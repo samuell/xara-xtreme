@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_WEBADDRESSDLG">
+			 <pos>0,0d</pos> <size>232,121d</size>
+		<object class="wxTextCtrl" name="IDC_WEBADDRESS_URL">
+			 <pos>7,17d</pos> <size>218,14d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBADDRESS_CORRECT">
+			 <pos>127,33d</pos> <size>97,11d</size>
+			<label>Correct URL automatically</label>
+		</object>
+		<object class="wxComboBox" name="IDC_WEBADDRESS_FRAME">
+			 <pos>7,53d</pos> <size>218,17d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBADDRESS_OBJECTSHAPE">
+			 <pos>18,83d</pos> <size>79,11d</size>
+			<label>Shape of object</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBADDRESS_RECTANGLE">
+			 <pos>103,82d</pos> <size>112,12d</size>
+			<label>Rectangle surrounding object</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>7,99d</pos> <size>50,14d</size>
+			<label>Add</label>
+		</object>
+		<object class="wxButton" name="IDC_WEBADDRESS_REMOVE">
+			 <pos>63,99d</pos> <size>50,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>119,99d</pos> <size>50,14d</size>
+			<label>Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>175,99d</pos> <size>50,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_WEBADDRESS_CLICKAREA">
+			 <pos>7,73d</pos> <size>218,24d</size>
+			<label>Clickable area</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,6d</pos> <size>43,10d</size>
+			<label>URL</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,42d</pos> <size>94,10d</size>
+			<label>Target frame for URL</label>
+		</object>
+		<title>Web Address...</title>
+	</object>
+</resource>

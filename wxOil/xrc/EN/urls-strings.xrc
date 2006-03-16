@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_URLSRC">
+		<title>String table from URLSRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_FORUM">
+					<label>http://www.xara.com/products/xarax/forum/</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_PLUGINS">
+					<label>http://www.xara.com/products/xarax/plugins/</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_PRODUCT">
+					<label>http://www.xara.com/products/xtreme/</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_PURCHASE">
+					<label>http://www.xara.com/products/xtreme/buy.asp</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_TUTORIALS">
+					<label>http://www.xara.com/products/xarax/tutorials/</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_URL_XARASITE">
+					<label>http://www.xara.com/</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

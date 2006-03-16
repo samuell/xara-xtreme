@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_REGSHAPETOOLBAR">
+			 <pos>0,0d</pos> <size>185,92d</size>
+		<object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
+			 <pos>8,12d</pos> <size>32,8d</size>
+			<label>Add:</label>
+		</object>
+		<object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_SIDES">
+			 <pos>147,73d</pos> <size>27,84d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_RADIUS">
+			 <pos>4,48d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_DIAMETER">
+			 <pos>22,48d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_BOUNDBOX">
+			 <pos>41,49d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_POLYGON">
+			 <pos>77,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_CURVATURE">
+			 <pos>137,46d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_STELLATION">
+			 <pos>123,54d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_ELLIPSE">
+			 <pos>95,51d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
+			 <pos>73,13d</pos> <size>68,75d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_REGSHAPETOOL_UPPER">
+			 <pos>13,73d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_REGSHAPETOOL_LOWER">
+			 <pos>47,72d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPLEFT">
+			 <pos>2,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPRIGHT">
+			 <pos>12,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPUP">
+			 <pos>2,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPDOWN">
+			 <pos>12,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_LINES">
+			 <pos>157,15d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

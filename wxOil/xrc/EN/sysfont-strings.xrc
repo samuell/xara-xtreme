@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_SYSFONTRC">
+		<title>String table from SYSFONTRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CUSTOM_SYSTEMFONT">
+					<label>MS Sans Serif</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

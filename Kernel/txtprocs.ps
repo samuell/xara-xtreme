@@ -1,0 +1,137 @@
+% $Header: c:\RCSdir\kernel/txtprocs.ps 1.2 1995/06/03 19:29:42 Tim Exp $
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% txtprocs.ps
+%
+% This file contains the PostScript procedures used when rendering text.
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% $Log: txtprocs.ps $
+%Revision 1.2  1995/06/03  19:29:42  Tim
+%Added generic text filling/stroking operators.
+%
+%Revision 1.1  1995/05/31  15:33:07  Tim
+%Initial revision
+%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	t:			string x y  t  -
+%
+%	Author:		Tim
+%	Created:	29/5/95
+%	Inputs:		string - the string to show using the current font.
+%				x,y - the position to show the font at
+%	Purpose:	Render a text string in the current font
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/t
+{
+	moveto
+	show
+} bd
+
+/ts
+{
+	% Set up a translation of the character path
+	% Get the character path and stroke it...
+
+	moveto
+	false	% We are going to stroke the path
+	charpath
+	S
+} bd
+
+/tf
+{
+	% Get the character path and fill it...
+
+	moveto
+	true	% We are going to fill the path
+	charpath
+	F
+} bd
+
+/tb
+{
+	% Get the character path and fill then stroke it...
+	3 copy
+
+	moveto
+	true	% We are going to fill the path
+	charpath
+	F
+
+	moveto
+	false	% We are going to stroke the path
+	charpath
+	S
+
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	selectfont
+%
+%	Author:		Tim
+%	Created:	29/5/95
+%	Purpose:	Definition of select font operator for interpreters that do not support it.
+%				(e.g. Level 1 interpreters)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/selectfont where
+{
+	% Already known (probably level 2)
+	pop
+}
+{
+	% Not known (probably Level 1) so define it
+	/selectfont
+	{
+		% Work out if it is an int or an array
+		dup type /integertype eq
+		{
+			% Scaled font required
+			exch findfont
+			exch scalefont
+			setfont
+		}
+		{
+			% Arbitrarily transformed font required
+			exch findfont
+			exch makefont
+			setfont
+		}
+		ifelse
+	}
+	bd
+}
+ifelse
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	sf:			selectfont
+%
+%	Author:		Tim
+%	Created:	29/5/95
+%	Purpose:	Shorthand for 'selectfont' operator.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/sf
+{
+	selectfont
+}
+bd
+
+

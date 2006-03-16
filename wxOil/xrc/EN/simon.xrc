@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BARCREATIONDLG">
+			 <pos>0,0d</pos> <size>158,135d</size>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,7d</pos> <size>60,8d</size>
+			<label>&amp;Number of Buttons</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BC_NO_OF_BUTTONS">
+			 <pos>72,5d</pos> <size>79,14d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,23d</pos> <size>57,8d</size>
+			<label>&amp;Direction of Bar</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BC_DIRECTION">
+			 <pos>72,21d</pos> <size>79,59d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,38d</pos> <size>60,8d</size>
+			<label>Button &amp;Spacing</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BC_SPACING">
+			 <pos>72,36d</pos> <size>79,14d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,54d</pos> <size>64,8d</size>
+			<label>Button S&amp;tretching</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BC_BUTTON_SIZE">
+			 <pos>72,52d</pos> <size>79,59d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,69d</pos> <size>56,8d</size>
+			<label>Buttons are &amp;All</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BC_BUTTONS_SAME">
+			 <pos>72,67d</pos> <size>79,59d</size>
+		</object>
+		<object class="wxButton" name="IDC_BC_REDEF_BACKBAR">
+			 <pos>7,84d</pos> <size>70,14d</size>
+			<label>Redefine</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BACKBAR_TEXT">
+			 <pos>82,87d</pos> <size>69,8d</size>
+			<label>from selection</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BC_CREATE_BACKBAR">
+			 <pos>7,86d</pos> <size>144,10d</size>
+			<label>Make BackBar from backmost object</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BC_GROUPS_STRETCH">
+			 <pos>7,100d</pos> <size>144,10d</size>
+			<label>Groups do not stretch</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>7,114d</pos> <size>38,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="IDC_BC_CREATE">
+			 <pos>72,114d</pos> <size>38,14d</size>
+			<label>Create</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>113,114d</pos> <size>38,14d</size>
+			<label>Cancel</label>
+		</object>
+		<title>Create a new NavBar</title>
+	</object>
+</resource>

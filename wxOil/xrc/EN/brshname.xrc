@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BRUSHNAMEDLG">
+			 <pos>0,0d</pos> <size>156,65d</size>
+		<object class="wxStaticText" name="IDC_STATICBRUSHNAME">
+			 <pos>3,9d</pos> <size>42,14d</size>
+			<label>Brush name:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITBRUSHNAME">
+			 <pos>49,6d</pos> <size>105,15d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>3,47d</pos> <size>45,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>55,47d</pos> <size>45,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>107,47d</pos> <size>45,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICBRUSHGROUP">
+			 <pos>3,25d</pos> <size>146,21d</size>
+			<label></label>
+		</object>
+		<title>Create new brush:</title>
+	</object>
+</resource>

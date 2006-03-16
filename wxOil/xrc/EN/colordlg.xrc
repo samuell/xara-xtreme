@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_COLOUREDITDLG">
+			 <pos>0,0d</pos> <size>142,126d</size>
+		<object class="wxComboBox" name="IDC_EDIT_NAMEMENU">
+			 <pos>4,4d</pos> <size>85,160d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_MAKESTYLE">
+			 <pos>92,4d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_216ONLY">
+			 <pos>107,4d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_ADVANCED">
+			 <pos>122,4d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_COLOURPICKER">
+			 <pos>6,22d</pos> <size>14,14d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT1">
+			 <pos>12,128d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT2">
+			 <pos>40,128d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT3">
+			 <pos>68,128d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT4">
+			 <pos>96,128d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_WEBHEX">
+			 <pos>54,128d</pos> <size>40,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_EDIT_COLMODEL">
+			 <pos>4,144d</pos> <size>104,60d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_EDIT_3D">
+			 <pos>112,144d</pos> <size>24,12d</size>
+			<label>&amp;3D</label>
+		</object>
+		<object class="wxComboBox" name="IDC_EDIT_COLTYPE">
+			 <pos>4,184d</pos> <size>133,48d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_EDIT_PARENTCOL">
+			 <pos>33,200d</pos> <size>103,160d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_TINT">
+			 <pos>28,219d</pos> <size>20,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_SHADE">
+			 <pos>64,219d</pos> <size>20,13d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_EDIT_INHERIT1">
+			 <pos>32,236d</pos> <size>48,10d</size>
+			<label>Comp 1</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_EDIT_INHERIT2">
+			 <pos>80,236d</pos> <size>48,10d</size>
+			<label>Comp 2</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_EDIT_INHERIT3">
+			 <pos>32,249d</pos> <size>48,10d</size>
+			<label>Comp 3</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_EDIT_INHERIT4">
+			 <pos>80,248d</pos> <size>48,10d</size>
+			<label>Comp 4</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_EDIT_PICKER">
+			 <pos>4,20d</pos> <size>134,104d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>176,148d</pos> <size>92,0d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_EDIT_PARENTNAME">
+			 <pos>4,202d</pos> <size>28,7d</size>
+			<label>Parent:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_EDIT_TINTNAME">
+			 <pos>4,221d</pos> <size>24,8d</size>
+			<label>Shade:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_EDIT_TINTPERCENT">
+			 <pos>50,221d</pos> <size>8,8d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_EDIT_SHADEPERCENT">
+			 <pos>86,221d</pos> <size>8,8d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_EDIT_INHERITNAME">
+			 <pos>4,236d</pos> <size>24,8d</size>
+			<label>Inherit:</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_NOCOLOUR">
+			 <pos>4,164d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_MAKE_LOCAL">
+			 <pos>19,164d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_EDIT_RENAME">
+			 <pos>34,164d</pos> <size>18,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>98,164d</pos> <size>40,12d</size>
+			<label>Help</label>
+		</object>
+		<title>Colour editor</title>
+	</object>
+</resource>

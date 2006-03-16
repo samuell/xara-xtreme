@@ -1,0 +1,135 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_OLLIERC">
+		<title>String table from OLLIERC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_WHATSTHIS">
+					<label>What's This?</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ABOUTDLG2">
+					<label>&amp;About Xara Xtreme;Information about Xara Xtreme ;AboutOp</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ABOUTDLG2_XS">
+					<label>&amp;About Xara XS;Information about Xara XS ;AboutOp</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ANIMATION_TAB_DLG">
+					<label>Animation properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ANIMATION_TAB_DLG_ONE">
+					<label>The Animation properties dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELP_MOVIES">
+					<label>Movies;Show a list of movies you can watch</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELP_TOPICS">
+					<label>Xara Xtreme &amp;Help...;Opens Xara Xtreme help</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELP_TOPICS_XS">
+					<label>Xara XS &amp;Help...;Opens Xara XS help</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HINTS_AND_TIPS_PAGES">
+					<label>Xara Xone;Open the Xara Xone web site</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NO_WEB_PAGE">
+					<label>Could not locate the specified WebPage.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NO_WEB_UTILITY">
+					<label>Your operating system is unable to open a web address in your default browser. Please see the FAQ for more details - www.xara.com/support/xarax</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_OLLIES_EXAMPLE_STRING">
+					<label>This is an example string</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIPOFTHEDAYMENU">
+					<label>Ti&amp;p of the day;Show useful hints and tips about using Xara Xtreme</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIPOFTHEDAYMENU_XS">
+					<label>Ti&amp;p of the day;Show useful hints and tips about using Xara XS</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WEBLINK">
+					<label>Use Hints, Tips and Movies from CD;Switch between getting hints, tips and movies from the CD or directly from Xara Ltd's web site</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WEBSTER_HOME_PAGE">
+					<label>Xara Xtreme Home Page;Open the Xara Xtreme home page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WHATSTHISOP">
+					<label>What's This?;Allows you to click on any part of Xara Xtreme to find out about it;What</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XARAX_FORUM">
+					<label>Xara Xtreme Forum;Open the Xara Xtreme Forum page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XARA_HOME_PAGE">
+					<label>Xara.com;Open the Xara home page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XARA_PURCHASE_PAGE">
+					<label>Purchase;Purchase Xara Xtreme</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XARA_WEB">
+					<label>Xara on the &amp;Web</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

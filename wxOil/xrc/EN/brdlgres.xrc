@@ -1,0 +1,316 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BRUSHEDITSPACING">
+			 <pos>0,0d</pos> <size>190,127d</size>
+		<object class="wxStaticText" name="IDC_STATICBRUSHSPACING">
+			 <pos>10,15d</pos> <size>27,8d</size>
+			<label>Spacing</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITBRUSHSPACING">
+			 <pos>147,14d</pos> <size>28,12d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATICBRUSHSPACINGRAND">
+			 <pos>4,33d</pos> <size>185,35d</size>
+			<label>Spacing changes by:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICBRUSHSPACINGMAXRAND">
+			 <pos>11,50d</pos> <size>37,8d</size>
+			<label>Random:</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERBRUSHSPACINGMAXRAND">
+			 <pos>56,47d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_BUTTONBRUSHSPACINGRANDSEED">
+			 <pos>145,78d</pos> <size>45,14d</size>
+			<label>Randomise</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT4">
+			 <pos>178,16d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERBRUSHSPACING1">
+			 <pos>56,14d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICBRUSHSPACINGRAND1">
+			 <pos>147,49d</pos> <size>32,8d</size>
+			<label>100 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT5">
+			 <pos>179,49d</pos> <size>8,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSEQUENCETYPE">
+			 <pos>7,81d</pos> <size>72,8d</size>
+			<label>Sequence progresses:</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOSEQUENCETYPE">
+			 <pos>85,78d</pos> <size>48,100d</size>
+		</object>
+		<title>Spacing</title>
+	</object>
+	<object class="wxDialog" name="IDD_BRUSHEDITOFFSET">
+			 <pos>0,0d</pos> <size>190,119d</size>
+		<object class="wxStaticText" name="IDC_STATICPATHOFFSETVALUE">
+			 <pos>10,28d</pos> <size>29,8d</size>
+			<label>Distance</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITPATHOFFSETVALUE">
+			 <pos>138,25d</pos> <size>27,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPATHOFFSETTYPE">
+			 <pos>9,7d</pos> <size>57,8d</size>
+			<label>Direction from line</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOPATHOFFSETTYPE">
+			 <pos>73,4d</pos> <size>55,100d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATICPATHOFFSETRAND">
+			 <pos>3,48d</pos> <size>182,39d</size>
+			<label>Offset changes by:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICOFFSETVALUEMAXRAND">
+			 <pos>10,66d</pos> <size>32,8d</size>
+			<label>Random: </label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDEROFFSETVALUEMAXRAND">
+			 <pos>47,62d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_BUTTONOFFSETVALUERANDSEED">
+			 <pos>4,94d</pos> <size>49,14d</size>
+			<label>Randomise</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERPATHOFFSETVAL">
+			 <pos>47,25d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT3">
+			 <pos>166,27d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICOFFSETRAND">
+			 <pos>139,65d</pos> <size>24,8d</size>
+			<label>0 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT6">
+			 <pos>164,65d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<title>Offset</title>
+	</object>
+	<object class="wxDialog" name="IDD_BRUSHEDITSCALING">
+			 <pos>0,0d</pos> <size>190,92d</size>
+		<object class="wxStaticBox" name="IDC_STATICBRUSHSCALINGRAND">
+			 <pos>3,9d</pos> <size>180,55d</size>
+			<label>Scaling changes by:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICBRUSHSCALINGMAXRAND">
+			 <pos>10,26d</pos> <size>29,8d</size>
+			<label>Random:</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERBRUSHSCALINGMAXRAND">
+			 <pos>46,22d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_BUTTONBRUSHSCALINGRANDSEED">
+			 <pos>4,73d</pos> <size>54,14d</size>
+			<label>Randomise</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSCALINGRAND">
+			 <pos>137,25d</pos> <size>32,8d</size>
+			<label>100 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT3">
+			 <pos>171,25d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSCALINGPRESSURE">
+			 <pos>10,47d</pos> <size>29,8d</size>
+			<label>Pressure:</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERSCALINGPRESSURE">
+			 <pos>46,44d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSCALINGPRESS">
+			 <pos>139,46d</pos> <size>30,8d</size>
+			<label>100 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT4">
+			 <pos>171,47d</pos> <size>10,8d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICBRUSHSCALEINFO">
+			 <pos>63,76d</pos> <size>118,13d</size>
+			<label></label>
+		</object>
+		<title>Scaling</title>
+	</object>
+	<object class="wxDialog" name="IDD_BRUSHEDITEFFECTS">
+			 <pos>0,0d</pos> <size>204,119d</size>
+		<object class="wxCheckBox" name="IDC_CHECKROTATE">
+			 <pos>10,6d</pos> <size>73,10d</size>
+			<label>Rotate along path</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITROTATEANGLE">
+			 <pos>145,19d</pos> <size>19,14d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATEANGLE">
+			 <pos>11,24d</pos> <size>41,12d</size>
+			<label>Brush angle: </label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATICPATHOFFSETRAND">
+			 <pos>6,39d</pos> <size>197,54d</size>
+			<label>Rotation changes by:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICOFFSETVALUEMAXRAND">
+			 <pos>12,73d</pos> <size>32,8d</size>
+			<label>Random:</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERROTATEANGLEMAXRAND">
+			 <pos>55,72d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_BUTTONROTATEANGLERANDSEED">
+			 <pos>6,97d</pos> <size>51,14d</size>
+			<label>Randomise</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATEANGLE2">
+			 <pos>171,21d</pos> <size>27,12d</size>
+			<label>degrees</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATEINCR">
+			 <pos>12,53d</pos> <size>29,12d</size>
+			<label>Adding:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITROTATEANGLEINCR">
+			 <pos>145,49d</pos> <size>20,14d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATEANGLE3">
+			 <pos>171,51d</pos> <size>26,12d</size>
+			<label>degrees</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERROTATEANGLE">
+			 <pos>56,19d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERROTATEANGLEINCR">
+			 <pos>55,49d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATIONRAND">
+			 <pos>146,73d</pos> <size>22,8d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICROTATEANGLE4">
+			 <pos>171,73d</pos> <size>25,12d</size>
+			<label>degrees</label>
+		</object>
+		<title>Rotation</title>
+	</object>
+	<object class="wxDialog" name="IDD_BRUSHEDITSEQUENCE">
+			 <pos>0,0d</pos> <size>190,70d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,33d</pos> <size>200,40d</size>
+			<label>Transparency changes by:</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERTRANSP">
+			 <pos>66,14d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSEQUENCETYPE2">
+			 <pos>10,15d</pos> <size>50,8d</size>
+			<label>Transparency:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITBRUSHTRANSP">
+			 <pos>160,13d</pos> <size>26,14d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT3">
+			 <pos>187,15d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERTRANSPPRESSURE">
+			 <pos>66,49d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSEQUENCETYPE3">
+			 <pos>10,51d</pos> <size>30,8d</size>
+			<label>Pressure:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICTRANSPPRESSURE">
+			 <pos>156,51d</pos> <size>32,11d</size>
+			<label>100 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT4">
+			 <pos>189,51d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<title>Transparency</title>
+	</object>
+	<object class="wxDialog" name="IDD_BRUSHEDITFILL">
+			 <pos>0,0d</pos> <size>197,117d</size>
+		<object class="wxCheckBox" name="IDC_CHECKTILEING">
+			 <pos>7,87d</pos> <size>39,10d</size>
+			<label>Tile fills</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATICLOCALFILL">
+			 <pos>105,61d</pos> <size>87,52d</size>
+			<label>Local colours replace:</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIOLOCALFILLALL">
+			 <pos>107,71d</pos> <size>67,13d</size>
+			<label>All brush colours</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIOLOCALFILLNAMED">
+			 <pos>107,95d</pos> <size>83,12d</size>
+			<label>Named brush colours</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIOLOCALFILLNONE">
+			 <pos>107,85d</pos> <size>74,8d</size>
+			<label>No brush colours</label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTONBRUSHFILLRANDOM">
+			 <pos>6,63d</pos> <size>49,14d</size>
+			<label>Randomise</label>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERSATURATIONRANDOM">
+			 <pos>47,20d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDERHUERANDOM">
+			 <pos>47,40d</pos> <size>85,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSATURATIONRANDOM">
+			 <pos>10,22d</pos> <size>34,10d</size>
+			<label>Saturation</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICHUERANDOM">
+			 <pos>11,42d</pos> <size>18,10d</size>
+			<label>Hue</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,5d</pos> <size>188,53d</size>
+			<label>Random colour changes:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICSATRAND">
+			 <pos>138,23d</pos> <size>23,8d</size>
+			<label>0 -100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT3">
+			 <pos>163,23d</pos> <size>10,11d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICHUERAND">
+			 <pos>138,42d</pos> <size>24,8d</size>
+			<label>0 - 100</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATICPERCENT4">
+			 <pos>164,42d</pos> <size>26,11d</size>
+			<label>degrees</label>
+		</object>
+		<title>Fill Properties</title>
+	</object>
+</resource>

@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_ABOUTDLG">
+			 <pos>34,22d</pos> <size>203,110d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>164,4d</pos> <size>36,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>164,22d</pos> <size>36,14d</size>
+			<label>&amp;Xara Ltd</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,24d</pos> <size>130,8d</size>
+			<label>Developed by Xara Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMVERSION">
+			 <pos>29,5d</pos> <size>131,8d</size>
+			<label> Version 3.00</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>18,20d</size>
+			<bitmap>2.png</bitmap>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,14d</pos> <size>131,8d</size>
+			<label>Copyright ? 1997 Xara Ltd.</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+			 <pos>4,44d</pos> <size>196,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_LICENSEE">
+			 <pos>60,49d</pos> <size>132,8d</size>
+			<label>Justin Flude</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COMPANY">
+			 <pos>60,60d</pos> <size>132,8d</size>
+			<label>Xara Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SERIAL">
+			 <pos>60,71d</pos> <size>132,8d</size>
+			<label>+ 44 1442 351000</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+			 <pos>4,85d</pos> <size>196,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMHOST">
+			 <pos>60,91d</pos> <size>131,8d</size>
+			<label>Windows NT 3.50</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMBUILD">
+			 <pos>60,99d</pos> <size>131,8d</size>
+			<label>32-bit Retail</label>
+		</object>
+		<title>MS Sans Serif</title>
+	</object>
+</resource>

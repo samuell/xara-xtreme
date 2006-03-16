@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_OPLDDIRRC">
+		<title>String table from OPLDDIRRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_LOADFILEDIRECT">
+					<label>Loads a file directly into a specified document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LOADFILEDIRECT">
+					<label>LoadFileDirect</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

@@ -1,0 +1,777 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_PHILRC">
+		<title>String table from PHILRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_APPLY_LIVEEFFECT">
+					<label>Apply Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_CHANGE_EFFECT_LOCK">
+					<label>Lock/unlock selected effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_CHANGE_EFFECT_LOCKALL">
+					<label>Lock/unlock all the effects in the selection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_CHANGE_EFFECT_RES">
+					<label>Change effect resolution</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_CLEARCACHE">
+					<label>Toggle Bitmap Cache</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_DELETEALL_LIVEEFFECT">
+					<label>Delete All Live Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_DELETE_LIVEEFFECT">
+					<label>Delete Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_EDITSELECTALL">
+					<label>Select all</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_EDITSELECTNONE">
+					<label>Clear selection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_EDIT_EDITSELECTION">
+					<label>Edit the selected object using its main editor</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_EDIT_LIVEEFFECT">
+					<label>Edit Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_PULLONTOGRID">
+					<label>Pull onto grid</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_THROTTLECACHE">
+					<label>Toggle cache throttling</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_XPE_EDIT">
+					<label>Edit with Xara Picture Editor</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_FAILEDTOUPDATEHANDS">
+					<label>Failed to contact xara.com or failed to read update information.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDM_LIVEEFFECTS_BAR">
+					<label>LIVEEFFECTS_BAR</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ALWAYSCONTINUE">
+					<label>&amp;Always Continue</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_APPLY_LIVEEFFECT">
+					<label>Apply Live &amp;Effect;Apply live bitmap effect to selection;Apply Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BITMAPTRANSPTYPE_ALPHA">
+					<label>Alpha channel</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BITMAPTRANSPTYPE_MASKED">
+					<label>Masked colours</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BITMAPTRANSPTYPE_NONE">
+					<label>No</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BITMAP_FEATHER">
+					<label>Bitmap Feather</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BITMAP_SHADOW">
+					<label>Bitmap Shadow</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_ALTERNATIVE">
+					<label>Alt-click</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_CONSTRAIN">
+					<label>Ctrl-click</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_EDITOBJECT">
+					<label>Select tool for clicked object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_FULLSCREEN">
+					<label>Toggle full-screen mode</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_MENU">
+					<label>Pop-up menu</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_NORMAL">
+					<label>Normal click</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_PUSHCENTRE">
+					<label>Push Tool</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_SHIFT">
+					<label>Shift-click</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTFUNC_ZOOMIN">
+					<label>Zoom in or out</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CHANGE_EFFECT_LOCK">
+					<label>Lock/unlock effect; Lock or unlock the selected effects; Lock/unlock effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CHANGE_EFFECT_LOCKALL">
+					<label>Lock/unlock effects; Lock or unlock all the effects in the selection; Lock/unlock effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CHANGE_EFFECT_RES">
+					<label>Change resolution;Change resolution of effect;Change resolution</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLEARCACHE">
+					<label>&amp;Toggle Bitmap Cache;Toggle bitmap cache;Toggle bitmap cache</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CONTINUEUPDATE">
+					<label>&amp;Continue update</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CUSTOMIZE_BAR_DLG">
+					<label>Customize control bar...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DEFAULT_GAL_BUTTON_SIZE">
+					<label>72</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DELETEALL_LIVEEFFECT">
+					<label>Delete &amp;All Live Effects;Delete all live bitmap effects;Delete All Live Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DELETE_LIVEEFFECT">
+					<label>&amp;Delete Live Effect;Delete live bitmap effect;Delete Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DESCRIBE_LIVEEFFECT">
+					<label>Apply Live Effect to selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DLIVEEFFECT_DESCRP">
+					<label>locked bitmap effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DLIVEEFFECT_DESCRS">
+					<label>locked bitmap effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_EDITSELECTALL">
+					<label>Select &amp;All;Select all the objects in the active layer(s)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_EDITSELECTNONE">
+					<label>Cl&amp;ear Selection;Deselect any selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_EDIT_EDITSELECTION">
+					<label>Edit Selected</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_EDIT_LIVEEFFECT">
+					<label>Edit Li&amp;ve Effect;Edit/Create live bitmap effect;Edit Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHEREFFECT_DESCRP">
+					<label>feathers</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHEREFFECT_DESCRS">
+					<label>feather</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHERNAME">
+					<label>Feather</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FORMAT_XPE">
+					<label>XPE bitmap</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_GREY_WHEN_SELECT_INSIDE">
+					<label>There are objects selected inside others</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HANDS_DOWNLOADFAILED">
+					<label>There was a problem downloading '#1%S'\nPlease check your Internet connection and try again. If you still can't get this file please contact Xara Technical Support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPDOWNLOADDLG">
+					<label>Update Help &amp;files;Check for new Help and Support files at xara.com;Help download;</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPDOWNLOADOP">
+					<label>Help download;Help download;Help download;</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_INFOBARNAME">
+					<label>Infobar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_INVALID_BARINFO">
+					<label>Cannot read new information about bars.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_ALWAYSCOPY">
+					<label>&amp;Always Copy</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_ASK_UNGROUPLOCALISE">
+					<label>There are special effects in this group which may make the objects look different when they are ungrouped. Do you want to remove the effects before ungrouping or copy them onto the ungrouped objects?</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_CHANGE_RES_PROGRESS">
+					<label>Please wait while the effect resolutions are changed. Press ESCAPE to cancel...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_COPY">
+					<label>&amp;Copy Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_DELETEALL_WARNING">
+					<label>You are about to delete all effects from the selected objects\nAre you sure?</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_DESTRUCTIVE_APPLY_TOP">
+					<label>This effect must be applied on top of any others. Please choose a different effect or change to a higher position in the effect order before trying again.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_DESTRUCTIVE_EDIT">
+					<label>This effect doesn't allow itself to be edited. If you want to change it you will have to recreate it from scratch.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_EDIT_RUNNING">
+					<label>Only one effect can be edited at a time. Close the current edit before starting a new one.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_LOCK_PROGRESS">
+					<label>Please wait while the selected effects are locked. Press ESCAPE to cancel...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_NOTHING_SELECTED">
+					<label>Effects can only be added or edited on selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPAPPLY">
+					<label>Add Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPAPPLYFEATHER">
+					<label>Add Feather Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPDELETE">
+					<label>Delete Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPEDIT">
+					<label>Edit Live Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPEFFECTLOCK">
+					<label>Lock/unlock Effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPEFFECTLOCKALL">
+					<label>Lock/unlock Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_OPEFFECTRES">
+					<label>Change Effect Resolution</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_RECREATEEFFECT">
+					<label>Recreate effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_REMOVE">
+					<label>&amp;Remove Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_RENDERPROGRESS">
+					<label>Please wait: Rendering LiveEffects...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_STARTUPPROGRESS">
+					<label>Please wait: Contacting XPE for list of Live Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LE_UNLOCK_PROGRESS">
+					<label>Please wait while the selected effects are unlocked. Press ESCAPE to cancel...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LIVEEFFECTS_INFOBARNAME">
+					<label>Live effects infobar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LIVEEFFECT_DESCRP">
+					<label>live effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LIVEEFFECT_DESCRS">
+					<label>live effect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LIVEEFFECT_TOOL">
+					<label>Live E&amp;ffect Tool;Choose the Live Effect Tool to apply dynamic bitmap effects to objects;LiveEffect</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NOTENOUGHSPACETODOWNLOAD">
+					<label>There is not enough space on your filing system to download the next help or support file.\nPlease free up some space and Try again or Cancel this download.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PHILS_EXAMPLE">
+					<label>Phil's example string</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PULLONTOGRID">
+					<label>Pul&amp;l onto grid;Pull the selection to the nearest grid point</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_150">
+					<label>150 dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_200">
+					<label>200 dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_300">
+					<label>300 dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_72">
+					<label>72 dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_96">
+					<label>96 dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_AUTO">
+					<label>Automatic</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_AUTOVARIABLE">
+					<label>Auto (variable dpi)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_INTERMEDIATE">
+					<label>Intermediate (150 dpi)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_PPI_FORMAT">
+					<label>%d dpi</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_PRINT">
+					<label>Print (200 dpi)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_PRINT300">
+					<label>Hi-res Print (300 dpi)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_RES_SCREEN">
+					<label>Screen (96 dpi)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SGBITMAP_XPE">
+					<label>0 K [Edits list]</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_STOPUPDATE">
+					<label>&amp;Stop update</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TAG_COMPOUNDRENDER">
+					<label>Compound render hint</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_THROTTLECACHE">
+					<label>&amp;Toggle cache throttling; Toggle cache throttling;Toggle cache throttling</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TOOLBARNAME_DLG">
+					<label>New control bar...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TOOLBARS_DLG">
+					<label>Con&amp;trol Bars...;Add, remove or edit the toolbars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TRYAGAIN">
+					<label>&amp;Try again</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UPDATING_HANDS">
+					<label>Checking and downloading Help and Support files</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UPDATING_SPECIALS">
+					<label>Checking and downloading information from xara.com</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_CANTFINDXPE">
+					<label>Unable to connect to Xara Picture Editor 2. Please ensure that XPE2 is installed correctly and try again.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_DISABLECACHEING">
+					<label>You are about to disable bitmap cacheing and clear the cache</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_DISABLE_THROTTLING">
+					<label>Your are about to disable cache throttling. Cacheing may take a significant proportion of rendering time.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_ENABLE_THROTTLING">
+					<label>You are about to enable cache throttling. Cacheing will be restricted to 5% of rendering time. Several renders may be needed before the drawing is fully cached.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_INCOMPATIBLETRANSPARENCY">
+					<label>The selection uses a transparency type that cannot be held in a standard bitmap.\nIf you Continue the bitmap may not look exactly like the selected objects.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_NOTWRITABLE">
+					<label>Xara Xtreme Update cannot write files in the Program Files\\Xara Xtreme folder.\nPlease ensure that your account is allowed to do so. If you're not sure ask your system administrator or contact Xara Technical Support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_NOTWRITABLE_FORE">
+					<label>Xara Xtreme Update cannot write files in the Program Files\\Xara Xtreme folder.\nPlease ensure that your account is allowed to do so. If you're not sure ask your system administrator or contact Xara Technical Support before trying again.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_READONLY">
+					<label>Xara Xtreme Update cannot write files in the Program Files\\Xara Xtreme folder.\nPlease remove Read only status. If you're not sure ask your system administrator or contact Xara Technical Support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_READONLY_FORE">
+					<label>Xara Xtreme Update cannot write files in the Program Files\\Xara Xtreme folder.\nPlease remove Read only status, ask your system administrator or contact Xara Technical Support before trying again.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_UNAVAILABLE">
+					<label>Xara Xtreme Update cannot find the Program Files\\Xara Xtreme folder.\nPlease ensure any removable discs are present or check your network connection. If this message appears again ask your system administrator or contact Xara Technical Support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_PROGRAMFOLDER_UNAVAILABLE_FORE">
+					<label>Xara Xtreme Update cannot find the Program Files\\Xara Xtreme folder.\nPlease ensure any removable discs are present or check your network connection. If this message appears again ask your system administrator or contact Xara Technical Support before trying again.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WARN_REPEATDOWNLOAD">
+					<label>The updated file '#1%S' may be incorrectly indexed at xara.com. Please inform Xara Technical Support.\nYou can either Continue to update more files or Stop and wait until the fault is corrected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_DESTROY_MSG">
+					<label>This image has information for the Xara Picture Editor stored with it.\nIf you continue that information will be lost.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT">
+					<label>Xara Picture Editor...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT_ADDITIONMESSAGE">
+					<label> (Edited)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT_DESCRIPTION">
+					<label>Edit bitmap with Xara Picture Editor...;Send the bitmap to the Xara Picture Editor</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT_ITEM">
+					<label>Xara Picture Editor...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT_NO_BITMAP_SELECTED">
+					<label>There are no bitmaps in the current selection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_EDIT_UNDO">
+					<label>Xara Picture Edit</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPE_NOT_FOUND">
+					<label>Xara Picture Editor not installed</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

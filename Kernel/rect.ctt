@@ -1,0 +1,1104 @@
+// Test template for Rects and so on wobjobby dooda.
+
+//!TEMPLATE_H
+
+//$Header: c:\RCSdir\kernel/rect.ctt 1.20 1995/07/07 11:35:00 Jason Exp $
+      
+#ifndef INC_RECT
+#define INC_RECT
+
+#include "camtypes.h"
+#include "coord.h"
+
+//!INCLUDE_EXTRA_HDRS
+
+/***********************************************************************************************
+
+>    Class <Rect>
+
+     Author:       Simon M
+     Date:    	   11/5/93
+     
+     Purpose:      This class is used to represent a rectangular region.  It uses a union to
+     			   enable the client to access the rectangle as two Coords (lo and hi) or as
+     			   four LONGs (lox, loy, hix, hiy).  An anonymous union is used, which is a
+     			   defined C++ feature and so portable.
+
+     			   The lo coordinates are inclusive, whilst the hi coordinates are exclusive.
+     			   In the document space, lo.y <= hi.y and lo.x <= hi.x (the inequalities are 
+     			   not strict because rectangles can have zero width and/or height - such
+     			   rectangles are considered perfectly valid). 
+     			   
+     			   The inclusivity can be explained as follows:
+     			   
+     			   A point at (lo.x, lo.y) is inside the rectangle
+     			   A point at (hi.x, hi.y) is outside the rectangle
+     			   
+     			   Any rectangle that does not obey the inequalites lo.y <= hi.y and 
+     			   lo.x <= hi.x is deemed to be 'invalid'.  Invalid rectangles have special
+     			   properties.  They will cause errors when used in some operations, but not
+     			   in others.  The general rule is that if the rectangle is used as an entity,
+     			   then the operation will succeed (taking account of the 'invalidity' of
+     			   the rectangle).  If, however, the actual coordinates of the invalid
+     			   rectangle must be used/changed in the operation, then an error (usually an
+     			   assertion failure) will occur.
+     			   
+     			   For example, using invalid rectangles in Unions and Intersections is ok, 
+     			   because the invalid rectangle is ignored, and the 'other' rectangle is
+     			   returned as the result.  This means that if both rectangles are invalid,
+     			   then an invalid rectangle is returned.
+     			   
+     			   Conversely, trying to use operations like Translate(), Inflate(), Width()
+     			   or Height() on invalid rectangles is considered to be an error, and will
+     			   cause an assertion failure.
+     			   
+     			   See the individual function descriptions for more details.
+     			   
+     			   
+     Errors:	   -
+
+     SeeAlso:	   Coord
+
+     SeeAlso:	   Rect
+     SeeAlso:	   DocRect
+     SeeAlso:	   WorkRect
+     SeeAlso:	   OSRect
+     			    
+***********************************************************************************************/
+
+class CAMAPI <Rect>
+{   
+public:
+
+	union
+	{
+		struct 
+		{
+			Coord	lo,hi;
+		};
+		struct
+		{
+			LONG	lox,loy,hix,hiy;
+		};
+	};
+	                        
+	// <Rect> constructors
+	                    
+	<Rect>();              
+
+	<Rect>(LONG LowX, LONG LowY, LONG HighX, LONG HighY); 
+
+	<Rect>(const Coord& Low, ULONG Width, ULONG Height); 
+
+	<Rect>(const Coord& Low, const Coord& High);   
+			 		 
+	<Rect>(const <Rect>& <Rect>); // Copy constructor
+
+	<Rect>& operator=(const <Rect>& <Rect>);// Assignment operator
+			 		 
+	LONG Width() const;
+	LONG Height() const; 
+	
+	Coord LowCorner() const;
+	Coord HighCorner() const;  
+
+	Coord Centre() const;
+	
+	// General operations type stuff
+	BOOL IsIntersectedWith(const <Rect>&) const;
+	<Rect> Intersection(const <Rect>&) const;
+	<Rect> Union(const <Rect>&) const;
+	int SplitRect(const <Rect>& R, <Rect>* SubRects);
+
+	BOOL ContainsCoord(const Coord&) const;
+	BOOL ContainsRectCoord(const Coord&) const;
+	BOOL ContainsRect(const <Rect>&) const;
+	BOOL IsAdjacent(const <Rect>&, MILLIPOINT Fuzzy) const;
+
+	void MakeEmpty();
+		
+	BOOL IsEmpty() const;	
+	BOOL IsValid() const;	
+
+	void Inflate(LONG XInc, LONG YInc);
+	void Inflate(LONG XInc);
+	void Translate(LONG XOfs, LONG YOfs);
+	void IncludePoint(const Coord&);
+	
+	// Overloaded operators
+	int operator==(const <Rect>&) const;
+	int operator!=(const <Rect>&) const;
+
+//!INCLUDE_EXTRA_DECLS
+
+};                                            
+
+
+  
+/*********************************************************************************************
+
+>    void <Rect>::Translate(LONG XOfs, LONG YOfs)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	(XOfs, YOfs) - the offset to translate the rectangle by.
+     Outputs:   - 
+     
+     Returns:   N/A.
+     			
+     Purpose:	Translate a rectangle by given offset.
+
+     Errors:	An assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+
+inline void <Rect>::Translate(LONG XOfs, LONG YOfs)
+{
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Translate() was called on an \ninvalid rectangle.");  
+
+	lo.x += XOfs;
+	lo.y += YOfs;
+    
+	hi.x += XOfs;
+	hi.y += YOfs;
+}
+
+
+
+/*********************************************************************************************
+
+>    int operator==(const <Rect>& R) const
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	R - the rectangle to compare against.
+     Outputs:   - 
+     
+     Returns:   TRUE if R is describes the same rectangle as the object.
+     			
+     Purpose:	Test for equality of two rectangles.  As all invalid rectangles have the
+     			same results when used for Union/Intersection, any two invalid rectangles
+     			are considered equal.
+
+	 Friend:    <Rect>
+	 
+     Errors:	None.
+
+**********************************************************************************************/  
+
+inline int <Rect>::operator==(const <Rect>& R) const
+{
+	// Invalid rectangles are equal
+	if ((!IsValid()) && (!R.IsValid()))
+		return TRUE;
+		
+	// Could use structure compare? Would it be portable? Probably not...
+	
+ 	return ((lo.x == R.lo.x) && (lo.y == R.lo.y) &&
+ 	        (hi.x == R.hi.x) && (hi.y == R.hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    int operator!=(const <Rect>& R) const
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	R - the rectangle to compare against.
+     Outputs:   - 
+     
+     Returns:   TRUE if R does not describe the same rectangle as the object.
+     			
+     Purpose:	Test for inequality of two rectangles.  As all invalid rectangles have the
+     			same results when used for Union/Intersection, any two invalid rectangles
+     			are considered equal.
+
+	 Friend:    <Rect>
+	 
+     Errors:	None.
+
+**********************************************************************************************/  
+
+inline int <Rect>::operator!=(const <Rect>& R) const
+{
+	// Invalid rectangles are equal
+	if ((!IsValid()) && (!R.IsValid()))
+		return FALSE;
+		
+ 	return ((lo.x != R.lo.x) || (lo.y != R.lo.y) ||
+ 	        (hi.x != R.hi.x) || (hi.y != R.hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    void <Rect>::Inflate(LONG XInc, LONG YInc)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	XInc, YInc - the amount to inflate (or deflate) the rectangle by.
+     Outputs:   - 
+     
+     Returns:   N/A.
+     			
+     Purpose:	Inflate a rectangle by given amounts.  Negative values will deflate the
+     			rectangle.
+
+     Errors:	An assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+
+inline void <Rect>::Inflate(LONG XInc, LONG YInc)
+{
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Inflate(LONG, LONG) was called on an \ninvalid rectangle.");  
+
+	lo.x -= XInc;
+	lo.y -= YInc;
+    
+	hi.x += XInc;
+	hi.y += YInc;
+}
+
+
+
+/*********************************************************************************************
+
+>    void <Rect>::Inflate(LONG Inc)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	Inc - the amount to inflate (or deflate) the rectangle by.
+     Outputs:   - 
+     
+     Returns:   N/A.
+     			
+     Purpose:	Inflate a rectangle by given amount.  Negative values will deflate the
+     			rectangle.
+
+     Errors:	An assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+
+inline void <Rect>::Inflate(LONG Inc)
+{
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Inflate(LONG) was called on an \ninvalid rectangle.");  
+
+	lo.x -= Inc;
+	lo.y -= Inc;
+    
+	hi.x += Inc;
+	hi.y += Inc;
+}
+
+
+
+/*********************************************************************************************
+
+>    <Rect>::<Rect>() 
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	None
+     Outputs:   -
+     Returns:   - 
+     			
+     Purpose:	To construct an empty <Rect>.
+     			
+
+     Errors:	
+
+**********************************************************************************************/  
+
+inline <Rect>::<Rect>()
+{
+	// An empty rectangle
+	hi.x = hi.y = lo.x = lo.y = 0;
+}
+     
+	            
+
+/*********************************************************************************************
+           
+>    <Rect>::<Rect>(LONG LowX, LONG LowY, LONG HighX, LONG HighY)
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	LowX : Lower X coord of rectangle (inclusive)
+     			HighX: Higher X coord of rectangle (exclusive) 
+     			LowY : Lower Y coord of rectangle (inclusive)
+     			HighY: Higher Y coord of rectangle (exclusive)
+     			
+     Outputs:   -
+     Returns:   - 
+     			
+     Purpose:	To construct a <Rect> with an inclusive lower left hand corner 
+     			position of (Left, Lower) and an exclusive upper right hand corner 
+     			position of (Right, Upper).  
+
+     Errors:	An assertion failure will occur if the lower left hand coordinates
+     			are not lower than and to the left of the upper right coordinate. 
+
+**********************************************************************************************/  
+                      
+inline <Rect>::<Rect>(LONG LowX, LONG LowY, LONG HighX, LONG HighY)
+{                               
+    // Defensive programming, detect an invalid rectangle
+	ENSURE((LowX <= HighX) && (LowY <= HighY),
+	       "<Rect>::<Rect>(LONG, LONG, LONG, LONG) was\n passed invalid coordinates");  
+	
+	lo.x = LowX;
+	lo.y = LowY; 
+	
+	hi.x = HighX; 
+	hi.y = HighY; 	
+} 
+
+
+
+/*********************************************************************************************
+           
+>    <Rect>::<Rect>(const Coord& Low, const Coord& High) 
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	Low : Coordinates of the lower left hand corner (inclusive) 
+     			High: Coordinates of the upper right hand corner (exclusive)
+     Outputs:   -
+     Returns:   - 
+     			
+     Purpose:	To construct a rectangle with an inclusive lower left hand corner 
+     			position of Low and an exclusive upper right hand corner
+     			position of High.
+
+     Errors:	An assertion failure will occur if the lower left hand coordinates
+     			are not lower than and to the left of the upper right coordinates. 
+
+**********************************************************************************************/  
+
+inline <Rect>::<Rect>(const Coord& Low, const Coord& High)
+{         
+    // Defensive programming, detect an invalid rectangle
+	ENSURE((Low.x <= High.x) && (Low.y <= High.y),
+	       "<Rect>::<Rect>(Coord, Coord) was\n passed invalid coordinates");  
+    
+	lo = Low;
+	hi = High;
+}       
+    
+
+
+/*********************************************************************************************
+           
+>    <Rect>::<Rect>(const Coord& Low, ULONG Width, ULONG Height) 
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	Low: Coordinates of the inclusive lower left hand corner.
+     			Width, Height  : Desired dimensions of the rectangle.
+     Outputs:   -
+     Returns:   - 
+     			
+     Purpose:	To construct a rectangle with an inclusive lower left hand corner 
+     			position of Low and a width and height as specified.
+
+     Errors:	None.
+     
+**********************************************************************************************/  
+
+inline <Rect>::<Rect>(const Coord& Low, ULONG Width, ULONG Height) 
+{         
+	lo = Low;
+	
+	hi.x = lox + Width;
+	hi.y = loy + Height;
+}       
+   
+   
+    
+       
+/*********************************************************************************************
+           
+>    <Rect>::<Rect>(const <Rect>& R) 
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	R: The copy of the <Rect> 
+     Outputs:   -
+     Returns:   - 
+     			
+     Purpose:	Copy constructor 
+
+**********************************************************************************************/  
+
+inline <Rect>::<Rect>(const <Rect>& R)
+{
+	lo = R.lo;
+	hi = R.hi;
+}
+
+
+
+/*********************************************************************************************
+           
+>    <Rect>& <Rect>::operator=(const <Rect>& <Rect>)
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	<Rect>: <Rect> to copy 
+     Outputs:   -
+     Returns:   Reference to this <Rect> 
+     			
+     Purpose:	Equals operator 
+
+**********************************************************************************************/  
+
+inline <Rect>& <Rect>::operator=(const <Rect>& <Rect>)
+{                                                    
+    lo = <Rect>.lo; 
+    hi = <Rect>.hi;
+    
+	return *this; 
+}
+
+
+
+/*********************************************************************************************
+           
+>    LONG <Rect>::Width() const
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	- 
+     Outputs:   -
+     Returns:   The width of the <Rect> 
+     			
+     Purpose:	To find the width of the <Rect> 
+
+**********************************************************************************************/  
+			 		 
+inline LONG <Rect>::Width() const
+{
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Width() was called on\nan invalid rectangle.");  
+
+	return (hi.x - lo.x); 	
+}       
+
+
+
+/*********************************************************************************************
+           
+>    LONG <Rect>::Height() const
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	- 
+     Outputs:   -
+     Returns:   The height of the <Rect> 
+     			
+     Purpose:	To find the height of the <Rect> 
+
+**********************************************************************************************/  
+
+inline LONG <Rect>::Height() const 
+{                      
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Height() was called on\nan invalid rectangle.");  
+
+	return(hi.y - lo.y); 
+}
+	                 
+
+
+/*********************************************************************************************
+           
+>    Coord <Rect>::LowCorner() const
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	- 
+     Outputs:   -
+     Returns:   The inclusive lower left hand coordinates of the <Rect>
+     			
+     Purpose:	To find the lower left hand coordinates of the <Rect>
+     
+     Errors:	Assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+	                 
+inline Coord <Rect>::LowCorner() const
+{     
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::LowCorner() was called on\nan invalid rectangle.");  
+
+	return(lo); 
+}        
+
+
+
+/*********************************************************************************************
+           
+>    Coord <Rect>::HighCorner() const  
+
+     Author: 	Simon M
+     Created:   13/5/93
+     Inputs:	- 
+     Outputs:   -
+     Returns:   The exclusive upper right hand coordinates of the <Rect> 
+     			
+     Purpose:	To find the upper right hand coordinates of the <Rect>
+
+     Errors:	Assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+
+inline Coord <Rect>::HighCorner() const  
+{      
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::HighCorner() was called on\nan invalid rectangle.");  
+
+	return(hi); 
+}                  
+
+
+
+/*********************************************************************************************
+           
+>    Coord <Rect>::Centre() const
+
+     Author: 	Markn
+     Created:   19/5/99
+     Inputs:	- 
+     Outputs:   -
+     Returns:   The centre coord of this <Rect>
+     			
+     Purpose:	To find the centre of the <Rect>
+				It calculates Coord(lox+(width/2),loy+(height/2))
+     
+     Errors:	Assertion failure if the rectangle is invalid.
+
+**********************************************************************************************/  
+	                 
+inline Coord <Rect>::Centre() const
+{     
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::Centre() was called on\nan invalid rectangle.");  
+
+	return Coord(lo.x + Width() / 2, lo.y + Height() / 2); 
+}        
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::IsIntersectedWith(const <Rect>& <Rect>) const
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the rectangles intersect, FALSE otherwise.
+     			
+     Purpose:	To check for rectangle intersection 
+
+     Errors:	
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::IsIntersectedWith(const <Rect>& R) const
+{
+    // Detect an invalid rectangle
+    if ((!IsValid()) || (!R.IsValid()))
+    	return FALSE;
+    	
+	return ((hi.x > R.lo.x) && (lo.x < R.hi.x) &&
+			(hi.y > R.lo.y) && (lo.y < R.hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::ContainsCoord(const Coord& Point)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the coordinate is within the rectangle, FALSE otherwise.
+     			
+     Purpose:	To check for coordinate containment.
+
+     Errors:	Assertion failure if the rectangle is invalid.
+
+     SeeAlso:	ContainsRectCoord; ContainsRect
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::ContainsCoord(const Coord& Point) const
+{
+	// Check for an an empty rectangle
+	if (IsEmpty())
+		return FALSE;
+
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::ContainsCoord() was called on\nan invalid rectangle.");  
+
+	return ((Point.x >= lo.x) && (Point.x < hi.x) &&
+	        (Point.y >= lo.y) && (Point.y < hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::ContainsRectCoord(const Coord& Point)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the coordinate is within the rectangle, FALSE otherwise.
+     			
+     Purpose:	To check for coordinate containment.  This will work for coordinates which
+     			have been extracted from other rectangles (i.e. the top right corner is
+     			considered inclusive for this operation, not exclusive).
+
+     Errors:	Assertion failure if the rectangle is invalid.
+
+     SeeAlso:	ContainsCoord; ContainsRect
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::ContainsRectCoord(const Coord& Point) const
+{
+	// Check for an an empty rectangle
+	if (IsEmpty())
+		return FALSE;
+
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::ContainsRectCoord() was called on\nan invalid rectangle.");  
+
+	return ((Point.x >= lo.x) && (Point.x <= hi.x) &&
+	        (Point.y >= lo.y) && (Point.y <= hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::ContainsRect(const <Rect>& Rect)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the rectangle 'Rect' is within the rectangle, FALSE otherwise.
+     			
+     Purpose:	To check for rectangle containment.
+
+     Errors:	Assertion failure if the rectangle is invalid.
+
+     SeeAlso:	ContainsRectCoord; ContainsCoord
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::ContainsRect(const <Rect>& Rect) const
+{
+	// Check for an an empty rectangle
+	if (IsEmpty())
+		return FALSE;
+
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::ContainsRect() was called on\nan invalid rectangle.");  
+
+	return ((Rect.lo.x >= lo.x) && (Rect.hi.x <= hi.x) &&
+	        (Rect.lo.y >= lo.y) && (Rect.hi.y <= hi.y));
+}
+
+
+
+/********************************************************************************************
+
+>	void <Rect>::MakeEmpty()
+
+	Author:		Tim
+	Created:	03/03/94
+	Purpose:	Make the rectangle an empty one (all coordinates are set to 0).
+	SeeAlso:	<Rect>::MakeEmpty
+
+********************************************************************************************/
+
+inline void <Rect>::MakeEmpty()
+{
+  lo.x = lo.y = hi.x = hi.y = 0;
+}
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::IsEmpty() const
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the rectangle is empty.
+     			
+     Purpose:	To check for empty rectangle.
+
+     Errors:	
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::IsEmpty() const
+{
+	return ((lo.x == hi.x) || (lo.y == hi.y));
+}
+
+
+
+/*********************************************************************************************
+
+>    BOOL <Rect>::IsValid() const
+
+     Author: 	Tim Browse
+     Created:   9/6/93
+     Inputs:	-  
+     Outputs:   - 
+     
+     Returns:   TRUE if the rectangle is valid.
+     			
+     Purpose:	To check for a valid rectangle.
+
+     Errors:	
+
+**********************************************************************************************/  
+
+inline BOOL <Rect>::IsValid() const
+{
+	return ((lo.x <= hi.x) && (lo.y <= hi.y));
+}
+
+#endif
+
+//!TEMPLATE_CPP
+
+
+#include "camtypes.h"
+#include "rect.h"
+#include "ensure.h"
+
+DECLARE_SOURCE("$Revision: 1.20 $");
+
+/*
+  $Log: rect.ctt $
+Revision 1.20  1995/07/07  11:35:00  Jason
+Fixed ABS macro definitions to be safe
+
+Revision 1.19  1994/06/28  16:57:47  Rik
+Added some code that shows how the hell the IsAdjacent function works
+
+Revision 1.18  1994/03/03  11:38:12  Tim
+Added a MakeEmpty function.
+
+Revision 1.17  1994/01/20  17:09:23  Simon
+Default constructor now creates an empty recatngle
+
+Revision 1.16  1994/01/12  17:30:17  Rik
+Improved region merging and region joining
+
+Revision 1.15  1993/11/05  14:56:03  Rik
+Blobs work, fixed DocRect probs, selecting blobs work
+
+Revision 1.14  1993/08/12  11:17:48  Will
+Global CheckIn for new Coord system.
+
+Revision 1.13  1993/07/29  11:10:02  Will
+Fixed problem with fuzzy adjacent test.
+
+Revision 1.12  1993/07/21  21:08:29  Will
+Split rect function was splitting the wrong rect.
+
+Revision 1.11  1993/07/19  17:02:42  Will
+Added some comments.
+Added Fuzzy limit passed during IsAdjacent().
+
+Revision 1.10  1993/07/15  17:04:10  Will
+Added SplitRect function for BG rendering.
+
+Revision 1.9  1993/07/14  17:34:25  Will
+Added IsAdjacent function for region merging.
+
+Revision 1.8  1993/07/12  12:58:11  Tim
+Added a ContainsRect function.
+
+Revision 1.7  1993/06/18  11:06:28  Tim
+Made rectangle classes usable by tools by using the CAMAPI macro in the
+class declaration.
+
+Revision 1.6  1993/06/15  16:49:28  Tim
+Altered Intersection and Union to return objects rather than object refs.
+
+Revision 1.5  1993/06/10  10:29:35  Tim
+Improved links for ADC generated help file.
+
+Revision 1.4  1993/06/09  16:40:02  Tim
+Moved class comment from .cpp file to .h file to conform to style guide.
+
+Revision 1.3  1993/06/09  13:52:40  Tim
+Revised use and meaning of empty/invalid rectangles.
+Expanded comment headers to explain this.
+
+Revision 1.2  1993/06/08  14:12:06  Tim
+Added comments about non-re-entrancy of Union and Intersection.
+
+*/
+
+
+/**********************************************************************************************
+
+>    BOOL <Rect>::IsAdjacent() const
+
+     Author: 	Will
+     Created:   14/7/93
+     Inputs:	The Fuzzy limit in MILLIPOINTS.  
+     Outputs:   - 
+     
+     Returns:   TRUE if the rectangles are adjacent within a Fuzzy limit.
+     			
+     Purpose:	To check for adjacent rectangles.
+
+     Errors:	
+
+**********************************************************************************************/  
+
+BOOL <Rect>::IsAdjacent(const <Rect>& Rect, MILLIPOINT Fuzzy) const
+{
+	// Check for an an empty rectangle
+	if (IsEmpty())
+		return FALSE;
+
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::IsAdjacent() was called on\nan invalid rectangle.");  
+
+#if 0
+	// This is the expansion of the rampant return statement below
+
+	// Near top or bottom
+	BOOL NearBot = (ABS(Rect.hi.y - lo.y)) <= Fuzzy;
+	BOOL NearTop = (ABS(Rect.lo.y - hi.y)) <= Fuzzy;
+
+	// Near left or right
+	BOOL NearLeft  = (ABS(Rect.hi.x - lo.x)) <= Fuzzy;
+	BOOL NearRight = (ABS(Rect.lo.x - hi.x)) <= Fuzzy;
+
+	// Overlaps
+	BOOL OverLeft  = (ABS(Rect.lo.x - lo.x)) <= Fuzzy;
+	BOOL OverRight = (ABS(Rect.hi.x - hi.x)) <= Fuzzy;
+	BOOL OverTop   = (ABS(Rect.hi.y - hi.y)) <= Fuzzy;
+	BOOL OverBot   = (ABS(Rect.lo.y - lo.y)) <= Fuzzy;
+
+	// Adjacent to the top or bottom?
+	BOOL TopOrBot    = (NearTop || NearBot) && OverLeft && OverRight;
+	BOOL LeftOrRight = (NearLeft || NearRight) && OverTop && OverBot;
+
+	return (TopOrBot || LeftOrRight);
+#endif
+
+	// This is explained more carefully in the section above that is excluded from the build
+	return (( ((ABS(Rect.lo.x - lo.x))<=Fuzzy) && ((ABS(Rect.hi.x - hi.x))<=Fuzzy) &&
+			 (((ABS(Rect.hi.y - lo.y))<=Fuzzy) || ((ABS(Rect.lo.y - hi.y))<=Fuzzy)) ) ||
+	        ( ((ABS(Rect.lo.y - lo.y))<=Fuzzy) && ((ABS(Rect.hi.y - hi.y))<=Fuzzy) &&
+			 (((ABS(Rect.hi.x - lo.x))<=Fuzzy) || ((ABS(Rect.lo.x - hi.x))<=Fuzzy)) ));
+}
+
+
+
+/*********************************************************************************************
+
+>    <Rect> <Rect>::Union(const <Rect>& R)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	R - the rectangle to join with the object.
+     Outputs:   - 
+     
+     Returns:   The simple union (bounding box).
+     			
+     Purpose:	Compute union of two rectangles.
+     			
+     			If one of the rectangles involved is invalid, the other is returned as the
+     			result.  In the case of both being invalid, one of the invalid rectangles
+     			is returned as the result.  It is undefined which rectangle is returned in
+     			this case.
+
+     Errors:	None.
+
+**********************************************************************************************/  
+
+<Rect> <Rect>::Union(const <Rect>& R) const
+{
+	// Special cases for invalid rectangles...
+	if (!IsValid()  ||  IsEmpty())
+		return R;
+	if (!R.IsValid()  ||  R.IsEmpty())
+		return *this;
+		
+	// Return the result
+	<Rect> U;
+	U.lo.x = min(lo.x, R.lo.x);
+	U.lo.y = min(lo.y, R.lo.y);
+	U.hi.x = max(hi.x, R.hi.x);
+	U.hi.y = max(hi.y, R.hi.y);
+	return U;
+}
+
+
+
+/*********************************************************************************************
+
+>    <Rect> <Rect>::Intersection(const <Rect>& R)
+
+     Author: 	Tim Browse
+     Created:   17/5/93
+     Inputs:	R - the rectangle to intersect with.
+     Outputs:   - 
+     
+     Returns:   The intersection.
+     			
+     Purpose:	Compute intersection of two rectangles.
+
+     			If one of the rectangles involved is invalid, the other is returned as the
+     			result.  In the case of both being invalid, one of the invalid rectangles
+     			is returned as the result.  It is undefined which rectangle is returned in
+     			this case.
+
+     Errors:	None.
+
+**********************************************************************************************/  
+
+<Rect> <Rect>::Intersection(const <Rect>& R) const
+{
+	// Special cases for invalid rectangles...
+	if (!IsValid())
+		return R;
+	if (!R.IsValid())
+		return *this;
+	
+	// Special cases when empty rectangles
+	if (IsEmpty())
+		return *this;
+	if (R.IsEmpty())
+		return R;
+
+	// Return the result
+	<Rect> I;
+	I.lo.x = max(lo.x, R.lo.x);
+	I.lo.y = max(lo.y, R.lo.y);
+	I.hi.x = min(hi.x, R.hi.x);
+	I.hi.y = min(hi.y, R.hi.y);
+	return I;
+}
+
+
+
+/*********************************************************************************************
+
+>    int <Rect>::SplitRect(const <Rect>& R, <Rect>* SubRects)
+
+     Author: 	Will
+     Created:   14/7/93
+     Inputs:	R is the rectangle to intersect with, SubRects is an array of <Rect> to fill.  
+     Outputs:   Puts any sub-rects into SubRects. 
+     
+     Returns:   The number of subrectangles found. 0 for no intersection.
+     			
+     Purpose:	Splits a rectangle into sub-rectangles which all exclude the interecting
+     			rectangle R.  The number of sub-rects generated depends on how the rectangles
+     			intersect.
+     				 _______________________       	 ___________________
+	            	|                       |      	|                   |
+     				| *this    A            |      	| *this    A        |
+     				|_ _ _  ________  _ _ _ |      	|_ _ _ _ _  ________|__________
+     				|      |        |       |      	|          |        |          |
+     				|  B   |   R    |   C   |      	|    B     |        |          |
+     				|_ _ _ |________| _ _ _ |      	|__________|________| R        |
+     				|                       |      	           |                   |
+                    |          D    Index=4 |      	           |           Index=2 |
+     				|_______________________|      	           |___________________|
+     Errors:	
+
+**********************************************************************************************/  
+
+int <Rect>::SplitRect(const <Rect>& R, <Rect>* SubRects)
+{
+	if (!this->IsIntersectedWith(R))
+		return 0;	// No intersection  
+
+	int Index = 0;
+
+	if (R.hi.y < hi.y)
+		SubRects[Index++] = <Rect>(lo.x, R.hi.y, hi.x, hi.y);	// Sub-Rect A
+		
+	if (R.lo.y > lo.y)
+		SubRects[Index++] = <Rect>(lo.x, lo.y, hi.x, R.lo.y);	// Sub-Rect D
+
+	LONG Ry0 = max(R.lo.y, lo.y);
+	LONG Ry1 = min(R.hi.y, hi.y);
+	
+	if (R.lo.x > lo.x)
+		SubRects[Index++] = <Rect>(lo.x, Ry0, R.lo.x, Ry1);			// Sub-Rect B		
+
+	if (R.hi.x < hi.x)
+		SubRects[Index++] = <Rect>(R.hi.x, Ry0, hi.x, Ry1);			// Sub-Rect C		
+
+	return Index;
+}
+
+
+
+/***********************************************************************************************
+
+>	void <Rect>::IncludePoint(const Coord& Point)
+
+	Author:		Tim Browse
+	Created:	27/5/93
+	Inputs:		Point - coordinate to include into this rectangle.
+	Outputs:	-
+	Returns:	-
+	Purpose:	Expand a rectangle so that it includes the given point.
+	Errors:		An assertion failure if the rectangle is invalid.
+	SeeAlso:	-
+
+***********************************************************************************************/
+
+void <Rect>::IncludePoint(const Coord& Point)
+{
+    // Detect an invalid rectangle
+	ENSURE(IsValid(), "<Rect>::IncludePoint() was called on an \ninvalid rectangle.");  
+
+	// Extend lower corner to include point if necessary
+	lo.x = min(lo.x, Point.x);
+	lo.y = min(lo.y, Point.y);
+	
+	// Extend upper corner to include point if necessary
+	// (remember upper corner is exclusive)
+	hi.x = max(hi.x, Point.x + 1L);
+	hi.y = max(hi.y, Point.y + 1L);
+}
+
+//!INCLUDE_EXTRA_DEFNS
+
+//!TEMPLATE_END

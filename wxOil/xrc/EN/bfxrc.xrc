@@ -1,0 +1,684 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BFXDLG_PG1">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPX">
+			 <pos>6,100d</pos> <size>66,10d</size>
+			<label>Flip &amp;horizontally</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPY">
+			 <pos>6,110d</pos> <size>66,10d</size>
+			<label>Flip &amp;vertically</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE90">
+			 <pos>6,120d</pos> <size>89,10d</size>
+			<label>Rotate by &amp;90 degrees</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE180">
+			 <pos>6,130d</pos> <size>84,10d</size>
+			<label>Rotate by &amp;180 degrees</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE270">
+			 <pos>6,140d</pos> <size>84,10d</size>
+			<label>Rotate by &amp;270 degrees</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<title>Flip &amp; Rotate</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXDLG_PG2">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_INTERP">
+			 <pos>7,147d</pos> <size>79,10d</size>
+			<label>Linear &amp;interpolation</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ASPECT">
+			 <pos>94,147d</pos> <size>77,10d</size>
+			<label>Lock &amp;aspect ratio</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_DPI2">
+			 <pos>59,109d</pos> <size>49,8d</size>
+			<label>&amp;Width (pixels)</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_DPI3">
+			 <pos>59,124d</pos> <size>47,8d</size>
+			<label>&amp;Height (pixels)</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGXSIZE">
+			 <pos>10,109d</pos> <size>48,8d</size>
+			<label>300</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGYSIZE">
+			 <pos>10,124d</pos> <size>48,8d</size>
+			<label>400</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_NEWXSIZE">
+			 <pos>117,106d</pos> <size>54,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_NEWYSIZE">
+			 <pos>117,122d</pos> <size>54,13d</size>
+		</object>
+		<title>Resize</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXDLG_PG3">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_BRIGHTNESS">
+			 <pos>67,98d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_CONTRAST">
+			 <pos>67,118d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTBRIGHTNESS">
+			 <pos>6,102d</pos> <size>49,7d</size>
+			<label>&amp;Brightness</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTCONTRAST">
+			 <pos>6,122d</pos> <size>49,7d</size>
+			<label>&amp;Contrast</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_COLOUR">
+			 <pos>67,137d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTCOLOUR">
+			 <pos>6,142d</pos> <size>49,7d</size>
+			<label>Co&amp;lour</label>
+		</object>
+		<title>Brightness &amp; Contrast</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXDLG_PG4">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERMONO">
+			 <pos>4,103d</pos> <size>82,10d</size>
+			<label>To mono (&amp;bayer)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_HALFTONEMONO">
+			 <pos>4,114d</pos> <size>85,10d</size>
+			<label>To mono (&amp;halftone)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_DIFFUSIONMONO">
+			 <pos>4,125d</pos> <size>83,10d</size>
+			<label>To mono (&amp;diffusion)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERCOLOUR">
+			 <pos>90,103d</pos> <size>83,10d</size>
+			<label>To 16 col (b&amp;ayer)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_POPULARITY">
+			 <pos>90,125d</pos> <size>87,10d</size>
+			<label>To 256 col (&amp;popularity)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_MAKEGREYSCALE">
+			 <pos>4,136d</pos> <size>76,10d</size>
+			<label>To &amp;greyscale</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_DIFFUSIONCOLOUR">
+			 <pos>90,114d</pos> <size>87,10d</size>
+			<label>To 16 col (d&amp;iffusion)</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_OCTREECOLOUR">
+			 <pos>90,136d</pos> <size>91,10d</size>
+		</object>
+		<title>Colour depth</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXDLG_PG5">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
+			 <pos>5,98d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">
+			 <pos>99,83d</pos> <size>68,59d</size>
+			<label>&amp;Custom</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM1">
+			 <pos>105,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM2">
+			 <pos>124,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM3">
+			 <pos>143,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM4">
+			 <pos>105,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM5">
+			 <pos>124,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM6">
+			 <pos>143,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM7">
+			 <pos>105,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM8">
+			 <pos>124,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM9">
+			 <pos>143,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_AMOUNTTXT">
+			 <pos>6,126d</pos> <size>30,7d</size>
+			<label>&amp;Amount</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_AMOUNT">
+			 <pos>39,123d</pos> <size>43,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<title>Special Effects</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXDLG_PG6">
+			 <pos>0,0d</pos> <size>182,160d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_SATURATION_SLIDER">
+			 <pos>54,112d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_VALUE_SLIDER">
+			 <pos>54,128d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_RAINBOW_SLIDER">
+			 <pos>54,144d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_SATURATION_CHECK">
+			 <pos>7,115d</pos> <size>46,10d</size>
+			<label>Saturation</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_VALUE_CHECK">
+			 <pos>7,130d</pos> <size>46,10d</size>
+			<label>Value</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_RAINBOW_CHECK">
+			 <pos>7,145d</pos> <size>46,10d</size>
+			<label>Rainbows</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_STYLE_SLIDER">
+			 <pos>144,112d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_OPACITY_SLIDER">
+			 <pos>144,128d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_GRAIN_SLIDER">
+			 <pos>144,144d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_STYLE_CHECK">
+			 <pos>97,114d</pos> <size>46,10d</size>
+			<label>Style</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_OPACITY_CHECK">
+			 <pos>97,130d</pos> <size>46,10d</size>
+			<label>Opacity</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_GRAIN_CHECK">
+			 <pos>97,145d</pos> <size>46,10d</size>
+			<label>Grain</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_HUE_SLIDER">
+			 <pos>54,96d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_HUE_CHECK">
+			 <pos>7,99d</pos> <size>46,10d</size>
+			<label>Hue</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_VARIATION_SLIDER">
+			 <pos>144,80d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_VARIATION_CHECK">
+			 <pos>97,82d</pos> <size>46,10d</size>
+			<label>Variation</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_ALC_SHAPES_SLIDER">
+			 <pos>144,96d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ALC_SHAPES_CHECK">
+			 <pos>97,97d</pos> <size>46,10d</size>
+			<label>Shapes</label>
+		</object>
+		<title>Bitmap Alchemist</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG1">
+			 <pos>0,0d</pos> <size>182,171d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPX">
+			 <pos>6,100d</pos> <size>66,10d</size>
+			<label>Flip &amp;horizontally</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPY">
+			 <pos>6,110d</pos> <size>66,10d</size>
+			<label>Flip &amp;vertically</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE90">
+			 <pos>6,120d</pos> <size>89,10d</size>
+			<label>Rotate by &amp;90 degrees</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE180">
+			 <pos>6,130d</pos> <size>84,10d</size>
+			<label>Rotate by &amp;180 degrees</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_ROTATE270">
+			 <pos>6,140d</pos> <size>84,10d</size>
+			<label>Rotate by &amp;270 degrees</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>37,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>5,155d</pos> <size>40,13d</size>
+			<label>&amp;Ok</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>72,155d</pos> <size>40,13d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_APPLY_NOW">
+			 <pos>50,155d</pos> <size>40,13d</size>
+			<label>&amp;Test</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>140,155d</pos> <size>40,13d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Flip &amp; Rotate</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG2">
+			 <pos>0,0d</pos> <size>182,181d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_INTERP">
+			 <pos>7,147d</pos> <size>79,10d</size>
+			<label>Linear &amp;interpolation</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BFXDLG_ASPECT">
+			 <pos>94,147d</pos> <size>77,10d</size>
+			<label>Lock &amp;aspect ratio</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>37,13d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_DPI2">
+			 <pos>59,109d</pos> <size>49,8d</size>
+			<label>&amp;Width (pixels)</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_DPI3">
+			 <pos>59,124d</pos> <size>47,8d</size>
+			<label>&amp;Height (pixels)</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGXSIZE">
+			 <pos>10,109d</pos> <size>48,8d</size>
+			<label>300</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGYSIZE">
+			 <pos>10,124d</pos> <size>48,8d</size>
+			<label>400</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_NEWXSIZE">
+			 <pos>117,106d</pos> <size>54,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_NEWYSIZE">
+			 <pos>117,122d</pos> <size>54,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>5,165d</pos> <size>40,13d</size>
+			<label>&amp;Ok</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>50,165d</pos> <size>40,13d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_APPLY_NOW">
+			 <pos>95,165d</pos> <size>40,13d</size>
+			<label>&amp;Test</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>140,165d</pos> <size>40,13d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Resize</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG3">
+			 <pos>0,0d</pos> <size>182,176d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>37,13d</size>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_BRIGHTNESS">
+			 <pos>67,98d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_CONTRAST">
+			 <pos>67,118d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTBRIGHTNESS">
+			 <pos>6,102d</pos> <size>49,8d</size>
+			<label>&amp;Brightness</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTCONTRAST">
+			 <pos>6,122d</pos> <size>49,8d</size>
+			<label>&amp;Contrast</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_COLOUR">
+			 <pos>67,137d</pos> <size>102,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_TXTCOLOUR">
+			 <pos>6,142d</pos> <size>49,8d</size>
+			<label>Co&amp;lour</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>5,160d</pos> <size>40,13d</size>
+			<label>&amp;Ok</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>72,160d</pos> <size>40,13d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_APPLY_NOW">
+			 <pos>50,160d</pos> <size>40,13d</size>
+			<label>&amp;Test</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>140,160d</pos> <size>40,13d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Brightness &amp; Contrast</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG4">
+			 <pos>0,0d</pos> <size>182,167d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>37,13d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERMONO">
+			 <pos>4,103d</pos> <size>82,10d</size>
+			<label>To mono (&amp;bayer)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_HALFTONEMONO">
+			 <pos>4,114d</pos> <size>85,10d</size>
+			<label>To mono (&amp;halftone)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_DIFFUSIONMONO">
+			 <pos>4,125d</pos> <size>83,10d</size>
+			<label>To mono (&amp;diffusion)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERCOLOUR">
+			 <pos>90,103d</pos> <size>83,10d</size>
+			<label>To 16 col (b&amp;ayer)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_POPULARITY">
+			 <pos>90,125d</pos> <size>87,10d</size>
+			<label>To 256 col (&amp;popularity)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_MAKEGREYSCALE">
+			 <pos>4,136d</pos> <size>76,10d</size>
+			<label>To &amp;greyscale</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_DIFFUSIONCOLOUR">
+			 <pos>90,114d</pos> <size>87,10d</size>
+			<label>To 16 col (d&amp;iffusion)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BFXDLG_OCTREECOLOUR">
+			 <pos>90,136d</pos> <size>91,10d</size>
+			<label>To 256 col (&amp;octree)</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>5,150d</pos> <size>40,13d</size>
+			<label>&amp;Ok</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>72,150d</pos> <size>40,13d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_APPLY_NOW">
+			 <pos>50,150d</pos> <size>40,13d</size>
+			<label>&amp;Test</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>140,150d</pos> <size>40,13d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Colour depth</title>
+	</object>
+	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG5">
+			 <pos>0,0d</pos> <size>182,167d</size>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME">
+			 <pos>2,3d</pos> <size>80,73d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+			 <pos>8,6d</pos> <size>70,67d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
+			 <pos>98,2d</pos> <size>79,74d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+			 <pos>102,6d</pos> <size>71,65d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+			 <pos>5,81d</pos> <size>37,13d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
+			 <pos>5,98d</pos> <size>77,12d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">
+			 <pos>99,83d</pos> <size>68,59d</size>
+			<label>&amp;Custom</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM1">
+			 <pos>105,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM2">
+			 <pos>124,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM3">
+			 <pos>143,96d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM4">
+			 <pos>105,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM5">
+			 <pos>124,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM6">
+			 <pos>143,110d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM7">
+			 <pos>105,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM8">
+			 <pos>124,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BFXDLG_CUSTOM9">
+			 <pos>143,124d</pos> <size>16,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_BFXDLG_AMOUNTTXT">
+			 <pos>6,126d</pos> <size>30,8d</size>
+			<label>&amp;Amount</label>
+		</object>
+		<object class="wxSlider" name="IDC_BFXDLG_AMOUNT">
+			 <pos>39,123d</pos> <size>43,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>5,150d</pos> <size>40,13d</size>
+			<label>&amp;Ok</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>72,150d</pos> <size>40,13d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_APPLY_NOW">
+			 <pos>50,150d</pos> <size>40,13d</size>
+			<label>&amp;Test</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>140,150d</pos> <size>40,13d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Special Effects</title>
+	</object>
+</resource>

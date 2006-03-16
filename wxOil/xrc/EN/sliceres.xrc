@@ -1,0 +1,132 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_SLICEINFOBAR">
+			 <pos>0,0d</pos> <size>362,17d</size>
+		<object class="wxStaticText" name="IDC_ST_BARNAME">
+			 <pos>85,0d</pos> <size>20,14d</size>
+			<label>Bar1</label>
+		</object>
+		<object class="wxButton" name="IDC_NEW_BAR">
+			 <pos>0,0d</pos> <size>30,14d</size>
+			<label>New...</label>
+		</object>
+		<object class="wxButton" name="IDC_EDIT_BAR">
+			 <pos>43,0d</pos> <size>53,14d</size>
+			<label>Bar Properties...</label>
+		</object>
+		<object class="wxButton" name="IDC_STATES">
+			 <pos>125,0d</pos> <size>72,14d</size>
+			<label>Create/Delete States...</label>
+		</object>
+		<object class="wxButton" name="IDC_REDEFINE_STATE">
+			 <pos>167,0d</pos> <size>50,14d</size>
+			<label>Set new design</label>
+		</object>
+		<object class="wxComboBox" name="IDC_ST_STATE">
+			 <pos>225,0d</pos> <size>50,120d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_LIVE">
+			 <pos>386,2d</pos> <size>52,10d</size>
+			<label>Live stretching</label>
+		</object>
+		<object class="wxButton" name="IDC_ST_EXPORT">
+			 <pos>341,0d</pos> <size>30,14d</size>
+			<label>Export...</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+	<object class="wxDialog" name="IDD_BARSTATESDLG">
+			 <pos>0,0d</pos> <size>218,77d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,0d</pos> <size>96,54d</size>
+			<label></label>
+		</object>
+		<object class="wxRadioButton" name="IDC_MOUSE_OFF">
+			 <pos>8,8d</pos> <size>55,10d</size>
+			<label>Mouse Off</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_MOUSE_OVER">
+			 <pos>8,19d</pos> <size>55,10d</size>
+			<label>Mouse Over</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_CLICKED">
+			 <pos>8,30d</pos> <size>55,10d</size>
+			<label>Mouse Down</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_SELECTED">
+			 <pos>8,41d</pos> <size>55,10d</size>
+			<label>Selected</label>
+		</object>
+		<object class="wxStaticText" name="IDC_MOUSE_OFF_EXISTS">
+			 <pos>70,9d</pos> <size>27,8d</size>
+			<label>Created</label>
+		</object>
+		<object class="wxStaticText" name="IDC_MOUSE_OVER_EXISTS">
+			 <pos>70,20d</pos> <size>27,8d</size>
+			<label>Created</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CLICKED_EXISTS">
+			 <pos>70,31d</pos> <size>27,8d</size>
+			<label>Created</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SELECTED_EXISTS">
+			 <pos>70,42d</pos> <size>27,8d</size>
+			<label>Created</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>105,0d</pos> <size>108,38d</size>
+			<label></label>
+		</object>
+		<object class="wxButton" name="IDC_CREATE_STATE">
+			 <pos>110,21d</pos> <size>50,14d</size>
+			<label>&amp;Create State</label>
+		</object>
+		<object class="wxComboBox" name="IDC_MUTATE_COLOURS">
+			 <pos>110,7d</pos> <size>98,55d</size>
+		</object>
+		<object class="wxButton" name="IDC_DELETE_STATE">
+			 <pos>110,40d</pos> <size>50,14d</size>
+			<label>&amp;Delete State</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>5,58d</pos> <size>50,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>163,58d</pos> <size>50,14d</size>
+			<label>Close</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SOURCE_TEXT">
+			 <pos>163,24d</pos> <size>47,8d</size>
+			<label>from MouseOff</label>
+		</object>
+		<title>Manage States for Nav Bar</title>
+	</object>
+	<object class="wxDialog" name="IDD_REDEFINE_STATE">
+			 <pos>0,0d</pos> <size>158,81d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>40,60d</pos> <size>55,14d</size>
+			<label>Set Design</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>101,60d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,7d</pos> <size>84,8d</size>
+			<label>Set the design for all in:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,20d</pos> <size>84,8d</size>
+			<label>Within the bar:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,33d</pos> <size>144,24d</size>
+			<label>"Set Design" will take your selection as the basis for the button design of this state. All buttons in this bar will reflect this design.</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BAR_NO_COMBO">
+			 <pos>92,18d</pos> <size>60,55d</size>
+		</object>
+		<title>Set button design in this State</title>
+	</object>
+</resource>

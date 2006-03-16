@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TIP">
+			 <pos>0,0d</pos> <size>242,184d</size>
+		<object class="wxStaticBitmap" name="-1">
+			 <pos>11,11d</pos> <size>219,130d</size>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_BITMAP">
+			 <pos>11,11d</pos> <size>50,130d</size>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_DIDYOUKNOW">
+			 <pos>61,17d</pos> <size>169,32d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>51,160d</pos> <size>56,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="IDC_MORE">
+			 <pos>113,160d</pos> <size>56,14d</size>
+			<label>&amp;Tell me more</label>
+		</object>
+		<object class="wxButton" name="IDC_NEXTTIP">
+			 <pos>175,160d</pos> <size>56,14d</size>
+			<label>&amp;Next Tip</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_STARTUP">
+			 <pos>11,145d</pos> <size>85,10d</size>
+			<label>&amp;Show Tips on StartUp</label>
+		</object>
+		<title>Tip of the Day</title>
+	</object>
+</resource>

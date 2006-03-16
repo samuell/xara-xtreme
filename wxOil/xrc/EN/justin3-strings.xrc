@@ -1,0 +1,639 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_JUSTIN3RC">
+		<title>String table from JUSTIN3RC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_DISPLAY_NAME_GALLERY">
+					<label>Name gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_LAYER_MOVE_TO_ACTIVE">
+					<label>Move to current layer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_ALL">
+					<label>All</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_ITEM">
+					<label>#1%S "#2%S" selected</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_NONE">
+					<label>No</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_PROPEXPORTNAME">
+					<label>Click to select the name and file type of this object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_PROPEXPORTOPT">
+					<label>Click to select the export options for this object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_PROPSLICE">
+					<label>Select to make this object remain whole after image slicing</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_PROPSTRETCH">
+					<label>Select to make this object stretch</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEGAL_SOME">
+					<label>Some</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_APPLY_NAMES_TO_ONE">
+					<label>Name the object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_APPLY_NAMES_TO_SEL">
+					<label>Name selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_APPLY_NAME_TO_NONE">
+					<label>Create a new name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_APPLY_NAME_TO_SEL">
+					<label>Name selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_CHANGE_BAR_EXTENDS">
+					<label>Change extending mode of bars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_CHANGE_BAR_PROPERTY">
+					<label>Change properties of bars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_CHANGE_SET_PROPERTY">
+					<label>Change properties of objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_DELETE_NAMES_FROM_ALL">
+					<label>Delete names from all objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_EXPORT_SETS">
+					<label>Export objects with names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_NAME_OBJECTS_DLG">
+					<label>Create new names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_REDEFINE_NAMES_AS_SEL">
+					<label>Redefine names as selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_REMOVE_NAMES_FROM_SEL">
+					<label>Remove names from selected objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_RENAME_ALL">
+					<label>Change a name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_RENAME_OBJECTS_DLG">
+					<label>Change a name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_SELECT_INTERSECT_SETS">
+					<label>Select objects with names in common</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_SELECT_SET">
+					<label>Select objects called a name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAMEOP_SELECT_UNION_SETS">
+					<label>Select objects with names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_NAME_GALLERY_PROP_INDEX">
+					<label>Change which properties are shown</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_NAMEDLG_NAME_EXISTS">
+					<label>That name is already used in this document. Please enter a name that is different to all others.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_LAYER_MOVE_TO_ACTIVE">
+					<label>Move the selected objects to the current layer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEGAL_ITEM_SEL_GADGET">
+					<label>#1%S objects using #3%S "#2%S" are selected; Click to (de)select objects using this #4%S</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEGAL_NAME_ITEM">
+					<label>#1%S objects using #3%S "#2%S" are selected; Click to highlight this #4%S; Double-click to name selected objects; Or drag and drop</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEGAL_OTHER_ITEM">
+					<label>#1%S objects using #3%S "#2%S" are selected; Click to highlight this #4%S</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEOP_CANT_DROP">
+					<label>Dragging "#1%S" #2%S</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEOP_DROP_TO_APPLY">
+					<label>Dragging "#1%S" #2%S : drop to give this #3%S the #4%S "#5%S"</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDST_NAMEOP_DROP_TO_APPLY_PLURAL">
+					<label>Dragging #1%Ss : drop to give this #2%S the highlighted #3%Ss</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DEFAULT_CONTAINER_NAME">
+					<label>Document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DEFAULT_EMBEDDED_DOCNAME">
+					<label>embedded.xar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DEFAULT_HOST_NAME">
+					<label>OLE Container</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DISPLAY_NAME_GALLERY">
+					<label>&amp;Name Gallery...;Display the name gallery;Allows you to name and select categories of objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DROP_FORMAT_TEXT">
+					<label>Paste #1%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_EMBEDDED_TITLE_FORMAT">
+					<label>#1%s in #2%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_CLOSE_AND_RETURN">
+					<label>&amp;Close And Return To #1%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_CLOSE_SERVER_MODE_GREYED">
+					<label>Xara Xtreme was started as an OLE server. Use Exit And Return instead.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_EXIT_AND_RETURN">
+					<label>E&amp;xit And Return To #1%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_NO_DOC_GREYED">
+					<label>There are no open documents.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_SAVE_ALL_NONE_CHANGED_GREYED">
+					<label>No file-based documents have been changed.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_SAVE_COPY_AS">
+					<label>Save Copy &amp;As...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_SAVE_EMBEDDED_GREYED">
+					<label>This document is embedded in #1%s. Use Save Copy As instead.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_SAVE_NOT_CHANGED_GREYED">
+					<label>This document has not been changed.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FILE_UPDATE">
+					<label>&amp;Update #1%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DEFAULT_NAME">
+					<label>Nothing</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_NOSELECT">
+					<label>There are no objects selected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_NOSET">
+					<label>There are no objects with this name.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_SELECT">
+					<label>There is one #1%S selected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_SELECT_PL">
+					<label>There are #1%S selected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_SET">
+					<label>There is one object named '#1%S',\n#2%S selected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_DESCRIBE_SET_PL">
+					<label>There are #3%d objects named '#1%S',\n#2%S selected.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_NONE">
+					<label>none</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_ONE_INSTANCE">
+					<label>This dialog box is already visible</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_UNIQUE_MASK">
+					<label>#1%S #2%d</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_WHICH_IS">
+					<label>which is</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEDLG_WHICH_ISNT">
+					<label>which isn't</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_BITMAPS_TITLE">
+					<label>Used bitmaps</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_BITMAPS_TYPE">
+					<label>bitmap</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_COLOURS_TITLE">
+					<label>Used colours</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_COLOURS_TYPE">
+					<label>colour</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_EXPORT_PROP">
+					<label>Exports</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_EXP_TITLE">
+					<label>Select Export Location</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_EXT_COMMA">
+					<label>, </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_EXT_ERROR">
+					<label>Some exports failed because #1%S files are not supported.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_GROUP_TITLE">
+					<label>Used #1%Ss</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_NAMES_TITLE">
+					<label>Used names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_NAMES_TYPE">
+					<label>name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_SLICE_PROP">
+					<label>Slices</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_STRETCH_PROP">
+					<label>Stretches</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_TYPEFACES_TITLE">
+					<label>Used fonts</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEGAL_TYPEFACES_TYPE">
+					<label>font</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_APPLY_NAMES_TO_ONE">
+					<label>Apply &amp;names to object;Give the highlighted names to an object;name object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_APPLY_NAMES_TO_SEL">
+					<label>Apply &amp;names to selection;Give the highlighted names to the selected objects;name objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_APPLY_NAME_TO_NONE">
+					<label>Create &amp;name for objects;Create a new name for objects;create name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_APPLY_NAME_TO_SEL">
+					<label>Apply &amp;name to selection;Give a name to the selected objects;name objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_CHANGE_BAR_EXTENDS">
+					<label>Change the extending mode of bars;Change the way that bars extend;change extend mode</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_CHANGE_BAR_PROPERTY">
+					<label>Change the properties of bars;Change the properties associated with bars;change bar property</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_CHANGE_SET_PROPERTY">
+					<label>Change the properties of objects;Change the properties associated with objects having a name;change object property</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_DELETE_NAMES_FROM_ALL">
+					<label>&amp;Delete names from objects;Delete the highlighted names from all objects;delete names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_EXPORT_SETS">
+					<label>E&amp;xport objects with names;Batch-export all objects with the highlighted names;export objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_NAME_OBJECTS_DLG">
+					<label>&amp;Name objects;Create new names for objects;create names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_REDEFINE_NAMES_AS_SEL">
+					<label>Rede&amp;fine names as selection;Redefine the highlighted names to denote only the selected objects;redefine names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_REMOVE_NAMES_FROM_SEL">
+					<label>Re&amp;move names from selection;Take the highlighted names away from the selected objects;remove names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_RENAME_ALL">
+					<label>&amp;Rename objects;Change a name for all objects with it;rename objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_RENAME_OBJECTS_DLG">
+					<label>&amp;Rename objects;Change the highlighted name for all objects with it;rename objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_SELECT_INTERSECT_SETS">
+					<label>Select &amp;intersection of names;Select all objects with every highlighted name;select intersection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_SELECT_SET">
+					<label>&amp;Select name;Select all objects called a name;select name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAMEOP_SELECT_UNION_SETS">
+					<label>Select &amp;union of names;Select all objects with any highlighted name;select union</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NAME_GALLERY_PROP_INDEX">
+					<label>Name gallery &amp;index;Change which properties of items are displayed in the gallery;change property index</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SAVE_AS_DEFAULT_EMBEDDED">
+					<label>You are about to replace the template document from which all new embedded documents are made. New documents inserted in other compound documents will look like this document from now on. The current template document for embeddings will be removed.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SGNAME_GALLERY_NAME">
+					<label>Name gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_CREATING_DOC_PFX">
+					<label>Creating Document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_FLUSH_CLIPBOARD_PFX">
+					<label>Updating Clipboard</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_OPENING_DOC_PFX">
+					<label>Opening Document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_RENDER_METAFILE">
+					<label>Rendering metafile ...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_SAVING_DOC_PFX">
+					<label>Saving Document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_WAIT_UPDATING_DOC_PFX">
+					<label>Updating #1%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ZOOM_COMBO_DIVIDER">
+					<label>--------</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

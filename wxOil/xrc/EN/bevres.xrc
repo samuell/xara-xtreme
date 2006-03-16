@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_DAVES_DLG">
+			 <pos>0,0d</pos> <size>158,121d</size>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>45,10d</size>
+			<label>Bevel Size:</label>
+		</object>
+		<object class="wxScrollBar" name="IDC_DAVE_LW_SLIDER">
+			 <pos>55,5d</pos> <size>95,10d</size>
+			<style>wxSB_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_DAVE_MKBMP">
+			 <pos>13,100d</pos> <size>60,15d</size>
+			<label>Apply Bevel</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>28,72d</pos> <size>45,10d</size>
+			<label>Bevel Type:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_DAVE_BEVEL_TYPE">
+			 <pos>83,71d</pos> <size>45,10d</size>
+		</object>
+		<object class="wxScrollBar" name="IDC_DAVE_SLIDER_ANGLE">
+			 <pos>55,35d</pos> <size>95,10d</size>
+			<style>wxSB_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,35d</pos> <size>45,10d</size>
+			<label>Light Angle:</label>
+		</object>
+		<object class="wxScrollBar" name="IDC_BEVEL_TRANSPARENCY">
+			 <pos>55,55d</pos> <size>95,10d</size>
+			<style>wxSB_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,56d</pos> <size>45,10d</size>
+			<label>Contrast:</label>
+		</object>
+		<object class="wxButton" name="IDC_DAVE_BEV_REMOVE">
+			 <pos>83,100d</pos> <size>60,15d</size>
+			<label>Remove bevel</label>
+		</object>
+		<title>Bevels</title>
+	</object>
+	<object class="wxDialog" name="IDD_BEVELINFOBAR">
+			 <pos>0,0d</pos> <size>362,17d</size>
+		<object class="wxSlider" name="IDC_BEVELSLIDER">
+			 <pos>141,3d</pos> <size>64,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxComboBox" name="IDC_BEVEL_SLIDER_COMBO">
+			 <pos>75,1d</pos> <size>60,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BEVEL_TYPE_COMBO">
+			 <pos>9,2d</pos> <size>60,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BEVEL_SLIDER_EDIT">
+			 <pos>215,2d</pos> <size>35,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BEVEL_INNER_COMBO">
+			 <pos>260,1d</pos> <size>60,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BEVELOUTER">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BEVELINNER">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BEVELJOINTYPEMITRE">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BEVELJOINTYPEROUND">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BEVELJOINTYPEBEVEL">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

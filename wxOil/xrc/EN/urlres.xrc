@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_URLIMPORT">
+			 <pos>0,0d</pos> <size>209,57d</size>
+		<object class="wxTextCtrl" name="IDC_URLIMPORT_URL">
+			 <pos>7,17d</pos> <size>195,14d</size>
+		</object>
+		<object class="wxButton" name="IDC_URLIMPORT_IMPORT">
+			 <pos>15,36d</pos> <size>50,14d</size>
+			<label>Import</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>79,36d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_URLIMPORT_HELP">
+			 <pos>143,36d</pos> <size>50,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,7d</pos> <size>16,8d</size>
+			<label>URL</label>
+		</object>
+		<title>Import from Web...</title>
+	</object>
+</resource>

@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_ALEXRC">
+		<title>String table from ALEXRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDM_CRASHME_REN">
+					<label>Crash me Render</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SERIOUSERROR">
+					<label>Serious error from Xara X</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

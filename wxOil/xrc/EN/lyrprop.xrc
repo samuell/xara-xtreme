@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TAB_GUIDELINE_PROPERTIES">
+			 <pos>0,0d</pos> <size>201,148d</size>
+		<object class="wxButton" name="IDC_GUIDETAB_NEW">
+			 <pos>125,20d</pos> <size>55,14d</size>
+			<label>New...</label>
+		</object>
+		<object class="wxButton" name="IDC_GUIDETAB_DELETE">
+			 <pos>125,40d</pos> <size>55,14d</size>
+			<label>Delete</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_GUIDETAB_HORZ">
+			 <pos>25,79d</pos> <size>45,10d</size>
+			<label>Horizontal</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_GUIDETAB_VERT">
+			 <pos>75,79d</pos> <size>45,10d</size>
+			<label>Vertical</label>
+		</object>
+		<object class="wxButton" name="IDC_GUIDETAB_PROPERTIES">
+			 <pos>125,60d</pos> <size>55,14d</size>
+			<label>Properties...</label>
+		</object>
+		<object class="wxListBox" name="IDC_GUIDETAB_GUIDELINELIST">
+			 <pos>25,20d</pos> <size>85,55d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_GUIDETAB_COLOURLIST">
+			 <pos>55,119d</pos> <size>70,96d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_GUIDETAB_COLOURTEXT">
+			 <pos>25,121d</pos> <size>25,8d</size>
+			<label>Colour:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,105d</pos> <size>190,35d</size>
+			<label>Colour of guide layer objects</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>190,90d</size>
+			<label>Guidelines</label>
+		</object>
+		<title>Guides</title>
+	</object>
+	<object class="wxDialog" name="IDD_TAB_LAYER_PROPERTIES">
+			 <pos>0,0d</pos> <size>201,148d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>190,60d</size>
+			<label>Layer</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>20,26d</pos> <size>21,8d</size>
+			<label>Name:</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_LAYERTAB_VISIBLE">
+			 <pos>45,45d</pos> <size>35,10d</size>
+			<label>Visible</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_LAYERTAB_EDITABLE">
+			 <pos>85,45d</pos> <size>40,10d</size>
+			<label>Editable</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_LAYERTAB_NAME">
+			 <pos>45,25d</pos> <size>140,13d</size>
+		</object>
+		<title>Layer</title>
+	</object>
+	<object class="wxDialog" name="IDD_GUIDELINE_PROPERTIES">
+			 <pos>0,0d</pos> <size>171,63d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>115,8d</pos> <size>50,14d</size>
+			<label>&amp;OK</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_GUIDELINEPROP_POSITION">
+			 <pos>50,20d</pos> <size>50,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>115,27d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>115,46d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>15,22d</pos> <size>30,8d</size>
+			<label>Position:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>15,41d</pos> <size>20,8d</size>
+			<label>Type:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_GUIDELINEPROP_TYPE">
+			 <pos>55,42d</pos> <size>38,8d</size>
+			<label>Horizontal</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>50,36d</pos> <size>50,17d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>105,55d</size>
+			<label>Properties</label>
+		</object>
+		<title>Guideline properties</title>
+	</object>
+</resource>

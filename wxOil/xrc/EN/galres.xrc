@@ -1,0 +1,472 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_GALBUTTONSTORE">
+			 <pos>0,0d</pos> <size>313,174d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_SGCOLOUR">
+			 <pos>8,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGLAYER">
+			 <pos>28,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGBITMAP">
+			 <pos>48,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGLINE">
+			 <pos>68,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGFONTS">
+			 <pos>88,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGNAME">
+			 <pos>148,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGCLIPART">
+			 <pos>108,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGFILLS">
+			 <pos>128,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_INSTALL">
+			 <pos>8,124d</pos> <size>36,12d</size>
+			<label>Install</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_DEINSTALL">
+			 <pos>44,124d</pos> <size>36,12d</size>
+			<label>Uninstall</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_OPEN">
+			 <pos>8,156d</pos> <size>36,12d</size>
+			<label>Open</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_COPY">
+			 <pos>80,156d</pos> <size>36,12d</size>
+			<label>Copy</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_IMPORT">
+			 <pos>44,156d</pos> <size>36,12d</size>
+			<label>Import</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_GENERATE">
+			 <pos>44,156d</pos> <size>36,12d</size>
+			<label>Create</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_UPDATE">
+			 <pos>44,156d</pos> <size>36,12d</size>
+			<label>Batch</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_REMOVE">
+			 <pos>44,156d</pos> <size>36,12d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_BROWSE">
+			 <pos>80,124d</pos> <size>36,12d</size>
+			<label>Add library...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_ADD_CLIPART">
+			 <pos>80,124d</pos> <size>36,12d</size>
+			<label>Disc clipart...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_ADD_FILLS">
+			 <pos>80,124d</pos> <size>36,12d</size>
+			<label>Disc fills...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_WEB_CLIPART">
+			 <pos>80,156d</pos> <size>36,12d</size>
+			<label>Get clipart...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Stop loading</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_WEB_FONTS">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Get fonts...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_WEB_FILLS">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Get fills...</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBGAL_ADD_FONTS">
+			 <pos>80,124d</pos> <size>36,12d</size>
+			<label>Disc fonts...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,112d</pos> <size>152,28d</size>
+			<label>Font gallery buttons</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,144d</pos> <size>152,28d</size>
+			<label>Library gallery buttons</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>152,32d</size>
+			<label>All gallery Op buttons</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>160,8d</pos> <size>152,28d</size>
+			<label>Add yours in here...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,36d</pos> <size>152,40d</size>
+			<label>Default Gallery buttons</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_EDIT">
+			 <pos>44,60d</pos> <size>36,12d</size>
+			<label>Edit</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_APPLY">
+			 <pos>8,48d</pos> <size>36,12d</size>
+			<label>Apply</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_NEW">
+			 <pos>44,48d</pos> <size>36,12d</size>
+			<label>New...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_NEW_NODLG">
+			 <pos>44,48d</pos> <size>36,12d</size>
+			<label>New</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_DELETE">
+			 <pos>80,48d</pos> <size>36,12d</size>
+			<label>Delete</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_REDEFINE">
+			 <pos>8,60d</pos> <size>36,12d</size>
+			<label>Redefine</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_UNDO">
+			 <pos>116,48d</pos> <size>36,12d</size>
+			<label>Undo</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_MENU">
+			 <pos>80,60d</pos> <size>36,12d</size>
+			<label>Options...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_COPY">
+			 <pos>8,92d</pos> <size>36,12d</size>
+			<label>Copy...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_COPY_NODLG">
+			 <pos>8,92d</pos> <size>36,12d</size>
+			<label>Copy</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_NAME">
+			 <pos>44,92d</pos> <size>36,12d</size>
+			<label>Name...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_PROPERTIES">
+			 <pos>44,92d</pos> <size>36,12d</size>
+			<label>Properties...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_HELP">
+			 <pos>44,92d</pos> <size>36,12d</size>
+			<label>Help...</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_UPONE">
+			 <pos>80,92d</pos> <size>36,12d</size>
+			<label>Up one</label>
+		</object>
+		<object class="wxButton" name="IDC_GALLERY_DOWNONE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Down one</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_CREATE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Insert</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_FILL">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Fill</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_TEXTURE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Transp</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_TRACE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Trace...</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_EFFECTS">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Effects...</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_SAVE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Save...</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_PROPS">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Properties...</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_PLUGINS">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Effects</label>
+		</object>
+		<object class="wxButton" name="IDC_COLGAL_BACKGROUND">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Background</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_BACKGROUND">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Background</label>
+		</object>
+		<object class="wxButton" name="IDC_BMPGAL_PREVIEW">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Preview...</label>
+		</object>
+		<object class="wxButton" name="IDC_FRAME_ANIMATION">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Animation...</label>
+		</object>
+		<object class="wxButton" name="IDC_FRAME_BROWSER">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Browser...</label>
+		</object>
+		<object class="wxButton" name="IDC_FRAME_DELETE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Delete</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SGFRAME">
+			 <pos>28,16d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxButton" name="IDC_LAYER_MOVE_TO_ACTIVE">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Move</label>
+		</object>
+		<object class="wxButton" name="IDC_NAMEGAL_RENAME">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Rename</label>
+		</object>
+		<object class="wxButton" name="IDC_NAMEGAL_SELECT">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Select</label>
+		</object>
+		<object class="wxButton" name="IDC_NAMEGAL_INTERSECT">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Intersect</label>
+		</object>
+		<object class="wxButton" name="IDC_NAMEGAL_EXPORT">
+			 <pos>116,92d</pos> <size>36,12d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxComboBox" name="IDC_NAMEGAL_PROP_IDX">
+			 <pos>116,92d</pos> <size>36,64d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_LIBGAL_CLIPTHEME">
+			 <pos>116,92d</pos> <size>45,64d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,80d</pos> <size>152,28d</size>
+			<label>Layer gallery buttons</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>160,44d</pos> <size>152,28d</size>
+			<label>Add yours in here...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>160,80d</pos> <size>152,28d</size>
+			<label>Add yours in here...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>160,144d</pos> <size>152,28d</size>
+			<label>Add yours in here...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>160,112d</pos> <size>152,28d</size>
+			<label>Add yours in here...</label>
+		</object>
+		<title>Gallery button store</title>
+	</object>
+	<object class="wxDialog" name="IDD_SGDISPLAY">
+			 <pos>0,0d</pos> <size>146,39d</size>
+		<object class="wxComboBox" name="IDC_SGDISPLAY_DMODE">
+			 <pos>4,5d</pos> <size>139,63d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>3,23d</pos> <size>43,14d</size>
+			<label>&amp;Apply</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>52,23d</pos> <size>43,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>99,23d</pos> <size>43,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Gallery icon size</title>
+	</object>
+	<object class="wxDialog" name="IDD_SGSEARCH">
+			 <pos>0,0d</pos> <size>155,72d</size>
+		<object class="wxRadioButton" name="IDC_SGSEARCH_NAMEONLY">
+			 <pos>4,36d</pos> <size>100,10d</size>
+			<label>Search &amp;names &amp;&amp; keywords</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SGSEARCH_TEXT">
+			 <pos>4,20d</pos> <size>104,13d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_SGSEARCH_FULLINFO">
+			 <pos>4,48d</pos> <size>88,10d</size>
+			<label>Search all &amp;information</label>
+		</object>
+		<object class="wxButton" name="IDC_SGSEARCH_FINDFIRST">
+			 <pos>112,4d</pos> <size>40,14d</size>
+			<label>&amp;Find first</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>112,20d</pos> <size>40,14d</size>
+			<label>Find ne&amp;xt</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>112,36d</pos> <size>40,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>112,52d</pos> <size>40,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,8d</pos> <size>96,8d</size>
+			<label>Find items including the text:</label>
+		</object>
+		<title>Find gallery item...</title>
+	</object>
+	<object class="wxDialog" name="IDD_COLOURNAMEDLG">
+			 <pos>0,0d</pos> <size>159,38d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>52,20d</pos> <size>50,14d</size>
+			<label>&amp;OK</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_COLNAME_TEXT">
+			 <pos>28,4d</pos> <size>128,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>107,20d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_COLNAME_PATCH">
+			 <pos>8,20d</pos> <size>12,12d</size>
+		</object>
+		<title>Rename colour style</title>
+	</object>
+	<object class="wxDialog" name="IDD_SGSORT">
+			 <pos>0,0d</pos> <size>227,73d</size>
+		<object class="wxComboBox" name="IDC_GALSORT_SORT1">
+			 <pos>7,17d</pos> <size>76,44d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE1">
+			 <pos>23,33d</pos> <size>44,10d</size>
+			<label>&amp;Reversed</label>
+		</object>
+		<object class="wxComboBox" name="IDC_GALSORT_SORT2">
+			 <pos>95,17d</pos> <size>76,44d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE2">
+			 <pos>111,33d</pos> <size>44,10d</size>
+			<label>Reversed</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_GALSORT_TOALL">
+			 <pos>3,48d</pos> <size>140,10d</size>
+			<label>A&amp;pply the sort to all the gallery sections</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_GALSORT_TOSELONLY">
+			 <pos>3,60d</pos> <size>200,10d</size>
+			<label>&amp;Only apply the sort to sections containing selected items</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>180,4d</pos> <size>43,14d</size>
+			<label>&amp;Sort</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>180,20d</pos> <size>43,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>180,36d</pos> <size>43,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GALSORT_GROUP1">
+			 <pos>3,4d</pos> <size>84,40d</size>
+			<label>Primary key</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GALSORT_GROUP2">
+			 <pos>91,4d</pos> <size>84,40d</size>
+			<label>Secondary key</label>
+		</object>
+		<title>Gallery sort options</title>
+	</object>
+	<object class="wxDialog" name="IDD_SGLINEPROPERTIES">
+			 <pos>0,0d</pos> <size>144,201d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>7,1d</pos> <size>130,50d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_SGLINEPROPERTIES_DIAGRAM">
+			 <pos>9,7d</pos> <size>126,42d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>7,51d</pos> <size>130,27d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>13,62d</pos> <size>45,9d</size>
+			<label>Brush Name:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SGLINEPROPERTIES_NAMEEDIT">
+			 <pos>58,59d</pos> <size>73,14d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>7,78d</pos> <size>130,34d</size>
+			<label></label>
+		</object>
+		<object class="wxCheckBox" name="IDC_SGLINEPROPERTIES_OVERRIDE_FILL">
+			 <pos>13,86d</pos> <size>118,10d</size>
+			<label>Override &amp;Brush Colours</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_SGLINEPROPERTIES_OVERRIDE_TRANS">
+			 <pos>13,98d</pos> <size>117,10d</size>
+			<label>Override Brush &amp;Transparency</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>7,112d</pos> <size>130,62d</size>
+			<label></label>
+		</object>
+		<object class="wxCheckBox" name="IDC_SGLINEPROPERTIES_REPEAT">
+			 <pos>14,120d</pos> <size>55,10d</size>
+			<label>&amp;Repeating</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_SGLINEPROPERTIES_OPTIMAL">
+			 <pos>14,134d</pos> <size>42,10d</size>
+			<label>Optimal</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_SGLINEPROPERTIES_FIXED">
+			 <pos>14,144d</pos> <size>35,10d</size>
+			<label>Fixed:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SGLINEPROPERTIES_FIXED_EDIT">
+			 <pos>104,155d</pos> <size>28,12d</size>
+		</object>
+		<object class="wxSlider" name="IDC_SGLINEPROPERTIES_FIXED_SLIDER">
+			 <pos>14,155d</pos> <size>64,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>52,180d</pos> <size>41,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>96,180d</pos> <size>41,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Custom brush properties</title>
+	</object>
+</resource>

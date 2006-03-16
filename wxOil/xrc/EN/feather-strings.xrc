@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_FEATHERRC">
+		<title>String table from FEATHERRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHEROP">
+					<label>Feather;Fades outline of selected objects;Feather</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHERPROFILEOP">
+					<label>Feather Profile;Changes the profile of the feather region;Feather Profile</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHERSIZEOP">
+					<label>Feather Size;Changes the size of the feather region;Feather Size</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHER_DESCRP">
+					<label>feathered objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_FEATHER_DESCRS">
+					<label>feathered object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NOT_VALID_FTHR_SZ">
+					<label>Sorry, feather region sizes must be in the range [0pix - 40pix]. Please re-enter.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NO_FEATHERED_OBJECTS">
+					<label>There are no feathered objects selected</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NO_UNFEATHERED_OBJECTS">
+					<label>All objects in the selection already have feathering applied</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNFEATHEROP">
+					<label>Remove Feathering;Removes feathered outline created by Feather command;Remove Feathering</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

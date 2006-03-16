@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_COMBINEBUTTONS">
+			 <pos>0,0d</pos> <size>185,92d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_COMBINEADD">
+			 <pos>48,11d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COMBINESUBTRACT">
+			 <pos>69,13d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COMBINEINTERSECT">
+			 <pos>88,14d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COMBINESLICE">
+			 <pos>107,14d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BITMAPPREVIEWDIALOG">
+			 <pos>0,0d</pos> <size>397,153d</size>
+		<object class="wxStaticBox" name="IDC_ACTIVE1">
+			 <pos>6,1d</pos> <size>167,150d</size>
+			<label>Image A (0%) SELECTED</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_REDRAW1">
+			 <pos>13,14d</pos> <size>155,111d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_IMAGESIZE1">
+			 <pos>13,125d</pos> <size>155,8d</size>
+			<label>Image Size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILESIZE1">
+			 <pos>13,133d</pos> <size>155,8d</size>
+			<label>File Size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEDIFF1">
+			 <pos>13,141d</pos> <size>155,8d</size>
+			<label>File Difference:</label>
+		</object>
+		<object class="wxComboBox" name="IDC_FILE_TYPE_LIST">
+			 <pos>121,0d</pos> <size>48,30d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_ACTIVE2">
+			 <pos>213,0d</pos> <size>165,151d</size>
+			<label>Image B (0%)</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_REDRAW2">
+			 <pos>218,14d</pos> <size>155,111d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_IMAGESIZE2">
+			 <pos>218,125d</pos> <size>155,8d</size>
+			<label>Image Size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILESIZE2">
+			 <pos>218,133d</pos> <size>155,8d</size>
+			<label>File Size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEDIFF2">
+			 <pos>218,141d</pos> <size>155,8d</size>
+			<label>File Difference:</label>
+		</object>
+		<object class="wxComboBox" name="IDC_FILE_TYPE_LIST2">
+			 <pos>326,0d</pos> <size>48,30d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_ZOOM_TOOL">
+			 <pos>183,6d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PUSH_TOOL">
+			 <pos>183,32d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_ZOOM_TO_FIT">
+			 <pos>183,56d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_100PERCENT">
+			 <pos>183,80d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_1TO1">
+			 <pos>183,104d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_COLOUR_SELECTOR">
+			 <pos>183,128d</pos> <size>20,20d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

@@ -1,0 +1,762 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BARCONTROLSTORE">
+			 <pos>0,0d</pos> <size>466,92d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWARRANGE">
+			 <pos>213,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_HELPUSING">
+			 <pos>116,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILENEW">
+			 <pos>13,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILEOPEN">
+			 <pos>33,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILESAVE">
+			 <pos>54,10d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILEPRINT">
+			 <pos>83,21d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWGRID">
+			 <pos>126,10d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWSNAP">
+			 <pos>144,10d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILESAVEAS">
+			 <pos>10,50d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILEEXIT">
+			 <pos>33,52d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILECLOSE">
+			 <pos>58,52d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_HELPINDEX">
+			 <pos>81,54d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_HELPSPEC">
+			 <pos>81,54d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_EDITUNDO">
+			 <pos>169,9d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_EDITREDO">
+			 <pos>186,10d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWNEWVIEW">
+			 <pos>148,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWTILE">
+			 <pos>171,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEGROUP">
+			 <pos>326,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEUNGROUP">
+			 <pos>346,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEMOVEFORWARD">
+			 <pos>286,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEMOVEBACK">
+			 <pos>306,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEBRINGFRONT">
+			 <pos>250,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEPUTTOBACK">
+			 <pos>266,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWQUALITYAA">
+			 <pos>366,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWQUALITYNORMAL">
+			 <pos>386,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWQUALITYSIMPLE">
+			 <pos>406,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WINDOWQUALITYOUTLINE">
+			 <pos>426,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_VIEWSTATUSBAR">
+			 <pos>234,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEMOVEFRONTLAYER">
+			 <pos>306,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ARRANGEMOVEBEHINDLAYER">
+			 <pos>306,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDPB_SELECTED_ZOOM_BUTTON">
+			 <pos>486,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDPB_DRAWING_ZOOM_BUTTON">
+			 <pos>466,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDPB_PREV_ZOOM_BUTTON">
+			 <pos>506,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDPB_SPREAD_ZOOM_BUTTON">
+			 <pos>446,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_EDITSELECTALL">
+			 <pos>210,10d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_EDITSELECTNONE">
+			 <pos>231,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COLOURMGRDLG">
+			 <pos>144,32d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SCALEFACTORDLG">
+			 <pos>170,33d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SCALEFACTORDLG2">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_UNITSETUPDLG">
+			 <pos>209,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_DELETEPOINTSOP">
+			 <pos>97,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_PAGESIZEDLG">
+			 <pos>120,35d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_OPTIONSDLG">
+			 <pos>100,35d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BITMAPTRACER">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BITMAPEFFECTS">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILESAVEALL">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILESAVETEMPLATE">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILEIMPORT">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILEEXPORT">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FITTEXTTOCURVE">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CLONE">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PRINTBORDERS">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_ALIGNEMENT">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_COLOUREDITOR">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PRINTSETUP">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PASTEATSAMEPOS">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PAGERULERS">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILEINFO">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SHOWGUIDES">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SNAPTOGUIDES">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_OVERPRINTFILL">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_OVERPRINTLINE">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PRINTONALLPLATES">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_COMPOSITEPREVIEW">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WEBADDRESSDLG">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FILEURLIMPORT">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TMPLTDLG">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FILENEW_ANIMATION">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_IMAGESLICE">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BARCREATION">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_FEATHERSIZE_CUSTOMEDIT">
+			 <pos>230,3d</pos> <size>35,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FEATHERPROFILE_GDGT">
+			 <pos>326,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_AUTOCLOSEPATHS">
+			 <pos>23,70d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_DELETE">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_DUPLICATE">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CONVERTTOSHAPES">
+			 <pos>306,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CUT">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COPY">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_PASTE">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_MULTILAYER">
+			 <pos>232,33d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ALLVISIBLE">
+			 <pos>252,33d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_VISIBLE">
+			 <pos>273,33d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_LOCKED">
+			 <pos>293,33d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_UNAVAILABLE">
+			 <pos>16,27d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BREAKATPOINTSOP">
+			 <pos>147,74d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SMOOTHSELECTIONOP">
+			 <pos>169,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_MAGNET">
+			 <pos>194,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_JOINSHAPEOP">
+			 <pos>39,71d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BREAKSHAPEOP">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_VIEWFULLSCREEN">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_PASTEATTRIBUTES">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_WHATSTHIS">
+			 <pos>62,73d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDPB_NAMEDLG_RUN_BUTTON">
+			 <pos>366,55d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxSlider" name="IDC_QUALITYSLIDER">
+			 <pos>250,75d</pos> <size>25,9d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_TIMEDRAW">
+			 <pos>186,50d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxComboBox" name="IDCB_ZOOM_COMBO_BOX">
+			 <pos>291,12d</pos> <size>36,105d</size>
+		</object>
+		<object class="wxComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
+			 <pos>258,12d</pos> <size>32,78d</size>
+		</object>
+		<object class="wxComboBox" name="IDLB_JOINTYPE_LIST_BOX">
+			 <pos>300,12d</pos> <size>46,48d</size>
+		</object>
+		<object class="wxComboBox" name="IDLB_LINECAP_LIST_BOX">
+			 <pos>300,12d</pos> <size>43,48d</size>
+		</object>
+		<title>Dummy standard bar</title>
+	</object>
+	<object class="wxDialog" name="IDD_BLANKBAR">
+			 <pos>0,0d</pos> <size>185,92d</size>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_GRIDDLG">
+			 <pos>0,0d</pos> <size>329,21d</size>
+		<object class="wxComboBox" name="IDC_UNITS">
+			 <pos>63,4d</pos> <size>54,89d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_GRIDTYPE">
+			 <pos>183,4d</pos> <size>54,30d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_DIVISIONS">
+			 <pos>6,4d</pos> <size>48,96d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_SUBDIVISIONS">
+			 <pos>126,4d</pos> <size>48,96d</size>
+		</object>
+		<object class="wxButton" name="IDC_MAKEGRID">
+			 <pos>245,5d</pos> <size>10,10d</size>
+			<label>G</label>
+		</object>
+		<title>Grid tool info</title>
+	</object>
+	<object class="wxDialog" name="IDD_GRIDTOOL">
+			 <pos>0,0d</pos> <size>394,22d</size>
+		<object class="wxComboBox" name="IDC_DIVISIONS">
+			 <pos>5,5d</pos> <size>36,97d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_UNITS">
+			 <pos>46,5d</pos> <size>54,89d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_SUBDIVISIONS">
+			 <pos>105,5d</pos> <size>36,98d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_GRIDTYPE">
+			 <pos>146,5d</pos> <size>54,30d</size>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_LAYER_NAME">
+			 <pos>0,0d</pos> <size>183,54d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>12,34d</pos> <size>50,14d</size>
+			<label>&amp;OK</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_LAYER_NAME">
+			 <pos>72,11d</pos> <size>77,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>67,34d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>122,34d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>25,14d</pos> <size>42,8d</size>
+			<label>Layer name:</label>
+		</object>
+		<title>Name layer</title>
+	</object>
+	<object class="wxDialog" name="IDD_TOOLBARS">
+			 <pos>0,0d</pos> <size>191,126d</size>
+		<object class="wxListBox" name="IDC_BARLIST">
+			 <pos>4,4d</pos> <size>125,62d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>136,4d</pos> <size>50,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="IDC_NEWBAR">
+			 <pos>136,20d</pos> <size>50,14d</size>
+			<label>Ne&amp;w...</label>
+		</object>
+		<object class="wxButton" name="IDC_DELETEBAR">
+			 <pos>136,36d</pos> <size>50,14d</size>
+			<label>&amp;Delete</label>
+		</object>
+		<object class="wxButton" name="IDC_RESETBARS">
+			 <pos>136,52d</pos> <size>50,14d</size>
+			<label>Re&amp;set</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>136,68d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BIGLEFT">
+			 <pos>8,92d</pos> <size>35,11d</size>
+			<label>&amp;Left</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BIGTOP">
+			 <pos>49,78d</pos> <size>35,10d</size>
+			<label>&amp;Top</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BIGFLOAT">
+			 <pos>49,92d</pos> <size>40,10d</size>
+			<label>&amp;Floating</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BIGRIGHT">
+			 <pos>93,92d</pos> <size>30,11d</size>
+			<label>&amp;Right</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BIGBOTTOM">
+			 <pos>49,107d</pos> <size>35,10d</size>
+			<label>&amp;Bottom</label>
+		</object>
+		<object class="wxButton" name="IDC_BIGNONE">
+			 <pos>95,78d</pos> <size>30,12d</size>
+			<label>&amp;None</label>
+		</object>
+		<object class="wxButton" name="IDC_BIGALL">
+			 <pos>94,106d</pos> <size>30,12d</size>
+			<label>&amp;All</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,68d</pos> <size>125,55d</size>
+			<label>Use large buttons for:</label>
+		</object>
+		<title>Control bars</title>
+	</object>
+	<object class="wxDialog" name="IDD_CUSTOMIZEBAR">
+			 <pos>0,0d</pos> <size>177,123d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>120,15d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>120,35d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxListBox" name="IDC_OPSLIST">
+			 <pos>5,15d</pos> <size>105,100d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,5d</pos> <size>80,8d</size>
+			<label>Operations:</label>
+		</object>
+		<title>Customize</title>
+	</object>
+	<object class="wxDialog" name="IDD_INFOBAR">
+			 <pos>0,0d</pos> <size>122,19d</size>
+		<object class="wxComboBox" name="IDC_LAYER_COMBO">
+			 <pos>10,3d</pos> <size>88,56d</size>
+		</object>
+		<object class="wxButton" name="IDC_INVOKE_LYR_DLG">
+			 <pos>101,3d</pos> <size>12,12d</size>
+			<label>..</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_NEWTOOLBAR">
+			 <pos>0,0d</pos> <size>186,57d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>6,35d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITNEWBARNAME">
+			 <pos>6,16d</pos> <size>173,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>60,35d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>129,35d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>6,6d</pos> <size>69,8d</size>
+			<label>Control bar name:</label>
+		</object>
+		<title>New control bar</title>
+	</object>
+	<object class="wxDialog" name="IDD_NAMEDLG_NAME_TEMPLATE">
+			 <pos>0,0d</pos> <size>183,70d</size>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>14,32d</pos> <size>40,10d</size>
+			<label>New name:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_NAMEDLG_NAME">
+			 <pos>56,31d</pos> <size>110,12d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>12,50d</pos> <size>44,14d</size>
+			<label>&amp;Create</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>68,50d</pos> <size>44,14d</size>
+			<label>Cl&amp;ose</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>124,50d</pos> <size>44,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Create a name</title>
+	</object>
+	<object class="wxDialog" name="IDD_NAMEDLG_RENAME_TEMPLATE">
+			 <pos>0,0d</pos> <size>183,70d</size>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>14,32d</pos> <size>40,10d</size>
+			<label>New name:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_NAMEDLG_NAME">
+			 <pos>56,31d</pos> <size>110,12d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>12,50d</pos> <size>44,14d</size>
+			<label>&amp;OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>68,50d</pos> <size>44,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>124,50d</pos> <size>44,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Change a name</title>
+	</object>
+	<object class="wxDialog" name="IDD_FREEHANDTOOL">
+			 <pos>0,0d</pos> <size>187,22d</size>
+		<object class="wxCamArtControl" name="IDC_FREEHANDPRESSURE">
+			 <pos>13,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxSlider" name="IDC_FREEHANDSLIDER">
+			 <pos>9,3d</pos> <size>64,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_FREEHANDPERCENT">
+			 <pos>95,5d</pos> <size>17,8d</size>
+			<label>100%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FREEHANDRETRO">
+			 <pos>161,4d</pos> <size>24,8d</size>
+			<label>Retro</label>
+		</object>
+		<object class="wxButton" name="IDC_CREATEBRUSH">
+			 <pos>77,17d</pos> <size>45,14d</size>
+			<label>Create Brush</label>
+		</object>
+		<object class="wxButton" name="IDC_EDITBRUSH">
+			 <pos>77,17d</pos> <size>45,14d</size>
+			<label>Edit Brush</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BRUSHSTEPDISTANCE">
+			 <pos>45,35d</pos> <size>30,13d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_LBLBRUSHDISTANCE">
+			 <pos>7,20d</pos> <size>24,9d</size>
+			<label>Spacing:</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BRUSHTYPE">
+			 <pos>175,15d</pos> <size>28,11d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_STROKETYPE">
+			 <pos>175,15d</pos> <size>28,11d</size>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_LIVEEFFECTTOOLCTRLS">
+			 <pos>0,0d</pos> <size>282,142d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>225,5d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>225,22d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxSpinButton" name="IDC_SPIN_LE_ORDER">
+			 <pos>5,25d</pos> <size>10,14d</size>
+			<style>wxSP_VERTICAL</style>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOBOX_LE_ORDER2">
+			 <pos>5,5d</pos> <size>85,30d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC_LE_CHANGEINSERT">
+			 <pos>10,45d</pos> <size>50,8d</size>
+			<label>Change/Insert</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOBOX_LE_TYPE2">
+			 <pos>5,60d</pos> <size>85,30d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_EDIT">
+			 <pos>5,80d</pos> <size>25,14d</size>
+			<label>Edit...</label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_REMOVE">
+			 <pos>5,100d</pos> <size>40,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_REMOVEALL">
+			 <pos>5,120d</pos> <size>40,14d</size>
+			<label>Remove All</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOBOX_LE_TYPE">
+			 <pos>100,60d</pos> <size>70,30d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOBOX_LE_ORDER">
+			 <pos>100,5d</pos> <size>100,30d</size>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_ADD">
+			 <pos>55,80d</pos> <size>25,14d</size>
+			<label>New &amp;gt;</label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_INSERT">
+			 <pos>55,100d</pos> <size>40,14d</size>
+			<label>Insert...</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_ADD">
+			 <pos>30,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_INSERT">
+			 <pos>55,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_EDIT">
+			 <pos>80,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_REMOVE">
+			 <pos>105,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_REMOVEALL">
+			 <pos>130,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_LE_LEFTBRACE">
+			 <pos>130,80d</pos> <size>21,17d</size>
+			<bitmap>leftbrace.png</bitmap>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_LE_RIGHTBRACE">
+			 <pos>160,80d</pos> <size>21,17d</size>
+			<bitmap>rightbrace.png</bitmap>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_LE_LABEL">
+			 <pos>130,100d</pos> <size>75,17d</size>
+			<bitmap>label.png</bitmap>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON_LE_SETUP">
+			 <pos>55,120d</pos> <size>40,14d</size>
+			<label>Setup...</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOBOX_LE_RES">
+			 <pos>205,60d</pos> <size>40,30d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_TOGGLELOCK">
+			 <pos>155,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_TOGGLELOCKALL">
+			 <pos>180,25d</pos> <size>17,15d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

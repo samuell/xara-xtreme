@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXPORTWEBOPTS">
+			 <pos>0,0d</pos> <size>262,109d</size>
+		<object class="wxStaticBox" name="IDC_WEBOPTS_RESGROUP">
+			 <pos>4,2d</pos> <size>133,41d</size>
+			<label>General Options</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_TEXTOUTLINES">
+			 <pos>9,13d</pos> <size>91,11d</size>
+			<label>Convert text to &amp;outlines</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_PREVIEWBITMAP">
+			 <pos>9,28d</pos> <size>95,10d</size>
+			<label>Remove preview &amp;bitmap</label>
+		</object>
+		<object class="wxStaticText" name="IDC_WEBOPTS_0PERCENT">
+			 <pos>22,59d</pos> <size>10,8d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxSlider" name="IDC_WEBOPTS_QUALITY">
+			 <pos>22,70d</pos> <size>73,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticBox" name="ID_STATIC">
+			 <pos>144,2d</pos> <size>55,41d</size>
+			<label>Area to view</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBOPTS_DRAWING">
+			 <pos>149,13d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBOPTS_SELECT">
+			 <pos>149,28d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>209,7d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>209,27d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>209,47d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_WEBOPTS_JPEGQUALITY">
+			 <pos>3,48d</pos> <size>134,57d</size>
+			<label>JPEG Quality</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_HTMLTAG">
+			 <pos>150,91d</pos> <size>105,14d</size>
+			<label>Put HTML tag on clipboard</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_MINIMISEBITMAPRES">
+			 <pos>9,92d</pos> <size>119,10d</size>
+			<label>Use &amp;JPEG on compatible bitmaps</label>
+		</object>
+		<title>Save options</title>
+	</object>
+	<object class="wxDialog" name="IDD_PREVIEWBITMAP">
+			 <pos>0,0d</pos> <size>115,130d</size>
+		<object class="wxCheckBox" name="IDC_SHOWPREVIEW">
+			 <pos>12,6d</pos> <size>90,8d</size>
+			<label>Show &amp;preview bitmap</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_PREVIEW">
+			 <pos>12,20d</pos> <size>91,83d</size>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>12,128d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="IDC_FILEDLG_OPTIONS">
+			 <pos>12,110d</pos> <size>50,14d</size>
+			<label>&amp;Options...</label>
+		</object>
+		<object class="wxStaticText" name="stc32">
+			 <pos>0,0d</pos> <size>10,130d</size>
+			<label></label>
+		</object>
+		<object class="wxCheckBox" name="IDC_AUTO_CHECK">
+			 <pos>10,110d</pos> <size>97,10d</size>
+			<label>Show preview in options</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

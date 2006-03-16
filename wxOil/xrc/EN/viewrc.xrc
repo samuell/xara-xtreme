@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="PUSHTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_PUSHTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="SELRTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_SELRTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="GRIDTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_GRIDTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="ELIPTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_ELIPTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="ROTATOOLDLG">
+			 <pos>0,0d</pos> <size>31,33d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_ROTATOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="RECTTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_RECTTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="BEZTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_BEZTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="GRADTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_GRADTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="PENTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_PENTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="BLANKTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_BLANKTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="TRANSTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_TRANSPTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="REGSHAPETOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="MOULDTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_MOULDTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="TEXTTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_TEXTTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="SOFTSHADOWTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_SOFTSHADOWTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="BEVELTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_BEVELTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="CONTOURTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_CONTOURTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="SLICETOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_SLICETOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_DIALOG1">
+			 <pos>0,0d</pos> <size>185,92d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>129,6d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>129,23d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

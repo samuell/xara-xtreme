@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[kernel.mak]
+SCC_Aux_Path = "\\xara\global\Projects\Camelot\camelot2004"
+SCC_Project_Name = "$/wxCamelot/Kernel", LBNBAAAA
+
+[ps.mak]
+SCC_Aux_Path = "\\xara\global\Projects\Camelot\camelot2004"
+SCC_Project_Name = "$/wxCamelot/Kernel", LBNBAAAA

@@ -1,0 +1,11 @@
+PORTNOTE( "other", "Fudged IDE/IDS consts, remove when ported to GetText" )
+PORTNOTE( "other", "Removed NameGallery usage" )
+PORTNOTE( "other", "BaseTextClass::PreOpProcessing - do nothing" )
+	TRACE( _T("Warning - BaseTextClass::PreOpProcessing called") );
+PORTNOTE( "other", "CAM_DEBUG_NEW won't work" )
+
+TRACE([ \t]*\(".*"\)
+TRACE( _T(\1)
+
+TRACEUSER([ \t]*\(.*\), \(".*"\)
+TRACEUSER( \1, _T(\2)

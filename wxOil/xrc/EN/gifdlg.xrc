@@ -1,0 +1,165 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TAB_ANIMATION_COLOURS">
+			 <pos>0,0d</pos> <size>201,121d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>190,60d</size>
+			<label>Palette &amp;colours</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_GLOBALBROWSER">
+			 <pos>10,15d</pos> <size>85,10d</size>
+			<label>Global &amp;browser palette</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_GLOBALOPTIMISED">
+			 <pos>100,15d</pos> <size>90,10d</size>
+			<label>Global &amp;optimised palette</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_LOCALOPT">
+			 <pos>10,30d</pos> <size>110,10d</size>
+			<label>Optimised palette per &amp;frame</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,47d</pos> <size>90,10d</size>
+			<label>Number of &amp;colours in palette</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_FRAME_NUMCOLOURS">
+			 <pos>114,45d</pos> <size>35,12d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,68d</pos> <size>190,24d</size>
+			<label>&amp;Dithering</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_NODITHER">
+			 <pos>11,78d</pos> <size>33,10d</size>
+			<label>&amp;None</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_ORDDITHER">
+			 <pos>55,78d</pos> <size>42,10d</size>
+			<label>Or&amp;dered</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_FRAME_DIFFUSION">
+			 <pos>115,78d</pos> <size>65,10d</size>
+			<label>Error &amp;diffusion</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,95d</pos> <size>190,24d</size>
+			<label>&amp;Transparency</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_FRAME_TRANSPARENCY">
+			 <pos>11,105d</pos> <size>170,10d</size>
+			<label>Make background &amp;transparent</label>
+		</object>
+		<title>Animation Colours</title>
+	</object>
+	<object class="wxDialog" name="IDD_TAB_FRAME_PROPERTIES">
+			 <pos>0,0d</pos> <size>201,121d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>190,51d</size>
+			<label>Frame</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>25,20d</pos> <size>21,8d</size>
+			<label>&amp;Name:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_FRAMETAB_NAME">
+			 <pos>50,20d</pos> <size>140,13d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_FRAMETAB_SOLID">
+			 <pos>50,40d</pos> <size>60,10d</size>
+			<label>&amp;Background</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_FRAMETAB_OVERLAY">
+			 <pos>115,40d</pos> <size>40,10d</size>
+			<label>O&amp;verlay</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,65d</pos> <size>190,51d</size>
+			<label>Local delay</label>
+		</object>
+		<object class="wxStaticText" name="IDC_DELAYFOR_STATIC">
+			 <pos>12,81d</pos> <size>70,10d</size>
+			<label>&amp;Display this frame for:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_FRAMETAB_DELAY">
+			 <pos>83,79d</pos> <size>30,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_CS_STATIC">
+			 <pos>115,81d</pos> <size>32,10d</size>
+			<label>1/100 s</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_FRAMETAB_SHOWFRAME">
+			 <pos>12,95d</pos> <size>66,15d</size>
+			<label>Show frame</label>
+		</object>
+		<title>Frame</title>
+	</object>
+	<object class="wxDialog" name="IDD_TAB_ANIMATION_PROPERTIES">
+			 <pos>0,0d</pos> <size>201,121d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>180,50d</size>
+			<label>Loop and Speed</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LOOP_STATIC">
+			 <pos>10,17d</pos> <size>17,10d</size>
+			<label>Loop</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ANIMOPTS_ITERATIONS">
+			 <pos>33,15d</pos> <size>29,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TIMES_STATIC">
+			 <pos>66,17d</pos> <size>20,10d</size>
+			<label>times</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_ANIMOPTS_LOOP">
+			 <pos>90,17d</pos> <size>77,10d</size>
+			<label>Loop continuously</label>
+		</object>
+		<object class="wxStaticText" name="IDC_DELAYFOR_STATIC">
+			 <pos>10,37d</pos> <size>75,10d</size>
+			<label>Display each frame for:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ANIMTAB_DELAY">
+			 <pos>90,35d</pos> <size>29,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_CS_STATIC">
+			 <pos>125,37d</pos> <size>32,10d</size>
+			<label>1/100 s</label>
+		</object>
+		<title>Animation Loop and Speed</title>
+	</object>
+	<object class="wxDialog" name="IDD_TAB_PREVIEW_IN_BROWSER">
+			 <pos>0,0d</pos> <size>201,121d</size>
+		<object class="wxStaticBox" name="IDC_GIF_T5STATIC1">
+			 <pos>15,5d</pos> <size>110,60d</size>
+			<label>Background Options</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PLAINBKGND">
+			 <pos>20,20d</pos> <size>76,10d</size>
+			<label>Plain Background</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_DOCBKGND">
+			 <pos>19,35d</pos> <size>95,10d</size>
+			<label>Document Background</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_CHQBKGND">
+			 <pos>19,49d</pos> <size>95,10d</size>
+			<label>Chequered Background</label>
+		</object>
+		<object class="wxButton" name="IDC_GIF_BITMAPPREVIEW">
+			 <pos>135,10d</pos> <size>58,14d</size>
+			<label>Browser Preview</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GIF_T5STATIC2">
+			 <pos>15,70d</pos> <size>110,35d</size>
+			<label>Additional Information</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_HTMLSTUB">
+			 <pos>20,85d</pos> <size>96,10d</size>
+			<label>Include Image Information</label>
+		</object>
+		<title>Preview in Browser</title>
+	</object>
+</resource>

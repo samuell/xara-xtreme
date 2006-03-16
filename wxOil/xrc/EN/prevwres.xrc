@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_PREVIEWDIALOG">
+			 <pos>0,0d</pos> <size>232,210d</size>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_PLAY">
+			 <pos>5,5d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_STOP">
+			 <pos>25,5d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_PREVFRAME">
+			 <pos>45,5d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_NEXTFRAME">
+			 <pos>65,5d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxSlider" name="IDC_PREVIEW_SLIDER">
+			 <pos>85,5d</pos> <size>80,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxButton" name="IDC_PREVIEW_REFRESH">
+			 <pos>175,5d</pos> <size>50,14d</size>
+			<label>Refresh</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>175,25d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,25d</pos> <size>160,15d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_PREVIEW_FRAMENAMETYPE">
+			 <pos>7,27d</pos> <size>22,10d</size>
+			<label>Frame:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PREVIEW_FRAMENAME">
+			 <pos>34,27d</pos> <size>126,10d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_3DFRAME">
+			 <pos>5,45d</pos> <size>210,160d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_REDRAW_ME">
+			 <pos>10,50d</pos> <size>200,150d</size>
+		</object>
+		<title>Preview</title>
+	</object>
+	<object class="wxDialog" name="IDD_ANIMATIONBAR">
+			 <pos>0,0d</pos> <size>466,92d</size>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_PLAY">
+			 <pos>13,9d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_STOP">
+			 <pos>33,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_NEXTFRAME">
+			 <pos>54,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_PREVFRAME">
+			 <pos>83,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_STARTFRAME">
+			 <pos>126,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PREVIEW_ENDFRAME">
+			 <pos>144,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_GRABFRAME">
+			 <pos>162,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_GRABALLFRAMES">
+			 <pos>180,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_NEWFRAME">
+			 <pos>198,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_COPYFRAME">
+			 <pos>216,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_FRAMEPROPERTIES">
+			 <pos>224,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_ANIMATIONPROPERTIES">
+			 <pos>242,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_DELETEFRAME">
+			 <pos>260,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_GOTOBROWSER">
+			 <pos>278,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_SAVEANIMATEDGIF">
+			 <pos>296,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_MOVEUPAFRAME">
+			 <pos>328,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_FRAME_MOVEDOWNAFRAME">
+			 <pos>312,4d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<title>Animation bar</title>
+	</object>
+</resource>

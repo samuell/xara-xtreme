@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_NEWCOLOURDLG">
+			 <pos>0,0d</pos> <size>131,70d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>44,52d</pos> <size>40,14d</size>
+			<label>C&amp;reate</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>88,52d</pos> <size>40,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_NEWCOL_NAME">
+			 <pos>28,4d</pos> <size>100,13d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_NEWCOL_COLLIST">
+			 <pos>4,36d</pos> <size>124,132d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,6d</pos> <size>24,8d</size>
+			<label>Name:</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_NEWCOL_SHADE">
+			 <pos>4,24d</pos> <size>108,10d</size>
+			<label>Make the colour a shade of:</label>
+		</object>
+		<title>New named colour</title>
+	</object>
+</resource>

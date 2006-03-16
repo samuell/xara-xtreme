@@ -1,0 +1,141 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_TLOCKRESRC">
+		<title>String table from TLOCKRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_QUIT">
+					<label>Quit</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_TIMELOCK_ONLINEHELP">
+					<label>Online help</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CD_UNLOCK_TEXT_XS">
+					<label>Click the 'register' button on the startup screen to obtain your Xara XS serial number.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CREATECDDIALOGFAILED">
+					<label>Could not create cd serial number dialog box.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ENTERSERIAL">
+					<label>Please enter the serial number for #1%s.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_INCORRECTONSYSTEM">
+					<label>Incorrect serial number present on system. This program will now terminate.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_INCORRECTSERIALNO">
+					<label>Incorrect serial number entered.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_CONNECTPROBLEM">
+					<label>Xara Xtreme found a problem while connecting with the server (0x%08x).\nPlease make sure you are connected to the Internet.\nIf this continues to happen, please contact technical support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_DEMOEXP">
+					<label>This demo version of Xara Xtreme has expired.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_FOUNDOLDVER">
+					<label>A previous installation has been found</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_INVALIDNUMBER">
+					<label>Invalid unlock number. Please contact support@xara.com supplying as many details as possible including which product you are trying to unlock and your xaraclub user name.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_JUSTPURCHASED">
+					<label>Thank you for purchasing Xara Xtreme. You will be sent a CD including the full program, clipart, bitmaps and movies. This download will run for a further 20 weeks. When you receive your CD please use it to re-install.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_NOFIND">
+					<label>Unable to find a previous version of Xara</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_NOOLDVERSION">
+					<label>Although the account you specified does own the Xara Xtreme Upgrade product, a corresponding installation could not be found. Please contact technical support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_NOPRODUCT">
+					<label>The account you specified does not own the Xara Xtreme product. Please try again using the details for the Xara account that you used to purchase Xara Xtreme, or click on the Buy button to purchase now.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_NORIGHTS">
+					<label>You do not have sufficient access rights to run Xara Xtreme on this computer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_PURCHASEEXP">
+					<label>This purchased download version of Xara Xtreme has expired please install Xara Xtreme from the CD you should have received.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_PURCHASEWARN">
+					<label>This purchased download version of Xara Xtreme will expire shortly, please install Xara Xtreme from the CD as soon as possible.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_SCAN">
+					<label>Xara Xtreme will now search for previous installations</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_UNLOCKBUTTON">
+					<label>Unlock</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_UNLOCKTEXT">
+					<label>Enter the email address or username and password that you used to\npurchase Xara Xtreme and then click the Unlock button below\nto unlock.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TIMELOCK_UNLOCKWINTITLE">
+					<label>Unlock Xara Xtreme</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

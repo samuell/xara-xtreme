@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<resource>
+    <object class="wxDialog" name="IDD_NEWDEBUGTREE">
+        <size>670,556</size>
+        <title>Xara Xtreme Debug Tree</title>
+        <object class="wxButton" name="wxID_OK">
+            <size>87,26</size>
+            <pos>551,519</pos>
+            <label>Close</label>
+        </object>
+        <object class="wxButton" name="IDC_DEBUGTREE_EXPAND">
+            <size>87,26</size>
+            <pos>320,519</pos>
+            <label>Expand Tree</label>
+        </object>
+        <object class="wxButton" name="IDC_DEBUGTREE_DUMP">
+            <size>87,26</size>
+            <pos>204,519</pos>
+            <label>Dump Tree</label>
+        </object>
+        <object class="wxButton" name="IDC_DEBUGTREE_REFRESH">
+            <size>87,26</size>
+            <pos>435,519</pos>
+            <label>Refresh</label>
+        </object>
+        <object class="wxCheckBox" name="IDC_DEBUGTREE_SELNONLY">
+            <size>113,18</size>
+            <pos>353,472</pos>
+            <label>Selection only</label>
+            <checked>0</checked>
+        </object>
+        <object class="wxCheckBox" name="IDC_DEBUGTREE_HIDDEN">
+            <size>138,18</size>
+            <pos>203,472</pos>
+            <label>Show hidden nodes</label>
+            <checked>0</checked>
+        </object>
+        <object class="wxTextCtrl" name="IDC_DEBUGTREE_DETAILS">
+            <size>341,421</size>
+            <pos>323,18</pos>
+            <style>wxTE_MULTILINE|wxTE_READONLY|wxTE_LEFT|wxTE_WORDWRAP</style>
+        </object>
+        <object class="wxTreeCtrl" name="IDC_DEBUGTREE_TREE">
+            <size>306,420</size>
+            <pos>8,18</pos>
+        </object>
+    </object>
+</resource>

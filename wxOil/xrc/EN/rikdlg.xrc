@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_RENDERDEMO">
+			 <pos>0,0d</pos> <size>231,173d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>175,6d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>175,23d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxStaticText" name="IDC_3DFRAME">
+			 <pos>5,5d</pos> <size>160,160d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_REDRAW_ME">
+			 <pos>10,10d</pos> <size>150,150d</size>
+		</object>
+		<object class="wxButton" name="IDC_REDRAWBTN">
+			 <pos>175,70d</pos> <size>50,14d</size>
+			<label>Redraw Me</label>
+		</object>
+		<title>Render Demo</title>
+	</object>
+</resource>

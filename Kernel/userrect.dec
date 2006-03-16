@@ -1,0 +1,5 @@
+// $Header: c:\RCSdir\kernel/userrect.dec 1.1 1995/09/12 17:11:43 Ed Exp $
+// declarations of extra functions for the DocRct class
+
+public:
+	DocRect ToSpread(Spread* pSpread);

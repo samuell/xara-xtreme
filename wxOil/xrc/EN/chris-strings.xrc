@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_CHRISRC">
+		<title>String table from CHRISRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CHRIS_EXAMPLE">
+					<label>Chris' example string</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

@@ -1,0 +1,549 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_OPTSTAB_PRINTLAYOUT">
+			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_UPRIGHT">
+			 <pos>45,55d</pos> <size>24,24d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SIDEWAYS">
+			 <pos>69,55d</pos> <size>24,24d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SCALEEDIT">
+			 <pos>130,57d</pos> <size>28,13d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPS_INDIVIDUALPAGES">
+			 <pos>10,75d</pos> <size>85,10d</size>
+			<label>Print &amp;individual pages</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPS_WHOLESPREAD">
+			 <pos>105,75d</pos> <size>75,10d</size>
+			<label>Print &amp;whole spread</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BESTFIT">
+			 <pos>10,95d</pos> <size>35,10d</size>
+			<label>&amp;Best fit</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_CUSTOMFIT">
+			 <pos>10,115d</pos> <size>45,10d</size>
+			<label>&amp;Custom fit</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TOPEDIT">
+			 <pos>90,115d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_LEFTEDIT">
+			 <pos>90,130d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_WIDTHEDIT">
+			 <pos>165,115d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_HEIGHTEDIT">
+			 <pos>165,130d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_MULTIPLEFIT">
+			 <pos>10,155d</pos> <size>45,10d</size>
+			<label>&amp;Multiple fit</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ROWSEDIT">
+			 <pos>90,155d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_COLUMNSEDIT">
+			 <pos>90,170d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_GUTTEREDIT">
+			 <pos>165,155d</pos> <size>35,13d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_SCALETEXT">
+			 <pos>105,59d</pos> <size>20,8d</size>
+			<label>Scale:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>85,395d</pos> <size>25,0d</size>
+			<label>tits 1</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LEFTTEXT">
+			 <pos>72,132d</pos> <size>15,8d</size>
+			<label>Left:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_WIDTHTEXT">
+			 <pos>141,118d</pos> <size>20,8d</size>
+			<label>Width:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_HEIGHTTEXT">
+			 <pos>139,132d</pos> <size>25,8d</size>
+			<label>Height:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PAPERSIZETEXT">
+			 <pos>5,38d</pos> <size>39,8d</size>
+			<label>Paper size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ROWSTEXT">
+			 <pos>67,157d</pos> <size>20,8d</size>
+			<label>Rows:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COLUMNSTEXT">
+			 <pos>58,172d</pos> <size>30,8d</size>
+			<label>Columns:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_GUTTERTEXT">
+			 <pos>140,156d</pos> <size>23,8d</size>
+			<label>Gutter:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>145,390d</pos> <size>55,0d</size>
+			<label>tits 2</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAMETEXT">
+			 <pos>5,5d</pos> <size>70,8d</size>
+			<label>Print layout options for</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SCALEPERCENT">
+			 <pos>160,59d</pos> <size>8,8d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAME">
+			 <pos>83,5d</pos> <size>120,8d</size>
+			<label>Untitled 1</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LAYOUTINFO_BOX">
+			 <pos>5,16d</pos> <size>195,15d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_LAYOUTINFO">
+			 <pos>10,19d</pos> <size>185,10d</size>
+			<label>Custom fit; 100% Upright: Page don't fit dude</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PAPERSIZEINFO_BOX">
+			 <pos>45,35d</pos> <size>155,15d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_PAPERSIZEINFO">
+			 <pos>50,38d</pos> <size>146,10d</size>
+			<label>210mm x 297mm</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BESTFITPAPER">
+			 <pos>105,95d</pos> <size>95,10d</size>
+			<label>&amp;Automatic fit</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<title>Print layout</title>
+	</object>
+	<object class="wxDialog" name="IDD_OPTSTAB_PRINTGENERAL">
+			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxRadioButton" name="IDC_ALLFOREGROUND">
+			 <pos>10,31d</pos> <size>80,11d</size>
+			<label>A&amp;ll foreground layers</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_VISIBLEFOREGROUND">
+			 <pos>100,31d</pos> <size>90,11d</size>
+			<label>&amp;Visible foreground layers</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PRINTMETHOD_NORMAL">
+			 <pos>10,68d</pos> <size>50,11d</size>
+			<label>&amp;Normal</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_PRINTMETHOD_BITMAP">
+			 <pos>65,68d</pos> <size>35,11d</size>
+			<label>&amp;Bitmap</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PRINTMETHOD_AABITMAP">
+			 <pos>115,68d</pos> <size>74,11d</size>
+			<label>An&amp;ti-aliased bitmap</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPIAUTO">
+			 <pos>10,106d</pos> <size>45,11d</size>
+			<label>&amp;Automatic</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPIMANUAL">
+			 <pos>65,106d</pos> <size>40,11d</size>
+			<label>&amp;Manual</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_DPIEDIT">
+			 <pos>115,106d</pos> <size>25,13d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_FILLQUALLIST">
+			 <pos>48,145d</pos> <size>48,38d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_PRINTLAYERS">
+			 <pos>5,19d</pos> <size>195,30d</size>
+			<label>Print layers</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_PRINTMETHOD">
+			 <pos>5,56d</pos> <size>195,30d</size>
+			<label>Print As...</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_DPI">
+			 <pos>5,94d</pos> <size>195,30d</size>
+			<label>Transparency resolution</label>
+		</object>
+		<object class="wxStaticText" name="IDC_DPIEDITTEXT">
+			 <pos>143,108d</pos> <size>52,8d</size>
+			<label>Pixels per inch</label>
+		</object>
+		<object class="wxStaticText" name="IDC_OUTPUT_DOCNAMETEXT">
+			 <pos>5,5d</pos> <size>60,8d</size>
+			<label>Output options for</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAME">
+			 <pos>67,5d</pos> <size>125,8d</size>
+			<label>Untitled#1</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_FILLQUAL">
+			 <pos>5,133d</pos> <size>95,30d</size>
+			<label>Fill quality</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILLQUALTEXT">
+			 <pos>20,146d</pos> <size>25,8d</size>
+			<label>Quality:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_TEXTOPTIONS">
+			 <pos>105,133d</pos> <size>95,30d</size>
+			<label>Text options</label>
+		</object>
+		<title> Output </title>
+	</object>
+	<object class="wxDialog" name="IDD_PRINTPROGRESS">
+			 <pos>0,0d</pos> <size>157,100d</size>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>54,82d</pos> <size>50,14d</size>
+			<label>&amp;Suspend</label>
+		</object>
+		<object class="wxSlider" name="IDC_PRINTPROGSLIDER">
+			 <pos>6,58d</pos> <size>146,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>24,200d</pos> <size>100,0d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_DOCNAME">
+			 <pos>44,4d</pos> <size>108,10d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINTERNAME">
+			 <pos>44,14d</pos> <size>108,10d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>8,34d</pos> <size>20,10d</size>
+			<label>Page:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PAGENUMBER">
+			 <pos>32,34d</pos> <size>46,10d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>8,44d</pos> <size>20,10d</size>
+			<label>Plate:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PLATENUMBER">
+			 <pos>32,44d</pos> <size>120,10d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TILENUMBER">
+			 <pos>103,34d</pos> <size>47,10d</size>
+			<label>-</label>
+		</object>
+		<title>Printing...</title>
+	</object>
+	<object class="wxDialog" name="IDD_PRINTTPLATE">
+			 <pos>36,52d</pos> <size>225,153d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>170,4d</pos> <size>50,14d</size>
+			<label>&amp;Print</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>170,21d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ctlFirst">
+			 <pos>170,39d</pos> <size>50,14d</size>
+			<label>Prin&amp;ter...</label>
+		</object>
+		<object class="wxButton" name="IDC_PRINTOPTIONS">
+			 <pos>170,56d</pos> <size>50,14d</size>
+			<label>&amp;Options...</label>
+		</object>
+		<object class="wxButton" name="IDC_PRINTHELP">
+			 <pos>170,76d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="IDC_PROBLEMS_HELP_BUTTON">
+			 <pos>170,93d</pos> <size>50,14d</size>
+			<label>Problems&amp;?</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_ALLOBJECTS">
+			 <pos>15,40d</pos> <size>45,10d</size>
+			<label>&amp;All objects</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_SELECTEDOBJECTS">
+			 <pos>70,40d</pos> <size>65,10d</size>
+			<label>&amp;Selected objects</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPSBOTH">
+			 <pos>15,80d</pos> <size>30,10d</size>
+			<label>&amp;Both</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPSLEFTPAGES">
+			 <pos>50,80d</pos> <size>45,10d</size>
+			<label>&amp;Left pages</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_DPSRIGHTPAGES">
+			 <pos>105,80d</pos> <size>50,10d</size>
+			<label>&amp;Right pages</label>
+		</object>
+		<object class="wxTextCtrl" name="edt3">
+			 <pos>42,110d</pos> <size>22,12d</size>
+		</object>
+		<object class="wxCheckBox" name="chx2">
+			 <pos>70,110d</pos> <size>60,12d</size>
+			<label>Collate Cop&amp;ies</label>
+		</object>
+		<object class="wxCheckBox" name="chx1">
+			 <pos>170,110d</pos> <size>51,12d</size>
+			<label>Print to &amp;File</label>
+		</object>
+		<object class="wxStaticText" name="stc1">
+			 <pos>4,-1004d</pos> <size>152,8d</size>
+			<label>Printer: Master Nev Strikes again</label>
+		</object>
+		<object class="wxStaticBox" name="grp1">
+			 <pos>5,25d</pos> <size>155,35d</size>
+			<label>Print Objects</label>
+		</object>
+		<object class="wxTextCtrl" name="edt1">
+			 <pos>52,-1073d</pos> <size>26,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="edt2">
+			 <pos>102,-1073d</pos> <size>26,12d</size>
+		</object>
+		<object class="wxStaticText" name="stc4">
+			 <pos>4,-1096d</pos> <size>56,9d</size>
+			<label>Print &amp;Quality:</label>
+		</object>
+		<object class="wxComboBox" name="cmb1">
+			 <pos>55,-1094d</pos> <size>81,36d</size>
+		</object>
+		<object class="wxStaticText" name="stc5">
+			 <pos>5,112d</pos> <size>25,9d</size>
+			<label>Copies:</label>
+		</object>
+		<object class="wxButton" name="psh15">
+			 <pos>170,-1058d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,10d</pos> <size>25,8d</size>
+			<label>Printer:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINTERNAME">
+			 <pos>33,10d</pos> <size>130,8d</size>
+			<label>Printer error: Cancel and choose Print... again.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,130d</pos> <size>215,15d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_PRINTPAGES">
+			 <pos>5,65d</pos> <size>155,35d</size>
+			<label>Print Pages</label>
+		</object>
+		<title>Print</title>
+	</object>
+	<object class="wxDialog" name="IDD_XSEPSOPS">
+			 <pos>0,0d</pos> <size>194,74d</size>
+		<object class="wxComboBox" name="IDC_DPIEDIT">
+			 <pos>10,23d</pos> <size>35,40d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_EXPORTTEXTASCURVES">
+			 <pos>10,52d</pos> <size>80,10d</size>
+			<label>Export text as curves</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>135,12d</pos> <size>50,14d</size>
+			<label>&amp;Export</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>135,32d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_XSEPSOPSHELP">
+			 <pos>135,52d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_DPIEDITTEXT">
+			 <pos>50,25d</pos> <size>52,8d</size>
+			<label>Dots per inch</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_GROUP_DPI">
+			 <pos>5,8d</pos> <size>109,35d</size>
+			<label>Resolution</label>
+		</object>
+		<title>Xara Xtreme EPS Export Options</title>
+	</object>
+	<object class="wxDialog" name="IDD_OPTSTAB_PRINTPRINT">
+			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>6,15d</pos> <size>193,76d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,95d</pos> <size>193,91d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>13,92d</pos> <size>22,9d</size>
+			<label> </label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBORESOLUTION">
+			 <pos>110,43d</pos> <size>62,100d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOFREQUENCY">
+			 <pos>110,59d</pos> <size>62,100d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBOTYPE">
+			 <pos>110,75d</pos> <size>84,100d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKSEPARATIONS">
+			 <pos>11,95d</pos> <size>89,8d</size>
+			<label>Print colour &amp;separations </label>
+		</object>
+		<object class="wxListBox" name="IDC_LISTCOLOURS">
+			 <pos>10,116d</pos> <size>184,46d</size>
+		</object>
+		<object class="wxButton" name="IDC_PLATEPROPS">
+			 <pos>143,166d</pos> <size>51,14d</size>
+			<label>&amp;Properties...</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKPROCESS">
+			 <pos>10,168d</pos> <size>130,12d</size>
+			<label>Print spot &amp;colours as process colours</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC1">
+			 <pos>11,15d</pos> <size>60,8d</size>
+			<label> PostScript options </label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PRINTERDEFAULTS">
+			 <pos>12,24d</pos> <size>77,10d</size>
+			<label>Use printer &amp;defaults</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_CUSTOMSETTINGS">
+			 <pos>12,35d</pos> <size>79,10d</size>
+			<label>Use &amp;custom settings</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAMETEXT">
+			 <pos>5,5d</pos> <size>91,8d</size>
+			<label>Colour separation options for</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAME">
+			 <pos>102,5d</pos> <size>85,8d</size>
+			<label>Untitled#1</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC3">
+			 <pos>176,46d</pos> <size>10,8d</size>
+			<label>dpi</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC5">
+			 <pos>176,60d</pos> <size>8,8d</size>
+			<label>lpi</label>
+		</object>
+		<title>Separations</title>
+	</object>
+	<object class="wxDialog" name="IDD_PLATEPROPS">
+			 <pos>0,0d</pos> <size>176,78d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>4,60d</pos> <size>54,15d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>61,60d</pos> <size>54,15d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>118,60d</pos> <size>54,15d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>23,20d</pos> <size>19,8d</size>
+			<label>Angle</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITANGLE">
+			 <pos>45,17d</pos> <size>47,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDITFREQUENCY">
+			 <pos>45,33d</pos> <size>47,12d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKPRINT">
+			 <pos>97,20d</pos> <size>60,10d</size>
+			<label>&amp;Print this ink</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKOVERPRINT">
+			 <pos>97,33d</pos> <size>67,10d</size>
+			<label>&amp;Overprint this ink</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_PLATECAPTION">
+			 <pos>5,2d</pos> <size>166,54d</size>
+			<label>Magenta plate properties</label>
+		</object>
+		<title>Separation properties</title>
+	</object>
+	<object class="wxDialog" name="IDD_OPTSTAB_IMAGESETTING">
+			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxStaticText" name="IDC_ISTATIC2">
+			 <pos>8,4d</pos> <size>79,10d</size>
+			<label>Imagesetting options for</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINT_DOCNAME">
+			 <pos>87,4d</pos> <size>62,10d</size>
+			<label>Untitled#1</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>6,20d</pos> <size>190,94d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_ISTATIC1">
+			 <pos>18,20d</pos> <size>50,9d</size>
+			<label> </label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKPMARKS">
+			 <pos>13,20d</pos> <size>84,9d</size>
+			<label>Output Printer's Marks </label>
+		</object>
+		<object class="wxListBox" name="IDC_PRINTERMARKSLIST">
+			 <pos>0,10d</pos> <size>34,180d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>6,124d</pos> <size>190,50d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_ISTATIC3">
+			 <pos>11,124d</pos> <size>32,8d</size>
+			<label>Print film </label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKREFLECT">
+			 <pos>13,134d</pos> <size>110,10d</size>
+			<label>Emulsion down (reflect image)</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKNEGATIVE">
+			 <pos>13,146d</pos> <size>48,10d</size>
+			<label>Negative</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECKOPBLACK">
+			 <pos>13,158d</pos> <size>90,10d</size>
+			<label>Always overprint black</label>
+		</object>
+		<title>Imagesetting</title>
+	</object>
+</resource>

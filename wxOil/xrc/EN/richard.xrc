@@ -1,0 +1,215 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_LIBPATHDLG">
+			 <pos>36,24d</pos> <size>210,154d</size>
+		<object class="wxStaticText" name="-1">
+			 <pos>6,4d</pos> <size>198,29d</size>
+			<label>Locate the folder containing the fonts that you want to add to the gallery.</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1090">
+			 <pos>6,26d</pos> <size>126,10d</size>
+			<label>File &amp;Name:</label>
+		</object>
+		<object class="wxTextCtrl" name="ID_STATICDECIMAL_1152">
+			 <pos>6,36d</pos> <size>140,12d</size>
+		</object>
+		<object class="wxListBox" name="ID_STATICDECIMAL_1120">
+			 <pos>6,52d</pos> <size>140,68d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="-1">
+			 <pos>6,26d</pos> <size>142,9d</size>
+			<label>&amp;Folder:</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1088">
+			 <pos>6,36d</pos> <size>142,9d</size>
+			<label></label>
+		</object>
+		<object class="wxListBox" name="ID_STATICDECIMAL_1121">
+			 <pos>6,50d</pos> <size>142,68d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1089">
+			 <pos>6,122d</pos> <size>140,9d</size>
+			<label>List Files of &amp;Type:</label>
+		</object>
+		<object class="wxComboBox" name="ID_STATICDECIMAL_1136">
+			 <pos>6,132d</pos> <size>140,36d</size>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
+			 <pos>6,122d</pos> <size>142,9d</size>
+			<label>Dri&amp;ves:</label>
+		</object>
+		<object class="wxComboBox" name="ID_STATICDECIMAL_1137">
+			 <pos>6,132d</pos> <size>142,68d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>154,26d</pos> <size>50,14d</size>
+			<label>&amp;Add</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>154,44d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_HELP_BUTTON">
+			 <pos>154,114d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="ID_STATICDECIMAL_1037">
+			 <pos>154,132d</pos> <size>50,14d</size>
+			<label>Net&amp;work...</label>
+		</object>
+		<object class="wxCheckBox" name="ID_STATICDECIMAL_1040">
+			 <pos>154,88d</pos> <size>50,12d</size>
+			<label>&amp;Read Only</label>
+		</object>
+		<title>Add folder to gallery</title>
+	</object>
+	<object class="wxDialog" name="IDD_LIBPATHGENDLG">
+			 <pos>36,24d</pos> <size>210,154d</size>
+		<object class="wxStaticText" name="-1">
+			 <pos>6,4d</pos> <size>198,29d</size>
+			<label>Locate the folder containing the files that you want to add to the gallery.</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1090">
+			 <pos>6,26d</pos> <size>76,10d</size>
+			<label>File &amp;Name:</label>
+		</object>
+		<object class="wxTextCtrl" name="ID_STATICDECIMAL_1152">
+			 <pos>6,36d</pos> <size>90,12d</size>
+		</object>
+		<object class="wxListBox" name="ID_STATICDECIMAL_1120">
+			 <pos>6,52d</pos> <size>90,68d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="-1">
+			 <pos>6,26d</pos> <size>142,9d</size>
+			<label>&amp;Folder:</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1088">
+			 <pos>6,36d</pos> <size>142,9d</size>
+			<label></label>
+		</object>
+		<object class="wxListBox" name="ID_STATICDECIMAL_1121">
+			 <pos>6,50d</pos> <size>142,68d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1089">
+			 <pos>6,122d</pos> <size>90,9d</size>
+			<label>List Files of &amp;Type:</label>
+		</object>
+		<object class="wxComboBox" name="ID_STATICDECIMAL_1136">
+			 <pos>6,132d</pos> <size>90,36d</size>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
+			 <pos>6,122d</pos> <size>142,9d</size>
+			<label>Dri&amp;ves:</label>
+		</object>
+		<object class="wxComboBox" name="ID_STATICDECIMAL_1137">
+			 <pos>6,132d</pos> <size>142,68d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>154,26d</pos> <size>50,14d</size>
+			<label>&amp;Add</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>154,44d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_GENERATE">
+			 <pos>154,62d</pos> <size>50,14d</size>
+			<label>&amp;Update</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_HELP_BUTTON">
+			 <pos>154,114d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="ID_STATICDECIMAL_1037">
+			 <pos>154,132d</pos> <size>50,14d</size>
+			<label>Net&amp;work...</label>
+		</object>
+		<object class="wxCheckBox" name="ID_STATICDECIMAL_1040">
+			 <pos>154,88d</pos> <size>50,12d</size>
+			<label>&amp;Read Only</label>
+		</object>
+		<title>Add folder to gallery</title>
+	</object>
+	<object class="wxDialog" name="IDD_LIBPATHDLG95">
+			 <pos>0,0d</pos> <size>270,134d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>212,32d</pos> <size>50,14d</size>
+			<label>&amp;Add</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>212,50d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_HELP_BUTTON">
+			 <pos>212,86d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1119">
+			 <pos>0,12d</pos> <size>204,88d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_0">
+			 <pos>7,122d</pos> <size>32,8d</size>
+			<label>Folder:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LIBPATH_PATHNAME">
+			 <pos>34,122d</pos> <size>260,12d</size>
+			<label>&amp;lt;Pathname here&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LIBPATH_ISLIBRARY">
+			 <pos>212,125d</pos> <size>200,12d</size>
+			<label>&amp;lt;Does index exist&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="-1">
+			 <pos>7,3d</pos> <size>260,8d</size>
+			<label>Locate the folder containing the fonts that you want to add to the gallery</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_LIBPATHGENDLG95">
+			 <pos>0,0d</pos> <size>270,134d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>212,32d</pos> <size>50,14d</size>
+			<label>&amp;Add</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>212,50d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_GENERATE">
+			 <pos>212,68d</pos> <size>50,14d</size>
+			<label>&amp;Update</label>
+		</object>
+		<object class="wxButton" name="IDC_LIBPATH_HELP_BUTTON">
+			 <pos>212,104d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1119">
+			 <pos>0,12d</pos> <size>204,88d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_0">
+			 <pos>7,122d</pos> <size>32,8d</size>
+			<label>Folder:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LIBPATH_PATHNAME">
+			 <pos>34,122d</pos> <size>260,12d</size>
+			<label>&amp;lt;Pathname here&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LIBPATH_ISLIBRARY">
+			 <pos>212,125d</pos> <size>200,12d</size>
+			<label>&amp;lt;Does index exist&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="-1">
+			 <pos>7,3d</pos> <size>260,8d</size>
+			<label>Locate the folder containing the files that you want to add to the gallery</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

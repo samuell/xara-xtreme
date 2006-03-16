@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_SAVEPROMPT">
+			 <pos>0,0d</pos> <size>246,62d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>9,42d</pos> <size>50,14d</size>
+			<label>&amp;Save</label>
+		</object>
+		<object class="wxButton" name="IDB_DIRTY_NOSAVE">
+			 <pos>68,42d</pos> <size>50,14d</size>
+			<label>Do&amp;n't Save</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>127,42d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxStaticText" name="IDB_DIRTY_PROMPT">
+			 <pos>11,12d</pos> <size>213,18d</size>
+			<label>Do you want to blobby blobby blobby to the document blobby?</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>186,42d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Xara Xtreme</title>
+	</object>
+</resource>

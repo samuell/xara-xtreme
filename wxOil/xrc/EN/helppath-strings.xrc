@@ -1,0 +1,2085 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_HELPPATHRC">
+		<title>String table from HELPPATHRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="End">
+					<label></label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_ATM_Not_Running">
+					<label>IDH_Alert_ATM_Not_Running</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Abort_or_Continue_Printing">
+					<label>IDH_Alert_Abort_or_Continue_Printing</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bad_Document_File_Format">
+					<label>IDH_Alert_Bad_Document_File_Format</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bad_Filename">
+					<label>IDH_Alert_Bad_Filename</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bad_Mould_Shape">
+					<label>IDH_Alert_Bad_Mould_Shape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bad_Pentium">
+					<label>IDH_Alert_Bad_Pentium</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bad_Text_Search">
+					<label>IDH_Alert_Bad_Text_Search</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bars_File_Problem">
+					<label>IDH_Alert_Bars_File_Problem</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Bitmap_Too_Large">
+					<label>IDH_Alert_Bitmap_Too_Large</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Browsing_Cannot_Find_Library">
+					<label>IDH_Alert_Browsing_Cannot_Find_Library</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_CD6_files_not_supported">
+					<label>IDH_Alert_CD6_files_not_supported</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Cannot_Close_File">
+					<label>IDH_Alert_Cannot_Close_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Cannot_Open_Web_Page">
+					<label>IDH_Alert_Cannot_Open_Web_Page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Clipboard_Problem">
+					<label>IDH_Alert_Clipboard_Problem</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Close_open_documents">
+					<label>IDH_Alert_Close_open_documents</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Delete_Used_Colour">
+					<label>IDH_Alert_Delete_Used_Colour</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Do_you_want_to_print_all_these_plates">
+					<label>IDH_Alert_Do_you_want_to_print_all_these_plates</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Document_Template">
+					<label>IDH_Alert_Document_Template</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Document_Unsaved">
+					<label>IDH_Alert_Document_Unsaved</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Drawing_too_large_for_CMX_export">
+					<label>IDH_Alert_Drawing_too_large_for_CMX_export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Export_Entire_Spread">
+					<label>IDH_Alert_Export_Entire_Spread</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Export_to_Existing_File">
+					<label>IDH_Alert_Export_to_Existing_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_File_Cannot_All_be_Exported">
+					<label>IDH_Alert_File_Cannot_All_be_Exported</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_File_Cannot_All_be_Imported">
+					<label>IDH_Alert_File_Cannot_All_be_Imported</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_File_Exists">
+					<label>IDH_Alert_File_Exists</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_File_Not_Found">
+					<label>IDH_Alert_File_Not_Found</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_File_is_Read_Only">
+					<label>IDH_Alert_File_is_Read_Only</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Fonts_Gallery_Sure_InstallDeinstall">
+					<label>IDH_Alert_Fonts_Gallery_Sure_InstallDeinstall</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Fonts_Substituted">
+					<label>IDH_Alert_Fonts_Substituted</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Fractal_Too_Small">
+					<label>IDH_Alert_Fractal_Too_Small</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_GIF_Transparency_Mask_Creation_Failed">
+					<label>IDH_Alert_GIF_Transparency_Mask_Creation_Failed</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_INI_File_Out_of_Date">
+					<label>IDH_Alert_INI_File_Out_of_Date</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Incorrect_Win32s_Version">
+					<label>IDH_Alert_Incorrect_Win32s_Version</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Invalid_Input_Value">
+					<label>IDH_Alert_Invalid_Input_Value</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Layer_Delete_Query">
+					<label>IDH_Alert_Layer_Delete_Query</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Browse_Or_Scan">
+					<label>IDH_Alert_Library_Browse_Or_Scan</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Cannot_Find_Index">
+					<label>IDH_Alert_Library_Cannot_Find_Index</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Cannot_Update_Index">
+					<label>IDH_Alert_Library_Cannot_Update_Index</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Check_Index_Create">
+					<label>IDH_Alert_Library_Check_Index_Create</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Check_Remove">
+					<label>IDH_Alert_Library_Check_Remove</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Create_Remote">
+					<label>IDH_Alert_Library_Create_Remote</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_No_Files">
+					<label>IDH_Alert_Library_No_Files</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_No_Index_File_Gen">
+					<label>IDH_Alert_Library_No_Index_File_Gen</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_No_Index_Skip">
+					<label>IDH_Alert_Library_No_Index_Skip</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Problems_Creating_Index">
+					<label>IDH_Alert_Library_Problems_Creating_Index</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Library_Thumbnail_Problem">
+					<label>IDH_Alert_Library_Thumbnail_Problem</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Loading_EPS">
+					<label>IDH_Alert_Loading_EPS</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Multiple_References_to_a_Bitmap_About_to_be_Deleted">
+					<label>IDH_Alert_Multiple_References_to_a_Bitmap_About_to_be_Deleted</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Named_Objects_Overlap">
+					<label>IDH_Alert_Named_Objects_Overlap</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_NavBar_File_Exists">
+					<label>IDH_Alert_NavBar_File_Exists</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_No_Result_When_Combining_Shapes">
+					<label>IDH_Alert_No_Result_When_Combining_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_No_Texture_Loaded">
+					<label>IDH_Alert_No_Texture_Loaded</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Nothing_Selected">
+					<label>IDH_Alert_Nothing_Selected</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Only_named_colors_can_be_spot_colors">
+					<label>IDH_Alert_Only_named_colors_can_be_spot_colors</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Out_of_Memory">
+					<label>IDH_Alert_Out_of_Memory</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Overrun_or_Truncated_File">
+					<label>IDH_Alert_Overrun_or_Truncated_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Overwrite_V1_file_with_a_V1_5">
+					<label>IDH_Alert_Overwrite_V1_file_with_a_V1_5</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Print_as_bitmap">
+					<label>IDH_Alert_Print_as_bitmap</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Problem_Installing_Font">
+					<label>IDH_Alert_Problem_Installing_Font</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Problem_With_INI_File">
+					<label>IDH_Alert_Problem_With_INI_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Read_Write_Failure">
+					<label>IDH_Alert_Read_Write_Failure</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Reinstall_the_Program">
+					<label>IDH_Alert_Reinstall_the_Program</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Remove_Old_Library_Groups">
+					<label>IDH_Alert_Remove_Old_Library_Groups</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Serious_Problem">
+					<label>IDH_Alert_Serious_Problem</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Set_Current_Attribute">
+					<label>IDH_Alert_Set_Current_Attribute</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Share_Violation">
+					<label>IDH_Alert_Share_Violation</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Spread_Too_Large">
+					<label>IDH_Alert_Spread_Too_Large</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_This_Op_Will_Remove_Perspective">
+					<label>IDH_Alert_This_Op_Will_Remove_Perspective</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_This_document_contains_overlapping_transparent_objects">
+					<label>IDH_Alert_This_document_contains_overlapping_transparent_objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Transparency_Mode_Switching">
+					<label>IDH_Alert_Transparency_Mode_Switching</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Unable_to_Create_File">
+					<label>IDH_Alert_Unable_to_Create_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Unable_to_find_printer_profile">
+					<label>IDH_Alert_Unable_to_find_printer_profile</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Undo_Warnings">
+					<label>IDH_Alert_Undo_Warnings</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_User_Cancelled_Something">
+					<label>IDH_Alert_User_Cancelled_Something</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_Web_Address_Too_Long">
+					<label>IDH_Alert_Web_Address_Too_Long</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_XaraFont_Not_Found">
+					<label>IDH_Alert_XaraFont_Not_Found</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_You_cannot_create_spot_colors">
+					<label>IDH_Alert_You_cannot_create_spot_colors</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_You_cannot_edit_library_colors">
+					<label>IDH_Alert_You_cannot_edit_library_colors</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert__No_plates_have_been_set_to_print">
+					<label>IDH_Alert__No_plates_have_been_set_to_print</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Alert_document_already_open">
+					<label>IDH_Alert_document_already_open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_1234">
+					<label>IDH_Command_1234</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_About_Studio">
+					<label>IDH_Command_About_Studio</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Add_Shapes">
+					<label>IDH_Command_Add_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Alignment">
+					<label>IDH_Command_Alignment</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Apply_ClipView">
+					<label>IDH_Command_Apply_ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Arrange_Icons">
+					<label>IDH_Command_Arrange_Icons</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Arrange_Views">
+					<label>IDH_Command_Arrange_Views</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bars">
+					<label>IDH_Command_Bars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects">
+					<label>IDH_Command_Bitmap_Effects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast">
+					<label>IDH_Command_Bitmap_Effects_Brightness_and_Contrast</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth">
+					<label>IDH_Command_Bitmap_Effects_Colour_Depth</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate">
+					<label>IDH_Command_Bitmap_Effects_Flip_and_Rotate</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects_Resize">
+					<label>IDH_Command_Bitmap_Effects_Resize</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Effects_Special">
+					<label>IDH_Command_Bitmap_Effects_Special</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Gallery">
+					<label>IDH_Command_Bitmap_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bitmap_Tracer">
+					<label>IDH_Command_Bitmap_Tracer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Break_Shapes">
+					<label>IDH_Command_Break_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Bring_to_Front">
+					<label>IDH_Command_Bring_to_Front</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Cascade_Views">
+					<label>IDH_Command_Cascade_Views</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Clear_Selection">
+					<label>IDH_Command_Clear_Selection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Clipart_Gallery">
+					<label>IDH_Command_Clipart_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Clone">
+					<label>IDH_Command_Clone</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Close">
+					<label>IDH_Command_Close</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Colour_Gallery">
+					<label>IDH_Command_Colour_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Colour_Line">
+					<label>IDH_Command_Colour_Line</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Combine_Shapes">
+					<label>IDH_Command_Combine_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Composite_Print_Preview">
+					<label>IDH_Command_Composite_Print_Preview</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Contents">
+					<label>IDH_Command_Contents</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Control_Bars">
+					<label>IDH_Command_Control_Bars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Convert_Line_to_Shape">
+					<label>IDH_Command_Convert_Line_to_Shape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Convert_to_Shapes">
+					<label>IDH_Command_Convert_to_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Copy">
+					<label>IDH_Command_Copy</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Create_Bitmap_Copy">
+					<label>IDH_Command_Create_Bitmap_Copy</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Cut">
+					<label>IDH_Command_Cut</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Delete">
+					<label>IDH_Command_Delete</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Document_Info">
+					<label>IDH_Command_Document_Info</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Duplicate">
+					<label>IDH_Command_Duplicate</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Exit">
+					<label>IDH_Command_Exit</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Export">
+					<label>IDH_Command_Export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Export_Animated_GIF">
+					<label>IDH_Command_Export_Animated_GIF</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Feather">
+					<label>IDH_Command_Feather</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Fill_Gallery">
+					<label>IDH_Command_Fill_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Fit_Text_To_Curve">
+					<label>IDH_Command_Fit_Text_To_Curve</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Font_Gallery">
+					<label>IDH_Command_Font_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Frame_Gallery">
+					<label>IDH_Command_Frame_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Fullscreen">
+					<label>IDH_Command_Fullscreen</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Group">
+					<label>IDH_Command_Group</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Group_Transparency">
+					<label>IDH_Command_Group_Transparency</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Imagesetting">
+					<label>IDH_Command_Imagesetting</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Import">
+					<label>IDH_Command_Import</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Import_from_Web">
+					<label>IDH_Command_Import_from_Web</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Intersect_Shapes">
+					<label>IDH_Command_Intersect_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Join_Shapes">
+					<label>IDH_Command_Join_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Layer_Gallery">
+					<label>IDH_Command_Layer_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Line_Attribute_Gallery">
+					<label>IDH_Command_Line_Attribute_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_Backwards">
+					<label>IDH_Command_Move_Backwards</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_Forwards">
+					<label>IDH_Command_Move_Forwards</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_to_Layer_Behind">
+					<label>IDH_Command_Move_to_Layer_Behind </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_to_Layer_in_Front">
+					<label>IDH_Command_Move_to_Layer_in_Front</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_to_Next_Frame">
+					<label>IDH_Command_Move_to_Next_Frame</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Move_to_Previous_Frame">
+					<label>IDH_Command_Move_to_Previous_Frame</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Name_Gallery">
+					<label>IDH_Command_Name_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_New">
+					<label>IDH_Command_New</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_New_View">
+					<label>IDH_Command_New_View</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Open">
+					<label>IDH_Command_Open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options">
+					<label>IDH_Command_Options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_General">
+					<label>IDH_Command_Options_General</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Grid_and_Ruler">
+					<label>IDH_Command_Options_Grid_and_Ruler</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Imagesetter">
+					<label>IDH_Command_Options_Imagesetter</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Internet">
+					<label>IDH_Command_Options_Internet</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Mouse">
+					<label>IDH_Command_Options_Mouse</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Output">
+					<label>IDH_Command_Options_Output</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Page">
+					<label>IDH_Command_Options_Page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Plugin">
+					<label>IDH_Command_Options_Plugin</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Print_Layout">
+					<label>IDH_Command_Options_Print_Layout</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Scaling">
+					<label>IDH_Command_Options_Scaling</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Separations">
+					<label>IDH_Command_Options_Separations</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Tuneups">
+					<label>IDH_Command_Options_Tuneups</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_Units">
+					<label>IDH_Command_Options_Units</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Options_View">
+					<label>IDH_Command_Options_View</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Overprint_Fill">
+					<label>IDH_Command_Overprint_Fill</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Overprint_Line">
+					<label>IDH_Command_Overprint_Line</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Paste">
+					<label>IDH_Command_Paste</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Paste_Attributes">
+					<label>IDH_Command_Paste_Attributes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Paste_at_Same_Position">
+					<label>IDH_Command_Paste_at_Same_Position</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Preview_All_Frames">
+					<label>IDH_Command_Preview_All_Frames</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Preview_Animation_in_Browser">
+					<label>IDH_Command_Preview_Animation_in_Browser</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print">
+					<label>IDH_Command_Print</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print_Borders">
+					<label>IDH_Command_Print_Borders</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print_On_All_Plates">
+					<label>IDH_Command_Print_On_All_Plates</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print_Options">
+					<label>IDH_Command_Print_Options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print_Setup">
+					<label>IDH_Command_Print_Setup</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Print_Text_as_Shapes">
+					<label>IDH_Command_Print_Text_as_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Put_to_Back">
+					<label>IDH_Command_Put_to_Back</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Quality">
+					<label>IDH_Command_Quality</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Remove_Feathering">
+					<label>IDH_Command_Remove_Feathering</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Reverse_Text_on_Curve">
+					<label>IDH_Command_Reverse_Text_on_Curve</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Rulers">
+					<label>IDH_Command_Rulers</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Save">
+					<label>IDH_Command_Save</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Save_All">
+					<label>IDH_Command_Save_All</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Save_As">
+					<label>IDH_Command_Save_As</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Save_As_Template">
+					<label>IDH_Command_Save_As_Template</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Scrollbars">
+					<label>IDH_Command_Scrollbars</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Select_All">
+					<label>IDH_Command_Select_All</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Show_Grid">
+					<label>IDH_Command_Show_Grid</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Show_Guides">
+					<label>IDH_Command_Show_Guides</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Slice_Image">
+					<label>IDH_Command_Slice_Image</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Slice_Shapes">
+					<label>IDH_Command_Slice_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Snap_To_Grid">
+					<label>IDH_Command_Snap_To_Grid</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Snap_To_Objects">
+					<label>IDH_Command_Snap_To_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Snap_to_Guides">
+					<label>IDH_Command_Snap_to_Guides</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Status_Line">
+					<label>IDH_Command_Status_Line</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Subtract_Shapes">
+					<label>IDH_Command_Subtract_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Time_Redraw">
+					<label>IDH_Command_Time_Redraw</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Tip_of_the_Day">
+					<label>IDH_Command_Tip_of_the_Day</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Undo">
+					<label>IDH_Command_Undo</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Ungroup">
+					<label>IDH_Command_Ungroup</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Ungroup_Transparency">
+					<label>IDH_Command_Ungroup_Transparency</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Use_Help_From_CD">
+					<label>IDH_Command_Use_Help_From_CD</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Web_Address">
+					<label>IDH_Command_Web_Address</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Wizard_Properties">
+					<label>IDH_Command_Wizard_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Command_Xara_On_The_Web">
+					<label>IDH_Command_Xara_On_The_Web</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Animation_Properties">
+					<label>IDH_Dialog_Animation_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Animation_Properties_Animation_Colors">
+					<label>IDH_Dialog_Animation_Properties_Animation_Colors</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Animation_Properties_Animation_Looping_and_Speed">
+					<label>IDH_Dialog_Animation_Properties_Animation_Looping_and_Speed</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Animation_Properties_Frame_Properties">
+					<label>IDH_Dialog_Animation_Properties_Frame_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Animation_Properties_Preview_in_Browser">
+					<label>IDH_Dialog_Animation_Properties_Preview_in_Browser</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Export">
+					<label>IDH_Dialog_Bitmap_Export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Export_BMP">
+					<label>IDH_Dialog_Bitmap_Export_BMP</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Export_GIF">
+					<label>IDH_Dialog_Bitmap_Export_GIF</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Export_JPEG">
+					<label>IDH_Dialog_Bitmap_Export_JPEG</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Export_PNG">
+					<label>IDH_Dialog_Bitmap_Export_PNG</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Bitmap_Properties">
+					<label>IDH_Dialog_Bitmap_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_CorelXARA_EPS_Export">
+					<label>IDH_Dialog_CorelXARA_EPS_Export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Offset">
+					<label>IDH_Dialog_Edit_Brush_Offset</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Properties">
+					<label>IDH_Dialog_Edit_Brush_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Rotation">
+					<label>IDH_Dialog_Edit_Brush_Rotation</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Scaling">
+					<label>IDH_Dialog_Edit_Brush_Scaling</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Sequence">
+					<label>IDH_Dialog_Edit_Brush_Sequence</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Edit_Brush_Spacing">
+					<label>IDH_Dialog_Edit_Brush_Spacing</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Gallery_Add_Folder">
+					<label>IDH_Dialog_Gallery_Add_Folder</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Gallery_Find_Dialog">
+					<label>IDH_Dialog_Gallery_Find_Dialog</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Gallery_Properties">
+					<label>IDH_Dialog_Gallery_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Gallery_Sort_Dialog">
+					<label>IDH_Dialog_Gallery_Sort_Dialog</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Guideline_Properties">
+					<label>IDH_Dialog_Guideline_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Image_Map_Export_Options">
+					<label>IDH_Dialog_Image_Map_Export_Options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Layer_Properties">
+					<label>IDH_Dialog_Layer_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Name_Layer">
+					<label>IDH_Dialog_Name_Layer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Name_Objects">
+					<label>IDH_Dialog_Name_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Paste_Special">
+					<label>IDH_Dialog_Paste_Special</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_PhotoCD_Import">
+					<label>IDH_Dialog_PhotoCD_Import</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Rename_Objects">
+					<label>IDH_Dialog_Rename_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Separation_Properties">
+					<label>IDH_Dialog_Separation_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Unit_Properties">
+					<label>IDH_Dialog_Unit_Properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_WEB_File_Options">
+					<label>IDH_Dialog_WEB_File_Options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Web_Export">
+					<label>IDH_Dialog_Web_Export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Dialog_Xar_Export">
+					<label>IDH_Dialog_Xar_Export</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Bitmap">
+					<label>IDH_Gallery_Bitmap</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Clipart">
+					<label>IDH_Gallery_Clipart</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Colour">
+					<label>IDH_Gallery_Colour</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Fill">
+					<label>IDH_Gallery_Fill</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Font">
+					<label>IDH_Gallery_Font</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Frame">
+					<label>IDH_Gallery_Frame</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Layer">
+					<label>IDH_Gallery_Layer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Line">
+					<label>IDH_Gallery_Line</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Gallery_Name">
+					<label>IDH_Gallery_Name</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Adding_Clipart_to_the_Clipart_Gallery">
+					<label>IDH_How_Adding_Clipart_to_the_Clipart_Gallery</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Adding_Custom_Brush_Strokes">
+					<label>IDH_How_Adding_Custom_Brush_Strokes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Adding_Points_to_a_LineShape">
+					<label>IDH_How_Adding_Points_to_a_LineShape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Adding_Web_Addresses_to_Objects">
+					<label>IDH_How_Adding_Web_Addresses_to_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Aligning_objects">
+					<label>IDH_How_Aligning_objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Applying_Fill_Colours">
+					<label>IDH_How_Applying_Fill_Colours</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Applying_Line_Colour">
+					<label>IDH_How_Applying_Line_Colour</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Applying_a_Mould">
+					<label>IDH_How_Applying_a_Mould</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Applying_attributes_to_a_whole_text_object">
+					<label>IDH_How_Applying_attributes_to_a_whole_text_object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Breaking_a_LineShape">
+					<label>IDH_How_Breaking_a_LineShape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Changing_Curved_Lines_and_Shapes">
+					<label>IDH_How_Changing_Curved_Lines_and_Shapes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Changing_The_Template_Document">
+					<label>IDH_How_Changing_The_Template_Document</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Changing_a_Line_into_a_Shape">
+					<label>IDH_How_Changing_a_Line_into_a_Shape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Changing_the_Quality_Setting">
+					<label>IDH_How_Changing_the_Quality_Setting</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Colour_Line_Moving_Colours">
+					<label>IDH_How_Colour_Line_Moving_Colours</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Copying_Objects">
+					<label>IDH_How_Copying_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Copying_colour_to_another_object">
+					<label>IDH_How_Copying_colour_to_another_object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Customizing_the_appearance_of_CorelXARA">
+					<label>IDH_How_Customizing_the_appearance_of_CorelXARA</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Drawing_Ellipses">
+					<label>IDH_How_Drawing_Ellipses</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Drawing_Rectangles">
+					<label>IDH_How_Drawing_Rectangles</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Entering_Text">
+					<label>IDH_How_Entering_Text</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Move_the_Transformation_Center">
+					<label>IDH_How_Moving_the_Transformation_Center</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Moving_and_Copying_Buttons">
+					<label>IDH_How_Moving_and_Copying_Buttons</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Moving_by_Dragging">
+					<label>IDH_How_Moving_by_Dragging</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Nudging_objects_and_handles">
+					<label>IDH_How_Nudging_objects_and_handles</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Pasting">
+					<label>IDH_How_Pasting</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Pasting_Attributes">
+					<label>IDH_How_Pasting_Attributes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Polygon_Curved_Corners">
+					<label>IDH_How_Polygon_Curved_Corners</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Polygon_Stellate">
+					<label>IDH_How_Polygon_Stellate</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Polygon_into_an_Ellipse">
+					<label>IDH_How_Polygon_into_an_Ellipse</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Previewing_animated_GIF_files">
+					<label>IDH_How_Previewing_animated_GIF_files</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Reordering_Gallery_Items">
+					<label>IDH_How_Reordering_Gallery_Items</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Restoring_and_Removing_Buttons">
+					<label>IDH_How_Restoring_and_Removing_Buttons</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Scaling_by_Dragging">
+					<label>IDH_How_Scaling_by_Dragging</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Select_Under">
+					<label>IDH_How_Select_Under</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Selecting_Difficult_Objects">
+					<label>IDH_How_Selecting_Difficult_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Selecting_Objects_in_Objects">
+					<label>IDH_How_Selecting_Objects_in_Objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Selecting_Text_Regions">
+					<label>IDH_How_Selecting_Text_Regions</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Setting_the_Current_Attributes">
+					<label>IDH_How_Setting_the_Current_Attributes</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Temporary_Selector_Use">
+					<label>IDH_How_Temporary_Selector_Use</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Text_Tool_Shortcuts">
+					<label>IDH_How_Text_Tool_Shortcuts</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Tip_of_the_Day">
+					<label>IDH_How_Tip_of_the_Day</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Typing_Text_onto_a_Curve">
+					<label>IDH_How_Typing_Text_onto_a_Curve</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Using_the_Push_Tool_Temporarily">
+					<label>IDH_How_Using_the_Push_Tool_Temporarily</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Viewing_the_demos">
+					<label>IDH_How_Viewing_the_demos</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_How_Zoom_Temporary">
+					<label>IDH_How_Zoom_Temporary</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Arrange">
+					<label>IDH_Menu_Arrange</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Edit">
+					<label>IDH_Menu_Edit</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_File">
+					<label>IDH_Menu_File</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Help">
+					<label>IDH_Menu_Help</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Plugin">
+					<label>IDH_Menu_Plugin</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Utilities">
+					<label>IDH_Menu_Utilities</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Menu_Window">
+					<label>IDH_Menu_Window</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Message__Bevel_already_applied">
+					<label>IDH_Message__Bevel_already_applied</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Message__Contour_already_applied">
+					<label>IDH_Message__Contour_already_applied</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Colour_Editor">
+					<label>IDH_Misc_Colour_Editor</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Demos">
+					<label>IDH_Misc_Demos</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Key_Shortcuts">
+					<label>IDH_Misc_Key_Shortcuts</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Tech_Support">
+					<label>IDH_Misc_Tech_Support</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Tools">
+					<label>IDH_Misc_Tools</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Misc_Xara_Ltd">
+					<label>IDH_Misc_Xara_Ltd</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Name_Gallery_Extend_Dialog_Box">
+					<label>IDH_Name_Gallery_Extend_Dialog_Box</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_NavBar_Create_Dialog_Box">
+					<label>IDH_NavBar_Create_Dialog_Box</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_NavBar_Edit_Design_Dialog_Box">
+					<label>IDH_NavBar_Edit_Design_Dialog_Box</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_NavBar_Edit_States_Dialog_Box">
+					<label>IDH_NavBar_Edit_States_Dialog_Box</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Overview_Galleries">
+					<label>IDH_Overview_Galleries</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Overview_Layers">
+					<label>IDH_Overview_Layers</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Overview_Popup_Menus">
+					<label>IDH_Overview_Popup_Menus</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Overview_Printing">
+					<label>IDH_Overview_Printing</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Overview_Zero_Width_Lines">
+					<label>IDH_Overview_Zero_Width_Lines</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Popup_Point_Handle_Deselect_All_Handles">
+					<label>IDH_Popup_Point_Handle_Deselect_All_Handles</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Popup_Point_Handle_Select_All_Points">
+					<label>IDH_Popup_Point_Handle_Select_All_Points</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Purchasing_Xara_X">
+					<label>Purchasing_Xara_X</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Registering_Xara_X">
+					<label>Registering_Xara_X</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Save_Template_Dialog">
+					<label>IDH_Save_Template_Dialog</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Bevel">
+					<label>IDH_Tool_Bevel</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Blend">
+					<label>IDH_Tool_Blend</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Contour">
+					<label>IDH_Tool_Contour</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Ellipse">
+					<label>IDH_Tool_Ellipse</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Fill">
+					<label>IDH_Tool_Fill</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Freehand">
+					<label>IDH_Tool_Freehand</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Mould">
+					<label>IDH_Tool_Mould</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Pen">
+					<label>IDH_Tool_Pen</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_QuickShape">
+					<label>IDH_Tool_QuickShape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Rectangle">
+					<label>IDH_Tool_Rectangle</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Selector">
+					<label>IDH_Tool_Selector</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shadow">
+					<label>IDH_Tool_Shadow</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shape">
+					<label>IDH_Tool_Shape</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shape_Break">
+					<label>IDH_Tool_Shape_Break</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shape_Curved">
+					<label>IDH_Tool_Shape_Curved</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shape_Delete">
+					<label>IDH_Tool_Shape_Delete</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Shape_Straight">
+					<label>IDH_Tool_Shape_Straight</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Text">
+					<label>IDH_Tool_Text</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Transparency">
+					<label>IDH_Tool_Transparency</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Tool_Zoom">
+					<label>IDH_Tool_Zoom</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Trouble_Print">
+					<label>IDH_Trouble_Print</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Unlocking_Xara_X">
+					<label>Unlocking_Xara_X</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_how_creating_multicolor_fills">
+					<label>IDH_how_creating_multicolor_fills</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="Tips">
+					<label></label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

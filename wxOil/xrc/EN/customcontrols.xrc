@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_SLIDER">
+			 <pos>0,0d</pos> <size>73,12d</size>
+		<object class="wxSlider" name="IDC_SLIDER">
+			 <pos>0,0d</pos> <size>73,11d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<title></title>
+	</object>
+</resource>

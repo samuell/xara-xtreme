@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_MOULDTOOLBAR">
+			 <pos>0,0d</pos> <size>266,60d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_DEFAULTENVELOPE">
+			 <pos>142,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_DEFAULTPERSPECTIVE">
+			 <pos>142,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_COPYMOULD">
+			 <pos>59,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_PASTEENVELOPE">
+			 <pos>238,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_TOGGLEMOULDGRID">
+			 <pos>3,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CIRCULARENVELOPE">
+			 <pos>160,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxButton" name="IDC_REMOVEMOULD">
+			 <pos>23,13d</pos> <size>33,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ELLIPTICENVELOPE">
+			 <pos>178,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CONCAVEENVELOPE">
+			 <pos>197,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BANNERENVELOPE">
+			 <pos>215,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_LEFTPERSPECTIVE">
+			 <pos>160,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_RIGHTPERSPECTIVE">
+			 <pos>178,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_FLOORPERSPECTIVE">
+			 <pos>197,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ROOFPERSPECTIVE">
+			 <pos>215,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_PASTEPERSPECTIVE">
+			 <pos>238,31d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_DETACHMOULD">
+			 <pos>76,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ROTATEMOULD">
+			 <pos>94,12d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

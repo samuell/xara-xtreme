@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="FHANDTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_FHANDTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_BENRC">
+		<title>String table from BENRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CDRFILTER_FORMATERROR">
+					<label>Error in CorelDRAW file.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CDRFILTER_NOTCDR">
+					<label>Not a CorelDRAW CDR file.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CORELPALETTEFILTER_BADCPLFILE">
+					<label>Version 5 Corel Palette file has an incorrect format.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CORELPALETTEFILTER_BADPALFILE">
+					<label>Version 3 or 4 Corel Palette file has an incorrect format.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CORELPALETTEFILTER_FILEERR">
+					<label>File error whilst reading Corel Palette file.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CORELPALETTEFILTER_NOTCPLORPAL">
+					<label>Not a CorelDRAW palette file.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_LOADCAMELOTEPSITHINKNOT">
+					<label>The file cannot be loaded because it is a renderable EPS file. It is not designed to be edited by Xara X. If you still have the original Xara X file from which it was exported please load that instead.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_LOADCAMELOTEPSITHINKNOTNAMED">
+					<label>'#1%s' cannot be loaded because it is a renderable EPS file. It is not designed to be edited by Xara X. If you still have the original Xara X file from which it was exported please load that instead.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_ADDCOLOURSTODOC">
+					<label>Adding colours to document...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRBITMAPNAME">
+					<label>CDR Bitmap #1%d</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_ENVAPPROXWARNING">
+					<label>#1%d envelopes were approximated.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_ENVAPPROXWARNING1">
+					<label>#1%d envelope was approximated.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_FILTERINFO">
+					<label>Imports CorelDRAW 3, 4 and 5 files.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_FILTERNAME">
+					<label>CorelDRAW</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_ISAV2FILE">
+					<label>That file is a version 2.xx CDR file. Only versions 3, 4 and 5 are supported.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_OBJWARNING">
+					<label>#1%d objects could not be imported.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRFILTER_OBJWARNING1">
+					<label>#1%d object could not be imported.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CDRPATTERNNAME">
+					<label>CDR Pattern #1%d</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CORELPALETTEFILTER_FILTERINFO">
+					<label>Imports CorelDRAW 3, 4 and 5 palette files.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CORELPALETTEFILTER_FILTERNAME">
+					<label>CorelDRAW Palette</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_FILTEREXT_FREEHANDEPS">
+					<label>eps</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_FREEHANDEPS_FILTERINFO">
+					<label>Imports FreeHand 3.0 EPS</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_FREEHANDEPS_FILTERNAME">
+					<label>FreeHand 3.0 EPS</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_IMPORTMSG_CDR3">
+					<label>Importing CorelDRAW 3 file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_IMPORTMSG_CDR4">
+					<label>Importing CorelDRAW 4 file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_IMPORTMSG_CDR5">
+					<label>Importing CorelDRAW 5 file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_IMPORTMSG_CORELPALETTEFILE">
+					<label>Importing CorelDRAW palette file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_IMPORTMSG_FREEHANDEPS">
+					<label>Importing FreeHand 3.0 EPS</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_LAYERNAMEUNIQUEFORM">
+					<label>#1%s (#2%d)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_NOTTHISEPS">
+					<label>That format of EPS cannot be loaded by this version of the Viewer.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPENMSG_CDR3">
+					<label>Loading CorelDRAW 3 file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPENMSG_CDR4">
+					<label>Loading CorelDRAW 4 file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPENMSG_CDR5">
+					<label>Loading CorelDRAW 5 file...</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

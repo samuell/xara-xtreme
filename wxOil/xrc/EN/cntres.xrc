@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_CONTOURINFOBAR">
+			 <pos>0,0d</pos> <size>251,57d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_CONTOURDISTANCE">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CONTOURSTEPS">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_CONTOURSTEPS">
+			 <pos>45,35d</pos> <size>30,13d</size>
+		</object>
+		<object class="wxButton" name="IDC_REMOVECONTOUR">
+			 <pos>40,17d</pos> <size>25,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxSlider" name="IDC_CONTOURSLIDER">
+			 <pos>141,3d</pos> <size>64,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxTextCtrl" name="IDC_CONTOURSLIDEREDIT">
+			 <pos>31,18d</pos> <size>23,13d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CONTOUROBJECTBIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CONTOURATTRBIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CONTOUROUTER">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CONTOURINNER">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_INSETPATH">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CONTOURJOINTYPEMITRE">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CONTOURJOINTYPEROUND">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_CONTOURJOINTYPEBEVEL">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXTENDSETSDLG">
+			 <pos>0,0d</pos> <size>178,202d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>6,181d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>63,181d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_ES_HELP">
+			 <pos>120,181d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ES_CHECKLIST">
+			 <pos>6,23d</pos> <size>166,93d</size>
+			<label>Check List Box Placeholder</label>
+		</object>
+		<object class="wxComboBox" name="IDC_ES_COMBO_XBEHAVIOUR">
+			 <pos>6,155d</pos> <size>75,48d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_ES_COMBO_YBEHAVIOUR">
+			 <pos>92,155d</pos> <size>78,48d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_ES_HORIZONTAL">
+			 <pos>6,145d</pos> <size>37,8d</size>
+			<label>Horizontally</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ES_VERTICAL">
+			 <pos>92,145d</pos> <size>29,8d</size>
+			<label>Vertically</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ES_EXTENDTYPE">
+			 <pos>6,128d</pos> <size>166,16d</size>
+			<label>Choose how #1%S should extend</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ES_EXTENDEDBY">
+			 <pos>6,5d</pos> <size>166,16d</size>
+			<label>Select which named objects will make #1%S extend</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>6,122d</pos> <size>166,1d</size>
+			<label></label>
+		</object>
+		<title>Extend #1%S</title>
+	</object>
+</resource>

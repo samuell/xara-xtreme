@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="BLENDTOOLDLG">
+			 <pos>0,0d</pos> <size>31,32d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_BLENDTOOL">
+			 <pos>8,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title></title>
+	</object>
+	<object class="wxDialog" name="IDD_BLENDTOOLBAR">
+			 <pos>0,0d</pos> <size>251,57d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_BLENDDISTANCE">
+			 <pos>6,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BLENDSTEPS">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BLENDSTEPS">
+			 <pos>45,35d</pos> <size>30,13d</size>
+		</object>
+		<object class="wxButton" name="IDC_REMOVEBLEND">
+			 <pos>77,17d</pos> <size>33,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LBLOBJECTPROFILE">
+			 <pos>7,20d</pos> <size>20,9d</size>
+			<label> Object:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LBLATTRPROFILE">
+			 <pos>7,20d</pos> <size>24,9d</size>
+			<label>Attribute:</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_ONETOONE">
+			 <pos>122,18d</pos> <size>39,13d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BLENDANTIALIAS">
+			 <pos>162,18d</pos> <size>39,13d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_ADDREMOVEBLENDPATH">
+			 <pos>333,23d</pos> <size>17,12d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TANGENTIAL">
+			 <pos>357,23d</pos> <size>18,13d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BLENDOBJECTBIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BLENDATTRBIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

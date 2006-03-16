@@ -1,0 +1,356 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXPORTBMPOPTS">
+			 <pos>0,0d</pos> <size>277,157d</size>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_RESGROUP">
+			 <pos>5,5d</pos> <size>150,75d</size>
+			<label>Bitmap size and &amp;resolution</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,20d</pos> <size>20,8d</size>
+			<label>Width</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_XSIZE">
+			 <pos>35,20d</pos> <size>40,10d</size>
+			<label>Unknown</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>80,20d</pos> <size>25,10d</size>
+			<label>Height</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_YSIZE">
+			 <pos>110,20d</pos> <size>40,10d</size>
+			<label>Unknown</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_DPI">
+			 <pos>35,37d</pos> <size>12,10d</size>
+			<label>&amp;dpi</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BMPOPTS_RES">
+			 <pos>50,35d</pos> <size>70,15d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>55,50d</pos> <size>45,10d</size>
+			<label>size in pixels</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,62d</pos> <size>20,10d</size>
+			<label>&amp;Width</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BMPOPTS_XPIXELS">
+			 <pos>35,60d</pos> <size>40,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>80,62d</pos> <size>25,10d</size>
+			<label>&amp;Height</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BMPOPTS_YPIXELS">
+			 <pos>110,60d</pos> <size>40,12d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_SAVEAREA">
+			 <pos>160,5d</pos> <size>55,75d</size>
+			<label>Area to save</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_SPREAD">
+			 <pos>165,20d</pos> <size>45,10d</size>
+			<label>S&amp;pread</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_DRAWING">
+			 <pos>165,40d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_SELECT">
+			 <pos>165,60d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,85d</pos> <size>150,30d</size>
+			<label>Colour depth (&amp;Bits per pixel)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_CMYK">
+			 <pos>12,100d</pos> <size>32,10d</size>
+			<label>CMYK</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_32BPP">
+			 <pos>17,100d</pos> <size>24,10d</size>
+			<label>32</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_24BPP">
+			 <pos>51,100d</pos> <size>20,10d</size>
+			<label>24</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_8BPP">
+			 <pos>81,100d</pos> <size>20,10d</size>
+			<label>8</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_4BPP">
+			 <pos>107,100d</pos> <size>15,10d</size>
+			<label>4</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_1BPP">
+			 <pos>131,100d</pos> <size>15,10d</size>
+			<label>1</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_COMPRESS">
+			 <pos>160,85d</pos> <size>80,30d</size>
+			<label>&amp;Compression</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_RLE">
+			 <pos>164,100d</pos> <size>31,10d</size>
+			<label>RLE</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_RGB">
+			 <pos>204,100d</pos> <size>31,10d</size>
+			<label>RGB</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BMPOPTS_TIFF">
+			 <pos>165,99d</pos> <size>70,15d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>220,10d</pos> <size>50,14d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>220,30d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>220,50d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_CREATEOPTS">
+			 <pos>160,85d</pos> <size>80,30d</size>
+			<label>Ba&amp;ckground</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_GIFTYPE">
+			 <pos>160,85d</pos> <size>110,30d</size>
+			<label>Export type</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BMPOPTS_INTERLACED">
+			 <pos>221,100d</pos> <size>45,10d</size>
+			<label>&amp;Interlaced</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BMPOPTS_TRANSPARENT">
+			 <pos>167,100d</pos> <size>50,10d</size>
+			<label>&amp;Transparent</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,120d</pos> <size>102,30d</size>
+			<label>&amp;Palette</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_PAL_STD">
+			 <pos>12,134d</pos> <size>41,10d</size>
+			<label>Browser</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_PAL_OPT">
+			 <pos>58,134d</pos> <size>43,10d</size>
+			<label>Optimised</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>112,120d</pos> <size>158,30d</size>
+			<label>&amp;Dithering</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_NODITHER">
+			 <pos>120,134d</pos> <size>33,10d</size>
+			<label>None</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_ORDDITHER">
+			 <pos>159,134d</pos> <size>42,10d</size>
+			<label>Ordered</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_DIFFUSION">
+			 <pos>205,134d</pos> <size>58,10d</size>
+			<label>Error diffusion</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_ANIMOPTS_ANIMGROUP">
+			 <pos>5,155d</pos> <size>265,41d</size>
+			<label>&amp;Animation</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ANIMOPTS_DELAY">
+			 <pos>55,164d</pos> <size>29,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_DELAYFOR_STATIC">
+			 <pos>21,166d</pos> <size>31,10d</size>
+			<label>Delay for:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ANIMOPTS_ITERATIONS">
+			 <pos>177,165d</pos> <size>29,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_LOOP_STATIC">
+			 <pos>154,167d</pos> <size>17,10d</size>
+			<label>Loop</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CS_STATIC">
+			 <pos>87,166d</pos> <size>32,10d</size>
+			<label>1/100 s</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TIMES_STATIC">
+			 <pos>210,167d</pos> <size>20,10d</size>
+			<label>times</label>
+		</object>
+		<object class="wxComboBox" name="IDC_ANIMOPTS_REMOVAL">
+			 <pos>55,180d</pos> <size>67,51d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_RESTORE_STATIC">
+			 <pos>21,178d</pos> <size>30,10d</size>
+			<label>Restore:</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_ANIMOPTS_LOOP">
+			 <pos>154,182d</pos> <size>85,10d</size>
+			<label>Loop Continously</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BMPOPTS_NUMCOLS_EDIT">
+			 <pos>86,215d</pos> <size>40,14d</size>
+		</object>
+		<object class="wxCheckBox" name="IDC_BMPOPTS_NUMCOLS_SYSCOLS">
+			 <pos>132,215d</pos> <size>86,10d</size>
+			<label>Add system colours</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_NUMCOLS_EDITTEXT">
+			 <pos>21,216d</pos> <size>60,8d</size>
+			<label>Number of colours:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_NUMCOLS_GROUP">
+			 <pos>5,204d</pos> <size>263,28d</size>
+			<label>Number of colours in palette</label>
+		</object>
+		<title>Export bitmap options</title>
+	</object>
+	<object class="wxDialog" name="IDD_EXPORTJPEGOPTS">
+			 <pos>0,0d</pos> <size>221,146d</size>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_RESGROUP">
+			 <pos>5,5d</pos> <size>150,75d</size>
+			<label>Bitmap size and &amp;resolution</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,20d</pos> <size>20,8d</size>
+			<label>Width</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_XSIZE">
+			 <pos>35,20d</pos> <size>40,10d</size>
+			<label>Unknown</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>80,20d</pos> <size>25,10d</size>
+			<label>Height</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_YSIZE">
+			 <pos>110,20d</pos> <size>40,10d</size>
+			<label>Unknown</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_DPI">
+			 <pos>35,37d</pos> <size>12,10d</size>
+			<label>&amp;dpi</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BMPOPTS_RES">
+			 <pos>50,35d</pos> <size>70,15d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>55,50d</pos> <size>45,10d</size>
+			<label>size in pixels</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,62d</pos> <size>20,10d</size>
+			<label>&amp;Width</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BMPOPTS_XPIXELS">
+			 <pos>35,60d</pos> <size>40,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>80,62d</pos> <size>25,10d</size>
+			<label>&amp;Height</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BMPOPTS_YPIXELS">
+			 <pos>110,60d</pos> <size>40,12d</size>
+		</object>
+		<object class="wxStaticBox" name="ID_STATIC">
+			 <pos>160,70d</pos> <size>55,60d</size>
+			<label>Area to save</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_SPREAD">
+			 <pos>165,85d</pos> <size>40,10d</size>
+			<label>S&amp;pread</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_DRAWING">
+			 <pos>165,100d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_BMPOPTS_SELECT">
+			 <pos>165,115d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,85d</pos> <size>118,41d</size>
+			<label>&amp;Quality</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,97d</pos> <size>10,8d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxSlider" name="IDC_BMPOPTS_QUALITY">
+			 <pos>10,107d</pos> <size>79,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCheckBox" name="IDC_JPGOPTS_PROGRESSIVE">
+			 <pos>10,131d</pos> <size>60,13d</size>
+			<label>&amp;Progressive</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>165,10d</pos> <size>50,14d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>165,30d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>165,50d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_JPEG_ORIGINAL">
+			 <pos>84,133d</pos> <size>88,10d</size>
+			<label>Use Original JPEG</label>
+		</object>
+		<title>Export JPEG options</title>
+	</object>
+	<object class="wxDialog" name="IDD_PHOTOCDOPTS">
+			 <pos>0,0d</pos> <size>185,108d</size>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>120,95d</size>
+			<label>Image to load</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PHOTOCD_BASEDIV16">
+			 <pos>10,20d</pos> <size>110,10d</size>
+			<label>Base/16 (192 by 128) </label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PHOTOCD_BASEDIV4">
+			 <pos>10,35d</pos> <size>110,10d</size>
+			<label>Base/4 (384 by 256)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PHOTOCD_BASE">
+			 <pos>10,50d</pos> <size>110,10d</size>
+			<label>Base (768 by 512)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PHOTOCD_BASE4">
+			 <pos>10,65d</pos> <size>110,10d</size>
+			<label>Base*4 (1536 by 1024)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_PHOTOCD_BASE16">
+			 <pos>10,80d</pos> <size>110,10d</size>
+			<label>Base*16 (3072 by 2048)</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>130,10d</pos> <size>50,14d</size>
+			<label>Import</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>130,30d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>130,50d</pos> <size>50,15d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Photo CD import options</title>
+	</object>
+</resource>

@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TRACEDLG">
+			 <pos>0,0d</pos> <size>317,227d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>262,4d</pos> <size>50,14d</size>
+			<label>&amp;Insert</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>262,22d</pos> <size>50,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="IDC_TRACER_TRACEBTN">
+			 <pos>262,40d</pos> <size>50,14d</size>
+			<label>&amp;Trace</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEO">
+			 <pos>2,3d</pos> <size>124,123d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_TRACER_ORIGREDRAW">
+			 <pos>4,5d</pos> <size>120,119d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEP">
+			 <pos>134,3d</pos> <size>124,123d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_TRACER_DESTREDRAW">
+			 <pos>136,5d</pos> <size>120,119d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_BLURTXT">
+			 <pos>4,191d</pos> <size>53,10d</size>
+			<label>Remove noise</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_BLURSLIDER">
+			 <pos>70,187d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_BLURNUM">
+			 <pos>105,190d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_ACCURACYTXT">
+			 <pos>134,190d</pos> <size>53,10d</size>
+			<label>Accuracy</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_ACCURACYSLIDER">
+			 <pos>212,188d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_ACCURACYNUM">
+			 <pos>248,190d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_ICTTXT">
+			 <pos>134,150d</pos> <size>75,10d</size>
+			<label>Initial colour tolerance</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_ICTSLIDER">
+			 <pos>212,148d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_ICTNUM">
+			 <pos>248,150d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_FCTTXT">
+			 <pos>134,170d</pos> <size>74,10d</size>
+			<label>Final colour tolerance</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_FCTSLIDER">
+			 <pos>212,168d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_FCTNUM">
+			 <pos>248,170d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TRACER_PASSESNUM">
+			 <pos>70,167d</pos> <size>13,13d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_PASSESTXT">
+			 <pos>4,171d</pos> <size>53,10d</size>
+			<label>Passes</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_SMOOTHTXT">
+			 <pos>134,210d</pos> <size>53,10d</size>
+			<label>Smoothing</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_SMOOTHSLIDER">
+			 <pos>212,208d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_SMOOTHNUM">
+			 <pos>248,210d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_MINAREATXT">
+			 <pos>4,211d</pos> <size>53,10d</size>
+			<label>Minimum area</label>
+		</object>
+		<object class="wxSlider" name="IDC_TRACER_MINAREASLIDER">
+			 <pos>70,208d</pos> <size>28,14d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_MINAREANUM">
+			 <pos>105,210d</pos> <size>13,10d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxComboBox" name="IDC_TRACER_BITMAP">
+			 <pos>2,131d</pos> <size>124,30d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_TRACER_METHOD">
+			 <pos>2,149d</pos> <size>124,30d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEP2">
+			 <pos>135,131d</pos> <size>124,11d</size>
+			<label></label>
+		</object>
+		<object class="wxButton" name="IDC_TRACER_HELP">
+			 <pos>263,58d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="IDC_TRACER_RESET">
+			 <pos>261,149d</pos> <size>50,14d</size>
+			<label>&amp;Reset settings</label>
+		</object>
+		<object class="wxButton" name="IDC_TRACER_SAVE">
+			 <pos>261,166d</pos> <size>50,14d</size>
+			<label>&amp;Save settings</label>
+		</object>
+		<object class="wxButton" name="IDC_TRACER_DEFAULT">
+			 <pos>261,183d</pos> <size>50,14d</size>
+			<label>&amp;Defaults</label>
+		</object>
+		<title>Bitmap tracer</title>
+	</object>
+</resource>

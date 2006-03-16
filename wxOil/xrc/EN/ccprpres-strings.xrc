@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_CCPRPRESRC">
+		<title>String table from CCPRPRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="AFX_IDS_PS_APPLY_NOW">
+					<label>&amp;Apply\n50</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="AFX_IDS_PS_CANCEL">
+					<label>Cancel\n50</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="AFX_IDS_PS_CLOSE">
+					<label>Close</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="AFX_IDS_PS_HELP">
+					<label>&amp;Help\n50</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="AFX_IDS_PS_OK">
+					<label>OK\n50</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

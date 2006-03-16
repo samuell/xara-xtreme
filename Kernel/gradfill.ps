@@ -1,0 +1,1443 @@
+% $Header: c:\RCSdir\kernel/gradfill.ps 1.3 1995/08/03 20:36:24 Tim Exp $
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% gradfill.ps
+%
+% These are the PostScript procedures which define the linear, radial, elliptical, and
+% conical graduated fill routines.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% $Log: gradfill.ps $
+%Revision 1.3  1995/08/03  20:36:24  Tim
+%Fixed linear grad fill problems in PostScript.
+%
+%Revision 1.2  1995/04/14  18:07:37  Tim
+%First proper version of Camelot PostScript rendering routines.
+%
+%Revision 1.1  1994/11/21  16:08:16  Tim
+%Initial revision
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	NumSteps:	distanceX distanceY  NumSteps  maxsteps
+%
+%	Author:		Tim
+%	Created:	14/04/95
+%	Inputs:		distanceX, distanceY - the distance to be covered by the fill.
+%	Outputs:	maxsteps - the number of steps needed to go from the start point to the
+%						   end point.
+%	Purpose:	Calculate the smallest number of steps needed to go from the start
+%				to the end, based on the size of the halftone cells.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+/NumSteps
+{
+	% Find out how this distance vector maps to device space.
+	dtransform
+
+	% Get the default transformation matrix, and convert the device space vector
+	% back to user space using this matrix.
+	matrix defaultmatrix
+	idtransform
+
+	% Use Pythagoras' Theorem to find the distance between the start and end in device
+	% space coordinates.
+	Pythag
+
+	% Get the halftone screen frequency
+	currentscreen pop pop
+
+	% And find: (Distance * Frequency) / 72
+	% and return it as the number of steps needed.
+	72 exch div
+	div
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	FindMinSteps:	FindMinSteps  minsteps
+%
+%	Author:		Tim
+%	Created:	14/04/95
+%	Outputs:	minsteps - the number of steps needed to traverse the distance.
+%	Purpose:	Calculate the smallest number of steps needed to go from the start
+%				to the end, based on the size of the halftone cells.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/FindMinSteps
+{
+ 	v_ft 4 eq
+ 	{
+ 		% Conical fill - find circumference.
+
+		% Find offsets of bounding box corner furthest from the cone's centre.
+		urx startX sub abs
+		llx startX sub abs
+		Max
+
+		ury startY sub abs
+		lly startY sub abs
+		Max
+                
+		% Using these offsets (on the stack) calculate radius of bounding circle.
+		Pythag
+
+		% Calculate circumference - 2*PI*r
+		2 3.14159265 mul mul
+
+		% Just use an x vector (i.e. dy = 0)
+		0
+ 	}
+ 	{
+ 		v_ft 2 eq
+ 		{
+ 			% Elliptical fill - find longest axis
+ 	 	 	endY startY sub endX startX sub Pythag
+ 	 	 	endY2 startY sub endX2 startX sub Pythag
+			gt
+			{
+	 	 	 	endY startY sub endX startX sub
+			}
+			{
+	 	 	 	endY2 startY sub endX2 startX sub
+			}
+			ifelse
+ 		}
+ 		{
+ 			% Otherwise just find distance between start and end points
+ 	 	 	endY startY sub endX startX sub
+ 		}
+		ifelse
+ 	}
+	ifelse
+
+	% Find number of steps needed to represent this distance and leave on stack for caller.
+	NumSteps
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cxe:		n  cxe  - 
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		The fill effect value.  Current legal values are:
+%					0 = RGB fade
+%					1 = Rainbow (HSV fade)
+%					2 = Alternate Rainbow (Long HSV fade)
+%	Purpose:	Store the required chromatic fill effect value.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cxe
+{
+	% Remember fill effect
+  	/v_cxe exch def
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cxm:		n 0  cxm  - 
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		0 - future expansion.
+%				n - The fill mapping value.  Current legal values are:
+%					1 = simple (no repeat)
+%					2 = repeat 
+%					3 = repeat inverted (mirrored repeat pattern)
+%	Purpose:	Store the required chromatic fill mapping value.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cxm
+{
+	% Discard the 0 - reserved for future expansion.
+	pop
+
+	% Remember fill mapping
+  	/v_cxm exch def
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cxmt:		n 0  cxmt  - 
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		0 - future expansion.
+%				n - The fill mapping value.  Current legal values are:
+%					1 = simple (no repeat)
+%					2 = repeat 
+%					3 = repeat inverted (mirrored repeat pattern)
+%	Purpose:	Store the required transparency fill mapping value.
+%				NB. This ignores the mapping until such time as PostScript supports
+%					transparency!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cxmt
+{
+	% Discard the 0 - reserved for future expansion.
+	pop
+
+	% Simple stuff - only 'no transparency' is supported in PostScript!
+	pop
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cxt:		0  cxt  - 
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		0 - no transparency.
+%	Purpose:	Set the transprency geometry to none.  This is always none, because we
+%				can't do transprency in PostScript.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cxt
+{
+	% Simple stuff - only 'no transparency' is supported in PostScript!
+	pop
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	S_eoclip:	-  S_eoclip  - 
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	'Safe' version of eoclip. This should not fail due to a limitcheck.
+%				It reduces the flatness until either the eoclip operation works, or
+%				until the flatness becomes too inaccurate and the operation is aborted
+%				with an error.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/S_eoclip
+{
+	% Get the current flatness - we use this as a reference throughout this procedure.
+	currentflat
+	{
+		% Try to clip the current path to the current clipping path, and check to see
+		% if it fails (stops) or not.
+    	{eoclip}
+	    stopped
+    	{
+			% Yes - it failed, so make the flatness less accurate and try again
+			% (After a few iterations we give up)
+    		dup currentflat exch sub 20 gt
+		    {
+    	    	([Error: PathTooComplex; OffendingCommand: eoclip]\n) print flush exit
+			}
+			{
+    	    	currentflat 2 add setflat
+      		} ifelse
+	    }
+	    {
+			% Worked ok - exit the loop
+    	  	exit
+	    } ifelse 
+	} loop
+
+	% Restore the flatness to its original setting
+	setflat
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	S_clip:		-  S_clip  - 
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	'Safe' version of clip. This should not fail due to a limitcheck.
+%				It reduces the flatness until either the clip operation works, or
+%				until the flatness becomes too inaccurate and the operation is aborted
+%				with an error.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/S_clip
+{
+	% Get the current flatness - we use this as a reference throughout this procedure.
+	currentflat
+  	{
+		% Try to clip the current path to the current clipping path, and check to see
+		% if it fails (stops) or not.
+		{clip}
+		stopped
+		{
+			% Yes - it failed, so make the flatness less accurate and try again
+			% (After a few iterations we give up)
+   			dup currentflat exch sub 20 gt
+			{
+       			([Error: PathTooComplex; OffendingCommand: clip]\n) print flush exit
+   			}
+   			{
+      			currentflat 2 add setflat
+   			} ifelse
+		}
+		{
+			% Worked ok - exit the loop
+      		exit
+		} ifelse 
+  	} loop
+
+	% Restore the flatness to its original setting
+  	setflat
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	S_eofill:	-  S_eofill  - 
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	'Safe' version of eofill. This should not fail due to a limitcheck.
+%				It reduces the flatness until either the eofill operation works, or
+%				until the flatness becomes too inaccurate and the operation is aborted
+%				with an error.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/S_eofill
+{
+	currentflat
+  	{
+		% Try to fill the current path, and check to see if it fails (stops) or not.
+		{eofill}
+		stopped
+    	{
+			% Yes - it failed, so make the flatness less accurate and try again
+			% (After a few iterations we give up)
+    		dup currentflat exch sub 20 gt
+      		{
+        		([Error: PathTooComplex; OffendingCommand: eofill]\n) print flush exit
+      		}
+      		{
+        		currentflat 2 add setflat
+      		} ifelse
+    	}
+    	{
+			% Worked ok - exit the loop
+      		exit
+    	} ifelse 
+  	} loop
+
+	% Restore the flatness to its original setting
+	setflat
+} bd
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	gpbbx:		- gpbbx  
+%
+%	Author:		Mike
+%	Created:	20/6/96
+%	Inputs:		-
+%	Outputs:	-
+%	Purpose:	save the bounding box of the current path in a set if global variables
+%				This function is a helper to <type>fill
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/gpbbx
+{
+	pathbbox 
+	/ury exch def
+	/urx exch def
+	/lly exch def
+	/llx exch def
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	lineargfill:	filltype  lineargfill  -
+%
+%	Author:		Mike
+%	Created:	20/6/96
+%	Inputs:		filltype -  0 => normal PostScript clipping
+%						other => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a linear fill using greys.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/lineargfill
+{
+	% start the fill (returns true if we need to fill)
+	initgfill
+  	{
+		% First, set up the colour and steps variables.
+		false initgfx
+
+    	% Calculate the distance between start and end (Pythagoras)
+    	/distance
+		endX startX sub 
+		endY startY sub Pythag
+       	def
+
+		% Work out the distance increment
+  		/incD distance Steps div def
+
+    	% Calculate the angle between the start and the end...
+    	endY startY sub 
+		endX startX sub atan
+	    	% Make sure the bounding box is translated and rotated
+			newpath llx lly urx ury Bx
+			% Alter the CTM to do the translation and the rotation
+    		startX startY translate	
+		rotate
+
+		% Update the path bounding box
+		gpbbx
+
+		% Fill the start and end rectangles with the start and end colours
+    	eGy ssg newpath llx lly urx ury Bx S_eofill
+    	sGy ssg newpath llx lly 0 ury Bx S_eofill
+
+    	/fillX 0 def
+
+		% Loop from 0 to Steps-1 by 1.
+    	0 1 Steps 1 sub
+    	{
+      		% First do the colour, and update the colour components ready for the next step.
+      		% Next do a rectangle from startX to startX+incD, and add incD to startX, ready
+			% for the next step.
+			stepgfx
+			newpath 
+			fillX lly 
+			fillX incD add dup /fillX exch def 
+			ury Bx S_eofill
+      		pop
+    	} for
+  	} if
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	radialgfill:	startX startY endX endY startCol endCol filltype  radialfill  -
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Inputs:		startX, startY - the start point of the linear fill.
+%				endX,   endY   - the end point of the linear fill.
+%				startCol - the starting colour of the linear fill (RGB triplet).
+%				endCol   - the end colour of the linear fill (RGB triplet).
+%				filltype -  false => normal PostScript clipping
+%							 true => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a radial fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/radialgfill
+{
+	initgfill
+	{
+		% First, set up the colour and steps variables.
+		false initgfx
+
+    	% Calculate the distance between start and end (Pythagoras)
+  		/distance
+		endX startX sub 
+		endY startY sub Pythag
+  		def
+		
+		/incD distance Steps div def
+
+  		% Fill the bounding box of the path with the end colour
+    	eGy ssg newpath llx lly urx ury Bx
+
+  		% append the outer circle (so we don't render too much)
+  		S_eofill
+
+  		/distance 0 def
+
+		% Loop from 0 to Steps-1 by 1.
+  		0 1 Steps 1 sub
+  		{
+      		% First do the colour, and update the colour components ready for the next step.
+			stepgfx
+
+    		% Render a ring shape:
+    		%  inner outline: centre = (startX,startY), radius = distance*(count/256)
+    		%  outer outline: centre = (startX,startY), radius = distance*((count+1)/256)
+    		newpath
+
+    		startX startY distance 0 360 arc closepath
+    		distance incD add dup /distance exch def 0 rmoveto
+    		startX startY distance 0 360 arc closepath
+
+    		S_eofill
+
+    		pop
+  		} for
+	} if
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	ellipticgfill:	x1 y1 xc yc x0 y0 startgrey endgrey filltype ellipticgfill  -
+%
+%	Author:		Mike, Sean, Tim, Gavin & ArtWorks Developers.
+%	Created:	Unknown
+%   History:    Original radial fill created (by Jim?). (Date Unknown)
+%               Commented by Tim.
+%               Converted from Gavin's code by Sean.
+%				Integrated into Camelot PostScript framework by Tim.
+%				Bashed servearly by Mike
+%
+%	Inputs:		x1, y1  - top left corner
+%               xc, yc  - Centre of ellipse (bottom left)
+%				x0, y0  - bottom right corner
+%			    startgrey - the starting grey of the elliptical fill.
+%			    endgrey   - the end grey of the elliptical fill.
+%			    filltype - 0 => normal PostScript clipping
+%					   other => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a elliptical fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/ellipticgfill 
+{
+	initgfill
+	{
+		true initgfx
+
+  		% Fill the bounding box of the path with the start colour
+    	sGy ssg newpath llx lly urx ury Bx
+  		% append the outer circle (so we don't render too much)
+  		S_eofill
+
+        %% Use a shear matrix so that circular arcs draw elipses.
+        [ endX  startX sub		endY  startY sub		% 0
+          endX2 startX sub		endY2 startY sub    	% 0
+          startX				startY              	% 1
+        ]
+        concat
+
+        % Do required number of steps to fill region. (Remember, 
+        % we've already draw the outermost ellipse).
+
+		% Loop from Steps-1 to 0 by -1.
+
+        Steps 1 sub -1 0
+        {
+      		% First do the colour, and update the colour components ready for the next step.
+			stepgfx
+			% Render the ellipse.
+			/i exch def
+			0 0 moveto
+			0 0 i Steps div 0 360 arc fill
+  		} for
+	} if
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	conicalgfill:	flag  conicalfill  -
+%
+%	Author:		Mike, Sean, Tim, Gavin & ArtWorks Developers.
+%	Created:	20/06/96
+%   History:    Original radial fill created (by Jim?). (Date Unknown)
+%				Commented by Tim.
+%				Elliptical fill converted from Gavin's & Jim's code by Sean.
+%				Conical fill converted from Elliptical fill!
+%				Integrated into Camelot PostScript framework by Tim.
+%				Bashed servearly by Mike
+%                                       
+%	Inputs:		flag - false => normal PostScript clipping
+%						true => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a conical fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/conicalgfill
+{
+	initgfill
+	{
+		% Calculate the radius of the fill described
+
+		% Find offsets of bounding box corner furthest from the cone's centre
+		urx startX sub abs
+		llx startX sub abs
+		Max
+
+		ury startY sub abs
+		lly startY sub abs
+		Max
+                
+		% Using these offsets (on the stack) calculate radius of bounding circle!
+		Pythag
+                
+		% Calculate the radius of the fill path (result on stack)
+		startY endY sub startX endX sub Pythag
+		div
+
+		% Radius in units of fill-path-radius
+		/radius exch def
+
+		% First, set up the colour and steps variables.
+		true initgfx
+
+		% Use matrix to center the universe round our cone.
+        [
+        	endX 	startX sub		endY 	startY sub		% 0
+			startY 	endY   sub		endX 	startX sub		% 0
+			startX					startY					% 1
+		]
+		concat
+
+		% Calculate the angle of each slice (segment)
+		/slice 180 Steps div def
+        
+		/startangle 0 def
+
+		% Do required number of steps to fill region.
+        Steps -1 0 
+        {
+			% Lose the loop variable
+			pop
+
+      		% First do the colour, and update the colour components ready for the next step.
+			stepgfx
+
+			0 0 moveto                              % Centre of cone
+			0 0 radius startangle neg
+			dup slice add 
+			arc 
+			fill
+
+			0 0 moveto                              % Centre of cone
+			0 0 radius startangle
+			dup slice add dup /startangle exch def
+			arc 
+			fill
+        } for
+	} if
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	initgfill:	flag initgfill bool
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Inputs:		flag - false => start at start gray and go towards end gray;
+%					    true => start at end gray and go towards the start gray.
+%	Outputs:	bool - true then the calling fill function should execute its fill
+%					   routine.
+%					 - false then exit, the fill is complete
+%	Purpose:	This function is a helper for the <type>gfill routines. Various 
+%				setup parameters are calculated and the simple case of standard
+%				fills is handled. A bool value is returned on the stack indicating
+%				if false for the fill handler to exit without doing anything further
+%				The conditions for this are either the start and end object share the
+%				same position or the same grey. Hmm Not totally sure about this actually.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/initgfill
+{
+	% Save the path bbox in (llx,lly),(urx,ury)
+	gpbbx
+
+	% Use the current path (which we're going to fill) as our new clipping path.
+	% This is so we can draw a series of rectangles to represent the graduated linear
+	% fill and have it clipped to the path.
+	% The filltype parameter indicates which winding rule to use.
+
+  	{S_eoclip}
+  	{S_clip}
+  	ifelse
+
+  	% See if the start and end match each other...
+  	% or the start and end greys are identical?
+  	startX endX eq 
+	startY endY eq and
+  	sGy eGy eq or
+	dup	 
+	{
+		% just do a flat fill using the start colour.
+    	sGy ssg newpath llx lly urx ury Bx S_eofill
+  	} if
+	not
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	initgfx:	flag  initgfx
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Inputs:		flag - false => start at start gray and go towards end gray;
+%					    true => start at end gray and go towards the start gray.
+%	Purpose:	Set up the grays for the current start/end colours.
+%				Current this deals only with standard gray fill effects
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/initgfx
+{
+	/flag exch def
+
+	% swap direction of grey if necessary
+	flag
+	{
+		sGy eGy
+		/sGy exch def
+		/eGy exch def
+	} if
+
+   	% Find the maximum difference between the components at the start and end.
+  	eGy sGy sub abs 256 mul
+
+  	% Stack holds the largest gap between colours. We should use the minimum of
+	% this and the number of halftone cells along the extent of the fill geometry - this
+	% characteristic is different for different fills.
+
+	FindMinSteps Min
+
+  	% clamp between 1 and 256
+  	256 Min	ceiling 1 Max
+
+	/Steps exch def
+
+	% Work out the colour component and distance increments for each step.
+	eGy sGy sub
+
+	Steps div
+	/incGy exch def
+
+	% setup midvalue (used as a "current colour")
+	sGy /mGy exch def
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	stepgfx:	-  stepgfx  -
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Purpose:	Works out the next gray to use in the graduated fill, and sets it as the
+%				current gray
+%				NB. initgfx must have been called previously to set up the gray variables.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/stepgfx
+{
+	mGy ssg
+	mGy incGy add /mGy exch def
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	linearfill:	filltype  linearfill  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		filltype -  0 => normal PostScript clipping
+%						other => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a linear fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/linearfill
+{
+	initfill
+  	{
+		% No - we need to do a proper linear fill.
+
+		% First, set up the colour and steps variables.
+		false initfx
+
+    	% Calculate the distance between start and end (Pythagoras)
+    	endX startX sub endY startY sub Pythag
+    	
+		% Save this in 'distance'
+    	/distance exch def
+
+		% Work out the distance increment
+  		/incD distance Steps div def
+
+    	% Calculate the angle between the start and the end...
+    	endY startY sub endX startX sub atan
+
+    	% ... and leave the angle on the stack for the rotate
+
+    	% Make sure the bounding box is translated and rotated
+    	newpath llx lly urx ury Bx
+
+		% Alter the CTM to do the translation and the rotation
+    	startX startY translate
+    	rotate
+
+		% Update the path bounding box
+    	gpbbx
+
+		% Fill the start rectangle with the start colour
+    	v_cxe 0 eq
+	{
+		eR eG eB setgfillrgb
+	}
+	{
+		eH eS eV setgfillhsb
+	}
+	ifelse
+    	newpath llx lly urx ury Bx S_eofill
+
+		% fill the end rectangle with the end colour
+    	v_cxe 0 eq
+	{
+		sR sG sB setgfillrgb
+	}
+	{
+		sH sS sV setgfillhsb
+	}
+	ifelse
+    	newpath llx lly 0 ury Bx S_eofill
+
+    	/fillX 0 def
+
+		% Loop from 0 to Steps-1 by 1.
+    	0 1 Steps 1 sub
+    	{
+
+      		% First do the colour, and update the colour components ready for the next step.
+			stepfx
+
+      		% do a rectangle from startX to startX+incD, and add incD to startX, ready
+			% for the next step.
+      		
+			newpath 
+			fillX lly 
+			fillX incD add dup /fillX exch def 
+			ury Bx S_eofill
+
+      		pop
+    	} for
+  	} if
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	radialfill:	startX startY endX endY startCol endCol filltype  radialfill  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		startX, startY - the start point of the linear fill.
+%				endX,   endY   - the end point of the linear fill.
+%				startCol - the starting colour of the linear fill (RGB triplet).
+%				endCol   - the end colour of the linear fill (RGB triplet).
+%				filltype -  false => normal PostScript clipping
+%							 true => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a radial fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/radialfill
+{
+	initfill
+	{
+		% First, set up the colour and steps variables.
+		false initfx
+
+    	% Calculate the distance between start and end (Pythagoras)
+  		endX startX sub endY startY sub Pythag
+  		
+		% Save this in 'distance'
+		/distance exch def
+
+		% Work out the distance increment
+  		/incD distance Steps div def
+
+  		% Fill the bounding box of the path with the end colour
+	    	v_cxe 0 eq
+		{
+			eR eG eB setgfillrgb
+		}
+		{
+			eH eS eV setgfillhsb
+		}
+		ifelse
+  		newpath llx lly urx ury Bx
+
+  		% append the outer circle (so we don't render too much)
+  		S_eofill
+
+  		/distance 0 def
+
+		% Loop from 0 to Steps-1 by 1.
+  		0 1 Steps 1 sub
+  		{
+      		% First do the colour, and update the colour components ready for the next step.
+			stepfx
+
+    		% Render a ring shape:
+    		%  inner outline: centre = (startX,startY), radius = distance*(count/256)
+    		%  outer outline: centre = (startX,startY), radius = distance*((count+1)/256)
+    		newpath
+
+    		startX startY distance 0 360 arc closepath
+    		distance incD add dup /distance exch def 0 rmoveto
+    		startX startY distance 0 360 arc closepath
+
+    		S_eofill
+
+    		pop
+
+  		} for
+ 	} if
+}
+bind def
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	ellipticalfill:	x1 y1 xc yc x0 y0 startCol endCol filltype  ellipticalfill  -
+%
+%	Author:		Sean, Tim, Gavin & ArtWorks Developers.
+%	Created:	Unknown
+%   History:    Original radial fill created (by Jim?). (Date Unknown)
+%               Commented by Tim.
+%               Converted from Gavin's code by Sean.
+%				Integrated into Camelot PostScript framework by Tim.
+%
+%	Inputs:		x1, y1  - top left corner
+%               xc, yc  - Centre of ellipse (bottom left)
+%				x0, y0  - bottom right corner
+%			    startCol - the starting colour of the elliptical fill (RGB triplet).
+%			    endCol   - the end colour of the elliptical fill (RGB triplet).
+%			    filltype - 0 => normal PostScript clipping
+%					   other => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a elliptical fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/ellipticalfill 
+{
+	initfill
+	{
+		% First, set up the colour and steps variables.
+		true initfx
+
+  		% Fill the bounding box of the path with the end colour
+		% (ChrisG 21/11/00) We should use the start colour, as we are starting at the
+		% outside. NOT the inside, as in the radial fill.
+
+    		v_cxe 0 eq
+		{
+			sR sG sB setgfillrgb
+		}
+		{
+			sH sS sV setgfillhsb
+		}
+		ifelse
+  		newpath llx lly urx ury Bx
+
+  		% append the outer circle (so we don't render too much)
+  		S_eofill
+
+        %% Use a shear matrix so that circular arcs draw elipses.
+        [ endX  startX sub		endY  startY sub		% 0
+          endX2 startX sub		endY2 startY sub    	% 0
+          startX				startY              	% 1
+        ]
+        concat
+
+        % Do required number of steps to fill region. (Remember, 
+        % we've already draw the outermost ellipse).
+
+		% Loop from Steps-1 to 0 by -1.
+
+	        Steps 1 sub -1 0
+        	{
+	      		% First do the colour, and update the colour components ready for the next step.
+			stepfx
+
+			% Render the ellipse.
+			/i exch def
+			0 0 moveto
+			0 0 i Steps div 0 360 arc fill
+  		} for
+
+		v_cxe 0 eq
+		{
+			% swap start and end colours back again (so they're the same as when we started)
+			sR sG sB eR eG eB
+
+			/sB exch def
+			/sG exch def
+			/sR exch def
+
+			/eB exch def
+			/eG exch def
+			/eR exch def
+		} if
+	} if
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	conicalfill:	flag  conicalfill  -
+%
+%	Author:		Sean, Tim, Gavin & ArtWorks Developers.
+%	Created:	Unknown
+%   History:    Original radial fill created (by Jim?). (Date Unknown)
+%				Commented by Tim.
+%				Elliptical fill converted from Gavin's & Jim's code by Sean.
+%				Conical fill converted from Elliptical fill!
+%				Integrated into Camelot PostScript framework by Tim.
+%                                       
+%	Inputs:		flag - false => normal PostScript clipping
+%						true => even-odd winding rule for clipping
+%	Purpose:	Fill the current path using a conical fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/conicalfill
+{
+	initfill
+	{
+		% Calculate the radius of the fill described
+
+		% Find offsets of bounding box corner furthest from the cone's centre
+		urx startX sub abs
+		llx startX sub abs
+		Max
+
+		ury startY sub abs
+		lly startY sub abs
+		Max
+                
+		% Using these offsets (on the stack) calculate radius of bounding circle!
+		Pythag
+                
+		% Calculate the radius of the fill path (result on stack)
+		startY endY sub startX endX sub Pythag
+		div
+
+		% Radius in units of fill-path-radius
+		/radius exch def
+
+		% First, set up the colour and steps variables.
+		true initfx
+
+		% Use matrix to center the universe round our cone.
+        [
+        	endX 	startX sub		endY 	startY sub		% 0
+			startY 	endY   sub		endX 	startX sub		% 0
+			startX					startY					% 1
+		]
+		concat
+
+		% Calculate the angle of each slice (segment)
+		/slice 180 Steps div def
+        
+		/startangle 0 def
+
+		% Do required number of steps to fill region.
+        Steps -1 0 
+        {
+			% Lose the loop variable
+			pop
+
+      		% First do the colour, and update the colour components ready for the next step.
+			stepfx
+
+			0 0 moveto                              % Centre of cone
+			0 0 radius startangle neg
+			dup slice add 
+			arc 
+			fill
+
+			0 0 moveto                              % Centre of cone
+			0 0 radius startangle
+			dup slice add dup /startangle exch def
+			arc 
+			fill
+        } for
+	} if
+} bd
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	initfill:	flag initfill bool
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Inputs:		flag - false => start at start gray and go towards end gray;
+%					    true => start at end gray and go towards the start gray.
+%	Outputs:	bool - true then the calling fill function should execute its fill
+%					   routine.
+%					 - false then exit, the fill is complete
+%	Purpose:	This function is a helper for the <type>fill routines. Various 
+%				setup parameters are calculated and the simple case of standard
+%				fills is handled. A bool value is returned on the stack indicating
+%				if false for the fill handler to exit without doing anything further
+%				The conditions for this are either the start and end object share the
+%				same position or the same colour. We also check the fill effect to
+%				make sure we're not dealing with alternate hsv fades
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/initfill
+{
+	% Save the path bbox in (llx,lly),(urx,ury)
+	gpbbx
+
+	% Use the current path (which we're going to fill) as our new clipping path.
+	% This is so we can draw a series of rectangles to represent the graduated linear
+	% fill and have it clipped to the path.
+	% The filltype parameter indicates which winding rule to use.
+	{S_eoclip}
+	{S_clip}
+	ifelse
+
+  	% See if the start and end match each other...
+  	% or the start and end colours are identical? (except for Alternate HSV fades)
+
+	startX endX eq 
+	startY endY eq and
+
+	v_cxe 2 ne
+  	sR eR eq 
+	sG eG eq and 
+	sB eB eq and 
+  	and
+  	or
+	dup	 
+	{
+		% Yes - just do a flat fill using the start colour.
+		% (ChrisG 22/11/00) The flat colour is now output as rgb rather than cmyk, so 
+		% that it is consistent with the gradient fills.
+
+		sR sG sB setgfillrgb
+ 
+ 		newpath llx lly urx ury Bx S_eofill
+	} if
+	not
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	initfx:		flag  initfx
+%
+%	Author:		Tim
+%	Inputs:		flag - false => start at start colour and go towards end colour;
+%					    true => start at end colour and go towards start colour.
+%	Purpose:	Set up the colours for the current start/end colours and fill effect.
+%				(Deals with RGB/HSV/long HSV fades)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/initfx
+{
+	% Remember flag
+	/flag exch def
+
+	% What kind of fill effect is it?
+	v_cxe 0 eq
+	{
+		% RGB fade:
+
+		% (a) swap colours if necessary
+		
+		flag
+		{
+			sR sG sB eR eG eB
+
+			% flag is true - swap colours
+			/sB exch def
+			/sG exch def
+			/sR exch def
+
+			/eB exch def
+			/eG exch def
+			/eR exch def
+		}
+		if
+
+		% (b) Work out maximum practical number of steps to represent colour change.
+		
+    	% Find the maximum difference between the colour components at the start and end.
+  		eR sR sub abs 256 mul
+  		eG sG sub abs 256 mul Max
+  		eB sB sub abs 256 mul Max
+
+  		% Stack holds the largest gap between colours. We should use the minimum of
+  		% this and the number of halftone cells along the extent of the fill geometry - this
+  		% characteristic is different for different fills.
+		FindMinSteps Min
+
+  		% And make sure it's never more than 256
+  		256 Min
+
+		ceiling
+
+  		% Prevent the steps being zero
+  		1 Max
+
+  		/Steps exch def
+
+		% (c) Work out R, G, and B increments
+
+		% Work out the colour component and distance increments for each step.
+  		/incR eR sR sub Steps div def
+  		/incG eG sG sub Steps div def
+  		/incB eB sB sub Steps div def
+
+		% Set midvalues.
+		sR /mR exch def
+		sG /mG exch def
+		sB /mB exch def
+	}
+	{
+		% HSV fade (normal or long)
+
+		% (a) Convert start and end colours to HSB
+
+		sR sG sB rgb2hsb
+		/sV exch def
+		/sS exch def
+		/sH exch def
+
+		eR eG eB rgb2hsb
+		/eV exch def
+		/eS exch def
+		/eH exch def
+
+		% (b) Work out maximum practical number of steps to represent colour change.
+			
+    	% Find the maximum difference between the colour components at the start and end.
+  		eH sH sub abs
+
+		% Ok - what kind of HSV fade is it?
+		v_cxe 1 eq
+		{
+			% Normal (short) HSV fade...
+
+			dup 0.5 gt
+			{
+				% Need to go the other way around...
+				1 exch sub
+			}
+			if
+		}
+		{
+			% Long HSV fade...
+
+			dup 0.5 lt
+			{
+				% Need to go the other way around...
+				1 exch sub
+			}
+			if
+
+		}
+		ifelse
+
+		% Convert to 0-256 range
+		256 mul
+
+  		eS sS sub abs 256 mul Max
+  		eV sV sub abs 256 mul Max
+
+  		% Stack holds the largest gap between colours. We should use the minimum of
+  		% this and the number of halftone cells along the extent of the fill geomoetry - this
+  		% characteristic is different for different fills.
+		FindMinSteps Min
+
+  		% And make sure it's never more than 256
+  		256 Min
+
+		ceiling
+
+  		% Prevent the steps being zero
+  		1 Max
+
+  		/Steps exch def
+
+		v_cxe 1 eq
+		{
+			% Normal (short) HSV fade...
+
+			% (c) Work out H, S, and V increments
+
+			/incH
+			eH sH sub dup abs 0.5 gt
+			{
+				% Distance is more than 0.5 - need to go the other way around...
+				dup 0 ge
+				{
+					% inc = -(1 - inc) = inc - 1
+					1 sub
+				}
+				{
+					% inc = 1 - (-inc) = 1 + inc
+					1 add 
+				}
+				ifelse
+			}
+			if
+
+			% Divide by number of steps to get increment.
+			Steps div def
+
+			% Compute the Saturation and Brightness increments normally.
+	  		/incS eS sS sub Steps div def
+	  		/incV eV sV sub Steps div def
+		}
+		{
+			% Long HSV fade
+
+			% (c) Work out H, S, and V increments
+
+			% Work out the colour component and distance increments for each step.
+
+			/incH 
+
+			% (ChrisG 7/12/00) - We need to use le rather than lt below to get the exact 
+			% opposite of the standard HSV fade. Otherwise HSV and long HSV will go in the 
+			% same direction (and therefore be identical) if the distance is 0.5.
+
+			eH sH sub dup abs 0.5 le
+			{
+				% Distance is less than 0.5 - need to go the other way around...
+				dup 0 ge
+				{
+					% inc = -(1 - inc) = inc - 1
+					1 sub
+				}
+				{
+					% inc = 1 - (-inc) = 1 + inc
+					1 add
+				}
+				ifelse
+			}
+			if
+
+			% Divide by number of steps to get increment.
+			Steps div def
+
+			% Compute the Saturation and Brightness increments normally.
+	  		/incS eS sS sub Steps div def
+	  		/incV eV sV sub Steps div def
+		}
+		ifelse
+
+		% Now, we have to work out if we need to reverse the colours/increments
+		% according to the flag passed in by the caller.
+		% Note that we must to it here because if we do it earlier then we screw up
+		% and go the wrong way through the rainbow (e.g. on an alt rainbow from red to red).
+		flag
+		{
+			% flag is true - swap colours
+			/sH eH 		/eH sH		def def
+			/sS eS 		/eS sS		def def
+			/sV eV 		/eV sV		def def
+
+			% and negate increments
+			/incH incH neg def
+			/incS incS neg def
+			/incV incV neg def
+		}
+		if
+	}
+	ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	stepfx:		-  stepfx  -
+%
+%	Author:		Tim
+%	Purpose:	Works out the next colour to use in the graduated fill, and sets it as the
+%				current colour.
+%				NB. initfx must have been called previously to set up the colour variables.
+%				(Handles RGB/HSV/long HSV fades)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/stepfx
+{
+	% What kind of fill effect is it?
+	v_cxe 0 eq
+	{
+		% RGB fade
+		mR mG mB setgfillrgb
+
+		mR incR add /mR exch def
+		mG incG add /mG exch def
+		mB incB add /mB exch def
+	}
+	{
+		% HSV fade (both normal and long fades)
+
+		sH sS sV setgfillhsb
+
+		% Need to cope with Hue wrapping around...
+		sH incH add
+		dup 0 le
+		{
+			% Below 0 - wrap around through 1
+			1 add
+		}
+		{
+			dup 1 ge
+			{
+				% Above 1 - wrap around though 0
+				1 sub
+			}
+			if
+		}
+		ifelse
+
+		% Store new Hue component.
+		/sH exch def
+
+		% Saturation and Brightness are handled normally.
+		sS incS add /sS exch def
+		sV incV add /sV exch def
+	}
+	ifelse
+} bd
+

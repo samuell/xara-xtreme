@@ -1,0 +1,1 @@
+autoreconf -f -i -s

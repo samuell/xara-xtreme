@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_GRADFILLDLG">
+			 <pos>0,0d</pos> <size>367,39d</size>
+		<object class="wxComboBox" name="IDC_GEOMETRY">
+			 <pos>5,15d</pos> <size>54,55d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_MAPPING">
+			 <pos>60,15d</pos> <size>48,35d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_EFFECT">
+			 <pos>115,15d</pos> <size>48,35d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_BITMAPEFFECT">
+			 <pos>175,15d</pos> <size>28,11d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SELCOLOURBLOB">
+			 <pos>275,20d</pos> <size>15,15d</size>
+			<label></label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SELPOINT">
+			 <pos>175,5d</pos> <size>34,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SELCOLOUR">
+			 <pos>276,5d</pos> <size>62,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TRANSPMODE">
+			 <pos>230,20d</pos> <size>40,12d</size>
+			<label>-</label>
+		</object>
+		<title>Fill tool infobar</title>
+	</object>
+	<object class="wxDialog" name="IDD_TRANFILLDLG">
+			 <pos>0,0d</pos> <size>367,39d</size>
+		<object class="wxComboBox" name="IDC_MAPPING">
+			 <pos>60,15d</pos> <size>48,35d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_GEOMETRY">
+			 <pos>5,15d</pos> <size>54,55d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_TRANSPTYPE">
+			 <pos>175,20d</pos> <size>48,35d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_EFFECT">
+			 <pos>115,15d</pos> <size>48,35d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BIASGAIN">
+			 <pos>31,21d</pos> <size>19,15d</size>
+			<label>-</label>
+		</object>
+		<object class="wxComboBox" name="IDC_BITMAPEFFECT">
+			 <pos>175,15d</pos> <size>28,12d</size>
+		</object>
+		<object class="wxSlider" name="IDC_TRANSPSLIDE">
+			 <pos>230,3d</pos> <size>64,10d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_SELCOLOURBLOB">
+			 <pos>275,20d</pos> <size>15,15d</size>
+			<label></label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SELPOINT">
+			 <pos>175,5d</pos> <size>34,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SELCOLOUR">
+			 <pos>276,5d</pos> <size>21,8d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TRANSPMODE">
+			 <pos>230,20d</pos> <size>40,12d</size>
+			<label>-</label>
+		</object>
+		<title>Transparency tool infobar</title>
+	</object>
+</resource>

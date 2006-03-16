@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_ZOOMRESRC">
+		<title>String table from ZOOMRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_ZOOM_TOOLBOX">
+					<label>Zoom Tool</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_STATUS_ZOOM_DRAG_TEXT">
+					<label>Drag to zoom in on an area</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_STATUS_ZOOM_IN_MASK">
+					<label>Click to zoom in to #1%d%; </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_STATUS_ZOOM_OUT_MASK">
+					<label>Shift-click to zoom out to #1%d%; </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ZOOMOP_STATUSHELP">
+					<label>Drag marquee around the area to zoom; Press Escape to cancel</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

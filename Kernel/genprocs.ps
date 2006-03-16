@@ -1,0 +1,2127 @@
+% $Header: c:\RCSdir\kernel/genprocs.ps 1.11 1995/10/06 17:45:27 Tim Exp $
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% genprocs.ps
+%
+% This file contains a list of the standard procedure definitions.
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% $Log: genprocs.ps $
+%Revision 1.11  1995/10/06  17:45:27  Tim
+%Fixed bug in image support library keyword.
+%
+%Revision 1.10  1995/08/03  21:36:38  Tim
+%Fixed linear grad fill problems in PostScript.
+%
+%Revision 1.9  1995/08/03  13:39:33  Tim
+%Printing fixes for release version.
+%
+%Revision 1.8  1995/07/19  12:43:07  Tim
+%Level 2 PostScript output support.
+%
+%Revision 1.7  1995/07/07  15:45:25  Tim
+%Mega bitmap printing check-in
+%
+%Revision 1.6  1995/06/20  20:44:05  Tim
+%Showstopper bug fixes for preview release.
+%
+%Revision 1.5  1995/06/03  20:32:29  Tim
+%Mega check in of EPS/printing code for the 'big freeze'.
+%
+%Revision 1.4  1995/05/23  15:59:34  Tim
+%Misc printing/filters fixes/new features.
+%
+%Revision 1.3  1995/05/10  20:07:45  Tim
+%Mega printing check in.
+%
+%Revision 1.2  1995/04/14  18:07:41  Tim
+%First proper version of Camelot PostScript rendering routines.
+%
+%Revision 1.1  1994/11/21  16:01:40  Tim
+%Initial revision
+%
+
+
+%
+% Usual shorthands for def constructs...
+%
+
+/bd 
+{
+	bind def
+} bind def
+
+/ld 
+{
+	load def
+} bind def
+
+/xd
+{
+	exch def
+} bind def
+
+%
+% Usual shorthands for save and restore...
+%
+
+/sv
+{
+	save
+} bd
+
+/rs
+{
+	restore
+} bd
+
+/gs
+{
+	gsave
+} bd
+
+/gr
+{
+	grestore
+} bd
+
+/bg
+{
+	begin
+} bd
+
+/en
+{
+	end
+} bd
+
+% Level 2? (Adobe SDK)
+/level2 
+	/languagelevel where 
+	{
+		pop languagelevel 2 ge
+	}
+	{
+		false
+	} 
+	ifelse 
+def
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setseps		unsigned_int setseps  -
+%	setplate:	unsigned_int setplate  -
+%	setkgray:	unsigned_int setkgray  -
+%	setmono:	unsigned_int setmono  -
+%
+%	Author:		Mike
+%	Created:	17/06/96
+%	Inputs:		An int 
+%	Purpose:	Functions to control the colour output of our postscript routines
+%				Graphically they interact as follows
+%
+%	[A] For pre-separated colour.....
+%
+%		v_gseps			v_mono			Expected		Action
+%		________________________________colour______________________________________________
+%		
+%		True			True			_,_,_,K			(1-K) setgray
+%
+%						False			0,M,0,0			(0,M,0,0) setcmykcolor
+%
+%		False			True			C,M,Y,K			(cmyk=>rgb=>gray) setgray
+%
+%						False			C,M,Y,K			(C,M,Y,K) setcmykcolor
+%
+%
+%	Note: the above requires no knowledge of the destination plate for separations as the
+%         colours have already been positioned correctly for the output plate. Version [B]
+%		  does however during setplate<type>
+%
+%	[B] For un-separated postscript rendered
+%	    grad fill colour.....
+%
+%		v_gseps			v_mono			Expected		Action
+%		________________________________colour______________________________________________
+%		
+%		True			True			C,M,Y,K			(cmyk=>rgb=>devcmyk) setplategray
+%
+%						False			C,M,Y,K			(cmyk=>rgb=>devcmyk) setplatecolor
+%
+%		False			True			C,M,Y,K			(cmyk=>rgb=>grey) setgray
+%
+%						False			C,M,Y,K			(C,M,Y,K) setcmykcolor
+%
+%	Some background is required to understand what is going on here. Currently Camalot
+%	separates everything itself apart from grad fills when rendered to Postscript devices.
+%	This is because we can do a better job of rendering fills if we do it in Postscript, we
+%	are able to read the device resolution and render a variable number of steps in the fill
+%	dependent on the capability which is good.
+%	Hence when rendering normal colour, one should set colour using setlogcmykcolor. This
+%	does algorithm [A] above. When rendering fills, the postscript fill routines use alg [B]
+%   instead, incidently requiring a knowledge of the destination plate.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setseps
+{
+	% enable separated output
+	/v_gseps xd
+} bd
+
+/setplate
+{
+	% set the separation plate type
+	/v_plate xd
+} bd
+
+/setkgray
+{
+	% bool used during rgb2devcmyk, all r=g=b
+	% values are put on key when this var=1
+	/v_keyg xd
+} bd
+
+/setmono
+{
+	% integrally linked to setseps and setplate.
+	% Mono is used in two ways. Either to expect all cmyk colours to
+	% be separated to k hence 0,0,0,k when separating, or to do as such if we
+	% are performing the separation. We do so when rendering grad fills
+	/v_mono xd
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% General routines for converting colours between colour models
+%
+% rgb2gray, cmyk2rgb, rgb2cmyk, rgb2hsb, hsb2rgb, rgb2g (rgb to grayscale)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2gray
+{
+	0.109 mul exch
+	0.586 mul add exch
+	0.305 mul add
+} bd
+
+
+/cmyk2rgb
+{
+	% Convert CMYK => RGB
+	%
+	% R = 1 - min(1, C + K)
+	% G = 1 - min(1, M + K)
+	% B = 1 - min(1, Y + K)
+
+	3 
+	{
+		dup
+		5 -1 roll
+		add
+		dup
+		1 gt {pop 1} if
+		1 exch sub
+		exch
+	} repeat
+
+	pop
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%   Outputs: 	c m y k, four reals (the separation of r,g,b)
+%   Purpose:    convert the rgb colour value to cmyk via an algorithmic method
+%				The great thing about this method is that it is reversible. You
+%				can safely interchange cmyk2rgb and rgb2cmyk values as much as you like
+%
+%               The algorithm used is as follows
+%
+%			    c = 1.0 - red
+%			    m = 1.0 - green
+%			    y = 1.0 - blue
+%			    k = min(c,m,y)
+%			    if (k>0.5)
+%			    {
+%				  k-=0.5
+%				  c-=k
+%                 m-=k
+%                 y-=k
+%				}
+%				else k=0
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2cmyk
+{
+	3						% stack = r g b
+	{
+	    1.0 exch sub
+	    3 1 roll
+	} repeat				% stack = (1-r) (1-g) (1-b)
+
+	3 copy				    % find the minimum of 3 elements
+	2 copy gt {exch} if pop
+	2 copy gt {exch} if pop
+
+	dup						% (1-r) (1-g) (1-b) min min
+	0.5 gt
+	{
+		0.5 sub				% (1-r) (1-g) (1-b) (min-0.5)
+		dup					% (1-r) (1-g) (1-b) (min-0.5) (min-0.5)
+		3
+		{
+			5 1 roll		% (min-127) (1-r) (1-g) (1-b) (min-127)
+			dup				% (min-127) (1-r) (1-g) (1-b) (min-127) (min-127)
+			3 1 roll		% (min-127) (1-r) (1-g) (min-127) (1-b) (min-127)
+			sub				% (min-127) (1-r) (1-g) (min-127) ((1-b)-(min-127))
+		} repeat
+		5 1 roll
+		pop
+	}
+	{
+		pop 0
+	}
+	ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Author: 	Artworks developers
+%   Created: 	Unknown
+%   Input:		c m y k, four reals on the stack
+%   Outputs: 	h,s,b, 
+%   Purpose:    convert the c,m,y,k colour value to hsb
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cmyk2hsb
+{
+	% First convert to RGB
+	3 
+	{
+		dup 						  % c m y k k
+		5 -1 roll 					  %	k c m y k
+		add 						  % k c m y+k
+		1 exch 						  %	k c m 1 y+k
+		sub dup 					  %	k c m 1-(y+k)
+		0 lt {pop 0} if				  %	k c m min(0.0, 1-(y+k))
+		exch						  %	k c min() m
+	} repeat
+
+	pop
+
+	% Convert RGB to required HSB
+	rgb2hsb
+
+	% Use PostScript to convert to HSB
+	% setrgbcolor
+	% currenthsbcolor
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	rgb2hsb:	r g b  rgb2hsb  h s b
+%
+%	Author:		Tim
+%	Created:	19/04/95
+%	Inputs:		RGB values
+%	Outputs:	HSB values
+%	Purpose:	Convert a colour specified as RGB to HSB - this code uses the PostScript
+%				color space operators to do the conversion.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2hsb
+{
+	setrgbcolor
+	currenthsbcolor
+} bd 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2devcmyk r g b rgb2devcmyk c m y k
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%   Outputs: 	c m y k, four reals (the separation of r,g,b)
+%   Purpose:    convert the rgb colour value to cmyk via printer
+%               tables. 5 tables are required named
+%               cyancurve, magentacurve, yellowcurve, ucrcurve, bgcurve
+%
+%               The algorithm used is as follows
+%
+%			    c = 1.0 - red
+%			    m = 1.0 - green
+%			    y = 1.0 - blue
+%			    k = min(c,m,y)
+%			    a = min(1.0,max(0.0,c-UnderCR(k)))
+%			    b = min(1.0,max(0.0,m-UnderCR(k)))
+%			    c = min(1.0,max(0.0,y-UnderCR(k)))
+%			    d = min(1.0,max(0.0,BlackG(k))
+%			    Cyan    = CYAN(a)
+%			    Magenta = MAGENTA(b)
+%			    Yellow  = YELLOW(c)
+%			    Key     = d
+%
+%   Dict:	Requires variables ccurve, mcurve, ycurve, ucurve and bcurve in the
+%		    user dictionary.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/readcurve
+{
+    exch
+    255.0 mul 0.5 add cvi
+    get 255.0 div
+} bd
+
+/rgb2devcmyk
+{
+	% does r=g=b and
+	% do we want greys separated to key?
+
+	3 copy dup 
+	3 1 roll eq
+	3 1 roll eq
+	v_keyg 1 eq
+	and
+	and
+	{
+		pop pop
+		1 exch sub
+		0 0 0
+		4 -1 roll
+	}
+	{	
+		% otherwise separate to cmyk
+		/ucurve where
+		{
+			% ok, lets do the physical conversion,
+			% we've found the curve set
+			pop						% pop the dict name
+			3						% stack = r g b
+			{
+				1.0 exch sub
+				3 1 roll
+			} repeat
+
+			% k = min (c,m,y)
+
+			3 copy				    % find the minimum of c,m,y
+			2 copy gt {exch} if pop
+			2 copy gt {exch} if pop
+
+			dup						% stack = c m y k k
+			ucurve readcurve  		% stack = c m y k ucr
+			exch				    % c m y ucr k
+			bcurve readcurve		% stack = c m y ucr bg
+			clamp01				    % stack = c m y ucr bg
+
+			3
+			{
+				5 1 roll			% bg c m y ucr
+				dup				    % bg c m y ucr ucr
+				3 1 roll			% bg c m ucr y ucr
+				sub				    % bg c m ucr (y-ucr)
+				clamp01
+			} repeat
+			
+			5 1 roll			    % (c-ucr) (m-ucr) (y-ucr) bg ucr
+			pop						% (cc) (mm) (yy) bg
+			4 1 roll			    % bg (cc) (mm) (yy)
+			ycurve readcurve
+			4 1 roll
+			mcurve readcurve
+			4 1 roll
+			ccurve readcurve
+			4 1 roll
+		} 
+		{
+			% perform a simplified logical conversion
+			rgb2cmyk	
+		} ifelse
+	} ifelse
+} def
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2keyG:	r g b rgb2keyG (key/gray)
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%	Outputs:	key
+%	Purpose:	A faster single channel version of the above general separation
+%				function. This is used from the rgb2plategray function
+%   Notes:		k = 1.0-max(r,g,b)
+%				k = min(1.0,max(0.0,BlackG(k))
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+/rgb2keyG
+{
+	3 copy dup
+	3 1 roll eq
+	3 1 roll eq
+	and	
+	{ pop pop }
+	{ Max3 }
+	ifelse
+	1 exch sub
+	bcurve readcurve		% stack = c m y ucr bg
+	clamp01				    % stack = c m y ucr bg
+} bd
+
+
+/rgb2key
+{
+	Max3
+	1 exch sub
+	bcurve readcurve		% stack = c m y ucr bg
+	clamp01				    % stack = c m y ucr bg
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2cyanG:	r g b rgb2cyanG (cyan)
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%	Outputs:	cyan
+%   Notes:		k = 1.0-max(r,g,b)
+%				c = min(1.0,max(0.0,(1-r)-UnderCR(k)))
+%				Cyan = Cyan(c)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2cyanG
+{
+	3 copy dup
+	3 1 roll eq
+	3 1 roll eq
+	and
+	{
+		pop pop pop
+		0
+	}
+	{
+		rgb2cyan
+	} ifelse
+} bd
+
+
+/rgb2cyan
+{
+	3 copy Max3
+	1 exch sub					% key = 1.0 - max(r,g,b)
+	ucurve readcurve  			% stack = r g b ucr
+	4 1 roll					% ucr r g b
+	pop pop						% ucr r
+	1 exch sub					% ucr c
+	exch sub					% c - ucr
+	ccurve readcurve			% c = Cyan(c)
+	clamp01
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2magentaG:	r g b rgb2magentaG (magenta)
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%	Outputs:	magenta
+%   Notes:		k = 1.0-max(r,g,b)
+%				m = min(1.0,max(0.0,(1-g)-UnderCR(k)))
+%				m = Magenta(m)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2magentaG
+{
+	3 copy dup
+	3 1 roll eq
+	3 1 roll eq
+	and
+	{
+		pop pop pop
+		0
+	}
+	{
+		rgb2magenta
+	} ifelse
+} bd
+
+
+/rgb2magenta
+{
+	3 copy Max3					% r g b max
+	1 exch sub					% r g b key (1.0 - max(r,g,b))
+	ucurve readcurve  			% r g b ucr
+	4 1 roll					% ucr r g b
+	pop 						% ucr r	g
+	1 exch sub					% ucr r m
+	3 1 roll pop				% m ucr
+	sub							% m-ucr
+	mcurve readcurve			% m = Magenta(m)
+	clamp01
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2yellowG:	r g b rgb2yellowG (yellow)
+%
+%   Author: 	Mike
+%   Created: 	18/06/96
+%   Input:		r g b, three reals on the stack
+%	Outputs:	yellow
+%   Notes:		k = 1.0-max(r,g,b)
+%				y = min(1.0,max(0.0,(1-b)-UnderCR(k)))
+%				y = Yellow(y)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2yellowG
+{
+	3 copy dup
+	3 1 roll eq
+	3 1 roll eq
+	and
+	{
+		pop pop pop
+		0
+	}
+	{
+		rgb2yellow
+	} ifelse
+} bd
+
+/rgb2yellow
+{
+	3 copy Max3
+	1 exch sub					% key = 1.0 - max(r,g,b)
+	ucurve readcurve  			% stack = r g b ucr
+	4 1 roll					% ucr r g b
+	1 exch sub					% ucr r g y
+	4 1 roll					% y ucr r g
+	pop pop						% y ucr
+	sub							% y-ucr
+	ycurve readcurve			% y = Yellow(y)
+	clamp01
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rgb2plategray: r g b rgb2plategray -
+%
+%	Author:		Mike
+%   Created: 	18/06/96
+%   Input:	 	r,g,b, three reals on the stack
+%   Outputs: 	-
+%   Purpose:    set the current rgb colour as a grey value dependent on the current
+%				outputplate. We convert from rgb to device cmyk before plating the
+%				colour. The function will use the current setgray function
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rgb2plategray
+{
+	v_keyg 0 eq
+	v_plate v_cpky eq
+	{
+		 { rgb2key }{ rgb2keyG } ifelse
+	}
+	{
+		v_plate v_cpyl eq
+		{
+			{ rgb2yellow }{	rgb2yellowG } ifelse
+		}
+		{
+			v_plate v_cpmg eq
+			{
+				{ rgb2magenta }{ rgb2magentaG } ifelse
+			}
+			{
+				v_plate v_cpcy eq
+				{
+					{ rgb2cyan }{ rgb2cyanG } ifelse
+				}
+				{
+					{ rgb2key }{ rgb2keyG } ifelse
+				} ifelse
+			} ifelse
+		} ifelse
+	} ifelse
+	1 exch sub setgray
+} bd
+
+
+
+% Command to declare a variable
+/dc 
+{ 
+	0 def 
+}
+bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	aca:		-  aca  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Set up the rendering variables to the default values we expect.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/aca 
+{
+    /v_cpnone	   	0 def		% colour plate enums
+    /v_cpcy			1 def
+	/v_cpyl			2 def
+	/v_cpmg			3 def
+	/v_cpky			4 def
+
+	/v_gseps		0 def		% produce separations
+	/v_keyg    		0 def		% force greys to key
+	/v_plate   		v_cpnone def
+	/v_mono			0 def		% use mono output only
+
+	/v_wr dc    % Winding rule
+
+	/v_fc dc    % fill colour cyan
+	/v_fm dc    % fill colour magenta
+	/v_fy dc    % fill colour yellow
+	/v_fk dc    % fill colour black
+	/v_fg dc	% fill grey
+	/v_fr dc	 % fill colour red
+	/v_fg dc	 % fill colour green
+	/v_fb dc	 % fill colour blue
+
+	/v_sc dc    % stroke colour cyan
+	/v_sm dc    % stroke colour magenta
+	/v_sy dc    % stroke colour yellow
+	/v_sk dc    % stroke colour black
+	/v_sg dc	% stroke grey
+	/v_sr dc	 % stroke colour red
+	/v_sg dc	 % stroke colour green
+	/v_sb dc	 % stroke colour blue
+
+	/v_sct 0 def	% stroke colour type	(0 = CMYK
+			%			 1 = RGB)
+
+	/v_fct 0 def	% fill colour type	(0 = CMYK
+			%			 1 = RGB)
+
+	/v_ft 0 def     % fill type    (0 = flat, 
+					%				1 = linear, 
+					%				2 = elliptical,
+					%				3 = circular,
+					%				4 = conical,
+					%				5 = bitmap,
+					%				6 = fractal)
+
+	/v_cxe 0 def	% fill effect  (0 = RGB fade,
+					%				1 = HSV fade,
+					%				2 = HSV alternate fade)
+
+	/v_cxm 0 def	% fill mapping (not used yet)
+
+	/v_sa -1 def    % start arrow type
+	/v_ea -1 def    % end arrow type
+
+	% Variables used by fill step algorithm
+	/sR dc
+	/sG dc
+	/sB dc
+	/mR dc
+	/mG dc
+	/mB dc
+	/eR dc
+	/eG dc
+	/eB dc
+
+	/sC dc
+	/sM dc
+	/sY dc
+	/sK dc
+	/eC dc
+	/eM dc
+	/eY dc
+	/eK dc
+
+	/sH dc
+	/sS dc
+	/sV dc
+	/eH dc
+	/eS dc
+	/eV dc
+
+	/sGy dc
+	/eGy dc
+	/mGy dc
+
+	% Used by color image related operators
+	/ci_datasrc dc
+	/ci_matrix dc
+	/ci_dataleft dc
+	/ci_buf dc
+	/ci_dataofs dc
+	/ci_y dc
+	/rciBuf dc
+	/cbslw dc
+	/cmiBuf dc
+	/cPalette dc
+	/cpci_datasrc dc
+	/cpci_matrix dc
+	/cpci_bpp dc
+	/cpci_y dc
+	/cpci_sampsleft dc
+	/cpci_nextcol dc
+	/cpci_buf dc
+
+	% Used by Grad fill routines
+	/startX dc
+	/startY dc
+	/endX dc
+	/endY dc
+	/endX2 dc
+	/endY2 dc
+	/fillX dc
+
+	% Bounding box vars
+	/urx dc
+	/ury dc
+	/llx dc
+	/lly dc
+
+	% More grad fill calculation variables
+	/incD dc
+	/distance dc
+	/slice dc
+	/startangle dc
+	/Steps dc
+
+	% Colour step calculations
+	/incH dc
+	/incS dc
+	/incV dc
+	/incR dc
+	/incG dc
+	/incB dc
+	/incGy dc
+
+	% 0.25pt lines
+	0.25 setlinewidth
+
+	% Solid lines
+	[] 0 setdash
+
+	% Mitred line joins
+	0 setlinejoin
+
+	% Butt line caps
+	0 setlinecap
+}
+bd
+
+%
+% Initialise all the variables
+%
+
+aca
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   setplategray: c m y k setplategray -
+%
+%	Author:		Mike
+%   Created: 	18/06/96
+%   Input:	 	c,m,y,k, four reals on the stack
+%   Outputs: 	-
+%   Purpose:    set the current cmyk colour as a grey value dependent on the current
+%				outputplate
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setplategray
+{
+	v_plate v_cpky eq
+	{
+		1 exch sub setgray
+		pop pop pop
+	}
+	{
+		v_plate v_cpyl eq
+		{
+			pop
+			1 exch sub setgray
+			pop pop
+		}
+		{
+			v_plate v_cpmg eq
+			{
+				pop pop
+				1 exch sub setgray
+				pop
+			}
+			{
+				v_plate v_cpcy eq
+				{
+					pop pop pop
+					1 exch sub setgray
+				}
+				{
+					1 exch sub setgray
+					pop pop pop
+				} ifelse
+			} ifelse
+		} ifelse
+	} ifelse
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   setplatecolor:	c m y k setplatecolor -
+%
+%	Author:		Mike
+%   Created: 	18/06/96
+%   Input:	 	c,m,y,k, four reals on the stack
+%   Outputs: 	-
+%   Purpose:    set the current cmyk colour as a cmyk colour value dependent on the
+%				current	outputplate
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setplatecolor
+{
+	v_plate v_cpky eq
+	{
+		1 exch sub 0 0 0 4 -1 roll
+		setcmykcolor
+		pop pop pop
+	}
+	{
+		v_plate v_cpyl eq
+		{
+			pop	1 exch sub 0 0 0 4 2 roll
+			setcmykcolor
+			pop pop
+		}
+		{
+			v_plate v_cpmg eq
+			{
+				pop pop	1 exch sub 0 0 0 4 1 roll
+				setcmykcolor
+				pop
+			}
+			{
+				v_plate v_cpcy eq
+				{
+					pop pop	pop 1 exch sub 0 0 0 
+					setcmykcolor
+				}
+				{
+					1 exch sub 0 0 0 4 -1 roll
+					setcmykcolor
+					pop pop pop
+				} ifelse
+			} ifelse
+		} ifelse
+	} ifelse
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setcmykcolor - usual definition
+%
+%	Author:		Tim
+%	Created:	23/5/95
+%	Inputs:		See Red book
+%	Purpose:	If we are on a Level 1 device which has no setcmykcolor operator, then
+%				define it by converting CMYK to RGB and then calling setrgbcolor.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 	I've changed the definition below, so that ALL colours are printed as RGB, rather than 
+%	some as RGB, some as CMYK. This is only intended for the coming release, and the colour
+%	information will be changed in the future, so that we export colours using RGB tokens
+%	rather than exporting CMYK ones and converting them. (ChrisG 28/11/00)
+%
+%	We now use RGB tokens, so setcmykcolor can return.
+
+/setcmykcolor where
+{
+	% Found - so don't redefine, and discard the dictionary
+	pop
+}
+{
+	% Not found, so define it for Level 1 devices...
+
+	/setcmykcolor
+	{
+		% Convert to RGB
+		cmyk2rgb
+
+		% Set the colour using the RGB value
+		setrgbcolor
+	} bd
+
+} ifelse
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setlogcmykcolor: c m y k setlogcmykcolor -
+%
+%	Author:		Mike
+%	Created:	21/6/96
+%	Inputs:		c,m,y,k = four reals 0<=x<=1
+%	Outputs:	-
+%	Purpose:	This function has been defined for use with our normal flat fill and
+%				stroke functions. It is defined in such a way as to be compatible with
+%				how Camelot deals with composite and separated colour. If Camelot is
+%				doing a composite print this function will be given full c,m,y,k values.
+%				We set these normally with a setcmykcolor. If the monochrome flag is set
+%				we should convert to a grey and use setgray as normal. If we are in
+%				separation mode then Camelot has already separated the colour for us and
+%				has given us some sort of c,m,y,k value. The value can be of the form
+%				0,0,y,0 (ie for a yellow separation) or 0,0,0,K for a mono separation.
+%				v_plate is the postscript variable which tells us what plate is currently
+%				active (this is only valid really for separation prints, it will be set
+%				to cp_none for composite prints). Here we ignore the plate setting, as
+%				we can simply call setgray or setcmyk on the stacked values. Camelot has
+%				made sure that colours will separate to white if this is the wrong plate.
+%				Note the use of setgray and setcmykcolor. These are strictly dependent
+%				on the mono flag.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setlogcmykcolor
+{
+	v_gseps 1 eq
+	{
+		v_mono 1 eq
+		{
+			1 exch sub
+			setgray
+			pop pop pop
+		}
+		{
+			% Is this correct or do we really
+			% want to call setplatecolor?
+			% We are separating but we want a colour
+			% version of the separation. Hmm is this possible?
+			% Postscript usually uses a simple cmyk=>rgb so we
+			% may get away with it.
+			setcmykcolor
+		} ifelse
+	}
+	{
+		v_mono 1 eq
+		{
+			cmyk2rgb
+			rgb2gray
+			setgray
+		}
+		{
+			setcmykcolor
+		} ifelse
+	} ifelse
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setlogcmykcolor: r g b setlogrgbcolor -
+%
+%	Author:		Chris G
+%	Created:	7/12/00
+%	Inputs:		r,g,b = three reals 0<=x<=1
+%	Outputs:	-
+%	Purpose:	This function is identical to the above except that it uses sets rgb 
+%			colours instead of cmyk ones, where possible.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setlogrgbcolor
+{
+	v_gseps 1 eq
+	{
+		v_mono 1 eq
+		{
+			rgbtoplategray
+		}
+		{
+			rgb2devcmyk
+			setplatecolor
+		} ifelse
+	}
+	{
+		v_mono 1 eq
+		{
+			rgb2gray
+			setgray
+		}
+		{
+			systemdict begin
+			setrgbcolor
+			end
+		} ifelse
+	} ifelse
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setfillcolor: setfillcolor -
+%
+%	Author:		Chris G
+%	Created:	7/12/00
+%	Inputs:		-
+%	Outputs:	-
+%	Purpose:	This function is used to set the fill colour, using the current fill
+%			colour space and components. To add another colour space, add the 
+%			operators (in pathprocs.ps), add some fill and stroke variables (in 
+%			/aca), write a setlogXXXXcolour and add an ifelse statement in this
+%			function and the setstrokecolour function
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setfillcolor
+{
+	v_fct 0 eq
+	{
+		% CMYK colours used for fill.
+		v_fc v_fm v_fy v_fk setlogcmykcolor
+	}
+	{
+		% RGB colours used for fill.
+		v_fr v_fg v_fb setlogrgbcolor
+	}
+	ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setstrokecolor: setstrokecolor -
+%
+%	Author:		Chris G
+%	Created:	7/12/00
+%	Inputs:		-
+%	Outputs:	-
+%	Purpose:	This is identical to setfillcolor above, except that it sets the 
+%			stroke colour
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setstrokecolor
+{
+	v_sct 0 eq
+	{
+		% CMYK colours used for fill.
+		v_sc v_sm v_sy v_sk setlogcmykcolor
+	}
+	{
+		% RGB colours used for fill.
+		v_sr v_sg v_sb setlogrgbcolor
+	}
+	ifelse
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setgfillcmyk: c m y k setgfillcmyk -
+%
+%	Author:		Mike
+%	Created:	21/6/96
+%	Inputs:		c,m,y,k = four reals 0<=x<=1
+%	Outputs:	-
+%	Purpose:	This function has been defined for use with our geometric fill functions
+%				linear, radial, elliptical and conical. As we have defined our own postscript
+%				functions to generate these fill types we need special separation code to
+%				cope with the separation of colours. Hence at all times grad fills will be
+%				presented as full colour fills. The { v_gseps, v_plate, v_mono } variables
+%				will direct how the fill is rendered. (Note Camelot skips its internal
+%				device colour separation stage for Postscript rendered grad fills only. It
+%				will perform only a logical rgb=>cmyk conversion of 1-r,1-g,1-b.) This
+%				is crucial to the working of grad fills, as this simple conversion is fully
+%				revisible. CMYK start and end colours of the fill will be converted to rgb
+%				or hsb in order to render the fill.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setgfillcmyk
+{
+	v_gseps 1 eq
+	{
+		v_mono 1 eq
+		{
+			cmyk2rgb
+			rgb2plategray
+			%rgb2devcmyk
+			%setplategray
+		}
+		{
+			cmyk2rgb
+			rgb2devcmyk
+			setplatecolor
+		} ifelse
+	}
+	{
+		v_mono 1 eq
+		{
+			cmyk2rgb
+			rgb2gray
+			setgray
+		}
+		{
+			setcmykcolor
+		} ifelse
+	} ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setgfillrgb: r g b setgfillrgb -
+%
+%	Author:		Mike
+%	Created:	21/6/96
+%	Inputs:		r,g,b = three reals 0<=x<=1
+%	Outputs:	-
+%	Purpose:	This function has been defined for use with our geometric fill functions
+%	SeeAlso:	setgfillcmyk
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/setgfillrgb
+{
+	v_gseps 1 eq
+	{
+		v_mono 1 eq
+		{
+			rgb2plategray
+			%rgb2devcmyk
+			%setplategray
+		}
+		{
+			rgb2devcmyk
+			setplatecolor
+		} ifelse
+	}
+	{
+		v_mono 1 eq
+		{
+			rgb2gray
+			setgray
+		}
+		{
+	    	systemdict begin 
+			setrgbcolor 
+			end
+		} ifelse
+	} ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	setgfillhsb: h s b setgfillhsb -
+%
+%	Author:		Mike
+%	Created:	21/6/96
+%	Inputs:		h,s,b = three reals 0<=x<=1
+%	Outputs:	-
+%	Purpose:	This function has been defined for use with our geometric fill functions
+%	SeeAlso:	setgfillcmyk
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+					
+/setgfillhsb
+{
+	v_gseps 1 eq
+	{
+		v_mono 1 eq
+		{
+		   	systemdict begin
+			sethsbcolor
+			currentrgbcolor
+			end
+			rgb2plategray
+			%rgb2devcmyk
+			%setplategray
+		}
+		{
+		   	systemdict begin
+			sethsbcolor
+			currentrgbcolor
+			end
+			rgb2devcmyk
+			setplatecolor
+		} ifelse
+	}
+	{
+		v_mono 1 eq
+		{
+	    	systemdict begin
+			sethsbcolor
+			currentgray
+			end
+			setgray
+		}
+		{
+	    	systemdict begin 
+			sethsbcolor 
+			end
+		} ifelse
+	} ifelse
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Max:		a b Max c
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		a and b - the two values to find the maximum of.
+%	Outputs:	c - the maximum value of a and b.
+%	Purpose:	Find the maximum of two values.
+%	SeeAlso:	Min
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Max 
+{
+	% find the maximum of 2 numbers
+	2 copy lt {exch} if pop
+} bd
+
+/Max3
+{
+	% find the maximum of 3 numbers
+	2 copy lt {exch} if pop
+	2 copy lt {exch} if pop
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Min:		a b Min c
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		a and b - the two values to find the minimum of.
+%	Outputs:	c - the minimum value of a and b.
+%	Purpose:	Find the minimum of two values.
+%	SeeAlso:	Max
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Min 
+{
+	% find the minimum of 2 numbers
+	2 copy gt {exch} if	pop
+} bd
+
+/Min3
+{
+	% find the minimum of 3 numbers
+	2 copy gt {exch} if pop
+	2 copy gt {exch} if pop
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	clamp:		val rangelo rangehi clamp x
+%
+%	Author:		Mike
+%	Created:	21/06/96
+%	Inputs:		val = the value to clamp to a range
+%				rangelo, rangehi = the range limits
+%	Outputs:	x = the clamped version of val
+%	Purpose:	Clamp the value val to the range [ rangelo, rangehi ]
+%				such that val<rangelo,  x=rangelo
+%						  val>rangehi,  x=rangehi
+%					 else x=val
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/clamp 
+{
+	3 1 roll Max
+	2 1 roll Min
+} bd
+
+/clamp01
+{
+	0 Max 1 Min
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Pythag:		dx dy  Pythag  length
+%
+%	Author:		Sean
+%	Created:	Unknown
+%	Inputs:		dx, dy - the vector to find the length of.
+%	Outputs:	length - length of the vector described by dx and dy.
+%	Purpose:	Find the length of a vector using Pythagoras' Theorem
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Pythag 
+{
+	dup mul exch dup mul add sqrt 
+} bd
+
+
+%
+% Some procedures that are needed by the Adobe SDK code.
+%
+
+/ssc
+{
+	% Our colours in image are always in RGB at present
+	DeviceRGB setcolorspace setcolor
+} 
+bd
+
+/ssg { setgray } bd
+
+% Initialise our variables so we don't get errors due to undefined or
+% differently defined names.
+
+%
+% Some general variables/procedures referenced while rendering.
+%
+
+/p_render {} def        % A deferred render command, used in multiple subpaths
+/p_count 0 def          % The counter that tells me we've finished *U
+/vis_flag true def      % Tells me if a layer is visible
+
+
+% Enough room to hold an RGB tuple
+/DataString 3 string def
+
+% Standard data source
+/DataSrc
+{
+	currentfile DataString readhexstring pop
+} bd
+
+% 3 dummy strings to hold decoded data
+/DataStr1 1 string def
+/DataStr2 1 string def
+/DataStr3 1 string def
+
+% Data sources to decode RLE ASCII85 RGB components.
+/DataSrc1
+{
+	% Put the string on the stack
+	DataStr1
+} bd
+
+/DataSrc2
+{
+	% Put the string on the stack
+	DataStr2
+} bd
+
+/DataSrc3
+{
+	% Put the string on the stack
+	DataStr3
+} bd
+
+% Work out how to define our 'ci' operator (shorthand for colorimage).
+% Basically, if colorimage is known by the interpreter, then use it,
+% otherwise implement our own (using horrible plot pixel as rectangle
+% technology).
+
+
+% BODGE! Remember to change this so we only over-ride colorimage on Level 1 devices!!!
+
+/colorimage where
+%false
+{
+	% Found colorimage...lose the dictionary as we don't need it
+	pop
+
+	/ci
+	{
+		% Level 2 (probably) - ok, so use colorimage
+
+		colorimage
+
+	} bd
+}
+{
+	% Not found...
+
+	/ci
+	{
+		%
+		% Level 1 version of colorimage.
+		%
+
+		% Note that this only copes with:
+		%
+		% * a single datasource (i.e. the 'multi' flag is false)
+		% * 8 bit component values (i.e. the 'bits/comp' parameter is 8)
+		% * RGB colour values (i.e. 'ncomp' is 3)
+		%
+		% So, in essence this version of colorimage will only render 24-bit RGB tuple 
+		% data from a single stream.
+		%
+		% We do output multiple data streams, but only to Level 2 devices, which will
+		% already have a colorimage operator, so this version does not need to cope with it.
+
+		% Ignore ncomp & multi parameters
+		pop pop
+
+		% Remember data-source procedure
+		/ci_datasrc exch def
+
+		% Get the inverse of our image matrix, because the image matrix maps
+		% from user space to image space, and we want to map from image space to
+		% user space.
+		matrix invertmatrix
+		
+		% Remember this matrix
+		/ci_matrix exch def
+
+		% Ignore bits/comp - should always be 8
+		pop
+
+		% Initially, no data is in the data var
+		/ci_dataleft 0 def
+		/ci_buf () def
+		/ci_dataofs 0 def
+
+		% Width and height are on stack...
+
+		% Major loop - y axis
+		0 1 3 -1 roll 1 sub
+		{
+			/ci_y exch def
+
+			% Minor loop - x axis
+			% (NB. executed multiple times so we use a copy of the width parameter)
+			dup
+			0 1 3 -1 roll 1 sub
+			{
+				% Get 3 bytes from the data source
+				0 1 2 
+				{
+					% Don't care about loop variable
+					pop
+
+					% Ensure we have some data to fetch
+					ci_dataleft 0 eq
+					{
+						% Need some fresh data, so get it.
+						ci_datasrc
+
+						% Find out how much data we got
+						dup length /ci_dataleft exch def
+
+						% Reset buffer and offset vars for this new data.
+						/ci_buf exch def
+						/ci_dataofs 0 def
+					}
+					if
+
+					% Index the data array to get the data.
+					ci_buf ci_dataofs get
+
+					% Force into 0.0 <-> 1.0 range (as it is colour data).
+					255 div
+
+					% Adjust data counter/offset
+					/ci_dataofs  ci_dataofs  1 add def
+					/ci_dataleft ci_dataleft 1 sub def
+
+					% Leave the colour data value on the stack...
+				}
+				for
+
+				% The three RGB values are on the stack - use them to set RGB colour.
+				setrgbcolor
+
+				% Draw the pixel!
+
+				% x-coord is on the stack... (take a copy as we use it four times)
+
+				% Get (x1,y1)
+				dup ci_y 
+
+				% Get (x2,y2)
+				3 -1 roll
+				1 add ci_y 1 add 
+
+				% Copy the co-ordinates to give correct order for a box/rectangle.
+				4 copy 					% x1 y1 x2 y2 x1 y1 x2 y2
+				5 1 roll 				% x1 y1 x2 y2 y2 x1 y1 x2
+				4 2 roll 				% x1 y1 x2 y2 y1 x2 y2 x1
+				5 -1 roll				% x1 y1 x2 y1 x2 y2 x1 y2
+
+				% Transform co-ordinates by the image matrix
+				1 1 4
+				{
+					% Lose loop variable.
+					pop
+
+					% Transform top co-ord pair
+					ci_matrix transform
+
+					% And shuffle it to the bottom
+					8 2 roll
+				}
+				for
+
+				% Make a closed rectangular path, and fill it.
+				m l l l closepath
+				fill
+			} for
+		} for
+
+		% Lose the last copy of width parameter
+		pop
+		
+		% Phew - all done!		
+	} bd
+}
+ifelse
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	rci:		width height bits/comp matrix  rci  -
+%
+%	Author:		Tim Browse
+%	Created:	29/6/95
+%	Inputs:		See colorimage (NB not all colorimage params are needed)
+%	Purpose:	Render an image using the colorimage operator.
+%	SeeAlso:	ci
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/rci
+{
+	% First, make a buffer long enough to hold a single scanline.
+	/rciBuf 
+
+	% Get the bitmap width (i.e. scanline length)
+	4 index 			
+
+	% Scale it according to the sample depth
+	3 index mul		% => number of bits
+	7 add			% => Round up to whole number of bytes
+	8 div			% => number of bytes
+	floor cvi
+
+	% Make the buffer
+	string def
+
+	% Put the rest of the colorimage operators on the stack...
+
+	% The data source procedure
+	{ currentfile rciBuf readhexstring pop } bind
+
+	% Only one data source
+	false
+
+	% 3 colour components per sample (R, G, and B)
+	3
+
+	% Now call our (mapped) colorimage operator.
+	ci
+}
+bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cbsl	    regionwidth 1 width height X Y level cbsl
+%				[ encoded scanline...... ]
+%
+%	Author:		Tim Browse
+%	Created:	29/6/95
+%	Inputs:		See colorimage (NB not all colorimage params are needed)
+%	Purpose:	Render an 24 bpp scanline to the output device.
+%	SeeAlso:	ci
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cbsl
+{
+	% Remember if this is L2 or not
+	2 eq /cbslL2 xd
+
+	% Remember pixel width
+	5 index /cbslw xd
+
+	% Transform:  	pw ph w h x y
+	%
+	% 	   into:  	x y translate 
+	%				w h scale
+	%				pw ph
+	%				8					(8 bits per component sample)
+	%				[ pw 0 0 ph 0 0 ]
+
+	% Do the translate
+	translate
+
+	% Do the scale
+	scale
+
+	% pw and ph left on stack...
+
+	% 8 bits per colour component
+	8
+
+	% Make the array
+	[
+		3 index 0 0						% stack is now: w h 8 [ w 0 0
+		5 index 0 0 					% stack is now: w h 8 [ w 0 0 h 0 0
+	]
+
+	cbslL2
+	{
+		% Level 2 compatible data.
+
+		% Decode data and store in DataStr1
+		/DataStr1 cbslw string def
+		currentfile /ASCII85Decode filter /RunLengthDecode filter
+		DataStr1 readstring pop pop
+
+		% Decode data and store in DataStr2
+		/DataStr2 cbslw string def
+		currentfile /ASCII85Decode filter /RunLengthDecode filter
+		DataStr2 readstring pop pop
+
+		% Decode data and store in DataStr3
+		/DataStr3 cbslw string def
+		currentfile /ASCII85Decode filter /RunLengthDecode filter
+		DataStr3 readstring pop pop
+
+		% Use these strings to make data sources.
+		{ DataStr1 } bind
+		{ DataStr2 } bind
+		{ DataStr3 } bind
+
+		% Multiple data sources
+		true
+	}
+	{
+		% Level 1 compatible data.
+
+		% Data source proc for bitmap data
+		/DataSrc load 
+
+		% No multiple data sources
+		false
+	}
+	ifelse
+
+	% 3 components in each sample
+	3
+
+	% Rasterise it
+	ci
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	gbsl	    pixelwidth pixelheight width height X Y level gbsl
+%				[ encoded scanline...... ]
+%
+%	Author:		Mike Kenny
+%	Created:	03/09/96
+%	Inputs:		See image (NB not all image params are needed)
+%	Purpose:	Render an 8 bpp greylevel scanline to the output device.
+%	SeeAlso:	ci
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/gbsl
+{
+	% Remember if this is L2 or not
+	2 eq /gbslL2 xd
+
+	% Remember pixel width
+	5 index /gbslw xd
+
+	% Do the (X,Y) translate
+	translate
+
+	% Do the (width, height) scale
+	scale
+
+	% leave pixelwidth and pixelheight on the stack...
+
+	% 8 bits per component
+	8
+
+	% Make the render matrix
+	[
+		3 index 0 0						% stack is now: w h 8 [ w 0 0
+		5 index 0 0 					% stack is now: w h 8 [ w 0 0 h 0 0 ]
+	]
+
+	% read the data source
+
+	gbslL2
+	{
+		% Level 2 compatible data.
+
+		% Decode data and store in DataStr1
+		/DataStr1 gbslw string def
+		currentfile /ASCII85Decode filter /RunLengthDecode filter
+		DataStr1 readstring pop pop
+		% Use these strings to make data sources.
+		{ DataStr1 } bind
+	}
+	{
+		% Level 1 compatible data.
+
+		% Data source proc for bitmap data
+		/DataStr1 gbslw string def
+		currentfile DataSrc1 readhexstring pop pop
+		% Use these strings to make data sources.
+		{ DataStr1 } bind
+	}
+	ifelse
+
+	% Rasterise the image
+	image
+} bd
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cmi:		width height bits/comp matrix  cmi  -
+%
+%	Author:		Tim
+%	Created:	27/6/95
+%	Inputs:		Width and height of bitmap, in pixels.
+%				Number of bits per component: Only 1, 4, or 8bpp are allowed.
+%				matrix - the matrix which maps user space to image space (see image operator).
+%	Purpose:	cmi = camelot monochrome image
+%				Render a monochrome image which is 1, 4, or 8bpp deep.
+%	SeeAlso:	image (Standard PostScript)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cmi
+{
+	% First, make a buffer long enough to hold a single scanline.
+	/cmiBuf 
+
+	% Get the bitmap width (i.e. scanline length)
+	4 index 			
+
+	% Scale it according to the sample depth
+	3 index mul		% => number of bits
+	7 add			% => Round up to whole number of bytes
+	8 div			% => number of bytes
+	floor cvi
+
+	% Make the buffer
+	string def
+
+	% Put the rest of the image operators on the stack...
+
+	% The data source procedure
+	{ currentfile cmiBuf readhexstring pop } bind
+
+	% Rasterise the image
+	image
+}
+bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cpal:		n  cpal  -
+%
+%	Author:		Tim
+%	Created:	27/6/95
+%	Inputs:		Number of 24bit palette entries.
+%	Purpose:	Read the specified number of palette entries from the file, and store them
+%				in the string array called "cPalette".
+%	SeeAlso:	cci
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cpal
+{
+	% Get a buffer to put this palette data in (4 times the space is required for RGB data
+	% because we use the Windows convention of RGBQUAD data structure)
+	4 mul string /cPalette exch def
+
+	% Read the bitmap palette from the file into this string array.
+	currentfile cPalette readhexstring pop
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cpci:		width height bits/comp matrix  cpci  -
+%
+%	Author:		Tim
+%	Created:	27/6/95
+%	Inputs:		Width and height of bitmap, in pixels.
+%				Number of bits per component: 1 = 1bpp, no palette
+%											  4 = 4bpp, 16 colour palette
+%											  8 = 8bpp, 256 colour palette
+%											  other values are illegal
+%				matrix - the matrix which maps user space to image space (see colorimage).
+%	Purpose:	cci = camelot colorimage
+%				Render an image which is 1, 4, or 8bpp deep.
+%				4 and 8bpp images have an associated palette which is used to decode the
+%				scanline data.  This palette should previously have been registered via
+%				the "cpal" token.
+%	SeeAlso:	cpal
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cpci
+{
+	%
+	% Routine for drawing a paletted image.
+	%
+
+	% Remember data-source procedure
+	/cpci_datasrc exch def
+
+	% Get the inverse of our image matrix, because the image matrix maps
+	% from user space to image space, and we want to map from image space to
+	% user space.
+	matrix invertmatrix
+	
+	% Remember this matrix
+	/cpci_matrix exch def
+
+	% Find out how deep the image is
+	/cpci_bpp exch def
+
+	% Initialise our data source procedure
+	cpci_init
+
+	% Width and height are on stack...
+
+	% Major loop - y axis
+	0 1 3 -1 roll 1 sub
+	{
+		/cpci_y exch def
+
+		% Minor loop - x axis
+		% (NB. executed multiple times so we use a copy of the width parameter)
+		dup
+
+		% Image data for each scanline always starts on a character boundary, so make
+		% sure we're on one.
+		cpci_bpp 4 eq
+		{
+			cpci_sampsleft 1 eq
+			{
+				% One sample (i.e. 4bits) left in the buffer at the start of
+				% the scanline, so throw this away and force a new byte to 
+				% be read.
+				/cpci_sampsleft 0 def
+			}
+			if
+		}
+		if
+
+		0 1 3 -1 roll 1 sub
+		{
+			% Get next pixel colour and set it in graphics state.
+			cpci_nextcol
+
+			% Draw the pixel!
+
+			% x-coord is on the stack... (take a copy as we use it four times)
+
+			% Get (x1,y1)
+			dup cpci_y 
+
+			% Get (x2,y2)
+			3 -1 roll
+			1 add cpci_y 1 add 
+
+			% Copy the co-ordinates to give correct order for a box/rectangle.
+			4 copy 					% x1 y1 x2 y2 x1 y1 x2 y2
+			5 1 roll 				% x1 y1 x2 y2 y2 x1 y1 x2
+			4 2 roll 				% x1 y1 x2 y2 y1 x2 y2 x1
+			5 -1 roll				% x1 y1 x2 y1 x2 y2 x1 y2
+
+			% Transform co-ordinates by the image matrix
+			1 1 4
+			{
+				% Lose loop variable.
+				pop
+
+				% Transform top co-ord pair
+				cpci_matrix transform
+
+				% And shuffle it to the bottom
+				8 2 roll
+			}
+			for
+
+			% Make a closed rectangular path, and fill it.
+			m l l l closepath
+
+			fill
+		} for
+	} for
+
+	% Lose the last copy of width parameter
+	pop
+	
+	% Phew - all done!		
+} bd
+
+/cpci_init
+{
+	/cpci_sampsleft 0 def
+} bd
+
+% We use this to get the next byte from the file.
+/cpci_buf 1 string def
+
+/cpci_nextcol
+{
+	cpci_bpp 1 eq
+	{
+		% Extract next monochrome bit
+		cpci_sampsleft 0 eq
+		{
+			% Need to get some more data
+			currentfile cpci_buf readhexstring pop pop
+
+			% Just read 8 bits
+			/cpci_sampsleft 8 def
+		}
+		if
+
+		% Get the LSB from the buffer, set the current colour accordingly, 
+		% and shift the byte right one bit.
+		cpci_buf dup 0 get dup 
+		1 and setgray
+		-1 bitshift 1 exch put
+
+		% One less sample in the buffer
+		/cpci_sampsleft cpci_sampsleft 1 sub def
+	}
+	{
+		cpci_bpp 4 eq
+		{
+			% Extract next 4bpp sample
+			cpci_sampsleft 0 eq
+			{
+				% Need to get some more data
+				currentfile cpci_buf readhexstring pop pop
+
+				% Just read 2 4bit samples
+				/cpci_sampsleft 2 def
+			}
+			if
+
+			% Get the lowest 4 bits from the buffer
+			cpci_buf 0 get dup
+			15 and exch
+
+			% Finally, shift the data right 4 bits.
+			-4 bitshift cpci_buf 0 3 -1 roll put
+
+			% One less sample in the buffer
+			/cpci_sampsleft cpci_sampsleft 1 sub def
+
+			% Leave palette index on the stack for the palette lookup routine...
+		}
+		{
+			% Extract next 8bpp sample
+			currentfile cpci_buf readhexstring pop
+
+			% Leave palette index on the stack for the palette lookup routine...
+			0 get
+		}
+		ifelse
+
+		% Extract the relevant palette entry and use it to set the current colour.
+
+		% Scale up offset so it works into the RGBQUAD structure of the palette data.
+		4 mul
+
+		% Convert to RGB colour tuple, and force into 0.0 to 1.0 range
+		dup 
+		2 add cPalette exch get 
+		255 div exch
+		dup 
+		1 add cPalette exch get 
+		255 div exch
+		cPalette exch get 
+		255 div
+
+		% Use this data to set the color
+		setrgbcolor
+	}
+	ifelse
+} bd
+
+
+
+

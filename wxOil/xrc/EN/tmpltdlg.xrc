@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TEMPLATE_DIALOG">
+			 <pos>0,0d</pos> <size>329,149d</size>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,7d</pos> <size>101,8d</size>
+			<label>Available Properties</label>
+		</object>
+		<object class="wxListBox" name="IDC_TMLPTDLG_AVAILABLE">
+			 <pos>10,18d</pos> <size>124,57d</size>
+		</object>
+		<object class="wxButton" name="IDC_TMPLTDLG_ADD">
+			 <pos>140,20d</pos> <size>50,14d</size>
+			<label>&amp;Add --&amp;gt;</label>
+		</object>
+		<object class="wxButton" name="IDC_TMPLTDLG_REMOVE">
+			 <pos>140,38d</pos> <size>50,14d</size>
+			<label>&amp;lt;-- &amp;Remove</label>
+		</object>
+		<object class="wxButton" name="IDC_TMPLTDLG_REMOVE_ALL">
+			 <pos>140,60d</pos> <size>50,14d</size>
+			<label>Remove A&amp;ll</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>195,7d</pos> <size>89,8d</size>
+			<label>Properties Used</label>
+		</object>
+		<object class="wxListBox" name="IDC_TMLPTDLG_USED">
+			 <pos>195,18d</pos> <size>124,58d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TMPLTDLG_QUESTION_TEXT">
+			 <pos>15,83d</pos> <size>29,8d</size>
+			<label>&amp;Question</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TMLPTDLG_QUESTION">
+			 <pos>52,81d</pos> <size>260,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TMPLTDLG_PARAM_TEXT">
+			 <pos>15,98d</pos> <size>298,8d</size>
+			<label></label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TMPLTDLG_PARAM">
+			 <pos>17,110d</pos> <size>295,12d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>123,129d</pos> <size>50,14d</size>
+			<label>A&amp;pply</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>181,129d</pos> <size>50,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>239,129d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxButton" name="IDC_TMPLTDLG_MAKE_STYLE">
+			 <pos>18,129d</pos> <size>50,14d</size>
+			<label>Make &amp;Style...</label>
+		</object>
+		<title>Wizard Properties</title>
+	</object>
+	<object class="wxDialog" name="IDD_NAME">
+			 <pos>0,0d</pos> <size>183,54d</size>
+		<object class="wxTextCtrl" name="IDC_NAME_NAME">
+			 <pos>72,11d</pos> <size>77,13d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>12,34d</pos> <size>50,14d</size>
+			<label>&amp;Create</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>67,34d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>122,34d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_NAME_LABEL">
+			 <pos>25,14d</pos> <size>42,8d</size>
+			<label>Style Name:</label>
+		</object>
+		<title>New Style Name</title>
+	</object>
+</resource>

@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_PROGRESS">
+			 <pos>0,0d</pos> <size>225,12d</size>
+		<object class="wxGauge" name="IDC_PROGRESSBAR">
+			 <pos>1,1d</pos> <size>146,10d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_PERCENTAGE">
+			 <pos>148,2d</pos> <size>23,9d</size>
+			<label>100%</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>173,0d</pos> <size>52,12d</size>
+			<label>Stop Download</label>
+		</object>
+		<title>File download</title>
+	</object>
+	<object class="wxDialog" name="IDD_OPTSTAB_INTERNET">
+			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxStaticText" name="IDC_OPTS_INETINFO">
+			 <pos>5,5d</pos> <size>195,10d</size>
+			<label>Internet options</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,16d</pos> <size>195,45d</size>
+			<label>Internet Cache</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>11,29d</pos> <size>45,10d</size>
+			<label>Cache usage:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>88,29d</pos> <size>8,8d</size>
+			<label>%</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>11,45d</pos> <size>42,11d</size>
+			<label>Cache Size:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_CACHESIZE">
+			 <pos>61,43d</pos> <size>55,12d</size>
+		</object>
+		<object class="wxButton" name="IDC_FLUSHCACHE">
+			 <pos>127,40d</pos> <size>63,16d</size>
+			<label>Empty Cache</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,64d</pos> <size>195,62d</size>
+			<label>Connection Type</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_14K">
+			 <pos>15,73d</pos> <size>96,12d</size>
+			<label>14.4 Kbs modem</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_28K">
+			 <pos>15,85d</pos> <size>96,12d</size>
+			<label>28.8/33.6 Kbs modem</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_56K">
+			 <pos>15,97d</pos> <size>96,12d</size>
+			<label>56 Kbs modem</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_ISDN">
+			 <pos>15,109d</pos> <size>120,12d</size>
+			<label>Dual ISDN or better (&amp;gt;128 Kbs)</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>5,130d</pos> <size>195,50d</size>
+			<label>Proxy Server Settings</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PROXY_DETAILS">
+			 <pos>11,139d</pos> <size>183,36d</size>
+			<label></label>
+		</object>
+		<title>Internet</title>
+	</object>
+</resource>

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_REGISTER_DLG">
+			 <pos>0,0d</pos> <size>215,60d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>38,39d</pos> <size>54,14d</size>
+			<label>Register Now</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>123,39d</pos> <size>54,14d</size>
+			<label>Register Later</label>
+		</object>
+		<object class="wxStaticText" name="IDC_REGISTER_DLG_TEXT">
+			 <pos>38,6d</pos> <size>167,30d</size>
+			<label>Register this copy of Xara Xtreme to receive free support and special offers on other Xara products and upgrades.</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STATIC">
+			 <pos>6,6d</pos> <size>18,20d</size>
+			<bitmap>2.png</bitmap>
+		</object>
+		<title>Xara Xtreme Online Registration</title>
+	</object>
+</resource>

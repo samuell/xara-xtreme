@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXPORTNATIVEOPTS">
+			 <pos>0,0d</pos> <size>122,66d</size>
+		<object class="wxStaticBox" name="ID_STATIC">
+			 <pos>5,5d</pos> <size>55,50d</size>
+			<label>Export size</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_NATIVEOPTS_DRAWING">
+			 <pos>10,20d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_NATIVEOPTS_SELECT">
+			 <pos>10,35d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>65,5d</pos> <size>50,14d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>65,25d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>65,45d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<title>Native Format Options</title>
+	</object>
+</resource>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_ROTATETOOL">
+			 <pos>0,0d</pos> <size>185,28d</size>
+		<object class="wxStaticBitmap" name="IDC_ROTATEGRID">
+			 <pos>61,6d</pos> <size>13,13d</size>
+		</object>
+		<title></title>
+	</object>
+</resource>

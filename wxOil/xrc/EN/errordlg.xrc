@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_ERRORBOX">
+			 <pos>200,200d</pos> <size>220,47d</size>
+		<object class="wxStaticText" name="IDC_ERRORBOX_TEXT">
+			 <pos>33,7d</pos> <size>180,19d</size>
+			<label>Help! Help! We are being held prisoner in a stately home!</label>
+		</object>
+		<object class="wxButton" name="ID_ERRORBOX_BUTTON1">
+			 <pos>8,30d</pos> <size>37,12d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="ID_ERRORBOX_BUTTON2">
+			 <pos>51,30d</pos> <size>37,12d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_ERRORBOX_BUTTON3">
+			 <pos>94,30d</pos> <size>37,12d</size>
+			<label>Ni!</label>
+		</object>
+		<object class="wxButton" name="ID_ERRORBOX_BUTTON4">
+			 <pos>137,30d</pos> <size>37,12d</size>
+			<label>Peng!</label>
+		</object>
+		<object class="wxButton" name="ID_ERRORBOX_BUTTON5">
+			 <pos>180,30d</pos> <size>37,12d</size>
+			<label>R*C*P</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_ERRORBOX_ICON">
+			 <pos>11,7d</pos> <size>18,20d</size>
+			<bitmap>.png</bitmap>
+		</object>
+		<title>Xara Xtreme</title>
+	</object>
+</resource>

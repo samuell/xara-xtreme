@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXPORTWEBOPTS">
+			 <pos>0,0d</pos> <size>291,135d</size>
+		<object class="wxStaticBox" name="IDC_WEBOPTS_RESGROUP">
+			 <pos>5,5d</pos> <size>160,125d</size>
+			<label>Options</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_TEXTOUTLINES">
+			 <pos>10,15d</pos> <size>140,11d</size>
+			<label>Convert text to &amp;outlines</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_PREVIEWBITMAP">
+			 <pos>10,30d</pos> <size>140,10d</size>
+			<label>Remove preview &amp;bitmap</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_MINIMAL">
+			 <pos>10,45d</pos> <size>150,9d</size>
+			<label>Remove extra &amp;editing information</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_INVISIBLELAYERS">
+			 <pos>10,60d</pos> <size>150,9d</size>
+			<label>Remove invisible &amp;layers</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_UNUSEDCOLOURS">
+			 <pos>10,75d</pos> <size>150,9d</size>
+			<label>Remove unused &amp;colours</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_MINIMISEBITMAPRES">
+			 <pos>10,90d</pos> <size>145,10d</size>
+			<label>Use &amp;JPEG on compatible bitmaps</label>
+		</object>
+		<object class="wxStaticText" name="IDC_WEBOPTS_0PERCENT">
+			 <pos>10,100d</pos> <size>10,8d</size>
+			<label>0%</label>
+		</object>
+		<object class="wxSlider" name="IDC_WEBOPTS_QUALITY">
+			 <pos>10,111d</pos> <size>73,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticBox" name="ID_STATIC">
+			 <pos>170,5d</pos> <size>55,50d</size>
+			<label>Export size</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_NATIVEOPTS_DRAWING">
+			 <pos>175,20d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_NATIVEOPTS_SELECT">
+			 <pos>175,40d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxStaticBox" name="ID_STATIC2">
+			 <pos>170,60d</pos> <size>55,50d</size>
+			<label>Viewport size</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBOPTS_DRAWING">
+			 <pos>175,75d</pos> <size>42,10d</size>
+			<label>D&amp;rawing</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_WEBOPTS_SELECT">
+			 <pos>175,95d</pos> <size>45,10d</size>
+			<label>Selec&amp;tion</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>230,10d</pos> <size>50,14d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>230,30d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>230,50d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_WEBOPTS_HTMLTAG">
+			 <pos>170,115d</pos> <size>121,14d</size>
+			<label>Put HTML tag on clipboard</label>
+		</object>
+		<title>Export Native Format Options</title>
+	</object>
+	<object class="wxDialog" name="IDD_PREVIEWBITMAP">
+			 <pos>0,0d</pos> <size>116,192d</size>
+		<object class="wxCheckBox" name="IDC_SHOWPREVIEW">
+			 <pos>12,6d</pos> <size>90,8d</size>
+			<label>Show preview</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_PREVIEW">
+			 <pos>11,17d</pos> <size>91,83d</size>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>12,167d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1119">
+			 <pos>0,0d</pos> <size>10,192d</size>
+			<label></label>
+		</object>
+		<object class="wxCheckBox" name="IDC_USEASDEFAULT">
+			 <pos>11,111d</pos> <size>91,9d</size>
+			<label>Use as default template</label>
+		</object>
+		<object class="wxButton" name="IDC_FILEDLG_OPTIONS">
+			 <pos>11,110d</pos> <size>50,14d</size>
+			<label>&amp;Options...</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_AUTO_CHECK">
+			 <pos>12,110d</pos> <size>97,10d</size>
+			<label>Show preview in options</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

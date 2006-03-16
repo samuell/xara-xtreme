@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_CMXRESRC">
+		<title>String table from CMXRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_CMXCANCELEXPORT">
+					<label>C&amp;ancel</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_CMXDOLENSES">
+					<label>&amp;Continue</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_CMXIGNORELENSES">
+					<label>&amp;Limit</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_CDRFILTER_CDR6">
+					<label>CorelDRAW version 6 files are not supported. Use the CMX format instead.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_CMXCANCELIMPORT">
+					<label>CMX Import cancelled by user!</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CMXFILTER_CMXERROR">
+					<label>An error was detected in the CMX file, and it cannot be processed. Your file is corrupt.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CMXFILTER_SQUISHWARNING">
+					<label>Xara Xtreme has exported the file but the size of the drawing on the paper has been reduced.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CMXIMPORTFILTER_FILTERINFO">
+					<label>Imports CMX files</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CMXIMPORTFILTER_FILTERNAME">
+					<label>CMX files</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_CMX_IMPORTMSG">
+					<label>Loading CMX file...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_FILTERNAME_CMXIMPORT">
+					<label>CMX</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDW_CMXOVERLAPPEDLENS">
+					<label>This document contains overlapping transparent objects which are too complex for some programs to handle. Do you want to Continue anyway or Limit transparency to the lower three objects?</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

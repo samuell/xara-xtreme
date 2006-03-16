@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_WEBDIALOGRC">
+		<title>String table from WEBDIALOGRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_APP_UPDATE">
+					<label>U&amp;pdate;Check for updates</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

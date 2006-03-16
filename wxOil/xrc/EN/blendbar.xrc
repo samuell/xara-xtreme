@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BLENDTOOLBAR">
+			 <pos>0,0d</pos> <size>251,57d</size>
+		<object class="wxStaticText" name="IDC_BLENDSTEPSTEXT">
+			 <pos>7,20d</pos> <size>24,9d</size>
+			<label>Steps:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_BLENDSTEPS">
+			 <pos>31,18d</pos> <size>18,13d</size>
+		</object>
+		<object class="wxButton" name="IDC_REMOVEBLEND">
+			 <pos>77,17d</pos> <size>33,14d</size>
+			<label>Remove</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_ONETOONE">
+			 <pos>122,18d</pos> <size>39,13d</size>
+			<label>1 to 1</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_BLENDANTIALIAS">
+			 <pos>162,18d</pos> <size>39,13d</size>
+			<label>Anti-alias</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

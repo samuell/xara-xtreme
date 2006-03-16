@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_REGISTERRC">
+		<title>String table from REGISTERRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_BUTTON">
+					<label>Register</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_CONNECTPROBLEM">
+					<label>Xara Xtreme found a problem while connecting with the server (0x%08x).\nPlease make sure you are connected to the Internet.\nIf this continues to happen, please contact technical support.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_JOINTEXT">
+					<label>Please enter your details below and then click the Register\nbutton.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_MAINTEXT">
+					<label>If you already have a Xara account, enter your email address or username\nand password and then click the Register button below. Otherwise click\nthe Sign-up button to register your details.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_MENUTEXT">
+					<label>R&amp;egister;Register the CD</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_REGSUCCESS">
+					<label>Thank you for registering your copy of Xara Xtreme</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REGISTER_TITLE">
+					<label>Register Xara Xtreme</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

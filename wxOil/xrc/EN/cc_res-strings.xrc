@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_CCRESRC">
+		<title>String table from CCRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CUSTOM_CANNOT_INIT">
+					<label>There was a problem initialising this library - cannot continue.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CUSTOM_NO_MEMORY">
+					<label>Not enough free memory to continue.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CUSTOM_TITLE">
+					<label>Xara X Custom Controls Library</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

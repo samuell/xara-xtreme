@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BMP_DLG">
+			 <pos>0,0d</pos> <size>178,202d</size>
+		<object class="wxTextCtrl" name="IDC_SETDELAY">
+			 <pos>70,114d</pos> <size>34,12d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_SETREMOVAL">
+			 <pos>70,134d</pos> <size>68,14d</size>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>14,181d</pos> <size>43,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>67,181d</pos> <size>43,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>121,181d</pos> <size>43,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>11,103d</pos> <size>155,50d</size>
+			<label>GIF Animation</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,117d</pos> <size>31,8d</size>
+			<label>Delay for:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>106,117d</pos> <size>27,8d</size>
+			<label>1/100 s</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>11,7d</pos> <size>155,90d</size>
+			<label>Information</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,20d</pos> <size>22,8d</size>
+			<label>Name:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_NAME">
+			 <pos>85,20d</pos> <size>77,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,32d</pos> <size>24,8d</size>
+			<label>Format:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FORMAT">
+			 <pos>85,32d</pos> <size>75,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SIZEI">
+			 <pos>35,44d</pos> <size>39,8d</size>
+			<label>Size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SIZEII">
+			 <pos>85,44d</pos> <size>75,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,56d</pos> <size>39,8d</size>
+			<label>Dimensions:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_DIMENSIONS">
+			 <pos>85,56d</pos> <size>75,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,68d</pos> <size>26,8d</size>
+			<label>Colours:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COLOURS">
+			 <pos>85,68d</pos> <size>75,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,80d</pos> <size>41,8d</size>
+			<label>Transparent:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TRANSPARENT">
+			 <pos>85,80d</pos> <size>75,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>35,135d</pos> <size>29,8d</size>
+			<label>Restore:</label>
+		</object>
+		<object class="wxButton" name="IDC_BMP_ALWAYS_INTERPOLATE">
+			 <pos>23,162d</pos> <size>108,10d</size>
+			<label>Smooth when scaled up</label>
+		</object>
+		<title>Bitmap Properties</title>
+	</object>
+</resource>

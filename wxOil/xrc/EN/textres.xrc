@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_TEXT_INFO_BAR">
+			 <pos>0,0d</pos> <size>329,171d</size>
+		<object class="wxComboBox" name="IDC_FONT_COMBO">
+			 <pos>56,10d</pos> <size>68,126d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_POINT_COMBO">
+			 <pos>135,10d</pos> <size>28,105d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BOLDBUTTON">
+			 <pos>168,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_ITALICBUTTON">
+			 <pos>185,7d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_UNDERLINEBUTTON">
+			 <pos>201,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_ASPECTBIT">
+			 <pos>176,40d</pos> <size>16,14d</size>
+			<bitmap>aspect.png</bitmap>
+		</object>
+		<object class="wxTextCtrl" name="IDC_ASPECTEDIT">
+			 <pos>221,10d</pos> <size>13,13d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_JUSTIFYLEFT">
+			 <pos>237,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_JUSTIFYCENTRE">
+			 <pos>254,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_JUSTIFYRIGHT">
+			 <pos>272,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_JUSTIFYFULL">
+			 <pos>290,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_KERN_EDIT_X">
+			 <pos>0,36d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_KERN_EDIT_Y">
+			 <pos>0,50d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_KERN_BUMP_X_LESS">
+			 <pos>26,38d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_KERN_BUMP_X_MORE">
+			 <pos>37,38d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_LESS">
+			 <pos>25,50d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_MORE">
+			 <pos>36,49d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TRACKING_EDIT">
+			 <pos>101,42d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_TRACKINGBIT">
+			 <pos>217,39d</pos> <size>16,14d</size>
+			<bitmap>tracking.png</bitmap>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_KERNINGBIT">
+			 <pos>252,39d</pos> <size>16,14d</size>
+			<bitmap>kerning.png</bitmap>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SUPERSCRIPT">
+			 <pos>45,70d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SUBSCRIPT">
+			 <pos>44,81d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TRACKING_LESS">
+			 <pos>66,63d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_TRACKING_MORE">
+			 <pos>77,63d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SPACING_LESS">
+			 <pos>65,74d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_SPACING_MORE">
+			 <pos>76,74d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_SPACING_EDIT">
+			 <pos>101,56d</pos> <size>20,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_AUTOKERN">
+			 <pos>237,9d</pos> <size>14,14d</size>
+			<label>-</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

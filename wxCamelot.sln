@@ -1,0 +1,50 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxCamelot", "wxCamelot.vcproj", "{655E50CD-62AE-492C-9D39-890199819241}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34042268-59CD-4D0D-8463-A5B40DD1F898} = {34042268-59CD-4D0D-8463-A5B40DD1F898}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CDraw", "..\CDraw\CDRAW.vcproj", "{34042268-59CD-4D0D-8463-A5B40DD1F898}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Camelot Debug = Camelot Debug
+		Camelot Release = Camelot Release
+		Debug = Debug
+		Profile = Profile
+		Release = Release
+		TestRelease = TestRelease
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{655E50CD-62AE-492C-9D39-890199819241}.Camelot Debug.ActiveCfg = Debug|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Camelot Debug.Build.0 = Debug|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Camelot Release.ActiveCfg = Release|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Camelot Release.Build.0 = Release|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Debug.ActiveCfg = Debug|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Debug.Build.0 = Debug|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Profile.ActiveCfg = Profile|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Profile.Build.0 = Profile|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Release.ActiveCfg = Release|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.Release.Build.0 = Release|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.TestRelease.ActiveCfg = TestRelease|Win32
+		{655E50CD-62AE-492C-9D39-890199819241}.TestRelease.Build.0 = TestRelease|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Camelot Debug.ActiveCfg = Camelot Debug|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Camelot Debug.Build.0 = Camelot Debug|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Camelot Release.ActiveCfg = Camelot Release|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Camelot Release.Build.0 = Camelot Release|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Debug.ActiveCfg = Debug|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Debug.Build.0 = Debug|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Profile.ActiveCfg = Profile|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Profile.Build.0 = Profile|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Release.ActiveCfg = Release|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.Release.Build.0 = Release|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.TestRelease.ActiveCfg = TestRelease|Win32
+		{34042268-59CD-4D0D-8463-A5B40DD1F898}.TestRelease.Build.0 = TestRelease|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

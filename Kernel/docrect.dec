@@ -1,0 +1,8 @@
+// $Header: c:\RCSdir\kernel/docrect.dec 1.1 1995/09/12 17:08:06 Ed Exp $
+// declarations of extra functions for the DocRect class
+
+public:
+	DocRect ToSpread(Spread* pSpread, View* pView);		// ie DocRect to SpreadRect
+	DocRect    ToDoc(Spread* pSpread, View* pView);		// ie SpreadRect to DocRect
+	UserRect  ToUser(Spread* pSpread);					// ie SpreadRect to UserRect
+	OilRect    ToOil(Spread* pSpread, View* pView);		// ie SpreadRect to OilRect

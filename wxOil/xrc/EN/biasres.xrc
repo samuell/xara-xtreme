@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BIASGAIN">
+			 <pos>0,0d</pos> <size>124,149d</size>
+		<object class="wxSlider" name="IDC_SLIDER_BIAS">
+			 <pos>7,102d</pos> <size>100,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxSlider" name="IDC_SLIDER_GAIN">
+			 <pos>7,129d</pos> <size>100,15d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxComboBox" name="IDC_BIASGAIN">
+			 <pos>7,7d</pos> <size>24,16d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_BIAS">
+			 <pos>95,102d</pos> <size>22,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT_GAIN">
+			 <pos>95,129d</pos> <size>22,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC7">
+			 <pos>34,8d</pos> <size>63,57d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_CURVE">
+			 <pos>34,8d</pos> <size>63,57d</size>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_CURVEINTERPOLATE">
+			 <pos>7,69d</pos> <size>110,15d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC10">
+			 <pos>3,90d</pos> <size>118,57d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC9">
+			 <pos>3,3d</pos> <size>118,85d</size>
+			<label></label>
+		</object>
+		<title>Profile</title>
+	</object>
+</resource>

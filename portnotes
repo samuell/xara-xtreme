@@ -1,0 +1,317 @@
+other
+=====
+Kernel/nodepostpro.cpp	SubtreeRenderState NodeEffect::RenderSubtree(RenderRegion* pRender, Node** ppNextNode, BOOL bClip) - DISABLED
+Kernel/modemldr.cpp 	CreateMouldPath / CreateMouldBitmap / DoBecomeA / AllowOp DISABLED awaiting functional undoable operations
+Kernel/bmapprev.cpp		Removed m_PaletteControl - requires BitmapExportPaletteControl
+Kernel/nodebmp.h		Default OPTOKEN for bitmap is blank as OPTOKEN_XPE_EDIT is not portable
+Kernel/ncntrcnt.cpp		Removed OpNudge, OpDeleteTextStory, OpTextFormat, OpCreateBevel usage in OnChildChange, NameGallery, RegenerateContourAction
+Kernel/spread.h			GIF enum bodge
+Kernel/attrappl.cpp		SelOperation::DoApply disabled, FillGeometryNudger used disabled, SelOperation::DoApplyToSelection, DoWithParam, DoRepeat disabled
+Kernel/menuops.h		Removed DATE usage
+Kernel/rechbmpp.cpp		Removed XML code
+Kernel/bmplist.cpp		Disabled GlobalBitmapList::IsUsedInDocument and various other bits
+Kernel/modlist.cpp		Disabled m_pOILModule deletion
+Kernel/strkattr.cpp		TAG_VARIABLEWIDTHTABLE disabled, removed text handling from GetAttrBoundingRect
+Kernel/viewcomp.cpp		Removed OpZoomComboDescriptor usage
+Kernel/nodeliveeffect.h	Dummy IXMLDOMDocumentPtr
+Kernel/exjbeg.h			Removed JPEGExportOptions - derived from BitmapExportOptions
+Kernel/basedoc.cpp		CheckedLockedEffect has XPEhost bits removed
+Kernel/cutop.cpp		Removed SGNameItem usage
+Kernel/app.cpp			Removed key1/key2 (HKEY_), CMSManager initialization, Blob Manager, Application::LateInit/templates, DebugTree dialog
+Kernel/moldpers.cpp		MouldBitmapRender removed
+Kernel/nodeshad.cpp		RenderTinyBlobs, DoBecomeA, ExportRender, AllowOp, OnNodePopup disabled
+Kernel/units.cpp		Removed DocUnitList::ReadUnitsFromRes - reads a resource file - easy to fix this one.
+Kernel/nodeblnd.cpp		RenderBlendOnCurveBlobs, AllowOp disabled
+Kernel/ngiter.cpp		Removed dependencies on NameGallery
+Kernel/docview.cpp		Removed many functions
+Kernel/moldedit.cpp		Removed DoCreateMouldg
+Kernel/view.h			Removed declarations of render functions
+Kernel/moldshap.cpp		Removed MouldGeometry::MouldPathRender
+Kernel/nodecomp.cpp		Removed BecomeAGroup
+Kernel/ccafile.cpp		CAM_DEBUG_NEW disabled
+Kernel/nodebldr.cpp		Map problem, 
+Kernel/bmapprev.cpp		CAM_DEBUG_NEw disabled. Removed Wizard Pages. Removed Registry usage.
+Kernel/transop.cpp		Many calls removed base on undobale operations
+Kernel/rndrgn.cpp		Perfcounter references disabled - should be replaced with CamProfiler
+Kernel/nodebev.cpp		Removed many calls
+Kernel/group.cpp		Removed PrintMaskedRenderRegion usage, CBitmapCache usage
+Kernel/colcontx.h		Removed HCMTRANSFORM usage
+Kernel/ndclpcnt.h		Removed OnApplyClipView usage
+Kernel/nbevcont.cpp		Removed lots of functions
+Kernel/module.cpp		Removed OILModule usage
+Kernel/clicarea.cpp		Removed ImageClickableArea::Write and variants thereof
+Kernel/nodecntr.cpp		Removed OpCreateBevel, OpCreateNewMould, OpPasteEnvelope, OpPastePerspective usage, Removed NameGallery usage, Removed NodeShadow::OnNodePopUP
+Kernel/brshbeca.cpp		Removed OperationHistory usage
+Kernel/fillattr.cpp		Removed SelectedAttrs::FindFirst & AttrFillGeometry::RemovePerspective
+Kernel/nodershp.cpp		Removed context menu usage
+Kernel/nodebrsh.cpp		Removed NodeBrush::AllowOp & NodeBrush::OnChildChange
+Kernel/spread.cpp		Removed EnsureActiveLayerIntegrity call
+Kernel/bmpcomp.cpp		Disabled BitmapListComponent::WriteBitmapPropertiesRecord
+Kernel/compshps.h		Disabled GetEffectStack
+Kernel/qualops.cpp		Removed OnControCreate / OnDocViewMsg / OnQualityChage, OpQuality::Do
+Kernel/fillval.cpp		Removed ContainsNamedColour, CheckForGreyscaleBitmap
+Kernel/tmpltarg.cpp		Removed bulk of WizOps
+Kernel/ccfile.h			Removed CCOleStream, CCOleAccusoftStream
+Kernel/cxftfile.cpp		Removed various FileUtil calls
+Kernel/bmpprefs.h		Removed BitmapExportOptions, Palette optimizer
+Kernel/hittest.cpp		Removed FindSimpleAtPoint, FindSimpleAtPointForColourPicker, FindColourForNodeRenderableAtPoitn, RenderAppliedAttributes, Phil's odd debug code
+Kernel/view.cpp			Disabled ProgressDisplay, disabled view rendering
+Kernel/rgnlist.cpp		Disabled rendering indicator code
+Kernel/nbrshpt.cpp		Disabled rendering code
+Kernel/dbugtree.cpp		Disabled bitmap bits, NM_TREE_VIEW, and Keypress
+Kernel/rechbmp.cpp		Removed HnaldeXPLEBitmapPlaceHolder
+Kernel/ccfile.cpp		Removed ios::setmode, OLE bits
+Kernel/guides.cpp		NodeGuideline::GetScaledPixelWidth removed
+Kernel/colcontx.cpp		Removed HCMTRANSFORM usage
+Kernel/blndhelp.cpp		SumPallPathsProcessor::ProcessPath removed
+Kernel/moldenv.cpp		BitmapRender, RenderGrid removed
+Kernel/ppstroke.cpp		Removed various stroking routines
+Kernel/bitmap.h			Removed XML stuff
+Kernel/nodebmp.cpp		Removed several bitmap routines
+Kernel/cxfrec.h			Removed BSTR usage
+Kernel/linedef.cpp		Removed LineDefinition::ConvertIndexedColours
+Kernel/nodecont.cpp		Removed much NodeShadowController stuff
+Kernel/styles.cpp		Removed BROADCAST_TO_CLASS usage
+Kernel/camfltr.cpp		Removed various record handlers
+Kernel/mail1.cpp		Removed several initializers
+Kernel/nodeliveeffect.cpp	Removed most of the file
+Kernel/selop.cpp		Removed SelOperation::DoStartSelOp
+Kernel/brshcomp.cpp		Removed OpDrawBrush, LoadDefaultBrushes
+Kernel/opdesc.cpp		Removed OpExit usage, BuildGadgetList
+Kernel/menuops.cpp		Removed ViewOps stuff, OpUdate
+Kernel/ops.cpp			Removed OpAsynchClipartImport, RalphCriticalSection
+Kernel/pathedit.cpp		Removed undoable operations
+Kernel/ndbrshmk.cpp		Removed rendering code from NodeBrushMaker
+Kernel/main2.cpp		Lots of initializers removed
+Kernel/blobs.cpp		Removed most blob manager functionality
+Kernel/ppairbsh			Removed airbrush pathprocessor functionality
+Kernel/app.h			Removed HKEY usage
+Kernel/main3.cpp		Removed a lot of initializers
+Kernel/rsmooth.cpp		Removed OpRetroSmooth::DoRetroSmooth
+Kernel/capturemanager.cpp	Removed GRenderRegion::MakeGavinMatrix usage
+Kernel/ppbevel.cpp		Removed PreOpProcessing
+Kernel/dialogop.cpp		Removed help reference
+Kernel/fillramp.cpp		Removed blobs and blend routines
+Kernel/infocomp.h		Removed InportUndoBufferSize
+Kernel/cnamecol.cpp		Removed CNamedColourReplace::Replace/RestoreCours, and a couple of others
+Kernel/fthrattr.cpp		Removed code performing feathers, nudge
+Kernel/noderend.cpp		Disabled caching by default, diabled CopyCached, TransformCached, ExportRender
+Kernel/userattr.cpp		Removed GetText, Display, Create, Interact
+Kernel/cxfrec.cpp		Removed CCPanose usage
+Kernel/snap.cpp			Removed CSnap::SnapToObjects
+Kernel/bitmap.cpp		Removed XPE hooks
+Kernel/ndbldpth.cpp		Removed NodeBlendPath::DoBecomeA
+Kernel/tool.cpp			Removed tool switching
+Kernel/document.cpp		Removed undoable operations, nudge, GetTopmostView
+Kernel/ndclpcnt.cpp		Removed blob drawing, click & drag code
+Kernel/nodeshap.cpp		Removed NodeSimpleShape::DoBecomeA
+Kernel/nodepath.cpp		Removed OnChildChange, OnClick, AllowOp
+Kernel/ngscan.h			Removed BaseSelectScan & SelectScan
+Kernel/node.cpp			Removed RenderRegionList usage
+Kernel/ppbrush.h		Removed SubRenderContext
+Kernel/range.cpp		Removed EffectsStack functionality, ScreenView dependency, GetTopClassRange
+Kernel/ppbrush.cpp		Removed rendering
+Kernel/main.cpp			Removed lots of init code
+Kernel/beveler.cpp		Removed bevel rendering
+Kernel/zoomops.cpp		Removed AdjustRect, RefreshList, Update
+Kernel/opdrbrsh.cpp		Removed OpDrawBrush, OpChangeBrush
+Kernel/opgrad.cpp		Removed blob drawing, keypress code
+Kernel/undoop.cpp		Removed LiveEffects call to EffectsStack
+Kernel/combshps.cpp		Removed LiveEffects call
+tools/opbevel.cpp		Removed operations & actions
+tools/opliveeffects.h	Dummy IXMLDOMDocumentPtr
+tools/opshadow.cpp		Removed initialization of NodeShadowParam::StackPosition
+tools/opbevel.h			Removed OpCreateBevel, OpRemoveBevel, OpChangeBevelLightAngle
+tools/viewmod.cpp		Removed various tool usage
+tools/opfree.h			Removed OpFreeHand
+tools/opcntr.h			Removed Ops derived from SelOperation
+tools/blndtool.cpp		Removed most operations
+tools/opdrbrsh.h		Removed ops derived from SelOperation
+tools/filltool.cpp		Removed Keypress code, BiasGainGadget use
+wxOil/scrvw.cpp			Almost total emasculation
+wxOil/basestr.h			Removed CDumpContext
+wxOil/oilbitmap.cpp		Disabled separations, ImportBitmap, LoadBitmap
+wxOil/dibconv.cpp		Removed GRenderOptPalette, DIBConvert::~Conv24to8
+wxOil/pathname.cpp		Removed UnicodeManager usage
+wxOil/basestr.cpp		Removed Dump, some inefficiencies.
+wxOil/pngutil.cpp		Removed progress bar usage
+wxOil/ralphint.h		Removed IID usage
+wxOil/scrcamvw.h		Removed OLE usage
+wxOil/unicdman.h		IsDBCSLeadByte unsupported
+wxOil/keypress.cpp		ConstructVK, GenerateUnicode, IgnoreMessage, MakeKeyPress, PeekMessage removed
+wxOil/dockbar.h			OilFloaters disabled
+wxOil/convert.cpp		Removed LocalEnvironment usage
+wxOil/grnddib.cpp		Removed separation code
+wxOil/errors.cpp		InformGeneral not yet implemented
+wxOil/ccobject.h		Removed CDumpContext
+wxOil/camdoc.cpp		Removed LoadDefaultDocyment, RemoveExtingOnNewDoc, DefaultDocumentRequired, SetPathName, SaveModified, DoSave, AbbreviateName
+wxOil/grndbmp.cpp		Removed GRenderBitmap::ExtractBitmap, GRenerOoptPalette::GetOptimisedPalette
+wxOil/dibutil.cpp		Removed DIBUtil::PlotDeepDIB, GRenderRegion::GetRecommendedPalette, CreateIdentityPalette, gun depth code
+wxOil/ccdc.h			Removed PAINTSTRUCT
+wxOil/clickmods.cpp		Removed ClickModifiers::SynthesizeMouseEventFlags
+wxOil/pathnmex.cpp		Removed CreateLocation, RemoveRecursively
+wxOil/filehndl.cpp		Removed CCDiskFile::GetFileHandle
+wxOil/grndrgn.cpp		Several alterations including removal of support for non-square DPI, <32bpp, separation code
+wxOil/ensure.cpp		MFC references removed, temporary use of wx dialog boxen
+wxOil/ralphdoc.h		OLE removed
+wxOil/camframe.cpp		All toolbars removed bar the standard one
+wxOil/ccobject.cpp		Removed MFC CDumpContext
+wxOil/cursor.cpp		Disabled everything
+wxOil/pen.cpp			Disabled almost everyting
+wxOil/oildbug.cpp		Disabled AddDebugInfo/GetDebugInfo
+wxOil/scrcamvw.cpp		Removed scrollers, RendewWindow usage & joystick
+wxOil/camview.cpp		Remover CCamView::OnRenderView
+wxOil/ccdc.cpp			Removed CCDC::GetType
+wxOil/osrndrgn.cpp		Removed several calls
+wxOil/camelot.cpp		Removed windows specific stuff
+wxOil/pen.h				Removed HWND usage
+wxOil/pngfiltr.h		Removed PNGExportOptions
+
+filters
+=======
+Kernel/filters.cpp		OILFilter disabled
+Kernel/filters.cpp		Many filter loaders removed
+Kernel/filtimag.h		Removed ImagemapFilter class
+Kernel/native.cpp		Removed NativeOILFilter usage
+Kernel/impjpeg.cpp		Removed JPEGImportFilter::InitProgressMonitor()
+Kernel/bitfilt.cpp		Removed most of the functionality
+Kernel/filters.h		Remvoed FilterRenderCallback
+Kernel/colcomp.cpp		Removed EPS colour component loading
+Kernel/document.cpp		Removed EPS stuff
+Kernel/ngprop.cpp		Removed NameExportProp usage
+wxOil/oilfltrs.cpp		Removed OILFilter::CreatePluginFilters, CMXImportOILFilter::CMXImportOILFilter
+wxOil/pngfiltr.cpp		Removed most of implementation
+wxOil/outputpng.h		Removed OutputPNG
+wxOil/maskfilt.cpp		Removed MaskedFilterExportOptions, most of MaskedFilter
+wxOil/maskfilt.h		Removed MaskedFilterExportOptions
+
+progress
+========
+wxOil/progress.cpp		Progress bar system disabled in its entirety
+
+dialog
+======
+Kernel/attraggl.cpp		SingletonAppliedAttribute::Display,Hide disabled due to no dialogs
+Kernel/bmapprev.cpp		Class BmapPrevDlg removed as derived from removed DialogTabOp
+Kernel/rechdoc.cpp		DocumentRecordHandler::HandleBarPropertyRecord removed - requires bars and thus dialogs
+Kernel/xarprefs.h		Removed DebugTreeDlg
+Kernel/tmpltatr.cpp		Removed TemplateAttribute::Interact
+Kernel/ngprop.h			Removed SuperGalleryUsage
+Kernel/bmpprefs.h		Removed BmpPrefsDlg and various derivatives tehrof
+Kernel/tmpltdlg.h		Removed TemplateDialog class
+Kernel/brshcomp.cpp		Removed LineGallery usage, FreeHandInfoBar usage
+Kernel/opdesc.cpp		Removed DialogBarOp usage
+Kernel/ops.cpp			Removed NameGallery usage
+Kernel/undoop.cpp		Removed NameGallery usage
+Kernel/nodetxts.cpp		Removed NameGallery usage
+Kernel/ngsentry.cpp		Removed NodeBarProperty::MakeChange
+Kernel/dialogop.cpp		Removed custom control, timer & HWND usage
+Kernel/bitfilt.cpp		Removed frame gallery, name gallery usage
+Kernel/slicehelper.cpp	Removed a lot of functionality due to extensive NameGallery usage
+Kernel/webprefs.h		Removed WebPrefsDlg
+Kernel/tool.cpp			Removed DialogBarOp usage
+Kernel/dialogop.cpp		Removed NameGallery usage
+Kernel/dialogop.h		Removed HWND & timer usage
+Kernel/uielem.cpp		Removed TemplateDialog from VisibleItem::Display
+Kernel/node.cpp			Removed NameGallery usage
+Kernel/ngprog.cpp		Removed SuperGallery usage
+Kernel/main.cpp			Removed	SGInit usage
+Kernel/layer.cpp		Removed layer gallery usage
+tools/modtool.h			Removed bar dependent bits
+tools/shadinfo.h		Removed bar dependent bits
+tools/regshape.h		Removed bar dependent bits
+tools/filltool.h		Removed bar dependent bits
+tools/blndtool.h		Removed bar dependent bits
+tools/rectangl.cpp		Removed bar reading
+tools/ellipse.cpp		Removed bar reading
+tools/regshape.cpp		Removed bar reading
+wxOil/dlgmgr.h			Removed HWND & timer usage, HGLOBAL, OurPropSheet, OurPropShtPage, DlgTagOpToPropShtItem
+wxOil/localenv.cpp		Removed GetProfileString
+wxOil/sgliboil.h		Removed OpClipartImport, OpBitmapImport
+wxOil/thumb.cpp			SGThumbs::LoadThumbnailIntoSlot, GetThumbNail disabled
+wxOil/dibutil.cpp		Remvoed BmapPrevDlg usage
+wxOil/scrvw.h			Removed various windows specific bits
+wxOil/dlgmgr.cpp		Removed bars, tabbed dialogs, and some more obscure controls
+wxOil/sgliboil.cpp		Removed gallery dependency
+wxOil/basebar2.cpp		Removed bar code
+
+status
+======
+Kernel/ncntrcnt.cpp		Removed UpdateStatusLineFont usage
+Kernel/app.cpp			Removed status line stuff
+Kernel/docview.cpp		Removed StatusLine usage
+
+gif
+===
+Kernel/spread.h			Removed GIF stuff
+Kernel/bmpsdlg.h		Removed GIF header
+Kernel/spread.cpp		Removed GIF stuff
+Kernel/bitmap.h			Removed GIF stuff
+Kernel/bitmap.cpp		Removed GIF stuff
+
+colourmanager
+=============
+Kernel/attrappl.cpp		ColourManager disabled
+Kernek/strkcomp.cpp		Removed ColourManager usage
+
+clipboard
+=========
+Kernel/bmplist.cpp		Internal clipboard usage removed
+Kernel/opcut.cpp		Clipboard stuff removed
+Kernel/brshcomp.cpp		Removed CopyInkTreeToClipboard
+Kernel/undoop.cpp		Removed DoCopyNodesToClipboard
+Kernel/bitfilt.cpp		Removed InternalClipboard usage
+wxOil/oilfiles.cpp		Removed MSW clipboard usage
+wxOil/oilfiles.h		Removed MSW clipboard usage
+
+text
+====
+Kernel/strkattr.cpp		removed text handling from GetAttrBoundingRect
+Kernel/basedoc.cpp		In BaseDocument::CheckReferences moved CheckFontSubstitution call
+Kernel/fontcomp.cpp		Many functions disabled
+Kernel/fontman.cpp		Many functions disabled
+Kernel/nodecomp.cpp		Removed text calls
+Kernel/nodetxtl.cpp		Removed text calls
+Kernel/rndrgn.cpp		GetAttrdCharBounds / CreateCharPath removed
+Kernel/nodetxts.cpp		Removed several text calls
+Kernel/nodetext.cpp		Removed several text calls
+Kernel/notetextl.h		FormatRegion stripped
+Kernel/main.cpp			Removed FontCache init
+wxOil/fontbase.cpp		ATM deactivated
+wxOil/fontbase.h		removed OILFont* definition
+wxOil/osrndrgn.cpp		Removed text rendering calls
+Kernel/undoop.cpp		Removed OpTextFormat usage
+
+cursor
+======
+Kernel/docview.cpp		removed CursorStack usage
+
+print
+=====
+Kernel/layer.cpp		removed printing code from Layer::RenderSubtree
+Kernel/princomp.cpp		removed many printing calls
+Kernel/view.cpp			disabled print view code
+Kernel/rgnlist.cpp		disabled print code
+Kernel/camfiltr.cpp		removed print bits
+Kernel/prnmkcom.cpp		removed print bits
+Kernel/scrvw.cpp		removed print bits
+wxOil/camview.h			removed CPrintInfo usage
+wxOil/camview.cpp		removed CPrintInfo usage
+
+byteorder
+=========
+Kernel/cdrfiltr.cpp		HowCompatible function marked for attention
+Kernel/cmxfiltr.cpp		HowCompatible function marked for attention
+Kernel/cmxifltr.cpp		HowCompatible function marked for attention
+Kernel/coplfltr.cpp		HowCompatible function marked for attention
+Kernel/drawfltr.cpp		HowCompatible function marked for attention
+Kernel/epsfiltr.cpp		HowCompatible function marked for attention
+Kernel/filters.cpp		HowCompatible function marked for attention
+Kernel/ftfilter.cpp		HowCompatible function marked for attention
+Kernel/htmlfltr.cpp		HowCompatible function marked for attention
+Kernel/imjpeg.cpp		HowCompatible function marked for attention
+wxOil/oilfltrs.cpp		HowCompatible function marked for attention
+wxOil/pngfltr.cpp		HowCompatible function marked for attention
+Kernel/textfltr.cpp		HowCompatible function marked for attention
+Kernel/xpfltr.cpp		HowCompatible function marked for attention
+Kernel/cxfile.cpp		Some funcs marked for attention

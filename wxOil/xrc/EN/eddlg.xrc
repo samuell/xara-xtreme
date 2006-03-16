@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_ALIGNDIALOG">
+			 <pos>0,0d</pos> <size>113,195d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>4,177d</pos> <size>33,14d</size>
+			<label>Apply</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>40,177d</pos> <size>33,14d</size>
+			<label>Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>76,177d</pos> <size>33,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_ALIGNDIALOG_TOSELECTION">
+			 <pos>9,95d</pos> <size>70,10d</size>
+			<label>Selection bounds</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_ALIGNDIALOG_TOPAGE">
+			 <pos>9,107d</pos> <size>38,10d</size>
+			<label>Page(s)</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_ALIGNDIALOG_TOSPREAD">
+			 <pos>59,107d</pos> <size>35,10d</size>
+			<label>Spread</label>
+		</object>
+		<object class="wxComboBox" name="IDC_ALIGNDIALOG_HORIZONTAL">
+			 <pos>4,133d</pos> <size>105,30d</size>
+		</object>
+		<object class="wxComboBox" name="IDC_ALIGNDIALOG_VERTICAL">
+			 <pos>4,158d</pos> <size>105,30d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,123d</pos> <size>72,8d</size>
+			<label>Horizontal positions:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,149d</pos> <size>67,8d</size>
+			<label>Vertical positions:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>4,84d</pos> <size>105,35d</size>
+			<label>Within:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_ALIGNDIALOG_FRAME">
+			 <pos>4,5d</pos> <size>105,76d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_ALIGNDIALOG_DIAGRAM">
+			 <pos>6,6d</pos> <size>102,74d</size>
+		</object>
+		<title>Object Alignment</title>
+	</object>
+</resource>

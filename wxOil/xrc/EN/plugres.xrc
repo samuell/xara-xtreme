@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_PLUGINPATHDLG">
+			 <pos>0,0d</pos> <size>270,134d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>212,32d</pos> <size>50,14d</size>
+			<label>&amp;Add</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>212,50d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="IDC_PLUGINPATH_HELP_BUTTON">
+			 <pos>212,86d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_1119">
+			 <pos>0,12d</pos> <size>204,88d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="ID_STATICDECIMAL_0">
+			 <pos>7,122d</pos> <size>32,8d</size>
+			<label>Folder:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PLUGINPATH_PATHNAME">
+			 <pos>34,122d</pos> <size>260,12d</size>
+			<label>&amp;lt;Pathname here&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="IDC_PLUGINPATH_ISPLUGIN">
+			 <pos>212,125d</pos> <size>200,12d</size>
+			<label>&amp;lt;Does index exist&amp;gt;</label>
+		</object>
+		<object class="wxStaticText" name="-1">
+			 <pos>7,3d</pos> <size>260,8d</size>
+			<label>Locate the folder containing the plug-ins that you want to use</label>
+		</object>
+		<title></title>
+	</object>
+</resource>

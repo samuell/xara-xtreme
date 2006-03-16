@@ -1,0 +1,80 @@
+// $Header: c:\RCSdir\kernel/docrect.def 1.1 1995/09/12 17:08:12 Ed Exp $
+// extra functions specific to the DocRect class
+
+/*
+$Log: docrect.def $
+Revision 1.1  1995/09/12  17:08:12  Ed
+Initial revision
+
+*/
+
+DECLARE_SOURCE("$Revision: 1.1 $");
+
+#include "userrect.h"
+#include "oilrect.h"
+
+/********************************************************************************************
+>	DocRect DocRect::ToSpread(Spread* pSpread, View* pView)
+
+	Author:		Ed Cornes
+	Created:	6/9/95
+	Inputs:		pSpread - 
+				pView   -
+	Returns:	DocRect
+	Purpose:	Convert a DocRect to a SpreadRect (AKA DocRect)
+********************************************************************************************/
+
+DocRect DocRect::ToSpread(Spread* pSpread, View* pView)
+{
+	return DocRect( this->lo.ToSpread(pSpread,pView), this->hi.ToSpread(pSpread,pView) );
+}
+
+
+/********************************************************************************************
+>	DocRect DocRect::ToDoc(Spread* pSpread, View* pView)
+
+	Author:		Ed Cornes
+	Created:	6/9/95
+	Inputs:		pSpread - 
+				pView   -
+	Returns:	DocRect
+	Purpose:	Convert a SpreadRect (AKA DocRect) to a DocRect
+********************************************************************************************/
+
+DocRect DocRect::ToDoc(Spread* pSpread, View* pView)
+{
+	return DocRect( this->lo.ToDoc(pSpread,pView), this->hi.ToDoc(pSpread,pView) );
+}
+
+
+/********************************************************************************************
+>	UserRect DocRect::ToUser(Spread* pSpread)
+
+	Author:		Ed Cornes
+	Created:	11/9/95
+	Inputs:		pSpread - 
+	Returns:	UserRect
+	Purpose:	Convert a SpreadRect (AKA DocRect) to a UserRect
+********************************************************************************************/
+
+UserRect DocRect::ToUser(Spread* pSpread)
+{
+	return UserRect( this->lo.ToUser(pSpread), this->hi.ToUser(pSpread) );
+}
+
+
+/********************************************************************************************
+>	OilRect DocRect::ToOil(Spread* pSpread, View* pView)
+
+	Author:		Ed Cornes
+	Created:	6/9/95
+	Inputs:		pSpread - 
+				pView   -
+	Returns:	DocRect
+	Purpose:	Convert a SpreadRect (AKA DocRect) to an OilRect
+********************************************************************************************/
+
+OilRect DocRect::ToOil(Spread* pSpread, View* pView)
+{
+	return OilRect( this->lo.ToOil(pSpread,pView), this->hi.ToOil(pSpread,pView) );
+}

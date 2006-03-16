@@ -1,0 +1,137 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_FINFODLG">
+			 <pos>0,0d</pos> <size>198,231d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>160,18d</pos> <size>32,14d</size>
+			<label>Close</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>61,197d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,5d</pos> <size>34,8d</size>
+			<label>Location:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_FILENAME">
+			 <pos>53,14d</pos> <size>102,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,41d</pos> <size>45,8d</size>
+			<label>Memory used:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_FILESIZE">
+			 <pos>53,41d</pos> <size>102,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,50d</pos> <size>35,8d</size>
+			<label>Undo size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_UNDOSIZE">
+			 <pos>53,50d</pos> <size>102,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,183d</pos> <size>32,8d</size>
+			<label>Comment:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_FILEINFO_COMMENT">
+			 <pos>5,192d</pos> <size>185,34d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,93d</pos> <size>63,8d</size>
+			<label>Number of objects:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_NUMOBJECTS">
+			 <pos>69,93d</pos> <size>22,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,102d</pos> <size>92,8d</size>
+			<label>Number of selected objects:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_NUMSELOBJECTS">
+			 <pos>98,102d</pos> <size>41,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,23d</pos> <size>30,8d</size>
+			<label>Created:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_CREATIONDATE">
+			 <pos>53,23d</pos> <size>102,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,32d</pos> <size>39,8d</size>
+			<label>Last saved:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_LASTSAVEDATE">
+			 <pos>53,32d</pos> <size>102,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,75d</pos> <size>63,8d</size>
+			<label>Number of bitmaps:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>95,75d</pos> <size>40,8d</size>
+			<label>Bitmap size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_NUMBITMAPS">
+			 <pos>69,75d</pos> <size>22,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_FRACTALS">
+			 <pos>69,84d</pos> <size>22,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,59d</pos> <size>41,8d</size>
+			<label>Undo steps:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_UNDOSTEPS">
+			 <pos>53,59d</pos> <size>140,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxButton" name="IDB_FILEINFO_HELP">
+			 <pos>160,38d</pos> <size>32,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,84d</pos> <size>63,8d</size>
+			<label>Number of fractals:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_BITMAPSIZE">
+			 <pos>137,75d</pos> <size>58,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,14d</pos> <size>34,8d</size>
+			<label>File name:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_LOCATION">
+			 <pos>53,5d</pos> <size>142,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>95,84d</pos> <size>40,8d</size>
+			<label>Fractal size:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_FILEINFO_FRACTALSIZE">
+			 <pos>137,84d</pos> <size>58,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>5,115d</pos> <size>185,8d</size>
+			<label>External resources used by this document:</label>
+		</object>
+		<object class="wxListBox" name="IDC_FINFO_REFSLIST">
+			 <pos>5,124d</pos> <size>185,55d</size>
+		</object>
+		<title>Document information</title>
+	</object>
+</resource>

@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_CLIPRESRC">
+		<title>String table from CLIPRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_APPLY_CLIPVIEW">
+					<label>Apply ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_REMOVE_CLIPVIEW">
+					<label>Remove ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_APPLY_CLIPVIEW">
+					<label>Apply ClipVie&amp;w;Groups the selected objects so that they are clipped to the back object;Apply ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLIPVIEW_CONTROLLER_DESCRP">
+					<label>ClipView groups</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLIPVIEW_CONTROLLER_DESCRS">
+					<label>ClipView group</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLIPVIEW_DESCRP">
+					<label>ClipView objects</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLIPVIEW_DESCRS">
+					<label>ClipView object</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CLIPVIEW_NEEDS_MULTIPLE_NODES">
+					<label>You need at least two objects selected in order to apply a ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_REMOVE_CLIPVIEW">
+					<label>Remove ClipVie&amp;w;Ungroups the selected objects so they are no longer clipped;Apply ClipView</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SEL_KEYHOLE_SELECT">
+					<label>Click here to select this ClipView group's keyhole object alone</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

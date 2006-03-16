@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_CAM_PASTESPECIAL">
+			 <pos>0,0d</pos> <size>171,78d</size>
+		<object class="wxListBox" name="IDC_PASTESPECIAL_LIST">
+			 <pos>4,16d</pos> <size>108,56d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>116,4d</pos> <size>50,14d</size>
+			<label>&amp;Paste</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>116,20d</pos> <size>50,14d</size>
+			<label>&amp;Cancel</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>116,36d</pos> <size>50,14d</size>
+			<label>&amp;Help</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>68,8d</size>
+			<label>Data type:</label>
+		</object>
+		<title>Paste Special</title>
+	</object>
+</resource>

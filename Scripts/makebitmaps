@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+
+use strict;
+
+my $indir="wxOil/xrc/";
+my $outdir="wxOil/xrc/";
+my $tmpfile="/tmp/alpha.$$";
+
+sub extract
+{
+    my $i = shift @_;
+    my $o = shift @_;
+    my $n = shift @_;
+    my $w = shift @_;
+    my $oin = shift @_;
+    print STDERR "Converting $i (segment $n * $w) to $o (from $oin)\n";
+    if ($n>=0)
+    {
+	system("pngtopnm -alpha <$i | pnmcut -left ".$n*$w." -top 0 -bottom -1 -width ".$w." > $tmpfile");
+	system("pngtopnm <$i | pnmcut -left ".$n*$w." -top 0 -bottom -1 -width ".$w." | pnmtopng -alpha $tmpfile > $o");
+    }
+    else
+    {
+	system("cat $i >$o");
+    }
+}
+
+while (<>)
+{
+    chomp;
+    my ($in, $out) = split(/\s+/);
+    my $seg=-1;
+    if ($in =~ s/\.(\d+)$//)
+    {
+	$seg=$1;
+    }
+    my $oin=$in;
+    my $in2;
+    my $w = 16;
+    my $w2 = 24;
+    if ($in eq "SMALLBUTTONSTRIP")
+    {
+	$in="shalfstr.png";
+	$in2="lhalfstr.png";
+	$w=8;
+	$w2=12;
+    }
+    elsif ($in eq "BUTTONSTRIP")
+    {
+	$in="sbuttonst32.png";
+	$in2="lbuttonst32.png";
+    }
+    elsif ($in eq "BUTTONSTRIP2")
+    {
+	$in="sbuttst232.png";
+	$in2="lbuttst232.png";
+    }
+    elsif ($in eq "LEBUTTONSTRIP")
+    {
+	$in="sbutts_liveeffect.png";
+	$in2="lbutts_liveeffect.png";
+    }
+    else
+    {
+	$in=~s/bmp$//i;
+	$in=lc($in)."32.png";
+	$in2="l".$in;
+	$in="s".$in;
+    }
+
+    if ( -e $indir.$in && -e $indir.$in2)
+    {
+	extract($indir.$in, $outdir.$out."-s.png", $seg, $w, $oin);
+	extract($indir.$in2, $outdir.$out.".png", $seg, $w2, $oin);
+
+	if ( -e $indir."h".$in && -e $indir."h".$in2)
+	{
+	    extract($indir."h".$in, $outdir.$out."-sx.png", $seg, $w, $oin);
+	    extract($indir."h".$in2, $outdir.$out."-x.png", $seg, $w2, $oin);
+	}
+    }
+    else
+    {
+	print STDERR "Can't find $indir$in $oin [ $seg ], $out\n";
+    }
+}

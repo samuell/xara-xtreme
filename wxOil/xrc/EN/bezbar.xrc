@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BEZTOOLBAR">
+			 <pos>0,0d</pos> <size>185,92d</size>
+		<object class="wxCamArtControl" name="IDC_BTN_DELETEPOINTSOP">
+			 <pos>108,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_MAKELINE">
+			 <pos>84,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_MAKECURVE">
+			 <pos>64,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_SMOOTHPOINT">
+			 <pos>32,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_CUSPPOINT">
+			 <pos>12,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_BEZTOOLADDCHANGE">
+			 <pos>76,76d</pos> <size>28,8d</size>
+			<label>Add:</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_ENDPOINTX">
+			 <pos>60,4d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_ENDPOINTY">
+			 <pos>60,20d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDX_LESS">
+			 <pos>2,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDX_MORE">
+			 <pos>12,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDY_MORE">
+			 <pos>2,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDY_LESS">
+			 <pos>12,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_FIRSTX">
+			 <pos>20,4d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_FIRSTY">
+			 <pos>20,20d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTX_LESS">
+			 <pos>2,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTX_MORE">
+			 <pos>12,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTY_MORE">
+			 <pos>2,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTY_LESS">
+			 <pos>12,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_SECONDX">
+			 <pos>100,4d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_PATH_EDIT_SECONDY">
+			 <pos>100,20d</pos> <size>25,12d</size>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDX_LESS">
+			 <pos>2,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDX_MORE">
+			 <pos>12,95d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDY_MORE">
+			 <pos>2,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDY_LESS">
+			 <pos>12,104d</pos> <size>8,8d</size>
+			<label>-</label>
+		</object>
+		<object class="wxSlider" name="IDC_SMOOTHSLIDER">
+			 <pos>15,74d</pos> <size>25,9d</size>
+			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxCamArtControl" name="IDC_BTN_BEZ_REVERSE_PATH">
+			 <pos>84,44d</pos> <size>16,16d</size>
+			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SMOOTHPERCENT">
+			 <pos>49,74d</pos> <size>20,8d</size>
+			<label>100%</label>
+		</object>
+		<title>Dialog</title>
+	</object>
+</resource>

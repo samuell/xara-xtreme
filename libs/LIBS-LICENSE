@@ -1,0 +1,84 @@
+================================XARAHEADERSTART===========================
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
+
+
+TEMPORARY LICENSE FOR CDRAW
+---------------------------
+
+This license applies ONLY to the "CDraw" libraries ("Libraries")
+distributed in the "libs" directory. Xara intends to release these
+under the same license as the remainder of the Xara LX program,
+at which time this header will be changed to indicate that. However,
+for the time being, the Libraries are distributed in binary
+form only, and you may use them only under the terms of this license.
+
+In layman's terms, the intent of this license is to say that if you
+distribute the libraries, you must either do it with a XaraLX executable,
+or with the source itself (if you don't want to do this, please just
+refer people to our web site where they can download the libraries);
+and you are only allowed to use the libraries with the GPL version
+of XaraLX. The legal terms are set out below.
+
+
+LICENSE TO USE AND DISTRIBUTE SOFTWARE
+--------------------------------------
+
+Xara Group hereby grants you a royalty free license to use and distribute
+the Libraries in object code form provided that you comply with the
+following conditions:
+
+1. You may not distribute any Library or any work derived therefrom
+   unless EITHER
+   a) the Library is contained within an executable program or package
+      of executable programs that also contains an object code version
+      of a Xara LX Derivative; OR
+   b) the Libraries are contained in a larger work also comprising the
+      complete source code of a Xara LX Derivative.
+
+2. You may not link (staticly or dynamicly) the Libraries to any work
+   other than a Xara LX Derivative, nor use the Libraries if linked to
+   any other such work.
+
+3. "Xara LX Derivative" means the program distributed by Xara Group Ltd
+   under the name "Xara LX", or any work derived from it and lawfully
+   distributed under the GNU General Public License version 2.
+
+4. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+   FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+   OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+   PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+   OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+   TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+   PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+   REPAIR OR CORRECTION.
+
+5. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+   WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+   REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+   INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+   OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+   TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+   YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+   PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+   POSSIBILITY OF SUCH DAMAGES.
+
+
+MARKS
+-----
+
+Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
+designs are registered or unregistered trademarks, design-marks, and/or
+service marks of Xara Group Ltd. All rights in these marks are reserved.
+
+
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
+
+=================================XARAHEADEREND============================
+
+

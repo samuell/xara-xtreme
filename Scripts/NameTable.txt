@@ -1,0 +1,99 @@
+adapted by Diccon Yamanaka,Diccon_Yamanaka,Xara Group Ltd,camelotdev@xara.com
+Adrian,Adrian_Stoicar,Xara Group Ltd,camelotdev@xara.com
+#Remove Alex as his new stuff is not Xara Group Ltd
+#Alex,Alex_Bligh,Xara Group Ltd,camelotdev@xara.com
+#Alex Bligh,Alex_Bligh,Xara Group Ltd,camelotdev@xara.com
+Alex Lee,Alex_Lee,Xara Group Ltd,camelotdev@xara.com
+Alex Price,Alex_Price,Xara Group Ltd,camelotdev@xara.com
+Andy,Andy_Pennell,Xara Group Ltd,camelotdev@xara.com
+Andy Hayward,Andy_Hayward,Xara Group Ltd,camelotdev@xara.com
+Andy Hills,Andy_Hills,Xara Group Ltd,camelotdev@xara.com
+AUTHOR,Unattributed,Xara Group Ltd,camelotdev@xara.com
+Ben,Ben_Summers,Xara Group Ltd,camelotdev@xara.com
+CGS,Chris_Snook,Xara Group Ltd,camelotdev@xara.com
+Chris,Chris_Snook,Xara Group Ltd,camelotdev@xara.com
+Chris G,Chris_Gallimore,Xara Group Ltd,camelotdev@xara.com
+ChrisG,Chris_Gallimore,Xara Group Ltd,camelotdev@xara.com
+Chris Parks,Chris_Parks,Xara Group Ltd,camelotdev@xara.com
+ChrisParks,Chris_Parks,Xara Group Ltd,camelotdev@xara.com
+Chris P,Chris_Parks,Xara Group Ltd,camelotdev@xara.com
+ChrisP,Chris_Parks,Xara Group Ltd,camelotdev@xara.com
+Claude,Claude_Quemerais,Xara Group Ltd,camelotdev@xara.com
+Colin,Colin_Barfoot,Xara Group Ltd,camelotdev@xara.com
+Craig,Craig_Hamilton,Xara Group Ltd,camelotdev@xara.com
+DaveM,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+David Cole,David_Cole,Xara Group Ltd,camelotdev@xara.com
+David,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+DavidMc,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+DavidM,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+Derek,Derek_Cox,Xara Group Ltd,camelotdev@xara.com
+Diccon/Chris,Diccon_Yamanaka,Xara Group Ltd,camelotdev@xara.com
+diccon,Diccon_Yamanaka,Xara Group Ltd,camelotdev@xara.com
+Diccon,Diccon_Yamanaka,Xara Group Ltd,camelotdev@xara.com
+DMc/Chris,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+D McClarnon,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+DMcClarnon,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+dmc,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+Dmc,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+DMc,David_McClarnon,Xara Group Ltd,camelotdev@xara.com
+Ed,Ed_Cornes,Xara Group Ltd,camelotdev@xara.com
+Gavin,Gavin_Theobald,Xara Group Ltd,camelotdev@xara.com
+gerry,Gerry_Iles,Xara Group Ltd,camelotdev@xara.com
+Gerry,Gerry_Iles,Xara Group Ltd,camelotdev@xara.com
+GGems,Unattributed,Xara Group Ltd,camelotdev@xara.com
+Graeme,Graeme_Sutherland,Xara Group Ltd,camelotdev@xara.com
+Graham,Graham_Walmsley,Xara Group Ltd,camelotdev@xara.com
+Harrison,Harrison_Ainsworth,Xara Group Ltd,camelotdev@xara.com
+Ilan,Ilan_Copelyn,Xara Group Ltd,camelotdev@xara.com
+Jaosn,Jason_Williams,Xara Group Ltd,camelotdev@xara.com
+Jason,Jason_Williams,Xara Group Ltd,camelotdev@xara.com
+Jason/Noel,Jason_Williams,Xara Group Ltd,camelotdev@xara.com
+Jim,Jim_Lynn,Xara Group Ltd,camelotdev@xara.com
+Jonathan,Jonathan_Payne,Xara Group Ltd,camelotdev@xara.com
+JustinF,Justin_Flude,Xara Group Ltd,camelotdev@xara.com
+JustinF & Rik,Justin_Flude,Xara Group Ltd,camelotdev@xara.com
+JustinF-SimonK,Justin_Flude,Xara Group Ltd,camelotdev@xara.com
+Justin/Jim,Justin_Flude,Xara Group Ltd,camelotdev@xara.com
+Justin,Justin_Flude,Xara Group Ltd,camelotdev@xara.com
+Karim,Karim_MacDonald,Xara Group Ltd,camelotdev@xara.com
+L Hart,Luke_Hart,Xara Group Ltd,camelotdev@xara.com
+Luke,Luke_Hart,Xara Group Ltd,camelotdev@xara.com
+Made into fn by Simon,_Original_code_WillC,Simon Maneggio,Xara Group Ltd,camelotdev@xara.com
+Marc,Marc_Power,Xara Group Ltd,camelotdev@xara.com
+Mario,Mario_Shamtani,Xara Group Ltd,camelotdev@xara.com
+MarkG,Mark_Goodall,Xara Group Ltd,camelotdev@xara.com
+MarkH,Mark_Howitt,Xara Group Ltd,camelotdev@xara.com
+Mark,Mark_Neves,Xara Group Ltd,camelotdev@xara.com
+Markn; Karim,Mark_Neves,Xara Group Ltd,camelotdev@xara.com
+Markn,Mark_Neves,Xara Group Ltd,camelotdev@xara.com
+MarkN,Mark_Neves,Xara Group Ltd,camelotdev@xara.com
+MartinD,Martin_Donelly,Xara Group Ltd,camelotdev@xara.com
+Martin Donelly,Martin_Donelly,Xara Group Ltd,camelotdev@xara.com
+Martin,Martin_Bell,Xara Group Ltd,camelotdev@xara.com
+Matt,Priestley,Xara Group Ltd,camelotdev@xara.com
+Mike,Mike_Kenny,Xara Group Ltd,camelotdev@xara.com
+Neville,Neville_Humphrys,Xara Group Ltd,camelotdev@xara.com
+Noel,Noel_Someone,Xara Group Ltd,camelotdev@xara.com
+Olivier,Olivier_Gascoin,Xara Group Ltd,camelotdev@xara.com
+Ollie,Ollie_Cornes,Xara Group Ltd,camelotdev@xara.com
+Peter,Peter_Arnold,Xara Group Ltd,camelotdev@xara.com
+Peter/Simon,Peter_Arnold,Xara Group Ltd,camelotdev@xara.com
+Phil,Phil_Martin,Xara Group Ltd,camelotdev@xara.com
+Ranbir,Ranbir_Rana,Xara Group Ltd,camelotdev@xara.com
+Ready for you Jason,Jason_Williams,Xara Group Ltd,camelotdev@xara.com
+Richard,Richard_Millican,Xara Group Ltd,camelotdev@xara.com
+Rik,Rik_Heywood,Xara Group Ltd,camelotdev@xara.com
+Sean,Sean_Sollé,Xara Group Ltd,camelotdev@xara.com
+SimonJK,Simon_Knight,Xara Group Ltd,camelotdev@xara.com
+Simon Knight,Simon_Knight,Xara Group Ltd,camelotdev@xara.com
+SimonK,Simon_Knight,Xara Group Ltd,camelotdev@xara.com
+SimonM,Simon_Maneggio,Xara Group Ltd,camelotdev@xara.com
+Simon M,Simon_Maneggio,Xara Group Ltd,camelotdev@xara.com
+Simon,Simon_Maneggio,Xara Group Ltd,camelotdev@xara.com
+sjk,Simon_Knight,Xara Group Ltd,camelotdev@xara.com
+Someone,Unattributed,Xara Group Ltd,camelotdev@xara.com
+Stefan,Stefan_Stoykov,Xara Group Ltd,camelotdev@xara.com
+Tim,Tim_Browse,Xara Group Ltd,camelotdev@xara.com
+Ti,Tim_Browse,Xara Group Ltd,camelotdev@xara.com
+Who,Unattributed,Xara Group Ltd,camelotdev@xara.com
+Will,Will_Cowling,Xara Group Ltd,camelotdev@xara.com

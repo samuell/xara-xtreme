@@ -1,0 +1,555 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_OPTSRESRC">
+		<title>String table from OPTSRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_GRIDANDRULERSDLG">
+					<label>Grid and Ruler options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_GUIDEPROPERTIESDLG">
+					<label>Guideline properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_LAYERPROPERTIESDLG">
+					<label>Layer properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_LAYERPROPERTYTAB">
+					<label>Layer properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_UNDOQUERY_DONTRESIZE">
+					<label>&amp;Don't resize</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDB_UNDOQUERY_RESIZE">
+					<label>&amp;Resize</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADSPECSTRING">
+					<label>The abbreviation for the unit you entered was invalid. It cannot be a blank string or contain numbers or the decimal point or thousands separator character</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADTEMPWORKMEM">
+					<label>The amount of limited redraw memory you entered was invalid. It must be a positive non-zero number.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADTOKENSTRING">
+					<label>The name for the unit you entered was invalid. It cannot be a blank string</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADUNDORESIZE">
+					<label>Unable to reduce the maximum size of the operation history, doing so would result in the loss of redo info</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADUNITDENOMINATOR">
+					<label>The equivalent number of user units you entered was invalid. It must be a positive, non-zero value</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_BADUNITNUMERATOR">
+					<label>The equivalent number of selected units you entered was invalid. It must be a positive, non-zero value</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDANGLE">
+					<label>The constraint angle you entered was invalid. It must be between 1 and 359 degrees.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDBLEED">
+					<label>The page bleed size you entered was invalid. It must be a positive measurement, maximum about 3in (7.62cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDCACHESIZE">
+					<label>The number of gallery cache items you entered was invalid. It must be between 1 and 99</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDCOMPOUNDDPISIZE">
+					<label>Operations, such as convert to editable shapes on shadows, generate bitmaps of user definable dpi. The dpi must be in the range of 10 to 1000.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDDISTANCE">
+					<label>The duplicate distance you entered was invalid. It must be a valid measurement.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDDRAWSCALE">
+					<label>The drawing scale you entered was invalid. It must be a valid measurement</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDFILELIST">
+					<label>The file list size you entered was invalid. It must be between 1 and 9</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDGRIDDIV">
+					<label>The number of grid subdivisions you entered was invalid. It must be between 0 and 99</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDGRIDSPACE">
+					<label>The grid spacing you entered was invalid. It must be a positive, non-zero measurement, maximum about 9ft (2.75M), minimum about 0.5inch (1.3cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDHEIGHT">
+					<label>The page height you entered was invalid. It must be a positive, non-zero measurement, maximum for page and margins is about 9ft (2.75M), minimum about 0.5inch (1.3cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDLINERAD">
+					<label>The magnetic line radius you entered was invalid. It must be a positive, non-zero measurement</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDMARGIN">
+					<label>The page margin you entered was invalid. It must be a positive, non-zero measurement, maximum is about 9ft (2.75M), minimum about 0.5inch (1.3cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDNUDGE">
+					<label>The nudge distance you entered was invalid. It must be a positive, non-zero measurement.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDORIGIN">
+					<label>The grid and ruler origin you entered was invalid. Both the X and Y values must be valid measurements and fall within the current page and margins. Maximum size is about 9ft (2.75M)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDPOINTRAD">
+					<label>The magnetic point radius you entered was invalid. It must be a positive, non-zero measurement</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDREALSCALE">
+					<label>The real scale you entered was invalid. It must be a valid measurement</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDSCALING">
+					<label>An invalid drawing and/or real scale has been set as the calculated scaling factor is bad.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDUNDOSIZE">
+					<label>The undo size you entered was invalid. It must be larger than 1k (1024 bytes) and positive</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_INVALIDWIDTH">
+					<label>The page width you entered was invalid. It must be a positive, non-zero measurement, maximum for page and margins is about 9ft (2.75M), minimum about 0.5inch (1.3cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_MINIMUMALLOWED">
+					<label>The minimum allowed is </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_OVERALLSPREADSIZE">
+					<label>The calculated size of the combined page(s) and margins that you have entered was too big. It must come to a maximum size of about 9ft (2.75M), minimum about 0.5inch (1.3cm)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_EDIT">
+					<label>Bad reading of preference in Edit section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_GRID">
+					<label>Bad reading of preference in Grid and Ruler section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_MISC">
+					<label>Bad reading of preference in General section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_SCALE">
+					<label>Bad reading of preference in Scaling section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_TUNE">
+					<label>Bad reading of preference in Tune ups section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_UNDO">
+					<label>Bad reading of preference in Undo section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_READPREF_VIEW">
+					<label>Bad reading of preference in View section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_EDIT">
+					<label>Bad setting of preference in Edit section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_GRID">
+					<label>Bad setting of preference in Grid and Ruler section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_MISC">
+					<label>Bad setting of preference in General section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_SCALE">
+					<label>Bad setting of preference in Scaling section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_TUNE">
+					<label>Bad setting of preference in Tune ups section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_UNDO">
+					<label>Bad setting of preference in Undo section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_OPTS_SETPREF_VIEW">
+					<label>Bad setting of preference in View section</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_APPLICATIONOPTS">
+					<label>Options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_BAD_CURRENT_SECTION">
+					<label>Bad current section in GetSection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_BAD_DECLARE_SECTION">
+					<label>Bad section name in DeclareSection</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_COLBAR_LARGE">
+					<label>Large with scroll bar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_COLBAR_MEDIUM">
+					<label>Medium</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_COLBAR_MEDSCROLL">
+					<label>Medium with scroll bar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_COLBAR_SMALL">
+					<label>Small</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_LAYERPROPERTYTAB">
+					<label>Layer properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_PAGESIZE_CUSTOM">
+					<label>Custom</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDN_PRINTOPTS">
+					<label>Print options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_APPPREFSDLG_ONE">
+					<label>The options dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_GRIDANDRULERSDLG">
+					<label>&amp;Grid and Ruler Options...;Change the grid and rulers settings</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_GUIDEPROPERTIESDLG">
+					<label>Guide &amp;Layer Properties...;Change the guide layer settings</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_GUIDEPROPERTIESDLG_ONE">
+					<label>The guideline properties dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_IMPORT_ACTIVE_LAYER">
+					<label>Import layers into the active layer</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_IMPORT_NAMED_LAYER">
+					<label>Maintain imported layers names</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_IMPORT_NEW_LAYER">
+					<label>Import layers into new layers</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LAYERPROPERTIESDLG">
+					<label>&amp;Layer Properties...;Change the layer settings</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LAYERPROPERTIESDLG_ONE">
+					<label>The layer properties dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LAYERPROPERTYTABDLG">
+					<label>Properties...</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_LAYERPROPERTYTABDLG_ONE">
+					<label>The layer properties dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_OPPAGERESIZE">
+					<label>Page resize; Page resize; Page resize;</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_OPSETDEFAULTGRID">
+					<label>Grid resize; Grid resize; Grid resize;</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PAGESIZEDLG">
+					<label>Pa&amp;ge Options...;Change the page options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PRINTOPTIONS">
+					<label>P&amp;rint Options...; Customise the printing based options</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PRINTPREFSDLG_ONE">
+					<label>The print options dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PROXY_NOTE">
+					<label>Xara uses the system wide proxy server settings. #1%s To change your proxy server settings, use the Internet Options in the Control Panel.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PROXY_SUB_DISABLED">
+					<label>Currently you have no proxy server set up or the system is set to auto-detect proxy servers.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PROXY_SUB_ENABLED">
+					<label>Your current proxy server is '#1%s', port #2%d.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_PROXY_SUB_ERROR">
+					<label>Xara was not able to find your current proxy server settings.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNITPROPERTIESDLG">
+					<label>Unit &amp;Properties...; Show and allow editing of a user unit's properties</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNITPROPERTIESDLG_ONE">
+					<label>The unit properties dialog is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNITSDESCRIPTION">
+					<label>#1%s (#2%s) #3%s #4%s:#5%s #6%s</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNITS_PREFIX">
+					<label>Prefix</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_UNITS_SUFFIX">
+					<label>Suffix</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_AUTOMATIC">
+					<label>Automatic</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_GRID_INFO">
+					<label>Grid and Ruler options for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_LOSSOFUNDO">
+					<label>This new undo size is smaller than the current undo buffer size and will result in the loss of undo information. Clicking Resize will continue with the change, Don't resize will stop the change.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_PAGE_INFO">
+					<label>Page layout options for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_SCALING_INFO">
+					<label>Scaling for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_UNDO_INFO">
+					<label>Undo size for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_UNITS_INFO">
+					<label>Units for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDT_OPTS_VIEW_INFO">
+					<label>Window options for </label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDW_BADDOCUMENTSCALE">
+					<label>The scaling values stored in this document are bad, using the default values instead</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

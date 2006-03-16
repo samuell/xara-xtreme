@@ -1,0 +1,1279 @@
+% $Header: c:\RCSdir\kernel/pathproc.ps 1.7 1995/08/03 12:38:56 Tim Exp $
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% pathproc.ps
+%
+% This file contains the procedure definitions for the Camelot rendering primitives.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% $Log: pathproc.ps $
+%Revision 1.7  1995/08/03  12:38:56  Tim
+%Printing fixes for release version.
+%
+%Revision 1.6  1995/06/20  20:43:12  Tim
+%Showstopper bug fixes for preview release.
+%
+%Revision 1.5  1995/06/03  20:31:52  Tim
+%Mega check in of EPS/printing code for the 'big freeze'.
+%
+%Revision 1.4  1995/05/23  15:59:28  Tim
+%Misc printing/filters fixes/new features.
+%
+%Revision 1.3  1995/05/01  13:25:25  Tim
+%Mega printing check-in.
+%
+%Revision 1.2  1995/04/14  18:07:29  Tim
+%First proper version of Camelot PostScript rendering routines.
+%
+%Revision 1.1  1994/11/21  16:07:16  Tim
+%Initial revision
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These are non-rendering procedures
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/ar {} bd                               % ArtWorks rectangle object
+/arr {pop pop pop pop pop pop pop} bd   % ArtWorks rounded rectangle object
+/ae {pop pop pop pop pop pop} bd        % ArtWorks ellipse object
+/aoa {pop} bd                           % Object angle
+/apl {pop} bd                           % Path length
+/apc {} bd                              % Create next object as a child (?)
+/aof {pop pop} bd                       % ArtWorks object flags
+
+/aafs {pop pop pop} bd                  % Your guess is as good as mine!
+
+/O {pop} bd                             % overprint when filling
+/R {pop} bd                             % overprint when stroking
+
+/axop {pop pop pop pop} bd              % grad fill overprint flags
+
+
+%
+% Current attribute procedures
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	g:		-  grey g  -
+%
+%	Author:		Mike
+%	Created:	17/06/96
+%	Inputs:		grey value between 0.0 and 1.0
+%	Purpose:	Set the current gray to be used when filling paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/g
+{
+	/v_ft 0 def			% set the fill type to flat fill
+
+    	/v_fc 0 def			% Set out internal fill colour values
+    	/v_fm 0 def
+    	/v_fy 0 def
+
+	1 exch sub			% as 0=black, 1=white K=(1-G)
+	/v_fk exch def
+
+	/v_fct 0 def			% use CMYK colours for fill
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	G:		-  grey  G  -
+%
+%	Author:		Mike
+%	Created:	17/06/96
+%	Inputs:		grey value between 0.0 and 1.0
+%	Purpose:	Set the current gray to be used when stroking paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/G
+{
+	/v_sc 0 def			% set the stroke greylevel
+	/v_sm 0 def
+	/v_sy 0 def
+
+	1 exch sub
+	/v_sk exch def
+
+
+	/v_sct 0 def			% use CMYK colours for stroke
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	k:			cyan magenta yellow black  k  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		CMYK components of the fill colour.
+%	Purpose:	Set the current colour to be used when filling paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/k 
+{
+	% Remember these colour values
+	/v_fk exch def
+	/v_fy exch def
+	/v_fm exch def
+	/v_fc exch def
+
+	% Set fill type = flat
+	/v_ft 0 def     
+
+	/v_fct 0 def			% use CMYK colours for fill
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	K:			cyan magenta yellow black  K  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		CMYK components of the stroke colour.
+%	Purpose:	Set the current colour to be used when stroking paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/K 
+{
+	% Remember these colour values
+	/v_sk exch def
+	/v_sy exch def
+	/v_sm exch def
+	/v_sc exch def
+
+	/v_sct 0 def			% use CMYK colours for stroke
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Xa:			red green blue Xa  -
+%
+%	Author:		Chris G
+%	Created:	7/12/00
+%	Inputs:		RGB components of the fill colour.
+%	Purpose:	Set the current colour to be used when filling paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Xa 
+{
+	% Remember these colour values
+	/v_fb exch def
+	/v_fg exch def
+	/v_fr exch def
+
+	% Set fill type = flat
+	/v_ft 0 def     
+
+	/v_fct 1 def			% use RGB colours for fill
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	XA:			red green blue XA  -
+%
+%	Author:		Chris G
+%	Created:	7/12/00
+%	Inputs:		RGB components of the stroke colour.
+%	Purpose:	Set the current colour to be used when stroking paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/XA 
+{
+	% Remember these colour values
+	/v_sb exch def
+	/v_sg exch def
+	/v_sr exch def
+
+	/v_sct 1 def			% use RGB colours for stroke
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	a_tc:		cyan magenta yellow black name tint  a_tc  cyan magenta yellow black
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		CMYK components of the colour
+%				Name of the colour (string)
+%				Tint of the colour (0 to 1)
+%	Purpose:	Converts a named colour on the stack to a standard cmyk colour.  To do this
+%				it just adjusts the CMYK values by the tint value.  A tint of 0 has no effect
+%				whereas a tint of 1 is white.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/a_tc 
+{
+	% Remove colour name
+	exch pop
+
+	% Make 1 = 0%, 0 = 100%
+	1 exch sub
+
+	% Tint the CMYK values by this amount
+	dup 3 -1 roll exch div exch
+	dup 4 -1 roll exch div 3 1 roll
+	dup 5 -1 roll exch div 4 1 roll
+	5 -1 roll exch div 4 1 roll
+
+	% Leave tinted values on the stack.
+} bd
+
+
+% Define current fill colour using tint
+% cyan magenta yellow black (name) tint x -
+% For some reason, 0 is 100%!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	x:			cyan magenta yellow black name tint  x  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		CMYK components of the fill colour
+%				Name of the colour (string)
+%				Tint of the colour (0 to 1)
+%	Purpose:	Set the current colour to be used when filling paths, using a tinted colour.
+%				NB. Tint of 0 is 100% colour, tint of 1 is 0%, i.e. white.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/x
+{
+	% Tint the colour
+	a_tc
+
+	% Set the current fill colour
+	k
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	X:			cyan magenta yellow black name tint  X  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		CMYK components of the stroke colour
+%				Name of the colour (string)
+%				Tint of the colour (0 to 1)
+%	Purpose:	Set the current colour to be used when stroking paths, using a tinted colour.
+%				NB. Tint of 0 is 100% colour, tint of 1 is 0%, i.e. white.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/X 
+{
+	% Tint the colour
+	a_tc
+
+	% Set the current stroke colour
+	K
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Xx:			(colour components 0 - n-1) name tint colourspace x  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		components of the fill colour (either CMYK or RGB)
+%				Name of the colour (string)
+%				Tint of the colour (0 to 1)
+%				Colour space to use (0 = CMYK. 1 = RGB)
+%	Purpose:	Set the current colour to be used when filling paths, using a tinted colour.
+%				NB. Tint of 0 is 100% colour, tint of 1 is 0%, i.e. white.
+%
+%			Note we currently don't use tints for RGB colours
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Xx
+{
+	0 eq
+	{
+		% CMYK color space used (use standard /x token)
+		x
+	}
+	{
+		% RGB colour space used.
+		% remove tint and name, then use standard RGB colour token.
+		pop pop Xa
+	}
+	ifelse
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	XX:			(Components 0 - n-1) name tint colourspace  X  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Components of the stroke colour
+%				Name of the colour (string)
+%				Tint of the colour (0 to 1)
+%				Colour space to use (0 = CMYK, 1 = RGB)
+%	Purpose:	Set the current colour to be used when stroking paths, using a tinted colour.
+%				NB. Tint of 0 is 100% colour, tint of 1 is 0%, i.e. white.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/XX 
+{
+	0 eq
+	{
+		% CMYK colour
+		X
+	}
+	{
+		% RGB colour
+		pop pop XA
+	}
+	ifelse
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	awr:		rule  awr  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Winding rule number: 0 => non-zero
+%									 1 => even-odd
+%	Purpose:	Set the winding rule to be used when filling paths.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/awr 
+{
+	/v_wr exch def
+} bd
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	w:			width  w  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Line width, in points.
+%	Purpose:	Alias for setlinewidth.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/w
+{
+	setlinewidth
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	j:			jointype  j  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Join type (see Red book).
+%	Purpose:	Alias for setlinejoin.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/j
+{
+	setlinejoin
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	J:			captype  J  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Cap type (see Red Book)
+%	Purpose:	Alias for setlinecap.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/J
+{
+	setlinecap
+}bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	d:			array offset  d  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Dash pattern array and offset (see Red Book)
+%	Purpose:	Alias for setdash.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/d
+{
+	setdash
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	asc:		captype width height  asc  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Line cap type
+%				Size of triangle caps if used (obsolete)
+%	Purpose:	Set the start line cap.  This is somewhat historical, as ArtWorks does not
+%				support different caps at the start and end of lines, or triangular line
+%				caps.
+%	SeeAlso:	J
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/asc
+{
+	% Discard triangle end cap widths (not used anyway by release ArtWorks)
+	pop pop 
+
+	% Set the line cap
+	J
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	aec:		captype width height  aec  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Line cap type
+%				Size of triangle caps if used (obsolete)
+%	Purpose:	Set the end line cap.  This is somewhat historical, as ArtWorks does not
+%				support different caps at the start and end of lines, or triangular line
+%				caps.
+%	SeeAlso:	J
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/aec
+{
+	% Discard triangle end cap widths (not used anyway by release ArtWorks)
+	pop pop 
+
+	% Set the line cap
+	J
+} bd
+
+
+%
+% asah & aeah
+%
+% Not really sure why these are here, as they are redefined in a few lines, and they are
+% not referenced inbetween...probably delete them soon.
+%
+
+/csah {pop pop pop} bd
+/ceah {pop pop pop} bd
+/cst {pop pop} bd
+/cdp {pop} bd
+
+%
+% m, l & c
+%
+% Standard aliases for moveto, lineto and curveto.
+%
+
+/m {moveto} bd
+/l {lineto} bd
+/c {curveto} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Bx:			x1 y1 x2 y2  Bx  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Limits of a rectangle.
+%	Purpose:	Construct a rectanglar path from four coordinates.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Bx 
+{
+	% Copy the co-ordinates to give correct order for a box/rectangle.
+
+	4 copy 					% x1 y1 x2 y2 x1 y1 x2 y2
+	5 1 roll 				% x1 y1 x2 y2 y2 x1 y1 x2
+	4 2 roll 				% x1 y1 x2 y2 y1 x2 y2 x1
+	5 -1 roll				% x1 y1 x2 y1 x2 y2 x1 y2
+
+	% Make a closed rectangular path
+	m l l l closepath
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Cp:			x1 y1 x2 y2  Cp  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		Limits of a rectangle.
+%	Purpose:	Convert a clipping box into a clipping path and intersects it into the
+%				current clipping path.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/Cp {Bx clip newpath} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	a_fp:		-  a_fp  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Fill the current path, but do not clear it,
+%				It uses the already defined fill variables to not only tell it what the
+%				colour is, but also to tell it which fill type to use.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/a_fp 
+{
+	gsave
+
+		% Use the proper winding rule...
+		v_wr 0 ne
+
+		% What kind of fill is it?
+		v_ft 0 eq
+		{
+			% Simple flat fill - set the colour
+			setfillcolor
+
+			% And fill using the current winding rule
+			{eofill}
+			{fill}
+			ifelse 
+		}
+		{
+			% Not a flat fill - what kind is it?
+			% (maybe we ought to put these in an array of procs..?)
+			v_ft 1 eq
+		 	{
+				% 1 means linear fill
+				linearfill
+			}
+			{
+				v_ft 2 eq
+				{
+					% 2 means elliptical fill
+					ellipticalfill
+				}
+				{
+					v_ft 3 eq
+					{
+						% 3 means radial fill
+						radialfill
+					}
+					{
+						v_ft 4 eq
+						{
+							% 4 means conical fill
+							conicalfill
+						}
+						{
+							v_ft 8 eq
+							{
+								%8 means mono linear fill
+								lineargfill
+							}
+							{
+								v_ft 9 eq
+								{
+									%9 means mono elliptical fill
+									ellipticgfill
+								}
+								{
+									v_ft 10 eq
+									{
+										%10 means mono radial fill
+										radialgfill
+									}
+									{
+										%11 means mono conical fill
+										conicalgfill
+									} ifelse
+								} ifelse
+							} ifelse
+						} ifelse
+					} ifelse
+				} ifelse
+			} ifelse
+		} ifelse
+
+	grestore
+}bd
+
+
+%
+% Now then. Paths in ArtWorks EPS are sent in a ludicrous way. Instead of
+% sending the path in the normal PostScript way, (i.e. moveto, lineto,
+% curveto, closepath, endpath etc.) the EPS saver insists on sending it in
+% the same way that Illustrator does. This seems ludicrous to me, since
+% illustrator only barely handles multiple sub-path paths, but ArtWorks
+% handles them with ease!
+%
+% Anyway, in order to render these things properly, I will have to do some
+% strange contortions. The *u command has to increment a flag which tells me
+% if I'm in the middle of rendering a multiple sub-path path. *U obviously
+% decrements the flag (a counter, really) and if the counter becomes zero,
+% does whatever rendering has to be done.
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	*u:			-  *u  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Start multiple sub-path.  This just increments the p_count variable.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/*u 
+{
+	% Start multiple subpaths
+	/p_count p_count 1 add def
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	*U:			-  *U  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Start multiple sub-path.  This just increments the p_count variable.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/*U 
+{
+	% End multiple subpaths - decrement p_count.
+	/p_count p_count 1 sub def
+
+	% If p_count has reached zero, the multiple subpaths stuff must have
+	% finished, so call the routine defined in p_render.
+	p_count 0 eq
+	{
+		% Is it visible? (copes with invisible layers)
+		vis_flag
+		{p_render}
+		{newpath}
+		ifelse
+	} if
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	B:			-  B  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Fill and stroke the current path using the current attributes.
+%				The current path is closed.
+%	SeeAlso:	b
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/B
+{
+	% First, define the p_render procedure in case this render should be
+	% deferred
+
+	/p_render
+	{
+		a_fp
+		setstrokecolor		% uses correct colour space automatically
+		stroke  		% Implicitly executes newpath
+	} bd
+
+	% Now check the multiple sub-paths counter - this will tell me if the render
+	% should be deferred (>0) or should happen now.
+	% Also check the vis_flag and only render if true (copes with invisible layers).
+
+	p_count 0 eq 
+	{
+		vis_flag
+		{p_render}
+		{newpath}
+		ifelse
+	} if
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	b:			-  b  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Close, fill and stroke the current path using the current attributes.
+%				The current path is open.
+%	SeeAlso:	B
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/b
+{
+	closepath               % Just close it, then call the real stroke proc
+	B
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	F:			-  F  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Fill (but do not stroke) the current path using the current attributes.
+%				The current path is open.
+%	SeeAlso:	f
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/F
+{
+	% First, define the p_render procedure in case this render should be
+	% deferred
+
+	/p_render
+	{
+		a_fp
+		newpath
+	} bd
+
+	% Now check the multiple sup-paths counter - this will tell me if the render
+	% should be deferred (>0) or should happen now.
+
+	p_count 0 eq 
+	{
+		vis_flag
+		{p_render}
+		{newpath}
+		ifelse
+	} if
+
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	f:			-  f  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Close, and fill (but do not stroke) the current path using the current 
+%				attributes.
+%				The current path is open.
+%	SeeAlso:	F
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/f
+{
+	closepath
+	F
+} bd
+
+% Current path is open and stroked
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	S:			-  S  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Stroke (but do not fill) the current path using the current attributes.
+%				The current path is closed.
+%	SeeAlso:	s
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/S
+{
+	% First, define the p_render procedure in case this render should be
+	% deferred
+
+	/p_render
+	{
+		setstrokecolor		% uses correct colour space automatically
+		stroke  		% Implicitly does a newpath
+	} bd
+
+	% Now check the multiple sup-paths counter - this will tell me if the render
+	% should be deferred (>0) or should happen now.
+
+	p_count 0 eq 
+	{
+		vis_flag
+		{p_render}
+		{newpath}
+		ifelse
+	} if
+
+} bd
+
+% Current path is closed and stroked
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	s:			-  s  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	Close and stroke (but do not fill) the current path using the current 
+%				attributes.
+%				The current path is closed.
+%	SeeAlso:	S
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/s
+{
+	closepath
+	S
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	H:			-  H  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	The current path is hidden - do not stroke or fill it; just use it up.
+%				The current path is closed.
+%	SeeAlso:	h
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/H
+{
+	% First, define the p_render procedure in case this render should be
+	% deferred
+
+	/p_render
+	{
+		newpath
+	} bd
+
+	% Now check the multiple sup-paths counter - this will tell me if the render
+	% should be deferred (>0) or should happen now.
+
+	p_count 0 eq 
+	{
+		vis_flag
+		{p_render}
+		{newpath}
+		ifelse
+	} if
+
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	h:			-  h  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	The current path is hidden - do not stroke or fill it; just close it and
+%				use it up.
+%				The current path is open.
+%	SeeAlso:	h
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/h
+{
+	closepath
+	H
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	N:			-  N  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	The current path is hidden - do not stroke or fill it; just use it up.
+%	SeeAlso:	n
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/N
+{
+	H
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	n:			-  n  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Purpose:	The current path is hidden - do not stroke or fill it; just close it and
+%				use it up.
+%				The current path is open.
+%	SeeAlso:	N
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/n
+{
+	h
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cag:	   	sGy eGy
+%               startX startY endX endY [endX2 endY2] 
+%               filltype cag  -
+%
+%	Author:		Mike
+%	Created:	20/06/96
+%	Inputs:		sGy - the starting grey 0..1
+%				eGy - the ending grey 0..1
+%				startX, startY - starting point of the grad fill
+%				endX, endY     - end point of the grad fill
+%				endX2, endY2   - optional second end point of grad fill (elliptical fills only)
+%				filltype: 	1 = linear
+%							2 = elliptical
+%							3 = radial
+%							4 = conical
+%							7 = new linear (3 point) fill
+%							8 = mono linear
+%							9 = mono elliptical
+%						   10 = mono radial
+%						   11 = mono conical
+%				
+%	Purpose:	Define the current fill attribute to be a special grad fill attribute.
+%				The fill uses grey levels to define the colour space for fills
+%	SeeAlso:	cax, caz
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cag
+{
+	dup	7 add
+	/v_ft exch def  % define fill type
+
+	% Get second end point for elliptical fills
+	dup
+
+	2 eq
+	{
+		pop
+		/endY2 exch def
+		/endX2 exch def
+	}
+	{
+		7 eq
+		{
+			% BODGE: discard second end point for 3 point linear fills, until we do this properly.
+			pop pop
+
+			% Change it to be a normal linear fill
+			/v_ft 8 def
+		} if
+	} ifelse
+
+	% Get normal start and end points.
+	/endY exch def
+	/endX exch def
+	/startY exch def
+	/startX exch def
+
+	% Get start and end colours.
+	/eGy exch def
+	/sGy exch def
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	caz:	   	sR sG sB eR eG eB startX startY endX endY [endX2 endY2] filltype caz  -
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		sR, sG, and sB - starting colour in RGB
+%				eR, eG and eB - end colour in RGB
+%				startX, startY - starting point of the grad fill
+%				endX, endY - end point of the grad fill
+%				endX2, endY2 - optional second end point of grad fill (elliptical fills only)
+%				filltype: 	1 = linear
+%							2 = elliptical
+%							3 = radial
+%							4 = conical
+%				
+%	Purpose:	Define the current fill attribute to be a special grad fill attribute.
+%				It does not do the fill immediately - that is still done by the
+%				fill/stroke procedures. 
+%	SeeAlso:	cax
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/caz
+{
+	dup
+	/v_ft exch def  % define fill type
+
+	% Get second end point for elliptical fills
+	dup
+	2 eq
+	{
+		pop
+		/endY2 exch def
+		/endX2 exch def
+	}
+	{
+		7 eq
+		{
+			% BODGE: discard second end point for 3 point linear filles, until we do this properly
+			pop pop
+
+			% change it to a normal linear fill
+			/v_ft 1 def
+		} if
+	 } ifelse
+
+	% Get normal start and end points.
+	/endY exch def
+	/endX exch def
+	/startY exch def
+	/startX exch def
+
+	% Get start and end colours.
+	/eB exch def
+	/eG exch def
+	/eR exch def
+
+	/sB exch def
+	/sG exch def
+	/sR exch def
+} bd
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	cax:	   	sR sG sB sN sT eR eG eB eN eT startX startY endX endY [endX2 endY2] 
+%				filltype  caz  -
+%
+%	Author:		Tim
+%	Created:	10/04/95
+%	Inputs:		sR, sG and sB - starting colour in RGB
+%				sN - name of the starting colour
+%				sT - tint of the starting colour (0.0 to 1.0)
+%				eR, eG and eB - end colour in RGB
+%				eN - name of the end colour
+%				eT - tint of the end colour (0.0 to 1.0)
+%				startX, startY - starting point of the grad fill
+%				endX, endY - end point of the grad fill
+%				endX2, endY2 - optional second end point of grad fill (elliptical fills only)
+%				filltype: 	1 = linear
+%							2 = elliptical
+%							3 = radial
+%							4 = conical
+%							7 = new linear (3 point) fill
+%	Purpose:	Define the current fill attribute to be a special grad fill attribute.
+%	SeeAlso:	caz
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/cax
+{
+	dup
+	/v_ft exch def  % define fill type
+
+	% Get second end point for elliptical fills
+	dup
+	2 eq
+	{
+		pop
+		/endY2 exch def
+		/endX2 exch def
+	}
+	{
+		7 eq
+		{
+			% BODGE: discard second end point for 3 point linear fills, until we do this properly.
+			pop pop
+
+			% Change it to be a normal linear fill
+			/v_ft 1 def
+		}
+		if
+	}
+	ifelse
+
+
+
+	% Get normal start and end points.
+	/endY exch def
+	/endX exch def
+	/startY exch def
+	/startX exch def
+
+	% Get start and end colours.
+	% First we have to change the tints to real cmyk colours
+	%
+	% Now the second colour definition is at the top of the stack...
+	%
+	% RGB colours don't deal with tints at the moment...
+
+%	a_tc			% Change tint colour to cmyk colour
+	pop pop
+
+	% Stack now looks like this (from the bottom):
+	% sR sG sB sN sT eR eG eB
+
+	8 3 roll		% Remember, there are two fewer items on the stack
+
+	% Stack now looks like this (from the bottom):
+	% eR eG eB sR sG sB sN sT 
+
+%	a_tc			% Change tint colour to cmyk colour
+	pop pop
+
+	% Stack now looks like this (from the bottom):
+	% eR eG eB sR sG sB
+
+	% Remember start and end colours.
+	/sB exch def
+	/sG exch def
+	/sR exch def
+
+	/eB exch def
+	/eG exch def
+	/eR exch def
+} bd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	axm:		startX startY endX endY  axm  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		startX, startY - starting point of the mutated grad fill
+%				endX, endY - end point of the mutated grad fill
+%	Purpose:	Handle mutated ArtWorks grad fills.  These values are supposed to be the
+%				same as the previous grad fill command according to John's documentation, so
+%				I don't really understand why we don't just throw them away and I can't
+%				be bothered to find out.
+%	SeeAlso:	az, ax
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/axm
+{
+	/endY exch def
+	/endX exch def
+	/startY exch def
+	/startX exch def
+} bd
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	alyr:		name type visible printOverride locked alyr  -
+%
+%	Author:		ArtWorks Developers
+%	Created:	Unknown
+%	Inputs:		name - String which holds the name of the layer
+%
+%				type  			0 => background layer
+%					   			1 => foreground layer
+%					   			2 => guide layer
+%
+%				visible  		0 => invisible
+%						 		1 => visible
+%
+%				printOverride	0 => do not override printing
+%								1 => override printing
+%
+%				locked	 		0 => layer is not locked
+%								1 => layer is locked
+%
+%	Purpose:	Marks the start and properties of a new layer.
+%				(Sets the vis_flag to indicate whether paths should be rendered.)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/alyr 
+{
+	% Discard locked and override flags
+	pop pop 
+
+	% Should we render this layer?
+	1 eq 
+	{true}
+	{false} 
+	ifelse 
+	
+	% Set vis_flag accordingly
+	/vis_flag exch def
+
+	% Discard layer name and type
+	pop pop
+} bd

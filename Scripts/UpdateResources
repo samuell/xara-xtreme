@@ -1,0 +1,2 @@
+cp wxOil/resources.cpp wxOil/xrc/winresources.cpp
+svn ci -m "Updated resources file" wxOil/xrc/winresources.cpp

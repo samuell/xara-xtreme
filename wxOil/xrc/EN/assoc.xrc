@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_CHECK_ASSOCIATIONS">
+			 <pos>0,0d</pos> <size>221,71d</size>
+		<object class="wxButton" name="wxID_YES">
+			 <pos>65,34d</pos> <size>43,14d</size>
+			<label>&amp;Yes</label>
+		</object>
+		<object class="wxButton" name="wxID_NO">
+			 <pos>115,34d</pos> <size>42,14d</size>
+			<label>&amp;No</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_PERFORM_CHECK">
+			 <pos>7,54d</pos> <size>181,10d</size>
+			<label>Always perform this check when starting the program</label>
+		</object>
+		<object class="wxStaticText" name="IDC_REGISTERED_HANDLER">
+			 <pos>7,7d</pos> <size>207,8d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,17d</pos> <size>85,8d</size>
+			<label>Do you want to register it ?</label>
+		</object>
+		<title>Check Associations</title>
+	</object>
+</resource>

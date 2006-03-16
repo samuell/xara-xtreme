@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_EXPORT_IMAGEMAP">
+			 <pos>0,0d</pos> <size>188,165d</size>
+		<object class="wxComboBox" name="IDC_IMAGEMAP_MAPNAME">
+			 <pos>45,7d</pos> <size>135,14d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_IMAGEMAP_APPROX">
+			 <pos>106,26d</pos> <size>75,24d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_IMAGEMAP_WIDTH">
+			 <pos>47,55d</pos> <size>30,14d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_IMAGEMAP_HEIGHT">
+			 <pos>128,55d</pos> <size>30,14d</size>
+		</object>
+		<object class="wxRadioButton" name="IDC_IMAGEMAP_AREA_SELECTION">
+			 <pos>36,94d</pos> <size>45,10d</size>
+			<label>&amp;Selection</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_IMAGEMAP_AREA_DRAWING">
+			 <pos>112,94d</pos> <size>40,10d</size>
+			<label>&amp;Drawing</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_IMAGEMAP_ALLRECTANGLES">
+			 <pos>7,113d</pos> <size>174,15d</size>
+			<label>Save all clickable areas as rectangles</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_IMAGEMAP_CLIPBOARD">
+			 <pos>7,125d</pos> <size>174,15d</size>
+			<label>Copy image map to clipboard</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>7,144d</pos> <size>50,14d</size>
+			<label>Export</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>73,144d</pos> <size>50,14d</size>
+			<label>Help</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>131,144d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,28d</pos> <size>97,11d</size>
+			<label>Approximate curves with lines</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>25,57d</pos> <size>20,10d</size>
+			<label>&amp;Width</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BMPOPTS_SAVEAREA">
+			 <pos>7,80d</pos> <size>174,30d</size>
+			<label>Area for image map</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>102,57d</pos> <size>24,10d</size>
+			<label>Height</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>7,9d</pos> <size>34,8d</size>
+			<label>Map name</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_IMAGEMAP_AREAGROUP">
+			 <pos>7,45d</pos> <size>174,30d</size>
+			<label>Size of corresponding bitmap</label>
+		</object>
+		<title>Image Map Export Options</title>
+	</object>
+</resource>

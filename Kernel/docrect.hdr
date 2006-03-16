@@ -1,0 +1,5 @@
+// $Header: $
+// extra headers for DocRect class
+
+class UserRect;
+class OilRect;

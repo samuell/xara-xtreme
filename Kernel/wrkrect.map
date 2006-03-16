@@ -1,0 +1,7 @@
+Coord=WorkCoord
+<Rect>=WorkRect
+LONG=XLONG
+ULONG=XLONG
+INC_RECT=INC_WRKRECT
+"rect.h"="wrkrect.h"
+"coord.h"="wrkcoord.h"

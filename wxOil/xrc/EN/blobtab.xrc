@@ -1,0 +1,268 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_BLOBTAB_PG1">
+			 <pos>0,0d</pos> <size>160,100d</size>
+		<object class="wxScrollBar" name="IDC_TSCROLLBAR2">
+			 <pos>52,12d</pos> <size>11,56d</size>
+			<style>wxSB_VERTICAL</style>
+		</object>
+		<object class="wxScrollBar" name="IDC_TSCROLLBAR1">
+			 <pos>64,57d</pos> <size>49,11d</size>
+			<style>wxSB_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TSTATIC4">
+			 <pos>67,69d</pos> <size>8,8d</size>
+			<label>X:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TSTATIC3">
+			 <pos>66,14d</pos> <size>8,10d</size>
+			<label>Y:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TYVAL">
+			 <pos>74,13d</pos> <size>30,8d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_TXVAL">
+			 <pos>74,69d</pos> <size>30,8d</size>
+			<label></label>
+		</object>
+		<title>Coords</title>
+	</object>
+	<object class="wxDialog" name="IDD_BLOBTAB_PG2">
+			 <pos>0,0d</pos> <size>160,100d</size>
+		<object class="wxRadioButton" name="IDC_TRADIO21">
+			 <pos>89,34d</pos> <size>35,10d</size>
+			<label>Radio1</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_TRADIO22">
+			 <pos>89,44d</pos> <size>35,10d</size>
+			<label>Radio2</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_TRADIO23">
+			 <pos>89,54d</pos> <size>35,10d</size>
+			<label>Radio3</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_TRADIO11">
+			 <pos>31,35d</pos> <size>35,10d</size>
+			<label>Radio4</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_TRADIO12">
+			 <pos>31,45d</pos> <size>35,10d</size>
+			<label>Radio5</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_TRADIO13">
+			 <pos>31,55d</pos> <size>35,10d</size>
+			<label>Radio6</label>
+		</object>
+		<title>RadioDaze</title>
+	</object>
+	<object class="wxDialog" name="IDD_BLOBTAB_PG3">
+			 <pos>0,0d</pos> <size>160,100d</size>
+		<object class="wxComboBox" name="IDC_TCOMBO3">
+			 <pos>16,22d</pos> <size>56,57d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_TCOMBO4">
+			 <pos>85,22d</pos> <size>48,57d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_TSTDEF">
+			 <pos>16,11d</pos> <size>30,8d</size>
+			<label>Default</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TSTCT">
+			 <pos>86,10d</pos> <size>52,10d</size>
+			<label>Convert to</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_TUNITVAL">
+			 <pos>77,47d</pos> <size>43,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_TSTUV">
+			 <pos>37,49d</pos> <size>36,10d</size>
+			<label>Unit Value</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TCONV">
+			 <pos>69,78d</pos> <size>38,9d</size>
+			<label>Conversion:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TCONVVAL">
+			 <pos>111,76d</pos> <size>43,12d</size>
+			<label></label>
+		</object>
+		<object class="wxButton" name="IDC_TBUTTON3">
+			 <pos>19,73d</pos> <size>47,17d</size>
+			<label>Convert</label>
+		</object>
+		<title>Convert</title>
+	</object>
+	<object class="wxDialog" name="IDD_BLOBBYDLG">
+			 <pos>0,0d</pos> <size>323,248d</size>
+		<object class="wxButton" name="IDC_BUTTON1">
+			 <pos>23,24d</pos> <size>50,14d</size>
+			<label></label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON2">
+			 <pos>22,44d</pos> <size>50,14d</size>
+			<label></label>
+		</object>
+		<object class="wxScrollBar" name="IDC_SCROLLBAR2">
+			 <pos>18,87d</pos> <size>11,56d</size>
+			<style>wxSB_VERTICAL</style>
+		</object>
+		<object class="wxScrollBar" name="IDC_SCROLLBAR1">
+			 <pos>30,132d</pos> <size>49,11d</size>
+			<style>wxSB_HORIZONTAL</style>
+		</object>
+		<object class="wxListBox" name="IDC_LIST1">
+			 <pos>101,20d</pos> <size>51,56d</size>
+		</object>
+		<object class="wxListBox" name="IDC_LIST2">
+			 <pos>154,20d</pos> <size>50,57d</size>
+			<style>wxLB_SORT</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO21">
+			 <pos>177,109d</pos> <size>35,10d</size>
+			<label>Radio1</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO22">
+			 <pos>177,119d</pos> <size>35,10d</size>
+			<label>Radio2</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO23">
+			 <pos>177,129d</pos> <size>35,10d</size>
+			<label>Radio3</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC">
+			 <pos>242,9d</pos> <size>78,148d</size>
+			<label>Dialog Control</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECK1">
+			 <pos>254,92d</pos> <size>60,10d</size>
+			<label>Disable gadgets</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_CHECK2">
+			 <pos>254,104d</pos> <size>59,11d</size>
+			<label>Hide gadgets</label>
+		</object>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>257,35d</pos> <size>50,14d</size>
+			<label>OK</label>
+		</object>
+		<object class="wxButton" name="wxID_CANCEL">
+			 <pos>257,56d</pos> <size>50,14d</size>
+			<label>Cancel</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC1">
+			 <pos>5,8d</pos> <size>84,62d</size>
+			<label>WIBBLE/WOBBLE</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC4">
+			 <pos>33,144d</pos> <size>8,8d</size>
+			<label>X:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC3">
+			 <pos>32,89d</pos> <size>8,10d</size>
+			<label>Y:</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC2">
+			 <pos>5,72d</pos> <size>84,85d</size>
+			<label>COORDS</label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STATIC6">
+			 <pos>96,9d</pos> <size>141,78d</size>
+			<label>Sort Items</label>
+		</object>
+		<object class="wxStaticText" name="IDC_YVAL">
+			 <pos>40,88d</pos> <size>30,8d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_XVAL">
+			 <pos>40,144d</pos> <size>30,8d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBox" name="IDC_STRD">
+			 <pos>96,89d</pos> <size>141,68d</size>
+			<label>Radiodaze</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO11">
+			 <pos>119,110d</pos> <size>35,10d</size>
+			<label>Radio4</label>
+			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO12">
+			 <pos>119,120d</pos> <size>35,10d</size>
+			<label>Radio5</label>
+		</object>
+		<object class="wxRadioButton" name="IDC_RADIO13">
+			 <pos>119,130d</pos> <size>35,10d</size>
+			<label>Radio6</label>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBO3">
+			 <pos>20,182d</pos> <size>56,57d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxComboBox" name="IDC_COMBO4">
+			 <pos>89,182d</pos> <size>48,57d</size>
+			<style>wxCB_SORT</style>
+		</object>
+		<object class="wxStaticBox" name="IDC_STCONV">
+			 <pos>4,160d</pos> <size>233,86d</size>
+			<label>Unit Conversion</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STDEF">
+			 <pos>20,171d</pos> <size>30,8d</size>
+			<label>Default</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STCT">
+			 <pos>90,170d</pos> <size>52,10d</size>
+			<label>Convert to</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_UNITVAL">
+			 <pos>183,182d</pos> <size>43,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STUV">
+			 <pos>145,184d</pos> <size>36,10d</size>
+			<label>Unit Value</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CONV">
+			 <pos>145,201d</pos> <size>38,9d</size>
+			<label>Conversion:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CONVVAL">
+			 <pos>184,201d</pos> <size>43,12d</size>
+			<label></label>
+		</object>
+		<object class="wxButton" name="IDC_BUTTON3">
+			 <pos>182,219d</pos> <size>47,17d</size>
+			<label>Convert</label>
+		</object>
+		<object class="wxStaticText" name="ID_STINT">
+			 <pos>245,179d</pos> <size>25,8d</size>
+			<label>Integer</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STRL">
+			 <pos>245,197d</pos> <size>22,8d</size>
+			<label>Real</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT1">
+			 <pos>272,176d</pos> <size>40,13d</size>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT2">
+			 <pos>272,194d</pos> <size>40,13d</size>
+		</object>
+		<object class="wxStaticBox" name="IDC_VLD">
+			 <pos>242,161d</pos> <size>78,85d</size>
+			<label>Character validation</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STXYZ">
+			 <pos>246,216d</pos> <size>12,8d</size>
+			<label>XYZ</label>
+		</object>
+		<object class="wxTextCtrl" name="IDC_EDIT3">
+			 <pos>272,213d</pos> <size>40,13d</size>
+		</object>
+		<title>Blobby Dialog</title>
+	</object>
+</resource>

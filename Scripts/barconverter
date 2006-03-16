@@ -1,0 +1,1259 @@
+#!/usr/bin/perl
+
+use strict;
+
+sub BuildOptokenMap;
+my %optokenmap;
+BuildOptokenMap;
+
+sub BuildStringTable;
+my %stringtable;
+BuildStringTable;
+
+my $ddindent="";
+my $dd=0;
+
+my $dialogname="";
+
+my $help;
+my $bubble;
+
+sub IsVertical
+{
+    return ($dialogname eq "IDD_BUTTBAR_TOOLBAR")?1:0;
+}
+
+sub GetStaticLabel
+{
+    my $resname = shift @_;
+   
+    return "X" if ($resname =~ /IDC_PATH_STATIC_.*X/);
+    return "Y" if ($resname =~ /IDC_PATH_STATIC_.*Y/);
+
+    my %namemap = (
+		   "IDC_CREATEBRUSH" => "Create Brush",
+		   "IDC_EDITBRUSH" => "Edit Brush",
+		   "IDC_REMOVEBLEND" => "Remove Blend",
+		   "IDC_REMOVEMOULD" => "Remove",
+		   "IDC_REMOVECONTOUR" => "Remove"
+		   );
+    return $namemap{ $resname } || ""; 
+
+}
+
+sub MakeName
+{
+    my $resname = shift @_;
+
+    my %namemap = (
+
+		   "IDD_BUTTBAR_GENERAL" => "General",
+		   "IDD_BUTTBAR_IMAGESETTING" => "Image Setting",
+		   "IDD_BUTTBAR_WINDOW" => "Window",
+		   "IDD_BUTTBAR_ARRANGE" => "Arrange",
+		   "IDD_BUTTBAR_EDIT" => "Edit",
+		   "IDD_BUTTBAR_FILE" => "File",
+		   "IDD_BUTTBAR_GALLERIES" => "Galleries",
+		   "IDD_BUTTBAR_STANDARD" => "Standard",
+		   "IDD_BUTTBAR_TOOLBAR" => "Toolbar",
+		   "IDD_BUTTBAR_ANIMATION" => "Animation",
+		   "IDD_BUTTBAR_FEATHER" => "Feather",
+		   "IDD_SELECTORINFO" => "Selector tool info bar",
+		   "IDD_ZOOMINFO" => "Zoom tool info bar",
+		   "IDD_PUSHINFO" => "Push tool info bar",
+		   "IDD_REGSHAPETOOLBAR" => "QuickShape tool info bar",
+		   "IDD_RECTTOOLBAR" => "Rectangle tool info bar",
+		   "IDD_ELLIPSETOOLBAR" => "Ellipse tool info bar",
+		   "IDD_GRADFILLDLG" => "Graduated fill tool info bar",
+		   "IDD_TRANFILLDLG" => "Transparent fill tool info bar",
+		   "IDD_BEZTOOLBAR" => "Shape editor tool info bar",
+		   "IDD_FREEHANDTOOL" => "Freehand tool info bar",
+		   "IDD_BLENDTOOLBAR" => "Blend tool info bar",
+		   "IDD_MOULDTOOLBAR" => "Mould tool info bar",
+		   "IDD_BEVELINFOBAR" => "Bevel tool info bar",
+		   "IDD_CONTOURINFOBAR" => "Contour tool info bar"
+		   );
+    return $namemap{ $resname } || "This bar should not be called $resname"; 
+}
+
+sub ConvertQuotedName
+{
+    my $qname = shift @_;
+
+    my %qnamemap = (
+                   "\"Selector" => "IDD_SELECTORINFO",
+                   "\"Zoom" => "IDD_ZOOMINFO",
+                   "\"Push" => "IDD_PUSHINFO",
+                   "\"QuickShape" => "IDD_REGSHAPETOOLBAR",
+                   "\"Rectangle" => "IDD_RECTTOOLBAR",
+                   "\"Ellipse" => "IDD_ELLIPSETOOLBAR",
+                   "\"Fill" => "IDD_GRADFILLDLG",
+                   "\"Transparency" => "IDD_TRANFILLDLG",
+                   "\"Shape" => "IDD_BEZTOOLBAR",
+		   "\"Freehand" => "IDD_FREEHANDTOOL",
+		   "\"Blend" => "IDD_BLENDTOOLBAR",
+		   "\"Mould" => "IDD_MOULDTOOLBAR",
+		   "\"Bevel" => "IDD_BEVELINFOBAR",
+		   "\"Contour" => "IDD_CONTOURINFOBAR"
+		    );
+    return $qnamemap{ $qname } || $qname;
+
+}
+
+sub GetSize
+{
+    my $control = shift @_;
+    my $default = shift @_;
+
+    my %cnamemap = (
+		    "IDC_GEOMETRY" => 128,
+		    "IDC_MAPPING" => 96,
+		    "IDC_EFFECT" => 96,
+		    "IDC_BITMAPEFFECT" => 128,
+		    "IDC_TRANSPTYPE" => 128,
+		    "IDC_SEL_EDIT_XSCALE" => 30,
+		    "IDC_SEL_EDIT_YSCALE" => 30,
+		    "IDC_SEL_EDIT_SHEAR" => 30,
+		    "IDC_SEL_EDIT_ANGLE" => 30
+		   );
+    return $cnamemap{ $control } || $default;
+}
+
+sub GetText
+{
+    my $n = shift @_;
+    return $stringtable{$n} || $n;
+}
+
+sub IsToggle
+{
+    my $name = shift @_;
+    return ($name=~/^(IDC_BTN_MAKECURVE|IDC_BTN_MAKELINE|IDC_BTN_SMOOTHPOINT|IDC_BTN_CUSPPOINT|IDC_BTN_REGSHAPETOOL_RADIUS|IDC_BTN_REGSHAPETOOL_DIAMETER|IDC_BTN_REGSHAPETOOL_BOUNDBOX|IDC_BTN_REGSHAPETOOL_POLYGON|IDC_BTN_REGSHAPETOOL_ELLIPSE|IDC_BTN_REGSHAPETOOL_STELLATION|IDC_BTN_REGSHAPETOOL_CURVATURE|IDC_SEL_SHOWBOUNDSBLOBS|IDC_SEL_SHOWOBJECTBLOBS|IDC_SEL_SHOWFILLBLOBS|IDC_SEL_ROTATEBUTTON|IDC_SEL_SCALELINES|IDC_SEL_PADLOCK|IDC_BTN_MAGNET|IDC_BTN_BLENDDISTANCE|C_BTN_BLENDSTEPS|IDC_BTN_ONETOONE|IDC_BTN_BLENDANTIALIAS|IDC_BTN_DETACHMOULD|IDC_BTN_BEVELOUTER|IDC_BTN_BEVELINNER|IDC_BEVELJOINTYPEMITRE|IDC_BEVELJOINTYPEROUND|IDC_BEVELJOINTYPEBEVEL|IDC_BTN_CONTOURDISTANCE|IDC_BTN_CONTOURSTEPS|IDC_BTN_CONTOUROUTER|IDC_BTN_CONTOURINNER|IDC_CONTOURJOINTYPEMITRE|IDC_CONTOURJOINTYPEROUND|IDC_CONTOURJOINTYPEBEVEL)$/)?1:0;
+}
+
+sub ConvertOptoken
+{
+    my $optokenname = shift @_;
+    if (defined $optokenmap{ $optokenname } )
+    {
+	printf STDOUT "                    <optoken>%s</optoken>\n", $optokenmap{$optokenname};
+    }
+}
+
+sub WriteFileHead
+{
+    print STDOUT "<?xml version=\"1.0\" ?>\n<resource>\n";
+}
+
+sub WriteFileTail
+{
+    print STDOUT "</resource>\n";
+}
+
+sub WriteBarHead
+{
+    my $name = shift @_;
+    my $title = MakeName($name);
+    print STDOUT $ddindent. "    <object class=\"wxPanel\" name=\"$name\">\n";
+    print STDOUT $ddindent. "        <label>$title</label>\n";
+    print STDOUT $ddindent. "        <title>$title</title>\n";
+    print STDOUT $ddindent. "        <object class=\"wxBoxSizer\">\n";
+    printf STDOUT $ddindent."            <orient>wx%s</orient>\n", !IsVertical()?"HORIZONTAL":"VERTICAL";
+}
+
+sub WriteBarTail
+{
+    print STDOUT $ddindent."        </object>\n";
+    print STDOUT $ddindent."    </object>\n";
+}
+
+sub BubbleHelp
+{
+    printf STDOUT $ddindent."                    <tooltip>%s</tooltip>\n",GetText($bubble) if ($bubble ne "");
+    printf STDOUT $ddindent."                    <help>%s</help>\n",GetText($help) if ($help ne "");
+}
+
+sub WriteBitmapButton
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    print STDOUT $ddindent. "            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    printf STDOUT $ddindent."                <border>%d</border>\n",$dd?0:1;
+    print STDOUT $ddindent. "                <object class=\"wxCamArtControl\" name=\"$name\">\n";
+    printf STDOUT $ddindent."                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER%s%s</camartstyle>\n", IsVertical()?"|wxCACS_TOOLBACKGROUND":"",(IsVertical()||IsToggle($name))?"|wxCACS_TOGGLEBUTTON":"";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent. "                </object>\n";
+    print STDOUT $ddindent. "            </object>\n";
+}
+
+sub WriteStaticBitmap
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    print STDOUT $ddindent. "            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+#    printf STDOUT $ddindent."                <border>%d</border>\n",$dd?0:1;
+    printf STDOUT $ddindent."                <border>%d</border>\n",$dd?0:0;
+    print STDOUT $ddindent. "                <object class=\"wxCamArtControl\" name=\"$name\">\n";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent. "                </object>\n";
+    print STDOUT $ddindent. "            </object>\n";
+}
+
+sub WriteCombo
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>0</border>\n";
+    print STDOUT $ddindent."                <object class=\"wxComboBox\" name=\"$name\">\n";
+    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 80);
+    print STDOUT $ddindent."                    <font>\n";
+    print STDOUT $ddindent."                        <size>8</size>\n";
+    print STDOUT $ddindent."                    </font>\n";
+    print STDOUT $ddindent."                    <style>wxCB_DROPDOWN</style>\n";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent."                </object>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteSlider
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>0</border>\n";
+    print STDOUT $ddindent."                <object class=\"wxSlider\" name=\"$name\">\n";
+    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 60);
+    printf STDOUT $ddindent."                    <style>wxSL_%s|wxSL_AUTOTICKS</style>\n", !IsVertical()?"HORIZONTAL":"VERTICAL";
+    print STDOUT $ddindent."                    <value>0</value>\n";
+    print STDOUT $ddindent."                    <min>0</min>\n";
+    print STDOUT $ddindent."                    <max>100</max>\n";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent."                </object>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteStaticText
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    my $label = GetStaticLabel($name);
+    print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>1</border>\n";
+    print STDOUT $ddindent."                <object class=\"wxStaticText\" name=\"$name\">\n";
+    print STDOUT $ddindent."                    <font>\n";
+    print STDOUT $ddindent."                        <size>8</size>\n";
+    print STDOUT $ddindent."                    </font>\n";
+    printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
+    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",($label eq "")?GetSize($name,80):-1;
+    print STDOUT $ddindent."                    <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>\n";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent."                </object>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteButton
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    my $label = GetStaticLabel($name);
+    print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>0</border>\n";
+    print STDOUT $ddindent."                <object class=\"wxButton\" name=\"$name\">\n";
+    print STDOUT $ddindent."                    <font>\n";
+    print STDOUT $ddindent."                        <size>8</size>\n";
+    print STDOUT $ddindent."                    </font>\n";
+    printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
+    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",($label eq "")?GetSize($name,20):-1;
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent."                </object>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteTextControl
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+    print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>0</border>\n";
+    print STDOUT $ddindent."                <object class=\"wxTextCtrl\" name=\"$name\">\n";
+    print STDOUT $ddindent."                    <font>\n";
+    print STDOUT $ddindent."                        <size>7</size>\n";
+    print STDOUT $ddindent."                    </font>\n";
+    printf STDOUT $ddindent."                    <size>%d,14</size>\n",GetSize($name, 50);
+    print STDOUT $ddindent."                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>\n";
+    ConvertOptoken($optoken) if ($optoken ne "");
+    BubbleHelp();
+    print STDOUT $ddindent."                </object>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteSeparator
+{
+    print STDOUT $ddindent."            <object class=\"spacer\">\n";
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
+    print STDOUT $ddindent."                <border>1</border>\n";
+    print STDOUT $ddindent."                <size>3,28</size>\n";
+    print STDOUT $ddindent."            </object>\n";
+}
+
+sub WriteDDTop
+{
+
+    print STDOUT "            <object class=\"sizeritem\">\n";
+    print STDOUT "                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>\n";
+    print STDOUT "                <border>0</border>\n";
+    print STDOUT "                <object class=\"wxBoxSizer\">\n";
+    print STDOUT "                    <orient>wxVERTICAL</orient>\n";
+    print STDOUT "                    <object class=\"sizeritem\">\n";
+    print STDOUT "                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>\n";
+    print STDOUT "                        <border>0</border>\n";
+    print STDOUT "                        <object class=\"wxBoxSizer\">\n";
+    print STDOUT "                            <orient>wxHORIZONTAL</orient>\n";
+    $ddindent="                ";
+    $dd=1;
+}
+
+sub WriteDDBottom
+{
+    print STDOUT "                        </object>\n";
+    print STDOUT "                    </object>\n";
+    print STDOUT "                    <object class=\"sizeritem\">\n";
+    print STDOUT "                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>\n";
+    print STDOUT "                        <border>0</border>\n";
+    print STDOUT "                        <object class=\"wxBoxSizer\">\n";
+    print STDOUT "                            <orient>wxHORIZONTAL</orient>\n";
+}
+
+sub WriteDDEnd
+{
+    print STDOUT "                        </object>\n";
+    print STDOUT "                    </object>\n";
+    print STDOUT "                </object>\n";
+    print STDOUT "            </object>\n";
+    $ddindent="";
+    $dd=0;
+}
+
+sub WriteSelGrid
+{
+    print STDOUT <<EOF
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxGridSizer">
+                    <cols>3</cols>
+                    <rows>3</rows>
+                    <vgap>0</vgap>
+                    <hgap>0</hgap>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_NW">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around top left</tooltip>
+                            <help>Rotate around top left of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_N">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around top centre</tooltip>
+                            <help>Rotate around top centre of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_NE">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around top right</tooltip>
+                            <help>Rotate around top right of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_W">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around centre left</tooltip>
+                            <help>Rotate around centre left of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_CENTRE">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around centre</tooltip>
+                            <help>Rotate around centre of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_E">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around centre right</tooltip>
+                            <help>Rotate around centre right of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_SW">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around bottom left</tooltip>
+                            <help>Rotate around bottom left of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_S">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around bottom centre</tooltip>
+                            <help>Rotate around bottom centre of selection</help>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxCamArtControl" name="IDC_SEL_GRID_SE">
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
+                            <tooltip>Rotate around bottom right</tooltip>
+                            <help>Rotate around bottom right of selection</help>
+                        </object>
+                    </object>
+                </object>
+            </object>
+EOF
+}
+
+sub WriteControl
+{
+    my $name = shift @_;
+    my $optoken = shift @_;
+#    print ">>> $name $optoken <<<\n";
+    if ($name =~ /^(IDCB_ZOOM_COMBO_BOX|IDCB_LINEWIDTH_COMBO_BOX|IDC_EDIT_REGSHAPETOOL_POS|IDC_EDIT_REGSHAPETOOL_SIDES|IDC_GEOMETRY|IDC_MAPPING|IDC_EFFECT|IDC_BITMAPEFFECT|IDC_TRANSPTYPE|IDC_MAPPING|IDC_BITMAPEFFECT|IDC_BRUSHTYPE|IDC_STROKETYPE|IDC_EFFECT|IDC_BEVEL_TYPE_COMBO|IDC_BEVEL_SLIDER_COMBO)$/)
+    {
+	WriteCombo($name,$optoken);
+    }
+    elsif ($name =~ /^(IDC_QUALITYSLIDER|IDC_TRANSPSLIDE|IDC_SMOOTHSLIDER|IDC_FEATHERSIZE_CUSTOMEDIT|IDC_FREEHANDSLIDER|IDC_BEVELSLIDER|IDC_CONTOURSLIDER)$/)
+    {
+	WriteSlider($name,$optoken);
+    }   
+    elsif ($name =~ /^(IDC_REGSHAPETOOL_ADDCHANGE|IDC_SELPOINT|IDC_SELCOLOUR|IDC_BEZTOOLADDCHANGE|IDC_PATH_STATIC_FIRSTX|IDC_PATH_STATIC_FIRSTY|IDC_PATH_STATIC_MIDX|IDC_PATH_STATIC_MIDY|IDC_PATH_STATIC_SECONDX|IDC_PATH_STATIC_SECONDY|IDC_SMOOTHPERCENT|IDC_FREEHANDPERCENT|IDC_FREEHANDRETRO)$/)
+    {
+	WriteStaticText($name,$optoken);
+    }
+    elsif ($name =~ /^(IDC_EDIT_REGSHAPETOOL_UPPER|IDC_EDIT_REGSHAPETOOL_LOWER|IDC_PATH_EDIT_FIRSTX|IDC_PATH_EDIT_FIRSTY|IDC_PATH_EDIT_ENDPOINTX|IDC_PATH_EDIT_ENDPOINTY|IDC_PATH_EDIT_SECONDX|IDC_PATH_EDIT_SECONDY|IDC_SEL_EDIT_X|IDC_SEL_EDIT_Y|IDC_SEL_EDIT_W|IDC_SEL_EDIT_H|IDC_SEL_EDIT_XSCALE|IDC_SEL_EDIT_YSCALE|IDC_SEL_EDIT_SHEAR|IDC_SEL_EDIT_ANGLE|IDC_BLENDSTEPS|IDC_BEVEL_SLIDER_EDIT|IDC_CONTOURSTEPS|IDC_CONTOURSLIDEREDIT)$/)
+    {
+	WriteTextControl($name,$optoken);
+    }
+    elsif ($name =~ /^IDC_SEL_ROTATE_GRID$/)
+    {
+	WriteSelGrid();
+    }
+    elsif ($name =~ /^(IDC_SEL_STATIC_XY|IDC_SEL_STATIC_WH|IDC_SEL_BRACKETSYMBOL|IDC_SEL_ROTATESYMBOL|IDC_SEL_SHEARSYMBOL)$/)
+    {
+	WriteStaticBitmap($name,$optoken);
+    }
+    elsif ($name =~ /^(IDC_CREATEBRUSH|IDC_EDITBRUSH|IDC_REMOVEBLEND|IDC_REMOVEMOULD|IDC_REMOVECONTOUR)$/)
+    {
+	WriteButton($name,$optoken);
+    }
+    else
+    {
+	WriteBitmapButton($name,$optoken);
+    }
+}
+
+
+my $inbar = 0;
+
+WriteFileHead();
+while (<>)
+{
+    chomp;
+    next if (/^\s*[;\#]/); # skip comments
+   
+    s/,/ /g; # remove bogus commas
+		   
+    if (/^Bar\b/)
+    {
+	my ($dummy, $name, $loc, $posx, $posy, $vis) = split(/\s+/);
+	$dialogname = ConvertQuotedName($name);
+	$dialogname =~ s/^IDS_/IDD_/;
+	WriteBarHead($dialogname);
+	$inbar = 1;
+	
+    }
+    elsif (/^EndBar\b/)
+    {
+	$dialogname="";
+	WriteBarTail();
+	$inbar = 0;
+    }
+    elsif (/^\s*Control\b/ && $inbar)
+    {
+	s/^\s+//g;
+	# If there is an optoken present, it's there instead
+	# of an IDDBBL_ and IDS_ name. We double it up to make the
+	# string split easier
+	s/\b(OPTOKEN_\w+)\s+/\1 \1 /g;
+	s/\b(TOOL(_|\d)\w+)\s+/\1 \1 /g;
+
+	my ($dummy, $vh, $optoken, $spare1, $tool, $resource, $control) = split (/\s+/);
+#	print ">>> dummy=$dummy vh=$vh optoken=$optoken spare1=$spare1 tool=$tool resource=$resource control=$control<<<\n";
+	if ($vh=~/(B|H)/)
+	{
+	    $bubble = "";
+	    $help = "";
+	    if ($optoken =~ /^IDBBL_/)
+	    {
+		$bubble = $optoken;
+		$help = $spare1 if $spare1 =~ /^ID/;
+	    }
+	    WriteControl($control, ($optoken=~/^(OPTOKEN_|TOOL)/)?$optoken:"");
+	}
+    }
+    elsif (/^\s*Separator\b/ && $inbar)
+    {
+	WriteSeparator();
+    }
+    elsif (/^\s*DDeckerTop\b/ && $inbar)
+    {
+	WriteDDTop();
+    }
+    elsif (/^\s*DDeckerBottom\b/ && $inbar)
+    {
+	WriteDDBottom();
+    }
+    elsif (/^\s*DDeckerEnd\b/ &&$inbar)
+    {
+	WriteDDEnd();
+    }
+}
+WriteFileTail();
+
+
+
+sub BuildOptokenMap
+{
+    %optokenmap = (
+		      "OPTOKEN_ABOUTDLG" => "AboutDlg",
+		      "OPTOKEN_ADDBLENDPATH" => "AddBlendPath",
+		      "OPTOKEN_ADDENDPOINT" => "AddEndpoint",
+		      "OPTOKEN_ADDNEWPATH" => "AddNewPath",
+		      "OPTOKEN_ADDPATH" => "AddPath",
+		      "OPTOKEN_ADDPATHTOPATH" => "AddPathToPath",
+		      "OPTOKEN_ADDSHAPES" => "AddShapes",
+		      "OPTOKEN_AFFECTFONTCHANGE" => "AffectFontChange",
+		      "OPTOKEN_ALIGNDLG" => "ArrangeAlignment",
+		      "OPTOKEN_ANIMATION_SUBMENU" => "Animation",
+		      "OPTOKEN_APPLYATTRIB" => "ApplyAttribute",
+		      "OPTOKEN_APPLYATTRIBS" => "ApplyAttributes",
+		      "OPTOKEN_APPLYATTRINTERACTIVE" => "ApplyAttributeInteractive",
+		      "OPTOKEN_APPLYCENTREJUSTIFY" => "ApplyCentreJustify",
+		      "OPTOKEN_APPLY_CLIPVIEW" => "ApplyClipView",
+		      "OPTOKEN_APPLY_FEATHEREFFECT" => "ApplyFeatherEffect",
+		      "OPTOKEN_APPLYFULLJUSTIFY" => "ApplyFullJustify",
+		      "OPTOKEN_APPLYLEFTJUSTIFY" => "ApplyLeftJustify",
+		      "OPTOKEN_APPLY_LIVEEFFECT" => "ApplyLiveEffect",
+		      "OPTOKEN_APPLY_NAMES_TO_ONE" => "ApplyNamesToOneObject",
+		      "OPTOKEN_APPLY_NAMES_TO_SEL" => "ApplyNamesToSelectedObjects",
+		      "OPTOKEN_APPLY_NAME_TO_NONE" => "ApplyNameToNoObjects",
+		      "OPTOKEN_APPLY_NAME_TO_SEL" => "ApplyNameToSelectedObjects",
+		      "OPTOKEN_APPLYRIGHTJUSTIFY" => "ApplyRightJustify",
+		      "OPTOKEN_APPLYSHADOW" => "ApplyShadow",
+		      "OPTOKEN_APPLYTONODE" => "ApplyAttributeToNode",
+		      "OPTOKEN_ARRANGEALIGNMENT" => "ArrangeAlignment",
+		      "OPTOKEN_ARRANGEBREAKSHAPES" => "ArrangeBreakShapes",
+		      "OPTOKEN_ARRANGEDOWNLAYER" => "ArrangeDownLayer",
+		      "OPTOKEN_ARRANGEJOINSHAPES" => "ArrangeJoinShapes",
+		      "OPTOKEN_ARRANGE_MENU" => "ArrangeMenu",
+		      "OPTOKEN_ARRANGEUPLAYER" => "ArrangeUpLayer",
+		      "OPTOKEN_ASYNCHBITMAPIMPORT" => "AsynchBitmapImport" ,
+		      "OPTOKEN_ATTRFILL" => "AttrFill",
+		      "OPTOKEN_ATTRFONT" => "AttrFont",
+		      "OPTOKEN_ATTRIBUTE_MENU" => "AttributeMenu",
+		      "OPTOKEN_ATTRLINE" => "AttrLine",
+		      "OPTOKEN_ATTRSTYLE" => "AttrStyle",
+		      "OPTOKEN_AUTOCLOSEPATHS" => "AutoClosePaths",
+		      "OPTOKEN_AUTOKERNTEXT" => "AutoKerning",
+		      "OPTOKEN_BACKGROUND" => "Background",
+		      "OPTOKEN_BARCREATIONDLG" => "BarCreationDlg",
+		      "OPTOKEN_BARCREATIONOP" => "BarCreationOp",
+		      "OPTOKEN_BARDUPLICATIONOP" => "BarDuplicationOp",
+		      "OPTOKEN_BARREDEFINESTATEDLG" => "BarRedefineStateDlg",
+		      "OPTOKEN_BARS_MENU" => "BarsMenu",
+		      "OPTOKEN_BARSTATESDLG" => "BarStatesDlg",
+		      "OPTOKEN_BEVEL" => "DavesBevelling",
+		      "OPTOKEN_BEZTOOL" => "BezierTool",
+		      "OPTOKEN_BFXDLG" => "BfxDlg",
+		      "OPTOKEN_BFXDLG_BRIGHTNESSCONTRAST" => "BfxDlgBrightnessContrast",
+		      "OPTOKEN_BFXDLG_COLOURDEPTH" => "BfxDlgColourDepth",
+		      "OPTOKEN_BFXDLG_FLIPROTATE" => "BfxDlgFlipRotate",
+		      "OPTOKEN_BFXDLG_RESIZE" => "BfxDlgResize",
+		      "OPTOKEN_BFXDLG_SPECIALEFFECTS" => "BfxDlgSpecialEffects",
+		      "OPTOKEN_BFXOP" => "BfxOp",
+		      "OPTOKEN_BFXPLUGINDLG" => "BfxPlugInDlg",
+		      "OPTOKEN_BFX_SPECIALEFFECTS" => "BfxSpecialEffects",
+		      "OPTOKEN_BIASGAIN_DLG" => "CBiasGainDlg",
+		      "OPTOKEN_BITMAPPREVIEWDIALOG" => "BitmapExportPreviewDialog",
+		      "OPTOKEN_BLENDANTIALIAS" => "BlendAntialias",
+		      "OPTOKEN_BLENDNODES" => "BlendNodes",
+		      "OPTOKEN_BLENDONETOONE" => "BlendOneToOne",
+		      "OPTOKEN_BLENDTANGENTIAL" => "BlendTangential",
+		      "OPTOKEN_BLOBBYBAR" => "BlobbyBar",
+		      "OPTOKEN_BLOBBY" => "Blobby",
+		      "OPTOKEN_BLOBBY" => "Blobby",
+		      "OPTOKEN_BLOBBYDLG" => "BlobbyDlg",
+		      "OPTOKEN_BLOBBYTABDLG" => "BlobbyTabDlg",
+		      "OPTOKEN_BMP_DLG" => "BmpDlg",
+		      "OPTOKEN_BMPPREFSDLG" => "BmpPrefsDlg",
+		      "OPTOKEN_BREAKATPOINTS" => "BreakAtPoints",
+		      "OPTOKEN_BREAKSHAPEOP" => "BreakShapes",
+		      "OPTOKEN_BRINGTOFRONT" => "BringToFront",
+		      "OPTOKEN_BRUSHEDIT_DLG" => "CBrushEditDlg",
+		      "OPTOKEN_CANCELPREVIEW" => "CancelPreview",
+		      "OPTOKEN_CHANGEATTRIBUTE" => "ChangeAttribute",
+		      "OPTOKEN_CHANGE_BAR_EXTENDS" => "ChangeBarExtends",
+		      "OPTOKEN_CHANGE_BAR_PROPERTY" => "ChangeBarProperty",
+		      "OPTOKEN_CHANGEBEVEL" => "ChangeBevel",
+		      "OPTOKEN_CHANGEBLEND" => "ChangeBlendFlag",
+		      "OPTOKEN_CHANGEBLENDDISTANCE" => "EditDistanceBetweenSteps",
+		      "OPTOKEN_CHANGEBLENDPROFILE" => "ChangeBlendProfile",
+		      "OPTOKEN_CHANGEBLENDSTEPS" => "ChangeBlendSteps",
+		      "OPTOKEN_CHANGEBRUSH" => "ChangeBrush",
+		      "OPTOKEN_CHANGEBRUSHDEF" => "ChangeBrushDefinition",
+		      "OPTOKEN_CHANGECONTOURATTRPROFILE" => "ChangeContourAttributeProfile",
+		      "OPTOKEN_CHANGECONTOURCOLOURTYPE" => "ChangeContourColourType",
+		      "OPTOKEN_CHANGECONTOUR_INNER" => "ChangeContourToInner",
+		      "OPTOKEN_CHANGECONTOUROBJPROFILE" => "ChangeContourObjectProfile",
+		      "OPTOKEN_CHANGECONTOUR_OUTER" => "ChangeContourToOuter",
+		      "OPTOKEN_CHANGECONTOURSTEPDISTANCE" => "ChangeContourStepDistance",
+		      "OPTOKEN_CHANGECONTOURSTEPS" => "ChangeContourSteps",
+		      "OPTOKEN_CHANGECONTOURWIDTH" => "ChangeContourWidth",
+		      "OPTOKEN_CHANGE_EFFECT_LOCKALL" => "ChangeEffectLockAll",
+		      "OPTOKEN_CHANGE_EFFECT_LOCK" => "ChangeEffectLock",
+		      "OPTOKEN_CHANGE_EFFECT_RES" => "ChangeEffectRes",
+		      "OPTOKEN_CHANGE_END_ARROW_EXTENDS" => "ChangeEndArrowExtends",
+		      "OPTOKEN_CHANGEFILL" => "ChangeFillColour",
+		      "OPTOKEN_CHANGELAYERCOLOUR" => "ChangeLayerColour",
+		      "OPTOKEN_CHANGE_LINE_CAP" => "ChangeLineCap",
+		      "OPTOKEN_CHANGE_LINE_JOIN" => "ChangeLineJoin",
+		      "OPTOKEN_CHANGELINEWIDTH" => "ChangeLineWidth",
+		      "OPTOKEN_CHANGE_SET_PROPERTY" => "ChangeSetProperty",
+		      "OPTOKEN_CHANGESHADOWTYPE" => "ChangeShadowType",
+		      "OPTOKEN_CHANGE_START_ARROW_EXTENDS" => "ChangeStartArrowExtends",
+		      "OPTOKEN_CLEARCACHE" => "ClearCache",
+		      "OPTOKEN_CLIPBOARDEXPORT" => "ExportClipboard",
+		      "OPTOKEN_CLIPBOARDIMPORT" => "ImportClipboard",
+		      "OPTOKEN_CLONE" => "EditClone",
+		      "OPTOKEN_CLOSEPATHWITHPATH" => "ClosePathWithPath",
+		      "OPTOKEN_CMXTREEDLG" => "CMXTreeDlg",
+		      "OPTOKEN_COLOURCHANGE" => "ColourChange" ,
+		      "OPTOKEN_COLOUREDITDLG" => "ColourPicker",
+		      "OPTOKEN_COLOURNAMEDLG" => "ColourNameDlg",
+		      "OPTOKEN_COMBINELAYERSTOFRAMELAYER" => "CombineLayersToFrameLayer",
+		      "OPTOKEN_COMBINESHAPES" => "CombineShapes",
+		      "OPTOKEN_COMPOSITEPREVIEW" => "CompositePreview",
+		      "OPTOKEN_CONTOURNODES" => "ContourNode",
+		      "OPTOKEN_CONVERTFILEFORMATS" => "ConvertFileFormats",
+		      "OPTOKEN_CONVERTPATHTOSHAPES" => "ConvertPathToShapes",
+		      "OPTOKEN_CONVERTTOBITMAP" => "ConvertToBitmap",
+		      "OPTOKEN_COPYANDTRANSFORM" => "CopyAndTransform",
+		      "OPTOKEN_COPY" => "Copy",
+		      "OPTOKEN_COPYMOULD" => "CopyMould",
+		      "OPTOKEN_CREATEBEVEL" => "CreateBevel",
+		      "OPTOKEN_CREATECONTOUR" => "CreateContour",
+		      "OPTOKEN_CREATEFONTTHUMBNAILS" => "CreateFontThumbnails",
+		      "OPTOKEN_CREATENEWMOULD" => "CreateMould",
+		      "OPTOKEN_CREATENODEBITMAP" => "CreateNodeBitmap",
+		      "OPTOKEN_CUSTOMIZEBARDLG" => "ToolbarNameDlg",
+		      "OPTOKEN_CUT" => "Cut",
+		      "OPTOKEN_CXFTREEDLG" => "CXFTreeDlg",
+		      "OPTOKEN_CYANPREVIEW" => "CyanPreview",
+		      "OPTOKEN_DAVEDLG" => "DaveDlg",
+		      "OPTOKEN_DEBUGDLG" => "DebugDlg",
+		      "OPTOKEN_DEBUG_MENU" => "DebugMenu",
+		      "OPTOKEN_DEBUGTREEDLG" => "DebugTreeDlg",
+		      "OPTOKEN_DELBAROP" => "DeleteBarOp",
+		      "OPTOKEN_DELETEALLGUIDELINES" => "DeleteAllGuidelines",
+		      "OPTOKEN_DELETEALL_LIVEEFFECT" => "DeleteAllLiveEffect",
+		      "OPTOKEN_DELETEATTR" => "RemoveAttrFromSel",
+		      "OPTOKEN_DELETEBITMAP" => "DeleteBitmap",
+		      "OPTOKEN_DELETEBRUSH" => "DeactivateBrush",
+		      "OPTOKEN_DELETE" => "Delete",
+		      "OPTOKEN_DELETEGUIDELINE" => "DeleteGuideline",
+		      "OPTOKEN_DELETE_LIVEEFFECT" => "DeleteLiveEffect",
+		      "OPTOKEN_DELETE_NAMES_FROM_ALL" => "DeleteNamesFromAllObjects",
+		      "OPTOKEN_DELETEPAGEBACKGROUND" => "DeletePageBackground",
+		      "OPTOKEN_DELETEPOINTSOP" => "DeletePoints",
+		      "OPTOKEN_DELETESTORY" => "TextStoryDeletion",
+		      "OPTOKEN_DESELECTALLPATHPOINTS" => "DeSelectAllPathPoints",
+		      "OPTOKEN_DETACHBLENDPATH" => "DetachBlendPath",
+		      "OPTOKEN_DETACHMOULD" => "DetachMould",
+		      "OPTOKEN_DISPLAYBITMAPGALLERY" => "DisplayBitmapGallery",
+		      "OPTOKEN_DISPLAYCLIPARTGALLERY" => "DisplayClipartGallery",
+		      "OPTOKEN_DISPLAYCOLOURGALLERY" => "DisplayColourGallery" ,
+		      "OPTOKEN_DISPLAYCOLOURGALLERY" => "DisplayColourGallery",
+		      "OPTOKEN_DISPLAYFILLSGALLERY" => "DisplayFillsGallery",
+		      "OPTOKEN_DISPLAYFONTSGALLERY" => "DisplayFontsGallery",
+		      "OPTOKEN_DISPLAYFRAMEGALLERY" => "DisplayFrameGallery" ,
+		      "OPTOKEN_DISPLAYLAYERGALLERY" => "DisplayLayerGallery" ,
+		      "OPTOKEN_DISPLAY_LINE_GALLERY" => "DisplayLineGallery",
+		      "OPTOKEN_DISPLAY_NAME_GALLERY" => "DisplayNameGallery",
+		      "OPTOKEN_DISPLAY_NAME_GALLERY" => "DisplayNameGallery",
+		      "OPTOKEN_DISPLAYTEMPLATEGALLERY" => "DisplayTEMPLATEGallery",
+		      "OPTOKEN_DLGBAROP" => "DialogBarOp",
+		      "OPTOKEN_DRAGBEVEL" => "DragBevel",
+		      "OPTOKEN_DRAGCREATESHADOW" => "DragCreateShadow",
+		      "OPTOKEN_DRAGREGULARSHAPE" => "DragRegularShape",
+		      "OPTOKEN_DRAGVANISHPOINT" => "DragVanishPoint",
+		      "OPTOKEN_DRAWBRUSH" => "DrawBrush",
+		      "OPTOKEN_DROPPEDFILE" => "DroppedFile",
+		      "OPTOKEN_DUPLICATE" => "Duplicate",
+		      "OPTOKEN_EDITBLENDENDOBJECT" => "EditBlendEndobject",
+		      "OPTOKEN_EDITCLONE" => "EditClone",
+		      "OPTOKEN_EDITCOPY" => "EditCopy",
+		      "OPTOKEN_EDITCUT" => "EditCut",
+		      "OPTOKEN_EDITDELETE" => "EditDelete",
+		      "OPTOKEN_EDITDELETE" => "EditDelete",
+		      "OPTOKEN_EDITDUPLICATE" => "EditDuplicate",
+		      "OPTOKEN_EDIT_EDITSELECTION" => "EditSelection",
+		      "OPTOKEN_EDITEFFECTS" => "EditEffectsRootMenuItem",
+		      "OPTOKEN_EDITFILL" => "EditGraduatedFill",
+		      "OPTOKEN_EDITGUIDELINEPROPDLG" => "EditGuidelinePropDlg",
+		      "OPTOKEN_EDIT_LEGACYEFFECT" => "EditLegacyEffect",
+		      "OPTOKEN_EDIT_LIVEEFFECT" => "EditLiveEffect",
+		      "OPTOKEN_EDIT_MENU" => "EditMenu",
+		      "OPTOKEN_EDITOBJECTINFO" => "EditObjectInfo",
+		      "OPTOKEN_EDITOLEINSERT" => "EditOLEInsert",
+		      "OPTOKEN_EDITOLELINKS" => "EditOLELinks",
+		      "OPTOKEN_EDITOLEOBJECT" => "EditOLEObject",
+		      "OPTOKEN_EDITPASTE" => "EditPaste",
+		      "OPTOKEN_EDITPASTESPECIAL" => "EditPasteSpecial",
+		      "OPTOKEN_EDITRECT" => "EditRectangle",
+		      "OPTOKEN_EDITREGULARSHAPE" => "EditRegularShape",
+		      "OPTOKEN_EDITSELECTALL" => "SelectAll",
+		      "OPTOKEN_EDITSELECTNONE" => "SelectNone",
+		      "OPTOKEN_EXCEPTION_DBL" => "CrashDbl",
+		      "OPTOKEN_EXCEPTION_INT" => "CrashInt",
+		      "OPTOKEN_EXCEPTION_PTR" => "CrashPtr",
+		      "OPTOKEN_EXCEPTION_REN" => "CrashRen",
+		      "OPTOKEN_EXIT" => "Exit",
+		      "OPTOKEN_EXPORTGIFANIMTABSDLG" => "OpenGifAnimTabsDlg",
+		      "OPTOKEN_EXPORT_SETS" => "ExportSets",
+		      "OPTOKEN_EXTENDSETSDLG" => "ExtendSetsDlg",
+		      "OPTOKEN_FEATHERPROFILE" => "FeatherProfile",
+		      "OPTOKEN_FEATHERSIZE" => "FeatherSize",
+		      "OPTOKEN_FILECLOSE" => "FileClose",
+		      "OPTOKEN_FILEINFO" => "FileInfo",
+		      "OPTOKEN_FILE_MENU" => "FileMenu",
+		      "OPTOKEN_FILEMERGE" => "FileMerge",
+		      "OPTOKEN_FILENEW_ANIMATION" => "FileNewAnimation",
+		      "OPTOKEN_FILENEW_DRAWING" => "FileNewDrawing",
+		      "OPTOKEN_FILENEW" => "FileNew",
+		      "OPTOKEN_FILENEW_TEMPLATE10" => "10FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE1" => "1FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE2" => "2FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE3" => "3FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE4" => "4FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE5" => "5FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE6" => "6FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE7" => "7FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE8" => "8FileNewTemplate",
+		      "OPTOKEN_FILENEW_TEMPLATE9" => "9FileNewTemplate",
+		      "OPTOKEN_FILEOPEN" => "FileOpen",
+		      "OPTOKEN_FILEOPTIONS" => "FileOptions",
+		      "OPTOKEN_FILESAVEALL" => "FileSaveAll",
+		      "OPTOKEN_FILESAVEAS" => "FileSaveAs",
+		      "OPTOKEN_FILESAVE" => "FileSave",
+		      "OPTOKEN_FILLNUDGEDOWN10" => "FillNudgeDown10",
+		      "OPTOKEN_FILLNUDGEDOWN1" => "FillNudgeDown1",
+		      "OPTOKEN_FILLNUDGEDOWN5" => "FillNudgeDown5",
+		      "OPTOKEN_FILLNUDGEDOWNFIFTH" => "FillNudgeDownFifth",
+		      "OPTOKEN_FILLNUDGEDOWNPIXEL10" => "FillNudgeDownPixel10",
+		      "OPTOKEN_FILLNUDGEDOWNPIXEL1" => "FillNudgeDownPixel1",
+		      "OPTOKEN_FILLNUDGE" => "FillNudge",
+		      "OPTOKEN_FILLNUDGELEFT10" => "FillNudgeLeft10",
+		      "OPTOKEN_FILLNUDGELEFT1" => "FillNudgeLeft1",
+		      "OPTOKEN_FILLNUDGELEFT5" => "FillNudgeLeft5",
+		      "OPTOKEN_FILLNUDGELEFTFIFTH" => "FillNudgeLeftFifth",
+		      "OPTOKEN_FILLNUDGELEFTPIXEL10" => "FillNudgeLeftPixel10",
+		      "OPTOKEN_FILLNUDGELEFTPIXEL1" => "FillNudgeLeftPixel1",
+		      "OPTOKEN_FILLNUDGERIGHT10" => "FillNudgeRight10",
+		      "OPTOKEN_FILLNUDGERIGHT1" => "FillNudgeRight1",
+		      "OPTOKEN_FILLNUDGERIGHT5" => "FillNudgeRight5",
+		      "OPTOKEN_FILLNUDGERIGHTFIFTH" => "FillNudgeRightFifth",
+		      "OPTOKEN_FILLNUDGERIGHTPIXEL10" => "FillNudgeRightPixel10",
+		      "OPTOKEN_FILLNUDGERIGHTPIXEL1" => "FillNudgeRightPixel1",
+		      "OPTOKEN_FILLNUDGEUP10" => "FillNudgeUp10",
+		      "OPTOKEN_FILLNUDGEUP1" => "FillNudgeUp1",
+		      "OPTOKEN_FILLNUDGEUP5" => "FillNudgeUp5",
+		      "OPTOKEN_FILLNUDGEUPFIFTH" => "FillNudgeUpFifth",
+		      "OPTOKEN_FILLNUDGEUPPIXEL10" => "FillNudgeUpPixel10",
+		      "OPTOKEN_FILLNUDGEUPPIXEL1" => "FillNudgeUpPixel1",
+		      "OPTOKEN_FILLPROFILE" => "FillProfile" ,
+		      "OPTOKEN_FINFODLG" => "FileInfo",
+		      "OPTOKEN_FITTEXTTOPATH" => "FitTextToPath",
+		      "OPTOKEN_FLIP" => "Flip Transform",
+		      "OPTOKEN_FRAME_ANIPROPERTIES" => "AnimationProperties",
+		      "OPTOKEN_FRAME_BROWSERPREVIEW" => "BrowserPreview",
+		      "OPTOKEN_FRAME_COPYFRAME" => "CopyFrame",
+		      "OPTOKEN_FRAME_DELETEFRAME" => "DeleteFrame",
+		      "OPTOKEN_FRAME_ENDFRAME" => "GotoEndFrame",
+		      "OPTOKEN_FRAME_GRABALLFRAMES" => "GrabAllFrames",
+		      "OPTOKEN_FRAME_GRABFRAME" => "GrabFrame",
+		      "OPTOKEN_FRAME_NEWFRAME" => "NewFrame",
+		      "OPTOKEN_FRAME_NEXTFRAME" => "GotoNextFrame",
+		      "OPTOKEN_FRAME_PREVFRAME" => "GotoPrevFrame",
+		      "OPTOKEN_FRAME_PROPERTIES" => "FrameProperties",
+		      "OPTOKEN_FRAME_STARTFRAME" => "GotoStartFrame",
+		      "OPTOKEN_FREEHAND" => "FreeHandTool",
+		      "OPTOKEN_GALDISPLAYDLG" => "GalDisplayDialog",
+		      "OPTOKEN_GALLERIES_SUBMENU" => "Galleries",
+		      "OPTOKEN_GBRUSH" => "GBrushToggle",
+		      "OPTOKEN_GDRAW" => "GDrawToggle",
+		      "OPTOKEN_GIFANIMPROPERTYTABS" => "GifAnimationPropertyTabs",
+		      "OPTOKEN_GIFTABDLG" => "BmapPrevDlg",
+		      "OPTOKEN_GLOWWIDTH" => "GlowWidth",
+		      "OPTOKEN_GRADFILL" => "GraduatedFill",
+		      "OPTOKEN_GRIDANDRULERSDLG" => "GridRulersDlg",
+		      "OPTOKEN_GRIDCHANGE" => "GridChange",
+		      "OPTOKEN_GRIDNEWRESIZE" => "GridNewResize",
+		      "OPTOKEN_GRIDRESIZE" => "GridResize" ,
+		      "OPTOKEN_GRIDSELECTION" => "GridSelection",
+		      "OPTOKEN_GROUP" => "Group",
+		      "OPTOKEN_GROUPTRANSP" => "GroupTransparency",
+		      "OPTOKEN_GUIDELINE" => "Guideline",
+		      "OPTOKEN_GUIDEPROPERTIESDLG" => "GuidePropertiesDlg",
+		      "OPTOKEN_HELPDEMOS" => "HelpDemos",
+		      "OPTOKEN_HELPDOWNLOADDLG" => "HelpDownloadDlg",
+		      "OPTOKEN_HELPDOWNLOADOP" => "HelpDownloadOp" ,
+		      "OPTOKEN_HELPGALLERIES" => "HelpGalleries",
+		      "OPTOKEN_HELPINDEX" => "HelpIndex",
+		      "OPTOKEN_HELP_MENU" => "HelpMenu",
+		      "OPTOKEN_HELPSPEC" => "HelpSpec",
+		      "OPTOKEN_HELPTECHSUPPORT" => "HelpTechSupport",
+		      "OPTOKEN_HELPTOOLS" => "HelpTools",
+		      "OPTOKEN_HELPUSING" => "HelpUsing",
+		      "OPTOKEN_HIDECOLOURS" => "DeleteColours" ,
+		      "OPTOKEN_HINTS_AND_TIPS_PAGES" => "HintsAndTipsPages",
+		      "OPTOKEN_HOTLINKOP" => "HotLinkOp",
+		      "OPTOKEN_IMAGEMAPDLG" => "ImagemapDlg",
+		      "OPTOKEN_IMAGESETTING" => "ImagesettingSubmenu",
+		      "OPTOKEN_IMAGESLICE" => "ImageSlice",
+		      "OPTOKEN_INFOBAR" => "InfoBar",
+		      "OPTOKEN_INITNAME_BRUSH_DLG" => "InitNameBrushDlg",
+		      "OPTOKEN_INSERTFLOATER" => "OpInsertFloater",
+		      "OPTOKEN_INTERSECTSHAPES" => "IntersectShapes",
+		      "OPTOKEN_JOINSHAPEOP" => "JoinShapes",
+		      "OPTOKEN_KERNTEXT" => "Kern",
+		      "OPTOKEN_KEYPREVIEW" => "KeyPreview",
+		      "OPTOKEN_LAYERDLG" => "LayerDlg",
+		      "OPTOKEN_LAYERGALCHANGE" => "LayerGalChange" ,
+		      "OPTOKEN_LAYERNAMEDLG" => "LayerNameDlg",
+		      "OPTOKEN_LAYERPROPERTIESDLG" => "LayerPropertiesDlg",
+		      "OPTOKEN_LAYERPROPERTYTABS" => "LayerPropertyTabs",
+		      "OPTOKEN_LIBGAL_CLIPTHEME" => "LibGalClipTheme",
+		      "OPTOKEN_LYRCHNG" => "LayerChange" ,
+		      "OPTOKEN_MAGENTAPREVIEW" => "MagentaPreview",
+		      "OPTOKEN_MAKECOLOURLOCALTOFRAME" => "MakeColourLocalToFrame" ,
+		      "OPTOKEN_MAKECURVESOP" => "MakeCurves",
+		      "OPTOKEN_MAKELINESOP" => "MakeLines",
+		      "OPTOKEN_MAKEMASK" => "MakeMask",
+		      "OPTOKEN_MAKE_NODES_SHAPES" => "MakeNodesShapes",
+		      "OPTOKEN_MAKE_SHAPES" => "ConvertToShapes",
+		      "OPTOKEN_MAKE_STROKE" => "ConvertToStroke",
+		      "OPTOKEN_MASKINSIDE" => "MaskInside",
+		      "OPTOKEN_MENUEXPORT" => "Export",
+		      "OPTOKEN_MENUIMPORT" => "Import",
+		      "OPTOKEN_MONOPLATEPREVIEW" => "MonoPlatePreview",
+		      "OPTOKEN_MOVEBACKWARDS" => "MoveBackwards",
+		      "OPTOKEN_MOVEFORWARDS" => "MoveForwards",
+		      "OPTOKEN_MOVELAYERBEHIND" => "MoveBackwardsALayer",
+		      "OPTOKEN_MOVELAYERINFRONT" => "MoveForwardsALayer",
+		      "OPTOKEN_MOVEPATHPOINT" => "MovePathPoint",
+		      "OPTOKEN_MOVE_SEL_TO_ACTIVE_LAYER" => "MoveSelToActiveLayer",
+		      "OPTOKEN_MRU_FILE1" => "01MRUFile",
+		      "OPTOKEN_MRU_FILE2" => "02MRUFile",
+		      "OPTOKEN_MRU_FILE3" => "03MRUFile",
+		      "OPTOKEN_MRU_FILE4" => "04MRUFile",
+		      "OPTOKEN_MRU_FILE5" => "05MRUFile",
+		      "OPTOKEN_MRU_FILE6" => "06MRUFile",
+		      "OPTOKEN_MRU_FILE7" => "07MRUFile",
+		      "OPTOKEN_MRU_FILE8" => "08MRUFile",
+		      "OPTOKEN_MRU_FILE9" => "09MRUFile",
+		      "OPTOKEN_MUTATEFILL" => "MutateGraduatedFill",
+		      "OPTOKEN_NAME_BRUSH_DLG" => "NameBrushDlg",
+		      "OPTOKEN_NAMEDLG" => "NameDlg",
+		      "OPTOKEN_NAME_GALLERY_PROP_INDEX" => "NameGalleryPropertyIndex",
+		      "OPTOKEN_NAME_OBJECTS_DLG" => "NameObjectsDlg",
+		      "OPTOKEN_NAME_OBJECTS_DLG" => "NameObjectsDlg",
+		      "OPTOKEN_NATIVELOAD" => "NativeLoad",
+		      "OPTOKEN_NATIVEPREFSDLG" => "NativePrefsDlg",
+		      "OPTOKEN_NATIVESAVE" => "NativeSave",
+		      "OPTOKEN_NEWCOLOURDLG" => "NewColourDlg",
+		      "OPTOKEN_NEWGUIDELINE2" => "NewGuideline",
+		      "OPTOKEN_NEWGUIDELINEPROPDLG" => "NewGuidelinePropDlg",
+		      "OPTOKEN_NEWREGSHAPE" => "NewRegShape",
+		      "OPTOKEN_NODEMOULDER" => "MoulderObject",
+		      "OPTOKEN_NODEMOULDGROUP" => "MouldGroupObject",
+		      "OPTOKEN_NODEMOULD" => "MouldObject",
+		      "OPTOKEN_NODEPATH" => "PathObject",
+		      "OPTOKEN_NUDGEDOWN10" => "NudgeDown10",
+		      "OPTOKEN_NUDGEDOWN1" => "NudgeDown1",
+		      "OPTOKEN_NUDGEDOWN5" => "NudgeDown5",
+		      "OPTOKEN_NUDGEDOWNFIFTH" => "NudgeDownFifth",
+		      "OPTOKEN_NUDGEDOWNPIXEL10" => "NudgeDownPixel10",
+		      "OPTOKEN_NUDGEDOWNPIXEL1" => "NudgeDownPixel1",
+		      "OPTOKEN_NUDGELEFT10" => "NudgeLeft10",
+		      "OPTOKEN_NUDGELEFT1" => "NudgeLeft1",
+		      "OPTOKEN_NUDGELEFT5" => "NudgeLeft5",
+		      "OPTOKEN_NUDGELEFTFIFTH" => "NudgeLeftFifth",
+		      "OPTOKEN_NUDGELEFTPIXEL10" => "NudgeLeftPixel10",
+		      "OPTOKEN_NUDGELEFTPIXEL1" => "NudgeLeftPixel1",
+		      "OPTOKEN_NUDGE" => "Nudge",
+		      "OPTOKEN_NUDGERIGHT10" => "NudgeRight10",
+		      "OPTOKEN_NUDGERIGHT1" => "NudgeRight1",
+		      "OPTOKEN_NUDGERIGHT5" => "NudgeRight5",
+		      "OPTOKEN_NUDGERIGHTFIFTH" => "NudgeRightFifth",
+		      "OPTOKEN_NUDGERIGHTPIXEL10" => "NudgeRightPixel10",
+		      "OPTOKEN_NUDGERIGHTPIXEL1" => "NudgeRightPixel1",
+		      "OPTOKEN_NUDGEUP10" => "NudgeUp10",
+		      "OPTOKEN_NUDGEUP1" => "NudgeUp1",
+		      "OPTOKEN_NUDGEUP5" => "NudgeUp5",
+		      "OPTOKEN_NUDGEUPFIFTH" => "NudgeUpFifth",
+		      "OPTOKEN_NUDGEUPPIXEL10" => "NudgeUpPixel10",
+		      "OPTOKEN_NUDGEUPPIXEL1" => "NudgeUpPixel1",
+		      "OPTOKEN_OPADDWEBFOLDERS" => "AddWebFolders" ,
+		      "OPTOKEN_OPADDWEBLIBRARY" => "AddWebLibrary" ,
+		      "OPTOKEN_OPALIGN" => "OpAlign",
+		      "OPTOKEN_OPASYNCHCLIPARTIMPORT" => "AsynchClipartImport" ,
+		      "OPTOKEN_OPASYNCHFONTINSTALL" => "AsynchFontInstall" ,
+		      "OPTOKEN_OPBIASGAIN" => "OpBiasGain",
+		      "OPTOKEN_OPBITMAPDOWNLOAD" => "BitmapDownloadOp" ,
+		      "OPTOKEN_OPBITMAPIMPORT" => "BitmapImport" ,
+		      "OPTOKEN_OPBRUSHEDIT" => "OpBrushEdit",
+		      "OPTOKEN_OPCLIPARTIMPORT" => "ClipartImport" ,
+		      "OPTOKEN_OPDOWNLOAD" => "DownloadOp" ,
+		      "OPTOKEN_OPGENERICDOWNLOAD" => "GenericDownloadOp" ,
+		      "OPTOKEN_OPGRIDRESIZE" => "OpGridResize",
+		      "OPTOKEN_OPPAGERESIZE" => "OpPageResize",
+		      "OPTOKEN_OPTHUMBDOWNLOAD" => "ThumbnailDownload" ,
+		      "OPTOKEN_OVERPRINTFILL" => "OverprintFill",
+		      "OPTOKEN_OVERPRINTLINE" => "OverprintLine",
+		      "OPTOKEN_PAGERESIZE" => "PageResize" ,
+		      "OPTOKEN_PAGESIZEDLG" => "PageSetupDlg",
+		      "OPTOKEN_PALETTE_DELETE" => "Palette:Delete",
+		      "OPTOKEN_PALETTE_LOCKED" => "Palette:Locked",
+		      "OPTOKEN_PALETTE_RESTORE" => "Palette:Restore",
+		      "OPTOKEN_PALETTE_SORT_BY_HUE" => "Palette:SortByHue",
+		      "OPTOKEN_PALETTE_SORT_BY_LUMINANCE" => "Palette:SortByLuminance",
+		      "OPTOKEN_PALETTE_SORT_BY_USE" => "Palette:SortByUse",
+		      "OPTOKEN_PALETTE_SYSTEM_COLOURS" => "Palette:SystemColours",
+		      "OPTOKEN_PALETTE_TRANSPARENT_BACKGROUND" => "Palette:Transparent Background",
+		      "OPTOKEN_PALETTE_TRANSPARENT" => "Palette:Transparent",
+		      "OPTOKEN_PALETTE_WEB_SAFE" => "Palette:WebSafe",
+		      "OPTOKEN_PASTEATSAMEPOS" => "PasteAtSamePos",
+		      "OPTOKEN_PASTEATTRIBUTES" => "PasteAttributes",
+		      "OPTOKEN_PASTEENVELOPE" => "PasteEnvelope",
+		      "OPTOKEN_PASTE" => "Paste",
+		      "OPTOKEN_PASTEPERSPECTIVE" => "PastePerspective",
+		      "OPTOKEN_PASTESPECIALDLG" => "PasteSpecialDlg",
+		      "OPTOKEN_PATHNUDGEDOWN10" => "PathNudgeDown10",
+		      "OPTOKEN_PATHNUDGEDOWN1" => "PathNudgeDown1",
+		      "OPTOKEN_PATHNUDGEDOWN5" => "PathNudgeDown5",
+		      "OPTOKEN_PATHNUDGEDOWNFIFTH" => "PathNudgeDownFifth",
+		      "OPTOKEN_PATHNUDGEDOWNPIXEL10" => "PathNudgeDownPixel10",
+		      "OPTOKEN_PATHNUDGEDOWNPIXEL1" => "PathNudgeDownPixel1",
+		      "OPTOKEN_PATHNUDGELEFT10" => "PathNudgeLeft10",
+		      "OPTOKEN_PATHNUDGELEFT1" => "PathNudgeLeft1",
+		      "OPTOKEN_PATHNUDGELEFT5" => "PathNudgeLeft5",
+		      "OPTOKEN_PATHNUDGELEFTFIFTH" => "PathNudgeLeftFifth",
+		      "OPTOKEN_PATHNUDGELEFTPIXEL10" => "PathNudgeLeftPixel10",
+		      "OPTOKEN_PATHNUDGELEFTPIXEL1" => "PathNudgeLeftPixel1",
+		      "OPTOKEN_PATHNUDGE" => "PathNudge",
+		      "OPTOKEN_PATHNUDGERIGHT10" => "PathNudgeRight10",
+		      "OPTOKEN_PATHNUDGERIGHT1" => "PathNudgeRight1",
+		      "OPTOKEN_PATHNUDGERIGHT5" => "PathNudgeRight5",
+		      "OPTOKEN_PATHNUDGERIGHTFIFTH" => "PathNudgeRightFifth",
+		      "OPTOKEN_PATHNUDGERIGHTPIXEL10" => "PathNudgeRightPixel10",
+		      "OPTOKEN_PATHNUDGERIGHTPIXEL1" => "PathNudgeRightPixel1",
+		      "OPTOKEN_PATHNUDGEUP10" => "PathNudgeUp10",
+		      "OPTOKEN_PATHNUDGEUP1" => "PathNudgeUp1",
+		      "OPTOKEN_PATHNUDGEUP5" => "PathNudgeUp5",
+		      "OPTOKEN_PATHNUDGEUPFIFTH" => "PathNudgeUpFifth",
+		      "OPTOKEN_PATHNUDGEUPPIEL10" => "PathNudgeUpPixel10",
+		      "OPTOKEN_PATHNUDGEUPPIXEL1" => "PathNudgeUpPixel1",
+		      "OPTOKEN_PENADDELEMENT" => "AddPenElement",
+		      "OPTOKEN_PENCLOSEPATH" => "ClosePenPath",
+		      "OPTOKEN_PENCREATEINTERNAL" => "CreatePenPoint",
+		      "OPTOKEN_PENCREATEPATH" => "CreatePenPath",
+		      "OPTOKEN_PENEDITINTERNAL" => "EditPenPoint",
+		      "OPTOKEN_PENHANDLES" => "PenHandles",
+		      "OPTOKEN_PENTOOL" => "PenTool",
+		      "OPTOKEN_PHOTOCDDLG" => "PhotoCDDlg",
+		      "OPTOKEN_PLUGINS_MANAGER" => "PlugInsManager",
+		      "OPTOKEN_PLUGINS_MENU" => "PlugInsMenu",
+		      "OPTOKEN_PLUGINS_PARSING" => "PlugInsParsing",
+		      "OPTOKEN_PLUGINS" => "PlugIns",
+		      "OPTOKEN_PLUGINS_PLUGINSMNGR" => "PlugInsPluginManager",
+		      "OPTOKEN_PLUGINS_UNDO_MENU" => "PlugInsUndoMenu",
+		      "OPTOKEN_PLUGSDLG" => "PlugSetupDlg",
+		      "OPTOKEN_PREVIEW_1TO1" => "Preview:1:1",
+		      "OPTOKEN_PREVIEW_COLOUR_SELECTOR_TOOL" => "Preview:Selector",
+		      "OPTOKEN_PREVIEWDIALOG" => "PreviewDialog",
+		      "OPTOKEN_PREVIEW_HELP" => "Preview:Help",
+		      "OPTOKEN_PREVIEW_PUSH_TOOL" => "Preview:Push",
+		      "OPTOKEN_PREVIEW_ZOOM_TO_100" => "Preview:100",
+		      "OPTOKEN_PREVIEW_ZOOM_TO_FIT" => "Preview:Fit",
+		      "OPTOKEN_PREVIEW_ZOOM_TOOL" => "Preview:Zoom",
+		      "OPTOKEN_PRINTONALLPLATES" => "PrintOnAllPlates",
+		      "OPTOKEN_PRINTOPTIONSDLG" => "PrintOptionsDlg",
+		      "OPTOKEN_PRINTOPTIONS" => "PrintOptions",
+		      "OPTOKEN_PRINT_PREVIEW" => "PrintPreview",
+		      "OPTOKEN_PRINT" => "Print",
+		      "OPTOKEN_PRINT_SETUP" => "PrintSetup",
+		      "OPTOKEN_PULLONTOGRID" => "PullOntoGrid",
+		      "OPTOKEN_PUSH" => "PushTool",
+		      "OPTOKEN_PUTTOBACK" => "PutToBack",
+		      "OPTOKEN_QUALITYANTIALIASED" => "QualityAntiAliased",
+		      "OPTOKEN_QUALITY_MENU" => "QualityMenu",
+		      "OPTOKEN_QUALITYNORMAL" => "QualityNormal",
+		      "OPTOKEN_QUALITYOUTLINE" => "QualityOutline",
+		      "OPTOKEN_QUALITYSIMPLE" => "QualitySimple",
+		      "OPTOKEN_QUALITYSLIDER" => "QualitySlider",
+		      "OPTOKEN_QUICKSHAPE_MAKEREGULAR" => "QuickShapeMakeRegular",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES10" => "QuickShapeNumberSides10",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES3" => "QuickShapeNumberSides3",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES4" => "QuickShapeNumberSides4",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES5" => "QuickShapeNumberSides5",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES6" => "QuickShapeNumberSides6",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES7" => "QuickShapeNumberSides7",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES8" => "QuickShapeNumberSides8",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES9" => "QuickShapeNumberSides9",
+		      "OPTOKEN_QUICKSHAPE_NUMBERSIDES" => "QuickShapeNumberSides",
+		      "OPTOKEN_RECTANGLE" => "RectangleTool",
+		      "OPTOKEN_RECTANGULARENVELOPE" => "DefaultEnvelope",
+		      "OPTOKEN_RECTANGULARPERSPECTIVE" => "DefaultPerspective",
+		      "OPTOKEN_REDEFINE_NAMES_AS_SEL" => "RedefineNamesAsSelectedObjects",
+		      "OPTOKEN_REDO" => "Redo",
+		      "OPTOKEN_REDRAWCOLOURS" => "RedrawColours" ,
+		      "OPTOKEN_REGISTER" => "Register",
+		      "OPTOKEN_REMOVEBEVEL" => "RemoveBevel",
+		      "OPTOKEN_REMOVEBLEND" => "RemoveBlend",
+		      "OPTOKEN_REMOVE_CLIPVIEW" => "RemoveClipView",
+		      "OPTOKEN_REMOVECONTOUR" => "RemoveContour",
+		      "OPTOKEN_REMOVEFLOATER" => "OpRemoveFloater",
+		      "OPTOKEN_REMOVEMOULD" => "RemoveMould",
+		      "OPTOKEN_REMOVE_NAMES_FROM_SEL" => "RemoveNamesFromSelectedObjects",
+		      "OPTOKEN_REMOVESHADOW" => "RemoveShadow",
+		      "OPTOKEN_RENAME_ALL" => "RenameAllObjects",
+		      "OPTOKEN_RENAME_OBJECTS_DLG" => "RenameObjectsDlg",
+		      "OPTOKEN_RENDERDEMODLG" => "RenderDemoDlg",
+		      "OPTOKEN_REPEATAPPLYATTRIB" => "RepeatApplyAttribute",
+		      "OPTOKEN_REPLACEATTRS" => "ReplaceAttributes",
+		      "OPTOKEN_RESETSPREADORIGIN" => "ResetSpreadOrigin",
+		      "OPTOKEN_RESHAPESHAPEEDGE" => "ReshapeShapeEdge",
+		      "OPTOKEN_RETROFIT" => "RetroFit",
+		      "OPTOKEN_RETROSMOOTH" => "RetroSmooth",
+		      "OPTOKEN_REVERSEPATH" => "ReversePath" ,
+		      "OPTOKEN_REVERSESTORYPATH" => "ReverseStoryPath",
+		      "OPTOKEN_ROTATEMOULD" => "RotateMould",
+		      "OPTOKEN_ROTATE" => "RotateTool",
+		      "OPTOKEN_SAVEANIMATEDGIF" => "SaveAnimatedGIF",
+		      "OPTOKEN_SAVEASDEFAULT" => "SaveAsDefault",
+		      "OPTOKEN_SAVEASNATIVEV1" => "SaveAsNativeV1",
+		      "OPTOKEN_SAVEASNATIVEV2" => "SaveAsNativeV2",
+		      "OPTOKEN_SAVEASWEB" => "SaveAsWeb",
+		      "OPTOKEN_SAVESHADOWDATA" => "SaveShadowData",
+		      "OPTOKEN_SCALEDLG" => "ScaleFactorDlg",
+		      "OPTOKEN_SCALE" => "Scale",
+		      "OPTOKEN_SELECTALLPATHPOINTS" => "SelectAllPathPoints",
+		      "OPTOKEN_SELECTBEVEL" => "SelectBevel",
+		      "OPTOKEN_SELECTBRUSH" => "MakeBrushSelected",
+		      "OPTOKEN_SELECTCOLS" => "ChangeSelectionColours",
+		      "OPTOKEN_SELECT_INTERSECT_SETS" => "SelectIntersectOfSets",
+		      "OPTOKEN_SELECTOR_DRAGBOX" => "SelectorDragBox",
+		      "OPTOKEN_SELECTOR_DRAGCENTRE" => "SelectorDragCentre",
+		      "OPTOKEN_SELECT_SET" => "SelectSetOfObjects",
+		      "OPTOKEN_SELECT_UNION_SETS" => "SelectUnionOfSets",
+		      "OPTOKEN_SEPSDIALOG" => "SepsDialog",
+		      "OPTOKEN_SGLINEPROPERTIESDLG" => "GalleryLinePropertiesDlg",
+		      "OPTOKEN_SGOPTIONSDLG" => "GalleryOptionsDlg",
+		      "OPTOKEN_SGSEARCHDLG" => "GallerySearchDlg",
+		      "OPTOKEN_SGSORTDLG" => "GallerySortDlg",
+		      "OPTOKEN_SHADOWANGLE" => "ShadowAngle",
+		      "OPTOKEN_SHADOWATTRIB" => "ShadowAttributeApply",
+		      "OPTOKEN_SHADOWDARKNESS" => "ShadowDarkness",
+		      "OPTOKEN_SHADOWHEIGHTANDANGLE" => "ShadowHeightAndAngle",
+		      "OPTOKEN_SHADOWHEIGHT" => "ShadowHeight",
+		      "OPTOKEN_SHADOWPENUMBRA" => "ShadowPenumbra",
+		      "OPTOKEN_SHADOWPOSITION" => "ShadowPosition",
+		      "OPTOKEN_SHADOWPROFILE" => "ShadowProfile",
+		      "OPTOKEN_SHADOWSCALE" => "ShadowScale",
+		      "OPTOKEN_SHEAR" => "Shear Transform",
+		      "OPTOKEN_SHORTENBAROP" => "ShortenBarOp",
+		      "OPTOKEN_SHOWCOLOURS" => "CreateColours" ,
+		      "OPTOKEN_SHOWGRID" => "ShowGrid",
+		      "OPTOKEN_SHOWGUIDES" => "ShowGuides",
+		      "OPTOKEN_SHOWPRINTBORDERS" => "ShowPrintBorders",
+		      "OPTOKEN_SHOWPRINTERCOLOURS" => "ShowPrinterColours",
+		      "OPTOKEN_SHOWSTATE" => "ShowStateOp",
+		      "OPTOKEN_SLICE_DRAGBOX" => "SliceDragBox",
+		      "OPTOKEN_SLICESHAPES" => "SliceShapes",
+		      "OPTOKEN_SLICE_TRANSLATE" => "SliceTranslate",
+		      "OPTOKEN_SMOOTHSELECTION" => "SmoothSelection",
+		      "OPTOKEN_SNAPTOGRID" => "SnapToGrid",
+		      "OPTOKEN_SNAPTOGUIDES" => "SnapToGuides",
+		      "OPTOKEN_SNAPTOOBJECTS" => "SnapToObjects",
+		      "OPTOKEN_SPOTPREVIEW1" => "SpotPreview1",
+		      "OPTOKEN_SPOTPREVIEW2" => "SpotPreview2",
+		      "OPTOKEN_SPOTPREVIEW3" => "SpotPreview3",
+		      "OPTOKEN_SPOTPREVIEW4" => "SpotPreview4",
+		      "OPTOKEN_SPOTPREVIEW5" => "SpotPreview5",
+		      "OPTOKEN_SPOTPREVIEW6" => "SpotPreview6",
+		      "OPTOKEN_SPOTPREVIEW7" => "SpotPreview7",
+		      "OPTOKEN_SPOTPREVIEW8" => "SpotPreview8",
+		      "OPTOKEN_SPOTPREVIEWBASE" => "SpotPreview",
+		      "OPTOKEN_SPOTPREVIEWMORE" => "SpotPreviewMore",
+		      "OPTOKEN_SPREADORIGIN" => "SpreadOrigin",
+		      "OPTOKEN_SQUASH" => "Squash Transform",
+		      "OPTOKEN_SUBTRACTSHAPES" => "SubtractShapes",
+		      "OPTOKEN_SYSTEMBAROP" => "SystemBarOp",
+		      "OPTOKEN_TEMPLATEDLG" => "TemplateDlg",
+		      "OPTOKEN_TEXTDRAGLEFTNONPATHINDENT" => "DragLeftNonPathIndent",
+		      "OPTOKEN_TEXTDRAGLEFTPATHINDENT" => "DragLeftPathIndent",
+		      "OPTOKEN_TEXTDRAGRIGHTNONPATHINDENT" => "DragRightNonPathIndent",
+		      "OPTOKEN_TEXTDRAGRIGHTPATHINDENT" => "DragRightPathIndent",
+		      "OPTOKEN_TEXTPASTE" => "PasteText",
+		      "OPTOKEN_TEXTSELECTION" => "TextSelect",
+		      "OPTOKEN_THROTTLECACHE" => "ThrottleCache",
+		      "OPTOKEN_TIMEDRAW" => "TimeDraw",
+		      "OPTOKEN_TIPSDLG" => "TipsDlg",
+		      "OPTOKEN_TOGGLECURVATURE" => "ShapeToggleCurvature",
+		      "OPTOKEN_TOGGLEELIPPOLY" => "ShapeToggleElipPoly",
+		      "OPTOKEN_TOGGLEFORE" => "ToggleForeBack",
+		      "OPTOKEN_TOGGLEINSETPATH" => "InsetPath",
+		      "OPTOKEN_TOGGLEMOULDGRID" => "ToggleMouldGrid",
+		      "OPTOKEN_TOGGLEPRESSURE" => "TogglePressure",
+		      "OPTOKEN_TOGGLEPRINTASSHAPES" => "TogglePrintAsShapes",
+		      "OPTOKEN_TOGGLESCROLL" => "ToggleScrollBars",
+		      "OPTOKEN_TOGGLESTELLATION" => "ShapeToggleStellation",
+		      "OPTOKEN_TOOLBARDLG" => "ToolbarDlg",
+		      "OPTOKEN_TOOLBARNAMEDLG" => "ToolbarNameDlg",
+		      "OPTOKEN_TRACEDLG" => "TraceDlg",
+		      "OPTOKEN_TRACEOP" => "TraceOp",
+		      "OPTOKEN_TRANSLATE" => "Translate",
+		      "OPTOKEN_TRANSPFILLPROFILE" => "TranspFillProfile" ,
+		      "OPTOKEN_UNDO" => "Undo",
+		      "OPTOKEN_UNGROUPSPECIAL" => "UngroupSpecial",
+		      "OPTOKEN_UNGROUPTRANSP" => "UnGroupTransparency",
+		      "OPTOKEN_UNGROUP" => "Ungroup",
+		      "OPTOKEN_UNITDLG" => "UnitSetupDlg",
+		      "OPTOKEN_UNITPROPERTIESDLG" => "UnitPropertiesDlg",
+		      "OPTOKEN_UPDATE" => "Update",
+		      "OPTOKEN_URLIMPORTDLG" => "URLImportDlg",
+		      "OPTOKEN_URLIMPORT" => "URLImport",
+		      "OPTOKEN_URLIMPORT" => "URLImport",
+		      "OPTOKEN_UTILCOLOUR" => "UtilColour",
+		      "OPTOKEN_UTILCUSTOMIZE" => "UtilCustomize",
+		      "OPTOKEN_UTILOPTIONS" => "UtilOptions",
+		      "OPTOKEN_UTILOPTIONS" => "UtilOptions",
+		      "OPTOKEN_UTILS_MENU" => "UtilsMenu",
+		      "OPTOKEN_VIEWCOLOURBAR" => "ViewColourBar",
+		      "OPTOKEN_VIEWFULLSCREEN" => "ViewFullScreen",
+		      "OPTOKEN_VIEWINFOBAR" => "ViewInfoBar",
+		      "OPTOKEN_VIEWRULERS" => "ViewRulers",
+		      "OPTOKEN_VIEWSCROLLBARS" => "ViewScrollBars",
+		      "OPTOKEN_VIEWSTATUSBAR" => "ViewStatusBar",
+		      "OPTOKEN_VIEWTOOLBAR" => "ViewToolBar",
+		      "OPTOKEN_WEBADDRESSDLG" => "WebAddressDlg",
+		      "OPTOKEN_WEBLINK" => "WebLink",
+		      "OPTOKEN_WEBPREFSDLG" => "WebPrefsDlg",
+		      "OPTOKEN_WEBSTER_HOME_PAGE" => "WebsterHomePage",
+		      "OPTOKEN_WHATSTHIS" => "WhatsThis",
+		      "OPTOKEN_WINDOWARRANGE" => "WindowArrange",
+		      "OPTOKEN_WINDOWBORDERS" => "WindowBorders",
+		      "OPTOKEN_WINDOWCASCADE" => "WindowCascade",
+		      "OPTOKEN_WINDOWEASYMDI" => "WindowEasyMDI",
+		      "OPTOKEN_WINDOW_MENU" => "WindowMenu",
+		      "OPTOKEN_WINDOWNEWVIEW" => "WindowNewView",
+		      "OPTOKEN_WINDOWQUALITY" => "WindowQuality",
+		      "OPTOKEN_WINDOWRULERS" => "WindowRulers",
+		      "OPTOKEN_WINDOWSEPARATION" => "WindowSeparation",
+		      "OPTOKEN_WINDOWTILE" => "WindowTile",
+		      "OPTOKEN_WINDOWTOOLBARS" => "WindowToolbars",
+		      "OPTOKEN_XARA_HOME_PAGE" => "XaraHomePage",
+		      "OPTOKEN_XARA_PURCHASE_PAGE" => "XaraPurchasePage",
+		      "OPTOKEN_XARA_WEB_MENU" => "XaraWebMenu",
+		      "OPTOKEN_XARAX_FORUM" => "XaraXForum",
+		      "OPTOKEN_XPE_EDIT_ITEM" => "XPEEditItem",
+		      "OPTOKEN_XPE_EDIT" => "XPEEdit",
+		      "OPTOKEN_YELLOWPREVIEW" => "YellowPreview",
+		      "OPTOKEN_ZOOMCOMBO" => "ZoomCombo",
+		      "OPTOKEN_ZOOMDRAWING" => "ZoomDrawing",
+		      "OPTOKEN_ZOOMIN" => "ZoomIn",
+		      "OPTOKEN_ZOOMOUT" => "ZoomOut",
+		      "OPTOKEN_ZOOMPREV" => "ZoomPrev",
+		      "OPTOKEN_ZOOMRECT" => "ZoomRect",
+		      "OPTOKEN_ZOOMSELECTED" => "ZoomSelect",
+		      "OPTOKEN_ZOOMSPREAD" => "ZoomSpread",
+		      "TOOL_OPTOKEN_BEVEL" => "TOOL23",
+		      "TOOL_OPTOKEN_BEZTOOL" => "TOOL11",
+		      "TOOL_OPTOKEN_BLANK" => "TOOL15",
+		      "TOOL_OPTOKEN_BLEND" => "TOOL16",
+		      "TOOL_OPTOKEN_CONTOUR" => "TOOL24",
+		      "TOOL_OPTOKEN_ELLIPSE" => "TOOL12",
+		      "TOOL_OPTOKEN_FREEHAND" => "TOOL6",
+		      "TOOL_OPTOKEN_GRADFILL" => "TOOL13",
+		      "TOOL_OPTOKEN_GRID" => "TOOL10",
+		      "TOOL_OPTOKEN_LIVEEFFECT" => "TOOL26",
+		      "TOOL_OPTOKEN_MOULD" => "TOOL19",
+		      "TOOL_OPTOKEN_PEN" => "TOOL14",
+		      "TOOL_OPTOKEN_PUSH" => "TOOL3",
+		      "TOOL_OPTOKEN_RECTANGLE" => "TOOL5",
+		      "TOOL_OPTOKEN_RECT" => "TOOL8",
+		      "TOOL_OPTOKEN_REGSHAPE" => "TOOL18",
+		      "TOOL_OPTOKEN_ROTATE" => "TOOL9",
+		      "TOOL_OPTOKEN_SELECTOR" => "TOOL7",
+		      "TOOL_OPTOKEN_SLICE" => "TOOL25",
+		      "TOOL_OPTOKEN_SOFTSHADOW" => "TOOL22",
+		      "TOOL_OPTOKEN_TEXT" => "TOOL21",
+		      "TOOL_OPTOKEN_TRANSP" => "TOOL17",
+		      "TOOL_OPTOKEN_ZOOM" => "TOOL4",
+		      "roguevalue"=>"roguevalue"
+	       );
+    return;
+}
+
+sub BuildStringTable
+{
+    open (ST, "wxOil/xrc/strings.lst");
+    while (<ST>)
+    {
+	chomp;
+	/(\S+)\t(.*)$/;
+	$stringtable{$1}=$2;
+    }
+}

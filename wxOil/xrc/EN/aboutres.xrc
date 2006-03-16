@@ -1,0 +1,185 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="IDD_ABOUTDLG">
+			 <pos>34,22d</pos> <size>223,86d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>164,4d</pos> <size>56,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>164,22d</pos> <size>56,14d</size>
+			<label>&amp;Xara Group Ltd</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,24d</pos> <size>130,8d</size>
+			<label>Developed by Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMVERSION">
+			 <pos>29,5d</pos> <size>131,8d</size>
+			<label>Xara X Version 3.0</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>21,20d</size>
+			<bitmap>2.png</bitmap>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,14d</pos> <size>131,8d</size>
+			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+			 <pos>4,40d</pos> <size>216,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,45d</pos> <size>77,10d</size>
+			<label>Licensee:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LICENSEE">
+			 <pos>80,45d</pos> <size>102,8d</size>
+			<label>Justin Flude</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,56d</pos> <size>77,8d</size>
+			<label>Organisation:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COMPANY">
+			 <pos>80,56d</pos> <size>102,8d</size>
+			<label>Xara Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,67d</pos> <size>77,8d</size>
+			<label>Serial Number:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SERIAL">
+			 <pos>80,67d</pos> <size>102,8d</size>
+			<label>+ 44 1442 351000</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+			 <pos>4,81d</pos> <size>216,1d</size>
+		</object>
+		<title>About Xara Xtreme</title>
+	</object>
+	<object class="wxDialog" name="IDD_ABOUTDLG_PLUS">
+			 <pos>34,22d</pos> <size>223,106d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>164,4d</pos> <size>56,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>164,22d</pos> <size>56,14d</size>
+			<label>&amp;Xara Group Ltd</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,24d</pos> <size>130,8d</size>
+			<label>Developed by Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMVERSION">
+			 <pos>29,5d</pos> <size>131,8d</size>
+			<label>Xara X Version 3.0</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>20,20d</size>
+			<bitmap>2.png</bitmap>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,14d</pos> <size>131,8d</size>
+			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+			 <pos>4,40d</pos> <size>216,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,45d</pos> <size>77,10d</size>
+			<label>Licensee:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LICENSEE">
+			 <pos>80,45d</pos> <size>102,8d</size>
+			<label>Justin Flude</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,56d</pos> <size>77,8d</size>
+			<label>Organisation:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COMPANY">
+			 <pos>80,56d</pos> <size>102,8d</size>
+			<label>Xara Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,67d</pos> <size>77,8d</size>
+			<label>Serial Number:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SERIAL">
+			 <pos>80,67d</pos> <size>102,8d</size>
+			<label>+ 44 1442 351000</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+			 <pos>4,81d</pos> <size>216,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,87d</pos> <size>155,8d</size>
+			<label>PANTONE? and other PANTONE trademarks</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,95d</pos> <size>191,8d</size>
+			<label>are the property of Pantone Inc.</label>
+		</object>
+		<title>About Xara Xtreme Plus</title>
+	</object>
+	<object class="wxDialog" name="IDD_ABOUTDLG_XS">
+			 <pos>34,22d</pos> <size>223,86d</size>
+		<object class="wxButton" name="wxID_OK">
+			 <pos>164,4d</pos> <size>56,14d</size>
+			<label>&amp;Close</label>
+		</object>
+		<object class="wxButton" name="ID_CC_HELP_BUTTON">
+			 <pos>164,22d</pos> <size>56,14d</size>
+			<label>&amp;Xara Group Ltd</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,24d</pos> <size>130,8d</size>
+			<label>Developed by Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_CAMVERSION">
+			 <pos>29,5d</pos> <size>131,8d</size>
+			<label>Xara X Version 3.0</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STATIC">
+			 <pos>4,4d</pos> <size>21,20d</size>
+			<bitmap>2.png</bitmap>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,14d</pos> <size>131,8d</size>
+			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+			 <pos>4,40d</pos> <size>216,1d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,45d</pos> <size>77,10d</size>
+			<label>Licensee:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_LICENSEE">
+			 <pos>80,45d</pos> <size>102,8d</size>
+			<label>Justin Flude</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,56d</pos> <size>77,8d</size>
+			<label>Organisation:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_COMPANY">
+			 <pos>80,56d</pos> <size>102,8d</size>
+			<label>Xara Ltd.</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>29,67d</pos> <size>77,8d</size>
+			<label>Serial Number:</label>
+		</object>
+		<object class="wxStaticText" name="IDC_SERIAL">
+			 <pos>80,67d</pos> <size>102,8d</size>
+			<label>+ 44 1442 351000</label>
+		</object>
+		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+			 <pos>4,81d</pos> <size>216,1d</size>
+		</object>
+		<title>About Xara XS</title>
+	</object>
+</resource>
