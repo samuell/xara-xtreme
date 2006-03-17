@@ -160,7 +160,6 @@ public:
     void OnSize(wxSizeEvent &event);
     void OnMove(wxMoveEvent &event);
 #endif
-	void OnKeyEvent( wxKeyEvent &event );
 	void OnCloseWindow(wxCloseEvent& event);
 
 	void OnMouseMove(wxMouseEvent& event);

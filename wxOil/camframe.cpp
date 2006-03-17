@@ -239,9 +239,6 @@ BEGIN_EVENT_TABLE( CCamFrame, wxDocMDIParentFrame )
 	EVT_MOVE(CCamFrame::OnMove)
 #endif
 
-	EVT_KEY_UP( CCamFrame::OnKeyEvent )
-	EVT_KEY_DOWN( CCamFrame::OnKeyEvent )
-
 	EVT_CLOSE(CCamFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -614,11 +611,6 @@ void CCamFrame::OnMove(wxMoveEvent &event)
 	event.Skip();
 }
 #endif
-
-void CCamFrame::OnKeyEvent( wxKeyEvent &event )
-{
-	AfxGetApp().OnKeyEvent( event );
-}
 
 void CCamFrame::OnCloseWindow(wxCloseEvent& event)
 {

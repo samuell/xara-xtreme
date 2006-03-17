@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dlgevt.h"
 #include "cartprov.h"
 #include "ctrllist.h"
+#include "cartctl.h"
 //
 // Define FILELIST for recent file list on file menu.
 // Note that this currently seems to be rather unreliable.
@@ -211,8 +212,8 @@ BEGIN_EVENT_TABLE( CCamApp, wxApp )
 	EVT_IDLE( CCamApp::OnIdle )
 //	EVT_TIMER( CAM_TIMER_ID, CCamApp::OnTimer )
 
-//	EVT_KEY_UP(			CCamApp::OnKeyEvent )
-	EVT_KEY_DOWN(		CCamApp::OnLocalKeyEvent )
+	EVT_KEY_UP(			CCamApp::OnKeyEvent )
+	EVT_KEY_DOWN(		CCamApp::OnKeyEvent )
 //	EVT_CHAR(			CCamApp::OnChar )
 END_EVENT_TABLE()
 
@@ -220,21 +221,16 @@ DialogManager			CCamApp::m_DlgMgr;
 bool					CCamApp::s_bIsDisabled = false; // Initially system is not disabled.
 wxString				CCamApp::m_strResourcePath;
 
-// Space bar down event seem to be eaten so we'll grab them from here
-void CCamApp::OnLocalKeyEvent( wxKeyEvent &event )
-{
-	if( event.GetKeyCode() == _T(' ') )
-	{
-		OnKeyEvent( event );
-		return;
-	}
-	
-	// We haven't handled it
-	event.Skip();
-}
-
 void CCamApp::OnKeyEvent( wxKeyEvent &event )
 {
+	// If a control (but not a button) has focus, let it handle the key events
+	wxClassInfo*		pClassInfo = wxWindow::FindFocus()->GetClassInfo();
+	TRACEUSER( "luke", _T("Focus = " PERCENT_S "\n"), pClassInfo->GetClassName() );
+	if(  pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
+		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
+		!pClassInfo->IsKindOf( CLASSINFO(wxCamArtControl) ) )
+		return;
+	
 	// Make sure the kernel knows which view/doc the event applies to, if any.
 	if( NULL != Document::GetSelected() )
 		Document::GetSelected()->SetCurrent();
@@ -365,7 +361,7 @@ bool CCamApp::OnInit()
 	
 	// Useful debug tracing enablers, left here for next debug session...
 //	wxLog::AddTraceMask( _T("focus") );
-	wxLog::AddTraceMask( _T("keyevent") );
+//	wxLog::AddTraceMask( _T("keyevent") );
 
 	// Initialise the MonotonicTime class
 	MonotonicTime::Init();

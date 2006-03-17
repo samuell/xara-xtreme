@@ -134,7 +134,6 @@ public:
 	void OnTimer	( wxTimerEvent &event );
 
 	void OnKeyEvent	( wxKeyEvent &event );
-	void OnLocalKeyEvent( wxKeyEvent &event );
 	void OnChar		( wxKeyEvent &event );
 
 protected:
