@@ -117,7 +117,8 @@ sub GetSize
 		    "IDC_SEL_EDIT_ANGLE" => 30,
 		    "IDC_BEVEL_TYPE_COMBO" => 96,
 		    "IDC_BEVEL_SLIDER_COMBO" => 96,
-		    "IDC_BEVELSLIDER" => 96
+		    "IDC_BEVELSLIDER" => 96,
+		    "IDC_FREEHANDSLIDER" => 128
 		   );
     return $cnamemap{ $control } || $default;
 }

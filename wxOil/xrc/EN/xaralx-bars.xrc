@@ -3616,7 +3616,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_FREEHANDSLIDER">
-                    <size>60,-1</size>
+                    <size>128,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
