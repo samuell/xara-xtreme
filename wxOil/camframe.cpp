@@ -705,7 +705,7 @@ void CCamFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
 	wxString			strMessage;
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%d\nUsage: XaraLX.exe [xar-file...]"), 
 		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
