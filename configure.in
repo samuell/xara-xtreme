@@ -122,8 +122,9 @@ if test -n "$vers" && test "$vers" -ge 2006001; then
 	WXRC="`$WXCONFIG --utility=wxrc`"
 	
 	# See if we are running on GTK
-	WX_GTK=`if [[[ $WX_CPPFLAGS == *__WXGTK__* ]]]; then echo yes ; else echo no ; fi`
-	if test "$WX_GTK" = "yes" ; then
+	WX_GTK="no"
+	if test `echo $WX_CPPFLAGS | grep *__WXGTK__*`; then 
+		WX_GTK="yes"
 		PKG_CHECK_MODULES(GTK, [gtk+-2.0])
 	fi
 
