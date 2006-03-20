@@ -106,7 +106,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_ERRORS
 #define INC_ERRORS
 
+#ifndef __WXMAC__
 #include <wx/stackwalk.h>
+#endif
 
 //#include "errordlg.h"
 
@@ -592,11 +594,13 @@ public:
 public:
 	static void DumpStack(UINT32 frames=0);
 
+#ifndef __WXMAC__
 	class StackWalker : public wxStackWalker
 	{
 		public:
 			virtual void OnStackFrame(const wxStackFrame & frame);
 	};
+#endif
 
 };
 

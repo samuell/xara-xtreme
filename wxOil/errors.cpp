@@ -1537,8 +1537,12 @@ void TestErrorStuff()
 void Error::DumpStack(UINT32 frames)
 {
 #ifdef _DEBUG
+#ifndef __WXMAC__
 	Error::StackWalker s;
 	s.Walk(frames);
+#else
+	TRACE("Request to dump stack not supported on WXMAC");
+#endif
 #endif
 }
 
@@ -1554,6 +1558,7 @@ void Error::DumpStack(UINT32 frames)
 
 ********************************************************************************************/
 
+#ifndef __WXMAC__
 void Error::StackWalker::OnStackFrame(const wxStackFrame & frame)
 {
 #ifdef _DEBUG
@@ -1563,3 +1568,4 @@ void Error::StackWalker::OnStackFrame(const wxStackFrame & frame)
 	wxLogDebug(l);
 #endif
 }
+#endif
