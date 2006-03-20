@@ -6345,14 +6345,14 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 	INT32 nStep = Width;
 	if ( BitmapData.GetRowStride()<0 )
 		nStep = -nStep;
-	for( unsigned y=0 ; y<Height ; ++y )
+	for( UINT32 y=0 ; y<Height ; ++y )
 	{
 		//
 		// Set all pixels to be opaque. (We don't want to plot with alpha here
 		// so inverting the alpha channel would not be correct, and it's
 		// possible that the transparency channel will not always be zero).
 		//
-		for( unsigned x=0; x<Width; ++x )
+		for( UINT32 x=0; x<Width; ++x )
 #if defined(__WXGTK__)
 			pDLine[x] = pSBuffer[x] | 0xff000000;
 #else
