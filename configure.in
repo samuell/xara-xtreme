@@ -115,7 +115,7 @@ GTK_LIBS=""
 
 # Verify minimus requires
 vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
-if test -n "$vers" && test "$vers" -ge 2006001; then
+if test -n "$vers" && test "$vers" -ge 2006003; then
 	WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cppflags`"
 	WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cxxflags | sed -e 's/-fno-exceptions//'`"
 	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs`"
@@ -123,13 +123,17 @@ if test -n "$vers" && test "$vers" -ge 2006001; then
 	
 	# See if we are running on GTK
 	WX_GTK="no"
-	if test `echo $WX_CPPFLAGS | grep *__WXGTK__*`; then 
+	AC_MSG_CHECKING([wxWidgets GTK usage])
+	if echo $WX_CPPFLAGS | grep -q '__WXGTK__' ; then 
 		WX_GTK="yes"
+		AC_MSG_RESULT([found])
 		PKG_CHECK_MODULES(GTK, [gtk+-2.0])
+	else
+		AC_MSG_RESULT([not found])
 	fi
 
 else
-	AC_MSG_ERROR([wxWidgets 2.6.1 or newer is required])
+	AC_MSG_ERROR([wxWidgets 2.6.3 or newer is required (2.6.3-rc2 will do)])
 fi
 
 TOPDIR=$srcdir;
