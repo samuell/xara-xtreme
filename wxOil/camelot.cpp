@@ -229,7 +229,10 @@ void CCamApp::OnKeyEvent( wxKeyEvent &event )
 	if(  pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxCamArtControl) ) )
+	{
+		event.Skip();
 		return;
+	}
 	
 	// Make sure the kernel knows which view/doc the event applies to, if any.
 	if( NULL != Document::GetSelected() )
@@ -361,7 +364,7 @@ bool CCamApp::OnInit()
 	
 	// Useful debug tracing enablers, left here for next debug session...
 //	wxLog::AddTraceMask( _T("focus") );
-//	wxLog::AddTraceMask( _T("keyevent") );
+	wxLog::AddTraceMask( _T("keyevent") );
 
 	// Initialise the MonotonicTime class
 	MonotonicTime::Init();
