@@ -254,7 +254,8 @@ BOOL CCResourceFile::open(LPCTSTR ResName, LPCTSTR WXUNUSED(ResType), FileAccess
 	IsOpen			= TRUE;
 
 	// Read into memory
-	DescribeBlock( MemHandle, &MemFile, &FileSize );
+	size_t cbDescSize;
+	DescribeBlock( MemHandle, &MemFile, &cbDescSize );
 	pStream->Read( MemFile, FileSize );
 	
 	// If we haven't read all the file, we must have failed
