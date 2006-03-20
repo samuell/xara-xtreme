@@ -1541,7 +1541,7 @@ void Error::DumpStack(UINT32 frames)
 	Error::StackWalker s;
 	s.Walk(frames);
 #else
-	TRACE("Request to dump stack not supported on WXMAC");
+	TRACE( _T("Request to dump stack not supported on WXMAC") );
 #endif
 #endif
 }
