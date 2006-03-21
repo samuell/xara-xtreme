@@ -814,7 +814,7 @@ BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 		}
 
 		// Something to mark the start of the bitmap pool
-		pDC->OutputToken("%%BeginCamelotBitmapPool");
+		pDC->OutputToken(_T("%%BeginCamelotBitmapPool"));
 		pDC->OutputNewLine();
 
 		// Tell the filter we are starting to save the bitmap pool
@@ -824,7 +824,7 @@ BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 		INT32 TotalBitmaps = pBitmapsToExport->GetCount();
 
 		// Output a comment saying how many bitmaps we have
-		pDC->OutputToken("%%BitmapPoolCount");
+		pDC->OutputToken(_T("%%BitmapPoolCount"));
 		pDC->OutputValue(TotalBitmaps);
 		pDC->OutputNewLine();
 
@@ -850,7 +850,7 @@ BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 		((CamelotNativeEPSFilter*)pFilter)->IsSavingBitmapPool = FALSE;
 
 		// Something to mark the start of the bitmap pool
-		pDC->OutputToken("%%EndCamelotBitmapPool");
+		pDC->OutputToken(_T("%%EndCamelotBitmapPool"));
 		pDC->OutputNewLine();
 	}
 
@@ -887,7 +887,7 @@ BOOL BitmapListComponent::ExportBitmapPoolItem(INT32 BitmapNum, EPSFilter* pFilt
 		// ...then the bitmap object token.
 		pDC->OutputValue(BitmapNum);			// Output the number of the bitmap
 		pDC->OutputValue(INT32(0));				// Bitmap pool type (ready for expansion)
-		pDC->OutputToken("cbmp");				// Bitmap pool token
+		pDC->OutputToken(_T("cbmp"));				// Bitmap pool token
 		pDC->OutputNewLine();
 		
 		// ...and then the bitmap data itself.
@@ -1891,6 +1891,8 @@ INT32 BitmapListComponent::SaveBitmapDefinition(KernelBitmap* pBitmap, BaseCamel
 		return pExportBitmap->RecordNumber;
 	}
 
+PORTNOTE("other", "Removed live effects stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	// Check to see whether we can save a simple placeholder, relying on the 
 	// XPE to regenerate the bitmap from master and edits when it's reloaded.
 	if (pFilter->GetSaveXPEBitmaps() == FALSE)
@@ -1917,6 +1919,7 @@ INT32 BitmapListComponent::SaveBitmapDefinition(KernelBitmap* pBitmap, BaseCamel
 			}
 		}
 	}
+#endif
 
 	BOOL ok = TRUE;
 	// Find out what bitmap compression was requested by the user

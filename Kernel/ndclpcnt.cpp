@@ -2567,7 +2567,7 @@ void NodeClipViewController::PreExportRender(RenderRegion* pRegion)
 	{
 		// Output "start group" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("q");
+		pDC->OutputToken(_T("q"));
 		pDC->OutputNewLine();
 	}
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
@@ -2599,7 +2599,7 @@ BOOL NodeClipViewController::ExportRender(RenderRegion* pRegion)
 	{
 		// Output "end group" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("Q");
+		pDC->OutputToken(_T("Q"));
 		pDC->OutputNewLine();
 		
 		// Tell caller we rendered ourselves ok

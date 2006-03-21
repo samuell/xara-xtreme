@@ -3940,7 +3940,7 @@ KernelBitmap* GrabFrameFilter::GetTheBitmap()
 
 BOOL GrabFrameFilter::ExportVisibleLayersOnly()
 {
-#if DO_EXPORT
+#ifdef DO_EXPORT
 	MaskedFilterExportOptions* pMaskedOptions = (MaskedFilterExportOptions*)GetBitmapExportOptions();
 	ERROR2IF(pMaskedOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pMaskedOptions->IS_KIND_OF(MaskedFilterExportOptions), "pMaskedOptions isn't");
@@ -4013,7 +4013,7 @@ BOOL GrabFrameFilter::ExportSelectionOnly(BOOL MaskedRender)
 
 BOOL GrabFrameFilter::IsSecondPassRequired()
 {
-#if DO_EXPORT
+#ifdef DO_EXPORT
 	MaskedFilterExportOptions* pMaskedOptions = (MaskedFilterExportOptions*)GetBitmapExportOptions();
 	ERROR2IF(pMaskedOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pMaskedOptions->IS_KIND_OF(MaskedFilterExportOptions), "pMaskedOptions isn't");

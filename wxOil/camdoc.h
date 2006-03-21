@@ -140,8 +140,6 @@ public:
 	virtual bool OnNewDocument();
 	virtual bool OnSaveDocument(const wxString& filename);
 	virtual bool OnOpenDocument(const wxString& filename);
-	virtual bool IsModified() const;
-	virtual void Modify(bool mod);
 
 	// Some CDocument emulation stuff
 	void SetModifiedFlag( BOOL fMod = TRUE ) { Modify( FALSE != fMod ); }

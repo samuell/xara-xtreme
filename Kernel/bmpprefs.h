@@ -194,8 +194,6 @@ typedef enum
 	Purpose:   	Base class for storing information about the bitmap we're exporting.
 ********************************************************************************************/
 
-PORTNOTE("other","Removed BitmapExportOptions")
-#ifndef EXCLUDE_FROM_XARALX
 class BitmapExportOptions : public OpParam
 {
 	CC_DECLARE_DYNCREATE(BitmapExportOptions)
@@ -272,7 +270,7 @@ public:
 
 	// Provide a baseclass version which returns something
 	virtual	DITHER GetDither() const				{ return XARADITHER_NONE; }
-	virtual SetDither(const DITHER&) { ERROR3("The base class has no concept of dithering"); }
+	virtual BOOL SetDither(const DITHER&) { ERROR3("The base class has no concept of dithering"); return FALSE; }
 
 	BOOL ShouldPutHTMLTagOnClipboard()				{ return m_fPutHTMLTagOnClipboard; }
 	void SetPutHTMLTagOnClipboard(BOOL fValueToSet)	{ m_fPutHTMLTagOnClipboard = fValueToSet; }
@@ -497,7 +495,6 @@ PORTNOTE("other","Need PaletteOptimiser when implemented")
 											// that would affect the appearance of the temp file
 	BOOL m_bCMYK;
 };
-#endif
 
 
 /********************************************************************************************

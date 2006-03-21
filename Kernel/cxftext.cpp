@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#if DO_EXPORT
+#ifdef DO_EXPORT
 
 #include "fontman.h"
 #include "nodetext.h"
@@ -376,7 +376,7 @@ BOOL CXaraFileTxtStory::IsGuaranteedFont(BaseCamelotFilter *pFilter,String_64* p
 
 	String_256 GuaranteedFonts = pFilter->GetDontConvertTheseFontsToOutlinesString();
 	String_64  GuaranteedFontName;
-	String_64  Delimiters = ";";
+	String_64  Delimiters = _T(";");
 	String_64  Str;
 
 	TCHAR* pTchar = cc_lstrtok(GuaranteedFonts,Delimiters);

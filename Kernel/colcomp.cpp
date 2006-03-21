@@ -1405,7 +1405,7 @@ INT32 ColourListComponent::GetWriteColourReference(DocColour* pDocColour, BaseCa
 					if (RecordNumber > 0)
 					{
 						// Add this colour to our list of exported items
-						BOOL ok = pExportedColours->AddColour(&Result, RecordNumber);
+						/*BOOL ok =*/ pExportedColours->AddColour(&Result, RecordNumber);
 						// Should return this error to the caller but not fatal so just continue
 					}
 
@@ -1899,7 +1899,7 @@ INT32 ColourListComponent::SaveComplexColour(IndexedColour *pCol, BaseCamelotFil
 	{
 		// If there is a parent then recover the record number from the exported colours list 
 		pExportCol = pExportedColours->GetColour(pParentCol);
-		ERROR2IF(pExportCol == NULL,FALSE,"ColourListComponent::SaveComplexColour Not exported parent before child!")
+		ERROR2IF(pExportCol == NULL,FALSE,"ColourListComponent::SaveComplexColour Not exported parent before child!");
 		ParentColourRef = pExportCol->RecordNumber;
 		TRACEUSER( "Neville", _T("Saving parent reference %d\n"),ParentColourRef);
 	}
@@ -2267,7 +2267,7 @@ BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 		EPSExportDC *pDC = pFilter->GetExportDC();
 
 		// The ArtWorks EPS comment:
-		pDC->OutputToken("%%AWColourTable");
+		pDC->OutputToken(_T("%%AWColourTable"));
 		pDC->OutputNewLine();
 
 		// Iterate over the document's list of named IndexedColours...
@@ -2334,7 +2334,7 @@ BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 						if (!HaveOutputHeader)
 						{
 							// Output the header comment if we haven't already done so
-							pDC->OutputToken("%%JWColourTable");
+							pDC->OutputToken(_T("%%JWColourTable"));
 							pDC->OutputNewLine();
 							HaveOutputHeader = TRUE;
 						}
@@ -2365,7 +2365,7 @@ BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 						if (!HaveOutputHeader)
 						{
 							// Output the header comment if we haven't already done so
-							pDC->OutputToken("%%JWColourTable");
+							pDC->OutputToken(_T("%%JWColourTable"));
 							pDC->OutputNewLine();
 							HaveOutputHeader = TRUE;
 						}
@@ -2553,11 +2553,11 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 	ColourModel Model = pCol->GetColourModel();
 
 	// Buffer to build up colour defs in.
-	char ColDef[256];
-	_tcscpy(ColDef, "%%+");
+	TCHAR ColDef[256];
+	_tcscpy(ColDef, _T("%%+"));
 
 	// Buffer for temporary strings
-	char TmpBuf[256];
+	TCHAR TmpBuf[256];
 
 	// Get information on the colour - ask for its full identifier rather than just the name,
 	// so we get a unique id for unnamed colours rather than just "Local colour"
@@ -2592,13 +2592,13 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		// Add tint identifier to colour definition
 		if (pCol->TintIsShade())
 		{
-			_tcscat(ColDef, "d");		// Is a shaDe
+			_tcscat(ColDef, _T("d"));		// Is a shaDe
 			TintVal = pCol->GetShadeValueY();		// Note that it is written out as "Y X"
 			ShadeVal = pCol->GetShadeValueX();		// to make backward compatability easier
 		}
 		else
 		{
-			_tcscat(ColDef, "t");		// Is a Tint
+			_tcscat(ColDef, _T("t"));		// Is a Tint
 			TintVal = pCol->GetTintValue();
 		}
 
@@ -2611,15 +2611,15 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (NestingLevel > 1)
 		{
 			// Write out the nesting level
-			_stprintf(TmpBuf, " %d", NestingLevel);
+			tsprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
 			_tcscat(ColDef, TmpBuf);
 		}
 
 		// Add the colour name and tint value
 		if (pCol->TintIsShade())
-			_stprintf(TmpBuf, " (%s) %d %d", ColName, Tint, Shade);
+			tsprintf(TmpBuf, 256, _T(" (%s) %d %d"), ColName, Tint, Shade);
 		else
-			_stprintf(TmpBuf, " (%s) %d", ColName, Tint);
+			tsprintf(TmpBuf, 256, _T(" (%s) %d"), ColName, Tint);
 			_tcscat(ColDef, TmpBuf);
 	}
 	else
@@ -2634,35 +2634,38 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (Linked)
 		{
 			// Mark this as a linked colour
-			_tcscat(ColDef, "l");
+			_tcscat(ColDef, _T("l"));
 		}
 		else if (CamelotEPS && (ColType == COLOURTYPE_SPOT))
 		{
 			// Mark this as a spot colour
-			_tcscat(ColDef, "s");
+			_tcscat(ColDef, _T("s"));
 		}
 
 		// Save out colour model, nesting level and colour name
 		switch (Model)
 		{
 			case COLOURMODEL_RGBT:
-				_tcscat(ColDef, "r");
+				_tcscat(ColDef, _T("r"));
 				break;
 
 			case COLOURMODEL_HSVT:
-				_tcscat(ColDef, "h");
+				_tcscat(ColDef, _T("h"));
 				break;
 
 			case COLOURMODEL_CMYK:
-				_tcscat(ColDef, "c");
+				_tcscat(ColDef, _T("c"));
 				break;
 
 			case COLOURMODEL_GREYT:
 				// Special case - only Camelot can handle greyscales - ArtWorks can't.
 				if (CamelotEPS)
-					_tcscat(ColDef, "g");
+					_tcscat(ColDef, _T("g"));
 				else
-					_tcscat(ColDef, "r");
+					_tcscat(ColDef, _T("r"));
+				break;
+
+			default:
 				break;
 		}
 
@@ -2670,14 +2673,14 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (NestingLevel > 1)
 		{
 			// Write out the nesting level
-			_stprintf(TmpBuf, " %d", NestingLevel);
+			tsprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
 			_tcscat(ColDef, TmpBuf);
 		}
 
 		// Add colour name
-		_tcscat(ColDef , " (");
+		_tcscat(ColDef , _T(" ("));
 		_tcscat(ColDef, ColName);
-		_tcscat(ColDef, ")");
+		_tcscat(ColDef, _T(")"));
 
 		// Now write out the colour component values...
 		switch (Model)
@@ -2687,9 +2690,9 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 				ColourRGBT *pRGBT;
 				pRGBT = (ColourRGBT *) &GenCol;
 
-				AddComponentValue(ColDef, "%.3f", pRGBT->Red.MakeDouble(),   LINKED(1));
-				AddComponentValue(ColDef, "%.3f", pRGBT->Green.MakeDouble(), LINKED(2));
-				AddComponentValue(ColDef, "%.3f", pRGBT->Blue.MakeDouble(),  LINKED(3));
+				AddComponentValue(ColDef, _T("%.3f"), pRGBT->Red.MakeDouble(),   LINKED(1));
+				AddComponentValue(ColDef, _T("%.3f"), pRGBT->Green.MakeDouble(), LINKED(2));
+				AddComponentValue(ColDef, _T("%.3f"), pRGBT->Blue.MakeDouble(),  LINKED(3));
 				break;
 
 			case COLOURMODEL_HSVT:
@@ -2697,9 +2700,9 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 				ColourHSVT *pHSVT;
 				pHSVT = (ColourHSVT *) &GenCol;
 
-				AddComponentValue(ColDef, "%.1f", pHSVT->Hue.MakeDouble() * 360.0, LINKED(1));
-				AddComponentValue(ColDef, "%.1f", pHSVT->Saturation.MakeDouble() * 100.0, LINKED(2));
-				AddComponentValue(ColDef, "%.1f", pHSVT->Value.MakeDouble() * 100.0, LINKED(3));
+				AddComponentValue(ColDef, _T("%.1f"), pHSVT->Hue.MakeDouble() * 360.0, LINKED(1));
+				AddComponentValue(ColDef, _T("%.1f"), pHSVT->Saturation.MakeDouble() * 100.0, LINKED(2));
+				AddComponentValue(ColDef, _T("%.1f"), pHSVT->Value.MakeDouble() * 100.0, LINKED(3));
 				break;
 
 			case COLOURMODEL_CMYK:
@@ -2707,10 +2710,10 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 				ColourCMYK *pCMYK;
 				pCMYK = (ColourCMYK *) &GenCol;
 
-				AddComponentValue(ColDef, "%.3f", pCMYK->Cyan.MakeDouble(),    LINKED(1));
-				AddComponentValue(ColDef, "%.3f", pCMYK->Magenta.MakeDouble(), LINKED(2));
-				AddComponentValue(ColDef, "%.3f", pCMYK->Yellow.MakeDouble(),  LINKED(3));
-				AddComponentValue(ColDef, "%.3f", pCMYK->Key.MakeDouble(),     LINKED(4));
+				AddComponentValue(ColDef, _T("%.3f"), pCMYK->Cyan.MakeDouble(),    LINKED(1));
+				AddComponentValue(ColDef, _T("%.3f"), pCMYK->Magenta.MakeDouble(), LINKED(2));
+				AddComponentValue(ColDef, _T("%.3f"), pCMYK->Yellow.MakeDouble(),  LINKED(3));
+				AddComponentValue(ColDef, _T("%.3f"), pCMYK->Key.MakeDouble(),     LINKED(4));
 				break;
 
 			case COLOURMODEL_GREYT:
@@ -2722,7 +2725,7 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 				if (CamelotEPS)
 				{
 					// General greyscale format...just add the intensity component
-					AddComponentValue(ColDef, "%.3f", Intensity, LINKED(1));
+					AddComponentValue(ColDef, _T("%.3f"), Intensity, LINKED(1));
 				}
 				else
 				{
@@ -2730,7 +2733,7 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 					// where R = G = B.
 					for (INT32 i = 1; i <= 3; i++)
 					{
-						AddComponentValue(ColDef, "%.3f", Intensity, FALSE);
+						AddComponentValue(ColDef, _T("%.3f"), Intensity, FALSE);
 					}
 				}
 				break;

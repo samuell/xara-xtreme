@@ -108,14 +108,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "spread.h"
 #include "page.h"
 //#include "tim.h"
-//#include "grndbmp.h"
-//#include "osrndrgn.h"
+#include "grndbmp.h"
+#include "osrndrgn.h"
 #include "nodebmp.h"
 #include "bitmpinf.h"
-//#include "progress.h"
+#include "progress.h"
 //#include "nev.h"		// _R(IDN_USER_CANCELLED)
 //#include "bmpres.h"		// general bitmap filter based resources
-//#include "prvwflt.h"
+#include "prvwflt.h"
 #ifndef WEBSTER
 //#include "extfilts.h"	// Accusoft filters
 #endif //WEBSTER
@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "qualattr.h"
 #include "ccbuffil.h"
 //#include "palman.h"
+#include "bmpprefs.h"
 
 #include "bmapprev.h"
 
@@ -1702,7 +1703,7 @@ BOOL BaseBitmapFilter::SetPixelHeight(const BMP_SIZE& Height)
 
 /********************************************************************************************
 
->	BOOL BaseBitmapFilter::GetExportOptions(BitmapExportOptions* pOptions)
+>	BOOL BaseBitmapFilter::GetExportOptions(* pOptions)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/11/96
@@ -1913,7 +1914,7 @@ BOOL BaseBitmapFilter::PrepareToExport(Spread *pSpread, UINT32 Depth, double DPI
 									   SelectionType Selection, UINT32 Dither)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pSpread==NULL,FALSE,"BaseBitmapFilter::PrepareToExport null spread pointer")
+	ERROR2IF(pSpread==NULL,FALSE,"BaseBitmapFilter::PrepareToExport null spread pointer");
 
 	// Check whether the selection contains objects that can't be represented
 	// in a bitmap
@@ -1994,17 +1995,17 @@ BOOL BaseBitmapFilter::PrepareToExport(Spread *pSpread, UINT32 Depth, double DPI
 	else
 	{
 		// Ensure Bitmap is at least 1 pixel square!
-		if (ClipRect.Width()<PIXELWIDTH)	ClipRect.hix = ClipRect.lox + PIXELWIDTH;
-		if (ClipRect.Height()<PIXELHEIGHT)	ClipRect.hiy = ClipRect.loy + PIXELHEIGHT;
+		if (ClipRect.Width()<PIXELWIDTH)	ClipRect.hi.x = ClipRect.lo.x + PIXELWIDTH;
+		if (ClipRect.Height()<PIXELHEIGHT)	ClipRect.hi.y = ClipRect.lo.y + PIXELHEIGHT;
 	}
 
 	// Remember the size of the bitmap
 	WinRect	Rect = OSRenderRegion::BitmapDocRectToWin( Identity, ClipRect, DPI );
-	SetPixelWidth(Rect.Width());
-	SetPixelHeight(Rect.Height());
+	SetPixelWidth(Rect.GetWidth());
+	SetPixelHeight(Rect.GetHeight());
 
 	// Create the region
-	TRACEUSER( "Gerry", _T("PrepareToExport creating GRenderBitmap %d bpp   (cmyk = %d)\n"), Depth, GetBitmapExportOptions()->IsCMYK());
+//	TRACEUSER( "Gerry", _T("PrepareToExport creating GRenderBitmap %d bpp   (cmyk = %d)\n"), Depth, GetBitmapExportOptions()->IsCMYK());
 	ExportRegion = new GRenderBitmap(ClipRect, Identity, Scale, Depth, DPI, FALSE, Dither, NULL, TRUE);
 	if (ExportRegion == NULL)
 		// Error already set by new, so just return
@@ -2429,7 +2430,7 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 #ifdef DO_EXPORT
 
 	// Dreamweaver integration.
-	BOOL bDesignNotesSelectedValue = FALSE;
+//	BOOL bDesignNotesSelectedValue = FALSE;
 
 	ERROR2IF(pOp == NULL, FALSE,"BaseBitmapFilter::DoExport no export operation");
 	ERROR2IF(pFile == NULL, FALSE,"BaseBitmapFilter::DoExport no file to export to");
@@ -2476,7 +2477,7 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 		Info.ErrorMsg = _R(IDT_BMPEXP_NOSELECTION);
 		Info.Button[0] = _R(IDB_EXPQUERY_EXPORT);
 		Info.Button[1] = _R(IDB_EXPQUERY_DONTEXPORT);
-		if (AskQuestion(&Info) == _R(IDB_EXPQUERY_DONTEXPORT))
+		if ((ResourceID)(AskQuestion(&Info)) == _R(IDB_EXPQUERY_DONTEXPORT))
 		{
 			Error::SetError(_R(IDN_USER_CANCELLED),0);		// Expects error set on cancel
 			ok = FALSE;
@@ -2695,9 +2696,9 @@ BOOL BaseBitmapFilter::DoExportBitmap(Operation* pOp, CCLexFile* pFile, PathName
 	// all this conversion with possible rounding errors.
 	// Use the original size that has been calculated in the info header
 	UINT32 PixWidth  = BmInfo.PixelWidth;
-	UINT32 PixHeight = BmInfo.PixelHeight;
+//	UINT32 PixHeight = BmInfo.PixelHeight;
 	MILLIPOINT	RecWidth = BmInfo.RecommendedWidth;
-	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
+//	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
 
 	if (PixWidth > 0)
 	{
@@ -3411,9 +3412,9 @@ BOOL BaseBitmapFilter::SetUpExportBitmapOptions(BitmapExportOptions **ppExportOp
 	// all this conversion with possible rounding errors.
 	// Use the original size that has been calculated in the info header
 	UINT32 PixWidth  = BmInfo.PixelWidth;
-	UINT32 PixHeight = BmInfo.PixelHeight;
+//	UINT32 PixHeight = BmInfo.PixelHeight;
 	MILLIPOINT	RecWidth = BmInfo.RecommendedWidth;
-	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
+//	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
 
 	if (PixWidth > 0)
 	{
@@ -3511,9 +3512,9 @@ BOOL BaseBitmapFilter::DoExportBitmapWithOptions(Operation* pOp, CCLexFile* pFil
 	// all this conversion with possible rounding errors.
 	// Use the original size that has been calculated in the info header
 	UINT32 PixWidth  = BmInfo.PixelWidth;
-	UINT32 PixHeight = BmInfo.PixelHeight;
+//	UINT32 PixHeight = BmInfo.PixelHeight;
 	MILLIPOINT	RecWidth = BmInfo.RecommendedWidth;
-	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
+//	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
 
 	if (PixWidth > 0)
 	{
@@ -3670,7 +3671,7 @@ BOOL BaseBitmapFilter::ExportRenderNodes(RenderRegion *pRegion, ExportDC *pDC,
 		if (NumberOfStrips <= 0)
 			NumberOfStrips = 1;
 TRACEUSER( "Gerry", _T("Number of bands is %d\n"), NumberOfStrips);
-TRACEUSER( "Gerry", _T"Number of nodes is %d\n"), OurNumNodes);
+TRACEUSER( "Gerry", _T("Number of nodes is %d\n"), OurNumNodes);
 
 		// We need the progress bar to just move up once rather than for every strip	
 		// plus include the number of lines in the export bitmap so that we can show
@@ -3767,10 +3768,10 @@ TRACEUSER( "Gerry", _T("Size of progress bar = %d\n"), SizeOfExport + HeightInPi
 				// it has actually been allocated in StartRender
 				WinRect BitmapRect = ((GRenderRegion*)pGRenderBitmap)->CalculateWinRect(pGRenderBitmap->GetClipRect());
 
-				TRACEUSER( "Gerry", _T("CMYK bitmap is (%d, %d)\n"), BitmapRect.Width(), BitmapRect.Height() );
+				TRACEUSER( "Gerry", _T("CMYK bitmap is (%d, %d)\n"), BitmapRect.GetWidth(), BitmapRect.GetHeight() );
 				LPBYTE pCMYKBits = NULL;
-				LPBITMAPINFO pCMYKInfo = AllocDIB(BitmapRect.Width(), BitmapRect.Height(), 32, &pCMYKBits);
-				memset(pCMYKBits, 0, BitmapRect.Width() * BitmapRect.Height() * sizeof(DWORD));
+				LPBITMAPINFO pCMYKInfo = AllocDIB(BitmapRect.Width(), BitmapRect.GetHeight(), 32, &pCMYKBits);
+				memset(pCMYKBits, 0, BitmapRect.GetWidth() * BitmapRect.GetHeight() * sizeof(DWORD));
 
 				// Loop around the four plates
 				for (UINT32 PlateType = COLOURPLATE_CYAN; PlateType <= COLOURPLATE_KEY; PlateType += 1)

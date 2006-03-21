@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccfile.h"						// needs FilePos
 #include "dibconv.h"					// needs DIBConvert
 #include "dibutil.h"					// needs FNPTR_SCANLINE
-//#include "outptdib.h"	
+#include "outptdib.h"	
 //#include "outptgif.h"					// TI_GIF_TRANSINTER	
 #include <png.h>
 //#include "accuflts.h"					// PNG
@@ -128,9 +128,6 @@ class BaseCamelotFilter;
 
 ********************************************************************************************/
 
-PORTNOTE("filters","Removed OutputPNG")
-
-#ifndef EXCLUDE_FROM_XARALX
 class OutputPNG : public OutputDIB
 {
 public:
@@ -185,5 +182,4 @@ private:
 	//INT32 DataBufferSize;				// size of the data buffer
 	UINT32 WidthOfLine;				// word/byte rounded line width rather than the pixel width
 };
-#endif
 #endif // INC_OUTPTPNG

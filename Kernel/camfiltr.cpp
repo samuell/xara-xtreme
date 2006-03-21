@@ -5101,7 +5101,7 @@ BOOL BaseCamelotFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* p
 	BOOL ok = TRUE;
 	EscapePressed = FALSE;
 
-	TRY
+//	TRY
 	{
 		// This needs to be fixed sensibly as it uses the value that is 
 		// currently in the TotalProgressBarCount variable
@@ -5186,6 +5186,7 @@ BOOL BaseCamelotFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* p
 			}
 		}
 	}
+#if 0
 	CATCH(CFileException, e)
 	{
 		TRACE( _T("BaseCamelotFilter::DoExport An error has occurred during export!\n") );
@@ -5193,7 +5194,7 @@ BOOL BaseCamelotFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* p
 		ok = FALSE;
 	}
 	END_CATCH
-
+#endif
 	// Clean up if we get an error
 	if (!ok)
 	{

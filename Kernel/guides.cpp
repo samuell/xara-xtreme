@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "osrndrgn.h"
 //#include "cameleps.h"
 #include "saveeps.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "keypress.h"
 #include "prpsgds.h"
 //#include "snapops.h"
@@ -482,7 +482,7 @@ void NodeGuideline::PreExportRender(RenderRegion* pRegion)
 		pDC->OutputValue(Ordinate);
 		pDC->OutputValue(INT32(Type));
 
-		pDC->OutputToken("glne");			// Camelot "guideline" token
+		pDC->OutputToken(_T("glne"));			// Camelot "guideline" token
 		pDC->OutputNewLine();
 	}
 #endif
@@ -509,9 +509,9 @@ BOOL NodeGuideline::ExportRender(RenderRegion* pRegion)
 #ifdef DO_EXPORT
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
-		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
+		/*EPSExportDC *pDC = */ (EPSExportDC *) pRegion->GetRenderDC();
 
-//		pDC->OutputToken("ceo");			// Output end extended object token
+//		pDC->OutputToken(_T("ceo"));			// Output end extended object token
 //		pDC->OutputNewLine();
 	}
 #endif

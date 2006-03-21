@@ -105,14 +105,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dibconv.h"					// needs DIBConvert
 #include "dibutil.h"					// needs FNPTR_SCANLINE
 #include "outptdib.h"	
-#include "gifutil.h"					// GIF header definitions
+//#include "gifutil.h"					// GIF header definitions
 extern "C"
 {
 // Header files supplied by Accusoft image library
-#include "imglib.h"						// get filter numbers
+//#include "imglib.h"						// get filter numbers
 }
 
-#include "accuflts.h"	// TI_GIF ...
+//#include "accuflts.h"	// TI_GIF ...
 
 #define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
 

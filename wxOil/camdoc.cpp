@@ -683,9 +683,93 @@ bool CCamDoc::DoNewDocument()
 	// Success.
 	return TRUE;
 }
-bool CCamDoc::OnSaveDocument( const wxString &strFilename )
+/********************************************************************************************
+>	virtual bool CCamDoc::OnSaveDocument(const wxString& filename)
+
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	8/3/94
+	Inputs:		A C string with the directory path / filename of the document.
+	Returns:	TRUE for a successful save, FALSE otherwise
+	Purpose:	Saves the document to the specified path.  Calls the kernel
+				to do the actual work.
+	SeeAlso:	CCamDoc::OnNewDocument; CCamDoc::OnOpenDocument; CCamDoc::DoSaveDocument
+********************************************************************************************/
+
+bool CCamDoc::OnSaveDocument(const wxString& filename)
 {
-	return false;
+	const TCHAR* pcszPathName = filename.c_str();
+#ifdef STANDALONE
+
+	// Do nothing on a standalone version
+	return TRUE;
+
+#else
+
+//	ASSERT_VALID(this);
+//	ASSERT(pcszPathName == 0 || AfxIsValidString(pcszPathName));
+
+PORTNOTE("other", "Disabled OLE")
+#ifndef EXCLUDE_FROM_XARALX
+#if (_OLE_VER >= 0x200)
+	#ifdef _DEBUG
+		if (IsUserName("JustinF"))
+		{
+			TRACE( _T("In CCamDoc::OnSaveDocument("));	
+			if (pcszPathName)
+				TRACE( _T("FILE %s"), (LPCTSTR) pcszPathName);
+			else
+				TRACE( _T("STORAGE 0x%p"), (LPVOID) m_lpRootStg);	
+			TRACE( _T(", %s)\n", (LPCTSTR) (m_bSameAsLoad ? TEXT("SAVE"))
+													  : (m_bRemember ? TEXT("SAVE AS")
+																	 : TEXT("SAVE COPY"))));
+		}
+	#endif
+#endif
+
+#if (_OLE_VER >= 0x200)
+	// This patched in from COleLinkingDoc::OnSaveDocument.
+	BOOL fRemember = m_bRemember;
+#endif
+
+	// TO DO: Check if we need to call the base-class, and how.
+/*	if (!CCamDocBase::OnSaveDocument(pcszPathName))
+	{
+		TRACE( _T("CCamDocBase::OnSaveDocument failed - that's quite scary, isn't it?\n"));
+		return FALSE;
+	}
+*/
+	// Set the busy prefix.
+//	StatusLine::SetPrefix(String_64(_R(IDS_WAIT_SAVING_DOC_PFX)));
+#endif
+	// Try the actual save.
+	if (!DoSaveDocument(pcszPathName))
+	{
+//		StatusLine::SetDefaultPrefix();
+		return FALSE;
+	}
+
+PORTNOTE("other", "Disabled OLE")
+#ifndef EXCLUDE_FROM_XARALX
+#if (_OLE_VER >= 0x200)
+	// Update the moniker/registration if the name has changed.
+	// Neville 8/8/97 Fix for bug 5592: MFC Assert while saving
+	// Check that the document is not a copy before trying to do OLE bits
+	// If its a copy then it should never be an OLE doc.
+	if (fRemember && m_strMoniker != pcszPathName && !IsACopy())
+	{
+		// update the moniker/registration since the name has changed
+		Revoke();
+		RegisterIfServerAttached(pcszPathName, TRUE);
+	}
+#endif
+#endif
+	// Close the file, update the flags etc and return success.
+	if (pcszPathName) SetOriginalPath(TEXT(""));
+	m_fIsUntouched = FALSE;
+//	StatusLine::SetDefaultPrefix();
+	return TRUE;
+
+#endif
 }
 
 /********************************************************************************************
@@ -1080,14 +1164,6 @@ BOOL CCamDoc::RemoveExistingDocs()
 	return TRUE;
 }
 
-bool CCamDoc::IsModified() const
-{
-	return false;
-}
-
-void CCamDoc::Modify( bool mod )
-{
-}
 
 /********************************************************************************************
 

@@ -118,7 +118,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "expcol.h"		// ExportedColours handling class
 #include "cxfrec.h"		// CXaraFileRecord handler
 
-//#include "exphint.h"	// ExportHint class
+#include "exphint.h"	// ExportHint class
+#include "ophist.h"
 
 DECLARE_SOURCE("$Revision: 662 $");
 
@@ -465,7 +466,7 @@ BOOL DocInfoComponent::StartExportBeforeComp(BaseCamelotFilter *pFilter)
 	Document * pDoc = pFilter->GetDocument();
 	if (pDoc)
 	{
-		BOOL ok = ExportDocumentComment(pFilter, pDoc);
+		/*BOOL ok =*/ ExportDocumentComment(pFilter, pDoc);
 	}
 
 #endif

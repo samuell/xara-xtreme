@@ -1756,8 +1756,8 @@ BOOL Filter::ExportSelectionOnly(BOOL MaskedRender)
 BOOL Filter::OpenExportFile(CCDiskFile * pDiskFile, PathName *pPath)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pDiskFile == NULL, FALSE,"Filter::OpenExportFile null file supplied")
-	ERROR2IF(pPath == NULL, FALSE,"Filter::OpenExportFile null pathname supplied")
+	ERROR2IF(pDiskFile == NULL, FALSE,"Filter::OpenExportFile null file supplied");
+	ERROR2IF(pPath == NULL, FALSE,"Filter::OpenExportFile null pathname supplied");
 
 	// Open up the file. This will create a zero length file just to make sure that it
 	// is possible, i.e. we have write access. This should have actually already been
@@ -1796,7 +1796,7 @@ BOOL Filter::OpenExportFile(CCDiskFile * pDiskFile, PathName *pPath)
 BOOL Filter::DeleteExportFile(CCDiskFile * pDiskFile)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pDiskFile == NULL, FALSE,"Filter::CloseExportFile null file supplied")
+	ERROR2IF(pDiskFile == NULL, FALSE,"Filter::CloseExportFile null file supplied");
 
 	// Remove the zero length file that we created as part of the process.
 	
@@ -1933,7 +1933,7 @@ PORTNOTE("filter","Removed EPSFilter usage")
 
 	if (IsCamelotEPS)
 	{
-		TRY
+		//TRY
 		{
 			// Special 3-stage rendering needed for Camelot EPS to be renderable.
 			View *pView = DocView::GetSelected();
@@ -1956,6 +1956,7 @@ PORTNOTE("filter","Removed EPSFilter usage")
 			// Finished render region - close down region (i.e. output trailer).
 			((EPSRenderRegion *) pRegion)->CloseDown();
 		}
+#if 0
 		CATCH(CFileException, e)
 		{
 			// Didn't work - report failure to caller.
@@ -1964,7 +1965,7 @@ PORTNOTE("filter","Removed EPSFilter usage")
 			return FALSE;
 		}
 		END_CATCH
-
+#endif
 		// All ok
 		return TRUE;
 	}
@@ -2152,7 +2153,7 @@ BOOL Filter::ExportRenderNodes ( RenderRegion	*pRegion,
 	NumNodes = 0;
 
 	// Guard against disk/file errors, and get ready to render.
-	TRY
+	//TRY
 	{
 		// Get the region ready to render.
 		if ( !pRegion->StartRender() )
@@ -2163,6 +2164,7 @@ BOOL Filter::ExportRenderNodes ( RenderRegion	*pRegion,
 			return FALSE;
 		}
 	}
+#if 0
 	CATCH ( CFileException, e )
 	{
 		// Didn't work - report failure to caller.
@@ -2173,7 +2175,7 @@ BOOL Filter::ExportRenderNodes ( RenderRegion	*pRegion,
 		return FALSE;
 	}
 	END_CATCH
-
+#endif
 	// Write the nodes out to the file, and end the export
 	if ( WriteNodes ( pRegion, pDC, VisibleLayersOnly, CheckSelected, ShowProgress ) &&
 		 EndExportRender ( pRegion, ShowProgress ) )
@@ -2230,7 +2232,7 @@ BOOL Filter::WriteNodes ( RenderRegion	*pRegion,
 
 	// Cycle through all exportable nodes, and render (export) them.
 	// Export the file, but catch any file errors.
-	TRY
+	//TRY
 	{
 		BOOL IsPageBackGroundAnd32BitAlpha = FALSE;
 		BOOL LookForPageBackgrounds = TRUE;
@@ -2239,6 +2241,7 @@ BOOL Filter::WriteNodes ( RenderRegion	*pRegion,
 		pRegion->RenderTree(pNode, FALSE, FALSE, &MyCallback);
 		pRegion->ResetRender();
 	}
+#if 0
 	CATCH ( CFileException, e )
 	{
 		// Didn't work - report failure to caller.
@@ -2250,7 +2253,7 @@ BOOL Filter::WriteNodes ( RenderRegion	*pRegion,
 		return FALSE;
 	}
 	END_CATCH
-
+#endif
 	// All OK
 	return TRUE;
 #else
@@ -2308,7 +2311,7 @@ BOOL Filter::EndExportRender ( RenderRegion	*pRegion,
 {
 #ifdef DO_EXPORT
 
-	TRY
+	//TRY
 	{
 		// Finished rendering - deinit render region.
 		pRegion->StopRender ();
@@ -2316,6 +2319,7 @@ BOOL Filter::EndExportRender ( RenderRegion	*pRegion,
 		// Shut down the render region.
 		pRegion->CloseDown ();
 	}
+#if 0
 	CATCH ( CFileException, e )
 	{
 		// Didn't work - report failure to caller.
@@ -2324,7 +2328,7 @@ BOOL Filter::EndExportRender ( RenderRegion	*pRegion,
 		return FALSE;
 	}
 	END_CATCH
-
+#endif
 	// Close down progress display, if present
 	if ( ShowProgress )
 		EndSlowJob ();
@@ -2419,7 +2423,7 @@ BOOL Filter::UpdateExportedNodeCount(UINT32 NumNodesSaved)
 		static UINT32 LastError = 0;
 		if (LastError != CurrentProgressLimit)
 		{
-			if (IsUserName("Tim"))
+			if (Error::IsUserName("Tim"))
 			{
 				ERROR3("Filter::UpdateExportedNodeCount() called with an out of range value!");
 			}

@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftags.h"
 #include "camfiltr.h"
 #include "rechgrp.h"
-//#include "cmxrendr.h"
+#include "cmxrendr.h"
 //#include "cmxexdc.h"
 #include "extender.h"
 #include "nodeblnd.h"
@@ -232,7 +232,7 @@ void NodeGroup::PreExportRender(RenderRegion* pRegion)
 	{
 		// Output "start group" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("u");
+		pDC->OutputToken(_T("u"));
 		pDC->OutputNewLine();
 	}
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
@@ -252,7 +252,7 @@ BOOL NodeGroup::ExportRender(RenderRegion* pRegion)
 	{
 		// Output "end group" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("U");
+		pDC->OutputToken(_T("U"));
 		pDC->OutputNewLine();
 		
 		// Tell caller we rendered ourselves ok

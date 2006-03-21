@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bitfilt.h"
 #include "outptdib.h"
 #include "bmpprefs.h"  // SelectionType
-#include "imglib.h"
+//#include "imglib.h"
 //#include "accures.h"
 //#include "tim.h"
 
@@ -195,7 +195,8 @@ public:
 	static UINT32 GetDefaultExportDither();
 	static void SetDefaultExportDither( UINT32 );
 
-	virtual INT32 GetFilterType() const { return BMP_UNCOMPRESSED; }
+PORTNOTE("filters", "Removed use of BMP_UNCOMPRESSED")
+	virtual INT32 GetFilterType() const { return 0/*BMP_UNCOMPRESSED*/; }
 
 	// Import related functions
 	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);

@@ -420,14 +420,15 @@ Technical Notes:
 
 void FileSaveAction() 
 {               
-PORTNOTETRACE("other", "FileSaveAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
+#if 0
  	((CCamDoc *)											
  		(((CMDIFrameWnd *)                                      
  			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
  					)->GetActiveDocument()                  	//Get Active Document
  						)->OnFileSave();                   			//Save Active Document
 #endif
+	wxCommandEvent		event;
+	AfxGetApp().GetDocumentManager()->OnFileSave( event );
 }
  
 /********************************************************************************************

@@ -2406,7 +2406,7 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 		if (Guide)
 		{
 			pDC->OutputValue(INT32(TAG_GUIDELAYER));	// Output start extended object tag and token
-			pDC->OutputToken("cso");
+			pDC->OutputToken(_T("cso"));
 			pDC->OutputNewLine();
 		}
 
@@ -2415,32 +2415,32 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 
 		// Layer type - foreground or background
 		if (IsBackground())
-			pDC->OutputToken("0");
+			pDC->OutputToken(_T("0"));
 		else
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 
 		// Visible flag
 		if (Visible)
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 		else
-			pDC->OutputToken("0");
+			pDC->OutputToken(_T("0"));
 
 		// Printable flag
 		if (IsPrintable())
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 		else
-			pDC->OutputToken("0");
+			pDC->OutputToken(_T("0"));
 
 		// Locked flag
 		if (Locked)
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 		else
-			pDC->OutputToken("0");
+			pDC->OutputToken(_T("0"));
 
 		// Layer token itself
 
 		if (!Guide)
-			pDC->OutputToken("alyr");
+			pDC->OutputToken(_T("alyr"));
 		else
 		{
 			// Output guide layer stuff
@@ -2453,7 +2453,7 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 			if (pGuideColour != NULL)
 				pDC->OutputNamedColour(pGuideColour);
 
-			pDC->OutputToken("glyr");
+			pDC->OutputToken(_T("glyr"));
 		}
 
 		pDC->OutputNewLine();
@@ -2488,7 +2488,7 @@ BOOL Layer::ExportRender(RenderRegion* pRegion)
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
-		pDC->OutputToken("ceo");
+		pDC->OutputToken(_T("ceo"));
 		pDC->OutputNewLine();
 	}
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))

@@ -2050,7 +2050,7 @@ void NodeBevelController::PreExportRender( RenderRegion* pRender )
 			}
 			else if (m_pBevel->m_bOuter)
 			{
-				pDC->OutputToken("u");
+				pDC->OutputToken(_T("u"));
 				pDC->OutputNewLine();
 			}
 		}
@@ -2075,7 +2075,7 @@ BOOL NodeBevelController::ExportRender(RenderRegion* pRegion)
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
 		if(m_pBevel && m_pBevel->m_bOuter)
-			pDC->OutputToken("U");
+			pDC->OutputToken(_T("U"));
 
 		pDC->OutputNewLine();
 		

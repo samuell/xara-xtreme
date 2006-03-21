@@ -457,7 +457,7 @@ BOOL OpMenuLoad::LoadFile(CCLexFile* pFileToLoad, UINT32 nPrefFilter)
 void OpMenuSave::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 {
 	// Extract the parameters.
-	NativeFileOpParams* ppm = (NativeFileOpParams*) (pOpParam->Param1);
+	NativeFileOpParams* ppm = (NativeFileOpParams*) (void *) (pOpParam->Param1);
 
 	// Try to save the file.
 	ERROR3IF(!ppm->pFile, "Null CCLexFile* in OpMenuSave::DoWithParam");
@@ -761,7 +761,7 @@ BOOL OpMenuSave::SaveSpecificFile(Filter* pFilter, CCLexFile* pFile)
 
 	// First off, we have to try and open the file
 	BOOL AllOK = TRUE;
-	TRY
+//	TRY
 	{
 		// Tell the filter we would like a Preview Bitmap please
 		if (pFilter->CanIncludePreviewBmp()) pFilter->IncludePreviewBmp(TRUE);
@@ -785,7 +785,7 @@ BOOL OpMenuSave::SaveSpecificFile(Filter* pFilter, CCLexFile* pFile)
 			AllOK = FALSE;
 		}
 	}
-
+#if 0
 	// See if there was a file io error
 	CATCH(CFileException, e)
 	{
@@ -801,7 +801,7 @@ BOOL OpMenuSave::SaveSpecificFile(Filter* pFilter, CCLexFile* pFile)
 		return FALSE;
 	}
 	END_CATCH
-
+#endif
 	// Tell the filter we would NOT like a Preview Bitmap ready for next time
 	if (pFilter->CanIncludePreviewBmp()) pFilter->IncludePreviewBmp(FALSE);
 
