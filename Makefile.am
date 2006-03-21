@@ -17,7 +17,7 @@ MOSTLYCLEANFILES=wxOil/xrc/xrc.d wxOil/xrc/xrc.stamp Resources/*
 bin_PROGRAMS		= XaraLX
 if DARWIN_LINK
     XaraLX_SOURCES	= Kernel/*.o wxOil/*.o tools/*.o wxXtra/*.o
-    XaraLX_LDSOURCE = $(XaraLX_SOURCES) -lpng
+    XaraLX_LDSOURCE = $(XaraLX_SOURCES)
 else
     XaraLX_SOURCES	= Kernel/libKernel.a wxOil/libwxOil.a tools/libTools.a wxXtra/libwxXtra.a
     XaraLX_LDSOURCE = -Wl,--start-group $(XaraLX_SOURCES) -Wl,--end-group
