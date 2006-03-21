@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FONTDROP
 #define INC_FONTDROP
 
-#include "dropdown.h"
+//#include "dropdown.h"
 #include "fontbase.h"
 
 class Document;
@@ -176,7 +176,7 @@ public:
 
 	// Default constructor and destructor
 	FontDropDown();
-	~FontDropDown();
+	virtual ~FontDropDown();
 
 	// (Re) initialise the font list
 	virtual BOOL Init(CWindowID ParentWindow, CGadgetID ParentControl);
@@ -255,7 +255,7 @@ public:
 
 	// Default constructor and destructor
 	DocumentFontDropDown();
-	~DocumentFontDropDown();
+	virtual ~DocumentFontDropDown();
 
 	// Fills in the combobox list of fonts in the specified document, and selects a useful one
 	BOOL FillInFontList(Document * WorkDoc);

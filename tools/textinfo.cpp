@@ -126,8 +126,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "finfodlg.h"
 #include "app.h"
 #include "spread.h"
-#include "fonts.h"
-#include "atminfo.h"
+//#include "fonts.h"
+//#include "atminfo.h"
 #include "fontman.h"
 #include "fontdrop.h"
 #include "fontbase.h"
@@ -135,7 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "localenv.h"
 #include "unicdman.h"
 #include "docview.h"
-#include "camvw.h"
+//#include "camvw.h"
 #include "blobs.h"
 
 DECLARE_SOURCE( "$Revision: 662 $" );
@@ -148,21 +148,21 @@ CC_IMPLEMENT_DYNCREATE(TextInfoBarEnumFont, OILEnumFonts )
 #define new CAM_DEBUG_NEW     
 
 // consts ...
-const KernNudge      = 10;		// ems/1000
-const KernLimit      = 999999;	// ems/1000    +/-
-const BaseLineNudge  = 200;		// millipoints
-const BaseLineLimit  = 999999;	// millipoints +/-
-const TrackingNudge  = 10;		// ems/1000
-const TrackingLimit  = 9999;	// ems/1000    +/-
-const LineSpaceNudge = 200;		// millipoints
-const LineSpaceLimit = 999999;	// millipoints +/-
-const LineSpacePercentNudge = 5; // percent
-const LineSpacePercentMin = -99999;	// percent
-const LineSpacePercentMax = 99999;// percent
-const FontSizeMin    = 100;		// millipoints
-const FontSizeMax    = 999999;	// millipoints
-const FontAspectMin  = 1;		// percent
-const FontAspectMax  = 9999;	// percent
+const INT32 KernNudge      = 10;		// ems/1000
+const INT32 KernLimit      = 999999;	// ems/1000    +/-
+const INT32 BaseLineNudge  = 200;		// millipoints
+const INT32 BaseLineLimit  = 999999;	// millipoints +/-
+const INT32 TrackingNudge  = 10;		// ems/1000
+const INT32 TrackingLimit  = 9999;	// ems/1000    +/-
+const INT32 LineSpaceNudge = 200;		// millipoints
+const INT32 LineSpaceLimit = 999999;	// millipoints +/-
+const INT32 LineSpacePercentNudge = 5; // percent
+const INT32 LineSpacePercentMin = -99999;	// percent
+const INT32 LineSpacePercentMax = 99999;// percent
+const INT32 FontSizeMin    = 100;		// millipoints
+const INT32 FontSizeMax    = 999999;	// millipoints
+const INT32 FontAspectMin  = 1;		// percent
+const INT32 FontAspectMax  = 9999;	// percent
 
 #define INVALID_ATTVAL -1000000
 // statics ...
@@ -268,7 +268,7 @@ BOOL TextInfoBarOp::IsDisplayFontInstalled()
 	CFont * pOldFont = pDesktopDC->SelectObject(TestFont);
 	
 	// get the type face name
-	char buff[64];
+	TCHAR buff[64];
 	pDesktopDC->GetTextFace(64,buff);
 
 	// Select old font back into screen DC
@@ -279,7 +279,7 @@ BOOL TextInfoBarOp::IsDisplayFontInstalled()
 
 	// is it one of ours ?
 	String_32 CCSmall(_R(IDS_FONTS_EDITFIELDSMALL)); // "CCSMALL"
-	return _tcsncicmp(buff, (TCHAR *)CCSmall, 64)==0;
+	return _tcsncmp(buff, (TCHAR *)CCSmall, 64)==0;
 }
 
 
@@ -356,6 +356,8 @@ TextInfoBarOp::~TextInfoBarOp()
 
 TextInfoBarOp::TextInfoBarOp()
 {
+	DlgResID = _R(IDD_TEXT_INFO_BAR);
+
 	SuperScriptSize   = Text_SuperScriptSize;
 	SuperScriptOffset = Text_SuperScriptOffset;
 	SubScriptSize     = Text_SubScriptSize;
@@ -631,6 +633,8 @@ void TextInfoBarOp::OnFieldChange(FontAttribute ThisChange)
 			}
 			break;	
 		}
+		default:
+			break;
 	}
 	
 	if (Attrib)
@@ -645,7 +649,10 @@ void TextInfoBarOp::OnFieldChange(FontAttribute ThisChange)
 				OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpTextKern));
 
 			if (OpDesc != NULL)
-				OpDesc->Invoke(&OpParam(InfoData.HorizontalKern,0));
+			{
+				OpParam param(InfoData.HorizontalKern,0);
+				OpDesc->Invoke(&param);
+			}
 			break;
 		}
 		case AutoKernText:
@@ -655,9 +662,14 @@ void TextInfoBarOp::OnFieldChange(FontAttribute ThisChange)
 				OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpTextAutoKern));
 
 			if (OpDesc != NULL)
-				OpDesc->Invoke(&OpParam(InfoData.AutoKerning,0));
+			{
+				OpParam param(InfoData.AutoKerning,0);
+				OpDesc->Invoke(&param);
+			}
 			break;
 		}
+		default:
+			break;
 	}
 
 	Update();
@@ -871,7 +883,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
  	if (result == SelRange ::ATTR_MANY)
 	{
 		InfoData.FontSize = INVALID_ATTVAL;
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_POINT_COMBO),&(String_64("")),0,-1);
+		String_64 empty(_T(""));
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_POINT_COMBO),&empty,0,-1);
 
 	}
 	else 
@@ -983,7 +996,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 	if (result == SelRange ::ATTR_MANY)
 	{
 		InfoData.AspectRatio = INVALID_ATTVAL;
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_ASPECTEDIT),&(String_64("")),0,-1);
+		String_64 empty(_T(""));
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_ASPECTEDIT),&empty,0,-1);
 	}
 	else 
 	{
@@ -1009,7 +1023,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 	if (result == SelRange ::ATTR_MANY)
 	{
 		InfoData.Tracking = INVALID_ATTVAL;
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_TRACKING_EDIT),&(String_64("")),0,-1);
+		String_64 empty(_T(""));
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_TRACKING_EDIT),&empty,0,-1);
 	}
 	else 
 	{
@@ -1034,7 +1049,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 
 	if (result == SelRange ::ATTR_MANY)
 	{
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT),&(String_64("")),0,-1);
+		String_64 empty(_T(""));
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT),&empty,0,-1);
 		InfoData.LineSpacePercent = InfoData.LineSpace = INVALID_ATTVAL;
 		
 	}
@@ -1075,7 +1091,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 	if (result == SelRange ::ATTR_MANY)
 	{
 		InfoData.BaseLineShift = INVALID_ATTVAL;
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),&(String_64("")),0,-1);
+		String_64 empty(_T(""));
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),&empty,0,-1);
 	}
 	else 
 	{
@@ -1259,20 +1276,21 @@ void TextInfoBarOp::UpdateButtonStates()
 
 void TextInfoBarOp::SetCurrentJustify(UINT32 Button)
 {
-	switch (Button)
+	if (Button == _R(IDC_JUSTIFYFULL))
 	{
-		case _R(IDC_JUSTIFYFULL):
-			InfoData.Justify = JustifyFull;
-			break;
-		case _R(IDC_JUSTIFYLEFT):
-			InfoData.Justify = JustifyLeft;
-			break;
-		case _R(IDC_JUSTIFYRIGHT):
-			InfoData.Justify = JustifyRight;
-			break;
-		case _R(IDC_JUSTIFYCENTRE):
-			InfoData.Justify = JustifyCentre;
-			break;
+		InfoData.Justify = JustifyFull;
+	}
+	else if (Button == _R(IDC_JUSTIFYLEFT))
+	{
+		InfoData.Justify = JustifyLeft;
+	}
+	else if (Button == _R(IDC_JUSTIFYRIGHT))
+	{
+		InfoData.Justify = JustifyRight;
+	}
+	else if (Button == _R(IDC_JUSTIFYCENTRE))
+	{
+		InfoData.Justify = JustifyCentre;
 	}
 
 	UpdateJustifyButtons();
@@ -1705,49 +1723,37 @@ void TextInfoBarOp::SetLineSpaceGadget()
 
 void TextInfoBarOp::DoKernBumps(UINT32 Button)
 {
-	switch(Button)
+	if (Button == _R(IDC_KERN_BUMP_X_LESS))
 	{
-		case _R(IDC_KERN_BUMP_X_LESS): 
+		if(InfoData.HorizontalKern>=-(KernLimit-KernNudge))
 		{
-			if(InfoData.HorizontalKern>=-(KernLimit-KernNudge))
-			{
-				SetCurrentHorizontalKern(InfoData.HorizontalKern-KernNudge);
-				pTextInfoBar->SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 	
-			}
-			break;						   
+			SetCurrentHorizontalKern(InfoData.HorizontalKern-KernNudge);
+			pTextInfoBar->SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 	
 		}
-		case _R(IDC_KERN_BUMP_X_MORE): 
+	}
+	else if (Button == _R(IDC_KERN_BUMP_X_MORE))
+	{
+		if(InfoData.HorizontalKern<=(KernLimit-KernNudge))
 		{
-			if(InfoData.HorizontalKern<=(KernLimit-KernNudge))
-			{
-				SetCurrentHorizontalKern(InfoData.HorizontalKern+KernNudge);
-				pTextInfoBar->SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 	
-			}
-			break;						   
+			SetCurrentHorizontalKern(InfoData.HorizontalKern+KernNudge);
+			pTextInfoBar->SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 	
 		}
-		case _R(IDC_KERN_BUMP_Y_LESS): 
+	}
+	else if (Button == _R(IDC_KERN_BUMP_Y_LESS))
+	{
+		if ((InfoData.BaseLineShift != INVALID_ATTVAL) && (InfoData.BaseLineShift>=-(BaseLineLimit-BaseLineNudge)))
 		{
-			if(InfoData.BaseLineShift == INVALID_ATTVAL)
-				break;
-			if(InfoData.BaseLineShift>=-(BaseLineLimit-BaseLineNudge))
-			{
-				SetCurrentBaseLineShift(InfoData.BaseLineShift-BaseLineNudge);
-				pTextInfoBar->SetUnitGadgetValue(_R(IDC_KERN_EDIT_Y),CurrentFontUnits,InfoData.BaseLineShift,0,-1);
-			}
-			break;						   
+			SetCurrentBaseLineShift(InfoData.BaseLineShift-BaseLineNudge);
+			pTextInfoBar->SetUnitGadgetValue(_R(IDC_KERN_EDIT_Y),CurrentFontUnits,InfoData.BaseLineShift,0,-1);
 		}
-		case _R(IDC_KERN_BUMP_Y_MORE): 
+	}
+	else if (Button == _R(IDC_KERN_BUMP_Y_MORE))
+	{
+		if ((InfoData.BaseLineShift != INVALID_ATTVAL) && (InfoData.BaseLineShift<=(BaseLineLimit-BaseLineNudge)))
 		{
-			if(InfoData.BaseLineShift == INVALID_ATTVAL)
-				break;
-			if(InfoData.BaseLineShift<=(BaseLineLimit-BaseLineNudge))
-			{
-				SetCurrentBaseLineShift(InfoData.BaseLineShift+BaseLineNudge);
-				pTextInfoBar->SetUnitGadgetValue(_R(IDC_KERN_EDIT_Y),CurrentFontUnits,InfoData.BaseLineShift,0,-1);
-			}
-			break;						   
-		}	  	 	  	 
-  
+			SetCurrentBaseLineShift(InfoData.BaseLineShift+BaseLineNudge);
+			pTextInfoBar->SetUnitGadgetValue(_R(IDC_KERN_EDIT_Y),CurrentFontUnits,InfoData.BaseLineShift,0,-1);
+		}
 	}
 }
 
@@ -1769,32 +1775,27 @@ void TextInfoBarOp::DoKernBumps(UINT32 Button)
 
 void TextInfoBarOp::DoTrackingBumps(UINT32 Button)
 {
-	if(InfoData.Tracking == INVALID_ATTVAL)
+	if (InfoData.Tracking == INVALID_ATTVAL)
 		return;
 
-
-	switch(Button)
+	if (Button == _R(IDC_TRACKING_LESS))
 	{
-		case _R(IDC_TRACKING_LESS): 
+		if(InfoData.Tracking>=-(TrackingLimit-TrackingNudge))
 		{
-			if(InfoData.Tracking>=-(TrackingLimit-TrackingNudge))
-			{
-				SetCurrentTracking(InfoData.Tracking-TrackingNudge);
-				pTextInfoBar->SetLongGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1); 	
-			}
-			break;						   
+			SetCurrentTracking(InfoData.Tracking-TrackingNudge);
+			pTextInfoBar->SetLongGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1); 	
 		}
-		case _R(IDC_TRACKING_MORE): 
+	}
+	else if (Button == _R(IDC_TRACKING_MORE))
+	{
+		if(InfoData.Tracking<=(TrackingLimit-TrackingNudge))
 		{
-			if(InfoData.Tracking<=(TrackingLimit-TrackingNudge))
-			{
-				SetCurrentTracking(InfoData.Tracking+TrackingNudge);
-				pTextInfoBar->SetLongGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1); 	
-			}
-			break;						   
+			SetCurrentTracking(InfoData.Tracking+TrackingNudge);
+			pTextInfoBar->SetLongGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1); 	
 		}
 	}
 }
+
 /********************************************************************************************
 
 >void TextInfoBarOp::DoLineSpacingBumps(UINT32 Button)
@@ -1813,57 +1814,54 @@ void TextInfoBarOp::DoTrackingBumps(UINT32 Button)
 void TextInfoBarOp::DoLineSpacingBumps(UINT32 Button)
 {
 	BOOL ChangedValue = FALSE;
-	switch(Button)
+
+	if (Button == _R(IDC_SPACING_LESS))
 	{
-		case _R(IDC_SPACING_LESS): 
+		if(InfoData.IsLineSpaceAPercent == FALSE)
 		{
-			if(InfoData.IsLineSpaceAPercent == FALSE)
+			if(InfoData.LineSpace == INVALID_ATTVAL)
+				return;
+			if(InfoData.LineSpace>=-(LineSpaceLimit-LineSpaceNudge))
 			{
-				if(InfoData.LineSpace == INVALID_ATTVAL)
-					return;
-				if(InfoData.LineSpace>=-(LineSpaceLimit-LineSpaceNudge))
-				{
-					SetCurrentLineSpace(InfoData.LineSpace-LineSpaceNudge);
-			   		ChangedValue = TRUE;
-				}
+				SetCurrentLineSpace(InfoData.LineSpace-LineSpaceNudge);
+				ChangedValue = TRUE;
 			}
-			else
-			{
-				if(InfoData.LineSpacePercent == INVALID_ATTVAL)
-					return;
-				if(InfoData.LineSpacePercent>=(LineSpacePercentMin+LineSpacePercentNudge))
-				{
-					SetCurrentLineSpacePercent(InfoData.LineSpacePercent - LineSpacePercentNudge);
-					ChangedValue = TRUE;
-				}
-			}
-			break;
 		}
-		case _R(IDC_SPACING_MORE): 
+		else
 		{
-			if(InfoData.IsLineSpaceAPercent == FALSE)
+			if(InfoData.LineSpacePercent == INVALID_ATTVAL)
+				return;
+			if(InfoData.LineSpacePercent>=(LineSpacePercentMin+LineSpacePercentNudge))
 			{
-				if(InfoData.LineSpace == INVALID_ATTVAL)
-					return;
-				if(InfoData.LineSpace<=(LineSpaceLimit-LineSpaceNudge))
-				{
-					SetCurrentLineSpace(InfoData.LineSpace+LineSpaceNudge);
-					ChangedValue = TRUE;
-				}
+				SetCurrentLineSpacePercent(InfoData.LineSpacePercent - LineSpacePercentNudge);
+				ChangedValue = TRUE;
 			}
-			else
-			{
-				if(InfoData.LineSpacePercent == INVALID_ATTVAL)
-					return;
-				if(InfoData.LineSpacePercent<=(LineSpacePercentMax - LineSpacePercentNudge))
-				{
-					SetCurrentLineSpacePercent(InfoData.LineSpacePercent + LineSpacePercentNudge);
-					ChangedValue = TRUE;
-				}
-			}
-			break;
 		}
 	}
+	else if (Button == _R(IDC_SPACING_MORE))
+	{
+		if(InfoData.IsLineSpaceAPercent == FALSE)
+		{
+			if(InfoData.LineSpace == INVALID_ATTVAL)
+				return;
+			if(InfoData.LineSpace<=(LineSpaceLimit-LineSpaceNudge))
+			{
+				SetCurrentLineSpace(InfoData.LineSpace+LineSpaceNudge);
+				ChangedValue = TRUE;
+			}
+		}
+		else
+		{
+			if(InfoData.LineSpacePercent == INVALID_ATTVAL)
+				return;
+			if(InfoData.LineSpacePercent<=(LineSpacePercentMax - LineSpacePercentNudge))
+			{
+				SetCurrentLineSpacePercent(InfoData.LineSpacePercent + LineSpacePercentNudge);
+				ChangedValue = TRUE;
+			}
+		}
+	}
+
 	if(ChangedValue)
 		SetLineSpaceGadget();
 }
@@ -1997,10 +1995,11 @@ BOOL TextInfoBarOp::StringToDouble(StringBase* pstrIn, double* pnOut,BOOL * pIsM
 	
 	*pIsMultiple = FALSE;
 	
-	while (*psczForward == TEXT(String_16(_R(IDS_TEXTINFO_PARSE_SPACE)))/*TEXT(' ')*/) 
+	String_16 space(_R(IDS_TEXTINFO_PARSE_SPACE));
+	while (*psczForward == *((TCHAR *)space)/*TEXT(' ')*/) 
 		psczForward++;
 	
-	while (psczBack > psczForward && *psczBack == TEXT(String_16(_R(IDS_TEXTINFO_PARSE_SPACE)))/*TEXT(' ')*/) 
+	while (psczBack > psczForward && *psczBack == *((TCHAR *)space)/*TEXT(' ')*/) 
 		psczBack--;
 	
 	if (psczForward > psczBack) 
@@ -2009,15 +2008,18 @@ BOOL TextInfoBarOp::StringToDouble(StringBase* pstrIn, double* pnOut,BOOL * pIsM
 	// Check if the string ends with a '%' or an 'x'.  If it is an 'x' then the number
 	// is a multipler, eg. "2 x" (two times).  If it is a '%', or not there at all,
 	// then it represents a percentage.
+	String_16 smallx(_R(IDS_TEXTINFO_PARSE_SMALLX));
+	String_16 largex(_R(IDS_TEXTINFO_PARSE_LARGEX));
+	String_16 percent(_R(IDS_TEXTINFO_PARSE_PERCENT));
 	BOOL bIsMultiplier = FALSE;
-	if (	*psczBack == TEXT(String_16(_R(IDS_TEXTINFO_PARSE_SMALLX)))/*TEXT('x')*/
-		 ||	*psczBack == TEXT(String_16(_R(IDS_TEXTINFO_PARSE_LARGEX)))/*TEXT('X')*/)
+	if (	*psczBack == *((TCHAR *)smallx)/*TEXT('x')*/
+		 ||	*psczBack == *((TCHAR *)largex)/*TEXT('X')*/)
 	{
 		// Parse a multiplier.  Skip over the 'x'.
 		psczBack--;
 		bIsMultiplier = TRUE;
 	}
-	else if (*psczBack == TEXT(String_16(_R(IDS_TEXTINFO_PARSE_PERCENT))) /*TEXT('%'))*/)
+	else if (*psczBack == *((TCHAR *)percent) /*TEXT('%'))*/)
 	{
 		// Parse a percentage.  Skip over the '%'
 		psczBack--;
@@ -2033,7 +2035,7 @@ BOOL TextInfoBarOp::StringToDouble(StringBase* pstrIn, double* pnOut,BOOL * pIsM
 	pstrIn->Mid(&strWork, (INT32) (psczForward - psczStart),
 				(INT32) (psczBack - psczForward) + 1);
 
-	if (!Convert::StringToDouble(&strWork, pnOut)) 
+	if (!Convert::StringToDouble(strWork, pnOut)) 
 		return FALSE;
 	
 	// Make sure it's within allowed bounds.
@@ -2076,46 +2078,49 @@ void TextInfoBarOp::DoInputError(UINT32 GadgetID)
  	String_256 sErrString;
 	String_64 sWarnString(_R(IDS_INVALID_FONTSIZE));
 	String_8 sAndString(_R(IDS_AND));
-	String_16 sMaxStr("0");
-	String_16 sMinStr("0");
+	String_16 sMaxStr(_T("0"));
+	String_16 sMinStr(_T("0"));
 
-  	switch(GadgetID)
-  	{
-  		case _R(IDC_TRACKING_EDIT) :
-			sMinStr._MakeMsg(TEXT("#1%dems"),-TrackingLimit);
-			sMaxStr._MakeMsg(TEXT("#1%dems"),TrackingLimit);
-			break;
-  		case _R(IDC_KERN_EDIT_X) :
-			sMinStr._MakeMsg(TEXT("#1%dems"),-KernLimit);
-			sMaxStr._MakeMsg(TEXT("#1%dems"),KernLimit);
-			break;
-		case _R(IDC_KERN_EDIT_Y) :
-			Convert::MillipointsToString(-BaseLineLimit, MILLIPOINTS, &sMinStr);
-  			Convert::MillipointsToString(BaseLineLimit, MILLIPOINTS, &sMaxStr);
-			break;
-	
-		case _R(IDC_SPACING_EDIT) :
-  			Convert::MillipointsToString(-LineSpaceLimit, MILLIPOINTS, &sMinStr);
-  			Convert::MillipointsToString(LineSpaceLimit, MILLIPOINTS, &sMaxStr);
-	  		break;
-	
-		case _R(IDC_ASPECTEDIT):
-			sMinStr._MakeMsg(TEXT("#1%d%"),FontAspectMin);
-			sMaxStr._MakeMsg(TEXT("#1%d%"),FontAspectMax);
-			break;
-		
-		case _R(IDC_POINT_COMBO):
-			Convert::MillipointsToString(FontSizeMax, CurrentFontUnits, &sMaxStr);
-			Convert::MillipointsToString(FontSizeMin, CurrentFontUnits, &sMinStr);  
-			break;
-		default : 
-			return;
+	if (GadgetID == _R(IDC_TRACKING_EDIT))
+	{
+		sMinStr._MakeMsg(TEXT("#1%dems"),-TrackingLimit);
+		sMaxStr._MakeMsg(TEXT("#1%dems"),TrackingLimit);
 	}
-	sErrString._MakeMsg(TEXT("#1%s #2%s #3%s #4%s\n"),
-										(TCHAR*)sWarnString,
-										(TCHAR*)sMinStr,
-										(TCHAR*)sAndString,
-										(TCHAR*)sMaxStr); 
+	else if (GadgetID == _R(IDC_KERN_EDIT_X))
+	{
+		sMinStr._MakeMsg(TEXT("#1%dems"),-KernLimit);
+		sMaxStr._MakeMsg(TEXT("#1%dems"),KernLimit);
+	}	
+	else if (GadgetID == _R(IDC_KERN_EDIT_Y))
+	{
+		Convert::MillipointsToString(-BaseLineLimit, MILLIPOINTS, &sMinStr);
+		Convert::MillipointsToString(BaseLineLimit, MILLIPOINTS, &sMaxStr);
+	}
+	else if (GadgetID == _R(IDC_SPACING_EDIT))
+	{
+		Convert::MillipointsToString(-LineSpaceLimit, MILLIPOINTS, &sMinStr);
+		Convert::MillipointsToString(LineSpaceLimit, MILLIPOINTS, &sMaxStr);
+	}
+	else if (GadgetID == _R(IDC_ASPECTEDIT))
+	{
+		sMinStr._MakeMsg(TEXT("#1%d%"),FontAspectMin);
+		sMaxStr._MakeMsg(TEXT("#1%d%"),FontAspectMax);
+	}
+	else if (GadgetID == _R(IDC_POINT_COMBO))
+	{
+		Convert::MillipointsToString(FontSizeMax, CurrentFontUnits, &sMaxStr);
+		Convert::MillipointsToString(FontSizeMin, CurrentFontUnits, &sMinStr);  
+	}
+	else
+	{
+		return;
+	}
+
+	sErrString._MakeMsg(_T("#1%s #2%s #3%s #4%s\n"),
+						(TCHAR*)sWarnString,
+						(TCHAR*)sMinStr,
+						(TCHAR*)sAndString,
+						(TCHAR*)sMaxStr); 
 			
 	Error::SetError(0,(TCHAR* )sErrString,0);
 	InformError();
@@ -2163,45 +2168,44 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 		}
 		else
 		{
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_SUPERSCRIPT))
 			{
-				case _R(IDC_SUPERSCRIPT):
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentScript(SuperScript);
-							OnFieldChange(ScriptA);		
+					case DIM_LFT_BN_CLICKED:
+						SetCurrentScript(SuperScript);
+						OnFieldChange(ScriptA);		
 						break;
-					}
-					break;	
-				}
-				
-				case _R(IDC_SUBSCRIPT):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentScript(SubScript);
-							OnFieldChange(ScriptA);	
+					default:
 						break;
-					}
-					break;	
 				}
-				
-				case _R(IDC_KERN_EDIT_Y) :
+			}
+			else if (Msg->GadgetID == _R(IDC_SUBSCRIPT))
+			{
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
-					{
+					case DIM_LFT_BN_CLICKED:
+						SetCurrentScript(SubScript);
+						OnFieldChange(ScriptA);	
+						break;
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_KERN_EDIT_Y))
+			{
+				switch (Msg->DlgMsg)
+				{
 					case DIM_SELECTION_CHANGED :
 						{
 							BOOL Valid= FALSE;
 							MILLIPOINT  BaseShift = GetUnitGadgetValue(_R(IDC_KERN_EDIT_Y),CurrentFontUnits, 
-		       			      		  			-BaseLineLimit,BaseLineLimit,0,&Valid);
+												-BaseLineLimit,BaseLineLimit,0,&Valid);
 							if(Valid)
 							{
-							 	if(SetCurrentBaseLineShift(BaseShift))
-							 		OnFieldChange(BaseLineShiftA);
+								if(SetCurrentBaseLineShift(BaseShift))
+									OnFieldChange(BaseLineShiftA);
 							}
 							else
 							{
@@ -2210,305 +2214,317 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 							}
 						}
 						break;
-					}
-					break;
+					default:
+						break;
 				}
-				case _R(IDC_KERN_EDIT_X) :
+			}
+			else if (Msg->GadgetID == _R(IDC_KERN_EDIT_X))
+			{
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
-					{
 					case DIM_SELECTION_CHANGED :
+					{
+						BOOL Valid= FALSE;
+						INT32 Kern = GetLongGadgetValue(_R(IDC_KERN_EDIT_X) , 
+											-KernLimit,KernLimit,0,&Valid);
+						if(Valid)
 						{
-							BOOL Valid= FALSE;
-							INT32 Kern = GetLongGadgetValue(_R(IDC_KERN_EDIT_X) , 
-		       			      		  			-KernLimit,KernLimit,0,&Valid);
-							if(Valid)
-							{
-								if(SetCurrentHorizontalKern(Kern))
-							 		OnFieldChange(HorizontalKernA);
-							}
-							else
-							{
-								DoInputError(Msg->GadgetID);
-								SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 
-							}
+							if(SetCurrentHorizontalKern(Kern))
+								OnFieldChange(HorizontalKernA);
 						}
-						break;
+						else
+						{
+							DoInputError(Msg->GadgetID);
+							SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1); 
+						}
 					}
 					break;
+					default:
+						break;
 				}
-				case _R(IDC_SPACING_MORE): 
-				case _R(IDC_SPACING_LESS):
+			}
+			else if ((Msg->GadgetID == _R(IDC_SPACING_MORE)) || (Msg->GadgetID == _R(IDC_SPACING_LESS)))
+			{
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
+					case DIM_LFT_BN_CLICKED:
 					{
-						case DIM_LFT_BN_CLICKED:
-						{
-							DoLineSpacingBumps(Msg->GadgetID);
-							break;
-						}
-						case DIM_LFT_BN_UP:
-						{
-			 		 		if(InfoData.IsLineSpaceAPercent == FALSE)
-			 		 			OnFieldChange(LineSpaceA);
-							else
-								OnFieldChange(LineSpacePercentA);
-							break;
-						}
+						DoLineSpacingBumps(Msg->GadgetID);
 						break;
 					}
-					break;
-				}
-				case _R(IDC_TRACKING_MORE): 
-				case _R(IDC_TRACKING_LESS):
-				{
-					switch (Msg->DlgMsg)
+					case DIM_LFT_BN_UP:
 					{
-						case DIM_LFT_BN_CLICKED:
-						{
-							DoTrackingBumps(Msg->GadgetID);
-							break;
-						}
-						case DIM_LFT_BN_UP:
-						{
-			 		 		OnFieldChange(TrackingA);
-							break;
-						}
+						if(InfoData.IsLineSpaceAPercent == FALSE)
+							OnFieldChange(LineSpaceA);
+						else
+							OnFieldChange(LineSpacePercentA);
 						break;
 					}
-					break;
+					default:
+						break;
 				}
-				case _R(IDC_KERN_BUMP_X_MORE): 
-				case _R(IDC_KERN_BUMP_X_LESS):
+			}
+			else if ((Msg->GadgetID == _R(IDC_TRACKING_MORE)) || (Msg->GadgetID == _R(IDC_TRACKING_LESS)))
+			{
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
+					case DIM_LFT_BN_CLICKED:
 					{
-						case DIM_LFT_BN_CLICKED:
-						{
-							DoKernBumps(Msg->GadgetID);
-							break;
-						}
-						case DIM_LFT_BN_UP:
-						{
-			 		 		OnFieldChange(HorizontalKernA);
-							break;
-						}
+						DoTrackingBumps(Msg->GadgetID);
 						break;
 					}
-					break;
-				}
-				case _R(IDC_KERN_BUMP_Y_MORE): 
-				case _R(IDC_KERN_BUMP_Y_LESS):
-				{
-					switch (Msg->DlgMsg)
+					case DIM_LFT_BN_UP:
 					{
-						case DIM_LFT_BN_CLICKED:
-						{
-							DoKernBumps(Msg->GadgetID);
-							break;
-						}
-						case DIM_LFT_BN_UP:
-						{
-			 		 		OnFieldChange(BaseLineShiftA);
-							break;
-						}
+						OnFieldChange(TrackingA);
 						break;
 					}
-					break;
+					default:
+						break;
 				}
-				case _R(IDC_SPACING_EDIT) :
+			}
+			else if ((Msg->GadgetID == _R(IDC_KERN_BUMP_X_MORE)) || (Msg->GadgetID == _R(IDC_KERN_BUMP_X_LESS)))
+			{
+				switch (Msg->DlgMsg)
 				{
-					switch (Msg->DlgMsg)
+					case DIM_LFT_BN_CLICKED:
 					{
+						DoKernBumps(Msg->GadgetID);
+						break;
+					}
+					case DIM_LFT_BN_UP:
+					{
+						OnFieldChange(HorizontalKernA);
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if ((Msg->GadgetID == _R(IDC_KERN_BUMP_Y_MORE)) || (Msg->GadgetID == _R(IDC_KERN_BUMP_Y_LESS)))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_LFT_BN_CLICKED:
+					{
+						DoKernBumps(Msg->GadgetID);
+						break;
+					}
+					case DIM_LFT_BN_UP:
+					{
+						OnFieldChange(BaseLineShiftA);
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_SPACING_EDIT))
+			{
+				switch (Msg->DlgMsg)
+				{
 					case DIM_SELECTION_CHANGED :
-						{
-							BOOL Valid= FALSE;
-							
-							String_256 Str = GetStringGadgetValue(_R(IDC_SPACING_EDIT),&Valid);
-							if(!Valid)
-								break;
-
-							double Percentage =0;
-							BOOL IsMultiple = FALSE;
-							BOOL WasAPercent = StringToDouble(&Str, &Percentage,&IsMultiple);
-							if(WasAPercent )
-							{
-							 	// was it a multiple
-							 	if(IsMultiple)
-								 	Percentage *= 100;
-								if(SetCurrentLineSpacePercent(Percentage))
-									OnFieldChange(LineSpacePercentA);	
-							}
-							else
-							{
-
-								MILLIPOINT  Spacing = GetUnitGadgetValue(_R(IDC_SPACING_EDIT),CurrentFontUnits, 
-			       			      		  			-LineSpaceLimit,LineSpaceLimit,0,&Valid);
-								if(Valid)
-								{
-								 	if(SetCurrentLineSpace(Spacing))
-								 		OnFieldChange(LineSpaceA);
-								}
-								else
-								{
-									DoInputError(Msg->GadgetID);
-									SetLineSpaceGadget();
-								}
-							}
-						}
-						break;
-					}
-					break;
-				}
-
-				case _R(IDC_TRACKING_EDIT):
-				{
-					switch (Msg->DlgMsg)
 					{
-					case DIM_SELECTION_CHANGED :
-						{
-							BOOL Valid= FALSE;
-							INT32 TrackingVal = GetLongGadgetValue(_R(IDC_TRACKING_EDIT), 
-		       			      		  			-TrackingLimit,TrackingLimit,0,&Valid);
-							if(Valid)
-							{
-								if(SetCurrentTracking(TrackingVal))
-							 		OnFieldChange(TrackingA);
-							}
-							else
-							{
-								DoInputError(Msg->GadgetID);
-								SetDoubleGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1);
-							}
-						}
-						break;
-					}
-					break;
-				}
-				case _R(IDC_ASPECTEDIT):
-				{
-					switch (Msg->DlgMsg)
-					{
-					case DIM_SELECTION_CHANGED :
-						{
-							BOOL Valid= FALSE;
-							FIXED16 Ratio = GetDoubleGadgetValue(_R(IDC_ASPECTEDIT), 
-		       			      		  			FontAspectMin,FontAspectMax,0,&Valid)/100;
-							if(Valid)
-							{
-								if(SetCurrentAspectRatio(Ratio))
-							 		OnFieldChange(AspectRatioA);
-							}
-							else
-							{
-								DoInputError(Msg->GadgetID);
-								SetDoubleGadgetValue(_R(IDC_ASPECTEDIT),InfoData.AspectRatio.MakeDouble()*100,0,-1); 
-							}
-						}
-						break;
-					}
-					break;
-				}
-				case _R(IDC_JUSTIFYFULL):
-				case _R(IDC_JUSTIFYLEFT):
-				case _R(IDC_JUSTIFYRIGHT):
-				case _R(IDC_JUSTIFYCENTRE):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentJustify(Msg->GadgetID);
-							OnFieldChange(JustifyA);		
-						break;
-					}
-					break;	
-				}
-				case _R(IDC_BOLDBUTTON):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentFontBold(!InfoData.Bold);
-							OnFieldChange(BoldA);	
-						break;
-					}
-					break;	
-				}
-				case _R(IDC_ITALICBUTTON):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentFontItalic(!InfoData.Italic);	
-							OnFieldChange(ItalicA);
-						break;
-					}
-					break;
-				}
-				case _R(IDC_AUTOKERN):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_LFT_BN_CLICKED:
-							SetCurrentAutoKerning(!InfoData.AutoKerning);
-							OnFieldChange(AutoKernText);	
-						break;
-					}
-					break;	
-				}
-				case _R(IDC_POINT_COMBO):
-				{
-					switch (Msg->DlgMsg)
-					{
-						case DIM_SELECTION_CHANGED :
-						{
-							BOOL Valid= FALSE;
-							MILLIPOINT  Size = GetUnitGadgetValue(_R(IDC_POINT_COMBO),CurrentFontUnits, 
-		       			      		  			FontSizeMin,FontSizeMax,0,&Valid);
-							if(Valid)
-							{
-							 	if(SetCurrentPointSize(Size))
-							 		OnFieldChange(FontSizeA);
-							}
-							else
-								DoInputError(Msg->GadgetID);
-
-							SetUnitGadgetValue(_R(IDC_POINT_COMBO),CurrentFontUnits,InfoData.FontSize,0,-1);
-						}
-						break;
-					}
-					break;
-				}
-
-				case _R(IDC_FONT_COMBO):
-				{
-					if(Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT)
-					{
-						// Handle selections in the font name menu.
-						INT32 SelIndex = GetSelectedValueIndex(_R(IDC_FONT_COMBO));
+						BOOL Valid= FALSE;
 						
-						if(SelIndex != -1)
-						{
-							if (NameDropDown != NULL)
-							{
-								FontDropItem *Selected = NameDropDown->DecodeSelection((INT32)SelIndex);
+						String_256 Str = GetStringGadgetValue(_R(IDC_SPACING_EDIT),&Valid);
+						if(!Valid)
+							break;
 
-								if (FONTMANAGER->IsFontInstalled(&Selected->FontName, Selected->Type))
-								{
-									if (SetCurrentFontName(&Selected->FontName, Selected->Type, TRUE))
-										OnFieldChange(FontNameA);
-								}
-								else
-								{
-								  	InformWarning(_R(IDS_INVALIDFONT));
-									Update();
-								}			 
+						double Percentage =0;
+						BOOL IsMultiple = FALSE;
+						BOOL WasAPercent = StringToDouble(&Str, &Percentage,&IsMultiple);
+						if(WasAPercent )
+						{
+							// was it a multiple
+							if(IsMultiple)
+								Percentage *= 100;
+							if(SetCurrentLineSpacePercent(Percentage))
+								OnFieldChange(LineSpacePercentA);	
+						}
+						else
+						{
+
+							MILLIPOINT  Spacing = GetUnitGadgetValue(_R(IDC_SPACING_EDIT),CurrentFontUnits, 
+												-LineSpaceLimit,LineSpaceLimit,0,&Valid);
+							if(Valid)
+							{
+								if(SetCurrentLineSpace(Spacing))
+									OnFieldChange(LineSpaceA);
+							}
+							else
+							{
+								DoInputError(Msg->GadgetID);
+								SetLineSpaceGadget();
 							}
 						}
+						break;
 					}
-					break;
+					default:
+						break;
 				}
-			}// end gadget switch !!
+			}
+			else if (Msg->GadgetID == _R(IDC_TRACKING_EDIT))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_SELECTION_CHANGED :
+					{
+						BOOL Valid= FALSE;
+						INT32 TrackingVal = GetLongGadgetValue(_R(IDC_TRACKING_EDIT), 
+											-TrackingLimit,TrackingLimit,0,&Valid);
+						if(Valid)
+						{
+							if(SetCurrentTracking(TrackingVal))
+								OnFieldChange(TrackingA);
+						}
+						else
+						{
+							DoInputError(Msg->GadgetID);
+							SetDoubleGadgetValue(_R(IDC_TRACKING_EDIT),InfoData.Tracking,0,-1);
+						}
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_ASPECTEDIT))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_SELECTION_CHANGED :
+					{
+						BOOL Valid= FALSE;
+						FIXED16 Ratio = GetDoubleGadgetValue(_R(IDC_ASPECTEDIT), 
+											FontAspectMin,FontAspectMax,0,&Valid)/100;
+						if(Valid)
+						{
+							if(SetCurrentAspectRatio(Ratio))
+								OnFieldChange(AspectRatioA);
+						}
+						else
+						{
+							DoInputError(Msg->GadgetID);
+							SetDoubleGadgetValue(_R(IDC_ASPECTEDIT),InfoData.AspectRatio.MakeDouble()*100,0,-1); 
+						}
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (
+				(Msg->GadgetID == _R(IDC_JUSTIFYFULL)) ||
+				(Msg->GadgetID == _R(IDC_JUSTIFYLEFT)) ||
+				(Msg->GadgetID == _R(IDC_JUSTIFYRIGHT)) ||
+				(Msg->GadgetID == _R(IDC_JUSTIFYCENTRE))
+				)
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_LFT_BN_CLICKED:
+					{
+						SetCurrentJustify(Msg->GadgetID);
+						OnFieldChange(JustifyA);		
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_BOLDBUTTON))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_LFT_BN_CLICKED:
+					{
+						SetCurrentFontBold(!InfoData.Bold);
+						OnFieldChange(BoldA);	
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_ITALICBUTTON))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_LFT_BN_CLICKED:
+					{
+						SetCurrentFontItalic(!InfoData.Italic);	
+						OnFieldChange(ItalicA);
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_AUTOKERN))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_LFT_BN_CLICKED:
+					{
+						SetCurrentAutoKerning(!InfoData.AutoKerning);
+						OnFieldChange(AutoKernText);	
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_POINT_COMBO))
+			{
+				switch (Msg->DlgMsg)
+				{
+					case DIM_SELECTION_CHANGED :
+					{
+						BOOL Valid= FALSE;
+						MILLIPOINT  Size = GetUnitGadgetValue(_R(IDC_POINT_COMBO),CurrentFontUnits, 
+											FontSizeMin,FontSizeMax,0,&Valid);
+						if(Valid)
+						{
+							if(SetCurrentPointSize(Size))
+								OnFieldChange(FontSizeA);
+						}
+						else
+							DoInputError(Msg->GadgetID);
+
+						SetUnitGadgetValue(_R(IDC_POINT_COMBO),CurrentFontUnits,InfoData.FontSize,0,-1);
+						break;
+					}
+					default:
+						break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_FONT_COMBO))
+			{
+				if(Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT)
+				{
+					// Handle selections in the font name menu.
+					INT32 SelIndex = GetSelectedValueIndex(_R(IDC_FONT_COMBO));
+					
+					if(SelIndex != -1)
+					{
+						if (NameDropDown != NULL)
+						{
+							FontDropItem *Selected = NameDropDown->DecodeSelection((INT32)SelIndex);
+
+							if (FONTMANAGER->IsFontInstalled(&Selected->FontName, Selected->Type))
+							{
+								if (SetCurrentFontName(&Selected->FontName, Selected->Type, TRUE))
+									OnFieldChange(FontNameA);
+							}
+							else
+							{
+								InformWarning(_R(IDS_INVALIDFONT));
+								Update();
+							}			 
+						}
+					}
+				}
+			}
 		}
 	}
 		// Does this message mean that the selected object has changed?
@@ -2699,27 +2715,27 @@ void TextInfoBarOp::InitControls()
  	UpdateGadgets();
   	
 	// Point Size 
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_8PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_10PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_11PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_12PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_14PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_16PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_18PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_20PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_24PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_28PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_32PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_36PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_48PT)));
-	SetStringGadgetValue(_R(IDC_POINT_COMBO), &String_8(_R(IDS_TEXTINFO_72PT)));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_8PT) );
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_10PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_11PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_12PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_14PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_16PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_18PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_20PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_24PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_28PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_32PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_36PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_48PT));
+	SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_72PT));
 	SetComboListLength(_R(IDC_POINT_COMBO));
 	
  	
 	if(Document::GetSelected()!= NULL)
  		SetUnitGadgetValue(_R(IDC_POINT_COMBO),CurrentFontUnits,InfoData.FontSize,0,-1);
 	else
-		SetStringGadgetValue(_R(IDC_POINT_COMBO),&String_8(_R(IDS_TEXTINFO_16PT)),0,-1);
+		SetStringGadgetValue(_R(IDC_POINT_COMBO), _R(IDS_TEXTINFO_16PT),0,-1);
 
 	if(Document::GetSelected()== NULL)
 		EnableGadgets(FALSE);

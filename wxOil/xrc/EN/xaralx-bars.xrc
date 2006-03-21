@@ -4409,4 +4409,370 @@
             </object>
         </object>
     </object>
+    <object class="wxPanel" name="IDD_TEXT_INFO_BAR">
+        <label>Text tool info bar</label>
+        <title>Text tool info bar</title>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxComboBox" name="IDC_FONT_COMBO">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxComboBox" name="IDC_POINT_COMBO">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxCamArtControl" name="IDC_ASPECTBIT">
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxTextCtrl" name="IDC_ASPECTEDIT">
+                    <font>
+                        <size>7</size>
+                    </font>
+                    <size>50,14</size>
+                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BOLDBUTTON">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_ITALICBUTTON">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_JUSTIFYLEFT">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_JUSTIFYCENTRE">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_JUSTIFYRIGHT">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_JUSTIFYFULL">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_SUPERSCRIPT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_SUBSCRIPT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxCamArtControl" name="IDC_TRACKINGBIT">
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxTextCtrl" name="IDC_SPACING_EDIT">
+                                    <font>
+                                        <size>7</size>
+                                    </font>
+                                    <size>50,14</size>
+                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxTextCtrl" name="IDC_TRACKING_EDIT">
+                                    <font>
+                                        <size>7</size>
+                                    </font>
+                                    <size>50,14</size>
+                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_SPACING_LESS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_SPACING_MORE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_TRACKING_LESS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_TRACKING_MORE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxCamArtControl" name="IDC_KERNINGBIT">
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxTextCtrl" name="IDC_KERN_EDIT_Y">
+                                    <font>
+                                        <size>7</size>
+                                    </font>
+                                    <size>50,14</size>
+                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxTextCtrl" name="IDC_KERN_EDIT_X">
+                                    <font>
+                                        <size>7</size>
+                                    </font>
+                                    <size>50,14</size>
+                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_LESS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_MORE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_LESS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_MORE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_AUTOKERN">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                </object>
+            </object>
+        </object>
+    </object>
 </resource>

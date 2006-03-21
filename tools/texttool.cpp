@@ -150,10 +150,10 @@ CC_IMPLEMENT_DYNAMIC(TextToolBlobPosList, List);
 #define new CAM_DEBUG_NEW     
 
 // These are still char* while we wait for resource technology to be developed for modules
-char* TextTool::FamilyName	= "Text Tools";
-char* TextTool::ToolName 	= "Text Tool";
-char* TextTool::Purpose 	= "Text manipulation";
-char* TextTool::Author 	= "TextToolTeam";
+TCHAR* TextTool::FamilyName	= _T("Text Tools");
+TCHAR* TextTool::ToolName 	= _T("Text Tool");
+TCHAR* TextTool::Purpose 	= _T("Text manipulation");
+TCHAR* TextTool::Author 	= _T("TextToolTeam");
 
 // Init those other useful static vars
 BOOL			TextTool::CurrentTool 			= FALSE;
@@ -329,6 +329,7 @@ BOOL TextTool::Init()
 	// after the infobar is successfully read and created.
 	if (ok)
 	{
+#if 0
 		CCResTextFile 		file;				// Resource File
 		TextInfoBarOpCreate BarCreate;			// Object that creates TextInfoBarOp objects
 
@@ -350,11 +351,15 @@ BOOL TextTool::Init()
 
 			ENSURE(ok,"Error finding the Text tool info bar");
 		}
+#endif
+		pTextInfoBarOp = new TextInfoBarOp();
+		ok = (pTextInfoBarOp != NULL);
+		ENSURE(ok,"Error finding the Text tool info bar");
 	}
 
 	// Read preference settings
-	GetApplication()->DeclareSection("TextTool",1);
-	GetApplication()->DeclarePref("TextTool","UseDeadKeys", &UseDeadKeys, 0, 1);
+	GetApplication()->DeclareSection(_T("TextTool"),1);
+	GetApplication()->DeclarePref(_T("TextTool"),_T("UseDeadKeys"), &UseDeadKeys, 0, 1);
 
 	// Read deadkey virtual key codes for the current driver
 	if (ok)
@@ -546,6 +551,8 @@ void TextTool::OnClick( DocCoord PointerPos, ClickType Click, ClickModifiers Cli
 				break;
 			case CLICKTYPE_DRAG:
 				Success = HandleDragClick(pSpread, PointerPos, ClickMods);
+				break;
+			default:
 				break;
 		}
 
@@ -1714,7 +1721,10 @@ BOOL TextTool::CommonApplyKern(MILLIPOINT ChangeAmmount)
 	// Invoke an operation to apply the kern
 	OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpTextKern));
 	if (OpDesc != NULL)
-		OpDesc->Invoke(&OpParam(NewKernVal,0));
+	{
+		OpParam param(NewKernVal,0);
+		OpDesc->Invoke(&param);
+	}
 
 	return TRUE;
 }
@@ -1910,7 +1920,7 @@ BOOL TextTool::HandleDeadKeys(KeyPress* pKeyPress, WCHAR* pNewUnicode)
 {
 	BOOL UsedKey = FALSE;
 	*pNewUnicode = pKeyPress->GetUnicode();
-	WCHAR OldUnicode = *pNewUnicode;
+//	WCHAR OldUnicode = *pNewUnicode;
 
 	if (!UseDeadKeys)
 		return FALSE;
@@ -1961,7 +1971,7 @@ BOOL TextTool::HandleDeadKeys(KeyPress* pKeyPress, WCHAR* pNewUnicode)
 			BOOL Found = FALSE;
 			while (!Found && (*pMapArrays != 0))
 			{
-				if (*pMapArrays == *pNewUnicode)
+				if (*pMapArrays == (UINT32)(*pNewUnicode))
 				{									  
 					*pNewUnicode = *(pMapArrays+1);
 					Found = TRUE;
@@ -2110,7 +2120,7 @@ BOOL TextTool::OnToolSelect()
 	// Give the input focus to the story with a subselection, as long as it is the only sub-selected story
 	SelRange* pSelRange = GetApplication()->FindSelection();
 	Node* pSel = pSelRange->FindFirst();
-	BOOL SelectedVTN = FALSE;
+//	BOOL SelectedVTN = FALSE;
 	TextStory* pSelStory = NULL;
 	while (pSel != NULL)
 	{

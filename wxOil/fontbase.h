@@ -387,6 +387,9 @@ class OILFontMan : public CCObject
 		#endif
 };
 
+
+#endif
+
 /********************************************************************************************
 
 >	class EnumFonts : public CCObject
@@ -410,6 +413,5 @@ class OILEnumFonts : public CCObject
 		virtual BOOL NewFont(FontClass Class, ENUMLOGFONT FAR* lpelf);
 };
 
-#endif
 
 #endif

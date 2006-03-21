@@ -108,7 +108,7 @@ class TextStory;
 class CaretNode;
 class KeyPress;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 class TextInfoBarOp;
 #endif
 
@@ -213,7 +213,7 @@ public:
 	BOOL OnIdle();
 
 	// Some useful static functions
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	static TextInfoBarOp* 	GetTextInfoBarOp()  { return pTextInfoBarOp; }
 #endif
 	static BOOL 			IsCurrentTool() 	 { return CurrentTool; }
@@ -261,7 +261,7 @@ protected:
 	void DestroyCursors();						// Destroy your tool's cursors in this func
 
 	static BOOL 			CurrentTool;		// Can be useful to keep a "is my tool currenmt?" flag
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	static TextInfoBarOp*	pTextInfoBarOp;		// Ptr to your tool's infobar
 #endif
 
@@ -275,10 +275,10 @@ protected:
 	BOOL IsBlankCursorUp;
 
 	// Standard tool static vars
-	static 	char* FamilyName;					// The Tools Family Name
-	static 	char* ToolName;						// The Tool Name
-	static 	char* Purpose;						// What the tool is for
-	static 	char* Author;						// Who wrote it
+	static 	TCHAR* FamilyName;					// The Tools Family Name
+	static 	TCHAR* ToolName;						// The Tool Name
+	static 	TCHAR* Purpose;						// What the tool is for
+	static 	TCHAR* Author;						// Who wrote it
 
 	BOOL UpdateAfterTyping;
 
