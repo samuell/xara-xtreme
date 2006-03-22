@@ -163,15 +163,15 @@ void  AddString( UINT32 Handle, char* String ) ;
 
 ************************************************************************************************/
 
-class GCache
+class CamCache
 {
 #ifdef _DEBUG
-	friend ostream& operator << ( ostream& os, GCache& Cache ) ;
+	friend ostream& operator << ( ostream& os, CamCache& Cache ) ;
 #endif
 
 public:
-	GCache( size_t Size = 0x40000, UINT32 Log2MaxEntries = 12 ) ;
-	~GCache() ;
+	CamCache( size_t Size = 0x40000, UINT32 Log2MaxEntries = 12 ) ;
+	~CamCache() ;
 	BOOL Verify() ;
 
 	BOOL FindPath( UINT32 Handle, INT32* &Points, BYTE* &Types, UINT32 &Length ) ;

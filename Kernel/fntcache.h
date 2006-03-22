@@ -133,14 +133,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 ********************************************************************************************/
 
 
-// The simpler FontCache defined below is simply a wrapper around a GCache
+// The simpler FontCache defined below is simply a wrapper around a CamCache
 
 class FontCache
 {
 	// All data/methods must be static
 
 public:
-	// This method must be called before we can use the GCache
+	// This method must be called before we can use the CamCache
 	static BOOL Init();
 
 	static BOOL InitCalled; // = FALSE, set to TRUE only if Init function has been called
@@ -152,7 +152,7 @@ public:
 	static BOOL GetPath(CharDescription& ChDesc, INT32** Points, BYTE** Types, UINT32 *Length);
 	
 	// The path cache is used to map a Path Handle to path data
-	static GCache* pPathCache;
+	static CamCache* pPathCache;
 
 	static BOOL  GetBounds(DocRect* pBounds, CharDescription& CharDesc);
 	static BOOL  CalcDefaultCharBounds(DocRect* pRect, CharDescription& CharDesc);
@@ -281,7 +281,7 @@ class FontCache
 
 	public:
 	
-	// This method must be called before we can use the GCache
+	// This method must be called before we can use the CamCache
 	static BOOL Init();
 
 	static BOOL InitCalled; // = FALSE, set to TRUE only if Init function has been called
@@ -324,7 +324,7 @@ class FontCache
 							  		INT32** Points, BYTE** Types, UINT32* Length);
 	
 	// The path cache is used to map a Path Handle to path data
-	static GCache* pPathCache;
+	static CamCache* pPathCache;
 	
 	static PathHandleItem* AllocatePathHandle(UINT32 Key, CharDescription& ChDesc);
 

@@ -102,28 +102,36 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include <afxwin.h>
-#include <iostream.h>
-#include "gcmaths.h"
+//#include <afxwin.h>
+#include <iostream>
+//#include "gcmaths.h"
 #include "gcache.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-GCache::GCache( size_t Size, UINT32 Log2MaxEntries )
+CamCache::CamCache( size_t Size, UINT32 Log2MaxEntries )
 {
 	HashTableSize = 1<<Log2MaxEntries ;
 	HashTableMask = HashTableSize-1 ;
 	HashTable	  = NULL ;
 	CacheStart	  = NULL ;
-	TRY {
-		HashTable	= new ( CacheBlock* [HashTableSize] ) ;
-		CacheStart	= (CacheBlock*) new BYTE[Size+2*FreeCacheBlockSize] ;
-	} CATCH_ALL (e) {
-		delete [] HashTable  ; HashTable  = NULL ;
-		delete [] CacheStart ; CacheStart = NULL ;
+
+	HashTable	= new ( CacheBlock* [HashTableSize] ) ;
+	CacheStart	= (CacheBlock*) new BYTE[Size+2*FreeCacheBlockSize] ;
+
+	if (!HashTable || !CacheStart)
+	{
+		if (HashTable)
+		{
+			delete [] HashTable  ; HashTable  = NULL ;
+		}
+		if (CacheStart)
+		{
+			delete [] CacheStart ; CacheStart = NULL ;
+		}
 		return ;
-	} END_CATCH_ALL ;
+	}
 	for ( size_t i=0 ; i<HashTableSize ; i++ )
 		HashTable[i] = NULL ;
 	CacheBlock *FreeBlock ;
@@ -143,16 +151,16 @@ GCache::GCache( size_t Size, UINT32 Log2MaxEntries )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Verify should be used after creation of a GCache object to ensure that it was created OK.
+// Verify should be used after creation of a CamCache object to ensure that it was created OK.
 //
-BOOL GCache::Verify()
+BOOL CamCache::Verify()
 {
 	return HashTable && CacheStart ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-GCache::~GCache()
+CamCache::~CamCache()
 {
 	delete [] HashTable  ; HashTable  = NULL ;
 	delete [] CacheStart ; CacheStart = NULL ;
@@ -161,7 +169,7 @@ GCache::~GCache()
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL GCache::FindPath( UINT32 Handle, INT32* &Points, BYTE* &Types, UINT32 &Length )
+BOOL CamCache::FindPath( UINT32 Handle, INT32* &Points, BYTE* &Types, UINT32 &Length )
 {
 	INT32 *Object = (INT32*) FindEntry( Handle ) ;
 	if ( Object )
@@ -173,12 +181,13 @@ BOOL GCache::FindPath( UINT32 Handle, INT32* &Points, BYTE* &Types, UINT32 &Leng
 	return Object!=NULL ;
 }
 
-void GCache::AddPath( UINT32 Handle, INT32* Points, BYTE* Types, UINT32 Length )
+void CamCache::AddPath( UINT32 Handle, INT32* Points, BYTE* Types, UINT32 Length )
 {
 	INT32 *DPtr = (INT32*) AddEntry( Handle,Length*9+4 ) ;
 	*DPtr++ = Length ;
 	INT32 *SPtr = Points ;
-	for ( size_t i=0 ; i<2*Length ; i++ )
+	size_t i;
+	for ( i=0 ; i<2*Length ; i++ )
 		*DPtr++ = *SPtr++ ;
 	SPtr = (INT32*) Types ;
 	Length = (Length+3)>>2 ;					/* Word length */
@@ -189,12 +198,15 @@ void GCache::AddPath( UINT32 Handle, INT32* Points, BYTE* Types, UINT32 Length )
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* GCache::FindString( UINT32 Handle )
+PORTNOTE("other","not used - removed because AddString looks dodgy")
+#ifndef EXCLUDE_FROM_XARALX
+
+char* CamCache::FindString( UINT32 Handle )
 {
 	return (char*) FindEntry( Handle ) ;
 }
 
-void GCache::AddString( UINT32 Handle, char* String )
+void CamCache::AddString( UINT32 Handle, char* String )
 {
 	size_t StringLength = cc_strlenBytes(String)+1 ;	/* Byte length */
 	INT32 *SPtr = (INT32*) String ;
@@ -203,11 +215,22 @@ void GCache::AddString( UINT32 Handle, char* String )
 	for ( size_t i=0 ; i<StringLength ; i++ )
 		*DPtr++ = *SPtr++ ;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-void* GCache::FindEntry( UINT32 Handle )
+// converted from asm function in gcmaths
+UINT32 Hash(UINT32 val)
+{
+	val ^= (val <<  7) | (val >> 25);
+	val ^= (val << 11) | (val >> 21);
+	val ^= (val << 19) | (val >> 13);
+	val ^= (val << 16) | (val >> 16);
+	return val;
+}
+
+void* CamCache::FindEntry( UINT32 Handle )
 {
 	UINT32 HashIndex = Hash( Handle ) & HashTableMask ;
 	CacheBlock *Ptr = HashTable[HashIndex] ;
@@ -237,7 +260,7 @@ void* GCache::FindEntry( UINT32 Handle )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-void* GCache::AddEntry( UINT32 Handle, size_t ObjectSize )
+void* CamCache::AddEntry( UINT32 Handle, size_t ObjectSize )
 {
 	UINT32 HashIndex = Hash( Handle ) & HashTableMask ;
 	CacheBlock *Ptr = HashTable[HashIndex] ;
@@ -324,7 +347,7 @@ void* GCache::AddEntry( UINT32 Handle, size_t ObjectSize )
 
 #ifdef _DEBUG
 
-ostream& operator << ( ostream& os, GCache& Cache )
+ostream& operator << ( ostream& os, CamCache& Cache )
 {
 	for ( size_t i=0 ; i<Cache.HashTableSize ; i++ )
 	{
@@ -349,7 +372,9 @@ ostream& operator << ( ostream& os, GCache& Cache )
 									  << ", " << Ptr->PrevUsed << "," << Ptr->NextUsed
 									  << ", " << Ptr->Link	   << "," << Ptr->Handle
 									  << ", " << (char*) Ptr->Object << " (" << hex
+#ifndef EXCLUDE_FROM_XARALX
 									  << Cache.BlockSize(Ptr)-UsedCacheBlockSize-cc_strlenBytes((char*)Ptr->Object)-1
+#endif
 									  << dec << ")" << endl ;
 		Ptr = Ptr->Next ;
 	}

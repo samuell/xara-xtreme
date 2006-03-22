@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 /*
 // */
 
-// To resolve: allocation of GCache
+// To resolve: allocation of CamCache
 
 // Set CACHE_STATS to 0 if you don't want loads of TRACE
 
@@ -117,7 +117,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndrgn.h"
 #include "gdraw.h"
 #include "fontman.h"
+#ifdef RALPH
 #include "ralphcri.h"
+#endif
 
 #define CACHE_STATS	0
 #define new CAM_DEBUG_NEW
@@ -136,7 +138,7 @@ static UINT32 DisplayCnt = 0;
 
 // statics ...
 BOOL    FontCache::InitCalled = FALSE; // Set to TRUE on entry to Init function 
-GCache* FontCache::pPathCache;
+CamCache* FontCache::pPathCache;
 INT32     FontCache::BoundsEntries    = 0;		// number of entries in char bounds cache
 
 
@@ -169,7 +171,7 @@ BOOL FontCache::Init()
 	BoundsEntries = 0;	// reset number of char bounds cached
 
 	// Try to allocate our path cache
-	pPathCache = new GCache(); 
+	pPathCache = new CamCache(); 
 	ERROR1IF(pPathCache == NULL, FALSE, _R(IDE_NOMORE_MEMORY));
 	return TRUE; 
 }
@@ -328,7 +330,7 @@ BOOL FontCache::GetBounds(DocRect* pBounds, CharDescription& CharDesc)
 	ERROR2IF(pBounds==NULL,FALSE,"FontCache::GetBounds() - pBounds==NULL");
 
 	// static cache
-	const  MaxBoundsEntries = 128;
+	const  INT32 MaxBoundsEntries = 128;
 	static AttrdCharBoundsCacheEntry entry[MaxBoundsEntries];
 
 	// search cache for desired char
@@ -376,8 +378,6 @@ BOOL FontCache::CalcDefaultCharBounds(DocRect* pRect, CharDescription& CharDesc)
 	RalphCriticalSection RalphCS;
 	#endif
 
-#if REAL_GDRAW
-
 	ERROR2IF(pRect==NULL,FALSE,"FontCache::CalcCharBounds() - pRect==NULL");
 
 	// create the char's default path
@@ -387,6 +387,7 @@ BOOL FontCache::CalcDefaultCharBounds(DocRect* pRect, CharDescription& CharDesc)
 
 	// calculate the path's bounds
 	BOOL    ok=TRUE;
+    RECT    DrawRect = {0, 0, 0, 0};
 	DocRect TempRect(0,0,0,0);
 	INT32    points=pCharPath->GetNumCoords();
 	if (points!=0)
@@ -403,14 +404,27 @@ BOOL FontCache::CalcDefaultCharBounds(DocRect* pRect, CharDescription& CharDesc)
 			if (pGDC == NULL)
 				ok = FALSE;
 			else
-				ok = !pGDC->CalcStrokeBBox((POINT*)pCoords, pVerbs, points, (tagRECT*)(&TempRect), pCharPath->IsFilled, 0, CAPS_BUTT, JOIN_BEVEL, NULL);
+				ok = !pGDC->CalcStrokeBBox((POINT*)pCoords, pVerbs, points, &DrawRect, pCharPath->IsFilled, 0, CAPS_BUTT, JOIN_BEVEL, NULL);
+			// TRACEUSER("wuerthne", _T("CDraw returned %d bbox from CDraw is %d, %d, %d, %d"), ok, DrawRect.left, DrawRect.top, DrawRect.right, DrawRect.bottom);
 
 			// if the call to GDraw failed then we fall back to calculating the bounds from the points bounding box.
-			if (!ok)
+			if (ok)
 			{
-				TRACE( _T("GDraw CalcStrokeBBox failed (GetLastError=%d) for the following path"), GetLastError());
-				pCharPath->DumpPath();
-
+				// GDraw did the job, so copy over the result from its RECT structure
+				// NB: The following assignment *looks* wrong because top and bottom seem to be swapped over,
+				//     but it is correct! The fields in RECT are just named in a strange way - GDraw certainly
+				//     has the same view of the structure as DocRect, so we only need to copy the fields over
+				//     in the order as they are defined and things are OK. Alternatively, we could pass a pointer
+				//     to a DocRect to GDraw but this would break things if ever someone changed the representation
+				//     of DocRect. I hope noone changes the field names in RECT - the ENSURE protects us:
+				ENSURE(&DrawRect.bottom > &DrawRect.right && &DrawRect.right > &DrawRect.top && &DrawRect.top > &DrawRect.left,
+					   "Incompatible change of RECT structure");
+				TempRect = DocRect(DrawRect.left, DrawRect.top, DrawRect.right, DrawRect.bottom);
+			}
+			else
+			{
+				// GDraw failed, so scan the coordinates
+				// pCharPath->DumpPath();
 				TempRect = pCharPath->GetBoundingRect();
 				ok = TRUE; // Well not really !
 			}
@@ -421,10 +435,6 @@ BOOL FontCache::CalcDefaultCharBounds(DocRect* pRect, CharDescription& CharDesc)
 	delete pCharPath;
 	if (ok)	*pRect=TempRect;
 	return ok;
-
-#else
-	ERROR2(FALSE,"FontCache::CalcCharBounds() - GDraw does not exist in this build!!!!");
-#endif
 }
 
 
@@ -488,7 +498,7 @@ PathHandleItem* FontCache::CacheA [CACHE_LIST_SIZE];
 PathHandleItem* FontCache::CacheB [CACHE_LIST_SIZE];
 PathHandleItem** FontCache::PrimaryC; 
 PathHandleItem** FontCache::SecondaryC;
-GCache* FontCache::pPathCache;
+CamCache* FontCache::pPathCache;
 UINT32 FontCache::NextUniquePathHandle;
 UINT32 FontCache::NumItemsInPrimaryCache;
 
@@ -559,7 +569,7 @@ BOOL FontCache::Init()
 	NumItemsInPrimaryCache = 0;
 
 	// Try to allocate our path cache
-	pPathCache = new GCache(); 
+	pPathCache = new CamCache(); 
 	ERROR1IF(pPathCache == NULL, FALSE, _R(IDE_NOMORE_MEMORY));
 	return TRUE; 
 }
@@ -788,7 +798,7 @@ PathHandleItem* FontCache::AllocatePathHandle(UINT32 Key, CharDescription& ChDes
 		DeleteCacheLists(PrimaryC);
 		DeleteCacheLists(SecondaryC);
 		
-		// We must also clear the GCache, there is no function to do this so we will
+		// We must also clear the CamCache, there is no function to do this so we will
 		// use the destructor.
 		
 		delete (pPathCache);
@@ -910,7 +920,7 @@ BOOL FontCache::GetPathFromPathCache(UINT32 PathHandle,
 		// of memory before.
 
 		// try to allocate one
-		pPathCache = new GCache(); 
+		pPathCache = new CamCache(); 
 		ERROR1IF(pPathCache == NULL, FALSE, _R(IDE_NOMORE_MEMORY));
 
 	}
