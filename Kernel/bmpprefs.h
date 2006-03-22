@@ -321,7 +321,7 @@ public:
 
 	// used by the back end to get the logical palette which is managed
 	// by this class and based on the extended palette
-	LOGPALETTE * BitmapExportOptions::GetLogicalPalette();
+	LOGPALETTE * GetLogicalPalette();
 
 	// Get Logical Palette gets uses the pre-edited colours as these are needed for consistant results
 	// this function swaps these preedited colours to the postedited colours for any locked colour
