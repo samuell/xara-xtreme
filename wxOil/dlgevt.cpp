@@ -150,10 +150,12 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_MOUSE_EVENTS (DialogEventHandler::MouseEvent)
 	EVT_CAMDIALOG_DEFERREDMSG (wxID_ANY, DialogEventHandler::CamDialogEvent)
 	EVT_CAMDIALOG_GRIMREAPER (wxID_ANY, DialogEventHandler::GrimReaperEvent)
+	EVT_CAMDIALOG_REDRAW (wxID_ANY, DialogEventHandler::CamDialogEvent)
 END_EVENT_TABLE();
 
 DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_DEFERREDMSG)
 DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_GRIMREAPER)
+DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_REDRAW)
 IMPLEMENT_DYNAMIC_CLASS( wxCamDialogEvent, wxEvent )
 
 /********************************************************************************************
@@ -676,6 +678,7 @@ BOOL DialogEventHandler::Init()
 
 	// And now our own...
 	HASHEVENTNAME(wxEVT_CAMDIALOG_DEFERREDMSG);
+	HASHEVENTNAME(wxEVT_CAMDIALOG_REDRAW);
 
 	TRACE(_T(">>> Event name %d=%s"),wxEVT_COMMAND_BUTTON_CLICKED,GetEventName(wxEVT_COMMAND_BUTTON_CLICKED));
 

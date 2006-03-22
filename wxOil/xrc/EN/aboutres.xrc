@@ -26,7 +26,7 @@
 			 <pos>29,14d</pos> <size>131,8d</size>
 			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+		<object class="wxCamDrawControl" name="IDC_STRIPE1">
 			 <pos>4,40d</pos> <size>216,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
@@ -53,7 +53,7 @@
 			 <pos>80,67d</pos> <size>102,8d</size>
 			<label>+ 44 1442 351000</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+		<object class="wxCamDrawControl" name="IDC_STRIPE2">
 			 <pos>4,81d</pos> <size>216,1d</size>
 		</object>
 		<title>About Xara Xtreme</title>
@@ -84,7 +84,7 @@
 			 <pos>29,14d</pos> <size>131,8d</size>
 			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+		<object class="wxCamDrawControl" name="IDC_STRIPE1">
 			 <pos>4,40d</pos> <size>216,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
@@ -111,7 +111,7 @@
 			 <pos>80,67d</pos> <size>102,8d</size>
 			<label>+ 44 1442 351000</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+		<object class="wxCamDrawControl" name="IDC_STRIPE2">
 			 <pos>4,81d</pos> <size>216,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
@@ -150,7 +150,7 @@
 			 <pos>29,14d</pos> <size>131,8d</size>
 			<label>Copyright ? 1994-2005 Xara Group Ltd.</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+		<object class="wxCamDrawControl" name="IDC_STRIPE1">
 			 <pos>4,40d</pos> <size>216,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
@@ -177,7 +177,7 @@
 			 <pos>80,67d</pos> <size>102,8d</size>
 			<label>+ 44 1442 351000</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+		<object class="wxCamDrawControl" name="IDC_STRIPE2">
 			 <pos>4,81d</pos> <size>216,1d</size>
 		</object>
 		<title>About Xara XS</title>

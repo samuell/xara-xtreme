@@ -64,7 +64,7 @@
 			 <pos>84,231d</pos> <size>48,10d</size>
 			<label>Comp 4</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_EDIT_PICKER">
+		<object class="wxCamDrawControl" name="IDC_EDIT_PICKER">
 			 <pos>4,20d</pos> <size>134,104d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">

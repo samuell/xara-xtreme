@@ -14,7 +14,7 @@
 			 <pos>5,5d</pos> <size>160,160d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_REDRAW_ME">
+		<object class="wxCamDrawControl" name="IDC_REDRAW_ME">
 			 <pos>10,10d</pos> <size>150,150d</size>
 		</object>
 		<object class="wxButton" name="IDC_REDRAWBTN">

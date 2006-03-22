@@ -6,7 +6,7 @@
 			 <pos>6,1d</pos> <size>167,150d</size>
 			<label>Image A (0%) SELECTED</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_REDRAW1">
+		<object class="wxCamDrawControl" name="IDC_REDRAW1">
 			 <pos>13,14d</pos> <size>155,111d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_IMAGESIZE1">
@@ -28,7 +28,7 @@
 			 <pos>213,0d</pos> <size>165,151d</size>
 			<label>Image B (0%)</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_REDRAW2">
+		<object class="wxCamDrawControl" name="IDC_REDRAW2">
 			 <pos>218,14d</pos> <size>155,111d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_IMAGESIZE2">

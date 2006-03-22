@@ -2,13 +2,13 @@
 <resource>
 	<object class="wxDialog" name="IDD_TIP">
 			 <pos>0,0d</pos> <size>242,184d</size>
-		<object class="wxStaticBitmap" name="-1">
+		<object class="wxCamDrawControl" name="-1">
 			 <pos>11,11d</pos> <size>219,130d</size>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BITMAP">
+		<object class="wxCamDrawControl" name="IDC_BITMAP">
 			 <pos>11,11d</pos> <size>50,130d</size>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_DIDYOUKNOW">
+		<object class="wxCamDrawControl" name="IDC_DIDYOUKNOW">
 			 <pos>61,17d</pos> <size>169,32d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">

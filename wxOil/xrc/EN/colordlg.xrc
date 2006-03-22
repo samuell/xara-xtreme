@@ -17,7 +17,7 @@
 			 <pos>122,4d</pos> <size>18,14d</size>
 			<label>-</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_COLOURPICKER">
+		<object class="wxCamDrawControl" name="IDC_COLOURPICKER">
 			 <pos>6,22d</pos> <size>14,14d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT1">
@@ -70,7 +70,7 @@
 			 <pos>80,248d</pos> <size>48,10d</size>
 			<label>Comp 4</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_EDIT_PICKER">
+		<object class="wxCamDrawControl" name="IDC_EDIT_PICKER">
 			 <pos>4,20d</pos> <size>134,104d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">

@@ -102,6 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/wxprec.h>
 #include <wx/event.h>
 
+#include "drawctl.h"
 #include "ccobject.h"
 #include "dlgtypes.h"
 #include "msg.h"
@@ -144,7 +145,6 @@ public:
 	void MouseEvent(wxMouseEvent &event);
 	void WindowDestroyEvent(wxWindowDestroyEvent &event);
 	void CamDialogEvent(wxCamDialogEvent &event);
-
 
 	void GrimReaperEvent(wxCamDialogEvent &event);
 
@@ -208,11 +208,14 @@ typedef void (wxEvtHandler::*wxCamDialogEventFunction)(wxCamDialogEvent &);
 BEGIN_DECLARE_EVENT_TYPES()
 	DECLARE_EVENT_TYPE(wxEVT_CAMDIALOG_DEFERREDMSG, 1001)
 	DECLARE_EVENT_TYPE(wxEVT_CAMDIALOG_GRIMREAPER, 1002)
+	DECLARE_EVENT_TYPE(wxEVT_CAMDIALOG_REDRAW, 1003)
 END_DECLARE_EVENT_TYPES()
 
 #define EVT_CAMDIALOG_DEFERREDMSG(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CAMDIALOG_DEFERREDMSG, id, -1, \
 	(wxObjectEventFunction)(wxEventFunction)(wxCamDialogEventFunction) &fn, (wxObject *) NULL),
 #define EVT_CAMDIALOG_GRIMREAPER(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CAMDIALOG_GRIMREAPER, id, -1, \
+	(wxObjectEventFunction)(wxEventFunction)(wxCamDialogEventFunction) &fn, (wxObject *) NULL),
+#define EVT_CAMDIALOG_REDRAW(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CAMDIALOG_REDRAW, id, -1, \
 	(wxObjectEventFunction)(wxEventFunction)(wxCamDialogEventFunction) &fn, (wxObject *) NULL),
 
 #endif

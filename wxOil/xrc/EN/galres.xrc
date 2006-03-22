@@ -353,7 +353,7 @@
 			 <pos>107,20d</pos> <size>50,14d</size>
 			<label>&amp;Cancel</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_COLNAME_PATCH">
+		<object class="wxCamDrawControl" name="IDC_COLNAME_PATCH">
 			 <pos>8,20d</pos> <size>12,12d</size>
 		</object>
 		<title>Rename colour style</title>
@@ -410,7 +410,7 @@
 			 <pos>7,1d</pos> <size>130,50d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_SGLINEPROPERTIES_DIAGRAM">
+		<object class="wxCamDrawControl" name="IDC_SGLINEPROPERTIES_DIAGRAM">
 			 <pos>9,7d</pos> <size>126,42d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">

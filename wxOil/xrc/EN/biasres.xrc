@@ -23,10 +23,10 @@
 			 <pos>34,8d</pos> <size>63,57d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_CURVE">
+		<object class="wxCamDrawControl" name="IDC_CURVE">
 			 <pos>34,8d</pos> <size>63,57d</size>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_CURVEINTERPOLATE">
+		<object class="wxCamDrawControl" name="IDC_CURVEINTERPOLATE">
 			 <pos>7,69d</pos> <size>110,15d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC10">

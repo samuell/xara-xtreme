@@ -112,6 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "camconfig.h"
 #include "camresource.h"
 #include "cartctl.h"
+#include "drawctl.h"
 #include "colourmat.h"
 
 #include "camelot.h"
@@ -1393,6 +1394,7 @@ BOOL CamResource::Init()
 	// Initialize the handlers
 	wxXmlResource::Get()->InitAllHandlers();
 	wxXmlResource::Get()->AddHandler(new wxCamArtControlXmlHandler);
+	wxXmlResource::Get()->AddHandler(new wxCamDrawControlXmlHandler);
 
 	if (!pwxFileSystem) pwxFileSystem = new wxFileSystem;
 	if (!pwxFileSystem)

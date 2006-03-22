@@ -915,7 +915,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}	
 	else if (
-		((EventType == wxEVT_PAINT) && (pGadget)) ||
+		((EventType == wxEVT_CAMDIALOG_REDRAW) && (pGadget)) ||
 		FALSE)
 	{
 		if (CCamApp::IsDisabled())

@@ -6,14 +6,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPX">
@@ -47,14 +47,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_BFXDLG_INTERP">
@@ -98,14 +98,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -143,14 +143,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -184,7 +184,7 @@
 			 <pos>90,114d</pos> <size>87,10d</size>
 			<label>To 16 col (d&amp;iffusion)</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_OCTREECOLOUR">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_OCTREECOLOUR">
 			 <pos>90,136d</pos> <size>91,10d</size>
 		</object>
 		<title>Colour depth</title>
@@ -195,14 +195,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -258,14 +258,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -351,14 +351,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPX">
@@ -408,14 +408,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_BFXDLG_INTERP">
@@ -475,14 +475,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -539,14 +539,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
@@ -608,14 +608,14 @@
 			 <pos>2,3d</pos> <size>80,73d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW">
 			 <pos>8,6d</pos> <size>70,67d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_ORIGFRAME2">
 			 <pos>98,2d</pos> <size>79,74d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_BFXDLG_ORIGREDRAW2">
+		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">

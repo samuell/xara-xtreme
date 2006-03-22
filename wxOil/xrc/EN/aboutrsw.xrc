@@ -26,7 +26,7 @@
 			 <pos>29,14d</pos> <size>131,8d</size>
 			<label>Copyright ? 1997 Xara Ltd.</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE1">
+		<object class="wxCamDrawControl" name="IDC_STRIPE1">
 			 <pos>4,44d</pos> <size>196,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_LICENSEE">
@@ -41,7 +41,7 @@
 			 <pos>60,71d</pos> <size>132,8d</size>
 			<label>+ 44 1442 351000</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_STRIPE2">
+		<object class="wxCamDrawControl" name="IDC_STRIPE2">
 			 <pos>4,85d</pos> <size>196,1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_CAMHOST">

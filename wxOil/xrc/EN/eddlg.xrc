@@ -49,7 +49,7 @@
 			 <pos>4,5d</pos> <size>105,76d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_ALIGNDIALOG_DIAGRAM">
+		<object class="wxCamDrawControl" name="IDC_ALIGNDIALOG_DIAGRAM">
 			 <pos>6,6d</pos> <size>102,74d</size>
 		</object>
 		<title>Object Alignment</title>

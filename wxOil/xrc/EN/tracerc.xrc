@@ -18,14 +18,14 @@
 			 <pos>2,3d</pos> <size>124,123d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_TRACER_ORIGREDRAW">
+		<object class="wxCamDrawControl" name="IDC_TRACER_ORIGREDRAW">
 			 <pos>4,5d</pos> <size>120,119d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEP">
 			 <pos>134,3d</pos> <size>124,123d</size>
 			<label></label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_TRACER_DESTREDRAW">
+		<object class="wxCamDrawControl" name="IDC_TRACER_DESTREDRAW">
 			 <pos>136,5d</pos> <size>120,119d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_TRACER_BLURTXT">

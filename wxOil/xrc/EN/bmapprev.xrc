@@ -284,7 +284,7 @@
 		<object class="wxTextCtrl" name="IDC_BLUE_EDIT">
 			 <pos>111,71d</pos> <size>24,12d</size>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_T2_PALETTE_CONTROL">
+		<object class="wxCamDrawControl" name="IDC_T2_PALETTE_CONTROL">
 			 <pos>142,7d</pos> <size>221,62d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_T2_LOCKED_COLOUR">

@@ -86,7 +86,7 @@
 			 <pos>12,6d</pos> <size>90,8d</size>
 			<label>Show preview</label>
 		</object>
-		<object class="wxStaticBitmap" name="IDC_PREVIEW">
+		<object class="wxCamDrawControl" name="IDC_PREVIEW">
 			 <pos>11,17d</pos> <size>91,83d</size>
 		</object>
 		<object class="wxButton" name="ID_CC_HELP_BUTTON">
