@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docview.h"
 //#include "markn.h"
 #include "nodepath.h"
-#include "mainfrm.h"
+//#include "mainfrm.h"
 #include "osrndrgn.h"
 #include "penedit.h"
 #include "ops.h"
@@ -132,10 +132,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will2.h"
 
 // These are still char* while we wait for resource technology to be developed for modules
-char* PenTool::FamilyName = "Drawing Tools";
-char* PenTool::ToolName = "Pen Tool";
-char* PenTool::Purpose = "To draw lines and curves";
-char* PenTool::Author = "Mike";
+TCHAR* PenTool::FamilyName = _T("Drawing Tools");
+TCHAR* PenTool::ToolName = _T("Pen Tool");
+TCHAR* PenTool::Purpose = _T("To draw lines and curves");
+TCHAR* PenTool::Author = _T("Mike");
 
 
 CC_IMPLEMENT_MEMDUMP( PenTool, Tool_v1 )
@@ -214,6 +214,11 @@ BOOL PenTool::Init()
 	// initially, no cursor
 	pcPenCursor = 0;
 
+	pPenInfoBarOp = new PenToolInfoBarOp();
+	ok = (pPenInfoBarOp != NULL);
+	if (ok) pPenInfoBarOp->pPenTool = this;				// Set a pointer from the op to this tool
+
+#if 0
  		ok = file.open(_R(IDM_PENTOOL_BAR), _R(IDT_INFO_BAR_RES));			// Open resource
 	if (ok) ok = DialogBarOp::ReadBarsFromFile(file,BarCreate);		// Read and create info bar
 	if (ok) file.close();									 		// Close resource.
@@ -233,6 +238,7 @@ BOOL PenTool::Init()
 
 		ENSURE(ok,"Failed to create PENTOOL info bar");
 	}
+#endif
 
 	if (ok) ok = EditPath.Initialise(12,24);				// create the edit path buffers please
 
@@ -545,14 +551,16 @@ MsgResult PenToolInfoBarOp::Message(Msg* Message)
 	else if (MESSAGE_IS_A(Message,DocChangingMsg)) 	// Check for changes in the doc system
 	{
 		DocChangingMsg* pDocChangingMsg = (DocChangingMsg*)Message;
-		Document* pDoc = pDocChangingMsg->pChangingDoc;
+//		Document* pDoc = pDocChangingMsg->pChangingDoc;
 
 		switch (pDocChangingMsg->State)
 		{
-			case DocChangingMsg::DocState::SELCHANGED:
-			case DocChangingMsg::DocState::KILLED:
+			case DocChangingMsg::SELCHANGED:
+			case DocChangingMsg::KILLED:
 				pPenTool->ClearInternalState();
 				break; 
+			default:
+				break;
 		}
 	}
 
@@ -709,9 +717,14 @@ void PenTool::OnClick( DocCoord PointerPos, ClickType Click, ClickModifiers Clic
 					if (pNodePath)
 						ClickOnEndPoint(Click, ClickMods, pSpread, pNodePath);
 					break;
+
+				default:
+					break;
 			}
 			break;
 
+		default:
+			break;
 	}
 
 }
@@ -954,7 +967,8 @@ void PenTool::ClickOnEndPoint( ClickType Click, ClickModifiers ClickMods, Spread
 				if (Verbs[Pos] == PT_MOVETO)
 				{
 					// This for loop will find either the end of the path, or the next moveto
-					for (INT32 j=Pos+1;j<NumCoords && Verbs[j] != PT_MOVETO;j++);	// ; is intentional!
+					INT32 j;
+					for (j=Pos+1;j<NumCoords && Verbs[j] != PT_MOVETO;j++);	// ; is intentional!
 					j--;
 					if (Verbs[j] & PT_CLOSEFIGURE)
 					{
@@ -1425,27 +1439,31 @@ void PenTool::RenderToolBlobs(Spread* pSpread, DocRect* pClipRect)
 			break;
 
  		case IS_DragTo:
-			pRegion = DocView::RenderOnTop(pClipRect, pSpread, ClippedEOR);
-			DocCoord OtherDrag;
-			OtherDrag.x = LastMove.x - (LastDrag.x - LastMove.x);
-			OtherDrag.y = LastMove.y - (LastDrag.y - LastMove.y);
-
-			while (pRegion)
 			{
-				// Draw three end blobs and an eor'd dotted line
-				pRegion->SetLineColour(COLOUR_BEZIERLINE);
-				pRegion->DrawLine(OtherDrag,LastDrag);
-				pRegion->SetLineColour(COLOUR_BEZIERBLOB);
-				pRegion->SetFillColour(COLOUR_TRANS);
-				pRegion->DrawBlob(LastMove,BT_SELECTED);
-				pRegion->SetFillColour(COLOUR_UNSELECTEDBLOB);
-				pRegion->SetLineColour(COLOUR_TRANS);
-				pRegion->DrawBlob(LastDrag,BT_UNSELECTED);
-				pRegion->DrawBlob(OtherDrag,BT_UNSELECTED);
-
-				// Get the next region in the list
-				pRegion = DocView::GetNextOnTop(pClipRect);
+				pRegion = DocView::RenderOnTop(pClipRect, pSpread, ClippedEOR);
+				DocCoord OtherDrag;
+				OtherDrag.x = LastMove.x - (LastDrag.x - LastMove.x);
+				OtherDrag.y = LastMove.y - (LastDrag.y - LastMove.y);
+	
+				while (pRegion)
+				{
+					// Draw three end blobs and an eor'd dotted line
+					pRegion->SetLineColour(COLOUR_BEZIERLINE);
+					pRegion->DrawLine(OtherDrag,LastDrag);
+					pRegion->SetLineColour(COLOUR_BEZIERBLOB);
+					pRegion->SetFillColour(COLOUR_TRANS);
+					pRegion->DrawBlob(LastMove,BT_SELECTED);
+					pRegion->SetFillColour(COLOUR_UNSELECTEDBLOB);
+					pRegion->SetLineColour(COLOUR_TRANS);
+					pRegion->DrawBlob(LastDrag,BT_UNSELECTED);
+					pRegion->DrawBlob(OtherDrag,BT_UNSELECTED);
+	
+					// Get the next region in the list
+					pRegion = DocView::GetNextOnTop(pClipRect);
+				}
+				break;
 			}
+		default:
 			break;
 	}	
 }

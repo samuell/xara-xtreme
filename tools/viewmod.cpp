@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pushtool.h"
 #include "zoomtool.h"
 #include "freehand.h"
-//#include "pentool.h"
+#include "pentool.h"
 #include "blndtool.h"
 #include "beztool.h"
 #include "filltool.h"
@@ -274,11 +274,8 @@ PORTNOTE("other","Removed grid tool usage")
 			return IN_DLL(GradFillTool);
 
 #ifndef WEBSTER	//Martin
-PORTNOTE("other","Removed pen tool usage")
-#ifndef EXCLUDE_FROM_XARALX
 		case 10:
 			return IN_DLL(PenTool);
-#endif
 
 		case 11:
 			return IN_DLL(BlendTool);

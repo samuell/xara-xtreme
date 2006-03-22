@@ -197,10 +197,10 @@ private:
 	void DeletePenCursors();
 
 private:
-	static 	char* FamilyName;		// The Tools Family Name
-	static 	char* ToolName;			// The Tool Name
-	static 	char* Purpose;			// What the tool is for
-	static 	char* Author;			// Who wrote it
+	static 	TCHAR* FamilyName;		// The Tools Family Name
+	static 	TCHAR* ToolName;		// The Tool Name
+	static 	TCHAR* Purpose;			// What the tool is for
+	static 	TCHAR* Author;			// Who wrote it
 
 	penstate 	CurrPenState;		// current internal tool state
 	penopstate	CurrPenOpState;		// current internal tool op state
@@ -243,7 +243,7 @@ class PenToolInfoBarOp : public InformationBarOp
 {
  	CC_DECLARE_DYNCREATE(PenToolInfoBarOp)
 public:
-	PenToolInfoBarOp() {};				// Dummy default constructor for DYNCREATE
+	PenToolInfoBarOp() {DlgResID = _R(IDD_PENTOOLBAR);};	// Dummy default constructor for DYNCREATE
 	MsgResult Message(Msg*);			// All messages to the info bar come through here
 	// void	InitControls();				// Initialises the controls in the info bar
 	// void	EnableControls();			// Enables/disables the controls in the info bar

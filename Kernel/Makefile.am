@@ -56,5 +56,6 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	opsmpshp.cpp snapops.cpp oppull.cpp fitcurve.cpp cpyact.cpp groupops.cpp \
 	zordops.cpp fillndge.cpp pathndge.cpp opbreak.cpp cmdctrl.cpp opsmooth.cpp \
 	combshps.cpp mkshapes.cpp mkstroke.cpp mrhbits.cpp ndmldink.cpp opfeathr.cpp \
-	linwthop.cpp sgmenu.cpp draginfo.cpp filelist.cpp statline.cpp pressure.cpp
+	linwthop.cpp sgmenu.cpp draginfo.cpp filelist.cpp statline.cpp pressure.cpp \
+	penedit.cpp
 AM_CXXFLAGS = $(XARAFLAGS)

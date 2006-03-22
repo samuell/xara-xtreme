@@ -72,7 +72,8 @@ sub MakeName
 		   "IDD_MOULDTOOLBAR" => "Mould tool info bar",
 		   "IDD_BEVELINFOBAR" => "Bevel tool info bar",
 		   "IDD_CONTOURINFOBAR" => "Contour tool info bar",
-		   "IDD_TEXT_INFO_BAR" => "Text tool info bar"
+		   "IDD_TEXT_INFO_BAR" => "Text tool info bar",
+		   "IDD_PENTOOLBAR" => "Pen tool info bar",
 		   );
     return $namemap{ $resname } || "This bar should not be called $resname"; 
 }
@@ -96,7 +97,8 @@ sub ConvertQuotedName
 		   "\"Mould" => "IDD_MOULDTOOLBAR",
 		   "\"Bevel" => "IDD_BEVELINFOBAR",
 		   "\"Contour" => "IDD_CONTOURINFOBAR",
-		   "\"Text" => "IDD_TEXT_INFO_BAR"
+		   "\"Text" => "IDD_TEXT_INFO_BAR",
+		   "\"Pen" => "IDD_PENTOOLBAR"
 		    );
     return $qnamemap{ $qname } || $qname;
 

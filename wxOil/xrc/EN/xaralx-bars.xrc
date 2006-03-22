@@ -4775,4 +4775,11 @@
             </object>
         </object>
     </object>
+    <object class="wxPanel" name="IDD_PENTOOLBAR">
+        <label>Pen tool info bar</label>
+        <title>Pen tool info bar</title>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+        </object>
+    </object>
 </resource>

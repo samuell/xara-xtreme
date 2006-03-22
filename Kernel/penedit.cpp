@@ -585,12 +585,12 @@ BOOL OpPenHandles::HasMouseMoved(DocCoord& OriginalPoint, DocCoord& PointerPos, 
 
 void OpPenHandles::RenderTestRect( DocRect Rect, Spread* pSpread, StockColour colour )
 {
-	if (IsUserName("Mike"))
+	if (Error::IsUserName("Mike"))
 	{
-		TRACE( _T("RectLox=%d\n"),Rect.lox);
-		TRACE( _T("RectLoy=%d\n"),Rect.loy);
-		TRACE( _T("RectHix=%d\n"),Rect.hix);
-		TRACE( _T("RectHiy=%d\n\n"),Rect.hiy);
+		TRACE( _T("RectLox=%d\n"),Rect.lo.x);
+		TRACE( _T("RectLoy=%d\n"),Rect.lo.y);
+		TRACE( _T("RectHix=%d\n"),Rect.hi.x);
+		TRACE( _T("RectHiy=%d\n\n"),Rect.hi.y);
 	}
 
 	RenderRegion* pRegion = DocView::RenderOnTop( &Rect, pSpread, ClippedEOR );
@@ -3129,7 +3129,8 @@ void OpClosePathWithPath::DoClosePathWithPath(NodePath* pDestinNode, Path* pEdit
 
 	// go and count the number of elements given to us in the edit path
 	INT32 ind = 0;
-	for (INT32 i=0; pEditPath->FindNext(&ind); i++);
+	INT32 i;
+	for (i=0; pEditPath->FindNext(&ind); i++);
 	ENSURE(i<3, "There are two many elements in the edit path when closing a path" );
 
 	if (i<1 || i>2)
