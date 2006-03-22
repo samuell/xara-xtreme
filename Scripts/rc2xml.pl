@@ -638,7 +638,7 @@ sub ParseDialogDraw
     my @rect;
     ReadRect (\@rect);
 
-    print OUTPUT "\t\t<object class=\"wxStaticBitmap\"";
+    print OUTPUT "\t\t<object class=\"wxCamDrawControl\"";
     WriteBasicInfo (@rect, $varname);
     # <Bitmap></Bitmap> deliberately omitted
     print OUTPUT "\t\t</object>\n";

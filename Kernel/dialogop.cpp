@@ -129,8 +129,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "colcontx.h"
 
 #include "ccdc.h"			// For redraw with RenderRegions
-//#include "grnddib.h"
-//#include "osrndrgn.h"
+#include "grndrgn.h"
+#include "grnddib.h"
+#include "osrndrgn.h"
 #include "dlgview.h"
 #include "docmsgs.h"
 #include "docvmsg.h"
@@ -2538,8 +2539,6 @@ BOOL DialogOp::SetTitlebarName(String_256* Name)
 RenderRegion* DialogOp::CreateGRenderRegion(DocRect* pRequiredSize, ReDrawInfoType* ExtraInfo,
 												BOOL UseSelViewColContext)
 {
-	PORTNOTETRACE("dialog","DialogOp::CreateGRenderRegion - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Make a new dialog view
 	DialogView *pDialogView = new DialogView;
 	if (pDialogView == NULL)
@@ -2609,7 +2608,6 @@ RenderRegion* DialogOp::CreateGRenderRegion(DocRect* pRequiredSize, ReDrawInfoTy
 
 	// Something went wrong, fail
 	delete pDialogView;
-#endif
 	return NULL;
 }
 
@@ -2632,8 +2630,6 @@ RenderRegion* DialogOp::CreateGRenderRegion(DocRect* pRequiredSize, ReDrawInfoTy
 
 BOOL DialogOp::DestroyGRenderRegion(RenderRegion* pRender)
 {
-	PORTNOTETRACE("dialog","DialogOp::DestroyGRenderRegion - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Test for preconditions
 	ERROR2IF(pRender==NULL, FALSE, "DestroyGRenderRegion was passed a NULL render region");
 
@@ -2646,7 +2642,7 @@ BOOL DialogOp::DestroyGRenderRegion(RenderRegion* pRender)
 	View* pView = pRender->GetRenderView();
 	delete pRender;
 	delete pView;
-#endif
+
 	// It worked
 	return TRUE;
 }
@@ -2689,8 +2685,6 @@ BOOL DialogOp::DestroyGRenderRegion(RenderRegion* pRender)
 RenderRegion* DialogOp::CreateOSRenderRegion(DocRect* pRequiredSize, ReDrawInfoType* ExtraInfo,
 												BOOL UseSelViewColContext)
 {
-	PORTNOTETRACE("dialog","DialogOp::CreateOSRenderRegion - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Make a new dialog view
 	DialogView *pDialogView = new DialogView;
 	if (pDialogView == NULL)
@@ -2763,7 +2757,6 @@ RenderRegion* DialogOp::CreateOSRenderRegion(DocRect* pRequiredSize, ReDrawInfoT
 
 	// Something went wrong, fail
 	delete pDialogView;
-#endif
 	return NULL;
 }
 
@@ -2772,7 +2765,7 @@ RenderRegion* DialogOp::CreateOSRenderRegion(DocRect* pRequiredSize, ReDrawInfoT
 
 /********************************************************************************************
 
->	BOOL DialogOp::DestroyGRenderRegion()
+>	BOOL DialogOp::DestroyOSRenderRegion(RenderRegion* pRender)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com> (Jason copied CreateGRenderRegion)
 	Created:	17/10/94 (11/1/95)
@@ -2791,8 +2784,6 @@ RenderRegion* DialogOp::CreateOSRenderRegion(DocRect* pRequiredSize, ReDrawInfoT
 
 BOOL DialogOp::DestroyOSRenderRegion(RenderRegion* pRender)
 {
-	PORTNOTETRACE("dialog","DialogOp::DestroyOSRenderRegion - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Test for preconditions
 	ERROR2IF(pRender==NULL, FALSE, "DestroyOSRenderRegion was passed a NULL render region");
 
@@ -2805,7 +2796,7 @@ BOOL DialogOp::DestroyOSRenderRegion(RenderRegion* pRender)
 	View* pView = pRender->GetRenderView();
 	delete pRender;
 	delete pView;
-#endif
+
 	// It worked
 	return TRUE;
 }
