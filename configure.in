@@ -8,17 +8,21 @@ DebugEnable="no"
 AC_ARG_ENABLE(debug,
 [[  --enable-debug          Add more debug information and checks to executable]],
 [
+	if test $enableval == "yes"; then
 		DEBUG_FLAGS="-ggdb -D_DEBUG"
 		OPT_FLAGS="-O0"
 		DebugEnable="yes"
+	fi
 ])
 
 StaticEnable="no"
 AC_ARG_ENABLE(static-exec,
 [[  --enable-static-exec    Build a statically linked version of the executable]],
 [
-	StaticEnable="yes"
-	DebugEnable="no"
+	if test $enableval == "yes"; then
+		StaticEnable="yes"
+		DebugEnable="no"
+	fi
 ])
 
 # Set language - this should be taken from a configure option
