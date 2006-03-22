@@ -180,9 +180,10 @@ PORTNOTE("other","Removed a large amount of initialization")
 			EditSelectionOp::Init() &&			// Init the "Edit Selection" op
 			KeyPress::Init() &&					// Init the key press system
 			FileInfo::Init() &&					// Init the document info dialogue
-
+#endif
 			ArrangeAlignment::Init() &&			// Init the arrange alignment dialogue
 			OpAlign::Init() &&					// Init the align op
+#ifndef EXCLUDE_FROM_XARALX
 			BmpPrefsDlg::Init() &&				// Init the export bitmap options dialog
 			TraceDlg::Init() &&					// Init the trace dialog
 			WebAddressDlg::Init() &&

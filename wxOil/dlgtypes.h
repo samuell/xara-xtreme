@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_DLGTYPES
      
 class CCDC;
+class CCPaintDC;
 class DocRect;
 class DocCoord;
 
@@ -259,7 +260,7 @@ struct ReDrawInfoType
 
 	// This data is only available during processing of cc_DialogDraw redraws
 	DocRect* pClipRect;		// The rectangle that has actually been invalidated
-	CCDC*	 pDC;			// The DC to plot into
+	CCPaintDC*	 pDC;			// The DC to plot into
 
 	// This data is only available when processing cc_DialogDraw mouse events
 	DocCoord *pMousePos;	// The position of the mouse at this event

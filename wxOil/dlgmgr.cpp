@@ -143,6 +143,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 #include "cartctl.h"
 #include "osrndrgn.h"
+#include "dlgtypes.h"
 
 DECLARE_SOURCE("$Revision: 662 $");
 
@@ -731,6 +732,9 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		return;
 	}
 
+	wxWindow * pGadget = NULL;
+	if (id) pGadget = GetGadget(pEvtHandler->pwxWindow, id);
+
 	// Make up a default message
 	DialogMsg msg(pEvtHandler->pwxWindow, DIM_NONE, id, DlgMsgParam, PageID);
 
@@ -910,7 +914,77 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		msg.DlgMsg = ((wxMouseEvent *)&event)->Dragging()?DIM_MOUSE_DRAG:DIM_MOUSE_MOVE;
 		HandleMessage = TRUE;
 	}	
+	else if (
+		((EventType == wxEVT_PAINT) && (pGadget)) ||
+		FALSE)
+	{
+		if (CCamApp::IsDisabled())
+		{
+			TRACE( _T("kernel-rendered gadget repaint has been aborted: the system is disabled (due to an error/ensure?)\n"));
+			HandleMessage = FALSE;
+		}
+		else
+		{
+			// HDC hDC = pInfo->PaintInfo.hdc;
+			// HPALETTE OldPalette = PaletteManager::StartPaintPalette(hDC);
+		
+			ReDrawInfoType ExtraInfo;
+		
+			ExtraInfo.pMousePos = NULL;		// No mouse position info for redraw events
 
+
+			// Build a CC dc out of it for rendering to the screen
+			// Get a MFC CDC to put the DC in
+			CCPaintDC MyDc(pGadget);
+
+			ExtraInfo.pDC = &MyDc;
+		
+			// The devices DPI
+			ExtraInfo.Dpi = OSRenderRegion::GetFixedDCPPI(MyDc).GetHeight();
+
+			// How big the window is
+			wxSize WindowSize = pGadget->GetClientSize();
+			ExtraInfo.dx = (((INT32)WindowSize.GetWidth())*72000) / ExtraInfo.Dpi;
+			ExtraInfo.dy = (((INT32)WindowSize.GetHeight())*72000) / ExtraInfo.Dpi;
+		
+			MyDc.BeginDrawing();
+
+			wxRegionIterator upd(pGadget->GetUpdateRegion()); // get the update rect list
+
+			while (upd)
+			{
+				// Alternatively we can do this:
+				wxRect ClipRect(upd.GetRect());
+				// Should we clip this to the WindowSize here?
+				// MyDC.SetClipRect(ClipRect);
+				
+				DocRect DocClipRect;
+			
+				// Convert to millipoints, Also need to flip the y coords to get a
+				// rectangle in with the origin in the bottom left.
+				DocClipRect.lo.x = (ClipRect.GetLeft() * 72000) / ExtraInfo.Dpi;
+				DocClipRect.lo.y = ExtraInfo.dy - ((ClipRect.GetBottom() * 72000) / ExtraInfo.Dpi);
+			
+				DocClipRect.hi.x = (ClipRect.GetRight() * 72000) / ExtraInfo.Dpi;
+				DocClipRect.hi.y = ExtraInfo.dy - ((ClipRect.GetTop() * 72000) / ExtraInfo.Dpi);
+			
+				// Set the pointer in the extra info structure
+				ExtraInfo.pClipRect = &DocClipRect;
+			
+				// Build the message and send it to the dialog op
+				// It is up to the dialog op to build a render region etc and attach the CCDC to it
+				// and to tidy the region up after it has finished drawing in it CDlgMessage
+				BROADCAST_TO_CLASS(DialogMsg(pEvtHandler->pwxWindow, DIM_REDRAW, id, (UINT_PTR)(void *)&ExtraInfo, PageID), DialogOp);
+				
+				upd ++ ;
+			}
+		
+			MyDc.EndDrawing();		
+		
+			// if (OldPalette)
+			//	PaletteManager::StopPaintPalette(hDC, OldPalette);
+		}
+	}
 
 	//case	wxEVT_COMMAND_TOOL_RCLICKED:
 	//case	wxEVT_COMMAND_TOOL_ENTER:
@@ -4566,8 +4640,6 @@ void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget,
 										ReDrawInfoType *ExtraInfo,
 										DocRect *InvalidRect)
 {
-	PORTNOTETRACE("dialog","DialogManager::InvalidateGadget - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (InvalidRect == NULL)	// No rect - invalidate the entire window
 	{
 		InvalidateGadget(WindowID, Gadget);
@@ -4581,32 +4653,30 @@ void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget,
 	}
 
 	ERROR3IF(ExtraInfo->Dpi == 0, "Screen DPI is zero? I think not! Divide-by-zeros imminent!");
+	if (!ExtraInfo->Dpi) return;
 
 	INT32 PixelSize = 72000 / ExtraInfo->Dpi;		// Size of a pixel in MILLIPOINTS
 
-	RECT ToRedraw;
-	ToRedraw.left	= InvalidRect->lo.x / PixelSize;
-	ToRedraw.right	= InvalidRect->hi.x / PixelSize;
-	ToRedraw.top	= (ExtraInfo->dy - InvalidRect->hi.y) / PixelSize;
-	ToRedraw.bottom	= (ExtraInfo->dy - InvalidRect->lo.y) / PixelSize;
-
-	if (ToRedraw.top > ToRedraw.bottom)
+	DocRect irect=*InvalidRect;
+	if (irect.lo.y > irect.hi.y)
 	{
 		// not an ERROR3 because this is in rendering code
 		TRACEALL( _T("Rectangle upside down in InvalidateGadget\n") );
-		// swap over the rect Y co-ords usin the amazing XOR trick
-		ToRedraw.top	^=	ToRedraw.bottom;
-		ToRedraw.bottom	^=	ToRedraw.top;
-		ToRedraw.top	^=	ToRedraw.bottom;
+		// swap over the rect Y co-ords
+		INT32 temp=irect.lo.y;
+		irect.lo.y=irect.hi.y;
+		irect.lo.y=temp;
 	}
 
-	// Invalidate the gadget, but only if we found a legal window to invalidate
-	HWND realwid = ::GetDlgItem((HWND)WindowID, (INT32)Gadget);
-	ERROR3IF((!realwid), "DialogManager::InvalidateGadget - Gadget not valid");
+	wxRect ToRedraw(irect.lo.x / PixelSize, (ExtraInfo->dy-irect.lo.y) / PixelSize,
+					ExtraInfo->dx / PixelSize, ExtraInfo->dy/PixelSize);
 
-	if (realwid)
-		::InvalidateRect(realwid, &ToRedraw, FALSE);
-#endif
+	wxWindow * pGadget = GetGadget(WindowID, Gadget);
+	// Invalidate the gadget, but only if we found a legal window to invalidate
+	ERROR3IF((!pGadget), "DialogManager::InvalidateGadget - Gadget not valid");
+
+	if (pGadget)
+		pGadget->Refresh(TRUE, &ToRedraw);
 }
 
 

@@ -127,6 +127,7 @@ DECLARE_SOURCE("$Revision: 662 $");
 //#include "barsdlgs.h"
 #include "keypress.h"
 #include "bubbleid.h"
+#include "ophist.h"
 
 CC_IMPLEMENT_DYNCREATE(ArrangeAlignment, DialogOp)   
 CC_IMPLEMENT_DYNCREATE(OpAlign, TransOperation)   
@@ -142,7 +143,7 @@ const CGadgetID TargetArea[]={_R(IDC_ALIGNDIALOG_TOSELECTION),	// default
 					#ifndef WEBSTER
 							  _R(IDC_ALIGNDIALOG_TOSPREAD),		
 					#endif //webster
-							  NULL};
+							  0};
 
 // string ID lists for combo boxes (null terminated) 
 // >>>> NB. must be in same order as AlignType enum <<<<
@@ -154,7 +155,7 @@ const INT32 HAlignIDS[]={_R(IDS_HALIGNNONE),
 						_R(IDS_HDISTRIBUTECENTRE),
 						_R(IDS_HDISTRIBUTERIGHT),
 						_R(IDS_HDISTRIBUTEEQUI),
-						NULL};
+						0};
 const INT32 VAlignIDS[]={_R(IDS_VALIGNNONE),
 						_R(IDS_VALIGNBOTTOM),
 						_R(IDS_VALIGNCENTRE),
@@ -163,7 +164,7 @@ const INT32 VAlignIDS[]={_R(IDS_VALIGNNONE),
 						_R(IDS_VDISTRIBUTECENTRE),
 						_R(IDS_VDISTRIBUTETOP),
 						_R(IDS_VDISTRIBUTEEQUI),
-						NULL};
+						0};
 
 // constants defining the size and position of the rectangles on the align dialog
 const INT32 DiagWidth =100;
@@ -213,7 +214,7 @@ BOOL ArrangeAlignment::Init()
 
 	return RegisterOpDescriptor(
 		0,									// Tool ID
- 		_R(IDS_ARRANGEALIGNMENT),				// String resource ID
+ 		_R(IDS_ARRANGE_ALIGNMENT),			// String resource ID
 		CC_RUNTIME_CLASS(ArrangeAlignment),	// Runtime class
  		OPTOKEN_ALIGNDLG,					// Token string
  		ArrangeAlignment::GetState,			// GetState function
@@ -375,6 +376,9 @@ MsgResult ArrangeAlignment::Message(Msg* Message)
 				Close();
 				End();
 				break;
+
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, SelChangingMsg))
@@ -453,10 +457,10 @@ void ArrangeAlignment::RedrawDiagram(ReDrawInfoType* ExtraInfo)
 
 	// make a render region
 	DocRect VirtRendRect;
-	VirtRendRect.lox=-1*scale;
-	VirtRendRect.loy=-2*scale;
-	VirtRendRect.hix=(DiagWidth +1)*scale;
-	VirtRendRect.hiy=(DiagHeight+2)*scale;
+	VirtRendRect.lo.x=-1*scale;
+	VirtRendRect.lo.y=-2*scale;
+	VirtRendRect.hi.x=(DiagWidth +1)*scale;
+	VirtRendRect.hi.y=(DiagHeight+2)*scale;
 	RenderRegion* pRender=CreateGRenderRegion(&VirtRendRect,ExtraInfo);
 
 	if (pRender!=NULL)
@@ -583,15 +587,24 @@ void ArrangeAlignment::UpdateState()
 {
 	// update target
 	CGadgetID Target = ReadRadioGroup(TargetArea,TargetArea[0]);
-	switch (Target)
+	if (Target == _R(IDC_ALIGNDIALOG_TOSELECTION))
 	{
-		case _R(IDC_ALIGNDIALOG_TOSELECTION): Align.target=ToSelection;	break;
-		case _R(IDC_ALIGNDIALOG_TOPAGE):      Align.target=ToPage;      break;
+		Align.target=ToSelection;
+	}
+	else if (Target == _R(IDC_ALIGNDIALOG_TOPAGE))
+	{
+		Align.target=ToPage;
+	}
 	//	WEBSTER-ranbirr-13/11/96
 	#ifndef WEBSTER
-		case _R(IDC_ALIGNDIALOG_TOSPREAD):    Align.target=ToSpread;    break;
+	else if (Target == _R(IDC_ALIGNDIALOG_TOSPREAD))
+	{
+		Align.target=ToSpread;
+	}
 	#endif //webster
-		default: ERROR3("ArrangeAlignment::UpdateState() - unknown target");
+	else
+	{
+		ERROR3("ArrangeAlignment::UpdateState() - unknown target");
 	}
 
 	// read alignments from horizontal and vertical combo boxes
@@ -608,7 +621,7 @@ void ArrangeAlignment::UpdateState()
 	BOOL ApplyButtonState = (NumObjs>0);
 	if (NumObjs==1 && Target==_R(IDC_ALIGNDIALOG_TOSELECTION)) ApplyButtonState = FALSE;
 	if (Align.h==AlignNone && Align.v==AlignNone)          ApplyButtonState = FALSE;
-	EnableGadget(IDOK,ApplyButtonState);
+	EnableGadget(_R(IDOK),ApplyButtonState);
 }
 
 
@@ -866,18 +879,18 @@ void OpAlign::DoWithParam(OpDescriptor* pOp, OpParam* pAlignParam)
 		{
 			DocRect ObjRect=((NodeRenderableBounded*)pObj[i])->GetBoundingRect();
 			x[i].i=i;
-			x[i].lo=ObjRect.lox;
-			x[i].hi=ObjRect.hix;
-			SumObjWidths+=ObjRect.hix-ObjRect.lox;
+			x[i].lo=ObjRect.lo.x;
+			x[i].hi=ObjRect.hi.x;
+			SumObjWidths+=ObjRect.hi.x-ObjRect.lo.x;
 			y[i].i=i;
-			y[i].lo=ObjRect.loy;
-			y[i].hi=ObjRect.hiy;
-			SumObjHeights+=ObjRect.hiy-ObjRect.loy;
+			y[i].lo=ObjRect.lo.y;
+			y[i].hi=ObjRect.hi.y;
+			SumObjHeights+=ObjRect.hi.y-ObjRect.lo.y;
 		}
 
 		// for each object, calculate the x and y displacements independently
-		AlignOneAxis(pAlign->h,NumObjs,SumObjWidths, TargetRect.lox,TargetRect.hix,x,dx);
-		AlignOneAxis(pAlign->v,NumObjs,SumObjHeights,TargetRect.loy,TargetRect.hiy,y,dy);
+		AlignOneAxis(pAlign->h,NumObjs,SumObjWidths, TargetRect.lo.x,TargetRect.hi.x,x,dx);
+		AlignOneAxis(pAlign->v,NumObjs,SumObjHeights,TargetRect.lo.y,TargetRect.hi.y,y,dy);
 
 		// apply the x and y displacements simultaneously to each object
 		for (i=0; i<NumObjs; i++)
