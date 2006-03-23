@@ -140,10 +140,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //
 // Define XARA_MENUGEN to use Xtreme style menu creation.
 // Note that this currently doesn't have full functionality
-//
-#if defined(_DEBUG)
+// but it's getting there
+//#if defined(_DEBUG)
 #define XARA_MENUGEN
-#endif
+//#endif
 
 #if defined(FILELIST)
 
