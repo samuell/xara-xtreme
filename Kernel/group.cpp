@@ -620,11 +620,17 @@ double NodeGroup::GetTightGroupPixelsPerInch(RenderRegion* pRender) const
 		// or get resolution from current view
 		double dViewPPI = 96.0;
 		double dViewScaledPPI = 96.0;
+		if (pRender==NULL)
 		{
 			View* pView = View::GetCurrent();
 			if (pView)
 				dViewPPI = 72000.0 / pView->GetPixelWidth().MakeDouble();
 				dViewScaledPPI = 72000.0 / pView->GetScaledPixelWidth().MakeDouble();
+		}
+		else
+		{
+			dViewPPI = pRender->GetPixelsPerInch();
+			dViewScaledPPI = 72000.0 / pRender->GetScaledPixelWidth();
 		}
 
 		Node* pParent = this->FindParent();
@@ -652,11 +658,7 @@ double NodeGroup::GetTightGroupPixelsPerInch(RenderRegion* pRender) const
 			// We should capture at a size that's at least as good as the current zoomed pixel size
 			// (We rely on the capture being clipped to keep bitmap sizes under control at high zoom factors)
 			// (We should reduce the resolution if the bitmap will be huge...)
-			dPPI = dViewPPI;
-
-			// If unzoomed pixels are bigger than zoomed pixels we'll use zoomed pixel width instead
-			if (dPPI < dViewScaledPPI)
-				dPPI = dViewScaledPPI;
+			dPPI = dViewScaledPPI;
 		}
 	}
 
@@ -680,6 +682,7 @@ double NodeGroup::GetTightGroupPixelsPerInch(RenderRegion* pRender) const
 		dPPI = 96.0;
 	}
 
+TRACEUSER("Phil", _T("GTGPPI %f\n"), dPPI);
 	return dPPI;
 }
 
@@ -939,7 +942,12 @@ void NodeGroup::Transform( TransformBase& Trans )
 	{
 		// Note! View::GetScaledPixelWidth returns an unrounded fractional value where
 		// RenderRegion::GetScaledPixelWidth return a rounded integer!!!
-		TransformCached(Trans, (MILLIPOINT)(pView->GetScaledPixelWidth().MakeDouble()+0.5));
+		//
+		// Note! It would be better not to call HasEffectAttrs() here because it can be slow in large groups
+		if (HasEffectAttrs())
+			TransformTight(Trans, GetTightGroupPixelsPerInch());
+		else
+			TransformCached(Trans, (MILLIPOINT)(pView->GetScaledPixelWidth().MakeDouble()+0.5));
 	}
 	else
 	{
@@ -1052,6 +1060,55 @@ void NodeGroup::Transform( TransformBase& Trans )
 		}
 	}
 }
+
+
+
+
+/********************************************************************************************
+
+>	virtual void NodeGroup::TransformTight(TransformBase& Trans, double dTestPixelWidth)
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/10/2004
+	Inputs:		Trans - Transformation
+				dPixelWidth - PixelWidth to be tested specifically to control Trans.bHaveTransformedCached
+	Returns:	-
+	Purpose:	Transform all the cached bitmaps associated with this node
+	SeeAlso:	NodeRenderableInk::RenderCached, CaptureCached
+
+********************************************************************************************/
+
+void NodeGroup::TransformTight(TransformBase& Trans, double dTestPixelWidth)
+{
+	CBitmapCache* pBitmapCache = Camelot.GetBitmapCache();
+
+	CBitmapCacheKey inky(this, 42);
+	CCacheKeyMap::iterator pos = pBitmapCache->GetStartPosition();
+	CCachedBitmap abitmap = pBitmapCache->FindNextOwnedBitmap(pos, inky);
+	MayBeCached = abitmap.IsValid();						// Update MayBeCached here because we can
+	BOOL bTransformedTested = FALSE;
+	while (abitmap.IsValid())
+	{
+		abitmap.Transform(Trans);
+		pBitmapCache->StoreBitmap(inky, abitmap);
+
+		if (inky.GetPixelWidth() == dTestPixelWidth && abitmap.IsTransparent())
+			bTransformedTested = TRUE;
+
+		abitmap = pBitmapCache->FindNextOwnedBitmap(pos, inky);
+	}
+
+	// We can only continue to transform cached things if all our bitmaps are transparent (32BPP)
+	// And if we actually had some cached data to transform
+	if (!bTransformedTested)
+	{
+		Trans.bHaveTransformedCached = FALSE;
+		Trans.bTransformYourChildren = TRUE;
+	}
+}
+
+
+
 
 /********************************************************************************************
 

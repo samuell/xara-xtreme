@@ -182,6 +182,7 @@ public:
 	virtual BOOL CaptureTight(RenderRegion* pRender);
 	virtual double GetTightGroupPixelsPerInch(RenderRegion* pRender=NULL) const;
 	virtual double GetTightGroupPixelWidth(RenderRegion* pRender=NULL) const {return 72000.0/GetTightGroupPixelsPerInch(pRender);}
+	virtual void TransformTight(TransformBase& Trans, double dTestPixelWidth);
 
 //	virtual BOOL IsValidEffectAttr(CCRuntimeClass* pAttrClass) const;
 	virtual BOOL IsValidEffectAttr(NodeAttribute* pAttr) const;
