@@ -1,5 +1,4 @@
 BUILT_SOURCES	= camtypes.h.gch
-include_HEADERS	= camtypes.h
 CLEANFILES		= camtypes.h.gch
 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
