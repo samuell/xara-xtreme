@@ -511,5 +511,10 @@ wxObject * wxCamArtControlXmlHandler::DoCreateResource()
 
 bool /*TYPENOTE: Correct*/ wxCamArtControlXmlHandler::CanHandle(wxXmlNode *node)
 {
-	return (IsOfClass(node, wxT("wxCamArtControl")));
+	bool	fOurClass = node->GetPropVal(wxT("class"), wxEmptyString) == wxT("wxCamArtControl");
+	return fOurClass;
+
+	// This doesn't work on some compilers (although it is identical to what's above
+	// just not in a function implemented in a header)
+//	return (IsOfClass(node, wxT("wxCamArtControl")));
 }
