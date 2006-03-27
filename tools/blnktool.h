@@ -141,27 +141,28 @@ public:
 	BOOL GetStatusLineText(String_256* ptext, Spread* pSpread, DocCoord DocPos, ClickModifiers ClickMods);
 
 	// Some useful static functions
-	static BlankInfoBarOp* 	GetBlankInfoBarOp()  { return pBlankInfoBarOp; }
-	static BOOL 			IsCurrentTool() 	 { return CurrentTool; }
+	static BlankInfoBarOp* 	GetBlankInfoBarOp()  { return s_pBlankInfoBarOp; }
+	static BOOL 			IsCurrentTool() 	 { return s_bCurrentTool; }
 
 private:
 	void DisplayStatusBarHelp(DocCoord DocPos, Spread* pSpread, ClickModifiers ClickMods);
 	void GetCurrentStatusText(String_256* ptext, Spread* pSpread, DocCoord DocPos, ClickModifiers ClickMods);
 
-	BOOL CreateCursors();						// Create  your tool's cursors in this func
-	void DestroyCursors();						// Destroy your tool's cursors in this func
+	BOOL CreateCursors();							// Create  your tool's cursors in this func
+	void DestroyCursors();							// Destroy your tool's cursors in this func
 
-	static BOOL 			CurrentTool;		// Can be useful to keep a "is my tool currenmt?" flag
-	static BlankInfoBarOp*	pBlankInfoBarOp;	// Ptr to your tool's infobar
+	static BOOL 			s_bCurrentTool;			// Can be useful to keep a "is my tool currenmt?" flag
+	static BlankInfoBarOp*	s_pBlankInfoBarOp;		// Ptr to your tool's infobar
 
-	Cursor*	pcNormalBlankCursor;				// Your standard cursor to use when your tool becomes active
-	Cursor*	pcCurrentCursor;					// The cursor your tool is currently displaying
-	INT32 CurrentCursorID;						// ID of the current cursor you're displaying
+	Cursor*					m_pcNormalBlankCursor;	// Your standard cursor to use when your tool becomes active
+	Cursor*					m_pcCurrentCursor;		// The cursor your tool is currently displaying
+	INT32 					m_CurrentCursorID;		// ID of the current cursor you're displaying
+
 	// Standard tool static vars
-	static 	char* FamilyName;					// The Tools Family Name
-	static 	char* ToolName;						// The Tool Name
-	static 	char* Purpose;						// What the tool is for
-	static 	char* Author;						// Who wrote it
+	static 	LPTSTR FamilyName;						// The Tools Family Name
+	static 	LPTSTR ToolName;						// The Tool Name
+	static 	LPTSTR Purpose;							// What the tool is for
+	static 	LPTSTR Author;							// Who wrote it
 };
 
 
@@ -185,28 +186,17 @@ class BlankInfoBarOp : public InformationBarOp
 {
 	CC_DECLARE_DYNCREATE( BlankInfoBarOp )  
 public:
-	BlankInfoBarOp() {};				// Dummy default constructor for DYNCREATE
+	BlankInfoBarOp(BlankTool* pTool=NULL)
+	{
+		m_pBlankTool = pTool;
+		DlgResID = _R(IDD_BLANKTOOLBAR);
+	}
 
 	MsgResult 	Message(Msg* Msg);	// All messages to the info bar come through here
+
+private:
+	BlankTool*	m_pBlankTool;
 };
 	
-
-/********************************************************************************************
-
->	class BlankInfoBarOpCreate : public BarCreate
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	3/10/94
-	Purpose:	Class for creating BlankInfoBarOps.
-				Derived classes of BarCreate are used by DialogBarOp::ReadBarsFromFile()
-
-********************************************************************************************/
-
-class BlankInfoBarOpCreate : public BarCreate
-{
-public:
-	DialogBarOp* Create() { return (new BlankInfoBarOp); }
-};
-
 
 #endif 		// INC_BLANKTOOL

@@ -121,14 +121,14 @@ CC_IMPLEMENT_DYNCREATE(BlankInfoBarOp,InformationBarOp)
 #define new CAM_DEBUG_NEW     
 
 // These are still char* while we wait for resource technology to be developed for modules
-char* BlankTool::FamilyName	= "Blank Tools";
-char* BlankTool::ToolName 	= "Blank Tool";
-char* BlankTool::Purpose 	= "Blank manipulation";
-char* BlankTool::Author 	= "Buster Gonad";
+LPTSTR BlankTool::FamilyName	= _T("Blank Tools");
+LPTSTR BlankTool::ToolName 	= _T("Blank Tool");
+LPTSTR BlankTool::Purpose 	= _T("Blank manipulation");
+LPTSTR BlankTool::Author 	= _T("Buster");
 
 // Init those other useful static vars
-BOOL			BlankTool::CurrentTool 			= FALSE;
-BlankInfoBarOp*	BlankTool::pBlankInfoBarOp		= NULL;
+BOOL			BlankTool::s_bCurrentTool 			= FALSE;
+BlankInfoBarOp*	BlankTool::s_pBlankInfoBarOp		= NULL;
 
 /********************************************************************************************
 
@@ -144,7 +144,8 @@ BlankInfoBarOp*	BlankTool::pBlankInfoBarOp		= NULL;
 
 BlankTool::BlankTool()
 {
-	pcCurrentCursor = NULL;
+	m_pcCurrentCursor = NULL;
+	m_pcNormalBlankCursor = NULL;
 }
 
 /********************************************************************************************
@@ -185,27 +186,8 @@ BOOL BlankTool::Init()
 	// after the infobar is successfully read and created.
 	if (ok)
 	{
-		CCResTextFile 		file;				// Resource File
-		BlankInfoBarOpCreate BarCreate;			// Object that creates BlankInfoBarOp objects
-
-		 		ok = file.open(_R(IDM_BLANK_BAR), _R(IDT_INFO_BAR_RES));		// Open resource
-		if (ok) ok = DialogBarOp::ReadBarsFromFile(file,BarCreate);	// Read and create info bar
-		if (ok) file.close();									 	// Close resource
-
-		ENSURE(ok,"Unable to load blankbar.ini from resource\n"); 
-
-		if (ok)
-		{
-			// Info bar now exists.  Now get a pointer to it
-			String_32 str = String_32("Blank info bar");
-			DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(str);
-
-					ok = (pDialogBarOp != NULL);
-			if (ok) ok = pDialogBarOp->IsKindOf(CC_RUNTIME_CLASS(BlankInfoBarOp));
-			if (ok) pBlankInfoBarOp = (BlankInfoBarOp*)pDialogBarOp;
-
-			ENSURE(ok,"Error finding the blank tool info bar");
-		}
+		s_pBlankInfoBarOp = new BlankInfoBarOp(this);
+		ERROR2IF(s_pBlankInfoBarOp==NULL, FALSE, "Can't create Blank tool Infobar");
 	}
 
 	return (ok);
@@ -228,10 +210,10 @@ BOOL BlankTool::Init()
 
 ********************************************************************************************/
 
-void BlankTool::Describe(void *InfoPtr)
+void BlankTool::Describe(void* InfoPtr)
 {
 	// Cast structure into the latest one we understand.
-	ToolInfo_v1 *Info = (ToolInfo_v1 *) InfoPtr;
+	ToolInfo_v1* Info = (ToolInfo_v1*) InfoPtr;
 
 	Info->InfoVersion = 1;
 	
@@ -271,28 +253,28 @@ void BlankTool::SelectChange(BOOL isSelected)
 	if (isSelected)
 	{
 		if (!CreateCursors()) return;
-		CurrentCursorID = CursorStack::GPush(pcNormalBlankCursor, FALSE);		// Push cursor but don't display now
-		pcCurrentCursor = pcNormalBlankCursor;
+		m_CurrentCursorID = CursorStack::GPush(m_pcNormalBlankCursor, FALSE);		// Push cursor but don't display now
+		m_pcCurrentCursor = m_pcNormalBlankCursor;
 
 		// This tool is now the current one
-		CurrentTool = TRUE;
+		s_bCurrentTool = TRUE;
 
 		// Create and display the tool's info bar
-		pBlankInfoBarOp->Create();
+		s_pBlankInfoBarOp->Create();
 	}
 	else
 	{
 		// Deselection - destroy the tool's cursors, if they exist.
-		if (pcCurrentCursor != NULL)
+		if (m_pcCurrentCursor != NULL)
 		{
-			CursorStack::GPop(CurrentCursorID);
-			pcCurrentCursor = NULL;
-			CurrentCursorID = 0;
+			CursorStack::GPop(m_CurrentCursorID);
+			m_pcCurrentCursor = NULL;
+			m_CurrentCursorID = 0;
 		}
 		DestroyCursors();
 
 		// Remove the info bar from view by deleting the actual underlying window
-		pBlankInfoBarOp->Delete();
+		s_pBlankInfoBarOp->Delete();
 
 		// ensure any tool object blobs are removed.
 		BlobManager* BlobMgr = GetApplication()->GetBlobManager();
@@ -304,7 +286,7 @@ void BlankTool::SelectChange(BOOL isSelected)
 		}
 
 		// No longer the current tool
-		CurrentTool = FALSE;
+		s_bCurrentTool = FALSE;
 	}
 }
 
@@ -325,9 +307,9 @@ void BlankTool::SelectChange(BOOL isSelected)
 BOOL BlankTool::CreateCursors()
 {
 	// This tool has just been selected.  Create the cursors.
-	pcNormalBlankCursor = new Cursor(this, _R(IDC_BLANKTOOLCURSOR));
+	m_pcNormalBlankCursor = new Cursor(this, _R(IDCSR_BLANKTOOLDEFAULT));
 
-	if ( pcNormalBlankCursor==NULL || !pcNormalBlankCursor->IsValid())
+	if ( m_pcNormalBlankCursor==NULL || !m_pcNormalBlankCursor->IsValid())
 	{
 		DestroyCursors();
 		return FALSE;
@@ -352,7 +334,7 @@ BOOL BlankTool::CreateCursors()
 
 void BlankTool::DestroyCursors()
 {
-	if (pcNormalBlankCursor != NULL) delete pcNormalBlankCursor;
+	if (m_pcNormalBlankCursor != NULL) delete m_pcNormalBlankCursor;
 }
 
 /********************************************************************************************
@@ -458,7 +440,7 @@ void BlankTool::RenderToolBlobs(Spread* pSpread,DocRect* pDocRect)
 
 void BlankTool::DisplayStatusBarHelp(DocCoord DocPos, Spread* pSpread, ClickModifiers ClickMods)
 {
-	String_256 StatusMsg("");
+	String_256 StatusMsg(_T(""));
 
 	// Get a string from the underlying help function and display it.
 	GetCurrentStatusText(&StatusMsg, pSpread, DocPos, ClickMods);
