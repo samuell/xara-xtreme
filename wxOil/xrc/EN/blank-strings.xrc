@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_BLANKRC">
+		<title>String table from BLANKRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BLANK_TOOL">
+					<label>&Blank Tool;Activate the blank tool;Blank</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_BLANK_TOOL">
+					<label>Blank Tool (No Hotkey)</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>
