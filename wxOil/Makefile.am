@@ -90,7 +90,7 @@ xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po: xrc/xrc.stamp
 	$(TOPDIR)/Scripts/combinexrc.pl -b missing.png -o xrc/dialogs.xrc $(XRCDIALOGS) && \
 	$(TOPDIR)/Scripts/combinexrc.pl -b missing.png -t -s -o xrc/strings.lst $(XRCSTRINGS) && \
 	( perl -ne 'chomp;s/^\S+\t//;print "_(\"$$_\");\n";' < xrc/strings.lst && @WXRC@ -g xrc/dialogs.xrc) | sort -u | \
-	perl -ne 'print unless /^_\(\"\"\)\;\s+$$/;' | \
+	perl -ne 'print unless /^_\(\"\"\)\;\s+$$/;' | sed 's/&amp;/\&/g' | \
 	${XGETTEXT} --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o xrc/xaralx.po
 
 # Don't produce strings.xrc any more
