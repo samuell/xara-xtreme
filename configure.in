@@ -58,7 +58,7 @@ AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(__int64)
 
 # Check that AUTOMAKE is new enough
-AutomakeVersion=`automake --version | awk '{ if($3 ~ /automake)/) print $4}'`
+AutomakeVersion=`automake --version | awk '{ if($3 ~ /automake\)/) print $4}'`
 AC_MSG_CHECKING([Automake ($AutomakeVersion)])
 AutomakeVersion=`echo $AutomakeVersion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
 if test "$AutomakeVersion" -lt 1009000; then
