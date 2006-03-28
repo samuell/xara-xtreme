@@ -150,6 +150,49 @@ else
 	AC_MSG_ERROR([wxWidgets 2.6.3 or newer is required (2.6.3-rc2 will do)])
 fi
 
+FTCONFIG=freetype-config
+AC_ARG_WITH(freetype-config,
+[[  --with-freetype-config=FILE   Use the given path to freetype-config when determining
+                                  freetype configuration; defaults to "freetype-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        FTCONFIG=$withval
+    fi
+])
+
+ftversion=0
+
+# In wxGTK builds we need Pango and FreeType for font rendering
+AC_DEFUN([FTTEST],
+[
+	AC_MSG_CHECKING([freetype version])
+	if ftversion=`$FTCONFIG --version`; then
+		AC_MSG_RESULT([$ftversion])
+	else
+		AC_MSG_RESULT([not found])
+		AC_MSG_ERROR([freetype is required. Try --with-freetype-config.])
+	fi])
+
+if test $WX_GTK == "yes"; then
+	# GTK build, so call FTTEST function to test for FreeType
+	FTTEST
+	FT_CFLAGS="`$FTCONFIG --cflags`"
+
+	# check for the Pango package
+	PKG_CHECK_MODULES(PANGOX, pangox,
+			  [
+				PANGO_CFLAGS="$PANGOX_CFLAGS"
+			  ],
+			  [
+				AC_MSG_ERROR([pangox library not found])
+			  ]
+			  )
+else
+	# non-GTK build, i.e., MacOS, so Pango and FreeType are not required
+	FT_CFLAGS = ""
+	PANGO_CFLAGS = ""
+fi
+
 TOPDIR=$srcdir;
 if test `echo $srcdir | cut -c1` != "/"; then
 	TOPDIR="../$srcdir";
@@ -160,8 +203,9 @@ if test "$StaticEnable" = "yes"; then
 	CXXFLAGS="$CXXFLAGS -static -static-libgcc"
 fi
 
-CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
-CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS"
+# pass the Pango, FreeType and GTK flags (required for wxGTK font rendering)
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS"
+CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS"
 
 AC_MSG_CHECKING([Linker])
 case $host in
