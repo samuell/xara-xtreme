@@ -229,6 +229,9 @@ case $target in
     amd64-* | x86_64-*)
 	AC_MSG_RESULT([libs/x86_64])
 	CDRAW_LIB_DIR="libs/x86_64";;
+    powerpc-*)
+        AC_MSG_RESULT([libs/ppc])
+        CDRAW_LIB_DIR="libs/ppc";;
     *)
 	AC_MSG_ERROR([Architecture $target not supported])
 esac
