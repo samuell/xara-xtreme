@@ -102,8 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "ttfonts.h"
-//#include "atmfonts.h"
+#ifdef __WXGTK__
+#include "ftfonts.h"
+#endif
 #include "textfuns.h"
 #include "fontman.h"		// includes fontbase.h
 #include "errors.h"
@@ -125,6 +126,9 @@ CC_IMPLEMENT_MEMDUMP( FontKerningPairsCache, CC_CLASS_MEMDUMP );
 CC_IMPLEMENT_MEMDUMP( CharOutlineCache, CC_CLASS_MEMDUMP );
 
 #define new CAM_DEBUG_NEW
+
+// a macro to ignore a parameter without causing a warning
+#define IGNORE(x) x = x
 
 /////////////////////////////////////////
 // Some outline cache constants
@@ -203,7 +207,18 @@ PORTNOTE("text","ATM never OK")
 #endif
 			break;
 		case FC_TRUETYPE:
+#ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::IsOkToCall();
+#else
+			return FALSE;
+#endif
+			break;
+		case FC_FREETYPE:
+#ifdef __WXGTK__
+			return FTFontMan::IsOkToCall();
+#else
+			return FALSE;
+#endif
 			break;
 	}
 	ERROR3("Unknown font class passed to OILFontMan::IsOkToCall()");
@@ -244,9 +259,15 @@ BOOL OILFontMan::CacheNamedFont(String_64* pFontName, FontClass Class, INT32 Pas
 			{
 				case FC_UNDEFINED:
 				{
+#ifdef __WXGTK__
+					if (FTFontMan::CacheNamedFont(pFontName))
+						return TRUE;
+#endif
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 					if (TTFontMan::CacheNamedFont(pFontName))
 						return TRUE;
-
+#endif
 PORTNOTE("text","Never cache ATM font")
 #ifndef EXCLUDE_FROM_XARALX
 					return ATMFontMan::CacheNamedFont(pFontName);
@@ -258,7 +279,12 @@ PORTNOTE("text","Never cache ATM font")
 
 				case FC_TRUETYPE:
 				{
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 					return TTFontMan::CacheNamedFont(pFontName);
+#else
+					return FALSE;
+#endif
 					break;
 				}
 
@@ -270,6 +296,16 @@ PORTNOTE("text","Never cache ATM font")
 #else
 					return FALSE;
 #endif					
+					break;
+				}
+
+				case FC_FREETYPE:
+				{
+#ifdef __WXGTK__
+					return FTFontMan::CacheNamedFont(pFontName);
+#else
+					return FALSE;
+#endif
 					break;
 				}
 
@@ -286,9 +322,16 @@ PORTNOTE("text","Never cache ATM font")
 			{
 				case FC_UNDEFINED:
 				{
+#ifdef __WXGTK__
+					if (FTFontMan::CacheCompatibleFont(pFontName))
+						return TRUE;
+#endif
+
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 					if (TTFontMan::CacheCompatibleFont(pFontName))
 						return TRUE;
-
+#endif
 PORTNOTE("text","Never cache ATM font")
 #ifndef EXCLUDE_FROM_XARALX
 					return ATMFontMan::CacheCompatibleFont(pFontName);
@@ -300,7 +343,12 @@ PORTNOTE("text","Never cache ATM font")
 
 				case FC_TRUETYPE:
 				{
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 					return TTFontMan::CacheCompatibleFont(pFontName);
+#else
+					return FALSE;
+#endif
 					break;
 				}
 
@@ -313,7 +361,17 @@ PORTNOTE("text","Never cache ATM font")
 					return FALSE;
 #endif					
 				}
-		
+
+				case FC_FREETYPE:
+				{
+#ifdef __WXGTK__
+					return FTFontMan::CacheCompatibleFont(pFontName);
+#else
+					return FALSE;
+#endif
+					break;
+				}
+
 				default:
 					ERROR3("Unknown font class passed to OILFontMan::CacheNamedFont()");
 
@@ -340,7 +398,13 @@ PORTNOTE("text","Never cache ATM font")
 
 void OILFontMan::ValidateCache()
 {
+#ifdef __WXGTK__
+	FTFontMan::ValidateCache();
+#endif
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	TTFontMan::ValidateCache();
+#endif
 PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 	ATMFontMan::ValidateCache();
@@ -361,7 +425,13 @@ PORTNOTE("text","ATM deactivated")
 
 void OILFontMan::FindClosestFont()
 {
+#ifdef __WXGTK__
+	FTFontMan::FindClosestFont();
+#endif
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	TTFontMan::FindClosestFont();
+#endif
 PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 	ATMFontMan::FindClosestFont();
@@ -386,15 +456,28 @@ FontBase* OILFontMan::CreateNewFont(FontClass Class, String_64* pFontName)
 {
 	switch (Class)
 	{
+		case FC_FREETYPE:
+#ifdef __WXGTK__
+		case FC_UNDEFINED:
+			return FTFontMan::CreateNewFont(pFontName);
+#else
+			return NULL;
+#endif
+			break;
 		case FC_TRUETYPE:
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::CreateNewFont(pFontName);
+#else
+			return NULL;
+#endif
 			break;
 		case FC_ATM:
 PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return ATMFontMan::CreateNewFont(pFontName);
 #else
-			return NULL
+			return NULL;
 #endif
 			break;
 	}
@@ -421,15 +504,27 @@ OUTLINETEXTMETRIC *OILFontMan::GetOutlineTextMetric(FontClass Class, LOGFONT *pL
 {
 	switch (Class)
 	{
+		case FC_FREETYPE:
+#ifdef __WXGTK__
+			return FTFontMan::GetOutlineTextMetric(pLogFont);
+#else
+			return NULL;
+#endif
+			break;
 		case FC_TRUETYPE:
+PORTNOTE("text","ATM deactivated")
+#ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::GetOutlineTextMetric(pLogFont);
+#else
+			return NULL;
+#endif
 			break;
 		case FC_ATM:
-PORTNOTE("other","ATM deactivated")
+PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return ATMFontMan::GetOutlineTextMetric(pLogFont);
 #else
-			return NULL
+			return NULL;
 #endif
 			break;
 	}
@@ -704,21 +799,35 @@ BOOL OILFontMan::GetCharPath(FontClass fclass,
 							 UINT32* pNumCoords,
 							 wxDC *pDC)
 {
+	TRACEUSER("wuerthne",_T("OILFontMan::GetCharPath"));
 	BOOL Success=FALSE;
 	switch (fclass)
 	{
 		case FC_TRUETYPE:
+PORTNOTE("text","TrueType deactivated")
+#ifndef EXCLUDE_FROM_XARALX
 			Success = TextManager::GetTTCharPath(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#endif
 			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOTTOUTLINE));
 			break;
 
 		case FC_ATM:
-PORTNOTE("other","ATM deactivated")
+PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			Success = ATMFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
 #endif
 			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOATMOUTLINE));
 			break;
+
+		case FC_FREETYPE:
+#ifdef __WXGTK__
+			Success = FTFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#else
+			Success = FALSE;
+#endif
+			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOFTOUTLINE));
+			break;
+
 	}
 	ERROR3IF(Success==FALSE,"Unknown font class in OILFontMan::GetCharPath");
 	return Success;
@@ -745,7 +854,8 @@ FontMetricsCacheEntry::FontMetricsCacheEntry()
 	FontEmWidth = 0;
 	FontAscent  = 0;
 	FontDescent = 0;
-	FontDesc    = CharDescription(0,0,0,0);
+	CharDescription emptyCharDesc(0, 0, 0, 0);
+	FontDesc    = emptyCharDesc;
 }
 
 
@@ -755,10 +865,10 @@ FontMetricsCacheEntry::FontMetricsCacheEntry()
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/1/96
-	Inputs:		pDC          - DC with design size font selected
-				FontDesc     - descriptor of font which is being cached
-				DefaultHeght - default height of char (ie size of font for which char widths are cached)
-				DesignSize   - size of font selected in DC (in Logical units - pixels)
+	Inputs:		pDC           - DC with design size font selected
+				FontDesc      - descriptor of font which is being cached
+				DefaultHeight - default height of char (ie size of font for which char widths are cached)
+				DesignSize    - size of font selected in DC (in Logical units - pixels)
 	Returns:	FALSE if fails
 	Purpose:	Refill the font cache entry
 ********************************************************************************************/
@@ -767,15 +877,17 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 												MILLIPOINT DefaultHeight, INT32 DesignSize )
 {
 	// get font metrics and convert from design size in pixels to default height in millipoints
-	TEXTMETRIC TextMetrics;
-	if (pDC->GetTextMetrics(&TextMetrics)==0)
-		ERROR2(FALSE,"FontMetricsCache::GetCharMetrics() - GetTextMetrics() failed");
-	SetFontAscent( MulDiv( TextMetrics.tmAscent, DefaultHeight, DesignSize) );
-	SetFontDescent(MulDiv(-TextMetrics.tmDescent,DefaultHeight, DesignSize) );
+	INT32 Ascent;
+	INT32 Descent;
+
+#ifdef __WXGTK__
+	if (FTFontMan::GetAscentDescent(FontDesc, &Ascent, &Descent) == FALSE) return FALSE;
+	SetFontAscent( MulDiv( Ascent, DefaultHeight, DesignSize) );
+	SetFontDescent(MulDiv(-Descent,DefaultHeight, DesignSize) );
 
 	// get char widths and convert form design size in pixels to default height in millipoints
 	static INT32 pTempCharWidthBuf[NUMCHARS];
-	if (TextManager::GetCharWidth(pDC, FIRSTCHAR, LASTCHAR, pTempCharWidthBuf)==FALSE)
+	if (FTFontMan::GetCharWidth(FontDesc, FIRSTCHAR, LASTCHAR, pTempCharWidthBuf)==FALSE)
 		return FALSE;
 	for (INT32 i=0; i<NUMCHARS; i++)
 		pCharWidths[i] = MulDiv(pTempCharWidthBuf[i], DefaultHeight, DesignSize);
@@ -787,17 +899,21 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 	{
 		ERROR3("FontMetricsCache::GetCharMetrics() - 'FONTEMCHAR' not in cache!");
 		INT32 TempCharWidth = 0;
-		if (TextManager::GetCharWidth(pDC, FONTEMCHAR, FONTEMCHAR, &TempCharWidth)==FALSE)
+		if (FTFontMan::GetCharWidth(FontDesc, FONTEMCHAR, FONTEMCHAR, &TempCharWidth)==FALSE)
 			return FALSE;
 		SetFontEmWidth( MulDiv(TempCharWidth, DefaultHeight, DesignSize) );
 	}
 
 	// update cache tag
 	SetFontDesc(FontDesc);
+#else // !wxGTK
+	return FALSE;
+#endif
 
+#ifndef EXCLUDE_FROM_XARALX
 	// debug test
 	CheckCharWidthsSameAsABCWidths(pDC,FontDesc);
-
+#endif
 	return TRUE;
 }
 
@@ -815,6 +931,7 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 void FontMetricsCacheEntry::CheckCharWidthsSameAsABCWidths(wxDC* pDC, CharDescription FontDesc)
 {
 #ifdef _DEBUG
+#ifndef EXCLUDE_FROM_XARALX
 	// ensure that the char widths are the same as the sum of the ABC widths
 
 	// do nothing if its an ATM font (or an error)
@@ -874,7 +991,8 @@ void FontMetricsCacheEntry::CheckCharWidthsSameAsABCWidths(wxDC* pDC, CharDescri
 		}
 		TRACEUSER( "Ed", _T("Sum of CharWidths (%5dMP): new=%8.0f (e=%6.2f), old=%8.0f (e=%6.2f), accrutate=%8.2f\n"), FontSizeInMP, SumNewMetrics, SumNewMetrics-SumAccurateMetrics, SumOldMetrics, SumOldMetrics-SumAccurateMetrics, SumAccurateMetrics);
 	}
-#endif
+#endif // EXCLUDE_FROM_XARALX
+#endif // _DEBUG
 }
 
 
@@ -898,7 +1016,8 @@ void FontMetricsCacheEntry::CheckCharWidthsSameAsABCWidths(wxDC* pDC, CharDescri
 
 BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
 {
-	ERROR2IF(         pDC==NULL,FALSE,"FontMetricsCache::GetCharMetrics() - pDC==NULL");
+	TRACEUSER("wuerthne", _T("FontMetricsCache::GetCharMetrics %04x"), ch);
+	IGNORE(pDC);
 	ERROR2IF(pCharMetrics==NULL,FALSE,"FontMetricsCache::GetCharMetrics() - pCharMetrics==NULL");
 	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,"FontMetricsCache::GetCharMetrics() - FontDesc char should be 'FONTEMCHAR'");
 
@@ -907,34 +1026,23 @@ BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& Font
 	while (CacheEntry<NUMENTRIES && mpFontMetricsData[CacheEntry].GetFontDesc()!=FontDesc)
 		CacheEntry +=1;
 
-	// if font not in cache, recache it, or if char not in cached ranged, get it explcitally
-	// both of these situations require the DC to be prepared, then either/both is done before restoring the DC
+	// if font not in cache, recache it, or if char not in cached range, get it explicitly
 	MILLIPOINT CharWidth  = 0;
 	BOOL CharInCacheRange = FontMetricsCacheEntry::CharInCacheRange(ch);
 	if (CacheEntry>=NUMENTRIES || !CharInCacheRange)
 	{
 		// get design size of font, and default heigh
-		INT32 DesignSize    = TextManager::GetDesignSize(pDC);
+		INT32 DesignSize    = TextManager::GetDesignSize(pDC);  // ignores pDC
 		INT32 DefaultHeight = TextManager::GetDefaultHeight();
 
-		// first, if ATM fonts, ensure accurate widths returned
-		// this should be a virtual function - but class structure does not facilitate such things!
 		CachedFontItem* pItem = FONTMANAGER->GetFont(FontDesc.GetTypefaceHandle());
 		if (pItem==NULL || pItem->IsCorrupt())
 			return FALSE;
-		if (pItem->GetFontClass()==FC_ATM)
-			ATMFontMan::ForceExactWidth();
-//			if (ATMFontMan::ForceExactWidth()==FALSE)
-//				pItem->SetIsCorrupt(TRUE);
 
 		// get a LogFont, create a font and select it into the DC
 		LOGFONT	CharLogFont;
 		if (TextManager::GetLogFontFromCharDescriptor(pDC, FontDesc, &CharLogFont, DesignSize)==FALSE)
 			return FALSE;
-		wxFont font;
-		font.CreateFontIndirect(&CharLogFont);
-		wxFont* pOldFont = pDC->SelectObject(&font);
-		ERROR2IF(pOldFont==NULL,FALSE,"FontMetricsCache::GetCharMetrics() - SelectObject() failed");
 
 		// if font not in cache, cache its metrics throwing out a random entry
 		if (CacheEntry>=NUMENTRIES)
@@ -957,9 +1065,6 @@ BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& Font
 				CharWidth = MulDiv(TempCharWidth, DefaultHeight, DesignSize);
 			}
 		}
-
-		// restore old font
-		pDC->SelectObject(pOldFont);
 	}
 
 	if (CharInCacheRange)
@@ -969,7 +1074,6 @@ BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& Font
 	pCharMetrics->FontAscent  = mpFontMetricsData[CacheEntry].GetFontAscent();
 	pCharMetrics->FontEmWidth = mpFontMetricsData[CacheEntry].GetFontEmWidth();
 	pCharMetrics->FontDescent = mpFontMetricsData[CacheEntry].GetFontDescent();
-
 	return TRUE;
 }
 
@@ -984,8 +1088,9 @@ BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& Font
 
 void FontMetricsCache::InvalidateCharMetrics()
 {
+	CharDescription emptyCharDesc(0, 0, 0, 0);
 	for (INT32 i=0; i<NUMENTRIES; i++)
-		mpFontMetricsData[i].SetFontDesc( CharDescription(0,0,0,0) );
+		mpFontMetricsData[i].SetFontDesc( emptyCharDesc );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1009,6 +1114,7 @@ void FontMetricsCache::InvalidateCharMetrics()
 MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight,
 																	CharDescription& FontDesc)
 {
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(         pDC==NULL,FALSE,"FontKerningPairsCache::GetCharsKerning() - pDC==NULL");
 	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,
 			"FontKerningPairsCache::GetCharsKerning() - FontDesc char should be 'FONTEMCHAR'");
@@ -1058,6 +1164,9 @@ MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR
 #endif _DEBUG
 
 	return mpFontKerningPairsCacheData[CacheEntry].GetCharsKerning(chLeft, chRight);
+#else
+	return 0;
+#endif
 }
 
 
@@ -1070,8 +1179,9 @@ MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR
 ********************************************************************************************/
 void FontKerningPairsCache::InvalidateKerningPairsCache()
 {
+	CharDescription emptyCharDesc(0, 0, 0, 0);
 	for (INT32 i=0; i<NUMENTRIES; ++i)
-		mpFontKerningPairsCacheData[i].SetFontDesc( CharDescription(0,0,0,0) );
+		mpFontKerningPairsCacheData[i].SetFontDesc( emptyCharDesc );
 }
 
 #ifdef _DEBUG
@@ -1094,7 +1204,7 @@ void FontKerningPairsCache::Dump()
 	}
 	TRACE( _T("<<< Font kerning data end <<<\n"));
 }
-#endif _DEBUG
+#endif // _DEBUG
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // FontKerningPairsCacheEntry
@@ -1109,7 +1219,8 @@ void FontKerningPairsCache::Dump()
 ********************************************************************************************/
 FontKerningPairsCacheEntry::FontKerningPairsCacheEntry()
 {
-	FontDesc = CharDescription(0,0,0,0);
+	CharDescription emptyCharDesc(0, 0, 0, 0);
+	FontDesc = emptyCharDesc;
 	KernCount = 0;
 	pKernPairs = 0;
 }
@@ -1169,6 +1280,7 @@ bool FontKerningPairsCacheEntry::CacheFontKerns(wxDC* pDC, CharDescription FontD
 {
 	delete[] pKernPairs;	// remove any old kern data
 
+#ifndef EXCLUDE_FROM_XARALX
 	KernCount = TextManager::GetKernCount(pDC);
 
 	// update cache tag
@@ -1198,6 +1310,7 @@ bool FontKerningPairsCacheEntry::CacheFontKerns(wxDC* pDC, CharDescription FontD
 			return false;
 		}
 	}
+#endif
 	pKernPairs = 0;
 	return true; // No kern data so kern cache is valid
 }
@@ -1270,7 +1383,7 @@ void FontKerningPairsCacheEntry::Dump()
 	}
 }
 
-#endif _DEBUG
+#endif // _DEBUG
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // some debug stuff
@@ -1345,8 +1458,10 @@ void OILFontMan::DumpEnumLogFont(ENUMLOGFONT* lpelf)
 	{
 		TRACE( _T(" ---------------- \n"));
 		TRACE( _T("Enum Log font structure:\n"));
+#ifndef EXCLUDE_FROM_XARALX
 		TRACE( _T(" Full name = %s\n"), lpelf->elfFullName);
 		TRACE( _T(" Style     = %s\n"), lpelf->elfStyle);
+#endif
 		DumpLogFont(&(lpelf->elfLogFont));
 		TRACE( _T(" ---------------- \n"));
 	}
@@ -1357,6 +1472,7 @@ void OILFontMan::DumpLogFont(LOGFONT* lplf)
 	if (lplf!=NULL)
 	{
 		TRACE( _T("Log font structure:\n"));
+#ifndef EXCLUDE_FROM_XARALX
 		TRACE( _T(" Height 			= %d\n"), lplf->lfHeight);
 		TRACE( _T(" Width			= %d\n"), lplf->lfWidth);
 		TRACE( _T(" Escapement		= %d\n"), lplf->lfEscapement);
@@ -1371,6 +1487,7 @@ void OILFontMan::DumpLogFont(LOGFONT* lplf)
 		TRACE( _T(" Quality			= %d\n"), lplf->lfQuality);
 		TRACE( _T(" PitchAndFamily	= %d\n"), lplf->lfPitchAndFamily);
 		TRACE( _T(" FaceName		= %s\n"), lplf->lfFaceName);
+#endif
 	}
 }
 
@@ -1487,8 +1604,17 @@ OILEnumFonts::OILEnumFonts()
 
 void OILEnumFonts::Execute()
 {
+PORTNOTE("text","We do not use TTFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	TTFontMan::EnumAllFonts(this);
+#endif
+PORTNOTE("text","We do not use ATMFontMan in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	ATMFontMan::EnumAllFonts(this);
+#endif
+#ifdef __WXGTK__
+	FTFontMan::EnumAllFonts(this);
+#endif
 	// Add any further OIL Level font managers here
 }
 

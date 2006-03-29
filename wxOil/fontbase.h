@@ -109,6 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "pathtype.h"
 #include "txtattr.h"
+#include "ccpanose.h"
 
 class  DocCoord;
 class CharMetrics;
@@ -125,9 +126,22 @@ typedef enum FontClass {
 	FC_DEVICE,
 	FC_TRUETYPE,
 	FC_ATM,
+	FC_FREETYPE,
 
 	// Add further font classes before this
 	FC_ILLEGAL
+};
+
+// The kernel likes dealing with LOGFONT and ENUMLOGFONT structures, so we do it this favour
+struct LOGFONT
+{
+	String_64 FaceName;
+};
+typedef LOGFONT		   *PLOGFONT, *LPLOGFONT;
+
+struct ENUMLOGFONT
+{
+	LOGFONT elfLogFont;
 };
 
 /********************************************************************************************
@@ -325,9 +339,6 @@ protected:
 	static FontKerningPairsCacheEntry mpFontKerningPairsCacheData[NUMENTRIES];
 };
 
-PORTNOTE("text","Removed OILFont* defn.")
-#ifndef EXCLUDE_FROM_XARALX
-
 /********************************************************************************************
 
 >	class OILFontMan : public CCObject
@@ -387,8 +398,6 @@ class OILFontMan : public CCObject
 		#endif
 };
 
-
-#endif
 
 /********************************************************************************************
 

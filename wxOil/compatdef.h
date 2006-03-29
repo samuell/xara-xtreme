@@ -538,12 +538,7 @@ struct DLGITEMTEMPLATE
 {
 };
 
-struct LOGFONT
-{
-};
-typedef LOGFONT		   *PLOGFONT, *LPLOGFONT;
-
-struct ENUMLOGFONT
+struct CDC
 {
 };
 
