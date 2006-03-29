@@ -1,4 +1,4 @@
-// $Id: pen.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 /// $Header: /wxCamelot/wxOil/pen.h 5     5/08/05 18:57 Luke $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

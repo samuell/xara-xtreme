@@ -1,4 +1,4 @@
-// $Id: moldtool.h 670 2006-03-15 13:00:45Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

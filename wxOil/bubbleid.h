@@ -1,4 +1,4 @@
-// $Id: bubbleid.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by C:\Camelot\Source\winoil\res\UKEnglish\bubbleid.rc

@@ -1,4 +1,4 @@
-// $Id: manager.h 264 2006-01-19 12:28:28Z alex $
+// $Id$
 /* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
 // The following line makes normalize.pl skip type fixing
 /* SKIPFIXTYPES: START */

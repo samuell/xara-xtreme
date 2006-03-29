@@ -1,4 +1,4 @@
-// $Id: slowjob.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Defines the return values of a slow jobs
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

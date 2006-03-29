@@ -1,4 +1,4 @@
-// $Id: ccolbar.cpp 669 2006-03-15 12:22:15Z gerry $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

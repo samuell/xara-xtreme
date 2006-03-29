@@ -1,4 +1,4 @@
-// $Id: ai5_eps.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Implementation of Adobe Illustrator 5 EPS filter.
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

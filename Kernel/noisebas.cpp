@@ -1,4 +1,4 @@
-// $Id: noisebas.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // noisebas.cpp
 //
 // Author  : Mike

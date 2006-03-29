@@ -1,4 +1,4 @@
-// $Id: ndbldpth.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // NodeBlendPath implementation. This file controls the tree node 'mouldpath'
 // which is the shape of the mould for perspective and envelope shapes.
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE

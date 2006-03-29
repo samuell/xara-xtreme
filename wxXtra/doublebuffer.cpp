@@ -1,4 +1,4 @@
-// $Id: wxmousestate.cpp 479 2006-02-15 18:30:13Z alex $
+// $Id$
 /* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
 // The following line makes normalize.pl skip type fixing
 /* SKIPFIXTYPES: START */

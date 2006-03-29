@@ -1,4 +1,4 @@
-// $Id: rechshad.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Header for the shadow record handling class for the v2 file format
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

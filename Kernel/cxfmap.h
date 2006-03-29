@@ -1,4 +1,4 @@
-// $Id: cxfmap.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Defines a class that handles the fast look-up of tags when importing v2 files.
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

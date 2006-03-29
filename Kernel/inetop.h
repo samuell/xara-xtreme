@@ -1,4 +1,4 @@
-// $Id: inetop.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Webster web clipart gallery - asynchronous operations and support classes
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

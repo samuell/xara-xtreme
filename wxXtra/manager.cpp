@@ -1,4 +1,4 @@
-// $Id: manager.cpp 630 2006-03-13 18:00:53Z alex $
+// $Id$
 /* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
 // The following line makes normalize.pl skip type fixing
 /* SKIPFIXTYPES: START */

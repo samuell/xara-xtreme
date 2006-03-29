@@ -1,4 +1,4 @@
-// $Id: viewmod.cpp 673 2006-03-15 15:34:39Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

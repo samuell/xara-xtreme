@@ -1,4 +1,4 @@
-// $Id: macros.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // macros.h
 //
 // Author  : Mike

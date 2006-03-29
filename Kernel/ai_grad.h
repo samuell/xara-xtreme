@@ -1,4 +1,4 @@
-// $Id: ai_grad.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // ai_grad.h: interface for the AIGradientProcessor class.
 //
 //////////////////////////////////////////////////////////////////////

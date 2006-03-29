@@ -1,4 +1,4 @@
-// $Id: optsinet.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Tiny header for the Internet tab of the options dialog box 
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

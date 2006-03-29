@@ -1,4 +1,4 @@
-// $Id: ai8_eps.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // ai8_eps.cpp: implementation of the AI8EPSFilter class.
 //
 //////////////////////////////////////////////////////////////////////

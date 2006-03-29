@@ -1,4 +1,4 @@
-// $Id: xarprefs.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // XarPrefs.cpp
 //
 // This file implements the dialogue box that allows the user to set the export native file

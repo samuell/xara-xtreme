@@ -1,4 +1,4 @@
-// $Id: rechattr.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Header for the attribute record handling classes for the v2 file format
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

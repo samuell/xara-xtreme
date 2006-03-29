@@ -1,0 +1,3 @@
+#!/bin/sh
+svn -v status | egrep -v "^\?" | cut -c 41- | egrep "(.cpp|.h|.xrc)$" | while read f ; do svn propset svn:eol-style LF $f ; svn propset svn:keywords Id $f ; done
+

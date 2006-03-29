@@ -1,4 +1,4 @@
-// $Id: camview.cpp 675 2006-03-15 17:06:18Z phil $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

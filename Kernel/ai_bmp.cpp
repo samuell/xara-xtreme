@@ -1,4 +1,4 @@
-// $Id: ai_bmp.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // ai_bmp.cpp: implementation of the AIBitmapProcessor class.
 //
 //////////////////////////////////////////////////////////////////////

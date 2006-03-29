@@ -1,4 +1,4 @@
-// $Id: filedlgs.h 663 2006-03-15 09:27:39Z phil $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

@@ -1,4 +1,4 @@
-// $Id: plugin.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // This files defines various items required by the plug in manager
 // At present, this includes:-
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE

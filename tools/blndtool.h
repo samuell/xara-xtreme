@@ -1,4 +1,4 @@
-// $Id: blndtool.h 668 2006-03-15 12:18:16Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

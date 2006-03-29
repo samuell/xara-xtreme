@@ -1,4 +1,4 @@
-// $Id: blobby.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

@@ -1,4 +1,4 @@
-// $Id: barcreationdlg.cpp 666 2006-03-15 12:11:56Z luke $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

@@ -1,4 +1,4 @@
-// $Id: bitmapcachekey.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // BitmapCacheKey.h: interface for the CBitmapCacheKey class.
 //
 //////////////////////////////////////////////////////////////////////

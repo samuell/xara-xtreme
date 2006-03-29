@@ -1,4 +1,4 @@
-// $Id: jerror.h 264 2006-01-19 12:28:28Z alex $
+// $Id$
 /* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
 /*
 Modified for Xara LX for 64-bit portability and for type compatibility with 

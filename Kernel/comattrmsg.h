@@ -1,4 +1,4 @@
-// $Id: comattrmsg.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // This file should contain any messages relating to tools
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

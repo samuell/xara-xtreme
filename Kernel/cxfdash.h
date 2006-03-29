@@ -1,4 +1,4 @@
-// $Id: cxfdash.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Default dash pattern definitions for the v2 file format
 // These are the built in dash patterns that can be referred to by just their reference number
 // as they are assumed to be built in.

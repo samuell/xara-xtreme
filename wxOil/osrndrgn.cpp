@@ -1,4 +1,4 @@
-// $Id: osrndrgn.cpp 674 2006-03-15 16:10:28Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

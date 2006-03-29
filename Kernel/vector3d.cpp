@@ -1,4 +1,4 @@
-// $Id: vector3d.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // vector3d.cpp
 //
 // Author  : Mike

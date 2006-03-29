@@ -1,4 +1,4 @@
-// $Id: bitmapcachekey.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // BitmapCacheKey.cpp: implementation of the CBitmapCacheKey class.
 //
 //////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: cntrtool.cpp 672 2006-03-15 15:24:01Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

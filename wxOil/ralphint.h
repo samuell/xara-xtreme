@@ -1,4 +1,4 @@
-// $Id: ralphint.h 662 2006-03-14 21:31:49Z alex $
+// $Id$
 // Definition of all Ralph's interfaces
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

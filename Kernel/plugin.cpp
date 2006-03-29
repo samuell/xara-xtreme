@@ -1,4 +1,4 @@
-// $Id: plugin.cpp 662 2006-03-14 21:31:49Z alex $
+// $Id$
 //
 // File which implements plug-in related items. At present this includes
 // implementations of:-
