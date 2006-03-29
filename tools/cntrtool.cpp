@@ -2805,7 +2805,7 @@ void ContourInfoBarOp::UpdateState()
 		EnableGadget(_R(IDC_CONTOUROBJECTBIASGAIN), NumSelBlends > 0);
 		EnableGadget(_R(IDC_CONTOURATTRBIASGAIN), NumSelBlends > 0);
 		EnableGadget(_R(IDC_CONTOURSTEPS), NumSelBlends > 0);
-PORTNOTE("other", "IDC_BTN_CONTOURANTIALIAS removed as not in the resources")
+PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources")
 #ifndef EXCLUDE_FROM_XARALX
 		EnableGadget(_R(IDC_BTN_CONTOURANTIALIAS),NumSelBlends > 0);
 #endif
@@ -2829,7 +2829,7 @@ PORTNOTE("other", "IDC_BTN_CONTOURANTIALIAS removed as not in the resources")
 		EnableGadget(_R(IDC_CONTOUROBJECTBIASGAIN), FALSE);
 		EnableGadget(_R(IDC_CONTOURATTRBIASGAIN), FALSE);
 		EnableGadget(_R(IDC_CONTOURSTEPS), FALSE);
-PORTNOTE("other", "IDC_BTN_CONTOURANTIALIAS removed as not in the resources")
+PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources")
 #ifndef EXCLUDE_FROM_XARALX
 		EnableGadget(_R(IDC_BTN_CONTOURANTIALIAS),FALSE);
 #endif

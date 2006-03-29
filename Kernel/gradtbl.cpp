@@ -2339,7 +2339,7 @@ BOOL GradTable32::BuildPaletteInternalHSV(DocColour &StartCol, DocColour &EndCol
 	// then use the other colour's hue (if any)
 	//
 	// TODO: WRONG!!! This should always be doing these two tests, not just when
-	// the Effect equals EFFECT_HSV_LONG. Note also that the long HSV colour
+	// the Effect equals EFFECT_HSV_LONG. Note also that the INT32 HSV colour
 	// generation is incorrect, although I'm not too sure why. (Gavin).
 	//
 	if (Effect == EFFECT_HSV_LONG)
