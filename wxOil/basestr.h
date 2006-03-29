@@ -302,15 +302,15 @@ INT32 CCAPI SmartLoadString(UINT32 modID, UINT32 resID, TCHAR *buf, INT32 size);
 
 // This is our very own version of the Windows string function lstrcpyn(), which
 // was mysteriously dropped from the Win32 API.  Using the standard C library function
-// strncpy() doesn't give quit the same results, so we must provide our own.
+// strncpy() doesn't give quite the same results, so we must provide our own.
 TCHAR* cc_lstrcpyn(TCHAR* dest, const TCHAR* src, size_t n);
-const TCHAR *cc_lstrstr(const TCHAR *String1, const TCHAR *String2);
-TCHAR* cc_lstristr(TCHAR *String1, TCHAR *String2);
-TCHAR* cc_lstrchr(TCHAR *Src, TCHAR c);
-TCHAR* cc_lstrichr(TCHAR *String1, TCHAR c);
-TCHAR* cc_lstrrchr(TCHAR *Src, TCHAR c);
-TCHAR* cc_lstrtok(TCHAR *String1, TCHAR *String2);
-INT32 cc_lstrncmp(TCHAR *String1, TCHAR *String2, INT32 Count);
+const TCHAR* cc_lstrstr(const TCHAR* String1, const TCHAR *String2);
+TCHAR* cc_lstristr(TCHAR* String1, TCHAR* String2);
+TCHAR* cc_lstrchr(TCHAR* Src, TCHAR c);
+TCHAR* cc_lstrichr(TCHAR* String1, TCHAR c);
+TCHAR* cc_lstrrchr(TCHAR* Src, TCHAR c);
+TCHAR* cc_lstrtok(TCHAR* String1, TCHAR* String2);
+INT32 cc_lstrncmp(TCHAR* String1, TCHAR* String2, INT32 Count);
 size_t cc_strlenCharacters( const TCHAR* string );
 size_t cc_strlenBytes( const TCHAR* string );
 
