@@ -197,6 +197,11 @@ NOTE: Do not include this file directly. Include XaDraw.h or XaDrwOld.h (V3 and 
 									(GColour_SetTransparent4WayGraduation)
 #define XaColour_SetTransparent4WayGraduation4 \
 									(GColour_SetTransparent4WayGraduation4)
+#define XaBitmap_SetBias			(GBitmap_SetBias)
+#define XaBitmap_SetGain			(GBitmap_SetGain)
+#define XaBitmap_SetContone			(GBitmap_SetContone)
+#define XaBitmap_SetTransparencyRamp \
+									(GBitmap_SetTransparencyRamp)
 #define XaColour_SetTilePattern		(GColour_SetTilePattern)
 #define XaColour_SetTilePattern4	(GColour_SetTilePattern4)
 #define XaColour_SetTransparentTilePattern \

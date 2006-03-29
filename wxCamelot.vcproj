@@ -388,6 +388,9 @@
 					RelativePath=".\wxOil\dragtrgt.cpp">
 				</File>
 				<File
+					RelativePath=".\wxOil\drawctl.cpp">
+				</File>
+				<File
 					RelativePath=".\wxOil\ensure.cpp">
 				</File>
 				<File
@@ -611,6 +614,9 @@
 			<Filter
 				Name="Kernel"
 				Filter="">
+				<File
+					RelativePath=".\Kernel\aligndlg.cpp">
+				</File>
 				<File
 					RelativePath=".\Kernel\app.cpp">
 				</File>
@@ -1299,6 +1305,9 @@
 					RelativePath=".\Kernel\pbecomea.cpp">
 				</File>
 				<File
+					RelativePath=".\Kernel\penedit.cpp">
+				</File>
+				<File
 					RelativePath=".\Kernel\pngfuncs.cpp">
 				</File>
 				<File
@@ -1616,6 +1625,9 @@
 				</File>
 				<File
 					RelativePath=".\tools\opsquash.cpp">
+				</File>
+				<File
+					RelativePath=".\tools\pentool.cpp">
 				</File>
 				<File
 					RelativePath=".\tools\pushtool.cpp">
@@ -3104,6 +3116,9 @@
 					RelativePath=".\wxOil\dragtrgt.h">
 				</File>
 				<File
+					RelativePath=".\wxOil\drawctl.h">
+				</File>
+				<File
 					RelativePath=".\wxOil\ensure.h">
 				</File>
 				<File
@@ -3337,6 +3352,9 @@
 				</File>
 				<File
 					RelativePath=".\Kernel\ai_layer.h">
+				</File>
+				<File
+					RelativePath=".\Kernel\aligndlg.h">
 				</File>
 				<File
 					RelativePath=".\Kernel\app.h">
@@ -3957,6 +3975,9 @@
 					RelativePath=".\Kernel\pathtype.h">
 				</File>
 				<File
+					RelativePath=".\Kernel\penedit.h">
+				</File>
+				<File
 					RelativePath="..\Camelot\Source\kernel\pngfuncs.h">
 				</File>
 				<File
@@ -4271,6 +4292,9 @@
 				</File>
 				<File
 					RelativePath=".\tools\OpShadow.h">
+				</File>
+				<File
+					RelativePath=".\tools\pentool.h">
 				</File>
 				<File
 					RelativePath=".\tools\pushtool.h">

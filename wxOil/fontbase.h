@@ -133,6 +133,7 @@ typedef enum FontClass {
 };
 
 // The kernel likes dealing with LOGFONT and ENUMLOGFONT structures, so we do it this favour
+/*
 struct LOGFONT
 {
 	String_64 FaceName;
@@ -143,7 +144,7 @@ struct ENUMLOGFONT
 {
 	LOGFONT elfLogFont;
 };
-
+*/
 /********************************************************************************************
 
 >	class FontBase : public CCObject

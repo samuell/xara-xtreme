@@ -272,6 +272,10 @@ INT32 XaColourOld_SetTransparent4WayGraduation4(
 	BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 	pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 );
+INT32 XaBitmapOld_SetBias(double fBias);
+INT32 XaBitmapOld_SetGain(double fGain);
+INT32 XaBitmapOld_SetContone( UINT32 uContoneStyle, COLORREF rgbStart=0x000000, COLORREF rgbEnd=0xFFFFFF );
+INT32 XaBitmapOld_SetTransparencyRamp( BYTE uStart=0x00, BYTE uEnd=0xFF );
 INT32 XaColourOld_SetTilePattern(
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,

@@ -847,7 +847,6 @@ INT32 ColourFillAttribute::operator==(const FillGeometryAttribute& Attrib)
 
 void ColourFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRegion->SetFillGeometry(this, Temp);
 }
 
@@ -870,7 +869,6 @@ void ColourFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void ColourFillAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRegion->RestoreFillGeometry(this, Temp);
 }
 
@@ -889,7 +887,6 @@ void ColourFillAttribute::SetStartColour(DocColour* NewCol)
 {
 	if (NewCol == NULL)
 	{
-//#pragma message( __LOCMSG__ "Removed ColorManager usage" )
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
 											_R(IDS_WHITENAME), &Colour);
 	}
@@ -1005,8 +1002,6 @@ NodeAttribute *FlatFillAttribute::MakeNode()
 
 void FlatFillAttribute::SetStartColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "FlatFillAttribute::SetStartColour - do nothing" )
-//	TRACE( _T("Warning - FlatFillAttribute::SetStartColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -1326,8 +1321,6 @@ INT32 GradFillAttribute::operator==(const FillGeometryAttribute& Attrib)
 
 BOOL GradFillAttribute::RenderFill(RenderRegion *pRegion, Path *pPath)
 {
-//#pragma message( __LOCMSG__ "GradFillAttribute::RenderFill - do nothing" )
-//	TRACE( _T("Warning - GradFillAttribute::RenderFill called\n") );
 	if ( pRegion->IsKindOf(CC_RUNTIME_CLASS(GRenderRegion)) )
 	{
 		// Safe to cast now
@@ -1399,8 +1392,6 @@ void GradFillAttribute::SetEndPoint(DocCoord* Pos)
 
 void GradFillAttribute::SetEndColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "GradFillAttribute::SetEndColour - do nothing" )
-//	TRACE( _T("Warning - GradFillAttribute::SetEndColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -2396,8 +2387,6 @@ BOOL BitmapFillAttribute::CopyBitmap(KernelBitmap* BmpToCopy)
 
 void BitmapFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "BitmapFillAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - BitmapFillAttribute::Render called\n") );
 	pRegion->SetFillGeometry(this, Temp);
 }
 
@@ -2420,8 +2409,6 @@ void BitmapFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void BitmapFillAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "BitmapFillAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - BitmapFillAttribute::Restore called\n") );
 	pRegion->RestoreFillGeometry(this, Temp);
 }
 
@@ -2673,8 +2660,6 @@ void BitmapFillAttribute::SimpleCopy(AttributeValue *pValue)
 
 BOOL BitmapFillAttribute::RenderFill(RenderRegion *pRegion, Path *pPath)
 {
-//#pragma message( __LOCMSG__ "BitmapFillAttribute::RenderFill - do nothing" )
-//	TRACE( _T("Warning - BitmapFillAttribute::RenderFill called\n") );
 	if ( pRegion->IsKindOf(CC_RUNTIME_CLASS(GRenderRegion)) )
 	{
 		// Safe to cast now
@@ -2851,8 +2836,6 @@ UINT32 BitmapFillAttribute::GetDPI()
 
 void BitmapFillAttribute::SetStartColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "BitmapFillAttribute::SetStartColour - do nothing" )
-//	TRACE( _T("Warning - BitmapFillAttribute::SetStartColour called\n") );
 	if (NewCol == NULL)
 		Colour = COLOUR_NONE;
 	else
@@ -2887,12 +2870,8 @@ void BitmapFillAttribute::SetStartColour(DocColour* NewCol)
 
 void BitmapFillAttribute::SetEndColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "BitmapFillAttribute::SetEndColour - do nothing" )
-//	TRACE( _T("Warning - BitmapFillAttribute::SetEndColour called\n") );
 	if (NewCol == NULL)
-	{
 		EndColour = COLOUR_NONE;
-	}
 	else
 		EndColour = *NewCol;
 
@@ -3320,8 +3299,6 @@ void FractalFillAttribute::SimpleCopy(AttributeValue *pValue)
 
 void FractalFillAttribute::SetStartColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "FractalFillAttribute::SetStartColour - do nothing" )
-//	TRACE( _T("Warning - FractalFillAttribute::SetStartColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -3350,8 +3327,6 @@ void FractalFillAttribute::SetStartColour(DocColour* NewCol)
 
 void FractalFillAttribute::SetEndColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "FractalFillAttribute::SetEndColour - do nothing" )
-//	TRACE( _T("Warning - FractalFillAttribute::SetEndColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -3732,8 +3707,6 @@ void NoiseFillAttribute::SimpleCopy(AttributeValue *pValue)
 
 void NoiseFillAttribute::SetStartColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "NoiseFillAttribute::SetStartColour - do nothing" )
-//	TRACE( _T("Warning - NoiseFillAttribute::SetStartColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -3752,8 +3725,6 @@ void NoiseFillAttribute::SetStartColour(DocColour* NewCol)
 
 void NoiseFillAttribute::SetEndColour(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "NoiseFillAttribute::SetEndColour - do nothing" )
-//	TRACE( _T("Warning - NoiseFillAttribute::SetEndColour called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -3865,8 +3836,6 @@ BOOL NoiseFillAttribute::SetSeed(INT32 NewSeed)
 
 ThreeColFillAttribute::ThreeColFillAttribute()
 {
-//#pragma message( __LOCMSG__ "ThreeColFillAttribute::ThreeColFillAttribute - do nothing" )
-//	TRACE( _T("Warning - ThreeColFillAttribute::ThreeColFillAttribute called\n") );
 	IsPersp = FALSE;
 
 	EndPoint2 = DocCoord(0,0);
@@ -4028,8 +3997,6 @@ void ThreeColFillAttribute::RemovePerspective()
 
 void ThreeColFillAttribute::SetEndColour2(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "ThreeColFillAttribute::SetEndColour2 - do nothing" )
-//	TRACE( _T("Warning - ThreeColFillAttribute::SetEndColour2 called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -4059,8 +4026,6 @@ void ThreeColFillAttribute::SetEndColour2(DocColour* NewCol)
 
 FourColFillAttribute::FourColFillAttribute()
 {
-//#pragma message( __LOCMSG__ "FourColFillAttribute::FourColFillAttribute - do nothing" )
-//	TRACE( _T("Warning - FourColFillAttribute::FourColFillAttribute called\n") );
 	AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
 										_R(IDS_YELLOWNAME), &EndColour3);
 }
@@ -4131,8 +4096,6 @@ NodeAttribute *FourColFillAttribute::MakeNode()
 
 void FourColFillAttribute::SetEndColour3(DocColour* NewCol)
 {
-//#pragma message( __LOCMSG__ "FourColFillAttribute::SetEndColour3 - do nothing" )
-//	TRACE( _T("Warning - FourColFillAttribute::SetEndColour3 called\n") );
 	if (NewCol == NULL)
 	{
 		AttributeManager::FindDefaultColour(ColourManager::GetCurrentColourList(),
@@ -4315,8 +4278,6 @@ INT32 TranspFillAttribute::operator==(const FillGeometryAttribute& Attrib)
 
 void TranspFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TranspFillAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TranspFillAttribute::Render called\n") );
 	pRegion->SetTranspFillGeometry(this, Temp);
 }
 
@@ -4339,8 +4300,6 @@ void TranspFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TranspFillAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TranspFillAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TranspFillAttribute::Restore called\n") );
 	pRegion->RestoreTranspFillGeometry(this, Temp);
 }
 
@@ -5835,8 +5794,6 @@ BOOL BitmapTranspFillAttribute::CopyBitmap(KernelBitmap* BmpToCopy)
 
 void BitmapTranspFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "BitmapTranspFillAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - BitmapTranspFillAttribute::Render called\n") );
 	pRegion->SetTranspFillGeometry(this, Temp);
 }
 
@@ -5859,8 +5816,6 @@ void BitmapTranspFillAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void BitmapTranspFillAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "BitmapTranspFillAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - BitmapTranspFillAttribute::Restore called\n") );
 	pRegion->RestoreTranspFillGeometry(this, Temp);
 }
 
@@ -8053,8 +8008,6 @@ void FillMappingAttribute::SimpleCopy(AttributeValue *pValue)
 
 void FillMappingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "FillMappingAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - FillMappingAttribute::Render called\n") );
 	pRegion->SetFillMapping(this, Temp);
 }
 
@@ -8077,8 +8030,6 @@ void FillMappingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void FillMappingAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "FillMappingAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - FillMappingAttribute::Restore called\n") );
 	pRegion->RestoreFillMapping(this, Temp);
 }
 
@@ -8211,8 +8162,6 @@ BOOL FillEffectAttribute::Init()
 
 void FillEffectAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "FillEffectAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - FillEffectAttribute::Render called\n") );
 	pRegion->SetFillEffect(this, Temp);
 }
 
@@ -8235,8 +8184,6 @@ void FillEffectAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void FillEffectAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "FillEffectAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - FillEffectAttribute::Restore called\n") );
 	pRegion->RestoreFillEffect(this, Temp);
 }
 
@@ -8476,8 +8423,6 @@ void TranspFillMappingAttribute::SimpleCopy(AttributeValue *pValue)
 
 void TranspFillMappingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TranspFillMappingAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TranspFillMappingAttribute::Render called\n") );
 	pRegion->SetTranspFillMapping(this, Temp);
 }
 
@@ -8500,8 +8445,6 @@ void TranspFillMappingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TranspFillMappingAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TranspFillMappingAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TranspFillMappingAttribute::Restore called\n") );
 	pRegion->RestoreTranspFillMapping(this, Temp);
 }
 
@@ -8659,8 +8602,6 @@ StrokeColourAttribute::StrokeColourAttribute(DocColour& NewCol)
 
 void StrokeColourAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeColourAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - StrokeColourAttribute::Render called\n") );
 	pRegion->SetLineColour(this, Temp);
 }
 
@@ -8683,8 +8624,6 @@ void StrokeColourAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void StrokeColourAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeColourAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - StrokeColourAttribute::Restore called\n") );
 	pRegion->RestoreLineColour(this, Temp);
 }
 
@@ -8804,8 +8743,6 @@ StrokeTranspAttribute::StrokeTranspAttribute(UINT32 NewTransp)
 
 void StrokeTranspAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeTranspAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - StrokeColourAttribute::Render called\n") );
 	pRegion->SetLineTransp(this, Temp);
 }
 
@@ -8828,8 +8765,6 @@ void StrokeTranspAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void StrokeTranspAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeTranspAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - StrokeColourAttribute::Restore called\n") );
 	pRegion->RestoreLineTransp(this, Temp);
 }
 
@@ -9945,7 +9880,6 @@ BOOL StrokeTranspAttribute::Blend(BlendAttrParam* pBlendParam)
 	AttrStrokeColour * pStartColour = (AttrStrokeColour *)pVal;
 	StrokeColourAttribute * pColourAttr = &(pStartColour->Value);
 
-//#pragma message( __LOCMSG__ "Removed DocColour usage" )
 	BOOL StartIsNoColour = pColourAttr->Colour.IsTransparent();
 
 	pVal = NULL;
@@ -9958,7 +9892,6 @@ BOOL StrokeTranspAttribute::Blend(BlendAttrParam* pBlendParam)
 	AttrStrokeColour * pEndColour = (AttrStrokeColour *)pVal;
 	pColourAttr = &(pEndColour->Value);
 
-//#pragma message( __LOCMSG__ "Removed DocColour usage" )
 	BOOL EndIsNoColour = pColourAttr->Colour.IsTransparent();
 
 	// Blend the Start and End Transparencies
@@ -9996,8 +9929,6 @@ BOOL StrokeTranspAttribute::Blend(BlendAttrParam* pBlendParam)
 BOOL FillGeometryAttribute::BlendFillColours(DocColour* Start, DocColour* End, DocColour* Blend,
 								  				double& Ratio, BlendAttrParam* pBlendParam)
 {
-//#pragma message( __LOCMSG__ "FillGeometryAttribute::BlendFillColours - do nothing" )
-//	TRACE( _T("Warning - FillGeometryAttribute::BlendFillColours called\n") );
 	ERROR3IF(Blend == NULL || pBlendParam == NULL, "Illegal NULL param");
 
 	if (Start == NULL)

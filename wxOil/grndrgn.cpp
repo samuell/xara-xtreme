@@ -3457,7 +3457,7 @@ BOOL GRenderRegion::SetSmoothingFlags(FillGeometryAttribute *Fill)
 
 BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill)
 {
-	if (Fill->GetBitmap() == NULL || Fill->GetBitmap()->ActualBitmap == NULL)
+	if ( Fill==NULL || Fill->GetBitmap()==NULL || Fill->GetBitmap()->ActualBitmap==NULL)
 		return FALSE;									// if no bitmap
 
 	ENSURE( Fill->GetBitmap()->ActualBitmap->IsKindOf( CC_RUNTIME_CLASS( CWxBitmap ) ),
@@ -3466,11 +3466,11 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 	INT32 bpp = Fill->GetBitmap()->GetBPP();
 	CWxBitmap *WinBM = NULL;
 	CWxBitmap *OrigWinBM = NULL;
-	BYTE *pGreyTable = NULL;
-	BOOL bContoned = FALSE;
+//	BYTE *pGreyTable = NULL;
+//	BOOL bContoned = FALSE;
 //	BOOL bAlpha = FALSE;
-
-	if (Fill && Fill->GetStartColour()!=NULL && Fill->GetEndColour()!=NULL)
+/*
+	if (Fill->GetStartColour()!=NULL && Fill->GetEndColour()!=NULL)
 	{
 		// The bitmap is contoned
 		bContoned = TRUE;
@@ -3494,9 +3494,9 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 
 	if (WinBM == NULL)
 	{
-		// Use the normal bitmap
+*/		// Use the normal bitmap
 		WinBM = (CWxBitmap*)Fill->GetBitmap()->ActualBitmap;
-	}
+//	}
 
 	if (WinBM == NULL || WinBM->BMInfo == NULL  || WinBM->BMBytes == NULL)
 		return FALSE;
@@ -3547,7 +3547,7 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 
 	// Do the colour correction. This may produce a new pointer in Palette or BitmapBits,
 	// which we should CCFree() when we are done with it - see the end of this function
-	ColourCorrectBitmap(Fill, WinBM->BMInfo, &Palette);
+/*	ColourCorrectBitmap(Fill, WinBM->BMInfo, &Palette);
 
 	if ( bContoned && bpp>8 )
 		Style |= 0x80 ;
@@ -3574,7 +3574,7 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 		if (OldPalette != WinBM->BMInfo->bmiColors)
 			CCFree(OldPalette);			// Don't need the contone palette any more
 	}
-
+*/
 	// Check for transparent bitmap plotting
 	BYTE *BitmapBits = WinBM->BMBytes;
 
@@ -3613,30 +3613,31 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 	}
 
 	// If we didn't create a temporary palette, then we'll use the original bitmap
-	if (Palette == NULL)
+	if ( Palette==NULL && bpp<=8 && !Fill->IsKindOf(CC_RUNTIME_CLASS(FractalFillAttribute)) &&
+									!Fill->IsKindOf(CC_RUNTIME_CLASS(  NoiseFillAttribute)) )
 		Palette = WinBM->BMInfo->bmiColors;
 
 	LPBYTE pTranspTable = NULL;
-	if (uBitmapDepth==32 && bpp > 8)
+	if ( uBitmapDepth==32 && bpp==32 )
 	{
 		// If rendering a non-paletted bitmap, then gavin needs the
 		// transparency table to be passed in
 		pTranspTable = (LPBYTE) TranspTable.GetTable();			// this cast is OK as the structure
 																// returned is an array of bytes
 		Style |= 0x004000;	// MarkH 15/7/99 Need to OR the Style with 0x004000 to say that
-								// we want to use the alpha channel!!
+							// we want to use the alpha channel!!
 	}
 
 	BOOL bDoBitmapFill = TRUE;
 
 	BOOL bClearBitmapConv = FALSE;
 	BYTE* pSepTables = NULL;
-	BGR *pCyanSepTable = NULL;
-	BGR *pMagentaSepTable = NULL;
-	BGR *pYellowSepTable = NULL;
-	BGR *pBlackSepTable = NULL;
-	BYTE *pUnderColourRemovalTable = NULL;
-	BYTE *pBlackGenerationTable = NULL;
+//	BGR *pCyanSepTable = NULL;
+//	BGR *pMagentaSepTable = NULL;
+//	BGR *pYellowSepTable = NULL;
+//	BGR *pBlackSepTable = NULL;
+//	BYTE *pUnderColourRemovalTable = NULL;
+//	BYTE *pBlackGenerationTable = NULL;
 	CWxBitmap* pNewBitmap = NULL;
 	
 	// --- Add Separation Style bits as approriate to the current colour separation mode
@@ -3710,11 +3711,24 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 	if (bDoBitmapFill)
 	{
 		//---------------------------------------------------------------------------------------
-		// Bitmap scaling
+		// Setup contoning
 		//---------------------------------------------------------------------------------------
 
-		// Andy Hills: removed, 27-10-00
+		if ( Fill->GetStartColour()!=NULL && Fill->GetEndColour()!=NULL )
+		{
+			DocColour* pCS = Fill->GetStartColour();
+			DocColour* pCE = Fill->GetEndColour  ();
+			INT32 sr,sg,sb;
+			INT32 er,eg,eb;
+			pCS->GetRGBValue(&sr,&sg,&sb);
+			pCE->GetRGBValue(&er,&eg,&eb);
+			GetDrawContext()->SetContone(GetFillEffect()+1,RGB(sr,sg,sb),RGB(er,eg,eb));
+		}
+		else
+			GetDrawContext()->SetContone(0);
 
+		GetDrawContext()->SetBias(Fill->GetProfile().GetBias()) ;
+		GetDrawContext()->SetGain(Fill->GetProfile().GetGain()) ;
 
 		//---------------------------------------------------------------------------------------
 		// Smoothing decisions
@@ -3828,7 +3842,7 @@ PORTNOTE( "other", "m_pTempTransparencyBMPBits seems never to be used, removed b
 		GetDrawContext()->SetSeparationTables();	// Defaults to setting everything to NULL
 		CCFree(pSepTables);
 	}
-
+/*
 	if (pCyanSepTable)
 		CCFree(pCyanSepTable);
 	if (pMagentaSepTable)
@@ -3841,7 +3855,7 @@ PORTNOTE( "other", "m_pTempTransparencyBMPBits seems never to be used, removed b
 		CCFree(pUnderColourRemovalTable);
 	if (pBlackGenerationTable)
 		CCFree(pBlackGenerationTable);
-
+*/
 	// Reset smoothing flags
 	SetSmoothingFlags(NULL);
 
@@ -4180,7 +4194,9 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
 																"Strange bitmapfill");
 
 	UINT32 bpp = Fill->GetBitmap()->GetBPP();
-	CWxBitmap *WinBM = NULL;
+	CWxBitmap *WinBM = (CWxBitmap*)Fill->GetBitmap()->ActualBitmap;
+
+/*	CWxBitmap *WinBM = NULL;
 
 	BYTE *pGreyTable = NULL;
 	if ( bpp<=8 )
@@ -4200,7 +4216,7 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
 		// Use the normal bitmap
 		WinBM = (CWxBitmap*)Fill->GetBitmap()->ActualBitmap;
 	}
-
+*/
 	if (WinBM == NULL || WinBM->BMInfo == NULL  || WinBM->BMBytes == NULL)
 		return FALSE;
 
@@ -4210,7 +4226,7 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
     	StartTransp = *Fill->GetStartTransp();
 	if (Fill->GetEndTransp() != NULL)
     	EndTransp = *Fill->GetEndTransp();
-
+/*
 	TransparencyRamp *pTranspRamp=Fill->GetTranspRamp();
 	// Note:  BuildBitmapTable is optimised internally depending upon the profile ....
 	pTranspTable->BuildBitmapTable(StartTransp, EndTransp, pTranspRamp, Fill->GetProfile ());
@@ -4225,6 +4241,23 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
 		for (INT32 i=0; i<1<<bpp; i++)
 			aRamp[i] = pRamp[pGreyTable[i]];
 		pRamp = aRamp;
+	}
+*/
+
+	BYTE aRamp[0x100];
+	BYTE* pRamp = NULL;
+	if ( bpp<=8 && !Fill->IsKindOf(CC_RUNTIME_CLASS(FractalTranspFillAttribute)) &&
+				   !Fill->IsKindOf(CC_RUNTIME_CLASS(  NoiseTranspFillAttribute)) )
+	{
+		RGBQUAD* pPalette = WinBM->BMInfo->bmiColors;
+		if ( pPalette )
+		{
+			for (INT32 i=0; i<1<<bpp; i++)
+				aRamp[i] = (pPalette[i].rgbRed  *0x4D4D4D+
+							pPalette[i].rgbGreen*0x979797+
+							pPalette[i].rgbBlue *0x1C1C1C) >> 24;
+			pRamp = aRamp;
+		}
 	}
 
 	// convert ArtWorks style attribute into Gavin-style
@@ -4275,6 +4308,10 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
 	// If the bitmap has an alpha channel, then use this for the transparency channel.
 	if ( bpp==32 && Fill->GetBitmap()->IsTransparent() )
 		TranspStyle |= 0x8000;
+
+	GetDrawContext()->SetBias(Fill->GetProfile().GetBias()) ;
+	GetDrawContext()->SetGain(Fill->GetProfile().GetGain()) ;
+	GetDrawContext()->SetTransparencyRamp(StartTransp,EndTransp) ;
 
 	//---------------------------------------------------------------------------------------
 	// Smoothing decisions
@@ -7451,12 +7488,12 @@ SlowJobResult GRenderRegion::DrawMaskedBitmap(const DocRect &Rect, KernelBitmap*
 	BOOL bForceToWhite = FALSE;
 	BOOL bClearBitmapConv = FALSE;
 	BYTE* pSepTables = NULL;
-	BGR *pCyanSepTable = NULL;
-	BGR *pMagentaSepTable = NULL;
-	BGR *pYellowSepTable = NULL;
-	BGR *pBlackSepTable = NULL;
-	BYTE *pUnderColourRemovalTable = NULL;
-	BYTE *pBlackGenerationTable = NULL;
+//	BGR *pCyanSepTable = NULL;
+//	BGR *pMagentaSepTable = NULL;
+//	BGR *pYellowSepTable = NULL;
+//	BGR *pBlackSepTable = NULL;
+//	BYTE *pUnderColourRemovalTable = NULL;
+//	BYTE *pBlackGenerationTable = NULL;
 //	BGR* pTable = NULL;
 
 	// --- Add Separation Style bits as approriate to the current colour separation mode
@@ -7609,7 +7646,7 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 		GetDrawContext()->SetSeparationTables();	// Defaults to setting everything to NULL
 		CCFree(pSepTables);
 	}
-
+/*
 	if (pCyanSepTable)
 		CCFree(pCyanSepTable);
 	if (pMagentaSepTable)
@@ -7622,7 +7659,7 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 		CCFree(pUnderColourRemovalTable);
 	if (pBlackGenerationTable)
 		CCFree(pBlackGenerationTable);
-
+*/
 	return SLOWJOB_SUCCESS;
 }
 

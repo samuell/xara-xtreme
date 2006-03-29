@@ -1596,7 +1596,6 @@ const LOGPALETTE* GDrawAsm::SelectPalette( INT32 WhichPal )
 	return XaColour_SelectPalette(m_pContext, FALSE != WhichPal );
 }
 
-
 /********************************************************************************************
 
 >	BOOL GDrawAsm::SetGraduation(
@@ -1776,7 +1775,47 @@ BOOL GDrawAsm::SetTransparentGraduation4(
 	return (MakeCurrent() && (XaColour_SetTransparentGraduation4(m_pContext, Style, Table->GetTable(), PointA, PointB, PointC, PointD ) ? FALSE : TRUE));
 }
 
+/********************************************************************************************/
 
+BOOL GDrawAsm::SetBias( double fBias )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetBias(m_pContext,fBias) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetGain( double fGain )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetGain(m_pContext,fGain) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetContone( UINT32 uContoneStyle, COLORREF rgbStart, COLORREF rgbEnd )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetContone(m_pContext,uContoneStyle,rgbStart,rgbEnd) ? FALSE : TRUE);
+}
+
+/*******************************************************************************************/
+
+BOOL GDrawAsm::SetTransparencyRamp( BYTE uStart, BYTE uEnd )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetTransparencyRamp(m_pContext,uStart,uEnd) ? FALSE : TRUE);
+}
+
+/*******************************************************************************************/
 
 BOOL GDrawAsm::SetBitmapFill( LPBITMAPINFOHEADER bmInfo, LPBYTE lpBytes, DWORD Style, LPPOINT Points,
 									COLORREF DefaultColour, LPRGBQUAD ColourTable,

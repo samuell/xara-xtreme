@@ -1462,6 +1462,9 @@ BOOL TranspGradTable::BuildBitmapTable(INT32 StartTransp, INT32 EndTransp, CProf
 			// were a feather profile - we need to do a bit of extra work to ensure that ilans
 			// feather renders correctly.  We MUST ensure that ilans white part of the bitmap
 			// is rendered as 100% transparent.  The following lines of code do this ....
+
+			// TODO: (Gavin) Why on earth is this setting Index-2 and Index-1 to 255
+			// when the code below overwrites Index-2 anyway?
 			m_pTable->Table[Index-2] = static_cast<BYTE> ( 255 );
 			m_pTable->Table[Index-1] = static_cast<BYTE> ( 255 );
 		}
@@ -1479,6 +1482,7 @@ BOOL TranspGradTable::BuildBitmapTable(INT32 StartTransp, INT32 EndTransp, CProf
 		}
 	}
 
+	// TODO: (Gavin) Why on earth is this setting 0xFE and not 0xFF?
 	m_pTable->Table[0xFE] = static_cast <BYTE> ( EndTransp );
 	
 	return(TRUE);
@@ -2333,6 +2337,11 @@ BOOL GradTable32::BuildPaletteInternalHSV(DocColour &StartCol, DocColour &EndCol
 
 	// When doing alt-rainbow, if one end colour has no specific hue (saturation near 0)
 	// then use the other colour's hue (if any)
+	//
+	// TODO: WRONG!!! This should always be doing these two tests, not just when
+	// the Effect equals EFFECT_HSV_LONG. Note also that the long HSV colour
+	// generation is incorrect, although I'm not too sure why. (Gavin).
+	//
 	if (Effect == EFFECT_HSV_LONG)
 	{
 		if (StartDef.Saturation < 2 && EndDef.Saturation >= 2)

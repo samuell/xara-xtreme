@@ -595,7 +595,8 @@ AFp  CProfileBiasGain::Bias ( AFp Bias,  AFp Input )   /// static
 	static const AFp  kOne( 1.0 );
 	static const AFp  kTwo( 2.0 );
 
-	const AFp  Output( Input  /  ( ( kOne / Bias - kTwo ) * ( kOne - Input ) + kOne ) );
+//	const AFp  Output( Input  /  ( ( kOne / Bias - kTwo ) * ( kOne - Input ) + kOne ) );
+	const AFp  Output( Input*Bias  /  ( ( kOne - kTwo*Bias ) * ( kOne - Input ) + Bias ) );
 
 
 	return  Output;
@@ -619,21 +620,19 @@ AFp  CProfileBiasGain::Gain ( AFp Gain,   AFp Input )   /// static
 	static const AFp  kTwo( 2.0 );
 	static const AFp  kHalf( 0.5 );
 
-
-	const AFp  CommonPart( ( kOne / Gain - kTwo ) * ( kOne - kTwo * Input ) );
-	      AFp  Output( 0.0 );
+//	const AFp  CommonPart( ( kOne / Gain - kTwo ) * ( kOne - kTwo * Input ) );
+	const AFp  CommonPart( ( kOne - kTwo*Gain ) * ( kOne - kTwo * Input ) );
 
 	if( Input  <  kHalf )
 	{
-		Output  =  Input / ( CommonPart + kOne );
+//		return  Input / ( CommonPart + kOne );
+		return  Input*Gain / ( CommonPart + Gain );
 	}
 	else
 	{
-		Output  =  ( CommonPart - Input ) / ( CommonPart - kOne );
+//		return  ( CommonPart - Input ) / ( CommonPart - kOne );
+		return  ( CommonPart - Input*Gain ) / ( CommonPart - Gain );
 	}
-
-
-	return  Output;
 
 }
 
@@ -651,5 +650,3 @@ void  CProfileBiasGain::SetDefaultIntervals ()
 	RangeLength_m   =  AFp( 1.0 );
 
 }
-
-

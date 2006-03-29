@@ -870,6 +870,38 @@ INT32 XaColourDbg_SetTransparent4WayGraduation4(
 	return nRetVal;
 }
 
+INT32 XaBitmap_SetBias( double fBias )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetBias"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetBias(pContext,fBias);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
+INT32 XaBitmap_SetGain( double fGain )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetGain"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetGain(pContext,fGain);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
+INT32 XaBitmap_SetContone( pGCONTEXT pContext, UINT32 uContoneStyle, COLORREF rgbStart,COLORREF rgbEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetContone"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetContone(pContext,uContoneStyle,rgbStart,rgbEnd);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
+INT32 XaBitmap_SetTransparencyRamp( pGCONTEXT pContext, BYTE uStart, BYTE uEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetTransparencyRamp"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetTransparencyRamp(pContext,uStart,uEnd);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
 INT32 XaColourDbg_SetTilePattern(
 	pGCONTEXT pContext,
 	pcBITMAPINFOHEADER BitmapInfo,
@@ -2013,6 +2045,10 @@ TCHAR* g_XaNames[127] = {
 	"GColour_SetTransparent3WayGraduation4",
 	"GColour_SetTransparent4WayGraduation",
 	"GColour_SetTransparent4WayGraduation4",
+	"GBitmap_SetBias",
+	"GBitmap_SetGain",
+	"GBitmap_SetContone",
+	"GBitmap_SetTransparencyRamp",
 	"GColour_SetTilePattern",
 	"GColour_SetTilePattern4",
 	"GColour_SetTransparentTilePattern",
@@ -2145,6 +2181,10 @@ XA_DRAW_FNS g_XaFns =
 	XaColourDbg_SetTransparent3WayGraduation4,
 	XaColourDbg_SetTransparent4WayGraduation,
 	XaColourDbg_SetTransparent4WayGraduation4,
+	XaBitmapDbg_SetBias,
+	XaBitmapDbg_SetGain,
+	XaBitmapDbg_SetContone,
+	XaBitmapDbg_SetTransparencyRamp,
 	XaColourDbg_SetTilePattern,
 	XaColourDbg_SetTilePattern4,
 	XaColourDbg_SetTransparentTilePattern,

@@ -332,6 +332,15 @@ extern "C"
 		BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 		pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 	) ;
+	extern INT32 GBitmap_SetBias(pGCONTEXT pContext,double fBias) ;
+	extern INT32 GBitmap_SetGain(pGCONTEXT pContext,double fGain) ;
+	extern INT32 GBitmap_SetContone( 
+		pGCONTEXT pContext, 
+		UINT32 uContoneStyle, 
+		COLORREF rgbStart = 0x000000,
+		COLORREF rgbEnd   = 0xFFFFFF 
+	) ;
+	extern INT32 GBitmap_SetTransparencyRamp( pGCONTEXT pContext,BYTE uStart=0x00,BYTE uEnd=0xFF) ;
 	extern INT32 GColour_SetTilePattern(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,

@@ -294,6 +294,10 @@ typedef struct tagXaDrawFns
 		BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 		pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 	) ;
+	INT32 (*pfnXaBitmap_SetBias)(pGCONTEXT pContext,double fBias) ;
+	INT32 (*pfnXaBitmap_SetGain)(pGCONTEXT pContext,double fGain) ;
+	INT32 (*pfnXaBitmap_SetContone)( pGCONTEXT pContext,UINT32 uContoneStyle,COLORREF rgbStart,COLORREF rgbEnd ) ;
+	INT32 (*pfnXaBitmap_SetTransparencyRamp)( pGCONTEXT pContext,BYTE uStart,BYTE uEnd ) ;
 	INT32 (*pfnXaColour_SetTilePattern)(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
@@ -764,6 +768,11 @@ XA_DRAW_FNS, *PXA_DRAW_FNS;
 									(g_XaFns.pfnXaColour_SetTransparent4WayGraduation)
 #define XaColour_SetTransparent4WayGraduation4 \
 									(g_XaFns.pfnXaColour_SetTransparent4WayGraduation4)
+#define XaBitmap_SetBias			(g_XaFns.pfnXaBitmap_SetBias)
+#define XaBitmap_SetGain			(g_XaFns.pfnXaBitmap_SetGain)
+#define XaBitmap_SetContone			(g_XaFns.pfnXaBitmap_SetContone)
+#define XaBitmap_SetTransparencyRamp \
+									(g_XaFns.pfnXaBitmap_SetTransparencyRamp)
 #define XaColour_SetTilePattern		(g_XaFns.pfnXaColour_SetTilePattern)
 #define XaColour_SetTilePattern4	(g_XaFns.pfnXaColour_SetTilePattern4)
 #define XaColour_SetTransparentTilePattern \

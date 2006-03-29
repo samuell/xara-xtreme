@@ -249,6 +249,10 @@ public:
 		CONST POINT *PointC,
 		CONST POINT *PointD
 	);
+	virtual BOOL SetBias(double fBias) ;
+	virtual BOOL SetGain(double fGain) ;
+	virtual BOOL SetContone( UINT32, COLORREF, COLORREF );
+	virtual BOOL SetTransparencyRamp( BYTE, BYTE );
 	virtual BOOL SetBitmapFill( LPBITMAPINFOHEADER, LPBYTE, DWORD, LPPOINT, COLORREF, LPRGBQUAD,
 									LPBYTE, LPBYTE, LPBYTE, LPBYTE, DWORD );
 

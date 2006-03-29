@@ -816,6 +816,38 @@ INT32 XaColourOld_SetTransparent4WayGraduation4(
 	return nRetVal;
 }
 
+INT32 XaBitmapOld_SetBias( double fBias )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetBias"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetBias(s_pContext,fBias);
+	XA_DRAW_LEAVE(s_pConvert);
+	return nRetVal;
+}
+
+INT32 XaBitmapOld_SetGain( double fGain )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetGain"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetGain(s_pContext,fGain);
+	XA_DRAW_LEAVE(s_pConvert);
+	return nRetVal;
+}
+
+INT32 XaBitmapOld_SetContone( UINT32 uContoneStyle, COLORREF rgbStart,COLORREF rgbEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetContone"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetContone(s_pContext,uContoneStyle,rgbStart,rgbEnd);
+	XA_DRAW_LEAVE(s_pConvert);
+	return nRetVal;
+}
+
+INT32 XaBitmapOld_SetTransparencyRamp( BYTE uStart, BYTE uEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetTransaprencyRamp"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetTransparencyRamp(s_pContext,uStart,uEnd);
+	XA_DRAW_LEAVE(s_pConvert);
+	return nRetVal;
+}
+
 INT32 XaColourOld_SetTilePattern(
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,
