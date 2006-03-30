@@ -105,10 +105,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "list.h"
 #include "listitem.h"
-//#include "fontbase.h"
-#include "ccpanose.h"
+#include "fontbase.h"
+// #include "ccpanose.h" - included in fontbase.h
 
-#define DEFAULTFONTNAME "Times New Roman"
+#define DEFAULTFONTNAME _T("Times New Roman")
 #define DEFAULTHANDLE	0
 #define ILLEGALFHANDLE	0x7FFF
 #define FIRSTFONTHANDLE 1
@@ -314,8 +314,6 @@ public:
 
 ********************************************************************************************/
 
-PORTNOTE("other","Removed EnumAllFonts - derived from OILEnumFonts")
-#ifndef EXCLUDE_FROM_XARALX
 class EnumAllFonts : public OILEnumFonts
 {
 	CC_DECLARE_DYNCREATE( EnumAllFonts )
@@ -323,7 +321,6 @@ class EnumAllFonts : public OILEnumFonts
 	public:
 		EnumAllFonts() {};
 		virtual BOOL NewFont(FontClass Class, ENUMLOGFONT FAR* lpelf);
-}; */
-#endif
+};
 
 #endif

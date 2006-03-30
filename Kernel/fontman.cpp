@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-//#include "fontbase.h"
+// #include "fontbase.h" - included in fontman.h
 #include "fontman.h"
 #include "errors.h"
 #include "txtattr.h"
@@ -111,10 +111,8 @@ DECLARE_SOURCE( "$Revision: 662 $" );
 
 CC_IMPLEMENT_DYNCREATE( CachedFontItem, ListItem )
 CC_IMPLEMENT_DYNCREATE( FontManager, CCObject )
-PORTNOTE("text","Removed EnumAllFonts impl.")
-#ifndef EXCLUDE_FROM_XARALX
 CC_IMPLEMENT_DYNCREATE( EnumAllFonts, OILEnumFonts )
-#endif
+
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW     
@@ -222,10 +220,8 @@ ENUMLOGFONT* CachedFontItem::GetEnumLogFont()
 
 OUTLINETEXTMETRIC* CachedFontItem::GetOutlineTextMetric()
 {
-	PORTNOTETRACE("text","CachedFontItem::GetOutlineTextMetric - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pFontClass==NULL, NULL, "this.pFontClass==NULL.")
-	ERROR2IF(pEnumLogFont==NULL, NULL, "this.pEnumLogFont==NULL.")
+	ERROR2IF(pFontClass==NULL, NULL, "this.pFontClass==NULL.");
+	ERROR2IF(pEnumLogFont==NULL, NULL, "this.pEnumLogFont==NULL.");
 
 	if (pOutlineTextMetric==NULL)
 	{
@@ -236,8 +232,6 @@ OUTLINETEXTMETRIC* CachedFontItem::GetOutlineTextMetric()
 
 	// return the result.
 	return pOutlineTextMetric;
-#endif
-	return NULL;
 }
 
 /********************************************************************************************
@@ -337,13 +331,13 @@ void CachedFontItem::Delete()
 
 BOOL CachedFontItem::IsFullyCached()
 {
-	PORTNOTETRACE("text","CachedFontItem::IsFullyCached - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	TRACE( _T("Warning - CachedFontItem::IsFullyCached called") );
+	PORTNOTE("text","CachedFontItem::IsFullyCached - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
+	TRACEUSER("wuerthne", _T("CachedFontItem::IsFullyCached called") );
 	ERROR2IF(pFontClass==NULL, FALSE, "A CachedFontItem structure exists without a FontClass!!!");
 	return (pEnumLogFont!=NULL);
 #else
-	return true;
+	return TRUE;
 #endif
 }
 
@@ -385,8 +379,6 @@ BOOL CachedFontItem::Compare(String_64 *pFontName)
 
 void CachedFontItem::Dump()
 {
-	PORTNOTETRACE("text","CachedFontItem::Dump - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifdef _DEBUG
 	ERROR3IF(pFontClass==NULL, "A CachedFontItem structure exists without a FontClass!!!");
 	TRACE( _T("Font item:\n Handle = %d\n"),Handle);
@@ -400,7 +392,6 @@ void CachedFontItem::Dump()
 		TRACE( _T(" Not fully cached\n"));
 	}
 	pFontClass->Dump();
-#endif
 #endif
 }
 
@@ -493,12 +484,7 @@ FontManager::~FontManager()
 
 BOOL FontManager::LegalFontClass(INT32 Class, FontClass& RealClass)
 {
-	PORTNOTETRACE("text","FontManager::LegalFontClass - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return OILFontMan::LegalFontClass(Class, RealClass);
-#else
-	return false;
-#endif
 }
 
 
@@ -606,11 +592,7 @@ CachedFontItem* FontManager::AddFont(String_64* Name, FontClass fclass, WORD& re
 	if (pItem==NULL)
 		return NULL;
 
-	PORTNOTETRACE("text","FontManager::AddFont - removed CreateNewFont call");
-	FontBase* pClass = NULL;
-#ifndef EXCLUDE_FROM_XARALX
 	FontBase* pClass = OILFontMan::CreateNewFont(fclass,Name);
-#endif
 	if (pClass==NULL)
 	{
 		delete pItem;
@@ -1181,8 +1163,6 @@ WORD FontManager::FindTypeface(String_64 &TypeFaceName, FontClass Class)
 
 ********************************************************************************************/
 
-PORTNOTE("text","Remove references to CCPanose")
-#ifndef EXCLUDE_FROM_XARALX
 WORD FontManager::FindClosestFont(const CCPanose &PanoseNumber)
 {
 	// check, is this a 'simple' panose number with just Weight and Letterform components?
@@ -1205,71 +1185,72 @@ WORD FontManager::FindClosestFont(const CCPanose &PanoseNumber)
 		FindClosestFontHandle = ILLEGALFHANDLE;
 		FindClosestPanoseNumber = PanoseNumber;
 		FindClosestDistance = 0xffffffff;
-		FindClosestTypeFaceName = "";
+		FindClosestTypeFaceName = _T("");
 		FindClosestFontClass = FC_UNDEFINED;
 
 		// normalise the panose number.
 		FindClosestPanoseNumber.BodgeToNormal();
 
 		// choose whichever panose font matching algorithm you require:
-
+PORTNOTE("text","TrueType/Win specific code removed")
+#ifndef EXCLUDE_FROM_XARALX
 		// quick - just checks the seven fonts from the Microsoft(tm) Web Font Pack(tm)
-		// return FindClosestFontQuick(PanoseNumber);
+		return FindClosestFontQuick(PanoseNumber);
+#endif
 
 		// full - checks all the fonts installed on the machine.
 		return FindClosestFontFull(PanoseNumber);
 	}
 } 
 
+PORTNOTE("text","TrueType/Win specific code removed")
+#ifndef EXCLUDE_FROM_XARALX
 WORD FontManager::FindClosestFontQuick(const CCPanose &PanoseNumber)
 {
 	WORD MyFontHandle;
 	String_64 MyFontName;
 
 	// try "Arial"
-	MyFontName = "Arial";
+	MyFontName = _T("Arial");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Arial Black"
-	MyFontName = "Arial Black";
+	MyFontName = _T("Arial Black");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Comic Sans"
-	MyFontName = "Comic Sans";
+	MyFontName = _T("Comic Sans");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Courier New"
-	MyFontName = "Courier New";
+	MyFontName = _T("Courier New");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Impact"
-	MyFontName = "Impact";
+	MyFontName = _T("Impact");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Times New Roman"
-	MyFontName = "Times New Roman";
+	MyFontName = _T("Times New Roman");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	// try "Verdana"
-	MyFontName = "Verdana";
+	MyFontName = _T("Verdana");
 	MyFontHandle = CacheNamedFont(&MyFontName, FC_TRUETYPE);
 	FindClosestFontQuickTry(MyFontHandle);
 
 	return FindClosestFontHandle;
 } 
-#endif
 
 
 BOOL FontManager::FindClosestFontQuickTry(WORD MyFontHandle)
 {
-	PORTNOTETRACE("text","FontManager::FindClosestFontQuickTry - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	OUTLINETEXTMETRIC *pOutlineTextMetric = GetOutlineTextMetric(MyFontHandle);
 
 	if (pOutlineTextMetric!=NULL)
@@ -1288,13 +1269,9 @@ BOOL FontManager::FindClosestFontQuickTry(WORD MyFontHandle)
 	}
 
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
+#endif
 
-PORTNOTE("text","Remove references to CCPanose")
-#ifndef EXCLUDE_FROM_XARALX
 WORD FontManager::FindClosestFontFull(const CCPanose &PanoseNumber)
 {
 	WORD MyFontHandle;
@@ -1326,12 +1303,10 @@ WORD FontManager::FindClosestFontFull(const CCPanose &PanoseNumber)
 	// return with this font handle
 	return MyFontHandle;
 }
-#endif
 
 BOOL FontManager::FindClosestFontFullTry(FontClass Class, String_64 *pTypeFaceName, ENUMLOGFONT *pEnumLogFont)
 {
 	PORTNOTETRACE("text","FontManager::FindClosestFontFullTry - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pEnumLogFont==NULL, FALSE, "FindClosestTry called with pEnumLogFont==NULL.");
 
 	OUTLINETEXTMETRIC *pOutlineTextMetric;
@@ -1359,9 +1334,6 @@ BOOL FontManager::FindClosestFontFullTry(FontClass Class, String_64 *pTypeFaceNa
 	}
 	
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1374,10 +1346,7 @@ BOOL FontManager::FindClosestFontFullTry(FontClass Class, String_64 *pTypeFaceNa
 
 void FontManager::InvalidateCharMetrics()
 {
-PORTNOTE("text","Removed FontMetricsCache usage")
-#ifndef EXCLUDE_FROM_XARALX
 	FontMetricsCache::InvalidateCharMetrics();
-#endif
 }
 
 /********************************************************************************************
@@ -1396,12 +1365,7 @@ PORTNOTE("text","Removed FontMetricsCache usage")
 
 BOOL FontManager::GetCharMetrics(CNativeDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
 {
-PORTNOTE("text","Removed FontMetricsCache usage")
-#ifndef EXCLUDE_FROM_XARALX
 	return FontMetricsCache::GetCharMetrics(pDC, ch, FontDesc, pCharMetrics);
-#else
-	return false;
-#endif
 }
 
 /********************************************************************************************
@@ -1419,13 +1383,8 @@ PORTNOTE("text","Removed FontMetricsCache usage")
 
 MILLIPOINT FontManager::GetCharsKerning(CNativeDC* pDC, WCHAR chLeft, WCHAR chRight, CharDescription& FontDesc)
 {
-	PORTNOTETRACE("text","FontManager::GetCharsKerning - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	TRACE( _T("Warning - FontManager::GetCharsKerning called\n") );
+	// TRACEUSER("wuerthne", _T("FontManager::GetCharsKerning called\n") );
 	return FontKerningPairsCache::GetCharsKerning(pDC, chLeft, chRight, FontDesc);
-#else
-	return MILLIPOINT(0);
-#endif
 }
 
 /********************************************************************************************
@@ -1458,8 +1417,6 @@ BOOL FontManager::GetCharPath(CharDescription& ChDesc,
 	ERROR2IF(ppVerbs==NULL,FALSE,"FontManager::GetCharPath ppVerbs==NULL");
 	ERROR2IF(pNumCoords==NULL,FALSE,"FontManager::GetCharPath pNumCoords==NULL");
 
-	PORTNOTETRACE("text","FontManager::GetCharPath - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	CachedFontItem* pItem = GetFont(ChDesc.GetTypefaceHandle());
 	if (pItem==NULL)
 		return FALSE;
@@ -1472,9 +1429,6 @@ BOOL FontManager::GetCharPath(CharDescription& ChDesc,
 		pItem->SetIsCorrupt(TRUE);
 
 	return Success;
-#else
-	return false;
-#endif
 }
 
 /********************************************************************************************
@@ -1494,8 +1448,8 @@ BOOL FontManager::GetCharPath(CharDescription& ChDesc,
 
 BOOL FontManager::CacheDefaultFont()
 {
-	PORTNOTETRACE("text","FontManager::CacheDefaultFont - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","FontManager::CacheDefaultFont - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	if (DefaultFontItem.pFontClass!=NULL)
 	{
 		ERROR3("CacheDefaultFont called but a default font is already resident");
@@ -1618,13 +1572,7 @@ WORD FontManager::CacheNamedFont(String_64* pFontName, FontClass Class)
 
 BOOL FontManager::TempCacheNamedFont(String_64* pFontName, FontClass Class, INT32 Pass)
 {
-	// Sticks the font in a temporary cache
-	PORTNOTETRACE("text","FontManager::TempCacheNamedFont - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return (OILFontMan::CacheNamedFont(pFontName, Class, Pass));
-#else
-	return true;
-#endif
 }
 
 /********************************************************************************************
@@ -1687,12 +1635,9 @@ BOOL FontManager::IsFullyCached(WORD Handle)
 
 void FontManager::RefreshCache()
 {
-	PORTNOTETRACE("text","FontManager::RefreshCache - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	InvalidateCache();
 	OILFontMan::ValidateCache();
 	ResetDefaultFont();
-#endif
 }
 
 /********************************************************************************************
@@ -2209,9 +2154,6 @@ INT32 FontManager::DecodeFontName(const String_64& IStringRef, String_64& OStrin
 	return Flags;
 }
 
-PORTNOTE("text","Removed EnumAllFonts")
-#ifndef EXCLUDE_FROM_XARALX
-
 /********************************************************************************************
 
 >	virtual BOOL EnumAllFonts::NewFont(FontClass Class, ENUMLOGFONT FAR* lpelf)
@@ -2230,5 +2172,3 @@ BOOL EnumAllFonts::NewFont(FontClass Class, ENUMLOGFONT FAR* lpelf)
 	// dont enumerate any more please.
 	return FALSE;
 }
-
-#endif

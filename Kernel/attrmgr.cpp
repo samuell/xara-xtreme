@@ -695,6 +695,8 @@ BOOL AttributeManager::InitInstance()
 	if (FntAttr == NULL)
 		return FALSE; 
 
+	PORTNOTETRACE("text", "Japanese default font disabled");
+#ifndef EXCLUDE_FROM_XARALX
 	// If we are in Japan we don't want Times to be the current font
 	if (UnicodeManager::IsDBCSOS())
 	{
@@ -705,6 +707,7 @@ BOOL AttributeManager::InitInstance()
 		FONTMANAGER->CacheNamedFont(&FontName, FC_UNDEFINED);
 		FntAttr->Value.HTypeface = FONTMANAGER->GetFontHandle(&FontName, FC_UNDEFINED);
 	}
+#endif
 
 	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), FntAttr, FALSE, TRUE);  
 
