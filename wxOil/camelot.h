@@ -118,6 +118,9 @@ public:
     static void EnableSystem();
 	static inline bool IsDisabled() {return s_bIsDisabled;}
 
+    // Display our about box             
+	static void DoAboutBox();
+	
     // Used to access the dialog manager             
     static DialogManager *GetDlgManager();
 

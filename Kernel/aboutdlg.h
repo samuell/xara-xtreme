@@ -104,7 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define OPTOKEN_ABOUTDLG _T("AboutDlg")    
    
-
 /********************************************************************************************
 
 >	class AboutDlg: public DialogOp
@@ -117,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 ********************************************************************************************/
 
+#if defined(DIALOGOP_ABOUT_BOX)
 class AboutDlg: public DialogOp
 {         
 	CC_DECLARE_DYNCREATE( AboutDlg )  
@@ -144,6 +144,21 @@ private:
 private:
 	static AboutDlg *TheDlg;
 	static double CurrentAngle;
-}; 
+};
+#else
+class AboutDlg: public Operation
+{         
+	CC_DECLARE_DYNCREATE( AboutDlg )  
+
+public:
+	AboutDlg();		// The constructor
+	~AboutDlg();	// and it's friend
+
+	void Do(OpDescriptor*);		// "Do" function        
+	static BOOL Init();                        
+
+	static OpState GetState(String_256*, OpDescriptor*);	
+};
+#endif//
 
 #endif

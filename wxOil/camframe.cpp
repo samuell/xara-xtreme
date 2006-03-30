@@ -101,14 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#if defined(__WXMSW__)
-#include "wx/sysopt.h"
-#include "staticversion.h"
-#else
-#include "svnversion.h"
-#endif
-#include "gdraw.h"
-
 #include "camelot.h"
 #include "camframe.h"
 #include "camresource.h"
@@ -180,7 +172,6 @@ BEGIN_EVENT_TABLE( CCamFrame, wxDocMDIParentFrame )
 
 	EVT_MENU_RANGE( AUTO_MENU_ID_MIN, AUTO_MENU_ID_MAX, CCamFrame::OnMenuCommand			)
 
-	EVT_MENU( _R(DOCVIEW_ABOUT),					CCamFrame::OnAbout						)
 	EVT_MENU( _R(DOCVIEW_ZOOMIN),					CCamFrame::OnZoomIn						)
 	EVT_MENU( _R(DOCVIEW_ZOOMOUT),					CCamFrame::OnZoomOut					)
 	EVT_MENU( _R(DOCVIEW_ZOOMDRAWING),				CCamFrame::OnZoomDrawing				)
@@ -701,27 +692,6 @@ void CCamFrame::OnMenuCommand( wxCommandEvent& event )
 	event.Skip();
 }
 
-void CCamFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
-{
-	wxString			strMessage;
-
-#if defined(__WXMSW__) || defined(__WXMAC__)
-	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%d\nUsage: XaraLX.exe [xar-file...]"), 
-		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
-#else
-#if FALSE == wxUSE_UNICODE
-	TCHAR*			pszCDrawVer = GDraw_GetSvnVersion();
-#else
-	TCHAR			pszCDrawVer[32];
-	mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
-#endif
-	strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%d (" PERCENT_S 
-		")\nUsage: XaraLX [xar-file...]"), 
-		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer );
-#endif
-
-	(void)wxMessageBox( strMessage, wxT("About Xara LX") );
-}
 
 /***************************************************************************************************************************/
 //

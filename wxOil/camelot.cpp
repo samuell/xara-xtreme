@@ -794,6 +794,28 @@ bool CCamApp::GetRecentFileText(INT32 Index, String_256* pszText)
 }
 
 
+void CCamApp::DoAboutBox()
+{
+	wxString			strMessage;
+
+#if defined(__WXMSW__) || defined(__WXMAC__)
+	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%d\nUsage: XaraLX.exe [xar-file...]"), 
+		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
+#else
+#if FALSE == wxUSE_UNICODE
+	TCHAR*			pszCDrawVer = GDraw_GetSvnVersion();
+#else
+	TCHAR			pszCDrawVer[32];
+	mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
+#endif
+	strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%d (" PERCENT_S 
+		")\nUsage: XaraLX [xar-file...]"), 
+		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer );
+#endif
+
+	(void)wxMessageBox( strMessage, wxT("About Xara LX") );
+}
+
 
 /***************************************************************************************************************************/
 //

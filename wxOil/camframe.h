@@ -168,7 +168,6 @@ public:
 
 	void OnMenuCommand			( wxCommandEvent& event );
 
-	void OnAbout				( wxCommandEvent& event );
 	void OnZoomIn				( wxCommandEvent& event );
 	void OnZoomOut				( wxCommandEvent& event );
 	void OnZoomDrawing			( wxCommandEvent& event );

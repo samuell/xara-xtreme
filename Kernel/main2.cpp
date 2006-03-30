@@ -272,10 +272,10 @@ PORTNOTE("other","Removed Lots of init functions")
 #ifdef VECTOR_STROKING
 			OpMakeStroke::Init() &&				// Register MakeStroke operation
 #endif // VECTOR_STROKING
+			AboutDlg::Init() &&					// Register "About Camelot" Dialog
 #ifndef EXCLUDE_FROM_XARALX
 			OpUpdate::Init() &&					// Register Update Operation
 			OpRegister::Init() &&				// Register Register Operation
-			AboutDlg::Init() &&					// Register "About Camelot" Dialog
 			TipsDlg::Init() &&					// Register "Tip of the Day" Dialog
 			OpSlice::Init() &&					// Register Image Slicing
 			BarStatesDlg::Init() &&				// Register the Bar States Creation Dlg

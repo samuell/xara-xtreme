@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cversion.h"
 #include "product.h"
 // Added by Craig Hamilton 21/12/00.
-#include "registry.h"
+//#include "registry.h"
 // End added.
 
 #include "menuops.h"
@@ -136,17 +136,18 @@ CC_IMPLEMENT_DYNCREATE(AboutDlg, DialogOp)
 // This line MUST go after all CC_IMPLEMENT lines
 #define new CAM_DEBUG_NEW
 
-
-const CDlgMode AboutDlg::Mode = MODELESS; 		// The dialog is modeless  
-
+#if defined(DIALOGOP_ABOUT_BOX)
 #ifndef STANDALONE
-const INT32      AboutDlg::IDD = _R(IDD_ABOUTDLG);	// The dialogs id
+const INT32			AboutDlg::IDD = _R(IDD_ABOUTDLG);	// The dialogs id
 #else
-const INT32      AboutDlg::IDD = _R(IDD_ABOUTDLG_SA);	// The dialogs id
+const INT32			AboutDlg::IDD = _R(IDD_ABOUTDLG_SA);	// The dialogs id
 #endif
 
-AboutDlg *AboutDlg::TheDlg = NULL;
-double AboutDlg::CurrentAngle = -1.0;
+const CDlgMode		AboutDlg::Mode = MODELESS; 		// The dialog is modeless  
+
+AboutDlg*			AboutDlg::TheDlg = NULL;
+double				AboutDlg::CurrentAngle = -1.0;
+#endif
 
 /********************************************************************************************
 >	AboutDlg::AboutDlg()
@@ -164,6 +165,7 @@ double AboutDlg::CurrentAngle = -1.0;
 
 ********************************************************************************************/
 
+#if defined(DIALOGOP_ABOUT_BOX)
 AboutDlg::AboutDlg()
   : DialogOp(AboutDlg::IDD, AboutDlg::Mode) 
 {   
@@ -182,8 +184,17 @@ AboutDlg::~AboutDlg()
 	else
 		CurrentAngle = 0.0;
 }
+#else
+AboutDlg::AboutDlg()
+{   
+}
 
+AboutDlg::~AboutDlg()
+{   
+}
+#endif
 
+#if defined(DIALOGOP_ABOUT_BOX)
 /********************************************************************************************
 
 >	MsgResult AboutDlg::Message(Msg* Message);
@@ -232,7 +243,8 @@ MsgResult AboutDlg::Message(Msg* Message)
 
 				pRender->SaveContext();
 
-				pRender->SetLineColour(DocColour(COLOUR_TRANS));
+				DocColour	colTrans( COLOUR_TRANS );
+				pRender->SetLineColour( colTrans );
 
 				LinearFillAttribute GradFill;
 				ColourHSVT ColDef;
@@ -305,6 +317,7 @@ BOOL AboutDlg::OnIdleEvent()
 
 	return TRUE;
 }
+#endif
 
 
 /********************************************************************************************
@@ -325,9 +338,11 @@ BOOL AboutDlg::OnIdleEvent()
 OpState	AboutDlg::GetState(String_256*, OpDescriptor*)
 {    
 	OpState OpSt;
+	OpSt.Greyed = false;
+	
 	return(OpSt);
 }
-		 
+
 /********************************************************************************************
 
 >	BOOL AboutDlg::Init()
@@ -365,6 +380,7 @@ BOOL AboutDlg::Init()
 
 }   
  
+#if defined(DIALOGOP_ABOUT_BOX)
 /********************************************************************************************
 
 >	BOOL AboutDlg::Create()
@@ -390,7 +406,7 @@ BOOL AboutDlg::Create()
 
 	return FALSE;
 }           
-
+#endif
 
 
 /********************************************************************************************
@@ -411,10 +427,17 @@ BOOL AboutDlg::Create()
 
 void AboutDlg::Do(OpDescriptor*)
 {
+#if defined(DIALOGOP_ABOUT_BOX)
 	Create();
 	Open();
+#else	
+	CCamApp::DoAboutBox();
+	End();
+#endif
 }
 
+
+#if defined(DIALOGOP_ABOUT_BOX)
 
 /********************************************************************************************
 
@@ -434,7 +457,6 @@ void AboutDlg::Do(OpDescriptor*)
 
 BOOL AboutDlg::InitDialog()
 {	
-	CCamApp*	Application = (CCamApp*) AfxGetApp();	// Find our main application object
 	String_64	Text1, Text2, ProdDetailed;
 
 	// add the static RETAIL version number that the user sees and that is used 
@@ -445,25 +467,26 @@ BOOL AboutDlg::InitDialog()
 	// the product name we display here should be the more detailed name of this product
 	// (e.g. Xara Xtreme Plus, Xara Xtreme Pro.)
 
-	ProdDetailed = _T(PRODUCT_NAME_LONG);
+	ProdDetailed = _T("Banana hammock");
 
 	Text2.MakeMsg(_R(IDS_CAMVERSION), &ProdDetailed, &Text1);
 
 	SetStringGadgetValue(_R(IDC_CAMVERSION), &Text2);		// (Camelot program version number)
 
-#ifndef STANDALONE
+/*#ifndef STANDALONE
 	Text1 = (LPCTSTR) ReleaseInfo::GetLicensee();		// (Licensee)
 	SetStringGadgetValue(_R(IDC_LICENSEE), &Text1);
 
 	Text1 = (LPCTSTR) ReleaseInfo::GetCompany();		// (Organisation)
 	SetStringGadgetValue(_R(IDC_COMPANY), &Text1);
 
-	CString		serialNumber = OpRegister::GetSerialNumber();
+	wxString	serialNumber = OpRegister::GetSerialNumber();
 	Text1 = (LPCTSTR) serialNumber;
 	SetStringGadgetValue(_R(IDC_SERIAL), &Text1);
 	// End altered.
 
-#endif
+#endif */
 
   	return TRUE; 
 }
+#endif
