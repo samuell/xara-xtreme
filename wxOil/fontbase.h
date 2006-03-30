@@ -116,6 +116,13 @@ class CharMetrics;
 
 #define OILFONTLIMIT 2048
 
+// At the moment, text rendering has been implemented for wxGTK-based systems only.
+// The higher text rendering levels in the Kernel depend on OILFontManager working,
+// so they need to be disabled if we cannot provide the required services.
+#ifndef __WXGTK__
+#define DISABLE_TEXT_RENDERING 1
+#endif
+
 /********************************************************************************************
 	The types of fonts the OIL font manager recognises so far
 ********************************************************************************************/

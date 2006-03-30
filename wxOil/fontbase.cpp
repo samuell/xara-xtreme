@@ -882,8 +882,9 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 
 #ifdef __WXGTK__
 	if (FTFontMan::GetAscentDescent(FontDesc, &Ascent, &Descent) == FALSE) return FALSE;
-	SetFontAscent( MulDiv( Ascent, DefaultHeight, DesignSize) );
-	SetFontDescent(MulDiv(-Descent,DefaultHeight, DesignSize) );
+	// scaling to DefaultHeight was done in GetAscentDescent already
+	SetFontAscent( Ascent );
+	SetFontDescent( -Descent );
 
 	// get char widths and convert form design size in pixels to default height in millipoints
 	static INT32 pTempCharWidthBuf[NUMCHARS];
@@ -892,7 +893,7 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 	for (INT32 i=0; i<NUMCHARS; i++)
 		pCharWidths[i] = MulDiv(pTempCharWidthBuf[i], DefaultHeight, DesignSize);
 
-	// if 'em' char in cache, get it from the cache else calculate it's width separately
+	// if 'em' char in cache, get it from the cache else calculate its width separately
 	if (CharInCacheRange(FONTEMCHAR))
 		SetFontEmWidth( GetCharWidthFromCache(FONTEMCHAR) );
 	else
@@ -1016,7 +1017,7 @@ void FontMetricsCacheEntry::CheckCharWidthsSameAsABCWidths(wxDC* pDC, CharDescri
 
 BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
 {
-	TRACEUSER("wuerthne", _T("FontMetricsCache::GetCharMetrics %04x"), ch);
+	// TRACEUSER("wuerthne", _T("FontMetricsCache::GetCharMetrics %04x"), ch);
 	IGNORE(pDC);
 	ERROR2IF(pCharMetrics==NULL,FALSE,"FontMetricsCache::GetCharMetrics() - pCharMetrics==NULL");
 	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,"FontMetricsCache::GetCharMetrics() - FontDesc char should be 'FONTEMCHAR'");

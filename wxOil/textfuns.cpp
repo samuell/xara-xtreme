@@ -106,7 +106,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "app.h"
 #include "camelot.h"
 #include "fontman.h"
+#ifndef EXCLUDE_FROM_XARALX
 #include "atmfonts.h"
+#endif
 #include "unicdman.h"
 
 DECLARE_SOURCE( "$Revision: 662 $" );
@@ -160,7 +162,7 @@ void CharMetrics::Scale(double ScaleX, double ScaleY)
 
 /***************************************************************************************
 >	static BOOL TextManager::GetTTCharPath(CharDescription& ChDesc, DocCoord** ppCoords,
-										 PathVerb** ppVerbs, UINT32* pNumCoords, CDC* pDC=NULL)
+										 PathVerb** ppVerbs, UINT32* pNumCoords, wxDC* pDC=NULL)
 
 	Author:		Mark_Goodall (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -175,8 +177,10 @@ void CharMetrics::Scale(double ScaleX, double ScaleY)
 ********************************************************************************************/
 
 BOOL TextManager::GetTTCharPath(CharDescription& ChDesc, DocCoord** ppCoords,
-							  PathVerb** ppVerbs, UINT32* pNumCoords, CDC* pDC)
+							  PathVerb** ppVerbs, UINT32* pNumCoords, wxDC* pDC)
 {
+PORTNOTE("text", "no TrueType font manager in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(ppCoords==NULL,FALSE,"TextManager::GetTTCharPath pCoords==NULL");
 	ERROR2IF(ppVerbs==NULL,FALSE,"TextManager::GetTTCharPath ppVerbs==NULL");
 	ERROR2IF(pNumCoords==NULL,FALSE,"TextManager::GetTTCharPath pNumCoords==NULL");
@@ -240,11 +244,14 @@ BOOL TextManager::GetTTCharPath(CharDescription& ChDesc, DocCoord** ppCoords,
 	}
 	if (LocalDC) delete pDC;
 	return ok;
+#else
+	return FALSE;
+#endif
 }
 
 
 /***************************************************************************************
->	static BOOL TextManager::GetBezierFromChar(CDC* pDC,const WCHAR CharNumber,
+>	static BOOL TextManager::GetBezierFromChar(wxDC* pDC,const WCHAR CharNumber,
 											   LPLOGFONT pLogFont, DWORD* NoPolyElements,
 											   POINT* pPolyCordBuffer, BYTE* pPolyVerbBuffer)
 
@@ -269,9 +276,11 @@ BOOL TextManager::GetTTCharPath(CharDescription& ChDesc, DocCoord** ppCoords,
 #define SCALEX(jobby) (MulDiv(MulDiv(jobby,72000,DivConstX),pLogFont->lfHeight,-4096))
 #define SCALEY(jobby) (MulDiv(MulDiv(jobby,72000,DivConstY),pLogFont->lfHeight,-4096))  
    
-BOOL TextManager::GetBezierFromChar(CDC* pDC,WCHAR CharNumber,
+BOOL TextManager::GetBezierFromChar(wxDC* pDC,WCHAR CharNumber,
  LPLOGFONT pLogFont, DWORD* NoPolyElements, POINT* pPolyCordBuffer, BYTE* pPolyVerbBuffer)
 {
+PORTNOTE("text", "no TrueType font manager in wxOil")
+#ifndef EXCLUDE_FROM_XARALX
 	if (*NoPolyElements==0)
 	{ 
 		*NoPolyElements=2000; // Assume that 500 element array is big enough, although we still check on this later!!
@@ -461,11 +470,14 @@ BOOL TextManager::GetBezierFromChar(CDC* pDC,WCHAR CharNumber,
 
 	*NoPolyElements=CurrentPolyIndex;
 	return TRUE; 
+#else
+	return FALSE;
+#endif
 }
 
 
 /*********************************************************************************************
->   static INT32 TextManager::GetDesignSize(CDC* pDC)
+>   static INT32 TextManager::GetDesignSize(wxDC* pDC)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/1/96
@@ -474,7 +486,7 @@ BOOL TextManager::GetBezierFromChar(CDC* pDC,WCHAR CharNumber,
 	Note:		>>>> just returns a constant for the moment, but gives reasonable accuracy <<<<
 ********************************************************************************************/
 
-INT32 TextManager::GetDesignSize(CDC* pDC)
+INT32 TextManager::GetDesignSize(wxDC* pDC)
 {
 //	ERROR2IF(pDC==NULL,FALSE,"TextManager::GetDesignSize() - pDC==NULL");
 
@@ -483,7 +495,7 @@ INT32 TextManager::GetDesignSize(CDC* pDC)
 
 
 /**********************************************************************************************
->	static BOOL TextManager::GetLogFontFromCharDescriptor(CDC* pDC, CharDescription& ChDesc,
+>	static BOOL TextManager::GetLogFontFromCharDescriptor(wxDC* pDC, CharDescription& ChDesc,
 						LPLOGFONT pLogFont, INT32 LogicalHeight=-1)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
@@ -497,8 +509,8 @@ INT32 TextManager::GetDesignSize(CDC* pDC)
 	Note:		Assumes MM_TextMode	
 *********************************************************************************************/
 
-BOOL TextManager::GetLogFontFromCharDescriptor(CDC* pDC, CharDescription& ChDesc,
-											LOGFONT* pLogFont, INT32 LogicalHeight)
+BOOL TextManager::GetLogFontFromCharDescriptor(wxDC* pDC, CharDescription& ChDesc,
+											   LOGFONT* pLogFont, INT32 LogicalHeight)
 {
 	ERROR2IF(pLogFont==NULL,FALSE,"TextManager::GetLogFontFromCharDescriptor() pLogFont==NULL");
 	ERROR2IF(     pDC==NULL,FALSE,"TextManager::GetLogFontFromCharDescriptor() pDC==NULL");
@@ -506,9 +518,13 @@ BOOL TextManager::GetLogFontFromCharDescriptor(CDC* pDC, CharDescription& ChDesc
 	// get LogFont from face handle in char descriptor
 	WORD            FaceHandle    = ChDesc.GetTypefaceHandle();
 	CachedFontItem* pFontDataItem = FONTMANAGER->GetFont(FaceHandle);
+	if (pFontDataItem == NULL) return FALSE;
+
   	ENUMLOGFONT*    pEnumLogFont     = pFontDataItem->GetEnumLogFont();
+	if (pEnumLogFont == NULL) return FALSE;
   	*pLogFont = pEnumLogFont->elfLogFont;
 
+#ifndef EXCLUDE_FROM_XARALX
 	// if not specified, set LogicalHeight to dpi (ie 1")
 	if (LogicalHeight==-1)
 		LogicalHeight = pDC->GetDeviceCaps(LOGPIXELSY);
@@ -518,6 +534,9 @@ BOOL TextManager::GetLogFontFromCharDescriptor(CDC* pDC, CharDescription& ChDesc
  	pLogFont->lfWidth  = 0;
 	pLogFont->lfWeight = ChDesc.GetBold() ? 700 : 0; 
 	pLogFont->lfItalic = ChDesc.GetItalic();
+#else
+    ERROR2IF(LogicalHeight==-1, FALSE, "NYI - get device DPI");
+#endif
 
 	return TRUE;
 }
@@ -540,6 +559,7 @@ BOOL TextManager::GetLogFontFromCharDescriptor(CDC* pDC, CharDescription& ChDesc
 
 BOOL TextManager::GetInfoFromLogFont(FontInfo* pFontInfo, LOGFONT* pLogFont, FontClass Class)
 {
+#ifndef EXCLUDE_FROM_XARALX
 // BODGE TEXT - no error trapping of creating new MFC objects - TRY/THROW required
 
 	// ensure the font is cached
@@ -599,6 +619,9 @@ BOOL TextManager::GetInfoFromLogFont(FontInfo* pFontInfo, LOGFONT* pLogFont, Fon
 	pFontInfo->Rotation = pLogFont->lfEscapement / 10.0;
 
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 
@@ -616,6 +639,7 @@ BOOL TextManager::GetInfoFromLogFont(FontInfo* pFontInfo, LOGFONT* pLogFont, Fon
 
 CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 {
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pChar==NULL,Failed,"TextManager::ProcessCharCase() - pChar==NULL");
 	ERROR2IF(NewState==Failed || NewState==Unknown,Failed,"TextManager::ProcessCharCase() - invalid NewState");
 
@@ -671,12 +695,15 @@ CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 	}
 
 	return OldCase;
+#else
+	ERROR2(Failed, "ProcessCharCase NYI");
+#endif
 }
 
 
 
 /********************************************************************************************
->	BOOL TextManager::GetCharWidth(CDC* pDC, WCHAR FirstChar, WCHAR, LastChar, INT32* pCharWidthsBuf)
+>	BOOL TextManager::GetCharWidth(wxDC* pDC, WCHAR FirstChar, WCHAR, LastChar, INT32* pCharWidthsBuf)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/1/96
@@ -688,8 +715,9 @@ CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 	Note:		pCharWidthsBuf size must be LastChar-FirstChar+1
 ********************************************************************************************/
 
-BOOL TextManager::GetCharWidth(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, INT32* pCharWidthsBuf)
+BOOL TextManager::GetCharWidth(wxDC* pDC, WCHAR FirstChar, WCHAR LastChar, INT32* pCharWidthsBuf)
 {
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(           pDC==NULL,FALSE,"TextManager::GetCharWidth() - pDC==NULL");
 	ERROR2IF(pCharWidthsBuf==NULL,FALSE,"TextManager::GetCharWidth() - pCharWidthsBuf==NULL");
 
@@ -706,11 +734,14 @@ BOOL TextManager::GetCharWidth(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, INT32*
 	ERROR2IF(!ok,FALSE,"TextManager::GetCharWidth() - ::GetCharWidth() failed");
 
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 
 /********************************************************************************************
->	BOOL TextManager::GetCharABCWidths(CDC* pDC, WCHAR FirstChar, WCHAR, LastChar, INT32* pCharABCsBuf)
+>	BOOL TextManager::GetCharABCWidths(wxDC* pDC, WCHAR FirstChar, WCHAR, LastChar, INT32* pCharABCsBuf)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/1/96
@@ -722,8 +753,9 @@ BOOL TextManager::GetCharWidth(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, INT32*
 	Note:		pABCWidthsBuf size must be LastChar-FirstChar+1
 ********************************************************************************************/
 
-BOOL TextManager::GetCharABCWidths(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, ABC* pCharABCsBuf)
+BOOL TextManager::GetCharABCWidths(wxDC* pDC, WCHAR FirstChar, WCHAR LastChar, ABC* pCharABCsBuf)
 {
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(              pDC==NULL,FALSE,"TextManager::GetABCWidths() - pDC==NULL");
 	ERROR2IF(pCharABCsBuf==NULL,FALSE,"TextManager::GetABCWidths() - pCharABCsBuf==NULL");
 
@@ -740,12 +772,15 @@ BOOL TextManager::GetCharABCWidths(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, AB
 	ERROR2IF(!ok,FALSE,"TextManager::GetABCWidths() - ::GetCharABCWidths() failed");
 
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 
 /********************************************************************************************
 
->	INT32	TextManager::GetKernCount(CDC* pDC)
+>	INT32	TextManager::GetKernCount(wxDC* pDC)
 
 	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/10/2000
@@ -755,18 +790,21 @@ BOOL TextManager::GetCharABCWidths(CDC* pDC, WCHAR FirstChar, WCHAR LastChar, AB
 	See also:	TextManager::FillKernArray()
 
 ********************************************************************************************/
-INT32 TextManager::GetKernCount(CDC* pDC)
+INT32 TextManager::GetKernCount(wxDC* pDC)
 {
 	ERROR2IF(pDC==0,0,"TextManager::GetKernCount() passed null DC");
-
+#ifndef EXCLUDE_FROM_XARALX
 	return pDC->GetKerningPairs(0, 0);
+#else
+	return 0;
+#endif
 }
 
 
 
 /********************************************************************************************
 
->	bool TextManager::FillKernArray(CDC* pDC, KERNINGPAIR *pKerningPairs, INT32 count)
+>	bool TextManager::FillKernArray(wxDC* pDC, KERNINGPAIR *pKerningPairs, INT32 count)
 
 	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/10/2000
@@ -778,12 +816,12 @@ INT32 TextManager::GetKernCount(CDC* pDC)
 	See also:	TextManager::GetKernCount()
 
 ********************************************************************************************/
-bool TextManager::FillKernArray(CDC* pDC, MillipointKerningPair* pKerningPairs, INT32 count)
+bool TextManager::FillKernArray(wxDC* pDC, MillipointKerningPair* pKerningPairs, INT32 count)
 {
 	ERROR2IF(pDC==0, 0,					"TextManager::FillKernArray() passed null DC");
 	ERROR3IF(count<GetKernCount(pDC),	"TextManager::FillKernArray() not passed enough memory - "
 										"kern table will be incomplete");
-
+#ifndef EXCLUDE_FROM_XARALX
 	// Allocate some tmp memory to store windows kerning data
 	KERNINGPAIR* pKPtmp = new KERNINGPAIR[count];
 	if (!pKPtmp) return false;
@@ -812,4 +850,7 @@ bool TextManager::FillKernArray(CDC* pDC, MillipointKerningPair* pKerningPairs, 
 	{
 		return true;
 	}
+#else
+	return FALSE;
+#endif
 }
