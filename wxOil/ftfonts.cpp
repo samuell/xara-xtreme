@@ -1,4 +1,4 @@
-// $Id: wxOil/ftfonts.cpp, 1, 01-Jan-2006, Anonymous $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
@@ -200,7 +200,7 @@ FTFontMan::FTFontMan()
 
 	Author: 	Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/9/95
-	Returns:	TRUE if the TrueType mangler is actually running and can be used on this OpSys
+	Returns:	TRUE if the FreeType manager is actually running and can be used on this OpSys
 	Purpose:	Determine whether we can make further calls to the TrueType Manager
 
 ********************************************************************************************/
@@ -212,13 +212,11 @@ BOOL FTFontMan::IsOkToCall()
 }
 
 // debugging routine to conveniently output a String_64 string
-#ifdef _DEBUG
 static void DumpString64User(char* user, TCHAR* msg, String_64* pString)
 {
 	TRACEUSER(user, msg);
 	TRACEUSER(user, (TCHAR*)(*pString));  // use TCHAR* conversion operator
 }
-#endif
 
 /********************************************************************************************
 
