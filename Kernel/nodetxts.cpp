@@ -148,7 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "opbevel.h"	// For determining if a gradient fill is used in a TextStory.
 
-DECLARE_SOURCE("$Revision: 662 $")				
+DECLARE_SOURCE("$Revision$")				
 
 CC_IMPLEMENT_DYNAMIC(BaseTextClass, NodeRenderableInk)
 CC_IMPLEMENT_MEMDUMP(TextStoryInfo, CC_CLASS_MEMDUMP );

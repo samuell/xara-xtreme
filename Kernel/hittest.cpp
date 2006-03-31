@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <list>
 #pragma warning(default: 4786)
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // This definition allows sensible debug trace output of memory leaks...
 // Declare smart memory handling in Debug builds

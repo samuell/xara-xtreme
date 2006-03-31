@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "plgnfltr.h"
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(FilterManager, CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_MEMDUMP(FileFormat, CC_CLASS_MEMDUMP)

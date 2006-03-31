@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixed16.h"
 #include "strings.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 /********************************************************************************************
 >	void FIXED16::ToString(StringBase* out) const 

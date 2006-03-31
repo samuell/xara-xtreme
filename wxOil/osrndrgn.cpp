@@ -148,7 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "strkattr.h"
 #include "cartprov.h"
 
-DECLARE_SOURCE("$Revision: 674 $");
+DECLARE_SOURCE("$Revision$");
 
 /********************************************************************************************
 

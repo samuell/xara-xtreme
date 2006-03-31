@@ -118,7 +118,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // This definition must appear after the above CC_IMPLEMENT_ definitions.
 // Declare smart memory handling in Debug builds

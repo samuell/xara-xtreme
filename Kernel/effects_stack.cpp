@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_DYNAMIC(PPStackLevel, ListItem);
 CC_IMPLEMENT_DYNAMIC(EffectsStack, List);
 
-DECLARE_SOURCE("$Revision: 264 $");
+DECLARE_SOURCE("$Revision$");
 
 #define new CAM_DEBUG_NEW
 

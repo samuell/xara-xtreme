@@ -153,7 +153,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fillramp.h"	// For colour/transparency ramps
 #include "pathutil.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // AttributeValue classes

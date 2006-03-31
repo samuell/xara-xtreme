@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "convert.h"
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(TemplateAttribute, AttrUser)
 CC_IMPLEMENT_MEMDUMP(VisibleTemplateAttribute, VisibleUserAttribute)

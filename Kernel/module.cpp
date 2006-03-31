@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "pushtool.h"
 
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 ModuleList *Module::Modules = NULL;
 

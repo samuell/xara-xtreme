@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
 #include "cxfrec.h"		// TAG_STARTCOMPRESSION TAG_STOPCOMPRESSION
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW

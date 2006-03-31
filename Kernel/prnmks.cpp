@@ -145,7 +145,7 @@ CC_IMPLEMENT_MEMDUMP(MarkFormatRegion, CC_CLASS_MEMDUMP);
 CC_IMPLEMENT_DYNCREATE(PageRect, ListItem);
 CC_IMPLEMENT_DYNAMIC(PageRectList, List);
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #define new CAM_DEBUG_NEW
 

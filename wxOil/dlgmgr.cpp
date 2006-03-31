@@ -145,7 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "osrndrgn.h"
 #include "dlgtypes.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(CGadgetImageList, CCObject);
 

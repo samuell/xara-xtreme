@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "atminst.h"
 #include "unicdman.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE( ATMFontMan, CCObject )
 CC_IMPLEMENT_DYNCREATE( ATMFont, FontBase )

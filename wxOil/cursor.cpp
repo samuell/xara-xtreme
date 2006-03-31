@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "hotlink.h"  //For the pointing hand cursor
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Memory dump info
 CC_IMPLEMENT_MEMDUMP(Cursor, CC_CLASS_MEMDUMP)

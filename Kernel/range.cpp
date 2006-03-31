@@ -143,7 +143,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "effects_stack.h"
 #include "bars.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );    
+DECLARE_SOURCE( "$Revision$" );    
 
 CC_IMPLEMENT_DYNAMIC(Range, CCObject)   
 CC_IMPLEMENT_DYNAMIC(NodeListItem, ListItem)

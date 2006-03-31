@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ophist.h"
 
 // Put my version Number into the About box
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 
 CC_IMPLEMENT_DYNCREATE(NodeSimpleShape, NodeRenderableInk)

@@ -106,5 +106,5 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndbmp.h"
 #include "attrmap.h"
 
-DECLARE_SOURCE("$Revision: 662 $")
+DECLARE_SOURCE("$Revision$")
 

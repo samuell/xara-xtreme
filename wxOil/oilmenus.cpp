@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camframe.h"	// GetMainFrame()
 #include "camelot.h"	// wxGetApp
 
-DECLARE_SOURCE("$Revision: 662 $");  
+DECLARE_SOURCE("$Revision$");  
 
 // This wasn't here before 7/3/97
 // We want better memory tracking

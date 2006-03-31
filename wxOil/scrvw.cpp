@@ -167,7 +167,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
   #include "ole2id.h"
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 CC_IMPLEMENT_DYNCREATE(PageDropInfo, CCObject)

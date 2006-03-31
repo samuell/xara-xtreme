@@ -133,7 +133,7 @@ CC_IMPLEMENT_MEMDUMP(TypesetInfo,	CC_CLASS_MEMDUMP)
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #define Swap(a,b)       { (a)^=(b), (b)^=(a), (a)^=(b); }
 

@@ -133,7 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //class NodeRenderableInk;
 
-DECLARE_SOURCE( "$Revision: 670 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_MEMDUMP( MouldTool,Tool_v1 )
 CC_IMPLEMENT_MEMDUMP( CreateMouldParam, OpParam )

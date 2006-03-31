@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <math.h>
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(GPerspective, GMould)
 CC_IMPLEMENT_DYNAMIC(MouldPerspective, MouldGeometry)

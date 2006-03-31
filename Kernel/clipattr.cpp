@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"			// _R(IDE_NOMORE_MEMORY)
 #include "blendatt.h"		// BlendAttrParam
 
-DECLARE_SOURCE("$Revision: 662 $")
+DECLARE_SOURCE("$Revision$")
 
 // runtime class creation stuff.
 CC_IMPLEMENT_DYNCREATE(ClipRegionAttribute, AttributeValue)

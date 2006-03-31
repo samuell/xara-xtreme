@@ -126,7 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "viewrc.h"	 
 //#include "will2.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_MEMDUMP(QuickShapeBase, Tool_v1)
 CC_IMPLEMENT_MEMDUMP(QuickShapeTool, QuickShapeBase)

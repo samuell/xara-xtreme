@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilfltrs.h"	// for find filter ext
 //#include "exprwres.h"	// for _R(IDS_BITMAPPREVIEWDIALOG)
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(BmapPrevDlg, DialogTabOp)
 

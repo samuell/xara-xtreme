@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "impbmp.h"
 #include "bitmap.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(ImportBitmap, ListItem)
 CC_IMPLEMENT_MEMDUMP(ImportBitmapList, List)

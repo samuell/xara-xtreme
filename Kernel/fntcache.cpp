@@ -512,7 +512,7 @@ UINT32 FontCache::Misses = 0;
 
 BOOL FontCache::InitCalled = FALSE; // Set to TRUE on entry to Init function 
 
-DECLARE_SOURCE("$Revision: 662 $")
+DECLARE_SOURCE("$Revision$")
 
 // Declare nodes dynamic
 CC_IMPLEMENT_DYNAMIC(PathHandleItem, CCObject)

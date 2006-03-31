@@ -175,7 +175,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "rendwnd.h"	// Shouldn't need this
 
-DECLARE_SOURCE("$Revision: 666 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // Used by SpreadRedraws class.

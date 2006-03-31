@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 CC_IMPLEMENT_MEMDUMP(LoadDirect, CC_CLASS_MEMDUMP);
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 /*****************************************************************************************

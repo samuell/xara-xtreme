@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxfrec.h"		// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
 #include "cxfunits.h"	// default export unit types
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW

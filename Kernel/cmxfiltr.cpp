@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"
 //#include "cmxres.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(CMXFilter, VectorFilter)
 CC_IMPLEMENT_DYNAMIC(CMXFilter16, CMXFilter)

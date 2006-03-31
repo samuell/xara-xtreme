@@ -120,7 +120,7 @@ CC_IMPLEMENT_DYNAMIC(PrintMarkComponentClass, DocComponentClass)
 CC_IMPLEMENT_DYNAMIC(DocPrintMarkList, List)
 CC_IMPLEMENT_DYNCREATE(DocPrintMark, ListItem)
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW

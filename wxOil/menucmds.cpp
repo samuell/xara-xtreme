@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rechblnd.h"		// so that can reset blend pointers
 //#include "urls.h"
 
-DECLARE_SOURCE("$Revision: 662 $");  
+DECLARE_SOURCE("$Revision$");  
 #define THIRTY_TWO 32
 
 /********************************************************************************************

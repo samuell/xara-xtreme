@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brushmsg.h"
 #include "ctrllist.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(MessageHandler, ListItem)
 
 // All message implement macros here

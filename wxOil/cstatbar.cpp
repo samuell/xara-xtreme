@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define IS_CHICAGO ((LOBYTE(LOWORD(GetVersion()))) > 3) 
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 IMPLEMENT_DYNAMIC(CCStatusBar, CStatusBar)
 

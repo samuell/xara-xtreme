@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixmem.h"
 #include "fillramp.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(GradTable, CCObject)
 CC_IMPLEMENT_DYNCREATE(TranspGradTable, CCObject)

@@ -165,7 +165,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Karim 09/08/2000 - enable the new tab selection-iteration code.
 #define NEW_SELECTION_TAB_ITERATION

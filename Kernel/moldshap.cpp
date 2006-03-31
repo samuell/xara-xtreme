@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "trans2d.h"
 #include "tranform.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(MouldGeometry, CCObject)
 CC_IMPLEMENT_DYNAMIC(MouldTransform, TransformBase)

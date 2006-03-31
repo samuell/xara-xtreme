@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sglinepr.h"	// For SGalleryLinePropertiesDlg::Init()
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(SGInit, CC_CLASS_MEMDUMP)
 

@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tool.h"
 
 // Declare the source version number
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 //Give my name in memory dumps
 CC_IMPLEMENT_MEMDUMP(BlobManager, MessageHandler)

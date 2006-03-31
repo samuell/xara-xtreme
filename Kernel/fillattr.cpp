@@ -163,7 +163,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "effects_stack.h"
 
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 //
 // NodeAttribute classes

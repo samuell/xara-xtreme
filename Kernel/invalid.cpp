@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "document.h"
 
 // declare the source
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // An implement to match the Declare in the .h file.
 // If you have many classes, it is recommended to place them all together, here at the start of the file

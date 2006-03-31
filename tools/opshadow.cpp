@@ -145,7 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "gerry.h"
 #include "ophist.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE(OpApplyShadow, SelOperation)
 CC_IMPLEMENT_DYNCREATE(OpChangeShadowType, SelOperation)

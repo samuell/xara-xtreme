@@ -133,7 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "hotlink.h"  //For the default status bar string
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 
 IMPLEMENT_DYNCREATE( RalphDocument, CCmdTarget )

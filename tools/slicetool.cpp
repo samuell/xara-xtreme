@@ -160,7 +160,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 void UpdateCurrentStateGadget(); // forward def
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 #define MIN(a, b)	((a) < (b) ? (a) : (b))
 #define MAX(a, b)	((a) < (b) ? (b) : (a))

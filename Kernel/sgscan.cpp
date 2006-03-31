@@ -132,7 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camnet.h"
 #include "pathnmex.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(Library, ListItem)
 

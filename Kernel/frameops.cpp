@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "page.h"
 #include "quality.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(OpSelectStartFrame,	OpLayerGalChange);
 CC_IMPLEMENT_DYNCREATE(OpSelectEndFrame,	OpLayerGalChange);

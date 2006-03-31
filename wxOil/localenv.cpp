@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "localenv.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(LocalEnvironment, CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_DYNAMIC(LocaleChangedMsg, Msg)

@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "page.h"
 //#include "node.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(CSnap, CC_CLASS_MEMDUMP)
 

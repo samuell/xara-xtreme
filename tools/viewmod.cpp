@@ -133,7 +133,7 @@ static char Name[] 		= "Kernel Module";
 static char Purpose[] 	= "Tools that need to be in the kernel";
 static char Author[] 	= "The Nasty People";
 
-DECLARE_SOURCE("$Revision: 673 $");
+DECLARE_SOURCE("$Revision$");
 
 
 

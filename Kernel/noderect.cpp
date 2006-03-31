@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Put my version Number into the About box
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Declare class and give details in memory dumps
 CC_IMPLEMENT_DYNCREATE(NodeRect, NodeSimpleShape)

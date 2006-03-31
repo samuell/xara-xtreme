@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "txtattr.h"
 //#include "richard2.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE( CachedFontItem, ListItem )
 CC_IMPLEMENT_DYNCREATE( FontManager, CCObject )

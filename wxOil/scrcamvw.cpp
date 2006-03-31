@@ -169,7 +169,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
   #include "ole2id.h"
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 /////////////////////////////////////////////////////////////////////////////
 // ScreenCamCanvas the message map.

@@ -143,7 +143,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Revision information.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Standard preliminaries.
 CC_IMPLEMENT_DYNCREATE(OpZoom, OpCentredDragBox)

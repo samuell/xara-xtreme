@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "fillattr.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE(NodeEffect, NodeCompound)
 

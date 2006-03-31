@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "osrndrgn.h"
 //#include "rik.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Declare this class and give my name for bad memory handling
 CC_IMPLEMENT_DYNCREATE(NodeEllipse, NodeSimpleShape)

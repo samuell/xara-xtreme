@@ -118,7 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard3.h"			// for MakePercent
 //#include "mario.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 BOOL StringBase::ThrowExceptionStack[str_MAXEXCEPTIONS];
 INT32 StringBase::CurrEx = -1;

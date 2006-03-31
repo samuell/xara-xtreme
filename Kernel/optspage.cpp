@@ -124,7 +124,7 @@ CC_IMPLEMENT_DYNCREATE(ActionPageResize, Action)
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Set some limit to the allowed page dimensions so that cannot have stupid values
 // better to do this than fall over or stop rendering.

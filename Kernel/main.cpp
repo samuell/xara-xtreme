@@ -141,7 +141,7 @@ BOOL InitPostTools2();
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 /*******************************************************************

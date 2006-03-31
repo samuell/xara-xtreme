@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rechattr.h"	// Record handling classes for attributes
 #include "cxfrec.h"
 //#include "resimmap.h"	//_R(IDS_TAG_WEBADDRESS)
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(AttrWebAddress, NodeAttribute)
 CC_IMPLEMENT_DYNCREATE(WebAddressAttribute, AttributeValue)

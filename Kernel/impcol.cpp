@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ben.h"
 //#include "filtrres.h"	// _R(IDS_NATIVE_SORTCOLOURS)
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 NewColourInfo::NewColourInfo()

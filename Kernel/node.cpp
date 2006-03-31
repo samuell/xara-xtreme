@@ -133,7 +133,7 @@ MILLIPOINT Node::PixelWidth;
 MILLIPOINT Node::PixelHeight; 
 BOOL Node::HourglassOn = FALSE; // When TRUE certain slow routines will call ContinueSlowJob
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNAMIC(Node, CCObject)
       
 // Declare smart memory handling in Debug builds

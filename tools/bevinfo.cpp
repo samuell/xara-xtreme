@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "simon.h"
 //#include "camvw.h"
 
-DECLARE_SOURCE( "$Revision: 674 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Declare stuff for the memory tracking
 CC_IMPLEMENT_DYNCREATE( BevelInfoBarOp, InformationBarOp )

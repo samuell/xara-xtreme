@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxfarrow.h"	// Default arrow head/tail references
 #include "cxfcols.h"	// REF_DEFAULTCOLOUR_TRANSPARENT ...
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(AttrStrokeColour,	AttrFillGeometry)
 CC_IMPLEMENT_DYNCREATE(AttrStrokeTransp,	AttrFillGeometry)

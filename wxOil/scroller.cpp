@@ -126,7 +126,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-DECLARE_SOURCE("$Revision: 5 $");
+DECLARE_SOURCE("$Revision$");
 
 #define new CAM_DEBUG_NEW
 

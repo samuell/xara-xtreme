@@ -132,7 +132,7 @@ CC_IMPLEMENT_DYNAMIC(ViewRecordHandler,CamelotRecordHandler)
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // This is the default view quality for the view records in a v2 file
 #define DEFAULT_VIEW_QUALITY 110

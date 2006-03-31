@@ -127,7 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "palman.h"		// PaletteManager::Get4bppBrowserPalette
 
-DECLARE_SOURCE("$Revision: 662 $");  
+DECLARE_SOURCE("$Revision$");  
 
 CC_IMPLEMENT_DYNCREATE(OpConvertToBitmap, SelOperation);
 CC_IMPLEMENT_DYNAMIC(MakeBitmapFilter, TI_GIFFilter);

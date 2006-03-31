@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 extern BOOL MakeShortPath(LPTSTR lpszPath, size_t cchMaxLen);
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(GenerateIndexFile, CCObject)
 CC_IMPLEMENT_DYNCREATE(IndGenFileBuffer, CCObject)

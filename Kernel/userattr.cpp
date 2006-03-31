@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dialogop.h"	// for slight bodge
 //#include "tmpltdlg.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(AttrUser, NodeAttribute)
 CC_IMPLEMENT_MEMDUMP(VisibleAttribute, UserInterface)

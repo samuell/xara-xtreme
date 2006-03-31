@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "xshelpid.h"	//For the help ID
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(ImagemapDlg, DialogOp)
 

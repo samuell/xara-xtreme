@@ -121,7 +121,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Place any IMPLEMENT type statements here
 CC_IMPLEMENT_MEMDUMP(Extender, CC_CLASS_MEMDUMP)

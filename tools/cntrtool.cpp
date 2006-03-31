@@ -154,7 +154,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "effects_stack.h"
 
-DECLARE_SOURCE( "$Revision: 672 $" );
+DECLARE_SOURCE( "$Revision$" );
 											 	
 CC_IMPLEMENT_MEMDUMP(ContourTool,Tool_v1)
 CC_IMPLEMENT_DYNCREATE(ContourInfoBarOp,InformationBarOp)

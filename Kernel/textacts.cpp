@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Resource headers
 
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(BaseTextAction, Action)
 CC_IMPLEMENT_DYNCREATE(StoreCharCodeAction, BaseTextAction)

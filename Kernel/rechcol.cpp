@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
 #include "cxfrec.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_DYNAMIC(ColourRecordHandler,CamelotRecordHandler);

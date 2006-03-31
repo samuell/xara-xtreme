@@ -196,7 +196,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camprofile.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // Declare all the classes in this file and ask for memory tracking

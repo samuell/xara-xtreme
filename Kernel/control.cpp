@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "textops.h"
 
 // source-safe version number.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // dynamic runtime type info.
 CC_IMPLEMENT_DYNAMIC(NodeController, NodeGroup)

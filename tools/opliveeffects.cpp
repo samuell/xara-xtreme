@@ -143,7 +143,7 @@ CC_IMPLEMENT_DYNAMIC(OpFeatherEffectParam, OpLiveEffectParam);
 CC_IMPLEMENT_DYNCREATE(OpApplyFeatherEffect, OpLiveEffect);
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #define new CAM_DEBUG_NEW
 

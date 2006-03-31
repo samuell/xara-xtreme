@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"	// for line width & colour attributes.
 #include "ndclpcnt.h"	// for ClipView path constants.
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // dynamic class creation stuff.
 CC_IMPLEMENT_MEMDUMP(PathBecomeA, BecomeA)

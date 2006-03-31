@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class Node;
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE( OpMouldLibSel,SelOperation )
 CC_IMPLEMENT_DYNCREATE( OpMouldLib,UndoableOperation )

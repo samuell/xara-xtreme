@@ -156,7 +156,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 // Set things up so that the tool will be listed in the Dialog box
-DECLARE_SOURCE("$Revision: 671 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // These are still char* while we wait for resource technology to be developed for modules

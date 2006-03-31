@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "oilkeys.h"
 //#include "oilbtns.h"
 
-DECLARE_SOURCE("$Revision: 662 $");  
+DECLARE_SOURCE("$Revision$");  
 
 CC_IMPLEMENT_MEMDUMP(CmdControl, 	ListItem)
 //CC_IMPLEMENT_MEMDUMP(HotKeyO, 		CmdControl)

@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 #include "pathops.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE(CompoundNodeTreeFactory, CCObject)
 CC_IMPLEMENT_DYNCREATE(NodeCompound, NodeRenderableInk)

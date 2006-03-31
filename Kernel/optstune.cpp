@@ -121,7 +121,7 @@ CC_IMPLEMENT_DYNAMIC(TuneTab, OptionsTabs)
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 /* The range of the values allowed in the TuneUps Temporary Workspace field */
 #define MAX_TUNEUPS_MEMORY	0x7fff*1024

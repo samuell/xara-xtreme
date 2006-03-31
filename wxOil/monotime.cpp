@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "monotime.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 wxStopWatch		MonotonicTime::s_stopwatch;
 

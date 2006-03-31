@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class Spread;
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(OpFillNudge,Operation)
 CC_IMPLEMENT_DYNCREATE(FillGeometryNudger, AttrValueChange)

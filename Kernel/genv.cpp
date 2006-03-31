@@ -118,7 +118,7 @@ $Log: /wxCamelot/Kernel/genv.cpp $
 #include "gmould.h"
 #include "genv.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(GEnvelope, GMould)
 CC_IMPLEMENT_DYNAMIC(GEnvelope2x2, GMould)

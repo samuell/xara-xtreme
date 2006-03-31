@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docvmsg.h"
 #include "colmsg.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Declare stuff for the memory tracking
 CC_IMPLEMENT_DYNCREATE( FreeHandInfoBarOp, InformationBarOp )

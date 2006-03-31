@@ -132,7 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshattr.h"
 #include "slicehelper.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(NodeBlend,NodeGroup)
 CC_IMPLEMENT_DYNCREATE(InitBlendAction,Action)

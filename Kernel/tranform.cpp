@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tranform.h"
 
 // file version number
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_DYNAMIC(TransformBase, CCObject)

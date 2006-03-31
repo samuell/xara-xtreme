@@ -117,7 +117,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 // Version information.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 

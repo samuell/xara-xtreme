@@ -220,7 +220,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Code version.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // This table associates all the non-common and non-error/warning dialogues in Camelot with

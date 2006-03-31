@@ -146,7 +146,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sginit.h"
 #include "sgname.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNCREATE(NameGallery, SuperGallery)

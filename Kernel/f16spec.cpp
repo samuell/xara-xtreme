@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "errors.h"
 //#include "andy.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #define	TORADIANS(x)	((x)/180.0*PI)
 

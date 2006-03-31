@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Set things up so that the tool will be listed in the Dialog box
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Declare the class
 CC_IMPLEMENT_DYNCREATE(OpRetroFit, SelOperation)

@@ -118,7 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "viewmod.h"
 //#include "zoomres.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // This list is always needed as RSN DLLs will hold resources even if the tool code
 // itself is in the .EXE

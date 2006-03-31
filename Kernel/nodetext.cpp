@@ -141,7 +141,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "ai_epsrr.h"
 
-DECLARE_SOURCE("$Revision: 662 $")
+DECLARE_SOURCE("$Revision$")
 
 CC_IMPLEMENT_DYNAMIC(VisibleTextNode, BaseTextClass)
 CC_IMPLEMENT_DYNAMIC(CaretNode, VisibleTextNode)

@@ -142,7 +142,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeliveeffect.h"
 
 // Revision Number
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // The Names of the tools
 TCHAR*		GradFillTool::FamilyName = _T("Fill Tools");

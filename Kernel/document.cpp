@@ -157,7 +157,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ralphvw.h"
 #include "vstate.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(Document, BaseDocument)
 CC_IMPLEMENT_DYNAMIC(DocChangingMsg, Msg)

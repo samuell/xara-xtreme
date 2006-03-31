@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sgrmfile.h"	// LibSettingsListItem
 
 // Code version.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(SaveRegistryEntries, CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_MEMDUMP(LoadRegistryEntries, CC_CLASS_MEMDUMP)

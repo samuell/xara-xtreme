@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opfeathr.h"
 #include "appprefs.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Declare stuff for the memory tracking
 CC_IMPLEMENT_DYNCREATE( LiveEffectsInfoBarOp, InformationBarOp )

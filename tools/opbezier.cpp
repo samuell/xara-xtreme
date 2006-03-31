@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rik.h"
 #include "bubbleid.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE(OpSelectPathPoints, UndoableOperation)
 CC_IMPLEMENT_DYNCREATE(OpInsertFloater, UndoableOperation)

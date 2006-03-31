@@ -126,7 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tmpltatr.h"		//For TemplateAttribute
 
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 CC_IMPLEMENT_DYNCREATE(SelectorInfoBarOp, InformationBarOp)
 
 #define new CAM_DEBUG_NEW

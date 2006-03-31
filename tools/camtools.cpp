@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dll_lib.h"
 #include "viewmod.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // Base new DLLs on this file.

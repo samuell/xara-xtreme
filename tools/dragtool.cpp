@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "selector.h"
 #include "spread.h"
 
-DECLARE_SOURCE( "$Revision: 662 $" );
+DECLARE_SOURCE( "$Revision$" );
 
 // Run-time type checking etc etc
 CC_IMPLEMENT_MEMDUMP(DragTool, Tool_v1)

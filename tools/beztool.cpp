@@ -153,7 +153,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "slicehelper.h"
 #include "opbevel.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP( BezierTool, Tool_v1 )
 CC_IMPLEMENT_DYNCREATE( BezToolInfoBarOp, InformationBarOp )

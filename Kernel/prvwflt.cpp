@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "view.h"
 						
 // This is not compulsory, registers the correct version of your file in the .exe
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(PreviewFilter, Filter)
 

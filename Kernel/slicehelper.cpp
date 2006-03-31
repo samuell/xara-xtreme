@@ -144,7 +144,7 @@ extern INT32 g_NoOfBarsBeforeImport;
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW

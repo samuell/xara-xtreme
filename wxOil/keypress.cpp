@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dragmgr.h"
 #include "unicdman.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(KeyPressSysMsg,CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_MEMDUMP(KeyPress,		CC_CLASS_MEMDUMP)

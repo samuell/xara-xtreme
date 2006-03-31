@@ -159,7 +159,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(OpSlice, OpMenuImport);
 

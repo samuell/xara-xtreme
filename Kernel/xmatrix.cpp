@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "xmatrix.h"
 #include "matrix.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // (this source was based on the 1.5 revision of matrix.cpp done by Mario)
 

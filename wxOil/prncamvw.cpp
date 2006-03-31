@@ -123,7 +123,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prnmks.h"
 #include "opbevel.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #define new CAM_DEBUG_NEW
 #define USERNAME "Mike"

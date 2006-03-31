@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cmxrendr.h"	// for CMXRenderRegion
 //#include "cmxexdc.h"	// for CMXExportDC
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // dynamic class creation stuff.
 CC_IMPLEMENT_DYNCREATE(NodeClipViewController, NodeGroup)

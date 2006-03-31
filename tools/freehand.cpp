@@ -163,7 +163,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layer.h"
 
 // Set things up so that the tool will be listed in the Dialog box
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // These are still TCHAR* while we wait for resource technology to be developed for modules

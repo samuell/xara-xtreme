@@ -135,7 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "range.h"
 
 // declare this files version number to the program and give our name in memory dumps
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(TransOperation, UndoableOperation)
 
 // Declare smart memory handling in Debug builds

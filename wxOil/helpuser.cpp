@@ -127,7 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Code version.
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 
 // We need to use the correct filename parsing functions, depending on whether we are

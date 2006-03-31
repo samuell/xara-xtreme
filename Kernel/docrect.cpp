@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docrect.h"
 #include "ensure.h"
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 /*
   $Log: rect.ctt $
@@ -409,7 +409,7 @@ Initial revision
 
 */
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #include "userrect.h"
 #include "oilrect.h"

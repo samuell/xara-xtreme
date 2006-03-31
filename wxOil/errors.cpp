@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camprofile.h"
 
 // Put the source file into the revision list
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 #if 0
 #ifdef _DEBUG

@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "mario.h"		// for _R(IDE_NOMORE_MEMORY)
 
-DECLARE_SOURCE("$Revision: 662 $");
+DECLARE_SOURCE("$Revision$");
 
 // dynamic class creation stuff.
 CC_IMPLEMENT_DYNCREATE(NodeClipView, NodeRenderableInk)
