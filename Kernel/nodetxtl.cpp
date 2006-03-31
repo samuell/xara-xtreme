@@ -1775,9 +1775,13 @@ BOOL FormatRegion::Init(NodeRenderableInk* pFirstNode)
 		return TRUE;
 
 	CCAttrMap		   *pAttribMap = new CCAttrMap(30);
-	BOOL				FoundAttributes = pFirstNode->FindAppliedAttributes(pAttribMap);
-	if (pAttribMap == NULL)
+	if (pAttribMap == NULL) return FALSE;
+
+	if (!pFirstNode->FindAppliedAttributes(pAttribMap))
+	{
+		delete pAttribMap;
 		return FALSE;
+	}
 
 	CCAttrMap::iterator	pos = pAttribMap->GetStartPosition();
 	CCAttrMap::iterator	end = pAttribMap->GetEndPosition();
@@ -1814,7 +1818,7 @@ BOOL FormatRegion::GetCharMetrics(CharMetrics* pCharMetrics, WCHAR ch)
 	// get the char metrics for the specified character
 	wxDC			   *pDC = m_pFormatDC.get();
 	CharDescription		FontDesc( FONTEMCHAR, RR_TXTFONTTYPEFACE(), RR_TXTBOLD(), RR_TXTITALIC() );
-	if( FONTMANAGER->GetCharMetrics( m_pFormatDC.get(), ch, FontDesc, pCharMetrics ) == FALSE )
+	if( FONTMANAGER->GetCharMetrics( pDC, ch, FontDesc, pCharMetrics ) == FALSE )
 		return FALSE;
 
 	// get x/y scale factors and apply then to the default metrics found
