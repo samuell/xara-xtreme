@@ -220,6 +220,8 @@ PORTNOTE("text","ATM never OK")
 			return FALSE;
 #endif
 			break;
+		default:
+			break;
 	}
 	ERROR3("Unknown font class passed to OILFontMan::IsOkToCall()");
 	return FALSE;
@@ -480,6 +482,8 @@ PORTNOTE("text","ATM deactivated")
 			return NULL;
 #endif
 			break;
+		default:
+			break;
 	}
 	ERROR3("OILFontMan::CreateNewFont() - Unknown font class");
 	return NULL;
@@ -526,6 +530,8 @@ PORTNOTE("text","ATM deactivated")
 #else
 			return NULL;
 #endif
+			break;
+		default:
 			break;
 	}
 	ERROR3("OILFontMan::CreateNewFont() - Unknown font class");
@@ -827,7 +833,8 @@ PORTNOTE("text","ATM deactivated")
 #endif
 			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOFTOUTLINE));
 			break;
-
+		default:
+			break;
 	}
 	ERROR3IF(Success==FALSE,"Unknown font class in OILFontMan::GetCharPath");
 	return Success;

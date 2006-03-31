@@ -5905,8 +5905,6 @@ BOOL RenderRegion::WriteNewLine ( void )
 
 BOOL RenderRegion::GetAttrdCharBounds(DocRect* pBounds, WCHAR ch)
 {
-	PORTNOTETRACE("text","RenderRegion::GetAttrdCharBounds - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pBounds==NULL,FALSE,"RenderRegion::GetAttrdCharBounds() - pBounds==NULL");
 
 	// get defualt bounds from cache
@@ -5924,9 +5922,6 @@ BOOL RenderRegion::GetAttrdCharBounds(DocRect* pBounds, WCHAR ch)
 		pBounds->MakeEmpty();
 
 	return ok;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -5945,8 +5940,6 @@ BOOL RenderRegion::GetAttrdCharBounds(DocRect* pBounds, WCHAR ch)
 
 Path* RenderRegion::CreateCharPath(WCHAR ch, Matrix* pMatrix)
 {
-	PORTNOTETRACE("text","RenderRegion::CreateCharPath - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// get overall matrix - attribute matrix concatenated with given matrix if supplied
 	Matrix matrix;
 	if (GetCharAttributeMatrix(&matrix)==FALSE)
@@ -5974,9 +5967,6 @@ Path* RenderRegion::CreateCharPath(WCHAR ch, Matrix* pMatrix)
 	}
 
 	return pPath;
-#else
-	return NULL;
-#endif
 }
 
 
@@ -6688,7 +6678,7 @@ void RenderRegion::ColourCorrectBitmap(BitmapFillAttribute* Fill, BITMAPINFO *In
 										   256, *Palette, Fill->GetProfile());
 		return;
 	}
-
+PORTNOTE("other", "RenderRegion: no colour correction for paletted bitmaps");
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// --- If it's a paletted bitmap, then we just colour-correct the palette
 	if (Info->bmiHeader.biBitCount <= 8)

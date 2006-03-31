@@ -708,12 +708,9 @@ void TextLine::GetDebugDetails(StringBase* Str)
 
 BOOL TextLine::ReCacheMetrics(FormatRegion* pFormatRegion)
 {
-	PORTNOTETRACE("text","TextLine::ReCacheMetrics - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	SetJustification( pFormatRegion->GetJustification());
 	SetLineSpacing(   pFormatRegion->GetLineSpacing());
 	SetLineSpaceRatio(pFormatRegion->GetLineSpaceRatio());
-#endif
 	return TRUE;
 }
 
@@ -1705,8 +1702,6 @@ BOOL TextLine::WriteEndChildRecordsNative(BaseCamelotFilter* pFilter)
 /////////////////////////////////////////////////////////////////////////////////////////////
 // FormatRegion
 
-PORTNOTE("text","Removed FormatRegion impl.")
-#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 >	FormatRegion::FormatRegion()
@@ -1776,7 +1771,7 @@ BOOL FormatRegion::Init(NodeRenderableInk* pFirstNode)
 	StartRender();
 
 	// Get the attributes
-	if (FirstNode==NULL)
+	if (pFirstNode==NULL)
 		return TRUE;
 
 	CCAttrMap		   *pAttribMap = new CCAttrMap(30);
@@ -1866,5 +1861,3 @@ MILLIPOINT FormatRegion::GetCharsKerning(WCHAR chLeft, WCHAR chRight)
 
 	return kern;
 }
-
-#endif

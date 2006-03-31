@@ -286,8 +286,8 @@ void BaseTextClass::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
 
 BOOL BaseTextClass::ReCacheNodeAndDescendantsMetrics(FormatRegion* pFormatRegion)
 {
-	PORTNOTETRACE("text","BaseTextClass::ReCacheNodeAndDescendantsMetrics - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+       PORTNOTE("text","BaseTextClass::ReCacheNodeAndDescendantsMetrics - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	BOOL ok=TRUE;
 	if (NodeOrDescendantModifiedByOp())
 	{
@@ -313,7 +313,7 @@ BOOL BaseTextClass::ReCacheNodeAndDescendantsMetrics(FormatRegion* pFormatRegion
 
 	return ok;
 #else
-	return false;
+	return FALSE;
 #endif
 }
 
@@ -1986,7 +1986,7 @@ TextLine* TextStory::FindLastLine() const
 
 void TextStory::RenderObjectBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (pRenderRegion != NULL)
 	{
    		pRenderRegion->SetLineColour(COLOUR_NONE);
@@ -2011,7 +2011,7 @@ void TextStory::RenderObjectBlobs(RenderRegion* pRenderRegion)
 
 void TextStory::RenderTinyBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (pRenderRegion != NULL)
 	{
    		pRenderRegion->SetLineColour(COLOUR_NONE);
@@ -2057,7 +2057,7 @@ DocRect TextStory::GetBlobBoundingRect()
 
 DocCoord TextStory::GetBlobPosAndSize(INT32* pSize)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Get the bounds of the text story
 	DocRect StoryBounds=GetBoundingRect();
 
@@ -2687,8 +2687,8 @@ VisibleTextNode* TextStory::GetSelectionEnd(BOOL* pDirection)
 
 BOOL TextStory::FormatAndChildren(UndoableOperation* pUndoOp, BOOL UseNodeFlags, BOOL WordWrap)
 {
-	PORTNOTETRACE("text","TextStory::FormatAndChildren - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+       PORTNOTE("text","TextStory::FormatAndChildren - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	// if whole story is affected, just flag all children as 'ModifiedByOp'
 	if (UseNodeFlags==FALSE)
 		FlagNodeAndDescendantsModifiedByOpAndParentsHaveDescendantModifiedByOp();

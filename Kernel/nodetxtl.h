@@ -129,8 +129,6 @@ class FormatRegion : public RenderRegion
 {
 	CC_DECLARE_DYNAMIC(FormatRegion)
 
-PORTNOTE("text","FormatRegion stripped")
-#ifndef EXCLUDE_FROM_XARALX
 	FormatRegion();
 	~FormatRegion();										   
 
@@ -181,7 +179,6 @@ public:
 
 private:
 	std::auto_ptr<wxDC>	m_pFormatDC;
-#endif
 };
 
 

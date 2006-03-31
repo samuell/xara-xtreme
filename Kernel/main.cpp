@@ -352,8 +352,7 @@ PORTNOTE("other","Removed ATMInstall usage")
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	HotKey::Deinit(); 
 #endif
-PORTNOTE("text","Removed FontCache usage")
-#ifndef EXCLUDE_FROM_XARALX
+#ifndef DISABLE_TEXT_RENDERING
 	FontCache::DeInit();
 #endif
 #ifndef EXCLUDE_GALS

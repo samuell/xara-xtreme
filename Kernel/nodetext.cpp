@@ -1561,7 +1561,7 @@ DocRect AbstractTextChar::GetImagemapRectForAdjacentChars(BOOL fForwards)
 
 void AbstractTextChar::RenderObjectBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	Path* pPath=CreateMetricsRectPath();
 	if (pPath!=NULL && pRenderRegion!=NULL)
 	{
@@ -1587,7 +1587,7 @@ void AbstractTextChar::RenderObjectBlobs(RenderRegion* pRenderRegion)
 
 void AbstractTextChar::RenderTinyBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	Path* pPath=CreateMetricsRectPath();
 	if (pPath!=NULL && pRenderRegion!=NULL)
 	{
@@ -1744,8 +1744,8 @@ Path* AbstractTextChar::CreateMetricsRectPath()
 
 BOOL AbstractTextChar::ReCacheMetrics(FormatRegion* pFormatRegion)
 {
-	PORTNOTETRACE("text","AbstractTextChar::ReCacheMetrics - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","AbstractTextChar::ReCacheMetrics - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	// get metrics for this char with current attribute stack
 	CharMetrics metrics;
 	if (pFormatRegion->GetCharMetrics(&metrics,GetUnicodeValue())==FALSE)
@@ -2004,10 +2004,11 @@ void TextChar::Render(RenderRegion* pRenderRegion)
 
 BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 {
-	PORTNOTETRACE("text","TextChar::RenderCore - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","TextChar::RenderCore - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	ERROR2IF(pRenderRegion == NULL, FALSE, "TextChar::RenderCore() - pRenderRegion == NULL");
 
+	// TRACEUSER("wuerthne", _T("TextChar::RenderCore %04x"), GetUnicodeValue());
 	// If the render region is being used for hit detection then render bounds
 	// BODGE TEXT - should be in the render region RenderChar function
 	if (pRenderRegion->IsHitDetect() &&
@@ -2028,6 +2029,9 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 	if (GetStoryAndCharMatrix(&matrix) == FALSE) return FALSE;
 
 	// render the character through the matrix with current attributes in RenderRegion
+
+PORTNOTE("other", "printing and AI export deactivated")
+#ifndef EXCLUDE_FROM_XARALX
 	// If the render region is a printing region then maybe print as shapes.
 	if (pRenderRegion->IsPrinting())
 	{
@@ -2060,6 +2064,7 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 			}
 		}
 	}
+#endif
 
 	// Render into the given region region as characters
 	BOOL Result =  pRenderRegion->RenderChar(GetUnicodeValue(), &matrix);
@@ -2087,8 +2092,9 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 #endif	// EXPORT_TEXT
 
 	return Result;
+#else
+	return FALSE;
 #endif
-	return false;
 }
 
 
@@ -2103,6 +2109,7 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 
 void TextChar::RenderEorDrag(RenderRegion* pRenderRegion)
 {
+PORTNOTE("text", "so far, enabling this crashes when a text object is moved and an EOR display is attempted")
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// Before rendering the character we need to render it's applied *TEXT* attributes
 	// into the render region as EOR drag render regions dosen't maintain an attribute stack
@@ -2132,7 +2139,7 @@ void TextChar::RenderEorDrag(RenderRegion* pRenderRegion)
 		pRenderRegion->RestoreContext();
 	}
 
-	delete pAttribMap;
+	if (pAttribMap!=NULL) delete pAttribMap;
 #endif
 }
 
@@ -2196,8 +2203,8 @@ BOOL TextChar::ExportRender ( RenderRegion *pRegion )
 
 BOOL TextChar::CreateNodePath(NodePath** ppNodePath, FormatRegion* pFormatRegion)
 {
-	PORTNOTETRACE("text","TextChar::CreateNodePath - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","TextChar::CreateNodePath - do nothing");
+#ifndef DISABLE_TEXT_RENDERING
 	ERROR2IF(pFormatRegion==NULL,FALSE,"TextChar::CreateNodePath() - pFormatRegion==NULL");
 	ERROR2IF(   ppNodePath==NULL,FALSE,"TextChar::CreateNodePath() - ppNodePath==NULL");
 
@@ -2256,7 +2263,7 @@ BOOL TextChar::Snap(DocCoord* pDocCoord)
 	BOOL Snapped = FALSE;
 
 	PORTNOTETRACE("text","TextChar::Snap - do nothing");
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	MILLIPOINT SnapDist    = CSnap::GetSnapDist();
 	MILLIPOINT SqrSnapDist = SnapDist*SnapDist;
 
@@ -2422,8 +2429,6 @@ BOOL TextChar::CanWriteChildrenNative(BaseCamelotFilter *pFilter)
 ********************************************************************************************/
 MILLIPOINT TextChar::GetAutoKernSize(FormatRegion* pFormatRegion)
 {
-	PORTNOTETRACE("text","TextChar::GetAutoKernSize - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	TextChar* pNextTC = FindNextTextCharInStory();
 
 	if (pNextTC)
@@ -2514,9 +2519,6 @@ MILLIPOINT TextChar::GetAutoKernSize(FormatRegion* pFormatRegion)
 	}
 	else
 		return 0; // No kern
-#else
-	return 0;
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -3400,7 +3402,7 @@ void EOLNode::RenderObjectBlobs(RenderRegion* pRenderRegion)
 
 void EOLNode::RenderTinyBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	RenderObjectBlobs(pRenderRegion);
 #endif
 }
@@ -3418,7 +3420,7 @@ void EOLNode::RenderTinyBlobs(RenderRegion* pRenderRegion)
 
 BOOL EOLNode::GetBlobPath(Path* pPath)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pPath==NULL, FALSE, "Path pointer was NULL");
 	TextLine* pParentLine = this->FindParentLine();
 	ERROR2IF(pParentLine==NULL, FALSE, "EOLNode didn't have a parent TextLine");

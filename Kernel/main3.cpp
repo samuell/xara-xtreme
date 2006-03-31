@@ -287,8 +287,12 @@ PORTNOTE("other","Removed another lot of initialization")
 
 			AttrFillGeometry::Init() &&			// Initialise the fill editing operations
 			EPSFilter::InitPrefs() &&			// Initialise default font mappings and
-												// EPS export prefs		
+												// EPS export prefs
+#endif
+#ifndef DISABLE_TEXT_RENDERING
 			FontCache::Init() &&
+#endif
+#ifndef EXCLUDE_FROM_XARALX
 			TunedMemory::Init()	&&				// declare prefs for the memory manager
 
 			OILRuler::Init() &&					// set the ruler widths depending on .ini font settings

@@ -1061,8 +1061,8 @@ BOOL FontComponent::ReadFontTrueType(CXaraFileRecord *pRec)
 
 	if (ok) ok = pRec->ReadCCPanose( &(pItem->mPanoseNumber) );
 
-	PORTNOTETRACE("text","FontComponent::ReadFontTrueType - removed ImportCacheFont call");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","FontComponent::ReadFontTrueType - removed ImportCacheFont call");
+#ifndef DISABLE_TEXT_RENDERING
 	if (ok) ok = ImportCacheFont(pItem);	// do all our clever matching
 
 	if (ok) pFontList->AddTail(pItem);
@@ -1094,8 +1094,8 @@ BOOL FontComponent::ReadFontATM(CXaraFileRecord *pRec)
 
 	if (ok) ok = pRec->ReadCCPanose( &(pItem->mPanoseNumber) );
 
-	PORTNOTETRACE("text","FontComponent::ReadFontATM - removed ImportCacheFont call");
-#ifndef EXCLUDE_FROM_XARALX
+	PORTNOTE("text","FontComponent::ReadFontATM - removed ImportCacheFont call");
+#ifndef DISABLE_TEXT_RENDERING
 	if (ok) ok = ImportCacheFont(pItem);	// do all our clever matching
 
 	if (ok) pFontList->AddTail(pItem);
@@ -1499,8 +1499,8 @@ BOOL FontComponent::ImportCacheFont(FontComponentListItem *pItem)
 		// the font has been deinstalled during this session of Camelot. So
 		// we find a replacement font now...
 
-		PORTNOTETRACE("text","FontComponent::ImportCacheFont - Removed FindClosestFont usage");
-#ifndef EXCLUDE_FROM_XARALX
+		PORTNOTE("text","FontComponent::ImportCacheFont - Removed FindClosestFont usage");
+#ifndef DISABLE_TEXT_RENDERING
 		CachedFontItem *pCachedFontItem = pFontManager->GetFont(FontHandle);
 
 		WORD BestFontHandle = pFontManager->FindClosestFont(pItem->mPanoseNumber);
@@ -1516,8 +1516,8 @@ BOOL FontComponent::ImportCacheFont(FontComponentListItem *pItem)
 
 	if (FontHandle==ILLEGALFHANDLE)
 	{
-#ifndef EXCLUDE_FROM_XARALX
-		PORTNOTETRACE("text","FontComponent::ImportCacheFont - Removed FindClosestFont usage");
+		PORTNOTE("text","FontComponent::ImportCacheFont - Removed FindClosestFont usage");
+#ifndef DISABLE_TEXT_RENDERING
 
 			// Failed again, so we try to find the closest font using PANOSE font matching.
 		WORD BestFontHandle = pFontManager->FindClosestFont(pItem->mPanoseNumber);
@@ -1537,7 +1537,7 @@ BOOL FontComponent::ImportCacheFont(FontComponentListItem *pItem)
 	
 	if (FontHandle==ILLEGALFHANDLE)
 	{
-		// something has gone wrong. camplain, and fix the error
+		// something has gone wrong. complain, and fix the error
 		ERROR2(FALSE, "Unable to find a font!.");
 		FontHandle = DEFAULTHANDLE;
 	}
