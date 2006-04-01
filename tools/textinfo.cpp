@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fontman.h"
 #include "fontdrop.h"
 #include "fontbase.h"
-#include "sgfonts.h"
+//#include "sgfonts.h"
 #include "localenv.h"
 #include "unicdman.h"
 #include "docview.h"
@@ -182,7 +182,10 @@ Document*         TextInfoBarOp::pDoc             = NULL;
 CommonAttrSet 	  TextInfoBarOp::CommonAttrsToFindSet; 	// A set which will contain all attribute types
 														// that we need to find common attributes for
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 FontDropDown	*TextInfoBarOp::NameDropDown = NULL;	// Font name drop-down list support for the font list and
+#endif
 
 String_64 	TextInfoBarData::FontName;
 FontClass 	TextInfoBarData::FontType;
@@ -250,6 +253,8 @@ TextInfoBarData::TextInfoBarData()
 
 BOOL TextInfoBarOp::IsDisplayFontInstalled()
 {
+PORTNOTE("text", "Removed IsDisplayFontInstalled");
+#ifndef EXCLUDE_FROM_XARALX
 	// if we are running on a DBCS OS then we don't use our display font at all.
 	if (UnicodeManager::IsDBCSOS())
 		return TRUE;
@@ -280,6 +285,9 @@ BOOL TextInfoBarOp::IsDisplayFontInstalled()
 	// is it one of ours ?
 	String_32 CCSmall(_R(IDS_FONTS_EDITFIELDSMALL)); // "CCSMALL"
 	return _tcsncmp(buff, (TCHAR *)CCSmall, 64)==0;
+#else
+	return FALSE;
+#endif
 }
 
 
@@ -331,12 +339,15 @@ TextInfoBarOp::~TextInfoBarOp()
 	// DeleteFontCache();
 	pTextInfoBar= NULL;
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 	// Delete our drop-down font list
 	if (NameDropDown != NULL)
 	{
 		delete NameDropDown;
 		NameDropDown = NULL;
 	}
+#endif
 
 }
 
@@ -702,10 +713,13 @@ void TextInfoBarOp::UpdateGadgets()
 	if(!pTextInfoBar->HasWindow())
 		return ;
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 	// Font Name
 	NameDropDown->SetTopFontName(&InfoData.FontName, InfoData.FontType, FALSE);
 	FontDropItem Dummy(InfoData.FontName, InfoData.FontType);
 	NameDropDown->SetSelection(&Dummy);
+#endif
 
 	// Kerning
 	pTextInfoBar->SetLongGadgetValue(_R(IDC_KERN_EDIT_X),InfoData.HorizontalKern,0,-1);
@@ -909,10 +923,13 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 
  	if (result == SelRange ::ATTR_MANY)
 	{
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 		String_64 Multiple(_R(IDS_TEXTTOOL_MULTIPLE));
 		NameDropDown->SetTopFontName(&Multiple, FC_UNDEFINED, TRUE);
 		ForceUpdate = TRUE;
 		InfoData.FontName = _R(IDS_TEXTINFO_MULTIPLE); // "Multiple" just to invalidate this field
+#endif
 	}
 	else 
 	{
@@ -969,13 +986,15 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 				else
 					ItalicChanged = FALSE;
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 				NameDropDown->SetTopFontName(&FontName, InfoData.FontType, Deselect);
 				if(!Deselect)
 				{
 					FontDropItem Dummy(InfoData.FontName, InfoData.FontType);
 					NameDropDown->SetSelection(&Dummy);
 				}
-
+#endif
 				ForceUpdate = !ThisData->IsValid();
  			}
  		}
@@ -1424,12 +1443,12 @@ void TextInfoBarOp::EnableGadgets(BOOL Enable)
 	pTextInfoBar->EnableGadget(_R(IDC_TRACKINGBIT) ,Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_KERNINGBIT) ,Enable);
 
-	pTextInfoBar->EnableGadget(_R(IDC_TEXT),Enable);
+//	pTextInfoBar->EnableGadget(_R(IDC_TEXT),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_FONT_COMBO),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_POINT_COMBO),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_BOLDBUTTON),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_ITALICBUTTON),Enable);
-	pTextInfoBar->EnableGadget(_R(IDC_UNDERLINEBUTTON),Enable);
+//	pTextInfoBar->EnableGadget(_R(IDC_UNDERLINEBUTTON),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_ASPECTBIT),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_ASPECTEDIT),Enable);
 	pTextInfoBar->EnableGadget(_R(IDC_JUSTIFYLEFT),Enable);
@@ -1638,9 +1657,12 @@ BOOL TextInfoBarOp::SetCurrentFontName(String_64 * Name, FontClass Type, BOOL Ca
 	if (Cache)
 		FONTMANAGER->CacheNamedFont(Name, Type);
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 	NameDropDown->SetTopFontName(Name, Type, FALSE);
 	FontDropItem Dummy(*Name, Type);
 	NameDropDown->SetSelection(&Dummy);
+#endif
 
 	return TRUE;
 }
@@ -1947,6 +1969,8 @@ void TextInfoBarOp::DoFontChange()
 	if (pFontChange!=NULL)
 		pFontChange->DoAffectFontChange();
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 	// Update the text info bar font drop list (if it's there)
 	if(NameDropDown != NULL)
 	{
@@ -1955,6 +1979,7 @@ void TextInfoBarOp::DoFontChange()
 		FontDropItem Dummy(InfoData.FontName, InfoData.FontType);
 		NameDropDown->SetSelection(&Dummy);
 	}
+#endif
 
 	// Update the actual combobox if the texttool is active
 	if(pTextInfoBar!= NULL &&pTextInfoBar->HasWindow())
@@ -2502,6 +2527,8 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 			{
 				if(Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT)
 				{
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 					// Handle selections in the font name menu.
 					INT32 SelIndex = GetSelectedValueIndex(_R(IDC_FONT_COMBO));
 					
@@ -2523,6 +2550,7 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 							}			 
 						}
 					}
+#endif
 				}
 			}
 		}
@@ -2571,7 +2599,8 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 				CCamView* pOilView = msg->pOldDocView->GetConnectionToOilView();
 				BlobManager* pBlobManager = GetApplication()->GetBlobManager();
 
-				if (pOilView!=NULL && pOilView->IsScreenCamView())
+PORTNOTE("text", "Removed IsScreenCamView() test");
+				if (pOilView!=NULL /*&& pOilView->IsScreenCamView()*/)
 					pBlobManager->RenderToolBlobsOff(pTextTool, msg->pOldDocView->GetVisibleSpread(), NULL);
 			}
 		}
@@ -2699,6 +2728,8 @@ void TextInfoBarOp::InitControls()
 	// current info bar public for callbacks argh..
 	pTextInfoBar = this;
 
+PORTNOTE("text", "Removed custom dropdown");
+#ifndef EXCLUDE_FROM_XARALX
 	// Only enum the fonts if it's the first time - should respond to font change messages now !
 	if (NameDropDown == NULL)
 	{
@@ -2710,6 +2741,7 @@ void TextInfoBarOp::InitControls()
 		NameDropDown->Init((CWindowID)WindowID, _R(IDC_FONT_COMBO));
 		NameDropDown->FillInFontList();
 	}
+#endif
 
 	pTextInfoBar->SetComboListLength(_R(IDC_FONT_COMBO));
  	UpdateGadgets();

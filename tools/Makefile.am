@@ -12,5 +12,5 @@ libTools_a_SOURCES = opdrbrsh.cpp zoomtool.cpp zoomops.cpp blndtool.cpp opbevel.
 	rectangl.cpp regshape.cpp eliptool.cpp oprshape.cpp filltool.cpp beztool.cpp \
 	opbezier.cpp opshadow.cpp shadtool.cpp shadinfo.cpp freeinfo.cpp opfree.cpp opdrbrsh.cpp \
 	freehand.cpp opretro.cpp moldtool.cpp bevinfo.cpp bevtool.cpp cntrtool.cpp opcntr.cpp \
-	pentool.cpp
+	pentool.cpp texttool.cpp textinfo.cpp textops.cpp
 AM_CXXFLAGS = $(XARAFLAGS)

@@ -610,7 +610,7 @@ public:
 	static ActionCode Init( Operation* pOp,
 							ActionList* pActionList,
 							TextStory* pStory,
-							bool NewIsAutoKerning);
+							BOOL NewIsAutoKerning);
 
 protected:
 	TextStory*	pTextStory;

@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "regshape.h"
 #include "rectangl.h"
 #include "moldtool.h"
-//#include "texttool.h"
+#include "texttool.h"
 #include "shadtool.h"	// shadow tool header, Olivier 29/10/96
 //#include "blnktool.h"
 #include "cntrtool.h"  // contour tool, DavidM 24/8/99
@@ -166,7 +166,7 @@ DECLARE_SOURCE("$Revision$");
 
 BOOL ViewModule::Init()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 #ifdef STANDALONE
 	TextTool* pTextTool = new TextTool();
 	if (pTextTool)
@@ -298,11 +298,8 @@ PORTNOTE("other","Removed blank tool usage")
 #endif
 #endif	//WEBSTER-Martin-06/11/96-end
 
-PORTNOTE("other","Removed text tool usage")
-#ifndef EXCLUDE_FROM_XARALX
 		case 16:
 			return IN_DLL(TextTool);
-#endif
 
 #ifndef NO_ADVANCED_TOOLS
 PORTNOTE("other","Removed effects tool usage")

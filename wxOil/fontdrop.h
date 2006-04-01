@@ -165,6 +165,7 @@ class FontDropEnumFont : public OILEnumFonts
 
 ********************************************************************************************/
 
+#ifndef EXCLUDE_FROM_XARALX
 class FontDropDown : public DropDown
 {
 friend class DialogManager;
@@ -232,6 +233,7 @@ protected:
 	BOOL RedrawingTopItem;
 
 };
+#endif
 
 /********************************************************************************************
 
@@ -245,6 +247,7 @@ protected:
 				document rather than the fonts avalaible in the system.
 ********************************************************************************************/
 
+#ifndef EXCLUDE_FROM_XARALX
 class DocumentFontDropDown : public FontDropDown
 {
 
@@ -261,6 +264,6 @@ public:
 	BOOL FillInFontList(Document * WorkDoc);
 
 };
-
+#endif
 
 #endif

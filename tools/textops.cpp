@@ -50,7 +50,7 @@ the GNU General Public License.
 SCOPE OF LICENSE
 ----------------
 
-This license applies to this program (XaraLX) and its constituent source
+This license applies to this program () and its constituent source
 files only, and does not necessarily apply to other Xara products which may
 in part share the same code base, and are subject to their own licensing
 terms.
@@ -152,6 +152,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "slicehelper.h"
 #include "becomea.h"
 #include "opliveeffects.h"
+#include "ophist.h"
 
 extern void Beep();
 
@@ -159,7 +160,7 @@ DECLARE_SOURCE( "$Revision$" );
 
 
 // CC_IMPLEMENTS for all classes
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)		
+#if !defined(EXCLUDE_FROM_RALPH)
 // Base class
 CC_IMPLEMENT_DYNCREATE(OpTextUndoable, SelOperation)
 
@@ -187,7 +188,7 @@ CC_IMPLEMENT_DYNCREATE(OpTextCaret, Operation)
 CC_IMPLEMENT_DYNCREATE(OpTextSelection, Operation)
 #endif
 CC_IMPLEMENT_DYNCREATE(OpApplyGlobalAffect, Operation)
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 CC_IMPLEMENT_DYNCREATE(OpApplyJustificationToStory, Operation)
 CC_IMPLEMENT_DYNCREATE(OpApplyLeftJustifyToStory, OpApplyJustificationToStory)
 CC_IMPLEMENT_DYNCREATE(OpApplyCentreJustifyToStory, OpApplyJustificationToStory)
@@ -198,7 +199,7 @@ CC_IMPLEMENT_DYNCREATE(OpAffectFontChange, OpApplyGlobalAffect)
 
 CC_IMPLEMENT_DYNCREATE(PrePostTextAction, Action)
 CC_IMPLEMENT_DYNCREATE(ToggleAutoKerningAction, Action)
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 CC_IMPLEMENT_DYNCREATE(PositionCaretAction, Action)
 CC_IMPLEMENT_DYNCREATE(StorePathIndentAction, Action)
 #endif
@@ -217,7 +218,7 @@ CC_IMPLEMENT_DYNCREATE(StorePathIndentAction, Action)
 // optimisation correctly
 #define SELECT_CARET_AND_CHARS
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 // statics
 VerticalInsetStore OpTextCaret::VertInset;
 
@@ -382,7 +383,8 @@ void OpCreateTextObject::DoImmediate( Spread* pSpread, DocCoord Anchor, NodePath
 						ok = FALSE;
 					else
 					{
-						pKern->SetValue(DocCoord(KernDist,0));
+						DocCoord kd(KernDist,0);
+						pKern->SetValue(kd);
 						ok = DoInsertNewNode(pKern,pTextStory->FindFirstChild(CC_RUNTIME_CLASS(TextLine)),
 																				FIRSTCHILD,FALSE,FALSE,FALSE);
 						// Also insert a zero kern so the caret appears in the correct
@@ -393,7 +395,8 @@ void OpCreateTextObject::DoImmediate( Spread* pSpread, DocCoord Anchor, NodePath
 								ok = FALSE;
 							else
 							{
-								pKern->SetValue(DocCoord(0,0));
+								DocCoord kd(0,0);
+								pKern->SetValue(kd);
 								ok = DoInsertNewNode(pKern,pTextStory->FindFirstChild(CC_RUNTIME_CLASS(TextLine)),
 																					FIRSTCHILD,FALSE,FALSE,FALSE);
 							}
@@ -1014,7 +1017,7 @@ void OpTextFormat::DoSwapCase()
 
 				ok = (Result != Failed);
 
-				if (ok && (Result != Unknown))
+				if (ok && (Result != UnknownType))
 				{
 					// Store the characters old UniCode value
 					ok = StoreCharCodeAction::DoStoreCharacterCode( this, &UndoActions, pSwapTextChar);
@@ -1815,6 +1818,8 @@ void OpFitTextToCurve::Do(OpDescriptor*)
 		Node* pCompoundAboveObj = NULL;
 		Node* pCompoundAboveText = NULL;
 
+PORTNOTE("other", "Removed live effects usage from text");
+#ifndef EXCLUDE_FROM_XARALX
 		// Find controller/effect stacks above the object and the text story
 		ListRange* pStack = EffectsStack::GetEffectsStackFromNode(pObject, FALSE, TRUE, TRUE);
 		if (pStack)
@@ -1836,6 +1841,7 @@ void OpFitTextToCurve::Do(OpDescriptor*)
 			OpLiveEffect::DoDeleteAllPostProcessors(this, pObject, TRUE, TRUE);
 			pCompoundAboveObj = NULL;
 		}
+#endif
 
 		// We want to translate the story so it sits near the start of the path
 		// so that attributes and effects are in roughly the right position.
@@ -1844,7 +1850,7 @@ void OpFitTextToCurve::Do(OpDescriptor*)
 		DocRect ObjectBounds = pObject->GetBoundingRect();
 		DocRect StoryBounds = pStory->GetBoundingRect();
 
-		Trans2DMatrix* pTransMat = new Trans2DMatrix(Matrix(ObjectBounds.lox-StoryBounds.lox, ObjectBounds.loy-StoryBounds.loy));
+		Trans2DMatrix* pTransMat = new Trans2DMatrix(Matrix(ObjectBounds.lo.x-StoryBounds.lo.x, ObjectBounds.lo.y-StoryBounds.lo.y));
 		ok = (pTransMat!=NULL);
 		if (ok)
 			ok = DoTransformNode(pStory, pTransMat);
@@ -1938,7 +1944,7 @@ BOOL OpFitTextToCurve::FindPathAndText(NodeRenderableInk** pPath, TextStory** pS
 {
 	OpState OpSt;
 
-	Range* pSelRange = GetApplication()->FindSelection(); 
+//	Range* pSelRange = GetApplication()->FindSelection(); 
 	*pStory = NULL;
 	*pPath= NULL;
 
@@ -2409,7 +2415,7 @@ ActionCode PrePostTextAction::Execute()
 	return Act;
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // OpTextCaret methods
@@ -3830,7 +3836,7 @@ BOOL OpTextSelection::InitialCaretPosition(VisibleTextNode* pSelectChar)
 	OpTextSelection::SelectionPos ClickPos = TO_LEFT;
 	if (pSelectChar->IsAnAbstractTextChar())
 		ClickPos = IsClickToLeftHalfOfChar((AbstractTextChar*)pSelectChar, StartPoint, TRUE);
-	ERROR3IF(ClickPos == NOT_NEAR,"Selection point was not near the character claimed")
+	ERROR3IF(ClickPos == NOT_NEAR,"Selection point was not near the character claimed");
 	if (ClickPos == TO_LEFT)
 		pSelectionStory->MoveCaretToCharacter(pSelectChar, PREV);
 	if (ClickPos == TO_RIGHT)
@@ -3886,7 +3892,7 @@ OpTextSelection::SelectionPos OpTextSelection::IsClickToLeftHalfOfChar(AbstractT
 		{
 			if (CharRect.ContainsCoord(ClickPoint) || MustChoose)
 			{
-				if (ClickPoint.x > ((CharRect.lox+CharRect.hix)/2))
+				if (ClickPoint.x > ((CharRect.lo.x+CharRect.hi.x)/2))
 					Result = TO_RIGHT;
 				else
 					Result = TO_LEFT;
@@ -3960,9 +3966,9 @@ BOOL OpTextSelection::ExtendSelection(VisibleTextNode* pClickChar, DocCoord Clic
 	}
 	else
 	{
-		BOOL CurrentForwardsDirection = TRUE;
+//		BOOL CurrentForwardsDirection = TRUE;
 		BOOL NewForwardsDirection = TRUE;
-		VisibleTextNode* pSelEnd = pSelectionStory->GetSelectionEnd(&CurrentForwardsDirection);
+//		VisibleTextNode* pSelEnd = pSelectionStory->GetSelectionEnd(&CurrentForwardsDirection);
 		CaretNode* pCaret = pSelectionStory->GetCaret();
 		ERROR2IF(pCaret == NULL, FALSE, "Caret not found");
 		
@@ -4155,7 +4161,7 @@ OpState	OpDeleteTextStory::GetState(String_256* UIDescription, OpDescriptor*)
 
 void OpDeleteTextStory::DoWithParam(OpDescriptor* pOpDesc, OpParam* pParam)
 {
-	TextStory* pStory = (TextStory*) pParam->Param1;
+	TextStory* pStory = (TextStory*) (void *) pParam->Param1;
 	if (pStory == NULL)
 	{
 		ERROR3("Story pointer was NULL");
@@ -4278,7 +4284,10 @@ BOOL OpDeleteTextStory::RemoveEmptyFocusStory(UndoableOperation* pOp)
 			{
 				OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpDeleteTextStory));
 				if (OpDesc != NULL)
-					OpDesc->Invoke(&OpParam((INT32)pTS,0));
+				{
+					OpParam p((void*)pTS,0);
+					OpDesc->Invoke(&p);
+				}
 				else
 					ok = FALSE;
 			}
@@ -4795,7 +4804,11 @@ BOOL OpTextPaste::DoPasteText(TextStory* pPasteStory, TextStory* pFocusStory, Ra
 	}
 
 	// create a range of nodes which have been pasted
-	if (ok) *pPasteRange = Range(pFirstPastedVTN, pLastPastedVTN, RangeControl(TRUE,TRUE,FALSE)); 
+	if (ok)
+	{
+		Range r(pFirstPastedVTN, pLastPastedVTN, RangeControl(TRUE,TRUE,FALSE));
+		*pPasteRange = r;
+	}
 	return ok;
 }
 
@@ -5625,7 +5638,7 @@ DocCoord OpDragStoryPathLeftIndent::InternalConstrain(DocCoord Current, ClickMod
 
 	INT32 NearEl=0;
 	double mu=0.0;
-	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
+//	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
 	DocCoord LinePoint = mpStoryPath->InkPath.ClosestPointTo(mu, NearEl);
 
 	// We need to stop the left hand blob going past the right hand one.
@@ -5660,7 +5673,7 @@ DocCoord OpDragStoryPathRightIndent::InternalConstrain(DocCoord Current, ClickMo
 	
 	INT32 NearEl=0;
 	double mu=0.0;
-	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
+//	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
 	DocCoord LinePoint = mpStoryPath->InkPath.ClosestPointTo(mu, NearEl);
 
 	// We need to stop the right hand blob going past the left hand one.
@@ -5742,7 +5755,7 @@ DocCoord OpDragStoryNonPathIndent::InternalConstrain(DocCoord Current, ClickModi
 ********************************************************************************************/
 BOOL OpDragStoryPathIndent::SetCurrentPos(DocCoord MousePos, ClickModifiers ClickMods)
 {
-	ERROR2IF(mpStoryPath==NULL, FALSE, "NULL story pointer")
+	ERROR2IF(mpStoryPath==NULL, FALSE, "NULL story pointer");
 
 	mCurrentBlobPos = InternalConstrain(MousePos, ClickMods);
 
@@ -5763,7 +5776,7 @@ BOOL OpDragStoryPathIndent::SetCurrentPos(DocCoord MousePos, ClickModifiers Clic
 ********************************************************************************************/
 BOOL OpDragStoryNonPathIndent::SetCurrentPos(DocCoord MousePos, ClickModifiers ClickMods)
 {
-	ERROR3IF(mpStoryPath!=NULL, "Story is on a path, you don't want to use this function")
+	ERROR3IF(mpStoryPath!=NULL, "Story is on a path, you don't want to use this function");
 
 	mCurrentBlobPos = InternalConstrain(MousePos, ClickMods);
 
@@ -5956,7 +5969,7 @@ void OpApplyGlobalAffect::DoAffectChange(ObjChangeParam* pObjChange, Document* p
 	if (!pDocument)
 		pDocument = (Document*) Camelot.Documents.GetHead();
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// render blobs off (only in selected doc)
 	if (Camelot.FindSelection()!=NULL)
 	{
@@ -5995,7 +6008,7 @@ void OpApplyGlobalAffect::DoAffectChange(ObjChangeParam* pObjChange, Document* p
 	pObjChange->Define(OBJCHANGE_FINISHED,pObjChange->GetChangeFlags(),NULL,NULL);
 	UpdateAllChangedNodes(pObjChange);
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// render blobs back on again!
 	if (Camelot.FindSelection()!=NULL)
 	{

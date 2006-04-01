@@ -713,6 +713,8 @@ typedef wxMenu				CNativeMenu;
 // Key bindings
 #define CAMKEY(x) WXK_ ## x
 
+inline void Beep() {wxBell();}
+
 // The following line makes normalize.pl stop skipping this file
 // Leave it at the end
 /* SKIPFIXTYPES: END */

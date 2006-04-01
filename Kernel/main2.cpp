@@ -435,11 +435,9 @@ PORTNOTE("other","Removed various bevel usage")
 #ifndef STANDALONE
 			OpNodePathEditBlob::Init() &&		// Node path editing itself operation
 			OpNodePathEditControlBlob::Init() &&	// Node path editing its control points operation
-#ifndef EXCLUDE_FROM_XARALX
 			OpFitTextToCurve::Init() &&			// Fit text line to path
 			OpTextKern::Init() &&				// Apply kern op
 			OpTextAutoKern::Init() &&			// Apply kern op
-#endif
 			OpJoinShapes::Init() &&				// Join shapes operation
 			OpBreakShapes::Init() &&			// Break shapes operation
 			OpNodePathAddEndpoint::Init() &&	// op to add a curve or line at the end of a path

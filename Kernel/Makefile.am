@@ -20,7 +20,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	doccomp.cpp doccoord.cpp docrect.cpp document.cpp docview.cpp dumbnode.cpp \
 	exphint.cpp extender.cpp fillattr.cpp fillramp.cpp fillval.cpp filters.cpp \
 	filtrmgr.cpp fontcomp.cpp fontlist.cpp fontman.cpp fracfill.cpp fthrattr.cpp \
-        gcache.cpp fntcache.cpp \
+	gcache.cpp fntcache.cpp textacts.cpp \
 	fttyplis.cpp gadget.cpp gblend.cpp genv.cpp gla.cpp gmould.cpp \
 	grid.cpp group.cpp guides.cpp gwinding.cpp hittest.cpp hotkeys.cpp impbmp.cpp \
 	impcol.cpp impstr.cpp infocomp.cpp insertnd.cpp invalid.cpp isetattr.cpp \
