@@ -9,8 +9,12 @@ noinst_LIBRARIES	= libwxXtra.a
 libwxXtra_a_SOURCES = manager.cpp wxmousestate.cpp doublebuffer.cpp
 
 # make sure this does NOT have our include files in the path
-libwxXtra_a_CXXFLAGS = @GTK_CFLAGS@
+# Don't use GTK includes for now - y ou will need this with sub-2.6.3 but that's not supported
+# right now
+# libwxXtra_a_CXXFLAGS = @GTK_CFLAGS@
 
-#libwxXtra_a_LDFLAGS = @GTK_LIBS@
+# Don't load the GTK libraries into wxXtra any more - you will need this with sub-2.6.3 but
+# that's not supported right now
+# libwxXtra_a_LDFLAGS = @GTK_LIBS@
 
 

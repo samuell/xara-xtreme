@@ -22,7 +22,7 @@ else
     XaraLX_SOURCES	= Kernel/libKernel.a wxOil/libwxOil.a tools/libTools.a wxXtra/libwxXtra.a
     XaraLX_LDSOURCE = -Wl,--start-group $(XaraLX_SOURCES) -Wl,--end-group
 endif
-XaraLX_LDFLAGS		= --debug -L$(srcdir)/$(CDRAW_LIB_DIR) $(WX_LIBS) $(LIBS) -lCDraw @GTK_LIBS@
+XaraLX_LDFLAGS		= --debug -L$(srcdir)/$(CDRAW_LIB_DIR) $(WX_LIBS) $(LIBS) -lCDraw
 XaraLX_LD			= $(CXX)
 
 if STATIC_ENABLE
