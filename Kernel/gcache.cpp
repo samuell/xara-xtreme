@@ -142,7 +142,7 @@ CamCache::CamCache( size_t Size, UINT32 Log2MaxEntries )
 	CacheStart->Next		= CacheEnd->Prev		=
 	CacheStart->NextFree 	= CacheEnd->PrevFree	= FreeBlock ;
 	CacheStart->PrevFree 	= CacheEnd->NextFree	= NULL ;
-	CacheStart->State		= CacheEnd->State		= NULL ;
+	CacheStart->State		= CacheEnd->State		= 0 ;
 	FreeBlock->Prev			= FreeBlock->PrevFree	= CacheStart ;
 	FreeBlock->Next			= FreeBlock->NextFree	= CacheEnd ;
 	FreeBlock->State		= FREE ;

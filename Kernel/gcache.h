@@ -122,8 +122,10 @@ struct CacheBlock {
 	} ;
 } ;
 
-const size_t FreeCacheBlockSize = 20 ;
-const size_t UsedCacheBlockSize = 24 ;
+// For some reason the size of Object[] is not included in the latter calc, presumably because
+// it's not really of size[1] - AMB
+const size_t FreeCacheBlockSize = 4 * sizeof(CacheBlock *) + sizeof (UINT32) ;
+const size_t UsedCacheBlockSize = 5 * sizeof(CacheBlock *) + sizeof (UINT32) ;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
