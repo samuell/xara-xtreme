@@ -2264,7 +2264,7 @@ BOOL TextChar::Snap(DocCoord* pDocCoord)
 
 	PORTNOTETRACE("text","TextChar::Snap - do nothing");
 #if !defined(EXCLUDE_FROM_RALPH)
-	MILLIPOINT SnapDist    = CSnap::GetSnapDist();
+//	MILLIPOINT SnapDist    = CSnap::GetSnapDist();
 //	MILLIPOINT SqrSnapDist = SnapDist*SnapDist;
 
 	// create a format region with an attribute stack
