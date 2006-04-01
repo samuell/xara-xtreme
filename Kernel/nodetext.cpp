@@ -973,7 +973,7 @@ BOOL VisibleTextNode::DoMoveNode(UndoableOperation*  pUndoOp,
 	//		and PrePostTextAction cannot cope with restoring the caret once hidden
 	if (this->IsACaret())
 	{
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 		if (pUndoOp!=NULL)
 			if (!PositionCaretAction::DoStoreCaretPosition(pUndoOp,pTextStory))
 				return FALSE;
@@ -1011,7 +1011,7 @@ BOOL VisibleTextNode::DoMoveNode(UndoableOperation*  pUndoOp,
 
 void VisibleTextNode::ScrollToShow()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	DocView* pDocView = DocView::GetSelected();
 	Spread* pSpread = FindParentSpread();		
 
@@ -2724,7 +2724,7 @@ void CaretNode::RenderObjectBlobs(RenderRegion* pRenderRegion)
 
 BOOL CaretNode::RenderObjectBlobsCore(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pRenderRegion==NULL,FALSE,"CaretNode::RenderObjectBlobsCore() - pRenderRegion==NULL");
 
 	TextStory* pTextStory = this->FindParentStory();
@@ -2856,7 +2856,7 @@ DocRect CaretNode::GetBoundingRect(BOOL DontUseAttr, BOOL HitTest)
 
 BOOL CaretNode::ValidateBoundingRect(FormatRegion* pFormatRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok=TRUE;
 
 	// get the overall matrix to apply to the caret
@@ -2925,7 +2925,7 @@ BOOL CaretNode::ValidateBoundingRect(FormatRegion* pFormatRegion)
 
 BOOL CaretNode::HasMoved()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	AbstractTextChar* pPrevATC=(AbstractTextChar*)(this->FindPrevious(CC_RUNTIME_CLASS(AbstractTextChar)));
 	BOOL AfterPrevChar = (pPrevATC!=NULL);
 
@@ -3070,7 +3070,7 @@ if (bDeleteDups)
 
 void CaretNode::SetSelected(BOOL Status)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (!TextTool::IsCurrentTool())
 	{
 		TextStory* pStory = this->FindParentStory();
@@ -3375,7 +3375,7 @@ DocRect EOLNode::GetBlobBoundingRect()
 
 void EOLNode::RenderObjectBlobs(RenderRegion* pRenderRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	Path RenderPath;
 	if (GetBlobPath(&RenderPath))
 	{

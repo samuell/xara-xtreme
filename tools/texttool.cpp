@@ -972,7 +972,7 @@ void TextTool::OnMouseMove(DocCoord PointerPos, Spread* pSpread, ClickModifiers 
 
 /********************************************************************************************
 
->	BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
+	>	BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 
 	Author:		Peter_Arnold (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/02/95

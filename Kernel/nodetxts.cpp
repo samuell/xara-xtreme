@@ -128,12 +128,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "textfuns.h"
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "ai_epsrr.h"
-//#include "progress.h"
+#include "progress.h"
 #include "camfiltr.h"
 #include "cxftext.h"
 #include "cxfrec.h"
 #include "impstr.h"
-//#include "unicdman.h"
+#include "unicdman.h"
 #include "extender.h"	// for ExtendParams
 //#include "ngcore.h"		// NameGallery, for stretching functionality
 
@@ -141,6 +141,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 //#include "peter.h"
 //#include "simon.h"
+#include "textinfo.h"
 
 #ifdef RALPH
 #include "ralphcri.h" // For RalphCriticalSection
@@ -717,8 +718,6 @@ PORTNOTE("dialog","Remove reference to NameGallery")
 
 BOOL BaseTextClass::PreOpProcessing(ObjChangeParam* pParam)
 {
-	PORTNOTETRACE("text","BaseTextClass::PreOpProcessing - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// if called by an AllowOp() which itself was NOT called by a child's AllowOp(), do our stuff
 	// (assume if it WAS called by an AllowOp() which itself was called by a child AllowOp()
 	// (this routine would have already been called by a child's AllowOp() which itself was
@@ -752,7 +751,6 @@ BOOL BaseTextClass::PreOpProcessing(ObjChangeParam* pParam)
 		// flag prev char to allow for kerning
 		FlagPrevTextCharAndDescendantsModifiedByOpAndParentsHaveDescendantModifiedByOp();
 	}
-#endif
 	return TRUE;
 }
 
@@ -1630,8 +1628,6 @@ ChangeCode TextStory::OnChildChange(ObjChangeParam* pParam)
 	// if we have an op pointer format and redraw the story undoably else just do it
 	// (ie consecutive attribute applies only do the first one undoably)
 	BOOL				ok = TRUE;
-	PORTNOTETRACE("text","TextStory::OnChildChange - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	UndoableOperation* pOp=pParam->GetOpPointer();
 	if (pOp!=NULL)
 	{
@@ -1675,7 +1671,6 @@ ChangeCode TextStory::OnChildChange(ObjChangeParam* pParam)
 			((Document*)pOwnerDoc)->ForceRedraw(FindParentSpread(), temprect, TRUE, this, FALSE);
 		}
 	}
-#endif
 
 	if (ok)
 		return CC_OK;
@@ -1748,8 +1743,6 @@ BOOL TextStory::DoBecomeA(BecomeA* pBecomeA)
 
 // BODGE TEXT - pass back should delete nodes if it fails - though MarkN claimed not when I wrote this!
 
-	PORTNOTETRACE("text","TextStory::DoBecomeA - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pBecomeA==NULL,FALSE,"TextStory::DoBecomeA() - pBecomeA==NULL");
 
 	// here to overcome scope problem
@@ -1885,7 +1878,7 @@ FailNoRestore:
 		pStoryNodeGroup->CascadeDelete();
 		delete pStoryNodeGroup;
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -3172,11 +3165,7 @@ BOOL TextStory::PostDuplicate(UndoableOperation* pOp)
 {
 	ERROR2IF(pOp==NULL, FALSE, "Operation pointer was NULL");
 	
-	PORTNOTETRACE("text","TextStory::PostDuplicate - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return PrePostTextAction::DoFormatStory(pOp, this);
-#endif
-	return TRUE;
 }
 
 
@@ -3449,7 +3438,7 @@ BOOL TextStory::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* p
 
 BOOL TextStory::DeleteSelectedText(UndoableOperation* pUndoOp)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pUndoOp==NULL,FALSE,"TextStory::DeleteSelectedText() - pUndoOp==NULL");
 	BOOL    ok = DeleteSelectedTextLines(pUndoOp);
 	if (ok)	ok = DeleteSelectedTextCharacters(pUndoOp);
@@ -3473,7 +3462,7 @@ BOOL TextStory::DeleteSelectedText(UndoableOperation* pUndoOp)
 
 BOOL TextStory::DeleteSelectedTextLines(UndoableOperation* pUndoOp)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pUndoOp==NULL,FALSE,"TextStory::DeleteSelectedTextLines() - pUndoOp==NULL");
 
 	// Delete all selected lines except the last one
@@ -3557,7 +3546,7 @@ BOOL TextStory::DeleteSelectedTextLines(UndoableOperation* pUndoOp)
 
 BOOL TextStory::DeleteSelectedTextCharacters(UndoableOperation* pUndoOp)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pUndoOp==NULL,FALSE,"TextStory::DeleteSelectedTextCharacters() - pUndoOp==NULL");
 
 	// get a set of non line level attrs on this story, which are to be localised to char level
@@ -3996,7 +3985,7 @@ INT32 TextStory::BaseComplexHide(UndoableOperation *pOp)
 	if (!DeleteSelectedText(pOp))
 		return -1;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// try to regain the caret on completion
 	TextInfoBarOp::RegainCaretOnOpEnd();
 #endif
@@ -4031,8 +4020,6 @@ INT32 TextStory::BaseComplexHide(UndoableOperation *pOp)
 TextStory* TextStory::CreateFromChars(DocCoord Pos, char* pChars, WCHAR* pWChars, Document* pCreateDoc,
 									  LOGFONT* pLogFont, BOOL ControlCodes, DocColour* pColour)
 {
-	PORTNOTETRACE("text","TextStory::CreateFromChars - do nothing - uses UnicodeManager");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pChars==NULL && pWChars==NULL || pChars!=NULL && pWChars!=NULL, NULL,
 			 "TextStory::CreateFromCharArray() - must specify one and only one char array");
 	ERROR2IF(pCreateDoc==NULL, NULL, "No creation document");
@@ -4079,7 +4066,8 @@ TextStory* TextStory::CreateFromChars(DocCoord Pos, char* pChars, WCHAR* pWChars
 		if (ok) ok = ((AttributeValue*)   &LineWidthAttr)->MakeNode(pTextLine,PREV) != NULL;
 		// BODGE TEXT - this is the only way this attribute will work!!!!
 		AttributeValue* pAttr=NULL;
-		if (ok) ok = NULL!=(pAttr=new StrokeColourAttribute(DocColour(COLOUR_TRANS)));
+		DocColour trans(COLOUR_TRANS);
+		if (ok) ok = NULL!=(pAttr=new StrokeColourAttribute(trans));
 		if (ok) ok = NULL!=pAttr->MakeNode(pTextLine,PREV);
 		if (pAttr!=NULL) delete pAttr;
 	}
@@ -4184,7 +4172,8 @@ TextStory* TextStory::CreateFromChars(DocCoord Pos, char* pChars, WCHAR* pWChars
 				}
 				case '\t':	// insert a kern to mimic a tab
 				{
-					KernCode* pKernCode= new KernCode(pCaretNode, PREV, DocCoord(4000,0));
+					DocCoord tabkern(4000,0); // Nothing like a hardcoded bodge
+					KernCode* pKernCode= new KernCode(pCaretNode, PREV, tabkern);
 					ok=(pKernCode!=NULL);
 					break;
 				}
@@ -4214,9 +4203,6 @@ TextStory* TextStory::CreateFromChars(DocCoord Pos, char* pChars, WCHAR* pWChars
 	}
 
 	return pTextStory;
-#else
-	return NULL;
-#endif
 }
 
 
