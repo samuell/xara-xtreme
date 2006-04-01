@@ -812,7 +812,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_COMMAND_SPINCTRL_UPDATED) ||
 		(EventType == wxEVT_SCROLL_CHANGED) ||
 		(EventType == wxEVT_SCROLL_THUMBTRACK) ||
-		(EventType == wxEVT_SCROLL_THUMBRELEASE) ||
+		((EventType == wxEVT_SCROLL_THUMBRELEASE) && !(pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Don't handle slider THUMB_RELEASE here
 		(EventType == wxEVT_SCROLL_LINEUP) ||
 		(EventType == wxEVT_SCROLL_LINEDOWN) ||
 		(EventType == wxEVT_SCROLL_PAGEUP) ||
@@ -836,17 +836,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_COMMAND_SLIDER_UPDATED) ||
 		FALSE)
 	{
-		// Right now we don't seem to be able to track slider release under GTK, so make
-		// everything generate a Set event (SLOW!) until this is fixed. Unfortunately some
-		// this seem to want a Slider Changing first, so we have to send two. How tiresome.
-		 msg.DlgMsg = DIM_SLIDER_POS_CHANGING;
-
-		// We should send the message out later - we use the same ID
-		wxCamDialogEvent deferredevent (wxEVT_CAMDIALOG_DEFERREDMSG, event.GetId(), msg);
-		deferredevent.SetEventObject(pEvtHandler->pwxWindow);
-		// set it for processing later
-		pEvtHandler->pwxWindow->GetEventHandler()->AddPendingEvent(deferredevent);
-
+		msg.DlgMsg = DIM_SLIDER_POS_CHANGING;
+		HandleMessage = TRUE;
+	}
+	else if(
+		((EventType == wxEVT_SCROLL_THUMBRELEASE) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider THUMB_RELEASE here
+		FALSE)
+	{
 		msg.DlgMsg = DIM_SLIDER_POS_SET;
 		HandleMessage = TRUE;
 	}
