@@ -95,4 +95,4 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-const TCHAR g_pszAppVersion[] = wxT("0.3");
+const TCHAR g_pszAppVersion[] = wxT("0.4");
