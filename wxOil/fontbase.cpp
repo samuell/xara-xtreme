@@ -883,11 +883,16 @@ FontMetricsCacheEntry::FontMetricsCacheEntry()
 BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDesc,
 												MILLIPOINT DefaultHeight, INT32 DesignSize )
 {
-	// get font metrics and convert from design size in pixels to default height in millipoints
 	INT32 Ascent;
 	INT32 Descent;
 
+	// these values are ignored - the DesignSize needs to be read from the font, so the
+	// scaling needs to be done by FTFontMan itself
+	IGNORE(DefaultHeight);
+	IGNORE(DesignSize);
+
 #ifdef __WXGTK__
+	// TRACEUSER("wuerthne", _T("CacheFontMetrics DesignSize = %d"), DesignSize);
 	if (FTFontMan::GetAscentDescent(FontDesc, &Ascent, &Descent) == FALSE) return FALSE;
 	// scaling to DefaultHeight was done in GetAscentDescent already
 	SetFontAscent( Ascent );
@@ -897,8 +902,9 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 	static INT32 pTempCharWidthBuf[NUMCHARS];
 	if (FTFontMan::GetCharWidth(FontDesc, FIRSTCHAR, LASTCHAR, pTempCharWidthBuf)==FALSE)
 		return FALSE;
+	// scaling to DefaultHeight was done in GetCharWidth already
 	for (INT32 i=0; i<NUMCHARS; i++)
-		pCharWidths[i] = MulDiv(pTempCharWidthBuf[i], DefaultHeight, DesignSize);
+		pCharWidths[i] = pTempCharWidthBuf[i];
 
 	// if 'em' char in cache, get it from the cache else calculate its width separately
 	if (CharInCacheRange(FONTEMCHAR))
@@ -909,7 +915,8 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 		INT32 TempCharWidth = 0;
 		if (FTFontMan::GetCharWidth(FontDesc, FONTEMCHAR, FONTEMCHAR, &TempCharWidth)==FALSE)
 			return FALSE;
-		SetFontEmWidth( MulDiv(TempCharWidth, DefaultHeight, DesignSize) );
+		// scaling to DefaultHeight was done in GetCharWidth already
+		SetFontEmWidth( TempCharWidth );
 	}
 
 	// update cache tag

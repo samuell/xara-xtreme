@@ -844,7 +844,7 @@ BOOL FTFontMan::GetCharOutline(CharDescription& ChDesc,
 							   UINT32* pNumCoords,
 							   wxDC* pDC)
 {
-	TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline"));
+	TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline %04x"), ChDesc.GetCharCode());
 	// Check some input parameters
 	ERROR2IF(ppCoords==NULL,FALSE,"FTFontMan::GetCharOutline ppCoords==NULL");
 	ERROR2IF(ppVerbs==NULL,FALSE,"FTFontMan::GetCharOutline ppVerbs==NULL");
@@ -942,7 +942,8 @@ BOOL FTFontMan::GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32*
 	Outputs:	character widths into pCharWidthsBuf
 	Returns:	TRUE if the widths could be retrieved
 				FALSE if not.
-	Purpose:	This function returns the raw widths of a range of characters
+	Purpose:	This function returns the widths of a range of characters scaled
+				to DefaultHeight
 
 ********************************************************************************************/
 
@@ -956,8 +957,8 @@ BOOL FTFontMan::GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR Las
 	if (!GetPangoFcFontAndFreeTypeFaceForCharDesc(ChDesc, &pPangoFcFont, &pFreeTypeFace)) return FALSE;
 
 	// get the design size
-	// INT32 DesignSize = pFreeTypeFace->units_per_EM;
-	// TRACEUSER("wuerthne", _T("DesignSize = %d"), DesignSize);
+	INT32 DesignSize = pFreeTypeFace->units_per_EM;
+	TRACEUSER("wuerthne", _T("GetCharWidth, DesignSize = %d"), DesignSize);
 
 	for (UINT32 i = 0; i < NumChars; i++) {
 		// load the glyph data for our character into the font's glyph slot
@@ -967,7 +968,7 @@ BOOL FTFontMan::GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR Las
 			ERROR2(FALSE, "FTFontMan::GetCharWidth - could not load glyph");
 		}
 		FT_GlyphSlotRec *pGlyph = pFreeTypeFace->glyph;
-		pCharWidthsBuf[i] = pGlyph->linearHoriAdvance;
+		pCharWidthsBuf[i] = ScaleToDefaultHeight(pGlyph->linearHoriAdvance, DesignSize);
 	}
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return TRUE;
