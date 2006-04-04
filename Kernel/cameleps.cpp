@@ -105,8 +105,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "cameleps.h"
 
-#include <strstrea.h>
-
 #include "nodepath.h"
 #include "paths.h"
 //#include "tim.h"
@@ -130,20 +128,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshap.h"
 #include "txtattr.h"
 #include "grndbmp.h"
-#include "camvw.h"
+#include "camview.h"
 #include "docview.h"
 #include "opgrad.h"		// for AreLinesPerpendicular()
 #include "oilfiles.h"
 #include "ndoptmz.h"
 #include "ndtxtpth.h"
 #include "maskedrr.h"
-#include "wbitmap.h"
+#include "oilbitmap.h"
 #include "dibutil.h"
 #include "native.h"			// The new designed native filter, used for v2
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
-#include "psdc.h"
+//#include "psdc.h"
 #include "osrndrgn.h"
-#include "prdlgctl.h"
+//#include "prdlgctl.h"
 #include "progress.h"
 #include "textfuns.h"
 #include "app.h"
@@ -161,7 +159,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "will2.h"
 
-#include "xsepsops.h"		// export eps options
+//#include "xsepsops.h"		// export eps options
 #include "ctrlhelp.h"		// ControlHelper class
 
 #include "unicdman.h"		// For MBCS support
@@ -188,96 +186,96 @@ typedef enum
 CommandMap CamelotEPSFilter::CamelotCommands[] =
 {
 	// Line/Fill colours
-	EPSC_cx,		"cx",
-	EPSC_cX,		"cX",
-	EPSC_ck,		"ck",
-	EPSC_cK,		"cK",
+	{ EPSC_cx,		"cx" },
+	{ EPSC_cX,		"cX" },
+	{ EPSC_ck,		"ck" },
+	{ EPSC_cK,		"cK" },
 
 	// Stroke transparency
-	EPSC_cst,		"cst",
+	{ EPSC_cst,		"cst" },
 		  			  
 	// Arrow heads
-	EPSC_csah,		"csah",
-	EPSC_ceah,		"ceah",
+	{ EPSC_csah,	"csah" },
+	{ EPSC_ceah,	"ceah" },
 
 	// Dash Patterns
-	EPSC_cdp,		"cdp",
+	{ EPSC_cdp,		"cdp" },
 
 	// Bitmap objects/bitmap fills
-	EPSC_cbm,		"cbm",
-	EPSC_csbm,		"csbm",
-	EPSC_cebm,		"cebm",
+	{ EPSC_cbm,		"cbm" },
+	{ EPSC_csbm,	"csbm" },
+	{ EPSC_cebm,	"cebm" },
 
 	// Chromatic fill geometries
-	EPSC_caz,		"caz",
-	EPSC_cax,		"cax",
+	{ EPSC_caz,		"caz" },
+	{ EPSC_cax,		"cax" },
 	
 	// Transparent fill geometries
-	EPSC_cxt,		"cxt",
+	{ EPSC_cxt,		"cxt" },
 
 	// Chromatic fill effects
-	EPSC_cxe,		"cxe",
+	{ EPSC_cxe,		"cxe" },
 
 	// Chromatic fill mappings
-	EPSC_cxm,		"cxm",
+	{ EPSC_cxm,		"cxm" },
 
 	// Transparent fill mappings
-	EPSC_cxmt,		"cxmt",
+	{ EPSC_cxmt,	"cxmt" },
 
 	// Blends
-	EPSC_csbd,		"csbd",
-	EPSC_cebd,		"cebd",
-	EPSC_csbr,		"csbr",
-	EPSC_cebr,		"cebr",
+	{ EPSC_csbd,	"csbd" },
+	{ EPSC_cebd,	"cebd" },
+	{ EPSC_csbr,	"csbr" },
+	{ EPSC_cebr,	"cebr" },
 
 	// Regular shapes
-	EPSC_csrs,		"csrs",
-	EPSC_crsp,		"crsp",
-	EPSC_crstm,		"crstm",
-	EPSC_crsp1,		"crsp1",
-	EPSC_crsp2,		"crsp2",
-	EPSC_cers,		"cers",
+	{ EPSC_csrs,	"csrs" },
+	{ EPSC_crsp,	"crsp" },
+	{ EPSC_crstm,	"crstm" },
+	{ EPSC_crsp1,	"crsp1" },
+	{ EPSC_crsp2,	"crsp2" },
+	{ EPSC_cers,	"cers" },
 
 	// Mould commands
-	EPSC_csev,		"csev",
-	EPSC_ceev,		"ceev",
-	EPSC_cspr,		"cspr",
-	EPSC_cepr,		"cepr",
-	EPSC_csmp,		"csmp",
-	EPSC_cemp,		"cemp",
-	EPSC_csso,		"csso",
-	EPSC_ceso,		"ceso",
-	EPSC_csdo,		"csdo",
-	EPSC_cedo,		"cedo",
+	{ EPSC_csev,	"csev" },
+	{ EPSC_ceev,	"ceev" },
+	{ EPSC_cspr,	"cspr" },
+	{ EPSC_cepr,	"cepr" },
+	{ EPSC_csmp,	"csmp" },
+	{ EPSC_cemp,	"cemp" },
+	{ EPSC_csso,	"csso" },
+	{ EPSC_ceso,	"ceso" },
+	{ EPSC_csdo,	"csdo" },
+	{ EPSC_cedo,	"cedo" },
 
 	// Text commands
- 	EPSC_ctf,		"ctf",
- 	EPSC_ctb,		"ctb",
-	EPSC_cti,		"cti",
-	EPSC_cts,		"cts",
-	EPSC_ctp,		"ctp",
-	EPSC_ctls,		"ctls",
+ 	{ EPSC_ctf,		"ctf" },
+ 	{ EPSC_ctb,		"ctb" },
+	{ EPSC_cti,		"cti" },
+	{ EPSC_cts,		"cts" },
+	{ EPSC_ctp,		"ctp" },
+	{ EPSC_ctls,	"ctls" },
 
-	EPSC_cso,		"cso",
-	EPSC_ceo,		"ceo",
-	EPSC_cfft,		"cfft",
-	EPSC_cftf, 		"cftf",
-	EPSC_cbot,		"cbot",
+	{ EPSC_cso,		"cso" },
+	{ EPSC_ceo,		"ceo" },
+	{ EPSC_cfft,	"cfft" },
+	{ EPSC_cftf, 	"cftf" },
+	{ EPSC_cbot,	"cbot" },
 
-	EPSC_cpal,		"cpal",
+	{ EPSC_cpal,	"cpal" },
 
 	// Guide layer & guideline
-	EPSC_glyr,		"glyr",
-	EPSC_glne,		"glne",
+	{ EPSC_glyr,	"glyr" },
+	{ EPSC_glne,	"glne" },
 
-	EPSC_cmth,		"cmth",
+	{ EPSC_cmth,	"cmth" },
 
-	EPSC_cag,		"cag",
+	{ EPSC_cag,		"cag" },
 
-	EPSC_cbti,		"cbti",
+	{ EPSC_cbti,	"cbti" },
 
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	"Invalid" }
 };
 
 /********************************************************************************************
@@ -410,14 +408,14 @@ BOOL CamelotEPSFilter::IsDefaultDocRequired(const TCHAR* pcszPathName)
 INT32 CamelotEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
+	if (strncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
 	}
 
 	// !PS-Adobe line is ok - check creator line...
-	istrstream HeaderFile((char *) pFileHeader, HeaderSize);
+	istringstream HeaderFile( (char*)pFileHeader );
 	char Buffer[200];
 
 	UINT32 Lines = 0;
@@ -427,13 +425,13 @@ INT32 CamelotEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		Lines++;
 
 		// Return TRUE if this file was created by Camelot
-		if (_tcsncmp(Buffer, "%%Creator: Camelot", 18) == 0)
+		if (strncmp(Buffer, "%%Creator: Camelot", 18) == 0)
 		{
 			// Camelot is the creator.
 			return 10;
 		}
 		// (ChrisG 8/11/00) Changed creator type to "Xara X")
-		else if (_tcsncmp (Buffer, "%%Creator: Xara X", 17) == 0)
+		else if (strncmp (Buffer, "%%Creator: Xara X", 17) == 0)
 		{
 			// New Xara X string was set as the creator.
 			return 10;
@@ -441,7 +439,7 @@ INT32 CamelotEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (strncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -500,7 +498,7 @@ BOOL CamelotEPSFilter::PrepareToImport()
 			return FALSE;
 
 		// Not expecting a bitmap fill initially
-		PendingBitmap = PENDING_BITMAP_NONE;
+		m_PendingBitmap = PENDING_BITMAP_NONE;
 		BitmapTransparencyIndex = -1;
 		pBitmap = FALSE;
 		pRegularShape = NULL;
@@ -644,7 +642,7 @@ void CamelotEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (CamelotCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, CamelotCommands[i].CmdStr) == 0)
+		if (strcmp(TokenBuf, CamelotCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = CamelotCommands[i].Cmd;
@@ -676,7 +674,6 @@ void CamelotEPSFilter::LookUpToken()
 BOOL CamelotEPSFilter::ProcessToken()
 {
 	// Variables used to extract operands from the stack
-	DocCoord 	Coords[3];
 	String_64	ColName;
 	PColourCMYK	Col;
 	TintType	Tint = TINT_NONE;
@@ -755,11 +752,11 @@ BOOL CamelotEPSFilter::ProcessToken()
 						LexTokenType Type = EPSFile->GetTokenType();
 						if ((Type != TOKEN_EOL) && (Type != TOKEN_EOF))
 						{
-							if (_tcscmp(TokenBuf, "cso") == 0)
+							if (strcmp(TokenBuf, "cso") == 0)
 							{
 								ObjectNesting++;
 							}
-							else if (_tcscmp(TokenBuf, "ceo") == 0)
+							else if (strcmp(TokenBuf, "ceo") == 0)
 							{
 								ObjectNesting--;
 							}							
@@ -909,8 +906,8 @@ BOOL CamelotEPSFilter::ProcessToken()
 					
 					// Is it really a bitmap fill ?
 					// It may be a new type bitmap object
-					if (PendingBitmap != PENDING_BITMAP_OBJECT_FILL)
-						PendingBitmap = PENDING_BITMAP_FILL;
+					if (m_PendingBitmap != PENDING_BITMAP_OBJECT_FILL)
+						m_PendingBitmap = PENDING_BITMAP_FILL;
 
 					BitmapAttrs.Coords[0] = StartPoint;
 					BitmapAttrs.Coords[1] = EndPoint;
@@ -921,7 +918,7 @@ BOOL CamelotEPSFilter::ProcessToken()
 					break;
 
 				case CAMEPS_FILL_NEWBITMAP:
-					PendingBitmap = PENDING_BITMAP_FILL;
+					m_PendingBitmap = PENDING_BITMAP_FILL;
 					BitmapAttrs.Coords[0] = StartPoint;
 					BitmapAttrs.Coords[1] = EndPoint;
 					BitmapAttrs.Coords[2] = EndPoint2;
@@ -1026,7 +1023,7 @@ BOOL CamelotEPSFilter::ProcessToken()
 
 		case EPSC_cebm:
 			// Should have just finished reading a bitmap...what should we use for?
-			switch (PendingBitmap)
+			switch (m_PendingBitmap)
 			{
 				case PENDING_BITMAP_FILL:
 					// Use the bitmap to do a bitmap fill
@@ -1148,7 +1145,7 @@ BOOL CamelotEPSFilter::ProcessToken()
 					AttributeValue* pOldLineColour = NULL;
 					AttributeValue* pOldLineWidth = NULL;
 
-					if (PendingBitmap == PENDING_BITMAP_OBJECT_FILL)
+					if (m_PendingBitmap == PENDING_BITMAP_OBJECT_FILL)
 					{
 						// This must be a non-contone bitmap, so make sure we
 						// don't apply any line colour.
@@ -1163,7 +1160,8 @@ BOOL CamelotEPSFilter::ProcessToken()
 						if (pLineCol == NULL)
 							goto NoMemory;
 
-						pLineCol->SetStartColour(&DocColour(COLOUR_NONE));
+						DocColour	colorNone( COLOUR_NONE );
+						pLineCol->SetStartColour( &colorNone );
 							
 						CurrentAttrs[ATTR_STROKECOLOUR].pAttr = pLineCol;
 					}
@@ -1239,7 +1237,7 @@ BOOL CamelotEPSFilter::ProcessToken()
 					break;
 			}
 
-			PendingBitmap = PENDING_BITMAP_NONE;
+			m_PendingBitmap = PENDING_BITMAP_NONE;
 			BitmapTransparencyIndex = -1;
 			break;
 
@@ -1254,7 +1252,8 @@ BOOL CamelotEPSFilter::ProcessToken()
 			DocCoord Coords[4];
 
 			// NB. reverse order because they're stacked, remember!
-			for (INT32 i = 3; i >= 0; i--)
+			INT32 i;
+			for ( i = 3; i >= 0; i--)
 			{
 				if (!Stack.PopCoordPair(&Coords[i]))
 					goto EPSError;
@@ -1273,7 +1272,7 @@ BOOL CamelotEPSFilter::ProcessToken()
 //			pBitmapObject->InkPath.UpdateBoundingRect();
 
 			// Flag to the code above that the next bitmap should be added to this object.
-			PendingBitmap = PENDING_BITMAP_OBJECT;
+			m_PendingBitmap = PENDING_BITMAP_OBJECT;
 
 			break;
 		}
@@ -1770,7 +1769,7 @@ BOOL CamelotEPSFilter::ProcessBitmapFlags()
 			case EPSC_cbot:
 				// This token indicates that the next bitmap fill is really 
 				// a bitmap object
-				PendingBitmap = PENDING_BITMAP_OBJECT_FILL;
+				m_PendingBitmap = PENDING_BITMAP_OBJECT_FILL;
 				break;
 
 			case EPSC_cbti:
