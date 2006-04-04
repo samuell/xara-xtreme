@@ -8,7 +8,7 @@ DebugEnable="no"
 AC_ARG_ENABLE(debug,
 [[  --enable-debug          Add more debug information and checks to executable]],
 [
-	if test $enableval == "yes"; then
+	if test $enableval = "yes"; then
 		DEBUG_FLAGS="-ggdb -D_DEBUG"
 		OPT_FLAGS="-O0"
 		DebugEnable="yes"
@@ -19,7 +19,7 @@ StaticEnable="no"
 AC_ARG_ENABLE(static-exec,
 [[  --enable-static-exec    Build a statically linked version of the executable]],
 [
-	if test $enableval == "yes"; then
+	if test $enableval = "yes"; then
 		StaticEnable="yes"
 		DebugEnable="no"
 	fi
@@ -72,7 +72,7 @@ GccVersion=0
 PrecompileEnable="yes"
 
 AC_MSG_CHECKING([Compiler])
-if test $ac_compiler_gnu == "yes"; then
+if test $ac_compiler_gnu = "yes"; then
 	GccVersion=`$CXX -v 2>&1 | $AWK '{ if ($2 ~ /version/) print $3 }'`
 	GccVersion=`echo $GccVersion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
 
@@ -173,7 +173,7 @@ AC_DEFUN([FTTEST],
 		AC_MSG_ERROR([freetype is required. Try --with-freetype-config.])
 	fi])
 
-if test $WX_GTK == "yes"; then
+if test $WX_GTK = "yes"; then
 	# GTK build, so call FTTEST function to test for FreeType
 	FTTEST
 	FT_CFLAGS="`$FTCONFIG --cflags`"
@@ -193,8 +193,8 @@ if test $WX_GTK == "yes"; then
 	fi
 else
 	# non-GTK build, i.e., MacOS, so Pango and FreeType are not required
-	FT_CFLAGS = ""
-	PANGO_CFLAGS = ""
+	FT_CFLAGS=""
+	PANGO_CFLAGS=""
 fi
 
 TOPDIR=$srcdir;
