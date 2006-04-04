@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Code headers
 #include "app.h"
-#include "becomea.h"
+//#include "becomea.h"
 #include "blobs.h"
 //#include "cameleps.h"
 #include "cliptype.h"
@@ -2109,20 +2109,22 @@ PORTNOTE("other", "printing and AI export deactivated")
 
 void TextChar::RenderEorDrag(RenderRegion* pRenderRegion)
 {
-PORTNOTE("text", "so far, enabling this crashes when a text object is moved and an EOR display is attempted")
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	// Before rendering the character we need to render it's applied *TEXT* attributes
-	// into the render region as EOR drag render regions dosen't maintain an attribute stack
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(DISABLE_TEXT_RENDERING)
+	// Before rendering the character we need to render its applied *TEXT* attributes
+	// into the render region as EOR drag render regions don't maintain an attribute stack
 	CCAttrMap* pAttribMap = new CCAttrMap(30);
-	BOOL FoundAttributes = FindAppliedAttributes(pAttribMap);
+	BOOL FoundAttributes = FALSE;
+	if (pAttribMap)
+		FoundAttributes = FindAppliedAttributes(pAttribMap);
 	
-	if (pAttribMap!=NULL)
+	if (FoundAttributes)
 	{
 		pRenderRegion->SaveContext();
-
 		// Render the text attributes
 		CCAttrMap::iterator pos = pAttribMap->GetStartPosition();
-		while (pos!=NULL)
+		CCAttrMap::iterator	end = pAttribMap->GetEndPosition();
+	
+		while (pos != end)
 		{
 			CCRuntimeClass *pKey;
 			void		   *pVal;
@@ -2131,13 +2133,14 @@ PORTNOTE("text", "so far, enabling this crashes when a text object is moved and 
 			if (((NodeAttribute*)pVal)->IsKindOfTextAttribute())
 				((NodeAttribute*)pVal)->Render(pRenderRegion);
 		}
-
-		// Render the character
-		if (RenderCore(pRenderRegion)==FALSE)
-			InformError();
-
-		pRenderRegion->RestoreContext();
 	}
+
+	// Render the character
+	if (RenderCore(pRenderRegion)==FALSE)
+		InformError();
+
+	if (FoundAttributes)
+		pRenderRegion->RestoreContext();
 
 	if (pAttribMap!=NULL) delete pAttribMap;
 #endif

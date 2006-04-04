@@ -417,7 +417,7 @@ void TextLine::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
 BOOL TextLine::CreateNodeGroup(NodeGroup** ppNodeGroup, FormatRegion* pFormatRegion, BecomeA* pBecomeA)
 {
 	PORTNOTETRACE("text","TextLine::CreateNodeGroup - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+#ifndef DISABLE_TEXT_RENDERING
 	ERROR2IF(pFormatRegion==NULL,FALSE,"TextChar::CreateNodeGroup() - pFormatRegion==NULL");
 	ERROR2IF(     pBecomeA==NULL,FALSE,"TextChar::CreateNodeGroup() - pBecomeA==NULL");
 	ERROR2IF(  ppNodeGroup==NULL,FALSE,"TextChar::CreateNodeGroup() - ppNodeGroup==NULL");

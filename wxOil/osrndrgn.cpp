@@ -7154,6 +7154,8 @@ BOOL OSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	RenderDC->SetTextAlign(OldTextAlign);
 	RenderDC->SetBkMode(OldBKMode);
 	RenderDC->SetTextColor(OldTextColor);
+#elif !defined(DISABLE_TEXT_RENDERING)
+	return RenderRegion::RenderChar(ch, pMatrix);
 #endif
 	return TRUE;
 }
