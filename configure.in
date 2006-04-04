@@ -179,14 +179,18 @@ if test $WX_GTK == "yes"; then
 	FT_CFLAGS="`$FTCONFIG --cflags`"
 
 	# check for the Pango package
+	PkgError = "no"
 	PKG_CHECK_MODULES(PANGOX, pangox,
 			  [
 				PANGO_CFLAGS="$PANGOX_CFLAGS"
 			  ],
 			  [
-				AC_MSG_ERROR([pangox library not found])
+				PkgError = "yes"
 			  ]
 			  )
+	if( test PkgError == "yes"; then
+		AC_MSG_ERROR([pangox library not found])
+	fi
 else
 	# non-GTK build, i.e., MacOS, so Pango and FreeType are not required
 	FT_CFLAGS = ""
