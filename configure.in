@@ -188,7 +188,7 @@ if test $WX_GTK = "yes"; then
 				PkgError = "yes"
 			  ]
 			  )
-	if( test PkgError == "yes"; then
+	if test PkgError = "yes"; then
 		AC_MSG_ERROR([pangox library not found])
 	fi
 else
