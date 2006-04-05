@@ -452,7 +452,7 @@ void SoftShadowInfoBarOp::UpdateGadgetBlurSlider(BOOL bUpdateSlider)
 	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOW_SLIDER_EDIT), &Str);
 	
 	d /= (double)BLURSLIDERMAX;
-	d = 1.0 - d;
+	//d = 1.0 - d;
 	d *= 100;
 	
 	if (bUpdateSlider)
@@ -1202,7 +1202,7 @@ PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
 						pSoftShadowTool->GetShadowEditRange(&pMaster);
 						if (pMaster!=NULL)
 						{
-							ChangeShadowPenumbra((MILLIPOINT)((((double)(100 - Result)) / 100.0) * ((double)BLURSLIDERMAX)));
+							ChangeShadowPenumbra((MILLIPOINT)((((double)(/*100 - */Result)) / 100.0) * ((double)BLURSLIDERMAX)));
 
 							UpdateGadgetBlurSlider(FALSE);
 						}
@@ -1226,7 +1226,7 @@ PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
 						SliderDragged = FALSE;
 						INT32 Result = GetLongGadgetValue(_R(IDC_SOFTSHADOWSLIDER), 0, CONTRASTSLIDERMAX, 0, &Valid);
 
-						DoChangePenumbra((MILLIPOINT)((((double)(100 - Result)) / 100.0) * ((double)BLURSLIDERMAX)));
+						DoChangePenumbra((MILLIPOINT)((((double)(/*100 - */Result)) / 100.0) * ((double)BLURSLIDERMAX)));
 						SliderDragged = FALSE;
 
 						SetBitmapUpdate(TRUE);
@@ -2196,7 +2196,7 @@ MILLIPOINT SoftShadowInfoBarOp::GetGlowSliderValue()
 
 	double dValue = Value - 0;
 	dValue /= (double)(WIDTHSLIDERMAX - 0);
-	dValue = 1.0 - dValue;
+	//dValue = 1.0 - dValue;
 
 	// change the profile
 	GlowSliderProfile.SetBias(-GlowSliderProfile.GetBias());
@@ -2237,7 +2237,7 @@ void SoftShadowInfoBarOp::SetGlowSliderValue(MILLIPOINT Value)
 	double dSliderValue = dValue;
 	
 	dSliderValue = GlowSliderProfile.MapZeroToOne((AFp)(dValue));
-	dSliderValue = 1.0 - dSliderValue;
+	//dSliderValue = 1.0 - dSliderValue;
 		
 	dSliderValue *= (double)WIDTHSLIDERMAX;
 	dSliderValue += 0;
@@ -2596,12 +2596,12 @@ BOOL SoftShadowInfoBarOp::GetDarknessEditGadget(double& dDarkness, BOOL &bMany)
 
 void SoftShadowInfoBarOp::SetDarknessSlider(double dDarkness)
 {
-	SetLongGadgetValue(_R(IDC_SOFTSHADOWTRANSPSLIDER), (INT32)(dDarkness * CONTRASTSLIDERMAX));
+	SetLongGadgetValue(_R(IDC_SOFTSHADOWTRANSPSLIDER), (INT32)((1.0-dDarkness) * CONTRASTSLIDERMAX));
 }
 
 double SoftShadowInfoBarOp::GetDarknessSlider(BOOL* pValid)
 {
-	return (double)GetLongGadgetValue(_R(IDC_SOFTSHADOWTRANSPSLIDER), 0, CONTRASTSLIDERMAX, 0, pValid)/(double)CONTRASTSLIDERMAX;
+	return 1.0-((double)GetLongGadgetValue(_R(IDC_SOFTSHADOWTRANSPSLIDER), 0, CONTRASTSLIDERMAX, 0, pValid)/(double)CONTRASTSLIDERMAX);
 }
 
 BOOL SoftShadowInfoBarOp::SelectShadowsAlone()
