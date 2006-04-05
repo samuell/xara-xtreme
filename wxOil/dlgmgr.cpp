@@ -810,13 +810,15 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_COMMAND_VLBOX_SELECTED) ||
 		(EventType == wxEVT_COMMAND_COMBOBOX_SELECTED) ||
 		(EventType == wxEVT_COMMAND_SPINCTRL_UPDATED) ||
-		(EventType == wxEVT_SCROLL_CHANGED) ||
-		(EventType == wxEVT_SCROLL_THUMBTRACK) ||
-		((EventType == wxEVT_SCROLL_THUMBRELEASE) && !(pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Don't handle slider THUMB_RELEASE here
-		(EventType == wxEVT_SCROLL_LINEUP) ||
-		(EventType == wxEVT_SCROLL_LINEDOWN) ||
-		(EventType == wxEVT_SCROLL_PAGEUP) ||
-		(EventType == wxEVT_SCROLL_PAGEDOWN) ||
+		((
+		  (EventType == wxEVT_SCROLL_CHANGED) || 
+		  (EventType == wxEVT_SCROLL_THUMBTRACK) || 
+		  (EventType == wxEVT_SCROLL_THUMBRELEASE) ||
+		  (EventType == wxEVT_SCROLL_LINEUP) ||
+		  (EventType == wxEVT_SCROLL_LINEDOWN) ||
+		  (EventType == wxEVT_SCROLL_PAGEUP) ||
+		  (EventType == wxEVT_SCROLL_PAGEDOWN)
+		) && !(pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Don't handle slider scroll stuff here
 		(EventType == wxEVT_COMMAND_TREE_SEL_CHANGED) ||
 		FALSE)
 	{
@@ -833,14 +835,19 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}
 	else if(
-		(EventType == wxEVT_COMMAND_SLIDER_UPDATED) ||
+		(( (EventType == wxEVT_SCROLL_THUMBTRACK) ||
+		   (EventType == wxEVT_SCROLL_LINEUP) ||
+		   (EventType == wxEVT_SCROLL_LINEDOWN) ||
+		   (EventType == wxEVT_SCROLL_PAGEUP) ||
+		   (EventType == wxEVT_SCROLL_PAGEDOWN)
+		 ) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider movements - note SCROLL_CHANGED always comes later
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_CHANGING;
 		HandleMessage = TRUE;
 	}
 	else if(
-		((EventType == wxEVT_SCROLL_THUMBRELEASE) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider THUMB_RELEASE here
+		((EventType == wxEVT_SCROLL_CHANGED) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_SET;
