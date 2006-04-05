@@ -111,7 +111,7 @@ sub GetSize
 
     my %cnamemap = (
 		    "IDC_GEOMETRY" => 128,
-		    "IDC_MAPPING" => 96,
+		    "IDC_MAPPING" => 128,
 		    "IDC_EFFECT" => 96,
 		    "IDC_BITMAPEFFECT" => 128,
 		    "IDC_TRANSPTYPE" => 128,
@@ -121,6 +121,7 @@ sub GetSize
 		    "IDC_SEL_EDIT_ANGLE" => 30,
 		    "IDC_BEVEL_TYPE_COMBO" => 96,
 		    "IDC_BEVEL_SLIDER_COMBO" => 96,
+		    "IDC_TRANSPSLIDE" => 128,
 		    "IDC_BEVELSLIDER" => 96,
 		    "IDC_FREEHANDSLIDER" => 128
 		   );

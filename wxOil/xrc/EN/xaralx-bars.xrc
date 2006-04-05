@@ -2121,7 +2121,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxComboBox" name="IDC_MAPPING">
-                    <size>96,-1</size>
+                    <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -2268,7 +2268,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxComboBox" name="IDC_MAPPING">
-                    <size>96,-1</size>
+                    <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -2336,7 +2336,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_TRANSPSLIDE">
-                    <size>60,-1</size>
+                    <size>128,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
