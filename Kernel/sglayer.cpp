@@ -1876,7 +1876,7 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 					if (OldGuideLayerState != NewGuideLayerState)
 					{
 						TRACEUSER( "Neville", _T("DocViewMsg::DocViewState::SELCHANGED CreateNewSubtree\n"));
-						CreateNewSubtree(Msg->pNewDocView ? Msg->pNewDocView->GetDoc() ? NULL);
+						CreateNewSubtree(Msg->pNewDocView ? Msg->pNewDocView->GetDoc() : NULL);
 						ForceRedrawOfList();
 					}
 				}
