@@ -1587,7 +1587,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
-                    <size>80,-1</size>
+                    <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -1785,7 +1785,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
-                    <size>80,-1</size>
+                    <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -1969,7 +1969,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
-                    <size>80,-1</size>
+                    <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>

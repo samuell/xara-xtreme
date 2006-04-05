@@ -129,7 +129,8 @@ sub GetSize
 		    "IDC_BEVELSLIDER" => 96,
 		    "IDC_FREEHANDSLIDER" => 128,
 		    "IDC_SOFTSHADOWSLIDER" => 128,
-		    "IDC_SOFTSHADOWTRANSPSLIDER" => 128
+		    "IDC_SOFTSHADOWTRANSPSLIDER" => 128,
+		    "IDC_EDIT_REGSHAPETOOL_POS" => 128
 		   );
     return $cnamemap{ $control } || $default;
 }
