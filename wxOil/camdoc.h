@@ -206,7 +206,7 @@ protected:
 	virtual bool DefaultDocumentRequired(CCLexFile* pFile, UINT32 nPrefFilter);
 	virtual bool LoadDefaultDocument();
 	virtual bool GeneralOpenDocument(CCLexFile* pFile, UINT32 nPrefFilter);
-	virtual bool SaveModified();
+	virtual bool OnSaveModified();
 	virtual bool DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
 	virtual bool DeleteContents();
 

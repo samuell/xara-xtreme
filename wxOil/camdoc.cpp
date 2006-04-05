@@ -1510,9 +1510,14 @@ Document* CCamDoc::GetKernelDoc() const
 
 ********************************************************************************************/
 
-bool CCamDoc::SaveModified()
+bool CCamDoc::OnSaveModified()
 {
 	PORTNOTETRACE("other","CCamDoc::SaveModified - do nothing");
+
+	// This here just to disable the "do you wanna save" dialog
+	// REMOVE WHEN IMPLEMENTING THIS FUNCTION!
+	SetModifiedFlag(FALSE);
+	
 #ifndef EXCLUDE_FROM_XARALX
 #ifdef STANDALONE
 	// Don't prompt in standalone version - we can't save anyway
