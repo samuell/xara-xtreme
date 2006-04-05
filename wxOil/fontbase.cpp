@@ -1074,10 +1074,11 @@ BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& Font
 				CharWidth = mpFontMetricsData[CacheEntry].GetFontEmWidth();
 			else
 			{
-				INT32 TempCharWidth = 0;
-				if (TextManager::GetCharWidth(pDC, ch, ch, &TempCharWidth)==FALSE)
+#ifdef __WXGTK__
+				// FTFontMan returns the scaled character width already
+				if (FTFontMan::GetCharWidth(FontDesc, ch, ch, &CharWidth)==FALSE)
+#endif
 					return FALSE;
-				CharWidth = MulDiv(TempCharWidth, DefaultHeight, DesignSize);
 			}
 		}
 	}

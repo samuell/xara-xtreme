@@ -923,7 +923,7 @@ BOOL FTFontMan::GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32*
 	// get the design size
 	INT32 DesignSize = pFreeTypeFace->units_per_EM;
 	*pAscent = ScaleToDefaultHeight(pFreeTypeFace->ascender, DesignSize);
-	*pDescent = ScaleToDefaultHeight(pFreeTypeFace->descender, DesignSize);
+	*pDescent = ScaleToDefaultHeight(-pFreeTypeFace->descender, DesignSize);
 	TRACEUSER("wuerthne", _T("returning ascent = %d, descent = %d"), *pAscent, *pDescent);
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return TRUE;
