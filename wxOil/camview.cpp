@@ -589,15 +589,22 @@ CNativeDC* CCamView::GetRenderDC() const
 
 void CCamView::GetClientSize(int * pWidth, int * pHeight) const /* TYPENOTE: Correct */
 {
-	WinRect wrect(0,0,0,0);
-	GetRenderWindow()->GetClientSize(&wrect.width, &wrect.height);
-	if (wrect.width<0) wrect.width = 0;
-	if (wrect.height<0) wrect.height = 0;
-	OilRect orect = wrect.ToOil(pDocView);
-	*pWidth  = orect.Width();
-	*pHeight = orect.Height();
+	if (GetRenderWindow())
+	{
+		WinRect wrect(0,0,0,0);
+		GetRenderWindow()->GetClientSize(&wrect.width, &wrect.height);
+		if (wrect.width<0) wrect.width = 0;
+		if (wrect.height<0) wrect.height = 0;
+		OilRect orect = wrect.ToOil(pDocView);
+		*pWidth  = orect.Width();
+		*pHeight = orect.Height();
+	}
+	else
+	{
+		*pWidth = 0;
+		*pHeight = 0;
+	}
 }
-
 
 
 // set this to 1 to show update rectangles using cross-hatching, 0 to not
