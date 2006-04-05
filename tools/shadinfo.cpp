@@ -1242,46 +1242,53 @@ PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
 			}
 
 			else if (Msg->GadgetID == _R(IDC_SHADOW_SLIDER_EDIT))
+			{
 				if (Msg->DlgMsg == DIM_SELECTION_CHANGED)
 				{
 					// handle the edit control changing
 					HandleSliderEditChange();
 				}
-
+			}
 			else if (Msg->GadgetID == _R(IDC_SHADOWTRANSP_EDIT))
+			{
 				if (Msg->DlgMsg == DIM_SELECTION_CHANGED)
 				{
 					// handle the edit control changing
 					HandleSliderTranspEditChange();
 				}
-
+			}
 			else if (Msg->GadgetID == _R(IDC_BTN_NOSHADOW))
+			{
 				if (Msg->DlgMsg == DIM_LFT_BN_CLICKED)
 				{
 					HandleNoShadowBtnClicked();
 					return OK;
 				}
-
+			}
 			else if (Msg->GadgetID == _R(IDC_BTN_WALLSHADOW))
+			{
 				if (Msg->DlgMsg == DIM_LFT_BN_CLICKED)
 				{
 					HandleWallShadowBtnClicked();
 					return OK;
 				}
-
+			}
 			else if (Msg->GadgetID == _R(IDC_BTN_FLOORSHADOW))
+			{
 				if (Msg->DlgMsg == DIM_LFT_BN_CLICKED)
 				{
 					HandleFloorShadowBtnClicked();
 					return OK;
 				}
-
+			}
 			else if (Msg->GadgetID == _R(IDC_BTN_GLOWSHADOW))
+			{
 				if (Msg->DlgMsg == DIM_LFT_BN_CLICKED)
 				{
 					HandleGlowShadowBtnClicked();
 					return OK;
 				}
+			}
 		}
 	}
 
