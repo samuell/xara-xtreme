@@ -847,7 +847,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}
 	else if(
-		((EventType == wxEVT_SCROLL_CHANGED) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
+		((EventType == wxEVT_SCROLL_THUMBRELEASE) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_SET;
