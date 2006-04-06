@@ -228,6 +228,7 @@ void CCamApp::OnKeyEvent( wxKeyEvent &event )
 	TRACEUSER( "luke", _T("Focus = " PERCENT_S "\n"), pClassInfo->GetClassName() );
 	if(  pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
+		!pClassInfo->IsKindOf( CLASSINFO(wxSlider) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxCamArtControl) ) )
 	{
 		event.Skip();
