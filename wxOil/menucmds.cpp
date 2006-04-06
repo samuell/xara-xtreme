@@ -467,6 +467,9 @@ PORTNOTETRACE("other", "FileSaveAsAction does nothing");
  			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
  					)->GetActiveDocument()                  	//Get Active Document
  						)->OnFileSaveAs();                   		//SaveAs Active Document
+#else
+	wxCommandEvent		event;
+	AfxGetApp().GetDocumentManager()->OnFileSaveAs( event );
 #endif
 }
 

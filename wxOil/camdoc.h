@@ -209,6 +209,7 @@ protected:
 	virtual bool OnSaveModified();
 	virtual bool DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
 	virtual bool DeleteContents();
+	virtual bool SaveAs();
 
 	BOOL RemoveExistingDocs();
 

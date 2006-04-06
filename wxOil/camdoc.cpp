@@ -1625,6 +1625,24 @@ bool CCamDoc::OnSaveModified()
 	return true;
 }
 
+
+/********************************************************************************************
+
+This overrides the default wxDocument SaveAs behaviour, initially to tell user that save 
+doesn't work, but in the longer term it will play host to the real SaveAs code
+
+********************************************************************************************/
+
+bool CCamDoc::SaveAs()
+{
+#if defined(_DEBUG)
+	return wxDocument::SaveAs();
+#else
+	wxMessageBox( _T("Save functionality has not been implemented yet. Operation not performed."), _T("Unimplemented"),
+		wxOK | wxICON_EXCLAMATION );
+#endif	
+}
+
 /********************************************************************************************
 
 >	BOOL CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
