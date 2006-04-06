@@ -267,7 +267,7 @@ sub WriteStaticText
     print STDOUT $ddindent."                <border>1</border>\n";
     print STDOUT $ddindent."                <object class=\"wxStaticText\" name=\"$name\">\n";
     print STDOUT $ddindent."                    <font>\n";
-    print STDOUT $ddindent."                        <size>8</size>\n";
+    print STDOUT $ddindent."                        <size>7</size>\n";
     print STDOUT $ddindent."                    </font>\n";
     printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
     printf STDOUT $ddindent."                    <size>%d,-1</size>\n",($label eq "")?GetSize($name,80):-1;

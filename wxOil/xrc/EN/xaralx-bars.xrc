@@ -1455,7 +1455,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -1722,7 +1722,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -1920,7 +1920,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2190,7 +2190,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELPOINT">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2208,7 +2208,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELCOLOUR">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2319,7 +2319,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELPOINT">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2355,7 +2355,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELCOLOUR">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2375,7 +2375,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_BEZTOOLADDCHANGE">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -2479,7 +2479,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_FIRSTX">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>X</label>
                                     <size>-1,-1</size>
@@ -2498,7 +2498,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_FIRSTY">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>Y</label>
                                     <size>-1,-1</size>
@@ -2638,7 +2638,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_MIDX">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>X</label>
                                     <size>-1,-1</size>
@@ -2657,7 +2657,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_MIDY">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>Y</label>
                                     <size>-1,-1</size>
@@ -2797,7 +2797,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_SECONDX">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>X</label>
                                     <size>-1,-1</size>
@@ -2816,7 +2816,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_PATH_STATIC_SECONDY">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>Y</label>
                                     <size>-1,-1</size>
@@ -2964,7 +2964,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SMOOTHPERCENT">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -3635,7 +3635,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_FREEHANDPERCENT">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -3653,7 +3653,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_FREEHANDRETRO">
                     <font>
-                        <size>8</size>
+                        <size>7</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4929,7 +4929,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_SOFTSHADOWCENTRE_X">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>X</label>
                                     <size>-1,-1</size>
@@ -4950,7 +4950,7 @@
                                 <border>1</border>
                                 <object class="wxStaticText" name="IDC_SOFTSHADOWCENTRE_Y">
                                     <font>
-                                        <size>8</size>
+                                        <size>7</size>
                                     </font>
                                     <label>Y</label>
                                     <size>-1,-1</size>
