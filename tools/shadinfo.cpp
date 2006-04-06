@@ -2531,11 +2531,10 @@ void SoftShadowInfoBarOp::SetDarknessEditGadget(double dDarkness)
 	INT32 percent = (INT32)(100 - (dDarkness * 100));
 
 	// Set the percentage string
-//	TCHAR Str[32];
-//	String_32 temp(_R(IDS_PERCENT_FORMAT));
-//	wsprintf(Str, temp, percent);
-//	String_32 PercentStr(Str);
-	String_32 PercentStr(_R(IDS_PERCENT_FORMAT), percent);
+	TCHAR Str[32];
+	String_32 temp(_R(IDS_PERCENT_FORMAT));
+	tsprintf(Str, 32, temp, percent);
+	String_32 PercentStr(Str);
 	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOWTRANSP_EDIT), &PercentStr);
 }
 
