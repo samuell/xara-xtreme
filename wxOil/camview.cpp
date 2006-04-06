@@ -1402,6 +1402,8 @@ PORTNOTE("other","CCamView::OnInitialUpdate - code removed")
 
 void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDeactiveView )
 {
+//	TRACEUSER("Gerry", _T("ScreenView::OnActivateView - %s\n"), bActivate ? _T("true") : _T("false"));
+
 	if ( !pDocView )
 	{
 		TRACE( _T("ScreenView::OnActivateView - Warning: pDocView uninitialised\n") );
@@ -1430,6 +1432,14 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 		// Inform the kernel that the view's Z-order has changed. This sets the selected
 		// View, Document, and spread, to legal values.
 		Document::SetSelectedViewAndSpread(KernelDoc, pDocView, NULL);
+	}
+	else
+	{
+//		TRACEUSER("Gerry", _T("Deactivating the view\n"));
+
+		// Lets just try setting no selected for the time being
+		PORTNOTE("other", "CCamView::OnActivateView(false) now setting no selected doc and view")
+		Document::SetNoSelectedViewAndSpread();
 	}
 }
 
