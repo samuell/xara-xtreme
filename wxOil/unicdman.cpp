@@ -240,6 +240,7 @@ WCHAR UnicodeManager::MultiByteToUnicode( UINT32 MBChar )
 {
 	CHAR				MBArray[3];
 	WCHAR				ReturnArray[4];
+	size_t				cch;
 
 	// Convert UINT32 to DBCS
 	if( IsDBCSLeadByte( ( MBChar >> 8 ) & 0xFF ) )
@@ -247,11 +248,13 @@ WCHAR UnicodeManager::MultiByteToUnicode( UINT32 MBChar )
 		MBArray[0] = (MBChar>>8) & 0xFF;
 		MBArray[1] = MBChar & 0xFF;
 		MBArray[2] = 0;
+		cch = 2;
 	}
 	else
 	{
 		MBArray[0] = MBChar & 0xFF;
 		MBArray[1] = 0;
+		cch = 1;
 	}
 	
 #if defined(__WXMSW__)
@@ -276,8 +279,7 @@ WCHAR UnicodeManager::MultiByteToUnicode( UINT32 MBChar )
 		return 128;
 	}
 #else
-	mbstate_t			state;
-	mbrtowc( ReturnArray, MBArray, 2, &state );
+	mbrtowc( ReturnArray, MBArray, cch, NULL );
 	return ReturnArray[0];
 #endif
 }
