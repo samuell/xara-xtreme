@@ -138,6 +138,8 @@ public:
 
 	void OnKeyEvent	( wxKeyEvent &event );
 	void OnChar		( wxKeyEvent &event );
+	
+	void GiveActiveCanvasFocus();
 
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;

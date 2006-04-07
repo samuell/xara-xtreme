@@ -98,6 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "ops.h"
+#include "camelot.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -243,9 +244,10 @@ MsgResult StandardBar::Message( Msg* Msg)
 			return OK; // who knows what that is all about...
 	}
 
+	DialogMsg* DMsg = (DialogMsg*)Msg;
+
 	if (IS_OUR_DIALOG_MSG(Msg))
 	{
-		DialogMsg* DMsg = (DialogMsg*)Msg;
 		// Handle ok button
 		if ((DMsg->DlgMsg == DIM_COMMIT) || (DMsg->DlgMsg == DIM_CANCEL))
 		{
@@ -256,6 +258,15 @@ MsgResult StandardBar::Message( Msg* Msg)
 		}
 		// Else fall through
 	}
+	else
+	{
+		if( DIM_SELECTION_CHANGED == DMsg->DlgMsg )
+		{
+			TRACEUSER( "luke", _T("Change focus") );
+			AfxGetApp().GiveActiveCanvasFocus();
+		}
+	}
+	
 	return DialogOp::Message(Msg);
 }
 

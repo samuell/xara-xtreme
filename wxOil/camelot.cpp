@@ -818,6 +818,12 @@ void CCamApp::DoAboutBox()
 }
 
 
+void CCamApp::GiveActiveCanvasFocus()
+{
+	CCamView* pView = dynamic_cast<CCamView*>( m_docManager->GetCurrentView() );
+	pView->Activate( true );
+}
+
 /***************************************************************************************************************************/
 //
 // The following is class is needed to ensure that the file menu is removed
