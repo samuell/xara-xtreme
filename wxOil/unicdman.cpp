@@ -279,7 +279,9 @@ WCHAR UnicodeManager::MultiByteToUnicode( UINT32 MBChar )
 		return 128;
 	}
 #else
-	mbrtowc( ReturnArray, MBArray, cch, NULL );
+	mbstate_t			state;
+	memset(&state, 0, sizeof(mbstate_t));
+	mbrtowc( ReturnArray, MBArray, cch, &state );
 	return ReturnArray[0];
 #endif
 }

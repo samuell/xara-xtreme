@@ -1064,14 +1064,17 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 				(pKeyPress->IsAlternative() && pKeyPress->IsConstrain()) ) // Ctrl & left alt down
 	 	{
 			WCHAR UnicodeValue = pKeyPress->GetUnicode();
+			TRACEUSER("wuerthne", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
 			if (HandleDeadKeys(pKeyPress, &UnicodeValue))
 				return TRUE;
 			else
 			{
 		 		if ( (UnicodeValue>=32) && ((UnicodeValue < CAMELOT_UNICODE_BASE) || (UnicodeValue > CAMELOT_UNICODE_LAST)))
 		 		{
+#ifndef EXCLUDE_FROM_XARALX
 					if ((UnicodeValue < 256) /*&& !TextManager::IsUnicodeCompleteOS()*/)
 						UnicodeValue = UnicodeManager::MultiByteToUnicode(UnicodeValue);
+#endif
 
 					// Display a blank cursor (thus hiding the pointer)
 					if (!IsBlankCursorUp)
@@ -1085,6 +1088,7 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 					OpTextFormat* pOp = new OpTextFormat();
 					if (pOp != NULL)
 					{
+						TRACEUSER("wuerthne", _T("inserting Unicode char %04x"), UnicodeValue);
 						pOp->DoInsertChar(UnicodeValue, OpTextFormat::INSERT);
 						UpdateAfterTyping = TRUE;
 						return TRUE;
