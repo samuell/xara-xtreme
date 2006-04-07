@@ -187,10 +187,10 @@ ImagemapFilterOptions::ImagemapFilterOptions(String_256 strName,
 	m_pthFile=pthFile;
 	m_fInsert=fInsert;
 	m_pfileFile=pfileFile;
-	m_fReportErrors=NULL;
+	m_fReportErrors=0;
 	
 	// init where the graphic is exported to
-	// this makes a reasonable guess but should be set latter
+	// this makes a reasonable guess but should be set later
 	m_GraphicPath = pthFile;
 	m_GraphicPath.SetType("gif");
 }

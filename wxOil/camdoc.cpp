@@ -1640,6 +1640,7 @@ bool CCamDoc::SaveAs()
 #else
 	wxMessageBox( _T("Save functionality has not been implemented yet. Operation not performed."), _T("Unimplemented"),
 		wxOK | wxICON_EXCLAMATION );
+	return false;
 #endif	
 }
 

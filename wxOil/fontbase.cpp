@@ -883,8 +883,10 @@ FontMetricsCacheEntry::FontMetricsCacheEntry()
 BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDesc,
 												MILLIPOINT DefaultHeight, INT32 DesignSize )
 {
+#ifdef __WXGTK__
 	INT32 Ascent;
 	INT32 Descent;
+#endif
 
 	// these values are ignored - the DesignSize needs to be read from the font, so the
 	// scaling needs to be done by FTFontMan itself
