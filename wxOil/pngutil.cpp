@@ -587,7 +587,7 @@ PORTNOTE("other","PNGUtil::ReadFromFile - removed progressbar")
 		/* that's it */
 		return (OK);
    }
-   catch( CFileException* )
+   catch( CFileException )
    {
 	   // catch our form of a file exception
 	   TRACE( _T("PNGUtil::ReadFromFile CC catch handler\n"));
