@@ -990,6 +990,23 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 #if FALSE != wxUSE_UNICODE
 		NumChars = 1;
 		pWideChar[0] = pKeySysMsg->m_Char;
+		
+		// We still have to try our custom translations (for VirtKey >= WXK_START
+		if( pKeySysMsg->VirtKey >= WXK_START )
+		{
+			for( INT32 i = 0; ExtraUnicodes[i].VirtKey != CAMKEY(CC_NONE); ++i )
+			{
+				// We have found an entry in our table for the given virtual key
+				if( ExtraUnicodes[i].VirtKey == pKeySysMsg->VirtKey )
+					// Stuff the Unicode value into the buffer and set the num chars generated to 1
+					pWideChar[0] = ExtraUnicodes[i].Unicode;
+			}
+			
+			// Don't pass on unknown function keys
+			if( ExtraUnicodes[i].VirtKey == CAMKEY(CC_NONE) )
+				NumChars = 0;
+		}
+		
 #elif defined(__WXMSW__)
 		BYTE pKeyState[256];			// Array to hold the current state of the keyboard
 		if (GetKeyboardState(pKeyState))	// Scan the current keyboard state
