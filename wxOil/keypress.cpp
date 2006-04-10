@@ -994,7 +994,8 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 		// We still have to try our custom translations (for VirtKey >= WXK_START
 		if( pKeySysMsg->VirtKey >= WXK_START )
 		{
-			for( INT32 i = 0; ExtraUnicodes[i].VirtKey != CAMKEY(CC_NONE); ++i )
+			INT32 i;
+			for( i = 0; ExtraUnicodes[i].VirtKey != CAMKEY(CC_NONE); ++i )
 			{
 				// We have found an entry in our table for the given virtual key
 				if( ExtraUnicodes[i].VirtKey == pKeySysMsg->VirtKey )
