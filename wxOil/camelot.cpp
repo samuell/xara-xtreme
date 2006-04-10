@@ -786,7 +786,8 @@ bool CCamApp::GetRecentFileText(INT32 Index, String_256* pszText)
 
 	if( Index < INT32(pFileHist->GetCount()) )
 	{
-		*pszText = pFileHist->GetHistoryFile( Index );
+		wxFileName	deconstruct( pFileHist->GetHistoryFile( Index ) );
+		*pszText = deconstruct.GetFullName();
 		return true;
 	}
 
