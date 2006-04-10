@@ -1294,7 +1294,7 @@ PORTNOTE("dialog","Removed OurPropSheet usage")
 	// Restore the active/disabled window state
 	if (pDlgOp->IsModal())
 	{
-		DialogManager::RestoreActiveDialogState();
+		// DialogManager::RestoreActiveDialogState();
 	}
 
 	DefaultKeyboardFocus();
@@ -2117,7 +2117,8 @@ wxWindow * DialogManager::GetGadget(CWindowID WindowID, CGadgetID Gadget)
 //	TRACEUSER("amb",_T("pwxDialog=0x%016llx Gadget=%d(%s) pGadget=0x%016llx"), WindowID, Gadget, CamResource::GetObjectName((ResourceID)Gadget), pGadget);
 	if (!pGadget)
 	{
-		ERROR3_PF((_T("Bad Gadget ID %d(%s) passed"), Gadget, CamResource::GetObjectName((ResourceID)Gadget)));
+		// Some dialogs seem to consciously do this, EG galleries
+//		ERROR3_PF((_T("Bad Gadget ID %d(%s) passed"), Gadget, CamResource::GetObjectName((ResourceID)Gadget)));
 		return NULL;
 	}
 #if 0
@@ -6409,13 +6410,17 @@ BOOL DialogManager::GetScreenSize(INT32 * pWidth, INT32 * pHeight)
 
 BOOL DialogManager::RecordActiveDialogState()
 {
-	PORTNOTETRACE("dialog","DialogManager::RecordActiveDialogState - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// The new way of checking if a modal dialog is about is to determine if the
 	//ActiveDlgStack is empty
 	BOOL IsModal = !(ActiveDlgStack.GetTop() == NULL);
 	// Which window is currently active
-	HWND ActiveWindow = GetActiveWindow();
+	wxWindow * ActiveWindow = wxWindow::FindFocus();
+	
+	// I think we need to look upwards here till we find a TLW
+	while (ActiveWindow && !ActiveWindow->IsKindOf(CLASSINFO(wxTopLevelWindow)) && ActiveWindow->GetParent())
+	{
+		ActiveWindow = ActiveWindow->GetParent();
+	}
 
 	// Record this information
 	ActiveDlgStateItem* pActiveDlgItem = new ActiveDlgStateItem;
@@ -6426,7 +6431,6 @@ BOOL DialogManager::RecordActiveDialogState()
 	pActiveDlgItem->fIsAModalDialog	= IsModal;
 
 	DialogManager::ActiveDlgStack.Push(pActiveDlgItem);
-#endif
 	return TRUE;
 }
 
