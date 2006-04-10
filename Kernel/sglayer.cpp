@@ -144,7 +144,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layermgr.h"
 
 #include "helpuser.h"
-#include "xshelpid.h"
+//#include "xshelpid.h"
 //#include "helppath.h"
 
 void Beep();

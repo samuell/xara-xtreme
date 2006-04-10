@@ -105,9 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "convert.h"
 #include "grid.h"
 #include "dibconv.h"
-//#ifdef _DEBUG
-//#include "sgframe.h"
-//#endif //debug
+#include "paldefs.h"
 
 
 // NEW_PASTEBOARD compile switch
@@ -118,9 +116,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define NEW_PASTEBOARD 0
 
-PORTNOTE("other","Define some sgframe stuuf")
-typedef INT32				WEB_PALETTE;
-typedef INT32				PALETTE_COLOURS;
 
 /***********************************************************************************************
 

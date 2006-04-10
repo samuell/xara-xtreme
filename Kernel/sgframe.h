@@ -111,22 +111,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sglayer.h"
 #include "bmpprefs.h"  // For PALETTE Type
 #include "quality.h"
+#include "paldefs.h"
 
 class DocView;
 class UndoableOperation;
-
-enum PALETTE_COLOURS
-{
-	PALCOL_BROWSER,	
-	PALCOL_OPTIMIZED,
-	PALCOL_STANDARD	
-};
-
-enum WEB_PALETTE
-{
-	PAL_GLOBAL,	
-	PAL_LOCAL
-};
 
 #ifndef EXCLUDE_GALS
 /***********************************************************************************************

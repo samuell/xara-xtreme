@@ -213,11 +213,13 @@ public:
 
 //-------------
 	OpLayerGalParam(OpLayerGalReason ThisReason,Spread* pThisParentSpread)
-	 : 	Reason(ThisReason), pParentSpread(pThisParentSpread), pLayer(NULL), 
-	 	pContextNode(NULL), pLayerSGal(NULL), ToggleBackground(FALSE)  { /* empty */ }
+	 : 	pLayer(NULL), ToggleBackground(FALSE),
+	 	pContextNode(NULL), pLayerSGal(NULL),
+		Reason(ThisReason), pParentSpread(pThisParentSpread)  { /* empty */ }
 
-	OpLayerGalParam() : Reason(LAYER_NONE), pParentSpread(NULL), pLayer(NULL), 
-	 	pContextNode(NULL), pLayerSGal(NULL) { /* empty */ }
+	OpLayerGalParam() : pLayer(NULL), ToggleBackground(FALSE),
+	 	pContextNode(NULL), pLayerSGal(NULL),
+		Reason(LAYER_NONE), pParentSpread(NULL)  { /* empty */ }
 
 	Spread*				GetParentSpread() 	{ return pParentSpread; }
 	OpLayerGalReason 	GetReason() 		{ return Reason; }
