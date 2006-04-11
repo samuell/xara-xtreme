@@ -999,8 +999,11 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 			{
 				// We have found an entry in our table for the given virtual key
 				if( ExtraUnicodes[i].VirtKey == pKeySysMsg->VirtKey )
+				{
 					// Stuff the Unicode value into the buffer and set the num chars generated to 1
 					pWideChar[0] = ExtraUnicodes[i].Unicode;
+					break;
+				}
 			}
 			
 			// Don't pass on unknown function keys
