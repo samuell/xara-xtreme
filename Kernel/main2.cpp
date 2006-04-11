@@ -181,6 +181,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeliveeffect.h"
 #include "stdbars.h"
 #include "rendwnd.h"
+#include "backgrnd.h"
 #if XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif
@@ -318,6 +319,9 @@ PORTNOTE("other","Removed Lots of init functions")
 #ifndef EXCLUDE_FROM_XARALX
 			BmapPrevDlg::Init() &&				// Bitmap Preview Dialog Box - Dbug Builds for the moment [MartinD]
 #endif //EXCLUDE_FROM_XARALX
+
+// Moved this here from inside ColourSGallery::Init
+			OpBackground::Init() &&
 
 // WEBSTER - markn 15/1/97
 // Removed these ops as they are not used

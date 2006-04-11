@@ -172,6 +172,8 @@ END_EVENT_TABLE()
 
 CCamView::CCamView()
 {
+	TRACEUSER("Gerry", _T("Creating CCamView at 0x%08x\n"), this);
+
 	// No child windows or connections yet.
 	pDocView = NULL;
 	pPrintView = NULL;
@@ -273,6 +275,8 @@ CCamView::~CCamView()
 // windows for displaying the view.
 bool CCamView::OnCreate( wxDocument *pDoc, /* TYPENOTE: Correct */ long flags )
 {
+	TRACEUSER("Gerry", _T("CCamView::OnCreate at 0x%08x\n"), this);
+
 	// Construct the (C++) child windows.
 PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller / ruler usage")
 	RenderWindow = new CRenderWnd(this);
@@ -385,6 +389,8 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed ruler usage")
     m_pFrame->Show(true);
     Activate(true);
 
+	TRACEUSER("Gerry", _T("Leaving CCamView::OnCreate at 0x%08x\n"), this);
+
     return true;
 }
 
@@ -393,7 +399,7 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed ruler usage")
 // Clean up windows used for displaying the view.
 bool CCamView::OnClose( bool fDeleteWindow /*= TRUE*/ )
 {
-	TRACEUSER("Gerry", _T("Closing CCamView at 0x%08x\n"), this);
+	TRACEUSER("Gerry", _T("CCamView::OnClose at 0x%08x\n"), this);
 
 	if( !GetDocument()->Close() )
 		return false;
@@ -1402,11 +1408,11 @@ PORTNOTE("other","CCamView::OnInitialUpdate - code removed")
 
 void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDeactiveView )
 {
-//	TRACEUSER("Gerry", _T("ScreenView::OnActivateView - %s\n"), bActivate ? _T("true") : _T("false"));
+	TRACEUSER("Gerry", _T("CCamView::OnActivateView(%s) - 0x%08x\n"), bActivate ? _T("true") : _T("false"), this);
 
 	if ( !pDocView )
 	{
-		TRACE( _T("ScreenView::OnActivateView - Warning: pDocView uninitialised\n") );
+		TRACE( _T("CCamView::OnActivateView - Warning: pDocView is NULL\n") );
 		return;
 	}
 
@@ -1435,11 +1441,18 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 	}
 	else
 	{
-//		TRACEUSER("Gerry", _T("Deactivating the view\n"));
-
-		// Lets just try setting no selected for the time being
-		PORTNOTE("other", "CCamView::OnActivateView(false) now setting no selected doc and view")
-		Document::SetNoSelectedViewAndSpread();
+		TRACEUSER("Gerry", _T("Deactivating the view\n"));
+/*
+		// Lets just try setting no selected for the time being but only if this view is the selected one
+		if (DocView::GetSelected() == pDocView)
+		{
+			PORTNOTE("other", "CCamView::OnActivateView(false) now setting no selected doc and view")
+			Document::SetNoSelectedViewAndSpread();
+		}
+		else
+		{
+			TRACEUSER("Gerry", _T("Not the selected view\n"));
+		}*/
 	}
 }
 

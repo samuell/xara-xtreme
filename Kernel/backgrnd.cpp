@@ -192,12 +192,14 @@ void OpBackground::DoWithParam(OpDescriptor* pOpDesc,OpParam* pParam)
 {
 	ERROR3IF(pParam == NULL,"pParam is NULL");
 
+	TRACEUSER("Gerry", _T("OpBackground::DoWithParam"));
+
 	if (pParam != NULL)
 	{
 		BOOL ok = TRUE;
 
 		OpBackgroundParam* pOpBackgroundParam = (OpBackgroundParam*)pParam;
-		Document *		pDoc		= pOpBackgroundParam->pDoc;
+//		Document *		pDoc		= pOpBackgroundParam->pDoc;
 		Spread *		pSpread		= pOpBackgroundParam->pSpread;
 		DocColour *		pDocColour	= pOpBackgroundParam->pDocColour;
 		KernelBitmap *	pBitmap		= pOpBackgroundParam->pBitmap;
@@ -301,6 +303,8 @@ BOOL OpBackground::MakePageBackground(UndoableOperation * pOp, Spread * pSpread,
 BOOL OpBackground::DoMakePageBackground(UndoableOperation * pOp, Spread * pSpread, KernelBitmap * pBitmap,
 										DocColour * pDocColour)
 {
+	TRACEUSER("Gerry", _T("OpBackground::DoMakePageBackground"));
+
 	// Our inputs are actually set up in the class variables, so check them
 	ERROR2IF(pSpread == NULL || pOp == NULL,FALSE,"DoMakePageBackground Bad params!");
 	ERROR2IF(pDocColour == NULL && pBitmap == NULL,FALSE,"DoMakePageBackground Bad params!");
@@ -317,6 +321,7 @@ BOOL OpBackground::DoMakePageBackground(UndoableOperation * pOp, Spread * pSprea
 		// Attempt to remove the old background layer.
 		if ( pOldLayer != NULL )
 		{
+			TRACEUSER("Gerry", _T("Removing old background"));
 			if ( !pOp->DoHideNode(pOldLayer, TRUE ) )
 			{
 				// Something went wrong, so handle the error.
@@ -330,6 +335,7 @@ BOOL OpBackground::DoMakePageBackground(UndoableOperation * pOp, Spread * pSprea
 	// Otherwise create a new background layer.
 	else
 	{
+		TRACEUSER("Gerry", _T("Creating new background"));
 		Layer* pBackgroundLayer = DoCreateBackgroundLayer(pOp, pSpread);
 
 		if (pBackgroundLayer == NULL)
@@ -484,10 +490,10 @@ NodeRegularShape * OpBackground::FindPageRectangle(Layer* pBackgroundLayer, cons
 				// The bounding rect should be roughly what we want
 				rect = pRegNode->GetBoundingRect(TRUE, FALSE);
 				if (
-					(PagesRect.lox > rect.lox - delta) && (PagesRect.lox < rect.lox + delta) &&
-					(PagesRect.hix > rect.hix - delta) && (PagesRect.hix < rect.hix + delta) &&
-					(PagesRect.loy > rect.loy - delta) && (PagesRect.loy < rect.loy + delta) &&
-					(PagesRect.hiy > rect.hiy - delta) && (PagesRect.hiy < rect.hiy + delta)
+					(PagesRect.lo.x > rect.lo.x - delta) && (PagesRect.lo.x < rect.lo.x + delta) &&
+					(PagesRect.hi.x > rect.hi.x - delta) && (PagesRect.hi.x < rect.hi.x + delta) &&
+					(PagesRect.lo.y > rect.lo.y - delta) && (PagesRect.lo.y < rect.lo.y + delta) &&
+					(PagesRect.hi.y > rect.hi.y - delta) && (PagesRect.hi.y < rect.hi.y + delta)
 				   )
 				{
 					pShape = pRegNode;
@@ -531,6 +537,13 @@ NodeRegularShape * OpBackground::DoCreateRectangle(Spread * pSpread)
 	{
 		BOOL ok = pShape->SetUpShape();
 
+		if (!ok)
+		{
+			// Do something sensible in here
+			delete pShape;
+			return NULL;
+		}
+
 		// We want to make the rectangle the same size as the current union of
 		// all the pages on the current spread
 		DocRect Rect;
@@ -546,8 +559,8 @@ NodeRegularShape * OpBackground::DoCreateRectangle(Spread * pSpread)
 		if (pShape->MakeRectangle(Rect.Width(), Rect.Height(), CornerRadius))
 		{
 			// Translate centre from 0,0 to required position relative to page
-			INT32 XTrans = Rect.lox + (Rect.Width()/2);
-			INT32 YTrans = Rect.loy + (Rect.Height()/2);
+			INT32 XTrans = Rect.lo.x + (Rect.Width()/2);
+			INT32 YTrans = Rect.lo.y + (Rect.Height()/2);
 			Trans2DMatrix Trans(XTrans, YTrans);
 
 			pShape->Transform(Trans);
@@ -577,7 +590,7 @@ NodeRegularShape * OpBackground::DoCreateRectangle(Spread * pSpread)
 
 BOOL OpBackground::ApplyDocColour(DocColour * pColourToApply, NodeRegularShape * pShape)
 {
-	ERROR2IF(pColourToApply == NULL || pShape == NULL,FALSE,"OpBackground::ApplyDocColour Bar params!")
+	ERROR2IF(pColourToApply == NULL || pShape == NULL,FALSE,"OpBackground::ApplyDocColour Bar params!");
 
 	// Set up a fill colour attribute
 	AttrFlatColourFill *pFillColAttr = new AttrFlatColourFill();
@@ -614,7 +627,7 @@ BOOL OpBackground::ApplyDocColour(DocColour * pColourToApply, NodeRegularShape *
 
 BOOL OpBackground::ApplyBitmap(KernelBitmap * pBitmapToApply, NodeRegularShape * pShape)
 {
-	ERROR2IF(pBitmapToApply == NULL || pShape == NULL,FALSE,"OpBackground::ApplyBitmap Bar params!")
+	ERROR2IF(pBitmapToApply == NULL || pShape == NULL,FALSE,"OpBackground::ApplyBitmap Bar params!");
 
 	// Set up a fill colour attribute
 	AttrBitmapColourFill *pBitmapFillAttr = new AttrBitmapColourFill();
@@ -639,15 +652,15 @@ BOOL OpBackground::ApplyBitmap(KernelBitmap * pBitmapToApply, NodeRegularShape *
 	// The End2 should be centre and top but needs to be top left.
 
 	// We want the start point to be half the height of the bitmap below this
-	//DocCoord Start(Rect.lox + Width/2, Rect.hiy - Height/2);
-	DocCoord Start(Rect.lox, Rect.hiy - Height);
+	//DocCoord Start(Rect.lo.x + Width/2, Rect.hi.y - Height/2);
+	DocCoord Start(Rect.lo.x, Rect.hi.y - Height);
 	// We want the other end point to be same height as the centre point
 	// but on the far right of the rectangle i.e the full width across
-	//DocCoord End(Rect.lox + Width, Rect.hiy - Height/2);
-	DocCoord End(Rect.lox + Width, Rect.hiy - Height);
+	//DocCoord End(Rect.lo.x + Width, Rect.hi.y - Height/2);
+	DocCoord End(Rect.lo.x + Width, Rect.hi.y - Height);
 	// We want the end point to be middle and top of the rectangle
-	//DocCoord End2(Rect.lox + Width/2, Rect.hiy);
-	DocCoord End2(Rect.lox, Rect.hiy);
+	//DocCoord End2(Rect.lo.x + Width/2, Rect.hi.y);
+	DocCoord End2(Rect.lo.x, Rect.hi.y);
 
 	((AttrFillGeometry*)pBitmapFillAttr)->SetStartPoint(&Start);
 	((AttrFillGeometry*)pBitmapFillAttr)->SetEndPoint(&End);
@@ -688,7 +701,7 @@ BOOL OpBackground::ApplyBitmap(KernelBitmap * pBitmapToApply, NodeRegularShape *
 
 BOOL OpBackground::ApplyDefaultAttributes(NodeRegularShape * pShape)
 {
-	ERROR2IF(pShape == NULL,FALSE,"OpBackground::ApplyDefaultAttributes Bar params!")
+	ERROR2IF(pShape == NULL,FALSE,"OpBackground::ApplyDefaultAttributes Bar params!");
 
 	// *****
 	// Set up a no colour line colour
@@ -699,7 +712,8 @@ BOOL OpBackground::ApplyDefaultAttributes(NodeRegularShape * pShape)
 		return(FALSE);
 	}
 
-	((AttrFillGeometry*)pLineColAttr)->SetStartColour(&DocColour(COLOUR_NONE));
+	DocColour ColNone(COLOUR_NONE);
+	((AttrFillGeometry*)pLineColAttr)->SetStartColour(&ColNone);
 	// And now insert it as a child of the regular shape
 	// Factoring should be ok as the Regular Shape is assumed to be the child of
 	// layer
@@ -790,7 +804,7 @@ Layer* OpBackground::DoCreateBackgroundLayer(UndoableOperation * pOp, Spread * p
 		if (pLastPage && pOp->DoInsertNewNode(pNewLayer, pLastPage, NEXT, FALSE,FALSE,FALSE,FALSE))
 		{
 			pNewLayer->EnsureUniqueLayerID();
-			BROADCAST_TO_ALL(SpreadMsg(pSpread, SpreadMsg::SpreadReason::LAYERCHANGES));
+			BROADCAST_TO_ALL(SpreadMsg(pSpread, SpreadMsg::LAYERCHANGES));
 		}
 		else
 		{
@@ -881,8 +895,8 @@ BOOL OpBackground::FixBackgroundLayer(Layer * pBackgroundLayer, const DocRect& N
 		if (pShape->MakeRectangle(NewPagesRect.Width(), NewPagesRect.Height(), CornerRadius))
 		{
 			// Translate centre from 0,0 to required position relative to page
-			INT32 XTrans = NewPagesRect.lox + (NewPagesRect.Width()/2);
-			INT32 YTrans = NewPagesRect.loy + (NewPagesRect.Height()/2);
+			INT32 XTrans = NewPagesRect.lo.x + (NewPagesRect.Width()/2);
+			INT32 YTrans = NewPagesRect.lo.y + (NewPagesRect.Height()/2);
 			Trans2DMatrix Trans(XTrans, YTrans);
 
 			pShape->Transform(Trans);
@@ -917,15 +931,15 @@ BOOL OpBackground::FixBackgroundLayer(Layer * pBackgroundLayer, const DocRect& N
 				// The End2 should be centre and top but needs to be top left.
 
 				// We want the start point to be half the height of the bitmap below this
-				//DocCoord Start(Rect.lox + Width/2, Rect.hiy - Height/2);
-				DocCoord Start(Rect.lox, Rect.hiy - Height);
+				//DocCoord Start(Rect.lo.x + Width/2, Rect.hi.y - Height/2);
+				DocCoord Start(Rect.lo.x, Rect.hi.y - Height);
 				// We want the other end point to be same height as the centre point
 				// but on the far right of the rectangle i.e the full width across
-				//DocCoord End(Rect.lox + Width, Rect.hiy - Height/2);
-				DocCoord End(Rect.lox + Width, Rect.hiy - Height);
+				//DocCoord End(Rect.lo.x + Width, Rect.hi.y - Height/2);
+				DocCoord End(Rect.lo.x + Width, Rect.hi.y - Height);
 				// We want the end point to be middle and top of the rectangle
-				//DocCoord End2(Rect.lox + Width/2, Rect.hiy);
-				DocCoord End2(Rect.lox, Rect.hiy);
+				//DocCoord End2(Rect.lo.x + Width/2, Rect.hi.y);
+				DocCoord End2(Rect.lo.x, Rect.hi.y);
 
 				((AttrFillGeometry*)pBitmapFillAttr)->SetStartPoint(&Start);
 				((AttrFillGeometry*)pBitmapFillAttr)->SetEndPoint(&End);

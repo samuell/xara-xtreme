@@ -154,7 +154,7 @@ END_EVENT_TABLE()
 
 CaptureWnd::CaptureWnd()
 {
-	TRACEUSER("Gerry", _T("CaptureWnd::CaptureWnd"));
+//	TRACEUSER("Gerry", _T("CaptureWnd::CaptureWnd"));
 	pDisplayDC = NULL;
 	BackBitmap = NULL;
 	MaskBitmap = NULL;
@@ -173,7 +173,7 @@ CaptureWnd::CaptureWnd()
 
 CaptureWnd::~CaptureWnd()
 {
-	TRACEUSER("Gerry", _T("CaptureWnd::~CaptureWnd"));
+//	TRACEUSER("Gerry", _T("CaptureWnd::~CaptureWnd"));
 // 	// Need to clean up all the pointers here...
 }
 
@@ -192,7 +192,7 @@ CaptureWnd::~CaptureWnd()
 
 BOOL CaptureWnd::Create()
 {
-	TRACEUSER("Gerry", _T("CaptureWnd::Create"));
+//	TRACEUSER("Gerry", _T("CaptureWnd::Create"));
 	BOOL WindowCreated = FALSE;
 
 	WindowCreated = wxFrame::Create(NULL, wxID_ANY, wxString(_T("")), wxPoint(0, 0), wxSize(20, 20), 0);
@@ -225,7 +225,7 @@ BOOL CaptureWnd::Create()
 
 void CaptureWnd::OnWindowCreate(wxWindowCreateEvent &event)
 {
-	TRACEUSER("Gerry", _T("CaptureWnd::OnWindowCreate"));
+//	TRACEUSER("Gerry", _T("CaptureWnd::OnWindowCreate"));
 	CaptureMouse();
 	event.Skip();
 }
@@ -432,27 +432,34 @@ BOOL CaptureWnd::CleanUpSolidDrag()
 {
 	TRACEUSER("Gerry", _T("CleanUpSolidDrag"));
 
-	if(!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
+	if (DragManagerOp::CurrentManager == NULL)
+		return(FALSE);
+
+	if (DragManagerOp::CurrentManager->CurrentDragInfo &&
+		!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
 	   return TRUE;
 
 	if (pDisplayDC == NULL)
 		return FALSE;
 
-	wxMemoryDC BackGroundDC;
-	
-	// select bitmap into the dc
-	BackGroundDC.SelectObject(*BackBitmap);
-
-	// remove the last drag draw (only if we drew something)
-	if (!DragManagerOp::CurrentManager->DragPending)
+	if (BackBitmap)
 	{
-		pDisplayDC->Blit(DragRect.x,DragRect.y,DragRect.width, DragRect.height,&BackGroundDC,0,0);
+		wxMemoryDC BackGroundDC;
+	
+		// select bitmap into the dc
+		BackGroundDC.SelectObject(*BackBitmap);
+
+		// remove the last drag draw (only if we drew something)
+		if (!DragManagerOp::CurrentManager->DragPending)
+		{
+			pDisplayDC->Blit(DragRect.x,DragRect.y,DragRect.width, DragRect.height,&BackGroundDC,0,0);
+		}
+
+		// clean up  and delete the DC's
+		BackGroundDC.SelectObject(wxNullBitmap);
 	}
-  	
-  	// clean up  and delete the DC's
-	BackGroundDC.SelectObject(wxNullBitmap);
-  	
-  	if (pDisplayDC)
+
+	if (pDisplayDC)
 	{
 		delete pDisplayDC;
 		pDisplayDC = NULL;
@@ -501,7 +508,7 @@ BOOL CaptureWnd::CleanUpSolidDrag()
 
 BOOL CaptureWnd::CleanUpSolidDragInScreenArea(const wxRect& Area)
 {
-	TRACEUSER("Gerry", _T("CleanUpSolidDragInScreenArea"));
+//	TRACEUSER("Gerry", _T("CleanUpSolidDragInScreenArea"));
 
 	// No solid drag, so no need to do anything
 	if (!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
@@ -577,16 +584,7 @@ void CaptureWnd::OnMouseMove(wxMouseEvent& event)
 
 BOOL CaptureWnd::DrawSolidDrag(wxPoint point)
 {
-	TRACEUSER("Gerry", _T("DrawSolidDrag(%d, %d)"), point.x, point.y);
-
-	if (HasCapture())
-	{
-		TRACEUSER("Gerry", _T("Has got capture"));
-	}
-	else
-	{
-		TRACEUSER("Gerry", _T("Hasn't got capture"));
-	}
+//	TRACEUSER("Gerry", _T("DrawSolidDrag(%d, %d)"), point.x, point.y);
 
 	ERROR2IF(DragManagerOp::CurrentManager == NULL ||
 			 DragManagerOp::CurrentManager->CurrentDragInfo == NULL,
@@ -689,7 +687,7 @@ BOOL CaptureWnd::DrawSolidDrag(wxPoint point)
 
 BOOL CaptureWnd::DrawTransparentDrag(wxPoint point, INT32 Transparency)
 {
-	TRACEUSER("Gerry", _T("DrawTransparentDrag(%d, %d, %d)"), point.x, point.y, Transparency);
+//	TRACEUSER("Gerry", _T("DrawTransparentDrag(%d, %d, %d)"), point.x, point.y, Transparency);
 
 	// offset mouse pos by drag offset
 	point += DragManagerOp::CurrentManager->CurrentDragInfo->SolidDragOffset;
@@ -792,7 +790,7 @@ BOOL CaptureWnd::DrawTransparentDrag(wxPoint point, INT32 Transparency)
 ********************************************************************************************/
 void CaptureWnd::OnRButtonUp(wxMouseEvent& event)
 {
-	TRACEUSER("Gerry", _T("CaptureWnd::OnRButtonUp"));
+//	TRACEUSER("Gerry", _T("CaptureWnd::OnRButtonUp"));
 	DragManagerOp::EndDrag(-1);//	-1 == Right click for now
 	event.Skip();
 }
@@ -1043,7 +1041,7 @@ void DragManagerOp::StartDrag(DragInformation *Descriptor)
 	
 	if (pNewManager != NULL && TheCaptureWindow != NULL)
 	{
-		DragPending = TRUE;	  
+		DragPending = TRUE;
 		
 		// Remember where the mouse is at the start of the drag
 		pNewManager->CurrentMousePos = wxGetMousePosition();
@@ -1106,7 +1104,14 @@ void DragManagerOp::EndDrag(INT32 Flags)
 
 	// clean up
 	if (TheCaptureWindow != NULL)
+	{
+// If you get a nasty crash in, or otherwise need to debug, the dropping code then 
+// you might want to kill the capture here or the debugger wont work very well and 
+// you'll need to kill the process
+//		GetMainFrame()->EndDragManagerDrag(TheCaptureWindow);
+
 		TheCaptureWindow->CleanUpSolidDrag();
+	}
 
 	if(DragPending)		 // not a drag - user intended a click
 	{
@@ -1114,7 +1119,7 @@ void DragManagerOp::EndDrag(INT32 Flags)
 		wxPoint StartMouse;
 		StartMouse.x = CurrentManager->InitialMousePos.x;
 		StartMouse.y = CurrentManager->InitialMousePos.y;
-		CurrentManager->CurrentDragInfo->OnClick(Flags,StartMouse);   	
+		CurrentManager->CurrentDragInfo->OnClick(Flags,StartMouse);
 	}
 	else 				// this is a genuine end of drag
 	{
