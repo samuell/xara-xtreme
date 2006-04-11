@@ -1323,6 +1323,2063 @@
             </object>
         </object>
     </object>
+    <object class="wxDialog" name="IDD_COLOURSGALLERY">
+        <label>Colour gallery</label>
+        <title>Colour gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_APPLY">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Apply</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply item to selection</tooltip>
+                                    <help>Apply this item to the document selection</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_REDEFINE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Redefine</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Redefine from selection</tooltip>
+                                    <help>Redefine this item from the document selection</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_NEW">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>New...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Create new item</tooltip>
+                                    <help>Create a new item (will duplicate a selected item)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_EDIT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Edit</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Edit this item</tooltip>
+                                    <help>Edit this item</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_DELETE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Delete</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Delete items</tooltip>
+                                    <help>Delete all selected items</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_NAME">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Name...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Rename this item</tooltip>
+                                    <help>Rename this item</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_MENU">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Options...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Display options</tooltip>
+                                    <help>Set gallery options (Sort, Search, Properties, etc)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_COLGAL_BACKGROUND">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Background</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Set Page Background</tooltip>
+                                    <help>Set Page Background</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_LAYERSGALLERY">
+        <label>Layer gallery</label>
+        <title>Layer gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_NEW">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>New...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>New layer</tooltip>
+                                    <help>Create a new layer</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_COPY">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Copy...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Copy layer</tooltip>
+                                    <help>Copy the selected layer and all its contents</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_PROPERTIES">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Properties...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Layer properties...</tooltip>
+                                    <help>Opens the properties dialog for the selected layer</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_DELETE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Delete</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Delete layer</tooltip>
+                                    <help>Delete the selected layer and all its contents</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LAYER_MOVE_TO_ACTIVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Move</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Move to current layer</tooltip>
+                                    <help>Move the selected objects to the current layer</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_ALLVISIBLE">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>All layers visible</tooltip>
+                    <help>Make all layers visible regardless of their visible state</help>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_MULTILAYER">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Edit all layers</tooltip>
+                    <help>Make all layers editable regardless of their editable state</help>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_FRAMESGALLERY">
+        <label>Frame gallery</label>
+        <title>Frame gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_NEW_NODLG">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>New</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>IDBBL_NEWFRAME</tooltip>
+                                    <help>IDS_FRAME_STATUS_NEW</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_COPY_NODLG">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Copy</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>IDBBL_COPYFRAME</tooltip>
+                                    <help>IDS_FRAME_STATUS_COPY</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_PROPERTIES">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Properties...</label>
+                                    <size>-1,-1</size>
+                    <optoken>FrameProperties</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_FRAME_DELETE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Delete</label>
+                                    <size>-1,-1</size>
+                    <optoken>DeleteFrame</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_PREVIEW">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Preview...</label>
+                                    <size>-1,-1</size>
+                    <optoken>GrabFrame</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_ALLVISIBLE">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>IDBBL_FRAME_ALLVISIBLE</tooltip>
+                    <help>IDS_FRAME_STATUS_ALLVISIBLE</help>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_MULTILAYER">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>IDBBL_FRAME_MULTILAYER</tooltip>
+                    <help>IDS_FRAME_STATUS_MULTILAYER</help>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_BITMAPSGALLERY">
+        <label>Bitmap gallery</label>
+        <title>Bitmap gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_CREATE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Insert</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Insert bitmap object</tooltip>
+                                    <help>Insert a new bitmap object</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_TRACE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Trace...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Trace bitmap</tooltip>
+                                    <help>Trace a bitmap</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_FILL">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Fill</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply as fill</tooltip>
+                                    <help>Apply a bitmap as a fill</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_PLUGINS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Effects</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Special Effects</tooltip>
+                                    <help>Plug-ins</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_TEXTURE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Transp</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply as transparency</tooltip>
+                                    <help>Apply a bitmap as a transparency</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_MENU">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Options...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Display options</tooltip>
+                                    <help>Set gallery options (Sort, Search, Properties, etc)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_DELETE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Delete</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Delete items</tooltip>
+                                    <help>Delete all selected items</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_SAVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Save...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Save bitmap</tooltip>
+                                    <help>Save a bitmap</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_BACKGROUND">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Background</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Set page background</tooltip>
+                                    <help>Set page background</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_PROPS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Properties...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Gallery properties</tooltip>
+                                    <help>Properties</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_PREVIEW">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Preview...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Show preview of bitmaps</tooltip>
+                                    <help>Preview</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_LINESGALLERY">
+        <label>Line gallery</label>
+        <title>Line gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_APPLY">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Apply</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply item to selection</tooltip>
+                                    <help>Apply this item to the document selection</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
+                    <optoken>ChangeLineWidth</optoken>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDLB_JOINTYPE_LIST_BOX">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>ChangeLineJoin</optoken>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDLB_LINECAP_LIST_BOX">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>ChangeLineCap</optoken>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_NAMESGALLERY">
+        <label>Name gallery</label>
+        <title>Name gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_APPLY">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Apply</label>
+                                    <size>-1,-1</size>
+                    <optoken>ApplyNamesToSelectedObjects</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Remove</label>
+                                    <size>-1,-1</size>
+                    <optoken>RemoveNamesFromSelectedObjects</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_NEW">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>New...</label>
+                                    <size>-1,-1</size>
+                    <optoken>NameObjectsDlg</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_NAMEGAL_RENAME">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Rename</label>
+                                    <size>-1,-1</size>
+                    <optoken>RenameObjectsDlg</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_NAMEGAL_SELECT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Select</label>
+                                    <size>-1,-1</size>
+                    <optoken>SelectUnionOfSets</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_NAMEGAL_INTERSECT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Intersect</label>
+                                    <size>-1,-1</size>
+                    <optoken>SelectIntersectOfSets</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_DELETE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Delete</label>
+                                    <size>-1,-1</size>
+                    <optoken>DeleteNamesFromAllObjects</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_REDEFINE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Redefine</label>
+                                    <size>-1,-1</size>
+                    <optoken>RedefineNamesAsSelectedObjects</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_NAMEGAL_EXPORT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Export</label>
+                                    <size>-1,-1</size>
+                    <optoken>ExportSets</optoken>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_NAMEGAL_PROP_IDX">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>NameGalleryPropertyIndex</optoken>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="FontsSGallery">
+        <label>This bar should not be called FontsSGallery</label>
+        <title>This bar should not be called FontsSGallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_APPLY">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Apply</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply item to selection</tooltip>
+                                    <help>Apply this item to the document selection</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Remove</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Remove selected sections</tooltip>
+                                    <help>Remove selected sections from your library gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_INSTALL">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Install</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Install selected fonts</tooltip>
+                                    <help>Installs the selected fonts onto your system</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_ADD_FONTS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Disc fonts...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Add fonts from disc</tooltip>
+                                    <help>Add new fonts from your hard drive or CD ROM</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_DEINSTALL">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Uninstall</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Uninstall selected fonts</tooltip>
+                                    <help>Uninstalls the selected fonts from your system</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_MENU">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Options...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Display options</tooltip>
+                                    <help>Set gallery options (Sort, Search, Properties, etc)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_WEB_FONTS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Get fonts...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Connect to font gallery on Xara's web site</tooltip>
+                                    <help>Click to download fonts and their thumbnails from Xara's web site</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Stop loading</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Stop thumbnail downloading</tooltip>
+                                    <help>Stop thumbnail downloading (click on Get Fonts... to start downloading them again)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_LIBCLIPARTSGALLERY">
+        <label>Clipart gallery</label>
+        <title>Clipart gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_OPEN">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Open</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Open as new document</tooltip>
+                                    <help>Open this item as a new document</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Remove</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Remove selected sections</tooltip>
+                                    <help>Remove selected sections from your library gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_IMPORT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Import</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Import into this document</tooltip>
+                                    <help>Import this item into the selected document</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_ADD_CLIPART">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Disc clipart...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Add clipart from disc</tooltip>
+                                    <help>Add new clipart from your local hard disc</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_WEB_CLIPART">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Get clipart...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Connect to clipart gallery on Xara's web site</tooltip>
+                                    <help>Click to download clipart and their thumbnails from Xara's web site</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Stop loading</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Stop thumbnail downloading</tooltip>
+                                    <help>Stop thumbnail downloading (click on Get Clipart... to start downloading them again)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_MENU">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Options...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Display options</tooltip>
+                                    <help>Set gallery options (Sort, Search, Properties, etc)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_UPDATE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Batch</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Start batching</tooltip>
+                                    <help>Start batching from the selected entry</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_LIBGAL_CLIPTHEME">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>LibGalClipTheme</optoken>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="IDD_LIBFILLSSGALLERY">
+        <label>Fills gallery</label>
+        <title>Fills gallery</title>
+        <style>wxRESIZE_BORDER</style>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>0</border>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_IMPORT">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Import</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Import into this document</tooltip>
+                                    <help>Import this item into the selected document</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Remove</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Remove selected sections</tooltip>
+                                    <help>Remove selected sections from your library gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_FILL">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Fill</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply as fill</tooltip>
+                                    <help>Apply a bitmap as a fill</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_ADD_FILLS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Disc fills...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Add fills from disc</tooltip>
+                                    <help>Add new fills from your hard drive or CD ROM</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_TEXTURE">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Transp</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Apply as transparency</tooltip>
+                                    <help>Apply a bitmap as a transparency</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_MENU">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Options...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Display options</tooltip>
+                                    <help>Set gallery options (Sort, Search, Properties, etc)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_WEB_FILLS">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Get fills...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Connect to fills gallery on Xara's web site</tooltip>
+                                    <help>Click to download fills and their thumbnails from Xara's web site</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Stop loading</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Stop thumbnail downloading</tooltip>
+                                    <help>Stop thumbnail downloading (click on Get Fills... to start downloading them again)</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>0</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_BMPGAL_BACKGROUND">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Background</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Set page background</tooltip>
+                                    <help>Set page background</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>0</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>0</border>
+                                <object class="wxButton" name="IDC_GALLERY_HELP">
+                                    <font>
+                                        <size>8</size>
+                                    </font>
+                                    <label>Help...</label>
+                                    <size>-1,-1</size>
+                                    <tooltip>Help for this Gallery</tooltip>
+                                    <help>Help for this Gallery</help>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>
+            <option>1</option>
+            <border>1</border>
+            <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
+                <style>wxFULL_REPAINT_ON_RESIZE</style>
+                <size>400,400</size>
+            </object>
+        </object>
+        </object>
+    </object>
     <object class="wxPanel" name="IDD_PUSHINFO">
         <label>Push tool info bar</label>
         <title>Push tool info bar</title>
@@ -2966,7 +5023,8 @@
                     <font>
                         <size>7</size>
                     </font>
-                    <size>80,-1</size>
+                    <label>100%</label>
+                    <size>-1,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
                     <tooltip>Smoothing</tooltip>
                     <help>Sets accuracy of the smoothing operation</help>
@@ -3637,7 +5695,8 @@
                     <font>
                         <size>7</size>
                     </font>
-                    <size>80,-1</size>
+                    <label>100%</label>
+                    <size>-1,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
                     <tooltip>Freehand smoothing</tooltip>
                     <help>Sets the accuracy for the freehand tool's curve fitting.</help>
@@ -3671,7 +5730,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_CREATEBRUSH">
                     <font>
-                        <size>8</size>
+                        <size>6</size>
                     </font>
                     <label>Create Brush</label>
                     <size>-1,-1</size>
@@ -3689,7 +5748,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_EDITBRUSH">
                     <font>
-                        <size>8</size>
+                        <size>6</size>
                     </font>
                     <label>Edit Brush</label>
                     <size>-1,-1</size>
@@ -3786,9 +5845,9 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVEBLEND">
                     <font>
-                        <size>8</size>
+                        <size>6</size>
                     </font>
-                    <label>Remove Blend</label>
+                    <label>Remove</label>
                     <size>-1,-1</size>
                     <optoken>RemoveBlend</optoken>
                 </object>
@@ -3919,7 +5978,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVEMOULD">
                     <font>
-                        <size>8</size>
+                        <size>6</size>
                     </font>
                     <label>Remove</label>
                     <size>-1,-1</size>
@@ -4125,7 +6184,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVECONTOUR">
                     <font>
-                        <size>8</size>
+                        <size>6</size>
                     </font>
                     <label>Remove</label>
                     <size>-1,-1</size>

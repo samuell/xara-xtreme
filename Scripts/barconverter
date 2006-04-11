@@ -10,6 +10,10 @@ sub BuildStringTable;
 my %stringtable;
 BuildStringTable;
 
+sub BuildNameMap;
+my %namemap;
+BuildNameMap;
+
 my $ddindent="";
 my $dd=0;
 
@@ -30,15 +34,6 @@ sub GetStaticLabel
     return "X" if ($resname =~ /IDC_PATH_STATIC_.*X/);
     return "Y" if ($resname =~ /IDC_PATH_STATIC_.*Y/);
 
-    my %namemap = (
-		   "IDC_CREATEBRUSH" => "Create Brush",
-		   "IDC_EDITBRUSH" => "Edit Brush",
-		   "IDC_REMOVEBLEND" => "Remove Blend",
-		   "IDC_REMOVEMOULD" => "Remove",
-		   "IDC_REMOVECONTOUR" => "Remove",
-		   "IDC_SOFTSHADOWCENTRE_X" => "X",
-		   "IDC_SOFTSHADOWCENTRE_Y" => "Y"
-		   );
     return $namemap{ $resname } || ""; 
 
 }
@@ -47,7 +42,7 @@ sub MakeName
 {
     my $resname = shift @_;
 
-    my %namemap = (
+    my %tnamemap = (
 
 		   "IDD_BUTTBAR_GENERAL" => "General",
 		   "IDD_BUTTBAR_IMAGESETTING" => "Image Setting",
@@ -76,9 +71,19 @@ sub MakeName
 		   "IDD_CONTOURINFOBAR" => "Contour tool info bar",
 		   "IDD_TEXT_INFO_BAR" => "Text tool info bar",
 		   "IDD_PENTOOLBAR" => "Pen tool info bar",
-		   "IDD_SOFTSHADOWTOOLBAR" => "Shadow tool info bar"
+		   "IDD_SOFTSHADOWTOOLBAR" => "Shadow tool info bar",
+		   "IDD_COLOURSGALLERY" => "Colour gallery",
+		   "IDD_LAYERSGALLERY" => "Layer gallery",
+		   "IDD_FRAMESGALLERY" => "Frame gallery",
+		   "IDD_BITMAPSGALLERY" => "Bitmap gallery",
+		   "IDD_LINESGALLERY" => "Line gallery",
+		   "IDD_NAMESGALLERY" => "Name gallery",
+		   "IDD_FONTSGALLERY" => "Font gallery",
+		   "IDD_LIBCLIPARTSGALLERY" => "Clipart gallery",
+		   "IDD_LIBFILLSSGALLERY" => "Fills gallery"
+
 		   );
-    return $namemap{ $resname } || "This bar should not be called $resname"; 
+    return $tnamemap{ $resname } || "This bar should not be called $resname"; 
 }
 
 sub ConvertQuotedName
@@ -86,24 +91,34 @@ sub ConvertQuotedName
     my $qname = shift @_;
 
     my %qnamemap = (
-                   "\"Selector" => "IDD_SELECTORINFO",
-                   "\"Zoom" => "IDD_ZOOMINFO",
-                   "\"Push" => "IDD_PUSHINFO",
-                   "\"QuickShape" => "IDD_REGSHAPETOOLBAR",
-                   "\"Rectangle" => "IDD_RECTTOOLBAR",
-                   "\"Ellipse" => "IDD_ELLIPSETOOLBAR",
-                   "\"Fill" => "IDD_GRADFILLDLG",
-                   "\"Transparency" => "IDD_TRANFILLDLG",
-                   "\"Shape" => "IDD_BEZTOOLBAR",
-		   "\"Freehand" => "IDD_FREEHANDTOOL",
-		   "\"Blend" => "IDD_BLENDTOOLBAR",
-		   "\"Mould" => "IDD_MOULDTOOLBAR",
-		   "\"Bevel" => "IDD_BEVELINFOBAR",
-		   "\"Contour" => "IDD_CONTOURINFOBAR",
-		   "\"Text" => "IDD_TEXT_INFO_BAR",
-		   "\"Pen" => "IDD_PENTOOLBAR",
-		   "\"Shadow" => "IDD_SOFTSHADOWTOOLBAR"
+		    "Selector" => "IDD_SELECTORINFO",
+		    "Zoom" => "IDD_ZOOMINFO",
+		    "Push" => "IDD_PUSHINFO",
+		    "QuickShape" => "IDD_REGSHAPETOOLBAR",
+		    "Rectangle" => "IDD_RECTTOOLBAR",
+		    "Ellipse" => "IDD_ELLIPSETOOLBAR",
+		    "Fill" => "IDD_GRADFILLDLG",
+		    "Transparency" => "IDD_TRANFILLDLG",
+		    "Shape" => "IDD_BEZTOOLBAR",
+		    "Freehand" => "IDD_FREEHANDTOOL",
+		    "Blend" => "IDD_BLENDTOOLBAR",
+		    "Mould" => "IDD_MOULDTOOLBAR",
+		    "Bevel" => "IDD_BEVELINFOBAR",
+		    "Contour" => "IDD_CONTOURINFOBAR",
+		    "Text" => "IDD_TEXT_INFO_BAR",
+		    "Pen" => "IDD_PENTOOLBAR",
+		    "Shadow" => "IDD_SOFTSHADOWTOOLBAR",
+		    "ColourSGallery" => "IDD_COLOURSGALLERY",
+		    "LayerSGallery" => "IDD_LAYERSGALLERY",
+		    "FrameSGallery" => "IDD_FRAMESGALLERY",
+		    "BitmapSGallery" => "IDD_BITMAPSGALLERY",
+		    "LineGallery" => "IDD_LINESGALLERY",
+		    "NameGallery" => "IDD_NAMESGALLERY",
+		    "FontSGallery" => "IDD_FONTSGALLERY",
+		    "LibClipartSGallery" => "IDD_LIBCLIPARTSGALLERY",
+		    "LibFillsSGallery" => "IDD_LIBFILLSSGALLERY"
 		    );
+    $qname =~ s/\"//g;
     return $qnamemap{ $qname } || $qname;
 
 }
@@ -144,7 +159,7 @@ sub GetText
 sub IsToggle
 {
     my $name = shift @_;
-    return ($name=~/^(IDC_BTN_MAKECURVE|IDC_BTN_MAKELINE|IDC_BTN_SMOOTHPOINT|IDC_BTN_CUSPPOINT|IDC_BTN_REGSHAPETOOL_RADIUS|IDC_BTN_REGSHAPETOOL_DIAMETER|IDC_BTN_REGSHAPETOOL_BOUNDBOX|IDC_BTN_REGSHAPETOOL_POLYGON|IDC_BTN_REGSHAPETOOL_ELLIPSE|IDC_BTN_REGSHAPETOOL_STELLATION|IDC_BTN_REGSHAPETOOL_CURVATURE|IDC_SEL_SHOWBOUNDSBLOBS|IDC_SEL_SHOWOBJECTBLOBS|IDC_SEL_SHOWFILLBLOBS|IDC_SEL_ROTATEBUTTON|IDC_SEL_SCALELINES|IDC_SEL_PADLOCK|IDC_BTN_MAGNET|IDC_BTN_BLENDDISTANCE|C_BTN_BLENDSTEPS|IDC_BTN_ONETOONE|IDC_BTN_BLENDANTIALIAS|IDC_BTN_DETACHMOULD|IDC_BTN_BEVELOUTER|IDC_BTN_BEVELINNER|IDC_BEVELJOINTYPEMITRE|IDC_BEVELJOINTYPEROUND|IDC_BEVELJOINTYPEBEVEL|IDC_BTN_CONTOURDISTANCE|IDC_BTN_CONTOURSTEPS|IDC_BTN_CONTOUROUTER|IDC_BTN_CONTOURINNER|IDC_CONTOURJOINTYPEMITRE|IDC_CONTOURJOINTYPEROUND|IDC_CONTOURJOINTYPEBEVEL|IDC_BOLDBUTTON|IDC_ITALICBUTTON|IDC_JUSTIFYLEFT|IDC_JUSTIFYCENTRE|IDC_JUSTIFYRIGHT|IDC_JUSTIFYFULL|IDC_SUPERSCRIPT|IDC_SUBSCRIPT|IDC_AUTOKERN|IDC_BTN_NOSHADOW|IDC_BTN_WALLSHADOW|IDC_BTN_FLOORSHADOW|IDC_BTN_GLOWSHADOW)$/)?1:0;
+    return ($name=~/^(IDC_BTN_MAKECURVE|IDC_BTN_MAKELINE|IDC_BTN_SMOOTHPOINT|IDC_BTN_CUSPPOINT|IDC_BTN_REGSHAPETOOL_RADIUS|IDC_BTN_REGSHAPETOOL_DIAMETER|IDC_BTN_REGSHAPETOOL_BOUNDBOX|IDC_BTN_REGSHAPETOOL_POLYGON|IDC_BTN_REGSHAPETOOL_ELLIPSE|IDC_BTN_REGSHAPETOOL_STELLATION|IDC_BTN_REGSHAPETOOL_CURVATURE|IDC_SEL_SHOWBOUNDSBLOBS|IDC_SEL_SHOWOBJECTBLOBS|IDC_SEL_SHOWFILLBLOBS|IDC_SEL_ROTATEBUTTON|IDC_SEL_SCALELINES|IDC_SEL_PADLOCK|IDC_BTN_MAGNET|IDC_BTN_BLENDDISTANCE|C_BTN_BLENDSTEPS|IDC_BTN_ONETOONE|IDC_BTN_BLENDANTIALIAS|IDC_BTN_DETACHMOULD|IDC_BTN_BEVELOUTER|IDC_BTN_BEVELINNER|IDC_BEVELJOINTYPEMITRE|IDC_BEVELJOINTYPEROUND|IDC_BEVELJOINTYPEBEVEL|IDC_BTN_CONTOURDISTANCE|IDC_BTN_CONTOURSTEPS|IDC_BTN_CONTOUROUTER|IDC_BTN_CONTOURINNER|IDC_CONTOURJOINTYPEMITRE|IDC_CONTOURJOINTYPEROUND|IDC_CONTOURJOINTYPEBEVEL|IDC_BOLDBUTTON|IDC_ITALICBUTTON|IDC_JUSTIFYLEFT|IDC_JUSTIFYCENTRE|IDC_JUSTIFYRIGHT|IDC_JUSTIFYFULL|IDC_SUPERSCRIPT|IDC_SUBSCRIPT|IDC_AUTOKERN|IDC_BTN_NOSHADOW|IDC_BTN_WALLSHADOW|IDC_BTN_FLOORSHADOW|IDC_BTN_GLOWSHADOW|IDC_BTN_ALLVISIBLE|IDC_BTN_MULTILAYER)$/)?1:0;
 }
 
 sub ConvertOptoken
@@ -179,6 +194,47 @@ sub WriteBarHead
 
 sub WriteBarTail
 {
+    print STDOUT $ddindent."        </object>\n";
+    print STDOUT $ddindent."    </object>\n";
+}
+
+sub WriteGalleryHead
+{
+    my $name = shift @_;
+    my $title = MakeName($name);
+    print STDOUT $ddindent. "    <object class=\"wxDialog\" name=\"$name\">\n";
+    print STDOUT $ddindent. "        <label>$title</label>\n";
+    print STDOUT $ddindent. "        <title>$title</title>\n";
+    print STDOUT $ddindent. "        <style>wxRESIZE_BORDER</style>\n";
+
+    print STDOUT $ddindent. "        <object class=\"wxBoxSizer\">\n";
+    print STDOUT $ddindent. "            <orient>wxVERTICAL</orient>\n";
+    print STDOUT $ddindent. "            <object class=\"sizeritem\">\n";
+    print STDOUT $ddindent. "                <flag>wxALIGN_LEFT|wxALL</flag>\n";
+    print STDOUT $ddindent. "                <border>0</border>\n";
+
+
+    print STDOUT $ddindent. "        <object class=\"wxBoxSizer\">\n";
+    printf STDOUT $ddindent."            <orient>wx%s</orient>\n", !IsVertical()?"HORIZONTAL":"VERTICAL";
+}
+
+sub WriteGalleryTail
+{
+
+    print STDOUT $ddindent. "            </object>\n";
+    print STDOUT $ddindent. "        </object>\n";
+
+    print STDOUT $ddindent. "        <object class=\"sizeritem\">\n";
+    printf STDOUT $ddindent."            <flag>wxALIGN_LEFT|wxALL|wxEXPAND</flag>\n";
+    printf STDOUT $ddindent."            <option>1</option>\n"; # Stretch
+    printf STDOUT $ddindent."            <border>%d</border>\n",$dd?0:1;
+    print STDOUT $ddindent. "            <object class=\"wxCamDrawControl\" name=\"IDC_GALLERY_LISTBOX\">\n";
+    print STDOUT $ddindent. "                <style>wxFULL_REPAINT_ON_RESIZE</style>\n";
+    print STDOUT $ddindent. "                <size>400,400</size>\n";
+    print STDOUT $ddindent. "            </object>\n";
+    print STDOUT $ddindent. "        </object>\n";
+
+
     print STDOUT $ddindent."        </object>\n";
     print STDOUT $ddindent."    </object>\n";
 }
@@ -288,10 +344,10 @@ sub WriteButton
     print STDOUT $ddindent."                <border>0</border>\n";
     print STDOUT $ddindent."                <object class=\"wxButton\" name=\"$name\">\n";
     print STDOUT $ddindent."                    <font>\n";
-    print STDOUT $ddindent."                        <size>8</size>\n";
+    printf STDOUT $ddindent."                        <size>%d</size>\n",$dd?8:6;
     print STDOUT $ddindent."                    </font>\n";
     printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
-    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",($label eq "")?GetSize($name,20):-1;
+    printf STDOUT $ddindent."                    <size>%d,%d</size>\n",($label eq "")?GetSize($name,20):-1,$dd?-1:-1;
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
     print STDOUT $ddindent."                </object>\n";
@@ -490,7 +546,7 @@ sub WriteControl
     {
 	WriteStaticBitmap($name,$optoken);
     }
-    elsif ($name =~ /^(IDC_CREATEBRUSH|IDC_EDITBRUSH|IDC_REMOVEBLEND|IDC_REMOVEMOULD|IDC_REMOVECONTOUR)$/)
+    elsif ($name =~ /^(IDC_CREATEBRUSH|IDC_EDITBRUSH|IDC_REMOVEBLEND|IDC_REMOVEMOULD|IDC_REMOVECONTOUR|IDC_BMPGAL_BACKGROUND|IDC_BMPGAL_CREATE|IDC_BMPGAL_FILL|IDC_BMPGAL_PLUGINS|IDC_BMPGAL_PREVIEW|IDC_BMPGAL_PROPS|IDC_BMPGAL_SAVE|IDC_BMPGAL_TEXTURE|IDC_BMPGAL_TRACE|IDC_COLGAL_BACKGROUND|IDC_FRAME_DELETE|IDC_GALLERY_APPLY|IDC_GALLERY_COPY|IDC_GALLERY_COPY_NODLG|IDC_GALLERY_DEINSTALL|IDC_GALLERY_DELETE|IDC_GALLERY_EDIT|IDC_GALLERY_HELP|IDC_GALLERY_INSTALL|IDC_GALLERY_MENU|IDC_GALLERY_NAME|IDC_GALLERY_NEW|IDC_GALLERY_NEW_NODLG|IDC_GALLERY_PROPERTIES|IDC_GALLERY_REDEFINE|IDC_LAYER_MOVE_TO_ACTIVE|IDC_LIBGAL_ADD_CLIPART|IDC_LIBGAL_ADD_FILLS|IDC_LIBGAL_ADD_FONTS|IDC_LIBGAL_IMPORT|IDC_LIBGAL_OPEN|IDC_LIBGAL_REMOVE|IDC_LIBGAL_STOP_LOADING|IDC_LIBGAL_UPDATE|IDC_LIBGAL_WEB_CLIPART|IDC_LIBGAL_WEB_FILLS|IDC_LIBGAL_WEB_FONTS|IDC_NAMEGAL_EXPORT|IDC_NAMEGAL_INTERSECT|IDC_NAMEGAL_RENAME|IDC_NAMEGAL_SELECT)$/)
     {
 	WriteButton($name,$optoken);
     }
@@ -502,6 +558,7 @@ sub WriteControl
 
 
 my $inbar = 0;
+my $ingal = 0;
 
 WriteFileHead();
 while (<>)
@@ -511,20 +568,30 @@ while (<>)
    
     s/,/ /g; # remove bogus commas
 		   
-    if (/^Bar\b/)
+    if (/^(Bar|Gallery)\b/)
     {
+	if (/^Gallery/)
+	{
+	    $ingal=1;
+	}
+	else
+	{
+	    $ingal=0;
+	}
+	    
 	my ($dummy, $name, $loc, $posx, $posy, $vis) = split(/\s+/);
 	$dialogname = ConvertQuotedName($name);
 	$dialogname =~ s/^IDS_/IDD_/;
-	WriteBarHead($dialogname);
+	$ingal?WriteGalleryHead($dialogname):WriteBarHead($dialogname);
 	$inbar = 1;
 	
     }
-    elsif (/^EndBar\b/)
+    elsif (/^End(Bar|Gallery)\b/)
     {
 	$dialogname="";
-	WriteBarTail();
+	$ingal?WriteGalleryTail():WriteBarTail();
 	$inbar = 0;
+	$ingal = 0;
     }
     elsif (/^\s*Control\b/ && $inbar)
     {
@@ -1272,4 +1339,526 @@ sub BuildStringTable
 	/(\S+)\t(.*)$/;
 	$stringtable{$1}=$2;
     }
+}
+
+sub BuildNameMap
+{
+    %namemap = (
+		   "IDC_CREATEBRUSH" => "Create Brush",
+		   "IDC_EDITBRUSH" => "Edit Brush",
+		   "IDC_REMOVEBLEND" => "Remove Blend",
+		   "IDC_REMOVEMOULD" => "Remove",
+		   "IDC_REMOVECONTOUR" => "Remove",
+		   "IDC_SOFTSHADOWCENTRE_X" => "X",
+		   "IDC_SOFTSHADOWCENTRE_Y" => "Y",
+		   "IDB_DIRTY_NOSAVE" => "Do&n\'t Save",
+		   "IDB_FILEINFO_HELP" => "&Help",
+		   "IDC_BC_CREATE" => "Create",
+		   "IDC_BC_REDEF_BACKBAR" => "Redefine",
+		   "IDC_BIGALL" => "&All",
+		   "IDC_BIGNONE" => "&None",
+		   "IDC_BUTTON3" => "Convert",
+		   "IDC_BUTTONBRUSHFILLRANDOM" => "Randomise",
+		   "IDC_BUTTONBRUSHSCALINGRANDSEED" => "Randomise",
+		   "IDC_BUTTONBRUSHSPACINGRANDSEED" => "Randomise",
+		   "IDC_BUTTON_LE_ADD" => "New >",
+		   "IDC_BUTTON_LE_EDIT" => "Edit...",
+		   "IDC_BUTTON_LE_INSERT" => "Insert...",
+		   "IDC_BUTTON_LE_REMOVEALL" => "Remove All",
+		   "IDC_BUTTON_LE_REMOVE" => "Remove",
+		   "IDC_BUTTON_LE_SETUP" => "Setup...",
+		   "IDC_BUTTONOFFSETVALUERANDSEED" => "Randomise",
+		   "IDC_BUTTONROTATEANGLERANDSEED" => "Randomise",
+		   "IDC_CD_CANCEL" => "Cancel",
+		   "ID_CC_HELP_BUTTON" => "&Help",
+		   "ID_CC_HELP_BUTTON" => "Help",
+		   "IDC_CREATEBRUSH" => "Create Brush",
+		   "IDC_CREATE_STATE" => "&Create State",
+		   "IDC_DAVE_BEV_REMOVE" => "Remove bevel",
+		   "IDC_DAVE_MKBMP" => "Apply Bevel",
+		   "IDC_DEBUGTREE_DUMP" => "Dump Tree",
+		   "IDC_DEBUGTREE_EXPAND" => "Expand Tree",
+		   "IDC_DEBUGTREE_REFRESH" => "Refresh",
+		   "IDC_DELETEBAR" => "&Delete",
+		   "IDC_DELETE_STATE" => "&Delete State",
+		   "IDC_EDIT_BAR" => "Bar Properties...",
+		   "IDC_EDITBRUSH" => "Edit Brush",
+		   "IDC_ES_HELP" => "&Help",
+		   "IDC_FILEDLG_OPTIONS" => "&Options...",
+		   "IDC_FLUSHCACHE" => "Empty Cache",
+		   "IDC_GIF_BITMAPPREVIEW" => "Browser Preview",
+		   "IDC_GUIDETAB_DELETE" => "Delete",
+		   "IDC_GUIDETAB_NEW" => "New...",
+		   "IDC_GUIDETAB_PROPERTIES" => "Properties...",
+		   "IDC_IMAPTAB_BROWSE" => "Browse...",
+		   "IDC_IMMEDIATE_BROWSER_PREVIEW" => "Browser Preview",
+		   "IDC_INVOKE_LYR_DLG" => "..",
+		   "IDC_LIBPATH_GENERATE" => "&Update",
+		   "IDC_LIBPATH_HELP_BUTTON" => "&Help",
+		   "IDC_MAKEGRID" => "G",
+		   "IDC_MAKE_LOCAL" => "Make local to frame",
+		   "IDC_MORE" => "&Tell me more",
+		   "IDC_NEW_BAR" => "New...",
+		   "IDC_NEWBAR" => "Ne&w...",
+		   "IDC_NEXTTIP" => "&Next Tip",
+		   "IDC_OPTS_BUTTON_PLUGINS_SETUP" => "Setup...",
+		   "IDC_OPTS_DELETEUNIT" => "&Delete unit",
+		   "IDC_OPTS_NEWUNIT" => "&New unit...",
+		   "IDC_OPTS_RESET" => "Reset &defaults",
+		   "IDC_OPTS_SAVENOW" => "Save settings no&w",
+		   "IDC_OPTS_UNITPROPERTY" => "&Properties...",
+		   "IDC_PLATEPROPS" => "&Properties...",
+		   "IDC_PLUGINPATH_HELP_BUTTON" => "&Help",
+		   "IDC_PRINTHELP" => "&Help",
+		   "IDC_PRINTOPTIONS" => "&Options...",
+		   "IDC_PROBLEMS_HELP_BUTTON" => "Problems&?",
+		   "IDC_REDEFINE_STATE" => "Set new design",
+		   "IDC_REDRAWBTN" => "Redraw Me",
+		   "IDC_REMOVEBLEND" => "Remove",
+		   "IDC_REMOVECONTOUR" => "Remove",
+		   "IDC_REMOVEMOULD" => "Remove",
+		   "IDC_RESETBARS" => "Re&set",
+		   "IDC_SGSEARCH_FINDFIRST" => "&Find first",
+		   "IDC_SOFTSHADOWAPPLY" => "Apply",
+		   "IDC_STATES" => "Create/Delete States...",
+		   "IDC_ST_EXPORT" => "Export...",
+		   "IDC_TBUTTON3" => "Convert",
+		   "IDC_TMPLTDLG_ADD" => "&Add -->",
+		   "IDC_TMPLTDLG_MAKE_STYLE" => "Make &Style...",
+		   "IDC_TMPLTDLG_REMOVE_ALL" => "Remove A&ll",
+		   "IDC_TMPLTDLG_REMOVE" => "<-- &Remove",
+		   "IDC_TRACER_DEFAULT" => "&Defaults",
+		   "IDC_TRACER_HELP" => "&Help",
+		   "IDC_TRACER_RESET" => "&Reset settings",
+		   "IDC_TRACER_SAVE" => "&Save settings",
+		   "IDC_TRACER_TRACEBTN" => "&Trace",
+		   "IDC_URLIMPORT_HELP" => "Help",
+		   "IDC_WEBADDRESS_REMOVE" => "Remove",
+		   "IDC_XSEPSOPSHELP" => "&Help",
+		   "ID_ERRORBOX_BUTTON1" => "OK",
+		   "ID_ERRORBOX_BUTTON2" => "Cancel",
+		   "ID_ERRORBOX_BUTTON3" => "Ni!",
+		   "ID_ERRORBOX_BUTTON4" => "Peng!",
+		   "ID_ERRORBOX_BUTTON5" => "R*C*P",
+		   "IDNO" => "&No",
+		   "IDC_BACKBAR_TEXT" => "from selection",
+		   "IDC_BLENDSTEPSTEXT" => "Steps:",
+		   "IDC_BMPOPTS_DPI" => "&dpi",
+		   "IDC_BMPOPTS_NUMCOLS_EDITTEXT" => "Number of colours:",
+		   "IDC_BMPOPTS_XSIZE" => "Unknown",
+		   "IDC_BMPOPTS_YSIZE" => "Unknown",
+		   "IDC_CLICKED_EXISTS" => "Created",
+		   "IDC_COLOURS" => "-",
+		   "IDC_CONV" => "Conversion:",
+		   "IDC_CS_STATIC" => "1/100 s",
+		   "IDC_DELAYFOR_STATIC" => "Delay for:",
+		   "IDC_DELAYFOR_STATIC" => "Display each frame for:",
+		   "IDC_DIMENSIONS" => "-",
+		   "IDC_DPIEDITTEXT" => "Dots per inch",
+		   "IDC_DPIEDITTEXT" => "Pixels per inch",
+		   "IDC_EDIT_PARENTNAME" => "Parent:",
+		   "IDC_EDIT_SHADEPERCENT" => "%",
+		   "IDC_EDIT_TINTNAME" => "Shade:",
+		   "IDC_EDIT_TINTPERCENT" => "%",
+		   "IDC_ES_CHECKLIST" => "Check List Box Placeholder",
+		   "IDC_ES_EXTENDTYPE" => "Choose how #1%S should extend",
+		   "IDC_ES_HORIZONTAL" => "Horizontally",
+		   "IDC_ES_VERTICAL" => "Vertically",
+		   "IDC_FILEDIFF1" => "File Difference:",
+		   "IDC_FILEDIFF2" => "File Difference:",
+		   "IDC_FILESIZE1" => "File Size:",
+		   "IDC_FILESIZE2" => "File Size:",
+		   "IDC_FILLQUALTEXT" => "Quality:",
+		   "IDC_FORMAT" => "-",
+		   "IDC_FREEHANDPERCENT" => "100%",
+		   "IDC_GUIDELINEPROP_TYPE" => "Horizontal",
+		   "IDC_GUIDETAB_COLOURTEXT" => "Colour:",
+		   "IDC_HEIGHTTEXT" => "Height:",
+		   "IDC_IMAGESIZE1" => "Image Size:",
+		   "IDC_IMAGESIZE2" => "Image Size:",
+		   "IDC_IMAPTAB_STATIC1" => "Name",
+		   "IDC_IMAPTAB_STATIC2" => "Approximate curves with lines",
+		   "IDC_IMAPTAB_STATIC3" => "Dreamweaver 3 is not installed",
+		   "IDC_IMAPTAB_STATIC4" => "Current drawing must be saved",
+		   "IDC_ISTATIC1" => "        ",
+		   "IDC_ISTATIC2" => "Imagesetting options for",
+		   "IDC_ISTATIC3" => "Print film ",
+		   "IDC_LBLATTRPROFILE" => "Attribute:",
+		   "IDC_LBLBRUSHDISTANCE" => "Spacing:",
+		   "IDC_LBLOBJECTPROFILE" => " Object:",
+		   "IDC_LEFTTEXT" => "Left:",
+		   "IDC_LIBPATH_ISLIBRARY" => "<Does index exist>",
+		   "IDC_LIBPATH_PATHNAME" => "<Pathname here>",
+		   "IDC_LOOP_STATIC" => "Loop",
+		   "IDC_MOUSE_OFF_EXISTS" => "Created",
+		   "IDC_MOUSE_OVER_EXISTS" => "Created",
+		   "IDC_NAME" => "-",
+		   "IDC_NAME_LABEL" => "Style Name:",
+		   "IDC_OPTIONSTAB_JPEG_TEXT4" => "100%",
+		   "IDC_OPTS_DUPLICATETXT" => "Duplication distance",
+		   "IDC_OPTS_FULLPAGEMEM" => "-",
+		   "IDC_OPTS_UNDOSIZE" => "-",
+		   "IDC_PAGENUMBER" => "-",
+		   "IDC_PAPERSIZETEXT" => "Paper size:",
+		   "IDC_PERCENTAGE" => "100%",
+		   "IDC_PLATENUMBER" => "-",
+		   "IDC_PLUGINPATH_ISPLUGIN" => "<Does index exist>",
+		   "IDC_PLUGINPATH_PATHNAME" => "<Pathname here>",
+		   "IDC_PRINTORIENTATIONTEXT" => "Orientation:",
+		   "IDC_RESTORE_STATIC" => "Restore:",
+		   "IDC_SCALEPERCENT" => "%",
+		   "IDC_SCALETEXT" => "Scale:",
+		   "IDC_SELECTED_EXISTS" => "Created",
+		   "IDC_SIZEII" => "-",
+		   "IDC_SIZEI" => "Size:",
+		   "IDC_SMOOTHPERCENT" => "100%",
+		   "IDC_SOFTSHADOWCENTRE_X" => "X",
+		   "IDC_SOFTSHADOWCENTRE_Y" => "Y",
+		   "IDC_SOFTSHADOWPENUMBRA" => "Softness width",
+		   "IDC_SOFTSHADOWPERCENT" => "100%",
+		   "IDC_SOURCE_TEXT" => "from MouseOff",
+		   "IDC_SSTATIC1" => " PostScript options ",
+		   "IDC_SSTATIC3" => "dpi",
+		   "IDC_SSTATIC5" => "lpi",
+		   "IDC_ST_BARNAME" => "Bar1",
+		   "IDC_STCT" => "Convert to",
+		   "IDC_STDEF" => "Default",
+		   "IDC_STRL" => "Real",
+		   "IDC_STUV" => "Unit Value",
+		   "IDC_STXYZ" => "XYZ",
+		   "IDC_T1STATIC2" => "DPI",
+		   "IDC_T1STATIC3" => "Width",
+		   "IDC_T1STATIC4" => "Height",
+		   "IDC_T1STATIC6" => "Scale",
+		   "IDC_T1STATIC7" => "%",
+		   "IDC_T2STATIC1" => "Dithering:",
+		   "IDC_T2STATIC2" => "Palette:",
+		   "IDC_T2STATIC3" => "Colour depth:",
+		   "IDC_T2STATIC4" => "Max colours:",
+		   "IDC_T2STATIC5" => "Sort By:",
+		   "IDC_T2STATIC6" => "Value:",
+		   "IDC_T2STATIC7" => "R",
+		   "IDC_T2STATIC8" => "G",
+		   "IDC_T2STATIC9" => "B",
+		   "IDC_TCONV" => "Conversion:",
+		   "IDC_TILENUMBER" => "-",
+		   "IDC_TIMES_STATIC" => "times",
+		   "IDC_TMPLTDLG_QUESTION_TEXT" => "&Question",
+		   "IDC_TOPTEXT" => "Top:",
+		   "IDC_TRACER_ACCURACYNUM" => "0%",
+		   "IDC_TRACER_ACCURACYTXT" => "Accuracy",
+		   "IDC_TRACER_BLURNUM" => "0%",
+		   "IDC_TRACER_BLURTXT" => "Remove noise",
+		   "IDC_TRACER_FCTNUM" => "0%",
+		   "IDC_TRACER_FCTTXT" => "Final colour tolerance",
+		   "IDC_TRACER_ICTNUM" => "0%",
+		   "IDC_TRACER_ICTTXT" => "Initial colour tolerance",
+		   "IDC_TRACER_MINAREANUM" => "0%",
+		   "IDC_TRACER_MINAREATXT" => "Minimum area",
+		   "IDC_TRACER_PASSESTXT" => "Passes",
+		   "IDC_TRACER_SMOOTHNUM" => "0%",
+		   "IDC_TRACER_SMOOTHTXT" => "Smoothing",
+		   "IDC_TRANSPARENT" => "-",
+		   "IDC_TSTATIC3" => "Y:",
+		   "IDC_TSTATIC4" => "X:",
+		   "IDC_TSTCT" => "Convert to",
+		   "IDC_TSTDEF" => "Default",
+		   "IDC_TSTUV" => "Unit Value",
+		   "IDC_WIDTHTEXT" => "Width:",
+		   "ID_STINT" => "Integer",
+		   "stc1" => "Printer:  Master Nev Strikes again",
+		   "stc4" => "Print &Quality:",
+		   "stc5" => "Copies:",
+		   "chx1" => "Print to &File",
+		   "chx2" => "Collate Cop&ies",
+		   "IDC_14K" => "14.4 Kbs modem",
+		   "IDC_28K" => "28.8/33.6 Kbs modem",
+		   "IDC_56K" => "56 Kbs modem",
+		   "IDC_ALIGNDIALOG_TOPAGE" => "Page(s)",
+		   "IDC_ALIGNDIALOG_TOSELECTION" => "Selection bounds",
+		   "IDC_ALIGNDIALOG_TOSPREAD" => "Spread",
+		   "IDC_ALLFOREGROUND" => "A&ll foreground layers",
+		   "IDC_ALLOBJECTS" => "&All objects",
+		   "IDC_BC_GROUPS_STRETCH" => "Groups do not stretch",
+		   "IDC_BESTFIT" => "&Best fit",
+		   "IDC_BESTFITPAPER" => "&Automatic fit",
+		   "IDC_BIGBOTTOM" => "&Bottom",
+		   "IDC_BIGFLOAT" => "&Floating",
+		   "IDC_BIGLEFT" => "&Left",
+		   "IDC_BIGRIGHT" => "&Right",
+		   "IDC_BIGTOP" => "&Top",
+		   "IDC_BLENDANTIALIAS" => "Anti-alias",
+		   "IDC_BMP_ALWAYS_INTERPOLATE" => "Smooth when scaled up",
+		   "IDC_BMPGAL_BACKGROUND" => "Background",
+		   "IDC_BMPGAL_CREATE" => "Insert",
+		   "IDC_BMPGAL_EFFECTS" => "Effects...",
+		   "IDC_BMPGAL_FILL" => "Fill",
+		   "IDC_BMPGAL_PLUGINS" => "Effects",
+		   "IDC_BMPGAL_PREVIEW" => "Preview...",
+		   "IDC_BMPGAL_PROPS" => "Properties...",
+		   "IDC_BMPGAL_SAVE" => "Save...",
+		   "IDC_BMPGAL_TEXTURE" => "Transp",
+		   "IDC_BMPGAL_TRACE" => "Trace...",
+		   "IDC_BMPOPTS_1BPP" => "1",
+		   "IDC_BMPOPTS_24BPP" => "24",
+		   "IDC_BMPOPTS_32BPP" => "32",
+		   "IDC_BMPOPTS_4BPP" => "4",
+		   "IDC_BMPOPTS_8BPP" => "8",
+		   "IDC_BMPOPTS_CMYK" => "CMYK",
+		   "IDC_BMPOPTS_DIFFUSION" => "Error diffusion",
+		   "IDC_BMPOPTS_DPI" => "&dpi",
+		   "IDC_BMPOPTS_INTERLACED" => "&Interlaced",
+		   "IDC_BMPOPTS_NODITHER" => "None",
+		   "IDC_BMPOPTS_NUMCOLS_SYSCOLS" => "Add system colours",
+		   "IDC_BMPOPTS_ORDDITHER" => "Ordered",
+		   "IDC_BMPOPTS_PAL_OPT" => "Optimised",
+		   "IDC_BMPOPTS_PAL_STD" => "Browser",
+		   "IDC_BMPOPTS_RGB" => "RGB",
+		   "IDC_BMPOPTS_RLE" => "RLE",
+		   "IDC_BMPOPTS_TRANSPARENT" => "&Transparent",
+		   "IDC_BROWSER_PREVIEW" => "Show all previews in browser",
+		   "IDC_BTN_LIVEEFFECTTOOL" => "LIVEEFFECTTOOLBMP",
+		   "IDC_BTN_SOFTSHADOWTOOL" => "SOFTSHADOWTOOLBMP",
+		   "IDC_CAMBUILD" => "32-bit Retail",
+		   "IDC_CAMHOST" => "Windows NT 3.50",
+		   "IDC_CHECK1" => "Disable gadgets",
+		   "IDC_CHECK2" => "Hide gadgets",
+		   "IDC_CHECKDONTSHOWME" => "Don't show this A&gain",
+		   "IDC_CHECKNEGATIVE" => "Negative",
+		   "IDC_CHECKOPBLACK" => "Always overprint black",
+		   "IDC_CHECKOVERPRINT" => "&Overprint this ink",
+		   "IDC_CHECKPMARKS" => "Output Printer's Marks ",
+		   "IDC_CHECKPRINT" => "&Print this ink",
+		   "IDC_CHECKREFLECT" => "Emulsion down (reflect image)",
+		   "IDC_CHECKROTATE" => "Rotate along path",
+		   "IDC_CHECKSEPARATIONS" => "Print colour &separations ",
+		   "IDC_CHECKTILEING" => "Tile fills",
+		   "IDC_CHQBKGND" => "Chequered Background",
+		   "IDC_CLICKED" => "Mouse Down",
+		   "IDC_COLGAL_BACKGROUND" => "Background",
+		   "IDC_COLUMNSTEXT" => "Columns:",
+		   "IDC_CUSTOMFIT" => "&Custom fit",
+		   "IDC_CUSTOMSETTINGS" => "Use &custom settings",
+		   "IDC_DEBUGTREE_HIDDEN" => "Show hidden nodes",
+		   "IDC_DEBUGTREE_SELNONLY" => "Selection only",
+		   "IDC_DEBUGTREE_TREE" => "Debug Tree",
+		   "IDC_DELAYFOR_STATIC" => "&Display this frame for:",
+		   "IDC_DOCBKGND" => "Document Background",
+		   "IDC_DPIAUTO" => "&Automatic",
+		   "IDC_DPIMANUAL" => "&Manual",
+		   "IDC_DPSBOTH" => "&Both",
+		   "IDC_DPS_INDIVIDUALPAGES" => "Print &individual pages",
+		   "IDC_DPSLEFTPAGES" => "&Left pages",
+		   "IDC_DPSRIGHTPAGES" => "&Right pages",
+		   "IDC_DPS_WHOLESPREAD" => "Print &whole spread",
+		   "IDC_EXPORTTEXTASCURVES" => "Export text as curves",
+		   "IDC_FILEINFO_BITMAPSIZE" => "-",
+		   "IDC_FILEINFO_CREATIONDATE" => "-",
+		   "IDC_FILEINFO_FILENAME" => "-",
+		   "IDC_FILEINFO_FILESIZE" => "-",
+		   "IDC_FILEINFO_FRACTALS" => "-",
+		   "IDC_FILEINFO_FRACTALSIZE" => "-",
+		   "IDC_FILEINFO_LASTSAVEDATE" => "-",
+		   "IDC_FILEINFO_LOCATION" => "-",
+		   "IDC_FILEINFO_NUMBITMAPS" => "-",
+		   "IDC_FILEINFO_NUMOBJECTS" => "-",
+		   "IDC_FILEINFO_NUMSELOBJECTS" => "-",
+		   "IDC_FILEINFO_UNDOSIZE" => "-",
+		   "IDC_FILEINFO_UNDOSTEPS" => "-",
+		   "IDC_FRAME_ANIMATION" => "Animation...",
+		   "IDC_FRAME_BROWSER" => "Browser...",
+		   "IDC_FRAME_DELETE" => "Delete",
+		   "IDC_FRAME_DIFFUSION" => "Error &diffusion",
+		   "IDC_FRAME_GLOBALBROWSER" => "Global &browser palette",
+		   "IDC_FRAME_GLOBALOPTIMISED" => "Global &optimised palette",
+		   "IDC_FRAME_LOCALOPT" => "Optimised palette per &frame",
+		   "IDC_FRAME_NODITHER" => "&None",
+		   "IDC_FRAME_ORDDITHER" => "Or&dered",
+		   "IDC_FRAMETAB_OVERLAY" => "O&verlay",
+		   "IDC_FRAMETAB_SHOWFRAME" => "Show frame",
+		   "IDC_FRAMETAB_SOLID" => "&Background",
+		   "IDC_FRAME_TRANSPARENCY" => "Make background &transparent",
+		   "IDC_GALLERY_APPLY" => "Apply",
+		   "IDC_GALLERY_COPY" => "Copy...",
+		   "IDC_GALLERY_COPY_NODLG" => "Copy",
+		   "IDC_GALLERY_DEINSTALL" => "Uninstall",
+		   "IDC_GALLERY_DELETE" => "Delete",
+		   "IDC_GALLERY_DOWNONE" => "Down one",
+		   "IDC_GALLERY_EDIT" => "Edit",
+		   "IDC_GALLERY_HELP" => "Help...",
+		   "IDC_GALLERY_INSTALL" => "Install",
+		   "IDC_GALLERY_MENU" => "Options...",
+		   "IDC_GALLERY_NAME" => "Name...",
+		   "IDC_GALLERY_NEW" => "New...",
+		   "IDC_GALLERY_NEW_NODLG" => "New",
+		   "IDC_GALLERY_PROPERTIES" => "Properties...",
+		   "IDC_GALLERY_REDEFINE" => "Redefine",
+		   "IDC_GALLERY_UNDO" => "Undo",
+		   "IDC_GALLERY_UPONE" => "Up one",
+		   "IDC_GALSORT_REVERSE1" => "&Reversed",
+		   "IDC_GALSORT_REVERSE2" => "Reversed",
+		   "IDC_GUIDETAB_HORZ" => "Horizontal",
+		   "IDC_GUIDETAB_VERT" => "Vertical",
+		   "IDC_GUTTERTEXT" => "Gutter:",
+		   "IDC_HTMLSTUB" => "Include Image Information",
+		   "IDC_IMAGEMAP_AREA_DRAWING" => "&Drawing",
+		   "IDC_IMAGEMAP_AREA_SELECTION" => "&Selection",
+		   "IDC_IMAGEMAP_CLIPBOARD" => "Copy image map to clipboard",
+		   "IDC_IMAPTAB_ADDDESIGNNOTE" => "Add Design Note",
+		   "IDC_IMAPTAB_EXPORTTOCLIPBOARD" => "Clipboard",
+		   "IDC_IMAPTAB_EXPORTTOFILE" => "File",
+		   "IDC_IMAPTAB_INSERT" => "Insert Image Map into Existing File",
+		   "IDC_IMAPTAB_REPLACE" => "Replace existing file",
+		   "IDC_ISDN" => "Dual ISDN or better (>128 Kbs)",
+		   "IDC_JPEG_ORIGINAL" => "Use Original JPEG",
+		   "IDC_JPGOPTS_PROGRESSIVE" => "&Progressive",
+		   "IDC_LAYER_MOVE_TO_ACTIVE" => "Move",
+		   "IDC_LAYERTAB_EDITABLE" => "Editable",
+		   "IDC_LAYERTAB_VISIBLE" => "Visible",
+		   "IDC_LIBGAL_ADD_CLIPART" => "Disc clipart...",
+		   "IDC_LIBGAL_ADD_FILLS" => "Disc fills...",
+		   "IDC_LIBGAL_ADD_FONTS" => "Disc fonts...",
+		   "IDC_LIBGAL_BROWSE" => "Add library...",
+		   "IDC_LIBGAL_COPY" => "Copy",
+		   "IDC_LIBGAL_GENERATE" => "Create",
+		   "IDC_LIBGAL_IMPORT" => "Import",
+		   "IDC_LIBGAL_OPEN" => "Open",
+		   "IDC_LIBGAL_REMOVE" => "Remove",
+		   "IDC_LIBGAL_STOP_LOADING" => "Stop loading",
+		   "IDC_LIBGAL_UPDATE" => "Batch",
+		   "IDC_LIBGAL_WEB_CLIPART" => "Get clipart...",
+		   "IDC_LIBGAL_WEB_FILLS" => "Get fills...",
+		   "IDC_LIBGAL_WEB_FONTS" => "Get fonts...",
+		   "IDC_LIVE" => "Live stretching",
+		   "IDC_MOUSE_OFF" => "Mouse Off",
+		   "IDC_MOUSE_OVER" => "Mouse Over",
+		   "IDC_MULTIPLEFIT" => "&Multiple fit",
+		   "IDC_NAMEGAL_EXPORT" => "Export",
+		   "IDC_NAMEGAL_INTERSECT" => "Intersect",
+		   "IDC_NAMEGAL_RENAME" => "Rename",
+		   "IDC_NAMEGAL_SELECT" => "Select",
+		   "IDC_NEWCOL_SHADE" => "Make the colour a shade of:",
+		   "IDC_ONETOONE" => "1 to 1",
+		   "IDC_OPTIONSTAB_CHECK1" => "&Progressive",
+		   "IDC_OPTIONSTAB_CHECK2" => "X",
+		   "IDC_OPTIONSTAB_CHECK3" => "Y",
+		   "IDC_OPTIONSTAB_JPEG_TEXT2" => "0%",
+		   "IDC_OPTS_ABBREVTXT" => "&Abbreviation:",
+		   "IDC_OPTS_AUTOCOLOURTXT" => "&Edit local colours in ",
+		   "IDC_OPTS_BACKREDRAW" => "Background &redraw",
+		   "IDC_OPTS_BLEEDSWITCH" => "&Bleed ",
+		   "IDC_OPTS_BLEEDTXT" => "mar&gin",
+		   "IDC_OPTS_CLR_UNIT_USE_BYTE" => "&0 - 255",
+		   "IDC_OPTS_CLR_UNIT_USE_PERCENT" => "Percen&t",
+		   "IDC_OPTS_COLLINETXT" => "&Colour line size",
+		   "IDC_OPTS_CONSTRAINTTXT" => "&Angle constraint",
+		   "IDC_OPTS_DITHER_DIFFUSED" => "Error &diffused (slower)",
+		   "IDC_OPTS_DITHER_NONE" => "&None (faster)",
+		   "IDC_OPTS_DITHER_ORDERED" => "&Ordered",
+		   "IDC_OPTS_DPS" => "&Double page spread",
+		   "IDC_OPTS_DRAWING" => "&Drawing",
+		   "IDC_OPTS_EQUIVTO" => "is equivalent to",
+		   "IDC_OPTS_FILELISTTXT" => "Recent &file list size",
+		   "IDC_OPTS_FONTUNITSTXT" => "&Font units:",
+		   "IDC_OPTS_GRIDDIVTXT" => "&Number of subdivisions",
+		   "IDC_OPTS_GRIDSPACETXT" => "&Major spacing",
+		   "IDC_OPTS_HEIGHTTXT" => "&Height",
+		   "IDC_OPTS_INETINFO" => "Internet options",
+		   "IDC_OPTS_INTERACTIVEFILL" => "&Interactive fill dragging",
+		   "IDC_OPTS_ISOMETRIC" => "&Isometric",
+		   "IDC_OPTS_LANDSCAPE" => "&Landscape",
+		   "IDC_OPTS_LEFTTXT" => "&Left mouse button",
+		   "IDC_OPTS_LIMITEDUNDO" => "&Limited:",
+		   "IDC_OPTS_LINERADIUSTXT" => "Li&ne",
+		   "IDC_OPTS_MARGINTXT" => "Outer &margin",
+		   "IDC_OPTS_NUDGETXT" => "&Nudge size",
+		   "IDC_OPTS_ORIGINXTXT" => "&X",
+		   "IDC_OPTS_ORIGINYTXT" => "&Y",
+		   "IDC_OPTS_PAGEUNITSTXT" => "&Page units:",
+		   "IDC_OPTS_POINTRADIUSTXT" => "&Point",
+		   "IDC_OPTS_PORTRAIT" => "&Portrait",
+		   "IDC_OPTS_PROGRESS" => "Show progress &bar",
+		   "IDC_OPTS_REALWORLD" => "&Real world",
+		   "IDC_OPTS_RECTANGULAR" => "&Rectangular",
+		   "IDC_OPTS_RIGHTTXT" => "&Right mouse button",
+		   "IDC_OPTS_SAVEONEXIT" => "&Save settings on exit",
+		   "IDC_OPTS_SCALEEG" => "E.g. 1   to   25000",
+		   "IDC_OPTS_SCALETO2" => "to",
+		   "IDC_OPTS_SCALETO" => "to",
+		   "IDC_OPTS_SHADOW" => "Sh&ow page shadow",
+		   "IDC_OPTS_SIZENAME" => "Paper &size",
+		   "IDC_OPTS_SMOOTH_BITMAPS" => "N&ever smooth",
+		   "IDC_OPTS_UNDOSIZETXT" => "Current undo size:",
+		   "IDC_OPTS_UNITNAMETXT" => "Unit na&me:",
+		   "IDC_OPTS_UNITPREFIX" => "P&refix",
+		   "IDC_OPTS_UNITSUFFIX" => "&Suffix",
+		   "IDC_OPTS_UNITTOKEN2" => "Fill me in",
+		   "IDC_OPTS_UNLIMITEDUNDO" => "&Unlimited",
+		   "IDC_OPTS_USELIMITMEM" => "Li&mited:",
+		   "IDC_OPTS_USEMAXMEMORY" => "&Automatic",
+		   "IDC_OPTS_USESCALEFACTOR" => "&Use scale factor",
+		   "IDC_OPTS_VIEWINFO" => "Window options",
+		   "IDC_OPTS_WIDTHTXT" => "&Width",
+		   "IDC_OPTS_XDUPLICATETXT" => "&X",
+		   "IDC_OPTS_YDUPLICATETXT" => "&Y",
+		   "IDC_OUTPUT_DOCNAMETEXT" => "Output options for",
+		   "IDC_PAPERSIZEINFO" => "210mm x 297mm",
+		   "IDC_PHOTOCD_BASE16" => "Base*16 (3072 by 2048)",
+		   "IDC_PHOTOCD_BASE4" => "Base*4 (1536 by 1024)",
+		   "IDC_PHOTOCD_BASE" => "Base (768 by 512)",
+		   "IDC_PHOTOCD_BASEDIV16" => "Base/16 (192 by 128) ",
+		   "IDC_PHOTOCD_BASEDIV4" => "Base/4 (384 by 256)",
+		   "IDC_PLAINBKGND" => "Plain Background",
+		   "IDC_PREVIEW_FRAMENAMETYPE" => "Frame:",
+		   "IDC_PRINTERDEFAULTS" => "Use printer &defaults",
+		   "IDC_PRINTMETHOD_AABITMAP" => "An&ti-aliased bitmap",
+		   "IDC_PRINTMETHOD_BITMAP" => "&Bitmap",
+		   "IDC_PRINTMETHOD_NORMAL" => "&Normal",
+		   "IDC_PROGRESSBAR" => "Progress1",
+		   "IDC_RADIO11" => "Radio4",
+		   "IDC_RADIO12" => "Radio5",
+		   "IDC_RADIO13" => "Radio6",
+		   "IDC_RADIO21" => "Radio1",
+		   "IDC_RADIO22" => "Radio2",
+		   "IDC_RADIO23" => "Radio3",
+		   "IDC_RADIOLOCALFILLALL" => "All brush colours",
+		   "IDC_RADIOLOCALFILLNAMED" => "Named brush colours",
+		   "IDC_RADIOLOCALFILLNONE" => "No brush colours",
+		   "IDC_ROWSTEXT" => "Rows:",
+		   "IDC_SELECTEDOBJECTS" => "&Selected objects",
+		   "IDC_SELECTED" => "Selected",
+		   "IDC_SGLINEPROPERTIES_FIXED" => "Fixed:",
+		   "IDC_SGLINEPROPERTIES_OPTIMAL" => "Optimal",
+		   "IDC_SGLINEPROPERTIES_REPEAT" => "&Repeating",
+		   "IDC_SGSEARCH_FULLINFO" => "Search all &information",
+		   "IDC_SGSEARCH_NAMEONLY" => "Search &names && keywords",
+		   "IDC_SLIDER" => "Slider1",
+		   "IDC_SOFTSHADOWHALOSWITCH" => "Halo",
+		   "IDC_SPIN_LE_ORDER" => "Spin1",
+		   "IDC_STARTUP" => "&Show Tips on StartUp",
+		   "IDC_T1RADIO1" => "Page",
+		   "IDC_T1RADIO2" => "Drawing",
+		   "IDC_T1RADIO3" => "Selection",
+		   "IDC_T1RADIO_MAINTAIN_AA" => "Maintain screen anti-aliasing",
+		   "IDC_T1RADIO_MINIMISE_AA" => "Minimise visible anti-aliasing",
+		   "IDC_T2_TRANSPARENT_BACKGROUND" => "TRANBACK.0",
+		   "IDC_T5CHECK1" => "Include Image Information",
+		   "IDC_T5CHECK2" => "Include Image Map",
+		   "IDC_T5RADIO1" => "Plain Background",
+		   "IDC_T5RADIO2" => "Document Background",
+		   "IDC_T5RADIO3" => "Bitmap As Background",
+		   "IDC_T5RADIO4" => "Chequered Background",
+		   "IDC_TRADIO11" => "Radio4",
+		   "IDC_TRADIO12" => "Radio5",
+		   "IDC_TRADIO13" => "Radio6",
+		   "IDC_TRADIO21" => "Radio1",
+		   "IDC_TRADIO22" => "Radio2",
+		   "IDC_TRADIO23" => "Radio3",
+		   "IDC_USEASDEFAULT" => "Use as default template",
+		   "IDC_VISIBLEFOREGROUND" => "&Visible foreground layers",
+		   "IDC_WEBADDRESS_CORRECT" => "Correct URL automatically",
+		   "IDC_WEBADDRESS_OBJECTSHAPE" => "Shape of object",
+		   "IDC_WEBADDRESS_RECTANGLE" => "Rectangle surrounding object",
+		   );
+
 }

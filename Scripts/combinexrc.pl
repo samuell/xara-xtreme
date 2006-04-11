@@ -177,7 +177,7 @@ sub process
 
     print STDERR "$ilab: Starting processing\n" if ($verbose>1);
 
-    open (INPUT, $in) || die ("Cannot open input file: $!");
+    open (INPUT, $in) || die ("Cannot open input file $in: $!");
 
     # bodge to remove duplicate checking on non-string table items, as
     # contols are allowed to share duplicate IDs between dialogs
