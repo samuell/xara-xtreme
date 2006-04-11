@@ -452,6 +452,8 @@ public:
 
 #define OPTOKEN_DISPLAYFRAMEGALLERY _T("DisplayFrameGallery")	// Optoken for the display frame gallery operation
 
+PORTNOTE("galleries", "Disable frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class OpDisplayFrameGallery: public Operation
@@ -472,6 +474,7 @@ public:
 	static OpState	GetState(String_256*, OpDescriptor*);		
     void 			Do(OpDescriptor*);
 };  
+#endif // EXCLUDE_FROM_XARALX
 
 #endif	// INC_LAYERGAL
 

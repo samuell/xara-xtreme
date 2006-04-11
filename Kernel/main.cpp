@@ -356,10 +356,7 @@ PORTNOTE("other","Removed ATMInstall usage")
 	FontCache::DeInit();
 #endif
 #ifndef EXCLUDE_GALS
-PORTNOTE("dialog","Removed SGInit usage")
-#ifndef EXCLUDE_FROM_XARALX
 	SGInit::DeInit();		// De-init the galleries
-#endif
 #endif
 	View::Deinit();
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)

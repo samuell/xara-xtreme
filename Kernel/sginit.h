@@ -128,7 +128,7 @@ public:
 	static BOOL Init(void);
 	static void DeInit(void);
 
-	static void UpdateGalleryButton(char *OpToken, BOOL IsVisible);
+	static void UpdateGalleryButton(ResourceID OpToken, BOOL IsVisible);
 };
 
 #endif

@@ -304,6 +304,7 @@ PORTNOTE("other","Removed Lots of init functions")
 #ifndef STANDALONE
 			ToolbarDlg::Init() &&				// Register "Toolbar..." dialogs
 #endif // STANDALONE
+#endif //EXCLUDE_FROM_XARALX
 
 // WEBSTER - markn 15/1/97
 // Removed these ops as they are not used
@@ -314,6 +315,7 @@ PORTNOTE("other","Removed Lots of init functions")
 #ifndef EXCLUDE_GALS
 			SGInit::Init() &&					// Init/Register all the supergallery related Ops
 #endif //EXCLUDE_GALS
+#ifndef EXCLUDE_FROM_XARALX
 			BmapPrevDlg::Init() &&				// Bitmap Preview Dialog Box - Dbug Builds for the moment [MartinD]
 #endif //EXCLUDE_FROM_XARALX
 

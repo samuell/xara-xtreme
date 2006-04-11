@@ -636,6 +636,9 @@ protected:			// For access by our friend classes only
 
 public:		// Global gallery preferences
 	static INT32		UseFixedColourSet;		// TRUE (default) to override Windows colours
+
+public:
+	virtual BOOL IsABar() {return FALSE; } // For now, claim not to be a bar so we get sized right
 };
 
 

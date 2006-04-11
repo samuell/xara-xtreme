@@ -105,18 +105,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragmgr.h"	// Drag manager (DragManagerOp::StartDrag, RedrawStarting etc)
 //#include "galres.h"		// Gallery bitmap resources
 //#include "galstr.h"		// Gallery string resources
-#include "scroller.h"	// For scroll bar width
+//#include "scroller.h"	// For scroll bar width
 #include "sgallery.h"	// SuperGallery definitions
 #include "sgdrag.h"		// Scroll bar drag target/info
 #include "sgtree.h"		// This file's associated header
 #include "sglib.h"		// For virtualising static switch
-#include "sglcart.h"
+//#include "sglcart.h"
 
 #include "ccdc.h"		// For render-into-dialogue support
-#include "sglfills.h"
+//#include "sglfills.h"
 #include "dlgcol.h"
 #include "fillval.h"
-#include "grnddib.h"
+//#include "grnddib.h"
 
 //#include "richard3.h"	// For _R(IDS_GALLERY_PREPARE_FOR_UNFOLD)
 #include "progress.h"
@@ -188,7 +188,7 @@ SGDisplayNode::SGDisplayNode()
 SGDisplayNode::~SGDisplayNode()
 {
 	ERROR3IF(Flags.HandleEventCount > 0, "AWOOGA! SGDisplayNode deleted while in its own HandleEvent method - Alert Jason!");
-	ERROR3IF(Flags.HandleEventCount < 0, "Deleted SGDisplayNode had a corrupted HandleEventCount");
+	ERROR3IF(Flags.HandleEventCount != 0, "Deleted SGDisplayNode had a corrupted HandleEventCount");
 
 	if (Parent != NULL || GetChild() != NULL || Next != NULL || Previous != NULL)
 	{
@@ -854,7 +854,7 @@ BOOL SGDisplayNode::GiveEventToMyChildren(SGEventType EventType, void *EventInfo
 {
 	BOOL Handled = FALSE;
 	SGDisplayNode *Ptr = GetChild();
-	SGDisplayNode *NextPtr = NULL;
+//	SGDisplayNode *NextPtr = NULL;
 
 	if (EventType == SGEVENT_FORMAT)
 	{
@@ -1075,7 +1075,7 @@ void SGDisplayNode::CalculateFormatRect(SGFormatInfo *FormatInfo, SGMiscInfo *Mi
 		// line is fully redrawn.
 
 		ERROR3IF(FormatInfo->LineHeight != 0,
-			"Sibling Display Item heights are not equal! Jason must upgrade the redraw code")
+			"Sibling Display Item heights are not equal! Jason must upgrade the redraw code");
 
 		FormatInfo->LineHeight = ItemHeight;
 	}
@@ -1112,11 +1112,11 @@ void SGDisplayNode::CalculateFormatRect(SGFormatInfo *FormatInfo, SGMiscInfo *Mi
 		{
 			FormatInfo->LastInvalidNode = this;		// We are the last node found to have invalid bounds
 
-			if (FormatInfo->InvalidBounds.hiy > 0)	// If we haven't found an invalid item before
-				FormatInfo->InvalidBounds.hiy = FormatRect.hiy;
+			if (FormatInfo->InvalidBounds.hi.y > 0)	// If we haven't found an invalid item before
+				FormatInfo->InvalidBounds.hi.y = FormatRect.hi.y;
 
-			if (FormatInfo->InvalidBounds.loy > FormatRect.loy)
-				FormatInfo->InvalidBounds.loy = FormatRect.loy;
+			if (FormatInfo->InvalidBounds.lo.y > FormatRect.lo.y)
+				FormatInfo->InvalidBounds.lo.y = FormatRect.lo.y;
 		}
 		else
 		{
@@ -1126,12 +1126,12 @@ void SGDisplayNode::CalculateFormatRect(SGFormatInfo *FormatInfo, SGMiscInfo *Mi
 				// invalid bounds, then we extend them to touch the top of us, to include any gap
 				// between them and us.
 
-				ERROR3IF(FormatInfo->InvalidBounds.hiy > 0,
+				ERROR3IF(FormatInfo->InvalidBounds.hi.y > 0,
 							"Gallery display formatting error - LastInvalidNode should be NULL "
 							"if there haven't been any invalid nodes yet");
 
-				if (FormatInfo->InvalidBounds.loy > FormatRect.hiy)
-					FormatInfo->InvalidBounds.loy = FormatRect.hiy;
+				if (FormatInfo->InvalidBounds.lo.y > FormatRect.hi.y)
+					FormatInfo->InvalidBounds.lo.y = FormatRect.hi.y;
 
 				FormatInfo->LastInvalidNode = NULL;		// Reset LastInvalid node so that the next node doesn't extend!
 			}
@@ -1263,6 +1263,8 @@ BOOL SGDisplayNode::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscIn
 		case SGEVENT_BGFLUSH:
 			DeregisterForBGRedraw();
 			break;				// And drop through to flush all children
+		default:
+			break;
 	}
 
 	// And pass all events on to my children
@@ -2324,7 +2326,8 @@ void SGDisplayNode::DrawPlinth(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInfo,
 		// Fill inside the plinth with button-face (grey), and optionally with the glyph bitmap
 		// (We always fill behind the bitmap first in case the bitmap isn't big enough to
 		// fill the entire area)
-		pRender->SetLineColour(DocColour(COLOUR_TRANS));
+		DocColour trans(COLOUR_TRANS);
+		pRender->SetLineColour(trans);
 		pRender->SetFillColour(RedrawColours->ButtonFace());
 		pRender->DrawRect(&InsideRect);
 
@@ -2425,8 +2428,10 @@ void SGDisplayNode::DrawSelectionOutline(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 		pRender->SaveContext();
 	
 		pRender->SetLineWidth(0);
-		pRender->SetLineColour(DocColour(COLOUR_TRANS));
-		pRender->SetFillColour(DocColour(COLOUR_BLACK));
+		DocColour trans(COLOUR_TRANS);
+		pRender->SetLineColour(trans);
+		DocColour black(COLOUR_BLACK);
+		pRender->SetFillColour(black);
 
 		DocRect TempRect(*BoundsRect);					// Left
 		TempRect.hi.x = TempRect.lo.x + Width;
@@ -2756,8 +2761,11 @@ BOOL SGDisplayNode::DefaultClickHandler(SGMouseInfo *Mouse, SGMiscInfo *MiscInfo
 				ParentGallery->SetSystemStateChanged();	// Ensure toolbar button pops out again
 			}
 		}
+PORTNOTE("galleries", "Disabled clipart gallery")
+#ifndef EXCLUDE_FROM_XARALX
 		else if (ParentGallery->IsKindOf(CC_RUNTIME_CLASS(LibFillsSGallery)))
 						 LibClipartSGallery::ImportClipart(TRUE, (LibraryGallery*) ParentGallery);
+#endif
 		else
 			ParentGallery->ApplyAction(SGACTION_APPLY);
 
@@ -2808,13 +2816,15 @@ BOOL SGDisplayNode::DefaultClickHandler(SGMouseInfo *Mouse, SGMiscInfo *MiscInfo
 #ifdef _DEBUG
 void SGDisplayNode::DumpSubtree(INT32 TreeLevel)
 {
+	PORTNOTETRACE("galleries", "Disabled debug dump");
+#ifndef EXCLUDE_FROM_XARALX
 	if (IsUserName("Matt"/*Jason*/))
 	{
 		// First, dump out myself...
-		char Temp[200];
-		char Msg[200];
-
-		for (INT32 i = 0; i < (TreeLevel * 2) && i < 50; i++)
+		TCHAR Temp[200];
+		TCHAR Msg[200];
+		INT32 i;
+		for (i = 0; i < (TreeLevel * 2) && i < 50; i++)
 		   Msg[i] = ' ';
 
 		Msg[i] = '\0';
@@ -2832,6 +2842,7 @@ void SGDisplayNode::DumpSubtree(INT32 TreeLevel)
 			Ptr = Ptr->Next;
 		}
 	}
+#endif
 }
 #endif
 
@@ -3218,11 +3229,11 @@ BOOL SGDisplayRoot::HandleEvent(SGEventType EventType, void *EventInfo,
 			// invalid bounds, to ensure we don't leave little bits of stuff past the end
 			// of the list if it has got smaller.
 
-			ERROR3IF(FormatInfo->InvalidBounds.hiy > 0,
+			ERROR3IF(FormatInfo->InvalidBounds.hi.y > 0,
 						"Gallery display formatting error - LastInvalidNode should be NULL "
 						"if there haven't been any invalid nodes yet");
 
-			FormatInfo->InvalidBounds.loy = FormatInfo->LinePos - MiscInfo->WindowHeight;
+			FormatInfo->InvalidBounds.lo.y = FormatInfo->LinePos - MiscInfo->WindowHeight;
 		}
 	}
 
@@ -3743,7 +3754,10 @@ SGDisplayRootScroll::SGDisplayRootScroll(SuperGallery *ParentGal) : SGDisplayRoo
 	IndentedButton = IBUTTON_NONE;
 
 	// Read the scroll bar width - use half of the normal scroll bar width (and is an even number)
-	ScrollBarWidth = (CScroller::GetScrollerSize() / 2) & 0xFE;
+PORTNOTE("galleries", "hard wired scrollbar width");
+	ScrollBarWidth = 12;
+//	ScrollBarWidth = (CScroller::GetScrollerSize() / 2) & 0xFE;
+	
 	if (ScrollBarWidth < 10)	// But make sure it lies within a sensible range
 		ScrollBarWidth = 10;
 	if (ScrollBarWidth > 100)
@@ -4185,7 +4199,7 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 				DragMessage *Msg = GetDragInfo(EventType, EventInfo);
 
 				// Is it a Drag Started message?
-				if (Msg->State == DragMessage::DragState::DRAGSTARTED)
+				if (Msg->State == DragMessage::DRAGSTARTED)
 				{
 					// Is it a SuperGallery scroll drag?
 					// And is it a scroll drag for THIS display tree?
@@ -4194,13 +4208,17 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 					{
 						SuperGallery *ParentGallery = GetParentGallery();						
 
-						SGScrollDragTarget *DragTarget = 
+						// AMB comment out assignment to variable as variable is unused. Can this be right?
+						/* SGScrollDragTarget *DragTarget = */
 								new SGScrollDragTarget(ParentGallery,
 														ParentGallery->GetListGadgetID());
 					}
 				}
 			}
 			break;
+
+			default:
+				break;
 	}
 
 	// And pass the event on to the tree via our base class handler
@@ -4225,7 +4243,7 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 		// everything to the very bottom of the list
 		SGFormatInfo *FormatInfo = GetFormatInfo(EventType, EventInfo);
 		if (FormatInfo->AccumulateBounds)
-			FormatInfo->InvalidBounds.loy = min(-OldScrollExtent, -ScrollExtent);
+			FormatInfo->InvalidBounds.lo.y = min(-OldScrollExtent, -ScrollExtent);
 	}
 
 	if (EventType == SGEVENT_REDRAW && HasScrollBar)		// If room for a scrollbar, draw it
@@ -4254,7 +4272,8 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 			// We move the left and top/bottom edges by 1 pixel to accomodate
 			// the black border lines that we draw around these areas.
 			Renderer->SetLineWidth(0);
-			Renderer->SetLineColour(DocColour(COLOUR_TRANS));
+			DocColour trans(COLOUR_TRANS);
+			Renderer->SetLineColour(trans);
 			Renderer->SetFillColour(RedrawColours.ButtonFace());
 
 			PageUp.lo.x += PixelSize;
@@ -4271,7 +4290,8 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 			// (down left edge and between scroll bar and arrows)
 			// We draw these lines as filled rectangles to avoid the fact that lines
 			// draw in different blimming places in different render regions
-			Renderer->SetFillColour(DocColour(COLOUR_BLACK));
+			DocColour black(COLOUR_BLACK);
+			Renderer->SetFillColour(black);
 
 			Renderer->DrawPixelLine(DocCoord(ScrollRect.lo.x, DownButton.lo.y),
 								DocCoord(ScrollRect.lo.x, UpButton.hi.y));
@@ -4825,6 +4845,8 @@ void SGDisplayGroup::ReadGroupTitle(void)
 		// Truncate the name into our 64-char buffer
 		NewTitle.Left(&TitleText, 63);
 	}
+PORTNOTE("galleries", "disabled folder updated stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	else if (ParentLibrary != NULL)
 	{
 		ParentLibrary->GetLibraryTitle(&TitleText);
@@ -4843,6 +4865,7 @@ void SGDisplayGroup::ReadGroupTitle(void)
 		}
 		//<< webster
 	}
+#endif
 }
 
 
@@ -5316,9 +5339,12 @@ BOOL SGDisplayGroup::Virtualise(void)
 	if(IsVirtualised())
 		return TRUE;
 
+PORTNOTE("galleries", "Disabled virtualising switch")
+#ifndef EXCLUDE_FROM_XARALX
 	// Virtualisation disabled...
 	if(!SGLibGroup::LibraryVirtualisingEnabled)
 		return FALSE;
+#endif
 
 	DestroySubtree(FALSE);	// Delete all items in the group (but not this one obviously)
 	SetVirtualisedState(TRUE);

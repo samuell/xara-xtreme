@@ -102,23 +102,23 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "app.h"		// For GetApplication()
 #include "layergal.h"	// For OpDisplayLayerGallery et al
-#include "newcol.h"		// For NewColourDlg
+//#include "newcol.h"		// For NewColourDlg
 #include "sgallery.h"	// For SGalleryOptionsDlg and SGallerySearchDlg
-#include "sgbitmap.h"	// For OpDisplayBitmapGallery
-#include "sgcolour.h"	// For OpDisplayColourGallery && ColourSGallery::Init
-#include "sgfonts.h"	// For OpDisplayFontsGallery
-#include "sglcart.h"	// For OpDisplayLibClipartGallery et al
-#include "sglfills.h"	// For OpDisplayLibFillsGallery
-#include "sgline.h"		// For OpDisplayLineGallery
-#include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
+//#include "sgbitmap.h"	// For OpDisplayBitmapGallery
+//#include "sgcolour.h"	// For OpDisplayColourGallery && ColourSGallery::Init
+//#include "sgfonts.h"	// For OpDisplayFontsGallery
+//#include "sglcart.h"	// For OpDisplayLibClipartGallery et al
+//#include "sglfills.h"	// For OpDisplayLibFillsGallery
+//#include "sgline.h"		// For OpDisplayLineGallery
+//#include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
 #include "sgscan.h"		// For Library::InitLibPrefs()
 #include "layerprp.h"	// For LayerPropertiesDlg::Init()
-#include "aprps.h"
-#include "frameops.h"	// OpGrabFrame::Init()
+//#include "aprps.h"
+//#include "frameops.h"	// OpGrabFrame::Init()
 
 // Taken out by vector stroking code Neville 2/10/97
 #ifdef VECTOR_STROKING
-#include "sglinepr.h"	// For SGalleryLinePropertiesDlg::Init()
+//#include "sglinepr.h"	// For SGalleryLinePropertiesDlg::Init()
 #endif
 
 DECLARE_SOURCE("$Revision$");
@@ -160,21 +160,29 @@ BOOL SGInit::Init(void)
 				SGallerySearchDlg::Init()			&&
 				SGallerySortDlg::Init()				&&
 
+PORTNOTE("galleries", "Excluded various galleries")
 #ifndef STANDALONE
+#ifndef EXCLUDE_FROM_XARALX
 				OpDisplayFrameGallery::Init()		&&
+#endif // EXCLUDE_FROM_XARALX
 				OpLayerGalChange::Init()			&&
+#ifndef EXCLUDE_FROM_XARALX
 				OpGrabFrame::Init()					&&
+#endif // EXCLUDE_FROM_XARALX
 // WEBSTER - markn 15/1/97
 // Removed some init functions that no longer exist
 #ifndef WEBSTER
 				OpDisplayLayerGallery::Init()		&&
 				LayerNameDlg::Init()				&&
+#ifndef EXCLUDE_FROM_XARALX
 				LayerPropertyTabsDlg::Init()		&&				
 
 				OpDisplayLineGallery::Init()		&&
 				OpDisplayNameGallery::Init()		&&
+#endif // EXCLUDE_FROM_XARALX
 #endif // WEBSTER				
 // Taken out by vector stroking code Neville 2/10/97
+#ifndef EXCLUDE_FROM_XARALX
 #ifdef VECTOR_STROKING
 				SGalleryLinePropertiesDlg::Init()	&&
 #endif // VECTOR_STROKING				
@@ -186,7 +194,9 @@ BOOL SGInit::Init(void)
 				OpDisplayBitmapGallery::Init()		&&
 
 				OpDisplayFontsGallery::Init()		&&
-#endif
+#endif // EXCLUDE_FROM_XARALX
+#endif // STANDALONE
+#ifndef EXCLUDE_FROM_XARALX
 				LibClipartSGallery::Init()			&&
 				OpDisplayLibClipartGallery::Init()	&&
 
@@ -195,7 +205,9 @@ BOOL SGInit::Init(void)
 				OpDisplayLibFillsGallery::Init()	&&
 #endif
 
-				Library::InitLibPrefs()
+				Library::InitLibPrefs() &&
+#endif // EXCLUDE_FROM_XARALX
+				TRUE
 			);
 	
 	return ok;
@@ -218,12 +230,17 @@ void SGInit::DeInit(void)
 // Removed some deinit functions that no longer exist
 
 	// Nothing much to deinit as yet
+PORTNOTE("galleries", "disabled various galleries deinit")
 #ifndef STANDALONE
 #ifndef WEBSTER
+#ifndef EXCLUDE_FROM_XARALX
 	LayerPropertyTabsDlg::Deinit();	
+#endif
 #endif	// WEBSTER	
+#ifndef EXCLUDE_FROM_XARALX
 	GIFAnimationPropertyTabsDlg::Deinit();
 	OpGrabFrame::DeInit();
+#endif
 #endif
 }
 
@@ -240,7 +257,7 @@ void SGInit::DeInit(void)
 
 ********************************************************************************************/
 
-void SGInit::UpdateGalleryButton(char *OpToken, BOOL IsVisible)
+void SGInit::UpdateGalleryButton(ResourceID OpToken, BOOL IsVisible)
 {
 	// Update all button controls that invoke this Op
 	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OpToken);
@@ -256,7 +273,7 @@ void SGInit::UpdateGalleryButton(char *OpToken, BOOL IsVisible)
 			while (pGadgetItem != NULL)
 			{
 				// Set the gadget
-				pGadgetItem->pDialogBarOp->SetBoolGadgetSelected(pGadgetItem->gidGadgetID,
+				pGadgetItem->pDialogOp->SetBoolGadgetSelected(pGadgetItem->gidGadgetID,
 																	IsVisible);
 				// Find the next gadget
 				pGadgetItem = (GadgetListItem*) Gadgets.GetNext(pGadgetItem);

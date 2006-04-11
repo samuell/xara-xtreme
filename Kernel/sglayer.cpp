@@ -137,8 +137,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layermsg.h"
 //#include "richard2.h"
 //#include "andy.h"
-#include "sgframe.h"	// SGDisplayFrame
-#include "aprps.h"
+//#include "sgframe.h"	// SGDisplayFrame
+//#include "aprps.h"
 //#include "will2.h"		// for _R(IDS_LAYERGAL_GALLNAME)
 //#include "sliceres.h"
 #include "layermgr.h"
@@ -538,12 +538,13 @@ void SGDisplayLayer::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInfo
 
 	RenderRegion *Renderer = RedrawInfo->Renderer;
 
-	INT32 OnePixel  = (INT32) DevicePixels(MiscInfo, 1);
-	INT32 TwoPixels = (INT32) DevicePixels(MiscInfo, 2);
+//	INT32 OnePixel  = (INT32) DevicePixels(MiscInfo, 1);
+//	INT32 TwoPixels = (INT32) DevicePixels(MiscInfo, 2);
 
 	Renderer->SetLineWidth(0);
 	Renderer->SetLineColour(RedrawInfo->Transparent);
-	Renderer->SetFillColour(DocColour(191L, 191L, 191L));
+	DocColour fill(191, 191, 191);
+	Renderer->SetFillColour(fill);
 
 	// Calculate and redraw the buttons
 	// NOTE:
@@ -885,8 +886,8 @@ BOOL SGDisplayLayer::HandleEvent(SGEventType EventType, void *EventInfo,
 
 					// Find out the state of the layer's flags
 					BOOL ActiveAndVisEd = (pLayer->IsActive() && Layer::ActiveLayerVisibleAndEditable);
-					BOOL Visible 		= pLayer->GetVisibleFlagState();
-					BOOL Locked  		= pLayer->GetLockedFlagState();
+//					BOOL Visible 		= pLayer->GetVisibleFlagState();
+//					BOOL Locked  		= pLayer->GetLockedFlagState();
 					BOOL Guide			= pLayer->IsGuide();
 					BOOL PageBackground = pLayer->IsPageBackground();
 
@@ -1217,9 +1218,16 @@ void SGDisplayLayer::MoveBefore(SGDisplayNode *NodeToMove)
 
 void SGDisplayLayer::MoveLayer(SGDisplayNode *NodeToMove,BOOL Before,BOOL ToggleBackground)
 {
+PORTNOTE("galleries", "disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF((!IS_A(NodeToMove,SGDisplayLayer) && !IS_A(NodeToMove,SGDisplayFrame)),"The node to move is not a SGDisplayLayer");
 	if (!IS_A(NodeToMove,SGDisplayLayer) && !IS_A(NodeToMove,SGDisplayFrame))
 		return;
+#else
+	ERROR3IF((!IS_A(NodeToMove,SGDisplayLayer)),"The node to move is not a SGDisplayLayer");
+	if (!IS_A(NodeToMove,SGDisplayLayer))
+		return;
+#endif
 
 	Layer* pLayerToMove = ((SGDisplayLayer*)NodeToMove)->GetDisplayedLayer();
 	Layer* pThisLayer   = GetDisplayedLayer();
@@ -1594,11 +1602,14 @@ MsgResult LayerSGallery::Message(Msg* Message)
 		switch (Msg->DlgMsg)
 		{
 			case DIM_CREATE:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYLAYERGALLERY, TRUE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), TRUE);
 				break;
 
 			case DIM_CANCEL:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYLAYERGALLERY, FALSE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), FALSE);
+				break;
+
+			default:
 				break;
 		}
 	}
@@ -1618,53 +1629,56 @@ MsgResult LayerSGallery::Message(Msg* Message)
 		switch (Msg->DlgMsg)
 		{
 			case DIM_LFT_BN_CLICKED:
+			{
 				//TRACE( _T("Gadget %d clicked\n"),Msg->GadgetID);
-				switch(Msg->GadgetID)
+				if (FALSE) {}
+				else if (Msg->GadgetID ==  _R(IDC_BTN_MULTILAYER))
 				{
-					case _R(IDC_BTN_MULTILAYER):
-						state = GetLongGadgetValue(_R(IDC_BTN_MULTILAYER),0,1);
-						DoChangeLayerState(NULL,LAYER_MULTILAYER,state);
-//						DoChangeMultilayer(state);
-//						ForceRedrawOfList();
-						break;
-
-					case _R(IDC_BTN_ALLVISIBLE):
-						state = GetLongGadgetValue(_R(IDC_BTN_ALLVISIBLE),0,1);
-						DoChangeLayerState(NULL,LAYER_ALLVISIBLE,state);
-//						DoChangeAllVisible(state);
-//						ForceRedrawOfList();
-						break;
-
-					case _R(IDC_GALLERY_UPONE):
-						DoMoveLayer(MOVELAYER_UPONE);
-						break;
-
-					case _R(IDC_GALLERY_DOWNONE):
-						DoMoveLayer(MOVELAYER_DOWNONE);
-						break;
-
-//					case _R(IDC_GALLERY_NAME):
-//						DoChangeName();
-//						break;
-
-					case _R(IDC_GALLERY_PROPERTIES):
-						DoLayerProperties();
-						break;
-
-					case _R(IDC_GALLERY_COPY):
-						DoCopyLayer();
-						break;
-
-					case _R(IDC_LAYER_MOVE_TO_ACTIVE):
-						DoMoveSelectionToActiveLayer();
-						break;
-												
-#ifndef WEBSTER
-					case _R(IDC_GALLERY_HELP):		// Show help page
-						HelpUserTopic(_R(IDS_HELPPATH_Gallery_Layer));
-						break;
-#endif					
+					state = GetLongGadgetValue(_R(IDC_BTN_MULTILAYER),0,1);
+					DoChangeLayerState(NULL,LAYER_MULTILAYER,state);
+					//DoChangeMultilayer(state);
+					//ForceRedrawOfList();
 				}
+				else if (Msg->GadgetID == _R(IDC_BTN_ALLVISIBLE))
+				{
+					state = GetLongGadgetValue(_R(IDC_BTN_ALLVISIBLE),0,1);
+					DoChangeLayerState(NULL,LAYER_ALLVISIBLE,state);
+					//DoChangeAllVisible(state);
+					//ForceRedrawOfList();
+				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_UPONE))
+				{
+					DoMoveLayer(MOVELAYER_UPONE);
+				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_DOWNONE))
+				{
+					DoMoveLayer(MOVELAYER_DOWNONE);
+				}
+				else if (Msg->GadgetID ==  _R(IDC_GALLERY_NAME))
+				{
+					//DoChangeName();
+					//break;
+				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_PROPERTIES))
+				{
+					DoLayerProperties();
+				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_COPY))
+				{
+					DoCopyLayer();
+				}
+				else if (Msg->GadgetID == _R(IDC_LAYER_MOVE_TO_ACTIVE))
+				{
+					DoMoveSelectionToActiveLayer();
+				}											
+#ifndef WEBSTER
+				else if (Msg->GadgetID == _R(IDC_GALLERY_HELP))
+				{
+					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Layer));
+				}
+#endif					
+			}
+			default:
 				break;
 		}
 	}
@@ -1675,6 +1689,8 @@ MsgResult LayerSGallery::Message(Msg* Message)
 			case OpMsg::AFTER_UNDO:
 			case OpMsg::AFTER_REDO:
 				EnsureSelSpreadSelectionIntegrity();
+				break;
+			default:
 				break;
 		}
 	}
@@ -1721,6 +1737,8 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 					}
 				}
 				break;
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, DocChangingMsg))
@@ -1728,7 +1746,7 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 		DocChangingMsg *Msg = (DocChangingMsg *) Message;
 		switch (Msg->State)
 		{
-				case DocChangingMsg::DocState::TITLECHANGED:
+				case DocChangingMsg::TITLECHANGED:
 // Showstopper removed, Jason, 28/3/96
 // When the doc title changes, we simply need to redraw to update the group titles.
 // Calling CreateNewSubtree will destroy the existing tree - this is really really bad
@@ -1740,13 +1758,13 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 				break;
 		
 			// This message is sent when a new or just opened document is stable.
-			case DocChangingMsg::DocState::SELCHANGED:
+			case DocChangingMsg::SELCHANGED:
 			{
 				if (Msg->pNewDoc == NULL)
 				{
 					// No documents around any more, so we must wipe the display tree
 					// The base class will shade the gallery for us.
-					TRACEUSER( "Neville", _T("DocChangingMsg::DocState::SELCHANGED CreateNewSubtree\n"));
+					TRACEUSER( "Neville", _T("DocChangingMsg::SELCHANGED CreateNewSubtree\n"));
 					CreateNewSubtree(NULL);
 					ForceRedrawOfList();
 				}
@@ -1796,7 +1814,7 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 				break;
 			}
 		#ifndef WEBSTER
-			case DocChangingMsg::DocState::BORN:
+			case DocChangingMsg::BORN:
 			{
 				// When a new document is created, a SELCHANGED
 				// message is broadcasted, for Camelot2 frame/layer integration
@@ -1814,11 +1832,11 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 				break;
 			}
 
-			case DocChangingMsg::DocState::BORNANDSTABLE:
+			case DocChangingMsg::BORNANDSTABLE:
 			{
 				// flag variables.
 				BOOL LayerMode = FALSE;	
-				BOOL GalleryClosed = FALSE;
+//				BOOL GalleryClosed = FALSE;
 
 				// Get the changing document pointer.
 				Document* pChangingDoc = Msg->pChangingDoc;
@@ -1846,8 +1864,8 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 				break;
 			}
 
-			case DocChangingMsg::DocState::KILLED:
-			case DocChangingMsg::DocState::ABOUTTODIE:
+			case DocChangingMsg::KILLED:
+			case DocChangingMsg::ABOUTTODIE:
 			{
 				// The doc. is about to die, therefore, set this falg to false.
 				SetNewDocBorn(FALSE);
@@ -1864,24 +1882,26 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 		DocViewMsg *Msg = (DocViewMsg *) Message;
 		switch (Msg->State)
 		{
-			case DocViewMsg::DocViewState::SELABOUTTOCHANGE: 
+			case DocViewMsg::SELABOUTTOCHANGE: 
 				OldGuideLayerState = GetGuideLayerState(Msg->pNewDocView);
 				break;
 
-			case DocViewMsg::DocViewState::SELCHANGED: 
+			case DocViewMsg::SELCHANGED: 
 			{
 				if (IsVisible())
 				{
 					NewGuideLayerState = GetGuideLayerState(Msg->pNewDocView);
 					if (OldGuideLayerState != NewGuideLayerState)
 					{
-						TRACEUSER( "Neville", _T("DocViewMsg::DocViewState::SELCHANGED CreateNewSubtree\n"));
+						TRACEUSER( "Neville", _T("DocViewMsg::SELCHANGED CreateNewSubtree\n"));
 						CreateNewSubtree(Msg->pNewDocView ? Msg->pNewDocView->GetDoc() : NULL);
 						ForceRedrawOfList();
 					}
 				}
 			}
 			break;
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, LayerMsg))
@@ -1891,7 +1911,7 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 		switch ( pMsg->Reason )
 		{
 			// The active layer has changed.
-			case LayerMsg::LayerReason::ACTIVE_LAYER_CHANGED:
+			case LayerMsg::ACTIVE_LAYER_CHANGED:
 			{
 				EnableGadget(_R(IDC_GALLERY_COPY),pMsg->pNewLayer != NULL && !pMsg->pNewLayer->IsGuide()); 
 			}
@@ -1899,14 +1919,14 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 
 			// The visibility of a layer has changed, probably by an external source
 			// so update the display
-			case LayerMsg::LayerReason::LAYER_VISIBILITY_CHANGED:
+			case LayerMsg::LAYER_VISIBILITY_CHANGED:
 			{
 				ForceRedrawOfList(); 
 			}
 			break;
 
 			// The active layer has been changed externally to the gallery.
-			case LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER:
+			case LayerMsg::UPDATE_ACTIVE_LAYER:
 			{
 				// We must now check whether the selected layer has been changed externally
 				// to us. May happen if an animated GIF is being loaded onto layers
@@ -1920,12 +1940,12 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 						Layer* pNewActiveLayer = pMsg->pNewLayer;
 						// Search for the new display item to match this new active layer 
 						SGDisplayLayer *pWantedDispLayer = NULL;
-						SGDisplayLayer *pDispLayer = ((SGDisplayFrame *) DisplayForeground->GetChild());
+						SGDisplayLayer *pDispLayer = ((SGDisplayLayer *) DisplayForeground->GetChild());
 						while (pDispLayer != NULL)						
 						{
 							if (pDispLayer->GetDisplayedLayer() == pNewActiveLayer)
 								pWantedDispLayer = pDispLayer;
-							pDispLayer = ((SGDisplayFrame *)pDispLayer->GetNext());
+							pDispLayer = (SGDisplayLayer *) pDispLayer->GetNext();
 						}
 						
 						// If we found the required display item then go and select it
@@ -1940,6 +1960,8 @@ TRACEUSER( "Neville", _T("SpreadMsg::LAYERCHANGES CreateNewSubtree\n"));
 				}
 			}
 			break;
+			default:
+				break;
 		}
 	}
 
@@ -2182,7 +2204,7 @@ void LayerSGallery::MakeActiveLayer(Layer* pNewActiveLayer, BOOL TellAll)
 	//ERROR3("LayerSGallery::MakeActiveLayer supressed broadcast - bad !");
 #else
 	if (TellAll)
-		BROADCAST_TO_ALL(LayerMsg(pNewActiveLayer,LayerMsg::LayerReason::ACTIVE_LAYER_CHANGED));
+		BROADCAST_TO_ALL(LayerMsg(pNewActiveLayer,LayerMsg::ACTIVE_LAYER_CHANGED));
 #endif
 }
 
@@ -2476,7 +2498,7 @@ BOOL LayerSGallery::PrepareToDelete(void)
 
 	if (pLayerGalItem != NULL)
 	{
-		if (HasLayerGotChildren(pLayerGalItem->GetDisplayedLayer()) != NULL)
+		if (HasLayerGotChildren(pLayerGalItem->GetDisplayedLayer()) != FALSE)
 		{
 			// If some are in use, determine if the user really wants to delete them
 			INT32 ButtonPressed = AskQuestion(_R(IDS_LAYER_CONSTAINSOBJECTS),
@@ -2646,6 +2668,8 @@ void LayerSGallery::DoLayerProperties()
 //#ifdef WEBSTER
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
+PORTNOTE("galleries", "Disabled layer properties tab dialog")
+#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();	
 //#endif // webster -RanbirR
 			if (pTabHandler)
@@ -2654,6 +2678,7 @@ void LayerSGallery::DoLayerProperties()
 				if (pDlg != NULL)
 					pDlg->Open();
 			}
+#endif
 		}
 	}
 #endif
@@ -2722,11 +2747,11 @@ void LayerSGallery::DoChangeAllVisible(BOOL AllVisible)
 		{
 			pDoc->SetAllVisible(PrevAllVisible);
 			BOOL PrevVisible = pLayer->IsVisible();
-			BOOL PrevLocked  = pLayer->IsLocked();
+//			BOOL PrevLocked  = pLayer->IsLocked();
 
 			pDoc->SetAllVisible(AllVisible);
 			BOOL PostVisible = pLayer->IsVisible();
-			BOOL PostLocked  = pLayer->IsLocked();
+//			BOOL PostLocked  = pLayer->IsLocked();
 
 			if (PrevVisible != PostVisible)
 			{
@@ -2743,7 +2768,7 @@ void LayerSGallery::DoChangeAllVisible(BOOL AllVisible)
 	pDoc->SetAllVisible(AllVisible);
 
 	// inform that visible layers have changed
-	BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::LAYER_VISIBILITY_CHANGED));
+	BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LAYER_VISIBILITY_CHANGED));
 }
 
 
@@ -2832,7 +2857,7 @@ void LayerSGallery::DoChangeVisible(Layer* pLayer,BOOL Visible)
 		LayerSGallery::ForceRedrawLayer(pLayer->FindDocument(), pLayer);
 
 		// inform that visible layers have changed
-		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::LAYER_VISIBILITY_CHANGED));
+		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LAYER_VISIBILITY_CHANGED));
 
 		// If layer has just become invisible, remove the selections on the layer 
 		if (!PostVisible)
@@ -3263,12 +3288,15 @@ BOOL LayerSGallery::BuildCommandMenu(GalleryContextMenu *TheMenu, SGMenuID MenuI
 //#ifdef WEBSTER
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
+PORTNOTE("galleries", "Disabled layer properties tab dialog")
+#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();
 //#endif //webster
 			if (pTabHandler)
 			{
 				pTabHandler->SetCurrentLayer(pLayerGalItem->GetDisplayedLayer());
 			}
+#endif
 		}
 #endif
 		ok = ok && AddCommand(TheMenu, (StringBase *) &SGCmd_New);
@@ -3341,11 +3369,14 @@ OpState LayerSGallery::GetCommandState(StringBase *CommandID, String_256 *ShadeR
 //#ifdef WEBSTR
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
+PORTNOTE("galleries", "Disabled layer properties tab dialog")
+#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();
 //#endif //webster RanbirR
 			if (pTabHandler)
 				State.Greyed = (pTabHandler->GetTabbedDlg() != NULL);
 			else
+#endif
 				State.Greyed = TRUE;	
 		}
 #endif
@@ -3432,8 +3463,10 @@ BOOL LayerSGallery::CloseLayerGallery()
 	
 	if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
 	{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 		GIFAnimationPropertyTabs::SetFrameGalleryOpen(FALSE);
-
+#endif
 		// Toggle the visible state of the gallery window
 		pDialogBarOp->SetVisibility( FALSE );
 	}
@@ -3442,7 +3475,7 @@ BOOL LayerSGallery::CloseLayerGallery()
 		ERROR3("Got the frame gallery but it's not of the LayerSGallery class");
 	}
 
-	SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYLAYERGALLERY, FALSE);
+	SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), FALSE);
 
 	// Everything ok.
 	return TRUE;

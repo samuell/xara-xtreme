@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layermgr.h"
 #include "fixst256.h"
 #include "ensure.h"
-#include "mainfrm.h" 
+//#include "mainfrm.h" 
 #include "infobar.h" 
 //#include "simon.h"
 //#include "mario.h"
@@ -119,6 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bubbleid.h"
 //#include "sliceres.h" // for the resource id move to active layer
 #include "objchge.h" // for the allow op flags
+#include "bars.h"
 
 //#include "will2.h"
 #include "selop.h"
@@ -545,7 +546,7 @@ BOOL LayerManager::ReadSpreadLayerDetails()
 			return FALSE; 
 		}
 		LayerDet->Status = (Current)->GetLayerStatus(); // record the layer status  
-		LayerDet->Layer = Current; 
+		LayerDet->m_pLayer = Current; 
 		LayerDet->New = FALSE; 
 		LayerDet->Deleted = FALSE; 
 
@@ -589,7 +590,7 @@ BOOL LayerManager::LayerDetailsChanged()
 		// We ignore deleted new layers because they don't change anything 
 		if (!(CurrentLyrDet->New && CurrentLyrDet->Deleted)) 	
 		{		
-			if (CurrentLyr != CurrentLyrDet->Layer) // z-order change 
+			if (CurrentLyr != CurrentLyrDet->m_pLayer) // z-order change 
 			{
 				return TRUE; 
 			}									
@@ -1220,7 +1221,8 @@ void OpMoveToLayer::Do(OpDescriptor*)
 			if (pSpread)
 			{
 				pTail = pSpread->FindActiveLayer();
-				AttachNodeDirection TailAttachDirection = LASTCHILD;
+				// AttachNodeDirection TailAttachDirection = LASTCHILD; <--- AMB removed this and inserted the next line 2006-04-10 presuming bug
+				TailAttachDirection = LASTCHILD;
 			}
 			else
 			{

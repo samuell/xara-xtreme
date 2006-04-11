@@ -126,8 +126,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // These constants are WIN32 specific and are used by Windows - only code such as the internet galleries
 // They DO NOT NEED to be redefined for other operating systems as the code using them simply won't exist
+// Well, actually, they do, as CALCRECT (for instance) is used elsewhere
 
-#ifdef _WIN32 
 #define FORMAT_TOP              0x00000000
 #define FORMAT_LEFT             0x00000000
 #define FORMAT_CENTER           0x00000001
@@ -144,9 +144,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define FORMAT_NOPREFIX         0x00000800
 #define FORMAT_INTERNAL         0x00001000
 #define DEFAULT_TEXT_FORMATTING		FORMAT_SINGLELINE | FORMAT_NOPREFIX | FORMAT_VCENTER 
-#else
-#define DEFAULT_TEXT_FORMATTING		NULL
-#endif
 
 
 class Node;
@@ -500,7 +497,7 @@ public:
 	virtual void DrawCross(const DocCoord &Point, const UINT32 Size) = 0;
 
 	virtual void DrawBitmap(const DocCoord &Point, KernelBitmap* pBitmap) = 0;
-	virtual void DrawBitmap(const DocCoord &Point, UINT32 BitmapID, UINT32 ToolID = NULL) = 0;
+	virtual void DrawBitmap(const DocCoord &Point, UINT32 BitmapID, UINT32 ToolID = 0) = 0;
 	virtual BOOL DrawTransformedBitmap(NodeBitmap *pNodeBitmap);
 
 	virtual void DrawBitmapBlob(const DocCoord &Point, KernelBitmap* BlobShape) = 0;

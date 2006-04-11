@@ -186,7 +186,7 @@ public:
 	GIFAnimationPropertyTabs();							// Constructor
 
 	static BOOL InitGIFAnimationPropertyTabs();			// set up all option tabs available
-	static DeinitGIFAnimationPropertyTabs();			// remove all option tabs available
+	static void DeinitGIFAnimationPropertyTabs();		// remove all option tabs available
 	static GIFAnimationPropertyTabs *GetFirst();
 	static GIFAnimationPropertyTabs *GetNext(GIFAnimationPropertyTabs*);
 
@@ -381,7 +381,7 @@ class PreviewInBrowserTab : public GIFAnimationPropertyTabs
 	CC_DECLARE_DYNCREATE( PreviewInBrowserTab )  
 public:
 
-	static Declare();
+	static BOOL Declare();
 
 	PreviewInBrowserTab();
 	~PreviewInBrowserTab();

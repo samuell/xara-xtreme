@@ -122,22 +122,22 @@ DECLARE_SOURCE("$Revision$");
 #include "nodetxts.h"
 #include "textops.h"
 #include "bubbleid.h"
-
+#include "ophist.h"
 #include "sglayer.h"		// The LayerSGallery class
 #include "sginit.h"
 
 //#include "will2.h"
 //#include "galstr.h"			// _R(IDS_DELETEPAGEBACKGROUND)
 //#include "prevwres.h"		// _R(IDS_DISPLAY_FRAME_GALLERY) _R(IDD_ANIMATIONBAR) ...
-#include "sgframe.h"		// FrameSGallery
+//#include "sgframe.h"		// FrameSGallery
 
-#include "frameops.h"		// Frame related ops
-#include "aprps.h"
+//#include "frameops.h"		// Frame related ops
+//#include "aprps.h"
 
 #include "nodetxts.h"		//TextStory::SetFocusStory
 
 #include "layermsg.h"		// LayerMsg::LayerReason::REDRAW_LAYER
-#include "xshelpid.h"		//For the help id
+//#include "xshelpid.h"		//For the help id
 
 #define Swap(a,b)       { (a)^=(b), (b)^=(a), (a)^=(b); }
 
@@ -147,7 +147,10 @@ DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(OpDeletePageBackground,OpLayerGalChange);
 CC_IMPLEMENT_DYNCREATE(OpLayerGalChange,UndoableOperation);
 CC_IMPLEMENT_DYNCREATE(OpDisplayLayerGallery,Operation);
+PORTNOTE("galleries", "disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 CC_IMPLEMENT_DYNCREATE(OpDisplayFrameGallery,Operation);
+#endif
 CC_IMPLEMENT_DYNCREATE(LayerNameDlg, DialogOp)   
 CC_IMPLEMENT_DYNCREATE(LayerStateAction,Action)
 			  
@@ -332,6 +335,8 @@ BOOL OpLayerGalChange::Init()
 								)
 			// special frame operations
 								&&
+PORTNOTE("galleries", "Disabled frame stuff")
+#ifndef EXCLUDE_FROM_XARALX
 			RegisterOpDescriptor(
 								0,								// Tool ID 
 	 							_R(IDS_SELECTSTARTFRAME),			// String resource ID
@@ -457,6 +462,9 @@ BOOL OpLayerGalChange::Init()
 								NULL,							// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								)
+								&&
+#endif // EXCLUDE_FROM_XARALX
+								TRUE
 			);
 }               
     
@@ -529,8 +537,11 @@ void OpLayerGalChange::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 			if (pLayer == NULL || pLayer->IsActive())
 				goto EndOperation;
 
+PORTNOTE("galleries", "disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 			// Make the layer we have been passed the active one
 			FrameSGallery::MakeActiveLayer(pLayer);
+#endif
 			UndoIDS = _R(IDS_FRAME_UNDO_SELECTNEW);
 			break;
 		//--------------------------------------------------------------------------------------------
@@ -577,9 +588,12 @@ void OpLayerGalChange::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 
 				if (DoInsertNewNode(pLayer, pLastLayer, NEXT, FALSE))
 				{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 					if (FrameLayer)
 						FrameSGallery::MakeActiveLayer(pLayer);
 					else
+#endif
 						LayerSGallery::MakeActiveLayer(pLayer);
 
 					// Note the layer inserted so we can clear any selection on the layer when this op is undone
@@ -659,9 +673,12 @@ void OpLayerGalChange::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 
 						if (pNewActiveLayer != NULL)
 						{
+PORTNOTE("galleries", "disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 							if (FrameLayer)
 								FrameSGallery::MakeActiveLayer(pNewActiveLayer);
 							else
+#endif
 								LayerSGallery::MakeActiveLayer(pNewActiveLayer);
 						}
 
@@ -773,7 +790,10 @@ void OpLayerGalChange::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 				// Ensure that the frame layer flag is on
 				pLayer->SetFrame(TRUE);
 				pLayer->SetEdited(TRUE);
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 				FrameSGallery::MakeActiveLayer(pLayer);
+#endif
 			}
 			else
 				LayerSGallery::MakeActiveLayer(pLayer);
@@ -899,9 +919,12 @@ void OpLayerGalChange::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 				pOpUndoLayer = pCopyOfLayer;
 
 				// Make it the active layer
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 				if (FrameLayer)
 					FrameSGallery::MakeActiveLayer(pCopyOfLayer);
 				else
+#endif
 					LayerSGallery::MakeActiveLayer(pCopyOfLayer);
 
 				NodeRenderableInk::DeselectAllOnLayer(pLayer);
@@ -1139,6 +1162,9 @@ BOOL OpLayerGalChange::Undo()
 			// will broadcast layer changes on undo and redo (hopefully!)
 			BroadcastLayerChanges = FALSE;
 			break;
+
+		default:
+			break;
 	}
 
 	BOOL Result = Operation::Undo(); 
@@ -1153,12 +1179,17 @@ BOOL OpLayerGalChange::Undo()
 				GetApplication()->UpdateSelection();
 				if (pOpUndoLayer != NULL)
 				{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 					if (Reason == FRAME_MOVE)
 						FrameSGallery::MakeActiveLayer(pOpUndoLayer);
 					else
+#endif
 						LayerSGallery::MakeActiveLayer(pOpUndoLayer);
 					BroadcastLayerChanges = TRUE;
 				}
+				break;
+			default:
 				break;
 		}		
 
@@ -1215,6 +1246,9 @@ BOOL OpLayerGalChange::Redo()
 			// will broadcast layer changes on undo and redo (hopefully!)
 			BroadcastLayerChanges = FALSE;
 			break;
+
+		default:
+			break;
 	}
 
 	BOOL Result = Operation::Redo(); 
@@ -1229,12 +1263,18 @@ BOOL OpLayerGalChange::Redo()
 				GetApplication()->UpdateSelection();
 				if (pOpRedoLayer != NULL)
 				{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 					if (Reason == FRAME_MOVE)
 						FrameSGallery::MakeActiveLayer(pOpRedoLayer);
 					else
+#endif
 						LayerSGallery::MakeActiveLayer(pOpRedoLayer);
 					BroadcastLayerChanges = TRUE;
 				}
+				break;
+
+			default:
 				break;
 		}		
 
@@ -1359,6 +1399,9 @@ MsgResult LayerNameDlg::Message(Msg* Message)
 
 			case DIM_TEXT_CHANGED:
 				break;
+
+			default:
+				break;
 		}
 
 		if (EndDialog)	// Dialog communication over 
@@ -1458,7 +1501,8 @@ void LayerNameDlg::StartUp(LayerDlgParam* pParam)
 		}
 	}
 	else if (LayerNameDlg::pLayerNameDlg != NULL)
-		SetActiveWindow(LayerNameDlg::pLayerNameDlg->WindowID);
+		LayerNameDlg::pLayerNameDlg->BringToTop();
+		// SetActiveWindow(LayerNameDlg::pLayerNameDlg->WindowID);
 }
 
 	   
@@ -1668,7 +1712,7 @@ void LayerNameDlg::CreateUniqueLayerCopyName(const String_256& strName, String_2
 void LayerNameDlg::CommitDialogValues()
 {
 	String_256 NewName;
-	char* pD = NewName;
+//	TCHAR* pD = NewName;
 	BOOL Valid;
 
 	// Get the string from the layer name dialog
@@ -1830,6 +1874,8 @@ void OpDisplayLayerGallery::Do(OpDescriptor*)
 	String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
 	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
 
+	if (!pDialogBarOp) pDialogBarOp = new LayerSGallery;
+
 	if (pDialogBarOp != NULL)
 	{
 		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
@@ -1842,13 +1888,16 @@ void OpDisplayLayerGallery::Do(OpDescriptor*)
 			ERROR3("Got the layer gallery but it's not of the LayerSGallery class");
 		}
 
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYLAYERGALLERY, pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), pDialogBarOp->IsVisible());
 	}
 
 	ERROR3IF(pDialogBarOp == NULL,"Couldn't find the layer gallery bar");
 
 	End();
 }
+
+PORTNOTE("galleries", "disable frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
@@ -2008,7 +2057,7 @@ void OpDisplayFrameGallery::Do(OpDescriptor*)
 			ERROR3("Got the frame gallery but it's not of the LayerSGallery class");
 		}
 
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYFRAMEGALLERY, pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFRAMEGALLERY), pDialogBarOp->IsVisible());
 
 		GIFAnimationPropertyTabs::SetFrameGalleryOpen(TRUE);
 	}
@@ -2017,6 +2066,7 @@ void OpDisplayFrameGallery::Do(OpDescriptor*)
 
 	End();
 }
+#endif
 
 //-----------------------------------------------------
 //-----------------------------------------------------
@@ -2164,12 +2214,15 @@ ActionCode LayerStateAction::Init(	UndoableOperation* pOp,
 
 				if (Param.pLayer != NULL)
 				{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 					FrameSGallery::DoChangeSolid(Param.pLayer,Param.NewState);
+#endif
 					Param.pLayer->SetEdited(TRUE);
 					Param.pLayer->SetFrame(TRUE);	// double check this
 #ifdef _DEBUG
 					// Tell the frame gallery to update its display of the frame
-					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 				}
 				break;
@@ -2179,12 +2232,15 @@ ActionCode LayerStateAction::Init(	UndoableOperation* pOp,
 
 				if (Param.pLayer != NULL)
 				{
+PORTNOTE("galleries", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 					FrameSGallery::DoChangeOverlay(Param.pLayer,Param.NewState);
+#endif
 					Param.pLayer->SetEdited(TRUE);
 					Param.pLayer->SetFrame(TRUE);	// double check this
 #ifdef _DEBUG
 					// Tell the frame gallery to update its display of the frame
-					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 				}
 				break;
@@ -2204,7 +2260,7 @@ ActionCode LayerStateAction::Init(	UndoableOperation* pOp,
 					Param.pLayer->SetActive(Param.NewState);
 
 					// Ensure that the gallery is updated with the new active layer details
-					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+					BROADCAST_TO_ALL(LayerMsg(Param.pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 				}
 				break;
 

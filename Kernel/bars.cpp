@@ -5710,6 +5710,7 @@ void DialogBarOp::SetVisibility(BOOL Open)
 	{
 		if (!IsVisible())
 			Create();
+			DialogOp::Open();
 	}
 	else
 	{

@@ -350,6 +350,9 @@ BOOL SGScrollDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDra
 					ScrollBy = ClickScroll;
 			}
 			break;
+
+		default:
+			break;
 	}
 
 	if (Event != DRAGEVENT_DEINITIALISE && ScrollBy != 0)
@@ -481,7 +484,7 @@ SGScrollDragInfo::SGScrollDragInfo(SGDisplayRootScroll *ParentRootNode,
 	// Set up a few things about this drag - it does not do solid drag
 	DoesSolidDrag = FALSE;
 	SolidDragOffset.x = SolidDragOffset.y = 0;	// Set up defaults just in case
-	SolidDragSize.cx = SolidDragSize.cy = 1;
+	SolidDragSize.Set(1,1);
 }
 
 
@@ -1098,6 +1101,8 @@ BOOL SGListDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDragI
 			// Call a subroutine to work out and set our current cursor shape
 			return(DetermineCursorShape((SuperGallery *) TargetDialog,
 										Info->GetDraggedNode(), pMousePos));
+		default:
+			break;
 	}
 
 	// Otherwise, we aren't interested in the event, so we don't claim it
@@ -1144,19 +1149,17 @@ BOOL SGListDragTarget::GetStatusLineText(String_256 * TheText)
 {
 	ERROR3IF(TheText == NULL, "Illegal NULL param");
 
-	switch(CurrentCursorID)
+	if (CurrentCursorID == _R(IDC_SGABOVECURSOR))
 	{
-		case _R(IDC_SGABOVECURSOR):
-			TheText->MakeMsg(_R(IDS_SGDRAG_INSABOVE));
-			break;
-
-		case _R(IDC_SGBELOWCURSOR):
-			TheText->MakeMsg(_R(IDS_SGDRAG_INSBELOW));
-			break;
-
-		default:
-			TheText->MakeMsg(_R(IDS_SGDRAG_LISTITEM));
-			break;
+		TheText->MakeMsg(_R(IDS_SGDRAG_INSABOVE));
+	}
+	else if (CurrentCursorID == _R(IDC_SGBELOWCURSOR))
+	{
+		TheText->MakeMsg(_R(IDS_SGDRAG_INSBELOW));
+	}
+	else
+	{
+		TheText->MakeMsg(_R(IDS_SGDRAG_LISTITEM));
 	}
 
 	return(TRUE);
@@ -1228,7 +1231,7 @@ SGListDragInfo::SGListDragInfo(SuperGallery *ParentGal, SGDisplayNode *DraggedNo
 	// Set up a few things about this drag - it does not do solid drag
 	DoesSolidDrag = FALSE;
 	SolidDragOffset.x = SolidDragOffset.y = 0;	// Set up defaults just in case
-	SolidDragSize.cx = SolidDragSize.cy = 1;
+	SolidDragSize.Set(1,1);
 }
 
 

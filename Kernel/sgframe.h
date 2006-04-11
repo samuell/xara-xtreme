@@ -99,7 +99,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // SGFrame.h - the FrameSGallery (Frame SuperGallery) class
 // Looks remarkably like the layer gallery but looks aren't everything!
 
-
 #ifndef INC_SGFRAME
 #define INC_SGFRAME
 

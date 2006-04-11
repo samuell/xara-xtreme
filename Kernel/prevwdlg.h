@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dialogop.h"
 #include "list.h"
 #include "listitem.h"
-#include "hirestim.h"	// high-resolution timer class
+//#include "hirestim.h"	// high-resolution timer class
 //#include "impexpop.h"
 #include "frameops.h"
 

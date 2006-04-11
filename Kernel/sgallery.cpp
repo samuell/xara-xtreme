@@ -227,6 +227,7 @@ void SuperGallery::InitData(void)
 
 SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogBarOp(Class) 
 {
+	DlgResID = _R(IDD_LAYERSGALLERY);
 	InitData();
 } 
 
@@ -472,7 +473,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 				// Drop through to LFT_BN_DOWN handler...
 
 			case DIM_LFT_BN_DOWN:
-				if (Msg->GadgetID == GetListGadgetID() && !Msg->DlgMsgParam)
+				if ((Msg->GadgetID == GetListGadgetID()) && Msg->DlgMsgParam)
 				{
 					// Get our kernel-rendered-dlg info, and calculate our virtual coord space
 					ReDrawInfoType *DlgRedrawInfo = (ReDrawInfoType*) Msg->DlgMsgParam;
