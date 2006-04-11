@@ -106,6 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/rawbmp.h>
 #include <wx/treectrl.h>
 #include <wx/dcbuffer.h>
+#include <wx/file.h>
+#include <wx/stdpaths.h>
 
 #include "wxXtra.h"
 
@@ -114,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <list>
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <new>
 #if !defined(__WXMAC__)
 #include <malloc.h>

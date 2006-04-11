@@ -104,6 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathname.h"
 #include "sgliboil.h"
 
+PORTNOTE("other", "Removed lots of Windows'isms" )
+#if !defined(EXCLUDE_FROM_XARALX)
+
 // Place any IMPLEMENT type statements here
 CC_IMPLEMENT_MEMDUMP(FindFiles, CC_CLASS_MEMDUMP);
 
@@ -542,6 +545,7 @@ DWORD FileUtil::GetTemporaryPath(UINT32 BufferLength,	TCHAR *Buffer)
 	return ::GetTempPath(BufferLength, Buffer);
 }
 
+#endif
 
 /*******************************************************************************************
 
@@ -568,10 +572,13 @@ BOOL FileUtil::DeleteFile(PathName *FileToRemove)
 
 	// remove it
 	if (Exists)
-		status = _tremove((const TCHAR *)FileToRemove->GetPath());
+		status = wxRemoveFile( FileToRemove->GetPath() );
 
 	return !status;
 }
+
+PORTNOTE("other", "Removed lots of Windows'isms" )
+#if !defined(EXCLUDE_FROM_XARALX)
 
 /*******************************************************************************************
 
@@ -790,3 +797,5 @@ BOOL FindFiles::StopFindingFiles()
 
 	return TRUE;
 }
+
+#endif

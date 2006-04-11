@@ -215,7 +215,7 @@ typedef char			TCHAR;
 #define _tcschr			strchr
 #define _tcsdup			wcsdup
 #define _tcsrchr		strrchr
-#define _tcstok			strtok
+#define _tcstok			strtok_r
 #define _tcscmp			strcmp
 #define _tcsncmp		strncmp
 #define _tcsnicmp		strncasecmp

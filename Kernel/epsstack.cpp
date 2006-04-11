@@ -142,18 +142,18 @@ void FIXEDPOINT::FromAscii(const char *Str)
 		// Found a decimal point - extract the integer and fractional parts and use them
 		// to construct the fixed point number.
 		char Tmp[20];
-		_tcscpy(Tmp, Str);
+		strcpy(Tmp, Str);
 		Tmp[i] = 0;
-		Long = (_ttol(Tmp) * 1000);
+		Long = (atol(Tmp) * 1000);
 
 		// Force fraction to be 3 digits at the most (as we only store with 3 digits accuracy)
 		Tmp[i + 4] = 0;
 
 		// Convert fraction to integer
-		INT32 Frac = _ttol(Tmp + i + 1);
+		INT32 Frac = atol(Tmp + i + 1);
 
 		// The fraction can be of the form .1, .10, or .100 - we must scale it correctly.
-		INT32 FracLen = cc_strlenBytes(Tmp + i + 1);
+		INT32 FracLen = strlen(Tmp + i + 1);
 
 		if (FracLen == 1)
 			Frac *= 100;
@@ -171,7 +171,7 @@ void FIXEDPOINT::FromAscii(const char *Str)
 	else
 	{
 		// No decimal point found - just scale the integer part.
-		Long = (_ttol(Str) * 1000);
+		Long = (atol(Str) * 1000);
 	}
 }
 
@@ -352,9 +352,9 @@ BOOL EPSStack::Push ( const char *pString,
 	}
 	
 	// Try to copy string
-	char *NewStr = new char[cc_strlenBytes(pString) + 1];
+	char *NewStr = new char[strlen(pString) + 1];
 	ERRORIF(NewStr == NULL,  _R(IDT_EPS_NOMEMORY), FALSE);
-	_tcscpy(NewStr, pString);
+	strcpy(NewStr, pString);
 
 	// Initialise stack item.
 	pItem->Init ( NewStr );
@@ -632,7 +632,7 @@ BOOL EPSStack::Pop ( char* pString )
 	if ( pItem->Type == EPSTYPE_STRING )
 	{
 		// Correct type - remove item from stack and return to caller.
-		_tcscpy ( pString, pItem->Data.pString );
+		strcpy ( pString, pItem->Data.pString );
 		delete pItem;
 		return TRUE;
 	}
@@ -671,7 +671,7 @@ BOOL EPSStack::Pop(StringBase* pString)
 	if ( pItem->Type == EPSTYPE_STRING )
 	{
 		// Correct type - remove item from stack and return to caller.
-		*pString = pItem->Data.pString;
+		*pString = String_256(pItem->Data.pString);
 		delete pItem;
 		return TRUE;
 	}
@@ -1389,8 +1389,7 @@ BOOL EPSStack::DiscardArray()
 {
 	if (GetType() != EPSTYPE_COMMAND)
 	{
-		if (IsUserName("Tim"))
-			TRACE( _T("EPSStack::DiscardArray: Expected ArrayEnd\n"));
+		TRACEUSER( "Tim", _T("EPSStack::DiscardArray: Expected ArrayEnd\n"));
 		return FALSE;
 	}
 	
@@ -1398,8 +1397,7 @@ BOOL EPSStack::DiscardArray()
 	PopCmd(&Cmd);
 	if (Cmd != EPSC_ArrayEnd)
 	{
-		if (IsUserName("Tim"))
-			TRACE( _T("EPSStack::DiscardArray: Expected ArrayEnd\n"));
+		TRACEUSER( "Tim", _T("EPSStack::DiscardArray: Expected ArrayEnd\n"));
 		return FALSE;
 	}
 	
@@ -1409,8 +1407,7 @@ BOOL EPSStack::DiscardArray()
 		if (IsEmpty())
 		{
 			// Run out of operands!
-			if (IsUserName("Tim"))
-				TRACE( _T("EPSStack::DiscardArray: Run out of operands\n"));
+			TRACEUSER( "Tim", _T("EPSStack::DiscardArray: Run out of operands\n"));
 			return FALSE;
 		}
 			
@@ -1422,8 +1419,7 @@ BOOL EPSStack::DiscardArray()
 			EPSCommand Cmd = ReadCmd();
 			if (!PopCmd(&Cmd) || Cmd != EPSC_ArrayStart)
 			{
-				if (IsUserName("Tim"))
-					TRACE( _T("EPSStack::DiscardArray: Expected ArrayStart\n"));
+				TRACEUSER( "Tim", _T("EPSStack::DiscardArray: Expected ArrayStart\n"));
 				return FALSE;
 			}
 			else
@@ -1514,7 +1510,7 @@ BOOL EPSStack::IsEmpty()
 
 void EPSStack::Dump(EPSFilter *pFilter)
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) && !defined(EXCLUDE_FROM_XARALX)
 	if (!IsUserName("Tim") && !IsUserName("Ben"))
 		return;
 

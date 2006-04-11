@@ -166,10 +166,10 @@ CC_IMPLEMENT_DYNAMIC(SGNameGroup,	SGDisplayGroup);
 
 SGNameItem::SGNameItem(const StringBase& strName)
   : m_strName(strName),
+	m_pCachedPropertyNode(0),
 	m_nNodes(0),
 	m_nObjects(0),
-	m_nSelected(0),
-	m_pCachedPropertyNode(0)
+	m_nSelected(0)
 {
 //  TRACEUSER( "JustinF", _T("SGNameItem::SGNameItem(%s)\n"), (LPCTSTR) m_strName);
 }
@@ -375,8 +375,8 @@ INT32 SGNameItem::CompareTo(SGDisplayNode* pItem, INT32 nKey)
 
 					// Convert and compare the numbers.
 					INT32 nThis, nOther;
-					Convert::StringToLong(&strThisNum, &nThis);
-					Convert::StringToLong(&strOtherNum, &nOther);
+					Convert::StringToLong( strThisNum, &nThis );
+					Convert::StringToLong( strOtherNum, &nOther );
 					if (nThis < nOther)
 						return -1;
 					else if (nThis > nOther)
@@ -387,12 +387,16 @@ INT32 SGNameItem::CompareTo(SGDisplayNode* pItem, INT32 nKey)
 				}
 
 				// The characters are not both numeric, so perform a normal comparison.
-				INT32 nTest = ::CompareString(LOCALE_USER_DEFAULT,
+				INT32 nTest = *pchOther - *pchThis;
+PORTNOTE("other", "Removed CompareString, rwplace with simple subtraction" )
+#if !defined(EXCLUDE_FROM_XARALX)
+							::CompareString(LOCALE_USER_DEFAULT,
 											NORM_IGNOREKANATYPE |
 											NORM_IGNOREWIDTH |
 											NORM_IGNORECASE,
 											pchThis, 1, pchOther, 1) - 2;
-
+#endif
+				
 				if (nTest != 0) return nTest;
 
 				// The strings are still equal so compare the next characters.
@@ -475,9 +479,8 @@ BOOL SGNameItem::GetBubbleHelp(DocCoord* pMousePos, String_256* pResult)
 			TRACEUSER( "matt", _T("...STRETCHY...\n"));
 		}
 
-		UINT32 id;
-		id = _R(IDBBL_NAMEGAL_NONE);
-		return pResult->MakeMsg(_R(IDBBL_NAMEGAL_ITEM), &String(id), &m_strName);
+		String strNameGal( _R(IDBBL_NAMEGAL_NONE) );
+		return pResult->MakeMsg(_R(IDBBL_NAMEGAL_ITEM), &strNameGal, &m_strName);
 	}
 	else
 	{
@@ -491,7 +494,8 @@ BOOL SGNameItem::GetBubbleHelp(DocCoord* pMousePos, String_256* pResult)
 			id = _R(IDBBL_NAMEGAL_SOME);
 
 		// Create the bubble help text.
-		return pResult->MakeMsg(_R(IDBBL_NAMEGAL_ITEM), &String(id), &m_strName);
+		String strNameGal( id );
+		return pResult->MakeMsg(_R(IDBBL_NAMEGAL_ITEM), &strNameGal, &m_strName);
 	}
 }
 
@@ -614,7 +618,10 @@ void SGNameItem::CalcUiBounds(SGFormatInfo* pFormatInfo, SGMiscInfo* pMiscInfo)
 	else
 	{
 		m_rProp = m_rText;
+PORTNOTE("other", "Removed SuperGallery related stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		pProp->CalcUiBounds(this, pFormatInfo, pMiscInfo, &m_rProp);
+#endif
 		m_rText.hi.x = m_rProp.lo.x - SG_GapBeforeText;
 	}
 
@@ -735,8 +742,11 @@ void SGNameItem::HandleRedraw(SGRedrawInfo* pRedrawInfo, SGMiscInfo* pMiscInfo)
 	// Render the property, on the right.
 	if (m_nObjects > 0)
 	{
+PORTNOTE("other", "Removed SuperGallery related stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		SGNameProp* pProp = GetProperty();
 		if (pProp != 0) pProp->HandleRedraw(this, pRedrawInfo, pMiscInfo, m_rProp);
+#endif
 	}
 }
 
@@ -832,7 +842,9 @@ BOOL SGNameItem::HandleEvent(SGEventType nEventType, void* pEventInfo, SGMiscInf
 					OpDescriptor* pDesc =
 							OpDescriptor::FindOpDescriptor(OPTOKEN_SELECT_SET);
 					ERROR3IF(pDesc == 0, "SGNameItem::HandleEvent: no descriptor");
-					pDesc->Invoke(&OpParam((INT32) this, (INT32) eChange));
+					
+					OpParam param( this, INT32(eChange) );
+					pDesc->Invoke( &param );
 					return TRUE;
 				}
 			}
@@ -841,6 +853,8 @@ BOOL SGNameItem::HandleEvent(SGEventType nEventType, void* pEventInfo, SGMiscInf
 			{
 				TRACEUSER( "matt", _T("m_rToggle DOES NOT contain MouseCoords, m_rProp DOES\n"));
 
+PORTNOTE("other", "Removed SuperGallery related stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 				// It's a click on the property UI.  Pass it on and claim it.
 				SGNameProp* pProp = GetProperty();
 				if (pProp != 0 && !pProp->HandleMouse(this, pMouseInfo, pMiscInfo))
@@ -848,7 +862,7 @@ BOOL SGNameItem::HandleEvent(SGEventType nEventType, void* pEventInfo, SGMiscInf
 					InformError();
 					return FALSE;
 				}
-
+#endif
 				return TRUE;
 			}
 
@@ -875,7 +889,7 @@ BOOL SGNameItem::HandleEvent(SGEventType nEventType, void* pEventInfo, SGMiscInf
 					DefaultClickHandler(pMouseInfo, pMiscInfo, FALSE);
 
 				TRACEUSER("JustinF",
-						  "%s \"%s\" at 0x%p --- %d nodes, %d objects, %d selected\n",
+						  _T("%s \"%s\" at 0x%p --- %d nodes, %d objects, %d selected\n"),
 						  (LPCTSTR) String(((SGNameGroup*) GetParent())->GetTypeID()),
 						  (LPCTSTR) m_strName, (LPVOID) this,
 						  m_nNodes, m_nObjects, m_nSelected);
@@ -940,7 +954,7 @@ BOOL SGNameItem::IsABackBar()
 {
 	String_256 SubName = m_strName;
 	*(SubName + 7) = 0;
-	return (SubName.CompareTo("BackBar") == 0);
+	return ( SubName ==  _T("BackBar") );
 }
 
 
@@ -1034,7 +1048,8 @@ SGNameItem* SGNameGroup::FindItem(const StringBase& strName) const
 SGNameItem* SGNameGroup::RegisterMember(Node* pNode, const StringBase& strName)
 {
 	// Only make a new item if there isn't one already.
-	for (SGNameItem* pItem = (SGNameItem*) GetChild();
+	SGNameItem* pItem;
+	for ( pItem = (SGNameItem*) GetChild();
 		 pItem != 0 && !pItem->IsEqual(strName);
 		 pItem = (SGNameItem*) pItem->GetNext())
 			/* empty */ ;
@@ -1115,9 +1130,9 @@ void SGNameGroup::ReadGroupTitle()
 BOOL SGUsedNames::IsMember(Node* pNode, const StringBase& strName) const
 {
 	TemplateAttribute* pAttr;
-	for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr(Node::IsAnObjectName);
+	for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr( &Node::IsAnObjectName );
 		 pAttr != 0;
-		 pAttr = (TemplateAttribute*) pAttr->FindNextAttr(Node::IsAnObjectName))
+		 pAttr = (TemplateAttribute*) pAttr->FindNextAttr( &Node::IsAnObjectName ) )
 			if (strName == pAttr->GetParam())
 				return TRUE;
 
@@ -1141,9 +1156,9 @@ BOOL SGUsedNames::IsMember(Node* pNode, const StringBase& strName) const
 BOOL SGUsedNames::CreateItems(Node* pNode)
 {
 	TemplateAttribute* pAttr;
-	for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr(Node::IsAnObjectName);
+	for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr( &Node::IsAnObjectName );
 		 pAttr != 0;
-		 pAttr = (TemplateAttribute*) pAttr->FindNextAttr(Node::IsAnObjectName))
+		 pAttr = (TemplateAttribute*) pAttr->FindNextAttr( &Node::IsAnObjectName ) )
 			if (RegisterMember(pNode, pAttr->GetParam()) == 0)
 				return FALSE;
 
@@ -1178,7 +1193,7 @@ BOOL SGUsedBitmaps::IsMember(Node* pNode, const StringBase& strName) const
 	}
 
 	// Test against bitmap transparency fills.
-	NodeAttribute* pAttr = pNode->FindFirstAttr(Node::IsABitmapTranspFill);
+	NodeAttribute* pAttr = pNode->FindFirstAttr( &Node::IsABitmapTranspFill );
 	if (pAttr != 0)
 	{
 		pBmp = ((BitmapTranspFillAttribute*) pAttr->GetAttributeValue())
@@ -1187,7 +1202,7 @@ BOOL SGUsedBitmaps::IsMember(Node* pNode, const StringBase& strName) const
 	}
 
 	// Test against bitmap colour fills.
-	pAttr = pNode->FindFirstAttr(Node::IsABitmapColourFill);
+	pAttr = pNode->FindFirstAttr( &Node::IsABitmapColourFill );
 	if (pAttr != 0)
 	{
 		pBmp = ((BitmapFillAttribute*) pAttr->GetAttributeValue())
@@ -1226,7 +1241,7 @@ BOOL SGUsedBitmaps::CreateItems(Node* pNode)
 	}
 
 	// Does it have a bitmap transparency fill attribute?
-	NodeAttribute* pAttr = pNode->FindFirstAttr(Node::IsABitmapTranspFill);
+	NodeAttribute* pAttr = pNode->FindFirstAttr( &Node::IsABitmapTranspFill );
 	if (pAttr != 0)
 	{
 		pBmp = ((BitmapTranspFillAttribute*) pAttr->GetAttributeValue())
@@ -1239,7 +1254,7 @@ BOOL SGUsedBitmaps::CreateItems(Node* pNode)
 	}
 
 	// Does a bitmap colour or transparency fill attribute apply to it?
-	pAttr = pNode->FindFirstAttr(Node::IsABitmapFill);
+	pAttr = pNode->FindFirstAttr( &Node::IsABitmapFill );
 	if (pAttr != 0 && !pAttr->IsAFractalFill()) // fractals and plasmas don't have a bitmap!!! sjk
 	{
 		pBmp = ((BitmapFillAttribute*) pAttr->GetAttributeValue())
@@ -1275,7 +1290,7 @@ BOOL SGUsedFonts::IsMember(Node* pNode, const StringBase& strName) const
 
 	// Does a typeface attribute apply?
 	AttrTxtFontTypeface* pAttr =
-				(AttrTxtFontTypeface*) pNode->FindFirstAttr(Node::IsATypeface);
+				(AttrTxtFontTypeface*) pNode->FindFirstAttr( &Node::IsATypeface );
 	if (pAttr == 0) return FALSE;
 
 	// The same value?
@@ -1306,7 +1321,7 @@ BOOL SGUsedFonts::CreateItems(Node* pNode)
 
 	// Does a typeface attribute apply?
 	AttrTxtFontTypeface* pAttr =
-				(AttrTxtFontTypeface*) pNode->FindFirstAttr(Node::IsATypeface);
+				(AttrTxtFontTypeface*) pNode->FindFirstAttr( &Node::IsATypeface );
 	if (pAttr == 0) return TRUE;
 
 	// Yes, make an item for it.
@@ -1448,9 +1463,9 @@ BOOL SGUsedColours::IsMember(Node* pNode, const StringBase& strName) const
 	DocColour* pCol;
 	AttrFillGeometry* pAttr;
 
-	for (pAttr = (AttrFillGeometry*) pNode->FindFirstAttr(Node::IsAFillAttr);
+	for (pAttr = (AttrFillGeometry*) pNode->FindFirstAttr( &Node::IsAFillAttr );
 		 pAttr != 0;
-		 pAttr = (AttrFillGeometry*) pAttr->FindNextAttr(Node::IsAFillAttr))
+		 pAttr = (AttrFillGeometry*) pAttr->FindNextAttr( &Node::IsAFillAttr ) )
 	{
 		pCol = pAttr->GetStartColour();
 		if (pCol != 0)
@@ -1508,9 +1523,9 @@ BOOL SGUsedColours::CreateItems(Node* pNode)
 	DocColour* pCol;
 	AttrFillGeometry* pAttr;
 
-	for (pAttr = (AttrFillGeometry*) pNode->FindFirstAttr(Node::IsAFillAttr);
+	for (pAttr = (AttrFillGeometry*) pNode->FindFirstAttr( &Node::IsAFillAttr );
 		 pAttr != 0;
-		 pAttr = (AttrFillGeometry*) pAttr->FindNextAttr(Node::IsAFillAttr))
+		 pAttr = (AttrFillGeometry*) pAttr->FindNextAttr( &Node::IsAFillAttr ))
 	{
 		pCol = pAttr->GetStartColour();
 		if (pCol != 0)

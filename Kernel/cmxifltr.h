@@ -127,8 +127,8 @@ class SelOperation;
 class CMXImportFilter : public VectorFilter
 {
 	CC_DECLARE_DYNAMIC(CMXImportFilter);
-	friend CMXImportRImage;
-	friend CMXImportBitmap;
+	friend class CMXImportRImage;
+	friend class CMXImportBitmap;
 
 public:
 	CMXImportFilter();
@@ -277,5 +277,4 @@ public:
 
 
 
-#endif CMXIFLTR_H
-
+#endif // CMXIFLTR_H

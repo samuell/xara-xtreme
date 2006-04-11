@@ -398,9 +398,8 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 
 ********************************************************************************************/
 
-char *OILFilter::ConstructFilterString(UINT32 NumberToExport)
+TCHAR *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// Load in the filter name and extensions...
 	static String_128 FilterStr;
 	String_32 Extensions;
@@ -408,41 +407,38 @@ char *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 	FilterStr = GetFilterName(NumberToExport);
 
 	// Construct the filter string from these two strings:
-	FilterStr += " (";
+	FilterStr += _T(" (");
 
 	// Extract each extension and see if we need to add it
 	String_32 ExtStr;
 	ExtStr = FilterExt;
 
-	char *pExt = _tcstok((TCHAR *) ExtStr, ",");
-
+	TCHAR*	pPointer;
+	TCHAR*	pExt = tcstok( (TCHAR*)ExtStr, _T(","), &pPointer );
 	BOOL NoneFound = TRUE;
 
 	while (pExt != NULL)
 	{
-		if (_tcsstr((TCHAR *) Extensions, pExt) == NULL)
+		if (_tcsstr( (TCHAR *)Extensions, pExt ) == NULL)
 		{
 			// Not already present - add the string.
 			if (!NoneFound)
 				// Don't add a semi-colon if this is the first one we find.
-				Extensions += ";";
-			Extensions += "*.";
+				Extensions += _T(";");
+			Extensions += _T("*.");
 			Extensions += pExt;
 			NoneFound = FALSE;
 		}
 
-		pExt = _tcstok(NULL, ",");
+		pExt = tcstok( NULL, _T(","), &pPointer );
 	}
 
 	FilterStr += Extensions;
-	FilterStr += ") |";
+	FilterStr += _T(") |");
 	FilterStr += Extensions;
 
 	// Return a pointer to the string.
 	return (TCHAR *) FilterStr;
-#else
-	return NULL;
-#endif
 }
 
 
@@ -500,7 +496,7 @@ OILFilterFamily::OILFilterFamily(Filter *pFilter, UINT32 NameID) : OILFilter(pFi
 
 ********************************************************************************************/
 
-char *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
+TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 {
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// Load in the filter name and extensions...

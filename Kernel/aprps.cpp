@@ -1048,8 +1048,6 @@ GIFAnimationPropertyTabs::Init()
 																					\
 	GIFAnimationPropertyTabsList.AddTail(pGIFAnimationProperty);
 
-/******************************************************************************************
-
 /********************************************************************************************
 
 >	BOOL GIFAnimationPropertyTabs::InitGIFAnimationPropertyTabs()

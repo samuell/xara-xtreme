@@ -102,7 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FILEDLGS
 
 // make sure this is defined if you want the "new XP-style" Open/Save dialogs:
+PORTNOTE("other", "XPDialog doesn't make sense" )
+#if !defined(EXCLUDE_FROM_XARALX)
 #define XPDialog
+#endif
 
 #include "filters.h" 
 #include "monotime.h"
@@ -118,6 +121,8 @@ RenderRegion* CreateOSRenderRegion(DocRect* pRequiredSize, ReDrawInfoType* Extra
 												BOOL UseSelViewColContext = FALSE);
 BOOL DestroyOSRenderRegion(RenderRegion* pRender);
 
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 #ifdef XPDialog
 // needed to show the "XP-style" place bar on the left hand side of the File dialogs:
 struct OPENFILENAMEEX : public OPENFILENAME
@@ -126,6 +131,7 @@ struct OPENFILENAMEEX : public OPENFILENAME
 	DWORD        dwReserved;
 	DWORD        FlagsEx;
 };
+#endif
 #endif
 
 /********************************************************************************************
@@ -136,8 +142,10 @@ struct OPENFILENAMEEX : public OPENFILENAME
 	Purpose:	To provide a custom File Save / Open Dialog that goes to the correct directory etc
 ********************************************************************************************/
 
-class BaseFileDialog : public CFileDialog
+class BaseFileDialog : public wxFileDialog
 {
+	DECLARE_CLASS(BaseFileDialog)
+
 public:
 	// Preferences to store the last path for the dialogs
 	static String_256 DefaultSaveFilePath;
@@ -152,7 +160,7 @@ public:
 	static BOOL Init();
 
 	// Creation & destruction.
-	BaseFileDialog(BOOL IsFileOpen, DWORD dwFlags, LPCSTR lpszFilter = NULL, CWnd* pParentWnd = NULL);
+	BaseFileDialog(BOOL IsFileOpen, DWORD dwFlags, LPCTSTR lpszFilter = NULL, wxWindow* pParentWnd = NULL);
 	~BaseFileDialog();
 
 	// Initialisation functions.
@@ -176,25 +184,25 @@ public:
 	virtual INT32 OpenAndGetFileName();
 
 	// Function to build the filter list for both exporters and importers
-	static char *BuildFilterString(BOOL GetImport, UINT32 SelectedFilterID, INT32 *SelectedFilter,
+	static TCHAR *BuildFilterString(BOOL GetImport, UINT32 SelectedFilterID, INT32 *SelectedFilter,
 								   CCRuntimeClass *pTypeOfFilter = CC_RUNTIME_CLASS(Filter),
 								   UINT32 Bpp = 0, UINT32 BitmapCount = 1);
 
 	// Function to add the extension to a filename e.g. .art or .xar
-	virtual void AppendExtension(CString* pFilename);
+	virtual void AppendExtension(wxString* pFilename);
 
 	// this is a version of OnFileNameOK that helps work around the win 95 bug
 	virtual BOOL IsValidFilename();
 
 #ifdef XPDialog
 // needed to show the "XP-style" place bar on the left hand side of the File dialogs:
-	virtual INT32 DoModal();
+	virtual int ShowModal();
 #endif
 
 //	WEBSTER-ranbirr-27/03/97
 	// Added for Webster - RanbirR. Removes the extension from a file name.
 #ifdef WEBSTER
-	virtual BOOL RemoveFileExtension(CString* pFilename);
+	virtual BOOL RemoveFileExtension(wxString* pFilename);
 #endif //WEBSTER
 
 
@@ -202,7 +210,10 @@ public:
 	// can access them when the palette changes...
 	// This points at the current running instance of a file dialog.
 	static BaseFileDialog* m_pCurrentFileDialog;
+PORTNOTE("other", "Removed OnPaletteChanged - windowsy" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
+#endif
 
 protected:
 	enum
@@ -212,25 +223,27 @@ protected:
 	// The title of the dialog
 	TCHAR Title[TITLE_SIZE];
 
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// This is called by the hook proc.
-	virtual UINT32 OnHookMsg(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
+	virtual UINT32 OnHookMsg(wxWindow* hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
 
 	virtual UINT32 OnFileTypeChange();
 
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 
 	BOOL ExplorerInited;
 
 	// This is used to inform explorer style dialogs of actions
-	virtual BOOL ExplorerFileHookNotify(HWND hDlg, LPOFNOTIFY pofn);
+	virtual BOOL ExplorerFileHookNotify(wxWindow* hDlg, LPOFNOTIFY pofn);
 	
 	// This points at the current running instance of a file dialog.
 // made public - see above
 //	static BaseFileDialog* m_pCurrentFileDialog;
 
 	// This calls your overridden virtual hook proc.
-	static UINT32 CALLBACK HookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
+	static UINT32 CALLBACK HookProc(wxWindow* hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
 
 	// There is no memory stuff (Declare_Memdump etc) as this is an MFC derived class
 	DECLARE_DYNAMIC(BaseFileDialog);
@@ -270,20 +283,21 @@ protected:
 									  UINT32			FilterID );
 	virtual void OnFolderChange();
 
-	// Member variables.
-	KernelBitmap * pBitmapToUse;
-
-	BOOL WantPreviewBitmap;
-
 // needed to show the "XP-style" place bar on the left hand side of the File dialogs:
 #ifdef XPDialog
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	OPENFILENAMEEX m_ofnEx;
 #endif
+#endif
+
+	// Member variables.
+	KernelBitmap * pBitmapToUse;
+
+	BOOL WantPreviewBitmap;
 
 private:
 	// Added by Craig Hamilton 20/9/00.
-	CString		m_previousPathName;
+	wxString		m_previousPathName;
 	// End added.
 };
 
@@ -300,6 +314,8 @@ private:
 
 class OpenFileDialog : public BaseFileDialog
 {
+	DECLARE_CLASS(OpenFileDialog)
+
 public:
 	// Data members.
 	INT32 NativeFilterPos;
@@ -312,19 +328,22 @@ public:
 	void SetDefaultPath(const String_256& NewPath);
 
 	// Function to build the filter list
-	static char* BuildFilterString(INT32* NativeFilterPos);
+	static TCHAR* BuildFilterString(INT32* NativeFilterPos);
 
 protected:
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 
 private:
 	// Initialisation functions.
-	BOOL OnInitDialog();
+	void OnInitDialog( wxInitDialogEvent& event );
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	void DoDataExchange(CDataExchange* pDX);
 
 	DECLARE_DYNAMIC(OpenFileDialog);
 	DECLARE_MESSAGE_MAP()
+#endif
 
 	//void OnLBSelChangedNotify(UINT32 IDBox, UINT32 CurSel, UINT32 Code);
 };
@@ -345,9 +364,12 @@ private:
 
 class SaveFileDialog : public BaseFileDialog
 {
+	DECLARE_CLASS(SaveFileDialog)
+
 public:
-	SaveFileDialog(LPCTSTR FilterString, String_256&, String_256&);
-	SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String_256& DefName, String_256& DocumentName);
+	SaveFileDialog(LPCTSTR FilterString, const String_256&, const String_256&);
+	SaveFileDialog(LPCTSTR FilterString, const String_256& DefPath, const String_256& DefName, 
+		const String_256& DocumentName);
 
 	// Initialisation function.
 	virtual BOOL PrepareDialog();
@@ -356,7 +378,7 @@ public:
 	void SetDefaultPath(const String_256& NewPath);
 
 	// Function to add the .art extension to a filename
-	virtual void AppendExtension(CString* pFilename);
+	virtual void AppendExtension(wxString* pFilename);
 
 protected:
 	// Our special variable which allows us to see if we have faked the closure
@@ -368,11 +390,14 @@ protected:
 	//virtual INT32 GetWebFileName();
 
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 	
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// WEBSTER - markn 24/1/97
 	// Handle clicking on the options
 	virtual BOOL HandleOptions();
+#endif
 
 protected:
 	// Default path and file name
@@ -380,18 +405,21 @@ protected:
 	String_256 DefaultPath;
 	String_256 DocName;
 
-	CButton CompressButton;
-	CButton Options;
-	CStatic CurrentOptions;
+	wxButton *CompressButton;
+	wxButton *Options;
+	wxStaticText *CurrentOptions;
 
 	// Implementation.
 	BOOL OnInitDialog();
 	BOOL OnFileNameOK();
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	void DoDataExchange(CDataExchange* pDX);
 
 
 	DECLARE_DYNAMIC(SaveFileDialog);
 	DECLARE_MESSAGE_MAP()
+#endif
 };
 
 /********************************************************************************************
@@ -406,25 +434,37 @@ protected:
 
 class SaveTemplateDialog : public SaveFileDialog
 {
+	DECLARE_CLASS(SaveTemplateDialog)
+
 public:
 	SaveTemplateDialog(PathName& pathToPutInDialog);
 	static BOOL m_fUseAsDefault;
 	static BOOL m_fDefaultTemplatesFolder;
 	void OnUseAsDefault();
 	void OnDefaultTemplatesFolder();
+
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	void OnFileNameChange();
+#endif
 
 protected:
 	String_256 m_strTitleOfDialog;
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	DECLARE_DYNAMIC(SaveTemplateDialog);
 	DECLARE_MESSAGE_MAP()
-	
+#endif
+
 private:
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Implementation.
 	void DoDataExchange(CDataExchange* pDX);
+#endif
 
-	BOOL ExplorerInitDialog(HWND hDlg);
+	BOOL ExplorerInitDialog(wxWindow* hDlg);
 
 	BOOL PrepareDialog();
 };
@@ -452,21 +492,26 @@ private:
 
 class ImportFileDialog : public BaseFileDialog
 {
+	DECLARE_CLASS(ImportFileDialog)
+
 public:
-	ImportFileDialog(LPCSTR lpszFilter = NULL);
+	ImportFileDialog(LPCTSTR lpszFilter = NULL);
 
 protected:
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 
 private:
-	CButton LayersButton;
+	wxButton *LayersButton;
 
-	BOOL OnInitDialog();
+	BOOL OnInitDialog( wxInitDialogEvent& event );
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	void DoDataExchange(CDataExchange* pDX);
 	afx_msg void OnLButtonDblClk(UINT32 nFlags, CPoint point);
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DYNAMIC(ImportFileDialog);
+#endif
 };
 
 
@@ -483,12 +528,14 @@ private:
 
 class ExportFileDialog : public BaseFileDialog
 {
+	DECLARE_CLASS(ExportFileDialog)
+
 public:
-	ExportFileDialog(LPCSTR lpszFilter = NULL);
+	ExportFileDialog(LPCTSTR lpszFilter = NULL);
 
 	// Function to add the extension to a filename
-	virtual void AppendExtension(CString* pFilename);
-	virtual void AddExtension(CString* pFilename, BOOL Replace = FALSE, BOOL AskAboutReplace = FALSE,
+	virtual void AppendExtension(wxString* pFilename);
+	virtual void AddExtension(wxString* pFilename, BOOL Replace = FALSE, BOOL AskAboutReplace = FALSE,
 							  UINT32 Selection = 0 );
 
 #if FALSE
@@ -501,12 +548,15 @@ public:
 
 protected:
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 	virtual BOOL HandleOptions();				// Handle clicking on the options button.
 
 private:
-	BOOL OnInitDialog();
+	BOOL OnInitDialog( wxInitDialogEvent& event );
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	void DoDataExchange(CDataExchange* pDX);
+#endif
 	BOOL OnFileNameOK();
 	
 	virtual void OnTypeChange();
@@ -515,11 +565,14 @@ private:
 	virtual BOOL IsValidFilename();
 	BOOL SetStateOnFilterChange();
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	afx_msg void OnAutoPreview();
 	//	afx_msg void OnFileTypeChange(NMHDR * pNotifyStruct, LRESULT * result );
 	DECLARE_MESSAGE_MAP()
 
 	DECLARE_DYNAMIC(ExportFileDialog);
+#endif
 
 protected:
 	BOOL m_bExportABitmap;
@@ -546,15 +599,20 @@ protected:
 **************************************************************************************************************************/
 class GIFExportFileDialog : public ExportFileDialog
 {
-	DECLARE_DYNAMIC(GIFExportFileDialog);
+	DECLARE_CLASS(GIFExportFileDialog)
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
+	DECLARE_DYNAMIC(GIFExportFileDialog);
+#endif
+	
 	public:
 	GIFExportFileDialog(LPCTSTR lpszFilter);	//Constructor
 
 	virtual BOOL HandleOptions();				// Handle clicking on the options button.
 
 	// This is called by explorer style dialog boxes so that they can be set up ok
-	virtual BOOL ExplorerInitDialog(HWND hDlg);
+	virtual BOOL ExplorerInitDialog(wxWindow* hDlg);
 };
 
 #endif  // !INC_FILEDLGS

@@ -39,7 +39,7 @@ libwxOil_a_SOURCES = \
 	dlgevt.cpp cartprov.cpp cartctl.cpp colourmat.cpp menucmds.cpp menupref.cpp \
 	rendwnd.cpp scroller.cpp helpuser.cpp oilprefs.cpp dragtrgt.cpp \
 	ctrllist.cpp dlgcol.cpp thumb.cpp dragmgr.cpp ccolbar.cpp dragcol.cpp \
-	drawctl.cpp \
+	drawctl.cpp filedlgs.cpp fileutil.cpp \
 	fontbase.cpp ftfonts.cpp textfuns.cpp \
 	resources.cpp
 

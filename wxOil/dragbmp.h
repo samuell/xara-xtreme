@@ -141,11 +141,11 @@ public:
 	
 	virtual UINT32 GetCursorID(void);
  	virtual BOOL GetStatusLineText(String_256 * TheText);
-	virtual BOOL OnDrawSolidDrag(CPoint Origin, CDC * TheDC);
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin, CDC * TheDC);
 
 	virtual UINT32 GetCursorID(DragTarget* pDragTarget);
 	virtual BOOL GetStatusLineText(String_256 * TheText, DragTarget* pDragTarget);
-	virtual BOOL OnDrawSolidDrag(CPoint Origin,CDC * TheDC, DragTarget* pDragTarget);
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin,CDC * TheDC, DragTarget* pDragTarget);
 
 	virtual KernelBitmap* GetSolidDragMask();
 
@@ -159,14 +159,14 @@ public:
 protected:
 
 	BOOL PlotBitmap(WinBitmap *WinBM, 
-					CPoint Origin, CSize Size, 
+					wxPoint Origin, wxSize Size, 
 					CDC * RenderDC);
 
 protected:
  	KernelBitmap *TheBitmap;
  	KernelBitmap *DragMask;
 
-	CSize DragRect;
+	wxSize DragRect;
 
 	LPBITMAPINFO TempInfo;
 	LPBYTE TempBits;
@@ -174,8 +174,8 @@ protected:
 	UINT32 DIBPal;
 
 	CDC* MemDC;
-	CBitmap* Bitmap;
-	CBitmap* OldBmp;
+	wxBitmap* Bitmap;
+	wxBitmap* OldBmp;
 
 	static INT32 DragTransparency;
 };

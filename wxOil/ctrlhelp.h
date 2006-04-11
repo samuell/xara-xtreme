@@ -141,7 +141,7 @@ public:
 	UINT32 BubbleID;
 	UINT32 StatusID;
 	UINT32 ModuleID;
-	HWND Parent;
+	wxWindow* Parent;
 };
 
 /********************************************************************************************
@@ -158,14 +158,14 @@ public:
 				You should return a pointer to the bubble help text to display.
 
 				MonoOn
-				typedef TCHAR *(*BubbleHelpCallback)(HWND, UINT32, void*);
+				typedef TCHAR *(*BubbleHelpCallback)(wxWindow*, UINT32, void*);
 				MonoOff
 
 				The parameters provide context information for the callback as there is
 				usually a delay between calling DoBubbleHelpOn(), and the callback being
 				called (because there is a short time delay before bubble help appears).
 
-	Inputs:		HWND - the handle of the window that bubble help is being provided on.
+	Inputs:		wxWindow* - the handle of the window that bubble help is being provided on.
 				UINT32 - the 'psuedo-ID' you passed in to DoBubbleHelpOn() which indicates
 					   which GUI element in the window that bubble help is being provided
 					   for.  This number is determined by you - it means nothing to the
@@ -209,44 +209,44 @@ public:
 	static BOOL Init();
 	static void DeInit();
 
-	static BOOL NotifyBarCreated(HWND);
-	static BOOL NotifyBarDeleted(HWND);
-	static BOOL NotifyBarChanged(HWND Old, HWND New);
-	static BOOL NotifyControlCreated(HWND, ControlHelpInfo*);
-	static BOOL NotifyControlCreated(HWND, OpDescriptor*);
-	static BOOL NotifyControlDeleted(HWND);
+	static BOOL NotifyBarCreated(wxWindow*);
+	static BOOL NotifyBarDeleted(wxWindow*);
+	static BOOL NotifyBarChanged(wxWindow* Old, wxWindow* New);
+	static BOOL NotifyControlCreated(wxWindow*, ControlHelpInfo*);
+	static BOOL NotifyControlCreated(wxWindow*, OpDescriptor*);
+	static BOOL NotifyControlDeleted(wxWindow*);
 
 	// Allow the control Bubble help to be changed on the fly
-	static BOOL NotifyControlChanged(HWND, ControlHelpInfo*);
+	static BOOL NotifyControlChanged(wxWindow*, ControlHelpInfo*);
 
-	typedef TCHAR *(*BubbleHelpCallback)(HWND, UINT32, void*);
+	typedef TCHAR *(*BubbleHelpCallback)(wxWindow*, UINT32, void*);
 
-	static void DoBubbleHelpOn(HWND, UINT32, BubbleHelpCallback, void*);
+	static void DoBubbleHelpOn(wxWindow*, UINT32, BubbleHelpCallback, void*);
 
 	static void ServiceBubbleHelp();
 	static void BubbleHelpDisable();
 
 	static void InformModalDialogOpened();
 	static void InformModalDialogClosed();
-	static BOOL ControlHelper::GetStatusLineText(String_256* ptext, HWND window);
+	static BOOL GetStatusLineText(String_256* ptext, wxWindow* window);
 
 	static BOOL IsUserInterfaceCaptured();
 
 private:
 	static void	BubbleHelpKill();
 
-	static BOOL AddControl(HWND, ControlHelpInfo *);
+	static BOOL AddControl(wxWindow*, ControlHelpInfo *);
 	static ControlTable  *Controls;
 	static BarTable      *Bars;
 	static BubbleHelpWnd *BubbleWnd;
 
-	static LRESULT CALLBACK MyWndProc(HWND, UINT32, WPARAM, LPARAM);
+	static LRESULT CALLBACK MyWndProc(wxWindow*, UINT32, WPARAM, LPARAM);
 	static MonotonicTime PendingTimer;
 	static POINT LastPos;
-	static HWND LastControl;
+	static wxWindow* LastControl;
 	static BOOL ControlHasFocus;
 
-	static HWND AdHocWindow;
+	static wxWindow* AdHocWindow;
 	static UINT32 AdHocControl;
 	static BOOL AdHocControlIsDifferent;
 	static void *AdHocReference;
@@ -281,10 +281,13 @@ private:
 	static INT32 ModalDialogs;
 
 	// State control functions
-	static void BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC WndProc);
-	static void SetState(BubbleState NewState, HWND Window = NULL);
+PORTNOTE( "dialog", "Remove function that needs WNDPROC" )
+#if 0
+	static void BubbleHelpStateMachine(POINT Pos, wxWindow* ThisControl, WNDPROC WndProc);
+#endif
+	static void SetState(BubbleState NewState, wxWindow* Window = NULL);
 	static void DeadHandler();
-	static void ActiveHandler(HWND Window);
+	static void ActiveHandler(wxWindow* Window);
 	static void InitialPendingHandler();
 	static void InitialDisabledHandler();
 	static void UpdatePendingHandler();
@@ -302,7 +305,7 @@ private:
 	Purpose:	Contains the information for a particular control.
 				The data members are:
 				MonoOn
-				HWND Window - the handle of the control.
+				wxWindow* Window - the handle of the control.
 				OpDescriptor *pOpDesc - pointer to the OpDescriptor associated with this
 										control.
 				WNDPROC WndProc - pointer to the normal WndProc for the subclassed control.
@@ -314,16 +317,19 @@ private:
 class ControlEntry
 {
 public:
-	HWND Window;			// Handle of the control being sublassed (may be a subwindow of
+	wxWindow* Window;			// Handle of the control being sublassed (may be a subwindow of
 							// a control).
-	HWND Parent;			// Not necessarily the immediate parent - just the handle of the
+	wxWindow* Parent;			// Not necessarily the immediate parent - just the handle of the
 							// parent control, or none if this *is* the parent control.
 	OpDescriptor *pOpDesc;	// The OpDescriptor for this control, or NULL if there isn't one.
 	UINT32 BubbleID;			// String resource ID for bubble help.
 	UINT32 StatusID;			// String resource ID for status bar text.
 	UINT32 ModuleID;			// Module ID to be used when loading bubble help/status 
 							// bar string resources.
+PORTNOTE( "dialog", "Remove WNDPROC usage" )
+#if 0
 	WNDPROC WndProc;		// Normal WndProc for this control.
+#endif
 
 	BOOL AddCommitHandling; // This flag is set to TRUE if the control is an edit or a combo 
 							// it is used in the subclass procedure to determine if we
@@ -352,13 +358,16 @@ public:
 	~ControlTable();
 	BOOL Init();
 
-	BOOL AddControl(HWND, ControlHelpInfo*, WNDPROC);
-	WNDPROC DeleteControl(HWND Window, HWND *RealWindow);
-	ControlEntry *FindControl(HWND Window);
-	BOOL ChangeControl(HWND, ControlHelpInfo*);
+PORTNOTE( "dialog", "Remove function that needs WNDPROC" )
+#if 0
+	BOOL AddControl(wxWindow*, ControlHelpInfo*, WNDPROC);
+	WNDPROC DeleteControl(wxWindow* Window, wxWindow* *RealWindow);
+#endif
+	ControlEntry *FindControl(wxWindow* Window);
+	BOOL ChangeControl(wxWindow*, ControlHelpInfo*);
 
 private:
-	INT32 FindControlIndex(HWND Window, BOOL IgnoreChildren = TRUE);
+	INT32 FindControlIndex(wxWindow* Window, BOOL IgnoreChildren = TRUE);
 
 	enum
 	{
@@ -372,7 +381,7 @@ private:
 	INT32 TableSize;
 
 	// State information - used when scanning the table for controls.
-	HWND LastWindow;
+	wxWindow* LastWindow;
 	INT32  LastIndex;
 };
 

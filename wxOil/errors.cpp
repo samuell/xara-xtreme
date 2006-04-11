@@ -1366,13 +1366,13 @@ INT32 ModuleInformWarning(UINT32 ModID, ErrorInfo *pInfo)
 
 
 
-INT32 AskQuestion(UINT32 ErrorMsg, UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4, UINT32 OK, UINT32 Cancel)
+UINT32 AskQuestion(UINT32 ErrorMsg, UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4, UINT32 OK, UINT32 Cancel)
 {
 	return InformGeneral(ERRORTYPE_QUESTION, 0, ErrorMsg, 
 						 Butt1, Butt2, Butt3, Butt4, OK, Cancel);
 }
 
-INT32 ToolAskQuestion(UINT32 ToolID, UINT32 ErrorMsg, UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4, UINT32 OK, UINT32 Cancel)
+UINT32 ToolAskQuestion(UINT32 ToolID, UINT32 ErrorMsg, UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4, UINT32 OK, UINT32 Cancel)
 {
 	return InformGeneral(ERRORTYPE_QUESTION, Tool::GetModuleID(ToolID), ErrorMsg, 
 						 Butt1, Butt2, Butt3, Butt4, OK, Cancel);
@@ -1558,7 +1558,7 @@ void Error::DumpStack(UINT32 frames)
 
 ********************************************************************************************/
 
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
 void Error::StackWalker::OnStackFrame(const wxStackFrame & frame)
 {
 #ifdef _DEBUG

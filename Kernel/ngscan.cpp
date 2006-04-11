@@ -120,6 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "keypress.h"
 #include "nodebmp.h"		// for NodeBitmap
 #include "nodershp.h"		// for NodeRegularShape
+#include "ophist.h"
 
 #include "cxfrech.h"		// TemplateAttribute
 #include "attrval.h"
@@ -672,7 +673,7 @@ static BOOL ApplyNameToNode(const StringBase& strName, Node* pNode, UndoableOper
 		BarName.MakeMsg(_R(IDS_BARNAME), BarNo+1);
 	}
 
-	ALLOC_WITH_FAIL(pta, (new TemplateAttribute(TA_NAME, BarNo >= 0 ? BarName : NullString , strName)), pOp);
+	ALLOC_WITH_FAIL(pta, (new TemplateAttribute(TA_NAME, BarNo >= 0 ? BarName : _T("") , strName)), pOp);
 	ERRORIF(pta == 0, _R(IDE_NOMORE_MEMORY), FALSE);
 
 	// If the target node is an object, check that the attribute type is required by it,
@@ -1049,9 +1050,9 @@ BOOL HideScan::HideItems::Do(SGNameItem* pItem)
 	{
 		// Find the exact Wix attribute that makes the node a member of pItem's set.
 		TemplateAttribute* pAttr;
-		for (pAttr = (TemplateAttribute*) m_pNode->FindFirstAttr(Node::IsAnObjectName);
+		for (pAttr = (TemplateAttribute*) m_pNode->FindFirstAttr( &Node::IsAnObjectName );
 			 pAttr != 0;
-			 pAttr = (TemplateAttribute*) pAttr->FindNextAttr(Node::IsAnObjectName))
+			 pAttr = (TemplateAttribute*) pAttr->FindNextAttr( &Node::IsAnObjectName ))
 				if (pItem->IsEqual(pAttr->GetParam())) break;
 
 		// Try to hide the attribute.
@@ -1199,9 +1200,9 @@ BOOL HideSingleScan::Do(Node* pNode)
 	{
 		// Find the exact Wix attribute that makes the node a member of the set.
 		TemplateAttribute* pAttr;
-		for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr(Node::IsAnObjectName);
+		for (pAttr = (TemplateAttribute*) pNode->FindFirstAttr( &Node::IsAnObjectName );
 			 pAttr != 0;
-			 pAttr = (TemplateAttribute*) pAttr->FindNextAttr(Node::IsAnObjectName))
+			 pAttr = (TemplateAttribute*) pAttr->FindNextAttr( &Node::IsAnObjectName ))
 				if (pAttr->GetParam() == m_strName) break;
 
 		// Try to hide the attribute.

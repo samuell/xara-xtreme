@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "mainfrm.h"
+#include "camframe.h"
 #include "camelot.h"
 #include "pathname.h"
 #include "document.h"
@@ -129,7 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "barsdlgs.h"		// for the import/export bar controls
 
 #include "bitfilt.h"		// BaseBitmapFilter
-#include "cameleps.h"
+//#include "cameleps.h"
 #include "oilfltrs.h"
 //#include "will3.h"
 #include "bmpsdlg.h"
@@ -142,14 +142,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opbevel.h"
 
-#include "bmapprev.h"
+//#include "bmapprev.h"
 
 #if XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif
 
 #if _DEBUG
-#include "cmxtree.h"
+//#include "cmxtree.h"
 #endif
 
 //Webster-Ranbirr-12\11\96
@@ -160,7 +160,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif //webster
 
 // generic import filter
-#include "gendwnd.h"
+//#include "gendwnd.h"
 //#include "webster.h"
 
 #include "ngsentry.h"
@@ -168,7 +168,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "justin3.h"
 
 #include "filtimag.h"	// The imagemap filter class
-#include "desnotes.h"	// Dream weaver integration
+//#include "desnotes.h"	// Dream weaver integration
 //#include "sliceres.h"	// For _R(IDS_NOTES_WARNING)
 
 CC_IMPLEMENT_DYNCREATE(OpMenuImport, SelOperation)
@@ -264,13 +264,16 @@ BOOL OpMenuImport::Init()
 	if (!InitOK) return FALSE; 
 
 
-	Camelot.DeclareSection("Filters", 5);
-	Camelot.DeclarePref("Filters", "DefaultImportFilter", &SelectedFilterID);
-	Camelot.DeclarePref("Filters", "DefaultImportFilterPath", &DefaultImportFilterPath);
+	Camelot.DeclareSection(_T("Filters"), 5);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultImportFilter"), &SelectedFilterID);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultImportFilterPath"), &DefaultImportFilterPath);
 
+PORTNOTE("other", "Removed OpGenericDownload" )
+#if 0
 	if (!OpGenericDownload::Init())
 		return FALSE;
-
+#endif
+	
 	return TRUE;
 }
 
@@ -326,7 +329,7 @@ void OpMenuImport::Do(OpDescriptor*)
 	// Check if the import with layers button has been changed and if so send a message
 	// to warn other users e.g. options dialog box
 	if (LayersImport != Filter::ImportWithLayers)
-		BROADCAST_TO_ALL(OptionsChangingMsg(OptionsChangingMsg::OptionsState::IMPORTWITHLAYERS)); 
+		BROADCAST_TO_ALL(OptionsChangingMsg(OptionsChangingMsg::IMPORTWITHLAYERS)); 
 
 	if (!DlgResult)
 	{
@@ -363,11 +366,18 @@ void OpMenuImport::Do(OpDescriptor*)
 	Filter *pFilter = Filter::GetFirst();
 	while (pFilter != 0)
 	{
-		if ((pFilter->GetFlags().CanImport && (!IS_A(pFilter, CamelotEPSFilter))) && 
-			(pFilter->pOILFilter->Position == SelectedFilter))
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
+		if( ( pFilter->GetFlags().CanImport && !IS_A( pFilter, CamelotEPSFilter ) ) &&
+#else
+		if( pFilter->GetFlags().CanImport &&
+#endif
+			NULL != pFilter->pOILFilter && pFilter->pOILFilter->Position == SelectedFilter )
+		{
 			// This is the filter!
 			break;
-
+		}
+		
 		// Try the next filter
 		pFilter = Filter::GetNext(pFilter);
 	}
@@ -386,6 +396,8 @@ void OpMenuImport::Do(OpDescriptor*)
 		SelectedFilterID = pFilter->FilterID;
 
 		String_256 URL = Path.GetPath();
+		
+		TRACEUSER( "luke", _T("Path = %s\n"), (TCHAR*)URL );
 
 		//Graham 14/7/97: Get the current view
 		DocView* pDocView=DocView::GetCurrent();
@@ -422,7 +434,7 @@ void OpMenuImport::DoImport(PathName Path, Filter* pFilter, String_256* URL, Imp
 	if (!pFilter->IS_KIND_OF(FilterFamily))
 	{
 		UINT32 Size = 1024;
-		INT32 FileSize;
+		size_t FileSize;
 		ADDR FilterBuf = pFilter->LoadInitialSegment(Path, &Size, &FileSize);
 
 		// If there has been a problem in the load initial segment then fail now.
@@ -452,7 +464,7 @@ void OpMenuImport::DoImport(PathName Path, Filter* pFilter, String_256* URL, Imp
 			Question.Button[0] = _R(IDB_IMPQUERY_IMPORT);
 			Question.Button[1] = _R(IDB_IMPQUERY_DONTIMPORT);
 
-			if (AskQuestion(&Question) != _R(IDB_IMPQUERY_IMPORT))
+			if (UINT32(AskQuestion(&Question)) != _R(IDB_IMPQUERY_IMPORT))
 			{
 				// User asked for this to be cancelled.
 				TRACEUSER( "Tim", _T("Filter compatibility was less than 10\n"));
@@ -481,7 +493,7 @@ void OpMenuImport::DoImport(PathName Path, Filter* pFilter, String_256* URL, Imp
 		// Get pointer to current doc 'cos we'll need it several times...
 		Document* pCurDoc = Document::GetCurrent();
 
-		TRY
+		try
 		{
 			if (!DiskFile.open(Path, ios::in | ios::binary))
 			{
@@ -514,11 +526,11 @@ void OpMenuImport::DoImport(PathName Path, Filter* pFilter, String_256* URL, Imp
 			// close the file
 			if (DiskFile.isOpen())
 				DiskFile.close();
-
+	
 		}
 
 		// See if there was a file io error
-		CATCH(CFileException, e)
+		catch(CFileException e)
 		{
 			// Report the error if no one else did
 			if (Error::GetErrorNumber() != _R(IDN_USER_CANCELLED))
@@ -527,25 +539,23 @@ void OpMenuImport::DoImport(PathName Path, Filter* pFilter, String_256* URL, Imp
 				Error::ClearError();	// otherwise remove the error so it won't get reported
 
 			// Make sure that the file is closed
-			TRY
+			try
 			{
 				if (DiskFile.isOpen())
 					DiskFile.close();
 			}
-			CATCH(CFileException, e)
+			catch(CFileException e)
 			{
 				// Failed to close the file - not much we can do about it really
 			}
-			END_CATCH
 
 			// and fail
 			FailAndExecute();
 		}
-		END_CATCH
 	}
 
 	// grab the focus
-	GetMainFrame()->SetActiveWindow();
+	GetMainFrame()->SetFocus();
 	// Finished the operation
 	End();
 }
@@ -679,10 +689,10 @@ BOOL OpMenuExport::Init()
  								);
 	if (!InitOK) return FALSE; 
 
-	Camelot.DeclareSection("Filters", 5);
-	Camelot.DeclarePref("Filters", "DefaultExportFilter", &SelectedFilterID);
-	Camelot.DeclarePref("Filters", "DefaultExportFilterPath", &DefaultExportFilterPath);
-	Camelot.DeclarePref("Filters", "DefaultBitmapFilter", &DefaultBitmapFilterID);
+	Camelot.DeclareSection(_T("Filters"), 5);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultExportFilter"), &SelectedFilterID);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultExportFilterPath"), &DefaultExportFilterPath);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultBitmapFilter"), &DefaultBitmapFilterID);
 
 	return TRUE;
 }
@@ -1012,7 +1022,8 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	FDialog.GetChosenFileName(&Path);
 
 	// Find the filter that the user chose
-	for (Filter* pFilter = Filter::GetFirst();
+	Filter* pFilter;
+	for (pFilter = Filter::GetFirst();
 		 pFilter != 0;
 		 pFilter = Filter::GetNext(pFilter))
 	{
@@ -1064,9 +1075,12 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		return;
 	}
 
+PORTNOTE("other", "Removed BmapPrevDlg usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Need to set the path for the export dialog (used for image map stuff etc)
 	BmapPrevDlg::m_pthExport = Path;
-
+#endif
+	
 	// Extract directory name (minus terminating backslash) and remember for next time.
 	DefaultExportFilterPath = Path.GetLocation(FALSE);
 			
@@ -1086,8 +1100,12 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	// these days than the other EPS filters.
 	if (TheSelectedFilterID != FILTERID_CAMELOT_EPS &&
 		TheSelectedFilterID != FILTERID_NATIVE_EPS &&
-		TheSelectedFilterID != FILTERID_AIEPS &&
-		pFilter->IS_KIND_OF ( EPSFilter ))
+		TheSelectedFilterID != FILTERID_AIEPS
+PORTNOTE("other", "Removed EPSFilter usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
+		&& pFilter->IS_KIND_OF ( EPSFilter )
+#endif
+		)
 	{
 		// Warn the user that they are not exporting in Camelot EPS or native
 		// format, and get them to confirm that this is what they want to do.
@@ -1096,7 +1114,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		Info.ErrorMsg = _R(IDT_EXPQUERY_NOTSURE);
 		Info.Button[0] = _R(IDB_EXPQUERY_EXPORT);
 		Info.Button[1] = _R(IDB_EXPQUERY_DONTEXPORT);
-		if (AskQuestion(&Info) == _R(IDB_EXPQUERY_DONTEXPORT))
+		if (UINT32(AskQuestion(&Info)) == _R(IDB_EXPQUERY_DONTEXPORT))
 		{
 			// User decided not to export - abort.
 			CCFree(FilterString);
@@ -1121,12 +1139,15 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	BitmapExportOptions* pOptions = NULL;
 	if (pFilter->IS_KIND_OF(BaseBitmapFilter)) 
 	{
+PORTNOTE("other", "Removed BmapPrevDlg usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		if (BmapPrevDlg::m_pExportOptions)
 		{
 			delete BmapPrevDlg::m_pExportOptions;
 			BmapPrevDlg::m_pExportOptions = 0;
 		}
-
+#endif
+		
 		// only if it is a raster type and we are not saving from the gallery
 		if (pExportParam == 0)
 		{
@@ -1135,20 +1156,29 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, FALSE);
 			// the dlg has been up and the user may have the graphic type
 			// ask the dlg for the type that it used
+PORTNOTE("other", "Removed BmapPrevDlg usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 			if (BmapPrevDlg::m_pExportOptions)
 				pOptions = BmapPrevDlg::m_pExportOptions;
 			// take responsibility for the export options away from the bmp preview dlg
 			BmapPrevDlg::m_pExportOptions = 0;
+#endif
 			// the filter we want to export with will change too if the export options have changed type
 			if (pOptions)
 			{
 				Filter * pOldFilter = pFilter;
+PORTNOTE("other", "Removed BitmapExportOptions usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 				pFilter = pOptions->FindBitmapFilterForTheseExportOptions();
+#endif
 				// change the export extent if we have changed filters
 				if (pFilter && pFilter != pOldFilter)
 				{
+PORTNOTE("other", "Removed BmapPrevDlg usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 					// set the path extention
 					Path.SetType(BmapPrevDlg::m_pthExport.GetType());
+#endif
 				}
 				else pFilter = pOldFilter;
 			}
@@ -1182,7 +1212,18 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 
 		// delete the empty file, if one was created, and try to rename the file
 		FileUtil::DeleteFile(&Path);
-		bFinished = !_trename(TempName, FinalName);
+		
+#if defined(__WXGTK__) && FALSE != wxUSE_UNICODE
+		char pszTempName[256];
+		char pszFinalName[256];
+		wcstombs( pszTempName, TempName, 256 );
+		wcstombs( pszFinalName, FinalName, 256 );		
+#else
+		char* pszTempName = TempName;
+		char* pszFinalName = FinalName;
+#endif		
+		
+		bFinished = !rename(pszTempName, pszFinalName);
 
 		if (bFinished)
 		{
@@ -1206,18 +1247,21 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		if (pOptions->ShouldPutHTMLTagOnClipboard() && pFilter->IS_KIND_OF(BaseBitmapFilter))
 			static_cast<BaseBitmapFilter *>(pFilter)->ExportHTMLTag(&Path);
 
+PORTNOTE("other", "Removed DreamWeaver DesignNote code" )
+#if 0
 		// Do we want to make the extra dream weaver design notes file?
 		if (pOptions->GetCanUseDesignNotes() && UsesDesignNotes())
 		{
-			if (!strcmpi(Path.GetType(),"gif") || !strcmpi(Path.GetType(),"jpg")
-				|| !strcmpi(Path.GetType(),"bmp") || !strcmpi(Path.GetType(),"png"))
+			if( !lstrcmpi( Path.GetType(), _T("gif") ) || !lstrcmpi( Path.GetType(), _T("jpg") ) || 
+				!lstrcmpi( Path.GetType(), _T("bmp") ) || !lstrcmpi( Path.GetType(), _T("png") ) )
 			{
-				CString DocName(Document::GetCurrent()->GetLocation());	
-				DocName += "\\" + Document::GetCurrent()->GetPathName();
+				wxString DocName( (TCHAR *)Document::GetCurrent()->GetLocation() );	
+				DocName += _T("\\");
+				DocName += (TCHAR *)Document::GetCurrent()->GetPathName();
 
-				if (DocName != "\\")
+				if (DocName != _T("\\") )
 				{
-					CString GraphicFile(Path.GetPath());
+					wxString GraphicFile( (const TCHAR *)Path.GetPath() );
 
 					// create or modify a .mno forward source file
 					CreateDesignNoteWithForwardSource(GraphicFile, DocName);
@@ -1228,6 +1272,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 				}
 			}
 		}
+#endif
 	}
 
 	if (!bFinished)
@@ -1238,7 +1283,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 
 	// First off, we have to try and open the file
 	CCDiskFile theDiskFile(1024, FALSE, TRUE);
-	TRY
+	try
 	{
 		/* File now opened up, if not already opened inside the DoExport functions in the filters
 		// themselves. This means this is done after the export options and so the file is not trashed
@@ -1339,29 +1384,27 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	}
 
 	// See if there was a file io error
-	CATCH(CFileException, e)
+	catch( CFileException e )
 	{
 		// Report the error if no one else did
 		RemoveUneededReportedErrors();
 
 		// Make sure that the file is closed and deleted
-		TRY
+		try
 		{
 			// First try and delete it (tries to close it first) and
 			// double check to make sure it is closed.
 			if (pFilter) pFilter->DeleteExportFile(&theDiskFile);
 			if (theDiskFile.isOpen()) theDiskFile.close();
 		}
-		CATCH(CFileException, e)
+		catch(CFileException e)
 		{
 			// Failed to close the file - not much we can do about it really
 			TRACE( _T("Failed to close file\n"));
 		}
-		END_CATCH
 
 		fExportedOk = FALSE;
 	}
-	END_CATCH
 
 ///////////////////////////////////////////////////////////////////////////////
 	// for the future "Options" button handling
@@ -1418,6 +1461,8 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 
 void OpMenuExport::CreateNamedSet(Filter* pFilter, const PathName& pthTarget)
 {
+PORTNOTETRACE("other", _T("CreateNamedSet - Do nothing - Use NgScan") );
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Try to create a named set for them based on the filename chosen.
 	String_256 strName(pthTarget.GetFileName(FALSE));
 	NodeSetSentinel* pSentry = GetWorkingDoc()->GetSetSentinel();
@@ -1491,6 +1536,7 @@ void OpMenuExport::CreateNamedSet(Filter* pFilter, const PathName& pthTarget)
 	BitmapExportOptions* pOptions =
 				((BaseBitmapFilter*) pFilter)->GetBitmapExportOptions();
 	pProp->SetOptions(pOptions);
+#endif
 }
 
 
@@ -1696,6 +1742,8 @@ BOOL OpDroppedFile::Init()
 void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 {
 	// Get the handle for this dropfiles action...
+PORTNOTE("other", "Removed OpGenericDownload" )
+#if 0
 	HDROP hDrop = (HDROP) pOpParam;
 
 #if XAR_TREE_DIALOG
@@ -1824,7 +1872,7 @@ void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 			// Get pointer to current doc 'cos we'll need it several times...
 			Document* pCurDoc = Document::GetCurrent();
 
-			TRY
+			try
 			{
 				if (!DiskFile.open(Path, ios::in | ios::binary))
 				{
@@ -1862,7 +1910,7 @@ void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 			}
 
 			// See if there was a file io error
-			CATCH(CFileException, e)
+			catch(CFileException e)
 			{
 				// Report the error if no one else did
 				if (Error::GetErrorNumber() != _R(IDN_USER_CANCELLED))
@@ -1871,25 +1919,24 @@ void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 					Error::ClearError();	// otherwise remove the error so it won't get reported
 
 				// Make sure that the file is closed
-				TRY
+				try
 				{
 					if (DiskFile.isOpen())
 						DiskFile.close();
 				}
-				CATCH(CFileException, e)
+				catch(CFileException e)
 				{
 					// Failed to close the file - not much we can do about it really
 				}
-				END_CATCH
 
 				// and fail
 				FailAndExecute();
 
 			}
-			END_CATCH
 		}
 	}
-
+#endif
+	
 	// Finished the operation
 	End();
 
@@ -1988,8 +2035,8 @@ KernelBitmap* BitmapExportParam::GetBitmap(UINT32 Index)
 	ERROR2IF(Index>=(UINT32)Param1, 0, "Index out of bounds");
 	ERROR2IF(Param2==0, 0, "0 array");
 
-	ERROR3IF(!(((KernelBitmap**)Param2)[Index])->IS_KIND_OF(KernelBitmap), "This dosen't seem to be a pointer to a kernel bitmap");
-	return ((KernelBitmap**)Param2)[Index];
+	ERROR3IF( !( ( (KernelBitmap**)(void *)Param2 )[Index])->IS_KIND_OF(KernelBitmap), "This dosen't seem to be a pointer to a kernel bitmap");
+	return( (KernelBitmap**)(void *)Param2 )[Index];
 }
 
 

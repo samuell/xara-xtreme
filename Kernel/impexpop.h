@@ -149,7 +149,7 @@ public:
 	virtual BOOL MayChangeNodeBounds() const { return FALSE; }
 
 private:
-	char *FilterString;
+	TCHAR *FilterString;
 	static UINT32 SelectedFilterID;
 	static INT32 SelectedFilter;
 
@@ -232,7 +232,7 @@ public:
 	static String_256 DefaultExportFilterPath;
 
 private:
-	char* FilterString;
+	TCHAR* FilterString;
 
 	static UINT32 SelectedFilterID;
 	static INT32 SelectedFilter;

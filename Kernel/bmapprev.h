@@ -99,7 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BMAPPREV
 #define INC_BMAPPREV
 
-//#include "bmpprefs.h"	// ExportFileType
+#include "bmpprefs.h"	// ExportFileType
+#include "dialogop.h"
 //#include "bmpalctrl.h"	// Required as BmapPrevDlg HasA BitmapExportPaletteControl
 
 class BitmapExportPreviewDialog;
@@ -109,8 +110,8 @@ class BubbleHelpWnd;
 
 #define OPTOKEN_GIFTABDLG _T("BmapPrevDlg")
 
-PORTNOTE("dialog","Removed BmapPrevDlg - derived from DialogTabOp")
-#ifndef EXCLUDE_FROM_XARALX
+//PORTNOTE("dialog","Removed BmapPrevDlg - derived from DialogTabOp")
+//#ifndef EXCLUDE_FROM_XARALX
 class BmapPrevDlg : public DialogTabOp
 {         
 	CC_DECLARE_DYNCREATE( BmapPrevDlg )  
@@ -305,7 +306,7 @@ private:	// Refresh functions to sync the controls with the bitmap export option
 //	void RefreshJPEGTab();
 
 //	void RefreshPNGTab();
-}; */
-#endif // EXCLUDE_FROM_XARALX
+};
+//#endif // EXCLUDE_FROM_XARALX
 #endif
 

@@ -106,7 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_ERRORS
 #define INC_ERRORS
 
-#ifndef __WXMAC__
+// FreeBSD does not provide backtrace()
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
 #include <wx/stackwalk.h>
 #endif
 
@@ -267,7 +268,7 @@ INT32 ToolInformWarning(UINT32 ToolID, ErrorInfo *pInfo);
 INT32 ModuleInformWarning(UINT32 ModID, ErrorInfo *pInfo);
 
 // questions:
-INT32 AskQuestion(UINT32 ErrorMsg = 0, 
+UINT32 AskQuestion(UINT32 ErrorMsg = 0, 
 					   UINT32 Butt1  = 0, 
 					   UINT32 Butt2  = 0, 
 					   UINT32 Butt3  = 0, 
@@ -276,7 +277,7 @@ INT32 AskQuestion(UINT32 ErrorMsg = 0,
 					   UINT32 Cancel = 2);
 
 
-INT32 ToolAskQuestion(UINT32 ToolID, 
+UINT32 ToolAskQuestion(UINT32 ToolID, 
 						   UINT32 ErrorMsg = 0,
 						   UINT32 Butt1  = 0, 
 						   UINT32 Butt2  = 0, 
@@ -594,7 +595,8 @@ public:
 public:
 	static void DumpStack(UINT32 frames=0);
 
-#ifndef __WXMAC__
+// FreeBSD does not provide backtrace()
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
 	class StackWalker : public wxStackWalker
 	{
 		public:

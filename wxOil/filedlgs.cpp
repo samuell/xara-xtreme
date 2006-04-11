@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "filedlgs.h"
 #include "app.h"
-#include "mainfrm.h"
+#include "camframe.h"
 //#include "rik.h"
 //#include "andy.h"
 //#include "mario.h"			// for _R(IDE_NOMORE_MEMORY)
@@ -112,9 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixmem.h"
 #include "native.h"			// The new designed native filter, used for v2
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
-#include <io.h>
-#include <dlgs.h> 			// For the COMMDLG control IDs
-#include "custmsg.h"
+//#include "custmsg.h"
 #include "helpuser.h"
 #include "camelot.h"
 #include "filters.h"
@@ -138,7 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "xardlg.h"			// For the base dialogue for the web dialogue.
 //#include "webdlg.h"			// Additional controls in _R(IDD_SAVEWEBOPTS)
 //#include "filtrres.h"		// _R(IDS_FILTEREXT_WEB)
-#include "reshlpid.h"       // _R(ID_CC_HELP_BUTTON) 
+//#include "reshlpid.h"       // _R(ID_CC_HELP_BUTTON) 
 
 // New for preview bitmaps
 #include "dlgcol.h"			// DialogColourInfo
@@ -148,11 +146,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bitmap.h"			// KernelBitmap
 #include "nodebmp.h"		// NodeBitmap
 #include "bitmpinf.h"		// BitmapInfo
-#include "wbitmap.h"		// WinBitmap
+#include "oilbitmap.h"		// CWxBitmap
 #ifndef WEBSTER
-#include "extfilts.h"		// AccusoftFilters
+//#include "extfilts.h"		// AccusoftFilters
 #endif //WEBSTER
-#include "cmxifltr.h"		// CMXImportFilter
+//#include "cmxifltr.h"		// CMXImportFilter
 #include "webaddr.h"		// Olivier 09/05/97, use of the WebAddress class
 #include "aprps.h"				
 #include "exjpeg.h"
@@ -164,7 +162,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 
 #include "qualattr.h"
-#include <shfolder.h> // For SHGetFolderPath
+//#include <shfolder.h> // For SHGetFolderPath
 
 void FixFPControlRegister();
 
@@ -191,14 +189,16 @@ BOOL 	   SaveTemplateDialog::m_fDefaultTemplatesFolder = TRUE;
 BaseFileDialog* BaseFileDialog::m_pCurrentFileDialog = NULL;
 
 // Run-time type enquiry mechanisms.  These are required by the on-line help system.
-IMPLEMENT_DYNAMIC(BaseFileDialog, 	CFileDialog);
-IMPLEMENT_DYNAMIC(OpenFileDialog, 	BaseFileDialog);
-IMPLEMENT_DYNAMIC(SaveFileDialog, 	BaseFileDialog);
-IMPLEMENT_DYNAMIC(SaveTemplateDialog, 	SaveFileDialog);
-IMPLEMENT_DYNAMIC(ImportFileDialog, BaseFileDialog);
-IMPLEMENT_DYNAMIC(ExportFileDialog, BaseFileDialog);
-IMPLEMENT_DYNAMIC(GIFExportFileDialog, ExportFileDialog);
+IMPLEMENT_CLASS(BaseFileDialog, 	wxFileDialog);
+IMPLEMENT_CLASS(OpenFileDialog, 	BaseFileDialog);
+IMPLEMENT_CLASS(SaveFileDialog, 	BaseFileDialog);
+IMPLEMENT_CLASS(SaveTemplateDialog, SaveFileDialog);
+IMPLEMENT_CLASS(ImportFileDialog,	BaseFileDialog);
+IMPLEMENT_CLASS(ExportFileDialog,	BaseFileDialog);
+IMPLEMENT_CLASS(GIFExportFileDialog,ExportFileDialog);
 
+PORTNOTE("other", "Removed MFC MESSAGE_MAPs" )
+#if !defined(EXCLUDE_FROM_XARALX)
 // Need to ensure we get redraw messages back from the dialog box
 // so that we can redraw the preview bitmap
 BEGIN_MESSAGE_MAP(OpenFileDialog, BaseFileDialog)
@@ -250,10 +250,11 @@ BEGIN_MESSAGE_MAP(ExportFileDialog, BaseFileDialog)
 	ON_MESSAGE(WM_REDRAW, OnRedrawMessage)
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
+#endif
 
 /********************************************************************************************
 >	BaseFileDialog::BaseFileDialog(BOOL IsFileOpen, WORD Flags, LPCSTR lpszFilter=NULL,
-				CWnd* pParentWnd=NULL)
+				wxWindow* pParentWnd=NULL)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com> & JustinF
 	Created:	26/1/95
@@ -277,27 +278,32 @@ work with it set. Used to fix the filenames up when switching to a new filter.
 #define OFN_EXPLORER 0
 #endif
 
-BaseFileDialog::BaseFileDialog(BOOL IsFileOpen, DWORD dwFlags, LPCSTR lpszFilter, CWnd* pParentWnd)
-  :	CFileDialog(IsFileOpen, NULL, NULL, dwFlags | ((CCamApp::IsNewWindowsUI()) ? OFN_EXPLORER : OFN_SHOWHELP) | OFN_ENABLEHOOK,
-  				lpszFilter, (pParentWnd != NULL) ? pParentWnd : pParentWnd = GetMainFrame())
+BaseFileDialog::BaseFileDialog(BOOL IsFileOpen, DWORD dwFlags, LPCTSTR lpszFilter, wxWindow* pParentWnd)
+  :	wxFileDialog( (pParentWnd != NULL) ? pParentWnd : pParentWnd = GetMainFrame(), _T("Choose a file"),
+		_T(""), _T(""), lpszFilter, dwFlags | ( IsFileOpen ? wxOPEN : wxSAVE) )
+// 	IsFileOpen, NULL, NULL, dwFlags | ((CCamApp::IsNewWindowsUI()) ? OFN_EXPLORER : OFN_SHOWHELP) | OFN_ENABLEHOOK,
+//	lpszFilter, )
 {
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Set the address of the message hook procedure.
 	m_ofn.lpfnHook = (LPOFNHOOKPROC) HookProc;
 
 	// Unfortunately, MFC doesn't set the hwndOwner member of m_ofn . . .
 	m_ofn.hwndOwner = (pParentWnd != NULL) ? pParentWnd->m_hWnd : NULL;
 
-	// Remember a pointer to this file dialog.
-	m_pCurrentFileDialog = this;
-
 	// We haven't called the explorer style init function by default
 	ExplorerInited = FALSE;
+#endif
+	
+	// Remember a pointer to this file dialog.
+	m_pCurrentFileDialog = this;
 
 	// Set the preview bitmap to be NULL
 	pBitmapToUse = NULL;
 
 	// Added by Craig Hamilton 20/9/00.
-	m_previousPathName = "";
+	m_previousPathName = _T("");
 	// End added.
 }
 
@@ -325,8 +331,10 @@ BaseFileDialog::~BaseFileDialog()
 }
 
 
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 /********************************************************************************************
->	static UINT32 CALLBACK BaseFileDialog::HookProc(HWND hwnd, UINT32 nMsg,
+>	static UINT32 CALLBACK BaseFileDialog::HookProc(wxWindow* hwnd, UINT32 nMsg,
 												  WPARAM wParam, LPARAM lParam)
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/5/95
@@ -338,7 +346,7 @@ BaseFileDialog::~BaseFileDialog()
 	SeeAlso:	BaseFileDialog::OnHookMsg
 ********************************************************************************************/
 
-UINT32 CALLBACK BaseFileDialog::HookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
+UINT32 CALLBACK BaseFileDialog::HookProc(wxWindow* hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
 {
 	// If there is no current file dialog then just say nothing and do nothing
 	// This MAY happen if we are bodging the web filename file dialog which is to get
@@ -352,7 +360,7 @@ UINT32 CALLBACK BaseFileDialog::HookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, 
 
 
 /********************************************************************************************
->	virtual UINT32 BaseFileDialog::OnHookMsg(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
+>	virtual UINT32 BaseFileDialog::OnHookMsg(wxWindow* hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/5/95
@@ -365,7 +373,7 @@ UINT32 CALLBACK BaseFileDialog::HookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, 
 	SeeAlso:	BaseFileDialog::HookProc
 ********************************************************************************************/
 
-UINT32 BaseFileDialog::OnHookMsg(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
+UINT32 BaseFileDialog::OnHookMsg(wxWindow* hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
 {
 	// Check for a help message.
 	if (nMsg == WM_COMMAND && LOWORD(wParam) == pshHelp)
@@ -409,7 +417,7 @@ UINT32 BaseFileDialog::OnHookMsg(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM l
 
 /********************************************************************************************
 
->	virtual BOOL BaseFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL BaseFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	2/7/96
@@ -421,18 +429,18 @@ UINT32 BaseFileDialog::OnHookMsg(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM l
 
 ********************************************************************************************/
 
-BOOL BaseFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL BaseFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
 	return TRUE;
 }
 
 /********************************************************************************************
 
->	virtual BOOL BaseFileDialog::ExplorerFileHookNotify(HWND hDlg, LPOFNOTIFY pofn)
+>	virtual BOOL BaseFileDialog::ExplorerFileHookNotify(wxWindow* hDlg, LPOFNOTIFY pofn)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	3/7/96
-	Inputs:		hDlg - HWND of the dialog box.
+	Inputs:		hDlg - wxWindow* of the dialog box.
  				pofn - pointer to notify structure
 	Returns:	TRUE if it worked, FALSE if it failed
 	Purpose:	Should be called when actions happen on the explorer style dialog boxes.
@@ -442,7 +450,7 @@ BOOL BaseFileDialog::ExplorerInitDialog(HWND hDlg)
 
 ********************************************************************************************/
 
-BOOL BaseFileDialog::ExplorerFileHookNotify(HWND hDlg, LPOFNOTIFY pofn)
+BOOL BaseFileDialog::ExplorerFileHookNotify(wxWindow* hDlg, LPOFNOTIFY pofn)
 {
 	return TRUE;
 }
@@ -466,6 +474,7 @@ UINT32 BaseFileDialog::OnFileTypeChange()
 {
 	return TRUE;
 }
+#endif
 
 /********************************************************************************************
 
@@ -486,13 +495,13 @@ BOOL BaseFileDialog::Init()
 	DefaultOpenFilePath = Blank;
 
 	// declare prefs for the open and save dialogs
-	Camelot.DeclareSection("Filters", 6);
-	Camelot.DeclarePref("Filters", "DefaultSaveFilePath", &DefaultSaveFilePath);
-	Camelot.DeclarePref("Filters", "DefaultOpenFilePath", &DefaultOpenFilePath);
-	Camelot.DeclarePref("Filters", "OpenFileFilter", &SelectedFilter);
-	Camelot.DeclarePref("Filters", "MakeBakFiles", &MakeBakFiles);
-	Camelot.DeclarePref("Filters", "ShowPreviewBitmap", &ShowPreviewBitmap);
-	Camelot.DeclarePref("Filters", "ThumbNailMode", &ThumbNailMode);
+	Camelot.DeclareSection(_T("Filters"), 6);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultSaveFilePath"), &DefaultSaveFilePath);
+	Camelot.DeclarePref(_T("Filters"), _T("DefaultOpenFilePath"), &DefaultOpenFilePath);
+	Camelot.DeclarePref(_T("Filters"), _T("OpenFileFilter"), &SelectedFilter);
+	Camelot.DeclarePref(_T("Filters"), _T("MakeBakFiles"), &MakeBakFiles);
+	Camelot.DeclarePref(_T("Filters"), _T("ShowPreviewBitmap"), &ShowPreviewBitmap);
+	Camelot.DeclarePref(_T("Filters"), _T("ThumbNailMode"), &ThumbNailMode);
 
 
 	return TRUE;
@@ -551,7 +560,7 @@ BOOL BaseFileDialog::PrepareDialog()
 
 ********************************************************************************************/
 
-char *BaseFileDialog::BuildFilterString(BOOL GetImport,
+TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 									    UINT32 SelectedFilterID,
 									    INT32 *SelectedFilter,
 									    CCRuntimeClass *pTypeOfFilter,
@@ -589,14 +598,19 @@ char *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		// import list - you can't hide it from just one list. It must be availiable though
 		// to give it's nice little error message. Other instances of this below.
 		if (
-			((GetImport && Flags.CanImport && !IS_A(pFilter, CamelotEPSFilter))
-				|| (!GetImport && Flags.CanExport)) &&
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
+			( ( GetImport && Flags.CanImport && !IS_A( pFilter, CamelotEPSFilter ) )
+#else
+			( ( GetImport && Flags.CanImport )
+#endif
+				|| (!GetImport && Flags.CanExport)) && NULL != pFilter->pOILFilter &&
 				Flags.ShowFilter && (pFilter->IsKindOf(pTypeOfFilter)) && FilterCanCope
 		   )
 		{
 			// Add the space required to put this into the filter string
 			// (add 1 for the separating '|' character)
-			FilterSize += cc_strlenBytes(pFilter->pOILFilter->ConstructFilterString(BitmapCount)) + 1;
+			FilterSize += ( _tcslen( pFilter->pOILFilter->ConstructFilterString( BitmapCount ) ) + 1 ) * sizeof(TCHAR);
 		}
 
 		// Try the next filter
@@ -616,7 +630,7 @@ char *BaseFileDialog::BuildFilterString(BOOL GetImport,
 	FilterSize += 2;
 
 	// Try to get this string
-	char *FilterString = (char *) CCMalloc(FilterSize);
+	TCHAR *FilterString = (TCHAR *) CCMalloc(FilterSize);
 	if (FilterString==NULL)
 	{
 		// Error state already set by CCMalloc
@@ -660,34 +674,42 @@ char *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		else
 			FilterCanCope = TRUE;
 
-		if (
-			((GetImport && Flags.CanImport && !IS_A(pFilter, CamelotEPSFilter))
-				|| (!GetImport && Flags.CanExport)) &&
-				Flags.ShowFilter && (pFilter->IsKindOf(pTypeOfFilter)) && FilterCanCope
-		   )
+		if( NULL != pFilter->pOILFilter )
 		{
-			// Add this filter into the list
-			_tcscat(FilterString, pFilter->pOILFilter->ConstructFilterString(BitmapCount));
-			_tcscat(FilterString, "|");
-			pFilter->pOILFilter->Position = Position;
+			if (
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
+				( ( GetImport && Flags.CanImport && !IS_A( pFilter, CamelotEPSFilter ) )
+#else
+				( ( GetImport && Flags.CanImport )
+#endif
+					|| (!GetImport && Flags.CanExport)) &&
+					Flags.ShowFilter && (pFilter->IsKindOf(pTypeOfFilter)) && FilterCanCope
+			   )
+			{
+				// Add this filter into the list
+				_tcscat(FilterString, pFilter->pOILFilter->ConstructFilterString(BitmapCount));
+				_tcscat(FilterString, _T("|"));
+				pFilter->pOILFilter->Position = Position;
 
-			// Is this the filter we used last?
-			if ((*SelectedFilter == -1) && (pFilter->FilterID == SelectedFilterID))
-				// Yes - remember this.
-			    *SelectedFilter = Position;
+				// Is this the filter we used last?
+				if ((*SelectedFilter == -1) && (pFilter->FilterID == SelectedFilterID))
+					// Yes - remember this.
+					*SelectedFilter = Position;
 
-			Position++;
+				Position++;
+			}
+			else
+				// Make sure we don't try this one later
+				pFilter->pOILFilter->Position = -1;
 		}
-		else
-			// Make sure we don't try this one later
-			pFilter->pOILFilter->Position = -1;
-
+		
 		// Try the next filter
 		pFilter = Filter::GetNext(pFilter);
 	}
 
 	// Terminate the string
-	_tcscat(FilterString, "|");
+	_tcscat(FilterString, _T("|") );
 
 	// All ok
 	return FilterString;
@@ -708,26 +730,7 @@ char *BaseFileDialog::BuildFilterString(BOOL GetImport,
 
 INT32 BaseFileDialog::GetSelectedFilterIndex()
 {
-	// NOTE: On NT3.51 it seems to return 0 for very specific file names
-	// e.g. a.bmp (converted to 256 colours using the popularity method).bmp		fails
-	// and		a bmp (converted to 256 colours using the popularity method).bmp	fails
-	// but		ab.bmp (converted to 256 colours using the popularity method).bmp	works 
-	// Works on 95 and NT4.0 beta
-	// 0 can be interpreted as (from VC4 help:
-	// If nFilterIndex is zero and lpstrCustomFilter is NULL, the system uses the first
-	// filter in the lpstrFilter buffer. If all three members are zero or NULL, the system
-	// does not use any filters and does not show any files in the file list control of the dialog box. 
-	// In this case lpstrCustomFilter is null
-	// If we do encounter 0 then we will error 3, to show what file has given the problem and return 1
-	// In the main import/export case this will then use the all filter. In the bitmap gallery save
-	// it will use the first available filter.
-	TRACEUSER( "Neville", _T("lpstrCustomFilter = %d\n"),m_ofn.lpstrCustomFilter);
-	TRACEUSER( "Neville", _T("lpstrFilter = %d\n"),m_ofn.lpstrFilter);
-
-	if (m_ofn.nFilterIndex == 0)
-		return 1;
-	
-	return m_ofn.nFilterIndex;
+	return GetFilterIndex();
 }
 
 /********************************************************************************************
@@ -744,11 +747,11 @@ INT32 BaseFileDialog::GetSelectedFilterIndex()
 
 INT32 BaseFileDialog::SetSelectedFilterIndex(INT32 NewIndex)
 {
-	INT32 Old = m_ofn.nFilterIndex;
+	INT32 Old = GetFilterIndex();
 	// Must not set this to zero as this is illegal 
 	ERROR3IF(NewIndex == 0, "BaseFileDialog::SetSelectedFilterIndex Trying to set bad index ");
 	if (NewIndex != 0)
-		m_ofn.nFilterIndex = NewIndex;
+		SetFilterIndex( NewIndex );
 	TRACEUSER( "Neville", _T("SetSelectedFilterIndex - new %d (old = %d)\n"), NewIndex, Old);
 	return Old;
 }
@@ -767,7 +770,7 @@ INT32 BaseFileDialog::SetSelectedFilterIndex(INT32 NewIndex)
 BOOL BaseFileDialog::SetTitle(INT32 TitleId) 
 {
 	if (SmartLoadString(0, TitleId, Title, 128))
-		m_ofn.lpstrTitle = Title;
+		SetName( Title );
 	
 	return TRUE;
 }
@@ -785,10 +788,9 @@ BOOL BaseFileDialog::SetTitle(INT32 TitleId)
 
 ********************************************************************************************/
 
-BOOL BaseFileDialog::SetInitialDirectory(const String_256& pDir)
+BOOL BaseFileDialog::SetInitialDirectory(const String_256& strDir)
 {
-	// VC4 requires an explicit const cast
-	m_ofn.lpstrInitialDir = (const TCHAR *)pDir;
+	SetDirectory( PCTSTR(strDir) );
 	
 	return TRUE;
 }
@@ -808,9 +810,7 @@ BOOL BaseFileDialog::SetInitialDirectory(const String_256& pDir)
 
 BOOL BaseFileDialog::SetDefaultFileName(String_256& Name)
 {
-	// VC4 requires an explicit const cast
-	m_ofn.lpstrFile = Name;
-	m_ofn.nMaxFile = Name.MaxLength();
+	SetFilename( PCTSTR(Name) );
 		
 	return TRUE;
 }
@@ -831,8 +831,7 @@ BOOL BaseFileDialog::SetDefaultFileName(String_256& Name)
 
 BOOL BaseFileDialog::GetChosenFileName(PathName * pName)
 {
-	String_256 Str(m_ofn.lpstrFile);
-	pName->SetPathName(Str);
+	pName->SetPathName( GetFilename() );
 	return pName->IsValid();
 }
 
@@ -910,21 +909,22 @@ void BaseFileDialog::SetSelectedExportFilter(UINT32 uiFilterID)
 
 BOOL BaseFileDialog::OpenAndGetFileName()
 {
+PORTNOTE("other", "Removed ControlHelper usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Keep Control Helper system informed
 	ControlHelper::InformModalDialogOpened();
-
+#endif
+	
 	// 'Do' the dialog
-	INT32 DlgResult = DoModal();
+	INT32 DlgResult = ShowModal();
 
+PORTNOTE("other", "Removed ControlHelper usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Keep Control Helper system informed
 	ControlHelper::InformModalDialogClosed();
-
-	// Check that we have floating point exception handler in place
-	// as we have just used a common dialog box and under win32s this might
-	// have reset the floating point exception handler.
-	FixFPControlRegister();
-
-	return (DlgResult == IDOK);
+#endif
+	
+	return (DlgResult == wxID_OK);
 }
 
 /********************************************************************************************
@@ -942,17 +942,17 @@ BOOL BaseFileDialog::OpenAndGetFileName()
 BOOL BaseFileDialog::IsValidFilename()
 {
 	// Get the pathname
-	CString FullPath = GetPathName();
+	wxString FullPath = GetFilename();
 	AppendExtension(&FullPath);
 
 	// Webster - RanbirR 17/02/97
 	// Save the file name with our Filter extension, for use in our Message Box.
 #ifdef WEBSTER
-	CString FileName(FullPath);
+	wxString FileName(FullPath);
 #endif //webster
 
 	// if doesn't exist then thats fine
-	if (_taccess( FullPath, 0 ))
+	if( wxFile::Exists( FullPath ) )
 	{
 		//	WEBSTER-ranbirr-27/03/97
 		// Remove the extension from the file. Webster - RanbirR 11\02\97.
@@ -986,13 +986,12 @@ BOOL BaseFileDialog::IsValidFilename()
 	const TCHAR* Name;
 	Name = (TCHAR*)KernelFilename;
 
-	TCHAR prompt[256];
-	if (!::LoadString( AfxGetResourceHandle(), _R(IDM_OVERWRITE), prompt, 256 ) )
-		lstrcpy( prompt, "%s?" );								// in case cannot load
+	String_256 strPrompt( _R(IDM_OVERWRITE) );
 
 	// fill in the %s field with the filename
 	TCHAR ErrorMsg[256];
-	wsprintf( ErrorMsg, prompt, (const TCHAR*)Name );
+	tsprintf( ErrorMsg, sizeof(ErrorMsg) / sizeof(ErrorMsg[0]), strPrompt, 
+		(const TCHAR*)Name );
 	Error::SetError( 0, ErrorMsg, 0 );
 	SetNextMsgHelpContext(_R(IDM_OVERWRITE));
 
@@ -1005,16 +1004,11 @@ BOOL BaseFileDialog::IsValidFilename()
 	// as defaulting to replace is bad.
 	Info.OK = Info.Cancel = 2;
 
-	switch (AskQuestion( &Info ))
-	{
-		// if they cancel, then the name is not acceptable to them
-		case _R(IDS_CANCEL):
-			return FALSE;
+	UINT32	idResult = AskQuestion( &Info );
 
-		case _R(IDB_OVERWRITE):
-		default:
-			break;
-	}
+	// if they cancel, then the name is not acceptable to them
+	if( _R(IDS_CANCEL) == idResult )
+		return FALSE;
 
 	// user was quite keen on the replace file idea.
 	// delete the file we're replacing so rampant filters don't get upset
@@ -1028,7 +1022,7 @@ BOOL BaseFileDialog::IsValidFilename()
 
 /********************************************************************************************
 
->	void BaseFileDialog::AppendExtension(CString* pFilename)
+>	void BaseFileDialog::AppendExtension(wxString* pFilename)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/1/96
@@ -1039,14 +1033,14 @@ BOOL BaseFileDialog::IsValidFilename()
 
 ********************************************************************************************/
 
-void BaseFileDialog::AppendExtension(CString* pFilename)
+void BaseFileDialog::AppendExtension(wxString* pFilename)
 {
  	// baseclass version so do nothing
 }
 
 /********************************************************************************************
 
->	void BaseFileDialog::RemoveFileExtension(CString* pFilename)
+>	void BaseFileDialog::RemoveFileExtension(wxString* pFilename)
 
 	Author:		Ranbir_Rana (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	11/02/97
@@ -1056,7 +1050,7 @@ void BaseFileDialog::AppendExtension(CString* pFilename)
 ********************************************************************************************/
 //	WEBSTER-ranbirr-27/03/97
 #ifdef WEBSTER
-BOOL  BaseFileDialog::RemoveFileExtension(CString* pName)
+BOOL  BaseFileDialog::RemoveFileExtension(wxString* pName)
 {
 	// Is this a valid file name
 	if ((pName == NULL) || (pName->IsEmpty()))
@@ -1102,6 +1096,8 @@ BOOL  BaseFileDialog::RemoveFileExtension(CString* pName)
 
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 afx_msg void BaseFileDialog::OnHelp()
 {
 	// Run the help engine for this dialog and don't bother processing this message
@@ -1205,13 +1201,13 @@ void BaseFileDialog::OnFileNameChange()
 	if ( ShowPreviewBitmap = IsDlgButtonChecked ( _R(IDC_SHOWPREVIEW) ) )
 	{
 		// Get the filename which the user has entered in the field.
-		CString FileName = GetFileName();
+		wxString FileName = GetFileName();
 
 		// Added by Craig Hamilton 20/9/00.
 		// This fixes the problem where a user drags a file over folders within the import
 		// dialog causing the preview to be redone. If the previously selected file is the
 		// same as the current then there is no need to regenerate a new preview.
-		CString pathName = GetPathName();
+		wxString pathName = GetPathName();
 		if(m_previousPathName != pathName)
 		{
 			// Reinitialise. This is the only place this happens.
@@ -1241,7 +1237,7 @@ void BaseFileDialog::OnFileNameChange()
 			if ((!Previous && Now) || (Previous && !Now) || ok)
 			{
 				// Force a redraw of the preview bitmap icon, as we have changed state
-				HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+				wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 				::InvalidateRect(Icon, NULL, TRUE);
 			}
 		}
@@ -1256,7 +1252,7 @@ void BaseFileDialog::OnFileNameChange()
 			pBitmapToUse = NULL;
 
 			// Force a redraw of the preview bitmap icon, as we have changed state
-			HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+			wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 			::InvalidateRect(Icon, NULL, TRUE);
 		}
 	}
@@ -1667,7 +1663,7 @@ afx_msg LRESULT BaseFileDialog::OnRedrawMessage(WPARAM wParam, LPARAM lParam)
 	
 	// How big the window is
 	RECT WindowSize;
-	if (::GetClientRect((HWND)wParam, &WindowSize))
+	if (::GetClientRect((wxWindow*)wParam, &WindowSize))
 	{
 		ExtraInfo.dx = (((INT32)WindowSize.right)*72000) / ExtraInfo.Dpi;
 		ExtraInfo.dy = (((INT32)WindowSize.bottom)*72000) / ExtraInfo.Dpi;
@@ -1906,7 +1902,7 @@ INT32 BaseFileDialog::DoModal()
 	// WINBUG: This is a special case for the file open/save dialog,
 	//  which sometimes pumps while it is coming up but before it has
 	//  disabled the main window.
-	HWND hWndFocus = ::GetFocus();
+	wxWindow* hWndFocus = ::GetFocus();
 	BOOL bEnableParent = FALSE;
 	m_ofn.hwndOwner = PreModal();
 	AfxUnhookWindowCreate();
@@ -1987,7 +1983,7 @@ INT32 BaseFileDialog::DoModal()
 
 void BaseFileDialog::OnSize(UINT32 nType, INT32 cx, INT32 cy)
 {
-	CFileDialog::OnSize(nType, cx, cy);
+	wxFileDialog::OnSize(nType, cx, cy);
 	
 	// move the darn Help button!!
 	CWnd *wndPreview = GetDlgItem(_R(IDC_PREVIEW));
@@ -1996,7 +1992,7 @@ void BaseFileDialog::OnSize(UINT32 nType, INT32 cx, INT32 cy)
 	CWnd *wndCancelButton = wndDlg->GetDlgItem(IDCANCEL);
 	if(wndPreview && wndHelpButton)
 	{
-		CRect rPreview, rCancel, rHelp;
+		wxRect rPreview, rCancel, rHelp;
 		wndCancelButton->GetWindowRect(&rCancel);
 		ScreenToClient(&rCancel);
 		wndPreview->GetWindowRect(&rPreview);
@@ -2012,7 +2008,7 @@ void BaseFileDialog::OnSize(UINT32 nType, INT32 cx, INT32 cy)
 
 /****************************************************************************
 
->	void BaseFileDialog::OnPaletteChanged(CWnd* pWindow)
+>	void BaseFileDialog::OnPaletteChanged(wxWindow* pWindow)
 
 	Author:		Alex
 	Creation:	03/03/2004
@@ -2020,7 +2016,7 @@ void BaseFileDialog::OnSize(UINT32 nType, INT32 cx, INT32 cy)
 
 ****************************************************************************/
 
-void BaseFileDialog::OnPaletteChanged(CWnd* pFocusWnd)
+void BaseFileDialog::OnPaletteChanged(wxWindow* pFocusWnd)
 {
 	if (pFocusWnd != this)
 	{
@@ -2061,10 +2057,11 @@ void BaseFileDialog::OnFolderChange()
 {
 	if(ThumbNailMode)
 	{
-		HWND view = FindWindowEx(GetParent()->m_hWnd, 0, "SHELLDLL_DefView", 0);
+		wxWindow* view = FindWindowEx(GetParent()->m_hWnd, 0, "SHELLDLL_DefView", 0);
 		::SendMessage(view, WM_COMMAND, FCIDM_SHVIEW_THUMBNAIL, 0);
 	}
 }
+#endif
 
 /********************************************************************************************
 
@@ -2245,11 +2242,13 @@ BOOL DestroyOSRenderRegion(RenderRegion* pRender)
 ********************************************************************************************/
 
 OpenFileDialog::OpenFileDialog(LPCTSTR FilterString)
-  : BaseFileDialog(TRUE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, FilterString)
+  : BaseFileDialog( TRUE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
 {
 	// Set some defaults
 	NativeFilterPos = 0;
 
+PORTNOTE("other", "Deactivate template usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (CCamApp::IsNewWindowsUI())
 	{
 		// Use our template to do the ammendment and addition of controls to the dialog box
@@ -2257,7 +2256,8 @@ OpenFileDialog::OpenFileDialog(LPCTSTR FilterString)
 	}
 	else
 		m_ofn.lpTemplateName = NULL;
-
+#endif
+	
 	// Set the preview bitmap to be NULL
 	pBitmapToUse = NULL;
 }
@@ -2274,20 +2274,22 @@ OpenFileDialog::OpenFileDialog(LPCTSTR FilterString)
 
 ********************************************************************************************/
 
-BOOL OpenFileDialog::OnInitDialog()
+void OpenFileDialog::OnInitDialog( wxInitDialogEvent& event )
 {
 	// Set up the string we require
 	String_256 NewText(_R(IDS_OPENBUTTON));
-	const char* NewTextStr = NewText;
+	const TCHAR* NewTextStr = NewText;
 
 	// Get the handle of the ok button.
-	HWND OkButton = ::GetDlgItem(GetSafeHwnd(), IDOK);
+	wxWindow* OkButton = FindWindow( wxID_OK );
 
 	// Now replace the 'ok' by 'Save' and return
-	::SetWindowText(OkButton, NewTextStr);
+	OkButton->SetLabel( NewTextStr );
 
+PORTNOTE("other", "Remove code to make filter combo-deeper" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Get the handle of the filter list box.
-	HWND ComboBox = ::GetDlgItem(GetSafeHwnd(), cmb1);
+	wxWindow* ComboBox = FindWindow( cmb1 );
 
 	// Find out where the list box is.
 	WINDOWPLACEMENT Placement;
@@ -2301,15 +2303,15 @@ BOOL OpenFileDialog::OnInitDialog()
 				 Placement.rcNormalPosition.right - Placement.rcNormalPosition.left,
 			     (Placement.rcNormalPosition.bottom - Placement.rcNormalPosition.top) * 5,
 			     TRUE);
-
+#endif
  	
  	// Let the base class do its thang . . .
- 	return BaseFileDialog::OnInitDialog();
+ 	return BaseFileDialog::OnInitDialog( event );
 }
 
 /********************************************************************************************
 
->	virtual BOOL OpenFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL OpenFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/7/96
@@ -2320,8 +2322,10 @@ BOOL OpenFileDialog::OnInitDialog()
 
 ********************************************************************************************/
 
-BOOL OpenFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL OpenFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing of not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
@@ -2330,32 +2334,34 @@ BOOL OpenFileDialog::ExplorerInitDialog(HWND hDlg)
 	// Set up and initialise the new buttons and controls
 
 	// Give it the correct state according to the preference.
-	CheckDlgButton(_R(IDC_SHOWPREVIEW), BaseFileDialog::ShowPreviewBitmap != FALSE);
+	wxCheckBox*	pCheck = (wxCheckBox*)FindWindow( _R(IDC_SHOWPREVIEW));
+	pCheck->SetValue( BaseFileDialog::ShowPreviewBitmap != FALSE );
 
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
-	::EnableWindow(Icon, TRUE);
+	wxWindow*	Icon = FindWindow( _R(IDC_PREVIEW));
+	Icon->EnableWindow(TRUE);
 
 	// WEBSTER - markn 28/1/97
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
-	::ShowWindow(Icon, SW_HIDE);
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
+	Icon->Show( false );
 
 	//Graham 27/10/97: And the "use as default" button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_USEASDEFAULT));
-	::ShowWindow(Icon, SW_HIDE);
+	Icon = FindWindow( _R(IDC_USEASDEFAULT));
+	Icon->ShowWindow( false );
 	
 	// Move the Preview box down a little, so that it lines up with the top of the List box
-	CWnd *wndDlg = GetParent();
-	CWnd* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
-	CRect rPreview, rList;
+	wxWindow*	wndDlg = GetParent();
+	wxWindow*	pWndPreview = FindWindow( _R(IDC_PREVIEW) );
+	wxRect		rPreview, rList;
 	pWndPreview->GetWindowRect(&rPreview);
 	ScreenToClient(rPreview);
-	CWnd* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
+	wxWindow*	pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
 	pWndList->GetWindowRect(&rList);
 	ScreenToClient(rList);
-	pWndPreview->SetWindowPos(NULL, rPreview.left, rList.top, rPreview.Width(), rPreview.Height(), 0);
-
+	pWndPreview->SetWindowPos(NULL, rPreview.GetLeft(), rList.GetTop(), 
+		rPreview.GetWidth(), rPreview.GetHeight(), 0);
 
 	ExplorerInited = TRUE;
+#endif
 
 	return TRUE;
 }
@@ -2377,26 +2383,16 @@ BOOL OpenFileDialog::PrepareDialog()
 {
 	// Set the dialogs Title
 	if (SmartLoadString(0, _R(IDS_OPENTITLE), Title, 128))
-		m_ofn.lpstrTitle = Title;
+		wxFileDialog::SetTitle( Title );
 
 	// Select the desired path
-	if (DefaultOpenFilePath.Length() > 0)
-	{
-		m_ofn.lpstrInitialDir = (char *) DefaultOpenFilePath;
-	}
-	else
-	{
-		// use the My Documents folder
-		TCHAR szPath[MAX_PATH];
-		if (S_OK == SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0/*SHGFP_TYPE_CURRENT*/, szPath))
-		{
-			DefaultOpenFilePath = szPath;
-			m_ofn.lpstrInitialDir = DefaultOpenFilePath;
-		}
-	}
+	if (DefaultOpenFilePath.Length() <= 0)
+		DefaultOpenFilePath = wxStandardPaths::Get().GetUserConfigDir();
+
+	SetDirectory( DefaultOpenFilePath );
 
 	// Choose the initial filter
-	m_ofn.nFilterIndex = SelectedFilter;
+	SetFilterIndex( SelectedFilter );
 
 	// See if the base class wants to do anything
 	return BaseFileDialog::PrepareDialog();
@@ -2430,6 +2426,8 @@ void OpenFileDialog::SetDefaultPath(const String_256& NewPath)
 
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void OpenFileDialog::DoDataExchange(CDataExchange* pDX)
 {
     BaseFileDialog::DoDataExchange(pDX);
@@ -2440,7 +2438,7 @@ void OpenFileDialog::DoDataExchange(CDataExchange* pDX)
 	}
     //}}AFX_DATA_MAP
 }
-
+#endif
 
 
 /********************************************************************************************
@@ -2457,7 +2455,7 @@ void OpenFileDialog::DoDataExchange(CDataExchange* pDX)
 
 ********************************************************************************************/
 
-char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
+TCHAR* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 {
 	// Find out how much space is needed
 	UINT32 FilterSize = 0;
@@ -2474,7 +2472,12 @@ char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 		// little bit of a bodge here to stop the CamelotEPSFilter from appearing in the
 		// import list - you can't hide it from just one list. It must be availiable though
 		// to give it's nice little error message. Other instances of this below.
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		if (Flags.CanImport && Flags.ShowFilter && !IS_A(pFilter, CamelotEPSFilter))
+#else
+		if (Flags.CanImport && Flags.ShowFilter )
+#endif
 		{
 			// Add the space required to put this into the filter string
 			// (add 1 for the separating '|' character)
@@ -2489,7 +2492,7 @@ char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 	FilterSize += 2;
 
 	// Try to get this string
-	char *FilterString = (char *) CCMalloc(FilterSize);
+	TCHAR*	FilterString = (TCHAR*)CCMalloc(FilterSize);
 	if (FilterString==NULL)
 		// Error state already set by CCMalloc
 		return NULL;
@@ -2503,15 +2506,25 @@ char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 	{
 		FilterFlags Flags = pFilter->GetFlags();
 
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		if (Flags.CanImport && Flags.ShowFilter && !IS_A(pFilter, CamelotEPSFilter))
+#else
+		if (Flags.CanImport && Flags.ShowFilter )
+#endif
 		{
 			// Add this filter into the list
 			_tcscat(FilterString, pFilter->pOILFilter->ConstructFilterString());
-			_tcscat(FilterString, "|");
+			_tcscat(FilterString, _T("|") );
 			pFilter->pOILFilter->Position = Position;
 
 			// see if it is the native filter
+PORTNOTE("other", "Removed CamelotEPSFilter check" )
+#if !defined(EXCLUDE_FROM_XARALX)
 			if (IS_A(pFilter, CamelotNativeEPSFilter))
+#else
+			if( false )
+#endif
 			{
 				*NativeFilterPos = Position;
 			}
@@ -2528,7 +2541,7 @@ char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 	}
 
 	// Terminate the string
-	_tcscat(FilterString, "|");
+	_tcscat(FilterString, _T("|"));
 
 	// All ok
 	return FilterString;
@@ -2551,19 +2564,23 @@ char* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 
 ********************************************************************************************/
 
-SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String_256& DefName)
-  : BaseFileDialog(FALSE, OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
+SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, const String_256& DefPath, const String_256& DefName)
+  : BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
+//  : BaseFileDialog(FALSE, OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
 {
 	// Make a note of this lot
 	DefaultName = DefName;
 	DefaultPath = DefPath;
 	DocName = DefName;
 
+PORTNOTE("other", "Removed OFN_OVERWRITEPROMPT - not sure if needed" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Under Windows 95 the OnFileNameOK system does not work, so use the default one
 	// Disable for VC4.0/MFC 4.0 as they have fixed it.
 #if _MFC_VER < 0x400
 	if (IsWin32c())
 		m_ofn.Flags |= OFN_OVERWRITEPROMPT;
+#endif
 #endif
 }
 
@@ -2584,15 +2601,19 @@ SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String
 
 ********************************************************************************************/
 
-SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String_256& DefName,
-	String_256& DocumentName)
-	: BaseFileDialog(FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
+SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, const String_256& DefPath, const String_256& DefName,
+	const String_256& DocumentName)
+PORTNOTE("other", "Disabled template stuff" )
+//	: BaseFileDialog( FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
+	: BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
 {
 	// Make a note of this lot
 	DefaultName = DefName;
 	DefaultPath = DefPath;
 	DocName = DocumentName;
 
+PORTNOTE("other", "Disabled template stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (CCamApp::IsNewWindowsUI())
 	{
 		// Use our template to do the ammendment and addition of controls to the dialog box
@@ -2600,7 +2621,8 @@ SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String
 	}
 	else
 		m_ofn.lpTemplateName = NULL;
-
+#endif
+	
 	// Set the preview bitmap to be NULL
 	pBitmapToUse = NULL;
 }
@@ -2621,16 +2643,17 @@ SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, String_256& DefPath, String
 BOOL SaveFileDialog::OnInitDialog()
 {
 	// Set up the string we require
-	String_256 NewText(_R(IDS_SAVEBUTTON));
-	const char* NewTextStr = NewText;
+	String_256		NewText(_R(IDS_SAVEBUTTON));
+	const TCHAR*	NewTextStr = NewText;
 
 	// Get the handle of the ok button.
-	HWND OkButton = ::GetDlgItem(GetSafeHwnd(), IDOK);
+	wxButton*		OkButton = (wxButton*)FindWindow( wxID_OK );
 
 	// Now replace the 'ok' by 'Save' and return
-	::SetWindowText(OkButton, NewTextStr);
+	OkButton->SetLabel( NewTextStr );
 
-#ifdef _DEBUG
+PORTNOTE( "other", "Remove code to add compression check" )
+#if !defined(EXCLUDE_FROM_XARALX) && defined(_DEBUG)
 	// Move the bottom of the dialog down...
 	WINDOWPLACEMENT Placement;
 	Placement.length = sizeof(Placement);
@@ -2647,24 +2670,19 @@ BOOL SaveFileDialog::OnInitDialog()
 					 Height + 20,
 					 TRUE);
 	}
-
+	
 	// ...and add a check box for the compression on/off preference.
-	CRect ButtonPos(10, Height - 35, 110, Height - 15);
+	wxRect ButtonPos(10, Height - 35, 110, Height - 15);
 
 	CompressButton.Create((TCHAR *)String_32(_R(IDS_FILEDLGS_COMPRESS_FILE)),
 						WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_AUTOCHECKBOX, 
 						ButtonPos, this, _R(IDC_COMPRESS_BUTTON));
-
-	// ..and make it use the same font as the rest of the dialog
-	HFONT hFont = (HFONT) SendMessage(WM_GETFONT);
-	CompressButton.SendMessage(WM_SETFONT, (WPARAM) hFont, MAKELPARAM(FALSE, 0));
-
+	
 	// Give it the correct state according to the preference.
 	CompressButton.SetCheck(CamelotNativeEPSFilter::CompressNative != FALSE);
 #endif
 
-	// Let the base class do its thang . . .
-	return BaseFileDialog::OnInitDialog();
+	return TRUE;
 }
 
 // Maximum truncated length of the web filename that will fit in the display icon
@@ -2672,7 +2690,7 @@ const INT32 MaxWebName = 40;
 
 /********************************************************************************************
 
->	virtual BOOL SaveFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL SaveFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	2/7/96
@@ -2683,8 +2701,10 @@ const INT32 MaxWebName = 40;
 
 ********************************************************************************************/
 
-BOOL SaveFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL SaveFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing of not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
@@ -2694,11 +2714,11 @@ BOOL SaveFileDialog::ExplorerInitDialog(HWND hDlg)
 	// Give it the correct state according to the preference.
 	CheckDlgButton(_R(IDC_SHOWPREVIEW), BaseFileDialog::ShowPreviewBitmap != FALSE);
 
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+	wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 	::EnableWindow(Icon, TRUE);
 
 	// WEBSTER - markn 28/1/97
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 #ifndef WEBSTER
 	::ShowWindow(Icon, SW_HIDE);
 #else
@@ -2707,21 +2727,22 @@ BOOL SaveFileDialog::ExplorerInitDialog(HWND hDlg)
 #endif // WEBSTER
 
 	//Graham 27/10/97: And the "use as default" button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_USEASDEFAULT));
+	Icon = FindWindow( _R(IDC_USEASDEFAULT));
 
 	::ShowWindow(Icon, SW_HIDE);
 	// Move the Preview box down a little, so that it lines up with the List box
 	CWnd *wndDlg = GetParent();
-	CWnd* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
-	CRect rPreview, rList;
+	wxWindow* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
+	wxRect rPreview, rList;
 	pWndPreview->GetWindowRect(&rPreview);
 	ScreenToClient(rPreview);
-	CWnd* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
+	wxWindow* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
 	pWndList->GetWindowRect(&rList);
 	ScreenToClient(rList);
 	pWndPreview->SetWindowPos(NULL, rPreview.left, rList.top, rPreview.Width(), rPreview.Height(), 0);
 
 	ExplorerInited = TRUE;
+#endif
 
 	return TRUE;
 }
@@ -2735,6 +2756,8 @@ BOOL SaveFileDialog::ExplorerInitDialog(HWND hDlg)
 	Purpose:	Gets the state of the "Compress file" check-box in the save file dialog.
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void SaveFileDialog::DoDataExchange(CDataExchange* pDX)
 {
     BaseFileDialog::DoDataExchange(pDX);
@@ -2749,7 +2772,7 @@ void SaveFileDialog::DoDataExchange(CDataExchange* pDX)
 	}
     //}}AFX_DATA_MAP
 }
-
+#endif
 
 /********************************************************************************************
 
@@ -2785,50 +2808,37 @@ BOOL SaveFileDialog::PrepareDialog()
 			Title[CopyLength] = TEXT('\0');
 		
 			// Change the dialogs data structure to use the new title string
-			m_ofn.lpstrTitle = Title;
+			wxFileDialog::SetTitle( Title );
 		}
 	}
 	else
 	{
 		// We have no title for the document, so just use 'Save As' instead
 		if (SmartLoadString(0, _R(IDS_SAVETITLE), Title, 128))
-			m_ofn.lpstrTitle = Title;
+			wxFileDialog::SetTitle( Title );
 	}
 
 	// Select the desired path, use the one passed in to the constructor is available
 	if (!DefaultPath.IsEmpty())
 	{
 		// Set the default path
-		m_ofn.lpstrInitialDir = DefaultPath;
+		SetDirectory( DefaultPath );
 	}
 	else
 	{
 		// or use the global default path
-		if (DefaultSaveFilePath.Length() > 0)
-		{
-			m_ofn.lpstrInitialDir = (char *) DefaultSaveFilePath;
-		}
-		else
-		{
+		if( DefaultSaveFilePath.Length() == 0 )
 			// use the My Documents folder
-			TCHAR szPath[MAX_PATH];
-			if (S_OK == SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0/*SHGFP_TYPE_CURRENT*/, szPath))
-			{
-				DefaultOpenFilePath = szPath;
-				m_ofn.lpstrInitialDir = DefaultOpenFilePath;
-			}
-		}
+			DefaultOpenFilePath = wxStandardPaths::Get().GetUserConfigDir();
+
+		SetDirectory( DefaultSaveFilePath );
 	}
 
 	// Do the same for the filename
 	if (!DefaultName.IsEmpty())
-	{
-		m_ofn.lpstrFile = DefaultName;
-		m_ofn.nMaxFile = DefaultName.MaxLength();
-	}
+		SetFilename( DefaultName );
 
-	// See if the base class wants to do anything
-	return BaseFileDialog::PrepareDialog();
+	return TRUE;
 }
 
 
@@ -2868,16 +2878,6 @@ void SaveFileDialog::SetDefaultPath(const String_256& NewPath)
 
 BOOL SaveFileDialog::OnFileNameOK()
 {
-	// Get around a bug in Win 95
-	// say that the filename is ok for now, as the return value is currently
-	// ignored in windows 95. One day it will start working and this will cause
-	// everything to still work, as it is handled by the new function.
-	// Disable for VC4.0/MFC 4.0 as they have fixed it.
-#if _MFC_VER < 0x400
-	if (IsWin32c())
-		return FALSE;
-#endif
-
 	// ask the new function if the name is OK
 	if (IsValidFilename())
 		return FALSE;
@@ -2889,7 +2889,7 @@ BOOL SaveFileDialog::OnFileNameOK()
 
 /********************************************************************************************
 
->	void SaveFileDialog::AppendExtension(CString* pFilename)
+>	void SaveFileDialog::AppendExtension(wxString* pFilename)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/6/95
@@ -2900,34 +2900,28 @@ BOOL SaveFileDialog::OnFileNameOK()
 
 ********************************************************************************************/
 
-void SaveFileDialog::AppendExtension(CString* pFilename)
+void SaveFileDialog::AppendExtension(wxString* pFilename)
 {
 	// Make sure we were not passed rubbish
 	if ((pFilename==NULL) || (pFilename->IsEmpty()))
 		return;
 
-	TRACEUSER( "Rik", _T("Append Extension in - %s\n"), (const char*)(*pFilename));
+	TRACEUSER( "Rik", _T("Append Extension in - %s\n"), (const TCHAR*)(*pFilename));
 
 	// First we will see if this filename has an extension already
-	INT32 i = pFilename->GetLength() - 1;
-	INT32 ExtensionLen = 0;
-
-	// go back through the string looking for the dot char
-	while ((i>=0) && (pFilename->GetAt(i)!='.'))
-	{
-		i--;
-		ExtensionLen++;
-	}
+	INT32	ExtensionLen = pFilename->length() - pFilename->Find( '.', true );
+	INT32	i = pFilename->Find( '.', true );
 
 	// See if we found a valid extension
-	if ((ExtensionLen>3) || (i<0))
+	if( ExtensionLen > 3 || i < 0 )
 	{
 		// No extension as yet, so add one in
 		String_32 NewExtension(_R(IDS_DEFAULT_EXTENSION));
-		*pFilename += CString(".") + CString(NewExtension);
+		*pFilename += wxString( _T(".") );
+		*pFilename += wxString( (const TCHAR *)NewExtension );
 	}
 
-	TRACEUSER( "Rik", _T("Append Extension out- %s\n\n"), (const char*)(*pFilename));
+	TRACEUSER( "Rik", _T("Append Extension out- %s\n\n"), (const TCHAR*)(*pFilename) );
 }
 
 /********************************************************************************************
@@ -2942,6 +2936,8 @@ void SaveFileDialog::AppendExtension(CString* pFilename)
 
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC type Hooks" )
+#if !defined(EXCLUDE_FROM_XARALX)
 BOOL SaveFileDialog::HandleOptions()
 {
 #ifndef WEBSTER
@@ -3000,6 +2996,7 @@ BOOL SaveFileDialog::HandleOptions()
 	return TRUE;
 #endif // WEBSTER
 }
+#endif
 
 /********************************************************************************************
 >	ImportFileDialog::ImportFileDialog(LPCTSTR lpszFilter)
@@ -3015,9 +3012,12 @@ URLs to be typed into the "File name" field, but it was stopping wildcard search
 ********************************************************************************************/
 
 ImportFileDialog::ImportFileDialog(LPCTSTR lpszFilter)
-  :	BaseFileDialog(TRUE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, lpszFilter, NULL)
-  //:	BaseFileDialog(TRUE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY, lpszFilter, NULL)
+//  :	BaseFileDialog(TRUE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | 
+//			OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, lpszFilter, NULL)
+	: BaseFileDialog( TRUE, wxFILE_MUST_EXIST | wxHIDE_READONLY, lpszFilter, NULL )
 {
+PORTNOTE("other", "Disabled template stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (CCamApp::IsNewWindowsUI())
 	{
 		// Use our template to do the ammendment and addition of controls to the dialog box
@@ -3025,7 +3025,8 @@ ImportFileDialog::ImportFileDialog(LPCTSTR lpszFilter)
 	}
 	else
 		m_ofn.lpTemplateName = NULL;
-
+#endif
+	
 	// Set the preview bitmap to be NULL
 	pBitmapToUse = NULL;
 }
@@ -3042,20 +3043,22 @@ ImportFileDialog::ImportFileDialog(LPCTSTR lpszFilter)
 	SeeAlso:	ImportFileDialog
 ********************************************************************************************/
 
-BOOL ImportFileDialog::OnInitDialog()
+BOOL ImportFileDialog::OnInitDialog( wxInitDialogEvent& event )
 {
 	// Set up the string we require
 	String_256 NewText(_R(IDN_IMPORTBUTTON));
-	const char * NewTextStr = NewText;
+	const TCHAR*	NewTextStr = NewText;
 
 	// Get the handle of the ok button.
-	HWND OkButton = ::GetDlgItem(GetSafeHwnd(), IDOK);
+	wxButton*		OkButton = dynamic_cast<wxButton*>( FindWindow( wxID_OK ) );
 
 	// Now replace the 'ok' by 'import'
-	::SetWindowText(OkButton, NewTextStr); 
+	OkButton->SetLabel( NewTextStr ); 
 
+PORTNOTE("other", "Remove code to re-arrange ImportFileDialog" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Get the handle of the filter list box.
-	HWND ComboBox = ::GetDlgItem(GetSafeHwnd(), cmb1);
+	wxComboBox*		ComboBox = dynamic_cast<wxComboBox*>( FindWindow( cmb1 ) );
 
 	// Find out where the list box is.
 	WINDOWPLACEMENT Placement;
@@ -3079,11 +3082,11 @@ BOOL ImportFileDialog::OnInitDialog()
 	// We need to place the extra control differently if we are in Win 95
 	// as the file dialog is a different size and shape. It also behaves differently,
 	// adjusting its size to fit the controls etc. Much smarter.
-	CRect ButtonPos;
+	wxRect ButtonPos;
 	if (CCamApp::IsNewWindowsUI()) //IsWin32c())
 	{
 		// Its windows 95, so use these settings
-		ButtonPos = CRect(10, 235, 160, 255);
+		ButtonPos = wxRect(10, 235, 160, 255);
 		if (IsWin32NT())
 		{
 			// NT 4 seems to open the dialog box too narrow in height so the switch is hidden
@@ -3100,7 +3103,7 @@ BOOL ImportFileDialog::OnInitDialog()
 	{
 		// Its not Windows 95, so use these settings.
 		// Note, we have to expand the dialog window here as well.
-		ButtonPos = CRect(10, Height-35, 160, Height-15);
+		ButtonPos = wxRect(10, Height-35, 160, Height-15);
 		::MoveWindow(GetSafeHwnd(),
 					 Placement.rcNormalPosition.left,
 					 Placement.rcNormalPosition.top,
@@ -3123,14 +3126,16 @@ BOOL ImportFileDialog::OnInitDialog()
 
 	// Give it the correct state according to the preference.
 	LayersButton.SetCheck(Filter::ImportWithLayers != FALSE);
+#endif
 
 	// Leave the rest up to the base class . . .
-	return BaseFileDialog::OnInitDialog();
+	BaseFileDialog::OnInitDialog( event );
+	return TRUE;
 }
 
 /********************************************************************************************
 
->	virtual BOOL ImportFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL ImportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/8/96
@@ -3141,8 +3146,10 @@ BOOL ImportFileDialog::OnInitDialog()
 
 ********************************************************************************************/
 
-BOOL ImportFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL ImportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing of not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
@@ -3152,33 +3159,34 @@ BOOL ImportFileDialog::ExplorerInitDialog(HWND hDlg)
 	// Give it the correct state according to the preference.
 	CheckDlgButton(_R(IDC_SHOWPREVIEW), BaseFileDialog::ShowPreviewBitmap != FALSE);
 
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+	wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 	::EnableWindow(Icon, TRUE);
 
 	// WEBSTER - markn 28/1/97
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 	::ShowWindow(Icon, SW_HIDE);
 
 	//Graham 27/10/97: And the "use as default" button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_USEASDEFAULT));
+	Icon = FindWindow( _R(IDC_USEASDEFAULT));
 	::ShowWindow(Icon, SW_HIDE);
 
 	//And the "default templates folder" button
-	//Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_DEFAULTTEMPLATESFOLDER));
+	//Icon = FindWindow( _R(IDC_DEFAULTTEMPLATESFOLDER));
 	//::ShowWindow(Icon, SW_HIDE);
 
 	// Move the Preview box down a little, so that it lines up with the List box
 	CWnd *wndDlg = GetParent();
-	CWnd* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
-	CRect rPreview, rList;
+	wxWindow* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
+	wxRect rPreview, rList;
 	pWndPreview->GetWindowRect(&rPreview);
 	ScreenToClient(rPreview);
-	CWnd* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
+	wxWindow* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
 	pWndList->GetWindowRect(&rList);
 	ScreenToClient(rList);
 	pWndPreview->SetWindowPos(NULL, rPreview.left, rList.top, rPreview.Width(), rPreview.Height(), 0);
 
 	ExplorerInited = TRUE;
+#endif
 
 	return TRUE;
 }
@@ -3192,6 +3200,8 @@ BOOL ImportFileDialog::ExplorerInitDialog(HWND hDlg)
 	Purpose:	Gets the state of the "Import Layers" check-box in the import file dialog.
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void ImportFileDialog::DoDataExchange(CDataExchange* pDX)
 {
     BaseFileDialog::DoDataExchange(pDX);
@@ -3203,11 +3213,12 @@ void ImportFileDialog::DoDataExchange(CDataExchange* pDX)
 	}
     //}}AFX_DATA_MAP
 }
-				   
-void ImportFileDialog::OnLButtonDblClk(UINT32 nFlags, CPoint point) 
+
+void ImportFileDialog::OnLButtonDblClk( wxMouseEvent& event ) 
 {
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
+#endif
 
 
 /********************************************************************************************
@@ -3220,9 +3231,11 @@ void ImportFileDialog::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 ********************************************************************************************/
 
 ExportFileDialog::ExportFileDialog(LPCTSTR lpszFilter)
-  :	BaseFileDialog(FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, lpszFilter, NULL)
+//	: BaseFileDialog(FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, lpszFilter, NULL)
+	: BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, lpszFilter, NULL )
 {
-
+PORTNOTE("other", "Disabled template stuff" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Under Windows 95 the OnFileNameOK system does not work, so use the default one
 	// Disable for VC4.0/MFC 4.0 as they have fixed it.
 #if _MFC_VER < 0x400
@@ -3237,7 +3250,8 @@ ExportFileDialog::ExportFileDialog(LPCTSTR lpszFilter)
 	}
 	else
 		m_ofn.lpTemplateName = NULL;
-
+#endif
+	
 	// Set the preview bitmap to be NULL
 	pBitmapToUse = NULL;	
 
@@ -3263,19 +3277,21 @@ ExportFileDialog::ExportFileDialog(LPCTSTR lpszFilter)
 	SeeAlso:	ExportFileDialog
 ********************************************************************************************/
 
-BOOL ExportFileDialog::OnInitDialog()
+BOOL ExportFileDialog::OnInitDialog( wxInitDialogEvent& event )
 {
 	// Set up the string we require
 	String_256 NewText(_R(IDN_EXPORTBUTTON));
 
 	// Get the handle of the ok button.
-	HWND OkButton = ::GetDlgItem(GetSafeHwnd(), IDOK);
+	wxButton*	OkButton = dynamic_cast<wxButton *>( FindWindow( wxID_OK ) );
 
 	// Now replace the 'ok' by 'export'
-	::SetWindowText(OkButton, (LPCSTR) NewText);
+	OkButton->SetLabel( (LPCTSTR)NewText );
 
+PORTNOTE("other", "Remove code to re-arrange ImportFileDialog" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Get the handle of the filter list box.
-	HWND ComboBox = ::GetDlgItem(GetSafeHwnd(), cmb1);
+	wxComboBox*	ComboBox = dynamic_cast<wxComboBox *>( FindWindow( cmb1 ) );
 
 	// Find out where the list box is.
 	WINDOWPLACEMENT Placement;
@@ -3289,14 +3305,16 @@ BOOL ExportFileDialog::OnInitDialog()
 				 Placement.rcNormalPosition.right - Placement.rcNormalPosition.left,
 			     (Placement.rcNormalPosition.bottom - Placement.rcNormalPosition.top) * 5,
 			     TRUE);
+#endif
 
 	// Let the base class do the rest . . .
-	return BaseFileDialog::OnInitDialog();
+	BaseFileDialog::OnInitDialog( event );
+	return TRUE;
 }
 
 /********************************************************************************************
 
->	virtual BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL ExportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/7/96
@@ -3307,14 +3325,16 @@ BOOL ExportFileDialog::OnInitDialog()
 
 ********************************************************************************************/
 
-BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL ExportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing of not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
 
 	// Replace the 'OK' button by 'Export' or 'Apply'.
-/*	::SetWindowText(::GetDlgItem(GetSafeHwnd(), IDOK),
+/*	::SetWindowText(FindWindow( IDOK),
 					(LPCSTR) String(NamedExportProp::m_fApplyNotExport
 											? _R(IDS_PREVIEW_APPLY) : _R(IDN_EXPORTBUTTON)));
 */
@@ -3324,21 +3344,21 @@ BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
 	// Give it the correct state according to the preference.
 	CheckDlgButton(_R(IDC_SHOWPREVIEW), BaseFileDialog::ShowPreviewBitmap != FALSE);
 
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+	wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 	::EnableWindow(Icon, TRUE);
 
 	// WEBSTER - markn 28/1/97
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 	// Grey the options button.
 	::EnableWindow(Icon, FALSE);
 	::ShowWindow(Icon, SW_HIDE);
 
 	//Graham 27/10/97: And the "use as default" button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_USEASDEFAULT));
+	Icon = FindWindow( _R(IDC_USEASDEFAULT));
 	::ShowWindow(Icon, SW_HIDE);
 
 	//And the "default templates folder" button
-	//Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_DEFAULTTEMPLATESFOLDER));
+	//Icon = FindWindow( _R(IDC_DEFAULTTEMPLATESFOLDER));
 	//::ShowWindow(Icon, SW_HIDE);
 
   	// initialise the state of the Options button
@@ -3346,11 +3366,11 @@ BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
 
 	// Move the Preview box down a little, so that it lines up with the List box
 	CWnd *wndDlg = GetParent();
-	CWnd* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
-	CRect rPreview, rList;
+	wxWindow* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
+	wxRect rPreview, rList;
 	pWndPreview->GetWindowRect(&rPreview);
 	ScreenToClient(rPreview);
-	CWnd* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
+	wxWindow* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
 	pWndList->GetWindowRect(&rList);
 	ScreenToClient(rList);
 	pWndPreview->SetWindowPos(NULL, rPreview.left, rList.top, rPreview.Width(), rPreview.Height(), 0);
@@ -3358,6 +3378,9 @@ BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
 	// set the state of the Auto-preview check-box
 //J	::CheckDlgButton(GetSafeHwnd(), _R(IDC_AUTO_CHECK), BmapPrevDlg::m_bDoAutoPreview);
 	return ExplorerInited = TRUE;
+#endif
+
+	return TRUE;
 }
 
 /********************************************************************************************
@@ -3371,6 +3394,8 @@ BOOL ExportFileDialog::ExplorerInitDialog(HWND hDlg)
 
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void ExportFileDialog::DoDataExchange(CDataExchange* pDX)
 {
     BaseFileDialog::DoDataExchange(pDX);
@@ -3382,7 +3407,7 @@ void ExportFileDialog::DoDataExchange(CDataExchange* pDX)
 	}
     //}}AFX_DATA_MAP
 }
-				   
+#endif				   
 
 /********************************************************************************************
 
@@ -3400,16 +3425,6 @@ void ExportFileDialog::DoDataExchange(CDataExchange* pDX)
 
 BOOL ExportFileDialog::OnFileNameOK()
 {
-	// Get around a bug in Win 95 using VC2.0
-	// say that the filename is ok for now, as the return value is currently
-	// ignored in windows 95. One day it will start working and this will cause
-	// everything to still work, as it is handled by the new function.
-	// Disable for VC4.0/MFC 4.0 as they have fixed it.
-#if _MFC_VER < 0x400
-	if (IsWin32c())
-		return FALSE;
-#endif
-
 	// ask the new function if the name is OK
 	if (IsValidFilename())
 		return FALSE;
@@ -3419,7 +3434,7 @@ BOOL ExportFileDialog::OnFileNameOK()
 
 /********************************************************************************************
 
->	void ExportFileDialog::AppendExtension(CString* pFilename)
+>	void ExportFileDialog::AppendExtension(wxString* pFilename)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/7/95
@@ -3438,7 +3453,7 @@ BOOL ExportFileDialog::OnFileNameOK()
 
 ********************************************************************************************/
 
-void ExportFileDialog::AppendExtension(CString* pFilename)
+void ExportFileDialog::AppendExtension(wxString* pFilename)
 {
 	// Use the new routine in its default state i.e. only add extension if not present already
 	AddExtension(pFilename);
@@ -3447,7 +3462,7 @@ void ExportFileDialog::AppendExtension(CString* pFilename)
 
 /********************************************************************************************
 
->	void ExportFileDialog::AddExtension(CString* pFilename, BOOL Replace = FALSE, BOOL AskAboutReplace = FALSE,
+>	void ExportFileDialog::AddExtension(wxString* pFilename, BOOL Replace = FALSE, BOOL AskAboutReplace = FALSE,
 										UINT32 Selection = 0)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
@@ -3471,24 +3486,17 @@ void ExportFileDialog::AppendExtension(CString* pFilename)
 
 ********************************************************************************************/
 
-void ExportFileDialog::AddExtension(CString* pFilename, BOOL Replace, BOOL AskAboutReplace, UINT32 Selection)
+void ExportFileDialog::AddExtension(wxString* pFilename, BOOL Replace, BOOL AskAboutReplace, UINT32 Selection)
 {
 	// Make sure we were not passed rubbish
 	if ((pFilename==NULL) || (pFilename->IsEmpty()))
 		return;
 
-	TRACEUSER( "Neville", _T("Add Extension in - %s\n"), (const char*)(*pFilename));
+	TRACEUSER( "Neville", _T("Add Extension in - %s\n"), (PCTSTR)*pFilename );
 
 	// First we will see if this filename has an extension already
-	INT32 i = pFilename->GetLength() - 1;
-	INT32 ExtensionLen = 0;
-
-	// go back through the string looking for the dot char
-	while ((i >= 0) && (pFilename->GetAt(i) != '.'))
-	{
-		i--;
-		ExtensionLen++;
-	}
+	INT32	ExtensionLen = pFilename->length() - pFilename->Find( '.', true );
+	INT32	i = pFilename->Find( '.', true );
 
 	// If a selection has been passed in then use that, otherwise use the one stored in the
 	// class variable.
@@ -3510,9 +3518,9 @@ TRACEUSER( "Neville", _T("TheSelectedFilter - %d\n"), TheSelectedFilter);
 	// Filters might have multiple extensions listed separated by commas
 	// so use first e.g. AI eps filter has ai and eps.
 	// Work out the position of the first separator character, - 1 if none
-	INT32	Position;
-	String_8 SepMark = ",";
-	Position = ExtStr.Sub(SepMark);
+	String_8	SepMark = _T(",");
+	INT32		Position = ExtStr.Sub( SepMark );
+	
 	// If comma separator was found use up to the separator 
 	if (Position > 0)
 		ExtStr.Left(&ExtStr, Position);
@@ -3521,7 +3529,7 @@ TRACEUSER( "Neville", _T("TheSelectedFilter - %d\n"), TheSelectedFilter);
 	if ((ExtensionLen > 3) || (i < 0))
 	{
 		// No valid extension as yet so add one
-		*pFilename += CString(".");
+		*pFilename += wxString( _T(".") );
 		*pFilename += (TCHAR*)ExtStr;
 	}
 	else if (ExtensionLen <= 3 && ExtensionLen > 0 && i > 0)
@@ -3534,14 +3542,12 @@ TRACEUSER( "Neville", _T("TheSelectedFilter - %d\n"), TheSelectedFilter);
 		if (AskAboutReplace && !Replace)
 		{
 			// Valid extension found so check that it is correct
-			String_32 FoundExtStr = "";
-			TCHAR c;
-			TCHAR *FoundExt = (TCHAR *) FoundExtStr;
-			for (INT32 j = 0; j < ExtensionLen; j++ )
-			{
-				c = pFilename->GetAt(i + 1 + j);
-				FoundExt[j] = c;
-			}
+			String_32	FoundExtStr( _T("") );
+			TCHAR*		FoundExt = (TCHAR *)FoundExtStr;
+			INT32		j;
+			for( j = 0; j < ExtensionLen; j++ )
+				FoundExt[j] = pFilename->operator[](i + 1 + j);
+
  			// Stuff a terminator on the end
  			FoundExt[j] = '\0';
 			// Ensure in lower case
@@ -3576,12 +3582,12 @@ TRACEUSER( "Neville", _T("TheSelectedFilter - %d\n"), TheSelectedFilter);
 			*pFilename = pFilename->Left(i);
 			
 			// Add in the new one
-			*pFilename += CString(".");
+			*pFilename += wxString( _T(".") );
 			*pFilename += (TCHAR*)ExtStr;
 		}
 	}
 
-	TRACEUSER( "Neville", _T("Add Extension out- %s\n\n"), (const char*)(*pFilename));
+	TRACEUSER( "Neville", _T("Add Extension out- %s\n\n"), PCTSTR(*pFilename) );
 }
 
 
@@ -3667,20 +3673,21 @@ BOOL ExportFileDialog::SetStateOnFilterChange()
 
 	BOOL State; // the state of the options button
 
+PORTNOTE("other", "Removed BMPFilter usage" )
 	// enable the Options button, but only if a bitmap filter 
 	//and not the BMP filter if exporting a bitmap
 	if ((pFilter != NULL) && pFilter->IS_KIND_OF(BaseBitmapFilter) && 
-		(!m_bExportABitmap || !IS_A(pFilter, BMPFilter)) )
+		(!m_bExportABitmap /*|| !IS_A(pFilter, BMPFilter)*/ ) )
 		State = TRUE; // the state of the checkbox
 	else
 		State = FALSE;
 	
-//	HWND Icon;
+//	wxWindow* Icon;
 #if FALSE
 	// for the future "Options" button handling
 
 	// enable the Options button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 	::EnableWindow(Icon, State);
 
 	// delete the options created for the last filter
@@ -3690,7 +3697,7 @@ BOOL ExportFileDialog::SetStateOnFilterChange()
 #endif
 
 	// set the state the "Auto-preview" checkbox
-//	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_AUTO_CHECK));
+//	Icon = FindWindow( _R(IDC_AUTO_CHECK));
 
 	// display it first
 //	::ShowWindow(Icon, SW_SHOW);
@@ -3735,7 +3742,7 @@ void ExportFileDialog::OnTypeChange()
 	SetStateOnFilterChange();
 
 	// Get the filename which the user has entered in the field
-	CString FileName = GetFileName();
+	wxString FileName = GetFileName();
 	// If its empty then return immediately
 	if (FileName.IsEmpty())
 		return;
@@ -3786,6 +3793,8 @@ void ExportFileDialog::OnTypeChange()
 
 void ExportFileDialog::OnLBSelChangedNotify(UINT32 nIDBox, UINT32 iCurSel, UINT32 nCode)
 {
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// If its Windows 95 or NT 4 then use the proper method of ExportFileDialog::OnTypeChange()
 	// which is not called on Windows NT 3
 	// It would appear that this does not get called at all on Windows 95!
@@ -3799,12 +3808,12 @@ void ExportFileDialog::OnLBSelChangedNotify(UINT32 nIDBox, UINT32 iCurSel, UINT3
 		TRACEUSER( "Neville", _T("Selection Changed - New selection = (%i)\n"), iCurSel);
 		
 		// Try and put this back into the edit box containing the filename
-		HWND hFileNameBox = ::GetDlgItem(GetSafeHwnd(), edt1);
+		wxWindow* hFileNameBox = FindWindow( edt1);
 
 		if (hFileNameBox)
 		{
 			// Get the current filename from the edit field
-			//CString FullPath = GetPathName(); // This doesn't work and returns zero
+			//wxString FullPath = GetPathName(); // This doesn't work and returns zero
 			String_256 StrVal;
 			::GetWindowText(hFileNameBox, (LPSTR)(TCHAR*)StrVal, StrVal.MaxLength());
 
@@ -3841,6 +3850,7 @@ void ExportFileDialog::OnLBSelChangedNotify(UINT32 nIDBox, UINT32 iCurSel, UINT3
 			}
 		}
 	}
+#endif
 }
 
 /********************************************************************************************
@@ -3866,11 +3876,11 @@ void ExportFileDialog::OnLBSelChangedNotify(UINT32 nIDBox, UINT32 iCurSel, UINT3
 BOOL ExportFileDialog::IsValidFilename()
 {
 	// Get the pathname
-	CString FullPath = GetPathName();
+	wxString	FullPath = GetPath();
 	AppendExtension(&FullPath);
 
 	// if doesn't exist then thats fine
-	if (_taccess( FullPath, 0 ))
+	if( !wxFile::Exists( FullPath ) )
 	{
 		return TRUE;
 	}
@@ -3878,14 +3888,14 @@ BOOL ExportFileDialog::IsValidFilename()
 	// But it does exist.
 	// So we need to get the currently selected filter to warn the user
 	// So get the currently selected filter
-	Filter *pFilter = GetSelectedExportFilter(GetSelectedFilterIndex());
+	Filter*		pFilter = GetSelectedExportFilter(GetSelectedFilterIndex());
 
 	// Check it's there
 	ERROR2IF(pFilter==NULL, FALSE, "ExportFileDialog::IsValidFilename - filter does not exist");
 
 	// And ask that filter if it wants to accept an existing file
-	String_256 strFullPath(FullPath);
-	PathName pthFullPath(strFullPath);
+	String_256	strFullPath(FullPath);
+	PathName	pthFullPath(strFullPath);
 
 	return pFilter->WillAcceptExistingFile(pthFullPath);
 }
@@ -3909,11 +3919,13 @@ BOOL ExportFileDialog::IsValidFilename()
 
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 afx_msg void ExportFileDialog::OnAutoPreview()
 {
 //J	BmapPrevDlg::m_bDoAutoPreview =	IsDlgButtonChecked(_R(IDC_AUTO_CHECK));
 }
-
+#endif
 	
 	
 /************************************************************************************************************
@@ -3929,51 +3941,54 @@ afx_msg void ExportFileDialog::OnAutoPreview()
 **************************************************************************************************************/
 BOOL ExportFileDialog::HandleOptions()
 {
+PORTNOTETRACE("other", "ExportFileDialog::HandleOptions - Do nothing - ControlHelper, GIFAnimationPropertyTabsDlg" );
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Get a ptr to the correct op. 
-		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_EXPORTGIFANIMTABSDLG);
+	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_EXPORTGIFANIMTABSDLG);
 
-		if (pOpDesc != NULL)
+	if (pOpDesc != NULL)
+	{
+		// If the animation properties dialog is open, close it.
+		if (GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg())
 		{
-			// If the animation properties dialog is open, close it.
-			if (GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg())
-			{
-				// Get a ptr to the dlg.
-				GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
-
-				// Ensure it is a valid ptr.
-				if(pDlg)
-				{
-					// Close the dialog.
-					pDlg->Close();		
-					pDlg->End();			
-				}
-			}
-		
-			// Select the "Browser Preview tab".
-			GIFAnimationPropertyTabsDlg::SetPageToOpen(0);
-
-			// Hide all other tabs. This flag is set back to FALSE in the destructor of AnimExOptns.
-			GIFAnimationPropertyTabs::SetBrowserPreviewTab(TRUE);
-
-			// This ensures that the dialog process works correctly.
-			ControlHelper::InformModalDialogOpened();
-
-			// Open the dialog.
-			pOpDesc->Invoke();
-
-			// Get a ptr to the dialog.
+			// Get a ptr to the dlg.
 			GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
 
-			// Ensure the ptr is valid.
-			if (pDlg)
+			// Ensure it is a valid ptr.
+			if(pDlg)
 			{
-				// Send our DIM_CANCEL message.
-				BROADCAST_TO_CLASS(DialogMsg(pDlg->WindowID, DIM_CANCEL, NULL) ,DialogOp);
+				// Close the dialog.
+				pDlg->Close();		
+				pDlg->End();			
 			}
-
-			// The dialog has closed.
-			ControlHelper::InformModalDialogClosed();
 		}
+	
+		// Select the "Browser Preview tab".
+		GIFAnimationPropertyTabsDlg::SetPageToOpen(0);
+
+		// Hide all other tabs. This flag is set back to FALSE in the destructor of AnimExOptns.
+		GIFAnimationPropertyTabs::SetBrowserPreviewTab(TRUE);
+
+		// This ensures that the dialog process works correctly.
+		ControlHelper::InformModalDialogOpened();
+		
+		// Open the dialog.
+		pOpDesc->Invoke();
+
+		// Get a ptr to the dialog.
+		GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
+
+		// Ensure the ptr is valid.
+		if (pDlg)
+		{
+			// Send our DIM_CANCEL message.
+			BROADCAST_TO_CLASS( DialogMsg( pDlg->WindowID, DIM_CANCEL, 0) ,DialogOp );
+		}
+
+		// The dialog has closed.
+		ControlHelper::InformModalDialogClosed();
+	}
+#endif
 
 	// Everything ok.
 	return TRUE;
@@ -4011,59 +4026,62 @@ GIFExportFileDialog::GIFExportFileDialog(LPCTSTR lpszFilter):ExportFileDialog(lp
 
 BOOL GIFExportFileDialog::HandleOptions()
 {
-		// Get a ptr to the correct op. 
-		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_EXPORTGIFANIMTABSDLG);
+PORTNOTETRACE("other", _T("GIFExportFileDialog::HandleOptions - Do nothing - Use NgScan") );
+#if !defined(EXCLUDE_FROM_XARALX)
+	// Get a ptr to the correct op. 
+	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_EXPORTGIFANIMTABSDLG);
 
-		if (pOpDesc != NULL)
+	if (pOpDesc != NULL)
+	{
+		// If the animation properties dialog is open, close it.
+		if (GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg())
 		{
-			// If the animation properties dialog is open, close it.
-			if (GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg())
-			{
-				// Get a ptr to the dlg.
-				GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
-
-				// Ensure it is a valid ptr.
-				if(pDlg)
-				{
-					// Close the dialog.
-					pDlg->Close();		
-					pDlg->End();			
-				}
-			}
-		
-			// Select the "Animation colours tab".
-			GIFAnimationPropertyTabsDlg::SetPageToOpen(0);
-
-			// Hide the Frame propertiestab. This flag is set back to TRUE in the destructor of AnimExOptns.
-			GIFAnimationPropertyTabs::SetIncludeFramePropertiesTab(FALSE);
-
-			// This ensures that the dialog process works correctly.
-			ControlHelper::InformModalDialogOpened();
-
-			// Open the dialog.
-			pOpDesc->Invoke();
-
-			// Get a ptr to the dialog.
+			// Get a ptr to the dlg.
 			GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
 
-			// Ensure the ptr is valid.
-			if (pDlg)
+			// Ensure it is a valid ptr.
+			if(pDlg)
 			{
-				// Send our DIM_CANCEL message.
-				BROADCAST_TO_CLASS(DialogMsg(pDlg->WindowID, DIM_CANCEL, NULL) ,DialogOp);
+				// Close the dialog.
+				pDlg->Close();		
+				pDlg->End();			
 			}
+		}
+	
+		// Select the "Animation colours tab".
+		GIFAnimationPropertyTabsDlg::SetPageToOpen(0);
 
-			// The dialog has closed.
-			ControlHelper::InformModalDialogClosed();
+		// Hide the Frame propertiestab. This flag is set back to TRUE in the destructor of AnimExOptns.
+		GIFAnimationPropertyTabs::SetIncludeFramePropertiesTab(FALSE);
+
+		// This ensures that the dialog process works correctly.
+		ControlHelper::InformModalDialogOpened();
+
+		// Open the dialog.
+		pOpDesc->Invoke();
+
+		// Get a ptr to the dialog.
+		GIFAnimationPropertyTabsDlg* pDlg = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertyTabsDlg();
+
+		// Ensure the ptr is valid.
+		if (pDlg)
+		{
+			// Send our DIM_CANCEL message.
+			BROADCAST_TO_CLASS( DialogMsg( pDlg->WindowID, DIM_CANCEL, 0 ), DialogOp );
 		}
 
+		// The dialog has closed.
+		ControlHelper::InformModalDialogClosed();
+	}
+#endif
+		
 	// Everything ok.
 	return TRUE;
 }
 
 /***********************************************************************************************************
 
->	virtual BOOL GIFExportFileDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL GIFExportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Ranbir_Rana (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	07/07/97
@@ -4072,8 +4090,10 @@ BOOL GIFExportFileDialog::HandleOptions()
 			
 
 ************************************************************************************************************/
-BOOL GIFExportFileDialog::ExplorerInitDialog(HWND hDlg)
+BOOL GIFExportFileDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing of not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
@@ -4084,15 +4104,16 @@ BOOL GIFExportFileDialog::ExplorerInitDialog(HWND hDlg)
 	CheckDlgButton(_R(IDC_SHOWPREVIEW), BaseFileDialog::ShowPreviewBitmap != FALSE);
 	
 	// Get a handle to the options button.
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	wxWindow* Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 	
 	// Ungrey the options button.
 	::EnableWindow(Icon, TRUE);	
 
 	//Graham 27/10/97: And the "use as default" button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_USEASDEFAULT));
+	Icon = FindWindow( _R(IDC_USEASDEFAULT));
 	::ShowWindow(Icon, SW_HIDE);
-
+#endif
+	
 	// Everything OK.
 	return TRUE;
 }
@@ -4109,9 +4130,9 @@ BOOL GIFExportFileDialog::ExplorerInitDialog(HWND hDlg)
 ********************************************************************************************/
 
 SaveTemplateDialog::SaveTemplateDialog(PathName& pathToShowInDialog)
-: SaveFileDialog(String_256(_R(IDS_NEWTEMPLATES_FILTER)), String_256(pathToShowInDialog.GetLocation(TRUE)),
-									String_256(pathToShowInDialog.GetFileName(TRUE)), String_256())
-
+	: SaveFileDialog( PCTSTR( String_256( _R(IDS_NEWTEMPLATES_FILTER) ) ) , 
+		String_256(pathToShowInDialog.GetLocation(TRUE)),
+		String_256(pathToShowInDialog.GetFileName(TRUE)), String_256() )
 
 {
 	m_fUseAsDefault=FALSE;
@@ -4123,7 +4144,7 @@ SaveTemplateDialog::SaveTemplateDialog(PathName& pathToShowInDialog)
 
 /********************************************************************************************
 
->	virtual BOOL SaveTemplateDialog::ExplorerInitDialog(HWND hDlg)
+>	virtual BOOL SaveTemplateDialog::ExplorerInitDialog(wxWindow* hDlg)
 
 	Author:		Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	24/10/97
@@ -4134,8 +4155,10 @@ SaveTemplateDialog::SaveTemplateDialog(PathName& pathToShowInDialog)
 
 ********************************************************************************************/
 
-BOOL SaveTemplateDialog::ExplorerInitDialog(HWND hDlg)
+BOOL SaveTemplateDialog::ExplorerInitDialog(wxWindow* hDlg)
 {
+PORTNOTE("other", "Remove MFC code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Do nothing if not on explorer type dialog boxes
 	if (!CCamApp::IsNewWindowsUI())
 		return TRUE;
@@ -4149,25 +4172,26 @@ BOOL SaveTemplateDialog::ExplorerInitDialog(HWND hDlg)
 	CheckDlgButton(_R(IDC_USEASDEFAULT), FALSE);
 
 	//And show the preview window	
-	HWND Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_PREVIEW));
+	wxWindow* Icon = FindWindow( _R(IDC_PREVIEW));
 	::EnableWindow(Icon, TRUE);
 
 	//But hide the options button
-	Icon = ::GetDlgItem(GetSafeHwnd(), _R(IDC_FILEDLG_OPTIONS));
+	Icon = FindWindow( _R(IDC_FILEDLG_OPTIONS));
 	::ShowWindow(Icon, SW_HIDE);
 
 	// Move the Preview box down a little, so that it lines up with the List box
-	CWnd *wndDlg = GetParent();
-	CWnd* pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
-	CRect rPreview, rList;
+	wxWindow*	wndDlg = GetParent();
+	wxWindow*	pWndPreview = GetDlgItem(_R(IDC_PREVIEW));
+	wxRect		rPreview, rList;
 	pWndPreview->GetWindowRect(&rPreview);
 	ScreenToClient(rPreview);
-	CWnd* pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
+	wxWindow*	pWndList = wndDlg->GetDlgItem(lst1);	// lst1 is the ID for the main list box
 	pWndList->GetWindowRect(&rList);
 	ScreenToClient(rList);
-	pWndPreview->SetWindowPos(NULL, rPreview.left, rList.top, rPreview.Width(), rPreview.Height(), 0);
+	pWndPreview->SetWindowPos(NULL, rPreview.GetLeft(), rList.GetTop(), rPreview.GetWidth(), rPreview.GetHeight(), 0);
 
 	ExplorerInited = TRUE;
+#endif
 
 	return TRUE;
 }
@@ -4181,6 +4205,8 @@ BOOL SaveTemplateDialog::ExplorerInitDialog(HWND hDlg)
 	Purpose:	Data exchange
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void SaveTemplateDialog::DoDataExchange(CDataExchange* pDX)
 {
     BaseFileDialog::DoDataExchange(pDX);
@@ -4197,7 +4223,7 @@ void SaveTemplateDialog::DoDataExchange(CDataExchange* pDX)
 	}
     //}}AFX_DATA_MAP
 }
-
+#endif
 
 /********************************************************************************************
 
@@ -4214,29 +4240,26 @@ void SaveTemplateDialog::DoDataExchange(CDataExchange* pDX)
 BOOL SaveTemplateDialog::PrepareDialog()
 {
 	// Set the title of the dialog
-	m_strTitleOfDialog=String_256(_R(IDS_NEWTEMPLATES_TITLEOFDIALOG));
+	m_strTitleOfDialog = String_256(_R(IDS_NEWTEMPLATES_TITLEOFDIALOG));
 
-	m_ofn.lpstrTitle = (TCHAR*) m_strTitleOfDialog;
+	wxFileDialog::SetTitle( (TCHAR*)m_strTitleOfDialog );
 
 	// Select the desired path
 	if (!DefaultPath.IsEmpty())
 	{
 		// Set the default path
-		m_ofn.lpstrInitialDir = DefaultPath;
+		SetDirectory( DefaultPath );
 	}
 	else
 	{
 		// or use the global default path
 		if (DefaultSaveFilePath.Length() > 0)
-			m_ofn.lpstrInitialDir = (char *) DefaultSaveFilePath;
+			SetDirectory( DefaultSaveFilePath );
 	}
 
 	// Do the same for the filename
 	if (!DefaultName.IsEmpty())
-	{
-		m_ofn.lpstrFile = DefaultName;
-		m_ofn.nMaxFile = DefaultName.MaxLength();
-	}
+		SetFilename( DefaultName );
 
 	// See if the base class wants to do anything
 	return TRUE;
@@ -4259,7 +4282,7 @@ BOOL SaveTemplateDialog::PrepareDialog()
 
 void SaveTemplateDialog::OnUseAsDefault()
 {
-	m_fUseAsDefault=(IsDlgButtonChecked(_R(IDC_USEASDEFAULT))==1);
+	m_fUseAsDefault = dynamic_cast<wxCheckBox*>( FindWindow( _R(IDC_USEASDEFAULT) ) )->IsChecked();
 }
 
 /********************************************************************************************
@@ -4296,6 +4319,8 @@ void SaveTemplateDialog::OnDefaultTemplatesFolder()
 		
 ********************************************************************************************/
 
+PORTNOTE("other", "Removed MFC junk" )
+#if !defined(EXCLUDE_FROM_XARALX)
 void SaveTemplateDialog::OnFileNameChange()
 {
 #if _MFC_VER >= 0x400
@@ -4303,7 +4328,7 @@ void SaveTemplateDialog::OnFileNameChange()
 		return;
 
 	//Get the new filename
-	CString cstrNameOfNewFile = GetPathName();
+	wxString cstrNameOfNewFile = GetPathName();
 		
 	// If its empty then return immediately
 	if (cstrNameOfNewFile.IsEmpty())
@@ -4327,4 +4352,4 @@ void SaveTemplateDialog::OnFileNameChange()
 
 	return;
 }
-
+#endif

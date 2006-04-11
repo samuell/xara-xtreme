@@ -11,27 +11,27 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	bitfilt.cpp bitmap.cpp bitmapcachekey.cpp blndhelp.cpp blobs.cpp \
 	bmpcomp.cpp bmplist.cpp bmpsrc.cpp brpress.cpp brshattr.cpp brshbeca.cpp \
 	brshcomp.cpp brshdata.cpp brushref.cpp bshadow.cpp cache.cpp cachfifo.cpp \
-	camfiltr.cpp capturemanager.cpp ccbhfile.cpp ccbuffil.cpp ccfile.cpp \
-	ccpanose.cpp chapter.cpp clipattr.cpp cnamecol.cpp colclist.cpp colcomp.cpp \
-	colcontx.cpp collist.cpp colormgr.cpp colourix.cpp colplate.cpp coord.cpp \
-	cutop.cpp cxfellp.cpp cxfile.cpp cxflists.cpp cxfmap.cpp \
+	camfiltr.cpp capturemanager.cpp ccbhfile.cpp ccbuffil.cpp \
+	ccfile.cpp ccpanose.cpp chapter.cpp clipattr.cpp cnamecol.cpp colclist.cpp \
+	colcomp.cpp colcontx.cpp collist.cpp colormgr.cpp colourix.cpp colplate.cpp \
+	coord.cpp cutop.cpp cxfellp.cpp cxfile.cpp cxflists.cpp cxfmap.cpp \
 	cxfnbmp.cpp cxfpoly.cpp cxfrec.cpp cxfrech.cpp cxfrect.cpp cxfrgshp.cpp \
 	cxftext.cpp cxftfile.cpp cxftrans.cpp dbugtree.cpp dialogop.cpp doccolor.cpp \
 	doccomp.cpp doccoord.cpp docrect.cpp document.cpp docview.cpp dumbnode.cpp \
-	exphint.cpp extender.cpp fillattr.cpp fillramp.cpp fillval.cpp filters.cpp \
-	filtrmgr.cpp fontcomp.cpp fontlist.cpp fontman.cpp fracfill.cpp fthrattr.cpp \
-	gcache.cpp fntcache.cpp textacts.cpp \
+	cpp exphint.cpp extender.cpp fillattr.cpp fillramp.cpp \
+	fillval.cpp filters.cpp filtrmgr.cpp fontcomp.cpp fontlist.cpp fontman.cpp \
+	fracfill.cpp fthrattr.cpp gcache.cpp fntcache.cpp textacts.cpp \
 	fttyplis.cpp gadget.cpp gblend.cpp genv.cpp gla.cpp gmould.cpp \
 	grid.cpp group.cpp guides.cpp gwinding.cpp hittest.cpp hotkeys.cpp impbmp.cpp \
-	impcol.cpp impstr.cpp infocomp.cpp insertnd.cpp invalid.cpp isetattr.cpp \
-	layer.cpp lineattr.cpp linecomp.cpp linedef.cpp list.cpp listitem.cpp \
+	impcol.cpp impstr.cpp impexpop.cpp infocomp.cpp insertnd.cpp invalid.cpp \
+	isetattr.cpp layer.cpp lineattr.cpp linecomp.cpp linedef.cpp list.cpp listitem.cpp \
 	main.cpp main1.cpp main2.cpp main3.cpp matrix.cpp modlist.cpp module.cpp \
 	moldedit.cpp moldenv.cpp moldpers.cpp moldshap.cpp native.cpp nativeop.cpp \
 	nbevcont.cpp ncntrcnt.cpp ndbldpth.cpp ndbrshmk.cpp ndbrshpt.cpp ndclpcnt.cpp \
-	ndmldgrp.cpp ndmldpth.cpp ndoptmz.cpp ngiter.cpp ngprop.cpp ngsentry.cpp \
-	node.cpp nodeabmp.cpp nodeattr.cpp nodebev.cpp nodebldr.cpp nodeblnd.cpp \
-	nodebmp.cpp nodebrsh.cpp nodeclip.cpp nodecntr.cpp nodecomp.cpp nodecont.cpp \
-	nodedoc.cpp nodeelip.cpp nodeliveeffect.cpp nodemldr.cpp nodemold.cpp \
+	ndmldgrp.cpp ndmldpth.cpp ndoptmz.cpp ngitem.cpp ngiter.cpp ngprop.cpp \
+	ngsentry.cpp node.cpp nodeabmp.cpp nodeattr.cpp nodebev.cpp nodebldr.cpp \
+	nodeblnd.cpp nodebmp.cpp nodebrsh.cpp nodeclip.cpp nodecntr.cpp nodecomp.cpp \
+	nodecont.cpp nodedoc.cpp nodeelip.cpp nodeliveeffect.cpp nodemldr.cpp nodemold.cpp \
 	nodepath.cpp nodepostpro.cpp noderect.cpp noderend.cpp nodershp.cpp nodeset.cpp \
 	nodeshad.cpp nodeshap.cpp nodetext.cpp nodetxtl.cpp nodetxts.cpp noise1.cpp \
 	noisebas.cpp noisef.cpp npaper.cpp objcache.cpp objchge.cpp objreg.cpp \

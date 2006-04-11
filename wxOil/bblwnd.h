@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 ********************************************************************************************/
 
-class BubbleHelpWnd : public CWnd
+class BubbleHelpWnd : public wxWindow
 {
 // Construction
 public:
@@ -143,16 +143,19 @@ public:
 
 	// Generated message map functions
 protected:
+PORTNOTE("other", "Removed MFC MESSAGE_MAPs" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	//{{AFX_MSG(BubbleHelpWnd)
 	afx_msg void OnNcPaint();
 	afx_msg void OnPaint();
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+#endif
 
 protected:
-	char    	*BubbleText;
-	CFont   	*BubbleFont;
+	TCHAR*		BubbleText;
+	wxFont*		BubbleFont;
 	POINT  	 	 BubbleSize;
 
 	// Name of the special window class for our bubble help windows

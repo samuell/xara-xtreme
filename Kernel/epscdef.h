@@ -154,6 +154,6 @@ private:
 };
 
 // An empty definition to pass back when problems occur.
-const EPSCommentDef EmptyDefinition ( "", "", FALSE, 0 );
+const EPSCommentDef EmptyDefinition ( _T(""), _T(""), FALSE, 0 );
 
 #endif

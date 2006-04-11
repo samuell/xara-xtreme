@@ -144,7 +144,7 @@ public:
 
 	static BOOL CreatePluginFilters(List&);
 
-	virtual char *ConstructFilterString(UINT32 NumberToExport = 1);
+	virtual TCHAR *ConstructFilterString(UINT32 NumberToExport = 1);
 	virtual String_64 GetFilterName(UINT32 NumberToExport);
 
 	// Some useful helper functions for checking that filename extensions match the
@@ -174,7 +174,7 @@ public:
 	OILFilterFamily(Filter *pFilter);
 	OILFilterFamily(Filter *pFilter, UINT32 FilterNameID);
 
-	virtual char *ConstructFilterString(UINT32 NumberToExport = 1);
+	virtual TCHAR *ConstructFilterString(UINT32 NumberToExport = 1);
 };
 
 

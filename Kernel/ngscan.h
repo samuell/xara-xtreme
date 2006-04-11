@@ -128,8 +128,6 @@ public:
 
 	BaseSelectScan(Change eChange, BOOL fQuiet = FALSE);
 
-PORTNOTE("other","BaseSelectScan stripped")
-#ifndef EXCLUDE_FROM_XARALX
 protected:
 	virtual BOOL OnSelectable(NodeRenderable* pRender);
 	Change m_eChange;
@@ -140,7 +138,6 @@ private:
 	virtual BOOL Pre();
 	virtual BOOL Do(Node*);
 	virtual BOOL Post();
-#endif
 };
 
 
@@ -160,13 +157,10 @@ class CCAPI SelectScan : public BaseSelectScan
 public:
 	SelectScan(SGNameItem* pItem, Change eChange, BOOL fQuiet = FALSE);
 
-PORTNOTE("other","SelectScan stripped")
-#ifndef EXCLUDE_FROM_XARALX
 protected:
 	virtual BOOL OnSelectable(NodeRenderable*);
 
 	SGNameItem* m_pItem;
-#endif
 };
 
 

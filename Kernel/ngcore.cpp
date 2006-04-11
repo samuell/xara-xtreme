@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "galstr.h"
 
 #include "helpuser.h"
-#include "xshelpid.h"
+//#include "xshelpid.h"
 //#include "helppath.h"
 //#include "mario.h"
 
@@ -132,12 +132,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "objchge.h"
 #include "zoomops.h"
 #include "transop.h"
-#include "slicetool.h"
+//#include "slicetool.h"
 //#include "sliceres.h"
 #include "group.h"
 #include "opscale.h"
 #include "opsquash.h"
 #include "attrappl.h" // Matt - 12/02/2001 - For OpApplyAttribToSelected
+#include "ophist.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -193,11 +194,14 @@ NameGallery::NameGallery()
 
 NameGallery::~NameGallery()
 {
+PORTNOTE("other", "Removed Windows timer usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Stop sending idle events if we are still claiming them.
 	if (m_nRefresh != 0)
 		//GetApplication()->RemoveIdleProcessor(IDLEPRIORITY_LOW, this);
 		KillTimer(TIMER_EVENT);
-
+#endif
+	
 	m_pInstance = 0;
 }
 
@@ -536,28 +540,35 @@ MsgResult NameGallery::Message(Msg* pMessage)
 		switch (pMsg->DlgMsg)
 		{
 		case DIM_CREATE:
-			SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_NAME_GALLERY, TRUE);
+			SGInit::UpdateGalleryButton( OPTOKEN_DISPLAY_NAME_GALLERY, TRUE);
 			break;
 
 		case DIM_CANCEL:
-			SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_NAME_GALLERY, FALSE); break;
+			SGInit::UpdateGalleryButton( OPTOKEN_DISPLAY_NAME_GALLERY, FALSE);
+			break;
 
 		case DIM_LFT_BN_CLICKED:
-			switch (pMsg->GadgetID)
+			if( _R(IDC_GALLERY_HELP) == pMsg->GadgetID )
 			{
-			case _R(IDC_GALLERY_HELP):
 				HelpUserTopic(_R(IDS_HELPPATH_Gallery_Name)); break;
-
-			case _R(IDC_GALLERY_NEW):		case _R(IDC_NAMEGAL_RENAME):
-			case _R(IDC_NAMEGAL_SELECT):	case _R(IDC_NAMEGAL_INTERSECT):
-			case _R(IDC_GALLERY_DELETE):	case _R(IDC_LIBGAL_REMOVE):
-			case _R(IDC_NAMEGAL_EXPORT):
+			}
+			else
+			if( _R(IDC_GALLERY_NEW)		== pMsg->GadgetID ||
+				_R(IDC_NAMEGAL_RENAME)	== pMsg->GadgetID ||
+				_R(IDC_NAMEGAL_SELECT)	== pMsg->GadgetID ||
+				_R(IDC_NAMEGAL_INTERSECT) == pMsg->GadgetID ||
+				_R(IDC_GALLERY_DELETE)	== pMsg->GadgetID ||
+				_R(IDC_LIBGAL_REMOVE)	== pMsg->GadgetID ||
+				_R(IDC_NAMEGAL_EXPORT)	== pMsg->GadgetID )
+			{
 				// By-pass default base class handling for these buttons so the default
 				// bar implementation can automatically invoke the operations defined
 				// for them in bars.ini.
 				return DialogBarOp::Message(pMessage);
-
-			case _R(IDC_GALLERY_APPLY):		case _R(IDC_GALLERY_REDEFINE):
+			}
+			if( _R(IDC_GALLERY_APPLY)	== pMsg->GadgetID ||
+				_R(IDC_GALLERY_REDEFINE) == pMsg->GadgetID )
+			{
 				// Do as above, but afterwards check to ensure that (if any of the sets
 				// affected is involved in a stretch) no NodeRegularShapes are involved
 				MsgResult tempMsg = DialogBarOp::Message(pMessage);
@@ -599,6 +610,10 @@ MsgResult NameGallery::Message(Msg* pMessage)
 
 				return tempMsg;
 			}
+			break;
+			
+		default:
+			break;
 		}
 	}
 
@@ -645,6 +660,9 @@ MsgResult NameGallery::Message(Msg* pMessage)
 		case OpMsg::AFTER_REDO:
 			DisplayDirty();
 			break;
+		
+		default:
+			break;
 		}			
 	}
 
@@ -670,7 +688,9 @@ MsgResult NameGallery::Message(Msg* pMessage)
 ********************************************************************************************/
 
 
-VOID CALLBACK NameTimerProc(
+PORTNOTE("other", "Removed MFC timer proc" )
+#if !defined(EXCLUDE_FROM_XARALX)
+void CALLBACK NameTimerProc(
   HWND hwnd,     // handle of window for timer messages
   UINT32 uMsg,     // WM_TIMER message
   UINT32 idEvent,  // timer identifier
@@ -680,7 +700,7 @@ VOID CALLBACK NameTimerProc(
 	// a callback calls the timer event
 	NameGallery::Instance()->OnTimerEvent(idEvent);
 }
-
+#endif
 
 // the timer event adds the idle processor
 // which adds to the  latency. Ie we wait 150 ms, before waiting for a free cpu cycle (or 2) to do the scan.
@@ -692,7 +712,10 @@ BOOL NameGallery::OnTimerEvent(UINT32 TimerId)
 	if (m_nRefresh != 0)
 	{
 		GetApplication()->RegisterIdleProcessor(IDLEPRIORITY_LOW, this);
+PORTNOTE("other", "Removed Windows timer usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 		KillTimer(TimerId);
+#endif
 	}
 
 	return TRUE;
@@ -712,12 +735,14 @@ void NameGallery::DisplayDirty()
 		return;
 	}
 
+PORTNOTE("other", "Removed Windows timer usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// If going from the clean to the dirty state then send the gallery high
 	// priority idle events.
 	// needs updating very soon now
 	if (m_nRefresh++ == 0)
 		SetTimer(TIMER_EVENT, TIMER_ELAPSE, NameTimerProc);
-
+#endif
 }
 
 
@@ -934,11 +959,17 @@ BOOL NameGallery::ApplyAction(SGActionType nAction)
 	{
 	case SGACTION_APPLY:
 	case SGACTION_APPLYADJUST:
-		OpDescriptor* pDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_APPLY_NAMES_TO_SEL);
-		ERROR3IF(pDesc == 0, "NameGallery::ApplyAction: no descriptor");
-		String_256 str;
-		if (!pDesc->GetOpsState(&str).Greyed) pDesc->Invoke();
+		{
+			OpDescriptor* pDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_APPLY_NAMES_TO_SEL);
+			ERROR3IF(pDesc == 0, "NameGallery::ApplyAction: no descriptor");
+			String_256 str;
+			if (!pDesc->GetOpsState(&str).Greyed)
+				pDesc->Invoke();
+		}
 		return TRUE;
+		
+	default:
+		break;
 	}
 
 	return SuperGallery::ApplyAction(nAction);
@@ -997,7 +1028,7 @@ void NameGallery::SetVisibility(BOOL fOpen)
 ********************************************************************************************/
 BOOL NameGallery::FastUpdateNamedSetSizes(BOOL PropagateChanges)
 {
-	TRACEUSER( "GerryX", _T("FastUpdateNamedSetSizes(%s)\n", PropagateChanges ? "TRUE" : "FALSE"));
+	TRACEUSER( "GerryX", _T("FastUpdateNamedSetSizes(%s)\n"), PropagateChanges ? _T("TRUE") : _T("FALSE") );
 
 	// scan the tree looking for name attribs
 	// find one and the size of the parent should be added to the bounds of the set
@@ -1102,12 +1133,13 @@ BOOL NameGallery::FastUpdateNamedSetSizes(BOOL PropagateChanges)
 	while (pNameGalleryItem)
 	{
 		pNameGalleryItem->GetNameText(&str);
-		TRACEUSER( "GerryX", _T("Item %s Bar = %d  Nodes = %d\n"), (char*)str, pNameGalleryItem->m_BarNumber, pNameGalleryItem->GetObjectCount());
+		TRACEUSER( "GerryX", _T("Item %s Bar = %d  Nodes = %d\n"), (TCHAR*)str, pNameGalleryItem->m_BarNumber, 
+			pNameGalleryItem->GetObjectCount());
 		DocRect Rect;
 		Rect = pNameGalleryItem->GetSetBounds();
-		TRACEUSER( "GerryX", _T("Bounds     = (%d, %d) (%d, %d)\n"), Rect.lox, Rect.loy, Rect.hix, Rect.hiy);
+		TRACEUSER( "GerryX", _T("Bounds     = (%d, %d) (%d, %d)\n"), Rect.lo.x, Rect.lo.y, Rect.hi.y, Rect.hi.y);
 		Rect = pNameGalleryItem->GetOldSetBounds();
-		TRACEUSER( "GerryX", _T("Old Bounds = (%d, %d) (%d, %d)\n"), Rect.lox, Rect.loy, Rect.hix, Rect.hiy);
+		TRACEUSER( "GerryX", _T("Old Bounds = (%d, %d) (%d, %d)\n"), Rect.lo.x, Rect.lo.y, Rect.hi.y, Rect.hi.y);
 		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 	}
 
@@ -1222,7 +1254,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 	INT32 TriggeredBar = -1;
 		if (m_TouchedBar >= 0)
 		{
-			if (!SetBSTData(m_TouchedBar, NULL, NULL, 1, NULL))
+			if (!SetBSTData(m_TouchedBar, 0, 0, 1, 0))
 			{
 				ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 				return FALSE;
@@ -1275,7 +1307,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 			{
 				// require that this is a TRIGGER
 				// ie it has targets set on it which should be stated in from the add stretches gallery
-				TriggersFound++;
+//				TriggersFound++;
 				pNameGalleryItem->m_SetIsAffectedTrigger = TRUE;
 			}
 			else
@@ -1325,7 +1357,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 							// mark this bar as an active bar
 							if (pTempTriggerSet->m_SetIsAffectedTrigger && pNameGalleryItem->m_BarNumber >= 0)
 							{
-								if (!SetBSTData(pNameGalleryItem->m_BarNumber, NULL, NULL, 1, NULL))
+								if (!SetBSTData(pNameGalleryItem->m_BarNumber, 0, 0, 1, 0))
 								{
 									ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 									return FALSE;
@@ -1344,8 +1376,8 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 			if (pNameGalleryItem->m_BarNumber >= 0 && pNameGalleryItem->m_BarNumber < MAX_BARS && !pNameGalleryItem->IsABackBar())
 			{
 				if (!SetBSTData(pNameGalleryItem->m_BarNumber,
-					max(TempTriggerRect.Width(), m_BarSize[pNameGalleryItem->m_BarNumber].MaxWidth),
-					max(TempTriggerRect.Height(), m_BarSize[pNameGalleryItem->m_BarNumber].MaxHeight), NULL, NULL))
+					max( DWORD(TempTriggerRect.Width()), m_BarSize[pNameGalleryItem->m_BarNumber].MaxWidth ),
+					max( DWORD(TempTriggerRect.Height()), m_BarSize[pNameGalleryItem->m_BarNumber].MaxHeight ), 0, 0 ) )
 				{
 					ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 					return FALSE;
@@ -1355,7 +1387,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 			// mark which bars have backbars
 			if (pNameGalleryItem->IsABackBar() && TimesInLoop == 1 && pNameGalleryItem->m_BarNumber >= 0)
 			{
-				if (!SetBSTData(pNameGalleryItem->m_BarNumber, NULL, NULL, NULL, 1))
+				if (!SetBSTData(pNameGalleryItem->m_BarNumber, 0, 0, 0, 1))
 				{
 					ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 					return FALSE;
@@ -1502,7 +1534,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 						if (pNameGalleryItem->m_BarNumber != -1)
 						{
 							TriggeredBar = pNameGalleryItem->m_BarNumber;
-							if (!SetBSTData(TriggeredBar, NULL, NULL, 1, NULL))
+							if (!SetBSTData(TriggeredBar, 0, 0, 1, 0))
 							{
 								ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 								return FALSE;
@@ -1564,7 +1596,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 						if (pNameGalleryItem->m_BarNumber != -1)
 						{
 							TriggeredBar = pNameGalleryItem->m_BarNumber;
-							if (!SetBSTData(TriggeredBar, NULL, NULL, 1, NULL))
+							if (!SetBSTData(TriggeredBar, 0, 0, 1, 0))
 							{
 								ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 								return FALSE;
@@ -1607,7 +1639,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 				// with reseting the old size of anything
 				FastUpdateNamedSetSizes();
 
-				if (!SetBSTData(TriggeredBar, NULL, NULL, 1, NULL))
+				if (!SetBSTData(TriggeredBar, 0, 0, 1, 0))
 				{
 					ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 					return FALSE;
@@ -1781,7 +1813,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 				//		which case it is possible for an object to swap sides in the target rect.
 				//		This is bad, as extension behaviour is side-dependent.
 				// Fix:	if an asymmetric shrink is about to happen, force it to be symmetric.
-				//		we do this by ensuring that TotalExtend.lox and .hix are both set
+				//		we do this by ensuring that TotalExtend.lo.x and .hi.y are both set
 				//		to be the lesser of the two values. Same for top and bottom.
 				if (ExtendStruct[pNodeListItem->Index].TotalExtend.lo.x < ExtendStruct[pNodeListItem->Index].TotalExtend.hi.x)
 					ExtendStruct[pNodeListItem->Index].TotalExtend.hi.x = ExtendStruct[pNodeListItem->Index].TotalExtend.lo.x;
@@ -1865,7 +1897,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 			// with reseting the old size of anything
 			FastUpdateNamedSetSizes();
 
-			if (!SetBSTData(TriggeredBar, NULL, NULL, 1, NULL))
+			if (!SetBSTData(TriggeredBar, 0, 0, 1, 0))
 			{
 				ERROR3("Couldn't Set Triggered Bar -> Index may be out of range!");
 				return FALSE;
@@ -1954,7 +1986,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 
 	m_TouchedBar = -1;
 
-	TRACEUSER( "GerryX", _T("FastApplyStretchScan returning %s\n", ExtendOk ? "TRUE" : "FALSE"));
+	TRACEUSER( "GerryX", _T("FastApplyStretchScan returning %s\n"), ExtendOk ? _T("TRUE") : _T("FALSE") );
 
 	return ExtendOk;
 }
@@ -2077,7 +2109,6 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 	DocCoord NextPos;
 	DocCoord FirstButtonPos;
 	DocCoord FirstButtonSubPixPos;
-	BOOL FoundFirstButton = FALSE;
 	DocRect	rBounds;
 	
 	SGNameItem * Order[MAX_BUTTONS_IN_A_BAR];
@@ -2116,8 +2147,8 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 		{
 			for (j = i+1; j < num; j++)
 			{
-				if ((Order[j]->GetSetBounds().lox < Order[i]->GetSetBounds().lox)
-					|| (Order[j]->GetSetBounds().lox == Order[i]->GetSetBounds().lox && Order[j]->GetSetBounds().hiy > Order[i]->GetSetBounds().hiy) )
+				if ((Order[j]->GetSetBounds().lo.x < Order[i]->GetSetBounds().lo.x)
+					|| (Order[j]->GetSetBounds().lo.x == Order[i]->GetSetBounds().lo.x && Order[j]->GetSetBounds().hi.y > Order[i]->GetSetBounds().hi.y) )
 				{
 					pNameGalleryItem = Order[j];
 					Order[j] = Order[i];
@@ -2131,8 +2162,8 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 		{
 			for (j = i+1; j < num; j++)
 			{
-				if ((Order[j]->GetSetBounds().hiy > Order[i]->GetSetBounds().hiy)
-					|| (Order[j]->GetSetBounds().hiy == Order[i]->GetSetBounds().hiy && Order[j]->GetSetBounds().lox < Order[i]->GetSetBounds().lox) )
+				if ((Order[j]->GetSetBounds().hi.y > Order[i]->GetSetBounds().hi.y)
+					|| (Order[j]->GetSetBounds().hi.y == Order[i]->GetSetBounds().hi.y && Order[j]->GetSetBounds().lo.x < Order[i]->GetSetBounds().lo.x) )
 				{
 					pNameGalleryItem = Order[j];
 					Order[j] = Order[i];
@@ -2152,19 +2183,19 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 			// but let user positioned bars and manually positioned buttons expand around the text
 			if (BarDirection == 1 || BarDirection == 2)
 			{
-				Order[i]->m_Translation.x = Order[i]->GetOldSetBounds().lox - rBounds.lox;
-				Order[i]->m_Translation.y = Order[i]->GetOldSetBounds().hiy - rBounds.hiy;
+				Order[i]->m_Translation.x = Order[i]->GetOldSetBounds().lo.x - rBounds.lo.x;
+				Order[i]->m_Translation.y = Order[i]->GetOldSetBounds().hi.y - rBounds.hi.y;
 			}
-			FirstButtonPos.x = rBounds.lox + Order[i]->m_Translation.x;
-			FirstButtonPos.y = rBounds.hiy + Order[i]->m_Translation.y;
+			FirstButtonPos.x = rBounds.lo.x + Order[i]->m_Translation.x;
+			FirstButtonPos.y = rBounds.hi.y + Order[i]->m_Translation.y;
 			FirstButtonSubPixPos.x = - (FirstButtonPos.x % 750);
 			FirstButtonSubPixPos.y = FirstButtonPos.y % 750;
 		}
 		else
 		{	// move button from bar relative to last position
 			// storing the translation in the name gallery item
-			Order[i]->m_Translation.x = NextPos.x - rBounds.lox;
-			Order[i]->m_Translation.y = NextPos.y - rBounds.hiy;
+			Order[i]->m_Translation.x = NextPos.x - rBounds.lo.x;
+			Order[i]->m_Translation.y = NextPos.y - rBounds.hi.y;
 
 			if (BarDirection == 1)
 				Order[i]->m_Translation.x += Spacing;
@@ -2177,18 +2208,18 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 		{
 		case 1: // horizontal
 			if (Spacing == 0 || Spacing >= 3750)
-				NextPos.x = ((rBounds.hix + Order[i]->m_Translation.x)/750)*750 + FirstButtonSubPixPos.x;
+				NextPos.x = ((rBounds.hi.y + Order[i]->m_Translation.x)/750)*750 + FirstButtonSubPixPos.x;
 			else
-				NextPos.x = rBounds.hix + Order[i]->m_Translation.x;
+				NextPos.x = rBounds.hi.y + Order[i]->m_Translation.x;
 			NextPos.y = FirstButtonPos.y;
 			break;
 
 		case 2: // vertical
 			NextPos.x = FirstButtonPos.x;
 			if (Spacing == 0 || Spacing >= 3750)
-				NextPos.y = ((rBounds.loy + Order[i]->m_Translation.y)/750 +1)*750 + FirstButtonSubPixPos.y;
+				NextPos.y = ((rBounds.lo.y + Order[i]->m_Translation.y)/750 +1)*750 + FirstButtonSubPixPos.y;
 			else
-				NextPos.y = rBounds.loy + Order[i]->m_Translation.y;
+				NextPos.y = rBounds.lo.y + Order[i]->m_Translation.y;
 			break;
 		}
 
@@ -2274,19 +2305,19 @@ BOOL NameGallery::ExpandVirtualTriggers(INT32 ExpandType, INT32 BarNo, DocRect &
 		return FALSE;
 	}
 
-	INT32 ysize = max((bstMaxHeight/*m_BarSize[BarNo].MaxHeight*/ - r1.Height())/2, 0); // not a typo ysize is held as half of xsize
-	INT32 xsize = max((bstMaxWidth/*m_BarSize[BarNo].MaxWidth*/ - r1.Width()), 0);
+	INT32 ysize = max( ( bstMaxHeight/*m_BarSize[BarNo].MaxHeight*/ - r1.Height() ) / 2, unsigned(0) ); // not a typo ysize is held as half of xsize
+	INT32 xsize = max( ( bstMaxWidth/*m_BarSize[BarNo].MaxWidth*/ - r1.Width() ), unsigned(0) );
 
 	switch (ExpandType)
 	{
 	case 1: //left align
 		r1.Inflate(0, ysize);
-		r1.hix += xsize;
+		r1.hi.y += xsize;
 		return TRUE;
 
 	case 2: // right align
 		r1.Inflate(0, ysize);
-		r1.lox -= xsize;
+		r1.lo.x -= xsize;
 		return TRUE;
 
 	case 0: // centre

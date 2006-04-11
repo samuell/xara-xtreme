@@ -142,7 +142,7 @@ public:
 	// Handlers for bitmap rendering during a drag.
 	virtual INT32 GetDragTransparency();
 	virtual KernelBitmap* GetSolidDragMask();
-	virtual BOOL OnDrawSolidDrag(CPoint ptOrigin, CDC* pDC);
+	virtual BOOL OnDrawSolidDrag(wxPoint ptOrigin, wxDC* pDC);
 	
 	// Returns a pointer to the Name Gallery display item being dragged.
 	SGNameItem* GetDraggedNameAttr();

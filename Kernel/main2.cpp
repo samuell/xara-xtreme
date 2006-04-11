@@ -376,12 +376,16 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 #endif //STANDALONE
 #endif //webster
 
+#endif
+
 			OpMenuImport::Init() &&				// Register import operations
+			OpMenuExport::Init() &&				// Register export operations
+
+#ifndef EXCLUDE_FROM_XARALX
 			OpURLImport::Init() &&				// Register internet import operations
 			URLImportDlg::Init() &&				// Register internet import operations
 			HelpDownloadOp::Init() &&			// Register help and support download operations
 #ifndef STANDALONE
-			OpMenuExport::Init() &&				// Register export operations
 #endif // STANDALONE
 			BaseFileDialog::Init() &&			// Declare the open and save default paths
 			OpDroppedFile::Init() &&			// Register drag'n'drop import operations

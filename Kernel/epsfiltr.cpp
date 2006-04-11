@@ -103,10 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "epsfiltr.h"
 
 #include <ctype.h>
-#include <strstrea.h>
-
-#include <afxdlgs.h>
-
 
 #include "attrmgr.h"
 #include "bitfilt.h"
@@ -120,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ensure.h"
 #include "prvwflt.h"
 #ifndef WEBSTER
-#include "extfilts.h"
+//#include "extfilts.h"
 #endif //WEBSTER
 #include "fixmem.h"
 #include "group.h"
@@ -810,121 +806,121 @@ Path *EPSClipContext::GetClipRegion()
 CommandMap EPSFilter::Commands[] =
 {
 	// Path Construction operators
-	EPSC_l,			"l",
-	EPSC_c,			"c",
-	EPSC_m,			"m",
-	EPSC_L,			"L",
-	EPSC_C,			"C",
-	EPSC_v,			"v",
-	EPSC_V,			"V",
-	EPSC_y,			"y",
-	EPSC_Y,			"Y",
+	{ EPSC_l,		"l" },
+	{ EPSC_c,		"c" },
+	{ EPSC_m,		"m" },
+	{ EPSC_L,		"L" },
+	{ EPSC_C,		"C" },
+	{ EPSC_v,		"v" },
+	{ EPSC_V,		"V" },
+	{ EPSC_y,		"y" },
+	{ EPSC_Y,		"Y" },
 
 	// Colour operators
-	EPSC_g,			"g",
-	EPSC_G,			"G",
-	EPSC_k,			"k",
-	EPSC_K,			"K",
-	EPSC_x,			"x",
-	EPSC_X,			"X",
-	EPSC_p,			"p",
-	EPSC_P,			"P",
+	{ EPSC_g,		"g" },
+	{ EPSC_G,		"G" },
+	{ EPSC_k,		"k" },
+	{ EPSC_K,		"K" },
+	{ EPSC_x,		"x" },
+	{ EPSC_X,		"X" },
+	{ EPSC_p,		"p" },
+	{ EPSC_P,		"P" },
 	
 	// Path Painting operators
-	EPSC_N,			"N",
-	EPSC_n,			"n",
-	EPSC_F,			"F",
-	EPSC_f,			"f",
-	EPSC_S,			"S",
-	EPSC_s,			"s",
-	EPSC_B,			"B",
-	EPSC_b,			"b",
-	EPSC__u,		"*u",
-	EPSC__U,		"*U",
+	{ EPSC_N,		"N" },
+	{ EPSC_n,		"n" },
+	{ EPSC_F,		"F" },
+	{ EPSC_f,		"f" },
+	{ EPSC_S,		"S" },
+	{ EPSC_s,		"s" },
+	{ EPSC_B,		"B" },
+	{ EPSC_b,		"b" },
+	{ EPSC__u,		"*u" },
+	{ EPSC__U,		"*U" },
 
 	// Group operators
-	EPSC_u,			"u",
-	EPSC_U,			"U",
+	{ EPSC_u,		"u" },
+	{ EPSC_U,		"U" },
 	
 	// Graphics state operators
-	EPSC_A,			"A",
-	EPSC_d,			"d",
-	EPSC_i,			"i",
-	EPSC_D,			"D",
-	EPSC_j,			"j",
-	EPSC_J,			"J",
-	EPSC_M,			"M",
-	EPSC_w,			"w",
+	{ EPSC_A,		"A" },
+	{ EPSC_d,		"d" },
+	{ EPSC_i,		"i" },
+	{ EPSC_D,		"D" },
+	{ EPSC_j,		"j" },
+	{ EPSC_J,		"J" },
+	{ EPSC_M,		"M" },
+	{ EPSC_w,		"w" },
 
 	// Special operators
-	EPSC_ArrayStart,"[",
-	EPSC_ArrayEnd,	"]",
-	EPSC_Slash,		"/",
+	{ EPSC_ArrayStart,"[" },
+	{ EPSC_ArrayEnd,"]" },
+	{ EPSC_Slash,	"/" },
 
 	// Overprint operators
-	EPSC_O,			"O",
-	EPSC_R,			"R",
+	{ EPSC_O,		"O" },
+	{ EPSC_R,		"R" },
 
 	// Clipping operators
-	EPSC_q,			"q",
-	EPSC_Q,			"Q",
-	EPSC_H,			"H",
-	EPSC_h,			"h",
-	EPSC_W,			"W",
+	{ EPSC_q,		"q" },
+	{ EPSC_Q,		"Q" },
+	{ EPSC_H,		"H" },
+	{ EPSC_h,		"h" },
+	{ EPSC_W,		"W" },
 	
 	// Text operators
-	EPSC_To,		"To",
-	EPSC_TO,		"TO",
-	EPSC_Tp,		"Tp",
-	EPSC_TP,		"TP",
+	{ EPSC_To,		"To" },
+	{ EPSC_TO,		"TO" },
+	{ EPSC_Tp,		"Tp" },
+	{ EPSC_TP,		"TP" },
 
 	// Matrix operators
-	EPSC_Tm,		"Tm",
-	EPSC_Td,		"Td",
-	EPSC_T_,		"T*",
-	EPSC_TR,		"TR",
+	{ EPSC_Tm,		"Tm" },
+	{ EPSC_Td,		"Td" },
+	{ EPSC_T_,		"T*" },
+	{ EPSC_TR,		"TR" },
 
 	// Text Attribute operators
-	EPSC_Tr,		"Tr",
-	EPSC_Tf,		"Tf",
-	EPSC_Ta,		"Ta",
-	EPSC_Tl,		"Tl",
-	EPSC_Tt,		"Tt",
-	EPSC_TW,		"TW",
-	EPSC_Tw,		"Tw",
-	EPSC_TC,		"TC",
-	EPSC_Tc,		"Tc",
-	EPSC_Ts,		"Ts",
-	EPSC_Ti,		"Ti",
-	EPSC_Tz,		"Tz",
-	EPSC_TA,		"TA",
-	EPSC_Tq,		"Tq",
+	{ EPSC_Tr,		"Tr" },
+	{ EPSC_Tf,		"Tf" },
+	{ EPSC_Ta,		"Ta" },
+	{ EPSC_Tl,		"Tl" },
+	{ EPSC_Tt,		"Tt" },
+	{ EPSC_TW,		"TW" },
+	{ EPSC_Tw,		"Tw" },
+	{ EPSC_TC,		"TC" },
+	{ EPSC_Tc,		"Tc" },
+	{ EPSC_Ts,		"Ts" },
+	{ EPSC_Ti,		"Ti" },
+	{ EPSC_Tz,		"Tz" },
+	{ EPSC_TA,		"TA" },
+	{ EPSC_Tq,		"Tq" },
 
 	// Text Body operators
-	EPSC_Tx,		"Tx",
-	EPSC_Tj,		"Tj",
-	EPSC_TX,		"TX",
-	EPSC_Tk,		"Tk",
-	EPSC_TK,		"TK",
-	EPSC_Tplus,		"T+",
-	EPSC_Tminus,	"T-",
+	{ EPSC_Tx,		"Tx" },
+	{ EPSC_Tj,		"Tj" },
+	{ EPSC_TX,		"TX" },
+	{ EPSC_Tk,		"Tk" },
+	{ EPSC_TK,		"TK" },
+	{ EPSC_Tplus,	"T+" },
+	{ EPSC_Tminus,	"T-" },
 
 	// Misc
-	EPSC_showpage,	"showpage",
-	EPSC_end,		"end",
-	EPSC_ctx,		"ctx",
-	EPSC_ctex,		"ctex",
+	{ EPSC_showpage,"showpage" },
+	{ EPSC_end,		"end" },
+	{ EPSC_ctx,		"ctx" },
+	{ EPSC_ctex,	"ctex" },
 
-	EPSC_Invalid,	"Invalid",
+	{ EPSC_Invalid,	"Invalid" },
 
-	EPSC_Name,		"Name",
-	EPSC_Integer,	"Integer",
-	EPSC_Double,	"Double",
-	EPSC_FixedPoint,"FixedPt",
-	EPSC_String,	"String",
-	EPSC_Comment,	"Comment",
-	EPSC_EOL,		"EOL",
-	EPSC_EOF,		"EOF"
+	{ EPSC_Name,	"Name" },
+	{ EPSC_Integer,	"Integer" },
+	{ EPSC_Double,	"Double" },
+	{ EPSC_FixedPoint,"FixedPt" },
+	{ EPSC_String,	"String" },
+	{ EPSC_Comment,	"Comment" },
+	{ EPSC_EOL,		"EOL" },
+	{ EPSC_EOF,		"EOF" }
 };
 
 
@@ -998,20 +994,20 @@ EPSFilter::EPSFilter()
 	EndOfEPS	= 0;
 
 	// Set up the comment list. These are the known DSC comments, and how to handle them.
-	EPSComments.Add ( "%%BeginProlog", 			"%%EndProlog",			TRUE,	0 );
-	EPSComments.Add ( "%%BeginSetup",			"%%EndSetup",			TRUE,	0 );
-	EPSComments.Add ( "%%BeginDocument",		"%%EndDocument",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginPageSetup",		"%%EndPageSetup",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginDefaults",		"%%EndDefaults",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginEmulation",		"%%EndEmulation",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginPreview",			"%%EndPreview",			FALSE,	0 );
-	EPSComments.Add ( "%%BeginFeature",			"%%EndFeature",			FALSE,	0 );
-	EPSComments.Add ( "%%BeginFile",			"%%EndFile",			FALSE,	0 );
-	EPSComments.Add ( "%%BeginFont",			"%%EndFont",			FALSE,	0 );
-	EPSComments.Add ( "%%BeginProcSet",			"%%EndProcSet",			FALSE,	0 );
-	EPSComments.Add ( "%%BeginResource",		"%%EndResource",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginCustomColor",		"%%EndCustomColor",		FALSE,	0 );
-	EPSComments.Add ( "%%BeginProcessColor",	"%%EndProcessColor",	FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginProlog"), 			_T("%%EndProlog"),			TRUE,	0 );
+	EPSComments.Add ( _T("%%BeginSetup"),			_T("%%EndSetup"),			TRUE,	0 );
+	EPSComments.Add ( _T("%%BeginDocument"),		_T("%%EndDocument"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginPageSetup"),		_T("%%EndPageSetup"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginDefaults"),		_T("%%EndDefaults"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginEmulation"),		_T("%%EndEmulation"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginPreview"),			_T("%%EndPreview"),			FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginFeature"),			_T("%%EndFeature"),			FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginFile"),			_T("%%EndFile"),			FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginFont"),			_T("%%EndFont"),			FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginProcSet"),			_T("%%EndProcSet"),			FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginResource"),		_T("%%EndResource"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginCustomColor"),		_T("%%EndCustomColor"),		FALSE,	0 );
+	EPSComments.Add ( _T("%%BeginProcessColor"),	_T("%%EndProcessColor"),	FALSE,	0 );
 }
 
 /********************************************************************************************
@@ -1052,68 +1048,68 @@ BOOL EPSFilter::InitPrefs()
 #ifndef STANDALONE
 
 	// Register preferences for EPS output.
-	Camelot.DeclareSection("EPS", 5);
-	Camelot.DeclarePref(NULL, "ExportPSType", &XSEPSExportPSType, 0, 2); 
-	Camelot.DeclarePref(NULL, "ExportDPI", &XSEPSExportDPI, 10, 600); 
-	Camelot.DeclarePref(NULL, "ExportTextAsCurves", &XSEPSExportTextAsCurves); 
+	Camelot.DeclareSection(_T("EPS"), 5);
+	Camelot.DeclarePref(NULL, _T("ExportPSType"), &XSEPSExportPSType, 0, 2); 
+	Camelot.DeclarePref(NULL, _T("ExportDPI"), &XSEPSExportDPI, 10, 600); 
+	Camelot.DeclarePref(NULL, _T("ExportTextAsCurves"), &XSEPSExportTextAsCurves); 
 
 	// Register preferences for font mappings from TrueType to PostScript names.
 	// This is used by Camelot EPS (or any other filter or class that wants to use it).
-	Camelot.DeclareSection("EPSFontMapping", 50);
+	Camelot.DeclareSection( _T("EPSFontMapping"), 50);
 
-	static const char FontMappings[][2][30] = 
+	static const TCHAR FontMappings[][2][30] = 
 	{
 		// Standard PostScript font mappings
 
 		//
 		// TrueType name          =>	PostScript name
 		//
-		{ "Times-New-Roman",			"Times-Roman" 					},
-		{ "Times-New-Roman-Bold",		"Times-Bold" 					},
-		{ "Times-New-Roman-Italic",		"Times-Italic" 					},
-		{ "Times-New-Roman-BoldItalic",	"Times-BoldItalic" 				},
-		{ "Arial",						"Helvetica"			 			},
-		{ "Arial-Bold",					"Helvetica-Bold"				},
-		{ "Arial-Italic",				"Helvetica-Oblique"				},
-		{ "Arial-BoldItalic",			"Helvetica-BoldOblique"			},
-		{ "Courier-New",				"Courier"			 			},
-		{ "Courier-New-Bold",			"Courier-Bold"			 		},
-		{ "Courier-New-Italic",			"Courier-Oblique"				},
-		{ "Courier-New-BoldItalic",		"Courier-BoldOblique"			},
-		{ "Michael",					"Palatino-Roman"				},
-		{ "Michael-Bold",				"Palatino-Bold"					},
-		{ "Michael-Italic",				"Palatino-Italic"				},
-		{ "Michael-BoldItalic",			"Palatino-BoldItalic"			},
-		{ "NewSchbook",					"NewCenturySchlbk-Roman" 		},
-		{ "NewSchbook-Bold",			"NewCenturySchlbk-Bold" 		},
-		{ "NewSchbook-Italic",			"NewCenturySchlbk-Italic" 		},
-		{ "NewSchbook-BoldItalic",		"NewCenturySchlbk-BoldItalic"	},
-		{ "ZapfDingbatsBT",				"ZapfDingbats"					},
-		{ "Symbol",						"Symbol"						},
+		{ _T("Times-New-Roman"),			_T("Times-Roman")					},
+		{ _T("Times-New-Roman-Bold"),		_T("Times-Bold")					},
+		{ _T("Times-New-Roman-Italic"),		_T("Times-Italic")					},
+		{ _T("Times-New-Roman-BoldItalic"),	_T("Times-BoldItalic")				},
+		{ _T("Arial"),						_T("Helvetica")			 			},
+		{ _T("Arial-Bold"),					_T("Helvetica-Bold")				},
+		{ _T("Arial-Italic"),				_T("Helvetica-Oblique")				},
+		{ _T("Arial-BoldItalic"),			_T("Helvetica-BoldOblique")			},
+		{ _T("Courier-New"),				_T("Courier")			 			},
+		{ _T("Courier-New-Bold"),			_T("Courier-Bold")			 		},
+		{ _T("Courier-New-Italic"),			_T("Courier-Oblique")				},
+		{ _T("Courier-New-BoldItalic"),		_T("Courier-BoldOblique")			},
+		{ _T("Michael"),					_T("Palatino-Roman")				},
+		{ _T("Michael-Bold"),				_T("Palatino-Bold")					},
+		{ _T("Michael-Italic"),				_T("Palatino-Italic")				},
+		{ _T("Michael-BoldItalic"),			_T("Palatino-BoldItalic")			},
+		{ _T("NewSchbook"),					_T("NewCenturySchlbk-Roman")		},
+		{ _T("NewSchbook-Bold"),			_T("NewCenturySchlbk-Bold")			},
+		{ _T("NewSchbook-Italic"),			_T("NewCenturySchlbk-Italic")		},
+		{ _T("NewSchbook-BoldItalic"),		_T("NewCenturySchlbk-BoldItalic")	},
+		{ _T("ZapfDingbatsBT"),				_T("ZapfDingbats")					},
+		{ _T("Symbol"),						_T("Symbol")						},
 
 #if 0
 		// Currently we have no TrueType equivalents for these fonts.
-		{ "",							"AvantGarde-Book"				},
-		{ "",							"AvantGarde-Demi"				},
-		{ "",							"AvantGarde-BookOblique"		},
-		{ "",							"AvantGarde-DemiOblique"		},
-		{ "",							"Bookman-Light"					},
-		{ "",							"Bookman-Demi"					},
-		{ "",							"Bookman-LightItalic"			},
-		{ "",							"Bookman-DemiItalic"			},
-		{ "",							"ZapfChancery-MediumItalic"		},
+		{ _T(""),							_T("AvantGarde-Book")				},
+		{ _T(""),							_T("AvantGarde-Demi")				},
+		{ _T(""),							_T("AvantGarde-BookOblique")		},
+		{ _T(""),							_T("AvantGarde-DemiOblique")		},
+		{ _T(""),							_T("Bookman-Light")					},
+		{ _T(""),							_T("Bookman-Demi")					},
+		{ _T(""),							_T("Bookman-LightItalic")			},
+		{ _T(""),							_T("Bookman-DemiItalic")			},
+		{ _T(""),							_T("ZapfChancery-MediumItalic")		},
 #endif
 
 		// Terminator
-		{ "",							""								}
+		{ _T(""),							_T("")								}
 	};
 
 	// Loop to declare all of these font mappings...
 	INT32 i = 0;
-	while (cc_strlenCharacters(FontMappings[i][0]) > 0)
+	while (_tcslen(FontMappings[i][0]) > 0)
 	{
-		Camelot.SetPrefDirect("EPSFontMapping", 
-							  (char *) &FontMappings[i][0][0], 
+		Camelot.SetPrefDirect( _T("EPSFontMapping"), 
+							  &FontMappings[i][0][0], 
 							  &FontMappings[i][1][0]); 
 		i++;
 	}

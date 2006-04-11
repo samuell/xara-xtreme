@@ -221,10 +221,10 @@ private:
 	// Matt - 06/02/2001
 	// Accessor and Mutator Functions for m_BarSize[] BarSizeType...
 	BOOL  SetBSTData(INT32 Index, DWORD MaxWidth, DWORD MaxHeight, BYTE TriggeredBar, BYTE HasABackBar);
-	DWORD GetBSTMaxWidth(INT32 Index)		{ if (Index < MAX_BARS) { return m_BarSize[Index].MaxWidth;     } else { ERROR3("Out of range m_BarSize[] index!"); return NULL; }};
-	DWORD GetBSTMaxHeight(INT32 Index)	{ if (Index < MAX_BARS) { return m_BarSize[Index].MaxHeight;    } else { ERROR3("Out of range m_BarSize[] index!"); return NULL; }};
-	BYTE  GetBSTTriggeredBar(INT32 Index) { if (Index < MAX_BARS) { return m_BarSize[Index].TriggeredBar; } else { ERROR3("Out of range m_BarSize[] index!"); return NULL; }};
-	BYTE  GetBSTHasABackBar(INT32 Index)  { if (Index < MAX_BARS) { return m_BarSize[Index].HasABackBar;  } else { ERROR3("Out of range m_BarSize[] index!"); return NULL; }};
+	DWORD GetBSTMaxWidth(INT32 Index)		{ if (Index < MAX_BARS) { return m_BarSize[Index].MaxWidth;     } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
+	DWORD GetBSTMaxHeight(INT32 Index)	{ if (Index < MAX_BARS) { return m_BarSize[Index].MaxHeight;    } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
+	BYTE  GetBSTTriggeredBar(INT32 Index) { if (Index < MAX_BARS) { return m_BarSize[Index].TriggeredBar; } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
+	BYTE  GetBSTHasABackBar(INT32 Index)  { if (Index < MAX_BARS) { return m_BarSize[Index].HasABackBar;  } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
 
 	CC_DECLARE_DYNCREATE(NameGallery)
 };

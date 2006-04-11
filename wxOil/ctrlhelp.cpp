@@ -104,32 +104,31 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ctrlhelp.h"
 
-#include <afxwin.h>
 #include "app.h"
 #include "fixmem.h"
 #include "errors.h"
 #include "ensure.h"
 #include "opdesc.h"
-#include "mainfrm.h"
+#include "camframe.h"
 #include "bblwnd.h"
 #include "ops.h"
 #include "tool.h"
 #include "dlgmgr.h"
-#include "fonts.h"
+//#include "fonts.h"
 #include "keypress.h"
-#include "childbar.h"
+//#include "childbar.h"
 #include "statline.h"
 
 //#include "textres.h"	// required so we know what an _R(IDC_FONT_COMBO) is.
 #include "textinfo.h"	// required so we know what a TextInfoBarOp is.
 
-#include "bitbutn.h"
+//#include "bitbutn.h"
 
 #define STATE_TRACE 0
 
 
-const HWND EMPTY_SLOT = NULL;
-extern HWND LastPointerInButton; // for new flat look - last button plinthed
+wxWindow* EMPTY_SLOT = NULL;
+extern wxWindow* LastPointerInButton; // for new flat look - last button plinthed
 								 // refers to the global variable defined in bitbutn.cpp
 
 /********************************************************************************************
@@ -153,14 +152,14 @@ public:
 	~BarTable();
 	BOOL Init();
 
-	BOOL AddBar(HWND);
-	BOOL DeleteBar(HWND);
-	BOOL ChangeBar(HWND, HWND);
+	BOOL AddBar(wxWindow*);
+	BOOL DeleteBar(wxWindow*);
+	BOOL ChangeBar(wxWindow*, wxWindow*);
 
-	BOOL IsABar(HWND);
+	BOOL IsABar(wxWindow*);
 
 private:
-	INT32 FindBarIndex(HWND);
+	INT32 FindBarIndex(wxWindow*);
 
 	enum
 	{
@@ -170,7 +169,7 @@ private:
 		InitialSize = 10
 	};
 
-	HWND *Table;
+	wxWindow** Table;
 	INT32 TableSize;
 };
 
@@ -226,7 +225,7 @@ BarTable::~BarTable()
 BOOL BarTable::Init()
 {
 	// Try to get some space for our table.
-	Table = (HWND *) CCMalloc(BarTable::InitialSize * sizeof(HWND));
+	Table = (wxWindow**) CCMalloc(BarTable::InitialSize * sizeof(wxWindow*));
 	if (Table == NULL)
 		return FALSE;
 
@@ -246,7 +245,7 @@ BOOL BarTable::Init()
 
 /********************************************************************************************
 
->	BOOL BarTable::AddBar(HWND Window)
+>	BOOL BarTable::AddBar(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -260,7 +259,7 @@ BOOL BarTable::Init()
 
 ********************************************************************************************/
 
-BOOL BarTable::AddBar(HWND Window)
+BOOL BarTable::AddBar(wxWindow* Window)
 {
 	// Basic sanity checks.
 	ENSURE(Window != NULL, "NULL window handle in BarTable::AddBar");
@@ -276,7 +275,7 @@ BOOL BarTable::AddBar(HWND Window)
 	{
 		// No free slots - extend the table.
 		INT32 NewTableSize = TableSize + BarTable::Granularity;
-		HWND *NewTable = (HWND *) CCRealloc((void*)Table, NewTableSize * sizeof(HWND));
+		wxWindow* *NewTable = (wxWindow* *) CCRealloc((void*)Table, NewTableSize * sizeof(wxWindow*));
 		if (NewTable == NULL)
 			return FALSE;
 
@@ -298,7 +297,7 @@ BOOL BarTable::AddBar(HWND Window)
 
 /********************************************************************************************
 
->	BOOL BarTable::DeleteBar(HWND Window)
+>	BOOL BarTable::DeleteBar(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -312,7 +311,7 @@ BOOL BarTable::AddBar(HWND Window)
 
 ********************************************************************************************/
 
-BOOL BarTable::DeleteBar(HWND Window)
+BOOL BarTable::DeleteBar(wxWindow* Window)
 {
 	// Basic sanity checks
 	ENSURE(Window != 0, "NULL Window handle in BarTable::DeleteBar!");
@@ -337,7 +336,7 @@ BOOL BarTable::DeleteBar(HWND Window)
 
 /********************************************************************************************
 
->	BOOL BarTable::ChangeBar(HWND Old, HWND New)
+>	BOOL BarTable::ChangeBar(wxWindow* Old, wxWindow* New)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/04/94
@@ -352,7 +351,7 @@ BOOL BarTable::DeleteBar(HWND Window)
 
 ********************************************************************************************/
 
-BOOL BarTable::ChangeBar(HWND Old, HWND New)
+BOOL BarTable::ChangeBar(wxWindow* Old, wxWindow* New)
 {
 	// Basic sanity checks
 	ENSURE((Old != NULL) && (New != NULL), "NULL Window handle in BarTable::ChangeBar!");
@@ -378,7 +377,7 @@ BOOL BarTable::ChangeBar(HWND Old, HWND New)
 
 /********************************************************************************************
 
->	BOOL BarTable::IsABar(HWND Window)
+>	BOOL BarTable::IsABar(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/04/94
@@ -391,7 +390,7 @@ BOOL BarTable::ChangeBar(HWND Old, HWND New)
 
 ********************************************************************************************/
 
-BOOL BarTable::IsABar(HWND Window)
+BOOL BarTable::IsABar(wxWindow* Window)
 {
 	ENSURE(Window != NULL, "NULL Window in BarTable::IsABar");
 	if (Window == NULL)
@@ -402,7 +401,7 @@ BOOL BarTable::IsABar(HWND Window)
 
 /********************************************************************************************
 
->	INT32 BarTable::FindBarIndex(HWND Window)
+>	INT32 BarTable::FindBarIndex(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -416,7 +415,7 @@ BOOL BarTable::IsABar(HWND Window)
 
 ********************************************************************************************/
 
-INT32 BarTable::FindBarIndex(HWND Window)
+INT32 BarTable::FindBarIndex(wxWindow* Window)
 {
 	// Scane the table for this entry
 	INT32 i = 0;
@@ -540,7 +539,7 @@ BOOL ControlTable::Init()
 
 /********************************************************************************************
 
->	BOOL ControlTable::AddControl(HWND Window, ControlHelpInfo *pInfo, WNDPROC WndProc)
+>	BOOL ControlTable::AddControl(wxWindow* Window, ControlHelpInfo *pInfo, WNDPROC WndProc)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -557,7 +556,9 @@ BOOL ControlTable::Init()
 
 ********************************************************************************************/
 
-BOOL ControlTable::AddControl(HWND Window, ControlHelpInfo* pInfo, WNDPROC WndProc)
+PORTNOTE( "dialog", "Remove function that needs WNDPROC" )
+#if !defined(EXCLUDE_FROM_XARALX)
+BOOL ControlTable::AddControl(wxWindow* Window, ControlHelpInfo* pInfo, WNDPROC WndProc)
 {
 	// Basic sanity checks.
 	ERROR3IF(pInfo == NULL, "Null ControlHelpInfo* in ControlTable::AddControl");
@@ -620,10 +621,11 @@ BOOL ControlTable::AddControl(HWND Window, ControlHelpInfo* pInfo, WNDPROC WndPr
 	// Everything worked
 	return TRUE;
 }
+#endif
 
 /********************************************************************************************
 
->	WNDPROC ControlTable::DeleteControl(HWND Window, HWND *RealWindow)
+>	WNDPROC ControlTable::DeleteControl(wxWindow* Window, wxWindow* *RealWindow)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -644,7 +646,7 @@ BOOL ControlTable::AddControl(HWND Window, ControlHelpInfo* pInfo, WNDPROC WndPr
 
 ********************************************************************************************/
 
-WNDPROC ControlTable::DeleteControl(HWND Window, HWND *RealWindow)
+WNDPROC ControlTable::DeleteControl(wxWindow* Window, wxWindow* *RealWindow)
 {
 	// Basic sanity checks
 	ENSURE(Window != 0, "NULL Window handle in ControlTable::DeleteControl!");
@@ -668,7 +670,7 @@ WNDPROC ControlTable::DeleteControl(HWND Window, HWND *RealWindow)
 	return Table[i].WndProc;
 }
 
-BOOL ControlTable::ChangeControl(HWND Window, ControlHelpInfo *pInfo)
+BOOL ControlTable::ChangeControl(wxWindow* Window, ControlHelpInfo *pInfo)
 {
 	INT32 i = FindControlIndex(Window);
 
@@ -685,7 +687,7 @@ BOOL ControlTable::ChangeControl(HWND Window, ControlHelpInfo *pInfo)
 
 /********************************************************************************************
 
->	ControlEntry *ControlTable::FindControl(HWND Window)
+>	ControlEntry *ControlTable::FindControl(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -698,7 +700,7 @@ BOOL ControlTable::ChangeControl(HWND Window, ControlHelpInfo *pInfo)
 
 ********************************************************************************************/
 
-ControlEntry *ControlTable::FindControl(HWND Window)
+ControlEntry *ControlTable::FindControl(wxWindow* Window)
 {
 	INT32 i=FindControlIndex(Window);
 
@@ -711,7 +713,7 @@ ControlEntry *ControlTable::FindControl(HWND Window)
 
 /********************************************************************************************
 
->	INT32 ControlTable::FindControlIndex(HWND Window, BOOL IgnoreChildren = TRUE)
+>	INT32 ControlTable::FindControlIndex(wxWindow* Window, BOOL IgnoreChildren = TRUE)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -728,7 +730,7 @@ ControlEntry *ControlTable::FindControl(HWND Window)
 
 ********************************************************************************************/
 
-INT32 ControlTable::FindControlIndex(HWND Window, BOOL IgnoreChildren)
+INT32 ControlTable::FindControlIndex(wxWindow* Window, BOOL IgnoreChildren)
 {
 	// Scan the table for this entry...
 	INT32 i;
@@ -770,7 +772,7 @@ ControlTable *ControlHelper::Controls = NULL;
 BarTable *ControlHelper::Bars = NULL;
 
 // Window handle of the last control that the cursor was over.
-HWND ControlHelper::LastControl = NULL;
+wxWindow* ControlHelper::LastControl = NULL;
 
 // The last position of the cursor (used to defer bubble help updates).
 POINT ControlHelper::LastPos = {-1, -1};
@@ -788,7 +790,7 @@ ControlHelper::BubbleState ControlHelper::BubbleHelpState = STATE_DEAD;
 BOOL ControlHelper::ControlHasFocus = FALSE;
 
 // Variables for ad-hoc bubble help
-HWND ControlHelper::AdHocWindow = NULL;
+wxWindow* ControlHelper::AdHocWindow = NULL;
 UINT32 ControlHelper::AdHocControl = 0;
 BOOL ControlHelper::AdHocControlIsDifferent = TRUE;
 void *ControlHelper::AdHocReference = NULL;
@@ -849,7 +851,7 @@ void ControlHelper::DeInit()
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyBarCreated(HWND Window)
+>	BOOL ControlHelper::NotifyBarCreated(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/04/94
@@ -863,7 +865,7 @@ void ControlHelper::DeInit()
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyBarCreated(HWND Window)
+BOOL ControlHelper::NotifyBarCreated(wxWindow* Window)
 {
 	// Sanity checks
 	ENSURE(Bars != NULL, "ControlHelper has not been initialised successfully");
@@ -875,7 +877,7 @@ BOOL ControlHelper::NotifyBarCreated(HWND Window)
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyBarDeleted(HWND Window)
+>	BOOL ControlHelper::NotifyBarDeleted(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/04/94
@@ -887,7 +889,7 @@ BOOL ControlHelper::NotifyBarCreated(HWND Window)
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyBarDeleted(HWND Window)
+BOOL ControlHelper::NotifyBarDeleted(wxWindow* Window)
 {
 	// Sanity checks
 	ENSURE(Bars != NULL, "ControlHelper has not been initialised successfully");
@@ -899,7 +901,7 @@ BOOL ControlHelper::NotifyBarDeleted(HWND Window)
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyBarChanged(HWND Old, HWND New)
+>	BOOL ControlHelper::NotifyBarChanged(wxWindow* Old, wxWindow* New)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/04/94
@@ -913,7 +915,7 @@ BOOL ControlHelper::NotifyBarDeleted(HWND Window)
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyBarChanged(HWND Old, HWND New)
+BOOL ControlHelper::NotifyBarChanged(wxWindow* Old, wxWindow* New)
 {
 	// Sanity checks
 	ENSURE(Bars != NULL, "ControlHelper has not been initialised successfully");
@@ -927,7 +929,7 @@ BOOL ControlHelper::NotifyBarChanged(HWND Old, HWND New)
 
 /********************************************************************************************
 
->	BOOL ControlHelper::AddControl(HWND Window, ControlHelpInfo *pInfo)
+>	BOOL ControlHelper::AddControl(wxWindow* Window, ControlHelpInfo *pInfo)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	10/05/94
@@ -942,7 +944,7 @@ BOOL ControlHelper::NotifyBarChanged(HWND Old, HWND New)
 
 ********************************************************************************************/
 
-BOOL ControlHelper::AddControl(HWND Window, ControlHelpInfo *pInfo)
+BOOL ControlHelper::AddControl(wxWindow* Window, ControlHelpInfo *pInfo)
 {
 	// Firstly, try to add this control
 	WNDPROC WndProc = (WNDPROC) ::GetWindowLong(Window, GWL_WNDPROC);
@@ -955,7 +957,7 @@ BOOL ControlHelper::AddControl(HWND Window, ControlHelpInfo *pInfo)
 	::SetWindowLong(Window, GWL_WNDPROC, (INT32) MyWndProc);
 
 	// Now try to add/subclass all the children...
-	HWND Child;
+	wxWindow* Child;
 	Child = ::GetWindow(Window, GW_CHILD);
 
 	while (Child != NULL)
@@ -965,7 +967,7 @@ BOOL ControlHelper::AddControl(HWND Window, ControlHelpInfo *pInfo)
 			goto Failure;
 
 		// Get the next child window, if any.
-		Child = ::GetWindow(Child, GW_HWNDNEXT);
+		Child = ::GetWindow(Child, GW_wxWindow*NEXT);
 	}
 
 	// Success!
@@ -977,7 +979,7 @@ Failure:
 	// function, and we only want to do this once).
 	if (Window == pInfo->Parent)
 	{
-		HWND RealWindow;
+		wxWindow* RealWindow;
 
 		while ((WndProc = Controls->DeleteControl(Window, &RealWindow)) != NULL)
 		{
@@ -995,7 +997,7 @@ Failure:
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyControlCreated(HWND Window, ControlHelpInfo *pInfo)
+>	BOOL ControlHelper::NotifyControlCreated(wxWindow* Window, ControlHelpInfo *pInfo)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -1010,7 +1012,7 @@ Failure:
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyControlCreated(HWND Window, ControlHelpInfo *pInfo)
+BOOL ControlHelper::NotifyControlCreated(wxWindow* Window, ControlHelpInfo *pInfo)
 {
 	// Sanity checks
 	ENSURE(Controls != NULL, "ControlHelper has not been initialised successfully");
@@ -1031,7 +1033,7 @@ BOOL ControlHelper::NotifyControlCreated(HWND Window, ControlHelpInfo *pInfo)
 	return TRUE;
 }
 
-BOOL ControlHelper::NotifyControlCreated(HWND Window, OpDescriptor *pOpDesc)
+BOOL ControlHelper::NotifyControlCreated(wxWindow* Window, OpDescriptor *pOpDesc)
 {
 	ControlHelpInfo Info;
 	Info.pOpDesc = pOpDesc;
@@ -1044,7 +1046,7 @@ BOOL ControlHelper::NotifyControlCreated(HWND Window, OpDescriptor *pOpDesc)
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyControlChanged(HWND Window, ControlHelpInfo* pInfo)
+>	BOOL ControlHelper::NotifyControlChanged(wxWindow* Window, ControlHelpInfo* pInfo)
 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/04/95
@@ -1059,7 +1061,7 @@ BOOL ControlHelper::NotifyControlCreated(HWND Window, OpDescriptor *pOpDesc)
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyControlChanged(HWND Window, ControlHelpInfo* pInfo)
+BOOL ControlHelper::NotifyControlChanged(wxWindow* Window, ControlHelpInfo* pInfo)
 {
 	if (Controls == NULL)
 		return FALSE;
@@ -1072,7 +1074,7 @@ BOOL ControlHelper::NotifyControlChanged(HWND Window, ControlHelpInfo* pInfo)
 
 /********************************************************************************************
 
->	BOOL ControlHelper::NotifyControlDeleted(HWND Window)
+>	BOOL ControlHelper::NotifyControlDeleted(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -1085,7 +1087,7 @@ BOOL ControlHelper::NotifyControlChanged(HWND Window, ControlHelpInfo* pInfo)
 
 ********************************************************************************************/
 
-BOOL ControlHelper::NotifyControlDeleted(HWND Window)
+BOOL ControlHelper::NotifyControlDeleted(wxWindow* Window)
 {
 	ENSURE(Controls != NULL, "ControlHelper has not been initialised successfully");
 	ENSURE(Window != NULL, "NULL Window handle in ControlHelper::NotifyControlDeleted");
@@ -1096,7 +1098,7 @@ BOOL ControlHelper::NotifyControlDeleted(HWND Window)
 	if ((Window == LastControl) && (BubbleHelpState != STATE_DEAD))
 		SetState(STATE_DEAD);
 
-	HWND RealWindow;
+	wxWindow* RealWindow;
 	WNDPROC OldWndProc;
 
 	while ((OldWndProc = Controls->DeleteControl(Window, &RealWindow)) != NULL)
@@ -1115,7 +1117,7 @@ BOOL ControlHelper::NotifyControlDeleted(HWND Window)
 
 
 /*****************************************************************************
->	static BOOL ControlHelper::GetStatusLineText(String_256* ptext, HWND window)
+>	static BOOL ControlHelper::GetStatusLineText(String_256* ptext, wxWindow* window)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/11/94
@@ -1123,7 +1125,7 @@ BOOL ControlHelper::NotifyControlDeleted(HWND Window)
 	Purpose:	Get status-line text for a control with given WHND
 *****************************************************************************/
 
-BOOL ControlHelper::GetStatusLineText(String_256* ptext, HWND window)
+BOOL ControlHelper::GetStatusLineText(String_256* ptext, wxWindow* window)
 {
 	if (window==NULL)
 		return FALSE;
@@ -1144,7 +1146,7 @@ BOOL ControlHelper::GetStatusLineText(String_256* ptext, HWND window)
 
 /********************************************************************************************
 
->	LRESULT ControlHelper::MyWndProc(HWND Window, UINT32 Msg, WPARAM wParam, LPARAM lParam)
+>	LRESULT ControlHelper::MyWndProc(wxWindow* Window, UINT32 Msg, WPARAM wParam, LPARAM lParam)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/04/94
@@ -1157,7 +1159,7 @@ BOOL ControlHelper::GetStatusLineText(String_256* ptext, HWND window)
 
 ********************************************************************************************/
 
-LRESULT ControlHelper::MyWndProc(HWND Window, UINT32 Msg, WPARAM wParam, LPARAM lParam)
+LRESULT ControlHelper::MyWndProc(wxWindow* Window, UINT32 Msg, WPARAM wParam, LPARAM lParam)
 {
 	ENSURE(Window != 0, "NULL Window handle in ControlHelper::MyWndProc");
 
@@ -1282,8 +1284,8 @@ LRESULT ControlHelper::MyWndProc(HWND Window, UINT32 Msg, WPARAM wParam, LPARAM 
 							}
 							else if (wParam == CAMKEY(RETURN) || wParam == CAMKEY(TAB))
 							{
-								HWND BarWnd;
-								HWND CtlWnd; 
+								wxWindow* BarWnd;
+								wxWindow* CtlWnd; 
 					
 								String_256 ClassNameStr;  // The control type
 
@@ -1370,8 +1372,8 @@ LRESULT ControlHelper::MyWndProc(HWND Window, UINT32 Msg, WPARAM wParam, LPARAM 
 									else
 									{
 										// Move focus to the next (previous) control, just like Windows.
-										HWND hwndNewFocus = ::GetNextDlgTabItem(BarWnd, Window, ::GetKeyState(CAMKEY(SHIFT)) < 0);
-										if (hwndNewFocus != NULL) ::SetFocus(hwndNewFocus);
+										wxWindow* wxWindow*NewFocus = ::GetNextDlgTabItem(BarWnd, Window, ::GetKeyState(CAMKEY(SHIFT)) < 0);
+										if (wxWindow*NewFocus != NULL) ::SetFocus(wxWindow*NewFocus);
 									}
 									return FALSE;
 								}
@@ -1415,13 +1417,13 @@ void ControlHelper::ServiceBubbleHelp()
 	// Find out which window the cursor is over.
 	POINT Pos;
 	::GetCursorPos(&Pos);
-	HWND ThisControl = ::WindowFromPoint(Pos);
+	wxWindow* ThisControl = ::WindowFromPoint(Pos);
 
 	if ((ThisControl != NULL) /*&& (IsWindowVisible (ThisControl))*/)
 	{
 		// This code copes with disabled controls...
 
-		// To look at the child windows of hWnd, screen coordinates
+		// To look at the child windows of wxWindow*, screen coordinates
 		// need to be converted to client coordinates.
 		POINT ClientPos = Pos;
 		ScreenToClient(ThisControl, &ClientPos);
@@ -1430,7 +1432,7 @@ void ControlHelper::ServiceBubbleHelp()
 		// will continue until no child windows remain.
 		while (TRUE)
 		{
-			HWND Child = ChildWindowFromPoint(ThisControl, ClientPos);
+			wxWindow* Child = ChildWindowFromPoint(ThisControl, ClientPos);
 
 			if ((Child != NULL) && (Child != ThisControl))
 				ThisControl = Child;
@@ -1453,7 +1455,7 @@ void ControlHelper::ServiceBubbleHelp()
 		DWORD LastError = ::GetLastError();
 		if (!::IsWindow(ThisControl))
 		{
-			TRACE( _T("BubbleHelp HWND bug - ThisControl is invalid (0x%p), GetLastError is 0x%lX\n"),
+			TRACE( _T("BubbleHelp wxWindow* bug - ThisControl is invalid (0x%p), GetLastError is 0x%lX\n"),
 					(LPVOID) ThisControl, LastError);
 			return;
 		}
@@ -1484,7 +1486,7 @@ void ControlHelper::ServiceBubbleHelp()
 
 /********************************************************************************************
 
->	void ControlHelper::BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC WndProc)
+>	void ControlHelper::BubbleHelpStateMachine(POINT Pos, wxWindow* ThisControl, WNDPROC WndProc)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/06/94
@@ -1503,7 +1505,7 @@ void ControlHelper::ServiceBubbleHelp()
 
 ********************************************************************************************/
 
-void ControlHelper::BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC WndProc)
+void ControlHelper::BubbleHelpStateMachine(POINT Pos, wxWindow* ThisControl, WNDPROC WndProc)
 {
 	// can sometimes be called with a NULL handle if pointer has found its way offscreen
 	if(ThisControl== NULL)
@@ -1618,7 +1620,7 @@ void ControlHelper::BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC 
 			break;
 
 		case STATE_ACTIVE:
-			if (BubbleWnd->GetSafeHwnd() == ThisControl)
+			if (BubbleWnd->GetSafewxWindow*() == ThisControl)
 			{
 				// We're over our own bubble window - disable it for a bit.
 				SetState(STATE_UPDATE_PENDING);
@@ -1698,7 +1700,7 @@ void ControlHelper::BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC 
 
 /********************************************************************************************
 
->	void ControlHelper::SetState(BubbleState NewState, HWND Window)
+>	void ControlHelper::SetState(BubbleState NewState, wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/06/94
@@ -1714,7 +1716,7 @@ void ControlHelper::BubbleHelpStateMachine(POINT Pos, HWND ThisControl, WNDPROC 
 
 ********************************************************************************************/
 
-void ControlHelper::SetState(BubbleState NewState, HWND Window)
+void ControlHelper::SetState(BubbleState NewState, wxWindow* Window)
 {
 	// Find out which state to change to.
 	switch (NewState)
@@ -1772,7 +1774,7 @@ void ControlHelper::DeadHandler()
 
 /********************************************************************************************
 
->	void ControlHelper::ActiveHandler(HWND Window)
+>	void ControlHelper::ActiveHandler(wxWindow* Window)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/06/94
@@ -1788,7 +1790,7 @@ void ControlHelper::DeadHandler()
 
 ********************************************************************************************/
 
-void ControlHelper::ActiveHandler(HWND Window)
+void ControlHelper::ActiveHandler(wxWindow* Window)
 {
 	// Sanity checks
 	ENSURE(Window != NULL, "Bad handle in control helper ActiveHandler()");
@@ -1821,8 +1823,8 @@ void ControlHelper::ActiveHandler(HWND Window)
 	}
 
 	// Only do bubble help if our application is active.
-	HWND Active  = ::GetActiveWindow();
-	HWND MainWnd = pMainWnd->m_hWnd;
+	wxWindow* Active  = ::GetActiveWindow();
+	wxWindow* MainWnd = pMainWnd->m_wxWindow*;
 
 	if ((Active != MainWnd) && (::GetParent(Active) != MainWnd))
 	{
@@ -2200,7 +2202,7 @@ void ControlHelper::BubbleHelpKill()
 
 /********************************************************************************************
 
->	void ControlHelper::DoBubbleHelpOn(HWND Window, UINT32 NewControl, 
+>	void ControlHelper::DoBubbleHelpOn(wxWindow* Window, UINT32 NewControl, 
 									   BubbleHelpCallback Callback, void *Reference)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
@@ -2224,7 +2226,7 @@ void ControlHelper::BubbleHelpKill()
 
 ********************************************************************************************/
 
-void ControlHelper::DoBubbleHelpOn(HWND Window, UINT32 NewControl, 
+void ControlHelper::DoBubbleHelpOn(wxWindow* Window, UINT32 NewControl, 
 								   BubbleHelpCallback Callback, void *Reference)
 {
 	// Caller is telling us that they have detected a mouse move over one of their
@@ -2333,14 +2335,14 @@ BOOL ControlHelper::IsUserInterfaceCaptured()
 	// Find out the handle of our main window
 	CWnd *pMainCWnd = AfxGetMainWnd();
 
-	HWND MainHwnd = NULL;
+	wxWindow* MainwxWindow* = NULL;
 
 	if (pMainCWnd != NULL)
-		MainHwnd = pMainCWnd->GetSafeHwnd();
+		MainwxWindow* = pMainCWnd->GetSafewxWindow*();
 
 	// Find out which window, if any, is captured.
-	HWND CapturedHwnd = ::GetCapture();
+	wxWindow* CapturedwxWindow* = ::GetCapture();
 
 	// Return TRUE if mouse is captured, and it is not our window.
-	return ((CapturedHwnd != NULL) && (CapturedHwnd != MainHwnd));
+	return ((CapturedwxWindow* != NULL) && (CapturedwxWindow* != MainwxWindow*));
 }
