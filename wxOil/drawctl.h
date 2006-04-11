@@ -192,6 +192,7 @@ public:
 
 	// EventHandlers
 	void OnPaint(wxPaintEvent & event);
+	void OnMouseEvent(wxMouseEvent & event);
 	void OnInvoke(wxCamDrawControlEvent& event);
 
 	virtual void SetStyle(wxCamDrawControlStyle style) { m_CamDrawControlStyle=style; }

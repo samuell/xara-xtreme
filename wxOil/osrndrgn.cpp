@@ -2200,17 +2200,22 @@ void OSRenderRegion::DrawCross(const DocCoord &Point, const UINT32 Size)
 
 void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect, UINT32 uFormat /* = FORMAT_SINGLELINE | FORMAT_NOPREFIX | FORMAT_VCENTER */)
 {
-	PORTNOTETRACE("text","OSRenderRegion::DrawFixedSystemText - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	WinRect Rect(0,0,0,0);
+	wxString Text = (wxString)(TCHAR *)(*TheText);
+	wxRect Rect(0,0,0,0);
 	if (uFormat & FORMAT_CALCRECT) // just calculate the rect needed to draw the text and return
 	{
 		INT32 LineHeight = 0;
 		// This won't actually draw the text, instead it returns a rectangle in 'Rect'	
-		LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
+		// LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
+		LineHeight = RenderDC->GetCharHeight();
+		wxCoord w, h;
+		RenderDC->GetTextExtent(Text, &w, &h);
+		Rect = wxRect(0, 0, w, h);
 
-		INT32 XDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSX);
-		INT32 YDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSY);
+		wxDC * pDC = RenderDC;
+		wxSize DPI = GetFixedDCPPI(*pDC);
+		INT32 XDPI = DPI.GetWidth();
+		INT32 YDPI = DPI.GetHeight();
 
 		if(XDPI == 0 || YDPI == 0 || LineHeight == 0)
 		{
@@ -2226,24 +2231,24 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 		return;
 	}
 	
-	
-	Rect = DocRectToWin(BoundsRect, 0,-1,1,0, TRUE);
+	Rect = DocRectToWin(BoundsRect, 0,0,0,0, TRUE);
+	// Rect = DocRectToWin(BoundsRect, 0,-1,1,0, TRUE);
 
 	// Small 'fix' - If we DrawRect the 'BoundsRect' then windows draws the text 1 pixel
 	// further to the right than the rectangle. This just ensures that the text is always
 	// clipped inside the rectangle rather than outside (at worst, a pixel too far inside)
 	if (Rect.width>0)		// Still a valid rectangle?
 	{
-		Rect.x--;
-		INT32 LineHeight;
+//		Rect.x--;
+//		INT32 LineHeight;
 
 		RenderDC->SetBackgroundMode(wxTRANSPARENT);
+		RenderDC->DrawText(Text, Rect.GetLeft(), Rect.GetTop());
 
-		LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
+//		LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
 
-		ENSURE(LineHeight > 0, "OSRenderRegion::DrawFixedSystemText failed");
+//		ENSURE(LineHeight > 0, "OSRenderRegion::DrawFixedSystemText failed");
 	}
-#endif
 }
 
 
@@ -2328,37 +2333,39 @@ void OSRenderRegion::SetFixedSystemTextColours(DocColour *TextCol, DocColour *Ba
 
 void OSRenderRegion::GetFixedSystemTextSize(StringBase *TheText, DocRect *BoundsRect, double* atDpi)
 {
-	PORTNOTETRACE("text","OSRenderRegion::GetFixedSystemTextSize - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+	wxString Text = (wxString)(TCHAR *)(*TheText);
+
 	ERROR3IF(TheText == NULL, "OSRenderRegion::GetFixedSystemTextSize given a null text pointer");
 	ERROR3IF(BoundsRect == NULL, "OSRenderRegion::GetFixedSystemTextSize given a null bounds rect pointer");
 	if(TheText == NULL || BoundsRect == NULL)
 		return;
 
-	WinRect Rect(0,0,0,0);
 	INT32 LineHeight = 0;
-
 	// This won't actually draw the text, instead it returns a rectangle in 'Rect'	
-	LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect,
-									DT_SINGLELINE | DT_NOPREFIX | DT_CALCRECT);
+	// LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
+	LineHeight = RenderDC->GetCharHeight();
+	wxCoord w, h;
+	RenderDC->GetTextExtent(Text, &w, &h);
+	wxRect Rect(0, 0, w, h);
 
-	INT32 XDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSX);
-	INT32 YDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSY);
+	wxDC * pDC = RenderDC;
+	wxSize DPI = GetFixedDCPPI(*pDC);
+	INT32 XDPI = DPI.GetWidth();
+	INT32 YDPI = DPI.GetHeight();
 
 	if(XDPI == 0 || YDPI == 0 || LineHeight == 0)
 	{
-		ERROR3("OSRenderRegion::GetFixedSystemTextSize failed");
-	  	*BoundsRect = DocRect(0, 0, 0, 0);
+		ERROR3("Can not calculate text size");
+		*BoundsRect = DocRect(0, 0, 0, 0);
 		return;
 	}
-
 	// For some reason, Rect.bottom and Rect.top seem to be incorrect, so we have
 	// to use the returned LineHeight value
-
 	*BoundsRect = DocRect(0, 0,
-						  (INT32)(((double)Rect.width * IN_MP_VAL) / XDPI),
-						  (INT32)(((double)LineHeight * IN_MP_VAL) / YDPI) );
-#endif
+							(INT32)(((double)Rect.width * IN_MP_VAL) / XDPI),
+							(INT32)(((double)LineHeight * IN_MP_VAL) / YDPI) );
+	return;
+
 }
 
 
@@ -3355,105 +3362,25 @@ void OSRenderRegion::DrawBitmap(const DocCoord &Point, KernelBitmap* pBitmap)
 
 void OSRenderRegion::DrawBitmap(const DocCoord &Point, UINT32 BitmapID, UINT32 ToolID)
 {
-	PORTNOTETRACE("other","OSRenderRegion::DrawBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// If we are not drawing complex shapes and this shape is, then return
 	if ((!RenderComplexShapes) && (TestForComplexShape(&Caps)))
 		return;
 
-	HBITMAP hBmp;
+	wxBitmap * pBitmap=CamArtProvider::Get()->FindBitmap((ResourceID)BitmapID);
 
-	if (ToolID != NULL)
-	{
-		// Find the tool that contains our Bitmap	
-		OILTool* pTheTool = Tool::GetOILTool(ToolID);
-
-		if (pTheTool == NULL)
-		{
-			TRACE( _T("Couldn't find the tool in DrawBitmapBlob\n"));
-			return;
-		}
-
-		// Ask the Tool to load the bitmap and return a Handle
-		hBmp = pTheTool->LoadBitmap(BitmapID);
-	}
-	else
-	{
-		// No tool was specified, so we'll try the Kernel
-		hBmp = ::LoadBitmap(AfxGetResourceHandle(), MAKEINTRESOURCE(BitmapID));
-	}
-
-	if (hBmp == 0) 
-	{	
-		TRACE( _T("Bitmap failed to Load in DrawBitmapBlob\n"));
+	if (!pBitmap)
 		return;
-	}
-	
-	// Make a Bitmap Object 
-	CBitmap Bitmap;
-	BOOL ok = Bitmap.Attach(hBmp);
-
-	if (!ok) 
-	{	
-		TRACE( _T("CBitmap failed to create in DrawBitmapBlob\n"));
-		return;
-	}
-
-	// Find out how big the Bitmap Info is
-	INT32 NumBytes = GetObject(hBmp, 0, NULL);
-
-	// Make a Info Structure big enough to hold it
-	BITMAPINFOHEADER* pBmpInfo = (BITMAPINFOHEADER*)new BYTE[NumBytes];
-
-	if (pBmpInfo == NULL) 
-	{
-		TRACE( _T("Not enough memory for BitmapInfo in DrawBitmapBlob\n"));
-		return;
-	}
-
-	// Get Info on the Bitmap
-	GetObject(hBmp, NumBytes, pBmpInfo);
 
 	// Extract the Width and Height
-	INT32 Width  = pBmpInfo->biWidth;
-	INT32 Height = pBmpInfo->biHeight;
-
-	delete pBmpInfo;	// Don't need this any more
+	// INT32 Width  = pBitmap->GetWidth();
+	INT32 Height = pBitmap->GetHeight();
 
 	// Convert the DocCoord into a windows coord
-	POINT Origin = DocCoordToWin(Point);
+	wxPoint Origin = DocCoordToWin(Point);
 	Origin.y = Origin.y - Height;	// Translate bottom left to top left
 
-	CDC MemDC;
-	// Create a Memory DC based on this render region
-	MemDC.CreateCompatibleDC(RenderDC);
-	// And select the Bitmap into it
-	CBitmap* OldBmp = MemDC.SelectObject(&Bitmap);
+	RenderDC->DrawBitmap(*pBitmap, Origin.x, Origin.y, TRUE);
 
-	if (OldBmp == NULL) 
-	{
-		TRACE( _T("Couldn't select Bitmap into CDC in DrawBitmapBlob\n"));
-		return;
-	}
-
-	// Plot the bitmap onto this render region
-	RenderDC->BitBlt(			Origin.x, Origin.y,
-								Width,
-								Height,
-								&MemDC,
-								0,0,
-								SRCCOPY
-								);
-
-	// Unselect our bitmap and delete it
-	MemDC.SelectObject(OldBmp);
-
-	ok = Bitmap.DeleteObject();
-	if (!ok)
-	{
-	 	TRACE( _T("Delete Bitmap failed in DrawBitmapBlob\n"));
-	}
-#endif
 }
 
 BOOL OSRenderRegion::DrawTransformedBitmap(NodeBitmap *pNodeBitmap)

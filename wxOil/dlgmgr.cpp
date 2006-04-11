@@ -992,9 +992,69 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	//case	wxEVT_COMMAND_TOOL_RCLICKED:
 	//case	wxEVT_COMMAND_TOOL_ENTER:
 
+
+	// Handle filling in ExtraInfo on redraw events
+	if ((msg.DlgMsg != DIM_NONE) && pGadget && pGadget->IsKindOf(CLASSINFO(wxCamDrawControl)) && event.IsKindOf(CLASSINFO(wxMouseEvent)))
+	{
+		switch (msg.DlgMsg)
+		{
+			case DIM_LFT_BN_DOWN:
+			case DIM_LFT_BN_UP:
+			case DIM_RGT_BN_DOWN:
+			case DIM_RGT_BN_UP:
+			case DIM_MOUSE_DRAG:
+			case DIM_MOUSE_MOVE:
+			case DIM_MOUSEWHEEL_UP:
+			case DIM_MOUSEWHEEL_DOWN:
+			{
+
+				// HDC hDC = pInfo->PaintInfo.hdc;
+				// HPALETTE OldPalette = PaletteManager::StartPaintPalette(hDC);
+			
+				ReDrawInfoType ExtraInfo;
+			
+				ExtraInfo.pMousePos = NULL;		// No mouse position info for redraw events
+		
+		
+				// Build a CC dc out of it for rendering to the screen
+				// Get a MFC CDC to put the DC in
+				CCPaintDC MyDc(pGadget);
+		
+				ExtraInfo.pDC = NULL;
+			
+				// The devices DPI
+				ExtraInfo.Dpi = OSRenderRegion::GetFixedDCPPI(MyDc).GetHeight();
+		
+				// How big the window is
+				wxSize WindowSize = pGadget->GetClientSize();
+				ExtraInfo.dx = (((INT32)WindowSize.GetWidth())*72000) / ExtraInfo.Dpi;
+				ExtraInfo.dy = (((INT32)WindowSize.GetHeight())*72000) / ExtraInfo.Dpi;
+
+				// Work out the MILLIPOINT coordinates of the mouse position
+				// Note that the Y value is flipped, as the kernel-origin is at the bottom left
+				INT32 XPos = ((wxMouseEvent *)(&event))->GetX();
+				INT32 YPos = ((wxMouseEvent *)(&event))->GetY();
+	
+				DocCoord MousePos;
+				MousePos.x = (XPos * 72000) / ExtraInfo.Dpi;
+				MousePos.y = ExtraInfo.dy - ((YPos * 72000) / ExtraInfo.Dpi);
+				ExtraInfo.pMousePos = &MousePos;
+
+				BROADCAST_TO_CLASS(DialogMsg(pEvtHandler->pwxWindow, msg.DlgMsg, id, (UINT_PTR)(void *)&ExtraInfo, PageID), DialogOp);
+
+				msg.DlgMsg = DIM_NONE; // Stop further processing
+			}
+
+			default:
+				break;
+		}
+	}
+
+
 	// If we have a message to send, then send it (or defer it for later)
 	if (msg.DlgMsg != DIM_NONE)
 	{
+
 		if (Defer)
 		{
 			// We should send the message out later - we use the same ID

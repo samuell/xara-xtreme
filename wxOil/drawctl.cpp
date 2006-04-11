@@ -117,6 +117,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxCamDrawControl, wxControl )
 BEGIN_EVENT_TABLE(wxCamDrawControl, wxControl)
 	EVT_CAMDRAWCONTROL_INVOKE(wxID_ANY, wxCamDrawControl::OnInvoke)
 	EVT_PAINT(wxCamDrawControl::OnPaint)
+	EVT_MOUSE_EVENTS(wxCamDrawControl::OnMouseEvent)
 END_EVENT_TABLE();
 
 IMPLEMENT_DYNAMIC_CLASS( wxCamDrawControlXmlHandler, wxXmlResourceHandler)
@@ -183,6 +184,43 @@ void wxCamDrawControl::OnPaint(wxPaintEvent & event)
 	if (pParent)
 		pParent->GetEventHandler()->ProcessEvent(RedrawEvent);	
 }
+
+/********************************************************************************************
+
+>	void wxCamDrawControl::OnMouseEvent(wxMouseEvent & event)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	30/12/2005
+	Inputs:		event - the event
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handles mouse events
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void wxCamDrawControl::OnMouseEvent(wxMouseEvent & event)
+{
+	// Irritatingly wxMouseEvent does not propagate to the parent, but we expect it to.
+	// so we have to fake it (sigh)
+	// event.Skip(); // pretend we did not handle it, so it falls through to the dialog
+
+	if ( !(GetExtraStyle() & wxWS_EX_BLOCK_EVENTS) )
+	{
+		wxWindow * pParent = GetParent();
+		if (pParent && !pParent->IsBeingDeleted())
+		{
+			wxEvtHandler *pHandler = pParent->GetEventHandler();
+			if (pHandler && pHandler->IsKindOf(CLASSINFO(DialogEventHandler))) // Only propagate to our own dialogs
+			{
+				pHandler->ProcessEvent(event);
+			}
+		}
+	}
+}
+
 
 
 /********************************************************************************************

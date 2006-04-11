@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dlgview.h"
 #include "vstate.h"
 #include "errors.h"
+#include "osrndrgn.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -131,7 +132,10 @@ BOOL DialogView::Init()
 {
 	// Get pixel size from screen DC.
 	INT32					pixwidth, pixheight;
-	wxScreenDC().GetSize( &pixwidth, &pixheight ); // NB wxScreenDC() creates temp. wxScreenDC object
+	wxScreenDC dc;
+	wxSize ppi = OSRenderRegion::GetFixedDCPPI(dc);
+	pixwidth=ppi.GetWidth();
+	pixheight=ppi.GetHeight();
 	
 	// Set up our pixel size
 	PixelWidth = FIXED16(72000.0 / pixwidth);
