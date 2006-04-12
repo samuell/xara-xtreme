@@ -345,6 +345,7 @@ void OpMenuImport::Do(OpDescriptor*)
 
 	// Remember the filter for next time.
 	SelectedFilter = FDialog.GetSelectedFilterIndex();
+	TRACEUSER( "luke", _T("Looking for ordinal %d"), SelectedFilter );
 
 	// Get the filename, ensuring that the path is valid
 	PathName Path;
@@ -366,17 +367,29 @@ void OpMenuImport::Do(OpDescriptor*)
 	Filter *pFilter = Filter::GetFirst();
 	while (pFilter != 0)
 	{
+		if( NULL != pFilter->pOILFilter )
+		{
 PORTNOTE("other", "Removed CamelotEPSFilter check" )
 #if !defined(EXCLUDE_FROM_XARALX)
-		if( ( pFilter->GetFlags().CanImport && !IS_A( pFilter, CamelotEPSFilter ) ) &&
+			if( ( pFilter->GetFlags().CanImport && !IS_A( pFilter, CamelotEPSFilter ) ) &&
 #else
-		if( pFilter->GetFlags().CanImport &&
+			if( pFilter->GetFlags().CanImport &&
 #endif
-			NULL != pFilter->pOILFilter && pFilter->pOILFilter->Position == SelectedFilter )
-		{
-			// This is the filter!
-			break;
+				pFilter->pOILFilter->Position == SelectedFilter )
+			{
+				TRACEUSER( "luke", _T("%s is THE filter (%d)"),
+					(TCHAR*)pFilter->FilterName, pFilter->pOILFilter->Position );
+
+				// This is the filter!
+				break;
+			}
+
+			TRACEUSER( "luke", _T("%s is not selected (ord=%d)"),
+				(TCHAR*)pFilter->FilterName, pFilter->pOILFilter->Position );
 		}
+		else
+			TRACEUSER( "luke", _T("Can't handle NULL pFilter->pOILFilter for %s"),
+				(TCHAR*)pFilter->FilterName );
 		
 		// Try the next filter
 		pFilter = Filter::GetNext(pFilter);

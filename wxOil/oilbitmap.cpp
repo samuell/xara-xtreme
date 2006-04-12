@@ -111,9 +111,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 #include "bitmpinf.h"
 //#include "rndrgn.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "saveeps.h"
-//#include "cameleps.h"
+#include "cameleps.h"
 //#include "bmpfiltr.h"
 //#include "giffiltr.h"	// TI_GIFFilter
 //#include "gifutil.h"
@@ -2791,8 +2791,6 @@ BOOL CWxBitmap::ImportBitmap(CCLexFile* pFile, BaseBitmapFilter* pBitmapFilter,
 
 BOOL CWxBitmap::ImportBitmap(Filter *pFilter, const BitmapInfo *pInfo, INT32 BitmapType)
 {
-	PORTNOTETRACE("other","CWxBitmap::ImportBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Check to see what the specified filter type is and take the appropriate action
 	// If a bitmap type of filter (derived off BaseBitmapFilter) e.g. BMPFilter or
 	// AccusoftFilters then pInfo will be NULL and we just need to load the bitmap in
@@ -2812,13 +2810,15 @@ BOOL CWxBitmap::ImportBitmap(Filter *pFilter, const BitmapInfo *pInfo, INT32 Bit
 			return FALSE;
 	}
 	
-
+PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
+#ifndef EXCLUDE_FROM_XARALX
 	if (!pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSFilter)))
 	{
 		ENSURE(FALSE, "Trying to import a bitmap with a non-Camelot EPS filter");
 		return FALSE;
 	}
-
+#endif
+	
 	// Sanity checks
 	ENSURE((pInfo->PixelDepth == 1) ||
 		   (pInfo->PixelDepth == 4) ||
@@ -2888,6 +2888,8 @@ BOOL CWxBitmap::ImportBitmap(Filter *pFilter, const BitmapInfo *pInfo, INT32 Bit
 	// And read in the image data
 //	if (IsUserName("Alex")) if (BitmapType !=0) return(TRUE);
 
+PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
+#ifndef EXCLUDE_FROM_XARALX
 	// Read in the Bitmap info
 	if (pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotNativeEPSFilter)))
 	{
@@ -2904,11 +2906,12 @@ BOOL CWxBitmap::ImportBitmap(Filter *pFilter, const BitmapInfo *pInfo, INT32 Bit
 		return TRUE;
 	}
 	else
+#endif
 	{
 		// Load it all in, in one go.
 		return pEPSFilter->ImportBinary(BMBytes, BMInfo->bmiHeader.biSizeImage);
 	}
-#endif
+
 	// Should not get here really.
 	return FALSE;
 }

@@ -638,7 +638,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 	}
 	
 	// Construct the string, and set up the position numbers for the filters.
-	UINT32 Position = 1;
+	UINT32 Position = 0;
 	FilterString[0] = 0;
 	pFilter = Filter::GetFirst();
 
@@ -748,10 +748,7 @@ INT32 BaseFileDialog::GetSelectedFilterIndex()
 INT32 BaseFileDialog::SetSelectedFilterIndex(INT32 NewIndex)
 {
 	INT32 Old = GetFilterIndex();
-	// Must not set this to zero as this is illegal 
-	ERROR3IF(NewIndex == 0, "BaseFileDialog::SetSelectedFilterIndex Trying to set bad index ");
-	if (NewIndex != 0)
-		SetFilterIndex( NewIndex );
+	SetFilterIndex( NewIndex );
 	TRACEUSER( "Neville", _T("SetSelectedFilterIndex - new %d (old = %d)\n"), NewIndex, Old);
 	return Old;
 }
@@ -831,7 +828,7 @@ BOOL BaseFileDialog::SetDefaultFileName(String_256& Name)
 
 BOOL BaseFileDialog::GetChosenFileName(PathName * pName)
 {
-	pName->SetPathName( GetFilename() );
+	pName->SetPathName( GetPath() );
 	return pName->IsValid();
 }
 
@@ -885,7 +882,7 @@ void BaseFileDialog::SetSelectedExportFilter(UINT32 uiFilterID)
 		{
 			//We've found it
 			//So set this as the selected filter
-			SetSelectedFilterIndex(pFilter->pOILFilter->Position);
+			SetSelectedFilterIndex( pFilter->pOILFilter->Position );
 			return;
 		}
 		pFilter = Filter::GetNext(pFilter);
@@ -2498,7 +2495,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 		return NULL;
 
 	// Construct the string, and set up the position numbers for the filters.
-	UINT32 Position = 1;
+	UINT32 Position = 0;
 	FilterString[0] = 0;
 	pFilter = Filter::GetFirst();
 
