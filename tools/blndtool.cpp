@@ -3689,7 +3689,7 @@ BOOL OpBlendNodes::DoBlendBlendAndObject()
 	if (BlendIsStart)
 	{
 //		BlenderInfoItem* pItem = (BlenderInfoItem*)BlenderList.GetTail();
-//		pNodeBlendStart = pNodeBlend;
+		pNodeBlendStart = pNodeBlend;
 		ok              = GetNodeClosestToPoint(&pNodeStart, TRUE);
 		pNodeEnd   		= pRefEnd->pNode;
 		pContextNode	= pNodeEnd;
@@ -3698,7 +3698,7 @@ BOOL OpBlendNodes::DoBlendBlendAndObject()
 	else
 	{
 //		BlenderInfoItem* pItem = (BlenderInfoItem*)BlenderList.GetHead();
-//		pNodeStart 		= pRefStart->pNode;
+		pNodeStart 		= pRefStart->pNode;
 		pNodeBlendEnd   = pNodeBlend;
 		ok              = GetNodeClosestToPoint(&pNodeEnd, FALSE);
 		pContextNode 	= pNodeStart;
