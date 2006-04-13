@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "units.h"
 #include "app.h"								// Camelot object
 //#include "peter.h"								// _R(IDS_MEMORYFORMAT_BYTE) ...
-//#include "localenv.h"							// for locale string settings
+#include "localenv.h"							// for locale string settings
 //#include "richard3.h"							// more naughty inline strings...
 
 
@@ -197,18 +197,15 @@ BOOL Convert::Init()
 
 BOOL Convert::GetCurrentNumberFormat()
 {
-	// Read from the operating system what the user has defined to be their decimal point
-	// character and thousands separator character.
-PORTNOTE("other","Removed LocalEnvironment usage")
-#ifndef EXCLUDE_FROM_XARALX
-	LocalEnvironment::GetThousandsSeparator(&ThousandsSepStr);
-	LocalEnvironment::GetDecimalPointChar(&DecimalPointStr);
-	LocalEnvironment::GetNumberOfDecimalPlaces(&NumDecimalPlaces);
-#else
 	String_8	ThousandsSepStr( _T(",") ); 
 	String_8	DecimalPointStr( _T(".") ); 
 	NumDecimalPlaces = 2;
-#endif
+
+	// Read from the operating system what the user has defined to be their decimal point
+	// character and thousands separator character.
+	LocalEnvironment::GetThousandsSeparator(&ThousandsSepStr);
+	LocalEnvironment::GetDecimalPointChar(&DecimalPointStr);
+	LocalEnvironment::GetNumberOfDecimalPlaces(&NumDecimalPlaces);
 	
 	// Set up the static char variables to reflect these
 	ThousandSep = ((TCHAR *) ThousandsSepStr)[0];

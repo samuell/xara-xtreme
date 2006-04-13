@@ -227,13 +227,13 @@ PORTNOTE("other","Removed a large amount of initialization")
 			ClickModifiers::DeclarePrefs() &&
 			DocView::DeclarePreferences() &&	// Deals with DocViews preferences
 			Document::ReadPrefs() &&			// read in class Document's preferences
+			Convert::Init() &&					// Read number of decimal places, decimal point
+												// and thousands seperator characters from
+												// operating system .
 PORTNOTE("other","Removed more initialization")
 #ifndef EXCLUDE_FROM_XARALX
 			ColourDragInformation::Init() &&
 			BitmapDragInformation::Init() &&
-			Convert::Init() &&					// Read number of decimal places, decimal point
-												// and thousands seperator characters from
-												// operating system .
 			InitDiagnosticPrefs() &&			// Get the diagnostic preferences
 			
 			CCamView::ReadViewPrefs() &&

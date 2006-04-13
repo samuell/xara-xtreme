@@ -114,6 +114,17 @@ UINT32 LocalEnvironment::MouseDoubleClickDelay;
 UINT32 LocalEnvironment::XMouseDoubleClickMove;
 UINT32 LocalEnvironment::YMouseDoubleClickMove;
 
+PORTNOTE("other","Temporary ToUnicode, will be removed we Gerry checks in full impl.")
+static inline TCHAR ToUnicode( char ch )
+{
+#if 0 != wxUSE_UNICODE
+	TCHAR	tch;
+	mbtowc( &tch, &ch, 1 );
+	return tch;
+#else
+	return ch;
+#endif
+}
 
 /********************************************************************************************
 
@@ -135,7 +146,11 @@ void LocalEnvironment::GetNumberOfDecimalPlaces(UINT32* DecimalPlaces)
 	TCHAR TS[8];
 
 PORTNOTE("other","Removed GetProfileString usage")
-#ifndef EXCLUDE_FROM_XARALX
+#if defined(__WXGTK__)
+	TRACEUSER( "luke", _T("iDigits = %d\n"), *nl_langinfo( FRAC_DIGITS ) );
+	*DecimalPlaces = *nl_langinfo( FRAC_DIGITS );
+	return;
+#elif !defined(EXCLUDE_FROM_XARALX)
 	GetProfileString("intl", "iDigits", "2", TS, sizeof(TS));
 #else
 	TS[0]=_T('2');
@@ -168,7 +183,12 @@ void LocalEnvironment::GetThousandsSeparator(StringBase* String)
 	TCHAR TS[8];
 
 PORTNOTE("other","Removed GetProfileString usage")
-#ifndef EXCLUDE_FROM_XARALX
+#if defined(__WXGTK__)
+	TS[0] = ToUnicode( *nl_langinfo( THOUSANDS_SEP ) );
+	TS[1] = 0;
+
+	TRACEUSER( "luke", _T("sThousand = %s\n"), TS );
+#elif !defined(EXCLUDE_FROM_XARALX)
 	GetProfileString("intl", "sThousand", ",", TS, sizeof(TS));
 #else
 	TS[0]=_T(',');
@@ -197,7 +217,12 @@ void LocalEnvironment::GetDecimalPointChar(StringBase* String)
 	TCHAR TS[8];
 
 PORTNOTE("other","Removed GetProfileString usage")
-#ifndef EXCLUDE_FROM_XARALX
+#if defined(__WXGTK__)
+	TS[0] = ToUnicode( *nl_langinfo( DECIMAL_POINT ) );
+	TS[1] = 0;
+
+	TRACEUSER( "luke", _T("sDecimal = %s\n"), TS );
+#elif !defined(EXCLUDE_FROM_XARALX)
 	GetProfileString("intl", "sDecimal", ".", TS, sizeof(TS));
 #else
 	TS[0]=_T('.');
