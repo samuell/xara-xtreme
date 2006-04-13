@@ -3263,7 +3263,7 @@ INT32 DIBUtil::FindLeastUsedColour(BITMAPINFO* pInfo, UINT32* pResultsArray)
 	return TransIndex;
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /***********************************************************************************************
 
@@ -3290,7 +3290,7 @@ size_t DIBUtil::GetOptimalPaletteWorkspaceSize()
 {
 //	return ::GetOptimalPaletteWorkspaceSize();
 	ASSERT(FALSE);
-	return NULL;
+	return 0;
 }
 
 /***********************************************************************************************
@@ -3531,7 +3531,7 @@ size_t DIBUtil::GetOptimal8bppPaletteWorkspaceSize()
 {
 //	return ::GetOptimal8bppPaletteWorkspaceSize();
 	ASSERT(FALSE);
-	return NULL;
+	return 0;
 }
 
 BOOL DIBUtil::Optimal8bppPaletteInitialise( INT32* Stats )
@@ -3562,7 +3562,7 @@ BOOL DIBUtil::GenOptimal8bppPalette( INT32* Stats, PLOGPALETTE pPalette, const s
 	return TRUE;
 }
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 
 
 /********************************************************************************************

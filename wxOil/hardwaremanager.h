@@ -207,7 +207,6 @@ namespace oilHardwareManager
 // Useful reference: http://en.wikipedia.org/wiki/Comparison_of_Unicode_encodings
 //
 PORTNOTE("WCHARSize", "Check conversion from UTF32 to UTF16 and vice-versa");
-	#define SIZEOF_UTF16 2					// UTF16 characters are only 2 byte
 	static inline WCHAR NativeToUTF16(WCHAR n) {return n;}		// Just truncate at the moment
 	static inline WCHAR UTF16ToNative(WCHAR n) {return n;}		// Just truncate at the moment
 

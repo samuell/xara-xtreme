@@ -6871,6 +6871,8 @@ BOOL HandleBecomeA::PassBack(Path* pBlendedPath,CCAttrMap* pBlendedAttrMap,UINT3
 void NodeBlender::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	// Ensure that we are initialised (if it can be done!!)
 	if (!Reinit())
 		return;
@@ -6935,6 +6937,7 @@ void NodeBlender::PreExportRender(RenderRegion* pRegion)
 	//pRefStart->GetFirstBlendPath()->GetNodePath()->Render(pRegion);
 	//pRefEnd  ->GetFirstBlendPath()->GetNodePath()->Render(pRegion);
 #endif
+#endif
 }
 
 /*********************************************************************************************
@@ -6956,6 +6959,8 @@ void NodeBlender::PreExportRender(RenderRegion* pRegion)
 BOOL NodeBlender::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	// Ensure that we are initialised (if it can be done!!)
 	if (!Reinit())
 		return FALSE;
@@ -6990,6 +6995,7 @@ BOOL NodeBlender::ExportRender(RenderRegion* pRegion)
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

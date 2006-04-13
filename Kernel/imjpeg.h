@@ -101,23 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_IMJPEG
 
 #include "bitfilt.h"
-
-#if defined(__WXMSW__)
-#define HAVE_BOOLEAN
-namespace JPEG
-{
-	typedef ::boolean	boolean;
-}
-#endif
-
-// NB We force C naming
-namespace JPEG
-{
-	extern "C"
-	{
-	#include "jpeglib.h"
-	}
-};
+#include "jpglib_namespace.h"
 
 class JPEGErrorManager;
 class JPEGDataSource;
@@ -195,7 +179,7 @@ protected:
 	UINT32							m_uStartOffset;
 
 	// the IJG control structure
-	struct JPEG::jpeg_decompress_struct	m_cinfo;
+	struct libJPEG::jpeg_decompress_struct	m_cinfo;
 	// ...and support
 	JPEGErrorManager*				m_pErrorHandler;
 	JPEGDataSource*					m_pSourceHandler;

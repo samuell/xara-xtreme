@@ -196,7 +196,7 @@ protected:
 	// dithering techniques
 
 	UINT32 DitherType;		// For 8bbp or less, this is the Dithering to use
-	INT32  OutputDepth;  		// If different from the actual RR bpp, then the bitmap will
+	UINT32  uOutputDepth;  	// If different from the actual RR bpp, then the bitmap will
 							// be converted before output
 
 	LPLOGPALETTE    pConvPalette;	// Palette to use for conversion to 8bpp or less
@@ -217,7 +217,7 @@ protected:
 	double			m_dYCentralAdjust;
 };
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -259,4 +259,5 @@ protected:
 };
 
 #endif
+
 #endif

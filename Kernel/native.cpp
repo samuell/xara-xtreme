@@ -225,11 +225,14 @@ PORTNOTE("filter","Removed NativeOILFilter usage")
 
 #ifdef DO_EXPORT
 
+PORTNOTE("PrefsDlg", "Removed use of PrefsDlg")
+#ifndef EXCLUDE_FROM_XARALX
 	// Initialise the native file export options dialog.
 	if ( ok )
 	{
 		ok = NativePrefsDlg::Init ();
 	}
+#endif
 
 #endif
 

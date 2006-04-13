@@ -174,6 +174,7 @@ PORTNOTE("other","WriteBSTR removed - Windows concept")
 #ifndef EXCLUDE_FROM_XARALX
 	virtual	BOOL WriteBSTR(_bstr_t bstr);
 #endif
+	virtual BOOL WriteUTF16STR(const StringVar& pvstr);
 
 	virtual	BOOL WriteMatrix(const Matrix & m);
 	virtual	BOOL WriteMatrixTrans(const Matrix & m,INT32 dx,INT32 dy);

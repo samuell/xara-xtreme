@@ -3626,6 +3626,8 @@ DocCoord NodeShadowController::GetWallShadowOffset()
 void NodeShadowController::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -3641,11 +3643,14 @@ void NodeShadowController::PreExportRender(RenderRegion* pRegion)
 		pDC->StartGroup(&BBox);
 	}
 #endif
+#endif
 }
 
 BOOL NodeShadowController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -3664,6 +3669,7 @@ BOOL NodeShadowController::ExportRender(RenderRegion* pRegion)
 
 		return TRUE;
 	}
+#endif
 #endif
 	// Render thid node in the normal way
 	return FALSE;

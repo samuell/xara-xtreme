@@ -100,21 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-namespace JPEG
-{
-	extern "C"
-	{
-	#include "jpeglib.h"
-	}
+#include "jpgermgr.h"
 
-#if defined(HAVE_BOOLEAN)
-	typedef ::boolean	boolean;
-#endif
-};
 #include "errors.h"
 //#include "filtrres.h"		// for Error strings
-
-#include "jpgermgr.h"
 
 // Place any IMPLEMENT type statements here
 //CC_IMPLEMENT_MEMDUMP(CCWobJob, CC_CLASS_MEMDUMP)
@@ -167,14 +156,14 @@ const JPEGErrorManager::ERROR_CLASS	ErrorClasses[] =
 				Few applications should need to override this method.
 
 ********************************************************************************************/
-METHODDEF(void) format_message (JPEG::j_common_ptr cinfo, char * buffer)
+METHODDEF(void) format_message (libJPEG::j_common_ptr cinfo, char * buffer)
 {
-  struct JPEG::jpeg_error_mgr * err = cinfo->err;
+  struct libJPEG::jpeg_error_mgr * err = cinfo->err;
   INT32 msg_code = err->msg_code;
   const char * msgtext = NULL;
   const char * msgptr;
   char ch;
-  JPEG::boolean isstring;
+  libJPEG::boolean isstring;
 
   // Look up message string in proper table 
   if (msg_code > 0 && msg_code <= err->last_jpeg_message) {
@@ -226,23 +215,23 @@ METHODDEF(void) format_message (JPEG::j_common_ptr cinfo, char * buffer)
 ********************************************************************************************/
 JPEGErrorManager::JPEGErrorManager()
 {
-	error_exit		= ErrorExit;
-	emit_message	= EmitMessage;
-	output_message	= OutputMessage;
-	format_message	= ::format_message;
-	reset_error_mgr	= ResetErrorManager;
+	m_errmgr.error_exit		= ErrorExit;
+	m_errmgr.emit_message	= EmitMessage;
+	m_errmgr.output_message	= OutputMessage;
+	m_errmgr.format_message	= ::format_message;
+	m_errmgr.reset_error_mgr	= ResetErrorManager;
 
-	trace_level		= 0;					/* default = no tracing */
-	num_warnings	= 0;					/* no warnings emitted yet */
-	msg_code		= 0;		// may be useful as a flag for "no error" */
+	m_errmgr.trace_level		= 0;					/* default = no tracing */
+	m_errmgr.num_warnings	= 0;					/* no warnings emitted yet */
+	m_errmgr.msg_code		= 0;		// may be useful as a flag for "no error" */
 
 	/* Initialize message table pointers */
-	jpeg_message_table	= ::MessageTable;
-	last_jpeg_message	= (INT32) JMSG_LASTMSGCODE - 1;
+	m_errmgr.jpeg_message_table	= ::MessageTable;
+	m_errmgr.last_jpeg_message	= (INT32) JMSG_LASTMSGCODE - 1;
 
-	addon_message_table	= NULL;
-	first_addon_message	= 0;	/* for safety */
-	last_addon_message	= 0;
+	m_errmgr.addon_message_table	= NULL;
+	m_errmgr.first_addon_message	= 0;	/* for safety */
+	m_errmgr.last_addon_message	= 0;
 
 //	ERROR_CLASS m_ErrorClass = ERR_NONE;
 }
@@ -262,13 +251,13 @@ JPEGErrorManager::JPEGErrorManager()
 ********************************************************************************************/
 J_MESSAGE_CODE JPEGErrorManager::GetLastError() const
 {
-	if (msg_code <= 0 || msg_code > last_jpeg_message)
+	if (m_errmgr.msg_code <= 0 || m_errmgr.msg_code > m_errmgr.last_jpeg_message)
 	{
-		ERROR3(jpeg_message_table[JMSG_NOMESSAGE]);
+		ERROR3(m_errmgr.jpeg_message_table[JMSG_NOMESSAGE]);
 		return JMSG_NOMESSAGE;
 	}
 
-	return (J_MESSAGE_CODE) msg_code;
+	return (J_MESSAGE_CODE) m_errmgr.msg_code;
 }
 
 
@@ -362,7 +351,7 @@ JPEGErrorManager::ERROR_CLASS JPEGErrorManager::GetLastErrorClass() const
 				This is that callback. It throws an exception.
 
 ********************************************************************************************/
-void JPEGErrorManager::ErrorExit(JPEG::j_common_ptr cinfo)
+void JPEGErrorManager::ErrorExit(libJPEG::j_common_ptr cinfo)
 {
 	JPEGErrorManager* pThis = (JPEGErrorManager*)cinfo->err;
 
@@ -388,7 +377,7 @@ void JPEGErrorManager::ErrorExit(JPEG::j_common_ptr cinfo)
 				Overrides standard implementation of sending errors to stderr.
 
 ********************************************************************************************/
-void JPEGErrorManager::OutputMessage(JPEG::j_common_ptr cinfo)
+void JPEGErrorManager::OutputMessage(libJPEG::j_common_ptr cinfo)
 {
   char buffer[JMSG_LENGTH_MAX];
 
@@ -416,7 +405,7 @@ void JPEGErrorManager::OutputMessage(JPEG::j_common_ptr cinfo)
 				2,3,...: successively more detailed tracing messages.
 
 ********************************************************************************************/
-void JPEGErrorManager::EmitMessage(JPEG::j_common_ptr cinfo, INT32 msg_level)
+void JPEGErrorManager::EmitMessage(libJPEG::j_common_ptr cinfo, INT32 msg_level)
 {
 	JPEGErrorManager* pThis = (JPEGErrorManager*)cinfo->err;
 
@@ -427,19 +416,19 @@ void JPEGErrorManager::EmitMessage(JPEG::j_common_ptr cinfo, INT32 msg_level)
 		* the policy implemented here is to show only the first warning,
 		* unless trace_level >= 3.
 		*/
-		if (pThis->num_warnings == 0 || pThis->trace_level >= 3)
+		if (pThis->m_errmgr.num_warnings == 0 || pThis->m_errmgr.trace_level >= 3)
 		{
-			(*pThis->output_message) (cinfo);
+			(*pThis->m_errmgr.output_message) (cinfo);
 		}
 		// Always count warnings in num_warnings.
-		pThis->num_warnings++;
+		pThis->m_errmgr.num_warnings++;
 	}
 	else
 	{
 		// It's a trace message.  Show it if trace_level >= msg_level.
-		if (pThis->trace_level >= msg_level)
+		if (pThis->m_errmgr.trace_level >= msg_level)
 		{
-			(*pThis->output_message) (cinfo);
+			(*pThis->m_errmgr.output_message) (cinfo);
 		}
 	}
 }
@@ -455,13 +444,13 @@ void JPEGErrorManager::EmitMessage(JPEG::j_common_ptr cinfo, INT32 msg_level)
 	Purpose:	Resets the the error manager prior to starting the filter proper
 
 ********************************************************************************************/
-void JPEGErrorManager::ResetErrorManager(JPEG::j_common_ptr cinfo)
+void JPEGErrorManager::ResetErrorManager(libJPEG::j_common_ptr cinfo)
 {
 	JPEGErrorManager* pThis = (JPEGErrorManager*)cinfo->err;
 
-	pThis->num_warnings = 0;
+	pThis->m_errmgr.num_warnings = 0;
 	/* trace_level is not reset since it is an application-supplied parameter */
-	pThis->msg_code = 0;	/* may be useful as a flag for "no error" */
+	pThis->m_errmgr.msg_code = 0;	/* may be useful as a flag for "no error" */
 }
 
 

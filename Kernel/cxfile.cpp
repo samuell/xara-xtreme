@@ -788,7 +788,7 @@ BOOL CXaraFile::Read(double* pd)
 
 BOOL CXaraFile::ReadWCHAR(WCHAR *pw)
 {
-	BOOL ok = Read((BYTE*)pw, SIZEOF_UTF16);	// sizeof(WCHAR));
+	BOOL ok = Read((BYTE*)pw, SIZEOF_XAR_UTF16);	// sizeof(WCHAR));
 	*pw = LEtoNative(*pw);
 	*pw = UTF16ToNative(*pw);
 	return ok;
@@ -985,7 +985,7 @@ BOOL CXaraFile::WriteWCHAR(WCHAR w)
 {
 	WCHAR t = NativeToUTF16(w);
 	t = NativetoLE(t);
-	return (Write((BYTE*)&t, SIZEOF_UTF16));		//sizeof(WCHAR)));
+	return (Write((BYTE*)&t, SIZEOF_XAR_UTF16));		//sizeof(WCHAR)));
 }
 
 BOOL CXaraFile::WriteCCPanose(const CCPanose & MyCCPanose)
@@ -1016,7 +1016,7 @@ BOOL CXaraFile::WriteCCPanose(const CCPanose & MyCCPanose)
 	Inputs:		pStr = ptr to zero-terminated string
 	Returns:	TRUE if written successfully
 				FALSE otherwise
-	Purpose:	Writes out the string as a Unicode string
+	Purpose:	Writes out the string as a Unicode string (UTF16)
 	Errors:		-
 	SeeAlso:	-
 

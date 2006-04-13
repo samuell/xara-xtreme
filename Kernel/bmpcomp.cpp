@@ -799,6 +799,8 @@ BOOL BitmapListComponent::WriteEPSComments(EPSFilter *pFilter)
 BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSFilter", "Removed use of EPSFilter")
+#if !defined(EXCLUDE_FROM_XARALX)
 
 	// This only happens in Native EPS
 	if (pFilter->IS_KIND_OF(CamelotNativeEPSFilter))
@@ -855,6 +857,7 @@ BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 	}
 
 #endif
+#endif
 	return TRUE;
 }
 
@@ -880,6 +883,8 @@ BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 BOOL BitmapListComponent::ExportBitmapPoolItem(INT32 BitmapNum, EPSFilter* pFilter, EPSExportDC* pDC, KernelBitmap* pBitmap)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSFilter", "Removed use of EPSFilter")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(pBitmap->HasBeenDeleted(), FALSE, "Trying to export a deleted bitmap");
 	
 	if (pFilter->IS_KIND_OF(CamelotNativeEPSFilter))
@@ -896,6 +901,7 @@ BOOL BitmapListComponent::ExportBitmapPoolItem(INT32 BitmapNum, EPSFilter* pFilt
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+#endif
 #endif
 	return FALSE;
 }
@@ -2058,7 +2064,7 @@ PORTNOTE("other", "Removed live effects stuff")
 		// Try the next filter
 		pBmpFilter = Filter::GetNext(pBmpFilter);
 	}
- 
+
 	// Check that the Filter existed
 	ERROR2IF(pBmpFilter == NULL,0,"BitmapListComponent::SaveBitmapDefinition can't find export filter!");
 
@@ -2067,11 +2073,7 @@ PORTNOTE("other", "Removed live effects stuff")
 	// If there is a string name, then add it to this size
 	// REMEMBER: We save out unicode strings and so we need to double the length of the returned string length
 	// but only if we are not being compiled as Unicode
-#ifdef UNICODE
-	Size += BitmapName.Length() + 1;
-#else
-	Size += (BitmapName.Length() + 1) * 2;
-#endif
+	Size += (BitmapName.Length() + 1) * SIZEOF_XAR_UTF16;
 	if (WritePalette)
 	{
 		// If we are an 8bpp JPEG then we must save out the palette so that on loading we can

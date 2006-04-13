@@ -112,11 +112,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will3.h"		// for _R(IDS_GENOPTPALMSGID)
 //#include "bmpres.h"		// general bitmap filter based resources (_R(IDE_TIGIFFILTER_MASKFAILED)/MASK)
 //#include "bmpfiltr.h"	// for GetDefaultDither()
+#include "outptdib.h"
 #include "fixmem.h"
 #include "bmapprev.h"	// To get the current transparent colour
 #include "exjpeg.h"
 #include "cxfrec.h"		// for CXaraFileRecord
-#include "maskfilt.h"	// For MaskedFilterExportOptions.
 //#include "mrhbits.h"	// For CBMPBits.
 #include "selall.h"		// For OPTOKEN_EDITSELECTALL.
 #include "palman.h"		// For PaletteManager.
@@ -129,9 +129,7 @@ CC_IMPLEMENT_DYNAMIC(MaskedFilter, BaseBitmapFilter)
 
 #define	new	CAM_DEBUG_NEW
 
-PORTNOTE("filters","Removed MaskedFilterExportOptions implementation")
-#ifndef EXCLUDE_FROM_XARALX
-CC_IMPLEMENT_DYNCREATE(MaskedFilterExportOptions, BitmapExportOptions)
+CC_IMPLEMENT_DYNAMIC(MaskedFilterExportOptions, BitmapExportOptions)
 
 PALETTE MaskedFilterExportOptions::g_Palette	= PAL_OPTIMISED;
 DITHER	MaskedFilterExportOptions::g_Dither		= XARADITHER_NONE;	// Webster <RanbiR> Intialise the
@@ -139,8 +137,8 @@ DITHER	MaskedFilterExportOptions::g_Dither		= XARADITHER_NONE;	// Webster <Ranbi
 BOOL	MaskedFilterExportOptions::g_bTransparent;
 BOOL	MaskedFilterExportOptions::g_bInterlaced;
 // WEBSTER - markn 17/1/97
-UINT32	MaskedFilterExportOptions::g_NumColsInPalette = 256;
-BOOL	MaskedFilterExportOptions::g_UseSystemColours = FALSE;
+UINT32	BitmapExportOptions::g_NumColsInPalette = 256;
+BOOL	BitmapExportOptions::g_UseSystemColours = FALSE;
 
 /********************************************************************************************
 
@@ -155,11 +153,11 @@ BOOL	MaskedFilterExportOptions::g_UseSystemColours = FALSE;
 ********************************************************************************************/
 BOOL MaskedFilterExportOptions::Declare()
 {
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
-		Camelot.DeclarePref( NULL, "Palette", (INT32*)&g_Palette, 0, 1 );
-		Camelot.DeclarePref( NULL, "NumColsInPalette", (INT32*)&g_NumColsInPalette, 0, 256 );
-		Camelot.DeclarePref( NULL, "UseSystemColours", (INT32*)&g_UseSystemColours, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("Palette"), (INT32*)&g_Palette, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("NumColsInPalette"), (INT32*)&g_NumColsInPalette, 0, 256 );
+		Camelot.DeclarePref( NULL, _T("UseSystemColours"), (INT32*)&g_UseSystemColours, 0, 1 );
 	}
 
 	// All ok
@@ -188,7 +186,7 @@ MaskedFilterExportOptions::MaskedFilterExportOptions()
 
 /********************************************************************************************
 >	MaskedFilterExportOptions::MaskedFilterExportOptions(const CDlgResID& Dialog, 
-									const FILTER_ID FilterID, const StringBase* pFilterName)
+									const FilterType FilterID, const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -200,7 +198,7 @@ MaskedFilterExportOptions::MaskedFilterExportOptions()
 				this one or provide objects of this class in their CreateExportOptions()
 ********************************************************************************************/
 MaskedFilterExportOptions::MaskedFilterExportOptions(const CDlgResID& Dialog, 
-								const FILTER_ID FilterID, const StringBase* pFilterName)
+								const FilterType FilterID, const StringBase* pFilterName)
   : BitmapExportOptions(Dialog, FilterID, pFilterName),
 	m_Dither(XARADITHER_NONE),							// Dither type
 	m_bInterlaced(FALSE)
@@ -255,13 +253,17 @@ BOOL MaskedFilterExportOptions::FileTypeChangeCopyFrom(BitmapExportOptions *pOth
 
 	MaskedFilterExportOptions* pOther2 = ( MaskedFilterExportOptions* )pOther;
 
+PORTNOTE("BMPFilter", "Removed use of BmpExportOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	if ( pOther->IS_KIND_OF(BMPExportOptions) )
 	{
 		m_Dither		= pOther2->m_Dither;
 		//  The following 2 don't exist in the bmp options.
 		m_bInterlaced	= 0;
 	}
-	else if ( pOther->IS_KIND_OF(JPEGExportOptions) )
+	else
+#endif
+	if ( pOther->IS_KIND_OF(JPEGExportOptions) )
 	{
 		//  None of these exist in the jpeg options.
 		//  So, give them default values.
@@ -362,11 +364,16 @@ BOOL MaskedFilterExportOptions::CopyFromMasked(MaskedFilterExportOptions *pOther
 ********************************************************************************************/
 BOOL MaskedFilterExportOptions::RetrieveDefaults()
 {
+PORTNOTE("BMPFilter", "Removed use of BmpExportOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	if (!BitmapExportOptions::RetrieveDefaults())
 		return FALSE;
 
 	UINT32 Dither = BMPFilter::GetDefaultExportDither();
 	ERROR2IF(Dither > 4, FALSE, "Dither Invalid");
+#else
+	UINT32 Dither = 0;
+#endif
 	SetDither((DITHER)Dither);
 
 	m_Dither  = g_Dither;
@@ -388,10 +395,13 @@ BOOL MaskedFilterExportOptions::RetrieveDefaults()
 ********************************************************************************************/
 BOOL MaskedFilterExportOptions::SetAsDefaults() const
 {
+PORTNOTE("BMPFilter", "Removed use of BmpExportOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	if (!BitmapExportOptions::SetAsDefaults())
 		return FALSE;
 
 	BMPFilter::SetDefaultExportDither(GetDither());
+#endif
 
 	// Derived classes can do their own thing with these...
 	// m_bInterlaced;
@@ -525,7 +535,6 @@ BOOL MaskedFilterExportOptions::SetMakeInterlaced(BOOL bInterlaced)
 	return TRUE;
 }
 
-#endif
 
 /********************************************************************************************
 
@@ -569,12 +578,7 @@ MaskedFilter::MaskedFilter()
 ********************************************************************************************/
 BOOL MaskedFilter::Init()
 {
-	PORTNOTETRACE("filters","MaskedFilter::Init - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return MaskedFilterExportOptions::Declare();
-#else
-	return TRUE;
-#endif
 }
 
 /********************************************************************************************
@@ -636,8 +640,6 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 		return FALSE;
 	}
 
-	PORTNOTETRACE("filters","MaskedFilter::ApplyTransparentColoursToBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the current Export palette and find out how many colours we`re using.
 	ExtendedPalette* pPal = pExportOptions->GetPalette();
 	ERROR3IF(!pPal,"Failed to get a valid palette pointer!");
@@ -705,8 +707,8 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 			// We have already remembered the entry state so just force it.
 			ForceBackgroundRedrawOff(View);
 
-			ERROR3IF ( GetBitmapExportOptions()->GetDepth() == -1,
-					   "Illegal Output Depth in MaskedFilter::RenderTransparencyMask" );
+//			ERROR3IF ( GetBitmapExportOptions()->GetDepth() == -1,
+//					   "Illegal Output Depth in MaskedFilter::RenderTransparencyMask" );
 
 			if (GetBitmapExportOptions()->GetDepth() == 1)
 			{
@@ -808,7 +810,8 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 		for(PixelPos = StartingPos; PixelPos < PixelsPerLine; PixelPos++)
 		{
 			// Get the current Byte of BMP Data at the current Position
-			ByteData = _rotr(pBMPBits[PixelPos],8);
+//			ByteData = _rotr(pBMPBits[PixelPos],8);
+			ByteData = pBMPBits[PixelPos]>>8 || pBMPBits[PixelPos]<<24;
 
 			NumOfSubPixels = PixelsPerByte;
 
@@ -818,7 +821,8 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 			// Now loop through all the Sub Byte Pixels setting their appropriate values
 			for(SubPixPos = 0; SubPixPos < PixelsPerByte; SubPixPos++)
 			{
-				ByteData = _rotl(ByteData,Depth);
+//				ByteData = _rotl(ByteData,Depth);
+				ByteData = ByteData<<8 || ByteData>>24;
 				Padding = (SubPixPos >= NumOfSubPixels);
 
 				// First check to see if the alpha channel is fully transparent
@@ -878,7 +882,6 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 		delete pMaskedRegion;
 		pMaskedRegion = NULL;
 	}
-#endif
 	return TRUE;
 }
 
@@ -951,12 +954,12 @@ BOOL MaskedFilter::WriteToFile ( BOOL End )
 			pTempBitmapMask = NULL;
 		}
 		
-		ERROR3IF ( pBMPOptions->GetDepth() == -1, "Illegal OutputDepth in PNGFilter::WriteToFile" );
+//		ERROR3IF ( pBMPOptions->GetDepth() == -1, "Illegal OutputDepth in PNGFilter::WriteToFile" );
 
 		// First, get the size of the bitmap we are going to export not just the simple
 		// lpInfo->bmiHeader.biHeight as this might just be the height of the first
 		// strip to be exported. With the width we can use the old method.
-		const UINT32 OutputWidth = lpInfo->bmiHeader.biWidth;
+//		const UINT32 OutputWidth = lpInfo->bmiHeader.biWidth;
 		const UINT32 OutputHeight = (INT32)ExportRegion->GetFullRegionHeight();
 
 		if ( pBMPOptions->GetDepth () == 8 ||
@@ -1065,17 +1068,12 @@ BOOL MaskedFilter::ExportSelectionOnly(BOOL MaskedRender)
 	// we dont do any of this secondpass / GeneratingOptimisedPalette bussiness anymore
 	// that is all done in a nice tight loop. So we would never want to just render the selection
 	// otherwise the background sometimes disappears which would be odd. sjk 3/1/01
-	PORTNOTETRACE("filters","MaskedFilter::ExportSelectionOnly - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	MaskedFilterExportOptions* pMaskedOptions = (MaskedFilterExportOptions*)GetBitmapExportOptions();
 	ERROR2IF(pMaskedOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pMaskedOptions->IS_KIND_OF(MaskedFilterExportOptions), "pMaskedOptions isn't");
 	return (pMaskedOptions->GetSelectionType() == SELECTION && 
 		((pMaskedOptions->IsBackgroundTransparent() && MaskedRender)
 		|| pMaskedOptions->GetDepth() == 32));
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1280,8 +1278,6 @@ BOOL MaskedFilter::CheckSingleBitmapsOnSpread ( Spread	*pSpread,
 ********************************************************************************************/
 UINT32 MaskedFilter::GetNumReservedColours()
 {
-	PORTNOTETRACE("filters","MaskedFilter::GetNumReservedColours - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	MaskedFilterExportOptions* pMaskedOptions = (MaskedFilterExportOptions*)GetBitmapExportOptions();
 	ERROR2IF(pMaskedOptions == NULL, FALSE, "NULL Member");
 	ERROR3IF(!pMaskedOptions->IS_KIND_OF(MaskedFilterExportOptions), "pMaskedOptions isn't");
@@ -1289,9 +1285,7 @@ UINT32 MaskedFilter::GetNumReservedColours()
 	if (pMaskedOptions->WantTransparent())
 		return 1;
 	else
-#else
 		return 0;
-#endif
 }
 
 /********************************************************************************************
@@ -1343,8 +1337,6 @@ INT32 MaskedFilter::FindUnusedColour(LPBITMAPINFO pBMInfo, LPBYTE pBMBits)
 ********************************************************************************************/
 BOOL MaskedFilter::SetExportHint(Document* pDoc)
 {
-	PORTNOTETRACE("filters","MaskedFilter::SetExportHint - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pDoc != NULL && !IsPreviewBitmap)
 	{
 		ExportHint* pHint = pDoc->GetExportHint();	
@@ -1390,6 +1382,5 @@ BOOL MaskedFilter::SetExportHint(Document* pDoc)
 			pHint->SetOptionsString(Opts);
 		}
 	}
-#endif
 	return(TRUE);
 }

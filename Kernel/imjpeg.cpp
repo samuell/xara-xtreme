@@ -760,7 +760,7 @@ BOOL JPEGImportFilter::PrepareFilterForOperation()
 	// Initialize the main JPG library structure
 	try
 	{
-		using namespace JPEG;
+		using namespace libJPEG;
 		jpeg_create_decompress( &m_cinfo );
 	}
 	catch(...)
@@ -965,14 +965,14 @@ void JPEGImportFilter::PrepareForImage(BitmapImportOptions* pOptions)
 	// Compute colormap size and total file size
 	switch (m_cinfo.out_color_space)
 	{
-		case JPEG::JCS_RGB:
+		case libJPEG::JCS_RGB:
 		{
 			// Unquantized, full color RGB
 			m_uBitsPerPixel = 24;
 			break;
 		}
 
-		case JPEG::JCS_GRAYSCALE:
+		case libJPEG::JCS_GRAYSCALE:
 		{
 			// Grayscale output
 	    	m_uBitsPerPixel = 8;
@@ -1059,7 +1059,7 @@ BOOL JPEGImportFilter::SetBitmapResolution()
 ********************************************************************************************/
 BOOL JPEGImportFilter::ReadPalette()
 {
-	if (m_cinfo.out_color_space == JPEG::JCS_GRAYSCALE)
+	if (m_cinfo.out_color_space == libJPEG::JCS_GRAYSCALE)
 	{
 		// We'll have to generate a palette for it
 		LPRGBQUAD pPalette = (*m_ppInfo)->bmiColors;
@@ -1265,7 +1265,8 @@ BOOL JPEGImportFilter::InitErrorHandler()
 		return FALSE;
 	}
 
-	m_cinfo.err = m_pErrorHandler;
+	m_cinfo.err = m_pErrorHandler->GetErrorMgrStruct();
+
 	return TRUE;
 }
 

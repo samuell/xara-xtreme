@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PREVIEWFILTERS
 
 #include "bmpfiltr.h"	// for BMP preview
-//#include "giffiltr.h"	// for GIF preview
-//#include "exjpeg.h"		// for JPEG preview
+#include "giffiltr.h"	// for GIF preview
+#include "exjpeg.h"		// for JPEG preview
 #include "pngfiltr.h"	// for, you guessed it.. PNG preview
 
 // Forward definitions.
@@ -180,8 +180,6 @@ protected:
 	virtual BOOL GetExportOptions(BitmapExportOptions* pOptions);
 };
 
-PORTNOTE ("filters", "Removed GIF & JPEG preview filters")
-#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class PreviewFilterGIF : public TI_GIFFilter
@@ -205,6 +203,7 @@ public:
 protected:
 	virtual BOOL GetExportOptions(BitmapExportOptions* pOptions);
 };
+
 
 /********************************************************************************************
 
@@ -231,7 +230,7 @@ public:
 protected:
 	virtual BOOL GetExportOptions(BitmapExportOptions* pOptions);
 };
-#endif
+
 
 /********************************************************************************************
 

@@ -585,12 +585,7 @@ BOOL DocInfoComponent::ExportDocumentComment(BaseCamelotFilter *pFilter, Documen
 	UINT32 Size = 0;
 	// If there is a string name, then add it to this size
 	// REMEMBER: We save out unicode strings and so we need to double the length of the returned string length
-	// but only if we are not being compiled as Unicode
-#ifdef UNICODE
-	Size += Comment.Length() + 1;
-#else
-	Size += (Comment.Length() + 1) * 2;
-#endif	
+	Size += (Comment.Length() + 1) * SIZEOF_XAR_UTF16;
 	CXaraFileRecord Rec(TAG_DOCUMENTCOMMENT, Size);
 	ok = Rec.Init();
 

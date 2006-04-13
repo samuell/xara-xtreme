@@ -117,7 +117,7 @@ class JPEGDataDestination : public CC_CLASS_MEMDUMP
 	// Declare the class for memory tracking
 	CC_DECLARE_MEMDUMP(JPEGDataDestination);
 
-	class IJGDestMgr : public jpeg_destination_mgr
+	class IJGDestMgr : public libJPEG::jpeg_destination_mgr
 	{
 	public:
 		JPEGDataDestination*		pThis;
@@ -125,12 +125,12 @@ class JPEGDataDestination : public CC_CLASS_MEMDUMP
 	IJGDestMgr	m_DestMgr;
 
 	CCFile*		m_pOutputFile;		// destination file
-	JOCTET*		m_pBuffer;			// start of write buffer
+	libJPEG::JOCTET*		m_pBuffer;			// start of write buffer
 
 public:
 	JPEGDataDestination(CCFile* pOutputFile);
 
-	BOOL Init(j_compress_ptr cinfo);
+	BOOL Init(libJPEG::j_compress_ptr cinfo);
 
 	enum
 	{
@@ -139,12 +139,12 @@ public:
 
 protected:
 	// Overrides for IJG callbacks
-	static void		InitDestination(j_compress_ptr cinfo);
-	static boolean	EmptyOutputBuffer(j_compress_ptr cinfo);
-	static void		TerminateDestination(j_compress_ptr cinfo);
+	static void		InitDestination(libJPEG::j_compress_ptr cinfo);
+	static libJPEG::boolean	EmptyOutputBuffer(libJPEG::j_compress_ptr cinfo);
+	static void		TerminateDestination(libJPEG::j_compress_ptr cinfo);
 
 	// Helper functions
-	static JPEGDataDestination* GetThis(j_compress_ptr cinfo);
+	static JPEGDataDestination* GetThis(libJPEG::j_compress_ptr cinfo);
 
 	CCFile* GetFile() const;
 

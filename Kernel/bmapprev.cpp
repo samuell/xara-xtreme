@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bmpres.h"		// general bitmap filter based resources
 //#include "bmpreres.h"
 //#include "bmpexprw.h"	// for BitmapExportPreviewDialog
-//#include "exjpeg.h"
+#include "exjpeg.h"
 //#include "filtrres.h"	// _R(IDS_BMPPREFS_DPITOOSMALL) _R(IDS_BMPPREFS_DPITOOBIG)
 //#include "giffiltr.h"
 #include "helpuser.h"
@@ -148,7 +148,7 @@ PORTNOTE("other","CAM_DEBUG_NEW won't work")
 #define new CAM_DEBUG_NEW
 #endif
 
-typedef UINT32 JPEG_QUALITY;
+//typedef UINT32 JPEG_QUALITY;
 
 const CDlgMode BmapPrevDlg::Mode	= MODAL;			// Mode of the dialog  
 const UINT32 BmapPrevDlg::IDD			= _R(IDD_BMAPPREVDLG);	// Used to uniquely identify the tabbed dialog
@@ -421,7 +421,7 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 	}
 
 	// get the filter ID
-	m_FilterType = (FILTER_ID) m_pExportOptions->GetFilterType();
+	m_FilterType = m_pExportOptions->GetFilterType();
 	//  The following is to stop the BitmapExportPreviewDialog from trying to
 	//  generate popularity values when we are exporting a jpeg ( and hence there is no palette );
 	if( m_FilterType == JPEG )

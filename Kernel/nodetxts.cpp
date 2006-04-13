@@ -2771,6 +2771,8 @@ BOOL TextStory::FormatAndChildren(UndoableOperation* pUndoOp, BOOL UseNodeFlags,
 void TextStory::PreExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL exportingAsShapes = FALSE;
 
 	// Determine whether or not to export AI text as shapes (i.e. if there are any 
@@ -2978,6 +2980,7 @@ void TextStory::PreExportRender(RenderRegion* pRegion)
 		}
 	}
 #endif
+#endif
 }
 
 
@@ -2995,6 +2998,8 @@ void TextStory::PreExportRender(RenderRegion* pRegion)
 BOOL TextStory::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	// (ChrisG 8/11/00) - Reset the 'exporting text as shapes' flag, so that it's valid for 
 	//	the next text story - also don't export the 'end of text object' data if we aren't 
 	//	exporting a text object.
@@ -3031,6 +3036,7 @@ BOOL TextStory::ExportRender(RenderRegion* pRegion)
 		}
 		return TRUE;
 	}
+#endif
 #endif
 	return FALSE;	
 }

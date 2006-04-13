@@ -18,7 +18,7 @@ version svnversion.h:
 	@echo "#define	CAMELOT_VERSION_MAJOR	`echo $(VERSION) | $(AWK) 'BEGIN { FS = "."; } { printf $$1;}'`" >> svnversion.h
 	@echo "#define	CAMELOT_VERSION_MINOR	`echo $(VERSION) | $(AWK) 'BEGIN { FS = "."; } { printf $$2;}'`" >> svnversion.h
 	@echo "#define	CAMELOT_VERSION			$(VERSION)" >> svnversion.h
-	@echo "#define	CAMELOT_VERSION_STRING	\"$(VERSION) ($(USER))\"" >> svnversion.h
+	@echo "#define	CAMELOT_VERSION_STRING	wxT(\"$(VERSION) ($(USER))\")" >> svnversion.h
 
 # the application source, library search path, and link libraries
 libwxOil_a_SOURCES = \
@@ -40,6 +40,7 @@ libwxOil_a_SOURCES = \
 	rendwnd.cpp scroller.cpp helpuser.cpp oilprefs.cpp dragtrgt.cpp \
 	ctrllist.cpp dlgcol.cpp thumb.cpp dragmgr.cpp ccolbar.cpp dragcol.cpp \
 	drawctl.cpp filedlgs.cpp fileutil.cpp \
+	outptdib.cpp outptpng.cpp outptgif.cpp gpalopt.cpp bmpfiltr.cpp giffiltr.cpp \
 	fontbase.cpp ftfonts.cpp textfuns.cpp \
 	resources.cpp
 

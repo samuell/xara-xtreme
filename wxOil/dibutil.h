@@ -221,7 +221,7 @@ public:
 								  LPBITMAPINFO pDestInfo,	LPBYTE pDestBits,
 								  INT32 SourceTop, INT32 SourceLeft);
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Gavin's palette optimisation routines
 	static BOOL Optimal4bppPaletteInitialise_1stPass() ;
 	static BOOL Optimal4bppPaletteInitialise_2ndPass() ;

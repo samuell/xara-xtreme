@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "app.h"
-//#include "progress.h"
+#include "progress.h"
 #include "docview.h"	// DocView
 #include "pngfiltr.h"
 #include "pngutil.h"	// PNG utility class
@@ -126,20 +126,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "selall.h"		//  For OPTOKEN_EDITSELECTALL
 
 CC_IMPLEMENT_DYNAMIC(PNGFilter, MaskedFilter)
-PORTNOTE("filters","Removed PNGExportOptions implementation")
-#ifndef EXCLUDE_FROM_XARALX
 CC_IMPLEMENT_DYNCREATE(PNGExportOptions, MaskedFilterExportOptions)
-#endif
 
 #define	new	CAM_DEBUG_NEW
 
-PORTNOTE("filters","Removed PNGFilter::DestPNG definition")
-#ifndef EXCLUDE_FROM_XARALX
 OutputPNG 	PNGFilter::DestPNG;
-#endif
-INT32 		PNGFilter::FilterType = PNG;	// Type of filter in use (PNG .. PNG_TRANSINTER)
+FilterType 	PNGFilter::s_FilterType = PNG;	// Type of filter in use (PNG .. PNG_TRANSINTER)
 
-#if 0
+#if 1
 
 UINT32 PNGExportOptions::g_CompactedFlagsForDefaults = 0;
 
@@ -156,8 +150,8 @@ UINT32 PNGExportOptions::g_CompactedFlagsForDefaults = 0;
 ********************************************************************************************/
 BOOL PNGExportOptions::Declare()
 {
-	if (Camelot.DeclareSection("Filters", 10))
-		Camelot.DeclarePref( NULL, "ExportPNGtype", &g_CompactedFlagsForDefaults, 0, 3 );
+	if (Camelot.DeclareSection(_T("Filters"), 10))
+		Camelot.DeclarePref( NULL, _T("ExportPNGtype"), &g_CompactedFlagsForDefaults, 0, 3 );
 
 	// All ok
 	return TRUE;
@@ -165,7 +159,7 @@ BOOL PNGExportOptions::Declare()
 
 /********************************************************************************************
 
->	PNGExportOptions::PNGExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+>	PNGExportOptions::PNGExportOptions(const FilterType FilterID, const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -173,7 +167,7 @@ BOOL PNGExportOptions::Declare()
 				options
 
 ********************************************************************************************/
-PNGExportOptions::PNGExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName) : 
+PNGExportOptions::PNGExportOptions(const FilterType FilterID, const StringBase* pFilterName) :
 						MaskedFilterExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName)
 {
 	// just us rats in here
@@ -238,7 +232,7 @@ PNGFilter::PNGFilter() : MaskedFilter()
 	Flags.CanImport = TRUE;
 	Flags.CanExport = TRUE;
 
-	FilterID = FILTERID_PNG;
+	FilterID = PNG;
 	ExportMsgID = _R(IDS_EXPORTMSG_PNG);			// "Preparing PNG file..."
 	ExportingMsgID = _R(IDS_EXPORTINGMSG_PNG);		// "Exporting PNG file..."
 
@@ -270,11 +264,8 @@ BOOL PNGFilter::Init()
 	FilterName.Load(_R(IDS_PNG_FILTERNAME));
 	FilterInfo.Load(_R(IDS_PNG_FILTERINFO));
 
-	PORTNOTETRACE("filters","PNGFilter::Init - removed PNGExportOptions::Declare");
-#ifndef EXCLUDE_FROM_XARALX
 	if (!PNGExportOptions::Declare())
 		return FALSE;
-#endif
 
 	// All ok
 	return TRUE;
@@ -472,8 +463,6 @@ BOOL PNGFilter::ReadFromFile(OILBitmap* pOilBitmap)
 BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 {
 	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
-	PORTNOTETRACE("filters","PNGFilter::GetExportOptions - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 
 	PNGExportOptions* pPNGOptions = (PNGExportOptions*)pOptions;
 	ERROR3IF(!pPNGOptions->IS_KIND_OF(PNGExportOptions), "pPNGOptions isn't");
@@ -490,8 +479,8 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	DoingMask = FALSE;
 
 	// Determine the filter type currently in use in Accusoft format
-	FilterType = PNG;
-	pPNGOptions->SetFilterType(FilterType);
+	s_FilterType = PNG;
+	pPNGOptions->SetFilterType(PNG);
 
 	BOOL Ok = FALSE;
 
@@ -504,6 +493,8 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 		// invoke the dialog
 		pOpDes->Invoke(&Param);
 
+PORTNOTE("BitmapPrevDlg", "Removed use of BitmapPrevDlg")
+#ifndef EXCLUDE_FROM_XARALX
 		// SMFIX
 		// we have brought the dlg up so get the options from the dlg as the graphic type may have changed
 		pOptions = BmapPrevDlg::m_pExportOptions;
@@ -511,6 +502,7 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 		// check for valid options
 		//  This may get messed up, so have to use the second line below.
 		Ok = BmapPrevDlg::m_bClickedOnExport;
+#endif
 	}
 	else
 	{	
@@ -519,9 +511,6 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 
 	// Return with the ok/cancel state used on the dialog box
 	return Ok;
-#else
-	return FALSE;
-#endif
 }
 
 // SMFIX sjk 5/12/00 there used to be some junk in the call to GetExportOptions that assumed the
@@ -530,9 +519,7 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 // call afterwards
 void PNGFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 {
-	PORTNOTETRACE("filters","PNGFilter::PostGetExportOptions - do nothing");
 	// should be of this type
-#ifndef EXCLUDE_FROM_XARALX
 	PNGExportOptions* pPNGOptions = (PNGExportOptions*)pOptions;
 	ERROR3IF(!pPNGOptions->IS_KIND_OF(PNGExportOptions), "pPNGOptions isn't");
 
@@ -548,12 +535,18 @@ void PNGFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 	{
 		Compression = Silliness;
 		// Compression ranges from 0 .. 4 so map this onto our filter types
-		FilterType = Silliness + PNG;
+//		s_FilterType = PNG + Silliness;
+		switch (Silliness)
+		{
+		case 0:	s_FilterType = PNG; break;
+		case 1:	s_FilterType = PNG_INTERLACED; break;
+		case 2:	s_FilterType = PNG_TRANSPARENT; break;
+		case 3:	s_FilterType = PNG_TRANSINTER; break;
+		}
 
 		if (pPNGOptions->WantTransparent() && pPNGOptions->GetSelectionType() == SELECTION)
 			DoingMask = TRUE;
 	}
-#endif
 }
 
 /********************************************************************************************
@@ -616,8 +609,6 @@ UINT32 PNGFilter::GetExportMsgID()
 	if (GeneratingOptimisedPalette())
 		return _R(IDS_GENOPTPALMSGID);				// "Generating optimised palette..."
 
-	PORTNOTETRACE("filters","PNGFilter::GetExportMsgID - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	PNGExportOptions* pPNGOptions = (PNGExportOptions*)GetBitmapExportOptions();
 	ERROR2IF(pPNGOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pPNGOptions->IS_KIND_OF(PNGExportOptions), "pPNGOptions isn't");
@@ -649,9 +640,6 @@ UINT32 PNGFilter::GetExportMsgID()
 	}
 
 	return ExportingMsgID;
-#else
-	return 0;
-#endif
 }
 
 /********************************************************************************************
@@ -674,8 +662,6 @@ BOOL PNGFilter::EndWriteToFile()
 	if (GeneratingOptimisedPalette())
 		return TRUE;		// No need to output anything
 
-	PORTNOTETRACE("filters","PNGFilter::EndWriteToFile - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	//  Can reset the band number now.
 	m_BandNumber = 0;
 
@@ -728,9 +714,6 @@ BOOL PNGFilter::EndWriteToFile()
 	ASSERT(ok);
 	
 	return DestPNG.TidyUp();
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1030,7 +1013,7 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 	INT32 Transparent = -1;	// colour or -1 = no transparency
 	BOOL WantTransparent = FALSE;
 
-	switch (FilterType)
+	switch (s_FilterType)
 	{
 		default:
 		case PNG:
@@ -1113,12 +1096,7 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 ********************************************************************************************/
 BOOL PNGFilter::WritePreFrame(void)
 {
-	PORTNOTETRACE("filters","PNGFilter::WritePreFrame - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return DestPNG.ReStartFile(NULL);
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1174,12 +1152,7 @@ BOOL PNGFilter::WritePostFrame(void)
 ********************************************************************************************/
 BOOL PNGFilter::WriteFileEnd(void)
 {
-	PORTNOTETRACE("filters","PNGFilter::WriteFileEnd - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return DestPNG.TidyUp();
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1233,12 +1206,7 @@ void PNGFilter::InvertAlpha ( LPBITMAPINFO	lpBitmapInfo,
 OutputDIB* PNGFilter::GetOutputDIB ( void )
 {
 	// Perform an upcast to allow the pointer to be used in a generic manner.
-	PORTNOTETRACE("filters","PNGFilter::GetOutputDIB - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return static_cast<OutputDIB*> ( &DestPNG );
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -1253,13 +1221,8 @@ OutputDIB* PNGFilter::GetOutputDIB ( void )
 ********************************************************************************************/
 BitmapExportOptions* PNGFilter::CreateExportOptions() const
 {
-	PORTNOTETRACE("filters","PNGFilter::CreateExportOptions - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	PNGExportOptions* pPNGOptions = new PNGExportOptions(PNG, &FilterName);
 	return (BitmapExportOptions*)pPNGOptions;
-#else
-	return NULL;
-#endif
 }
 
 void PNGFilter::AlterPaletteContents( LPLOGPALETTE pPalette )

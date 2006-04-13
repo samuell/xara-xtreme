@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_MASKEDFILTER
 
 #include "bitfilt.h"
-#include "bmpprefs.h"  	// SelectionType
+//#include "bmpprefs.h"  	// SelectionType
 #include "exphint.h"
 
 class CXaraFileRecord;
@@ -118,12 +118,9 @@ class OutputDIB;
 
 ********************************************************************************************/
 
-PORTNOTE("filters","Removed MaskedFilterExportOptions")
-
-#ifndef EXCLUDE_FROM_XARALX
 class MaskedFilterExportOptions : public BitmapExportOptions
 {
-	CC_DECLARE_DYNCREATE(MaskedFilterExportOptions)
+	CC_DECLARE_DYNAMIC(MaskedFilterExportOptions)
 
 public:
 
@@ -131,7 +128,7 @@ public:
 
 	MaskedFilterExportOptions();
     MaskedFilterExportOptions(const CDlgResID& Dialog, 
-							  const FILTER_ID FilterID, const StringBase* pFilterName);
+							  const FilterType FilterID, const StringBase* pFilterName);
 
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
@@ -147,7 +144,7 @@ public:
 	BOOL	WantInterlaced() const { return m_bInterlaced; }
 	BOOL	SetMakeInterlaced(BOOL bInterlaced);
 
-	void	SetFilterType(FILTER_ID ID)	{	m_FilterID = ID;	}
+	void	SetFilterType(FilterType ID)	{	m_FilterID = ID;	}
 
 // WEBSTER - markn 21/1/97
 	virtual BOOL UseSpecificNumColsInPalette();
@@ -175,7 +172,6 @@ protected:
 	static BOOL		g_bInterlaced;
 
 };
-#endif
 
 /********************************************************************************************
 

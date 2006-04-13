@@ -102,12 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 //#include "filtrres.h"		// for Error string ID's
+
+#include "jpglib_namespace.h"
 #include "jerror.h"
 
 typedef UINT32 StringID;
 /********************************************************************************************
 
->	class JPEGErrorManager : public jpeg_error_mgr
+>	class JPEGErrorManager
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	08/08/96
@@ -117,7 +119,7 @@ typedef UINT32 StringID;
 	Scope:		public
 
 ********************************************************************************************/
-class JPEGErrorManager : public JPEG::jpeg_error_mgr
+class JPEGErrorManager
 {
 public:
 	enum ERROR_CLASS
@@ -139,15 +141,18 @@ public:
 	ERROR_CLASS		GetLastErrorClass() const;
 	J_MESSAGE_CODE	GetLastError() const;
 	StringID		GetStringIDForError() const;
+	const libJPEG::jpeg_error_mgr* GetErrorMgrStruct() const {return &m_errmgr;};
+	libJPEG::jpeg_error_mgr* GetErrorMgrStruct() {return &m_errmgr;};
 
-	static void		ErrorExit(JPEG::j_common_ptr cinfo);
-	static void		OutputMessage(JPEG::j_common_ptr cinfo);
-	static void		EmitMessage(JPEG::j_common_ptr cinfo, INT32 msg_level);
-	static void		ResetErrorManager(JPEG::j_common_ptr cinfo);
+	static void		ErrorExit(libJPEG::j_common_ptr cinfo);
+	static void		OutputMessage(libJPEG::j_common_ptr cinfo);
+	static void		EmitMessage(libJPEG::j_common_ptr cinfo, INT32 msg_level);
+	static void		ResetErrorManager(libJPEG::j_common_ptr cinfo);
 protected:
 	// Attributes
-	ERROR_CLASS			m_ErrorClass;
-	StringID			m_MessageID;
+	libJPEG::jpeg_error_mgr		m_errmgr;
+	ERROR_CLASS					m_ErrorClass;
+	StringID					m_MessageID;
 
 	static const ERROR_CLASS*	m_ErrorClassTable;
 };

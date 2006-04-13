@@ -106,13 +106,28 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dibutil.h"					// needs FNPTR_SCANLINE
 #include "outptdib.h"	
 //#include "gifutil.h"					// GIF header definitions
-extern "C"
-{
-// Header files supplied by Accusoft image library
-//#include "imglib.h"						// get filter numbers
-}
 
-//#include "accuflts.h"	// TI_GIF ...
+// From gifutil.h
+enum GIFDisposalMethod
+{
+	GDM_NONE		= 0,	// No disposal specified. The decoder is not required to take any action.
+	GDM_LEAVE		= 1,	// Do not dispose. The graphic is to be left in place.
+	GDM_BACKTOBACK	= 2,	// Restore to background color. The area used by the graphic must be restored to the background color.
+	GDM_PREVIOUS	= 3		// Restore to previous. The decoder is required to restore the area overwritten by the graphic with what was there prior to rendering the graphic.
+};
+
+#define GIFBITS    		12
+#define MAX_LWZ_BITS	12
+#define HSIZE  			5003            // 80% occupancy
+
+typedef int			code_int;
+typedef long int	count_int;
+
+const int maxbits = GIFBITS;            				// user settable max # bits/code
+const code_int maxmaxcode = (code_int)1 << GIFBITS; 	// should NEVER generate this code
+
+const code_int hsize = HSIZE;              		// for dynamic table sizing
+
 
 #define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
 
@@ -220,8 +235,8 @@ protected:
 	INT32 clear_flg;
 
 	INT32 offset;
-	INT32 INT32 in_count;       // length of input
-	INT32 INT32 out_count; 		// # of codes output (for debugging)
+	INT32 in_count;       // length of input
+	INT32 out_count; 		// # of codes output (for debugging)
 
 	// For compress()
 	INT32 g_init_bits;

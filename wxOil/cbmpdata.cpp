@@ -729,7 +729,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 		{
 			// output the bitmap
 			
-			if ((FILTER_ID)m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER)
+			if (m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER)
 			{
 				// GIF animation
 				s.MakeMsg(_R(IDS_DISPLAY_PIC), (const TCHAR *)TempPath.GetFileName());
@@ -785,7 +785,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 			count=0;
 			// generate the info strings
 			
-			if ((FILTER_ID) m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER)
+			if (m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER)
 			{
 				// This is actually the export animated GIF using the frame gallery system
 				MakeBitmapExportOptions* pMkBOptions = (MakeBitmapExportOptions*)m_pOptions;
@@ -895,7 +895,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 				}
 				
 				TempDiskFile.write(s);
-			} // if ((FILTER_ID) m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER) block ends
+			} // if (m_pOptions->GetFilterType() == MAKE_BITMAP_FILTER) block ends
 			else
 			{
 				switch (m_pOptions->GetFilterNameStrID())

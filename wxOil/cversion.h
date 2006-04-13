@@ -96,8 +96,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-#define	CAMELOT_VERSION_MAJOR	0
-#define	CAMELOT_VERSION_MINOR	4183
-#define	CAMELOT_VERSION	0.4183
-#define	CAMELOT_VERSION_STRING	"0.4183 (Luke)"
-#define	MASTER_BUILDER	0
+#ifndef INC_CVERSION
+#define INC_CVERSION
+
+#if defined(__WXMSW__)
+#include "staticversion.h"
+#else
+#include "svnversion.h"
+#endif
+
+#endif // INC_CVERSION

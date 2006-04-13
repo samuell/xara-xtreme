@@ -120,9 +120,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dibutil.h"
 #include "dibconv.h"
 #include "osrndrgn.h"
-// GAT #include "outptdib.h"
+#include "outptdib.h"
 #include "palman.h"
-// GAT #include "progress.h"
+#include "progress.h"
 #include "GDrawIntf.h"			// GAT
 
 #include "fixmem.h"
@@ -133,13 +133,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define FIXEDBANDSIZE 512
 
 CC_IMPLEMENT_DYNAMIC( GRenderBitmap, GRenderDIB )
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 CC_IMPLEMENT_DYNAMIC( GRenderOptPalette, GRenderBitmap )
 #endif
 
 #define new CAM_DEBUG_NEW
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 // Preference as to whether we round the colours of a 1bpp optimised palette
 BOOL GRenderOptPalette::DoTwoColourRoundingToPrimary = TRUE;
 #endif
@@ -151,10 +151,9 @@ BOOL GRenderOptPalette::DoTwoColourRoundingToPrimary = TRUE;
 // (on demand, the first time it is actually needed).
 GDrawContext *GRenderBitmap::pGreyscaleContext = NULL;
 
-/* GAT
 BOOL GRenderOptPalette::DoGDrawConversion = TRUE;
 BOOL GRenderOptPalette::UseOldPalette = TRUE;
-*/
+
 /********************************************************************************************
 
 >	GRenderBitmap::GRenderBitmap(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 ViewScale, 
@@ -199,7 +198,7 @@ GRenderBitmap::GRenderBitmap(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 V
  	// This next bit was added to cope with the conversion needed when using certain
 	// dithering techniques
 	DitherType = Dither;
-	OutputDepth = Depth;  		// If different from the actual RR bpp, then the bitmap will
+	uOutputDepth = Depth;  		// If different from the actual RR bpp, then the bitmap will
 								// be converted before output
 	lpOutputInfo = NULL;	
 	lpOutputBits = NULL;	
@@ -209,7 +208,7 @@ GRenderBitmap::GRenderBitmap(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 V
 
 	pConvPalette = pPalette;
 
-	if (AutoConvert && OutputDepth<32)
+	if (AutoConvert && uOutputDepth<32)
 	{
 		// The dithering we are using requires us to render to 32bpp and then convert it down
 		// to our output bpp at the end
@@ -818,8 +817,6 @@ BOOL GRenderBitmap::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispl
 ********************************************************************************************/
 OILBitmap *GRenderBitmap::ExtractBitmap(LPLOGPALETTE pPalette)
 {
-	PORTNOTETRACE("other","GRenderBitmap::ExtractBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pBitmapInfo && pBits)
 	{
 		LPBITMAPINFO lpConvInfo;	
@@ -888,7 +885,7 @@ OILBitmap *GRenderBitmap::ExtractBitmap(LPLOGPALETTE pPalette)
 		if(DeletePalette)
 			CCFree(pPalette);
 	}
-#endif
+
 	return NULL;
 }
 
@@ -1197,7 +1194,7 @@ BOOL GRenderBitmap::GetBitmapData(LPBITMAPINFO* pBmpInfo, LPBYTE* pBmpData, BOOL
 
 BOOL GRenderBitmap::DoOutputBitmapConversion(LPBITMAPINFO* lpConvInfo, LPBYTE* lpConvBits, LPLOGPALETTE pPalette)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR3IF(lpConvInfo == NULL, "NULL info pointer passed to GRenderBitmap::DoOutputBitmapConversion");
 	if (lpConvInfo == NULL)
 		return FALSE;
@@ -1206,23 +1203,23 @@ BOOL GRenderBitmap::DoOutputBitmapConversion(LPBITMAPINFO* lpConvInfo, LPBYTE* l
 	if (lpConvBits == NULL)
 		return FALSE;
 
-	if (OutputDepth == BitmapDepth)
+	if (uOutputDepth == uBitmapDepth)
 	{
 		// No conversion is needed !!
-		*lpConvInfo = lpBitmapInfo;
-		*lpConvBits = lpBits;
+		*lpConvInfo = pBitmapInfo;
+		*lpConvBits = pBits;
 
 		if(m_bEnableConversion && m_DoCompression)
 		{
-			UINT32 Width = lpBitmapInfo->bmiHeader.biWidth;
-			UINT32 Height = lpBitmapInfo->bmiHeader.biHeight;
-			BYTE* lpOutput = lpBits;
+			UINT32 Width = pBitmapInfo->bmiHeader.biWidth;
+			UINT32 Height = pBitmapInfo->bmiHeader.biHeight;
+			BYTE* lpOutput = pBits;
 
 			DIBConvert* Converter = DIBConvert::Create( 32, 32, Width, NULL, 0 );
 
 			if(Converter != NULL)
 			{
-				Converter->Convert(lpBits, lpOutput, Height);
+				Converter->Convert(pBits, lpOutput, Height);
 				delete Converter;
 				Converter = NULL;
 
@@ -1241,11 +1238,11 @@ BOOL GRenderBitmap::DoOutputBitmapConversion(LPBITMAPINFO* lpConvInfo, LPBYTE* l
 	*lpConvBits = NULL;
 
 	// We must need to do some Bitmap conversion then ....
-	UINT32 Width = lpBitmapInfo->bmiHeader.biWidth;
-	UINT32 Height = lpBitmapInfo->bmiHeader.biHeight;
+	UINT32 Width = pBitmapInfo->bmiHeader.biWidth;
+	UINT32 Height = pBitmapInfo->bmiHeader.biHeight;
 
 	// Make a converter object
-	DIBConvert* Converter = DIBConvert::Create( BitmapDepth, OutputDepth, Width, pPalette, DitherType );
+	DIBConvert* Converter = DIBConvert::Create( uBitmapDepth, uOutputDepth, Width, pPalette, DitherType );
 	ERROR3IF(Converter == NULL, "Failed to create DIBConvert object in GRenderBitmap::DoOutputBitmapConversion");
 	if (Converter == NULL)
 		return FALSE;
@@ -1260,14 +1257,14 @@ BOOL GRenderBitmap::DoOutputBitmapConversion(LPBITMAPINFO* lpConvInfo, LPBYTE* l
 	}
 
 	// Allocate some memory for the converted bitmap
-	lpOutputInfo = AllocDIB(Width, Height, OutputDepth, &lpOutputBits);
+	lpOutputInfo = AllocDIB(Width, Height, uOutputDepth, &lpOutputBits);
 	ERROR3IF(lpOutputInfo == NULL, "Failed to allocate conversion info in GRenderBitmap::DoOutputBitmapConversion");
 	ERROR3IF(lpOutputBits == NULL, "Failed to allocate conversion data in GRenderBitmap::DoOutputBitmapConversion");
 	if (lpOutputInfo == NULL || lpOutputBits == NULL)
 		return FALSE;
 
 	// Do the conversion
-	BOOL ok = Converter->Convert(lpBits, lpOutputBits, Height);
+	BOOL ok = Converter->Convert(pBits, lpOutputBits, Height);
 	delete Converter;
 
 	if (ok)
@@ -1295,8 +1292,8 @@ BOOL GRenderBitmap::DoOutputBitmapConversion(LPBITMAPINFO* lpConvInfo, LPBYTE* l
 
 LPLOGPALETTE GRenderBitmap::GetConversionPalette()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	if (OutputDepth>8)
+#if !defined(EXCLUDE_FROM_RALPH)
+	if (uOutputDepth>8)
 		return NULL;	// Must be 8bpp or less
 
  	if (pConvPalette)
@@ -1308,7 +1305,7 @@ LPLOGPALETTE GRenderBitmap::GetConversionPalette()
 	LPLOGPALETTE pPalette;
 	size_t TotalPal;
 
-	switch (OutputDepth)
+	switch (uOutputDepth)
 	{
 		case 8:
 			// Get the standard 256 colour palette
@@ -1498,7 +1495,7 @@ void GRenderBitmap::Deinit(void)
 
 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -1605,8 +1602,8 @@ BOOL GRenderOptPalette::GetNextBand()
 	// palette optimising code
 	if (Stats)
 	{
-		INT32 Width = lpBitmapInfo->bmiHeader.biWidth;
-		INT32 Height = lpBitmapInfo->bmiHeader.biHeight;
+		INT32 Width = pBitmapInfo->bmiHeader.biWidth;
+		INT32 Height = pBitmapInfo->bmiHeader.biHeight;
 
 		INT32 BmpSize = Width * Height;
 
@@ -1615,7 +1612,7 @@ BOOL GRenderOptPalette::GetNextBand()
 		// GAT
 		if( !m_bTooManyColours && !UseOldPalette )
 		{
-			BOOL bResult = DIBUtil::CalculateNumberOfColoursInBitmap( m_pExactPalette, ( RGBQUAD* )lpBits, BmpSize ); 
+			BOOL bResult = DIBUtil::CalculateNumberOfColoursInBitmap( m_pExactPalette, ( RGBQUAD* )pBits, BmpSize );
 			if( !bResult )
 			{
 				m_bTooManyColours = TRUE;
@@ -1625,9 +1622,9 @@ BOOL GRenderOptPalette::GetNextBand()
 
 		BOOL ok;
 		if (UseSpecial8bpp)
-			ok = DIBUtil::GenOptimal8bppPaletteStats( (INT32*)Stats, (RGBQUAD*)lpBits, BmpSize );
+			ok = DIBUtil::GenOptimal8bppPaletteStats( (INT32*)Stats, (RGBQUAD*)pBits, BmpSize );
 		else
-			ok = DIBUtil::GenOptimalPaletteStats( Stats, (RGBQUAD*)lpBits, BmpSize );
+			ok = DIBUtil::GenOptimalPaletteStats( Stats, (RGBQUAD*)pBits, BmpSize );
 
 		ERROR3IF(!ok, "GenOptimalPaletteStats failed");
 	}
@@ -1667,8 +1664,6 @@ BOOL GRenderOptPalette::GetNextBand()
 
 LPLOGPALETTE GRenderOptPalette::GetOptimisedPalette(UINT32 PaletteSize, UINT32 NumColours, UINT32 ReservedColours, BOOL SnapToBrowserPalette)
 {
-	PORTNOTETRACE("other","GRenderOptPalette::GetOptimisedPalette - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(!(PaletteSize==2 || PaletteSize==16 || PaletteSize==256), "Bad palette size passed to GRenderOptPalette::GetOptimisedPalette");
 	ERROR3IF(ReservedColours > PaletteSize, "Too many colours reserved in GRenderOptPalette::GetOptimisedPalette");
 
@@ -1695,13 +1690,19 @@ LPLOGPALETTE GRenderOptPalette::GetOptimisedPalette(UINT32 PaletteSize, UINT32 N
 				// GAT
 				//  If the bitmap has less than 256 colours, then we want to bypass the 
 				//  optimisation code, and just use the exact palette.
+PORTNOTE("BmpPrevDlg", "Rampant use of BmapPrevDlg removed (please don't re-instate directly - the value should be a param or member of this class)")
+#ifndef EXCLUDE_FROM_XARALX
 				if( !m_bTooManyColours && m_pExactPalette && !UseOldPalette 
 					&& m_pExactPalette->palNumEntries < BmapPrevDlg::m_NumOfColoursUserAskedFor ) // and we want this many colours
+#else
+				if( !m_bTooManyColours && m_pExactPalette && !UseOldPalette ) // and we want this many colours
+#endif
 				{
 					//  Transfer the exact palette into the variable we want, and then clear up the memory.
 					INT32 blackEntry = 10;
 					pPalette->palNumEntries = m_pExactPalette->palNumEntries;
-					for( INT32 i = 0; i < m_pExactPalette->palNumEntries; i++ )
+					INT32 i = 0;
+					for( i = 0; i < m_pExactPalette->palNumEntries; i++ )
 					{
 						pPalette->palPalEntry[i].peRed	 = m_pExactPalette->palPalEntry[i].peRed;
 						pPalette->palPalEntry[i].peGreen = m_pExactPalette->palPalEntry[i].peGreen;
@@ -1731,7 +1732,10 @@ LPLOGPALETTE GRenderOptPalette::GetOptimisedPalette(UINT32 PaletteSize, UINT32 N
 					}
 
 //					BmapPrevDlg::m_bNeedPaletteUpdated = TRUE;
+PORTNOTE("BmpPrevDlg", "Use of BmapPrevDlg removed")
+#ifndef EXCLUDE_FROM_XARALX
 					BmapPrevDlg::m_bUseExistingPalette = FALSE;
+#endif
 				}
 				else if (UseSpecial8bpp)
 				{
@@ -1981,8 +1985,5 @@ LPLOGPALETTE GRenderOptPalette::GetOptimisedPalette(UINT32 PaletteSize, UINT32 N
 	}
 
  	return pPalette;
-#else
-	return NULL;
-#endif
 }
 #endif

@@ -2773,6 +2773,8 @@ BOOL CaretNode::RenderObjectBlobsCore(RenderRegion* pRenderRegion)
 BOOL CaretNode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 // BODGE TEXT - need to export caret in a comment!
  	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
@@ -2781,6 +2783,7 @@ BOOL CaretNode::ExportRender(RenderRegion* pRegion)
 //		pDC->OutputNewLine();
 		return TRUE;
 	}
+#endif
 #endif
 	return FALSE;
 }
@@ -3527,6 +3530,8 @@ BOOL EOLNode::CanWriteChildrenNative(BaseCamelotFilter *pFilter)
 BOOL EOLNode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 
 	// (ChrisG - 3/11/00)
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(AIEPSRenderRegion)))
@@ -3538,6 +3543,9 @@ BOOL EOLNode::ExportRender(RenderRegion* pRegion)
 	}
 
 	return pRegion->WriteNewLine ();
+#else
+	return FALSE;
+#endif
 #else
 	return FALSE;
 #endif
@@ -3619,6 +3627,8 @@ KernCode::KernCode(Node* ContextNode, AttachNodeDirection Direction,
 BOOL KernCode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
  	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output any valid text attributes necessary
@@ -3636,6 +3646,7 @@ BOOL KernCode::ExportRender(RenderRegion* pRegion)
 		pDC->OutputNewLine();
 		return TRUE;
 	}
+#endif
 #endif
 	return FALSE;
 }

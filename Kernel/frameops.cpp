@@ -3696,7 +3696,7 @@ BOOL GrabFrameFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	m_pMkBmpOptions = (MakeBitmapExportOptions*) pOptions;
 
 	// Determine the filter type currently in use in Accusoft format
-	FilterType = MAKE_BITMAP_FILTER;
+	s_FilterType = MAKE_BITMAP_FILTER;
 
 	// Force the selection type to be DRAWING as this should render all visible objects
 	m_pMkBmpOptions->SetSelectionType(DRAWING);

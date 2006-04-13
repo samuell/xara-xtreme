@@ -105,6 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "gpalopt.h"
 
+//#include <stdlib.h>
+
 #pragma warning ( disable : 4554 )
 
 /***************************************************************************/
@@ -942,7 +944,7 @@ bool PaletteOptimiser::GetPalette( cpLOGPALETTE pPalette, cUINT32 uMaxColours )
 				n++ ;
 		}
 
-	qsort(T,n,sizeof PalEntry,SortFn) ;
+	qsort(T, n, sizeof(PalEntry), SortFn) ;
 	for ( i=0 ; i<n ; i++ )
 	{
 		pPalette->palPalEntry[i] = T[i].C ;

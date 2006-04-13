@@ -626,6 +626,8 @@ void NodeBitmap::PreExportRender(RenderRegion*)
 BOOL NodeBitmap::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
 	{
 		// Get valid transparency fill for this object
@@ -863,6 +865,7 @@ BOOL NodeBitmap::ExportRender(RenderRegion* pRegion)
 		return pAIEPSRR->ExportBitmap ( this );
 	}
 
+#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

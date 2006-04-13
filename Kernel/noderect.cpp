@@ -268,6 +268,8 @@ String NodeRect::Describe(BOOL Plural, BOOL Verbose)
 void NodeRect::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSRenderRegion)))
 	{
 		// Output "ArtWorks rectangle" token
@@ -275,6 +277,7 @@ void NodeRect::PreExportRender(RenderRegion* pRegion)
 		pDC->OutputToken("ar");
 		pDC->OutputNewLine();
 	}
+#endif
 #endif
 }
 

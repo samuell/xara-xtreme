@@ -394,7 +394,7 @@ BOOL PreviewFilterBMP::DoExport(Operation* pOp, CCLexFile* pFile, PathName* pPat
 
 BOOL PreviewFilterBMP::GetExportOptions(BitmapExportOptions* pOptions)
 {
-	ERROR2IF(pOptions == NULL, FALSE, "NULL Args")
+	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pOptions->IS_KIND_OF(BMPExportOptions), "pOptions isn't a BMPExportOptions");
 
 	BMPExportOptions* pBMPOptions = (BMPExportOptions*)pOptions;
@@ -545,7 +545,7 @@ BOOL PreviewFilterGIF::DoExport(Operation* pOp, CCLexFile* pFile, PathName* pPat
 
 BOOL PreviewFilterGIF::GetExportOptions(BitmapExportOptions* pOptions)
 {
-	ERROR2IF(pOptions == NULL, FALSE, "NULL Args")
+	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pOptions->IS_KIND_OF(GIFExportOptions), "pOptions isn't a GIFExportOptions");
 
 	GIFExportOptions* pGIFOptions = (GIFExportOptions*)pOptions;
@@ -601,8 +601,8 @@ BOOL PreviewFilterGIF::GetExportOptions(BitmapExportOptions* pOptions)
 	Compression = 0;				// Previews have no interlace/transparency
 
 	// Determine the filter type currently in use in Accusoft format
-	FilterType = TI_GIF;
-	pGIFOptions->SetFilterType(FilterType);
+	FilterID = FILTERID_TI_GIF;
+	pGIFOptions->SetFilterType(TI_GIF);
 
 	m_DoingAnimation = FALSE;
 
@@ -719,7 +719,7 @@ BOOL PreviewFilterJPEG::DoExport(Operation* pOp, CCLexFile* pFile, PathName* pPa
 
 BOOL PreviewFilterJPEG::GetExportOptions(BitmapExportOptions* pOptions)
 {
-	ERROR2IF(pOptions == NULL, FALSE, "NULL Args")
+	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pOptions->IS_KIND_OF(JPEGExportOptions), "pOptions isn't a JPEGExportOptions");
 
 	JPEGExportOptions* pJPEGOptions = (JPEGExportOptions*)pOptions;
@@ -778,7 +778,7 @@ PreviewFilterPNG::PreviewFilterPNG() : PNGFilter()
 	// Filter menus.
 	Flags.CanImport = FALSE;
 	Flags.CanExport = FALSE;
-	FilterID = FILTERID_PREVIEW_PNG;
+	FilterID = FILTERID_PNG;		// FILTERID_PREVIEW_PNG;
 
 	ExportRegion = NULL;
 	ExportMsgID = _R(IDS_BUILDINGPREVIEW);
@@ -866,7 +866,7 @@ BOOL PreviewFilterPNG::DoExport(Operation* pOp, CCLexFile* pFile, PathName* pPat
 
 BOOL PreviewFilterPNG::GetExportOptions(BitmapExportOptions* pOptions)
 {
-	ERROR2IF(pOptions == NULL, FALSE, "NULL Args")
+	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 	ERROR3IF(!pOptions->IS_KIND_OF(PNGExportOptions), "pOptions isn't a PNGExportOptions");
 
 	PNGExportOptions* pPNGOptions = (PNGExportOptions*)pOptions;
@@ -916,8 +916,8 @@ BOOL PreviewFilterPNG::GetExportOptions(BitmapExportOptions* pOptions)
 	Compression = 0;				// Previews have no interlace/transparency
 
 	// Determine the filter type currently in use in Accusoft format
-	FilterType = PNG;
-	pPNGOptions->SetFilterType(FilterType);
+	FilterID = FILTERID_PNG;
+	pPNGOptions->SetFilterType(PNG);
 
 	return TRUE;
 }

@@ -665,7 +665,7 @@ BOOL UnitListComponent::StartExport(BaseCamelotFilter *pFilter)
 		ERROR3IF(pDocUnitList == NULL,"UnitListComponent::StartExport No doc unit list attached to this doc yet");
 
 		// Get a hash table for the user units...
-		TRY
+/*		TRY
 		{
 			pExpUserUnitMap = new CMapPtrToPtr;
 		}
@@ -674,6 +674,20 @@ BOOL UnitListComponent::StartExport(BaseCamelotFilter *pFilter)
 			ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
 		}
 		END_CATCH
+*/
+		try
+		{
+			pExpUserUnitMap = new CMapPtrToLong;
+		}
+		catch (std::bad_alloc&)
+		{
+			ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
+		}
+		catch (...)
+		{
+			ERROR1(FALSE, _R(IDS_UNKNOWN_ERROR));
+		}
+
 	}
 	else
 	{
@@ -778,10 +792,10 @@ INT32 UnitListComponent::GetWriteUnitReference(Unit* pUnit, BaseCamelotFilter *p
 	{
 		// See if we have saved the unit definition out by checking our has table
 		// Try and find the specified record number in our loaded user unit list
-		if (!pExpUserUnitMap->Lookup(pUnit, (void *&)RecordNumber))
+		if (pExpUserUnitMap->find(pUnit)==pExpUserUnitMap->end())
 		{
 			// We have not seen this unit before so save out the definition
-			BOOL ok = ExportUnitDefinition(pFilter, pUnit);
+			/*BOOL ok =*/ ExportUnitDefinition(pFilter, pUnit);
 		}
 	}
 
@@ -839,10 +853,10 @@ INT32 UnitListComponent::GetWriteUnitReference(UnitType type, BaseCamelotFilter 
 	{
 		// See if we have saved the unit definition out by checking our has table
 		// Try and find the specified record number in our loaded user unit list
-		if (!pExpUserUnitMap->Lookup(pUnit, (void *&)RecordNumber))
+		if (pExpUserUnitMap->find(pUnit)==pExpUserUnitMap->end())
 		{
 			// We have not seen this unit before so save out the definition
-			BOOL ok = ExportUnitDefinition(pFilter, pUnit);
+			/*BOOL ok =*/ ExportUnitDefinition(pFilter, pUnit);
 		}
 	}
 
@@ -922,14 +936,13 @@ INT32 UnitListComponent::ExportUnitDefinition(BaseCamelotFilter *pFilter, Unit* 
 
 	// See if we have saved the unit definition out by checking our table
 	// If so then do nothing
-	if (pExpUserUnitMap->Lookup(pUnit, (void *&)RecordNumber))
-	{
-		return RecordNumber;
-	}
+	CMapPtrToLong::iterator it = pExpUserUnitMap->find(pUnit);
+	if (it!=pExpUserUnitMap->end())
+		return it->second;
 
 	// Export the definition for this unit
 	// First get all the details
-	UnitType type = pUnit->GetUnitType();
+//	UnitType type = pUnit->GetUnitType();
 	
 	// Set up the prefix/suffix state for this user's unit.
 	BOOL Prefix = pUnit->IsPrefix();
@@ -953,14 +966,8 @@ INT32 UnitListComponent::ExportUnitDefinition(BaseCamelotFilter *pFilter, Unit* 
 
 	// If there are string names, then add it to this size
 	// REMEMBER: We save out unicode strings and so we need to double the length of the returned string length
-	// but only if we are not being compiled as Unicode
-#ifdef UNICODE
-	Size += Name.Length() + 1;
-	Size += Abbrev.Length() + 1;
-#else
-	Size += (Name.Length() + 1) * 2;
-	Size += (Abbrev.Length() + 1) * 2;
-#endif	
+	Size += (Name.Length() + 1) * SIZEOF_XAR_UTF16;
+	Size += (Abbrev.Length() + 1) * SIZEOF_XAR_UTF16;
 
 	BOOL ok = TRUE;
 	CXaraFileRecord Rec(Tag, Size);
@@ -997,16 +1004,18 @@ INT32 UnitListComponent::ExportUnitDefinition(BaseCamelotFilter *pFilter, Unit* 
 	// exported units and hence whether we have exported this before
 	// Reference for this unit is the record number
 TRACEUSER( "Neville", _T("Exported user unit reference %d\n"), RecordNumber);
-	TRY
+	try
 	{
-		pExpUserUnitMap->SetAt(pUnit, (void *&)RecordNumber);
+		(*pExpUserUnitMap)[pUnit] = RecordNumber;
 	}
-	CATCH (CMemoryException, e)
+	catch (std::bad_alloc&)
 	{
-		// Could not do it - report error to caller.
 		ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
 	}
-	END_CATCH
+	catch (...)
+	{
+		ERROR1(FALSE, _R(IDS_UNKNOWN_ERROR));
+	}
 
 	return RecordNumber;
 #else
@@ -1106,6 +1115,11 @@ INT32 UnitListComponent::GetExportUnitType(UnitType type)
 		case PIXELS:		DefUnitType = REF_DEFAULTUNIT_PIXELS;		break;
 
 		case NOTYPE:		DefUnitType = REF_DEFAULTUNIT_NOTYPE;		break;
+
+		case AUTOMATIC:		
+		case NUM_DEFAULT_UNIT_TYPES:
+							ERROR3("This shouldn't happen!");
+							DefUnitType = 0; break;
 	}
 
 	return DefUnitType; 

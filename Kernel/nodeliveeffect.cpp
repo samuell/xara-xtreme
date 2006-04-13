@@ -2659,16 +2659,19 @@ BOOL NodeLiveEffect::WriteLiveEffect(BaseCamelotFilter* pFilter)
 
 	CXaraFileRecord Rec(Tag);
 
+PORTNOTETRACE("other","NodeLiveEffect::WriteLiveEffect - removed use of XML");
+#ifndef EXCLUDE_FROM_XARALX
 	BSTR bstrValue;
 	HRESULT hr;
 	hr = m_pEditsDoc->get_xml(&bstrValue);
 	ok = (SUCCEEDED(hr));
+#endif
 	if (ok) ok = Rec.Init();
 	if (ok) ok = Rec.WriteBYTE(Flags);					// flags
 	if (ok) ok = Rec.WriteDOUBLE(m_dPixelsPerInch);		// Resolution
 	if (ok) ok = Rec.WriteUnicode(m_strPostProID);		// Effect ID
 	if (ok) ok = Rec.WriteUnicode(m_strDisplayName);	// Display Name
-	if (ok) ok = Rec.WriteBSTR(bstrValue);				// UNICODE xml string edits list
+	if (ok) ok = Rec.WriteUTF16STR(m_vstrEdits);		// UNICODE xml string edits list
 
 	// Write the record
 	if (ok) ok = pFilter->Write(&Rec);
@@ -3642,10 +3645,13 @@ BOOL NodeLockedEffect::WriteLockedEffect(BaseCamelotFilter* pFilter)
 
 	CXaraFileRecord Rec(Tag);
 
+PORTNOTETRACE("other","NodeLockedEffect::WriteLockedEffect - removed use of XML");
+#ifndef EXCLUDE_FROM_XARALX
 	BSTR bstrValue;
 	HRESULT hr;
 	hr = m_pEditsDoc->get_xml(&bstrValue);
 	ok = (SUCCEEDED(hr));
+#endif
 	if (ok) ok = Rec.Init();
 	if (ok) ok = Rec.WriteBYTE(Flags);					// flags
 	if (ok) ok = Rec.WriteDOUBLE(m_dPixelsPerInch);		// Resolution
@@ -3655,7 +3661,7 @@ BOOL NodeLockedEffect::WriteLockedEffect(BaseCamelotFilter* pFilter)
 	if (ok) ok = Rec.WriteCoordTrans(m_PGram[2], 0, 0);
 	if (ok) ok = Rec.WriteUnicode(m_strPostProID);		// Effect ID
 	if (ok) ok = Rec.WriteUnicode(m_strDisplayName);	// Display Name
-	if (ok) ok = Rec.WriteBSTR(bstrValue);				// UNICODE xml string edits list
+	if (ok) ok = Rec.WriteUTF16STR(m_vstrEdits);		// UNICODE xml string edits list
 
 	// Write the record
 	if (ok) ok = pFilter->Write(&Rec);

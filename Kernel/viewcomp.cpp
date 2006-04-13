@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "viewcomp.h"
 #include "app.h"
-//#include "webparam.h"
+#include "webparam.h"
 //#include "xarprefs.h"
 //#include "webprefs.h"
 #include "bitfilt.h"		// For standard bounds calc routines.

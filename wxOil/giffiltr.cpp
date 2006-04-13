@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodebmp.h"
 #include "bmpfiltr.h"
 #include "progress.h"
-#include "wbitmap.h"	// Windows specific bitmap information	 
+#include "oilbitmap.h"	// Windows specific bitmap information
 #include "docview.h"	// DocView
 #include "fixmem.h"
 
@@ -119,12 +119,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will3.h"		// for _R(IDS_GENOPTPALMSGID)
 
 #include "maskfilt.h"	// MaskedFilter class
-#include "bmpsdlg.h"
-#include "frameops.h"	// GIFAnimationExportParam
+//#include "bmpsdlg.h"
+//#include "frameops.h"	// GIFAnimationExportParam
 #include "spread.h"		// Pasteboard rect
-#include "bmapprev.h"	// tab preview dialog
+//#include "bmapprev.h"	// tab preview dialog
 #include "palman.h"		// MakePaletteBrowserCompatible
 #include "sprdmsg.h"	// SpreadMsg::ANIMATIONPROPERTIESCHANGED
+#include "impexpop.h"
 
 #include "exphint.h"
 
@@ -132,11 +133,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "menuops.h"
 
 #include "outptdib.h"
-#include "bmapprev.h"
+//#include "bmapprev.h"
 #include "cxfrec.h"		// for CXaraFileRecord
 
 #include "mrhbits.h"	//  For CBMPBits::RenderSelectionToBMP
 #include "selall.h"		//  For OPTOKEN_EDITSELECTALL
+#include "bmpprefs.h"
+#include "animparams.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -151,14 +154,13 @@ CC_IMPLEMENT_DYNCREATE(AnimatedGIFImage, ListItem)
 static UINT32 g_DefaultGIFType = 0;
 
 OutputGIF 	TI_GIFFilter::DestGIF;
-INT32 		TI_GIFFilter::FilterType = TI_GIF;	// Type of filter in use (TI_GIF .. TI_GIF_TRANSINTER)
-
+FilterType	TI_GIFFilter::s_FilterType = GIF;	// Type of filter in use (TI_GIF .. TI_GIF_TRANSINTER)
 
 CENTISECONDS		GIFExportOptions::g_AnimationDelay 			= 10;			// Delay in CentiSeconds
 GIFDisposalMethod	GIFExportOptions::g_AnimationRestoreType 	= GDM_LEAVE;	// How to restore after each frame
 UINT32				GIFExportOptions::g_AnimationLoopCount 		= 1;			// Number of loops
 KernelBitmap**		GIFExportOptions::m_pBitmapList				= NULL;
-UINT32				GIFExportOptions::m_ListSize				=0;
+UINT32				GIFExportOptions::m_ListSize				= 0;
 
 /********************************************************************************************
 
@@ -173,12 +175,12 @@ UINT32				GIFExportOptions::m_ListSize				=0;
 ********************************************************************************************/
 BOOL GIFExportOptions::Declare()
 {
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
-		Camelot.DeclarePref( NULL, "ExportGIFtype", &g_DefaultGIFType, 0, 3 );
-		Camelot.DeclarePref( NULL, "AnimationDelay", &g_AnimationDelay, 0, 65535 );
-		Camelot.DeclarePref( NULL, "AnimationRestoreType", (INT32*)&g_AnimationRestoreType, 0, 3 );
-		Camelot.DeclarePref( NULL, "AnimationLoopCount", &g_AnimationLoopCount, 0, 65535 );
+		Camelot.DeclarePref( NULL, _T("ExportGIFtype"), &g_DefaultGIFType, 0, 3 );
+		Camelot.DeclarePref( NULL, _T("AnimationDelay"), &g_AnimationDelay, 0, 65535 );
+		Camelot.DeclarePref( NULL, _T("AnimationRestoreType"), (INT32*)&g_AnimationRestoreType, 0, 3 );
+		Camelot.DeclarePref( NULL, _T("AnimationLoopCount"), &g_AnimationLoopCount, 0, 65535 );
 	}
 
 	// All ok
@@ -196,17 +198,17 @@ BOOL GIFExportOptions::Declare()
 				options
 ********************************************************************************************/
 
-GIFExportOptions::GIFExportOptions()
-  : m_AnimDelay(g_AnimationDelay),
-	m_AnimDispose((GIFDisposalMethod) g_AnimationRestoreType),
-	m_AnimLoop(g_AnimationLoopCount),
-	m_AnimSize(0, 0),
+GIFExportOptions::GIFExportOptions() :
+	DelayIndex(0),
+	RestoreIndex(0),
 	m_GlobalPalette(TRUE),
 	m_LeftOffset(0),
 	m_TopOffset(0),
-	DelayValueIsDefault(FALSE),
-	DelayIndex(0),
-	RestoreIndex(0)
+	m_AnimDelay(g_AnimationDelay),
+	m_AnimDispose((GIFDisposalMethod) g_AnimationRestoreType),
+	m_AnimLoop(g_AnimationLoopCount),
+	m_AnimSize(0, 0),
+	DelayValueIsDefault(FALSE)
 {
 	g_AnimationLoopCount = 1;
 }
@@ -214,7 +216,7 @@ GIFExportOptions::GIFExportOptions()
 
 
 /********************************************************************************************
->	GIFExportOptions::GIFExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+>	GIFExportOptions::GIFExportOptions(const FilterType FilterID, const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -222,18 +224,18 @@ GIFExportOptions::GIFExportOptions()
 				options
 ********************************************************************************************/
 
-GIFExportOptions::GIFExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+GIFExportOptions::GIFExportOptions(const FilterType FilterID, const StringBase* pFilterName)
   : MaskedFilterExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName),
+	DelayIndex(0),
+	RestoreIndex(0),
+	m_GlobalPalette(TRUE),
+	m_LeftOffset(0),
+	m_TopOffset(0),
 	m_AnimDelay(g_AnimationDelay),
 	m_AnimDispose((GIFDisposalMethod) g_AnimationRestoreType),
 	m_AnimLoop(g_AnimationLoopCount),
 	m_AnimSize(0, 0),
-	m_GlobalPalette(TRUE),
-	m_LeftOffset(0),
-	m_TopOffset(0),
-	DelayValueIsDefault(FALSE),
-	DelayIndex(0),
-	RestoreIndex(0)
+	DelayValueIsDefault(FALSE)
 {
 	g_AnimationLoopCount = 1;
 }
@@ -741,10 +743,10 @@ BOOL TI_GIFFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* pFilt
 		BeginSlowJob(-1);	// GIFUtil::ReadImage expects a progress bar.
 
 	// Try to import bitmap as usual binary BMP file.
-	WinBitmap* pWBitmap = (WinBitmap*) pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*) pOilBitmap;
 	
-	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
-	LPBYTE *pBytes = &(pWBitmap->BMBytes);
+//	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
+//	LPBYTE *pBytes = &(pWBitmap->BMBytes);
 
 	// Set a default transparent colour
 	INT32 TransColour = -1;
@@ -756,7 +758,12 @@ BOOL TI_GIFFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* pFilt
 
 	// Read from file, no header and using pFilter for progress bar updates
 	// 20/01/97 In fact pFilter is not used so NULL ptr ok
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#ifndef EXCLUDE_FROM_XARALX
 	if (!GIFUtil::ReadFromFile(pFile, pInfo, pBytes, &TransColour, NULL, pFilter))
+#else
+	if (FALSE)
+#endif
 	{
 		if (!pFilter)
 			EndSlowJob();
@@ -811,10 +818,10 @@ BOOL TI_GIFFilter::ReadFromFile(OILBitmap* pOilBitmap)
 	SetTransColour(TransColour);
 	INT32 nBitmapToRead = GetBitmapNumber();
 
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+//	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	
-	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
-	LPBYTE *pBytes = &(pWBitmap->BMBytes);
+//	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
+//	LPBYTE *pBytes = &(pWBitmap->BMBytes);
 	// Receives the Bitmap delay/Restore value from the Import.
 	UINT32 Delay=0;
 	GIFDisposalMethod Restore = GDM_LEAVE;
@@ -824,8 +831,13 @@ BOOL TI_GIFFilter::ReadFromFile(OILBitmap* pOilBitmap)
 	m_TopOffset = 0;
 
 	// The GIF filter liked it very much and so use it, showing progress bar
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#ifndef EXCLUDE_FROM_XARALX
 	if (GIFUtil::ReadFromFile(pImportFile, pInfo, pBytes, &TransColour,nBitmapToRead, &ProgressString, NULL,
 							  &Delay, &Restore, &m_LeftOffset, &m_TopOffset))
+#else
+	if (FALSE)
+#endif
 	{
 		// Set the Delay\Restore value of the OILBitmap.
 		pOilBitmap->SetBitmapAnimDelay(Delay);
@@ -880,7 +892,8 @@ BOOL TI_GIFFilter::ReadFromFile(OILBitmap* pOilBitmap)
 BOOL TI_GIFFilter::GetDragAndDropTranslation(ImportPosition *pPos, DocRect BoundsRect, 
 											 Coord* Offset)
 {
-#ifndef EXCLUDE_FROM_RALPH
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// First check to se if we actually have a drag and drop point.
 	if (pPos == NULL || pPos->pSpread == NULL)
 	{
@@ -992,6 +1005,8 @@ BOOL TI_GIFFilter::GetDragAndDropTranslation(ImportPosition *pPos, DocRect Bound
 BOOL TI_GIFFilter::SetFlagsFromBitmap(Layer * pLayer, KernelBitmap * pBitmap,
 									  UINT32 nBitmapToRead)
 {
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (pBitmap && pLayer)
 	{
 		// transfer the disposal method from the bitmap to the layer
@@ -1032,6 +1047,9 @@ BOOL TI_GIFFilter::SetFlagsFromBitmap(Layer * pLayer, KernelBitmap * pBitmap,
 	}
 
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 /********************************************************************************************
@@ -1089,6 +1107,8 @@ BOOL TI_GIFFilter::AddOffsetFromBitmap(DocCoord * pOffset)
 
 BOOL TI_GIFFilter::SetAnimationPropertiesFromLoaded(Spread * pSpread)
 {
+//PORTNOTE("GIFFilter", "Removed use of gif code")
+//#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(pSpread == NULL,FALSE,"SetAnimationPropertiesFromLoaded pSpread = NULL");
 	
 	// Find out about the palettes that the bitmaps have
@@ -1139,6 +1159,9 @@ BOOL TI_GIFFilter::SetAnimationPropertiesFromLoaded(Spread * pSpread)
 	}
 
 	return TRUE;
+//#else
+//	return FALSE;
+//#endif
 }
 
 /********************************************************************************************
@@ -1203,6 +1226,8 @@ BOOL TI_GIFFilter::GetExportOptions(BitmapExportOptions* pOptions)
 //[MD]
 
 #ifndef STANDALONE
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 
 	GIFExportOptions* pGIFOptions = (GIFExportOptions*)pOptions;
@@ -1223,14 +1248,14 @@ BOOL TI_GIFFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	// on/off interlaced and on/off transparent
 	
 	// Determine the filter type currently in use in Accusoft format
-	FilterType = (pGIFOptions->GetSelectionType() == SOMEBITMAPS) ? TI_GIF_ANIM : TI_GIF;
-	pGIFOptions->SetFilterType(FilterType);
+	s_FilterType = (pGIFOptions->GetSelectionType() == SOMEBITMAPS) ? TI_GIF_ANIM : TI_GIF);
+	pGIFOptions->SetFilterType(s_FilterType);
 	m_DoingAnimation = (pGIFOptions->GetSelectionType() == SOMEBITMAPS);
 	
 	// This is ok as we are using a modal dialog box	
 	BOOL Ok = FALSE;
 	
-	if (FilterType == TI_GIF)
+	if (s_FilterType == TI_GIF)
 	{
 		OpDescriptor* pOpDes = OpDescriptor::FindOpDescriptor(OPTOKEN_GIFTABDLG);
 		if (pOpDes != NULL)
@@ -1262,6 +1287,9 @@ BOOL TI_GIFFilter::GetExportOptions(BitmapExportOptions* pOptions)
 
 	// Return with the ok/cancel state used on the dialog box
 	return Ok;
+#else
+	return FALSE;
+#endif
 
 #else
 	return FALSE;
@@ -1295,7 +1323,15 @@ void TI_GIFFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 	{
 		Compression = Silliness;
 		// Compression ranges from 0 .. 3 so map this onto our filter types
-		FilterType = Silliness + TI_GIF;
+//		FilterID = Silliness + TI_GIF;
+		switch (Silliness)
+		{
+		case 0:	s_FilterType = TI_GIF; break;
+		case 1:	s_FilterType = TI_GIF_INTERLACED; break;
+		case 2:	s_FilterType = TI_GIF_TRANSPARENT; break;
+		case 3:	s_FilterType = TI_GIF_TRANSINTER; break;
+		case 4:	s_FilterType = TI_GIF_ANIM; break;
+		}
 
 		if (pGIFOptions->WantTransparent() && pGIFOptions->GetSelectionType() == SELECTION)
 			DoingMask = TRUE;
@@ -1516,6 +1552,8 @@ BOOL TI_GIFFilter::SaveExportBitmapsToFile(CCLexFile* pFile, PathName* pPath, Bi
 										   BOOL DontShowFileName)
 {
 #ifdef DO_EXPORT
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(pFile == NULL || pPath == NULL, FALSE,"NULL Parameters");
 	ERROR2IF(pParam == NULL,FALSE,"TI_GIFFilter::DoExportBitmaps null BitmapExportParam specified");
 
@@ -1866,6 +1904,9 @@ BOOL TI_GIFFilter::SaveExportBitmapsToFile(CCLexFile* pFile, PathName* pPath, Bi
 	CleanUpAfterExport();
 
 	return ok;
+#else
+	return FALSE;
+#endif
 #endif
 	return FALSE;
 }
@@ -1931,6 +1972,8 @@ TRACEUSER( "Neville", _T("TI_GIFFilter::HowCompatible"));
 		return 0;
 	}
 
+PORTNOTE("GIFFilter", "Removed use of gif code")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Check the header for the "GIF" signature.
 	LPGIFINFOHEADER pHeader = (LPGIFINFOHEADER) HeaderStart;
 
@@ -1947,6 +1990,7 @@ TRACEUSER( "Neville", _T("TI_GIFFilter::HowCompatible"));
 		GIFHowCompatible = 10;
 	}
 	else
+#endif
 	{
 		// No GIF signature - we don't want this file.
 		GIFHowCompatible = 0;
@@ -2001,10 +2045,10 @@ BOOL TI_GIFFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double Dpi)
 
 	// Now get the pointer to the info header and actual bits data.
 	// Need to use the actual bitmap pointer
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO pInfo = pWBitmap->BMInfo;
 	LPBYTE pBytes = pWBitmap->BMBytes;
-	UINT32 Bpp = pWBitmap->GetBPP();
+//	UINT32 Bpp = pWBitmap->GetBPP();
 
 	// Now, save the data out showing the correct progress string
 	String_64 ProgressString(ExportingMsgID);
@@ -2052,7 +2096,7 @@ BOOL TI_GIFFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFil
 
 	// Now get the pointer to the info header and actual bits data.
 	// Need to use the actual bitmap pointer
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO Info = pWBitmap->BMInfo;
 	LPBYTE Bytes = pWBitmap->BMBytes;
 	UINT32 Bpp = pWBitmap->GetBPP();
@@ -2061,7 +2105,7 @@ BOOL TI_GIFFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFil
 	BOOL ok = FALSE;
 	// We must output with no interlacing and no transparency as otherwise things like
 	// the progress bar update will be screwed, so force the filter type to be simple.
-	FilterType = TI_GIF;
+	s_FilterType = TI_GIF;
 
 	BOOL Interlace = FALSE;	// Don't use interlacing by default
 	INT32 Transparent = -1;	// colour or -1 = no transparency
@@ -2235,7 +2279,7 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 	INT32 Transparent = -1;	// colour or -1 = no transparency
 	BOOL MakeTransparent = FALSE;
 
-	switch (FilterType)
+	switch (s_FilterType)
 	{
 		default:
 		case TI_GIF:
@@ -2255,7 +2299,7 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 			MakeTransparent = TRUE;
 			break;
 	}
-TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterType);
+TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterID);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Interlace = %d\n"),Interlace);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transparent);
 
@@ -2289,7 +2333,7 @@ TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transpa
 			MakeTransparent = FALSE;
 	}
 
-TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterType);
+TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterID);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Interlace = %d\n"),Interlace);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transparent);
 
@@ -2413,7 +2457,7 @@ BOOL TI_GIFFilter::WritePostFrame(void)
 ********************************************************************************************/
 BOOL TI_GIFFilter::WriteFileEnd(void)
 {
-	BOOL ok = DestGIF.OutputGifTerminator(OutputFile);
+	/*BOOL ok =*/ DestGIF.OutputGifTerminator(OutputFile);
 	return DestGIF.TidyUp();
 }
 

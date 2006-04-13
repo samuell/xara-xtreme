@@ -327,7 +327,7 @@ void ZipDeflate::send_bits(DeflateState *s, INT32 value, INT32 length)
 
 void ZipDeflate::tr_static_init()
 {
-    static static_init_done = 0;
+    static BOOL static_init_done = 0;
     INT32 n;        /* iterates over tree elements */
     INT32 bits;     /* bit counter */
     INT32 length;   /* length value */

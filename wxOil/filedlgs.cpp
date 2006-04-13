@@ -659,10 +659,13 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 				// support 24 colour bitmaps.) We later convert to an 8 Bpp. 
 				// This fixes an animated GIF export bug in Camelot.
 				// At present we error if the first bitmap in our animated gif is 24Bpp.
+PORTNOTE("filter", "Removed use fo GIFFilter")
+#ifndef EXCLUDE_FROM_XARALX
 				if (pFilter->FilterID ==  FILTERID_TI_GIF && Bpp == 24 && BitmapCount == 1)
 					FilterCanCope = FALSE;
 
 				else
+#endif
 					FilterCanCope = TRUE;
 			}
 			else

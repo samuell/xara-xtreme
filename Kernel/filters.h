@@ -117,6 +117,8 @@ class Pathname;
 
 
 // Every filter should have a unique filter ID which is allocated in this header file. 
+#define FILTERID_INVALID			(-1)
+
 #define FILTERID_USERCHOICE			(UINT_MAX)
 #define FILTERID_NONE				(0)
 
@@ -233,6 +235,11 @@ class Pathname;
 #define	FILTERID_ALDUS_END			1099
 
 // !!!!!!!!!!!!!!!!! DON'T ADD ANY MORE TO THE ABOVE LIST !!!!!!!!!!!!!!!!
+
+
+// Unicode characters in the XAR file format are always 16-bit UTF16
+#define SIZEOF_XAR_UTF16 2					// UTF16 characters are only 2 byte
+
 
 
 /********************************************************************************************
@@ -856,8 +863,6 @@ protected:
 
 ********************************************************************************************/
 
-PORTNOTE("filters","Removed FilterRenderCallback - derived from RenderCallback")
-#ifndef EXCLUDE_FROM_XARALX
 class FilterRenderCallback : public RenderCallback
 {
 public:
@@ -882,7 +887,6 @@ private:
 	BOOL m_bVisibleLayersOnly;
 	BOOL m_bSelectedOnly;
 };
-#endif
 
 /********************************************************************************************
 

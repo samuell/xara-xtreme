@@ -552,8 +552,11 @@ BOOL Layer::NeedsToExport(RenderRegion *pRender, BOOL VisibleLayersOnly, BOOL Ch
 {
 #ifdef DO_EXPORT
 	// If this is export as a ART file, we want to save all the layers
+PORTNOTE("NativeRR", "Removed use of NativeRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IS_KIND_OF(NativeRenderRegion))
 		return TRUE;
+#endif
 
 	// If there's a filter running
 	// and it's trying to export just one layer
@@ -570,8 +573,11 @@ BOOL Layer::NeedsToExport(RenderRegion *pRender, BOOL VisibleLayersOnly, BOOL Ch
 	// if this is an export as a CMX file, we don't want invisible layers
 	// as CMX doesn't support non-visible stuff so we can't save it and
 	// get the file looking the same
+PORTNOTE("CMXRenderRegion", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	if(!IsVisible() && pRender->IS_KIND_OF(CMXRenderRegion))
 		return FALSE;
+#endif
 
 	// Guide layers only export to Native render regions
 	if (Guide)
@@ -2391,6 +2397,8 @@ DocRect Layer::GetBlobBoundingRect()
 void Layer::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSFilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if(pRegion->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSRenderRegion)))
 	{
 		// export layers in ArtWorks-type EPS render regions
@@ -2405,7 +2413,7 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 		// Guide layers are extended objects so mark them as such
 		if (Guide)
 		{
-			pDC->OutputValue(INT32(TAG_GUIDELAYER));	// Output start extended object tag and token
+			pDC->OutputValue(INT32(EOTAG_GUIDELAYER));	// Output start extended object tag and token
 			pDC->OutputToken(_T("cso"));
 			pDC->OutputNewLine();
 		}
@@ -2465,6 +2473,7 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 		pDC->StartLayer(GetLayerID());
 	}
 #endif
+#endif
 }
 
 /***********************************************************************************************
@@ -2483,6 +2492,8 @@ void Layer::PreExportRender(RenderRegion* pRegion)
 BOOL Layer::ExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSFilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	// Can only export guide layers in Native format
 	if (Guide && pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
@@ -2513,6 +2524,7 @@ BOOL Layer::ExportRender(RenderRegion* pRegion)
 		return TRUE;
 	}
 
+#endif
 #endif
 
 	return FALSE;

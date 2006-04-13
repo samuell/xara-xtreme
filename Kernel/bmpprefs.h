@@ -107,11 +107,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bitmap.h"
 //#include "dialogop.h"
 #include "dibconv.h"				// for DITHER
-//#include "gpalopt.h"
+#include "gpalopt.h"
+#include "filter_types.h"
 
 class BitmapExportDocument;
 class DocRect;
-class MaskedFilterExportOptions;
+//class MaskedFilterExportOptions;
 class BitmapExportParam;
 class BmpDlgParam;
 class CXaraFileRecord;
@@ -161,12 +162,12 @@ typedef struct
 
 //  Enum for the different display types in the File type drop list in the bitmap export dialog.
 //  The current type is stored in a variable in the bitmap export options.
-enum ExportFileType { GIF_TYPE = 0, PNG_TYPE, BMP_TYPE, JPG_TYPE };
+//enum ExportFileType { GIF_TYPE = 0, PNG_TYPE, BMP_TYPE, JPG_TYPE };
 
 typedef double		DPI;
 typedef UINT32		BMP_SIZE;	// that's in pixels
 typedef UINT32		BMP_DEPTH;	// that's in planes
-typedef UINT32		FILTER_ID;
+typedef INT32		FILTER_ID;
 
 /********************************************************************************************
 >	PaletteMarkType
@@ -200,7 +201,7 @@ class BitmapExportOptions : public OpParam
 
 public:
 	BitmapExportOptions();
-    BitmapExportOptions(const CDlgResID DialogID, const FILTER_ID FilterID, 
+    BitmapExportOptions(const CDlgResID DialogID, const FilterType FilterID, 
 						const StringBase* pFilterName);
 	~BitmapExportOptions();
 	static BOOL Init();
@@ -241,8 +242,8 @@ public:
 	BOOL			GetTempFileFlag() const						{return m_bTempFileFlag;}
 	void			SetTempFileFlag(const BOOL newFlag)			{m_bTempFileFlag = newFlag;}
 
-	CDlgResID			GetDialogType() const				{ return m_DialogID;	}
-	const FILTER_ID		GetFilterType() const				{ return m_FilterID;	}
+	CDlgResID			GetDialogType() const					{return m_DialogID;}
+	const FilterType	GetFilterType() const					{return m_FilterID;}
 	const StringBase*	GetFilterName() const;
 
 	// smfix 
@@ -404,7 +405,7 @@ protected:
 	SelectionType	m_SelectionType;			// ...remove this
 	Coord			m_OutputSize;				// ...and this
 	Coord			m_PixelOutputSize;			// Added by Graham 1/7/97
-	FILTER_ID		m_FilterID;					// keep this rubbish for now
+	FilterType		m_FilterID;					// keep this rubbish for now
 	BmpDlgParam*	m_pBmpDlgParam;
 	BOOL			m_UseDesignNotes;			// sjk - use compat. files with Dream Weaver?
 	BOOL			m_bSeparateLayerFiles;			// True if should export layers as separate files
@@ -484,11 +485,8 @@ private:
 	BOOL m__BackgroundIsTransparent; // Does the user want the background to be visible or not
 									 // if this is off this doesn't mean that there can be no transparency as the
 									 // user could have marked an arby colour in the palette as transparent
-PORTNOTE("other","Need PaletteOptimiser when implemented")
-#ifndef EXCLUDE_FROM_XARALX // NB Nested
-	PaletteOptimiser   *m__pPaletteOptimiser; // ptr to the current palette optimiser
+	PaletteOptimiser* m__pPaletteOptimiser; // ptr to the current palette optimiser
 											 // this can be null if there isn't one or we dont need a palette
-#endif // NB Nested
 	BOOL m__HavePrimedOptimier;	// m__pPaletteOptimiser may be not null but has it been fed with stats and these stats been processed?
 
 	BOOL m__TempFileMatchesExportOptions;	// This is TRUE when the options haven't been changed in a way
@@ -564,7 +562,7 @@ protected:
 	void InitDitherRadioGroup(const DITHER& DitherType);
 	void InitSelectionRadioGroup();
 
-	UINT32 GetFilterHelpID(UINT32 FilterType);
+	UINT32 GetFilterHelpID(FilterType FilterID);
 
 // WEBSTER - markn 17/1/97
 	void InitNumColoursGroup(BitmapExportOptions* pOptions);

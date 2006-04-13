@@ -130,7 +130,7 @@ class BMPExportOptions : public BitmapExportOptions
 	CC_DECLARE_DYNCREATE(BMPExportOptions)
 public:
 	BMPExportOptions();
-    BMPExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName);
+    BMPExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
@@ -195,8 +195,7 @@ public:
 	static UINT32 GetDefaultExportDither();
 	static void SetDefaultExportDither( UINT32 );
 
-PORTNOTE("filters", "Removed use of BMP_UNCOMPRESSED")
-	virtual INT32 GetFilterType() const { return 0/*BMP_UNCOMPRESSED*/; }
+	virtual FilterType GetFilterType() const { return BMP_UNCOMPRESSED; }
 
 	// Import related functions
 	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);

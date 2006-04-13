@@ -2626,6 +2626,8 @@ void NodeContourController::Extend(const ExtendParams& ExtParams)
 void NodeContourController::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -2641,11 +2643,14 @@ void NodeContourController::PreExportRender(RenderRegion* pRegion)
 		pDC->StartGroup(&BBox);
 	}
 #endif
+#endif
 }
 
 BOOL NodeContourController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -2664,6 +2669,7 @@ BOOL NodeContourController::ExportRender(RenderRegion* pRegion)
 
 		return TRUE;
 	}
+#endif
 #endif
 	// Render thid node in the normal way
 	return FALSE;

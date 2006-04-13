@@ -6681,7 +6681,8 @@ BOOL AttrLinearColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 				if (pItem)
 				{
 					pPositions[i]   = pItem->GetPosition();
-					pRampColRefs[i] = pFilter->WriteRecord(&pItem->GetColour());
+					DocColour tempcolour = pItem->GetColour();
+					pRampColRefs[i] = pFilter->WriteRecord(&tempcolour);
 				}
 
 				pItem = (ColRampItem *)pRamp->GetNext(pItem);
@@ -6723,7 +6724,7 @@ BOOL AttrLinearColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 		else
 		{
 			INT32 tag = TAG_LINEARFILLMULTISTAGE;
-			UINT32 size = TAG_LINEARFILLMULTISTAGE_SIZE;
+			INT32 size = TAG_LINEARFILLMULTISTAGE_SIZE;
 			if (b3PointLinear)
 			{
 				tag = TAG_LINEARFILLMULTISTAGE3POINT;
@@ -7912,7 +7913,8 @@ BOOL AttrRadialColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 #ifdef DO_EXPORT
 	ERROR2IF(pFilter == NULL,FALSE,"NULL filter param");
 
-	UINT32 Tag = TAG_CIRCULARFILL, TagSize = TAG_CIRCULARFILL_SIZE;
+	UINT32 Tag = TAG_CIRCULARFILL;
+	INT32 TagSize = TAG_CIRCULARFILL_SIZE;
 
 	if (IsElliptical())
 	{
@@ -7952,7 +7954,8 @@ BOOL AttrRadialColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 				if (pItem)
 				{
 					pPositions[i]   = pItem->GetPosition();
-					pRampColRefs[i] = pFilter->WriteRecord(&pItem->GetColour());
+					DocColour tempcolour = pItem->GetColour();
+					pRampColRefs[i] = pFilter->WriteRecord(&tempcolour);
 				}
 
 				pItem = (ColRampItem *)pRamp->GetNext(pItem);
@@ -9387,7 +9390,8 @@ BOOL AttrConicalColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 				if (pItem)
 				{
 					pPositions[i]   = pItem->GetPosition();
-					pRampColRefs[i] = pFilter->WriteRecord(&pItem->GetColour());
+					DocColour tempcolour = pItem->GetColour();
+					pRampColRefs[i] = pFilter->WriteRecord(&tempcolour);
 				}
 
 				pItem = (ColRampItem *)pRamp->GetNext(pItem);
@@ -10506,7 +10510,8 @@ BOOL AttrSquareColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 				if (pItem)
 				{
 					pPositions[i]   = pItem->GetPosition();
-					pRampColRefs[i] = pFilter->WriteRecord(&pItem->GetColour());
+					DocColour tempcolour = pItem->GetColour();
+					pRampColRefs[i] = pFilter->WriteRecord(&tempcolour);
 				}
 
 				pItem = (ColRampItem *)pRamp->GetNext(pItem);

@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ai8_eps.h"
 //#include "drawfltr.h"
 //#include "textfltr.h"
-//#include "oilfltrs.h"
+#include "oilfltrs.h"
 #include "errors.h"
 //#include "tim.h"
 #include "fixmem.h"
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "chapter.h"
 #include "group.h"
 #include "app.h"
-//#include "bmpfiltr.h"
+#include "bmpfiltr.h"
 #include "fillattr.h"
 #include "attrmgr.h"
 #include "native.h"			// The new designed native filter, used for v2
@@ -141,14 +141,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will2.h"
 //#include "filtrres.h"
 //#include "cmxifltr.h"
-//#include "exjpeg.h"			// JPEGExportFilter
+#include "exjpeg.h"			// JPEGExportFilter
 #include "filtimag.h"		// Imagemap filter
 #include "pngfiltr.h"		// for PNG filter class
 #include "imjpeg.h"			// for JPEGImportFilter
 #include "swffiltr.h"		// For the SWF export filter.
 //#include "extfilts.h"		// For the TIFF filter.
+#include "kerneldc.h"
 
-//#include "giffiltr.h"		// Transparent and interlaced GIF filter``
+#include "giffiltr.h"		// Transparent and interlaced GIF filter``
 #include "htmlfltr.h"		// HTML filter
 
 //#include "andy.h"			//For _R(IDM_OVERWRITE)
@@ -784,16 +785,13 @@ PORTNOTETRACE("filter","Removed EPS filters usage");
 	// mis-ordered.
 
 	// Graeme (25-9-00) - Primary filters, in the order that Mark requested.
-PORTNOTETRACE("filter","Removed JPEG Export filter");
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(JPEGExportFilter)
-#endif
 	ADD_FILTER(JPEGImportFilter)
 
 	ADD_FILTER(PNGFilter)
-PORTNOTETRACE("filter","Removed GIFFilter & TIFFilter");
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(TI_GIFFilter)
+PORTNOTETRACE("filter","Removed TIFFFilter");
+#ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(TIFFFilter)					
 #endif
 
@@ -877,10 +875,7 @@ PORTNOTE("filter","Removed FlareTemplateFilter usage")
 
 	// Initialise the OIL filters (but they are still objects of class "Filter")
 	// This can include filters specific to one platform.
-PORTNOTE("filter","Removed filters usage")
-#ifndef EXCLUDE_FROM_XARALX
 	OILFilter::InitFilters(FilterList);
-#endif
 
 #if !defined(EXCLUDE_FROM_RALPH)
 	// Register our preference for minimum line widths, and whether or not we import
@@ -1814,7 +1809,7 @@ BOOL Filter::DeleteExportFile(CCDiskFile * pDiskFile)
 		BOOL status = TRUE;
 		Exists = SGLibOil::FileExists(&Path);
 		if (Exists)
-			status = _tremove((const TCHAR *)Path.GetPath());
+			status = SGLibOil::FileDelete(&Path);
 		TRACEUSER( "Neville", _T("Filter::DeleteExportFile removed exists status =%d, file status =%d/n"),Exists,status);
 	}
 #endif
@@ -1844,7 +1839,12 @@ BOOL Filter::ExportRender ( RenderRegion *pRegion, BOOL MaskedRender)
 
 	// We need special handling for Camelot EPS 
 	// (NB. but not native files - do not change this to IS_KIND_OF!)
+PORTNOTE("filter","Removed EPSFilter usage")
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL IsCamelotEPS = IS_A(pRegion, CamelotEPSRenderRegion);
+#else
+	BOOL IsCamelotEPS = FALSE;
+#endif
 
 	// Get the DC for this export operation
 	// This can be NULL, in the case of bitmap export, or a CMetaFileDC in the case
@@ -1852,24 +1852,20 @@ BOOL Filter::ExportRender ( RenderRegion *pRegion, BOOL MaskedRender)
 	// pDC otherwise the CATCH handlers will fail as there is no ExportFile. Also the
 	// progress bar message will fail.
 	// The CDC can be Null if we are talking about bitmap export
-	CDC *pCDC = pRegion->GetRenderDC(); 
-	ExportDC *pDC = NULL;
+//	CNativeDC* pCDC = pRegion->GetRenderDC();
+	ExportDC* pDC = NULL;
+	NumNodes = 0;
+
 	// At present, it appears that only EPS derived filters have a file attached and so
 	// are the only ones which use an ExportDC. All bitmap filters use NULL.
 PORTNOTE("filter","Removed EPSFilter usage")
-	if( pCDC != NULL 
 #ifndef EXCLUDE_FROM_XARALX
-		&& 	this->IS_KIND_OF(EPSFilter)
+	if( pCDC != NULL && this->IS_KIND_OF(EPSFilter))
+		pDC = (ExportDC*)pCDC;
 #endif
-		)
-
-		pDC = (ExportDC *)pCDC;
 	
-	//ExportDC *pDC = (ExportDC *) pRegion->GetRenderDC();
-
 	// Find out how big the document and document components are...
 	// (We only do this for EPS files)
-	NumNodes = 0;
 PORTNOTE("filter","Removed EPSFilter usage")
 	if(
 #ifndef EXCLUDE_FROM_XARALX
@@ -1931,6 +1927,8 @@ PORTNOTE("filter","Removed EPSFilter usage")
 	BOOL bVisibleLayersOnly = ExportVisibleLayersOnly();
 	BOOL bSelectedOnly = ExportSelectionOnly(MaskedRender);
 
+PORTNOTE("filter","Removed EPSFilter usage")
+#ifndef EXCLUDE_FROM_XARALX
 	if (IsCamelotEPS)
 	{
 		//TRY
@@ -1970,6 +1968,7 @@ PORTNOTE("filter","Removed EPSFilter usage")
 		return TRUE;
 	}
 	else
+#endif
 	{
 		FilterRenderCallback MyCallback(this, TRUE, bVisibleLayersOnly, bSelectedOnly);
 		pRegion->RenderTree(pNode, FALSE, FALSE, &MyCallback);
@@ -1989,8 +1988,8 @@ PORTNOTE("filter","Removed EPSFilter usage")
 #endif
 }
 
-PORTNOTE("filter","Removed FilterRenderCallback impl.")
-#ifndef EXCLUDE_FROM_XARALX
+
+
 
 /********************************************************************************************
 
@@ -2101,7 +2100,8 @@ BOOL FilterRenderCallback::BeforeSubtree(RenderRegion* pRegion,
 	}
 }
 
-#endif
+
+
 
 /********************************************************************************************
 
@@ -2234,8 +2234,8 @@ BOOL Filter::WriteNodes ( RenderRegion	*pRegion,
 	// Export the file, but catch any file errors.
 	//TRY
 	{
-		BOOL IsPageBackGroundAnd32BitAlpha = FALSE;
-		BOOL LookForPageBackgrounds = TRUE;
+//		BOOL IsPageBackGroundAnd32BitAlpha = FALSE;
+//		BOOL LookForPageBackgrounds = TRUE;
 
 		FilterRenderCallback MyCallback(this, FALSE, VisibleLayersOnly, SelectedOnly);	// Not counting this time!
 		pRegion->RenderTree(pNode, FALSE, FALSE, &MyCallback);

@@ -444,6 +444,8 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, BOOL Enhanced, INT32 TransC
 ********************************************************************************************/
 BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, BOOL Enhanced, INT32 TransColour, LPLOGPALETTE pPalette, LPRGBQUAD pQuadPalette)
 {
+PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR2IF(pInfo==NULL,FALSE,"OutputGIF::OutputGifHeader BitmapInfo pointer is null");
 	ERROR2IF(pPalette==NULL && pQuadPalette==NULL,FALSE,"OutputGIF::OutputGifHeader Bitmap palette pointer is null");
@@ -459,7 +461,7 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, B
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
 
-	TRY
+	try
 	{
 		// Set up the class variables
 		// First the width/height of the bitmap
@@ -584,7 +586,7 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, B
 		// er, we seem to have finished OK so say so
 		return TRUE;
 	}
-	CATCH( CFileException, e)
+	catch(...)
 	{
 		// catch our form of a file exception
 		TRACE( _T("OutputGIF::OutputGifHeader CC catch handler\n"));
@@ -595,9 +597,11 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, B
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
+#else
+	return FALSE;
+#endif
 }	
 
 
@@ -618,6 +622,8 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, B
 ********************************************************************************************/
 BOOL OutputGIF::OutputGifImageExtensionHeader(CCLexFile *File, BOOL InterlaceState, INT32 TransparentColour, UINT32 Delay, UINT32 RestoreType)
 {
+PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR3IF(RestoreType > 3, "Unknown GIF image restore type");
 
@@ -634,7 +640,7 @@ BOOL OutputGIF::OutputGifImageExtensionHeader(CCLexFile *File, BOOL InterlaceSta
 	// Replaces the goto's that handled this before.
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
-	TRY
+	try
 	{
 		GIFTRANSBLOCK TransBlock;
 		TransBlock.gtbBlockStart 	= EXTENSIONBLOCK;
@@ -656,7 +662,7 @@ BOOL OutputGIF::OutputGifImageExtensionHeader(CCLexFile *File, BOOL InterlaceSta
 
 		return TRUE;
 	}
-	CATCH( CFileException, e)
+	catch(...)
 	{
 		// catch our form of a file exception
 		TRACE( _T("OutputGIF::OutputGifHeader CC catch handler\n"));
@@ -667,9 +673,11 @@ BOOL OutputGIF::OutputGifImageExtensionHeader(CCLexFile *File, BOOL InterlaceSta
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
+#else
+	return FALSE;
+#endif
 }	
 
 
@@ -691,7 +699,7 @@ BOOL OutputGIF::OutputAnimationControl(CCLexFile *File, unsigned short Repeats)
 
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
-	TRY
+	try
 	{
 		// Generate the Netscape Extension block
 		BYTE Block[19];
@@ -712,14 +720,13 @@ BOOL OutputGIF::OutputAnimationControl(CCLexFile *File, unsigned short Repeats)
 
 		return TRUE;
 	}
-	CATCH( CFileException, e)
+	catch(...)
 	{
 		File->SetThrowExceptions( OldThrowingState );
 		File->SetReportErrors( OldReportingState );
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
 }	
@@ -848,6 +855,8 @@ BOOL OutputGIF::OutputGifImageBits(CCLexFile *File, LPBYTE pBlockStart, BOOL Int
 								   LPRGBQUAD pDestPalette, UINT32 PaletteColourDepth, UINT32 NewBitsPerPixel)
 
 {
+PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR2IF(pBlockStart==NULL,FALSE,"OutputGIF::OutputGifHeader BitmapInfo pointer is null");
 
@@ -879,7 +888,7 @@ BOOL OutputGIF::OutputGifImageBits(CCLexFile *File, LPBYTE pBlockStart, BOOL Int
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
 
-	TRY
+	try
 	{
 	    // Write an Image separator
 	    File->put(0x2C);
@@ -992,7 +1001,7 @@ BOOL OutputGIF::OutputGifImageBits(CCLexFile *File, LPBYTE pBlockStart, BOOL Int
 		return TRUE;
 	}
 
-	CATCH( CFileException, e)
+	catch(...)
 	{
 		// catch our form of a file exception
 		TRACE( _T("OutputGIF::OutputGifHeader CC catch handler\n"));
@@ -1003,9 +1012,11 @@ BOOL OutputGIF::OutputGifImageBits(CCLexFile *File, LPBYTE pBlockStart, BOOL Int
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
+#else
+	return FALSE;
+#endif
 }	
 
 
@@ -1028,7 +1039,7 @@ BOOL OutputGIF::OutputGifTerminator(CCLexFile *File)
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
 
-	TRY
+	try
 	{
 	    // Write the GIF file terminator
 	    File->put( ';' );
@@ -1041,7 +1052,7 @@ BOOL OutputGIF::OutputGifTerminator(CCLexFile *File)
 		return TRUE;
 	}
 
-	CATCH( CFileException, e)
+	catch(...)
 	{
 		// Must set the exception throwing and reporting flags back to their entry states
 		File->SetThrowExceptions( OldThrowingState );
@@ -1049,7 +1060,6 @@ BOOL OutputGIF::OutputGifTerminator(CCLexFile *File)
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
 }
@@ -1381,6 +1391,8 @@ nomatch:
 
 void OutputGIF::OutputCode( code_int code )
 {
+PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
+#ifndef EXCLUDE_FROM_XARALX
     cur_accum &= masks[ cur_bits ];
 
     if( cur_bits > 0 )
@@ -1430,6 +1442,7 @@ void OutputGIF::OutputCode( code_int code )
 
         OutputFile->flush();
     }
+#endif
 }
 
 /********************************************************************************************

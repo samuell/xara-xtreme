@@ -2563,6 +2563,8 @@ void NodeClipViewController::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
 void NodeClipViewController::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -2577,6 +2579,7 @@ void NodeClipViewController::PreExportRender(RenderRegion* pRegion)
 		DocRect BBox = GetBoundingRect();
 		pDC->StartGroup(&BBox);
 	}
+#endif
 #endif
 }
 
@@ -2595,6 +2598,8 @@ void NodeClipViewController::PreExportRender(RenderRegion* pRegion)
 BOOL NodeClipViewController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -2613,6 +2618,7 @@ BOOL NodeClipViewController::ExportRender(RenderRegion* pRegion)
 
 		return TRUE;
 	}
+#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

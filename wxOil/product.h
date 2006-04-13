@@ -163,110 +163,54 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // define the bits that are peculiar to the programs e.g. Studio, Viewer
 #ifndef STANDALONE
 
-	#ifdef WEBSTER
+	#define	PRODUCT_MANUFACTURER		_T("Xara")
+	#define	PRODUCT_COMPANYNAME			_T("Xara Ltd.")
 
-		// We should use "Xara" instead of "Xara Ltd" because this string is used to generate
-		// registry keys.
-		#define	PRODUCT_MANUFACTURER	"Xara"	
-		#define	PRODUCT_COMPANYNAME		"Xara Ltd."
+	// use this one as the base for filenames e.g. ini
+	#define	PRODUCT_BASENAME			_T("XaraX")
 
-		// use this one as the base for filenames e.g. ini
-		#define	PRODUCT_BASENAME		"XaraWeb" // WEBSTER - markn 26/11/96"CorelXra"	//"XSTUDIO"
+	#define	PRODUCT_HELPFILENAME		_T("XaraX")			// e.g. "CorelXra.hlp" and "CorelXra.cnt"
+	#define	PRODUCT_MOVIESHELPFILENAME	_T("Movies")			// e.g. "CorelXra.hlp" and "CorelXra.cnt"
 
-		#define	PRODUCT_HELPFILENAME	"Xara"	// e.g. "Xara.hlp" and "xara.cnt"
+	#define	PRODUCT_EXENAME				_T("XaraX.exe")
 
-		#define	PRODUCT_EXENAME			"Webster.exe" // WEBSTER - markn 26/11/96"CorelXra.exe"	
+	// Use these for the specific ini files mentioned
+	#define PRODUCT_BARSFULL_INIFILE	_T("XaraXBF.ini")
+	#define PRODUCT_BARSNORMAL_INIFILE	_T("XaraXBN.ini")
+	#define PRODUCT_GALLERY_INIFILE		_T("XaraXGR.ini")
+	#define PRODUCT_RESOURCES_INIFILE	_T("XaraWRS.ini")
+	#define PRODUCT_PLUGINS_INIFILE		_T("XaraXPL.ini")
 
-		// Use these for the specific ini files mentioned
-		#define PRODUCT_BARSFULL_INIFILE	"XaraWBF.ini"  // WEBSTER - markn 26/11/96 "CorelXBF.ini"
-		#define PRODUCT_BARSNORMAL_INIFILE	"XaraWBN.ini"  // WEBSTER - markn 26/11/96 "CorelXBN.ini"
-		#define PRODUCT_GALLERY_INIFILE		"XaraWGR.ini"  // WEBSTER - markn 26/11/96 "CorelXGR.ini"
-		#define PRODUCT_RESOURCES_INIFILE	"XaraWRS.ini"  // WEBSTER - markn 26/11/96 "CorelXRS.ini"
-		#define PRODUCT_PLUGINS_INIFILE		"XaraWPL.ini"
+	// The resource DLL leaf name (the last 3 chars define the locale)
+	// Note: You'll also need to change the RESOURCELEAF var in the make file too
+	#define PRODUCT_RESOURCELEAF		_T("XaraX")
 
-		// The resource DLL leaf name (the last 3 chars define the locale)
-		// Note: You'll also need to change the RESOURCELEAF var in the make file too
-		#define PRODUCT_RESOURCELEAF "xaraw" // WEBSTER - markn 4/12/96 "crlxa"
+	// use this one to display the name of the product to the user
+	// WEBSTER - markn 26/11/96
+	// (See notes at the top of this file about the PRODUCT_NAME macros)
+	#define	PRODUCT_NAME				_T("Xara X")
+	#define STRINGIZE(x)				#x
+	#define	PRODUCT_NAME1(s)			STRINGIZE(s Xara X)
+	#define	PRODUCT_NAME2(s)			STRINGIZE(Xara X##s)
+	#define	PRODUCT_NAME3(s1,s2)		STRINGIZE(s1 Xara X##s2)
+	#define	PRODUCT_NAME4(s1,s2,s3)		STRINGIZE(s1 Xara X##s2 Xara X##s3)
+	#define	PRODUCT_NAME5(s1,s2)		STRINGIZE(Xara X##s1 Xara X##s2)
 
-		// use this one to display the name of the product to the user
-		// WEBSTER - markn 26/11/96
-		// (See notes at the top of this file about the PRODUCT_NAME macros)
-		#define	PRODUCT_NAME			"Xara Webster"
-		#define STRINGIZE(x) #x
-		#define	PRODUCT_NAME1(s)		STRINGIZE(s Xara Webster)
-		#define	PRODUCT_NAME2(s)		STRINGIZE(Xara Webster##s)
-		#define	PRODUCT_NAME3(s1,s2)	STRINGIZE(s1 Xara Webster##s2)
-		#define	PRODUCT_NAME4(s1,s2,s3)	STRINGIZE(s1 Xara Webster##s2 Xara Webster##s3)
-		#define	PRODUCT_NAME5(s1,s2)	STRINGIZE(Xara Webster##s1 Xara Webster##s2)
+	#define	PRODUCT_WEBLINKNAME			_T("XaraLink")
+	#define	PRODUCT_WEBLINKEXENAME		_T("XaraLink.exe")
 
-		#define	PRODUCT_WEBLINKNAME		"WebLink"
-		#define	PRODUCT_WEBLINKEXENAME	"weblink.exe"
+	// use this one as the product name
+	#define	PRODUCT_PRODUCTNAME			_T("XaraX2")
 
-		// use this one as the product name
-		#define	PRODUCT_PRODUCTNAME		"Webster" // WEBSTER - markn 26/11/96 "CorelXARA" // "Studio"
+	// use this one as the running name
+	#define	PRODUCT_RUNNINGNAME			_T("XaraX")
 
-		// use this one as the running name
-		#define	PRODUCT_RUNNINGNAME		"XaraWebster" // WEBSTER - markn 26/11/96 "CorelXARA" //"XaraStudio"
+	// use this as the product version as shown to the user
+	#define PRODUCT_VERSION_NO			_T("3.0")
 
-		// use this as the product version as shown to the user
-		#define PRODUCT_VERSION_NO		"2.0"
+	#define PRODUCT_INTERNALNAME		_T("Camelot")
 
-		#define PRODUCT_INTERNALNAME	"Webster"
-
-		#define PRODUCT_TRADEMARKS		"Xara and Xara Webster are registered trademarks of Xara Ltd"
-
-	#else	// WEBSTER
-
-		#define	PRODUCT_MANUFACTURER		"Xara"	
-		#define	PRODUCT_COMPANYNAME			"Xara Ltd."
-
-		// use this one as the base for filenames e.g. ini
-		#define	PRODUCT_BASENAME			"XaraX"			// "XSTUDIO"
-
-		#define	PRODUCT_HELPFILENAME		"XaraX"			// e.g. "CorelXra.hlp" and "CorelXra.cnt"
-		#define	PRODUCT_MOVIESHELPFILENAME		"Movies"			// e.g. "CorelXra.hlp" and "CorelXra.cnt"
-
-		#define	PRODUCT_EXENAME				"XaraX.exe"	
-
-		// Use these for the specific ini files mentioned
-		#define PRODUCT_BARSFULL_INIFILE	"XaraXBF.ini"
-		#define PRODUCT_BARSNORMAL_INIFILE	"XaraXBN.ini"
-		#define PRODUCT_GALLERY_INIFILE		"XaraXGR.ini"
-		#define PRODUCT_RESOURCES_INIFILE	"XaraWRS.ini"
-		#define PRODUCT_PLUGINS_INIFILE		"XaraXPL.ini"
-									  
-		// The resource DLL leaf name (the last 3 chars define the locale)
-		// Note: You'll also need to change the RESOURCELEAF var in the make file too
-		#define PRODUCT_RESOURCELEAF		"XaraX"
-
-		// use this one to display the name of the product to the user
-		// WEBSTER - markn 26/11/96
-		// (See notes at the top of this file about the PRODUCT_NAME macros)
-		#define	PRODUCT_NAME				"Xara X"
-		#define STRINGIZE(x)				#x
-		#define	PRODUCT_NAME1(s)			STRINGIZE(s Xara X)
-		#define	PRODUCT_NAME2(s)			STRINGIZE(Xara X##s)
-		#define	PRODUCT_NAME3(s1,s2)		STRINGIZE(s1 Xara X##s2)
-		#define	PRODUCT_NAME4(s1,s2,s3)		STRINGIZE(s1 Xara X##s2 Xara X##s3)
-		#define	PRODUCT_NAME5(s1,s2)		STRINGIZE(Xara X##s1 Xara X##s2)
-
-		#define	PRODUCT_WEBLINKNAME			"XaraLink"
-		#define	PRODUCT_WEBLINKEXENAME		"XaraLink.exe"
-
-		// use this one as the product name
-		#define	PRODUCT_PRODUCTNAME			"XaraX2"
-
-		// use this one as the running name
-		#define	PRODUCT_RUNNINGNAME			"XaraX"		// "XaraStudio"
-
-		// use this as the product version as shown to the user
-		#define PRODUCT_VERSION_NO			"3.0"
-
-		#define PRODUCT_INTERNALNAME		"Camelot"
-
-		#define PRODUCT_TRADEMARKS			"Xara and Xara X are registered trademarks of Xara Ltd"
-
-	#endif	// WEBSTER
+	#define PRODUCT_TRADEMARKS			_T("Xara and Xara X are registered trademarks of Xara Ltd")
 
 #else	// STANDALONE
 

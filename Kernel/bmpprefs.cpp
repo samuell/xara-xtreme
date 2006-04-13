@@ -118,7 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "accures.h"	// general Accusoft dll resources
 //#include "simon.h"
 #include "dialogop.h"	// DialogOp header
-#include "dlgmgr.h"		// Dialogue manager class
+#include "dlgmgr.h"		// Dialog manager class
 #include "msg.h"
 //#include "rikdlg.h"		// _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER)
 #include "osrndrgn.h"
@@ -127,27 +127,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "justin2.h"
 #include "units.h"		// for pixel units
 //#include "will3.h"
-#include "reshlpid.h"
+//#include "reshlpid.h"
 #include "makebmp.h"
 #include "helpuser.h"
-#include "accuflts.h"	// PNG and TI-GIFF filter types
-#include "xshelpid.h"
+//#include "accuflts.h"	// PNG and TI-GIFF filter types
+//#include "xshelpid.h"
 //#include "filtrres.h"	// _R(IDS_BMPPREFS_DPITOOSMALL) _R(IDS_BMPPREFS_DPITOOBIG)
 #include "exjpeg.h"
 #include "bmpfiltr.h"
 #include "pngfiltr.h"
 #ifndef WEBSTER
-#include "extfilts.h"
+//#include "extfilts.h"
 #endif //WEBSTER
 //#include "simon.h"
 #include "impexpop.h"	// BitmapExportParam
 #include "fileutil.h"
-#include "bmpsdlg.h"	// BmpDlgParam
+//#include "bmpsdlg.h"	// BmpDlgParam
 #include "cxfrec.h"		// for CXaraFileRecord
 #include "ngprop.h"		// for the NamedExportProp::m_fApplyNotExport flag.
 //#include "bmpreres.h"	// for _R(IDS_PREVIEW_APPLY)
-#include "registry.h"
-#include "desnotes.h"
+//#include "registry.h"
+//#include "desnotes.h"
 #include "bmpalint.h"	// for BitmapExportPaletteInterface::InvalidateSortedPalette()
 #include "oilfltrs.h"	// for the find filter fn
 #include "slicehelper.h"
@@ -159,13 +159,14 @@ DECLARE_SOURCE("$Revision$");
 
 // An implement to match the Declare in the .h file.
 // If you have many classes, it is recommended to place them all together, here at the start of the file
+PORTNOTE("other","Removed BmpPrefsDlg - derived from DialogOp")
+#ifndef EXCLUDE_FROM_XARALX
 CC_IMPLEMENT_DYNCREATE(BmpPrefsDlg, DialogOp)
 CC_IMPLEMENT_DYNCREATE(JPEGExportPrefsDialog, BmpPrefsDlg)
+CC_IMPLEMENT_DYNCREATE(PhotoCDDlg, DialogOp)
+#endif
 
 CC_IMPLEMENT_DYNCREATE(BitmapExportOptions, OpParam)
-
-CC_IMPLEMENT_DYNCREATE(PhotoCDDlg, DialogOp)
-
 CC_IMPLEMENT_MEMDUMP(PhotoCDDlgParam, OpParam)
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
@@ -219,7 +220,7 @@ BitmapExportOptions::BitmapExportOptions()
 	m_pBmpDlgParam(0),
 	m_TransparencyIndex(-1),			// WEBSTER - markn 5/2/97 - no transparent colour
 	m_DialogID(0),						// BmpPrefsDlg uses these...
-	m_FilterID(0),
+	m_FilterID(INVALID),
 	m_pFilterName(0),
 	m_bValid(FALSE),					// Always use this...
 	m_OutputSize(0, 0),					// And initialise the output size
@@ -234,7 +235,12 @@ BitmapExportOptions::BitmapExportOptions()
 {
 	m_Palette.NumberOfColours = 0;
 	memset(&(m_Palette.Data), 0, sizeof(ExtendedPaletteEntry)*256);
+PORTNOTE("DesignNotes", "Removed use of DesignNotes")
+#if !defined(EXCLUDE_FROM_XARALX)
 	m_UseDesignNotes = GetRegistryFlagForDesignNotes();
+#else
+	m_UseDesignNotes = FALSE;
+#endif
 	m__pLogicalPalette = NULL;
 	m__NumberOfColoursUserRequested = 256;
 	m__UseBrowserPalette = FALSE;
@@ -253,7 +259,7 @@ BitmapExportOptions::BitmapExportOptions()
 
 /********************************************************************************************
 >	BitmapExportOptions::BitmapExportOptions(const CDlgResID DialogID, 
-										const FILTER_ID FilterID, StringBase* pFilterName)
+										const FilterType FilterID, StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -263,7 +269,7 @@ BitmapExportOptions::BitmapExportOptions()
 
 BitmapExportOptions::BitmapExportOptions(
 								const CDlgResID DialogID, 
-								const FILTER_ID FilterID,
+								const FilterType FilterID,
 								const StringBase* pFilterName)
   :	m_SelectionType(SELECTION),			// BaseBitmapFilter uses these...
 	m_DPI(0),
@@ -286,7 +292,12 @@ BitmapExportOptions::BitmapExportOptions(
 {
 	m_Palette.NumberOfColours = 0;
 	memset(&(m_Palette.Data), 0, sizeof(ExtendedPaletteEntry)*256);
+PORTNOTE("DesignNotes", "Removed use of DesignNotes")
+#if !defined(EXCLUDE_FROM_XARALX)
 	m_UseDesignNotes = GetRegistryFlagForDesignNotes();
+#else
+	m_UseDesignNotes = FALSE;
+#endif
 	m__pLogicalPalette = NULL;
 	m__NumberOfColoursUserRequested = 256;
 	m__UseBrowserPalette = FALSE;
@@ -646,7 +657,7 @@ BOOL BitmapExportOptions::SetAsDefaults() const
 ********************************************************************************************/
 BOOL BitmapExportOptions::Declare()
 {
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
 		Camelot.DeclarePref( NULL, ms_strPutHTMLTagOnClipboard, &ms_fPutHTMLTagOnClipboard, FALSE, TRUE );
 	}
@@ -700,7 +711,7 @@ BOOL BitmapExportOptions::Write(CXaraFileRecord* pRec)
 		!pRec->WriteUINT32((UINT32) m_DialogID) ||
 		!pRec->WriteINT16(Packed) || // was m_Antialiasing but I have now packed this data to fit in the new stuff
 		!pRec->WriteINT32(m_Palette.NumberOfColours) ||
-		!pRec->WriteUnicode(m_pFilterName ? ((LPTSTR) (LPCTSTR) *m_pFilterName) : ""))
+		!pRec->WriteUnicode(m_pFilterName ? ((LPTSTR) (LPCTSTR) *m_pFilterName) : (LPTSTR) _T("")))
 			return FALSE;
 
 	// Write out the palette.
@@ -1058,6 +1069,8 @@ BOOL BitmapExportOptions::CanExportSeparateLayers()
 
 
 
+PORTNOTE("other", "Removed export dlgs");
+#if !defined(EXCLUDE_FROM_XARALX)
 
 /*******************************************************************************************/
 PhotoCDDlgParam * PhotoCDDlg::pParams = NULL;	// Data passing class
@@ -4820,6 +4833,8 @@ DocRect MultipleBitmapSelection::GetSize()	{ return DocRect(0,0,0,0); }
 DocRect SpreadSelection::GetSize()			{ return BaseBitmapFilter::GetSizeOfSpread(m_pSpread); }
 DocRect DrawingSelection::GetSize()			{ return BaseBitmapFilter::GetSizeOfDrawing(m_pSpread); }
 
+#endif
+
 
 
 /**************************************************************************************************
@@ -4933,7 +4948,7 @@ BOOL BitmapExportOptions::CreatePaletteOptimiser()
 		m__HavePrimedOptimier = FALSE;
 		m__pPaletteOptimiser = new PaletteOptimiser();
 
-		ERROR2IF(m__pPaletteOptimiser == NULL, FALSE, "Low on memory, couldn't create palette optimiser")
+		ERROR2IF(m__pPaletteOptimiser == NULL, FALSE, "Low on memory, couldn't create palette optimiser");
 
 		m__pPaletteOptimiser->Initialise();
 
@@ -4982,7 +4997,7 @@ LOGPALETTE * BitmapExportOptions::GetLogicalPalette()
 		return NULL;
 
 	// pick a colour to duplicate for deleted colours to be
-	INT32 OptimisedCommonColour = m_Palette.NumberOfColours-1;
+//	INT32 OptimisedCommonColour = m_Palette.NumberOfColours-1;
 
 	m__pLogicalPalette->palNumEntries = m_Palette.NumberOfColours;
 	m__pLogicalPalette->palVersion = 0x300;
@@ -5112,7 +5127,7 @@ void BitmapExportOptions::CreateValidPalette()
 
 	// work out how many spare colours we have within the user defined restraint
 	// once we have kept these locked colours and have account for the transparency
-	INT32 NoOfColoursToOptimise = MaxColoursInPalette - LockedColours - BackGroundTransp;
+//	INT32 NoOfColoursToOptimise = MaxColoursInPalette - LockedColours - BackGroundTransp;
 
 	m__pPaletteOptimiser->SnapToBrowserPalette(m__UseWebSnapPalette);
 	m__pPaletteOptimiser->SnapToPrimaries(m__UsePrimarySnapPalette);
@@ -5130,7 +5145,7 @@ void BitmapExportOptions::CreateValidPalette()
 	m__pLogicalPalette->palVersion = 0x300;
 
 	// get the optimised palette from the optimser
-	BOOL JustBmpColours = m__pPaletteOptimiser->GetPalette( m__pLogicalPalette, max(2,MaxColoursInPalette - BackGroundTransp));
+	/*BOOL JustBmpColours =*/ m__pPaletteOptimiser->GetPalette( m__pLogicalPalette, max(2,MaxColoursInPalette - BackGroundTransp));
 
 //	if (JustBmpColours)
 //		TRACE( _T("Just bmp colours\n"));
@@ -5434,23 +5449,24 @@ DWORD BitmapExportOptions::GetSupportedDithers()
 	if(m_Depth <= 8)
 	{
 		// Find out what Filter Type we are
-		switch(FilterStrID)
-		{
-		case _R(IDN_FILTERNAME_GIF):
-		case _R(IDS_FILTERNAME_PNG):
-		case _R(IDT_FILTERNAME_BMP):
+//		switch (FilterStrID)
+//		{
+//		case _R(IDN_FILTERNAME_GIF):
+//		case _R(IDS_FILTERNAME_PNG):
+//		case _R(IDT_FILTERNAME_BMP):
+		if (FilterStrID==_R(IDN_FILTERNAME_GIF) || FilterStrID==_R(IDS_FILTERNAME_PNG) || FilterStrID==_R(IDT_FILTERNAME_BMP))
 			{
 				Supported |= ERROR_DITHER;
 
-				if(m__UseBrowserPalette && m_Depth != 4)
+				if (m__UseBrowserPalette && m_Depth != 4)
 					Supported |= ORDERED_DITHER;
 
-				break;
+//				break;
 			}
-		case _R(IDS_JPG_EXP_FILTERNAME):
-		default:
-			break; // Not supported so don`t do anything!
-		}
+//		case _R(IDS_JPG_EXP_FILTERNAME):
+//		default:
+//			break; // Not supported so don`t do anything!
+//		}
 	}
 
 	return Supported;

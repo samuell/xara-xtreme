@@ -112,14 +112,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 				using CCFile's.
 
 **************************************************************************************/
-class JPEGDataSource : public JPEG::jpeg_source_mgr
+class JPEGDataSource : public libJPEG::jpeg_source_mgr
 {
 	// Declare the class for memory tracking
 //	CC_DECLARE_MEMDUMP(CCWobJob);
 
 	BOOL		m_bStartOfFile;		// Do we have any data yet?
 	CCFile*		m_pInputFile;		// source file
-	JPEG::JOCTET *m_pBuffer;			// start of read buffer
+	libJPEG::JOCTET *m_pBuffer;			// start of read buffer
 
 public:
 	JPEGDataSource(CCFile* pInputFile);
@@ -129,11 +129,11 @@ public:
 		INPUT_BUF_SIZE = 4096	/* choose an efficiently fread'able size */
 	};
 
-	JPEG::boolean	InitBuffer(JPEG::j_decompress_ptr cinfo);
-	static void	InitSource(JPEG::j_decompress_ptr cinfo);
-	static JPEG::boolean	FillInputBuffer(JPEG::j_decompress_ptr cinfo);
-	static void	SkipInputData(JPEG::j_decompress_ptr cinfo, long /*TYPENOTE: Correct*/ num_bytes);
-	static void	TerminateSource(JPEG::j_decompress_ptr cinfo);
+	libJPEG::boolean	InitBuffer(libJPEG::j_decompress_ptr cinfo);
+	static void	InitSource(libJPEG::j_decompress_ptr cinfo);
+	static libJPEG::boolean	FillInputBuffer(libJPEG::j_decompress_ptr cinfo);
+	static void	SkipInputData(libJPEG::j_decompress_ptr cinfo, long /*TYPENOTE: Correct*/ num_bytes);
+	static void	TerminateSource(libJPEG::j_decompress_ptr cinfo);
 };
 
 

@@ -144,7 +144,7 @@ public:
 	static BOOL Declare();
 
 	GIFExportOptions();
-    GIFExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName);
+    GIFExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
@@ -246,7 +246,7 @@ public:
 	//Graham 5/11/97
 	virtual BOOL IsDefaultDocRequired(const TCHAR* pcszPathName);
 
-	virtual INT32 GetFilterType() const { return TI_GIF; }
+	virtual FilterType GetFilterType() const { return TI_GIF; }
 
 	// Import related functions
 	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);
@@ -317,7 +317,7 @@ protected:
 	// This is so we can remember what we thought of the GIF file.
 	INT32 GIFHowCompatible;
 
-	static INT32 FilterType;		// Type of filter in use (TI_GIF .. TI_GIF_TRANSINTER)
+	static FilterType s_FilterType;		// Type of filter in use (TI_GIF .. TI_GIF_TRANSINTER)
 
 	BOOL m_DoingAnimation;		// flag for wether or not we are generating a GIF animation
 	UINT32 m_AnimationFrame;		// the frame we are on in the animation

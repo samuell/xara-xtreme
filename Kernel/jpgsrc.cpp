@@ -101,18 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "ccfile.h"
 
-namespace JPEG
-{
-	extern "C"
-	{
-	#include "jpeglib.h"
-	}
-
-#if defined(HAVE_BOOLEAN)
-	typedef ::boolean	boolean;
-#endif
-};
-
+#include "jpglib_namespace.h"
 #include "jpgermgr.h"
 #include "errors.h"
 //#include "andy.h"			// for _R(IDE_FILEREADERROR)
@@ -160,7 +149,7 @@ JPEGDataSource::JPEGDataSource(CCFile* pInputFile) : m_pInputFile(pInputFile)
 	* provided by the JPEG library.  That method assumes that no backtracking
 	* is possible.
 	*/
-	resync_to_restart	= JPEG::jpeg_resync_to_restart;
+	resync_to_restart	= libJPEG::jpeg_resync_to_restart;
 	term_source			= TerminateSource;
 
 	// Initialize base class!!
@@ -180,9 +169,9 @@ JPEGDataSource::JPEGDataSource(CCFile* pInputFile) : m_pInputFile(pInputFile)
 	Notes:		Uses the IJG library for memory allocation
 
 ********************************************************************************************/
-JPEG::boolean	JPEGDataSource::InitBuffer(JPEG::j_decompress_ptr cinfo)
+libJPEG::boolean	JPEGDataSource::InitBuffer(libJPEG::j_decompress_ptr cinfo)
 {
-	using namespace JPEG;
+	using namespace libJPEG;
 
 	m_pBuffer = (JOCTET *) (*cinfo->mem->alloc_small) 
 					((j_common_ptr) cinfo, JPOOL_PERMANENT, INPUT_BUF_SIZE * sizeof(JOCTET));
@@ -205,7 +194,7 @@ JPEG::boolean	JPEGDataSource::InitBuffer(JPEG::j_decompress_ptr cinfo)
 				one source.
 
 ********************************************************************************************/
-void JPEGDataSource::InitSource(JPEG::j_decompress_ptr cinfo)
+void JPEGDataSource::InitSource(libJPEG::j_decompress_ptr cinfo)
 {
 	JPEGDataSource* pThis = (JPEGDataSource*)cinfo->src;
 
@@ -257,7 +246,7 @@ void JPEGDataSource::InitSource(JPEG::j_decompress_ptr cinfo)
 				the front of the buffer rather than discarding it.
 
 ********************************************************************************************/
-JPEG::boolean JPEGDataSource::FillInputBuffer (JPEG::j_decompress_ptr cinfo)
+libJPEG::boolean JPEGDataSource::FillInputBuffer (libJPEG::j_decompress_ptr cinfo)
 {
 	JPEGDataSource* pThis = (JPEGDataSource*)cinfo->src;
 	CCFile* pFile = pThis->m_pInputFile;
@@ -283,11 +272,11 @@ JPEG::boolean JPEGDataSource::FillInputBuffer (JPEG::j_decompress_ptr cinfo)
 	{
 		if (pThis->m_bStartOfFile)	// Treat empty input file as fatal error
 		{
-			using namespace JPEG;
+			using namespace libJPEG;
 			ERREXIT(cinfo, JERR_INPUT_EMPTY);
 		}
 		
-		using namespace JPEG;
+		using namespace libJPEG;
 		WARNMS(cinfo, JWRN_JPEG_EOF);
 		// Insert a fake EOI marker
 		pThis->m_pBuffer[0] = (JOCTET) 0xFF;
@@ -322,7 +311,7 @@ JPEG::boolean JPEGDataSource::FillInputBuffer (JPEG::j_decompress_ptr cinfo)
 				buffer is the application writer's problem.
 
 ********************************************************************************************/
-void JPEGDataSource::SkipInputData(JPEG::j_decompress_ptr cinfo, long /*TYPENOTE: Correct*/ num_bytes)
+void JPEGDataSource::SkipInputData(libJPEG::j_decompress_ptr cinfo, long /*TYPENOTE: Correct*/ num_bytes)
 {
 	JPEGDataSource* pThis = (JPEGDataSource*)cinfo->src;
   /* Just a dumb implementation for now.  Could use fseek() except
@@ -363,7 +352,7 @@ void JPEGDataSource::SkipInputData(JPEG::j_decompress_ptr cinfo, long /*TYPENOTE
 				for error exit.
 
 ********************************************************************************************/
-void JPEGDataSource::TerminateSource(JPEG::j_decompress_ptr cinfo)
+void JPEGDataSource::TerminateSource(libJPEG::j_decompress_ptr cinfo)
 {
 //	JPEGDataSource* pThis = (JPEGDataSource*)cinfo->src;
   /* no work necessary here */

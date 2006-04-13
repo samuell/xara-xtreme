@@ -109,13 +109,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 	Purpose:	Provides progress update callback for the IJG library JPEG Filters
 
 **************************************************************************************/
-class JPEGProgressMonitor : public JPEG::jpeg_progress_mgr 
+class JPEGProgressMonitor : public libJPEG::jpeg_progress_mgr 
 {
 	// Declare the class for memory tracking
 	//CC_DECLARE_MEMDUMP(JPEGProgressMonitor);
 public:
 	// Overridden 'C' function
-	static void Update(JPEG::j_common_ptr cinfo);
+	static void Update(libJPEG::j_common_ptr cinfo);
 
 	BOOL UserAborted() const	{	return !m_bContinueOp;	}
 
@@ -124,11 +124,11 @@ public:
 protected:
 
 	BOOL				m_bContinueOp;
-	JPEG::j_decompress_ptr	m_pcinfo;
+	libJPEG::j_decompress_ptr	m_pcinfo;
 
 protected:
 	// Support functions
-	JPEGProgressMonitor(JPEG::j_decompress_ptr cinfo);
+	JPEGProgressMonitor(libJPEG::j_decompress_ptr cinfo);
 
 	// Overridable functions
 
@@ -152,7 +152,7 @@ class JPEGProgressBySelf : public JPEGProgressMonitor
 	//CC_DECLARE_MEMDUMP(JPEGProgressBySelf);
 public:
 
-	JPEGProgressBySelf(JPEG::j_decompress_ptr cinfo, const StringBase& BarString);
+	JPEGProgressBySelf(libJPEG::j_decompress_ptr cinfo, const StringBase& BarString);
 
 	~JPEGProgressBySelf();
 
@@ -184,7 +184,7 @@ class JPEGProgressByFilter : public JPEGProgressMonitor
 	//CC_DECLARE_MEMDUMP(JPEGProgressByFilter);
 public:
 
-	JPEGProgressByFilter(JPEG::j_decompress_ptr cinfo, Filter* pFilterToUse, 
+	JPEGProgressByFilter(libJPEG::j_decompress_ptr cinfo, Filter* pFilterToUse,
 		UINT32 ImportSize);
 
 protected:

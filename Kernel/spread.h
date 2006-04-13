@@ -106,6 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grid.h"
 #include "dibconv.h"
 #include "paldefs.h"
+#include "animparams.h"
 
 
 // NEW_PASTEBOARD compile switch
@@ -330,9 +331,7 @@ protected:		// Internal variables
 	BOOL RalphDontShowPaper;
 	DocCoord SpreadOrigin;		// The origin of the spread coordinate space (in document coords)
 	DocCoord UserOrigin;		// The origin of user (displayed on screen) coordinates (ruler origin)
-PORTNOTE("GIF","Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
-	AnimPropertiesParam		m_AnimPropertiesParam; 
+	AnimPropertiesParam		m_AnimPropertiesParam;
 								// The following values for a GIF animation will be stored in a spread.
 								// Animation loop	
 								// Global Delay
@@ -340,7 +339,6 @@ PORTNOTE("GIF","Removed GIF stuff")
 								// Palette	
 								// Number of Cols In Palette
 								// Use System Colours flag
-#endif
 	
 public:
 	// Selector functions.
@@ -357,11 +355,8 @@ public:
 										DWORD* NumColsInPalette, BOOL* UseSystemColours,
 										BOOL* pIsBgTransparent);
 
-PORTNOTE("GIF","Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
 	AnimPropertiesParam& GetSpreadAnimPropertiesParam();
 	void SetSpreadAnimPropertiesParam(const AnimPropertiesParam& Param);
-#endif
 	void SetAnimationDelay(const DWORD GlobalDelay);
 	void SetAnimationLoop(const DWORD &Loop);
 

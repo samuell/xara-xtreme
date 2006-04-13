@@ -434,11 +434,14 @@ BOOL NodeMouldPath::InsideMould()
 BOOL NodeMouldPath::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSRenderRegion", "Removed use of EPSRenderegion")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 		return ExportCAMEPS(pRegion);
 
 	if (pRegion->IS_KIND_OF(ArtWorksEPSRenderRegion))
 		return ExportAWEPS(pRegion);
+#endif
 #endif	
 	return FALSE;
 }
@@ -464,6 +467,8 @@ BOOL NodeMouldPath::ExportRender(RenderRegion* pRegion)
 BOOL NodeMouldPath::ExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
 	// If we're hanging around in a mould then export the correct tokens
@@ -482,6 +487,7 @@ BOOL NodeMouldPath::ExportCAMEPS(RenderRegion* pRegion)
 		pDC->OutputToken("cemp");			// Camelot "start mould path" token
 		pDC->OutputNewLine();
 	}
+#endif
 #endif
 	return TRUE;
 }

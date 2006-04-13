@@ -668,7 +668,7 @@ BOOL CXaraFileRecord::WriteWCHAR(WCHAR w)
 	ENTERWRITEFUNCTION(FTT_WCHAR);
 	w = NativeToUTF16(w);
 	w = NativetoLE(w);
-	BOOL ok = WriteBuffer((BYTE*)&w, SIZEOF_UTF16);	//sizeof(WCHAR));	2-byte UNICODE stored in Xar files
+	BOOL ok = WriteBuffer((BYTE*)&w, SIZEOF_XAR_UTF16);	//sizeof(WCHAR));	2-byte UNICODE stored in Xar files
 	LEAVEWRITEFUNCTION;
 	return (ok);
 }
@@ -859,19 +859,15 @@ BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
 #ifdef _UNICODE
 
 // TODO: Is this conditional stuff really needed?
-#if defined(__WXGTK__)
+#if defined(__WXGTK__) || defined(__WXMAC__)
 	// pStr points to a Unicode string, so just write it out
 	size_t				cch = wcslen( pStr );
 
 	// cch + 1 chars to include \0
-	for( unsigned ord = 0; ord <= cch; ++ord )
+	for( unsigned ord = 0; ord <= cch && ok; ord++ )
 	{
-		WORD			wc = WORD(pStr[ord]);
-		wc = NativetoLE(wc);
-		if( !WriteBuffer( PBYTE(&wc), sizeof(wc) ) )
-			return false;
+		ok = WriteWCHAR(pStr[ord]);
 	}
-	ok = TRUE;
 
 #elif defined(__WXMSW__)
 	// pStr points to a Unicode string, so just write it out
@@ -997,6 +993,43 @@ BOOL CXaraFileRecord::WriteASCII(TCHAR* pStr)
 
 	return (ok);
 } */
+
+/********************************************************************************************
+
+>	BOOL CXaraFileRecord::WriteUTF16STR(const StringVar& pvstr)
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	28/Mar/2006
+	Inputs:		pvstr - pointer to StringVar
+	Outputs:	-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Writes a variable length string as a stream of UTF16 unicode characters
+	Errors:		-
+	SeeAlso:	StartRecord(), EndRecord()
+
+********************************************************************************************/
+
+BOOL CXaraFileRecord::WriteUTF16STR(const StringVar& pvstr)
+{
+#ifdef UNICODE
+	BOOL ok = TRUE;
+	WCHAR c = 0;
+	INT32 i = 0;
+
+	do
+	{
+		c = pvstr.CharAt(i++);
+		ok = WriteWCHAR(c);						// Read two bytes into the WCHAR buffer
+		if (!ok) c = 0;							// If the read failed then write a terminator
+	}
+	while (c!=0);// Until end of string or no longer OK to write
+
+	return ok;									// If we terminated due to Read failure tell the caller
+#else
+	ERROR3("StringVar only holds UNICODE data in UNICODE builds");
+	return FALSE;
+#endif
+}
 
 /********************************************************************************************
 
@@ -1282,7 +1315,7 @@ BOOL CXaraFileRecord::ReadDOUBLEnoError(double* pd)
 BOOL CXaraFileRecord::ReadWCHAR(WCHAR *pw)
 {
 	*pw = 0;
-	BOOL ok = ReadBuffer((BYTE*)pw, SIZEOF_UTF16);	//sizeof(WCHAR)); 2-byte UNICODE stored in Xar files
+	BOOL ok = ReadBuffer((BYTE*)pw, SIZEOF_XAR_UTF16);	//sizeof(WCHAR)); 2-byte UNICODE stored in Xar files
 	*pw = LEtoNative(*pw);
 	*pw = UTF16ToNative(*pw);
 	return ok;
@@ -1583,6 +1616,7 @@ BOOL CXaraFileRecord::ReadASCII( char *pStr, UINT32 MaxChars )
 
 BOOL CXaraFileRecord::ReadUTF16STR(StringVar* pvstr, UINT32 MaxChars)
 {
+#ifdef UNICODE
 	BOOL ok = TRUE;
 	pvstr->Empty();
 	WCHAR c = 0;
@@ -1598,6 +1632,10 @@ BOOL CXaraFileRecord::ReadUTF16STR(StringVar* pvstr, UINT32 MaxChars)
 //TRACEUSER("Phil", _T("ReadUTF16: %s\n"), (TCHAR*)*pvstr);
 
 	return ok;									// If we terminated due to Read failure tell the caller
+#else
+	ERROR3("StringVar only holds UNICODE data in UNICODE builds");
+	return FALSE;
+#endif
 }
 
 

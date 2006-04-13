@@ -159,6 +159,26 @@ NativePrefsDlg::NativePrefsDlg () : DialogOp ( NativeID, MODAL )
 
 /******************************************************************************************
 
+>	NativePrefsDlg::~NativePrefsDlg()
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	28/03/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	NativePrefsDlg destructor.
+	Errors:		-
+	SeeAlso:	-
+
+******************************************************************************************/
+
+NativePrefsDlg::~NativePrefsDlg ()
+{
+	// The base class does all the work.
+}
+
+/******************************************************************************************
+
 >	NativePrefsDlg::NativePrefsDlg ( CDlgResID IDD )
 
 	Author:		Graeme_Sutherland (Xara Group Ltd) <camelotdev@xara.com>

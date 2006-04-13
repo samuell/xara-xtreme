@@ -2,14 +2,14 @@ export XARAFLAGS = -I../PreComp -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil -I$(TOPDIR)
 	-I$(TOPDIR)/tools -I$(TOPDIR)/GDraw -I$(TOPDIR)/PreComp -I$(TOPDIR)/wxXtra \
 	-DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS \
 	-DVECTOR_STROKING -DEXCLUDE_FROM_XARALX -DNEW_SHADOW_RENDER -DNO_XARACMS \
-	-DNEW_FEATURES -DSHOWPORTNOTE
+	-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT
 export TOPDIR
 
 PRECOMPILE_DIR =
 if PRECOMPILE_ENABLE
 	PRECOMPILE_DIR = PreComp
 endif
-SUBDIRS = $(PRECOMPILE_DIR) Kernel wxOil tools wxXtra po
+SUBDIRS = $(PRECOMPILE_DIR) wxOil Kernel tools wxXtra po
 
 # We clean these here not in the wxOil makefile to prevent a loop
 MOSTLYCLEANFILES=wxOil/xrc/xrc.d wxOil/xrc/xrc.stamp Resources/*

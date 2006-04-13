@@ -124,6 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "nodedoc.h"
 #include "backgrnd.h"	// OpBackground
+#include "animparams.h"
 
 //#include "prevwres.h"	// _R(IDS_TAG_LAYER_FRAMEPROPS)
 //#include "frameops.h" // for OpGrabAllFrames
@@ -890,8 +891,6 @@ Node* Spread::SimpleCopy()
 
 void Spread::CopyNodeContents(Spread* NodeCopy)
 {                         
-//#pragma message( __LOCMSG__ "Spread::CopyNodeContents - do nothing" )
-//	TRACE( _T("Warning - Spread::CopyNodeContents called\n") );
 	ERROR3IF(NodeCopy == NULL,"Trying to copy node contents to\n"
 							"a node pointed to by a NULL pointer"); 
 	NodeRenderablePaper::CopyNodeContents(NodeCopy); 
@@ -901,11 +900,8 @@ void Spread::CopyNodeContents(Spread* NodeCopy)
 
 	NodeCopy->ShowDropShadow = ShowDropShadow;
 	
-PORTNOTE("other","Warning - Spread::CopyNodeContents - Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
 	NodeCopy->m_AnimPropertiesParam = m_AnimPropertiesParam;
-#endif
-}              
+}
 
   	      
 /***********************************************************************************************
@@ -3746,10 +3742,7 @@ BOOL Spread::WriteSpreadAnimProperties(BaseCamelotFilter* pFilter)
 *******************************************************************************************************/
 void Spread::SetAnimationLoop(const DWORD &Loop)
 {
-	PORTNOTETRACE("other","Spread::SetAnimationLoop - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	m_AnimPropertiesParam.SetAnimLoop(Loop);	
-#endif
+	m_AnimPropertiesParam.SetAnimLoop(Loop);
 }
 
 
@@ -3768,10 +3761,7 @@ void Spread::SetAnimationLoop(const DWORD &Loop)
 *******************************************************************************************************/
 void Spread::SetAnimationDelay(const DWORD GlobalDelay)
 {
-	PORTNOTETRACE("other","Spread::SetAnimationDelay - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	m_AnimPropertiesParam.SetGlobalanimDelay(GlobalDelay);
-#endif
 }
 
 /******************************************************************************************************
@@ -3794,8 +3784,6 @@ void Spread::SetAnimationColours(const DITHER& Dither, const WEB_PALETTE& WebPal
 								 const PALETTE_COLOURS& ColoursPalette, const DWORD& NumColsInPalette,
 								 const BOOL& IsBackgroundTransparent)
 {
-	PORTNOTETRACE("other","Spread::SetAnimationDelay - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// test if we need to junk any cached bitmaps
 	if (Dither != m_AnimPropertiesParam.GetDither() ||
 		WebPalette != m_AnimPropertiesParam.GetPalette() ||
@@ -3805,7 +3793,10 @@ void Spread::SetAnimationColours(const DITHER& Dither, const WEB_PALETTE& WebPal
 	{
 		// force a refresh (regrab) of all frames as
 		// the palette has changed etc..
+PORTNOTETRACE("OpGrabAllFrames","Spread::SetAnimationColours - Not setting OpGrabAllFrames force refresh flag");
+#ifndef EXCLUDE_FROM_XARALX
 		OpGrabAllFrames::ms_ForceRefreshOfAllFrames = TRUE;
+#endif
 	}
 
 	m_AnimPropertiesParam.SetDither(Dither);
@@ -3813,7 +3804,6 @@ void Spread::SetAnimationColours(const DITHER& Dither, const WEB_PALETTE& WebPal
 	m_AnimPropertiesParam.SetPaletteCols(ColoursPalette);
 	m_AnimPropertiesParam.SetNumColsInPalette(NumColsInPalette);
 	m_AnimPropertiesParam.SetIsBackGroundTransp(IsBackgroundTransparent);
-#endif
 }
 
 /******************************************************************************************************
@@ -3835,8 +3825,6 @@ void Spread::GetAnimationColours(DITHER * pDither, WEB_PALETTE * pWebPalette,
 								 PALETTE_COLOURS * pColoursPalette, DWORD * pNumColsInPalette,
 								 BOOL * pIsBackgroundTransparent)
 {
-	PORTNOTETRACE("other","Spread::GetAnimationColours - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pDither != NULL)
 		*pDither = m_AnimPropertiesParam.GetDither();
 	if (pWebPalette != NULL)
@@ -3847,7 +3835,6 @@ void Spread::GetAnimationColours(DITHER * pDither, WEB_PALETTE * pWebPalette,
 		*pNumColsInPalette = m_AnimPropertiesParam.GetNumColsInPalette();
 	if (pIsBackgroundTransparent != NULL)
 		*pIsBackgroundTransparent = m_AnimPropertiesParam.GetIsBackGroundTransp(); 
-#endif
 }
 
 /********************************************************************************************
@@ -3875,7 +3862,7 @@ BOOL Spread::WriteSpreadInformation(BaseCamelotFilter* pFilter)
 #ifdef DO_EXPORT
 	ERROR2IF(pFilter == NULL,FALSE,"NULL filter param");
 
-	BOOL RecordWritten = FALSE;
+//	BOOL RecordWritten = FALSE;
 
 	// Now save out the information record
 	MILLIPOINT Width = 0;
@@ -3962,14 +3949,14 @@ BOOL Spread::WriteSpreadScaling(BaseCamelotFilter* pFilter)
 
 		double 		DrawingScaleValue	= 1.0;
 		UnitType 	DrawingUnits		= NOTYPE;
-		ok = Convert::StringToComponents(&DrawingScale, &DrawingScaleValue, &DrawingUnits);
+		ok = Convert::StringToComponents(DrawingScale, &DrawingScaleValue, &DrawingUnits);
 
 		if (DrawingUnits == NOTYPE)
 			DrawingUnits = Default;
 
 		double 		RealScaleValue		= 1.0;
 		UnitType 	RealUnits			= NOTYPE;
-		ok = Convert::StringToComponents(&RealScale, &RealScaleValue, &RealUnits);
+		ok = Convert::StringToComponents(RealScale, &RealScaleValue, &RealUnits);
 
 		if (RealUnits == NOTYPE)
 			RealUnits = Default;
@@ -4024,13 +4011,10 @@ BOOL Spread::WriteSpreadScaling(BaseCamelotFilter* pFilter)
 	Returns:	TRUE if ok, FALSE otherwise.
 	
 ********************************************************************************************/
-PORTNOTE("other","Removed Spread::SetSpreadAnimPropertiesParam")
-#ifndef EXCLUDE_FROM_XARALX
-*void Spread::SetSpreadAnimPropertiesParam(const AnimPropertiesParam& Param)
+void Spread::SetSpreadAnimPropertiesParam(const AnimPropertiesParam& Param)
 {
 	m_AnimPropertiesParam = Param;
 }
-#endif
 
 /********************************************************************************************
 
@@ -4041,13 +4025,10 @@ PORTNOTE("other","Removed Spread::SetSpreadAnimPropertiesParam")
 	Purpose:	Returns the the Animation Properties details for this spread.
 		
 ********************************************************************************************/
-PORTNOTE("other","Removed Spread::SetSpreadAnimPropertiesParam")
-#ifndef EXCLUDE_FROM_XARALX
 AnimPropertiesParam& Spread::GetSpreadAnimPropertiesParam()
 {
 	return m_AnimPropertiesParam;
 }
-#endif
 
 /********************************************************************************************************************
 >	BOOL Spread::SetSpreadAnimPropertiesParam(const DWORD &Loop, const DWORD &GlobalDelay, const DITHER &Dither, 
@@ -4066,8 +4047,6 @@ BOOL Spread::SetSpreadAnimPropertiesParam(const DWORD &Loop, const DWORD &Global
 											const DWORD &NumColsInPalette, const BOOL& UseSystemColours,
 											const BOOL& IsBackgroundTransparent)
 {
-	PORTNOTETRACE("other","Spread::SetSpreadAnimPropertiesParam - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(this==NULL,FALSE,"Spread::SetSpreadAnimProperties cslled on NULL pointer");
 
 	m_AnimPropertiesParam.SetAnimLoop(Loop);
@@ -4078,7 +4057,7 @@ BOOL Spread::SetSpreadAnimPropertiesParam(const DWORD &Loop, const DWORD &Global
 	m_AnimPropertiesParam.SetNumColsInPalette(NumColsInPalette);
 	m_AnimPropertiesParam.SetUseSystemCols(UseSystemColours);
 	m_AnimPropertiesParam.SetIsBackGroundTransp(IsBackgroundTransparent);
-#endif
+
 	return TRUE;
 }
 
@@ -4101,8 +4080,6 @@ BOOL Spread::GetSpreadAnimPropertiesParam(DWORD *Loop, DWORD *GlobalDelay, DITHE
 {
 	ERROR2IF(this==NULL,FALSE,"Spread::GetSpreadAnimProperties cslled on NULL pointer");
 
-	PORTNOTETRACE("other","Spread::GetSpreadAnimPropertiesParam - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	*Loop				=		 m_AnimPropertiesParam.GetAnimLoop();
 	*GlobalDelay		=		 m_AnimPropertiesParam.GetGlobalAnimDelay();	
 	*Dither				=		 m_AnimPropertiesParam.GetDither();
@@ -4112,7 +4089,7 @@ BOOL Spread::GetSpreadAnimPropertiesParam(DWORD *Loop, DWORD *GlobalDelay, DITHE
 	*UseSystemColours	=		 m_AnimPropertiesParam.GetUseSystemCols();
 	if (IsBgTransparent != NULL)
 		*IsBgTransparent=		 m_AnimPropertiesParam.GetIsBackGroundTransp();
-#endif
+
 	return TRUE;
 }
 
@@ -4129,10 +4106,7 @@ BOOL Spread::GetSpreadAnimPropertiesParam(DWORD *Loop, DWORD *GlobalDelay, DITHE
 
 void Spread::SetAnimationBoundingRect(const DocRect& BoundingRect)
 {
-	PORTNOTETRACE("other","Spread::SetAnimationBoundingRect - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	m_AnimPropertiesParam.SetBoundingRect(BoundingRect);
-#endif
 }
 
 /********************************************************************************************
@@ -4148,12 +4122,7 @@ void Spread::SetAnimationBoundingRect(const DocRect& BoundingRect)
 
 DocRect Spread::GetAnimationBoundingRect()
 {
-	PORTNOTETRACE("other","Spread::GetAnimationBoundingRect - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return m_AnimPropertiesParam.GetBoundingRect();
-#else
-	return DocRect();
-#endif
 }
 
 
@@ -4170,10 +4139,7 @@ DocRect Spread::GetAnimationBoundingRect()
 
 void Spread::SetAnimationQuality(const Quality& NewQuality)
 {
-	PORTNOTETRACE("other","Spread::SetAnimationQuality - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	m_AnimPropertiesParam.SetAnimationQuality(NewQuality);
-#endif
 }
 
 
@@ -4190,12 +4156,7 @@ void Spread::SetAnimationQuality(const Quality& NewQuality)
 
 Quality Spread::GetAnimationQuality()
 {
-	PORTNOTETRACE("other","Spread::GetAnimationQuality - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return m_AnimPropertiesParam.GetAnimationQuality();
-#else
-	return Quality();
-#endif
 }
 
 

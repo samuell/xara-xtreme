@@ -178,7 +178,7 @@ public:
 	// or does the file format supply the document.
 	virtual BOOL IsDefaultDocRequired(const TCHAR* pcszPathName);
 
-	virtual INT32 GetFilterType() const { return -1; }
+	virtual FilterType GetFilterType() const { return INVALID; }
 
 	BOOL DoImport(SelOperation *Op, CCLexFile*, Document *DestDoc, 
 				  BOOL AutoChosen = FALSE, ImportPosition *Pos = NULL,

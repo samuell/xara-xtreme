@@ -2273,12 +2273,15 @@ BOOL NodePath::IsPathAllowable()
 BOOL NodePath::NeedsToExport(RenderRegion* pRender, BOOL VisibleLayersOnly, BOOL CheckSelected)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSRenderRegion", "Removed use of EPSRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		Node* pParent=FindParent();
 		if (pParent!=NULL && IS_A(pParent,TextStory))
 			return FALSE;
 	}
+#endif
 
 	// If we have the check selection flag on then see if this node is:-
 	// - selected or not = render it

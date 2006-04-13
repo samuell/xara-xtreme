@@ -144,10 +144,10 @@ public:
 					 FNPTR_SCANLINE *pConvertFn );
 	virtual BOOL SetUpInfoHeader(const LPBITMAPINFOHEADER lpHeader, const UINT32 OutputDepth,
 								 const DWORD CompressionType, const UINT32 FinalHeight, INT32 *); 
-	BOOL SetUpExport( CCLexFile *File, LPBITMAPINFOHEADER lpHeader, LPLOGPALETTE Palette, 
-					  UINT32 DitherType, UINT32 OutputDepth,
-					  DWORD CompressionType, UINT32, LPBYTE,
-					  UINT32 StripSize, INT32 ExportSize, BOOL Forward);
+//	BOOL SetUpExport( CCLexFile *File, LPBITMAPINFOHEADER lpHeader, LPLOGPALETTE Palette, 
+//					  UINT32 DitherType, UINT32 OutputDepth,
+//					  DWORD CompressionType, UINT32, LPBYTE,
+//					  UINT32 StripSize, INT32 ExportSize, BOOL Forward);
 	static BOOL GetNextBlock( UINT32 YPos, UINT32 Height, LPBYTE BlockStart,
 							  LPBYTE *Buffer, INT32 *CurrentBlockSize,
 							  INT32 *CurrentStartYPos, UINT32 *WrittenSoFar);

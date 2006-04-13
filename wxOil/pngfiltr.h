@@ -104,10 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "outptpng.h"
 #include "bmpprefs.h"  	// SelectionType
 //#include "filtrres.h"
-//#include "imglib.h"
-
-// Fake an const that would be defined in imglib.h
-static INT32			PNG = 1;
 
 class KernelBitmap;
 
@@ -121,8 +117,6 @@ class KernelBitmap;
 
 ********************************************************************************************/
 
-PORTNOTE("other","Removed PNGExportOptions")
-#ifndef EXCLUDE_FROM_XARALX
 class PNGExportOptions : public MaskedFilterExportOptions
 {
 CC_DECLARE_DYNCREATE(PNGExportOptions)
@@ -130,7 +124,7 @@ CC_DECLARE_DYNCREATE(PNGExportOptions)
 public:
 	static BOOL Declare();
 
-    PNGExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName);
+    PNGExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 	PNGExportOptions() {};
 
 	virtual BOOL	GetSupportsImageMap() { return TRUE; }
@@ -145,7 +139,6 @@ public:
 protected:
 	static	UINT32 g_CompactedFlagsForDefaults;
 };
-#endif
 
 /********************************************************************************************
 
@@ -171,7 +164,7 @@ public:
 	virtual INT32 HowCompatible( PathName& Filename, ADDR HeaderStart, UINT32 HeaderSize,
 		UINT32 FileSize );
 
-	virtual INT32 GetFilterType() const { return PNG; }
+	virtual FilterType GetFilterType() const { return PNG; }
 
 	// Import related functions
 	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);
@@ -239,7 +232,7 @@ protected:
 	// This is so we can remember what we thought of the GIF file.
 	INT32 PNGHowCompatible;
 
-	static INT32 FilterType;						// Type of filter in use i.e. PNG
+	static FilterType s_FilterType;						// Type of filter in use i.e. PNG
 
 	// The string to display when exporting the second stage.
 	UINT32 Export2ndStageMsgID;

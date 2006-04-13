@@ -497,6 +497,8 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 	PathName pathToPutInDialog=pCamelot->GetTemplatesPath();
 	
 	//Now create the dialog
+PORTNOTE("commonfiledlg", "Removed use of Common File Dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	SaveTemplateDialog dialogToDisplay(pathToPutInDialog);
 		
 	//And show it
@@ -509,7 +511,7 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 		PathName pathToSaveTo;
 		dialogToDisplay.GetChosenFileName(&pathToSaveTo);
 
-		CString cstrPathToSaveTo=pathToSaveTo.GetPath(FALSE);
+		String_256 cstrPathToSaveTo=pathToSaveTo.GetPath(FALSE);
 		dialogToDisplay.AppendExtension(&cstrPathToSaveTo);
 
 		String_256 strPathToSaveTo=cstrPathToSaveTo;
@@ -546,6 +548,7 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 			pCamelot->SetTemplatesPath(strDefaultPath);
 		}
 	}
+#endif
 
 	// Finished the operation
 	End();

@@ -392,10 +392,10 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 #endif //EXCLUDE_FROM_XARALX
 			DummyOp::Init() &&					// Register dummy ops for unimplemented menu items
 			OpMenuLoad::Init() &&				// Register Load operation
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 			OpMenuSave::Init() &&				// Register Save operation
 #endif
+#ifndef EXCLUDE_FROM_XARALX
 			OpException::Init() &&
 			InfoBarOp::Init() &&
 			InfoBarViewOp::Init() &&

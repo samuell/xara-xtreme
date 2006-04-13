@@ -2033,6 +2033,8 @@ void NodeBevelController::PreExportRender( RenderRegion* pRender )
 	TRACEUSER( "MarkH", _T("PreExport Rendering NODEBEVEL! <------------------------\n"));
 
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -2062,13 +2064,15 @@ void NodeBevelController::PreExportRender( RenderRegion* pRender )
 		DocRect BBox = GetBoundingRect(FALSE,FALSE);
 		pDC->StartGroup(&BBox);
 	}
-
+#endif
 #endif
 }
 
 BOOL NodeBevelController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -2094,6 +2098,7 @@ BOOL NodeBevelController::ExportRender(RenderRegion* pRegion)
 	if(m_pBevel)
 		m_pBevel->SetConvertingFlag();
 
+#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

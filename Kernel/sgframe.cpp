@@ -154,8 +154,6 @@ CC_IMPLEMENT_DYNAMIC(SGDisplayFrame, SGDisplayLayer)
 CC_IMPLEMENT_DYNCREATE(FrameSGallery, Operation)
 #endif
 
-CC_IMPLEMENT_DYNAMIC(AnimPropertiesParam, OpParam)
-
 // This line mustn't go before any CC_IMPLEMENT_... macros
 #define new CAM_DEBUG_NEW
 
@@ -3365,33 +3363,6 @@ BOOL FrameSGallery::IsFrameMode(Document* pDoc)
 	// return the document mode.
 	return FrameMode;
 }
-
-/********************************************************************************************
-
->	AnimPropertiesParam& AnimPropertiesParam::operator=(const AnimPropertiesParam& obj)
-
-	Author:		Ranbir_Rana (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	08/05/97
-	Scope:		public
-
-********************************************************************************************/
-
-AnimPropertiesParam& AnimPropertiesParam::operator=(const AnimPropertiesParam& obj)
-{
-		if (this == &obj)	return *this;
-
-		m_Animloop			=	obj.m_Animloop;	
-		m_GlobalAnimDelay	=	obj.m_GlobalAnimDelay; 		
-		m_Dither			=	obj.m_Dither;
-		m_Palette			=	obj.m_Palette;				
-		m_PaletteColours	=	obj.m_PaletteColours;
-		m_NumColsInPalette	=	obj.m_NumColsInPalette;
-		m_UseSystemColours	=	obj.m_UseSystemColours;
-		
-		m_BoundingRect		=	obj.m_BoundingRect;
-		
-		return *this;
-};
 
 #endif // EXCLUDE_GALS
 

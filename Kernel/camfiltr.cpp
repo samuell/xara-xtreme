@@ -132,7 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "biasgain.h"
 //#include "qualops.h"	// for QualitySliderDescriptor::Update();
 
-//#include "bitfilt.h"	// GetSizeOfDrawing()
+#include "bitfilt.h"	// GetSizeOfDrawing()
 //#include "bmpsrc.h"		// BitmapSource
 #include "colcomp.h"	// colour component, record handling classes for colours
 #include "bmpcomp.h"	// bitmap component, record handling classes for bitmaps
@@ -179,8 +179,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "xarprefs.h"	// The base Xara file preferences dialogue.
 //#include "webprefs.h"	// Web options dialog handler
-//#include "webparam.h"	// WebPrefsDlgParam class
-//#include "prvwflt.h"	// for PreviewBitmap::PreviewBitmapSize
+#include "webparam.h"	// WebPrefsDlgParam class
+#include "prvwflt.h"	// for PreviewBitmap::PreviewBitmapSize
 #include "group.h"
 
 //#include "grptrans.h"	// GroupTransparencyRecordHandler
@@ -215,7 +215,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "nodeshad.h"	// for NodeShadow export.
 #include "nodecont.h"
-//#include "objreg.h"
+#include "objreg.h"
 
 #include "nodeliveeffect.h"
 #include "hardwaremanager.h"
@@ -4315,6 +4315,8 @@ BOOL BaseCamelotFilter::WriteDocument(Operation * pExportOp)
 	BOOL ok = TRUE;
 
 	// Set up the name gallery, using Simon's code, and check that it's valid
+PORTNOTE("namegallery", "Removed use of NameGallery")
+#ifndef EXCLUDE_FROM_XARALX
 	NameGallery	*pNameGallery	= NameGallery::Instance ();
 	if ( pNameGallery == NULL )
 	{
@@ -4325,6 +4327,7 @@ BOOL BaseCamelotFilter::WriteDocument(Operation * pExportOp)
 	// Update the named set information if everythings ok.
 	if (ok)
 		pNameGallery->FastUpdateNamedSetSizes ();
+#endif
 
 	// Karim 08/02/2001
 	// Set the document up to save out shadows correctly.
@@ -4393,8 +4396,6 @@ BOOL BaseCamelotFilter::PreExportShadows(Node* pRoot)
 	if (pRoot == NULL)
 		return FALSE;
 
-	PORTNOTETRACE("other","BaseCamelotFilter::PreExportShadows - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Turn off attr-transp rejection for shadows.
 	NodeRenderableInkDetailsItem* pShadowDetails =
 		ObjectRegistry::GetAttribDetails(CC_RUNTIME_CLASS(NodeShadow));
@@ -4449,8 +4450,6 @@ BOOL BaseCamelotFilter::PreExportShadows(Node* pRoot)
 	}
 
 	return ok;
-#endif
-	return FALSE;
 }
 
 
@@ -4478,8 +4477,6 @@ BOOL BaseCamelotFilter::PostExportShadows(Node* pRoot)
 	if (pRoot == NULL)
 		return FALSE;
 
-	PORTNOTETRACE("other","BaseCamelotFilter::PostExportShadows - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Turn on attr-transp rejection for shadows.
 	NodeRenderableInkDetailsItem* pShadowDetails =
 		ObjectRegistry::GetAttribDetails(CC_RUNTIME_CLASS(NodeShadow));
@@ -4516,7 +4513,7 @@ BOOL BaseCamelotFilter::PostExportShadows(Node* pRoot)
 			}
 		}
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -4836,7 +4833,7 @@ BOOL BaseCamelotFilter::WriteNodeAndSubNodes (Node* pNode)
 	//	required, and should speed up the export slightly when the exporting the whole 
 	//	document, as it no longer has to trudge through any selection code.
 
-	BOOL RecordWritten = WritePreChildren(pNode);
+	/*BOOL RecordWritten =*/ WritePreChildren(pNode);
 	BOOL WriteChildren = CanWriteChildren(pNode);
 
 	if (WriteChildren)
@@ -5101,7 +5098,7 @@ BOOL BaseCamelotFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* p
 	BOOL ok = TRUE;
 	EscapePressed = FALSE;
 
-//	TRY
+	try
 	{
 		// This needs to be fixed sensibly as it uses the value that is 
 		// currently in the TotalProgressBarCount variable
@@ -5186,15 +5183,13 @@ BOOL BaseCamelotFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* p
 			}
 		}
 	}
-#if 0
-	CATCH(CFileException, e)
+	catch (...)
 	{
 		TRACE( _T("BaseCamelotFilter::DoExport An error has occurred during export!\n") );
 		// Flag an error has occurred so that things get cleaned up correctly
 		ok = FALSE;
 	}
-	END_CATCH
-#endif
+
 	// Clean up if we get an error
 	if (!ok)
 	{
@@ -5556,7 +5551,7 @@ INT32 BaseCamelotFilter::WriteRecord(KernelBitmap* pBitmap)
 INT32 BaseCamelotFilter::WriteFontDefinition(WORD FontHandle, BOOL IsBold, BOOL IsItalic)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFontComponent==NULL, NULL, "Member variable pFontComponent==NULL.");
+	ERROR2IF(pFontComponent==NULL, -1, "Member variable pFontComponent==NULL.");
 	
 	return pFontComponent->WriteFontDefinition(this, FontHandle, IsBold, IsItalic);
 #else

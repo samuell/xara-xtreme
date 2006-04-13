@@ -455,7 +455,7 @@ BOOL OutputPNG::OutputPNGHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo,
 	ERROR2IF(pInfo==NULL,FALSE,"OutputPNG::OutputPNGHeader BitmapInfo pointer is null");
 	//ERROR2IF(pPalette==NULL && pQuadPalette==NULL,FALSE,"OutputPNG::OutputPNGHeader Bitmap palette pointer is null");
 
-	TRACEUSER( "Jonathan", _T("PNG write: Interlace: %s\n", InterlaceState ? "Yes" : "No"));
+	TRACEUSER( "Jonathan", _T("PNG write: Interlace: %s\n"), InterlaceState ? _T("Yes") : _T("No"));
 
 	// Note file in our class variable as used by all the low level routines
 	OutputFile = File;
@@ -482,7 +482,7 @@ BOOL OutputPNG::OutputPNGHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo,
 	png_ptr		= NULL;
 	info_ptr	= NULL;
 
-	TRY
+	try
 	{
 		// Work out the palette size 
 		INT32 PalSize = pInfo->biClrUsed;		// How many entries in palette
@@ -737,7 +737,7 @@ TRACEUSER( "Jonathan", _T("PNG write: rowbytes %d color_type %d\n"),png_ptr->row
 		return TRUE;
 	}
 	
-	CATCH( CFileException, e)
+	catch (...)
 	{
 		// catch our form of a file exception
 		TRACE( _T("OutputPNG::OutputPNGHeader CC catch handler\n"));
@@ -754,7 +754,6 @@ TRACEUSER( "Jonathan", _T("PNG write: rowbytes %d color_type %d\n"),png_ptr->row
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
 }	
@@ -846,7 +845,7 @@ BOOL OutputPNG::OutputPNGBits(CCLexFile *File, LPBYTE pBlockStart, BOOL OneBlock
 	BOOL OldThrowingState = File->SetThrowExceptions( TRUE );
 	BOOL OldReportingState = File->SetReportErrors( FALSE );
 
-	TRY
+	try
 	{
 		// It is now ready to go and put that data onto the disc
 		// so wait for the bitmap data to be prepared
@@ -932,7 +931,8 @@ BOOL OutputPNG::OutputPNGBits(CCLexFile *File, LPBYTE pBlockStart, BOOL OneBlock
 		return TRUE;
 	}
 
-	CATCH( CFileException, e)
+//	CATCH( CFileException, e)
+	catch (...)
 	{
 		// catch our form of a file exception
 		TRACE( _T("OutputPNG::OutputPNGBits CC catch handler\n"));
@@ -949,7 +949,6 @@ BOOL OutputPNG::OutputPNGBits(CCLexFile *File, LPBYTE pBlockStart, BOOL OneBlock
 
 		return FALSE;
 	}
-	END_CATCH
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
 }	

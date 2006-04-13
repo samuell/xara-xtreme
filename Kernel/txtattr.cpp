@@ -3297,7 +3297,7 @@ void AttrTxtBold::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtBold::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtBold::WritePreChildrenWeb(pFilter, this);
 #else
@@ -3308,7 +3308,7 @@ BOOL AttrTxtBold::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtBold::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtBold::WritePreChildrenNative(pFilter, this);
 #else
@@ -3584,7 +3584,7 @@ void AttrTxtItalic::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtItalic::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtItalic::WritePreChildrenWeb(pFilter, this);
 #else
@@ -3595,7 +3595,7 @@ BOOL AttrTxtItalic::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtItalic::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtItalic::WritePreChildrenNative(pFilter, this);
 #else
@@ -3886,7 +3886,7 @@ void AttrTxtFontSize::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
 BOOL AttrTxtFontSize::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtFontSize::WritePreChildrenWeb(pFilter, this);
 #else
@@ -3897,7 +3897,7 @@ BOOL AttrTxtFontSize::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtFontSize::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtFontSize::WritePreChildrenNative(pFilter, this);
 #else
@@ -4171,7 +4171,7 @@ void AttrTxtUnderline::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtUnderline::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtUnderline::WritePreChildrenWeb(pFilter, this);
 #else
@@ -4182,7 +4182,7 @@ BOOL AttrTxtUnderline::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtUnderline::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtUnderline::WritePreChildrenNative(pFilter, this);
 #else
@@ -4451,7 +4451,7 @@ void AttrTxtAspectRatio::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect
 BOOL AttrTxtAspectRatio::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtAspectRatio::WritePreChildrenWeb(pFilter, this);
 #else
@@ -4462,7 +4462,7 @@ BOOL AttrTxtAspectRatio::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtAspectRatio::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtAspectRatio::WritePreChildrenNative(pFilter, this);
 #else
@@ -4758,7 +4758,7 @@ void AttrTxtJustification::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtJustification::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtJustification::WritePreChildrenWeb(pFilter, this);
 #else
@@ -4769,7 +4769,7 @@ BOOL AttrTxtJustification::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtJustification::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtJustification::WritePreChildrenNative(pFilter, this);
 #else
@@ -5042,7 +5042,7 @@ void AttrTxtTracking::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtTracking::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtTracking::WritePreChildrenWeb(pFilter, this);
 #else
@@ -5053,7 +5053,7 @@ BOOL AttrTxtTracking::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtTracking::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtTracking::WritePreChildrenNative(pFilter, this);
 #else
@@ -5330,7 +5330,7 @@ void AttrTxtScript::GetDebugDetails(StringBase* Str)
 BOOL AttrTxtScript::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtScript::WritePreChildrenWeb(pFilter, this);
 #else
@@ -5341,7 +5341,7 @@ BOOL AttrTxtScript::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtScript::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtScript::WritePreChildrenNative(pFilter, this);
 #else
@@ -5632,7 +5632,7 @@ void AttrTxtBaseLine::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
 BOOL AttrTxtBaseLine::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtBaseLine::WritePreChildrenWeb(pFilter, this);
 #else
@@ -5643,7 +5643,7 @@ BOOL AttrTxtBaseLine::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtBaseLine::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtBaseLine::WritePreChildrenNative(pFilter, this);
 #else
@@ -5982,7 +5982,7 @@ void AttrTxtLineSpace::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
 BOOL AttrTxtLineSpace::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtLineSpace::WritePreChildrenWeb(pFilter, this);
 #else
@@ -5993,7 +5993,7 @@ BOOL AttrTxtLineSpace::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
 BOOL AttrTxtLineSpace::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 {
 #ifdef DO_EXPORT
-	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.")
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtLineSpace::WritePreChildrenNative(pFilter, this);
 #else

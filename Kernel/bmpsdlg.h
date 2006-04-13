@@ -107,8 +107,7 @@ PORTNOTE("gif","Removed gifutil usage")
 #include "gifutil.h"
 #endif
 
-typedef INT32 GIFDisposalMethod;
-const INT32	GDM_LEAVE = 0;
+#include "outptgif.h"
 
 class BmpDlgParam;
 

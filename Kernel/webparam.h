@@ -100,9 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmpprefs.h"
 
-// Forward declaration.
-class OpParam;
-
 /********************************************************************************************
 
 >	class WebPrefsDlgParam : public OpParam
@@ -117,23 +114,12 @@ class OpParam;
 class WebPrefsDlgParam : public OpParam
 {
 
-CC_DECLARE_MEMDUMP ( WebPrefsDlgParam )
+CC_DECLARE_MEMDUMP(WebPrefsDlgParam);
 
 public:
     // Default constructor, set up some useful defaults
-	WebPrefsDlgParam ( void )
-	{
-		ViewportSel				= DRAWING;
-		ExportSel				= DRAWING;
-		BmpCompression			= 100;
-		Compression				= TRUE;
-		ExportPreviewBitmap		= FALSE;
-		ConvertTextToOutlines	= TRUE;
-		WebOk					= FALSE;
-		HTMLToClipboard			= FALSE;
-		ConvertBlendsToOutlines	= FALSE;
-	};
-
+	WebPrefsDlgParam();
+	
 // WEBSTER - markn 28/1/97
 // Added access functions, and the Convert blends to outlines flag
 
@@ -181,5 +167,6 @@ private:
 
 	BOOL WebOk;						// Ok or cancel selected 
 };
+
 
 #endif // _INC_WEB_PARAM_H

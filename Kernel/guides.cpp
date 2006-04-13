@@ -471,6 +471,8 @@ void NodeGuideline::PreExportRender(RenderRegion* pRegion)
 // WEBSTER - markn 14/1/97
 #ifndef WEBSTER
 #ifdef DO_EXPORT
+PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
@@ -485,6 +487,7 @@ void NodeGuideline::PreExportRender(RenderRegion* pRegion)
 		pDC->OutputToken(_T("glne"));			// Camelot "guideline" token
 		pDC->OutputNewLine();
 	}
+#endif
 #endif
 #endif // WEBSTER
 }
@@ -507,6 +510,8 @@ BOOL NodeGuideline::ExportRender(RenderRegion* pRegion)
 // WEBSTER - markn 14/1/97
 #ifndef WEBSTER
 #ifdef DO_EXPORT
+PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		/*EPSExportDC *pDC = */ (EPSExportDC *) pRegion->GetRenderDC();
@@ -514,6 +519,7 @@ BOOL NodeGuideline::ExportRender(RenderRegion* pRegion)
 //		pDC->OutputToken(_T("ceo"));			// Output end extended object token
 //		pDC->OutputNewLine();
 	}
+#endif
 #endif
 #endif // WEBSTER
 	return TRUE;
@@ -629,7 +635,10 @@ BOOL NodeGuideline::NeedsToExport(RenderRegion *pRender,BOOL VisibleLayersOnly, 
 // WEBSTER - markn 14/1/97
 #ifdef DO_EXPORT
 #ifndef WEBSTER
+PORTNOTE("NativeRenderRegion","Removed NativeRenderRegion usage")
+#ifndef EXCLUDE_FROM_XARALX
 	return (pRender->IS_KIND_OF(NativeRenderRegion));
+#endif
 #endif // WEBSTER
 #endif
 	return FALSE;

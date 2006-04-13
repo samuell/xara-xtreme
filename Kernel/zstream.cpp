@@ -1093,7 +1093,7 @@ INT32 GZipFile::gzwrite(GZipStream *s, const char *buf, unsigned len)
     if (s == NULL || s->mode != 'w' || deflate == NULL || buf == NULL)
     	return Z_STREAM_ERROR;
 
-    Byte *b = (Byte*)buf;
+    Byte* b = (Byte*)buf;
 
     s->stream.next_in = b;
     s->stream.avail_in = len;
@@ -1104,7 +1104,7 @@ INT32 GZipFile::gzwrite(GZipStream *s, const char *buf, unsigned len)
         {
             s->stream.next_out = s->outbuf;
             INT32 len = Z_BUFSIZE;
-			s->file->write(s->outbuf, len);
+			s->file->write((const char*)s->outbuf, len);
             if (len != Z_BUFSIZE)
             {
                 s->z_err = Z_ERRNO;
@@ -1167,7 +1167,7 @@ INT32 GZipFile::gzflush(GZipStream *s, INT32 flush)
         {
 //            if (fwrite(s->outbuf, 1, len, s->file) != len)
             uInt len2 = len;
-            s->file->write(s->outbuf, len2);
+            s->file->write((const char*)s->outbuf, len2);
             if ( len2 != len)
             {
                 s->z_err = Z_ERRNO;

@@ -101,23 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_EXJPEG
 
 #include "bitfilt.h"
-
-#if defined(__WXMSW__)
-#define HAVE_BOOLEAN
-namespace JPEG
-{
-	typedef ::boolean	boolean;
-}
-#endif
-
-#define JPEG_EXPORT
-namespace JPEG
-{
-extern "C"
-{
-	#include "jpeglib.h"
-}
-}
+#include "jpglib_namespace.h"
 //#include "filtrres.h"
 
 class CXaraFileRecord;
@@ -133,15 +117,13 @@ typedef UINT32 JPEG_QUALITY;
 	Purpose:   	Allows JPEG specific export options to be manipulated
 
 ********************************************************************************************/
-#ifndef EXCLUDE_FROM_XARALX
-PORTNOTE("other","Removed JPEGExportOptions - derived from BitmapExportOptions")
 class JPEGExportOptions : public BitmapExportOptions
 {
 	// Declare the class for memory tracking
 	CC_DECLARE_DYNCREATE(JPEGExportOptions);
 public:
 	JPEGExportOptions();
-	JPEGExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName);
+	JPEGExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
@@ -159,12 +141,12 @@ public:
 	JPEG_QUALITY	GetQuality() const;
 	BOOL			SetQuality(const JPEG_QUALITY& Quality);
 
-	J_DCT_METHOD	GetDCTMethod() const;
-	BOOL			SetDCTMethod(const J_DCT_METHOD& DCTMethod);
+	libJPEG::J_DCT_METHOD	GetDCTMethod() const;
+	BOOL			SetDCTMethod(const libJPEG::J_DCT_METHOD& DCTMethod);
 
-	J_COLOR_SPACE	GetColourModel() const;
+	libJPEG::J_COLOR_SPACE	GetColourModel() const;
 	UINT32			GetColourComponentCount() const;
-	BOOL			SetColourModel(const J_COLOR_SPACE& ColourModel);
+	BOOL			SetColourModel(const libJPEG::J_COLOR_SPACE& ColourModel);
 
 	static void	SetKernelBitmap (KernelBitmap* pBitmap) { pKernelBitmap = pBitmap; }
 	static KernelBitmap* GetKernelBitmap ()				{ return pKernelBitmap; }
@@ -186,17 +168,16 @@ public:
 
 protected:
 	
-	JPEG_QUALITY	m_Quality;
-	BOOL			m_DoAsProgressive;
-	J_DCT_METHOD	m_DCTMethod;
-	J_COLOR_SPACE	m_ColourModel;
-	UINT32			m_ColourComponents;
+	JPEG_QUALITY			m_Quality;
+	BOOL					m_DoAsProgressive;
+	libJPEG::J_DCT_METHOD	m_DCTMethod;
+	libJPEG::J_COLOR_SPACE	m_ColourModel;
+	UINT32					m_ColourComponents;
 
 	static KernelBitmap*	pKernelBitmap;
-	static BOOL m_JPEGPresentAndSelected ;
+	static BOOL 			m_JPEGPresentAndSelected ;
 
 };
-#endif
 
 class JPEGErrorManager;
 class JPEGDataDestination;
@@ -291,7 +272,7 @@ protected:
 	Filter*							m_pFilterForUpdate;
 
 	// the IJG control structure
-	struct JPEG::jpeg_compress_struct m_cinfo;
+	struct libJPEG::jpeg_compress_struct m_cinfo;
 	// ...and support
 	JPEGErrorManager*				m_pErrorHandler;
 	JPEGDataDestination*			m_pDestinationHandler;

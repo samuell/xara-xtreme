@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmpprefs.h"
 #include "webparam.h"
+#include "dialogop.h"
 
 /********************************************************************************************
 
@@ -122,14 +123,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define OPTOKEN_NATIVEPREFSDLG _T("NativePrefsDlg")
 
-PORTNOTE("dialog","Removed DebugTreeDlg - derived from DialogOp")
-#ifndef EXCLUDE_FROM_XARALX
 class NativePrefsDlg : public DialogOp
 {
 	CC_DECLARE_DYNCREATE( NativePrefsDlg )
 
 public:
 	NativePrefsDlg ();								// Default constructor.
+	~NativePrefsDlg();
 
 	void DoWithParam ( OpDescriptor*,				// "DoWithParam" function
 					   OpParam* Param );
@@ -156,5 +156,4 @@ protected:
 
 	WebPrefsDlgParam *mpParams;						// The export parameters.
 };
-#endif
 #endif // _INC_XARPREFS_H

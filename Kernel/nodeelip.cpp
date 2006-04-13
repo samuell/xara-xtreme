@@ -241,6 +241,8 @@ String NodeEllipse::Describe(BOOL Plural, BOOL Verbose)
 void NodeEllipse::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSRenderRegion)))
 	{
 		// Output "ArtWorks ellipse" token
@@ -255,6 +257,7 @@ void NodeEllipse::PreExportRender(RenderRegion* pRegion)
 		pDC->OutputToken("ae");
 		pDC->OutputNewLine();
 	}
+#endif
 #endif
 }
 

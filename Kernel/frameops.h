@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "makebmp.h"	// MakeBitmapFilter
 #include "impexpop.h"	// OpMenuExport BitmapExportParam
-#include "sgframe.h"	// AnimPropertiesParam
+#include "animparams.h"	// AnimPropertiesParam
 
 //#if _DEBUG // removal of these ops from non-debug builds
 

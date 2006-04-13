@@ -1842,12 +1842,8 @@ INT32 ColourListComponent::SaveComplexColour(IndexedColour *pCol, BaseCamelotFil
 	UINT32 Size = TAG_DEFINECOMPLEXCOLOUR_SIZE;
 	// If there is a string name, then add it to this size
 	// REMEMBER: We save out unicode strings and so we need to double the length of the returned string length
-	// but only if we are not being compiled as Unicode
-#ifdef UNICODE
-	Size += ColName.Length() + 1;
-#else
-	Size += (ColName.Length() + 1) * 2;
-#endif	
+	Size += (ColName.Length() + 1) * SIZEOF_XAR_UTF16;
+
 //	INT32 RecordNumber = pFilter->StartRecord(TAG_DEFINECOMPLEXCOLOUR, Size);
 	CXaraFileRecord Rec(TAG_DEFINECOMPLEXCOLOUR, Size);
 	ok = Rec.Init();
@@ -2258,6 +2254,8 @@ void ColourListComponent::AddNewColour(IndexedColour *pNewCol)
 BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 {
 #ifdef DO_EXPORT
+PORTNOTE("EPSFilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pFilter->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSFilter)))
 	{
 		// Is it a Camelot specific filter?
@@ -2380,6 +2378,7 @@ BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 			
 		}
 	}
+#endif
 #endif
 	// All ok.
 	return TRUE;

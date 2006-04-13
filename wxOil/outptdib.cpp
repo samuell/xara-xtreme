@@ -107,9 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "errors.h"
 //#include "andy.h"
 #include "dibconv.h"
-#ifndef WEBSTER
-#include "extfilts.h"		// Accusoft filters
-#endif
 #include "progress.h"		// For hourglass stuff
 #include "bmapprev.h"
 
@@ -315,12 +312,15 @@ void OutputDIB::FixBlackAndWhitePalette(LPLOGPALETTE Palette)
 	Palette->palNumEntries = 2;
 
 	INT32 i = 0;
+PORTNOTE("BmapPrevDlg", "Removed use of bitmap preview dialog");
+#ifndef EXCLUDE_FROM_XARALX
 	if( BmapPrevDlg::GetNumberOfTransparentColours() > 0 )
 	{
 		PokePaletteEntry(Palette, &i, 0xff, 0xff, 0xff);
 		PokePaletteEntry(Palette, &i, 0x00, 0x00, 0x00);
 	}
 	else
+#endif
 	{
 		PokePaletteEntry(Palette, &i, 0x00, 0x00, 0x00);
 		PokePaletteEntry(Palette, &i, 0xff, 0xff, 0xff);
@@ -788,6 +788,8 @@ BOOL OutputDIB::WriteBlock( UINT32 YPos, UINT32 Height, LPBYTE BlockStart, UINT3
 //
 ********************************************************************************************/
 
+// The following function is no longer used but retained for informational reasons
+#if 0
 /********************************************************************************************
 
 >	BOOL OutputDIB::SetUpExport( CCLexFile *File, LPBITMAPINFOHEADER lpHeader, LPRGBQUAD Palette,
@@ -979,6 +981,7 @@ BOOL OutputDIB::SetUpExport( CCLexFile *File, LPBITMAPINFOHEADER lpHeader, LPLOG
 
 	return TRUE;
 }
+#endif
 
 
 /********************************************************************************************

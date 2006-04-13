@@ -101,14 +101,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "filters.h"
 #include "oilfltrs.h"
-#include "wbitmap.h"
-#include "dibutil.h"
+#include "oilbitmap.h"
+//#include "dibutil.h"
 //#include "filtrres.h"
 //#include "resource.h"		// for _R(IDS_OUT_OF_MEMORY)
-#include "imglib.h"			// for JPEG
+//#include "imglib.h"			// for JPEG
 #include "grndbmp.h"
 #include "camfiltr.h"		// for BaseCamelotFilter progress update
 #include "app.h"			// Camelot!!
+#include "convert.h"
 
 #include "exjpeg.h"
 #include "jpgdest.h"
@@ -148,7 +149,7 @@ static TCHAR g_szSmoothing[]	= _T("ExportJPEG\\Smoothing");
 //J_DCT_METHOD JPEGExportFilter::g_DefaultDCTMethod;
 
 JPEG_QUALITY	g_DefaultCompression	= 75;
-J_DCT_METHOD	g_DefaultDCTMethod		= JDCT_FLOAT;
+libJPEG::J_DCT_METHOD	g_DefaultDCTMethod		= libJPEG::JDCT_FLOAT;
 BOOL			g_bExportProgressive	= FALSE;
 
 BOOL			g_bOptimizeCoding = FALSE;
@@ -170,8 +171,8 @@ JPEGExportOptions::JPEGExportOptions()
   : m_bJPEGPresentAndSelected(0),
 	m_Quality(100),
 	m_DoAsProgressive(FALSE),
-	m_DCTMethod(JDCT_DEFAULT),
-	m_ColourModel(JCS_UNKNOWN),
+	m_DCTMethod(libJPEG::JDCT_DEFAULT),
+	m_ColourModel(libJPEG::JCS_UNKNOWN),
 	m_ColourComponents(0)
 {
 	// Empty.
@@ -179,7 +180,7 @@ JPEGExportOptions::JPEGExportOptions()
 
 
 /********************************************************************************************
->	JPEGExportOptions::JPEGExportOptions(const FILTER_ID FilterID, 
+>	JPEGExportOptions::JPEGExportOptions(const FilterType FilterID, 
 										 const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
@@ -187,13 +188,13 @@ JPEGExportOptions::JPEGExportOptions()
 	Purpose:	Constructor for a JPEGExportOptions object.
 ********************************************************************************************/
 
-JPEGExportOptions::JPEGExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+JPEGExportOptions::JPEGExportOptions(const FilterType FilterID, const StringBase* pFilterName)
   : BitmapExportOptions(_R(IDD_EXPORTJPEGOPTS), FilterID, pFilterName),
 	m_bJPEGPresentAndSelected(0),
 	m_Quality(100),
 	m_DoAsProgressive(FALSE),
-	m_DCTMethod(JDCT_DEFAULT),
-	m_ColourModel(JCS_UNKNOWN),
+	m_DCTMethod(libJPEG::JDCT_DEFAULT),
+	m_ColourModel(libJPEG::JCS_UNKNOWN),
 	m_ColourComponents(0)
 {
 	// Empty.
@@ -240,8 +241,8 @@ BOOL JPEGExportOptions::FileTypeChangeCopyFrom(BitmapExportOptions *pOther)
 	//  No other options types has the JPEG options, so have to use the default values
 	m_Quality			= 75;
 	m_DoAsProgressive	= FALSE;
-	m_DCTMethod			= JDCT_DEFAULT;
-	m_ColourModel		= JCS_UNKNOWN;
+	m_DCTMethod			= libJPEG::JDCT_DEFAULT;
+	m_ColourModel		= libJPEG::JCS_UNKNOWN;
 	m_ColourComponents	= 0;
 	m_bJPEGPresentAndSelected = 0;
 
@@ -433,7 +434,7 @@ JPEG_QUALITY JPEGExportOptions::GetQuality() const
 	Purpose:	Provides a JPEG specific export parameter
 
 ********************************************************************************************/
-J_DCT_METHOD JPEGExportOptions::GetDCTMethod() const
+libJPEG::J_DCT_METHOD JPEGExportOptions::GetDCTMethod() const
 {
 	return m_DCTMethod;
 }
@@ -502,9 +503,9 @@ BOOL JPEGExportOptions::SetMakeProgressive(BOOL bProgressive)
 	Errors:		ERROR2IF DCTMethod not one of: fast,slow or float
 
 ********************************************************************************************/
-BOOL JPEGExportOptions::SetDCTMethod(const J_DCT_METHOD& DCTMethod)
+BOOL JPEGExportOptions::SetDCTMethod(const libJPEG::J_DCT_METHOD& DCTMethod)
 {
-	ERROR2IF(DCTMethod != JDCT_ISLOW && DCTMethod != JDCT_IFAST && DCTMethod != JDCT_FLOAT, 
+	ERROR2IF(DCTMethod != libJPEG::JDCT_ISLOW && DCTMethod != libJPEG::JDCT_IFAST && DCTMethod != libJPEG::JDCT_FLOAT,
 				FALSE, "Invalid DCT method");
 
 	m_DCTMethod = DCTMethod;
@@ -529,15 +530,15 @@ BOOL JPEGExportOptions::SetDCTMethod(const J_DCT_METHOD& DCTMethod)
 	See Also:	JPEGExportFilter::WriteRawBitmap()
 
 ********************************************************************************************/
-BOOL JPEGExportOptions::SetColourModel(const J_COLOR_SPACE& ColourModel)
+BOOL JPEGExportOptions::SetColourModel(const libJPEG::J_COLOR_SPACE& ColourModel)
 {
 	switch (ColourModel)
 	{
-		case JCS_RGB:
+		case libJPEG::JCS_RGB:
 			m_ColourComponents = 4;
 			break;
 
-		case JCS_GRAYSCALE:
+		case libJPEG::JCS_GRAYSCALE:
 			m_ColourComponents = 1;
 			break;
 
@@ -563,7 +564,7 @@ BOOL JPEGExportOptions::SetColourModel(const J_COLOR_SPACE& ColourModel)
 	See Also:	GetColourComponentCount()
 
 ********************************************************************************************/
-J_COLOR_SPACE JPEGExportOptions::GetColourModel() const
+libJPEG::J_COLOR_SPACE JPEGExportOptions::GetColourModel() const
 {
 	return m_ColourModel;
 }
@@ -571,7 +572,7 @@ J_COLOR_SPACE JPEGExportOptions::GetColourModel() const
 
 /********************************************************************************************
 
->	J_COLOR_SPACE JPEGExportOptions::GetColourModel() const
+>	libJPEG::J_COLOR_SPACE JPEGExportOptions::GetColourModel() const
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -934,16 +935,16 @@ BOOL JPEGExportFilter::DoFilter(KernelBitmap* pKernelBitmap, CCLexFile *pFile)
 			case 8:
 				if (pKernelBitmap->IsGreyscale())
 				{
-					pOptions->SetColourModel(JCS_GRAYSCALE);
+					pOptions->SetColourModel(libJPEG::JCS_GRAYSCALE);
 				}
 				else
 				{
-					pOptions->SetColourModel(JCS_RGB);
+					pOptions->SetColourModel(libJPEG::JCS_RGB);
 				}
 				break;
 
 			case 24:
-				pOptions->SetColourModel(JCS_RGB);
+				pOptions->SetColourModel(libJPEG::JCS_RGB);
 				break;
 	
 			default:
@@ -952,7 +953,9 @@ BOOL JPEGExportFilter::DoFilter(KernelBitmap* pKernelBitmap, CCLexFile *pFile)
 				break;
 		}
 		// Create a converter from bitmap depth to export depth
-		pConverter = DIBConvert::Create(((WinBitmap*)pOily)->BMInfo, 
+//		pConverter = DIBConvert::Create(((WinBitmap*)pOily)->BMInfo, 
+//										(8 * pOptions->GetColourComponentCount()));
+		pConverter = DIBConvert::Create(((CWxBitmap*)pOily)->BMInfo,
 										(8 * pOptions->GetColourComponentCount()));
 
 		if (bOK)
@@ -1014,17 +1017,17 @@ BOOL JPEGExportFilter::PrepareForOperation()
 	}
 	
 	// Initialize the main JPG library structure
-	TRY
+	try
 	{
+		using namespace libJPEG;
 		jpeg_create_compress(&m_cinfo);
 	}
-	CATCH_ALL(e)
+	catch (...)
 	{
 		StringID errorString = m_pErrorHandler->GetStringIDForError();
 		Error::SetError(errorString);
 		return FALSE;
 	}
-	END_CATCH_ALL
 
 	// Setup a JPEGDataDestination
 	if (!InitFileHandler())
@@ -1145,9 +1148,9 @@ BOOL JPEGExportFilter::PrepareToExport(Spread *pSpread, UINT32 Depth, double DPI
 
 	SetFilterForUpdate(NULL);
 
-	if (!((JPEGExportOptions*)GetBitmapExportOptions())->SetColourModel(JCS_RGB))
+	if (!((JPEGExportOptions*)GetBitmapExportOptions())->SetColourModel(libJPEG::JCS_RGB))
 	{
-		ERROR2(FALSE,"Can't set colour model")
+		ERROR2(FALSE,"Can't set colour model");
 		return FALSE;
 	}
 
@@ -1183,20 +1186,20 @@ BOOL JPEGExportFilter::InternalPrepareToExport()
 	m_cinfo.in_color_space		= pExportInfo->GetColourModel();
 	m_cinfo.input_components	= pExportInfo->GetColourComponentCount();
 
-	TRY
+	try
 	{
-		jpeg_set_defaults(&m_cinfo);
+		libJPEG::jpeg_set_defaults(&m_cinfo);
 
 		if (pExportInfo->DoAsProgressive())
 		{
-			jpeg_simple_progression(&m_cinfo);
+			libJPEG::jpeg_simple_progression(&m_cinfo);
 		}
 
 		m_cinfo.density_unit	= 1;	// that's JFIF for DPI
 		m_cinfo.X_density		= UINT16 (pExportInfo->GetDPI());
 		m_cinfo.Y_density		= UINT16 (pExportInfo->GetDPI());
 
-		jpeg_set_quality (&m_cinfo, pExportInfo->GetQuality(), TRUE);
+		libJPEG::jpeg_set_quality (&m_cinfo, pExportInfo->GetQuality(), TRUE);
 
 		m_cinfo.optimize_coding		= g_bOptimizeCoding;
 		m_cinfo.smoothing_factor	= g_Smoothing;
@@ -1205,15 +1208,14 @@ BOOL JPEGExportFilter::InternalPrepareToExport()
 		m_cinfo.dct_method = pExportInfo->GetDCTMethod();
 
 
-		jpeg_start_compress(&m_cinfo, TRUE);	// "TRUE" for complete JPEG interchange datastream
+		libJPEG::jpeg_start_compress(&m_cinfo, TRUE);	// "TRUE" for complete JPEG interchange datastream
 	}
-	CATCH_ALL(e)
+	catch (...)
 	{
 		StringID errorString = m_pErrorHandler->GetStringIDForError();
 		Error::SetError(errorString);
 		return FALSE;
 	}
-	END_CATCH_ALL
 
 	return TRUE;
 }
@@ -1334,7 +1336,7 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 		pExportLine = pExportBuffer;
 	}
 
-	TRY
+	try
 	{
 		UINT32 ScanlinesRemaining = Height;
 		pBitmapLine += (ScanlinesRemaining - 1) * ScanlineSize;
@@ -1352,7 +1354,7 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 				pConverter->Convert(pBitmapLine, pExportBuffer, 1, FALSE);
 			}
 
-			jpeg_write_scanlines(&m_cinfo, &pExportLine, 1);
+			libJPEG::jpeg_write_scanlines(&m_cinfo, &pExportLine, 1);
 
 			if (pFilterForUpdate != NULL)
 			{
@@ -1368,7 +1370,7 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 			--ScanlinesRemaining;
 		}
 	}
-	CATCH_ALL(e)
+	catch (...)
 	{
 		if (pExportBuffer != NULL)
 		{
@@ -1379,7 +1381,6 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 
 		return FALSE;
 	}
-	END_CATCH_ALL
 
 	if (pExportBuffer != NULL)
 	{
@@ -1409,18 +1410,17 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 ********************************************************************************************/
 BOOL JPEGExportFilter::WritePostFrame(void)
 {
-	TRY
+	try
 	{
-		jpeg_finish_compress(&m_cinfo);
+		libJPEG::jpeg_finish_compress(&m_cinfo);
 	}
-	CATCH_ALL(e)
+	catch (...)
 	{
 		StringID errorString = m_pErrorHandler->GetStringIDForError();
 		Error::SetError(errorString);
 
 		return FALSE;
 	}
-	END_CATCH_ALL
 
 	return TRUE;
 }
@@ -1457,7 +1457,7 @@ void JPEGExportFilter::CleanUpAfterExport()
 {
 	if (GetPostOperation())
 	{
-		jpeg_destroy_compress(&m_cinfo);
+		libJPEG::jpeg_destroy_compress(&m_cinfo);
 	}
 
 	if (m_pDestinationHandler != NULL)
@@ -1498,7 +1498,7 @@ BOOL JPEGExportFilter::InitErrorHandler()
 		}
 
 	}
-	m_cinfo.err = m_pErrorHandler;
+	m_cinfo.err = m_pErrorHandler->GetErrorMgrStruct();
 	return TRUE;
 }
 
@@ -1596,7 +1596,7 @@ BOOL JPEGExportFilter::SetExportHint(Document* pDoc)
 			
 			if (pOptions->DoAsProgressive())
 			{
-				Opts += " P";
+				Opts += _T(" P");
 			}
 
 			pHint->SetOptionsString(Opts);
@@ -1718,9 +1718,9 @@ BOOL JPEGExportFilter::DoExportBitmapWithOptions(Operation* pOp, CCLexFile* pFil
 	// all this conversion with possible rounding errors.
 	// Use the original size that has been calculated in the info header
 	UINT32 PixWidth  = BmInfo.PixelWidth;
-	UINT32 PixHeight = BmInfo.PixelHeight;
+//	UINT32 PixHeight = BmInfo.PixelHeight;
 	MILLIPOINT	RecWidth = BmInfo.RecommendedWidth;
-	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
+//	MILLIPOINT	RecHeight = BmInfo.RecommendedHeight;
 //	double DPI = 0.0;
 	if (PixWidth > 0)
 	{

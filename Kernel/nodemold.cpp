@@ -2499,6 +2499,8 @@ ChangeCode NodeMould::RemouldAll(UndoableOperation* pUndoOp)
 void NodeMould::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		PreExportCAMEPS(pRegion);
@@ -2510,6 +2512,7 @@ void NodeMould::PreExportRender(RenderRegion* pRegion)
 		PreExportAWEPS(pRegion);
 		return;
 	}
+#endif
 #endif
 }
 
@@ -2532,11 +2535,14 @@ void NodeMould::PreExportRender(RenderRegion* pRegion)
 BOOL NodeMould::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 		return PostExportCAMEPS(pRegion);
 
 	if (pRegion->IS_KIND_OF(ArtWorksEPSRenderRegion))
 		return PostExportAWEPS(pRegion);
+#endif
 #endif
 	return FALSE;
 }
@@ -2546,6 +2552,8 @@ BOOL NodeMould::ExportRender(RenderRegion* pRegion)
 void NodeMould::PreExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	MouldSpace mSpace = DescribeGeometry();
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
@@ -2586,6 +2594,7 @@ void NodeMould::PreExportCAMEPS(RenderRegion* pRegion)
 		pDC->OutputNewLine();
 	}
 #endif
+#endif
 }
 
 
@@ -2594,6 +2603,8 @@ void NodeMould::PreExportCAMEPS(RenderRegion* pRegion)
 BOOL NodeMould::PostExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	MouldSpace mSpace = DescribeGeometry();
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
@@ -2609,6 +2620,7 @@ BOOL NodeMould::PostExportCAMEPS(RenderRegion* pRegion)
 			break;
 	}
 	pDC->OutputNewLine();
+#endif
 #endif
 
 	return TRUE;

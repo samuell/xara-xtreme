@@ -227,6 +227,7 @@ public:
 	void SwapChar(const TCHAR schar, const TCHAR rchar);
 	INT32 CountChar(const TCHAR tchar);
 	TCHAR operator[](const INT32 Index);
+	const WCHAR CharAt(const INT32 Index) const;
 	
 	INT32 SkipComma(INT32 pos=0) const;
 	INT32 SkipSpace(INT32 pos=0) const;
@@ -871,6 +872,33 @@ inline TCHAR StringBase::operator[](const INT32 Index)
 {
 	ERROR3IF(!text, "Call to String::operator[] for an unALLOCated String");
 	return (text && (Index <= (INT32)lstrlen(text))) ? text[Index] : 0;
+}
+
+
+
+/**************************************************************************************
+>	const WCHAR StringBase::CharAt(const INT32 Index);
+
+	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22nd November 1995
+	Returns		The character at offset Index into the string... Or 0 if there were
+				problems (or if the character was 0 of course).
+	Purpose:	Extract single characters from the string...
+				0 is the first char, String.Length() is the terminating zero...
+**************************************************************************************/
+inline const WCHAR StringBase::CharAt(const INT32 Index) const
+{
+#ifdef UNICODE
+	ERROR3IF(!text, "Call to String::operator[] for an unALLOCated String");
+	TCHAR ch = (text && (Index <= (INT32)lstrlen(text))) ? text[Index] : 0;
+
+	return (WCHAR)ch;
+
+#else
+	PORTNOTETRACE("other", "WCHAR StringBase::CharAt does nothing in non-UNICODE builds!")
+	ERROR3("This function is unimplemented in non-UNICODE builds!");
+	return (WCHAR)ch;
+#endif
 }
 
 

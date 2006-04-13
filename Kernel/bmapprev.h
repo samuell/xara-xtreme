@@ -152,8 +152,8 @@ public:		// Public data (bad design)
 	//  has changed, and so have the options.
 	static BOOL m_bClickedOnExport;
 	//  This is the original file type for use with the above variable
-	static ExportFileType m_OriginalFileType;
-	UINT32 m_FilterType;
+//	static ExportFileType m_OriginalFileType;
+	INT32 m_FilterType;
 
 private:	// Functions
 	virtual void DoWithParam(OpDescriptor*, OpParam* pParam);

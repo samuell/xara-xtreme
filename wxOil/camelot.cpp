@@ -115,12 +115,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #if defined(__WXMSW__)
 #include "wx/sysopt.h"
-#include "staticversion.h"
 #else
-#include "svnversion.h"
 #include "gdraw.h"
 #endif
 
+#include "cversion.h"
 #include "camelot.h"
 
 #include "ccdc.h"

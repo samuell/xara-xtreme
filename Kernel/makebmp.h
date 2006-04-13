@@ -152,7 +152,7 @@ public:
 	// default constructor, fairly useful at the best of times.
 	MakeBitmapExportOptions() {} // Do nothing for now
 
-    MakeBitmapExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName);
+    MakeBitmapExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
@@ -212,7 +212,7 @@ protected:
 	virtual KernelBitmap* GetTheBitmap(BitmapExportOptions *pExportOptions);
 
 	KernelBitmap* pTheBitmap;
-	static INT32 FilterType;
+	static FilterType s_FilterType;
 };
 
 #endif

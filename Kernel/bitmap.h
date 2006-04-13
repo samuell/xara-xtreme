@@ -106,6 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "gradtype.h"
 #include "doccomp.h"
 //#include "gifutil.h"
+#include "outptgif.h"
 //#include "xmlutils.h"
 #include "dibutil.h"
 
@@ -273,11 +274,8 @@ public:
 	BOOL IsHidden() const					{ return m_bHidden ; }
 	BOOL IsHiddenInGallery();
 
-PORTNOTE("gif","Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
 	void SetAnimationRestoreType(GIFDisposalMethod Type)	{ m_AnimationRestoreType = Type; }
 	GIFDisposalMethod GetAnimationRestoreType ()			{ return m_AnimationRestoreType; }	
-#endif
 	void SetLeftOffset(UINT32 LeftOffset)	{ m_LeftOffset = LeftOffset; }
 	UINT32 GetLeftOffset()				{ return m_LeftOffset; }
 	void SetTopOffset(UINT32 TopOffset)	{ m_TopOffset = TopOffset; }
@@ -405,10 +403,7 @@ protected:
 	String_256 m_BitmapName;
 	UINT32 m_BitmapAnimDelay;
 	BOOL m_bInterpolation;			// 'smooth when scaled up' property
-PORTNOTE("gif","Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
 	GIFDisposalMethod	m_AnimationRestoreType;
-#endif
 	UINT32 m_LeftOffset;
 	UINT32 m_TopOffset;
 
@@ -580,11 +575,8 @@ public:
 	BOOL GetInterpolation();
 	void SetInterpolation(BOOL bInterpolation);
 
-PORTNOTE("other","Removed GIF stuff")
-#ifndef EXCLUDE_FROM_XARALX
 	void SetAnimationRestoreType(GIFDisposalMethod Type);
 	GIFDisposalMethod GetAnimationRestoreType() const;
-#endif
 
 	void SetLeftOffset(UINT32 LeftOffset);
 	UINT32 GetLeftOffset() const;

@@ -136,7 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "exjpeg.h"			// for JPEGExportFilter
 #include "filtimag.h"		// Imagemap filter
 //#include "resimmap.h"		//Imagemap resources
-//#include "prvwflt.h"		// for preview filters
+#include "prvwflt.h"		// for preview filters
 
 #include "oilfltrs.h"
 //#include "metafilt.h"
@@ -307,7 +307,19 @@ BOOL OILFilter::InitFilters(List& FilterList)
 //#pragma message( __LOCMSG__ "OILFilter::InitFilters - removed JPEGImportFilter" )
 //	TRACE( _T("Warning - OILFilter::InitFilters - removed JPEGImportFilter\n") );
 	ADD_FILTER(JPEGImportFilter)
-	ADD_FILTER(PNGFilter)
+
+	// Add the Preview Bitmap Filter
+	// Tricky one this. Don't really need this any more (14/3/97)- its only use is the 
+	// PreviewFilter::PreviewBitmapSize static that has historically been used all over the place
+	ADD_FILTER(PreviewFilter)
+
+	// Add the preview bitmap filters that we can use in the new native/web format
+	ADD_FILTER(PreviewFilterBMP)
+//	ADD_FILTER(PreviewFilterGIF)
+	ADD_FILTER(PreviewFilterJPEG)
+	ADD_FILTER(PreviewFilterPNG)
+	ADD_FILTER(ThumbnailFilterPNG)
+
 #endif
 
 	// All ok
@@ -752,6 +764,8 @@ AI8EPSOILFilter::AI8EPSOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 #endif
 
+PORTNOTE("EpsFilter", "Removed use of EPS filters")
+#if !defined(EXCLUDE_FROM_XARALX)
 /********************************************************************************************
 
 >	ArtWorksEPSOILFilter::EPSOILFilter()
@@ -802,7 +816,11 @@ NativeEPSOILFilter::NativeEPSOILFilter(Filter* pFilter) : CamelotEPSOILFilter(pF
 {
 	FilterName.Load(_R(IDS_FILTERNAME_NATIVE_EPS));
 	FilterExt.Load(_R(IDS_FILTEREXT_NATIVE));
-} 
+}
+
+#endif
+
+
 
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 
@@ -1257,6 +1275,7 @@ DCXOILFilter::DCXOILFilter(Filter *pFilter) : OILFilter(pFilter)
 	FilterName.Load(_R(IDN_FILTERNAME_DCX));
 	FilterExt.Load(_R(IDN_FILTEREXT_DCX));
 }
+#endif
 
 /********************************************************************************************
 
@@ -1282,6 +1301,7 @@ String_64 GIFOILFilter::GetFilterName(UINT32 NumberToExport)
 		return FilterName;
 }
 
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 
 /********************************************************************************************
 
@@ -1386,9 +1406,6 @@ JPEGImportOILFilter::JPEGImportOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-
-
 /********************************************************************************************
 
 >	JPEGExportOILFilter::JPEGExportOILFilter(Filter *pFilter)
@@ -1422,6 +1439,27 @@ JPEGOILFilter::JPEGOILFilter(Filter *pFilter) : OILFilter(pFilter)
 	FilterName.Load(_R(IDN_FILTERNAME_JPEG));
 	FilterExt.Load(_R(IDN_FILTEREXT_JPEG));
 }
+
+/********************************************************************************************
+
+>	PNGOILFilter::PNGOILFilter(Filter* pFilter)
+
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	25/4/96
+	Inputs:		pFilter - The Filter
+	Purpose:	Constructs the oily parts of the PNG File Format Filter (ie the list of
+				File Extensions that this filter understands)
+
+********************************************************************************************/
+
+PNGOILFilter::PNGOILFilter(Filter* pFilter) : OILFilter(pFilter)
+{
+	FilterName.Load(_R(IDS_FILTERNAME_PNG));
+	FilterExt.Load(_R(IDS_FILTEREXT_PNG));
+} 
+
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+
 
 /********************************************************************************************
 
@@ -1719,24 +1757,6 @@ FlareTemplateOILFilter::FlareTemplateOILFilter(Filter* pFilter) : OILFilter(pFil
 	FilterExt.Load(_R(IDS_FILTEREXT_FLARETEMPLATE));
 } 
 
-
-/********************************************************************************************
-
->	PNGOILFilter::PNGOILFilter(Filter* pFilter)
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	25/4/96
-	Inputs:		pFilter - The Filter
-	Purpose:	Constructs the oily parts of the PNG File Format Filter (ie the list of
-				File Extensions that this filter understands)
-
-********************************************************************************************/
-
-PNGOILFilter::PNGOILFilter(Filter* pFilter) : OILFilter(pFilter)
-{
-	FilterName.Load(_R(IDS_FILTERNAME_PNG));
-	FilterExt.Load(_R(IDS_FILTEREXT_PNG));
-} 
 
 /********************************************************************************************
 

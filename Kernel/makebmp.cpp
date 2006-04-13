@@ -140,7 +140,7 @@ BMP_DEPTH	MakeBitmapExportOptions::g_Depth		= 8;
 DITHER		MakeBitmapExportOptions::g_Dither		= XARADITHER_ERROR_DIFFUSION;
 PALETTE		MakeBitmapExportOptions::g_Palette		= PAL_OPTIMISED;
 BOOL		MakeBitmapExportOptions::g_TranspBkGnd	= TRUE;
-INT32 		MakeBitmapFilter::FilterType			= MAKE_BITMAP_FILTER;
+FilterType	MakeBitmapFilter::s_FilterType			= MAKE_BITMAP_FILTER;
 
 //-----------------------------------------------------------------------------------------------
 // OpConvertToBitmap - Convert one or more objects into a bitmap
@@ -348,7 +348,7 @@ BOOL MakeBitmapExportOptions::Declare()
 
 /********************************************************************************************
 
->	MakeBitmapExportOptions::MakeBitmapExportOptions(	const FILTER_ID FilterID, 
+>	MakeBitmapExportOptions::MakeBitmapExportOptions(	const FilterType FilterID, 
 														const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
@@ -357,7 +357,7 @@ BOOL MakeBitmapExportOptions::Declare()
 				CreateBitmapCopy to store its own defaults)
 
 ********************************************************************************************/
-MakeBitmapExportOptions::MakeBitmapExportOptions(	const FILTER_ID FilterID, 
+MakeBitmapExportOptions::MakeBitmapExportOptions(	const FilterType FilterID, 
 													const StringBase* pFilterName) : 
 						MaskedFilterExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName)
 {

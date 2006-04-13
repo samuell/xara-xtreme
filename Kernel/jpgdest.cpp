@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "ccfile.h"
 
-#include "jinclude.h"
-#include "jpeglib.h"
+//#include "jinclude.h"
+#include "jpglib_namespace.h"
 #include "jpgermgr.h"
 
 #include "errors.h"
@@ -160,7 +160,7 @@ JPEGDataDestination::JPEGDataDestination(CCFile* pOutputFile)
 	Purpose:	Initializes the given compression structure with this JPEGDataDestination
 
 ********************************************************************************************/
-BOOL JPEGDataDestination::Init(j_compress_ptr cinfo)
+BOOL JPEGDataDestination::Init(libJPEG::j_compress_ptr cinfo)
 {
 	ERROR3IF(cinfo == NULL, "cinfo NULL");
 
@@ -182,13 +182,15 @@ BOOL JPEGDataDestination::Init(j_compress_ptr cinfo)
 				before any data is actually written.
 
 ********************************************************************************************/
-void JPEGDataDestination::InitDestination(j_compress_ptr cinfo)
+void JPEGDataDestination::InitDestination(libJPEG::j_compress_ptr cinfo)
 {
+	using namespace libJPEG;
+
 	JPEGDataDestination* pThis = GetThis(cinfo);
 
 	/* Allocate the output buffer --- it will be released when done with image */
 	pThis->m_pBuffer = (JOCTET *)(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
-				  OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
+				  OUTPUT_BUF_SIZE * sizeof(JOCTET));
 
 	pThis->m_DestMgr.next_output_byte = pThis->m_pBuffer;
 	pThis->m_DestMgr.free_in_buffer = OUTPUT_BUF_SIZE;
@@ -212,7 +214,7 @@ void JPEGDataDestination::InitDestination(j_compress_ptr cinfo)
 	Scope:		static
 
 ********************************************************************************************/
-boolean	JPEGDataDestination::EmptyOutputBuffer(j_compress_ptr cinfo)
+libJPEG::boolean	JPEGDataDestination::EmptyOutputBuffer(libJPEG::j_compress_ptr cinfo)
 {
 	JPEGDataDestination* pThis = GetThis(cinfo);
 	CCFile* pFile = pThis->GetFile();
@@ -248,7 +250,7 @@ boolean	JPEGDataDestination::EmptyOutputBuffer(j_compress_ptr cinfo)
 				for error exit.
 
 ********************************************************************************************/
-void JPEGDataDestination::TerminateDestination(j_compress_ptr cinfo)
+void JPEGDataDestination::TerminateDestination(libJPEG::j_compress_ptr cinfo)
 {
 	JPEGDataDestination* pThis = GetThis(cinfo);
 	CCFile* pFile = pThis->GetFile();
@@ -283,7 +285,7 @@ void JPEGDataDestination::TerminateDestination(j_compress_ptr cinfo)
 	Purpose:	Helper function to return the this pointer buried in the cinfo structure
 
 ********************************************************************************************/
-JPEGDataDestination* JPEGDataDestination::GetThis(j_compress_ptr cinfo)
+JPEGDataDestination* JPEGDataDestination::GetThis(libJPEG::j_compress_ptr cinfo)
 {
 	JPEGDataDestination* pThis = ((IJGDestMgr*)(cinfo->dest))->pThis;
 	ERROR3IF(!pThis->IS_KIND_OF(JPEGDataDestination), "GetThis - pThis isn't");

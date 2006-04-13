@@ -129,6 +129,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccbuffil.h"
 //#include "palman.h"
 #include "bmpprefs.h"
+#include "exjpeg.h"
+//#include "giffiltr.h"
+#include "grndbmp.h"
 
 #include "bmapprev.h"
 
@@ -2493,7 +2496,7 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 	BitmapExportOptions* pExportOptions = CreateExportOptions();
 
 	// Try to create the export options.
-	if(ok && pExportOptions)
+	if (ok && pExportOptions)
 	{
 		pExportOptions->RetrieveDefaults();
 		pExportOptions->SetSelectionType(Selection);
@@ -2502,8 +2505,11 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 	else
 		ok = FALSE;
 
+PORTNOTE("ExportUI", "Removed use of export UI");
+#ifndef EXCLUDE_FROM_XARALX
 	//Graham W 3/7/97: Tell the preview dialog what the path to save out to is
 	BmapPrevDlg::m_pthExport=*pPath;
+#endif
 
 	if(ok)
 		ok = GetExportOptions(pExportOptions);
@@ -2513,9 +2519,9 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 	BaseBitmapFilter *pFilter = this;
 
 	// Write out the bitmap.
-	if(ok)
+	if (ok)
 	{
-		if(!pFilter->DoExportWithOptions(pOp, pFile, pPath, pDoc, pExportOptions))
+		if (!pFilter->DoExportWithOptions(pOp, pFile, pPath, pDoc, pExportOptions))
 		{
 			// Export failed, therefore no valid export options.
 			Error::SetError(_R(IDN_USER_CANCELLED),0);
@@ -3294,11 +3300,14 @@ BOOL BaseBitmapFilter::DoExportHelper(Operation* pOp,
 	// set the render depth, which might change during the preview
 	switch (m_pExportOptions->GetFilterType())
 	{
+PORTNOTE("filter", "Removed use fo GIFFilter")
+#ifndef EXCLUDE_FROM_XARALX
 		case TI_GIF:
 			if (m_pExportOptions->GetDepth() > 8)
 				m_pExportOptions->SetDepth(8);
 			SetDepthToRender(m_pExportOptions->GetDepth());
 			break;
+#endif
 
 		case JPEG:
 			SetDepthToRender(24);
@@ -3645,7 +3654,10 @@ BOOL BaseBitmapFilter::ExportRenderNodes(RenderRegion *pRegion, ExportDC *pDC,
 	// filter to using the Accusoft filters as we are saving in a format which the Bitmap
 	// filters do not understand. 
 	//WEBSTER-Martin-03/01/97
+PORTNOTE("ExportAccusoft", "Removed use fo Accusoft filters")
+#ifndef EXCLUDE_FROM_XARALX
 	AccusoftFilters::SetRenderVariables(this, pRegion, pDC, VisibleLayersOnly, CheckSelected);
+#endif
 
 	// Set the bad rendering flag to its default value
 	BadExportRender = FALSE;
@@ -3770,7 +3782,7 @@ TRACEUSER( "Gerry", _T("Size of progress bar = %d\n"), SizeOfExport + HeightInPi
 
 				TRACEUSER( "Gerry", _T("CMYK bitmap is (%d, %d)\n"), BitmapRect.GetWidth(), BitmapRect.GetHeight() );
 				LPBYTE pCMYKBits = NULL;
-				LPBITMAPINFO pCMYKInfo = AllocDIB(BitmapRect.Width(), BitmapRect.GetHeight(), 32, &pCMYKBits);
+				LPBITMAPINFO pCMYKInfo = AllocDIB(BitmapRect.GetWidth(), BitmapRect.GetHeight(), 32, &pCMYKBits);
 				memset(pCMYKBits, 0, BitmapRect.GetWidth() * BitmapRect.GetHeight() * sizeof(DWORD));
 
 				// Loop around the four plates
@@ -4040,8 +4052,14 @@ TRACEUSER( "Gerry", _T("Size of progress bar = %d\n"), SizeOfExport + HeightInPi
 		// Use the pass in version to say whether we need to start the progress bar or not.
 		// Assume that we are the GIF filter renderer and so do not try and output the data
 		// at all. We will ensure as this might be dangerous.
+PORTNOTE("filter", "Removed use of GIFFilter")
+#ifndef EXCLUDE_FROM_XARALX
 		ERROR3IF(!(this->IS_KIND_OF(TI_GIFFilter)) && !(this->IS_KIND_OF(PNGFilter)),
 				 "BaseBitmapFilter::ExportRenderNodes rendering in strips off");
+#else
+		ERROR3IF(!(this->IS_KIND_OF(PNGFilter)),
+				 "BaseBitmapFilter::ExportRenderNodes rendering in strips off");
+#endif
 
 		ok = Filter::ExportRenderNodes(pRegion, pDC, VisibleLayersOnly,
 									   CheckSelected, ShowProgress);

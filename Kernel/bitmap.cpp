@@ -1822,8 +1822,6 @@ void KernelBitmap::SetInterpolation(BOOL bInterpolation)
 
 ********************************************************************************************/
 
-PORTNOTE("gif","KernelBitmap::GetAnimationRestoreType removed")
-#ifndef EXCLUDE_FROM_XARALX
 GIFDisposalMethod KernelBitmap::GetAnimationRestoreType () const
 {
 	if (ActualBitmap != NULL)
@@ -1831,7 +1829,6 @@ GIFDisposalMethod KernelBitmap::GetAnimationRestoreType () const
 
 	return GDM_LEAVE;	
 }
-#endif
 
 /********************************************************************************************
 
@@ -1844,14 +1841,11 @@ GIFDisposalMethod KernelBitmap::GetAnimationRestoreType () const
 
 ********************************************************************************************/
 
-PORTNOTE("gif","KernelBitmap::SetAnimationRestoreType removed")
-#ifndef EXCLUDE_FROM_XARALX
 void KernelBitmap::SetAnimationRestoreType(GIFDisposalMethod Type)
 {
 	if (ActualBitmap != NULL)
 		ActualBitmap->SetAnimationRestoreType(Type);
 }
-#endif
 
 /********************************************************************************************
 
@@ -2223,11 +2217,8 @@ OILBitmap::OILBitmap()
 	m_bIsGreyscale = FALSE;
 
 	SetBitmapAnimDelay(10);
-PORTNOTE("gif","Removed Animation support")
-#ifndef EXCLUDE_FROM_XARALX
 	SetAnimationRestoreType(GDM_LEAVE);
 	SetInterpolation(TRUE);
-#endif
 
 	m_LeftOffset = 0;
 	m_TopOffset = 0;

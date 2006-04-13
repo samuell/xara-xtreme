@@ -1715,14 +1715,14 @@ BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 {
 	PORTNOTETRACE("other","NodeShadow::ExportRender - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
-	enum FilterType
+	enum ShadowFilterType
 	{
 		NONE,
 		FLASH,
 		CMX,
 		AIEPS
 	};
-	FilterType ftExportFilter	=	pRegion->IS_KIND_OF(FlashRenderRegion)	? FLASH	:
+	ShadowFilterType ftExportFilter	=	pRegion->IS_KIND_OF(FlashRenderRegion)	? FLASH	:
 									pRegion->IS_KIND_OF(CMXRenderRegion)	? CMX	:
 									pRegion->IS_KIND_OF(AIEPSRenderRegion)	? AIEPS	:
 									NONE;
@@ -1812,7 +1812,7 @@ BOOL NodeShadow::WritePreChildrenNative(BaseCamelotFilter * pFilter)
 	
 	CXaraFileRecord Rec(TAG_SHADOW, TAG_SHADOW_SIZE);
 
-	INT32 Blur = 0;
+//	INT32 Blur = 0;
 
 	Rec.Init();
 	if (ok) ok = Rec.WriteDOUBLE((double)m_BiasGain.GetBias());

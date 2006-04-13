@@ -1655,6 +1655,8 @@ BOOL NodeBlend::Remap(UINT32 RemapRef,DocCoord PosStart,DocCoord PosEnd,DocCoord
 void NodeBlend::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (IS_A(pRegion, CamelotEPSRenderRegion))
 		// We ust want the paths in EPS.
 		return;
@@ -1696,6 +1698,7 @@ void NodeBlend::PreExportRender(RenderRegion* pRegion)
 		}
 	}
 #endif
+#endif
 }
 
 /*********************************************************************************************
@@ -1717,6 +1720,8 @@ void NodeBlend::PreExportRender(RenderRegion* pRegion)
 BOOL NodeBlend::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (IS_A(pRegion, CamelotEPSRenderRegion))
 		// We just want the paths in EPS.
 		return FALSE;
@@ -1738,6 +1743,7 @@ BOOL NodeBlend::ExportRender(RenderRegion* pRegion)
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

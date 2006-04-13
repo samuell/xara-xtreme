@@ -3969,6 +3969,8 @@ void NodeRegularShape::SetTransformMatrix(const Matrix* newmatrix)
 void NodeRegularShape::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(NativeRenderRegion)))
 	{
 		// Output "start regular shape" token
@@ -3976,6 +3978,7 @@ void NodeRegularShape::PreExportRender(RenderRegion* pRegion)
 		pDC->OutputToken("csrs");
 		pDC->OutputNewLine();
 	}
+#endif
 #endif
 }
 
@@ -3998,6 +4001,8 @@ void NodeRegularShape::PreExportRender(RenderRegion* pRegion)
 BOOL NodeRegularShape::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
+PORTNOTE("epsfilter", "Removed use of EPSFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(NativeRenderRegion)))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
@@ -4073,6 +4078,7 @@ BOOL NodeRegularShape::ExportRender(RenderRegion* pRegion)
 		return static_cast<FlashRenderRegion*> ( pRegion )->ExportRenderableNode ( this );
 	}
 
+#endif
 #endif
 	// Render the node in the normal way
 	return FALSE;

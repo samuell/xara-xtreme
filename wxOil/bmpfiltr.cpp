@@ -108,13 +108,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndbmp.h"
 #include "nodebmp.h"
 #ifndef WEBSTER
-#include "extfilts.h"	// Accusoft filters class
+//#include "extfilts.h"	// Accusoft filters class
 #endif //WEBSTER
-#include "wbitmap.h"	// Windows specific bitmap information	 
+#include "oilbitmap.h"	// Platform specific bitmap information
 
 #include "fixmem.h"
 
-#include "accuflts.h"	// instead of imglib.h for 'BMP_UNCOMPRESSED'
+//#include "accuflts.h"	// instead of imglib.h for 'BMP_UNCOMPRESSED'
 #include "bmapprev.h"	// tab preview dialog
 #include "cxfrec.h"		// for CXaraFileRecord
 #include "exjpeg.h"
@@ -132,7 +132,7 @@ static PALETTE DefaultExportPalette = PAL_OPTIMISED;
 
 
 /********************************************************************************************
->	BMPExportOptions::BMPExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+>	BMPExportOptions::BMPExportOptions(const FilterType FilterID, const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -150,7 +150,7 @@ BMPExportOptions::BMPExportOptions()
 
 
 /********************************************************************************************
->	BMPExportOptions::BMPExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+>	BMPExportOptions::BMPExportOptions(const FilterType FilterID, const StringBase* pFilterName)
 
 	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/10/96
@@ -158,7 +158,7 @@ BMPExportOptions::BMPExportOptions()
 				options
 ********************************************************************************************/
 
-BMPExportOptions::BMPExportOptions(const FILTER_ID FilterID, const StringBase* pFilterName)
+BMPExportOptions::BMPExportOptions(const FilterType FilterID, const StringBase* pFilterName)
   : BitmapExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName),
 	m_Dither(XARADITHER_NONE),
 	m_Palette(DefaultExportPalette),
@@ -646,11 +646,11 @@ BOOL BMPFilter::Init()
 	FilterName.Load(_R(IDT_BMP_FILTERNAME));
 	FilterInfo.Load(_R(IDT_BMP_FILTERINFO));
 
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
 //		Requested that we don't store DPI for export (see bug 6757)
 //		Camelot.DeclarePref( NULL, "ExportBitmapDPI", &DefaultExportDPI, 1.0, 3000.0 );
-		Camelot.DeclarePref( NULL, "ExportBitmapDepth", &DefaultExportDepth, 1, 32 );
+		Camelot.DeclarePref( NULL, _T("ExportBitmapDepth"), &DefaultExportDepth, 1, 32 );
 	}
 
 	// All ok
@@ -690,7 +690,7 @@ BOOL BMPFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* pFilter,
 	ERROR2IF(pFile == NULL,FALSE,"BMPFilter::ReadFromFile null pFile pointer");
 
 	// Try to import bitmap as usual binary BMP file.
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	
 	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
 	LPBYTE *pBytes = &(pWBitmap->BMBytes);
@@ -755,12 +755,13 @@ BOOL BMPFilter::ReadFromFile( OILBitmap* pOilBitmap )
 
 	ProgressString = GetImportProgressString(pImportFile, ImportMsgId);
 
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	
 	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
 	LPBYTE *pBytes = &(pWBitmap->BMBytes);
 
-#ifndef EXCLUDE_FROM_RALPH
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 #ifndef WEBSTER
 	if (
 		(GetBmpCompatibility() == 10) || (AccusoftFilters::GetVersionNumber() == 0)
@@ -776,8 +777,11 @@ BOOL BMPFilter::ReadFromFile( OILBitmap* pOilBitmap )
 		// see if the Accusoft loader is present and if so give this an attempt at
 		// loading that file. 		
 		// Get a cast version of a pointer to the filter
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 		if (!AccusoftFilters::ReadFromFile(pImportFile, pInfo, pBytes, TRUE, &ProgressString))
 			return FALSE;
+#endif
 	}
 #else //WEBSTER
 	//WEBSTER-Martin-07/01/97 all we can do is try to read it
@@ -825,13 +829,16 @@ BOOL BMPFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	}
 
 	// Determine the filter type currently in use in Accusoft format
-	INT32 FilterType = BMP_UNCOMPRESSED;
+	INT32 FilterID = BMP_UNCOMPRESSED;
 
 	// Sets the Accusoft filter type to the same specified value just in case
 	// we wish to use the Accusoft DLL to do some of the BMP saving for us 
 	//WEBSTER-Martin-07/01/97
 #ifndef WEBSTER
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 	AccusoftFilters::SetFilterType(BMP_UNCOMPRESSED);
+#endif
 #endif
 
 	// When saving a bitmap directly then only use the dialog box for 8 and 4 bpp export
@@ -853,6 +860,8 @@ BOOL BMPFilter::GetExportOptions(BitmapExportOptions* pOptions)
 
 			// SMFIX
 			// we have brought the dlg up so get the options from the dlg as the graphic type may have changed
+PORTNOTE("BmpPrevDlg", "Removed use of bitmap preview dialog")
+#ifndef EXCLUDE_FROM_XARALX
 			pOptions = BmapPrevDlg::m_pExportOptions;
 
 			// check for valid options
@@ -860,6 +869,10 @@ BOOL BMPFilter::GetExportOptions(BitmapExportOptions* pOptions)
 
 			// This line decides if we will create a file on disk for the bmp or not
 			Ok = BmapPrevDlg::m_bClickedOnExport;
+#else
+			pOptions = NULL;
+			Ok = FALSE;
+#endif
 		}
 		else
 		{	
@@ -897,9 +910,12 @@ void BMPFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 	// as we may be calling this to do the exporting for us!
 	//WEBSTER-Martin-07/01/97
 #ifndef WEBSTER
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 	AccusoftFilters::SetDitherToUse(pBMPOptions->GetDither());
 //Mark Howitt, 24/10/97. Reset the FilterType as import uses FilterType as something else!
 	AccusoftFilters::SetFilterType(pBMPOptions->GetFilterType());
+#endif
 #endif
 }
 
@@ -924,8 +940,13 @@ BOOL BMPFilter::ExportViaAccusoftFilters()
 	// Check if Accusoft filters are present
 	// 8 and 4 as we cannot export as RLE in these formats
 #ifndef WEBSTER
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 	return	(DefaultExportDepth==8 || DefaultExportDepth==4 || DefaultExportDepth==1) &&
 			(AccusoftFilters::GetVersionNumber() > 0);
+#else
+	return FALSE;
+#endif
 #else
 	//WEBSTER-Martin-07/01/97
 	return	FALSE;
@@ -985,6 +1006,8 @@ BOOL BMPFilter::WriteToFile( BOOL End )
 	if ( ExportViaAccusoftFilters() )
 #ifndef WEBSTER
 	{
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 		// Graeme (26-1-00) - I've added a call to the static SetFilterType method in the
 		// AccusoftFilters class to set up the bitmap type to be an uncompressed bitmap.
 		// This line isn't strictly necessary - the filter contains code to catch an unset
@@ -996,6 +1019,9 @@ BOOL BMPFilter::WriteToFile( BOOL End )
 		return AccusoftFilters::WriteDataToFile ( End, DefaultExportDepth,
 												  DefaultExportCompression,
 												  GetBitmapExportOptions());
+#else
+		return FALSE;
+#endif
 	}
 #else
 		//WEBSTER-Martin-07/01/97
@@ -1029,7 +1055,12 @@ BOOL BMPFilter::EndWriteToFile( )
 	// that we used to actually write the data to the file
 	if 	( ExportViaAccusoftFilters() )
 #ifndef WEBSTER
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 		return AccusoftFilters::EndWriteDataToFile();
+#else
+		return FALSE;
+#endif
 #else
 		//WEBSTER-Martin-07/01/97
 		return FALSE;
@@ -1355,7 +1386,7 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double TheDpi)
 
 	// Now get the pointer to the info header and actual bits data.
 	// Need to use the actual bitmap pointer
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO Info = pWBitmap->BMInfo;
 	LPBYTE Bytes = pWBitmap->BMBytes;
 	UINT32 Bpp = pWBitmap->GetBPP();
@@ -1368,6 +1399,8 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double TheDpi)
 	BOOL Compression = FALSE;
 	//WEBSTER-Martin-07/01/97
 #ifndef WEBSTER
+PORTNOTE("ExtFilt", "Removed use of external filters")
+#ifndef EXCLUDE_FROM_XARALX
 	if (
 		(DefaultExportCompression && (Bpp == 4)) ||
 		(DefaultExportCompression && (Bpp == 8))
@@ -1383,6 +1416,7 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double TheDpi)
 	if 	( Compression && (AccusoftFilters::GetVersionNumber() > 0) )
 		ok = AccusoftFilters::WriteToFile(OutputFile, Info, Bytes, &ProgressString);
 	else
+#endif
 #endif //WEBSTER
 		ok = DIBUtil::WriteToFile(OutputFile, Info, Bytes, &ProgressString);
 	
@@ -1429,7 +1463,7 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFilter
 
 	// Now get the pointer to the info header and actual bits data.
 	// Need to use the actual bitmap pointer
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO Info = pWBitmap->BMInfo;
 	LPBYTE Bytes = pWBitmap->BMBytes;
 	UINT32 Bpp = pWBitmap->GetBPP();
