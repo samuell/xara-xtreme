@@ -905,10 +905,6 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 							 BaseCamelotFilter* pFilter )
 {
 #ifdef DO_EXPORT
-#ifndef WIN32
-	Error::SetError( _R(IDE_BADFORMAT) );
-	return FALSE;
-#else
 	ERROR2IF(File==NULL,FALSE,"PNGFilter::WriteToFile File pointer is null");
 	ERROR2IF(Info==NULL,FALSE,"PNGFilter::WriteToFile BitmapInfo pointer is null");
 	ERROR2IF(Bits==NULL,FALSE,"PNGFilter::WriteToFile Bits pointer is null");
@@ -946,7 +942,6 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 
 	// er, we seem to have finished OK so say so
 	return TRUE;
-#endif
 #else
 	return FALSE;
 #endif
@@ -986,10 +981,6 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 							 String_64* ProgressString )
 {
 #ifdef DO_EXPORT
-#ifndef WIN32
-	Error::SetError( _R(IDE_BADFORMAT) );
-	return FALSE;
-#else
 	ERROR2IF(File==NULL,FALSE,"PNGFilter::WriteToFile File pointer is null");
 	ERROR2IF(Info==NULL,FALSE,"PNGFilter::WriteToFile BitmapInfo pointer is null");
 	ERROR2IF(Bits==NULL,FALSE,"PNGFilter::WriteToFile Bits pointer is null");
@@ -1076,7 +1067,6 @@ BOOL PNGFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
 
 	// er, we seem to have finished OK so say so
 	return TRUE;
-#endif
 #else
 	return FALSE;
 #endif

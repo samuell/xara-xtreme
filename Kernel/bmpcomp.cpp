@@ -1760,8 +1760,6 @@ INT32 BitmapListComponent::GetWriteBitmapReference(KernelBitmap* pBitmap, BaseCa
 
 BOOL BitmapListComponent::WriteBitmapPropertiesRecord(KernelBitmap* pBitmap, BaseCamelotFilter *pFilter, INT32 BmpRef)
 {
-	PORTNOTETRACE("other","BitmapListComponent::WriteBitmapPropertiesRecord - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL ok = TRUE;
 
 	// populate the record
@@ -1769,6 +1767,8 @@ BOOL BitmapListComponent::WriteBitmapPropertiesRecord(KernelBitmap* pBitmap, Bas
 	if (pBitmap->GetInterpolation()) Flags |= 0x01;
 
 	// Find out whether we need to make an XPE record or not...
+PORTNOTE("other","KernelBitmap::GetXPEInfo removed")
+#ifndef EXCLUDE_FROM_XARALX
 	KernelBitmap* pMaster = NULL;
 	IXMLDOMDocumentPtr pEditList = NULL;
 	pBitmap->GetXPEInfo(pMaster, pEditList);
@@ -1814,6 +1814,7 @@ BOOL BitmapListComponent::WriteBitmapPropertiesRecord(KernelBitmap* pBitmap, Bas
 			}
 		}
 	}
+#endif
 
 	// Fallback to the original BITMAP PROPERTIES record style
 	// Create an old style properties record
@@ -1835,9 +1836,6 @@ BOOL BitmapListComponent::WriteBitmapPropertiesRecord(KernelBitmap* pBitmap, Bas
 	if (ok) ok = pFilter->Write(&Rec);
 
 	return ok;
-#else
-	return FALSE;
-#endif
 }
 
 

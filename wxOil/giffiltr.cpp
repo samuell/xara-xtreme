@@ -2181,10 +2181,6 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 								BOOL Interlace, INT32 Transparent,
 								BaseCamelotFilter *pFilter )
 {
-#ifndef WIN32
-	Error::SetError( _R(IDE_BADFORMAT) );
-	return FALSE;
-#else
 	ERROR2IF(File==NULL,FALSE,"TI_GIFFilter::WriteToFile File pointer is null");
 	ERROR2IF(Info==NULL,FALSE,"TI_GIFFilter::WriteToFile BitmapInfo pointer is null");
 	ERROR2IF(Bits==NULL,FALSE,"TI_GIFFilter::WriteToFile Bits pointer is null");
@@ -2215,7 +2211,6 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 	DestGIF.TidyUp();
 	
 	return ok;
-#endif
 }
 
 /********************************************************************************************
@@ -2252,10 +2247,6 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 							    String_64 *ProgressString)
 {
-#ifndef WIN32
-	Error::SetError( _R(IDE_BADFORMAT) );
-	return FALSE;
-#else
 	ERROR2IF(File==NULL,FALSE,"TI_GIFFilter::WriteToFile File pointer is null");
 	ERROR2IF(Info==NULL,FALSE,"TI_GIFFilter::WriteToFile BitmapInfo pointer is null");
 	ERROR2IF(Bits==NULL,FALSE,"TI_GIFFilter::WriteToFile Bits pointer is null");
@@ -2299,7 +2290,7 @@ BOOL TI_GIFFilter::WriteToFile( CCLexFile *File, LPBITMAPINFO Info, LPBYTE Bits,
 			MakeTransparent = TRUE;
 			break;
 	}
-TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterID);
+TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),s_FilterType);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Interlace = %d\n"),Interlace);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transparent);
 
@@ -2333,7 +2324,7 @@ TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transpa
 			MakeTransparent = FALSE;
 	}
 
-TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),FilterID);
+TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile FilterType = %d\n"),s_FilterType);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Interlace = %d\n"),Interlace);
 TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transparent);
 
@@ -2367,7 +2358,6 @@ TRACEUSER( "Neville", _T("TI_GIFFilter::WriteToFile Transparent = %d\n"),Transpa
 		EndSlowJob();
 
 	return ok;
-#endif
 }
 
 
