@@ -1180,10 +1180,7 @@ PORTNOTE("other", "Removed BmapPrevDlg usage" )
 			if (pOptions)
 			{
 				Filter * pOldFilter = pFilter;
-PORTNOTE("other", "Removed BitmapExportOptions usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 				pFilter = pOptions->FindBitmapFilterForTheseExportOptions();
-#endif
 				// change the export extent if we have changed filters
 				if (pFilter && pFilter != pOldFilter)
 				{

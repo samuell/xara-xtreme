@@ -405,7 +405,7 @@ BOOL NodeSetProperty::WritePreChildrenNative(BaseCamelotFilter* pFilter)
 	CXaraFileRecord rec(TAG_SETPROPERTY, TAG_SETPROPERTY_SIZE);
 	if (!rec.Init() ||
 		!rec.WriteUnicode(m_strName) ||
-		!rec.WriteINT16((short) SGNameProp::nPropertyCount))
+		!rec.WriteINT16((INT16) SGNameProp::nPropertyCount))
 	{
 		pFilter->GotError(_R(IDE_FILE_WRITE_ERROR));
 		return FALSE;
@@ -414,8 +414,8 @@ BOOL NodeSetProperty::WritePreChildrenNative(BaseCamelotFilter* pFilter)
 	// Write out each property in ascending index order.
 	for (INT32 i = 0; i < SGNameProp::nPropertyCount; i++)
 	{
-		ERROR3IF(m_pProp[i] == 0, "NodeSetProperty::WritePreChildrenNative: no property");
-		if (!rec.WriteINT16((short) i) || !m_pProp[i]->Write(&rec))
+		ERROR3IF(m_pProp[i] == NULL, "NodeSetProperty::WritePreChildrenNative: no property");
+		if (!rec.WriteINT16((INT16) i) || !m_pProp[i]->Write(&rec))
 		{
 			pFilter->GotError(_R(IDE_FILE_WRITE_ERROR));
 			return FALSE;			

@@ -4496,8 +4496,6 @@ BOOL BaseBitmapFilter::GenerateOptimisedPalette(Spread *pSpread, BitmapExportOpt
 {
 	if (pSpread != NULL && pOptions != NULL)
 	{
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 		return GenerateOptimisedPalette(pSpread,
 										pOptions->GetDepth(), 
 										pOptions->GetDPI(),
@@ -4505,7 +4503,6 @@ PORTNOTE("filters","Removed BitmapExportOptions usage")
 										pOptions->GetNumColsInPalette(),
 										pOptions->GetUseSystemColours()
 										);
-#endif
 	}
 
 	return FALSE;
@@ -4764,11 +4761,8 @@ BOOL BaseBitmapFilter::GetCurrentStripInfo(	ADDR* ppBits,
 ********************************************************************************************/
 BitmapExportOptions* BaseBitmapFilter::GetBitmapExportOptions() const
 {
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR3IF(m_pExportOptions != NULL && !m_pExportOptions->IS_KIND_OF(BitmapExportOptions), 
+	ERROR3IF(m_pExportOptions != NULL && !m_pExportOptions->IS_KIND_OF(BitmapExportOptions),
 			"m_pExportOptions isn't");
-#endif
 	return m_pExportOptions;
 }
 
@@ -4787,11 +4781,9 @@ PORTNOTE("filters","Removed BitmapExportOptions usage")
 
 BOOL BaseBitmapFilter::SetExportOptions ( BitmapExportOptions*	pOptions )
 {
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF ( pOptions != NULL && !pOptions->IS_KIND_OF ( BitmapExportOptions ),
 			   "BitmapExportOptions is wrong kind" );
-#endif
+
 	// Don't delete the old options unless specifically requested. This is to avoid the nasty
 	// access violations that might occur otherwise.
 

@@ -574,8 +574,6 @@ NamedExportProp::NamedExportProp(const StringBase& strName)
   : SGNameProp(strName, NamedExportProp::nIndex),
 	m_pOptions(0)
 {
-	PORTNOTETRACE("filters","NamedExportProp::NamedExportProp - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Create a default export path from the menu operation's default and the set name.
 	// If there is no implied extension in the set's name then use the default export
 	// format (ie. JPEG).
@@ -583,7 +581,14 @@ NamedExportProp::NamedExportProp(const StringBase& strName)
 	if( !OpMenuExport::DefaultExportFilterPath.IsEmpty() )
 		strPath = OpMenuExport::DefaultExportFilterPath;
 	else
+{
+PORTNOTE("other","Removed use of GetCurrentDirectory")
+#ifndef EXCLUDE_FROM_XARALX
 		FileUtil::GetCurrentDirectory( &strPath );
+#else
+		strPath = _T("Bodginess abounds.");
+#endif
+}
 
 	// Construct a path and set the default extension (export type) if necessary.
 	strPath += TEXT("\\");
@@ -598,6 +603,7 @@ NamedExportProp::NamedExportProp(const StringBase& strName)
 		 m_pFilter != 0;
 		 m_pFilter = Filter::GetNext(m_pFilter))
 			if (m_pFilter->GetFlags().CanExport &&
+				m_pFilter->pOILFilter &&
 				m_pFilter->pOILFilter->DoesExtensionOfPathNameMatch(&pth))
 					break;
 
@@ -620,7 +626,6 @@ NamedExportProp::NamedExportProp(const StringBase& strName)
 
 		m_pOptions->RetrieveDefaults();
 	}
-#endif
 }
 
 /***********************************************************************************************
@@ -654,10 +659,7 @@ NamedExportProp::~NamedExportProp()
 {
 	if (m_pOptions != NULL)
 	{
-	PORTNOTETRACE("filters","NamedExportProp::~NamedExportProp - not deleting m_pOptions");
-#ifndef EXCLUDE_FROM_XARALX
 		delete m_pOptions;
-#endif
 		m_pOptions = NULL;
 	}
 }
@@ -743,17 +745,12 @@ BitmapExportOptions* NamedExportProp::SetOptions(BitmapExportOptions* pOptions)
 {
 	if (m_pOptions != NULL)
 	{
-	PORTNOTETRACE("filters","NamedExportProp::SetOptions - not deleting m_pOptions");
-#ifndef EXCLUDE_FROM_XARALX
 		delete m_pOptions;
-#endif
 		m_pOptions = NULL;
 	}
 
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pOptions != 0) m_pOptions = pOptions->MakeCopy();
-#endif
+
 	return m_pOptions;
 }
 
@@ -805,17 +802,12 @@ BOOL NamedExportProp::Write(CXaraFileRecord* pRec)
 	if (m_pFilter == 0) return pRec->WriteUINT32(FILTERID_NONE);
 	ERROR3IF(m_pOptions == 0, "NamedExportProp::Write: no options");
 	
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Write out the filter ID, the path to the target file, the export options
 	// class name, and the export options object.
 	return pRec->WriteUINT32(m_pFilter->FilterID) &&
 		   pRec->WriteUnicode((LPTSTR) (LPCTSTR) m_Path.GetPath()) &&
-		   pRec->WriteASCII((LPSTR) m_pOptions->GetRuntimeClass()->GetClassName() ) &&
+		   pRec->WriteASCII((LPTSTR) m_pOptions->GetRuntimeClass()->GetClassName() ) &&
 		   m_pOptions->Write(pRec);
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -860,18 +852,10 @@ BOOL NamedExportProp::Read(CXaraFileRecord* pRec)
 	}
 
 	// Delete the existing bitmap options. This prevents a memory leak on shutdown.
-	PORTNOTETRACE("filters","NamedExportProp::Read - not deleting m_pOptions");
-#ifndef EXCLUDE_FROM_XARALX
 	delete m_pOptions;
-#endif
 
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 	m_pOptions = static_cast<BitmapExportOptions*> ( pClass->CreateObject () );
 	return ( m_pOptions != 0 && m_pOptions->Read ( pRec ) );
-#else
-	return FALSE;
-#endif
 }
 
 /***********************************************************************************************
