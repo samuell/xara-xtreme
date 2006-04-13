@@ -325,7 +325,7 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 #else
 		RepeatCount = 1;
 		ScanCode	= VirtKey;
-		Extended 	= false;
+		Extended 	= VirtKey >= WXK_START;
 		PrevDown 	= m_LastVirtKey == VirtKey;
 #if FALSE != wxUSE_UNICODE
 		m_Char		= pMsg->GetRawKeyCode();

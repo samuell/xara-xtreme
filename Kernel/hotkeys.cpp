@@ -344,6 +344,9 @@ PORTNOTE( "other", "Removed DragManagerOp usage" )
 	{
 		if (DoesHotKeyMatchKeyPress(pHotKey,pKeyPress))
 		{
+			TRACEUSER( "luke", _T("Key VK=%04x (%08x) handled as HotKey\n"), pKeyPress->GetVirtKey(), 
+				pKeyPress->GetUnicode() );
+
 			// The key press is a hot key combination
 			if ((pHotKey->pKeyPress->IsOkInDrags() || !DuringADrag) && !pKeyPress->IsRelease())
 			{
@@ -359,6 +362,12 @@ PORTNOTE( "other", "Removed DragManagerOp usage" )
 
 		// Get the next hot key
 		pHotKey = (HotKey*)HotKeyList.GetNext(pHotKey);
+	}
+	
+	if( !Processed )
+	{
+		TRACEUSER( "luke", _T("Key VK=%04x (%08x) not handled as HotKey\n"), pKeyPress->GetVirtKey(), 
+			pKeyPress->GetUnicode() );
 	}
 
 	return Processed;
