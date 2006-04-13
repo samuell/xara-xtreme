@@ -302,7 +302,7 @@ bool CCamApp::OnInit()
 		wxString			strMessage;
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-		strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%d\n"), 
+		strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%03d\n"), 
 			g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
 #if FALSE == wxUSE_UNICODE
@@ -311,9 +311,9 @@ bool CCamApp::OnInit()
 		TCHAR			pszCDrawVer[32];
 		mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-		strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%d (" PERCENT_S 
-			")\n"), 
-			g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer );
+		strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%03d (" PERCENT_S 
+			")\nBuild date: " PERCENT_S "\n"), 
+			g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, CAMELOT_BUILD_DATE );
 #endif
 
 		tprintf( strMessage.c_str() );
@@ -800,7 +800,7 @@ void CCamApp::DoAboutBox()
 	wxString			strMessage;
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%d\nUsage: XaraLX.exe [xar-file...]"), 
+	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%03d\nUsage: XaraLX.exe [xar-file...]"), 
 		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
 #if FALSE == wxUSE_UNICODE
@@ -809,9 +809,10 @@ void CCamApp::DoAboutBox()
 	TCHAR			pszCDrawVer[32];
 	mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-	strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%d (" PERCENT_S 
-		")\nUsage: XaraLX [xar-file...]"), 
-		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer );
+	strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%03d (" PERCENT_S 
+		")\nBuild date: " PERCENT_S "\nUsage: XaraLX [xar-file...]"), 
+		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, 
+		CAMELOT_BUILD_DATE );
 #endif
 
 	(void)wxMessageBox( strMessage, wxT("About Xara LX") );

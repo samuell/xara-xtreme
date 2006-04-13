@@ -19,6 +19,7 @@ version svnversion.h:
 	@echo "#define	CAMELOT_VERSION_MINOR	`echo $(VERSION) | $(AWK) 'BEGIN { FS = "."; } { printf $$2;}'`" >> svnversion.h
 	@echo "#define	CAMELOT_VERSION			$(VERSION)" >> svnversion.h
 	@echo "#define	CAMELOT_VERSION_STRING	wxT(\"$(VERSION) ($(USER))\")" >> svnversion.h
+	@echo "#define  CAMELOT_BUILD_DATE _T(\"`date +"%d-%b-%y %H:%M"`\")" >> svnversion.h	
 
 # the application source, library search path, and link libraries
 libwxOil_a_SOURCES = \
