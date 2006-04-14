@@ -1277,7 +1277,7 @@ void ZipDeflate::set_data_type( DeflateState *s)
 				IN assertion: length <= 16 and value fits in length bits.
 
 ********************************************************************************************/
-/*
+#if 0
 void ZipDeflate::send_bits( DeflateState *s, INT32 value, INT32 length)
 {
 #ifdef DEBUG
@@ -1289,7 +1289,7 @@ void ZipDeflate::send_bits( DeflateState *s, INT32 value, INT32 length)
      * (16 - bi_valid) bits from value, leaving (width - (16-bi_valid))
      * unused bits in value.
      */
-/*    if (s->bi_valid > (INT32)Buf_size - length) {
+     if (s->bi_valid > (INT32)Buf_size - length) {
         s->bi_buf |= (value << s->bi_valid);
         put_short(s, s->bi_buf);
         s->bi_buf = (ush)value >> (Buf_size - s->bi_valid);
@@ -1298,7 +1298,8 @@ void ZipDeflate::send_bits( DeflateState *s, INT32 value, INT32 length)
         s->bi_buf |= value << s->bi_valid;
         s->bi_valid += length;
     }
-} */
+} 
+#endif
 
 /********************************************************************************************
 

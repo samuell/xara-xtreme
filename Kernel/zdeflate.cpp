@@ -996,7 +996,7 @@ INT32 ZipDeflate::End(ZStream *strm)
 
 ********************************************************************************************/
 
-///* ========================================================================= */
+//* ========================================================================= */
 	/*
 	     Sets the destination stream as a complete copy of the source stream.  If
 	   the source stream is using an application-supplied history buffer, a new
@@ -1018,14 +1018,15 @@ INT32 ZipDeflate::End(ZStream *strm)
 	   destination.
 	*/
 
-//INT32 ZipDeflate::Copy(ZStream *dest, ZStream *source)
-/*{
+#if 0
+INT32 ZipDeflate::Copy(ZStream *dest, ZStream *source)
+{
     if (source == Z_NULL || dest == Z_NULL || source->state == Z_NULL) {
         return Z_STREAM_ERROR;
     }
     *dest = *source;
     return Z_STREAM_ERROR; /* to be implemented */
-/*#if 0
+#if 0
     dest->state = (struct internal_state FAR *)
         (*dest->zalloc)(1, sizeof(deflate_state));
     if (dest->state == Z_NULL) return Z_MEM_ERROR;
@@ -1033,7 +1034,8 @@ INT32 ZipDeflate::End(ZStream *strm)
     *(dest->state) = *(source->state);
     return Z_OK;
 #endif
-}*/
+}
+#endif
 
 
 /********************************************************************************************

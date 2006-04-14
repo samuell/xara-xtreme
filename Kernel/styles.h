@@ -332,7 +332,7 @@ private:
 };
 
 
-extern const UINT32 XFILEREF_ERROR;
+extern const INT32 XFILEREF_ERROR;
 
 class RecordReferenceItem;
 class List;

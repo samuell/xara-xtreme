@@ -488,7 +488,7 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	if (pOpDes != NULL)
 	{
 		// set up the data for the export options dialog
-		OpParam Param((INT32)pOptions, (INT32)this);
+		OpParam Param((void *)pOptions, (void *)this);
 
 		// invoke the dialog
 		pOpDes->Invoke(&Param);

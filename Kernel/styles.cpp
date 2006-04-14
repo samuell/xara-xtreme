@@ -1806,7 +1806,7 @@ WizOpStyles& WizOpStyleRecordHandler::GetTentativeStyles()
 
 
 
-const UINT32 XFILEREF_ERROR = 0L;
+const INT32 XFILEREF_ERROR = 0L;
 
 
 /********************************************************************************************

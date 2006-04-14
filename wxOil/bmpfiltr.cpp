@@ -829,7 +829,7 @@ BOOL BMPFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	}
 
 	// Determine the filter type currently in use in Accusoft format
-	INT32 FilterID = BMP_UNCOMPRESSED;
+//	INT32 FilterID = BMP_UNCOMPRESSED;
 
 	// Sets the Accusoft filter type to the same specified value just in case
 	// we wish to use the Accusoft DLL to do some of the BMP saving for us 
@@ -853,7 +853,7 @@ PORTNOTE("ExtFilt", "Removed use of external filters")
 		if (pOpDes != NULL)
 		{
 			// set up the data for the export options dialog
-			OpParam Param((INT32)pOptions, (INT32)this);
+			OpParam Param((void *)pOptions, (void *)this);
 
 			// invoke the dialog
 			pOpDes->Invoke(&Param);
@@ -1132,7 +1132,7 @@ BOOL BMPFilter::WriteDataToFile( BOOL End, UINT32 Bpp, UINT32 Compression)
 		// First, get the size of the bitmap we are going to export not just the simple
 		// lpInfo->bmiHeader.biHeight as this might just be the height of the first
 		// strip to be exported. With the width we can use the old method.
-		const UINT32 OutputWidth = lpInfo->bmiHeader.biWidth;
+//		const UINT32 OutputWidth = lpInfo->bmiHeader.biWidth;
 		const UINT32 OutputHeight = (INT32)ExportRegion->GetFullRegionHeight();
 TRACEUSER( "Neville", _T("BMPFilter::WriteDataToFile Total output height = %d\n"),OutputHeight);
 TRACEUSER( "Neville", _T("BMPFilter::WriteDataToFile height of 1st strip = %d\n"),lpInfo->bmiHeader.biHeight);
@@ -1389,18 +1389,18 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double TheDpi)
 	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO Info = pWBitmap->BMInfo;
 	LPBYTE Bytes = pWBitmap->BMBytes;
-	UINT32 Bpp = pWBitmap->GetBPP();
 
 	// Now, save the data out showing the correct progress string
 	String_64 ProgressString(ExportingMsgID);
 	BOOL ok = FALSE;
 	// If the user has chosen a compressed BMP then we must use the Accusoft code,
 	// if it is present as the built in one cannot do RLE compression.
-	BOOL Compression = FALSE;
 	//WEBSTER-Martin-07/01/97
 #ifndef WEBSTER
 PORTNOTE("ExtFilt", "Removed use of external filters")
 #ifndef EXCLUDE_FROM_XARALX
+	BOOL Compression = FALSE;
+	UINT32 Bpp = pWBitmap->GetBPP();
 	if (
 		(DefaultExportCompression && (Bpp == 4)) ||
 		(DefaultExportCompression && (Bpp == 8))
@@ -1466,7 +1466,7 @@ BOOL BMPFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFilter
 	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	LPBITMAPINFO Info = pWBitmap->BMInfo;
 	LPBYTE Bytes = pWBitmap->BMBytes;
-	UINT32 Bpp = pWBitmap->GetBPP();
+//	UINT32 Bpp = pWBitmap->GetBPP();
 
 	// Now, save the data out showing the correct progress string
 	BOOL ok = FALSE;

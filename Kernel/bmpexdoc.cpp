@@ -214,7 +214,8 @@ BOOL BitmapExportDocument::Init(KernelBitmap* pBitmap, const DocRect& RectToExpo
 	if (pLineColAttr == NULL)
 		return(InitFailed());
 
-	((AttrFillGeometry*)pLineColAttr)->SetStartColour(&DocColour(COLOUR_NONE));
+	DocColour none(COLOUR_NONE);
+	((AttrFillGeometry*)pLineColAttr)->SetStartColour(&none);
 	pLineColAttr->AttachNode(pRectNode, FIRSTCHILD);
 #endif
 

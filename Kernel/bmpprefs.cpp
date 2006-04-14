@@ -213,25 +213,25 @@ BOOL BitmapExportOptions::ms_bSeparateLayerFiles = FALSE;
 	See Also:	BaseBitmapFilter::CreateBitmapOptions()
 ********************************************************************************************/
 
-BitmapExportOptions::BitmapExportOptions()
-  :	m_SelectionType(SELECTION),			// BaseBitmapFilter uses these...
-	m_DPI(0),
-	m_Depth(0),
-	m_pBmpDlgParam(0),
-	m_TransparencyIndex(-1),			// WEBSTER - markn 5/2/97 - no transparent colour
-	m_DialogID(0),						// BmpPrefsDlg uses these...
-	m_FilterID(INVALID),
-	m_pFilterName(0),
-	m_bValid(FALSE),					// Always use this...
+BitmapExportOptions::BitmapExportOptions() :
+	m_SelectionType(SELECTION),			// BaseBitmapFilter uses these...
 	m_OutputSize(0, 0),					// And initialise the output size
-	m_bTempFileExported(FALSE),			// export preview uses this
 	m_PixelOutputSize(0, 0),
-	m_fPutHTMLTagOnClipboard(ms_fPutHTMLTagOnClipboard), // default HTML to clipboard
+	m_FilterID(INVALID),
+	m_pBmpDlgParam(0),
+	m_bSeparateLayerFiles(FALSE),
+	m_bTempFileFlag(FALSE),
 	m_NumColsInPalette(0),
 	m_UseSystemColours(FALSE),
-	m_Antialiasing(MINIMISE_VISIBLE_AA),	// Always start with the highest quality option
-	m_bSeparateLayerFiles(FALSE),
-	m_bTempFileFlag(FALSE)
+	m_fPutHTMLTagOnClipboard(ms_fPutHTMLTagOnClipboard), // default HTML to clipboard
+	m_bValid(FALSE),					// Always use this...
+	m_DPI(0),
+	m_Depth(0),
+	m_TransparencyIndex(-1),			// WEBSTER - markn 5/2/97 - no transparent colour
+	m_DialogID(0),						// BmpPrefsDlg uses these...
+	m_pFilterName(0),
+	m_bTempFileExported(FALSE),			// export preview uses this
+	m_Antialiasing(MINIMISE_VISIBLE_AA)	// Always start with the highest quality option
 {
 	m_Palette.NumberOfColours = 0;
 	memset(&(m_Palette.Data), 0, sizeof(ExtendedPaletteEntry)*256);
@@ -270,25 +270,25 @@ PORTNOTE("DesignNotes", "Removed use of DesignNotes")
 BitmapExportOptions::BitmapExportOptions(
 								const CDlgResID DialogID, 
 								const FilterType FilterID,
-								const StringBase* pFilterName)
-  :	m_SelectionType(SELECTION),			// BaseBitmapFilter uses these...
-	m_DPI(0),
-	m_Depth(0),
-	m_pBmpDlgParam(0),
-	m_TransparencyIndex(-1),			// WEBsTER - markn 5/2/97 - no transparent colour
-	m_DialogID(DialogID),				// BmpPrefsDlg uses these...
-	m_FilterID(FilterID),
-	m_pFilterName(pFilterName),
-	m_bValid(FALSE),					// Always use this...
+								const StringBase* pFilterName) :
+	m_SelectionType(SELECTION),			// BaseBitmapFilter uses these...
 	m_OutputSize(0, 0),					// And initialise the output size
-	m_bTempFileExported(FALSE),			// export preview uses this
 	m_PixelOutputSize(0, 0),
-	m_fPutHTMLTagOnClipboard(ms_fPutHTMLTagOnClipboard), // default HTML to clipboard
+	m_FilterID(FilterID),
+	m_pBmpDlgParam(0),
+	m_bSeparateLayerFiles(FALSE),
+	m_bTempFileFlag(FALSE),
 	m_NumColsInPalette(0),
 	m_UseSystemColours(FALSE),
-	m_Antialiasing(MINIMISE_VISIBLE_AA),	// Always start with the highest quality option
-	m_bSeparateLayerFiles(FALSE),
-	m_bTempFileFlag(FALSE)
+	m_fPutHTMLTagOnClipboard(ms_fPutHTMLTagOnClipboard), // default HTML to clipboard
+	m_bValid(FALSE),					// Always use this...
+	m_DPI(0),
+	m_Depth(0),
+	m_TransparencyIndex(-1),			// WEBsTER - markn 5/2/97 - no transparent colour
+	m_DialogID(DialogID),				// BmpPrefsDlg uses these...
+	m_pFilterName(pFilterName),
+	m_bTempFileExported(FALSE),			// export preview uses this
+	m_Antialiasing(MINIMISE_VISIBLE_AA)	// Always start with the highest quality option
 {
 	m_Palette.NumberOfColours = 0;
 	memset(&(m_Palette.Data), 0, sizeof(ExtendedPaletteEntry)*256);
@@ -502,7 +502,7 @@ void BitmapExportOptions::CopyPaletteInformationFrom( BitmapExportOptions* pOthe
 		m_Palette.NumberOfColours = 0;
 
 		INT32 i = 0;
-		for( i; i < 256; i++ )
+		for( i=0; i < 256; i++ )
 		{
 			m_Palette.Data[ i ].Red					= 0;
 			m_Palette.Data[ i ].Green				= 0;
@@ -519,7 +519,7 @@ void BitmapExportOptions::CopyPaletteInformationFrom( BitmapExportOptions* pOthe
 	INT32 i = 0;
 	INT32 Colours = m_Palette.NumberOfColours;
 	Colours = max( 256, Colours );
-	for( i; i < Colours; i++ )
+	for( i=0; i < Colours; i++ )
 	{
 		m_Palette.Data[ i ].Red					= ( pOther->m_Palette ).Data[ i ].Red;
 		m_Palette.Data[ i ].Green				= ( pOther->m_Palette ).Data[ i ].Green;

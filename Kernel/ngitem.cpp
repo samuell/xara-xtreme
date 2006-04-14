@@ -953,7 +953,7 @@ PORTNOTE("other", "Removed SuperGallery related stuff" )
 BOOL SGNameItem::IsABackBar()
 {
 	String_256 SubName = m_strName;
-	*(SubName + 7) = 0;
+	*(((TCHAR *)SubName) + 7) = 0;
 	return ( SubName ==  _T("BackBar") );
 }
 

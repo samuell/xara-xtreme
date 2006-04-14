@@ -798,7 +798,7 @@ BOOL NodeBarProperty::WritePreChildrenNative(BaseCamelotFilter* pFilter)
 	}
 
 	// Write out each property in ascending index order.
-	for (INT32 i = 0; i < HowMany(); i++)
+	for (UINT32 i = 0; i < HowMany(); i++)
 	{
 		const BarDataType& bdt = Bar(i);
 		BYTE nCode = bdt.IsLive |

@@ -2001,7 +2001,8 @@ BitmapExportParam::BitmapExportParam(): OpParam(0, 0)
 	Purpose:	Used to pass around lists of bitmaps.  Note that deleting the bitmap array
 				is the responsibility of the caller.
 ********************************************************************************************/
-BitmapExportParam::BitmapExportParam(UINT32 Count, KernelBitmap** pBitmap, BmpDlgParam* pParam) : OpParam((INT32)Count, (INT32)pBitmap)
+BitmapExportParam::BitmapExportParam(UINT32 Count, KernelBitmap** pBitmap, BmpDlgParam* pParam) :
+	OpParam((INT32)Count, (void *)pBitmap)
 {
 	ERROR3IF(Count==0, "Zero bitmap count, that's not right");
 	ERROR3IF(pBitmap==0, "0 bitmap array");
