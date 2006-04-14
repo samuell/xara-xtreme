@@ -1,7 +1,0 @@
-<?xml version="1.0" ?>
-<resource>
-	<object class="wxDialog" name="IDD_PENTOOLBAR">
-			 <pos>0,0d</pos> <size>185,92d</size>
-		<title>Dialog</title>
-	</object>
-</resource>

@@ -6839,6 +6839,11 @@
         <title>Pen tool info bar</title>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_SOFTSHADOWTOOLBAR">
