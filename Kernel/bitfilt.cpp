@@ -4447,7 +4447,7 @@ BOOL BaseBitmapFilter::GenerateOptimisedPalette(Spread *pSpread, UINT32 Depth, d
 		// Now do an export render pass, using the Palette Region
 		if (ExportRender(pPalRegion))
 		{
-			UINT32 MaxColours = UINT32(pow(2,Depth));
+			UINT32 MaxColours = 1U<<Depth; // let's not use floating point here - UINT32(pow(2,Depth));
 
 			if (NumColsInPalette < 1)
 				NumColsInPalette = MaxColours;
