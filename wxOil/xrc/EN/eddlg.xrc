@@ -28,10 +28,10 @@
 			<label>Spread</label>
 		</object>
 		<object class="wxComboBox" name="IDC_ALIGNDIALOG_HORIZONTAL">
-			 <pos>4,133d</pos> <size>105,30d</size>
+			 <pos>4,133d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_ALIGNDIALOG_VERTICAL">
-			 <pos>4,158d</pos> <size>105,30d</size>
+			 <pos>4,158d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>4,123d</pos> <size>72,8d</size>

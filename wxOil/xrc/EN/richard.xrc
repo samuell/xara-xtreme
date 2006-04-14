@@ -34,14 +34,14 @@
 			<label>List Files of &amp;Type:</label>
 		</object>
 		<object class="wxComboBox" name="ID_STATICDECIMAL_1136">
-			 <pos>6,132d</pos> <size>140,36d</size>
+			 <pos>6,132d</pos> <size>140,-1d</size>
 		</object>
 		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
 			 <pos>6,122d</pos> <size>142,9d</size>
 			<label>Dri&amp;ves:</label>
 		</object>
 		<object class="wxComboBox" name="ID_STATICDECIMAL_1137">
-			 <pos>6,132d</pos> <size>142,68d</size>
+			 <pos>6,132d</pos> <size>142,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
@@ -100,14 +100,14 @@
 			<label>List Files of &amp;Type:</label>
 		</object>
 		<object class="wxComboBox" name="ID_STATICDECIMAL_1136">
-			 <pos>6,132d</pos> <size>90,36d</size>
+			 <pos>6,132d</pos> <size>90,-1d</size>
 		</object>
 		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
 			 <pos>6,122d</pos> <size>142,9d</size>
 			<label>Dri&amp;ves:</label>
 		</object>
 		<object class="wxComboBox" name="ID_STATICDECIMAL_1137">
-			 <pos>6,132d</pos> <size>142,68d</size>
+			 <pos>6,132d</pos> <size>142,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">

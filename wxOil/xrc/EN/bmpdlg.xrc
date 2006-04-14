@@ -27,7 +27,7 @@
 			<label>&amp;dpi</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BMPOPTS_RES">
-			 <pos>50,35d</pos> <size>70,15d</size>
+			 <pos>50,35d</pos> <size>70,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>55,50d</pos> <size>45,10d</size>
@@ -104,7 +104,7 @@
 			<label>RGB</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BMPOPTS_TIFF">
-			 <pos>165,99d</pos> <size>70,15d</size>
+			 <pos>165,99d</pos> <size>70,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>220,10d</pos> <size>50,14d</size>
@@ -189,7 +189,7 @@
 			<label>times</label>
 		</object>
 		<object class="wxComboBox" name="IDC_ANIMOPTS_REMOVAL">
-			 <pos>55,180d</pos> <size>67,51d</size>
+			 <pos>55,180d</pos> <size>67,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_RESTORE_STATIC">
 			 <pos>21,178d</pos> <size>30,10d</size>
@@ -243,7 +243,7 @@
 			<label>&amp;dpi</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BMPOPTS_RES">
-			 <pos>50,35d</pos> <size>70,15d</size>
+			 <pos>50,35d</pos> <size>70,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>55,50d</pos> <size>45,10d</size>

@@ -19,10 +19,10 @@
 			<label>Check List Box Placeholder</label>
 		</object>
 		<object class="wxComboBox" name="IDC_ES_COMBO_XBEHAVIOUR">
-			 <pos>6,155d</pos> <size>75,48d</size>
+			 <pos>6,155d</pos> <size>75,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_ES_COMBO_YBEHAVIOUR">
-			 <pos>92,155d</pos> <size>78,48d</size>
+			 <pos>92,155d</pos> <size>78,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_ES_HORIZONTAL">
 			 <pos>6,145d</pos> <size>37,8d</size>

@@ -3,16 +3,16 @@
 	<object class="wxDialog" name="IDD_GRADFILLDLG">
 			 <pos>0,0d</pos> <size>367,39d</size>
 		<object class="wxComboBox" name="IDC_GEOMETRY">
-			 <pos>5,15d</pos> <size>54,55d</size>
+			 <pos>5,15d</pos> <size>54,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_MAPPING">
-			 <pos>60,15d</pos> <size>48,35d</size>
+			 <pos>60,15d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_EFFECT">
-			 <pos>115,15d</pos> <size>48,35d</size>
+			 <pos>115,15d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BITMAPEFFECT">
-			 <pos>175,15d</pos> <size>28,11d</size>
+			 <pos>175,15d</pos> <size>28,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BIASGAIN">
 			 <pos>31,21d</pos> <size>19,15d</size>
@@ -37,23 +37,23 @@
 	<object class="wxDialog" name="IDD_TRANFILLDLG">
 			 <pos>0,0d</pos> <size>367,39d</size>
 		<object class="wxComboBox" name="IDC_MAPPING">
-			 <pos>60,15d</pos> <size>48,35d</size>
+			 <pos>60,15d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_GEOMETRY">
-			 <pos>5,15d</pos> <size>54,55d</size>
+			 <pos>5,15d</pos> <size>54,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_TRANSPTYPE">
-			 <pos>175,20d</pos> <size>48,35d</size>
+			 <pos>175,20d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_EFFECT">
-			 <pos>115,15d</pos> <size>48,35d</size>
+			 <pos>115,15d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BIASGAIN">
 			 <pos>31,21d</pos> <size>19,15d</size>
 			<label>-</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BITMAPEFFECT">
-			 <pos>175,15d</pos> <size>28,12d</size>
+			 <pos>175,15d</pos> <size>28,-1d</size>
 		</object>
 		<object class="wxSlider" name="IDC_TRANSPSLIDE">
 			 <pos>230,3d</pos> <size>64,10d</size>

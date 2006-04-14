@@ -29,7 +29,7 @@
 			<label>Group</label>
 		</object>
 		<object class="wxComboBox" name="IDC_DEBUGDLG_GROUP">
-			 <pos>40,5d</pos> <size>130,279d</size>
+			 <pos>40,5d</pos> <size>130,-1d</size>
 		</object>
 		<title>Camelot debug commands</title>
 	</object>

@@ -7,7 +7,7 @@
 			<label>Add:</label>
 		</object>
 		<object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_SIDES">
-			 <pos>147,73d</pos> <size>27,84d</size>
+			 <pos>147,73d</pos> <size>27,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BTN_REGSHAPETOOL_RADIUS">
 			 <pos>4,48d</pos> <size>16,16d</size>
@@ -38,7 +38,7 @@
 			<label>-</label>
 		</object>
 		<object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
-			 <pos>73,13d</pos> <size>68,75d</size>
+			 <pos>73,13d</pos> <size>68,-1d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_REGSHAPETOOL_UPPER">
 			 <pos>13,73d</pos> <size>25,12d</size>

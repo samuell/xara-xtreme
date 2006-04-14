@@ -14,7 +14,7 @@
 			<label>&amp;Direction of Bar</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BC_DIRECTION">
-			 <pos>72,21d</pos> <size>79,59d</size>
+			 <pos>72,21d</pos> <size>79,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>7,38d</pos> <size>60,8d</size>
@@ -28,14 +28,14 @@
 			<label>Button S&amp;tretching</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BC_BUTTON_SIZE">
-			 <pos>72,52d</pos> <size>79,59d</size>
+			 <pos>72,52d</pos> <size>79,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>7,69d</pos> <size>56,8d</size>
 			<label>Buttons are &amp;All</label>
 		</object>
 		<object class="wxComboBox" name="IDC_BC_BUTTONS_SAME">
-			 <pos>72,67d</pos> <size>79,59d</size>
+			 <pos>72,67d</pos> <size>79,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_BC_REDEF_BACKBAR">
 			 <pos>7,84d</pos> <size>70,14d</size>

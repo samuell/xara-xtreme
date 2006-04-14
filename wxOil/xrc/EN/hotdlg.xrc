@@ -10,7 +10,7 @@
 			<label>Correct URL automatically</label>
 		</object>
 		<object class="wxComboBox" name="IDC_WEBADDRESS_FRAME">
-			 <pos>7,53d</pos> <size>218,17d</size>
+			 <pos>7,53d</pos> <size>218,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_WEBADDRESS_OBJECTSHAPE">

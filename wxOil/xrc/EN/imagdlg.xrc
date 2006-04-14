@@ -3,11 +3,11 @@
 	<object class="wxDialog" name="IDD_EXPORT_IMAGEMAP">
 			 <pos>0,0d</pos> <size>188,165d</size>
 		<object class="wxComboBox" name="IDC_IMAGEMAP_MAPNAME">
-			 <pos>45,7d</pos> <size>135,14d</size>
+			 <pos>45,7d</pos> <size>135,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
 		<object class="wxComboBox" name="IDC_IMAGEMAP_APPROX">
-			 <pos>106,26d</pos> <size>75,24d</size>
+			 <pos>106,26d</pos> <size>75,-1d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_IMAGEMAP_WIDTH">
 			 <pos>47,55d</pos> <size>30,14d</size>

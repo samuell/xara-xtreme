@@ -554,6 +554,10 @@ sub ParseComboBox
 	ReadOrs (\$token) unless $GotOrs;
     }
 
+    # Set height to -1 as for some reason Camelot combo boxes have a ridiculous height
+    # value. wxWidgets then centres them vertically which result in a vertical offset
+    $rect[3]=-1;
+
     print OUTPUT "\t\t<object class=\"wxComboBox\"";
     WriteBasicInfo (@rect, $varname);
     WriteStyle ("wxCB_SIMPLE") if ($token =~ /CBS_SIMPLE/);

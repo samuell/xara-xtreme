@@ -44,14 +44,14 @@
 			<label>&amp;Colour line size</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_COLOURBAR">
-			 <pos>86,108d</pos> <size>105,20d</size>
+			 <pos>86,108d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_AUTOCOLOURTXT">
 			 <pos>11,127d</pos> <size>65,10d</size>
 			<label>&amp;Edit local colours in </label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_AUTOCOLOUR">
-			 <pos>86,125d</pos> <size>105,20d</size>
+			 <pos>86,125d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_OPTS_AUTOSCROLL">
 			 <pos>11,141d</pos> <size>125,10d</size>
@@ -120,7 +120,7 @@
 			<label>Ask about &amp;closing document views</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_IMPWITHLAYERS">
-			 <pos>70,115d</pos> <size>125,48d</size>
+			 <pos>70,115d</pos> <size>125,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_OPTS_EDITGRP">
 			 <pos>5,136d</pos> <size>195,49d</size>
@@ -131,7 +131,7 @@
 			<label>&amp;Angle constraint</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_ANGLECONST">
-			 <pos>70,146d</pos> <size>40,15d</size>
+			 <pos>70,146d</pos> <size>40,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_NUDGETXT">
 			 <pos>116,148d</pos> <size>37,10d</size>
@@ -179,7 +179,7 @@
 			<label>Paper &amp;size</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_SIZELIST">
-			 <pos>60,27d</pos> <size>136,15d</size>
+			 <pos>60,27d</pos> <size>136,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_WIDTHTXT">
 			 <pos>37,48d</pos> <size>20,10d</size>
@@ -363,14 +363,14 @@
 			<label>&amp;Left mouse button</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_LEFTBUTTON">
-			 <pos>80,30d</pos> <size>115,15d</size>
+			 <pos>80,30d</pos> <size>115,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_RIGHTTXT">
 			 <pos>11,53d</pos> <size>65,10d</size>
 			<label>&amp;Right mouse button</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_RIGHTBUTTON">
-			 <pos>80,51d</pos> <size>115,15d</size>
+			 <pos>80,51d</pos> <size>115,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_OPTS_RESET">
 			 <pos>120,72d</pos> <size>75,15d</size>
@@ -467,14 +467,14 @@
 			<label>&amp;Page units:</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_PAGEUNITS">
-			 <pos>51,30d</pos> <size>81,60d</size>
+			 <pos>51,30d</pos> <size>81,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_FONTUNITSTXT">
 			 <pos>11,47d</pos> <size>35,9d</size>
 			<label>&amp;Font units:</label>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_FONTUNITS">
-			 <pos>51,47d</pos> <size>81,60d</size>
+			 <pos>51,47d</pos> <size>81,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_OPTS_USERUNITSGROUP">
 			 <pos>5,75d</pos> <size>195,105d</size>
@@ -553,7 +553,7 @@
 			 <pos>11,90d</pos> <size>35,12d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_OPTS_BASEUNIT">
-			 <pos>55,90d</pos> <size>85,67d</size>
+			 <pos>55,90d</pos> <size>85,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>180,10d</pos> <size>50,14d</size>
@@ -588,10 +588,10 @@
 			<label>New effects are locked by default</label>
 		</object>
 		<object class="wxComboBox" name="IDC_COMBO_LIVEEFFECT_RES">
-			 <pos>113,70d</pos> <size>82,30d</size>
+			 <pos>113,70d</pos> <size>82,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_COMBO_LOCKEDEFFECT_RES">
-			 <pos>113,87d</pos> <size>82,30d</size>
+			 <pos>113,87d</pos> <size>82,-1d</size>
 		</object>
 		<title>Effects &amp;&amp; Plugins</title>
 	</object>

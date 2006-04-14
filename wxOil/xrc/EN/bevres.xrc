@@ -50,16 +50,16 @@
 			<style>wxSL_HORIZONTAL</style>
 		</object>
 		<object class="wxComboBox" name="IDC_BEVEL_SLIDER_COMBO">
-			 <pos>75,1d</pos> <size>60,12d</size>
+			 <pos>75,1d</pos> <size>60,-1d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BEVEL_TYPE_COMBO">
-			 <pos>9,2d</pos> <size>60,12d</size>
+			 <pos>9,2d</pos> <size>60,-1d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_BEVEL_SLIDER_EDIT">
 			 <pos>215,2d</pos> <size>35,12d</size>
 		</object>
 		<object class="wxComboBox" name="IDC_BEVEL_INNER_COMBO">
-			 <pos>260,1d</pos> <size>60,12d</size>
+			 <pos>260,1d</pos> <size>60,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BTN_BEVELOUTER">
 			 <pos>6,21d</pos> <size>19,15d</size>
