@@ -2746,7 +2746,7 @@ void OpAddNewPath::DoAddNewPath(Path* pAddPath, Spread* pSpread)
 	
 	// We had better copy the path back over the original and re-calc the bounding box
 	DocView* pDocView = DocView::GetSelected();
-	ENSURE( pDocView != NULL, "There was no selected DocView when editing a path" );
+	ERROR2IF( pDocView == NULL, (void)0, "There was no selected DocView when editing a path" );
 
 	// Create a path to hold the data
 	NodePath* NewPath = new NodePath;
@@ -2930,7 +2930,7 @@ void OpAddPathToPath::DoAddPathToPath(NodePath* pNode, Path* pElement, INT32 ind
 	DoStartSelOp(TRUE,TRUE);
 	
 	DocView* pDocView = DocView::GetSelected();
-	ENSURE( pDocView != NULL, "There was no selected docview when augmenting a path" );
+	ERROR2IF( pDocView == NULL, (void)0, "There was no selected docview when augmenting a path" );
 
 	// Save the bounds of the path for undo/redo
 	if (RecalcBoundsAction::DoRecalc(this, &UndoActions, pNode) == AC_FAIL)
@@ -3117,7 +3117,7 @@ void OpClosePathWithPath::DoClosePathWithPath(NodePath* pDestinNode, Path* pEdit
 	DoStartSelOp(TRUE,TRUE);
 	
 	DocView* pDocView = DocView::GetSelected();
-	ENSURE( pDocView != NULL, "There was no selected doc view when closing a path" );
+	ERROR2IF( pDocView == NULL, (void)0, "There was no selected doc view when closing a path" );
 
 	// Save the bounds of the path for undo/redo
 	if (RecalcBoundsAction::DoRecalc(this, &UndoActions, pDestinNode) == AC_FAIL)

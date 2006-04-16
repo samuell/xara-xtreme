@@ -15175,7 +15175,8 @@ BOOL AttrBitmapColourFill::WritePreChildrenWeb(BaseCamelotFilter* pFilter)
 	// Contone?
 	DocColour* pStartCol= Value.GetStartColour();
 	DocColour* pEndCol	= Value.GetEndColour();
-	INT32 StartColRef, EndColRef;
+	INT32 StartColRef=0;
+	INT32 EndColRef=0;
 
 	if (pStartCol != NULL && pEndCol != NULL)
 	{

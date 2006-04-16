@@ -1861,7 +1861,7 @@ INT32 ColourListComponent::SaveComplexColour(IndexedColour *pCol, BaseCamelotFil
 	// If the colour is linked, we save out the component as an illegal known value
 	// Convert the colour types into export colour types
 	// Should be a straight conversion but just in case...
-	ExportColourType ExpColType;
+	ExportColourType ExpColType=EXPORT_COLOURTYPE_NORMAL;
 	switch (ColType)
 	{
 		case COLOURTYPE_NORMAL:	ExpColType = EXPORT_COLOURTYPE_NORMAL;	break;
