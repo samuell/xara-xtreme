@@ -1,4 +1,4 @@
-// $Id: animparams.cpp3 2006-04-10 09:36:42Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

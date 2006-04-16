@@ -1,4 +1,4 @@
-// $Id: filter_types.h 740 2006-03-29 17:40:18Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
