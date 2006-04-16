@@ -116,6 +116,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "gbrush.h"
 
 #include "oilbitmap.h"
+#include "osrndrgn.h"
+#include "cwfrompoint.h"
 
 CC_IMPLEMENT_DYNCREATE(DragManagerOp, Operation)
 IMPLEMENT_DYNAMIC_CLASS(CaptureWnd, wxFrame)
@@ -1292,8 +1294,6 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					wxWindow* WindowUnderPoint = wxFindWindowAtPoint(WinoilMousePos);
 					BOOL AreOverTargetWnd = (WindowUnderPoint == TargetWindow);
 
-// wx doesn't have ChildWindowFromPoint
-#ifndef EXCLUDE_FROM_XARALX
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
@@ -1305,28 +1305,19 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 						ClientPoint.y = WinoilMousePos.y;
 						ClientPoint = TargetWindow->ScreenToClient(ClientPoint);
 
-						wxWindow* ChildWindowUnderPoint = TargetWindow->ChildWindowFromPoint(ClientPoint);
+						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, ClientPoint);
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
 												ChildWindowUnderPoint == WindowUnderPoint);
 					}
-#endif	// FALSE
+
 					if (BroadcastToAll || Ptr->WantsAllEvents() || AreOverTargetWnd)
 					{
-						INT32 DPI = 96;
-#ifndef EXCLUDE_FROM_XARALX
-						// Get the screen DPI
-						HDC ScreenDC = CreateCompatibleDC(NULL);
-						if (ScreenDC == NULL)
-						{
-							ERROR2(FALSE, "DragManagerOp::ProcessEvent: Unable to create screen DC");
-						}
+						wxScreenDC dc;
+						wxSize ppi = OSRenderRegion::GetFixedDCPPI(dc);
 
-						DPI = GetDeviceCaps(ScreenDC, LOGPIXELSY);
-						DeleteDC(ScreenDC);
-#endif
-						KernelMousePos.x = ((WinoilMousePos.x - TargetRect.GetLeft()) * 72000) / DPI;
+						KernelMousePos.x = ((WinoilMousePos.x - TargetRect.GetLeft()) * 72000) / ppi.GetWidth();
 // CHECKRECT: This may need to be the exclusive bottom coord
-						KernelMousePos.y = ((TargetRect.GetBottom() - WinoilMousePos.y) * 72000) / DPI;
+						KernelMousePos.y = ((TargetRect.GetBottom() - WinoilMousePos.y) * 72000) / ppi.GetHeight();
 					}
 					else
 						GoAhead	= FALSE;
@@ -1371,17 +1362,15 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					wxWindow* WindowUnderPoint = wxFindWindowAtPoint(WinoilMousePos);
 					BOOL AreOverTargetWnd = (WindowUnderPoint == TargetWindow);
 
-// wx doesn't have ChildWindowFromPoint
-#ifndef EXCLUDE_FROM_XARALX
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
 						// a child-window of our window! 
-						HWND ChildWindowUnderPoint = ChildWindowFromPoint(TargetWindow, ClientPoint);
+						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, ClientPoint);
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
 												ChildWindowUnderPoint == WindowUnderPoint);
 					}
-#endif
+
 					if (!BroadcastToAll && !Ptr->WantsAllEvents() && !AreOverTargetWnd)
 					{
 						GoAhead	= FALSE;
