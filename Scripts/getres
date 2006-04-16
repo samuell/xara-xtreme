@@ -1,0 +1,12 @@
+#!/bin/sh
+RES=$1
+echo Finding $RES
+egrep -h "\b$RES\b" winoilres/UKEnglish/*.rc | perl -ne '{if (!(/^\s+#/)) {chomp; ($b,$t,$d,$n)=split(/\s+/) ; $n=~s/\"//g; $n=lc($n); print "$b $t $n\n"} }' | while read BITMAP TYPE NAME ; do
+    if [ x$TYPE = xCURSOR ] ; then	
+	echo Converting cursor $NAME to $BITMAP.cur
+	cp winoilres/UKEnglish/$NAME wxOil/xrc/$BITMAP.cur
+    else
+	echo Converting bitmap $NAME to $BITMAP.png
+	Scripts/bmpconv < winoilres/UKEnglish/$NAME > wxOil/xrc/$BITMAP.png
+    fi
+done

@@ -1,2 +1,2 @@
 #!/bin/sh
-bmptopnm | pnmtopng -transparent magenta
+bmptopnm | pnmtopng -transparent =magenta
