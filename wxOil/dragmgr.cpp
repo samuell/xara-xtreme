@@ -1285,7 +1285,15 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 				if (GadgetID != 0)
 					TargetWindow = TargetWindow->FindWindow((INT32)GadgetID);
 
-				wxRect TargetRect = TargetWindow->GetRect();
+				// We want to do the following. But it doesn't work because GetRect() is relative to the
+				// parent window when TargetWindow is not a TLW. What we need is (consistently) screen
+				// coordinates
+				// wxRect TargetRect = TargetWindow->GetRect();
+
+				wxSize ClientSize = TargetWindow->GetClientSize();
+				wxRect TargetRect (TargetWindow->ClientToScreen(wxPoint(0,0)),
+				 				   TargetWindow->ClientToScreen(wxPoint(ClientSize.GetWidth(),
+																ClientSize.GetHeight())));
 
 				if (BroadcastToAll || Ptr->WantsAllEvents() ||
 					TargetRect.Inside(WinoilMousePos))
