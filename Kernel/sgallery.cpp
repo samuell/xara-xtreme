@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 //#include "resource.h"	// For _R(IDS_OK) (dammit!)
 #include "sgallery.h"
-//#include "sgdrag.h"
+#include "sgdrag.h"
 #include "sgmenu.h"
 #include "sgtree.h"
 #include "thumbmsg.h"
@@ -650,8 +650,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 				break;
 		}
 	}
-PORTNOTE("drag", "Dragging disabled in SuperGallery::Message()")
-#ifndef EXCLUDE_FROM_XARALX
+
 	else if (MESSAGE_IS_A(Message, DragMessage) && IsVisible() && DisplayTree != NULL)
 	{
 		// If a drag starting message comes around, pass it on to the tree
@@ -665,7 +664,7 @@ PORTNOTE("drag", "Dragging disabled in SuperGallery::Message()")
 			HandleDragStart(Msg);
 		}
 	}
-#endif
+
 	else if (MESSAGE_IS_A(Message, ThumbMessage) && DisplayTree != NULL)
 	{
 		// If a library Thumb message comes around, pass it on to the tree
@@ -706,6 +705,9 @@ PORTNOTE("drag", "Dragging disabled in SuperGallery::Message()")
 
 BOOL SuperGallery::Create(void)
 {
+	if (!DialogOp::Create())
+		return(FALSE);
+
 	// Call derived class PreCreate handler (to create display tree, usually)
 	if (!PreCreate())
 		return(FALSE);
@@ -723,8 +725,8 @@ BOOL SuperGallery::Create(void)
 	SetOffset(Offset);
 	SetFloatingCPoint(FloatPos);
 
-	if (!DialogOp::Create())
-		return(FALSE);
+//	if (!DialogOp::Create())
+//		return(FALSE);
 
 	AmShaded = FALSE;
 
@@ -966,16 +968,14 @@ void SuperGallery::DoShadeGallery(BOOL ShadeIt)
 
 void SuperGallery::HandleDragStart(DragMessage *DragMsg)
 {
-PORTNOTE("bars", "SuperGallery::HandleDragStart Disabled")
-#ifndef EXCLUDE_FROM_XARALX
 	// If this is a gallery list-reorganising drag which originated from this gallery,
 	// then create a target for the gallery listbox.
 	if (DragMsg->pInfo->IsKindOf(CC_RUNTIME_CLASS(SGListDragInfo)) &&
 		((SGListDragInfo *)DragMsg->pInfo)->GetParentGallery() == this)
 	{
-		SGListDragTarget *NewTarget = new SGListDragTarget(this, GetListGadgetID());
+		// Note this sort of auto-attaches it seems - AMB
+		/*SGListDragTarget *NewTarget = */new SGListDragTarget(this, GetListGadgetID());
 	}
-#endif
 }
 
 
@@ -1138,11 +1138,8 @@ void SuperGallery::ApplySortNow(BOOL ApplyToEntireList)
 		{
 			HasSelection = FALSE;
 			Ptr = CurrentGroup->GetChild();
-PORTNOTE("other", "Removed SGDisplayItem reference")
-#ifndef EXCLUDE_FROM_XARALX
 			ERROR3IF(Ptr != NULL && !Ptr->IsKindOf(CC_RUNTIME_CLASS(SGDisplayItem)),
 						"Sort hasn't found items! Heinous failure imminent!" );
-#endif
 			// Count the number of items we have to sort
 			NumItems = 0;
 			while (Ptr != NULL)
@@ -2438,11 +2435,8 @@ SGDisplayGroup *SuperGallery::AddLibraryGroup(Library *LibraryToDisplay, INT32 N
 
 	if (TheGroup == NULL)
 	{
-PORTNOTE("galleries", "SuperGallery::AddLibraryGroup removed SGDisplayGroup usage");
-#ifndef EXCLUDE_FROM_XARALX
 		// No existing group for that library, so create a new one
 		TheGroup = new SGDisplayGroup(this, NULL, LibraryToDisplay);
-#endif
 		if (TheGroup == NULL)				// Failed!
 			return(NULL);
 
@@ -3400,13 +3394,10 @@ BOOL SuperGallery::OnIdleEvent(void)
 	SGMiscInfo MiscInfo;
 	FillInMiscInfo(&MiscInfo);
 
-PORTNOTE("galleries", "Removed SuperGallery::OnIdleEvent() - DoBGRedrawPass")
-#ifndef EXCLUDE_FROM_XARALX
 	if (LastBGNode == NULL)
 		DisplayTree->DoBGRedrawPass(&MiscInfo);
 	else
 		LastBGNode->DoBGRedrawPass(&MiscInfo);
-#endif
 
 	return(TRUE);
 }

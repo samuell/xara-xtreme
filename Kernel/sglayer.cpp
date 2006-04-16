@@ -2200,7 +2200,7 @@ void LayerSGallery::MakeActiveLayer(Layer* pNewActiveLayer, BOOL TellAll)
 	if (!pNewActiveLayer->IsActive())
 		LayerSGallery::SetActive(pDoc,pNewActiveLayer,TRUE);
 
-#if defined(EXCLUDE_FROM_RALPH) || defined(EXCLUDE_FROM_XARALX)
+#if defined(EXCLUDE_FROM_RALPH)
 	//ERROR3("LayerSGallery::MakeActiveLayer supressed broadcast - bad !");
 #else
 	if (TellAll)
@@ -2240,10 +2240,15 @@ void LayerSGallery::EnsureActiveLayerIntegrity(Spread* pSpread,Layer** ppActiveL
 	// Start the search from the first layer
 	Layer* pLayer = pFirstLayer;
 
+	INT32 ActiveLayers = 0;
+
 	while (pLayer != NULL && pActiveLayer == NULL)
 	{
 		if (pLayer->IsActive())
+		{
+			ActiveLayers++;
 			pActiveLayer = pLayer;	// Found the active layer, so make a note of it
+		}
 
 		pLayer = pLayer->FindNextLayer();
 	}
@@ -2254,10 +2259,12 @@ void LayerSGallery::EnsureActiveLayerIntegrity(Spread* pSpread,Layer** ppActiveL
 //#ifndef WEBSTER
 	if (pActiveLayer == NULL)
 //#endif // WEBSTER
-		pActiveLayer = pSpread->FindLastLayer();
+		pActiveLayer = pSpread->FindLastLayer(); // In this instance ActiveLayers must be 0
 
 	// If we have an active layer, ensure that it really is the one and only active layer
-	if (pActiveLayer != NULL)
+	// AMB20060416 - only make the call if did not have exactly one active layer before
+	// to save an unnecessary layer change message when the layer gallery is brought up
+	if ((pActiveLayer != NULL) /*&& (ActiveLayers != 1)*/)
 		LayerSGallery::MakeActiveLayer(pActiveLayer);
 
 	// If caller wants the ptr to the active layer

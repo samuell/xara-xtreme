@@ -795,6 +795,7 @@ void SGListDragTarget::HandleDragCompleted(SuperGallery *ParentGallery,
 											OilCoord *pMousePos,
 											BOOL DragThisItemOnly)
 {
+	TRACEUSER("amb", _T("SGListDragTarget::HandleDragCompleted"));
 	ERROR3IF(DraggedNode == NULL || pMousePos == NULL || ParentGallery == NULL,
 				"Illegal NULL params");
 

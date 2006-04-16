@@ -1889,7 +1889,7 @@ void FrameSGallery::MakeActiveLayer(Layer* pNewActiveLayer,	UndoableOperation * 
 		LayerStateAction::Init(pUndoOp, pUndoOp->GetUndoActions(), Param);
 	}
 
-#if defined(EXCLUDE_FROM_RALPH) || defined(EXCLUDE_FROM_XARALX)
+#if defined(EXCLUDE_FROM_RALPH)
 	//ERROR3("FrameSGallery::MakeActiveLayer supressed broadcast - bad !");
 #else
 	BROADCAST_TO_ALL(LayerMsg(pNewActiveLayer,LayerMsg::LayerReason::ACTIVE_LAYER_CHANGED));
