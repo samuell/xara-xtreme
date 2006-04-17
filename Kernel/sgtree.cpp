@@ -2758,7 +2758,7 @@ BOOL SGDisplayNode::DefaultClickHandler(SGMouseInfo *Mouse, SGMiscInfo *MiscInfo
 				// auto closes the gallery (just like RISC OS and Win95)
 				ParentGallery->SetVisibility(FALSE);
 
-				ParentGallery->SetSystemStateChanged();	// Ensure toolbar button pops out again
+				DialogBarOp::SetSystemStateChanged();	// Ensure toolbar button pops out again
 			}
 		}
 PORTNOTE("galleries", "Disabled clipart gallery")

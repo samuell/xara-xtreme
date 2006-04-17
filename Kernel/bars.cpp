@@ -1318,6 +1318,8 @@ BOOL Gallery::Write(CCLexFile& file)
 BOOL SuperGallery::Write(CCLexFile& file)
 {
 	BOOL ok = TRUE;
+#ifndef EXCLUDE_FROM_XARALX
+PORTNOTE("galleries", "Disable Lexfile writing")
 	String_256 str;
 	if (ok) ok = file.PutToken(TokenTable[TOKEN_GALLERY].Token);
 	
@@ -1350,7 +1352,7 @@ BOOL SuperGallery::Write(CCLexFile& file)
 
 	if (ok) ok = file.PutNewLine();
 	if (ok) ok = file.PutNewLine();
-
+#endif
 	return ok;
 }
 
@@ -5665,59 +5667,6 @@ BOOL DialogBarOp::ReadBarsFromFile(	CCLexFile& file,
 }
 
 
-
-/********************************************************************************************
-
->	BOOL DialogBarOp::IsVisible()
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	29/4/94
-	Inputs:		-
-	Outputs:	-
-	Returns:	TRUE if this DialogBarOp is on screen
-	Purpose:	Used by the tool bar customize system to find out if a tool bar is
-				visible or not. 
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-BOOL DialogBarOp::IsVisible()
-{
-	return (WindowID != NULL);
-}
-
-/********************************************************************************************
-
->	virtual void DialogBarOp::SetVisibility(BOOL Open)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	29/4/94
-	Inputs:		Open - 	if TRUE then open DialogBarOp in its last pos if it is
-						currently closed.
-						if FALSE, it is closed
-	Outputs:	-
-	Returns:	-
-	Purpose:	Used by the tool bar customize system to open and close a tool bar.
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-void DialogBarOp::SetVisibility(BOOL Open)
-{
-	if (Open)
-	{
-		if (!IsVisible())
-			Create();
-			DialogOp::Open();
-	}
-	else
-	{
-		if (IsVisible())
-			Delete();
-	}
-}
 
 /********************************************************************************************
 

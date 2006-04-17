@@ -1290,6 +1290,7 @@ PORTNOTE("galleries", "disabled frame gallery")
 LayerSGallery::LayerSGallery()
 {
 #ifndef EXCLUDE_GALS
+	DlgResID = _R(IDD_LAYERSGALLERY);
 	pSpread = NULL;
 	pDoc = NULL;
 	DisplayForeground = NULL;	// Group of foreground layers

@@ -2859,6 +2859,95 @@ CDlgResID DialogOp::GetCurrentPageID()
 	return ReadWritePage;
 }
 
+/********************************************************************************************
+
+>	static DialogOp* DialogOp::FindDialogOp(CDlgResID ResID)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	17/4/2006
+	Inputs:		ResID - The resource ID of the dialog to find
+	Outputs:	-
+	Returns:	ptr to DialogOp
+				NULL is returned if not found
+	Purpose:	Looks for a given DialogOp by using its ResourceID
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+DialogOp* DialogOp::FindDialogOp(CDlgResID ResID)
+{
+	List*		pList = MessageHandler::GetClassList(CC_RUNTIME_CLASS(DialogOp));
+	DialogOp*	pDialogOp = (DialogOp*)pList->GetHead();
+	
+	while (pDialogOp != NULL)
+	{
+		if (pDialogOp->DlgResID == ResID)
+			return (pDialogOp);
+
+		pDialogOp = (DialogOp*)pList->GetNext(pDialogOp);
+	}
+
+	return NULL;
+}
+
+/********************************************************************************************
+
+>	BOOL DialogOp::IsVisible()
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	29/4/94
+	Inputs:		-
+	Outputs:	-
+	Returns:	TRUE if this DialogOp is on screen
+	Purpose:	Used by the tool bar customize system to find out if a tool bar is
+				visible or not. 
+	Errors:		-
+	SeeAlso:	-
+
+This function is a hangover from old bar days. You probably don't want to use it.
+Use Show() etc. which are orthogonal to this. This merely tells you whether there
+is a window ID there... FOR COMPATIBILITY ONLY
+
+********************************************************************************************/
+
+BOOL DialogOp::IsVisible()
+{
+	return (WindowID != NULL);
+}
+
+/********************************************************************************************
+
+>	virtual void DialogOp::SetVisibility(BOOL Visible)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	29/4/94
+	Inputs:		Open - 	if TRUE then open DialogOp in its last pos if it is
+						currently closed.
+						if FALSE, it is closed
+	Outputs:	-
+	Returns:	-
+	Purpose:	Used by the tool bar customize system to open and close a tool bar.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void DialogOp::SetVisibility(BOOL Visible)
+{
+	if (Visible)
+	{
+		if (!WindowID)
+		{
+			Create();
+		}
+		Open();
+	}
+	else
+	{
+		Close();
+	}
+}
 
 
 // -----------------------------------------------------------------------------------------

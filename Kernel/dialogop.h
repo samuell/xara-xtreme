@@ -506,6 +506,11 @@ PORTNOTE("dialog","Removed HWND and timer usage")
 	INT32 GetScreenDpi();
 	BOOL GetScreenSize(INT32 * pWidth, INT32 * pHeight);
 
+	static DialogOp*	FindDialogOp(CDlgResID ResID);
+
+	BOOL			IsVisible();
+	virtual void	SetVisibility(BOOL Visible);
+
 protected:
 	// Need to subclass your dialog controls? Override this to do so
 	virtual BOOL AddControlsToHelper();

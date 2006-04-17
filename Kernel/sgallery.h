@@ -216,7 +216,7 @@ typedef enum
 
 /***********************************************************************************************
 
->	class SuperGallery : public DialogBarOp
+>	class SuperGallery : public DialogOp
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/10/94
@@ -239,7 +239,7 @@ class SaveRegistryEntries;			// Defined below
 class SGallerySortDlg;				// Defined below
 class SGalleryLinePropertiesDlg;	// Defined in sglinepr.h
 
-class SuperGallery : public DialogBarOp
+class SuperGallery : public DialogOp
 {
 friend class SGalleryOptionsDlg;
 friend class SGallerySortDlg;
@@ -640,6 +640,12 @@ public:		// Global gallery preferences
 public:
 	virtual BOOL IsABar() {return FALSE; } 		// We are not a bar
 	virtual BOOL IsAGallery() {return TRUE; }	// We are a gallery
+	static SuperGallery*		FindSuperGallery(String_32& SuperGalleryName, INT32 limit = -1);
+
+	String_32		Name;
+	String_32&		GetName()								{ return Name; }
+	void			SetName(String_32& str)					{ Name = str; }
+
 };
 
 

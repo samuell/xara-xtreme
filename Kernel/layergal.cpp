@@ -1832,12 +1832,12 @@ OpState	OpDisplayLayerGallery::GetState(String_256* UIDescription, OpDescriptor*
 	{
 		// If the gallery is currenty open, then the menu item should be ticked
 		String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
-		DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+		SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
 
-		if (pDialogBarOp != NULL)
+		if (pSuperGallery != NULL)
 		{
-			if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
-			OpSt.Ticked = pDialogBarOp->IsVisible();
+			if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
+			OpSt.Ticked = pSuperGallery->IsVisible();
 		}
 
 		// If there are no open documents, you can't toggle the gallery
@@ -1872,26 +1872,26 @@ OpState	OpDisplayLayerGallery::GetState(String_256* UIDescription, OpDescriptor*
 void OpDisplayLayerGallery::Do(OpDescriptor*)
 {
 	String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
 
-	if (!pDialogBarOp) pDialogBarOp = new LayerSGallery;
+	if (!pSuperGallery) pSuperGallery = new LayerSGallery;
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
 		{
 			// Toggle the visible state of the gallery window
-			pDialogBarOp->SetVisibility( !pDialogBarOp->IsVisible() );
+			pSuperGallery->SetVisibility( !pSuperGallery->IsVisible() );
 		}
 		else
 		{
 			ERROR3("Got the layer gallery but it's not of the LayerSGallery class");
 		}
 
-		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYLAYERGALLERY), pSuperGallery->IsVisible());
 	}
 
-	ERROR3IF(pDialogBarOp == NULL,"Couldn't find the layer gallery bar");
+	ERROR3IF(pSuperGallery == NULL,"Couldn't find the layer gallery bar");
 
 	End();
 }
@@ -1962,12 +1962,12 @@ OpState	OpDisplayFrameGallery::GetState(String_256* UIDescription, OpDescriptor*
 		
 	// If the gallery is currenty open, then the menu item should be ticked
 	String_32 Name(_R(IDS_FRAMEGAL_GALLNAME));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
-			OpSt.Ticked = pDialogBarOp->IsVisible();
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
+			OpSt.Ticked = pSuperGallery->IsVisible();
 	}
 
 	// If there are no open documents, you can't toggle the gallery
@@ -1997,12 +1997,12 @@ OpState	OpDisplayFrameGallery::GetState(String_256* UIDescription, OpDescriptor*
 	{
 		// If the gallery is currenty open, then the menu item should be ticked
 		String_32 Name(_R(IDS_FRAMEGAL_GALLNAME));
-		DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+		SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
 
-		if (pDialogBarOp != NULL)
+		if (pSuperGallery != NULL)
 		{
-			if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
-				OpSt.Ticked = pDialogBarOp->IsVisible();
+			if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
+				OpSt.Ticked = pSuperGallery->IsVisible();
 		}
 
 		// If there are no open documents, you can't toggle the gallery
@@ -2041,28 +2041,28 @@ OpState	OpDisplayFrameGallery::GetState(String_256* UIDescription, OpDescriptor*
 void OpDisplayFrameGallery::Do(OpDescriptor*)
 {
 	String_32 Name(_R(IDS_FRAMEGAL_GALLNAME));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(FrameSGallery))
 		{
 			GIFAnimationPropertyTabs::SetFrameGalleryOpen(FALSE);
 
 			// Toggle the visible state of the gallery window
-			pDialogBarOp->SetVisibility( !pDialogBarOp->IsVisible() );
+			pSuperGallery->SetVisibility( !pSuperGallery->IsVisible() );
 		}
 		else
 		{
 			ERROR3("Got the frame gallery but it's not of the LayerSGallery class");
 		}
 
-		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFRAMEGALLERY), pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFRAMEGALLERY), pSuperGallery->IsVisible());
 
 		GIFAnimationPropertyTabs::SetFrameGalleryOpen(TRUE);
 	}
 
-	ERROR3IF(pDialogBarOp == NULL,"Couldn't find the frame gallery bar");
+	ERROR3IF(pSuperGallery == NULL,"Couldn't find the frame gallery bar");
 
 	End();
 }

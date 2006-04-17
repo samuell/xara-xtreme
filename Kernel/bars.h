@@ -668,9 +668,6 @@ public:
 	virtual BOOL	Read(LoadRegistryEntries& Loader);
 	virtual BOOL	Write(SaveRegistryEntries& Saver);
 
-	BOOL			IsVisible();
-	virtual void	SetVisibility(BOOL Open);
-
 	DockBarType		GetDockBarType() 						{ return Dock; }
 	void			SetDockBarType(DockBarType DockValue) 	{ Dock = DockValue; }
 	UINT32			GetSlot() 								{ return Slot; }

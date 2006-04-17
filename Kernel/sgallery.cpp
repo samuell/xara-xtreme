@@ -133,7 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brushmsg.h"   // for the screen change message
 
 // Implement the dynamic class bits...
-CC_IMPLEMENT_DYNCREATE(SuperGallery, DialogBarOp)
+CC_IMPLEMENT_DYNCREATE(SuperGallery, DialogOp)
 CC_IMPLEMENT_DYNCREATE(SGalleryOptionsDlg, DialogOp)
 CC_IMPLEMENT_DYNCREATE(SGallerySortDlg, DialogOp)
 CC_IMPLEMENT_DYNCREATE(SGallerySearchDlg, DialogOp)
@@ -217,7 +217,7 @@ void SuperGallery::InitData(void)
 
 /********************************************************************************************
 
->	SuperGallery::SuperGallery(CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogBarOp)): DialogBarOp(Class) 
+>	SuperGallery::SuperGallery(CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogOp)): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class))
 												 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/10/94
@@ -225,9 +225,10 @@ void SuperGallery::InitData(void)
 
 ********************************************************************************************/
 
-SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogBarOp(Class) 
+SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class)) 
 {
-	DlgResID = _R(IDD_LAYERSGALLERY);
+	String_32 str = String_32(_R(IDS_K_BARS_NONAME));
+	Name=str;
 	InitData();
 } 
 
@@ -235,8 +236,8 @@ SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogBarOp(Class)
 
 /********************************************************************************************
 
->	SuperGallery::SuperGallery(String_32 &NewName,CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogBarOp): 
-	DialogBarOp(NewName, Class) 
+>	SuperGallery::SuperGallery(String_32 &NewName,CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogOp): 
+	DialogOp(NewName, Class) 
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/10/94
@@ -245,8 +246,10 @@ SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogBarOp(Class)
 ********************************************************************************************/
 
 SuperGallery::SuperGallery(String_32 &NewName,CCRuntimeClass *Class)
-		: DialogBarOp(NewName, Class) 
+		: DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class))
 {
+	String_32 str = String_32(_R(IDS_K_BARS_NONAME));
+	Name=str;
 	InitData();
 } 
 
@@ -402,7 +405,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 	if ( Message->IsKindOf(CC_RUNTIME_CLASS(DialogMsg)) &&
 			((DialogMsg*)Message)->DlgMsg == DIM_BAR_DEATH )
 	{
-		DialogBarOp::Message(Message);
+		DialogOp::Message(Message);
 		return(OK);
 	}
 
@@ -673,7 +676,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 	}
 	
 	// Pass the call down to the base class
-	return(DialogBarOp::Message(Message));
+	return(DialogOp::Message(Message));
 
 	return OK;
 }    
@@ -689,7 +692,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 	Returns:	TRUE if the window was successfully created
 				FALSE => ERROR2
 	Purpose:	The SuperGallery Create method
-				This method has been overridden to de-specialize the DialogBarOp. 
+				This method has been overridden to de-specialize the DialogOp. 
 
 	Notes:		Before doing anything else, the PreCreate handler is called.
 				Secondly, the InitMenuCommands() method is called to init any
@@ -719,11 +722,14 @@ BOOL SuperGallery::Create(void)
 	// Ensure any items pending background-redraws are 'flushed'
 	FlushBackgroundRedraws();
 
+#ifndef EXCLUDE_FROM_XARALX
+PORTNOTE("galleries", "Removed docking stuff")
 	// Bar initialisation and creation
 	SetDockBarType(Dock);
 	SetSlot(Slot);
 	SetOffset(Offset);
 	SetFloatingCPoint(FloatPos);
+#endif
 
 //	if (!DialogOp::Create())
 //		return(FALSE);
@@ -770,7 +776,7 @@ void SuperGallery::SetVisibility(BOOL Open)
 	}	
 
 	// Now call the base class to show/hide ourselves
-	DialogBarOp::SetVisibility(Open);
+	DialogOp::SetVisibility(Open);
 }
 
 
@@ -3531,6 +3537,48 @@ BOOL SuperGallery::DeVirtualiseAllGroups(StringBase *ProgressBarMsg)
 }
 
 
+/********************************************************************************************
+
+>	static SuperGallery* SuperGallery::FindSuperGallery(String_32& SuperGalleryName, INT32 limit = -1)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	26/4/94
+	Inputs:		SuperGalleryName = Name of op to find
+				limit	if -1 then it means use the whole name for the check (default)
+						if > 0 then limit the check to the limit number of characters
+	Outputs:	-
+	Returns:	ptr to SuperGallery
+				NULL is returned if not found
+	Purpose:	Looks for a given SuperGallery by using its name 
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+SuperGallery* SuperGallery::FindSuperGallery(String_32& SuperGalleryName, INT32 limit)
+{
+	List*       	pList = MessageHandler::GetClassList(CC_RUNTIME_CLASS(DialogOp));
+	SuperGallery*	pSuperGallery = (SuperGallery*)pList->GetHead();
+	
+	String_32		OpName;
+	while (pSuperGallery != NULL)
+	{
+		if (pSuperGallery->IsKindOf(CC_RUNTIME_CLASS(SuperGallery)))
+		{
+			if (limit > 0)
+				pSuperGallery->Name.Left(&OpName, limit);
+			else
+				OpName = pSuperGallery->Name;
+			
+			if (OpName == SuperGalleryName)
+				return (pSuperGallery);
+		}
+
+		pSuperGallery = (SuperGallery*)pList->GetNext(pSuperGallery);
+	}
+
+	return NULL;
+}
 
 
 
