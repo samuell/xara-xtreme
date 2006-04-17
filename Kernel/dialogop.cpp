@@ -2421,13 +2421,17 @@ PORTNOTE("other","DialogOp::Message - Help system disabled")
 				break;
 
 			case DIM_CANCEL:
-			case DIM_CREATE:
+//			case DIM_CREATE:
 			case DIM_BAR_DEATH:
 				// These messages need to be broadcast to all controls within the dialog
 				if (ControlList::Get()->SendMessageToAllControls(this, pDlgMsg))
 				{
-					DlgMgr->Delete(WindowID, this);
-					WindowID = NULL;
+					Close();
+					End();
+					// the Op has now been deleted. Exit fast!
+					return OK;
+					//DlgMgr->Delete(WindowID, this);
+					//WindowID = NULL;
 				}
 				break;
 
