@@ -102,3 +102,4 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "manager.h"
 #include "wxmousestate.h"
 #include "doublebuffer.h"
+#include "cwfrompoint.h"

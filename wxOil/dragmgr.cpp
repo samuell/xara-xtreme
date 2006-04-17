@@ -117,7 +117,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "oilbitmap.h"
 #include "osrndrgn.h"
-#include "cwfrompoint.h"
 
 CC_IMPLEMENT_DYNCREATE(DragManagerOp, Operation)
 IMPLEMENT_DYNAMIC_CLASS(CaptureWnd, wxFrame)
