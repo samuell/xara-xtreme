@@ -3184,13 +3184,18 @@ BOOL SGDisplayRoot::HandleEvent(SGEventType EventType, void *EventInfo,
 					pRender->SetFillColour(RedrawInfo->Background);
 					pRender->SetLineColour(COLOUR_TRANS);	//RedrawInfo->Background);
 
-					// Fill entire display window background with bg colour
-					DocRect WindowBG(0, -ScrollExtent, MiscInfo->MaxWidth, 0);
-
+					// Work out height first to avoid ENSURE in DocRect ctor
+					INT32 height=ScrollExtent;
 					// Extend the rect if necessary to ensure entire window bg is filled
 					if (ScrollExtent < MiscInfo->WindowHeight)
-						WindowBG.lo.y = -MiscInfo->WindowHeight;
-					pRender->DrawRect(&WindowBG);
+						height = MiscInfo->WindowHeight;
+
+					if ((height>=0) && (MiscInfo->MaxWidth>=0))
+					{
+						// Fill entire display window background with bg colour
+						DocRect WindowBG(0, -height, MiscInfo->MaxWidth, 0);
+						pRender->DrawRect(&WindowBG);
+					}
 
 					StopRendering(RedrawInfo, MiscInfo);
 				}

@@ -638,7 +638,8 @@ public:		// Global gallery preferences
 	static INT32		UseFixedColourSet;		// TRUE (default) to override Windows colours
 
 public:
-	virtual BOOL IsABar() {return FALSE; } // For now, claim not to be a bar so we get sized right
+	virtual BOOL IsABar() {return FALSE; } 		// We are not a bar
+	virtual BOOL IsAGallery() {return TRUE; }	// We are a gallery
 };
 
 

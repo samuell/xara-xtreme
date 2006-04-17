@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <resource>
     <object class="wxPanel" name="IDD_BUTTBAR_GENERAL">
-        <label>General</label>
-        <title>General</title>
+        <label>General Bar</label>
+        <title>General Bar</title>
+        <tooltip>General Bar</tooltip>
+        <help>General Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -153,8 +155,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_IMAGESETTING">
-        <label>Image Setting</label>
-        <title>Image Setting</title>
+        <label>Image Setting Bar</label>
+        <title>Image Setting Bar</title>
+        <tooltip>Image Setting Bar</tooltip>
+        <help>Image Setting Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -210,8 +214,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_WINDOW">
-        <label>Window</label>
-        <title>Window</title>
+        <label>Window Bar</label>
+        <title>Window Bar</title>
+        <tooltip>Window Bar</tooltip>
+        <help>Window Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -360,8 +366,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_ARRANGE">
-        <label>Arrange</label>
-        <title>Arrange</title>
+        <label>Arrange Bar</label>
+        <title>Arrange Bar</title>
+        <tooltip>Arrange Bar</tooltip>
+        <help>Arrange Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -538,8 +546,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_EDIT">
-        <label>Edit</label>
-        <title>Edit</title>
+        <label>Edit Bar</label>
+        <title>Edit Bar</title>
+        <tooltip>Edit Bar</tooltip>
+        <help>Edit Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -651,8 +661,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_FILE">
-        <label>File</label>
-        <title>File</title>
+        <label>File Bar</label>
+        <title>File Bar</title>
+        <tooltip>File Bar</tooltip>
+        <help>File Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -774,8 +786,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_GALLERIES">
-        <label>Galleries</label>
-        <title>Galleries</title>
+        <label>Galleries Bar</label>
+        <title>Galleries Bar</title>
+        <tooltip>Galleries Bar</tooltip>
+        <help>Galleries Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -853,8 +867,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_STANDARD">
-        <label>Standard</label>
-        <title>Standard</title>
+        <label>Standard Bar</label>
+        <title>Standard Bar</title>
+        <tooltip>Standard Bar</tooltip>
+        <help>Standard Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -1036,8 +1052,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_TOOLBAR">
-        <label>Toolbar</label>
-        <title>Toolbar</title>
+        <label>Toolbar Bar</label>
+        <title>Toolbar Bar</title>
+        <tooltip>Toolbar Bar</tooltip>
+        <help>Toolbar Bar</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -1187,8 +1205,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_ANIMATION">
-        <label>Animation</label>
-        <title>Animation</title>
+        <label>Animation Bar</label>
+        <title>Animation Bar</title>
+        <tooltip>Animation Bar</tooltip>
+        <help>Animation Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -1292,8 +1312,10 @@
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_FEATHER">
-        <label>Feather</label>
-        <title>Feather</title>
+        <label>Feather Bar</label>
+        <title>Feather Bar</title>
+        <tooltip>Feather Bar</tooltip>
+        <help>Feather Bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -1323,10 +1345,11 @@
             </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_COLOURSGALLERY">
+    <object class="wxPanel" name="IDD_COLOURSGALLERY">
         <label>Colour gallery</label>
         <title>Colour gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Colour gallery</tooltip>
+        <help>Colour gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -1562,10 +1585,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_LAYERSGALLERY">
+    <object class="wxPanel" name="IDD_LAYERSGALLERY">
         <label>Layer gallery</label>
         <title>Layer gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Layer gallery</tooltip>
+        <help>Layer gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -1750,10 +1774,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_FRAMESGALLERY">
+    <object class="wxPanel" name="IDD_FRAMESGALLERY">
         <label>Frame gallery</label>
         <title>Frame gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Frame gallery</tooltip>
+        <help>Frame gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -1935,10 +1960,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_BITMAPSGALLERY">
+    <object class="wxPanel" name="IDD_BITMAPSGALLERY">
         <label>Bitmap gallery</label>
         <title>Bitmap gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Bitmap gallery</tooltip>
+        <help>Bitmap gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -2241,10 +2267,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_LINESGALLERY">
+    <object class="wxPanel" name="IDD_LINESGALLERY">
         <label>Line gallery</label>
         <title>Line gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Line gallery</tooltip>
+        <help>Line gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -2355,10 +2382,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_NAMESGALLERY">
+    <object class="wxPanel" name="IDD_NAMESGALLERY">
         <label>Name gallery</label>
         <title>Name gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Name gallery</tooltip>
+        <help>Name gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -2618,10 +2646,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="FontsSGallery">
+    <object class="wxPanel" name="FontsSGallery">
         <label>This bar should not be called FontsSGallery</label>
         <title>This bar should not be called FontsSGallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>This bar should not be called FontsSGallery</tooltip>
+        <help>This bar should not be called FontsSGallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -2857,10 +2886,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_LIBCLIPARTSGALLERY">
+    <object class="wxPanel" name="IDD_LIBCLIPARTSGALLERY">
         <label>Clipart gallery</label>
         <title>Clipart gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Clipart gallery</tooltip>
+        <help>Clipart gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -3121,10 +3151,11 @@
         </object>
         </object>
     </object>
-    <object class="wxDialog" name="IDD_LIBFILLSSGALLERY">
+    <object class="wxPanel" name="IDD_LIBFILLSSGALLERY">
         <label>Fills gallery</label>
         <title>Fills gallery</title>
-        <style>wxRESIZE_BORDER</style>
+        <tooltip>Fills gallery</tooltip>
+        <help>Fills gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -3383,6 +3414,8 @@
     <object class="wxPanel" name="IDD_PUSHINFO">
         <label>Push tool info bar</label>
         <title>Push tool info bar</title>
+        <tooltip>Push tool info bar</tooltip>
+        <help>Push tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -3444,6 +3477,8 @@
     <object class="wxPanel" name="IDD_ZOOMINFO">
         <label>Zoom tool info bar</label>
         <title>Zoom tool info bar</title>
+        <tooltip>Zoom tool info bar</tooltip>
+        <help>Zoom tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -3505,6 +3540,8 @@
     <object class="wxPanel" name="IDD_REGSHAPETOOLBAR">
         <label>QuickShape tool info bar</label>
         <title>QuickShape tool info bar</title>
+        <tooltip>QuickShape tool info bar</tooltip>
+        <help>QuickShape tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -3772,6 +3809,8 @@
     <object class="wxPanel" name="IDD_RECTTOOLBAR">
         <label>Rectangle tool info bar</label>
         <title>Rectangle tool info bar</title>
+        <tooltip>Rectangle tool info bar</tooltip>
+        <help>Rectangle tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -3970,6 +4009,8 @@
     <object class="wxPanel" name="IDD_ELLIPSETOOLBAR">
         <label>Ellipse tool info bar</label>
         <title>Ellipse tool info bar</title>
+        <tooltip>Ellipse tool info bar</tooltip>
+        <help>Ellipse tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -4154,6 +4195,8 @@
     <object class="wxPanel" name="IDD_GRADFILLDLG">
         <label>Graduated fill tool info bar</label>
         <title>Graduated fill tool info bar</title>
+        <tooltip>Graduated fill tool info bar</tooltip>
+        <help>Graduated fill tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -4283,6 +4326,8 @@
     <object class="wxPanel" name="IDD_TRANFILLDLG">
         <label>Transparent fill tool info bar</label>
         <title>Transparent fill tool info bar</title>
+        <tooltip>Transparent fill tool info bar</tooltip>
+        <help>Transparent fill tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -4425,6 +4470,8 @@
     <object class="wxPanel" name="IDD_BEZTOOLBAR">
         <label>Shape editor tool info bar</label>
         <title>Shape editor tool info bar</title>
+        <tooltip>Shape editor tool info bar</tooltip>
+        <help>Shape editor tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -5035,6 +5082,8 @@
     <object class="wxPanel" name="IDD_SELECTORINFO">
         <label>Selector tool info bar</label>
         <title>Selector tool info bar</title>
+        <tooltip>Selector tool info bar</tooltip>
+        <help>Selector tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -5668,6 +5717,8 @@
     <object class="wxPanel" name="IDD_FREEHANDTOOL">
         <label>Freehand tool info bar</label>
         <title>Freehand tool info bar</title>
+        <tooltip>Freehand tool info bar</tooltip>
+        <help>Freehand tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -5797,6 +5848,8 @@
     <object class="wxPanel" name="IDD_BLENDTOOLBAR">
         <label>Blend tool info bar</label>
         <title>Blend tool info bar</title>
+        <tooltip>Blend tool info bar</tooltip>
+        <help>Blend tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -5958,6 +6011,8 @@
     <object class="wxPanel" name="IDD_MOULDTOOLBAR">
         <label>Mould tool info bar</label>
         <title>Mould tool info bar</title>
+        <tooltip>Mould tool info bar</tooltip>
+        <help>Mould tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -6136,6 +6191,8 @@
     <object class="wxPanel" name="IDD_CONTOURINFOBAR">
         <label>Contour tool info bar</label>
         <title>Contour tool info bar</title>
+        <tooltip>Contour tool info bar</tooltip>
+        <help>Contour tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -6342,6 +6399,8 @@
     <object class="wxPanel" name="IDD_BEVELINFOBAR">
         <label>Bevel tool info bar</label>
         <title>Bevel tool info bar</title>
+        <tooltip>Bevel tool info bar</tooltip>
+        <help>Bevel tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -6471,6 +6530,8 @@
     <object class="wxPanel" name="IDD_TEXT_INFO_BAR">
         <label>Text tool info bar</label>
         <title>Text tool info bar</title>
+        <tooltip>Text tool info bar</tooltip>
+        <help>Text tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">
@@ -6837,6 +6898,8 @@
     <object class="wxPanel" name="IDD_PENTOOLBAR">
         <label>Pen tool info bar</label>
         <title>Pen tool info bar</title>
+        <tooltip>Pen tool info bar</tooltip>
+        <help>Pen tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="spacer">
@@ -6849,6 +6912,8 @@
     <object class="wxPanel" name="IDD_SOFTSHADOWTOOLBAR">
         <label>Shadow tool info bar</label>
         <title>Shadow tool info bar</title>
+        <tooltip>Shadow tool info bar</tooltip>
+        <help>Shadow tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
             <object class="sizeritem">

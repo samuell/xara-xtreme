@@ -98,6 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Implementation of the DialogManager class (bodge central)
 
+#include <wx/tooltip.h>
+
 // Include files
 #include "camtypes.h"
 #include "dlgmgr.h"
@@ -266,11 +268,11 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 	ERRORIF(!DlgOp->pEvtHandler || !DlgOp->pEvtHandler->pDialogOp, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
 
 	BOOL wxAUImanaged = FALSE;
-	if ( DlgOp->IsABar() )
+	if ( DlgOp->IsABar() || DlgOp->IsAGallery() )
 	{
 		BOOL modal = DlgOp->IsModal();
 		ERROR2IF(modal, FALSE, "Attempting to create a wxAUImanaged Dialog that is modal");
-		// They wanted a bar. Well, the only difference to us is we let wxAUI manage it.
+		// They wanted a bar. Well, the main difference to us is we let wxAUI manage it.
 		wxAUImanaged = TRUE;
 	}
 
@@ -332,14 +334,22 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		// of stuff to be specified. Or try and retrieve it from the DialogBarOp or similar. Anyway, for now
 		// give it some default parameters
 		wxPaneInfo paneinfo;
-		paneinfo.ToolbarPane().Fixed().DestroyOnClose(FALSE);
-		if (DlgOp->IsVertical())
+		if (DlgOp->IsABar())
 		{
-			paneinfo.Left().Layer(0).GripperTop().TopDockable(FALSE).BottomDockable(FALSE);
+			paneinfo.ToolbarPane().Fixed().DestroyOnClose(FALSE);
+			if (DlgOp->IsVertical())
+			{
+				paneinfo.Left().Layer(0).GripperTop().TopDockable(FALSE).BottomDockable(FALSE);
+			}
+			else
+			{
+				paneinfo.Top().Layer(1).Row(2).LeftDockable(FALSE).RightDockable(FALSE);
+			}
 		}
 		else
 		{
-			paneinfo.Top().Layer(1).Row(2).LeftDockable(FALSE).RightDockable(FALSE);
+			paneinfo.DestroyOnClose(FALSE);
+			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float();
 		}
 
 		if (DlgOp->IsKindOf(CC_RUNTIME_CLASS(InformationBarOp)))
@@ -351,7 +361,15 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 
 		wxString Title = pDialogWnd->GetTitle();
 		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
-		if (Title.IsEmpty()) Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
+		if (Title.IsEmpty())
+		{
+			// Finally, in desperation, we (mis-)use the tooltip string because now the wx folks have removed
+			// the label, even though it's needed for accessibility. Aarrghh
+			wxToolTip* pTip = pDialogWnd->GetToolTip();
+			if (pTip) Title=pTip->GetTip();
+		}
+		if (Title.IsEmpty())
+			 Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
 		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo.
 			Name(pDialogName).Caption(Title).
 			PinButton(TRUE));

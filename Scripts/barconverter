@@ -44,17 +44,17 @@ sub MakeName
 
     my %tnamemap = (
 
-		   "IDD_BUTTBAR_GENERAL" => "General",
-		   "IDD_BUTTBAR_IMAGESETTING" => "Image Setting",
-		   "IDD_BUTTBAR_WINDOW" => "Window",
-		   "IDD_BUTTBAR_ARRANGE" => "Arrange",
-		   "IDD_BUTTBAR_EDIT" => "Edit",
-		   "IDD_BUTTBAR_FILE" => "File",
-		   "IDD_BUTTBAR_GALLERIES" => "Galleries",
-		   "IDD_BUTTBAR_STANDARD" => "Standard",
-		   "IDD_BUTTBAR_TOOLBAR" => "Toolbar",
-		   "IDD_BUTTBAR_ANIMATION" => "Animation",
-		   "IDD_BUTTBAR_FEATHER" => "Feather",
+		   "IDD_BUTTBAR_GENERAL" => "General Bar",
+		   "IDD_BUTTBAR_IMAGESETTING" => "Image Setting Bar",
+		   "IDD_BUTTBAR_WINDOW" => "Window Bar",
+		   "IDD_BUTTBAR_ARRANGE" => "Arrange Bar",
+		   "IDD_BUTTBAR_EDIT" => "Edit Bar",
+		   "IDD_BUTTBAR_FILE" => "File Bar",
+		   "IDD_BUTTBAR_GALLERIES" => "Galleries Bar",
+		   "IDD_BUTTBAR_STANDARD" => "Standard Bar",
+		   "IDD_BUTTBAR_TOOLBAR" => "Toolbar Bar",
+		   "IDD_BUTTBAR_ANIMATION" => "Animation Bar",
+		   "IDD_BUTTBAR_FEATHER" => "Feather Bar",
 		   "IDD_SELECTORINFO" => "Selector tool info bar",
 		   "IDD_ZOOMINFO" => "Zoom tool info bar",
 		   "IDD_PUSHINFO" => "Push tool info bar",
@@ -188,6 +188,8 @@ sub WriteBarHead
     print STDOUT $ddindent. "    <object class=\"wxPanel\" name=\"$name\">\n";
     print STDOUT $ddindent. "        <label>$title</label>\n";
     print STDOUT $ddindent. "        <title>$title</title>\n";
+    print STDOUT $ddindent. "        <tooltip>$title</tooltip>\n";
+    print STDOUT $ddindent. "        <help>$title</help>\n";
     print STDOUT $ddindent. "        <object class=\"wxBoxSizer\">\n";
     printf STDOUT $ddindent."            <orient>wx%s</orient>\n", !IsVertical()?"HORIZONTAL":"VERTICAL";
 }
@@ -202,10 +204,14 @@ sub WriteGalleryHead
 {
     my $name = shift @_;
     my $title = MakeName($name);
-    print STDOUT $ddindent. "    <object class=\"wxDialog\" name=\"$name\">\n";
+    print STDOUT $ddindent. "    <object class=\"wxPanel\" name=\"$name\">\n";
     print STDOUT $ddindent. "        <label>$title</label>\n";
     print STDOUT $ddindent. "        <title>$title</title>\n";
-    print STDOUT $ddindent. "        <style>wxRESIZE_BORDER</style>\n";
+    print STDOUT $ddindent. "        <tooltip>$title</tooltip>\n";
+    print STDOUT $ddindent. "        <help>$title</help>\n";
+
+# The following for wxDialog only
+#    print STDOUT $ddindent. "        <style>wxRESIZE_BORDER</style>\n"; 
 
     print STDOUT $ddindent. "        <object class=\"wxBoxSizer\">\n";
     print STDOUT $ddindent. "            <orient>wxVERTICAL</orient>\n";

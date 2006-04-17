@@ -152,6 +152,7 @@ public:
 			 INT32 OpeningPage = -1, CWindowID ParentWnd = NULL);
 
 	virtual BOOL IsABar() { return FALSE; }
+	virtual BOOL IsAGallery() {return FALSE; }
 	virtual BOOL IsVertical() { return FALSE; }
   			
 	// The create method reserves everything needed to guarantee that the dialog will 
