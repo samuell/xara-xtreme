@@ -11,6 +11,6 @@
 
 #include <wx/wx.h>
 
-extern wxWindow* wxChildWindowFromPoint(wxWindow* win, const wxPoint& pt);
+extern wxWindow* wxChildWindowFromPoint(wxWindow* win, const wxPoint& pt, bool hidden=true, int depth=1);
 
 #endif // __WXXTRA_DOUBLEBUFFER_H
