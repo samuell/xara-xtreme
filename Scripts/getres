@@ -6,7 +6,15 @@ egrep -h "\b$RES\b" winoilres/UKEnglish/*.rc | perl -ne '{if (!(/^\s+#/)) {chomp
 	echo Converting cursor $NAME to $BITMAP.cur
 	cp winoilres/UKEnglish/$NAME wxOil/xrc/$BITMAP.cur
     else
-	echo Converting bitmap $NAME to $BITMAP.png
-	Scripts/bmpconv < winoilres/UKEnglish/$NAME > wxOil/xrc/$BITMAP.png
+	EXT=`echo $NAME | awk -F. '{print $2}'`
+	if [ x$EXT = xbmp ] ; then
+	    echo Converting BMP bitmap $NAME to $BITMAP.png
+	    Scripts/bmpconv < winoilres/UKEnglish/$NAME > wxOil/xrc/$BITMAP.png
+	elif [ x$EXT = xpng ] ; then
+	    echo Converting PNG bitmap $NAME to $BITMAP.png
+	    cp winoilres/UKEnglish/$NAME wxOil/xrc/$BITMAP.cur
+	else
+	    echo Dont understand what to do with bitmap $NAME
+        fi  
     fi
 done
