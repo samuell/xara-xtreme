@@ -111,10 +111,10 @@ namespace libJPEG
 // NB We assume jpeglib.h will test __cplusplus and use C naming as required
 namespace libJPEG
 {
-//	extern "C"
-//	{
+	extern "C"
+	{
 	#include "jpeglib.h"
-//	}
+	}
 };
 
 #endif	// INC_INCJPGLIB
