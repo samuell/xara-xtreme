@@ -1665,7 +1665,7 @@ enum UnTokenIndex
 static UnTokenIndex FindToken(const TCHAR* Token)
 {
 	for (INT32 i = 0; i < UnNUM_TOKENS; i++)
-		if (lstrcmp(TokenTable[i].Token,Token) == 0) return (UnTokenIndex) i;
+		if (camStrcmp(TokenTable[i].Token,Token) == 0) return (UnTokenIndex) i;
 
 	return UnTOKEN_NONE;
 }
@@ -1788,9 +1788,9 @@ BOOL DocUnitList::ReadUnitsFromRes()
 void DocUnitList::OutputTrace( char *err, const TCHAR *TokenBuf )
 {
 #if 0 != wxUSE_UNICODE
-	size_t				cch = mbstowcs( NULL, err, 0 ) + 1;
+	size_t				cch = camMbstowcs( NULL, err, 0 ) + 1;
 	wchar_t			   *pwsz = (wchar_t *)alloca( cch * 2 );
-	mbstowcs( pwsz, err, cch );
+	camMbstowcs( pwsz, err, cch );
 	
 	TRACE( pwsz );
 #else
@@ -1826,7 +1826,7 @@ BOOL DocUnitList::ReadLong(CCLexFile& file,void* pLong,char* err)
 	const TCHAR		   *TokenBuf = file.GetTokenBuf();
 	BOOL ok = file.GetSimpleToken();
 	if (ok)
-		ok = ( _stscanf( TokenBuf, _T("%li"), pLong ) == 1 );
+		ok = ( camSscanf( TokenBuf, _T("%li"), pLong ) == 1 );
 
 	if (!ok)
 		OutputTrace( err, TokenBuf );
@@ -1858,7 +1858,7 @@ BOOL DocUnitList::ReadDouble(CCLexFile& file,double* pDouble,char* err)
 	const TCHAR		    *TokenBuf = file.GetTokenBuf();
 	BOOL				ok = file.GetSimpleToken();
 	if (ok)
-		ok = ( _stscanf( TokenBuf, _T("%lg"), pDouble ) == 1 );
+		ok = ( camSscanf( TokenBuf, _T("%lg"), pDouble ) == 1 );
 
 	if (!ok)
 		OutputTrace( err, TokenBuf );

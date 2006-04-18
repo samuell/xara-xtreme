@@ -160,7 +160,7 @@ PORTNOTE("other","Removed GetProfileString usage")
 	// Convert the string into a number that the string represents which we
 	// can then return to the caller.
 	TCHAR* pszMark;
-	*DecimalPlaces = tcstol( TS, &pszMark, 10 );
+	*DecimalPlaces = camStrtol( TS, &pszMark, 10 );
 }
 
 /********************************************************************************************

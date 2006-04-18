@@ -2899,7 +2899,7 @@ MsgResult GridInfoBarOp::Message(Msg* Message)
 							if (Index < 0)
 							{
 								String_32 StrVal = GetStringGadgetValue(_R(IDC_DIVISIONS),&Valid); 
-								_stscanf((TCHAR*)StrVal,"%NLf",&Div);
+								camSscanf((TCHAR*)StrVal,"%NLf",&Div);
 							}
 							else
 								Div = Index+1;
@@ -2932,7 +2932,7 @@ MsgResult GridInfoBarOp::Message(Msg* Message)
 							if (Index < 0)
 							{
 								String_32 StrVal = GetStringGadgetValue(_R(IDC_SUBDIVISIONS),&Valid); 
-								_stscanf((TCHAR*)StrVal,"%ld",&Subdiv);
+								camSscanf((TCHAR*)StrVal,"%ld",&Subdiv);
 							}
 							else
 								Subdiv = Index+1;
@@ -3264,11 +3264,11 @@ void GridInfoBarOp::DisplayGridInfo(double Divisions, UnitType Units, UINT32 Sub
 	String_16 StringVal;
 	TCHAR CharString[20];
 
-	_stprintf(CharString, "%.2g", (double) Divisions);
+	camSprintf(CharString, _T("%.2g"), (double) Divisions);
 	StringVal = CharString;
 	SetStringGadgetValue(_R(IDC_DIVISIONS), &StringVal, FALSE, -1);
 
-	wsprintf(CharString, TEXT("%ld"), (INT32) Subdivisions);
+	camSprintf(CharString, _T("%ld"), (INT32) Subdivisions);
 	StringVal = CharString;
 	SetStringGadgetValue(_R(IDC_SUBDIVISIONS), &StringVal, FALSE,-1);
 }

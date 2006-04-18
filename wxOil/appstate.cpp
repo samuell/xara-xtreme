@@ -477,7 +477,7 @@ BOOL SaveAppWindowState(BOOL fAutoRestart)
 		TCHAR szAutoCmd[_MAX_PATH * 2];
 		::wsprintf(szAutoCmd, TEXT("%s /Restore"), (LPCTSTR) szCamelotExePath);
 		SetRegValue(hRunOnceKey, szCamelotAppRegistryID, REG_SZ,
-					szAutoCmd, ::lstrlen(szAutoCmd));
+					szAutoCmd, ::camStrlen(szAutoCmd));
 		CloseRegKey(hRunOnceKey);
 
 		// If there's a status line then set it.

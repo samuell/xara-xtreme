@@ -282,7 +282,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
@@ -294,30 +294,30 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (_tcsncmp(Buffer, "%%Creator: Adobe Illustrator(TM) 5", 34) == 0)
+				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(TM) 5", 34) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
 					return 10;
 				}
 
-				if (_tcsncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (_tcsstr(Buffer, "Illustrator(TM) 5") != NULL)
+					if (camStrstr(Buffer, "Illustrator(TM) 5") != NULL)
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// we'll accept version 7.0 as well
-					else if ((_tcsstr(Buffer, "Illustrator(TM) 7") != NULL) ||
-							 (_tcsstr(Buffer, "Illustrator(R) 7") != NULL))
+					else if ((camStrstr(Buffer, "Illustrator(TM) 7") != NULL) ||
+							 (camStrstr(Buffer, "Illustrator(R) 7") != NULL))
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// Catch FreeHand generated EPS files.
-					else if (_tcsstr(Buffer, "FreeHand") != NULL)
+					else if (camStrstr(Buffer, "FreeHand") != NULL)
 					{
 						HeaderFile.close();
 						return 8;
@@ -328,7 +328,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 					break;
 			}
 
@@ -342,7 +342,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -423,7 +423,7 @@ void AI5EPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (AI5Commands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, AI5Commands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, AI5Commands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = AI5Commands[i].Cmd;
@@ -940,7 +940,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 {
 	BOOL ok = TRUE;
 
-	if (_tcsncmp(TokenBuf, "%AI5_BeginGradient", 18) == 0)
+	if (camStrncmp(TokenBuf, "%AI5_BeginGradient", 18) == 0)
 	{
 		ENSURE(!mbReadingGradFill, "Already reading a grad fill!");
 
@@ -969,7 +969,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 		// Put the token back onto the input stream to allow the caller to use it.
 		EPSFile->UngetToken();
 	}
-	else if (_tcsncmp(TokenBuf, "%AI5_EndGradient", 16) == 0)
+	else if (camStrncmp(TokenBuf, "%AI5_EndGradient", 16) == 0)
 	{
 		ENSURE(mbReadingGradFill, "Not reading a grad fill!");
 
@@ -981,7 +981,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 
 		return ok;
 	}
-	else if (_tcsncmp(TokenBuf, _T("%AI5_BeginRaster"), 16) == 0)
+	else if (camStrncmp(TokenBuf, _T("%AI5_BeginRaster"), 16) == 0)
 	{
 		ENSURE(!mbReadingBitmap, "Already reading a bitmap!");
 
@@ -1006,7 +1006,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 		// All done - don't pass this on to document components.
 		return ok;
 	}
-	else if (_tcsncmp(TokenBuf, _T("%AI5_EndRaster"), 14) == 0)
+	else if (camStrncmp(TokenBuf, _T("%AI5_EndRaster"), 14) == 0)
 	{
 		ENSURE(mbReadingBitmap, "Not reading a bitmap!");
 
@@ -1023,7 +1023,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 
 		return ok;
 	}
-	else if (_tcsncmp(TokenBuf, _T("%AI8_BeginMesh"), 14) == 0)
+	else if (camStrncmp(TokenBuf, _T("%AI8_BeginMesh"), 14) == 0)
 	{
 		/////////////////
 		// completely ignore the mesh definition 'cos it isn't in the current documentation
@@ -1033,11 +1033,11 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 		{
 			GetToken();
 		}
-		while ((_tcsncmp(TokenBuf, _T("%AI8_EndMesh"), 12) != 0) && (!EPSFile->eof()));
+		while ((camStrncmp(TokenBuf, _T("%AI8_EndMesh"), 12) != 0) && (!EPSFile->eof()));
 
 		return TRUE;
 	}
-	else if ( _tcsncmp ( TokenBuf, _T ( "%AI3_BeginPattern" ), 17 ) == 0 )
+	else if ( camStrncmp ( TokenBuf, _T ( "%AI3_BeginPattern" ), 17 ) == 0 )
 	{
 /*		// Get the fillname - we need this to get the rest of the fill details.
 		String_64 PatternName;
@@ -1051,19 +1051,19 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 */
 		return TRUE;
 	}
-	else if ( _tcsncmp ( TokenBuf, _T( "%AI3_EndPattern" ), 15 ) == 0 )
+	else if ( camStrncmp ( TokenBuf, _T( "%AI3_EndPattern" ), 15 ) == 0 )
 	{
 		// NOP for now.
 		INT32 NOP = 0;
 		return TRUE;
 	}
-	else if ( _tcsncmp ( TokenBuf, _T ( "%AI6_BeginPatternLayer" ), 22 ) == 0 )
+	else if ( camStrncmp ( TokenBuf, _T ( "%AI6_BeginPatternLayer" ), 22 ) == 0 )
 	{
 		// NOP for now.
 		INT32 NOP = 0;
 		return TRUE;
 	}
-	else if (_tcsncmp(TokenBuf, _T("%AI6_EndPatternLayer"), 20) == 0)
+	else if (camStrncmp(TokenBuf, _T("%AI6_EndPatternLayer"), 20) == 0)
 	{
 		// NOP for now.
 		INT32 NOP = 0;

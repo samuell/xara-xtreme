@@ -232,46 +232,46 @@ void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 
 	UINT32 Tag = pRecord->GetTag();
 	BOOL ok = TRUE;
-	char s[256];
+	TCHAR s[256];
 	INT32 RecordNumber = pRecord->GetRecordNumber();
 	switch (Tag)
 	{
 		case TAG_DEFINERGBCOLOUR:
 		{
-			_stprintf(s,"Define simple colour reference %d\r\n\r\n",RecordNumber);
+			canSprintf(s,_T("Define simple colour reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			// Show what the simple RGB colour is
 			BYTE Red = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Red);
-			_stprintf(s,"Red\t= %d\r\n",Red);
+			camSprintf(s,_T("Red\t= %d\r\n"),Red);
 			(*pStr) += s;
 			BYTE Green = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Green);
-			_stprintf(s,"Green\t= %d\r\n",Green);
+			camSprintf(s,_T("Green\t= %d\r\n"),Green);
 			(*pStr) += s;
 			BYTE Blue = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Blue);
-			_stprintf(s,"Blue\t= %d\r\n",Blue);
+			camSprintf(s,_T("Blue\t= %d\r\n"),Blue);
 			(*pStr) += s;
 			break;
 		}
 		
 		case TAG_DEFINECOMPLEXCOLOUR:
 		{
-			_stprintf(s,"Define complex colour reference %d\r\n",RecordNumber);
+			camSprintf(s,_T("Define complex colour reference %d\r\n"),RecordNumber);
 			(*pStr) += s;
 			// Show what the simple RGB colour is
 			BYTE Red = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Red);
-			_stprintf(s,"Red\t= %d\r\n",Red);
+			camSprintf(s,_T("Red\t= %d\r\n"),Red);
 			(*pStr) += s;
 			BYTE Green = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Green);
-			_stprintf(s,"Green\t= %d\r\n",Green);
+			camSprintf(s,_T("Green\t= %d\r\n"),Green);
 			(*pStr) += s;
 			BYTE Blue = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Blue);
-			_stprintf(s,"Blue\t= %d\r\n",Blue);
+			camSprintf(s,_T("Blue\t= %d\r\n"),Blue);
 			(*pStr) += s;
 
 			// read in the colour model
@@ -306,19 +306,19 @@ void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 			String_64 ColName; 
 			if (ok) ok = pRecord->ReadUnicode(&ColName);//ColName, ColName.MaxLength());
 			if (ColName.Length() == 0)
-				(*pStr) += "Unnamed\r\n\r\n";
+				(*pStr) += _T("Unnamed\r\n\r\n");
 			else
 			{
-				(*pStr) += "Colour name:- ";
+				(*pStr) += _T("Colour name:- ");
 				(*pStr) += ColName;
-				(*pStr) += "\r\n\r\n";
+				(*pStr) += _T("\r\n\r\n");
 			}
 			if (ParentColour != 0)
 			{
-				_stprintf(s,"Parent colour reference = %d\r\n",ParentColour);
+				camSprintf(s,_T("Parent colour reference = %d\r\n"),ParentColour);
 				(*pStr) += s;
 			}
-			_stprintf(s,"Entry number in list = %d\r\n\r\n",EntryNumber);
+			camSprintf(s,_T("Entry number in list = %d\r\n\r\n"),EntryNumber);
 			(*pStr) += s;
 
 			// Read the colour components according to the colour model.
@@ -326,43 +326,43 @@ void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 			switch (ColType)
 			{
 				case EXPORT_COLOURTYPE_NORMAL:
-					(*pStr) += "Normal colour\r\n";
+					(*pStr) += _T("Normal colour\r\n");
 					DecodeColour(ColModel, Comp1, Comp2, Comp3, Comp4, Linked, pStr);
 					break;
 				case EXPORT_COLOURTYPE_SPOT:
-					(*pStr) += "Spot colour\r\n";
+					(*pStr) += _T("Spot colour\r\n");
 					DecodeColour(ColModel, Comp1, Comp2, Comp3, Comp4, Linked, pStr);
 					break;
 				case EXPORT_COLOURTYPE_LINKED:
-					(*pStr) += "Linked colour\r\n";
+					(*pStr) += _T("Linked colour\r\n");
 					DecodeColour(ColModel, Comp1, Comp2, Comp3, Comp4, Linked, pStr);
 					break;
 
 				case EXPORT_COLOURTYPE_TINT:
 					{
-						(*pStr) += "Tint colour\r\n";
+						(*pStr) += _T("Tint colour\r\n");
 						FIXED24 Value24 = 0.0;
 						Value24.SetAsFixed24(Comp1);
-						_stprintf(s,"\tTint\t= %f\r\n",Value24.MakeDouble());
+						camSprintf(s,_T("\tTint\t= %f\r\n"),Value24.MakeDouble());
 						(*pStr) += s;
 					}
 					break;
 
 				case EXPORT_COLOURTYPE_SHADE:
 					{
-						(*pStr) += "Shade colour\r\n";
+						(*pStr) += _T("Shade colour\r\n");
 						FIXED24 Value24 = 0.0;
 						Value24.SetAsFixed24(Comp1);
-						_stprintf(s,"\tSaturation\t= %f\r\n",Value24.MakeDouble());
+						camSprintf(s,_T("\tSaturation\t= %f\r\n"),Value24.MakeDouble());
 						(*pStr) += s;
 						Value24.SetAsFixed24(Comp2);
-						_stprintf(s,"\tValue\t= %f\r\n",Value24.MakeDouble());
+						camSprintf(s,_T("\tValue\t= %f\r\n"),Value24.MakeDouble());
 						(*pStr) += s;
 					}
 					break;
 
 				default:
-					(*pStr) += "Unknown type of colour\r\n";
+					(*pStr) += _T("Unknown type of colour\r\n");
 					break;
 			}
 		}
@@ -397,39 +397,39 @@ void ColourRecordHandler::DecodeColour(ColourModel ColModel, UINT32 Comp1, UINT3
 	switch (ColModel)
 	{
 		case COLOURMODEL_RGBT:
-			(*pStr) += "\tRed\t= ";
+			(*pStr) += _T("\tRed\t= ");
 			DecodeComponent(Comp1, Linked, pStr);
-			(*pStr) += "\tGreen\t= ";
+			(*pStr) += _T("\tGreen\t= ");
 			DecodeComponent(Comp2, Linked, pStr);
-			(*pStr) += "\tBlue\t= ";
+			(*pStr) += _T("\tBlue\t= ");
 			DecodeComponent(Comp3, Linked, pStr);
 			break;
 
 		case COLOURMODEL_CMYK:
-			(*pStr) += "\tCyan\t= ";
+			(*pStr) += _T("\tCyan\t= ");
 			DecodeComponent(Comp1, Linked, pStr);
-			(*pStr) += "\tMagenta\t= ";
+			(*pStr) += _T("\tMagenta\t= ");
 			DecodeComponent(Comp2, Linked, pStr);
-			(*pStr) += "\tYellow\t= ";
+			(*pStr) += _T("\tYellow\t= ");
 			DecodeComponent(Comp3, Linked, pStr);
-			(*pStr) += "\tKey\t= ";
+			(*pStr) += _T("\tKey\t= ");
 			DecodeComponent(Comp4, Linked, pStr);
 			break;
 		case COLOURMODEL_HSVT:
-			(*pStr) += "\tHue\t\t= ";
+			(*pStr) += _T("\tHue\t\t= ");
 			DecodeComponent(Comp1, Linked, pStr);
-			(*pStr) += "\tSaturation\t= ";
+			(*pStr) += _T("\tSaturation\t= ");
 			DecodeComponent(Comp2, Linked, pStr);
-			(*pStr) += "\tValue\t\t= ";
+			(*pStr) += _T("\tValue\t\t= ");
 			DecodeComponent(Comp3, Linked, pStr);
 			break;
 
 		case COLOURMODEL_GREYT:
-			(*pStr) += "\tGreyscale\t= ";
+			(*pStr) += _T("\tGreyscale\t= ");
 			DecodeComponent(Comp1, Linked, pStr);
 			break;
 		default:
-			(*pStr) += "\tUnknown colour model\r\n";
+			(*pStr) += _T("\tUnknown colour model\r\n");
 			break;
 	}
 
@@ -454,18 +454,18 @@ void ColourRecordHandler::DecodeColour(ColourModel ColModel, UINT32 Comp1, UINT3
 
 void ColourRecordHandler::DecodeComponent(UINT32 Comp, BOOL Linked, StringBase* pStr)
 {
-	char s[256];
+	TCHAR s[256];
 	// read the Red colour component in
 	FIXED24 LinkValue = FIXED24(-8.0);
 	FIXED24 Value24 = 0.0;
 	Value24.SetAsFixed24(Comp);
 	if (Linked && (Value24 == LinkValue))
 	{
-		(*pStr) += "Inherits\r\n";
+		(*pStr) += _T("Inherits\r\n");
 	}
 	else
 	{
-		_stprintf(s,"%f\r\n",Value24.MakeDouble());
+		camSprintf(s,_T("%f\r\n"),Value24.MakeDouble());
 		(*pStr) += s;
 	}
 }

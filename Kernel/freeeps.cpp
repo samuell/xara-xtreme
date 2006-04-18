@@ -360,7 +360,7 @@ void FreeHandEPSFilter::CleanUpAfterImport(BOOL Successful)
 INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -388,14 +388,14 @@ INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// Return TRUE if this file was created by Illustrator, or has been exported in 
 		// Illustrator format.
-		if (_tcsncmp(Buffer, "%%Creator: ", 11) == 0 && strstr(Buffer, "FreeHand") != 0)
+		if (camStrncmp(Buffer, "%%Creator: ", 11) == 0 && strstr(Buffer, "FreeHand") != 0)
 		{
 			// found a plausible creator string - but it could be any version
 			// (3.0 for the Mac gives it's version number here, but the PC one doesn't)
 			HaveCreatorString = TRUE;
 		}
 
-		if (_tcsncmp(Buffer, "%%DocumentProcSets: FreeHand_header 3 ", 38) == 0 && HaveCreatorString)
+		if (camStrncmp(Buffer, "%%DocumentProcSets: FreeHand_header 3 ", 38) == 0 && HaveCreatorString)
 		{
 			// I'll have that then.
 			HeaderFile.close();
@@ -404,7 +404,7 @@ INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -434,7 +434,7 @@ void FreeHandEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (FHCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, FHCommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, FHCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = FHCommands[i].Cmd;
@@ -877,7 +877,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 
 			 		if(EPSFile->GetTokenType() == TOKEN_NORMAL)
 			 		{
-			 			if(_tcscmp(TokenBuf, "spots") == 0)
+			 			if(camStrcmp(TokenBuf, "spots") == 0)
 						{
 							// check to see if the array is about to start
 							if(!EPSFile->GetToken())
@@ -891,7 +891,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 						}
 					}
 				
-					if(_tcsncmp(TokenBuf, "%%EndSetup", 10) == 0)
+					if(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0)
 					{
 						TRACEUSER( "Ben", _T("Met end of setup without finding spots\n"));
 						break;
@@ -923,7 +923,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 
 			 		if(EPSFile->GetTokenType() == TOKEN_COMMENT)
 			 		{
-						if(_tcsncmp(TokenBuf, "%%EndSetup", 10) == 0)
+						if(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0)
 						{
 							TRACEUSER( "Ben", _T("Found end of setup\n"));
 							Found = TRUE;
@@ -1077,7 +1077,7 @@ BOOL FreeHandEPSFilter::DiscardFillSubType()
 			String_64 Str;
 			if(!Stack.Pop(&Str))
 				return FALSE;
-			if(_tcscmp(Str, "{") == 0)
+			if(camStrcmp(Str, "{") == 0)
 				Done = TRUE;		// found end of this bit
 		}
 		else

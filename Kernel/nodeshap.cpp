@@ -323,10 +323,10 @@ void NodeSimpleShape::GetDebugDetails( StringBase* Str )
 		
 	(*Str) += TEXT( "\r\nEllipse Path Data Dump\r\n" );
 
-	TempStr._MakeMsg( TEXT(	"Parallelogram :-\r\n\t#1%ld,\t#2%ld\r\n"
-							"\t#3%ld,\t#4%ld\r\n"
-							"\t#5%ld,\t#6%ld\r\n"
-							"\t#7%ld,\t#8%ld\r\n"),
+	TempStr._MakeMsg( TEXT(	"Parallelogram :-\r\n\t#1%ld,\t#2%ld\r\n")
+						TEXT("\t#3%ld,\t#4%ld\r\n")
+						TEXT("\t#5%ld,\t#6%ld\r\n")
+						TEXT("\t#7%ld,\t#8%ld\r\n"),
 						Parallel[0].x, Parallel[0].y,
 						Parallel[1].x, Parallel[1].y,
 						Parallel[2].x, Parallel[2].y,

@@ -286,7 +286,7 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 	{
 		Message = KM_KEYUP;
 	}
-#pragma message( __LOCMSG__ _T("Removed Windows IME usage") )
+#pragma message( __LOCMSG__ "Removed Windows IME usage" )
 /*	case WM_IME_CHAR:
 		TRACE( _T("IME\n"));
 		break; */
@@ -316,7 +316,7 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 			return;
 		}
 		
-#pragma message( __LOCMSG__ _T("Removed NameGallery usage") )
+#pragma message( __LOCMSG__ "Removed NameGallery usage" )
 #if 0
 		RepeatCount = KeyData & 0xffff;
 		ScanCode	= (KeyData >> 16) & 0xff;
@@ -420,7 +420,7 @@ BOOL KeyPress::Init()
 
 BOOL KeyPress::DispatchKeyEvent(UINT32 nMsgID, UINT32 nChar, UINT32 nRepCnt, UINT32 nFlags)
 {
-#pragma message( __LOCMSG__ _T("BaseTextClass::PreOpProcessing - do nothing") )
+#pragma message( __LOCMSG__ "BaseTextClass::PreOpProcessing - do nothing" )
 	TRACE( _T("Warning - BaseTextClass::PreOpProcessing called") );
 /*	// For compatibility with existing code we must repackage the unpacked message.
 	// NB. the RHS of the lParam expression will work for Win16 as well.
@@ -1319,7 +1319,7 @@ BOOL KeyPress::IsGalleryCtrlPressed(void)
 
 BOOL KeyPress::IsEscapePressed()
 {
-#pragma message( __LOCMSG__ _T("KeyPress::IsEscapePressed - do nothing") )
+#pragma message( __LOCMSG__ "KeyPress::IsEscapePressed - do nothing" )
 //	TRACE( _T("Warning - KeyPress::IsEscapePressed called") );
 /*	BOOL EscapePressed = (GetAsyncKeyState(CAMKEY(ESCAPE)) != 0);
 	BOOL Pressed       = EscapePressed || (GetAsyncKeyState(CAMKEY(CANCEL)) != 0);
@@ -1553,7 +1553,7 @@ BOOL KeyPress::GenerateCharMessage(wxKeyEvent* pMsg)
 					// Only post the ASCII value if one's been specified via the Num key pad
 					// (i.e. the value >= 0)
 			 		//TRACE( _T("-*-*-*-- Posting WM_CHAR. Val = %ld\n"),KeyPress::AsciiVal);
-#pragma message( __LOCMSG__ _T("Removed PostMessage usage - WM_CHAR from ascii code") )
+#pragma message( __LOCMSG__ "Removed PostMessage usage - WM_CHAR from ascii code" )
 //					Processed = ::PostMessage(pMsg->hwnd,WM_CHAR,KeyPress::AsciiVal % 256,1);
 				}
 				//TRACE( _T("-*-*-*-- (keyup) Invalidating ascii val. Val = %ld\n"),KeyPress::AsciiVal);
@@ -1795,7 +1795,7 @@ void KeyPress::RemoveVirtualKeyCode(UINT32 VCode, WCHAR Unicode)
 
 void KeyPress::DumpKeyMessage(wxKeyEvent* pMsg)
 {
-#pragma message( __LOCMSG__ _T("KeyPress::DumpKeyMessage - do nothing") )
+#pragma message( __LOCMSG__ "KeyPress::DumpKeyMessage - do nothing" )
 	TRACE( _T("Warning - KeyPress::DumpKeyMessage called") );
 /*	//if (!IsUserName("Markn")) return;
 

@@ -1321,7 +1321,7 @@ BOOL DownloadCache::SetSize(UINT32 lSize)
 
 	TCHAR szDrive[_MAX_DRIVE + 1];
 	_tsplitpath(m_strCachePath, szDrive, NULL, NULL, NULL);
-	lstrcat(szDrive, _T("\\"));
+	camStrcat(szDrive, _T("\\"));
 
 	// Get pointer to the GetDiskFreeSpaceEx function if it exists on this platform...
 	BOOL fResult = FALSE;
@@ -1499,7 +1499,7 @@ void DownloadCache::Refresh()
 			return TRUE; // the directory is empty
 		do
 		{
-			if (!(_tcscmp(findData.name, _T(".")) &&  _tcscmp(findData.name, _T(".."))))
+			if (!(camStrcmp(findData.name, _T(".")) &&  camStrcmp(findData.name, _T(".."))))
 				continue; // skip this directory (.) or its parent (..)
 			String_256 strFilePath(strDirPath);
 			if (strFilePath[strFilePath.Length() -1] != _T('\\'))
@@ -1524,7 +1524,7 @@ void DownloadCache::Refresh()
 					m_CacheData.push(entry);
 					m_lCurrentSize += entry.Size();
 				}
-				else if (!_tcsstr(strFilePath, _T(".txt")))
+				else if (!camStrstr(strFilePath, _T(".txt")))
 					RemoveFile(strFilePath);
 			}
 		}
@@ -1552,7 +1552,7 @@ void DownloadCache::Refresh()
  	 strPath.toLower();
 	 String_256 cachePath(m_strCachePath);
 	 cachePath.toLower();
-	 return (_tcsstr(strPath, cachePath)) ? TRUE : FALSE;
+	 return (camStrstr(strPath, cachePath)) ? TRUE : FALSE;
  }
 
  
@@ -1583,7 +1583,7 @@ void DownloadCache::Refresh()
 		switch (errno)
 		{
 			case ENOENT:
-				lstrcpy(szError, "path not found (ENOENT)");
+				camStrcpy(szError, "path not found (ENOENT)");
 				break;
 			default:
 				wsprintf(szError, "errno = %d", errno);
@@ -1683,10 +1683,10 @@ void DownloadCache::Refresh()
 			switch (errno)
 			{
 				case EACCES:
-					lstrcpy(szError, "access denied (EACCES)");
+					camStrcpy(szError, "access denied (EACCES)");
 					break;
 				case ENOENT:
-					lstrcpy(szError, "path not found (ENOENT)");
+					camStrcpy(szError, "path not found (ENOENT)");
 					break;
 				default:
 					wsprintf(szError, "errno = %d", errno);
@@ -1752,7 +1752,7 @@ void DownloadCache::Refresh()
 			return nRetValue;
 		}
 		m_CacheData.push(entry); // push the new file entry on the cache data stack
-		_tcscpy(entry.szFilePath, strOldName); 
+		camStrcpy(entry.szFilePath, strOldName); 
 		RemoveEntry(entry); // remove old entry
 	}
 #ifdef _DEBUG
@@ -1763,10 +1763,10 @@ void DownloadCache::Refresh()
 		switch (errno)
 		{
 			case EACCES:
-				lstrcpy(szError, "file already exists or could not be created (EACCES)");
+				camStrcpy(szError, "file already exists or could not be created (EACCES)");
 				break;
 			case ENOENT:
-				lstrcpy(szError, "path not found (ENOENT)");
+				camStrcpy(szError, "path not found (ENOENT)");
 				break;
 			default:
 				wsprintf(szError, "errno = %d", errno);
@@ -1951,7 +1951,7 @@ void DownloadCache::CacheMonitor::OnCacheEvent()
 ********************************************************************************************/
 CacheEntry::CacheEntry(const String_256& strPath)
 {
-	_tcscpy(szFilePath, strPath);
+	camStrcpy(szFilePath, strPath);
 	if (m_bIsValid = (!_tstat(szFilePath, &m_FileStat))) 
 	{
 		String_256 strFilePath(strPath);
@@ -1978,11 +1978,11 @@ CacheEntry::CacheEntry(const String_256& strPath)
 				String_256 strTypePath(appDataPath.GetLocation(TRUE)); // path of files of type rgTypes[i]
 				strTypePath += strCacheSubdir;
 				strTypePath.toLower();
-				if (_tcsstr(strFilePath, strTypePath))
+				if (camStrstr(strFilePath, strTypePath))
 					break;
 			}
 			// is the file a thumbnail?
-			BOOL bIsThumb = (_tcsstr(strFilePath, _T("xarainfo"))) && (filePath.GetType() == _T("png"));
+			BOOL bIsThumb = (camStrstr(strFilePath, _T("xarainfo"))) && (filePath.GetType() == _T("png"));
 			switch (nLibType)
 			{
 				case SGLib_ClipArt:
@@ -2167,7 +2167,7 @@ DOWNLOAD_HANDLE InternetManager::RegisterDownload(LPDOWNLOADINFO pDownloadInfo)
 
 	DOWNLOAD_HANDLE handle = m_NextHandle;
 	m_NextHandle++;
- 	if (_tcsstr((TCHAR*) pDownloadInfo->strURL, _T("file://")))
+ 	if (camStrstr((TCHAR*) pDownloadInfo->strURL, _T("file://")))
 	{
 		PathNameEx(pDownloadInfo->strLocalFile).CreateLocation();
 #ifdef UNICODE
@@ -2736,13 +2736,13 @@ bool InternetManager::GetProxyServer(SERVENT* pProxyEntry, bool* pbProxyEnabled)
 		String_256 ProxyServer;
 		BOOL ok = GetRegString(hKey, TEXT("ProxyServer"), &ProxyServer);
 		if (ok)
-			_tcscpy(szProxy, (TCHAR*)ProxyServer);
+			camStrcpy(szProxy, (TCHAR*)ProxyServer);
 		*pbProxyEnabled = GetRegBool(hKey, TEXT("ProxyEnable")) == TRUE;
 		CloseRegKey(hKey);
 	}
 
 	// If the string is blank then the proxy must be off
-	if (!lstrlen(szProxy))
+	if (!camStrlen(szProxy))
 	{
 		*pbProxyEnabled = false;
 		return true;
@@ -2750,9 +2750,9 @@ bool InternetManager::GetProxyServer(SERVENT* pProxyEntry, bool* pbProxyEnabled)
 
 	String_256 strHost, strPort;
 	TCHAR tchBuff[_MAX_PATH];
-	_tcscpy(tchBuff, szProxy);
+	camStrcpy(tchBuff, szProxy);
 	TCHAR* lpszTemp = NULL;
-	lpszTemp = _tcsstr(tchBuff, _T("http="));
+	lpszTemp = camStrstr(tchBuff, _T("http="));
 	if (lpszTemp != NULL)
 	{
 		strHost = _tcstok((lpszTemp + 5), _T(":"));
@@ -2763,13 +2763,13 @@ bool InternetManager::GetProxyServer(SERVENT* pProxyEntry, bool* pbProxyEnabled)
 		strHost = _tcstok(tchBuff, _T(":"));
 		strPort = _tcstok(NULL, _T(";"));
 	}
-	if (!lstrlen(strHost) || !lstrlen(strPort))
+	if (!camStrlen(strHost) || !camStrlen(strPort))
 	{
 		*pbProxyEnabled = false;
 		return true;
 	}
 
-	lstrcpy(pProxyEntry->s_name, strHost);
+	camStrcpy(pProxyEntry->s_name, strHost);
 	pProxyEntry->s_port = (unsigned short) atoi(strPort);
 	return true;
 }

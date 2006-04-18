@@ -2158,7 +2158,7 @@ BOOL LibraryGallery::ActuallyAddGRMGroups(/*SGLibType LibType*/ List *TypeList, 
 				//>> webster (Adrian 3/01/96)
 				// Check if the catalog file still exists and is accessible - the web clipart folder
 				// might have been deleted in the meantime - in which case we'll skip it
-				BOOL bIsWebFolder = (_tcsstr((TCHAR*) Entry, (TCHAR*) strWebFoldersPath) != NULL);
+				BOOL bIsWebFolder = (camStrstr((TCHAR*) Entry, (TCHAR*) strWebFoldersPath) != NULL);
 				// BUT if it is a CD based folder and the CD ROM is not present then this test will fail.
 				// This is very very very bad. We need to only check this if we are in the web case.
 				// Otherwise, if the user opens the gallery without the CD ROM present, they loose all their

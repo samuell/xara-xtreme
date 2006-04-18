@@ -1034,7 +1034,7 @@ PORTNOTE("byteorder", "TODO: Check byte order")
 	if (pStr == NULL)
 		return FALSE;
 
-	size_t len = _tcslen(pStr);
+	size_t len = camStrlen(pStr);
 
 #ifdef UNICODE
 	// pStr points to a Unicode string, so just write it out
@@ -1072,7 +1072,7 @@ BOOL CXaraFile::WriteASCII(TCHAR* pStr)
 	if (pStr == NULL)
 		return FALSE;
 
-	UINT32 len = _tcslen(pStr);
+	UINT32 len = camStrlen(pStr);
 
 #ifdef UNICODE
 	// Writing a Unicode string at pStr as an ASCII string

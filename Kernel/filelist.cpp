@@ -240,7 +240,7 @@ OpState FileListOp::GetState(String_256* Title, OpDescriptor* pOp)
 	// Get the first 2 chars of the opdescriptors description as this holds the
 	// file number of the recent file.
 	TCHAR FileNum[3];
-	_tcsncpy(FileNum, pOp->Token, 2);
+	camStrncpy(FileNum, pOp->Token, 2);
 	FileNum[2] = 0;
 
 	// make sure that it contains digits.
@@ -248,7 +248,7 @@ OpState FileListOp::GetState(String_256* Title, OpDescriptor* pOp)
 	{
 		// Find out which number was chosen
 		TCHAR *pszMark;
-		INT32 Index = tcstol( FileNum, &pszMark, 10 );
+		INT32 Index = camStrtol( FileNum, &pszMark, 10 );
 		
 		// Only the first 'MaxFileListSize' items will appear
 		if (Index > MaxFileListSize)
@@ -290,7 +290,7 @@ void FileListOp::Do(OpDescriptor* pOpDesc)
 	// file number of the recent file.
 	TCHAR FileNum[3];
 	BOOL WorkedOK = FALSE;
-	_tcsncpy(FileNum, pOpDesc->Token, 2);
+	camStrncpy(FileNum, pOpDesc->Token, 2);
 	FileNum[2] = 0;
 
 	// make sure that it contains digits.
@@ -298,7 +298,7 @@ void FileListOp::Do(OpDescriptor* pOpDesc)
 	{
 		// Find out which number was chosen
 		TCHAR *pszMark;
-		INT32 RecentFileNum = tcstol( FileNum, &pszMark, 10 );
+		INT32 RecentFileNum = camStrtol( FileNum, &pszMark, 10 );
 
 		// Ask the app to load the file specified (it will look up the file name etc)
 		WorkedOK = AfxGetApp().OnRecentFile(RecentFileNum-1);

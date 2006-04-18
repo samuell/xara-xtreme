@@ -1797,7 +1797,7 @@ void EPSRenderRegion::ExportPath(Path *DrawPath, BOOL DataOnly, BOOL PureDataOnl
 	}
 
 	// make closed varity of PathType
-	PathTypeClosed[0] = _totlower(PathTypeOpen[0]);
+	PathTypeClosed[0] = camTolower(PathTypeOpen[0]);
 	PathTypeClosed[1] = '\0';
 
 	// Reset to start of path
@@ -2704,7 +2704,7 @@ BOOL EPSExportDC::OutputToken(TCHAR *Str)
 	}
 
 	// Write the token out to the file
-	INT32 Len = cc_strlenBytes(Str);
+	INT32 Len = camStrlen(Str);
 	if (ExportFile->write(Str, Len).fail())
 		// Error
 		return FALSE;

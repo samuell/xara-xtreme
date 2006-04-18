@@ -403,7 +403,7 @@ void GRenderBrush::DrawToScreenNow()
 					else
 					{
 						TRACEUSER( "ChrisS", _T("%i, "), fps);
-						//TextOut (DeviceHdc, 0, 0, data, lstrlen (data));
+						//TextOut (DeviceHdc, 0, 0, data, camStrlen (data));
 						startCount = 0;
 						fps = 0;
 					}

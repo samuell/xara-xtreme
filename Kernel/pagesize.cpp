@@ -157,7 +157,7 @@ static struct
 static PsTokenIndex FindToken(const TCHAR* Token)
 {
 	for (INT32 i = 0; i < PsNUM_TOKENS; i++)
-		if (lstrcmp(TokenTable[i].Token,Token) == 0) return  (PsTokenIndex) i;
+		if (camStrcmp(TokenTable[i].Token,Token) == 0) return  (PsTokenIndex) i;
 
 	return PsTOKEN_NONE;
 }
@@ -898,7 +898,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 						// Read that text into the name of the page as this is the only 
 						// string that is expected
 						// Make sure the desccription is not too long and there is one
-						INT32 length = lstrlen(TokenBuf); 
+						INT32 length = camStrlen(TokenBuf); 
 						ok = ((length <= pPageName->MaxLength()) && (length > 0) );
 
 						if (ok)
@@ -944,7 +944,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 									//ok = Convert::StringToDouble( &Value, &Number);
 									// Could use this but is not unicode compliant!
 									//Number = atof((char *)TokenBuf);
-									ok = (_stscanf(TokenBuf,"%lg",&Number) == 1);
+									ok = (camSscanf(TokenBuf,"%lg",&Number) == 1);
 									if (ok)
 									{
 										if (!ReadWidth)
@@ -954,7 +954,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 										}
 										else
 										{
-											//ok = (_stscanf(TokenBuf,"%g",pHeight) == 1);
+											//ok = (camSscanf(TokenBuf,"%g",pHeight) == 1);
 											*pHeight = Number;
 										}
 									}

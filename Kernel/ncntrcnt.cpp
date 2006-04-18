@@ -250,7 +250,7 @@ NodeContourController::~NodeContourController()
 	if (myContourID > -1)
 	{
 		TCHAR			strId[100];
-		tsprintf( strId, 100, _T("Popping NodeContourController ID:  %i\n"), myContourID );
+		camSnprintf( strId, 100, _T("Popping NodeContourController ID:  %i\n"), myContourID );
 			
 		TRACEUSER( "ChrisS", strId );
 	}

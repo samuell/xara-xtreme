@@ -255,7 +255,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
@@ -267,7 +267,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (_tcsncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
+				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
 				{
 					// We definitely want this.
 		 			HeaderFile.close();
@@ -275,7 +275,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				}
 
 				// Another variation on the Illustrator theme
-				if (_tcsncmp(Buffer, "%%Creator: AI", 13) == 0)
+				if (camStrncmp(Buffer, "%%Creator: AI", 13) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
@@ -283,7 +283,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				}
 
 				// yet another variation (see cru_logo.eps for this one)
-				if (_tcsncmp(Buffer, "%%Creator: ps2ai.ps", 19) == 0)
+				if (camStrncmp(Buffer, "%%Creator: ps2ai.ps", 19) == 0)
 				{
 					HeaderFile.close ();
 					return 9;
@@ -291,10 +291,10 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If there is a creator field, see if it mentions Illustrator
 				// NOTE: this test must be the last one of the "Creator:" tests.
-				if (_tcsncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (_tcsstr(Buffer, "Illustrator") != NULL)
+					if (camStrstr(Buffer, "Illustrator") != NULL)
 					{
 						HeaderFile.close();
 						return 9;
@@ -305,7 +305,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 					break;
 			}
 
@@ -319,7 +319,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -401,7 +401,7 @@ void AIEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (AICommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, AICommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, AICommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = AICommands[i].Cmd;
@@ -1023,7 +1023,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
@@ -1035,7 +1035,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (_tcsncmp(Buffer, "%%Creator: Adobe Photoshop", 26) == 0)
+				if (camStrncmp(Buffer, "%%Creator: Adobe Photoshop", 26) == 0)
 				{
 					// We definitely want this.
 		 			HeaderFile.close();
@@ -1044,7 +1044,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 					break;
 			}
 
@@ -1058,7 +1058,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 

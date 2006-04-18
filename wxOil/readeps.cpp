@@ -161,9 +161,9 @@ void ReadEPSData(char *FileName, Node *Parent, DocRect& PageRect, BOOL AddAttrs)
 	 
 	// Use this location to construct the full pathname for EPS file
 	char FullFileName[_MAX_PATH];
-	_tcscpy(FullFileName, Drive);
-	_tcscat(FullFileName, Dir);
-	_tcscatl(FullFileName, FileName);
+	camStrcpy(FullFileName, Drive);
+	camStrcat(FullFileName, Dir);
+	camStrcatl(FullFileName, FileName);
 	
 	// Array to hold coords that are read in from the file.
 	DocCoord Coords[4];

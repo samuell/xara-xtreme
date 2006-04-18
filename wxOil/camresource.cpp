@@ -282,7 +282,7 @@ public:
 		pCamResourceFixNameEntry * pPoint = &(pArray[h]);
 		while (*pPoint)	// while we have a valid pointer to a "next" item
 		{
-			if (!lstrcmp( (*pPoint)->MapFrom, from ) ) return ( (*pPoint)->MapTo );
+			if (!camStrcmp( (*pPoint)->MapFrom, from ) ) return ( (*pPoint)->MapTo );
 			pPoint = &((*pPoint)->pNext);
 		}
 
@@ -411,7 +411,7 @@ so we remember a list of these, then blat them out back through GetResourceID du
 
 void CamResource::RememberDuringStaticInit(const TCHAR * ObjectName)
 {
-	TCHAR * text = _tcsdup(ObjectName);
+	TCHAR * text = camStrdup(ObjectName);
 	if (!text) return;	// we can't error, we can't trace, so meekly forget it
 	CamResourceRemember * pRem = new CamResourceRemember;
 	if (!pRem) return;	// we can't error, we can't trace, so meekly forget it
@@ -474,7 +474,7 @@ void CamResource::AddStringResource(const TCHAR * name, const TCHAR * text, Reso
 		}
 		else
 		{
-			const TCHAR * tcopy = _tcsdup(text);
+			const TCHAR * tcopy = camStrdup(text);
 			(*pHash)[r] = tcopy;
 
 			const TCHAR * t = GetText(r);
@@ -951,14 +951,14 @@ BOOL CamResource::AddBitmaps(wxString &Path)
 	
 	//			TRACE(_T("Loading bitmap %s"),fn.c_str());
 				if (LoadwxImage(*pBitmap, LeafName))
-					(*pBitmapHash)[_tcsdup(LeafName.c_str())]=pBitmap;
+					(*pBitmapHash)[camStrdup(LeafName.c_str())]=pBitmap;
 				else
 				{
 					ERROR3_PF((_T("Could not load bitmap %s"),fn.c_str()));
 					delete pBitmap;
 				}
 #else
-				(*pBitmapHash)[_tcsdup(LeafName.c_str())]=NULL; // Mark as there, but needs to be loaded
+				(*pBitmapHash)[camStrdup(LeafName.c_str())]=NULL; // Mark as there, but needs to be loaded
 #endif
 			}
 		}
@@ -1185,7 +1185,7 @@ void CamResource::MakeVariantBitmaps(ResourceStringToBitmap::iterator * it)
 										ERROR3("Unsupported automatic variant");
 										break;
 								}
-								NewHash[_tcsdup(gfn.c_str())] = pBitmap;
+								NewHash[camStrdup(gfn.c_str())] = pBitmap;
 							}
 						}	
 					}
@@ -2204,9 +2204,9 @@ BOOL CamResource::LoadwxBitmap (wxBitmap & rBitmap, const TCHAR * pFileName, BOO
 #else
 		// GNU\Linux seems to have no unicode filesystem name support, so we
 		// just get on and do the needed conversion as efficiently as possible
-		size_t				cchTmp = wcstombs( NULL, strRes.c_str(), 0 ) + 1;
+		size_t				cchTmp = camWcstombs( NULL, strRes.c_str(), 0 ) + 1;
 		PSTR				pszTmp = PSTR( alloca( cchTmp ) );
-		wcstombs( pszTmp, strRes.c_str(), cchTmp );
+		camWcstombs( pszTmp, strRes.c_str(), cchTmp );
 	
 		FILE *fpResFile = fopen( pszTmp, "rb" );
 #endif

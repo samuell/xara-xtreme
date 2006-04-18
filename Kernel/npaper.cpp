@@ -406,8 +406,7 @@ void NodeRenderablePaper::ChangePasteboardRect(const DocRect& PasteRect)
 		{
 			// The root of the tree should be a NodeDocument
 			ENSURE(this->IsKindOf(CC_RUNTIME_CLASS(NodeDocument)),
-				   "When trying to set the document extents no\n"
-				   "NodeDocument node was found at the root of the tree");    
+				   "When trying to set the document extents no\nNodeDocument node was found at the root of the tree");
 			// Set the document extents
 			((NodeDocument*)this)->SetExtents(); 
 		}

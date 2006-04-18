@@ -331,7 +331,7 @@ static BOOL UpdateInstanceVersion(HKEY hkProductKey,
 	{
 		// Write this stuff.
 		SetRegValue(hkProductKey, TEXT("NewestVersion"),
-					REG_SZ, pszThisVersion, ::lstrlen(pszThisVersion) + 1);
+					REG_SZ, pszThisVersion, ::camStrlen(pszThisVersion) + 1);
 		SetRegValue(hkProductKey, TEXT("NewestBuildMajor"),
 					REG_DWORD, &dwThisBuildMajor, sizeof(DWORD));
 		SetRegValue(hkProductKey, TEXT("NewestBuildMinor"),
@@ -464,8 +464,8 @@ BOOL InitRegistry()
 	// Work out the command lines for opening and printing a doc.  These are the app's full path
 	// plus some parameters tagged on the end.
 	TCHAR szOpenCmd[_MAX_PATH + 32];
-	::lstrcpy(szOpenCmd,  szCamelotExePath);
-	::lstrcat(szOpenCmd,  TEXT(" %1"));
+	::camStrcpy(szOpenCmd,  szCamelotExePath);
+	::camStrcat(szOpenCmd,  TEXT(" %1"));
 
 	// Register some shell commands ...
 	HKEY hkShellCmd = CreateRegKey(hkAppID, TEXT("shell"));
@@ -477,7 +477,7 @@ BOOL InitRegistry()
 	ERROR2IF(hkOpenVerb == NULL, FALSE, "Can't create shell/open Subkey");
 	HKEY hkOpenCmd  = CreateRegKey(hkOpenVerb, TEXT("command"));
 	ERROR2IF(hkOpenCmd == NULL, FALSE, "Can't create open/command Subkey");
-	SetRegValue(hkOpenCmd, NULL, REG_SZ, szOpenCmd, ::lstrlen(szOpenCmd) + 1);
+	SetRegValue(hkOpenCmd, NULL, REG_SZ, szOpenCmd, ::camStrlen(szOpenCmd) + 1);
 	CloseRegKey(hkOpenVerb);
 	CloseRegKey(hkOpenCmd);
 */
@@ -488,15 +488,15 @@ BOOL InitRegistry()
 
 	// Build the command-line to print a doc (don't do print registration if this is the viewer).
 	TCHAR szPrintCmd[_MAX_PATH + 32];
-	::lstrcpy(szPrintCmd, szCamelotExePath);
-	::lstrcat(szPrintCmd, TEXT(" /P %1"));
+	::camStrcpy(szPrintCmd, szCamelotExePath);
+	::camStrcat(szPrintCmd, TEXT(" /P %1"));
 
 	// Register the command-line.
 	HKEY hkPrintVerb = CreateRegKey(hkShellCmd, TEXT("print"));
 	ERROR2IF(hkPrintVerb == NULL, FALSE, "Can't create shell/print Subkey");
 	HKEY hkPrintCmd  = CreateRegKey(hkPrintVerb, TEXT("command"));
 	ERROR2IF(hkPrintCmd == NULL, FALSE, "Can't create print/command Subkey");
-	SetRegValue(hkPrintCmd, NULL, REG_SZ, szPrintCmd, ::lstrlen(szPrintCmd) + 1);
+	SetRegValue(hkPrintCmd, NULL, REG_SZ, szPrintCmd, ::camStrlen(szPrintCmd) + 1);
 	CloseRegKey(hkShellCmd);
 	CloseRegKey(hkPrintVerb);
 	CloseRegKey(hkPrintCmd);
@@ -526,7 +526,7 @@ BOOL InitRegistry()
 	// document.  (The viewer has no default doc and can't create new docs).
 //	HKEY hkShellNew = CreateRegKey(hkExtension, TEXT("ShellNew"));
 //	ERROR2IF(hkShellNew == NULL, FALSE, "Can't create ShellNew Subkey");
-//	SetRegValue(hkShellNew, TEXT("FileName"), REG_SZ, szDefDocPath, ::lstrlen(szDefDocPath) + 1);
+//	SetRegValue(hkShellNew, TEXT("FileName"), REG_SZ, szDefDocPath, ::camStrlen(szDefDocPath) + 1);
 //	CloseRegKey(hkShellNew);
 #endif
 
@@ -860,7 +860,7 @@ BOOL SetRegString(HKEY hKey, LPCTSTR lpcszValueName, TCHAR * str)
 	ERROR2IF(lpcszValueName == NULL,FALSE,"SetRegString bad registry key name!");
 	ERROR2IF(str == NULL,FALSE,"SetRegString bad string");
 
-	return SetRegValue(hKey, lpcszValueName, REG_SZ, str, ::lstrlen(str));
+	return SetRegValue(hKey, lpcszValueName, REG_SZ, str, ::camStrlen(str));
 }
 
 

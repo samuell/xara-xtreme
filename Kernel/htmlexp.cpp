@@ -227,7 +227,7 @@ INT32 HTMLExportFilter::Write(TCHAR* pcToWrite, CCLexFile* pfileToWrite, TCHAR* 
 
 	//If we have a file, then write to it
 	if (pfileToWrite)
-		pfileToWrite->write(pcToWrite, _tcslen(pcToWrite));
+		pfileToWrite->write(pcToWrite, camStrlen(pcToWrite));
 
 	//If we have a text buffer, then write to it
 	if (pcBuffer)
@@ -236,14 +236,14 @@ INT32 HTMLExportFilter::Write(TCHAR* pcToWrite, CCLexFile* pfileToWrite, TCHAR* 
 		//buffer ends at the moment.
 		
 		//So find the length of the buffer
-		INT32 lBufLen=_tcslen(pcBuffer);
+		INT32 lBufLen=camStrlen(pcBuffer);
 
 		//And start writing at the NULL character
-		_tcscpy(pcBuffer+lBufLen*sizeof(TCHAR), pcToWrite);
+		camStrcpy(pcBuffer+lBufLen*sizeof(TCHAR), pcToWrite);
 	}
 
 	//So, the number of characters written is equal to the length of the string
-	INT32 lCharsWritten= _tcslen(pcToWrite);
+	INT32 lCharsWritten= camStrlen(pcToWrite);
 
 	//Now, if we should be doing word wrapping
 	if (m_fShouldWordWrap)

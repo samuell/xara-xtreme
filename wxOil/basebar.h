@@ -596,7 +596,7 @@ protected:
 	wxRect HorizontalLargeRect;
 	wxRect VerticalLargeRect;
 
- #pragma message( __LOCMSG__ _T("Removed font members") )
+ #pragma message( __LOCMSG__ "Removed font members" )
 /*	// Font to paint caption
 	wxFont * TitleFont;
 

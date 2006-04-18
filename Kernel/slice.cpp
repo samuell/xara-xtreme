@@ -2951,7 +2951,7 @@ void OpSlice::FailledToExportHTML (const String_256 & file)
 {
 	TCHAR prompt[256];
 	if (!::LoadString( AfxGetResourceHandle(), _R(IDS_FAILED_EXPORT_HTML), prompt, 256 ) )
-		lstrcpy( prompt, "%s?" );								// in case cannot load
+		camStrcpy( prompt, "%s?" );								// in case cannot load
 
 	// fill in the %s field with the filename
 	TCHAR ErrorMsg[512];
@@ -3024,7 +3024,7 @@ BOOL SliceSaveFileDlg::IsValidFilename()
 
 	TCHAR prompt[256];
 	if (!::LoadString( AfxGetResourceHandle(), _R(IDM_OVERWRITE_INJECT), prompt, 256 ) )
-		lstrcpy( prompt, "%s?" );								// in case cannot load
+		camStrcpy( prompt, "%s?" );								// in case cannot load
 
 	// fill in the %s field with the filename
 	TCHAR ErrorMsg[512];

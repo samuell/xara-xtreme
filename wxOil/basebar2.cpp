@@ -361,7 +361,7 @@ BaseBar::BaseBar()
 	LastSmallBarPos.x = LastSmallBarPos.y = -1;
 	
 	// create a bitmap for the drag rendering
-#pragma message( __LOCMSG__ _T("Not using dither pattern") )
+#pragma message( __LOCMSG__ "Not using dither pattern" )
 //  WORD WindowsGray [] = { 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA } ;
 //	BrushBitmap.CreateBitmap (8, 8, 1, 1, (LPSTR) WindowsGray) ;
 	BrushBitmap.Create( 8, 8, 1 );
@@ -496,7 +496,7 @@ void BaseBar::FinishErrorBox()
 
 void BaseBar::SetFormatVariables()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::SetFormatVariables - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::SetFormatVariables - do nothing" )
 	TRACE( _T("Warning - BaseBar::SetFormatVariables called") );
 /*	if (GetMainFrame()->GetDockBar(ParentDockBarType)->IsBigControls())
 		SeparatorWidth = LARGE_SEPARATOR;
@@ -524,7 +524,7 @@ void BaseBar::SetFormatVariables()
 			 
 void BaseBar::CloseCombos()
 {															 
-#pragma message( __LOCMSG__ _T("BaseBar::CloseCombos - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::CloseCombos - do nothing" )
 	TRACE( _T("Warning - BaseBar::CloseCombos called") );
 /*	String_256 ClassNameStr;
 	HWND CurrentChild;
@@ -699,7 +699,7 @@ void  BaseBar::InitFormatRects()
 
 wxRect  BaseBar::GetFormatRect(DockBarType BarType)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::GetFormatRect - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetFormatRect - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetFormatRect called") );
 /*	OILDockingBar* DockBar = GetMainFrame()->GetDockBar(BarType);
  	switch(BarType)
@@ -773,7 +773,7 @@ wxRect  BaseBar::GetFormatRect(DockBarType BarType)
 
 DockBarType BaseBar::IsPointerOverDock(wxPoint point)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::IsPointerOverDock - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::IsPointerOverDock - do nothing" )
 	TRACE( _T("Warning - BaseBar::IsPointerOverDock called") );
 /*	wxRect temp ;
 	OILFixedDockingBar * ParentDockBar;
@@ -822,7 +822,7 @@ wxRect  BaseBar::SetBarSize(DockBarType BarType ,BOOL DoRedraw)
 {
 	wxRect temp;
 
-#pragma message( __LOCMSG__ _T("BaseBar::SetBarSize - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::SetBarSize - do nothing" )
 	TRACE( _T("Warning - BaseBar::SetBarSize called") );
 /*	switch(BarType)
 	{
@@ -920,7 +920,7 @@ BOOL  BaseBar::PositionControls(BOOL DoRedraw)
 
 BOOL BaseBar::Show(DialogBarOp* Op)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::Show - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::Show - do nothing" )
 	TRACE( _T("Warning - BaseBar::Show called") );
 /*	if (Op->IS_KIND_OF(InformationBarOp))
 		((InformationBarOp*)Op)->SetInfo();
@@ -1000,7 +1000,7 @@ BOOL BaseBar::Show(DialogBarOp* Op)
 ********************************************************************************************/
 BOOL BaseBar::Hide(DialogBarOp* Op)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::Hide - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::Hide - do nothing" )
 	TRACE( _T("Warning - BaseBar::Hide called") );
 /*	BOOL DoTidy = DO_TIDY;
 
@@ -1038,7 +1038,7 @@ BOOL BaseBar::Hide(DialogBarOp* Op)
 
 BOOL BaseBar::Create(DialogBarOp* Op)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::Create - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::Create - do nothing" )
 	TRACE( _T("Warning - BaseBar::Create called") );
 /*	InRecreate = TRUE;
 	pOp = Op; 
@@ -1223,7 +1223,7 @@ BOOL BaseBar::Create(DialogBarOp* Op)
 BOOL BaseBar::RecreateAt(KernelBarPos Pos,DockBarType DockBarTyp,
 					  BaseBar* BaseBar, DialogBarOp* Op, wxWindow* OldHwnd) 
 {
-#pragma message( __LOCMSG__ _T("BaseBar::RecreateAt - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::RecreateAt - do nothing" )
 	TRACE( _T("Warning - BaseBar::RecreateAt called") );
 /*	LastSmallBarPos = Pos;
 	pOp = Op; 
@@ -1343,7 +1343,7 @@ BOOL BaseBar::RecreateAt(KernelBarPos Pos,DockBarType DockBarTyp,
 
 BOOL BaseBar::Recreate(DockBarType DockBarTyp, BaseBar* BaseBar, DialogBarOp* Op,BOOL CanCopy ) 
 {
-#pragma message( __LOCMSG__ _T("BaseBar::Recreate - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::Recreate - do nothing" )
 	TRACE( _T("Warning - BaseBar::Recreate called") );
 /*	pOp = Op; 
 	ParentDockBarType = DockBarTyp; // Record the current dock ba
@@ -1668,7 +1668,7 @@ BOOL BaseBar::CopyOrLoadControls(wxWindow* BarHwnd)
 
 KernelBarPos  * BaseBar::GetBarPosition()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarPosition - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarPosition - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetBarPosition called") );
 //	return GetMainFrame()->GetDockBar(ParentDockBarType)->GetBarPos(GetSafeHwnd());
 
@@ -2029,7 +2029,7 @@ BOOL BaseBar::GetBestCachedWidth(INT32 TargetHeight, INT32 * FoundWidth)
 
 BOOL BaseBar::FormatLineFeeds(INT32 Targetx,wxSize * pBarSize, INT32 * pNoLFs)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::FormatLineFeeds - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::FormatLineFeeds - do nothing" )
 	TRACE( _T("Warning - BaseBar::FormatLineFeeds called") );
 /*	//List is empty	just return 
 		if (pOp->IsListEmpty())
@@ -2246,7 +2246,7 @@ BOOL BaseBar::FormatLineFeeds(INT32 Targetx,wxSize * pBarSize, INT32 * pNoLFs)
 
 UINT32 BaseBar::GetNearestControl(wxPoint DropPoint)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::GetNearestControl - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetNearestControl - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetNearestControl called") );
 /*	HWND hcontrol;			 						// handle of current control
 	INT32 ControlIndex = 0;	 						// index in bar item list
@@ -2461,7 +2461,7 @@ BOOL BaseBar::FormatFloatingBar(BOOL MoveWindows,ForceControlSize ForceSize)
 {
 //	TRACEUSER( "Gerry", _T("FormatFloatingBar\n"));
 
-#pragma message( __LOCMSG__ _T("BaseBar::FormatFloatingBar - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::FormatFloatingBar - do nothing" )
 	TRACE( _T("Warning - BaseBar::FormatFloatingBar called") );
 /*	HWND hcontrol;
  	wxSize BarSize(0,0);
@@ -2703,7 +2703,7 @@ BOOL BaseBar::FormatFloatingBar(BOOL MoveWindows,ForceControlSize ForceSize)
 
 		wxFont * OldFont=dc->SelectObject(TitleFont);
 
-		wxSize TextSize=dc->GetTextExtent(Name,lstrlen(Name));
+		wxSize TextSize=dc->GetTextExtent(Name,camStrlen(Name));
 
 		dc->SelectObject(OldFont);
 
@@ -2769,7 +2769,7 @@ BOOL BaseBar::FormatHorizontalBar(BOOL MoveControls,ForceControlSize ForceSize)
 {
 //	TRACEUSER( "Gerry", _T("FormatHorizontalBar\n"));
 
-#pragma message( __LOCMSG__ _T("BaseBar::FormatHorizontalBar - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::FormatHorizontalBar - do nothing" )
 	TRACE( _T("Warning - BaseBar::FormatHorizontalBar called") );
 /*	BOOL AtFront = TRUE; 	
 	HWND hcontrol;
@@ -3018,7 +3018,7 @@ BOOL BaseBar::FormatHorizontalBar(BOOL MoveControls,ForceControlSize ForceSize)
 BOOL BaseBar::FormatVerticalBar(BOOL MoveControls,ForceControlSize ForceSize)
 {
 //	TRACEUSER( "Gerry", _T("FormatVerticalBar\n"));
-#pragma message( __LOCMSG__ _T("BaseBar::FormatVerticalBar - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::FormatVerticalBar - do nothing" )
 	TRACE( _T("Warning - BaseBar::FormatVerticalBar called") );
 /*	BOOL AtFront = TRUE; 	
 	HWND hcontrol;
@@ -3254,7 +3254,7 @@ DLGITEMTEMPLATE* BaseBar::GetPointerToControl(DLGTEMPLATE* pDlg ,UINT32 CtlId)
 
 HINSTANCE BaseBar::GetModuleInst(const BarControlInfo*pBarCtlInfo,UINT32 * ToolModuleID )
 {
-#pragma message( __LOCMSG__ _T("BaseBar::GetModuleInst - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetModuleInst - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetModuleInst called") );
 /*	*ToolModuleID = Tool::GetModuleID(pBarCtlInfo->ToolID); 
 
@@ -3611,7 +3611,7 @@ BOOL BaseBar::CreateControlFromResource(BarControl* pBarControl)
  									HINSTANCE ModuleInst,
  									UINT32 ToolModuleID)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::GetModuleInst - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetModuleInst - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetModuleInst called") );
 /*	BarItemType	 ThisControlType = OTHERCONTROL;
 
@@ -3800,34 +3800,34 @@ BOOL BaseBar::CreateControlFromResource(BarControl* pBarControl)
 	// INT32 result;
 												  
 	// really we should use WideCharToMultiByte, but it refuses to work under Win32s 1.1
-	// returning zero with a GetLastError of 2, so we use wcstombs instead.
-	wcstombs( AnsiClass, pClass, sizeof(AnsiClass) );
-	wcstombs( AnsiTitle, pTitle, sizeof(AnsiTitle) );
+	// returning zero with a GetLastError of 2, so we use camWcstombs instead.
+	camWcstombs( AnsiClass, pClass, sizeof(AnsiClass) );
+	camWcstombs( AnsiTitle, pTitle, sizeof(AnsiTitle) );
 #else
 	// 16-bit version needs no conversion, but we have to copy them because we
 	// crap upon them
-	_tcscpy( AnsiClass, pClass );
-	_tcscpy( AnsiTitle, pTitle );
+	camStrcpy( AnsiClass, pClass );
+	camStrcpy( AnsiTitle, pTitle );
 #endif
 
 	// Check for type here if not already set
 	if(ThisControlType == OTHERCONTROL)
 	{
-		if (lstrcmpi(AnsiClass, "cc_BitmapButton") == 0)		// Internal
+		if (camStricmp(AnsiClass, "cc_BitmapButton") == 0)		// Internal
 			ThisControlType = BITMAPBUTTON;
-		else if (lstrcmpi(AnsiClass, "cc_SmallButton") == 0)	// Internal
+		else if (camStricmp(AnsiClass, "cc_SmallButton") == 0)	// Internal
 			ThisControlType = SMALLBITMAPBUTTON;
-		else if (lstrcmpi(AnsiClass, "cc_StaticBitmap") == 0)	// Internal
+		else if (camStricmp(AnsiClass, "cc_StaticBitmap") == 0)	// Internal
 			ThisControlType = STATICBITMAP;
-		else if (lstrcmpi(AnsiClass, "cc_Text3D") == 0)			// Internal
+		else if (camStricmp(AnsiClass, "cc_Text3D") == 0)			// Internal
 			ThisControlType = TEXT3D;
-		else if (lstrcmpi(AnsiClass, "cc_Grid")==0)				// Internal
+		else if (camStricmp(AnsiClass, "cc_Grid")==0)				// Internal
 			ThisControlType = ROTATEGRID;
-		else if (lstrcmpi(AnsiClass,"cc_Slider")==0)			// Internal
+		else if (camStricmp(AnsiClass,"cc_Slider")==0)			// Internal
 			ThisControlType = SLIDER;
-		else if (lstrcmpi(AnsiClass, "cc_1dBitmapComboBoxEdit") == 0)	// internal
+		else if (camStricmp(AnsiClass, "cc_1dBitmapComboBoxEdit") == 0)	// internal
 			ThisControlType = BITMAPCOMBO1D;
-		else if (lstrcmpi(AnsiClass, "cc_2dBitmapComboBoxEdit") == 0)	// internal
+		else if (camStricmp(AnsiClass, "cc_2dBitmapComboBoxEdit") == 0)	// internal
 			ThisControlType = BITMAPCOMBO2D;
 	}
 	
@@ -4193,7 +4193,7 @@ size_t BaseBar::SizeDlgHeader(DLGTEMPLATE *pHeader)
 			break;
 
 		default:
-			pResult += lstrlen((LPTCHAR) (pResult)) + 1;
+			pResult += camStrlen((LPTCHAR) (pResult)) + 1;
 			break;
 	}
 
@@ -4310,7 +4310,7 @@ size_t BaseBar::SizeCtrlData(DLGITEMTEMPLATE *pControl)
 
 void BaseBar::InformControlsDead()
 {														 
-#pragma message( __LOCMSG__ _T("BaseBar::InformControlsDead - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::InformControlsDead - do nothing" )
 	TRACE( _T("Warning - BaseBar::InformControlsDead called") );
 /* 	HWND CurrentChild;
 	HWND NextChild; 
@@ -4462,7 +4462,7 @@ BOOL BaseBar::CanStartDrag(wxPoint point)
 
 void BaseBar::StartDrag(wxPoint point, DlgDragType TypeOfDrag)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::StartDrag - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::StartDrag - do nothing" )
 	TRACE( _T("Warning - BaseBar::StartDrag called") );
 /*#ifdef STANDALONE
 #ifndef EXCLUDE_GALS
@@ -4565,7 +4565,7 @@ void BaseBar::StartDrag(wxPoint point, DlgDragType TypeOfDrag)
 // Message map - maintained by Class Wizard.
 
 BEGIN_EVENT_TABLE( BaseBar, wxWindow )
-#pragma message( __LOCMSG__ _T("Removed BaseBar message map") )
+#pragma message( __LOCMSG__ "Removed BaseBar message map" )
 /*	ON_WM_NCCALCSIZE()
 	ON_WM_NCPAINT()
 	ON_WM_NCACTIVATE()
@@ -4618,7 +4618,7 @@ END_EVENT_TABLE()
 
 static void PatB( wxDC &DC, INT32 x, INT32 y, INT32 dx, INT32 dy, wxColour &rgb )
 {
-#pragma message( __LOCMSG__ _T("PatB - do nothing") )
+#pragma message( __LOCMSG__ "PatB - do nothing" )
 	TRACE( _T("Warning - PatB called") );
 /*	RECT rect;
 
@@ -4650,7 +4650,7 @@ static void PatB( wxDC &DC, INT32 x, INT32 y, INT32 dx, INT32 dy, wxColour &rgb 
 
 void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::Paint3dPlinth - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::Paint3dPlinth - do nothing" )
 	TRACE( _T("Warning - BaseBar::Paint3dPlinth called") );
 /*	if((LOBYTE(LOWORD(GetVersion()))) > 3 )
 	{
@@ -4767,7 +4767,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 ********************************************************************************************/
 
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnDrawItem removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnDrawItem removed" )
 /*void BaseBar::OnDrawItem( INT32 nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct )
 {
 	// owner drawn text button
@@ -4844,7 +4844,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 						
-#pragma message( __LOCMSG__ _T("BaseBar::OnParentNotify removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnParentNotify removed" )
 /*void BaseBar::OnParentNotify( UINT32 message, LPARAM lParam )
 {
 	if(message == WM_LBUTTONDOWN)
@@ -4885,7 +4885,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnKillFocus removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnKillFocus removed" )
 /*void BaseBar::OnKillFocus( wxWindow*Wnd )
 {
 	wxWindow::OnKillFocus(Wnd);
@@ -4908,7 +4908,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 ********************************************************************************************/
 
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnSetFocus removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnSetFocus removed" )
 /*void BaseBar::OnSetFocus( wxWindow * Wnd )
 {
 	wxWindow::OnSetFocus(Wnd);
@@ -4930,7 +4930,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnActivateApp removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnActivateApp removed" )
 /*void BaseBar::OnActivateApp( BOOL  bActive, HTASK  hTask )
 {
 	
@@ -4965,7 +4965,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnActivate removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnActivate removed" )
 /*void BaseBar::OnActivate( UINT32 State, wxWindow* pWndOther, BOOL bMinimized ) 
 {
 	
@@ -5003,7 +5003,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnMouseActivate removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnMouseActivate removed" )
 /*INT32 BaseBar::OnMouseActivate( wxWindow* pDesktopWnd, UINT32 nHitTest, UINT32 message ) 
 {
 	
@@ -5052,7 +5052,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnDestroy removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnDestroy removed" )
 /*void BaseBar ::OnDestroy( )
 {
  
@@ -5104,7 +5104,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::ListLostFocus removed") )
+#pragma message( __LOCMSG__ "BaseBar::ListLostFocus removed" )
 /*void  BaseBar::ListLostFocus(void)
 {
  
@@ -5126,7 +5126,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::ListSelChanged removed") )
+#pragma message( __LOCMSG__ "BaseBar::ListSelChanged removed" )
 /*void  BaseBar::ListSelChanged(void)
 {
 //	if( pOp->IsKindOf(CC_RUNTIME_CLASS(SuperGallery)) )
@@ -5150,7 +5150,7 @@ void BaseBar::Paint3dPlinth(wxDC* pDC, wxRect *rect, BOOL PlinthOut)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::DoResize removed") )
+#pragma message( __LOCMSG__ "BaseBar::DoResize removed" )
 /*LRESULT  BaseBar::DoResize(WPARAM , LPARAM)
 {
 	// ZZZZ
@@ -5226,7 +5226,7 @@ BOOL  BaseBar::HaveNonClientMetricsChanged( )
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarSize removed") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarSize removed" )
 /*LRESULT  BaseBar::GetBarSize(WPARAM DockType , LPARAM ControlS)
 {
 	DockBarType ThisDock = (DockBarType) DockType;	
@@ -5275,7 +5275,7 @@ wxRect BaseBar::GetBarsDims (DockBarType DockBarType)
 {
 	wxRect ReturnRect(0,0,0,0);
 
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarsDims - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarsDims - do nothing" )
 	TRACE( _T("Warning - BaseBar::GetBarsDims called") );
 /*	OILDockingBar* FloatBars = GetMainFrame ()->GetDockBar (DockBarType);//DOCKBAR_FLOAT);
 	BOOL BigControls = FloatBars->IsBigControls ();
@@ -5323,7 +5323,7 @@ wxRect BaseBar::GetBarsDims (DockBarType DockBarType)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarSize removed") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarSize removed" )
 /*LRESULT BaseBar::SetControlFocus(WPARAM State, LPARAM Hwnd)
 {
 	if (State == TRUE)
@@ -5375,7 +5375,7 @@ wxRect BaseBar::GetBarsDims (DockBarType DockBarType)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarSize removed") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarSize removed" )
 /*LRESULT  BaseBar::StartControlDrag(WPARAM State, LPARAM Hwnd)
 {
 #ifdef STANDALONE
@@ -5446,7 +5446,7 @@ wxRect BaseBar::GetBarsDims (DockBarType DockBarType)
 #endif
 } */											 	
 
-#pragma message( __LOCMSG__ _T("BaseBar::GetBarSize removed") )
+#pragma message( __LOCMSG__ "BaseBar::GetBarSize removed" )
 /*LRESULT  BaseBar::EndControlDrag(WPARAM State, LPARAM Hwnd)
 {
 	return 0;
@@ -5515,7 +5515,7 @@ return TRUE	;
 
 LRESULT BaseBar::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
 {
-#pragma message( __LOCMSG__ _T("BaseBar::WindowProc - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::WindowProc - do nothing" )
 	TRACE( _T("Warning - BaseBar::WindowProc called") );
 /*	// First send the message to the dialog manager 
 	DialogManager::SendDialogMessage(this,
@@ -5580,7 +5580,7 @@ LRESULT BaseBar::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
 	Scope:		Protected
 
 ********************************************************************************************/
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcCalcSize removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcCalcSize removed" )
 /*void BaseBar::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
 {
 	// So that we are compatible with different screen modes we will paint the non-client area
@@ -5619,7 +5619,7 @@ LRESULT BaseBar::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
 	Scope:		Protected
 
 ********************************************************************************************/
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcPaint removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcPaint removed" )
 /*void BaseBar::OnNcPaint()
 {
 	
@@ -5667,7 +5667,7 @@ LRESULT BaseBar::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
 #define ROP_PSDPxax  0x00B8074AL
 
 
-#pragma message( __LOCMSG__ _T("BaseBar::PlotStretchedMaskedBitmap removed") )
+#pragma message( __LOCMSG__ "BaseBar::PlotStretchedMaskedBitmap removed" )
 /*BOOL BaseBar::PlotStretchedMaskedBitmap(wxDC* destDC, CBitmap* srcBitmap,wxRect Pos)
 {
 	
@@ -5939,9 +5939,9 @@ void BaseBar::PaintWin95DialogNonClient(BOOL IsActive)
 	dc->SetBkMode(TRANSPARENT);
 
 	// Check that the text will not overlap to the left
-	wxSize TextSize=dc->GetTextExtent(Name,lstrlen(Name));
+	wxSize TextSize=dc->GetTextExtent(Name,camStrlen(Name));
 
-	dc->DrawText(Name,lstrlen(Name),BoundBox,DT_LEFT);
+	dc->DrawText(Name,camStrlen(Name),BoundBox,DT_LEFT);
 
 	// Clean up and release the DC
 
@@ -5958,7 +5958,7 @@ void BaseBar::PaintWin95DialogNonClient(BOOL IsActive)
 	// make sure that DrawCaption shows the correct title
 	SetLabel( pOp->GetName() );
 	
-#pragma message( __LOCMSG__ _T("Remove MSW frame redrawing stuff") )
+#pragma message( __LOCMSG__ "Remove MSW frame redrawing stuff" )
 /*	UINT32 DrawFlags = DC_TEXT|DC_SMALLCAP;
 	
 	if(IsActive)
@@ -5991,7 +5991,7 @@ void BaseBar::PaintWin95DialogNonClient(BOOL IsActive)
 
 void BaseBar::PaintDialogNonClient(BOOL IsActive)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::PaintDialogNonClient - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::PaintDialogNonClient - do nothing" )
 	TRACE( _T("Warning - BaseBar::PaintDialogNonClient called") );
 /*	// Get the System Frame Size
 	BorderWidth=wxSystemSettings::GetMetric(SM_CXFRAME);
@@ -6185,14 +6185,14 @@ void BaseBar::PaintDialogNonClient(BOOL IsActive)
 	dc.SetBackgroundMode( wxTRANSPARENT );
 
 	// Check that the text will not overlap to the left
-	wxSize TextSize=dc->GetTextExtent(Name,lstrlen(Name));
+	wxSize TextSize=dc->GetTextExtent(Name,camStrlen(Name));
 
 	if (TextSize.width<BoundBox.GetWidth())
 		  dc->DrawText(Name,-1,BoundBox,DT_CENTER|DT_VCENTER|DT_SINGLELINE);  // UIC	
-		//dc->DrawText(Name,lstrlen(Name),BoundBox,DT_CENTER); 
+		//dc->DrawText(Name,camStrlen(Name),BoundBox,DT_CENTER); 
 	else
-		dc->DrawText(Name,lstrlen(Name),BoundBox,DT_LEFT|DT_VCENTER |DT_SINGLELINE); // UIC
-		//dc->DrawText(Name,lstrlen(Name),BoundBox,DT_LEFT);
+		dc->DrawText(Name,camStrlen(Name),BoundBox,DT_LEFT|DT_VCENTER |DT_SINGLELINE); // UIC
+		//dc->DrawText(Name,camStrlen(Name),BoundBox,DT_LEFT);
 
 	// Clean up and release the DC
 
@@ -6222,7 +6222,7 @@ void BaseBar::PaintDialogNonClient(BOOL IsActive)
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcPaint removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcPaint removed" )
 /*BOOL BaseBar::OnNcActivate(BOOL IsActive)
 {
 	
@@ -6243,7 +6243,7 @@ void BaseBar::PaintDialogNonClient(BOOL IsActive)
 
 ********************************************************************************************/
 										 
-#pragma message( __LOCMSG__ _T("BaseBar::OnPaint removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnPaint removed" )
 /*void BaseBar::OnPaint()
 {
 	wxPaintDC  PaintDC(this); // device context for painting
@@ -6282,7 +6282,7 @@ void BaseBar::PaintDialogNonClient(BOOL IsActive)
 
 void BaseBar::PaintChicagoBorder()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::PaintChicagoBorder - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::PaintChicagoBorder - do nothing" )
 	TRACE( _T("Warning - BaseBar::PaintChicagoBorder called") );
 /*	wxRect WinRect( GetClientRect() );
 	wxRect ParWin( GetParent()->GetRect() );
@@ -6343,7 +6343,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcHitTest removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcHitTest removed" )
 /*UINT32 BaseBar::OnNcHitTest(wxPoint point)
 {
 
@@ -6434,7 +6434,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcRButtonDown removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcRButtonDown removed" )
 /*void BaseBar::OnNcRButtonDown(UINT32 nHitTest, wxPoint point)
 {
 } */
@@ -6454,7 +6454,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnNcHitTest removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnNcHitTest removed" )
 /*void BaseBar::OnNcHitTest(UINT32 nHitTest, wxPoint point)
 {
 
@@ -6477,7 +6477,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnLButtonDown removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnLButtonDown removed" )
 /*void BaseBar::OnLButtonDown(UINT32 nFlags, wxPoint point)
 {
 	// make sure we're not clicking on a disabled button
@@ -6526,7 +6526,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnMouseWheel removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnMouseWheel removed" )
 /*BOOL BaseBar::OnMouseWheel(UINT32 nFlags, short zDelta, wxPoint pt)
 {
 	TRACEUSER( "Matt", _T("MouseWheel Scroll In BaseBar!\n"));
@@ -6548,7 +6548,7 @@ void BaseBar::PaintChicagoBorder()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::OnLButtonDblClk removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnLButtonDblClk removed" )
 /*void BaseBar::OnLButtonDblClk( UINT32 nFlags, wxPoint point )
 {
 	//MessageBeep(MB_OK);
@@ -6825,7 +6825,7 @@ BOOL BaseBar::HasOrientationChanged(DockBarType Old,DockBarType New)
 ********************************************************************************************/
 BOOL BaseBar::TidyUpControlDrag()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::TidyUpControlDrag - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::TidyUpControlDrag - do nothing" )
 	TRACE( _T("Warning - BaseBar::TidyUpControlDrag called") );
 /*	CtlDragState = NO_DRAG;
 	DragManagerOp::SetDragActive(FALSE);
@@ -6880,7 +6880,7 @@ BOOL BaseBar::TidyUpBarDrag()
 	InRecreate = FALSE;
 	CurrentBar = NULL;
 
-#pragma message( __LOCMSG__ _T("Remove DragManagerOp::SetDragActive usage") )
+#pragma message( __LOCMSG__ "Remove DragManagerOp::SetDragActive usage" )
 //	DragManagerOp::SetDragActive(FALSE); 
 	return TRUE;
 }
@@ -6903,7 +6903,7 @@ BOOL BaseBar::TidyUpBarDrag()
 ********************************************************************************************/
 BOOL BaseBar::DropControl(wxPoint point, wxWindow* OverBar,BOOL InsertSeparator)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::DropControl - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::DropControl - do nothing" )
 	TRACE( _T("Warning - BaseBar::DropControl called") );
 /*	BOOL DeleteSeparator = FALSE;
 
@@ -7096,7 +7096,7 @@ BOOL BaseBar::DropControl(wxPoint point, wxWindow* OverBar,BOOL InsertSeparator)
 ********************************************************************************************/
 BOOL BaseBar::EndControlDrag(wxPoint point)
 {
-#pragma message( __LOCMSG__ _T("BaseBar::EndControlDrag - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::EndControlDrag - do nothing" )
 	TRACE( _T("Warning - BaseBar::EndControlDrag called") );
 /*	// go to screen co-ords	- we may be dropping on a different bar
 	wxPoint sPnt= point;
@@ -7249,7 +7249,7 @@ BOOL BaseBar::EndControlDrag(wxPoint point)
 	SeeAlso:	-
 
 ********************************************************************************************/
-#pragma message( __LOCMSG__ _T("BaseBar::OnLButtonUp removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnLButtonUp removed" )
 /*void BaseBar::OnLButtonUp(UINT32 nFlags, wxPoint point)
 {
 	if(CtlDragState == DRAGGING)
@@ -7364,7 +7364,7 @@ BOOL BaseBar::EndControlDrag(wxPoint point)
 
 void BaseBar::ConvertToolbarOnStartup ()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::ConvertToolbarOnStartup - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::ConvertToolbarOnStartup - do nothing" )
 	TRACE( _T("Warning - BaseBar::ConvertToolbarOnStartup called") );
 /*	ERROR3IF (pOp->GetName () != String_32 (TEXT ("Toolbar")), "BaseBar::ConvertToolbarOnStartup () - Call that a toolbar!");
 	
@@ -7411,7 +7411,7 @@ void BaseBar::ConvertToolbarOnStartup ()
 
 ********************************************************************************************/
 
-#pragma message( __LOCMSG__ _T("BaseBar::MoveBar removed") )
+#pragma message( __LOCMSG__ "BaseBar::MoveBar removed" )
 /*LRESULT BaseBar::MoveBar(WPARAM Dock, LPARAM Pos)
 {	
 	DockBarType NewDockType = (DockBarType)Dock;
@@ -7476,7 +7476,7 @@ void BaseBar::ConvertToolbarOnStartup ()
 	SeeAlso:	-
 
 ********************************************************************************************/
-#pragma message( __LOCMSG__ _T("BaseBar::OnMouseMove removed") )
+#pragma message( __LOCMSG__ "BaseBar::OnMouseMove removed" )
 /*void BaseBar::OnMouseMove(UINT32 Flags, wxPoint Point)
 {
 	if(CtlDragState == DRAGGING)
@@ -7532,7 +7532,7 @@ void BaseBar::ConvertToolbarOnStartup ()
 
 void BaseBar::CacheAllDockRects()
 {
-#pragma message( __LOCMSG__ _T("BaseBar::CacheAllDockRects - do nothing") )
+#pragma message( __LOCMSG__ "BaseBar::CacheAllDockRects - do nothing" )
 	TRACE( _T("Warning - BaseBar::CacheAllDockRects called") );
 /*	OILFixedDockingBar* DockBar;
 
@@ -7789,7 +7789,7 @@ void BaseBar::PaintDragRect(wxRect Rect,wxRect OldRect,DockBarType DockBar,DockB
 	}
 
 	// MFC DrawDragRect function
-#pragma message( __LOCMSG__ _T("Remove DrawDragRect usage") )
+#pragma message( __LOCMSG__ "Remove DrawDragRect usage" )
 //	pDisplayDC->DrawDragRect( &Rect, NewSize, &OldRect, OldSize );
 	
 	/*
@@ -7847,7 +7847,7 @@ void BaseBar::PaintDragRect(wxRect Rect,wxRect OldRect,DockBarType DockBar,DockB
 
 void BaseBar::PaintXORDragRect(wxRect Rect,DockBarType DockBar)
 {
-#pragma message( __LOCMSG__ _T("Remove DC::PatBlt usage") )
+#pragma message( __LOCMSG__ "Remove DC::PatBlt usage" )
 /*	DWORD dwRop = PATINVERT;
 
 	wxScreenDC	DisplayDC;

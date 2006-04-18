@@ -183,7 +183,7 @@ BOOL FontFactory::Init()
 	LogFont.lfCharSet = ANSI_CHARSET;  
 	LogFont.lfWeight = FW_NORMAL;
 	LogFont.lfPitchAndFamily = VARIABLE_PITCH | FF_SWISS;
-	lstrcpy(LogFont.lfFaceName, _T("CCSmall"));
+	camStrcpy(LogFont.lfFaceName, _T("CCSmall"));
 	LogFont.lfHeight = -MulDiv(7, PixelsPerInch.cx, 72);
 
 	// Create the font
@@ -614,7 +614,7 @@ CFont *FontFactory::GetCFont(StockFont Font)
 	}
 
 	if (FontName)
-		lstrcpy(LogFont.lfFaceName, FontName);
+		camStrcpy(LogFont.lfFaceName, FontName);
 	if (FontSize)
 		LogFont.lfHeight = -MulDiv(FontSize, PixelsPerInch.cx, 72);
 

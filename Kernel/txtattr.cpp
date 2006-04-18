@@ -2965,31 +2965,31 @@ void AttrTxtFontTypeface::GetDebugDetails(StringBase* Str)
 
 		TCHAR			buf[255];
 		
-		tsprintf( buf, 255, _T("\r\nFontName = %s\r\n"), (TCHAR*)(FontName) );
+		camSnprintf( buf, 255, _T("\r\nFontName = %s\r\n"), (TCHAR*)(FontName) );
 		(*Str) += buf;
 
-		tsprintf( buf, 256, _T("\r\nFont Handle = %ld\r\n"), Value.HTypeface );
+		camSnprintf( buf, 256, _T("\r\nFont Handle = %ld\r\n"), Value.HTypeface );
 		(*Str) += buf;
 		
 		switch (Class)
 		{
 		case FC_ATM:
-			tsprintf( buf, 255, _T("Type = ATM Type1\r\n") ); 
+			camSnprintf( buf, 255, _T("Type = ATM Type1\r\n") ); 
 			break;
 		case FC_TRUETYPE: 
-			tsprintf( buf, 255, _T("Type = TrueType\r\n") );
+			camSnprintf( buf, 255, _T("Type = TrueType\r\n") );
 			break;
 		default:
-			tsprintf( buf, 255, _T("Type = Unknown\r\n") ); 
+			camSnprintf( buf, 255, _T("Type = Unknown\r\n") ); 
 			break;
 		}
 		
 		(*Str) += buf;
-		tsprintf( buf, 255, _T("Bold = %s\r\n"), Value.IsBold ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Bold = %s\r\n"), Value.IsBold ? "TRUE":"FALSE");
 		(*Str) += buf;
-		tsprintf( buf, 255, _T("Italic = %s\r\n"), Value.IsItalic ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Italic = %s\r\n"), Value.IsItalic ? "TRUE":"FALSE");
 		(*Str) += buf;	
-		tsprintf( buf, 255, _T("Replaced = %s\r\n"), FONTMANAGER->IsFontReplaced(&FontName, Class) ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Replaced = %s\r\n"), FONTMANAGER->IsFontReplaced(&FontName, Class) ? "TRUE":"FALSE");
 		(*Str) += buf;	
 	}
 }
@@ -4412,7 +4412,7 @@ void AttrTxtAspectRatio::GetDebugDetails(StringBase* Str)
 
 	String_256			TempStr;
 	TCHAR				floatStr[20];
-	tsprintf( floatStr, 20, _T("%f"), Value.AspectRatio.MakeDouble() );
+	camSnprintf( floatStr, 20, _T("%f"), Value.AspectRatio.MakeDouble() );
 	TempStr._MakeMsg( TEXT("\r\nAspect ratio :\t#1%s\r\n"), floatStr);
 	(*Str) += TempStr;
 #endif
@@ -5943,7 +5943,7 @@ void AttrTxtLineSpace::GetDebugDetails(StringBase* Str)
 
 	
 	TCHAR				buf[64];
-	tsprintf( buf, 64, _T("\r\nLineSpace = %ld\r\nRatio = %.2f"), Value.Value, Value.Ratio.MakeDouble() );
+	camSnprintf( buf, 64, _T("\r\nLineSpace = %ld\r\nRatio = %.2f"), Value.Value, Value.Ratio.MakeDouble() );
 	//TempStr._MakeMsg( TEXT("\r\nLine space=#1%ld\r\n Ratio=#2%f\r\n"), Value.Value,Value.Ratio.MakeDouble());
 	(*Str) += buf;
 }

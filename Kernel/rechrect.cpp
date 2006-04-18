@@ -911,18 +911,18 @@ void RectangleRecordHandler::DescribeRectangleSimple(CXaraFileRecord *pRecord, S
 	INT32 Height;
 	INT32 Width;
 
-	char s[256];
+	TCHAR s[256];
 
 	BOOL ok = TRUE;
 	if (ok) ok = pRecord->ReadCoord(&CentrePoint);
 	if (ok) ok = pRecord->ReadINT32(&Width);
 	if (ok) ok = pRecord->ReadINT32(&Height);
 
-	_stprintf(s,"Centre point\t= %d, %d\r\n",CentrePoint.x,CentrePoint.y);
+	camSprintf(s,_T("Centre point\t= %d, %d\r\n"),CentrePoint.x,CentrePoint.y);
 	(*pStr) += s;
-	_stprintf(s,"Width\t\t= %d\r\n",Width);
+	camSprintf(s,_T("Width\t\t= %d\r\n"),Width);
 	(*pStr) += s;
-	_stprintf(s,"Height\t\t= %d\r\n",Height);
+	camSprintf(s,_T("Height\t\t= %d\r\n"),Height);
 	(*pStr) += s;
 }
 
@@ -934,7 +934,7 @@ void RectangleRecordHandler::DescribeRectangleComplex(CXaraFileRecord *pRecord, 
 	DocCoord CentrePoint;
 	DocCoord MajorAxis;
 	DocCoord MinorAxis;
-	char s[256];
+	TCHAR s[256];
 
 	BOOL ok = TRUE;
 
@@ -942,11 +942,11 @@ void RectangleRecordHandler::DescribeRectangleComplex(CXaraFileRecord *pRecord, 
 	if (ok) ok = pRecord->ReadCoordTrans(&MajorAxis,0,0);
 	if (ok) ok = pRecord->ReadCoordTrans(&MinorAxis,0,0);
 
-	_stprintf(s,"Centre point\t= %d, %d\r\n",CentrePoint.x,CentrePoint.y);
+	camSprintf(s,_T("Centre point\t= %d, %d\r\n"),CentrePoint.x,CentrePoint.y);
 	(*pStr) += s;
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
 }
 
@@ -957,16 +957,16 @@ void RectangleRecordHandler::DescribeRectangleComplexReformed(CXaraFileRecord *p
 
 	DocCoord MajorAxis;
 	DocCoord MinorAxis;
-	char s[256];
+	TCHAR s[256];
 
 	BOOL ok = TRUE;
 
 	if (ok) ok = pRecord->ReadCoordTrans(&MajorAxis,0,0);
 	if (ok) ok = pRecord->ReadCoordTrans(&MinorAxis,0,0);
 
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
 }
 
@@ -975,7 +975,7 @@ void RectangleRecordHandler::DescribeInvalid(CXaraFileRecord *pRecord, StringBas
 	if (pRecord == NULL || pStr == NULL)
 		return;
 
-	(*pStr) += "Invalid rectangle\r\n";
+	(*pStr) += _T("Invalid rectangle\r\n");
 }
 #endif
 

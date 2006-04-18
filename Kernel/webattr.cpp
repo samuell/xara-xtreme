@@ -1147,7 +1147,7 @@ void WebAddressAttribute::CopyString(TCHAR** ppcCopyTo, const TCHAR* pcCopyFrom)
 	{
 		//Yes (we assume it does if it's not NULL)
 		//So copy that string into *ppcCopyTo
-		(*ppcCopyTo) = _tcsdup( pcCopyFrom );
+		(*ppcCopyTo) = camStrdup( pcCopyFrom );
 	}
 
 	//If pcCopyFrom is NULL, then ppcCopyTo is NULL, which is correct
@@ -1180,7 +1180,7 @@ BOOL WebAddressAttribute::AreStringsEqual(TCHAR* pcFirst, TCHAR* pcSecond)
 		return (pcFirst==pcSecond);
 
 	//Otherwise, return the result of comparing the two strings
-	return (_tcscmp(pcFirst, pcSecond)==0);
+	return (camStrcmp(pcFirst, pcSecond)==0);
 }
 
 

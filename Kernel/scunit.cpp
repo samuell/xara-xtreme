@@ -1509,7 +1509,7 @@ Parser::TOKEN Parser::GetToken()
 
 			return TK_NUMBER;
 		}
-		else if (_istspace(c))
+		else if (camIsspace(c))
 		{
 			++m_uParsePosition;
 			continue;

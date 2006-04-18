@@ -676,7 +676,13 @@ PORTNOTE("other","Removed MFC CDumpContext")
 #ifndef EXCLUDE_FROM_XARALX
 			((CCObject*)(pItem->Start))->Dump(afxDump);
 #endif
-		tsprintf( OutputMsg, 256, _T("allocated in %s at line %d.\n"), pItem->Filename, pItem->LineNum );
+#if 0 != wxUSE_UNICODE
+		TCHAR pFilename[22];
+		camMbstowcs(pFilename, pItem->Filename, 22);
+#else
+		TCHAR* pFilename = pItem->Filename;
+#endif
+		camSnprintf( OutputMsg, 256, _T("allocated in %s at line %d.\n"), pFilename, pItem->LineNum );
 		TRACE(OutputMsg);
 
 		// Get the next one along
@@ -886,7 +892,7 @@ CCRuntimeClass* CCObject::GetRuntimeClassByName(LPCTSTR pClassName)
 	CCRuntimeClass* pClass = CCRuntimeClass::pFirstClass; 
 	do
 	{
-		if( 0 == _tcscmp(pClassName,pClass->m_lpszClassName) )
+		if( 0 == camStrcmp(pClassName,pClass->m_lpszClassName) )
 		{
 			return (pClass);
 		}
@@ -1137,7 +1143,7 @@ extern "C" void CCAssertValidObject(const CCObject* pOb, LPCSTR lpszFileName, IN
 	{
 		TRACE0( _T("CC_ASSERT_VALID fails with NULL pointer\n") );
 		TCHAR			pszTmp[256];
-		tsprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
+		camSnprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
 		wxFAIL_MSG( pszTmp );
 		return;     // quick escape
 	}
@@ -1147,7 +1153,7 @@ extern "C" void CCAssertValidObject(const CCObject* pOb, LPCSTR lpszFileName, IN
 	{
 		TRACE0( _T("CC_ASSERT_VALID fails with illegal pointer\n") );
 		TCHAR			pszTmp[256];
-		tsprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
+		camSnprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
 		wxFAIL_MSG( pszTmp );
 		return;     // quick escape
 	}
@@ -1170,7 +1176,7 @@ extern "C" void CCAssertValidObject(const CCObject* pOb, LPCSTR lpszFileName, IN
 	{
 		TRACE0( _T("CC_ASSERT_VALID fails with illegal pointer\n") );
 		TCHAR			pszTmp[256];
-		tsprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
+		camSnprintf( pszTmp, 256, _T("%s, %d"), lpszFileName, nLine );
 		wxFAIL_MSG( pszTmp );
 		return;     // quick escape
 	}

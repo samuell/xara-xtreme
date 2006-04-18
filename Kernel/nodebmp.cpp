@@ -396,7 +396,7 @@ String NodeBitmap::Describe(BOOL Plural, BOOL Verbose)
 		if (dpi > 0)
 		{
 			String_256 jcf(_R(IDS_NODEBMP_DPI_FORMAT));
-			tsprintf(DpiText, 256, jcf, dpi);
+			camSnprintf(DpiText, 256, jcf, dpi);
 		}
 
 		String_64 TrunkDpi;

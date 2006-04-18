@@ -1106,7 +1106,7 @@ BOOL EPSFilter::InitPrefs()
 
 	// Loop to declare all of these font mappings...
 	INT32 i = 0;
-	while (_tcslen(FontMappings[i][0]) > 0)
+	while (camStrclen(FontMappings[i][0]) > 0)
 	{
 		Camelot.SetPrefDirect( _T("EPSFontMapping"), 
 							  &FontMappings[i][0][0], 
@@ -1382,7 +1382,7 @@ BOOL EPSFilter::IsDefaultDocRequired(const TCHAR* pcszPathName)
 INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -1400,14 +1400,14 @@ INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// Return TRUE if this file was created by Illustrator, or has been exported in 
 		// Illustrator format.
-		if (_tcsncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
+		if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
 			// We definitely want this.
 			return 8;
 
-		if (_tcsncmp(Buffer, "%%Creator:", 10) == 0)
+		if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
 		{
 			// Found the creator line - does it contain the word Illustrator?
-			if (_tcsstr(Buffer, "Illustrator") != NULL)
+			if (camStrstr(Buffer, "Illustrator") != NULL)
 				return 9;
 			else
 				break;
@@ -1415,7 +1415,7 @@ INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -1780,7 +1780,7 @@ void EPSFilter::DecodeToken()
 	//
 	// Determine what we just read into TokenBuf.
 	//
-	ENSURE(_tcscmp(TokenBuf,"}bd") != 0, "Found a }bd token!");
+	ENSURE(camStrcmp(TokenBuf,"}bd") != 0, "Found a }bd token!");
 		
 	// Not interested in comments, unless it's actually a strange token
 	if (Token == EPSC_Comment)
@@ -1917,7 +1917,7 @@ void EPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (Commands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, Commands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, Commands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and exit.
 			Token = Commands[i].Cmd;
@@ -3983,12 +3983,12 @@ BOOL EPSFilter::ProcessUnfilledPath ( void )
 
 BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 {
-	if ((_tcsncmp(TokenBuf, "%%Trailer", 9) == 0) ||
-		(_tcsncmp(TokenBuf, "%%PageTrailer", 13) == 0))
+	if ((camStrncmp(TokenBuf, "%%Trailer", 9) == 0) ||
+		(camStrncmp(TokenBuf, "%%PageTrailer", 13) == 0))
 	{
 		ProcessEPSTrailer();
 	}
-	else if (_tcsncmp(TokenBuf, "%%BoundingBox:", 14) == 0)
+	else if (camStrncmp(TokenBuf, "%%BoundingBox:", 14) == 0)
 	{
 		ProcessBoundingBox();
 	}
@@ -4002,7 +4002,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 		for(;;)
 		{
 			Comments = EPSComments.ReturnElement ( Index );
-			INT32 StartLen = cc_strlenCharacters ( Comments.StartMarker );
+			INT32 StartLen = camStrclen( Comments.StartMarker );
 
 			if (StartLen == 0)
 			{
@@ -4010,7 +4010,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 				break;
 			}
 
-			if (_tcsncmp(TokenBuf, Comments.StartMarker, StartLen) == 0)
+			if (camStrncmp(TokenBuf, Comments.StartMarker, StartLen) == 0)
 			{
 				FoundComment = TRUE;
 				break;
@@ -4023,7 +4023,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 		if (FoundComment)
 		{
 			// Look for the end of this comment block.
-			INT32 EndLen = cc_strlenCharacters(Comments.EndMarker);
+			INT32 EndLen = camStrclen(Comments.EndMarker);
 
 			do
 			{
@@ -4031,7 +4031,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 
 				if (Token == EPSC_Comment)
 				{
-					if (_tcsncmp(TokenBuf, Comments.EndMarker, EndLen) == 0)
+					if (camStrncmp(TokenBuf, Comments.EndMarker, EndLen) == 0)
 					{
 						// Found the end of the comment block
 						break;
@@ -4039,8 +4039,8 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 
 					// Special case for brain-damaged formats that don't bother to
 					// bracket prolog segments correctly
-					if ((_tcsncmp(TokenBuf, "%%EndProlog", 11) == 0) ||
-						(_tcsncmp(TokenBuf, "%%EndSetup", 10) == 0))
+					if ((camStrncmp(TokenBuf, "%%EndProlog", 11) == 0) ||
+						(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0))
 					{
 						// Found the end of the prolog/setup - this means we're not in the
 						// prolog or setup processing loop (otherwise the above test
@@ -4103,7 +4103,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 BOOL EPSFilter::ProcessFilterComment()
 {
 	// This is the base class - there are no EPS comments specific to this filter.
-	if (_tcsncmp(TokenBuf, "%%XSScript", 10) == 0)
+	if (camStrncmp(TokenBuf, "%%XSScript", 10) == 0)
 	{
 		TextComment[0]=2;
 		return TRUE;
@@ -4166,7 +4166,7 @@ BOOL EPSFilter::ProcessEPSComment()
 		// Get the next token
 		GetToken();
 
-		if ((Token != EPSC_Comment) || (_tcsncmp(TokenBuf, "%%+", 3) != 0))
+		if ((Token != EPSC_Comment) || (camStrncmp(TokenBuf, "%%+", 3) != 0))
 		{
 			// Not a continuation comment - so we're finished
 			if (Result == EPSCommentOK)
@@ -4269,7 +4269,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 
 	// Take a copy of the bounding box line so we can decompose it.
 	char BBoxStr[50];
-	_tcsncpy(BBoxStr, TokenBuf + 14, 50);
+	camStrncpy(BBoxStr, TokenBuf + 14, 50);
 
 	// Extract the minimum values (converting to millipoints)
 
@@ -5038,7 +5038,7 @@ void EPSFilter::RemoveMessage(CCLexFile* pFile)
 	// What we are looking for
 	char Message[] =  "1992 ACCUSOFT INC, ALL RIGHTS RESERVED";
 	String_64 Replace("Xara Studio, Xara Studio, Xara Studio.");
-	INT32 Length = cc_strlenBytes(Message);
+	INT32 Length = camStrlen(Message);
 	char Ch = 0;
 	FilePos StartOfStr = 0;
 
@@ -5196,7 +5196,7 @@ INT32 EPSFilter::ImportBinary(ADDR pData, INT32 Length)
 ********************************************************************************************/
 INT32 EPSFilter::DecodeHexString(ADDR pData, INT32 Length, INT32 nStart)
 {
-	INT32 TokenLen = cc_strlenBytes(TokenBuf + nStart);
+	INT32 TokenLen = camStrlen(TokenBuf + nStart);
 	INT32 Ofs = 0;
 
 	// Assume hex strings are even-numbered in length for the moment
@@ -5208,7 +5208,7 @@ INT32 EPSFilter::DecodeHexString(ADDR pData, INT32 Length, INT32 nStart)
 	// Decode the string two characters at a time
 	for (INT32 i = nStart; (i < TokenLen) && (i < MaxOfs); i += 2)
 	{
-		char Ch = _totupper(TokenBuf[i]);
+		char Ch = camToupper(TokenBuf[i]);
 		BYTE Byte;
 
 		// Decode first digit.
@@ -5226,7 +5226,7 @@ INT32 EPSFilter::DecodeHexString(ADDR pData, INT32 Length, INT32 nStart)
 			return -1;
 		}
 
-		Ch = _totupper(TokenBuf[i+1]);
+		Ch = camToupper(TokenBuf[i+1]);
 		Byte <<= 4;
 			
 		// Decode swcond digit.

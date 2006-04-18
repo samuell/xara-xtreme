@@ -960,7 +960,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 
 				case FTT_UNICODE:
 					{
-						UINT32 len = 2 * ( _tcslen( (PCTSTR)pBinPtr ) + 1 );
+						UINT32 len = 2 * ( camStrlen( (PCTSTR)pBinPtr ) + 1 );
 						if (IsSimpleUnicode((WCHAR*) pBinPtr))
 						{
 							ok = WriteSimpleUnicode((WCHAR*)pBinPtr);

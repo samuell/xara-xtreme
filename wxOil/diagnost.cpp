@@ -163,7 +163,7 @@ void CDECL DiagnosticFn(LPCTSTR FunctionStr, LPCTSTR pszFormat, ...)
 	va_list args;
 	va_start(args, pszFormat);
 
-	nBuf = tvsprintf( szBuffer, 512, pszLocalFormat, args );
+	nBuf = camVsnprintf( szBuffer, 512, pszLocalFormat, args );
 	
 	ASSERT(nBuf < sizeof(szBuffer));
 
@@ -235,7 +235,7 @@ void CDECL Diagnostic(LPCTSTR pszFormat, ...)
 	va_list args;
 	va_start(args, pszFormat);
 
-	nBuf = tvsprintf( szBuffer, 512, pszLocalFormat, args );
+	nBuf = camVsnprintf( szBuffer, 512, pszLocalFormat, args );
 	ASSERT(nBuf < sizeof(szBuffer));
 
 #if 0
@@ -259,7 +259,7 @@ void CDECL Diagnostic(LPCTSTR pszFormat, ...)
 #if defined(__WXMSW__)
 	OutputDebugString(DiagOutput);
 #elif defined(__WXGTK__)
-	tprintf( DiagOutput );
+	camPrintf( DiagOutput );
 #endif
 
 #endif

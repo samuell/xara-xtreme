@@ -690,14 +690,14 @@ GZipStream *GZipFile::gz_open(iostream* pFileStream, TCHAR *mode, TCHAR *path )
 
 	if (path != NULL)
 	{
-		s->path = (TCHAR*) ALLOC(cc_strlenBytes(path) + 1);
+		s->path = (TCHAR*) ALLOC((camStrlen(path) + 1) * sizeof(TCHAR));
 		if (s->path == NULL)
 		{
     		destroy(s);
     		return NULL;
 		}
 
-		_tcscpy(s->path, path); /* do this early for debugging */
+		camStrcpy(s->path, path); /* do this early for debugging */
 	}
 
 	// Note the current position in the file for later use
@@ -1377,7 +1377,7 @@ INT32 GZipFile::gzclose(GZipStream *s)
 //    s->msg = (char*)ALLOC(_tcsclen(s->path) + strlen(m) + 3);
 //	if (s->msg)
 //	{
-//	    _tcscpy(s->msg, s->path);
+//	    camStrcpy(s->msg, s->path);
 //	    strcat(s->msg, ": ");
 //	    strcat(s->msg, m);
 //	}

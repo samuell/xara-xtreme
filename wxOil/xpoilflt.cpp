@@ -664,13 +664,13 @@ INT32 PluginOILFilter::CompareVersions(const String_64& lhs, const String_64& rh
 	INT32 la, lb, lc, ld;
 	INT32 ra, rb, rc, rd;
 
-	if (_stscanf(lhs, _T("%d, %d, %d, %d"), &la, &lb, &lc, &ld) != 4)
+	if (camSscanf(lhs, _T("%d, %d, %d, %d"), &la, &lb, &lc, &ld) != 4)
 	{
 		ASSERT(FALSE);
 		return(0);
 	}
 
-	if (_stscanf(rhs, _T("%d, %d, %d, %d"), &ra, &rb, &rc, &rd) != 4)
+	if (camSscanf(rhs, _T("%d, %d, %d, %d"), &ra, &rb, &rc, &rd) != 4)
 	{
 		ASSERT(FALSE);
 		return(0);
@@ -781,7 +781,7 @@ BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 		if (pExt[0] == _T('*') && pExt[1] == _T('.'))
 		{
 			pExt += 2;
-			if (_tcsstr((TCHAR *)FilterExt, pExt) == NULL)
+			if (camStrstr((TCHAR *)FilterExt, pExt) == NULL)
 			{
 				// Not already present - add the string.
 				if (!NoneFound)

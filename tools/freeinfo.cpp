@@ -1021,7 +1021,7 @@ void FreeHandInfoBarOp::HandleCreate()
 		// Set the percentage string
 		TCHAR Str[32];
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
-		tsprintf(Str, 32, jcf, (INT32) Smoothness);
+		camSnprintf(Str, 32, jcf, (INT32) Smoothness);
 		String_32 PercentStr(Str);
 		SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), &PercentStr);
 	
@@ -1908,7 +1908,7 @@ void FreeHandInfoBarOp::HandleSliderPosChanging()
 
 	// Build the Percentage string and set it
 	String_32 jcf(_R(IDS_PERCENT_FORMAT));
-	tsprintf(Str, 32, jcf, (INT32) Result);
+	camSnprintf(Str, 32, jcf, (INT32) Result);
 	String_8 PercentStr(Str);
 	SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), &PercentStr);
 

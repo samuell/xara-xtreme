@@ -234,7 +234,7 @@ static TokenIndex FindToken(const TCHAR* Token)
 {
 	for (INT32 i=0;i<NUM_TOKENS;i++)
 	{
-		if (lstrcmp(TokenTable[i].Token,Token) == 0)
+		if (camStrcmp(TokenTable[i].Token,Token) == 0)
 			return ((TokenIndex)i);
 	}
 
@@ -1375,7 +1375,7 @@ PORTNOTE("galleries", "Disable Lexfile writing")
 
 BOOL DialogBarOp::Write(CCLexFile& file)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::Write(CCLexFile& file) - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::Write(CCLexFile& file) - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::Write(CCLexFile& file) called") );
 /*	BOOL ok = TRUE;
 	// we don't want to write out the control bank
@@ -1495,7 +1495,7 @@ BOOL DialogBarOp::Read(CCLexFile& file)
 			case TOKEN_NORMAL:
 				{
 					INT32 ID = 0;
-					ok = (_stscanf(TokenBuf, _T("%li"), &ID) == 1);
+					ok = (camSscanf(TokenBuf, _T("%li"), &ID) == 1);
 					if(ID == 0)
 					{
 						Name.operator=((const TCHAR*) TokenBuf);
@@ -1543,14 +1543,14 @@ BOOL DialogBarOp::Read(CCLexFile& file)
 				ok = file.GetSimpleToken();
 				if (ok)
 				{	
-					ok = (_stscanf(TokenBuf, _T("%li"),&FloatPos.x) == 1);
+					ok = (camSscanf(TokenBuf, _T("%li"),&FloatPos.x) == 1);
 					if (!ok) TRACE( _T("Expected the bar's floating x pos, but got '%s'\n"),TokenBuf);
 				}
 
 				if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf, _T("%li"),&FloatPos.y) == 1);
+					ok = (camSscanf(TokenBuf, _T("%li"),&FloatPos.y) == 1);
 					if (!ok) TRACE( _T("Expected the bar's floating y pos, but got '%s'\n"),TokenBuf);
 				}
 			}
@@ -1559,14 +1559,14 @@ BOOL DialogBarOp::Read(CCLexFile& file)
 				ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf, _T("%li"),&Slot) == 1);
+					ok = (camSscanf(TokenBuf, _T("%li"),&Slot) == 1);
 					if (!ok) TRACE( _T("Expected the bar's slot, but got '%s'\n"),TokenBuf);
 				}
 
 				if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf, _T("%li"),&Offset) == 1);
+					ok = (camSscanf(TokenBuf, _T("%li"),&Offset) == 1);
 					if (!ok) TRACE( _T("Expected the bar's offset, but got '%s'\n"),TokenBuf);
 				}
 			}
@@ -1671,7 +1671,7 @@ BOOL DialogBarOp::Read(CCLexFile& file)
 
 BOOL DialogBarOp::Read(LoadRegistryEntries& Loader)
 {
-#pragma message( __LOCMSG__ _T("BaseTextClass::PreOpProcessing - do nothing") )
+#pragma message( __LOCMSG__ "BaseTextClass::PreOpProcessing - do nothing" )
 	TRACE( _T("Warning - BaseTextClass::PreOpProcessing called") );
 /*	BOOL ok = TRUE;
 
@@ -1823,7 +1823,7 @@ BOOL DialogBarOp::Read(LoadRegistryEntries& Loader)
 
 BOOL DialogBarOp::Write(SaveRegistryEntries& Saver)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::Write(SaveRegistryEntries& Saver) - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::Write(SaveRegistryEntries& Saver) - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::Write(SaveRegistryEntries& Saver) called") );
 /*	//ERROR2IF(hSubKey == NULL,FALSE,"DialogBarOp::Write bad sub key");
 
@@ -1920,7 +1920,7 @@ BOOL DialogBarOp::Write(SaveRegistryEntries& Saver)
 
 BOOL SuperGallery::Write(SaveRegistryEntries& Saver)
 {
-#pragma message( __LOCMSG__ _T("SuperGallery::Write(SaveRegistryEntries& Saver) - do nothing") )
+#pragma message( __LOCMSG__ "SuperGallery::Write(SaveRegistryEntries& Saver) - do nothing" )
 	TRACE( _T("Warning - SuperGallery::Write(SaveRegistryEntries& Saver) called") );
 /*	BOOL ok = TRUE;
 
@@ -2025,7 +2025,7 @@ BOOL SuperGallery::Write(SaveRegistryEntries& Saver)
 
 BOOL DialogBarOp::MakeControlBank()
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::MakeControlBank - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::MakeControlBank - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::MakeControlBank called") );
 /*	// create the bar
 	if(DialogBarOp::AllBarsOp == NULL)
@@ -2604,7 +2604,7 @@ void DialogBarOp::Delete()
 
  BOOL DialogBarOp::SetValidPath(String_256 FileName)
  {
-#pragma message( __LOCMSG__ _T("DialogBarOp::SetValidPath - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::SetValidPath - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::SetValidPath called") );
 /*	 // new naming convention = PRODUCT_BASENAME.cle/nor
 	// I've left the above intact as I can't get hold of the files 
@@ -2636,7 +2636,7 @@ void DialogBarOp::Delete()
 		String_256 Temp = DefaultBarsConfigPath;
 		Temp += _T("\\");
 		Temp += File;
-		_tcscpy( szBuff, Temp );
+		camStrcpy( szBuff, Temp );
 		TRACEUSER( "chris", _T("Loading Bars from Prefs path\n"));
 		if (_taccess(szBuff, 0) == 0)
 		{
@@ -2652,7 +2652,7 @@ void DialogBarOp::Delete()
 	if ((Len > 0) && (Len < cchMaxPath))
 	{
 		String_256 Temp = _T("\\") + File;
-		_tcscat(szBuff, Temp );
+		camStrcat(szBuff, Temp );
 		TRACEUSER( "chris", _T("Loading Bars from Windows path\n"));
 		if (_taccess(szBuff, 0) == 0)
 		{
@@ -2712,7 +2712,7 @@ BOOL DialogBarOp::LoadDefaultBars()
 
 BOOL DialogBarOp::LoadNamedBars(String_256 FileName)
 {  
-#pragma message( __LOCMSG__ _T("DialogBarOp::LoadNamedBars - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::LoadNamedBars - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::LoadNamedBars called") );
 /*	// Simon - In dire emergency please uncomment this back in - Chris.
 		
@@ -2803,7 +2803,7 @@ BOOL DialogBarOp::LoadNamedBars(String_256 FileName)
 
 BOOL DialogBarOp::LoadBars()
 {  
-#pragma message( __LOCMSG__ _T("DialogBarOp::LoadBars - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::LoadBars - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::LoadBars called") );
 //	return LoadNamedBars(GetMainFrame()->InFullScreenMode() ? "clean" : "normal");
 
@@ -2828,7 +2828,7 @@ BOOL DialogBarOp::LoadBars()
 
 BOOL DialogBarOp::WipeRegistrySettingsForBar(TCHAR * pBarName)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WipeRegistrySettingsForBar - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WipeRegistrySettingsForBar - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WipeRegistrySettingsForBar called") );
 /*	ERROR2IF(pBarName == NULL,FALSE,"WipeRegistrySettingsForBar bar section name");
 	// Wipe all the bars settings from the registry.
@@ -2891,7 +2891,7 @@ BOOL DialogBarOp::WipeBarFiles()
 //	BOOL ok = TRUE;
 	BOOL UnlinkOK = TRUE;
 
-#pragma message( __LOCMSG__ _T("DialogBarOp::WipeBarFiles - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WipeBarFiles - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WipeBarFiles called") );
 /*#ifdef SAVE_PREFS_TO_REGISTRY
 	// Wipe all the bars settings from the registry.
@@ -2953,7 +2953,7 @@ BOOL DialogBarOp::WipeBarFiles()
 
 BOOL DialogBarOp::LoadNamedBarFile(String_256 FileName ,BOOL * Opened)
 {  
-#pragma message( __LOCMSG__ _T("DialogBarOp::LoadNamedBarFile - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::LoadNamedBarFile - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::LoadNamedBarFile called") );
 /*	BOOL ok = TRUE;
 	BOOL open = FALSE;
@@ -3038,7 +3038,7 @@ BOOL DialogBarOp::LoadNamedBarFile(String_256 FileName ,BOOL * Opened)
 
 BOOL DialogBarOp::ReadResVersion()
 {  
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadResVersion- do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadResVersion- do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadResVersion called") );
 /*	BOOL ok = TRUE,open=FALSE; 
 	BOOL NewVersion = FALSE;
@@ -3057,7 +3057,7 @@ BOOL DialogBarOp::ReadResVersion()
 	Temp.Left(&Version,Temp.Length()-1);
 	if(Version.CompareTo(BarsVersion))
 	{
-		lstrcpy(BarsVersion,Version);
+		camStrcpy(BarsVersion,Version);
 	 	NewVersion = TRUE;
 	}
 	if (open) file.close();
@@ -3087,7 +3087,7 @@ BOOL DialogBarOp::LoadBarsFromRes()
 {  
 	BOOL ok = TRUE;
 //if (IsUserName("MarkN")) TRACE( _T("DialogBarOp::LoadBarsFromRes()\n"));
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadResVersion- do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadResVersion- do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadResVersion called") );
 /*
 	BOOL open=FALSE; 
@@ -3241,7 +3241,7 @@ UINT32 DialogBarOp::FindUniqueBarNumber()
 			//Highest ++;
 			name.Right(&number,name.Length()-4);
 			TCHAR *pszMark;
-			UINT32 SoFar = tcstol( (const TCHAR *)number, &pszMark, 10 );
+			UINT32 SoFar = camStrtol( (const TCHAR *)number, &pszMark, 10 );
 			if(SoFar>=Highest)
 				Highest = SoFar;
 		}
@@ -3330,7 +3330,7 @@ void DialogBarOp::TestStart()
 
 void DialogBarOp::TestEnd()
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::TestEnd - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::TestEnd - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::TestEnd called") );
 /*	if( !Error::IsUserName("MarkN") )
 		return;
@@ -3499,24 +3499,24 @@ BOOL DialogBarOp::WriteNamedBars(String_256 FileName)
 	TCHAR *szBuff = static_cast<TCHAR *>(alloca( cchMaxPath * sizeof(TCHAR) ));
 	if (DefaultBarsConfigPath.Length() > 0)
 	{
-		_tcscpy( szBuff, DefaultBarsConfigPath );
-		_tcscpy( szBuff, _T("\\") );
-		_tcscpy( szBuff, File );
+		camStrcpy( szBuff, DefaultBarsConfigPath );
+		camStrcpy( szBuff, _T("\\") );
+		camStrcpy( szBuff, File );
 	}
 	// no entry use windows dir
 	else
 	{
 #if defined(__WXMSW__)
-		UINT32 Len = GetWindowsDirectory((LPSTR)szBuff, cchMaxPath - 1);
+		UINT32 Len = GetWindowsDirectory(szBuff, cchMaxPath - 1);
 #else
-		_tcscpy( szBuff, _T("~/.XaraLX") );
-		UINT32 Len = _tcslen( szBuff );
+		camStrcpy( szBuff, _T("~/.XaraLX") );
+		UINT32 Len = camStrlen( szBuff );
 #endif
 		
 		if ((Len > 0) && (Len < cchMaxPath))
 		{
-			lstrcat( szBuff, _T("\\") );
-			lstrcat( szBuff, File );
+			camStrcat( szBuff, _T("\\") );
+			camStrcat( szBuff, File );
 		}	
 	}
 
@@ -3530,7 +3530,7 @@ BOOL DialogBarOp::WriteNamedBars(String_256 FileName)
 	
 	// the write has failed probably due to  disc full
 	// we'll delete the corrupt file and set an error.
-#pragma message( __LOCMSG__ _T("Removed _tremove on non-Windows OS") )
+#pragma message( __LOCMSG__ "Removed _tremove on non-Windows OS" )
 	#if defined(__WXMSW__)
 	if(!ok)
 		_tremove(szBuff);
@@ -3817,20 +3817,20 @@ BOOL BarControl::Write(String_256 * pString)
 	{
 		*pString += wxT(QUOTE);
 		*pString += Horizontal.pOpDesc->Token;
-		*pString += wxT(QUOTE " ");
+		*pString += wxT(QUOTE) wxT(" ");
 	}
 	else
 	{
-		tsprintf(buf, 9, TEXT("%d "), Horizontal.BubbleID);
+		camSnprintf(buf, 9, TEXT("%d "), Horizontal.BubbleID);
 		*pString += buf;
-		tsprintf(buf, 9, TEXT("%d "), Horizontal.StatusID);
+		camSnprintf(buf, 9, TEXT("%d "), Horizontal.StatusID);
 		*pString += buf;
 	}
-	tsprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ToolID);
+	camSnprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ToolID);
 	*pString += buf;
-	tsprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ResourceID);
+	camSnprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ResourceID);
 	*pString += buf;
-	tsprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ControlID);
+	camSnprintf(buf, 9, TEXT("%d "), Horizontal.BarCtrlInfo.ControlID);
 	*pString += buf;
 
 	*pString += TokenTable[TOKEN_BAR_CONTROL_VERT].Token;
@@ -3839,20 +3839,20 @@ BOOL BarControl::Write(String_256 * pString)
 	{
 		*pString += wxT(QUOTE);
 		*pString += Vertical.pOpDesc->Token;
-		*pString += wxT(QUOTE " ");
+		*pString += wxT(QUOTE) wxT(" ");
 	}
 	else
 	{
-		tsprintf(buf, 9, TEXT("%d "), Vertical.BubbleID);
+		camSnprintf(buf, 9, TEXT("%d "), Vertical.BubbleID);
 		*pString += buf;
-		tsprintf(buf, 9, TEXT("%d "), Vertical.StatusID);
+		camSnprintf(buf, 9, TEXT("%d "), Vertical.StatusID);
 		*pString += buf;
 	}
-	tsprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ToolID);
+	camSnprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ToolID);
 	*pString += buf;
-	tsprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ResourceID);
+	camSnprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ResourceID);
 	*pString += buf;
-	tsprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ControlID);
+	camSnprintf(buf, 9, TEXT("%d "), Vertical.BarCtrlInfo.ControlID);
 	*pString += buf;
 
 	return ok;
@@ -4186,13 +4186,13 @@ BOOL BarControl::ReadSimpleBarControl(CCLexFile& file,SimpleBarControl* pSBC)
 				pSBC->pOpDesc  = NULL;		// No op descriptor associated with this control
 
 				// Read the bubble and status bar text IDs
-				ok = (_stscanf(TokenBuf, _T("%li"),&pSBC->BubbleID) == 1);
+				ok = (camSscanf(TokenBuf, _T("%li"),&pSBC->BubbleID) == 1);
 				if (!ok) TRACE( _T("Expected a bubble ID, but got '%s'\n"),TokenBuf);
 
 				if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
-				 	ok = (_stscanf(TokenBuf,_T("%li"),&pSBC->StatusID) == 1);
+				 	ok = (camSscanf(TokenBuf,_T("%li"),&pSBC->StatusID) == 1);
 					if (!ok) TRACE( _T("Expected a status ID, but got '%s'\n"),TokenBuf);
 				}
 
@@ -4209,21 +4209,21 @@ BOOL BarControl::ReadSimpleBarControl(CCLexFile& file,SimpleBarControl* pSBC)
 		if (ok)
 		{
 			// Interpret the next token as an INT32 (dec,hex, or oct)
-			ok = (_stscanf(TokenBuf, _T("%li"),&pSBC->BarCtrlInfo.ToolID) == 1);
+			ok = (camSscanf(TokenBuf, _T("%li"),&pSBC->BarCtrlInfo.ToolID) == 1);
 			if (!ok) TRACE( _T("Expected a tool ID, but got '%s'\n"),TokenBuf);
 
 			if (ok) ok = file.GetSimpleToken();
 			if (ok)
 			{
 				// Interpret the next token as an INT32 (dec,hex, or oct)
-				ok = (_stscanf(TokenBuf, _T("%li"),&pSBC->BarCtrlInfo.ResourceID) == 1);
+				ok = (camSscanf(TokenBuf, _T("%li"),&pSBC->BarCtrlInfo.ResourceID) == 1);
 				if (!ok) TRACE( _T("Expected a resource ID, but got '%s'\n"),TokenBuf);
 
                 if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
 					// Interpret the next token as an INT32 (dec,hex, or oct)
-					ok = (_stscanf(TokenBuf,_T("%li"),&pSBC->BarCtrlInfo.ControlID) == 1);
+					ok = (camSscanf(TokenBuf,_T("%li"),&pSBC->BarCtrlInfo.ControlID) == 1);
 					if (!ok) TRACE( _T("Expected a control ID, but got '%s'\n"),TokenBuf);
 				}
 			}
@@ -4761,7 +4761,7 @@ void BarToolButton::SetBitmap(BitmapType Type, UINT32 ThisBitmap)
 
 BOOL DialogBarOp::WriteBarsToRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WriteBarsToRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WriteBarsToRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WriteBarsToRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"WriteBarsToRegistry bad registry key!");
 
@@ -4839,7 +4839,7 @@ BOOL DialogBarOp::WriteBarsToRegistry(HKEY hSubKey)
 
 BOOL DialogBarOp::ReadBarsFromRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadBarsFromRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadBarsFromRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadBarsFromRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"ReadBarsFromRegistry bad registry key!");
 
@@ -4955,7 +4955,7 @@ BOOL DialogBarOp::ReadBarsFromRegistry(HKEY hSubKey)
 
 BOOL DialogBarOp::WriteDockingBarsToRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WriteDockingBarsToRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WriteDockingBarsToRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WriteDockingBarsToRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"WriteDockingBarsToRegistry bad registry key!");
 
@@ -5009,7 +5009,7 @@ BOOL DialogBarOp::WriteDockingBarsToRegistry(HKEY hSubKey)
 
 BOOL DialogBarOp::ReadDockingBarsFromRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadDockingBarsFromRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadDockingBarsFromRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadDockingBarsFromRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"ReadDockingBarsFromRegistry bad registry key!");
 
@@ -5083,7 +5083,7 @@ BOOL DialogBarOp::ReadDockingBarsFromRegistry(HKEY hSubKey)
 
 BOOL DialogBarOp::WriteWorkSpaceInfoToRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WriteWorkSpaceInfoToRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WriteWorkSpaceInfoToRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WriteWorkSpaceInfoToRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"WriteWorkSpaceInfoToRegistry bad registry key!");
 
@@ -5133,7 +5133,7 @@ BOOL DialogBarOp::WriteWorkSpaceInfoToRegistry(HKEY hSubKey)
 
 BOOL DialogBarOp::ReadWorkSpaceInfoFromRegistry(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadWorkSpaceInfoFromRegistry - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadWorkSpaceInfoFromRegistry - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadWorkSpaceInfoFromRegistry called") );
 /*	ERROR2IF(hSubKey == NULL,FALSE,"ReadWorkSpaceInfoFromRegistry bad registry key!");
 
@@ -5232,7 +5232,7 @@ PORTNOTE("other","WriteBarsToFile - Removed")
 
 BOOL DialogBarOp::WriteDockingBarsToFile(CCLexFile& file)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WriteDockingBarsToFile - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WriteDockingBarsToFile - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WriteDockingBarsToFile called") );
 /*	BOOL ok = TRUE;
 	CCamFrame* pMainFrame = GetMainFrame();
@@ -5280,7 +5280,7 @@ BOOL DialogBarOp::WriteDockingBarsToFile(CCLexFile& file)
 
 BOOL DialogBarOp::WriteWorkSpaceInfoToFile(CCLexFile& file)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::WriteWorkSpaceInfoToFile - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::WriteWorkSpaceInfoToFile - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::WriteWorkSpaceInfoToFile called") );
 /*	BOOL ok = TRUE;
 	CCamFrame* pMainFrame = GetMainFrame();
@@ -5419,7 +5419,7 @@ BOOL DialogBarOp::ReadBarsFromFile(	CCLexFile& file,
 									UINT32* pNumBarsRead,
 									UINT32* pNumDockingBarsRead)
 {
-#pragma message( __LOCMSG__ _T("DialogBarOp::ReadBarsFromFile - do nothing") )
+#pragma message( __LOCMSG__ "DialogBarOp::ReadBarsFromFile - do nothing" )
 	TRACE( _T("Warning - DialogBarOp::ReadBarsFromFile called") );
 /*	BOOL ok  = TRUE;                    // Indicates a serious error if FALSE
 	BOOL eof = FALSE;                   // TRUE if end of file is found
@@ -6261,7 +6261,7 @@ MsgResult InformationBarOp::Message(Msg* Message)
 
 void InformationBarOp::HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID)
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::HandleProfileButtonClick - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::HandleProfileButtonClick - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::HandleProfileButtonClick called") );
 /*	if (!(Gadget.IsDialogOpen ()))
 	{
@@ -6327,7 +6327,7 @@ void InformationBarOp::HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadge
 
 void InformationBarOp::HandleProfileSelChangingMsg (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID)
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::HandleProfileSelChangingMsg - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::HandleProfileSelChangingMsg - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::HandleProfileSelChangingMsg called") );
 /*	BOOL bMany = FALSE, bAllSameType = TRUE;
 	CProfileBiasGain* appliedBiasGain = GetProfileFromSelection (ProfileGadgetID, &bMany, &bAllSameType);
@@ -6647,7 +6647,7 @@ void InformationBarOp::SetInfo()
 
 void InformationBarOp::GetInfo()
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::GetInfo - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::GetInfo - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::GetInfo called") );
 /*	KernelBarPos* 	pKernelBarPos;
 	DockBarType 	Dock;
@@ -6742,7 +6742,7 @@ void InformationBarOp::Delete()
 
 BOOL InformationBarOp::Read(CCLexFile& file)
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::Read - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::Read - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::Read called") );
 /*	TokenIndex Token;
 	const TCHAR* TokenBuf = file.GetTokenBuf();
@@ -6777,14 +6777,14 @@ BOOL InformationBarOp::Read(CCLexFile& file)
 				ok = file.GetSimpleToken();
 				if (ok)
 				{	
-					ok = (_stscanf(TokenBuf,"%li",&InformationBarOp::FloatPos.x) == 1);
+					ok = (camSscanf(TokenBuf,"%li",&InformationBarOp::FloatPos.x) == 1);
 					if (!ok) TRACE( _T("Expected the Infobar's floating x pos, but got '%s'\n"),TokenBuf);
 				}
 
 				if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf,"%li",&InformationBarOp::FloatPos.y) == 1);
+					ok = (camSscanf(TokenBuf,"%li",&InformationBarOp::FloatPos.y) == 1);
 					if (!ok) TRACE( _T("Expected the Infobar's floating y pos, but got '%s'\n"),TokenBuf);
 				}
 			}
@@ -6793,14 +6793,14 @@ BOOL InformationBarOp::Read(CCLexFile& file)
 				ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf,"%li",&InformationBarOp::Slot) == 1);
+					ok = (camSscanf(TokenBuf,"%li",&InformationBarOp::Slot) == 1);
 					if (!ok) TRACE( _T("Expected the Infobar's slot, but got '%s'\n"),TokenBuf);
 				}
 
 				if (ok) ok = file.GetSimpleToken();
 				if (ok)
 				{
-					ok = (_stscanf(TokenBuf,"%li",&InformationBarOp::Offset) == 1);
+					ok = (camSscanf(TokenBuf,"%li",&InformationBarOp::Offset) == 1);
 					if (!ok) TRACE( _T("Expected the Infobar's offset, but got '%s'\n"),TokenBuf);
 				}
 			}
@@ -6931,7 +6931,7 @@ BOOL InformationBarOp::WriteStatic(CCLexFile& file)
 
 BOOL InformationBarOp::Read(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::Read - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::Read - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::Read called") );
 /*	// Create our main token under the information bar name
 	HKEY hRegKey = OpenRegKey(hSubKey, TokenTable[TOKEN_INFO_BAR].Token);
@@ -7019,7 +7019,7 @@ BOOL InformationBarOp::Read(HKEY hSubKey)
 
 BOOL InformationBarOp::Write(HKEY hSubKey)
 {
-#pragma message( __LOCMSG__ _T("InformationBarOp::Write - do nothing") )
+#pragma message( __LOCMSG__ "InformationBarOp::Write - do nothing" )
 	TRACE( _T("Warning - InformationBarOp::Write called") );
 /*	// Ensure the section is blank before we start saving any data
 	DeleteRegKey(hSubKey, TokenTable[TOKEN_INFO_BAR].Token);

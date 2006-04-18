@@ -446,7 +446,7 @@ BOOL AIBitmapProcessor::ReadImageData( AI5EPSFilter& filter, const INT32 ImageTy
 	while ( pCurrentLine >= pDataStart && !filter.GetEPSFile()->eof() )
 	{
 		// the data ends with a comment
-		if ( _tcsncmp( filter.GetTokenBuf(), _T("%%EndData"), 9 ) == 0 )
+		if ( camStrncmp( filter.GetTokenBuf(), _T("%%EndData"), 9 ) == 0 )
 			break;
 
 		////////////////
@@ -522,7 +522,7 @@ BOOL AIBitmapProcessor::ReadImageData( AI5EPSFilter& filter, const INT32 ImageTy
 ********************************************************************************************/
 bool inline CharToHex( const char& cDigit, BYTE& nNum )
 {
-	char ch = _totupper(cDigit);
+	char ch = camToupper(cDigit);
 
 	if ( (ch >= '0') && (ch <= '9') )
 	{
@@ -591,7 +591,7 @@ BYTE ColourValueToByte(const double& Value)
 ********************************************************************************************/
 INT32 AIBitmapProcessor::DecodeHexStringAsCMYK( AI5EPSFilter& filter, ADDR& pCurrentLine, INT32& nLineOffset, INT32 nLineLength, INT32 nMaxLineOffset, UINT32 nStart, BYTE CMYKval[], UINT32& nShift )
 {
-	UINT32 nTokenLen = cc_strlenBytes(filter.GetTokenBuf() + nStart);
+	UINT32 nTokenLen = camStrlen(filter.GetTokenBuf() + nStart);
 
 	// Assume hex strings are even-numbered in length for the moment
 	if ( (nTokenLen & 1) != 0 )
@@ -698,7 +698,7 @@ INT32 AIBitmapProcessor::DecodeHexStringAsCMYK( AI5EPSFilter& filter, ADDR& pCur
 ********************************************************************************************/
 INT32 AIBitmapProcessor::DecodeHexStringAsRGB( AI5EPSFilter& filter, ADDR& pCurrentLine, INT32& nLineOffset, INT32 nLineLength, INT32 nMaxLineOffset, UINT32 nStart, BYTE RGBVal[], UINT32& nShift )
 {
-	UINT32 nTokenLen = cc_strlenBytes(filter.GetTokenBuf() + nStart);
+	UINT32 nTokenLen = camStrlen(filter.GetTokenBuf() + nStart);
 
 	// Assume hex strings are even-numbered in length for the moment
 	if ( (nTokenLen & 1) != 0 )

@@ -973,7 +973,7 @@ void IndexedColour::SetName(const StringBase &NewName, BOOL ForceNamed)
 			TCHAR *Dest = (TCHAR *)(*Name);
 
 			// Copy up to 63 chars across
-			cc_lstrcpyn(Dest, Src, 63);
+			camStrncpy(Dest, Src, 63);
 			
 			// convert underscores into spaces
 			Name->SwapChar(TCHAR('_'), TCHAR(' '));

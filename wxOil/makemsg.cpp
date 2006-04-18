@@ -243,7 +243,7 @@ Item* Item::tail = 0;
 // Create & join an Item.
 Item::Item(const TCHAR* s, INT32 ps, ArgType t)
 {
-	lstrcpy(str = new TCHAR[lstrlen(s) + 1], s);
+	camStrcpy(str = new TCHAR[camStrlen(s) + 1], s);
 	pos = ps;
 	type = t;
 	next = 0;
@@ -360,7 +360,7 @@ INT32 StringBase::BuildList(const TCHAR* format)
 					// Extract the specifier.
 					TCHAR temp[64];
 					INT32 len = next - start - 2;
-					cc_lstrcpyn(temp, start + 2, len);
+					camStrncpy(temp, start + 2, len);
 					temp[len] = 0;
 					new Item(temp, ArgPos, kind);
 					start = next;
@@ -386,7 +386,7 @@ not_format:
 		TCHAR temp[256];
 		INT32 len = next - start;
 
-		cc_lstrcpyn(temp, start, len);
+		camStrncpy(temp, start, len);
 		temp[len] = 0;
 		new Item(temp, 0, LITERAL);
 		start = next;
@@ -442,45 +442,45 @@ INT32 StringBase::CCvsprintf(const TCHAR* layout, va_list va)
 					// type 'c' - single character
 					case CHAR_ARG:
 #if defined(__WXMSW__)
-						tsprintf( temp, 512, p->str, va_arg(va, TCHAR) );
+						camSnprintf( temp, 512, p->str, va_arg(va, TCHAR) );
 #else					// TCHARs are promoted to INT32 when passed via ... under GCC
-						tsprintf( temp, 512, p->str, va_arg(va, INT32) );
+						camSnprintf( temp, 512, p->str, va_arg(va, INT32) );
 #endif
 						break;
 					// type 'd' / 'i' - signed decimal integer
 					case SIGNED_INT_ARG:
-						tsprintf(temp, 512, p->str, va_arg(va, INT32));
+						camSnprintf(temp, 512, p->str, va_arg(va, INT32));
 						break;
 					// type 'ld' / 'li' - signed decimal INT32
 					case SIGNED_INT32_ARG:
-						tsprintf(temp, 512, p->str, va_arg(va, INT32));
+						camSnprintf(temp, 512, p->str, va_arg(va, INT32));
 						break;
 					// type 'u' - unsigned decimal integer
 					case UNSIGNED_INT_ARG:
-						tsprintf(temp, 512, p->str, va_arg(va, UINT32));
+						camSnprintf(temp, 512, p->str, va_arg(va, UINT32));
 						break;
 					// type 'lu' / 'lx' / 'lX' - unsigned decimal INT32
 					case UNSIGNED_INT32_ARG:
-						tsprintf(temp, 512, p->str, va_arg(va, UINT32));
+						camSnprintf(temp, 512, p->str, va_arg(va, UINT32));
 						break;
 					// type 's' - long pointer to array of (constant) char
 					case CHAR_POINTER_ARG:
-						tsprintf(temp, 512, p->str, va_arg(va, LPCTSTR));
+						camSnprintf(temp, 512, p->str, va_arg(va, LPCTSTR));
 						break;
 					// type 'S' - a pointer to a StringBase.  First change the
 					// %S format specifier, which is our own, into a sprintf()
 					// compatible %s.  Note that the 'S' is always the last
 					// character of the format specifier.
 					case STRING_POINTER_ARG:
-						(p->str)[lstrlen(p->str) - 1] = TEXT('s');
-						tsprintf(temp, 512, p->str, LPCTSTR(va_arg(va, const StringBase*)->text));
+						(p->str)[camStrlen(p->str) - 1] = TEXT('s');
+						camSnprintf(temp, 512, p->str, LPCTSTR(va_arg(va, const StringBase*)->text));
 						break;
 					default:
 						break;
 				}
 				// Replace the format specifier with the formatted text
 				delete[] p->str;
-				lstrcpy(p->str = new TCHAR[lstrlen(temp) + 1], temp);
+				camStrcpy(p->str = new TCHAR[camStrlen(temp) + 1], temp);
 				break;
 			}
 	}
@@ -491,8 +491,8 @@ INT32 StringBase::CCvsprintf(const TCHAR* layout, va_list va)
 	INT32 Index = 0;
 	for (Item* p = Item::head; (p != NULL && NextChar < length) ; p = p->next)
 	{
-/*		if (lstrlen(text) + lstrlen(p->str) < length)
-			lstrcat(text, p->str);
+/*		if (camStrlen(text) + camStrlen(p->str) < length)
+			camStrcat(text, p->str);
 		else
 		{
 			ENSURE(FALSE, "Call to String::MakeMsg will overflow - text has been truncated");
@@ -507,5 +507,5 @@ INT32 StringBase::CCvsprintf(const TCHAR* layout, va_list va)
 	text[NextChar] = TCHAR('\0');
 
 	delete Item::head;
-	return lstrlen(text);
+	return camStrlen(text);
 }

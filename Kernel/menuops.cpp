@@ -363,7 +363,7 @@ BOOL OpToolSelect::Init()
 	
 	// Set up OpToken
 	String OpToken;
-	tsprintf( OpToken, 16, _T("TOOL%u"), (Info->ID) );
+	camSnprintf( OpToken, 16, _T("TOOL%u"), (Info->ID) );
 	
 	// Create an instance of the ToolOpDescriptor
 		ToolOpDescriptor* ToolOp = new ToolOpDescriptor(
@@ -563,7 +563,7 @@ PORTNOTE("other","Remove template determination - needed find file from FileUtil
 		pOp->Token.Left(&strNumberOfTemplate, iPositionOfFCharacter);
 
 		TCHAR* pszTmp;
-		INT32 iNumberOfTemplate = tcstol( (TCHAR *)strNumberOfTemplate, &pszTmp, 10 );
+		INT32 iNumberOfTemplate = camStrtol( (TCHAR *)strNumberOfTemplate, &pszTmp, 10 );
 
 		//And search the path for xar files that are
 		//NOT the default animation or drawing templates
@@ -2716,7 +2716,7 @@ PORTNOTETRACE("other","OpUpdate::GetUpdateURL() - do nothing");
 	sTemp += PRODUCT_RETAIL_VERSION_NO;
 	LPCTSTR szURL = sTemp;
 	String_256 strURLEnc(szURL);
-	DWORD dwLen = _tcslen(szURL) * 3; // max buffer length for encoded URL
+	DWORD dwLen = camStrlen(szURL) * 3; // max buffer length for encoded URL
 
 	// Since the version may include illegal URL characters, canonicalise it.
 	InternetCanonicalizeUrl(szURL, strURLEnc.GetBuffer(dwLen), &dwLen, 0);

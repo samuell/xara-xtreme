@@ -1547,7 +1547,7 @@ void WebsterDemos()
 PORTNOTETRACE("other","Movies index - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	// Opens the default Browser on Xara's Home Page
-	const String_256 cmd = TEXT(PRODUCT_WEBLINKEXENAME " movies/index.htm");
+	const String_256 cmd = TEXT(PRODUCT_WEBLINKEXENAME) TEXT(" movies/index.htm");
 	InvokeWeblink(cmd);
 #endif
 }

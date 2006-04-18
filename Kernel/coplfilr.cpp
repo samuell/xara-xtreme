@@ -1137,7 +1137,7 @@ INT32 CorelPaletteFilter::HowCompatible4(PathName& Filename, ADDR  HeaderStart,
 			{
 				return 0;		// if we over run the header size, it's probably not one of ours...
 			}
-			if(!_istprint(start[l]))
+			if(!camIsprint(start[l]))
 			{
 				return 0;		// a non alphanumerical character
 			}
@@ -1147,7 +1147,7 @@ INT32 CorelPaletteFilter::HowCompatible4(PathName& Filename, ADDR  HeaderStart,
 
 		// find the next non-quoted character
 		l++;
-		while(_istspace(start[l]) && l < HeaderSize)
+		while(camIsspace(start[l]) && l < HeaderSize)
 		  l++;
 
 		// and the next a digit?
@@ -1303,7 +1303,7 @@ BOOL CorelPaletteFilter::DoImport4()
 
 		// Read the CMYK colour components
 		INT32 c, m, y, k;
-		if (_stscanf(Line + l, "%d %d %d %d", &c, &m, &y, &k) == 4)
+		if (camSscanf(Line + l, "%d %d %d %d", &c, &m, &y, &k) == 4)
 		{
 			if (!ProcessCMYKColour(c/100.0, m/100.0, y/100.0, k/100.0, &ColName))
 				return FALSE;
@@ -1400,22 +1400,22 @@ BOOL CorelPaletteFilter::DoImport5()
 		switch (Prefix)
 		{
 			case PalettePrefix_Pantone:
-				_tcscpy(ColName, PREFIX_PANTONE);
+				camStrcpy(ColName, PREFIX_PANTONE);
 				ColNameOffset = sizeof(PREFIX_PANTONE) - 1;
 				break;
 
 			case PalettePrefix_Focoltone:
-				_tcscpy(ColName, PREFIX_FOCOLTONE);
+				camStrcpy(ColName, PREFIX_FOCOLTONE);
 				ColNameOffset = sizeof(PREFIX_FOCOLTONE) - 1;
 				break;
 
 			case PalettePrefix_Trumatch:
-				_tcscpy(ColName, PREFIX_TRUMATCH);
+				camStrcpy(ColName, PREFIX_TRUMATCH);
 				ColNameOffset = sizeof(PREFIX_TRUMATCH) - 1;
 				break;
 
 			case PalettePrefix_RGB:
-				_tcscpy(ColName, PREFIX_UNIFORM);
+				camStrcpy(ColName, PREFIX_UNIFORM);
 				ColNameOffset = sizeof(PREFIX_UNIFORM) - 1;
 				break;
 		}
@@ -1453,7 +1453,7 @@ BOOL CorelPaletteFilter::DoImport5()
 		// check the name
 		for (l = ColNameOffset; l < (Len + ColNameOffset); l++)
 		{
-			if (!_istprint(ColName[l]))
+			if (!camIsprint(ColName[l]))
 				ColName[l] = '\0';
 		}
 
@@ -2237,7 +2237,7 @@ BOOL PaintShopProPaletteFilter::PreImport()
 	{
 		const TCHAR* Line = m_pImportFile->GetTokenBuf();
 		// BODGE - does this work in UNICODE builds?
-		_stscanf(Line, "%d", &m_NumToImport);
+		camSscanf(Line, "%d", &m_NumToImport);
 	}
 
 	return m_pImportFile->good();
@@ -2271,7 +2271,7 @@ BOOL PaintShopProPaletteFilter::ImportPalette()
 		UINT32 Red = 0;
 		UINT32 Green = 0;
 		UINT32 Blue = 0;
-		INT32 result = _stscanf(Line, "%d %d %d", &Red, &Green, &Blue);
+		INT32 result = camSscanf(Line, "%d %d %d", &Red, &Green, &Blue);
 
 		if (result != 0)
 			ok = ProcessRGBColour(Red/(double)0xFF, Green/(double)0xFF, Blue/(double)0xFF);

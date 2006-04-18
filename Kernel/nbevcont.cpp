@@ -248,7 +248,7 @@ NodeBevelController::~NodeBevelController()
 	if (myBevelID > -1)
 	{
 		TCHAR			strId[100];
-		tsprintf( strId, 100, _T("Popping NodeBevelController ID:  %i\n"), myBevelID );
+		camSnprintf( strId, 100, _T("Popping NodeBevelController ID:  %i\n"), myBevelID );
 			
 		TRACEUSER( "ChrisS", strId );
 	}

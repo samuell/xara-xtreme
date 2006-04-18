@@ -123,6 +123,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccolbar.h"
 #include "dragmgr.h"
 
+#include "wx/sysopt.h"
+
 #if defined(USE_WXAUI)
 
 class CamFrameManager : public wxFrameManager
@@ -377,7 +379,7 @@ BOOL CCamFrame::CreateToolbars()
 	{
 		wxSystemOptions::SetOption( wxT("msw.remap"), 2 );
 	}
-#endif	
+#endif
 
 	wxCommandEvent sbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_STANDARD));
 	OnStandardBar(sbe);

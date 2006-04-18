@@ -421,7 +421,7 @@ INT32 AcornDrawFilter::HowCompatible(PathName& Filename, ADDR HeaderStart,
 
 {
 PORTNOTE("byteorder", "TODO: Check byte ordering")
-	if (_tcsncmp((char *) HeaderStart, "Draw", 4) == 0)
+	if (camStrncmp((char *) HeaderStart, "Draw", 4) == 0)
 	{
 		// It's a Draw file.
 		return 10;
@@ -590,7 +590,7 @@ BOOL AcornDrawFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 	// Check that this is an Acorn Draw file...the first four characters in the file
 	// should be "Draw".  If we've been chosen automatically, then don't bother as we've
 	// already checked this.
-	if (DrawFile->eof() || (!AutoChosen && (_tcsncmp(FileHeader.Ident, "Draw", 4) != 0)))
+	if (DrawFile->eof() || (!AutoChosen && (camStrncmp(FileHeader.Ident, "Draw", 4) != 0)))
 	{
 		// Could not find the ident header - close the file, and return error.
 		EndSlowJob();

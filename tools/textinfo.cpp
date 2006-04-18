@@ -284,7 +284,7 @@ PORTNOTE("text", "Removed IsDisplayFontInstalled");
 
 	// is it one of ours ?
 	String_32 CCSmall(_R(IDS_FONTS_EDITFIELDSMALL)); // "CCSMALL"
-	return _tcsncmp(buff, (TCHAR *)CCSmall, 64)==0;
+	return camStrncmp(buff, (TCHAR *)CCSmall, 64)==0;
 #else
 	return FALSE;
 #endif

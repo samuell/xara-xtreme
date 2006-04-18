@@ -119,8 +119,8 @@ String_16::String_16(const TCHAR* psz)
 	length = FIX_LEN_BUFSIZE;
 	if (psz != 0)
 	{
-		ERROR3IF(lstrlen(psz) >= length, "String_16::String_16 overflow");
-		lstrcpy(text, psz);
+		ERROR3IF(camStrlen(psz) >= length, "String_16::String_16 overflow");
+		camStrcpy(text, psz);
 	}
 }
 
@@ -144,9 +144,9 @@ void String_16::CopyConstruct(const StringBase& other)
 	*(text = fixedbuf) = 0;
 	length = FIX_LEN_BUFSIZE;
 	ERROR3IF((const TCHAR*) other == 0, "StringBase to be copied has not been ALLOCated");
-	ERROR3IF(lstrlen((const TCHAR*) other) >= length,
+	ERROR3IF(camStrlen((const TCHAR*) other) >= length,
 				"Constructed String_16 not large enough to hold StringBase copy");
-	lstrcpy(text, (const TCHAR*) other);
+	camStrcpy(text, (const TCHAR*) other);
 }
 
 
@@ -176,8 +176,8 @@ String_16::String_16(UINT32 resID, UINT32 hinst)
 	{
 		ERROR3("String resource failed to load");
 		TCHAR buf[128];
-		tsprintf(buf, 128, TEXT("<%X:%X>"), (INT32) resID, (INT32) hinst);
-		lstrcpy(text, (lstrlen(buf) <= 16) ? buf : TEXT("!"));
+		camSnprintf(buf, 128, TEXT("<%X:%X>"), (INT32) resID, (INT32) hinst);
+		camStrcpy(text, (camStrlen(buf) <= 16) ? buf : TEXT("!"));
 	}
 }
 
@@ -200,7 +200,7 @@ String_16::String_16(const wxString& wxs)
 	*(text = fixedbuf) = 0;
 	length = FIX_LEN_BUFSIZE;
 	ERROR3IF(wxs.Len() >= length, "String_16::String_16 overflow");
-	lstrcpy(text, (LPCTSTR)wxs);
+	camStrcpy(text, (LPCTSTR)wxs);
 }
 
 

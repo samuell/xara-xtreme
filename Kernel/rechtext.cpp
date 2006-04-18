@@ -825,89 +825,59 @@ void TextObjRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFileR
 
 void TextObjRecordHandler::DescribeStorySimple(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story (Simple)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story (Simple)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryComplex(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story (Complex)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story (Complex)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStorySimpleStartLeft(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - Start Left (Simple)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - Start Left (Simple)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStorySimpleStartRight(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - Start Right (Simple)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - Start Right (Simple)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStorySimpleEndLeft(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - End Left (Simple)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - End Left (Simple)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStorySimpleEndRight(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - End Right (Simple)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - End Right (Simple)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryComplexStartLeft(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - Start Left (Complex)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - Start Left (Complex)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryComplexStartRight(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - Start Right (Complex)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - Start Right (Complex)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryComplexEndLeft(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - End Left (Complex)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - End Left (Complex)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryComplexEndRight(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Story - End Right (Complex)\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Story - End Right (Complex)\r\n");
 }
 
 void TextObjRecordHandler::DescribeStoryWordWrapInfo(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Story Word Wrap Infor\r\n");	(*pStr) += s;
+	(*pStr) += _T("Text Story Word Wrap Infor\r\n");
 
 	INT32 Width;
 	BYTE WordWrapOn;
@@ -915,8 +885,10 @@ void TextObjRecordHandler::DescribeStoryWordWrapInfo(CXaraFileRecord *pCXaraFile
 	pCXaraFileRecord->ReadINT32(&Width);
 	pCXaraFileRecord->ReadBYTE(&WordWrapOn);
 
-	_stprintf(s, "Width : \t%ld\r\n",Width);			(*pStr) += s;
-	_stprintf(s, "Word Wrap On : \t%ld\r\n",WordWrapOn);(*pStr) += s;
+	camSprintf(s, _T("Width : \t%ld\r\n"),Width);
+	(*pStr) += s;
+	camSprintf(s, _T("Word Wrap On : \t%ld\r\n"),WordWrapOn);
+	(*pStr) += s;
 }
 
 
@@ -924,7 +896,7 @@ void TextObjRecordHandler::DescribeStoryIndentInfo(CXaraFileRecord *pCXaraFileRe
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Story Indent Info\r\n");	(*pStr) += s;
+	(*pStr) += _T("Text Story Indent Info\r\n");
 
 	INT32 LeftIndent;
 	INT32 RightIndent;
@@ -932,17 +904,16 @@ void TextObjRecordHandler::DescribeStoryIndentInfo(CXaraFileRecord *pCXaraFileRe
 	pCXaraFileRecord->ReadINT32(&LeftIndent);
 	pCXaraFileRecord->ReadINT32(&RightIndent);
 
-	_stprintf(s, "Left indent : \t%ld\r\n",LeftIndent);			(*pStr) += s;
-	_stprintf(s, "Right indent : \t%ld\r\n",RightIndent);		(*pStr) += s;
+	camSprintf(s, _T("Left indent : \t%ld\r\n"),LeftIndent);
+	(*pStr) += s;
+	camSprintf(s, _T("Right indent : \t%ld\r\n"),RightIndent);
+	(*pStr) += s;
 }
 
 
 void TextObjRecordHandler::DescribeLine(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Line\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Line\r\n");
 }
 
 void TextObjRecordHandler::DescribeLineInfo(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
@@ -955,13 +926,16 @@ void TextObjRecordHandler::DescribeLineInfo(CXaraFileRecord *pCXaraFileRecord, S
 	pCXaraFileRecord->ReadINT32(&Height);
 	pCXaraFileRecord->ReadINT32(&DistFromPreviousLine);
 
-	_stprintf(s, "Text Line info\r\n");										(*pStr) += s;
-	_stprintf(s, "Width : \t%ld\r\n",Width);								(*pStr) += s;
-	_stprintf(s, "Height: \t%ld\r\n",Height);								(*pStr) += s;
-	_stprintf(s, "Dist from previous line: \t%ld\r\n",DistFromPreviousLine);(*pStr) += s;
+	(*pStr) += _T("Text Line info\r\n");
+	camSprintf(s, _T("Width : \t%ld\r\n"),Width);
+	(*pStr) += s;
+	camSprintf(s, _T("Height: \t%ld\r\n"),Height);
+	(*pStr) += s;
+	camSprintf(s, _T("Dist from previous line: \t%ld\r\n"),DistFromPreviousLine);
+	(*pStr) += s;
 
-	_stprintf(s, "\r\n'Dist from previous line' is the y distance between\r\n");(*pStr) += s;
-	_stprintf(s, "this line's base line and the previous line's base line\r\n");(*pStr) += s;
+	(*pStr) += _T("\r\n'Dist from previous line' is the y distance between\r\n");
+	(*pStr) += _T("this line's base line and the previous line's base line\r\n");
 }
 
 void TextObjRecordHandler::DescribeString(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
@@ -972,20 +946,16 @@ void TextObjRecordHandler::DescribeString(CXaraFileRecord *pCXaraFileRecord, Str
 	WCHAR MyWChar;
 	UINT32 i;
 
-	_stprintf(s, "Text String\r\n");
-	(*pStr) += s;
-	_stprintf(s, "String = ");
-	(*pStr) += s;
+	(*pStr) += _T("Text String\r\nString = ");
 
 	for (i=0; i<RecSize/2; i++)
 	{
 		pCXaraFileRecord->ReadWCHAR(&MyWChar);
-		_stprintf(s, "%lc", MyWChar);
+		camSprintf(s, _T("%lc"), MyWChar);
 		(*pStr) += s;
 	}
 
-	_stprintf(s, "\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("\r\n");
 }
 
 void TextObjRecordHandler::DescribeChar(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
@@ -996,18 +966,13 @@ void TextObjRecordHandler::DescribeChar(CXaraFileRecord *pCXaraFileRecord, Strin
 
 	pCXaraFileRecord->ReadWCHAR(&MyWChar);
 
-	_stprintf(s, "Text Char\r\n");
-	(*pStr) += s;
-	_stprintf(s, "Char = %lc\r\n", MyWChar);
+	camSprintf(s, _T("Text Char\r\nChar = %lc\r\n"), MyWChar);
 	(*pStr) += s;
 }
 
 void TextObjRecordHandler::DescribeEOL(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text EOL\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text EOL\r\n");
 }
 
 void TextObjRecordHandler::DescribeKern(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
@@ -1018,26 +983,18 @@ void TextObjRecordHandler::DescribeKern(CXaraFileRecord *pCXaraFileRecord, Strin
 	pCXaraFileRecord->ReadINT32(&KernX);
 	pCXaraFileRecord->ReadINT32(&KernY);
 
-	_stprintf(s, "Text Kern Code\r\n");
-	(*pStr) += s;
-	_stprintf(s, "Kern Code = DocCoord(%ld, %ld)", KernX, KernY);
+	camSprintf(s, _T("Text Kern Code\r\nKern Code = DocCoord(%ld, %ld)"), KernX, KernY);
 	(*pStr) += s;
 }
 
 void TextObjRecordHandler::DescribeCaret(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Caret\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Caret\r\n");
 }
 
 void TextObjRecordHandler::DescribeInvalid(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr)
 {
-	TCHAR s[256];
-
-	_stprintf(s, "Text Object - Invalid\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Text Object - Invalid\r\n");
 }
 
 #endif

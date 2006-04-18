@@ -341,12 +341,11 @@ BOOL PreferenceChunk::AddPref(LPTCHAR Name, PrefData EntryData, PreferenceType T
 	// Fill in the entry (NB. obscure pointer arithmetic)
 	PreferenceEntry *pEntry = pEntries + NumEntriesUsed;
 	
-	UINT32 memsize = ((cc_strlenBytes(Name)+1 /*term zero*/)* sizeof(TCHAR)+3) & ~3;
-
 	// Alex put in something to make a copy of the name
+	UINT32 memsize = (camStrlen(Name) + 1) * sizeof(TCHAR);
 	pEntry->Name = (LPTCHAR) CCMalloc( memsize );
 	if (!pEntry->Name) return FALSE; // error already set
-	_tcscpy(pEntry->Name, Name);
+	camStrcpy(pEntry->Name, Name);
 //	pEntry->Name 	= Name;
 
 	pEntry->Data 	= EntryData;
@@ -422,7 +421,7 @@ BOOL PreferenceChunk::GetPrefValue(LPTCHAR Pref, PrefData EntryData, PreferenceT
 	
 	for (UINT32 i = 0; i < NumEntriesUsed; i++)
 	{
-		if (lstrcmpi(Pref, pEntry->Name) == 0)
+		if (camStricmp(Pref, pEntry->Name) == 0)
 		{
 			// Found it so it does exist
 			// Check that the type corresponds to the correct one
@@ -490,7 +489,7 @@ BOOL PreferenceChunk::SetPrefValue(LPTCHAR Pref, PrefData EntryData, PreferenceT
 	
 	for (UINT32 i = 0; i < NumEntriesUsed; i++)
 	{
-		if (lstrcmpi(Pref, pEntry->Name) == 0)
+		if (camStricmp(Pref, pEntry->Name) == 0)
 		{
 			// Found it so it does exist
 			// Check that the type corresponds to the correct one
@@ -557,7 +556,7 @@ BOOL PreferenceChunk::PrefExists(LPTCHAR Pref)
 	
 	for (UINT32 i = 0; i < NumEntriesUsed; i++)
 	{
-		if (lstrcmpi(Pref, pEntry->Name) == 0)
+		if (camStricmp(Pref, pEntry->Name) == 0)
 			// Found it so it does exist
 			return TRUE;
 		
@@ -673,8 +672,8 @@ BOOL PreferenceSection::AddPref(OILPreferences* OILPrefs,
 								LPTCHAR Pref, PreferenceType Type, PrefData PrefVar)
 {
 #ifdef _DEBUG
-	if ((_tcsnicmp(Pref, _T("blobby"), 7) == 0) ||
-		(_tcsnicmp(Pref, _T("wobjob"), 7) == 0))
+	if ((camStrnicmp(Pref, _T("blobby"), 7) == 0) ||
+		(camStrnicmp(Pref, _T("wobjob"), 7) == 0))
 	{
 		// Silly names not allowed
 		ENSURE(FALSE, "Preference section has suffered a cliche overload");
@@ -1107,7 +1106,7 @@ BOOL Preferences::DeclareSection(LPTCHAR Section, UINT32 InitialSize)
 #if !defined(EXCLUDE_FROM_RALPH)
 	// Check that somebody is not trying to define a null section name or a zero length
 	// string as this may cause problems in the string compares. (make it one or less for now)
-	ERROR2IF(((Section == NULL) || (cc_strlenCharacters(Section) <= 1)), FALSE, _R(IDN_BAD_DECLARE_SECTION));
+	ERROR2IF(((Section == NULL) || (camStrclen(Section) <= 1)), FALSE, _R(IDN_BAD_DECLARE_SECTION));
 
 	PreferenceSection* pSection = NULL;
 
@@ -1425,8 +1424,8 @@ PreferenceSection *Preferences::GetSection(LPTCHAR SectionName)
 #if !defined(EXCLUDE_FROM_RALPH)
 #ifdef _DEBUG
 	if ((SectionName != NULL) &&
-	    ((_tcsnicmp(SectionName, _T("blobby"), 7) == 0) ||
-		 (_tcsnicmp(SectionName, _T("wobjob"), 7) == 0)))
+	    ((camStrnicmp(SectionName, _T("blobby"), 7) == 0) ||
+		 (camStrnicmp(SectionName, _T("wobjob"), 7) == 0)))
 	{
 		// Silly names not allowed
 		ENSURE(FALSE, "Preference section has suffered a cliche overload");
@@ -1447,11 +1446,11 @@ PreferenceSection *Preferences::GetSection(LPTCHAR SectionName)
 	// otherwise this could screw up the name comparing. Duplicate null check just in
 	// case check above is removed.
 	ERROR2IF(((SectionName != NULL) &&
-			 (cc_strlenCharacters(SectionName) <= 1)), NULL, _R(IDN_BAD_CURRENT_SECTION));
+			 (camStrclen(SectionName) <= 1)), NULL, _R(IDN_BAD_CURRENT_SECTION));
 		
 	// Do a quick check to see if it is the cached section.
 	if ((CurrentSection != NULL) && 
-		(lstrcmpi(SectionName, CurrentSection->Section) == 0))
+		(camStricmp(SectionName, CurrentSection->Section) == 0))
 		// It's the same one as we tried last time.
 		return CurrentSection;
 		
@@ -1461,7 +1460,7 @@ PreferenceSection *Preferences::GetSection(LPTCHAR SectionName)
 	
 	while (pSection != NULL)
 	{
-		if (lstrcmpi(SectionName, pSection->Section) == 0)
+		if (camStricmp(SectionName, pSection->Section) == 0)
 		{
 			// Found the right section - remember it for next time and return it.
 			CurrentSection = pSection;

@@ -1978,8 +1978,8 @@ PORTNOTE("GIFFilter", "Removed use of gif code")
 	LPGIFINFOHEADER pHeader = (LPGIFINFOHEADER) HeaderStart;
 
 	if (
-		(_tcsncmp(pHeader->giName, "GIF89a", 6) == 0) ||
-	 	(_tcsncmp(pHeader->giName, "GIF87a", 6) == 0)
+		(camStrncmp(pHeader->giName, "GIF89a", 6) == 0) ||
+	 	(camStrncmp(pHeader->giName, "GIF87a", 6) == 0)
 	   )
 	{
 		// the other fields in the GIFINFOHEADER don't really hold any useful information

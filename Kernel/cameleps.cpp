@@ -5746,7 +5746,7 @@ BOOL CamelotEPSRenderRegion::DrawClippedBitmap(Path *DrawPath)
 
 	if (Verbs[NumCoords - 1] & PT_CLOSEFIGURE)
 		// Path should be closed
-		PathType[0] = _totlower(PathType[0]);
+		PathType[0] = tolower(PathType[0]);
 
 	// Do the stroke command
 	pDC->OutputToken(PathType);

@@ -640,14 +640,14 @@ INT32 CMXTreeDlg::AddDisplayNode(CMXNode* pNode,INT32 Index,INT32 Depth,BOOL Exp
 		char indent[256];
 		indent[0] = 0;
 		for (INT32 i=0;i<Depth;i++)
-			_tcscat(indent,"       ");
+			camStrcat(indent,"       ");
 
 		if (pNode->HasChildren())
 		{
 			if (pNode->ShowChildren())
-				_tcscat(indent,"-");
+				camStrcat(indent,"-");
 			else
-				_tcscat(indent,"+");
+				camStrcat(indent,"+");
 		}
 
 		// Get the textual desc of the tag
@@ -761,9 +761,9 @@ void CMXTreeDlg::ShowNodeDebugInfoForNode(CMXNode *pNode)
 			pHandler->GetRecordDescriptionText(pNode->GetCMXFileRecord(),EditStr);
 		else
 		{
-			char s[256];
+			TCHAR s[256];
 			FOURCC ChunkType = pNode->GetChunkType();
-			_stprintf(s,"Default handler (%d)\r\n", ChunkType);
+			canSprintf(s,_T("Default handler (%d)\r\n"), ChunkType);
 			(*EditStr) += s;
 		}
 
@@ -995,7 +995,7 @@ void CMXTreeDlgRecordHandler::GetRecordDescriptionText(CMXFileRecord* pRecord,St
 	}
 
 	TCHAR s[256];
-	_stprintf(s,"Record Number = %d\r\nRIFF type = %s\r\nTag = %s\r\nSize = %d\r\n\r\n",pRecord->GetRecordNumber(),pObjText,pTagText,pRecord->GetChunkSize());
+	camSprintf(s,_T("Record Number = %d\r\nRIFF type = %s\r\nTag = %s\r\nSize = %d\r\n\r\n"),pRecord->GetRecordNumber(),pObjText,pTagText,pRecord->GetChunkSize());
 
 	(*pStr) += s;
 }
@@ -1167,7 +1167,7 @@ HTREEITEM CMXTreeDlg::AddOneItem(HTREEITEM hParent, TCHAR *pText, HTREEITEM hIns
 	// The pszText, iImage, and iSelectedImage members are filled out.
 	tvI.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
 	tvI.pszText = pText;
-	tvI.cchTextMax = lstrlen(pText);
+	tvI.cchTextMax = camStrlen(pText);
 	tvI.iImage = iImage;
 	tvI.iSelectedImage = iImage;
 	tvI.lParam = (LPARAM)pNode;

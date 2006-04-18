@@ -219,7 +219,7 @@ public:
 	virtual wxSize GetBarSize () = 0;
 #ifdef _DEBUG
 	virtual void AssertValid() const;
-#pragma message( __LOCMSG__ _T("Removed OILDockingBar::Dump") )
+#pragma message( __LOCMSG__ "Removed OILDockingBar::Dump" )
 //	virtual void Dump(CDumpContext& dc) const;
 	void Dump_List();
 #endif
@@ -228,7 +228,7 @@ protected:
     DECLARE_DYNAMIC_CLASS( OILDockingBar )
     DECLARE_EVENT_TABLE()
 
-#pragma message( __LOCMSG__ _T("Removed OILDockingBar::OnUpdateCmdUI") )
+#pragma message( __LOCMSG__ "Removed OILDockingBar::OnUpdateCmdUI" )
 //	void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler) ;
 
 	//{{AFX_MSG(OILDockingBar)
@@ -299,7 +299,7 @@ public:
 	BOOL	SetSlotSize(INT32 SlotNo, INT32 NewSize);
 
 	BOOL  DeleteBars();
-#pragma message( __LOCMSG__ _T("Removed OILFixedDockingBar::RepositionWindow") )
+#pragma message( __LOCMSG__ "Removed OILFixedDockingBar::RepositionWindow" )
 //	void 	RepositionWindow(AFX_SIZEPARENTPARAMS FAR* lpLayout, 
 //				wxWindow* wxWindow*, LPCRECT lpRect);
 
@@ -308,7 +308,7 @@ public:
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
-#pragma message( __LOCMSG__ _T("Removed OILFixedDockingBar::Dump") )
+#pragma message( __LOCMSG__ "Removed OILFixedDockingBar::Dump" )
 //	virtual void Dump(CDumpContext& dc) const;
 	void Dump_List();
 #endif

@@ -236,7 +236,7 @@ void OpCreateFontThumbnails::Do(OpDescriptor*)
 
 	//Now, start reading from the file until we reach the "START" token
 	//or we reach the end of the file
-	while (tokType != TOKEN_EOF && _tcscmp(TokenBuf, "START")!=0)
+	while (tokType != TOKEN_EOF && camStrcmp(TokenBuf, "START")!=0)
 	{
 		//Get a token frm the file
 		fileIndex.GetToken();
@@ -255,13 +255,13 @@ void OpCreateFontThumbnails::Do(OpDescriptor*)
 		tokType = fileIndex.GetTokenType();
 
 		//Right, now let's find the first comma in the string
-		TCHAR* pcFindPtr=_tcschr(TokenBuf, ',');
+		TCHAR* pcFindPtr=camStrchr(TokenBuf, ',');
 
 		//If we've found one
 		if (pcFindPtr)
 		{
 			//Then move the string pointer on by two characters
-			pcFindPtr=_tcsninc(pcFindPtr, 2);
+			pcFindPtr=camStrninc(pcFindPtr, 2);
 
 			//And if we didn't go past the end of the string
 			if (pcFindPtr && *pcFindPtr!='\0')
@@ -269,7 +269,7 @@ void OpCreateFontThumbnails::Do(OpDescriptor*)
 				//Then pcFindPtr should now be pointing to the font name
 
 				//Then find a pointer to the next comma in the string
-				TCHAR* pcSecondComma=_tcschr(pcFindPtr, ',');
+				TCHAR* pcSecondComma=camStrchr(pcFindPtr, ',');
 
 				if (!pcSecondComma)
 					break;
@@ -281,13 +281,13 @@ void OpCreateFontThumbnails::Do(OpDescriptor*)
 				while (pcFindPtr && pcFindPtr!=pcSecondComma && *pcFindPtr!='\0')
 				{
 					strFontName+=(*pcFindPtr);
-					pcFindPtr=_tcsinc(pcFindPtr);
+					pcFindPtr=camStrinc(pcFindPtr);
 				}
 
 				//Now we want to find the ID of the font. That will occur after the
 				//second comma. So set pcFindPtr so it points to two characters
 				//after the second comma
-				pcFindPtr=_tcsninc(pcSecondComma, 2);
+				pcFindPtr=camStrninc(pcSecondComma, 2);
 
 				//And copy everything from the pcFindPtr (inclusive) to the third comma
 				//(exclusive) into a new string
@@ -296,7 +296,7 @@ void OpCreateFontThumbnails::Do(OpDescriptor*)
 				while (pcFindPtr && *pcFindPtr!=',' && *pcFindPtr!='\0')
 				{
 					strFontID+=(*pcFindPtr);
-					pcFindPtr=_tcsinc(pcFindPtr);
+					pcFindPtr=camStrinc(pcFindPtr);
 				}
 
 				//And translate that string into a number
@@ -677,7 +677,7 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 			String_256 strDescription=pLogFont->lfFaceName;
 
 			//And if that description is the one we're looking for
-			if (_tcsncmp(strDescription, strCorrectedName, strCorrectedName.Length())==0)
+			if (camStrncmp(strDescription, strCorrectedName, strCorrectedName.Length())==0)
 			{
 				//Return that item
 				return pTTFItem;
@@ -699,9 +699,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a bold-italic font?
-					else if (_tcsstr(strCorrectedName, "BoldItal") != 0)
+					else if (camStrstr(strCorrectedName, "BoldItal") != 0)
 					{
-						if (_tcsstr(strDescription, "BoldItal") != 0)
+						if (camStrstr(strDescription, "BoldItal") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -709,9 +709,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a heavy-italic font?
-					else if (_tcsstr(strCorrectedName, "HeavyItal") != 0)
+					else if (camStrstr(strCorrectedName, "HeavyItal") != 0)
 					{
-						if (_tcsstr(strDescription, "HeavyItal") != 0)
+						if (camStrstr(strDescription, "HeavyItal") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -719,9 +719,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a heavy font?
-					else if (_tcsstr(strCorrectedName, "Heavy") != 0)
+					else if (camStrstr(strCorrectedName, "Heavy") != 0)
 					{
-						if (_tcsstr(strDescription, "Heavy") != 0)
+						if (camStrstr(strDescription, "Heavy") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -729,9 +729,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a bold font?
-					else if (_tcsstr(strCorrectedName, "Bold") != 0)
+					else if (camStrstr(strCorrectedName, "Bold") != 0)
 					{
-						if (_tcsstr(strDescription, "Bold") != 0)
+						if (camStrstr(strDescription, "Bold") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -739,9 +739,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this an italic font?
-					else if (_tcsstr(strCorrectedName, "Ital") != 0)
+					else if (camStrstr(strCorrectedName, "Ital") != 0)
 					{
-						if (_tcsstr(strDescription, "Ital") != 0)
+						if (camStrstr(strDescription, "Ital") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -749,9 +749,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this an engraved font?
-					else if (_tcsstr(strCorrectedName, "Engraved") != 0)
+					else if (camStrstr(strCorrectedName, "Engraved") != 0)
 					{
-						if (_tcsstr(strDescription, "Engraved") != 0)
+						if (camStrstr(strDescription, "Engraved") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pTTFItem;
@@ -783,7 +783,7 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 			String_256 strDescription=pLogFont->lfFaceName;
 
 			//And if that description is the one we're looking for
-			if (_tcsncmp(strDescription, strCorrectedName, strCorrectedName.Length())==0)
+			if (camStrncmp(strDescription, strCorrectedName, strCorrectedName.Length())==0)
 			{
 				//Return that item
 				return pATMItem;
@@ -805,9 +805,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a bold-italic font?
-					else if (_tcsstr(strCorrectedName, "BoldItal") != 0)
+					else if (camStrstr(strCorrectedName, "BoldItal") != 0)
 					{
-						if (_tcsstr(strDescription, "BoldItal") != 0)
+						if (camStrstr(strDescription, "BoldItal") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;
@@ -815,9 +815,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a heavy-italic font?
-					else if (_tcsstr(strCorrectedName, "HeavyItal") != 0)
+					else if (camStrstr(strCorrectedName, "HeavyItal") != 0)
 					{
-						if (_tcsstr(strDescription, "HeavyItal") != 0)
+						if (camStrstr(strDescription, "HeavyItal") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;
@@ -825,9 +825,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a heavy font?
-					else if (_tcsstr(strCorrectedName, "Heavy") != 0)
+					else if (camStrstr(strCorrectedName, "Heavy") != 0)
 					{
-						if (_tcsstr(strDescription, "Heavy") != 0)
+						if (camStrstr(strDescription, "Heavy") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;
@@ -835,9 +835,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this a bold font?
-					else if (_tcsstr(strCorrectedName, "Bold") != 0)
+					else if (camStrstr(strCorrectedName, "Bold") != 0)
 					{
-						if (_tcsstr(strDescription, "Bold") != 0)
+						if (camStrstr(strDescription, "Bold") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;
@@ -845,9 +845,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this an italic font?
-					else if (_tcsstr(strCorrectedName, "Ital") != 0)
+					else if (camStrstr(strCorrectedName, "Ital") != 0)
 					{
-						if (_tcsstr(strDescription, "Ital") != 0)
+						if (camStrstr(strDescription, "Ital") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;
@@ -855,9 +855,9 @@ SGDisplayPreviewFonts* OpCreateFontThumbnails::FindFontFromName(String_256& strN
 					}
 
 					// is this an engraved font?
-					else if (_tcsstr(strCorrectedName, "Engraved") != 0)
+					else if (camStrstr(strCorrectedName, "Engraved") != 0)
 					{
-						if (_tcsstr(strDescription, "Engraved") != 0)
+						if (camStrstr(strDescription, "Engraved") != 0)
 						{
 							TRACEALL( _T("Matched %s with %s\n"), (TCHAR*)strCorrectedName, (TCHAR*)strDescription);
 							return pATMItem;

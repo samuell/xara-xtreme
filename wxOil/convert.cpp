@@ -994,14 +994,14 @@ BOOL Convert::MillipointsToString( double MpValue, UnitType TheUnit, StringBase*
 	// Makes the output form "%.xf" where x is num dp.
 	// %g instead of %f gives leading zero supression but then requires number significant
 	// figures rather than number of decimal places.
-	tsprintf( dpformat, 256, TEXT("%%.%df"), DecimalPlaces) ;
+	camSnprintf( dpformat, 256, TEXT("%%.%df"), DecimalPlaces) ;
 
 	// Create the string to stick in an editable field (or wherever you like)
 	if (pUnit->IsPrefix())
 	{
 		// Prefix units so show units followed by value
-		tsprintf( format, 256, _T("%") PERCENT_S PERCENT_S, (LPCTSTR) dpformat );				// ie. %s %.3f
-		tsprintf( p, 256, format, (LPCTSTR)Specifier, (double)Value );			// uses FP
+		camSnprintf( format, 256, _T("%%s%s"), (LPCTSTR) dpformat );				// ie. %s %.3f
+		camSnprintf( p, 256, format, (LPCTSTR)Specifier, (double)Value );			// uses FP
 		*OutputString = p;
 		// Look for all zeros after decimal point and if so then remove
 		//StripTrailingZeros(OutputString);
@@ -1009,10 +1009,7 @@ BOOL Convert::MillipointsToString( double MpValue, UnitType TheUnit, StringBase*
 	else
 	{
 		// Suffix units so show value followed by units
-		//_stprintf(format,"%s%%s",dpformat);
-		//_stprintf(p,format,Value,(char*)Specifier);
-		tsprintf( format, 256, PERCENT_S, (LPCTSTR) dpformat );
-		tsprintf( p, 256, format, (double)Value );									// uses FP
+		camSnprintf( p, 256, dpformat, (double)Value );						// uses FP
 		*OutputString = p;
 
 		// Look for all zeros after decimal point and if so then remove
@@ -1093,16 +1090,14 @@ BOOL Convert::DoubleToString( double Number, StringBase* OutputString, INT32 Dec
 {
 	// Generate the output string in a simple char array
 	TCHAR dpformat[32]; 
-	TCHAR format[32];
 	TCHAR TempString[32];
 
 	// Use the default/preference or desired number of decimal places
 	if (DecimalPlaces < 0)
 		DecimalPlaces = (INT32) NumDecimalPlaces;		// Use the preference value
 
-	tsprintf( dpformat, 32, _T("%%.%df"), (INT32) DecimalPlaces);		// make %.xf formatting string
-	tsprintf( format, 32, PERCENT_S, (LPCTSTR)dpformat );
-	tsprintf( TempString, 32, format, (double)Number );					// uses FP
+	camSnprintf( dpformat, 32, _T("%%.%df"), (INT32) DecimalPlaces);		// make %.xf formatting string
+	camSnprintf( TempString, 32, dpformat, (double)Number );					// uses FP
 
 	*OutputString = TempString;		// Copy the resulting string into the String
 	
@@ -1879,7 +1874,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 			if (pScaleUnit->IsPrefix())
 			{
 				// Prefix units required so print them first followed by the number
-				tsprintf( p, 256, PERCENT_S _T("%.*f"), (LPCTSTR) Specifier, (INT32) dp, (double)ScaledValue );		// uses * & FP
+				camSnprintf( p, 256, _T("%s%.*f"), (LPCTSTR) Specifier, (INT32) dp, (double)ScaledValue );		// uses * & FP
 
 				// Look for all zeros after decimal point and if so then remove
 				*pStr = p;
@@ -1891,7 +1886,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 				// Used to do this in one go but makes life more difficult on the trailing
 				// zero supression front.
 				//_stprintf(p,"%.*f%s",dp,ScaledValue,(char*)Specifier);
-				tsprintf( p, 256, _T("%.*f") , (INT32) dp, (double) ScaledValue );	// uses * & FP
+				camSnprintf( p, 256, _T("%.*f") , (INT32) dp, (double) ScaledValue );	// uses * & FP
 
 				// Look for all zeros after decimal point and if so then remove
 				*pStr = p;
@@ -1906,7 +1901,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 			if (pScaleUnit->IsPrefix())
 			{
 				// Prefix units required so print them first followed by the number
-				tsprintf( p, 256, PERCENT_S _T("%.*g"), (LPCTSTR) Specifier, (INT32) dp-100, (double) ScaledValue);
+				camSnprintf( p, 256, _T("%s%.*g"), (LPCTSTR) Specifier, (INT32) dp-100, (double) ScaledValue);
 
 				// Look for all zeros after decimal point and if so then remove
 				*pStr = p;
@@ -1914,7 +1909,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 			else
 			{
 				// Suffix units required so print number followed by units
-				tsprintf( p, 256, _T("%.*g") PERCENT_S, (INT32) dp-100, (double)ScaledValue, (LPCTSTR)Specifier );
+				camSnprintf( p, 256, _T("%.*g%s"), (INT32) dp-100, (double)ScaledValue, (LPCTSTR)Specifier );
 
 				// Look for all zeros after decimal point and if so then remove
 				*pStr = p;
@@ -1926,7 +1921,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 		if (dp<=100)
 		{
 			// No units so just output the value
-			tsprintf( p, 256, wxT("%.*f"), (INT32) dp, (double) ScaledValue);								// uses * & FP
+			camSnprintf( p, 256, wxT("%.*f"), (INT32) dp, (double) ScaledValue);								// uses * & FP
 
 			// Look for all zeros after decimal point and if so then remove
 			*pStr = p;
@@ -1935,7 +1930,7 @@ BOOL DimScale::ConvertToUnits(double MpValue, String_256* pStr, BOOL UnitSpecifi
 		else
 		{
 			// No units so just output the value
-			tsprintf( p, 256, wxT("%.*g"), (INT32) dp-100, (double)ScaledValue );
+			camSnprintf( p, 256, wxT("%.*g"), (INT32) dp-100, (double)ScaledValue );
 
 			// Look for all zeros after decimal point and if so then remove
 			*pStr = p;

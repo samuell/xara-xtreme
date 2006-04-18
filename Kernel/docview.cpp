@@ -3374,7 +3374,7 @@ void DocView::OnClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
 					pManager->CheckHaveDetailsOnPlugIns();
 #endif // PHOTOSHOPPLUGINS
 				
-#pragma message( __LOCMSG__ _T("Removed ViewContextMenu usage") )
+#pragma message( __LOCMSG__ "Removed ViewContextMenu usage" )
 /*				// Pop up the context sensitive view menu.
 				ViewContextMenu* pViewPopup = new ViewContextMenu;
 				pViewPopup->ShowOverView(pSpread, DocPos, Mods); */

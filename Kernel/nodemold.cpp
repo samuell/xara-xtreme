@@ -3076,7 +3076,7 @@ void MouldRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -3090,7 +3090,7 @@ void MouldRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 
 			pRecord->ReadINT32(&Threshold);
 
-			_stprintf(s,"Threshold = %d\r\n",Threshold);
+			camSprintf(s,_T("Threshold = %d\r\n"),Threshold);
 			(*pStr) += s;
 		}
 		break;

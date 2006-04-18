@@ -341,8 +341,8 @@ INT32 SGNameItem::CompareTo(SGDisplayNode* pItem, INT32 nKey)
 			for (;;)
 			{
 				// Eat up any whitespace.
-				while (StringBase::IsSpace(*pchThis)) pchThis = _tcsinc(pchThis);
-				while (StringBase::IsSpace(*pchOther)) pchOther = _tcsinc(pchOther);
+				while (StringBase::IsSpace(*pchThis)) pchThis = camStrinc(pchThis);
+				while (StringBase::IsSpace(*pchOther)) pchOther = camStrinc(pchOther);
 			
 				// Check if we've reached the end of the strings.  If we have reached
 				// the end of both, they are equal.  Otherwise the one that is shortest
@@ -361,14 +361,14 @@ INT32 SGNameItem::CompareTo(SGDisplayNode* pItem, INT32 nKey)
 					
 					do {
 						*pchThisNum = *pchThis;
-						pchThisNum = _tcsinc(pchThisNum);
-						pchThis = _tcsinc(pchThis);
+						pchThisNum = camStrinc(pchThisNum);
+						pchThis = camStrinc(pchThis);
 					} while (StringBase::IsNumeric(*pchThis));
 
 					do {
 						*pchOtherNum = *pchOther;
-						pchOtherNum = _tcsinc(pchOtherNum);
-						pchOther = _tcsinc(pchOther);
+						pchOtherNum = camStrinc(pchOtherNum);
+						pchOther = camStrinc(pchOther);
 					} while (StringBase::IsNumeric(*pchOther));
 
 					*pchThisNum = *pchOtherNum = TEXT('\0');
@@ -400,8 +400,8 @@ PORTNOTE("other", "Removed CompareString, rwplace with simple subtraction" )
 				if (nTest != 0) return nTest;
 
 				// The strings are still equal so compare the next characters.
-				pchThis = _tcsinc(pchThis);
-				pchOther = _tcsinc(pchOther);
+				pchThis = camStrinc(pchThis);
+				pchOther = camStrinc(pchOther);
 			}
 		}
 		break;

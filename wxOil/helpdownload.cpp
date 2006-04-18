@@ -390,8 +390,8 @@ CString HelpDownloadOp::GetSupportFilepath(const CString& strLeafName, const CSt
 	_tsplitpath(achzExePath, achzDrive, achzDirectory, achzFileName, achzExtn);
 	_tsplitpath(strLeafName, NULL, achzLeafPath, achzLeafFile, achzLeafExtension);
 
-	_tcscat(achzDirectory, strSupportFolder);
-	_tcscat(achzDirectory, achzLeafPath);
+	camStrcat(achzDirectory, strSupportFolder);
+	camStrcat(achzDirectory, achzLeafPath);
 
 	_tmakepath(pathbuffer, achzDrive, achzDirectory, achzLeafFile, achzLeafExtension);
 
@@ -1154,7 +1154,7 @@ BOOL HelpDownloadOp::LegalFileType(const CString& strFilename)
 
 	_tsplitpath(strFilename, NULL, NULL, NULL, achzExtn);
 
-	return (_tcsstr(_T(".htm .txt .xml .chm .mpg .avi .jpg .png .gif .web .xar .wix .wmv"), achzExtn)!=NULL);
+	return (camStrstr(_T(".htm .txt .xml .chm .mpg .avi .jpg .png .gif .web .xar .wix .wmv"), achzExtn)!=NULL);
 }
 
 
@@ -1173,7 +1173,7 @@ BOOL HelpDownloadOp::LegalFileType(const CString& strFilename)
 
 BOOL HelpDownloadOp::LegalPathname(const CString& strPathname)
 {
-	return (_tcsstr(strPathname, _T(".."))==NULL);
+	return (camStrstr(strPathname, _T(".."))==NULL);
 }
 
 
@@ -1281,7 +1281,7 @@ BOOL HelpDownloadOp::EnoughDiskSpace(const CString& strPath, const UINT32 sizeRe
 {
 	TCHAR szDrive[_MAX_DRIVE + 1];
 	_tsplitpath(strPath, szDrive, NULL, NULL, NULL);
-	lstrcat(szDrive, _T("\\"));
+	camStrcat(szDrive, _T("\\"));
 
 	// Get pointer to the GetDiskFreeSpaceEx function if it exists on this platform...
 	BOOL fResult = FALSE;

@@ -156,7 +156,7 @@ static struct
 static HK_TokenIndex FindToken(const TCHAR* Token)
 {
 	for (INT32 i=0;i<HK_NUM_TOKENS;i++)
-		if (lstrcmp(TokenTable[i].Token,Token) == 0) return ((HK_TokenIndex)i);
+		if (camStrcmp(TokenTable[i].Token,Token) == 0) return ((HK_TokenIndex)i);
 
 	return (HK_TOKEN_NONE);
 }
@@ -815,12 +815,11 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 						// that this is it
 
 						// Make sure the desc is not too long
-						ok = (_tcslen(TokenBuf) <= TEXT_DESC_SIZE);
-
-						if (ok)
+						UINT32 TokenLen = camStrlen(TokenBuf);
+						if (TokenLen <= TEXT_DESC_SIZE)
 						{
-							// Is the string empty (i.e. "") ?
-							if (cc_strlenCharacters(TokenBuf) > 0)
+							// Is the string not empty (i.e. "") ?
+							if (TokenLen > 0)
 							{
 								// if there is a valid text desc, get a String_32 ready for it
 								// and put the desc in it
@@ -828,7 +827,7 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 								if (pTextDesc != NULL)
 									*pTextDesc = TokenBuf;
 								else
-									TRACE( _T("HotKey: Not enough memory or a String_32 - pathetic eh?"));
+									TRACE( _T("HotKey: Not enough memory for a String_32 - pathetic eh?"));
 							}
 						}
 						else
@@ -861,7 +860,7 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 							case HK_TOKEN_CHECKUNICODE	: *pCheckUnicode = TRUE; break;
 
 							case HK_TOKEN_NONE:
-								ok = (_stscanf(TokenBuf,_T("%li"),&VirtKey) == 1);
+								ok = (camSscanf(TokenBuf,_T("%li"),&VirtKey) == 1);
 								if (!ok) TRACE( _T("HotKey: Expected a virtual key code but got : '%s'\n"),TokenBuf);
 								break;
 

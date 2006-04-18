@@ -591,7 +591,7 @@ BOOL StringToBitmap::TTFAddString(String_256 *text, UINT32 Xsize, UINT32 Ysize, 
 			pPath = NULL;
 			pTransform = NULL;
 
-			pCurrentChar = _tcsinc(pCurrentChar);
+			pCurrentChar = camStrinc(pCurrentChar);
 		}
 	}
 
@@ -786,7 +786,7 @@ BOOL StringToBitmap::AddString(String_256 *text, UINT32 Xsize, UINT32 Ysize, UIN
 			pPath = NULL;
 			pTransform = NULL;
   
-			pCurrentChar = _tcsinc(pCurrentChar);
+			pCurrentChar = camStrinc(pCurrentChar);
 		}
 	}
 

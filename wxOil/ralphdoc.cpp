@@ -1641,12 +1641,12 @@ STDMETHODIMP RalphDocument::XCreation::GetVerNum(TCHAR * pVerNum)
 	TCHAR VerText[] = TEXT(PRODUCT_VERSION_NO "  " __DATE__ );
 	// the build number
 	TCHAR Temp[32];
-	wsprintf(Temp," (%d)", CAMELOT_VERSION_MINOR);
+	camSprintf(Temp,_T(" (%d)"), CAMELOT_VERSION_MINOR);
 	// add them
 	CString FullText(VerText);
 	FullText +=Temp;
 	// and return
-	::lstrcpy(pVerNum,FullText);
+	::camStrcpy(pVerNum,FullText);
 	// fine..
 	RALPH_RETURN (S_OK);
 

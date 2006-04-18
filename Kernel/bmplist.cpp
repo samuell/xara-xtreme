@@ -394,7 +394,7 @@ void GlobalBitmapList::MakeNameUnique(String_256* BitmapName)
 		{
 			// This name already exists, so lets make it unique
 			String_256	Str;
-			tsprintf( Str, 256, TEXT("%d"), Number++ );
+			camSnprintf( Str, 256, TEXT("%d"), Number++ );
 			Name = (*BitmapName);
 			Name += Str;
 

@@ -157,7 +157,7 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 
 	if (AssertDescription != NULL)
 	{
-		tsprintf(sz, 255,
+		camSnprintf(sz, 255,
 			szMessage,                       
 			AssertDescription, 
 			lpszFileName, 
@@ -165,7 +165,7 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 	}
 	else   
 	{
-		tsprintf(sz, 255,
+		camSnprintf(sz, 255,
 			szMessageNoReason,
 			nLine,
 			lpszFileName);
@@ -180,14 +180,14 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 		// assume the debugger or auxiliary port
 		#ifndef _MAC
 		::OutputDebugString(sz);
-		::OutputDebugString(", ");
+		::OutputDebugString(_T(", "));
 		::OutputDebugString(szTitle);
-		::OutputDebugString("\n\r");
+		::OutputDebugString(_T("\n\r"));
 		#else
 		// Mac version needs them all together
-		_tcscat(sz, ", ");
-		_tcscat(sz,szTitle);
-		_tcscat(sz,"\n\r");
+		camStrcat(sz, _T(", "));
+		camStrcat(sz,szTitle);
+		camStrcat(sz,_T("\n\r"));
 		::OutputDebugString(sz);
 		#endif
 	}
@@ -226,7 +226,7 @@ PORTNOTE("other","We can never use MFC again")
 		ErrorInfo Info;
 
 		// try to preserve original error message
-		lstrcpy( RealErrorMsg, Error::GetErrorString() );
+		camStrcpy( RealErrorMsg, Error::GetErrorString() );
 
 		Error::SetErrorSerious( sz );			// set error msg (vaping any previous one)
 		Info.ErrorMsg = 0;
@@ -387,7 +387,7 @@ void AFXAPI AfxAssertFailedLine(LPCSTR lpszFileName, INT32 nLine)
 	#ifdef _MAC
 	// ignore an incredibly annoying Mac assert which is something to do with rendering
 	// the icons on our scroll bars
-	if ( (nLine==119) && (lstrcmp(lpszFileName, "winbtn.cpp")==0) )
+	if ( (nLine==119) && (camStrcmp(lpszFileName, "winbtn.cpp")==0) )
 		return FALSE;
 	#endif
 

@@ -237,7 +237,7 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 		 ptpl++)
 	{
 		// If the class-names & page ID's match then return the associated topic index.
-		if ((lpcszLookupClass == NULL || ::lstrcmpi(ptpl->lpcszDialogClass, lpcszLookupClass) == 0) &&
+		if ((lpcszLookupClass == NULL || ::camStricmp(ptpl->lpcszDialogClass, lpcszLookupClass) == 0) &&
 			ptpl->nPageResID == nPageResID)
 		{
 			return ptpl->dwTopicIndex;
@@ -277,7 +277,7 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 		 ptpl++)
 	{
 		// If the token values match then we've found our help topic.
-		if (::lstrcmpi(ptpl->lpcszToken, lpcszOpName) == 0)
+		if (::camStricmp(ptpl->lpcszToken, lpcszOpName) == 0)
 		{
 			return ptpl->dwTopicIndex;
 		}
@@ -370,14 +370,14 @@ static BOOL FakeHelpButtonClick(HWND hwndDialog)
 		::GetClassName(hwndChild, achzClassName, 256);
 
 		// If it is a button then examine the label.
-		if (lstrcmpi(achzClassName, BUTTON_CLASS) == 0)
+		if (camStricmp(achzClassName, BUTTON_CLASS) == 0)
 		{
 			// It is a button.  Get its label.
 			TCHAR achzButtonLabel[256];
 			::GetWindowText(hwndChild, achzButtonLabel, 256);
 			
 			// Does its label match the "help" label?
-			if (lstrcmpi(achzButtonLabel, strHelpLabel) == 0)
+			if (camStricmp(achzButtonLabel, strHelpLabel) == 0)
 			{
 				// It does!  Fake a click on it and return.
 				return ::PostMessage(hwndDialog,
@@ -1175,9 +1175,9 @@ BOOL InitHelpPath(LPTSTR achzExePath, LPCTSTR achzLocale, BOOL bMainHelp)
 	SPLITPATH(achzExePath, achzDrive, achzDirectory, achzFileName, achzExtn);
 
 	// Look for the localised help file in the HelpAndSupport folder now!
-	_tcscat(achzDirectory, _T("HelpAndSupport\\"));
-	_tcscat(achzDirectory, achzLocale);
-	_tcscat(achzDirectory, _T("\\"));
+	camStrcat(achzDirectory, _T("HelpAndSupport\\"));
+	camStrcat(achzDirectory, achzLocale);
+	camStrcat(achzDirectory, _T("\\"));
 
 	// Now put them back together, substituting the help database's filename.
 	if(bMainHelp)

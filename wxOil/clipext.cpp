@@ -897,7 +897,7 @@ void ExternalClipboard::GetExternalFormatName(UINT32 ExternalFormat, String_64 *
 #if FALSE
 #if _DEBUG
 /*
-	if (!_tcsncmp((TCHAR *)(*Result), "QuarkXPress", 10))	// A Quack XPress clipboard format?
+	if (!camStrncmp((TCHAR *)(*Result), "QuarkXPress", 10))	// A Quack XPress clipboard format?
 	{
 		HANDLE Bob = GetClipboardData(ExternalFormat);
 		char *buff = (char *) GlobalLock(Bob);

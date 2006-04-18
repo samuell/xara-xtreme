@@ -412,8 +412,7 @@ void IndexedColour::IncrementUsage(void)
 
 BOOL IndexedColour::DecrementUsage(void)
 {
-	ENSURE(UsageCount > 0, "IndexedColour::DecrementUsage - "
-							"UsageCount has gone NEGATIVE!");
+	ENSURE(UsageCount > 0, "IndexedColour::DecrementUsage - UsageCount has gone NEGATIVE!");
 
 	return((--UsageCount) != 0);
 }
@@ -506,8 +505,7 @@ BOOL IndexedColour::DecrementChildUsage(void)
 {
 	ENSURE(IsNamed(), "Attempt to decrement child usage of an UNNAMED colour!");
 
-	ENSURE(ChildUsage > 0, "IndexedColour::DecrementChildUsage - "
-							"UsageCount has gone NEGATIVE!");
+	ENSURE(ChildUsage > 0, "IndexedColour::DecrementChildUsage - UsageCount has gone NEGATIVE!");
 
 	return((--ChildUsage) != 0);
 }

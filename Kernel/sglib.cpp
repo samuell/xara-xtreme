@@ -790,7 +790,7 @@ void SGLibDisplayItem::DrawItemText(RenderRegion *Renderer, SGRedrawInfo *Redraw
 				Renderer->DrawFixedSystemText(&DisplayText, TextBoundRect);
 				if (bIsNew)
 				{
-					*_tcschr(DisplayText, _T(' ')) = 0x00;
+					*camStrchr(DisplayText, _T(' ')) = 0x00;
 					Renderer->SetFixedSystemTextColours(&red, &RedrawInfo->Background);
 					Renderer->DrawFixedSystemText(&DisplayText, TextBoundRect);
 					Renderer->SetFixedSystemTextColours(&RedrawInfo->Foreground, &RedrawInfo->Background);
@@ -821,7 +821,7 @@ void SGLibDisplayItem::DrawItemText(RenderRegion *Renderer, SGRedrawInfo *Redraw
 				Renderer->DrawFixedSystemText(&DisplayText, TopTextRect);
 				if (bIsNew)
 				{
-					*_tcschr(DisplayText, _T(' ')) = 0x00;
+					*camStrchr(DisplayText, _T(' ')) = 0x00;
 					Renderer->SetFixedSystemTextColours(&red, &RedrawInfo->Background);
 					Renderer->DrawFixedSystemText(&DisplayText, TopTextRect);
 					Renderer->SetFixedSystemTextColours(&RedrawInfo->Foreground, &RedrawInfo->Background);
@@ -836,7 +836,7 @@ void SGLibDisplayItem::DrawItemText(RenderRegion *Renderer, SGRedrawInfo *Redraw
 			Renderer->DrawFixedSystemText(&DisplayText, TextRect);
 			if (bIsNew)
 			{
-				*_tcschr(DisplayText, _T(' ')) = 0x00;
+				*camStrchr(DisplayText, _T(' ')) = 0x00;
 				Renderer->SetFixedSystemTextColours(&red, &RedrawInfo->Background);
 				Renderer->DrawFixedSystemText(&DisplayText, TextRect);
 				Renderer->SetFixedSystemTextColours(&RedrawInfo->Foreground, &RedrawInfo->Background);
@@ -2930,7 +2930,7 @@ void SGLibDisplayItem::DrawPlaceholder(RenderRegion *Renderer, SGMiscInfo *MiscI
 			Renderer->DrawFixedSystemText(&strLabel, rcText, FORMAT_NOPREFIX | FORMAT_CALCRECT | FORMAT_SINGLELINE | FORMAT_CENTER | FORMAT_VCENTER);
 			if (rcText.Width() >= Rectangle->Width()) // we have to draw multiline
 			{
-				_stprintf((TCHAR*) strLabel, _T("%s%d%%"), (TCHAR*) (String_256) GetStringField(1, _R(IDS_LOADINGTHUMB)), nPercentageDownloaded);
+				camSprintf((TCHAR*) strLabel, _T("%s%d%%"), (TCHAR*) (String_256) GetStringField(1, _R(IDS_LOADINGTHUMB)), nPercentageDownloaded);
 				// DrawFixedSystemText can't center multiline text, so we'll have to adjust the rect
 				Renderer->DrawFixedSystemText(&strLabel, rcText, FORMAT_NOPREFIX | FORMAT_CALCRECT);
 				DocRect rcAdjusted = *Rectangle;
@@ -2939,7 +2939,7 @@ void SGLibDisplayItem::DrawPlaceholder(RenderRegion *Renderer, SGMiscInfo *MiscI
 			}
 			else
 			{
-				_stprintf((TCHAR*) strLabel, _T("%s%d%%"), (TCHAR*) (String_256) GetStringField(2, _R(IDS_LOADINGTHUMB)), nPercentageDownloaded);
+				camSprintf((TCHAR*) strLabel, _T("%s%d%%"), (TCHAR*) (String_256) GetStringField(2, _R(IDS_LOADINGTHUMB)), nPercentageDownloaded);
 				Renderer->DrawFixedSystemText(&strLabel, *Rectangle, FORMAT_NOPREFIX | FORMAT_SINGLELINE | FORMAT_CENTER | FORMAT_VCENTER);
 			}
 		}

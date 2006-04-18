@@ -154,7 +154,7 @@ static struct
 static PpmTokenIndex FindToken(const TCHAR* Token)
 {
 	for (INT32 i = 0; i < PpmNUM_TOKENS; i++)
-		if (lstrcmp(TokenTable[i].Token,Token) == 0) return (PpmTokenIndex) i;
+		if (camStrcmp(TokenTable[i].Token,Token) == 0) return (PpmTokenIndex) i;
 
 	return PpmTOKEN_NONE;
 }
@@ -250,8 +250,8 @@ BOOL PPMFilter::Init()
 BOOL PPMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(_tcsncmp(pHeader, "P3", 2) == 0) ||		// ASCII PPM
-		(_tcsncmp(pHeader, "P6", 2) == 0) 		// BINARY PPM
+		(camStrncmp(pHeader, "P3", 2) == 0) ||		// ASCII PPM
+		(camStrncmp(pHeader, "P6", 2) == 0) 		// BINARY PPM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -356,8 +356,8 @@ BOOL PGMFilter::Init()
 BOOL PGMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(_tcsncmp(pHeader, "P2", 2) == 0) ||		// ASCII PGM
-		(_tcsncmp(pHeader, "P5", 2) == 0) 		// BINARY PGM
+		(camStrncmp(pHeader, "P2", 2) == 0) ||		// ASCII PGM
+		(camStrncmp(pHeader, "P5", 2) == 0) 		// BINARY PGM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -464,8 +464,8 @@ BOOL PBMFilter::Init()
 BOOL PBMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(_tcsncmp(pHeader, "P1", 2) == 0) ||		// ASCII PBM
-		(_tcsncmp(pHeader, "P4", 2) == 0)		// BINARY PBM
+		(camStrncmp(pHeader, "P1", 2) == 0) ||		// ASCII PBM
+		(camStrncmp(pHeader, "P4", 2) == 0)		// BINARY PBM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -898,7 +898,7 @@ BOOL BasePMFilter::ReadFromFile( CCLexFile* pLexFile, LPBITMAPINFO* Info, LPBYTE
 								{
 									// Must be one of the header numbers
 									INT32 Number; 
-									ok = (_stscanf(TokenBuf,"%d",&Number) == 1);
+									ok = (camSscanf(TokenBuf,"%d",&Number) == 1);
 
 									// Now work out what to do with this
 									switch (Count)
@@ -1352,7 +1352,7 @@ BOOL BasePMFilter::ReadASCIIFromFile( CCLexFile *pLexFile, LPBYTE pBits,
 						case TOKEN_NONE:
 							{
 								// Must be one of the header numbers
-								ok = (_stscanf(TokenBuf,"%d",&Number) == 1);
+								ok = (camSscanf(TokenBuf,"%d",&Number) == 1);
 
 								// Call the correct filters function to put the data into the bitmap itself
 								// in its own unique way, so long as we haven't failed already.

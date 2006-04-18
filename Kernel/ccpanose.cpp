@@ -609,199 +609,199 @@ void CCPanose::GetDebugDetails(StringBase *pStr)
 {
 	TCHAR				s[256], t[256];
 
-	tsprintf( s, 256, _T("\r\nPANOSE information\r\n\r\n") );
+	camSnprintf( s, 256, _T("\r\nPANOSE information\r\n\r\n") );
 	(*pStr) += s;
 	
 	switch (mFamilyType)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_FAMILY_TEXT_DISPLAY		: tsprintf( t, 256, _T("Text and display") ); break;
-		case PAN_FAMILY_SCRIPT				: tsprintf( t, 256, _T("Script") ); break;
-		case PAN_FAMILY_DECORATIVE			: tsprintf( t, 256, _T("Decorative") ); break;
-		case PAN_FAMILY_PICTORIAL			: tsprintf( t, 256, _T("Pictorial") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_FAMILY_TEXT_DISPLAY		: camSnprintf( t, 256, _T("Text and display") ); break;
+		case PAN_FAMILY_SCRIPT				: camSnprintf( t, 256, _T("Script") ); break;
+		case PAN_FAMILY_DECORATIVE			: camSnprintf( t, 256, _T("Decorative") ); break;
+		case PAN_FAMILY_PICTORIAL			: camSnprintf( t, 256, _T("Pictorial") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Family Type\t= (%d) %s\r\n") , mFamilyType, t);
+	camSnprintf( s, 256, _T("Family Type\t= (%d) %s\r\n") , mFamilyType, t);
 	(*pStr) += s;
 
 	switch (mSerifStyle)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_SERIF_COVE					: tsprintf( t, 256, _T("Cove") ); break;
-		case PAN_SERIF_OBTUSE_COVE			: tsprintf( t, 256, _T("Obtuse cove") ); break;
-		case PAN_SERIF_SQUARE_COVE			: tsprintf( t, 256, _T("Square cove") ); break;
-		case PAN_SERIF_OBTUSE_SQUARE_COVE	: tsprintf( t, 256, _T("Obtuse square cove") ); break;
-		case PAN_SERIF_SQUARE				: tsprintf( t, 256, _T("Square	") ); break;
-		case PAN_SERIF_THIN					: tsprintf( t, 256, _T("Thin") ); break;
-		case PAN_SERIF_BONE					: tsprintf( t, 256, _T("Bone") ); break;
-		case PAN_SERIF_EXAGGERATED			: tsprintf( t, 256, _T("Exaggerated") ); break;
-		case PAN_SERIF_TRIANGLE				: tsprintf( t, 256, _T("Triangle") ); break;
-		case PAN_SERIF_NORMAL_SANS			: tsprintf( t, 256, _T("Normal sans serif") ); break;
-		case PAN_SERIF_OBTUSE_SANS			: tsprintf( t, 256, _T("Obtuse sans serif") ); break;
-		case PAN_SERIF_PERP_SANS			: tsprintf( t, 256, _T("Perp sans serif") ); break;
-		case PAN_SERIF_FLARED				: tsprintf( t, 256, _T("Flared") ); break;
-		case PAN_SERIF_ROUNDED				: tsprintf( t, 256, _T("Rounded") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_SERIF_COVE					: camSnprintf( t, 256, _T("Cove") ); break;
+		case PAN_SERIF_OBTUSE_COVE			: camSnprintf( t, 256, _T("Obtuse cove") ); break;
+		case PAN_SERIF_SQUARE_COVE			: camSnprintf( t, 256, _T("Square cove") ); break;
+		case PAN_SERIF_OBTUSE_SQUARE_COVE	: camSnprintf( t, 256, _T("Obtuse square cove") ); break;
+		case PAN_SERIF_SQUARE				: camSnprintf( t, 256, _T("Square	") ); break;
+		case PAN_SERIF_THIN					: camSnprintf( t, 256, _T("Thin") ); break;
+		case PAN_SERIF_BONE					: camSnprintf( t, 256, _T("Bone") ); break;
+		case PAN_SERIF_EXAGGERATED			: camSnprintf( t, 256, _T("Exaggerated") ); break;
+		case PAN_SERIF_TRIANGLE				: camSnprintf( t, 256, _T("Triangle") ); break;
+		case PAN_SERIF_NORMAL_SANS			: camSnprintf( t, 256, _T("Normal sans serif") ); break;
+		case PAN_SERIF_OBTUSE_SANS			: camSnprintf( t, 256, _T("Obtuse sans serif") ); break;
+		case PAN_SERIF_PERP_SANS			: camSnprintf( t, 256, _T("Perp sans serif") ); break;
+		case PAN_SERIF_FLARED				: camSnprintf( t, 256, _T("Flared") ); break;
+		case PAN_SERIF_ROUNDED				: camSnprintf( t, 256, _T("Rounded") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Serif Style\t\t= (%d) %s\r\n") , mSerifStyle, t);
+	camSnprintf( s, 256, _T("Serif Style\t\t= (%d) %s\r\n") , mSerifStyle, t);
 	(*pStr) += s;
 	
 	switch (mWeight)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_WEIGHT_VERY_LIGHT			: tsprintf( t, 256, _T("Very light") ); break;
-		case PAN_WEIGHT_LIGHT				: tsprintf( t, 256, _T("Light") ); break;
-		case PAN_WEIGHT_THIN				: tsprintf( t, 256, _T("Thin") ); break;
-		case PAN_WEIGHT_BOOK				: tsprintf( t, 256, _T("Book") ); break;
-		case PAN_WEIGHT_MEDIUM				: tsprintf( t, 256, _T("Medium") ); break;
-		case PAN_WEIGHT_DEMI				: tsprintf( t, 256, _T("Demibold") ); break;
-		case PAN_WEIGHT_BOLD				: tsprintf( t, 256, _T("Bold") ); break;
-		case PAN_WEIGHT_HEAVY				: tsprintf( t, 256, _T("Heavy") ); break;
-		case PAN_WEIGHT_BLACK				: tsprintf( t, 256, _T("Black") ); break;
-		case PAN_WEIGHT_NORD				: tsprintf( t, 256, _T("Nord") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_WEIGHT_VERY_LIGHT			: camSnprintf( t, 256, _T("Very light") ); break;
+		case PAN_WEIGHT_LIGHT				: camSnprintf( t, 256, _T("Light") ); break;
+		case PAN_WEIGHT_THIN				: camSnprintf( t, 256, _T("Thin") ); break;
+		case PAN_WEIGHT_BOOK				: camSnprintf( t, 256, _T("Book") ); break;
+		case PAN_WEIGHT_MEDIUM				: camSnprintf( t, 256, _T("Medium") ); break;
+		case PAN_WEIGHT_DEMI				: camSnprintf( t, 256, _T("Demibold") ); break;
+		case PAN_WEIGHT_BOLD				: camSnprintf( t, 256, _T("Bold") ); break;
+		case PAN_WEIGHT_HEAVY				: camSnprintf( t, 256, _T("Heavy") ); break;
+		case PAN_WEIGHT_BLACK				: camSnprintf( t, 256, _T("Black") ); break;
+		case PAN_WEIGHT_NORD				: camSnprintf( t, 256, _T("Nord") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Weight\t\t= (%d) %s\r\n") , mWeight, t);
+	camSnprintf( s, 256, _T("Weight\t\t= (%d) %s\r\n") , mWeight, t);
 	(*pStr) += s;
 
 	switch (mProportion)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_PROP_OLD_STYLE				: tsprintf( t, 256, _T("Old style") ); break;
-		case PAN_PROP_MODERN				: tsprintf( t, 256, _T("Modern") ); break;
-		case PAN_PROP_EVEN_WIDTH			: tsprintf( t, 256, _T("Even width") ); break;
-		case PAN_PROP_EXPANDED				: tsprintf( t, 256, _T("Expanded") ); break;
-		case PAN_PROP_CONDENSED				: tsprintf( t, 256, _T("Condensed") ); break;
-		case PAN_PROP_VERY_EXPANDED			: tsprintf( t, 256, _T("Very expanded") ); break;
-		case PAN_PROP_VERY_CONDENSED		: tsprintf( t, 256, _T("Very condensed") ); break;
-		case PAN_PROP_MONOSPACED			: tsprintf( t, 256, _T("Monospaced") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_PROP_OLD_STYLE				: camSnprintf( t, 256, _T("Old style") ); break;
+		case PAN_PROP_MODERN				: camSnprintf( t, 256, _T("Modern") ); break;
+		case PAN_PROP_EVEN_WIDTH			: camSnprintf( t, 256, _T("Even width") ); break;
+		case PAN_PROP_EXPANDED				: camSnprintf( t, 256, _T("Expanded") ); break;
+		case PAN_PROP_CONDENSED				: camSnprintf( t, 256, _T("Condensed") ); break;
+		case PAN_PROP_VERY_EXPANDED			: camSnprintf( t, 256, _T("Very expanded") ); break;
+		case PAN_PROP_VERY_CONDENSED		: camSnprintf( t, 256, _T("Very condensed") ); break;
+		case PAN_PROP_MONOSPACED			: camSnprintf( t, 256, _T("Monospaced") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Proportion\t= (%d) %s\r\n") , mProportion, t);
+	camSnprintf( s, 256, _T("Proportion\t= (%d) %s\r\n") , mProportion, t);
 	(*pStr) += s;
 	
 	switch (mContrast)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_CONTRAST_NONE				: tsprintf( t, 256, _T("None") ); break;
-		case PAN_CONTRAST_VERY_LOW			: tsprintf( t, 256, _T("Very low") ); break;
-		case PAN_CONTRAST_LOW				: tsprintf( t, 256, _T("Low") ); break;
-		case PAN_CONTRAST_MEDIUM_LOW		: tsprintf( t, 256, _T("Medium low") ); break;
-		case PAN_CONTRAST_MEDIUM			: tsprintf( t, 256, _T("Medium") ); break;
-		case PAN_CONTRAST_MEDIUM_HIGH		: tsprintf( t, 256, _T("Medium high") ); break;
-		case PAN_CONTRAST_HIGH				: tsprintf( t, 256, _T("High") ); break;
-		case PAN_CONTRAST_VERY_HIGH			: tsprintf( t, 256, _T("Very high") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_CONTRAST_NONE				: camSnprintf( t, 256, _T("None") ); break;
+		case PAN_CONTRAST_VERY_LOW			: camSnprintf( t, 256, _T("Very low") ); break;
+		case PAN_CONTRAST_LOW				: camSnprintf( t, 256, _T("Low") ); break;
+		case PAN_CONTRAST_MEDIUM_LOW		: camSnprintf( t, 256, _T("Medium low") ); break;
+		case PAN_CONTRAST_MEDIUM			: camSnprintf( t, 256, _T("Medium") ); break;
+		case PAN_CONTRAST_MEDIUM_HIGH		: camSnprintf( t, 256, _T("Medium high") ); break;
+		case PAN_CONTRAST_HIGH				: camSnprintf( t, 256, _T("High") ); break;
+		case PAN_CONTRAST_VERY_HIGH			: camSnprintf( t, 256, _T("Very high") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Contrast\t\t= (%d) %s\r\n") , mContrast, t);
+	camSnprintf( s, 256, _T("Contrast\t\t= (%d) %s\r\n") , mContrast, t);
 	(*pStr) += s;
 	
 	switch (mStrokeVariation)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_STROKE_GRADUAL_DIAG		: tsprintf( t, 256, _T("Gradual/diagonal") ); break;
-		case PAN_STROKE_GRADUAL_TRAN		: tsprintf( t, 256, _T("Gradual/transitional") ); break;
-		case PAN_STROKE_GRADUAL_VERT		: tsprintf( t, 256, _T("Gradual/vertical") ); break;
-		case PAN_STROKE_GRADUAL_HORZ		: tsprintf( t, 256, _T("Gradual/horizontal") ); break;
-		case PAN_STROKE_RAPID_VERT			: tsprintf( t, 256, _T("Rapid/vertical") ); break;
-		case PAN_STROKE_RAPID_HORZ			: tsprintf( t, 256, _T("Rapid/horizontal") ); break;
-		case PAN_STROKE_INSTANT_VERT		: tsprintf( t, 256, _T("Instant/vertical") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_STROKE_GRADUAL_DIAG		: camSnprintf( t, 256, _T("Gradual/diagonal") ); break;
+		case PAN_STROKE_GRADUAL_TRAN		: camSnprintf( t, 256, _T("Gradual/transitional") ); break;
+		case PAN_STROKE_GRADUAL_VERT		: camSnprintf( t, 256, _T("Gradual/vertical") ); break;
+		case PAN_STROKE_GRADUAL_HORZ		: camSnprintf( t, 256, _T("Gradual/horizontal") ); break;
+		case PAN_STROKE_RAPID_VERT			: camSnprintf( t, 256, _T("Rapid/vertical") ); break;
+		case PAN_STROKE_RAPID_HORZ			: camSnprintf( t, 256, _T("Rapid/horizontal") ); break;
+		case PAN_STROKE_INSTANT_VERT		: camSnprintf( t, 256, _T("Instant/vertical") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Stroke Variation\t= (%d) %s\r\n") , mStrokeVariation, t);
+	camSnprintf( s, 256, _T("Stroke Variation\t= (%d) %s\r\n") , mStrokeVariation, t);
 	(*pStr) += s;
 	
 	switch (mArmStyle)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_STRAIGHT_ARMS_HORZ			: tsprintf( t, 256, _T("Straight arms/horizontal") ); break;
-		case PAN_STRAIGHT_ARMS_WEDGE		: tsprintf( t, 256, _T("Straight arms/wedge") ); break;
-		case PAN_STRAIGHT_ARMS_VERT			: tsprintf( t, 256, _T("traight arms/vertical") ); break;
-		case PAN_STRAIGHT_ARMS_SINGLE_SERIF	: tsprintf( t, 256, _T("Straight arms/single-serif") ); break;
-		case PAN_STRAIGHT_ARMS_DOUBLE_SERIF	: tsprintf( t, 256, _T("Straight arms/double-serif") ); break;
-		case PAN_BENT_ARMS_HORZ				: tsprintf( t, 256, _T("Non-straight arms/horizontal") ); break;
-		case PAN_BENT_ARMS_WEDGE			: tsprintf( t, 256, _T("Non-straight arms/wedge") ); break;
-		case PAN_BENT_ARMS_VERT				: tsprintf( t, 256, _T("Non-straight arms/vertical") ); break;
-		case PAN_BENT_ARMS_SINGLE_SERIF		: tsprintf( t, 256, _T("Non-straight arms/single-serif") ); break;
-		case PAN_BENT_ARMS_DOUBLE_SERIF		: tsprintf( t, 256, _T("Non-straight arms/double-serif") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_STRAIGHT_ARMS_HORZ			: camSnprintf( t, 256, _T("Straight arms/horizontal") ); break;
+		case PAN_STRAIGHT_ARMS_WEDGE		: camSnprintf( t, 256, _T("Straight arms/wedge") ); break;
+		case PAN_STRAIGHT_ARMS_VERT			: camSnprintf( t, 256, _T("traight arms/vertical") ); break;
+		case PAN_STRAIGHT_ARMS_SINGLE_SERIF	: camSnprintf( t, 256, _T("Straight arms/single-serif") ); break;
+		case PAN_STRAIGHT_ARMS_DOUBLE_SERIF	: camSnprintf( t, 256, _T("Straight arms/double-serif") ); break;
+		case PAN_BENT_ARMS_HORZ				: camSnprintf( t, 256, _T("Non-straight arms/horizontal") ); break;
+		case PAN_BENT_ARMS_WEDGE			: camSnprintf( t, 256, _T("Non-straight arms/wedge") ); break;
+		case PAN_BENT_ARMS_VERT				: camSnprintf( t, 256, _T("Non-straight arms/vertical") ); break;
+		case PAN_BENT_ARMS_SINGLE_SERIF		: camSnprintf( t, 256, _T("Non-straight arms/single-serif") ); break;
+		case PAN_BENT_ARMS_DOUBLE_SERIF		: camSnprintf( t, 256, _T("Non-straight arms/double-serif") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Arm Style\t\t= (%d) %s\r\n") , mArmStyle, t);
+	camSnprintf( s, 256, _T("Arm Style\t\t= (%d) %s\r\n") , mArmStyle, t);
 	(*pStr) += s;
 	
 	switch (mLetterform)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_LETT_NORMAL_CONTACT		: tsprintf( t, 256, _T("Normal/contact") ); break;
-		case PAN_LETT_NORMAL_WEIGHTED		: tsprintf( t, 256, _T("Normal/weighted") ); break;
-		case PAN_LETT_NORMAL_BOXED			: tsprintf( t, 256, _T("Normal/boxed") ); break;
-		case PAN_LETT_NORMAL_FLATTENED		: tsprintf( t, 256, _T("Normal/flattened") ); break;
-		case PAN_LETT_NORMAL_ROUNDED		: tsprintf( t, 256, _T("Normal/rounded") ); break;
-		case PAN_LETT_NORMAL_OFF_CENTER		: tsprintf( t, 256, _T("Normal/off center") ); break;
-		case PAN_LETT_NORMAL_SQUARE			: tsprintf( t, 256, _T("Normal/square") ); break;
-		case PAN_LETT_OBLIQUE_CONTACT		: tsprintf( t, 256, _T("Oblique/contact") ); break;
-		case PAN_LETT_OBLIQUE_WEIGHTED		: tsprintf( t, 256, _T("Oblique/weighted") ); break;
-		case PAN_LETT_OBLIQUE_BOXED			: tsprintf( t, 256, _T("Oblique/boxed") ); break;
-		case PAN_LETT_OBLIQUE_FLATTENED		: tsprintf( t, 256, _T("Oblique/flattened") ); break;
-		case PAN_LETT_OBLIQUE_ROUNDED		: tsprintf( t, 256, _T("Oblique/rounded") ); break;
-		case PAN_LETT_OBLIQUE_OFF_CENTER	: tsprintf( t, 256, _T("Oblique/off center") ); break;
-		case PAN_LETT_OBLIQUE_SQUARE		: tsprintf( t, 256, _T("Oblique/square") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_LETT_NORMAL_CONTACT		: camSnprintf( t, 256, _T("Normal/contact") ); break;
+		case PAN_LETT_NORMAL_WEIGHTED		: camSnprintf( t, 256, _T("Normal/weighted") ); break;
+		case PAN_LETT_NORMAL_BOXED			: camSnprintf( t, 256, _T("Normal/boxed") ); break;
+		case PAN_LETT_NORMAL_FLATTENED		: camSnprintf( t, 256, _T("Normal/flattened") ); break;
+		case PAN_LETT_NORMAL_ROUNDED		: camSnprintf( t, 256, _T("Normal/rounded") ); break;
+		case PAN_LETT_NORMAL_OFF_CENTER		: camSnprintf( t, 256, _T("Normal/off center") ); break;
+		case PAN_LETT_NORMAL_SQUARE			: camSnprintf( t, 256, _T("Normal/square") ); break;
+		case PAN_LETT_OBLIQUE_CONTACT		: camSnprintf( t, 256, _T("Oblique/contact") ); break;
+		case PAN_LETT_OBLIQUE_WEIGHTED		: camSnprintf( t, 256, _T("Oblique/weighted") ); break;
+		case PAN_LETT_OBLIQUE_BOXED			: camSnprintf( t, 256, _T("Oblique/boxed") ); break;
+		case PAN_LETT_OBLIQUE_FLATTENED		: camSnprintf( t, 256, _T("Oblique/flattened") ); break;
+		case PAN_LETT_OBLIQUE_ROUNDED		: camSnprintf( t, 256, _T("Oblique/rounded") ); break;
+		case PAN_LETT_OBLIQUE_OFF_CENTER	: camSnprintf( t, 256, _T("Oblique/off center") ); break;
+		case PAN_LETT_OBLIQUE_SQUARE		: camSnprintf( t, 256, _T("Oblique/square") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Letter Form\t= (%d) %s\r\n") , mLetterform, t);
+	camSnprintf( s, 256, _T("Letter Form\t= (%d) %s\r\n") , mLetterform, t);
 	(*pStr) += s;
 
 	switch (mMidline)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_MIDLINE_STANDARD_TRIMMED	: tsprintf( t, 256, _T("Standard/trimmed") ); break;
-		case PAN_MIDLINE_STANDARD_POINTED	: tsprintf( t, 256, _T("Standard/pointed") ); break;
-		case PAN_MIDLINE_STANDARD_SERIFED	: tsprintf( t, 256, _T("Standard/serifed") ); break;
-		case PAN_MIDLINE_HIGH_TRIMMED		: tsprintf( t, 256, _T("High/trimmed") ); break;
-		case PAN_MIDLINE_HIGH_POINTED		: tsprintf( t, 256, _T("High/pointed") ); break;
-		case PAN_MIDLINE_HIGH_SERIFED		: tsprintf( t, 256, _T("High/serifed") ); break;
-		case PAN_MIDLINE_CONSTANT_TRIMMED	: tsprintf( t, 256, _T("Constant/trimmed") ); break;
-		case PAN_MIDLINE_CONSTANT_POINTED	: tsprintf( t, 256, _T("Constant/pointed") ); break;
-		case PAN_MIDLINE_CONSTANT_SERIFED	: tsprintf( t, 256, _T("Constant/serifed") ); break;
-		case PAN_MIDLINE_LOW_TRIMMED		: tsprintf( t, 256, _T("Low/trimmed") ); break;
-		case PAN_MIDLINE_LOW_POINTED		: tsprintf( t, 256, _T("Low/pointed") ); break;
-		case PAN_MIDLINE_LOW_SERIFED		: tsprintf( t, 256, _T("Low/serifed") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_MIDLINE_STANDARD_TRIMMED	: camSnprintf( t, 256, _T("Standard/trimmed") ); break;
+		case PAN_MIDLINE_STANDARD_POINTED	: camSnprintf( t, 256, _T("Standard/pointed") ); break;
+		case PAN_MIDLINE_STANDARD_SERIFED	: camSnprintf( t, 256, _T("Standard/serifed") ); break;
+		case PAN_MIDLINE_HIGH_TRIMMED		: camSnprintf( t, 256, _T("High/trimmed") ); break;
+		case PAN_MIDLINE_HIGH_POINTED		: camSnprintf( t, 256, _T("High/pointed") ); break;
+		case PAN_MIDLINE_HIGH_SERIFED		: camSnprintf( t, 256, _T("High/serifed") ); break;
+		case PAN_MIDLINE_CONSTANT_TRIMMED	: camSnprintf( t, 256, _T("Constant/trimmed") ); break;
+		case PAN_MIDLINE_CONSTANT_POINTED	: camSnprintf( t, 256, _T("Constant/pointed") ); break;
+		case PAN_MIDLINE_CONSTANT_SERIFED	: camSnprintf( t, 256, _T("Constant/serifed") ); break;
+		case PAN_MIDLINE_LOW_TRIMMED		: camSnprintf( t, 256, _T("Low/trimmed") ); break;
+		case PAN_MIDLINE_LOW_POINTED		: camSnprintf( t, 256, _T("Low/pointed") ); break;
+		case PAN_MIDLINE_LOW_SERIFED		: camSnprintf( t, 256, _T("Low/serifed") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("Midline\t\t= (%d) %s\r\n") , mMidline, t);
+	camSnprintf( s, 256, _T("Midline\t\t= (%d) %s\r\n") , mMidline, t);
 	(*pStr) += s;
 
 	switch (mXHeight)
 	{
-		case PAN_ANY						: tsprintf( t, 256, _T("Any") ); break;
-		case PAN_NO_FIT						: tsprintf( t, 256, _T("No fit") ); break;
-		case PAN_XHEIGHT_CONSTANT_SMALL		: tsprintf( t, 256, _T("Constant/small") ); break;
-		case PAN_XHEIGHT_CONSTANT_STD		: tsprintf( t, 256, _T("Constant/standard") ); break;
-		case PAN_XHEIGHT_CONSTANT_LARGE		: tsprintf( t, 256, _T("Constant/large") ); break;
-		case PAN_XHEIGHT_DUCKING_SMALL		: tsprintf( t, 256, _T("Ducking/small") ); break;
-		case PAN_XHEIGHT_DUCKING_STD		: tsprintf( t, 256, _T("Ducking/standard") ); break;
-		case PAN_XHEIGHT_DUCKING_LARGE		: tsprintf( t, 256, _T("Ducking/large") ); break;
-		default 							: tsprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
+		case PAN_ANY						: camSnprintf( t, 256, _T("Any") ); break;
+		case PAN_NO_FIT						: camSnprintf( t, 256, _T("No fit") ); break;
+		case PAN_XHEIGHT_CONSTANT_SMALL		: camSnprintf( t, 256, _T("Constant/small") ); break;
+		case PAN_XHEIGHT_CONSTANT_STD		: camSnprintf( t, 256, _T("Constant/standard") ); break;
+		case PAN_XHEIGHT_CONSTANT_LARGE		: camSnprintf( t, 256, _T("Constant/large") ); break;
+		case PAN_XHEIGHT_DUCKING_SMALL		: camSnprintf( t, 256, _T("Ducking/small") ); break;
+		case PAN_XHEIGHT_DUCKING_STD		: camSnprintf( t, 256, _T("Ducking/standard") ); break;
+		case PAN_XHEIGHT_DUCKING_LARGE		: camSnprintf( t, 256, _T("Ducking/large") ); break;
+		default 							: camSnprintf( t, 256, _T("!! Unknown !! (tell Andy)") ); break;
 	}
 
-	tsprintf( s, 256, _T("XHeight\t\t= (%d) %s\r\n") , mXHeight, t);
+	camSnprintf( s, 256, _T("XHeight\t\t= (%d) %s\r\n") , mXHeight, t);
 	(*pStr) += s;
 }

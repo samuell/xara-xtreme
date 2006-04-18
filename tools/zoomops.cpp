@@ -2769,10 +2769,10 @@ BOOL OpZoomComboDescriptor::StringToLong(const StringBase& strIn, INT32* pnOut)
 	const TCHAR* psczBack = psczStart + pstrIn->Length() - 1;
 
 	while (StringBase::IsSpace(*psczForward))
-		psczForward = _tcsinc(psczForward);
+		psczForward = camStrinc(psczForward);
 	
 	while (psczBack > psczForward && StringBase::IsSpace(*psczBack))
-		psczBack = _tcsdec(psczStart, psczBack);
+		psczBack = camStrdec(psczStart, psczBack);
 	
 	if (psczForward >= psczBack) return FALSE;
 

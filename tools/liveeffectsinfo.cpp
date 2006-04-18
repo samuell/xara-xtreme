@@ -1158,7 +1158,7 @@ void LiveEffectsInfoBarOp::PopulateOrderDropdown(EffectsStack* pPPStack, INT32 i
 					pjm = String_64(_R(IDS_LE_ORDER_FORMAT_NOTFOUND));
 				else if (bDestructive)
 					pjm = String_64(_R(IDS_LE_ORDER_FORMAT_DESTRUCTIVE));
-				_stprintf(Str, pjm, pos+1, (LPTSTR)strDisplayName);
+				camSprintf(Str, pjm, pos+1, (LPTSTR)strDisplayName);
 				String_64 strOrderedName(Str);
 
 				SetStringGadgetValue(_R(IDC_COMBOBOX_LE_ORDER), &strOrderedName, FALSE, pos);

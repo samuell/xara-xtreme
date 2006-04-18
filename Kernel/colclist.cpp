@@ -148,8 +148,7 @@ ColourContextList *ColourContextList::ColContextList = NULL;
 
 BOOL ColourContextList::InitColourContexts(void)
 {
-	ENSURE(ColContextList == NULL, "ColourContextList::InitColourContexts "
-									"called more than once!");
+	ENSURE(ColContextList == NULL, "ColourContextList::InitColourContexts called more than once!");
 
 	// First, create the global Colour context list in which all colour contexts
 	// should be registered.
@@ -228,8 +227,7 @@ BOOL ColourContextList::InitColourContexts(void)
 
 void ColourContextList::DeinitColourContexts(void)
 {
-	ENSURE(ColContextList != NULL, "ColourContextList::DeinitColourContexts: "
-									"but I haven't been initialised yet!");
+	ENSURE(ColContextList != NULL, "ColourContextList::DeinitColourContexts: but I haven't been initialised yet!");
 
 	ColourContextArray	DefaultCCA;
 	ColourContext		*DefaultCC;
@@ -265,8 +263,7 @@ void ColourContextList::DeinitColourContexts(void)
 		}
 	}
 
-	ENSURE(ColContextList->IsEmpty(), "ColourContextList::DeinitColourContexts: "
-							"Some ColourContext(s) have not yet been released");
+	ENSURE(ColContextList->IsEmpty(), "ColourContextList::DeinitColourContexts: Some ColourContext(s) have not yet been released");
 
 	// And delete the global list of contexts
 	delete ColContextList;

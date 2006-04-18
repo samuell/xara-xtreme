@@ -400,9 +400,9 @@ BOOL OpMenuLoad::LoadFile(CCLexFile* pFileToLoad, UINT32 nPrefFilter)
 					InformError();
 					wxMessageDialog dlg(
 						NULL,
-						_T( "Xara LX failed to load the design.\n\n"
-							"This is an early demonstration version of the program which does "
-							"not yet support all of the data types that can appear in XAR designs."),
+						_T( "Xara LX failed to load the design.\n\n")
+						_T( "This is an early demonstration version of the program which does ")
+						_T( "not yet support all of the data types that can appear in XAR designs."),
 						_T("Load failed"),
 						wxOK
 					);

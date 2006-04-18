@@ -246,7 +246,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
@@ -258,7 +258,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Return TRUE if this file was created by Illustrator, or has been exported in 
 				// Illustrator format.
-				if (_tcsncmp(Buffer, "%%Creator: Adobe Illustrator(R) 8", 33) == 0)
+				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(R) 8", 33) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
@@ -267,7 +267,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Check to see if it's from Illustrator 9. If you're writing a dedicated AI9
 				// filter, then you really should remove this code.
-				else if (_tcsncmp(Buffer, "%%Creator: Adobe Illustrator(R) 9", 33) == 0)
+				else if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(R) 9", 33) == 0)
 				{
 					// We probably want this. Note: I'm returning 9 because a native AI9
 					// filter would return 10, and if this code is left in, it will be
@@ -276,10 +276,10 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 					return 9;
 				}
 
-				if (_tcsncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (_tcsstr(Buffer, "Illustrator(R) 8") != NULL)
+					if (camStrstr(Buffer, "Illustrator(R) 8") != NULL)
 					{
 						HeaderFile.close();
 						return 10;
@@ -287,7 +287,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 					
 					// Try to see if it's Illustrator 9. Again, remove this code when you're
 					// writing a dedicated AI9 filter.
-					else if (_tcsstr(Buffer, "Illustrator(R) 9") != NULL)
+					else if (camStrstr(Buffer, "Illustrator(R) 9") != NULL)
 					{
 						HeaderFile.close();
 						return 9;
@@ -302,7 +302,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 					break;
 			}
 
@@ -316,7 +316,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 

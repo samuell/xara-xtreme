@@ -2089,15 +2089,15 @@ BOOL SGTTFItem::CreateThumbnail(KernelBitmap** Bitmap)
 					switch(DMode)
 					{
 						case 0:
-							wsprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dL.bmp"), LibID);
+							camSprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dL.bmp"), LibID);
 							break;
 						case 2:
-							wsprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dS.bmp"), LibID);
+							camSprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dS.bmp"), LibID);
 							break;
 						case 1:
 						case 3:
 						default:
-							wsprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dM.bmp"), LibID);
+							camSprintf(tmp, TEXT("c:\\fonts\\TrueType\\XaraInfo\\F%05dM.bmp"), LibID);
 							break;
 					}
 					ThePath = new PathName(tmp);	
@@ -2116,15 +2116,15 @@ BOOL SGTTFItem::CreateThumbnail(KernelBitmap** Bitmap)
 					switch(DMode)
 					{
 						case 0:
-							wsprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dL.bmp"), LibID);
+							camSprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dL.bmp"), LibID);
 							break;
 						case 2:
-							wsprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dS.bmp"), LibID);
+							camSprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dS.bmp"), LibID);
 							break;
 						case 1:
 						case 3:
 						default:
-							wsprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dM.bmp"), LibID);
+							camSprintf(tmp, TEXT("d:\\fonts\\TrueType\\XaraInfo\\F%05dM.bmp"), LibID);
 							break;
 					}
 					ThePath = new PathName(tmp);	
@@ -2406,15 +2406,15 @@ BOOL SGATMItem::CreateThumbnail(KernelBitmap **Bitmap)
 					switch(DMode)
 					{
 						case 0:
-							_stprintf(tmp, "c:\\fonts\\ATM\\XaraInfo\\F%05dL.bmp", LibID);
+							camSprintf(tmp, _T("c:\\fonts\\ATM\\XaraInfo\\F%05dL.bmp"), LibID);
 							break;
 						case 2:
-							_stprintf(tmp, "c:\\fonts\\ATM\\XaraInfo\\F%05dS.bmp", LibID);
+							camSprintf(tmp, _T("c:\\fonts\\ATM\\XaraInfo\\F%05dS.bmp"), LibID);
 							break;
 						case 1:
 						case 3:
 						default:
-							_stprintf(tmp, "c:\\fonts\\ATM\\XaraInfo\\F%05dM.bmp", LibID);
+							camSprintf(tmp, _T("c:\\fonts\\ATM\\XaraInfo\\F%05dM.bmp"), LibID);
 							break;
 					}
 					ThePath = new PathName(tmp);	
@@ -2433,15 +2433,15 @@ BOOL SGATMItem::CreateThumbnail(KernelBitmap **Bitmap)
 					switch(DMode)
 					{
 						case 0:
-							_stprintf(tmp, "d:\\fonts\\ATM\\XaraInfo\\F%05dL.bmp", LibID);
+							camSprintf(tmp, _T("d:\\fonts\\ATM\\XaraInfo\\F%05dL.bmp"), LibID);
 							break;
 						case 2:
-							_stprintf(tmp, "d:\\fonts\\ATM\\XaraInfo\\F%05dS.bmp", LibID);
+							camSprintf(tmp, _T("d:\\fonts\\ATM\\XaraInfo\\F%05dS.bmp"), LibID);
 							break;
 						case 1:
 						case 3:
 						default:
-							_stprintf(tmp, "d:\\fonts\\ATM\\XaraInfo\\F%05dM.bmp", LibID);
+							camSprintf(tmp, _T("d:\\fonts\\ATM\\XaraInfo\\F%05dM.bmp"), LibID);
 							break;
 					}
 					ThePath = new PathName(tmp);	
@@ -4198,7 +4198,7 @@ BOOL FontsSGallery::ApplyFont(BOOL Dropping, SGDisplayNode *TheNode, NodeRendera
 
 				if(lplf != NULL)
 				{
-					// _tcscpy((TCHAR *)Desc, (TCHAR *)lplf->lfFaceName);
+					// camStrcpy((TCHAR *)Desc, (TCHAR *)lplf->lfFaceName);
 					Desc = (TCHAR *)lplf->lfFaceName;
 
 					Italic = lplf->lfItalic;
@@ -5046,7 +5046,7 @@ BOOL FontsSGallery::DeinstallTTFFont(String_256 *FontDesc, BOOL Delete)
 		if(!ok)
 		{
 			DWORD LastErr = GetLastError();
-			wsprintf(GLErrMsgF,
+			camSprintf(GLErrMsgF,
 					 TEXT("Problems with remove font resource (file) - GetLastError returned %d '%s'"),
 					 LastErr, (const TCHAR *)FOTFile.GetPath());
 		}
@@ -5060,7 +5060,7 @@ BOOL FontsSGallery::DeinstallTTFFont(String_256 *FontDesc, BOOL Delete)
 			// Why does this sometimes fail ???
 			DWORD LastErr = GetLastError();
 			String_256 GLErrMsgP;
-			wsprintf(GLErrMsgP,
+			camSprintf(GLErrMsgP,
 					 TEXT("Problems with remove font resource (path) - GetLastError returned %d '%s'"),
 					 LastErr, (const TCHAR *)FOTFile.GetPath());
 			ERROR3((TCHAR*) GLErrMsgF);
@@ -5436,19 +5436,19 @@ BOOL FontsSGallery::GetWindowsFontDirectory(String_256* Result)
 	{
 		if (IsWindows31()) // IsWin32s() && !IsWin32c())
 		{
-			wsprintf((TCHAR*) FontDir, TEXT("%s\\System"), (LPCTSTR) WindowsDir);
+			camSprintf((TCHAR*) FontDir, TEXT("%s\\System"), (LPCTSTR) WindowsDir);
 			RecognisedWindows = TRUE;
 		}
 
 		if (UseWin95FontInstallMethod()) // IsWin32c())
 		{
-			wsprintf((TCHAR*) FontDir, TEXT("%s\\Fonts"), (LPCTSTR) WindowsDir);
+			camSprintf((TCHAR*) FontDir, TEXT("%s\\Fonts"), (LPCTSTR) WindowsDir);
 			RecognisedWindows = TRUE;
 		}
 
 		if (!UseWin95FontInstallMethod() && IsWindowsNT()) // IsWin32NT())
 		{
-			wsprintf((TCHAR*) FontDir, TEXT("%s\\System"), (LPCTSTR) WindowsDir);
+			camSprintf((TCHAR*) FontDir, TEXT("%s\\System"), (LPCTSTR) WindowsDir);
 			RecognisedWindows = TRUE;
 		}
 	}
@@ -5578,7 +5578,7 @@ BOOL FontsSGallery::GetFOTNameFromRegistry(String_256 *Desc, PathName *FOTFile)
 		if (ok)
 		{
 		 	String_256 SysTTF;
-			wsprintf((TCHAR*) SysTTF, TEXT("%s\\%s"),
+			camSprintf((TCHAR*) SysTTF, TEXT("%s\\%s"),
 					 (LPCTSTR) FontDir, (LPCTSTR) FOTBufPath.GetFileName());
 			ok = FOTFile->SetPathName(SysTTF);
 			if (ok) ok = FOTFile->IsValid();
@@ -7170,7 +7170,7 @@ BOOL SGLibFontItem::GetThumbFileName(String_256* path)
 		default:
 			tchSize = _T(' ');
 	}
-	_sntprintf(strFilename, _MAX_PATH, "%c%05d%c", tchType, pLibrary->GetID(TheLibraryIndex), tchSize); 
+	camSnprintf(strFilename, _MAX_PATH, _T("%c%05d%c"), tchType, pLibrary->GetID(TheLibraryIndex), tchSize);
 	thumbPath += strFilename;
 	thumbPath += _T(".png"); // thumbnails for web files will always be PNGs
 	*path = thumbPath;
@@ -7201,10 +7201,10 @@ FontClass SGLibFontItem::GetType(void)
 		BOOL ok = Lib->GetFilename(TheLibraryIndex, &pFName);
 		if(ok)
 		{
-			if(_tcsstr(pFName, ".ttf") != NULL || strstr(pFName, ".TTF") != NULL)
+			if(camStrstr(pFName, ".ttf") != NULL || strstr(pFName, ".TTF") != NULL)
 				return FC_TRUETYPE;
 
-			if(_tcsstr(pFName, ".pfb") != NULL || strstr(pFName, ".PFB") != NULL)
+			if(camStrstr(pFName, ".pfb") != NULL || strstr(pFName, ".PFB") != NULL)
 				return FC_ATM;
 		}
 		else

@@ -394,7 +394,7 @@ void DebugTreeDlg::ShowNodeDebugInfoForNode(Node *pNode)
 	m_pstrDetails->Empty();
 	*m_pstrDetails += NodeDesc;
 	TCHAR NodeAddress[64];
-	tsprintf( NodeAddress, 64, _T(" Data at 0x%p (%lu bytes)\n\n"), pNode, pNode->GetNodeSize() );
+	camSnprintf( NodeAddress, 64, _T(" Data at 0x%p (%lu bytes)\n\n"), pNode, pNode->GetNodeSize() );
 	*m_pstrDetails += NodeAddress;
 	pNode->GetDebugDetails(m_pstrDetails);
 
@@ -462,7 +462,7 @@ void DebugTreeDlg::TweeDump(BaseDocument* DocToDump)
 	}
 	else
 	{
-		tsprintf( StrBuff, 256, _T("Tweedump: Document %p\n"), DocToDump);
+		camSnprintf( StrBuff, 256, _T("Tweedump: Document %p\n"), DocToDump);
 		DebugTreeInfo::OutputDebug((TCHAR*) StrBuff);
 	}
 
@@ -475,19 +475,19 @@ void DebugTreeDlg::TweeDump(BaseDocument* DocToDump)
 		Details.Empty();
 		for(i=0; i<depth; i++)
 		{
-			tsprintf( StrBuff, 256, _T("  ") );
+			camSnprintf( StrBuff, 256, _T("  ") );
 			Details += StrBuff;
 		}
-		tsprintf( StrBuff, 256, _T("%p  "), pNode);
+		camSnprintf( StrBuff, 256, _T("%p  "), pNode);
 		Details += StrBuff;
-		tsprintf( StrBuff, 256, _T("%c%c%c  "),	
+		camSnprintf( StrBuff, 256, _T("%c%c%c  "),	
 										(pNode->IsRenderable() ? 'R':'-'),
 										(pNode->IsSelected() ? 'S':'-'),
 										(pNode->IsParentOfSelected() ? 'P':'-')
 				);
 		Details += StrBuff;
 		Details += String_256((TCHAR*)(pNode->GetRuntimeClass()->GetClassName())); 
-		tsprintf( StrBuff, 256, _T("\n"), pNode);
+		camSnprintf( StrBuff, 256, _T("\n"), pNode);
 		Details += StrBuff;
 		DebugTreeInfo::OutputDebug((TCHAR*)Details);
 
@@ -548,7 +548,7 @@ void DebugTreeDlg::DumpSubTree(Node* pSubTree, INT32 FromParent, INT32 MaxDepth)
 	}
 
 	TCHAR				StrBuff[256];
-	tsprintf( StrBuff, 256, _T("DebugTreeDlg::DumpSubTree() - pStartNode = %p\n"), pStartNode );
+	camSnprintf( StrBuff, 256, _T("DebugTreeDlg::DumpSubTree() - pStartNode = %p\n"), pStartNode );
 	DebugTreeInfo::OutputDebug((TCHAR*)StrBuff);
 
 	INT32        depth = 0;
@@ -557,13 +557,13 @@ void DebugTreeDlg::DumpSubTree(Node* pSubTree, INT32 FromParent, INT32 MaxDepth)
 	while (pNode && depth>=0)
 	{
 		// Fill in the details string for this node...
-		tsprintf( StrBuff, 256, _T("  ") );
+		camSnprintf( StrBuff, 256, _T("  ") );
 		Details.Empty();
 		for(INT32 i=0; i<depth; i++)
 			Details += StrBuff;
-		tsprintf( StrBuff, 256, _T("%p  "), pNode);
+		camSnprintf( StrBuff, 256, _T("%p  "), pNode);
 		Details += StrBuff;
-		tsprintf( StrBuff, 256, _T("%c%c%c  "),
+		camSnprintf( StrBuff, 256, _T("%c%c%c  "),
 									(pNode->IsRenderable()       ? 'R':'-'),
 									(pNode->IsSelected()         ? 'S':'-'),
 									(pNode->IsParentOfSelected() ? 'P':'-') );

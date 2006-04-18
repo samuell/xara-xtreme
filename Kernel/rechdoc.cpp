@@ -1255,7 +1255,7 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 	// This outputs the tag and size
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
 
-	char s[256];
+	TCHAR s[256];
 	BOOL ok = TRUE;
 
 	UINT32 Tag = pRecord->GetTag();
@@ -1278,17 +1278,16 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 
 		case TAG_SPREADINFORMATION:
 		{
-			_stprintf(s,"Spread Information record\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Spread Information record\r\n\r\n");
 			
 			// Width, Height of page
 			MILLIPOINT Width = 0;
 			MILLIPOINT Height = 0;
 			if (ok) ok = pRecord->ReadINT32(&Width);
 			if (ok) ok = pRecord->ReadINT32(&Height);
-			_stprintf(s,"Page width \t: %d\r\n",Width);
+			camSprintf(s,_T("Page width \t: %d\r\n"),Width);
 			(*pStr) += s;
-			_stprintf(s,"Page height \t: %d\r\n",Height);
+			camSprintf(s,_T("Page height \t: %d\r\n"),Height);
 			(*pStr) += s;
 			
 			// <Margin : MILLIPOINT>	The margin to add around all four sides of the pages in the spread to make up the pasteboard. 
@@ -1297,9 +1296,9 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			MILLIPOINT Bleed = 0;
 			if (ok) ok = pRecord->ReadINT32(&Margin);
 			if (ok) ok = pRecord->ReadINT32(&Bleed);
-			_stprintf(s,"Margin around spread : %d\r\n",Margin);
+			camSprintf(s,_T("Margin around spread : %d\r\n"),Margin);
 			(*pStr) += s;
-			_stprintf(s,"Bleed around spread : %d\r\n",Bleed);
+			camSprintf(s,_T("Bleed around spread : %d\r\n"),Bleed);
 			(*pStr) += s;
 
 			// <SpreadFlags : BYTE>	Flags for the current spread.
@@ -1318,9 +1317,9 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			if (FlagsWord & 2)
 				ShowDropShadow = TRUE;
 			else
-			_stprintf(s,"Double page spread : %d\r\n",Dps);
+			camSprintf(s,_T("Double page spread : %d\r\n"),Dps);
 			(*pStr) += s;
-			_stprintf(s,"Show drop shadow : %d\r\n",ShowDropShadow);
+			camSprintf(s,_T("Show drop shadow : %d\r\n"),ShowDropShadow);
 			(*pStr) += s;
 
 			break;
@@ -1339,21 +1338,21 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			pRecord->ReadUnicode(&Name);//Name, Name.MaxLength());
 			if (Tag == TAG_GUIDELAYERDETAILS)
 			{
-				sprintf(s,"Guide layer details\r\n\r\n"); (*pStr) += s;
+				(*pStr) += _T("Guide layer details\r\n\r\n");
 				pRecord->ReadINT32(&ColRef);
 			}
 			else
 			{
-				sprintf(s,"Standard layer details\r\n\r\n"); (*pStr) += s;
+				(*pStr) += _T("Standard layer details\r\n\r\n");
 			}
 
-			sprintf(s,"Flags\r\n"); (*pStr) += s;
+			(*pStr) += _T("Flags\r\n");
 			sprintf(s,"Visible:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_VISIBLE)	!= 0); (*pStr) += s;
 			sprintf(s,"Locked:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_LOCKED)		!= 0); (*pStr) += s;
 			sprintf(s,"Printable:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_PRINTABLE)	!= 0); (*pStr) += s;
 			sprintf(s,"Active:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_ACTIVE)		!= 0); (*pStr) += s;
 			sprintf(s,"PageBackground:\t%d\r\n",(Flags & TAG_LAYER_FLAG_PAGEBACKGROUND)	!= 0); (*pStr) += s;
-			sprintf(s,"\r\n"); (*pStr) += s;
+			(*pStr) += _T("\r\n");
 
 			sprintf(s,"Name: %s\r\n\r\n",(TCHAR*)Name); (*pStr) += s;
 			sprintf(s,"Colour reference : %d\r\n",ColRef); (*pStr) += s;

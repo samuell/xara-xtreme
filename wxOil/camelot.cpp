@@ -224,7 +224,7 @@ void CCamApp::OnKeyEvent( wxKeyEvent &event )
 {
 	// If a control (but not a button) has focus, let it handle the key events
 	wxClassInfo*		pClassInfo = wxWindow::FindFocus()->GetClassInfo();
-	TRACEUSER( "luke", _T("Focus = " PERCENT_S "\n"), pClassInfo->GetClassName() );
+	TRACEUSER( "luke", _T("Focus = %s\n"), pClassInfo->GetClassName() );
 	if(  pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxSlider) ) &&
@@ -309,14 +309,13 @@ bool CCamApp::OnInit()
 		TCHAR*			pszCDrawVer = GDraw_GetSvnVersion();
 #else
 		TCHAR			pszCDrawVer[32];
-		mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
+		camMbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-		strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%03d (" PERCENT_S 
-			")\nBuild date: " PERCENT_S "\n"), 
+		strMessage = wxString::Format( wxT("Xara LX\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\n"), 
 			g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, CAMELOT_BUILD_DATE );
 #endif
 
-		tprintf( strMessage.c_str() );
+		camPrintf( strMessage.c_str() );
 		
 		return false;
 	}
@@ -439,7 +438,7 @@ bool CCamApp::OnInit()
 	wxSize ScreenSize = ::wxGetDisplaySize();
 	wxRect WndRect;
 	wxSize OldScreenSize;
-	if ((_stscanf(MainWndPosString, _T("%d %d %d %d %d %d"),
+	if ((camSscanf(MainWndPosString, _T("%d %d %d %d %d %d"),
 			&WndRect.x, &WndRect.y, &WndRect.width, &WndRect.height, &OldScreenSize.x, &OldScreenSize.y) == 6) &&
 			(WndRect.width > 0) && (WndRect.height > 0))
 	{
@@ -807,12 +806,10 @@ void CCamApp::DoAboutBox()
 	TCHAR*			pszCDrawVer = GDraw_GetSvnVersion();
 #else
 	TCHAR			pszCDrawVer[32];
-	mbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
+	camMbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-	strMessage = wxString::Format( wxT("Xara LX\nVersion: " PERCENT_S " (" PERCENT_S ")\nCDraw Version: %d.%03d (" PERCENT_S 
-		")\nBuild date: " PERCENT_S "\nUsage: XaraLX [xar-file...]"), 
-		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, 
-		CAMELOT_BUILD_DATE );
+	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\nUsage: XaraLX [xar-file...]"), 
+		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, CAMELOT_BUILD_DATE );
 #endif
 
 	(void)wxMessageBox( strMessage, wxT("About Xara LX") );

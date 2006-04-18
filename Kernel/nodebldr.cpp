@@ -505,15 +505,15 @@ void NodeBlender::GetDebugDetails( StringBase* Str )
 	(*Str) += TEXT( "\r\nBlender Data Dump\r\n" );
 
 	TCHAR				buf[500];
-	tsprintf( buf, 500,	_T("Blend steps = %ld\r\n"
-						"m_ObjIndex start = %ld\r\n"
-						"m_ObjIndex end   = %ld\r\n"
-						"m_ProportionOfPathDistStart = %f\r\n"
-						"m_ProportionOfPathDistEnd   = %f\r\n"
-						"m_AngleStart = %f\r\n"
-						"m_AngleEnd   = %f\r\n"
-						"m_NodeBlendPathIndex = %ld\r\n"
-						"\r\n"),
+	camSnprintf( buf, 500,	_T("Blend steps = %ld\r\n")
+						_T("m_ObjIndex start = %ld\r\n")
+						_T("m_ObjIndex end   = %ld\r\n")
+						_T("m_ProportionOfPathDistStart = %f\r\n")
+						_T("m_ProportionOfPathDistEnd   = %f\r\n")
+						_T("m_AngleStart = %f\r\n")
+						_T("m_AngleEnd   = %f\r\n")
+						_T("m_NodeBlendPathIndex = %ld\r\n")
+						_T("\r\n"),
 						GetNumBlendSteps(),
 						m_ObjIndexStart,
 						m_ObjIndexEnd,

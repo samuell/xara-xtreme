@@ -295,7 +295,7 @@ PORTNOTE("byteorder", "TODO: Check byte ordering")
 	// check for version 2 files if the extension matches...
 	if (ExtensionMatches)
 	{
-		if(_tcsncmp((char *)HeaderStart, "WL", 2) == 0)
+		if(camStrncmp((char *)HeaderStart, "WL", 2) == 0)
 			return 10;			// a version 2.xx CDR file
 	}
 
@@ -462,7 +462,7 @@ TRACEUSER( "Ben", _T("In CDRFilter::DoImport\n"));
 		if(pDiskFile->read((void *)FirstBit, sizeof(FirstBit)).bad())
 			return FALSE;
 
-		ERROR1IF(_tcsncmp((char *)FirstBit, "WL", 2) == 0, FALSE, _R(IDT_CDRFILTER_ISAV2FILE));
+		ERROR1IF(camStrncmp((char *)FirstBit, "WL", 2) == 0, FALSE, _R(IDT_CDRFILTER_ISAV2FILE));
 	
 		// let's pop the file back to the beginning
 		if(pDiskFile->seek(0).bad())

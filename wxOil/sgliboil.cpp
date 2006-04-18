@@ -1220,14 +1220,14 @@ BOOL SGLibOil::FileCopy(PathName *Source, PathName *Destination)
 #else
 	PSTR				pszSrc, pszDst;
 	{
-		size_t			cchTmp = wcstombs( NULL, Source->GetPath(), 0 ) + 1;
+		size_t			cchTmp = camWcstombs( NULL, Source->GetPath(), 0 ) + 1;
 		pszSrc = PSTR( alloca( cchTmp ) );
-		wcstombs( pszSrc, Source->GetPath(), cchTmp );
+		camWcstombs( pszSrc, Source->GetPath(), cchTmp );
 	}
 	{
-		size_t			cchTmp = wcstombs( NULL, Destination->GetPath(), 0 ) + 1;
+		size_t			cchTmp = camWcstombs( NULL, Destination->GetPath(), 0 ) + 1;
 		pszDst = PSTR( alloca( cchTmp ) );
-		wcstombs( pszDst, Destination->GetPath(), cchTmp );
+		camWcstombs( pszDst, Destination->GetPath(), cchTmp );
 	}
 
 	FPin  = fopen( pszSrc, "rb" );
@@ -1679,7 +1679,7 @@ PORTNOTE("dialog","Removed LibraryGallery usage")
 			    	}
 
 					// Advance to next valid drive in system
-					lpszDriveStringBuffer = lpszDriveStringBuffer + cc_strlenBytes(lpszDriveStringBuffer) + 1;
+					lpszDriveStringBuffer = lpszDriveStringBuffer + camStrlen(lpszDriveStringBuffer) + 1;
 			    }
 			}
 		}
@@ -2611,14 +2611,14 @@ BOOL SGLibOil::PlayRandomSample(String_256 *SampleString, String_256 *SubPath)
 			}
 
 			// Strip any trailing sounds
-			if(TmpSoundToUse.Sub(String_8("|")) != -1)
-				TmpSoundToUse.Left(&SoundToUse, TmpSoundToUse.Sub(String_8("|")));
+			if(TmpSoundToUse.Sub(String_8(_T("|"))) != -1)
+				TmpSoundToUse.Left(&SoundToUse, TmpSoundToUse.Sub(String_8(_T("|"))));
 			else
 				SoundToUse = TmpSoundToUse;
 		}
 
 		// Path for normal files is with the pictures
-		if(SoundToUse.Sub(String_8("\\")) == -1)
+		if(SoundToUse.Sub(String_8(_T("\\"))) == -1)
 		{
 			String_256 File = *SubPath;
 			SGLibOil::AppendSlashIfNotPresent(&File);
@@ -2663,11 +2663,11 @@ BOOL SGLibOil::IsRootDirectory(String_256 *Path)
 	
 	// Remove trailing '\'s
 	String_256 TmpPath(*Path);
-	if(TmpPath[TmpPath.Length()-1] == '\\')
+	if(TmpPath[TmpPath.Length()-1] == _T('\\'))
 		Path->Left(&TmpPath, Path->Length()-1);
 
 	// Check for 'a:'s...
-	if(	TmpPath.Length() == 2 && TmpPath[1] == ':' )
+	if(	TmpPath.Length() == 2 && TmpPath[1] == _T(':') )
 		return TRUE;
 
 //	ERROR3_PF(("For %s, Sub = %d, Count = %d", (TCHAR *)TmpPath, TmpPath.Sub(String_8("\\\\"), 0, TCHAR('*')), TmpPath.CountChar('\\')));
@@ -2717,7 +2717,7 @@ BOOL SGLibOil::LoadSoundDefinition(CXaraFileRecordHandler *pXFileRecHandler, CXa
 	}
 
 	// Create a temporary filename to use
-	if(( TmpSndName = tmpnam( NULL ) ) != NULL )
+	if(( TmpSndName = _ttmpnam( NULL ) ) != NULL )
 	{
 		UINT32 Size = pCXFile->GetCurrentRecordSize();
 		CCFile *pRecordFile = pCXFile->GetCCFile();
@@ -3001,7 +3001,7 @@ String_256 MakeURL(const String_256& rRelativePath, const String_256& rRootURL)
 {
 	String_256 strURL = rRootURL;
 	INT32 nCharCount = rRelativePath.Length();
-	if (_tcsstr( (const TCHAR *)strURL, _T("file://") ) )
+	if (camStrstr( (const TCHAR *)strURL, _T("file://") ) )
 		strURL += rRelativePath;
 	else for (INT32 i = 0; i < nCharCount; i++)
 	{
@@ -3010,7 +3010,7 @@ String_256 MakeURL(const String_256& rRelativePath, const String_256& rRootURL)
 		if (rRelativePath[i] == _T('\\'))
 			strURL += _T('/');
 		else
-			strURL += _totlower( rRelativePath[i] );
+			strURL += camTolower( rRelativePath[i] );
 	}
 	return strURL;
 }

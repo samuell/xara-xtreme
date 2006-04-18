@@ -289,7 +289,7 @@ BOOL ArtWorksEPSFilter::Init()
 INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -306,11 +306,11 @@ INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		Lines++;
 
 		// Return TRUE if this file was created by ArtWorks
-		if (_tcsncmp(Buffer, "%%Creator: ArtWorks", 19) == 0)
+		if (camStrncmp(Buffer, "%%Creator: ArtWorks", 19) == 0)
 		{
 			// ArtWorks is the creator - but has it exported it in an alien format?
 			// Return 10 if it hasn't, 1 if it has.
-			if (_tcsstr(Buffer, "exported") == NULL)
+			if (camStrstr(Buffer, "exported") == NULL)
 				return 10;
 			else
 				// 5 because it *might* be "ArtWorks (exported by Mr. Blobby)", and
@@ -320,7 +320,7 @@ INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -419,7 +419,7 @@ void ArtWorksEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (ArtWorksCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, ArtWorksCommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, ArtWorksCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = ArtWorksCommands[i].Cmd;

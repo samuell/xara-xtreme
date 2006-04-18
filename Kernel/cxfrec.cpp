@@ -871,7 +871,7 @@ BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
 
 #elif defined(__WXMSW__)
 	// pStr points to a Unicode string, so just write it out
-	INT32 len = _tcslen(pStr);
+	INT32 len = camStrlen(pStr);
 	ok = WriteBuffer((BYTE*)pStr,(len*2)+2);
 
 #else
@@ -943,7 +943,7 @@ BOOL CXaraFileRecord::WriteASCII(TCHAR* pStr)
 		return FALSE;
 
 	ENTERWRITEFUNCTION(FTT_ASCII);
-	size_t len = _tcslen(pStr);
+	size_t len = camStrlen(pStr);
 	BOOL ok= TRUE;
 
 #ifdef UNICODE

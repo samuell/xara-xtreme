@@ -280,7 +280,7 @@ public:
 		if (pObjectNameHash)	// skip on static initialization phase or we'll be dead
 		{
 			ResIDToString::iterator i=pObjectNameHash->find(Resource);
-			if (i==pObjectNameHash->end()) (*pObjectNameHash)[Resource]=_tcsdup(fObjectName);
+			if (i==pObjectNameHash->end()) (*pObjectNameHash)[Resource]=camStrdup(fObjectName);
 		}
 		else RememberDuringStaticInit(fObjectName); // add it to the hash later
 		return Resource;

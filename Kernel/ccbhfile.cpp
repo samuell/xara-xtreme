@@ -188,9 +188,9 @@ CCFile& CCBinHexFile::write(const StringBase& buf, UINT32 length)
 
 
 #if 0 != wxUSE_UNICODE
-	size_t				cchTCSrc = wcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
+	size_t				cchTCSrc = camWcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
 	PSTR				pTCSrc = PSTR( alloca( cchTCSrc ) );
-	wcstombs( pTCSrc, (const TCHAR *)buf, cchTCSrc );
+	camWcstombs( pTCSrc, (const TCHAR *)buf, cchTCSrc );
 #else
 	const char* pTCSrc = buf;
 #endif

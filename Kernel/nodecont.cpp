@@ -245,7 +245,7 @@ NodeShadowController::~NodeShadowController()
 	if (myShadowID > -1)
 	{
 		TCHAR			strId[100];
-		tsprintf( strId, 100, _T("Popping NodeShadowController ID:  %i\n"), myShadowID );
+		camSnprintf( strId, 100, _T("Popping NodeShadowController ID:  %i\n"), myShadowID );
 			
 		TRACEUSER( "ChrisS", strId);
 	}
@@ -2260,7 +2260,7 @@ void ShadowRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Stri
 			}
 			(*pStr) += "\r\n";
 
-			_stprintf(s,"Width\t\t= %d\r\n",Width);
+			camSprintf(s,_T("Width\t\t= %d\r\n"),Width);
 			(*pStr) += s;
 			(*pStr) += "\r\n";
 		}

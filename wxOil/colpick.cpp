@@ -1572,7 +1572,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 	// convert to lower case (avoid trouble with caps etc.)
 	CopyNewValue.toLower ();
 
-	INT32 StringLength = CopyNewValue.Length ();//lstrlen ((TCHAR*) CopyNewValue);
+	INT32 StringLength = CopyNewValue.Length ();//camStrlen ((TCHAR*) CopyNewValue);
 
 	BOOL ValidStringParseSoFar = TRUE;
 	BOOL Single0xPrefix = FALSE;

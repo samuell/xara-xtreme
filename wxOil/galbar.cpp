@@ -1325,7 +1325,7 @@ BOOL GalleryBar::FormatVerticalBar(BOOL MoveControls, ForceControlSize ForceSize
 
 		CFont * OldFont=dc->SelectObject(TitleFont);
 
-		CSize TextSize=dc->GetTextExtent(Name,lstrlen(Name));
+		CSize TextSize=dc->GetTextExtent(Name,camStrlen(Name));
 
 		dc->SelectObject(OldFont);
 

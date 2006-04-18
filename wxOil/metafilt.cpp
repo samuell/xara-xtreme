@@ -1010,7 +1010,7 @@ MetaFileFilter::MetaFileFilter()
 	SelectedFont.lfQuality = 1;
 	SelectedFont.lfPitchAndFamily = 18;
 	
-	lstrcpy(SelectedFont.lfFaceName, (TCHAR *)String_64(_R(IDS_METAFILT_FONT))/*"Times New Roman"*/);
+	camStrcpy(SelectedFont.lfFaceName, (TCHAR *)String_64(_R(IDS_METAFILT_FONT))/*"Times New Roman"*/);
 
 	// Clear out the view
 	pMetaView = NULL;
@@ -2712,7 +2712,7 @@ BOOL MetaFileFilter::DecodeTextStory(METARECORD* pMetaRec)
 		return FALSE;
 	
 	// Copy the chars into our new string
-	_tcsncpy(pString, (char*)pWords, Count);
+	camStrncpy(pString, (char*)pWords, Count);
 	pString[Count] = 0;
 	TRACE( _T("- %s\n"), pString);
 
@@ -2801,7 +2801,7 @@ BOOL MetaFileFilter::DecodeExtTextStory(METARECORD* pMetaRec)
 		return FALSE;
 	
 	// Copy the chars into our new string
-	_tcsncpy(pString, (char*)pWords, Count);
+	camStrncpy(pString, (char*)pWords, Count);
 	pString[Count] = 0;
 	TRACE( _T("%s\n"), pString);
 
@@ -2860,7 +2860,7 @@ void MetaFileFilter::SetLogicalFont(LOGFONT_16* pNewFont)
 	SelectedFont.lfClipPrecision = pNewFont->lfClipPrecision;
 	SelectedFont.lfQuality = pNewFont->lfQuality;
 	SelectedFont.lfPitchAndFamily = pNewFont->lfPitchAndFamily;
-	_tcscpy(SelectedFont.lfFaceName, pNewFont->lfFaceName);
+	camStrcpy(SelectedFont.lfFaceName, pNewFont->lfFaceName);
 
 	// Scale the text size according to the current mapping mode.
 	switch (CurrentMappingMode)

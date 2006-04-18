@@ -104,6 +104,100 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define USE_WXAUI
 
+// New string function wrappers allowing portability issues to be resolved
+// For now, in wxOil, they are mostly defined as the wxWidgets equivalent
+
+// These should be used for all TCHAR string manipulation that doesn't use a 
+// string class
+
+// All ASCII string (plain char) manipulation should be done using the standard 
+// strcpy type functions.
+
+#define camIsalnum		wxIsalnum
+#define camIsalpha		wxIsalpha
+#define camIscntrl		wxIscntrl
+#define camIsdigit		wxIsdigit
+#define camIsgraph		wxIsgraph
+#define camIslower		wxIslower
+#define camIsprint		wxIsprint
+#define camIspunct		wxIspunct
+#define camIsspace		wxIsspace
+#define camIsupper		wxIsupper
+#define camIsxdigit		wxIsxdigit
+#define camTolower		wxTolower
+#define camToupper		wxToupper
+#define camSetlocale	wxSetlocale
+#define camStrcat		wxStrcat
+#define camStrchr		wxStrchr
+#define camStrcmp		wxStrcmp
+#define camStrcoll		wxStrcoll
+#define camStrcpy		wxStrcpy
+#define camStrcspn		wxStrcspn
+#define camStrdup		wxStrdup
+#define camStrdupW		wxStrdupW
+#define camStrftime		wxStrftime
+#define camStricmp		wxStricmp
+#define camStrnicmp		wxStrnicmp
+#define camStrlen		wxStrlen
+#define camStrclen		wxStrlen
+#define camStrncat		wxStrncat
+#define camStrncmp		wxStrncmp
+#define camStrncpy		wxStrncpy
+#define camStrpbrk		wxStrpbrk
+#define camStrrchr		wxStrrchr
+#define camStrspn		wxStrspn
+#define camStrstr		wxStrstr
+#define camStrtod		wxStrtod
+#define camStrtol		wxStrtol
+#define camStrtoul		wxStrtoul
+#define camStrxfrm		wxStrxfrm
+#define camFgetc		wxFgetc
+#define camFgetchar		wxFgetchar
+#define camFgets		wxFgets
+#define camFopen		wxFopen
+#define camFputc		wxFputc
+#define camFputchar		wxFputchar
+#define camFprintf		wxFprintf
+#define camFputs		wxFputs
+#define camFreopen		wxFreopen
+#define camFscanf		wxFscanf
+#define camGetc			wxGetc
+#define camGetchar		wxGetchar
+#define camGets			wxGets
+#define camPerror		wxPerror
+#define camPrintf		wxPrintf
+#define camPutc			wxPutc
+#define camPutchar		wxPutchar
+#define camPuts			wxPuts
+#define camScanf		wxScanf
+#define camSprintf		wxSprintf
+#define camSscanf		wxSscanf
+#define camTmpnam		wxTmpnam
+#define camUngetc		wxUngetc
+#define camVfprintf		wxVfprintf
+#define camVprintf		wxVprintf
+#define camVsscanf		wxVsscanf
+#define camVsprintf		wxVsprintf
+#define camVsnprintf	wxVsnprintf
+#define camSnprintf		wxSnprintf
+#define camRemove		wxRemove
+#define camRename		wxRename
+#define camAtoi			wxAtoi
+#define camAtol			wxAtol
+#define camGetenv		wxGetenv
+#define camSystem		wxSystem
+#define camAsctime		wxAsctime
+#define camCtime		wxCtime
+#define camMbstowcs		wxMbstowcs
+#define camWcstombs		wxWcstombs
+
+// The following also need to be defined but do not have wx equivalents
+// camStrtok
+// camStrinc(v)
+// camStrninc(s, n)
+// camStrdec(s, v)
+
+
 // Define types that *nix doesn't have
 #if !defined(__WXMSW__)
 typedef char			CHAR;
@@ -117,135 +211,55 @@ typedef unsigned long long	UINT_PTR;
 typedef unsigned long long	DWORD_PTR;
 #endif
 
+#define camStrinc(v)		( (v)+1 )
+#define camStrninc(s, n)	( (s)+(n) )
+#define camStrdec(s, v)		( (v)-1 )
+
 #if 0 != wxUSE_UNICODE
 typedef wchar_t			TCHAR;
-#define _istalpha		iswalpha
-#define IsCharAlpha		iswalpha
-#define IsCharAlphaNumeric	iswalnum
-#define _istlower		iswlower
-#define _istupper		iswupper
-#define _istspace		iswspace
-#define _istxdigit		iswxdigit
-#define _istcntrl		iswcntrl
-#define _istprint		iswprint
-#define _totlower		towlower
-#define _totupper		towupper
 
-#define lstrlen			wcslen
-#define lstrcpy			wcscpy
-#define lstrcpyn		wcsncpy
-#define lstrcat			wcscat
-#define lstrcmp			wcscmp
-#if defined(__WXMAC__)
-//PORTNOTE("MacPort", "Horrendous bodge - can't find case insensitive string compare function")
-// NOTE! wcscasecmp not available in wchar.h on Mac OS X (???) Bodged to be case senstive temporarilly...
-#define lstrcmpi		wcscmp
-#else
-#define lstrcmpi		wcscasecmp
-#endif
+#define camStrtok		wcstok
+#define camStrtof( str, pszMark )	wcstof( str, pszMark )
 
+// These two have been left in for now as they are currently needed by CCLexFile
 #define _strnicmp		strncasecmp
 #define _snprintf		snprintf
-#define _stscanf		swscanf
 
-#define _tcslen			wcslen
-#define _tcscpy			wcscpy
-#define _tcsncpy		wcsncpy
-#define _tcscat			wcscat
-#define _tcschr			wcschr
-#if defined(__WXMAC__)
-#define _tcsdup			wxStrdup
-#else
-#define _tcsdup			wcsdup
-#endif
-#define _tcsrchr		wcsrchr
-#define tcstok			wcstok
-#define _tcscmp			wcscmp
-#define _tcsncmp		wcsncmp
-#if defined(__WXMAC__)
-//PORTNOTE("MacPort", "Horrendous bodge - can't find case insensitive string compare function")
-// NOTE! wcsncasecmp not available in wchar.h on Mac OS X (???) Bodged to be case senstive temporarilly...
-#define _tcsnicmp		wcsncmp
-#else
-#define _tcsnicmp		wcsncasecmp
-#endif
-#define _tcsclen		wcslen
-#define _tcsstr			wcsstr
-#define _tcsinc(v)		( (v)+1 )
-#define _tcsninc(s, n)	( (s)+(n) )
-#define _tcsdec(s, v)	( (v)-1 )
+//#define _tcsclen		wcslen
 
-#define tcstol( str, pszMark, radix )	wcstol( str, pszMark, radix )
-#define tcstof							wcstof
-#define tcstoul							wcstoul
+//#define tcstof							wcstof
 
-#define tsprintf		swprintf
-#define tvsprintf( dst, cch, tmt, param )	vswprintf( dst, cch, tmt, param )
-#define tprintf			wprintf
+//#define tprintf			wprintf
 
 #else // !wxUSE_UNICODE
 
 typedef char			TCHAR;
-#define _istalpha		isalpha
-#define IsCharAlpha		isalpha
-#define IsCharAlphaNumeric	isalnum
-#define _istlower		islower
-#define _istupper		isupper
-#define _istspace		isspace
-#define _istxdigit		isxdigit
-#define _istcntrl		iscntrl
-#define _istprint		isprint
-#define _totlower		tolower
-#define _totupper		toupper
 
-#define lstrlen			strlen
-#define lstrcpy			strcpy
-#define lstrcpyn		strncpy
-#define lstrcat			strcat
-#define lstrcmp			strcmp
-#define lstrcmpi		strcasecmp
+#define camStrtok		strtok_r
+#define camStrtof( str, pszMark )	strtof( str, pszMark )
 
+// These two have been left in for now as they are currently needed by CCLexFile
 #define _strnicmp		strncasecmp
 #define _snprintf		snprintf
 
-#define _tcslen			strlen
-#define _tcscpy			strcpy
-#define _tcsncpy		strncpy
-#define _tcscat			strcat
-#define _tcschr			strchr
-#define _tcsdup			wcsdup
-#define _tcsrchr		strrchr
-#define _tcstok			strtok_r
-#define _tcscmp			strcmp
-#define _tcsncmp		strncmp
-#define _tcsnicmp		strncasecmp
-#define _tcsclen		strlen
-#define _tcsstr			strstr
-#define _tcsinc(v)		( (v)+1 )
-#define _tcsninc(s, n)	( (s) + (n) )
-#define _tcsdec(s, v)	( (v)-1 )
+//#define _tcstok			strtok_r
+//#define _tcsclen		strlen
 
-#define _ttol			atol
-#define _ttoi			atoi
-#define _ttof			atof
-#define _tcstoul		atoul
+//#define _ttof			atof
 
-#define _stscanf		sscanf
-#define tsprintf		snprintf
-#define tvsprintf( dst, cch, tmt, param )	vsprintf( dst, cch, tmt, param )
-#define tprintf			printf
+//#define tprintf			printf
 
 #endif
 
 static void CharUpper( TCHAR *psz )
 {
 	for( ; *psz != '\0'; ++psz )
-		*psz = _totupper( *psz );
+		*psz = camToupper( *psz );
 }
 static void CharLower( TCHAR *psz )
 {
 	for( ; *psz != '\0'; ++psz )
-		*psz = _totlower( *psz );
+		*psz = camTolower( *psz );
 }
 
 #if SIZEOF_CHAR == 1
@@ -601,6 +615,8 @@ inline size_t _msize( PVOID ptr )
 
 #elif defined(__WXMSW__) /////////// MS WINDOWS SPECIFIC //////////////////////
 
+#include <tchar.h>
+
 typedef unsigned long long	__uint64;
 
 #define INT32_MAX INT_MAX
@@ -610,29 +626,21 @@ typedef unsigned long long	__uint64;
 
 #define SIZEOF_VOIDP	sizeof(void *)
 
-#define tprintf			_tprintf
+#define camStrtok	_tcstok
+#define camStrtof( str, pszMark )	tcstod( str, pszMark )
+
+//#define tprintf			_tprintf
 
 #if 0 != wxUSE_UNICODE
-#define tsprintf		_stprintf
-#define tvsprintf( dst, cch, tmt, param )	_vstprintf( dst, cch, tmt, param )
 
-#define tcstok( str, sep, pszMark )			wcstok( str, sep )
+//#define tcstok( str, sep, pszMark )			wcstok( str, sep )
+//#define tcstof( str, pszMark )				wcstod( str, pszMark )
 
-#define tcstol( str, pszMark, radix )		_wtol( str, radix )
-#define tcstof( str, pszMark )				wcstof( str )
 #else
-inline int tsprintf( TCHAR *pszDst, size_t, TCHAR *pszFormat, ... )
-{
-	va_list				marker;
-	va_start( marker, pszFormat );
-	return _vstprintf( pszDst, pszFormat, marker );
-}
-#define tvsprintf( dst, cch, tmt, param )	_vstprintf( dst, tmt, param )
 
-#define tcstok( str, sep, pszMark )			strtok( str, sep )
+//#define tcstok( str, sep, pszMark )			strtok( str, sep )
+//#define tcstof( str, pszMark )				strtod( str, pszMark )
 
-#define tcstol( str, pszMark, radix )		atol( str )
-#define tcstof( str, pszMark )				atof( str )
 #endif
 
 #endif
@@ -671,15 +679,6 @@ typedef wxMenu				CNativeMenu;
 #define	AfxGetApp			::wxGetApp
 
 #define AfxAbort			abort
-
-// for sprintf etc.
-#if 0 != wxUSE_UNICODE
-#define PERCENT_S L"%ls"
-#define PERCENT_C L"%lc"
-#else
-#define PERCENT_S "%s"
-#define PERCENT_C "%lc"
-#endif
 
 // From WinUser.h - juat to allow helpuser to compile...
 /*

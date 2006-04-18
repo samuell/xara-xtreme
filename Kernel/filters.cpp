@@ -1578,7 +1578,7 @@ BOOL GetProgressString(CCLexFile* pTheFile, String_64 *pMessage, String_64* StrT
 			// If we have a valid file name and it will fit into the progress string
 			// then tag this onto the end of the progress string with single quotes.
 
-			PCTSTR		res = _tcsstr( (const TCHAR *)Filename, _T(".tmp") );
+			PCTSTR		res = camStrstr( (const TCHAR *)Filename, _T(".tmp") );
 			
 			if (res == NULL)
 			{
@@ -4798,7 +4798,7 @@ PORTNOTE("filter","Removed OILFilter usage")
 	{
 #ifdef STANDALONE
 		// if this is the standalone version, see if it's an EPS file we just tried
-		if(_tcsncmp((char*) FilterBuf, "%!PS-Adobe", 10) == 0)
+		if(camStrncmp((char*) FilterBuf, "%!PS-Adobe", 10) == 0)
 		{
 			Error::SetError(_R(IDT_NOTTHISEPS));
 			CCFree(FilterBuf);

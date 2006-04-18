@@ -163,10 +163,10 @@ BOOL PathNameEx::CreateLocation()
 				switch (errno)
 				{
 					case EACCES:
-						lstrcpy(szError, "access denied (EACCES)");
+						camStrcpy(szError, "access denied (EACCES)");
 						break;
 					case ENOENT:
-						lstrcpy(szError, "path not found (ENOENT)");
+						camStrcpy(szError, "path not found (ENOENT)");
 						break;
 					default:
 						wsprintf(szError, "errno = %d", errno);

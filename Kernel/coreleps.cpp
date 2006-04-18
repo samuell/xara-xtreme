@@ -264,7 +264,7 @@ void CorelEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (CorelCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, CorelCommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, CorelCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = CorelCommands[i].Cmd;
@@ -1193,7 +1193,7 @@ BOOL Corel3EPSFilter::Init()
 INT32 Corel3EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF", 19) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF", 19) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -1210,17 +1210,17 @@ INT32 Corel3EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		HeaderFile.getline(Buffer, 200);
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%%Creator: CorelDRAW!", 21) == 0)
+		if (camStrncmp(Buffer, "%%Creator: CorelDRAW!", 21) == 0)
 		{
 			HaveCreatorString = TRUE;
 		}
 
 		// Check for CorelDRAW exported by other packages
-		if (_tcsstr("Corel", Buffer) != NULL)
+		if (camStrstr("Corel", Buffer) != NULL)
 			// Found Corel in the creator line - good chance it's Corel EPS.
 			return 8;
 
-		if(_tcsncmp(Buffer, "/wCorelDict", 11) == 0 && HaveCreatorString == TRUE)
+		if(camStrncmp(Buffer, "/wCorelDict", 11) == 0 && HaveCreatorString == TRUE)
 		{
 			// OK, found it
 			return 10;
@@ -1228,7 +1228,7 @@ INT32 Corel3EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -1237,7 +1237,7 @@ INT32 Corel3EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 	// May want to look for this string one day.
 	#if 0
-	if (_tcsncmp(Buf, "% -------------- POSTSCRIPT PROLOG FOR CORELDRAW 3.X", 52) == 0)
+	if (camStrncmp(Buf, "% -------------- POSTSCRIPT PROLOG FOR CORELDRAW 3.X", 52) == 0)
 		FoundProlog = TRUE;
 	#endif
 }
@@ -1265,7 +1265,7 @@ void Corel3EPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (Corel3Commands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, Corel3Commands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, Corel3Commands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = Corel3Commands[i].Cmd;
@@ -1489,7 +1489,7 @@ BOOL Corel4EPSFilter::Init()
 INT32 Corel4EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-2.0", 23) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-2.0", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -1509,11 +1509,11 @@ INT32 Corel4EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		HeaderFile.getline(Buffer, 200);
 		Lines++;
 
-		if (_tcsncmp(Buffer, "%%BeginResource: procset wCorel4Dict", 36) == 0)
+		if (camStrncmp(Buffer, "%%BeginResource: procset wCorel4Dict", 36) == 0)
 			// This must be Corel 4.0 EPS
 			return 10;
 
-		if ((_tcsncmp(Buffer, "%%Creator:", 10) == 0) && (cc_strlenCharacters(Buffer) <= 12))
+		if ((camStrncmp(Buffer, "%%Creator:", 10) == 0) && (camStrclen(Buffer) <= 12))
 		{
 			// Blank Creator comment - this could be Corel 4.0 EPS
 			if (IsUserName("Tim"))
@@ -1525,13 +1525,13 @@ INT32 Corel4EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 			return 6;
 		}
 		
-		if ((_tcsncmp(Buffer, "%%Creator: CorelDRAW!", 21) == 0) && (cc_strlenCharacters(Buffer) <= 23))
+		if ((camStrncmp(Buffer, "%%Creator: CorelDRAW!", 21) == 0) && (camStrclen(Buffer) <= 23))
 		{
 			// yep, that's the one
 			HaveCreatorString = TRUE;
 		}
 
-		if(_tcsncmp(Buffer, "/wCorel5Dict", 12) == 0 && HaveCreatorString)
+		if(camStrncmp(Buffer, "/wCorel5Dict", 12) == 0 && HaveCreatorString)
 		{
 			// it's a Corel5 file
 			return 10;
@@ -1566,9 +1566,9 @@ void Corel4EPSFilter::LookUpToken()
 	if(Token == EPSC_Comment)
 	{
 		// is it one of the clipping things?
-		if(_tcsncmp(TokenBuf, "%SetClippingRegion", 17) == 0)
+		if(camStrncmp(TokenBuf, "%SetClippingRegion", 17) == 0)
 			Token = EPSC_q;
-		else if(_tcsncmp(TokenBuf, "%ClearClipping", 13) == 0)
+		else if(camStrncmp(TokenBuf, "%ClearClipping", 13) == 0)
 			Token = EPSC_Q; 
 
 		return;
@@ -1579,7 +1579,7 @@ void Corel4EPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (Corel4Commands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, Corel4Commands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, Corel4Commands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = Corel4Commands[i].Cmd;

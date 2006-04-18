@@ -1163,7 +1163,7 @@ BOOL CCLexFile::GetToken()
 	else if (Ch == CommentMarker)
 	{
 		// It's a comment - ignore the rest of this line
-		_tcscpy( TokenBuf, Buf + Ofs - 1 );
+		camStrcpy( TokenBuf, Buf + Ofs - 1 );
 		TokenType = TOKEN_COMMENT;
 		
 		GetLine();
@@ -1702,9 +1702,9 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 	PCSTR				pcFound;
 #if 0 != wxUSE_UNICODE
 	{
-		size_t			cchParam = wcstombs( NULL, (const TCHAR *)strParameterName, 0 ) + 1;
+		size_t			cchParam = camWcstombs( NULL, (const TCHAR *)strParameterName, 0 ) + 1;
 		PSTR			pszParam = PSTR( alloca( cchParam ) );
-		wcstombs( pszParam, (const TCHAR *)strParameterName, cchParam );
+		camWcstombs( pszParam, (const TCHAR *)strParameterName, cchParam );
 		pcFound = FindStringWithoutCase( m_pcHTMLBuffer, pszParam );
 	}
 #else
@@ -1715,7 +1715,8 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 	if (pcFound)
 	{
 		//Yes. So move our found pointer past the string we've found
-		pcFound = _tcsninc( pcFound, strParameterName.Length() );
+//		pcFound = camStrninc( pcFound, strParameterName.Length() );
+		pcFound = pcFound + strParameterName.Length();
 
 		//We're now pointing to the character after the parameter name
 
@@ -1723,7 +1724,8 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 		//to the first character that's not whitespace					
 		while (*pcFound!='\0' && IsWhitespace(*pcFound))		
 		{
-			pcFound = _tcsinc( pcFound );
+//			pcFound = camStrinc( pcFound );
+			pcFound++;
 		}
 		 
 		//If that character is not an equals, return an empty string
@@ -1733,7 +1735,8 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 		//And, again, move our found pointer to the next character that's not a space
 		do
 		{
-			pcFound = _tcsinc( pcFound );
+//			pcFound = camStrinc( pcFound );
+			pcFound++;
 		}
 		while (*pcFound!='\0' && IsWhitespace(*pcFound));		
 
@@ -1753,7 +1756,8 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 			fInQuotes=TRUE;
 
 			//And move on to the character after the quotes
-			pcFound=_tcsinc(pcFound);
+//			pcFound=camStrinc(pcFound);
+			pcFound++;
 		}
 
 		//Now, copy everything from the character we are pointing at
@@ -1765,7 +1769,8 @@ String_256 CCLexFile::GetHTMLParameterValue( const String_256 &strParameterName,
 			|| (!fInQuotes && (!IsWhitespace(*pcFound) && *pcFound!='>'))))
 		{
 			strToReturn+=*pcFound;
-			pcFound=_tcsinc(pcFound);
+//			pcFound=camStrinc(pcFound);
+			pcFound++;
 		}
 	}
 
@@ -1820,7 +1825,8 @@ PCSTR CCLexFile::FindStringWithoutCase( PCSTR strToSearch, PCSTR strToFind )
 			return pcThisChar;
 		}
 
-		pcThisChar = _tcsinc(pcThisChar);
+//		pcThisChar = camStrinc(pcThisChar);
+		pcThisChar++;
 	}
 
 	//Otherwise return NULL
@@ -1860,7 +1866,7 @@ BOOL CCLexFile::GetHexToken()
 		INT32 i = 0;
 		while (TokenBuf[i] != 0)
 		{
-			if (!_istxdigit(TokenBuf[i]))
+			if (!camIsxdigit(TokenBuf[i]))
 				// Not valid hex data
 				return FALSE;
 
@@ -1913,7 +1919,7 @@ BOOL CCLexFile::GetHexToken()
 		else
 		{
 			// Ok - is it a hex digit?
-			if (_istxdigit(Ch))
+			if (camIsxdigit(Ch))
 				// Yes - fall through to next bit of code to decode it
 				break;
 			else
@@ -1930,7 +1936,7 @@ BOOL CCLexFile::GetHexToken()
 	// buffer access and register variables. (sorry!)
 	register TCHAR *pHexCh = Buf + Ofs - 1;
 
-	while (_istxdigit(*pHexCh))
+	while (camIsxdigit(*pHexCh))
 	{
 		TokenBuf[i++] = *pHexCh++;
 	}
@@ -2010,7 +2016,7 @@ BOOL CCLexFile::GetLineToken()
 
 		// Otherwise, we should append the rest of the current line to the token, 
 		// and work out the token type again.
-		_tcscpy( TokenBuf + _tcslen( TokenBuf ), Buf + Ofs - 1 );
+		camStrcpy( TokenBuf + camStrlen( TokenBuf ), Buf + Ofs - 1 );
 
 		if (TokenBuf[0] == CommentMarker)
 		{
@@ -2056,7 +2062,7 @@ BOOL CCLexFile::GetLineToken()
 	}
 
 	// Otherwise, just get the rest of the line...
-	_tcscpy( TokenBuf, Buf + Ofs - 1 );
+	camStrcpy( TokenBuf, Buf + Ofs - 1 );
 
 	GetLine();
 	GetCh();
@@ -2393,12 +2399,12 @@ BOOL CCLexFile::PutToken( const StringBase &str, UINT32 length, char *pszSep )
 BOOL CCLexFile::PutToken( const TCHAR *buf, char *Sep )
 {
 #if 0 != wxUSE_UNICODE
-	size_t				cch = wcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
+	size_t				cch = camWcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
 	PSTR				psz = PSTR( alloca( cch ) );
-	wcstombs( psz, (const TCHAR *)buf, cch );
+	camWcstombs( psz, (const TCHAR *)buf, cch );
 	write( psz, cch );
 #else
-	UINT32 length = _tcslen( buf );
+	UINT32 length = camStrlen( buf );
 	write( buf, length );
 #endif
 	if( strlen( Sep ) > 0 )
@@ -3056,9 +3062,9 @@ CCFile &CCStreamFile::write( const StringBase &buf, UINT32 length )
 	ENSURE((INT32) length <= buf.Length(), "CCStreamFile::write(): Not enough characters in string!");
 
 #if 0 != wxUSE_UNICODE
-	size_t				cch = wcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
+	size_t				cch = camWcstombs( NULL, (const TCHAR *)buf, 0 ) + 1;
 	PSTR				psz = PSTR( alloca( cch ) );
-	wcstombs( psz, (const TCHAR *)buf, cch );
+	camWcstombs( psz, (const TCHAR *)buf, cch );
 #else
 	PCSTR				psz = PCSTR(buf);
 #endif
@@ -4444,9 +4450,9 @@ CCDiskFile::CCDiskFile(fstream *pfstream,
 	// Open the file 
 #if 0 != wxUSE_UNICODE
 	{
-		size_t			cch = wcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
+		size_t			cch = camWcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
 		PSTR			pszFileName = PSTR( alloca( cch ) );
-		wcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
+		camWcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
 		GetFileStream().open( pszFileName, ios_base::openmode(fileMode) );
 	}
 #else
@@ -4508,9 +4514,9 @@ CCDiskFile::CCDiskFile(PathName fPath,
 	// Open the file 
 #if 0 != wxUSE_UNICODE
 	{
-		size_t			cch = wcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
+		size_t			cch = camWcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
 		PSTR			pszFileName = PSTR( alloca( cch ) );
-		wcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
+		camWcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
 		GetFileStream().open( pszFileName, ios_base::openmode(fileMode) );
 	}
 #else
@@ -4571,9 +4577,9 @@ BOOL CCDiskFile::open( PathName fPath, INT32 fileMode, INT32 )
 	// Open file
 #if 0 != wxUSE_UNICODE
 	{
-		size_t			cch = wcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
+		size_t			cch = camWcstombs( NULL, (const TCHAR *)filePath.GetPath(), 0 ) + 1;
 		PSTR			pszFileName = PSTR( alloca( cch ) );
-		wcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
+		camWcstombs( pszFileName, (const TCHAR *)filePath.GetPath(), cch );
 		GetFileStream().open( pszFileName, ios_base::openmode(fileMode) );
 	}
 #else

@@ -1969,7 +1969,7 @@ BOOL Operation::RegisterOpDescriptor(
 	BOOL ok = TRUE;
 
 	// tok is going into a string which turns out to be a string 32, so do a sanity check (Neville 26/6/97)
-	size_t len = cc_strlenCharacters(tok); //_tcslen
+	size_t len = camStrclen(tok);
 	ERROR2IF(len > 32,FALSE,"Operation::RegisterOpDescriptor token buffer overflow!");
 
 	// Try to create the OpDescriptor

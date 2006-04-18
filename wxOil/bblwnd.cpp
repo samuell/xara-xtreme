@@ -214,7 +214,7 @@ void BubbleHelpWnd::OnPaint()
 	// in yellow on red. In retail builds we just don't do anything if there is no
 	// bubble help.
 #if _DEBUG
-	BOOL NoBubbleHelp = (_tcscmp(BubbleText, TEXT_NOBUBBLEHELP) == 0);
+	BOOL NoBubbleHelp = (camStrcmp(BubbleText, TEXT_NOBUBBLEHELP) == 0);
 #endif
 
 	// Create the yellow brush to paint the client area (unless we have no bubble help
@@ -353,7 +353,7 @@ BOOL BubbleHelpWnd::Init()
 	// Register our special window class.
 	// Text returned by AfxRegisterWndClass is only a static buffer, so we take a copy of
 	// it for our own use.
-	BubbleClass = _tcsdup(AfxRegisterWndClass(CS_SAVEBITS));
+	BubbleClass = camStrdup(AfxRegisterWndClass(CS_SAVEBITS));
 	ENSURE(BubbleClass != NULL, "Bubble help window class could not be registered!");
 	ERRORIF(BubbleClass == NULL, _R(IDS_OUT_OF_MEMORY), FALSE);
 
@@ -475,9 +475,9 @@ BOOL BubbleHelpWnd::SetText(TCHAR *Text)
 	#if _DEBUG
 
 	if ((Text == NULL) || (Text[0] == 0))
-		BubbleText = _tcsdup(TEXT_NOBUBBLEHELP);
+		BubbleText = camStrdup(TEXT_NOBUBBLEHELP);
 	else
-		BubbleText = _tcsdup(Text);
+		BubbleText = camStrdup(Text);
 
 	#else
 
@@ -485,7 +485,7 @@ BOOL BubbleHelpWnd::SetText(TCHAR *Text)
 		// No text!
 		return FALSE;
 
-	BubbleText = _tcsdup(Text);
+	BubbleText = camStrdup(Text);
 
 	#endif
 
@@ -502,7 +502,7 @@ BOOL BubbleHelpWnd::SetText(TCHAR *Text)
 	CFont *OldFont = dc->SelectObject(BubbleFont);
 
 	// Find out how big this text is.
-	CSize TextSize = dc->GetTextExtent(BubbleText, cc_strlenCharacters(BubbleText));
+	CSize TextSize = dc->GetTextExtent(BubbleText, camStrclen(BubbleText));
 
 	// Clean up and release the DC
 	dc->SelectObject(OldFont);

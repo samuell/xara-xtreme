@@ -453,8 +453,7 @@ void Chapter::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
 
 void Chapter::CopyNodeContents(Chapter* NodeCopy)
 {                         
-	ENSURE(NodeCopy != NULL,"Trying to copy node contents to\n"
-							"a node pointed to by a NULL pointer"); 
+	ENSURE(NodeCopy != NULL,"Trying to copy node contents to\na node pointed to by a NULL pointer"); 
 	NodeRenderablePaper::CopyNodeContents(NodeCopy); 
 	NodeCopy->FoldLineXCoord = FoldLineXCoord; 
 }              

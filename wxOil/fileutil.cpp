@@ -382,9 +382,9 @@ BOOL FileUtil::GetLongFileName(LPTSTR lpszPath, LPTSTR lpszOutput, size_t cchMax
 	}
 
 	// The find_data structure will hopefully now contain the long filename for the file
-	if(lstrlen(FileData.cFileName) < (INT32)cchMaxOutLen)
+	if(camStrlen(FileData.cFileName) < (INT32)cchMaxOutLen)
 	{
-		lstrcpy(lpszOutput, FileData.cFileName);
+		camStrcpy(lpszOutput, FileData.cFileName);
 		return TRUE;
 	}
 
@@ -459,7 +459,7 @@ BOOL FileUtil::GetTemporaryPathName(const TCHAR *pExt, PathName *pTempPath)
 	*pTempPath = FileUtil::GetTemporaryPathName();
 
 	// if tmp extension is asked - call the relevant function
-	if (lstrcmpi(pExt, (const TCHAR *)"tmp") == 0)
+	if (camStricmp(pExt, (const TCHAR *)"tmp") == 0)
 		return TRUE;
 
 	// remember the current name
@@ -745,7 +745,7 @@ BOOL FindFiles::FindNextFile(String_256 *FoundFile, BOOL *IsDirectory)
 			const DWORD AttrDirMask = FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
 			TCHAR * ThisDir = ".";
 			TCHAR * ParentDir = "..";
-			INT32 len = cc_strlenCharacters(m_SearchData.cFileName);
+			INT32 len = camStrclen(m_SearchData.cFileName);
 			if ((m_SearchData.dwFileAttributes & AttrMask) == 0)
 			{
 				// OK, it's a safe file to return, so return it
@@ -754,8 +754,10 @@ BOOL FindFiles::FindNextFile(String_256 *FoundFile, BOOL *IsDirectory)
 				return TRUE;
 			}
 			else if (((m_SearchData.dwFileAttributes & AttrDirMask) == 0) &&
-					  (cc_lstrncmp(m_SearchData.cFileName, ThisDir, len) != 0) &&
-					  (cc_lstrncmp(m_SearchData.cFileName, ParentDir, len) != 0))
+//					  (cc_lstrncmp(m_SearchData.cFileName, ThisDir, len) != 0) &&
+//					  (cc_lstrncmp(m_SearchData.cFileName, ParentDir, len) != 0))
+					  (camStrncmp(m_SearchData.cFileName, ThisDir, len) != 0) &&
+					  (camStrncmp(m_SearchData.cFileName, ParentDir, len) != 0))
 			{
 				// OK, it's a safe directory to return, so return it
 				*FoundFile = m_SearchData.cFileName;

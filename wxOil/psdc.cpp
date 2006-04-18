@@ -228,13 +228,13 @@ BOOL PSPrintDC::OutputNewLine()
 	static char NewLine[] = "\n";
 
 	// Make sure we have enough room in the buffer
-	if (!MakeRoomInBuffer(cc_strlenBytes(NewLine)))
+	if (!MakeRoomInBuffer(camStrlen(NewLine)))
 		// Error occured in buffer handling.
 		return FALSE;
 
 	// Add newline to buffer
-	_tcscat(Buffer.Data, NewLine);
-	Buffer.nCount += cc_strlenBytes(NewLine);
+	camStrcat(Buffer.Data, NewLine);
+	Buffer.nCount += camStrlen(NewLine);
 
 	// Update line width record.
 	LineWidth = 0;
@@ -353,7 +353,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 			return FALSE;
 
 		// Add space to buffer
-		_tcscat(Buffer.Data, " ");
+		camStrcat(Buffer.Data, " ");
 		Buffer.nCount++;
 
 		// Update line width record.
@@ -361,7 +361,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 	}
 
 	// Write the token out to the file
-	INT32 Len = cc_strlenBytes(Str);
+	INT32 Len = camStrlen(Str);
 
 	// Make sure we have enough room in the buffer
 	if (!MakeRoomInBuffer(Len))
@@ -369,7 +369,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 		return FALSE;
 
 	// Add space to buffer
-	_tcscat(Buffer.Data, Str);
+	camStrcat(Buffer.Data, Str);
 	Buffer.nCount += Len;
 
 	// Update line width record.

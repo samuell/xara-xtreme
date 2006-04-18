@@ -170,10 +170,10 @@ const char *ReleaseInfo::GetInfo()
 
 	String_256 jcf;
 	jcf.MakeMsg(_R(IDS_RELEASE_INFO_FORMAT), ReleaseInfo::GetLicensee(), ReleaseInfo::GetSerialNumber());
-	lstrcpy(buf, jcf);
+	camStrcpy(buf, jcf);
 
 #else
-	lstrcpy(buf, PublicInfo.Name);
+	camStrcpy(buf, PublicInfo.Name);
 #endif
 
 	return buf;

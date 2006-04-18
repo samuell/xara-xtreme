@@ -1005,7 +1005,7 @@ void GetMemoryStatus(UINT64* pPhysRam, UINT32* pLoadPercent)
 	// because GlobalMemoryStatus has issues in older OSs that can cause it to return
 	// duff information.
 	GETMEMORYSTATUSEX_FUNC pExFunc;
-	pExFunc = (GETMEMORYSTATUSEX_FUNC) GetProcAddress(GetModuleHandle("kernel32.dll"), "GlobalMemoryStatusEx");
+	pExFunc = (GETMEMORYSTATUSEX_FUNC) GetProcAddress(GetModuleHandle(_T("kernel32.dll")), "GlobalMemoryStatusEx");
 
 	if (pExFunc)
 	{

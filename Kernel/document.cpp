@@ -1580,6 +1580,7 @@ void Document::SetNoCurrent()
 
 void Document::SetNoSelectedViewAndSpread(void)
 {
+	TRACEUSER("Gerry", _T("Document::SetNoSelectedViewAndSpread"));
 #ifdef RALPH
 	// if we are being called from the load thread just ignore 
 	if(::GetCurrentThreadId() == RalphDocument::GetImportingThreadID())
@@ -1680,6 +1681,7 @@ void Document::SetSelectedViewAndSpread(Document *TheDocument,
 											DocView *TheView,
 											Spread *TheSpread)
 {
+	TRACEUSER("Gerry", _T("Document::SetSelectedViewAndSpread(0x%08x, 0x%08x, 0x%08x)"), TheDocument, TheView, TheSpread);
 #ifdef RALPH
 	// if we are being called from the load thread just ignore 
 	if(::GetCurrentThreadId() == RalphDocument::GetImportingThreadID())
@@ -3273,17 +3275,17 @@ BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
 	INT32& i = *Offset;
 
 	// Skip till we get to the first number
-	while (_istspace(Comment[i]) && (Comment[i]!=0))
+	while (camIsspace(Comment[i]) && (Comment[i]!=0))
 		i++;
 
 	// Read in the number
-	if (!_istspace(Comment[i]))
+	if (!camIsspace(Comment[i]))
 	{
 		// get the Number
 		*Number = atof(Comment+i);
 
 		// Skip to the next number
-		while (!_istspace(Comment[i]))
+		while (!camIsspace(Comment[i]))
 			i++;
 
 		// finished
@@ -3415,15 +3417,15 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 	{
 		// Take a copy of the comment
 		char Comment[256];
-		_tcscpy(Comment, pComment);
+		camStrcpy(Comment, pComment);
 
 		// Look for Document info
-		if (_tcsncmp(pComment, "%%NativePageList", 16) == 0)
+		if (camStrncmp(pComment, "%%NativePageList", 16) == 0)
 		{
 			// Found the page description table
 			return EPSCommentOK;
 		}
-		else if (_tcsncmp(pComment, "%%DocumentInfo", 14) == 0)
+		else if (camStrncmp(pComment, "%%DocumentInfo", 14) == 0)
 		{
 			// Found the page description table
 			// Set the Documents Comment to nothing
@@ -3432,7 +3434,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 
 			return EPSCommentOK;
 		}
-		else if (_tcsncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, "%%+", 3) == 0)
 		{
 			// Assume we do not know about this comment until we can prove that we do.
 			//
@@ -3566,15 +3568,15 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 
 		// Take a copy of the comment
 		char Comment[256];
-		_tcscpy(Comment, pComment);
+		camStrcpy(Comment, pComment);
 
 		// Look for Document info
-		if (_tcsncmp(pComment, "%%NativePageList", 16) == 0)
+		if (camStrncmp(pComment, "%%NativePageList", 16) == 0)
 		{
 			// Found the page description table
 			return EPSCommentOK;
 		}
-		else if (_tcsncmp(pComment, "%%DocumentInfo", 14) == 0)
+		else if (camStrncmp(pComment, "%%DocumentInfo", 14) == 0)
 		{
 			// Found the page description table
 			// Set the Documents Comment to nothing
@@ -3583,7 +3585,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 
 			return EPSCommentOK;
 		}
-		else if (_tcsncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, "%%+", 3) == 0)
 		{
 			// Default to recognising this comment - all we care about is extracting the page origin.
 			ProcessEPSResult Result = EPSCommentOK;
@@ -3866,7 +3868,7 @@ BOOL Document::ExportDocumentComment(EPSExportDC *pDC)
 	// Go though the string splitting it up as needed
 	TCHAR OneLine[256];
 	TCHAR Buffer[256];
-	_tcscpy(Buffer, (TCHAR*)Comment);
+	camStrcpy(Buffer, (TCHAR*)Comment);
 
 	// vars to keep track of where we are
 	INT32 Src = 0;
@@ -4412,7 +4414,7 @@ BOOL Document::ExportUnitInfo(EPSExportDC *pDC)
 		String_32 UnitName = pUnit->GetSpecifier();
 
 		// Build the Comment
-		INT32 nBytes = tsprintf(Buffer, EUI_BUFFER_SIZE, _T("%d %ld %d %f %f %d"), Version, Size, (INT32)BaseUnit, Numerator, Denominator, IsPrefix);
+		INT32 nBytes = camSnprintf(Buffer, EUI_BUFFER_SIZE, _T("%d %ld %d %f %f %d"), Version, Size, (INT32)BaseUnit, Numerator, Denominator, IsPrefix);
 		if (nBytes > EUI_BUFFER_SIZE - 1)
 		{
 			ERROR3("Document::ExportUnitInfo - nBytes > EUI_BUFFER_SIZE - 1");
@@ -4478,7 +4480,7 @@ BOOL Document::ExportDefaultUnitsInfo(EPSExportDC *pDC)
 		String_32 FontUnitToken = pDocUnitList->GetToken(FontUnits);
 
 		// Build the Comment
-		tsprintf(Buffer, 256, _T("%d"), Version);
+		camSnprintf(Buffer, 256, _T("%d"), Version);
 
 PORTNOTE("filters","Removed EPSExportDC usage")
 #ifndef EXCLUDE_FROM_XARALX

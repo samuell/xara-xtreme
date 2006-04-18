@@ -1764,8 +1764,7 @@ Node* Node::SimpleCopy()
 
 void Node::CopyNodeContents(Node* NodeCopy)
 {                         
-	ENSURE(NodeCopy != NULL,"Trying to copy node contents to\n"
-							"a node pointed to by a NULL pointer"); 
+	ENSURE(NodeCopy != NULL,"Trying to copy node contents to\na node pointed to by a NULL pointer"); 
 	NodeCopy->Flags = Flags;        
 	// All tree pointers are NULL
 // Phil, 7/1/2004
@@ -1946,8 +1945,7 @@ tree, and then to attach it to its new position in the tree.
 void Node::MoveNode(Node* DestinationNode, 
 			    AttachNodeDirection Direction) 
 {     
-	ENSURE(DestinationNode != NULL,"Trying to copy a node to a"
-								   "node pointed to by a NULL pointer"); 
+	ENSURE(DestinationNode != NULL,"Trying to copy a node to a node pointed to by a NULL pointer"); 
 
 	UnlinkNodeFromTree(); // Remove the node from the tree    
 	AttachNode(DestinationNode, Direction); 
@@ -4377,8 +4375,7 @@ Chapter* Node::FindEnclosingChapter(DocCoord* ChapterPos, XLONG* ChapterDepth)
 		else
 			CurrentNode = CurrentNode->FindParent(); 
 	}    
-	ENSURE(FALSE,"Trying to find the enclosing chapter\n"
-				 "of a node which has no enclosing chapter"); 
+	ENSURE(FALSE,"Trying to find the enclosing chapter\nof a node which has no enclosing chapter"); 
 	return (NULL); 
 }
 

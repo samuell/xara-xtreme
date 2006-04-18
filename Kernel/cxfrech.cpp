@@ -674,7 +674,7 @@ void CXaraFileRecordHandler::GetTagText(UINT32 Tag,String_256& Str)
 		default:
 		{
 			TCHAR s[256];
-			_stprintf(s,"*%d",Tag);
+			camSprintf(s, _T("*%d"), Tag);
 			Str = s;
 		}
 		break;
@@ -710,8 +710,7 @@ void CXaraFileRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,S
 	TCHAR* pTagText = TagText;
 
 	TCHAR s[256];
-	_stprintf(s,"Record Number = %d\r\nTag = %d (%s)\r\nSize = %d\r\n\r\n",pRecord->GetRecordNumber(),pRecord->GetTag(),pTagText,pRecord->GetSize());
-
+	camSprintf(s, _T("Record Number = %d\r\nTag = %d (%s)\r\nSize = %d\r\n\r\n"), pRecord->GetRecordNumber(),pRecord->GetTag(),pTagText,pRecord->GetSize());
 	(*pStr) += s;
 }
 #endif
@@ -739,11 +738,11 @@ void CXaraFileRecordHandler::GetRecordInfo(CXaraFileRecord *pCXaraFileRecord, St
 
 	TCHAR s[256];
 
-	_stprintf(s,"Record Number = %d\r\n", pCXaraFileRecord->GetRecordNumber());
+	camSprintf(s, _T("Record Number = %d\r\n"), pCXaraFileRecord->GetRecordNumber());
 	(*pStr) += s;
-	_stprintf(s, "Tag = %d (%s)\r\n", pCXaraFileRecord->GetTag(),pTagText);
+	camSprintf(s, _T("Tag = %d (%s)\r\n"), pCXaraFileRecord->GetTag(),pTagText);
 	(*pStr) += s;
-	_stprintf(s, "Size = %d\r\n\r\n", pCXaraFileRecord->GetSize());
+	camSprintf(s, _T("Size = %d\r\n\r\n"), pCXaraFileRecord->GetSize());
 	(*pStr) += s;
 }
 #endif
@@ -776,7 +775,7 @@ void CXaraFileRecordHandler::DescribePath(CXaraFileRecord* pRecord,StringBase* p
 
 	INT32 NumCoords;
 	pRecord->ReadINT32(&NumCoords);
-	_stprintf(s,"Number of Coords = %d\r\n\r\n",NumCoords);
+	camSprintf(s,"Number of Coords = %d\r\n\r\n",NumCoords);
 	(*pStr) += s;
 
 	if (NumCoords < 1)
@@ -796,12 +795,11 @@ void CXaraFileRecordHandler::DescribePath(CXaraFileRecord* pRecord,StringBase* p
 	for (i=0;i<NumCoords;i++)
 		pRecord->ReadCoord(pCoord+i);
 
-	_stprintf(s,"Num\tVerb\tX Coord\tY Coord\r\n");
-	(*pStr) += s;
+	(*pStr) += _T("Num\tVerb\tX Coord\tY Coord\r\n");
 
 	for (i=0;i<NumCoords;i++)
 	{
-		_stprintf(s,"%d\t%d\t%d\t%d\r\n",i,pVerb[i],pCoord[i].x,pCoord[i].y);
+		camSprintf(s, _T("%d\t%d\t%d\t%d\r\n"),i,pVerb[i],pCoord[i].x,pCoord[i].y);
 		(*pStr) += s;
 	}
 
@@ -837,7 +835,7 @@ void CXaraFileRecordHandler::DescribePathRelative(CXaraFileRecord* pRecord,Strin
 	TCHAR s[256];
 
 	INT32 NumCoords = INT32(pRecord->GetSize())/(sizeof(BYTE)+sizeof(INT32)+sizeof(INT32));
-	_stprintf(s,"Number of Coords = %d\r\n\r\n",NumCoords);
+	camSprintf(s, _T("Number of Coords = %d\r\n\r\n"),NumCoords);
 	(*pStr) += s;
 
 	if (NumCoords < 1)
@@ -851,7 +849,7 @@ void CXaraFileRecordHandler::DescribePathRelative(CXaraFileRecord* pRecord,Strin
 	if (pVerb == NULL || pCoord == NULL)
 		return;
 
-	_stprintf(s,"Num\tVerb\tX Coord\tY Coord\tRel x\tRel y\r\n");	(*pStr) += s;
+	(*pStr) += _T("Num\tVerb\tX Coord\tY Coord\tRel x\tRel y\r\n");
 
 	DocCoord PrevCoord;
 
@@ -862,7 +860,8 @@ void CXaraFileRecordHandler::DescribePathRelative(CXaraFileRecord* pRecord,Strin
 		if (i == 0)
 		{
 			pRecord->ReadCoordInterleaved(&PrevCoord);
-			_stprintf(s,"%d\t%d\t%d\t%d\t%d\t%d\r\n",i,pVerb[0],PrevCoord.x,PrevCoord.y,0,0); 	(*pStr) += s;
+			camSprintf(s, _T("%d\t%d\t%d\t%d\t%d\t%d\r\n"),i,pVerb[0],PrevCoord.x,PrevCoord.y,0,0);
+			(*pStr) += s;
 		}
 		else
 		{
@@ -876,7 +875,8 @@ void CXaraFileRecordHandler::DescribePathRelative(CXaraFileRecord* pRecord,Strin
 			PrevCoord.x -= TempCoord.x;
 			PrevCoord.y -= TempCoord.y;
 
-			_stprintf(s,"%d\t%d\t%d\t%d\t%x\t%x\r\n",i,pVerb[i],PrevCoord.x,PrevCoord.y,TempCoord.x,TempCoord.y); 	(*pStr) += s;
+			camSprintf(s,_T("%d\t%d\t%d\t%d\t%x\t%x\r\n"),i,pVerb[i],PrevCoord.x,PrevCoord.y,TempCoord.x,TempCoord.y);
+			(*pStr) += s;
 		}
 	}
 

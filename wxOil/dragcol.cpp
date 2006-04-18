@@ -934,8 +934,6 @@ BOOL ColourDragInformation::OnPageDrop(ViewDragTarget* pDragTarget)
 		// No node(s) are targetted so see if the constrain key is pressed or not
 		if (ThisNode == NULL && Constrain)
 		{
-PORTNOTE("other","Removed drop colour on page")
-#if !defined(EXCLUDE_FROM_XARALX)
 			// Use the colour to set the background
 			// We should use the document given to us by the page info class
 			OpBackgroundParam Param;
@@ -948,7 +946,6 @@ PORTNOTE("other","Removed drop colour on page")
 
 			// Invoke the operation, passing in our parameters
 			pOpDesc->Invoke(&Param);
-#endif
 		}
 		else
 		{

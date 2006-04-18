@@ -1449,7 +1449,7 @@ BOOL PrintMarksCache::UpdateTextInfoMark(Document* pDocument, RenderRegion* pRRe
 	Style.lfClipPrecision	=0x02;
 	Style.lfQuality			=0x01;
 	Style.lfPitchAndFamily	=0x12;
-	cc_lstrcpyn(Style.lfFaceName, TEXT("Times New Roman\0"), 16);
+	camStrncpy(Style.lfFaceName, TEXT("Times New Roman\0"), 16);
 */
 	String_64 FontName("Courier New");
 	MILLIPOINT FontSize = 9*1000;

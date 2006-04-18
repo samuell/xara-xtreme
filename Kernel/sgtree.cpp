@@ -2830,7 +2830,7 @@ void SGDisplayNode::DumpSubtree(INT32 TreeLevel)
 		Msg[i] = '\0';
 
 		wsprintf(Temp, "%s (%x)\n", GetRuntimeClass()->m_lpszClassName, (INT32)this);
-		_tcscat(Msg, Temp);
+		camStrcat(Msg, Temp);
 		OutputDebugString(Msg);
 
 

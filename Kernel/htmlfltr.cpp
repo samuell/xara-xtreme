@@ -187,7 +187,7 @@ static INT32 FindTagId(const TCHAR* Token)
 {
 	//Changed by Graham 29/5/97 so the comparison is case insensitive
 	for (INT32 i=0;i<HTMLNUM_TAGS;i++)
-		if (lstrcmpi(HTML_Table[i].tag,Token) == 0) return (HTML_Table[i].Id);
+		if (camStricmp(HTML_Table[i].tag,Token) == 0) return (HTML_Table[i].Id);
 
 	return (HTMLTAG_UNKNOWN);
 }
@@ -361,10 +361,10 @@ PORTNOTE("byteorder", "TODO: Check byte ordering")
 	// all known HTML tags
 	for (INT32 i=0;i<HTMLNUM_TAGS;i++)
 	{
-/*		TCHAR* Tag = new TCHAR[lstrlen(HTML_Table[i].tag)+3];
+/*		TCHAR* Tag = new TCHAR[camStrlen(HTML_Table[i].tag)+3];
 		*Tag = '\0';
-		lstrcat(Tag, "<");
-		lstrcat(Tag, HTML_Table[i].tag);
+		camStrcat(Tag, "<");
+		camStrcat(Tag, HTML_Table[i].tag);
 */
 
 		// is there an occurence of the string 'HTML_Table[i].tag' in the string 'HeaderStart'
@@ -833,7 +833,7 @@ BOOL HTMLFilter::ParseHTMLFile(CCLexFile* pFile, HTMLFileList* HTMLList)
 
 					//And if we found a TYPE parameter and its value was
 					//IMAGE
-					if (lstrcmpi(szTypeValue, "image")==0)
+					if (camStricmp(szTypeValue, "image")==0)
 					{
 						// Then look for an "SRC" parameter
 						String_256 szSRCValue=pFile->GetHTMLParameterValue(String_256("SRC"), FALSE);
@@ -1013,7 +1013,7 @@ BOOL HTMLFilter::GetTag(TCHAR* pTokenBuf, TCHAR* pTagName, const TCHAR* TokenBuf
 		return FALSE;
 
 	// convert to lower case
-	lstrcpy(pTokenBuf, TokenBuffer);
+	camStrcpy(pTokenBuf, TokenBuffer);
 	pTokenBuf = _strlwr(pTokenBuf);
 
 	// all known HTML tags

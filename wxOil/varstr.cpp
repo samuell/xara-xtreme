@@ -163,7 +163,7 @@ StringVar::StringVar(const TCHAR* psz)
 	text = NULL;
 	length = 0;
 
-	UINT32 newlen = lstrlen(psz);
+	UINT32 newlen = camStrlen(psz);
 	EnsureAlloc(newlen);
 	SafeCopy(psz, newlen);
 }
@@ -214,7 +214,7 @@ StringVar::StringVar(UINT32 resID, UINT32 hinst)
 	length = 0;
 
 	const TCHAR* pResText = CamResource::GetText(resID);
-	UINT32 len = lstrlen(pResText);
+	UINT32 len = camStrlen(pResText);
 
 	EnsureAlloc(len);
 	SafeCopy(pResText, len);
@@ -367,7 +367,7 @@ StringVar& StringVar::operator=(const TCHAR* s)
 
 	if (text && s)
 	{
-		UINT32 newlen = lstrlen(s);
+		UINT32 newlen = camStrlen(s);
 		EnsureAlloc(newlen);
 		SafeCopy(s, newlen);
 	}
@@ -426,12 +426,12 @@ void StringVar::SafeCat(const TCHAR* string)
 		return;
 
 	// Are we going to overflow ?
-	UINT32 newlen = lstrlen(text) + lstrlen(string);
+	UINT32 newlen = camStrlen(text) + camStrlen(string);
 	EnsureAlloc(newlen);
 
 	// Now we can concatenate the specified string, if we allocated the buffer correcetly
 	if (text && length>0 && (length-1) >= newlen)
-		lstrcat(text, string);
+		camStrcat(text, string);
 }
 	
 
@@ -457,11 +457,11 @@ void StringVar::SafeCopy(const TCHAR* string, UINT32 maxlen)
 	if (text!=NULL && length>0 && string!=NULL)
 	{
 		if (maxlen==0)
-			maxlen = lstrlen(string);
+			maxlen = camStrlen(string);
 
 		maxlen = ((length-1)<maxlen) ? length-1 : maxlen;		// length includes term
 
-		lstrcpyn(text, string, maxlen+1);		// Copy the string AND the terminating 0 character
+		camStrncpy(text, string, maxlen+1);		// Copy the string AND the terminating 0 character
 	}
 }
 	
@@ -499,7 +499,7 @@ void StringVar::EnsureAlloc(UINT32 newlen)
 		Alloc(newlen);
 
 		if (text!=NULL && pOldText!=NULL)
-			lstrcpy(text, pOldText);
+			camStrcpy(text, pOldText);
 	}
 }
 

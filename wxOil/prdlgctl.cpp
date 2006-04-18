@@ -957,7 +957,7 @@ void CCPrintDialog::GetSelectedPrinterName(LPTSTR pName,INT32 BufferSize)
 		if (pDevNames != NULL)
 		{
 			// Copy the name from the DEVNAMES field into the buffer provided
-			lstrcpyn(pName,LPTSTR(pDevNames) + pDevNames->wDeviceOffset,BufferSize);
+			camStrncpy(pName,LPTSTR(pDevNames) + pDevNames->wDeviceOffset,BufferSize);
 			::GlobalUnlock(hDevNames);
 		}
 	}
@@ -2309,13 +2309,13 @@ DEVMODE* CCPrintDialog::GetSystemDevMode(HWND hWnd,LPCTSTR pDriverName,LPCTSTR p
 
 			if (pDeviceName != NULL && pPortName != NULL)
 			{
-				_tcsncpy(pDevice,pDeviceName,98);
-				_tcsncpy(pPort,pPortName,98);
+				camStrncpy(pDevice,pDeviceName,98);
+				camStrncpy(pPort,pPortName,98);
 				pDevice[99] = 0;
 				pPort[99] = 0;
 
-				//_tcsncpy(pDeviceName,PrDlg.GetDeviceName(),200);
-				//_tcsncpy(pPortName,PrDlg.GetPortName(),200);
+				//camStrncpy(pDeviceName,PrDlg.GetDeviceName(),200);
+				//camStrncpy(pPortName,PrDlg.GetPortName(),200);
 
 				INT32 size = ExtDeviceMode(hWnd,hMod,NULL, pDevice,pPort, 0, 0, 0);
 				if (size > 0)
@@ -3068,7 +3068,7 @@ CCPrintToFileDialog::CCPrintToFileDialog(TCHAR *DefExt, TCHAR *FilterString) :
 //	TCHAR *pch = (TCHAR *)Filt; // modify the buffer in place
 
 	// MFC delimits with '|' not '\0'
-//	while ((pch = _tcschr(pch, '|')) != NULL)
+//	while ((pch = camStrchr(pch, '|')) != NULL)
 //		*pch++ = '\0';
 
 //	m_ofn.lpstrFilter = m_strFilter;
@@ -3114,7 +3114,7 @@ INT32 CCPrintToFileDialog::DoModal()
 
 	if (Result == IDOK)
 	{
-		_tcsncpy(FileName,GetPathName(),FILENAMEBUFSIZE);
+		camStrncpy(FileName,GetPathName(),FILENAMEBUFSIZE);
 		FileName[FILENAMEBUFSIZE-1] = '\0';
 	}
 

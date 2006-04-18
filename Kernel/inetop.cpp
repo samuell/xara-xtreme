@@ -1116,7 +1116,7 @@ BOOL OpAddWebFolders::OnIdleEvent()
 					if (nFieldOffset == 2) // finished reading a line, so try adding the corresponding library
 					{
 						// append a slash to the root URL if necessary
-						if (_tcsstr((TCHAR*) strRootURL, _T("file://")))
+						if (camStrstr((TCHAR*) strRootURL, _T("file://")))
 						{
 							if (strRootURL[strRootURL.Length() - 1] != _T('\\'))
 								strRootURL += _T('\\');

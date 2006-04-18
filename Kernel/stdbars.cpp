@@ -296,7 +296,7 @@ BOOL StandardBar::Init()
 						0, \
 						_R(IDS_BUTTBAR_M_ ## name ),				/*NORESOURCEFIX*/ \
 						CC_RUNTIME_CLASS(StandardBar), \
-						_T("IDD_BUTTBAR_" # name),			/* Use Dialog ID as Optoken */	/*NORESOURCEFIX*/ \
+						_T("IDD_BUTTBAR_") _T(#name),		/* Use Dialog ID as Optoken */	/*NORESOURCEFIX*/ \
 						StandardBar::GetState, 				/* GetState					*/ \
 						0,									/* help ID 					*/ \
 						_R(IDBBL_BAR_ ## name), 			/* Bubble help				*/	/*NORESOURCEFIX*/ \

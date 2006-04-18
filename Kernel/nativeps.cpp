@@ -403,7 +403,7 @@ void CamelotNativeEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (NativeCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (_tcscmp(TokenBuf, NativeCommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, NativeCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = NativeCommands[i].Cmd;
@@ -963,7 +963,7 @@ NoMemory:
 INT32 CamelotNativeEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (_tcsncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
+	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
@@ -980,12 +980,12 @@ INT32 CamelotNativeEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		Lines++;
 
 		// if the file is native camelot, return indicating strong 'interest'!
-		if (_tcsncmp(Buffer, "%%Creator: Xara Studio (Native)", 31) == 0)
+		if (camStrncmp(Buffer, "%%Creator: Xara Studio (Native)", 31) == 0)
 			return 10;
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (_tcsncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -1317,7 +1317,7 @@ INT32 CamelotNativeEPSFilter::ImportBinary(ADDR pData, INT32 Length)
 BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 {
 	// read the build version number of the app which saved this file
-	if (_tcsncmp(TokenBuf, "%%Creator: Xara Studio (Native)", 31) == 0)
+	if (camStrncmp(TokenBuf, "%%Creator: Xara Studio (Native)", 31) == 0)
 	{
 		BuildVersionNumber = atof(TokenBuf+31);
 		return TRUE;
@@ -1325,7 +1325,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 	// Go and have a look at the token buffer and see if it is our special
 	// file version comment. If so, then extract the version number from it. 
-	if (_tcsncmp(TokenBuf, "%%File version:", 15)==0)
+	if (camStrncmp(TokenBuf, "%%File version:", 15)==0)
 	{
 		char* pVersion = ((char*)TokenBuf)+15;
 		double Version = atof(pVersion);
@@ -1347,7 +1347,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	
 	// Go and have a look at the token buffer and see if it is our special
 	// compression comment
-	if (_tcsncmp(TokenBuf, "%%Compression:", 14)==0)
+	if (camStrncmp(TokenBuf, "%%Compression:", 14)==0)
 	{
 //#ifdef STANDALONE
 //		// First release of the file viewer will not have the native file compression
@@ -1383,7 +1383,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (_tcsncmp(TokenBuf, "%%Compression info:", 19)==0)
+	if (camStrncmp(TokenBuf, "%%Compression info:", 19)==0)
 	{
 		char* pVersion = ((char*)TokenBuf)+19;
 		double CompVersion = atof(pVersion);
@@ -1404,7 +1404,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (_tcsncmp(TokenBuf, "%%EndCompression:", 17)==0)
+	if (camStrncmp(TokenBuf, "%%EndCompression:", 17)==0)
 	{
 		// We have found our compression token so turn compression on
 		BOOL ok = EPSFile->SetCompression(FALSE);
@@ -1421,13 +1421,13 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (_tcsncmp(TokenBuf, "%%EndCompressionInfo:", 21)==0)
+	if (camStrncmp(TokenBuf, "%%EndCompressionInfo:", 21)==0)
 	{
 		return TRUE;
 	}
 	  
 	// Go and have a look at the token buffer and see if it looks like bitmap count
-	if (_tcsncmp(TokenBuf, "%%BitmapPoolCount", 17)==0)
+	if (camStrncmp(TokenBuf, "%%BitmapPoolCount", 17)==0)
 	{
 		char* pCount = ((char*)TokenBuf)+17;
 		BitmapCount = _ttoi(pCount);
@@ -1447,7 +1447,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	}
 
 	// Check for any text comments
-	if (_tcsncmp(TokenBuf, "%%XSScript",	10)==0)
+	if (camStrncmp(TokenBuf, "%%XSScript",	10)==0)
 	{
 		TextComment[0]=2;
 		return TRUE;

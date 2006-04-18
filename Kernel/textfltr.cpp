@@ -1660,7 +1660,7 @@ BOOL RTFTextFilter::ReadKeyword(StringBase* pKeyword, INT32* pParam, BOOL* pPara
 		return FALSE;
 
 	// If it's a control symbol there is no delimiter, its just one character
-	if (!_istalpha(ch))
+	if (!camIsalpha(ch))
 	{
 		*pKeyword = ch;
 //		PATRACE( _T("Control symbol \\%s\n"), (TCHAR*)(*pKeyword));
@@ -1668,7 +1668,7 @@ BOOL RTFTextFilter::ReadKeyword(StringBase* pKeyword, INT32* pParam, BOOL* pPara
 	}
 
 	// Read in the rest of the control word
-	while (_istalpha(ch))
+	while (camIsalpha(ch))
 	{
 		*pKeyword += ch;
 		if (!ReadCharFromFile(&ch))
@@ -1685,10 +1685,10 @@ BOOL RTFTextFilter::ReadKeyword(StringBase* pKeyword, INT32* pParam, BOOL* pPara
     }
 
     // Read the numeric parameter (if there is one)
-	if (isdigit(ch))
+	if (camIsdigit(ch))
 	{
 		*pParamUsed = TRUE;
-		while (isdigit(ch))
+		while (camIsdigit(ch))
 		{
 			Parameter += ch;
 			if (!ReadCharFromFile(&ch))
@@ -1696,7 +1696,7 @@ BOOL RTFTextFilter::ReadKeyword(StringBase* pKeyword, INT32* pParam, BOOL* pPara
 		}
 
 		TCHAR* pChar = (TCHAR*)Parameter;
-		*pParam = _ttol(pChar);		// BODGE - use string class conversions
+		*pParam = camStrtol(pChar);		// BODGE - use string class conversions
 		if (fNegative)
 			*pParam = -*pParam;
 //		PATRACE( _T("Parameter %d\n"), *pParam);

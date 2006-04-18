@@ -426,12 +426,12 @@ TCHAR *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 	ExtStr = FilterExt;
 
 	TCHAR*	pPointer;
-	TCHAR*	pExt = tcstok( (TCHAR*)ExtStr, _T(","), &pPointer );
+	TCHAR*	pExt = camStrtok( (TCHAR*)ExtStr, _T(","), &pPointer );
 	BOOL NoneFound = TRUE;
 
 	while (pExt != NULL)
 	{
-		if (_tcsstr( (TCHAR *)Extensions, pExt ) == NULL)
+		if (camStrstr((TCHAR *) Extensions, pExt) == NULL)
 		{
 			// Not already present - add the string.
 			if (!NoneFound)
@@ -442,7 +442,7 @@ TCHAR *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 			NoneFound = FALSE;
 		}
 
-		pExt = tcstok( NULL, _T(","), &pPointer );
+		pExt = camStrtok( NULL, _T(","), &pPointer );
 	}
 
 	FilterStr += Extensions;
@@ -548,7 +548,7 @@ TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 
 				while (pExt != NULL)
 				{
-					if (_tcsstr((TCHAR *) Extensions, pExt) == NULL)
+					if (camStrstr((TCHAR *) Extensions, pExt) == NULL)
 					{
 						// Not already present - add the string.
 						if (!NoneFound)
@@ -645,7 +645,7 @@ BOOL OILFilter::DoesExtensionOfPathNameMatch(PathName *Path)
 	INT32 l = 0;
 	while(pex[l] != '\0')
 	{
-		ex[l] = _totlower(pex[l]);
+		ex[l] = camTolower(pex[l]);
 		l++;
 	}
 	ex[l] = '\0';
@@ -659,7 +659,7 @@ TRACEUSER( "Ben", _T("File didn't have an extension\n"));
 	}
 
 	// see if the extension is in the list of supported extensions in the filter
-	if(_tcsstr(fe, (ex[0] == '.')?(ex + 1):ex) != NULL)
+	if(camStrstr(fe, (ex[0] == '.')?(ex + 1):ex) != NULL)
 		return TRUE;
 
 	return FALSE;

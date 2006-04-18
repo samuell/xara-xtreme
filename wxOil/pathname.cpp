@@ -429,7 +429,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 	// OK, we will need to compress it, so look for the actual filename part of the path
 	// the filename goes from the end of the string to the last \ in the string
 	const TCHAR* pFullName = (const TCHAR*)FullName;
-	const TCHAR* pLastSlash = _tcsrchr(pFullName, SEPARATOR);
+	const TCHAR* pLastSlash = camStrrchr(pFullName, SEPARATOR);
 
 	// if we fell off the end of the string, we only had a filename, so return it
 	if (pLastSlash == NULL)
@@ -446,8 +446,8 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 	// in more and more of the path, until it will fit no more.
 	// We will skip the first 2 chars as they will be either c: or \\.
 	const TCHAR* pCurrent = pFullName;
-	pCurrent = _tcsinc(pCurrent);
-	pCurrent = _tcsinc(pCurrent);		// Now pointing at the third character
+	pCurrent = camStrinc(pCurrent);
+	pCurrent = camStrinc(pCurrent);		// Now pointing at the third character
 
 	// see if this is a UNC filename
 	if (*pCurrent != SEPARATOR)
@@ -455,7 +455,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 		// yes, it's UNC, so walk though the server name
 		do
 		{
-			pCurrent = _tcsinc(pCurrent);
+			pCurrent = camStrinc(pCurrent);
 		} while (*pCurrent != SEPARATOR);
 	}
 
@@ -465,7 +465,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 	// and we need at least the first directory
 	do
 	{
-		pCurrent = _tcsinc(pCurrent);
+		pCurrent = camStrinc(pCurrent);
 	} while (*pCurrent != SEPARATOR);
 
 	// See if what we have will fit
@@ -484,7 +484,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 			// Yep, we can fit it in...
 			// Build the resulting short path
 			FullName.Left(pShortName, VolumeNameLen);
-			*pShortName+=TEXT(SEPARATOR_SYM "...");
+			*pShortName+=TEXT(SEPARATOR_SYM) TEXT("...");
 			*pShortName+=pFullName+FileNameStart;
 			return;
 		}
@@ -501,7 +501,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 		DirectoryStart = pCurrent-pFullName;
 		do
 		{
-			pCurrent = _tcsdec(pFullName, pCurrent);
+			pCurrent = camStrdec(pFullName, pCurrent);
 		} while ((*pCurrent!=SEPARATOR) && ((pCurrent-pFullName)>VolumeNameLen));
 	}
 
@@ -514,7 +514,7 @@ void PathName::TruncateName(String_256& FullName, String_256* pShortName, INT32 
 
 	// Build the resulting short path
 	FullName.Left(pShortName, VolumeNameLen);
-	*pShortName+=TEXT(SEPARATOR_SYM "...");
+	*pShortName+=TEXT(SEPARATOR_SYM) TEXT("...");
 	*pShortName+=pFullName+DirectoryStart;
 }
 
@@ -1000,7 +1000,7 @@ BOOL PathName::IsValidAndReturnInfo(const String_256& ConstPath,
 				
 		    if (*fn == END_OF_PATH || *fn == END_OF_STRING)
 			{
-				fn = _tcsdec(path, fn);		// move to last valid character
+				fn = camStrdec(path, fn);		// move to last valid character
 				// Get File Extension
 				// If we don't find a vlaid extension then do not complain as this should
 				// not be a problem.
@@ -1569,7 +1569,7 @@ BOOL IsDeviceName(const String_256& path)
 {
 #if defined(__WXMSW__)	
 	const INT32			buffer_size = 256;
-	char				buffer[buffer_size];			// create buffer of characters
+	TCHAR				buffer[buffer_size];			// create buffer of characters
 	// First use a Windows call to try and see if the pathname supplied is a
 	// known device name. Use a 256 string as a buffer as not particular bothered
 	// by what is returned, only if something is returned  
@@ -1591,7 +1591,7 @@ BOOL IsDeviceName(const String_256& path)
 	// some known bad values
 	path.Left(&temp,4);						// temp = left most 4 characters of path
 
-	if ( temp.IsIdentical(TEXT(SEPARATOR_SYM SEPARATOR_SYM "." SEPARATOR_SYM )))		// NT device name starts with this
+	if ( temp.IsIdentical(TEXT(SEPARATOR_SYM) TEXT(SEPARATOR_SYM) TEXT(".") TEXT(SEPARATOR_SYM)))		// NT device name starts with this
 		return TRUE;						// if start this then no more checks required
 
 	path.Left(&temp,3);						// temp = left most 3 characters of path

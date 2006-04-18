@@ -454,7 +454,7 @@ BOOL AppPrefsDlg::CommitDialogValues()
 
 MsgResult AppPrefsDlg::Message(Msg* Message)
 {
-#pragma message( __LOCMSG__ _T("AppPrefsDlg::Message - do nothing") )
+#pragma message( __LOCMSG__ "AppPrefsDlg::Message - do nothing" )
 	TRACE( _T("Warning - AppPrefsDlg::Message called") );
 /*#ifndef STANDALONE
 
@@ -1100,7 +1100,7 @@ BOOL AppPrefsDlg::Init()
 {
 	BOOL InitOK = TRUE;
 
-#pragma message( __LOCMSG__ _T("AppPrefsDlg::Init - do nothing") )
+#pragma message( __LOCMSG__ "AppPrefsDlg::Init - do nothing" )
 	TRACE( _T("Warning - AppPrefsDlg::Init called") );
 /*#ifndef STANDALONE
 	// Declare any preferences that we require.
@@ -1244,7 +1244,7 @@ BOOL AppPrefsDlg::Init()
 	// Set up our special print options dialog box as well as this is effectively the
 	// same dialog box.
 //	WEBSTER-ranbirr-13/11/96
-#pragma message( __LOCMSG__ _T("Removed PrintPrefsDlg::Init usage") )
+#pragma message( __LOCMSG__ "Removed PrintPrefsDlg::Init usage" )
 #ifndef WEBSTER
 //	InitOK = InitOK && PrintPrefsDlg::Init();
 #endif //webster
@@ -1271,7 +1271,7 @@ BOOL AppPrefsDlg::Init()
 
 void AppPrefsDlg::Deinit()
 {
-#pragma message( __LOCMSG__ _T("AppPrefsDlg::Deinit - do nothing") )
+#pragma message( __LOCMSG__ "AppPrefsDlg::Deinit - do nothing" )
 	TRACE( _T("Warning - AppPrefsDlg::Deinit called") );
 /*	BOOL ok;
 	
@@ -1636,7 +1636,7 @@ BOOL OptionsTabs::Init()
 
 BOOL OptionsTabs::InitOptionsTabs()
 {
-#pragma message( __LOCMSG__ _T("AppPrefsDlg::InitOptionsTabs - do nothing") )
+#pragma message( __LOCMSG__ "AppPrefsDlg::InitOptionsTabs - do nothing" )
 	TRACE( _T("Warning - AppPrefsDlg::InitOptionsTabs called") );
 /*	// Find the OptionsTabs - the kernel ones are hard-wired.
 	OptionsTabs *pOptionsTab = NULL;
@@ -2075,7 +2075,7 @@ BOOL OptionsTabs::UpdateSection(String_256 *DocumentName)
 
 BOOL OptionsTabs::GreyApplyNow()
 {
-#pragma message( __LOCMSG__ _T("OptionsTabs::GreyApplyNow - do nothing") )
+#pragma message( __LOCMSG__ "OptionsTabs::GreyApplyNow - do nothing" )
 	TRACE( _T("Warning - OptionsTabs::GreyApplyNow called") );
 /*	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::GreyApplyNow called with no dialog pointer");
 
@@ -2109,7 +2109,7 @@ BOOL OptionsTabs::GreyApplyNow()
 
 BOOL OptionsTabs::UngreyApplyNow()
 {
-#pragma message( __LOCMSG__ _T("OptionsTabs::UngreyApplyNow - do nothing") )
+#pragma message( __LOCMSG__ "OptionsTabs::UngreyApplyNow - do nothing" )
 	TRACE( _T("Warning - OptionsTabs::UngreyApplyNow called") );
 /*	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::UngreyApplyNow called with no dialog pointer");
 	

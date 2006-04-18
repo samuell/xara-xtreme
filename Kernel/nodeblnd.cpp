@@ -4616,7 +4616,7 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -4631,21 +4631,21 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			pRecord->ReadUINT16(&NumSteps);
 			pRecord->ReadBYTE(&Flags);
 
-			_stprintf(s,"NumSteps\t= %hu\r\n",NumSteps);
+			camSprintf(s,_T("NumSteps\t= %hu\r\n"),NumSteps);
 			(*pStr) += s;
-			_stprintf(s,"Flags\t\t= %d\r\n",INT32(Flags));
+			camSprintf(s,_T("Flags\t\t= %d\r\n"),INT32(Flags));
 			(*pStr) += s;
 			(*pStr) += "\r\n";
 
-			_stprintf(s,"One to One\t= %d\r\n",Flags & TAG_BLEND_FLAG_ONETOONE);
+			camSprintf(s,_T("One to One\t= %d\r\n"),Flags & TAG_BLEND_FLAG_ONETOONE);
 			(*pStr) += s;
-			_stprintf(s,"Antialiased\t= %d\r\n",Flags & TAG_BLEND_FLAG_ANTIALIAS);
+			camSprintf(s,_T("Antialiased\t= %d\r\n"),Flags & TAG_BLEND_FLAG_ANTIALIAS);
 			(*pStr) += s;
-			_stprintf(s,"Tangential\t= %d\r\n",Flags & TAG_BLEND_FLAG_TANGENTIAL);
+			camSprintf(s,_T("Tangential\t= %d\r\n"),Flags & TAG_BLEND_FLAG_TANGENTIAL);
 			(*pStr) += s;
 
 			BYTE ColEffect = (Flags & TAG_BLEND_COLEFFECT_MASK) >> TAG_BLEND_COLEFFECT_SHIFT;
-			_stprintf(s,"Colour Effect\t= %d\r\n",INT32(ColEffect));
+			camSprintf(s,_T("Colour Effect\t= %d\r\n"),INT32(ColEffect));
 			(*pStr) += s;
 		}
 		break;
@@ -4658,9 +4658,9 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			pRecord->ReadINT32(&PathIndexStart);
 			pRecord->ReadINT32(&PathIndexEnd);
 
-			_stprintf(s,"PathIndexStart\t= %d\r\n",PathIndexStart);
+			camSprintf(s,_T("PathIndexStart\t= %d\r\n"),PathIndexStart);
 			(*pStr) += s;
-			_stprintf(s,"PathIndexEnd\t= %d\r\n",PathIndexEnd);
+			camSprintf(s,_T("PathIndexEnd\t= %d\r\n"),PathIndexEnd);
 			(*pStr) += s;
 
 		}
@@ -4672,9 +4672,9 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			double PropEnd   = -1.0;
 			pRecord->ReadDOUBLE(&PropStart);
 			pRecord->ReadDOUBLE(&PropEnd);
-			_stprintf(s,"Proportion of path distance start\t= %f\r\n",PropStart);
+			camSprintf(s,_T("Proportion of path distance start\t= %f\r\n"),PropStart);
 			(*pStr) += s;
-			_stprintf(s,"Proportion of path distance end\t= %f\r\n",PropEnd);
+			camSprintf(s,_T("Proportion of path distance end\t= %f\r\n"),PropEnd);
 			(*pStr) += s;
 		}
 		break;
@@ -4685,9 +4685,9 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			double AngleEnd   = -1.0;
 			pRecord->ReadDOUBLE(&AngleStart);
 			pRecord->ReadDOUBLE(&AngleEnd);
-			_stprintf(s,"Angle start\t= %f\r\n",AngleStart);
+			camSprintf(s,_T("Angle start\t= %f\r\n"),AngleStart);
 			(*pStr) += s;
-			_stprintf(s,"Angle end\t= %f\r\n",AngleEnd);
+			camSprintf(s,_T("Angle end\t= %f\r\n"),AngleEnd);
 			(*pStr) += s;
 		}
 		break;
@@ -4700,7 +4700,7 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 		{
 			INT32 BlendedOnCurve = FALSE;
 			pRecord->ReadINT32(&BlendedOnCurve);
-			_stprintf(s,"BlendedOnCurve\t= %f\r\n",BlendedOnCurve);
+			camSprintf(s,_T("BlendedOnCurve\t= %f\r\n"),BlendedOnCurve);
 			(*pStr) += s;
 		}
 		break;
@@ -4708,7 +4708,7 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 		{
 			INT32 Filled = FALSE;
 			pRecord->ReadINT32(&Filled);
-			_stprintf(s,"Filled \t= %f\r\n",Filled);
+			camSprintf(s,_T("Filled \t= %f\r\n"),Filled);
 			(*pStr) += s;
 		}
 		break;
@@ -4722,37 +4722,37 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			BOOL ok    = pRecord->ReadDOUBLE(&ObjBias);
 			if (ok) 
 			{
-				_stprintf(s,"Object Bias\t= %f\r\n",ObjBias);
+				camSprintf(s,_T("Object Bias\t= %f\r\n"),ObjBias);
 				(*pStr) += s;
 				ok = pRecord->ReadDOUBLE(&ObjGain);
 			}
 			if (ok) 
 			{
-				_stprintf(s,"Object Gain\t= %f\r\n",ObjGain);
+				camSprintf(s,_T("Object Gain\t= %f\r\n"),ObjGain);
 				(*pStr) += s;	
 				ok = pRecord->ReadDOUBLE(&AttrBias);
 			}
 			if (ok) 
 			{
-				_stprintf(s,"Attribute Bias\t= %f\r\n",AttrBias);
+				camSprintf(s,_T("Attribute Bias\t= %f\r\n"),AttrBias);
 				(*pStr) += s;
 				ok = pRecord->ReadDOUBLE(&AttrGain);
 			}
 			if (ok) 
 			{
-				_stprintf(s,"Attribute Gain\t= %f\r\n",AttrGain);
+				camSprintf(s,_T("Attribute Gain\t= %f\r\n"),AttrGain);
 				(*pStr) += s;
 				ok = pRecord->ReadDOUBLE(&PosBias);
 			}
 			if (ok) 
 			{
-				_stprintf(s,"Position Bias\t= %f\r\n",PosBias);
+				camSprintf(s,_T("Position Bias\t= %f\r\n"),PosBias);
 				(*pStr) += s;
 				ok = pRecord->ReadDOUBLE(&PosGain);
 			}
 			if (ok)
 			{
-				_stprintf(s,"Position Gain\t= %f\r\n",PosGain);
+				camSprintf(s,_T("Position Gain\t= %f\r\n"),PosGain);
 				(*pStr) += s;
 			}
 			break;

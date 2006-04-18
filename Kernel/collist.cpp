@@ -1060,7 +1060,7 @@ BOOL ColourList::GenerateUniqueColourName(const StringBase *pPrefix, String_64 *
 	while (TRUE)
 	{
 		// If this doesn't terminate [Tim] will eat [his] Archimedes!
-		tsprintf( pPrefixEnd, 64, _T(" %ld"), i++ );
+		camSnprintf( pPrefixEnd, 64, _T(" %ld"), i++ );
 
 		// Is this name ok?
 		if (!NamedColourExists(NewName))

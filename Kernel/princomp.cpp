@@ -332,7 +332,7 @@ PCToken PrintComponent::GetToken(const char* pComment)
 {
 	UINT32 i;
 
-	for (i=0;!_istspace(pComment[i]) && i < PC_BUFFERSIZE;i++)
+	for (i=0;!camIsspace(pComment[i]) && i < PC_BUFFERSIZE;i++)
 		Buffer[i] = pComment[i];
 
 	if (i >= PC_BUFFERSIZE)
@@ -342,7 +342,7 @@ PCToken PrintComponent::GetToken(const char* pComment)
 
 	for (i=0;i < PCTOKEN_UNKNOWN;i++)
 	{
-		if (_tcscmp(PCTokenStr[i],Buffer) == 0)
+		if (camStrcmp(PCTokenStr[i],Buffer) == 0)
 			return (PCToken)i;
 	}
 
@@ -372,16 +372,16 @@ void PrintComponent::ExtractTokenValStr(const char* pComment)
 		UINT32 i=0;
 
 		// Skip past token str, up to first space char or string terminating char
-		while (!_istspace(pComment[i]) && !_istcntrl(pComment[i]))
+		while (!camIsspace(pComment[i]) && !camIscntrl(pComment[i]))
 			i++;
 
 		// Find next non-space char
-		while (_istspace(pComment[i]))
+		while (camIsspace(pComment[i]))
 			i++;
 
 		// Extract all the remaining printable characters
 		UINT32 j=0;
-		while (_istprint(pComment[i]) && j < PC_BUFFERSIZE)
+		while (camIsprint(pComment[i]) && j < PC_BUFFERSIZE)
 			Buffer[j++] = pComment[i++];
 
 		if (j >= PC_BUFFERSIZE)
@@ -409,7 +409,7 @@ INT32 PrintComponent::GetTokenValINT32(const char* pComment)
 	ExtractTokenValStr(pComment);
 
 	INT32 n = 0;
-	_stscanf( Buffer, _T("%ld"), &n );
+	camSscanf( Buffer, _T("%ld"), &n );
 
 	return n;
 }
@@ -433,7 +433,7 @@ FIXED16 PrintComponent::GetTokenValFIXED16(const char* pComment)
 	ExtractTokenValStr(pComment);
 
 	double n = 0.0;
-	_stscanf( Buffer, _T("%le"), &n );
+	camSscanf( Buffer, _T("%le"), &n );
 
 	if (n > double(0x7fff))
 		n = double(0x7fff);

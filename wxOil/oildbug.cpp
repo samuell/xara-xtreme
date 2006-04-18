@@ -169,7 +169,7 @@ void *DebugTreeInfo::GetDebugInfo(INT32 Index)
 void DebugTreeInfo::OutputDebugLine(TCHAR *Str)
 {
 #if defined(__WXMSW__)
-	OutputDebugString( (char*)Str );
+	OutputDebugString( Str );
 #else
 	#pragma error( "Not impl'ed from this architechure" );
 #endif
@@ -192,9 +192,9 @@ void DebugTreeInfo::OutputDebugLine(TCHAR *Str)
 void DebugTreeInfo::OutputDebug(TCHAR *Str)
 {
 #if defined(__WXMSW__)
-	OutputDebugString( (char*)Str );
+	OutputDebugString( Str );
 #elif defined(__WXGTK__)
-	tprintf( Str );
+	camPrintf( Str );
 #else
 	#pragma error( "Not impl'ed from this architechure" );
 #endif

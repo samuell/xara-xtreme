@@ -4566,7 +4566,7 @@ BOOL JPEGExportPrefsDialog::InitDialog()
 		// Set the percentage string
 		TCHAR Str[32];
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
-		_stprintf(Str, jcf, Quality);
+		camSprintf(Str, jcf, Quality);
 		String_32 PercentStr(Str);
 		SetStringGadgetValue(_R(IDC_BMPOPTS_PERCENT), &PercentStr);
 
@@ -4652,7 +4652,7 @@ void JPEGExportPrefsDialog::SetJPEGDlgState()
 		// Set the percentage string
 		TCHAR Str[32];
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
-		_stprintf(Str, jcf, Quality);
+		camSprintf(Str, jcf, Quality);
 		String_32 PercentStr(Str);
 		SetStringGadgetValue(_R(IDC_BMPOPTS_PERCENT), &PercentStr);
 

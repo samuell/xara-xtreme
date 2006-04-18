@@ -499,7 +499,7 @@ BOOL SelectorTool::Init()
 	// everthing is working as it should
 	pInfoBarOp = new SelectorInfoBarOp;
 
-#pragma message( __LOCMSG__ _T("Removed NameGallery usage") )
+#pragma message( __LOCMSG__ "Removed NameGallery usage" )
 /*	// Now we have to declare all our operations and if that works, try to find
 	// the freehand tools info bar and create it
 	CCResTextFile ResFile;
@@ -1071,7 +1071,8 @@ void SelectorTool::SetKeyDownCursor(ClickModifiers cmods)
 	DocCoord dcMousePos;
 	if( DocView::GetCurrentMousePos( &pSpread, &dcMousePos ) &&
 		Tool::GetCurrentID()== TOOLID_SELECTOR )
-#pragma message( __LOCMSG__ _T("Removed NameGallery usage") ) /*		&&
+#pragma message( __LOCMSG__ "Removed NameGallery usage" )
+		/*	&&
 		!BaseBar::IsDragging()) */
 	{
 //		StartSpread = pSpread;
@@ -5883,7 +5884,7 @@ void OpSelectorDragBox::DragFinished(DocCoord PointerPos, ClickModifiers ClickMo
 	RenderDragBlobs(BoundingRect, StartSpread, bSolidDrag);
 
 	// Put the hourglass up
-#pragma message( __LOCMSG__ _T("Removed BeginSlowJob usage") )
+#pragma message( __LOCMSG__ "Removed BeginSlowJob usage" )
 //	BeginSlowJob();
 
 	// Go and try and select a few things
@@ -6166,7 +6167,7 @@ void OpDragRotateCentre::DragFinished(DocCoord dcPos, ClickModifiers mods,
 									  Spread* pSpread, BOOL fDragOK, BOOL bSolidDrag)
 {
 	// Put the hourglass up
-#pragma message( __LOCMSG__ _T("Removed BeginSlowJob usage") )
+#pragma message( __LOCMSG__ "Removed BeginSlowJob usage" )
 //	BeginSlowJob();
 
 	// Act on the termination status of the drag operation.

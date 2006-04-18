@@ -1111,7 +1111,7 @@ void UpdateWinMenu(wxMenu* pMenu, MenuItem* kernelMenu)
 
 					if (subMenu->ControlState.Ticked)
 					{
-						TRACE( _T("Check " PERCENT_S "\n"), (PCTSTR)subMenu->GetMenuText() );
+						TRACE( _T("Check %s\n"), (PCTSTR)subMenu->GetMenuText() );
 						
 						//Tick Menu Item
 						pMenu->Check( subMenu->GetMenuId(), true );

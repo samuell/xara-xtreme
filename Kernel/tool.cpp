@@ -596,7 +596,7 @@ void  Tool::SetButtons(BOOL State)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 		String OpToken;
-		tsprintf(OpToken, 16, _T("TOOL%u"), GetID());
+		camSnprintf(OpToken, 16, _T("TOOL%u"), GetID());
 		ToolOpDescriptor* ToolOp = (ToolOpDescriptor *) OpDescriptor::FindOpDescriptor(OpToken);
 
 		// Keep Select state in the OpDescriptor
@@ -611,8 +611,7 @@ void  Tool::SetButtons(BOOL State)
 		//Build list of all controls linked to this Op
 		if (!ToolOp->BuildGadgetList(pGadgetList))
 		{
-			TRACEUSER( "Chris", _T("Couldn't build gadget list in ")
-					  "Tool::SetCurrent\n");
+			TRACEUSER( "Chris", _T("Couldn't build gadget list in Tool::SetCurrent\n"));
 			delete pGadgetList;
 			return;
 		}
@@ -803,7 +802,7 @@ void Tool::ActivateTemporaryTool(Tool *pTempTool)
 		//Current->SelectChange(FALSE);
 		// Find the instance of the ToolOpDescriptor
 		String_64		OpToken;
-		tsprintf( OpToken, 64, _T("TOOL%u"), pTempTool->GetID() );
+		camSnprintf( OpToken, 64, _T("TOOL%u"), pTempTool->GetID() );
 		ToolOpDescriptor* ToolOp = (ToolOpDescriptor *) OpDescriptor::FindOpDescriptor(OpToken);
 
 		// Use the OpDescriptor to invoke the tool (i.e. make it become the selected tool)
@@ -843,7 +842,7 @@ void Tool::DeactivateTemporaryTool()
 
 		// Find the instance of the ToolOpDescriptor
 		String_64		OpToken;
-		tsprintf( OpToken, 64, _T("TOOL%u"), PrevToolID );
+		camSnprintf( OpToken, 64, _T("TOOL%u"), PrevToolID );
 		ToolOpDescriptor* ToolOp = (ToolOpDescriptor *) OpDescriptor::FindOpDescriptor(OpToken);
 
 		// Use the OpDescriptor to invoke the tool (i.e. make it become the selected tool)

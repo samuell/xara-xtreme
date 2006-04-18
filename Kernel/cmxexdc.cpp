@@ -1432,8 +1432,8 @@ BOOL CMXExportDC::CreateHeader(DocRect *pFileBBox)
 	// write the CMX header
 	cmxHeader fhdr;
 	memset(&fhdr, 0, sizeof(fhdr));			// set everything to zero
-	_tcscpy((char *)fhdr.Id, cmxID);
-	_tcscpy((char *)fhdr.OS, cmxOS);
+	camStrcpy((char *)fhdr.Id, cmxID);
+	camStrcpy((char *)fhdr.OS, cmxOS);
 	fhdr.ByteOrder = cmxBYTEORDER_INTEL | 0x30;
 	if(ThirtyTwoBit)
 	{

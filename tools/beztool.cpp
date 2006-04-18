@@ -3534,7 +3534,7 @@ void BezierTool::RetroSmoothSet(INT32 percent, BOOL Enabled)
 			// Set the percentage string
 			TCHAR Str[32];
 			String_32 jcf(_R(IDS_PERCENT_FORMAT));
-			tsprintf(Str, 31, jcf, (INT32) percent);
+			camSnprintf(Str, 31, jcf, (INT32) percent);
 			String_32 PercentStr(Str);
 			pBezToolInfoBarOp->SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
 
@@ -4181,7 +4181,7 @@ MsgResult BezToolInfoBarOp::InfobarMessage(Msg* Message)
 		// Set the percentage string
 		TCHAR Str[32];
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
-		tsprintf(Str, 31, jcf, (INT32) 0);
+		camSnprintf(Str, 31, jcf, (INT32) 0);
 		String_32 PercentStr(Str);
 		SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
 
@@ -4323,7 +4323,7 @@ MsgResult BezToolInfoBarOp::InfobarMessage(Msg* Message)
 
 			// Build the Percentage string and set it
 			String_32 jcf(_R(IDS_PERCENT_FORMAT));
-			tsprintf(Str, 31, jcf, Result);
+			camSnprintf(Str, 31, jcf, Result);
 			String_32 PercentStr(Str);
 			SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
 

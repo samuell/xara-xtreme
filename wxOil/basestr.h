@@ -301,10 +301,10 @@ protected:
 
 INT32 CCAPI SmartLoadString(UINT32 modID, UINT32 resID, TCHAR *buf, INT32 size);
 
-// This is our very own version of the Windows string function lstrcpyn(), which
+// This is our very own version of the Windows string function camStrncpy(), which
 // was mysteriously dropped from the Win32 API.  Using the standard C library function
 // strncpy() doesn't give quite the same results, so we must provide our own.
-TCHAR* cc_lstrcpyn(TCHAR* dest, const TCHAR* src, size_t n);
+TCHAR* cc_camStrncpy(TCHAR* dest, const TCHAR* src, size_t n);
 const TCHAR* cc_lstrstr(const TCHAR* String1, const TCHAR *String2);
 TCHAR* cc_lstristr(TCHAR* String1, TCHAR* String2);
 TCHAR* cc_lstrchr(TCHAR* Src, TCHAR c);
@@ -381,7 +381,7 @@ inline StringBase::~StringBase()
 inline INT32 StringBase::Length() const
 {
 	ERROR3IF(!text, "Attempt to find the LENGTH of an unALLOCated String");
-	return (text) ? lstrlen( text ) : 0;
+	return (text) ? camStrlen( text ) : 0;
 }
 
 	
@@ -437,7 +437,7 @@ inline BOOL StringBase::IsEmpty() const
 	Errors:		If either of the strings is 0, an ESNURE failure is generated
 
 	Notes:		We define different versions of the function for UNICODE builds,
-				as lstrcmp is very slow compared to vanilla strcmp.
+				as camStrcmp is very slow compared to vanilla strcmp.
 
 				Note also that this is a very fast comparison compared to CompareTo.
 				It should be used in preference where relative ordering of strings
@@ -472,7 +472,7 @@ inline bool StringBase::IsIdentical(const StringBase &other) const
 	Errors:		If either of the strings is 0, an ESNURE failure is generated
 
 	Notes:		We define different versions of the function for UNICODE builds,
-				as lstrcmp is very slow compared to vanilla strcmp.
+				as camStrcmp is very slow compared to vanilla strcmp.
 
 				Note also that this is a very fast comparison compared to CompareTo.
 				It should be used in preference where relative ordering of strings
@@ -615,7 +615,7 @@ inline BOOL StringBase::IsLegal(INT32 index) const
 ***************************************************************************************/
 inline BOOL StringBase::IsAlpha(TCHAR c)
 {
-	return _istalpha (c); // IsCharAlpha(c);
+	return camIsalpha(c); // IsCharAlpha(c);
 }
 
 
@@ -631,7 +631,7 @@ inline BOOL StringBase::IsAlpha(TCHAR c)
 ***************************************************************************************/
 inline BOOL StringBase::IsAlphaNumeric(TCHAR c)
 {
-	return IsCharAlphaNumeric(c);
+	return camIsalnum(c);	//IsCharAlphaNumeric(c);
 }
 
 
@@ -647,7 +647,7 @@ inline BOOL StringBase::IsAlphaNumeric(TCHAR c)
 ***************************************************************************************/
 inline BOOL StringBase::IsNumeric(TCHAR c)
 {
-	return IsCharAlphaNumeric(c) && !IsCharAlpha(c);
+	return camIsalnum(c) && !camIsalpha(c);
 }
 
 
@@ -663,7 +663,7 @@ inline BOOL StringBase::IsNumeric(TCHAR c)
 ***************************************************************************************/
 inline BOOL StringBase::IsLower(TCHAR c)
 {
-	return _istlower(c); // IsCharLower(c)
+	return camIslower(c); // IsCharLower(c)
 }
 
 
@@ -679,7 +679,7 @@ inline BOOL StringBase::IsLower(TCHAR c)
 ***************************************************************************************/
 inline BOOL StringBase::IsUpper(TCHAR c)
 {
-	return _istupper(c); // IsCharUpper(c)
+	return camIsupper(c); // IsCharUpper(c)
 }
 
 
@@ -694,7 +694,7 @@ inline BOOL StringBase::IsUpper(TCHAR c)
 ***************************************************************************************/
 inline BOOL StringBase::IsSpace(TCHAR c)
 {
-	return _istspace(c);
+	return camIsspace(c);
 }
 
 
@@ -829,7 +829,7 @@ inline StringBase::operator const wxString() const
 inline StringBase& StringBase::operator+=(const StringBase& rhs)
 {
 	ERROR3IF(!text || !rhs.text, "Call to String::operator+= for an unALLOCated String");
-/*	ERROR3IF(lstrlen(text) + lstrlen(rhs.text) >= length,
+/*	ERROR3IF(camStrlen(text) + camStrlen(rhs.text) >= length,
 			"Call to String::operator+= will result in overflow");*/
 
 	if (text && rhs.text) SafeCat(text, rhs.text, length-1);
@@ -871,7 +871,7 @@ inline StringBase& StringBase::operator=(const TCHAR ch)
 inline TCHAR StringBase::operator[](const INT32 Index)
 {
 	ERROR3IF(!text, "Call to String::operator[] for an unALLOCated String");
-	return (text && (Index <= (INT32)lstrlen(text))) ? text[Index] : 0;
+	return (text && (Index <= (INT32)camStrlen(text))) ? text[Index] : 0;
 }
 
 
@@ -890,7 +890,7 @@ inline const WCHAR StringBase::CharAt(const INT32 Index) const
 {
 #ifdef UNICODE
 	ERROR3IF(!text, "Call to String::operator[] for an unALLOCated String");
-	TCHAR ch = (text && (Index <= (INT32)lstrlen(text))) ? text[Index] : 0;
+	TCHAR ch = (text && (Index <= (INT32)camStrlen(text))) ? text[Index] : 0;
 
 	return (WCHAR)ch;
 
@@ -1094,7 +1094,7 @@ inline INT32 StringBase::TCharToNum(TCHAR c)
 
 
 /**************************************************************************************
->	TCHAR* cc_lstrcpyn(TCHAR* dest, const TCHAR* src, size_t n)
+>	TCHAR* cc_camStrncpy(TCHAR* dest, const TCHAR* src, size_t n)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9th Feb 1994
@@ -1104,16 +1104,16 @@ inline INT32 StringBase::TCharToNum(TCHAR c)
 
 	Returns:	destination
 
-	Purpose:	Replaces the Windows API function lstrcpyn(), whose existence has been
+	Purpose:	Replaces the Windows API function camStrncpy(), whose existence has been
 				rewritten out of history.  Does basically what the standard C library
 				function memmove() does, only for TCHARs.
 ***************************************************************************************/
 
-inline TCHAR* cc_lstrcpyn(TCHAR* dest, const TCHAR* src, INT32 n)
+inline TCHAR* cc_camStrncpy(TCHAR* dest, const TCHAR* src, INT32 n)
 {
 	ERROR3IF(src == 0 || dest == 0 || n <= 0,
-				"0 (zero) parameters passed to cc_lstrcpyn!");
-	return lstrcpyn(dest, src, n + 1);		// +1 as lstrcpyn includes the terminator.
+				"0 (zero) parameters passed to cc_camStrncpy!");
+	return camStrncpy(dest, src, n + 1);		// +1 as camStrncpy includes the terminator.
 }
 
 
@@ -1142,7 +1142,7 @@ inline TCHAR* cc_lstrcpyn(TCHAR* dest, const TCHAR* src, INT32 n)
 inline TCHAR* cc_lstrrchr(TCHAR *Str, TCHAR c)
 {
 	ERROR3IF(Str == 0, "0 (zero) parameters passed to cc_lstrrchr");
-	return (Str != 0) ? _tcsrchr(Str, c) : 0;
+	return (Str != 0) ? camStrrchr(Str, c) : 0;
 
 //	TCHAR *start = Str;
 //
@@ -1241,7 +1241,7 @@ inline TCHAR* cc_lstrtok(TCHAR *String1, TCHAR *String2)
 //
 //	/* Update nextoken (or the corresponding field in the per-thread data
 //	 * structure */
-//	_tcscpy(nextoken, str);
+//	camStrcpy(nextoken, str);
 //
 //	/* Determine if a token has been found. */
 //	if ( string == str )
@@ -1278,7 +1278,7 @@ inline INT32 cc_lstrncmp(TCHAR *String1, TCHAR *String2, INT32 Count)
 {
 	ERROR3IF(String1 == 0 || String2 == 0,
 		"INT32 cc_lstrncmp(TCHAR *String1, TCHAR *String2, INT32 Count) given 0 params");
-	return (Count != 0) ? _tcsncmp(String1, String2, Count) : 0;
+	return (Count != 0) ? camStrncmp(String1, String2, Count) : 0;
 }
 
 
@@ -1296,7 +1296,7 @@ inline INT32 cc_lstrncmp(TCHAR *String1, TCHAR *String2, INT32 Count)
 ***************************************************************************************/
 inline size_t cc_strlenCharacters( const TCHAR* string )
 {
-	return _tcsclen(string);
+	return camStrclen(string);
 }
 
 
@@ -1310,15 +1310,11 @@ inline size_t cc_strlenCharacters( const TCHAR* string )
 	Returns:	The length of a string in bytes
 	Purpose:	Returns the number of bytes needed to store the given string.  Dosen't
 				include the terminator.  Unicode and DBCS aware.
-	SeeAlso:	cc_strlenCharacters
+	SeeAlso:	camStrclen
 ***************************************************************************************/
 inline size_t cc_strlenBytes( const TCHAR* string )
 {
-#ifdef _UNICODE
-	return wcslen(string)*sizeof(WCHAR);
-#else
-	return strlen(string);		// Not MBCS aware so returns the number of chars
-#endif
+	return camStrlen(string)*sizeof(TCHAR);
 }
 
 
@@ -1347,7 +1343,7 @@ inline size_t cc_strlenBytes( const TCHAR* string )
 inline TCHAR* cc_lstrchr(TCHAR *Str, TCHAR c)
 {
 	ERROR3IF(Str == 0, "0 (zero) parameters passed to cc_lstrchr");
-	return (Str != 0) ? _tcschr(Str, c) : 0;
+	return (Str != 0) ? camStrchr(Str, c) : 0;
 
 //	while (*Str && *Str != c)
 //		Str++;

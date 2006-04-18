@@ -138,13 +138,13 @@ size_t CCDiskFile::Size()
 	size_t			FileSize = 0;
 
 #if defined(__WXMSW__) || 0 == wxUSE_UNICODE
-	FILE *FP = _tfopen((const TCHAR *)filePath.GetPath(), "rb");
+	FILE *FP = _tfopen((const TCHAR *)filePath.GetPath(), _T("rb"));
 #else
 	// GNU\Linux seems to have no unicode filesystem name support, so we
 	// just get on and do the needed conversion as efficiently as possible
-	size_t				cchTmp = wcstombs( NULL, filePath.GetPath(), 0 ) + 1;
+	size_t				cchTmp = camWcstombs( NULL, filePath.GetPath(), 0 ) + 1;
 	PSTR				pszTmp = PSTR( alloca( cchTmp ) );
-	wcstombs( pszTmp, filePath.GetPath(), cchTmp );
+	camWcstombs( pszTmp, filePath.GetPath(), cchTmp );
 
 	FILE *FP = fopen( pszTmp, "rb" );
 #endif

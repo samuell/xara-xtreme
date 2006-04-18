@@ -182,7 +182,7 @@ BOOL OILModule::Init()
 
 	HINSTANCE hLibrary = (HINSTANCE)HINSTANCE_ERROR;
 
-#pragma message( __LOCMSG__ _T("Removed SetErrorMode usage") )
+#pragma message( __LOCMSG__ "Removed SetErrorMode usage" )
 //	SetErrorMode( SEM_NOOPENFILEERRORBOX );						// don't cause errors
 	
 	// Still need the DLLs for the module/tool resources.
@@ -261,7 +261,7 @@ BOOL OILModule::Init()
 AbnormalExit:
 	// Out of memory - clean up and fail
 	TRACEUSER( "Tim", _T("OILModule::Init(): memory exhausted") );
-#pragma message( __LOCMSG__ _T("Removed SetErrorMode usage") )
+#pragma message( __LOCMSG__ "Removed SetErrorMode usage" )
 //	FreeLibrary(hLibrary);
 	DLLs[0] = (HINSTANCE)HINSTANCE_ERROR;
 	DLLCount--;
@@ -375,7 +375,7 @@ void OILModule::EnumerateModulesFromDLL(const char *Filename)
 				}
 			}
 		}
-		else if (lstrcmp( Filename, TOOL_DLL_NAME )==0 )
+		else if (camStrcmp( Filename, TOOL_DLL_NAME )==0 )
 		{
 			// loaded resources from the DLL, now declare the built-in Tools
 			Module *NewModule = (Module*) new ViewModule;

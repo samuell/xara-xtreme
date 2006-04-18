@@ -284,27 +284,21 @@ StringBase& StringBase::toTitle()
 INT32 StringBase::CompareTo(const StringBase& other, BOOL CaseSensitive) const
 {
 	ERROR3IF(text == 0 || other.text == 0, "StringBase::CompareTo: not ALLOCed");
-#if defined(__WXMSW__)
+PORTNOTE("other", "StringBase::CompareTo should be locale specific");
+#if FALSE
 	DWORD dw = NORM_IGNOREKANATYPE | NORM_IGNOREWIDTH;
 	if (!CaseSensitive) dw |= NORM_IGNORECASE;
 	return CompareString(LOCALE_USER_DEFAULT, dw, text, -1, other.text, -1) - 2;
+#endif
 
-#elif defined(__WXMAC__)
-	if (CaseSensitive)
-		return wxStrcmp(text, other.text);
-	else
-		return wxStricmp(text, other.text);
-		
-#else
 	if( CaseSensitive )
 	{
-		return lstrcmp( text, other.text );
+		return camStrcmp( text, other.text );
 	}
 	else
 	{
-		return lstrcmpi( text, other.text );
+		return camStricmp( text, other.text );
 	}
-#endif	
 }
 
 
@@ -341,27 +335,21 @@ INT32 StringBase::CompareTo(const StringBase& other, BOOL CaseSensitive) const
 INT32 StringBase::CompareTo(const TCHAR* other, BOOL CaseSensitive) const
 {
 	ERROR3IF(text == 0 || other == 0, "StringBase::CompareTo: null buffers");
-#if defined(__WXMSW__)
+PORTNOTE("other", "StringBase::CompareTo should be locale specific");
+#if FALSE
 	DWORD dw = NORM_IGNOREKANATYPE | NORM_IGNOREWIDTH;
 	if (!CaseSensitive) dw |= NORM_IGNORECASE;
 	return CompareString(LOCALE_USER_DEFAULT, dw, text, -1, other, -1) - 2;
+#endif
 
-#elif defined(__WXMAC__)
-	if (CaseSensitive)
-		return wxStrcmp(text, other);
-	else
-		return wxStricmp(text, other);
-		
-#else
 	if( CaseSensitive )
 	{
-		return lstrcmp( text, other );
+		return camStrcmp( text, other );
 	}
 	else
 	{
-		return lstrcmpi( text, other );
+		return camStricmp( text, other );
 	}
-#endif	
 }
 
 
@@ -381,14 +369,14 @@ INT32 StringBase::CompareTo(const TCHAR* other, BOOL CaseSensitive) const
 StringBase& StringBase::operator=(const StringBase& other)
 {
 	ERROR3IF(!text || !other.text, "Call to String::operator= for an unALLOCated String");
-//	ERROR3IF(lstrlen(other.text) >= length, "Call to String::operator= will result in overflow");
+//	ERROR3IF(camStrlen(other.text) >= length, "Call to String::operator= will result in overflow");
 
 	if (text && other.text)
 	{
-		if(lstrlen(other.text) > length)
-			cc_lstrcpyn(text, other.text, (INT32)length);
+		if(camStrlen(other.text) >= length)
+			camStrncpy(text, other.text, (INT32)length - 1);
 		else
-			lstrcpy(text, other.text);
+			camStrcpy(text, other.text);
 	}
 	return *this;
 }
@@ -409,14 +397,14 @@ StringBase& StringBase::operator=(const StringBase& other)
 StringBase& StringBase::operator=(const TCHAR* s)
 {
 	ERROR3IF(!text || !s, "Call to String::operator= for an unALLOCated String or 0 char*");
-//	ERROR3IF(lstrlen(s) >= length, "Call to String::operator= will result in overflow");
+//	ERROR3IF(camStrlen(s) >= length, "Call to String::operator= will result in overflow");
 
 	if (text && s)
 	{
-		if(lstrlen(s) > length)
-			cc_lstrcpyn(text, s, (INT32)length);
+		if(camStrlen(s) >= length)
+			camStrncpy(text, s, (INT32)length-1);
 		else
-			lstrcpy(text, s);
+			camStrcpy(text, s);
 	}
 	return *this;
 }
@@ -437,7 +425,7 @@ StringBase& StringBase::operator=(const TCHAR* s)
 StringBase& StringBase::operator+=(const TCHAR* s)
 {
 	ERROR3IF(!text || !s, "Call to String::operator+= for an unALLOCated String");
-	ERROR3IF(lstrlen(text) + lstrlen(s) >= length,
+	ERROR3IF(camStrlen(text) + camStrlen(s) >= length,
 			"Call to String::operator+= will result in overflow");
 	if (text && s) SafeCat(text, s, length-1);
 	return *this;
@@ -456,7 +444,7 @@ StringBase& StringBase::operator+=(const TCHAR* s)
 StringBase& StringBase::operator+=(const TCHAR ch)
 {
 	ERROR3IF(text == 0, "Call to String::operator+= for an unALLOCated String");
-	INT32 CurrentLength = lstrlen(text);
+	INT32 CurrentLength = camStrlen(text);
 	ERROR3IF(CurrentLength == MaxLength() - 1, "StringBase::operator+= will overflow");
 
 	text[CurrentLength] = ch;
@@ -481,7 +469,7 @@ StringBase& StringBase::operator+=(const TCHAR ch)
 	Returns:	string1
 
 	Purpose:	Appends string2 to the end of string1 and returns string1 as the result.
-				The difference between this and lstrcat is the Max parameter which helps
+				The difference between this and camStrcat is the Max parameter which helps
 				alleviate the buffer overwrite problems. Setting max to the length member
 				of a stringbase will ERROR3IF that we don't go overwriting ends of buffers
 				and suchlike... In such cases the result will be trucated.
@@ -496,22 +484,31 @@ TCHAR *StringBase::SafeCat(TCHAR *string1, const TCHAR *string2, UINT32 Max )
 {
 	ERROR3IF(string1 == 0 || string2 == 0, "StringBase::SafeCat given 0 params");
 
-	// Are we going to overflow ?
-	if((lstrlen(string1) + lstrlen(string2)) > Max)
+	UINT32 len1 = camStrlen(string1);
+
+	ERROR3IF(len1 > Max, "First parameter to StringBase::SafeCat already larger than safe");
+
+	// No point trying if all space used up
+	if (len1 <= Max)
 	{
-		// Yeah, so we need to chop some of the second string off before concatenation
-		INT32 Required = (Max - lstrlen(string1)) - 1;
-		if(Required >= 1)
+		// Are we going to overflow ?
+		if ((len1 + camStrlen(string2)) > Max)
 		{
 			ERROR3("Call to StringBase::SafeCat will give truncated result");
-			cc_lstrcpyn( &(string1[lstrlen(string1)]), string2, Required);
-			string1[Max-1] = 0;
+
+			// Yeah, so we need to chop some of the second string off before concatenation
+			INT32 Required = Max - len1;
+			if (Required > 0)
+			{
+				camStrncpy( &(string1[len1]), string2, Required);
+				string1[Max] = 0;
+			}
 		}
-	}
-	else
-	{
-		// No, just do a normal strcat
-		lstrcat(string1, string2);
+		else
+		{
+			// No, just do a normal strcat
+			camStrcat(string1, string2);
+		}
 	}
 	
 	return string1;
@@ -545,11 +542,11 @@ const StringBase& StringBase::Left(StringBase* out, UINT32 count) const
 	{
 		if (count == 0)
 			*(out->text) = 0;
-		else if (count >= lstrlen(text))
-			lstrcpy(out->text, text);
+		else if (count >= camStrlen(text))
+			camStrcpy(out->text, text);
 		else
 		{
-			cc_lstrcpyn(out->text, text, (INT32)count);
+			camStrncpy(out->text, text, (INT32)count);
 			out->text[count] = 0;
 		}
 	}
@@ -583,13 +580,13 @@ const StringBase& StringBase::Mid(StringBase* out, UINT32 first, UINT32 count) c
 
 	if (text && out && out->text)
 	{	
-		UINT32 L = lstrlen(text);
+		UINT32 L = camStrlen(text);
 		if ((first + count) > L) count = L - first;
 		if (count <= 0)
 			*(out->text) = 0;
 		else
 		{
-			cc_lstrcpyn(out->text, text + first, (INT32)count);
+			camStrncpy(out->text, text + first, (INT32)count);
 			out->text[count] = 0;
 		}
 	}
@@ -622,14 +619,14 @@ const StringBase& StringBase::Right(StringBase* out, UINT32 count) const
 
 	if (text && out && out->text)
 	{    
-	    UINT32 L = lstrlen(text);
+	    UINT32 L = camStrlen(text);
 	    if (count == 0)
 	    	*(out->text) = 0;
 	    else if (count >= L)
-	    	lstrcpy(out->text, text);
+	    	camStrcpy(out->text, text);
 	    else
 	    {
-	    	cc_lstrcpyn(out->text, text + L - count, (INT32)count);
+	    	camStrncpy(out->text, text + L - count, (INT32)count);
 	    	out->text[count] = 0;
 	    }
 	}
@@ -741,7 +738,7 @@ INT32 StringBase::Sub(const StringBase& mask, UINT32 from, TCHAR fuzz) const
 	
 	if (text && mask.text)
 	{
-		if (from >= lstrlen(text) || lstrlen(mask.text) == 0)
+		if (from >= camStrlen(text) || camStrlen(mask.text) == 0)
 			return -1;
 
 		BOOL matched = FALSE;						// 2 state DFA
@@ -804,13 +801,13 @@ INT32 StringBase::SubWithoutCase(const StringBase& strToFind) const
 	{
 		//Is strToSearch from pcThisChar onwards the same
 		//as strToFind, doing a case insensitive comparision?
-		if (_tcsnicmp(pcThisChar, strToFind, _tcslen(strToFind))==0)
+		if (camStrnicmp(pcThisChar, strToFind, camStrlen(strToFind))==0)
 		{
 			//Yes. So return the index of the character we found
 			return iThisChar;
 		}
 
-		pcThisChar=_tcsinc(pcThisChar);
+		pcThisChar=camStrinc(pcThisChar);
 		iThisChar++;
 	}
 #else
@@ -955,7 +952,7 @@ void StringBase::SwapChar(const TCHAR schar, const TCHAR rchar)
 		{
 			if (*pThis == schar)
 				*pThis = rchar;
-			pThis = _tcsinc(pThis);
+			pThis = camStrinc(pThis);
 		}
 	}
 }
@@ -985,7 +982,7 @@ INT32 StringBase::CountChar(const TCHAR tchar)
 		{
 			if (*pThis == tchar)
 				Count ++;
-			pThis = _tcsinc(pThis);
+			pThis = camStrinc(pThis);
 		}
 	}
 	return Count;
@@ -1014,7 +1011,7 @@ void StringBase::MakePercent(INT32 Value)
 	{
 		String_32 Format(_R(IDS_PERCENT_LONG));
 		Format.FixFormat();
-		tsprintf( text, 32, (TCHAR *)Format, Value );
+		camSnprintf( text, 32, (TCHAR *)Format, Value );
 	}
 }
 
@@ -1036,13 +1033,14 @@ void StringBase::MakePercent(TCHAR *Value)
 		String_32 tmp(Value);
 		String_32 Format(_R(IDS_PERCENT_STRING));
 		Format.FixFormat();
-		tsprintf( text, 32, (TCHAR *)Format, tmp.text );
+		camSnprintf( text, 32, (TCHAR *)Format, tmp.text );
 	}
 }
 
 // Make formats into Unicode compatible variants
 void StringBase::FixFormat()
 {
+#if FALSE
 #if 0 != wxUSE_UNICODE
 	INT32 i=0;
 	while ((i+1)<Length()) // Don't look at the last character
@@ -1055,6 +1053,7 @@ void StringBase::FixFormat()
 		}
 		i++;
 	}
+#endif
 #endif
 }
 
@@ -1092,9 +1091,9 @@ INT32 SmartLoadString(UINT32 modID, UINT32 resID, LPTCHAR buf, INT32 size)
 	INT32 numchars = size/sizeof(TCHAR);
 	ERROR3IF(numchars < 2, "Buffer too small in SmartLoadString");
 
-	lstrcpyn( buf, CamResource::GetText(resID), numchars ); // NB GetText cannot fail
+	camStrncpy( buf, CamResource::GetText(resID), numchars ); // NB GetText cannot fail
 	buf[numchars-1]=0; // ensure zero terminated
-	return (lstrlen(buf)+1)*sizeof(TCHAR); // return number of bytes copied
+	return (camStrlen(buf)+1)*sizeof(TCHAR); // return number of bytes copied
 }
 
 #if 0
@@ -1584,7 +1583,7 @@ void StringBase::Serialize(CArchive& archive)
 	INT32 L;
 	if (archive.IsStoring())
 	{
-		L = lstrlen(text);
+		L = camStrlen(text);
 		archive.Write(&L, sizeof(L));
 		archive.Write(text, L * sizeof(TCHAR));
 	}
@@ -1633,7 +1632,7 @@ const TCHAR *cc_lstrstr(const TCHAR* String1, const TCHAR* String2)
 
 	if (String1 == 0 || String2 == 0) return 0;
 	if (!*String2) return String1;
-	return _tcsstr(String1, String2);
+	return camStrstr(String1, String2);
 
 //	TCHAR *cp = String1;
 //	TCHAR *s1;

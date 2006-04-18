@@ -2097,7 +2097,7 @@ INT32 SliceHelper::GetBarNumberFromBarName(const String_256 & BarName)
 {
 	PTSTR pszMark = NULL;
 	if (BarName.Length() > 3)
-		return tcstol( ((const TCHAR*)BarName) + 3, &pszMark, 10 ) - 1;
+		return camStrtol( ((const TCHAR*)BarName) + 3, &pszMark, 10 ) - 1;
 
 	return -1;
 }

@@ -468,14 +468,15 @@ void CamProfile::GetTimeString(TCHAR * pTime, UINT32 length)
 		time_t t = Secs;
 
 		// Don't use ctime_r as it isn't present on Windows
-		char * c = ctime(&t);
-		c[19]=0; // delete the year
 
-		// Now tsprintf this into the string. This turns it into UNICODE if appropriate
-		// Note %s for this call ALWAYS means a char *, even on a UNICODE build
-		tsprintf (pTime, length, _T("%s.%06d"), &c[11], uSecs);
+		//Ask wx for a string with the time
+		wxDateTime TheTime(t);
+		wxString sTime(TheTime.FormatISOTime());
+
+		// Now camSnprintf this into the string. This turns it into UNICODE if appropriate
+		camSnprintf (pTime, length, _T("%s.%06d"), sTime.c_str(), uSecs);
 	}
-	else lstrcpyn(pTime, _T("[UNAVAILABLE]"), length);
+	else camStrncpy(pTime, _T("[UNAVAILABLE]"), length);
 	pTime[length-1]=0; // ensure string terminated - string copy primatives do funny thing
 }
 

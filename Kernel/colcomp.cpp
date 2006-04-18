@@ -630,7 +630,7 @@ BOOL ColourListComponent::ImportSimpleColour(CXaraFileRecord* pCXFileRec)
 	String_64 ColName; //(TEXT("_"));
 	// Make the name unique by adding a text form of the record number 
 	TCHAR			   *pNewName = (TCHAR *)ColName;
-	tsprintf( pNewName, 64, _T("_%d"), ColourInfo.RecordNumber );
+	camSnprintf( pNewName, 64, _T("_%d"), ColourInfo.RecordNumber );
 
 	NewRGBT.Red = (double)((double)Red/256.0);	
 	NewRGBT.Green = (double)((double)Green/256.0);	
@@ -728,7 +728,7 @@ BOOL ColourListComponent::ImportColourDefinition(CXaraFileRecord* pCXFileRec)
 		// This is so that all the existing import code can be reused.
 		// Make the name unique by adding a text form of the record number 
 		TCHAR		   *pNewName = (TCHAR *)ColName;
-		tsprintf( pNewName, 64, _T("_%d"), ColourInfo.RecordNumber );
+		camSnprintf( pNewName, 64, _T("_%d"), ColourInfo.RecordNumber );
 	}
 TRACEUSER( "Neville", _T("ImportColourDefinition Name %s RecordNumber %d, EntryNumber %d\n"),(TCHAR*)ColName,ColourInfo.RecordNumber,EntryNumber);
 	
@@ -2418,17 +2418,17 @@ void ColourListComponent::AddComponentValue( PTSTR ColDef, PCTSTR Format,
 	// If this is a linked colour, and this component is inherited, then just add a '-'.
 	if (Inherited)
 	{
-		_tcscpy( CompVal, _T("-") );
+		camStrcpy( CompVal, _T("-") );
 	}
 	else
 	{
 		// We have to output the component....
-		tsprintf( CompVal, 20, const_cast<TCHAR *>(Format), ComponentValue );
+		camSnprintf( CompVal, 20, const_cast<TCHAR *>(Format), ComponentValue );
 	}
 
 	// Add the value onto the end of the string
-	_tcscat( ColDef, _T(" ") );
-	_tcscat( ColDef, CompVal );
+	camStrcat( ColDef, _T(" ") );
+	camStrcat( ColDef, CompVal );
 }
 
 
@@ -2553,7 +2553,7 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 
 	// Buffer to build up colour defs in.
 	TCHAR ColDef[256];
-	_tcscpy(ColDef, _T("%%+"));
+	camStrcpy(ColDef, _T("%%+"));
 
 	// Buffer for temporary strings
 	TCHAR TmpBuf[256];
@@ -2591,13 +2591,13 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		// Add tint identifier to colour definition
 		if (pCol->TintIsShade())
 		{
-			_tcscat(ColDef, _T("d"));		// Is a shaDe
+			camStrcat(ColDef, _T("d"));		// Is a shaDe
 			TintVal = pCol->GetShadeValueY();		// Note that it is written out as "Y X"
 			ShadeVal = pCol->GetShadeValueX();		// to make backward compatability easier
 		}
 		else
 		{
-			_tcscat(ColDef, _T("t"));		// Is a Tint
+			camStrcat(ColDef, _T("t"));		// Is a Tint
 			TintVal = pCol->GetTintValue();
 		}
 
@@ -2610,16 +2610,16 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (NestingLevel > 1)
 		{
 			// Write out the nesting level
-			tsprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
-			_tcscat(ColDef, TmpBuf);
+			camSnprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
+			camStrcat(ColDef, TmpBuf);
 		}
 
 		// Add the colour name and tint value
 		if (pCol->TintIsShade())
-			tsprintf(TmpBuf, 256, _T(" (%s) %d %d"), ColName, Tint, Shade);
+			camSnprintf(TmpBuf, 256, _T(" (%s) %d %d"), ColName, Tint, Shade);
 		else
-			tsprintf(TmpBuf, 256, _T(" (%s) %d"), ColName, Tint);
-			_tcscat(ColDef, TmpBuf);
+			camSnprintf(TmpBuf, 256, _T(" (%s) %d"), ColName, Tint);
+			camStrcat(ColDef, TmpBuf);
 	}
 	else
 	{
@@ -2633,35 +2633,35 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (Linked)
 		{
 			// Mark this as a linked colour
-			_tcscat(ColDef, _T("l"));
+			camStrcat(ColDef, _T("l"));
 		}
 		else if (CamelotEPS && (ColType == COLOURTYPE_SPOT))
 		{
 			// Mark this as a spot colour
-			_tcscat(ColDef, _T("s"));
+			camStrcat(ColDef, _T("s"));
 		}
 
 		// Save out colour model, nesting level and colour name
 		switch (Model)
 		{
 			case COLOURMODEL_RGBT:
-				_tcscat(ColDef, _T("r"));
+				camStrcat(ColDef, _T("r"));
 				break;
 
 			case COLOURMODEL_HSVT:
-				_tcscat(ColDef, _T("h"));
+				camStrcat(ColDef, _T("h"));
 				break;
 
 			case COLOURMODEL_CMYK:
-				_tcscat(ColDef, _T("c"));
+				camStrcat(ColDef, _T("c"));
 				break;
 
 			case COLOURMODEL_GREYT:
 				// Special case - only Camelot can handle greyscales - ArtWorks can't.
 				if (CamelotEPS)
-					_tcscat(ColDef, _T("g"));
+					camStrcat(ColDef, _T("g"));
 				else
-					_tcscat(ColDef, _T("r"));
+					camStrcat(ColDef, _T("r"));
 				break;
 
 			default:
@@ -2672,14 +2672,14 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 		if (NestingLevel > 1)
 		{
 			// Write out the nesting level
-			tsprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
-			_tcscat(ColDef, TmpBuf);
+			camSnprintf(TmpBuf, 256, _T(" %d"), NestingLevel);
+			camStrcat(ColDef, TmpBuf);
 		}
 
 		// Add colour name
-		_tcscat(ColDef , _T(" ("));
-		_tcscat(ColDef, ColName);
-		_tcscat(ColDef, _T(")"));
+		camStrcat(ColDef , _T(" ("));
+		camStrcat(ColDef, ColName);
+		camStrcat(ColDef, _T(")"));
 
 		// Now write out the colour component values...
 		switch (Model)
@@ -2842,23 +2842,23 @@ ProcessEPSResult ColourListComponent::ProcessEPSComment(EPSFilter *pFilter,
 		BOOL CamelotEPS = pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSFilter));
 
 		// ArtWorks EPS (or derivative)
-		if (_tcsncmp(pComment, "%%AWColourTable", 15) == 0)
+		if (camStrncmp(pComment, "%%AWColourTable", 15) == 0)
 		{
 			// Found a colour table
 			return EPSCommentOK;
 		}
-		else if (_tcsncmp(pComment, "%%JWColourTable", 15) == 0)
+		else if (camStrncmp(pComment, "%%JWColourTable", 15) == 0)
 		{
 			// Found a version 1.1 extended colour table
 			return EPSCommentOK;			
 		}
-		else if (_tcsncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, "%%+", 3) == 0)
 		{
 			// Found a colour - add it to the colour list for the document.
 
 			// Take a copy of this comment
 			char Comment[256];
-			_tcscpy(Comment, pComment);
+			camStrcpy(Comment, pComment);
 
 			// Find out the colour model (c, h, r, or t)
 			INT32 i = 3;
@@ -3088,13 +3088,13 @@ INT32 ColourListComponent::ExtractString( PCTSTR Comment, INT32 Start, PTSTR Str
 //	INT32 StringNesting = 1;
 	
 	// Look for the last closing Parenthesis in this string...
-	const TCHAR		   *End = _tcsrchr(Comment, ')');
+	const TCHAR		   *End = camStrrchr(Comment, ')');
 
 	if ((End == NULL) || (End < (Comment + Start)))
 	{
 		// Something's gone wrong - don't extract string and put a warning where the colour name
 		// should be.
-		_tcscpy( String, _T("Colour Import Error") );
+		camStrcpy( String, _T("Colour Import Error") );
 		return Start;
 	}
 
@@ -3103,7 +3103,7 @@ INT32 ColourListComponent::ExtractString( PCTSTR Comment, INT32 Start, PTSTR Str
 	INT32 NameLength = End - Comment;
 	NameLength -= Start;
 
-	_tcsncpy( String, Comment + Start, NameLength );
+	camStrncpy( String, Comment + Start, NameLength );
 	String[NameLength] = 0;
 
 	// Return the next character position after the string's closing parenthesis.
@@ -3139,31 +3139,31 @@ void ColourListComponent::ReadEPS_RGB( ColourRGBT *pCol, PTSTR pComment,
 	BOOL Linked = (pColourInfo != NULL) && (pColourInfo->Type == COLOURTYPE_LINKED);
 
 	PTSTR pszTokMark = NULL ;
-	PTSTR Value = tcstok(pComment, _T(" \t"), &pszTokMark);
+	PTSTR Value = camStrtok(pComment, _T(" \t"), &pszTokMark);
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, _T("-") ) == 0))
+		if (Linked && (camStrcmp(Value, _T("-") ) == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
-			pCol->Red = tcstof( Value, &pszTokMark );
+			pCol->Red = camStrtof( Value, &pszTokMark );
 	}
 
-	Value = tcstok( NULL, _T(" \t"), &pszTokMark );
+	Value = camStrtok( NULL, _T(" \t"), &pszTokMark );
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, _T("-") ) == 0))
+		if (Linked && (camStrcmp(Value, _T("-") ) == 0))
 			pColourInfo->Inherits[1] = TRUE;
 		else
-			pCol->Green = tcstof( Value, &pszTokMark );
+			pCol->Green = camStrtof( Value, &pszTokMark );
 	}
 
-	Value = tcstok( NULL, _T(" \t"), &pszTokMark );
+	Value = camStrtok( NULL, _T(" \t"), &pszTokMark );
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, _T("-") ) == 0))
+		if (Linked && (camStrcmp(Value, _T("-") ) == 0))
 			pColourInfo->Inherits[2] = TRUE;
 		else
-			pCol->Blue = tcstof( Value, &pszTokMark );
+			pCol->Blue = camStrtof( Value, &pszTokMark );
 	}
 
 	// No transparency
@@ -3199,7 +3199,7 @@ void ColourListComponent::ReadEPS_CMYK(ColourCMYK *pCol, PTSTR pComment,
 	char *Value = _tcstok(pComment, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
 			pCol->Cyan = atof(Value);
@@ -3208,7 +3208,7 @@ void ColourListComponent::ReadEPS_CMYK(ColourCMYK *pCol, PTSTR pComment,
 	Value = _tcstok(NULL, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[1] = TRUE;
 		else
 			pCol->Magenta = atof(Value);
@@ -3226,7 +3226,7 @@ void ColourListComponent::ReadEPS_CMYK(ColourCMYK *pCol, PTSTR pComment,
 	Value = _tcstok(NULL, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[3] = TRUE;
 		else
 			pCol->Key = atof(Value);
@@ -3263,7 +3263,7 @@ void ColourListComponent::ReadEPS_HSV(ColourHSVT *pCol, PTSTR pComment,
 	char *Value = _tcstok(pComment, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
 			pCol->Hue = atof(Value) / 360.0;
@@ -3272,7 +3272,7 @@ void ColourListComponent::ReadEPS_HSV(ColourHSVT *pCol, PTSTR pComment,
 	Value = _tcstok(NULL, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[1] = TRUE;
 		else
 			pCol->Saturation = atof(Value) / 100.0;
@@ -3281,7 +3281,7 @@ void ColourListComponent::ReadEPS_HSV(ColourHSVT *pCol, PTSTR pComment,
 	Value = _tcstok(NULL, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[2] = TRUE;
 		else
 			pCol->Value = atof(Value) / 100.0;
@@ -3321,7 +3321,7 @@ void ColourListComponent::ReadEPS_Grey(ColourGreyT *pCol, PTSTR pComment,
 	char *Value = _tcstok(pComment, " \t");
 	if (Value != NULL)
 	{
-		if (Linked && (_tcscmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, "-") == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
 			pCol->Intensity = atof(Value);
@@ -3356,12 +3356,12 @@ void ColourListComponent::ReadEPS_Grey(ColourGreyT *pCol, PTSTR pComment,
 UINT32 ColourListComponent::ReadEPS_Tint( PTSTR pComment )
 {
 	PTSTR pszTokMark = NULL;
-	PTSTR Value = tcstok( pComment, _T(" \t"), &pszTokMark );
+	PTSTR Value = camStrtok( pComment, _T(" \t"), &pszTokMark );
 	INT32 Tint = 0;
 	if (Value != NULL)
 	{
 		// Get the tint value
-		Tint = tcstol( Value, &pszTokMark, 10 );
+		Tint = camStrtol( Value, &pszTokMark, 10 );
 		if (Tint < 0)
 			Tint = 0;
 	}
@@ -3397,17 +3397,17 @@ UINT32 ColourListComponent::ReadEPS_Tint( PTSTR pComment )
 void ColourListComponent::ReadEPS_Shade( PTSTR pComment, INT32 *ResultX, INT32 *ResultY)
 {
 	PTSTR pszTokMark = NULL;
-	PTSTR Value = tcstok( pComment, _T(" \t"), &pszTokMark );
+	PTSTR Value = camStrtok( pComment, _T(" \t"), &pszTokMark );
 	INT32  Val = 0;
 	if( Value != NULL )
-		Val = tcstol( Value, &pszTokMark, 10 );
+		Val = camStrtol( Value, &pszTokMark, 10 );
 
 	*ResultY = (INT32)Val;
 
-	Value = tcstok( NULL, _T(" \t"), &pszTokMark );
+	Value = camStrtok( NULL, _T(" \t"), &pszTokMark );
 	if (Value != NULL)
 	{
-		Val = tcstol( Value, &pszTokMark, 10 );
+		Val = camStrtol( Value, &pszTokMark, 10 );
 
 TRACEUSER( "Jason", _T("Load new shade %ld %ld\n"), Val, (INT32)*ResultY);
 	}
@@ -3495,8 +3495,7 @@ IndexedColour *ColourListComponent::FindNamedColour( PCTSTR pName,
 													BOOL Strict)
 {
 	// Sanity check
-	ENSURE(pNewColours != NULL, "Someone asked for an imported colour when there is no"
-							   "import going on!");
+	ENSURE(pNewColours != NULL, "Someone asked for an imported colour when there is no import going on!");
 
 	if (pNewColours == NULL)
 		return NULL;
@@ -3518,7 +3517,7 @@ IndexedColour *ColourListComponent::FindNamedColour( PCTSTR pName,
 		}
 
 		TCHAR		   *pNewName = (TCHAR *)NewName;
-		tsprintf( pNewName + Len, 64 - Len, _T(" (%d%% tint)"), Tint );
+		camSnprintf( pNewName + Len, 64 - Len, _T(" (%d%% tint)"), Tint );
 
 		// Ok - we have a name - recurse so we can get a new colour (or use an existing
 		// one created by this bit of code).

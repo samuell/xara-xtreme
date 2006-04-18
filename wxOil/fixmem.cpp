@@ -320,13 +320,13 @@ void DumpCCMallocTrace(void)
 
 		while (Ptr != NULL)
 		{
-// we have to be careful here. %s in a trace statement means a WIDE string, but we have a char *
-#if wxUSE_UNICODE
-			wxString File(Ptr->Filename, wxConvUTF8);
-			TRACE( _T("%ld bytes allocated in %s at line %ld\n"),Ptr->Size, File.c_str(), Ptr->LineNum);
+#if 0 != wxUSE_UNICODE
+			TCHAR pFilename[22];
+			camMbstowcs(pFilename, Ptr->Filename, 22);
 #else
-			TRACE( _T("%ld bytes allocated in %s at line %ld\n"),Ptr->Size, Ptr->Filename, Ptr->LineNum);
+			TCHAR* pFilename = Ptr->Filename;
 #endif
+			TRACE( _T("%ld bytes allocated in %s at line %ld\n"),Ptr->Size, pFilename, Ptr->LineNum);
 			Ptr = Ptr->Next;
 		}
 

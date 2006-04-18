@@ -1045,7 +1045,7 @@ INT32 Library::ReadHeaderInfo(CCLexFile *pSubIndex)
 			if(TT == TOKEN_COMMENT)
 			{
 				// Optional header extras - Must have their name followed by a ':' then the item
-				if(_tcschr((TCHAR *) pSubIndex->GetTokenBuf(), _T(':')))
+				if(camStrchr((TCHAR *) pSubIndex->GetTokenBuf(), _T(':')))
 				{
 					// We assume these lines aren't going to be bigger than 256 chars
 					String_256 TokenBufU(pSubIndex->GetTokenBuf());
@@ -1164,7 +1164,7 @@ INT32 Library::ReadHeaderInfo(CCLexFile *pSubIndex)
 			default:
 
 				// Optional header extras - Must have their name followed by a ':' then the item
-				if(_tcschr((TCHAR *) pSubIndex->GetTokenBuf(), _T(':')))
+				if(camStrchr((TCHAR *) pSubIndex->GetTokenBuf(), _T(':')))
 				{
 					// We assume these lines aren't going to be bigger than 256 chars
 					String_256 TokenBufU(pSubIndex->GetTokenBuf());
@@ -1212,7 +1212,7 @@ INT32 Library::ReadHeaderInfo(CCLexFile *pSubIndex)
 
 				// No further header entries, anything following the start line is a proper
 				// line of library text...
-				if(!lstrcmp((TCHAR *) pSubIndex->GetTokenBuf(), (TCHAR *)(String_16(_R(IDS_LIBRARIES_INDEX_START)))))
+				if(!camStrcmp((TCHAR *) pSubIndex->GetTokenBuf(), (TCHAR *)(String_16(_R(IDS_LIBRARIES_INDEX_START)))))
 				{
 					// Read until end of line
 					do {
@@ -1746,7 +1746,7 @@ BOOL Library::GetTitle(LibraryIndex Offset, TCHAR **Title)
 //	BOOL ok = GetSingleField(Offset, 4, Title);
 
 	// NULL titles are invalid - default to something else - probably filename
-	if(lstrlen(*Title)  == 0)
+	if(camStrlen(*Title)  == 0)
 		ok = FALSE;
 
 	return ok;
@@ -1858,11 +1858,11 @@ BOOL Library::LocalPath2URL(String_256* pLocalPath)
 	strWebFilesDir += _T("\\");
 	strLocalPath.toLower();
 	strWebFilesDir.toLower();
-	strURL += _tcsstr((TCHAR*) strLocalPath, (TCHAR*) strWebFilesDir + String_256(_R(IDS_CACHEPATH)).Length());
+	strURL += camStrstr((TCHAR*) strLocalPath, (TCHAR*) strWebFilesDir + String_256(_R(IDS_CACHEPATH)).Length());
 	strURL.toLower();
 	// Convert backslashes to normal (UNIX) ones
 	TCHAR* pBackSlash = NULL;
-	while (pBackSlash = _tcschr((TCHAR*) strURL, _T('\\')))
+	while (pBackSlash = camStrchr((TCHAR*) strURL, _T('\\')))
 			*pBackSlash = _T('/');
 	// Check if the URL is valid
 	WCHAR  wchURL[INTERNET_MAX_PATH_LENGTH];
@@ -2587,7 +2587,7 @@ BOOL Library::CachePut(LibraryIndex Offset, UINT32 Count, StringBase *Field)
 		}
 		else
 		{
-		 	lstrcpy(OurEntry.Field, (TCHAR *)*Field);
+		 	camStrcpy(OurEntry.Field, (TCHAR *)*Field);
 		}
 	
 		SGFieldCache *plc = &FieldCache[CacheHashFunction(Offset, Count)];
@@ -2717,7 +2717,7 @@ BOOL Library::SaveIndexInDisplayedOrder(PathName *IndexPathName, BOOL NewIDs)
 
 			TCHAR FieldStringBuffer[256];
 			TCHAR *FieldStringDone = (TCHAR *)FieldStringBuffer;
-			lstrcpy(FieldStringDone, (TCHAR *)FieldString);
+			camStrcpy(FieldStringDone, (TCHAR *)FieldString);
 
 			BOOL MoreFields = TRUE;
 
@@ -2726,7 +2726,7 @@ BOOL Library::SaveIndexInDisplayedOrder(PathName *IndexPathName, BOOL NewIDs)
 			{			
 				// find next comma in FieldStringDone and replace it with a 0
 				// If there are none then we assume that the end has come...
-				TCHAR *Comma = _tcschr(FieldStringDone, _T(','));
+				TCHAR *Comma = camStrchr(FieldStringDone, _T(','));
 				if(Comma != NULL)
 					*Comma = 0;
 				else
@@ -2753,7 +2753,7 @@ BOOL Library::SaveIndexInDisplayedOrder(PathName *IndexPathName, BOOL NewIDs)
 				if(Comma != NULL)
 				{
 					IndexPath->write((TCHAR *)",", sizeof(TCHAR) * 1);
-					FieldStringDone += ((lstrlen(FieldStringDone)+1) * sizeof(TCHAR));
+					FieldStringDone += ((camStrlen(FieldStringDone)+1) * sizeof(TCHAR));
 				}
 				else
 					IndexPath->write((TCHAR *)"\r\n", sizeof(TCHAR) * 2);		

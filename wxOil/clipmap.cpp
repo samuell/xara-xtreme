@@ -2658,13 +2658,13 @@ BOOL QuarkPictureClipMap::HandleImport(SelOperation *Caller,
 			fclose(fp);
 		}
 
-		if (_tcsncmp(buff->ID, "XPR3", 4))
+		if (camStrncmp(buff->ID, "XPR3", 4))
 		{
 			ERROR3("Not a Quark XPress 3 clipboard thingo");
 			goto Abort;
 		}
 
-		if (_tcsncmp(buff->Type, "EPSF", 4))
+		if (camStrncmp(buff->Type, "EPSF", 4))
 		{
 			ERROR3("Doesn't appear to be EPSF");
 			goto Abort;

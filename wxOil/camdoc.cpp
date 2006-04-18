@@ -2163,7 +2163,7 @@ String_256 CCamDoc::GetKernelPathName(UINT32 MaxSize)
 	{
 		// Extract the abbreviated path from the full path as held by MFC.
 		TCHAR			buf[512];
-		lstrcpy( buf, name );
+		camStrcpy( buf, name );
 PORTNOTE("other","Removed AbbreviateName usage")
 #ifndef EXCLUDE_FROM_XARALX
 		AbbreviateName( buf, (INT32)MaxSize, TRUE );

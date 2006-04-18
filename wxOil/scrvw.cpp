@@ -1663,7 +1663,7 @@ PORTNOTE("print","Removed Printing from OnDraw")
 			upd ++ ;
 		}
 
-//#pragma message( __LOCMSG__ _T("ScreenView::OnDraw - Forcing redraw") )
+//#pragma message( __LOCMSG__ "ScreenView::OnDraw - Forcing redraw" )
 //TRACE( _T("ScreenView::OnDraw - Forcing redraw") );
 //		Camelot.GetRegionList()->ImmediateRender(true);
 

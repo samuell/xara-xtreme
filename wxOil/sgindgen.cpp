@@ -139,7 +139,7 @@ DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(GenerateIndexFile, CCObject)
 CC_IMPLEMENT_DYNCREATE(IndGenFileBuffer, CCObject)
 
-#pragma message( __LOCMSG__ _T("sgindgen.cpp STRIPPED") )
+#pragma message( __LOCMSG__ "sgindgen.cpp STRIPPED" )
 #if 0
 
 #define new CAM_DEBUG_NEW
@@ -380,7 +380,7 @@ BOOL GenerateIndexFile::CheckForRemote(PathName *FilesDirectory, String_256 *Rem
 			//}
 		}
 
-		_tcscpy((TCHAR *)*RemoteDirectory, OSTMP);
+		camStrcpy((TCHAR *)*RemoteDirectory, OSTMP);
 	}
 
 	String_256 TmpDir(FilesDirectory->GetFileName(FALSE));
@@ -1066,10 +1066,10 @@ BOOL IndGenFileBuffer::AddItem(TCHAR *String)
 
 	BOOL ok = FALSE;
 
-	Buffer[Position] = (TCHAR *)CCMalloc((cc_strlenBytes(String) + 1) * sizeof(TCHAR));
+	Buffer[Position] = (TCHAR *)CCMalloc((camStrlen(String) + 1) * sizeof(TCHAR));
 	if(Buffer[Position] != NULL)
 	{
-		_tcscpy(Buffer[Position], String);
+		camStrcpy(Buffer[Position], String);
 		ok = TRUE;
 	}
 
@@ -1226,7 +1226,7 @@ BOOL GenerateIndexFile::AddFile(PathName *FileName)
 	FName.toLower();
 
 	// And capitalise the first character
-	TCHAR First = _totupper(((TCHAR *)FName)[0]);
+	TCHAR First = camToupper(((TCHAR *)FName)[0]);
 	((TCHAR *)FName)[0] = First;
 
 	// Default description - lowercase filename without file extension
@@ -1237,7 +1237,7 @@ BOOL GenerateIndexFile::AddFile(PathName *FileName)
 	Description.toLower();
 
 	// And capitalise the first character
-	First = _totupper(((TCHAR *)Description)[0]);
+	First = camToupper(((TCHAR *)Description)[0]);
 	((TCHAR *)Description)[0] = First;
 #endif
 
@@ -1732,7 +1732,7 @@ BOOL GenerateIndexFile::RipTrueTypeNameFromFile(PathName *FileName, String_256 *
 			}
 
 			// name
-			if(!(_tcscmp(tag,"name"))) {
+			if(!(camStrcmp(tag,"name"))) {
 				NameOffset = Noffset;
 			} 
 			
@@ -1797,7 +1797,7 @@ BOOL GenerateIndexFile::RipTrueTypeNameFromFile(PathName *FileName, String_256 *
 						_fgetts(Name, family_strlen+1, file);
 						found = TRUE;
 
-						_tcscpy((TCHAR *)*RetName, Name);
+						camStrcpy((TCHAR *)*RetName, Name);
 				
 						TRACEUSER( "Richard", _T("Font name = %s\n"), Name);
 						TRACEUSER( "Richard", _T("PlatID %d, SpecID %d, LangID %d\n"), PlatformID, PlatformSpecID, LangID);
@@ -1903,7 +1903,7 @@ BOOL GenerateIndexFile::RipATMNameFromFile(PathName *FileName, String_256 *RetNa
 			{
 				PFMFile.read((void *)Buffer, 11);
 
-				if(!_tcscmp(((TCHAR *)Buffer) , "PostScript"))	// Debug
+				if(!camStrcmp(((TCHAR *)Buffer) , "PostScript"))	// Debug
 				{
 //					ERROR3("Found postscript");
 					FoundPostScript = TRUE;
@@ -2297,7 +2297,7 @@ BOOL GenerateIndexFile::CreateThumbnail(PathName *InFile, PathName *OutFile, UIN
 	BITMAPINFOHEADER *header = (BITMAPINFOHEADER *)Fish;
 	
 	char FileWithPath[256];
-	_tcscpy(FileWithPath, (const TCHAR *)InFile->GetPath());
+	camStrcpy(FileWithPath, (const TCHAR *)InFile->GetPath());
 	
 	INT32 z = AccusoftFilters::pfnIMGLOW_get_fileinfo(FileWithPath, header);
 	if(z<0)
@@ -2374,7 +2374,7 @@ BOOL GenerateIndexFile::CreateThumbnail(PathName *InFile, PathName *OutFile, UIN
 			} else {	
 		
 				TCHAR OutFileAndPath[256];
-				_tcscpy(OutFileAndPath, (const TCHAR *)OutFile->GetPath());
+				camStrcpy(OutFileAndPath, (const TCHAR *)OutFile->GetPath());
 
 				// Save the newly decompressed / scaled bitmap
 				INT32 Problem = AccusoftFilters::pfnIMG_save_bitmap(imghandle, OutFileAndPath, BMP_UNCOMPRESSED);
@@ -2809,7 +2809,7 @@ BOOL GenerateIndexFile::RipDescriptionFromCDRFile(PathName *FileName, String_256
 				CDRFile.read((void *)Buffer, 8);
 
 				// Debug
-				if(!_tcscmp(((TCHAR *)Buffer) , "INFOIKEY"))
+				if(!camStrcmp(((TCHAR *)Buffer) , "INFOIKEY"))
 				{
 					FoundInfoIKey = TRUE;
 					
@@ -3443,13 +3443,13 @@ BOOL GenerateIndexFile::GetToken(StringBase *Source, INT32 Count, String_256 *Re
 	}
 	else
 	{
-		Comma = _tcschr((TCHAR *)*Source, _T(','));
+		Comma = camStrchr((TCHAR *)*Source, _T(','));
 
 		if(Count > 2)
 		{
 			for(INT32 i = Count - 1; i > 0; i--)
 			{
-				Comma = _tcschr(Comma + 1, _T(','));
+				Comma = camStrchr(Comma + 1, _T(','));
 				
 				// Couldn't find token in string - not enough commas
 				if(Comma == NULL)
@@ -3460,10 +3460,10 @@ BOOL GenerateIndexFile::GetToken(StringBase *Source, INT32 Count, String_256 *Re
 
 	INT32 first = (Comma - (TCHAR *)*Source) + 1;	
 	INT32 second = 0;
-	if(_tcschr(Comma + 1, _T(',')))
-		second = (_tcschr(Comma + 1, _T(',')) - (TCHAR *)*Source);
+	if(camStrchr(Comma + 1, _T(',')))
+		second = (camStrchr(Comma + 1, _T(',')) - (TCHAR *)*Source);
 	else
-		second = cc_strlenBytes((TCHAR *)*Source);
+		second = camStrlen((TCHAR *)*Source);
 
 	// strip leading spaces
 	while ( (((TCHAR *)*Source)[first] == ' ') && (first < Source->Length()))
@@ -3785,7 +3785,7 @@ BOOL GenerateIndexFile::RipDescriptionFromIndex(PathName *IndexFile, PathName *F
 			Title->toLower();
 
 			// And capitalise the first character
-			TCHAR First = _totupper(((TCHAR *)*Title)[0]);
+			TCHAR First = camToupper(((TCHAR *)*Title)[0]);
 			((TCHAR *)*Title)[0] = First;
 		}
 	}

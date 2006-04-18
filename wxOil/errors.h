@@ -811,7 +811,7 @@ UINT32 Error::GetErrorModule()
 #endif // __GNUG__
 #define PORTNOTETRACE(section, text) \
 PORTNOTE(section,text) \
-TRACE(_T("PORTNOTE[" section "]: " text))
+TRACE(_T("PORTNOTE[") _T(section) _T("]: ") _T(text))
 #else //_DEBUG, SHOWPORTNOTE
 #define PORTNOTE(section, text)
 #define PORTNOTETRACE(section,text)

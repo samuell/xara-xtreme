@@ -6230,7 +6230,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 							{
 								if (Mode == FRACTALFILL)
 								{
-									tsprintf(Str, 31, _T("%.1f"), Grain);
+									camSnprintf(Str, 31, _T("%.1f"), Grain);
 								}
 							}
 						}
@@ -6318,7 +6318,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 								{
 									if (Mode == FRACTALFILL)
 									{
-										tsprintf(Str, 31, _T("%.1f"), val);
+										camSnprintf(Str, 31, _T("%.1f"), val);
 									}
 								}
 							}
@@ -7976,7 +7976,7 @@ void TranspInfoBarOp::ShowCommonBitmapDpi()
 	else if (dpi > 0)
 	{
 		String_256 jcf(_R(IDS_FILLTOOL_DPI_FORMAT));
-		tsprintf(Str, 15, jcf, (INT32) dpi);
+		camSnprintf(Str, 15, jcf, (INT32) dpi);
 		DpiStr = Str;
 	}
 
@@ -8124,7 +8124,7 @@ void TranspInfoBarOp::ShowCommonFractalGrain()
 		GrainStr.Load(_R(IDS_FILLTOOL_MANYGRAIN));
 	if (Grain > 0)
 	{
-		tsprintf(Str, 15, _T("%.1f"), Grain);
+		camSnprintf(Str, 15, _T("%.1f"), Grain);
 		GrainStr = Str;
 	}
 
@@ -8134,7 +8134,7 @@ void TranspInfoBarOp::ShowCommonFractalGrain()
 	SetLongGadgetValue(_R(IDC_TRANSPSLIDE), GrainPos);
 
 	// Build the Percentage string and set it
-	tsprintf(Str, 15, _T("%.1f"), Grain);
+	camSnprintf(Str, 15, _T("%.1f"), Grain);
 	String_8 PercentStr(Str);
 	SetGadgetString(_R(IDC_SELCOLOUR), &PercentStr);
 }
@@ -8223,7 +8223,7 @@ void TranspInfoBarOp::ShowCommonNoiseScale()
 	}
 	if (Scale > 0)
 	{	
-		tsprintf(Str, 15, _T("%.1f"), Scale);
+		camSnprintf(Str, 15, _T("%.1f"), Scale);
 		ScaleStr = Str;
 		convert = TRUE;
 	}
@@ -8249,7 +8249,7 @@ void TranspInfoBarOp::ShowCommonNoiseScale()
 	else
 	{
 	
-		tsprintf(Str, 15, _T("%.1f"), Scale);
+		camSnprintf(Str, 15, _T("%.1f"), Scale);
 		String_8 PercentStr(Str);
 		SetGadgetString(_R(IDC_SELCOLOUR), &PercentStr);
 	}

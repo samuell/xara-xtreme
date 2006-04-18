@@ -1471,7 +1471,7 @@ PORTNOTE("other", "Removed DreamWeaver DesignNote code" )
 
 void OpMenuExport::CreateNamedSet(Filter* pFilter, const PathName& pthTarget)
 {
-PORTNOTETRACE("other", _T("CreateNamedSet - Do nothing - Use NgScan") );
+PORTNOTETRACE("other", "CreateNamedSet - Do nothing - Use NgScan");
 #if !defined(EXCLUDE_FROM_XARALX)
 	// Try to create a named set for them based on the filename chosen.
 	String_256 strName(pthTarget.GetFileName(FALSE));

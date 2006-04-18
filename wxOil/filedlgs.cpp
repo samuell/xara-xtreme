@@ -610,7 +610,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 		{
 			// Add the space required to put this into the filter string
 			// (add 1 for the separating '|' character)
-			FilterSize += ( _tcslen( pFilter->pOILFilter->ConstructFilterString( BitmapCount ) ) + 1 ) * sizeof(TCHAR);
+			FilterSize += camStrlen(pFilter->pOILFilter->ConstructFilterString(BitmapCount)) + 1;
 		}
 
 		// Try the next filter
@@ -630,7 +630,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 	FilterSize += 2;
 
 	// Try to get this string
-	TCHAR *FilterString = (TCHAR *) CCMalloc(FilterSize);
+	TCHAR *FilterString = (TCHAR *) CCMalloc(FilterSize * sizeof(TCHAR));
 	if (FilterString==NULL)
 	{
 		// Error state already set by CCMalloc
@@ -691,8 +691,8 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 			   )
 			{
 				// Add this filter into the list
-				_tcscat(FilterString, pFilter->pOILFilter->ConstructFilterString(BitmapCount));
-				_tcscat(FilterString, _T("|"));
+				camStrcat(FilterString, pFilter->pOILFilter->ConstructFilterString(BitmapCount));
+				camStrcat(FilterString, _T("|"));
 				pFilter->pOILFilter->Position = Position;
 
 				// Is this the filter we used last?
@@ -712,7 +712,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 	}
 
 	// Terminate the string
-	_tcscat(FilterString, _T("|") );
+	camStrcat(FilterString, _T("|"));
 
 	// All ok
 	return FilterString;
@@ -990,7 +990,7 @@ BOOL BaseFileDialog::IsValidFilename()
 
 	// fill in the %s field with the filename
 	TCHAR ErrorMsg[256];
-	tsprintf( ErrorMsg, sizeof(ErrorMsg) / sizeof(ErrorMsg[0]), strPrompt, 
+	camSnprintf( ErrorMsg, sizeof(ErrorMsg) / sizeof(ErrorMsg[0]), strPrompt, 
 		(const TCHAR*)Name );
 	Error::SetError( 0, ErrorMsg, 0 );
 	SetNextMsgHelpContext(_R(IDM_OVERWRITE));
@@ -1895,7 +1895,7 @@ INT32 BaseFileDialog::DoModal()
 	
 	// zero out the file buffer for consistent parsing later
 	ASSERT(AfxIsValidAddress(m_ofn.lpstrFile, m_ofn.nMaxFile));
-	DWORD nOffset = lstrlen(m_ofn.lpstrFile)+1;
+	DWORD nOffset = camStrlen(m_ofn.lpstrFile)+1;
 	ASSERT(nOffset <= m_ofn.nMaxFile);
 	memset(m_ofn.lpstrFile+nOffset, 0, (m_ofn.nMaxFile-nOffset)*sizeof(TCHAR));
 
@@ -2481,7 +2481,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 		{
 			// Add the space required to put this into the filter string
 			// (add 1 for the separating '|' character)
-			FilterSize += cc_strlenBytes(pFilter->pOILFilter->ConstructFilterString()) + 1;
+			FilterSize += camStrlen(pFilter->pOILFilter->ConstructFilterString()) + 1;
 		}
 
 		// Try the next filter
@@ -2514,8 +2514,8 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 #endif
 		{
 			// Add this filter into the list
-			_tcscat(FilterString, pFilter->pOILFilter->ConstructFilterString());
-			_tcscat(FilterString, _T("|") );
+			camStrcat(FilterString, pFilter->pOILFilter->ConstructFilterString());
+			camStrcat(FilterString, _T("|"));
 			pFilter->pOILFilter->Position = Position;
 
 			// see if it is the native filter
@@ -2541,7 +2541,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 	}
 
 	// Terminate the string
-	_tcscat(FilterString, _T("|"));
+	camStrcat(FilterString, _T("|"));
 
 	// All ok
 	return FilterString;
@@ -2804,7 +2804,7 @@ BOOL SaveFileDialog::PrepareDialog()
 			{
 				CopyLength = TITLE_SIZE - 1;
 			}
-			_tcsncpy( Title, (const TCHAR*)(DialogTitle), CopyLength);
+			camStrncpy( Title, (const TCHAR*)(DialogTitle), CopyLength);
 			Title[CopyLength] = TEXT('\0');
 		
 			// Change the dialogs data structure to use the new title string
@@ -4026,7 +4026,7 @@ GIFExportFileDialog::GIFExportFileDialog(LPCTSTR lpszFilter):ExportFileDialog(lp
 
 BOOL GIFExportFileDialog::HandleOptions()
 {
-PORTNOTETRACE("other", _T("GIFExportFileDialog::HandleOptions - Do nothing - Use NgScan") );
+PORTNOTETRACE("other", "GIFExportFileDialog::HandleOptions - Do nothing - Use NgScan" );
 #if !defined(EXCLUDE_FROM_XARALX)
 	// Get a ptr to the correct op. 
 	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_EXPORTGIFANIMTABSDLG);

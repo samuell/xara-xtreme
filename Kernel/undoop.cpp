@@ -1302,7 +1302,7 @@ BOOL UndoableOperation::DoTransformNodes(Range NodeRange,
 			else
 			{
 				TRACE( _T("Warning: UndoableOperation::DoTransformNodes: ")
-					  "Current node %s is not a NodeRenderableInk\n",
+					  _T("Current node %s is not a NodeRenderableInk\n"),
 						(LPCTSTR) Current->Name());
 			}
 		#endif
@@ -1352,7 +1352,7 @@ BOOL UndoableOperation::DoTransformNodes(Range NodeRange,
 			else
 			{
 				TRACE( _T("Warning: UndoableOperation::DoTransformNodes: ")
-					  "Current node %s is not a NodeRenderableInk\n",
+					  _T("Current node %s is not a NodeRenderableInk\n"),
 						(LPCTSTR) Current->Name());
 			}
 		#endif
@@ -3815,7 +3815,7 @@ BOOL UndoableOperation::RegisterOpDescriptor(
 									 UINT32 AutoStateFlags)
 {
 	// tok is going into a string which turns out to be a string 32, so do a sanity check (Neville 26/6/97)
-	size_t				len = cc_strlenCharacters(tok); //_tcslen
+	size_t len = camStrclen(tok);
 	ERROR2IF(len > 32,FALSE,"UndoableOperation::RegisterOpDescriptor token buffer overflow!");
 
 	// Try to create the OpDescriptor

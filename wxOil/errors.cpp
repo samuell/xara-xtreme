@@ -223,7 +223,7 @@ HRESULT Error::GetRalphError()
 		if(!ErrStr.IsEmpty())
 		{
 #if defined(_DEBUG) && defined(__WXMSW__)
-			MessageBox(NULL,ErrStr,"Error",MB_OK);
+			MessageBox(NULL,ErrStr,_T("Error"),MB_OK);
 #endif
 			// make sure we clear ERROR2's 'cause we report them now
 			Error::ClearError();
@@ -672,7 +672,7 @@ void Error::SetError(UINT32 number, const TCHAR* errstring, UINT32 module)
 		ErrStatus = ERRORSTAT_TEXT;
 		ErrorHasBeenReported=FALSE;
 		ModuleID = module;
-		lstrcpy( ErrorString, LastResort );
+		camStrcpy( ErrorString, LastResort );
 		return;
 	}
 	InSetError++;
@@ -691,7 +691,7 @@ void Error::SetError(UINT32 number, const TCHAR* errstring, UINT32 module)
 #endif
 
 	RalphErrorID = ErrorID = number;
-	lstrcpy(ErrorString, errstring);
+	camStrcpy(ErrorString, errstring);
 	ModuleID = module;
 	ErrStatus = ERRORSTAT_TEXT;
 	ErrorHasBeenReported = FALSE;
@@ -707,7 +707,7 @@ void Error::SetErrorSerious( const TCHAR* errstring )
 	InSetError = 0;
 	ErrStatus = ERRORSTAT_TEXT;
 	ErrorHasBeenReported = FALSE;
-	lstrcpy( ErrorString, errstring );
+	camStrcpy( ErrorString, errstring );
 }
 
 void Error::SetError(UINT32 number, UINT32 module)
@@ -723,7 +723,7 @@ void Error::SetError(UINT32 number, UINT32 module)
 		ErrStatus = ERRORSTAT_TEXT;
 		ErrorHasBeenReported=FALSE;
 		ModuleID = module;
-		lstrcpy( ErrorString, LastResort );
+		camStrcpy( ErrorString, LastResort );
 		return;
 	}
 	InSetError++;
@@ -741,7 +741,7 @@ void Error::SetError(UINT32 number, UINT32 module)
 	ErrorHasBeenReported = FALSE;
 	if (!SmartLoadString(module, ErrorID, ErrorString, 256 ) )
 	{
-		tsprintf( ErrorString, 256, _T("Error Number %u from module ID %u"), ErrorID, ModuleID );
+		camSnprintf( ErrorString, 256, _T("Error Number %u from module ID %u"), ErrorID, ModuleID );
 	}
 	
 	TRACE( _T("Setting error: ID = %d: \"%s\"\n"), ErrorID, ErrorString);
@@ -841,7 +841,7 @@ void Error::TraceWrite(const TCHAR * bufp, va_list args)
 #if 1
 	// replace \n by a space - the real solution is to remove the \n from all the trace statements (yawn)
 	TCHAR buf[MAXERRORFORMATLENGTH];
-	lstrcpyn(buf, bufp, MAXERRORFORMATLENGTH);
+	camStrncpy(buf, bufp, MAXERRORFORMATLENGTH);
 	buf[MAXERRORFORMATLENGTH-1]=0;
 	TCHAR * b=buf;
 	do
@@ -857,7 +857,7 @@ void Error::TraceWrite(const TCHAR * bufp, va_list args)
 
 	do
 	{
-		newline = _tcschr(bufp, _T('\n'));
+		newline = camStrchr(bufp, _T('\n'));
 		if (newline) *newline++=0;
 		// We really should pass only the args before the newline here, but...
 		wxVLogDebug(bufp, args);
@@ -933,7 +933,7 @@ void CDECL Error::ReleaseTrace(LPCTSTR fmt, ...)
 	TCHAR				buf[256];
 	va_list				marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt, marker );
+	camVsnprintf( buf, 256, fmt, marker );
 
 #if defined( __WXMSW__ )
 	OutputDebugString( buf );
@@ -964,8 +964,8 @@ void CDECL Error::ReleaseTrace(LPCTSTR fmt, ...)
 
 static void CalcInternalMessage( LPTCHAR result, UINT32 Line, const TCHAR* Filename )
 {
-	const TCHAR* Slash    = _tcsrchr( Filename, TEXT('\\') );
-	const TCHAR* Dot      = _tcsrchr( Filename, TEXT('.')  );
+	const TCHAR* Slash    = camStrrchr( Filename, TEXT('\\') );
+	const TCHAR* Dot      = camStrrchr( Filename, TEXT('.')  );
 	TCHAR CodedFile[20];
 
 	if (Slash && Dot)
@@ -986,7 +986,7 @@ static void CalcInternalMessage( LPTCHAR result, UINT32 Line, const TCHAR* Filen
 
 	// this message should not be translated
 	String_256 jcf(_R(IDS_INTERNAL_ERROR_MSG));
-	tsprintf(result, 256, jcf, (UINT32) Line, (LPCTSTR) Filename);
+	camSnprintf(result, 256, jcf, (UINT32) Line, (LPCTSTR) Filename);
 }
 
 
@@ -1019,7 +1019,7 @@ void CDECL Error::XSetError( const TCHAR *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );
+	camVsnprintf( buf, 256, fmt2, marker );
 	va_end( marker );
 	
 	// in debug builds we put up an ensure box
@@ -1041,7 +1041,7 @@ void CDECL Error::XSetError( const char *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );
+	camVsnprintf( buf, 256, fmt2, marker );
 	va_end( marker );
 	
 	// in debug builds we put up an ensure box
@@ -1070,7 +1070,7 @@ void CDECL Error::XSetError( const TCHAR *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );
+	camVsnprintf( buf, 256, fmt2, marker );
 	va_end( marker );
 	// in debug builds we put up an ensure box
 	EnsureFailedLine( buf, LastErrorFile, LastErrorLine );		// put up box
@@ -1094,7 +1094,7 @@ void CDECL Error::XSetError( const char *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );
+	camVsnprintf( buf, 256, fmt2, marker );
 	va_end( marker );
 	// in debug builds we put up an ensure box
 	EnsureFailedLine( buf, LastErrorFile, LastErrorLine );		// put up box
@@ -1165,7 +1165,7 @@ void CDECL Error::XSetError( UINT32 errID, ...)
 	// load the format string as a resoure (note no module ID yet)
 	if (!SmartLoadString(0, errID, buf, sizeof(buf)))
 	{
-		tsprintf( buf, 256, wxT("Error<%u>"), errID ); // keep inline
+		camSnprintf( buf, 256, wxT("Error<%u>"), errID ); // keep inline
 	}
 
 	// now do _MakeMsg type formatting
@@ -1221,7 +1221,7 @@ void CDECL Error::XComplain( const TCHAR *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );								// convert the args
+	camVsnprintf( buf, 256, fmt2, marker );								// convert the args
 	va_end( marker );
 
 	EnsureFailedLine( buf, LastErrorFile, LastErrorLine );		// put up box
@@ -1237,7 +1237,7 @@ void CDECL Error::XComplain( const char *fmt, ...)
 
 	va_list marker;
 	va_start( marker, fmt );
-	tvsprintf( buf, 256, fmt2, marker );								// convert the args
+	camVsnprintf( buf, 256, fmt2, marker );								// convert the args
 	va_end( marker );
 
 	EnsureFailedLine( buf, LastErrorFile, LastErrorLine );		// put up box

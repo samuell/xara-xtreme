@@ -545,9 +545,9 @@ BOOL DialogEventHandler::Init()
 #if _DEBUG
 
 	#if 0 != wxUSE_UNICODE
-	#define HASHEVENTNAME(x) (*pHash)[x] = (EventNameString)_tcsdup(L ## #x)
+	#define HASHEVENTNAME(x) (*pHash)[x] = (EventNameString)camStrdup(L ## #x)
 	#else
-	#define HASHEVENTNAME(x) (*pHash)[x] = (EventNameString)_tcsdup(#x)
+	#define HASHEVENTNAME(x) (*pHash)[x] = (EventNameString)camStrdup(#x)
 	#endif
 
 	HASHEVENTNAME(wxEVT_COMMAND_BUTTON_CLICKED);

@@ -2096,7 +2096,7 @@ void GroupRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			{
 				INT32 reserved = 0;
 				pRecord->ReadINT32(&reserved);
-				_stprintf(s,"Reserved\t\t= %d\r\n", reserved);
+				camSprintf(s,_T("Reserved\t\t= %d\r\n"), reserved);
 				(*pStr) += s;
 			}
 			nobreak;			// fall through
@@ -2105,7 +2105,7 @@ void GroupRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			DocRect rbounds;
 			pRecord->ReadCoord(&rbounds.lo);
 			pRecord->ReadCoord(&rbounds.hi);
-			_stprintf(s,"Bounds\t\t= %d, %d, %d, %d\r\n", rbounds.lox, rbounds.loy, rbounds.hix, rbounds.hiy);
+			camSprintf(s, _T("Bounds\t\t= %d, %d, %d, %d\r\n"), rbounds.lox, rbounds.loy, rbounds.hix, rbounds.hiy);
 			(*pStr) += s;
 			break;
 	}

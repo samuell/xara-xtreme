@@ -119,8 +119,8 @@ String_128::String_128(const TCHAR* psz)
 	length = FIX_LEN_BUFSIZE;
 	if (psz != 0)
 	{
-		ERROR3IF(lstrlen(psz) >= length, "String_128::String_128 overflow");
-		lstrcpy(text, psz);
+		ERROR3IF(camStrlen(psz) >= length, "String_128::String_128 overflow");
+		camStrcpy(text, psz);
 	}
 }
 
@@ -147,7 +147,7 @@ String_128::String_128( PCSTR psz )
 	if (psz != 0)
 	{
 		ERROR3IF( strlen(psz) >= length, "String_128::String_128 overflow" );
-		mbstowcs( text, psz, FIX_LEN_BUFSIZE );
+		camMbstowcs( text, psz, FIX_LEN_BUFSIZE );
 	}
 }
 #endif
@@ -170,9 +170,9 @@ void String_128::CopyConstruct( const StringBase &other )
 	*(text = fixedbuf) = 0;
 	length = FIX_LEN_BUFSIZE;
 	ERROR3IF((const TCHAR*) other == 0, "StringBase to be copied has not been ALLOCated");
-	ERROR3IF(lstrlen((const TCHAR*) other) >= length,
+	ERROR3IF(camStrlen((const TCHAR*) other) >= length,
 				"Constructed String_128 not large enough to hold StringBase copy");
-	lstrcpy(text, (const TCHAR*) other);
+	camStrcpy(text, (const TCHAR*) other);
 }
 
 
@@ -202,8 +202,8 @@ String_128::String_128(UINT32 resID, UINT32 hinst)
 	{
 		ERROR3("String resource failed to load");
 		TCHAR buf[128];
-		tsprintf(buf, 128, TEXT("<%X:%X>"), (INT32) resID, (INT32) hinst);
-		lstrcpy(text, (lstrlen(buf) <= 128) ? buf : TEXT("!"));
+		camSnprintf(buf, 128, TEXT("<%X:%X>"), (INT32) resID, (INT32) hinst);
+		camStrcpy(text, (camStrlen(buf) <= 128) ? buf : TEXT("!"));
 	}
 }
 
@@ -226,7 +226,7 @@ String_128::String_128(const wxString& wxs)
 	*(text = fixedbuf) = 0;
 	length = FIX_LEN_BUFSIZE;
 	ERROR3IF(wxs.Len() >= length, "String_128::String_128 overflow");
-	lstrcpy(text, (LPCTSTR)wxs);
+	camStrcpy(text, (LPCTSTR)wxs);
 }
 
 

@@ -1459,7 +1459,7 @@ BOOL ImagemapFilter::WriteExistingDataHelper(CCLexFile* pfileTo, CCLexFile* pfil
 
 		//And write it out
 		if (pcBufferToWrite)
-			pfileTo->write(pcBufferToWrite, _tcslen(pcBufferToWrite));
+			pfileTo->write(pcBufferToWrite, camStrlen(pcBufferToWrite));
 	}
 
 	//Now, if we haven't inserted an imagemap before a closing body tag,
@@ -1617,18 +1617,18 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 	if (pcBuffer)
 	{
 		//Hint line for novice users
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), temp);
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), temp);
 
 		//Image Path and filename...
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T("<img src=\"file:///"));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("<img src=\"file:///"));
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
 
 /*******************************************************************************************************************************
 		// Get the dimensions of the image map area
@@ -1640,58 +1640,58 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 		WinRect	rectWinRect = OSRenderRegion::BitmapDocRectToWin( Identity, rectDocRect, 96.0 );
 
 		//Image Width and Height...
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(" width=\""));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(" width=\""));
 
 		INT32 tempLong = rectWinRect.right - rectWinRect.left;
-		nChars = _tcslen(pcBuffer);
+		nChars = camStrlen(pcBuffer);
 
 		//Format the INT32 as a string
 		temp.MakeMsg(_R(IDS_HTMLEXPORT_NUMBERFORMAT), tempLong);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(temp));
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(temp));
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
 
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(" height=\""));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(" height=\""));
 
 		tempLong = rectWinRect.bottom - rectWinRect.top;
-		nChars = _tcslen(pcBuffer);
+		nChars = camStrlen(pcBuffer);
 
 		//Format the INT32 as a string
 		temp.MakeMsg(_R(IDS_HTMLEXPORT_NUMBERFORMAT), tempLong);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(temp));
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(temp));
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
 
 ************************************************************************************************************/
 
 		//Now the remaining details...
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(" usemap=\"#"));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(" usemap=\"#"));
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.GetImagemapName()));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.GetImagemapName()));
 
-		nChars = _tcslen(pcBuffer);
-		_tcscpy(pcBuffer+nChars*sizeof(TCHAR), _T("\" border=\"0\">\r\n"));
+		nChars = camStrlen(pcBuffer);
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\" border=\"0\">\r\n"));
 
 
-		nChars = _tcslen(pcBuffer);
+		nChars = camStrlen(pcBuffer);
 
 		return nChars;
 	}
 
 	//Hint line for novice users
-	nChars += _tcslen(temp);
+	nChars += camStrlen(temp);
 
 	//Image Path and filename...
-	nChars += _tcslen(_T("<img src=\"file:///"));
-	nChars += _tcslen(_T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
-	nChars += _tcslen(_T("\""));
+	nChars += camStrlen(_T("<img src=\"file:///"));
+	nChars += camStrlen(_T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
+	nChars += camStrlen(_T("\""));
 
 /************************************************************************************
 	// Get the dimensions of the image map area
@@ -1703,32 +1703,32 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 	WinRect	rectWinRect = OSRenderRegion::BitmapDocRectToWin( Identity, rectDocRect, 96.0 );
 
 	//Image Width and Height...
-	nChars += _tcslen(_T(" width=\""));
+	nChars += camStrlen(_T(" width=\""));
 	INT32 tempLong = rectWinRect.right - rectWinRect.left;
 
 
 	//Format our INT32
 	temp.MakeMsg(_R(IDS_HTMLEXPORT_NUMBERFORMAT), tempLong);
 
-	nChars += _tcslen(temp);
-	nChars += _tcslen(_T("\""));
+	nChars += camStrlen(temp);
+	nChars += camStrlen(_T("\""));
 
-	nChars += _tcslen(_T(" height=\""));
+	nChars += camStrlen(_T(" height=\""));
 	tempLong = rectWinRect.bottom - rectWinRect.top;
 
 
 	//Format our INT32
 	temp.MakeMsg(_R(IDS_HTMLEXPORT_NUMBERFORMAT), tempLong);
 
-	nChars += _tcslen(temp);
-	nChars += _tcslen(_T("\""));
+	nChars += camStrlen(temp);
+	nChars += camStrlen(_T("\""));
 
 ************************************************************************************/
 
 	//Now the remaining details...
-	nChars += _tcslen(_T(" usemap=\"#"));
-	nChars += _tcslen(_T(ms_Options.GetImagemapName()));
-	nChars += _tcslen(_T("\" border=\"0\">\r\n"));
+	nChars += camStrlen(_T(" usemap=\"#"));
+	nChars += camStrlen(_T(ms_Options.GetImagemapName()));
+	nChars += camStrlen(_T("\" border=\"0\">\r\n"));
 
 	return nChars*sizeof(TCHAR);
 }

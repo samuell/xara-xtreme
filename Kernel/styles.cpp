@@ -961,7 +961,7 @@ BOOL Styles::GenerateUniqueName(const StringBase& Prefix, StringBase* pResult)
 
 	do 
 	{
-		tsprintf( pPrefixEnd, 256, _T(" %ld"), i++ );
+		camSnprintf( pPrefixEnd, 256, _T(" %ld"), i++ );
 	}
 	while (NameExists(*pResult));
 

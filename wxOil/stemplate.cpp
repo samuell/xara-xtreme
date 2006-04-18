@@ -1271,7 +1271,7 @@ BOOL WebAddress::ShouldCorrectHTTP(String_256* pstrCorrect)
 	//Now, starting at the first character in the string, scan through
 	//each character in turn until we get to something that is not
 	//in our set of allowed characters
-	for (INT32 i=0; i<iLength && (_tcschr(strAllowed, (*pstrCorrect)[i]))!=NULL; i++)
+	for (INT32 i=0; i<iLength && (camStrchr(strAllowed, (*pstrCorrect)[i]))!=NULL; i++)
 		 {
 			 //If the letter we are looking at is a full stop,
 			  if ((*pstrCorrect)[i]=='.')

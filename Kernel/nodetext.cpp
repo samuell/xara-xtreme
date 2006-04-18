@@ -698,10 +698,10 @@ void VisibleTextNode::GetDebugDetails(StringBase* Str)
 
 	TempStr._MakeMsg( TEXT("\r\nMatrix\r\n"));	 
 	(*Str) += TempStr;
-	tsprintf( floatStr, 20, _T("%f,%f"), abcd[0].MakeDouble(), abcd[1].MakeDouble());
+	camSnprintf( floatStr, 20, _T("%f,%f"), abcd[0].MakeDouble(), abcd[1].MakeDouble());
 	TempStr._MakeMsg( TEXT("a, b :\t#1%s\r\n"), floatStr);
 	(*Str) += TempStr;
-	tsprintf( floatStr, 20, _T("%f,%f"), abcd[2].MakeDouble(), abcd[3].MakeDouble());
+	camSnprintf( floatStr, 20, _T("%f,%f"), abcd[2].MakeDouble(), abcd[3].MakeDouble());
 	TempStr._MakeMsg( TEXT("c, d :\t#1%s\r\n"), floatStr);
 	(*Str) += TempStr;
 	TempStr._MakeMsg( TEXT("e, f :\t#1%ld,\t#2%ld\r\n"), ef[0], ef[1]);

@@ -948,7 +948,7 @@ BOOL LibraryFile::TidyUpSubPath(String_256 *Str)
 
 		// \\XARAINFO
 		String_16 XaraInfo("\\" + String_16(_R(IDS_LIBRARIES_XARAINFO_DIRNAME_CAPS)));
-		if(lstrcmp((TCHAR *)RighthandSection, (TCHAR *)XaraInfo) == 0)
+		if(camStrcmp((TCHAR *)RighthandSection, (TCHAR *)XaraInfo) == 0)
 		{
 			// Use the un-uppered string to return
 			OurPathTmp.Left(&OurPath, OurPath.Length() - 9);

@@ -5304,8 +5304,8 @@ BOOL DialogManager::MakeListBoxDragable(CWindowID WindowID,
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 #if _DEBUG
-	ENSURE( pGadget->IsKindOf( CLASSINFO( wxListBox ) ), "MakeListBoxDragable function called\n"
-													  	"on a gadget which is not a Listbox" );
+	ENSURE( pGadget->IsKindOf( CLASSINFO( wxListBox ) ),
+			"MakeListBoxDragable function called\non a gadget which is not a Listbox" );
 #endif
 
 	return TRUE;										// pretend worked
@@ -5682,7 +5682,7 @@ size_t DialogManager::SizeDlgHeader(DLGTEMPLATE *pHeader)
 			break;
 
 		default:
-			pResult += lstrlen((LPTCHAR) (pResult)) + 1;
+			pResult += camStrlen((LPTCHAR) (pResult)) + 1;
 			break;
 	}
 
@@ -8117,9 +8117,9 @@ BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
 						fontItem = (FontDropItem*)ComboBox_GetItemData(hwndCombo, i);
 						if (fontItem != NULL)
 						{
-							bMatch = (_tcsnicmp(fontItem->GetFontName(),
+							bMatch = (camStrnicmp(fontItem->GetFontName(),
 								strCharsTyped,
-								_tcslen(strCharsTyped)) == 0);
+								camStrlen(strCharsTyped)) == 0);
 						}
 					}
 

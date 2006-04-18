@@ -133,7 +133,7 @@ void fixed16::ToString(StringBase* pOut) const
 	}
 
 	// Convert and output the integer part of the number.
-	pch += tsprintf( pch, 256, TEXT("%u"), unsigned(n >> F16SHIFT) );
+	pch += camSnprintf( pch, 256, TEXT("%u"), unsigned(n >> F16SHIFT) );
 
 	// Mask off the fractional part, converting it if it exists.
 	n &= (1uL << F16SHIFT) - 1;
