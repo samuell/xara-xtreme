@@ -1535,6 +1535,26 @@ bool wxFrameManager::DetachPane(wxWindow* window)
     {
         if (m_panes.Item(i).window == window)
         {
+
+            wxPaneInfo& p = m_panes.Item(i);
+
+            if (p.frame)
+            {
+                // we have a floating frame, so we need to
+                // reparent it to m_frame and destroy the floating frame
+                
+                // reduce flicker - we assume the caller will resize the denuded window
+
+                p.window->SetSize(1,1);
+                p.frame->Show(false);
+                       
+                // reparent to m_frame and destroy the pane
+                p.window->Reparent(m_frame);
+                p.frame->SetSizer(NULL);
+                p.frame->Destroy();
+                p.frame = NULL;
+            }
+
             m_panes.RemoveAt(i);
             return true;
         }
