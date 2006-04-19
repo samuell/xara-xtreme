@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sgscan.h"
 #include "dlgtypes.h"
 
+#define   GSAFECLASS(TheClass)     (TheClass?TheClass:CC_RUNTIME_CLASS(DialogOp))
 
 // Pre-declarations
 class DragMessage;

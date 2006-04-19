@@ -269,10 +269,10 @@ SuperGallery *OpGalleryCommand::GetGalleryAndCommand(OpDescriptor *pOpDesc, Stri
 
 	String_32 Bob;
 	Temp.Left(&Bob, 31);
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Bob , GalleryBarNameLimitSize);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Bob , GalleryBarNameLimitSize);
 
-	if (pDialogBarOp != NULL && pDialogBarOp->IsKindOf(CC_RUNTIME_CLASS(SuperGallery)))
-		return((SuperGallery *) pDialogBarOp);
+	if (pSuperGallery != NULL && pSuperGallery->IsKindOf(CC_RUNTIME_CLASS(SuperGallery)))
+		return((SuperGallery *) pSuperGallery);
 
 	// Not found, or isn't a gallery?! (eep!)
 	return(NULL);

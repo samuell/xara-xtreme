@@ -217,7 +217,7 @@ void SuperGallery::InitData(void)
 
 /********************************************************************************************
 
->	SuperGallery::SuperGallery(CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogOp)): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class))
+>	SuperGallery::SuperGallery(CCRuntimeClass *Class = CC_RUNTIME_CLASS(DialogOp)): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,GSAFECLASS(Class))
 												 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/10/94
@@ -225,7 +225,7 @@ void SuperGallery::InitData(void)
 
 ********************************************************************************************/
 
-SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class)) 
+SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogOp(_R(IDD_BLANKBAR), MODELESS,0,GSAFECLASS(Class)) 
 {
 	String_32 str = String_32(_R(IDS_K_BARS_NONAME));
 	Name=str;
@@ -246,7 +246,7 @@ SuperGallery::SuperGallery(CCRuntimeClass *Class): DialogOp(_R(IDD_BLANKBAR), MO
 ********************************************************************************************/
 
 SuperGallery::SuperGallery(String_32 &NewName,CCRuntimeClass *Class)
-		: DialogOp(_R(IDD_BLANKBAR), MODELESS,0,SAFECLASS(Class))
+		: DialogOp(_R(IDD_BLANKBAR), MODELESS,0,GSAFECLASS(Class))
 {
 	String_32 str = String_32(_R(IDS_K_BARS_NONAME));
 	Name=str;
