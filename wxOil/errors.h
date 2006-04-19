@@ -106,10 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_ERRORS
 #define INC_ERRORS
 
-// FreeBSD does not provide backtrace()
-#if !defined(__WXMAC__) && !defined(__FreeBSD__)
-#include <wx/stackwalk.h>
-#endif
 
 //#include "errordlg.h"
 

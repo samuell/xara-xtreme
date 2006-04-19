@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_OILPREFS
 
 #include "prefs.h"
-#include "wx/config.h"
 
 /********************************************************************************************
 

@@ -99,10 +99,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include <wx/wxprec.h>
-#include <wx/event.h>
-#include <wx/tooltip.h>
-
 #include "cartctl.h"
 #include "cartprov.h"
 #include "dlgevt.h"

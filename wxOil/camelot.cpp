@@ -113,9 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "keypress.h"
 #include "oilmenus.h"
 
-#if defined(__WXMSW__)
-#include "wx/sysopt.h"
-#else
+#if !defined(__WXMSW__)
 #include "gdraw.h"
 #endif
 
@@ -144,18 +142,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define XARA_MENUGEN
 //#endif
 
-#if defined(FILELIST)
-
-//#include <wx/config.h>
-//#include <wx/confbase.h>
-#include <wx/fileconf.h>
-#if defined(__WXMSW__)
-#include <wx/msw/regconf.h>
-#endif
-
-#endif
-
-#include <wx/cmdline.h>
 
 /********************************************************************************************
 

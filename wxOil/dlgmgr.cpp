@@ -101,8 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Include files
 #include "camtypes.h"
 
-#include <wx/tooltip.h>
-
 #include "dlgmgr.h"
 #include "dialogop.h"
 //#include "simon.h"

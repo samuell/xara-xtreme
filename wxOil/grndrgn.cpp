@@ -108,8 +108,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // camconfig.h must be included immediately after camtypes.h
 #include "camconfig.h"
 
-#include <wx/display.h>
-
 #include "docview.h"
 
 // Includes (alphabetically ordered for convenience)

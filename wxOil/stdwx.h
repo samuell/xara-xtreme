@@ -95,19 +95,53 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
+
+// First the main include file
 #include <wx/wx.h>
+
+// Now specialized bits we might not have got through the above
 #include <wx/bitmap.h>
-#include <wx/docview.h>
-#include <wx/docmdi.h>
+#include <wx/cmdline.h>
 #include <wx/cmdproc.h>
+#include <wx/config.h>
+#include <wx/dcbuffer.h>
+#include <wx/display.h>
+#include <wx/docmdi.h>
+#include <wx/docview.h>
+#include <wx/event.h>
+#include <wx/fileconf.h>
+#include <wx/file.h>
+#include <wx/filesys.h>
+#include <wx/fontenum.h>
+#include <wx/fs_mem.h>
+#include <wx/fs_zip.h>
+#include <wx/hashmap.h>
 #include <wx/image.h>
 #include <wx/imagpng.h>
 #include <wx/log.h>
 #include <wx/rawbmp.h>
-#include <wx/treectrl.h>
-#include <wx/dcbuffer.h>
-#include <wx/file.h>
+#include <wx/splash.h>
 #include <wx/stdpaths.h>
+#include <wx/sysopt.h>
+#include <wx/tooltip.h>
+#include <wx/treectrl.h>
+#include <wx/wxchar.h>
+#include <wx/wxprec.h>
+#include <wx/xrc/xh_all.h>
+#include <wx/xrc/xmlres.h>
+
+// Now platform dependent stuff
+// FreeBSD does not provide backtrace()
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
+#include <wx/stackwalk.h>
+#endif
+
+#if defined(__WXMSW__)
+#include <wx/msw/regconf.h>
+#endif
+
+
+
 
 #include "wxXtra.h"
 

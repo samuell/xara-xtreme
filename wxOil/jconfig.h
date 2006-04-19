@@ -164,7 +164,7 @@ typedef unsigned char boolean;
 #endif
 
 /* use wxWidgets' configure */
-#include "wx/setup.h"
+#include <wx/setup.h>
 
 /* If using Metrowerks and not using configure-generated setup */
 #if defined(__MWERKS__) && !defined(__WX_SETUP_H__)

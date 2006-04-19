@@ -123,8 +123,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccolbar.h"
 #include "dragmgr.h"
 
-#include "wx/sysopt.h"
-
 #if defined(USE_WXAUI)
 
 class CamFrameManager : public wxFrameManager

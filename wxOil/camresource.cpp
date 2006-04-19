@@ -99,16 +99,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include <wx/wxprec.h>
-#include <wx/filesys.h>
-#include <wx/fs_mem.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/xrc/xh_all.h>
-#include <wx/fs_zip.h>
-#include <wx/filesys.h>
-#include <wx/splash.h>
-#include <wx/bitmap.h>
-
 //#include "camconfig.h"
 #include "camresource.h"
 #include "cartctl.h"

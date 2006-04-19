@@ -111,7 +111,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "reshelp.h"
 //#include "oilmods.h"			// for OILModule::xx
 #include "convert.h"			// for MakePercent
-#include <wx/wxchar.h>
 
 //#include "Res/UKEnglish/stringtbl.h"
 

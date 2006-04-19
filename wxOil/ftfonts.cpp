@@ -113,17 +113,14 @@ DECLARE_SOURCE( "$Revision$" );
 #include "textfuns.h"
 #include "oilpanse.h"
 
-#include "wx/wx.h"
-#include <wx/fontenum.h>
-
-#include "pango/pango.h"
-#include "pango/pangofc-font.h"
+#include <pango/pango.h>
+#include <pango/pangofc-font.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 
 #ifdef __WXGTK20__
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 extern GtkWidget *wxGetRootWindow();
 #endif
 

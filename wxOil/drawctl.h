@@ -99,10 +99,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DRAWCTL
 #define	INC_DRAWCTL
 
-#include <wx/wxprec.h>
-#include <wx/event.h>
-#include <wx/xrc/xmlres.h>
-
 #include "ctrllist.h"
 
 enum wxCamDrawControlStyle
