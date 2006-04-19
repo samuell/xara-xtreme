@@ -7271,8 +7271,8 @@ PORTNOTE("MacPort", "We should allow the user to configure this value on the mac
 	wxSize PPI(96,96);
 #endif
 
-	// If it's not a Screen DC we MIGHT just believe it!	
-	if (!DC.IsKindOf(CLASSINFO(wxScreenDC)))
+	// If it's not a Screen DC or a PaintDC we MIGHT just believe it!	
+	if (! ( DC.IsKindOf(CLASSINFO(wxScreenDC)) || DC.IsKindOf(CLASSINFO(wxPaintDC)) ))
 		PPI=DC.GetPPI();
 
 	return PPI;
