@@ -141,15 +141,22 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 
 #ifdef _ENSURES
 
-	TCHAR				sz[255];
+	TCHAR				sz[256];
 	static TCHAR BASED_CODE szTitle[] = wxT("Ensure Failed!");
 
-	// In Unicode we need %ls for AssertDescription
+	// In Unicode we need to convert the filename to TCHAR
 #if 0 != wxUSE_UNICODE
-	static TCHAR BASED_CODE szMessage[] = wxT("%ls, File %s, Line %d\nNo=Abort, Yes=Debug, Cancel=Continue");
+	TCHAR szRealFile[256];
+	size_t count = camMbstowcs(szRealFile, lpszFileName, 255);
+	if (count == (size_t)-1)
+		count = 0;
+	szRealFile[count] = (TCHAR)0;
+	const TCHAR* lpszRealFile = szRealFile;
 #else
-	static TCHAR BASED_CODE szMessage[] = wxT("%s, File %s, Line %d\nNo=Abort, Yes=Debug, Cancel=Continue");
+	const TCHAR* lpszRealFile = lpszFileName;
 #endif
+
+	static TCHAR BASED_CODE szMessage[] = wxT("%s, File %s, Line %d\nNo=Abort, Yes=Debug, Cancel=Continue");
 	static TCHAR BASED_CODE szMessageNoReason[] = wxT("Error %d@%s\nNo=Abort, Yes=Debug, Cancel=Continue");			// note number first
 
 	// get app name or NULL if unknown (don't call assert)
@@ -160,7 +167,7 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 		camSnprintf(sz, 255,
 			szMessage,                       
 			AssertDescription, 
-			lpszFileName, 
+			lpszRealFile, 
 			nLine);    
 	}
 	else   
@@ -168,7 +175,7 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 		camSnprintf(sz, 255,
 			szMessageNoReason,
 			nLine,
-			lpszFileName);
+			lpszRealFile);
 	}
 	
 #ifdef _DEBUG

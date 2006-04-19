@@ -193,10 +193,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // The following also need to be defined but do not have wx equivalents
 // camStrtok
+// camStrtof
 // camStrinc(v)
 // camStrninc(s, n)
 // camStrdec(s, v)
-
 
 // Define types that *nix doesn't have
 #if !defined(__WXMSW__)
@@ -225,12 +225,6 @@ typedef wchar_t			TCHAR;
 #define _strnicmp		strncasecmp
 #define _snprintf		snprintf
 
-//#define _tcsclen		wcslen
-
-//#define tcstof							wcstof
-
-//#define tprintf			wprintf
-
 #else // !wxUSE_UNICODE
 
 typedef char			TCHAR;
@@ -241,13 +235,6 @@ typedef char			TCHAR;
 // These two have been left in for now as they are currently needed by CCLexFile
 #define _strnicmp		strncasecmp
 #define _snprintf		snprintf
-
-//#define _tcstok			strtok_r
-//#define _tcsclen		strlen
-
-//#define _ttof			atof
-
-//#define tprintf			printf
 
 #endif
 
@@ -626,22 +613,11 @@ typedef unsigned long long	__uint64;
 
 #define SIZEOF_VOIDP	sizeof(void *)
 
-#define camStrtok	_tcstok
-#define camStrtof( str, pszMark )	tcstod( str, pszMark )
-
-//#define tprintf			_tprintf
-
-#if 0 != wxUSE_UNICODE
-
-//#define tcstok( str, sep, pszMark )			wcstok( str, sep )
-//#define tcstof( str, pszMark )				wcstod( str, pszMark )
-
-#else
-
-//#define tcstok( str, sep, pszMark )			strtok( str, sep )
-//#define tcstof( str, pszMark )				strtod( str, pszMark )
-
-#endif
+#define camStrinc				_tcsinc
+#define camStrninc				_tcsninc
+#define camStrdec				_tcsdec
+#define camStrtok( t, d, x )	_tcstok( (t), (d) )
+#define camStrtof				_tcstod
 
 #endif
 

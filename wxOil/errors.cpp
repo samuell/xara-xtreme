@@ -923,7 +923,7 @@ void CDECL Error::TraceTime (TCHAR * t)
 {
 	TCHAR buf[256];
 	CamProfile::GetTimeString(buf, 256);
-	TraceAll(_T("[%s] %s"),buf, t);
+	TraceAll(_T("[%s] %s"), buf, t);
 }
 
 #endif

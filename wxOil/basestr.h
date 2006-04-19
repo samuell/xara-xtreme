@@ -895,9 +895,9 @@ inline const WCHAR StringBase::CharAt(const INT32 Index) const
 	return (WCHAR)ch;
 
 #else
-	PORTNOTETRACE("other", "WCHAR StringBase::CharAt does nothing in non-UNICODE builds!")
+	PORTNOTETRACE("other", "WCHAR StringBase::CharAt does nothing in non-UNICODE builds!");
 	ERROR3("This function is unimplemented in non-UNICODE builds!");
-	return (WCHAR)ch;
+	return (WCHAR)0;
 #endif
 }
 
