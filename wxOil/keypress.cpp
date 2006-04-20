@@ -991,7 +991,7 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 		NumChars = 1;
 		pWideChar[0] = pKeySysMsg->m_Char;
 		
-		// We still have to try our custom translations (for VirtKey >= WXK_START
+		// We still have to try our custom translations (for VirtKey >= WXK_START)
 		if( pKeySysMsg->VirtKey >= WXK_START )
 		{
 			INT32 i;
@@ -1010,6 +1010,11 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 			if( ExtraUnicodes[i].VirtKey == CAMKEY(CC_NONE) )
 				NumChars = 0;
 		}
+		
+		// Windows translates Ctrl+char to control codes, I don't think we need too. Hopefully
+		// just using CR will be enought.
+		if( IsConstrainPressed() )
+			pWideChar[0] = _T('\n');
 		
 #elif defined(__WXMSW__)
 		BYTE pKeyState[256];			// Array to hold the current state of the keyboard
