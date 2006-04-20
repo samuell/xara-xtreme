@@ -613,6 +613,9 @@ public:
                        PaneBorder(false).
                        Layer(0).Row(0).Position(0);
                                               
+        // Carry over the minimum size
+        SetMinSize(pane.window->GetMinSize());
+
         m_mgr.AddPane(m_pane_window, contained_pane);
         m_mgr.Update();           
 
@@ -651,16 +654,25 @@ public:
         }
     }
 
+    void EnsureSizeRecorded()
+    {
+        // This is a work around for a wxGTK problem - see OnSize
+        m_owner_mgr->OnFloatingPaneResized(m_pane_window, GetSize());
+    }
+
 private:
 
     void OnSize(wxSizeEvent& event)
     {
+        // This never gets called on wxGTK (2.6.3 and below) because m_hasScrolling is false
         m_owner_mgr->OnFloatingPaneResized(m_pane_window, event.GetSize());
     }
 
     void OnClose(wxCloseEvent& event)
     {
         static wxList s_closing;
+
+        EnsureSizeRecorded();
 
         if (!s_closing.Member(this))
         {
@@ -727,6 +739,8 @@ private:
 
     void OnMoveStart()
     {
+        // Check we have a record of our own size for dock hints
+        EnsureSizeRecorded();
         // notify the owner manager that the pane has started to move
         m_owner_mgr->OnFloatingPaneMoveStart(m_pane_window);
     }
@@ -739,6 +753,8 @@ private:
 
     void OnMoveFinished()
     {
+        // Check we have a record of our own size for docking
+        EnsureSizeRecorded();
         // notify the owner manager that the pane has finished moving
         m_owner_mgr->OnFloatingPaneMoved(m_pane_window);
     }
@@ -788,7 +804,10 @@ private:
     wxFrameManager m_mgr;
 
     DECLARE_EVENT_TABLE()
+	DECLARE_CLASS(wxFloatingPaneBaseClass)
 };
+
+IMPLEMENT_CLASS( wxFloatingPane, wxFloatingPaneBaseClass )
 
 BEGIN_EVENT_TABLE(wxFloatingPane, wxFloatingPaneBaseClass)
     EVT_SIZE(wxFloatingPane::OnSize)
@@ -1992,7 +2011,8 @@ void wxFrameManager::LayoutAddPane(wxSizer* cont,
      else
     {
         sizer_item = vert_pane_sizer->Add(pane.window, 1, wxEXPAND);
-        vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
+        // Don't do this because it breaks the pane size in floating windows
+        // vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
     }
 
     part.type = wxDockUIPart::typePane;
@@ -2587,7 +2607,12 @@ void wxFrameManager::Update()
         {
             // because the pane is no longer in a floating, we need to
             // reparent it to m_frame and destroy the floating frame
-            
+
+            // First ensure the size is recorded in case the last thing was
+            // a resize before a dock was done via a method other than a drag
+            if (p.frame->IsKindOf(CLASSINFO(wxFloatingPane)))
+                ((wxFloatingPane *)(p.frame))->EnsureSizeRecorded();
+
             // reduce flicker
             p.window->SetSize(1,1);
             p.frame->Show(false);
