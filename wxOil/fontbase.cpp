@@ -516,7 +516,7 @@ OUTLINETEXTMETRIC *OILFontMan::GetOutlineTextMetric(FontClass Class, LOGFONT *pL
 #endif
 			break;
 		case FC_TRUETYPE:
-PORTNOTE("text","ATM deactivated")
+PORTNOTE("text","TT deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::GetOutlineTextMetric(pLogFont);
 #else
@@ -1126,12 +1126,13 @@ void FontMetricsCache::InvalidateCharMetrics()
 	 			FontDesc	= a font description
 	Returns:	Kern in millipoints (or zero if no kern or error)
 	Purpose:	Get the kern between two chars of a font
-	Note:		Uses a single entry cache for speed
+	Note:		So far, the kerning values are not cached
 ********************************************************************************************/
 
 MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight,
 																	CharDescription& FontDesc)
 {
+	PORTNOTE("text", "caching of kern pairs removed");
 #ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(         pDC==NULL,FALSE,"FontKerningPairsCache::GetCharsKerning() - pDC==NULL");
 	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,
@@ -1179,11 +1180,15 @@ MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR
 #ifdef _DEBUG
 //	TRACE( _T("State of kerning cache after update...\n"));
 //	Dump();
-#endif _DEBUG
+#endif /*_DEBUG */
 
 	return mpFontKerningPairsCacheData[CacheEntry].GetCharsKerning(chLeft, chRight);
 #else
+#ifndef DISABLE_TEXT_RENDERING
+	return FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
+#else
 	return 0;
+#endif
 #endif
 }
 

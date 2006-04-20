@@ -118,6 +118,7 @@ DECLARE_SOURCE( "$Revision$" );
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
+#include FT_TRUETYPE_TABLES_H
 
 #ifdef __WXGTK20__
 #include <gtk/gtk.h>
@@ -266,6 +267,16 @@ BOOL FTFontMan::CacheFontCore(String_64* pFontName, BOOL compatible)
 			  pango_font_description_get_style(pRealDesc), pango_font_description_get_weight(pRealDesc));
 	pango_font_description_free(pRealDesc);
 	
+	// NB - Apart from the following "if" this routine only fails in case of a technical error
+	//      not because the required font is not present. At the moment, we only check that we
+	//      got the right font if compatible == FALSE, but we are always called with
+	//      compatible == TRUE afterwards, so effectively, we always find a font, in the worst
+	//      case some system default font. That means that the clever Panose matching code is
+	//      never used because it is only called if both passes (first with compatible == FALSE
+	//      then with compatible == TRUE) fail. Removing the "!compatible" check on the other
+	//      hand means that we only allow an exact match and hence cannot make use of fontconfig's
+	//      font substitution service, most notably using the user's own font substitution rules.
+
 	// check whether the font name is the same as the one we asked for (case-insensitive)
 	if (!compatible && !pFontName->IsEmpty() && OurFontName.CompareTo(*pFontName, FALSE) != 0) {
 		// we wanted an exact match, but the names do not match, so do not cache the font
@@ -347,47 +358,59 @@ void FTFontMan::ValidateCache()
 	PORTNOTETRACE("text", "FTFontMan::ValidateCache - do nothing");
 }
 
+// ****************
+// Font enumeration
+// ****************
+
+// To enumerate fonts using wxWidgets we need to derive from wxFontEnumerator
+// and override the OnFacename method
+class ClosestFontEnumerator: public wxFontEnumerator
+{
+public:
+	bool OnFacename(const wxString& font);         // TYPENOTE: Correct - overriding wx method
+};
+
+// Our ClosestFontEnumerator calls the fixed callback routine in FontMan to report the font
+
+
+/********************************************************************************************
+
+>	bool ClosestFontEnumerator::OnFacename(const wxString& font)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/04/06
+	Inputs:		font - the Facename of an enumerated font
+	Purpose:	Callback function for font enumeration - passes call on to the kernel Panose
+				Panose matcher
+
+********************************************************************************************/
+bool ClosestFontEnumerator::OnFacename(const wxString& font)
+{
+	// we need to pass a ENUMLOGFONT structure to the kernel
+	// we can pass pointers to transient structures - the kernel copies the data if it is the
+	// best match so far
+	ENUMLOGFONT OurEnumLogFont;
+	OurEnumLogFont.elfLogFont.FaceName = font;
+	FontManager* pFontMan = GetApplication()->GetFontManager();
+	return pFontMan->FindClosestFontFullTry(FC_FREETYPE, &OurEnumLogFont.elfLogFont.FaceName, &OurEnumLogFont);
+}
+
 /********************************************************************************************
 
 >	static void FTFontMan::FindClosestFont()
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
-	Created:	06/03/06
-	Purpose:	Enumerates all the fonts, looking for a match to a panose number
+	Created:	19/04/06
+	Purpose:	Enumerates all the fonts reporting each to the Panose matcher in FontMan.
 
 ********************************************************************************************/
 
 void FTFontMan::FindClosestFont()
 {
-	PORTNOTETRACE("text", "FTFontMan::FindClosestFont - do nothing");
-}
-
-/********************************************************************************************
-
->	FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
-
-	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	12/9/95
-	Inputs:		pFontName = a pointer to a fontname
-	Returns:	NULL if no FreeType font structure has been created
-				A pointer to a FreeType font structure if successfull.
-	Purpose:	This function attempts to create a font instance and will be called by
-				the font manager when new fonts are added.
-
-********************************************************************************************/
-
-FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
-{
-	DumpString64User("wuerthne", _T("FTFontMan::CreateNewFont"), pFontName);
-	FTFont *pFont = new FTFont;
-	if (pFont==NULL)
-		return NULL;
-	if (!pFont->Initialise(pFontName))
-	{
-		delete pFont;
-		return NULL;
-	}
-	return pFont;
+	// use wxWidgets to enumerate all font families
+	TRACEUSER("wuerthne", _T("FTFonMan::FindClosestFont"));
+	ClosestFontEnumerator WxEnumerator;
+	WxEnumerator.EnumerateFacenames();	
 }
 
 // To enumerate fonts using wxWidgets we need to derive from wxFontEnumerator
@@ -408,7 +431,7 @@ private:
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	06/03/06
 	Inputs:		font - the Facename of an enumerated font
-	Purpose:	Callback function for font enumeration - passed call on to the OilEnumerator
+	Purpose:	Callback function for font enumeration - passes call on to the OilEnumerator
 
 ********************************************************************************************/
 
@@ -437,6 +460,34 @@ void FTFontMan::EnumAllFonts(OILEnumFonts* pOilEnumerator)
 	TRACEUSER("wuerthne", _T("FTFonMan::EnumAllFonts"));
 	MyFontEnumerator WxEnumerator(pOilEnumerator);
 	WxEnumerator.EnumerateFacenames();	
+}
+
+/********************************************************************************************
+
+>	FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	12/9/95
+	Inputs:		pFontName = a pointer to a fontname
+	Returns:	NULL if no FreeType font structure has been created
+				A pointer to a FreeType font structure if successfull.
+	Purpose:	This function attempts to create a font instance and will be called by
+				the font manager when new fonts are added.
+
+********************************************************************************************/
+
+FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
+{
+	DumpString64User("wuerthne", _T("FTFontMan::CreateNewFont"), pFontName);
+	FTFont *pFont = new FTFont;
+	if (pFont==NULL)
+		return NULL;
+	if (!pFont->Initialise(pFontName))
+	{
+		delete pFont;
+		return NULL;
+	}
+	return pFont;
 }
 
 /********************************************************************************************
@@ -510,6 +561,46 @@ static BOOL ToASCII(TCHAR* src, char* buffer, UINT32 len)    // TYPENOTE: correc
 
 /********************************************************************************************
 
+>	static PangoFont* GetPangoFontForFaceName(String_64* pFaceName)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/04/06
+	Inputs:		pFaceName - pointer to a face name
+	Outputs:	-
+	Returns:	a pointer to the corresponding PangoFont structure
+				may return NULL if the font could not be loaded
+				the Pango documentation does not state anything about how to or having to
+				free the PangoFont object, so we assume it is managed by the FontMap
+	Purpose:	return a PangoFont for a particular font face
+
+********************************************************************************************/
+
+static PangoFont* GetPangoFontForFaceName(String_64* pFaceName, BOOL IsBold, BOOL IsItalic)
+{
+	DumpString64User("wuerthne", _T("FTFontMan::GetPangoFontForFaceName"), pFaceName);
+
+	char ASCIIFaceName[64]; // TYPENOTE: correct (needed as parameter to Pango)
+	if (!ToASCII(*pFaceName, ASCIIFaceName, 64)) return NULL;
+
+	PangoContext* pPangoContext = GetPangoContext();
+	ERROR2IF(pPangoContext==NULL,NULL,"FTFontMan::GetPangoFontForCharDesc failed to get PangoContext");
+   	PangoFontMap* pFontMap = pango_context_get_font_map(pPangoContext);
+	ERROR2IF(pPangoContext==NULL,NULL,"FTFontMan::GetPangoFontForCharDesc failed to get PangoFontMan");
+
+	PangoFontDescription* pDescription = pango_font_description_new();
+	pango_font_description_set_family_static(pDescription, ASCIIFaceName);
+	pango_font_description_set_style(pDescription, IsItalic ? PANGO_STYLE_ITALIC :  PANGO_STYLE_NORMAL);
+	pango_font_description_set_weight(pDescription, IsBold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+    pango_font_description_set_size(pDescription, 12 * PANGO_SCALE);  // arbitrary, we get unscaled outlines later
+
+	PangoFont* pFont = pango_font_map_load_font(pFontMap, pPangoContext, pDescription);
+	pango_font_description_free(pDescription);
+	if (!PANGO_IS_FONT(pFont)) return NULL;
+	return pFont;
+}
+
+/********************************************************************************************
+
 >	static PangoFont* GetPangoFontForCharDesc(CharDescription &ChDesc)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
@@ -527,26 +618,7 @@ static BOOL ToASCII(TCHAR* src, char* buffer, UINT32 len)    // TYPENOTE: correc
 static PangoFont* GetPangoFontForCharDesc(CharDescription &ChDesc)
 {
 	String_64* pFaceName = GetFacenameFromCharDesc(ChDesc);
-	DumpString64User("wuerthne", _T("FTFontMan::GetPangoFontForCharDesc using FaceName"), pFaceName);
-
-	char ASCIIFaceName[64]; // TYPENOTE: correct (needed as parameter to Pango)
-	if (!ToASCII(*pFaceName, ASCIIFaceName, 64)) return NULL;
-
-	PangoContext* pPangoContext = GetPangoContext();
-	ERROR2IF(pPangoContext==NULL,NULL,"FTFontMan::GetPangoFontForCharDesc failed to get PangoContext");
-   	PangoFontMap* pFontMap = pango_context_get_font_map(pPangoContext);
-	ERROR2IF(pPangoContext==NULL,NULL,"FTFontMan::GetPangoFontForCharDesc failed to get PangoFontMan");
-
-	PangoFontDescription* pDescription = pango_font_description_new();
-	pango_font_description_set_family_static(pDescription, ASCIIFaceName);
-	pango_font_description_set_style(pDescription, ChDesc.GetItalic() ? PANGO_STYLE_ITALIC :  PANGO_STYLE_NORMAL);
-	pango_font_description_set_weight(pDescription, ChDesc.GetBold() ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
-    pango_font_description_set_size(pDescription, 12 * PANGO_SCALE);  // arbitrary, we get unscaled outlines later
-
-	PangoFont* pFont = pango_font_map_load_font(pFontMap, pPangoContext, pDescription);
-	pango_font_description_free(pDescription);
-	if (!PANGO_IS_FONT(pFont)) return NULL;
-	return pFont;
+	return GetPangoFontForFaceName(pFaceName, ChDesc.GetBold(), ChDesc.GetItalic());
 }
 
 // Get the application's Pango context - in wxGTK we already have one since wxGTK
@@ -599,30 +671,26 @@ static INT32 ScaleToDefaultHeight(INT32 coord, INT32 DesignSize)
 	return coord * TextManager::GetDefaultHeight() / DesignSize;
 }
 
-
 /********************************************************************************************
 
->	static BOOL GetPangoFcFontAndFreeTypeFaceForCharDesc(CharDescription& ChDesc,
+>	static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont,
 													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
-	Created:	06/03/06
-	Inputs:		ChDesc - a Kernel character description
+	Created:	19/04/06
+	Inputs:		pFont - pointer to a PangoFont
 	Outputs:	a pointer to the PangoFcFont is stored in ppPangoFcFont
 				a pointer to the FreeType font is stored in ppFreeTypeFace
 				When finished with the font and face, the client has to call
 				pango_fc_font_unlock_face(*ppPangoFcFont) to free the font
 	Returns:	TRUE if the font descriptors have been returned correctly
 				FALSE if not.
-	Purpose:	Get a PangoFc font and a FreeType face for a char description
+	Purpose:	Get a PangoFc font and a FreeType face for a Pango font
 
 ********************************************************************************************/
 
-static BOOL GetPangoFcFontAndFreeTypeFaceForCharDesc(CharDescription& ChDesc,
-													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
+static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont, PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
 {
-	// We extract the font description from ChDesc and find a PangoFont for it
-	PangoFont* pFont = GetPangoFontForCharDesc(ChDesc);
 	if (!pFont) return FALSE;
 
 	// We need to get at the underlying FreeType information, which only works for
@@ -660,6 +728,61 @@ static BOOL GetPangoFcFontAndFreeTypeFaceForCharDesc(CharDescription& ChDesc,
 	*ppFreeTypeFace = pFreeTypeFace;
 	return TRUE;
 }
+
+/********************************************************************************************
+
+>	static BOOL GetPangoFcFontAndFreeTypeFaceForCharDesc(CharDescription& ChDesc,
+													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	06/03/06
+	Inputs:		ChDesc - a Kernel character description
+	Outputs:	a pointer to the PangoFcFont is stored in ppPangoFcFont
+				a pointer to the FreeType font is stored in ppFreeTypeFace
+				When finished with the font and face, the client has to call
+				pango_fc_font_unlock_face(*ppPangoFcFont) to free the font
+	Returns:	TRUE if the font descriptors have been returned correctly
+				FALSE if not.
+	Purpose:	Get a PangoFc font and a FreeType face for a char description
+
+********************************************************************************************/
+
+static BOOL GetPangoFcFontAndFreeTypeFaceForCharDesc(CharDescription& ChDesc,
+													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
+{
+	// We extract the font description from ChDesc and find a PangoFont for it
+	PangoFont* pFont = GetPangoFontForCharDesc(ChDesc);
+    return GetPangoFcFontAndFreeTypeFaceForPangoFont(pFont, ppPangoFcFont, ppFreeTypeFace);
+}
+
+/********************************************************************************************
+
+>	static BOOL GetPangoFcFontAndFreeTypeFaceForFaceName(String_64* pFaceName,
+													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/04/06
+	Inputs:		pFaceName - pointer to a face name
+	Outputs:	a pointer to the PangoFcFont is stored in ppPangoFcFont
+				a pointer to the FreeType font is stored in ppFreeTypeFace
+				When finished with the font and face, the client has to call
+				pango_fc_font_unlock_face(*ppPangoFcFont) to free the font
+	Returns:	TRUE if the font descriptors have been returned correctly
+				FALSE if not.
+	Purpose:	Get a PangoFc font and a FreeType face for a particular font face
+
+********************************************************************************************/
+
+static BOOL GetPangoFcFontAndFreeTypeFaceForFaceName(String_64* pFaceName,
+													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace)
+{
+	PangoFont* pFont = GetPangoFontForFaceName(pFaceName, FALSE, FALSE);
+    return GetPangoFcFontAndFreeTypeFaceForPangoFont(pFont, ppPangoFcFont, ppFreeTypeFace);
+}
+
+// *********************************
+// Text Character Outline Extraction
+// *********************************
 
 // the state we have to keep during outline decomposition
 typedef struct OutlineDecompositionState {
@@ -895,6 +1018,65 @@ BOOL FTFontMan::GetCharOutline(CharDescription& ChDesc,
 	return TRUE;
 }
 
+// *******************
+// Metrics and kerning
+// *******************
+
+/********************************************************************************************
+
+>	OUTLINETEXTMETRIC* FTFontMan::GetOutlineTextMetric(LOGFONT *pLogFont)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/04/06
+	Inputs:		pLogFont  = font descriptor
+	Returns:	an OUTLINETEXTMETRIC structure or NULL if the information cannot be obtained
+                (Panose information is only available for TrueType fonts, not for Type-1 fonts)
+                The caller is responsible for freeing the structure
+	Purpose:	get the Panose structure for a font
+
+********************************************************************************************/
+
+OUTLINETEXTMETRIC* FTFontMan::GetOutlineTextMetric(LOGFONT *pLogFont)
+{
+	String_64* pFaceName = &pLogFont->FaceName;
+	PangoFcFont* pPangoFcFont;
+	FT_Face pFreeTypeFace;
+	DumpString64User("wuerthne", _T("FTFontMan::GetOutlineTextMetric"), pFaceName);
+
+	// first of all, retrieve the underlying font information
+	if (!GetPangoFcFontAndFreeTypeFaceForFaceName(pFaceName, &pPangoFcFont, &pFreeTypeFace)) return NULL;
+
+	// we have successfully retrieved the FreeType information - we need to release the information below
+	// ask FreeType for the Panose information
+	FT_ULong DummyTag;
+	FT_ULong DummyLen;
+
+	// check whether this font has a TrueType OS/2 font table
+	TT_OS2* pOS2_Table;
+	if (FT_Sfnt_Table_Info(pFreeTypeFace, ft_sfnt_os2, &DummyTag, &DummyLen) != 0 /* not present */
+		|| (pOS2_Table = (TT_OS2*)FT_Get_Sfnt_Table(pFreeTypeFace, ft_sfnt_os2)) == NULL   /* error loading */
+		|| pOS2_Table->version == 0xffff /* Mac font without OS/2 table */)
+	{
+		// we could not get the table with the Panose information, either because there
+		// was an error when trying to load it or because the font is not a TrueType font,
+		// or because it is an old Mac TrueType font without Panose information
+		pango_fc_font_unlock_face(pPangoFcFont);
+		return NULL;
+	}
+
+	// we have got the OS/2 table - it is owned by the face object so we need not free it,
+    // it will disappear when we unlock the font face below
+
+	// We need a permanent structure - the pointer may be cached. Otherwise, the kernel
+	// will free the structure.
+	OUTLINETEXTMETRIC* pMetric = new OUTLINETEXTMETRIC;
+	pMetric->otmPanoseNumber = *((struct PANOSE*)&pOS2_Table->panose);
+	TRACEUSER("wuerthne", _T("returning valid OUTLINEFONTMETRIC structure"));
+
+	pango_fc_font_unlock_face(pPangoFcFont);
+	return pMetric;
+}
+
 /********************************************************************************************
 
 >	BOOL FTFontMan::GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32* pDescent)
@@ -955,7 +1137,7 @@ BOOL FTFontMan::GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR Las
 
 	// get the design size
 	INT32 DesignSize = pFreeTypeFace->units_per_EM;
-	TRACEUSER("wuerthne", _T("GetCharWidth, DesignSize = %d"), DesignSize);
+	// TRACEUSER("wuerthne", _T("GetCharWidth, DesignSize = %d"), DesignSize);
 
 	for (UINT32 i = 0; i < NumChars; i++) {
 		// load the glyph data for our character into the font's glyph slot
@@ -969,6 +1151,47 @@ BOOL FTFontMan::GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR Las
 	}
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return TRUE;
+}
+
+/********************************************************************************************
+
+>	BOOL FTFontMan::GetCharsKerning(CharDescription& FontDesc, TCHAR LeftChar, TCHAR RightChar)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/04/06
+	Inputs:		FontDesc - a Kernel character description (to identify the font)
+				LeftChar, RightChar - left and right character
+	Outputs:    -
+	Returns:	the kerning to be applied between LeftChar and RightChar
+	Purpose:	This function returns the kerning between two glyphs scaled to DefaultHeight
+
+********************************************************************************************/
+
+INT32 FTFontMan::GetCharsKerning(CharDescription& FontDesc, TCHAR LeftChar, TCHAR RightChar)
+{
+    PangoFcFont* pPangoFcFont;
+	FT_Face pFreeTypeFace;
+
+	TRACEUSER("wuerthne", _T("GetCharsKerning, %04x %04x"), LeftChar, RightChar);
+	if (!GetPangoFcFontAndFreeTypeFaceForCharDesc(FontDesc, &pPangoFcFont, &pFreeTypeFace)) return 0;
+
+	// get the design size
+	INT32 DesignSize = pFreeTypeFace->units_per_EM;
+
+	FT_ULong LeftIndex = FT_Get_Char_Index(pFreeTypeFace, LeftChar);
+	FT_ULong RightIndex = FT_Get_Char_Index(pFreeTypeFace, RightChar);;
+
+	FT_Vector kerning;
+	FT_Error FreeTypeError;
+	if ((FreeTypeError = FT_Get_Kerning(pFreeTypeFace, LeftIndex, RightIndex, FT_KERNING_UNSCALED, &kerning)) != 0)
+	{
+		TRACEUSER("wuerthne", _T("could not get kerning, error = %d"), FreeTypeError);
+		return 0;
+	}
+
+	TRACEUSER("wuerthne", _T("Got kerning: %d"), kerning.x);
+	pango_fc_font_unlock_face(pPangoFcFont);
+	return ScaleToDefaultHeight(kerning.x, DesignSize);
 }
 
 #endif // __WXGTK__

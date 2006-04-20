@@ -152,6 +152,7 @@ public:
 
 	static BOOL     GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32* pDescent);
 	static BOOL     GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR LastChar, INT32* pCharWidthsBuf);
+    static INT32    GetCharsKerning(CharDescription& FontDesc, TCHAR LeftChar, TCHAR RightChar);
 
 // the support interface (functions in class OILFontMan will use these)
 private:
@@ -162,8 +163,8 @@ private:
 	static void		FindClosestFont();
 	static FTFont*	CreateNewFont(String_64* pFontName);
 
-	// as in ATMFontMan, we cannot extract the relevant information, so do nothing
-	static OUTLINETEXTMETRIC* GetOutlineTextMetric(LOGFONT *pLogFont) { return NULL; }
+	// extract the Panose information
+	static OUTLINETEXTMETRIC* GetOutlineTextMetric(LOGFONT *pLogFont);
 
 	// get a vector representation of a glyph
 	static BOOL 	GetCharOutline(CharDescription& ChDesc, 
@@ -171,7 +172,6 @@ private:
 								   PathVerb** ppVerbs,
 								   UINT32* pNumCoords,
 								   wxDC* pDC);
-
 // utterly private
 private:
 	static BOOL CacheFontCore(String_64* pFont, BOOL compatible);
