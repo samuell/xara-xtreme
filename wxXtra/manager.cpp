@@ -582,12 +582,13 @@ public:
     wxFloatingPane(wxWindow* parent,
                    wxFrameManager* owner_mgr,
                    wxWindowID id = -1,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize)
-                    : wxFloatingPaneBaseClass(parent, id, wxT(""), pos, size,
-                            wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
+                   const wxPaneInfo& pane)
+                    : wxFloatingPaneBaseClass(parent, id, wxT(""),
+                            pane.floating_pos, pane.floating_size,
+                            wxSYSTEM_MENU | wxCAPTION |
                             wxCLOSE_BOX | wxFRAME_NO_TASKBAR |
-                            wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN)
+                            wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN |
+                            (pane.IsFixed()?0:wxRESIZE_BORDER))
     {
         m_owner_mgr = owner_mgr;
         m_moving = false;
@@ -626,9 +627,6 @@ public:
         }
         
         SetTitle(pane.caption);
-
-        if (contained_pane.IsFixed())
-            SetWindowStyle(GetWindowStyle() & ~wxRESIZE_BORDER);
 
         if (pane.floating_size != wxDefaultSize)
         {
@@ -2620,8 +2618,7 @@ void wxFrameManager::Update()
                 // pane, which has recently been floated
                 wxFloatingPane* frame = new wxFloatingPane(m_frame,
                                                   this, -1,
-                                                  p.floating_pos,
-                                                  p.floating_size);
+                                                  p);
                                 
                 // on MSW, if the owner desires transparent dragging, and
                 // the dragging is happening right now, then the floating
