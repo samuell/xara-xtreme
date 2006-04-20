@@ -10,7 +10,7 @@
 // Modified by:
 // Created:     2005-05-17
 // RCS-ID:      
-// Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
+// Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1230,9 +1230,13 @@ wxFrameManager::wxFrameManager(wxFrame* frame, unsigned int flags)
     m_last_mouse_move = wxPoint();
     m_hover_button = NULL;
     m_art = new wxDefaultDockArt;
-    m_frame = frame;
     m_hint_wnd = NULL;
     m_flags = flags;
+
+    if (frame)
+    {
+        SetFrame(frame);
+    }
 }
 
 wxFrameManager::~wxFrameManager()
@@ -1339,6 +1343,7 @@ void wxFrameManager::SetFrame(wxFrame* frame)
     m_frame = frame;
     m_frame->PushEventHandler(this);
 
+#if wxUSE_MDI
     // if the owner is going to manage an MDI parent frame,
     // we need to add the MDI client window as the default
     // center pane
@@ -1354,6 +1359,7 @@ void wxFrameManager::SetFrame(wxFrame* frame)
                 wxPaneInfo().Name(wxT("mdiclient")).
                 CenterPane().PaneBorder(false));
     }
+#endif
 }
 
 
@@ -1362,8 +1368,7 @@ void wxFrameManager::SetFrame(wxFrame* frame)
 // will result in a crash upon program exit
 void wxFrameManager::UnInit()
 {
-    if (m_frame->GetEventHandler() == this)
-        m_frame->PopEventHandler();
+    m_frame->RemoveEventHandler(this);
 }
 
 // GetFrame() returns the frame pointer being managed by wxFrameManager
@@ -1422,7 +1427,8 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
     if (pinfo.name.IsEmpty())
     {
         pinfo.name.Printf(wxT("%08x%08x%08x%08x"),
-	     pinfo.window, (unsigned int)time(NULL),
+             ((unsigned long)pinfo.window) & 0xffffffff,
+             (unsigned int)time(NULL),
              (unsigned int)clock(), m_panes.GetCount());
     }
     
@@ -1437,11 +1443,26 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
         button.button_id = wxPaneInfo::buttonClose;
         pinfo.buttons.Add(button);
     }
-
+    
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
     {
         pinfo.best_size = pinfo.window->GetClientSize();
+
+        if (pinfo.window->IsKindOf(CLASSINFO(wxToolBar)))
+        {
+            // GetClientSize() doesn't get the best size for
+            // a toolbar under some newer versions of wxWidgets,
+            // so use GetBestSize()
+            pinfo.best_size = pinfo.window->GetBestSize();
+                    
+            // for some reason, wxToolBar::GetBestSize() is returning
+            // a size that is a pixel shy of the correct amount.
+            // I believe this to be the correct action, until
+            // wxToolBar::GetBestSize() is fixed.  Is this assumption
+            // correct?
+            pinfo.best_size.y++;
+        }
         
         if (pinfo.min_size != wxDefaultSize)
         {
@@ -1533,28 +1554,24 @@ bool wxFrameManager::DetachPane(wxWindow* window)
     int i, count;
     for (i = 0, count = m_panes.GetCount(); i < count; ++i)
     {
-        if (m_panes.Item(i).window == window)
+        wxPaneInfo& p = m_panes.Item(i);    
+        if (p.window == window)
         {
-
-            wxPaneInfo& p = m_panes.Item(i);
-
             if (p.frame)
             {
-                // we have a floating frame, so we need to
+                // we have a floating frame which is being detached. We need to
                 // reparent it to m_frame and destroy the floating frame
-                
-                // reduce flicker - we assume the caller will resize the denuded window
 
+                // reduce flicker
                 p.window->SetSize(1,1);
                 p.frame->Show(false);
-                       
+
                 // reparent to m_frame and destroy the pane
                 p.window->Reparent(m_frame);
                 p.frame->SetSizer(NULL);
                 p.frame->Destroy();
                 p.frame = NULL;
             }
-
             m_panes.RemoveAt(i);
             return true;
         }
@@ -2574,7 +2591,6 @@ void wxFrameManager::Update()
             // reparent it to m_frame and destroy the floating frame
             
             // reduce flicker
-
             p.window->SetSize(1,1);
             p.frame->Show(false);
                        
@@ -2982,9 +2998,14 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
         // should float if being dragged over center pane windows
         if (!part->dock->fixed || part->dock->dock_direction == wxAUI_DOCK_CENTER)
         {
-            if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) && (drop.IsFloatable() || (part->dock->dock_direction != wxAUI_DOCK_CENTER
-																			    && part->dock->dock_direction != wxAUI_DOCK_NONE)))
+            if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
+                   (drop.IsFloatable() ||
+                    (part->dock->dock_direction != wxAUI_DOCK_CENTER &&
+                     part->dock->dock_direction != wxAUI_DOCK_NONE)))
+            {
                 drop.Float();
+            }
+            
             return ProcessDockResult(target, drop);
         }
         
@@ -3277,6 +3298,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         {
 #ifdef __WXMSW__
             m_hint_wnd = new wxFrame(m_frame, -1, wxEmptyString, pt, size,
+                                        wxFRAME_TOOL_WINDOW |
                                         wxFRAME_FLOAT_ON_PARENT |
                                         wxFRAME_NO_TASKBAR |
                                         wxNO_BORDER);
@@ -3286,6 +3308,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         else
         {
             m_hint_wnd = new wxPseudoTransparentFrame (m_frame, -1, wxEmptyString, pt, size,
+                                        wxFRAME_TOOL_WINDOW |
                                         wxFRAME_FLOAT_ON_PARENT |
                                         wxFRAME_NO_TASKBAR |
                                         wxNO_BORDER);
@@ -3413,10 +3436,10 @@ void wxFrameManager::DrawHintRect(wxWindow* pane_window,
     delete sizer;
 
     if (rect.IsEmpty())
-	{
-		HideHint();
+    {
+        HideHint();
         return;
-	}
+    }
 
     // actually show the hint rectangle on the screen
     m_frame->ClientToScreen(&rect.x, &rect.y);
@@ -3426,10 +3449,10 @@ void wxFrameManager::DrawHintRect(wxWindow* pane_window,
 void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
 {
     // try to find the pane
-    #ifdef __WXMSW__
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
     
+    #ifdef __WXMSW__
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         MakeWindowTransparent(pane.frame, 150);
     #endif
@@ -3480,7 +3503,7 @@ void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
 
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
-    if (wxGetKeyState(WXK_ALT))
+    if (wxGetKeyState(WXK_CONTROL) || wxGetKeyState(WXK_ALT))
     {
         HideHint();
         return;
@@ -3518,7 +3541,7 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
 
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
-    if (wxGetKeyState(WXK_ALT))
+    if (wxGetKeyState(WXK_CONTROL) || wxGetKeyState(WXK_ALT))
     {
         HideHint();
         return;
@@ -3573,8 +3596,8 @@ void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
     if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
     {
         // try to find the pane
-//        wxPaneInfo& pane = GetPane(wnd);
-//        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+        wxPaneInfo& pane = GetPane(wnd);
+        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
         SetActivePane(m_panes, wnd);
         Repaint();
@@ -4030,11 +4053,15 @@ void wxFrameManager::OnLeftUp(wxMouseEvent& event)
         m_frame->ReleaseMouse();     
         UpdateButtonOnScreen(m_action_part, event);
 
-        // fire button-click event
-        wxFrameManagerEvent e(wxEVT_AUI_PANEBUTTON);
-        e.SetPane(m_action_part->pane);
-        e.SetButton(m_action_part->button->button_id);
-        ProcessMgrEvent(e);
+        // make sure we're still over the item that was originally clicked
+        if (m_action_part == HitTest(event.GetX(), event.GetY()))
+        { 
+            // fire button-click event
+            wxFrameManagerEvent e(wxEVT_AUI_PANEBUTTON);
+            e.SetPane(m_action_part->pane);
+            e.SetButton(m_action_part->button->button_id);
+            ProcessMgrEvent(e);
+        }
     }
      else if (m_action == actionClickCaption)
     {
@@ -4070,7 +4097,7 @@ void wxFrameManager::OnLeftUp(wxMouseEvent& event)
         pane.state &= ~wxPaneInfo::actionPane;
         Update();
     }
-    else
+     else
     {
         event.Skip();
     }
