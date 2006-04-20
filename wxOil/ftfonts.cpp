@@ -1045,16 +1045,12 @@ OUTLINETEXTMETRIC* FTFontMan::GetOutlineTextMetric(LOGFONT *pLogFont)
 
 	// first of all, retrieve the underlying font information
 	if (!GetPangoFcFontAndFreeTypeFaceForFaceName(pFaceName, &pPangoFcFont, &pFreeTypeFace)) return NULL;
+	// we have successfully retrieved the FreeType information (we need to release it below!)
 
-	// we have successfully retrieved the FreeType information - we need to release the information below
-	// ask FreeType for the Panose information
-	FT_ULong DummyTag;
-	FT_ULong DummyLen;
-
-	// check whether this font has a TrueType OS/2 font table
+	// ask FreeType for the Panose information - this is found in the OS/2 font table,
+	// so check whether this font has a TrueType OS/2 font table
 	TT_OS2* pOS2_Table;
-	if (FT_Sfnt_Table_Info(pFreeTypeFace, ft_sfnt_os2, &DummyTag, &DummyLen) != 0 /* not present */
-		|| (pOS2_Table = (TT_OS2*)FT_Get_Sfnt_Table(pFreeTypeFace, ft_sfnt_os2)) == NULL   /* error loading */
+	if ((pOS2_Table = (TT_OS2*)FT_Get_Sfnt_Table(pFreeTypeFace, ft_sfnt_os2)) == NULL   /* error loading */
 		|| pOS2_Table->version == 0xffff /* Mac font without OS/2 table */)
 	{
 		// we could not get the table with the Panose information, either because there
