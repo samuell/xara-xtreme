@@ -99,8 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 /*
 */
-
 #include "camtypes.h"
+
+#include <locale.h>
+
 #include "localenv.h"
 
 DECLARE_SOURCE("$Revision$");
@@ -147,8 +149,10 @@ void LocalEnvironment::GetNumberOfDecimalPlaces(UINT32* DecimalPlaces)
 
 PORTNOTE("other","Removed GetProfileString usage")
 #if defined(__WXGTK__)
-	TRACEUSER( "luke", _T("iDigits = %d\n"), *nl_langinfo( FRAC_DIGITS ) );
-	*DecimalPlaces = *nl_langinfo( FRAC_DIGITS );
+	struct lconv *lc;
+	lc = localeconv();
+	TRACEUSER( "luke", _T("iDigits = %d\n"), lc->frac_digits );
+	*DecimalPlaces = (UINT32)lc->frac_digits;
 	return;
 #elif !defined(EXCLUDE_FROM_XARALX)
 	GetProfileString("intl", "iDigits", "2", TS, sizeof(TS));
@@ -184,7 +188,9 @@ void LocalEnvironment::GetThousandsSeparator(StringBase* String)
 
 PORTNOTE("other","Removed GetProfileString usage")
 #if defined(__WXGTK__)
-	TS[0] = ToUnicode( *nl_langinfo( THOUSANDS_SEP ) );
+	struct lconv *lc;
+	lc = localeconv();
+	TS[0] = ToUnicode( lc->thousands_sep[0] );
 	TS[1] = 0;
 
 	TRACEUSER( "luke", _T("sThousand = %s\n"), TS );
@@ -218,7 +224,9 @@ void LocalEnvironment::GetDecimalPointChar(StringBase* String)
 
 PORTNOTE("other","Removed GetProfileString usage")
 #if defined(__WXGTK__)
-	TS[0] = ToUnicode( *nl_langinfo( DECIMAL_POINT ) );
+	struct lconv *lc;
+	lc = localeconv();
+	TS[0] = ToUnicode( lc->decimal_point[0] );
 	TS[1] = 0;
 
 	TRACEUSER( "luke", _T("sDecimal = %s\n"), TS );
