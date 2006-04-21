@@ -121,13 +121,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ctrlhelp.h"
 //#include "errorbox.h"
 #include "helpuser.h"
-//#include "basebar.h"		// For gallery creation error box fix...
+#include "basebar.h"		// For gallery creation error box fix...
 //#include "justin2.h"
 #include "ralphint.h"
 #include "ralphdoc.h"
 #include "document.h"
 #include "ralpherr.h"
 #include "camprofile.h"
+#include "cartprov.h"
+#include "dragmgr.h"
 
 // Put the source file into the revision list
 DECLARE_SOURCE("$Revision$");
@@ -141,9 +143,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 static BOOL ErrorHasBeenReported = TRUE;
 static UINT32	InSetError = 0;			// In either of the SetError routines
-#ifndef EXCLUDE_FROM_XARALX
 static UINT32 ErrorBoxRecurse = 0;	// Incremented as per how many recursive error boxes we have
-#endif
 
 // Used to indicate what kind of error message is currently defined.
 typedef enum
@@ -347,15 +347,37 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 #else
 
+class CamErrorDialog : public wxDialog
+{
+public:
+	CamErrorDialog(ResourceID TitleID) :  wxDialog( NULL, -1, CamResource::GetText(TitleID),
+											wxDefaultPosition, wxDefaultSize,
+											wxDEFAULT_DIALOG_STYLE | wxSTAY_ON_TOP ) {}
+
+	wxButton * AddErrorButton(wxSizer * pButtonSizer, const TCHAR * pText, INT32 id)
+	{
+		wxButton* pButton = new wxButton( this, id, pText, wxDefaultPosition, wxDefaultSize, 0 );
+		if (!pButton)
+			return NULL;
+		pButtonSizer->Add(pButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+		return pButton;
+	}
+
+	void ButtonClicked(wxCommandEvent &event) { EndModal(event.GetId()); }
+
+	DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE( CamErrorDialog, wxDialog )
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, CamErrorDialog::ButtonClicked)
+END_EVENT_TABLE()
+
+
 // **CAMELOT Error reporting** 
 INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg, 
 				  UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4,
 				  UINT32 OK, UINT32 Cancel)
 {    
-	PORTNOTETRACE("other", "InformGeneral called but unimplemented");
-	TRACE(_T("InformGeneral Error=%d, ErrorMsg=%d"), Error, ErrorMsg);
-#ifndef EXCLUDE_FROM_XARALX
-	
 	// Make sure there is at least one valid button.
 	if (Butt1 == 0) Butt1 = _R(IDS_OK);
 
@@ -366,7 +388,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		// InformGeneral).
 		TRACE( _T("Recursive InformGeneral - Error in error handler! (1)\n"));
 		// Don't risk putting up another error box - just return OK & hope for the best
-		::MessageBeep(MB_OK); // shouldn't cause too much trouble
+		Beep(); // shouldn't cause too much trouble
 		return(OK);
 	}
 
@@ -383,44 +405,181 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 	// In retail builds, we report the error anyway, just in case - it's better to have
 	// two errors reported than none at all!
-	CInformErrorDialog	MyErrorBox(NULL);
 
-    // Set the params according to what was supplied
-	MyErrorBox.m_StaticTextStr 	= ErrorMsg;
-	MyErrorBox.m_ButtonStr[0] 	= Butt1;
-	MyErrorBox.m_ButtonStr[1] 	= Butt2;
-	MyErrorBox.m_ButtonStr[2] 	= Butt3;
-	MyErrorBox.m_ButtonStr[3] 	= Butt4;
-	MyErrorBox.m_ErrorBoxType 	= Error;
-	MyErrorBox.m_OwnerModule  	= modID;
-	MyErrorBox.m_OK 			= OK;
-	MyErrorBox.m_Cancel 		= Cancel;
+	// we should get our bitmap from the OS
+	ResourceID TitleID = 0;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+	wxArtID bitmap=wxART_MISSING_IMAGE;
+
+	switch (Error)
+	{
+		case ERRORTYPE_NORMAL:
+			// No sound for this one - it's just a message; nothing to shout about.
+			bitmap = wxART_INFORMATION;
+			TitleID = _R(IDS_ERRORBOX_NORMAL);
+			break;
+
+		case ERRORTYPE_QUESTION:
+			//MessageBeep(MB_ICONQUESTION);
+			bitmap = wxART_QUESTION;
+			TitleID = _R(IDS_ERRORBOX_NORMAL);
+			break;
+
+		case ERRORTYPE_WARNING:
+			//MessageBeep(MB_ICONASTERISK);
+			bitmap = wxART_WARNING;
+			TitleID = _R(IDS_ERRORBOX_WARNING);
+			break;
+
+		case ERRORTYPE_SERIOUS:
+			//MessageBeep(MB_ICONHAND);
+			bitmap = wxART_ERROR;
+			TitleID = _R(IDS_ERRORBOX_SERIOUS);
+			break;
+
+		case ERRORTYPE_ENSURE:
+			//MessageBeep(MB_ICONHAND);
+			bitmap = wxART_ERROR;
+			TitleID = _R(IDS_ERRORBOX_ENSURE);
+			break;
+
+		case ERRORTYPE_ERROR:
+		default:
+			//MessageBeep(MB_ICONEXCLAMATION);
+			bitmap = wxART_ERROR;
+			TitleID = _R(IDS_ERRORBOX_ERROR);
+			break;
+
+	}
+
+	// We really should detect an error here, and if so use a stock wxMessageBox, but that
+	// doesn't seem to support help (oh dear).
+	// but in anticipation of that being fixed, we use a pointer
+
+	wxDialog * pBox = new CamErrorDialog(TitleID);
+
+	if (!pBox)
+	{
+		Beep();
+		ErrorBoxRecurse--;
+		return OK;
+	}
+
+#ifdef __WXMAC__
+	pBox->SetExtraStyle(wxDIALOG_EX_METAL);
+	pBox->SetBackgroundStyle(wxBG_STYLE_COLOUR);
+	pBox->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+#endif
+
+	// Note we add these to the dialog as soon as we can. Thus delete pBox will take
+	// care of them
+    wxBoxSizer* pVSizer = new wxBoxSizer(wxVERTICAL);
+	if (!pVSizer)
+	{
+		Beep();
+		ErrorBoxRecurse--;
+		delete pBox;
+		return OK;
+	}
+    pBox->SetSizer(pVSizer);
+
+    wxBoxSizer* pMessageSizer = new wxBoxSizer(wxHORIZONTAL);
+	if (!pMessageSizer)
+	{
+		Beep();
+		ErrorBoxRecurse--;
+		delete pBox;
+		return OK;
+	}
+    pVSizer->Add(pMessageSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+
+	CamArtProvider * pArtProv = CamArtProvider::Get();
+	// Art provider may not have been initialized...
+	if (pArtProv)
+	{
+		wxStaticBitmap* pStaticBitmap = new wxStaticBitmap( pBox, -1,
+															wxArtProvider::GetBitmap(bitmap, wxART_MESSAGE_BOX),
+														    wxDefaultPosition, wxDefaultSize, 0 );
+		if (!pStaticBitmap)
+		{
+			Beep();
+			ErrorBoxRecurse--;
+			delete pBox;
+			return OK;
+		}
+		pMessageSizer->Add(pStaticBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+	}
+
+    //wxTextCtrl* pMessage = new wxTextCtrl( pBox, -1, (TCHAR *)Error::GetErrorString(),
+	//									   wxDefaultPosition, wxSize(400, -1),
+	//									   wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxNO_BORDER );
+
+	wxStaticText* pMessage = new wxStaticText( pBox, -1, (TCHAR *)Error::GetErrorString(),
+										   wxDefaultPosition, wxSize(400, -1),
+										   wxALIGN_CENTRE|wxNO_BORDER );
+	if (!pMessage)
+	{
+		Beep();
+		ErrorBoxRecurse--;
+		delete pBox;
+		return OK;
+	}
+	pMessage->Wrap(400);
+    //pMessage->Enable(false); // this annoyingly does not grey it
+	//pMessage->SetBackgroundColour(pBox->GetBackgroundColour());
+    pMessageSizer->Add(pMessage, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
+
+    wxBoxSizer* pButtonSizer = new wxBoxSizer(wxHORIZONTAL);
+	if (!pButtonSizer)
+	{
+		Beep();
+		ErrorBoxRecurse--;
+		delete pBox;
+		return OK;
+	}
+    pVSizer->Add(pButtonSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+	wxButton * pButt[6]; // see help below, note we don't use zero, 5 is reserved for help
+	ResourceID butres[6];
+	butres[0]=0;
+	butres[1]=Butt1;
+	butres[2]=Butt2;
+	butres[3]=Butt3;
+	butres[4]=Butt4;
+	butres[5]=0;
+
+#if !defined(EXCLUDE_FROM_RALPH)
 	// See if there is any on-line help associated with the given warning/error message.
 	// If there is then we will add a "Help" button to the dialog.
 	if (CanHelpUser(Error::GetErrorNumber()))
+		butres[5]=_R(IDS_HELP);
+#endif
+	
+	INT32 butt;
+	for (butt=0; butt<=5; butt++)
 	{
-		// There is some on-line help for this message.  First, find out how many buttons
-		// were specified by the caller (we know they specified the first).
-		INT32 nButtons = 1 + (Butt2 != 0) + (Butt3 != 0) + (Butt4 != 0);
-
-		// Do we have room for another button?
-		if (nButtons <= 4)
+		if (butres[butt])
 		{
-			// Make the next available button the help button.
-			MyErrorBox.m_ButtonStr[nButtons] = _R(IDS_HELP);
-			MyErrorBox.m_Help = nButtons + 1;
+			pButt[butt] = ((CamErrorDialog *)pBox)->AddErrorButton(pButtonSizer, CamResource::GetText(butres[butt]),
+																 butres[butt]);
+			if (!pButt[butt])
+			{
+				Beep();
+				ErrorBoxRecurse--;
+				delete pBox;
+				return OK;
+			}
+			if (butres[butt] == (ResourceID)OK)
+				pButt[butt]->SetDefault();
 		}
-#ifdef _DEBUG
 		else
-		{
-			TRACEUSER( "JustinF", _T("Message 0x%lX - no room for help button\n"),
-									(UINT32) Error::GetErrorNumber());
-		}
-#endif
+			pButt[butt]=NULL;
 	}
-#endif
+
+    pBox->GetSizer()->Fit(pBox);
+    pBox->GetSizer()->SetSizeHints(pBox);
+    pBox->Centre();
 
 	CamResource::DoneInit();
  	// Disable the system's functionality for serious errors (i.e. stop rendering etc).
@@ -430,28 +589,37 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 	// Bodge because ReleaseCapture() sometimes doesn't send WM_CANCELMODE (e.g. to custom controls) which
 	// appears to be a bug somewhere in the Windows API
-	if (GetCapture()) SendMessage(GetCapture(), WM_CANCELMODE, 0, 0);
-	ReleaseCapture();
+	if (wxWindow::GetCapture()) wxWindow::GetCapture()->ReleaseMouse();
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	// Keep Control Helper system informed
+#if !defined(EXCLUDE_FROM_RALPH)
+#ifndef EXCLUDE_FROM_XARALX
+// Keep Control Helper system informed
 	ControlHelper::InformModalDialogOpened();
-
+#endif
 	// Bodge so error boxes are given focus when bars/galleries are being created
 	BaseBar::StartErrorBox();
 #endif
 
 	// 'Do' the dialog
-	INT32 result = MyErrorBox.DoModal();
+	ResourceID pressed = pBox->ShowModal();
+	INT32 result = Cancel;
+
+	for (butt=0; butt<=5; butt++)
+	{
+		if (butres[butt] == pressed)
+			result = butt;
+	}
 
 	ErrStatus = ERRORSTAT_NONE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Make sure we forget the old help content.
 	SetNextMsgHelpContext(0);
 
+#ifndef EXCLUDE_FROM_XARALX
 	// Keep Control Helper system informed
 	ControlHelper::InformModalDialogClosed();
+#endif
 
 	// Bodge so error boxes are given focus when bars/galleries are being created
 	BaseBar::FinishErrorBox();
@@ -477,9 +645,6 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	DragManagerOp::AbortDrag();
 
 	return result;
-#else
-	return OK;
-#endif
 }
 
 #endif
@@ -739,7 +904,7 @@ void Error::SetError(UINT32 number, UINT32 module)
 	ErrorString[0] = 0;
 	ErrStatus = ERRORSTAT_ID;
 	ErrorHasBeenReported = FALSE;
-	if (!SmartLoadString(module, ErrorID, ErrorString, 256 ) )
+	if (!SmartLoadString(module, ErrorID, ErrorString, 256 * sizeof(TCHAR)) )
 	{
 		camSnprintf( ErrorString, 256, _T("Error Number %u from module ID %u"), ErrorID, ModuleID );
 	}
