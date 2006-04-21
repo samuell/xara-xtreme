@@ -644,8 +644,8 @@ public:
 	static SuperGallery*		FindSuperGallery(String_32& SuperGalleryName, INT32 limit = -1);
 
 	String_32		Name;
-	String_32&		GetName()								{ return Name; }
-	void			SetName(const String_32& str)			{ Name = str; }
+	String_32&		GetGalName()							{ return Name; }
+	void			SetGalName(const String_32& str)		{ Name = str; }
 
 };
 

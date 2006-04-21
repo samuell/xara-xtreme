@@ -421,7 +421,7 @@ MsgResult SuperGallery::Message(Msg* Message)
 			case DIM_CREATE:
 				{
 					String_32 name(CamResource::GetObjectName(DlgResID));
-					SetName(name);
+					SetGalName(name);
 				}
 				break;
 
@@ -2647,7 +2647,7 @@ BOOL SuperGallery::InitMenuCommands(void)
 
 BOOL SuperGallery::InitMenuCommand(StringBase *CommandID, UINT32 MenuTextID)
 {
-	String_256 OpToken = GetName();
+	String_256 OpToken = GetGalName();
 	// With the new GIF Animation frame gallery, this can mean that the OpToken can easily
 	// overrun its String_32 allocation. Therefore, restrict the name to the first 16 characters.
 	// Unfortunately, we then use the name to find the gallery to send the command to!
@@ -2690,7 +2690,7 @@ BOOL SuperGallery::InitMenuCommand(StringBase *CommandID, UINT32 MenuTextID)
 BOOL SuperGallery::AddCommand(GalleryContextMenu *TheMenu, StringBase *CommandID, BOOL Separator,
 							  MenuItem* pRootMenu)
 {
-	String_256 OpToken = GetName();
+	String_256 OpToken = GetGalName();
 	// With the new GIF Animation frame gallery, this can mean that the OpToken can easily
 	// overrun its String_32 allocation. Therefore, restrict the name to the first 16 characters.
 	// Unfortunately, we then use the name to find the gallery to send the command to!
