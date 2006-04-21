@@ -409,8 +409,7 @@ inline BOOL ListControl::AddItem(const StringBase& ItemText)
 	ENSURE( 0 != m_ControlID, "Control ID is invalide" );
 	ENSURE_NOT_NULL(m_pDialog);
 	
-	String_256 NonConstItemText = ItemText;
-	return m_pDialog->SetStringGadgetValue(m_ControlID, &NonConstItemText, TRUE);
+	return m_pDialog->SetStringGadgetValue(m_ControlID, ItemText, TRUE);
 }
 
 inline BOOL ListControl::InsertItem(const StringBase& ItemText, UINT32 AtIndex)
@@ -418,8 +417,7 @@ inline BOOL ListControl::InsertItem(const StringBase& ItemText, UINT32 AtIndex)
 	ENSURE( 0 != m_ControlID, "Control ID is invalide" );
 	ENSURE_NOT_NULL(m_pDialog);
 	
-	String_256 NonConstItemText = ItemText;
-	return m_pDialog->SetStringGadgetValue(m_ControlID, &NonConstItemText, FALSE, AtIndex);
+	return m_pDialog->SetStringGadgetValue(m_ControlID, ItemText, FALSE, AtIndex);
 }
 
 inline BOOL ListControl::DeleteItemAtIndex(UINT32 AtIndex)

@@ -838,7 +838,7 @@ BOOL DialogOp::SetStringGadgetValue(CGadgetID Gadget,
 ********************************************************************************************/
     
 BOOL DialogOp::SetStringGadgetValue(CGadgetID Gadget, 
-									StringBase* StrValue, 
+									const StringBase& StrValue, 
 									BOOL EndOfList, 
 			     			 	  	INT32 ListPos)
 {      
@@ -1008,7 +1008,7 @@ void DialogOp::SetResDropListValue(const CGadgetID DropListID,
 			String_32 strTemp(_R(IDS_RES_PPI_FORMAT));
 			camSnprintf( str, 32, strTemp, iValue );
 			String_32 strPPI(str);
-			SetStringGadgetValue(DropListID, &strPPI, FALSE, -1);
+			SetStringGadgetValue(DropListID, strPPI, FALSE, -1);
 		}
 		break;
 	}
@@ -3420,7 +3420,7 @@ BOOL DialogOp::UpdateStringGadgetValue(CGadgetID Gadget, StringBase* NewString)
 
 	if (OldString != *NewString)
 	{
-		SetStringGadgetValue(Gadget, NewString);
+		SetStringGadgetValue(Gadget, *NewString);
 		return TRUE;
 	}
 	else

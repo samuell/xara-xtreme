@@ -3266,7 +3266,7 @@ void GradInfoBarOp::InitControls()
 	for ( INT32 i=0; i<FillGeometryMenuCount; i++ )
 	{
 		Str.Load( FillGeometryMenu[i].StringID );
-		SetStringGadgetValue( _R(IDC_GEOMETRY), &Str, TRUE, FillGeometryMenu[i].Geometry );
+		SetStringGadgetValue( _R(IDC_GEOMETRY), Str, TRUE, FillGeometryMenu[i].Geometry );
 	}
 
 	// Ensure the drop-downs are the correct length
@@ -3386,11 +3386,11 @@ void GradInfoBarOp::InitEffect()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_FADE));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_FADE);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_FADE);
 	Str.Load(_R(IDS_FILLTOOL_RAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_RAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_RAINBOW);
 	Str.Load(_R(IDS_FILLTOOL_ALTRAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,TRUE, FEMENU_ALTRAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,TRUE, FEMENU_ALTRAINBOW);
 
 	SetComboListLength(_R(IDC_EFFECT));
 }
@@ -3415,9 +3415,9 @@ void GradInfoBarOp::InitMapping()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_MAPSIMPLE));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FMMENU_SIMPLE);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,FALSE, FMMENU_SIMPLE);
 	Str.Load(_R(IDS_FILLTOOL_MAPREPEAT));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FMMENU_REPEATING);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FMMENU_REPEATING);
 
 //	SetSelectedValueIndex(_R(IDC_MAPPING), 0);
 	SetComboListLength(_R(IDC_MAPPING));
@@ -3480,7 +3480,7 @@ PORTNOTETRACE("other","GradInfoBarOp::InitBitmapName() - removed CustomComboBox 
 				// and insert the data item into the cutsom combobox ....
 				SetCustomComboGadgetValue( _R(IDC_BITMAPEFFECT), theItem, TRUE, 0);
 #else
-				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), &Str, TRUE, Index);
+				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), Str, TRUE, Index);
 #endif
 				Index++;
 			}
@@ -3520,11 +3520,11 @@ void GradInfoBarOp::InitTesselate()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_TESS_SIMPLE));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FTMENU_SIMPLE);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,FALSE, FTMENU_SIMPLE);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEAT));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FTMENU_REPEAT);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,FALSE, FTMENU_REPEAT);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEATINV));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FTMENU_REPEATINV);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FTMENU_REPEATINV);
 
 	SetComboListLength(_R(IDC_MAPPING));
 }
@@ -3551,7 +3551,7 @@ BOOL GradInfoBarOp::SetGadgetString(CGadgetID Gadget, StringBase* StrValue)
 
 	if (GetStringGadgetValue(Gadget, NULL, -1) != *StrValue)
   	{
-		return SetStringGadgetValue(Gadget, StrValue, FALSE, -1);
+		return SetStringGadgetValue(Gadget, *StrValue, FALSE, -1);
 	}
 
 	return TRUE;
@@ -4629,8 +4629,8 @@ void GradInfoBarOp::ShowControlPointInfo()
 	// PointStr and ColourStr will be updated if we find any
 
 	// Show the selected control points state
-	SetStringGadgetValue(_R(IDC_SELPOINT),&PointStr);
-	SetStringGadgetValue(_R(IDC_SELCOLOUR),&ColourStr);
+	SetStringGadgetValue(_R(IDC_SELPOINT), PointStr);
+	SetStringGadgetValue(_R(IDC_SELCOLOUR), ColourStr);
 
 	if ((Mode != BITMAPFILL && 
 		 Mode != FRACTALFILL && 
@@ -6261,7 +6261,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 							if (Mode == FRACTALFILL)
 							{
 								String_32 PercentStr(Str);
-								SetStringGadgetValue(_R(IDC_SELCOLOUR), &PercentStr);
+								SetStringGadgetValue(_R(IDC_SELCOLOUR), PercentStr);
 							}
 							else	// MUST be NOISEFILL
 							{
@@ -6352,7 +6352,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 								if (Mode == FRACTALFILL)
 								{
 									String_32 PercentStr(Str);
-									SetStringGadgetValue(_R(IDC_SELCOLOUR), &PercentStr);
+									SetStringGadgetValue(_R(IDC_SELCOLOUR), PercentStr);
 								}
 								else	// MUST be NOISEFILL
 								{
@@ -6704,36 +6704,36 @@ void TranspInfoBarOp::InitControls()
 	for ( INT32 i=0; i<TransparencyGeometryMenuCount; i++ )
 	{
 		Str.Load( TransparencyGeometryMenu[i].StringID );
-		SetStringGadgetValue( _R(IDC_GEOMETRY), &Str, TRUE, TransparencyGeometryMenu[i].Geometry );
+		SetStringGadgetValue( _R(IDC_GEOMETRY), Str, TRUE, TransparencyGeometryMenu[i].Geometry );
 	}
 
 	Str.Load(_R(IDS_FILLTOOL_PAINT));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,FALSE, FTMENU_REFLECT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,FALSE, FTMENU_REFLECT);
 	Str.Load(_R(IDS_FILLTOOL_STAIN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,FALSE, FTMENU_SUB);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,FALSE, FTMENU_SUB);
 	Str.Load(_R(IDS_FILLTOOL_BLEACH));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_ADD);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_ADD);
 	Str.Load(_R(IDS_FILLTOOL_CONTRAST));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_CON);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_CON);
 	Str.Load(_R(IDS_FILLTOOL_SATURATE));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_SAT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_SAT);
 	Str.Load(_R(IDS_FILLTOOL_DARKEN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_DARK);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_DARK);
 	Str.Load(_R(IDS_FILLTOOL_LIGHTEN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_LIGHT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_LIGHT);
 	Str.Load(_R(IDS_FILLTOOL_BRIGHTNESS));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_BRI);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_BRI);
 	Str.Load(_R(IDS_FILLTOOL_LUMINOSITY));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_LUM);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_LUM);
 	Str.Load(_R(IDS_FILLTOOL_HUE));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_HUE);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_HUE);
 
 	Str.Load(_R(IDS_FILLTOOL_TESS_SIMPLE));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FTMENU_SIMPLE);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,FALSE, FTMENU_SIMPLE);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEAT));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FTMENU_REPEAT);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FTMENU_REPEAT);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEATINV));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FTMENU_REPEATINV);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FTMENU_REPEATINV);
 
 	// Ensure the drop-downs are the correct length
 	SetComboListLength(_R(IDC_GEOMETRY));
@@ -6860,9 +6860,9 @@ void TranspInfoBarOp::InitMapping()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_MAPSIMPLE));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FMMENU_SIMPLE);
+	SetStringGadgetValue(_R(IDC_MAPPING), Str,FALSE, FMMENU_SIMPLE);
 	Str.Load(_R(IDS_FILLTOOL_MAPREPEAT));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FMMENU_REPEATING);
+	SetStringGadgetValue(_R(IDC_MAPPING), Str,TRUE, FMMENU_REPEATING);
 
 	SetComboListLength(_R(IDC_MAPPING));
 }
@@ -6922,7 +6922,7 @@ PORTNOTETRACE("other","SelectorTool::ResetDefaults - SelectorInfoBarOp usage");
 				// and insert the data item into the cutsom combobox ....
 				SetCustomComboGadgetValue ( _R(IDC_BITMAPEFFECT), theItem, TRUE, 0);
 #else
-				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), &Str, TRUE, Index);
+				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), Str, TRUE, Index);
 #endif
 				Index++;
 			}
@@ -6960,25 +6960,25 @@ void TranspInfoBarOp::InitTransType ()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_PAINT));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,FALSE, FTMENU_REFLECT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE), Str,FALSE, FTMENU_REFLECT);
 	Str.Load(_R(IDS_FILLTOOL_STAIN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,FALSE, FTMENU_SUB);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,FALSE, FTMENU_SUB);
 	Str.Load(_R(IDS_FILLTOOL_BLEACH));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_ADD);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_ADD);
 	Str.Load(_R(IDS_FILLTOOL_CONTRAST));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_CON);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_CON);
 	Str.Load(_R(IDS_FILLTOOL_SATURATE));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_SAT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_SAT);
 	Str.Load(_R(IDS_FILLTOOL_DARKEN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_DARK);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_DARK);
 	Str.Load(_R(IDS_FILLTOOL_LIGHTEN));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_LIGHT);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_LIGHT);
 	Str.Load(_R(IDS_FILLTOOL_BRIGHTNESS));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_BRI);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_BRI);
 	Str.Load(_R(IDS_FILLTOOL_LUMINOSITY));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_LUM);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_LUM);
 	Str.Load(_R(IDS_FILLTOOL_HUE));
-	SetStringGadgetValue(_R(IDC_TRANSPTYPE),&Str,TRUE, FTMENU_HUE);
+	SetStringGadgetValue(_R(IDC_TRANSPTYPE),Str,TRUE, FTMENU_HUE);
 
 	SetComboListLength(_R(IDC_TRANSPTYPE));
 }
@@ -7004,11 +7004,11 @@ void TranspInfoBarOp::InitTesselate()
 	String_64 Str;
 
 	Str.Load(_R(IDS_FILLTOOL_TESS_SIMPLE));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,FALSE, FTMENU_SIMPLE);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,FALSE, FTMENU_SIMPLE);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEAT));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FTMENU_REPEAT);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FTMENU_REPEAT);
 	Str.Load(_R(IDS_FILLTOOL_TESS_REPEATINV));
-	SetStringGadgetValue(_R(IDC_MAPPING),&Str,TRUE, FTMENU_REPEATINV);
+	SetStringGadgetValue(_R(IDC_MAPPING),Str,TRUE, FTMENU_REPEATINV);
 
 	SetComboListLength(_R(IDC_MAPPING));
 }
@@ -7088,7 +7088,7 @@ BOOL TranspInfoBarOp::SetGadgetString(CGadgetID Gadget, StringBase* StrValue)
 
 	if (GetStringGadgetValue(Gadget, NULL, -1) != *StrValue)
   	{
-		return SetStringGadgetValue(Gadget, StrValue, FALSE, -1);
+		return SetStringGadgetValue(Gadget, *StrValue, FALSE, -1);
 	}
 
 	return TRUE;

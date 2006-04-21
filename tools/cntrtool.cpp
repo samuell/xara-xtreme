@@ -2857,18 +2857,18 @@ PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources"
 	DeleteAllValues(_R(IDC_EFFECT));
 
 	Str.Load(_R(IDS_FILLTOOL_FADE));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_FADE);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_FADE);
 	Str.Load(_R(IDS_FILLTOOL_RAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_RAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_RAINBOW);
 	Str.Load(_R(IDS_FILLTOOL_ALTRAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,TRUE, FEMENU_ALTRAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,TRUE, FEMENU_ALTRAINBOW);
 
 	SetComboListLength(_R(IDC_EFFECT));
 
 	if (NumSelBlends == 0)
 	{
 		Str = _T("");
-		SetStringGadgetValue(_R(IDC_CONTOURSTEPS),&Str);
+		SetStringGadgetValue(_R(IDC_CONTOURSTEPS),Str);
 	}
 	else
 	{
@@ -2883,7 +2883,7 @@ PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources"
 			{
 				String_256 ManyString;
 				ManyString.Load(_R(IDS_MANY));
-				SetStringGadgetValue(_R(IDC_CONTOURSTEPS),&ManyString);
+				SetStringGadgetValue(_R(IDC_CONTOURSTEPS),ManyString);
 				PaintGadgetNow(_R(IDC_CONTOURSTEPS));
 			}
 		}
@@ -2894,14 +2894,14 @@ PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources"
 				// do the conversion to whatever the document intends
 				String_256 DistString;
 				ConvertValueToString(DistString, StepDistance);
-				SetStringGadgetValue(_R(IDC_CONTOURSTEPS), &DistString);
+				SetStringGadgetValue(_R(IDC_CONTOURSTEPS), DistString);
 
 			}
 			else
 			{
 				String_256 ManyString;
 				ManyString.Load(_R(IDS_MANY));
-				SetStringGadgetValue(_R(IDC_CONTOURSTEPS),&ManyString);
+				SetStringGadgetValue(_R(IDC_CONTOURSTEPS),ManyString);
 				PaintGadgetNow(_R(IDC_CONTOURSTEPS));
 			}
 		}
@@ -2916,7 +2916,7 @@ PORTNOTE("other", "_R(IDC_BTN_CONTOURANTIALIAS) removed as not in the resources"
 			default:ERROR3("Unknown colour blend type"); Str.Load(_R(IDS_FILLTOOL_FADE)); break;
 		}
 		
-		SetStringGadgetValue(_R(IDC_EFFECT),&Str, FALSE, -1);
+		SetStringGadgetValue(_R(IDC_EFFECT),Str, FALSE, -1);
 		
 		// ensure immediate update
 		PaintGadgetNow(_R(IDC_EFFECT));
@@ -3032,7 +3032,7 @@ void ContourInfoBarOp::SetSliderValue(UINT32 Value, BOOL bMany)
 		WidthStr.Load(_R(IDS_MANY));
 
 		if (ok)
-			ok = SetStringGadgetValue(_R(IDC_CONTOURSLIDEREDIT), &WidthStr);
+			ok = SetStringGadgetValue(_R(IDC_CONTOURSLIDEREDIT), WidthStr);
 		
 		if (ok)
 		{
@@ -3047,7 +3047,7 @@ void ContourInfoBarOp::SetSliderValue(UINT32 Value, BOOL bMany)
 			ok = ConvertValueToString(WidthStr, Value);
 		
 		if (ok)
-			ok = SetStringGadgetValue(_R(IDC_CONTOURSLIDEREDIT), &WidthStr);
+			ok = SetStringGadgetValue(_R(IDC_CONTOURSLIDEREDIT), WidthStr);
 
 		if (ok)
 		{

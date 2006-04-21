@@ -1161,7 +1161,7 @@ BOOL QuickShapeBaseInfoBarOp::InitialiseInfobar()
 		for (INT32 i = 3; i <= 10; i++)
 		{
 			Str._MakeMsg(_T("#1%d"),i);
-			SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_SIDES),&Str);
+			SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_SIDES),Str);
 		}
 		SetComboListLength(_R(IDC_EDIT_REGSHAPETOOL_SIDES)); 
 		SetNumSides(pQuickShapeBase->GetNumSides());
@@ -1268,7 +1268,7 @@ void QuickShapeBaseInfoBarOp::BuildEditMenu(BOOL UpdateImmediate)
 					pQuickShapeBase->EditFieldOptions[CurrentCount++] = OptionIDs[i];
 					
 				Str.MakeMsg(StringResource);
-				SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_POS),&Str);
+				SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_POS),Str);
 			}
 		}
 
@@ -1277,7 +1277,7 @@ void QuickShapeBaseInfoBarOp::BuildEditMenu(BOOL UpdateImmediate)
 		{
 			Str.MakeMsg(_R(IDS_REGSHAPETOOL_MENUROT));
 			pQuickShapeBase->EditFieldOptions[CurrentCount++] = QuickShapeBase::EDITF_ROT;
-			SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_POS),&Str);
+			SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_POS),Str);
 		}
 		SetComboListLength(_R(IDC_EDIT_REGSHAPETOOL_POS));
 
@@ -1675,7 +1675,7 @@ void QuickShapeBaseInfoBarOp::UpdateEditFields(NodeRegularShape* ShapeToShow, Sp
 					
 					Blank = !SetDoubleGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_UPPER), MajorAngle);
 					Str.Empty();
-					SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),&Str);
+					SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),Str);
 					if (FastUpdate)
 					{
 						PaintGadgetNow(_R(IDC_EDIT_REGSHAPETOOL_UPPER));
@@ -1697,20 +1697,20 @@ void QuickShapeBaseInfoBarOp::UpdateEditFields(NodeRegularShape* ShapeToShow, Sp
 	if (MakeUpperMany)
 	{
 		Str.MakeMsg(_R(IDS_MANY));
-		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_UPPER),&Str);
+		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_UPPER),Str);
 	}
 
 	if (MakeLowerMany)
 	{
 		Str.MakeMsg(_R(IDS_MANY));
-		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),&Str);
+		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),Str);
 	}
 
 	if (Blank)
 	{
 		Str.Empty();
-		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_UPPER),&Str);
-		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),&Str);
+		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_UPPER),Str);
+		SetStringGadgetValue(_R(IDC_EDIT_REGSHAPETOOL_LOWER),Str);
 		for (loop = 0; loop < 6; EnableArray[loop++] = FALSE);
 	}
 
@@ -1994,7 +1994,7 @@ void QuickShapeBaseInfoBarOp::SetToolMode()
 			Text.Load(_R(IDS_BEZTOOL_CHANGE),Tool::GetModuleID(pQuickShapeBase->GetID()));
 		else
 			Text.Load(_R(IDS_BEZTOOL_NEW),Tool::GetModuleID(pQuickShapeBase->GetID()));
-		SetStringGadgetValue(_R(IDC_REGSHAPETOOL_ADDCHANGE), &Text);
+		SetStringGadgetValue(_R(IDC_REGSHAPETOOL_ADDCHANGE), Text);
 	}
 }
 

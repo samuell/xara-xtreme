@@ -728,7 +728,7 @@ PORTNOTE("text", "Removed custom dropdown");
 	else
 	{
 		String_64 ZeroPt(_R(IDS_TEXTINFO_0PT));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),&ZeroPt,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),ZeroPt,0,-1);
 	}
 
 	SetLineSpaceGadget();
@@ -898,7 +898,7 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 	{
 		InfoData.FontSize = INVALID_ATTVAL;
 		String_64 empty(_T(""));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_POINT_COMBO),&empty,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_POINT_COMBO),empty,0,-1);
 
 	}
 	else 
@@ -1016,7 +1016,7 @@ PORTNOTE("text", "Removed custom dropdown");
 	{
 		InfoData.AspectRatio = INVALID_ATTVAL;
 		String_64 empty(_T(""));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_ASPECTEDIT),&empty,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_ASPECTEDIT),empty,0,-1);
 	}
 	else 
 	{
@@ -1043,7 +1043,7 @@ PORTNOTE("text", "Removed custom dropdown");
 	{
 		InfoData.Tracking = INVALID_ATTVAL;
 		String_64 empty(_T(""));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_TRACKING_EDIT),&empty,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_TRACKING_EDIT),empty,0,-1);
 	}
 	else 
 	{
@@ -1069,7 +1069,7 @@ PORTNOTE("text", "Removed custom dropdown");
 	if (result == SelRange ::ATTR_MANY)
 	{
 		String_64 empty(_T(""));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT),&empty,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT),empty,0,-1);
 		InfoData.LineSpacePercent = InfoData.LineSpace = INVALID_ATTVAL;
 		
 	}
@@ -1111,7 +1111,7 @@ PORTNOTE("text", "Removed custom dropdown");
 	{
 		InfoData.BaseLineShift = INVALID_ATTVAL;
 		String_64 empty(_T(""));
-		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),&empty,0,-1);
+		pTextInfoBar->SetStringGadgetValue(_R(IDC_KERN_EDIT_Y),empty,0,-1);
 	}
 	else 
 	{
@@ -1723,7 +1723,7 @@ void TextInfoBarOp::SetLineSpaceGadget()
 			// Convert::DoubleToString(InfoData.LineSpacePercent, &StrValue);
 			// StrValue += String_8(_R(IDS_TEXTINFO_PERCENT));			
 			StrValue.MakePercent(InfoData.LineSpacePercent);
-			pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT), &StrValue, 0,-1);
+			pTextInfoBar->SetStringGadgetValue(_R(IDC_SPACING_EDIT), StrValue, 0,-1);
 		}
 	}
 }

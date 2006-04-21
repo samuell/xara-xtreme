@@ -210,8 +210,7 @@ TextControl::TextControl(	DialogOp* const pDialog, CGadgetID ControlID,
 	if (!InitialText.IsEmpty())
 	{
 		NotifyOff();
-		String_256 NonConstIdiocy = InitialText;
-		pDialog->SetStringGadgetValue(m_ControlID, &NonConstIdiocy);
+		pDialog->SetStringGadgetValue(m_ControlID, InitialText);
 		NotifyOn();
 	}
 }
@@ -247,8 +246,7 @@ void TextControl::UpdateText(const StringBase &NewString)
 {
 	ASSERT(m_ControlID != 0 && m_pDialog != NULL);
 
-	String_256 NonConstIdiocy = NewString;
-	m_pDialog->SetStringGadgetValue(m_ControlID, &NonConstIdiocy);
+	m_pDialog->SetStringGadgetValue(m_ControlID, NewString);
 	Notify(m_pObserver);
 }
 
@@ -323,8 +321,7 @@ StaticTextControl::StaticTextControl(	DialogOp* const pDialog, CGadgetID Control
 {
 	if (!InitialText.IsEmpty())
 	{
-		String_256 NonConstIdiocy = InitialText;
-		pDialog->SetStringGadgetValue(m_ControlID, &NonConstIdiocy);
+		pDialog->SetStringGadgetValue(m_ControlID, InitialText);
 	}
 }
 
@@ -345,8 +342,7 @@ void StaticTextControl::UpdateText(const StringBase &NewString)
 {
 	ASSERT(m_ControlID != 0 && m_pDialog != NULL);
 
-	String_256 NonConstIdiocy = NewString;
-	m_pDialog->SetStringGadgetValue(m_ControlID, &NonConstIdiocy);
+	m_pDialog->SetStringGadgetValue(m_ControlID, NewString);
 	Notify(m_pObserver);
 }
 

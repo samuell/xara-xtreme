@@ -430,7 +430,7 @@ public:
 			     			    
 	static BOOL SetStringGadgetValue(CWindowID WindowID,
 							  CGadgetID Gadget, 
-							  StringBase* StrVal, 
+							  const StringBase& StrVal, 
 							  BOOL EndOfList = TRUE, 
 			     			  INT32 ListPos = 0);    
 

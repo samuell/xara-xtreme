@@ -2380,7 +2380,7 @@ BOOL OpZoomComboDescriptor::UpdateAllCombos(String_256* pStr)
 			// combo-boxes) to the given percentage text.
 			GadgetListItem* pGadgetItem = (GadgetListItem*) pListItem;
 			pGadgetItem->pDialogOp->SetStringGadgetValue(pGadgetItem->gidGadgetID,
-															pStr,
+															*pStr,
 															FALSE,
 															-1);
 
@@ -2500,33 +2500,33 @@ BOOL OpZoomComboDescriptor::RefreshList()
 			for (i = 0; i < cZoomTableSize; i++)
 			{
 				txt.MakeMsg(_R(IDS_ZOOM_INFO_FORMAT), OpZoom::GetPresetZoomPercent(i));
-				pBarOp->SetStringGadgetValue(gid, &txt, FALSE, i);
+				pBarOp->SetStringGadgetValue(gid, txt, FALSE, i);
 			}
 
 			// Insert a divider so it all looks nice.
 			String_256 strDivide(_R(IDS_ZOOM_COMBO_DIVIDER));
-			pBarOp->SetStringGadgetValue(gid, &strDivide, FALSE, i++);
+			pBarOp->SetStringGadgetValue(gid, strDivide, FALSE, i++);
 
 			// Add the text commands after the percentages.
 			txt.Load(_R(IDS_ZOOMSPREADCOMBOTEXT));
-			pBarOp->SetStringGadgetValue(gid, &txt, FALSE, i++);
+			pBarOp->SetStringGadgetValue(gid, txt, FALSE, i++);
 			txt.Load(_R(IDS_ZOOMDRAWINGCOMBOTEXT));
-			pBarOp->SetStringGadgetValue(gid, &txt, FALSE, i++);
+			pBarOp->SetStringGadgetValue(gid, txt, FALSE, i++);
 
 #ifndef STANDALONE
 			txt.Load(_R(IDS_ZOOMSELECTEDCOMBOTEXT));
-			pBarOp->SetStringGadgetValue(gid, &txt, FALSE, i++);
+			pBarOp->SetStringGadgetValue(gid, txt, FALSE, i++);
 #endif
 
 			txt.Load(_R(IDS_ZOOMPREVIOUSCOMBOTEXT));
-			pBarOp->SetStringGadgetValue(gid, &txt, FALSE, i++);
+			pBarOp->SetStringGadgetValue(gid, txt, FALSE, i++);
 
 			// Set the required depth of the combo-box when it drops down.
 			pBarOp->SetComboListLength(gid);
 
 			// Blank the string to start off with
 			txt=_T("");
-			pBarOp->SetStringGadgetValue(gid, &txt, FALSE, -1);
+			pBarOp->SetStringGadgetValue(gid, txt, FALSE, -1);
 
 			// Do the next control in the list, if any.
 			pListItem = pList->GetNext(pListItem);

@@ -1023,7 +1023,7 @@ void FreeHandInfoBarOp::HandleCreate()
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
 		camSnprintf(Str, 32, jcf, (INT32) Smoothness);
 		String_32 PercentStr(Str);
-		SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), &PercentStr);
+		SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), PercentStr);
 	
 		// Set the Retro field (Will be empty initially)
 		if (pTool!=NULL)
@@ -1910,7 +1910,7 @@ void FreeHandInfoBarOp::HandleSliderPosChanging()
 	String_32 jcf(_R(IDS_PERCENT_FORMAT));
 	camSnprintf(Str, 32, jcf, (INT32) Result);
 	String_8 PercentStr(Str);
-	SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), &PercentStr);
+	SetStringGadgetValue(_R(IDC_FREEHANDPERCENT), PercentStr);
 
 	// Tell the freehand tool about the new smoothness
 	if (Valid)
@@ -3209,14 +3209,14 @@ void FreeHandInfoBarOp::SetRetroString()
 			if (RetroWord.Load(_R(IDS_FHANDRETROTEXT)))
 			{
 				// Set the contents of the field to indicate retro is possible
-				SetStringGadgetValue(_R(IDC_FREEHANDRETRO), &RetroWord);
+				SetStringGadgetValue(_R(IDC_FREEHANDRETRO), RetroWord);
 			}
 		}
 		else
 		{
 			// make the word retro not appear
 			String_8 RetroWord(_T(""));
-			SetStringGadgetValue(_R(IDC_FREEHANDRETRO), &RetroWord);
+			SetStringGadgetValue(_R(IDC_FREEHANDRETRO), RetroWord);
 		}
 	}
 }

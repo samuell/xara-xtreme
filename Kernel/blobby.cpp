@@ -1000,9 +1000,9 @@ void InitValues(BlobbyDlg* pBlob)
 	String_256 Wibble("WIBBLE");
 	String_256 Wobble("WOBBLE");
 	pBlob->SetStringGadgetValue(_R(IDC_BUTTON1),
-			  			   		 &Wibble);
+			  			   		 Wibble);
 	pBlob->SetStringGadgetValue(_R(IDC_BUTTON2),
-				   		 		&Wobble);
+				   		 		Wobble);
 
 	// Fill lists
 	String_256 StrList[5*5];
@@ -1016,7 +1016,7 @@ void InitValues(BlobbyDlg* pBlob)
 			((TCHAR*)StrList[i])[0] = a;
 			((TCHAR*)StrList[i])[1] = b;
 			((TCHAR*)StrList[i])[2] = 0;
-			pBlob->SetStringGadgetValue(_R(IDC_LIST1), &StrList[i],FALSE,i);
+			pBlob->SetStringGadgetValue(_R(IDC_LIST1), StrList[i],FALSE,i);
 			i++;
 		}
 	}
@@ -1197,10 +1197,10 @@ BitmapEffectAtom::Test(Value);
 			String_256 Temp = GetStringGadgetValue(_R(IDC_BUTTON1), &Valid);
 		    String_256 Temp2 = GetStringGadgetValue(_R(IDC_BUTTON2), &Valid);
 			SetStringGadgetValue(_R(IDC_BUTTON1),
-							   	 &Temp2);
+							   	 Temp2);
 
 			SetStringGadgetValue(_R(IDC_BUTTON2),
-							   	 &Temp);
+							   	 Temp);
 			SetTitlebarName(&Temp); // Returns a BOOL !!!
 		}
 		// Hide and enable
@@ -1218,7 +1218,7 @@ BitmapEffectAtom::Test(Value);
 			// Add the selected item to the sorted list
 			BOOL Valid =0;
 			String_256 MoveStr = GetStringGadgetValue(_R(IDC_LIST1), &Valid);
-			SetStringGadgetValue(_R(IDC_LIST2), &MoveStr);
+			SetStringGadgetValue(_R(IDC_LIST2), MoveStr);
 			// Delete the selected item
 			WORD Index;
 			GetValueIndex(_R(IDC_LIST1), &Index);
@@ -1229,7 +1229,7 @@ BitmapEffectAtom::Test(Value);
 			// Add the selected item to LIST1
 			BOOL Valid =0;
 			String_256 MoveStr = GetStringGadgetValue(_R(IDC_LIST2), &Valid);
-			SetStringGadgetValue(_R(IDC_LIST1), &MoveStr);
+			SetStringGadgetValue(_R(IDC_LIST1), MoveStr);
 			// Delete the selected item
 			WORD Index;
 			GetValueIndex(_R(IDC_LIST2), &Index);
@@ -1381,8 +1381,8 @@ BOOL BlobbyDlg::Create()
 
 		for (INT32 i=0; i<9; i++)
 		{
-			SetStringGadgetValue(_R(IDC_COMBO3), &UnitStrList[i],FALSE,i);
-			SetStringGadgetValue(_R(IDC_COMBO4), &UnitStrList[i],FALSE,i);
+			SetStringGadgetValue(_R(IDC_COMBO3), UnitStrList[i],FALSE,i);
+			SetStringGadgetValue(_R(IDC_COMBO4), UnitStrList[i],FALSE,i);
 		}
 
 
@@ -1704,8 +1704,8 @@ void BlobbyTabDlg::HandleConvertMsg(DialogMsg* Msg)
 			// Setup combos
 			for (INT32 i=0; i<9; i++)
 			{
-				SetStringGadgetValue(_R(IDC_TCOMBO3), &UnitStrList[i],FALSE,i);
-				SetStringGadgetValue(_R(IDC_TCOMBO4), &UnitStrList[i],FALSE,i);
+				SetStringGadgetValue(_R(IDC_TCOMBO3), UnitStrList[i],FALSE,i);
+				SetStringGadgetValue(_R(IDC_TCOMBO4), UnitStrList[i],FALSE,i);
 			}
 		}
 		break;

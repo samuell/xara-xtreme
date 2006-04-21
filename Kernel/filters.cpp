@@ -1869,7 +1869,9 @@ PORTNOTE("filter","Removed EPSFilter usage")
 PORTNOTE("filter","Removed EPSFilter usage")
 	if(
 #ifndef EXCLUDE_FROM_XARALX
-		 //this->IS_KIND_OF(EPSFilter) &&
+		this->IS_KIND_OF(EPSFilter) &&
+#else
+		FALSE && 
 #endif
 		!IsCamelotEPS)
 	{

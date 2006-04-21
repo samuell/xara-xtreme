@@ -831,6 +831,8 @@ BOOL BaseFileDialog::SetDefaultFileName(String_256& Name)
 
 BOOL BaseFileDialog::GetChosenFileName(PathName * pName)
 {
+	TRACEUSER( "luke", _T("FileName is %s\n"), GetPath().c_str() );
+
 	pName->SetPathName( GetPath() );
 	return pName->IsValid();
 }

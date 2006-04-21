@@ -253,7 +253,7 @@ public:
 			     			  INT32 ListPos = 0);
 
 	BOOL SetStringGadgetValue(CGadgetID Gadget, 
-							  StringBase* StrVal,   
+							  const StringBase& StrVal,   
 							  BOOL EndOfList = TRUE, 
 			     			  INT32 ListPos = 0);
 

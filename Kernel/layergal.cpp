@@ -1647,7 +1647,7 @@ void LayerNameDlg::ShowLayerDetails()
 			break;
 	}
 
-	SetStringGadgetValue(_R(IDC_LAYER_NAME),&Name);
+	SetStringGadgetValue(_R(IDC_LAYER_NAME),Name);
 }
 
 

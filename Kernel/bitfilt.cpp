@@ -2081,10 +2081,6 @@ BOOL BaseBitmapFilter::PrepareToExport(Spread *pSpread, UINT32 Depth, double DPI
 
 BOOL BaseBitmapFilter::WarnIfIncompatible()
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::WarnIfIncompatible - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	BOOL bOK = TRUE;
-
 	// Check whether the user has asked us to be silent about this
 	if (bDontWarnBitmapNonMixTransp)
 		return TRUE;
@@ -2161,9 +2157,6 @@ BOOL BaseBitmapFilter::WarnIfIncompatible()
 		bDontWarnBitmapNonMixTransp = TRUE;
 
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -3011,8 +3004,6 @@ BOOL BaseBitmapFilter::DoExportBitmaps(Operation *pOp, CCLexFile* pFile, PathNam
 
 BOOL BaseBitmapFilter::SetUpExportOptions(BitmapExportOptions **ppExportOptions, BOOL OnlyDefaults)
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::SetUpExportOptions - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(ppExportOptions == NULL, FALSE,"BaseBitmapFilter::Can't Set up export options");
 
 	Document *pDoc = Document::GetCurrent();
@@ -3107,9 +3098,6 @@ BOOL BaseBitmapFilter::SetUpExportOptions(BitmapExportOptions **ppExportOptions,
 	}
 
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -3137,8 +3125,6 @@ BOOL BaseBitmapFilter::SetUpExportOptions(BitmapExportOptions **ppExportOptions,
 BOOL BaseBitmapFilter::DoExportWithOptions(Operation* pOp, CCLexFile* pFile, PathName* pPath,
 								   Document* pDoc, BitmapExportOptions *pOptions, DocRect *pRect)
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::DoExportWithOptions - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pOp == NULL, FALSE,"BaseBitmapFilter::DoExport no export operation");
 	ERROR2IF(pFile == NULL, FALSE,"BaseBitmapFilter::DoExport no file to export to");
 	ERROR2IF(pPath == NULL, FALSE,"BaseBitmapFilter::DoExport no export pathname");
@@ -3236,9 +3222,6 @@ BOOL BaseBitmapFilter::DoExportWithOptions(Operation* pOp, CCLexFile* pFile, Pat
 	OutputFile = pFile;
 
 	return ok;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -3267,8 +3250,6 @@ BOOL BaseBitmapFilter::DoExportHelper(Operation* pOp,
 									  PathName* pPath,
 									  Document* pDoc)
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::DoExportHelper - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Used to open the file up before starting DoExport. But this meant a cancel on the export
 	// options dialog had filled the file, if it was already present. So now up up here if
 	// not open already. In the PreviewBitmap case the file will already be open.
@@ -3288,9 +3269,12 @@ BOOL BaseBitmapFilter::DoExportHelper(Operation* pOp,
 		PaletteType = ((BMPExportOptions *)m_pExportOptions)->GetPalette() ? 1 : 0;	// 1 for an optimised palette
 		BMPFilter::SetDefaultExportDPI(m_pExportOptions->GetDPI());
 		BMPFilter::SetDefaultExportDepth(m_pExportOptions->GetDepth());
+PORTNOTE("filter", "Removed use fo GIFFilter")
+#ifndef EXCLUDE_FROM_XARALX
 		// Need to set the dither for the accusoft filter here, otherwise the dither
 		// changes by the user will not have any effect
 		AccusoftFilters::SetDitherToUse(m_pExportOptions->GetDither());
+#endif
 	}
 	else if (m_pExportOptions->IS_KIND_OF(MaskedFilterExportOptions))
 	{
@@ -3319,7 +3303,8 @@ PORTNOTE("filter", "Removed use fo GIFFilter")
 	}
 
 //Mark Howitt, 24/10/97. Reset the FilterType variable as Importing uses this for something else!
-#ifndef WEBSTER
+PORTNOTE("filter", "Removed use of AccusoftFilters")
+#if !defined(EXCLUDE_FROM_XARALX) && !defined(WEBSTER)
 	// Andy Hills, 21-12-00
 	// Warning: bodge alert!
 	// At this stage, AccusoftFilters::FilterType may contain a useful value.
@@ -3359,9 +3344,6 @@ PORTNOTE("filter", "Removed use fo GIFFilter")
 	CleanUpAfterExport();
 
 	return ok;
-#else
-	return FALSE;
-#endif
 }
 
 

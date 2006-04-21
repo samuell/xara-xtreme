@@ -365,7 +365,7 @@ BOOL OpChangeLineWidthOpDesc::SetStringInGadgets(String_256& Str)
 			InitialiseControl(GadgetItem->pDialogOp, GadgetItem->gidGadgetID);
 
 			GadgetItem->pDialogOp->SetStringGadgetValue(GadgetItem->gidGadgetID, 
-														   &Str, 
+														   Str, 
 														   FALSE, 
 														   -1); 
 		}
@@ -460,19 +460,19 @@ void OpChangeLineWidthOpDesc::InitialiseControl(DialogOp* pDlg, CGadgetID SetGad
 
 			// Fill up the gadget combo-box.
 			String_256 s;
-			s=_R(IDS_NONE); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			pDlg->SetStringGadgetValue(SetGadgetID, &str025pt);
-			pDlg->SetStringGadgetValue(SetGadgetID, &str05pt);		
-			s=_T("1pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("2pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("4pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("8pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("12pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("16pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("24pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("36pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("48pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
-			s=_T("72pt"); pDlg->SetStringGadgetValue(SetGadgetID, &s);
+			s=_R(IDS_NONE); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			pDlg->SetStringGadgetValue(SetGadgetID, str025pt);
+			pDlg->SetStringGadgetValue(SetGadgetID, str05pt);		
+			s=_T("1pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("2pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("4pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("8pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("12pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("16pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("24pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("36pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("48pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
+			s=_T("72pt"); pDlg->SetStringGadgetValue(SetGadgetID, s);
 
 			// Set the default line width units	
 			//pDlg->SetUnitGadgetValue(SetGadgetID, COMP_POINTS, 250);	  // 0.25pt

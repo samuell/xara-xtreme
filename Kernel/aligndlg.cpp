@@ -669,7 +669,7 @@ void ArrangeAlignment::BuildIDSDropList(const CGadgetID DropListID,
 	while (IDSList[i])
 	{
 		Str.MakeMsg(IDSList[i]);
-		SetStringGadgetValue(DropListID,&Str);
+		SetStringGadgetValue( DropListID, Str );
 		i++;
 	}
 	SetComboListLength(DropListID);

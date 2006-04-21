@@ -1768,7 +1768,7 @@ BOOL DialogManager::SetUnitGadgetValue( CWindowID WindowID,
 	String_256		StrValue;
 //	Convert::MillipointsToString(Value, Unit, 3, &StrValue);
 	Convert::MillipointsToString( Value, Unit, &StrValue ); // Display using defaults
-	return( SetStringGadgetValue( WindowID, Gadget, &StrValue, EndOfList, ListPos ) );
+	return( SetStringGadgetValue( WindowID, Gadget, StrValue, EndOfList, ListPos ) );
 }
 
 
@@ -1826,7 +1826,7 @@ BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
 
 	String_256 Str;
 	BOOL ok = pDimScale->ConvertToUnits(Value,&Str,IncludeUnitSpecifier,-1,units);
-	if (ok) ok = SetStringGadgetValue(WindowID,Gadget,&Str,EndOfList,ListPos);
+	if (ok) ok = SetStringGadgetValue(WindowID,Gadget,Str,EndOfList,ListPos);
 
 	return ok;
 }
@@ -1970,7 +1970,7 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 	String_256 StrValue;
 	// Convert Value to a string
 	Convert::LongToString(Value, &StrValue);
-	return(SetStringGadgetValue(WindowID, Gadget, &StrValue, EndOfList, ListPos));
+	return(SetStringGadgetValue(WindowID, Gadget, StrValue, EndOfList, ListPos));
 }
 
 /********************************************************************************************
@@ -2069,7 +2069,7 @@ BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
 	String_256 StrValue;
 	// Convert Value to a string
 	Convert::DoubleToString(Value, &StrValue);
-	return(SetStringGadgetValue(WindowID, Gadget, &StrValue, EndOfList, ListPos));
+	return(SetStringGadgetValue(WindowID, Gadget, StrValue, EndOfList, ListPos));
 }
 
 /********************************************************************************************
@@ -2172,7 +2172,7 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 	DiscardStr->pStr = StrVal;
 	DiscardStrList.AddHead( DiscardStr );
 
-	return (SetStringGadgetValue(WindowID, Gadget, StrVal, EndOfList, ListPos));
+	return (SetStringGadgetValue(WindowID, Gadget, *StrVal, EndOfList, ListPos));
 }
 
 /********************************************************************************************
@@ -2289,14 +2289,14 @@ OpDescriptor * DialogManager::GetGadgetOpDescriptor(CWindowID WindowID, CGadgetI
 
 BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 										 CGadgetID Gadget,
-								         StringBase* StrVal,
+								         const StringBase& StrVal,
 								         BOOL EndOfList,
 			     						 INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
-	wxString String((const TCHAR*)(*StrVal));
+	wxString String( (const TCHAR*)StrVal );
 
 	//if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
@@ -2918,7 +2918,7 @@ BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
 	String_256			Str;
 
 	pDimScale->ConvertToUnits( Value, &Str, IncludeUnitSpecifier );
-	SetStringGadgetValue( WindowID, Gadget, &Str, EndOfList, ListPos );
+	SetStringGadgetValue( WindowID, Gadget, Str, EndOfList, ListPos );
 
 	return TRUE;
 }
@@ -2992,7 +2992,7 @@ BOOL DialogManager::SetMemoryGadgetValue( CWindowID WindowID,
 {
 	String_256 StrValue;
 	Convert::BytesToString(&StrValue, Value);
-	return (SetStringGadgetValue(WindowID, Gadget, &StrValue, EndOfList, ListPos));
+	return (SetStringGadgetValue(WindowID, Gadget, StrValue, EndOfList, ListPos));
 }
 
 

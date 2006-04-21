@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 //#include "bmpres.h"		// general bitmap filter based resources
 //#include "bmpreres.h"
-//#include "bmpexprw.h"	// for BitmapExportPreviewDialog
+#include "bmpexprw.h"	// for BitmapExportPreviewDialog
 #include "exjpeg.h"
 //#include "filtrres.h"	// _R(IDS_BMPPREFS_DPITOOSMALL) _R(IDS_BMPPREFS_DPITOOBIG)
 //#include "giffiltr.h"
@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 //#include "makebmp.h"
 #include "page.h"
-//#include "pngfiltr.h"
+#include "pngfiltr.h"
 #include "spread.h"
 //#include "will3.h"
 #include "fileutil.h"
@@ -124,29 +124,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mfcdlg.h"	
 #include "sgliboil.h"	//For SGLibOil::FileExists()
 #include "strlist.h"	//For class StringListItem
-//#include "statline.h"	// for the status line
-#include <stdlib.h>
-//#include "aprps.h"
+#include "statline.h"	// for the status line
+#include "aprps.h"
 //#include "opbevel.h"
 #include "ngprop.h"
 //#include "dlgcol.h"		// DialogColourInfo
 //#include "desnotes.h"	//  Design notes
 //#include "registry.h"
 #include "gpalopt.h"
-//#include "osrndrgn.h"
+#include "osrndrgn.h"
 //#include "rikdlg.h"		// _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER)
 //#include "justin.h"		// for _R(IDS_ZOOM_INFO_FORMAT) a % readout
 #include "oilfltrs.h"	// for find filter ext
 //#include "exprwres.h"	// for _R(IDS_BITMAPPREVIEWDIALOG)
+#include "units.h"
 
 DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNCREATE(BmapPrevDlg, DialogTabOp)
 
-PORTNOTE("other","CAM_DEBUG_NEW won't work")
-#ifndef EXCLUDE_FROM_XARALX
 #define new CAM_DEBUG_NEW
-#endif
 
 //typedef UINT32 JPEG_QUALITY;
 
@@ -165,7 +162,7 @@ const UINT32 BmapPrevDlg::IDD			= _R(IDD_BMAPPREVDLG);	// Used to uniquely ident
 PathName BmapPrevDlg::m_pthExport;
 
 BOOL BmapPrevDlg::m_bUseExistingPalette			= FALSE;
-ExportFileType BmapPrevDlg::m_OriginalFileType	= GIF_TYPE;
+//ExportFileType BmapPrevDlg::m_OriginalFileType	= GIF_TYPE;
 BOOL BmapPrevDlg::m_bClickedOnExport			= FALSE;
 BOOL BmapPrevDlg::m_bIsOrderedDither			= TRUE;
 BOOL BmapPrevDlg::m_bIsCreateBitmap				= FALSE;
@@ -178,8 +175,8 @@ bool BmapPrevDlg::m_MovedWindow = false;
 
 struct ChildWindowParameters
 {
-	HWND FirstID;
-	HWND SecondID;
+	wxWindow* FirstID;
+	wxWindow* SecondID;
 	INT32 Distance;
 	INT32 TopOffset;
 };
@@ -290,8 +287,8 @@ BmapPrevDlg::BmapPrevDlg()
   , m_DialogWnd(NULL)
   , m_bImageMapTabCreated(false)
   , m_bBrowserPreviewTabCreated(false)
-  , m_MouseInsidePaletteControl(true)	// at this point we don't know where the mouse is so this is a safe option
   , m_ClipBoardUsage(CLIPBOARD_NONE)	// which of the two clipboard check boxes are set
+  , m_MouseInsidePaletteControl(true)	// at this point we don't know where the mouse is so this is a safe option
   ,	m_pBubbleWnd(0)						// used by bubble help
   , m_LastCursorOverControlID(0)		// used by bubble help
   , m_pBubbleTimer(0)					// timer is only created when we need it
@@ -338,7 +335,10 @@ PORTNOTE("other","Removed registry usage")
 BmapPrevDlg::~BmapPrevDlg()
 {
 	//  If a bubble-help window exists, then reclaim the memory.
+PORTNOTE("other","Removed BubbleHelpWnd usage")
+#if !defined(EXCLUDE_FROM_XARALX)
 	delete m_pBubbleWnd;
+#endif
 	delete m_pBubbleTimer;
 /*	
 	if( m_FilterType == MAKE_BITMAP_FILTER )
@@ -353,7 +353,7 @@ BmapPrevDlg::~BmapPrevDlg()
 	}
 */
 PORTNOTE("other","Removed registry usage")
-#ifndef EXCLUDE_FROM_XARALX
+#if !defined(EXCLUDE_FROM_XARALX)
 	HKEY optionsKey = OpenRegKey( hAppStateRegKey, TEXT("Options") );
 	if (!optionsKey)
 		optionsKey = CreateRegKey(hAppStateRegKey, TEXT("Options") );
@@ -401,16 +401,16 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 
 	// this should be the only place where the export options are deleted
 	// so delete them if we have a new and valid and different set of options to replace them
-	if (m_pExportOptions && m_pExportOptions != (BitmapExportOptions *)pParam->Param1)
+	if (m_pExportOptions && m_pExportOptions != (BitmapExportOptions *)(void *)pParam->Param1)
 	{
 		delete m_pExportOptions;
 		m_pExportOptions = NULL;
 	}
 
-	m_pExportOptions = (BitmapExportOptions *)pParam->Param1;
+	m_pExportOptions = (BitmapExportOptions *)(void*)pParam->Param1;
 
 	// remember the bitmap filter
-	m_pBmpFilter = (BaseBitmapFilter *)pParam->Param2;
+	m_pBmpFilter = (BaseBitmapFilter *)(void*)pParam->Param2;
 
 	// safety check
 	ERROR3IF((m_pExportOptions == NULL) || (m_pBmpFilter == NULL), "No filter or export options");
@@ -443,6 +443,8 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 		case GIF:
 		case TI_GIF:
 		{
+PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
+#if !defined(EXCLUDE_FROM_XARALX)
 			GIFExportOptions* pGIFOptions = (GIFExportOptions*)m_pExportOptions;
 			ERROR3IF(!pGIFOptions->IS_KIND_OF(GIFExportOptions), "pGIFOptions isn't");
 
@@ -452,11 +454,13 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 			// > 8bpp not leled by the gif filter
 			if (pGIFOptions->GetDepth() > 8)
 				pGIFOptions->SetDepth(8);
-
+#endif
 			break;
 		}
 		case MAKE_BITMAP_FILTER:
 		{
+PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
+#if !defined(EXCLUDE_FROM_XARALX)
 			MakeBitmapExportOptions* pMkBOptions = (MakeBitmapExportOptions*)m_pExportOptions;
 			ERROR3IF(!pMkBOptions->IS_KIND_OF(MakeBitmapExportOptions), "pMkBOptions isn't");
 
@@ -508,7 +512,7 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 
 			}
 			m_bIsCreateBitmap = TRUE;
-
+#endif
 			break;
 		}
 		case PNG: 
@@ -553,7 +557,7 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 void BmapPrevDlg::SetButtonsText()
 {
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
-	TalkToPage(NULL);						// Select the main tab
+	TalkToPage(0);						// Select the main tab
 
 	UINT32 ResID;
 
@@ -579,7 +583,7 @@ void BmapPrevDlg::SetButtonsText()
 			default:	ResID = _R(IDS_EXPORT_BUTTON);			break;
 		}
 
-	SetStringGadgetValue(IDOK, ResID);
+	SetStringGadgetValue(wxID_OK, ResID);
 	
 	// Use the tabbed dialogs 'Apply' button as a 'Preview' button
 	SetStringGadgetValue(_R(ID_APPLY_NOW), _R(IDS_PREVIEW_BUTTON));
@@ -592,14 +596,14 @@ void BmapPrevDlg::SetPreviewButtonState(bool enabled)
 	TRACEUSER( "Gerry", _T("SetPreviewButtonState matches = %d\n"), m_pExportOptions->DoesTempFileMatchExportOptions());
 	
 	CDlgResID PageID = GetCurrentPageID();		// Get currently selected Tab id
-	TalkToPage(NULL);							// Select the main tab
+	TalkToPage(0);							// Select the main tab
 	EnableGadget(_R(ID_APPLY_NOW), !m_pExportOptions->DoesTempFileMatchExportOptions() /*enabled == 1*/);
 	TalkToPage(PageID);							// Select the originally selected tab
 }
 
 
 /********************************************************************************************
->	BOOL CALLBACK EnumChildProc(HWND hChild, LPARAM lParam )
+>	BOOL CALLBACK EnumChildProc(wxWindow* hChild, LPARAM lParam )
 	Author:		Stefan_Stoykov (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/07/97
 	Inputs:		hChild - a child window
@@ -611,7 +615,9 @@ void BmapPrevDlg::SetPreviewButtonState(bool enabled)
 	See Also:	BmapPrevDlg::OnCreate
 	NOTE:		This is oily code and should become part of the dialog manager
 ********************************************************************************************/
-BOOL CALLBACK EnumChildProc(HWND hChild, LPARAM lParam )
+PORTNOTE("other","Removed Windows style function EnumChildProc")
+#ifndef EXCLUDE_FROM_XARALX
+BOOL CALLBACK EnumChildProc(wxWindow* hChild, LPARAM lParam )
 {
 	// First get our parameters back
 	ChildWindowParameters* pParam = (ChildWindowParameters*)lParam;
@@ -619,7 +625,7 @@ BOOL CALLBACK EnumChildProc(HWND hChild, LPARAM lParam )
 		return FALSE;
 
 	//Get the ID of our parent window
-	HWND hParent = (HWND)pParam->FirstID;
+	wxWindow* hParent = (wxWindow*)pParam->FirstID;
 	if (hParent == NULL)
 		return FALSE;
 
@@ -629,25 +635,25 @@ BOOL CALLBACK EnumChildProc(HWND hChild, LPARAM lParam )
 		return TRUE;
 
 	//If this is the Preview dialog child window, return TRUE
-	if (GetParent(hChild) == (HWND) pParam->SecondID)
+	if (GetParent(hChild) == (wxWindow*) pParam->SecondID)
 		return TRUE;
 
 	//move the window
 
 	// get the size of the child window
-	RECT Rect;
+	wxRect Rect;
 	GetWindowRect(hChild, &Rect);
 
-	RECT Parent;
+	wxRect Parent;
 	GetWindowRect(hParent, &Parent);
 	
 	INT32 Offset = pParam->Distance - pParam->TopOffset;
-	MoveWindow(hChild, Rect.left - Parent.left, Rect.top - Parent.top + Offset,
-					   Rect.right - Rect.left, Rect.bottom - Rect.top, TRUE);
+	MoveWindow(hChild, Rect.GetLeft() - Parent.GetLeft(), Rect.GetTop() - Parent.GetTop() + Offset,
+					   Rect.GetRight() - Rect.GetLeft(), Rect.GetBottom() - Rect.GetTop(), TRUE);
 
 	return TRUE;
 }
-						
+#endif						
 
 /********************************************************************************************
 >	BOOL BmapPrevDlg::OnCreate()
@@ -664,8 +670,10 @@ BOOL BmapPrevDlg::OnCreate()
 	// If we need to add a preview section then go and do it now
 	if ((m_FilterType == JPEG) || (m_pExportOptions->GetSelectionType() != ABITMAP))
 	{
+PORTNOTETRACE("other","Preview section NOT setup");
+#ifndef EXCLUDE_FROM_XARALX
 		//First get the size of the current window
-		RECT Rect;
+		wxRect Rect;
 		GetWindowRect(WindowID, &Rect);
 
 		//Now, the current window contains only the Tabs
@@ -703,11 +711,11 @@ BOOL BmapPrevDlg::OnCreate()
 		ERROR2IF(m_DialogWnd == NULL, FALSE, "No preview dialog!");
 
 		//And get the Preview Dialog's rectangle
-		RECT rectPreview;
+		wxRect rectPreview;
 		GetWindowRect(m_DialogWnd, &rectPreview);
 
 		//First we must get the height of the Preview section
-		INT32 lPreviewHeight = rectPreview.bottom - rectPreview.top;
+		INT32 lPreviewHeight = rectPreview.GetBottom() - rectPreview.GetTop();
 		ERROR2IF(lPreviewHeight <= 0, FALSE, "Preview Dialog has no height");
 
 		if (!m_MovedWindow)
@@ -716,10 +724,10 @@ BOOL BmapPrevDlg::OnCreate()
 			// the first time the dialog is run) and incress its size
 			::MoveWindow(
 				WindowID,									// The window
-				Rect.left,									// Horiz position
-				Rect.top - lPreviewHeight / 2,				// Vertical position
-				Rect.right - Rect.left,						// Width
-				Rect.bottom - Rect.top + lPreviewHeight,	// Height
+				Rect.GetLeft(),									// Horiz position
+				Rect.GetTop() - lPreviewHeight / 2,				// Vertical position
+				Rect.GetRight() - Rect.GetLeft(),						// Width
+				Rect.GetBottom() - Rect.GetTop() + lPreviewHeight,	// Height
 				TRUE										// Repaint option
 			);
 			m_MovedWindow = true;
@@ -729,10 +737,10 @@ BOOL BmapPrevDlg::OnCreate()
 			// Just incress the window's size
 			::MoveWindow(
 				WindowID,									// The window
-				Rect.left,									// Horiz position
-				Rect.top,									// Vertical position
-				Rect.right - Rect.left,						// Width
-				Rect.bottom - Rect.top + lPreviewHeight,	// Height
+				Rect.GetLeft(),									// Horiz position
+				Rect.GetTop(),									// Vertical position
+				Rect.GetRight() - Rect.GetLeft(),						// Width
+				Rect.GetBottom() - Rect.GetTop() + lPreviewHeight,	// Height
 				TRUE										// Repaint option
 			);
 		}
@@ -753,10 +761,11 @@ BOOL BmapPrevDlg::OnCreate()
 		//but it does, and moving it again does actually
 		//produce the right effect, so let's not question
 		//why.
-		MoveWindow(m_DialogWnd, 0, 0, rectPreview.right - rectPreview.left, rectPreview.bottom - rectPreview.top, TRUE);
+		MoveWindow(m_DialogWnd, 0, 0, rectPreview.GetRight() - rectPreview.GetLeft(), rectPreview.GetBottom() - rectPreview.GetTop(), TRUE);
 		
 		// enable our window (which has been disabled when the preview window was created)
 		EnableWindow(WindowID, TRUE);
+#endif
 	}
 
 	// set the title bar
@@ -785,11 +794,11 @@ BOOL BmapPrevDlg::OnCreate()
 	{
 		// and ensure that its always the number of dpi as defined by a pixel unit
 		DocUnitList* pDocUnitList =	DocUnitList::GetCurrentDocUnitList();
-		ERROR3IF(pDocUnitList == 0, "BmapPrevDlg::OnCreate - no pDocUnitList!")
+		ERROR3IF(pDocUnitList == 0, "BmapPrevDlg::OnCreate - no pDocUnitList!");
 		Unit* pPixelUnit = pDocUnitList->FindUnit(PIXELS);
-		ERROR3IF(pPixelUnit == 0, "BmapPrevDlg::OnCreate - no pixel units!")
+		ERROR3IF(pPixelUnit == 0, "BmapPrevDlg::OnCreate - no pixel units!");
 		Unit* pInchUnit = pDocUnitList->FindUnit(INCHES);
-		ERROR3IF(pInchUnit == 0, "BmapPrevDlg::OnCreate - no inch units!")
+		ERROR3IF(pInchUnit == 0, "BmapPrevDlg::OnCreate - no inch units!");
 		double newDpi = (pPixelUnit->GetMillipoints() > 0)
 							? pInchUnit->GetMillipoints() / pPixelUnit->GetMillipoints()
 							: 96.0;
@@ -800,7 +809,10 @@ BOOL BmapPrevDlg::OnCreate()
 
 	UpdateCurrentTab();
 
+PORTNOTE("other","Removed Windows style function EnumChildProc")
+#ifndef EXCLUDE_FROM_XARALX
 	m_PaletteControl.Init(GetReadWriteWindowID());
+#endif
 
 	return TRUE;
 }
@@ -814,8 +826,11 @@ BOOL BmapPrevDlg::OnCreate()
 ******************************************************************************************/
 void BmapPrevDlg::DoBubbleHelp()
 {
+PORTNOTE("other","Removed registry usage")
+#if !defined(EXCLUDE_FROM_XARALX)
 	//  If a bubble help window exists from a previous call to this function then delete it
 	delete m_pBubbleWnd;
+#endif
 	m_pBubbleWnd = 0;
 	
 	//  Are we over a control?  This is the case if this variable is non-zero.
@@ -826,33 +841,44 @@ void BmapPrevDlg::DoBubbleHelp()
 	UINT32 bubbleID;
 
 	//  Get the bubble-help string from the gadget ID.
-	switch (m_LastCursorOverControlID)
+	if( m_LastCursorOverControlID == _R(IDC_T2_LOCKED_COLOUR) )			//  'Locked Colour' button.
 	{
-		case _R(IDC_T2_LOCKED_COLOUR):		//  'Locked Colour' button.
-			bubbleID = _R(IDS_LOCKED_COLOUR);
-			break;
-		case _R(IDC_T2_WEB_SAFE_COLOUR):	//  'Web Safe Colour' button.
-			bubbleID = _R(IDS_WEB_SAFE_COLOUR);
-			break;
-		case _R(IDC_T2_TRANSPARENT_COLOUR):	//  'Transparent Colour' button.
-			bubbleID = _R(IDS_TRANSPARENT_COLOUR);
-			break;
-		case _R(IDC_T2_TRANSPARENT_BACKGROUND):
-			bubbleID = _R(IDS_TRANSPARENT_BACKGROUND);
-			break;
-		case _R(IDC_T2_DELETE_COLOUR):		//  'Delete Colour' button.
-			bubbleID = _R(IDS_DELETE_COLOUR);
-			break;
-		case _R(IDC_T2_RESTORE_COLOUR):		//  'Restore Colour' button.
-			bubbleID = _R(IDS_RESTORE_COLOUR);
-			break;
-		case _R(IDC_T2_SYSTEM_COLOURS):		//  'Add System Colors' button.
-			bubbleID = _R(IDS_SYSTEM_COLOURS);
-			break;
-		default:						//  Any other control.
-			m_LastCursorOverControlID = 0;
-			bubbleID = 0;
-			break;
+		bubbleID = _R(IDS_LOCKED_COLOUR);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_WEB_SAFE_COLOUR) )		//  'Web Safe Colour' button.
+	{
+		bubbleID = _R(IDS_WEB_SAFE_COLOUR);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_TRANSPARENT_COLOUR) )	//  'Transparent Colour' button.
+	{
+		bubbleID = _R(IDS_TRANSPARENT_COLOUR);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_TRANSPARENT_BACKGROUND) )
+	{
+		bubbleID = _R(IDS_TRANSPARENT_BACKGROUND);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_DELETE_COLOUR) )			//  'Delete Colour' button.
+	{
+		bubbleID = _R(IDS_DELETE_COLOUR);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_RESTORE_COLOUR) )		//  'Restore Colour' button.
+	{
+		bubbleID = _R(IDS_RESTORE_COLOUR);
+	}
+	else
+	if( m_LastCursorOverControlID == _R(IDC_T2_SYSTEM_COLOURS) )		//  'Add System Colors' button.
+	{
+		bubbleID = _R(IDS_SYSTEM_COLOURS);
+	}
+	else 																// Any other control.
+	{
+		m_LastCursorOverControlID = 0;
+		bubbleID = 0;
 	}
 
 	//  If no bubble-help required, then return.
@@ -862,6 +888,8 @@ void BmapPrevDlg::DoBubbleHelp()
 	//  Load the bubble-help string into a variable.
 	String_256 bubbleText(bubbleID);
 
+PORTNOTE("other","Removed registry usage")
+#if !defined(EXCLUDE_FROM_XARALX)
 	//  Make a new bubble help window
 	m_pBubbleWnd = new BubbleHelpWnd;
 	if (!m_pBubbleWnd)
@@ -883,6 +911,7 @@ void BmapPrevDlg::DoBubbleHelp()
 
 	//  Show the window
 	m_pBubbleWnd->Show();
+#endif
 }
 
 void BmapPrevDlg::PrepareBubbleHelp()
@@ -892,10 +921,12 @@ void BmapPrevDlg::PrepareBubbleHelp()
 	else
 		m_pBubbleTimer = new MonotonicTime; // it is OK for new to fail as this will just return a null
 											// pointer and therefore there will be no bubble help
-
+PORTNOTE("other","Removed registry usage")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Create a new 
 	delete m_pBubbleWnd;
 	m_pBubbleWnd = 0;
+#endif
 }
 
 void BmapPrevDlg::UpdateStatusBar(UINT32 id)
@@ -904,37 +935,52 @@ void BmapPrevDlg::UpdateStatusBar(UINT32 id)
 	UINT32 statusTextID;
 
 	// Find the status message ID from the Gadget ID
-	switch( id )
+	if( id == _R(IDC_T2_LOCKED_COLOUR) )			// 'Locked Colour' button
 	{
-		case _R(IDC_T2_LOCKED_COLOUR):			// 'Locked Colour' button
-			statusTextID = _R(IDS_LOCKED_COLOUR_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_WEB_SAFE_COLOUR):		// 'Web Safe Colour' button
-			statusTextID = _R(IDS_WEB_SAFE_COLOUR_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_TRANSPARENT_COLOUR):		// 'Transparent Colour' button
-			statusTextID = _R(IDS_TRANSPARENT_COLOUR_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_TRANSPARENT_BACKGROUND):
-			statusTextID = _R(IDS_TRANSPARENT_BACKGROUND_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_DELETE_COLOUR):			// 'Delete Colour' button
-			statusTextID = _R(IDS_DELETE_COLOUR_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_RESTORE_COLOUR):			// 'Restore Colour' button
-			statusTextID = _R(IDS_RESTORE_COLOUR_STATUS_TEXT);
-			break;
-		case _R(IDC_T2_SYSTEM_COLOURS):			// 'Add System Colours' button
-			statusTextID = _R(IDS_SYSTEM_COLOURS_STATUS_TEXT);
-			break;
-		default:							// Nothing - Just show 'Preview...'
-			statusTextID = _R(IDS_BITMAPPREVIEWDIALOG);
+		statusTextID = _R(IDS_LOCKED_COLOUR_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_WEB_SAFE_COLOUR) )			// 'Web Safe Colour' button
+	{
+		statusTextID = _R(IDS_WEB_SAFE_COLOUR_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_TRANSPARENT_COLOUR) )		// 'Transparent Colour' button
+	{
+		statusTextID = _R(IDS_TRANSPARENT_COLOUR_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_TRANSPARENT_BACKGROUND) )
+	{
+		statusTextID = _R(IDS_TRANSPARENT_BACKGROUND_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_DELETE_COLOUR) )			// 'Delete Colour' button
+	{
+		statusTextID = _R(IDS_DELETE_COLOUR_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_RESTORE_COLOUR) )			// 'Restore Colour' button
+	{
+		statusTextID = _R(IDS_RESTORE_COLOUR_STATUS_TEXT);
+	}
+	else
+	if( id == _R(IDC_T2_SYSTEM_COLOURS) )			// 'Add System Colours' button
+	{
+		statusTextID = _R(IDS_SYSTEM_COLOURS_STATUS_TEXT);
+	}
+	else											// Nothing - Just show 'Preview...'
+	{
+		statusTextID = _R(IDS_BITMAPPREVIEWDIALOG);
 	}
 
 	//  Put up some status line help
 	StatusLine* pStatusLine = GetApplication()->GetpStatusLine();
 	if ( pStatusLine != NULL )
-		pStatusLine->UpdateText( &String_256(statusTextID), FALSE );
+	{
+		String_256	strStatus(statusTextID);
+		pStatusLine->UpdateText( &strStatus, FALSE );
+	}
 	else
 		ERROR3("pStatusLine == NULL");
 }
@@ -948,6 +994,8 @@ void BmapPrevDlg::UpdateStatusBar(UINT32 id)
 ********************************************************************************************/
 void BmapPrevDlg::SetPaletteSelection(INT32 index)
 {
+PORTNOTETRACE("other", "BmapPrevDlg::SetPaletteSelection - do nothing" );
+#if !defined(EXCLUDE_FROM_XARALX)	
 	if (GetCurrentPageID() != _R(IDD_TPALETTE))
 		return;
 	
@@ -955,6 +1003,7 @@ void BmapPrevDlg::SetPaletteSelection(INT32 index)
 	GetKernelRenderedGadgetInfo(_R(IDC_T2_PALETTE_CONTROL), &info);
 	m_PaletteControl.SetSelectedCell(&info, index);
 	RefreshPaletteLinkedControls();
+#endif
 }
 
 /********************************************************************************************
@@ -965,6 +1014,8 @@ void BmapPrevDlg::SetPaletteSelection(INT32 index)
 ********************************************************************************************/
 void BmapPrevDlg::SetPaletteHighlight(INT32 index)
 {
+PORTNOTETRACE("other", "BmapPrevDlg::SetPaletteSelection - do nothing" );
+#if !defined(EXCLUDE_FROM_XARALX)	
 	if (GetCurrentPageID() != _R(IDD_TPALETTE))
 		return;
 
@@ -972,6 +1023,7 @@ void BmapPrevDlg::SetPaletteHighlight(INT32 index)
 	GetKernelRenderedGadgetInfo(_R(IDC_T2_PALETTE_CONTROL), &info);
 	m_PaletteControl.SetHighlightedCell(&info, index);
 	RefreshPaletteLinkedControls();
+#endif
 }
 
 /********************************************************************************************
@@ -983,34 +1035,41 @@ void BmapPrevDlg::SetPaletteHighlight(INT32 index)
 void BmapPrevDlg::UpdateCurrentTab()
 {
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
-	switch (PageID)
+	if(PageID == _R(IDD_TBITMAPSIZE) )
 	{
-		case _R(IDD_TBITMAPSIZE):
-			//TRACEUSER( "Simonk", _T("Update tab SIZE\n"));
-			// Refresh the size tab
-			RefreshBitmapSizeTab();
-			break;
-		case _R(IDD_TPALETTE):
-			//TRACEUSER( "Simonk", _T("Update tab PALETTE\n"));
-			RefreshPaletteOptionsTab();
-			break;
-		case _R(IDD_TIMAPOPTIONS):
-			//TRACEUSER( "Simonk", _T("Update tab IMAGE MAP\n"));
-			// Refresh the image map tab
-			RefreshImageMapTab();
-			break;
-		case _R(IDD_TBROWSER):
-			//TRACEUSER( "Simonk", _T("Update tab BROWSER\n"));
-			// Refresh browser tab
-			break;
-		case _R(IDD_TBITMAPOPTIONS):
-			//TRACEUSER( "Simonk", _T("Update tab OPTIONS\n"));
-			// for this tab the init works just like the refresh
-			InitBitmapOptionsTab();
-			break;
-		default:
-			//TRACEUSER( "Simonk", _T("Update tab NULL\n"));
-			break;
+		//TRACEUSER( "Simonk", _T("Update tab SIZE\n"));
+		// Refresh the size tab
+		RefreshBitmapSizeTab();
+	}
+	else
+	if(PageID == _R(IDD_TPALETTE) )
+	{
+		//TRACEUSER( "Simonk", _T("Update tab PALETTE\n"));
+		RefreshPaletteOptionsTab();
+	}
+	else
+	if(PageID == _R(IDD_TIMAPOPTIONS) )
+	{
+		//TRACEUSER( "Simonk", _T("Update tab IMAGE MAP\n"));
+		// Refresh the image map tab
+		RefreshImageMapTab();
+	}
+	else
+	if(PageID == _R(IDD_TBROWSER) )
+	{
+		//TRACEUSER( "Simonk", _T("Update tab BROWSER\n"));
+		// Refresh browser tab
+	}
+	else
+	if(PageID == _R(IDD_TBITMAPOPTIONS) )
+	{
+		//TRACEUSER( "Simonk", _T("Update tab OPTIONS\n"));
+		// for this tab the init works just like the refresh
+		InitBitmapOptionsTab();
+	}
+	else
+	{
+		//TRACEUSER( "Simonk", _T("Update tab NULL\n"));
 	}
 }
 
@@ -1025,7 +1084,9 @@ void BmapPrevDlg::UpdateCurrentTab()
 ********************************************************************************************/
 BOOL BmapPrevDlg::DoPreview()
 {
-//	TRACEUSER( "Gerry", _T("DoPreview 0x%08x\n"), m_pExportOptions);
+PORTNOTETRACE("other", "BmapPrevDlg::DoPreview - do nothing - returning true" );
+#if !defined(EXCLUDE_FROM_XARALX)
+	//	TRACEUSER( "Gerry", _T("DoPreview 0x%08x\n"), m_pExportOptions);
 
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	if (m_pPreviewDlg == NULL)
@@ -1064,6 +1125,8 @@ BOOL BmapPrevDlg::DoPreview()
 	TalkToPage(PageID);
 
 	return ok;
+#endif
+	return true;
 }
 
 
@@ -1084,6 +1147,7 @@ BOOL BmapPrevDlg::DoPreview()
 
 	Purpose:	This is the message handler for the BmapPrevDlg
 ********************************************************************************************/
+
 MsgResult BmapPrevDlg::Message( Msg* Message)
 {
 	// handle the message
@@ -1091,10 +1155,12 @@ MsgResult BmapPrevDlg::Message( Msg* Message)
 		return OK;
 
 	if (m_DialogWnd != NULL)
-		EnableWindow(m_DialogWnd, TRUE);
+		m_DialogWnd->Enable( TRUE );
 	
 	DialogMsg* Msg = ((DialogMsg*) Message); 
-	
+
+PORTNOTETRACE("other","BmapPrevDlg::Message - Do nothing");
+#if !defined(EXCLUDE_FROM_XARALX)
 	BOOL EndDialog = FALSE;		// TRUE if we should quit the dialog
 //	BOOL CommitValues = FALSE; 	// TRUE if we should commit the dialog values
 
@@ -1190,6 +1256,9 @@ MsgResult BmapPrevDlg::Message( Msg* Message)
 					if (Msg->GadgetID == IDHELP)
 						OnHelpButtonClicked();
 					break;
+
+				default:
+					break;
 			}
 			break;
 		default:
@@ -1257,9 +1326,10 @@ MsgResult BmapPrevDlg::Message( Msg* Message)
 		Close();
 		End(); 	 	// End of dialog 
 	}
+#endif
 
-	return (DLG_EAT_IF_HUNGRY(Msg));   // I return EAT_MSG unless the message needs to be sent to all dialogs 
-} 
+	return DLG_EAT_IF_HUNGRY(Msg);   // I return EAT_MSG unless the message needs to be sent to all dialogs 
+}
 
 /********************************************************************************************
 >	void BmapPrevDlg::OnHelpButtonClicked()
@@ -1405,13 +1475,13 @@ void BmapPrevDlg::InitPaletteColourModelList()
 ********************************************************************************************/
 void BmapPrevDlg::InitPaletteButtonStrip()
 {
-	SetGadgetBitmaps(_R(IDC_T2_LOCKED_COLOUR),			NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_WEB_SAFE_COLOUR),		NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_TRANSPARENT_COLOUR),		NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_TRANSPARENT_BACKGROUND),	NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_DELETE_COLOUR),			NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_RESTORE_COLOUR),			NULL, NULL );
-	SetGadgetBitmaps(_R(IDC_T2_SYSTEM_COLOURS),			NULL, NULL );
+	SetGadgetBitmaps(_R(IDC_T2_LOCKED_COLOUR),			0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_WEB_SAFE_COLOUR),		0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_TRANSPARENT_COLOUR),		0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_TRANSPARENT_BACKGROUND),	0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_DELETE_COLOUR),			0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_RESTORE_COLOUR),			0, 0 );
+	SetGadgetBitmaps(_R(IDC_T2_SYSTEM_COLOURS),			0, 0 );
 }
 
 /******************************************************************************************
@@ -1442,6 +1512,8 @@ void BmapPrevDlg::InitPaletteSortList()
 	Inputs:		Msg: The message sent from page 1 of the dialog
 	Purpose:	All messages generated from the tabbed dialog's palette tab get processed here
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::HandlePaletteTabMsg - Windows message handler")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 {
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
@@ -1455,14 +1527,21 @@ void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 		}
 		case DIM_SELECTION_CHANGED:
 		{
-			switch (Msg->GadgetID)
-			{
-				case _R(IDC_DITHERING_COMBO):		HandlePaletteDitheringListChange();		break;
-				case _R(IDC_PALETTE_COMBO):			HandlePalettePaletteListChange();		break;
-				case _R(IDC_COLOUR_DEPTH_COMBO):	HandlePaletteColourDepthListChange();	break;
-				case _R(IDC_T2_SORT_LIST):			HandlePaletteSortListChange();			break;
-				case _R(IDC_COLOR_MODEL_LIST):		HandlePaletteColourModelListChange();	break;
-			}
+			if( Msg->GadgetID == _R(IDC_DITHERING_COMBO) )
+				HandlePaletteDitheringListChange();
+			else
+			if( Msg->GadgetID == _R(IDC_PALETTE_COMBO) )
+				HandlePalettePaletteListChange();
+			else
+			if( Msg->GadgetID == _R(IDC_COLOUR_DEPTH_COMBO) )
+				HandlePaletteColourDepthListChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_SORT_LIST) )
+				HandlePaletteSortListChange();
+			else
+			if( Msg->GadgetID == _R(IDC_COLOR_MODEL_LIST) )
+				HandlePaletteColourModelListChange();
+
 			RefreshPaletteOptionsTab();	// Changes may have had an effect other controls
 			break;
 		}
@@ -1585,6 +1664,7 @@ void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 			break;
 	};
 }
+#endif
 
 /******************************************************************************************
 >	void BmapPrevDlg::HandleDitherListChange()
@@ -1699,6 +1779,8 @@ void BmapPrevDlg::HandlePaletteColourDepthListChange()
 	m_pExportOptions->SetDepth(newDepth);
 }
 
+PORTNOTE("other","BmapPrevDlg::HandlePaletteLockedColourButtonChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteLockedColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1712,7 +1794,10 @@ void BmapPrevDlg::HandlePaletteLockedColourButtonChange()
 	}
 	SetPreviewButtonState(true); // set the preview button
 }
+#endif
 
+PORTNOTE("other","BmapPrevDlg::HandlePaletteWebSafeColourButtonChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteWebSafeColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1722,6 +1807,7 @@ void BmapPrevDlg::HandlePaletteWebSafeColourButtonChange()
 	}
 	SetPreviewButtonState(true); // set the preview button
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandleTransparentBackgroundButtonChange()
@@ -1742,6 +1828,8 @@ void BmapPrevDlg::HandlePaletteTransparentBackgroundButtonChange()
 	Created:	08/12/2000
 	Purpose:	Makes the current selected colour in the palette control transparent.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::HandlePaletteTransparentColourButtonChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1757,6 +1845,7 @@ void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 		SetPreviewButtonState(true); // set the preview button
 	}
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
@@ -1764,6 +1853,8 @@ void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 	Created:	08/12/2000
 	Purpose:	Deletes the currently selected colour in the palette control.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::HandlePaletteDeleteColourButtonChnage - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1773,6 +1864,7 @@ void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 //	m_pExportOptions->InvalidatePalette();
 	SetPreviewButtonState(true); // set the preview button
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
@@ -1783,6 +1875,8 @@ void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 				function relies on its button only being enabled when the colour can be
 				restored.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::HandlePaletteRestoreColourButtonChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1791,6 +1885,7 @@ void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
 	m_pExportOptions->InvalidatePalette();
 	SetPreviewButtonState(true); // set the preview button
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteSystemColoursButtonChnage()
@@ -1812,6 +1907,8 @@ void BmapPrevDlg::HandlePaletteSystemColoursButtonChnage()
 	Purpose:	This function responds to the user changing the current sort method and tells
 				the palette control about the change.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::HandlePaletteSortListChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteSortListChange()
 {
 	//  Get the user's selection
@@ -1836,6 +1933,7 @@ void BmapPrevDlg::HandlePaletteSortListChange()
 
 //	m_PaletteControl.RenderSoon();
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteColourModelListChange()
@@ -1869,6 +1967,8 @@ void BmapPrevDlg::HandlePaletteColoursUsedChange()
 	SetPreviewButtonState(true); // set the preview button
 }
 
+PORTNOTE("other","BmapPrevDlg::HandlePaletteColourEditChange - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 {
 	BOOL valid;
@@ -1987,7 +2087,7 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 		SetPreviewButtonState(true); // set the preview button
 	}
 }
-
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteOptionsTab()
@@ -1998,6 +2098,8 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 ********************************************************************************************/
 void BmapPrevDlg::RefreshPaletteOptionsTab()
 {
+PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteOptionsTab - Do nothing");
+#if !defined(EXCLUDE_FROM_XARALX)
 //	if (m_pExportOptions->GetSupportsPalette())
 //	{
 		if (!m_pExportOptions->IsPaletteValid())
@@ -2014,6 +2116,7 @@ void BmapPrevDlg::RefreshPaletteOptionsTab()
 	RefreshPaletteLinkedControls();
 
 	SetPreviewButtonState(true);
+#endif
 }
 
 /********************************************************************************************
@@ -2027,10 +2130,13 @@ void BmapPrevDlg::RefreshPaletteOptionsTab()
 ********************************************************************************************/
 void BmapPrevDlg::RefreshPaletteLinkedControls()
 {
+PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteLinkedControls - Do nothing");
+#if !defined(EXCLUDE_FROM_XARALX)
 	RefreshPaletteColourModelList();
 	RefreshPaletteButtonStrip();
 	RefreshPaletteColoursUsedEdit();
 	RefreshPaletteColoursEdit();
+#endif
 }
 
 /********************************************************************************************
@@ -2155,6 +2261,8 @@ void BmapPrevDlg::RefreshPaletteColourDepthList()
 		EnableGadget(_R(IDC_COLOUR_DEPTH_COMBO), TRUE);
 }
 
+PORTNOTE("other","BmapPrevDlg::RefreshPaletteColoursUsedEdit - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 {
 	BOOL active = m_pExportOptions->GetSupportsPalette();
@@ -2178,10 +2286,11 @@ void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 				SetLongGadgetValue(_R(IDC_COLOURS_USED_EDIT), m_pExportOptions->GetNumberOfUserRequestedColours());
 	}
 	else
-		SetStringGadgetValue(_R(IDC_COLOURS_USED_EDIT), &String_16(""));
+		SetStringGadgetValue(_R(IDC_COLOURS_USED_EDIT), &String_16(_T("")));
 
 	m_LockSizeUpdates = FALSE;
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteColourModelList()
@@ -2192,6 +2301,8 @@ void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 				bearing on how the colour information is represented to the user, not how the
 				graphic is exported.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::RefreshPaletteColourModelList - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColourModelList()
 {
 	switch(m_ColorModelType)
@@ -2204,6 +2315,7 @@ void BmapPrevDlg::RefreshPaletteColourModelList()
 
 	EnableGadget(_R(IDC_COLOR_MODEL_LIST), m_pExportOptions->GetSupportsPalette());
 }
+#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteColoursEdit()
@@ -2212,6 +2324,8 @@ void BmapPrevDlg::RefreshPaletteColourModelList()
 	Purpose:	Set the values of the three colour edit boxes based on the currently selected
 				palette entry and on the currently selected colour model.
 ********************************************************************************************/
+PORTNOTE("other","BmapPrevDlg::RefreshPaletteColoursEdit - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColoursEdit()
 {
 	BOOL bPalette		= m_pExportOptions->GetSupportsPalette();
@@ -2248,7 +2362,7 @@ void BmapPrevDlg::RefreshPaletteColoursEdit()
 		{
 			case MODEL_RGBHEX:
 			{
-				char str[16];	// Temp string buffer (of abitary size)
+				TCHAR str[16];	// Temp string buffer (of abitary size)
 				sprintf(str, "%02x", r);	SetStringGadgetValue(_R(IDC_RED_EDIT),		&String_16(str));
 				sprintf(str, "%02x", g);	SetStringGadgetValue(_R(IDC_GREEN_EDIT),	&String_16(str));
 				sprintf(str, "%02x", b);	SetStringGadgetValue(_R(IDC_BLUE_EDIT),		&String_16(str));
@@ -2306,7 +2420,10 @@ void BmapPrevDlg::RefreshPaletteColoursEdit()
 
 	m_LockSizeUpdates = FALSE;
 }
+#endif
 
+PORTNOTE("other","BmapPrevDlg::RefreshPaletteButtonStrip - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteButtonStrip()
 {
 	if (m_PaletteControl.GetSelectedColour() == BitmapExportPaletteControl::INVALID_COLOUR_VALUE
@@ -2352,7 +2469,10 @@ void BmapPrevDlg::RefreshPaletteButtonStrip()
 	EnableGadget(_R(IDC_T2_SYSTEM_COLOURS),					m_pExportOptions->GetSupportsPalette());
 	SetLongGadgetValue(_R(IDC_T2_SYSTEM_COLOURS),			m_pExportOptions->IsUsingSystemPalette());
 }
+#endif
 
+PORTNOTE("other","BmapPrevDlg::RefreshPaletteSortList - uses colour palette")
+#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteSortList()
 {
 	if (!m_pExportOptions->GetSupportsPalette())
@@ -2384,6 +2504,7 @@ void BmapPrevDlg::RefreshPaletteSortList()
 			break;
 	}
 }
+#endif
 
 // //////////////////////////////////////////////////////////////////////////////////////// //
 // //////////////////////////////////////////////////////////////////////////////////////// //
@@ -2421,31 +2542,32 @@ void BmapPrevDlg::HandleBitmapSizeTabMsg(DialogMsg* Msg)
 
 		case DIM_TEXT_CHANGED:
 		{
-			switch (Msg->GadgetID)
-			{
-				case _R(IDC_T1EDIT1):	HandleBitmapSizeWidthChange();			break;
-				case _R(IDC_T1EDIT2):	HandleBitmapSizeHeightChange();			break;
-				case _R(IDC_T1EDIT3):	HandleBitmapSizeScaleFactorChange();	break;
-
-				case _R(IDC_T1COMBO1):	
+			if( Msg->GadgetID == _R(IDC_T1EDIT1) )
+				HandleBitmapSizeWidthChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T1EDIT2) )
+				HandleBitmapSizeHeightChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T1EDIT3) )
+				HandleBitmapSizeScaleFactorChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T1COMBO1) )	
 					if (PageID == _R(IDD_TBITMAPSIZE) && !m_LockSizeUpdates)
 						HandleBitmapSizeDPIChange();
-				break;
-			}
 			break;
 		}
 
 		case DIM_SELECTION_CHANGED:
 		{
-			switch (Msg->GadgetID)
-			{
-				case _R(IDC_T1COMBO1):	HandleBitmapSizeDPIChange();							break;
-			}
+			if( Msg->GadgetID == _R(IDC_T1COMBO1) )
+				HandleBitmapSizeDPIChange();
 			break;
 		}
 
 		case DIM_LFT_BN_CLICKED:
 		{
+PORTNOTE("other","Hopefully this is no longer needed")
+#ifndef EXCLUDE_FROM_XARALX
 			// This is a nasty hack/bodge
 			// I keep on getting sent this DIM_LFT_BN_CLICKED msg when the user
 			// changes views - or shortly after. The user didn't click on
@@ -2453,8 +2575,8 @@ void BmapPrevDlg::HandleBitmapSizeTabMsg(DialogMsg* Msg)
 			// So I check that the cursor is over the control that the user
 			// has just clicked on before passing the msg to be processed.
 			// sjk 2/1/01
-			RECT r;
-			RECT wndpos;
+			wxRect r;
+			wxRect wndpos;
 			GetGadgetPosition(Msg->GadgetID, &r);
 			GetWindowRect(GetReadWriteWindowID(), &wndpos);
 			POINT CurPos;
@@ -2462,32 +2584,43 @@ void BmapPrevDlg::HandleBitmapSizeTabMsg(DialogMsg* Msg)
 
 			BOOL inctrl = FALSE;
 
-			if (CurPos.x >= wndpos.left + r.left && CurPos.x <= wndpos.left + r.right &&
-				CurPos.y >= wndpos.top + r.top && CurPos.y <= wndpos.top + r.bottom)
+			if (CurPos.x >= wndpos.GetLeft() + r.GetLeft() && 
+				CurPos.x <= wndpos.GetLeft() + r.GetRight() &&
+				CurPos.y >= wndpos.GetTop() + r.GetTop() && 
+				CurPos.y <= wndpos.GetTop() + r.GetBottom())
 				inctrl = TRUE;
 
 			if (inctrl)
-				switch (Msg->GadgetID)
 			{
-				case _R(IDC_T1RADIO2): HandleBitmapSizeAreaToSaveChange(DRAWING);				break;
-				case _R(IDC_T1RADIO3): HandleBitmapSizeAreaToSaveChange(SELECTION);				break;
-				case _R(IDC_T1RADIO1): HandleBitmapSizeAreaToSaveChange(SPREAD);				break;
-
-				case _R(IDC_T1RADIO_MINIMISE_AA): HandleBitmapSizeAntiAliasingChange(TRUE);		break;
-				case _R(IDC_T1RADIO_MAINTAIN_AA): HandleBitmapSizeAntiAliasingChange(FALSE);	break;
-				case _R(IDC_T1_PUTHTMLTAGONCLIPBOARD):
-									HandleBitmapSizePutHTMLChange();						break;
-			}
+#endif
+				if( Msg->GadgetID == _R(IDC_T1RADIO2) )
+					HandleBitmapSizeAreaToSaveChange(DRAWING);
+				else
+				if( Msg->GadgetID == _R(IDC_T1RADIO3) )
+					HandleBitmapSizeAreaToSaveChange(SELECTION);
+				else
+				if( Msg->GadgetID == _R(IDC_T1RADIO1) )
+					HandleBitmapSizeAreaToSaveChange(SPREAD);
+				else
+				if( Msg->GadgetID == _R(IDC_T1RADIO_MINIMISE_AA) )
+					HandleBitmapSizeAntiAliasingChange(TRUE);
+				else
+				if( Msg->GadgetID == _R(IDC_T1RADIO_MAINTAIN_AA) )
+					HandleBitmapSizeAntiAliasingChange(FALSE);
+				else
+				if( Msg->GadgetID == _R(IDC_T1_PUTHTMLTAGONCLIPBOARD) )
+					HandleBitmapSizePutHTMLChange();
+//			}
 			break;
 		}
 
 		case DIM_FOCUS_LOST:
 		{
-			switch (Msg->GadgetID)
+			if( Msg->GadgetID == _R(IDC_T1EDIT1) ||
+				Msg->GadgetID == _R(IDC_T1EDIT2) ||
+				Msg->GadgetID == _R(IDC_T1COMBO1) )
 			{
-				case _R(IDC_T1EDIT1):
-				case _R(IDC_T1EDIT2):
-				case _R(IDC_T1COMBO1):	HandleBitmapSizeDPIChange();			break;
+				HandleBitmapSizeDPIChange();
 			}
 			TalkToPage(PageID);			
 			break;
@@ -2672,9 +2805,6 @@ WinRect BmapPrevDlg::GetExportSize(double dpi)
 		// Get the bounding rectangle for the selection
 		ExportObjectSize = pSelection->GetBoundingRect();
 
-		// Work out the parent spread by finding the first node in the selection
-		Node* pNode = pSelection->FindFirst();
-
 		pSelection->Range::SetRangeControl(rc);
 	}
 	else if (m_pExportOptions->GetSelectionType() == SPREAD)
@@ -2707,7 +2837,8 @@ void BmapPrevDlg::HandleBitmapSizeDPIChange()
 		
 	BOOL valid;
 
-	double value = GetDoubleGadgetValue(_R(IDC_T1COMBO1), BMPEXP_MINDPI, BMPEXP_MAXDPI, NULL /*_R(IDS_BMPPREFS_INVALIDDPI)*/ ,&valid);
+	double value = GetDoubleGadgetValue(_R(IDC_T1COMBO1), BMPEXP_MINDPI, BMPEXP_MAXDPI, 
+						0 /*_R(IDS_BMPPREFS_INVALIDDPI)*/ ,&valid);
 	if (valid == FALSE)
 		return;
 
@@ -2724,23 +2855,23 @@ void BmapPrevDlg::HandleBitmapSizeDPIChange()
 	WinRect	Rect = GetExportSize(value);
 
 	// check the new width
-	if (Rect.Width() < 1 || Rect.Width() > BMPEXP_MAXWIDTH)
+	if (Rect.GetWidth() < 1 || Rect.GetWidth() > BMPEXP_MAXWIDTH)
 		return;
 
 	// and check the new height
-	if (Rect.Height() < 1 || Rect.Height() > BMPEXP_MAXHEIGHT)
+	if (Rect.GetHeight() < 1 || Rect.GetHeight() > BMPEXP_MAXHEIGHT)
 		return;
 
 	// If returned value in range then set the new default
 	m_pExportOptions->SetDPI(value);
 
 	m_LockSizeUpdates = TRUE;
-	SetLongGadgetValue(_R(IDC_T1EDIT1), Rect.Width());
-	SetLongGadgetValue(_R(IDC_T1EDIT2), Rect.Height());
+	SetLongGadgetValue(_R(IDC_T1EDIT1), Rect.GetWidth());
+	SetLongGadgetValue(_R(IDC_T1EDIT2), Rect.GetHeight());
 	m_LockSizeUpdates = FALSE;
 
 	// set the size of the export into the export options
-	m_pExportOptions->SetPixelOutputSize(Rect.Width(), Rect.Height());
+	m_pExportOptions->SetPixelOutputSize(Rect.GetWidth(), Rect.GetHeight());
 	// JPNOTE remove the next line soon
 	SetPreviewButtonState(true);
 }
@@ -2751,22 +2882,22 @@ void BmapPrevDlg::HandleBitmapSizeWidthChange()
 		return;
 
 	BOOL valid = TRUE;
-	INT32 Width  = GetLongGadgetValue(_R(IDC_T1EDIT1), 0, BMPEXP_MAXWIDTH, NULL, &valid);
+	INT32 Width  = GetLongGadgetValue(_R(IDC_T1EDIT1), 0, BMPEXP_MAXWIDTH, 0, &valid);
 	if (!valid || Width < 1)
 		return;
 
 	double dpi = m_pExportOptions->GetDPI();
 	WinRect	Rect = GetExportSize(dpi);
-	if (dpi < 5 || Rect.Width() == 0)
+	if (dpi < 5 || Rect.GetWidth() == 0)
 		return;
 
 	// calc the new dpi
-	double Resolution = ((double) Width * dpi) / ((double) Rect.Width());
+	double Resolution = ((double) Width * dpi) / ((double) Rect.GetWidth());
 	if ((Resolution < BMPEXP_MINDPI) || (Resolution > BMPEXP_MAXDPI))
 		return; // new dpi out of range
 
 	// calc the new height
-	INT32 Height = (INT32) ceil((Resolution * (double)Rect.Height()) / dpi);
+	INT32 Height = (INT32) ceil((Resolution * (double)Rect.GetHeight()) / dpi);
 
 	if (Height < 1 || Height > BMPEXP_MAXHEIGHT)
 		return;
@@ -2799,22 +2930,22 @@ void BmapPrevDlg::HandleBitmapSizeHeightChange()
 		return;
 
 	BOOL valid = TRUE;
-	INT32 Height = GetLongGadgetValue(_R(IDC_T1EDIT2), 0, BMPEXP_MAXHEIGHT, NULL, &valid);
+	INT32 Height = GetLongGadgetValue(_R(IDC_T1EDIT2), 0, BMPEXP_MAXHEIGHT, 0, &valid);
 	if (!valid || Height < 1)
 		return;
 
 	double dpi = m_pExportOptions->GetDPI();
 	WinRect	Rect = GetExportSize(dpi);
-	if (dpi < BMPEXP_MINDPI || Rect.Height() == 0)
+	if (dpi < BMPEXP_MINDPI || Rect.GetHeight() == 0)
 		return;
 
 	// calc the new dpi
-	double Resolution = ((double) Height * dpi) / ((double) Rect.Height());
+	double Resolution = ((double) Height * dpi) / ((double) Rect.GetHeight());
 	if ((Resolution < BMPEXP_MINDPI) || (Resolution > BMPEXP_MAXDPI))
 		return; // new dpi out of range
 
 	// calc the new Width
-	INT32 Width = (INT32) ceil((Resolution * (double)Rect.Width()) / dpi);
+	INT32 Width = (INT32) ceil((Resolution * (double)Rect.GetWidth()) / dpi);
 
 	if (Width < 1 || Width > BMPEXP_MAXWIDTH)
 		return;
@@ -2856,7 +2987,7 @@ void BmapPrevDlg::HandleBitmapSizeScaleFactorChange()
 
 	WinRect	rect = GetExportSize(dpi);
 
-	if (dpi < 5 || rect.Height() == 0)
+	if (dpi < 5 || rect.GetHeight() == 0)
 		return;
 
 	// calc the new dpi
@@ -2873,8 +3004,8 @@ void BmapPrevDlg::HandleBitmapSizeScaleFactorChange()
 	WinRect wr = GetExportSize(m_pExportOptions->GetDPI());
 
 	m_LockSizeUpdates = TRUE;
-	SetLongGadgetValue(_R(IDC_T1EDIT1), wr.Width());
-	SetLongGadgetValue(_R(IDC_T1EDIT2), wr.Height());
+	SetLongGadgetValue(_R(IDC_T1EDIT1), wr.GetWidth());
+	SetLongGadgetValue(_R(IDC_T1EDIT2), wr.GetHeight());
 	m_LockSizeUpdates = FALSE;
 
 	SetPreviewButtonState(true);
@@ -2923,8 +3054,8 @@ void BmapPrevDlg::RefreshBitmapSizeTab()
 	{
 		m_LockSizeUpdates = TRUE;
 		WinRect wr = GetExportSize(m_pExportOptions->GetDPI());
-		SetLongGadgetValue(_R(IDC_T1EDIT1), wr.Width());
-		SetLongGadgetValue(_R(IDC_T1EDIT2), wr.Height());
+		SetLongGadgetValue(_R(IDC_T1EDIT1), wr.GetWidth());
+		SetLongGadgetValue(_R(IDC_T1EDIT2), wr.GetHeight());
 		m_LockSizeUpdates = FALSE;
 	}
 	InitBitmapSizePutHTMLTick();
@@ -2968,6 +3099,8 @@ void BmapPrevDlg::RefreshBitmapSizeScaleFactor()
 
 void BmapPrevDlg::HandleBrowserPreviewTabMsg(DialogMsg* Msg)
 {
+PORTNOTETRACE("other","BmapPrevDlg::BrowserPreviewGetOptions - Do nothing");
+#if !defined(EXCLUDE_FROM_XARALX)
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	TalkToPage(_R(IDD_TBROWSER));  // The Coords Page identifier
 
@@ -3002,35 +3135,29 @@ void BmapPrevDlg::HandleBrowserPreviewTabMsg(DialogMsg* Msg)
 		}
 		case DIM_LFT_BN_CLICKED:
 		{
-			switch (Msg->GadgetID)
+			if( Msg->GadgetID == _R(IDC_IMMEDIATE_BROWSER_PREVIEW) )
 			{
-				case _R(IDC_IMMEDIATE_BROWSER_PREVIEW):
+				// click on the 'Browser Preview' button
+
+				if (m_pPreviewDlg)
 				{
-					// click on the 'Browser Preview' button
-
-					if (m_pPreviewDlg)
-					{
-						// get the browser options
-						BrowserPreviewOptions BrowserOptions;
-						BrowserPreviewGetOptions(&BrowserOptions);  				
-
-						BOOL ok = TRUE;
-
-						// Shold check here if we need to regenerate preview and if so do so
-						// ok = DoPreview();
-
-						// do the browser preview
-						if (ok) m_pPreviewDlg->DoBrowserPreview(BrowserOptions);
-					}
+					// get the browser options
+					BrowserPreviewOptions BrowserOptions;
+					BrowserPreviewGetOptions(&BrowserOptions);  				
+					
+					BOOL ok = TRUE;
+					// Shold check here if we need to regenerate preview and if so do so
+					// ok = DoPreview();
+					
+					// do the browser preview
+					if (ok) m_pPreviewDlg->DoBrowserPreview(BrowserOptions);
 				}
-				break;
-
-				case _R(IDC_BROWSER_PREVIEW):
-				{
-					// check whether to do preview in browser
-//					m_bDoPreviewInBrowser = GetLongGadgetValue(_R(IDC_BROWSER_PREVIEW), 0, 0);
-				}
-				break;
+			}
+			else
+			if( Msg->GadgetID == _R(IDC_BROWSER_PREVIEW) )
+			{
+				// check whether to do preview in browser
+//				m_bDoPreviewInBrowser = GetLongGadgetValue(_R(IDC_BROWSER_PREVIEW), 0, 0);
 			}
 		}
 		break;
@@ -3043,6 +3170,7 @@ void BmapPrevDlg::HandleBrowserPreviewTabMsg(DialogMsg* Msg)
 			TalkToPage(PageID);
 			break;
 	}
+#endif
 }
 
 /********************************************************************************************
@@ -3054,6 +3182,8 @@ void BmapPrevDlg::HandleBrowserPreviewTabMsg(DialogMsg* Msg)
 ********************************************************************************************/
 void BmapPrevDlg::BrowserPreviewGetOptions(BrowserPreviewOptions *pBrowserOptions)
 {
+PORTNOTETRACE("other","BmapPrevDlg::BrowserPreviewGetOptions - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	if (!m_bBrowserPreviewTabCreated)
 	{
 		// The tab has not been created so give up
@@ -3105,6 +3235,7 @@ void BmapPrevDlg::BrowserPreviewGetOptions(BrowserPreviewOptions *pBrowserOption
 
 	//And set those options into the browser options
 	pBrowserOptions->Set(Bgr, Info, Imagemap, ifoOptionsToUse);
+#endif
 }
 
 // //////////////////////////////////////////////////////////////////////////////////////// //
@@ -3114,6 +3245,8 @@ void BmapPrevDlg::BrowserPreviewGetOptions(BrowserPreviewOptions *pBrowserOption
 // //////////////////////////////////////////////////////////////////////////////////////// //
 void BmapPrevDlg::HandleImageMapTabMsg(DialogMsg* Msg)
 {
+PORTNOTETRACE("other","BmapPrevDlg::HandleImageMapTabMsg - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	TalkToPage(_R(IDD_TIMAPOPTIONS));  // The Coords Page identifier
 
@@ -3137,49 +3270,40 @@ void BmapPrevDlg::HandleImageMapTabMsg(DialogMsg* Msg)
 
 		case DIM_LFT_BN_CLICKED:
 		{
-			switch (Msg->GadgetID)
+			if( Msg->GadgetID == _R(IDC_IMAPTAB_EXPORTTOCLIPBOARD) ||
+				Msg->GadgetID == _R(IDC_IMAPTAB_EXPORTTOFILE) )
 			{
-				case _R(IDC_IMAPTAB_EXPORTTOCLIPBOARD):
-				case _R(IDC_IMAPTAB_EXPORTTOFILE):
-				{
-					//Get the state of the two Export... switches
-					BOOL fFile		= GetLongGadgetValue(_R(IDC_IMAPTAB_EXPORTTOFILE), FALSE, TRUE);
-					BOOL fClipboard	= GetLongGadgetValue(_R(IDC_IMAPTAB_EXPORTTOCLIPBOARD), FALSE, TRUE);
+				//Get the state of the two Export... switches
+				BOOL fFile		= GetLongGadgetValue(_R(IDC_IMAPTAB_EXPORTTOFILE), FALSE, TRUE);
+				BOOL fClipboard	= GetLongGadgetValue(_R(IDC_IMAPTAB_EXPORTTOCLIPBOARD), FALSE, TRUE);
 
-					if (fClipboard)
-						m_ClipBoardUsage = CLIPBOARD_IMAGEMAP;
-					else if (m_ClipBoardUsage == CLIPBOARD_IMAGEMAP)
-						m_ClipBoardUsage = CLIPBOARD_NONE;
+				if (fClipboard)
+					m_ClipBoardUsage = CLIPBOARD_IMAGEMAP;
+				else if (m_ClipBoardUsage == CLIPBOARD_IMAGEMAP)
+					m_ClipBoardUsage = CLIPBOARD_NONE;
 
-					//And enable the imagemap options gadgets if either of them is on
-					//Otherwise, disable the gadgets
-					ImageMapEnableOptions(fFile || fClipboard);
-					ImageMapEnableExportToFileOptions(fFile);
-					break;
-				}
+				//And enable the imagemap options gadgets if either of them is on
+				//Otherwise, disable the gadgets
+				ImageMapEnableOptions(fFile || fClipboard);
+				ImageMapEnableExportToFileOptions(fFile);
+			}
+			else
+			if( Msg->GadgetID == _R(IDC_IMAPTAB_BROWSE) )
+			{
+				ImageMapOnBrowseClicked();
+			}
+			else
+			if( Msg->GadgetID == _R(IDC_IMAPTAB_ADDDESIGNNOTE) )
+			{
+				//  User clicked on the 'Use Design Notes' checkbox
 
-				case _R(IDC_IMAPTAB_BROWSE):
-				{
-					ImageMapOnBrowseClicked();
-					break;
-				}
+				BOOL bCurrentState = m_pExportOptions->GetCanUseDesignNotes();
+				//  Flip the value of the bitmap export options variable.
+				bCurrentState = !bCurrentState;
 
-				case _R(IDC_IMAPTAB_ADDDESIGNNOTE):
-				{
-					//  User clicked on the 'Use Design Notes' checkbox
+				m_pExportOptions->SetCanUseDesignNotes( bCurrentState );
 
-					if( Msg->GadgetID == _R(IDC_IMAPTAB_ADDDESIGNNOTE) )
-					{
-						BOOL bCurrentState = m_pExportOptions->GetCanUseDesignNotes();
-						//  Flip the value of the bitmap export options variable.
-						bCurrentState = !bCurrentState;
-
-						m_pExportOptions->SetCanUseDesignNotes( bCurrentState );
-
-						SetRegistryFlagForDesignNotes(bCurrentState);
-					}
-					break;
-				}
+				SetRegistryFlagForDesignNotes(bCurrentState);
 			}
 			break;
 		}
@@ -3193,6 +3317,7 @@ void BmapPrevDlg::HandleImageMapTabMsg(DialogMsg* Msg)
 			break;
 
 	}
+#endif
 }
 
 /********************************************************************************************
@@ -3206,16 +3331,18 @@ void BmapPrevDlg::HandleImageMapTabMsg(DialogMsg* Msg)
 ********************************************************************************************/
 void BmapPrevDlg::ImageMapOnCreate()
 {
+PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCreate - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//Make sure we're talking to the right page
 	TalkToPage(_R(IDD_TIMAPOPTIONS));
 
 	//  Set the initial state of the 'Design Notes' checkbox
 	//  Depending on whether the DreamWeaver programme is available or not, and whether the file
 	//  has been named or not, we can enable/disable the appropriate controls.
-	CString DocName = "\\" + Document::GetCurrent()->GetPathName();	//  File name
+	wxString DocName = _T("\\") + Document::GetCurrent()->GetPathName();	//  File name
 
-	BOOL bUsesDesignNotes	= UsesDesignNotes();		//  Is Dreamweaver 3 installed?
-	BOOL bFileSaved			= DocName != "\\";				//  Has the current document been saved?
+	BOOL bUsesDesignNotes	= UsesDesignNotes();			//  Is Dreamweaver 3 installed?
+	BOOL bFileSaved			= DocName != _("\\");			//  Has the current document been saved?
 
 	SetLongGadgetValue( _R(IDC_IMAPTAB_ADDDESIGNNOTE), m_pExportOptions->GetCanUseDesignNotes() );
 	if( (bUsesDesignNotes && bFileSaved) /*|| !m_pExportOptions->GetCanUseDesignNotes()*/)
@@ -3325,17 +3452,17 @@ void BmapPrevDlg::ImageMapOnCreate()
 	pthToUse.SetType("htm");
 	
 	String_256 strToUse=pthToUse.GetPath(FALSE);
-	SetStringGadgetValue(_R(IDC_IMAPTAB_PATH), &strToUse, FALSE, -1);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_PATH), strToUse, FALSE, -1);
 
 //	}
 
 	//Set up the Approximate... combo box
 	DeleteAllValues(_R(IDC_IMAPTAB_APPROX));
 
-	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), &String_256(_R(IDS_IMAGEMAP_APPROX_VERYCLOSELY)), FALSE, 0);
-	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), &String_256(_R(IDS_IMAGEMAP_APPROX_CLOSELY)), FALSE, 1);
-	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), &String_256(_R(IDS_IMAGEMAP_APPROX_APPROXIMATELY)), FALSE, 2);
-	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), &String_256(_R(IDS_IMAGEMAP_APPROX_NOTATALL)), FALSE, 3);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), String_256(_R(IDS_IMAGEMAP_APPROX_VERYCLOSELY)), FALSE, 0);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), String_256(_R(IDS_IMAGEMAP_APPROX_CLOSELY)), FALSE, 1);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), String_256(_R(IDS_IMAGEMAP_APPROX_APPROXIMATELY)), FALSE, 2);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_APPROX), String_256(_R(IDS_IMAGEMAP_APPROX_NOTATALL)), FALSE, 3);
 	
 	SetComboListLength(_R(IDC_IMAPTAB_APPROX));
 
@@ -3390,7 +3517,7 @@ void BmapPrevDlg::ImageMapOnCreate()
 		PathName pthToUse=m_pthExport;
 
 		String_256 strToUse=pthToUse.GetFileName(FALSE);
-		SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), &strToUse, FALSE, -1);
+		SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), strToUse, FALSE, -1);
 	}
 
 	SetComboListLength(_R(IDC_IMAPTAB_MAPNAME));
@@ -3407,6 +3534,7 @@ void BmapPrevDlg::ImageMapOnCreate()
 	ImageMapEnableExportToFileOptions(fFile);
 
 	RefreshImageMapTab();
+#endif
 }
 
 void BmapPrevDlg::RefreshImageMapTab()
@@ -3505,6 +3633,8 @@ void BmapPrevDlg::ImageMapGetOptions(ImagemapFilterOptions* pOptions)
 ********************************************************************************************/
 void BmapPrevDlg::ImageMapOnCommit()
 {
+PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCommit - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	// Check if we have opened the tab or not. If we haven't then it is not a good
 	// idea to get get values from an uninitialised tab!
 	if (!m_bImageMapTabCreated)
@@ -3552,6 +3682,7 @@ void BmapPrevDlg::ImageMapOnCommit()
 		m_strLastMapName=ifoCurrent.m_strName;
 	}
 */
+#endif
 }
 
 /********************************************************************************************
@@ -3594,6 +3725,8 @@ void BmapPrevDlg::ImageMapEnableExportToFileOptions(BOOL fValue)
 ********************************************************************************************/
 void BmapPrevDlg::ImageMapOnBrowseClicked()
 {
+PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnBrowseClicked - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//First get our default filename from the Path edit field
 	String_256 strFile=GetStringGadgetValue(_R(IDC_IMAPTAB_PATH));
 	PathName pthFile(strFile);
@@ -3624,10 +3757,11 @@ void BmapPrevDlg::ImageMapOnBrowseClicked()
 	TalkToPage(_R(IDD_TIMAPOPTIONS)); 
 	
 	//And put that path name string into the filename field
-	SetStringGadgetValue(_R(IDC_IMAPTAB_PATH), &strChosen, FALSE, -1);
+	SetStringGadgetValue(_R(IDC_IMAPTAB_PATH), strChosen, FALSE, -1);
 
 	//Then call the function that we call every time the filename changes
 	ImageMapOnFileNameChanged();
+#endif
 }
 
 /********************************************************************************************
@@ -3644,6 +3778,8 @@ void BmapPrevDlg::ImageMapOnBrowseClicked()
 ********************************************************************************************/
 void BmapPrevDlg::ImageMapOnFileNameChanged()
 {
+PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnFileNameChanged - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//Return if the imagemap tab isn't created yet
 	if (!m_bImageMapTabCreated)
 		return;
@@ -3696,7 +3832,7 @@ void BmapPrevDlg::ImageMapOnFileNameChanged()
 			//Add the string into the combo box
 			String_256 strToUse=pThisItem->GetString();
 
-			SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), &strToUse, FALSE, i);
+			SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), strToUse, FALSE, i);
 
 			//And increase our current position
 			i++;
@@ -3713,7 +3849,7 @@ void BmapPrevDlg::ImageMapOnFileNameChanged()
 		//And set the default map name into the list, which is the name of the
 		//bitmap file without the extension
 		String_256 strDefault=pthOpen.GetFileName(FALSE);
-		SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), &strDefault, FALSE, -1);
+		SetStringGadgetValue(_R(IDC_IMAPTAB_MAPNAME), strDefault, FALSE, -1);
 		
 	} //END if the file exists
 	else
@@ -3724,6 +3860,7 @@ void BmapPrevDlg::ImageMapOnFileNameChanged()
 		HideGadget(_R(IDC_IMAPTAB_INSERT), TRUE);
 		HideGadget(_R(IDC_IMAPTAB_REPLACE), TRUE);
 	}
+#endif
 }
 
 // //////////////////////////////////////////////////////////////////////////////////////// //
@@ -3766,7 +3903,7 @@ void BmapPrevDlg::HandleBitmapOptionsTabMsg(DialogMsg* Msg)
 			String_256 QualityPercent = "";
 			QualityPercent.MakeMsg(_R(IDS_ZOOM_INFO_FORMAT), 100-SliderPos);
 
-			SetStringGadgetValue(_R(IDC_OPTIONSTAB_JPEG_TEXT4), &QualityPercent);
+			SetStringGadgetValue(_R(IDC_OPTIONSTAB_JPEG_TEXT4), QualityPercent);
 		}
 		break;
 
@@ -3800,14 +3937,30 @@ void BmapPrevDlg::InitBitmapOptionsTab()
 		String_256 QualityPercent = "";
 		QualityPercent.MakeMsg(_R(IDS_ZOOM_INFO_FORMAT), 100-Quality);
 
-		SetStringGadgetValue(_R(IDC_OPTIONSTAB_JPEG_TEXT4), &QualityPercent);
+		SetStringGadgetValue(_R(IDC_OPTIONSTAB_JPEG_TEXT4), QualityPercent);
 	}
 
-	switch(m_pExportOptions->GetFilterNameStrID())
+	if( m_pExportOptions->GetFilterNameStrID() == _R(IDS_JPG_EXP_FILTERNAME) )
 	{
-	default:
-	case _R(IDN_FILTERNAME_GIF):
-	case _R(IDS_FILTERNAME_PNG):
+		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), _R(IDS_OPTIONS_TAB_PROGRESSIVE));
+		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), _R(IDS_OPTIONS_TAB_ORIGINAL_JPEG));
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK1), FALSE);
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), TRUE);
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK3), TRUE);
+		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), ((JPEGExportOptions*) m_pExportOptions)->DoAsProgressive());
+	}
+	else
+	if( m_pExportOptions->GetFilterNameStrID() == _R(IDT_FILTERNAME_BMP) )
+	{
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK1), TRUE);
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), TRUE);
+		HideGadget(_R(IDC_OPTIONSTAB_CHECK3), TRUE);
+	}
+//	default:
+//	case _R(IDN_FILTERNAME_GIF):
+//	case _R(IDS_FILTERNAME_PNG):
+	else
+	{
 		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), _R(IDS_OPTIONS_TAB_INTERLACED));
 		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), _R(IDS_OPTIONS_TAB_TRANSPARENT));
 		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK3), _R(IDS_OPTIONS_TAB_LAYERFILES));
@@ -3817,22 +3970,6 @@ void BmapPrevDlg::InitBitmapOptionsTab()
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), ((MaskedFilterExportOptions*) m_pExportOptions)->WantInterlaced());
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), m_pExportOptions->IsBackgroundTransparent());
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK3), m_pExportOptions->GetSeparateLayerFiles());
-		break;
-
-	case _R(IDS_JPG_EXP_FILTERNAME):
-		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), _R(IDS_OPTIONS_TAB_PROGRESSIVE));
-		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), _R(IDS_OPTIONS_TAB_ORIGINAL_JPEG));
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK1), FALSE);
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), TRUE);
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK3), TRUE);
-		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), ((JPEGExportOptions*) m_pExportOptions)->DoAsProgressive());
-		break;
-
-	case _R(IDT_FILTERNAME_BMP):
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK1), TRUE);
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), TRUE);
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK3), TRUE);
-		break;
 	}
 
 }
@@ -3840,26 +3977,25 @@ void BmapPrevDlg::InitBitmapOptionsTab()
 void BmapPrevDlg::HandleBitmapOptionsTicks(UINT32 tick)
 {
 	BOOL NewState = GetLongGadgetValue(tick,0,1);
-	switch(m_pExportOptions->GetFilterNameStrID())
+
+	UINT32	idFilterName = m_pExportOptions->GetFilterNameStrID();
+
+	if( idFilterName == _R(IDS_JPG_EXP_FILTERNAME) )
+		if (tick == _R(IDC_OPTIONSTAB_CHECK1))
+			((JPEGExportOptions*) m_pExportOptions)->SetMakeProgressive(NewState);
+	else
+	if( idFilterName == _R(IDT_FILTERNAME_BMP) ) 
 	{
-	default:
-	case _R(IDN_FILTERNAME_GIF):
-	case _R(IDS_FILTERNAME_PNG):
+		// Do nothing
+	}
+	else
+	{
 		if (tick == _R(IDC_OPTIONSTAB_CHECK1))
 			((MaskedFilterExportOptions*) m_pExportOptions)->SetMakeInterlaced(NewState);
 		else if (tick == _R(IDC_OPTIONSTAB_CHECK2))
 			m_pExportOptions->SetBackgroundTransparency(NewState);
 		else if (tick == _R(IDC_OPTIONSTAB_CHECK3))
 			m_pExportOptions->SetSeparateLayerFiles(NewState);
-		break;
-
-	case _R(IDS_JPG_EXP_FILTERNAME):
-		if (tick == _R(IDC_OPTIONSTAB_CHECK1))
-			((JPEGExportOptions*) m_pExportOptions)->SetMakeProgressive(NewState);
-		break;
-
-	case _R(IDT_FILTERNAME_BMP):
-		break;
 	}
 
 	// show the controls as they now are
@@ -3909,8 +4045,7 @@ INT32 BmapPrevDlg::GetPositionOfItemInDropList( INT32 ListID, INT32 ItemID )
 	//  Get the number of entries in the list
 	GetValueCount( ListID, &NumberOfListItems );
 	//  Go through all the entries, and see if you can find the one which matches.
-	INT32 i = 0;
-	for( i; i < NumberOfListItems; i++ )
+	for( INT32 i = 0; i < NumberOfListItems; i++ )
 	{
 		//  Get the string at the specified index.
 		ListItemString = GetStringGadgetValue( ListID, NULL, i );
@@ -3930,6 +4065,8 @@ INT32 BmapPrevDlg::GetPositionOfItemInDropList( INT32 ListID, INT32 ItemID )
 // sjk (22/12/00)
 void BmapPrevDlg::SetPreEditedPaletteColour(INT32 r, INT32 g, INT32 b)
 {
+PORTNOTETRACE("other","BmapPrevDlg::SetPreEditedPaletteColour - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	// set the preedited colour to match the edited colour
 	ExtendedPalette	*palette = m_pExportOptions->GetExtendedPalette();
 	if (palette == NULL)
@@ -3948,4 +4085,5 @@ void BmapPrevDlg::SetPreEditedPaletteColour(INT32 r, INT32 g, INT32 b)
 	palette->Data[index].PreEditedRed = (r == -1 ? palette->Data[index].Red : r);
 	palette->Data[index].PreEditedGreen = (g == -1 ? palette->Data[index].Green : g);
 	palette->Data[index].PreEditedBlue = (b == -1 ? palette->Data[index].Blue : b);
+#endif
 }

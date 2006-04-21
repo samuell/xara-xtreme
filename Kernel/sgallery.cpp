@@ -3741,7 +3741,7 @@ void SGalleryOptionsDlg::AddDisplayModeName(UINT32 NameResourceID)
 
 void SGalleryOptionsDlg::AddDisplayModeName(StringBase *EntryName)
 {
-	SetStringGadgetValue(_R(IDC_SGDISPLAY_DMODE), EntryName, TRUE, 0);
+	SetStringGadgetValue(_R(IDC_SGDISPLAY_DMODE), *EntryName, TRUE, 0);
 }
 
 
@@ -4258,7 +4258,7 @@ void SGallerySortDlg::AddSortKeyName(StringBase *EntryName)
 	}
 */
 	for (INT32 i = 0; i < MaxSGSortKeys; i++)
-		SetStringGadgetValue(GallerySorts[i].ListControlID, EntryName, TRUE, 0);
+		SetStringGadgetValue(GallerySorts[i].ListControlID, *EntryName, TRUE, 0);
 }
 
 
@@ -4338,7 +4338,7 @@ void SGallerySortDlg::SetControls(void)
 //		GadgetRedraw(GallerySorts[i].ListControlID, FALSE);
 		DeleteAllValues(GallerySorts[i].ListControlID);
 		if (i > 0)
-			SetStringGadgetValue(GallerySorts[i].ListControlID, (StringBase *)&NoSortName, FALSE, 0);
+			SetStringGadgetValue(GallerySorts[i].ListControlID, NoSortName, FALSE, 0);
 	}
 
 	BOOL Result = ParentGallery->ApplyAction(SGACTION_SETSORTMODE);
@@ -4757,7 +4757,7 @@ void SGallerySearchDlg::SetControls(void)
 	}
 
 	// Set the search-text field
-	SetStringGadgetValue(_R(IDC_SGSEARCH_TEXT), (StringBase *) &LastSearchText);
+	SetStringGadgetValue(_R(IDC_SGSEARCH_TEXT), LastSearchText);
 
 	// Set the name-only/full-info radio buttons
 	SetBoolGadgetSelected(_R(IDC_SGSEARCH_NAMEONLY), !(LastSearchFullInfo));

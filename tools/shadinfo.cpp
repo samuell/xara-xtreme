@@ -383,7 +383,7 @@ void SoftShadowInfoBarOp::UpdateGadgetPositionShadowX()
 	if (pMaster)
 		ConvertValueToString(In, pMaster->GetOffsetX() , PIXELS, _T(" pix"));
 
-	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SOFTSHADOWCENTRE_EDIT_X), &In);
+	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SOFTSHADOWCENTRE_EDIT_X), In);
 }
 
 /********************************************************************************************
@@ -407,7 +407,7 @@ void SoftShadowInfoBarOp::UpdateGadgetPositionShadowY()
 	if (pMaster)
 		ConvertValueToString(In, pMaster->GetOffsetY(), PIXELS, _T(" pix"));
 
-	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SOFTSHADOWCENTRE_EDIT_Y), &In);
+	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SOFTSHADOWCENTRE_EDIT_Y), In);
 }
 
 /********************************************************************************************
@@ -449,7 +449,7 @@ void SoftShadowInfoBarOp::UpdateGadgetBlurSlider(BOOL bUpdateSlider)
 		}
 //	}
 	
-	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOW_SLIDER_EDIT), &Str);
+	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOW_SLIDER_EDIT), Str);
 	
 	d /= (double)BLURSLIDERMAX;
 	//d = 1.0 - d;
@@ -493,7 +493,7 @@ void SoftShadowInfoBarOp::UpdateGadgetTranspSlider(BOOL bUpdateSlider)
 		SetDarknessEditGadget(dDarkness);
 	}
 	else
-		pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOWTRANSP_EDIT), &Str);
+		pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOWTRANSP_EDIT), Str);
 
 	if (bUpdateSlider)
 		SetDarknessSlider(dDarkness);
@@ -2535,7 +2535,7 @@ void SoftShadowInfoBarOp::SetDarknessEditGadget(double dDarkness)
 	String_32 temp(_R(IDS_PERCENT_FORMAT));
 	camSnprintf(Str, 32, temp, percent);
 	String_32 PercentStr(Str);
-	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOWTRANSP_EDIT), &PercentStr);
+	pSoftShadowInfoBar->SetStringGadgetValue(_R(IDC_SHADOWTRANSP_EDIT), PercentStr);
 }
 
 /********************************************************************************************

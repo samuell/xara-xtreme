@@ -9,7 +9,7 @@ noinst_LIBRARIES	= libKernel.a
 libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attrbev.cpp \
 	attrmap.cpp attrmgr.cpp basedoc.cpp beveler.cpp bevtrap.cpp biasgain.cpp \
 	bitfilt.cpp bitmap.cpp bitmapcachekey.cpp blndhelp.cpp blobs.cpp \
-	bmpcomp.cpp bmplist.cpp bmpsrc.cpp brpress.cpp brshattr.cpp brshbeca.cpp \
+	bmpcomp.cpp bmplist.cpp bmapprev.cpp bmpsrc.cpp brpress.cpp brshattr.cpp brshbeca.cpp \
 	brshcomp.cpp brshdata.cpp brushref.cpp bshadow.cpp cache.cpp cachfifo.cpp \
 	camfiltr.cpp capturemanager.cpp ccbhfile.cpp ccbuffil.cpp \
 	ccfile.cpp ccpanose.cpp chapter.cpp clipattr.cpp cnamecol.cpp colclist.cpp \

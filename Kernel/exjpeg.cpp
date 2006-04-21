@@ -1061,7 +1061,7 @@ BOOL JPEGExportFilter::PrepareForOperation()
 ********************************************************************************************/
 BOOL JPEGExportFilter::GetExportOptions(BitmapExportOptions* pOptions)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 
 	BOOL Ok = TRUE;
@@ -1073,7 +1073,7 @@ BOOL JPEGExportFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	if (pOpDes != NULL)
 	{
 		// set up the data for the export options dialog
-		OpParam Param((INT32)pOptions, (INT32)this);
+		OpParam Param( pOptions, this );
 
 		// invoke the dialog
 		pOpDes->Invoke(&Param);

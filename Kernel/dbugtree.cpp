@@ -399,7 +399,7 @@ void DebugTreeDlg::ShowNodeDebugInfoForNode(Node *pNode)
 	pNode->GetDebugDetails(m_pstrDetails);
 
 	// Copy this string into the edit control.
-	SetStringGadgetValue(_R(IDC_DEBUGTREE_DETAILS), m_pstrDetails); 
+	SetStringGadgetValue(_R(IDC_DEBUGTREE_DETAILS), *m_pstrDetails); 
 }  
 
 /********************************************************************************************

@@ -142,7 +142,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opbevel.h"
 
-//#include "bmapprev.h"
+#include "bmapprev.h"
 
 #if XAR_TREE_DIALOG
 #include "cxftree.h"
@@ -1040,6 +1040,9 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		 pFilter != 0;
 		 pFilter = Filter::GetNext(pFilter))
 	{
+		if( NULL == pFilter->pOILFilter )
+			continue;
+
 		if (pFilter->GetFlags().CanExport && 
 			pFilter->pOILFilter->Position == TheSelectedFilter)
 				// This is the filter!
@@ -1152,30 +1155,26 @@ PORTNOTE("other", "Removed EPSFilter usage" )
 	BitmapExportOptions* pOptions = NULL;
 	if (pFilter->IS_KIND_OF(BaseBitmapFilter)) 
 	{
-PORTNOTE("other", "Removed BmapPrevDlg usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 		if (BmapPrevDlg::m_pExportOptions)
 		{
 			delete BmapPrevDlg::m_pExportOptions;
 			BmapPrevDlg::m_pExportOptions = 0;
 		}
-#endif
 		
 		// only if it is a raster type and we are not saving from the gallery
 		if (pExportParam == 0)
 		{
 			// set up with default attrib for this filter
 			// and get the user to edit these default params in the export dlg (thats the FALSE param)
-			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, FALSE);
+PORTNOTE("other", "Use SetUpExportOptions to get defaults only and not do dialog" )
+//			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, FALSE);
+			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, TRUE);
 			// the dlg has been up and the user may have the graphic type
 			// ask the dlg for the type that it used
-PORTNOTE("other", "Removed BmapPrevDlg usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 			if (BmapPrevDlg::m_pExportOptions)
 				pOptions = BmapPrevDlg::m_pExportOptions;
 			// take responsibility for the export options away from the bmp preview dlg
 			BmapPrevDlg::m_pExportOptions = 0;
-#endif
 			// the filter we want to export with will change too if the export options have changed type
 			if (pOptions)
 			{
@@ -1184,11 +1183,8 @@ PORTNOTE("other", "Removed BmapPrevDlg usage" )
 				// change the export extent if we have changed filters
 				if (pFilter && pFilter != pOldFilter)
 				{
-PORTNOTE("other", "Removed BmapPrevDlg usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 					// set the path extention
 					Path.SetType(BmapPrevDlg::m_pthExport.GetType());
-#endif
 				}
 				else pFilter = pOldFilter;
 			}

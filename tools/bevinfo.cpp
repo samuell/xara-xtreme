@@ -304,7 +304,7 @@ MsgResult BevelInfoBarOp::Message(Msg* Message)
 				for ( INT32 i=0; i<NumSliderTypes; i++ )
 				{
 					Str.Load( SliderTypes[i] );
-					SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_COMBO), &Str, TRUE, i);
+					SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_COMBO), Str, TRUE, i);
 				}
 				
 				SetComboListLength(_R(IDC_BEVEL_SLIDER_COMBO));
@@ -742,7 +742,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 								 PIXELS);
 			// Str += _T(" pix");
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 			m_SliderComboIndex = 0;
 			
 			break;
@@ -757,7 +757,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			Str = GetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT));
 			Str += _T(" %");
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 1;
 
@@ -778,7 +778,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			Str = GetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT));
 			Str += _T(" ");
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 2;
 			
@@ -794,7 +794,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			Str = GetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT));
 			Str += _T(" ");
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 3;
 			break;
@@ -825,7 +825,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			}
 			
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			PaintGadgetNow(_R(IDC_BEVELSLIDER));
 			PaintGadgetNow(_R(IDC_BEVEL_SLIDER_EDIT));		
@@ -856,7 +856,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			}
 
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 1;
 
@@ -884,7 +884,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			}
 			
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 2;			
 
@@ -913,7 +913,7 @@ void BevelInfoBarOp::SliderUpdate(BOOL bSetVariables, BOOL bTestMany)
 			}
 			
 			SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-								 &Str);
+								 Str);
 
 			m_SliderComboIndex = 3;			
 
@@ -1604,9 +1604,9 @@ BOOL BevelInfoBarOp::ConvertStringToValue(CGadgetID ID, INT32 &Value)
 				}
 			}
 			
-			SetStringGadgetValue(ID, &NumberString);
+			SetStringGadgetValue(ID, NumberString);
 			Value = GetLongGadgetValue(ID, BEVEL_CONTRAST_MIN, BEVEL_CONTRAST_MAX);
-			SetStringGadgetValue(ID, &FieldContents);
+			SetStringGadgetValue(ID, FieldContents);
 			break;
 		case 2:
 		case 3:
@@ -1632,7 +1632,7 @@ BOOL BevelInfoBarOp::ConvertStringToValue(CGadgetID ID, INT32 &Value)
 				}
 			}
 			
-			SetStringGadgetValue(ID, &NumberString);
+			SetStringGadgetValue(ID, NumberString);
 			Value = GetLongGadgetValue(ID, -1000, 1000);
 			
 			while (Value < BEVEL_LIGHTANGLE_MIN)
@@ -1649,7 +1649,7 @@ BOOL BevelInfoBarOp::ConvertStringToValue(CGadgetID ID, INT32 &Value)
 			
 			if (!bUpdate)
 			{
-				SetStringGadgetValue(ID, &FieldContents);
+				SetStringGadgetValue(ID, FieldContents);
 			}
 			else
 			{
@@ -1657,7 +1657,7 @@ BOOL BevelInfoBarOp::ConvertStringToValue(CGadgetID ID, INT32 &Value)
 				NumberString = GetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT));
 				NumberString += _T(" ");
 				SetStringGadgetValue(_R(IDC_BEVEL_SLIDER_EDIT),
-					&NumberString);
+					NumberString);
 			}		
 			
 			break;
@@ -2586,7 +2586,7 @@ void BevelInfoBarOp::LoadBevelTypeComboStrings(BOOL bMany)
 	if (bMany)
 	{
 		Str.Load( _R(IDS_BEVELSTRING_MANY) );
-		SetStringGadgetValue(_R(IDC_BEVEL_TYPE_COMBO), &Str, TRUE, 0);
+		SetStringGadgetValue(_R(IDC_BEVEL_TYPE_COMBO), Str, TRUE, 0);
 		Offset = 1;
 	}
 				
@@ -2594,7 +2594,7 @@ void BevelInfoBarOp::LoadBevelTypeComboStrings(BOOL bMany)
 	for ( INT32 i=0; i<NumBevelTypes; i++ )
 	{
 		Str.Load( BevelTypes[i].StringID );
-		SetStringGadgetValue(_R(IDC_BEVEL_TYPE_COMBO), &Str, TRUE, i + Offset);
+		SetStringGadgetValue(_R(IDC_BEVEL_TYPE_COMBO), Str, TRUE, i + Offset);
 	}
 				
 	SetComboListLength(_R(IDC_BEVEL_TYPE_COMBO));

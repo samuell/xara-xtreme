@@ -2209,8 +2209,8 @@ void BlendInfoBarOp::UpdateInfoBarState()
 		// make the effect combo and the blendsteps text blank
 		String_64 Str;
 		Str = _T("");
-		SetStringGadgetValue(_R(IDC_BLENDSTEPS),&Str);
-		SetStringGadgetValue(_R(IDC_EFFECT),&Str, FALSE, -1);
+		SetStringGadgetValue(_R(IDC_BLENDSTEPS),Str);
+		SetStringGadgetValue(_R(IDC_EFFECT),Str, FALSE, -1);
 	}
 	else
 	{
@@ -2298,7 +2298,7 @@ void BlendInfoBarOp::ShowEffectComboString(ColourBlendType Type)
 
 		default:ERROR3("Unknown colour blend type"); Str.Load(_R(IDS_FILLTOOL_FADE)); break;
 	}
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str, FALSE, -1);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str, FALSE, -1);
 }
 
 /********************************************************************************************
@@ -2317,11 +2317,11 @@ void BlendInfoBarOp::LoadStringsIntoEffectCombo()
 	String_64 Str;
 	DeleteAllValues(_R(IDC_EFFECT));
 	Str.Load(_R(IDS_FILLTOOL_FADE));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_FADE);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_FADE);
 	Str.Load(_R(IDS_FILLTOOL_RAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,FALSE, FEMENU_RAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,FALSE, FEMENU_RAINBOW);
 	Str.Load(_R(IDS_FILLTOOL_ALTRAINBOW));
-	SetStringGadgetValue(_R(IDC_EFFECT),&Str,TRUE, FEMENU_ALTRAINBOW);
+	SetStringGadgetValue(_R(IDC_EFFECT),Str,TRUE, FEMENU_ALTRAINBOW);
 
 	SetComboListLength(_R(IDC_EFFECT));
 }
@@ -2393,7 +2393,7 @@ void BlendInfoBarOp::SetBlendStepsEditText(INT32 NumSteps)
 		Convert::LongToString(NumSteps, &StrNumSteps);
 		StrNumSteps += StepString;
 
-		/*BOOL ok =*/ SetStringGadgetValue(_R(IDC_BLENDSTEPS), &StrNumSteps);
+		/*BOOL ok =*/ SetStringGadgetValue(_R(IDC_BLENDSTEPS), StrNumSteps);
 		//  error code to go here
 }
 
@@ -2436,7 +2436,7 @@ void BlendInfoBarOp::SetBlendDistanceEditText(INT32 NumSteps)
 		String_256 Str;
 		pDimScale->ConvertToUnits(DistanceBetweenSteps, &Str, TRUE, 4);
 		
-		SetStringGadgetValue(_R(IDC_BLENDSTEPS), &Str);// set it
+		SetStringGadgetValue(_R(IDC_BLENDSTEPS), Str);// set it
 	}
 	
 	return;

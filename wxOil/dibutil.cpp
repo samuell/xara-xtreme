@@ -2062,12 +2062,15 @@ BitmapConvertHint DIBUtil::CalcConvertHint( DWORD ScreenBPP, wxDC *pDC )
 	// returned - i.e. a 5 bit gun cannot return more than 32 values
 	BYTE LastValue[3] = {0, 0, 0};
 	BYTE     Count[3] = {0, 0, 0};
+	wxMemoryDC	memdc;
+	wxBitmap	bitmap( 1, 1 );
+	memdc.SelectObject( bitmap );
 	for ( UINT32 Value=0x00; Value<0x100; Value++ )
 	{
 		wxColour colour;
-		pDC->SetPen(wxPen(wxColour(Value,Value,Value)));
-		pDC->DrawPoint(0,0);
-		pDC->GetPixel(0,0,&colour);
+		memdc.SetPen(wxPen(wxColour(Value,Value,Value)));
+		memdc.DrawPoint(0,0);
+		memdc.GetPixel(0,0,&colour);
 		if ( colour.Red()!=LastValue[0] )
 		{
 			LastValue[0] = colour.Red();
@@ -2084,6 +2087,7 @@ BitmapConvertHint DIBUtil::CalcConvertHint( DWORD ScreenBPP, wxDC *pDC )
 			Count[2]++;
 		}
 	}
+	memdc.SelectObject( wxNullBitmap );
 
 	// Now determine how many bits would be needed to store the number of values we generated
 	// for each gun. Note that this code will return (eg) 5 bits for all values between 17-32 inclusive

@@ -771,7 +771,7 @@ void SelectorInfoBarOp::SetEdit(CGadgetID gid, INT32 nValue, Spread* pUnitSpread
 		// Convert to units & text and display.
 		String_256 str;
 		pDimScale->ConvertToUnits((INT32) nValue, &str);
-		if (HasWindow()) SetStringGadgetValue(gid, &str);
+		if (HasWindow()) SetStringGadgetValue(gid, str);
 	}
 	else
 	{
@@ -844,7 +844,7 @@ void SelectorInfoBarOp::SetEdit(CGadgetID gid, FIXED16 fxValue, Spread* pUnitSpr
 */
 	String str;
 	fxValue.ToString(&str);
-	if (HasWindow()) SetStringGadgetValue(gid, &str, FALSE);
+	if (HasWindow()) SetStringGadgetValue(gid, str, FALSE);
 	if (fUpdate) UpdateRecord((UINT32) gid);
 }
 
@@ -868,7 +868,7 @@ void SelectorInfoBarOp::ClearEdit(CGadgetID gid)
 	String_256 str;
 	str.Empty();
 	if(HasWindow())
-		SetStringGadgetValue(gid, &str, FALSE);
+		SetStringGadgetValue(gid, str, FALSE);
 	UpdateRecord((UINT32) gid);
 }
 

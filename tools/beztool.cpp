@@ -1732,7 +1732,7 @@ void BezToolInfoBarOp::UpdateTextIndicator()
 			ERROR3("Unknown tool mode encountered");
 	}
 
-	SetStringGadgetValue(_R(IDC_BEZTOOLADDCHANGE), &DisplayWord);
+	SetStringGadgetValue(_R(IDC_BEZTOOLADDCHANGE), DisplayWord);
 	PaintGadgetNow(_R(IDC_BEZTOOLADDCHANGE));
 }
 
@@ -2065,16 +2065,16 @@ void BezToolInfoBarOp::UpdatePositionFields(BOOL ForceUpdate, BOOL ScanForCurren
 			CurrentInkPath = NULL;
 			for (INT32 loop = 0; loop < NumberIconIDs; loop++)
 				EnableArray[loop] = FALSE;
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_ENDPOINTX), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_ENDPOINTY), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTX), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTY), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDX), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDY), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTX), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTY), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDX), &NullString);
-			SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDY), &NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_ENDPOINTX), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_ENDPOINTY), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTX), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTY), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDX), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDY), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTX), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTY), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDX), NullString);
+			SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDY), NullString);
 
 			for (INT32 i = 0; i < NumberIconIDs; i++)
 			{
@@ -3536,7 +3536,7 @@ void BezierTool::RetroSmoothSet(INT32 percent, BOOL Enabled)
 			String_32 jcf(_R(IDS_PERCENT_FORMAT));
 			camSnprintf(Str, 31, jcf, (INT32) percent);
 			String_32 PercentStr(Str);
-			pBezToolInfoBarOp->SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
+			pBezToolInfoBarOp->SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), PercentStr);
 
 			pBezToolInfoBarOp->EnableGadget(_R(IDC_SMOOTHSLIDER), Enabled);
 			pBezToolInfoBarOp->EnableGadget(_R(IDC_SMOOTHPERCENT), Enabled);
@@ -3820,8 +3820,8 @@ void BezToolInfoBarOp::UpdateEditFieldsFromPath(Path* pPath, Spread* pSpread, IN
 		}
 		else
 		{
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTX), &NullString, FALSE);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTY), &NullString, FALSE);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTX), NullString, FALSE);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_FIRSTY), NullString, FALSE);
 			if (EnableData != NULL)
 			{
 				EnableData[8] = FALSE;
@@ -3848,8 +3848,8 @@ void BezToolInfoBarOp::UpdateEditFieldsFromPath(Path* pPath, Spread* pSpread, IN
 	}
 
 	// Redraw the left hand text indicators
-	SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTX), &UpperString);
-	SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTY), &LowerString);
+	SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTX), UpperString);
+	SetStringGadgetValue(_R(IDC_PATH_STATIC_FIRSTY), LowerString);
 	if (ForceUpdate)
 	{
 		PaintGadgetNow(_R(IDC_PATH_STATIC_FIRSTX));
@@ -3907,8 +3907,8 @@ void BezToolInfoBarOp::UpdateEditFieldsFromPath(Path* pPath, Spread* pSpread, IN
 		}
 		else
 		{
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDX), &NullString, FALSE);
-			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDY), &NullString, FALSE);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDX), NullString, FALSE);
+			SetStringGadgetValue(_R(IDC_PATH_EDIT_SECONDY), NullString, FALSE);
 			if (EnableData != NULL)
 			{
 				EnableData[14] = FALSE;
@@ -3929,8 +3929,8 @@ void BezToolInfoBarOp::UpdateEditFieldsFromPath(Path* pPath, Spread* pSpread, IN
 	}
 
 	// Redraw the right hand text indicators
-	SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDX), &UpperString);
-	SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDY), &LowerString);
+	SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDX), UpperString);
+	SetStringGadgetValue(_R(IDC_PATH_STATIC_SECONDY), LowerString);
 	if (ForceUpdate)
 	{
 		PaintGadgetNow(_R(IDC_PATH_STATIC_SECONDX));
@@ -4183,7 +4183,7 @@ MsgResult BezToolInfoBarOp::InfobarMessage(Msg* Message)
 		String_32 jcf(_R(IDS_PERCENT_FORMAT));
 		camSnprintf(Str, 31, jcf, (INT32) 0);
 		String_32 PercentStr(Str);
-		SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
+		SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), PercentStr);
 
 		// Update all the buttons
 		UpdateTextIndicator();	
@@ -4325,7 +4325,7 @@ MsgResult BezToolInfoBarOp::InfobarMessage(Msg* Message)
 			String_32 jcf(_R(IDS_PERCENT_FORMAT));
 			camSnprintf(Str, 31, jcf, Result);
 			String_32 PercentStr(Str);
-			SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), &PercentStr);
+			SetStringGadgetValue(_R(IDC_SMOOTHPERCENT), PercentStr);
 
 			// Tell the bezier tool about the new smoothness
 			if (Valid)
