@@ -369,6 +369,14 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		}
 		if (Title.IsEmpty())
 			 Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
+
+		wxSizer * pSizer = pDialogWnd->GetSizer();
+		if (pSizer)
+		{
+			pSizer->SetSizeHints(pDialogWnd);
+			pDialogWnd->SetSizerAndFit(pSizer);
+		}
+
 		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo.
 			Name(pDialogName).Caption(Title).
 			PinButton(TRUE));

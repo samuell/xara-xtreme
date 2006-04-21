@@ -645,7 +645,7 @@ public:
 
 	String_32		Name;
 	String_32&		GetName()								{ return Name; }
-	void			SetName(String_32& str)					{ Name = str; }
+	void			SetName(const String_32& str)			{ Name = str; }
 
 };
 

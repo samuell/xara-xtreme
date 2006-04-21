@@ -1183,10 +1183,7 @@ BOOL CreateContextMenu(MenuItem* pContextMenu)
 //		CamelotContextMenu->UpdateMenuState(FALSE);
 //		UpdateWinMenu(WinContextMenu, CamelotContextMenu);
 
-		// And open it on screen
-		wxPoint			pos = wxGetMousePosition();
-		 
-		if( CCamFrame::GetMainFrame()->PopupMenu( WinContextMenu, pos.x, pos.y ) )
+		if( CCamFrame::GetMainFrame()->PopupMenu( WinContextMenu ) )
 			worked = TRUE;
 		else
 		{

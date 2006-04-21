@@ -419,6 +419,10 @@ MsgResult SuperGallery::Message(Msg* Message)
 		switch (Msg->DlgMsg)
 		{
 			case DIM_CREATE:
+				{
+					String_32 name(CamResource::GetObjectName(DlgResID));
+					SetName(name);
+				}
 				break;
 
 			case DIM_CANCEL:			// We're closing - close our owned dlgs
