@@ -581,7 +581,7 @@ class wxFloatingPane : public wxFloatingPaneBaseClass
 public:
     wxFloatingPane(wxWindow* parent,
                    wxFrameManager* owner_mgr,
-                   wxWindowID id = -1,
+                   wxWindowID id,
                    const wxPaneInfo& pane)
                     : wxFloatingPaneBaseClass(parent, id, wxT(""),
                             pane.floating_pos, pane.floating_size,
