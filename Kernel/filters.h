@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attr.h"
 #include "attrmgr.h"
 #include "txtattr.h"
-#include "fontbase.h"
+#include "fontclass.h"
 #include <limits.h>
 #include "oilfltrs.h"
 

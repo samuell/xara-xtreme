@@ -1306,7 +1306,6 @@ WORD FontManager::FindClosestFontFull(const CCPanose &PanoseNumber)
 
 BOOL FontManager::FindClosestFontFullTry(FontClass Class, String_64 *pTypeFaceName, ENUMLOGFONT *pEnumLogFont)
 {
-	PORTNOTETRACE("text","FontManager::FindClosestFontFullTry - do nothing");
 	ERROR2IF(pEnumLogFont==NULL, FALSE, "FindClosestTry called with pEnumLogFont==NULL.");
 
 	OUTLINETEXTMETRIC *pOutlineTextMetric;
@@ -1346,7 +1345,7 @@ BOOL FontManager::FindClosestFontFullTry(FontClass Class, String_64 *pTypeFaceNa
 
 void FontManager::InvalidateCharMetrics()
 {
-	FontMetricsCache::InvalidateCharMetrics();
+	OILFontMan::InvalidateCharMetrics();
 }
 
 /********************************************************************************************
@@ -1365,7 +1364,7 @@ void FontManager::InvalidateCharMetrics()
 
 BOOL FontManager::GetCharMetrics(CNativeDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
 {
-	return FontMetricsCache::GetCharMetrics(pDC, ch, FontDesc, pCharMetrics);
+	return OILFontMan::GetCharMetrics(pDC, ch, FontDesc, pCharMetrics);
 }
 
 /********************************************************************************************
@@ -1384,7 +1383,7 @@ BOOL FontManager::GetCharMetrics(CNativeDC* pDC, WCHAR ch, CharDescription& Font
 MILLIPOINT FontManager::GetCharsKerning(CNativeDC* pDC, WCHAR chLeft, WCHAR chRight, CharDescription& FontDesc)
 {
 	// TRACEUSER("wuerthne", _T("FontManager::GetCharsKerning called\n") );
-	return FontKerningPairsCache::GetCharsKerning(pDC, chLeft, chRight, FontDesc);
+	return OILFontMan::GetCharsKerning(pDC, chLeft, chRight, FontDesc);
 }
 
 /********************************************************************************************

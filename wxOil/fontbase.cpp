@@ -112,6 +112,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathtype.h"
 #include "txtattr.h"
 #include "app.h"
+
+#include "fontimpl.h"       // private definitions
 //#include "mike.h"
 
 DECLARE_SOURCE( "$Revision$" );
@@ -139,7 +141,7 @@ PathVerb CharOutlineCache::CacheVerbs[OILFONTLIMIT];
 
 // define some font metrics/kerning pairs cache statics
 FontMetricsCacheEntry		FontMetricsCache::mpFontMetricsData[FontMetricsCache::NUMENTRIES];
-FontKerningPairsCacheEntry	FontKerningPairsCache::mpFontKerningPairsCacheData[FontKerningPairsCache::NUMENTRIES];
+FontKerningPairsCacheEntry	FontKerningPairsCache::m_FontKerningPairsCacheData[FontKerningPairsCache::NUMENTRIES];
 
 
 /********************************************************************************************
@@ -536,6 +538,45 @@ PORTNOTE("text","ATM deactivated")
 	}
 	ERROR3("OILFontMan::CreateNewFont() - Unknown font class");
 	return NULL;
+}
+
+/********************************************************************************************
+>	OILFontMan::InvalidateCharMetrics()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Purpose:	Facade routine for FontMetricsCache::InvalidateCharMetrics
+
+********************************************************************************************/
+void OILFontMan::InvalidateCharMetrics()
+{
+	FontMetricsCache::InvalidateCharMetrics();
+}
+
+/********************************************************************************************
+>	BOOL GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Purpose:	Facade routine for FontMetricsCache::GetCharMetrics
+
+********************************************************************************************/
+BOOL OILFontMan::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
+{
+	return FontMetricsCache::GetCharMetrics(pDC, ch, FontDesc, pCharMetrics);
+}
+
+/********************************************************************************************
+>	MILLIPOINT GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight, CharDescription& FontDesc)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Purpose:	Facade routine for FontKerningPairsCache::GetCharsKerning
+
+********************************************************************************************/
+MILLIPOINT OILFontMan::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight, CharDescription& FontDesc)
+{
+	return FontKerningPairsCache::GetCharsKerning(pDC, chLeft, chRight, FontDesc);
 }
 
 /********************************************************************************************
@@ -1126,85 +1167,34 @@ void FontMetricsCache::InvalidateCharMetrics()
 	 			FontDesc	= a font description
 	Returns:	Kern in millipoints (or zero if no kern or error)
 	Purpose:	Get the kern between two chars of a font
-	Note:		So far, the kerning values are not cached
+	Note:		The kern pairs are cached (see FontKerningPairsCacheEntry::GetCharsKerning)
 ********************************************************************************************/
 
 MILLIPOINT FontKerningPairsCache::GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight,
-																	CharDescription& FontDesc)
+												  CharDescription& FontDesc)
 {
-	PORTNOTE("text", "caching of kern pairs removed");
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(         pDC==NULL,FALSE,"FontKerningPairsCache::GetCharsKerning() - pDC==NULL");
-	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,
-			"FontKerningPairsCache::GetCharsKerning() - FontDesc char should be 'FONTEMCHAR'");
-
-	// find if font is in cache (and if so which entry)
-	INT32 CacheEntry = 0;
-	while (CacheEntry<NUMENTRIES && mpFontKerningPairsCacheData[CacheEntry].GetFontDesc()!=FontDesc)
-		CacheEntry +=1;
-
-	// if font not in cache, recache it (requires the DC to be prepared, then either/both is
-	// done before restoring the DC)
-	if (CacheEntry>=NUMENTRIES)
-	{
-		// get design size of font, and default heigh
-		INT32 DesignSize    = TextManager::GetDesignSize(pDC);
-		INT32 DefaultHeight = TextManager::GetDefaultHeight();
-
-		// first, if ATM fonts, ensure accurate widths returned
-		// this should be a virtual function - but class structure does not facilitate such things!
-//-		CachedFontItem* pItem = FONTMANAGER->GetFont(FontDesc.GetTypefaceHandle());
-//-		if (pItem==NULL || pItem->IsCorrupt())
-//-			return FALSE;
-//-		if (pItem->GetFontClass()==FC_ATM)
-//-			ATMFontMan::ForceExactWidth();
-
-		// get a LogFont, create a font and select it into the DC
-		LOGFONT	CharLogFont;
-		if (TextManager::GetLogFontFromCharDescriptor(pDC, FontDesc, &CharLogFont, DesignSize) == false)
-			return 0;
-		wxFont font;
-		font.CreateFontIndirect(&CharLogFont);
-		wxFont* pOldFont = pDC->SelectObject(&font);
-		ERROR2IF(pOldFont==NULL,FALSE,"FontKerningPairsCache::GetCharsKerning() - SelectObject() failed");
-
-		// if font not in cache, cache its kerns throwing out a random entry
-		CacheEntry = rand() % NUMENTRIES;
-		if (mpFontKerningPairsCacheData[CacheEntry].CacheFontKerns(pDC, FontDesc, DefaultHeight, DesignSize) == false)
-			return 0;
-
-		// restore old font
-		pDC->SelectObject(pOldFont);
-	}
-
-#ifdef _DEBUG
-//	TRACE( _T("State of kerning cache after update...\n"));
-//	Dump();
-#endif /*_DEBUG */
-
-	return mpFontKerningPairsCacheData[CacheEntry].GetCharsKerning(chLeft, chRight);
-#else
+	// TRACEUSER("wuerthne", _T("GetCharsKerning %04x %04x"), chLeft, chRight);
+	ERROR2IF(pDC==NULL, 0, "FontKerningPairsCache::GetCharsKerning() - pDC==NULL");
+	ERROR2IF(FontDesc.GetCharCode() != FONTEMCHAR, FALSE,
+		"FontKerningPairsCache::GetCharsKerning() - FontDesc char should be 'FONTEMCHAR'");
 #ifndef DISABLE_TEXT_RENDERING
-	return FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
+	// find out whether the font is in the cache (and if so which entry)
+	INT32 CacheEntry = 0;
+	while (CacheEntry < NUMENTRIES && m_FontKerningPairsCacheData[CacheEntry].GetFontDesc() != FontDesc)
+		CacheEntry++;
+
+	if (CacheEntry >= NUMENTRIES)
+	{
+		// TRACEUSER("wuerthne", _T("did not find cache entry, so allocate new one"));
+		// the font is not in the cache, so throw out a random cache entry and prepare
+		// the cache entry so we can start caching the kerning data for the new font
+		CacheEntry = rand() % NUMENTRIES;
+		m_FontKerningPairsCacheData[CacheEntry].Reinitialise(FontDesc);
+	}
+	return m_FontKerningPairsCacheData[CacheEntry].GetCharsKerning(chLeft, chRight);
 #else
 	return 0;
 #endif
-#endif
-}
-
-
-/********************************************************************************************
->	static void FontKerningPairsCache::InvalidateCharMetrics()
-
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
-	Purpose:	Invalidate the FontKerningPairsCache
-********************************************************************************************/
-void FontKerningPairsCache::InvalidateKerningPairsCache()
-{
-	CharDescription emptyCharDesc(0, 0, 0, 0);
-	for (INT32 i=0; i<NUMENTRIES; ++i)
-		mpFontKerningPairsCacheData[i].SetFontDesc( emptyCharDesc );
 }
 
 #ifdef _DEBUG
@@ -1223,7 +1213,7 @@ void FontKerningPairsCache::Dump()
 	for (INT32 i=0; i<NUMENTRIES; ++i)
 	{
 		TRACE( _T("Entry %d:\n"), i);
-		mpFontKerningPairsCacheData[i].Dump();
+		m_FontKerningPairsCacheData[i].Dump();
 	}
 	TRACE( _T("<<< Font kerning data end <<<\n"));
 }
@@ -1235,8 +1225,8 @@ void FontKerningPairsCache::Dump()
 /********************************************************************************************
 >	FontKerningPairsCacheEntry::FontKerningPairsCacheEntry()
 
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
 	Purpose:	Default constructor
 
 ********************************************************************************************/
@@ -1244,142 +1234,80 @@ FontKerningPairsCacheEntry::FontKerningPairsCacheEntry()
 {
 	CharDescription emptyCharDesc(0, 0, 0, 0);
 	FontDesc = emptyCharDesc;
-	KernCount = 0;
-	pKernPairs = 0;
+	m_pPairsCacheMap = NULL;
 }
 
 /********************************************************************************************
 >	FontKerningPairsCacheEntry::FontKerningPairsCacheEntry()
 
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
-	Purpose:	Default destructor
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Purpose:	Destructor
 
 ********************************************************************************************/
 FontKerningPairsCacheEntry::~FontKerningPairsCacheEntry()
 {
-	delete[] pKernPairs;
+	if (m_pPairsCacheMap) delete m_pPairsCacheMap;
 }
 
 /********************************************************************************************
+>	FontKerningPairsCacheEntry::Reinitialise(CharDescription& NewFontDesc)
 
->	INT32 CompareKernsForSort( const void *arg1, const void *arg2 )
-
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	25/10/2000
-	Purpose:	Compare function for FontKerningPairsChaceEntry::CacheFontKerns 
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Inputs:		NewFontDesc = a font descriptor specifying the font to which this cache
+							  entry should refer from now on
+	Purpose:	Clears the cache entry and initialises it for a new font
 
 ********************************************************************************************/
-INT32 CompareKernsFunc( const void *arg1, const void *arg2 )
+void FontKerningPairsCacheEntry::Reinitialise(CharDescription& NewFontDesc)
 {
-	MillipointKerningPair *p1, *p2;
-	p1 = (MillipointKerningPair *)arg1;
-	p2 = (MillipointKerningPair *)arg2;
-
-	if ((p1->wFirst < p2->wFirst) || (p1->wFirst == p2->wFirst && p1->wSecond < p2->wSecond))
-		return -1;	// arg1 less than arg2
-	else if (p1->wFirst == p2->wFirst && p1->wSecond == p2->wSecond)
-		return 0;	// arg1 equivalent to arg2
-	else
-		return 1;	// arg1 greater than arg2
+	FontDesc = NewFontDesc;
+	if (m_pPairsCacheMap) delete m_pPairsCacheMap;
+	m_pPairsCacheMap = new std::map<UINT32,INT32>;
+	// we do not check whether the new has succeeded - in case it has not,
+	// we will not fall over later but caching will be disabled for this entry
 }
 
 /********************************************************************************************
->	bool FontKerningPairsCacheEntry::CacheFontKerns(wxDC* pDC, CharDescription FontDesc,
-												MILLIPOINT DefaultHeight, INT32 DesignSize)
+>	FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRight)
 
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
-	Inputs:		pDC          - DC with design size font selected
-				FontDesc     - descriptor of font which is being cached
-				DefaultHeght - default height of char (ie size of font for which char widths are cached)
-				DesignSize   - size of font selected in DC (in Logical units - pixels)
-	Returns:	false if fails
-	Purpose:	Refill the font cache entry
-********************************************************************************************/
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/04/2006
+	Inputs:		chLeft		= a character code of the left char of a kerning pair
+				chRight		= a character code of the right char of a kerning pair
+	Returns:	Kern in millipoints (or zero if no kern or error)
+	Purpose:	Gets the kerning for a character pair (and caches it if not cached yet)
+	Note:		The cache uses an STL map, which means logarithmic access time. Maybe
+				a hash_map could do better.
 
-bool FontKerningPairsCacheEntry::CacheFontKerns(wxDC* pDC, CharDescription FontDesc,
-												MILLIPOINT DefaultHeight, INT32 DesignSize)
-{
-	delete[] pKernPairs;	// remove any old kern data
-
-#ifndef EXCLUDE_FROM_XARALX
-	KernCount = TextManager::GetKernCount(pDC);
-
-	// update cache tag
-	SetFontDesc(FontDesc);
-
-	if (KernCount)
-	{
-		pKernPairs = new MillipointKerningPair[KernCount];
-		if (!pKernPairs) return false;
-		if (TextManager::FillKernArray(pDC, pKernPairs, KernCount))
-		{
-			for (INT32 c = 0; c < KernCount; ++c)
-				pKernPairs[c].iKernAmount = MulDiv(pKernPairs[c].iKernAmount, DefaultHeight, DesignSize);
-
-			// Sort array (this allows us to do a binary search on the array
-			// when finding kerns).  Note: The kern data from windows appears to
-			// be sorted already but I am not sure that this is always the case
-			// so I am sorting it again to make sure (not too bad as qsort
-			// does not do too much harm to a sorted array).
-			qsort(pKernPairs, KernCount, sizeof(pKernPairs[0]), CompareKernsFunc);
-
-			return true;
-		}
-		else
-		{
-			KernCount = 0;
-			return false;
-		}
-	}
-#endif
-	pKernPairs = 0;
-	return true; // No kern data so kern cache is valid
-}
-
-/********************************************************************************************
->	MILLIPOINT FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRight)
-
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
-	Inputs:		chLeft			- The left char of a kern pair
-				chRight			- The right char of a kern pair
-	Returns:	The kern in millipoints (or zero if none)
-	Purpose:	Performs a binary search of the sorted kern data and returns the kern
-				for a given pair a chars (or zero if there is no kern)
-
-				Algorithm from Knuth Vol III section 6.2.1 algorithm B
 ********************************************************************************************/
 MILLIPOINT FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRight)
 {
-	MillipointKerningPair K;	// The key we are looking for
-
-	K.wFirst		= chLeft;
-	K.wSecond		= chRight;
-	K.iKernAmount	= 0;		// Not used
-
-	INT32 i, t;
-
-	INT32 l = 0;											// B1
-	INT32 u = KernCount - 1;
-
-	while (u >= l)
+	UINT32 key;
+	// we cache the kerning for characters in the range 0x0 - 0xFFFF only
+	// we also need the map set up - if it could not be allocated, we simply bypass the cache
+	if (chLeft > 0x10000 || chRight > 0x10000 || m_pPairsCacheMap == NULL)
 	{
-		/* At this point, if the kern is in the table, Kl <= K <= Ku */
-		
-		i = (l + u) / 2;								// B2
-
-		t = CompareKernsFunc(&K, &(pKernPairs[i]));		// B3
-
-		if (t < 0)
-			u = i - 1;									// B4
-		else if (t > 0)
-			l = i + 1;									// B5
-		else if (t == 0)
-			return pKernPairs[i].iKernAmount;
+		// TRACEUSER("wuerthne", _T("Bypass cache"));
+		return FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
 	}
-	return 0;
+
+	key = (chLeft << 16) | chRight;
+	std::map<UINT32,INT32>::iterator it = m_pPairsCacheMap->find(key);
+	if (it != m_pPairsCacheMap->end()) {
+		// we found a cached entry
+		// TRACEUSER("wuerthne", _T("kern pair found"));
+		return it->second;
+	}
+	else {
+		// we did not find an entry, so get the kerning from the underlying font system
+		INT32 kerning = FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
+		// and cache it
+		// TRACEUSER("wuerthne", _T("cache kern pair"));
+		(*m_pPairsCacheMap)[key] = kerning;
+		return kerning;
+	}
 }
 
 #if _DEBUG
@@ -1388,21 +1316,20 @@ MILLIPOINT FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRig
 
 >	void FontKerningPairsCacheEntry::Dump()
 
-	Author:		Jonathan_Payne (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/10/2000
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	21/04/2006
 	Purpose:	Dumps the class data
-	See also:	FontKerningPairs::Dump()
 
 ********************************************************************************************/
 void FontKerningPairsCacheEntry::Dump()
 {
-	for (INT32 c = 0; c < KernCount; ++c)
-	{
-		TRACE( _T("%3d:\t%c\t%c\t%d\n"),
-				c,
-				pKernPairs[c].wFirst,
-				pKernPairs[c].wSecond,
-				pKernPairs[c].iKernAmount);
+	// dump the map
+	if (m_pPairsCacheMap != NULL) {
+		for (std::map<UINT32,INT32>::iterator it = m_pPairsCacheMap->begin(); it != m_pPairsCacheMap->end(); ++it)
+		{
+			UINT32 key = (*it).first;
+			TRACE(_T("cached kern pair %04x/%04x = %d"), key >> 16, key & 0xffff, (*it).second);
+		}
 	}
 }
 
