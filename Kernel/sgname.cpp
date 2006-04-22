@@ -126,9 +126,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tmpltatr.h"
 
 #include "grndbmp.h"
-#include "wbitmap.h"
+//#include "wbitmap.h"
 #include "dragmgr.h"
-#include "scrvw.h"
+//#include "scrvw.h"
 #include "docview.h"
 
 //#include "resource.h"
