@@ -352,7 +352,11 @@ class CamErrorDialog : public wxDialog
 public:
 	CamErrorDialog(ResourceID TitleID) :  wxDialog( NULL, -1, CamResource::GetText(TitleID),
 											wxDefaultPosition, wxDefaultSize,
-											wxDEFAULT_DIALOG_STYLE | wxSTAY_ON_TOP ) {}
+											wxDEFAULT_DIALOG_STYLE | wxSTAY_ON_TOP )
+	{
+		m_nHelpContext = Error::GetErrorNumber();
+		if (! m_nHelpContext) m_nHelpContext = GetNextMsgHelpContext();
+	}
 
 	wxButton * AddErrorButton(wxSizer * pButtonSizer, const TCHAR * pText, INT32 id)
 	{
@@ -363,7 +367,23 @@ public:
 		return pButton;
 	}
 
-	void ButtonClicked(wxCommandEvent &event) { EndModal(event.GetId()); }
+	void ButtonClicked(wxCommandEvent &event)
+	{
+		ResourceID id = event.GetId();
+		if (id == _R(IDS_HELP)) // Help always has a fixed ID.
+		{
+#if !defined(EXCLUDE_FROM_RALPH)
+			// It is, so run the help topic associated with the message ID.
+			HelpUser(m_nHelpContext);
+#endif
+		}
+		else
+		{
+			EndModal(id);
+		}
+	}
+
+	INT32 m_nHelpContext;
 
 	DECLARE_EVENT_TABLE()
 };
