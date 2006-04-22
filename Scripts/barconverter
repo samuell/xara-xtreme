@@ -236,6 +236,7 @@ sub WriteGalleryTail
     printf STDOUT $ddindent."            <border>%d</border>\n",$dd?0:1;
     print STDOUT $ddindent. "            <object class=\"wxCamDrawControl\" name=\"IDC_GALLERY_LISTBOX\">\n";
     print STDOUT $ddindent. "                <style>wxFULL_REPAINT_ON_RESIZE</style>\n";
+    print STDOUT $ddindent. "                <camdrawstyle>wxCDCS_SETCLIPRECT</camdrawstyle>\n";
     print STDOUT $ddindent. "                <size>400,400</size>\n";
     print STDOUT $ddindent. "            </object>\n";
     print STDOUT $ddindent. "        </object>\n";

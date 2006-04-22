@@ -106,7 +106,8 @@ enum wxCamDrawControlStyle
 	// Caching flags start here - the art provider may have a different bitmap depending on the
 	// state of these flags...
 
-	wxCDCS_DEFAULT			= 0
+	wxCDCS_DEFAULT			= 0,
+	wxCDCS_SETCLIPRECT		= 1<<0
 };
 
 /*******************************************************************************************

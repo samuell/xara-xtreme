@@ -298,6 +298,7 @@ void wxCamDrawControl::Invoke()
 wxCamDrawControlXmlHandler::wxCamDrawControlXmlHandler() : wxXmlResourceHandler()
 {
 	XRC_ADD_STYLE(wxCDCS_DEFAULT);
+	XRC_ADD_STYLE(wxCDCS_SETCLIPRECT);
 	AddWindowStyles();
 }
 

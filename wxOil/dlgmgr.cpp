@@ -979,13 +979,33 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 
 			wxRegionIterator upd(pGadget->GetUpdateRegion()); // get the update rect list
 
-			while (upd)
+			BOOL Stop = FALSE;
+
+			while (upd && !Stop)
 			{
 				// Alternatively we can do this:
 				wxRect ClipRect(upd.GetRect());
-				// Should we clip this to the WindowSize here?
-				// MyDC.SetClipRect(ClipRect);
+				// Should we clip this to the WindowSize here? For reasons which are not entirely clear, setting the
+				// ClipRect breaks GRenderRegions. But if we don't set the clip rect, it breaks (at least some)
+				// code that uses OSRenderRegion (sigh). Right now this is too painful to debug, so instead we
+				// cop out, and ask the control whether or not it would like a ClipRect set. Those that say no
+				// will paint the entire area, so we only give them one call
+
+				BOOL UseClipRect = (pGadget->IsKindOf(CLASSINFO(wxCamDrawControl)))
+									&& (((wxCamDrawControl*)pGadget)->GetStyle() & wxCDCS_SETCLIPRECT);
+
+				if (UseClipRect)
+				{
+					MyDc.SetClippingRegion(ClipRect);
+				}
+				else
+				{
+					ClipRect = wxRect(WindowSize);
+					Stop = TRUE; // cease drawing after this one
+				}
 				
+				ClipRect.Inflate(1,1);  // Inflate by one pixel to get around wxRect stupidity
+
 				DocRect DocClipRect;
 			
 				// Convert to millipoints, Also need to flip the y coords to get a
