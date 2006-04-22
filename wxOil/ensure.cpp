@@ -134,10 +134,13 @@ INT32 			AssertBusy = FALSE;				  // for testing diagnostics
 
 static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFileName, INT32 nLine, BOOL UseMFC)
 {
-#if defined(__WXMSW__)
 	if (!UseMFC)
+#if defined(__WXMSW__)
 		MessageBeep(MB_ICONASTERISK);
+#else
+		::wxBell();
 #endif
+
 
 #ifdef _ENSURES
 
@@ -222,9 +225,8 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 
 	INT32					result;
 
-PORTNOTE("other","We can never use MFC again")
-#ifndef EXCLUDE_FROM_XARALX
 	TCHAR				RealErrorMsg[256];
+
 	if (UseMFC)
 	{
 		// use our error handler to report ensures as it is more robust instead of MessageBox
@@ -239,23 +241,27 @@ PORTNOTE("other","We can never use MFC again")
 		Info.ErrorMsg = 0;
 		Info.Button[0] = _R(IDS_CONTINUE);
 		Info.Button[1] = _R(IDS_QUIT);
+#ifndef EXCLUDE_FROM_XARALX
 		if (IsWin32NT())
 		{
+#endif
 			// only NT can cope with an Abort button
 			Info.Button[2] = _R(IDS_ABORT);
 			Info.Button[3] = _R(IDS_DEBUG);
+#ifndef EXCLUDE_FROM_XARALX
 		}
 		else
 		{
 			Info.Button[2] = _R(IDS_DEBUG);
 		}
+#endif
 													// no default button (or Help)
 		Info.Cancel = 1;							// Esc = Continue
 
 		result = InformGeneral( ERRORTYPE_ENSURE, &Info );
 	}
 	else
-#endif
+
 	{
 		CamResource::DoneInit();
 		CCamApp::DisableSystem();
