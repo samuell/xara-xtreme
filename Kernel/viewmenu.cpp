@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "viewmenu.h"
 #include "tool.h"
 #include "menuops.h"
-#include "coldlog.h"
+//#include "coldlog.h"
 #include "snapops.h"
 #include "app.h"
 #include "ink.h"
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opimgset.h"
 #include "hlinkdlg.h"
 #include "layergal.h"	// OPTOKEN_DELETEPAGEBACKGROUND
-#include "brushdlg.h"
+//#include "brushdlg.h"
 #include "brushop.h"
 #include "cutop.h"		// OPTOKEN_PASTE	matt-23/08/2000
 
@@ -234,8 +234,11 @@ BOOL ViewContextMenu::BuildOverView(Spread* pSpread, DocCoord ClickPos, ClickMod
 	#endif //webster
 			// Utils commands
 			ok = ok && BuildCommand(OPTOKEN_WEBADDRESSDLG);
+PORTNOTE("other", "Removed colour edit dialog and brush edit dialog from popup menu")
+#ifndef EXCLUDE_FROM_XARALX
 			ok = ok && BuildCommand(OPTOKEN_COLOUREDITDLG,TRUE);
 			ok = ok && BuildCommand(OPTOKEN_BRUSHEDIT_DLG);
+#endif
 			ok = ok && BuildCommand(OPTOKEN_SELECTBRUSH);
 		}
 

@@ -872,9 +872,9 @@ BOOL NodePath::OnBlobPopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pM
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	DocRect    BlobRect;
-	DocCoord*  Coords = InkPath.GetCoordArray();
-	PathFlags* Flags  = InkPath.GetFlagArray();
-	PathVerb*  Verbs  = InkPath.GetVerbArray();
+//	DocCoord*  Coords = InkPath.GetCoordArray();
+//	PathFlags* Flags  = InkPath.GetFlagArray();
+//	PathVerb*  Verbs  = InkPath.GetVerbArray();
 
 	// Should always be able to get selected view
 	DocView *pDocView = DocView::GetSelected();
@@ -887,7 +887,7 @@ BOOL NodePath::OnBlobPopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pM
 	if (!InkPath.IsSubSelection())
 		return FALSE;
 
-	INT32 NumCoords = InkPath.GetNumCoords();
+//	INT32 NumCoords = InkPath.GetNumCoords();
 	INT32 i;
 	if (InkPath.FindNearestPoint(	PointerPos, 
 									POINTFLAG_ENDPOINTS | 

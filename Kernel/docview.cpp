@@ -145,7 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dragcol.h"
 //#include "mainfrm.h"
 #include "zoomops.h"
-//#include "viewmenu.h"
+#include "viewmenu.h"
 #include "menuops.h"
 #include "clikmods.h"
 #include "nodetext.h"
@@ -3374,10 +3374,9 @@ void DocView::OnClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
 					pManager->CheckHaveDetailsOnPlugIns();
 #endif // PHOTOSHOPPLUGINS
 				
-#pragma message( __LOCMSG__ "Removed ViewContextMenu usage" )
-/*				// Pop up the context sensitive view menu.
+				// Pop up the context sensitive view menu.
 				ViewContextMenu* pViewPopup = new ViewContextMenu;
-				pViewPopup->ShowOverView(pSpread, DocPos, Mods); */
+				pViewPopup->ShowOverView(pSpread, DocPos, Mods);
 			}
 #endif
 		}
