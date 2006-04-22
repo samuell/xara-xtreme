@@ -470,7 +470,7 @@ BOOL ContextMenu::BuildEffectCommands()
 	if (pStack->IsEmpty() || !pStack->bConsistent)
 		return TRUE;
 
-	BuildCommand( wxT(TOOL_OPTOKEN_LIVEEFFECT) );		// Go to Effects tool
+	BuildCommand( TOOL_OPTOKEN_LIVEEFFECT );		// Go to Effects tool
 
 	pStack->BuildEffectMenu(this);						// <List of effects>
 

@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "becomea.h"
 #include "blobs.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "lineattr.h"
 #include "ophist.h"
 #include "opbreak.h"
@@ -870,7 +870,7 @@ BOOL NodePath::OnClick( DocCoord PointerPos, ClickType Click,
 
 BOOL NodePath::OnBlobPopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	DocRect    BlobRect;
 	DocCoord*  Coords = InkPath.GetCoordArray();
 	PathFlags* Flags  = InkPath.GetFlagArray();
@@ -933,7 +933,7 @@ BOOL NodePath::OnBlobPopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pM
 ********************************************************************************************/
 BOOL NodePath::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 	
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_BEZTOOL, TRUE);

@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "becomea.h"
 #include "blobs.h"							
 //#include "cameleps.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "docview.h"
 #include "fillattr.h"
 #include "group.h"
@@ -3412,7 +3412,7 @@ VisibleTextNode* TextStory::FindLastVTN() const
 
 BOOL TextStory::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_TEXT, TRUE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_APPLYLEFTJUSTIFY);

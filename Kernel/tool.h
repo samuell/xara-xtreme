@@ -157,29 +157,29 @@ class KeyPress;
 // The op tokens for each of the tools
 // A tool's op token is "TOOL" with the tool ID appended on the end
 
-#define TOOL_OPTOKEN_PUSH       "TOOL3"
-#define TOOL_OPTOKEN_ZOOM               "TOOL4"
-#define TOOL_OPTOKEN_RECTANGLE  "TOOL5"
-#define TOOL_OPTOKEN_FREEHAND   "TOOL6"
-#define TOOL_OPTOKEN_SELECTOR   "TOOL7"
-#define TOOL_OPTOKEN_RECT               "TOOL8"
-#define TOOL_OPTOKEN_ROTATE             "TOOL9"
-#define TOOL_OPTOKEN_GRID               "TOOL10"
-#define TOOL_OPTOKEN_BEZTOOL    "TOOL11"
-#define TOOL_OPTOKEN_ELLIPSE    "TOOL12"
-#define TOOL_OPTOKEN_GRADFILL   "TOOL13"
-#define TOOL_OPTOKEN_PEN                "TOOL14"
-#define TOOL_OPTOKEN_BLANK              "TOOL15"
-#define TOOL_OPTOKEN_BLEND              "TOOL16"
-#define TOOL_OPTOKEN_TRANSP             "TOOL17"
-#define TOOL_OPTOKEN_REGSHAPE   "TOOL18"
-#define TOOL_OPTOKEN_MOULD              "TOOL19"
-#define TOOL_OPTOKEN_TEXT 		"TOOL21"
-#define TOOL_OPTOKEN_SOFTSHADOW "TOOL22"
-#define TOOL_OPTOKEN_BEVEL		"TOOL23"
-#define TOOL_OPTOKEN_CONTOUR	"TOOL24"
-#define TOOL_OPTOKEN_SLICE		"TOOL25"
-#define TOOL_OPTOKEN_LIVEEFFECT	"TOOL26"
+#define TOOL_OPTOKEN_PUSH       _T("TOOL3")
+#define TOOL_OPTOKEN_ZOOM       _T("TOOL4")
+#define TOOL_OPTOKEN_RECTANGLE  _T("TOOL5")
+#define TOOL_OPTOKEN_FREEHAND   _T("TOOL6")
+#define TOOL_OPTOKEN_SELECTOR   _T("TOOL7")
+#define TOOL_OPTOKEN_RECT       _T("TOOL8")
+#define TOOL_OPTOKEN_ROTATE     _T("TOOL9")
+#define TOOL_OPTOKEN_GRID       _T("TOOL10")
+#define TOOL_OPTOKEN_BEZTOOL    _T("TOOL11")
+#define TOOL_OPTOKEN_ELLIPSE    _T("TOOL12")
+#define TOOL_OPTOKEN_GRADFILL   _T("TOOL13")
+#define TOOL_OPTOKEN_PEN        _T("TOOL14")
+#define TOOL_OPTOKEN_BLANK      _T("TOOL15")
+#define TOOL_OPTOKEN_BLEND      _T("TOOL16")
+#define TOOL_OPTOKEN_TRANSP     _T("TOOL17")
+#define TOOL_OPTOKEN_REGSHAPE   _T("TOOL18")
+#define TOOL_OPTOKEN_MOULD      _T("TOOL19")
+#define TOOL_OPTOKEN_TEXT 		_T("TOOL21")
+#define TOOL_OPTOKEN_SOFTSHADOW _T("TOOL22")
+#define TOOL_OPTOKEN_BEVEL		_T("TOOL23")
+#define TOOL_OPTOKEN_CONTOUR	_T("TOOL24")
+#define TOOL_OPTOKEN_SLICE		_T("TOOL25")
+#define TOOL_OPTOKEN_LIVEEFFECT	_T("TOOL26")
 
 const UINT32 TOOLID_MAX           =       99;
 

@@ -1329,7 +1329,7 @@ INT32 EffectsStack::FindSelectionPos()
 ********************************************************************************************/
 BOOL EffectsStack::BuildEffectMenu(ContextMenu* pMenu)
 {
-PORTNOTE("menu", "BuildEffectMenu can't do anything until the menu system works");
+PORTNOTE("menu", "BuildEffectMenu can't do anything until we have XPEHost::GetEffectDetails or equivalent");
 #ifndef EXCLUDE_FROM_XARALX
 	PPStackLevel* pItem = (PPStackLevel*)GetHead();
 //	PPStackLevel* pNextItem = NULL;

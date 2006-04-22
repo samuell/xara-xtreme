@@ -3051,7 +3051,7 @@ BOOL BaseBitmapFilter::SetUpExportOptions(BitmapExportOptions **ppExportOptions,
 		Info.ErrorMsg = _R(IDT_BMPEXP_NOSELECTION);
 		Info.Button[0] = _R(IDB_EXPQUERY_EXPORT);
 		Info.Button[1] = _R(IDB_EXPQUERY_DONTEXPORT);
-		if (AskQuestion(&Info) == _R(IDB_EXPQUERY_DONTEXPORT))
+		if ((ResourceID)AskQuestion(&Info) == _R(IDB_EXPQUERY_DONTEXPORT))
 		{
 			Error::SetError(_R(IDN_USER_CANCELLED),0);		// Expects error set on cancel
 			return FALSE;								// if cancelled

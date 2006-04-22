@@ -157,7 +157,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "gdraw.h"
 
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "blndhelp.h"
 #include "osrndrgn.h"
 //#include "progress.h"
@@ -3054,15 +3054,11 @@ void NodeShadow::Extend(const ExtendParams& ExtParams)
 ********************************************************************************************/
 BOOL NodeShadow::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-	PORTNOTE("other","NodeShadow::OnNodePopUp - do nothing")
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL ok = TRUE;
 #ifndef NO_ADVANCED_TOOLS	
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_SOFTSHADOW, TRUE);
 #endif
 	return ok;
-#endif
-	return FALSE;
 }
 
 

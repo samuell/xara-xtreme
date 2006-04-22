@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cmxrendr.h"	// For the CMXRenderRegion custom export code.
 //#include "ai_epsrr.h"	// For the AIEPSRenderRegion custom export code.
 #include "rsmooth.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "blndhelp.h"
 #include "offscrn.h"
 #include "scanrr.h"
@@ -3922,10 +3922,8 @@ BOOL NodeBevel::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* p
 	BOOL ok = TRUE;
 
 	PORTNOTETRACE("other","NodeBevel::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef NO_ADVANCED_TOOLS	
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_BEVEL, TRUE);
-#endif
 #endif
 	return ok;
 }

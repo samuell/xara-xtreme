@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "cameleps.h"
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "swfrndr.h"		// For the Flash render region class.
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "docview.h"
 #include "fillval.h"
 #include "nodepath.h"
@@ -4201,11 +4201,9 @@ INT32 NodeRegularShape::GetRectHeight()
 
 BOOL NodeRegularShape::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 	
-PORTNOTE("other","Removed ContextMenu usage")
-#ifndef EXCLUDE_FROM_XARALX
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_REGSHAPE, TRUE);
 
 	ok = ok && pMenu->BuildCommand(OPTOKEN_TOGGLEELIPPOLY, TRUE);
@@ -4222,7 +4220,6 @@ PORTNOTE("other","Removed ContextMenu usage")
 	ok = ok && pMenu->BuildCommand(OPTOKEN_QUICKSHAPE_NUMBERSIDES8, FALSE, pNumberRoot);
 	ok = ok && pMenu->BuildCommand(OPTOKEN_QUICKSHAPE_NUMBERSIDES9, FALSE, pNumberRoot);
 	ok = ok && pMenu->BuildCommand(OPTOKEN_QUICKSHAPE_NUMBERSIDES10, FALSE, pNumberRoot);
-#endif
 
 	return ok;
 #else

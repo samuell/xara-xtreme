@@ -159,9 +159,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "cmxexdc.h"
 
 // for popup menu
-//#include "contmenu.h"
+#include "contmenu.h"
 //#include "bfxdlg.h"
-//#include "tracedlg.h"
+#include "tracedlg.h"
 
 //This includes the Hot Link class
 #include "userattr.h"
@@ -519,15 +519,13 @@ UINT32 NodeBitmap::GetNodeSize() const
 ********************************************************************************************/
 BOOL NodeBitmap::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-PORTNOTE("other","OnNodePopUp - Remove ContextMenu")
-
 #if !defined(EXCLUDE_FROM_RALPH)
 
 	BOOL ok = TRUE;
 
-#if !defined(EXCLUDE_FROM_XARALX)
-
+#ifndef EXCLUDE_FROM_XARALX
 	ok = ok && pMenu->BuildCommand(OPTOKEN_XPE_EDIT, FALSE);
+#endif
 
 	//ok = ok && pMenu->BuildCommand(OPTOKEN_BFXDLG, FALSE);
 
@@ -548,8 +546,6 @@ PORTNOTE("other","OnNodePopUp - Remove ContextMenu")
 #endif	// PHOTOSHOPPLUGINS
 
 	ok = ok && pMenu->BuildCommand(OPTOKEN_TRACEDLG, TRUE);
-
-#endif	// !defined(EXCLUDE_FROM_XARALX)
 
 	return ok;
 

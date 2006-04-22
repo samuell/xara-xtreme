@@ -146,7 +146,7 @@ DECLARE_SOURCE("$Revision$");
 #include "lineattr.h"
 #include "grndrgn.h"			// for REAL_GDRAW
 #include "snap.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "becomea.h"
 #include "nodetext.h"
 #include "nodetxtl.h"

@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "markn.h"
 //#include "ed.h"
 //#include "tim.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 //#include "lyrprop.h"
 //#include "resource.h"
 #include "usercord.h"
@@ -137,7 +137,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "keypress.h"
 #include "prpsgds.h"
-//#include "snapops.h"
+#include "snapops.h"
 //#include "viewrc.h"
 #include "csrstack.h"
 //#include "justin.h"
@@ -816,7 +816,7 @@ BOOL NodeGuideline::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMen
 #ifndef WEBSTER
 	BOOL ok = TRUE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// set up data required for ops which could be invoked
 	GuidelinePropDlg::SetEditGuidelineParams(this);
 	OpDeleteGuideline::SetGuideline(this);

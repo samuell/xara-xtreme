@@ -127,7 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 #include "rsmooth.h"
 #include "fitcurve.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "blndhelp.h"
 #include "brshattr.h"
 #include "pbecomea.h"
@@ -2116,12 +2116,7 @@ void NodeContour::Extend(const ExtendParams& ExtParams)
 
 BOOL NodeContour::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* pMenu)
 {
-	PORTNOTETRACE("other","NodeShadow::OnNodePopUp - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return pMenu->BuildCommand(TOOL_OPTOKEN_CONTOUR, TRUE);
-#else
-	return FALSE;
-#endif
 }
 
 

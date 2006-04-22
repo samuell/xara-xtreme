@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodebldr.h"
 #include "app.h"
 #include "blobs.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "blndtool.h"
 #include "tool.h"
 #include "ndbldpth.h"
@@ -2051,7 +2051,7 @@ BOOL NodeBlend::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* p
 //WEBSTER-ranbirr-01/12/96	
 #ifndef WEBSTER
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 	
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_BLEND, 		TRUE);

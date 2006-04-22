@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h" 	// For _R(IDS_OK)/CANCEL
 //#include "will.h"
 //#include "tim.h"
-//#include "contmenu.h"
+#include "contmenu.h"
 #include "pathedit.h"
 #include "moldedit.h"
 
@@ -3126,14 +3126,12 @@ BOOL NodeMould::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* p
 //	WEBSTER-ranbirr-01/12/96	
 #ifndef WEBSTER
 	
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	ok = ok && pMenu->BuildCommand(TOOL_OPTOKEN_MOULD, 	TRUE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_DETACHMOULD, FALSE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_ROTATEMOULD, FALSE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_COPYMOULD, 	TRUE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_RECTANGULARENVELOPE,		FALSE);
 //	ok = ok && pMenu->BuildCommand(OPTOKEN_RECTANGULARPERSPECTIVE,	TRUE);
-#endif
 #endif //webster
 
 	return ok;
