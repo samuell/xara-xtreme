@@ -997,6 +997,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 				if (UseClipRect)
 				{
 					MyDc.SetClippingRegion(ClipRect);
+					ClipRect.Inflate(1,1); // work around wxRect problems.
 				}
 				else
 				{
@@ -1004,8 +1005,6 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 					Stop = TRUE; // cease drawing after this one
 				}
 				
-				ClipRect.Inflate(1,1);  // Inflate by one pixel to get around wxRect stupidity
-
 				DocRect DocClipRect;
 			
 				// Convert to millipoints, Also need to flip the y coords to get a
