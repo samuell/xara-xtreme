@@ -517,8 +517,8 @@ PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
 		}
 		case PNG: 
 		{
-			PNGExportOptions* pPNGOptions = (PNGExportOptions*)m_pExportOptions;
-			ERROR3IF(!pPNGOptions->IS_KIND_OF(PNGExportOptions), "pPNGOptions isn't");
+//			PNGExportOptions* pPNGOptions = (PNGExportOptions*)m_pExportOptions;
+//			ERROR3IF(!pPNGOptions->IS_KIND_OF(PNGExportOptions), "pPNGOptions isn't");
 			// 1, 4, 8, 24 and 32 bpp
 //			m_bTransparent = pPNGOptions->WantTransparent();
 

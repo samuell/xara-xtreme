@@ -120,10 +120,10 @@ enum GIFDisposalMethod
 #define MAX_LWZ_BITS	12
 #define HSIZE  			5003            // 80% occupancy
 
-typedef int			code_int;
-typedef long int	count_int;
+typedef INT32	code_int;
+typedef INT32	count_int;
 
-const int maxbits = GIFBITS;            				// user settable max # bits/code
+const INT32 maxbits = GIFBITS;            				// user settable max # bits/code
 const code_int maxmaxcode = (code_int)1 << GIFBITS; 	// should NEVER generate this code
 
 const code_int hsize = HSIZE;              		// for dynamic table sizing

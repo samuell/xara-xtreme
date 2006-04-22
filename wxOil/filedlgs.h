@@ -196,7 +196,7 @@ public:
 
 #ifdef XPDialog
 // needed to show the "XP-style" place bar on the left hand side of the File dialogs:
-	virtual int ShowModal();
+	virtual int /*TYPENOTE: Correct*/ ShowModal();
 #endif
 
 //	WEBSTER-ranbirr-27/03/97

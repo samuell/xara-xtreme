@@ -1066,8 +1066,8 @@ BOOL JPEGExportFilter::GetExportOptions(BitmapExportOptions* pOptions)
 
 	BOOL Ok = TRUE;
 
-	JPEGExportOptions* pJPEGOptions = (JPEGExportOptions*)pOptions;
-	ERROR3IF(!pJPEGOptions->IS_KIND_OF(JPEGExportOptions), "pJPEGOptions isn't");
+//	JPEGExportOptions* pJPEGOptions = (JPEGExportOptions*)pOptions;
+//	ERROR3IF(!pJPEGOptions->IS_KIND_OF(JPEGExportOptions), "pJPEGOptions isn't");
 
 	OpDescriptor* pOpDes = OpDescriptor::FindOpDescriptor(OPTOKEN_GIFTABDLG);
 	if (pOpDes != NULL)

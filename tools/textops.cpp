@@ -50,7 +50,7 @@ the GNU General Public License.
 SCOPE OF LICENSE
 ----------------
 
-This license applies to this program () and its constituent source
+This license applies to this program (XaraLX) and its constituent source
 files only, and does not necessarily apply to other Xara products which may
 in part share the same code base, and are subject to their own licensing
 terms.
