@@ -769,6 +769,8 @@ PORTNOTE("galleries", "Removed docking stuff")
 
 				It always calls the base class in order to show/hide the gallery
 
+				NOTE THAT THIS CAN DELETE THE OBJECT CONCERNED!
+
 ********************************************************************************************/
 
 void SuperGallery::SetVisibility(BOOL Open)
@@ -781,6 +783,8 @@ void SuperGallery::SetVisibility(BOOL Open)
 
 	// Now call the base class to show/hide ourselves
 	DialogOp::SetVisibility(Open);
+	if (!Open)
+		End(); // Return quick, this deletes the super gallery
 }
 
 
@@ -3575,6 +3579,42 @@ SuperGallery* SuperGallery::FindSuperGallery(String_32& SuperGalleryName, INT32 
 				OpName = pSuperGallery->Name;
 			
 			if (OpName == SuperGalleryName)
+				return (pSuperGallery);
+		}
+
+		pSuperGallery = (SuperGallery*)pList->GetNext(pSuperGallery);
+	}
+
+	return NULL;
+}
+
+
+/********************************************************************************************
+
+>	static SuperGallery* SuperGallery::FindSuperGallery(ResourceID SuperGalleryID, INT32 limit = -1)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	26/4/94
+	Inputs:		SuperGalleryID - resource ID to find
+	Outputs:	-
+	Returns:	ptr to SuperGallery
+				NULL is returned if not found
+	Purpose:	Looks for a given SuperGallery by using its name 
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+SuperGallery* SuperGallery::FindSuperGallery(ResourceID SuperGalleryID)
+{
+	List*       	pList = MessageHandler::GetClassList(CC_RUNTIME_CLASS(DialogOp));
+	SuperGallery*	pSuperGallery = (SuperGallery*)pList->GetHead();
+	
+	while (pSuperGallery != NULL)
+	{
+		if (pSuperGallery->IsKindOf(CC_RUNTIME_CLASS(SuperGallery)))
+		{
+			if (pSuperGallery->DlgResID == SuperGalleryID)
 				return (pSuperGallery);
 		}
 

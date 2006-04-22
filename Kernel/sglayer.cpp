@@ -3462,21 +3462,20 @@ void LayerSGallery::DoCommand(StringBase *CommandID)
 
 BOOL LayerSGallery::CloseLayerGallery()
 {
-	String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_LAYERSGALLERY));
 
 	// Ensure a valid ptr.
-	if (pDialogBarOp == NULL)
+	if (pSuperGallery == NULL)
 		return FALSE;
 	
-	if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
+	if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(LayerSGallery))
 	{
 PORTNOTE("galleries", "Disabled frame gallery")
 #ifndef EXCLUDE_FROM_XARALX
 		GIFAnimationPropertyTabs::SetFrameGalleryOpen(FALSE);
 #endif
 		// Toggle the visible state of the gallery window
-		pDialogBarOp->SetVisibility( FALSE );
+		pSuperGallery->SetVisibility( FALSE );
 	}
 	else
 	{

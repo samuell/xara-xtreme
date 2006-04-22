@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "collist.h"
 #include "colourix.h"
 #include "colormgr.h"
-#include "colpick.h"
+//#include "colpick.h"
 #include "comattrmsg.h"
 #include "docview.h"
 #include "dragcol.h"
@@ -120,8 +120,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "jason.h"
 #include "lineattr.h"
 //#include "markn.h"
-#include "newcol.h"
-#include "resdll.h"
+//#include "newcol.h"
+//#include "resdll.h"
 //#include "resource.h"	// For _R(IDS_CANCEL)
 #include "sgcolour.h"
 #include "sgdrag.h"
@@ -138,7 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // WEBSTER - markn 31/1/97
 #include "helpuser.h"
-#include "xshelpid.h"
+//#include "xshelpid.h"
 //#include "helppath.h"
 
 // Implement the dynamic class bits...
@@ -387,6 +387,8 @@ BOOL SGColourDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDra
 				// Call a subroutine to work out and set our current cursor shape
 				return(DetermineCursorShape((SuperGallery *) TargetDialog,
 											DraggedNode, pMousePos));
+			default:
+				break;
 		}
 	}
 
@@ -837,6 +839,9 @@ void SGDisplayColour::GetFullInfoText(String_256 *Result)
 					Info += TempStr;
 				}
 				break;
+
+			default:
+				break;
 		}
 
 
@@ -1080,7 +1085,8 @@ void SGDisplayColour::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInf
 	// WEBSTER - markn 23/1/97
 	// No Circles required.
 	//
-	Renderer->SetFillColour(DocColour(COLOUR_BLACK));
+	DocColour black(COLOUR_BLACK);
+	Renderer->SetFillColour(black);
 #ifndef WEBSTER
 	if (IsASpotColour())
 	{
@@ -1120,7 +1126,7 @@ void SGDisplayColour::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInf
 	{
 		GridLockRect(MiscInfo, &MyRect);
 
-		IndexedColour *ParentCol = TheColour.FindParentIndexedColour();
+//		IndexedColour *ParentCol = TheColour.FindParentIndexedColour();
 
 		if (Flags.Selected)
 		{
@@ -1141,9 +1147,10 @@ void SGDisplayColour::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInf
 				if (LineCol != NULL && LineCol->FindParentIndexedColour() == TheColour.FindParentIndexedColour())
 				{
 					// This item is selected and is the current line colour. Put a mark in to indicate this
-					Renderer->SetLineColour(DocColour(COLOUR_BLACK));
+					DocColour black(COLOUR_BLACK);
+					Renderer->SetLineColour(black);
 					Renderer->SetLineWidth(TwoPixels);
-					Renderer->DrawLine(MyRect.lo, DocCoord(MyRect.lox, MyRect.hiy));
+					Renderer->DrawLine(MyRect.lo, DocCoord(MyRect.lo.x, MyRect.hi.y));
 				}
 			}
 		}
@@ -1677,7 +1684,7 @@ SGDisplayLibColour::SGDisplayLibColour(DocColour *ColourToDisplay,
 	// allocate exactly the right number of characters, in order to minimise
 	// memory usage (libraries hold thousands of colours, so even one byte less
 	// saves kilobytes of storage over an entire library)
-	INT32 Length = Name->Length();
+//	INT32 Length = Name->Length();
 	ColourName.Alloc(Name->Length());
 	ColourName = *Name;
 }
@@ -1823,7 +1830,7 @@ BOOL SGDisplayLibColour::HandleEvent(SGEventType EventType, void *EventInfo,
 					// Otherwise, the normal click action takes place.
 					// If the drag fails (turns into a click) then the normal click action
 					// takes place, passed on by the GalleryColourDragInfo::OnClick handler
-					SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
+//					SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
 
 					if (Mouse->DoubleClick) // || Parent->GetParentDocument() != Document::GetSelected())
 					{
@@ -2075,11 +2082,11 @@ SGDisplayLibColGroup::SGDisplayLibColGroup(SuperGallery *ParentGal, PathName *Li
 	UpperFile.toUpper();
 
 	if (UpperFile == String_256(TEXT("PANTSPOT")))
-		TitleText.MakeMsg(_R(IDS_PANTONESPOTLIB));						// "PANTONE® Spot Colours"
+		TitleText.MakeMsg(_R(IDS_PANTONESPOTLIB));						// "PANTONE Spot Colours"
 	else if (UpperFile == String_256(TEXT("PPROCESSU")))
-		TitleText.MakeMsg(_R(IDS_PANTONEPROCESSU));						// "PANTONE® Color Name-Uncoated"
+		TitleText.MakeMsg(_R(IDS_PANTONEPROCESSU));						// "PANTONE Color Name-Uncoated"
 	else if (UpperFile == String_256(TEXT("PPROCESSC")))
-		TitleText.MakeMsg(_R(IDS_PANTONEPROCESSC));						// "PANTONE® Color Name-Coated"
+		TitleText.MakeMsg(_R(IDS_PANTONEPROCESSC));						// "PANTONE Color Name-Coated"
 	else if (UpperFile == String_256(TEXT("WEB")))
 		TitleText.MakeMsg(_R(IDS_WEBLIBRARY));							// "Web Colours"
 	else
@@ -2099,7 +2106,7 @@ SGDisplayLibColGroup::SGDisplayLibColGroup(SuperGallery *ParentGal, PathName *Li
 	m_DisplayInColourLine = -1;
 
 	// read a preference value for that named gallery
-	BOOL ReadOk = Camelot.GetPrefDirect(TEXT("ColourLine"), UpperFile, &m_DisplayInColourLine);
+	/*BOOL ReadOk =*/ Camelot.GetPrefDirect(TEXT("ColourLine"), UpperFile, &m_DisplayInColourLine);
 	if (m_DisplayInColourLine == -1)
 	{
 		// If the value wasn't present then default to TRUE for "WEB" and FALSE for others
@@ -2333,7 +2340,7 @@ BOOL SGDisplayLibColGroup::ToggleDisplayInColourLine()
 	String_256 TheFile = Filename.GetFileName(FALSE);
 	TheFile.toUpper();
 	// read a preference value for that named gallery
-	BOOL SetOk = Camelot.SetPrefDirect(TEXT("ColourLine"), TheFile, &m_DisplayInColourLine);
+	/*BOOL SetOk =*/ Camelot.SetPrefDirect(TEXT("ColourLine"), TheFile, &m_DisplayInColourLine);
 
 	return OldState;
 }
@@ -2361,6 +2368,8 @@ BOOL SGDisplayLibColGroup::ToggleDisplayInColourLine()
 
 ColourSGallery::ColourSGallery()
 {
+	DlgResID = _R(IDD_COLOURSGALLERY);
+
 	ISentTheMessage = FALSE;
 	CurrentColComp  = NULL;
 	CurrentTarget	= NULL;
@@ -2709,6 +2718,8 @@ BOOL ColourSGallery::PreCreate(void)
 		Ptr = Ptr->GetNext();
 	}
 
+PORTNOTE("other", "Colour gallery needs to use the resource system for finding palettes when no path is specified");
+#ifndef EXCLUDE_FROM_XARALX
 	if (Ptr == NULL)
 	{
 		SGDisplayLibColGroup *Bob;
@@ -2752,6 +2763,7 @@ BOOL ColourSGallery::PreCreate(void)
 			FileUtil::StopFindingFiles();
 		}
 	}
+#endif
 
 	// Ensure we know we have to reformat before the next redraw
 	InvalidateCachedFormat();
@@ -2863,8 +2875,11 @@ SGDisplayLibColGroup * ColourSGallery::GetNextLibGroup(SGDisplayLibColGroup * pL
 
 void ColourSGallery::EditColour(ColourList *ParentList, IndexedColour *TheColour)
 {
+PORTNOTE("other", "disabled colour picker");
+#ifndef EXCLUDE_FROM_XARALX
 	ColourPicker ColPicker;
 	ColPicker.EditColour(ParentList, TheColour);
+#endif
 }
 
 
@@ -3648,57 +3663,53 @@ MsgResult ColourSGallery::Message(Msg* Message)
 		switch (Msg->DlgMsg)
 		{
 			case DIM_CREATE:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYCOLOURGALLERY, TRUE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYCOLOURGALLERY), TRUE);
 				SetSelectionFromDocument(TRUE);
 				break;
 
 			case DIM_CANCEL:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYCOLOURGALLERY, FALSE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYCOLOURGALLERY), FALSE);
 				break;
 
 			case DIM_LFT_BN_CLICKED:
 				if (DisplayTree == NULL || !IsVisible())
 					break;
 
-				switch(Msg->GadgetID)
+				if (FALSE) {}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_NAME))
 				{
-					case _R(IDC_GALLERY_NAME):		// Show "rename" dlg
-						{
-							SGDisplayColour *FirstSelected = (SGDisplayColour *)
-												DisplayTree->FindNextSelectedItem(NULL);
-							if (FirstSelected != NULL)
-							{
-								IndexedColour *ColToEdit = FirstSelected->GetDisplayedColour()->
-																FindParentIndexedColour();
-
-								SGDisplayGroup *DocumentGroup = (SGDisplayGroup *) FirstSelected->GetParent();
-								ERROR3IF(DocumentGroup == NULL, "SGallery DisplayTree linkage corruption detected");
-
-								Document *ScopeDoc = DocumentGroup->GetParentDocument();
-								ERROR3IF(ScopeDoc == NULL, "SGallery group is not for a document! Unimplemented! Eek!");
-
-								ColourList *ColList = ScopeDoc->GetIndexedColours();
-								ERROR3IF(ColList == NULL, "A document with no colour list? Now I've seen it all");
-
-								if (ColToEdit != NULL)
-									ColourNameDlg::InvokeDialog(ColList, ColToEdit);
-							}
-						}
-						break;
-					case _R(IDC_GALLERY_HELP):		// Show help page
+					SGDisplayColour *FirstSelected = (SGDisplayColour *)
+										DisplayTree->FindNextSelectedItem(NULL);
+					if (FirstSelected != NULL)
 					{
-						TRACEUSER( "Markn", _T("Hello. Do you want help on this gallery?\n"));
-						HelpUserTopic(_R(IDS_HELPPATH_Gallery_Colour));
+						IndexedColour *ColToEdit = FirstSelected->GetDisplayedColour()->
+														FindParentIndexedColour();
+
+						SGDisplayGroup *DocumentGroup = (SGDisplayGroup *) FirstSelected->GetParent();
+						ERROR3IF(DocumentGroup == NULL, "SGallery DisplayTree linkage corruption detected");
+
+						Document *ScopeDoc = DocumentGroup->GetParentDocument();
+						ERROR3IF(ScopeDoc == NULL, "SGallery group is not for a document! Unimplemented! Eek!");
+
+						ColourList *ColList = ScopeDoc->GetIndexedColours();
+						ERROR3IF(ColList == NULL, "A document with no colour list? Now I've seen it all");
+
+						if (ColToEdit != NULL)
+							ColourNameDlg::InvokeDialog(ColList, ColToEdit);
 					}
-					break;
-
-					case _R(IDC_COLGAL_BACKGROUND):	// Set a background layer with the selected colour
-						{
-							ApplySelectedAsBackground();
-						}
-						break;
-
 				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_HELP))
+				{
+					TRACEUSER( "Markn", _T("Hello. Do you want help on this gallery?\n"));
+					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Colour));
+				}
+				else if (Msg->GadgetID == _R(IDC_COLGAL_BACKGROUND))	// Set a background layer with the selected colour
+				{
+					ApplySelectedAsBackground();
+				}
+				break;
+
+			default:
 				break;
 		}
 
@@ -3718,7 +3729,7 @@ MsgResult ColourSGallery::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocChangingMsg::DocState::BORN:			// New document - add to display tree
+			case DocChangingMsg::BORN:			// New document - add to display tree
 				{
 					CreateNewSubtree(TheMsg->pChangingDoc);	// Add a subtree for this doc
 					ShadeGallery(FALSE);
@@ -3735,6 +3746,9 @@ MsgResult ColourSGallery::Message(Msg* Message)
 //				==== NOTE ====
 //				The base sgallery class handles these messages to automatically remove
 //				the subtree for the dying doc, and/or shade the gallery if no docs are left
+			default:
+				break;
+
 		}
 	}
 	else if (MESSAGE_IS_A(Message, ColourChangingMsg))
@@ -3743,7 +3757,7 @@ MsgResult ColourSGallery::Message(Msg* Message)
 
 		switch (TheMsg->State)
 		{
-			case ColourChangingMsg::ColourState::LISTUPDATED:
+			case ColourChangingMsg::LISTUPDATED:
 				// A document colour list has been changed. We must recreate its display subtree
 				if (!ISentTheMessage && TheMsg->NewColourList != NULL)
 				{
@@ -3770,8 +3784,8 @@ MsgResult ColourSGallery::Message(Msg* Message)
 				break;
 
 
-			case ColourChangingMsg::ColourState::COLOURUPDATED:
-			case ColourChangingMsg::ColourState::COLOURUPDATEDINVISIBLE:
+			case ColourChangingMsg::COLOURUPDATED:
+			case ColourChangingMsg::COLOURUPDATEDINVISIBLE:
 				if (TheMsg->NewColourList != NULL)
 				{
 					Document *ScopeDoc = (Document *)TheMsg->NewColourList->GetParentDocument();
@@ -3779,10 +3793,13 @@ MsgResult ColourSGallery::Message(Msg* Message)
 				}
 				break;
 
-			case ColourChangingMsg::ColourState::SELVIEWCONTEXTCHANGE:
+			case ColourChangingMsg::SELVIEWCONTEXTCHANGE:
 				// Colour separation/correction options for the selected view have
 				// changed, so redraw the entire colour list using the new options.
 				ForceRedrawOfList();
+				break;
+
+			default:
 				break;
 		}
 	}
@@ -3794,9 +3811,9 @@ MsgResult ColourSGallery::Message(Msg* Message)
 		SelChangingMsg *Msg = (SelChangingMsg *) Message;
 		switch ( Msg->State )
 		{
-			case SelChangingMsg::SelectionState::COLOURATTCHANGED:
-			case SelChangingMsg::SelectionState::SELECTIONCHANGED:
-			case SelChangingMsg::SelectionState::NODECHANGED:
+			case SelChangingMsg::COLOURATTCHANGED:
+			case SelChangingMsg::SELECTIONCHANGED:
+			case SelChangingMsg::NODECHANGED:
 				if (!AmShaded)			// If we're open & active, set listbox selection
 					SetSelectionFromDocument();
 				break;
@@ -3865,7 +3882,7 @@ void ColourSGallery::HandleDragStart(DragMessage *DragMsg)
 	// have a look at it (to see if it is a group being dragged)
 	if (DragMsg->pInfo->IsKindOf(CC_RUNTIME_CLASS(ColourDragInformation)))
 	{
-		SGColourDragTarget *NewTarget = new SGColourDragTarget(this, GetListGadgetID());
+		/*SGColourDragTarget *NewTarget =*/ new SGColourDragTarget(this, GetListGadgetID());
 	}
 	else
 		SuperGallery::HandleDragStart(DragMsg);
@@ -4748,7 +4765,19 @@ BOOL OpDisplayColourGallery::Init()
 	 							OpDisplayColourGallery::GetState,
 	 							_R(IDST_COLGAL_OPENGALLERY),
 	 							_R(IDBBL_DISPLAY_COLOUR_GALLERY),
-	 							0	/* bitmap ID */));
+				 				_R(IDC_BTN_SGCOLOUR), // UINT32 resourceID = 0,	// resource ID
+								_R(IDC_BTN_SGCOLOUR), // UINT32 controlID = 0,	// control ID
+								SYSTEMBAR_ILLEGAL,	  // SystemBarType GroupBarID = SYSTEMBAR_ILLEGAL,	// group bar ID
+				 				TRUE,	  // BOOL ReceiveMessages = TRUE,	// BODGE
+				 				FALSE,	  // BOOL Smart = FALSE,
+				 				TRUE,	  // BOOL Clean = TRUE,   
+								NULL,	  // OpDescriptor *pVertOpDesc = NULL,
+								0,	  // UINT32 OneOpenInstID = 0,		
+								0,	  // UINT32 AutoStateFlags = 0,
+								TRUE	  // BOOL fCheckable = FALSE
+								)
+								);
+
 }               
     
 /********************************************************************************************
@@ -4771,9 +4800,9 @@ OpState	OpDisplayColourGallery::GetState(String_256* UIDescription, OpDescriptor
 	OpState OpSt;  
 
 	// If the gallery is currenty open, then the menu item should be ticked
-	DialogBarOp* pDialogBarOp = FindGallery();
-	if (pDialogBarOp != NULL)
-		OpSt.Ticked = pDialogBarOp->IsVisible();
+	SuperGallery* pSuperGallery = FindGallery();
+	if (pSuperGallery != NULL)
+		OpSt.Ticked = pSuperGallery->IsVisible();
 
 	// If there are no open documents, you can't toggle the gallery
 	OpSt.Greyed = (Document::GetSelected() == NULL);
@@ -4801,15 +4830,15 @@ OpState	OpDisplayColourGallery::GetState(String_256* UIDescription, OpDescriptor
 
 void OpDisplayColourGallery::Do(OpDescriptor*)
 {
-	DialogBarOp *pDialogBarOp = FindGallery();
+	SuperGallery *pSuperGallery = FindGallery();
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
 		// Toggle the visible state of the gallery window
-		pDialogBarOp->SetVisibility( !pDialogBarOp->IsVisible() );
+		pSuperGallery->SetVisibility( !pSuperGallery->IsVisible() );
 
 		// And update the gallery button state
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYCOLOURGALLERY, pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYCOLOURGALLERY), pSuperGallery->IsVisible());
 	}
 	
 	End();
@@ -4819,7 +4848,7 @@ void OpDisplayColourGallery::Do(OpDescriptor*)
 
 /********************************************************************************************
 
->	static DialogBarOp *OpDisplayColourGallery::FindGallery(void)
+>	static SuperGallery *OpDisplayColourGallery::FindGallery(void)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/2/95 (base generated in sgbase.cpp)
@@ -4836,15 +4865,16 @@ void OpDisplayColourGallery::Do(OpDescriptor*)
 
 ********************************************************************************************/
 
-DialogBarOp *OpDisplayColourGallery::FindGallery(void)
+SuperGallery *OpDisplayColourGallery::FindGallery(void)
 {
-	String_32 Name = _R(IDS_SGCOLOUR_COLOUR_GALLERY); // "Colour gallery";
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_COLOURSGALLERY));
 
-	if (pDialogBarOp != NULL)
+	if (!pSuperGallery) pSuperGallery = new ColourSGallery;
+
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(ColourSGallery))
-			return(pDialogBarOp);
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(ColourSGallery))
+			return(pSuperGallery);
 
 		ERROR3("Got the Colour gallery but it's not of the ColourSGallery class");
 	}
@@ -4907,7 +4937,7 @@ MsgResult ColourNameDlg::Message(Msg* Message)
 	if (IS_OUR_DIALOG_MSG(Message))
 	{
 		DialogMsg* Msg = (DialogMsg*)Message;
-		BOOL EndDialog = FALSE;
+//		BOOL EndDialog = FALSE;
 
 		switch (Msg->DlgMsg)
 		{
@@ -4918,14 +4948,14 @@ MsgResult ColourNameDlg::Message(Msg* Message)
 					if (Info->TheName != NULL)			// Must be creating new colour
 					{
 						Name.MakeMsg(_R(IDS_COLNAME_CREATE));
-						SetStringGadgetValue(IDOK, _R(IDS_COLNAME_YCREATE));
-						SetStringGadgetValue(_R(IDC_COLNAME_TEXT), (StringBase *)Info->TheName);
+						SetStringGadgetValue(_R(IDOK), _R(IDS_COLNAME_YCREATE));
+						SetStringGadgetValue(_R(IDC_COLNAME_TEXT), *Info->TheName);
 					}
 					else if (Info->TheColour != NULL)	// Are renaming existing colour
 					{
 						Name.MakeMsg(_R(IDS_COLNAME_ALTER));
-						SetStringGadgetValue(IDOK, _R(IDS_COLNAME_YALTER));
-						SetStringGadgetValue(_R(IDC_COLNAME_TEXT), (StringBase *)Info->TheColour->GetName());
+						SetStringGadgetValue(_R(IDOK), _R(IDS_COLNAME_YALTER));
+						SetStringGadgetValue(_R(IDC_COLNAME_TEXT), *Info->TheColour->GetName());
 					}
 
 					SetTitlebarName(&Name);
@@ -4968,6 +4998,9 @@ MsgResult ColourNameDlg::Message(Msg* Message)
 						DestroyOSRenderRegion(pRender);
 					}
 				}
+				break;
+
+			default:
 				break;
 		}
 

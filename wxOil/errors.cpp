@@ -689,10 +689,10 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 INT32 InformGeneral(UINT32 Error, ErrorInfo* pInfo, UINT32 ModID)
 {
 	if (!pInfo) return _R(IDS_OK); // Catch this early
-	return InformGeneral(Error,ModID, pInfo->ErrorMsg, 
-				  pInfo->Button[1],pInfo->Button[2],pInfo->Button[3],pInfo->Button[4],
+	INT32 num = InformGeneral(Error,ModID, pInfo->ErrorMsg, 
+				  pInfo->Button[0],pInfo->Button[1],pInfo->Button[2],pInfo->Button[3],
 				  pInfo->OK,pInfo->Cancel);
-
+	return num?pInfo->Button[num-1]:_R(IDS_OK);
 	
 }
 

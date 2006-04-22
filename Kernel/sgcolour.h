@@ -630,7 +630,7 @@ public:
 	static OpState	GetState(String_256*, OpDescriptor*);		
     void 			Do(OpDescriptor*);
 
-	static DialogBarOp *FindGallery(void);
+	static SuperGallery *FindGallery(void);
 			// Finds the Colour gallery class instance
 };  
 

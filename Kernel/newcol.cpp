@@ -186,7 +186,7 @@ MsgResult NewColourDlg::Message(Msg* Message)
 	if (IS_OUR_DIALOG_MSG(Message))
 	{
 		DialogMsg* Msg = (DialogMsg*)Message;
-		BOOL EndDialog = FALSE;
+//		BOOL EndDialog = FALSE;
 
 		switch (Msg->DlgMsg)
 		{
@@ -235,12 +235,10 @@ MsgResult NewColourDlg::Message(Msg* Message)
 
 
 			case DIM_LFT_BN_CLICKED:
-				switch(Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_NEWCOL_SHADE))
 				{
-					case _R(IDC_NEWCOL_SHADE):
-						SetNameText();			// Ensure name text is updated if necessary
-						ShadeControls();		// And make sure shading of controls is updated
-						break;
+					SetNameText();			// Ensure name text is updated if necessary
+					ShadeControls();		// And make sure shading of controls is updated
 				}
 				break;
 
@@ -284,6 +282,8 @@ MsgResult NewColourDlg::Message(Msg* Message)
 				}
 				break;
 */
+			default:
+				break;
 		}
 
 		return (DLG_EAT_IF_HUNGRY(Msg)); 
@@ -370,7 +370,7 @@ void NewColourDlg::SetNameText(void)
 				AutoName.MakeMsg(_R(IDS_NEWCOLOUR));											// "New Colour"
 		}
 
-		SetStringGadgetValue(_R(IDC_NEWCOL_NAME), (StringBase *) &AutoName);
+		SetStringGadgetValue(_R(IDC_NEWCOL_NAME), AutoName);
 	}
 }
 
@@ -532,7 +532,7 @@ void NewColourDlg::CommitDetails(BOOL Force, BOOL ForceMakeShade)
 
 		TCHAR TempStr[256];
 		String_256 jcf(_R(IDS_NEWCOL_RENAMED));
-		wsprintf(TempStr, jcf, (LPCTSTR) UniqueName);
+		camSnprintf(TempStr, 256, jcf, (LPCTSTR) UniqueName);
 
 		// We still don't have a f***ing way of reporting a f***ing message to the user which uses
 		// a STRING so we can f***ing include f***ing useful information at runtime!

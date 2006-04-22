@@ -641,7 +641,8 @@ public:		// Global gallery preferences
 public:
 	virtual BOOL IsABar() {return FALSE; } 		// We are not a bar
 	virtual BOOL IsAGallery() {return TRUE; }	// We are a gallery
-	static SuperGallery*		FindSuperGallery(String_32& SuperGalleryName, INT32 limit = -1);
+	static SuperGallery* FindSuperGallery(String_32& SuperGalleryName, INT32 limit = -1);
+	static SuperGallery* FindSuperGallery(ResourceID SuperGalleryID);
 
 	String_32		Name;
 	String_32&		GetGalName()							{ return Name; }

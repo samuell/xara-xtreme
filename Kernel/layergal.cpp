@@ -1786,7 +1786,18 @@ BOOL OpDisplayLayerGallery::Init()
 	 							OpDisplayLayerGallery::GetState,
 	 							0,	/* help ID */
 	 							_R(IDBBL_DISPLAY_LAYER_GALLERY),
-	 							0	/* bitmap ID */));
+				 				_R(IDC_BTN_SGLAYER), // UINT32 resourceID = 0,	// resource ID
+								_R(IDC_BTN_SGLAYER), // UINT32 controlID = 0,	// control ID
+								SYSTEMBAR_ILLEGAL,	  // SystemBarType GroupBarID = SYSTEMBAR_ILLEGAL,	// group bar ID
+				 				TRUE,	  // BOOL ReceiveMessages = TRUE,	// BODGE
+				 				FALSE,	  // BOOL Smart = FALSE,
+				 				TRUE,	  // BOOL Clean = TRUE,   
+								NULL,	  // OpDescriptor *pVertOpDesc = NULL,
+								0,	  // UINT32 OneOpenInstID = 0,		
+								0,	  // UINT32 AutoStateFlags = 0,
+								TRUE	  // BOOL fCheckable = FALSE
+								)
+								);
 }               
     
 /********************************************************************************************
@@ -1831,8 +1842,7 @@ OpState	OpDisplayLayerGallery::GetState(String_256* UIDescription, OpDescriptor*
 	if(LayerDoc)
 	{
 		// If the gallery is currenty open, then the menu item should be ticked
-		String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
-		SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
+		SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_LAYERSGALLERY));
 
 		if (pSuperGallery != NULL)
 		{
@@ -1871,8 +1881,7 @@ OpState	OpDisplayLayerGallery::GetState(String_256* UIDescription, OpDescriptor*
 
 void OpDisplayLayerGallery::Do(OpDescriptor*)
 {
-	String_32 Name(_R(IDS_LAYERGAL_GALLNAME));
-	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_LAYERSGALLERY));
 
 	if (!pSuperGallery) pSuperGallery = new LayerSGallery;
 
@@ -1961,8 +1970,7 @@ OpState	OpDisplayFrameGallery::GetState(String_256* UIDescription, OpDescriptor*
 #ifdef WEBSTER
 		
 	// If the gallery is currenty open, then the menu item should be ticked
-	String_32 Name(_R(IDS_FRAMEGAL_GALLNAME));
-	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_LAYERSGALLERY));
 
 	if (pSuperGallery != NULL)
 	{
