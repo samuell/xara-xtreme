@@ -206,17 +206,13 @@ MsgResult RenderDemoDlg::Message(Msg* Message)
 			case DIM_LFT_BN_CLICKED :
 			{
 				// See which button was pressed
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_REDRAWBTN))
 				{
-					case _R(IDC_REDRAWBTN) :
-					{
-						// Toggle the colour
-						ShowFirst = ShowFirst ? FALSE : TRUE;
+					// Toggle the colour
+					ShowFirst = ShowFirst ? FALSE : TRUE;
 
-						// invalidate the gadget with the picture in it
-						InvalidateGadget(_R(IDC_REDRAW_ME));
-						break;
-					}
+					// invalidate the gadget with the picture in it
+					InvalidateGadget(_R(IDC_REDRAW_ME));
 				}
 				break;
 			}
@@ -226,27 +222,24 @@ MsgResult RenderDemoDlg::Message(Msg* Message)
 				// This is where all the redrawing is done
 				// Which control in the window is sending the redraw message (if there are many
 				// grdraw controls you can tell which is which from the Gadget ID
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_REDRAW_ME))
 				{
 					// Draw the redraw_me control in here
-					case _R(IDC_REDRAW_ME) :
-					{
-						// Render this control
-						RenderControl((ReDrawInfoType*) Msg->DlgMsgParam);
-						break;
-					}
-
-					// there are no other controls that should get a redraw message ever
-					default :
-					{
-						// give out an error in debug builds, ignore in retail builds
-						ERROR3("Got a redraw message for a control I don't know about");
-						break;
-					}
+					// Render this control
+					RenderControl((ReDrawInfoType*) Msg->DlgMsgParam);
+				}
+				else
+				// there are no other controls that should get a redraw message ever
+				{
+					// give out an error in debug builds, ignore in retail builds
+					ERROR3("Got a redraw message for a control I don't know about");
+					break;
 				}
 
 				break;
 			}
+			default:
+				break;
 		}
 		
 		// Return

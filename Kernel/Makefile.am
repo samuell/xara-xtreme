@@ -61,6 +61,6 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	penedit.cpp aligndlg.cpp exjpeg.cpp aboutdlg.cpp sgdrag.cpp sginit.cpp sgtree.cpp \
 	bmpprefs.cpp expbmp.cpp expcol.cpp prvwflt.cpp bmpexdoc.cpp webop.cpp \
 	zdeflate.cpp jpgdest.cpp webparam.cpp bmpalint.cpp zdftrees.cpp animparams.cpp \
-	sglayer.cpp layermgr.cpp layergal.cpp backgrnd.cpp viewmenu.cpp
+	sglayer.cpp layermgr.cpp layergal.cpp backgrnd.cpp viewmenu.cpp renddlg.cpp
 
 AM_CXXFLAGS = $(XARAFLAGS)

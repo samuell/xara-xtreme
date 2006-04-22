@@ -188,7 +188,9 @@ PORTNOTE("other","Removed a large amount of initialization")
 			TraceDlg::Init() &&					// Init the trace dialog
 			WebAddressDlg::Init() &&
 			PhotoCDDlg::Init() &&				// Init the import PhotoCD options dialog
+#endif
 			RenderDemoDlg::Init() &&			// Init the Render Demo Dialog
+#ifndef EXCLUDE_FROM_XARALX
 			AppPrefsDlg::Init() &&				// Init the application preference/options dialog
 			TemplateDialog::Init() &&
 			DocPrefsDlg::Init() &&				// Init the document preference/options dialog
