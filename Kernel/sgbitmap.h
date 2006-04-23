@@ -114,7 +114,10 @@ const INT32 SG_DefaultLargeBmpText	= 120000;
 class Bitmap;
 class KernelBitmap;
 class BmpDlgParam;
+class SGDisplayKernelBitmap;
 
+PORTNOTE("other", "Disable GalleryBitmapDragInfo")
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class GalleryBitmapDragInfo : public BitmapDragInformation
@@ -125,7 +128,6 @@ class BmpDlgParam;
 	SeeAlso:	BitmapDragInformation
 				
 ********************************************************************************************/
-class SGDisplayKernelBitmap;
 
 class GalleryBitmapDragInfo : public BitmapDragInformation
 { 
@@ -155,6 +157,7 @@ protected:
 
 	KernelBitmap*			m_pDragBmp;
 };
+#endif
 
 /*********************************************************************************************
 

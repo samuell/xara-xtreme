@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //nclude "bfxalu.h"
 //nclude "bitmapfx.h"
 #include "impexpop.h"	// Import/Export ops
-#include "scrcamvw.h"
+//#include "scrcamvw.h"
 #include "fixmem.h"
 
 //nclude "sglib.h"
@@ -151,26 +151,30 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "backgrnd.h"	// OpBackground
 #include "keypress.h"	// KeyPress
 #include "impexpop.h"	// BitmapExportParam
-#include "prevwdlg.h"	// PreviewDialog::Init()
+//#include "prevwdlg.h"	// PreviewDialog::Init()
 #include "bmpexprw.h"	// BitmapExportPreviewDialog::Init()
 
 #include "helpuser.h"		//For the help button
 //#include "xshelpid.h"		//For the help button
 //#include "helppath.h"
-#include "xpehost.h"		// For OPTOKEN_XPE_EDIT
+//#include "xpehost.h"		// For OPTOKEN_XPE_EDIT
 #include "qualattr.h"
 #include "bfxop.h"			// useful BFX plug-in related operations
 
 #ifdef PHOTOSHOPPLUGINS
 #include "plugmngr.h"	// CheckHaveDetailsOnPlugIns
-#endif PHOTOSHOPPLUGINS
+#endif //PHOTOSHOPPLUGINS
 
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNCREATE(BitmapSGallery, SuperGallery)
 CC_IMPLEMENT_DYNAMIC(SGDisplayKernelBitmap, SGDisplayItem)
 CC_IMPLEMENT_DYNCREATE(OpDisplayBitmapGallery,Operation);
-CC_IMPLEMENT_DYNCREATE(GalleryBitmapDragInfo, BitmapDragInformation)
 CC_IMPLEMENT_DYNAMIC(SGBitmapDragTarget, SGListDragTarget);
+
+PORTNOTE("other", "Disabled GalleryBitmapDragInfo")
+#ifndef EXCLUDE_FROM_XARALX
+CC_IMPLEMENT_DYNCREATE(GalleryBitmapDragInfo, BitmapDragInformation)
+#endif
 
 // Enable Background redraw in the bitmap gallery...
 //#define SGBITMAP_BACKGROUND_REDRAW
@@ -228,6 +232,8 @@ SGBitmapDragTarget::SGBitmapDragTarget(DialogOp *TheDialog, CGadgetID TheGadget)
 BOOL SGBitmapDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDragInfo,
 										OilCoord *pMousePos, KeyPress* pKeyPress)
 {
+PORTNOTE("other", "Disabled use of BitmapDragInformation");
+#ifndef EXCLUDE_FROM_XARALX
 	if (!pDragInfo->IsKindOf(CC_RUNTIME_CLASS(BitmapDragInformation)))
 		return(FALSE);
 
@@ -258,13 +264,17 @@ BOOL SGBitmapDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDra
 				// Call a subroutine to work out and set our current cursor shape
 				return(DetermineCursorShape((SuperGallery *) TargetDialog,
 											DraggedNode, pMousePos));
+			default:
+				break;
 		}
 	}
-
+#endif
 	// Otherwise, we aren't interested in the event, so we don't claim it
 	return(FALSE);
 }
 
+PORTNOTE ("other", "Removed GalleryBitmapDragInfo class")
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	void GalleryBitmapDragInfo::GalleryBitmapDragInfo() 
@@ -574,13 +584,15 @@ BOOL GalleryBitmapDragInfo::OnPageDrop(ViewDragTarget* pDragTarget)
 			OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpCreateNodeBitmap));
 
 			// Invoke the operation, passing DocView and Pos as parameters
-			OpDesc->Invoke(&OpParam((INT32)BitmapToApply,(INT32)&ThePageDropInfo));		 
+			OpParam param((void *)BitmapToApply,(void *)&ThePageDropInfo);
+			OpDesc->Invoke(&param);		 
 		}
 	}
 
 	return TRUE;
 }
 
+#endif // EXCLUDE_FROM_XARALX
 
 /***********************************************************************************************
 
@@ -911,9 +923,9 @@ void SGDisplayKernelBitmap::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 	// So if the thumbnail has become so thin as to be invisible
 	// We will bodge it back into shape even if that distorts things a bit
 	if (ThumbnailRect.Width()==0)
-		ThumbnailRect.hix = ThumbnailRect.lox + OnePixel;
+		ThumbnailRect.hi.x = ThumbnailRect.lo.x + OnePixel;
 	if (ThumbnailRect.Height()==0)
-		ThumbnailRect.hiy = ThumbnailRect.loy + OnePixel;
+		ThumbnailRect.hi.y = ThumbnailRect.lo.y + OnePixel;
 
 	// Set up the colours for rendering our text, and fill the background if selected
 	if (Flags.Selected)
@@ -1112,10 +1124,15 @@ void SGDisplayKernelBitmap::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 		BitmapSource* pSource = NULL;
 		BaseBitmapFilter* pDummyFilter;
 
+PORTNOTE("other", "Removed XPE hook")
+#ifndef EXCLUDE_FROM_XARALX
 		KernelBitmap* pMaster = NULL;
 		IXMLDOMDocumentPtr pEdits = NULL;
 		TheKernelBitmap->GetXPEInfo(pMaster, pEdits);
 		BOOL bIsXPE = (pMaster!=NULL && pEdits!=NULL);
+#else
+		BOOL bIsXPE = FALSE;
+#endif
 
 		BOOL OriginalSourcePresent = TheKernelBitmap->GetOriginalSource(&pSource, &pDummyFilter);
 		String_256 BitmapFormat;
@@ -1156,11 +1173,11 @@ void SGDisplayKernelBitmap::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 		DocRect MiddleRect(MyRect);
 		DocRect BottomRect(MyRect);
 
-		//TopRect.loy 	+= 11000;
-		TopRect.loy 	+= 18000;
-		MiddleRect.hiy 	-= 5000;
-		//MiddleRect.hiy 	-= 16000; Down
-		BottomRect.hiy	-= 26000; 
+		//TopRect.lo.y 	+= 11000;
+		TopRect.lo.y 	+= 18000;
+		MiddleRect.hi.y 	-= 5000;
+		//MiddleRect.hi.y 	-= 16000; Down
+		BottomRect.hi.y	-= 26000; 
 
 		// Plot the Name and Memory used on the Top Line
 		String_256 TopLine; // = "'"+BitmapName+"', "+BitmapFormat", "+MemoryUsed;
@@ -1184,7 +1201,7 @@ void SGDisplayKernelBitmap::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 		else
 		{
 			String_256 dpitext;
-			wsprintf(dpitext, "%u x %u", hdpi, vdpi);
+			camSnprintf(dpitext, 256, _T("%u x %u"), hdpi, vdpi);
 			MiddleLine.MakeMsg(_R(IDS_SGBITMAP_FULLINFO_BOTTOMLINE), (TCHAR *)BitmapWidth, (TCHAR *)BitmapHeight, (TCHAR *)BitmapCols, (TCHAR *)dpitext);
 		}
 		Renderer->DrawFixedSystemText(&MiddleLine, MiddleRect);				
@@ -1344,7 +1361,7 @@ BOOL SGDisplayKernelBitmap::HandleEvent(SGEventType EventType, void *EventInfo,
 					// Otherwise, the normal click action takes place.
 					// If the drag fails (turns into a click) then the normal click action
 					// takes place, passed on by the GalleryColourDragInfo::OnClick handler
-					SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
+//					SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
 
 					if (Mouse->DoubleClick) // || Parent->GetParentDocument() != Document::GetSelected())
 					{
@@ -1361,6 +1378,8 @@ BOOL SGDisplayKernelBitmap::HandleEvent(SGEventType EventType, void *EventInfo,
 					}
 					else
 					{
+PORTNOTE("other", "Disabled GalleryBitmapDragInfo")
+#ifndef EXCLUDE_FROM_XARALX
 						DefaultPreDragHandler(Mouse, MiscInfo);
 
 						GalleryBitmapDragInfo *DragBmp;
@@ -1368,6 +1387,7 @@ BOOL SGDisplayKernelBitmap::HandleEvent(SGEventType EventType, void *EventInfo,
 															Mouse->MenuClick);
 						if (DragBmp != NULL)
 							DragManagerOp::StartDrag(DragBmp);
+#endif
 					}
 
 					return(TRUE);		// Claim this event - nobody else can own this click
@@ -1627,6 +1647,8 @@ BOOL SGDisplayKernelBitmap::GetStatusLineHelp(DocCoord *MousePos, String_256 *Re
 
 BitmapSGallery::BitmapSGallery()
 {
+	DlgResID = _R(IDD_BITMAPSGALLERY);
+
 	// WEBSTER - markn 9/12/96
 	// Default gallery size
 #ifdef WEBSTER
@@ -1943,7 +1965,7 @@ KernelBitmap* BitmapSGallery::GetSelectedBitmap()
 {
 	// Determine useful info - this is usually needed for most actions, so always get it
 	Document		*SelectedDoc = Document::GetSelected();
-	SGDisplayGroup	*DocumentGroup = DisplayTree->FindSubtree(this, SelectedDoc, NULL);
+	/*SGDisplayGroup	*DocumentGroup =*/ DisplayTree->FindSubtree(this, SelectedDoc, NULL);
 	SGDisplayKernelBitmap	*FirstSelected = NULL;
 	
 	// Lets see if any of our Items are selected
@@ -1998,7 +2020,7 @@ BOOL BitmapSGallery::ApplyAction(SGActionType Action)
 
 	// Determine useful info - this is usually needed for most actions, so always get it
 	Document		*SelectedDoc = Document::GetSelected();
-	SGDisplayGroup	*DocumentGroup = DisplayTree->FindSubtree(this, SelectedDoc, NULL);
+	/*SGDisplayGroup	*DocumentGroup =*/ DisplayTree->FindSubtree(this, SelectedDoc, NULL);
 	SGDisplayKernelBitmap	*FirstSelected = NULL;
 	
 	// Lets see if any of our Items are selected
@@ -2129,7 +2151,8 @@ BOOL BitmapSGallery::DeleteSelection()
 					}
 					else
 					{
-						Error::SetError(NULL, "You cannot delete the Default Bitmap",0);
+						// Shouldn't we be using an error from the resource file here??
+						Error::SetError(0, _T("You cannot delete the Default Bitmap"),0);
 						InformError();
 					}
 				}
@@ -2410,322 +2433,315 @@ MsgResult BitmapSGallery::Message(Msg* Message)
 		switch (Msg->DlgMsg)
 		{
 			case DIM_CREATE:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYBITMAPGALLERY, TRUE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYBITMAPGALLERY), TRUE);
 				SetSelectionFromDocument(TRUE);
 				break;
 
 			case DIM_CANCEL:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYBITMAPGALLERY, FALSE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYBITMAPGALLERY), FALSE);
 				break;
 
 			case DIM_LFT_BN_CLICKED:
-				switch(Msg->GadgetID)
-				{
-					case _R(IDC_BMPGAL_CREATE):
-						
-						SelectedBitmap = GetSelectedBitmap();
+				if (FALSE) {}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_CREATE))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
 
-						if (SelectedBitmap != NULL)
-						{
-							PageDropInfo DropInfo;
-							DropInfo.pDocView 	= DocView::GetSelected();
-							DropInfo.pDoc 		= Document::GetSelected();
-							DropInfo.pSpread 	= Document::GetSelectedSpread();
-
-							FindCentreInsertionPosition(&DropInfo.pSpread, &DropInfo.DropPos);
-
-							// Obtain a pointer to the op descriptor for the create operation 
-							OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpCreateNodeBitmap));
-
-							// Invoke the operation, passing DocView and Pos as parameters
-							OpDesc->Invoke(&OpParam((INT32)SelectedBitmap,(INT32)&DropInfo));		 
-						}
-						break;
-
-		
-						case _R(IDC_BMPGAL_FILL):
-
-						SelectedBitmap = GetSelectedBitmap();
-
-						if (SelectedBitmap != NULL)
-						{
-							// Fill colour selected	so create a fill colour attribute
-							NodeAttribute *Attrib = new AttrBitmapColourFill;
-							if (Attrib == NULL)
-								return(SuperGallery::Message(Message));
-
-							((AttrBitmapColourFill *)Attrib)->AttachBitmap(SelectedBitmap);
-
-							// AttributeSelected knows what to do with a selected attribute
-							AttributeManager::AttributeSelected(NULL, Attrib);
-						}
-						break;
-		
-
-					case _R(IDC_BMPGAL_TEXTURE):
-
-						SelectedBitmap = GetSelectedBitmap();
-
-						if (SelectedBitmap != NULL)
-						{
-							SelectedBitmap = CheckTextureBitmap(SelectedBitmap);
-
-							AttributeManager::HaveAskedAboutContoneColours = FALSE;
-							AttributeManager::UserCancelledContoneColours = FALSE;
-
-							if (SelectedBitmap == NULL)
-								return(SuperGallery::Message(Message));
-
-							// Fill colour selected	so create a fill colour attribute
-							NodeAttribute *Attrib = new AttrBitmapTranspFill;
-							if (Attrib == NULL)
-								return(SuperGallery::Message(Message));
-
-							((AttrBitmapTranspFill *)Attrib)->AttachBitmap(SelectedBitmap);
-
-							// AttributeSelected knows what to do with a selected attribute
-							AttributeManager::AttributeSelected(NULL, Attrib);
-						}
-						break;
-	
-					case _R(IDC_BMPGAL_XPE_EDIT):
-			
-						SelectedBitmap = GetSelectedBitmap();
-						if (SelectedBitmap != NULL)
-						{
-							// Obtain a pointer to the op descriptor for the create operation 
-							OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(XPEEditItemOp));
-
-							// Invoke the operation, passing DocView and Pos as parameters
-							OpDesc->Invoke(&OpParam((INT32)SelectedBitmap, NULL));
-						}
-						break;
-	
-					case _R(IDC_BMPGAL_TRACE):
-			
-						SelectedBitmap = GetSelectedBitmap();
-					// WEBSTER-Martin-09/01/97 we don't trace stuff
-					#ifndef WEBSTER
-						if (SelectedBitmap != NULL)
-						{
-							TraceMsg::OpenOrUse(SelectedBitmap);
-						}
-					#endif //webster
-						break;
-	
-					/*case _R(IDC_BMPGAL_EFFECTS):
-
-						SelectedBitmap = GetSelectedBitmap();
-					// WEBSTER-Martin-09/01/97
-					#ifndef WEBSTER
-						if (SelectedBitmap != NULL)
-						{
-							BfxMsg::OpenOrUse(SelectedBitmap);
-						}
-					#endif //webster
-						break; */
-	
-					case _R(IDC_BMPGAL_SAVE):
+					if (SelectedBitmap != NULL)
 					{
-						{
-							// Generate a list of the selected bitmaps
-							UINT32 ListSize = 0;
-							KernelBitmap** pList = NULL;
-							if (!GetSelectedBitmaps(&pList, &ListSize))
-								InformError();
-							else
-							{
-								if (ListSize != 0)
-								{
-									BmpDlgParam BmpDlgParam;
+						PageDropInfo DropInfo;
+						DropInfo.pDocView 	= DocView::GetSelected();
+						DropInfo.pDoc 		= Document::GetSelected();
+						DropInfo.pSpread 	= Document::GetSelectedSpread();
 
-									GetBmpInfo(&BmpDlgParam);
-									// Save the Bitmap deatils for use in the bitmap export code.#
-									BmpDlgParam.SetBitmapList(pList);
-									BmpDlgParam.SetListSize(ListSize);
-									
-									BitmapExportParam ExportList(ListSize, pList, &BmpDlgParam);
-									// Invoke the export operation
-									OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpMenuExport));
-									OpDesc->Invoke(&ExportList);		 
-									SetBmpInfo(&BmpDlgParam);
-									ForceRedrawOfList();
-								}
-								else
-									ERROR3("No bitmaps were selected - how come the option wasn't greyed");
-							}
-							if (pList != NULL)
-								CCFree(pList);
-						}
+						FindCentreInsertionPosition(&DropInfo.pSpread, &DropInfo.DropPos);
+
+						// Obtain a pointer to the op descriptor for the create operation 
+						OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpCreateNodeBitmap));
+
+						// Invoke the operation, passing DocView and Pos as parameters
+						OpParam param((void *)SelectedBitmap,(void *)&DropInfo);
+						OpDesc->Invoke(&param);		 
 					}
-					break;
+				}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_FILL))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
 
-					case _R(IDC_GALLERY_HELP):		// Show help page
-//						HelpUserTopic(_R(IDH_Gallery_Bitmap));
-						HelpUserTopic(_R(IDS_HELPPATH_Gallery_Bitmap));
-						break;
-
-//#if _DEBUG
-					case _R(IDC_BMPGAL_PREVIEW):
+					if (SelectedBitmap != NULL)
 					{
-						// Generate a list of the selected bitmaps
-						UINT32 ListSize = 0;
-						KernelBitmap** pList = NULL;
-						if (!GetSelectedBitmaps(&pList, &ListSize))
-							InformError();
-						else
-						{
-							if (ListSize != 0)
-							{
-								BmpDlgParam BmpDlgParam;
-								GetBmpInfo(&BmpDlgParam);
-								// Save the Bitmap deatils for use in the bitmap export code.#
-								BmpDlgParam.SetBitmapList(pList);
-								BmpDlgParam.SetListSize(ListSize);
-								BitmapExportParam ExportList(ListSize, pList, &BmpDlgParam);
+						// Fill colour selected	so create a fill colour attribute
+						NodeAttribute *Attrib = new AttrBitmapColourFill;
+						if (Attrib == NULL)
+							return(SuperGallery::Message(Message));
 
-								// Invoke the preview operation
-																// Check if there is a Preview Dialog present.
-								PreviewDialog* pPreviewDialog = PreviewDialog::GetPreviewDialog();
-								if (!pPreviewDialog)
-								{
-									OpDescriptor* OpDesc;
-									//if (KeyPress::IsAdjustPressed())
-									//	OpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BITMAPPREVIEWDIALOG);
-									//else
-									OpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_PREVIEWDIALOG);
+						((AttrBitmapColourFill *)Attrib)->AttachBitmap(SelectedBitmap);
 
-									if (OpDesc)
-									{
-										PreviewDialog::ToggleViaBitmapGallery (TRUE);
-										OpDesc->Invoke(&ExportList);
-										pPreviewDialog->SetDelay (100);
-										pPreviewDialog = PreviewDialog::GetPreviewDialog();
-									//	pPreviewDialog->ToggleViaBitmapGallery (TRUE);
-									}
-								}
-								else
-								{
-									// If the animation is playing, stop the animation before we pass it our new list of bitmaps.
-									if(pPreviewDialog->GetPlayAnimation())
-										pPreviewDialog->SetPlayAnimation(FALSE);
-
-									PreviewDialog::ToggleViaBitmapGallery (TRUE);
-
-									pPreviewDialog->SetBitmapList(&ExportList);
-								//	pPreviewDialog->ToggleViaBitmapGallery (TRUE);
-									pPreviewDialog->SetDelay (100);
-
-									// Call the dialog box so that it sets up the necessary states
-									pPreviewDialog->ReInitDialog();
-								}
-
-								SetBmpInfo(&BmpDlgParam);
-								ForceRedrawOfList();
-							}
-							else
-								ERROR3("No bitmaps were selected - how come the option wasn't greyed");
-						}
-						if (pList != NULL)
-							CCFree(pList);
+						// AttributeSelected knows what to do with a selected attribute
+						AttributeManager::AttributeSelected(NULL, Attrib);
 					}
-					break;
-//#endif
+				}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_TEXTURE))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
 
-#ifdef PHOTOSHOPPLUGINS
-// Only add in if required - general plug-in removal at present
-					case _R(IDC_BMPGAL_PLUGINS):
+					if (SelectedBitmap != NULL)
 					{
-						// Need to say which document and more importantly which bitmap we
-						// want the menu to apply to.
-						SelectedBitmap = GetSelectedBitmap();
-						// Now find out what the selected group is, which will be the document group
-						SGDisplayNode * FirstSelected = DisplayTree->FindNextSelectedItem(NULL);
-						Document *pDocument	= NULL;
-						if (FirstSelected == NULL)
-							pDocument = Document::GetSelected();
-						else
-							pDocument = ((SGDisplayGroup *) FirstSelected->GetParent())->GetParentDocument();
-						ERROR3IF(pDocument == NULL, "No parent document?!");
-						if (SelectedBitmap != NULL && pDocument != NULL)
-						{
-							// replaced menu with direct invocation of Bfx:Special Effects operation since this was 
-							// the only option left on menu - all the other plug-in options have been superseded
-							// by the new Live Effects implementation. Fixes #11376.
+						SelectedBitmap = CheckTextureBitmap(SelectedBitmap);
 
-							OpDescriptor *pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BFX_SPECIALEFFECTS);
-							if(pOpDesc)
-							{
-								// Inform the Bfx operation what bitmap and document it will be working on
-								BfxPlugInOp::SetBitmapAndDocument(SelectedBitmap, pDocument);
-								// and invoke it immediately
-								pOpDesc->Invoke();
-							}
-							else
-							{
-								ERROR2RAW("Unable to find BFX:Special Effects operation");
-							}
-						}
+						AttributeManager::HaveAskedAboutContoneColours = FALSE;
+						AttributeManager::UserCancelledContoneColours = FALSE;
+
+						if (SelectedBitmap == NULL)
+							return(SuperGallery::Message(Message));
+
+						// Fill colour selected	so create a fill colour attribute
+						NodeAttribute *Attrib = new AttrBitmapTranspFill;
+						if (Attrib == NULL)
+							return(SuperGallery::Message(Message));
+
+						((AttrBitmapTranspFill *)Attrib)->AttachBitmap(SelectedBitmap);
+
+						// AttributeSelected knows what to do with a selected attribute
+						AttributeManager::AttributeSelected(NULL, Attrib);
 					}
-					break;
+				}
+PORTNOTE("other", "Remove XPE hooks")
+#ifndef EXCLUDE_FROM_XARALX
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_XPE_EDIT))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
+					if (SelectedBitmap != NULL)
+					{
+						// Obtain a pointer to the op descriptor for the create operation 
+						OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(XPEEditItemOp));
+
+						// Invoke the operation, passing DocView and Pos as parameters
+						OpParam param((void *)SelectedBitmap, NULL);
+						OpDesc->Invoke(&param);
+					}
+				}
 #endif
-					case _R(IDC_BMPGAL_BACKGROUND):
+PORTNOTE("other", "Disabled tracer")
+#ifndef EXCLUDE_FROM_XARALX
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_TRACE))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
+				// WEBSTER-Martin-09/01/97 we don't trace stuff
+				#ifndef WEBSTER
+					if (SelectedBitmap != NULL)
 					{
-						// Need to say which document and more importantly which bitmap we
-						// want the menu to apply to.
-						SelectedBitmap = GetSelectedBitmap();
-						// Now find out what the selected group is, which will be the document group
-						SGDisplayNode * FirstSelected = DisplayTree->FindNextSelectedItem(NULL);
-						Document *pDocument	= NULL;
-						if (FirstSelected == NULL)
-							pDocument = Document::GetSelected();
-						else
-							pDocument = ((SGDisplayGroup *) FirstSelected->GetParent())->GetParentDocument();
-						ERROR3IF(pDocument == NULL, "No parent document?!");
-						if (SelectedBitmap != NULL && pDocument != NULL)
-						{
-							// Apply the bitmap as the new background
-							OpBackgroundParam Param;
-							Param.pBitmap = SelectedBitmap;
-							Param.pDoc = pDocument;			
-							
-							// Obtain a pointer to the op descriptor for the create operation 
-							OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BACKGROUND);
-
-							// Invoke the operation, passing in our parameters
-							pOpDesc->Invoke(&Param);		 
-						}
+						TraceMsg::OpenOrUse(SelectedBitmap);
 					}
+				#endif //webster
+				}
+#endif
+				/* else if (Msg->GadgetID == _R(IDC_BMPGAL_EFFECTS))
+				{	
+					SelectedBitmap = GetSelectedBitmap();
+				// WEBSTER-Martin-09/01/97
+				#ifndef WEBSTER
+					if (SelectedBitmap != NULL)
+					{
+						BfxMsg::OpenOrUse(SelectedBitmap);
+					}
+				#endif //webster
 					break;
-
-					case _R(IDC_BMPGAL_PROPS):
+				} */
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_SAVE))
+				{	
+					// Generate a list of the selected bitmaps
+					UINT32 ListSize = 0;
+					KernelBitmap** pList = NULL;
+					if (!GetSelectedBitmaps(&pList, &ListSize))
+						InformError();
+					else
 					{
-						// Generate a list of the selected bitmaps
-						UINT32 ListSize = 0;
-						KernelBitmap** pList = NULL;
-						if (!GetSelectedBitmaps(&pList, &ListSize))
-							InformError();
-						else
+						if (ListSize != 0)
 						{
-							if (ListSize != 0)
-							{
-								//  Opens the Bitmap Properties Dialog, from the Bitmap Gallery.
-								BmpDlgParam BmpDlgParam;
-								GetBmpInfo(&BmpDlgParam);
-								BmpDlg::InvokeBmpDlg(&BmpDlgParam);
-								SetBmpInfo(&BmpDlgParam);
-								ForceRedrawOfList();
-							}
-							else
-								ERROR3("No bitmaps were selected - how come the option wasn't greyed");
+							BmpDlgParam BmpDlgParam;
+
+							GetBmpInfo(&BmpDlgParam);
+							// Save the Bitmap deatils for use in the bitmap export code.#
+							BmpDlgParam.SetBitmapList(pList);
+							BmpDlgParam.SetListSize(ListSize);
+							
+							BitmapExportParam ExportList(ListSize, pList, &BmpDlgParam);
+							// Invoke the export operation
+							OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpMenuExport));
+							OpDesc->Invoke(&ExportList);		 
+							SetBmpInfo(&BmpDlgParam);
+							ForceRedrawOfList();
 						}
-						if (pList != NULL)
-							CCFree(pList);
+						else
+							ERROR3("No bitmaps were selected - how come the option wasn't greyed");
 					}
+					if (pList != NULL)
+						CCFree(pList);
+				}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_HELP))
+				{	
+					// HelpUserTopic(_R(IDH_Gallery_Bitmap));
+					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Bitmap));
 					break;
 				}
+PORTNOTE("other", "Removed preview dialog")
+#ifndef EXCLUDE_FROM_XARALX
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_PREVIEW))
+				{
+					// Generate a list of the selected bitmaps
+					UINT32 ListSize = 0;
+					KernelBitmap** pList = NULL;
+					if (!GetSelectedBitmaps(&pList, &ListSize))
+						InformError();
+					else
+					{
+						if (ListSize != 0)
+						{
+							BmpDlgParam BmpDlgParam;
+							GetBmpInfo(&BmpDlgParam);
+							// Save the Bitmap deatils for use in the bitmap export code.#
+							BmpDlgParam.SetBitmapList(pList);
+							BmpDlgParam.SetListSize(ListSize);
+							BitmapExportParam ExportList(ListSize, pList, &BmpDlgParam);
+
+							// Invoke the preview operation
+															// Check if there is a Preview Dialog present.
+							PreviewDialog* pPreviewDialog = PreviewDialog::GetPreviewDialog();
+							if (!pPreviewDialog)
+							{
+								OpDescriptor* OpDesc;
+								//if (KeyPress::IsAdjustPressed())
+								//	OpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BITMAPPREVIEWDIALOG);
+								//else
+								OpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_PREVIEWDIALOG);
+
+								if (OpDesc)
+								{
+									PreviewDialog::ToggleViaBitmapGallery (TRUE);
+									OpDesc->Invoke(&ExportList);
+									pPreviewDialog->SetDelay (100);
+									pPreviewDialog = PreviewDialog::GetPreviewDialog();
+								//	pPreviewDialog->ToggleViaBitmapGallery (TRUE);
+								}
+							}
+							else
+							{
+								// If the animation is playing, stop the animation before we pass
+								// it our new list of bitmaps.
+								if(pPreviewDialog->GetPlayAnimation())
+									pPreviewDialog->SetPlayAnimation(FALSE);
+
+								PreviewDialog::ToggleViaBitmapGallery (TRUE);
+
+								pPreviewDialog->SetBitmapList(&ExportList);
+							//	pPreviewDialog->ToggleViaBitmapGallery (TRUE);
+								pPreviewDialog->SetDelay (100);
+
+								// Call the dialog box so that it sets up the necessary states
+								pPreviewDialog->ReInitDialog();
+							}
+
+							SetBmpInfo(&BmpDlgParam);
+							ForceRedrawOfList();
+						}
+						else
+							ERROR3("No bitmaps were selected - how come the option wasn't greyed");
+					}
+					if (pList != NULL)
+						CCFree(pList);
+				}
+#endif
+#ifdef PHOTOSHOPPLUGINS
+// Only add in if required - general plug-in removal at present
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_PLUGINS))
+				{	
+					// Need to say which document and more importantly which bitmap we
+					// want the menu to apply to.
+					SelectedBitmap = GetSelectedBitmap();
+					// Now find out what the selected group is, which will be the document group
+					SGDisplayNode * FirstSelected = DisplayTree->FindNextSelectedItem(NULL);
+					Document *pDocument	= NULL;
+					if (FirstSelected == NULL)
+						pDocument = Document::GetSelected();
+					else
+						pDocument = ((SGDisplayGroup *) FirstSelected->GetParent())->GetParentDocument();
+					ERROR3IF(pDocument == NULL, "No parent document?!");
+					if (SelectedBitmap != NULL && pDocument != NULL)
+					{
+						// replaced menu with direct invocation of Bfx:Special Effects operation since this was 
+						// the only option left on menu - all the other plug-in options have been superseded
+						// by the new Live Effects implementation. Fixes #11376.
+
+						OpDescriptor *pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BFX_SPECIALEFFECTS);
+						if(pOpDesc)
+						{
+							// Inform the Bfx operation what bitmap and document it will be working on
+							BfxPlugInOp::SetBitmapAndDocument(SelectedBitmap, pDocument);
+							// and invoke it immediately
+							pOpDesc->Invoke();
+						}
+						else
+						{
+							ERROR2RAW("Unable to find BFX:Special Effects operation");
+						}
+					}
+				}
+#endif
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_BACKGROUND))
+				{	
+					// Need to say which document and more importantly which bitmap we
+					// want the menu to apply to.
+					SelectedBitmap = GetSelectedBitmap();
+					// Now find out what the selected group is, which will be the document group
+					SGDisplayNode * FirstSelected = DisplayTree->FindNextSelectedItem(NULL);
+					Document *pDocument	= NULL;
+					if (FirstSelected == NULL)
+						pDocument = Document::GetSelected();
+					else
+						pDocument = ((SGDisplayGroup *) FirstSelected->GetParent())->GetParentDocument();
+					ERROR3IF(pDocument == NULL, "No parent document?!");
+					if (SelectedBitmap != NULL && pDocument != NULL)
+					{
+						// Apply the bitmap as the new background
+						OpBackgroundParam Param;
+						Param.pBitmap = SelectedBitmap;
+						Param.pDoc = pDocument;			
+						
+						// Obtain a pointer to the op descriptor for the create operation 
+						OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BACKGROUND);
+
+						// Invoke the operation, passing in our parameters
+						pOpDesc->Invoke(&Param);		 
+					}
+				}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_PROPS))
+				{	
+					// Generate a list of the selected bitmaps
+					UINT32 ListSize = 0;
+					KernelBitmap** pList = NULL;
+					if (!GetSelectedBitmaps(&pList, &ListSize))
+						InformError();
+					else
+					{
+						if (ListSize != 0)
+						{
+							//  Opens the Bitmap Properties Dialog, from the Bitmap Gallery.
+							BmpDlgParam BmpDlgParam;
+							GetBmpInfo(&BmpDlgParam);
+							BmpDlg::InvokeBmpDlg(&BmpDlgParam);
+							SetBmpInfo(&BmpDlgParam);
+							ForceRedrawOfList();
+						}
+						else
+							ERROR3("No bitmaps were selected - how come the option wasn't greyed");
+					}
+					if (pList != NULL)
+						CCFree(pList);
+				}
 				break;
-			
+			default:
+				break;
 		}
 
 		return(SuperGallery::Message(Message));
@@ -2742,7 +2758,7 @@ MsgResult BitmapSGallery::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocChangingMsg::DocState::BORN:			// New document - add to display tree
+			case DocChangingMsg::BORN:						// New document - add to display tree
 				{
 					INT32 Extent = GetDisplayExtent();		// Remember previous list extent
 
@@ -2753,6 +2769,8 @@ MsgResult BitmapSGallery::Message(Msg* Message)
 					RedrawEverythingBelow(-Extent);
 				}
 				break;		// Pass this message on to the base class as well
+			default:
+				break;
 		}
 	}
 
@@ -2780,8 +2798,8 @@ MsgResult BitmapSGallery::Message(Msg* Message)
 				
 				// The above will loose the selection, so we can listen out for the special
 				// form of the message which says which bitmap to reselect.
-				if (TheMsg->State == BitmapListChangedMsg::BitmapListState::SELECTNEWBITMAP &&
-					TheMsg->pNewBitmap != NULL)
+				if ((TheMsg->State == BitmapListChangedMsg::SELECTNEWBITMAP) &&
+					(TheMsg->pNewBitmap != NULL))
 				{
 					// We have been sent a message that a new bitmap has been added and
 					// this is the one we should go and select.
@@ -2859,11 +2877,14 @@ MsgResult BitmapSGallery::Message(Msg* Message)
 
 void BitmapSGallery::HandleDragStart(DragMessage *DragMsg)
 {
+PORTNOTE("other", "Disable GalleryBitmapDragInfo")
+#ifndef EXCLUDE_FROM_XARALX
 	// If it's a bitmap drag, add a target for our window. If not, let the base class
 	// have a look at it (to see if it is a gallery item being dragged)
 	if (DragMsg->pInfo->IsKindOf(CC_RUNTIME_CLASS(GalleryBitmapDragInfo)))
-		SGBitmapDragTarget *NewTarget = new SGBitmapDragTarget(this, GetListGadgetID());
+		/* SGBitmapDragTarget *NewTarget =*/ new SGBitmapDragTarget(this, GetListGadgetID());
 	else
+#endif
 		SuperGallery::HandleDragStart(DragMsg);
 }
 
@@ -2911,8 +2932,8 @@ BOOL BitmapSGallery::FindCentreInsertionPosition(Spread** Spread, DocCoord* Posi
 	
 	// Determine the centre of the view
 	WorkCoord WrkCentreOfView; 
-	WrkCentreOfView.x = WrkViewRect.lox	+ (WrkViewRect.Width()/2); 
-	WrkCentreOfView.y = WrkViewRect.loy	+ (WrkViewRect.Height()/2);
+	WrkCentreOfView.x = WrkViewRect.lo.x	+ (WrkViewRect.Width()/2); 
+	WrkCentreOfView.y = WrkViewRect.lo.y	+ (WrkViewRect.Height()/2);
 	
 	// FindEnclosing spread requires an OilCoord
 	OilCoord OilCentreOfView = WrkCentreOfView.ToOil(CurDocView->GetScrollOffsets()); 
@@ -2940,8 +2961,8 @@ BOOL BitmapSGallery::FindCentreInsertionPosition(Spread** Spread, DocCoord* Posi
 
 	// Find the centre of the DocViewRect
    	DocCoord DocCentreOfView; 
-	DocCentreOfView.x = DocViewRect.lox	+ (DocViewRect.Width()/2); 
-	DocCentreOfView.y = DocViewRect.loy	+ (DocViewRect.Height()/2);
+	DocCentreOfView.x = DocViewRect.lo.x	+ (DocViewRect.Width()/2); 
+	DocCentreOfView.y = DocViewRect.lo.y	+ (DocViewRect.Height()/2);
 
 	// Now convert from DocCoords to spread coords
 	(*Spread)->DocCoordToSpreadCoord(&DocCentreOfView);
@@ -3437,12 +3458,25 @@ BOOL OpDisplayBitmapGallery::Init()
 	 							OpDisplayBitmapGallery::GetState,
 	 							0,	/* help ID */
 	 							_R(IDBBL_DISPLAY_BITMAP_GALLERY),
-	 							0	/* bitmap ID */)
+				 				_R(IDC_BTN_SGBITMAP), // UINT32 resourceID = 0,	// resource ID
+								_R(IDC_BTN_SGBITMAP), // UINT32 controlID = 0,	// control ID
+								SYSTEMBAR_ILLEGAL,	  // SystemBarType GroupBarID = SYSTEMBAR_ILLEGAL,	// group bar ID
+				 				TRUE,	  // BOOL ReceiveMessages = TRUE,	// BODGE
+				 				FALSE,	  // BOOL Smart = FALSE,
+				 				TRUE,	  // BOOL Clean = TRUE,   
+								NULL,	  // OpDescriptor *pVertOpDesc = NULL,
+								0,	  // UINT32 OneOpenInstID = 0,		
+								0,	  // UINT32 AutoStateFlags = 0,
+								TRUE	  // BOOL fCheckable = FALSE
+								)
 			
+PORTNOTE("other", "Removed Preview Dialog")
+#ifndef EXCLUDE_FROM_XARALX
 //#if _DEBUG
 			&& BitmapExportPreviewDialog::Init()
 //#endif
 			&& PreviewDialog::Init()
+#endif
 			);
 }               
     
@@ -3466,13 +3500,12 @@ OpState	OpDisplayBitmapGallery::GetState(String_256* UIDescription, OpDescriptor
 	OpState OpSt;
 
 	// If the gallery is currenty open, then the menu item should be ticked
-	String_32 Name = _R(IDS_SGBITMAP_GALLERY_NAME); // "Bitmap gallery";
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_BITMAPSGALLERY));
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(BitmapSGallery))
-			OpSt.Ticked = pDialogBarOp->IsVisible();
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(BitmapSGallery))
+			OpSt.Ticked = pSuperGallery->IsVisible();
 	}
 
 	// If there are no open documents, you can't toggle the gallery
@@ -3498,19 +3531,21 @@ OpState	OpDisplayBitmapGallery::GetState(String_256* UIDescription, OpDescriptor
 
 void OpDisplayBitmapGallery::Do(OpDescriptor*)
 {
-	String_32 Name = _R(IDS_SGBITMAP_GALLERY_NAME); // "Bitmap gallery";
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_BITMAPSGALLERY));
 
-	if (pDialogBarOp != NULL)
+	if (!pSuperGallery)
+		pSuperGallery = new BitmapSGallery();
+
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(BitmapSGallery))
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(BitmapSGallery))
 		{
 			// Toggle the visibility of the gallery window
-			pDialogBarOp->SetVisibility( !pDialogBarOp->IsVisible() );
+			pSuperGallery->SetVisibility( !pSuperGallery->IsVisible() );
 
 			// And update the gallery button state
-			SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYBITMAPGALLERY,
-										pDialogBarOp->IsVisible());
+			SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYBITMAPGALLERY),
+										pSuperGallery->IsVisible());
 		}
 #if _DEBUG
 		else
@@ -3518,32 +3553,7 @@ void OpDisplayBitmapGallery::Do(OpDescriptor*)
 #endif
 	}
 
-	ERROR3IF(pDialogBarOp == NULL,"Couldn't find the bitmap gallery bar");
-
-	// Update all button controls that invoke this Op
-	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_DISPLAYBITMAPGALLERY);
-	if (pOpDesc!=NULL)
-	{
-		// Found the opdescriptor. Now find all the gadgets associated with it
-		List Gadgets;
-		if (pOpDesc->BuildGadgetList(&Gadgets))
-		{
-			// Found some. Set the controls accordingly
-			GadgetListItem* pGadgetItem = (GadgetListItem*) Gadgets.GetHead();
-
-			while (pGadgetItem != NULL)
-			{
-				// Set the gadget
-				pGadgetItem->pDialogBarOp->SetBoolGadgetSelected(pGadgetItem->gidGadgetID,
-																	pDialogBarOp->IsVisible());
-				// Find the next gadget
-				pGadgetItem = (GadgetListItem*) Gadgets.GetNext(pGadgetItem);
-			}
-	
-			// Clean out the list
-			Gadgets.DeleteAll();
-		}
-	}
+	ERROR3IF(pSuperGallery == NULL,"Couldn't find the bitmap gallery bar");
 
 	End();
 }
@@ -3569,7 +3579,7 @@ BOOL BitmapSGallery::GetSelectedBitmaps(KernelBitmap*** pOutputArray, UINT32* pO
 	// Init vars
 	ERROR2IF(pOutputArray==NULL || pOutputCount==NULL, FALSE, "NULL output param");
 	KernelBitmap** pBuildingArray = NULL;
-	UINT32 BuildingCount = 0;
+//	UINT32 BuildingCount = 0;
 	
 	// Lets see if any of our items are selected
 	Document* ParentDoc = (Document*) GetApplication()->Documents.GetHead();
@@ -3649,7 +3659,7 @@ BOOL BitmapSGallery::GetBmpInfo(BmpDlgParam* Param)
 
 	UINT32 ListSize = 0;				
 	KernelBitmap** pList = NULL;	
-	BOOL Done = FALSE;
+//	BOOL Done = FALSE;
 	
 	if (!GetSelectedBitmaps(&pList, &ListSize))
 		return FALSE;
@@ -3692,10 +3702,15 @@ BOOL BitmapSGallery::GetBmpInfo(BmpDlgParam* Param)
 			if (pOILBitmap == NULL)
 				return FALSE;
 
+PORTNOTE("other", "Removed XPE hooks")
+#ifndef EXCLUDE_FROM_XARALX
 			IXMLDOMDocumentPtr pEditsList = NULL;
 			KernelBitmap* pMaster = NULL;
 			pKernelBitmap->GetXPEInfo(pMaster, pEditsList);
 			BOOL bIsXPE = (pMaster!=NULL && pEditsList!=NULL);
+#else
+			BOOL bIsXPE = FALSE;
+#endif
 
 			//  Get the bitmap name details.
 			Param->SetBitmapName(pOILBitmap->GetName());

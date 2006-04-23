@@ -468,8 +468,8 @@ PORTNOTE("other","Removed various bevel usage")
 //#endif
 			OpDragBox::Init() &&				// drag operation base-class
 			OpQuality::Init() &&				// init the OpQuality operations
-#ifndef EXCLUDE_FROM_XARALX
 			BmpDlg::Init() &&					// Register Bitmap Properties Dialog
+#ifndef EXCLUDE_FROM_XARALX
 			GIFAnimationPropertyTabsDlg::Init() &&	// Register the GIF animation tabs dialog
 			AnimExOptns::Init() &&					// Register the Animation Export Options tabs dialog	
 			OpConvertPathToShapes::Declare() &&		// convert path to shapes operation

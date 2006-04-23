@@ -227,7 +227,7 @@ protected:
 	// Useful set up functions
 			BOOL	InitDialog();
 			BOOL	SetUpCallBack();
-	static	TCHAR*	HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData);
+	static	TCHAR*	HelpCallbackHandler(wxWindow * Window, UINT32 Item, void *UserData);
 	static	BOOL	PreviewDialog::GetStatusLineText(PreviewDialog *pPrvDlg, UINT32 GadgetID,String_256 *Result);
 			BOOL	DoRegenerateFrames();
 			void	SetPreviewDialogToIdleState(ReDrawInfoType* pExtraInfo);

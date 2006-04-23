@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layergal.h"	// For OpDisplayLayerGallery et al
 //#include "newcol.h"		// For NewColourDlg
 #include "sgallery.h"	// For SGalleryOptionsDlg and SGallerySearchDlg
-//#include "sgbitmap.h"	// For OpDisplayBitmapGallery
+#include "sgbitmap.h"	// For OpDisplayBitmapGallery
 #include "sgcolour.h"	// For OpDisplayColourGallery && ColourSGallery::Init
 //#include "sgfonts.h"	// For OpDisplayFontsGallery
 //#include "sglcart.h"	// For OpDisplayLibClipartGallery et al
@@ -192,8 +192,11 @@ PORTNOTE("galleries", "Excluded various galleries")
 				ColourNameDlg::Init()				&&
 #ifndef EXCLUDE_FROM_XARALX
 				NewColourDlg::Init()				&&
+#endif
+#ifdef _DEBUG // For now bitmap gallery only on debug builds
 				OpDisplayBitmapGallery::Init()		&&
-
+#endif
+#ifndef EXCLUDE_FROM_XARALX
 				OpDisplayFontsGallery::Init()		&&
 #endif // EXCLUDE_FROM_XARALX
 #endif // STANDALONE

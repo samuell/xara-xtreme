@@ -191,31 +191,19 @@ void BmpDlg::UpdateInterpolationCheckbox()
 	// get the current state
 	BOOL bState = GetBoolGadgetSelected(_R(IDC_BMP_ALWAYS_INTERPOLATE));
 
+	// this code is broken. How can a BOOL return have 3 states? -AMB
+
 	switch(bState)
 	{
-	case BST_INDETERMINATE:
+	case TRUE:
 		{
-			// currently the checkbox is set to 'many'
-			// i.e. several bmps are selected, and their interpolation settings vary
-			// --> Tick the box (interpolate them all)
-			bState = BST_CHECKED;
-			break;
-		}
-	case BST_UNCHECKED:
-		{
-			bState = BST_CHECKED;
-			break;
-		}
-	case BST_CHECKED:
-		{
-			bState = BST_UNCHECKED;
+			bState = FALSE;
 			break;
 		}
 	default:
 		{
-			// this should never happen!
-			ERROR3("BmpDlg::UpdateInterpolationCheckbox - 3-state checkbox has invalid value");
-			return;
+			bState = TRUE;
+			break;
 		}
 	}
 
@@ -293,25 +281,15 @@ MsgResult BmpDlg::Message(Msg* Message)
 			case DIM_TEXT_CHANGED:
 				{
 					// A control on the dialog box has been typed in.
-					switch (Msg->GadgetID)	
-					{	
-						case _R(IDC_SETDELAY):
-							SetDelayChanged(TRUE);
-					}
+					if (Msg->GadgetID == _R(IDC_SETDELAY))
+						SetDelayChanged(TRUE);
 				}
 			break;
 			case DIM_LFT_BN_CLICKED:
 				{
 					// Left button clicked.
-					switch (Msg->GadgetID)	
-					{	
-						case _R(IDC_BMP_ALWAYS_INTERPOLATE):
-						{
-							UpdateInterpolationCheckbox();
-							break;
-						}
-
-					}
+					if (Msg->GadgetID == _R(IDC_BMP_ALWAYS_INTERPOLATE))
+						UpdateInterpolationCheckbox();
 				}
 			break;
 			default:
@@ -545,33 +523,36 @@ BOOL BmpDlg::InitDialog()
 		SetStringGadgetValue(_R(IDC_NAME), _R(IDS_MANY) );		// Name details
 	
 		if(pParam->GetSameFormat())
-			SetStringGadgetValue(_R(IDC_FORMAT), &pParam->GetBitmapFormat());	// Format details.	
+		{
+			SetStringGadgetValue(_R(IDC_FORMAT), pParam->GetBitmapFormat());	// Format details.	
+		}
 		else
 			SetStringGadgetValue(_R(IDC_FORMAT), _R(IDS_MANY));
 		
 		// Change the size field and enter the measurements.
 		SetStringGadgetValue(_R(IDC_SIZEI), _R(IDS_TOTALSIZE) );
-		SetStringGadgetValue(_R(IDC_SIZEII), &pParam->GetMemoryUsed());
+		SetStringGadgetValue(_R(IDC_SIZEII), pParam->GetMemoryUsed());
 
 		// Dimensions info
 		if(pParam->GetSameDimensions())
 		{
 			String_256 DimensionsInfo; //  = BitmapWidth+" by "+BitmapHeight+" pixels,  "+BitmapCols;
-			DimensionsInfo.MakeMsg(_R(IDS_SGBITMAP_FULLINFO), (TCHAR *)pParam->GetBitmapWidth(), (TCHAR *)pParam->GetBitmapHeight());
-			SetStringGadgetValue(_R(IDC_DIMENSIONS), &DimensionsInfo);
+			DimensionsInfo.MakeMsg(_R(IDS_SGBITMAP_FULLINFO), (TCHAR *)pParam->GetBitmapWidth(),
+									(TCHAR *)pParam->GetBitmapHeight());
+			SetStringGadgetValue(_R(IDC_DIMENSIONS), DimensionsInfo);
 		}
 		else
 			SetStringGadgetValue(_R(IDC_DIMENSIONS), _R(IDS_MANY));
 		
 		// Colour Info
 		if(pParam->GetSameColors())
-			SetStringGadgetValue(_R(IDC_COLOURS), &pParam->GetBitmapCols());
+			SetStringGadgetValue(_R(IDC_COLOURS), pParam->GetBitmapCols());
 		else
 			SetStringGadgetValue(_R(IDC_COLOURS), _R(IDS_MANY));
 		
 		// Transparency Info
 		if (pParam->GetSameTranspType())
-			SetStringGadgetValue(_R(IDC_TRANSPARENT), &pParam->GetBitmapTranspType());
+			SetStringGadgetValue(_R(IDC_TRANSPARENT), pParam->GetBitmapTranspType());
 		else
 			SetStringGadgetValue(_R(IDC_TRANSPARENT), _R(IDS_MANY));	
 		
@@ -587,7 +568,7 @@ BOOL BmpDlg::InitDialog()
 		else
 		{
 			// grey-out the box to represent 'many' different interpolation settings
-			SetBoolGadgetSelected(_R(IDC_BMP_ALWAYS_INTERPOLATE), BST_INDETERMINATE );
+			SetLongGadgetValue(_R(IDC_BMP_ALWAYS_INTERPOLATE), 2 );
 		}
 
 
@@ -628,10 +609,10 @@ BOOL BmpDlg::InitDialog()
 		if(pParam->GetSameRestoreType())
 		{
 			// Set up the list for our Animation Restore types.
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_NOTHING)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_LEAVEASIS)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_BACKGROUND)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_PREVIOUS)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_NOTHING)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_LEAVEASIS)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_BACKGROUND)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_PREVIOUS)));
 			SetComboListLength  (_R(IDC_SETREMOVAL));			
 
 			// Select the correct restore tpye for the List box.
@@ -649,20 +630,21 @@ BOOL BmpDlg::InitDialog()
 	}
 	else // Only one Bitmap is currently selected.
 	{
-		SetStringGadgetValue(_R(IDC_NAME), &pParam->GetBitmapName());		// Name details.
+		SetStringGadgetValue(_R(IDC_NAME), pParam->GetBitmapName());		// Name details.
 		
-		SetStringGadgetValue(_R(IDC_FORMAT), &pParam->GetBitmapFormat());	// Format details.	
+		SetStringGadgetValue(_R(IDC_FORMAT), pParam->GetBitmapFormat());	// Format details.	
 		
-		SetStringGadgetValue(_R(IDC_SIZEII), &pParam->GetMemoryUsed());		// Memeory details.	
+		SetStringGadgetValue(_R(IDC_SIZEII), pParam->GetMemoryUsed());		// Memeory details.	
 		
 		String_256 DimensionsInfo; //  = BitmapWidth+" by "+BitmapHeight+" pixels,  "+BitmapCols;
 
-		DimensionsInfo.MakeMsg(_R(IDS_SGBITMAP_FULLINFO), (TCHAR *)pParam->GetBitmapWidth(), (TCHAR *)pParam->GetBitmapHeight());
-		SetStringGadgetValue(_R(IDC_DIMENSIONS), &DimensionsInfo);			// Dimensions details
+		DimensionsInfo.MakeMsg(_R(IDS_SGBITMAP_FULLINFO), (TCHAR *)pParam->GetBitmapWidth(),
+								(TCHAR *)pParam->GetBitmapHeight());
+		SetStringGadgetValue(_R(IDC_DIMENSIONS), DimensionsInfo);			// Dimensions details
 
-		SetStringGadgetValue(_R(IDC_COLOURS), &pParam->GetBitmapCols());	// Colour detalis.
+		SetStringGadgetValue(_R(IDC_COLOURS), pParam->GetBitmapCols());	// Colour detalis.
 
-		SetStringGadgetValue(_R(IDC_TRANSPARENT), &pParam->GetBitmapTranspType());	// Colour detalis.
+		SetStringGadgetValue(_R(IDC_TRANSPARENT), pParam->GetBitmapTranspType());	// Colour detalis.
 		
 		SetLongGadgetValue(_R(IDC_SETDELAY), pParam->GetAnimDelay());		// Delay details.
 
@@ -704,10 +686,10 @@ BOOL BmpDlg::InitDialog()
 			}
 	*/
 			// Set up the list for our Animation Restore types.
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_NOTHING)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_LEAVEASIS)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_BACKGROUND)));
-			SetStringGadgetValue(_R(IDC_SETREMOVAL), &String_32(_R(IDS_RESTORE_PREVIOUS)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_NOTHING)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_LEAVEASIS)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_BACKGROUND)));
+			SetStringGadgetValue(_R(IDC_SETREMOVAL), String_32(_R(IDS_RESTORE_PREVIOUS)));
 			SetComboListLength  (_R(IDC_SETREMOVAL));			
 			SetSelectedValueIndex(_R(IDC_SETREMOVAL), pParam->GetRestoreType());
 	}
