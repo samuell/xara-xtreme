@@ -112,6 +112,13 @@ enum wxCamArtControlStyle
 	wxCACS_ALWAYS3D			= CAF_ALWAYS3D,
 	wxCACS_ALLOWHOVER		= CAF_ALLOWHOVER,
 	wxCACS_NOINTERNALBORDER	= CAF_NOINTERNALBORDER,
+	wxCACS_TEXT				= CAF_TEXT,
+	wxCACS_EXACTFIT			= CAF_EXACTFIT,
+	wxCACS_HALFHEIGHT		= CAF_HALFHEIGHT,
+	wxCACS_TOP				= CAF_TOP,
+	wxCACS_BOTTOM			= CAF_BOTTOM,
+	wxCACS_LEFT				= CAF_LEFT,
+	wxCACS_RIGHT			= CAF_RIGHT,
 
 	wxCACS_DEFAULT			= 0
 };
@@ -212,7 +219,7 @@ public:
 	void NewBitmap() {FindBitmap(); Refresh();}
 	
 	virtual void SetStyle(wxCamArtControlStyle style) { m_CamArtControlStyle=style; NewBitmap(); }
-	virtual wxCamArtControlStyle GetStyle() { return m_CamArtControlStyle;}
+	virtual wxCamArtControlStyle GetStyle() const { return m_CamArtControlStyle;}
 
 	virtual void SetValue(UINT32 value)
 		{

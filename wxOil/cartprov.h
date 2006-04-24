@@ -120,6 +120,14 @@ enum CamArtFlags
 	CAF_PUSHBUTTON		= 1<<6,
 	CAF_TOGGLEBUTTON	= 1<<7, // unused here, but for the CACS_ stuff
 	CAF_ALLOWHOVER		= 1<<8,
+	CAF_TEXT			= 1<<9,
+	CAF_EXACTFIT		= 1<<10, // For wxCACS
+	CAF_HALFHEIGHT		= 1<<11, // For wxCACS
+
+	CAF_TOP				= 1<<12,
+	CAF_BOTTOM			= 1<<13,
+	CAF_LEFT			= 1<<14,
+	CAF_RIGHT			= 1<<15,
 
 	CAF_BUTTONHOVER		= 1<<16, // this is set if the pointer IS CURRENTLY hovering
 	CAF_ALWAYS3D		= 1<<17, // 3D even when not pushed in
@@ -204,9 +212,9 @@ public:
 
 	void GetBitmapEvent(wxCamArtProviderEvent &event);
 	void InvalidateArtEvent(wxCamArtProviderEvent &event);
-	void Draw (wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags = CAF_DEFAULT);
+	void Draw (wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags = CAF_DEFAULT, const wxString &text = wxEmptyString);
 
-	wxSize GetSize(ResourceID r, CamArtFlags Flags=CAF_DEFAULT);
+	wxSize GetSize(ResourceID r, CamArtFlags Flags=CAF_DEFAULT, const wxString &text = wxEmptyString);
 	
 	void EnsureBitmapLoaded(ResourceID Resource, BOOL SkipArtLoad = FALSE);
 	void EnsureChildBitmapsLoaded(wxWindow * pWindow = NULL, BOOL SkipArtLoad = FALSE);
@@ -217,7 +225,7 @@ public:
 	static CamArtFlags GetBitmapFlags(const wxString &str);
 	static wxString MakeBitmapFlagString(const CamArtFlags flags);
 
-private:
+protected:
 	ResIDWithFlagsToBitmapPtr::iterator Find(ResourceID Resource, CamArtFlags Flags, BOOL SkipArtLoad);
 
 	ResourceIDWithFlags CombineFlags(ResourceID Resource, CamArtFlags Flags) { return Resource | (((UINT64)Flags)<<32) ; }
@@ -232,6 +240,8 @@ private:
 	void InvalidateAllArtInChildren(wxWindow * pWindow);
 	void DeleteHashContents();
 	void ArtLoad(BOOL newbitmaps = FALSE, BOOL defer=TRUE);
+
+	wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text = wxEmptyString);
 
 	ResIDWithFlagsToBitmapPtr * m_pHash;
 	BOOL m_GetBitmapEventPending;

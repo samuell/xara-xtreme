@@ -256,12 +256,14 @@ sub WriteBitmapButton
 {
     my $name = shift @_;
     my $optoken = shift @_;
+    my $textlabel = shift @_;
     print STDOUT $ddindent. "            <object class=\"sizeritem\">\n";
-    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
-    printf STDOUT $ddindent."                <border>%d</border>\n",$dd?0:1;
+    printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL%s</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL",($textlabel ne "")?"|wxEXPAND":"";
+    printf STDOUT $ddindent."                <border>%d</border>\n",$dd?(($textlabel ne "")?1:0):1;
     print STDOUT $ddindent. "                <object class=\"wxCamArtControl\" name=\"$name\">\n";
-    printf STDOUT $ddindent."                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER%s%s</camartstyle>\n", IsVertical()?"|wxCACS_TOOLBACKGROUND":"",(IsVertical()||IsToggle($name))?"|wxCACS_TOGGLEBUTTON":"";
+    printf STDOUT $ddindent."                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER%s%s%s%s</camartstyle>\n", IsVertical()?"|wxCACS_TOOLBACKGROUND":"",(IsVertical()||IsToggle($name))?"|wxCACS_TOGGLEBUTTON":"",($textlabel ne "")?"|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER":"",$dd?"|wxCACS_HALFHEIGHT":"";
     ConvertOptoken($optoken) if ($optoken ne "");
+    printf STDOUT $ddindent."                    <size>%d,18</size>\n",GetSize($name, -1) if ($textlabel ne "");
     BubbleHelp();
     print STDOUT $ddindent. "                </object>\n";
     print STDOUT $ddindent. "            </object>\n";
@@ -346,6 +348,11 @@ sub WriteButton
     my $name = shift @_;
     my $optoken = shift @_;
     my $label = GetStaticLabel($name);
+    if ($dd)
+    {
+	WriteBitmapButton($name, $optoken, $label);
+	return;
+    }
     print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>0</border>\n";
@@ -559,7 +566,7 @@ sub WriteControl
     }
     else
     {
-	WriteBitmapButton($name,$optoken);
+	WriteBitmapButton($name,$optoken,"");
     }
 }
 

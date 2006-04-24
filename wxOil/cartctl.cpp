@@ -187,7 +187,21 @@ BOOL wxCamArtControl::Create( wxWindow * parent, wxWindowID id, const wxPoint& p
 wxSize wxCamArtControl::DoGetBestSize() const
 {
 	((wxCamArtControl *)this)->FindBitmap();
-	return m_BestSize;
+
+	wxSize ret = m_BestSize; // ret( wxControl::DoGetBestSize() );
+
+	if ((GetStyle() & wxCACS_TEXT) && (!(GetStyle() & wxCACS_EXACTFIT)))
+	{
+		wxSize DefaultSize;
+		DefaultSize=wxButton::GetDefaultSize();
+		if (GetStyle() & wxCACS_HALFHEIGHT)
+			DefaultSize.y = (DefaultSize.y/2)-2;
+		if (ret.x < DefaultSize.x) ret.x = DefaultSize.x;
+		if (ret.y < DefaultSize.y) ret.y = DefaultSize.y;
+	}
+
+	CacheBestSize(ret);
+	return ret;
 }
 
 /********************************************************************************************
@@ -208,7 +222,7 @@ wxSize wxCamArtControl::DoGetBestSize() const
 
 void wxCamArtControl::FindBitmap()
 {
-	m_BestSize=(CamArtProvider::Get())->GetSize((ResourceID)GetId(), GetArtFlags());
+	m_BestSize=(CamArtProvider::Get())->GetSize((ResourceID)GetId(), GetArtFlags(), GetLabel());
 	return;
 }
 
@@ -233,7 +247,7 @@ void wxCamArtControl::OnPaint(wxPaintEvent & event)
 	wxPaintDC dc(this);
 
 	wxRect rect = GetClientRect();
-	CamArtProvider::Get()->Draw(dc, rect, GetId(), GetArtFlags());
+	CamArtProvider::Get()->Draw(dc, rect, GetId(), GetArtFlags(), GetLabel());
 }
 
 
@@ -446,12 +460,19 @@ void wxCamArtControl::Invoke()
 
 wxCamArtControlXmlHandler::wxCamArtControlXmlHandler() : wxXmlResourceHandler()
 {
+	XRC_ADD_STYLE(wxCACS_TEXT);
 	XRC_ADD_STYLE(wxCACS_TOOLBACKGROUND);
 	XRC_ADD_STYLE(wxCACS_PUSHBUTTON);
 	XRC_ADD_STYLE(wxCACS_TOGGLEBUTTON);
 	XRC_ADD_STYLE(wxCACS_ALWAYS3D);
 	XRC_ADD_STYLE(wxCACS_ALLOWHOVER);
 	XRC_ADD_STYLE(wxCACS_NOINTERNALBORDER);
+	XRC_ADD_STYLE(wxCACS_HALFHEIGHT);
+	XRC_ADD_STYLE(wxCACS_EXACTFIT);
+	XRC_ADD_STYLE(wxCACS_TOP);
+	XRC_ADD_STYLE(wxCACS_BOTTOM);
+	XRC_ADD_STYLE(wxCACS_LEFT);
+	XRC_ADD_STYLE(wxCACS_RIGHT);
 	AddWindowStyles();
 }
 

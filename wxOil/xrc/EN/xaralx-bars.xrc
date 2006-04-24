@@ -1368,14 +1368,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_APPLY">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Apply</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
                                 </object>
@@ -1388,14 +1385,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_REDEFINE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Redefine</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_REDEFINE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Redefine from selection</tooltip>
                                     <help>Redefine this item from the document selection</help>
                                 </object>
@@ -1415,14 +1409,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_NEW">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>New...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Create new item</tooltip>
                                     <help>Create a new item (will duplicate a selected item)</help>
                                 </object>
@@ -1435,14 +1426,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_EDIT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Edit</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_EDIT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Edit this item</tooltip>
                                     <help>Edit this item</help>
                                 </object>
@@ -1462,14 +1450,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_DELETE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Delete</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Delete items</tooltip>
                                     <help>Delete all selected items</help>
                                 </object>
@@ -1482,14 +1467,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_NAME">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Name...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_NAME">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Rename this item</tooltip>
                                     <help>Rename this item</help>
                                 </object>
@@ -1509,14 +1491,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_MENU">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Options...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
                                 </object>
@@ -1529,14 +1508,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_COLGAL_BACKGROUND">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Background</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_COLGAL_BACKGROUND">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Set Page Background</tooltip>
                                     <help>Set Page Background</help>
                                 </object>
@@ -1556,14 +1532,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -1609,14 +1582,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_NEW">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>New...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>New layer</tooltip>
                                     <help>Create a new layer</help>
                                 </object>
@@ -1629,14 +1599,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_COPY">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Copy...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_COPY">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Copy layer</tooltip>
                                     <help>Copy the selected layer and all its contents</help>
                                 </object>
@@ -1656,14 +1623,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_PROPERTIES">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Properties...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_PROPERTIES">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Layer properties...</tooltip>
                                     <help>Opens the properties dialog for the selected layer</help>
                                 </object>
@@ -1676,14 +1640,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_DELETE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Delete</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Delete layer</tooltip>
                                     <help>Delete the selected layer and all its contents</help>
                                 </object>
@@ -1703,14 +1664,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LAYER_MOVE_TO_ACTIVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Move</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LAYER_MOVE_TO_ACTIVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Move to current layer</tooltip>
                                     <help>Move the selected objects to the current layer</help>
                                 </object>
@@ -1723,14 +1681,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -1799,14 +1754,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_NEW_NODLG">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>New</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_NEW_NODLG">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>IDBBL_NEWFRAME</tooltip>
                                     <help>IDS_FRAME_STATUS_NEW</help>
                                 </object>
@@ -1819,14 +1771,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_COPY_NODLG">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Copy</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_COPY_NODLG">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>IDBBL_COPYFRAME</tooltip>
                                     <help>IDS_FRAME_STATUS_COPY</help>
                                 </object>
@@ -1846,15 +1795,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_PROPERTIES">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Properties...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_PROPERTIES">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>FrameProperties</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -1865,15 +1811,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_FRAME_DELETE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Delete</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_FRAME_DELETE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>DeleteFrame</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -1891,15 +1834,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_PREVIEW">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Preview...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_PREVIEW">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>GrabFrame</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -1910,14 +1850,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -1986,14 +1923,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_CREATE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Insert</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_CREATE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Insert bitmap object</tooltip>
                                     <help>Insert a new bitmap object</help>
                                 </object>
@@ -2006,14 +1940,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_TRACE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Trace...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_TRACE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Trace bitmap</tooltip>
                                     <help>Trace a bitmap</help>
                                 </object>
@@ -2033,14 +1964,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_FILL">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Fill</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_FILL">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply as fill</tooltip>
                                     <help>Apply a bitmap as a fill</help>
                                 </object>
@@ -2053,14 +1981,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_PLUGINS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Effects</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_PLUGINS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Special Effects</tooltip>
                                     <help>Plug-ins</help>
                                 </object>
@@ -2080,14 +2005,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_TEXTURE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Transp</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_TEXTURE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply as transparency</tooltip>
                                     <help>Apply a bitmap as a transparency</help>
                                 </object>
@@ -2100,14 +2022,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_MENU">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Options...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
                                 </object>
@@ -2127,14 +2046,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_DELETE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Delete</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Delete items</tooltip>
                                     <help>Delete all selected items</help>
                                 </object>
@@ -2147,14 +2063,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_SAVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Save...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_SAVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Save bitmap</tooltip>
                                     <help>Save a bitmap</help>
                                 </object>
@@ -2174,14 +2087,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_BACKGROUND">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Background</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_BACKGROUND">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Set page background</tooltip>
                                     <help>Set page background</help>
                                 </object>
@@ -2194,14 +2104,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_PROPS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Properties...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_PROPS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Gallery properties</tooltip>
                                     <help>Properties</help>
                                 </object>
@@ -2221,14 +2128,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -2241,14 +2145,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_PREVIEW">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Preview...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_PREVIEW">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Show preview of bitmaps</tooltip>
                                     <help>Preview</help>
                                 </object>
@@ -2294,14 +2195,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_APPLY">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Apply</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
                                 </object>
@@ -2314,14 +2212,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -2410,15 +2305,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_APPLY">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Apply</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>ApplyNamesToSelectedObjects</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2429,15 +2321,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Remove</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RemoveNamesFromSelectedObjects</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2455,15 +2344,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_NEW">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>New...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>NameObjectsDlg</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2474,15 +2360,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_NAMEGAL_RENAME">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Rename</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_NAMEGAL_RENAME">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RenameObjectsDlg</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2500,15 +2383,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_NAMEGAL_SELECT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Select</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_NAMEGAL_SELECT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>SelectUnionOfSets</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2519,15 +2399,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_NAMEGAL_INTERSECT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Intersect</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_NAMEGAL_INTERSECT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>SelectIntersectOfSets</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2545,15 +2422,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_DELETE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Delete</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>DeleteNamesFromAllObjects</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2564,15 +2438,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_REDEFINE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Redefine</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_REDEFINE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RedefineNamesAsSelectedObjects</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2590,15 +2461,12 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_NAMEGAL_EXPORT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Export</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_NAMEGAL_EXPORT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>ExportSets</optoken>
+                                    <size>-1,18</size>
                                 </object>
                             </object>
                         </object>
@@ -2609,14 +2477,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -2675,14 +2540,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_APPLY">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Apply</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
                                 </object>
@@ -2695,14 +2557,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Remove</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
                                 </object>
@@ -2722,14 +2581,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_INSTALL">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Install</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_INSTALL">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Install selected fonts</tooltip>
                                     <help>Installs the selected fonts onto your system</help>
                                 </object>
@@ -2742,14 +2598,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_ADD_FONTS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Disc fonts...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_FONTS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Add fonts from disc</tooltip>
                                     <help>Add new fonts from your hard drive or CD ROM</help>
                                 </object>
@@ -2769,14 +2622,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_DEINSTALL">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Uninstall</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_DEINSTALL">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Uninstall selected fonts</tooltip>
                                     <help>Uninstalls the selected fonts from your system</help>
                                 </object>
@@ -2789,14 +2639,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_MENU">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Options...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
                                 </object>
@@ -2816,14 +2663,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_WEB_FONTS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Get fonts...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_FONTS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Connect to font gallery on Xara's web site</tooltip>
                                     <help>Click to download fonts and their thumbnails from Xara's web site</help>
                                 </object>
@@ -2836,14 +2680,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Stop loading</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Fonts... to start downloading them again)</help>
                                 </object>
@@ -2863,14 +2704,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -2916,14 +2754,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_OPEN">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Open</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_OPEN">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Open as new document</tooltip>
                                     <help>Open this item as a new document</help>
                                 </object>
@@ -2936,14 +2771,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Remove</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
                                 </object>
@@ -2963,14 +2795,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_IMPORT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Import</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_IMPORT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Import into this document</tooltip>
                                     <help>Import this item into the selected document</help>
                                 </object>
@@ -2983,14 +2812,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_ADD_CLIPART">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Disc clipart...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_CLIPART">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Add clipart from disc</tooltip>
                                     <help>Add new clipart from your local hard disc</help>
                                 </object>
@@ -3010,14 +2836,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_WEB_CLIPART">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Get clipart...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_CLIPART">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Connect to clipart gallery on Xara's web site</tooltip>
                                     <help>Click to download clipart and their thumbnails from Xara's web site</help>
                                 </object>
@@ -3030,14 +2853,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Stop loading</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Clipart... to start downloading them again)</help>
                                 </object>
@@ -3057,14 +2877,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_MENU">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Options...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
                                 </object>
@@ -3077,14 +2894,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -3109,14 +2923,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_UPDATE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Batch</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_UPDATE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Start batching</tooltip>
                                     <help>Start batching from the selected entry</help>
                                 </object>
@@ -3182,14 +2993,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_IMPORT">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Import</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_IMPORT">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Import into this document</tooltip>
                                     <help>Import this item into the selected document</help>
                                 </object>
@@ -3202,14 +3010,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_REMOVE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Remove</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
                                 </object>
@@ -3229,14 +3034,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_FILL">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Fill</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_FILL">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply as fill</tooltip>
                                     <help>Apply a bitmap as a fill</help>
                                 </object>
@@ -3249,14 +3051,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_ADD_FILLS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Disc fills...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_FILLS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Add fills from disc</tooltip>
                                     <help>Add new fills from your hard drive or CD ROM</help>
                                 </object>
@@ -3276,14 +3075,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_TEXTURE">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Transp</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_TEXTURE">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Apply as transparency</tooltip>
                                     <help>Apply a bitmap as a transparency</help>
                                 </object>
@@ -3296,14 +3092,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_MENU">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Options...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
                                 </object>
@@ -3323,14 +3116,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_WEB_FILLS">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Get fills...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_FILLS">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Connect to fills gallery on Xara's web site</tooltip>
                                     <help>Click to download fills and their thumbnails from Xara's web site</help>
                                 </object>
@@ -3343,14 +3133,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_LIBGAL_STOP_LOADING">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Stop loading</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Fills... to start downloading them again)</help>
                                 </object>
@@ -3370,14 +3157,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_BMPGAL_BACKGROUND">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Background</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_BMPGAL_BACKGROUND">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Set page background</tooltip>
                                     <help>Set page background</help>
                                 </object>
@@ -3390,14 +3174,11 @@
                         <object class="wxBoxSizer">
                             <orient>wxHORIZONTAL</orient>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>0</border>
-                                <object class="wxButton" name="IDC_GALLERY_HELP">
-                                    <font>
-                                        <size>8</size>
-                                    </font>
-                                    <label>Help...</label>
-                                    <size>-1,-1</size>
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
+                                <border>1</border>
+                                <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
                                 </object>
@@ -3765,7 +3546,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPLEFT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -3774,7 +3555,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPRIGHT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -3790,7 +3571,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPUP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -3799,7 +3580,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPDOWN">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -3965,7 +3746,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPLEFT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -3974,7 +3755,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPRIGHT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -3990,7 +3771,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPUP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -3999,7 +3780,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPDOWN">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -4151,7 +3932,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPLEFT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -4160,7 +3941,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPRIGHT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -4176,7 +3957,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPUP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Reduce the value in the editable field to the left</help>
                                 </object>
@@ -4185,7 +3966,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_EDIT_REGSHAPETOOL_BUMPDOWN">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Increase the value in the editable field to the left</help>
                                 </object>
@@ -4688,7 +4469,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTX_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle left</help>
                                 </object>
@@ -4697,7 +4478,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTX_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle right</help>
                                 </object>
@@ -4713,7 +4494,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTY_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle downwards</help>
                                 </object>
@@ -4722,7 +4503,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_FIRSTY_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle upwards</help>
                                 </object>
@@ -4847,7 +4628,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDX_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle left</help>
                                 </object>
@@ -4856,7 +4637,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDX_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle right</help>
                                 </object>
@@ -4872,7 +4653,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDY_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle downwards</help>
                                 </object>
@@ -4881,7 +4662,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_ENDY_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle upwards</help>
                                 </object>
@@ -5006,7 +4787,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDX_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle left</help>
                                 </object>
@@ -5015,7 +4796,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDX_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle right</help>
                                 </object>
@@ -5031,7 +4812,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDY_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Reduce value</tooltip>
                                     <help>Click to move the handle downwards</help>
                                 </object>
@@ -5040,7 +4821,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_PATH_BUMP_SECONDY_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Increase value</tooltip>
                                     <help>Click to move the handle upwards</help>
                                 </object>
@@ -5304,7 +5085,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_X_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>X coordinate of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) X and Y position</help>
                                 </object>
@@ -5313,7 +5094,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_X_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>X coordinate of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) X and Y position</help>
                                 </object>
@@ -5329,7 +5110,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_Y_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Y coordinate of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) X and Y position</help>
                                 </object>
@@ -5338,7 +5119,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_Y_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Y coordinate of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) X and Y position</help>
                                 </object>
@@ -5419,7 +5200,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_W_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Width of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) width and height</help>
                                 </object>
@@ -5428,7 +5209,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_W_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Width of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) width and height</help>
                                 </object>
@@ -5444,7 +5225,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_H_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Height of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) width and height</help>
                                 </object>
@@ -5453,7 +5234,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_H_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Height of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) width and height</help>
                                 </object>
@@ -5628,7 +5409,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_ANGLE_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Angle of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) angle of rotation</help>
                                 </object>
@@ -5637,7 +5418,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_ANGLE_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Angle of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) angle of rotation</help>
                                 </object>
@@ -5653,7 +5434,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_SHEAR_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Skew-angle of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) degree of shearing</help>
                                 </object>
@@ -5662,7 +5443,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SEL_BUMP_SHEAR_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Skew-angle of selection</tooltip>
                                     <help>Increase or decrease the selected object(s) degree of shearing</help>
                                 </object>
@@ -6663,7 +6444,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SUPERSCRIPT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -6677,7 +6458,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SUBSCRIPT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -6752,14 +6533,14 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SPACING_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SPACING_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -6773,14 +6554,14 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_TRACKING_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_TRACKING_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -6855,14 +6636,14 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -6876,14 +6657,14 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                 </object>
                             </object>
                         </object>
@@ -7162,7 +6943,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SOFTSHADOWCENTRE_X_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Position nudge</tooltip>
                                     <help>Use to nudge the position of the selected shadow(s)</help>
                                 </object>
@@ -7171,7 +6952,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SOFTSHADOWCENTRE_X_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Position nudge</tooltip>
                                     <help>Use to nudge the position of the selected shadow(s)</help>
                                 </object>
@@ -7187,7 +6968,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SOFTSHADOWCENTRE_Y_LESS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Position nudge</tooltip>
                                     <help>Use to nudge the position of the selected shadow(s)</help>
                                 </object>
@@ -7196,7 +6977,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SOFTSHADOWCENTRE_Y_MORE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
                                     <tooltip>Position nudge</tooltip>
                                     <help>Use to nudge the position of the selected shadow(s)</help>
                                 </object>

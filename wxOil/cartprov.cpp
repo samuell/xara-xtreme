@@ -570,7 +570,8 @@ void CamArtProvider::EnsureChildBitmapsLoaded(wxWindow * pWindow, BOOL SkipArtLo
 	if (!pWindow) return;
 
 	// Process this one
-	if (pWindow->IsKindOf(CLASSINFO(wxCamArtControl)))
+	if ( (pWindow->IsKindOf(CLASSINFO(wxCamArtControl))) &&
+		 !(((wxCamArtControl*)pWindow)->GetStyle() & wxCACS_TEXT) ) // don't bother finding bitmaps for text ones, as there isn't one!
 		EnsureBitmapLoaded((ResourceID)(pWindow->GetId()), TRUE); // always skip the art load
 
 	// Now process children if any
@@ -731,7 +732,7 @@ wxBitmap * CamArtProvider::FindBitmap(ResourceID Resource, CamArtFlags Flags, BO
 
 /********************************************************************************************
 
->	void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags = 0)
+>	void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags = 0, const wxString &text = wxEmptyString)
 
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
@@ -752,13 +753,8 @@ already have been inflated (wxCamArtControl does this by increasing its client a
 
 ********************************************************************************************/
 
-void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags)
+void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, CamArtFlags Flags, const wxString &text)
 {
-	// Get the bitmap with the correct flags. We here pretend the button is selected if we are
-	// hovering. We can't do this in the control (grrr...) because else by the time the flags get
-	// here we cannot distinguish selection from hover, which means we slab wrongly
-	wxBitmap *pBitmap = FindBitmap(Resource, (CamArtFlags)(Flags|((Flags & CAF_BUTTONHOVER)?CAF_SELECTED:0) ));
-	
 	dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 	dc.SetPen(*wxTRANSPARENT_PEN);
 //	dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
@@ -828,14 +824,60 @@ void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, Ca
 		}
 	}
 
-	// plot the bitmap
-	if (pBitmap)
-		dc.DrawBitmap(*pBitmap, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY, TRUE);
+	// Now apply justification to the object
+	wxRect BestSize(GetSize(Resource, Flags, text));
+	if (BestSize.width != rect.width)
+	{
+		if (Flags & CAF_RIGHT)
+		{
+			bitmapoffsetX += (rect.width-BestSize.width);
+		}
+		else if (Flags & CAF_LEFT)
+		{
+			// do nothing
+		}
+		else
+		{
+			bitmapoffsetX += (rect.width-BestSize.width)/2;
+		}	
+	}	
+	if (BestSize.height != rect.height)
+	{
+		if (Flags & CAF_BOTTOM)
+		{
+			bitmapoffsetY += (rect.height-BestSize.height);
+		}
+		else if (Flags & CAF_TOP)
+		{
+			// do nothing
+		}
+		else
+		{
+			bitmapoffsetY += (rect.height-BestSize.height)/2;
+		}	
+	}	
+
+	if (Flags & CAF_TEXT)
+	{
+		wxString ctext = GetTextInfo(Resource, Flags, dc, text);
+		dc.DrawText(ctext, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY);
+	}
+	else
+	{
+		// Get the bitmap with the correct flags. We here pretend the button is selected if we are
+		// hovering. We can't do this in the control (grrr...) because else by the time the flags get
+		// here we cannot distinguish selection from hover, which means we slab wrongly
+		wxBitmap *pBitmap = FindBitmap(Resource, (CamArtFlags)(Flags|((Flags & CAF_BUTTONHOVER)?CAF_SELECTED:0) ));
+		
+		// plot the bitmap
+		if (pBitmap)
+			dc.DrawBitmap(*pBitmap, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY, TRUE);
+	}
 }
 
 /********************************************************************************************
 
->	wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags=CAF_DEFAULT)
+>	wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags=CAF_DEFAULT, const wxString &text = wxEmptyString)
 
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
@@ -854,20 +896,83 @@ already have been inflated (wxCamArtControl does this by increasing its client a
 
 ********************************************************************************************/
 
-wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags)
+wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &text)
 {
-	wxSize BestSize(24,24);
-	wxBitmap * pBitmap=FindBitmap(r, Flags);
-	if (pBitmap)
+	wxCoord w=24;
+	wxCoord h=24;
+
+	if (Flags & CAF_TEXT)
 	{
-		UINT32 InternalBorderX = (Flags & CAF_NOINTERNALBORDER)?0:2;
-		UINT32 InternalBorderY = (Flags & CAF_NOINTERNALBORDER)?0:1;
-		// 3 extra pixels for push buttons, 2 border (one on each side) and one for push displacement
-		UINT32 extraX=InternalBorderX+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
-		UINT32 extraY=InternalBorderY+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
-		BestSize=wxSize(pBitmap->GetWidth()+extraX, pBitmap->GetHeight()+extraY);
+		wxScreenDC dc;
+		wxString ctext = GetTextInfo(r, Flags, dc, text);
+		dc.GetTextExtent(ctext, &w, &h);
 	}
-	return BestSize;
+	else
+	{
+		wxBitmap * pBitmap=FindBitmap(r, Flags);
+		if (pBitmap)
+		{
+			w=pBitmap->GetWidth();
+			h=pBitmap->GetHeight();
+		}
+	}
+
+	UINT32 InternalBorderX = (Flags & CAF_NOINTERNALBORDER)?0:2;
+	UINT32 InternalBorderY = (Flags & CAF_NOINTERNALBORDER)?0:1;
+	// 3 extra pixels for push buttons, 2 border (one on each side) and one for push displacement
+	UINT32 extraX=InternalBorderX+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
+	UINT32 extraY=InternalBorderY+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
+
+	return wxSize(w+extraX, h+extraY);
+}
+
+/********************************************************************************************
+
+>	wxString CamArtProvider::GetTextInfo(ResourceID r, wxDC &dc, const wxString &text = wxEmptyString)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	24/04/2006
+	Inputs:		r - the resource
+				Flags - the flags
+	Outputs:	-
+	Returns:	The text
+	Purpose:	Sets up the DC and returns the text
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text)
+{
+	// find the name by looking up the ID as a string
+	const TCHAR * tcname=text;
+
+	if (text.IsEmpty())
+	{
+		tcname = CamResource::GetTextFail(r);
+		if (!tcname || ( (tcname[0]==_T('-')) && !tcname[1]) )
+		{
+			// default to object name
+			tcname = CamResource::GetObjectNameFail(r);
+		}
+		
+		if (!tcname)
+		{
+			// If this goes off, then somehow we've been passed a resource ID without a reverse
+			// bitmap lookup. This can normally only happen if the resource ID is corrupted, or
+			// the resources are corrupted
+			ERROR3_PF(("Cannot get text for resource %d",r));
+			return wxEmptyString;
+		}
+	}
+
+	dc.SetTextForeground((f & CAF_GREYED)?wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT):*wxBLACK);
+	wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	font.SetPointSize(7);
+	dc.SetFont(font);
+
+	return wxString(tcname);
 }
 
 /********************************************************************************************
