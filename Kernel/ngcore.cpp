@@ -176,6 +176,7 @@ NameGallery::NameGallery()
 	m_fMenusCreated(FALSE),
 	m_fChildChanges(FALSE)
 {
+	DlgResID = _R(IDD_NAMESGALLERY);
 	ERROR3IF(m_pInstance != 0, "NameGallery::NameGallery: instance already exists");
 	m_pInstance = this;
 	m_BarToIgnoreTargetsOf = "";
@@ -540,11 +541,11 @@ MsgResult NameGallery::Message(Msg* pMessage)
 		switch (pMsg->DlgMsg)
 		{
 		case DIM_CREATE:
-			SGInit::UpdateGalleryButton( OPTOKEN_DISPLAY_NAME_GALLERY, TRUE);
+			SGInit::UpdateGalleryButton( _R(OPTOKEN_DISPLAY_NAME_GALLERY), TRUE);
 			break;
 
 		case DIM_CANCEL:
-			SGInit::UpdateGalleryButton( OPTOKEN_DISPLAY_NAME_GALLERY, FALSE);
+			SGInit::UpdateGalleryButton( _R(OPTOKEN_DISPLAY_NAME_GALLERY), FALSE);
 			break;
 
 		case DIM_LFT_BN_CLICKED:
@@ -564,14 +565,14 @@ MsgResult NameGallery::Message(Msg* pMessage)
 				// By-pass default base class handling for these buttons so the default
 				// bar implementation can automatically invoke the operations defined
 				// for them in bars.ini.
-				return DialogBarOp::Message(pMessage);
+				return DialogOp::Message(pMessage);
 			}
 			if( _R(IDC_GALLERY_APPLY)	== pMsg->GadgetID ||
 				_R(IDC_GALLERY_REDEFINE) == pMsg->GadgetID )
 			{
 				// Do as above, but afterwards check to ensure that (if any of the sets
 				// affected is involved in a stretch) no NodeRegularShapes are involved
-				MsgResult tempMsg = DialogBarOp::Message(pMessage);
+				MsgResult tempMsg = DialogOp::Message(pMessage);
 
 
 				// For every SGNameItem currently selected, check if it is involved in a stretch...
@@ -991,7 +992,7 @@ void NameGallery::SelectionHasChanged()
 	// all gallery buttons is determined by the operations they are attached to, allowing
 	// them to be stand-alone in the original Camelot style.  The base class model is only
 	// used for the display tree redraw and click handling.
-	SetSystemStateChanged(TRUE);
+	DialogBarOp::SetSystemStateChanged(TRUE);
 }
 
 
@@ -1224,8 +1225,12 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 	// list the ops that would allow us to pull a button apart
 	BOOL IsPossiblePullApartOp =  m_LastOpUsed->IS_KIND_OF(TransOperation) && !IS_A(m_LastOpUsed, OpScaleTrans) && !IS_A(m_LastOpUsed, OpSquashTrans);
 	BOOL IsAChangePropertyOp = IS_A(m_LastOpUsed, OpChangeBarProperty);
-	BOOL IsAButtonNoChangingOp =	IS_A(m_LastOpUsed, OpDuplicateBar) || 
+	BOOL IsAButtonNoChangingOp =
+PORTNOTE("other", "Remove OpDuplicateBar and OpShortenBar")
+#ifndef EXCLUDE_FROM_XARALX
+									IS_A(m_LastOpUsed, OpDuplicateBar) || 
 									IS_A(m_LastOpUsed, OpShortenBar) || 
+#endif
 									IS_A(m_LastOpUsed, OpRenameAll);
 
 	// force recursion for these two ops
@@ -1251,7 +1256,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 		// zero the array of bar sizes and other cached bar data
 		memset (m_BarSize,0, sizeof(m_BarSize));
 
-	INT32 TriggeredBar = -1;
+		INT32 TriggeredBar = -1;
 		if (m_TouchedBar >= 0)
 		{
 			if (!SetBSTData(m_TouchedBar, 0, 0, 1, 0))
@@ -1264,6 +1269,8 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 			// adding a bar member is added over button1
 			// so first we have to shuffle the button into the correct place
 			// otherwise the back bar wont be able to expand around it
+PORTNOTE("other", "Removed OpDuplicateBar");
+#ifndef EXCLUDE_FROM_XARALX
 			if (IS_A(m_LastOpUsed, OpDuplicateBar) && pNodeBarProperty->Bar(TriggeredBar).IsLive)
 			{
 			INT32 barDirection = pNodeBarProperty->Bar(TriggeredBar).IsHorizontal ? 1 : 2;
@@ -1279,6 +1286,7 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 
 				FastUpdateNamedSetSizes(); // record the new positions
 			}
+#endif
 		}
 
 	//INT32 TriggersFound = 0; // not needed in the calculation any more but left as it can be useful for debugging
@@ -1621,10 +1629,13 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 		// bar creation should make the bar shuffle as we know no extending is likely to go on
 		if (TriggeredBar == -1)
 		{
+PORTNOTE("other", "Removed OpBarCreation");
+#ifndef EXCLUDE_FROM_XARALX
 			if (IS_A(m_LastOpUsed, OpBarCreation))
 			{
 				TriggeredBar = ((OpBarCreation *)m_LastOpUsed)->GetBarNumber();
 			}
+#endif
 		}
 		
 		// no target found to extend, so give up now!
@@ -1939,7 +1950,12 @@ BOOL NameGallery::FastApplyStretchScan(ObjChangeParam & ObjChange)
 
 	// tidy up after a delete or a shorten bar op has occured to remove some of the properties
 	// from bars that still exist
-	if (m_LastOpUsed->OpStatus == DO && (IS_A(m_LastOpUsed, OpShortenBar) || IS_A(m_LastOpUsed, OpDelete)))
+	if (m_LastOpUsed->OpStatus == DO && (
+PORTNOTE("other", "Removed OpShortenBar")
+#ifndef EXCLUDE_FROM_XARALX											
+											IS_A(m_LastOpUsed, OpShortenBar) ||
+#endif
+											IS_A(m_LastOpUsed, OpDelete)))
 	{
 		pNameGalleryItem = (SGNameItem*) pNames->GetChild();
 		while (pNameGalleryItem)

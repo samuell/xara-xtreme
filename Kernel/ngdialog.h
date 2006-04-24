@@ -240,7 +240,7 @@ public:
 
 protected:
     virtual void Do(OpDescriptor*);
-	static DialogBarOp* FindGallery();
+	static SuperGallery* FindGallery();
 };  
 
 #endif	/* !NGDIALOG_H */

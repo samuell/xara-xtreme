@@ -2497,9 +2497,13 @@
             </object>
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                <border>1</border>
-                <object class="wxCamArtControl" name="IDC_NAMEGAL_PROP_IDX">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                <border>0</border>
+                <object class="wxComboBox" name="IDC_NAMEGAL_PROP_IDX">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
                     <optoken>NameGalleryPropertyIndex</optoken>
                 </object>
             </object>

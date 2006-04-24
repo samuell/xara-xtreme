@@ -669,7 +669,7 @@ protected:
 				if  ((OpHist.ReduceSize((OpHist.GetSize()-1), TRUE)) == FALSE)            \
 					NoMoreUndoOpsToDelete = TRUE;                                 	      \
 															  	                  		  \
-			} while ( (((Ptr) = (AllocExpr))  == NULL)      							  \
+			} while ( (((Ptr) = (AllocExpr))  == NULL)									  \
 					&& (!NoMoreUndoOpsToDelete) ); 									      \
 		                                              									  \
 			if (NoMoreUndoOpsToDelete)           								          \

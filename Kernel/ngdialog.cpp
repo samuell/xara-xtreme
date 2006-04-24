@@ -209,7 +209,7 @@ MsgResult BaseNameObjectsDlg::Message(Msg* pMessage)
 
 		case DIM_TEXT_CHANGED:
 			// Disable the OK/Apply button if there's no document or entered text.
-			EnableGadget(IDOK, !GetStringGadgetValue(_R(IDC_NAMEDLG_NAME), 0).IsEmpty()
+			EnableGadget(_R(IDOK), !GetStringGadgetValue(_R(IDC_NAMEDLG_NAME), 0).IsEmpty()
 							&& Document::GetSelected() != 0);
 			break;
 			
@@ -239,6 +239,9 @@ MsgResult BaseNameObjectsDlg::Message(Msg* pMessage)
 			Close();
 			End();
 			break;
+
+		default:
+			break;
 		}
 	}
 	
@@ -250,13 +253,13 @@ MsgResult BaseNameObjectsDlg::Message(Msg* pMessage)
 	{
 		// Update the description.
 		String_256 strEnter;
-		SetStringGadgetValue(_R(IDC_NAMEDLG_DESC), GetDescription(&strEnter));
+		SetStringGadgetValue(_R(IDC_NAMEDLG_DESC), *GetDescription(&strEnter));
 
 		// And if not changed or empty, also the suggestion.
 		strEnter = GetStringGadgetValue(_R(IDC_NAMEDLG_NAME), 0);
 		if (strEnter.IsEmpty() || strEnter == m_strSuggest)
 		{
-			SetStringGadgetValue(_R(IDC_NAMEDLG_NAME), GetSuggestion(&m_strSuggest));
+			SetStringGadgetValue(_R(IDC_NAMEDLG_NAME), *GetSuggestion(&m_strSuggest));
 			HighlightText(_R(IDC_NAMEDLG_NAME));
 		}
 	}
@@ -266,7 +269,7 @@ MsgResult BaseNameObjectsDlg::Message(Msg* pMessage)
 	{
 		DocChangingMsg* pMsg = (DocChangingMsg*) pMessage;
 		if (pMsg->State == DocChangingMsg::SELCHANGED)
-			EnableGadget(IDOK, pMsg->pNewDoc != 0);
+			EnableGadget(_R(IDOK), pMsg->pNewDoc != 0);
 	}
 
 	// Pass everything on to the base class . . .
@@ -287,8 +290,8 @@ MsgResult BaseNameObjectsDlg::Message(Msg* pMessage)
 void BaseNameObjectsDlg::InitGadgetText()
 {
 	String_256 str;
-	SetStringGadgetValue(_R(IDC_NAMEDLG_DESC), GetDescription(&str));
-	SetStringGadgetValue(_R(IDC_NAMEDLG_NAME), GetSuggestion(&m_strSuggest));
+	SetStringGadgetValue(_R(IDC_NAMEDLG_DESC), *GetDescription(&str));
+	SetStringGadgetValue(_R(IDC_NAMEDLG_NAME), *GetSuggestion(&m_strSuggest));
 	HighlightText(_R(IDC_NAMEDLG_NAME));
 	SetKeyboardFocus(_R(IDC_NAMEDLG_NAME));
 }
@@ -350,9 +353,15 @@ StringBase* NameObjectsDlg::GetDescription(StringBase* pstrDesc)
 		pstrDesc->Load(_R(IDS_NAMEDLG_DESCRIBE_NOSELECT));
 	else
 		if (pSel->Count() == 1)
-			pstrDesc->MakeMsg(_R(IDS_NAMEDLG_DESCRIBE_SELECT), &pSel->Describe(MENU));
+		{
+			String_256 desc=pSel->Describe(MENU);
+			pstrDesc->MakeMsg(_R(IDS_NAMEDLG_DESCRIBE_SELECT), &desc);
+		}
 		else
-			pstrDesc->MakeMsg(_R(IDS_NAMEDLG_DESCRIBE_SELECT_PL), &pSel->Describe(STATUS_BAR));
+		{
+			String_256 desc=pSel->Describe(STATUS_BAR);
+			pstrDesc->MakeMsg(_R(IDS_NAMEDLG_DESCRIBE_SELECT_PL), &desc);
+		}
 
 	return pstrDesc;
 }
@@ -449,7 +458,8 @@ BOOL NameObjectsDlg::DoCommit(const StringBase& strName)
 	// Apply and (do or do not) close the dialog.
 	OpDescriptor* pDesc = OpDescriptor::FindOpDescriptor((TCHAR*) pszTok);
 	ERROR3IF(pDesc == 0, "NameObjectsDlg::DoCommit: can't find descriptor");
-	pDesc->Invoke(&OpParam((INT32) &strName, 0));
+	OpParam param((void *) &strName, 0);
+	pDesc->Invoke(&param);
 	return m_fModeless;
 }
 
@@ -641,7 +651,8 @@ BOOL RenameObjectsDlg::DoCommit(const StringBase& strName)
 	// Rename all the highlighted items to the new name and close.
 	OpDescriptor* pDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_RENAME_ALL);
 	ERROR3IF(pDesc == 0, "RenameObjectsDlg::DoCommit: can't find OPTOKEN_RENAME_ALL");
-	pDesc->Invoke(&OpParam((INT32) &strName, 0));
+	OpParam param((void *) &strName, 0);
+	pDesc->Invoke(&param);
 	return FALSE;
 }
 
@@ -714,11 +725,11 @@ void OpNameGalleryPropIndexDesc::OnControlCreate(OpDescControlCreateMsg* pCreate
 	// Fill up the gadget's list with the names of properties.  These must be in
 	// ascending order of property indices.
 	pCreateMsg->pDlgOp->SetStringGadgetValue(
-							pCreateMsg->SetGadgetID, &String(_R(IDS_NAMEGAL_EXPORT_PROP)));
+							pCreateMsg->SetGadgetID, String(_R(IDS_NAMEGAL_EXPORT_PROP)));
 	pCreateMsg->pDlgOp->SetStringGadgetValue(
-							pCreateMsg->SetGadgetID, &String(_R(IDS_NAMEGAL_SLICE_PROP)));
+							pCreateMsg->SetGadgetID, String(_R(IDS_NAMEGAL_SLICE_PROP)));
 	pCreateMsg->pDlgOp->SetStringGadgetValue(
-							pCreateMsg->SetGadgetID, &String(_R(IDS_NAMEGAL_STRETCH_PROP)));
+							pCreateMsg->SetGadgetID, String(_R(IDS_NAMEGAL_STRETCH_PROP)));
 
 	// Resize the list to fit and update associated gadgets.
 	pCreateMsg->pDlgOp->SetComboListLength(pCreateMsg->SetGadgetID);
@@ -774,7 +785,7 @@ void OpNameGalleryPropIndexDesc::UpdateGadgets()
 			 pgli = (GadgetListItem*) theGadgets.GetNext(pgli))
 		{
 			// Set each control to display the text.
-			pgli->pDialogBarOp->SetSelectedValueIndex(pgli->gidGadgetID, nVal);
+			pgli->pDialogOp->SetSelectedValueIndex(pgli->gidGadgetID, nVal);
 		}
 
 		// Tidy up.
@@ -785,7 +796,7 @@ void OpNameGalleryPropIndexDesc::UpdateGadgets()
 
 
 /**********************************************************************************************
->	static DialogBarOp* OpDisplayNameGallery::FindGallery()
+>	static SuperGallery* OpDisplayNameGallery::FindGallery()
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/5/99
@@ -798,10 +809,10 @@ void OpNameGalleryPropIndexDesc::UpdateGadgets()
 				Also check that bars.ini indicates the bar is of the NameGallery class
 **********************************************************************************************/
 
-DialogBarOp* OpDisplayNameGallery::FindGallery()
+SuperGallery* OpDisplayNameGallery::FindGallery()
 {
-	String id(_R(IDS_SGNAME_GALLERY_NAME));						// "Name gallery"
-	DialogBarOp* pOp = DialogBarOp::FindDialogBarOp(id);
+	SuperGallery* pOp = SuperGallery::FindSuperGallery(_R(IDD_NAMESGALLERY));
+	if (!pOp) pOp=new NameGallery();
 	ERROR3IF(pOp == 0 || pOp->GetRuntimeClass() != CC_RUNTIME_CLASS(NameGallery), 
 		"OpDisplayNameGallery::FindGallery: Can't find the gallery in bars.ini!\n");
 	return pOp;
@@ -821,8 +832,8 @@ OpState	OpDisplayNameGallery::GetState(String_256* UIDescription, OpDescriptor*)
 {
 	// If the gallery is currently open, then the menu item should be ticked
 	OpState OpSt;  
-	DialogBarOp* pDialogBarOp = FindGallery();
-	if (pDialogBarOp != 0) OpSt.Ticked = pDialogBarOp->IsVisible();
+	SuperGallery* pSuperGallery = FindGallery();
+	if (pSuperGallery != 0) OpSt.Ticked = pSuperGallery->IsVisible();
 
 	// If there are no open documents, you can't toggle the gallery
 	OpSt.Greyed = (Document::GetSelected() == 0);
@@ -843,12 +854,12 @@ OpState	OpDisplayNameGallery::GetState(String_256* UIDescription, OpDescriptor*)
 
 void OpDisplayNameGallery::Do(OpDescriptor*)
 {
-	DialogBarOp* pOp = FindGallery();
+	SuperGallery* pOp = FindGallery();
 	if (pOp != 0)
 	{
 		// Toggle the visible state of the gallery window
 		pOp->SetVisibility(!pOp->IsVisible());
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_NAME_GALLERY, pOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAY_NAME_GALLERY), pOp->IsVisible());
 	}
 
 	End();
@@ -875,5 +886,16 @@ BOOL OpDisplayNameGallery::Init()
 					OPTOKEN_DISPLAY_NAME_GALLERY,
 					OpDisplayNameGallery::GetState,
 					0,
-					_R(IDBBL_DISPLAY_NAME_GALLERY));
+					_R(IDBBL_DISPLAY_NAME_GALLERY),
+					_R(IDC_BTN_SGNAME), // UINT32 resourceID = 0,	// resource ID
+					_R(IDC_BTN_SGNAME), // UINT32 controlID = 0,	// control ID
+					SYSTEMBAR_ILLEGAL,	  // SystemBarType GroupBarID = SYSTEMBAR_ILLEGAL,	// group bar ID
+					TRUE,	  // BOOL ReceiveMessages = TRUE,	// BODGE
+					FALSE,	  // BOOL Smart = FALSE,
+					TRUE,	  // BOOL Clean = TRUE,   
+					NULL,	  // OpDescriptor *pVertOpDesc = NULL,
+					0,	  // UINT32 OneOpenInstID = 0,		
+					0,	  // UINT32 AutoStateFlags = 0,
+					TRUE	  // BOOL fCheckable = FALSE
+					);
 }

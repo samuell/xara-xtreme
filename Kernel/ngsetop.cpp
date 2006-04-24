@@ -123,6 +123,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "impexpop.h"
 #include "bitfilt.h"
 
+#include "ophist.h"
+
 //#include "mario.h"
 //#include "justin3.h"
 
@@ -166,7 +168,7 @@ CC_IMPLEMENT_DYNCREATE(OpChangeBarExtends,		UndoableOperation);
 
 void OpSelectSet::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
-	SelectScan((SGNameItem*) pParam->Param1, (SelectScan::Change) pParam->Param2).Scan();
+	SelectScan((SGNameItem*)(void *) pParam->Param1, (SelectScan::Change) (INT32) pParam->Param2).Scan();
 	End();
 }
 
@@ -306,7 +308,7 @@ void OpApplyNamesToSel::Do(OpDescriptor*)
 void OpApplyNamesToSel::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
 	ERROR3IF(pParam->Param1 == 0, "OpApplyNamesToSel::DoWithParam: null argument");
-	const StringBase& strName = *((const StringBase*) pParam->Param1);
+	const StringBase& strName = *((const StringBase*)(void *) pParam->Param1);
 
 	AllowOpScan aosSel(this, &theSelectedObjects),
 				aosSentinel(this, &theSetSentinel);
@@ -360,7 +362,7 @@ OpState OpApplyNamesToOne::GetState(String_256*, OpDescriptor*)
 void OpApplyNamesToOne::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
 	ERROR3IF(pParam->Param1 == 0, "OpApplyNamesToOne::DoWithParam: null argument");
-	Node* pNode = (Node*) pParam->Param1;
+	Node* pNode = (Node*)(void *) pParam->Param1;
 	
 	SingleNodeSource theObject(pNode);
 	AllowOpScan aosObj(this, &theObject),
@@ -396,7 +398,7 @@ void OpApplyNamesToOne::DoWithParam(OpDescriptor*, OpParam* pParam)
 void OpApplyNameToNone::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
 	ERROR3IF(pParam->Param1 == 0, "OpApplyNameToNone::DoWithParam: null argument");
-	const StringBase& strName = *((const StringBase*) pParam->Param1);
+	const StringBase& strName = *((const StringBase*)(void *) pParam->Param1);
 
 	AllowOpScan aosSentinel(this, &theSetSentinel);
 
@@ -543,7 +545,7 @@ void RenameSetInstance(const String_256 & str, const String_256 & NewStr, Undoab
 void OpRenameAll::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
 	ERROR3IF(pParam->Param1 == 0, "OpRenameAll::DoWithParam: null argument");
-	const StringBase& strNewName = *((const StringBase*) pParam->Param1);
+	const StringBase& strNewName = *((const StringBase*) (void *) pParam->Param1);
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread == NULL)
 	{
@@ -556,7 +558,7 @@ void OpRenameAll::DoWithParam(OpDescriptor*, OpParam* pParam)
 	// if we are renaming lots to be the same name then make default properties.
 	NodeSetProperty* pCopyPropNode = 0;
 	NamedExportProp* pNewExport = 0;
-	Node * pNodeSetSentinel = GetWorkingDoc()->GetSetSentinel(); // the sentinel 
+//	Node * pNodeSetSentinel = GetWorkingDoc()->GetSetSentinel(); // the sentinel 
 
 	INT32 nNames;
 	NameGallery::Instance()->GetHighlightCount(0, &nNames);
@@ -598,7 +600,7 @@ void OpRenameAll::DoWithParam(OpDescriptor*, OpParam* pParam)
 	}
 
 	SGNameItem* pNameGalleryItem = (SGNameItem*) NameGallery::Instance()->GetUsedNames()->GetChild();
-	SGNameItem* pRenameMe = NULL;
+//	SGNameItem* pRenameMe = NULL;
 	while (pNameGalleryItem)
 	{
 		if (pNameGalleryItem->IsSelected())
@@ -607,7 +609,7 @@ void OpRenameAll::DoWithParam(OpDescriptor*, OpParam* pParam)
 			pNameGalleryItem->GetNameText(&str);
 			// remove any references to str (the old set name)
 			// and replace them (undoably of corse) with strNewName (sjk)
-			RenameSetInstance(str, *((const String_256 *) pParam->Param1), this, pSpread);
+			RenameSetInstance(str, *((const String_256 *) (void *) pParam->Param1), this, pSpread);
 		}
 
 		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
@@ -891,9 +893,9 @@ void OpChangeSetProperty::DoWithParam(OpDescriptor*, OpParam* pParam)
 {
 	// Extract the parameters.
 	ERROR3IF(pParam == 0 || pParam->Param1 == 0, "OpChangeSetProperty::DoWithParam: no input");
-	const StringBase& strName = *(((StringBase**) pParam->Param1)[0]);
-	StringBase* pstrNewName = ((StringBase**) pParam->Param1)[1];
-	SGNameProp* pProp = (SGNameProp*) pParam->Param2;
+	const StringBase& strName = *(((StringBase**) (void *) pParam->Param1)[0]);
+	StringBase* pstrNewName = ((StringBase**) (void *) pParam->Param1)[1];
+	SGNameProp* pProp = (SGNameProp*) (void *) pParam->Param2;
 
 	// Find the equivalent old property, if any, and hide it.
 	NodeSetSentinel* pSentry = GetWorkingDoc()->GetSetSentinel();
@@ -919,8 +921,9 @@ void OpChangeSetProperty::DoWithParam(OpDescriptor*, OpParam* pParam)
 	}
 
 	// Try to copy the old properties into it.
-	BOOL fOk;
-	ALLOC_WITH_FAIL(fOk, pNewSetNode->CopyProperties(pOldSetNode), this);
+	NodeSetProperty* fOk=NULL; // we use this as a boolean because ALLOC_WITH_FAIL expects an allocation routine and thus pointers
+	// so we return a dummy pointer (pNewSetNode) if we succeed as a flag
+	ALLOC_WITH_FAIL(fOk, ((pNewSetNode->CopyProperties(pOldSetNode))?pNewSetNode:NULL), this);
 	if (!fOk)
 	{
 		FailAndExecute();
@@ -1037,7 +1040,7 @@ BOOL OpChangeBarProperty::DoChangeBarProperty(UndoableOperation * pOp, INT32 Ind
 	}
 
 	// Write the new data into the duplicate.
-	if (Index >= pCopy->HowMany())
+	if (Index >= (INT32)pCopy->HowMany())
 		pCopy->Add(*pBarData);
 	else
 	{

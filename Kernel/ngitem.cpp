@@ -875,6 +875,8 @@ PORTNOTE("other", "Removed SuperGallery related stuff" )
 				// start dragging it.  If the click isn't really a drag then
 				// DragWasReallyAClick will be called when the drag is cancelled.
 				DefaultPreDragHandler(pMouseInfo, pMiscInfo);
+PORTNOTE("other", "Removed bitmap drag handling BitmapDragInformation");
+#ifndef EXCLUDE_FROM_XARALX
 				if (GetParent() == NameGallery::Instance()->GetUsedNames())
 				{           
 					// It's a name (ie. a child of the 'Used Names' group), so create and run
@@ -884,6 +886,7 @@ PORTNOTE("other", "Removed SuperGallery related stuff" )
 					DragManagerOp::StartDrag(pDragInfo);
 				}
 				else
+#endif
 					// Not a name so just do the default, but don't close on
 					// adjust-double-click.
 					DefaultClickHandler(pMouseInfo, pMiscInfo, FALSE);

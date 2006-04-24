@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "sglcart.h"	// For OpDisplayLibClipartGallery et al
 //#include "sglfills.h"	// For OpDisplayLibFillsGallery
 //#include "sgline.h"		// For OpDisplayLineGallery
-//#include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
+#include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
 #include "sgscan.h"		// For Library::InitLibPrefs()
 #include "layerprp.h"	// For LayerPropertiesDlg::Init()
 //#include "aprps.h"
@@ -178,8 +178,10 @@ PORTNOTE("galleries", "Excluded various galleries")
 				LayerPropertyTabsDlg::Init()		&&				
 
 				OpDisplayLineGallery::Init()		&&
-				OpDisplayNameGallery::Init()		&&
 #endif // EXCLUDE_FROM_XARALX
+#ifdef _DEBUG // For now name gallery only on debug builds
+				OpDisplayNameGallery::Init()		&&
+#endif
 #endif // WEBSTER				
 // Taken out by vector stroking code Neville 2/10/97
 #ifndef EXCLUDE_FROM_XARALX

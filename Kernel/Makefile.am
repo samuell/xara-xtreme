@@ -62,6 +62,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	bmpprefs.cpp expbmp.cpp expcol.cpp prvwflt.cpp bmpexdoc.cpp webop.cpp \
 	zdeflate.cpp jpgdest.cpp webparam.cpp bmpalint.cpp zdftrees.cpp animparams.cpp \
 	sglayer.cpp layermgr.cpp layergal.cpp backgrnd.cpp viewmenu.cpp renddlg.cpp \
-	sgcolour.cpp sgbitmap.cpp bmpsdlg.cpp
+	sgcolour.cpp sgbitmap.cpp bmpsdlg.cpp ngcore.cpp ngitem.cpp ngscan.cpp \
+	ngsentry.cpp ngsetop.cpp ngdialog.cpp
 
 AM_CXXFLAGS = $(XARAFLAGS)
