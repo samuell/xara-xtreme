@@ -241,7 +241,7 @@ protected:
 	void DeleteHashContents();
 	void ArtLoad(BOOL newbitmaps = FALSE, BOOL defer=TRUE);
 
-	wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text = wxEmptyString);
+	wxString GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text = wxEmptyString);
 
 	ResIDWithFlagsToBitmapPtr * m_pHash;
 	BOOL m_GetBitmapEventPending;
