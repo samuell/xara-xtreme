@@ -967,7 +967,7 @@ wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, cons
 		}
 	}
 
-	dc.SetTextForeground((f & CAF_GREYED)?wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT):*wxBLACK);
+	dc.SetTextForeground(wxSystemSettings::GetColour((f & CAF_GREYED)?wxSYS_COLOUR_GRAYTEXT:wxSYS_COLOUR_BTNTEXT));
 	wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 	font.SetPointSize(7);
 	dc.SetFont(font);
