@@ -858,27 +858,22 @@ BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
 	
 #ifdef _UNICODE
 
-// TODO: Is this conditional stuff really needed?
-#if defined(__WXGTK__) || defined(__WXMAC__)
-	// pStr points to a Unicode string, so just write it out
-	size_t				cch = wcslen( pStr );
+	// We must cope with byte-order differences between native storage and XAR file storage:
+	// Native may be big-endian or little-endian, XAR is always little-endian
+	// Native WCHAR may be 16 or 32 bits, XAR is always 16 bits
+	// These differences are handled in WriteWCHAR
+	WCHAR c = 0;
+	INT32 i = 0;
 
-	// cch + 1 chars to include \0
-	for( unsigned ord = 0; ord <= cch && ok; ord++ )
+	do
 	{
-		ok = WriteWCHAR(pStr[ord]);
+		c = pStr[i++];
+		ok = WriteWCHAR(c);						// Read two bytes into the WCHAR buffer
+		if (!ok) c = 0;							// If the read failed then write a terminator
 	}
+	while (c!=0);// Until end of string or no longer OK to write
 
-#elif defined(__WXMSW__)
-	// pStr points to a Unicode string, so just write it out
-	INT32 len = camStrlen(pStr);
-	ok = WriteBuffer((BYTE*)pStr,(len*2)+2);
-
-#else
-	#pragma error( "This build enviroment is not supported" )
-	ok = FALSE;
-
-#endif
+	return ok;									// If we terminated due to Read failure tell the caller
 
 #else
 	// pStr points to an ASCII or DBCS string, and we want it written as a Unicode string
