@@ -3339,7 +3339,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -3608,7 +3608,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -3808,7 +3808,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_REGSHAPETOOL_ADDCHANGE">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4080,7 +4080,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELPOINT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4098,7 +4098,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELCOLOUR">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4211,7 +4211,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELPOINT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4247,7 +4247,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SELCOLOUR">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4269,7 +4269,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_BEZTOOLADDCHANGE">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -4858,7 +4858,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_SMOOTHPERCENT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <label>100%</label>
                     <size>-1,-1</size>
@@ -5534,7 +5534,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_FREEHANDPERCENT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <label>100%</label>
                     <size>-1,-1</size>
@@ -5553,7 +5553,7 @@
                 <border>1</border>
                 <object class="wxStaticText" name="IDC_FREEHANDRETRO">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>80,-1</size>
                     <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>
@@ -5571,7 +5571,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_CREATEBRUSH">
                     <font>
-                        <size>6</size>
+                        <size>8</size>
                     </font>
                     <label>Create Brush</label>
                     <size>-1,-1</size>
@@ -5589,7 +5589,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_EDITBRUSH">
                     <font>
-                        <size>6</size>
+                        <size>8</size>
                     </font>
                     <label>Edit Brush</label>
                     <size>-1,-1</size>
@@ -5670,7 +5670,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_BLENDSTEPS">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -5688,7 +5688,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVEBLEND">
                     <font>
-                        <size>6</size>
+                        <size>8</size>
                     </font>
                     <label>Remove</label>
                     <size>-1,-1</size>
@@ -5823,7 +5823,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVEMOULD">
                     <font>
-                        <size>6</size>
+                        <size>8</size>
                     </font>
                     <label>Remove</label>
                     <size>-1,-1</size>
@@ -6013,7 +6013,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_CONTOURSTEPS">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -6031,7 +6031,7 @@
                 <border>0</border>
                 <object class="wxButton" name="IDC_REMOVECONTOUR">
                     <font>
-                        <size>6</size>
+                        <size>8</size>
                     </font>
                     <label>Remove</label>
                     <size>-1,-1</size>
@@ -6084,7 +6084,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_CONTOURSLIDEREDIT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -6252,7 +6252,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_BEVEL_SLIDER_EDIT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -6367,7 +6367,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_ASPECTEDIT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -6770,7 +6770,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_SHADOW_SLIDER_EDIT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
@@ -6806,7 +6806,7 @@
                 <border>0</border>
                 <object class="wxTextCtrl" name="IDC_SHADOWTRANSP_EDIT">
                     <font>
-                        <size>7</size>
+                        <size>8</size>
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>

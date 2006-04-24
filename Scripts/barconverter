@@ -171,6 +171,13 @@ sub ConvertOptoken
     }
 }
 
+sub WriteFont
+{
+    print STDOUT $ddindent."                    <font>\n";
+    printf STDOUT $ddindent."                        <size>%d</size>\n",$dd?7:8;
+    print STDOUT $ddindent."                    </font>\n";
+}
+
 sub WriteFileHead
 {
     print STDOUT "<?xml version=\"1.0\" ?>\n<resource>\n";
@@ -293,9 +300,7 @@ sub WriteCombo
     print STDOUT $ddindent."                <border>0</border>\n";
     print STDOUT $ddindent."                <object class=\"wxComboBox\" name=\"$name\">\n";
     printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 80);
-    print STDOUT $ddindent."                    <font>\n";
-    print STDOUT $ddindent."                        <size>8</size>\n";
-    print STDOUT $ddindent."                    </font>\n";
+    WriteFont();
     print STDOUT $ddindent."                    <style>wxCB_DROPDOWN</style>\n";
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
@@ -331,9 +336,7 @@ sub WriteStaticText
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>1</border>\n";
     print STDOUT $ddindent."                <object class=\"wxStaticText\" name=\"$name\">\n";
-    print STDOUT $ddindent."                    <font>\n";
-    print STDOUT $ddindent."                        <size>7</size>\n";
-    print STDOUT $ddindent."                    </font>\n";
+    WriteFont();
     printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
     printf STDOUT $ddindent."                    <size>%d,-1</size>\n",($label eq "")?GetSize($name,80):-1;
     print STDOUT $ddindent."                    <style>wxALIGN_CENTRE|wxSUNKEN_BORDER</style>\n";
@@ -357,9 +360,7 @@ sub WriteButton
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>0</border>\n";
     print STDOUT $ddindent."                <object class=\"wxButton\" name=\"$name\">\n";
-    print STDOUT $ddindent."                    <font>\n";
-    printf STDOUT $ddindent."                        <size>%d</size>\n",$dd?8:6;
-    print STDOUT $ddindent."                    </font>\n";
+    WriteFont();
     printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
     printf STDOUT $ddindent."                    <size>%d,%d</size>\n",($label eq "")?GetSize($name,20):-1,$dd?-1:-1;
     ConvertOptoken($optoken) if ($optoken ne "");
@@ -376,9 +377,7 @@ sub WriteTextControl
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>0</border>\n";
     print STDOUT $ddindent."                <object class=\"wxTextCtrl\" name=\"$name\">\n";
-    print STDOUT $ddindent."                    <font>\n";
-    print STDOUT $ddindent."                        <size>7</size>\n";
-    print STDOUT $ddindent."                    </font>\n";
+    WriteFont();
     printf STDOUT $ddindent."                    <size>%d,14</size>\n",GetSize($name, 50);
     print STDOUT $ddindent."                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>\n";
     ConvertOptoken($optoken) if ($optoken ne "");
