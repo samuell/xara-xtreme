@@ -362,7 +362,8 @@ sub WriteButton
     print STDOUT $ddindent."                <object class=\"wxButton\" name=\"$name\">\n";
     WriteFont();
     printf STDOUT $ddindent."                    <label>%s</label>\n",$label if ($label ne "");
-    printf STDOUT $ddindent."                    <size>%d,%d</size>\n",($label eq "")?GetSize($name,20):-1,$dd?-1:-1;
+    printf STDOUT $ddindent."                    <style>wxBU_EXACTFIT</style>\n";
+    printf STDOUT $ddindent."                    <size>%d,%d</size>\n",($label eq "")?GetSize($name,20):-1,$dd?24:24;
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
     print STDOUT $ddindent."                </object>\n";

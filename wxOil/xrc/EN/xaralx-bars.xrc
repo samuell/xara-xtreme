@@ -5574,7 +5574,8 @@
                         <size>8</size>
                     </font>
                     <label>Create Brush</label>
-                    <size>-1,-1</size>
+                    <style>wxBU_EXACTFIT</style>
+                    <size>-1,24</size>
                     <tooltip>Create a new brush</tooltip>
                     <help>Create a new brush</help>
                 </object>
@@ -5592,7 +5593,8 @@
                         <size>8</size>
                     </font>
                     <label>Edit Brush</label>
-                    <size>-1,-1</size>
+                    <style>wxBU_EXACTFIT</style>
+                    <size>-1,24</size>
                     <tooltip>Edit an existing brush</tooltip>
                     <help>Edit an existing brush</help>
                 </object>
@@ -5691,7 +5693,8 @@
                         <size>8</size>
                     </font>
                     <label>Remove</label>
-                    <size>-1,-1</size>
+                    <style>wxBU_EXACTFIT</style>
+                    <size>-1,24</size>
                     <optoken>RemoveBlend</optoken>
                 </object>
             </object>
@@ -5826,7 +5829,8 @@
                         <size>8</size>
                     </font>
                     <label>Remove</label>
-                    <size>-1,-1</size>
+                    <style>wxBU_EXACTFIT</style>
+                    <size>-1,24</size>
                     <optoken>RemoveMould</optoken>
                 </object>
             </object>
@@ -6034,7 +6038,8 @@
                         <size>8</size>
                     </font>
                     <label>Remove</label>
-                    <size>-1,-1</size>
+                    <style>wxBU_EXACTFIT</style>
+                    <size>-1,24</size>
                     <optoken>RemoveContour</optoken>
                 </object>
             </object>
