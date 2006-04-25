@@ -647,7 +647,7 @@ GRenderDIB* QuickRenderer::CreateGRenderDIB(
 
 		if(DoWantBMPSmoothing)
 		{
-			(pNewGRR->GetDrawContext())->SetBitmapSmoothingFlag(TRUE);
+			(pNewGRR->GetDrawContext())->SetTileSmoothingFlag(TRUE);
 		}
 
 		return pNewGRR;

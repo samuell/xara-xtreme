@@ -1153,7 +1153,7 @@ void GDrawAsm::SetAntialiasQualityFlag( BOOL Flag )
 				with perspectivised!
 
 ********************************************************************************************/
-void GDrawAsm::SetBitmapSmoothingFlag( BOOL Flag )
+void GDrawAsm::SetTileSmoothingFlag( BOOL Flag )
 {
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
@@ -1177,6 +1177,37 @@ void GDrawAsm::SetTileFilteringFlag( BOOL Flag )
 	CamProfile cp(CAMPROFILE_GDRAW);
 
 	if (MakeCurrent()) XaColour_SetTileFilteringFlag(m_pContext, FALSE != Flag );
+}
+
+/********************************************************************************************/
+
+void GDrawAsm::SetMaxFilterSize( UINT32 uSize )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	if ( MakeCurrent() )
+		XaBitmap_SetMaxFilterSize(m_pContext,uSize);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::Blur( INT32 nBlur )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_Blur(m_pContext,nBlur) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::Sharpen( INT32 nSharpen )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_Sharpen(m_pContext,nSharpen) ? FALSE : TRUE);
 }
 
 /********************************************************************************************
@@ -1777,22 +1808,72 @@ BOOL GDrawAsm::SetTransparentGraduation4(
 
 /********************************************************************************************/
 
-BOOL GDrawAsm::SetBias( double fBias )
+BOOL GDrawAsm::SetBias( UINT32 uChannel,double fBias )
 {
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
 
-	return MakeCurrent() && (XaBitmap_SetBias(m_pContext,fBias) ? FALSE : TRUE);
+	return MakeCurrent() && (XaBitmap_SetBias(m_pContext,uChannel,fBias) ? FALSE : TRUE);
 }
 
 /********************************************************************************************/
 
-BOOL GDrawAsm::SetGain( double fGain )
+BOOL GDrawAsm::SetGain( UINT32 uChannel,double fGain )
 {
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
 
-	return MakeCurrent() && (XaBitmap_SetGain(m_pContext,fGain) ? FALSE : TRUE);
+	return MakeCurrent() && (XaBitmap_SetGain(m_pContext,uChannel,fGain) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetBrightness( double fBrightness )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetBrightness(m_pContext,fBrightness) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetContrast( double fContrast )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetContrast(m_pContext,fContrast) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetGamma( double fGamma )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetGamma(m_pContext,fGamma) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetPostGamma( double fPostGamma )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetPostGamma(m_pContext,fPostGamma) ? FALSE : TRUE);
+}
+
+/********************************************************************************************/
+
+BOOL GDrawAsm::SetSaturation( double fSaturation )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetSaturation(m_pContext,fSaturation) ? FALSE : TRUE);
 }
 
 /********************************************************************************************/
@@ -1807,12 +1888,21 @@ BOOL GDrawAsm::SetContone( UINT32 uContoneStyle, COLORREF rgbStart, COLORREF rgb
 
 /*******************************************************************************************/
 
-BOOL GDrawAsm::SetTransparencyRamp( BYTE uStart, BYTE uEnd )
+BOOL GDrawAsm::SetInputRange( UINT32 uChannel, BYTE uStart, BYTE uEnd )
 {
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
 
-	return MakeCurrent() && (XaBitmap_SetTransparencyRamp(m_pContext,uStart,uEnd) ? FALSE : TRUE);
+	return MakeCurrent() && (XaBitmap_SetInputRange(m_pContext,uChannel,uStart,uEnd) ? FALSE : TRUE);
+}
+/*******************************************************************************************/
+
+BOOL GDrawAsm::SetOutputRange( UINT32 uChannel, BYTE uStart, BYTE uEnd )
+{
+	CriticalSection Ralph;
+	CamProfile cp(CAMPROFILE_GDRAW);
+
+	return MakeCurrent() && (XaBitmap_SetOutputRange(m_pContext,uChannel,uStart,uEnd) ? FALSE : TRUE);
 }
 
 /*******************************************************************************************/
@@ -2354,7 +2444,7 @@ BOOL GDrawAsm::PlotBitmap( LPBITMAPINFOHEADER bmInfo, LPBYTE lpBytes, DWORD Styl
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
 
-	return (MakeCurrent() && (XaSprite_PlotTile(m_pContext, bmInfo, lpBytes, Style, Points, Points+1, Points+2,
+	return (MakeCurrent() && (XaBitmap_PlotTile(m_pContext, bmInfo, lpBytes, Style, Points, Points+1, Points+2,
 									(CONST BGRT*)ColourTable, Red, Green, Blue, Trans)
 				? FALSE : TRUE));
 }
@@ -2366,7 +2456,7 @@ BOOL GDrawAsm::PlotPerspectiveBitmap( LPBITMAPINFOHEADER bmInfo, LPBYTE lpBytes,
 	CriticalSection Ralph;
 	CamProfile cp(CAMPROFILE_GDRAW);
 
-	return (MakeCurrent() && (XaSprite_PlotTile4(m_pContext, bmInfo, lpBytes, Style, Points, Points+1, Points+2, Points+3,
+	return (MakeCurrent() && (XaBitmap_PlotTile4(m_pContext, bmInfo, lpBytes, Style, Points, Points+1, Points+2, Points+3,
 									(CONST BGRT*)ColourTable, Red, Green, Blue, Trans)
 				? FALSE : TRUE));
 }

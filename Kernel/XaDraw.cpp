@@ -493,20 +493,29 @@ INT32 XaColourDbg_SetTileFilteringFlag( pGCONTEXT pContext,BOOL Flag )
 	return nRetVal;
 }
 
-INT32 XaColourDbg_Sharpen( pGCONTEXT pContext,INT32 Sharpen )
+INT32 XaBitmapDbg_SetMaxFilterSize( pGCONTEXT pContext,UINT32 uSize )
 {
-	XA_DRAW_ENTER(TEXT("XaColour_Sharpen"), pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetMaxFilterSize"), pContext);
 	INT32 nRetVal =
-		g_XaFnsOriginal.pfnXaColour_Sharpen(pContext, Sharpen);
+		g_XaFnsOriginal.pfnXaBitmap_SetMaxFilterSize(pContext, Size);
+	XA_DRAW_LEAVE(pContext, ?);
+	return nRetVal;
+}
+
+INT32 XaBitmapDbg_Sharpen( pGCONTEXT pContext,INT32 Sharpen )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_Sharpen"), pContext);
+	INT32 nRetVal =
+		g_XaFnsOriginal.pfnXaBitmap_Sharpen(pContext, Sharpen);
 	XA_DRAW_LEAVE(pContext, 26);
 	return nRetVal;
 }
 
-INT32 XaColourDbg_Blur   ( pGCONTEXT pContext,INT32 Blur    )
+INT32 XaBitmapDbg_Blur   ( pGCONTEXT pContext,INT32 Blur    )
 {
-	XA_DRAW_ENTER(TEXT("XaColour_Blur"), pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmap_Blur"), pContext);
 	INT32 nRetVal =
-		g_XaFnsOriginal.pfnXaColour_Blur(pContext, Blur);
+		g_XaFnsOriginal.pfnXaBitmap_Blur(pContext, Blur);
 	XA_DRAW_LEAVE(pContext, 27);
 	return nRetVal;
 }
@@ -870,7 +879,7 @@ INT32 XaColourDbg_SetTransparent4WayGraduation4(
 	return nRetVal;
 }
 
-INT32 XaBitmap_SetBias( double fBias )
+INT32 XaBitmap_SetBias( pGCONTEXT pContext,UINT32 uChannel,double fBias )
 {
 	XA_DRAW_ENTER(TEXT("XaBitmap_SetBias"),pContext);
 	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetBias(pContext,fBias);
@@ -878,10 +887,18 @@ INT32 XaBitmap_SetBias( double fBias )
 	return nRetVal;
 }
 
-INT32 XaBitmap_SetGain( double fGain )
+INT32 XaBitmap_SetGain( pGCONTEXT pContext,UINT32 uChannel,double fGain )
 {
 	XA_DRAW_ENTER(TEXT("XaBitmap_SetGain"),pContext);
 	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetGain(pContext,fGain);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
+INT32 XaBitmap_SetBrightness( pGCONTEXT pContext,double fBrightness )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetBrightness"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetBrightness(pContext,fBrightness);
 	XA_DRAW_LEAVE(pConvert,?);
 	return nRetVal;
 }
@@ -894,10 +911,18 @@ INT32 XaBitmap_SetContone( pGCONTEXT pContext, UINT32 uContoneStyle, COLORREF rg
 	return nRetVal;
 }
 
-INT32 XaBitmap_SetTransparencyRamp( pGCONTEXT pContext, BYTE uStart, BYTE uEnd )
+INT32 XaBitmap_SetInputRange( pGCONTEXT pContext, UINT32 uChannel,BYTE uStart, BYTE uEnd )
 {
-	XA_DRAW_ENTER(TEXT("XaBitmap_SetTransparencyRamp"),pContext);
-	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetTransparencyRamp(pContext,uStart,uEnd);
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetInputRange"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetInputRange(pContext,uStart,uEnd);
+	XA_DRAW_LEAVE(pConvert,?);
+	return nRetVal;
+}
+
+INT32 XaBitmap_SetOutputRange( pGCONTEXT pContext, UINT32 uChannel,BYTE uStart, BYTE uEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmap_SetOutputRange"),pContext);
+	INT32 nRetVal = g_XaFnsOriginal.pfnXaBitmap_SetOutputRange(pContext,uStart,uEnd);
 	XA_DRAW_LEAVE(pConvert,?);
 	return nRetVal;
 }
@@ -1677,7 +1702,7 @@ INT32 XaDrawDbg_TranslateBevelValue( pcGCONTEXT pContext, BYTE Index, BYTE Colou
 	return nRetVal;
 }
 
-INT32 XaSpriteDbg_PlotTile(
+INT32 XaBitmapDbg_PlotTile(
 	pGCONTEXT pContext,
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,
@@ -1692,9 +1717,9 @@ INT32 XaSpriteDbg_PlotTile(
 	pcBYTE TransparencyTranslationTable /* =0 */
 )
 {
-	XA_DRAW_ENTER(TEXT("XaSprite_PlotTile"), pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmap_PlotTile"), pContext);
 	INT32 nRetVal =
-		g_XaFnsOriginal.pfnXaSprite_PlotTile(	pContext,
+		g_XaFnsOriginal.pfnXaBitmap_PlotTile(	pContext,
 												BitmapInfo, Bitmap, Style,
 												PointA, PointB, PointC,
 												TranslationTable,
@@ -1706,7 +1731,7 @@ INT32 XaSpriteDbg_PlotTile(
 	return nRetVal;
 }
 
-INT32 XaSpriteDbg_PlotTile4(
+INT32 XaBitmapDbg_PlotTile4(
 	pGCONTEXT pContext,
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,
@@ -1722,9 +1747,9 @@ INT32 XaSpriteDbg_PlotTile4(
 	pcBYTE TransparencyTranslationTable = 0
 )
 {
-	XA_DRAW_ENTER(TEXT("XaSprite_PlotTile4"), pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmap_PlotTile4"), pContext);
 	INT32 nRetVal =
-		g_XaFnsOriginal.pfnXaSprite_PlotTile4(	pContext,
+		g_XaFnsOriginal.pfnXaBitmap_PlotTile4(	pContext,
 												BitmapInfo, Bitmap, Style,
 												PointA, PointB, PointC, PointD,
 												TranslationTable,
@@ -2017,8 +2042,8 @@ TCHAR* g_XaNames[127] = {
 	"GColour_SetDitherStyle",
 	"GColour_SetTileSmoothingFlag",
 	"GColour_SetTileFilteringFlag",
-	"GColour_Sharpen",
-	"GColour_Blur   ",
+	"GBitmap_Sharpen",
+	"GBitmap_Blur   ",
 	"GColour_SetHalftoneOrigin",
 	"GColour_SetColour",
 	"GColour_SetSolidColour",
@@ -2048,7 +2073,8 @@ TCHAR* g_XaNames[127] = {
 	"GBitmap_SetBias",
 	"GBitmap_SetGain",
 	"GBitmap_SetContone",
-	"GBitmap_SetTransparencyRamp",
+	"GBitmap_SetInputRange",
+	"GBitmap_SetOutputRange",
 	"GColour_SetTilePattern",
 	"GColour_SetTilePattern4",
 	"GColour_SetTransparentTilePattern",
@@ -2106,8 +2132,8 @@ TCHAR* g_XaNames[127] = {
 	"GDraw_SetBevelLightness",
 	"GDraw_SetBevelDarkness ",
 	"GDraw_TranslateBevelValue",
-	"GSprite_PlotTile",
-	"GSprite_PlotTile4",
+	"GBitmap_PlotTile",
+	"GBitmap_PlotTile4",
 	"G3D_SetTruePerspectiveFlag",
 	"G3D_DefineView",
 	"G3D_DefineTexture",
@@ -2184,7 +2210,8 @@ XA_DRAW_FNS g_XaFns =
 	XaBitmapDbg_SetBias,
 	XaBitmapDbg_SetGain,
 	XaBitmapDbg_SetContone,
-	XaBitmapDbg_SetTransparencyRamp,
+	XaBitmapDbg_SetInputRange,
+	XaBitmapDbg_SetOutputRange,
 	XaColourDbg_SetTilePattern,
 	XaColourDbg_SetTilePattern4,
 	XaColourDbg_SetTransparentTilePattern,

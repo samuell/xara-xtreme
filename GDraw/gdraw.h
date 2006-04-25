@@ -196,8 +196,9 @@ extern "C"
 	extern INT32 GColour_SetDitherStyle( pGCONTEXT pContext,DitherStyle Style=DITHER_GREY_ORDERED ) ;
 	extern INT32 GColour_SetTileSmoothingFlag( pGCONTEXT pContext,bool Flag ) ;
 	extern INT32 GColour_SetTileFilteringFlag( pGCONTEXT pContext,bool Flag ) ;
-	extern INT32 GColour_Sharpen( pGCONTEXT pContext,INT32 Sharpen ) ;
-	extern INT32 GColour_Blur   ( pGCONTEXT pContext,INT32 Blur    ) ;
+	extern INT32 GBitmap_SetMaxFilterSize( pGCONTEXT pContext, UINT32 Size ) ;
+	extern INT32 GBitmap_Sharpen( pGCONTEXT pContext,INT32 Sharpen ) ;
+	extern INT32 GBitmap_Blur   ( pGCONTEXT pContext,INT32 Blur    ) ;
 	extern INT32 GColour_SetHalftoneOrigin( pGCONTEXT pContext, INT32 x,INT32 y ) ;
 //	extern INT32 GColour_SetSupersampleRate( pGCONTEXT pContext,UINT32 Rate ) ;
 	extern INT32 GColour_SetColour( pGCONTEXT pContext,COLORREF Colour ) ;
@@ -332,15 +333,21 @@ extern "C"
 		BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 		pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 	) ;
-	extern INT32 GBitmap_SetBias(pGCONTEXT pContext,double fBias) ;
-	extern INT32 GBitmap_SetGain(pGCONTEXT pContext,double fGain) ;
+	extern INT32 GBitmap_SetBrightness	(pGCONTEXT pContext,double fBrightness	) ;
+	extern INT32 GBitmap_SetContrast	(pGCONTEXT pContext,double fContrast	) ;
+	extern INT32 GBitmap_SetGamma		(pGCONTEXT pContext,double fGamma		) ;
+	extern INT32 GBitmap_SetPostGamma	(pGCONTEXT pContext,double fPostGamma	) ;
+	extern INT32 GBitmap_SetSaturation	(pGCONTEXT pContext,double fSaturation	) ;
 	extern INT32 GBitmap_SetContone( 
 		pGCONTEXT pContext, 
 		UINT32 uContoneStyle, 
 		COLORREF rgbStart = 0x000000,
 		COLORREF rgbEnd   = 0xFFFFFF 
 	) ;
-	extern INT32 GBitmap_SetTransparencyRamp( pGCONTEXT pContext,BYTE uStart=0x00,BYTE uEnd=0xFF) ;
+	extern INT32 GBitmap_SetBias		(pGCONTEXT pContext,UINT32 uChannel,double fBias) ;
+	extern INT32 GBitmap_SetGain		(pGCONTEXT pContext,UINT32 uChannel,double fGain) ;
+	extern INT32 GBitmap_SetInputRange  (pGCONTEXT pContext,UINT32 uChannel,BYTE uStart=0x00,BYTE uEnd=0xFF) ;
+	extern INT32 GBitmap_SetOutputRange (pGCONTEXT pContext,UINT32 uChannel,BYTE uStart=0x00,BYTE uEnd=0xFF) ;
 	extern INT32 GColour_SetTilePattern(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
@@ -606,7 +613,7 @@ extern "C"
 
 
 
-	extern INT32 GSprite_PlotTile(
+	extern INT32 GBitmap_PlotTile(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
 		pcBYTE Bitmap,
@@ -620,7 +627,7 @@ extern "C"
 		pcBYTE  BlueTranslationTable = 0,
 		pcBYTE TransparencyTranslationTable = 0
 	) ;
-	extern INT32 GSprite_PlotTile4(
+	extern INT32 GBitmap_PlotTile4(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
 		pcBYTE Bitmap,

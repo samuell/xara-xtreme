@@ -158,8 +158,9 @@ NOTE: Do not include this file directly. Include XaDraw.h or XaDrwOld.h (V3 and 
 									(GColour_SetTileSmoothingFlag)
 #define XaColour_SetTileFilteringFlag \
 									(GColour_SetTileFilteringFlag)
-#define XaColour_Sharpen			(GColour_Sharpen)
-#define XaColour_Blur				(GColour_Blur)
+#define XaBitmap_SetMaxFilterSize	(GBitmap_SetMaxFilterSize)
+#define XaBitmap_Sharpen			(GBitmap_Sharpen)
+#define XaBitmap_Blur				(GBitmap_Blur)
 #define XaColour_SetHalftoneOrigin	(GColour_SetHalftoneOrigin)
 #define XaColour_SetColour			(GColour_SetColour)
 #define XaColour_SetSolidColour		(GColour_SetSolidColour)
@@ -199,9 +200,14 @@ NOTE: Do not include this file directly. Include XaDraw.h or XaDrwOld.h (V3 and 
 									(GColour_SetTransparent4WayGraduation4)
 #define XaBitmap_SetBias			(GBitmap_SetBias)
 #define XaBitmap_SetGain			(GBitmap_SetGain)
+#define XaBitmap_SetBrightness		(GBitmap_SetBrightness)
+#define XaBitmap_SetContrast		(GBitmap_SetContrast)
+#define XaBitmap_SetGamma			(GBitmap_SetGamma)
+#define XaBitmap_SetPostGamma		(GBitmap_SetPostGamma)
+#define XaBitmap_SetSaturation		(GBitmap_SetSaturation)
 #define XaBitmap_SetContone			(GBitmap_SetContone)
-#define XaBitmap_SetTransparencyRamp \
-									(GBitmap_SetTransparencyRamp)
+#define XaBitmap_SetInputRange		(GBitmap_SetInputRange)
+#define XaBitmap_SetOutputRange		(GBitmap_SetOutputRange)
 #define XaColour_SetTilePattern		(GColour_SetTilePattern)
 #define XaColour_SetTilePattern4	(GColour_SetTilePattern4)
 #define XaColour_SetTransparentTilePattern \
@@ -282,8 +288,8 @@ NOTE: Do not include this file directly. Include XaDraw.h or XaDrwOld.h (V3 and 
 #define XaDraw_TranslateBevelValue	(GDraw_TranslateBevelValue)
 
 
-#define XaSprite_PlotTile			(GSprite_PlotTile)
-#define XaSprite_PlotTile4			(GSprite_PlotTile4)
+#define XaBitmap_PlotTile			(GBitmap_PlotTile)
+#define XaBitmap_PlotTile4			(GBitmap_PlotTile4)
 
 #define Xa3D_SetTruePerspectiveFlag	(G3D_SetTruePerspectiveFlag)
 #define Xa3D_DefineView				(G3D_DefineView)

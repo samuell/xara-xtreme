@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //
 // GDraw_      -> XaDraw_
 // GColour_    -> XaColour_
-// GSprite_    -> XaSprite_
+// GBitmap_    -> XaBitmap_
 // G3D_        -> Xa3D_
 
 // Include the Oil specific version of GDraw
@@ -294,10 +294,16 @@ typedef struct tagXaDrawFns
 		BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 		pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 	) ;
-	INT32 (*pfnXaBitmap_SetBias)(pGCONTEXT pContext,double fBias) ;
-	INT32 (*pfnXaBitmap_SetGain)(pGCONTEXT pContext,double fGain) ;
+	INT32 (*pfnXaBitmap_SetBias)(pGCONTEXT pContext,UINT32 uChannel,double fBias) ;
+	INT32 (*pfnXaBitmap_SetGain)(pGCONTEXT pContext,UINT32 uChannel,double fGain) ;
+	INT32 (*pfnXaBitmap_SetBrightness)(pGCONTEXT pContext,double fBrightness) ;
+	INT32 (*pfnXaBitmap_SetContrast)(pGCONTEXT pContext,double fContrast) ;
+	INT32 (*pfnXaBitmap_SetGamma)(pGCONTEXT pContext,double fGamma) ;
+	INT32 (*pfnXaBitmap_SetPostGamma)(pGCONTEXT pContext,double fPostGamma) ;
+	INT32 (*pfnXaBitmap_SetSaturation)(pGCONTEXT pContext,double fSaturation) ;
 	INT32 (*pfnXaBitmap_SetContone)( pGCONTEXT pContext,UINT32 uContoneStyle,COLORREF rgbStart,COLORREF rgbEnd ) ;
-	INT32 (*pfnXaBitmap_SetTransparencyRamp)( pGCONTEXT pContext,BYTE uStart,BYTE uEnd ) ;
+	INT32 (*pfnXaBitmap_SetInputRange)( pGCONTEXT pContext,UINT32 uChannel,BYTE uStart,BYTE uEnd ) ;
+	INT32 (*pfnXaBitmap_SetOutputRange)( pGCONTEXT pContext,UINT32 uChannel,BYTE uStart,BYTE uEnd ) ;
 	INT32 (*pfnXaColour_SetTilePattern)(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
@@ -563,7 +569,7 @@ typedef struct tagXaDrawFns
 
 
 
-	INT32 (*pfnXaSprite_PlotTile)(
+	INT32 (*pfnXaBitmap_PlotTile)(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
 		pcBYTE Bitmap,
@@ -577,7 +583,7 @@ typedef struct tagXaDrawFns
 		pcBYTE  BlueTranslationTable,
 		pcBYTE TransparencyTranslationTable
 	) ;
-	INT32 (*pfnXaSprite_PlotTile4)(
+	INT32 (*pfnXaBitmap_PlotTile4)(
 		pGCONTEXT pContext,
 		pcBITMAPINFOHEADER BitmapInfo,
 		pcBYTE Bitmap,
@@ -729,8 +735,8 @@ XA_DRAW_FNS, *PXA_DRAW_FNS;
 									(g_XaFns.pfnXaColour_SetTileSmoothingFlag)
 #define XaColour_SetTileFilteringFlag \
 									(g_XaFns.pfnXaColour_SetTileFilteringFlag)
-#define XaColour_Sharpen			(g_XaFns.pfnXaColour_Sharpen)
-#define XaColour_Blur				(g_XaFns.pfnXaColour_Blur)
+#define XaBitmap_Sharpen			(g_XaFns.pfnXaBitmap_Sharpen)
+#define XaBitmap_Blur				(g_XaFns.pfnXaBitmap_Blur)
 #define XaColour_SetHalftoneOrigin	(g_XaFns.pfnXaColour_SetHalftoneOrigin)
 #define XaColour_SetColour			(g_XaFns.pfnXaColour_SetColour)
 #define XaColour_SetSolidColour		(g_XaFns.pfnXaColour_SetSolidColour)
@@ -770,9 +776,14 @@ XA_DRAW_FNS, *PXA_DRAW_FNS;
 									(g_XaFns.pfnXaColour_SetTransparent4WayGraduation4)
 #define XaBitmap_SetBias			(g_XaFns.pfnXaBitmap_SetBias)
 #define XaBitmap_SetGain			(g_XaFns.pfnXaBitmap_SetGain)
+#define XaBitmap_SetBrightness		(g_XaFns.pfnXaBitmap_SetBrightness)
+#define XaBitmap_SetContrast		(g_XaFns.pfnXaBitmap_SetContrast)
+#define XaBitmap_SetGamma			(g_XaFns.pfnXaBitmap_SetGamma)
+#define XaBitmap_SetPostGamma		(g_XaFns.pfnXaBitmap_SetPostGamma)
+#define XaBitmap_SetSaturation		(g_XaFns.pfnXaBitmap_SetSaturation)
 #define XaBitmap_SetContone			(g_XaFns.pfnXaBitmap_SetContone)
-#define XaBitmap_SetTransparencyRamp \
-									(g_XaFns.pfnXaBitmap_SetTransparencyRamp)
+#define XaBitmap_SetInputRange		(g_XaFns.pfnXaBitmap_SetInputRange)
+#define XaBitmap_SetOutputRange		(g_XaFns.pfnXaBitmap_SetOutputRange)
 #define XaColour_SetTilePattern		(g_XaFns.pfnXaColour_SetTilePattern)
 #define XaColour_SetTilePattern4	(g_XaFns.pfnXaColour_SetTilePattern4)
 #define XaColour_SetTransparentTilePattern \
@@ -853,8 +864,8 @@ XA_DRAW_FNS, *PXA_DRAW_FNS;
 #define XaDraw_TranslateBevelValue	(g_XaFns.pfnXaDraw_TranslateBevelValue)
 
 
-#define XaSprite_PlotTile			(g_XaFns.pfnXaSprite_PlotTile)
-#define XaSprite_PlotTile4			(g_XaFns.pfnXaSprite_PlotTile4)
+#define XaBitmap_PlotTile			(g_XaFns.pfnXaBitmap_PlotTile)
+#define XaBitmap_PlotTile4			(g_XaFns.pfnXaBitmap_PlotTile4)
 
 #define Xa3D_SetTruePerspectiveFlag	(g_XaFns.pfnXa3D_SetTruePerspectiveFlag)
 #define Xa3D_DefineView				(g_XaFns.pfnXa3D_DefineView)

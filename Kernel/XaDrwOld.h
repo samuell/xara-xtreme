@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //
 // GDraw_      -> XaDrawOld_
 // GColour_    -> XaColourOld_
-// GSprite_    -> XaSpriteOld_
+// GBitmap_    -> XaBitmapOld_
 // G3D_        -> Xa3DOld_
 
 // GDraw V2 function prototypes.
@@ -272,10 +272,16 @@ INT32 XaColourOld_SetTransparent4WayGraduation4(
 	BYTE	ValueA, BYTE	ValueB, BYTE	ValueC, BYTE	ValueD,
 	pcPOINT PointA, pcPOINT PointB, pcPOINT PointC, pcPOINT PointD
 );
-INT32 XaBitmapOld_SetBias(double fBias);
-INT32 XaBitmapOld_SetGain(double fGain);
+INT32 XaBitmapOld_SetBias(double);
+INT32 XaBitmapOld_SetGain(double);
+INT32 XaBitmapOld_SetBrightness(double);
+INT32 XaBitmapOld_SetContrast(double);
+INT32 XaBitmapOld_SetGamma(double);
+INT32 XaBitmapOld_SetPostGamma(double);
+INT32 XaBitmapOld_SetSaturation(double);
 INT32 XaBitmapOld_SetContone( UINT32 uContoneStyle, COLORREF rgbStart=0x000000, COLORREF rgbEnd=0xFFFFFF );
-INT32 XaBitmapOld_SetTransparencyRamp( BYTE uStart=0x00, BYTE uEnd=0xFF );
+INT32 XaBitmapOld_SetInputRange( BYTE uStart=0x00, BYTE uEnd=0xFF );
+INT32 XaBitmapOld_SetOutputRange( BYTE uStart=0x00, BYTE uEnd=0xFF );
 INT32 XaColourOld_SetTilePattern(
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,

@@ -3431,7 +3431,7 @@ BOOL GRenderRegion::SetSmoothingFlags(FillGeometryAttribute *Fill)
 		if (!SetTileFilteringFlag) SetTileFilteringFlag = pCapture->info.caFlags.TileFiltering;
 	}
 
-	GetDrawContext()->SetBitmapSmoothingFlag(SetExtraSmoothFlag);
+	GetDrawContext()->SetTileSmoothingFlag(SetExtraSmoothFlag);
 	GetDrawContext()->SetTileFilteringFlag(SetTileFilteringFlag);
 
 	return TRUE;
@@ -3725,8 +3725,8 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 		else
 			GetDrawContext()->SetContone(0);
 
-		GetDrawContext()->SetBias(Fill->GetProfile().GetBias()) ;
-		GetDrawContext()->SetGain(Fill->GetProfile().GetGain()) ;
+		GetDrawContext()->SetBias(3,Fill->GetProfile().GetBias()) ;
+		GetDrawContext()->SetGain(3,Fill->GetProfile().GetGain()) ;
 
 		//---------------------------------------------------------------------------------------
 		// Smoothing decisions
@@ -4307,9 +4307,9 @@ BOOL GRenderRegion::SetBitmapTransparencyFill(TranspFillAttribute* Fill, DWORD* 
 	if ( bpp==32 && Fill->GetBitmap()->IsTransparent() )
 		TranspStyle |= 0x8000;
 
-	GetDrawContext()->SetBias(Fill->GetProfile().GetBias()) ;
-	GetDrawContext()->SetGain(Fill->GetProfile().GetGain()) ;
-	GetDrawContext()->SetTransparencyRamp(StartTransp,EndTransp) ;
+	GetDrawContext()->SetBias(3,Fill->GetProfile().GetBias()) ;
+	GetDrawContext()->SetGain(3,Fill->GetProfile().GetGain()) ;
+	GetDrawContext()->SetOutputRange(3,StartTransp,EndTransp) ;
 
 	//---------------------------------------------------------------------------------------
 	// Smoothing decisions

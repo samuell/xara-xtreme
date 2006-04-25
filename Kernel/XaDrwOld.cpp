@@ -840,10 +840,18 @@ INT32 XaBitmapOld_SetContone( UINT32 uContoneStyle, COLORREF rgbStart,COLORREF r
 	return nRetVal;
 }
 
-INT32 XaBitmapOld_SetTransparencyRamp( BYTE uStart, BYTE uEnd )
+INT32 XaBitmapOld_SetInputRange( BYTE uStart, BYTE uEnd )
 {
-	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetTransaprencyRamp"),s_pContext);
-	INT32 nRetVal = XaBitmap_SetTransparencyRamp(s_pContext,uStart,uEnd);
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetInputRange"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetInputRange(s_pContext,uStart,uEnd);
+	XA_DRAW_LEAVE(s_pConvert);
+	return nRetVal;
+}
+
+INT32 XaBitmapOld_SetOutputRange( BYTE uStart, BYTE uEnd )
+{
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_SetOutputRange"),s_pContext);
+	INT32 nRetVal = XaBitmap_SetOutputRange(s_pContext,uStart,uEnd);
 	XA_DRAW_LEAVE(s_pConvert);
 	return nRetVal;
 }
@@ -1559,7 +1567,7 @@ INT32 XaDrawOld_TranslateBevelValue( BYTE Index, BYTE Colour )
 	return nRetVal;
 }
 
-INT32 XaSpriteOld_PlotTile(
+INT32 XaBitmapOld_PlotTile(
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,
 	DWORD Style,
@@ -1573,9 +1581,9 @@ INT32 XaSpriteOld_PlotTile(
 	pcBYTE TransparencyTranslationTable /* =0 */
 )
 {
-	XA_DRAW_ENTER(TEXT("XaSpriteOld_PlotTile"), s_pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_PlotTile"), s_pContext);
 	INT32 nRetVal =
-		XaSprite_PlotTile(	s_pContext,
+		XaBitmap_PlotTile(	s_pContext,
 												BitmapInfo, Bitmap, Style,
 												PointA, PointB, PointC,
 												TranslationTable,
@@ -1587,7 +1595,7 @@ INT32 XaSpriteOld_PlotTile(
 	return nRetVal;
 }
 
-INT32 XaSpriteOld_PlotTile4(
+INT32 XaBitmapOld_PlotTile4(
 	pcBITMAPINFOHEADER BitmapInfo,
 	pcBYTE Bitmap,
 	DWORD Style,
@@ -1602,9 +1610,9 @@ INT32 XaSpriteOld_PlotTile4(
 	pcBYTE TransparencyTranslationTable /* =0 */
 )
 {
-	XA_DRAW_ENTER(TEXT("XaSpriteOld_PlotTile4"), s_pContext);
+	XA_DRAW_ENTER(TEXT("XaBitmapOld_PlotTile4"), s_pContext);
 	INT32 nRetVal =
-		XaSprite_PlotTile4(	s_pContext,
+		XaBitmap_PlotTile4(	s_pContext,
 												BitmapInfo, Bitmap, Style,
 												PointA, PointB, PointC, PointD,
 												TranslationTable,

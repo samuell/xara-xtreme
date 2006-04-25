@@ -199,8 +199,11 @@ public:
 	virtual BOOL SetMatrix( GMATRIX* );
 	virtual void SetAntialiasFlag( BOOL );
 	virtual void SetAntialiasQualityFlag( BOOL );
-	virtual void SetBitmapSmoothingFlag( BOOL );
+	virtual void SetTileSmoothingFlag( BOOL );
 	virtual void SetTileFilteringFlag( BOOL );
+	virtual void SetMaxFilterSize( UINT32 );
+	virtual BOOL Sharpen( INT32 );
+	virtual BOOL Blur( INT32 );
 	virtual void SetHintingFlag( BOOL );
 	virtual void SetFlatness( DWORD );
 	virtual void TransformPath( LPPOINT, LPPOINT, DWORD, GMATRIX* );
@@ -249,10 +252,16 @@ public:
 		CONST POINT *PointC,
 		CONST POINT *PointD
 	);
-	virtual BOOL SetBias(double fBias) ;
-	virtual BOOL SetGain(double fGain) ;
+	virtual BOOL SetBias(UINT32,double) ;
+	virtual BOOL SetGain(UINT32,double) ;
+	virtual BOOL SetBrightness(double) ;
+	virtual BOOL SetContrast(double) ;
+	virtual BOOL SetGamma(double) ;
+	virtual BOOL SetPostGamma(double) ;
+	virtual BOOL SetSaturation(double) ;
 	virtual BOOL SetContone( UINT32, COLORREF, COLORREF );
-	virtual BOOL SetTransparencyRamp( BYTE, BYTE );
+	virtual BOOL SetInputRange( UINT32, BYTE, BYTE );
+	virtual BOOL SetOutputRange( UINT32, BYTE, BYTE );
 	virtual BOOL SetBitmapFill( LPBITMAPINFOHEADER, LPBYTE, DWORD, LPPOINT, COLORREF, LPRGBQUAD,
 									LPBYTE, LPBYTE, LPBYTE, LPBYTE, DWORD );
 
