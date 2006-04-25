@@ -105,9 +105,9 @@ class KernelTimer;
 
 >	class TimerMsg: public Msg
 
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/3/94
-	Purpose:	This message is sent whenever something happens to an operation
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	25/04/2006
+	Purpose:	This message is sent whenever something happens with a timer
 	SeeAlso:	-
 
 ********************************************************************************************/
