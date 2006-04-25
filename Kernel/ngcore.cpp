@@ -153,8 +153,7 @@ CC_IMPLEMENT_DYNCREATE(NameGallery, SuperGallery);
 // This line mustn't go before any CC_IMPLEMENT_... macros
 #define new CAM_DEBUG_NEW
 
-#define TIMER_ELAPSE	150
-#define TIMER_EVENT		505
+#define TIMER_ELAPSE 150
 
 // The one and only NameGallery object.
 NameGallery* NameGallery::m_pInstance = 0;
@@ -174,7 +173,8 @@ NameGallery::NameGallery()
 	m_nRefresh(0),
 	m_nHiddenUpdates(0),
 	m_fMenusCreated(FALSE),
-	m_fChildChanges(FALSE)
+	m_fChildChanges(FALSE),
+	m_Timer(this)
 {
 	DlgResID = _R(IDD_NAMESGALLERY);
 	ERROR3IF(m_pInstance != 0, "NameGallery::NameGallery: instance already exists");
@@ -195,14 +195,6 @@ NameGallery::NameGallery()
 
 NameGallery::~NameGallery()
 {
-PORTNOTE("other", "Removed Windows timer usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
-	// Stop sending idle events if we are still claiming them.
-	if (m_nRefresh != 0)
-		//GetApplication()->RemoveIdleProcessor(IDLEPRIORITY_LOW, this);
-		KillTimer(TIMER_EVENT);
-#endif
-	
 	m_pInstance = 0;
 }
 
@@ -688,35 +680,17 @@ MsgResult NameGallery::Message(Msg* pMessage)
 	SeeAlso:	NameGallery::Message; NameGallery::OnIdleEvent
 ********************************************************************************************/
 
-
-PORTNOTE("other", "Removed MFC timer proc" )
-#if !defined(EXCLUDE_FROM_XARALX)
-void CALLBACK NameTimerProc(
-  HWND hwnd,     // handle of window for timer messages
-  UINT32 uMsg,     // WM_TIMER message
-  UINT32 idEvent,  // timer identifier
-  DWORD dwTime   // current system time
-)
-{
-	// a callback calls the timer event
-	NameGallery::Instance()->OnTimerEvent(idEvent);
-}
-#endif
-
 // the timer event adds the idle processor
 // which adds to the  latency. Ie we wait 150 ms, before waiting for a free cpu cycle (or 2) to do the scan.
 // So why do we have a timer in there too? Well the msgs that the name gallery reacts to tend to come in bursts
 // so putting a timer in hopes to minimise unneeded scans that are likely to occur when the msg burst occurs.
 // The idles were previously being called more optimistically than hoped. (sjk 6/10/00)
-BOOL NameGallery::OnTimerEvent(UINT32 TimerId)
+BOOL NameGallery::OnTimerEvent()
 {
 	if (m_nRefresh != 0)
 	{
 		GetApplication()->RegisterIdleProcessor(IDLEPRIORITY_LOW, this);
-PORTNOTE("other", "Removed Windows timer usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
-		KillTimer(TimerId);
-#endif
+		m_Timer.Stop();
 	}
 
 	return TRUE;
@@ -736,14 +710,11 @@ void NameGallery::DisplayDirty()
 		return;
 	}
 
-PORTNOTE("other", "Removed Windows timer usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 	// If going from the clean to the dirty state then send the gallery high
 	// priority idle events.
 	// needs updating very soon now
 	if (m_nRefresh++ == 0)
-		SetTimer(TIMER_EVENT, TIMER_ELAPSE, NameTimerProc);
-#endif
+		m_Timer.Start(TIMER_ELAPSE, TRUE);
 }
 
 

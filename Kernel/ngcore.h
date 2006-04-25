@@ -104,6 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define NGCORE_H
 
 #include "sgallery.h"
+#include "ktimer.h"
+
 #include <list>
 
 class SGNameGroup;
@@ -165,7 +167,7 @@ public:
 	BOOL PreTriggerEdit(UndoableOperation* pOp, ObjChangeParam* pParam, Node* pNode);
 	BOOL PostTriggerEdit(UndoableOperation* pOp, ObjChangeParam* pParam);
 
-	BOOL OnTimerEvent(UINT32 TimerId);
+	BOOL OnTimerEvent();
 
 protected:
 	// Event & redraw handlers.
@@ -197,8 +199,8 @@ private:
 	// Data.
 	SGUsedNames*		m_pUsedNames;			// cached ptr to 'Used Names' display group
 	INT32					m_nPropertyIndex;		// type of item property being displayed
-	unsigned			m_nRefresh;				// non-zero if gallery display needs redrawing
-	unsigned			m_nHiddenUpdates;		// non-zero if doc changed while gallery hidden
+	UINT32				m_nRefresh;				// non-zero if gallery display needs redrawing
+	UINT32				m_nHiddenUpdates;		// non-zero if doc changed while gallery hidden
 	BOOL				m_fMenusCreated;		// TRUE if menus have been created
 	BOOL				m_fChildChanges;		// TRUE if must send child-change messages
 	UndoableOperation*	m_LastOpUsed;			// the ptr to the op given in PreTrigger and reused in PostTrigger
@@ -225,6 +227,16 @@ private:
 	DWORD GetBSTMaxHeight(INT32 Index)	{ if (Index < MAX_BARS) { return m_BarSize[Index].MaxHeight;    } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
 	BYTE  GetBSTTriggeredBar(INT32 Index) { if (Index < MAX_BARS) { return m_BarSize[Index].TriggeredBar; } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
 	BYTE  GetBSTHasABackBar(INT32 Index)  { if (Index < MAX_BARS) { return m_BarSize[Index].HasABackBar;  } else { ERROR3("Out of range m_BarSize[] index!"); return 0; }};
+
+private:
+	class NameGalleryTimer : public KernelTimer
+	{
+	public:
+		NameGalleryTimer(NameGallery * pOwner) : m_pOwner(pOwner) {}
+		virtual void Notify() {m_pOwner->OnTimerEvent();}
+		NameGallery * m_pOwner;
+	};
+	NameGalleryTimer m_Timer;
 
 	CC_DECLARE_DYNCREATE(NameGallery)
 };
