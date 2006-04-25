@@ -4709,8 +4709,6 @@ BOOL BaseBitmapFilter::GetCurrentStripInfo(	ADDR* ppBits,
 											BMP_SIZE* pWidth, BMP_SIZE* pHeight,
 											BMP_DEPTH* pDepth) const
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::GetCurrentStripInfo - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	LPBITMAPINFO	pBitmapInfo;
 	LPBYTE			pBitmapBits;
 
@@ -4726,7 +4724,6 @@ BOOL BaseBitmapFilter::GetCurrentStripInfo(	ADDR* ppBits,
 	*pWidth		= pBitmapInfo->bmiHeader.biWidth;
 	*pHeight	= pBitmapInfo->bmiHeader.biHeight;
 	*pDepth		= pBitmapInfo->bmiHeader.biBitCount;
-#endif
 	return TRUE;
 }
 

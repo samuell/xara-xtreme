@@ -113,7 +113,7 @@ namespace libJPEG
 {
 	extern "C"
 	{
-	#include "jpeglib.h"
+	#include <jpeglib.h>
 	}
 };
 

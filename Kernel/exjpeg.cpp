@@ -535,7 +535,8 @@ BOOL JPEGExportOptions::SetColourModel(const libJPEG::J_COLOR_SPACE& ColourModel
 	switch (ColourModel)
 	{
 		case libJPEG::JCS_RGB:
-			m_ColourComponents = 4;
+			// This really should be RGB_PIXELSIZE (in jmorecfg.h), but this isn't exported!
+			m_ColourComponents = 3;
 			break;
 
 		case libJPEG::JCS_GRAYSCALE:
@@ -1281,12 +1282,15 @@ BOOL JPEGExportFilter::WriteFrame(void)
 	BMP_SIZE	Width, Height;
 	BMP_DEPTH	Depth;
 	ADDR		pBitmapBits;
-
+	
 	Ok = GetCurrentStripInfo(&pBitmapBits, &Width, &Height, &Depth);
+
+	// Create a converter from bitmap depth to export depth
+	DIBConvert* pConverter = DIBConvert::Create( Depth, GetRenderDepth(), Width, NULL );
 
 	if (Ok)
 	{
-		Ok = WriteRawBitmap(pBitmapBits, Width, Height, Depth, NULL);
+		Ok = WriteRawBitmap( pBitmapBits, Width, Height, Depth, pConverter );
 	}
 
 	return Ok;
