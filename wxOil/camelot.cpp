@@ -209,9 +209,12 @@ wxString				CCamApp::m_strResourcePath;
 void CCamApp::OnKeyEvent( wxKeyEvent &event )
 {
 	// If a control (but not a button) has focus, let it handle the key events
-	wxClassInfo*		pClassInfo = wxWindow::FindFocus()->GetClassInfo();
+	// Whilst debugging focus can end-up NULL, so we protect ourselves
+	wxWindow*			pFocusWnd = wxWindow::FindFocus();
+	wxClassInfo*		pClassInfo = NULL != pFocusWnd ? pFocusWnd->GetClassInfo() : NULL;
 	TRACEUSER( "luke", _T("Focus = %s\n"), pClassInfo->GetClassName() );
-	if(  pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
+	if(  NULL != pFocusWnd &&
+		 pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxSlider) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxCamArtControl) ) )
