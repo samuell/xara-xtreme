@@ -152,7 +152,7 @@ TypeDefC2( VOID,void			)
 extern "C"
 {
 	extern DWORD GDraw_GetVersion() ;
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#if !defined(__WXMSW__)
 	extern pcCHAR GDraw_GetSvnVersion() ;
 #endif
 
