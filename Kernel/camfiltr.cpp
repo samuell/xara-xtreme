@@ -203,8 +203,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ngsentry.h"	// NodeSetSentinel
 
 #include "slicehelper.h"// for slice helper static functions - layer merging
-//#include "ngcore.h"		// For name gallery code.
-//#include "ngitem.h"		// For named item code.
+#include "ngcore.h"		// For name gallery code.
+#include "ngitem.h"		// For named item code.
 //#include "opbevel.h"
 #include "brshattr.h"
 #include "ndclpcnt.h"	// ClipViewRecordHandler
@@ -4315,19 +4315,9 @@ BOOL BaseCamelotFilter::WriteDocument(Operation * pExportOp)
 	BOOL ok = TRUE;
 
 	// Set up the name gallery, using Simon's code, and check that it's valid
-PORTNOTE("namegallery", "Removed use of NameGallery")
-#ifndef EXCLUDE_FROM_XARALX
 	NameGallery	*pNameGallery	= NameGallery::Instance ();
-	if ( pNameGallery == NULL )
-	{
-		// Inform the caller that an error has occurred.
-		ok = FALSE;
-	}
-
-	// Update the named set information if everythings ok.
-	if (ok)
+	if ( pNameGallery)
 		pNameGallery->FastUpdateNamedSetSizes ();
-#endif
 
 	// Karim 08/02/2001
 	// Set the document up to save out shadows correctly.

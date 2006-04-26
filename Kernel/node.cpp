@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 #include "group.h"
 
 #ifdef RALPH
@@ -5242,12 +5242,9 @@ BOOL Node::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState, BOOL DoPre
 		if(DoPreTriggerEdit)
 		{
 			// if the Op is non-NULL then query its MayChangeNodeBounds() method.
-			if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+			if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 			{
-PORTNOTE("other","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 				allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 			}
 		}
 	}

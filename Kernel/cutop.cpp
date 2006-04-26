@@ -1315,13 +1315,10 @@ BOOL OpPaste::RemoveNamesAlreadyUsedInStretching(Node * pAttrib, UndoableOperati
 				ok = FALSE;
 			else
 			{
-PORTNOTE("other","Removed SGNameItem::GetProperty usage")
-#ifndef EXCLUDE_FROM_XARALX
 				// is it a target?
 				NamedStretchProp* pProp = (NamedStretchProp*)pGalleryItem->GetProperty(NamedStretchProp::nIndex);
 				if (pProp && !pProp->GetTriggers().empty())
 					ok = FALSE;
-#endif
 			}
 		}
 		else

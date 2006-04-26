@@ -494,6 +494,8 @@ BOOL ExtendSetsDlg::FillCheckListBox()
 {
 	// iterate over all names used within the document.
 	NameGallery* pNameGallery = NameGallery::Instance();
+	if (!pNameGallery)
+		return TRUE;
 	SGUsedNames* pNames = pNameGallery->GetUsedNames();
 	SGNameItem* pItem = (SGNameItem*) pNames->GetChild();
 

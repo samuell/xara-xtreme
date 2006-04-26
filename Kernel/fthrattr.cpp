@@ -2137,7 +2137,6 @@ BOOL AttrFeather::LinkedNodeGeometryHasChanged(UndoableOperation* pOp)
 	//
 	// The only way to detect whether we're being transformed as above, is to test on the Op.
 
-PORTNOTE("other","Removed NameGallery usage")
 	if (pOp->IS_KIND_OF(TransOperation) 
 		&& !pOp->IsKindOf( CC_RUNTIME_CLASS(OpPathNudge) )
 		)

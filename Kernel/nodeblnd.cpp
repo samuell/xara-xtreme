@@ -128,7 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "opshadow.h"
 //#include "opbevel.h"
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 #include "brshattr.h"
 #include "slicehelper.h"
 
@@ -1943,10 +1943,8 @@ BOOL NodeBlend::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState,
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
 		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
 		{
-			PORTNOTETRACE("other","NodeBlend::AllowOp - removed call to PreTriggerEdit");
-#ifndef EXCLUDE_FROM_XARALX
-			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
+			if (NameGallery::Instance())
+				allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
 		}
 	}
 

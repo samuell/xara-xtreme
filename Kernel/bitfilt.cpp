@@ -296,7 +296,7 @@ BaseBitmapFilter::~BaseBitmapFilter()
 ********************************************************************************************/
 BOOL BaseBitmapFilter::InitBaseClass()
 {
-PORTNOTE("filters","Removed NameGallery usage")
+PORTNOTE("filters","Removed BitmapExportOptions usage")
 #ifndef EXCLUDE_FROM_XARALX
 	return BitmapExportOptions::Declare();
 #else

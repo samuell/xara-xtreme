@@ -149,7 +149,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeblnd.h"
 #include "spread.h"
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 #include "blendatt.h"
 #include "blndhelp.h"
 #include "nodebldr.h"
@@ -2401,18 +2401,15 @@ PORTNOTE("other","Removed OpCreateContour from NodeBevelController::AllowOp");
 	// if we're ok so far and were asked to do a PreTriggerEdit, then
 	// determine whether the Op may change the bounds of some nodes.
 	// If it may, then call NameGallery::PreTriggerEdit.
-PORTNOTE("other","Removed NameGallery from NodeBevelController::AllowOp");
-#ifndef EXCLUDE_FROM_XARALX
 	if (allowed && DoPreTriggerEdit)
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
 			NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
 		}
 	}
-#endif
 
 	return allowed;
 }

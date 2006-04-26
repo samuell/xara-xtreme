@@ -135,7 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "gclip.h"
 
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 
 CC_IMPLEMENT_DYNCREATE(NodeContour, NodeRenderableInk)
 
@@ -1961,12 +1961,9 @@ PORTNOTE("other","Removed OpCreateBevel, OpCreateNewMould, OpPasteEnvelope, OpPa
 		// if we're ok so far and were asked to do a PreTriggerEdit, then
 		// determine whether the Op may change the bounds of some nodes.
 		// If it may, then call NameGallery::PreTriggerEdit.
-		if (DoPreTriggerEdit && pChangeOp && pChangeOp->MayChangeNodeBounds())
+		if (DoPreTriggerEdit && pChangeOp && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("other","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 		}
 	}
 

@@ -498,61 +498,10 @@ BOOL SelectorTool::Init()
 	// This should be set to NULL by default. It will be set properly below, if
 	// everthing is working as it should
 	pInfoBarOp = new SelectorInfoBarOp;
-
-#pragma message( __LOCMSG__ "Removed NameGallery usage" )
-/*	// Now we have to declare all our operations and if that works, try to find
-	// the freehand tools info bar and create it
-	CCResTextFile ResFile;
-	SelectorInfoBarOpCreate BarCreate;
-	if (ResFile.open(_R(IDM_SELECTOR_BAR), _R(IDT_INFO_BAR_RES)))
-	{
-		// Found the file and opened it
-		if (DialogBarOp::ReadBarsFromFile(ResFile,BarCreate))
-		{
-			// Info bar now exists.  Now get a pointer to it
-			String_32 str = String_32(_R(IDS_SELECTOR_INFOBARNAME));
-			DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(str);
-
-			// Should have a dialog bar op by now
-			if (pDialogBarOp != NULL)
-			{
-				// Make sure it is what we were expecting and set it
-			 	if (pDialogBarOp->IsKindOf(CC_RUNTIME_CLASS(SelectorInfoBarOp)))
-				{
-					pInfoBarOp = (SelectorInfoBarOp*) pDialogBarOp;
-				}
-				else
-				{
-					ENSURE(FALSE, "Wrong kind of info-bar in SelectorTool::Init");
-					pInfoBarOp = NULL;
-				}
-			}
-		#ifdef _DEBUG
-			else
-			{
-				TRACE( _T("Couldn't find DialogBarOp for Selector tool info-bar!"));
-			}
-		#endif
-		}
-	#ifdef _DEBUG
-		else
-		{
-			TRACE( _T("Couldn't read selector tool info-bar description from file."));
-		}
-	#endif
-		// Finished with file so close it
-		ResFile.close();
-	}
-#ifdef _DEBUG
-	else
-	{
-		TRACE( _T("Couldn't open selector tool info-bar description file."));
-	}
-#endif
 	
 	// In the debug version make sure we can create a bar.
 	ENSURE(pInfoBarOp != NULL, "Failed to create selector tool info-bar");
-	if (pInfoBarOp == NULL) return FALSE; */
+	if (pInfoBarOp == NULL) return FALSE;
 
 	// Get a permanent pointer to the blob manager.
 	pBlobManager = GetApplication()->GetBlobManager();

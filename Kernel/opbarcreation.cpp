@@ -649,53 +649,56 @@ BOOL OpBarCreation::CreateOrEditBar (OpParam* pOpParam)
 	// get their names and work out the translations to line up a new state
 	NameGallery * pNameGallery = NameGallery::Instance();
 
-	pNameGallery->FastUpdateNamedSetSizes(); // make sure we are using the most up-to-date data
-	
-	SGUsedNames* pNames = pNameGallery->GetUsedNames();
-	SGNameItem* pNameGalleryItem = pNames ? (SGNameItem*) pNames->GetChild() : NULL;
-
-		
-	while (pNameGalleryItem)
+	if (pNameGallery)
 	{
-		if (pNameGalleryItem->m_BarNumber == BarNo && !pNameGalleryItem->IsEmpty() && !pNameGalleryItem->IsABackBar())
+		pNameGallery->FastUpdateNamedSetSizes(); // make sure we are using the most up-to-date data
+		
+		SGUsedNames* pNames = pNameGallery->GetUsedNames();
+		SGNameItem* pNameGalleryItem = pNames ? (SGNameItem*) pNames->GetChild() : NULL;
+	
+			
+		while (pNameGalleryItem)
 		{
-			// set the name
-			pNameGalleryItem->GetNameText(&(ButtonData[ButtonsInitialised].Name));
-			ButtonData[ButtonsInitialised].HaveCreatedProperty = FALSE;
-
-			// Matt 19/12/2000
-			// If the LiveStretching check box is turned on, then we should reposition the buttons relative to the centre of their set bounds.
-			// If not, then we should position them central to where their set bounds on THIS layer are...
-			// This is so that you can change some colours (etc) on one state, click 'SetNewDesign' and be sure that your button isn't
-			// about to realign itself centrally to its set (when this may not have been appropriate)
-			BOOL LiveStretching = FALSE;
-			NodeBarProperty* pNodeBarProperty = (NodeBarProperty*) Document::GetCurrent()->GetSetSentinel()->FindBarProperty();
-			BarDataType NewBarData = pNodeBarProperty->Bar(BarNo);
-			if (pNodeBarProperty  && BarNo < pNodeBarProperty->HowMany())
+			if (pNameGalleryItem->m_BarNumber == BarNo && !pNameGalleryItem->IsEmpty() && !pNameGalleryItem->IsABackBar())
 			{
-				LiveStretching = NewBarData.IsLive;
+				// set the name
+				pNameGalleryItem->GetNameText(&(ButtonData[ButtonsInitialised].Name));
+				ButtonData[ButtonsInitialised].HaveCreatedProperty = FALSE;
+	
+				// Matt 19/12/2000
+				// If the LiveStretching check box is turned on, then we should reposition the buttons relative to the centre of their set bounds.
+				// If not, then we should position them central to where their set bounds on THIS layer are...
+				// This is so that you can change some colours (etc) on one state, click 'SetNewDesign' and be sure that your button isn't
+				// about to realign itself centrally to its set (when this may not have been appropriate)
+				BOOL LiveStretching = FALSE;
+				NodeBarProperty* pNodeBarProperty = (NodeBarProperty*) Document::GetCurrent()->GetSetSentinel()->FindBarProperty();
+				BarDataType NewBarData = pNodeBarProperty->Bar(BarNo);
+				if (pNodeBarProperty  && BarNo < pNodeBarProperty->HowMany())
+				{
+					LiveStretching = NewBarData.IsLive;
+				}
+	
+				// If LiveStretching is not enabled or the bar does not require shuffling (ie user positioned)
+				if ((!LiveStretching || !NewBarData.RequiresShuffle) && !IgnoreSettings)
+				{
+					// Unfortunately, I now want to know where the old version of this button was... I need to know this so that I can position the new buttons with
+					// their new designs in the same place as the original ones so as to minimise on-screen fun... Also, we should use this in the case of User Positioned
+					// buttons so that we don't turn them into Vertical Bars everytime the user clicks 'Set New Design' - not very user positioned!
+					ButtonData[ButtonsInitialised].Translation.x = oldbuttoncentres[ButtonsInitialised].x - SelCentre.x;
+					ButtonData[ButtonsInitialised].Translation.y = oldbuttoncentres[ButtonsInitialised].y - SelCentre.y;
+				}
+				else
+				{
+					// position to new button state on top of the other button states
+					ButtonData[ButtonsInitialised].Translation.x = pNameGalleryItem->GetSetBounds().Centre().x - SelCentre.x;
+					ButtonData[ButtonsInitialised].Translation.y = pNameGalleryItem->GetSetBounds().Centre().y - SelCentre.y;
+				}
+	
+				ButtonsInitialised++;
+	
 			}
-
-			// If LiveStretching is not enabled or the bar does not require shuffling (ie user positioned)
-			if ((!LiveStretching || !NewBarData.RequiresShuffle) && !IgnoreSettings)
-			{
-				// Unfortunately, I now want to know where the old version of this button was... I need to know this so that I can position the new buttons with
-				// their new designs in the same place as the original ones so as to minimise on-screen fun... Also, we should use this in the case of User Positioned
-				// buttons so that we don't turn them into Vertical Bars everytime the user clicks 'Set New Design' - not very user positioned!
-				ButtonData[ButtonsInitialised].Translation.x = oldbuttoncentres[ButtonsInitialised].x - SelCentre.x;
-				ButtonData[ButtonsInitialised].Translation.y = oldbuttoncentres[ButtonsInitialised].y - SelCentre.y;
-			}
-			else
-			{
-				// position to new button state on top of the other button states
-				ButtonData[ButtonsInitialised].Translation.x = pNameGalleryItem->GetSetBounds().Centre().x - SelCentre.x;
-				ButtonData[ButtonsInitialised].Translation.y = pNameGalleryItem->GetSetBounds().Centre().y - SelCentre.y;
-			}
-
-			ButtonsInitialised++;
-
+			pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 		}
-		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 	}
 
 	// init buttons that haven't been seen yet working out their new names and their locations

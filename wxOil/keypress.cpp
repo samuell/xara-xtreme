@@ -316,7 +316,7 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 			return;
 		}
 		
-#pragma message( __LOCMSG__ "Removed NameGallery usage" )
+#pragma message( __LOCMSG__ "Removed some keypress mangling" )
 #if 0
 		RepeatCount = KeyData & 0xffff;
 		ScanCode	= (KeyData >> 16) & 0xff;

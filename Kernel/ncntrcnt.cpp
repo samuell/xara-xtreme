@@ -146,7 +146,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ppbevel.h"
 //#include "cstatbar.h"
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 //#include "blendatt.h"
 #include "blndhelp.h"
 //#include "mario.h"
@@ -1329,10 +1329,8 @@ PORTNOTE("other","NodeContourController::AllowOp - removed OpCreateBevel test")
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
 		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
 		{
-	PORTNOTETRACE("other","NodeContourController::AllowOp - removed call to PreTriggerEdit");
-#ifndef EXCLUDE_FROM_XARALX
-			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
+			if (NameGallery::Instance())
+				allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
 		}
 	}
 

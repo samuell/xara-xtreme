@@ -1110,7 +1110,7 @@ BOOL MenuPopupOps::Init()
 	ERRORIF(!NumSidesOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
 
-PORTNOTE("other","Removed NameGallery usage")
+PORTNOTE("other","Removed bitmap effects usage")
 #ifndef EXCLUDE_FROM_XARALX
 	OpDescriptor* EditEffectOp = new OpDescriptor(     
 												0, 

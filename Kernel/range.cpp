@@ -133,7 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "toolmsg.h"
 #include "comattrmsg.h"
 #include "qualattr.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 #include "objchge.h"	// for ues of ObjChangeParam
 //#include "scrvw.h"
 //#include "will2.h"
@@ -2368,12 +2368,9 @@ BOOL Range::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState, BOOL DoPr
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("dialog","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 			result = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 		}
 	}
 

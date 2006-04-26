@@ -146,7 +146,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opgrad.h"
 //#include "princomp.h"
 #include "strkattr.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 #include "slicehelper.h"
 #include "brshattr.h"
 #include "fthrattr.h"	// for AttrFeather
@@ -3671,11 +3671,8 @@ PORTNOTE("other","Removed opCreateNewMould, OpPasteEnvelope, OpPastePerspective,
 		// if we're ok so far and were asked to do a PreTriggerEdit, then
 		// determine whether the Op may change the bounds of some nodes.
 		// If it may, then call NameGallery::PreTriggerEdit.
-PORTNOTE("other","Removed NameGallery from NodeBevel::GetBlobBoundingRect");
-#ifndef EXCLUDE_FROM_XARALX
-		if (DoPreTriggerEdit && pChangeOp && pChangeOp->MayChangeNodeBounds())
+		if (DoPreTriggerEdit && pChangeOp && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 	}
 
 	// return result (directly, or indirectly via a child AllowOp()) to op

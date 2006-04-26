@@ -368,7 +368,7 @@ void OpSlice::Do(OpDescriptor*)
 
 	// find the defined slices
 	NameGallery* pNameGallery = NameGallery::Instance();
-	SGUsedNames* pNames = pNameGallery->GetUsedNames();
+	SGUsedNames* pNames = pNameGallery?NameGallery->GetUsedNames():NULL;
 
 	if (!pNames)
 	{

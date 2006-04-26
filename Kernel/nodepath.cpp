@@ -132,7 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 
 #include "gdraw.h"
 //#include "rndrgn.h"
@@ -2344,13 +2344,9 @@ BOOL NodePath::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState,
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("dialog","Removed NameGallery usage")
-// Nested exclude
-#ifndef EXCLUDE_FROM_XARALX
 			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 		}
 	}
 	if (SetOpPermissionState)

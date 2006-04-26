@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layermsg.h"	// layer messages for redraw layer message in debug builds
 #endif
 
-//#include "ngcore.h"		// for NameGallery stretching implementation.
+#include "ngcore.h"		// for NameGallery stretching implementation.
 #include "chapter.h"
 
 #include "opdupbar.h"
@@ -4349,12 +4349,9 @@ BOOL UndoableOperation::UpdateChangedNodes(ObjChangeParam* pParam,Spread* pSprea
 		// When querying the Op responsible for the change, I've decided to use 'this'.
 		// Could've asked pParam for the Op's pointer, but 'this' is probably more reliable.
 		UndoableOperation* pChangeOp = this;// pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("dialog","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 			NameGallery::Instance()->PostTriggerEdit(pChangeOp, pParam);
-#endif
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////

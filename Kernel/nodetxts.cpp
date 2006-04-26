@@ -135,7 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "impstr.h"
 #include "unicdman.h"
 #include "extender.h"	// for ExtendParams
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 
 // Resource headers
 //#include "mario.h"
@@ -692,12 +692,9 @@ BOOL BaseTextClass::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState,
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("dialog","Remove reference to NameGallery")
-#ifndef EXCLUDE_FROM_XARALX
 			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 		}
 	}
 
@@ -1524,12 +1521,9 @@ BOOL TextStory::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState,
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
-		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
+		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds() && NameGallery::Instance())
 		{
-PORTNOTE("dialog","Remove reference to NameGallery")
-#ifndef EXCLUDE_FROM_XARALX
 			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
 		}
 	}
 

@@ -2072,7 +2072,8 @@ BOOL BarRedefineStateDlg::SetUpControls()
 
 	NameGallery* pNameGallery = NameGallery::Instance();
 		// make sure we are dealing with the most uptodate information
-	pNameGallery->FastUpdateNamedSetSizes();
+	if (pNameGallery)
+		pNameGallery->FastUpdateNamedSetSizes();
 
 	String_256 BarName = "";
 

@@ -158,7 +158,7 @@ DECLARE_SOURCE("$Revision$");
 #include "userattr.h"
 #include "tmpltatr.h"
 
-//#include "ngcore.h"
+#include "ngcore.h"
 //#include "ngsetop.h"
  
 CC_IMPLEMENT_MEMDUMP(ActionList, List)
@@ -1493,19 +1493,19 @@ BOOL Operation::Undo()
 	OpStatus = UNDO;
 	UndoActions.ExecuteBackwards(FALSE);  
 	BOOL fSuccess = !OpFlags.Failed;
+PORTNOTE("other","Removed OpChangeBarProperty usage")
+#ifndef EXCLUDE_FROM_XARALX
 	if (fSuccess)
 	{
-PORTNOTE("dialog","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 		NameGallery* pNameGallery = NameGallery::Instance();
-		if (pNameGallery != 0)
+		if (pNameGallery)
 		{
 			pNameGallery->PreTriggerEdit((UndoableOperation*) this, 0, (Node*) 0);
 			if (IS_A(this, OpChangeBarProperty))
 				pNameGallery->m_TouchedBar = ((OpChangeBarProperty*) this)->m_BarIndex;
 		}
-#endif
 	}
+#endif
 
 	End(); // End the operation properly, remember that this may delete the operation 
 	return fSuccess; 
@@ -1539,7 +1539,7 @@ BOOL Operation::Redo()
 	BOOL fSuccess = !OpFlags.Failed; 
 	if (fSuccess)
 	{
-PORTNOTE("dialog","Removed NameGallery usage")
+PORTNOTE("other","Removed OpChangeBarProperty usage")
 #ifndef EXCLUDE_FROM_XARALX
 		NameGallery* pNameGallery = NameGallery::Instance();
 		if (pNameGallery != 0)

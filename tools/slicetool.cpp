@@ -2571,7 +2571,8 @@ BOOL SliceTool::UpdateSelectionInfo()
 
 			// call the name-gallery to update named set info.
 			NameGallery* pNameGallery = NameGallery::Instance();
-			pNameGallery->FastUpdateNamedSetSizes();
+			if (pNameGallery)
+				pNameGallery->FastUpdateNamedSetSizes();
 
 			// decide what set-selection info we'll be displaying.
 			INT32 nSetSelection = SliceHelper::DoesSelectionOnlyContainCompleteSets();
@@ -2874,7 +2875,8 @@ MsgResult SliceInfoBarOp::Message(Msg* Message)
 							NewBarData.IsLive = !NewBarData.IsLive;
 
 							NameGallery * pNameGallery = NameGallery::Instance();
-							pNameGallery->FastUpdateNamedSetSizes();
+							if (pNameGallery)
+								pNameGallery->FastUpdateNamedSetSizes();
 
 							pNodeBarProperty->MakeChange(BarNumber, NewBarData);
 						}
@@ -2937,7 +2939,8 @@ MsgResult SliceInfoBarOp::Message(Msg* Message)
 		{
 			// this will be a new set of named sets!
 			NameGallery * pNameGallery = NameGallery::Instance();
-			pNameGallery->FastUpdateNamedSetSizes();
+			if (pNameGallery)
+				pNameGallery->FastUpdateNamedSetSizes();
 		}
 	}
 

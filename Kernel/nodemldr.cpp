@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fillattr.h" 	// For AttrFillGeometry::MakePerspective()
 
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 
 #include "strkattr.h"
 #include "ophist.h"
@@ -1580,10 +1580,8 @@ BOOL NodeMoulder::AllowOp(ObjChangeParam* pParam, BOOL SetOpPermissionState,
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
 		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
 		{
-PORTNOTE("other","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
-			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
-#endif
+			if (NameGallery::Instance())
+				allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
 		}
 	}
 

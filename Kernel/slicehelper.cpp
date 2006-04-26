@@ -109,8 +109,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tmpltatr.h"
 
 // named set stuff
-//#include "ngcore.h"
-//#include "ngitem.h"
+#include "ngcore.h"
+#include "ngitem.h"
 
 //#include "simon.h" // for the _R(IDS_ROLLOVER_DEFAULT) etc
 //#include "sliceres.h"		// more resources
@@ -126,7 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "nodetext.h"
 #include "nodecntr.h"
 
-//#include "layergal.h" // for the vis layer action
+#include "layergal.h" // for the vis layer action
 
 // need to know about shadows and bevels since they size funny for the GetNodeBounding()
 #include "nodeshad.h"
@@ -134,6 +134,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ncntrcnt.h"
 
 #include "lineattr.h" // for the line width inclusion part of the GetNodeBounding()
+
+#include "ophist.h"
 
 // global that is set when a bar property tag is imported to say how many bars there were beforehand
 // used by SliceHelper::MeshImportedLayersWithExistingButtonBars() and is defined in rechdoc.cpp
@@ -364,8 +366,6 @@ void SliceHelper::BuildListOfNodesInBar(List * pList, Node * pNode, const String
 ********************************************************************************************/
 SGNameItem* SliceHelper::LookupNameGalleryItem(const StringBase & strName)
 {
-	PORTNOTETRACE("dialog","SliceHelper::LookupNameGalleryItem - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	NameGallery * pNameGallery = NameGallery::Instance();
 	SGUsedNames* pNames = pNameGallery ? pNameGallery->GetUsedNames() : NULL;
 	SGNameItem* pNameGalleryItem = pNames ? (SGNameItem*) pNames->GetChild() : NULL;
@@ -383,7 +383,6 @@ SGNameItem* SliceHelper::LookupNameGalleryItem(const StringBase & strName)
 		// no then try the next one?
 		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 	}
-#endif
 	return NULL;
 }
 
@@ -406,8 +405,6 @@ SGNameItem* SliceHelper::LookupNameGalleryItem(const StringBase & strName)
 ********************************************************************************************/
 void SliceHelper::GetNextFreeButtonName(INT32 &butno, StringBase * pStr)
 {
-	PORTNOTETRACE("dialog","SliceHelper::GetNextFreeButtonName - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	String_256 TempButtonName;
 	SGNameItem* pNGItem = NULL;
 	SGNameItem* pNGItemExtender = NULL;
@@ -434,7 +431,6 @@ void SliceHelper::GetNextFreeButtonName(INT32 &butno, StringBase * pStr)
 
 	if (pStr)
 		*pStr = TempButtonName;
-#endif
 }
 
 /********************************************************************************************
@@ -582,16 +578,11 @@ Node * SliceHelper::FindNextOfClass(Node *pNode, Node * pLidNode, const class CC
 BOOL SliceHelper::SelectObjectsInSet(const StringBase& strName,
 										SelectScan::Change eNewState)
 {
-	PORTNOTETRACE("dialog","SliceHelper::SelectObjectsInSet - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	SGNameItem* pItem = SliceHelper::LookupNameGalleryItem(strName);
 	if (pItem == 0) return FALSE;
 	SelectScan scanner(pItem, eNewState);
 	scanner.Scan();
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -987,12 +978,12 @@ public:
 ********************************************************************************************/
 void SliceHelper::MeshImportedLayersWithExistingButtonBars(Node * pImportedLayer[5], UndoableOperation * pUndoableOp, BOOL Imported)
 {
-	PORTNOTETRACE("dialog","SliceHelper::MeshImportedLayersWithExistingButtonBars - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	INT32 BarReplacedWithBar[MAX_IMPORTED_BARS]; // 255 bars the max to import into a document
 	memset (BarReplacedWithBar, -1, sizeof(BarReplacedWithBar));
 
 	NameGallery* pNameGallery = NameGallery::Instance();
+	if (!pNameGallery)
+		return;
 	pNameGallery->FastUpdateNamedSetSizes(); // update the existing names in the gallery
 
 	String_256 Postfix;							// holds the "Extender" postfix
@@ -1202,7 +1193,7 @@ void SliceHelper::MeshImportedLayersWithExistingButtonBars(Node * pImportedLayer
 						AlreadyUsed = IsUniqueName(NewButtonName, &ExistingAttrList);
 
 						if (AlreadyUsed)
-							NewButtonName += "x";
+							NewButtonName += _T("x");
 
 					}while (AlreadyUsed);
 				}
@@ -1274,7 +1265,7 @@ void SliceHelper::MeshImportedLayersWithExistingButtonBars(Node * pImportedLayer
 						AlreadyUsed = IsUniqueName(NewExtender, &ExistingAttrList);
 
 						if (AlreadyUsed)
-							NewExtender += "x";
+							NewExtender += _T("x");
 
 					}while (AlreadyUsed);
 
@@ -1450,10 +1441,10 @@ void SliceHelper::MeshImportedLayersWithExistingButtonBars(Node * pImportedLayer
 
 				if (pBarPropertyCopy)
 				{
-					if (pBarPropertyCopy->HowMany() <= BarReplacedWithBar[i])
+					if ((INT32)(pBarPropertyCopy->HowMany()) <= BarReplacedWithBar[i])
 					{
 						UINT32 tempuint = 0;
-						while ((pBarPropertyCopy->HowMany() <= BarReplacedWithBar[i]) && tempuint != UINT_MAX)
+						while (((INT32)(pBarPropertyCopy->HowMany()) <= BarReplacedWithBar[i]) && tempuint != UINT_MAX)
 							tempuint = pBarPropertyCopy->Add(pBarPropertyCopy->Bar(i));
 					}
 					else
@@ -1520,7 +1511,7 @@ void SliceHelper::MeshImportedLayersWithExistingButtonBars(Node * pImportedLayer
 
 	// Ensure that the Trigger sets are correctly flagged...
 	SliceHelper::EnsureTriggerInfo();
-#endif
+
 }
 
 
@@ -1681,8 +1672,6 @@ BOOL SliceHelper::CreatePropertiesForSet(	const String_256& SetName,
 											UndoableOperation* pOp,
 											NodeSetProperty * pExampleProp)
 {
-	PORTNOTETRACE("dialog","SliceHelper::CreatePropertiesForSet - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	NodeSetSentinel * pSentinel = Document::GetSelected()->GetSetSentinel();
 
 	if (!pSentinel)
@@ -1884,7 +1873,6 @@ BOOL SliceHelper::CreatePropertiesForSet(	const String_256& SetName,
 					  		 ( Action**)(&UndoHideNodeAction));
 
 	}
-#endif
 	return TRUE;
 }
 
@@ -2357,8 +2345,6 @@ BOOL SliceHelper::SyncTextStories (TextStory * pStory, TextStory * pMaster, Undo
 
 BOOL SliceHelper::SyncTextLines (TextLine * pLine1, TextLine * pLine2, UndoableOperation * pOp)
 {
-	PORTNOTETRACE("dialog","SliceHelper::SyncTextLines - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	Node * pChar1 = pLine1->FindFirstChild(CC_RUNTIME_CLASS(TextChar));
 	Node * pChar2 = pLine2->FindFirstChild(CC_RUNTIME_CLASS(TextChar));
 
@@ -2568,7 +2554,6 @@ BOOL SliceHelper::SyncTextLines (TextLine * pLine1, TextLine * pLine2, UndoableO
 	}
 
 	TRACEUSER( "Matt", _T("Done\n"));
-#endif
 	return TRUE;
 }
 
@@ -2803,8 +2788,6 @@ BOOL SliceHelper::BarExistsOnLayer(const String_256 &BarName, const String_256 &
 // find out if the rect r intersects with any bars (sjk 27/6/00)
 void SliceHelper::BarNameInRect(DocRect r, String_256 *pBarName)
 {
-	PORTNOTETRACE("dialog","SliceHelper::BarNameInRect - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	NameGallery * pNameGallery = NameGallery::Instance();
 	if (!pNameGallery)
 		return;
@@ -2824,14 +2807,11 @@ void SliceHelper::BarNameInRect(DocRect r, String_256 *pBarName)
 		}
 		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 	}
-#endif
 }
 
 // add an action to show this Layer undoably (sjk 6/7/00)
 void SliceHelper::ShowLayer(BOOL Visible, Layer * pLayer, Spread * pSpread, UndoableOperation * pUndoOp)
 {
-	PORTNOTETRACE("dialog","SliceHelper::ShowLayer - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// dont put in the undo action if we have done nothing
 	if (pLayer->IsVisible() == Visible)
 		return;
@@ -2841,7 +2821,6 @@ void SliceHelper::ShowLayer(BOOL Visible, Layer * pLayer, Spread * pSpread, Undo
 	Param.NewState = Visible;
 	Param.pLayer = pLayer;
 	LayerStateAction::Init(pUndoOp, pUndoOp->GetUndoActions(), Param);
-#endif
 }
 
 // uses the name gallery data to work out if the selection
@@ -2852,8 +2831,6 @@ void SliceHelper::ShowLayer(BOOL Visible, Layer * pLayer, Spread * pSpread, Undo
 // sjk 7/7/00
 INT32 SliceHelper::DoesSelectionOnlyContainCompleteSets()
 {
-	PORTNOTETRACE("dialog","SliceHelper::DoesSelectionOnlyContainCompleteSets - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	NameGallery * pNameGallery = NameGallery::Instance();
 	if (!pNameGallery)
 		return 2;
@@ -2882,9 +2859,6 @@ INT32 SliceHelper::DoesSelectionOnlyContainCompleteSets()
 	}
 
 	return ret;
-#else
-	return 2;
-#endif
 }
 
 // Small function to scan the tree looking for a named object
@@ -3069,8 +3043,6 @@ BOOL SliceHelper::RemoveNamesFromController (UndoableOperation * pOp, Node * pCt
 
 BOOL SliceHelper::ModifySelectionToContainWholeButtonElements()
 {
-	PORTNOTETRACE("dialog","SliceHelper::ModifySelectionToContainWholeButtonElements - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get a pointer to the NameGallery, and make sure it is up-to-date
 	NameGallery *pNameGallery = NameGallery::Instance();
 	pNameGallery->FastUpdateNamedSetSizes();
@@ -3117,7 +3089,7 @@ BOOL SliceHelper::ModifySelectionToContainWholeButtonElements()
 				// Retrieve the current node from the NodeListItem...
 				pNode = pItem->pNode;
 
-				for (pAttr = (TemplateAttribute*)pNode->FindFirstAttr(Node::IsAnObjectName); pAttr; pAttr = (TemplateAttribute*)pAttr->FindNextAttr(Node::IsAnObjectName))
+				for (pAttr = (TemplateAttribute*)pNode->FindFirstAttr(&Node::IsAnObjectName); pAttr; pAttr = (TemplateAttribute*)pAttr->FindNextAttr(&Node::IsAnObjectName))
 				{
 					// This may seem a redundant check - but it's not! When we find that all of one layer has been selected
 					// we select all of the layer and update the NameGallery - if we check within this 'for' loop, then
@@ -3189,7 +3161,7 @@ BOOL SliceHelper::ModifySelectionToContainWholeButtonElements()
 								}
 
 								// Select ALL LAYERS of this named set...
-								TRACEUSER( "Matt", _T("ALL of %s on layer selected\n"),StrName);
+								TRACEUSER( "Matt", _T("ALL of %s on layer selected\n"),(TCHAR *)StrName);
 
 								SelectScan scanner(pNameGalleryItem, SelectScan::SELECT);
 								scanner.Scan();
@@ -3222,7 +3194,6 @@ BOOL SliceHelper::ModifySelectionToContainWholeButtonElements()
 		// Then our procedure has altered the selection, so we'd better update it!
 		GetApplication()->FindSelection()->Update();		
 	}
-#endif
 	return TRUE;
 }
 
@@ -3427,8 +3398,6 @@ void SliceHelper::BuildListOfNodesInButton(List * pList, Layer * pLayer, const S
 ********************************************************************************************/
 void SliceHelper::EnsureTriggerInfo()
 {
-	PORTNOTETRACE("dialog","SliceHelper::EnsureTriggerInfo - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	NameGallery *pNameGallery = NameGallery::Instance();
 	SGUsedNames* pNames = pNameGallery->GetUsedNames();
 
@@ -3474,5 +3443,4 @@ void SliceHelper::EnsureTriggerInfo()
 		// Get the next item and try again...
 		pNameGalleryItem = (SGNameItem *) pNameGalleryItem->GetNext();
 	}
-#endif
 }

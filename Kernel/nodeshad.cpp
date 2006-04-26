@@ -153,7 +153,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blobs.h"
 #include "attrmap.h"
 #include "extender.h"
-//#include "ngcore.h"		// NameGallery, for stretching functionality
+#include "ngcore.h"		// NameGallery, for stretching functionality
 
 #include "gdraw.h"
 
@@ -2894,18 +2894,16 @@ PORTNOTE("other", "Removed use of sundry Ops from NodeShadow::AllowOp")
 	// If we're ok so far and were asked to do a PreTriggerEdit, then
 	// determine whether the Op may change the bounds of some nodes.
 	// If it may, then call NameGallery::PreTriggerEdit.
-PORTNOTETRACE("NameGallery", "Use of NameGallery removed in NodeShadowController::AllowOp");
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (allowed && DoPreTriggerEdit)
 	{
 		// if the Op is non-NULL then query its MayChangeNodeBounds() method.
 		UndoableOperation* pChangeOp = pParam->GetOpPointer();
 		if (pChangeOp != NULL && pChangeOp->MayChangeNodeBounds())
 		{
-			allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
+			if (NameGallery::Instance())
+				allowed = NameGallery::Instance()->PreTriggerEdit(pChangeOp, pParam, this);
 		}
 	}
-#endif
 
 	return allowed;
 }
