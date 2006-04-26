@@ -202,8 +202,10 @@ OpState OpSelectUnionSets::GetState(String_256*, OpDescriptor*)
 
 void OpSelectUnionSets::Do(OpDescriptor*)
 {
-	SelectUnionScan(KeyPress::IsGalleryCtrlPressed() ? SelectUnionScan::DESELECT : 
-		SelectUnionScan::SELECT_EXCLUSIVE).Scan();
+	INT32 option = SelectUnionScan::SELECT_EXCLUSIVE;
+	if( KeyPress::IsGalleryCtrlPressed() )
+		option = SelectUnionScan::DESELECT;
+	SelectUnionScan( option ).Scan();
 	End();
 }
 
@@ -237,9 +239,10 @@ OpState OpSelectIntersectSets::GetState(String_256*, OpDescriptor*)
 
 void OpSelectIntersectSets::Do(OpDescriptor*)
 {
-	SelectIntersectScan(KeyPress::IsGalleryCtrlPressed()
-							? SelectIntersectScan::DESELECT
-							: SelectIntersectScan::SELECT_EXCLUSIVE).Scan();
+	INT32 option = SelectUnionScan::SELECT_EXCLUSIVE;
+	if( KeyPress::IsGalleryCtrlPressed() )
+		option = SelectUnionScan::DESELECT;
+	SelectUnionScan( option ).Scan();
 	End();
 }
 
