@@ -1,17 +1,33 @@
 #!/bin/sh
 
-# We should really only set TOPDIR if it's not already set to allow
-# out of tree builds
-TOPDIR=`pwd`
+# Scripts/build-resources.sh
+# Build resources.cpp if necessary
+# Call with a -f argument to force build of resources even if the system doesn't think it necessary
 
-# We should set this to 0
 NEWRES=0
+if test "$1" = "-f" ; then
+	NEWRES=1
+fi
 # A checksum routine - it doesn't much matter what it is
-CHECKSUM=md5sum
-ZIP=zip
-XARALANGUAGE=EN
-XGETTEXT=xgettext
-WXRC=wxrc
+if test "$CHECKSUM" = "" ; then
+	CHECKSUM=md5sum
+fi
+if test "$ZIP" = "" ; then
+	ZIP=zip
+fi
+if test "$XARALANGUAGE" = "" ; then
+	XARALANGUAGE=EN
+fi
+if test "$XGETTEXT" = "" ; then
+	XGETTEXT=xgettext
+fi
+if test "$WXRC" = "" ; then
+	WXRC=wxrc
+fi
+# Set TOPDIR if it's not already set
+if test "$TOPDIR" = "" ; then
+	TOPDIR=`pwd`
+fi
 
 cd wxOil
 echo Testing for new resources... 1>&2
@@ -38,20 +54,17 @@ fi
 
 if test "$NEWRES" -eq 1 ; then
 	echo "Rebuilding resources" 1>&2
-	rm -f xrc/xrc.check xrc/resources.xrs xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst 1>&2 2>/dev/null;
-
+	rm -f resources.cpp xrc/xrc.check xrc/resources.xrs xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst 1>&2 2>/dev/null
 
 	echo "Combining dialog & string resources" 1>&2 && \
 	touch xrc/strings.xrc && \
 	$TOPDIR/Scripts/combinexrc.pl -b missing.png -o xrc/dialogs.xrc $XRCDIALOGS && \
 	$TOPDIR/Scripts/combinexrc.pl -b missing.png -t -s -o xrc/strings.lst $XRCSTRINGS && \
-	( perl -ne 'chomp;s/^\S+\t//;print "_(\"$_\");\n";' < xrc/strings.lst && $WXRC -g xrc/dialogs.xrc) | sort -u | \
+	( ( perl -ne 'chomp;s/^\S+\t//;print "_(\"$_\");\n";' < xrc/strings.lst && $WXRC -g xrc/dialogs.xrc) | sort -u | \
 	perl -ne 'print unless /^_\(\"\"\)\;\s+$/;' | sed 's/&amp;/\&/g' | \
-	$XGETTEXT --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o xrc/xaralx.po
-
-	echo "Generating resource checksum" 1>&2 && \
+	$XGETTEXT --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o xrc/xaralx.po ) && \
+	echo "Generating resource checksum and resources.cpp" 1>&2 && \
 	( cat xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst $XRCBITMAPS | $CHECKSUM | awk '{print $1}' > xrc/xrc.check ) && \
-	$ZIP -9 -j -q xrc/resources.xrs xrc/xrc.check xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst $XRCBITMAPS
-
+	$ZIP -9 -j -q xrc/resources.xrs xrc/xrc.check xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst $XRCBITMAPS && \
 	$TOPDIR/Scripts/bin2cpp.pl -f CamResource::GetBinaryFileInfo xrc/resources.xrs resources.cpp
 fi
