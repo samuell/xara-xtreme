@@ -1371,7 +1371,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
@@ -1388,7 +1388,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_REDEFINE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Redefine from selection</tooltip>
                                     <help>Redefine this item from the document selection</help>
@@ -1412,7 +1412,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Create new item</tooltip>
                                     <help>Create a new item (will duplicate a selected item)</help>
@@ -1429,7 +1429,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_EDIT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Edit this item</tooltip>
                                     <help>Edit this item</help>
@@ -1453,7 +1453,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Delete items</tooltip>
                                     <help>Delete all selected items</help>
@@ -1470,7 +1470,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_NAME">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Rename this item</tooltip>
                                     <help>Rename this item</help>
@@ -1494,7 +1494,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
@@ -1511,7 +1511,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_COLGAL_BACKGROUND">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Set Page Background</tooltip>
                                     <help>Set Page Background</help>
@@ -1535,7 +1535,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -1585,7 +1585,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>New layer</tooltip>
                                     <help>Create a new layer</help>
@@ -1602,7 +1602,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_COPY">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Copy layer</tooltip>
                                     <help>Copy the selected layer and all its contents</help>
@@ -1626,7 +1626,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_PROPERTIES">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Layer properties...</tooltip>
                                     <help>Opens the properties dialog for the selected layer</help>
@@ -1643,7 +1643,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Delete layer</tooltip>
                                     <help>Delete the selected layer and all its contents</help>
@@ -1667,7 +1667,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LAYER_MOVE_TO_ACTIVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Move to current layer</tooltip>
                                     <help>Move the selected objects to the current layer</help>
@@ -1684,7 +1684,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -1757,7 +1757,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_NEW_NODLG">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>IDBBL_NEWFRAME</tooltip>
                                     <help>IDS_FRAME_STATUS_NEW</help>
@@ -1774,7 +1774,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_COPY_NODLG">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>IDBBL_COPYFRAME</tooltip>
                                     <help>IDS_FRAME_STATUS_COPY</help>
@@ -1798,7 +1798,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_PROPERTIES">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>FrameProperties</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -1814,7 +1814,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_FRAME_DELETE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>DeleteFrame</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -1837,7 +1837,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_PREVIEW">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>GrabFrame</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -1853,7 +1853,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -1926,7 +1926,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_CREATE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Insert bitmap object</tooltip>
                                     <help>Insert a new bitmap object</help>
@@ -1943,7 +1943,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_TRACE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Trace bitmap</tooltip>
                                     <help>Trace a bitmap</help>
@@ -1967,7 +1967,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_FILL">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply as fill</tooltip>
                                     <help>Apply a bitmap as a fill</help>
@@ -1984,7 +1984,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_PLUGINS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Special Effects</tooltip>
                                     <help>Plug-ins</help>
@@ -2008,7 +2008,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_TEXTURE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply as transparency</tooltip>
                                     <help>Apply a bitmap as a transparency</help>
@@ -2025,7 +2025,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
@@ -2049,7 +2049,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Delete items</tooltip>
                                     <help>Delete all selected items</help>
@@ -2066,7 +2066,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_SAVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Save bitmap</tooltip>
                                     <help>Save a bitmap</help>
@@ -2090,7 +2090,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_BACKGROUND">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Set page background</tooltip>
                                     <help>Set page background</help>
@@ -2107,7 +2107,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_PROPS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Gallery properties</tooltip>
                                     <help>Properties</help>
@@ -2131,7 +2131,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -2148,7 +2148,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_PREVIEW">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Show preview of bitmaps</tooltip>
                                     <help>Preview</help>
@@ -2198,7 +2198,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
@@ -2215,7 +2215,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -2308,7 +2308,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>ApplyNamesToSelectedObjects</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2324,7 +2324,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RemoveNamesFromSelectedObjects</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2347,7 +2347,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_NEW">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>NameObjectsDlg</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2363,7 +2363,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_NAMEGAL_RENAME">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RenameObjectsDlg</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2386,7 +2386,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_NAMEGAL_SELECT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>SelectUnionOfSets</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2402,7 +2402,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_NAMEGAL_INTERSECT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>SelectIntersectOfSets</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2425,7 +2425,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_DELETE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>DeleteNamesFromAllObjects</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2441,7 +2441,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_REDEFINE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>RedefineNamesAsSelectedObjects</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2464,7 +2464,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_NAMEGAL_EXPORT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                     <optoken>ExportSets</optoken>
                                     <size>-1,18</size>
                                 </object>
@@ -2480,7 +2480,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -2547,7 +2547,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_APPLY">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply item to selection</tooltip>
                                     <help>Apply this item to the document selection</help>
@@ -2564,7 +2564,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
@@ -2588,7 +2588,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_INSTALL">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Install selected fonts</tooltip>
                                     <help>Installs the selected fonts onto your system</help>
@@ -2605,7 +2605,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_FONTS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Add fonts from disc</tooltip>
                                     <help>Add new fonts from your hard drive or CD ROM</help>
@@ -2629,7 +2629,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_DEINSTALL">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Uninstall selected fonts</tooltip>
                                     <help>Uninstalls the selected fonts from your system</help>
@@ -2646,7 +2646,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
@@ -2670,7 +2670,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_FONTS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Connect to font gallery on Xara's web site</tooltip>
                                     <help>Click to download fonts and their thumbnails from Xara's web site</help>
@@ -2687,7 +2687,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Fonts... to start downloading them again)</help>
@@ -2711,7 +2711,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -2761,7 +2761,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_OPEN">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Open as new document</tooltip>
                                     <help>Open this item as a new document</help>
@@ -2778,7 +2778,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
@@ -2802,7 +2802,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_IMPORT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Import into this document</tooltip>
                                     <help>Import this item into the selected document</help>
@@ -2819,7 +2819,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_CLIPART">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Add clipart from disc</tooltip>
                                     <help>Add new clipart from your local hard disc</help>
@@ -2843,7 +2843,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_CLIPART">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Connect to clipart gallery on Xara's web site</tooltip>
                                     <help>Click to download clipart and their thumbnails from Xara's web site</help>
@@ -2860,7 +2860,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Clipart... to start downloading them again)</help>
@@ -2884,7 +2884,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
@@ -2901,7 +2901,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>
@@ -2930,7 +2930,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_UPDATE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Start batching</tooltip>
                                     <help>Start batching from the selected entry</help>
@@ -3000,7 +3000,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_IMPORT">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Import into this document</tooltip>
                                     <help>Import this item into the selected document</help>
@@ -3017,7 +3017,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_REMOVE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Remove selected sections</tooltip>
                                     <help>Remove selected sections from your library gallery</help>
@@ -3041,7 +3041,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_FILL">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply as fill</tooltip>
                                     <help>Apply a bitmap as a fill</help>
@@ -3058,7 +3058,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_ADD_FILLS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Add fills from disc</tooltip>
                                     <help>Add new fills from your hard drive or CD ROM</help>
@@ -3082,7 +3082,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_TEXTURE">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Apply as transparency</tooltip>
                                     <help>Apply a bitmap as a transparency</help>
@@ -3099,7 +3099,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_MENU">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Display options</tooltip>
                                     <help>Set gallery options (Sort, Search, Properties, etc)</help>
@@ -3123,7 +3123,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_WEB_FILLS">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Connect to fills gallery on Xara's web site</tooltip>
                                     <help>Click to download fills and their thumbnails from Xara's web site</help>
@@ -3140,7 +3140,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_LIBGAL_STOP_LOADING">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Stop thumbnail downloading</tooltip>
                                     <help>Stop thumbnail downloading (click on Get Fills... to start downloading them again)</help>
@@ -3164,7 +3164,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_BMPGAL_BACKGROUND">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Set page background</tooltip>
                                     <help>Set page background</help>
@@ -3181,7 +3181,7 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</flag>
                                 <border>1</border>
                                 <object class="wxCamArtControl" name="IDC_GALLERY_HELP">
-                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TEXT|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER|wxCACS_NOAUTOREPEAT|wxCACS_HALFHEIGHT</camartstyle>
                                     <size>-1,18</size>
                                     <tooltip>Help for this Gallery</tooltip>
                                     <help>Help for this Gallery</help>

@@ -134,8 +134,9 @@ enum CamArtFlags
 
 	CAF_NOINTERNALBORDER= 1<<18, // Don't paint an internal border (unused, for CACS_)
 
+	CAF_NOAUTOREPEAT	= 1<<19, // Used for CACS_
 	// And this goes right at the end
-	CAF_MAX				= 1<<18,
+	CAF_MAX				= 1<<20,
 
 	// And here is the default
 	CAF_DEFAULT			= 0

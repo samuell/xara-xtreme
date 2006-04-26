@@ -328,7 +328,7 @@ void wxCamArtControl::OnMouseEvent(wxMouseEvent & event)
 	if (ButtonClick)
 	{
 		Invoke();
-		if (IsEnabled() && !(m_CamArtControlStyle & wxCACS_TOGGLEBUTTON)) // Toggle buttons don't autorepeat
+		if (IsEnabled() && !(m_CamArtControlStyle & wxCACS_TOGGLEBUTTON) && !(m_CamArtControlStyle & wxCACS_NOAUTOREPEAT)) // Toggle buttons don't autorepeat
 		{
 			// We start the timer at the end, as the Op may be an INT32 one
 			m_AREventPending = FALSE; // Just in case an event got lost in flight
@@ -473,6 +473,7 @@ wxCamArtControlXmlHandler::wxCamArtControlXmlHandler() : wxXmlResourceHandler()
 	XRC_ADD_STYLE(wxCACS_BOTTOM);
 	XRC_ADD_STYLE(wxCACS_LEFT);
 	XRC_ADD_STYLE(wxCACS_RIGHT);
+	XRC_ADD_STYLE(wxCACS_NOAUTOREPEAT);
 	AddWindowStyles();
 }
 
