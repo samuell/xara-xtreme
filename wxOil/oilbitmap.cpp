@@ -2145,6 +2145,58 @@ RebuildXPEBitmap();
 	return(TRUE);
 }
 
+/********************************************************************************************
+
+>	virtual wxImage * CWxBitmap::MakewxImage(BOOL UsePalette) const;
+
+	Author:		Alex Bligh
+	Created:	26/04/2006
+
+	Inputs:		UsePalette -Ignored for deep bitmaps
+							For <=8bpp bitmaps, if this value is:
+								FALSE, the bitmap's palette will be ignored, and the actual pixel
+								(palette index) value will be returned as a greyscale RGB value
+								TRUE, the pixel index value will be used to retrieve the 24bpp
+								palette entry for the pixel, if a palette is available.
+
+	Outputs:	None
+
+	Returns:	A pointer to a wxImage, or NULL for failure
+
+	Purpose:	Makes a wxBitmap, slowly
+
+				The scanline will be converted up from 1, 4, 8, 24, or 32bpp into
+				the generic Pixel32bpp format.
+
+	Notes:		This function basically just calls ReadPixel for all pixels in the scanline
+
+	SeeAlso:	CWxBitmap::ReadPixel32bpp
+
+********************************************************************************************/
+
+wxImage * CWxBitmap::MakewxImage(BOOL UsePalette)
+{
+	wxImage * pImage = new wxImage(GetWidth(), GetHeight(), /*TYPENOTE: Correct*/ false);
+	if (!pImage)
+		return NULL;
+	pImage->SetAlpha();
+	if (!pImage->HasAlpha())
+	{
+		delete pImage;
+		return NULL;
+	}
+
+	RebuildXPEBitmap();
+
+	for (UINT32 YPos = 0; YPos < GetHeight(); YPos++) for (UINT32 XPos = 0; XPos < GetWidth(); XPos++)
+	{
+		Pixel32bpp p = ReadPixel32bpp(XPos, YPos, UsePalette);
+		pImage->SetRGB(XPos, YPos, p.Red, p.Blue, p.Green);
+		pImage->SetAlpha(XPos, YPos, 255-p.Alpha); // wxImage alpha has 0 for fully transparent
+	}
+
+	return(pImage);
+}
 
 
 /********************************************************************************************

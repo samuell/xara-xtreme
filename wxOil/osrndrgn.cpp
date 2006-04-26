@@ -2202,20 +2202,21 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 {
 	wxString Text = (wxString)(TCHAR *)(*TheText);
 	wxRect Rect(0,0,0,0);
+
+	wxDC * pDC = RenderDC;
+	wxSize DPI = GetFixedDCPPI(*pDC);
+	INT32 XDPI = DPI.GetWidth();
+	INT32 YDPI = DPI.GetHeight();
+	INT32 LineHeight = RenderDC->GetCharHeight();
+
 	if (uFormat & FORMAT_CALCRECT) // just calculate the rect needed to draw the text and return
 	{
-		INT32 LineHeight = 0;
 		// This won't actually draw the text, instead it returns a rectangle in 'Rect'	
 		// LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
-		LineHeight = RenderDC->GetCharHeight();
 		wxCoord w, h;
 		RenderDC->GetTextExtent(Text, &w, &h);
 		Rect = wxRect(0, 0, w, h);
 
-		wxDC * pDC = RenderDC;
-		wxSize DPI = GetFixedDCPPI(*pDC);
-		INT32 XDPI = DPI.GetWidth();
-		INT32 YDPI = DPI.GetHeight();
 
 		if(XDPI == 0 || YDPI == 0 || LineHeight == 0)
 		{
@@ -2231,7 +2232,13 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 		return;
 	}
 	
-	Rect = DocRectToWin(BoundsRect, 0,0,0,0, TRUE);
+	// We plot using the TOP of the rectangle supplied (that's the highest DocCoord
+	// but we need to center it (i.e. reduce the value
+	DocRect brect=BoundsRect;
+
+	brect.hi.y -= ((brect.hi.y-brect.lo.y)-(INT32)(((double)LineHeight * IN_MP_VAL) / YDPI))/2;
+
+	Rect = DocRectToWin(brect, 0,0,0,0, TRUE);
 	// Rect = DocRectToWin(BoundsRect, 0,-1,1,0, TRUE);
 
 	// Small 'fix' - If we DrawRect the 'BoundsRect' then windows draws the text 1 pixel
@@ -2240,7 +2247,6 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 	if (Rect.width>0)		// Still a valid rectangle?
 	{
 //		Rect.x--;
-//		INT32 LineHeight;
 
 		RenderDC->SetBackgroundMode(wxTRANSPARENT);
 		RenderDC->DrawText(Text, Rect.GetLeft(), Rect.GetTop());
@@ -3385,8 +3391,6 @@ void OSRenderRegion::DrawBitmap(const DocCoord &Point, UINT32 BitmapID, UINT32 T
 
 BOOL OSRenderRegion::DrawTransformedBitmap(NodeBitmap *pNodeBitmap)
 {
-	PORTNOTETRACE("other","OSRenderRegion::DrawTransformedBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// If we are not printing, then we'll always render as a bitmap fill
 	// (eg. Gallery items).
 	if (IsPrinting())
@@ -3424,40 +3428,16 @@ BOOL OSRenderRegion::DrawTransformedBitmap(NodeBitmap *pNodeBitmap)
 				INT32 DestWidth = (INT32) ((((double) Width) / dPixelSize) + 0.5);
 				INT32 DestHeight = (INT32) ((((double) Height) / dPixelSize) + 0.5);
 
-				// Make sure the Blit is the correct quality
-				INT32 OldMode = RenderDC->SetStretchBltMode(HALFTONE);
-
-				// Must call SetBrushOrgEx() after setting the stretchblt mode 
-				// to HALFTONE (see Win32 SDK docs).
-				POINT OldOrg;
-				SetBrushOrgEx(RenderDC->m_hDC, 0, 0, &OldOrg);
-
 				// Get handle to bitmap (must be a WinBitmap as we are in winoil!)
-				WinBitmap *WinBM = (WinBitmap *) pNodeBitmap->GetBitmap()->ActualBitmap;
+				CWxBitmap *WxBM = (CWxBitmap *) pNodeBitmap->GetBitmap()->ActualBitmap;
 
-				// Blit the bitmap to the DC
-				INT32 Result = StretchDIBits( RenderDC->m_hDC, 
+				wxImage *pwxImage=WxBM->MakewxImage();
 
-						  					DestTopLeft.x, DestTopLeft.y,
-						  					DestWidth, DestHeight,
-
-						  					0,0,										// source 0,0
-						  					WinBM->BMInfo->bmiHeader.biWidth,			// source W
-						  					WinBM->BMInfo->bmiHeader.biHeight,			// source H
-
-						  					WinBM->BMBytes,
-						  					WinBM->BMInfo,
-						  					DIB_RGB_COLORS,
-						  					SRCCOPY );
-
-				// Restore StretchBlt mode and brush origin
-				RenderDC->SetStretchBltMode(OldMode);
-				SetBrushOrgEx(RenderDC->m_hDC, OldOrg.x, OldOrg.y, NULL);
-
-				if (Result != GDI_ERROR)
+				if (pwxImage)
 				{
-					// All done
-					return TRUE;
+					wxBitmap TheBitmap(pwxImage->Rescale(DestWidth, DestHeight));
+					delete pwxImage;
+					RenderDC->DrawBitmap(TheBitmap, DestTopLeft.x, DestTopLeft.y, TRUE);
 				}
 			}
 		}
@@ -3469,9 +3449,6 @@ BOOL OSRenderRegion::DrawTransformedBitmap(NodeBitmap *pNodeBitmap)
 	RenderComplexShapes = FALSE;
 
 	return bOk;
-#else
-	return TRUE;
-#endif
 }
 
 /********************************************************************************************
