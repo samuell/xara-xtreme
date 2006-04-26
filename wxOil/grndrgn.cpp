@@ -3727,6 +3727,7 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 
 		GetDrawContext()->SetBias(3,Fill->GetProfile().GetBias()) ;
 		GetDrawContext()->SetGain(3,Fill->GetProfile().GetGain()) ;
+		GetDrawContext()->SetOutputRange(3,0x00,0xFF) ;
 
 		//---------------------------------------------------------------------------------------
 		// Smoothing decisions
