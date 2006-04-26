@@ -4821,15 +4821,20 @@ void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget,
 		irect.lo.y=temp;
 	}
 
-	wxRect ToRedraw(irect.lo.x / PixelSize, (ExtraInfo->dy-irect.lo.y) / PixelSize,
-					ExtraInfo->dx / PixelSize, ExtraInfo->dy/PixelSize);
+	wxRect ToRedraw(irect.lo.x / PixelSize, (ExtraInfo->dy-irect.hi.y) / PixelSize,
+					(irect.hi.x-irect.lo.x) / PixelSize, (irect.hi.y-irect.lo.y)/PixelSize);
 
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	// Invalidate the gadget, but only if we found a legal window to invalidate
 	ERROR3IF((!pGadget), "DialogManager::InvalidateGadget - Gadget not valid");
 
 	if (pGadget)
+	{
+		// GTK seems a bit precious about invalid coordinates, so clip to the client size
+		wxRect GadgetRect(pGadget->GetClientSize());
+		ToRedraw=ToRedraw.Intersect(GadgetRect);
 		pGadget->Refresh(TRUE, &ToRedraw);
+	}
 }
 
 
@@ -5001,7 +5006,7 @@ PORTNOTE("dialog","Can't handle different DPIs, using X")
 	Result->Dpi = OSRenderRegion::GetFixedDCPPI(ScreenDC).x; // x;
 
 	// Calculate how big the window is, in MILLIPOINTS
-	wxSize				WindowSize( pTheWindow->GetSize() );
+	wxSize				WindowSize( pTheWindow->GetClientSize() );
 
 	Result->dx = ( INT32(WindowSize.GetWidth())*72000 ) / Result->Dpi;
 	Result->dy = ( INT32(WindowSize.GetHeight())*72000) / Result->Dpi;
