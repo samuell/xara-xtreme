@@ -769,6 +769,46 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 					CamResource::GetObjectName((ResourceID)id), pEvtHandler->pwxWindow);
 	}
 
+	if (
+		(EventType == wxEVT_LEFT_DCLICK) ||
+		(EventType == wxEVT_MIDDLE_DCLICK) ||
+		(EventType == wxEVT_RIGHT_DCLICK) ||
+		FALSE)
+	{
+		// OK, these are a bit deadly. We expected there to be TWO mouse up mouse downs. People
+		// don't seem to hang off double clicks themselves, but do their own double click handling
+		// (why oh why). So we generate an extra mouse down and mouse up, and sending them to
+		// ourselves. This may not be necessary on all platforms.
+		wxMouseEvent *MouseDown = (wxMouseEvent *)(event.Clone());
+		wxMouseEvent *MouseUp = (wxMouseEvent *)(event.Clone());
+		if (MouseDown && MouseUp)
+		{
+			if (EventType == wxEVT_LEFT_DCLICK)
+			{
+				MouseDown->SetEventType(wxEVT_LEFT_DOWN);
+				MouseUp->SetEventType(wxEVT_LEFT_UP);
+			}
+			else if	(EventType == wxEVT_MIDDLE_DCLICK)
+			{
+				MouseDown->SetEventType(wxEVT_MIDDLE_DOWN);
+				MouseUp->SetEventType(wxEVT_MIDDLE_UP);
+			}
+			else
+			{
+				MouseDown->SetEventType(wxEVT_RIGHT_DOWN);
+				MouseUp->SetEventType(wxEVT_RIGHT_UP);
+			}
+			
+			//MouseDown.SetEventObject(pEvtHandler->pwxWindow);
+			// MouseUp.SetEventObject(pEvtHandler->pwxWindow);
+			// set it for processing later
+			pEvtHandler->pwxWindow->GetEventHandler()->ProcessEvent(*MouseDown);
+			pEvtHandler->pwxWindow->GetEventHandler()->ProcessEvent(*MouseUp);
+		}
+		if (MouseDown) delete MouseDown;
+		if (MouseUp) delete MouseUp;
+	}	
+
 	/* Here is a list of possible command events
 	wxEVT_COMMAND_BUTTON_CLICKED
 	wxEVT_COMMAND_CHECKBOX_CLICKED
@@ -1044,8 +1084,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		{
 			case DIM_LFT_BN_DOWN:
 			case DIM_LFT_BN_UP:
+			case DIM_LFT_BN_CLICKED:
 			case DIM_RGT_BN_DOWN:
 			case DIM_RGT_BN_UP:
+			case DIM_RGT_BN_CLICKED:
+			case DIM_MID_BN_DOWN:
+			case DIM_MID_BN_UP:
+			case DIM_MID_BN_CLICKED:
 			case DIM_MOUSE_DRAG:
 			case DIM_MOUSE_MOVE:
 			case DIM_MOUSEWHEEL_UP:
