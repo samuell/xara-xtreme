@@ -3045,6 +3045,8 @@ BOOL SliceHelper::ModifySelectionToContainWholeButtonElements()
 {
 	// Get a pointer to the NameGallery, and make sure it is up-to-date
 	NameGallery *pNameGallery = NameGallery::Instance();
+	if (!pNameGallery)
+		return TRUE;
 	pNameGallery->FastUpdateNamedSetSizes();
 
 	//Get the first entry in the 'UsedNames' field of the NameGallery
