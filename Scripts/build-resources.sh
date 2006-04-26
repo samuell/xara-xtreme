@@ -11,6 +11,7 @@ CHECKSUM=md5sum
 ZIP=zip
 XARALANGUAGE=EN
 XGETTEXT=xgettext
+WXRC=wxrc
 
 cd wxOil
 echo Testing for new resources... 1>&2
@@ -34,7 +35,7 @@ if test "$NEWRES" -eq 1 ; then
 	touch xrc/strings.xrc && \
 	$TOPDIR/Scripts/combinexrc.pl -b missing.png -o xrc/dialogs.xrc $XRCDIALOGS && \
 	$TOPDIR/Scripts/combinexrc.pl -b missing.png -t -s -o xrc/strings.lst $XRCSTRINGS && \
-	( perl -ne 'chomp;s/^\S+\t//;print "_(\"$_\");\n";' < xrc/strings.lst && @WXRC@ -g xrc/dialogs.xrc) | sort -u | \
+	( perl -ne 'chomp;s/^\S+\t//;print "_(\"$_\");\n";' < xrc/strings.lst && $WXRC -g xrc/dialogs.xrc) | sort -u | \
 	perl -ne 'print unless /^_\(\"\"\)\;\s+$/;' | sed 's/&amp;/\&/g' | \
 	$XGETTEXT --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o xrc/xaralx.po
 
