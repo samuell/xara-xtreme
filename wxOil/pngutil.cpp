@@ -244,7 +244,7 @@ BOOL PNGUtil::ReadFromFile( CCLexFile *File, LPBITMAPINFO *Info, LPBYTE *Bits,
 	png_structp png_ptr		= 0;	// Must be zero to avoid bad free in case of exception
 	png_infop info_ptr		= 0;	// Must be zero to avoid bad free in case of exception
 
-	LPBYTE *ppbRowPointers	= 0;	// Must be zero to avoid bad free in case of exception
+	png_bytepp ppbRowPointers= 0;	// Must be zero to avoid bad free in case of exception
 
 	try {
 	/* Create and initialize the png_struct with the desired error handler

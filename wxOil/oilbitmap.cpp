@@ -2646,9 +2646,16 @@ RebuildXPEBitmap();
 	if (ok) ok = pFilter->Write(Entries);
 	for (UINT32 i = 0; i < NumberOfPaletteEntries; i++)
 	{
+#if defined(__WXMSW__)
+		// Swap BGR for RGB for some random reason
+		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbBlue);
+		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbGreen);
+		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbRed);
+#else
 		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbRed);
 		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbGreen);
 		if (ok) ok = pFilter->Write(BMInfo->bmiColors[i].rgbBlue);
+#endif
 	}
 
 	// During the preparation process we told the system we would update by the

@@ -604,9 +604,15 @@ TRACEUSER( "Jonathan", _T("PNG write: TransColour = %d\n"),TransparentColour);
 				// Palette supplied in RGBQUAD form 
 				for (INT32 i = 0; i < PaletteEntries; i++)
 				{
+#if defined(__WXGTK__)
+					pPNGPalette->red 	= pQuadPalette->rgbBlue;	// NOTE! Swap BGR <=> BGR
+					pPNGPalette->green 	= pQuadPalette->rgbGreen;
+					pPNGPalette->blue 	= pQuadPalette->rgbRed;		// NOTE! Swap BGR <=> BGR
+#else
 					pPNGPalette->red 	= pQuadPalette->rgbRed;
 					pPNGPalette->green 	= pQuadPalette->rgbGreen;
 					pPNGPalette->blue 	= pQuadPalette->rgbBlue;
+#endif
 					// skip to the next palette entry
 					pQuadPalette++;
 					pPNGPalette++;
@@ -617,9 +623,15 @@ TRACEUSER( "Jonathan", _T("PNG write: TransColour = %d\n"),TransparentColour);
 				// Palette supplied in LOGPALETTE form 
 				for (INT32 i = 0; i < PaletteEntries; i++)
 				{
+#if defined(__WXGTK__)
+					pPNGPalette->red  	= pPalette->palPalEntry[i].peBlue;	// NOTE! Swap BGR <=> BGR
+					pPNGPalette->green 	= pPalette->palPalEntry[i].peGreen;
+					pPNGPalette->blue 	= pPalette->palPalEntry[i].peRed;	// NOTE! Swap BGR <=> BGR
+#else
 					pPNGPalette->red  	= pPalette->palPalEntry[i].peRed;
 					pPNGPalette->green 	= pPalette->palPalEntry[i].peGreen;
 					pPNGPalette->blue 	= pPalette->palPalEntry[i].peBlue;
+#endif
 					pPNGPalette++;
 				}
 			}
@@ -724,7 +736,9 @@ TRACEUSER( "Jonathan", _T("PNG write: rowbytes %d color_type %d\n"),png_ptr->row
 		//png_set_packing(png_ptr);
 
 		// flip bgr pixels to rgb
+#if !defined(__WXGTK__)
 		png_set_bgr(png_ptr);
+#endif
 
 		// swap bytes of 16 bit files to most significant bit first
 		png_set_swap(png_ptr);
