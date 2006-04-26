@@ -4950,7 +4950,7 @@ BOOL CCMemFile::GetBuffer(BYTE** ppBuffer, UINT32* pSize)
 		return(FALSE);
 
 	BYTE* tempBuf = NULL;
-	UINT32 tempSize = 0;
+	size_t tempSize = 0;
     
 	// Get Pointer to the memory file
 	if (!DescribeBlock(MemHandle, &tempBuf, &tempSize))
@@ -4960,7 +4960,7 @@ BOOL CCMemFile::GetBuffer(BYTE** ppBuffer, UINT32* pSize)
 	} 
 
 	*ppBuffer = tempBuf;
-	*pSize = tempSize;
+	*pSize = (UINT32)tempSize;
 
 	return(TRUE);
 }
