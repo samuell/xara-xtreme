@@ -101,8 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 #include "camtypes.h"
 
-#include <locale.h>
-
 #include "localenv.h"
 
 DECLARE_SOURCE("$Revision$");
@@ -147,18 +145,22 @@ void LocalEnvironment::GetNumberOfDecimalPlaces(UINT32* DecimalPlaces)
 {
 	TCHAR TS[8];
 
+
 PORTNOTE("other","Removed GetProfileString usage")
-#if defined(__WXGTK__)
+#if defined(__MSW__)
+	GetProfileString("intl", "iDigits", "2", TS, sizeof(TS));
+#else
+#if 0
+// AMB removed libiconv usage
 	struct lconv *lc;
 	lc = localeconv();
 	TRACEUSER( "luke", _T("iDigits = %d\n"), lc->frac_digits );
 	*DecimalPlaces = (UINT32)lc->frac_digits;
 	return;
-#elif !defined(EXCLUDE_FROM_XARALX)
-	GetProfileString("intl", "iDigits", "2", TS, sizeof(TS));
-#else
+#else //0
 	TS[0]=_T('2');
 	TS[1]=0;
+#endif //0
 #endif
 
 	// Convert the string into a number that the string represents which we
@@ -184,23 +186,7 @@ PORTNOTE("other","Removed GetProfileString usage")
 ********************************************************************************************/
 void LocalEnvironment::GetThousandsSeparator(StringBase* String)
 {
-	TCHAR TS[8];
-
-PORTNOTE("other","Removed GetProfileString usage")
-#if defined(__WXGTK__)
-	struct lconv *lc;
-	lc = localeconv();
-	TS[0] = ToUnicode( lc->thousands_sep[0] );
-	TS[1] = 0;
-
-	TRACEUSER( "luke", _T("sThousand = %s\n"), TS );
-#elif !defined(EXCLUDE_FROM_XARALX)
-	GetProfileString("intl", "sThousand", ",", TS, sizeof(TS));
-#else
-	TS[0]=_T(',');
-	TS[1]=0;
-#endif
-	*String = TS;
+	*String = wxLocale::GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
 }
 
 /********************************************************************************************
@@ -220,23 +206,7 @@ PORTNOTE("other","Removed GetProfileString usage")
 ********************************************************************************************/
 void LocalEnvironment::GetDecimalPointChar(StringBase* String)
 {
-	TCHAR TS[8];
-
-PORTNOTE("other","Removed GetProfileString usage")
-#if defined(__WXGTK__)
-	struct lconv *lc;
-	lc = localeconv();
-	TS[0] = ToUnicode( lc->decimal_point[0] );
-	TS[1] = 0;
-
-	TRACEUSER( "luke", _T("sDecimal = %s\n"), TS );
-#elif !defined(EXCLUDE_FROM_XARALX)
-	GetProfileString("intl", "sDecimal", ".", TS, sizeof(TS));
-#else
-	TS[0]=_T('.');
-	TS[1]=0;
-#endif
-	*String = TS;
+	*String = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
 }
 
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
