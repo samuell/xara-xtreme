@@ -202,9 +202,8 @@ OpState OpSelectUnionSets::GetState(String_256*, OpDescriptor*)
 
 void OpSelectUnionSets::Do(OpDescriptor*)
 {
-	SelectUnionScan(KeyPress::IsGalleryCtrlPressed()
-						? SelectUnionScan::DESELECT
-						: SelectUnionScan::SELECT_EXCLUSIVE).Scan();
+	SelectUnionScan(KeyPress::IsGalleryCtrlPressed() ? SelectUnionScan::DESELECT : 
+		SelectUnionScan::SELECT_EXCLUSIVE).Scan();
 	End();
 }
 
