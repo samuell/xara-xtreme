@@ -108,9 +108,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif
 #include "ensure.h"
 #include "errors.h"
-//#include "resource.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "tunemem.h"
-//#include "richard2.h"	// for resource string
+#endif
 
 #if defined( __WXMSW__ )
 #include <new.h>
@@ -121,7 +122,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ralphcri.h"	// for critical sections
 //#define USE_CRIT 1
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 static TunedMemory TheTunedMemoryManager;
+#endif
 
 // Happy chappie critical crappy (for ralphm, threads and so forth)
 CRITICAL_SECTION CCMallocCriticalSection::sm_Section;
@@ -775,6 +778,7 @@ void CCFree( LPVOID Buf )
 
 
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	TunedMemory* GetTunedMemManager()
@@ -791,3 +795,5 @@ TunedMemory* GetTunedMemManager()
 {
 	return &TheTunedMemoryManager;
 }
+#endif
+

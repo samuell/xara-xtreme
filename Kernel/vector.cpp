@@ -101,7 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "vector.h"
 
-
 // Place any IMPLEMENT type statements here
 //CC_IMPLEMENT_MEMDUMP(CCVector3, CC_CLASS_MEMDUMP)
 
@@ -109,6 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // We want better memory tracking
 #define new CAM_DEBUG_NEW
 
+using namespace std;
 
 // Functions follow
 

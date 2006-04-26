@@ -252,9 +252,11 @@ void CCFile::GotError( UINT32 errorID , const TCHAR* errorString)
 	// So that if the user continues to access the file then they should get an error.
 	SetBadState();
 	
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// If the ReportErrors flag is set then report the error now.
 	if (ReportErrors)
 		InformError();
+#endif
 
 	// If the ThrowExceptions flag is set then throw an exception.
 	// Use the CFileException with a generic or unknown error and make the ioserror
@@ -288,9 +290,11 @@ void CCFile::GotError( UINT32 errorID )
 	// So that if the user continues to access the file then they should get an error.
 	SetBadState();
 	
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// If the ReportErrors flag is set then report the error now.
 	if (ReportErrors)
 		InformError();
+#endif
 	
 	// If the ThrowExceptions flag is set then throw an exception.
 	// Use the CFileException with a generic or unknown error and make the ioserror
@@ -4937,6 +4941,28 @@ CCMemFile::~CCMemFile()
 BOOL CCMemFile::IsMemFileInited()
 {
 	return MemFileInitialised;
+}
+
+
+BOOL CCMemFile::GetBuffer(BYTE** ppBuffer, UINT32* pSize)
+{
+	if (!MemFileInitialised)
+		return(FALSE);
+
+	BYTE* tempBuf = NULL;
+	UINT32 tempSize = 0;
+    
+	// Get Pointer to the memory file
+	if (!DescribeBlock(MemHandle, &tempBuf, &tempSize))
+	{
+		GotError(_R(IDE_MEM_BLOCK_FAILURE));
+  		return FALSE;
+	} 
+
+	*ppBuffer = tempBuf;
+	*pSize = tempSize;
+
+	return(TRUE);
 }
 
 

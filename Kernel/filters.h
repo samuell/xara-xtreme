@@ -237,10 +237,6 @@ class Pathname;
 // !!!!!!!!!!!!!!!!! DON'T ADD ANY MORE TO THE ABOVE LIST !!!!!!!!!!!!!!!!
 
 
-// Unicode characters in the XAR file format are always 16-bit UTF16
-#define SIZEOF_XAR_UTF16 2					// UTF16 characters are only 2 byte
-
-
 
 /********************************************************************************************
 

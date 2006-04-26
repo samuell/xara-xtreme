@@ -136,6 +136,8 @@ public:
 	// Find out if the record is streamed or not
 	virtual BOOL IsStreamed(UINT32 Tag);
 
+	virtual void IncProgressBarCount(UINT32 n) {};
+
 #if XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 #endif

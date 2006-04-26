@@ -98,6 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #if !defined(_CAMELOT_H_)
 #define _CAMELOT_H_
 
+#if !defined(EXCLUDE_FROM_XARLIB)
+
 #include "dlgmgr.h"     
 
 class CCamFrame;
@@ -168,6 +170,8 @@ public:
 };
 
 DECLARE_APP( CCamApp )
+
+#endif
 
 // Used to determine target platform at runtime.
 #if defined(__WXMSW__)

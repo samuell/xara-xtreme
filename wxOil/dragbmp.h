@@ -141,11 +141,11 @@ public:
 	
 	virtual UINT32 GetCursorID(void);
  	virtual BOOL GetStatusLineText(String_256 * TheText);
-	virtual BOOL OnDrawSolidDrag(wxPoint Origin, CDC * TheDC);
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC);
 
 	virtual UINT32 GetCursorID(DragTarget* pDragTarget);
 	virtual BOOL GetStatusLineText(String_256 * TheText, DragTarget* pDragTarget);
-	virtual BOOL OnDrawSolidDrag(wxPoint Origin,CDC * TheDC, DragTarget* pDragTarget);
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin,wxDC * TheDC, DragTarget* pDragTarget);
 
 	virtual KernelBitmap* GetSolidDragMask();
 
@@ -160,7 +160,7 @@ protected:
 
 	BOOL PlotBitmap(WinBitmap *WinBM, 
 					wxPoint Origin, wxSize Size, 
-					CDC * RenderDC);
+					wxDC * RenderDC);
 
 protected:
  	KernelBitmap *TheBitmap;
@@ -173,7 +173,7 @@ protected:
 
 	UINT32 DIBPal;
 
-	CDC* MemDC;
+	wxDC* MemDC;
 	wxBitmap* Bitmap;
 	wxBitmap* OldBmp;
 

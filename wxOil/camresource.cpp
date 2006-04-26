@@ -101,11 +101,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "camconfig.h"
 #include "camresource.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "cartctl.h"
 #include "drawctl.h"
 #include "colourmat.h"
+#endif
 
-#include "camelot.h"
+//#include "camelot.h"
 #include "ccfile.h"
 
 #define PRELOAD_BITMAPS 0
@@ -130,6 +133,7 @@ TCHAR * CamResource::DefaultObjectName = _T("[Object name not Found]");
 
 wxArrayString CamResource::BitmapExtensions;
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 // Bodge for the toolbar bitmap
 wxImage					imageBevelTool;
 wxImage					imageBezTool;
@@ -150,7 +154,7 @@ wxImage					imageSlicetool;
 wxImage					imageTextTool;
 wxImage					imageTransTool;
 wxImage					imageZoomTool;
-
+#endif
 
 /********************************************************************************************
 
@@ -899,6 +903,9 @@ void CamResource::SetResourceFilePath( const wxString &str )
 	return;
 }
 
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+
 /********************************************************************************************
 
 >	static BOOL CamResource::AddBitmaps(wxString &Path)
@@ -1327,6 +1334,8 @@ BOOL CamResource::LoadBitmaps()
 	return TRUE;
 }
 
+#endif
+
 /********************************************************************************************
 
 >	static BOOL CamResource::Init()
@@ -1352,17 +1361,17 @@ BOOL CamResource::Init()
 
 	pHash = new (ResIDToString);
 	if (!pHash) return FALSE;
+	pHash->clear();
 
 	pObjectNameHash = new (ResIDToString);
 	if (!pObjectNameHash) return FALSE;
+	pObjectNameHash->clear();
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	pBitmapHash = new (ResourceStringToBitmap);
 	if (!pBitmapHash) return FALSE;
-
-	// Clear our own hash tables
-	pHash->clear();
-	pObjectNameHash->clear();
 	pBitmapHash->clear();
+#endif
 
 	// Now go through ID's translated before we got here
 	CamResourceRemember * pRem = pFirstRemember;
@@ -1380,11 +1389,12 @@ BOOL CamResource::Init()
 		delete pORem;
 	}
 
-
 	// Initialize the handlers
 	wxXmlResource::Get()->InitAllHandlers();
+#if !defined(EXCLUDE_FROM_XARLIB)
 	wxXmlResource::Get()->AddHandler(new wxCamArtControlXmlHandler);
 	wxXmlResource::Get()->AddHandler(new wxCamDrawControlXmlHandler);
+#endif
 
 	if (!pwxFileSystem) pwxFileSystem = new wxFileSystem;
 	if (!pwxFileSystem)
@@ -1415,9 +1425,11 @@ BOOL CamResource::Init()
 	// This is because it tries to initialize the MIME system (sigh)
 	wxMemoryFSHandler::AddFile(_T("resources"), pFile, Length); // Irritatingly does not return errors
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Add bitmap extenstions
 	BitmapExtensions.Add(_T("png"));
 	BitmapExtensions.Add(_T("cur"));
+#endif
 
 	// Initialize locale
 	m_pLocale = new wxLocale();
@@ -1426,8 +1438,10 @@ BOOL CamResource::Init()
 	m_pLocale->AddCatalogLookupPathPrefix(GetResourceFilePath(_T("")));
 	m_pLocale->AddCatalog(_T("XaraLX"));
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	TRACET(_T("CamResource::Init() launching splash screen"));
 	if (!Splash()) return FALSE;
+#endif
 
 #ifdef XML_STRINGS
 	TRACET(_T("CamResource::Init() now loading internal resources, calling InitXmlResource"));
@@ -1475,6 +1489,7 @@ BOOL CamResource::Init()
 
 	wxYield(); // yield again to allow repaint
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Note this won't actually load the bitmaps if we are demand loading, but it will at least get a list of them
 	if (!LoadBitmaps())
 		return FALSE;
@@ -1516,10 +1531,13 @@ BOOL CamResource::Init()
 	TRACET(_T("CamResource::Init - loaded dialogs"));
 
 	wxYield(); // yield again to allow repaint
+#endif
 
 	return TRUE;
 }
 
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	static void CamResource::DeleteBitmapHashEntries()
@@ -1556,6 +1574,7 @@ void CamResource::DeleteBitmapHashEntries()
 		pBitmapHash->clear();
 	}
 }
+#endif	// EXCLUDE_FROM_XARLIB
 
 
 /********************************************************************************************
@@ -1582,13 +1601,14 @@ BOOL CamResource::DeInit()
 		pwxFileSystem = NULL;
 	}
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	if (pBitmapHash)
 	{
 		DeleteBitmapHashEntries();
 		delete pBitmapHash;
 		pBitmapHash = NULL;
 	}
-
+#endif	// EXCLUDE_FROM_XARLIB
 	if (pHash)
 	{
 		ResIDToString::iterator current;
@@ -1625,6 +1645,7 @@ BOOL CamResource::DeInit()
 		pObjectNameHash = NULL;
 	}
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	if (pSplashScreen)
 	{
 		delete (pSplashScreen);
@@ -1636,6 +1657,7 @@ BOOL CamResource::DeInit()
 		delete (pSplashBitmap);
 		pSplashBitmap = NULL;
 	}
+#endif	// EXCLUDE_FROM_XARLIB
 
 	if (m_pLocale)
 	{
@@ -1645,6 +1667,9 @@ BOOL CamResource::DeInit()
 
 	return TRUE;
 }
+
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 
 /********************************************************************************************
 
@@ -1697,6 +1722,7 @@ BOOL CamResource::Splash()
 
 	return TRUE;
 }
+#endif	// EXCLUDE_FROM_XARLIB
 
 /********************************************************************************************
 
@@ -1718,6 +1744,7 @@ BOOL CamResource::Splash()
 BOOL CamResource::DoneInit()
 {
 	TRACET(_T("CamResource::DoneInit() called"));
+#if !defined(EXCLUDE_FROM_XARLIB)
 	if (pSplashScreen)
 	{
 		delete pSplashScreen;
@@ -1728,6 +1755,7 @@ BOOL CamResource::DoneInit()
 		delete (pSplashBitmap);
 		pSplashBitmap = NULL;
 	}
+#endif	// EXCLUDE_FROM_XARLIB
 	return TRUE;
 }
 
@@ -1977,6 +2005,9 @@ wxFSFile * CamResource::OpenwxFSFile( const TCHAR * pFileName )
 	return pwxFSFile;
 }
 
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+
 /********************************************************************************************
 
 >	static void CamResource::MakeGreyImage (wxImage & rImage)
@@ -2166,7 +2197,7 @@ BOOL CamResource::LoadwxBitmap (wxBitmap & rBitmap, const TCHAR * pFileName, BOO
 	return TRUE;
 }
 
-
+#endif	// EXCLUDE_FROM_XARLIB
 
 
 #if 0

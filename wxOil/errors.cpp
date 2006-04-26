@@ -109,20 +109,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 #include "strings.h"
 #include "tool.h"
-//#include "oilmods.h"
 #include "basestr.h"
-//#include "alex.h"			// For _R(IDS_SERIOUSERROR)
-//#include "timdlg.h"
-//#include "tim.h"
-//#include "andy.h"
-//#include "simon.h"			// for _R(IDS_HELP), the text on help buttons
 #include "ensure.h"
-//#include "resource.h"
-//#include "ctrlhelp.h"
-//#include "errorbox.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "helpuser.h"
 #include "basebar.h"		// For gallery creation error box fix...
-//#include "justin2.h"
 #include "ralphint.h"
 #include "ralphdoc.h"
 #include "document.h"
@@ -130,6 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camprofile.h"
 #include "cartprov.h"
 #include "dragmgr.h"
+#endif
 
 // Put the source file into the revision list
 DECLARE_SOURCE("$Revision$");
@@ -199,6 +191,8 @@ HRESULT Error::ErrIDToHRESULT(UINT32 ErrID)
 #endif
 	return S_OK;
 }
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	HRESULT Error::GetRalphError()
@@ -246,7 +240,6 @@ HRESULT Error::GetRalphError()
 	
 	return hr;
 }
-
 
 
 /********************************************************************************************
@@ -802,7 +795,7 @@ void InformLastError(UINT32)
 	SeeAlso:	InformError
 
 ********************************************************************************************/
-
+#endif	// EXCLUDE_FROM_XARLIB
 
 // Define the instances of the static variables belonging to the Error class
 
@@ -1107,7 +1100,11 @@ void CDECL Error::TraceAll(LPCTSTR fmt, ...)
 void CDECL Error::TraceTime (TCHAR * t)
 {
 	TCHAR buf[256];
+#if !defined(EXCLUDE_FROM_XARLIB)
 	CamProfile::GetTimeString(buf, 256);
+#else
+	camStrcpy(buf, _T("unknown"));
+#endif
 	TraceAll(_T("[%s] %s"), buf, t);
 }
 
@@ -1123,7 +1120,7 @@ void CDECL Error::ReleaseTrace(LPCTSTR fmt, ...)
 #if defined( __WXMSW__ )
 	OutputDebugString( buf );
 #elif defined( __WXGTK__ )
-	wprintf( buf );
+	camPrintf( buf );
 #else
 	#pragma error( "Not support on this architechure" )
 #endif
@@ -1433,7 +1430,7 @@ void CDECL Error::XComplain( const char *fmt, ...)
 #endif
 
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 INT32 InformError(UINT32 ErrorMsg, UINT32 Butt1, UINT32 Butt2, UINT32 Butt3, UINT32 Butt4, UINT32 OK,	UINT32 Cancel)
 {
 	return InformGeneral(ERRORTYPE_ERROR, 0, ErrorMsg, 
@@ -1630,7 +1627,7 @@ INT32 ModuleInformMessage(UINT32 ModID, ErrorInfo *pInfo)
 {
 	return InformGeneral(ERRORTYPE_NORMAL, pInfo, ModID);
 }
-
+#endif
 
 
 #if 0

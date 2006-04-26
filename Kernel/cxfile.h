@@ -103,6 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccoord.h"
 #include "list.h"
 #include "ccfile.h"
+#include "taglists.h"
+#include "cxfrech.h"
+#if defined(EXCLUDE_FROM_XARLIB)
+#include "xarlib.h"
+#endif
 
 class CCLexFile;
 class Progress;
@@ -114,8 +119,12 @@ class BitmapSource;
 class CXaraFileRecord;
 class CXaraFileRecordHandler;
 class CamelotRecordHandler;
+class StandardDefaultRecordHandler;
 class StripSubTreeRecordHandler;
 class CXaraFileMapTagToHandler;
+
+// Unicode characters in the XAR file format are always 16-bit UTF16
+#define SIZEOF_XAR_UTF16 2					// UTF16 characters are only 2 byte
 
 /********************************************************************************************
 
@@ -189,7 +198,9 @@ public:
 
 	BOOL WriteCCPanose(const CCPanose& Panose);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	BOOL WriteBitmapSource(const BitmapSource& Source, UINT32 Height, BaseCamelotFilter* pThisFilter);
+#endif
 
 	BOOL Write(TCHAR* pStr);				// Calls WriteUnicode() (Use WriteASCII() for ASCII writing)
 	BOOL WriteASCII(TCHAR* pStr);
@@ -227,7 +238,15 @@ public:
 
 	virtual FilePos GetFilePos();
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	virtual BOOL SetUpHandlers(BaseCamelotFilter* pThisFilter);
+#else
+	virtual BOOL SetUpHandlers(void);
+	void SetExternalRecordHandler(void* pMagic, RecordHandler* pfnRecordHandler);
+
+	void SetEndOfFile() { EndOfFile = TRUE; }
+	BOOL IsEndOfFile() { return(EndOfFile); }
+#endif
 
 	virtual void SetDefaultRecordHandler(CXaraFileRecordHandler* pHandler);
 	virtual CXaraFileRecordHandler* GetDefaultRecordHandler();
@@ -246,9 +265,21 @@ public:
 	BOOL RegisterRecordHandlers(List* pListOfHandlers);
 
 	// Camelot-specific stuff
+	UINT32				GetLastReadTag()							{ return ReadTag; }
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 	void				SetFilter(BaseCamelotFilter* pThisFilter)	{ pFilter = pThisFilter; }
 	BaseCamelotFilter*	GetFilter()									{ return pFilter; }
-	UINT32				GetLastReadTag()							{ return ReadTag; }
+#else
+	// Tag management functions
+	void AddAtomicTag(AtomicTagListItem* pItem);
+	void AddEssentialTag(EssentialTagListItem* pItem);
+
+	BOOL IsTagInAtomicList(UINT32 Tag);
+	BOOL IsTagInEssentialList(UINT32 Tag);
+
+	BOOL WriteRemainingAtomicTagDefinitions();
+#endif
 
 protected:
 
@@ -306,6 +337,14 @@ protected:
 	// Camelot-specific stuff
 	BaseCamelotFilter*			pFilter;
 	CXaraFileMapTagToHandler*	pMap;
+
+#if defined(EXCLUDE_FROM_XARLIB)
+	// Tag management variables
+	AtomicTagList*		pAtomicTagList;
+	EssentialTagList*	pEssentialTagList;
+
+	BOOL	EndOfFile;
+#endif
 };
 
 /********************************************************************************************
@@ -345,6 +384,77 @@ public:
 
 protected:
 	virtual BOOL FixStreamedRecordHeader(UINT32 *RecordSize);
+};
+
+
+
+class StandardDefaultRecordHandler : public CamelotRecordHandler
+{
+	// Give my name in memory dumps
+	CC_DECLARE_DYNAMIC(StandardDefaultRecordHandler);
+
+public:
+	StandardDefaultRecordHandler()
+	{
+#if defined(EXCLUDE_FROM_XARLIB)
+		m_pfnRecordHandler = NULL;
+		m_pMagic = NULL;
+#endif
+	};
+
+	// Pure virtual functions that must be overridden.
+	virtual UINT32*	GetTagList() { static UINT32 TagList[]={CXFRH_TAG_LIST_END}; return (UINT32*)TagList; }
+	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
+
+	virtual void	IncProgressBarCount(UINT32 n) {};
+	virtual BOOL	IsStreamed(UINT32 Tag) { return FALSE; }
+
+#if defined(EXCLUDE_FROM_XARLIB)
+	void SetExternalHandler(void* pMagic, RecordHandler pfnRecordHandler)
+	{
+		m_pfnRecordHandler = pfnRecordHandler;
+		m_pMagic = pMagic;
+	}
+
+protected:
+	RecordHandler* m_pfnRecordHandler;
+	void* m_pMagic;
+#endif
+};
+
+/********************************************************************************************
+
+>	class GeneralRecordHandler : public CamelotRecordHandler
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/5/96
+	Purpose:	This is the general record handler.
+				It handles all the general record types, such as the End Of File, file header, etc.
+
+********************************************************************************************/
+
+class GeneralRecordHandler : public CamelotRecordHandler
+{
+	// Give my name in memory dumps
+	CC_DECLARE_DYNAMIC(GeneralRecordHandler);
+
+public:
+	virtual UINT32*	GetTagList();
+	virtual BOOL HandleRecord(CXaraFileRecord* pCXaraFileRecord);
+	virtual void IncProgressBarCount(UINT32 n) {};
+
+#if XAR_TREE_DIALOG
+	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
+#endif
+
+private:
+	BOOL HandleFileHeader(CXaraFileRecord* pCXaraFileRecord);
+	BOOL HandleAtomicTagsRecord(CXaraFileRecord* pCXaraFileRecord);
+	BOOL HandleEssentialTagsRecord(CXaraFileRecord* pCXaraFileRecord);
+#if !defined(EXCLUDE_FROM_XARLIB)
+	BOOL HandleTagDescriptionRecord(CXaraFileRecord* pCXaraFileRecord);
+	BOOL HandleTagNudgeSizeRecord(CXaraFileRecord* pCXaraFileRecord);
+#endif
 };
 
 #endif	// INC_CXFILE

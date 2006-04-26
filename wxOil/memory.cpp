@@ -106,10 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "handles.h"
 #include "ensure.h"
 #include "memory.h"
-#include "app.h"
 #include "errors.h"
 #include "memblk.h"
-//#include "resource.h"
 #if !defined(__WXMAC__)
 #include <malloc.h>
 #else

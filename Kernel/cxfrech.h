@@ -102,7 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "listitem.h"
 #include "doccoord.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "camfiltr.h"
+#endif
 
 #define CXFRH_TAG_LIST_END	(0xffffffff)
 
@@ -160,7 +163,11 @@ public:
 
 	virtual BOOL IsTagInList(UINT32 Tag);
 
+#if defined(EXCLUDE_FROM_XARLIB)
+	virtual BOOL Init(CXaraFile* pCXFile);
+#else
 	virtual BOOL Init(BaseCamelotFilter* pBaseCamelotFilter);
+#endif
 	virtual BOOL BeginImport();
 	virtual BOOL EndImport();
 	virtual BOOL BeginSubtree(UINT32 Tag);
@@ -201,6 +208,9 @@ public:
 
 	virtual BOOL IsCamelotHandler() { return TRUE; }
 
+#if defined(EXCLUDE_FROM_XARLIB)
+	virtual BOOL Init(CXaraFile* pCXFile);
+#else
 	virtual BOOL Init(BaseCamelotFilter* pBaseCamelotFilter);
 
 	// Funcs for extracting reusable data items
@@ -260,18 +270,22 @@ public:
 	void	IncLayerInsertedCount();
 	void	IncSetSentinelInsertedCount();
 
+	BOOL AddTagDescription(TagDescriptionListItem* pItem);
+	TagDescriptionListItem* GetTagDescription(UINT32 Tag);
+
+	BOOL SetDocumentNudgeSize(UINT32 newVal);
+
+#endif
+
 	void AddAtomicTag(AtomicTagListItem* pItem);
 	void AddEssentialTag(EssentialTagListItem* pItem);
-	BOOL AddTagDescription(TagDescriptionListItem* pItem);
-	BOOL SetDocumentNudgeSize(UINT32 newVal);
 
 	BOOL IsTagInAtomicList(UINT32 Tag);
 	BOOL IsTagInEssentialList(UINT32 Tag);
 
-	TagDescriptionListItem* GetTagDescription(UINT32 Tag);
-
 	BOOL UnrecognisedTag(UINT32 Tag);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Path record references
 	void		AddPathRecordRefToList(NodePath* pNodePath, UINT32 RecordNumber);
 	UINT32		FindPathRecordRefRecordNumber(NodePath* pNodePath);
@@ -293,18 +307,26 @@ public:
 	BaseCamelotFilter* GetBaseCamelotFilter() { return pBaseCamelotFilter; }
 
 	// Function to turn Compression on or off on the underlying CCFile
-	virtual BOOL  SetCompression(BOOL NewState);
 	virtual BOOL  SetPreCompression(UINT32 Flags);
 	virtual UINT32 GetPreCompression();
+#endif
+
+	virtual BOOL  SetCompression(BOOL NewState);
 
 	// Find out if the record is streamed or not
 	virtual BOOL IsStreamed(UINT32 Tag);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	virtual void	SetImportFileType(char* pFileType);
 	virtual	BOOL	IsOpeningMinimalWebFormat();
+#endif
 
 protected:
+#if !defined(EXCLUDE_FROM_XARLIB)
 	BaseCamelotFilter* pBaseCamelotFilter;
+#else
+	CXaraFile* m_pCXFile;
+#endif
 };
 
 /********************************************************************************************
@@ -336,6 +358,7 @@ public:
 	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
 	virtual BOOL	IsTagInList(UINT32 Tag);
 	virtual BOOL	BeginImport();
+	virtual void	IncProgressBarCount(UINT32 n) {};
 
 	virtual void StripSubTreeOn()	{ StripSubTree = TRUE; }
 	virtual void StripSubTreeOff()	{ StripSubTree = FALSE; }

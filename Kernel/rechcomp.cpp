@@ -102,8 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "rechcomp.h"	// CompressionRecordHandler for handling compression for v2 native/web files
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "colcomp.h"	// Document colour component, handles import of colours
 #include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+#endif
 
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
 #include "cxfrec.h"		// TAG_STARTCOMPRESSION TAG_STOPCOMPRESSION

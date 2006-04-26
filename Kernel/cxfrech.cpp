@@ -100,11 +100,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "cxfrech.h"
 //#include "doccolor.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "colcomp.h"
 #include "bmpcomp.h"
 #include "unitcomp.h"
 #include "infocomp.h"
 #include "camfiltr.h"
+#else
+#include "cxfile.h"
+#endif
 #include "fixmem.h"
 
 #include "cxfrec.h"
@@ -239,7 +243,11 @@ BOOL CXaraFileRecordHandler::HandleStreamedRecord(CXaraFile * pCXFile, UINT32 Ta
 
 ********************************************************************************************/
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 BOOL CXaraFileRecordHandler::Init(BaseCamelotFilter* pThisBaseCamelotFilter)
+#else
+BOOL CXaraFileRecordHandler::Init(CXaraFile* pCXFile)
+#endif
 {
 	return TRUE;
 }
@@ -909,7 +917,11 @@ void CXaraFileRecordHandler::DescribePathRelative(CXaraFileRecord* pRecord,Strin
 
 CamelotRecordHandler::CamelotRecordHandler()
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 	pBaseCamelotFilter = NULL;
+#else
+	m_pCXFile = NULL;
+#endif
 }
 
 /********************************************************************************************
@@ -948,6 +960,7 @@ CamelotRecordHandler::~CamelotRecordHandler()
 
 ********************************************************************************************/
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 BOOL CamelotRecordHandler::Init(BaseCamelotFilter* pThisBaseCamelotFilter)
 {
 	ERROR2IF(pThisBaseCamelotFilter == NULL,FALSE,"pThisBaseCamelotFilter is NULL");
@@ -956,6 +969,16 @@ BOOL CamelotRecordHandler::Init(BaseCamelotFilter* pThisBaseCamelotFilter)
 
 	return TRUE;
 }
+#else
+BOOL CamelotRecordHandler::Init(CXaraFile* pCXFile)
+{
+	ERROR2IF(pCXFile == NULL,FALSE,"pCXFile is NULL");
+
+	m_pCXFile = pCXFile;
+
+	return TRUE;
+}
+#endif
 
 /********************************************************************************************
 
@@ -995,12 +1018,18 @@ BOOL CamelotRecordHandler::IsStreamed(UINT32 Tag)
 
 BOOL CamelotRecordHandler::SetCompression(BOOL NewState)
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 	ERROR2IF(pBaseCamelotFilter == NULL,FALSE,"CamelotRecordHandler::SetCompression pBaseCamelotFilter is NULL");
 	
 	return pBaseCamelotFilter->SetCompression(NewState);
+#else
+	ERROR2IF(m_pCXFile == NULL,FALSE,"CamelotRecordHandler::SetCompression m_pCXFile is NULL");
+	
+	return m_pCXFile->SetCompression(NewState);
+#endif
 }
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	virtual BOOL CamelotRecordHandler::GetDocColour(INT32 ColourRef,DocColour* pDocColour)
@@ -1427,20 +1456,6 @@ DocCoord CamelotRecordHandler::GetCoordOrigin()
 	return DocCoord(0,0);
 }
 
-void CamelotRecordHandler::AddAtomicTag(AtomicTagListItem* pItem)
-{
-	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
-	if (pBaseCamelotFilter != NULL)
-		pBaseCamelotFilter->AddAtomicTag(pItem);
-}
-
-void CamelotRecordHandler::AddEssentialTag(EssentialTagListItem* pItem)
-{
-	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
-	if (pBaseCamelotFilter != NULL)
-		pBaseCamelotFilter->AddEssentialTag(pItem);
-}
-
 BOOL CamelotRecordHandler::AddTagDescription(TagDescriptionListItem* pItem)
 {
 	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
@@ -1459,20 +1474,70 @@ BOOL CamelotRecordHandler::SetDocumentNudgeSize(UINT32 newVal)
 	return FALSE;
 }
 
+#endif
+
+
+void CamelotRecordHandler::AddAtomicTag(AtomicTagListItem* pItem)
+{
+#if !defined(EXCLUDE_FROM_XARLIB)
+	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
+	if (pBaseCamelotFilter != NULL)
+		pBaseCamelotFilter->AddAtomicTag(pItem);
+#else
+	ERROR3IF(m_pCXFile == NULL,"m_pCXFile is NULL");
+	if (m_pCXFile != NULL)
+		m_pCXFile->AddAtomicTag(pItem);
+#endif
+}
+
+void CamelotRecordHandler::AddEssentialTag(EssentialTagListItem* pItem)
+{
+#if !defined(EXCLUDE_FROM_XARLIB)
+	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
+	if (pBaseCamelotFilter != NULL)
+		pBaseCamelotFilter->AddEssentialTag(pItem);
+#else
+	ERROR3IF(m_pCXFile == NULL,"m_pCXFile is NULL");
+	if (m_pCXFile != NULL)
+		m_pCXFile->AddEssentialTag(pItem);
+#endif
+}
+
 BOOL CamelotRecordHandler::IsTagInAtomicList(UINT32 Tag)
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
 	if (pBaseCamelotFilter != NULL)
 		return pBaseCamelotFilter->IsTagInAtomicList(Tag);
+#else
+	ERROR3IF(m_pCXFile == NULL,"m_pCXFile is NULL");
+	if (m_pCXFile != NULL)
+		m_pCXFile->IsTagInAtomicList(Tag);
+#endif
 
 	return FALSE;
 }
 
 BOOL CamelotRecordHandler::IsTagInEssentialList(UINT32 Tag)
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
 	if (pBaseCamelotFilter != NULL)
 		return pBaseCamelotFilter->IsTagInEssentialList(Tag);
+#else
+	ERROR3IF(m_pCXFile == NULL,"m_pCXFile is NULL");
+	if (m_pCXFile != NULL)
+		return m_pCXFile->IsTagInEssentialList(Tag);
+#endif
+	return FALSE;
+}
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+BOOL CamelotRecordHandler::UnrecognisedTag(UINT32 Tag)
+{
+	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
+	if (pBaseCamelotFilter != NULL)
+		return pBaseCamelotFilter->UnrecognisedTag(Tag);
 
 	return FALSE;
 }
@@ -1502,15 +1567,6 @@ UINT32 CamelotRecordHandler::GetPreCompression()
 		return pBaseCamelotFilter->GetPreCompression();
 
 	return 0;
-}
-
-BOOL CamelotRecordHandler::UnrecognisedTag(UINT32 Tag)
-{
-	ERROR3IF(pBaseCamelotFilter == NULL,"pBaseCamelotFilter is NULL");
-	if (pBaseCamelotFilter != NULL)
-		return pBaseCamelotFilter->UnrecognisedTag(Tag);
-
-	return FALSE;
 }
 
 void CamelotRecordHandler::AddPathRecordRefToList(NodePath* pNodePath, UINT32 RecordNumber)
@@ -1553,7 +1609,7 @@ BOOL CamelotRecordHandler::IsOpeningMinimalWebFormat()
 
 	return FALSE;
 }
-
+#endif
 
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------

@@ -123,8 +123,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "coord.h"
 #endif
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "wrkcoord.h"
-#include "ccmaths.h"
+#endif
+
 #include "matrix.h"
 
 // Declare various classes to prevent bogus stuff...
@@ -145,6 +147,7 @@ public:
 	DocCoord( INT32 x, INT32 y ) : Coord(x,y) {};
 	DocCoord() : Coord() {};
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Build the matrix which transforms DocCoords into OilCoords...
 	friend Matrix ComposeDocToOilMat( const DocCoord& ChapterPos,	// Top left coord of chapter
                           const XLONG& ChapterDepth,			// Accumulated height of previous chaps
@@ -180,6 +183,7 @@ public:
 	BOOL Pixelise();
 	BOOL Pixelise(View* pView);
 	BOOL IsPixelised(View* pView);
+#endif
 
 	// Some operator functions
 	friend DocCoord operator + (const DocCoord& , const DocCoord& );

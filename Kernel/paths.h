@@ -106,7 +106,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "handles.h"
 #include "pathtype.h"
 #include "attr.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "gconsts.h"
+#endif
 
 class RenderRegion;
 class NodePath;
@@ -335,9 +337,11 @@ public:
 
 	
 	DocRect GetBoundingRect() const;
+#if !defined(EXCLUDE_FROM_XARLIB)
 	DocRect GetBlobRect() const;
 	BOOL GetTrueBoundingRect(	DocRect* pRect,	MILLIPOINT LineWidth = 0,
 												CCAttrMap* pAttrMap = NULL );
+#endif
 
 	DocCoord GetEndPoint();
 	DocCoord GetControl1();
@@ -399,6 +403,7 @@ public:
 	void DumpPath();
 	void GetDebugDetails(StringBase* Str);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Rendering Functions (Blobs)
 	void RenderPathBlobs(Spread* pSpread);
 	void RenderPathBlobs(RenderRegion* pRender);
@@ -414,6 +419,7 @@ public:
 	void DrawBlob(RenderRegion*, const DocCoord&, BOOL);
 	void DrawControlBlob(RenderRegion*, const DocCoord&);
 	void DrawControlLine(RenderRegion*, const DocCoord&, const DocCoord&);
+#endif
 
 	// Functions to help with sub-selections
 	void ClearSubSelection();
@@ -440,6 +446,7 @@ public:
 	void Translate(const INT32 x, const INT32 y);
 	void Translate(const DocCoord& coord);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	INT32 ClipPathToPath(const Path& Src,Path* const pDest,UINT32 Flags,
 						UINT32 Tolerance = 100,double SrcFlatness = 750.0,double ClipFlatness = 750.0);
 	
@@ -462,6 +469,11 @@ public:
 								 CapStyles CapS = CAPS_ROUND, UINT32 MitreLimit = 751941);
 	
 	INT32 GetContourForStep(Path* pDest, double StepValue = 1.0);
+
+#endif
+
+	// functions for working with NeedToRender flags
+	void ClearNeedToRender();
 
 	// Copy functions
 	BOOL CopySectionFrom(const Path& Other, INT32 StartIndex, INT32 NumToCopy);
@@ -489,9 +501,6 @@ public:
 	BOOL Quantise(const double threshold, Path* pOutput);
 	BOOL Flatten(const double flatness, Path* pOutput);
 	BOOL CreateFlatPath(const ProcessFlags& PFlags, const double flatness, Path* pOutput);
-
-	// functions for working with NeedToRender flags
-	void ClearNeedToRender();
 
 	// Making room in a path for more points
 	BOOL MakeSpaceInPath(INT32 NumSlots);
@@ -545,6 +554,7 @@ private:
 	// Helper functions
 	BOOL InsertSectionAtEnd(const Path* Other, INT32 StartPos, INT32 NumSlots);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Contour Variables - MRH 23/05/00
 	INT32 m_ContourWidth;
 	JoinStyles m_ContourJoinS;
@@ -555,7 +565,8 @@ private:
 	BOOL m_IsAnOuterContour;
 	BOOL m_DoClosePath;
 	BOOL m_UseContourMode;
-	
+#endif
+
 public:
 	// Flags that effect the entire path
 	BOOL IsFilled;

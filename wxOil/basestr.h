@@ -238,12 +238,13 @@ public:
 	//Graham 6/5/97
 	INT32 ReverseFind(TCHAR cToFind) const;
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Special internationalisation stuff...
 	virtual void MakePercent(INT32 Value);
 	virtual void MakePercent(double Value);
 	virtual void MakePercent(TCHAR *Value);
 	virtual void FixFormat();
+#endif
 
 	// Comparison operators.
 	bool IsIdentical(const TCHAR *other) const;

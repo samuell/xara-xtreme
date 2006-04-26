@@ -140,10 +140,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/msw/regconf.h>
 #endif
 
-
-
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "wxXtra.h"
+#endif
 
 #include <memory>
 #include <map>
@@ -187,6 +186,7 @@ T Abs( T val )
 #define BASED_CODE
 
 #include "compatdef.h"
+#include "ensure.h"
 #include "errors.h"
 #include "memdebug.h"
 #include "exception.h"

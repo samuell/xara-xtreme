@@ -101,32 +101,36 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "app.h"
+#endif
 #include "paths.h"
-//#include "rndrgn.h"
 #include "memory.h"
-#include "errors.h"
-#include "ensure.h"
 #include <math.h>
-//#include "rik.h"
-//#include "peter.h"
+
+#include "fixmem.h"
+#include "pathutil.h"
+#include "handles.h"
+#include "pathproc.h"
+#include "vector.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "docview.h"
 #include "osrndrgn.h"
 #include "pen.h"
-#include "pathutil.h"
+//	#include "pathutil.h"
 #include "blobs.h"
-#include "fixmem.h"
-#include "pathproc.h"
+//	#include "fixmem.h"
 #include "fitcurve.h"
 #include "layermgr.h"
 #include "gclip.h"
 #include "grndrgn.h"
-#include "vector.h"
 #include "XaDraw.h"
 #include "cstroke.h"
 #include "lineattr.h"
 #include "attrmap.h"
-#include "handles.h"
+//	#include "handles.h"
+#endif
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW
@@ -199,6 +203,7 @@ Path::Path()
 	// Setup the Extra Info Channels
 	ExtraInfo = NULL;
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Set up the contouring variables
 //	m_pGPC = NULL;
 //	m_pGSC = NULL;
@@ -217,6 +222,7 @@ Path::Path()
 	m_ContourMitreLimit = 10;
 	m_ContourMitreLimit <<= 16;
 	m_UseContourMode = TRUE;
+#endif
 }
 
 /********************************************************************************************
@@ -1560,7 +1566,6 @@ DocRect Path::GetBoundingRect()	const
 }
 
 
-
 /********************************************************************************************
 
 >	BOOL Path::GetTrueBoundingRect(	DocRect* pRect,	MILLIPOINT LineWidth = 0,
@@ -1595,6 +1600,7 @@ DocRect Path::GetBoundingRect()	const
 	SeeAlso:	GDrawContext::CalcStrokeBBox.
 
 ********************************************************************************************/
+#if !defined(EXCLUDE_FROM_XARLIB)
 BOOL Path::GetTrueBoundingRect(DocRect* pRect, MILLIPOINT LineWidth, CCAttrMap* pAttrMap)
 {
 //#pragma message( __LOCMSG__ "Path::GetTrueBoundingRect - do nothing" )
@@ -1734,7 +1740,7 @@ DocRect Path::GetBlobRect()	const
 	// return the completed rectangle
 	return BlobRect;
 }
-
+#endif
 
 
 /********************************************************************************************
@@ -2931,7 +2937,7 @@ void Path::GetDebugDetails(StringBase* Str)
 	PathFlags *	Flags	= GetFlagArray();
 	for (INT32 i=0; i < nSlots; i ++)
 	{
-		String_8 VerbStr;
+		String_32 VerbStr;
 		VerbStr._MakeMsg(TEXT("#1%d ("), Verbs[i]);
 		if (Verbs[i] & PT_CLOSEFIGURE)	VerbStr += TEXT("S");
 		if (Verbs[i] & PT_LINETO)		VerbStr += TEXT("L");
@@ -2952,6 +2958,9 @@ void Path::GetDebugDetails(StringBase* Str)
 	}
 #endif
 }
+
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 
 /********************************************************************************************
 
@@ -3354,6 +3363,7 @@ void Path::RenderPathPenBlobs(RenderRegion* pRegion)
 #endif
 }
 
+#endif	// EXCLUDE_FROM_XARLIB
 
 
 /********************************************************************************************
@@ -3461,6 +3471,9 @@ INT32 Path::FindNextControlPoint(INT32 Index)
 	return -1;
 }
 
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+
 /********************************************************************************************
 
 >	void Path::DrawBlob(RenderRegion* pRender, const DocCoord& Coord, BOOL DrawSelected)
@@ -3546,7 +3559,7 @@ void Path::DrawControlLine(RenderRegion* pRender, const DocCoord& Start, const D
 #endif
 }
 
-
+#endif
 
 
 /********************************************************************************************
@@ -5367,6 +5380,7 @@ BOOL Path::MergeTwoPaths(DocCoord* OtherCoords,PathVerb* OtherVerbs,PathFlags* O
 }
 
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	double Path::CalculateFlatnessValueFromPath(double DividerValue = 375.0, double LowerLimit = 1.0,
@@ -5939,6 +5953,9 @@ INT32 Path::GetContourForStep(Path* pDest, double StepValue)
 	// Return the New Path Length
 	return PathLength;
 }
+
+#endif	// EXCLUDE_FROM_XARLIB
+
 
 /********************************************************************************************
 
@@ -6743,6 +6760,7 @@ BOOL Path::InsertSectionAtEnd(const Path* Other, INT32 StartSlot, INT32 NumSlots
 
 BOOL Path::FindNearestPoint(DocCoord pos, UINT32 flags, INT32* position)
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 //#pragma message( __LOCMSG__ "Path::FindNearestPoint - do nothing" )
 //	TRACE( _T("Warning - Path::FindNearestPoint called\n") );
 	// If neither ENDPOINTS or CONTROLPOINTS flags are set, return FALSE since the caller
@@ -6847,6 +6865,7 @@ BOOL Path::FindNearestPoint(DocCoord pos, UINT32 flags, INT32* position)
 			}
 		}
 	}
+#endif
 	return FALSE;
 }
 
@@ -7154,7 +7173,7 @@ BOOL Path::SplitAtPoint(const DocCoord SplitPt,
 
 BOOL Path::PointCloseToLine(DocCoord pos, INT32* position)
 {
-#if !defined(EXCLUDE_FROM_RALPH)
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARLIB)
 /*
 	double d;
 	INT32 Near;
@@ -7759,7 +7778,7 @@ BOOL Path::MakePathFromSection(const INT32 Start, const INT32 Length, Path* pDes
 
 BOOL Path::Smooth(const double error)
 {
-#if !defined(EXCLUDE_FROM_RALPH)
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARLIB)
 	double QuantOrder = 1024;
 
 	INT32 orignumcoords = UsedSlots;

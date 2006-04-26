@@ -258,6 +258,7 @@ private:
 	FTTypeList* m_pTypeList;
 };
 
+
 /********************************************************************************************
 
 >	class CamelotFileRecord : public CXaraFileRecord
@@ -277,6 +278,7 @@ public:
 	CamelotFileRecord(BaseCamelotFilter* pFilter,UINT32 Tag,INT32 Size = -1);
 	~CamelotFileRecord();
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Translates the coords and the paths automatically on writing
 	virtual	BOOL WriteCoord(const DocCoord& Coord);
 	virtual	BOOL WriteCoordInterleaved(const DocCoord& Coord);
@@ -297,6 +299,7 @@ public:
 
 private:
 	DocCoord CoordOrigin;
+#endif	// EXCLUDE_FROM_XARLIB
 };
 
 #endif	// INC_CXFREC

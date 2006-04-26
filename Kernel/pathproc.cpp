@@ -106,7 +106,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixmem.h"
 #include "paths.h"
 #include "errors.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "pen.h"
+#else
+#define MAXPRESSURE 1023
+#endif
 
 DECLARE_SOURCE("$Revision$");
 

@@ -133,8 +133,9 @@ class TunedMemory;
 void CCFree( LPVOID buf );
 
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 TunedMemory* GetTunedMemManager();
-
+#endif
 
 class CCMallocCriticalSection
 {

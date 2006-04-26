@@ -99,6 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CAMTYPES
 #define INC_CAMTYPES
 
+#if defined(EXCLUDE_FROM_XARLIB) && !defined(EXCLUDE_FROM_XARALX)
+#define EXCLUDE_FROM_XARALX
+#endif
+
 //This removes the UNWIND_SEMATICS warnings during a build
 #pragma warning(disable:4530)
 
@@ -132,7 +136,9 @@ typedef UINT32 	TAG;
 #include "ccobject.h"
 #include "errors.h"
 #include "strings.h"
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "app.h"
+
 #include "document.h"
 //#include "docview.h"		// GAT - Removed
 #include "range.h"
@@ -147,6 +153,7 @@ typedef UINT32 	TAG;
 //#include "bars.h"
 //#include "sgallery.h"
 //#include "sgtree.h"
+#endif
 
 //-----------------------------------------------------------------------------------------//
 // Some globally useful coordinate values...

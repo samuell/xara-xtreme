@@ -110,7 +110,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixmem.h"				// for CCMalloc, etc...
 //#include "reshelp.h"
 //#include "oilmods.h"			// for OILModule::xx
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "convert.h"			// for MakePercent
+#endif
 
 //#include "Res/UKEnglish/stringtbl.h"
 
@@ -988,7 +990,7 @@ INT32 StringBase::CountChar(const TCHAR tchar)
 }		
 
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 /**************************************************************************************
 >	void StringBase::MakePercent(INT32 Value);
 	void StringBase::MakePercent(double Value);
@@ -1055,6 +1057,9 @@ void StringBase::FixFormat()
 #endif
 #endif
 }
+
+#endif
+
 
 /***********************************************************************************************
 >	INT32 SmartLoadString(UINT32 modID, UINT32 resID, LPTCHAR buf, INT32 size)
@@ -1232,12 +1237,12 @@ void StringBase::Dump(CDumpContext& dc) const
 				read as many characters as possible and put a newline at the end.
 	SeeAlso:	ostream& operator<<(ostream& os, const StringBase& s)
 ***************************************************************************************/
-istream &operator>>( istream& is, StringBase& s )
+std::istream &operator>>( std::istream& is, StringBase& s )
 {
 	ERROR3IF(!s.text, "Call to istream >> for an unALLOCated String");
 
 	char				temp[MAX_STRING_RES_LENGTH];
-	is >> ws;								// skip any leading whitespace
+	is >> std::ws;								// skip any leading whitespace
 	is.get(temp, MAX_STRING_RES_LENGTH);	// grab a chunk of input, up to a newline
 	
 	ERROR3IF( size_t(s.length) <= strlen(temp), "Call to istream >> will overflow String" );
@@ -1266,7 +1271,7 @@ PORTNOTE("other","This is not very efficient needs revisiting")
 				"[0]" is printed.
 	SeeAlso:	istream& operator>>(istream& is, StringBase& s)
 ***************************************************************************************/
-ostream& operator<<(ostream& os, const StringBase& s)
+std::ostream& operator<<(std::ostream& os, const StringBase& s)
 {
 	ERROR3IF(!s.text, "Call to ostream << for an unALLOCated String");	
 	os << (s.Length() ? s.text : TEXT("[0]"));

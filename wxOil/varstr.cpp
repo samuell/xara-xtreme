@@ -504,7 +504,7 @@ void StringVar::EnsureAlloc(UINT32 newlen)
 }
 
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 /**************************************************************************************
 >	void StringVar::MakePercent(INT32 Value);
 	void StringVar::MakePercent(double Value);
@@ -537,6 +537,5 @@ void StringVar::MakePercent(TCHAR* Value)
 	EnsureAlloc(32);
 	StringBase::MakePercent(Value);
 }
+#endif
 
-	
-	

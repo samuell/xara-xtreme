@@ -97,6 +97,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
+#ifndef INC_TAGLISTS
+#define INC_TAGLISTS
+
+#include "cxftags.h"
 #include "list.h"
 #include "listitem.h"
 #include "strings.h"
@@ -268,3 +272,4 @@ public:
 	TagDescriptionListItem* GetNext(TagDescriptionListItem* pItem)	{ return (TagDescriptionListItem*)List::GetNext(pItem); }
 };
 
+#endif	// INC_TAGLISTS

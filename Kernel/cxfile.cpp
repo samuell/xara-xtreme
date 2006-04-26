@@ -111,41 +111,34 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ccpanose.h"
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "bmpsrc.h"		// BitmapSource
 #include "ccbuffil.h"
+#endif
 
 #include "cxftags.h"	// The tag definitions
 #include "cxfdefs.h"	// The constants
 #include "zutil.h"		// ZLIB_VERSIONNO
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "camfiltr.h"	// BaseCamelotFilter
+#else
+#include "rechcomp.h"
+#endif
 
 #include "hardwaremanager.h"
 using namespace oilHardwareManager;
 
-//-----------------------------------------------
-
-class StandardDefaultRecordHandler : public CamelotRecordHandler
-{
-	// Give my name in memory dumps
-	CC_DECLARE_DYNAMIC(StandardDefaultRecordHandler);
-
-public:
-	StandardDefaultRecordHandler() {};
-
-	// Pure virtual functions that must be overridden.
-	virtual UINT32*	GetTagList() { static UINT32 TagList[]={CXFRH_TAG_LIST_END}; return (UINT32*)TagList; }
-	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
-
-	virtual void	IncProgressBarCount(UINT32 n) {};
-	virtual BOOL	IsStreamed(UINT32 Tag) { return FALSE; }
-};
 
 //-----------------------------------------------
 
 CC_IMPLEMENT_DYNAMIC(CXaraFile,CCObject);
-CC_IMPLEMENT_DYNAMIC(NULLXaraFile,CXaraFile);
 CC_IMPLEMENT_DYNAMIC(StandardDefaultRecordHandler,CamelotRecordHandler);
+CC_IMPLEMENT_DYNAMIC(GeneralRecordHandler,CamelotRecordHandler);
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+CC_IMPLEMENT_DYNAMIC(NULLXaraFile,CXaraFile);
+#endif
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
@@ -190,6 +183,11 @@ CXaraFile::CXaraFile()
 
 	pFilter = NULL;
 	pMap	= NULL;
+
+#if defined(EXCLUDE_FROM_XARLIB)
+	pAtomicTagList = NULL;
+	pEssentialTagList = NULL;
+#endif
 }
 
 
@@ -252,7 +250,7 @@ BOOL CXaraFile::OpenToWrite(CCLexFile* pThisCCFile)
 	SeeAlso:	Close()
 
 ********************************************************************************************/
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 BOOL CXaraFile::SetUpHandlers(BaseCamelotFilter* pFilter)
 {
 	SetUpHandlerMap();
@@ -305,6 +303,98 @@ BOOL CXaraFile::SetUpHandlers(BaseCamelotFilter* pFilter)
 
 	return ok;
 }
+#else
+
+#define NEW_RECORD_HANDLER(HandlerClassName)				\
+{															\
+	CamelotRecordHandler* pCamelotRecordHandler;			\
+	pCamelotRecordHandler = new HandlerClassName;			\
+	if (pCamelotRecordHandler != NULL)						\
+		pRecordHandlerList->AddTail(pCamelotRecordHandler);	\
+	else													\
+		return FALSE;										\
+}															\
+
+BOOL CXaraFile::SetUpHandlers(void)
+{
+	BOOL ok = TRUE;
+	
+	pRecordHandlerList = new List;
+	if (!pRecordHandlerList)
+		return(FALSE);
+	NEW_RECORD_HANDLER(GeneralRecordHandler);		// The general record handler
+	NEW_RECORD_HANDLER(CompressionRecordHandler);	// The compression record handler
+
+	// Initialise all the handlers
+	CamelotRecordHandler* pCamelotRecordHandler = (CamelotRecordHandler*)pRecordHandlerList->GetHead();
+	while (ok && pCamelotRecordHandler != NULL)
+	{
+				ok = pCamelotRecordHandler->Init(this);
+		if (ok) ok = pCamelotRecordHandler->BeginImport();
+
+		pCamelotRecordHandler = (CamelotRecordHandler*)pRecordHandlerList->GetNext(pCamelotRecordHandler);
+	}
+
+	if (ok)
+	{
+		SetUpHandlerMap();
+
+		// Set up the default handler, but only if there hasn't been one set up yet
+		if (pDefaultRecordHandler == NULL)
+		{
+			if (pStandardDefaultRecordHandler == NULL)
+				pStandardDefaultRecordHandler = new StandardDefaultRecordHandler;
+
+			if (pStandardDefaultRecordHandler == NULL)
+			{
+				ERROR3("Unable to create StandardDefaultRecordHandler");
+				return FALSE;
+			}
+
+			SetDefaultRecordHandler(pStandardDefaultRecordHandler);
+		}
+
+		// Init the default handler, and inform it we're about to start importing
+		if (pDefaultRecordHandler != NULL)
+		{
+			if (ok) ok = pDefaultRecordHandler->Init(this);
+			if (ok) ok = pDefaultRecordHandler->BeginImport();
+		}
+
+		// Set up the sub tree stripper handler, but only if one has not been set yet
+		if (pStripSubTreeRecordHandler == NULL)
+		{
+			if (pStandardStripSubTreeRecordHandler == NULL)
+				pStandardStripSubTreeRecordHandler = new StripSubTreeRecordHandler;
+
+			if (pStandardStripSubTreeRecordHandler == NULL)
+			{
+				ERROR3("Unable to create standard sub tree stripper");
+				return FALSE;
+			}
+
+			SetStripSubTreeRecordHandler(pStandardStripSubTreeRecordHandler);
+		}
+
+		// Init the sub tree stripper handler, and inform it we're about to start importing
+		if (pStripSubTreeRecordHandler != NULL)
+		{
+			if (ok) ok = pStripSubTreeRecordHandler->Init(this);
+			if (ok) ok = pStripSubTreeRecordHandler->BeginImport();
+		}
+	}
+
+	return ok;
+}
+
+void CXaraFile::SetExternalRecordHandler(void* pMagic, RecordHandler* pfnRecordHandler)
+{
+	if (pStandardDefaultRecordHandler)
+		((StandardDefaultRecordHandler*)pStandardDefaultRecordHandler)->SetExternalHandler(pMagic, pfnRecordHandler);
+}
+
+#endif
+
 
 /********************************************************************************************
 
@@ -599,9 +689,10 @@ BOOL CXaraFile::StartCompression()
 	
 	// First check whether we are meant to be doing this or not
 	// by looking at the filter preference
-	BOOL CompressFile = BaseCamelotFilter::GetNativeCompression();
-	if (!CompressFile)
+#if !defined(EXCLUDE_FROM_XARLIB)
+	if (!BaseCamelotFilter::GetNativeCompression())
 		return TRUE;
+#endif
 
 	if (pCCFile->IsCompressionSet())
 	{
@@ -682,9 +773,10 @@ BOOL CXaraFile::StopCompression()
 
 	// First check whether we are meant to be doing this or not
 	// by looking at the filter preference
-	BOOL CompressFile = BaseCamelotFilter::GetNativeCompression();
-	if (!CompressFile)
+#if !defined(EXCLUDE_FROM_XARLIB)
+	if (!BaseCamelotFilter::GetNativeCompression())
 		return TRUE;
+#endif
 
 	if (!pCCFile->IsCompressionSet())
 	{
@@ -1127,7 +1219,7 @@ BOOL CXaraFile::Write(const DocCoord& Coord)
 	return (Write(Coord.x) && Write(Coord.y));
 }
 
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	BOOL CXaraFile::WriteBitmapSource(const BitmapSource& Source, UINT32 Height, 
@@ -1200,7 +1292,7 @@ BOOL CXaraFile::WriteBitmapSource(const BitmapSource& Source, UINT32 Height,
 
 	return TRUE;
 }
-
+#endif
 
 /********************************************************************************************
 
@@ -1920,13 +2012,16 @@ BOOL CXaraFile::ReadNextRecord()
 					}
 
 					if (ok) ok = pCXaraFileRecordHandler->HandleRecord(pCXaraFileRecord);
+#if !defined(EXCLUDE_FROM_XARLIB)
 					if (ok)		 pCXaraFileRecordHandler->IncProgressBarCount(pCXaraFileRecord->GetSize()+8);
-
+#endif
 					delete pCXaraFileRecord;
 				}
 			}
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 			if (ok && pFilter != NULL) ok = pFilter->SetLastRecordHandler(pCXaraFileRecordHandler,ReadTag);
+#endif
 		}
 		else
 		{
@@ -1948,10 +2043,162 @@ BOOL CXaraFile::ReadNextRecord()
 }
 
 
+#if defined(EXCLUDE_FROM_XARLIB)
+/********************************************************************************************
+
+>	virtual void CXaraFile::AddAtomicTag(AtomicTagListItem* pItem)
+
+	Author:		Markn
+	Created:	16/8/96
+	Inputs:		pItem = ptr to an atomic list item
+	Returns:	-
+	Purpose:	Adds the item to the list of atomic tags compiled during import
+
+	SeeAlso:	BaseCamelotFilter::PrepareToImport; BaseCamelotFilter::DoImport
+	Scope: 		Protected
+
+********************************************************************************************/
+
+void CXaraFile::AddAtomicTag(AtomicTagListItem* pItem)
+{
+	if (pAtomicTagList == NULL)
+		pAtomicTagList = new AtomicTagList;
+
+	if (pAtomicTagList != NULL)
+		pAtomicTagList->AddTail(pItem);
+}
+
+/********************************************************************************************
+
+>	virtual void CXaraFile::AddEssentialTag(EssentialTagListItem* pItem)
+
+	Author:		Markn
+	Created:	16/8/96
+	Inputs:		pItem = ptr to an Essential list item
+	Returns:	-
+	Purpose:	Adds the item to the list of Essential tags compiled during import
+
+	SeeAlso:	BaseCamelotFilter::PrepareToImport; BaseCamelotFilter::DoImport
+	Scope: 		Protected
+
+********************************************************************************************/
+
+void CXaraFile::AddEssentialTag(EssentialTagListItem* pItem)
+{
+	if (pEssentialTagList == NULL)
+		pEssentialTagList = new EssentialTagList;
+
+	if (pEssentialTagList != NULL)
+		pEssentialTagList->AddTail(pItem);
+}
+
+/********************************************************************************************
+
+>	BOOL CXaraFile::WriteRemainingAtomicTagDefinitions ()
+
+	Author:		Chris Snook
+	Created:	14/9/2000
+	Inputs:		-
+	Outputs:	-
+	Returns:	TRUE if changed value, FALSE otherwise
+	Purpose:	All compound nodes (e.g.  bevels, contours, shadows, clipview) are now defined
+				as being atomic.  This is so that they can be backwards compatible with CX2.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL CXaraFile::WriteRemainingAtomicTagDefinitions ()
+{
+	BOOL ok = TRUE;
+	
+	CXaraFileRecord atomicRec(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
+	if (ok) ok = atomicRec.Init();
+	if (ok) ok = atomicRec.WriteUINT32(TAG_BEVEL);						// NodeBevelController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_BEVELINK);					// NodeBevel
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CONTOURCONTROLLER);			// NodeContourController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CONTOUR);						// NodeContour
+	if (ok) ok = atomicRec.WriteUINT32(TAG_SHADOWCONTROLLER);			// NodeShadowController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_SHADOW);						// NodeShadow
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CLIPVIEWCONTROLLER);			// NodeClipViewController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CLIPVIEW);					// NodeClipView
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CURRENTATTRIBUTES);			// Current Attributes container/component
+	if (ok)	ok = Write(&atomicRec);
+
+	return (ok);
+}
+
+/********************************************************************************************
+
+>	virtual BOOL CXaraFile::IsTagInAtomicList(UINT32 Tag)
+
+	Author:		Markn
+	Created:	16/8/96
+	Inputs:		Tag = tag value to look for
+	Returns:	TRUE if found, FALSE otherwsie
+	Purpose:	Searches the atomic tag list to see of the given tag is in the list.
+
+	SeeAlso:	BaseCamelotFilter::PrepareToImport; BaseCamelotFilter::DoImport
+	Scope: 		Protected
+
+********************************************************************************************/
+
+BOOL CXaraFile::IsTagInAtomicList(UINT32 Tag)
+{
+	if (pAtomicTagList != NULL)
+	{
+		AtomicTagListItem* pItem = pAtomicTagList->GetHead();
+		while (pItem != NULL)
+		{
+			if (pItem->GetTag() == Tag)
+				return TRUE;
+
+			pItem = pAtomicTagList->GetNext(pItem);
+		}
+	}
+
+	return FALSE;
+}
+
+/********************************************************************************************
+
+>	virtual BOOL CXaraFile::IsTagInEssentialList(UINT32 Tag)
+
+	Author:		Markn
+	Created:	16/8/96
+	Inputs:		Tag = tag value to look for
+	Returns:	TRUE if found, FALSE otherwsie
+	Purpose:	Searches the Essential tag list to see of the given tag is in the list.
+
+	SeeAlso:	BaseCamelotFilter::PrepareToImport; BaseCamelotFilter::DoImport
+	Scope: 		Protected
+
+********************************************************************************************/
+
+BOOL CXaraFile::IsTagInEssentialList(UINT32 Tag)
+{
+	if (pEssentialTagList != NULL)
+	{
+		EssentialTagListItem* pItem = pEssentialTagList->GetHead();
+		while (pItem != NULL)
+		{
+			if (pItem->GetTag() == Tag)
+				return TRUE;
+
+			pItem = pEssentialTagList->GetNext(pItem);
+		}
+	}
+
+	return FALSE;
+}
+#endif
+
+
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	virtual BOOL NULLXaraFile::Write(BYTE b)
@@ -2146,3 +2393,428 @@ BOOL NULLXaraFile::FixStreamedRecordHeader(UINT32 *RecordSize)
 {
 	return TRUE;
 }
+#endif	// EXCLUDE_FROM_XARLIB
+
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+
+UINT32* GeneralRecordHandler::GetTagList()
+{
+	static UINT32 TagList[] = {	TAG_ENDOFFILE,
+								TAG_FILEHEADER,
+#if !defined(EXCLUDE_FROM_XARLIB)
+								TAG_UP,
+								TAG_DOWN,
+								TAG_TAGDESCRIPTION,
+								TAG_DOCUMENTNUDGE,
+#endif
+								TAG_ATOMICTAGS,
+								TAG_ESSENTIALTAGS,
+								CXFRH_TAG_LIST_END};
+	return (UINT32*)&TagList;
+}
+
+BOOL GeneralRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"pCXaraFileRecord is NULL");
+
+	BOOL ok = TRUE;
+
+	switch (pCXaraFileRecord->GetTag())
+	{
+		case TAG_FILEHEADER :
+			ok = HandleFileHeader(pCXaraFileRecord);
+			break;
+
+		case TAG_ENDOFFILE:
+#if !defined(EXCLUDE_FROM_XARLIB)
+			EndOfFile();
+#else
+			m_pCXFile->SetEndOfFile();
+#endif
+			break;
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+		case TAG_UP:
+			ok = DecInsertLevel();
+			break;
+
+		case TAG_DOWN:
+			ok = IncInsertLevel();
+			break;
+
+		case TAG_TAGDESCRIPTION:
+			ok = HandleTagDescriptionRecord(pCXaraFileRecord);
+			break;
+
+		case TAG_DOCUMENTNUDGE:
+			ok = HandleTagNudgeSizeRecord(pCXaraFileRecord);
+			break;
+#endif
+		case TAG_ATOMICTAGS:
+			ok = HandleAtomicTagsRecord(pCXaraFileRecord);
+			break;
+
+		case TAG_ESSENTIALTAGS:
+			ok = HandleEssentialTagsRecord(pCXaraFileRecord);
+			break;
+
+		default:
+			ok = FALSE;
+			ERROR3_PF(("I don't handle records with the tag (%d)\n",pCXaraFileRecord->GetTag()));
+			break;
+	}
+
+	return ok;
+}
+
+/********************************************************************************************
+
+>	BOOL GeneralRecordHandler::HandleFileHeader(CXaraFileRecord* pCXaraFileRecord)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	14/6/96
+	Inputs:		pCXaraFileRecord = ptr to a record
+	Returns:	-
+	Purpose:	Handles the file header record
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL GeneralRecordHandler::HandleFileHeader(CXaraFileRecord* pCXaraFileRecord)
+{
+	BOOL ok = TRUE;
+	BYTE Buffer[100];
+	BYTE FileType[4];
+	UINT32 n;
+	UINT32 PreCompFlags;
+	UINT32 FileSize;
+
+	if (ok) ok = pCXaraFileRecord->ReadBuffer(FileType,3);			// File type (ensuring only 3 chars are read)
+	if (ok) ok = pCXaraFileRecord->ReadUINT32(&FileSize);			// File size
+	if (ok) ok = pCXaraFileRecord->ReadUINT32(&n);					// Native/Web link ID
+	if (ok) ok = pCXaraFileRecord->ReadUINT32(&PreCompFlags);		// Precompression flags
+	if (ok) ok = pCXaraFileRecord->ReadASCII((TCHAR*)Buffer,100);	// Producer
+	if (ok) ok = pCXaraFileRecord->ReadASCII((TCHAR*)Buffer,100);	// Producer version
+	if (ok) ok = pCXaraFileRecord->ReadASCII((TCHAR*)Buffer,100);	// Producer build
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+	SetTotalProgressBarCount(FileSize);
+
+	SetImportFileType((char*)FileType);
+
+	ok = SetPreCompression(PreCompFlags);
+#endif
+	return ok;
+}
+
+
+/********************************************************************************************
+
+>	BOOL GeneralRecordHandler::HandleAtomicTagsRecord(CXaraFileRecord* pCXaraFileRecord)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	16/8/96
+	Inputs:		pCXaraFileRecord = ptr to a record
+	Returns:	-
+	Purpose:	Handles the atomic tags record
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL GeneralRecordHandler::HandleAtomicTagsRecord(CXaraFileRecord* pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"pCXaraFileRecord is NULL");
+	ERROR2IF(pCXaraFileRecord->GetTag() != TAG_ATOMICTAGS,FALSE,"I don't handle this tag type");
+
+	BOOL ok = TRUE;
+
+	UINT32 Size = pCXaraFileRecord->GetSize();
+	UINT32 Tag;
+
+	// Create an atomic tag item for each atomic tag in the record
+
+	for (UINT32 i = 0;ok && i < Size; i+=sizeof(UINT32))
+	{
+		AtomicTagListItem* pItem = NULL;
+
+		ok = pCXaraFileRecord->ReadUINT32(&Tag);
+		if (ok) pItem = new AtomicTagListItem(Tag);
+		if (ok) ok = (pItem != NULL);
+		if (ok) AddAtomicTag(pItem);
+	}
+
+	return ok;
+}
+
+/********************************************************************************************
+
+>	BOOL GeneralRecordHandler::HandleEssentialTagsRecord(CXaraFileRecord* pCXaraFileRecord)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	16/8/96
+	Inputs:		pCXaraFileRecord = ptr to a record
+	Returns:	-
+	Purpose:	Handles the essential tags record
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL GeneralRecordHandler::HandleEssentialTagsRecord(CXaraFileRecord* pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"pCXaraFileRecord is NULL");
+	ERROR2IF(pCXaraFileRecord->GetTag() != TAG_ESSENTIALTAGS,FALSE,"I don't handle this tag type");
+
+	BOOL ok = TRUE;
+
+	UINT32 Size = pCXaraFileRecord->GetSize();
+	UINT32 Tag;
+
+	// Create an essential tag item for each essential tag in the record
+
+	for (UINT32 i = 0;ok && i < Size; i+=sizeof(UINT32))
+	{
+		EssentialTagListItem* pItem = NULL;
+
+		ok = pCXaraFileRecord->ReadUINT32(&Tag);
+		if (ok) pItem = new EssentialTagListItem(Tag);
+		if (ok) ok = (pItem != NULL);
+		if (ok) AddEssentialTag(pItem);
+	}
+
+	return ok;
+}
+
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+/********************************************************************************************
+
+>	BOOL GeneralRecordHandler::HandleTagDescriptionRecord(CXaraFileRecord* pCXaraFileRecord)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	16/8/96
+	Inputs:		pCXaraFileRecord = ptr to a record
+	Returns:	-
+	Purpose:	Handles the tag description record
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL GeneralRecordHandler::HandleTagDescriptionRecord(CXaraFileRecord* pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"pCXaraFileRecord is NULL");
+	ERROR2IF(pCXaraFileRecord->GetTag() != TAG_TAGDESCRIPTION,FALSE,"I don't handle this tag type");
+
+	BOOL ok = TRUE;
+
+	UINT32 NumTags;
+	UINT32 Tag;
+	String_256* pDesc = NULL;
+
+	ok = pCXaraFileRecord->ReadUINT32(&NumTags);
+
+	// Create a tag description item for each tag description in the record
+
+	for (UINT32 i = 0;ok && i < NumTags; i++)
+	{
+		TagDescriptionListItem* pItem = NULL;
+
+		pDesc = new String_256;
+		ok = (pDesc != NULL);
+
+		if (ok) ok = pCXaraFileRecord->ReadUINT32(&Tag);
+		if (ok) ok = pCXaraFileRecord->ReadUnicode(pDesc);//*pDesc,pDesc->MaxLength());
+		if (ok) pItem = new TagDescriptionListItem(Tag,pDesc);
+		if (ok) ok = (pItem != NULL);
+		if (ok) ok = AddTagDescription(pItem);
+
+		if (!ok && pItem != NULL)
+		{
+			delete pItem;
+			pItem = NULL;
+		}
+	}
+
+	return ok;
+}
+
+
+
+/********************************************************************************************
+
+>	BOOL GeneralRecordHandler::HandleTagNudgeSizeRecord(CXaraFileRecord* pCXaraFileRecord)
+
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	31/8/2000
+	Inputs:		pCXaraFileRecord = ptr to a record
+	Returns:	-
+	Purpose:	Handles the nudge size description record
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL GeneralRecordHandler::HandleTagNudgeSizeRecord(CXaraFileRecord* pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"pCXaraFileRecord is NULL");
+	ERROR2IF(pCXaraFileRecord->GetTag() != TAG_DOCUMENTNUDGE,FALSE,"I don't handle this tag type");
+
+	BOOL ok = TRUE;
+
+	INT32 val = (INT32) 2835;		//DEFAULT_NUDGE_SIZE;	I'm not moving this just so it will be consistent
+	
+	ok = pCXaraFileRecord->ReadINT32 (&val);
+
+	ok = SetDocumentNudgeSize ((UINT32) val);
+
+	return ok;
+}
+#endif
+
+/********************************************************************************************
+
+>	virtual void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	14/6/96
+	Inputs:		pRecord = ptr to a record
+				pStr = ptr to string to update
+	Returns:	-
+	Purpose:	The general record handler text dumper
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+#if XAR_TREE_DIALOG
+void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
+{
+	if (pStr == NULL || pRecord == NULL)
+		return;
+
+	// Call base class first
+	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
+
+	switch (pRecord->GetTag())
+	{
+		case TAG_FILEHEADER :
+		{
+			TCHAR FileType[4];
+			FileType[3] = 0;
+
+			char s[256];
+			TCHAR Producer[100];
+			TCHAR ProducerVersion[100];
+			TCHAR ProducerBuild[100];
+			UINT32 NativeWebLink;
+			UINT32 PrecompressionFlags;
+			UINT32 FileSize;
+
+			pRecord->ReadBuffer((BYTE*)FileType,3);		// File type (ensuring only 3 chars are read)
+			pRecord->ReadUINT32(&FileSize);				// File size
+			pRecord->ReadUINT32(&NativeWebLink);			// Native/Web link ID
+			pRecord->ReadUINT32(&PrecompressionFlags);	// Precompression flags
+			pRecord->ReadASCII(Producer,100);			// Producer
+			pRecord->ReadASCII(ProducerVersion,100);	// Producer version
+			pRecord->ReadASCII(ProducerBuild,100);		// Producer build
+
+			(*pStr) += "File Type\t\t\t: ";
+			(*pStr) += FileType;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Uncompressed File Size\t: ";
+			_stprintf(s,"%d",FileSize);
+			(*pStr) += s;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Native/Web Link ID\t: ";
+			_stprintf(s,"%d",NativeWebLink);
+			(*pStr) += s;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Precompression Flags\t: ";
+			_stprintf(s,"0x%x",PrecompressionFlags);
+			(*pStr) += s;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Producer\t\t\t: ";
+			(*pStr) += Producer;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Producer Version\t\t: ";
+			(*pStr) += ProducerVersion;
+			(*pStr) += "\r\n";
+
+			(*pStr) += "Producer Build\t\t: ";
+			(*pStr) += ProducerBuild;
+			(*pStr) += "\r\n";
+		}
+		break;
+
+		case TAG_ATOMICTAGS:
+		{
+			UINT32 Size = pRecord->GetSize();
+			UINT32 Tag;
+			String_256 TagText;
+
+			(*pStr) += "Atomic tag list:\r\n";
+
+			for (UINT32 i = 0;i < Size; i+=sizeof(UINT32))
+			{
+				pRecord->ReadUINT32(&Tag);
+				GetTagText(Tag,TagText);
+				(*pStr) += TagText;
+				(*pStr) += "\r\n";
+			}
+		}
+		break;
+
+		case TAG_ESSENTIALTAGS:
+		{
+			UINT32 Size = pRecord->GetSize();
+			UINT32 Tag;
+			String_256 TagText;
+
+			(*pStr) += "Essential tag list:\r\n";
+
+			for (UINT32 i = 0;i < Size; i+=sizeof(UINT32))
+			{
+				pRecord->ReadUINT32(&Tag);
+				GetTagText(Tag,TagText);
+				(*pStr) += TagText;
+				(*pStr) += "\r\n";
+			}
+		}
+		break;
+
+		case TAG_TAGDESCRIPTION:
+		{
+			UINT32 NumTags;
+			UINT32 Tag;
+			String_256 Desc,TagText;
+
+			(*pStr) += "Tag description list:\r\n";
+
+			pRecord->ReadUINT32(&NumTags);
+
+			for (UINT32 i = 0;i < NumTags; i++)
+			{
+				pRecord->ReadUINT32(&Tag);
+				pRecord->ReadUnicode(&Desc);//Desc,Desc.MaxLength());
+				GetTagText(Tag,TagText);
+				(*pStr) += TagText;
+				(*pStr) += " (";
+				(*pStr) += Desc;
+				(*pStr) += ")\r\n";
+			}
+		}
+		break;
+	}
+}
+#endif

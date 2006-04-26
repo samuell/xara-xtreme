@@ -409,6 +409,8 @@ Initial revision
 
 */
 
+#if !defined(EXCLUDE_FROM_XARLIB)
+
 DECLARE_SOURCE("$Revision$");
 
 #include "userrect.h"
@@ -480,4 +482,4 @@ OilRect DocRect::ToOil(Spread* pSpread, View* pView)
 	return OilRect( this->lo.ToOil(pSpread,pView), this->hi.ToOil(pSpread,pView) );
 }
 
-
+#endif	// EXCLUDE_FROM_XARLIB

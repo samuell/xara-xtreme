@@ -118,6 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define	ERRORTYPE_SERIOUS	4
 #define	ERRORTYPE_ENSURE	5
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	class ErrorInfo
@@ -328,7 +329,7 @@ INT32 ModuleInformMessage(UINT32 ModID,
 INT32 InformMessage(ErrorInfo *pInfo);
 INT32 ToolInformMessage(UINT32 ToolID, ErrorInfo *pInfo);
 INT32 ModuleInformMessage(UINT32 ModID, ErrorInfo *pInfo);
-
+#endif
 
 
 /***********************************************************************************************
@@ -528,7 +529,9 @@ public:
 	// convert ID's to HRESULT for ralph harness's
 	static HRESULT ErrIDToHRESULT(UINT32 ErrID);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	static HRESULT GetRalphError();
+#endif
 
 	~Error();
 	static void SetError(UINT32 number, const TCHAR* errstring, UINT32 module);

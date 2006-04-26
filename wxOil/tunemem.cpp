@@ -104,7 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tunemem.h"
 #include "errors.h"
 #include "fixmem.h"
-#include "app.h"
 
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_MEMDUMP(TunedMemory, CC_CLASS_MEMDUMP)

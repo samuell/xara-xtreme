@@ -102,7 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxfrec.h"
 #include "cxfile.h"
 #include "cxfdefs.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "camfiltr.h"
+#endif
 
 //#include "ccpanose.h"
 #include "fixmem.h"
@@ -120,7 +123,9 @@ using namespace oilHardwareManager;
 #endif
 
 CC_IMPLEMENT_DYNAMIC(CXaraFileRecord,CCObject);
+#if !defined(EXCLUDE_FROM_XARLIB)
 CC_IMPLEMENT_DYNAMIC(CamelotFileRecord,CXaraFileRecord);
+#endif
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
@@ -129,6 +134,13 @@ CC_IMPLEMENT_DYNAMIC(CamelotFileRecord,CXaraFileRecord);
 
 
 #define RELPATHINTERLEAVE
+
+#ifndef SIZEOF_XAR_UTF16
+// Unicode characters in the XAR file format are always 16-bit UTF16
+#define SIZEOF_XAR_UTF16 2					// UTF16 characters are only 2 byte
+#endif
+
+
 
 //-------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------
@@ -2011,10 +2023,12 @@ BOOL CXaraFileRecord::ReadYOrd(INT32* pYOrdinate)
 
 CamelotFileRecord::CamelotFileRecord(BaseCamelotFilter* pFilter,UINT32 Tag,INT32 Size) : CXaraFileRecord(Tag,Size)
 {
+#if !defined(EXCLUDE_FROM_XARLIB)
 	CoordOrigin = DocCoord(0,0);
 
 	if (pFilter != NULL)
 		CoordOrigin = pFilter->GetCoordOrigin();
+#endif
 }
 
 /********************************************************************************************
@@ -2033,6 +2047,7 @@ CamelotFileRecord::~CamelotFileRecord()
 {
 }
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	virtual	BOOL CamelotFileRecord::WritePath(Path* pPath)
@@ -2250,3 +2265,4 @@ BOOL CamelotFileRecord::ReadYOrd(INT32* pYOrdinate)
 
 	return FALSE;
 }
+#endif

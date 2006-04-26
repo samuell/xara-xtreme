@@ -110,7 +110,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccobject.h"
 
 #include "ensure.h"
-#include "app.h"
 #include "errors.h"
 //#include "resource.h"
 

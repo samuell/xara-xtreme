@@ -99,11 +99,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "doccoord.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include "usercord.h"
 #include "node.h"
 //#include "paper.h"
 #include "xmatrix.h"
-#include "ensure.h"
 #include "spread.h"
 #include "chapter.h"
 #include "oilcoord.h"
@@ -626,7 +627,7 @@ BOOL DocCoord::Pixelise()
 	return Pixelise(View::GetCurrent());
 }
 
-
+#endif	// EXCLUDE_FROM_XARLIB
 
 /********************************************************************************************
 

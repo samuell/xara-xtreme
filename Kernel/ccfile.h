@@ -583,6 +583,9 @@ public:
 	// Call this to change the iostream this classes uses.
 	virtual iostream* SetStream(iostream* pStream);
 
+	// Switch between text and binary modes. (filebuf::text is non-standard and the same as 0)
+	virtual BOOL  setMode(INT32 fileMode = 0) { return(TRUE); };
+
 	// Stream files are always open and cannot be closed.
 	virtual BOOL isOpen() const;
 
@@ -862,6 +865,8 @@ public:
 	// than doing these in a init function, we will introduce a flag to say whether
 	// things have gone well so that if errors are supressed then a user can check. 
 	BOOL IsMemFileInited();
+
+	BOOL GetBuffer(BYTE** ppBuffer, UINT32* pSize);
 
 	BOOL open(void* pFile, UINT32 size, FileAccess fProt = CCMemRead);
     

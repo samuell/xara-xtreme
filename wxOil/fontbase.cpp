@@ -130,7 +130,7 @@ CC_IMPLEMENT_MEMDUMP( CharOutlineCache, CC_CLASS_MEMDUMP );
 #define new CAM_DEBUG_NEW
 
 // a macro to ignore a parameter without causing a warning
-#define IGNORE(x) x = x
+#define IGNOREPARAM(x) x = x
 
 /////////////////////////////////////////
 // Some outline cache constants
@@ -931,8 +931,8 @@ BOOL FontMetricsCacheEntry::CacheFontMetrics( wxDC* pDC, CharDescription FontDes
 
 	// these values are ignored - the DesignSize needs to be read from the font, so the
 	// scaling needs to be done by FTFontMan itself
-	IGNORE(DefaultHeight);
-	IGNORE(DesignSize);
+	IGNOREPARAM(DefaultHeight);
+	IGNOREPARAM(DesignSize);
 
 #ifdef __WXGTK__
 	// TRACEUSER("wuerthne", _T("CacheFontMetrics DesignSize = %d"), DesignSize);
@@ -1075,7 +1075,7 @@ void FontMetricsCacheEntry::CheckCharWidthsSameAsABCWidths(wxDC* pDC, CharDescri
 BOOL FontMetricsCache::GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics)
 {
 	// TRACEUSER("wuerthne", _T("FontMetricsCache::GetCharMetrics %04x"), ch);
-	IGNORE(pDC);
+	IGNOREPARAM(pDC);
 	ERROR2IF(pCharMetrics==NULL,FALSE,"FontMetricsCache::GetCharMetrics() - pCharMetrics==NULL");
 	ERROR2IF(FontDesc.GetCharCode()!=FONTEMCHAR,FALSE,"FontMetricsCache::GetCharMetrics() - FontDesc char should be 'FONTEMCHAR'");
 
@@ -1290,7 +1290,11 @@ MILLIPOINT FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRig
 	if (chLeft > 0x10000 || chRight > 0x10000 || m_pPairsCacheMap == NULL)
 	{
 		// TRACEUSER("wuerthne", _T("Bypass cache"));
+#ifdef __WXGTK__
 		return FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
+#else
+		return 0;
+#endif
 	}
 
 	key = (chLeft << 16) | chRight;
@@ -1302,7 +1306,11 @@ MILLIPOINT FontKerningPairsCacheEntry::GetCharsKerning(WCHAR chLeft, WCHAR chRig
 	}
 	else {
 		// we did not find an entry, so get the kerning from the underlying font system
+#ifdef __WXGTK__
 		INT32 kerning = FTFontMan::GetCharsKerning(FontDesc, chLeft, chRight);
+#else
+		INT32 kerning = 0;
+#endif
 		// and cache it
 		// TRACEUSER("wuerthne", _T("cache kern pair"));
 		(*m_pPairsCacheMap)[key] = kerning;
