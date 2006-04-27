@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragtrgt.h"
 
 class KernelBitmap;
-class WinBitmap;
+class CWxBitmap;
 
 class SGDisplayItem;
 
@@ -158,7 +158,7 @@ public:
 
 protected:
 
-	BOOL PlotBitmap(WinBitmap *WinBM, 
+	BOOL PlotBitmap(CWxBitmap *WinBM, 
 					wxPoint Origin, wxSize Size, 
 					wxDC * RenderDC);
 

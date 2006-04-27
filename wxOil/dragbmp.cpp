@@ -106,15 +106,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragbmp.h"
 #include "dragmgr.h"
 #include "keypress.h"
-#include "mainfrm.h"
-//#include "resource.h"
+#include "camframe.h"
 #include "bitmap.h"
 #include "bitmpinf.h"	
+#include "oilbitmap.h"
 
 #include "grndrgn.h"
 #include "gdrawcon.h"
 #include "dibutil.h"
-#include "wbitmap.h"
 
 #include "gbrush.h"
 #include "camelot.h"	// for IsWin32s()
@@ -229,30 +228,30 @@ BitmapDragInformation::BitmapDragInformation(	KernelBitmap * DragBitmap,
 		Ratio = double(xSize) / double(ySize);
 
 	// size of the solid drag redraw
-	SolidDragSize.cx = (xSize > 0) ? xSize : BitmapWidth;
-	SolidDragSize.cy = (ySize > 0) ? ySize : BitmapHeight;
+	SolidDragSize.x = (xSize > 0) ? xSize : BitmapWidth;
+	SolidDragSize.y = (ySize > 0) ? ySize : BitmapHeight;
 
 	if (xSize > 0 && ySize == 0)
-		SolidDragSize.cy = INT32(SolidDragSize.cx / Ratio);
+		SolidDragSize.y = INT32(SolidDragSize.x / Ratio);
 
-	if (SolidDragSize.cx > CellSize)
+	if (SolidDragSize.x > CellSize)
 	{
-		SolidDragSize.cx = CellSize;
-		SolidDragSize.cy = INT32(SolidDragSize.cx / Ratio);
+		SolidDragSize.x = CellSize;
+		SolidDragSize.y = INT32(SolidDragSize.x / Ratio);
 	}
 
-	if (SolidDragSize.cy > CellSize)
+	if (SolidDragSize.y > CellSize)
 	{
-		SolidDragSize.cy = CellSize;
-		SolidDragSize.cx = INT32(SolidDragSize.cy * Ratio);
+		SolidDragSize.y = CellSize;
+		SolidDragSize.x = INT32(SolidDragSize.y * Ratio);
 	}
 
 	// Offset relative to bitmap centre
-	SolidDragOffset.x += (xOffset - SolidDragSize.cx/2);
-	SolidDragOffset.y += (yOffset - SolidDragSize.cy/2);	   
+	SolidDragOffset.x += (xOffset - SolidDragSize.x/2);
+	SolidDragOffset.y += (yOffset - SolidDragSize.y/2);	   
 
-	DragRect.cx = SolidDragSize.cx;
-	DragRect.cy = SolidDragSize.cy;
+	DragRect.x = SolidDragSize.x;
+	DragRect.y = SolidDragSize.y;
 }
 
 /********************************************************************************************
@@ -270,7 +269,7 @@ BitmapDragInformation::~BitmapDragInformation()
 {
 	if (Bitmap)
 	{
-		Bitmap->DeleteObject();
+//		Bitmap->DeleteObject();
 		delete Bitmap;
 	}
 
@@ -461,7 +460,7 @@ BOOL BitmapDragInformation::StartGalleryItemDrag(SGDisplayItem* pGalleryItem)
 
 /********************************************************************************************
 
->	void BitmapDragInformation::OnDrawSolidDrag(CRect DragRect,CDC * TheDC, DragTarget* pDragTarget) 
+>	void BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget) 
 	 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/1/95		  
@@ -475,14 +474,14 @@ BOOL BitmapDragInformation::StartGalleryItemDrag(SGDisplayItem* pGalleryItem)
 
 ********************************************************************************************/
 
-BOOL BitmapDragInformation::OnDrawSolidDrag(CPoint Origin,CDC * TheDC, DragTarget* pDragTarget)
+BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
 {
 	return OnDrawSolidDrag(Origin, TheDC);
 }
 
 /********************************************************************************************
 
->	void BitmapDragInformation::OnDrawSolidDrag(CRect DragRect,CDC * TheDC) 
+>	void BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC) 
 	 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/1/95		  
@@ -496,30 +495,32 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(CPoint Origin,CDC * TheDC, DragTarge
 
 ********************************************************************************************/
 
-BOOL BitmapDragInformation::OnDrawSolidDrag(CPoint Origin,CDC * TheDC)
+BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC)
 {
-	CPalette * OldPal = NULL;
+//	CPalette * OldPal = NULL;
 
-	if (PaletteManager::UsePalette())
-	{
-		OldPal = PaletteManager::StartPaintPalette( TheDC);
-	}
+//	if (PaletteManager::UsePalette())
+//	{
+//		OldPal = PaletteManager::StartPaintPalette( TheDC);
+//	}
 
 	if (TheBitmap != NULL && TheBitmap->ActualBitmap != NULL)
 	{	
-		PlotBitmap((WinBitmap*)TheBitmap->ActualBitmap, Origin, DragRect, TheDC);
+		PlotBitmap((CWxBitmap*)TheBitmap->ActualBitmap, Origin, DragRect, TheDC);
 	}
 	else
 	{
 		// get a gbrush brush
 		GBrush GDrawBrush;
-		GDrawBrush.Init(TheDC->m_hDC);
+		GDrawBrush.Init(TheDC);
 		GDrawBrush.Start();
 
 		DWORD ScreenWord = 0x007F7F7F;
 
-		CBrush *pDragBrush = NULL;
-	
+		wxBrush *pDragBrush = NULL;
+
+PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be ported");
+#if !defined(EXCLUDE_FROM_XARALX)
 		// get a new MFC brush, catching any exceptions
 		TRY
 		{
@@ -580,13 +581,14 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(CPoint Origin,CDC * TheDC)
 		}
 		else
 			BrushCreate = FALSE;
+#endif
 
 		// Finish with GBrush
 		GDrawBrush.Stop();
 	}
 
-	if (OldPal)
-		PaletteManager::StopPaintPalette(TheDC, OldPal);
+//	if (OldPal)
+//		PaletteManager::StopPaintPalette(TheDC, OldPal);
 	
 	return TRUE;
 }
@@ -609,9 +611,9 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(CPoint Origin,CDC * TheDC)
 
 ********************************************************************************************/
 
-BOOL BitmapDragInformation::PlotBitmap(	WinBitmap *WinBM, 
-										CPoint Origin, CSize Size, 
-										CDC * RenderDC)
+BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *WinBM, 
+										wxPoint Origin, wxSize Size, 
+										wxDC* RenderDC)
 {
 	if ((WinBM == NULL) ||
 		(WinBM->BMInfo==NULL) ||
@@ -619,15 +621,15 @@ BOOL BitmapDragInformation::PlotBitmap(	WinBitmap *WinBM,
 	   )
 		return FALSE;
 
-	POINT TopLeft  = Origin;
+	wxPoint TopLeft  = Origin;
 
-	POINT BottomLeft;
+	wxPoint BottomLeft;
 	BottomLeft.x = TopLeft.x;
-	BottomLeft.y = TopLeft.y + Size.cy;
+	BottomLeft.y = TopLeft.y + Size.y;
 
-	POINT BottomRight;
-	BottomRight.x = TopLeft.x + Size.cx;
-	BottomRight.y = TopLeft.y + Size.cy;
+	wxPoint BottomRight;
+	BottomRight.x = TopLeft.x + Size.x;
+	BottomRight.y = TopLeft.y + Size.y;
 
 	INT32 DestWidth  = BottomRight.x - BottomLeft.x;
 	INT32 DestHeight = BottomLeft.y  - TopLeft.y;
@@ -641,6 +643,8 @@ BOOL BitmapDragInformation::PlotBitmap(	WinBitmap *WinBM,
 //	if (PaletteManager::UsePalette())
 //		hPal = *(PaletteManager::GetPalette());
 
+PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be ported");
+#if !defined(EXCLUDE_FROM_XARALX)
 	CDC MemDC;
 	MemDC.CreateCompatibleDC(RenderDC);
 
@@ -986,6 +990,8 @@ BOOL BitmapDragInformation::PlotBitmap(	WinBitmap *WinBM,
 
 	if (OldPal)
 		MemDC.SelectPalette(OldPal, FALSE);
+
+#endif
 
 	// Yipeee !! We done it
    	return TRUE;
