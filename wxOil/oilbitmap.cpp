@@ -2147,12 +2147,14 @@ RebuildXPEBitmap();
 
 /********************************************************************************************
 
->	virtual wxImage * CWxBitmap::MakewxImage(BOOL UsePalette) const;
+>	virtual wxImage * CWxBitmap::MakewxImage(UINT32 ImageWidth=0, UINT32 ImageHeight=0, BOOL UsePalette=TRUE) const;
 
 	Author:		Alex Bligh
 	Created:	26/04/2006
 
-	Inputs:		UsePalette -Ignored for deep bitmaps
+	Inputs:		ImageWidth - Width of image to make (or zero for width of bitmap)
+				ImageHeight - Depth of image to make (or zero for depth of bitmap)
+				UsePalette -Ignored for deep bitmaps
 							For <=8bpp bitmaps, if this value is:
 								FALSE, the bitmap's palette will be ignored, and the actual pixel
 								(palette index) value will be returned as a greyscale RGB value
@@ -2174,25 +2176,46 @@ RebuildXPEBitmap();
 
 ********************************************************************************************/
 
-wxImage * CWxBitmap::MakewxImage(BOOL UsePalette)
+wxImage * CWxBitmap::MakewxImage(UINT32 ImageWidth, UINT32 ImageHeight, BOOL UsePalette)
 {
+	if (!ImageWidth)
+		ImageWidth=GetWidth();
+	if (!ImageHeight)
+		ImageHeight=GetHeight();
+
 	wxImage * pImage = new wxImage(GetWidth(), GetHeight(), /*TYPENOTE: Correct*/ false);
 	if (!pImage)
 		return NULL;
+#if 0
 	pImage->SetAlpha();
 	if (!pImage->HasAlpha())
 	{
 		delete pImage;
 		return NULL;
 	}
+#endif
 
 	RebuildXPEBitmap();
 
-	for (UINT32 YPos = 0; YPos < GetHeight(); YPos++) for (UINT32 XPos = 0; XPos < GetWidth(); XPos++)
+	double xstep = GetWidth()/ImageWidth;
+	double ystep = GetHeight()/ImageHeight;
+	double x=0;
+	double y=0;
+
+	for (UINT32 YPos = 0; YPos < ImageHeight; YPos++)
 	{
-		Pixel32bpp p = ReadPixel32bpp(XPos, YPos, UsePalette);
-		pImage->SetRGB(XPos, YPos, p.Red, p.Blue, p.Green);
-		pImage->SetAlpha(XPos, YPos, 255-p.Alpha); // wxImage alpha has 0 for fully transparent
+		UINT32 YP=(UINT32)(y+0.5);
+		x=0;
+		for (UINT32 XPos = 0; XPos < ImageWidth; XPos++)
+		{
+			UINT32 XP=(UINT32)(x+0.5);
+			Pixel32bpp p = ReadPixel32bpp(XP, YP, UsePalette);
+			pImage->SetRGB(XPos, YPos, p.Red, p.Blue, p.Green);
+//			pImage->SetAlpha(XPos, YPos, 255-p.Alpha); // wxImage alpha has 0 for fully transparent
+
+			x+=xstep;
+		}
+		y+=ystep;
 	}
 
 	return(pImage);

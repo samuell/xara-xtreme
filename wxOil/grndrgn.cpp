@@ -6350,13 +6350,20 @@ static WORD ColDebugTable[32] =
 void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 		INT32 Left,INT32 Top, UINT32 Width,UINT32 Height, wxPalette* hPalette, INT32 SourceLeft,INT32 SourceTop )
 {
+	pBits=StaticPlotBitmap(hDC, ColourFlag, pBitmapInfo, pBits, Left, Top, Width, Height, hPalette, SourceLeft, SourceTop);
+}
+
+LPBYTE GRenderRegion::StaticPlotBitmap( wxDC* hDC, UINT32 ColourFlag,
+		LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits,
+		INT32 Left,INT32 Top, UINT32 Width,UINT32 Height, wxPalette* hPalette, INT32 SourceLeft,INT32 SourceTop )
+{
 	if( Width==0 || Height==0 )
-		return;
+		return lpBits;
 
 	// Test preconditions
-	ERROR3IF((pBitmapInfo->bmiHeader.biSize==0x00000000) /*|| 
-			 (pBitmapInfo->bmiHeader.biSize==0xdddddddd) || 
-			 (pBitmapInfo->bmiHeader.biSize==0xcdcdcdcd) */,"Illegal BitmapInfo structure passed to PlotBitmap");
+	ERROR3IF((lpBitmapInfo->bmiHeader.biSize==0x00000000) /*|| 
+			 (lpBitmapInfo->bmiHeader.biSize==0xdddddddd) || 
+			 (lpBitmapInfo->bmiHeader.biSize==0xcdcdcdcd) */,"Illegal BitmapInfo structure passed to PlotBitmap");
 			// AB commented second two checks out as bmiHeader.biSize is a WORD, i.e. 16 bits in size, according to compatdef.h
 //	TRACE( _T("SrcRect(%d, %d, %d, %d) - (%d, %d)"), rectDraw.GetLeft(), rectDraw.GetTop(),
 //		rectDraw.GetWidth(), rectDraw.GetHeight(), pBitmap->GetWidth(), pBitmap->GetHeight() );
@@ -6365,7 +6372,7 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 
 #if !USE_wxBITMAP
 
-	ERROR3IF(pBitmapInfo->bmiHeader.biBitCount!=32,"Image must (currently) be 32bpp");
+	ERROR3IF(lpBitmapInfo->bmiHeader.biBitCount!=32,"Image must (currently) be 32bpp");
 
 	wxBitmap Bitmap(Width,Height,32);
 	wxAlphaPixelData BitmapData(Bitmap);
@@ -6373,8 +6380,8 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 	// Copy source (or part of source) into wxBitmap.
 	//
 	DWORD* pSBuffer = 
-			(DWORD*)pBits + 
-			pBitmapInfo->bmiHeader.biWidth*(pBitmapInfo->bmiHeader.biHeight-1-SourceTop) +
+			(DWORD*)lpBits + 
+			lpBitmapInfo->bmiHeader.biWidth*(lpBitmapInfo->bmiHeader.biHeight-1-SourceTop) +
 			SourceLeft;
 	DWORD* pDBuffer = (DWORD*)Bitmap.GetRawData(BitmapData,32);
 	DWORD* pDLine = pDBuffer;
@@ -6394,7 +6401,7 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 #else
 			pDLine[x] = pSBuffer[x];
 #endif
-		pSBuffer -= pBitmapInfo->bmiHeader.biWidth;
+		pSBuffer -= lpBitmapInfo->bmiHeader.biWidth;
 		pDLine += nStep;
 	}
 	if ( ScreenHinting==CONVHINT_FINAL16  ||
@@ -6438,7 +6445,7 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 #else
 
 #if defined(__WXGTK__)
-	RGBT* pBuffer = (RGBT*)pBits + pBitmapData->m_width*SourceTop + SourceLeft;
+	RGBT* pBuffer = (RGBT*)lpBits + pBitmapData->m_width*SourceTop + SourceLeft;
 	for( UINT32 y=0 ; y<Height ; ++y )
 	{
 		//
@@ -6493,7 +6500,7 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 	else
 	{
 		if ( bIs16Bit )
-			GRenderRegion::GetStaticDrawContext()->ConvertBitmap(&Info,pBits,&Info,pBits,uHint);
+			GRenderRegion::GetStaticDrawContext()->ConvertBitmap(&Info,lpBits,&Info,lpBits,uHint);
 		pBitmap->UngetRawData(*pBitmapData) ;
 		{
 //			CamProfile cp(CAMPROFILE_BLIT);
@@ -6502,9 +6509,9 @@ void GRenderRegion::PlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 		TRACE( _T("DrawBitmap(%08x,%04x,%04x)\n"),hDC,Left,Top);
 	}
 
-	pBits = (BYTE*)pBitmap->GetRawData(*pBitmapData,uBitmapDepth);
-
+	lpBits = (BYTE*)pBitmap->GetRawData(*pBitmapData,uBitmapDepth);
 #endif
+	return lpBits;
 }
 
 

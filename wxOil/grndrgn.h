@@ -391,7 +391,9 @@ protected:
 
 	void PlotBitmap( UINT32 ColourFlag );
 	void PlotBitmap( wxDC *pDC, UINT32 ColourFlag, INT32 Left, INT32 Top, UINT32 Width, UINT32 Height, wxPalette* hPal, INT32, INT32 );
-
+public:
+	static LPBYTE StaticPlotBitmap( wxDC *pDC, UINT32 ColourFlag, LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits, INT32 Left, INT32 Top, UINT32 Width, UINT32 Height, wxPalette* hPal, INT32, INT32 );
+protected:
 //	KernelBitmap* FractalBitmap;		// GAT: Never used.
 
 	// Limit of transparency in hit-detect pixels before pixel will be ignored

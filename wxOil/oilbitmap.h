@@ -161,7 +161,7 @@ public:
 	// Helper function used by ExportSeparatedData - this retrieves one scanline of the
 	// bitmap as generic 24bpp RGB data.
 	virtual BOOL GetScanline32bpp(UINT32 YPos, BOOL UsePalette, Pixel32bpp *Scanline);
-	virtual wxImage * MakewxImage(BOOL UsePalette=TRUE);
+	virtual wxImage * MakewxImage(UINT32 ImageWidth=0, UINT32 ImageHeight=0, BOOL UsePalette=TRUE);
 
 	virtual OILBitmap* MakeCopy(); // returns a copy of this object
 protected:

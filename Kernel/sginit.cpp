@@ -195,9 +195,7 @@ PORTNOTE("galleries", "Excluded various galleries")
 #ifndef EXCLUDE_FROM_XARALX
 				NewColourDlg::Init()				&&
 #endif
-#ifdef _DEBUG // For now bitmap gallery only on debug builds
 				OpDisplayBitmapGallery::Init()		&&
-#endif
 #ifndef EXCLUDE_FROM_XARALX
 				OpDisplayFontsGallery::Init()		&&
 #endif // EXCLUDE_FROM_XARALX
