@@ -322,7 +322,7 @@ private:
 ********************************************************************************************/
 
 class OurPropSheet;
-class OurPropShtPage;
+typedef wxNotebookPage OurPropShtPage;
 class DialogBarOp;
                
 class DialogManager: public CCObject  
@@ -341,7 +341,7 @@ public:
 private:
 	// Creates a DialogBarOp
 	static BOOL CreateBar(DialogBarOp* DlgOp);
-	static BOOL CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage);
+	static wxWindow* CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage);
 
 
 	// Post create gets called after a dialog window has been created.
@@ -763,6 +763,7 @@ private:
 	// created. See the Create method for a description of why we need this. 
 	static List DlgTagOpToPropShtList; 
                                                                 
+	static OurPropSheet* GetPropertySheetFromOp( DialogTabOp* pDialogTabOp );
 	
 	static BOOL HandleScrollBarMsg(wxWindow *pScrollWnd, 
 											      UINT32 wParam, 
@@ -917,22 +918,28 @@ class CWindowIDItem: public ListItem
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed OurPropSheet")
-#ifndef EXCLUDE_FROM_XARALX
-class OurPropSheet : public CPropertySheet
+class OurPropSheet : public wxPropertySheetDialog
 {
 public:
-	OurPropSheet(String_256* pName, UINT32 SelPage);
+	OurPropSheet( wxWindow* pParentWnd, String_256* pName, UINT32 SelPage );
 	~OurPropSheet(); 
 
-	BOOL IsModal(void) { return !m_bModeless; };
+//	BOOL IsModal(void) { return !m_bModeless; };
 
 	// This very useful function is protected within the MFC base class, so we redefine it
 	// here as public, and make it return a pointer to one of our Camelot pages.
 	OurPropShtPage* GetActivePage() const
-		{ return (OurPropShtPage*) CPropertySheet::GetActivePage(); }
+		{ return (OurPropShtPage*)GetBookCtrl()->GetCurrentPage(); }
 
 protected:
+	std::set<wxWindow*>	m_setCreateSent;
+
+	void OnSetActive( wxNotebookEvent& event );
+
+	DECLARE_EVENT_TABLE()
+
+PORTNOTE("dialog","Removed Windows callbacks")
+#ifndef EXCLUDE_FROM_XARALX
 	// Message handlers
 	//{{AFX_MSG(OurPropSheet)
 	afx_msg INT32  OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -951,11 +958,14 @@ protected:
 
 	// The WindowProc chanels suitable messages to the DialogManager
 	LRESULT WindowProc(UINT32 Message, WPARAM wParam, LPARAM lParam); 
-	DECLARE_DYNAMIC(OurPropSheet)
-	friend class DialogManager;
-};
 #endif
 
+	DECLARE_CLASS(OurPropSheet)
+	friend class DialogManager;
+};
+
+PORTNOTE("dialog","Don't need \ can't use OurPropShtPage, removed")
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class OurPropShtPage: public CPropertyPage
@@ -967,19 +977,17 @@ protected:
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed OurPropShtPage")
-#ifndef EXCLUDE_FROM_XARALX
-class OurPropShtPage: public CPropertyPage
+class OurPropShtPage: public wxNotebookPage
 {	
 	friend class DialogManager;
 	   
-	DECLARE_DYNAMIC(OurPropShtPage)
+	DECLARE_ABSTRACT_CLASS( OurPropShtPage )
 
 public:
 	// Construction
 	OurPropShtPage(CDlgResID DialogResID);
 
-	CDlgResID GetPageID() { return PageID; }
+	CDlgResID GetPageID() { return m_PageID; }
 
 protected:
 	// The WindowProc chanels suitable messages to the DialogManager
@@ -988,8 +996,8 @@ protected:
 	BOOL OnSetActive();
 	BOOL OnKillActive(); 
 
-	CDlgResID PageID; // We store the resource id used to create the page
-	BOOL CreateMessageSent; // Becomes TRUE after a Create message is sent for the page.
+	CDlgResID		m_PageID;				// We store the resource id used to create the page
+	BOOL			m_CreateMessageSent;	// Becomes TRUE after a Create message is sent for the page.
 
 	enum EnabledState { ENABLED, DISABLED, UNKNOWN };
 };
@@ -1008,14 +1016,11 @@ protected:
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed DlgTagOpToPropShtItem")
-#ifndef EXCLUDE_FROM_XARALX
 class DlgTagOpToPropShtItem: public ListItem
 {
 	public:
 		DialogTabOp* pDialogTabOp; 
 		OurPropSheet* pPropertySheet;
 };
-#endif
 
 #endif		// !INC_DLGMGR

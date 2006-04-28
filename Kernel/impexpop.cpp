@@ -1167,8 +1167,8 @@ PORTNOTE("other", "Removed EPSFilter usage" )
 			// set up with default attrib for this filter
 			// and get the user to edit these default params in the export dlg (thats the FALSE param)
 PORTNOTE("other", "Use SetUpExportOptions to get defaults only and not do dialog" )
-//			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, FALSE);
-			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, TRUE);
+			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, FALSE);
+//			((BaseBitmapFilter*) pFilter)->SetUpExportOptions(&pOptions, TRUE);
 			// the dlg has been up and the user may have the graphic type
 			// ask the dlg for the type that it used
 			if (BmapPrevDlg::m_pExportOptions)

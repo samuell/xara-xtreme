@@ -316,9 +316,7 @@ PORTNOTE("other","Removed Lots of init functions")
 #ifndef EXCLUDE_GALS
 			SGInit::Init() &&					// Init/Register all the supergallery related Ops
 #endif //EXCLUDE_GALS
-#ifndef EXCLUDE_FROM_XARALX
 			BmapPrevDlg::Init() &&				// Bitmap Preview Dialog Box - Dbug Builds for the moment [MartinD]
-#endif //EXCLUDE_FROM_XARALX
 
 // Moved this here from inside ColourSGallery::Init
 			OpBackground::Init() &&

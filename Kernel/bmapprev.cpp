@@ -243,8 +243,6 @@ BOOL BmapPrevDlg::RegisterYourPagesInOrderPlease()
 {
 	BOOL ok = TRUE;
 
-PORTNOTE("other","Removed wizard pages code")
-#ifndef EXCLUDE_FROM_XARALX
 	// flag indicating we are doing a bitmap export
 	BOOL bExportABitmap = (m_pExportOptions->GetSelectionType() == ABITMAP);
 
@@ -254,8 +252,11 @@ PORTNOTE("other","Removed wizard pages code")
 	}
 	else
 	{
+PORTNOTE("other","Removed registry usage")
+#ifndef EXCLUDE_FROM_XARALX
 		// Not exporting a bitmap from the bitmap gallery
 		AddAPage(_R(IDD_TPALETTE));
+#endif
 
 		if (!m_bSlicingImage)
 			ok = AddAPage(_R(IDD_TBITMAPSIZE));
@@ -268,7 +269,6 @@ PORTNOTE("other","Removed wizard pages code")
 	// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
 		ok = AddAPage(_R(IDD_TIMAPOPTIONS));
-#endif
 
 	return (ok); 
 }
@@ -1159,8 +1159,6 @@ MsgResult BmapPrevDlg::Message( Msg* Message)
 	
 	DialogMsg* Msg = ((DialogMsg*) Message); 
 
-PORTNOTETRACE("other","BmapPrevDlg::Message - Do nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
 	BOOL EndDialog = FALSE;		// TRUE if we should quit the dialog
 //	BOOL CommitValues = FALSE; 	// TRUE if we should commit the dialog values
 
@@ -1189,81 +1187,90 @@ PORTNOTETRACE("other","BmapPrevDlg::Message - Do nothing");
 	}
 
 	// Determine from what page the message originated
-	switch (Msg->PageID)
+	if( Msg->PageID == _R(IDD_TBITMAPSIZE) )
+		HandleBitmapSizeTabMsg(Msg); 
+PORTNOTE("other", "Remove palette usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
+	else
+	if( Msg->PageID == _R(IDD_TPALETTE) )
+		HandlePaletteTabMsg(Msg);
+#endif
+	else
+	if( Msg->PageID == _R(IDD_TIMAPOPTIONS) )
+		HandleImageMapTabMsg(Msg); 
+	else
+	if( Msg->PageID == _R(IDD_TBROWSER) )
+		HandleBrowserPreviewTabMsg(Msg); 
+	else
+	if( Msg->PageID == _R(IDD_TBITMAPOPTIONS) )
+		HandleBitmapOptionsTabMsg(Msg);
+	else
+	if( Msg->PageID == 0 )
 	{
-		case _R(IDD_TBITMAPSIZE):
-			HandleBitmapSizeTabMsg(Msg); 
-			break;
-		case _R(IDD_TPALETTE):
-			HandlePaletteTabMsg(Msg); 
-			break;
-		case _R(IDD_TIMAPOPTIONS):
-			HandleImageMapTabMsg(Msg); 
-			break;
-		case _R(IDD_TBROWSER):
-			HandleBrowserPreviewTabMsg(Msg); 
-			break;
-		case _R(IDD_TBITMAPOPTIONS):
-			HandleBitmapOptionsTabMsg(Msg);
-			break;
-
-		case 0:
-			// A message generated from the tabbed dialog itself
-			switch (Msg->DlgMsg)
+		// A message generated from the tabbed dialog itself
+		switch (Msg->DlgMsg)
+		{
+			case DIM_CREATE:
 			{
-				case DIM_CREATE:
+				if (!OnCreate()) // initialise
 				{
-					if (!OnCreate()) // initialise
-					{
-						ERROR3("Problem in OnCreate()");
-						return FAIL;
-					}
-					// disable browser preview for now
-//					BOOL Old = m_bDoPreviewInBrowser; // remember the value of the flag
-//					m_bDoPreviewInBrowser = FALSE; // disable browser preview
-//					DoPreview(); // do preview
-//					m_bDoPreviewInBrowser = Old; // restore the setting
-
-					//  Set up the bubble-help timer.
-					SetTimer(BUBBLE_HELP_TIMMER_ID, 100);
-					break;
+					ERROR3("Problem in OnCreate()");
+					return FAIL;
 				}
+				// disable browser preview for now
+//				BOOL Old = m_bDoPreviewInBrowser; // remember the value of the flag
+//				m_bDoPreviewInBrowser = FALSE; // disable browser preview
+//				DoPreview(); // do preview
+//				m_bDoPreviewInBrowser = Old; // restore the setting
 
-				case DIM_COMMIT:		// Close dialog and insert the bitmap in the document
-					EndDialog = TRUE;
-					KillTimer(BUBBLE_HELP_TIMMER_ID);
-					BmapPrevDlg::m_bClickedOnExport = TRUE;
-					ImageMapOnCommit();		// Save the image map values
-					break;
-
-				case DIM_SOFT_COMMIT:		// Update the preview
-					EndDialog = FALSE;
-					DoPreview();
-					BmapPrevDlg::m_bClickedOnExport = FALSE;
-					break; 
-
-				case DIM_CANCEL:		// Close dialog and don't insert the bitmap in the document
-					EndDialog = TRUE;
-					KillTimer(BUBBLE_HELP_TIMMER_ID);
-					BmapPrevDlg::m_bClickedOnExport = FALSE;
-					// we have cancelled so these options are not valid
-					m_pExportOptions->MarkInvalid();
-					break;
-
-				case DIM_LFT_BN_CLICKED:
-				case DIM_RGT_BN_CLICKED:
-					// If they clicked on the help button
-					if (Msg->GadgetID == IDHELP)
-						OnHelpButtonClicked();
-					break;
-
-				default:
-					break;
+PORTNOTE("other", "Remove bubble help timer usage" );
+#if !defined(EXCLUDE_FROM_XARALX)
+			//  Set up the bubble-help timer.
+				SetTimer(BUBBLE_HELP_TIMMER_ID, 100);
+#endif
+				break;
 			}
-			break;
-		default:
-			ERROR3("Message from unknown tab dialog page"); 
+
+			case DIM_COMMIT:		// Close dialog and insert the bitmap in the document
+				EndDialog = TRUE;
+PORTNOTE("other", "Remove bubble help timer usage" );
+#if !defined(EXCLUDE_FROM_XARALX)
+				KillTimer(BUBBLE_HELP_TIMMER_ID);
+#endif
+				BmapPrevDlg::m_bClickedOnExport = TRUE;
+				ImageMapOnCommit();		// Save the image map values
+				break;
+
+			case DIM_SOFT_COMMIT:		// Update the preview
+				EndDialog = FALSE;
+				DoPreview();
+				BmapPrevDlg::m_bClickedOnExport = FALSE;
+				break; 
+
+			case DIM_CANCEL:		// Close dialog and don't insert the bitmap in the document
+				EndDialog = TRUE;
+PORTNOTE("other", "Remove bubble help timer usage" );
+#if !defined(EXCLUDE_FROM_XARALX)
+				KillTimer(BUBBLE_HELP_TIMMER_ID);
+#endif
+				BmapPrevDlg::m_bClickedOnExport = FALSE;
+				// we have cancelled so these options are not valid
+				m_pExportOptions->MarkInvalid();
+				break;
+
+			case DIM_LFT_BN_CLICKED:
+			case DIM_RGT_BN_CLICKED:
+				// If they clicked on the help button
+				if (Msg->GadgetID == wxID_HELP)
+					OnHelpButtonClicked();
+				break;
+
+			default:
+				break;
+		}
 	}
+	else
+		ERROR3("Message from unknown tab dialog page"); 
 
 	if (EndDialog)	// Dialog communication over 
 	{	
@@ -1320,13 +1327,12 @@ PORTNOTETRACE("other","BmapPrevDlg::Message - Do nothing");
 
 		// tell the preview dialog to shut down			
 		if (m_DialogWnd != NULL)
-			BROADCAST_TO_CLASS( DialogMsg(m_DialogWnd, Msg->DlgMsg, 0, NULL, 0), DialogOp );
+			BROADCAST_TO_CLASS( DialogMsg(m_DialogWnd, Msg->DlgMsg, 0, 0, 0), DialogOp );
 		m_DialogWnd = NULL;
 
 		Close();
 		End(); 	 	// End of dialog 
 	}
-#endif
 
 	return DLG_EAT_IF_HUNGRY(Msg);   // I return EAT_MSG unless the message needs to be sent to all dialogs 
 }

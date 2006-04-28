@@ -127,6 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/treectrl.h>
 #include <wx/wxchar.h>
 #include <wx/wxprec.h>
+#include <wx/propdlg.h>
 #include <wx/xrc/xh_all.h>
 #include <wx/xrc/xmlres.h>
 
@@ -148,6 +149,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <map>
 #include <list>
 #include <vector>
+#include <set>
 #include <iostream>
 #include <sstream>
 #include <new>

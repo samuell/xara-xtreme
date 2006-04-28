@@ -1090,7 +1090,7 @@ BOOL JPEGExportFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	}
 	else
 	{	
-		ERROR3("Unable to find OPTOKEN_BMAPPREVDLG");
+		ERROR3("Unable to find OPTOKEN_GIFTABDLG");
 	} 
 
 /*	if (Ok)
