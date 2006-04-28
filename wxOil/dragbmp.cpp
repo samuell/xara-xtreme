@@ -519,41 +519,33 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC)
 
 		wxBrush *pDragBrush = NULL;
 
-PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be ported");
-#if !defined(EXCLUDE_FROM_XARALX)
-
 		pDragBrush = new wxBrush;
 	
 		BOOL BrushCreate = TRUE;
 
 		if (pDragBrush != NULL )
 		{
-			wxBrush *OldBrush;
-			wxPen *OldPen;
-
 			// create the Brush and	Pen
 			if (GDrawBrush.Available())
 			{
-				LOGBRUSH LogBrush;
-				GDrawBrush.GetLogBrush((COLORREF)(ScreenWord), &LogBrush);
-				pDragBrush->CreateBrushIndirect(&LogBrush);
+				GDrawBrush.GetLogBrush((COLORREF)(ScreenWord), pDragBrush);
 			}
 			else
-				pDragBrush->CreateSolidBrush( (COLORREF)ScreenWord );
-
-			CPen MyPen(PS_SOLID,1,RGB(0,0,0));
+				*pDragBrush=wxBrush(wxColour(0x7F,0x7F,0x7F));
+			
+			wxPen MyPen(*wxBLACK);
 		
 			//the rectangle to draw into
-			CRect DrawRect;
+			wxRect DrawRect;
 
-			if(DragRect.cx == 0 || DragRect.cy == 0)
-				DrawRect = CRect(Origin.x,Origin.y, Origin.x + NullSize, Origin.y + NullSize);
+			if(DragRect.x == 0 || DragRect.y == 0)
+				DrawRect = wxRect(Origin.x,Origin.y, Origin.x + NullSize, Origin.y + NullSize);
 			else
-				DrawRect = CRect(Origin.x,Origin.y, Origin.x + DragRect.cx, Origin.y + DragRect.cy);
+				DrawRect = wxRect(Origin.x,Origin.y, Origin.x + DragRect.x, Origin.y + DragRect.y);
 
 			// select brushes and pens ..
-			OldBrush = TheDC->SelectObject(pDragBrush);
-			OldPen = TheDC->SelectObject(&MyPen);
+			TheDC->SetBrush(*pDragBrush);
+			TheDC->SetPen(MyPen);
 
 			// draw an ellipse
 	 		// TheDC->Ellipse(&DrawRect);
@@ -563,21 +555,12 @@ PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be
 			// TheDC->TextOut(Origin.x, Origin.y, (TCHAR *)Str, Str.Length());		
 
 			// draw a rectangle 			 		
-	 		TheDC->Rectangle(DrawRect);
+	 		TheDC->DrawRectangle(DrawRect);
 		    						
-	    	// clean up the dc
-	    	TheDC->SelectObject(OldBrush);
-			TheDC->SelectObject(OldPen);
- 	
-	    	// delete the objects
-    	
-	    	pDragBrush->DeleteObject(); 
-			
 			delete pDragBrush;
 		}
 		else
 			BrushCreate = FALSE;
-#endif
 
 		// Finish with GBrush
 		GDrawBrush.Stop();

@@ -598,9 +598,9 @@ BOOL CaptureWnd::DrawSolidDrag(wxPoint point)
 	if(!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
 	   	return TRUE;
 
+#ifndef __WXGTK__
 	INT32 DragTransparency = DragManagerOp::CurrentManager->CurrentDragInfo->
 															GetDragTransparency();
-#ifndef __WXGTK__
 	// If the Drag Info says it wants to be transparent,
 	// then call the transparent drag routine.
 	if (DragTransparency > 0 || MaskBitmap != NULL)
