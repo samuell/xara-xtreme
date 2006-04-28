@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cursor.h"
 //#include "resource.h"
 #include "gbrush.h"
+#include "grndrgn.h"
 
 #include "oilbitmap.h"
 #include "osrndrgn.h"
@@ -323,81 +324,86 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 		// which will be used to 'knock' pixels out of the
 		// drag bitmap.
 
-		wxMemoryDC MaskDC;
-		MaskBitmap = new wxBitmap(DSize.x, DSize.y, 1);
+		// Sadly, the world has conspired against us in terms of producing this
+		// in any rational manner. 1bpp wxBitmaps do not work as brushes (random
+		// memory). 24bpp wxBitmaps do not work as brushes into wxMemoryDCs backed
+		// by 1bpp brushes. Conversion of 24bpp bitmaps to 1bpp does not dither.
+		// making 1bpp brushes with a stipple does not dither. So we just manually
+		// implement they bayer dithering algorithm.
 
-		if (MaskBitmap == NULL)
-		{
-		 	return FALSE;
-		}
-
-		MaskDC.SelectObject(*MaskBitmap);
-
-		// get a grey level hatched brush
+		// Create a wxImage, don't initalize it
+		wxImage MaskImage(DSize.x, DSize.y, false);
 
 		// DragTransparency is between 0 and 100,
 		// and we need a grey level between 0 and 255.
 		INT32 GreyLevel = (DragTransparency * 255) / 100;
 
-		// create the Brush and	Pen
-		wxBrush DragBrush(wxColour(GreyLevel, GreyLevel, GreyLevel), wxSOLID);
-		wxPen MyPen(wxColour(0, 0, 0), 1, wxTRANSPARENT);
-	
-		// the rectangle to draw into
-		wxRect DrawRect(0, 0, DSize.x, DSize.y);
+		// for (i=0; i<4*4*3; i++) ImageData[i]=GreyLevel;
+		// The above would be far too easy. wxWidgets doesn't seem to want to dither. Sigh
+		// write our own ordered dither! And neither do 1bpp wxBitmaps work as brushes
+		// sigh... And painting a 24bpp brush into a 1bpp bitmap dies horribly. Aaarrggghh
+		// Bayer table
+		INT32 OrderedDither[4*4]={1,9,3,11,13,5,15,7,4,12,2,10,16,8,14,6};
+		INT32 x, y;
 
-		// select brushes and pens ..
-		MaskDC.SetBrush(DragBrush);
-		MaskDC.SetPen(MyPen);
+		unsigned char * pix=MaskImage.GetData();
 
-	 	MaskDC.DrawRectangle(DrawRect);
-
-PORTNOTE("other","Removed bitmap masking in drags")
-#ifndef EXCLUDE_FROM_XARALX
-		// Now combine the DragMask with the transparency mask.
-		if (DragMask)
+		for (y=0; y<DSize.y; y++) for (x=0; x<DSize.x; x++)
 		{
-			// This needs to create a wxBitmap from DragMask
-			// and OR it into the MaskDC
-
-			WinBitmap* pMaskBmp = (WinBitmap*)DragMask->ActualBitmap;
-			RGBQUAD* Palette = (RGBQUAD *) (pMaskBmp->BMInfo->bmiColors);
-
-			// set the first colours to black and white
-			Palette[0].rgbRed = Palette[0].rgbBlue = Palette[0].rgbGreen = 0;
-			Palette[1].rgbRed = Palette[1].rgbBlue = Palette[1].rgbGreen = 255;
-	
-			// set the reserved bytes to zero
-			Palette[0].rgbReserved = Palette[1].rgbReserved = 0;
-
-			wxMemoryDC MemDC;
-			MemDC.CreateCompatibleDC(pMaskDC);
-
-			// Make a Windows DDB from the Kernel Mask Bitmap
-			HBITMAP hBmp = CreateDIBitmap(MemDC.m_hDC,
-			 								(BITMAPINFOHEADER*)pMaskBmp->BMInfo,
-											CBM_INIT,
-											pMaskBmp->BMBytes,
-											pMaskBmp->BMInfo,
-											DIB_RGB_COLORS
-			 								);
-
-			// Get a CBitmap version to select into the MemoryDC
-			CBitmap* WinMaskBmp = CBitmap::FromHandle(hBmp);
-			CBitmap* OldBmp = MemDC.SelectObject(WinMaskBmp);
-
-			// Now OR the Mask Bitmap into the MaskDC, so that
-			// it 'masks' the transparency mask.
-			MaskDC.Blit(DrawRect.x, DrawRect.y, DrawRect.width, DrawRect.height, &MemDC, 0, 0, wxOR);
-
-			MemDC.SelectObject(OldBmp);
-			WinMaskBmp->DeleteObject();
+			BYTE thresh = (GreyLevel>(OrderedDither[(x&3)|((y&3)<<2)]*16-8))?0xff:0x00;
+			// write three pixels
+			*pix++=thresh;
+			*pix++=thresh;
+			*pix++=thresh;
 		}
-#endif
-	    // clean up the dc
-	    MaskDC.SetBrush(*wxTRANSPARENT_BRUSH);
-		MaskDC.SetPen(*wxTRANSPARENT_PEN);
-		MaskDC.SelectObject(wxNullBitmap);
+
+		MaskBitmap=new wxBitmap(MaskImage, 1);
+		if (MaskBitmap)
+		{
+			// Now combine the DragMask with the transparency mask.
+			if (DragMask)
+			{
+	
+				wxMemoryDC MaskDC;
+				MaskDC.SelectObject(*MaskBitmap);
+	
+				// This needs to create a wxBitmap from DragMask
+				// and OR it into the MaskDC
+	
+				CWxBitmap* pMaskBmp = (CWxBitmap*)DragMask->ActualBitmap;
+				RGBQUAD* Palette = (RGBQUAD *) (pMaskBmp->BMInfo->bmiColors);
+	
+				// set the first colours to black and white
+				Palette[0].rgbRed = Palette[0].rgbBlue = Palette[0].rgbGreen = 0;
+				Palette[1].rgbRed = Palette[1].rgbBlue = Palette[1].rgbGreen = 255;
+		
+				// set the reserved bytes to zero
+				Palette[0].rgbReserved = Palette[1].rgbReserved = 0;
+	
+				UINT32 bpp=pMaskBmp->GetBPP();
+	
+				wxMemoryDC MemDC;
+				wxBitmap MemBitmap(DSize.x, DSize.y, bpp);
+				MemDC.SelectObject(MemBitmap);
+	
+				if (bpp>8)
+					bpp=32;
+	
+				LPBYTE MemBBits;
+				LPBITMAPINFO MemBInfo = AllocDIB(DSize.x, DSize.y, bpp, &MemBBits);
+	
+				GRenderRegion::StaticPlotBitmap(&MemDC, DIB_RGB_COLORS, MemBInfo, MemBBits, 0, 0, DSize.x, DSize.y, MaskBitmap->GetPalette(), 0, 0);
+	
+				// Now OR the Mask Bitmap into the MaskDC, so that
+				// it 'masks' the transparency mask.
+				MaskDC.Blit(0, 0, DSize.x, DSize.y, &MemDC, 0, 0, wxOR);
+	
+				// clean up the dc
+				MaskDC.SetBrush(*wxTRANSPARENT_BRUSH);
+				MaskDC.SetPen(*wxTRANSPARENT_PEN);
+				MaskDC.SelectObject(wxNullBitmap);
+			}
+		}
 	}
 	else
 		MaskBitmap = NULL;
@@ -598,7 +604,7 @@ BOOL CaptureWnd::DrawSolidDrag(wxPoint point)
 	if(!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
 	   	return TRUE;
 
-#ifndef __WXGTK__
+//#ifndef __WXGTK__
 	INT32 DragTransparency = DragManagerOp::CurrentManager->CurrentDragInfo->
 															GetDragTransparency();
 	// If the Drag Info says it wants to be transparent,
@@ -611,7 +617,7 @@ BOOL CaptureWnd::DrawSolidDrag(wxPoint point)
 		// If the Transparency Drag fails (eg. not enough resources under Win32s !!)
 		// then just fall though, and try a normal solid drag .....
 	}
-#endif
+//#endif
 
 	// offset mouse pos by drag offset
 	point += DragManagerOp::CurrentManager->CurrentDragInfo->SolidDragOffset;
@@ -744,7 +750,7 @@ BOOL CaptureWnd::DrawTransparentDrag(wxPoint point, INT32 Transparency)
 
 	MaskDC.SelectObject(*MaskBitmap);
 
-	TempDC.Blit(0, 0, DSize.x, DSize.y, &MaskDC, 0, 0, wxAND);
+	TempDC.Blit(0, 0, DSize.x, DSize.y, &MaskDC, 0, 0, wxAND_INVERT);
 
 	wxBitmap OffScreenBmp(DSize.x, DSize.y);
 	wxMemoryDC OffScreenDC;
