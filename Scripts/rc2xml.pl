@@ -144,6 +144,13 @@ foreach $ifn (@ARGV)
 exit (0);
 
 
+sub IsPanel
+{
+    my $name=shift @_;
+    return 1 if ($name=~/^(IDD_TBITMAPSIZE|IDD_TIMAPOPTIONS|IDD_TBROWSER|IDD_TBITMAPOPTIONS|IDD_PALETTE_TAB)$/);
+    return 0;
+}
+
 
 sub LookUpString
 {
@@ -1196,7 +1203,7 @@ sub ParseDialog
     my @rect;
     ReadRect(\@rect);
 
-    print OUTPUT "\t<object class=\"wxDialog\"";
+    printf OUTPUT "\t<object class=\"%s\"",IsPanel($dlgname)?"wxPanel":"wxDialog";
 
     WriteBasicInfo (@rect, $dlgname);
 

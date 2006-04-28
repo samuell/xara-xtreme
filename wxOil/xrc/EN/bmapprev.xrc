@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_TBITMAPSIZE">
+	<object class="wxPanel" name="IDD_TBITMAPSIZE">
 			 <pos>0,0d</pos> <size>370,90d</size>
 		<object class="wxStaticBox" name="IDC_T1STATIC1">
 			 <pos>4,5d</pos> <size>140,55d</size>
@@ -78,7 +78,7 @@
 		</object>
 		<title>Bitmap Size</title>
 	</object>
-	<object class="wxDialog" name="IDD_TIMAPOPTIONS">
+	<object class="wxPanel" name="IDD_TIMAPOPTIONS">
 			 <pos>0,0d</pos> <size>370,90d</size>
 		<object class="wxStaticBox" name="IDC_EXP_IMAPTAB_OPTIONS">
 			 <pos>4,4d</pos> <size>180,53d</size>
@@ -149,7 +149,7 @@
 		</object>
 		<title>Image Map</title>
 	</object>
-	<object class="wxDialog" name="IDD_TBROWSER">
+	<object class="wxPanel" name="IDD_TBROWSER">
 			 <pos>0,0d</pos> <size>370,90d</size>
 		<object class="wxStaticBox" name="IDC_T5STATIC1">
 			 <pos>3,7d</pos> <size>110,75d</size>
@@ -194,7 +194,7 @@
 		</object>
 		<title>Browser Preview</title>
 	</object>
-	<object class="wxDialog" name="IDD_TBITMAPOPTIONS">
+	<object class="wxPanel" name="IDD_TBITMAPOPTIONS">
 			 <pos>0,0d</pos> <size>370,90d</size>
 		<object class="wxStaticBox" name="IDC_OPTIONSTAB_JPEG_TEXT1">
 			 <pos>6,20d</pos> <size>119,40d</size>
@@ -226,7 +226,7 @@
 		</object>
 		<title>Options</title>
 	</object>
-	<object class="wxDialog" name="IDD_PALETTE_TAB">
+	<object class="wxPanel" name="IDD_PALETTE_TAB">
 			 <pos>0,0d</pos> <size>370,90d</size>
 		<object class="wxStaticText" name="IDC_T2STATIC1">
 			 <pos>7,8d</pos> <size>30,9d</size>
