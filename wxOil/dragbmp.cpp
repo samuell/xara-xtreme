@@ -521,19 +521,15 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC)
 
 PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be ported");
 #if !defined(EXCLUDE_FROM_XARALX)
-		// get a new MFC brush, catching any exceptions
-		TRY
-		{
-			pDragBrush = new CBrush;
-		}
-		END_TRY
+
+		pDragBrush = new wxBrush;
 	
 		BOOL BrushCreate = TRUE;
 
 		if (pDragBrush != NULL )
 		{
-			CBrush *OldBrush;
-			CPen *OldPen;
+			wxBrush *OldBrush;
+			wxPen *OldPen;
 
 			// create the Brush and	Pen
 			if (GDrawBrush.Available())
@@ -596,7 +592,7 @@ PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be
 
 /********************************************************************************************
 
->	BOOL BitmapDragInformation::PlotBitmap(	WinBitmap *WinBM, 
+>	BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *wxBM, 
 											CPoint Origin, CSize Size, 
 											CDC * RenderDC)
  
@@ -611,13 +607,13 @@ PORTNOTE("other", "BitmapDragInformation::OnDrawSolidDrag rendering code must be
 
 ********************************************************************************************/
 
-BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *WinBM, 
+BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *wxBM, 
 										wxPoint Origin, wxSize Size, 
 										wxDC* RenderDC)
 {
-	if ((WinBM == NULL) ||
-		(WinBM->BMInfo==NULL) ||
-		(WinBM->BMBytes==NULL)
+	if ((wxBM == NULL) ||
+		(wxBM->BMInfo==NULL) ||
+		(wxBM->BMBytes==NULL)
 	   )
 		return FALSE;
 
@@ -643,30 +639,27 @@ BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *WinBM,
 //	if (PaletteManager::UsePalette())
 //		hPal = *(PaletteManager::GetPalette());
 
-PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be ported");
-#if !defined(EXCLUDE_FROM_XARALX)
-	CDC MemDC;
-	MemDC.CreateCompatibleDC(RenderDC);
+	wxMemoryDC MemDC;
 
 	// Get the palette to use (will be NULL if palette not needed)
-	CPalette* pPal = PaletteManager::GetPalette();
-	CPalette* OldPal = NULL;
+	wxPalette* pPal = PaletteManager::GetPalette();
 
 	// If this is the first time, then we need to create the Cached Bitmap
 	if (Bitmap == NULL)
 	{
-		Bitmap = new CBitmap();
+		Bitmap = new wxBitmap(DestWidth, DestHeight);
 		if (Bitmap == NULL)
 		{
 			return FALSE;
 		}
 
-		// Create a CBitmap the same size as our one
-		Bitmap->CreateCompatibleBitmap(RenderDC, DestWidth, DestHeight);
+		MemDC.SelectObject(*Bitmap);
 
-		OldBmp = MemDC.SelectObject(Bitmap);
+PORTNOTE("other", "disabled palettes in dragbmp")
+#ifndef EXCLUDE_FROM_XARALX
 		if (PaletteManager::UsePalette())
- 			OldPal = MemDC.SelectPalette(pPal, FALSE);
+ 			MemDC.SelectPalette(pPal, FALSE);
+#endif
 
 		// Since the GDI cannot cope with anything other than very simple bitmaps,
 		// we will get GDraw to render the bitmap into a screen compatible DIB, and
@@ -690,8 +683,13 @@ PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be port
 
 		INT32 DeviceDepth;
 
+PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
+#ifndef EXCLUDE_FROM_XARALX
 		DeviceDepth = GetDeviceCaps( RenderDC->m_hDC, BITSPIXEL ) * 
 										GetDeviceCaps( RenderDC->m_hDC, PLANES );
+#else
+		DeviceDepth = 24;
+#endif
 
 		if (DeviceDepth == 24)
 			DeviceDepth = 32;	// GDraw cannot plot to 24-bit bitmaps
@@ -703,7 +701,11 @@ PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be port
 			return FALSE;
 		}
 
-	// We may need to get a palette for the DIB.
+#ifdef _DEBUG
+		*((DWORD *)(void *)(TempBits))=0xDEADBEEF;
+#endif
+
+		// We may need to get a palette for the DIB.
 
 		DIBPal = DIB_RGB_COLORS;
 
@@ -724,9 +726,9 @@ PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be port
 		COLORREF DefaultColour = 0xFFFFFFFF;
 
 		RGBQUAD TempPalette[256];
-		RGBQUAD* Palette = WinBM->BMInfo->bmiColors;
+		RGBQUAD* Palette = wxBM->BMInfo->bmiColors;
 	
-		INT32 bpp = WinBM->GetBPP();
+		INT32 bpp = wxBM->GetBPP();
 		if (bpp <= 8)
 		{
 			INT32 NumCols;
@@ -778,8 +780,8 @@ PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be port
 		PGram[1].x = DestWidth;		PGram[1].y = 0;
 		PGram[2].x = 0;				PGram[2].y = DestHeight;
 
-		GD->SetBitmapFill(	&(WinBM->BMInfo->bmiHeader),
-							WinBM->BMBytes,
+		GD->SetBitmapFill(	&(wxBM->BMInfo->bmiHeader),
+							wxBM->BMBytes,
 							1,
 							PGram,
 							DefaultColour,
@@ -799,199 +801,19 @@ PORTNOTE("other", "BitmapDragInformation::PlotBitmap rendering code must be port
 
 		GD->FillRectangle(&BmpRect);
 
-		// Now we have a DIB version of the Bitmap, rendered by Gavin
-		
-		if (DeviceDepth >= 16)
-		{
-			// We have got either a 16 or 32bpp bitmap.
-			// Either way windows only knows about 24bpp,
-			// So we need to convert this into a 24bpp DIB
-			// so windows know's what to do with it.
+		// Now we use GRenderRegion to plot it (far easier than farting about
+		// with conversion which was the previous technique...)
 
-			void (*ConvertFn)(INT32, LPBYTE, LPBYTE);
-			ConvertFn = DeviceDepth == 16 ? DIBUtil::Convert16to24 : DIBUtil::Convert32to24;
 
-			LPBYTE ConvBits;
-			LPBITMAPINFO ConvInfo = AllocDIB(DestWidth, DestHeight, 24, &ConvBits);
+		GRenderRegion::StaticPlotBitmap(&MemDC, DIBPal, TempInfo, TempBits, 0, 0, DestWidth, DestHeight, pPal, 0, 0);
 
-			if (ConvInfo==NULL)
-			{
-				TRACEALL( _T("Out of memory during BitmapDragInformation::PlotBitmap"));
-				FreeDIB(TempInfo, TempBits);
-				return FALSE;
-			}
-
-			// Scan lines are always DWord or Word Aligned, so lets find out the
-			// actual number of bytes per scanline
-			INT32 ScanAlign = DIBUtil::ScanlineSize(DestWidth, DeviceDepth);
-			INT32 ConvAlign = DIBUtil::ScanlineSize(DestWidth, 24);
-			
-			LPBYTE SourceBits 	= TempBits;
-			LPBYTE DestBits 	= ConvBits;
-			
-			// Now convert each scan line into 24bpp format
-			for (INT32 Scan = 0; Scan < DestHeight; Scan++)
-			{
-				ConvertFn(DestWidth, SourceBits, DestBits);
-
-				SourceBits += ScanAlign;
-				DestBits += ConvAlign;
-			}
-
-			// Get rid of the old bitmap data
-			FreeDIB(TempInfo, TempBits);
-
-			// and point at the new data
-			TempInfo = ConvInfo;
-			TempBits = ConvBits;
-			
-			DeviceDepth = 24;
-		}
-
-		// Now make a Windows DDB from the DIB.
-		// We've already made sure that this is either
-		// 1,2,4,8 or 24 bpp, so windows should be able
-		// to cope
-
-	 	HBITMAP hDDB = CreateDIBitmap(RenderDC->m_hDC,
-	 				 				  (BITMAPINFOHEADER*)TempInfo,
-									  CBM_INIT,
-									  TempBits,
-							 		  TempInfo,
-							 		  DIBPal
-	 						  		  );
-
-		if (hDDB == NULL) 
-		{
-			TRACEALL( _T("Couldn't create DDB in BitmapDragInformation::PlotBitmap\n"));
-			FreeDIB(TempInfo, TempBits);
-			return FALSE;
-		}
-
-		// Now get a CBitmap version to select into the MemoryDC
-		CBitmap* pBitmap = CBitmap::FromHandle(hDDB);
-
-		if (pBitmap == NULL) 
-		{
-			TRACEALL( _T("Couldn't create CBitmap in BitmapDragInformation::PlotBitmap\n"));
-			FreeDIB(TempInfo, TempBits);
-			return FALSE;
-		}
-
-		// Now we have a DDB version of the Bitmap.
-		// But this is a Tempory GDI object, so it will have disappeared
-		// the next time we are called.  So we need to copy it into our
-		// permanent Cache Bitmap.
-		
-		// Create another temporary memory DC based on the output DC
-		CDC TempDC;
-		TempDC.CreateCompatibleDC(RenderDC);
-
-		// Select out new DDB into it
-		CBitmap* pOldBmp = TempDC.SelectObject(pBitmap);
-
-		if (pOldBmp == NULL) 
-		{
-			TRACEALL( _T("Couldn't select Bitmap into CDC in BitmapDragInformation::PlotBitmap\n"));
-			FreeDIB(TempInfo, TempBits);
-			TempDC.SelectObject(pOldBmp);
-			pBitmap->DeleteObject();
-			return FALSE;
-		}
-
-		if (PaletteManager::UsePalette())
-			TempDC.SelectPalette(pPal, FALSE);
-
-		// Now Blit from the Temporary Bitmap into our Permanent one
-		MemDC.BitBlt(0,0,DestWidth, DestHeight, &TempDC,0,0,SRCCOPY);
-
-		// Tidy up a bit
-		TempDC.SelectObject(pOldBmp);
-		pBitmap->DeleteObject();
-
-		// We don't need the DIB any more either
-		FreeDIB(TempInfo, TempBits);
-
-/*
-		HDC OutputDC;
-		INT32 xPos; 
-		INT32 yPos; 
-
-		// If Win32s, then output directly to the screen
-		// otherwise we output to the MemDC.
-		if (IsWin32s())
-		{
-		  	OutputDC = RenderDC->m_hDC;
-			xPos = TopLeft.x;
-			yPos = TopLeft.y;
-		}
-		else
-		{
-			OutputDC = MemDC->m_hDC;
-			xPos = 0;
-			yPos = 0;
-		}
-
-		GRenderRegion::PlotBitmap( 	OutputDC, 
-									DIBPal, 
-									TempInfo, 
-									TempBits,
-									xPos, 
-									yPos, 
-									DestWidth, 
-									DestHeight, 
-									hPal,
-									0,0
-								 );
+//		Bitmap->SaveFile(_T("/tmp/test.png"), wxBITMAP_TYPE_PNG);
 
 		FreeDIB(TempInfo, TempBits);
 
-		if (IsWin32s())
-		{
-			// If Win32s, copy from the screen into our MemDC
-			MemDC->BitBlt(	0, 0,
-							DestWidth,
-							DestHeight,
-							RenderDC,
-							TopLeft.x,TopLeft.y,
-							SRCCOPY
-							);
-		}
-*/
 	}
-	else
-	{
-		// We already rendered the Bitmap into out Cached bitmap on the
-		// last call, so all we need to do is select the Cached Bitmap
-		// into our Memory DC
-
-		OldBmp = MemDC.SelectObject(Bitmap);
-		if (PaletteManager::UsePalette())
-			OldPal = MemDC.SelectPalette(pPal, FALSE);
-
-		if (OldBmp == NULL) 
-		{
-			TRACE( _T("Couldn't select Bitmap into CDC in DrawBitmapBlob\n"));
-			return FALSE;
-		}
-	}
-
 	// Finally plot the Bitmap onto the output RenderDC
-	RenderDC->BitBlt(			TopLeft.x, TopLeft.y,
-								DestWidth,
-								DestHeight,
-								&MemDC,
-								0,0,
-								SRCCOPY
-								);
-
-	// and tidy up
-	MemDC.SelectObject(OldBmp);
-
-	if (OldPal)
-		MemDC.SelectPalette(OldPal, FALSE);
-
-#endif
+	RenderDC->DrawBitmap(*Bitmap, TopLeft.x, TopLeft.y, true);
 
 	// Yipeee !! We done it
    	return TRUE;
