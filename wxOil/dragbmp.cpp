@@ -538,10 +538,10 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC)
 			//the rectangle to draw into
 			wxRect DrawRect;
 
-			if(DragRect.x == 0 || DragRect.y == 0)
-				DrawRect = wxRect(Origin.x,Origin.y, Origin.x + NullSize, Origin.y + NullSize);
+			if(DragRect.GetWidth() == 0 || DragRect.GetHeight() == 0)
+				DrawRect = wxRect(Origin.x,Origin.y, NullSize, NullSize);
 			else
-				DrawRect = wxRect(Origin.x,Origin.y, Origin.x + DragRect.x, Origin.y + DragRect.y);
+				DrawRect = wxRect(Origin.x,Origin.y, DragRect.GetWidth(), DragRect.GetHeight());
 
 			// select brushes and pens ..
 			TheDC->SetBrush(*pDragBrush);
@@ -556,7 +556,10 @@ BOOL BitmapDragInformation::OnDrawSolidDrag(wxPoint Origin, wxDC* TheDC)
 
 			// draw a rectangle 			 		
 	 		TheDC->DrawRectangle(DrawRect);
-		    						
+
+			TheDC->SetBrush(*wxTRANSPARENT_BRUSH);
+			TheDC->SetPen(*wxTRANSPARENT_PEN);
+
 			delete pDragBrush;
 		}
 		else
