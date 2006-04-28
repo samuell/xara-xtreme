@@ -395,8 +395,8 @@ PORTNOTE("other","Removed bitmap masking in drags")
 		}
 #endif
 	    // clean up the dc
-	    MaskDC.SetBrush(wxNullBrush);
-		MaskDC.SetPen(wxNullPen);
+	    MaskDC.SetBrush(*wxTRANSPARENT_BRUSH);
+		MaskDC.SetPen(*wxTRANSPARENT_PEN);
 		MaskDC.SelectObject(wxNullBitmap);
 	}
 	else

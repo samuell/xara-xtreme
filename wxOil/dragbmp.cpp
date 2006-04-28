@@ -353,7 +353,7 @@ BOOL BitmapDragInformation::GetStatusLineText(String_256 * TheText)
 
 UINT32 BitmapDragInformation::GetCursorID(DragTarget* pDragTarget)
 {
-	return NULL;
+	return 0;
 }
 
 /********************************************************************************************
@@ -1038,7 +1038,7 @@ INT32 BitmapDragInformation::GetDragTransparency()
 >	static BOOL BitmapDragInformation::Init()
 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	19/3/95		  
+	Created:	19/3/95
 	Returns:	-
 	Purpose:	Initialise any Bitmap Drag stuff. (eg. ini file preferences).
 	SeeAlso:	-
@@ -1048,9 +1048,9 @@ INT32 BitmapDragInformation::GetDragTransparency()
 BOOL BitmapDragInformation::Init()
 {
 	// Setup preference for drag transparency
-	if (GetApplication()->DeclareSection("Dragging", 1))
+	if (GetApplication()->DeclareSection(_T("Dragging"), 1))
 	{
-		GetApplication()->DeclarePref( NULL, "BitmapDragTransparency", 
+		GetApplication()->DeclarePref( NULL, _T("BitmapDragTransparency"), 
 								&DragTransparency, 0, 100);
 	}
 

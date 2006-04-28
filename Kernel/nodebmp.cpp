@@ -523,6 +523,7 @@ BOOL NodeBitmap::OnNodePopUp(Spread* pSpread, DocCoord PointerPos, ContextMenu* 
 
 	BOOL ok = TRUE;
 
+PORTNOTE("liveeffects", "XPE menu option disabled")
 #ifndef EXCLUDE_FROM_XARALX
 	ok = ok && pMenu->BuildCommand(OPTOKEN_XPE_EDIT, FALSE);
 #endif
@@ -2673,18 +2674,17 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 {
 	BOOL ok = FALSE;
 
-PORTNOTE("other","OpCreateNodeBitmap::DoWithParam - User intraction")
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(pOpParam == NULL, "NULL OpParam passed to OpCreateNodeBitmap"); 
 
-	KernelBitmap* KernelBmp = (KernelBitmap*)pOpParam->Param1;
-	PageDropInfo* pDropInfo = (PageDropInfo*)pOpParam->Param2;
+	KernelBitmap* KernelBmp = (KernelBitmap*)(void *)pOpParam->Param1;
+	PageDropInfo* pDropInfo = (PageDropInfo*)(void *)pOpParam->Param2;
 
-	Document* pDoc 		= pDropInfo->pDoc;
+//	Document* pDoc 		= pDropInfo->pDoc;
 	Spread* pSpread		= pDropInfo->pSpread;
 	DocCoord DropPos 	= pDropInfo->DropPos;
 
 	DocRect BoundsRect;
+	BitmapInfo Info;
 
 	NodeBitmap* pNodeBitmap = new NodeBitmap();
 	if ((pNodeBitmap == NULL) || (!pNodeBitmap->SetUpPath(12,12)))
@@ -2699,7 +2699,6 @@ PORTNOTE("other","OpCreateNodeBitmap::DoWithParam - User intraction")
 	}
 
 	
-	BitmapInfo Info;
 	pNodeBitmap->GetBitmap()->ActualBitmap->GetInfo(&Info);
 
 	BoundsRect.lo.x = DropPos.x - (Info.RecommendedWidth/2);
@@ -2722,12 +2721,9 @@ PORTNOTE("other","OpCreateNodeBitmap::DoWithParam - User intraction")
 		delete pNodeBitmap;
 		goto EndOp;
 	} 
-#endif
 	ok = TRUE;
 
-#ifndef EXCLUDE_FROM_XARALX
 EndOp:
-#endif
 	if (!ok)
 		FailAndExecute();
 

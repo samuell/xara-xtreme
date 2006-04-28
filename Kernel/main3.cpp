@@ -202,10 +202,9 @@ PORTNOTE("other","Removed a large amount of initialization")
 			OpNudge::Init() &&					// Init the nudge ops
 			OpCombineShapes::Init() &&			// init the shape combining ops
 
-#ifndef EXCLUDE_FROM_XARALX
 			OpMenuSelectPathPoints::Init() &&
 			OpCreateNodeBitmap::Init() &&
-#endif
+
 			ColourListComponentClass::Init() && // Init & register the colour list component
 			BitmapListComponentClass::Init() && // Init & register the bitmap list component
 			UnitListComponentClass::Init()	 && // Init & register the units component

@@ -116,8 +116,6 @@ class KernelBitmap;
 class BmpDlgParam;
 class SGDisplayKernelBitmap;
 
-PORTNOTE("other", "Disable GalleryBitmapDragInfo")
-#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class GalleryBitmapDragInfo : public BitmapDragInformation
@@ -157,7 +155,6 @@ protected:
 
 	KernelBitmap*			m_pDragBmp;
 };
-#endif
 
 /*********************************************************************************************
 

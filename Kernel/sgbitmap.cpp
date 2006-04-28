@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"	// For _R(IDS_CANCEL)
 
 #include "dragmgr.h"
-//nclude "dragbmp.h"
+#include "dragbmp.h"
 //nclude "viewrc.h"		// FOR _R(IDC_CANDROPONPAGE)
 
 #include "docview.h"
@@ -171,10 +171,7 @@ CC_IMPLEMENT_DYNAMIC(SGDisplayKernelBitmap, SGDisplayItem)
 CC_IMPLEMENT_DYNCREATE(OpDisplayBitmapGallery,Operation);
 CC_IMPLEMENT_DYNAMIC(SGBitmapDragTarget, SGListDragTarget);
 
-PORTNOTE("other", "Disabled GalleryBitmapDragInfo")
-#ifndef EXCLUDE_FROM_XARALX
 CC_IMPLEMENT_DYNCREATE(GalleryBitmapDragInfo, BitmapDragInformation)
-#endif
 
 // Enable Background redraw in the bitmap gallery...
 //#define SGBITMAP_BACKGROUND_REDRAW
@@ -273,8 +270,6 @@ PORTNOTE("other", "Disabled use of BitmapDragInformation");
 	return(FALSE);
 }
 
-PORTNOTE ("other", "Removed GalleryBitmapDragInfo class")
-#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	void GalleryBitmapDragInfo::GalleryBitmapDragInfo() 
@@ -574,7 +569,8 @@ BOOL GalleryBitmapDragInfo::OnPageDrop(ViewDragTarget* pDragTarget)
 			OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_BACKGROUND);
 
 			// Invoke the operation, passing in our parameters
-			pOpDesc->Invoke(&Param);		 
+			if (pOpDesc)
+				pOpDesc->Invoke(&Param);		 
 		}
 		else
 		{
@@ -583,16 +579,18 @@ BOOL GalleryBitmapDragInfo::OnPageDrop(ViewDragTarget* pDragTarget)
 			// Obtain a pointer to the op descriptor for the create operation 
 			OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(OpCreateNodeBitmap));
 
-			// Invoke the operation, passing DocView and Pos as parameters
-			OpParam param((void *)BitmapToApply,(void *)&ThePageDropInfo);
-			OpDesc->Invoke(&param);		 
+			if (OpDesc)
+			{
+				// Invoke the operation, passing DocView and Pos as parameters
+				OpParam param((void *)BitmapToApply,(void *)&ThePageDropInfo);
+				OpDesc->Invoke(&param);		 
+			}
 		}
 	}
 
 	return TRUE;
 }
 
-#endif // EXCLUDE_FROM_XARALX
 
 /***********************************************************************************************
 
@@ -1378,8 +1376,6 @@ BOOL SGDisplayKernelBitmap::HandleEvent(SGEventType EventType, void *EventInfo,
 					}
 					else
 					{
-PORTNOTE("other", "Disabled GalleryBitmapDragInfo")
-#ifndef EXCLUDE_FROM_XARALX
 						DefaultPreDragHandler(Mouse, MiscInfo);
 
 						GalleryBitmapDragInfo *DragBmp;
@@ -1387,7 +1383,6 @@ PORTNOTE("other", "Disabled GalleryBitmapDragInfo")
 															Mouse->MenuClick);
 						if (DragBmp != NULL)
 							DragManagerOp::StartDrag(DragBmp);
-#endif
 					}
 
 					return(TRUE);		// Claim this event - nobody else can own this click
@@ -2877,14 +2872,11 @@ PORTNOTE("other", "Removed preview dialog")
 
 void BitmapSGallery::HandleDragStart(DragMessage *DragMsg)
 {
-PORTNOTE("other", "Disable GalleryBitmapDragInfo")
-#ifndef EXCLUDE_FROM_XARALX
 	// If it's a bitmap drag, add a target for our window. If not, let the base class
 	// have a look at it (to see if it is a gallery item being dragged)
 	if (DragMsg->pInfo->IsKindOf(CC_RUNTIME_CLASS(GalleryBitmapDragInfo)))
 		/* SGBitmapDragTarget *NewTarget =*/ new SGBitmapDragTarget(this, GetListGadgetID());
 	else
-#endif
 		SuperGallery::HandleDragStart(DragMsg);
 }
 
