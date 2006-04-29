@@ -140,7 +140,7 @@ public:
 
 	virtual INT32 GetDragTransparency();
 	virtual KernelBitmap* GetSolidDragMask();
-	virtual BOOL OnDrawSolidDrag(CPoint Origin,CDC * TheDC);
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget);
 
 	LineAttrItem*	GetDraggedLineAttr()	{ return(SourceItem); }
 

@@ -588,7 +588,7 @@ KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 
 /********************************************************************************************
 
->	BOOL GalleryLineDragInfo::OnDrawSolidDrag(CPoint Origin,CDC * TheDC)
+>	BOOL GalleryLineDragInfo::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	10/4/95		  
@@ -598,7 +598,7 @@ KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 
 ********************************************************************************************/
 
-BOOL GalleryLineDragInfo::OnDrawSolidDrag(CPoint Origin,CDC * TheDC)
+BOOL OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
 {
 	if (TheBitmap == NULL)
 	{
