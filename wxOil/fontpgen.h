@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #ifndef EXCLUDE_GALS
 
-#include "camtypes.h"
+//#include "camtypes.h"
 #include "bfxbase.h"
 #include "fontbase.h"
 

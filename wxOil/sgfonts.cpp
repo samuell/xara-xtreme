@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "galres.h"
 #include "sgallery.h"
 #include "fixmem.h"
-#include "wbitmap.h"
+//#include "wbitmap.h"
 //#include "richard.h"	
 #include "sgscan.h"
 #include "sgscanf.h"
@@ -137,8 +137,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sgmenu.h"
 #include "fontbase.h"
 #include "stockcol.h"
-#include "atmfonts.h"
-#include "atminst.h"
 #include "txtattr.h"	// For apply
 #include "attrmgr.h"	// For apply
 #include "textinfo.h"	// For apply
@@ -150,15 +148,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard2.h"	// New reosurce strings
 #include "dibutil.h"
 #include "keypress.h"
-#include "camnet.h"
-#include "inetop.h"
+//#include "camnet.h"
+//#include "inetop.h"
 //#include "webster.h"
 //#include "resimmap.h"	// For _R(IDS_LARGEFONTDISPLAYSTRING)
 
 #include "helpuser.h"	//For the help button
 //#include "xshelpid.h"	//For the help button
 //#include "helppath.h"
-#include "resdll.h"
+//#include "resdll.h"
 
 #include "ndoptmz.h"
 
@@ -366,7 +364,7 @@ BOOL SGFontsGroup::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscInf
 					switch (Msg->State)
 					{
 						// Installed fonts cache needs resizing ?
-						case ThumbMessage::ThumbState::CACHESIZECHANGED:
+						case ThumbMessage::CACHESIZECHANGED:
 							{
 								// We know our parent is the fonts gallery....
 								FontsSGallery *TheGal = (FontsSGallery *)GetParentGallery();
@@ -404,7 +402,7 @@ BOOL SGFontsGroup::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscInf
 
 					 		break;
 
-						case ThumbMessage::ThumbState::KILLCACHE:
+						case ThumbMessage::KILLCACHE:
 							{
 								// We know our parent is the fonts gallery....
 								FontsSGallery *TheGal = (FontsSGallery *)GetParentGallery();
@@ -429,9 +427,14 @@ BOOL SGFontsGroup::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscInf
 							   }
 							}
 							break;
+
+						default:
+							break;
 					}
 				}
 			}
+			break;
+		default:
 			break;
 	}
 
@@ -588,7 +591,7 @@ BOOL SGFontsGroup::CanVirtualise(void)
 SGDisplayPreviewFonts::SGDisplayPreviewFonts()
 {
 	FontBitmap = NULL;
-	FontDescription = "";
+	FontDescription = _T("");
 	CachedLogFont = NULL;
 	ID = 0;
 	IntLeading = 0;
@@ -615,7 +618,7 @@ SGDisplayPreviewFonts::~SGDisplayPreviewFonts()
 	// The FontBitmap is also referenced in the thumbnail cache, and that's where its
 	// memory is free'd
 	FontBitmap = NULL;
-	FontDescription = "";
+	FontDescription = _T("");
 
 	if(CachedLogFont != NULL)
 	{
@@ -828,6 +831,8 @@ void SGDisplayPreviewFonts::DrawItemText(RenderRegion *Renderer, SGRedrawInfo *R
 		case LibDisplay_MediumThumb:
 		case LibDisplay_LargeThumb:
 			return; // No text
+		default:
+			break;
 	}
 
 	INT32 OnePixel  = (INT32) DevicePixels(MiscInfo, 1);
@@ -885,7 +890,6 @@ void SGDisplayPreviewFonts::DrawItemText(RenderRegion *Renderer, SGRedrawInfo *R
 	Renderer->DrawFixedSystemText(&DisplayText, TextRect);
 }
 
-
 /***********************************************************************************************
 
 >	virtual BOOL SGLibDisplayItem::DrawThumb(RenderRegion *Renderer, SGRedrawInfo *RedrawInfo,
@@ -929,7 +933,7 @@ BOOL SGDisplayPreviewFonts::DrawThumb(RenderRegion *Renderer, SGRedrawInfo *Redr
 		return FALSE;
 
 	DMode = MiscInfo->DisplayMode;
-	FontsSGallery *FSGallery = FontsSGallery::ThisGallery;
+//	FontsSGallery *FSGallery = FontsSGallery::ThisGallery;
 	
 	DocRect BmpRect(*Rectangle);
 
@@ -939,7 +943,8 @@ BOOL SGDisplayPreviewFonts::DrawThumb(RenderRegion *Renderer, SGRedrawInfo *Redr
 	UINT32 YSize = 0;
 	
 	Renderer->SetLineWidth(0);
-	Renderer->SetLineColour(DocColour(COLOUR_TRANS));
+	DocColour trans(COLOUR_TRANS);
+	Renderer->SetLineColour(trans);
 
 	BOOL ThumbnailOK = TRUE;
 
@@ -1059,12 +1064,12 @@ void SGDisplayPreviewFonts::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 	DocRect NewFormatRect(FormatRect);
 
 	// Space for icon
-	NewFormatRect.lox += (SGF_TYPE_WIDTH * OnePixel);
+	NewFormatRect.lo.x += (SGF_TYPE_WIDTH * OnePixel);
 
 	GridLockRect(MiscInfo, &NewFormatRect);
 
 	DocRect TypeRect(FormatRect);
-	TypeRect.hix = NewFormatRect.lox;
+	TypeRect.hi.x = NewFormatRect.lo.x;
 
 	DrawTypeIcon(RedrawInfo, MiscInfo, &TypeRect, Type);
 
@@ -1186,15 +1191,15 @@ void SGDisplayPreviewFonts::DrawTypeIcon(SGRedrawInfo *RedrawInfo, SGMiscInfo *M
 	DocRect GlyphRect(*TypeRect);
 
 	INT32 OnePixel = (INT32) MiscInfo->PixelSize;
-	INT32 Centre = GlyphRect.loy + ((GlyphRect.hiy - GlyphRect.loy) / 2);
-	GlyphRect.loy = Centre - ((SGF_TYPE_WIDTH / 2) * OnePixel);
-	GlyphRect.hiy = Centre + (((SGF_TYPE_WIDTH / 2) + 1) * OnePixel);		// Always round up...
+	INT32 Centre = GlyphRect.lo.y + ((GlyphRect.hi.y - GlyphRect.lo.y) / 2);
+	GlyphRect.lo.y = Centre - ((SGF_TYPE_WIDTH / 2) * OnePixel);
+	GlyphRect.hi.y = Centre + (((SGF_TYPE_WIDTH / 2) + 1) * OnePixel);		// Always round up...
 
 	// Bodge so 'text only' mode has space to left of icon...
 	LibDisplayType DType = SGDisplayPreviewFonts::GetDisplayType(MiscInfo);
 
 	if(DType == LibDisplay_JustText)
-		GlyphRect.lox += (6 * OnePixel);
+		GlyphRect.lo.x += (6 * OnePixel);
 
 	RedrawInfo->Renderer->DrawBitmap(GlyphRect.lo, BitmapID);
 }
@@ -2509,6 +2514,7 @@ BOOL SGATMItem::CreateThumbnail(KernelBitmap **Bitmap)
 
 FontsSGallery::FontsSGallery()
 {
+	DlgResID = _R(IDD_FONTSGALLERY);
 	// The installed fonts group
 	InsGroup = NULL;
 
@@ -2609,7 +2615,7 @@ INT32 CALLBACK FontsSGallery::EnumInstalledFamily(ENUMLOGFONT FAR *lplf,
 	// Can be TRUETYPE_FONTTYPE, RASTER_FONTTYPE, or DEVICE_FONTTYPE
 	if((FontType & TRUETYPE_FONTTYPE) || (FontType & DEVICE_FONTTYPE)) {
 
-		BOOL ok = TRUE;			
+//		BOOL ok = TRUE;			
 						
 		// Next ID number...
 		ThisGallery->IDCount++;
@@ -2876,7 +2882,7 @@ void FontsSGallery::CreateNewSubtreeForInstalledFonts(SGFontsGroup *ExistingGrou
 	else
 	{
 		IDCount = 0;
-		ok=EnumFontFamilies(ScreenDC, NULL, (FONTENUMPROC)EnumInstalledFonts, (UINT32)ExistingGroup);
+		ok=EnumFontFamilies(ScreenDC, NULL, (FONTENUMPROC)EnumInstalledFonts, (void *)ExistingGroup);
 	}
 	DeleteDC(ScreenDC);
 
@@ -3228,8 +3234,9 @@ void FontsSGallery::SortInstalledFonts(void)
 	// Keep a copy of the current sort keys
   	SGSortKey TmpSortKeys[MaxSGSortKeys];
 
+	INT32 j;
 	// We want a straight alphabetic sort
-	for(INT32 j=0; j<MaxSGSortKeys; j++)
+	for(j=0; j<MaxSGSortKeys; j++)
 		TmpSortKeys[j] = SortKeys[j]; 
 
 	// Extract the SortKey array from a UINT32
@@ -3246,7 +3253,7 @@ void FontsSGallery::SortInstalledFonts(void)
 	INT32 NumItems = NumItemsToSort;
 	NumItemsToSort = 0;
 	INT32 i = 0;
-	BOOL GroupHasChanged = FALSE;
+//	BOOL GroupHasChanged = FALSE;
 
 	Ptr = CurrentGroup->GetChild();
 	ERROR3IF(!Ptr->IsKindOf(CC_RUNTIME_CLASS(SGDisplayItem)),
@@ -3369,6 +3376,8 @@ BOOL FontsSGallery::PreCreate(void)
 		}
 	}
 
+PORTNOTE("other", "Disabled font libraries")
+#ifndef EXCLUDE_FROM_XARALX
 	// Add the library groups to the gallery if they're not there already
 	if(OpenLibFiles.IsEmpty())
 	{
@@ -3397,6 +3406,7 @@ BOOL FontsSGallery::PreCreate(void)
 
 		LibraryGallery::AddLibraryGroups(SGLib_Font, &DefaultLibraryPath);
 	}
+#endif
 
 	// Use last time's display mode
 	DisplayMode = FontsSGallery::DefaultDisplayMode;
@@ -3434,7 +3444,8 @@ void FontsSGallery::SortGallery(void)
 
 	// Sort alphabetically (and keep old sort keys)...
 	SGSortKey TmpSortKeys[MaxSGSortKeys];
-	for (INT32 i = 0; i < MaxSGSortKeys; i++)
+	INT32 i;
+	for (i = 0; i < MaxSGSortKeys; i++)
 		TmpSortKeys[i] = SortKeys[i];
 
 	// Extract the SortKey array from a UINT32
@@ -3444,7 +3455,7 @@ void FontsSGallery::SortGallery(void)
 	SortKeys[1].Reversed = (((DefaultSortKeys>>15) & 0x1) == 1);
 
 	ApplySortNow(TRUE);
-
+	
 	for (i = 0; i < MaxSGSortKeys; i++)
 		SortKeys[i] = TmpSortKeys[i];
 }
@@ -3600,7 +3611,7 @@ BOOL FontsSGallery::CheckForIndexMatch(StringBase *Txt)
 	BOOL Match = FALSE;
 
 	// Textures (fills)
-	if(((Txt->Sub(String_8("F"))!=-1) || (Txt->Sub(String_8("f"))!=-1)) ) Match = TRUE;
+	if(((Txt->Sub(String_8(_T("F")))!=-1) || (Txt->Sub(String_8(_T("f")))!=-1)) ) Match = TRUE;
 
 	return Match;
 }
@@ -3698,6 +3709,8 @@ BOOL FontsSGallery::ScanForLocation(SGLibType Type, StringBase *Result)
 
 				return TRUE;
 			}
+			default:
+				break;
 		}
 	}
 #endif
@@ -3878,7 +3891,7 @@ MsgResult FontsSGallery::Message(Msg* Message)
 				handle = CreateMutex(NULL,TRUE,mutexName);
 				// End added.
 
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYFONTSGALLERY, TRUE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFONTSGALLERY), TRUE);
 				GalleryAboutToReOpen();
 				break;
 
@@ -3890,65 +3903,66 @@ MsgResult FontsSGallery::Message(Msg* Message)
 				}
 				// End added.
 
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYFONTSGALLERY, FALSE);
-				BROADCAST_TO_CLASS(ThumbMessage(ThumbMessage::ThumbState::KILLCACHE, SGLib_Font), DialogOp);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFONTSGALLERY), FALSE);
+				BROADCAST_TO_CLASS(ThumbMessage(ThumbMessage::KILLCACHE, SGLib_Font), DialogOp);
 				// Free memory, etc...
 				GalleryAboutToClose();
 				break;
 
 			case DIM_LFT_BN_CLICKED:
-				switch (Msg->GadgetID)
+				if (FALSE) {}
+				else if ((Msg->GadgetID == _R(IDC_LIBGAL_BROWSE)) ||
+					     (Msg->GadgetID == _R(IDC_LIBGAL_ADD_FONTS)))
 				{
-					case _R(IDC_LIBGAL_BROWSE):
-					case _R(IDC_LIBGAL_ADD_FONTS):
-						BrowseClicked();
-						return OK;
-
-					case _R(IDC_GALLERY_INSTALL):
-						InstallFonts(TRUE);
-						SelectionHasChanged();
-						return OK;
-
-					case _R(IDC_GALLERY_DEINSTALL):
-						DeinstallFonts(FontsSGallery::DeleteTTFandFOTfiles);
-						SelectionHasChanged();
-						return OK;
-
-					case _R(IDC_GALLERY_HELP):		// Show help page
-						HelpUserTopic(_R(IDS_HELPPATH_Gallery_Font));
-						break;
-
-
-
-					case _R(IDC_BMPGAL_SAVE):
+					BrowseClicked();
+					return OK;
+				}
+				else if (Msg->GadgetID == _R(IDC_LIBGAL_BROWSE))
+				{
+					InstallFonts(TRUE);
+					SelectionHasChanged();
+					return OK;
+				}
+				else if (Msg->GadgetID == _R(IDC_LIBGAL_DEINSTALL))
+				{
+					DeinstallFonts(FontsSGallery::DeleteTTFandFOTfiles);
+					SelectionHasChanged();
+					return OK;
+				}
+				else if (Msg->GadgetID == _R(IDC_GALLERY_HELP))
+				{
+					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Font));
+					return OK;
+				}
+				else if (Msg->GadgetID == _R(IDC_BMPGAL_SAVE))
+				{
 #ifdef _DEBUG		
+					SGDisplayNode *Item = DisplayTree->FindNextSelectedItem(NULL);
+					if(Item != NULL && Item->IsKindOf(CC_RUNTIME_CLASS(SGLibDisplayItem)))
+					{
+						SGLibDisplayItem *LibItem = (SGLibDisplayItem *)Item;
+
+						Library *Parent = LibItem->GetParentLibrary();
+						if(Parent != NULL)
 						{
-							SGDisplayNode *Item = DisplayTree->FindNextSelectedItem(NULL);
-							if(Item != NULL && Item->IsKindOf(CC_RUNTIME_CLASS(SGLibDisplayItem)))
-							{
-								SGLibDisplayItem *LibItem = (SGLibDisplayItem *)Item;
+							PathName *Source = Parent->ReturnIndexLocation();
+							PathName Dest(*Source);
+							Dest.SetType((String_256)"BAK");
+							SGLibOil::FileCopy(Source, &Dest);
 
-								Library *Parent = LibItem->GetParentLibrary();
-								if(Parent != NULL)
-								{
-									PathName *Source = Parent->ReturnIndexLocation();
-									PathName Dest(*Source);
-									Dest.SetType((String_256)"BAK");
-									SGLibOil::FileCopy(Source, &Dest);
-
-									Parent->SaveIndexInDisplayedOrder(Source, FALSE);
-								}
-							}
+							Parent->SaveIndexInDisplayedOrder(Source, FALSE);
 						}
+					}
 #endif
-						break;
-					
-
+					return OK;
 				}
 				break;
 
 			case DIM_FONTCHANGE:
 				FontsSGallery::DoFontChange();
+				break;
+
+			default:
 				break;
 
 		}
@@ -3958,7 +3972,7 @@ MsgResult FontsSGallery::Message(Msg* Message)
 		DocChangingMsg *Msg = (DocChangingMsg *) Message;
 		switch (Msg->State)
 		{
-			case DocChangingMsg::DocState::SELCHANGED:
+			case DocChangingMsg::SELCHANGED:
 				if (Msg->pNewDoc == NULL)
 				{
 					// There is no selected doc - this can only mean there are no docs
@@ -3972,6 +3986,9 @@ MsgResult FontsSGallery::Message(Msg* Message)
 					SelectionHasChanged();
 				}
 				break;
+
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, ThumbMessage) && DisplayTree != NULL)
@@ -3979,8 +3996,8 @@ MsgResult FontsSGallery::Message(Msg* Message)
 		ThumbMessage *Msg = (ThumbMessage *) Message;
 
 		// If a library Thumb message comes around, flush the redraw stuff, etc
-		if(Msg->State == ThumbMessage::ThumbState::CACHESIZECHANGED
-		   || Msg->State == ThumbMessage::ThumbState::KILLCACHE)
+		if(Msg->State == ThumbMessage::CACHESIZECHANGED
+		   || Msg->State == ThumbMessage::KILLCACHE)
 		{
 			FlushBackgroundRedraws();
 			ForceRedrawOfList();
@@ -4383,7 +4400,7 @@ BOOL FontsSGallery::InstallFonts(BOOL Copy)
 						String_8 Ending;
 						Ending += FileName.GetType();
 						Ending.toLower();
-						BOOL ThisFontIsATM = (Ending.Sub((String_8)"pfb") != -1);
+						BOOL ThisFontIsATM = (Ending.Sub((String_8)_T("pfb")) != -1);
 
 						if(ThisFontIsATM && !ATMInstalled && !WarnedThatATMIsntPresent)
 						{
@@ -4480,7 +4497,7 @@ BOOL FontsSGallery::InstallFonts(BOOL Copy)
 				}
 				else
 				{
-					DWORD f = GetLastError();
+					/*DWORD f =*/ GetLastError();
 					ERROR3("FontsSGallery::InstallFonts Error getting library filename");
 				}
 			}
@@ -4667,7 +4684,7 @@ BOOL FontsSGallery::InstallFont(PathName *FontFile, String_256 *Description, BOO
 	Ending += FontFile->GetType();
 	Ending.toLower();
 
-	if(Ending.Sub((String_8)"ttf") != -1)
+	if(Ending.Sub((String_8)_T("ttf")) != -1)
 	{
 		if(FontsSGallery::IsFontAlreadyInstalled(Description, FC_ATM))
 		{
@@ -4687,7 +4704,7 @@ BOOL FontsSGallery::InstallFont(PathName *FontFile, String_256 *Description, BOO
 		}
 	}
 
-	if(Ending.Sub((String_8)"pfb") != -1)
+	if(Ending.Sub((String_8)_T("pfb")) != -1)
 	{
 		String_256 Result(*Description);
 
@@ -4860,7 +4877,7 @@ BOOL FontsSGallery::InstallTTFFont(PathName *FontFile, String_256 *Description, 
 
 	if(!GetWindowsFontDirectory(&FontDir))
 	{
-		DWORD f = GetLastError();
+		/*DWORD f = */GetLastError();
 		ERROR3("FontsSGallery::InstallTTFFont Problems getting the system dir");
 		return FALSE;
 	}
@@ -5045,7 +5062,7 @@ BOOL FontsSGallery::DeinstallTTFFont(String_256 *FontDesc, BOOL Delete)
 
 		if(!ok)
 		{
-			DWORD LastErr = GetLastError();
+			/*DWORD LastErr =*/ GetLastError();
 			camSprintf(GLErrMsgF,
 					 TEXT("Problems with remove font resource (file) - GetLastError returned %d '%s'"),
 					 LastErr, (const TCHAR *)FOTFile.GetPath());
@@ -5058,7 +5075,7 @@ BOOL FontsSGallery::DeinstallTTFFont(String_256 *FontDesc, BOOL Delete)
 		{
 #ifdef _DEBUG
 			// Why does this sometimes fail ???
-			DWORD LastErr = GetLastError();
+			/*DWORD LastErr =*/ GetLastError();
 			String_256 GLErrMsgP;
 			camSprintf(GLErrMsgP,
 					 TEXT("Problems with remove font resource (path) - GetLastError returned %d '%s'"),
@@ -5156,7 +5173,7 @@ BOOL FontsSGallery::InstallDraggedLibFont(FontsSGallery *FontGallery, SGLibDispl
 		}			
 	}
 
-	*Desc = (String_64)"";
+	*Desc = (String_64)_T("");
 
 #ifdef STOP_WINDOWS95_FONT_INSTALLS
 	if(IsWin32c())
@@ -6250,13 +6267,12 @@ OpState	OpDisplayFontsGallery::GetState(String_256* UIDescription, OpDescriptor*
 	OpState OpSt;  
 
 	// If the gallery is currenty open, then the menu item should be ticked
-	String_32 Name(_R(IDS_FONTS_GALLERY_OP));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_FONTSGALLERY));
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(FontsSGallery))
-			OpSt.Ticked = pDialogBarOp->IsVisible();
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(FontsSGallery))
+			OpSt.Ticked = pSuperGallery->IsVisible();
 	}
 
  	return(OpSt);   
@@ -6279,22 +6295,20 @@ OpState	OpDisplayFontsGallery::GetState(String_256* UIDescription, OpDescriptor*
 
 void OpDisplayFontsGallery::Do(OpDescriptor*)
 {
-
-	String_32 Name(_R(IDS_FONTS_GALLERY_OP));
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_FONTSGALLERY));
   
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
 		// Toggle the visible state of the gallery window
-		pDialogBarOp->SetVisibility( !pDialogBarOp->IsVisible() );
+		pSuperGallery->SetVisibility( !pSuperGallery->IsVisible() );
 
 		// And update our button state
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAYFONTSGALLERY, pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAYFONTSGALLERY), pSuperGallery->IsVisible());
 
 		// If we're closing the gallery, flush the thumbnail caches
-		if(pDialogBarOp->IsVisible() == FALSE)
+		if(pSuperGallery->IsVisible() == FALSE)
 		{
-			BROADCAST_TO_CLASS(ThumbMessage(ThumbMessage::ThumbState::KILLCACHE, SGLib_Font), DialogOp);
+			BROADCAST_TO_CLASS(ThumbMessage(ThumbMessage::KILLCACHE, SGLib_Font), DialogOp);
 
 			// Reclaim open library group memory when gallery closed...
 			if(FontsSGallery::ThisGallery != NULL)
@@ -6959,11 +6973,11 @@ void SGLibFontItem::HandleRedraw(SGRedrawInfo *RedrawInfo, SGMiscInfo *MiscInfo)
 	DocRect NewFormatRect(FormatRect);
 
 	// Draw the icon here...
-	NewFormatRect.lox += (SGF_TYPE_WIDTH * OnePixel);
+	NewFormatRect.lo.x += (SGF_TYPE_WIDTH * OnePixel);
 	GridLockRect(MiscInfo, &NewFormatRect);
 
 	DocRect TypeRect(FormatRect);
-	TypeRect.hix = NewFormatRect.lox;
+	TypeRect.hi.x = NewFormatRect.lo.x;
 
 	SGDisplayPreviewFonts::DrawTypeIcon(RedrawInfo, MiscInfo, &TypeRect, GetType());
 
@@ -7201,10 +7215,10 @@ FontClass SGLibFontItem::GetType(void)
 		BOOL ok = Lib->GetFilename(TheLibraryIndex, &pFName);
 		if(ok)
 		{
-			if(camStrstr(pFName, ".ttf") != NULL || strstr(pFName, ".TTF") != NULL)
+			if(camStrstr(pFName, _T(".ttf")) != NULL || camStrstr(pFName, _T(".TTF")) != NULL)
 				return FC_TRUETYPE;
 
-			if(camStrstr(pFName, ".pfb") != NULL || strstr(pFName, ".PFB") != NULL)
+			if(camStrstr(pFName, _T(".pfb")) != NULL || camStrstr(pFName, _T(".PFB")) != NULL)
 				return FC_ATM;
 		}
 		else
@@ -7214,10 +7228,10 @@ FontClass SGLibFontItem::GetType(void)
 			if(ok)
 			{
 				FName.toLower();
-				if(FName.Sub((String_8)".ttf") != -1)
+				if(FName.Sub((String_8)_T(".ttf")) != -1)
 					return FC_TRUETYPE;
 
-				if(FName.Sub((String_8)".pfb") != -1)
+				if(FName.Sub((String_8)_T(".pfb")) != -1)
 					return FC_ATM;
 			}
 		}
