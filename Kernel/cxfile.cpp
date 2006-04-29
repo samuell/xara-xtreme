@@ -1125,8 +1125,6 @@ BOOL CXaraFile::WriteUnicode(TCHAR* pStr)
 	if (pStr == NULL)
 		return FALSE;
 
-	size_t len = camStrlen(pStr);
-
 #ifdef UNICODE
 	// pStr points to a Unicode string, so just write it out
 	//
@@ -1151,6 +1149,8 @@ BOOL CXaraFile::WriteUnicode(TCHAR* pStr)
 #else
 	// pStr points to an ASCII string, and we want it written as a Unicode string
 	// Write out each char, followed by a 0 byte
+
+	size_t len = camStrlen(pStr);
 
 	BOOL ok= TRUE;
 	for (unsigned i=0;ok && i<=len;i++)

@@ -147,11 +147,11 @@ public:
 
 	BOOL IsAnAdjustDrag()						{ return IsAdjustDrag; }
 
-
 public:		// Solid-dragging support
 	virtual INT32 GetDragTransparency()			{ return 0; }		// Not transparent
 	virtual KernelBitmap *GetSolidDragMask()	{ return NULL; }	// Not masked
-
+	virtual BOOL HasTransparentMask()			{ return FALSE; }
+	virtual wxBitmap * GetTransparentMask()		{ return NULL; }
 
 public:		// Special dropping functions called for drop-on-page (called by ViewDragTarget)
 	virtual BOOL CanDropOnPage()				{ return FALSE; }

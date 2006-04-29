@@ -4863,6 +4863,39 @@ void DIBUtil::InvertAlpha(LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits)
 	}
 }
 
+/********************************************************************************************
+
+>	static void DIBUtil::MakeAlphaIntoGreyscale ( LPBITMAPINFO	lpBitmapInfo,
+										  LPBYTE		lpBits )
+
+	Author:		Graeme_Sutherland (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	27/6/00 (moved here by Phil 06/02/2004)
+	Purpose:	Camelot uses a different transparency scheme to the rest of the world, in
+				that 255 is clear, and 0 is opaque. Until the rest of the world catches up,
+				it's necessary to invert the alpha channel to make exported files compatible
+				with other programs.
+
+********************************************************************************************/
+
+void DIBUtil::MakeAlphaIntoGreyscale(LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits)
+{
+	// Only 32 bpp bitmaps have an alpha channel.
+	if ( lpBitmapInfo->bmiHeader.biBitCount == 32 )
+	{
+		// Cast the pointer into a DWORD.
+		DWORD *lpRGBA = reinterpret_cast<DWORD*> ( lpBits );
+
+		// If we`re exporting a 32Bit BMP then we need to make sure that we convert the
+		// Alpha channel to Transparency! i.e. invert it!
+		for ( UINT32 i = 0; i < lpBitmapInfo->bmiHeader.biSizeImage; i+=4 )
+		{
+			// Multiply the alpha value by 0x010101 puts it in each of R, G and B
+			*lpRGBA = 0x010101 * (*lpRGBA>>24);
+			lpRGBA ++;
+		}
+	}
+}
+
 
 #ifdef _DEBUG
 void DIBUtil::FillColour24(LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits)

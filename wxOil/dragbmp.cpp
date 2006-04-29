@@ -195,6 +195,7 @@ BitmapDragInformation::BitmapDragInformation(	KernelBitmap * DragBitmap,
 	MemDC = NULL;
 	Bitmap = NULL;
 	DragMask = NULL;
+	MaskBitmap = NULL;
 
 	// Set up a few things about this drag
 	DoesSolidDrag = TRUE;
@@ -271,6 +272,11 @@ BitmapDragInformation::~BitmapDragInformation()
 	{
 //		Bitmap->DeleteObject();
 		delete Bitmap;
+	}
+
+	if (MaskBitmap)
+	{
+		delete MaskBitmap;
 	}
 
 	if (DragMask)
@@ -639,6 +645,23 @@ BOOL BitmapDragInformation::PlotBitmap(	CWxBitmap *wxBM,
 			return FALSE;
 		}
 
+		INT32 bpp = wxBM->GetBPP();
+
+		if (MaskBitmap)
+		{
+			delete MaskBitmap;
+			MaskBitmap = NULL;
+		}
+
+		// For now, only do the mask bitmap where we have a 32bpp representation
+		// as I haven't tested whether Gavin works OK with (say) a palette with
+		// transparency in it
+		if ((bpp==32) && TheBitmap->IsTransparent())
+		{
+			// If this fails, we simply treat it as non-transparent. Hey ho
+			MaskBitmap = new wxBitmap(DestWidth, DestHeight);
+		}
+
 		MemDC.SelectObject(*Bitmap);
 
 PORTNOTE("other", "disabled palettes in dragbmp")
@@ -714,7 +737,6 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 		RGBQUAD TempPalette[256];
 		RGBQUAD* Palette = wxBM->BMInfo->bmiColors;
 	
-		INT32 bpp = wxBM->GetBPP();
 		if (bpp <= 8)
 		{
 			INT32 NumCols;
@@ -790,16 +812,39 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 		// Now we use GRenderRegion to plot it (far easier than farting about
 		// with conversion which was the previous technique...)
 
-
 		GRenderRegion::StaticPlotBitmap(&MemDC, DIBPal, TempInfo, TempBits, 0, 0, DestWidth, DestHeight, pPal, 0, 0);
 
-//		Bitmap->SaveFile(_T("/tmp/test.png"), wxBITMAP_TYPE_PNG);
+		if (MaskBitmap)
+		{
+			// Make the rectangle black
+			MemDC.SelectObject(*MaskBitmap);
+			GD->SetColour(0);
+			GD->FillRectangle(&BmpRect);
+
+			// Contone between white and white, but use the transparency values
+			GD->SetColour(0xFFFFFF);
+			GD->SetContone(1, 0xFFFFFF, 0xFFFFFF);
+			GD->SetBitmapFill(	&(wxBM->BMInfo->bmiHeader),
+								wxBM->BMBytes,
+								0x4000,
+								PGram,
+								DefaultColour,
+								Palette,
+								NULL, NULL, NULL,
+								NULL,
+								0
+								);
+			GD->FillRectangle(&BmpRect);
+
+			GRenderRegion::StaticPlotBitmap(&MemDC, DIBPal, TempInfo, TempBits, 0, 0, DestWidth, DestHeight, pPal, 0, 0);
+		}
 
 		FreeDIB(TempInfo, TempBits);
 
 	}
 	// Finally plot the Bitmap onto the output RenderDC
-	RenderDC->DrawBitmap(*Bitmap, TopLeft.x, TopLeft.y, true);
+	if (RenderDC)
+		RenderDC->DrawBitmap(*Bitmap, TopLeft.x, TopLeft.y, true);
 
 	// Yipeee !! We done it
    	return TRUE;
@@ -815,10 +860,21 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 	Purpose:	Get a 1 bpp mask to use for the solid drag.
 	SeeAlso:	-
 
+We (ab)use this call to ensure an initial plot is done, which in turn sets up the mask,
+which has to be done before the first plot (on setup)
+
 ********************************************************************************************/
 
 KernelBitmap* BitmapDragInformation::GetSolidDragMask()
 {
+	if (TheBitmap != NULL && TheBitmap->ActualBitmap != NULL)
+	{	
+		wxBitmap bitmap(1,1);
+		wxMemoryDC DC;
+		DC.SelectObject(bitmap);
+		PlotBitmap((CWxBitmap*)TheBitmap->ActualBitmap, wxPoint(0,0), DragRect, &DC);
+	}
+	
 	return DragMask;
 }
 
@@ -864,3 +920,4 @@ BOOL BitmapDragInformation::Init()
 
 	return TRUE;
 }
+

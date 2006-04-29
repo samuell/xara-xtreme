@@ -147,6 +147,9 @@ public:
 	virtual BOOL GetStatusLineText(String_256 * TheText, DragTarget* pDragTarget);
 	virtual BOOL OnDrawSolidDrag(wxPoint Origin,wxDC * TheDC, DragTarget* pDragTarget);
 
+	virtual BOOL HasTransparentMask()	{ return (MaskBitmap != NULL); }
+	virtual wxBitmap* GetTransparentMask() { return (MaskBitmap); }
+
 	virtual KernelBitmap* GetSolidDragMask();
 
 	KernelBitmap *GetTheBitmap(void)	{ return TheBitmap; }
@@ -176,6 +179,7 @@ protected:
 	wxDC* MemDC;
 	wxBitmap* Bitmap;
 	wxBitmap* OldBmp;
+	wxBitmap* MaskBitmap;
 
 	static INT32 DragTransparency;
 };

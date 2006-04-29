@@ -285,6 +285,7 @@ public:
 #ifdef _DEBUG
 	static void FillColour24(LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits);
 #endif
+	static void MakeAlphaIntoGreyscale(LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits);
 };
 
 

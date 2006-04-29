@@ -316,7 +316,9 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 	KernelBitmap* DragMask = 
 		DragManagerOp::CurrentManager->CurrentDragInfo->GetSolidDragMask();
 	
-	if (DragTransparency > 0 || DragMask != NULL)
+	BOOL TransparentMask = DragManagerOp::CurrentManager->CurrentDragInfo->HasTransparentMask();
+
+	if (DragTransparency > 0 || TransparentMask ||  DragMask != NULL)
  	{
 		// If we're doing a transparency drag, then we'll need
 		// a monochome mask bitmap.
@@ -333,6 +335,23 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 
 		// Create a wxImage, don't initalize it
 		wxImage MaskImage(DSize.x, DSize.y, false);
+		unsigned char * pix=MaskImage.GetData();
+		unsigned char * tpix = NULL;
+
+		wxImage * pTransparentMask = NULL;
+		if (TransparentMask)
+		{
+			wxBitmap *pTMbitmap=DragManagerOp::CurrentManager->CurrentDragInfo->GetTransparentMask();
+			if (pTMbitmap)
+				pTransparentMask = new wxImage();
+			if (!pTransparentMask)
+				TransparentMask=FALSE;
+			else
+			{
+				*pTransparentMask=pTMbitmap->ConvertToImage();
+				tpix=pTransparentMask->GetData();
+			}
+		}
 
 		// DragTransparency is between 0 and 100,
 		// and we need a grey level between 0 and 255.
@@ -349,16 +368,28 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 								  16, 8,14, 6};
 		INT32 x, y;
 
-		unsigned char * pix=MaskImage.GetData();
-
 		for (y=0; y<DSize.y; y++) for (x=0; x<DSize.x; x++)
 		{
-			BYTE thresh = (GreyLevel>(OrderedDither[(x&3)|((y&3)<<2)]*16-8))?0xff:0x00;
+			INT32 tlevel=GreyLevel;
+			if (TransparentMask)
+			{
+				// Combine the transparency level with the transparency of the mask
+				// Note if EITHER are 255 we want full transparency. The appropriate
+				// operation is thus 1-((1-x)(1-y)), except of course they are 0..255
+				tlevel=((255*255+(255/2)) - // that's the maximum value (as we invert), but also add 255/2 for rounding when we divide by 255
+						((255-GreyLevel)*(*tpix))
+						)/255;
+				tpix +=3;
+			}
+			BYTE thresh = (tlevel>(OrderedDither[(x&3)|((y&3)<<2)]*16-8))?0xff:0x00;
 			// write three bytes (R, G, B)
 			*pix++=thresh;
 			*pix++=thresh;
 			*pix++=thresh;
 		}
+
+		if (pTransparentMask)
+			delete pTransparentMask;
 
 		MaskBitmap=new wxBitmap(MaskImage, 1);
 		if (MaskBitmap)
