@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "sgfonts.h"	// For OpDisplayFontsGallery
 //#include "sglcart.h"	// For OpDisplayLibClipartGallery et al
 //#include "sglfills.h"	// For OpDisplayLibFillsGallery
-//#include "sgline.h"		// For OpDisplayLineGallery
+#include "sgline.h"		// For OpDisplayLineGallery
 #include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
 #include "sgscan.h"		// For Library::InitLibPrefs()
 #include "layerprp.h"	// For LayerPropertiesDlg::Init()

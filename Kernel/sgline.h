@@ -415,7 +415,7 @@ public:
 
 private:
 	// Finds the Line gallery class instance
-	static DialogBarOp* FindGallery(void);
+	static SuperGallery* FindGallery(void);
 };  
 
 #endif

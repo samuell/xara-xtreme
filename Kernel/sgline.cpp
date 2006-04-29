@@ -148,7 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rik.h"
 #include "brushmsg.h"
 #include "brshname.h"
-#include "resdll.h"
+//#include "resdll.h"
 #include "fileutil.h"
 #include "brushop.h"
 
@@ -244,7 +244,8 @@ BOOL LineAttrItem::UpdateCurrentAttribStatus()
 					"No attribute run-time classes in LineAttrItem::UpdateCurrentAttribStatus");
 
 		// Count how many types of classes the item represents.  Note the null statement.
-		for (CCRuntimeClass** pprtc = ppAttribClasses; *pprtc != NULL; pprtc++);
+		CCRuntimeClass**  pprtc;
+		for (pprtc = ppAttribClasses; *pprtc != NULL; pprtc++);
 		INT32 nAttribClasses = pprtc - ppAttribClasses;
 
 		// Allocate an array of NodeAttribute pointers for each run-time class.
@@ -756,7 +757,7 @@ BOOL LineAttrItem::HandleEvent(SGEventType EventType, void* EventInfo, SGMiscInf
 			{
 				//OK temporary dodge (see, not a bodge) to stop people doing things with brushes in the
 				//line gallery before we get them working!
-				LineAttrItem* pItem = this;
+				// LineAttrItem* pItem = this;
 	
 				{
 					// If the colour is in the selected document, then it is safe to
@@ -765,7 +766,7 @@ BOOL LineAttrItem::HandleEvent(SGEventType EventType, void* EventInfo, SGMiscInf
 					// Otherwise, the normal click action takes place.
 					// If the drag fails (turns into a click) then the normal click action
 					// takes place, passed on by the GalleryColourDragInfo::OnClick handler
-					SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
+					// SGDisplayGroup *Parent = (SGDisplayGroup *) GetParent();
 
 					if (Mouse->DoubleClick) // || Parent->GetParentDocument() != Document::GetSelected())
 						DefaultClickHandler(Mouse, MiscInfo);
@@ -874,7 +875,7 @@ BOOL LineAttrItem::DefaultClickHandler(SGMouseInfo* pMouse, SGMiscInfo* pMiscInf
 			{
 				pParent->SetVisibility(FALSE);
 
-				pParent->SetSystemStateChanged();	// Ensure toolbar button pops out again
+				DialogBarOp::SetSystemStateChanged();	// Ensure toolbar button pops out again
 			}
 		}
 
@@ -1169,6 +1170,8 @@ LineGallery::LineGallery()
 	// Remember a pointer to the global instance of this gallery.
 	ERROR3IF(m_pTheGallery != NULL, "Gallery already exists in LineGallery::LineGallery?");
 	m_pTheGallery = this;
+
+	DlgResID=_R(IDD_LINESGALLERY);
 	
 	// set to the normal default
 	m_PreviousLineWidth = 500;
@@ -1198,7 +1201,7 @@ LineGallery::~LineGallery()
 	// delete the string array
 	if (m_pFileNameArray != NULL)
 	{	
-		for (INT32 i = 0; i < m_NumDefaultFiles; i++)
+		for (UINT32 i = 0; i < m_NumDefaultFiles; i++)
 			m_pFileNameArray[i].Empty();
 
 		// don't forget that we allocated it with malloc..
@@ -1799,7 +1802,7 @@ BOOL LineGallery::CreateBrushGroups()
 	// Create the default folder, which will contain the default stroke
 	LineAttrGroup *pGroup = CreateGroup(String_256(_R(IDS_BRUSHGROUP_DEFAULT)), TRUE);
 	if (pGroup == NULL)
-		return(NULL);
+		return(FALSE);
 
 	// Create a default 'no brush' brush
 	BrushAttrValue *pAttr;
@@ -1930,22 +1933,22 @@ MsgResult LineGallery::Message(Msg* pMessage)
 		{
 			// Gallery being created.
 			case DIM_CREATE:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_LINE_GALLERY, TRUE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAY_LINE_GALLERY), TRUE);
 				break;
 
 			// Gallery being closed.
 			case DIM_CANCEL:
-				SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_LINE_GALLERY, FALSE);
+				SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAY_LINE_GALLERY), FALSE);
 				break;
 
-				case DIM_LFT_BN_CLICKED:
-				switch(pMsg->GadgetID)
+			case DIM_LFT_BN_CLICKED:
+				if (pMsg->GadgetID == _R(IDC_GALLERY_HELP))		// Show help page
 				{
-					case _R(IDC_GALLERY_HELP):		// Show help page
-					{
-						HelpUserTopic(_R(IDS_HELPPATH_Gallery_Line));
-					}
+					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Line));
 				}
+				break;
+
+			default:
 				break;
 
 		}
@@ -1955,7 +1958,7 @@ MsgResult LineGallery::Message(Msg* pMessage)
 	else if (MESSAGE_IS_A(pMessage, DocChangingMsg))
 	{
 		DocChangingMsg* pMsg = (DocChangingMsg*) pMessage;
-		if (pMsg->State == DocChangingMsg::DocState::SELCHANGED)
+		if (pMsg->State == DocChangingMsg::SELCHANGED)
 		{
 			if (pMsg->pNewDoc != NULL)
 			{
@@ -2698,7 +2701,9 @@ MILLIPOINT LineGallery::SetPreviousLineWidth()
 BOOL LineGallery::PrepareBrushFolders()
 {
 	// find all .xar files in the /templates/brushes directory and put them in a temp array
-	
+PORTNOTE("other", "Disabled loading of line gallery templates")
+#ifndef EXCLUDE_FROM_XARALX
+
 	// allocate a stupidly large array
 	String_256 TempString[1000]; // surely can't be 1000 files!
 
@@ -2755,7 +2760,7 @@ BOOL LineGallery::PrepareBrushFolders()
 	memcpy(m_pFileNameArray, &TempString, size * Counter);
 	
 	m_NumDefaultFiles = Counter;  // remember how many we got
-
+#endif
 	return TRUE;
 }
 
@@ -2878,8 +2883,8 @@ OpState OpDisplayLineGallery::GetState(String_256* UIDescription, OpDescriptor*)
 {
 	// If the gallery is currently open then the menu item should be ticked.
 	OpState OpSt;  
-	DialogBarOp* pDialogBarOp = FindGallery();
-	if (pDialogBarOp != NULL) OpSt.Ticked = pDialogBarOp->IsVisible();
+	SuperGallery* pSuperGallery = FindGallery();
+	if (pSuperGallery != NULL) OpSt.Ticked = pSuperGallery->IsVisible();
 
 	// If there are no open documents, you can't toggle the gallery
   	OpSt.Greyed = (Document::GetSelected() == NULL);
@@ -2903,15 +2908,15 @@ OpState OpDisplayLineGallery::GetState(String_256* UIDescription, OpDescriptor*)
 
 void OpDisplayLineGallery::Do(OpDescriptor*)
 {
-	DialogBarOp *pDialogBarOp = FindGallery();
+	SuperGallery *pSuperGallery = FindGallery();
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
 		// Toggle the visible state of the gallery window
-		pDialogBarOp->SetVisibility(!pDialogBarOp->IsVisible());
+		pSuperGallery->SetVisibility(!pSuperGallery->IsVisible());
 
 		// And update the gallery button state
-		SGInit::UpdateGalleryButton(OPTOKEN_DISPLAY_LINE_GALLERY, pDialogBarOp->IsVisible());
+		SGInit::UpdateGalleryButton(_R(OPTOKEN_DISPLAY_LINE_GALLERY), pSuperGallery->IsVisible());
 	}
 	
 	End();
@@ -2920,7 +2925,7 @@ void OpDisplayLineGallery::Do(OpDescriptor*)
 
 
 /********************************************************************************************
->   static DialogBarOp* OpDisplayLineGallery::FindGallery()
+>   static SuperGallery* OpDisplayLineGallery::FindGallery()
 
 	Author:     Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:    9/2/95 (base generated in sgbase.cpp)
@@ -2933,15 +2938,14 @@ void OpDisplayLineGallery::Do(OpDescriptor*)
 				Also check that bars.ini indicates the bar is of the LineGallery class
 ********************************************************************************************/
 
-DialogBarOp* OpDisplayLineGallery::FindGallery()
+SuperGallery* OpDisplayLineGallery::FindGallery()
 {
-	String_32 Name = _R(IDS_SGLINE_GALLERY_NAME); // "Line gallery";
-	DialogBarOp* pDialogBarOp = DialogBarOp::FindDialogBarOp(Name);
+	SuperGallery* pSuperGallery = SuperGallery::FindSuperGallery(_R(IDD_LINESGALLERY));
 
-	if (pDialogBarOp != NULL)
+	if (pSuperGallery != NULL)
 	{
-		if (pDialogBarOp->GetRuntimeClass() == CC_RUNTIME_CLASS(LineGallery))
-			return(pDialogBarOp);
+		if (pSuperGallery->GetRuntimeClass() == CC_RUNTIME_CLASS(LineGallery))
+			return(pSuperGallery);
 
 		ERROR3("Got the line gallery but it's not of the LineGallery class?");
 	}

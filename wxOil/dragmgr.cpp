@@ -343,7 +343,10 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 		// write our own ordered dither! And neither do 1bpp wxBitmaps work as brushes
 		// sigh... And painting a 24bpp brush into a 1bpp bitmap dies horribly. Aaarrggghh
 		// Bayer table
-		INT32 OrderedDither[4*4]={1,9,3,11,13,5,15,7,4,12,2,10,16,8,14,6};
+		INT32 OrderedDither[4*4]={ 1, 9, 3,11,
+								  13, 5,15, 7,
+								   4,12, 2,10,
+								  16, 8,14, 6};
 		INT32 x, y;
 
 		unsigned char * pix=MaskImage.GetData();
@@ -351,7 +354,7 @@ BOOL CaptureWnd::SetUpSolidDrag(wxPoint StartPos)
 		for (y=0; y<DSize.y; y++) for (x=0; x<DSize.x; x++)
 		{
 			BYTE thresh = (GreyLevel>(OrderedDither[(x&3)|((y&3)<<2)]*16-8))?0xff:0x00;
-			// write three pixels
+			// write three bytes (R, G, B)
 			*pix++=thresh;
 			*pix++=thresh;
 			*pix++=thresh;
