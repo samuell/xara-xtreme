@@ -719,9 +719,6 @@ void BmpDlg::InvokeBmpDlg(BmpDlgParam* pBmpDlgParam)
 	pParam = pBmpDlgParam;	
 
 	OpDescriptor* OpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(BmpDlg));
-	OpDesc->Invoke(pBmpDlgParam,(INT32)NULL);
+	OpDesc->Invoke(pBmpDlgParam, FALSE);
 }
-
-
-
 
