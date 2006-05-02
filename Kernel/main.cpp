@@ -133,6 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dlgcthlp.h"
 //#include "xpehost.h"
 #include "opfeathr.h"
+#include "appprefs.h"
 
 BOOL InitPreTools();
 BOOL InitPostTools1();
@@ -253,8 +254,6 @@ PORTNOTE("extClipboard", "Do no call ExternalClipboard::Deinit")
 	AttributeManager::Deinit();
 
 #if !defined(EXCLUDE_FROM_RALPH)
-PORTNOTE("dialogs", "Use of AppPrefsDlg removed")
-#if !defined(EXCLUDE_FROM_XARALX)
 	#ifndef STANDALONE
 		// Write out the preferences, only if the user has requested this
 		if ( AppPrefsDlg::IsSaveOnExitSet() )
@@ -264,7 +263,6 @@ PORTNOTE("dialogs", "Use of AppPrefsDlg removed")
 	#endif
 #else
 	Camelot.WritePreferences();
-#endif
 #endif
 
 PORTNOTE("other","Removed XPEHost usage")
@@ -321,10 +319,7 @@ PORTNOTE("other","Removed XPEHost usage")
 #endif
 
 #ifndef STANDALONE
-PORTNOTE("other","Removed AppPrefsDlg usage")
-#ifndef EXCLUDE_FROM_XARALX
 	AppPrefsDlg::Deinit();				// Deinit the application preference/options dialog
-#endif
 #endif
 	Filter::DeinitFilters();
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)

@@ -7,13 +7,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDH_DEFAULT_PAGESIZES">
-					<label>DEFAULT_PAGESIZES</label>
+					<label>DEFAULT_PAGESIZES.res</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDT_CAM_PAGESIZES_RES">
-					<label>CAMELOT_PAGESIZES</label>
+					<label>CAMELOT_PAGESIZES.res</label>
 				</object>
 			</object>
 			<object class="sizeritem">
