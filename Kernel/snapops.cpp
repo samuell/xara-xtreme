@@ -162,7 +162,8 @@ BOOL OpShowGrid::Init()
 									TRUE,						// Clean operation
 									0,							// No vertical counterpart
 									0,							// String for one copy only error
-									(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
+									(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC), // Auto state flags
+									TRUE						// fCheckable
 								);
 }
 
@@ -275,7 +276,8 @@ BOOL OpSnapToGrid::Init()
 								TRUE,						// Clean operation
 								0,							// No vertical counterpart
 								0,							// String for one copy only error
-								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
+								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC), // Auto state flags
+								TRUE						// fCheckable
 							  );
 }
 
@@ -386,7 +388,8 @@ BOOL OpSnapToObjects::Init()
 								TRUE,						// Clean operation
 								0,							// No vertical counterpart
 								0,							// String for one copy only error
-								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
+								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC), // Auto state flags
+								TRUE						// fCheckable
 							  );
 }
 
@@ -521,7 +524,8 @@ BOOL OpSnapToGuides::Init()
 								TRUE,						// Clean operation
 								0,							// No vertical counterpart
 								0,							// String for one copy only error
-								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
+								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC), // Auto state flags
+								TRUE						// fCheckable
 							  );
 }
 
@@ -643,7 +647,8 @@ BOOL OpShowGuides::Init()
 									TRUE,						// Clean operation
 									0,							// No vertical counterpart
 									0,							// String for one copy only error
-									(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
+									(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC), // Auto state flags
+									TRUE						// fCheckable
 								);
 }
 
