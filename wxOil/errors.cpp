@@ -625,6 +625,8 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 	ErrStatus = ERRORSTAT_NONE;
 
+	delete pBox;
+
 #if !defined(EXCLUDE_FROM_RALPH)
 	// Make sure we forget the old help content.
 	SetNextMsgHelpContext(0);
