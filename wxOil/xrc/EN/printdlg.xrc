@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_OPTSTAB_PRINTLAYOUT">
+	<object class="wxPanel" name="IDD_OPTSTAB_PRINTLAYOUT">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxCamArtControl" name="IDC_BTN_UPRIGHT">
 			 <pos>45,55d</pos> <size>24,24d</size>
@@ -130,8 +130,9 @@
 			<style>wxRB_GROUP</style>
 		</object>
 		<title>Print layout</title>
+		<tooltip>Print layout</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_PRINTGENERAL">
+	<object class="wxPanel" name="IDD_OPTSTAB_PRINTGENERAL">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxRadioButton" name="IDC_ALLFOREGROUND">
 			 <pos>10,31d</pos> <size>80,11d</size>
@@ -207,6 +208,7 @@
 			<label>Text options</label>
 		</object>
 		<title> Output </title>
+		<tooltip> Output </tooltip>
 	</object>
 	<object class="wxDialog" name="IDD_PRINTPROGRESS">
 			 <pos>0,0d</pos> <size>157,100d</size>
@@ -390,7 +392,7 @@
 		</object>
 		<title>Xara Xtreme EPS Export Options</title>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_PRINTPRINT">
+	<object class="wxPanel" name="IDD_OPTSTAB_PRINTPRINT">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>6,15d</pos> <size>193,76d</size>
@@ -460,6 +462,7 @@
 			<label>lpi</label>
 		</object>
 		<title>Separations</title>
+		<tooltip>Separations</tooltip>
 	</object>
 	<object class="wxDialog" name="IDD_PLATEPROPS">
 			 <pos>0,0d</pos> <size>176,78d</size>
@@ -499,7 +502,7 @@
 		</object>
 		<title>Separation properties</title>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_IMAGESETTING">
+	<object class="wxPanel" name="IDD_OPTSTAB_IMAGESETTING">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_ISTATIC2">
 			 <pos>8,4d</pos> <size>79,10d</size>
@@ -545,5 +548,6 @@
 			<label>Always overprint black</label>
 		</object>
 		<title>Imagesetting</title>
+		<tooltip>Imagesetting</tooltip>
 	</object>
 </resource>

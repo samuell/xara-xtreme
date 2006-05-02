@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_BLOBTAB_PG1">
+	<object class="wxPanel" name="IDD_BLOBTAB_PG1">
 			 <pos>0,0d</pos> <size>160,100d</size>
 		<object class="wxScrollBar" name="IDC_TSCROLLBAR2">
 			 <pos>52,12d</pos> <size>11,56d</size>
@@ -27,8 +27,9 @@
 			<label></label>
 		</object>
 		<title>Coords</title>
+		<tooltip>Coords</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_BLOBTAB_PG2">
+	<object class="wxPanel" name="IDD_BLOBTAB_PG2">
 			 <pos>0,0d</pos> <size>160,100d</size>
 		<object class="wxRadioButton" name="IDC_TRADIO21">
 			 <pos>89,34d</pos> <size>35,10d</size>
@@ -56,8 +57,9 @@
 			<label>Radio6</label>
 		</object>
 		<title>RadioDaze</title>
+		<tooltip>RadioDaze</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_BLOBTAB_PG3">
+	<object class="wxPanel" name="IDD_BLOBTAB_PG3">
 			 <pos>0,0d</pos> <size>160,100d</size>
 		<object class="wxComboBox" name="IDC_TCOMBO3">
 			 <pos>16,22d</pos> <size>56,-1d</size>
@@ -95,6 +97,7 @@
 			<label>Convert</label>
 		</object>
 		<title>Convert</title>
+		<tooltip>Convert</tooltip>
 	</object>
 	<object class="wxDialog" name="IDD_BLOBBYDLG">
 			 <pos>0,0d</pos> <size>323,248d</size>

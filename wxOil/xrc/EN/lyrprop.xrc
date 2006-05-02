@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_TAB_GUIDELINE_PROPERTIES">
+	<object class="wxPanel" name="IDD_TAB_GUIDELINE_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,148d</size>
 		<object class="wxButton" name="IDC_GUIDETAB_NEW">
 			 <pos>125,20d</pos> <size>55,14d</size>
@@ -42,8 +42,9 @@
 			<label>Guidelines</label>
 		</object>
 		<title>Guides</title>
+		<tooltip>Guides</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_TAB_LAYER_PROPERTIES">
+	<object class="wxPanel" name="IDD_TAB_LAYER_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,148d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>5,5d</pos> <size>190,60d</size>
@@ -65,6 +66,7 @@
 			 <pos>45,25d</pos> <size>140,13d</size>
 		</object>
 		<title>Layer</title>
+		<tooltip>Layer</tooltip>
 	</object>
 	<object class="wxDialog" name="IDD_GUIDELINE_PROPERTIES">
 			 <pos>0,0d</pos> <size>171,63d</size>

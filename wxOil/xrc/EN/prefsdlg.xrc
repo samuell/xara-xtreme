@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_OPTSTAB_VIEW">
+	<object class="wxPanel" name="IDD_OPTSTAB_VIEW">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_VIEWINFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -81,8 +81,9 @@
 			<label>DPI when auto generated</label>
 		</object>
 		<title> View </title>
+		<tooltip> View </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_MISC">
+	<object class="wxPanel" name="IDD_OPTSTAB_MISC">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticBox" name="IDC_OPTS_MISCGRP1">
 			 <pos>5,5d</pos> <size>195,127d</size>
@@ -163,8 +164,9 @@
 			<label>Make &amp;groups be transparent as a whole</label>
 		</object>
 		<title> General </title>
+		<tooltip> General </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_PAGE">
+	<object class="wxPanel" name="IDD_OPTSTAB_PAGE">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -234,8 +236,9 @@
 			<label>Sh&amp;ow page shadow</label>
 		</object>
 		<title> Page </title>
+		<tooltip> Page </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_TUNE">
+	<object class="wxPanel" name="IDD_OPTSTAB_TUNE">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticBox" name="IDC_OPTS_TUNEGROUP">
 			 <pos>5,2d</pos> <size>195,43d</size>
@@ -305,8 +308,9 @@
 			 <pos>145,167d</pos> <size>50,12d</size>
 		</object>
 		<title> Tune-ups </title>
+		<tooltip> Tune-ups </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_SCALE">
+	<object class="wxPanel" name="IDD_OPTSTAB_SCALE">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -347,8 +351,9 @@
 			<label>E.g. 1 to 25000</label>
 		</object>
 		<title> Scaling </title>
+		<tooltip> Scaling </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_POINTERS">
+	<object class="wxPanel" name="IDD_OPTSTAB_POINTERS">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -395,8 +400,9 @@
 			 <pos>140,116d</pos> <size>55,12d</size>
 		</object>
 		<title> Mouse </title>
+		<tooltip> Mouse </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_GRID">
+	<object class="wxPanel" name="IDD_OPTSTAB_GRID">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -451,8 +457,9 @@
 			 <pos>81,132d</pos> <size>45,12d</size>
 		</object>
 		<title> Grid and Ruler </title>
+		<tooltip> Grid and Ruler </tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_UNITS">
+	<object class="wxPanel" name="IDD_OPTSTAB_UNITS">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -509,6 +516,7 @@
 			<label>&amp;0 - 255</label>
 		</object>
 		<title> Units </title>
+		<tooltip> Units </tooltip>
 	</object>
 	<object class="wxDialog" name="IDD_OPTS_UNITPROPERTIES">
 			 <pos>0,0d</pos> <size>237,113d</size>
@@ -569,7 +577,7 @@
 		</object>
 		<title>Unit properties</title>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_PLUGINS">
+	<object class="wxPanel" name="IDD_OPTSTAB_PLUGINS">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticBox" name="IDC_OPTS_LIVEEFFECTS">
 			 <pos>5,40d</pos> <size>195,70d</size>
@@ -594,5 +602,6 @@
 			 <pos>113,87d</pos> <size>82,-1d</size>
 		</object>
 		<title>Effects &amp;&amp; Plugins</title>
+		<tooltip>Effects &amp;&amp; Plugins</tooltip>
 	</object>
 </resource>

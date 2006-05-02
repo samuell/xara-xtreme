@@ -299,6 +299,15 @@ sub WriteTitle
     print OUTPUT "\t\t<title>$t</title>\n";
 }
 
+sub WriteTooltip
+{
+    my $t=shift @_;
+    $t=~s/</&lt;/g;
+    $t=~s/>/&gt;/g;
+    $t=~s/&/&amp;/g;
+    print OUTPUT "\t\t<tooltip>$t</tooltip>\n";
+}
+
 # Write basic info
 sub WriteBasicInfo
 {
@@ -1220,6 +1229,7 @@ sub ParseDialog
 
     ParseControls();
     WriteTitle ($title);
+    WriteTooltip ($title) if IsPanel($dlgname);
     print OUTPUT "\t</object>\n";
 }
 

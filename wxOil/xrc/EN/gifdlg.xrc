@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_TAB_ANIMATION_COLOURS">
+	<object class="wxPanel" name="IDD_TAB_ANIMATION_COLOURS">
 			 <pos>0,0d</pos> <size>201,121d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>5,5d</pos> <size>190,60d</size>
@@ -52,8 +52,9 @@
 			<label>Make background &amp;transparent</label>
 		</object>
 		<title>Animation Colours</title>
+		<tooltip>Animation Colours</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_TAB_FRAME_PROPERTIES">
+	<object class="wxPanel" name="IDD_TAB_FRAME_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,121d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>5,5d</pos> <size>190,51d</size>
@@ -94,8 +95,9 @@
 			<label>Show frame</label>
 		</object>
 		<title>Frame</title>
+		<tooltip>Frame</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_TAB_ANIMATION_PROPERTIES">
+	<object class="wxPanel" name="IDD_TAB_ANIMATION_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,121d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>5,5d</pos> <size>180,50d</size>
@@ -128,8 +130,9 @@
 			<label>1/100 s</label>
 		</object>
 		<title>Animation Loop and Speed</title>
+		<tooltip>Animation Loop and Speed</tooltip>
 	</object>
-	<object class="wxDialog" name="IDD_TAB_PREVIEW_IN_BROWSER">
+	<object class="wxPanel" name="IDD_TAB_PREVIEW_IN_BROWSER">
 			 <pos>0,0d</pos> <size>201,121d</size>
 		<object class="wxStaticBox" name="IDC_GIF_T5STATIC1">
 			 <pos>15,5d</pos> <size>110,60d</size>
@@ -161,5 +164,6 @@
 			<label>Include Image Information</label>
 		</object>
 		<title>Preview in Browser</title>
+		<tooltip>Preview in Browser</tooltip>
 	</object>
 </resource>

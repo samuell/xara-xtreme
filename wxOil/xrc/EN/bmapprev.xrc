@@ -76,6 +76,7 @@
 			 <pos>228,39d</pos> <size>99,8d</size>
 			<label>Minimise visible anti-aliasing</label>
 		</object>
+		<title>Bitmap Size</title>
 		<tooltip>Bitmap Size</tooltip>
 	</object>
 	<object class="wxPanel" name="IDD_TIMAPOPTIONS">
@@ -147,6 +148,7 @@
 			 <pos>81,72d</pos> <size>98,8d</size>
 			<label>Current drawing must be saved</label>
 		</object>
+		<title>Image Map</title>
 		<tooltip>Image Map</tooltip>
 	</object>
 	<object class="wxPanel" name="IDD_TBROWSER">
@@ -192,6 +194,7 @@
 			 <pos>240,30d</pos> <size>112,10d</size>
 			<label>Show all previews in browser</label>
 		</object>
+		<title>Browser Preview</title>
 		<tooltip>Browser Preview</tooltip>
 	</object>
 	<object class="wxPanel" name="IDD_TBITMAPOPTIONS">
@@ -224,6 +227,7 @@
 			 <pos>6,34d</pos> <size>178,10d</size>
 			<label>Y</label>
 		</object>
+		<title>Options</title>
 		<tooltip>Options</tooltip>
 	</object>
 	<object class="wxPanel" name="IDD_PALETTE_TAB">
@@ -322,6 +326,7 @@
 		<object class="wxComboBox" name="IDC_T2_SORT_LIST">
 			 <pos>296,71d</pos> <size>68,-1d</size>
 		</object>
+		<title>Palette Options</title>
 		<tooltip>Palette Options</tooltip>
 	</object>
 </resource>

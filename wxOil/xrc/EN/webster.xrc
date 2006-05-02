@@ -15,7 +15,7 @@
 		</object>
 		<title>File download</title>
 	</object>
-	<object class="wxDialog" name="IDD_OPTSTAB_INTERNET">
+	<object class="wxPanel" name="IDD_OPTSTAB_INTERNET">
 			 <pos>0,0d</pos> <size>206,188d</size>
 		<object class="wxStaticText" name="IDC_OPTS_INETINFO">
 			 <pos>5,5d</pos> <size>195,10d</size>
@@ -73,5 +73,6 @@
 			<label></label>
 		</object>
 		<title>Internet</title>
+		<tooltip>Internet</tooltip>
 	</object>
 </resource>
