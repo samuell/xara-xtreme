@@ -18,6 +18,7 @@
 		<object class="wxRadioButton" name="IDC_IMAGEMAP_AREA_SELECTION">
 			 <pos>36,94d</pos> <size>45,10d</size>
 			<label>&amp;Selection</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_IMAGEMAP_AREA_DRAWING">
 			 <pos>112,94d</pos> <size>40,10d</size>

@@ -310,6 +310,7 @@
 		<object class="wxRadioButton" name="IDC_SGSEARCH_NAMEONLY">
 			 <pos>4,36d</pos> <size>100,10d</size>
 			<label>Search &amp;names &amp;&amp; keywords</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_SGSEARCH_TEXT">
 			 <pos>4,20d</pos> <size>104,13d</size>

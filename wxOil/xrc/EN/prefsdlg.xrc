@@ -200,6 +200,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_PORTRAIT">
 			 <pos>59,65d</pos> <size>40,10d</size>
 			<label>&amp;Portrait</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_LANDSCAPE">
 			 <pos>104,65d</pos> <size>50,10d</size>
@@ -255,6 +256,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_USEMAXMEMORY">
 			 <pos>50,28d</pos> <size>45,10d</size>
 			<label>&amp;Automatic</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_USELIMITMEM">
 			 <pos>105,28d</pos> <size>40,10d</size>
@@ -285,6 +287,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_UNLIMITEDUNDO">
 			 <pos>50,104d</pos> <size>45,10d</size>
 			<label>&amp;Unlimited</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_LIMITEDUNDO">
 			 <pos>105,104d</pos> <size>37,10d</size>
@@ -433,6 +436,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_RECTANGULAR">
 			 <pos>81,83d</pos> <size>55,10d</size>
 			<label>&amp;Rectangular</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_ISOMETRIC">
 			 <pos>145,83d</pos> <size>45,10d</size>
@@ -510,6 +514,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_CLR_UNIT_USE_PERCENT">
 			 <pos>145,35d</pos> <size>46,9d</size>
 			<label>Percen&amp;t</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_CLR_UNIT_USE_BYTE">
 			 <pos>145,48d</pos> <size>46,9d</size>
@@ -541,6 +546,7 @@
 		<object class="wxRadioButton" name="IDC_OPTS_UNITPREFIX">
 			 <pos>100,40d</pos> <size>30,10d</size>
 			<label>P&amp;refix</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_OPTS_UNITSUFFIX">
 			 <pos>135,40d</pos> <size>30,10d</size>

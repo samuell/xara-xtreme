@@ -93,6 +93,9 @@ my $inputfile="";
 my %stringtable;
 my %bitmap;
 
+my $CurrentGroup=1;
+my $ThisRadioGroup=0;
+
 GetOptions( "stdout!" => \$stdout,
 	    "verbose|v+" => \$verbose,
 	    "help!" => \$help ) || usage ("Bad option");
@@ -151,6 +154,17 @@ sub IsPanel
     return 0;
 }
 
+sub NewGroup
+{
+    $CurrentGroup++;
+}
+
+sub IsNewRadioGroup
+{
+    my $isnew = ($CurrentGroup != $ThisRadioGroup);
+    $ThisRadioGroup = $CurrentGroup;
+    return $isnew;
+}
 
 sub LookUpString
 {
@@ -548,7 +562,7 @@ sub ParseRadioButton
 	ReadOrs (\$token) unless $GotOrs;
     }
 
-    $style .= "wxRB_GROUP" if ($token =~ /WS_GROUP/);
+    $style .= "wxRB_GROUP" if (IsNewRadioGroup() || ($token =~ /WS_GROUP/));
 
     print OUTPUT "\t\t<object class=\"wxRadioButton\"";
     WriteBasicInfo (@rect, $varname);
@@ -907,7 +921,16 @@ sub ParseGroupBox
 
     # read position
     my @rect;
-    ReadRect(\@rect);
+    $token="";
+    if (ReadRect(\@rect))
+    {
+	ReadOrs (\$token);
+    }
+
+    if ($token=~/WS_GROUP/)
+    {
+	NewGroup();
+    }
 
     print OUTPUT "\t\t<object class=\"wxStaticBox\"";
     WriteBasicInfo (@rect, $varname);

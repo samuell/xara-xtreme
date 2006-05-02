@@ -44,6 +44,7 @@
 		<object class="wxRadioButton" name="IDC_MOUSE_OFF">
 			 <pos>8,8d</pos> <size>55,10d</size>
 			<label>Mouse Off</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_MOUSE_OVER">
 			 <pos>8,19d</pos> <size>55,10d</size>

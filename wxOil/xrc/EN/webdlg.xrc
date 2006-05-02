@@ -45,6 +45,7 @@
 		<object class="wxRadioButton" name="IDC_NATIVEOPTS_DRAWING">
 			 <pos>175,20d</pos> <size>40,10d</size>
 			<label>&amp;Drawing</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_NATIVEOPTS_SELECT">
 			 <pos>175,40d</pos> <size>45,10d</size>
@@ -57,6 +58,7 @@
 		<object class="wxRadioButton" name="IDC_WEBOPTS_DRAWING">
 			 <pos>175,75d</pos> <size>42,10d</size>
 			<label>D&amp;rawing</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_WEBOPTS_SELECT">
 			 <pos>175,95d</pos> <size>45,10d</size>

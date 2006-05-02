@@ -292,9 +292,9 @@ PORTNOTE("other","Removed another lot of initialization")
 #ifndef DISABLE_TEXT_RENDERING
 			FontCache::Init() &&
 #endif
-#ifndef EXCLUDE_FROM_XARALX
 			TunedMemory::Init()	&&				// declare prefs for the memory manager
 
+#ifndef EXCLUDE_FROM_XARALX
 			OILRuler::Init() &&					// set the ruler widths depending on .ini font settings
 			InitRegistry() &&					// register us with the shell etc
 			InitAppState()	&&					// get workspace prefs

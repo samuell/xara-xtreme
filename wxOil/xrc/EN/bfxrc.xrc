@@ -19,6 +19,7 @@
 		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPX">
 			 <pos>6,100d</pos> <size>66,10d</size>
 			<label>Flip &amp;horizontally</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_FLIPY">
 			 <pos>6,110d</pos> <size>66,10d</size>

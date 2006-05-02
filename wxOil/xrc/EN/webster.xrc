@@ -51,6 +51,7 @@
 		<object class="wxRadioButton" name="IDC_14K">
 			 <pos>15,73d</pos> <size>96,12d</size>
 			<label>14.4 Kbs modem</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_28K">
 			 <pos>15,85d</pos> <size>96,12d</size>

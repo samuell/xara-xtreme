@@ -16,6 +16,7 @@
 		<object class="wxRadioButton" name="IDC_WEBADDRESS_OBJECTSHAPE">
 			 <pos>18,83d</pos> <size>79,11d</size>
 			<label>Shape of object</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_WEBADDRESS_RECTANGLE">
 			 <pos>103,82d</pos> <size>112,12d</size>

@@ -13,6 +13,7 @@
 		<object class="wxRadioButton" name="IDC_GUIDETAB_HORZ">
 			 <pos>25,79d</pos> <size>45,10d</size>
 			<label>Horizontal</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_GUIDETAB_VERT">
 			 <pos>75,79d</pos> <size>45,10d</size>

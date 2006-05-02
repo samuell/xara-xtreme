@@ -262,6 +262,7 @@
 		<object class="wxRadioButton" name="IDC_RADIOLOCALFILLALL">
 			 <pos>107,71d</pos> <size>67,13d</size>
 			<label>All brush colours</label>
+			<style>wxRB_GROUP</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_RADIOLOCALFILLNAMED">
 			 <pos>107,95d</pos> <size>83,12d</size>
