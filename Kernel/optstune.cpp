@@ -485,6 +485,8 @@ TRACEUSER( "Neville", _T("TuneTab::CommitSection\n"));
 	
 #ifndef EXCLUDE_GALS
 	// Section = Gallery cache size
+PORTNOTE("other", "Disabled Library Thumbnails preference")
+#ifndef EXCLUDE_FROM_XARALX
 
 	BOOL Valid = TRUE; 
 	INT32 CacheSize = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_CACHESIZE), 1, 99, _R(IDE_OPTS_INVALIDCACHESIZE), &Valid);
@@ -498,6 +500,7 @@ TRACEUSER( "Neville", _T("commit gallery cache size='%d'\n"), CacheSize);
 	}
 	else
 		return FALSE; 			// Cache size incorrect, user has been warned already
+#endif
 #endif
 
 	ok = CommitUndoSection();
@@ -940,11 +943,13 @@ TRACEUSER( "Neville", _T("TuneTab::InitSection\n"));
 	InitRenderingSection();
 
 	// Section = Gallery Cache size
-
+PORTNOTE("other", "Disabled Library Thumbnails preference")
+#ifndef EXCLUDE_FROM_XARALX
 	INT32 CacheSize = 1;
 	BOOL ReadOk = Camelot.GetPrefValue(TEXT("Libraries"), TEXT("Thumbnails"), &CacheSize);
 	pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_CACHESIZE), CacheSize);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_TUNE));
+#endif
 
 	InitUndoSection();
 	

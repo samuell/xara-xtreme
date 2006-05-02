@@ -2422,6 +2422,7 @@ PORTNOTE("other","DialogOp::Message - Help system disabled")
 				}
 				break;
 
+			case DIM_COMMIT:
 			case DIM_CANCEL:
 			case DIM_CREATE:
 			case DIM_BAR_DEATH:
@@ -2431,7 +2432,7 @@ PORTNOTE("other","DialogOp::Message - Help system disabled")
 
 					// These messages need to be broadcast to all controls within the dialog
 					// temporarily ALWAYS destroy if we get as far as here on a DIM_CANCEL
-					if ((pDlgMsg->DlgMsg==DIM_CANCEL) || Destroy )
+					if ((pDlgMsg->DlgMsg==DIM_CANCEL) || (pDlgMsg->DlgMsg==DIM_COMMIT) ||Destroy )
 					{
 						Close();
 						End();

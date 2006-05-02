@@ -2765,13 +2765,11 @@ void Document::ResetInsertionPosition()
 
 BOOL Document::ReadPrefs()
 {
-#ifndef EXCLUDE_FROM_XARALX
 	if (Camelot.DeclareSection(TEXT("Preferences"), 1))
 	{
 		Camelot.DeclarePref(TEXT("Preferences"), TEXT("RemoveExistingDocs"),
-							   &CCamDoc::m_RemoveExistingOnNewDoc, FALSE, TRUE);
+							   &CCamDoc::s_RemoveExistingOnNewDoc, FALSE, TRUE);
 	}
-#endif
 	return TRUE;
 }
 

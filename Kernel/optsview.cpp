@@ -490,10 +490,13 @@ PORTNOTE("other", "Disabled Colour Editor dialog")
 	}
 #endif
 
+PORTNOTE("other", "Disabled colour editor model preference writing")
+#ifndef EXCLUDE_FROM_XARALX
 	SetOk = Camelot.SetPrefValue(TEXT("Displays"), TEXT("ColourEditorAutoModel"), &AutoColourModel);
 	INT32 DisplayModelPref = (INT32)DisplayModel;	
 	SetOk = SetOk && Camelot.SetPrefValue(TEXT("Displays"), TEXT("ColourEditorDisplayModel"), &DisplayModelPref);
 	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
+#endif
 
 	// Error diffused view option
 	BOOL ViewDither = 2;
@@ -533,10 +536,13 @@ PORTNOTE("other", "Disabled Colour Editor dialog")
 //	SetOk = ProgressCursorSetPref(State);
 //	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
 
+PORTNOTE("other", "Disabled progress bar writing")
+#ifndef EXCLUDE_FROM_XARALX
 	// Show progress bar.
 	State = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_PROGRESS), 0, 1, 0, &Valid);
 	SetOk = Camelot.SetPrefValue(TEXT("Displays"), TEXT("ProgressBar"), &State);
 	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
+#endif
 
 	// Section = Window
 
@@ -1103,12 +1109,15 @@ TRACEUSER( "Neville", _T("set colour bar mode '%d'\n"),ColourBarMode);
 	INT32 DisplayModelPref = (INT32)DisplayModel;
 	INT32 SelectedIndex = 0;
 
+PORTNOTE("other", "Disabled colour editor model preference reading")
+#ifndef EXCLUDE_FROM_XARALX
 	// First check if automatic is set.
 	ReadOk = Camelot.GetPrefValue(TEXT("Displays"), TEXT("ColourEditorAutoModel"), &ColourEditorAutoModel);
 TRACEUSER( "Neville", _T("set colour editor auto model mode '%d'\n"),ColourEditorAutoModel);
 	// Now get the display model preference 
 	ReadOk = ReadOk && Camelot.GetPrefValue(TEXT("Displays"), TEXT("ColourEditorDisplayModel"), &DisplayModelPref);
 TRACEUSER( "Neville", _T("set colour editor model '%d'\n"),DisplayModelPref);
+#endif
 	DisplayModel = (ColourModel)DisplayModelPref;
 	// Set up the list, passing in the default colour model, returning an index into the list
 	// of available colour models
@@ -1147,6 +1156,8 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 //		pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_HOURGLASS), FALSE);
 //	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 
+PORTNOTE("other", "Disabled progress bar reading")
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL ProgressBar = FALSE;
 	ReadOk = Camelot.GetPrefValue(TEXT("Displays"), TEXT("ProgressBar"), &ProgressBar);
 	if (ProgressBar != 0)
@@ -1154,6 +1165,7 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 	else
 		pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_PROGRESS), FALSE);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
+#endif
 
 	// Section = Bitmaps
 	BOOL bSmoothing = TRUE;

@@ -212,7 +212,7 @@ void CCamApp::OnKeyEvent( wxKeyEvent &event )
 	// Whilst debugging focus can end-up NULL, so we protect ourselves
 	wxWindow*			pFocusWnd = wxWindow::FindFocus();
 	wxClassInfo*		pClassInfo = NULL != pFocusWnd ? pFocusWnd->GetClassInfo() : NULL;
-	TRACEUSER( "luke", _T("Focus = %s\n"), pClassInfo->GetClassName() );
+	TRACEUSER( "luke", _T("Focus = %s\n"), pClassInfo?pClassInfo->GetClassName():_T("None") );
 	if(  NULL != pFocusWnd &&
 		 pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
 		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&

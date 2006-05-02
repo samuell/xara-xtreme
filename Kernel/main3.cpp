@@ -278,15 +278,14 @@ PORTNOTE("other","Removed even more initialization")
 			InitMenuSystem() &&					// Initialise Menu system (keep very last)
 												// (esp. after all Register'ing has been done)
 
+			AttrFillGeometry::Init() &&			// Initialise the fill editing operations
 
 PORTNOTE("other","Removed another lot of initialization")
 #ifndef EXCLUDE_FROM_XARALX
 // This has been moved to CCamApp::InitCamelotApp so that it happens after MFC's document templates
 // are set up.
-
 												// ===================
 
-			AttrFillGeometry::Init() &&			// Initialise the fill editing operations
 			EPSFilter::InitPrefs() &&			// Initialise default font mappings and
 												// EPS export prefs
 #endif
