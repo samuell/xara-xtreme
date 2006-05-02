@@ -860,6 +860,9 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		else if (id == _R(wxID_CANCEL))
 		{
 			msg.DlgMsg = DIM_CANCEL;
+			// Do not defer processing of clicks on the close button because the default handler may destroy the window on
+			// exit from this call
+			Defer=FALSE; 
 			HandleMessage = TRUE;
 		}
 		else
