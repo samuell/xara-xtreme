@@ -373,8 +373,8 @@ MsgResult ArrangeAlignment::Message(Msg* Message)
 				break;
 
 			case DIM_CANCEL:				// handle cancel
-				Close();
-				End();
+				// Close();
+				// End(); // Do not call Close() and End(). The base class does this.
 				break;
 
 			default:

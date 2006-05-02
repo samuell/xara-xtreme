@@ -576,6 +576,8 @@ DialogOp::~DialogOp()
 	if (WindowID != NULL)
 		DlgMgr->Delete(WindowID, this); 
 
+	WindowID = NULL; // ensure we get a NULL pointer if this is used again
+	DlgMgr = NULL;	// Again, ensure this is a NULL pointer
 	pEvtHandler=NULL;
 }    
 

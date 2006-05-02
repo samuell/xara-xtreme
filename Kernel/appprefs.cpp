@@ -966,6 +966,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 			if (!ok)
 			{
 				EndDialog = FALSE;	// Values not correct so do not allow exit
+				Msg->DlgMsg = DIM_SOFT_COMMIT; // turn the message into a soft-commit so the base class does not destroy the dialog
 			}
 
 #ifndef REMOVE_PRINT_TABS
@@ -1009,20 +1010,16 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 
 		// Allow the base class access to the message, it will do the
 		// DLG_EAT_IF_HUNGRY(Msg) for us
-		// Must do this before the Close and End
+		// Note that this call can DELETE "this"
 		Result = DialogTabOp::Message(Message);
 
 		// End dialog here
 		if (EndDialog) 
 		{
-			Close();				// Hide the dialog box
-			End();					// Finish the operation
-
 			// Make sure that we remove our options tabs link to the dialog box class
 			// as the dialog will now be destroyed
 			OptionsTabs::pPrefsDlg = NULL;
 		}
-
 		
 		// Check if have been sending an init/create message and if so then set flag False.
 		// Only do this in the init/create case as we might be sent one of these and then
