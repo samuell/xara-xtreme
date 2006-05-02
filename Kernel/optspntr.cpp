@@ -278,7 +278,7 @@ TRACEUSER( "Neville", _T("commit PointersTab section\n"));
 
 	// Ok has been pressed so take the values from this section of the dialog box
 	BOOL Valid=FALSE;		// Flag for validity of value
-	BOOL State=FALSE;		// Flag for state of button/switch
+//	BOOL State=FALSE;		// Flag for state of button/switch
 	BOOL SetOk=TRUE;		// Preference value set ok
 
 	// Middle button removed for now as nothing seems to use it.
@@ -352,7 +352,7 @@ TRACEUSER( "Neville", _T("New units in edit section\n"));
 		return TRUE;	// Talk to page failed to return now
 
 	// Set up the common variables
-	BOOL Valid=FALSE;		// Flag for validity of value
+//	BOOL Valid=FALSE;		// Flag for validity of value
 
 	// We will not error on any of the conversions as this might mean double errors
 	// when say an apply is used but instead just ignore the conversion. This also means
@@ -577,22 +577,20 @@ TRACEUSER( "Neville", _T("PointersTab::HandleMsg\n"));
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			// A control on the dialog box has been clicked...
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_RESET))
 			{
-				case _R(IDC_OPTS_RESET):
-					// Somebody has pressed the reset defaults button
-					// Go and call the nice function which resets the values and then
-					// update our values again.
-					ClickModifiers::RestoreDefaults();
-					InitClickLists();
-					break;
-				default:
-					break;
+				// Somebody has pressed the reset defaults button
+				// Go and call the nice function which resets the values and then
+				// update our values again.
+				ClickModifiers::RestoreDefaults();
+				InitClickLists();
 			}
 			break;
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
+			break;
+		default:
 			break;
 	}
 	return TRUE;
@@ -622,7 +620,7 @@ BOOL PointersTab::InitSection()
 TRACEUSER( "Neville", _T("PointersTab::InitSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"PointersTab::InitSection called with no dialog pointer");
 
-	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
+//	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
 	BOOL ok	= TRUE;			// Flag for whether value set up ok 
 
 	// Set up the click lists for the left, right and middle mouse buttons
@@ -684,9 +682,9 @@ TRACEUSER( "Neville", _T("InitClickLists\n"));
 	{
 		bf = (ButtonFunction)i;
 		ClickModifiers::GetButtonFuncName(bf, &FunctionName);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_LEFTBUTTON), &FunctionName);
-//		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_MIDDLEBUTTON), &FunctionName);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_RIGHTBUTTON), &FunctionName);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_LEFTBUTTON), FunctionName);
+//		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_MIDDLEBUTTON), FunctionName);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_RIGHTBUTTON), FunctionName);
 	}
 	// Set the length of the list
 	pPrefsDlg->SetComboListLength(_R(IDC_OPTS_LEFTBUTTON));

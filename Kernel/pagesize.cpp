@@ -147,10 +147,10 @@ static struct
 	TCHAR*  Token;
 } TokenTable[] = 
 {
-	"PageSize",
-	"PageSizeEnd",
-	"MILLIMETRES",
-	"INCHES",
+	{_T("PageSize")},
+	{_T("PageSizeEnd")},
+	{_T("MILLIMETRES")},
+	{_T("INCHES")}
 };
 
 
@@ -202,8 +202,8 @@ BOOL PageSize::Init(PageId NewId, String_32 *Name, double Width, double Height,
 {
 	// Guard against floating point exceptions by checking the input values
 	// 0.1" or 0.1mm should be a good enough minimim
-	ERROR2IF(Width < 0.1 || Width > (double)INT32_MAX, FALSE, "PageSize::Init bad width")
-	ERROR2IF(Height < 0.1 || Height > (double)INT32_MAX, FALSE, "PageSize::Init bad width")
+	ERROR2IF(Width < 0.1 || Width > (double)INT32_MAX, FALSE, "PageSize::Init bad width");
+	ERROR2IF(Height < 0.1 || Height > (double)INT32_MAX, FALSE, "PageSize::Init bad width");
 
 	Id = NewId;					// Copy the page id across
 	PageName = *Name;			// Copy the page name across 
@@ -397,16 +397,16 @@ BOOL PageSizesList::InitPageSizes()
 		PageSize *pPageSize;
 
 		// First size is implied to be custom i.e. if unknown size.
-		DeclarePageSize(A0, &String_32(_R(IDS_K_PAGESIZE_A0)), 840.0, 1188.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A1, &String_32(_R(IDS_K_PAGESIZE_A1)), 594.0, 840.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A2, &String_32(_R(IDS_K_PAGESIZE_A2)), 420.0, 594.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A3, &String_32(_R(IDS_K_PAGESIZE_A3)), 297.0, 420.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A4, &String_32(_R(IDS_K_PAGESIZE_A4)), 210.0, 297.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A5, &String_32(_R(IDS_K_PAGESIZE_A5)), 148.5, 210.0, MILLIMETRES, &pPageSize);
-		DeclarePageSize(A6, &String_32(_R(IDS_K_PAGESIZE_A6)), 105.0, 148.5, MILLIMETRES, &pPageSize);
-		DeclarePageSize(USLEGAL, &String_32(_R(IDS_K_PAGESIZE_USLEGAL)), 8.5, 14, INCHES, &pPageSize);
-		DeclarePageSize(USLETTER, &String_32(_R(IDS_K_PAGESIZE_USLETTER)), 8.5, 11, INCHES, &pPageSize);
-		DeclarePageSize(FANFOLD, &String_32(_R(IDS_K_PAGESIZE_FANFOLD)), 8.25, 12, INCHES, &pPageSize);
+		DeclarePageSize(A0, _R(IDS_K_PAGESIZE_A0), 840.0, 1188.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A1, _R(IDS_K_PAGESIZE_A1), 594.0, 840.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A2, _R(IDS_K_PAGESIZE_A2), 420.0, 594.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A3, _R(IDS_K_PAGESIZE_A3), 297.0, 420.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A4, _R(IDS_K_PAGESIZE_A4), 210.0, 297.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A5, _R(IDS_K_PAGESIZE_A5), 148.5, 210.0, MILLIMETRES, &pPageSize);
+		DeclarePageSize(A6, _R(IDS_K_PAGESIZE_A6), 105.0, 148.5, MILLIMETRES, &pPageSize);
+		DeclarePageSize(USLEGAL, _R(IDS_K_PAGESIZE_USLEGAL), 8.5, 14, INCHES, &pPageSize);
+		DeclarePageSize(USLETTER,_R(IDS_K_PAGESIZE_USLETTER), 8.5, 11, INCHES, &pPageSize);
+		DeclarePageSize(FANFOLD, _R(IDS_K_PAGESIZE_FANFOLD), 8.25, 12, INCHES, &pPageSize);
 	}
 	
 	// All ok
@@ -753,7 +753,7 @@ BOOL PageSizesList::ReadPageSizesFromFile(CCLexFile& file)
 					break;
 
 				default:
-					TRACEUSER( "Neville, _T(""PageSizesList: Unexpected token - %s\n"),TokenBuf);
+					TRACEUSER("Neville", _T("PageSizesList: Unexpected token - %s\n"),TokenBuf);
 					ErrorId = _R(IDW_PAGES_UNEXPECTEDMAINTOKEN);
 					ok = FALSE;
 					break;
@@ -860,7 +860,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 	ERROR2IF(pUnits == NULL,	FALSE,"PageSizesList::ReadPageSizeDef pUnits is NULL");
 
 	// Fill in some useful default values
-	*pPageName 				= "";
+	*pPageName 				= _T("");
 	*pWidth 				= 0.0;
 	*pHeight 				= 0.0;
 	*pUnits 				= MILLIMETRES;	// default to reading in measurements in millimetres
@@ -870,7 +870,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 
 	// This set of parameters will combine to form a key press object that represents
 	// the hot key combination
-	String_32* pTextDesc 	= NULL;
+//	String_32* pTextDesc 	= NULL;
 
 	// This is FALSE until we have read the text that describes the page size
 	BOOL TextDescRead 		= FALSE;
@@ -935,7 +935,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 								finished = TRUE;
 								break;
 
-							case TOKEN_NONE:
+							case PsTOKEN_NONE:
 								{
 									double Number;
 									// Could use this but the routine requires a valid doc!
@@ -944,7 +944,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 									//ok = Convert::StringToDouble( &Value, &Number);
 									// Could use this but is not unicode compliant!
 									//Number = atof((char *)TokenBuf);
-									ok = (camSscanf(TokenBuf,"%lg",&Number) == 1);
+									ok = (camSscanf(TokenBuf,_T("%lg"),&Number) == 1);
 									if (ok)
 									{
 										if (!ReadWidth)

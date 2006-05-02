@@ -897,10 +897,10 @@ static NodeSetProperty* ApplyPropToNode(const StringBase& strName, Node* pNode,
 	ERRORIF(psp == 0, _R(IDE_NOMORE_MEMORY), 0);
 
 	// Try to make a bunch of default or copied properties for it.
-	BOOL fOK;
-	ALLOC_WITH_FAIL(fOK, 
-					(pCopyPropNode != 0 ? psp->CopyProperties(pCopyPropNode)
-										: psp->CreateDefaults()),
+	NodeSetProperty * fOK=psp; // we use this as a boolean flag
+	ALLOC_WITH_FAIL(psp, 
+					((pCopyPropNode != 0 ? psp->CopyProperties(pCopyPropNode)
+										: psp->CreateDefaults())?psp:NULL),
 					pOp);
 	if (!fOK)
 	{

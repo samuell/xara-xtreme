@@ -188,7 +188,7 @@ public:
 	BOOL SetPrefValue(TCHAR *Section, TCHAR *Pref, UINT32 *PrefVar);
 	BOOL SetPrefValue(TCHAR *Section, TCHAR *Pref, double *PrefVar);
 
-	BOOL SetPrefDirect(TCHAR *Section, TCHAR *Pref, const char *pValue, BOOL Force = FALSE);
+	BOOL SetPrefDirect(TCHAR *Section, TCHAR *Pref, const TCHAR *pValue, BOOL Force = FALSE);
 	BOOL SetPrefDirect(TCHAR *Section, TCHAR *Pref, PreferenceType Type, PrefData Data);
 	BOOL SetPrefDirect(TCHAR *Section, TCHAR *Pref, INT32 *pValue);
 	BOOL SetPrefDirect(TCHAR *Section, TCHAR *Pref, UINT32 *pValue);

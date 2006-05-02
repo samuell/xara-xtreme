@@ -509,7 +509,7 @@ public:
 
 	// Used for direct partying on the preference file - mainly used for 'dynamic'
 	// preferences that are interrogated on the fly as and when required.
-	BOOL SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const char *pValue, BOOL Force = FALSE)
+	BOOL SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const TCHAR *pValue, BOOL Force = FALSE)
 		{ return CamelotPrefs->SetPrefDirect(Section, Pref, pValue, Force); }
 	BOOL SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, INT32 *pValue)
 		{ return CamelotPrefs->SetPrefDirect(Section, Pref, pValue); }

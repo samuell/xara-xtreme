@@ -128,8 +128,6 @@ typedef struct
 } GridResizeInfo;
 
 
-PORTNOTE("other", "Removed GridTab because it relies on dialog manager functionality")
-#if !defined(EXCLUDE_FROM_XARALX)
 /********************************************************************************************
 
 >	class GridTab : public OptionsTabs
@@ -201,7 +199,6 @@ private:
 
 	BOOL GreyStatus;			// Remember the state that we are currently in
 }; 
-#endif
 
 
 /****************************************************************************

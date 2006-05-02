@@ -182,7 +182,11 @@ public:
 	// Function to declare a page size to the PageSizes system
 	BOOL DeclarePageSize(PageId NewId, String_32 *Name, double Width, double Height,
 						 UnitType Units, PageSize **pPageSize);
-	
+
+	BOOL DeclarePageSize(PageId NewId, ResourceID r, double Width, double Height,
+						UnitType Units, PageSize **pPageSize)
+						{ String_32 Name(r); return DeclarePageSize(NewId, &Name, Width, Height, Units, pPageSize); }
+
 	// Useful functions which are supplied by each page size in the list
 	String_32* GetTextualDescription(PageId ThisId);
 	PageId GetPageIdFromSize(INT32 Width, INT32 Height);

@@ -107,6 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "optsundo.h"
 #include "app.h"		// Camelot object
 #include "convert.h"	// StringToBytes and BytesToString
+#include "ophist.h"
 
 CC_IMPLEMENT_DYNAMIC(UndoTab, OptionsTabs)   
 			  
@@ -268,8 +269,8 @@ TRACEUSER( "Neville", _T("commit undo section\n"));
 
 	// Ok has been pressed so take the values from this section of the dialog box
 	BOOL Valid=TRUE;		// Flag for validity of value
-	BOOL State=FALSE;		// Flag for state of button/switch
-	BOOL SetOk=TRUE;		// Preference value set ok
+//	BOOL State=FALSE;		// Flag for state of button/switch
+//	BOOL SetOk=TRUE;		// Preference value set ok
 
 	// Section = Undo settings
 
@@ -531,35 +532,32 @@ TRACEUSER( "Neville", _T("HandleUndoMsg\n"));
 			break;
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_UNLIMITEDUNDO))
 			{
-				case _R(IDC_OPTS_UNLIMITEDUNDO):
-				{
-					BOOL Valid;
-					BOOL Unlimited = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_UNLIMITEDUNDO), 0, 1, 0, &Valid);
-					// If set then grey the editable field and its name text otherwise ungrey
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOTXT), !Unlimited);
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOSIZE), !Unlimited);
-				}
-				break;
-#if 0
-				case _R(IDC_OPTS_DEFAULTUNDO):
-				{
-					// Set the MaxSize in the dialog field to a default value
-				  	String_256	String;
-					UINT32 MaxUndoSize = UINT32_MAX; //40*1024*1024;	// 40 Mbytes
-					// Put that size in a string formatted as a memory size	value
-					BytesToString(&String, MaxUndoSize);
-					// Show that on the dialog box
-					pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_MAXUNDOSIZE), &String);
-				}
-				break;
-#endif
+				BOOL Valid;
+				BOOL Unlimited = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_UNLIMITEDUNDO), 0, 1, 0, &Valid);
+				// If set then grey the editable field and its name text otherwise ungrey
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOTXT), !Unlimited);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOSIZE), !Unlimited);
 			}
+#if 0
+			else if (Msg->GadgetID == _R(IDC_OPTS_DEFAULTUNDO))
+			{
+				// Set the MaxSize in the dialog field to a default value
+				String_256	String;
+				UINT32 MaxUndoSize = UINT32_MAX; //40*1024*1024;	// 40 Mbytes
+				// Put that size in a string formatted as a memory size	value
+				BytesToString(&String, MaxUndoSize);
+				// Show that on the dialog box
+				pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_MAXUNDOSIZE), &String);
+			}
+#endif
 			break;
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
+			break;
+		default:
 			break;
 	}
 
@@ -590,12 +588,12 @@ BOOL UndoTab::InitSection()
 TRACEUSER( "Neville", _T("InitUndoSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"UndoTab::InitSection called with no dialog pointer");
 
-	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
+//	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
 
 	// Make sure the information field displaying the name of the current document
 	// is correct.
 	String_256 *DocumentName = GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_DOCUMENT), DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_DOCUMENT), *DocumentName);
 
 
 	// Section = Undo settings

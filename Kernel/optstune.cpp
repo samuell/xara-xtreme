@@ -116,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tunemem.h"
 //#include "resource.h"	// Needs _R(IDS_OK) for InformWarning
 //#include "justin2.h"
+#include "ophist.h"
 
 CC_IMPLEMENT_DYNAMIC(TuneTab, OptionsTabs)   
 
@@ -276,8 +277,8 @@ TRACEUSER( "Neville", _T("TuneTab::CommitRenderingSection\n"));
 
 	// Ok has been pressed so take the values from this section of the dialog box
 	BOOL Valid=FALSE;			// Flag for validity of value
-	BOOL SetOk=TRUE;			// Preference value set ok
-	BOOL ReadOk=TRUE;			// Value read ok from gadget
+//	BOOL SetOk=TRUE;			// Preference value set ok
+//	BOOL ReadOk=TRUE;			// Value read ok from gadget
 
 	// Now the maximum temporary memory available to Gdraw for rendering purposes
 	UINT32 TempWorkMem = 0;		// Working memory value in bytes
@@ -356,7 +357,7 @@ TRACEUSER( "Neville", _T("TuneTab::CommitUndoSection\n"));
 
 	// Ok has been pressed so take the values from this section of the dialog box
 	BOOL Valid=TRUE;		// Flag for validity of value
-	BOOL State=FALSE;		// Flag for state of button/switch
+//	BOOL State=FALSE;		// Flag for state of button/switch
 	BOOL SetOk=TRUE;		// Preference value set ok
 
 	// Section = Undo settings
@@ -405,7 +406,7 @@ TRACEUSER( "Neville", _T("New maximum undo size =%d\n"),NewMaxUndoSize);
 				Info.ErrorMsg = _R(IDT_OPTS_LOSSOFUNDO);
 				Info.Button[0] = _R(IDB_UNDOQUERY_RESIZE);
 				Info.Button[1] = _R(IDB_UNDOQUERY_DONTRESIZE);
-				if (AskQuestion(&Info) == _R(IDB_UNDOQUERY_DONTRESIZE))
+				if ((ResourceID)AskQuestion(&Info) == _R(IDB_UNDOQUERY_DONTRESIZE))
 				{
 					// If the user has cancelled just display the current value again
 					OkToResize = FALSE;
@@ -519,7 +520,7 @@ TRACEUSER( "Neville", _T("commit gallery cache size='%d'\n"), CacheSize);
 		double dValue = 0;
 		INT32 Pos = 0;
 		INT32 iValue = 0;
-		Convert::ReadNumber(&strCachePercent, &Pos, &dValue);	// Allow trailing chars
+		Convert::ReadNumber(strCachePercent, &Pos, &dValue);	// Allow trailing chars
 		if (Valid && dValue>=1 && dValue<=100)
 			iValue = (INT32)dValue;
 			SetOk = Camelot.SetPrefValue(TEXT("Cache"), TEXT("CacheRAMPercent"), &iValue);
@@ -566,7 +567,7 @@ TRACEUSER( "Neville", _T("GreySection in TuneTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNDO_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -608,7 +609,7 @@ TRACEUSER( "Neville", _T("UngreySection in TuneTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNDO_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), DocumentName);
 
 	// Only update if we are not already ungrey 
 	if (GreyStatus == FALSE)
@@ -697,7 +698,7 @@ TRACEUSER( "Neville", _T("TuneTab::UpdateSection\n"));
 	// is correct.
 	String_256	DocName(_R(IDT_OPTS_UNDO_INFO)); 
 	DocName +=	*DocumentName;
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), &DocName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), DocName);
 
 	// Remove any lists that we have created.
 	//pPrefsDlg->DeleteAllValues(_R(IDC_OPTS_SIZELIST));
@@ -741,34 +742,27 @@ TRACEUSER( "Neville", _T("HandleTuneUpMsg\n"));
 			break;
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if ((Msg->GadgetID == _R(IDC_OPTS_USEMAXMEMORY)) || (Msg->GadgetID == _R(IDC_OPTS_USELIMITMEM)))
 			{
-				case _R(IDC_OPTS_USEMAXMEMORY):
-				case _R(IDC_OPTS_USELIMITMEM):
-				{
-					BOOL Valid;
-					BOOL UseMaximumMemory = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_USEMAXMEMORY), 0, 1, 0, &Valid);
-					// If set then grey the editable field and its name text otherwise ungrey
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_MEMLIMITTXT), !UseMaximumMemory);
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_TEMPWORKMEM), !UseMaximumMemory);
-				}
-				break;
-
-				case _R(IDC_OPTS_UNLIMITEDUNDO):
-				case _R(IDC_OPTS_LIMITEDUNDO):
-				{
-					BOOL Valid;
-					BOOL Unlimited = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_UNLIMITEDUNDO), 0, 1, 0, &Valid);
-					// If set then grey the editable field and its name text otherwise ungrey
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_UNDOLIMITTXT), !Unlimited);
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOSIZE), !Unlimited);
-				}
-				break;
+				BOOL Valid;
+				BOOL UseMaximumMemory = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_USEMAXMEMORY), 0, 1, 0, &Valid);
+				// If set then grey the editable field and its name text otherwise ungrey
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_MEMLIMITTXT), !UseMaximumMemory);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_TEMPWORKMEM), !UseMaximumMemory);
 			}
-			break;
+			else if ((Msg->GadgetID ==  _R(IDC_OPTS_UNLIMITEDUNDO)) || (Msg->GadgetID == _R(IDC_OPTS_LIMITEDUNDO)))
+			{
+				BOOL Valid;
+				BOOL Unlimited = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_UNLIMITEDUNDO), 0, 1, 0, &Valid);
+				// If set then grey the editable field and its name text otherwise ungrey
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_UNDOLIMITTXT), !Unlimited);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_MAXUNDOSIZE), !Unlimited);
+			}
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
+			break;
+		default:
 			break;
 	}
 	return TRUE;
@@ -799,7 +793,7 @@ BOOL TuneTab::InitRenderingSection()
 
 	// The Maximum temporary workspace available to Gdraw
 	UINT32 TempWorkMem = TunedMemory::GetLimitedMemSize();
-	UINT32 TempWorkMemK = TempWorkMem / 1024;
+//	UINT32 TempWorkMemK = TempWorkMem / 1024;
 	BOOL UseMaximumMemory = TunedMemory::IsAutomaticMemory();
 
 	// Limit the values											   
@@ -861,7 +855,7 @@ BOOL TuneTab::InitUndoSection()
 TRACEUSER( "Neville", _T("TuneTab::InitUndoSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"TuneTab::InitUndoSection called with no dialog pointer");
 
-	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
+//	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
 
 	// Section = Undo settings
 
@@ -941,7 +935,7 @@ TRACEUSER( "Neville", _T("TuneTab::InitSection\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNDO_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_UNDOINFO), DocumentName);
 
 	InitRenderingSection();
 
@@ -965,9 +959,9 @@ TRACEUSER( "Neville", _T("TuneTab::InitSection\n"));
 	Camelot.GetPrefValue(TEXT("Cache"), TEXT("CacheRAMPercent"), &iCacheRAMPercent);
 	TCHAR Str[32];
 	String_32 temp(_R(IDS_PERCENT_FORMAT));
-	wsprintf(Str, temp, iCacheRAMPercent);
+	camSnprintf(Str, 32, temp, iCacheRAMPercent);
 	String_32 PercentStr(Str);
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_EDIT_CACHE_SIZE), &PercentStr);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_EDIT_CACHE_SIZE), PercentStr);
 
 	CBitmapCache* pCache = GetApplication()->GetBitmapCache();
 	if (pCache)
@@ -979,9 +973,9 @@ TRACEUSER( "Neville", _T("TuneTab::InitSection\n"));
 		String_32 temp(_R(IDS_PERCENT_OF_FORMAT));
 		String_32 strCacheSize;
 		Convert::BytesToString(&strCacheSize, (UINT32)pCache->GetMaximumDataSize());
-		wsprintf(Str, temp, iCacheUsagePercent, (TCHAR*)strCacheSize);
+		camSnprintf(Str, 32, temp, iCacheUsagePercent, (TCHAR*)strCacheSize);
 		String_32 PercentStr(Str);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_EDIT_CURRENTCACHE), &PercentStr);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_EDIT_CURRENTCACHE), PercentStr);
 
 //		pPrefsDlg->SetLongGadgetValue(_R(IDC_PROGRESS_CACHEUSAGE), iCacheUsagePercent);		// TODO: Should be percentage
 	}

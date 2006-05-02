@@ -129,8 +129,8 @@ DECLARE_SOURCE("$Revision$");
 
 // Where the default colour units are stored...Use GetColourUnitPreference() to do the fetching.
 
-static char*	ColourUnitSection = TEXT("Displays");
-static char*	ColourUnitPreference = TEXT("ColourEditorUnits");
+static TCHAR*	ColourUnitSection = TEXT("Displays");
+static TCHAR*	ColourUnitPreference = TEXT("ColourEditorUnits");
 
 // Set up the dialog box details stored as statics in the class
 // This is for the user units properties dialog box
@@ -353,7 +353,7 @@ TRACEUSER( "Neville", _T("GreySection in UnitsTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNITS_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -396,7 +396,7 @@ TRACEUSER( "Neville", _T("UngreySection in UnitsTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNITS_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already ungrey 
 	if (GreyStatus == FALSE)
@@ -516,24 +516,16 @@ TRACEUSER( "Neville", _T("HandleUnitsMsg\n"));
 
 	    case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
-			{
-				case _R(IDC_OPTS_UNITPROPERTY):
-					// Show the user the properties of the selected user unit
-					ShowUnitProperties();
-					break;
-
-				case _R(IDC_OPTS_NEWUNIT):
-					// Create the user a new unit
-					CreateNewUnit();
-					break;
-
-				case _R(IDC_OPTS_DELETEUNIT):
-					// Delete the currently selected user unit
-					DeleteUnit();
-					break;
-			}
-			break; 
+			if (Msg->GadgetID == _R(IDC_OPTS_UNITPROPERTY))
+				// Show the user the properties of the selected user unit
+				ShowUnitProperties();
+			else if (Msg->GadgetID == _R(IDC_OPTS_NEWUNIT))
+				// Create the user a new unit
+				CreateNewUnit();
+			else if (Msg->GadgetID == _R(IDC_OPTS_DELETEUNIT))
+				// Delete the currently selected user unit
+				DeleteUnit();
+			break;
 
 		case DIM_SELECTION_CHANGED:
 		{
@@ -542,24 +534,22 @@ TRACEUSER( "Neville", _T("HandleUnitsMsg\n"));
 			
 			WORD Index = 0;
 			Unit* pUnit = NULL;
-			Unit* pCurUserUnit = NULL;
+//			Unit* pCurUserUnit = NULL;
 			
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_UNITSLIST))
 			{
-
-				case _R(IDC_OPTS_UNITSLIST):
-					// Clicked on the list of user unit types
-					// Now, switch to the new item
-					pPrefsDlg->GetValueIndex(_R(IDC_OPTS_UNITSLIST), &Index); 
-					pUnit = pDocUnitList->FindUserUnit(Index);
-					if (pUnit != NULL)
-					{
-						CurrentUserUnitType = pUnit->GetUnitType();
-					}
-					break;
+				// Clicked on the list of user unit types
+				// Now, switch to the new item
+				pPrefsDlg->GetValueIndex(_R(IDC_OPTS_UNITSLIST), &Index); 
+				pUnit = pDocUnitList->FindUserUnit(Index);
+				if (pUnit != NULL)
+				{
+					CurrentUserUnitType = pUnit->GetUnitType();
+				}
 			}
-			break; // DIM_SELECTION_CHANGED
 		}
+		default:
+			break;
 	}
 
 	return TRUE;
@@ -631,7 +621,7 @@ BOOL UnitsTab::CommitDialogValues()
 	}
 
 	ScaleUnit*	pColourUnit = (ScaleUnit*)m_ColourUnitRadioGroup.GetSelected();
-	ERROR3IF(pColourUnit == NULL, "UnitsTab::CommitDialogValues - Gibberish from GetSelected()")
+	ERROR3IF(pColourUnit == NULL, "UnitsTab::CommitDialogValues - Gibberish from GetSelected()");
 
 	// If we have changed the units from the entry ones then tell other users about the change 
 	// Do a blantant update if the current user units are the current page or font units
@@ -648,13 +638,13 @@ BOOL UnitsTab::CommitDialogValues()
 		// the Colour Editor is listening
 		if (m_pOldColourUnit != pColourUnit)
 		{
-			ERROR3IF(!(pColourUnit->IS_KIND_OF(ScaleUnit)), "UnitsTab::CommitDialogValues - Not ScaleUnit")
+			ERROR3IF(!(pColourUnit->IS_KIND_OF(ScaleUnit)), "UnitsTab::CommitDialogValues - Not ScaleUnit");
 			Camelot.SetPrefDirect(ColourUnitSection, ColourUnitPreference, pColourUnit->GetQualifier()->GetToken(), TRUE);
 			m_pOldColourUnit = pColourUnit;
 		}
 		// Now tell other users of units that there is a possibly new default units in operation
 		// and so update any currently displayed units. 
-		BROADCAST_TO_ALL(OptionsChangingMsg(pDocument, OptionsChangingMsg::OptionsState::NEWUNITS));
+		BROADCAST_TO_ALL(OptionsChangingMsg(pDocument, OptionsChangingMsg::NEWUNITS));
 
 		// Mark the document as modified as we have changed something that is saved with the
 		// document but only if the page or font units have changed.
@@ -735,9 +725,9 @@ BOOL UnitsTab::CreateNewUnit()
 		if (Ok)
 		{
 			EnableControls();
-			SetUnitToken(_R(IDC_OPTS_PAGEUNITS),  CurrentUserUnitType,NULL,TRUE);
+			SetUnitToken(_R(IDC_OPTS_PAGEUNITS),  CurrentUserUnitType, 0,TRUE);
 			//SetUnitToken(_R(IDC_OPTS_SCALEDUNITS),CurrentUserUnitType,NULL,TRUE);
-			SetUnitToken(_R(IDC_OPTS_FONTUNITS),  CurrentUserUnitType,NULL,TRUE);
+			SetUnitToken(_R(IDC_OPTS_FONTUNITS),  CurrentUserUnitType, 0,TRUE);
 			InitControls();
 			// Now make sure the current user unit is selected in the list
 			SelectCurrentUserUnit();
@@ -827,7 +817,7 @@ BOOL UnitsTab::DeleteUnit()
 				BOOL ok = TRUE;
 				double dummy = 0.0;
 				Str = pDimScale->GetDrawingScaleStr();
-				ok = Convert::StringToComponents(&Str, &dummy, &ScaleUnits);
+				ok = Convert::StringToComponents(Str, &dummy, &ScaleUnits);
 				if (ok && CurrentUserUnitType == ScaleUnits)
 					DeleteReason = UNITREASON_BEINGUSED;
 			}
@@ -993,8 +983,8 @@ TRACEUSER( "Neville", _T("UnitsTab::UpdateUnitListControls()\n"));
 	ERROR2IF(pDocUnitList == NULL,FALSE,"UnitsTab::UpdateUnitListControls called with no doc unit list pointer");
 
 	// Make sure that we have the text for the current unit up to date
-	String_256 TokenStr = "";
-	String_32 TokenStr_32 = "";
+	String_256 TokenStr = _T("");
+	String_32 TokenStr_32 = _T("");
 	Unit* pCurUserUnit = NULL;
 
 	pCurUserUnit = pDocUnitList->FindUnit(CurrentUserUnitType);
@@ -1010,8 +1000,8 @@ TRACEUSER( "Neville", _T("UnitsTab::UpdateUnitListControls()\n"));
 		// These lists have all units on
 		pPrefsDlg->DeleteValue(_R(IDC_OPTS_PAGEUNITS), FALSE, UnitIndex);
 		pPrefsDlg->DeleteValue(_R(IDC_OPTS_FONTUNITS), FALSE, UnitIndex);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_PAGEUNITS), &TokenStr, FALSE, UnitIndex);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_FONTUNITS), &TokenStr, FALSE, UnitIndex);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_PAGEUNITS), TokenStr, FALSE, UnitIndex);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_FONTUNITS), TokenStr, FALSE, UnitIndex);
 
 		// Must set the selected item as otherwise it will blank the main list item. 
 
@@ -1053,7 +1043,7 @@ void UnitsTab::SetUnitToken(CGadgetID ID, UnitType ThisUnitType, INT32 Index, BO
 {
 	String_32 Str = pDocUnitList->GetToken(ThisUnitType);
 	String_256 Str256 = Str;
-	pPrefsDlg->SetStringGadgetValue(ID, &Str256, EndOfList, Index);
+	pPrefsDlg->SetStringGadgetValue(ID, Str256, EndOfList, Index);
 }
 
 /********************************************************************************************
@@ -1114,7 +1104,7 @@ void UnitsTab::ShowUnitDetails(CGadgetID ID, UnitType ThisUnitType, INT32 Index,
 										  (TCHAR*)Denominator, (TCHAR*)Numerator,
 										  (TCHAR*)BasedOn);
 
-	pPrefsDlg->SetStringGadgetValue(ID, &Details, EndOfList, Index);
+	pPrefsDlg->SetStringGadgetValue(ID, Details, EndOfList, Index);
 }
 
 /********************************************************************************************
@@ -1321,7 +1311,7 @@ TRACEUSER( "Neville", _T("InitUnitsSection\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_UNITS_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	m_ColourUnitRadioGroup.SetAssociations((DialogOp*)pPrefsDlg, ColourUnitAssociations, NUM_CLR_DEFAULTS);
 
@@ -1400,7 +1390,7 @@ BOOL UnitPropertiesDlg::InvokeDialog(UnitType CurrentUserUnitType)
 	// Send in some useful paramters
 	BOOL IsEditOK = FALSE;
 	UnitType CurUserUnitType = CurrentUserUnitType;
-	OpParam Params((INT32)&CurUserUnitType, (INT32)&IsEditOK);
+	OpParam Params((void *)&CurUserUnitType, (void *)&IsEditOK);
 	if (pOpDesc != NULL)
 		pOpDesc->Invoke(&Params);
 
@@ -1544,7 +1534,7 @@ BOOL UnitPropertiesDlg::CommitDialogValues()
 		// As long as we have a valid user unit pointer, go and set the new values in it
 		//TCHAR* pTokenStr = TokenStr;
 		//TCHAR* pSpecifierStr = SpecifierStr;
-		String_32  Str32 = "";
+		String_32  Str32 = _T("");
 		if (pCurUserUnit != NULL)
 		{
 			BOOL ok = TRUE;
@@ -1676,52 +1666,50 @@ MsgResult UnitPropertiesDlg::Message(Msg* Message)
 				Unit* pUnit = NULL;
 				Unit* pCurUserUnit = NULL;
 
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_OPTS_BASEUNIT))
 				{
-					case _R(IDC_OPTS_BASEUNIT):
-						// The user has chosen a new base unit
-						GetValueIndex(_R(IDC_OPTS_BASEUNIT),&Index);
-						pUnit        = pDocUnitList->FindUnit(Index);
-						pCurUserUnit = pDocUnitList->FindUnit(CurrentUserUnitType);
-						if (pUnit->GetUnitType() == CurrentUserUnitType)
-						{
-							// Warn the user that this is the current unit
-							Error::SetError(_R(IDS_UNITERROR_BASEISCURRENT),0);
-							InformError();
-							// And reselect the old one unit type in the list
-							UnitType BaseUnit = pCurUserUnit->GetBaseUnitType(); 
-							INT32 BaseUnitIndex = pDocUnitList->FindUnitIndex(BaseUnit);
-							SetSelectedValueIndex(_R(IDC_OPTS_BASEUNIT), BaseUnitIndex);
-						}
-						else if (pDocUnitList->IsDescendent(pUnit,CurrentUserUnitType))
-						{
-							// Warn the user that the selected unit is a descendent
-							Error::SetError(_R(IDS_UNITERROR_BASEISDESCENDENT),0);
-							InformError();
-							// And reselect the old one unit type in the list
-							UnitType BaseUnit = pCurUserUnit->GetBaseUnitType();
-							INT32 BaseUnitIndex = pDocUnitList->FindUnitIndex(BaseUnit);
-							SetSelectedValueIndex(_R(IDC_OPTS_BASEUNIT), BaseUnitIndex);
-						}
-						// Otherwise selection is ok so do nothing
-						break;
+					// The user has chosen a new base unit
+					GetValueIndex(_R(IDC_OPTS_BASEUNIT),&Index);
+					pUnit        = pDocUnitList->FindUnit(Index);
+					pCurUserUnit = pDocUnitList->FindUnit(CurrentUserUnitType);
+					if (pUnit->GetUnitType() == CurrentUserUnitType)
+					{
+						// Warn the user that this is the current unit
+						Error::SetError(_R(IDS_UNITERROR_BASEISCURRENT),0);
+						InformError();
+						// And reselect the old one unit type in the list
+						UnitType BaseUnit = pCurUserUnit->GetBaseUnitType(); 
+						INT32 BaseUnitIndex = pDocUnitList->FindUnitIndex(BaseUnit);
+						SetSelectedValueIndex(_R(IDC_OPTS_BASEUNIT), BaseUnitIndex);
+					}
+					else if (pDocUnitList->IsDescendent(pUnit,CurrentUserUnitType))
+					{
+						// Warn the user that the selected unit is a descendent
+						Error::SetError(_R(IDS_UNITERROR_BASEISDESCENDENT),0);
+						InformError();
+						// And reselect the old one unit type in the list
+						UnitType BaseUnit = pCurUserUnit->GetBaseUnitType();
+						INT32 BaseUnitIndex = pDocUnitList->FindUnitIndex(BaseUnit);
+						SetSelectedValueIndex(_R(IDC_OPTS_BASEUNIT), BaseUnitIndex);
+					}
+					// Otherwise selection is ok so do nothing
 				}
 			}
 			break; // DIM_SELECTION_CHANGED
 
 			case DIM_TEXT_CHANGED:
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_OPTS_UNITTOKEN))
 				{
-					case _R(IDC_OPTS_UNITTOKEN):
-						// User is editing the main user unit name
-						// Update the text in the X <UnitsName> are equivalent to ... field 
-						BOOL Valid;
-						String_256 TokenStr = GetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN),&Valid);
-						SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN2),&TokenStr);
-
-						break;
+					// User is editing the main user unit name
+					// Update the text in the X <UnitsName> are equivalent to ... field 
+					BOOL Valid;
+					String_256 TokenStr = GetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN),&Valid);
+					SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN2),TokenStr);
 				}
 				break;	// DIM_TEXT_CHANGED
+
+			default:
+				break;
 		}
 
 		// Must do this before the Close and End
@@ -1963,8 +1951,8 @@ void UnitPropertiesDlg::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 	// Use the OpParam that has been passed in to us
 	// Force a decent CurrentUserUnitType
 	CurrentUserUnitType = NOTYPE;
-	UnitType * pCurUserUnitType = (UnitType*) pOpParam->Param1;
-	pIsOk = (BOOL*) pOpParam->Param2;
+	UnitType * pCurUserUnitType = (UnitType*) (void *) pOpParam->Param1;
+	pIsOk = (BOOL*) (void *) pOpParam->Param2;
 
 	CurrentUserUnitType = *pCurUserUnitType;
 
@@ -2008,7 +1996,7 @@ void UnitPropertiesDlg::SetUnitToken(CGadgetID ID, UnitType ThisUnitType, INT32 
 	{
 		String_32 Str = pDocUnitList->GetToken(ThisUnitType);
 		String_256 Str256 = Str;
-		SetStringGadgetValue(ID, &Str256, EndOfList, Index);
+		SetStringGadgetValue(ID, Str256, EndOfList, Index);
 	}
 }
 
@@ -2051,7 +2039,7 @@ BOOL UnitPropertiesDlg::DisplayUserUnitDetails()
 		// Show the name of the user's unit
 		Str = pCurUserUnit->GetSpecifier();
 		Str256 = Str;
-		SetStringGadgetValue(_R(IDC_OPTS_UNITSPEC), &Str256);
+		SetStringGadgetValue(_R(IDC_OPTS_UNITSPEC), Str256);
 
 		// Set up the prefix/suffix state for this user's unit.
 		BOOL PrefixState = FALSE;
@@ -2090,12 +2078,12 @@ BOOL UnitPropertiesDlg::DisplayUserUnitDetails()
 		// Blank everything as unit is NOTYPE
 		String_256 Str256 = "";
 
-	 	SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN),	&Str256);
-	 	SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN2),	&Str256);
-	 	SetStringGadgetValue(_R(IDC_OPTS_UNITSPEC),		&Str256);
-	 	SetStringGadgetValue(_R(IDC_OPTS_NUMNEWUNITS),	&Str256);
-	 	SetStringGadgetValue(_R(IDC_OPTS_NUMBASEUNITS),	&Str256);
-	 	SetStringGadgetValue(_R(IDC_OPTS_BASEUNIT),		&Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN),	Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_UNITTOKEN2),	Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_UNITSPEC),		Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_NUMNEWUNITS),	Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_NUMBASEUNITS),	Str256);
+	 	SetStringGadgetValue(_R(IDC_OPTS_BASEUNIT),		Str256);
 	}
 
 	return TRUE;

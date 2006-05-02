@@ -314,7 +314,7 @@ TRACEUSER( "Neville", _T("commit file list size='%d'\n"), State);
 	// Now tell the layers gallery to update itself, if present
 	// Broadcast a SpreadMsg with reason code SpreadMsg::LAYERCHANGES, when the pref changes.
 	// The layer gallery will then redraw itself. 
-	BROADCAST_TO_ALL(SpreadMsg(pSpread, pSpread, SpreadMsg::SpreadReason::LAYERCHANGES));
+	BROADCAST_TO_ALL(SpreadMsg(pSpread, pSpread, SpreadMsg::LAYERCHANGES));
 
 	// Section = Attributes
 
@@ -372,7 +372,7 @@ TRACEUSER( "Neville", _T("commit constraint angle in degrees='%d' angle='%d' Val
 	// pSpread tells the dimension class which document to pick the dimensioning from
 	MILLIPOINT x = 0;
 	MILLIPOINT y = 0;
-	const INT32 Maxxy = INT_MAX;		// maximum value allowed as the distance
+//	const INT32 Maxxy = INT_MAX;		// maximum value allowed as the distance
 	BOOL bValidX = FALSE;
 	BOOL bValidY = FALSE;
 
@@ -805,44 +805,44 @@ TRACEUSER( "Neville", _T("MiscTab::HandleMsg\n"));
 		case DIM_SELECTION_CHANGED:
 		case DIM_LFT_BN_CLICKED:
 			// A control on the dialog box has been clicked...
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_LASTATTRB))
 			{
-				case _R(IDC_OPTS_LASTATTRB):
+				// Ungrey the apply as we have clicked on this button
+				OptionsTabs::SetApplyNowState(TRUE);
+				// If last attibute applied becomes current is True then the ask before
+				// setting attribute is superfluous as it will be ignored.
+				// Get current button state. 
+				BOOL Valid = TRUE;
+				BOOL LastAttribute = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_LASTATTRB), 0, 1, 0, &Valid);
+				// Set new state of ask before setting button.
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_ASKSETATTRB), !LastAttribute);
+				break;
+			}
+			else if (Msg->GadgetID == _R(IDC_OPTS_SAVENOW))
+			{
+				// save now action button pressed, save out preferences 
+				// but first we must take all the current values
+				// Should only be present in options mode
+				if (pPrefsDlg->IsKindOf(CC_RUNTIME_CLASS(AppPrefsDlg)))
 				{
-					// Ungrey the apply as we have clicked on this button
-					OptionsTabs::SetApplyNowState(TRUE);
-					// If last attibute applied becomes current is True then the ask before
-					// setting attribute is superfluous as it will be ignored.
-					// Get current button state. 
-					BOOL Valid = TRUE;
-					BOOL LastAttribute = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_LASTATTRB), 0, 1, 0, &Valid);
-					// Set new state of ask before setting button.
-					pPrefsDlg->EnableGadget(_R(IDC_OPTS_ASKSETATTRB), !LastAttribute);
-					break;
+					// Cast/Convert our dialog pointer to be the correct type 
+					AppPrefsDlg *pOptionsDlg = (AppPrefsDlg*) pPrefsDlg;
+					ok = pOptionsDlg->CommitDialogValues();
+					if (ok)
+						Camelot.WritePreferences();
 				}
-				case _R(IDC_OPTS_SAVENOW):
-					// save now action button pressed, save out preferences 
-					// but first we must take all the current values
-					// Should only be present in options mode
-					if (pPrefsDlg->IsKindOf(CC_RUNTIME_CLASS(AppPrefsDlg)))
-					{
-						// Cast/Convert our dialog pointer to be the correct type 
-						AppPrefsDlg *pOptionsDlg = (AppPrefsDlg*) pPrefsDlg;
-						ok = pOptionsDlg->CommitDialogValues();
-						if (ok)
-							Camelot.WritePreferences();
-					}
-				break;
-				default:
-					// Only ungrey the apply now if the gadget is not the save now button
-					OptionsTabs::SetApplyNowState(TRUE);
-				break;
+			}
+			else
+			{
+				OptionsTabs::SetApplyNowState(TRUE);
 			}
 			break; // DIM_LFT_BN_CLICKED		
 #endif //webster
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			break; // DIM_TEXT_CHANGED		
+		default:
+			break;
 	}
 	
 	return TRUE;
@@ -880,7 +880,7 @@ TRACEUSER( "Neville", _T("InitMiscSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"MiscTab::InitSection called with no dialog pointer");
 
 	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
-	BOOL ok	= TRUE;			// Flag for whether value set up ok 
+//	BOOL ok	= TRUE;			// Flag for whether value set up ok 
 
 	// Make sure the information field displaying the name of the current document
 	// is correct.
@@ -1075,8 +1075,8 @@ TRACEUSER( "Neville", _T("set constraint angle '%d'\n"),Angle);
 	// These should be shown in scaled coordinates as they measure distances on the page 
 	// pSpread tells the dimensioning system which document to get the dimensioning
 	// details from.
-	INT32 x = 0;
-	INT32 y = 0;
+//	INT32 x = 0;
+//	INT32 y = 0;
 	DocCoord offset = pDocument->GetDuplicationOffset();
 //	ReadOk = Camelot.GetPrefValue(TEXT("Duplicate"), TEXT("DuplicatePlacementX"), &x);
 	ok = pPrefsDlg->SetDimensionGadgetValue(_R(IDC_OPTS_XDUPLICATE), offset.x, pSpread, TRUE, FALSE, -1);

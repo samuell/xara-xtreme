@@ -105,7 +105,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 #include "app.h"		// Camelot object
-#include "scrcamvw.h"
 #include "docview.h"
 #include "appprefs.h"
 //#include "prefsdlg.h"	// dialog/gadget ids
@@ -118,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "jason.h"		// _R(IDS_COLCONTEXTNAME)
 #include "colcontx.h"	// For ColourContexts
 #include "palman.h"
-#include "coldlog.h"
+//#include "coldlog.h"
 #include "bmpcomp.h"	// for BitmapList
 
 CC_IMPLEMENT_DYNAMIC(ViewTab, OptionsTabs)   
@@ -360,7 +359,7 @@ BOOL ViewTab::CommitBitmapSmoothingFlag( BOOL bNewSetting )
 		return(TRUE);
 	
 	// Invalidate any affected bitmaps.
-	BOOL bOldSetting = pDocument->GetBitmapSmoothing();
+	/* BOOL bOldSetting =*/ pDocument->GetBitmapSmoothing();
 
 	// Enable the new setting
 	pDocument->SetBitmapSmoothing(bNewSetting);
@@ -461,7 +460,7 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 
 	// Now tell other users that there is a possibly new colour bar display mode
 	// in operation and so update any necessary items. 
-	BROADCAST_TO_ALL(OptionsChangingMsg(pDocument, OptionsChangingMsg::OptionsState::NEWCOLOURBARMODE));
+	BROADCAST_TO_ALL(OptionsChangingMsg(pDocument, OptionsChangingMsg::NEWCOLOURBARMODE));
 
 	// Now set up the other preference values according to the switches
 
@@ -475,6 +474,8 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 	// we now need to force it from in here as well (otherwise the colour editor will save the one
 	// that it is currently using - and NOT the one that we have just applied here!
 
+PORTNOTE("other", "Disabled Colour Editor dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	OpDescriptor* pOpDescriptor = (OpDescriptor*) OpDescriptor::FindOpDescriptor( OPTOKEN_COLOUREDITDLG );
 
 	String_256 Dummy;
@@ -487,6 +488,7 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 
 		pColourEditDlg->SetDefaultDisplayModel (DisplayModel);
 	}
+#endif
 
 	SetOk = Camelot.SetPrefValue(TEXT("Displays"), TEXT("ColourEditorAutoModel"), &AutoColourModel);
 	INT32 DisplayModelPref = (INT32)DisplayModel;	
@@ -496,21 +498,10 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 	// Error diffused view option
 	BOOL ViewDither = 2;
 	ViewDither = GetSelectedDither();
-	SetOk = Camelot.SetPrefValue("Screen", "ViewDither", &ViewDither);
+	SetOk = Camelot.SetPrefValue(_T("Screen"), _T("ViewDither"), &ViewDither);
 	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
 
-	if (ViewDither != OldViewDither)
-	{
-		CMainFrame *MainFrame = GetMainFrame();
-		if (MainFrame != NULL)
-		{
-			HWND hWnd = MainFrame->m_hWndMDIClient;
-			if (hWnd != NULL)
-				PaletteManager::RedrawAllPalettedWindows(hWnd);
-		}
-		OldViewDither = ViewDither;
-	}
-
+	PaletteManager::RedrawAllPalettedWindows(NULL);
 
 	// Section = Bitmaps
 
@@ -663,7 +654,7 @@ TRACEUSER( "Neville", _T("GreySection in ViewTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -705,7 +696,7 @@ TRACEUSER( "Neville", _T("UngreySection in ViewTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	BOOL bSmoothing = TRUE;
 	if (pDocument)
@@ -805,7 +796,7 @@ TRACEUSER( "Neville", _T("ViewTab::UpdateSection\n"));
 	// Set up the information field to reflect the current document name
 	String_256	DocName(_R(IDT_OPTS_VIEW_INFO)); 
 	DocName +=	*DocumentName;
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocName);
 
 	BOOL bSmoothing = TRUE;
 	if (pDocument)
@@ -917,6 +908,8 @@ TRACEUSER( "Neville", _T("HandleViewMsg\n"));
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			break;
+		default:
+			break;
 	}
 
 	return TRUE;
@@ -1025,7 +1018,7 @@ TRACEUSER( "Neville", _T("ViewTab::InitAutoColourModelList\n"));
 	// First item in the list is an automatic.
 	ModelName = String(_R(IDT_OPTS_AUTOMATIC));  	// automatic colour model	
 	NameString.MakeMsg(_R(IDS_COLCONTEXTNAME), (TCHAR *) ModelName);
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_AUTOCOLOUR), &NameString, FALSE, Index);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_AUTOCOLOUR), NameString, FALSE, Index);
 
 	for (INT32 i = 0; i < MAX_COLOURMODELS; i++)
 	{
@@ -1034,7 +1027,7 @@ TRACEUSER( "Neville", _T("ViewTab::InitAutoColourModelList\n"));
 			ColContexts.Context[i]->GetModelName(&ModelName);
 
 			NameString.MakeMsg(_R(IDS_COLCONTEXTNAME), (TCHAR *) ModelName);
-			pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_AUTOCOLOUR), &NameString, FALSE, Index + 1);
+			pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_AUTOCOLOUR), NameString, FALSE, Index + 1);
 
 			// If the colour model is equal to the entry model then note the index for this item. 
 			if (i == (INT32)DisplayModel)
@@ -1084,7 +1077,7 @@ TRACEUSER( "Neville", _T("ViewTab::InitSection\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Section = Display
 
@@ -1094,10 +1087,10 @@ TRACEUSER( "Neville", _T("ViewTab::InitSection\n"));
 TRACEUSER( "Neville", _T("set colour bar mode '%d'\n"),ColourBarMode);
 	// Set up the list of available options
 	pPrefsDlg->DeleteAllValues(_R(IDC_OPTS_COLOURBAR));
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), &String_32(_R(IDN_COLBAR_SMALL)));
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), &String_32(_R(IDN_COLBAR_MEDIUM)));
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), &String_32(_R(IDN_COLBAR_MEDSCROLL)));
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), &String_32(_R(IDN_COLBAR_LARGE)));
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), String_32(_R(IDN_COLBAR_SMALL)));
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), String_32(_R(IDN_COLBAR_MEDIUM)));
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), String_32(_R(IDN_COLBAR_MEDSCROLL)));
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_COLOURBAR), String_32(_R(IDN_COLBAR_LARGE)));
 	pPrefsDlg->SetComboListLength(_R(IDC_OPTS_COLOURBAR));
 	// Set up the default option displayed
 	BOOL ok = pPrefsDlg->SetSelectedValueIndex(_R(IDC_OPTS_COLOURBAR),ColourBarMode);
@@ -1194,7 +1187,7 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 	
 	INT32 ViewDither = 2;
-	ReadOk = Camelot.GetPrefValue("Screen", "ViewDither", &ViewDither);
+	ReadOk = Camelot.GetPrefValue(_T("Screen"), _T("ViewDither"), &ViewDither);
 	SetSelectedDither(ViewDither);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 
@@ -1210,7 +1203,7 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 static CGadgetID DitherGadgets[] = {_R(IDC_OPTS_DITHER_NONE),
 									_R(IDC_OPTS_DITHER_ORDERED),
 									_R(IDC_OPTS_DITHER_DIFFUSED),
-									NULL};
+									0};
 
 
 
@@ -1236,20 +1229,12 @@ INT32 ViewTab::GetSelectedDither(void)
 
 	CGadgetID Gadget = pPrefsDlg->GetRadioGroupSelected(DitherGadgets);
 
-	switch(Gadget)
-	{
-		case _R(IDC_OPTS_DITHER_NONE):
-			DitherStyle = 4;
-			break;
-
-		case _R(IDC_OPTS_DITHER_ORDERED):
-			DitherStyle = 2;
-			break;
-
-		case _R(IDC_OPTS_DITHER_DIFFUSED):
-			DitherStyle = 3;
-			break;
-	}									
+	if (Gadget ==  _R(IDC_OPTS_DITHER_NONE))
+		DitherStyle = 4;
+	else if (Gadget == _R(IDC_OPTS_DITHER_ORDERED))
+		DitherStyle = 2;
+	else if (Gadget == _R(IDC_OPTS_DITHER_DIFFUSED))
+		DitherStyle = 3;
 
 	return(DitherStyle);
 }

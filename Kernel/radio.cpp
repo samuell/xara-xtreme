@@ -133,9 +133,9 @@ CC_IMPLEMENT_MEMDUMP(RadioGroup, CC_CLASS_MEMDUMP)
 ********************************************************************************************/
 BOOL RadioGroup::SetAssociations(DialogOp* pDialog, CGadgetAssociation* AssocArray, UINT32 NumGadgets)
 {
-	ERROR2IF(pDialog == NULL, FALSE, "RadioGroup::SetAssociations() - pDialog NULL")
-	ERROR2IF(AssocArray == NULL, FALSE, "RadioGroup::SetAssociations() - AssocArray NULL")
-	ERROR2IF(NumGadgets == 0, FALSE, "RadioGroup::SetAssociations() - NumGadgets is zero")
+	ERROR2IF(pDialog == NULL, FALSE, "RadioGroup::SetAssociations() - pDialog NULL");
+	ERROR2IF(AssocArray == NULL, FALSE, "RadioGroup::SetAssociations() - AssocArray NULL");
+	ERROR2IF(NumGadgets == 0, FALSE, "RadioGroup::SetAssociations() - NumGadgets is zero");
 
 	m_pDialog = pDialog;
 	m_Associations = AssocArray;
@@ -160,7 +160,7 @@ BOOL RadioGroup::SetAssociations(DialogOp* pDialog, CGadgetAssociation* AssocArr
 ********************************************************************************************/
 CCObject*	RadioGroup::GetDefault()
 {
-	ERROR3IF(TRUE, "RadioGroup::GetDefault() - not implemented")
+	ERROR3IF(TRUE, "RadioGroup::GetDefault() - not implemented");
 
 	return NULL;
 }
@@ -183,7 +183,7 @@ CCObject*	RadioGroup::GetDefault()
 ********************************************************************************************/
 BOOL RadioGroup::Disable()
 {
-	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::Disable - m_pDialog not set")
+	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::Disable - m_pDialog not set");
 
 	for (UINT32 i = 0; i < GetRadioBoxCount(); i++)
 	{
@@ -210,7 +210,7 @@ BOOL RadioGroup::Disable()
 ********************************************************************************************/
 BOOL RadioGroup::Enable()
 {
-	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::Disable - m_pDialog not set")
+	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::Disable - m_pDialog not set");
 
 	for (UINT32 i = 0; i < GetRadioBoxCount(); i++)
 	{
@@ -239,7 +239,7 @@ BOOL RadioGroup::Enable()
 ********************************************************************************************/
 BOOL RadioGroup::SetDefault(CCObject* pDefaultObject)
 {
-	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::SetDefault - m_pDialog not set")
+	ERROR2IF(m_pDialog == NULL, FALSE, "RadioGroup::SetDefault - m_pDialog not set");
 
 	for (UINT32 i = 0; i < GetRadioBoxCount(); i++)
 	{
@@ -267,7 +267,7 @@ BOOL RadioGroup::SetDefault(CCObject* pDefaultObject)
 ********************************************************************************************/
 CCObject* RadioGroup::GetSelected()
 {
-	ERROR2IF(m_pDialog == NULL, NULL, "RadioGroup::GetSelected - m_pDialog not set")
+	ERROR2IF(m_pDialog == NULL, NULL, "RadioGroup::GetSelected - m_pDialog not set");
 
 	for (UINT32 i = 0; i < GetRadioBoxCount(); i++)
 	{

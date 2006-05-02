@@ -411,14 +411,14 @@ TRACEUSER( "Neville", _T("New units in edit section\n"));
 	const INT32 Maxxy = INT_MAX;		// maximum value allowed as the distance
 
 	x = pPrefsDlg->GetUnitGadgetValue(_R(IDC_OPTS_XDUPLICATE), CurrentScaledUnits,
-										 -Maxxy, Maxxy, NULL, &Valid);
+										 -Maxxy, Maxxy, 0, &Valid);
 	if (Valid)
 	{
 		ok = pPrefsDlg->SetUnitGadgetValue(_R(IDC_OPTS_XDUPLICATE), CurrentScaledUnits, x, FALSE, -1);
 	}
 
 	y = pPrefsDlg->GetUnitGadgetValue(_R(IDC_OPTS_YDUPLICATE), CurrentScaledUnits,
-										 -Maxxy, Maxxy, NULL, &Valid);
+										 -Maxxy, Maxxy, 0, &Valid);
 	if (Valid)
 	{
 		ok = pPrefsDlg->SetUnitGadgetValue(_R(IDC_OPTS_YDUPLICATE), CurrentScaledUnits, y, FALSE, -1);
@@ -427,7 +427,7 @@ TRACEUSER( "Neville", _T("New units in edit section\n"));
 	// Now the nudge size distance
 	UINT32 Nudge = 0;
 	Nudge = pPrefsDlg->GetUnitGadgetValue(_R(IDC_OPTS_NUDGESIZE), CurrentScaledUnits,
-											 0, INT_MAX, NULL, &Valid);
+											 0, INT_MAX, 0, &Valid);
 	if (Valid)
 	{
 		ok = pPrefsDlg->SetUnitGadgetValue(_R(IDC_OPTS_NUDGESIZE), CurrentScaledUnits, Nudge, FALSE, -1);
@@ -655,6 +655,8 @@ TRACEUSER( "Neville", _T("HandleEditMsg\n"));
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			break;
+		default:
+			break;
 	}
 	return TRUE;
 }  
@@ -730,8 +732,8 @@ TRACEUSER( "Neville", _T("set constraint angle '%d'\n"),Angle);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_EDIT));
 
 	// Now the duplicate distance
-	INT32 x = 0;
-	INT32 y = 0;
+//	INT32 x = 0;
+//	INT32 y = 0;
 	DocCoord offset = pDocument->GetDuplicationOffset();
 //	ReadOk = Camelot.GetPrefValue(TEXT("Duplicate"), TEXT("DuplicatePlacementX"), &x);
 	ok = pPrefsDlg->SetUnitGadgetValue(_R(IDC_OPTS_XDUPLICATE), CurrentScaledUnits, offset.x, FALSE, -1);

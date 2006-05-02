@@ -193,7 +193,7 @@ static INT32 SaveOnExit 						= TRUE;	// flag for whether we save preferences on
 DialogTabOp *OptionsTabs::pPrefsDlg 		= NULL;	// link to application options dialog class
 List OptionsTabs::OptionsTabsList;					// The global list of installed options tabs.
 UnitType OptionsTabs::CurrentPageUnits 		= NOTYPE;	// The units used to display page measurements in
-//UnitType OptionsTabs::CurrentScaledUnits 	= NOTYPE;	// The units used to display scaled measurements in
+UnitType OptionsTabs::CurrentScaledUnits 	= NOTYPE;	// The units used to display scaled measurements in
 UnitType OptionsTabs::CurrentFontUnits 		= NOTYPE;	// The units used to display font measurements in
 BOOL OptionsTabs::ApplyNow 					= FALSE;// True if Apply now should be ungreyed
 BOOL OptionsTabs::InitMessage 				= FALSE;// True if sending init message
@@ -454,9 +454,7 @@ BOOL AppPrefsDlg::CommitDialogValues()
 
 MsgResult AppPrefsDlg::Message(Msg* Message)
 {
-#pragma message( __LOCMSG__ "AppPrefsDlg::Message - do nothing" )
-	TRACE( _T("Warning - AppPrefsDlg::Message called") );
-/*#ifndef STANDALONE
+#ifndef STANDALONE
 
 #ifndef REMOVE_PRINT_TABS
 	// Jason - This is a message-loop lock which is used in the DIM_CREATE code to 
@@ -479,13 +477,13 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocChangingMsg::DocState::TITLECHANGED:
-			case DocChangingMsg::DocState::SELCHANGED:
+			case DocChangingMsg::TITLECHANGED:
+			case DocChangingMsg::SELCHANGED:
 			{
 				// In the different cases there are different document pointers that
 				// we must use.
 				Document *pDocument = NULL;
-				if (TheMsg->State == DocChangingMsg::DocState::TITLECHANGED)
+				if (TheMsg->State == DocChangingMsg::TITLECHANGED)
 				{
 					// Document title has changed message.
 					pDocument = TheMsg->pChangingDoc;
@@ -553,7 +551,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 			// the same document and hence the selected document/spread/view does
 			// not change and so we do not get the last update.
 			// Could cache all messages from BORN to this and only update on this.
-			case DocChangingMsg::DocState::BORNANDSTABLE:
+			case DocChangingMsg::BORNANDSTABLE:
 			{
 				// In the different cases there are different document pointers that
 				// we must use, in this case the changing doc is relevent.
@@ -587,6 +585,10 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+
+		default:
+			break;
+
 		}
 	}
 #ifndef REMOVE_PRINT_TABS
@@ -628,7 +630,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocViewMsg::DocViewState::SELCHANGED:
+			case DocViewMsg::SELCHANGED:
 			{
 				if (TheMsg->pNewDocView != NULL)
 				{
@@ -659,6 +661,9 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, OptionsChangingMsg))
@@ -677,7 +682,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case OptionsChangingMsg::OptionsState::NEWUNITS:
+			case OptionsChangingMsg::NEWUNITS:
 			{
 				// Current display units may have changed changed so may need to update
 				// any display fields on other tabs which are using units. 
@@ -701,7 +706,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 			}
 	//	WEBSTER-ranbirr-13/11/96
 	#ifndef WEBSTER
-			case OptionsChangingMsg::OptionsState::ASKBEFORESETTINGATTR:
+			case OptionsChangingMsg::ASKBEFORESETTINGATTR:
 			{
 				// Tell the Misc tab about the change in state of ask before setting
 				// the attribute
@@ -719,7 +724,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 				}
 				break;
 			}
-			case OptionsChangingMsg::OptionsState::IMPORTWITHLAYERS:
+			case OptionsChangingMsg::IMPORTWITHLAYERS:
 			{
 				// Tell the Misc tab about the change in state of Import with layers
 				OptionsTabs *pOptionsTabs = OptionsTabs::GetFirst();
@@ -737,8 +742,8 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 				break;
 			}
 	#endif //webster
-			case OptionsChangingMsg::OptionsState::NEWPAGESIZE:
-			case OptionsChangingMsg::OptionsState::PAGESIZEHASCHANGED:
+			case OptionsChangingMsg::NEWPAGESIZE:
+			case OptionsChangingMsg::PAGESIZEHASCHANGED:
 			{
 				// Current page size may have changed changed so may need to update
 				// any display fields on other tabs which are showing pages. 
@@ -753,7 +758,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 					// If we are the page tab then call its special function but only if it
 					// did not send the message.
 					if (pOptionsTabs->GetPageID() == _R(IDD_OPTSTAB_PAGE) &&
-						TheMsg->State == OptionsChangingMsg::OptionsState::NEWPAGESIZE )
+						TheMsg->State == OptionsChangingMsg::NEWPAGESIZE )
 					{
 						PageTab *pPageTab = (PageTab *) pOptionsTabs;
 						pPageTab->UpdatePageSection();
@@ -770,7 +775,7 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 				}
 				break;
 			}
-			case OptionsChangingMsg::OptionsState::NEWDEFAULTGRID:
+			case OptionsChangingMsg::NEWDEFAULTGRID:
 			{
 				// Current default grid may have changed changed
 				// so may need to update any display fields on other tabs which
@@ -932,6 +937,9 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 					EndDialog = TRUE;
 				}
 				break;
+
+				default:
+					break;
 			}
 		}
 
@@ -1046,9 +1054,8 @@ MsgResult AppPrefsDlg::Message(Msg* Message)
 #endif
 
 //	return OK; 
-	return DialogTabOp::Message(Message); */
+	return DialogTabOp::Message(Message);
 
-	return OK;
 }
 
 /******************************************************************************************
@@ -1100,9 +1107,6 @@ BOOL AppPrefsDlg::Init()
 {
 	BOOL InitOK = TRUE;
 
-#pragma message( __LOCMSG__ "AppPrefsDlg::Init - do nothing" )
-	TRACE( _T("Warning - AppPrefsDlg::Init called") );
-/*#ifndef STANDALONE
 	// Declare any preferences that we require.
 	if ( Camelot.DeclareSection(TEXT("Preferences"), 3) )
 	{
@@ -1248,7 +1252,7 @@ BOOL AppPrefsDlg::Init()
 #ifndef WEBSTER
 //	InitOK = InitOK && PrintPrefsDlg::Init();
 #endif //webster
-#endif */
+
 
 	return (InitOK);
 }
@@ -1271,9 +1275,7 @@ BOOL AppPrefsDlg::Init()
 
 void AppPrefsDlg::Deinit()
 {
-#pragma message( __LOCMSG__ "AppPrefsDlg::Deinit - do nothing" )
-	TRACE( _T("Warning - AppPrefsDlg::Deinit called") );
-/*	BOOL ok;
+	BOOL ok;
 	
 	// Remove any options tabs that have been declared to the system.
 	ok = OptionsTabs::DeinitOptionsTabs();	
@@ -1285,8 +1287,8 @@ void AppPrefsDlg::Deinit()
 		ok = pPageSizesList->DeinitPageSizes();	// delete all list items
 		delete pPageSizesList;					// delete list item object
 		pPageSizesList = NULL;					// set item pointer to null
-	} */
 	}
+}
 
 
 
@@ -1636,9 +1638,7 @@ BOOL OptionsTabs::Init()
 
 BOOL OptionsTabs::InitOptionsTabs()
 {
-#pragma message( __LOCMSG__ "AppPrefsDlg::InitOptionsTabs - do nothing" )
-	TRACE( _T("Warning - AppPrefsDlg::InitOptionsTabs called") );
-/*	// Find the OptionsTabs - the kernel ones are hard-wired.
+	// Find the OptionsTabs - the kernel ones are hard-wired.
 	OptionsTabs *pOptionsTab = NULL;
 
 #ifndef STANDALONE
@@ -1657,11 +1657,17 @@ BOOL OptionsTabs::InitOptionsTabs()
 	ADD_OPTIONSTAB(PrintImagesetterTab) // Imagesetting
 #endif
 #endif //webster
+PORTNOTE("other", "Disabled internet tab")
+#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(InternetTab)		// Internet options
+#endif
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	ADD_OPTIONSTAB(PointersTab)		// Mouse
+PORTNOTE("other", "Disabled print general tab")
+#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintGeneralTab)	// Output
+#endif
 #endif //webster
 	ADD_OPTIONSTAB(PageTab)			// Page
 #ifdef PHOTOSHOPPLUGINS
@@ -1670,10 +1676,16 @@ BOOL OptionsTabs::InitOptionsTabs()
 #endif
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
+PORTNOTE("other", "Disabled print layout tab")
+#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintLayoutTab)	// Print layout
+#endif
 	ADD_OPTIONSTAB(ScaleTab)		// Scaling
 #ifdef BUILD_SEPARATIONS
+PORTNOTE("other", "Disabled print separations tab")
+#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintSepsTab)	// Separation (Colour) 
+#endif
 #endif
 	ADD_OPTIONSTAB(TuneTab)			// Tune ups
 //	ADD_OPTIONSTAB(UndoTab)
@@ -1736,7 +1748,7 @@ TRACEUSER( "Neville", _T("OptionsTabs::PageAppTabNumber = %d\n"),OptionsTabs::Pa
 TRACEUSER( "Neville", _T("OptionsTabs::GridAppTabNumber = %d\n"),OptionsTabs::GridAppTabNumber);
 
 TRACEUSER( "Neville", _T("OptionsTabs::PrintTabNumber = %d\n"),OptionsTabs::PrintTabNumber);
-#endif */
+#endif
 
 	// All ok
 	return TRUE;
@@ -1885,7 +1897,7 @@ void OptionsTabs::SetDefaultUnits()
 {
 	// Just to be on the safe side set up some default values 
 	CurrentPageUnits = MILLIMETRES;			// Set up random default units.
-	//CurrentScaledUnits = MILLIMETRES;		// Set up random default units.
+	CurrentScaledUnits = MILLIMETRES;		// Set up random default units.
 	CurrentFontUnits = COMP_POINTS;			// Set up random default units.
 
 }
@@ -1918,7 +1930,7 @@ BOOL OptionsTabs::SetUpDocUnits()
 	{
 		// Just to be on the safe side set up some default values 
 		CurrentPageUnits = MILLIMETRES;						
-		//CurrentScaledUnits = CurrentPageUnits;
+		CurrentScaledUnits = CurrentPageUnits;
 		CurrentFontUnits = COMP_POINTS;
 	}
 	else
@@ -1932,10 +1944,10 @@ BOOL OptionsTabs::SetUpDocUnits()
 		{
 			CurrentPageUnits = pDocUnitList->GetPageUnits(); 	// Set to the page units.
 		
-//			CurrentScaledUnits = pDocUnitList->GetScaleUnits();	// Set to the scale units.
-//			// If set to automatic then use the current page units
-//			if (CurrentScaledUnits == AUTOMATIC)
-//				CurrentScaledUnits = CurrentPageUnits; 
+			CurrentScaledUnits = pDocUnitList->GetScaleUnits();	// Set to the scale units.
+			// If set to automatic then use the current page units
+			if (CurrentScaledUnits == AUTOMATIC)
+				CurrentScaledUnits = CurrentPageUnits; 
 	
 			CurrentFontUnits = pDocUnitList->GetFontUnits();	// Set to the font units.
 
@@ -1946,7 +1958,7 @@ BOOL OptionsTabs::SetUpDocUnits()
 		{
 			// Just to be on the safe side set up some default values 
 			CurrentPageUnits = MILLIMETRES;						// Set up random default units.
-			//CurrentScaledUnits = MILLIMETRES;					// Set up random default units.
+			CurrentScaledUnits = MILLIMETRES;					// Set up random default units.
 			CurrentFontUnits = COMP_POINTS;						// Set up random default units.
 		}
 	}
@@ -2075,9 +2087,7 @@ BOOL OptionsTabs::UpdateSection(String_256 *DocumentName)
 
 BOOL OptionsTabs::GreyApplyNow()
 {
-#pragma message( __LOCMSG__ "OptionsTabs::GreyApplyNow - do nothing" )
-	TRACE( _T("Warning - OptionsTabs::GreyApplyNow called") );
-/*	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::GreyApplyNow called with no dialog pointer");
+	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::GreyApplyNow called with no dialog pointer");
 
 	// Grey out the apply now button on the main page
 	// Must restore the state of the currently selected tab as otherwise you might start
@@ -2085,9 +2095,9 @@ BOOL OptionsTabs::GreyApplyNow()
 	// on one of the pages and hence give rise to unknown controls messages when we try to
 	// talk to the pages controls again.
 	CDlgResID PageID = pPrefsDlg->GetCurrentPageID();	// Get currently selected Tab id
-	pPrefsDlg->TalkToPage(NULL);
+	pPrefsDlg->TalkToPage(0);
 	pPrefsDlg->EnableGadget(_R(ID_APPLY_NOW), FALSE);
-	pPrefsDlg->TalkToPage(PageID); */						// Select the originally selected tab
+	pPrefsDlg->TalkToPage(PageID); 						// Select the originally selected tab
 
 	return TRUE;
 }
@@ -2109,9 +2119,7 @@ BOOL OptionsTabs::GreyApplyNow()
 
 BOOL OptionsTabs::UngreyApplyNow()
 {
-#pragma message( __LOCMSG__ "OptionsTabs::UngreyApplyNow - do nothing" )
-	TRACE( _T("Warning - OptionsTabs::UngreyApplyNow called") );
-/*	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::UngreyApplyNow called with no dialog pointer");
+	ERROR2IF(pPrefsDlg == NULL,FALSE,"OptionsTabs::UngreyApplyNow called with no dialog pointer");
 	
 	// Ungrey the apply now button on the main page
 	// Must restore the state of the currently selected tab as otherwise you might start
@@ -2119,12 +2127,12 @@ BOOL OptionsTabs::UngreyApplyNow()
 	// on one of the pages and hence give rise to unknown controls messages when we try to
 	// talk to the pages controls again.
 	CDlgResID PageID = pPrefsDlg->GetCurrentPageID();	// Get currently selected Tab id
-	pPrefsDlg->TalkToPage(NULL);						// Select the main tab
+	pPrefsDlg->TalkToPage(0);						// Select the main tab
 	pPrefsDlg->EnableGadget(_R(ID_APPLY_NOW), TRUE);		// ungrey button on main tab
 //// Do these two just in case
 //pPrefsDlg->EnableGadget(IDOK, TRUE);				// ungrey button on main tab
 //pPrefsDlg->EnableGadget(IDCANCEL, TRUE);			// ungrey button on main tab
-	pPrefsDlg->TalkToPage(PageID); */						// Select the originally selected tab
+	pPrefsDlg->TalkToPage(PageID); 						// Select the originally selected tab
 
 	return TRUE;
 }

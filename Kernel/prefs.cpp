@@ -1789,7 +1789,7 @@ BOOL Preferences::SetPrefValue(LPTCHAR Section, LPTCHAR Pref, double *PrefVar)
 
 /********************************************************************************************
 
->	BOOL Preferences::SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const char *pValue, BOOL Force)
+>	BOOL Preferences::SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const TCHAR *pValue, BOOL Force)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	06/01/95
@@ -1807,7 +1807,7 @@ BOOL Preferences::SetPrefValue(LPTCHAR Section, LPTCHAR Pref, double *PrefVar)
 
 ********************************************************************************************/
 
-BOOL Preferences::SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const char *pValue, BOOL Force)
+BOOL Preferences::SetPrefDirect(LPTCHAR Section, LPTCHAR Pref, const TCHAR *pValue, BOOL Force)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// First check if there is a valid OILPrefs, as if there was a problem on start up such as

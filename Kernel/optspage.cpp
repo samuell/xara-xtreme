@@ -304,8 +304,8 @@ TRACEUSER( "Neville", _T("commit page section\n"));
 
 	// Ok has been pressed so take the values from this section of the dialog box
 	BOOL Valid=0;		// Flag for validity of value
-	BOOL State=0;		// Flag for state of button/switch
-	BOOL SetOk=0;		// Preference value set ok
+//	BOOL State=0;		// Flag for state of button/switch
+//	BOOL SetOk=0;		// Preference value set ok
 
 
 
@@ -402,7 +402,7 @@ TRACEUSER( "Neville", _T("PageTab::CommitSection width %d height %d in MP\n"),Wi
 	MILLIPOINT MaxPageMargin = MaxPageDimension;
 	Margin = pPrefsDlg->GetUnitGadgetValue(_R(IDC_OPTS_MARGIN), CurrentPageUnits,
 										 	 MinPageDimension, MaxPageMargin,
-										 	 NULL, &Valid);
+										 	 0, &Valid);
 	if (Margin < 0 || Margin >= MaxPageDimension) // ignore valid as it will be false
 	{
 		InformError(_R(IDE_OPTS_INVALIDMARGIN));
@@ -545,7 +545,7 @@ TRACEUSER( "Neville", _T("GreySection in page section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_PAGE_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -587,7 +587,7 @@ TRACEUSER( "Neville", _T("UngreySection in page section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_PAGE_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already ungrey 
 	if (GreyStatus == FALSE)
@@ -684,7 +684,7 @@ TRACEUSER( "Neville", _T("PageTab::UpdateSection\n"));
 	// is correct.
 	String_256	DocName(_R(IDT_OPTS_PAGE_INFO)); 
 	DocName +=	*DocumentName;
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocName);
 
 
 	// All units work off the selected document and so we must do nothing if there is no
@@ -806,54 +806,49 @@ TRACEUSER( "Neville", _T("HandlePageMsg\n"));
 			OptionsTabs::SetApplyNowState(TRUE);
 	// WEBSTER-ranbirr-13/11/96
 	#ifndef WEBSTER
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_SIZELIST))
 			{
-				case _R(IDC_OPTS_SIZELIST):
-					// Get the currently selected item and set up the other fields accordingly 
-					INT32 PageSizeSelected;
-					PageSizeSelected = pPrefsDlg->GetSelectedValueIndex(_R(IDC_OPTS_SIZELIST));
-					// Get whether we are in Portrait or Landscape mode
-					BOOL Portrait;
-					BOOL Valid;
-					Portrait = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_PORTRAIT), 0, 1, 0, &Valid);
-					HandlePageList(PageSizeSelected, Portrait);
-					break;
+				// Get the currently selected item and set up the other fields accordingly 
+				INT32 PageSizeSelected;
+				PageSizeSelected = pPrefsDlg->GetSelectedValueIndex(_R(IDC_OPTS_SIZELIST));
+				// Get whether we are in Portrait or Landscape mode
+				BOOL Portrait;
+				BOOL Valid;
+				Portrait = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_PORTRAIT), 0, 1, 0, &Valid);
+				HandlePageList(PageSizeSelected, Portrait);
+				break;
 			}
-			break;
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
-			{
+			if (FALSE) {}
 			// WEBSTER-ranbirr-13/11/96
 			#ifndef WEBSTER
-				case _R(IDC_OPTS_PORTRAIT):
-				case _R(IDC_OPTS_LANDSCAPE):
-					// Portrait landscape buttons toggle the width/height fields
-					HandlePortraitLandscape();
-					break;
+			else if ((Msg->GadgetID == _R(IDC_OPTS_PORTRAIT)) || (Msg->GadgetID == _R(IDC_OPTS_LANDSCAPE)))
+				// Portrait landscape buttons toggle the width/height fields
+				HandlePortraitLandscape();
 			#endif // Webster
-
-				case _R(IDC_OPTS_BLEEDSWITCH):
-					// Bleed switch enables or disables the bleed size field 
-					BOOL BleedEnabled;
-					BOOL Valid;
-					BleedEnabled = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_BLEEDSWITCH), 0, 1, 0, &Valid);
-					if (BleedEnabled)
-					{
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEED), TRUE);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEEDTXT), TRUE);
-					}
-					else
-					{
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEED), FALSE);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEEDTXT), FALSE);
-					}													
-					break;
+			else if (Msg->GadgetID == _R(IDC_OPTS_BLEEDSWITCH))
+			{
+				// Bleed switch enables or disables the bleed size field 
+				BOOL BleedEnabled;
+				BOOL Valid;
+				BleedEnabled = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_BLEEDSWITCH), 0, 1, 0, &Valid);
+				if (BleedEnabled)
+				{
+					pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEED), TRUE);
+					pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEEDTXT), TRUE);
+				}
+				else
+				{
+					pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEED), FALSE);
+					pPrefsDlg->EnableGadget(_R(IDC_OPTS_BLEEDTXT), FALSE);
+				}													
 			}
-			break;
 	#endif //webster	
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
+			break;
+		default:
 			break;
 	}
 	
@@ -883,7 +878,7 @@ TRACEUSER( "Neville", _T("InitPageSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"PageTab::InitSection called with no dialog pointer");
 	ERROR2IF(AppPrefsDlg::pPageSizesList == NULL,FALSE,"PageTab::InitSection called with list of page sizes");
 
-	BOOL ok	= TRUE;			// Flag for whether value set up ok 
+//	BOOL ok	= TRUE;			// Flag for whether value set up ok 
 
 	// We have an uninitialised page sizes list, so flag that before we have a chance to exit
 	pPrefsDlg->DeleteAllValues(_R(IDC_OPTS_SIZELIST));
@@ -896,7 +891,7 @@ TRACEUSER( "Neville", _T("InitPageSection\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_PAGE_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 
 	// All units work off the selected document and so we must do nothing if there is no
@@ -946,7 +941,7 @@ BOOL PageTab::SetUpPageSizeList()
 	// Handle everything that we do not know as a CUSTOM setting.
 // WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_SIZELIST), &String_32(_R(IDN_PAGESIZE_CUSTOM)));
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_SIZELIST), String_32(_R(IDN_PAGESIZE_CUSTOM)));
 #endif //webster
 
 	// Now go through the defined list
@@ -958,7 +953,7 @@ BOOL PageTab::SetUpPageSizeList()
 		String_32 *pPageName = pPageSize->GetPageName();
 // WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_SIZELIST), pPageName);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_SIZELIST), *pPageName);
 #endif //webster
 		// skip to the next item, if there is one
 		pPageSize = (PageSize*) AppPrefsDlg::pPageSizesList->GetNextPageSize(pPageSize);
@@ -1315,8 +1310,8 @@ BOOL PageTab::GetSizeOfPage(MILLIPOINT *Width, MILLIPOINT *Height, MILLIPOINT *M
 	// The dialog handler should have already set up the class variables pDocument and pSpread.
 	// We will check that they are not null.
 	// For now, get details on 1st page of spread 1
-	ERROR2IF(pDocument == NULL,FALSE,"PageTab::GetSizeOfPage no selected document")
-	ERROR2IF(pSpread == NULL,FALSE,"PageTab::GetSizeOfPage no spread to work on")
+	ERROR2IF(pDocument == NULL,FALSE,"PageTab::GetSizeOfPage no selected document");
+	ERROR2IF(pSpread == NULL,FALSE,"PageTab::GetSizeOfPage no spread to work on");
 
 	// Set up some interim variables
 	MILLIPOINT PageWidth = *Width;
@@ -1458,13 +1453,13 @@ BOOL PageTab::GetSizeOfPage(MILLIPOINT *Width, MILLIPOINT *Height, MILLIPOINT *M
 
 BOOL PageTab::InvokeResize(PageResizeInfo *pParam)
 {
-	ERROR2IF(pParam==NULL,FALSE,"PageTab::InvokeResize() no pParam supplied")
+	ERROR2IF(pParam==NULL,FALSE,"PageTab::InvokeResize() no pParam supplied");
 	// For now, get details on 1st page of spread 1
 
 	// The dialog handler should have already set up the class variables pDocument and pSpread.
 	// We will check that they are not null.
-	ERROR2IF(pDocument==NULL,FALSE,"PageTab::InvokeResize() no selected document")
-	ERROR2IF(  pSpread==NULL,FALSE,"PageTab::InvokeResize() no spread to work on")
+	ERROR2IF(pDocument==NULL,FALSE,"PageTab::InvokeResize() no selected document");
+	ERROR2IF(  pSpread==NULL,FALSE,"PageTab::InvokeResize() no spread to work on");
 
 	// Only change the page size/layout if something has changed 
 	// If the user has changed anything then warn them that nothing will happen
@@ -1544,15 +1539,15 @@ BOOL PageTab::InvokeResize(PageResizeInfo *pParam)
 
 BOOL PageTab::InvokeResizeAndCentre(PageResizeInfo *pParam)
 {
-	ERROR2IF(pParam==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no pParam supplied")
+	ERROR2IF(pParam==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no pParam supplied");
 
 	// The dialog handler should have already set up the class variables pDocument and pSpread.
 	// We will check that they are not null.
-	ERROR2IF(pDocument==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no selected document")
-	ERROR2IF(  pSpread==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no spread to work on")
+	ERROR2IF(pDocument==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no selected document");
+	ERROR2IF(  pSpread==NULL,FALSE,"PageTab::InvokeResizeAndCentre() no spread to work on");
 
 	// Flag we need to make a change
-	BOOL ChangeRequired = TRUE;
+//	BOOL ChangeRequired = TRUE;
 
 	// Make these the new defaults
 	OldPageWidth = pParam->Width;
@@ -1860,7 +1855,7 @@ void OpPageResize::DoWithParam(OpDescriptor* pOp, OpParam* pResizeParam)
 		// page tab.
 		pParentDoc->ForceRedraw();
 		BROADCAST_TO_ALL(OptionsChangingMsg(pParentDoc,
-											OptionsChangingMsg::OptionsState::PAGESIZEHASCHANGED));
+											OptionsChangingMsg::PAGESIZEHASCHANGED));
 	}
 
 	// If we reached here then everything has happened ok and we can just end the
@@ -2093,7 +2088,7 @@ ActionCode ActionPageResize::Execute()
 
 				BROADCAST_TO_ALL(OptionsChangingMsg(
 												 pParentDoc,
-												 OptionsChangingMsg::OptionsState::NEWPAGESIZE
+												 OptionsChangingMsg::NEWPAGESIZE
 								 				   )
 								);
 			}

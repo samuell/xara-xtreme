@@ -772,7 +772,7 @@ INT32 HTMLExportFilter::WriteCoords(Path* ppthToWrite, TCHAR* pcValue, CCLexFile
 
 	//And get its coordinate and verb arrays
 	DocCoord* pdcCoords=ppthToWrite->GetCoordArray();
-	PathVerb* ppvVerbs=ppthToWrite->GetVerbArray();
+//	PathVerb* ppvVerbs=ppthToWrite->GetVerbArray();
 
 	//Keep a copy of the last coordinate written, to make sure
 	//we don't write out two consecutive identical coordinates

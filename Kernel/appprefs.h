@@ -403,7 +403,7 @@ protected:
 	static Spread   *pSpread; 				// The spread we are working on 
 
 	static UnitType CurrentPageUnits;		// The units used to display page measurements
-	//static UnitType CurrentScaledUnits;		// The units to display scaled measurements
+	static UnitType CurrentScaledUnits;		// The units to display scaled measurements
 	static UnitType CurrentFontUnits;		// The units used to display font measurements
 
 private:

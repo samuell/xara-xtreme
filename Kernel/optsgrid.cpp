@@ -139,9 +139,6 @@ const MILLIPOINT MaxPageDimension = 9 * 72000 * 12; 	// maximum = 108in = 9 ft =
 const MILLIPOINT MinPageDimension = 72000/2; 			// minimum = 0.5inch
 
 
-PORTNOTE("other", "Removed GridTab because it relies on dialog manager functionality")
-#if !defined(EXCLUDE_FROM_XARALX)
-
 CC_IMPLEMENT_DYNAMIC(GridTab, OptionsTabs)   
 
 /********************************************************************************************
@@ -456,7 +453,7 @@ TRACEUSER( "Neville", _T("GreySection in page section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_GRID_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -498,7 +495,7 @@ TRACEUSER( "Neville", _T("UngreySection in page section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_GRID_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already ungrey 
 	if (GreyStatus == FALSE)
@@ -589,7 +586,7 @@ TRACEUSER( "Neville", _T("GridTab::UpdateSection\n"));
 	// Make sure the information field displaying the name of the current document is correct.
 	String_256	DocName(_R(IDT_OPTS_GRID_INFO)); 
 	DocName +=	*DocumentName;
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocName);
 
 	// All units work off the selected document and so we must do nothing if there is no
 	// selected document. Check our clas variable to see if this is true or not.
@@ -684,6 +681,8 @@ TRACEUSER( "Neville", _T("HandlePageMsg\n"));
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			break;
+		default:
+			break;
 	}
 	
 	return TRUE;
@@ -711,13 +710,13 @@ BOOL GridTab::InitSection()
 TRACEUSER( "Neville", _T("InitPageSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"GridTab::InitSection called with no dialog pointer");
 
-	BOOL ok	= TRUE;			// Flag for whether value set up ok 
+//	BOOL ok	= TRUE;			// Flag for whether value set up ok 
 
 	// Make sure the information field displaying the name of the current document
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_GRID_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// All units work off the selected document and so we must do nothing if there is no
 	// selected document. Check our clas variable to see if this is true or not.
@@ -754,7 +753,7 @@ BOOL GridTab::InitGridSection()
 
 	// get a pointer to the default grid
 	NodeGrid* pDefaultGrid = pSpread->FindFirstDefaultGridInSpread();
-	ERROR2IF(pDefaultGrid==NULL,FALSE,"GridTab::GetDefaultGridDetails() - pDefaultGrid==NULL")
+	ERROR2IF(pDefaultGrid==NULL,FALSE,"GridTab::GetDefaultGridDetails() - pDefaultGrid==NULL");
 
 	// read current grid settings
 	double   GridSpacing      = pDefaultGrid->GetMainStep();		// seems to be equivalent
@@ -815,8 +814,8 @@ BOOL GridTab::InvokeResize(GridResizeInfo *pParam)
 
 	// The dialog handler should have already set up the class variables pDocument and pSpread.
 	// We will check that they are not null.
-	ERROR2IF(pDocument==NULL,FALSE,"GridTab::InvokeResize() no selected document")
-	ERROR2IF(  pSpread==NULL,FALSE,"GridTab::InvokeResize() no spread to work on")
+	ERROR2IF(pDocument==NULL,FALSE,"GridTab::InvokeResize() no selected document");
+	ERROR2IF(  pSpread==NULL,FALSE,"GridTab::InvokeResize() no spread to work on");
 
 	// Only change the page size/layout if something has changed 
 	// If the user has changed anything then warn them that nothing will happen
@@ -865,7 +864,6 @@ BOOL GridTab::InvokeResize(GridResizeInfo *pParam)
 
 	return TRUE;
 }	
-#endif
 
 
 
