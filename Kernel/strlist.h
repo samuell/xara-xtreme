@@ -128,7 +128,7 @@ public:
 		return m_String;
 	}
 
-	void SetString(String_256& strToSet)
+	void SetString(const String_256& strToSet)
 	{
 		m_String=strToSet;
 	}

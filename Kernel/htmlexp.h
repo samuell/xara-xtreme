@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class CCLexFile;
 
-const HTMLEXPORT_DEFAULTWORDWRAP=100;
+const UINT32 HTMLEXPORT_DEFAULTWORDWRAP = 100;
 
 /**************************************************************************************
 

@@ -853,9 +853,9 @@ PORTNOTE("filter","Removed EPS filters usage")
 	// HTML based filters.
 PORTNOTE("filter","Removed HTMLFilter usage")
 	ADD_FILTER(HTMLFilter)	// the HTML filter
+#endif //EXCLUDE_FROM_XARALX
 	ADD_FILTER(ImagemapFilter)
 
-#endif //EXCLUDE_FROM_XARALX
 
 #if BUILD_OTHER_TEXT_FILTERS
 

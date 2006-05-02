@@ -19,11 +19,11 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	cxftext.cpp cxftfile.cpp cxftrans.cpp dbugtree.cpp dialogop.cpp doccolor.cpp \
 	doccomp.cpp doccoord.cpp docrect.cpp document.cpp docview.cpp dumbnode.cpp \
 	cpp exphint.cpp extender.cpp fillattr.cpp fillramp.cpp \
-	fillval.cpp filters.cpp filtrmgr.cpp fontcomp.cpp fontlist.cpp fontman.cpp \
-	fracfill.cpp fthrattr.cpp gcache.cpp fntcache.cpp textacts.cpp \
+	fillval.cpp filters.cpp filtimag.cpp filtimop.cpp filtrmgr.cpp fontcomp.cpp fontlist.cpp \
+	fontman.cpp fracfill.cpp fthrattr.cpp gcache.cpp fntcache.cpp textacts.cpp \
 	fttyplis.cpp gadget.cpp gblend.cpp genv.cpp gla.cpp gmould.cpp \
-	grid.cpp group.cpp guides.cpp gwinding.cpp hittest.cpp hotkeys.cpp impbmp.cpp \
-	impcol.cpp impstr.cpp impexpop.cpp infocomp.cpp insertnd.cpp invalid.cpp \
+	grid.cpp group.cpp guides.cpp gwinding.cpp hittest.cpp htmlexp.cpp hotkeys.cpp \
+	impbmp.cpp impcol.cpp impstr.cpp impexpop.cpp infocomp.cpp insertnd.cpp invalid.cpp \
 	isetattr.cpp layer.cpp lineattr.cpp linecomp.cpp linedef.cpp list.cpp listitem.cpp \
 	main.cpp main1.cpp main2.cpp main3.cpp matrix.cpp modlist.cpp module.cpp \
 	moldedit.cpp moldenv.cpp moldpers.cpp moldshap.cpp native.cpp nativeop.cpp \

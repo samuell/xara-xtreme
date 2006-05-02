@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "resimmap.h"		// Imagemap resources
 
-//#include "fimagdlg.h"		//Imagemap dialog
+#include "fimagdlg.h"		//Imagemap dialog
 #include "filtimag.h"
 
 #include "docview.h"		//For DocView::GetCurrent
@@ -213,8 +213,11 @@ BOOL ImagemapFilter::Init()
 		Camelot.DeclarePref( NULL, ms_strInsert, &ms_Options.m_fInsert, FALSE, TRUE);
 	}
 
+PORTNOTE("other","Remove ImagemapDlg usage - not defined yet");
+#ifndef EXCLUDE_FROM_XARALX
 	//Initialise the ExportOptions dialog
 	ImagemapDlg::Init();
+#endif
 	
 	//And return
 	return TRUE;
@@ -510,23 +513,17 @@ BOOL ImagemapFilter::WillAcceptExistingFile(PathName pthToReplace)
 	Info.Cancel = 3;
 
 	//And put the error box up
-	switch (AskQuestion( &Info ))
-	{
-		case _R(IDB_IMAGEMAP_INSERT):
-			ms_Options.m_fInsert=TRUE;	
-			return TRUE;
-
-		case _R(IDB_IMAGEMAP_REPLACE):
-			ms_Options.m_fInsert=FALSE;
-			return TRUE;
-
-		case _R(IDS_CANCEL):
-			return FALSE;
-
-		default:
-			return TRUE;
-	}
-
+	const UINT32 uResult = AskQuestion( &Info );
+	if( uResult == _R(IDB_IMAGEMAP_INSERT) )
+		ms_Options.m_fInsert=TRUE;	
+	else
+	if( uResult == _R(IDB_IMAGEMAP_REPLACE) )
+		ms_Options.m_fInsert=FALSE;	
+	else
+	if( uResult ==_R(IDS_CANCEL) )
+		return FALSE;
+	
+	return TRUE;
 }
 
 /********************************************************************************************
@@ -650,6 +647,8 @@ BOOL ImagemapFilter::GetOptionsFromUser(ImagemapFilterOptions* pifoDefault, Path
 {
 	ERROR2IF (pifoDefault==NULL, FALSE, "ImagemapFilter::GetOptionsFromUser - NULL parameter");
 
+PORTNOTETRACE("other","ImagemapFilter::GetOptionsFromUser - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//Now, if the file we are writing to exists already, and if
 	//we are writing to that file
 	if (SGLibOil::FileExists(ppthFile) && ms_Options.Insert())
@@ -681,7 +680,9 @@ BOOL ImagemapFilter::GetOptionsFromUser(ImagemapFilterOptions* pifoDefault, Path
 		//chose back into *pifoDefault
 		return ImagemapDlg::InvokeDialog(pifoDefault);
 	}
-
+#endif
+	
+	return FALSE;
 }	
 
 
@@ -709,6 +710,8 @@ BOOL ImagemapFilter::GetOptionsFromUser(ImagemapFilterOptions* pifoDefault, Path
 
 BOOL ImagemapFilter::PrepareRenderRegion(Document* pDoc)
 {
+PORTNOTETRACE("other","ImagemapFilter::PrepareRenderRegion - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	// First, create the render region from our current options
 	if (m_pRegion)
 		delete m_pRegion;
@@ -730,7 +733,8 @@ BOOL ImagemapFilter::PrepareRenderRegion(Document* pDoc)
 
 	//We also need to switch background rendering off in the view
 	ForceBackgroundRedrawOff(pView);
-		
+#endif
+	
 	return TRUE;
 }
 
@@ -1070,6 +1074,8 @@ INT32 ImagemapFilter::WriteImagemapHTML(CCLexFile* pfileToWrite, TCHAR* pcBuffer
 	//Keep a count of the characters we write out
 	INT32 lCharsWritten=0;
 
+PORTNOTETRACE("other","ImagemapFilter::WriteImagemapHTML - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//Do we have an imagemap render region member?
 	if (m_pRegion)
 	{
@@ -1093,7 +1099,7 @@ INT32 ImagemapFilter::WriteImagemapHTML(CCLexFile* pfileToWrite, TCHAR* pcBuffer
 		//And a new line
 		//lCharsWritten+=WriteEOL(pfileToWrite, pcBuffer);
 	}
-	
+#endif	
 	
 	//And return the number of characters written
 	return lCharsWritten;
@@ -1136,6 +1142,8 @@ BOOL ImagemapFilter::WriteDataToExistingFile(CCLexFile* pFile, PathName* pPath)
 	//Check parameters
 	ERROR2IF (pFile==NULL || pPath==NULL, FALSE, "ImagemapFilter::WriteDataToExistingFile - null parameter");
 
+PORTNOTETRACE("other","ImagemapFilter::WriteDataToExistingFile - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//Now let's create a new Xara temporary file
 	PathName pthTemp=FileUtil::GetTemporaryPathName();
 
@@ -1165,6 +1173,9 @@ BOOL ImagemapFilter::WriteDataToExistingFile(CCLexFile* pFile, PathName* pPath)
 
 	//And return
 	return ok;
+#endif
+
+	return TRUE;
 }
 
 /********************************************************************************************
@@ -1455,11 +1466,11 @@ BOOL ImagemapFilter::WriteExistingDataHelper(CCLexFile* pfileTo, CCLexFile* pfil
 		}
 
 		//Then get a pointer to the last HTML token we read
-		TCHAR* pcBufferToWrite=pfileFrom->GetHTMLTokenBuffer();
+		char* pcBufferToWrite=pfileFrom->GetHTMLTokenBuffer();
 
 		//And write it out
 		if (pcBufferToWrite)
-			pfileTo->write(pcBufferToWrite, camStrlen(pcBufferToWrite));
+			pfileTo->write(pcBufferToWrite, strlen(pcBufferToWrite));
 	}
 
 	//Now, if we haven't inserted an imagemap before a closing body tag,
@@ -1545,6 +1556,8 @@ BOOL ImagemapFilter::WriteExistingDataHelper(CCLexFile* pfileTo, CCLexFile* pfil
 
 void ImagemapFilter::BuildMapNamesList(CCLexFile* pfileSearch, PathName* ppthSearch, List* plstToAdd)
 {
+PORTNOTETRACE("other","ImagemapFilter::BuildMapNamesList - Do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	//First we must open the file for reading
 	CCDiskFile* pDiskFile=(CCDiskFile*) pfileSearch;
 
@@ -1581,6 +1594,7 @@ void ImagemapFilter::BuildMapNamesList(CCLexFile* pfileSearch, PathName* ppthSea
 
 	//Then close the file
 	pDiskFile->close();
+#endif
 }
 
 
@@ -1625,7 +1639,7 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("<img src=\"file:///"));
 
 		nChars = camStrlen(pcBuffer);
-		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), ms_Options.m_GraphicPath.GetPath() ); // the path and file name of the graphic
 
 		nChars = camStrlen(pcBuffer);
 		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\""));
@@ -1674,7 +1688,7 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(" usemap=\"#"));
 
 		nChars = camStrlen(pcBuffer);
-		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T(ms_Options.GetImagemapName()));
+		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), ms_Options.GetImagemapName() );
 
 		nChars = camStrlen(pcBuffer);
 		camStrcpy(pcBuffer+nChars*sizeof(TCHAR), _T("\" border=\"0\">\r\n"));
@@ -1690,7 +1704,7 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 
 	//Image Path and filename...
 	nChars += camStrlen(_T("<img src=\"file:///"));
-	nChars += camStrlen(_T(ms_Options.m_GraphicPath.GetPath())); // the path and file name of the graphic
+	nChars += camStrlen( ms_Options.m_GraphicPath.GetPath() ); // the path and file name of the graphic
 	nChars += camStrlen(_T("\""));
 
 /************************************************************************************
@@ -1727,7 +1741,7 @@ INT32 ImagemapFilter::WritePreamble(TCHAR* pcBuffer)
 
 	//Now the remaining details...
 	nChars += camStrlen(_T(" usemap=\"#"));
-	nChars += camStrlen(_T(ms_Options.GetImagemapName()));
+	nChars += camStrlen( ms_Options.GetImagemapName() );
 	nChars += camStrlen(_T("\" border=\"0\">\r\n"));
 
 	return nChars*sizeof(TCHAR);

@@ -252,12 +252,12 @@ BOOL BmapPrevDlg::RegisterYourPagesInOrderPlease()
 	}
 	else
 	{
-PORTNOTE("other","Removed registry usage")
+PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
 #ifndef EXCLUDE_FROM_XARALX
 		// Not exporting a bitmap from the bitmap gallery
 		AddAPage(_R(IDD_TPALETTE));
 #endif
-
+	
 		if (!m_bSlicingImage)
 			ok = AddAPage(_R(IDD_TBITMAPSIZE));
 	}
@@ -3251,8 +3251,6 @@ PORTNOTETRACE("other","BmapPrevDlg::BrowserPreviewGetOptions - Do nothing");
 // //////////////////////////////////////////////////////////////////////////////////////// //
 void BmapPrevDlg::HandleImageMapTabMsg(DialogMsg* Msg)
 {
-PORTNOTETRACE("other","BmapPrevDlg::HandleImageMapTabMsg - Do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	TalkToPage(_R(IDD_TIMAPOPTIONS));  // The Coords Page identifier
 
@@ -3309,7 +3307,10 @@ PORTNOTETRACE("other","BmapPrevDlg::HandleImageMapTabMsg - Do nothing");
 
 				m_pExportOptions->SetCanUseDesignNotes( bCurrentState );
 
+PORTNOTE("other","SetRegistryFlagForDesignNotes - not defiend yet");
+#ifndef EXCLUDE_FROM_XARALX
 				SetRegistryFlagForDesignNotes(bCurrentState);
+#endif
 			}
 			break;
 		}
@@ -3323,7 +3324,6 @@ PORTNOTETRACE("other","BmapPrevDlg::HandleImageMapTabMsg - Do nothing");
 			break;
 
 	}
-#endif
 }
 
 /********************************************************************************************
@@ -3337,8 +3337,6 @@ PORTNOTETRACE("other","BmapPrevDlg::HandleImageMapTabMsg - Do nothing");
 ********************************************************************************************/
 void BmapPrevDlg::ImageMapOnCreate()
 {
-PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCreate - Do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	//Make sure we're talking to the right page
 	TalkToPage(_R(IDD_TIMAPOPTIONS));
 
@@ -3347,7 +3345,8 @@ PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCreate - Do nothing");
 	//  has been named or not, we can enable/disable the appropriate controls.
 	wxString DocName = _T("\\") + Document::GetCurrent()->GetPathName();	//  File name
 
-	BOOL bUsesDesignNotes	= UsesDesignNotes();			//  Is Dreamweaver 3 installed?
+PORTNOTE("other","Removed UsesDesignNotes - not defined yet")
+	BOOL bUsesDesignNotes	= false; //UsesDesignNotes();			//  Is Dreamweaver 3 installed?
 	BOOL bFileSaved			= DocName != _("\\");			//  Has the current document been saved?
 
 	SetLongGadgetValue( _R(IDC_IMAPTAB_ADDDESIGNNOTE), m_pExportOptions->GetCanUseDesignNotes() );
@@ -3425,7 +3424,7 @@ PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCreate - Do nothing");
 	}
 
 	//Get the current set of ImagemapFilterOptions
-	ImagemapFilterOptions ifoCurrent=pImagemapFilter->GetFilterOptions();
+	ImagemapFilterOptions ifoCurrent = pImagemapFilter->GetFilterOptions();
 
 	//First get the value for the ExportToFile switch
 	BOOL fFile=ifoCurrent.ExportToFile();
@@ -3540,7 +3539,6 @@ PORTNOTETRACE("other","BmapPrevDlg::ImageMapOnCreate - Do nothing");
 	ImageMapEnableExportToFileOptions(fFile);
 
 	RefreshImageMapTab();
-#endif
 }
 
 void BmapPrevDlg::RefreshImageMapTab()

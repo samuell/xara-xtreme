@@ -156,25 +156,25 @@ BOOL HTMLFilter::ImportingHTML = FALSE;
 static struct {
 	TCHAR *tag;		
 	HTMLTAG_TYPE Id;		
-} HTML_Table[] = {	"img",	HTMLTAG_IMGSRC,
-					"body", HTMLTAG_BODY,
-					"input",HTMLTAG_INPUT,
-					"center", HTMLTAG_CENTER,
-					"/center", HTMLTAG_CENTEREND,
-					"embed", HTMLTAG_EMBED,
+} HTML_Table[] = {	{_T("img"),	HTMLTAG_IMGSRC},
+					{_T("body"),	HTMLTAG_BODY},
+					{_T("input"),	HTMLTAG_INPUT},
+					{_T("center"),	HTMLTAG_CENTER},
+					{_T("/center"),HTMLTAG_CENTEREND},
+					{_T("embed"),	HTMLTAG_EMBED},
 
 					// The following tags are not used during the parsing,
 					// but are used during HowCompatible()
-					"a href", HTMLTAG_UNUSED,
-					"select",HTMLTAG_UNUSED,
-					"/body", HTMLTAG_UNUSED,
-					"/a", HTMLTAG_UNUSED,
-					"html", HTMLTAG_UNUSED,
-					"/html", HTMLTAG_UNUSED,
-					"title", HTMLTAG_UNUSED,
-					"/title", HTMLTAG_UNUSED,
-					"head", HTMLTAG_UNUSED,
-					"/head",HTMLTAG_UNUSED,
+					{_T("a href"),	HTMLTAG_UNUSED},
+					{_T("select"),	HTMLTAG_UNUSED},
+					{_T("/body"),	HTMLTAG_UNUSED},
+					{_T("/a"),		HTMLTAG_UNUSED},
+					{_T("html"),	HTMLTAG_UNUSED},
+					{_T("/html"),	HTMLTAG_UNUSED},
+					{_T("title"),	HTMLTAG_UNUSED},
+					{_T("/title"),	HTMLTAG_UNUSED},
+					{_T("head"),	HTMLTAG_UNUSED},
+					{_T("/head"),	HTMLTAG_UNUSED},
 									
 					////// add more TAGS here //////
 					///// just add the FIRST element of the HTML tag ///////

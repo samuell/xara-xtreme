@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "filtimop.h"	//For ImagemapFilterOptions
 #include "filtirr.h"	//For ImagemapRenderRegion
 #include "filters.h"	//For AuldLangSyne
-//#include "htmlexp.h"	//The HTML export filter
+#include "htmlexp.h"	//The HTML export filter
 #include "list.h"		//For the list class
 
 class CCLexFile;
@@ -126,8 +126,6 @@ class Operation;
 					at the same time as it exports the bitmap
 
 **************************************************************************************/
-PORTNOTE("filter","Removed ImagemapFilter - don't need exporter yet")
-#ifndef EXCLUDE_FROM_XARALX
 class ImagemapFilter : public HTMLExportFilter
 {
 	// Declare the class for memory tracking
@@ -232,6 +230,5 @@ private:
 	static TCHAR ms_strFile[];	
 	static TCHAR ms_strInsert[];	
 };
-#endif
 
 #endif	// INC_IMAGEMAPFILTER
