@@ -992,6 +992,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}	
 	else if (
+		(EventType == wxEVT_MOUSEWHEEL) ||
+		FALSE)
+	{
+		msg.DlgMsg = (((wxMouseEvent *)&event)->GetWheelRotation()>0)?DIM_MOUSEWHEEL_UP:DIM_MOUSEWHEEL_DOWN;
+		HandleMessage = TRUE;
+	}	
+	else if (
 		((EventType == wxEVT_CAMDIALOG_REDRAW) && (pGadget)) ||
 		FALSE)
 	{
