@@ -150,7 +150,7 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(CGadgetImageList, CCObject);
 
-IMPLEMENT_ABSTRACT_CLASS(OurPropSheet, wxNotebookPage);
+IMPLEMENT_CLASS(OurPropSheet, wxPropertySheetDialog);
 
 
 // Place all statics here please, ordered by class
@@ -325,8 +325,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 
 	if( ok && 
 		Mode == MODAL && 
-		( pDialogWnd->IsKindOf( CLASSINFO(wxDialog) ) ||
-		  DlgOp->IS_KIND_OF(DialogTabOp) ) )
+		pDialogWnd->IsKindOf( CLASSINFO(wxDialog) ) )
 	{
 		((wxDialog *) pDialogWnd)->ShowModal();
 	}

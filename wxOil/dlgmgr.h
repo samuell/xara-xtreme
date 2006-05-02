@@ -964,44 +964,6 @@ PORTNOTE("dialog","Removed Windows callbacks")
 	friend class DialogManager;
 };
 
-PORTNOTE("dialog","Don't need \ can't use OurPropShtPage, removed")
-#ifndef EXCLUDE_FROM_XARALX
-/********************************************************************************************
-
->	class OurPropShtPage: public CPropertyPage
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	30/11/94
-	Purpose:	A page which live in OurPropertySheets
-	SeeAlso:	-
-
-********************************************************************************************/
-
-class OurPropShtPage: public wxNotebookPage
-{	
-	friend class DialogManager;
-	   
-	DECLARE_ABSTRACT_CLASS( OurPropShtPage )
-
-public:
-	// Construction
-	OurPropShtPage(CDlgResID DialogResID);
-
-	CDlgResID GetPageID() { return m_PageID; }
-
-protected:
-	// The WindowProc chanels suitable messages to the DialogManager
-	LRESULT WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam ); 
-
-	BOOL OnSetActive();
-	BOOL OnKillActive(); 
-
-	CDlgResID		m_PageID;				// We store the resource id used to create the page
-	BOOL			m_CreateMessageSent;	// Becomes TRUE after a Create message is sent for the page.
-
-	enum EnabledState { ENABLED, DISABLED, UNKNOWN };
-};
-#endif
 
 /********************************************************************************************
 
