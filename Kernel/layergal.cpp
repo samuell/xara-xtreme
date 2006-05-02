@@ -1411,8 +1411,8 @@ MsgResult LayerNameDlg::Message(Msg* Message)
 
 			LayerNameDlg::IsOpen 		= FALSE;	// We no longer have a current layer name dialog
 			LayerNameDlg::pLayerNameDlg = NULL;		// so reset the static vars
+			return (DLG_EAT_IF_HUNGRY(Msg)); 
 	   	}
-//		return (DLG_EAT_IF_HUNGRY(Msg)); 
 	}
 //	return OK; 
 
