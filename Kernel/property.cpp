@@ -190,7 +190,7 @@ PropertyTabs::PropertyTabs()
 
 ********************************************************************************************/
 
-PropertyTabs::Init()
+BOOL PropertyTabs::Init()
 {
 	// Do nothing for now.
 	return TRUE;
@@ -198,7 +198,7 @@ PropertyTabs::Init()
 
 
 
-///********************************************************************************************
+//********************************************************************************************
 //
 //>	static BOOL PropertyTabs::DeclarePropertyTab(PropertyTabs *pProperty)
 //
@@ -228,7 +228,7 @@ PropertyTabs::Init()
 //	return TRUE;
 //}
 //
-///********************************************************************************************
+//********************************************************************************************
 //
 //>	static BOOL PropertyTabs::UndeclarePropertyTab(PropertyTabs *pProperty)
 //
@@ -271,7 +271,7 @@ PropertyTabs::Init()
 //	return TRUE;
 //}
 //
-///********************************************************************************************
+//********************************************************************************************
 //
 //>	static PropertyTabs *PropertyTabs::GetFirst()
 //
@@ -290,7 +290,7 @@ PropertyTabs::Init()
 //	return (PropertyTabs *) PropertyTabsList.GetHead();
 //}
 //
-///********************************************************************************************
+//********************************************************************************************
 //
 //>	static PropertyTabs *PropertyTabs::GetNext(PropertyTabs *pPropertyTabs)
 //
@@ -519,11 +519,11 @@ BOOL PropertyTabs::GreyApplyNow()
 	// on one of the pages and hence give rise to unknown controls messages when we try to
 	// talk to the pages controls again.
 	CDlgResID PageID = pPropertiesDlg->GetCurrentPageID();	// Get currently selected Tab id
-	pPropertiesDlg->TalkToPage(NULL);
+	pPropertiesDlg->TalkToPage(0);
 
 	pPropertiesDlg->EnableGadget(_R(ID_APPLY_NOW), FALSE);
-	pPropertiesDlg->EnableGadget(IDOK, FALSE);
-	pPropertiesDlg->SetStringGadgetValue(IDCANCEL,_R(IDS_CLOSEDOCS));
+	pPropertiesDlg->EnableGadget(_R(wxID_OK), FALSE);
+	pPropertiesDlg->SetStringGadgetValue(_R(wxID_CANCEL),_R(IDS_CLOSEDOCS));
 
 	pPropertiesDlg->TalkToPage(PageID);						// Select the originally selected tab
 
@@ -557,11 +557,11 @@ BOOL PropertyTabs::UngreyApplyNow()
 	// on one of the pages and hence give rise to unknown controls messages when we try to
 	// talk to the pages controls again.
 	CDlgResID PageID = pPropertiesDlg->GetCurrentPageID();	// Get currently selected Tab id
-	pPropertiesDlg->TalkToPage(NULL);						// Select the main tab
+	pPropertiesDlg->TalkToPage(0);						// Select the main tab
 
 	pPropertiesDlg->EnableGadget(_R(ID_APPLY_NOW), TRUE);		// ungrey button on main tab
-	pPropertiesDlg->EnableGadget(IDOK, TRUE);
-	pPropertiesDlg->SetStringGadgetValue(IDCANCEL,_R(IDS_CANCEL));
+	pPropertiesDlg->EnableGadget(_R(wxID_OK), TRUE);
+	pPropertiesDlg->SetStringGadgetValue(_R(wxID_CANCEL),_R(IDS_CANCEL));
 
 	pPropertiesDlg->TalkToPage(PageID);						// Select the originally selected tab
 
@@ -863,10 +863,10 @@ BOOL PropertyTabs::SetOkState(BOOL Val)
 	CDlgResID PageID = pPropertiesDlg->GetCurrentPageID();	
 
 	// Select the main tab
-	pPropertiesDlg->TalkToPage(NULL);					
+	pPropertiesDlg->TalkToPage(0);					
 
 	// ungrey button on main tab
-	pPropertiesDlg->EnableGadget(IDOK, Val);		
+	pPropertiesDlg->EnableGadget(_R(ID_OK), Val);		
 		
 	// Select the originally selected tab
 	pPropertiesDlg->TalkToPage(PageID);						
