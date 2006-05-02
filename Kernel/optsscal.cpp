@@ -277,7 +277,7 @@ TRACEUSER( "Neville", _T("commit Scale section\n"));
 	// Ok has been pressed so take the values from this section of the dialog box
 	// Takes the values in the dialog and sets the DimScale object accordingly.
 	BOOL Valid=TRUE;		// Flag for validity of value
-	BOOL State=FALSE;		// Flag for state of button/switch
+//	BOOL State=FALSE;		// Flag for state of button/switch
 	BOOL SetOk=TRUE;		// Preference value set ok
 
 	// Section = Scale settings
@@ -322,8 +322,8 @@ TRACEUSER( "Neville", _T("commit Scale section\n"));
 				if (Active)
 				{
 					// Dim Scales can only be 32 characters long
-					String_32 DrawingStr32 = "";
-					String_32 RealStr32 = "";
+					String_32 DrawingStr32 = _T("");
+					String_32 RealStr32 = _T("");
 					// Check if read in strings are longer than this
 					if (DrawingStr.Length() > DrawingStr32.MaxLength())
 					{
@@ -374,7 +374,7 @@ TRACEUSER( "Neville", _T("commit Scale section\n"));
 			// Now tell other users of units/scaling factors that there they are likely
 			// to need to update any currently displayed units. 
 			Document *pCurrentDoc = (Document *)pSpread->FindOwnerDoc();
-			BROADCAST_TO_ALL(OptionsChangingMsg(pCurrentDoc, OptionsChangingMsg::OptionsState::NEWUNITS));
+			BROADCAST_TO_ALL(OptionsChangingMsg(pCurrentDoc, OptionsChangingMsg::NEWUNITS));
 // unfortunately pScopeDoc is NULL!, and since pCurrentDoc is calulated I thought it ought to use! - Ed 17/10/95
 //			BROADCAST_TO_ALL(OptionsChangingMsg(pScopeDocument, OptionsChangingMsg::OptionsState::NEWUNITS));
 
@@ -421,7 +421,7 @@ TRACEUSER( "Neville", _T("GreySection in ScaleTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_SCALING_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
@@ -463,7 +463,7 @@ TRACEUSER( "Neville", _T("UngreySection in ScaleTab section\n"));
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_SCALING_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Only update if we are not already ungrey 
 	if (GreyStatus == FALSE)
@@ -583,29 +583,27 @@ TRACEUSER( "Neville", _T("HandleScaleMsg\n"));
 			break;
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_OPTS_USESCALEFACTOR))
 			{
-				case _R(IDC_OPTS_USESCALEFACTOR):
-					{
-						BOOL Valid;
-						BOOL Active = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_USESCALEFACTOR),0,1,0,&Valid);
-						// Grey/ungrey the editable fields accordingly 
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_DRAWINGSCALE), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_REALSCALE), Active);
-						// Grey/ungrey the static text fields accordingly 
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALEEG), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_REALWORLD), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_DRAWING), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALETO), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALETO2), Active);
-						pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALEGROUP), Active);
-					}
-					break;						
+				BOOL Valid;
+				BOOL Active = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_USESCALEFACTOR),0,1,0,&Valid);
+				// Grey/ungrey the editable fields accordingly 
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_DRAWINGSCALE), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_REALSCALE), Active);
+				// Grey/ungrey the static text fields accordingly 
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALEEG), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_REALWORLD), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_DRAWING), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALETO), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALETO2), Active);
+				pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCALEGROUP), Active);
 			}
 			break; 
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
+			break;
+		default:
 			break;
 	}
 
@@ -634,13 +632,13 @@ BOOL ScaleTab::InitSection()
 TRACEUSER( "Neville", _T("ScaleTab::InitSection\n"));
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"ScaleTab::InitSection called with no dialog pointer");
 
-	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
+//	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
 
 	// Make sure the information field displaying the name of the current document
 	// is correct.
 	String_256	DocumentName(_R(IDT_OPTS_SCALING_INFO)); 
 	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), &DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	// Section = Scale settings
 
@@ -718,13 +716,13 @@ TRACEUSER( "Neville", _T("ScaleTab::ShowScaleDetails\n"));
 	OldActiveState = Active;
 
 	Str = pDimScale->GetDrawingScaleStr();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_DRAWINGSCALE), &Str);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_DRAWINGSCALE), Str);
 	pPrefsDlg->EnableGadget(_R(IDC_OPTS_DRAWINGSCALE), Active);
 	// remember entry states in our class variables
 	OldDrawingStr = Str;
 
 	Str = pDimScale->GetRealScaleStr();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_REALSCALE), &Str);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_REALSCALE), Str);
 	pPrefsDlg->EnableGadget(_R(IDC_OPTS_REALSCALE), Active);
 	// remember entry states in our class variables
 	OldRealStr = Str;
