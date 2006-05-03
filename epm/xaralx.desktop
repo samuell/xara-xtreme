@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Xara LX
+Comment=Versatile vector graphics program
+Comment[pt_BR]=Versátil programa para gráficos vetoriais
+Icon=xaralx.xpm
+Terminal=false
+Type=Application
+Categories=Application;Graphics;VectorGraphics;
+StartupNotify=true
+MimeType=image/xar;application/x-extension-xar;
+FilePattern=xaralx;
+Exec=xaralx %F
+TryExec=xaralx
+GenericName[pt_BR]=

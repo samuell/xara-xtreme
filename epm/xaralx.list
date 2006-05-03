@@ -1,0 +1,32 @@
+%product xaralx
+%copyright 1999-2006 Xara Group Ltd.
+%vendor Xara
+%license LICENSE
+%readme README
+%description Xara Illustration Software
+
+$ver=0.4
+%version $ver
+
+%format deb
+%requires libstd++5
+d 755 root root /usr/share/doc/xaralx
+d 755 root root /usr/share/doc/xaralx/examples
+d 755 root root /usr/share/doc/xaralx/examples
+l 000 root root /usr/share/xaralx/examples 		/usr/share/doc/xaralx/examples
+
+%format rpm
+%requires pango
+d 755 root root /usr/share/xaralx
+d 755 root root /usr/share/xaralx/examples
+f 755 root root /usr/share/xaralx/examples 		XaraLX/Designs/*.xar
+d 755 root root /usr/share/doc/xaralx-${ver}
+f 755 root root /usr/share/doc/xaralx-${ver}/README	README
+f 755 root root /usr/share/doc/xaralx-${ver}/LICENSE	LICENSE
+f 755 root root /usr/share/doc/xaralx-${ver}/GPL	GPL
+f 755 root root /usr/share/doc/xaralx-${ver}/AUTHORS	AUTHORS
+
+%format all
+f 755 root root /usr/bin/xaralx 			XaraLX/XaraLX
+f 644 root root /usr/share/applications/xaralx.desktop 	xaralx.desktop
+f 644 root root /usr/share/pixmaps/xaralx.xpm 		xaralx.xpm
