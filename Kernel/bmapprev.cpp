@@ -3056,7 +3056,8 @@ void BmapPrevDlg::RefreshBitmapSizeTab()
 
 	HandleBitmapSizeDPIChange();
 	
-	if (m_pPreviewDlg )
+PORTNOTE("other", "Remove preview usage" )
+//	if (m_pPreviewDlg )
 	{
 		m_LockSizeUpdates = TRUE;
 		WinRect wr = GetExportSize(m_pExportOptions->GetDPI());
@@ -3105,7 +3106,7 @@ void BmapPrevDlg::RefreshBitmapSizeScaleFactor()
 
 void BmapPrevDlg::HandleBrowserPreviewTabMsg(DialogMsg* Msg)
 {
-PORTNOTETRACE("other","BmapPrevDlg::BrowserPreviewGetOptions - Do nothing");
+PORTNOTETRACE("other","BmapPrevDlg::HandleBrowserPreviewTabMsg - Do nothing");
 #if !defined(EXCLUDE_FROM_XARALX)
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	TalkToPage(_R(IDD_TBROWSER));  // The Coords Page identifier

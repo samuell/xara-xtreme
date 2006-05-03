@@ -766,6 +766,28 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	wxWindow * pGadget = NULL;
 	if (id) pGadget = GetGadget(pEvtHandler->pwxWindow, id);
 
+	// Try and find-out whether our control is part of a tabbed dialog page
+	if( NULL != pGadget )
+	{
+		// pEvtHandler->pwxWindow maybe our immediate wxPanel\wxDialog, but won't
+		// be in case of tabbed dialog
+		wxWindow*	pDialog = pGadget->GetParent();
+		while( NULL != pDialog && !pDialog->IsKindOf( CLASSINFO(wxDialog) ) && 
+			!pDialog->IsKindOf( CLASSINFO(wxPanel) ) )
+		{
+			pDialog = pDialog->GetParent();
+		}
+
+		// Could this be part of a tabbed dialog?
+		if( NULL != pDialog && pDialog->IsKindOf( CLASSINFO(wxPanel) ) )
+		{
+			// A parent of type wxBookCtrlBase would synch it
+			wxWindow *pDialogParent = pDialog->GetParent();
+			if( NULL != pDialogParent && pDialogParent->IsKindOf( CLASSINFO(wxBookCtrlBase) ) )
+				PageID = pDialog->GetId();
+		}
+	}
+
 	// Make up a default message
 	DialogMsg msg(pEvtHandler->pwxWindow, DIM_NONE, id, DlgMsgParam, PageID);
 
@@ -898,6 +920,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	{
 		msg.DlgMsg = DIM_SELECTION_CHANGED;
 		msg.DlgMsgParam = NO_COMMIT;
+		HandleMessage = TRUE;
+	}
+	else
+	if( EventType == wxEVT_COMMAND_TEXT_UPDATED && 	// only with WXWIN_COMPATIBILITY_EVENT_TYPES
+		pGadget == wxWindow::FindFocus() )
+	{
+		msg.DlgMsg = DIM_TEXT_CHANGED;
 		HandleMessage = TRUE;
 	}
 	else if(
@@ -6250,8 +6279,18 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 	ERROR1IF(pNewPage == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
 
 	wxString Title = pNewPage->GetTitle();
-	if (Title.IsEmpty()) Title = pNewPage->GetLabel(); // because wxPanel doesn't seem to support a title
-	if (Title.IsEmpty())
+	if (Title.IsEmpty()) 
+		Title = pNewPage->GetLabel(); // because wxPanel doesn't seem to support a title
+	if( Title.IsEmpty() )
+	{
+		PCTSTR	pszStringLookup = CamResource::GetTextFail( DialogResID );
+		if( NULL != pszStringLookup )
+		{
+			Title = pszStringLookup;
+			TRACEUSER( "jlh92", _T("Page (FST) = \"%s\"\n"), Title.c_str() );
+		}
+	}
+	if( Title.IsEmpty() )
 	{
 		// Finally, in desperation, we (mis-)use the tooltip string because now the wx folks have removed
 		// the label, even though it's needed for accessibility. Aarrghh
