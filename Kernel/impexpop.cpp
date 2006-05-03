@@ -1114,13 +1114,12 @@ PORTNOTE("other", "Removed BmapPrevDlg usage" )
 	// Graeme (11-4-00) - Added FILTERID_AIEPS to stop the warnings when doing an
 	// AI format export. After all, the AIEPS filter is probably better specified
 	// these days than the other EPS filters.
+PORTNOTE("other", "Removed EPSFilter usage" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (TheSelectedFilterID != FILTERID_CAMELOT_EPS &&
 		TheSelectedFilterID != FILTERID_NATIVE_EPS &&
 		TheSelectedFilterID != FILTERID_AIEPS
-PORTNOTE("other", "Removed EPSFilter usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 		&& pFilter->IS_KIND_OF ( EPSFilter )
-#endif
 		)
 	{
 		// Warn the user that they are not exporting in Camelot EPS or native
@@ -1141,6 +1140,7 @@ PORTNOTE("other", "Removed EPSFilter usage" )
 			return;
 		}
 	}
+#endif
 
 	BOOL fExportedOk = FALSE;
 
