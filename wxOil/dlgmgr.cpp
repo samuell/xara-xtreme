@@ -6257,12 +6257,14 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 
 	// We need to create a page object
 	// Because OurPropShtPage is derived from an MFC object we have to cope with exceptions
-	wxWindow* pNewPage;
+	wxWindow*	pNewPage;
+	wxString	ObjectName;
 	try
 	{
 		const TCHAR* pDialogName=CamResource::GetObjectNameFail( DialogResID );
 		ERROR1IF(pDialogName == NULL, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
 		TRACEUSER( "jlh92", _T("Cre tab %s\n"), pDialogName );
+		ObjectName = pDialogName;
 
 		pNewPage = wxXmlResource::Get()->LoadPanel( pNoteBook, pDialogName );
 		ERROR1IF(pNewPage == NULL, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
@@ -6283,7 +6285,9 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 		Title = pNewPage->GetLabel(); // because wxPanel doesn't seem to support a title
 	if( Title.IsEmpty() )
 	{
-		PCTSTR	pszStringLookup = CamResource::GetTextFail( DialogResID );
+		ObjectName += _T("_NAME");
+		ResourceID	NameResID = CamResource::GetResourceID( PCTSTR(ObjectName) );
+		PCTSTR		pszStringLookup = CamResource::GetTextFail( NameResID );
 		if( NULL != pszStringLookup )
 		{
 			Title = pszStringLookup;
