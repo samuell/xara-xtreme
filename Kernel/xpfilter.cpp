@@ -187,7 +187,7 @@ BOOL PluginNativeFilter::Init(const CLSID& rCLSID)
 
 	// Load the description strings
 	FilterName = pPluginOILFilter->FilterName;
-	FilterInfo = "Temp Info String";
+	FilterInfo = _T("Temp Info String");
 
 	BOOL ok = CreateRecordHandlers();
 
@@ -278,7 +278,6 @@ BOOL PluginNativeFilter::DoImport(SelOperation* pOp, CCLexFile* pFile, Document*
 	ERROR2IF(FALSE, pFile == NULL,"PluginNativeFilter::DoImport null file!");
 	ERROR2IF(FALSE, pDestDoc == NULL,"PluginNativeFilter::DoImport null document!");
 
-	BOOL bRetVal = TRUE;
 	PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
 
 	// Make sure the OIL filter gets cleaned up on exit
@@ -346,7 +345,7 @@ BOOL PluginNativeFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* 
 	// Call OIL layer to get a new CCLexFile derived object that the Xar data
 	// must be exported to
 	CCLexFile* pNewFile = NULL;
-	if (!pPluginOILFilter->GetExportFile(&pNewFile))
+	if (!pPluginOILFilter->GetExportFile(pPath, &pNewFile))
 	{
 		TRACEUSER( "Gerry", _T("Failed to get an output file\n"));
 		return(FALSE);
@@ -470,9 +469,9 @@ BOOL PluginNativeFilter::GenerateExportData(CapabilityTree* pPlugCaps)
 	SetTotalProgressBarCount(500);
 	m_ProgressOffset = 0;
 
-	UINT32 ThisPassCount = 0;
-	UINT32 ThisPassTotal = 0;
-	UINT32 NextPassCount = 0;
+//	UINT32 ThisPassCount = 0;
+//	UINT32 ThisPassTotal = 0;
+//	UINT32 NextPassCount = 0;
 
 	// First we create a copy of the chapter node
 	Node* pChapter = CamelotNativeFilter::GetExportNode();
@@ -524,14 +523,14 @@ BOOL PluginNativeFilter::GenerateExportData(CapabilityTree* pPlugCaps)
 	}
 
 	// Then we loop through each spread
-	BOOL bFirstSpread = TRUE;
+//	BOOL bFirstSpread = TRUE;
 	Node* pChild = pChapter->FindFirstChild();
 	while (pChild)
 	{
 		if (IS_A(pChild, Spread))
 		{
 			Spread* pSpread = (Spread*)pChild;
-			Spread* pNewSpread = NULL;
+//			Spread* pNewSpread = NULL;
 
 			// If spreads are being converted to bitmap then render a bitmap
 			// and build a NodeBitmap to represent it
@@ -1049,6 +1048,6 @@ BOOL PluginNativeFilter::SetProgressBarCount(UINT32 n)
 String_256 PluginNativeFilter::GetNewBitmapName()
 {
 	String_256 Str;
-	wsprintf(Str, TEXT("%d"), ++m_BitmapCount);
+	Str._MakeMsg(_T("%d"), ++m_BitmapCount);
 	return(Str);
 }

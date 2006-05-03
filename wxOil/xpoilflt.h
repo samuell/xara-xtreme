@@ -102,14 +102,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_XPOILFLT
 
 #include "oilfltrs.h"
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 #include <atlbase.h>	// For CRegKey and CComPtr
 
 #include "xpfapi.h"
+#endif
 
 #include "xpfcaps.h"
 
 class PluginNativeFilter;
 
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 class PluginFilterCallback : public CCmdTarget
 {
 	DECLARE_DYNCREATE( PluginFilterCallback )
@@ -129,7 +134,7 @@ public:
 protected:
 	PluginNativeFilter* m_pFilter;
 };
-
+#endif
 
 
 
@@ -160,13 +165,15 @@ public:
 	INT32 HowCompatible(PathName& Filename);
 	BOOL GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile);
 
-	BOOL GetExportFile(CCLexFile** ppNewFile);
+	BOOL GetExportFile(PathName* pPath, CCLexFile** ppNewFile);
 	BOOL GetCapabilities(CCLexFile* pFile, PathName* pPath, CapabilityTree* pCapTree);
 	BOOL DoExport(CCLexFile* pXarFile, PathName* pPath);
 
 	void Cleanup();
 
 protected:
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	BOOL CreateFilterObject();
 	void ReleaseFilterObject();
 
@@ -185,22 +192,27 @@ protected:
 	XPFCapability* CreateObjectNode(IXMLDOMNode* pNode);
 	XPFCapability* CreateAttributeNode(IXMLDOMNode* pNode);
 	XPFCapability* CreateColourNode(IXMLDOMNode* pNode);
+#endif
 
 protected:
 	BOOL m_bImport;
 	BOOL m_bExport;
+
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	CLSID m_CLSID;
-
 	CComPtr<IXPFilter> m_pFilterObj;
-
 	CComPtr<IStream> m_pXarStream;
+#endif
 
 public:
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	static BOOL AutoRegisterFilters();
 	static BOOL RegisterDLL(String_256& sPath);
 	static BOOL GetFileVersion(PathName* pPath, String_64* pVersion);
 	static INT32 CompareVersions(const String_64& lhs, const String_64& rhs);
-
+#endif
 };
 
 

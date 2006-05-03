@@ -219,14 +219,15 @@ BOOL OILFilter::InitFilters(List& FilterList)
 	// Find the OILy filters
 	Filter *pFilter;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 	if (!CreatePluginFilters(FilterList))
 	{
 		// Error has already been set
 		return(FALSE);
 	}
-	
+
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Create, initialise and install the Windows MetaFile import filter
 	ADD_FILTER(MetaFileFilter)
 
@@ -291,22 +292,11 @@ BOOL OILFilter::InitFilters(List& FilterList)
 //WEBSTER-Martin-19/12/96
 // possibly these next ones should now be in Filter::InitFilters as it's native code now
 
-	// Add the Preview Bitmap Filter
-	// Tricky one this. Don't really need this any more (14/3/97)- its only use is the 
-	// PreviewFilter::PreviewBitmapSize static that has historically been used all over the place
-	ADD_FILTER(PreviewFilter)
+#endif	// EXCLUDE_FROM_XARALX
 
-	// Add the preview bitmap filters that we can use in the new native/web format
-	ADD_FILTER(PreviewFilterBMP)
-	ADD_FILTER(PreviewFilterGIF)
-	ADD_FILTER(PreviewFilterJPEG)
-	ADD_FILTER(PreviewFilterPNG)
-	ADD_FILTER(ThumbnailFilterPNG)
-
-#else
-//#pragma message( __LOCMSG__ "OILFilter::InitFilters - removed JPEGImportFilter" )
-//	TRACE( _T("Warning - OILFilter::InitFilters - removed JPEGImportFilter\n") );
+#if defined(EXCLUDE_FROM_XARALX)
 	ADD_FILTER(JPEGImportFilter)
+#endif
 
 	// Add the Preview Bitmap Filter
 	// Tricky one this. Don't really need this any more (14/3/97)- its only use is the 
@@ -315,7 +305,9 @@ BOOL OILFilter::InitFilters(List& FilterList)
 
 	// Add the preview bitmap filters that we can use in the new native/web format
 	ADD_FILTER(PreviewFilterBMP)
-//	ADD_FILTER(PreviewFilterGIF)
+#if !defined(EXCLUDE_FROM_XARALX)
+	ADD_FILTER(PreviewFilterGIF)
+#endif
 	ADD_FILTER(PreviewFilterJPEG)
 	ADD_FILTER(PreviewFilterPNG)
 	ADD_FILTER(ThumbnailFilterPNG)
@@ -343,7 +335,18 @@ BOOL OILFilter::InitFilters(List& FilterList)
 
 BOOL OILFilter::CreatePluginFilters(List& FilterList)
 {
-	PORTNOTETRACE("filters","OILFilter::CreatePluginFilters - do nothing");
+	PORTNOTETRACE("filters","OILFilter::CreatePluginFilters - bodged");
+
+	CLSID Clsid;
+	PluginNativeFilter* pFilter = new PluginNativeFilter;
+	if (pFilter == NULL)
+		return FALSE;
+
+	if (pFilter->Init(Clsid))
+		FilterList.AddTail(pFilter);
+	else
+		delete pFilter;
+
 #ifndef EXCLUDE_FROM_XARALX
 	// Iterate through the component category adding each filter to the filter list
 	HRESULT hRes = S_OK;

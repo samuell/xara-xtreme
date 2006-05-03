@@ -106,9 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "handles.h"
 #include "pathtype.h"
 #include "attr.h"
-#if !defined(EXCLUDE_FROM_XARLIB)
 #include "gconsts.h"
-#endif
 
 class RenderRegion;
 class NodePath;

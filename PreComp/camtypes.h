@@ -114,6 +114,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Include machine-specific types
 #include "stdwx.h"
 
+// This has been placed here to ensure that min and max are available
+// if ccfile.h is not included (via document.h below)
+using namespace std;
+
 // This must be the first file included of ours as it defines _R()
 // note it does include other stuff, but only after it has defined _R()
 #include "camresource.h"

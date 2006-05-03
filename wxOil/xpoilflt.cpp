@@ -114,99 +114,104 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ncntrcnt.h"
 //#include "nev.h"		// For _R(IDN_USER_CANCELLED)
 
-IMPLEMENT_DYNCREATE(PluginFilterCallback, CCmdTarget)
 CC_IMPLEMENT_MEMDUMP(PluginOILFilter, OILFilter)
 CC_IMPLEMENT_DYNAMIC(PathNameListItem, ListItem)
+
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
+IMPLEMENT_DYNCREATE(PluginFilterCallback, CCmdTarget)
 
 BEGIN_INTERFACE_MAP(PluginFilterCallback, CCmdTarget)
 	INTERFACE_PART(PluginFilterCallback, __uuidof(IXPFCallback), _XPFCallback)
 END_INTERFACE_MAP()
+#endif
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
 #define new CAM_DEBUG_NEW
 
-PropMapEntry aShadowTypes[] = { {"wall", XPFP_SHADOWTYPE_WALL},
-								{"floor", XPFP_SHADOWTYPE_FLOOR},
-								{"glow", XPFP_SHADOWTYPE_GLOW},
-								{"feather", XPFP_SHADOWTYPE_FEATHER},
+PropMapEntry aShadowTypes[] = { {_T("wall"), XPFP_SHADOWTYPE_WALL},
+								{_T("floor"), XPFP_SHADOWTYPE_FLOOR},
+								{_T("glow"), XPFP_SHADOWTYPE_GLOW},
+								{_T("feather"), XPFP_SHADOWTYPE_FEATHER},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aBevelTypes[] = { {"flat", XPFP_BEVELTYPE_FLAT},
-								{"round", XPFP_BEVELTYPE_ROUND},
-								{"halfround", XPFP_BEVELTYPE_HALFROUND},
-								{"frame", XPFP_BEVELTYPE_FRAME},
-								{"mesa1", XPFP_BEVELTYPE_MESA_1},
-								{"mesa2", XPFP_BEVELTYPE_MESA_2},
-								{"smooth1", XPFP_BEVELTYPE_SMOOTH_1},
-								{"smooth2", XPFP_BEVELTYPE_SMOOTH_2},
-								{"point1", XPFP_BEVELTYPE_POINT_1},
-								{"point2a", XPFP_BEVELTYPE_POINT_2a},
-								{"point2b", XPFP_BEVELTYPE_POINT_2b},
-								{"ruffle2a", XPFP_BEVELTYPE_RUFFLE_2a},
-								{"ruffle2b", XPFP_BEVELTYPE_RUFFLE_2b},
-								{"ruffle3a", XPFP_BEVELTYPE_RUFFLE_3a},
-								{"ruffle3b", XPFP_BEVELTYPE_RUFFLE_3b},
+PropMapEntry aBevelTypes[] = { {_T("flat"), XPFP_BEVELTYPE_FLAT},
+								{_T("round"), XPFP_BEVELTYPE_ROUND},
+								{_T("halfround"), XPFP_BEVELTYPE_HALFROUND},
+								{_T("frame"), XPFP_BEVELTYPE_FRAME},
+								{_T("mesa1"), XPFP_BEVELTYPE_MESA_1},
+								{_T("mesa2"), XPFP_BEVELTYPE_MESA_2},
+								{_T("smooth1"), XPFP_BEVELTYPE_SMOOTH_1},
+								{_T("smooth2"), XPFP_BEVELTYPE_SMOOTH_2},
+								{_T("point1"), XPFP_BEVELTYPE_POINT_1},
+								{_T("point2a"), XPFP_BEVELTYPE_POINT_2a},
+								{_T("point2b"), XPFP_BEVELTYPE_POINT_2b},
+								{_T("ruffle2a"), XPFP_BEVELTYPE_RUFFLE_2a},
+								{_T("ruffle2b"), XPFP_BEVELTYPE_RUFFLE_2b},
+								{_T("ruffle3a"), XPFP_BEVELTYPE_RUFFLE_3a},
+								{_T("ruffle3b"), XPFP_BEVELTYPE_RUFFLE_3b},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aBevelSides[] = { {"inner", XPFP_BEVELSIDE_INNER},
-								{"outer", XPFP_BEVELSIDE_OUTER},
+PropMapEntry aBevelSides[] = { {_T("inner"), XPFP_BEVELSIDE_INNER},
+								{_T("outer"), XPFP_BEVELSIDE_OUTER},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aColourEffects[] = { {"fade", XPFP_COLOUREFFECT_FADE},
-								{"rainbow", XPFP_COLOUREFFECT_RAINBOW},
-								{"altrainbow", XPFP_COLOUREFFECT_ALTRAINBOW},
+PropMapEntry aColourEffects[] = { {_T("fade"), XPFP_COLOUREFFECT_FADE},
+								{_T("rainbow"), XPFP_COLOUREFFECT_RAINBOW},
+								{_T("altrainbow"), XPFP_COLOUREFFECT_ALTRAINBOW},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aMouldTypes[] = { {"envelope", XPFP_MOULDTYPE_ENVELOPE},
-								{"perspective", XPFP_MOULDTYPE_PERSPECTIVE},
+PropMapEntry aMouldTypes[] = { {_T("envelope"), XPFP_MOULDTYPE_ENVELOPE},
+								{_T("perspective"), XPFP_MOULDTYPE_PERSPECTIVE},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aLineCaps[] = { {"butt", XPFP_LINECAP_BUTT},
-								{"round", XPFP_LINECAP_ROUND},
-								{"square", XPFP_LINECAP_SQUARE},
+PropMapEntry aLineCaps[] = { {_T("butt"), XPFP_LINECAP_BUTT},
+								{_T("round"), XPFP_LINECAP_ROUND},
+								{_T("square"), XPFP_LINECAP_SQUARE},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aLineJoins[] = { {"mitre", XPFP_LINEJOIN_MITRE},
-								{"round", XPFP_LINEJOIN_ROUND},
-								{"bevel", XPFP_LINEJOIN_BEVEL},
+PropMapEntry aLineJoins[] = { {_T("mitre"), XPFP_LINEJOIN_MITRE},
+								{_T("round"), XPFP_LINEJOIN_ROUND},
+								{_T("bevel"), XPFP_LINEJOIN_BEVEL},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aFillShapes[] = { {"flat", FILLSHAPE_FLAT},
-								{"linear", FILLSHAPE_LINEAR},
-								{"circular", FILLSHAPE_CIRCULAR},
-								{"elliptical", FILLSHAPE_ELLIPTICAL},
-								{"conical", FILLSHAPE_CONICAL},
-								{"diamond", FILLSHAPE_DIAMOND},
-								{"3point", FILLSHAPE_3POINT},
-								{"4point", FILLSHAPE_4POINT},
-								{"bitmap", FILLSHAPE_BITMAP},
-								{"clouds", FILLSHAPE_CLOUDS},
-								{"plasma", FILLSHAPE_PLASMA},
+PropMapEntry aFillShapes[] = { {_T("flat"), FILLSHAPE_FLAT},
+								{_T("linear"), FILLSHAPE_LINEAR},
+								{_T("circular"), FILLSHAPE_CIRCULAR},
+								{_T("elliptical"), FILLSHAPE_ELLIPTICAL},
+								{_T("conical"), FILLSHAPE_CONICAL},
+								{_T("diamond"), FILLSHAPE_DIAMOND},
+								{_T("3point"), FILLSHAPE_3POINT},
+								{_T("4point"), FILLSHAPE_4POINT},
+								{_T("bitmap"), FILLSHAPE_BITMAP},
+								{_T("clouds"), FILLSHAPE_CLOUDS},
+								{_T("plasma"), FILLSHAPE_PLASMA},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aFillRepeats[] = { {"simple", XPFP_FILLREPEAT_SIMPLE},
-								{"repeat", XPFP_FILLREPEAT_REPEAT},
-								{"repeatinv", XPFP_FILLREPEAT_REPEATINV},
-								{"repeatex", XPFP_FILLREPEAT_REPEATEXTRA},
+PropMapEntry aFillRepeats[] = { {_T("simple"), XPFP_FILLREPEAT_SIMPLE},
+								{_T("repeat"), XPFP_FILLREPEAT_REPEAT},
+								{_T("repeatinv"), XPFP_FILLREPEAT_REPEATINV},
+								{_T("repeatex"), XPFP_FILLREPEAT_REPEATEXTRA},
 								{NULL, XPFP_UNKNOWN}};
 
-PropMapEntry aTransTypes[] = { {"none", TT_NoTranspType},
-								{"mix", TT_Mix},
-								{"stained", TT_StainGlass},
-								{"bleach", TT_Bleach},
-								{"contrast", TT_CONTRAST},
-								{"saturation", TT_SATURATION},
-								{"darken", TT_DARKEN},
-								{"lighten", TT_LIGHTEN},
-								{"brightness", TT_BRIGHTNESS},
-								{"luminosity", TT_LUMINOSITY},
-								{"hue", TT_HUE},
-								{"bevel", TT_BEVEL},
+PropMapEntry aTransTypes[] = { {_T("none"), TT_NoTranspType},
+								{_T("mix"), TT_Mix},
+								{_T("stained"), TT_StainGlass},
+								{_T("bleach"), TT_Bleach},
+								{_T("contrast"), TT_CONTRAST},
+								{_T("saturation"), TT_SATURATION},
+								{_T("darken"), TT_DARKEN},
+								{_T("lighten"), TT_LIGHTEN},
+								{_T("brightness"), TT_BRIGHTNESS},
+								{_T("luminosity"), TT_LUMINOSITY},
+								{_T("hue"), TT_HUE},
+								{_T("bevel"), TT_BEVEL},
 								{NULL, XPFP_UNKNOWN}};
 
 
-
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 /******************************************************************************************
 
 >	PluginFilterCallback::PluginFilterCallback(PluginNativeFilter* pFilter = NULL)
@@ -320,9 +325,6 @@ STDMETHODIMP PluginFilterCallback::X_XPFCallback::Progress(INT32 lProgress)
 }
 
 
-
-
-
 /****************************************************************************
 
 >	static BOOL PluginOILFilter::AutoRegisterFilters()
@@ -408,7 +410,7 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 						if (pItem)
 						{
 							FilterList.AddTail(pItem);
-							RELTRACE("Adding %s to list\n", (LPCTSTR)Path.GetPath());
+//							RELTRACE(_T("Adding %s to list\n"), (LPCTSTR)Path.GetPath());
 						}
 					}
 				}
@@ -421,9 +423,9 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 	GetModuleFileName(NULL, sPath, 256);
 	PathName ExePath(sPath);
 	sPath = ExePath.GetLocation();
-	sPath += "Filters\\";
+	sPath += _T("Filters\\");
 	String_256 sFindPath(sPath);
-	sFindPath += "*.*";
+	sFindPath += _T("*.*");
 
 	FindFiles Finder;
 	BOOL bIsFolder = FALSE;
@@ -435,7 +437,7 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 			if (!Finder.FindNextFile(&sLeafName, &bIsFolder))
 				break;
 
-			RELTRACE("Testing %s\n", (TCHAR*)sLeafName);
+//			RELTRACE(_T("Testing %s\n"), (TCHAR*)sLeafName);
 
 			String_256 sFullPath(sPath);
 			sFullPath += sLeafName;
@@ -452,7 +454,7 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 			PathName TestPath(sFullPath);
 			if (TestPath.GetType() == _T("dll") && SGLibOil::FileExists(&TestPath))
 			{
-				RELTRACE("FullPath %s\n", (TCHAR*)sFullPath);
+//				RELTRACE(_T("FullPath %s\n"), (TCHAR*)sFullPath);
 
 				// If the full path of the DLL is in the installed list then 
 				// the correct version is already registered so do nothing.
@@ -470,12 +472,12 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 				{
 					if (sLeafName.CompareTo(pItem->m_Path.GetFileName(TRUE), FALSE) == 0)
 					{
-						RELTRACE("Leaf name is in list\n");
+//						RELTRACE(_T("Leaf name is in list\n"));
 						// Found the leafname in the list
 						if (sFullPath.CompareTo(pItem->m_Path.GetPath(), FALSE) == 0)
 						{
 							// The full path is the same so do nothing
-							RELTRACE("Full path is in list\n");
+//							RELTRACE(_T("Full path is in list\n"));
 							bRegister = FALSE;
 						}
 						else
@@ -484,19 +486,19 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 							String_64 sVerInstalled;
 							if (GetFileVersion(&(pItem->m_Path), &sVerInstalled))
 							{
-								RELTRACE("Current version is %s\n", (TCHAR*)sVerInstalled);
+//								RELTRACE(_T("Current version is %s\n"), (TCHAR*)sVerInstalled);
 
 								// Get the version number of the Filters version
 								String_64 sVerFilters;
 								PathName FiltersPath(sFullPath);
 								if (GetFileVersion(&FiltersPath, &sVerFilters))
 								{
-									RELTRACE("This version is %s\n", (TCHAR*)sVerFilters);
+//									RELTRACE(_T("This version is %s\n"), (TCHAR*)sVerFilters);
 									// If the Installed version is greater than or equal
 									// to the Filters version then don't register
 									if (CompareVersions(sVerInstalled, sVerFilters) >= 0)
 									{
-										RELTRACE("Current is new enough\n");
+//										RELTRACE(_T("Current is new enough\n"));
 										bRegister = FALSE;
 									}
 								}
@@ -510,9 +512,9 @@ BOOL PluginOILFilter::AutoRegisterFilters()
 				if (bRegister)
 				{
 					// Register the DLL
-					RELTRACE("Registering %s\n", (TCHAR*)sFullPath);
+					RELTRACE(_T("Registering %s\n"), (TCHAR*)sFullPath);
 					BOOL bRegOk = RegisterDLL(sFullPath);
-					RELTRACE("RegisterDLL returned %s\n", bRegOk ? "true" : "false");
+					RELTRACE(_T("RegisterDLL returned %s\n"), bRegOk ? _T("true") : _T("false"));
 				}
 			}
 		}
@@ -552,7 +554,7 @@ BOOL PluginOILFilter::RegisterDLL(String_256& sPath)
 	if (hThisCOM = LoadLibraryEx(sPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH))
 	{
 		// Get pointer to standard dll registry function
-		pDllRegisterServer = GetProcAddress(hThisCOM, "DllRegisterServer");
+		pDllRegisterServer = GetProcAddress(hThisCOM, _T("DllRegisterServer"));
 		if (!pDllRegisterServer)
 		{
 			return FALSE;
@@ -630,7 +632,7 @@ BOOL PluginOILFilter::GetFileVersion(PathName* pPath, String_64* pVersion)
 					// Now get the value from the block
 					if (VerQueryValue((void*)pVersionInfo, pValName, &pValue, &ValueLen))
 					{
-						*pVersion = (char*)pValue;
+						*pVersion = (TCHAR*)pValue;
 						bRetVal = TRUE;
 					}
 					delete [] pVersionInfo;
@@ -687,7 +689,7 @@ INT32 PluginOILFilter::CompareVersions(const String_64& lhs, const String_64& rh
 
 	return(ld - rd);
 }
-
+#endif
 
 
 
@@ -704,6 +706,8 @@ INT32 PluginOILFilter::CompareVersions(const String_64& lhs, const String_64& rh
 
 PluginOILFilter::PluginOILFilter(Filter *pFilter) : OILFilter(pFilter)
 {
+	m_bImport = FALSE;
+	m_bExport = FALSE;
 }
 
 
@@ -725,6 +729,8 @@ PluginOILFilter::PluginOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 {
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Remember the CLSID for later use
 	m_CLSID = rCLSID;
 	
@@ -748,7 +754,7 @@ BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 		return(FALSE);
 
 	CRegKey rServerKey;
-	if (rServerKey.Open(rClassKey, "InProcServer32", KEY_READ) != ERROR_SUCCESS)
+	if (rServerKey.Open(rClassKey, _T("InProcServer32"), KEY_READ) != ERROR_SUCCESS)
 		return(FALSE);
 
 	DWORD Size = _MAX_PATH;
@@ -764,18 +770,22 @@ BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 	}
 
 	CRegKey rConfigKey;
-	if (rConfigKey.Open(rClassKey, "Config", KEY_READ) != ERROR_SUCCESS)
+	if (rConfigKey.Open(rClassKey, _T("Config"), KEY_READ) != ERROR_SUCCESS)
 		return(FALSE);
+#endif
 
-	Size = 32;
-	TCHAR Exts[32];
-	if (rConfigKey.QueryValue(Exts, _T("Extensions"), &Size) != ERROR_SUCCESS)
-		return(FALSE);
+//	Size = 32;
+//	TCHAR Exts[32];
+//	if (rConfigKey.QueryValue(Exts, _T("Extensions"), &Size) != ERROR_SUCCESS)
+//		return(FALSE);
+
+	TCHAR Exts[32] = _T("*.xar");
 
 	// We have to convert the plugin extension format into the XaraX format
-	char *pExt = _tcstok(Exts, ";");
+	TCHAR* pTokTemp = NULL;
+	TCHAR* pExt = camStrtok(Exts, _T(";"), &pTokTemp);
 	BOOL NoneFound = TRUE;
-	FilterExt = "";
+	FilterExt = _T("");
 	while (pExt != NULL)
 	{
 		if (pExt[0] == _T('*') && pExt[1] == _T('.'))
@@ -786,34 +796,40 @@ BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 				// Not already present - add the string.
 				if (!NoneFound)
 					// Don't add a comma if this is the first one we find.
-					FilterExt += ",";
+					FilterExt += _T(",");
 				FilterExt += pExt;
 				NoneFound = FALSE;
 			}
 		}
 
-		pExt = _tcstok(NULL, ";");
+		pExt = camStrtok(NULL, _T(";"), &pTokTemp);
 	}
 
-	Size = 64;
-	TCHAR TypeName[64];
-	if (rConfigKey.QueryValue(TypeName, _T("TypeName"), &Size) != ERROR_SUCCESS)
-		return(FALSE);
+//	Size = 64;
+//	TCHAR TypeName[64];
+//	if (rConfigKey.QueryValue(TypeName, _T("TypeName"), &Size) != ERROR_SUCCESS)
+//		return(FALSE);
+//	FilterName = TypeName;
 
-	FilterName = TypeName;
+	FilterName = _T("Plugin Test");
 
+#if !defined(EXCLUDE_FROM_XARALX)
 	CRegKey rCatKey;
-	if (rCatKey.Open(rClassKey, "Implemented Categories", KEY_READ) != ERROR_SUCCESS)
+	if (rCatKey.Open(rClassKey, T("Implemented Categories"), KEY_READ) != ERROR_SUCCESS)
 		return(FALSE);
 
 	CRegKey rImpKey;
-	m_bImport = (rImpKey.Open(rCatKey, "{42F818E1-9EF6-4241-909B-91E783B9B935}", KEY_READ) == ERROR_SUCCESS) ||
-				(rImpKey.Open(rCatKey, "{42F818E1-9EF6-4241-909B-91E783B9B937}", KEY_READ) == ERROR_SUCCESS);
+	m_bImport = (rImpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B935}"), KEY_READ) == ERROR_SUCCESS) ||
+				(rImpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B937}"), KEY_READ) == ERROR_SUCCESS);
 
 	CRegKey rExpKey;
-	m_bExport = (rExpKey.Open(rCatKey, "{42F818E1-9EF6-4241-909B-91E783B9B936}", KEY_READ) == ERROR_SUCCESS) ||
-				(rExpKey.Open(rCatKey, "{42F818E1-9EF6-4241-909B-91E783B9B938}", KEY_READ) == ERROR_SUCCESS);
-	
+	m_bExport = (rExpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B936}"), KEY_READ) == ERROR_SUCCESS) ||
+				(rExpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B938}"), KEY_READ) == ERROR_SUCCESS);
+#endif	
+
+	m_bImport = TRUE;
+	m_bExport = TRUE;
+
 	return(m_bImport || m_bExport);		// If it doesn't do either then it isn't a filter
 }
 
@@ -836,14 +852,18 @@ BOOL PluginOILFilter::Init(const CLSID& rCLSID)
 
 INT32 PluginOILFilter::HowCompatible(PathName& Filename)
 {
+	INT32 HowCompatible = 0;
+
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (!CreateFilterObject())
 		return(0);
 
-	INT32 HowCompatible = 0;
 	CComBSTR bsFileName((LPCTSTR)Filename.GetPath());
 	HRESULT hRes = m_pFilterObj->HowCompatible(bsFileName, &HowCompatible);
 	if (FAILED(hRes))
 		return(0);
+#endif
 
 	return(HowCompatible);
 }
@@ -869,6 +889,11 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 {
 	ERROR2IF(pFile == NULL, FALSE,"PluginOILFilter::GetImportFile no file to import from");
 	ERROR2IF(ppNewFile == NULL, FALSE,"PluginOILFilter::GetImportFile no newfile pointer");
+
+	*ppNewFile = NULL;
+
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(!m_pFilterObj, FALSE, "No filter object in GetImportFile");
 
 	if (m_pXarStream)
@@ -912,6 +937,7 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 	m_pXarStream.p->AddRef();
 
 	*ppNewFile = pStreamFile;		// Return the new file pointer
+#endif
 
 	return(TRUE);
 }
@@ -931,10 +957,26 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 
 ****************************************************************************/
 
-BOOL PluginOILFilter::GetExportFile(CCLexFile** ppNewFile)
+BOOL PluginOILFilter::GetExportFile(PathName* pPath, CCLexFile** ppNewFile)
 {
 	ERROR2IF(ppNewFile == NULL, FALSE,"PluginOILFilter::GetExportFile no newfile pointer");
 
+	*ppNewFile = NULL;
+
+	CCDiskFile* pFile = new CCDiskFile();
+	if (pFile)
+	{
+		if (pFile->open(*pPath, ios::out | ios::binary | ios::trunc))
+		{
+			*ppNewFile = pFile;
+			return(TRUE);
+		}
+
+		delete pFile;
+	}
+
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	if (!CreateFilterObject())
 	{
 		return(FALSE);
@@ -961,6 +1003,7 @@ BOOL PluginOILFilter::GetExportFile(CCLexFile** ppNewFile)
 	*ppNewFile = pStreamFile;		// Return the new file pointer
 
 	return(TRUE);
+#endif
 }
 
 
@@ -980,6 +1023,8 @@ BOOL PluginOILFilter::GetExportFile(CCLexFile** ppNewFile)
 
 BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, CapabilityTree* pCapTree)
 {
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(!m_pFilterObj, FALSE, "No filter object");
 
 	String_256 sPath = pPath->GetPath();
@@ -1008,6 +1053,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 		Error::SetHResultError(hRes);
 		return(FALSE);
 	}
+#endif
 
 	return(TRUE);
 }
@@ -1030,6 +1076,8 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 
 BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 {
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(!m_pFilterObj, FALSE, "No filter object\n");
 
 	// Reset the stream back to the start ready for the filter to translate it
@@ -1053,12 +1101,14 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 	{
 		ERROR1(FALSE, _R(IDE_XPF_DOEXPORTFAILED));
 	}
+#endif
 
 	return(TRUE);
 }
 
 
-
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 /****************************************************************************
 
 >	BOOL PluginOILFilter::CreateFilterObject()
@@ -1101,8 +1151,11 @@ void PluginOILFilter::ReleaseFilterObject()
 	m_pFilterObj.Release();
 	m_pXarStream.Release();
 }
+#endif
 
 
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 
 /****************************************************************************
 
@@ -1125,7 +1178,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 	HRESULT hRes = S_OK;
 	hRes = pDoc.CoCreateInstance(__uuidof(MSXML2::DOMDocument40));
 
-	hRes = pDoc->setProperty(CComBSTR("SelectionLanguage"), CComVariant("XPath"));
+	hRes = pDoc->setProperty(CComBSTR(_T("SelectionLanguage")), CComVariant(_T("XPath")));
 	hRes = pDoc->put_async(VARIANT_FALSE);
 	hRes = pDoc->put_preserveWhiteSpace(VARIANT_TRUE);
 	hRes = pDoc->put_validateOnParse(VARIANT_FALSE);
@@ -1145,7 +1198,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 	CComBSTR bsName;
 	hRes = pRootElem->get_nodeName(&bsName);
 
-	if (!(bsName == "XPFilterConfig"))
+	if (!(bsName == _T("XPFilterConfig")))
 	{
 		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
 	}
@@ -1168,11 +1221,11 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 		CComBSTR bsChildName;
 		hRes = pChild->get_nodeName(&bsChildName);
 		
-		if (bsChildName == "#text")
+		if (bsChildName == _T("#text"))
 		{
 			// ignore it
 		}
-		else if (bsChildName == "Options")
+		else if (bsChildName == _T("Options"))
 		{
 			if (Phase > 0)
 			{
@@ -1181,7 +1234,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 			hRes = ReadOptions(pChild, pCapTree);		// Read the options attributes
 			Phase = 1;
 		}
-		else if (bsChildName == "Rasterise")
+		else if (bsChildName == _T("Rasterise"))
 		{
 			if (Phase > 1)
 			{
@@ -1190,7 +1243,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 			hRes = ReadRasterise(pChild, pCapTree);		// Read the dpi and alpha attributes
 			Phase = 2;
 		}
-		else if (bsChildName == "Spread")
+		else if (bsChildName == _T("Spread"))
 		{
 			if (Phase > 2)
 			{
@@ -1199,7 +1252,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 			hRes = ReadSpread(pChild, pCapTree);		// Read the as attribute
 			Phase = 3;
 		}
-		else if (bsChildName == "Objects")
+		else if (bsChildName == _T("Objects"))
 		{
 			if (Phase > 3)
 			{
@@ -1208,7 +1261,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 			ReadObjects(pChild, pCapTree);		// Build the tree of XPFCapability derived objects
 			Phase = 4;
 		}
-		else if (bsChildName == "Attributes")
+		else if (bsChildName == _T("Attributes"))
 		{
 			if (Phase > 4)
 			{
@@ -1217,7 +1270,7 @@ HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTre
 			ReadAttributes(pChild, pCapTree);	// Build the tree of XPFCapability derived objects
 			Phase = 5;
 		}
-		else if (bsChildName == "Colour")
+		else if (bsChildName == _T("Colour"))
 		{
 			if (Phase > 5)
 			{
@@ -1252,19 +1305,19 @@ HRESULT PluginOILFilter::ReadOptions(IXMLDOMNode* pNode, CapabilityTree* pCapTre
 	HRESULT hRes;
 	BoundsWriteLevel Level = BWL_NONE;
 	CComVariant vLevel;
-	hRes = pElem->getAttribute(CComBSTR("boundslevel"), &vLevel);
+	hRes = pElem->getAttribute(CComBSTR(_T("boundslevel")), &vLevel);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = vLevel.ChangeType(VT_BSTR);
-		if (vLevel == CComVariant("none"))
+		if (vLevel == CComVariant(_T("none")))
 		{
 			Level = BWL_NONE;
 		}
-		else if (vLevel == CComVariant("compound"))
+		else if (vLevel == CComVariant(_T("compound")))
 		{
 			Level = BWL_COMPOUND;
 		}
-		else if (vLevel == CComVariant("all"))
+		else if (vLevel == CComVariant(_T("all")))
 		{
 			Level = BWL_ALL;
 		}
@@ -1277,11 +1330,11 @@ HRESULT PluginOILFilter::ReadOptions(IXMLDOMNode* pNode, CapabilityTree* pCapTre
 
 	BOOL bSelection = FALSE;
 	CComVariant vSelection;
-	hRes = pElem->getAttribute(CComBSTR("selection"), &vSelection);
+	hRes = pElem->getAttribute(CComBSTR(_T("selection")), &vSelection);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = vSelection.ChangeType(VT_BSTR);
-		bSelection = (vSelection == CComVariant("true"));
+		bSelection = (vSelection == CComVariant(_T("true")));
 	}
 	pCapTree->SetSelection(bSelection);
 
@@ -1303,7 +1356,7 @@ HRESULT PluginOILFilter::ReadRasterise(IXMLDOMNode* pNode, CapabilityTree* pCapT
 	BOOL bAlpha = TRUE;
 
 	CComVariant vDPI;
-	hRes = pElem->getAttribute(CComBSTR("dpi"), &vDPI);
+	hRes = pElem->getAttribute(CComBSTR(_T("dpi")), &vDPI);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = vDPI.ChangeType(VT_R8);
@@ -1311,11 +1364,11 @@ HRESULT PluginOILFilter::ReadRasterise(IXMLDOMNode* pNode, CapabilityTree* pCapT
 	}
 
 	CComVariant vAlpha;
-	hRes = pElem->getAttribute(CComBSTR("alpha"), &vAlpha);
+	hRes = pElem->getAttribute(CComBSTR(_T("alpha")), &vAlpha);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = vAlpha.ChangeType(VT_BSTR);
-		bAlpha = (vAlpha == CComVariant("true"));
+		bAlpha = (vAlpha == CComVariant(_T("true")));
 	}
 
 	pCapTree->SetRasterise(DPI, bAlpha);
@@ -1336,15 +1389,15 @@ HRESULT PluginOILFilter::ReadSpread(IXMLDOMNode* pNode, CapabilityTree* pCapTree
 
 	CComVariant vAs;
 	XPFConvertType Type = XPFCONVTYPE_UNKNOWN;
-	hRes = pElem->getAttribute(CComBSTR("as"), &vAs);
+	hRes = pElem->getAttribute(CComBSTR(_T("as")), &vAs);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = vAs.ChangeType(VT_BSTR);
-		if (vAs == CComVariant(""))
+		if (vAs == CComVariant(_T("")))
 		{
 			Type = XPFCONVTYPE_NATIVE;
 		}
-		else if (vAs == CComVariant("bitmap"))
+		else if (vAs == CComVariant(_T("bitmap")))
 		{
 			Type = XPFCONVTYPE_BITMAP;
 		}
@@ -1522,61 +1575,61 @@ HRESULT PluginOILFilter::GetConvertAsType(IXMLDOMNode* pNode, XPFConvertType* pV
 		HRESULT hRes;
 
 		CComVariant vAs;
-		hRes = pElem->getAttribute(CComBSTR("as"), &vAs);
+		hRes = pElem->getAttribute(CComBSTR(_T("as")), &vAs);
 		if (SUCCEEDED(hRes))
 		{
 			if (vAs.vt != VT_NULL)
 			{
 				hRes = vAs.ChangeType(VT_BSTR);
-				if (vAs == CComVariant("native"))
+				if (vAs == CComVariant(_T("native")))
 				{
 					AsType = XPFCONVTYPE_NATIVE;
 				}
-				else if (vAs == CComVariant("simple"))
+				else if (vAs == CComVariant(_T("simple")))
 				{
 					AsType = XPFCONVTYPE_SIMPLE;
 				}
-				else if (vAs == CComVariant("stroked"))
+				else if (vAs == CComVariant(_T("stroked")))
 				{
 					AsType = XPFCONVTYPE_STROKED;
 				}
-				else if (vAs == CComVariant("bitmap"))
+				else if (vAs == CComVariant(_T("bitmap")))
 				{
 					AsType = XPFCONVTYPE_BITMAP;
 				}
-				else if (vAs == CComVariant("bitmapfill"))
+				else if (vAs == CComVariant(_T("bitmapfill")))
 				{
 					AsType = XPFCONVTYPE_BITMAPFILL;
 				}
-				else if (vAs == CComVariant("bitmaptrans"))
+				else if (vAs == CComVariant(_T("bitmaptrans")))
 				{
 					AsType = XPFCONVTYPE_BITMAPTRANS;
 				}
-				else if (vAs == CComVariant("bitmapfilltrans"))
+				else if (vAs == CComVariant(_T("bitmapfilltrans")))
 				{
 					AsType = XPFCONVTYPE_BITMAPFILLTRANS;
 				}
-				else if (vAs == CComVariant("bitmapspan"))
+				else if (vAs == CComVariant(_T("bitmapspan")))
 				{
 					AsType = XPFCONVTYPE_BITMAPSPAN;
 				}
-				else if (vAs == CComVariant("reformat"))
+				else if (vAs == CComVariant(_T("reformat")))
 				{
 					AsType = XPFCONVTYPE_REFORMAT;
 				}
-				else if (vAs == CComVariant("remove"))
+				else if (vAs == CComVariant(_T("remove")))
 				{
 					AsType = XPFCONVTYPE_REMOVE;
 				}
-				else if (vAs == CComVariant("simplergb"))
+				else if (vAs == CComVariant(_T("simplergb")))
 				{
 					AsType = XPFCONVTYPE_SIMPLERGB;
 				}
-				else if (vAs == CComVariant("rgb"))
+				else if (vAs == CComVariant(_T("rgb")))
 				{
 					AsType = XPFCONVTYPE_RGB;
 				}
-				else if (vAs == CComVariant("cmyk"))
+				else if (vAs == CComVariant(_T("cmyk")))
 				{
 					AsType = XPFCONVTYPE_CMYK;
 				}
@@ -1613,11 +1666,11 @@ HRESULT PluginOILFilter::GetXPFBOOL(IXMLDOMNode* pNode, LPTSTR pAttrName, XPFBOO
 			if (vVal.vt != VT_NULL)
 			{
 				hRes = vVal.ChangeType(VT_BSTR);
-				if (vVal == CComVariant("true"))
+				if (vVal == CComVariant(_T("true")))
 				{
 					bValue = XPFB_TRUE;
 				}
-				else if (vVal == CComVariant("false"))
+				else if (vVal == CComVariant(_T("false")))
 				{
 					bValue = XPFB_FALSE;
 				}
@@ -1691,136 +1744,136 @@ XPFCapability* PluginOILFilter::CreateObjectNode(IXMLDOMNode* pNode)
 	CComBSTR bsName;
 	HRESULT hRes = pNode->get_nodeName(&bsName);
 	
-	if (bsName == "#text")
+	if (bsName == _T("#text"))
 	{
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
 	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == "Layer")
+	if (bsName == _T("Layer"))
 	{
 		// Read the visible and locked attributes
 		XPFBOOL bVisible = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "visible", &bVisible);
+		hRes = GetXPFBOOL(pNode, _T("visible"), &bVisible);
 		XPFBOOL bLocked = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "locked", &bLocked);
+		hRes = GetXPFBOOL(pNode, _T("locked"), &bLocked);
 		XPFBOOL bPrintable = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "printable", &bPrintable);
+		hRes = GetXPFBOOL(pNode, _T("printable"), &bPrintable);
 		XPFBOOL bActive = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "active", &bActive);
+		hRes = GetXPFBOOL(pNode, _T("active"), &bActive);
 		XPFBOOL bBackground = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "background", &bBackground);
+		hRes = GetXPFBOOL(pNode, _T("background"), &bBackground);
 		XPFBOOL bGuide = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "guide", &bGuide);
+		hRes = GetXPFBOOL(pNode, _T("guide"), &bGuide);
 		pCap = new XPFCLayer(AsType, bVisible, bLocked, bPrintable, bActive, bBackground, bGuide);
 	}
-	else if (bsName == "Contour")
+	else if (bsName == _T("Contour"))
 	{
 		pCap = new XPFCContour(AsType);
 	}
-	else if (bsName == "Shadow")
+	else if (bsName == _T("Shadow"))
 	{
 		// Read the type attribute
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "type", aShadowTypes, &Type);
+		hRes = GetXPFProp(pNode, _T("type"), aShadowTypes, &Type);
 		pCap = new XPFCShadow(AsType, Type);
 	}
-	else if (bsName == "Bevel")
+	else if (bsName == _T("Bevel"))
 	{
 		// Read the type and side attributes
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "type", aBevelTypes, &Type);
+		hRes = GetXPFProp(pNode, _T("type"), aBevelTypes, &Type);
 		XPFProp Side = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "side", aBevelSides, &Side);
+		hRes = GetXPFProp(pNode, _T("side"), aBevelSides, &Side);
 		pCap = new XPFCBevel(AsType, Type, Side);
 	}
-	else if (bsName == "Blend")
+	else if (bsName == _T("Blend"))
 	{
 		// Read the effect, oncurve, posprofile and attrprofile attributes
 		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "effect", aColourEffects, &Effect);
+		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
 		XPFBOOL bOnCurve = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "oncurve", &bOnCurve);
+		hRes = GetXPFBOOL(pNode, _T("oncurve"), &bOnCurve);
 		XPFBOOL bObjProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "posprofile", &bObjProfile);
+		hRes = GetXPFBOOL(pNode, _T("posprofile"), &bObjProfile);
 		XPFBOOL bAttrProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "attrprofile", &bAttrProfile);
+		hRes = GetXPFBOOL(pNode, _T("attrprofile"), &bAttrProfile);
 		pCap = new XPFCBlend(AsType, Effect, bOnCurve, bObjProfile, bAttrProfile);
 	}
-	else if (bsName == "Mould")
+	else if (bsName == _T("Mould"))
 	{
 		// Read the as and type attributes
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "type", aMouldTypes, &Type);
+		hRes = GetXPFProp(pNode, _T("type"), aMouldTypes, &Type);
 		XPFBOOL bGradFill = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "gradfill", &bGradFill);
+		hRes = GetXPFBOOL(pNode, _T("gradfill"), &bGradFill);
 		pCap = new XPFCMould(AsType, Type, bGradFill);
 	}
-	else if (bsName == "Rectangle")
+	else if (bsName == _T("Rectangle"))
 	{
 		// Read the as, rounded and complex attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "complex", &bComplex);
+		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "rounded", &bRounded);
+		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
 		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "stellated", &bStellated);
+		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
 		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "reformed", &bReformed);
+		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
 		pCap = new XPFCRectangle(AsType, bComplex, bRounded, bStellated, bReformed);
 	}
-	else if (bsName == "Ellipse")
+	else if (bsName == _T("Ellipse"))
 	{
 		// Read the as and complex attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "complex", &bComplex);
+		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		pCap = new XPFCEllipse(AsType, bComplex);
 	}
-	else if (bsName == "Polygon")
+	else if (bsName == _T("Polygon"))
 	{
 		// Read the as, rounded, stellated and reformed attributes
 		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "rounded", &bRounded);
+		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
 		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "stellated", &bStellated);
+		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
 		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "reformed", &bReformed);
+		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
 		pCap = new XPFCPolygon(AsType, bRounded, bStellated, bReformed);
 	}
-	else if (bsName == "Bitmap")
+	else if (bsName == _T("Bitmap"))
 	{
 		// Read the complex and contone attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "complex", &bComplex);
+		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "contone", &bContone);
+		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
 		pCap = new XPFCBitmap(AsType, bComplex, bContone);
 	}
-	else if (bsName == "Text")
+	else if (bsName == _T("Text"))
 	{
 		// Read the onpath, complex and plain attributes
 		XPFBOOL bOnPath = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "onpath", &bOnPath);
+		hRes = GetXPFBOOL(pNode, _T("onpath"), &bOnPath);
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "complex", &bComplex);
+		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bPlain = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "plain", &bPlain);
+		hRes = GetXPFBOOL(pNode, _T("plain"), &bPlain);
 		XPFBOOL bAutoKern = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "autokern", &bAutoKern);
+		hRes = GetXPFBOOL(pNode, _T("autokern"), &bAutoKern);
 		XPFBOOL bJustified = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "justified", &bJustified);
+		hRes = GetXPFBOOL(pNode, _T("justified"), &bJustified);
 		pCap = new XPFCText(AsType, bOnPath, bComplex, bPlain, bAutoKern, bJustified);
 	}
-	else if (bsName == "ClipView")
+	else if (bsName == _T("ClipView"))
 	{
 		pCap = new XPFCClipView(AsType);
 	}
-	else if (bsName == "BitmapEffect")
+	else if (bsName == _T("BitmapEffect"))
 	{
 		pCap = new XPFCBitmapEffect(AsType);
 	}
-	else if (bsName == "Feather")
+	else if (bsName == _T("Feather"))
 	{
 		pCap = new XPFCFeather(AsType);
 	}
@@ -1871,64 +1924,64 @@ XPFCapability* PluginOILFilter::CreateAttributeNode(IXMLDOMNode* pNode)
 	CComBSTR bsName;
 	HRESULT hRes = pNode->get_nodeName(&bsName);
 	
-	if (bsName == "#text")
+	if (bsName == _T("#text"))
 	{
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
 	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == "Fill")
+	if (bsName == _T("Fill"))
 	{
 		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "shape", aFillShapes, &Shape);
+		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
 		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "repeat", aFillRepeats, &Repeat);
+		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
 		XPFBOOL bMultistage = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "multistage", &bMultistage);
+		hRes = GetXPFBOOL(pNode, _T("multistage"), &bMultistage);
 		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "effect", aColourEffects, &Effect);
+		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
 		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "profile", &bProfile);
+		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
 		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "contone", &bContone);
+		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
 		pCap = new XPFCFill(AsType, Shape, Repeat, bMultistage, Effect, bProfile, bContone);
 	}
-	else if (bsName == "FillTrans")
+	else if (bsName == _T("FillTrans"))
 	{
 		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "shape", aFillShapes, &Shape);
+		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "type", aTransTypes, &Type);
+		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
 		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "repeat", aFillRepeats, &Repeat);
+		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
 		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "profile", &bProfile);
+		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
 		pCap = new XPFCFillTrans(AsType, Shape, Type, Repeat, bProfile);
 	}
-	else if (bsName == "Line")
+	else if (bsName == _T("Line"))
 	{
 		XPFBOOL bDash = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "dash", &bDash);
+		hRes = GetXPFBOOL(pNode, _T("dash"), &bDash);
 		XPFBOOL bArrowhead = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "arrowhead", &bArrowhead);
+		hRes = GetXPFBOOL(pNode, _T("arrowhead"), &bArrowhead);
 		XPFProp Cap = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "cap", aLineCaps, &Cap);
+		hRes = GetXPFProp(pNode, _T("cap"), aLineCaps, &Cap);
 		XPFProp Join = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "join", aLineJoins, &Join);
+		hRes = GetXPFProp(pNode, _T("join"), aLineJoins, &Join);
 		XPFBOOL bStroke = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "stroke", &bStroke);
+		hRes = GetXPFBOOL(pNode, _T("stroke"), &bStroke);
 		XPFBOOL bBrush = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, "brush", &bBrush);
+		hRes = GetXPFBOOL(pNode, _T("brush"), &bBrush);
 		pCap = new XPFCLine(AsType, bDash, bArrowhead, Cap, Join, bStroke, bBrush);
 	}
-	else if (bsName == "LineTrans")
+	else if (bsName == _T("LineTrans"))
 	{
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, "type", aTransTypes, &Type);
+		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
 		pCap = new XPFCLineTrans(AsType, Type);
 	}
-	else if (bsName == "Feather")
+	else if (bsName == _T("Feather"))
 	{
 		pCap = new XPFCFeather(AsType);
 	}
@@ -1978,14 +2031,14 @@ XPFCapability* PluginOILFilter::CreateColourNode(IXMLDOMNode* pNode)
 	CComBSTR bsName;
 	HRESULT hRes = pNode->get_nodeName(&bsName);
 	
-	if (bsName == "#text")
+	if (bsName == _T("#text"))
 	{
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
 	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == "Colour")
+	if (bsName == _T("Colour"))
 	{
 		pCap = new XPFCColour(AsType);
 	}
@@ -2026,6 +2079,7 @@ XPFCapability* PluginOILFilter::CreateColourNode(IXMLDOMNode* pNode)
 
 	return(pCap);
 }
+#endif
 
 /****************************************************************************
 
@@ -2040,5 +2094,8 @@ XPFCapability* PluginOILFilter::CreateColourNode(IXMLDOMNode* pNode)
 
 void PluginOILFilter::Cleanup()
 {
+PORTNOTE("other","PluginFilter COM bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ReleaseFilterObject();
+#endif
 }

@@ -315,7 +315,7 @@ BOOL XPFCMould::DoesNodeMatch(Node* pNode)
 	{
 		// Scan story for non-plain attributes
 		BOOL bGradFill = HasGraduatedFill(pNode);
-		TRACEUSER( "Gerry", _T("HasGraduatedFill returned %s\n", bGradFill ? "true" : "false"));
+		TRACEUSER( "Gerry", _T("HasGraduatedFill returned %s\n"), bGradFill ? _T("true") : _T("false"));
 		if (bGradFill != m_bGradFill)
 			return(FALSE);
 	}
@@ -506,7 +506,7 @@ BOOL XPFCText::DoesNodeMatch(Node* pNode)
 	{
 		// Scan story for non-plain attributes
 		BOOL bPlain = IsNodePlain(pStory);
-		TRACEUSER( "Gerry", _T("IsNodePlain returned %s\n", bPlain ? "true" : "false"));
+		TRACEUSER( "Gerry", _T("IsNodePlain returned %s\n"), bPlain ? _T("true") : _T("false"));
 		if (bPlain != m_bPlain)
 			return(FALSE);
 	}
@@ -640,6 +640,9 @@ BOOL XPFCText::IsNodePlain(Node* pNode)
 						return(FALSE);
 				}
 				break;
+
+				default:
+					break;
 			}
 		}
 	}
@@ -821,7 +824,7 @@ BOOL XPFCFillTrans::DoAttributesMatch(RenderRegion* pRegion)
 		// Get the transp attribute from the render region
 		TranspFillAttribute* pTrans = (TranspFillAttribute*)(pRegion->GetCurrentAttribute(ATTR_TRANSPFILLGEOMETRY));
 		// Get the type
-		UINT32 Type = pTrans->GetTranspType();
+		INT32 Type = pTrans->GetTranspType();
 		// If we are flat, mix and 0% trans
 		if (Type == TT_Mix &&
 			pTrans->GetGeometryShape() == FILLSHAPE_FLAT &&
@@ -984,7 +987,7 @@ BOOL XPFCLineTrans::DoAttributesMatch(RenderRegion* pRegion)
 		// Get the transp attribute from the render region
 		StrokeTranspAttribute* pTrans = (StrokeTranspAttribute*)(pRegion->GetCurrentAttribute(ATTR_STROKETRANSP));
 		// Get the type
-		UINT32 Type = pTrans->GetTranspType();
+		INT32 Type = pTrans->GetTranspType();
 		// If we have no stroke colour or are mix and 0% trans
 		if (bNoStroke || (Type == TT_Mix && *(pTrans->GetStartTransp()) == 0))
 		{

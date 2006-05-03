@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 #include "nodetext.h"
 #include "nodetxtl.h"
-//#include "nev.h"
+#include "grndbmp.h"
 
 // The implements to match the declares in the .h file.
 
@@ -167,7 +167,7 @@ XPFRenderRegion::~XPFRenderRegion()
 }
 
 
-BOOL XPFRenderRegion::AttachDevice(View* ViewToAttach, CDC* DCToAttach,
+BOOL XPFRenderRegion::AttachDevice(View* ViewToAttach, CNativeDC* DCToAttach,
 								Spread* SpreadToAttach)
 {
 	BOOL ok = RenderRegion::AttachDevice(ViewToAttach, DCToAttach, SpreadToAttach);
@@ -418,19 +418,17 @@ void XPFRenderRegion::DrawBitmapBlob(const DocCoord &Point, KernelBitmap* BlobSh
 
 /********************************************************************************************
 
->	virtual void XPFRenderRegion::DrawBitmapBlob(const DocCoord &Point, UINT32 BitmapID,
-														UINT32 ToolID)
+>	virtual void XPFRenderRegion::DrawBitmapBlob(const DocCoord &Point, ResourceID resID)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	6/4/95
 	Inputs:		Point - A coord
-				BitmapID - the ID of a bitmap
-				ToolID - the Id of the tool the bitmap resource is in
+				ResourceID - the ID of a bitmap
 	Purpose:	None - I just had to overide this function as it is pure virtual. Does nothing
 
 ********************************************************************************************/
 
-void XPFRenderRegion::DrawBitmapBlob(const DocCoord &Point, UINT32 BitmapID, UINT32 ToolID)
+void XPFRenderRegion::DrawBitmapBlob(const DocCoord &Point, ResourceID resID)
 {
 }
 
@@ -1288,7 +1286,7 @@ Node* XPFRenderCallback::ReformatTextLine(TextLine* pLineNode, FormatRegion* pFo
 			}
 
 			// Get the metrics of the character
-			MILLIPOINT EMWidth = 0;
+//			MILLIPOINT EMWidth = 0;
 			CharMetrics CharMet;
 			ok = pFormatRegion->GetCharMetrics(&CharMet, pATC->GetUnicodeValue());
 
@@ -1315,7 +1313,8 @@ Node* XPFRenderCallback::ReformatTextLine(TextLine* pLineNode, FormatRegion* pFo
 						PosEM1000 -= 1;
 
 					// Create and insert a KernCode with the same attributes as pNode
-					KernCode* pKern = new KernCode(DocCoord(PosEM1000, 0));
+					DocCoord TempCoord(PosEM1000, 0);
+					KernCode* pKern = new KernCode(TempCoord);
 					if (pKern)
 					{
 						ok = CopyAttributesFromNode(pKern, pNode);
@@ -1700,7 +1699,7 @@ BOOL XPFRenderCallback::ConvertNodesForPass2()
 
 				// Convert the node
 				ok = OpConvertPathToShapes::ConvertPathToShapes(NULL, (NodeRenderableInk*)pNode);
-				TRACEUSER( "Gerry", _T("ConvertPathToShapes returned %s\n", ok ? "true" : "false"));
+				TRACEUSER( "Gerry", _T("ConvertPathToShapes returned %s\n"), ok ? _T("true") : _T("false"));
 				if (!ok)
 				{
 					// Report error
@@ -1735,7 +1734,7 @@ BOOL XPFRenderCallback::ConvertNodesForPass2()
 			else
 			{
 				ok = OpConvertPathToShapes::ConvertPathToShapes(NULL, (NodeRenderableInk*)pNode);
-				TRACEUSER( "Gerry", _T("ConvertPathToShapes returned %s\n", ok ? "true" : "false"));
+				TRACEUSER( "Gerry", _T("ConvertPathToShapes returned %s\n"), ok ? _T("true") : _T("false"));
 				if (!ok)
 				{
 					return(ok);
@@ -1787,7 +1786,7 @@ BOOL XPFRenderCallback::ConvertNodesForPass3()
 	NodeThreeBoolListItem* pItem = (NodeThreeBoolListItem*)m_ConvertList.GetHead();
 	while (pItem)
 	{
-		TRACEUSER( "Gerry", _T("ConvertFillAttrs 0x%08x (%s) %s%s\n", pItem->m_pNode, pItem->m_pNode->GetRuntimeClass()->m_lpszClassName, pItem->m_bFirst ? "fill " : "", pItem->m_bSecond ? "trans" : ""));
+		TRACEUSER( "Gerry", _T("ConvertFillAttrs 0x%08x (%s) %s%s\n"), pItem->m_pNode, pItem->m_pNode->GetRuntimeClass()->m_lpszClassName, pItem->m_bFirst ? _T("fill ") : _T(""), pItem->m_bSecond ? _T("trans") : _T(""));
 		Node* pNode = pItem->m_pNode;
 		Node* pParentNode = pNode->FindParent();
 		ERROR2IF(!pParentNode, FALSE, "Node has no parent in ConvertNodesForPass3");
@@ -1836,8 +1835,8 @@ BOOL XPFRenderCallback::ConvertNodesForPass3()
 			BitmapFillAttribute* pBmpVal = (BitmapFillAttribute*)(pBmpFill->GetAttributeValue());
 			pBmpVal->BitmapRef.Attach(pBmp);
 			DocCoord BottomLeft(BoundsRect.lo);
-			DocCoord BottomRight(BoundsRect.hix, BoundsRect.loy);
-			DocCoord TopLeft(BoundsRect.lox, BoundsRect.hiy);
+			DocCoord BottomRight(BoundsRect.hi.x, BoundsRect.lo.y);
+			DocCoord TopLeft(BoundsRect.lo.x, BoundsRect.hi.y);
 			pBmpVal->SetStartPoint(&BottomLeft);
 			pBmpVal->SetEndPoint(&BottomRight);
 			pBmpVal->SetEndPoint2(&TopLeft);
@@ -1880,8 +1879,8 @@ BOOL XPFRenderCallback::ConvertNodesForPass3()
 				BitmapFillAttribute* pBmpVal = (BitmapFillAttribute*)(pBmpFill->GetAttributeValue());
 				pBmpVal->BitmapRef.Attach(pBmp);
 				DocCoord BottomLeft(BoundsRect.lo);
-				DocCoord BottomRight(BoundsRect.hix, BoundsRect.loy);
-				DocCoord TopLeft(BoundsRect.lox, BoundsRect.hiy);
+				DocCoord BottomRight(BoundsRect.hi.x, BoundsRect.lo.y);
+				DocCoord TopLeft(BoundsRect.lo.x, BoundsRect.hi.y);
 				pBmpVal->SetStartPoint(&BottomLeft);
 				pBmpVal->SetEndPoint(&BottomRight);
 				pBmpVal->SetEndPoint2(&TopLeft);
@@ -1928,8 +1927,8 @@ BOOL XPFRenderCallback::ConvertNodesForPass3()
 				BitmapTranspFillAttribute* pBmpVal = (BitmapTranspFillAttribute*)(pBmpTrans->GetAttributeValue());
 				pBmpVal->BitmapRef.Attach(pBmp);
 				DocCoord BottomLeft(BoundsRect.lo);
-				DocCoord BottomRight(BoundsRect.hix, BoundsRect.loy);
-				DocCoord TopLeft(BoundsRect.lox, BoundsRect.hiy);
+				DocCoord BottomRight(BoundsRect.hi.x, BoundsRect.lo.y);
+				DocCoord TopLeft(BoundsRect.lo.x, BoundsRect.hi.y);
 				pBmpVal->SetStartPoint(&BottomLeft);
 				pBmpVal->SetEndPoint(&BottomRight);
 				pBmpVal->SetEndPoint2(&TopLeft);
@@ -2168,9 +2167,9 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 	// Make sure that SpanBounds wont end up as a zero-sized rectangle
 	double MPPerPix = 72000.0 / Dpi;
 	if (SpanBounds.Width() < MPPerPix)
-		SpanBounds.hix = SpanBounds.lox + MPPerPix;
+		SpanBounds.hi.x = SpanBounds.lo.x + (INT32)(MPPerPix + 0.5);
 	if (SpanBounds.Height() < MPPerPix)
-		SpanBounds.hiy = SpanBounds.loy + MPPerPix;
+		SpanBounds.hi.y = SpanBounds.lo.y + (INT32)(MPPerPix + 0.5);
 
 	GRenderBitmap BitmapRR(SpanBounds, ViewTrans, TempScale, 32, Dpi);
 	if (!bBackground)
@@ -2194,7 +2193,7 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 		DrawRect.Inflate( (INT32)(2*72000.0/Dpi + 0.5) );
 
 		BitmapRR.SaveContext();
-		BitmapRR.SetFillColour(DocColour(255,255,255));
+		BitmapRR.SetFillColour(COLOUR_WHITE);
 		BitmapRR.DrawRect(&DrawRect);
 		BitmapRR.RestoreContext();
 	}
@@ -2205,7 +2204,7 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 	BitmapRR.SetQuality(pQualAttr, TRUE);
 
 	// Render the relevant span of the tree
-	TRACEUSER("Gerry", "Rendering nodes from 0x%08x to 0x%08x%s\n", pFirstNode, pLastNode, bBackground ? _T(" with background") : _T(""));
+	TRACEUSER("Gerry", _T("Rendering nodes from 0x%08x to 0x%08x%s\n"), pFirstNode, pLastNode, bBackground ? _T(" with background") : _T(""));
 	XPFSpanRenderCallback SpanCallback(pFirstNode, pLastNode, bBackground);
 	BitmapRR.RenderTree(pSpread, FALSE, FALSE, &SpanCallback);
 
@@ -2216,7 +2215,8 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 	BitmapRR.StopRender();
 
 	OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
-	pFullBitmap->SetName(m_pFilter->GetNewBitmapName());
+	String_256 BmpName = m_pFilter->GetNewBitmapName();
+	pFullBitmap->SetName(BmpName);
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
 
 	// Attach the bitmap to this document or a copy will be created when 
@@ -2273,9 +2273,9 @@ KernelBitmap* XPFRenderCallback::RenderFillToBitmap(Node* pNode, DocRect& Bounds
 	// Make sure that BoundsRect wont end up as a zero-sized rectangle
 	double MPPerPix = 72000.0 / Dpi;
 	if (BoundsRect.Width() < MPPerPix)
-		BoundsRect.hix = BoundsRect.lox + MPPerPix;
+		BoundsRect.hi.x = BoundsRect.lo.x + (INT32)(MPPerPix + 0.5);
 	if (BoundsRect.Height() < MPPerPix)
-		BoundsRect.hiy = BoundsRect.loy + MPPerPix;
+		BoundsRect.hi.y = BoundsRect.lo.y + (INT32)(MPPerPix + 0.5);
 
 	GRenderBitmap BitmapRR(BoundsRect, ViewTrans, TempScale, 32, Dpi);
 	BitmapRR.m_DoCompression = TRUE;
@@ -2314,9 +2314,9 @@ KernelBitmap* XPFRenderCallback::RenderFillToBitmap(Node* pNode, DocRect& Bounds
 	{
 		// Start at bottom left corner
 		RectPath.InsertMoveTo(BoundsRect.lo);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.hix, BoundsRect.loy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.hi.x, BoundsRect.lo.y));
 		RectPath.InsertLineTo(BoundsRect.hi);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.lox, BoundsRect.hiy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.lo.x, BoundsRect.hi.y));
 		RectPath.InsertLineTo(BoundsRect.lo);
 
 		// Close the path properly
@@ -2336,7 +2336,8 @@ KernelBitmap* XPFRenderCallback::RenderFillToBitmap(Node* pNode, DocRect& Bounds
 	BitmapRR.StopRender();
 
 	OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
-	pFullBitmap->SetName(m_pFilter->GetNewBitmapName());
+	String_256 BmpName = m_pFilter->GetNewBitmapName();
+	pFullBitmap->SetName(BmpName);
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
 
 	// Attach the bitmap to this document or a copy will be created when 
@@ -2383,9 +2384,9 @@ KernelBitmap* XPFRenderCallback::RenderTransToBitmap(Node* pNode, DocRect& Bound
 	// Make sure that BoundsRect wont end up as a zero-sized rectangle
 	double MPPerPix = 72000.0 / Dpi;
 	if (BoundsRect.Width() < MPPerPix)
-		BoundsRect.hix = BoundsRect.lox + MPPerPix;
+		BoundsRect.hi.x = BoundsRect.lo.x + (INT32)(MPPerPix + 0.5);
 	if (BoundsRect.Height() < MPPerPix)
-		BoundsRect.hiy = BoundsRect.loy + MPPerPix;
+		BoundsRect.hi.y = BoundsRect.lo.y + (INT32)(MPPerPix + 0.5);
 
 	GRenderBitmap BitmapRR(BoundsRect, ViewTrans, TempScale, 32, Dpi);
 	BitmapRR.AttachDevice(pView, NULL, pSpread);
@@ -2406,7 +2407,7 @@ KernelBitmap* XPFRenderCallback::RenderTransToBitmap(Node* pNode, DocRect& Bound
 
 	// Draw it into the real bitmap
 	BitmapRR.SaveContext();
-	BitmapRR.SetFillColour(DocColour(255,255,255));
+	BitmapRR.SetFillColour(COLOUR_WHITE);
 	BitmapRR.DrawRect(&DrawRect);
 
 	// Best quality please
@@ -2439,9 +2440,9 @@ KernelBitmap* XPFRenderCallback::RenderTransToBitmap(Node* pNode, DocRect& Bound
 	{
 		// Start at bottom left corner
 		RectPath.InsertMoveTo(BoundsRect.lo);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.hix, BoundsRect.loy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.hi.x, BoundsRect.lo.y));
 		RectPath.InsertLineTo(BoundsRect.hi);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.lox, BoundsRect.hiy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.lo.x, BoundsRect.hi.y));
 		RectPath.InsertLineTo(BoundsRect.lo);
 
 		// Close the path properly
@@ -2461,7 +2462,8 @@ KernelBitmap* XPFRenderCallback::RenderTransToBitmap(Node* pNode, DocRect& Bound
 	BitmapRR.StopRender();
 
 	OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
-	pFullBitmap->SetName(m_pFilter->GetNewBitmapName());
+	String_256 BmpName = m_pFilter->GetNewBitmapName();
+	pFullBitmap->SetName(BmpName);
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
 
 	// Attach the bitmap to this document or a copy will be created when 
@@ -2528,9 +2530,9 @@ KernelBitmap* XPFRenderCallback::RenderFillAndTransToBitmap(Node* pNode, DocRect
 	// Make sure that BoundsRect wont end up as a zero-sized rectangle
 	double MPPerPix = 72000.0 / Dpi;
 	if (BoundsRect.Width() < MPPerPix)
-		BoundsRect.hix = BoundsRect.lox + MPPerPix;
+		BoundsRect.hi.x = BoundsRect.lo.x + (INT32)(MPPerPix + 0.5);
 	if (BoundsRect.Height() < MPPerPix)
-		BoundsRect.hiy = BoundsRect.loy + MPPerPix;
+		BoundsRect.hi.y = BoundsRect.lo.y + (INT32)(MPPerPix + 0.5);
 
 	GRenderBitmap BitmapRR(BoundsRect, ViewTrans, TempScale, 32, Dpi);
 	if (!bBackground)
@@ -2555,7 +2557,7 @@ KernelBitmap* XPFRenderCallback::RenderFillAndTransToBitmap(Node* pNode, DocRect
 
 		// Draw it into the real bitmap
 		BitmapRR.SaveContext();
-		BitmapRR.SetFillColour(DocColour(255,255,255));
+		BitmapRR.SetFillColour(COLOUR_WHITE);
 		BitmapRR.DrawRect(&DrawRect);
 		BitmapRR.RestoreContext();
 	}
@@ -2613,9 +2615,9 @@ KernelBitmap* XPFRenderCallback::RenderFillAndTransToBitmap(Node* pNode, DocRect
 	{
 		// Start at bottom left corner
 		RectPath.InsertMoveTo(BoundsRect.lo);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.hix, BoundsRect.loy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.hi.x, BoundsRect.lo.y));
 		RectPath.InsertLineTo(BoundsRect.hi);
-		RectPath.InsertLineTo(DocCoord(BoundsRect.lox, BoundsRect.hiy));
+		RectPath.InsertLineTo(DocCoord(BoundsRect.lo.x, BoundsRect.hi.y));
 		RectPath.InsertLineTo(BoundsRect.lo);
 
 		// Close the path properly
@@ -2635,7 +2637,8 @@ KernelBitmap* XPFRenderCallback::RenderFillAndTransToBitmap(Node* pNode, DocRect
 	BitmapRR.StopRender();
 
 	OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
-	pFullBitmap->SetName(m_pFilter->GetNewBitmapName());
+	String_256 BmpName = m_pFilter->GetNewBitmapName();
+	pFullBitmap->SetName(BmpName);
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
 
 	// Attach the bitmap to this document or a copy will be created when 
@@ -2789,7 +2792,7 @@ void XPFView::ContinueRenderView(RenderRegion*, Spread*, BOOL, BOOL,
 
 ********************************************************************************************/
 
-CDC *XPFView::GetRenderDC()
+CNativeDC *XPFView::GetRenderDC()
 {
 	return NULL;
 }

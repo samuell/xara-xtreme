@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_XPFRGN
 #define INC_XPFRGN
 
+#include "view.h"
 #include "becomea.h"
 
 class PluginNativeFilter;
@@ -126,7 +127,7 @@ class XPFRenderRegion : public RenderRegion
 	XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps);
 	~XPFRenderRegion();
 
-	virtual BOOL AttachDevice(View*, CDC*, Spread* SpreadToAttach = NULL);
+	virtual BOOL AttachDevice(View*, CNativeDC*, Spread* SpreadToAttach = NULL);
 
 	// Starting and stopping the rendering process
 	virtual BOOL StartRender();
@@ -148,7 +149,7 @@ class XPFRenderRegion : public RenderRegion
 	virtual void DrawBlob(DocCoord p, BlobType type);
 	virtual void DrawCross(const DocCoord &Point, const UINT32 Size);
 	virtual void DrawBitmapBlob(const DocCoord &Point, KernelBitmap* BlobShape);
-	virtual void DrawBitmapBlob(const DocCoord &Point, UINT32 BitmapID, UINT32 ToolID);
+	virtual void DrawBitmapBlob(const DocCoord &Point, ResourceID resID);
 
 	// Pure Virtual functions that have to be overidden to use this class.
 	// They all do nothing in this class
@@ -448,7 +449,7 @@ public:
 public:
 	virtual void ContinueRenderView(RenderRegion*, Spread*, BOOL = TRUE, BOOL = TRUE,
 									 BOOL bForceImmediate = FALSE);
-	virtual CDC *GetRenderDC();
+	virtual CNativeDC *GetRenderDC();
 
 public:
 	virtual BOOL GetForeBackMode();

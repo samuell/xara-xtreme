@@ -191,7 +191,7 @@ typedef INT32 XPFProp;
 
 typedef struct PropMapEntry
 {
-	char* pName;
+	TCHAR* pName;
 	XPFProp Value;
 } PropMapEntry;
 
