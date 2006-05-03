@@ -2248,8 +2248,22 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 	{
 //		Rect.x--;
 
+		// wxWidgets seems to corrupt the current brush here, which we need to preserve
+		wxBrush SaveBrush=RenderDC->GetBrush();
+		INT32 SaveBackgroundMode=RenderDC->GetBackgroundMode();
+
+		// Draw the text
 		RenderDC->SetBackgroundMode(wxTRANSPARENT);
 		RenderDC->DrawText(Text, Rect.GetLeft(), Rect.GetTop());
+
+		// Restore the brush. First we have to ensure SetBrush really works. This is
+		// because the GTK brush is corrupted whilst the wxWidgets one is still right.
+		// So we have to select a different brush or wxWidgets will skip the call
+		// that would otherwise fix the GTK brush
+		RenderDC->SetBackgroundMode(SaveBackgroundMode);
+		RenderDC->SetBrush(*wxTRANSPARENT_BRUSH);
+		RenderDC->SetBrush(wxNullBrush);
+		RenderDC->SetBrush(SaveBrush);
 
 //		LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
 
