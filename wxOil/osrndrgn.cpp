@@ -1162,8 +1162,8 @@ void OSRenderRegion::CreateNewPen()
 		!EmptyPen									// not on NULL pens (over complex)
 	   )
 	{
-///		Windows version would have used brush calculation to set pen properties
-///		CalcLogBrush( &Brush, RR_STROKECOLOUR() );
+//		Windows version would have used brush calculation to set pen properties
+//		CalcLogBrush( &Brush, RR_STROKECOLOUR() );
 
 		INT32 PenWidth = MPtoLP(RR_LINEWIDTH());
 		if (IsPrinting())
@@ -2203,6 +2203,12 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 	wxString Text = (wxString)(TCHAR *)(*TheText);
 	wxRect Rect(0,0,0,0);
 
+	wxFont SaveFont=RenderDC->GetFont();
+
+	wxFont FixedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	FixedFont.SetPointSize(8);
+	RenderDC->SetFont(FixedFont);
+
 	wxDC * pDC = RenderDC;
 	wxSize DPI = GetFixedDCPPI(*pDC);
 	INT32 XDPI = DPI.GetWidth();
@@ -2222,6 +2228,7 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 		{
 			ERROR3("Can not calculate text size");
 	  		BoundsRect = DocRect(0, 0, 0, 0);
+			RenderDC->SetFont(SaveFont);
 			return;
 		}
 		// For some reason, Rect.bottom and Rect.top seem to be incorrect, so we have
@@ -2229,6 +2236,7 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 		BoundsRect = DocRect(0, 0,
 							  (INT32)(((double)Rect.width * IN_MP_VAL) / XDPI),
 							  (INT32)(((double)LineHeight * IN_MP_VAL) / YDPI) );
+		RenderDC->SetFont(SaveFont);
 		return;
 	}
 	
@@ -2259,7 +2267,7 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 		// Restore the brush. First we have to ensure SetBrush really works. This is
 		// because the GTK brush is corrupted whilst the wxWidgets one is still right.
 		// So we have to select a different brush or wxWidgets will skip the call
-		// that would otherwise fix the GTK brush
+		// that would otherwise fix the GTK brush - wxWidgets bug #148096
 		RenderDC->SetBackgroundMode(SaveBackgroundMode);
 		RenderDC->SetBrush(*wxTRANSPARENT_BRUSH);
 		RenderDC->SetBrush(wxNullBrush);
@@ -2269,6 +2277,8 @@ void OSRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRec
 
 //		ENSURE(LineHeight > 0, "OSRenderRegion::DrawFixedSystemText failed");
 	}
+
+	RenderDC->SetFont(SaveFont);
 }
 
 
