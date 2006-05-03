@@ -22,5 +22,6 @@
 			<label>Anti-alias</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

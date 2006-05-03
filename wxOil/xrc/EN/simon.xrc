@@ -66,5 +66,6 @@
 			<label>Cancel</label>
 		</object>
 		<title>Create a new NavBar</title>
+		<label>Create a new NavBar</label>
 	</object>
 </resource>

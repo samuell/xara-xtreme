@@ -33,6 +33,7 @@
 			<label>-</label>
 		</object>
 		<title>Fill tool infobar</title>
+		<label>Fill tool infobar</label>
 	</object>
 	<object class="wxDialog" name="IDD_TRANFILLDLG">
 			 <pos>0,0d</pos> <size>367,39d</size>
@@ -74,5 +75,6 @@
 			<label>-</label>
 		</object>
 		<title>Transparency tool infobar</title>
+		<label>Transparency tool infobar</label>
 	</object>
 </resource>

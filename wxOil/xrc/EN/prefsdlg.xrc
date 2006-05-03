@@ -81,7 +81,7 @@
 			<label>DPI when auto generated</label>
 		</object>
 		<title> View </title>
-		<tooltip> View </tooltip>
+		<label> View </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_MISC">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -164,7 +164,7 @@
 			<label>Make &amp;groups be transparent as a whole</label>
 		</object>
 		<title> General </title>
-		<tooltip> General </tooltip>
+		<label> General </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_PAGE">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -237,7 +237,7 @@
 			<label>Sh&amp;ow page shadow</label>
 		</object>
 		<title> Page </title>
-		<tooltip> Page </tooltip>
+		<label> Page </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_TUNE">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -311,7 +311,7 @@
 			 <pos>145,167d</pos> <size>50,12d</size>
 		</object>
 		<title> Tune-ups </title>
-		<tooltip> Tune-ups </tooltip>
+		<label> Tune-ups </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_SCALE">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -354,7 +354,7 @@
 			<label>E.g. 1 to 25000</label>
 		</object>
 		<title> Scaling </title>
-		<tooltip> Scaling </tooltip>
+		<label> Scaling </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_POINTERS">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -403,7 +403,7 @@
 			 <pos>140,116d</pos> <size>55,12d</size>
 		</object>
 		<title> Mouse </title>
-		<tooltip> Mouse </tooltip>
+		<label> Mouse </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_GRID">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -461,7 +461,7 @@
 			 <pos>81,132d</pos> <size>45,12d</size>
 		</object>
 		<title> Grid and Ruler </title>
-		<tooltip> Grid and Ruler </tooltip>
+		<label> Grid and Ruler </label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_UNITS">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -521,7 +521,7 @@
 			<label>&amp;0 - 255</label>
 		</object>
 		<title> Units </title>
-		<tooltip> Units </tooltip>
+		<label> Units </label>
 	</object>
 	<object class="wxDialog" name="IDD_OPTS_UNITPROPERTIES">
 			 <pos>0,0d</pos> <size>237,113d</size>
@@ -582,6 +582,7 @@
 			<label>Help</label>
 		</object>
 		<title>Unit properties</title>
+		<label>Unit properties</label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_PLUGINS">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -608,6 +609,6 @@
 			 <pos>113,87d</pos> <size>82,-1d</size>
 		</object>
 		<title>Effects &amp;&amp; Plugins</title>
-		<tooltip>Effects &amp;&amp; Plugins</tooltip>
+		<label>Effects &amp;&amp; Plugins</label>
 	</object>
 </resource>

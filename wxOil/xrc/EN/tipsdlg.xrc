@@ -28,5 +28,6 @@
 			<label>&amp;Show Tips on StartUp</label>
 		</object>
 		<title>Tip of the Day</title>
+		<label>Tip of the Day</label>
 	</object>
 </resource>

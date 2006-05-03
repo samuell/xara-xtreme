@@ -41,6 +41,7 @@
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<title>Flip &amp; Rotate</title>
+		<label>Flip &amp; Rotate</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXDLG_PG2">
 			 <pos>0,0d</pos> <size>182,160d</size>
@@ -92,6 +93,7 @@
 			 <pos>117,122d</pos> <size>54,13d</size>
 		</object>
 		<title>Resize</title>
+		<label>Resize</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXDLG_PG3">
 			 <pos>0,0d</pos> <size>182,160d</size>
@@ -137,6 +139,7 @@
 			<label>Co&amp;lour</label>
 		</object>
 		<title>Brightness &amp; Contrast</title>
+		<label>Brightness &amp; Contrast</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXDLG_PG4">
 			 <pos>0,0d</pos> <size>182,160d</size>
@@ -189,6 +192,7 @@
 			 <pos>90,136d</pos> <size>91,10d</size>
 		</object>
 		<title>Colour depth</title>
+		<label>Colour depth</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXDLG_PG5">
 			 <pos>0,0d</pos> <size>182,160d</size>
@@ -252,6 +256,7 @@
 			<style>wxSL_HORIZONTAL</style>
 		</object>
 		<title>Special Effects</title>
+		<label>Special Effects</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXDLG_PG6">
 			 <pos>0,0d</pos> <size>182,160d</size>
@@ -345,6 +350,7 @@
 			<label>Shapes</label>
 		</object>
 		<title>Bitmap Alchemist</title>
+		<label>Bitmap Alchemist</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG1">
 			 <pos>0,0d</pos> <size>182,171d</size>
@@ -402,6 +408,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Flip &amp; Rotate</title>
+		<label>Flip &amp; Rotate</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG2">
 			 <pos>0,0d</pos> <size>182,181d</size>
@@ -469,6 +476,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Resize</title>
+		<label>Resize</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG3">
 			 <pos>0,0d</pos> <size>182,176d</size>
@@ -533,6 +541,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Brightness &amp; Contrast</title>
+		<label>Brightness &amp; Contrast</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG4">
 			 <pos>0,0d</pos> <size>182,167d</size>
@@ -602,6 +611,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Colour depth</title>
+		<label>Colour depth</label>
 	</object>
 	<object class="wxDialog" name="IDD_BFXPLUGINDLG_PG5">
 			 <pos>0,0d</pos> <size>182,167d</size>
@@ -681,5 +691,6 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Special Effects</title>
+		<label>Special Effects</label>
 	</object>
 </resource>

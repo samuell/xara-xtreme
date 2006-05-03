@@ -788,6 +788,13 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 		PGram[1].x = DestWidth;		PGram[1].y = 0;
 		PGram[2].x = 0;				PGram[2].y = DestHeight;
 
+		GD->SetContone(0);
+		GD->SetBias(3, 0.0);
+		GD->SetGain(3, 0.0);
+		GD->SetTileSmoothingFlag(TRUE/*FALSE*/);
+		GD->SetTileFilteringFlag(TRUE/*FALSE*/);
+
+
 		GD->SetBitmapFill(	&(wxBM->BMInfo->bmiHeader),
 							wxBM->BMBytes,
 							1,
@@ -824,6 +831,10 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 			// Contone between white and white, but use the transparency values
 			GD->SetColour(0xFFFFFF);
 			GD->SetContone(1, 0xFFFFFF, 0xFFFFFF);
+			GD->SetBias(3, 0.0);
+			GD->SetGain(3, 0.0);
+			GD->SetTileSmoothingFlag(TRUE/*FALSE*/);
+			GD->SetTileFilteringFlag(TRUE/*FALSE*/);
 			GD->SetBitmapFill(	&(wxBM->BMInfo->bmiHeader),
 								wxBM->BMBytes,
 								0x4000,

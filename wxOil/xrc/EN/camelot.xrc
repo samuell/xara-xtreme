@@ -189,5 +189,6 @@
 	<object class="wxDialog" name="IDD_SPLASHDIALOG">
 			 <pos>0,0d</pos> <size>192,133d</size>
 		<title></title>
+		<label></label>
 	</object>
 </resource>

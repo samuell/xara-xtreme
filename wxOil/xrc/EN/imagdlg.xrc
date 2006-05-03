@@ -69,5 +69,6 @@
 			<label>Size of corresponding bitmap</label>
 		</object>
 		<title>Image Map Export Options</title>
+		<label>Image Map Export Options</label>
 	</object>
 </resource>

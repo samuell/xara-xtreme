@@ -27,7 +27,7 @@
 			<label></label>
 		</object>
 		<title>Coords</title>
-		<tooltip>Coords</tooltip>
+		<label>Coords</label>
 	</object>
 	<object class="wxPanel" name="IDD_BLOBTAB_PG2">
 			 <pos>0,0d</pos> <size>160,100d</size>
@@ -57,7 +57,7 @@
 			<label>Radio6</label>
 		</object>
 		<title>RadioDaze</title>
-		<tooltip>RadioDaze</tooltip>
+		<label>RadioDaze</label>
 	</object>
 	<object class="wxPanel" name="IDD_BLOBTAB_PG3">
 			 <pos>0,0d</pos> <size>160,100d</size>
@@ -97,7 +97,7 @@
 			<label>Convert</label>
 		</object>
 		<title>Convert</title>
-		<tooltip>Convert</tooltip>
+		<label>Convert</label>
 	</object>
 	<object class="wxDialog" name="IDD_BLOBBYDLG">
 			 <pos>0,0d</pos> <size>323,248d</size>
@@ -267,5 +267,6 @@
 			 <pos>272,213d</pos> <size>40,13d</size>
 		</object>
 		<title>Blobby Dialog</title>
+		<label>Blobby Dialog</label>
 	</object>
 </resource>

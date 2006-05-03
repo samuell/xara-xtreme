@@ -4646,6 +4646,15 @@ PORTNOTE("other", "No colour separation OSRenderRegion::RenderBitmapFill")
 		}
 	}
 #endif
+
+	// Set the context to the default values
+
+	GD->SetContone(0);
+	GD->SetBias(3, 0.0);
+	GD->SetGain(3, 0.0);
+	GD->SetTileSmoothingFlag(TRUE/*FALSE*/);
+	GD->SetTileFilteringFlag(TRUE/*FALSE*/);
+
 	if (bDoBitmapFill)
 	{
 		GD->SetBitmapFill(	&(WxBM->BMInfo->bmiHeader),

@@ -7,5 +7,6 @@
 			<style>wxSL_HORIZONTAL</style>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 </resource>

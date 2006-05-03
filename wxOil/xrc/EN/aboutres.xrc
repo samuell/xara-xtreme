@@ -57,6 +57,7 @@
 			 <pos>4,81d</pos> <size>216,1d</size>
 		</object>
 		<title>About Xara Xtreme</title>
+		<label>About Xara Xtreme</label>
 	</object>
 	<object class="wxDialog" name="IDD_ABOUTDLG_PLUS">
 			 <pos>34,22d</pos> <size>223,106d</size>
@@ -123,6 +124,7 @@
 			<label>are the property of Pantone Inc.</label>
 		</object>
 		<title>About Xara Xtreme Plus</title>
+		<label>About Xara Xtreme Plus</label>
 	</object>
 	<object class="wxDialog" name="IDD_ABOUTDLG_XS">
 			 <pos>34,22d</pos> <size>223,86d</size>
@@ -181,5 +183,6 @@
 			 <pos>4,81d</pos> <size>216,1d</size>
 		</object>
 		<title>About Xara XS</title>
+		<label>About Xara XS</label>
 	</object>
 </resource>

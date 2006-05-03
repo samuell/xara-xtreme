@@ -59,6 +59,7 @@
 			<label>Make &amp;Style...</label>
 		</object>
 		<title>Wizard Properties</title>
+		<label>Wizard Properties</label>
 	</object>
 	<object class="wxDialog" name="IDD_NAME">
 			 <pos>0,0d</pos> <size>183,54d</size>
@@ -82,5 +83,6 @@
 			<label>Style Name:</label>
 		</object>
 		<title>New Style Name</title>
+		<label>New Style Name</label>
 	</object>
 </resource>

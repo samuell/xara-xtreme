@@ -51,5 +51,6 @@
 			<label>Target frame for URL</label>
 		</object>
 		<title>Web Address...</title>
+		<label>Web Address...</label>
 	</object>
 </resource>

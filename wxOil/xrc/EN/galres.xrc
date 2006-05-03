@@ -285,6 +285,7 @@
 			<label>Add yours in here...</label>
 		</object>
 		<title>Gallery button store</title>
+		<label>Gallery button store</label>
 	</object>
 	<object class="wxDialog" name="IDD_SGDISPLAY">
 			 <pos>0,0d</pos> <size>146,39d</size>
@@ -304,6 +305,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Gallery icon size</title>
+		<label>Gallery icon size</label>
 	</object>
 	<object class="wxDialog" name="IDD_SGSEARCH">
 			 <pos>0,0d</pos> <size>155,72d</size>
@@ -340,6 +342,7 @@
 			<label>Find items including the text:</label>
 		</object>
 		<title>Find gallery item...</title>
+		<label>Find gallery item...</label>
 	</object>
 	<object class="wxDialog" name="IDD_COLOURNAMEDLG">
 			 <pos>0,0d</pos> <size>159,38d</size>
@@ -358,6 +361,7 @@
 			 <pos>8,20d</pos> <size>12,12d</size>
 		</object>
 		<title>Rename colour style</title>
+		<label>Rename colour style</label>
 	</object>
 	<object class="wxDialog" name="IDD_SGSORT">
 			 <pos>0,0d</pos> <size>227,73d</size>
@@ -404,6 +408,7 @@
 			<label>Secondary key</label>
 		</object>
 		<title>Gallery sort options</title>
+		<label>Gallery sort options</label>
 	</object>
 	<object class="wxDialog" name="IDD_SGLINEPROPERTIES">
 			 <pos>0,0d</pos> <size>144,201d</size>
@@ -469,5 +474,6 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Custom brush properties</title>
+		<label>Custom brush properties</label>
 	</object>
 </resource>

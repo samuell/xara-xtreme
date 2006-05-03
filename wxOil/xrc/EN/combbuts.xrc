@@ -19,5 +19,6 @@
 			<label>-</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

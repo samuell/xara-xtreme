@@ -6285,7 +6285,6 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 		Title = pNewPage->GetLabel(); // because wxPanel doesn't seem to support a title
 	if( Title.IsEmpty() )
 	{
-		ObjectName += _T("_NAME");
 		ResourceID	NameResID = CamResource::GetResourceID( PCTSTR(ObjectName) );
 		PCTSTR		pszStringLookup = CamResource::GetTextFail( NameResID );
 		if( NULL != pszStringLookup )

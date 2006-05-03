@@ -34,6 +34,7 @@
 			<label>Export...</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 	<object class="wxDialog" name="IDD_BARSTATESDLG">
 			 <pos>0,0d</pos> <size>218,77d</size>
@@ -102,6 +103,7 @@
 			<label>from MouseOff</label>
 		</object>
 		<title>Manage States for Nav Bar</title>
+		<label>Manage States for Nav Bar</label>
 	</object>
 	<object class="wxDialog" name="IDD_REDEFINE_STATE">
 			 <pos>0,0d</pos> <size>158,81d</size>
@@ -129,5 +131,6 @@
 			 <pos>92,18d</pos> <size>60,-1d</size>
 		</object>
 		<title>Set button design in this State</title>
+		<label>Set button design in this State</label>
 	</object>
 </resource>

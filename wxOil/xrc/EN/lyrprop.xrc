@@ -43,7 +43,7 @@
 			<label>Guidelines</label>
 		</object>
 		<title>Guides</title>
-		<tooltip>Guides</tooltip>
+		<label>Guides</label>
 	</object>
 	<object class="wxPanel" name="IDD_TAB_LAYER_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,148d</size>
@@ -67,7 +67,7 @@
 			 <pos>45,25d</pos> <size>140,13d</size>
 		</object>
 		<title>Layer</title>
-		<tooltip>Layer</tooltip>
+		<label>Layer</label>
 	</object>
 	<object class="wxDialog" name="IDD_GUIDELINE_PROPERTIES">
 			 <pos>0,0d</pos> <size>171,63d</size>
@@ -107,5 +107,6 @@
 			<label>Properties</label>
 		</object>
 		<title>Guideline properties</title>
+		<label>Guideline properties</label>
 	</object>
 </resource>

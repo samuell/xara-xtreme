@@ -52,7 +52,7 @@
 			<label>Make background &amp;transparent</label>
 		</object>
 		<title>Animation Colours</title>
-		<tooltip>Animation Colours</tooltip>
+		<label>Animation Colours</label>
 	</object>
 	<object class="wxPanel" name="IDD_TAB_FRAME_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,121d</size>
@@ -95,7 +95,7 @@
 			<label>Show frame</label>
 		</object>
 		<title>Frame</title>
-		<tooltip>Frame</tooltip>
+		<label>Frame</label>
 	</object>
 	<object class="wxPanel" name="IDD_TAB_ANIMATION_PROPERTIES">
 			 <pos>0,0d</pos> <size>201,121d</size>
@@ -130,7 +130,7 @@
 			<label>1/100 s</label>
 		</object>
 		<title>Animation Loop and Speed</title>
-		<tooltip>Animation Loop and Speed</tooltip>
+		<label>Animation Loop and Speed</label>
 	</object>
 	<object class="wxPanel" name="IDD_TAB_PREVIEW_IN_BROWSER">
 			 <pos>0,0d</pos> <size>201,121d</size>
@@ -164,6 +164,6 @@
 			<label>Include Image Information</label>
 		</object>
 		<title>Preview in Browser</title>
-		<tooltip>Preview in Browser</tooltip>
+		<label>Preview in Browser</label>
 	</object>
 </resource>

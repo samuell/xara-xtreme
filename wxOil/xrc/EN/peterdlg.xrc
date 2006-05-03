@@ -133,5 +133,6 @@
 			 <pos>5,124d</pos> <size>185,55d</size>
 		</object>
 		<title>Document information</title>
+		<label>Document information</label>
 	</object>
 </resource>

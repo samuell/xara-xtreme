@@ -7,6 +7,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="SELRTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -15,6 +16,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="GRIDTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -23,6 +25,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="ELIPTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -31,6 +34,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="ROTATOOLDLG">
 			 <pos>0,0d</pos> <size>31,33d</size>
@@ -39,6 +43,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="RECTTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -47,6 +52,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="BEZTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -55,6 +61,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="GRADTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -63,6 +70,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="PENTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -71,6 +79,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="BLANKTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -79,6 +88,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="TRANSTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -87,6 +97,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="REGSHAPETOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -95,6 +106,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="MOULDTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -103,6 +115,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="TEXTTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -111,6 +124,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="SOFTSHADOWTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -119,6 +133,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="BEVELTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -127,6 +142,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="CONTOURTOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -135,6 +151,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="SLICETOOLDLG">
 			 <pos>0,0d</pos> <size>31,32d</size>
@@ -143,6 +160,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_DIALOG1">
 			 <pos>0,0d</pos> <size>185,92d</size>
@@ -155,5 +173,6 @@
 			<label>Cancel</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

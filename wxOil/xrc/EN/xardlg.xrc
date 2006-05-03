@@ -28,5 +28,6 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Native Format Options</title>
+		<label>Native Format Options</label>
 	</object>
 </resource>

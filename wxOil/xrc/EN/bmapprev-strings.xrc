@@ -6,30 +6,6 @@
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-				<object class="wxStaticText" name="IDD_TBITMAPSIZE_NAME">
-					<label>Bitmap Size</label>
-				</object>
-			</object>
-			<object class="sizeritem">
-				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-				<object class="wxStaticText" name="IDD_TIMAPOPTIONS_NAME">
-					<label>Image Map</label>
-				</object>
-			</object>
-			<object class="sizeritem">
-				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-				<object class="wxStaticText" name="IDD_TBROWSER_NAME">
-					<label>Browser Preview</label>
-				</object>
-			</object>
-			<object class="sizeritem">
-				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-				<object class="wxStaticText" name="IDD_TBITMAPOPTIONS_NAME">
-					<label>Options</label>
-				</object>
-			</object>
-			<object class="sizeritem">
-				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ADVANCED_OPTIONS">
 					<label>#1%s Options</label>
 				</object>

@@ -269,6 +269,15 @@ sub WriteLabel
     print OUTPUT "\t\t\t<label>$t</label>\n";
 }
 
+sub WriteLabel2
+{
+    my $t=shift @_;
+    $t=~s/</&lt;/g;
+    $t=~s/>/&gt;/g;
+    $t=~s/&/&amp;/g;
+    print OUTPUT "\t\t<label>$t</label>\n";
+}
+
 sub WriteStyle
 {
     my $t=shift @_;
@@ -1252,7 +1261,8 @@ sub ParseDialog
 
     ParseControls();
     WriteTitle ($title);
-    WriteTooltip ($title) if IsPanel($dlgname);
+    WriteLabel2 ($title);
+    # WriteTooltip ($title) if IsPanel($dlgname);
     print OUTPUT "\t</object>\n";
 }
 

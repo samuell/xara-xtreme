@@ -23,5 +23,6 @@
 			<label>Data type:</label>
 		</object>
 		<title>Paste Special</title>
+		<label>Paste Special</label>
 	</object>
 </resource>

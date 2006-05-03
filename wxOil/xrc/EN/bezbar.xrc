@@ -105,5 +105,6 @@
 			<label>100%</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

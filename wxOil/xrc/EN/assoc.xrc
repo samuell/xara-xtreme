@@ -23,5 +23,6 @@
 			<label>Do you want to register it ?</label>
 		</object>
 		<title>Check Associations</title>
+		<label>Check Associations</label>
 	</object>
 </resource>

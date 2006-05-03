@@ -7,6 +7,7 @@
 			<label>-</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_BLENDTOOLBAR">
 			 <pos>0,0d</pos> <size>251,57d</size>
@@ -58,5 +59,6 @@
 			<label>-</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

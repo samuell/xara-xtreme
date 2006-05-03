@@ -104,5 +104,6 @@
 			<label>Make local to frame</label>
 		</object>
 		<title>Colour editor</title>
+		<label>Colour editor</label>
 	</object>
 </resource>

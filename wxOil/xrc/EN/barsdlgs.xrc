@@ -394,10 +394,12 @@
 			 <pos>300,12d</pos> <size>43,-1d</size>
 		</object>
 		<title>Dummy standard bar</title>
+		<label>Dummy standard bar</label>
 	</object>
 	<object class="wxDialog" name="IDD_BLANKBAR">
 			 <pos>0,0d</pos> <size>185,92d</size>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_GRIDDLG">
 			 <pos>0,0d</pos> <size>329,21d</size>
@@ -418,6 +420,7 @@
 			<label>G</label>
 		</object>
 		<title>Grid tool info</title>
+		<label>Grid tool info</label>
 	</object>
 	<object class="wxDialog" name="IDD_GRIDTOOL">
 			 <pos>0,0d</pos> <size>394,22d</size>
@@ -434,6 +437,7 @@
 			 <pos>146,5d</pos> <size>54,-1d</size>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_LAYER_NAME">
 			 <pos>0,0d</pos> <size>183,54d</size>
@@ -457,6 +461,7 @@
 			<label>Layer name:</label>
 		</object>
 		<title>Name layer</title>
+		<label>Name layer</label>
 	</object>
 	<object class="wxDialog" name="IDD_TOOLBARS">
 			 <pos>0,0d</pos> <size>191,126d</size>
@@ -516,6 +521,7 @@
 			<label>Use large buttons for:</label>
 		</object>
 		<title>Control bars</title>
+		<label>Control bars</label>
 	</object>
 	<object class="wxDialog" name="IDD_CUSTOMIZEBAR">
 			 <pos>0,0d</pos> <size>177,123d</size>
@@ -536,6 +542,7 @@
 			<label>Operations:</label>
 		</object>
 		<title>Customize</title>
+		<label>Customize</label>
 	</object>
 	<object class="wxDialog" name="IDD_INFOBAR">
 			 <pos>0,0d</pos> <size>122,19d</size>
@@ -547,6 +554,7 @@
 			<label>..</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_NEWTOOLBAR">
 			 <pos>0,0d</pos> <size>186,57d</size>
@@ -570,6 +578,7 @@
 			<label>Control bar name:</label>
 		</object>
 		<title>New control bar</title>
+		<label>New control bar</label>
 	</object>
 	<object class="wxDialog" name="IDD_NAMEDLG_NAME_TEMPLATE">
 			 <pos>0,0d</pos> <size>183,70d</size>
@@ -593,6 +602,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Create a name</title>
+		<label>Create a name</label>
 	</object>
 	<object class="wxDialog" name="IDD_NAMEDLG_RENAME_TEMPLATE">
 			 <pos>0,0d</pos> <size>183,70d</size>
@@ -616,6 +626,7 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Change a name</title>
+		<label>Change a name</label>
 	</object>
 	<object class="wxDialog" name="IDD_FREEHANDTOOL">
 			 <pos>0,0d</pos> <size>187,22d</size>
@@ -657,6 +668,7 @@
 			 <pos>175,15d</pos> <size>28,-1d</size>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_LIVEEFFECTTOOLCTRLS">
 			 <pos>0,0d</pos> <size>282,142d</size>
@@ -758,5 +770,6 @@
 			<label>-</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

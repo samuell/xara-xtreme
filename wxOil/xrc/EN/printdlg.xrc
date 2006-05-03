@@ -130,7 +130,7 @@
 			<style>wxRB_GROUP</style>
 		</object>
 		<title>Print layout</title>
-		<tooltip>Print layout</tooltip>
+		<label>Print layout</label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_PRINTGENERAL">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -208,7 +208,7 @@
 			<label>Text options</label>
 		</object>
 		<title> Output </title>
-		<tooltip> Output </tooltip>
+		<label> Output </label>
 	</object>
 	<object class="wxDialog" name="IDD_PRINTPROGRESS">
 			 <pos>0,0d</pos> <size>157,100d</size>
@@ -253,6 +253,7 @@
 			<label>-</label>
 		</object>
 		<title>Printing...</title>
+		<label>Printing...</label>
 	</object>
 	<object class="wxDialog" name="IDD_PRINTTPLATE">
 			 <pos>36,52d</pos> <size>225,153d</size>
@@ -359,6 +360,7 @@
 			<label>Print Pages</label>
 		</object>
 		<title>Print</title>
+		<label>Print</label>
 	</object>
 	<object class="wxDialog" name="IDD_XSEPSOPS">
 			 <pos>0,0d</pos> <size>194,74d</size>
@@ -391,6 +393,7 @@
 			<label>Resolution</label>
 		</object>
 		<title>Xara Xtreme EPS Export Options</title>
+		<label>Xara Xtreme EPS Export Options</label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_PRINTPRINT">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -462,7 +465,7 @@
 			<label>lpi</label>
 		</object>
 		<title>Separations</title>
-		<tooltip>Separations</tooltip>
+		<label>Separations</label>
 	</object>
 	<object class="wxDialog" name="IDD_PLATEPROPS">
 			 <pos>0,0d</pos> <size>176,78d</size>
@@ -501,6 +504,7 @@
 			<label>Magenta plate properties</label>
 		</object>
 		<title>Separation properties</title>
+		<label>Separation properties</label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_IMAGESETTING">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -548,6 +552,6 @@
 			<label>Always overprint black</label>
 		</object>
 		<title>Imagesetting</title>
-		<tooltip>Imagesetting</tooltip>
+		<label>Imagesetting</label>
 	</object>
 </resource>

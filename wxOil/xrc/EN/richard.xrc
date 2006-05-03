@@ -65,6 +65,7 @@
 			<label>&amp;Read Only</label>
 		</object>
 		<title>Add folder to gallery</title>
+		<label>Add folder to gallery</label>
 	</object>
 	<object class="wxDialog" name="IDD_LIBPATHGENDLG">
 			 <pos>36,24d</pos> <size>210,154d</size>
@@ -135,6 +136,7 @@
 			<label>&amp;Read Only</label>
 		</object>
 		<title>Add folder to gallery</title>
+		<label>Add folder to gallery</label>
 	</object>
 	<object class="wxDialog" name="IDD_LIBPATHDLG95">
 			 <pos>0,0d</pos> <size>270,134d</size>
@@ -171,6 +173,7 @@
 			<label>Locate the folder containing the fonts that you want to add to the gallery</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 	<object class="wxDialog" name="IDD_LIBPATHGENDLG95">
 			 <pos>0,0d</pos> <size>270,134d</size>
@@ -211,5 +214,6 @@
 			<label>Locate the folder containing the files that you want to add to the gallery</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 </resource>

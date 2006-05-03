@@ -42,6 +42,7 @@
 			<label>Remove bevel</label>
 		</object>
 		<title>Bevels</title>
+		<label>Bevels</label>
 	</object>
 	<object class="wxDialog" name="IDD_BEVELINFOBAR">
 			 <pos>0,0d</pos> <size>362,17d</size>
@@ -82,5 +83,6 @@
 			<label>-</label>
 		</object>
 		<title>Dialog</title>
+		<label>Dialog</label>
 	</object>
 </resource>

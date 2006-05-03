@@ -49,6 +49,7 @@
 			 <pos>85,78d</pos> <size>48,-1d</size>
 		</object>
 		<title>Spacing</title>
+		<label>Spacing</label>
 	</object>
 	<object class="wxDialog" name="IDD_BRUSHEDITOFFSET">
 			 <pos>0,0d</pos> <size>190,119d</size>
@@ -99,6 +100,7 @@
 			<label>%</label>
 		</object>
 		<title>Offset</title>
+		<label>Offset</label>
 	</object>
 	<object class="wxDialog" name="IDD_BRUSHEDITSCALING">
 			 <pos>0,0d</pos> <size>190,92d</size>
@@ -147,6 +149,7 @@
 			<label></label>
 		</object>
 		<title>Scaling</title>
+		<label>Scaling</label>
 	</object>
 	<object class="wxDialog" name="IDD_BRUSHEDITEFFECTS">
 			 <pos>0,0d</pos> <size>204,119d</size>
@@ -209,6 +212,7 @@
 			<label>degrees</label>
 		</object>
 		<title>Rotation</title>
+		<label>Rotation</label>
 	</object>
 	<object class="wxDialog" name="IDD_BRUSHEDITSEQUENCE">
 			 <pos>0,0d</pos> <size>190,70d</size>
@@ -248,6 +252,7 @@
 			<label>%</label>
 		</object>
 		<title>Transparency</title>
+		<label>Transparency</label>
 	</object>
 	<object class="wxDialog" name="IDD_BRUSHEDITFILL">
 			 <pos>0,0d</pos> <size>197,117d</size>
@@ -313,5 +318,6 @@
 			<label>degrees</label>
 		</object>
 		<title>Fill Properties</title>
+		<label>Fill Properties</label>
 	</object>
 </resource>

@@ -35,5 +35,6 @@
 			<label>Locate the folder containing the plug-ins that you want to use</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 </resource>

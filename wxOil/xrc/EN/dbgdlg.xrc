@@ -32,5 +32,6 @@
 			 <pos>40,5d</pos> <size>130,-1d</size>
 		</object>
 		<title>Camelot debug commands</title>
+		<label>Camelot debug commands</label>
 	</object>
 </resource>

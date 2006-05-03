@@ -81,6 +81,7 @@
 			<label>Put HTML tag on clipboard</label>
 		</object>
 		<title>Export Native Format Options</title>
+		<label>Export Native Format Options</label>
 	</object>
 	<object class="wxDialog" name="IDD_PREVIEWBITMAP">
 			 <pos>0,0d</pos> <size>116,192d</size>
@@ -112,5 +113,6 @@
 			<label>Show preview in options</label>
 		</object>
 		<title></title>
+		<label></label>
 	</object>
 </resource>

@@ -22,5 +22,6 @@
 			<label>Redraw Me</label>
 		</object>
 		<title>Render Demo</title>
+		<label>Render Demo</label>
 	</object>
 </resource>

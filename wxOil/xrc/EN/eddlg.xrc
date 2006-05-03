@@ -53,5 +53,6 @@
 			 <pos>6,6d</pos> <size>102,74d</size>
 		</object>
 		<title>Object Alignment</title>
+		<label>Object Alignment</label>
 	</object>
 </resource>

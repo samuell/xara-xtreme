@@ -26,5 +26,6 @@
 			<label></label>
 		</object>
 		<title>Create new brush:</title>
+		<label>Create new brush:</label>
 	</object>
 </resource>

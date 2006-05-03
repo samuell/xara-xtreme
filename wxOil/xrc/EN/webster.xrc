@@ -14,6 +14,7 @@
 			<label>Stop Download</label>
 		</object>
 		<title>File download</title>
+		<label>File download</label>
 	</object>
 	<object class="wxPanel" name="IDD_OPTSTAB_INTERNET">
 			 <pos>0,0d</pos> <size>206,188d</size>
@@ -74,6 +75,6 @@
 			<label></label>
 		</object>
 		<title>Internet</title>
-		<tooltip>Internet</tooltip>
+		<label>Internet</label>
 	</object>
 </resource>

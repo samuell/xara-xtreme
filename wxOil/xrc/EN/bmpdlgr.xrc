@@ -93,5 +93,6 @@
 			<label>Smooth when scaled up</label>
 		</object>
 		<title>Bitmap Properties</title>
+		<label>Bitmap Properties</label>
 	</object>
 </resource>

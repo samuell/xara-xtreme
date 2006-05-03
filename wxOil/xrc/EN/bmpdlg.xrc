@@ -220,6 +220,7 @@
 			<label>Number of colours in palette</label>
 		</object>
 		<title>Export bitmap options</title>
+		<label>Export bitmap options</label>
 	</object>
 	<object class="wxDialog" name="IDD_EXPORTJPEGOPTS">
 			 <pos>0,0d</pos> <size>221,146d</size>
@@ -318,6 +319,7 @@
 			<label>Use Original JPEG</label>
 		</object>
 		<title>Export JPEG options</title>
+		<label>Export JPEG options</label>
 	</object>
 	<object class="wxDialog" name="IDD_PHOTOCDOPTS">
 			 <pos>0,0d</pos> <size>185,108d</size>
@@ -359,5 +361,6 @@
 			<label>&amp;Help</label>
 		</object>
 		<title>Photo CD import options</title>
+		<label>Photo CD import options</label>
 	</object>
 </resource>

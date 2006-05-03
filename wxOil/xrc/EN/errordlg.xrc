@@ -31,5 +31,6 @@
 			<bitmap>.png</bitmap>
 		</object>
 		<title>Xara Xtreme</title>
+		<label>Xara Xtreme</label>
 	</object>
 </resource>

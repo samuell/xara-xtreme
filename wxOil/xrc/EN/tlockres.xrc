@@ -22,5 +22,6 @@
 			<label>Cancel</label>
 		</object>
 		<title>Serial number entry</title>
+		<label>Serial number entry</label>
 	</object>
 </resource>

@@ -134,5 +134,6 @@
 			<label>&amp;Defaults</label>
 		</object>
 		<title>Bitmap tracer</title>
+		<label>Bitmap tracer</label>
 	</object>
 </resource>

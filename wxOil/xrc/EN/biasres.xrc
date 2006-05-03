@@ -38,5 +38,6 @@
 			<label></label>
 		</object>
 		<title>Profile</title>
+		<label>Profile</label>
 	</object>
 </resource>

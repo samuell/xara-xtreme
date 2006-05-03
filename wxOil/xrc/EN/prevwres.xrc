@@ -50,6 +50,7 @@
 			 <pos>10,50d</pos> <size>200,150d</size>
 		</object>
 		<title>Preview</title>
+		<label>Preview</label>
 	</object>
 	<object class="wxDialog" name="IDD_ANIMATIONBAR">
 			 <pos>0,0d</pos> <size>466,92d</size>
@@ -122,5 +123,6 @@
 			<label>-</label>
 		</object>
 		<title>Animation bar</title>
+		<label>Animation bar</label>
 	</object>
 </resource>

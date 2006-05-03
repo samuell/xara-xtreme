@@ -25,5 +25,6 @@
 			<label>Make the colour a shade of:</label>
 		</object>
 		<title>New named colour</title>
+		<label>New named colour</label>
 	</object>
 </resource>

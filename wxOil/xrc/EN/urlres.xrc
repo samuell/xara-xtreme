@@ -22,5 +22,6 @@
 			<label>URL</label>
 		</object>
 		<title>Import from Web...</title>
+		<label>Import from Web...</label>
 	</object>
 </resource>
