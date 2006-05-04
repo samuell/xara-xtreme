@@ -157,28 +157,54 @@ class PluginOILFilter : public OILFilter
 
 public:
 	PluginOILFilter(Filter *pFilter);
+
+	// This function initialises the filter setting up the import and export flags, 
+	// the filter name and file extension
+	// The parameter will almost certainly need to change when OILFilter::CreatePluginFilters 
+	// is implemented properly by scanning the installed filters
 	BOOL Init(const CLSID& rCLSID);
 
 	BOOL IsImport() { return(m_bImport); }
 	BOOL IsExport() { return(m_bExport); }
 
-	INT32 HowCompatible(PathName& Filename);
-	BOOL GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile);
-
+	// The import and export functions
+	// The mechanism may need to be modified to efficiently launch processes and 
+	// attach CCLexFile derived classes.
+	// Currently GetExportFile is called first so it will only really support 
+	// outputting the Xar data to a temporary location so that it can be sent to the 
+	// filter's stdin when DoExport is called.
+	// GetCapabilities doesn't really need the pFile parameter so it could be called 
+	// before GetExportFile.
+	// At the moment, the easiest thing to do would probably be to load and save the 
+	// Xar data from temporary files and simply redirect stdin and stdout when running 
+	// the filter
+	// I expect this will involve far less work than trying to attach a CCFile to a 
+	// external process though to handle the progress indication correctly, stderr will 
+	// need to be attached to in such a way that the loop that waits for the process to 
+	// exit can read the progress values from stderr and update the XaraLX progress system
 	BOOL GetExportFile(PathName* pPath, CCLexFile** ppNewFile);
 	BOOL GetCapabilities(CCLexFile* pFile, PathName* pPath, CapabilityTree* pCapTree);
 	BOOL DoExport(CCLexFile* pXarFile, PathName* pPath);
+	INT32 HowCompatible(PathName& Filename);
+	BOOL GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile);
 
 	void Cleanup();
 
 protected:
 PORTNOTE("other","PluginFilter COM bits removed")
 #if !defined(EXCLUDE_FROM_XARALX)
+	// Functions to create and release the filter COM object
 	BOOL CreateFilterObject();
 	void ReleaseFilterObject();
+#endif
 
+PORTNOTE("other","PluginFilter XML bits removed")
+#if !defined(EXCLUDE_FROM_XARALX)
+//	This function is called from GetCapabilities to parse the XML
 	HRESULT BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTree);
 
+	// The functions from here down to CreateColourNode are all concerned with the 
+	// parsing of the XML and the creation of the CapabilityTree
 	HRESULT ReadOptions(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
 	HRESULT ReadRasterise(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
 	HRESULT ReadSpread(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
@@ -208,6 +234,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 public:
 PORTNOTE("other","PluginFilter COM bits removed")
 #if !defined(EXCLUDE_FROM_XARALX)
+	// These functions handle the COM object autoregistration
 	static BOOL AutoRegisterFilters();
 	static BOOL RegisterDLL(String_256& sPath);
 	static BOOL GetFileVersion(PathName* pPath, String_64* pVersion);

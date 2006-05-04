@@ -1001,9 +1001,9 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	m_pXarStream.p->AddRef();
 
 	*ppNewFile = pStreamFile;		// Return the new file pointer
+#endif
 
 	return(TRUE);
-#endif
 }
 
 
