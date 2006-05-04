@@ -521,6 +521,9 @@ protected:
 	BOOL AddDialogControlToHelper(CGadgetID GadgetID, CDlgResID PageID); // overridden for tabbed dialogs
 	BOOL RemoveDialogControlFromHelper(CGadgetID GadgetID);
 	BOOL RemoveDialogControlFromHelper(CGadgetID GadgetID , CDlgResID PageID);
+
+private:
+	UINT32 MagicWord;
 };  
 
 

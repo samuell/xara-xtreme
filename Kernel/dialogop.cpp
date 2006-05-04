@@ -147,6 +147,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class Node;
 struct ReDrawInfoType;
 
+#define MAGIC_CREATE  0xa1ec501dUL
+#define MAGIC_DESTROY 0xa1ecdeadUL
+
+#define CheckMagic(f) \
+	do \
+	{ \
+		if (MagicWord == MAGIC_DESTROY) \
+		{ \
+			ERROR3(f ": DialogOp already destroyed"); \
+		} \
+		else \
+		{ \
+			ERROR3IF(MagicWord != MAGIC_CREATE, f ": DialogOp suffered double destroyed or is corrupt"); \
+		} \
+	} while(0)
+
 //-----------------------------------------------------------------------------------------
 
 DECLARE_SOURCE("$Revision$");
@@ -186,7 +202,9 @@ DialogOp::DialogOp(CDlgResID DialogResID, CDlgMode Mode,
 				   CCRuntimeClass* Class,
 				   INT32 OpeningPage, 
 				   CWindowID ParentWnd) : Operation(Class)
-{            
+{
+	MagicWord = MAGIC_CREATE;			// Save this for later
+
 	DlgResID = DialogResID;     		// Dialog's resource ID
 	DlgMode = Mode;             		// Dialog's mode       
 	SubDlgID = SubDialogID;				// Dialog to merge with (0 => no merging)
@@ -320,6 +338,7 @@ void DialogOp::Open()
 
 void DialogOp::Close() 
 {                               
+	CheckMagic("DialogOp:Close()");
 	ENSURE(WindowID != NULL, "Trying to close a window with a NULL window ID !");        
 	
 	DlgMgr->Close(WindowID, this); 
@@ -572,13 +591,16 @@ BOOL DialogOp::CloseDropdown (CGadgetID Gadget, BOOL CloseVal)
 ********************************************************************************************/
 
 DialogOp::~DialogOp() 
-{                              
+{
+	CheckMagic("DialogOp destructor");
 	if (WindowID != NULL)
 		DlgMgr->Delete(WindowID, this); 
 
 	WindowID = NULL; // ensure we get a NULL pointer if this is used again
 	DlgMgr = NULL;	// Again, ensure this is a NULL pointer
 	pEvtHandler=NULL;
+
+	MagicWord = MAGIC_DESTROY;
 }    
 
 // -----------------------------------------------------------------------------------------
@@ -2328,6 +2350,8 @@ BOOL DialogOp::MakeListBoxDragable(CGadgetID ListGadget)
 
 MsgResult DialogOp::Message( Msg* Message )       
 {
+	CheckMagic("DialogOp::Message");;
+
 	if (MESSAGE_IS_A(Message, DocChangingMsg))
 	{
 		// Get a pointer the correct type of message.
@@ -2839,6 +2863,7 @@ BOOL DialogOp::DestroyOSRenderRegion(RenderRegion* pRender)
 
 CWindowID DialogOp::GetReadWriteWindowID()
 {
+	CheckMagic("DialogOp::GetReadWriteWindowID");
 	return (DlgMgr->GetPageWindow(WindowID, ReadWritePage)); 		
 }
 
