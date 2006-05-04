@@ -3932,6 +3932,7 @@ MsgResult SGalleryOptionsDlg::Message( Msg* Message)
 		case DIM_CANCEL:						// Cancel clicked
 			Close();
 			End();
+			return OK;
 			break;
 
 		case DIM_SOFT_COMMIT:					// OK "adjust clicked"
@@ -4479,7 +4480,7 @@ MsgResult SGallerySortDlg::Message( Msg* Message)
 		case DIM_CANCEL:						// Cancel clicked
 			Close();
 			End();
-			break;
+			return OK;
 
 		case DIM_SOFT_COMMIT:					// OK "adjust clicked"
 			Commit();
@@ -5238,6 +5239,7 @@ MsgResult SGallerySearchDlg::Message( Msg* Message)
 		case DIM_CANCEL:						// Cancel clicked
 			Close();
 			End();
+			return OK;
 			break;
 
 		case DIM_LFT_BN_CLICKED:
