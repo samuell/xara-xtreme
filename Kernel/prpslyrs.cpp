@@ -375,7 +375,7 @@ BOOL LayerPropertiesTab::ChangeControlStatus(const BOOL Status)
 	// Check if we are on a frame layer or not
 	// If we are then we must disable some items
 	// At present, these are the visible and editable flags as these are not user controlled.
-	BOOL FrameLayer = FALSE;
+//	BOOL FrameLayer = FALSE;
 	if (pLayer != NULL && pLayer->IsFrame())
 		EnableNonFrameItem = FALSE;
 #endif
@@ -448,7 +448,7 @@ BOOL LayerPropertiesTab::ShowDetails()
 		pPropertiesDlg->SetBoolGadgetSelected(_R(IDC_LAYERTAB_EDITABLE),!pLayer->GetLockedFlagState());
 	}
 
-	pPropertiesDlg->SetStringGadgetValue(_R(IDC_LAYERTAB_NAME),&LayerID);
+	pPropertiesDlg->SetStringGadgetValue(_R(IDC_LAYERTAB_NAME), LayerID);
 
 	ChangeControlStatus(!GreyStatus);
 
@@ -521,6 +521,9 @@ TRACEUSER( "Neville", _T("LayerPropertiesTab::HandleMsg\n"));
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			UpdateApplyState();
+			break;
+
+		default:
 			break;
 	}
 	return TRUE;

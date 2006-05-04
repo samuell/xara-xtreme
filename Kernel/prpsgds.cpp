@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "nev.h"		// error messages
 #include "prpsgds.h"
 #include "guides.h"
-#include "coldrop.h"
+//#include "coldrop.h"
 #include "fixmem.h"
 #include "document.h"
 //#include "markn.h"
@@ -174,9 +174,11 @@ GuidesPropertiesTab::GuidesPropertiesTab()
 																				
 GuidesPropertiesTab::~GuidesPropertiesTab()
 {
+PORTNOTE("other", "Disabled Colour Dropdown")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown != NULL)
 		delete pColourDropDown;
-
+#endif
 	GuidelineList.DeleteAll();
 }        
 
@@ -513,6 +515,8 @@ BOOL GuidesPropertiesTab::ShowGuidelines(Layer* pLayer)
 
 BOOL GuidesPropertiesTab::ShowColours()
 {
+PORTNOTE("other", "Disabled Colour Dropdown")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown != NULL)
 	{
 		IndexedColour* pIndexedColour = NULL;
@@ -549,7 +553,7 @@ BOOL GuidesPropertiesTab::ShowColours()
 		else
 			pColourDropDown->FillInColourList(NULL,0);
 	}
-
+#endif
 	return TRUE;
 }
 
@@ -645,6 +649,8 @@ BOOL GuidesPropertiesTab::UpdateGuidelineSection()
 
 BOOL GuidesPropertiesTab::ColourListChanged(Document* pDoc)
 {
+PORTNOTE("other", "Disabled Colour Dropdown")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pPropertiesDlg == NULL,FALSE,"GuidesPropertiesTab::UpdateGuidelineSection() called with no dialog pointer");
 	ERROR2IF(pColourDropDown == NULL,FALSE,"ptr to 'colour drop down' is NULL");
 
@@ -660,7 +666,7 @@ BOOL GuidesPropertiesTab::ColourListChanged(Document* pDoc)
 		else
 			pColourDropDown->ClearList();			
 	}
-
+#endif
 	return TRUE;
 }
 
@@ -699,55 +705,55 @@ TRACEUSER( "Neville", _T("GuidesPropertiesTab::HandleMsg\n"));
 			break;
 		case DIM_LFT_BN_CLICKED:
 			//LayerPropertyTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_HORZ))
 			{
-				case _R(IDC_GUIDETAB_HORZ):
-					if (GuideType != GUIDELINE_HORZ)
-					{
-						GuideType = GUIDELINE_HORZ;
-						ShowDetails();
-					}
-					break;
-
-				case _R(IDC_GUIDETAB_VERT):
-					if (GuideType != GUIDELINE_VERT)
-					{
-						GuideType = GUIDELINE_VERT;
-						ShowDetails();
-					}
-					break;
-
-				case _R(IDC_GUIDETAB_PROPERTIES):
-					PropertiesClicked();
+				if (GuideType != GUIDELINE_HORZ)
+				{
+					GuideType = GUIDELINE_HORZ;
 					ShowDetails();
-					break;
-
-				case _R(IDC_GUIDETAB_NEW):
-					NewClicked();
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_VERT))
+			{
+				if (GuideType != GUIDELINE_VERT)
+				{
+					GuideType = GUIDELINE_VERT;
 					ShowDetails();
-					break;
-
-				case _R(IDC_GUIDETAB_DELETE):
-					DeleteClicked();
-					ShowDetails();
-					break;
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_PROPERTIES))
+			{
+				PropertiesClicked();
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_NEW))
+			{
+				NewClicked();
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_DELETE))
+			{	
+				DeleteClicked();
+				ShowDetails();
 			}
 			break;
 
 		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			//LayerPropertyTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_GUIDELINELIST))
 			{
-				case _R(IDC_GUIDETAB_GUIDELINELIST):
-					ChangeControlStatus(!GreyStatus);
-					break;
-
-				case _R(IDC_GUIDETAB_COLOURLIST):
-					ColourChanged(pPropertiesDlg->GetSelectedValueIndex(Msg->GadgetID));
-					ShowDetails();
-					break;
+				ChangeControlStatus(!GreyStatus);
 			}
+			else if (Msg->GadgetID == _R(IDC_GUIDETAB_COLOURLIST))
+			{
+				ColourChanged(pPropertiesDlg->GetSelectedValueIndex(Msg->GadgetID));
+				ShowDetails();
+			}
+			break;
+		default:
 			break;
 	}
 	return TRUE;
@@ -770,6 +776,8 @@ TRACEUSER( "Neville", _T("GuidesPropertiesTab::HandleMsg\n"));
 
 BOOL GuidesPropertiesTab::ColourChanged(INT32 Index)
 {
+PORTNOTE("other", "Disabled Colour Dropdown")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown == NULL || Index < 0)
 		return FALSE;
  
@@ -789,7 +797,7 @@ BOOL GuidesPropertiesTab::ColourChanged(INT32 Index)
 //		pLayer->SetGuideColour(pNewColour);
 //		LayerSGallery::ForceRedrawLayer(pDocument,pLayer);
 	}
-
+#endif
 	return TRUE;
 }
 
@@ -813,6 +821,8 @@ BOOL GuidesPropertiesTab::DeleteClicked()
 	INT32* pIndexList = pPropertiesDlg->GetSelectedItems(_R(IDC_GUIDETAB_GUIDELINELIST));
 	INT32 Count = GuidelineList.GetCount();
 
+	INT32 i;
+
 	BOOL ok = (pIndexList != NULL && Count > 0);
 	NodeGuideline** pGuidelineList = NULL;
 
@@ -824,7 +834,7 @@ BOOL GuidesPropertiesTab::DeleteClicked()
 
 		if (ok)
 		{
-			for (INT32 i=0;(pIndexList[i] >= 0) && (i < Count);i++)
+			for (i=0; (pIndexList[i] >= 0) && (i < Count);i++)
 			{
 				GuidelineListItem* pItem = (GuidelineListItem*)GuidelineList.FindItem(pIndexList[i]);
 				if (pItem != NULL)
@@ -908,7 +918,7 @@ BOOL GuidesPropertiesTab::PropertiesClicked()
 	if (Index < 0 || pLayer == NULL) return FALSE;
 
 	BOOL Valid;
-	MILLIPOINT Ordinate = pPropertiesDlg->GetDimensionGadgetValue(_R(IDC_GUIDETAB_GUIDELINELIST),pLayer,&Valid,Index);
+	/*MILLIPOINT Ordinate =*/ pPropertiesDlg->GetDimensionGadgetValue(_R(IDC_GUIDETAB_GUIDELINELIST),pLayer,&Valid,Index);
 
 	if (Valid)
 	{
@@ -1000,9 +1010,12 @@ BOOL GuidesPropertiesTab::InitSection()
 TRACEUSER( "Neville", _T("GuidesPropertiesTab::InitSection\n"));
 	ERROR2IF(pPropertiesDlg == NULL,FALSE,"GuidesPropertiesTab::InitSection called with no dialog pointer");
 
+PORTNOTE("other", "Disabled colour dropdown")
+#ifndef EXCLUDE_FROM_XARALX
 	pColourDropDown = new ColourDropDown;
 	if (pColourDropDown != NULL)
 		pColourDropDown->Init(pPropertiesDlg->GetReadWriteWindowID(),_R(IDC_GUIDETAB_COLOURLIST));
+#endif
 
 	ShowDetails();
 
@@ -1080,7 +1093,7 @@ ActionCode LayerColourAction::Init(	UndoableOperation* pOp,
 
 			pLayer->SetGuideColour(EntryParam.pColour);
 			LayerSGallery::ForceRedrawLayer(pDoc,pLayer);
-			BROADCAST_TO_ALL(LayerMsg(pLayer,LayerMsg::LayerReason::GUIDELINES_CHANGED));
+			BROADCAST_TO_ALL(LayerMsg(pLayer,LayerMsg::GUIDELINES_CHANGED));
 		}
 
 		ERROR3IF(pDoc == NULL,  "pDoc is NULL");			

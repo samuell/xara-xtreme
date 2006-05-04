@@ -961,7 +961,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_COMMAND_RADIOBUTTON_SELECTED) ||
 		FALSE)
 	{
-		msg.DlgMsg = DIM_SELECTION_CHANGED;
+		msg.DlgMsg = DIM_LFT_BN_CLICKED; // apparently not a DIM_SELECTION_CHANGED - the click itself is eaten by the radio control - please do not change - AMB
 		HandleMessage = TRUE;
 	}
 	else if (

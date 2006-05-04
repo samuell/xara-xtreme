@@ -174,9 +174,9 @@ PORTNOTE("galleries", "Excluded various galleries")
 #ifndef WEBSTER
 				OpDisplayLayerGallery::Init()		&&
 				LayerNameDlg::Init()				&&
-#ifndef EXCLUDE_FROM_XARALX
 				LayerPropertyTabsDlg::Init()		&&				
 
+#ifndef EXCLUDE_FROM_XARALX
 				OpDisplayLineGallery::Init()		&&
 #endif // EXCLUDE_FROM_XARALX
 #ifdef _DEBUG // For now name gallery only on debug builds

@@ -2676,8 +2676,6 @@ void LayerSGallery::DoLayerProperties()
 //#ifdef WEBSTER
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
-PORTNOTE("galleries", "Disabled layer properties tab dialog")
-#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();	
 //#endif // webster -RanbirR
 			if (pTabHandler)
@@ -2686,7 +2684,6 @@ PORTNOTE("galleries", "Disabled layer properties tab dialog")
 				if (pDlg != NULL)
 					pDlg->Open();
 			}
-#endif
 		}
 	}
 #endif
@@ -3296,15 +3293,12 @@ BOOL LayerSGallery::BuildCommandMenu(GalleryContextMenu *TheMenu, SGMenuID MenuI
 //#ifdef WEBSTER
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
-PORTNOTE("galleries", "Disabled layer properties tab dialog")
-#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();
 //#endif //webster
 			if (pTabHandler)
 			{
 				pTabHandler->SetCurrentLayer(pLayerGalItem->GetDisplayedLayer());
 			}
-#endif
 		}
 #endif
 		ok = ok && AddCommand(TheMenu, (StringBase *) &SGCmd_New);
@@ -3377,14 +3371,11 @@ OpState LayerSGallery::GetCommandState(StringBase *CommandID, String_256 *ShadeR
 //#ifdef WEBSTR
 //			GIFAnimationPropertyTabs * pTabHandler = GIFAnimationPropertyTabsDlg::GetGIFAnimationPropertiesTabs();
 //#else
-PORTNOTE("galleries", "Disabled layer properties tab dialog")
-#ifndef EXCLUDE_FROM_XARALX
 			LayerPropertyTabs * pTabHandler = LayerPropertyTabsDlg::GetLayerPropertiesTabs();
 //#endif //webster RanbirR
 			if (pTabHandler)
 				State.Greyed = (pTabHandler->GetTabbedDlg() != NULL);
 			else
-#endif
 				State.Greyed = TRUE;	
 		}
 #endif

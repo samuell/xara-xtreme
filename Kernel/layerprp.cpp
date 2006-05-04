@@ -362,13 +362,13 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-//			case DocChangingMsg::DocState::TITLECHANGED:
-			case DocChangingMsg::DocState::SELCHANGED:
+//			case DocChangingMsg::TITLECHANGED:
+			case DocChangingMsg::SELCHANGED:
 			{
 				// In the different cases there are different document pointers that
 				// we must use.
 				Document *pDocument = NULL;
-				if (TheMsg->State == DocChangingMsg::DocState::TITLECHANGED)
+				if (TheMsg->State == DocChangingMsg::TITLECHANGED)
 				{
 					// Document title has changed message.
 					pDocument = TheMsg->pChangingDoc;
@@ -431,7 +431,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 			// the same document and hence the selected document/spread/view does
 			// not change and so we do not get the last update.
 			// Could cache all messages from BORN to this and only update on this.
-			case DocChangingMsg::DocState::BORNANDSTABLE:
+			case DocChangingMsg::BORNANDSTABLE:
 			{
 				// In the different cases there are different document pointers that
 				// we must use, in this case the changing doc is relevent.
@@ -462,6 +462,8 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+			default:
+				break;
 		}
 	}
 
@@ -477,7 +479,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocViewMsg::DocViewState::SELCHANGED:
+			case DocViewMsg::SELCHANGED:
 			{
 				if (TheMsg->pNewDocView != NULL)
 				{
@@ -505,6 +507,8 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+			default:
+				break;
 		}
 	}
 
@@ -520,7 +524,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 		switch ( TheMsg->Reason )
 		{
 			// The selected spread has changed
-			case SpreadMsg::SpreadReason::SELCHANGED:
+			case SpreadMsg::SELCHANGED:
 			{
 				// pOldSpread = ptr to the old selected spread
 				// pNewSpread = ptr to the new selected spread
@@ -552,7 +556,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 			break;
 
 /*			// The layers of a spread have changed.
-			case SpreadMsg::SpreadReason::LAYERCHANGES:
+			case SpreadMsg::LAYERCHANGES:
 			{
 				// pOldSpread = pNewSpread = spread whose layers have changed
 				if (TheMsg->pNewSpread != NULL)
@@ -582,6 +586,8 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 			}
 			break;
 */
+			default:
+				break;
 		}
 	}
 
@@ -593,7 +599,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 		switch ( TheMsg->Reason )
 		{
 			// The active layer has changed.
-			case LayerMsg::LayerReason::ACTIVE_LAYER_CHANGED:
+			case LayerMsg::ACTIVE_LAYER_CHANGED:
 			{
 				if (TheMsg->pNewLayer != NULL)
 				{
@@ -619,7 +625,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 			}
 			break;
 
-			case LayerMsg::LayerReason::GUIDELINES_CHANGED:
+			case LayerMsg::GUIDELINES_CHANGED:
 			{
 				// Only pass on if the layer that's changed is the same as the layer we consider
 				// to be the active layer.
@@ -642,6 +648,8 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+			default:
+				break;
 		}
 	}
 
@@ -660,7 +668,7 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case OptionsChangingMsg::OptionsState::NEWUNITS:
+			case OptionsChangingMsg::NEWUNITS:
 			{
 				// Current display units may have changed changed so may need to update
 				// any display fields on other tabs which are using units. 
@@ -682,6 +690,8 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 
@@ -757,6 +767,9 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 				case DIM_CANCEL:		// Want to quit
 					EndDialog = TRUE;
 					break;
+
+				default:
+					break;
 			}
 		}
 
@@ -792,20 +805,17 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 
 		// Allow the base class access to the message, it will do the
 		// DLG_EAT_IF_HUNGRY(Msg) for us
+
 		// Must do this before the Close and End
 		Result = DialogTabOp::Message(Message);
 
 		// End dialog here
 		if (EndDialog) 
 		{
-			Close();				// Hide the dialog box
-			End();					// Finish the operation
-
 			// Make sure that we remove our options tabs link to the dialog box class
 			// as the dialog will now be destroyed
 			pLayerProperties->SetTabbedDlg(NULL);
 		}
-
 		
 		// Check if have been sending an init/create message and if so then set flag False.
 		// Only do this in the init/create case as we might be sent one of these and then
@@ -827,17 +837,19 @@ MsgResult LayerPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( Msg->State )
 		{
-			case ColourChangingMsg::ColourState::LISTDESELECTED:
+			case ColourChangingMsg::LISTDESELECTED:
 				pDoc = NULL;
 				CallColourListChanged = TRUE;
 				break;
 
-			case ColourChangingMsg::ColourState::LISTPAGED:
-			case ColourChangingMsg::ColourState::LISTUPDATED:
-			case ColourChangingMsg::ColourState::COLOURUPDATED:
-			case ColourChangingMsg::ColourState::COLOURUPDATEDINVISIBLE:
+			case ColourChangingMsg::LISTPAGED:
+			case ColourChangingMsg::LISTUPDATED:
+			case ColourChangingMsg::COLOURUPDATED:
+			case ColourChangingMsg::COLOURUPDATEDINVISIBLE:
 				pDoc = Msg->ScopeDoc;
 				CallColourListChanged = TRUE;
+				break;
+			default:
 				break;
 		}
 
@@ -1241,7 +1253,7 @@ LayerPropertyTabs::LayerPropertyTabs()
 
 ********************************************************************************************/
 
-LayerPropertyTabs::Init()
+BOOL LayerPropertyTabs::Init()
 {
 	// Do nothing for now.
 	return TRUE;
@@ -1308,14 +1320,13 @@ BOOL LayerPropertyTabs::InitLayerPropertyTabs()
 		// Only include the tab if it is a document based option
 		if ( pLayerProperty->IsPropertyRequired() )
 		{
-			switch (pLayerProperty->GetPageID())
+			if (pLayerProperty->GetPageID() == _R(IDD_TAB_LAYER_PROPERTIES))
 			{
-				case _R(IDD_TAB_LAYER_PROPERTIES):
-					LayersTabNumber = i;		// note that tab number
-					break;
-				case _R(IDD_TAB_GUIDELINE_PROPERTIES):
-					GuidesTabNumber = i;		// note that tab number
-					break;
+				LayersTabNumber = i;		// note that tab number
+			}
+			else if (pLayerProperty->GetPageID() == _R(IDD_TAB_GUIDELINE_PROPERTIES))
+			{
+				GuidesTabNumber = i;		// note that tab number
 			}
 			
 			i += 1;		// increment the counter 
@@ -1342,7 +1353,7 @@ BOOL LayerPropertyTabs::InitLayerPropertyTabs()
 
 BOOL LayerPropertyTabs::DeinitLayerPropertyTabs()
 {
-	LayerPropertyTabs *pLayerProperty = NULL;
+//	LayerPropertyTabs *pLayerProperty = NULL;
 
 	// Now, we can get rid of our LayerPropertyTabs
 	LayerPropertyTabsList.DeleteAll();
@@ -1572,7 +1583,7 @@ BOOL LayerPropertyTabs::SetInitMessageState(BOOL NewState)
 
 CDlgResID LayerPropertyTabs::GetPageID()
 {
-	return NULL;
+	return 0;
 }
 
 /******************************************************************************************

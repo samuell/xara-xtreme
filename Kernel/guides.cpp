@@ -2623,6 +2623,8 @@ MsgResult GuidelinePropDlg::Message(Msg* pMsg)
 				
 			case DIM_COMMIT:
 				EndDialog = CommitValues();
+				if (!EndDialog)
+					Msg->DlgMsg = DIM_NONE;  // stop default handler from closing dialog
 				break;
 
 			case DIM_SOFT_COMMIT:
@@ -2646,6 +2648,7 @@ MsgResult GuidelinePropDlg::Message(Msg* pMsg)
 		{			   // Isn't this pretty?
 			Close();  // Close the dialog 
 			End(); 	 // Destroy dialog 
+			return OK;
 	   	}
 	}
 
