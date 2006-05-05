@@ -6469,20 +6469,18 @@ BOOL DialogManager::KillTimer( CWindowID Wnd, INT32 nIDEvent )
 
 BOOL DialogManager::GetWindowPosition( CWindowID WindowID, wxRect *pRect )
 {
-	PORTNOTETRACE("dialog","DialogManager::GetWindowPosition - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Get the size and position of the specified window
-	WINDOWPLACEMENT Place;
-	Place.length = sizeof(WINDOWPLACEMENT);
-	// Call the Windows API
-	if (!GetWindowPlacement(WindowID, &Place))
-		return FALSE;
+	*pRect = wxRect(WindowID->GetPosition(), WindowID->GetSize());
+	return TRUE;
+}
 
-	// We just need to pass back the normal position of the window
-	if (pRect)
-		*pRect = Place.rcNormalPosition;
-#endif
-
+BOOL DialogManager::GetWindowPosition( CWindowID WindowID, RECT *pRect )
+{
+	wxRect Rect;
+	if (!GetWindowPosition(WindowID, &Rect)) return FALSE;
+	pRect->bottom=Rect.GetBottom();
+	pRect->top=Rect.GetTop();
+	pRect->left=Rect.GetLeft();
+	pRect->right=Rect.GetRight();
 	return TRUE;
 }
 
@@ -6513,6 +6511,17 @@ BOOL DialogManager::GetGadgetPosition( CWindowID WindowID, CGadgetID Gadget, wxR
 	return TRUE;
 }
 
+BOOL DialogManager::GetGadgetPosition( CWindowID WindowID, CGadgetID Gadget, RECT *pRect )
+{
+	wxRect Rect;
+	if (!GetGadgetPosition(WindowID, Gadget, &Rect)) return FALSE;
+	pRect->bottom=Rect.GetBottom();
+	pRect->top=Rect.GetTop();
+	pRect->left=Rect.GetLeft();
+	pRect->right=Rect.GetRight();
+	return TRUE;
+}
+
 /********************************************************************************************
 
 >	static BOOL DialogManager::SetWindowPosition(CWindowID WindowID, const RECT& Rect)
@@ -6534,28 +6543,14 @@ BOOL DialogManager::GetGadgetPosition( CWindowID WindowID, CGadgetID Gadget, wxR
 
 BOOL DialogManager::SetWindowPosition(CWindowID WindowID, const wxRect &Rect)
 {
-	PORTNOTETRACE("dialog","DialogManager::SetWindowPosition - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// First we need to get the current version of the structure we require
-	// to set the new position (See technical note as to why we do it this way)
-	WINDOWPLACEMENT Place;
-	Place.length = sizeof(WINDOWPLACEMENT);
-	if (GetWindowPlacement(WindowID, &Place))
-	{
-		// Make the surround for the redraw icon the required size
-		Place.length = sizeof(WINDOWPLACEMENT);
+	WindowID->SetPosition(Rect.GetTopLeft());
+	WindowID->SetSize(Rect.GetSize());
+	return TRUE;
+}
 
-		// We just need to set up the new normal position of the window using the
-		// rectangle that we have been given.
-		Place.rcNormalPosition = Rect;
-
-		// Call the Windows API to set the new position and return the result to the caller
-		return SetWindowPlacement(WindowID, &Place);
-	}
-#endif
-
-	// The get call failed so we cannot call the set
-	return FALSE;
+BOOL DialogManager::SetWindowPosition( CWindowID WindowID, const RECT &Rect )
+{
+	return SetWindowPosition( WindowID, wxRect(wxPoint(Rect.left, Rect.top), wxPoint(Rect.right, Rect.bottom)));
 }
 
 /********************************************************************************************
@@ -6580,6 +6575,11 @@ BOOL DialogManager::SetGadgetPosition( CWindowID WindowID, CGadgetID Gadget, con
 
 	pGadget->SetSize( Rect );
 	return TRUE;
+}
+
+BOOL DialogManager::SetGadgetPosition( CWindowID WindowID, CGadgetID Gadget, const RECT &Rect )
+{
+	return SetGadgetPosition( WindowID, Gadget, wxRect(wxPoint(Rect.left, Rect.top), wxPoint(Rect.right, Rect.bottom)));
 }
 
 /********************************************************************************************

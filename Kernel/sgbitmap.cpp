@@ -151,7 +151,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "backgrnd.h"	// OpBackground
 #include "keypress.h"	// KeyPress
 #include "impexpop.h"	// BitmapExportParam
-//#include "prevwdlg.h"	// PreviewDialog::Init()
+#include "prevwdlg.h"	// PreviewDialog::Init()
 #include "bmpexprw.h"	// BitmapExportPreviewDialog::Init()
 
 #include "helpuser.h"		//For the help button
@@ -229,8 +229,6 @@ SGBitmapDragTarget::SGBitmapDragTarget(DialogOp *TheDialog, CGadgetID TheGadget)
 BOOL SGBitmapDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDragInfo,
 										OilCoord *pMousePos, KeyPress* pKeyPress)
 {
-PORTNOTE("other", "Disabled use of BitmapDragInformation");
-#ifndef EXCLUDE_FROM_XARALX
 	if (!pDragInfo->IsKindOf(CC_RUNTIME_CLASS(BitmapDragInformation)))
 		return(FALSE);
 
@@ -265,7 +263,6 @@ PORTNOTE("other", "Disabled use of BitmapDragInformation");
 				break;
 		}
 	}
-#endif
 	// Otherwise, we aren't interested in the event, so we don't claim it
 	return(FALSE);
 }
@@ -2580,8 +2577,6 @@ PORTNOTE("other", "Disabled tracer")
 					HelpUserTopic(_R(IDS_HELPPATH_Gallery_Bitmap));
 					break;
 				}
-PORTNOTE("other", "Removed preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 				else if (Msg->GadgetID == _R(IDC_BMPGAL_PREVIEW))
 				{
 					// Generate a list of the selected bitmaps
@@ -2646,7 +2641,6 @@ PORTNOTE("other", "Removed preview dialog")
 					if (pList != NULL)
 						CCFree(pList);
 				}
-#endif
 #ifdef PHOTOSHOPPLUGINS
 // Only add in if required - general plug-in removal at present
 				else if (Msg->GadgetID == _R(IDC_BMPGAL_PLUGINS))
@@ -3462,13 +3456,13 @@ BOOL OpDisplayBitmapGallery::Init()
 								TRUE	  // BOOL fCheckable = FALSE
 								)
 			
-PORTNOTE("other", "Removed Preview Dialog")
+PORTNOTE("other", "Removed BitmapExportPreviewDialog")
 #ifndef EXCLUDE_FROM_XARALX
 //#if _DEBUG
 			&& BitmapExportPreviewDialog::Init()
 //#endif
-			&& PreviewDialog::Init()
 #endif
+			&& PreviewDialog::Init()
 			);
 }               
     

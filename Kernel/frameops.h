@@ -417,6 +417,13 @@ protected:
 	UINT32 m_RegeneratedBitmapPosition;	// The position of the regenerated bitmap in the array. 	
 };
 
+#define OPTOKEN_FRAME_GRABFRAME		_T("GrabFrame")
+#define OPTOKEN_FRAME_GRABALLFRAMES	_T("GrabAllFrames")
+#define	OPTOKEN_SAVEANIMATEDGIF	_T("SaveAnimatedGIF")
+#define OPTOKEN_FRAME_BROWSERPREVIEW _T("BrowserPreview")
+
+PORTNOTE("other", "Removed GrabFrameFilter, OpGrabFrame, OpGrabAllFrames")
+#ifndef EXCLUDE_FROM_XARALX
 //------------------------------------------------------------------------------------------
 //#if _DEBUG // removal of these ops from non-debug builds
 //------------------------------------------------------------------------------------------
@@ -524,7 +531,6 @@ private:
 	SeeAlso:	-
 
 ********************************************************************************************/
-#define OPTOKEN_FRAME_GRABFRAME		_T("GrabFrame")
 
 class CCAPI OpGrabFrame : public Operation
 {         
@@ -600,7 +606,6 @@ protected:
 	SeeAlso:	-
 
 ********************************************************************************************/
-#define OPTOKEN_FRAME_GRABALLFRAMES	_T("GrabAllFrames")
 
 class CCAPI OpGrabAllFrames : public OpGrabFrame
 {         
@@ -636,7 +641,6 @@ protected:
 ********************************************************************************************/
 
 // Operation token for the OpMenuExport class
-#define	OPTOKEN_SAVEANIMATEDGIF	_T("SaveAnimatedGIF")
 
 class OpSaveAnimatedGIF : public OpGrabAllFrames
 {
@@ -672,7 +676,6 @@ private:
 	SeeAlso:	-
 
 ********************************************************************************************/
-#define OPTOKEN_FRAME_BROWSERPREVIEW _T("BrowserPreview")
 
 class CCAPI OpBrowserPreview : public OpSaveAnimatedGIF
 {         
@@ -694,5 +697,6 @@ private:
 
 //------------------------------------------------------------------------------------------
 //#endif // _DEBUG removal of these ops from non-debug builds
+#endif // EXCLUDE_FROM_XARALX
 
 #endif	// INC_FRAMEOPS

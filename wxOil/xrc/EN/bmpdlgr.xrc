@@ -88,7 +88,7 @@
 			 <pos>35,135d</pos> <size>29,8d</size>
 			<label>Restore:</label>
 		</object>
-		<object class="wxButton" name="IDC_BMP_ALWAYS_INTERPOLATE">
+		<object class="wxCheckBox" name="IDC_BMP_ALWAYS_INTERPOLATE">
 			 <pos>23,162d</pos> <size>108,10d</size>
 			<label>Smooth when scaled up</label>
 		</object>

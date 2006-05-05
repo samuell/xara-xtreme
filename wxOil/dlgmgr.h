@@ -722,9 +722,13 @@ PORTNOTE("dialog","Removed HWND and timer usage")
 
 	// Get and set the position of a window or a gadget
 	static BOOL GetWindowPosition(CWindowID WindowID, wxRect *pRect);
+	static BOOL GetWindowPosition(CWindowID WindowID, RECT *pRect);
 	static BOOL GetGadgetPosition(CWindowID WindowID, CGadgetID Gadget, wxRect *pRect);
+	static BOOL GetGadgetPosition(CWindowID WindowID, CGadgetID Gadget, RECT *pRect);
 	static BOOL SetWindowPosition(CWindowID WindowID, const wxRect &Rect);
+	static BOOL SetWindowPosition(CWindowID WindowID, const RECT &Rect);
 	static BOOL SetGadgetPosition(CWindowID WindowID, CGadgetID Gadget, const wxRect &Rect);
+	static BOOL SetGadgetPosition(CWindowID WindowID, CGadgetID Gadget, const RECT &Rect);
 
 	static INT32 GetScreenDpi();
 	static BOOL GetScreenSize(INT32 * pWidth, INT32 * pHeight);

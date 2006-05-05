@@ -248,14 +248,14 @@ MsgResult BmpDlg::Message(Msg* Message)
 						CommitDialogValue();
 						Close();	// Hide the dialog box
 						End();		// Finish the operation
-							
+						return OK;							
 					}
 			break;
 			case DIM_CANCEL:	
 					{
 						Close();	// Hide the dialog box
 						End();		// Finish the operation
-						return (DLG_EAT_IF_HUNGRY(Msg)); 
+						return OK; 
 					}
 			break;
 			case DIM_LISTDROPPED:

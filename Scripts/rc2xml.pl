@@ -958,7 +958,7 @@ sub ParseCtrlButton
     ReadOrs (\$token);
     $inputfile = $ii;
 
-    if ($token =~ /BS_AUTOCHECKBOX/)
+    if ($token =~ /(BS_AUTOCHECKBOX|BS_3STATE)/)
     {
 	ParseCheckBox($label, $varname);
     }

@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dialogop.h"
 #include "list.h"
 #include "listitem.h"
-//#include "hirestim.h"	// high-resolution timer class
+#include "ktimer.h"
 //#include "impexpop.h"
 #include "frameops.h"
 
@@ -272,9 +272,6 @@ protected:
 	// The number of the current bitmap that we are displaying
 	INT32 m_CurrentItem;
 	
-	// The timer that we are using
-	HiResTimer m_Timer;
-
 	// The render region that we are using for redraws
 	RenderRegion * m_pRender;
 
@@ -298,7 +295,20 @@ protected:
 
 protected:
 	// the call back statics that we require
-	static BOOL TimerProc(HiResTimer* pTimer, INT32 nElapsed, void* pvData);
+//	static BOOL TimerProc(HiResTimer* pTimer, INT32 nElapsed, void* pvData);
+
+	void OnTimer();
+
+	class PreviewTimer : public KernelTimer
+	{
+	public:
+		PreviewTimer(PreviewDialog * pOwner) : m_pOwner(pOwner) {}
+		virtual void Notify() {m_pOwner->OnTimer();}
+		PreviewDialog * m_pOwner;
+	};
+	PreviewTimer m_Timer;
+
+
 	static UINT32 m_Delay; 
 	static BOOL m_AnimationPropertiesChanged;	// While the dialog is open, has the user changed any properties?
 	static PreviewDialog* m_pPreviewDialog;

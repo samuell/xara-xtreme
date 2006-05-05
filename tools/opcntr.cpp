@@ -3735,7 +3735,7 @@ void OpChangeContourStepDistance::DoWithParam(OpDescriptor*,OpParam* pOpParam)
 	if (ok)
 	{
 		// The new number of steps is in pOpParam->Param1 of the 
-		UINT32 NewStepDistance = UINT32(pOpParam->Param1);
+		INT32 NewStepDistance = INT32(pOpParam->Param1);
 		pItem = (NodeListItem *)NodeList.GetHead();
 
 		Node* pSelNode = NULL;

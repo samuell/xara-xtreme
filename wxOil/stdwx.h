@@ -170,10 +170,13 @@ T Abs( T val )
 #endif
 
 #if defined(__WXMSW__)
-// min and max macros
+// min and max macros - only MSW because they blow up some of the headers
 #define max(a,b)  (((a) > (b)) ? (a) : (b))
 #define min(a,b)  (((a) < (b)) ? (a) : (b))
 #endif
+
+#define camMax(a,b)  (((a) > (b)) ? (a) : (b))
+#define camMin(a,b)  (((a) < (b)) ? (a) : (b))
 
 // Defines and types moved from awindows.h
 

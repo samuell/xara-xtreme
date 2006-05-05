@@ -368,11 +368,11 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocChangingMsg::DocState::SELCHANGED:
+			case DocChangingMsg::SELCHANGED:
 			{
 				// In different cases we use different document pointers.
 				Document *pDocument = NULL;
-				if (TheMsg->State == DocChangingMsg::DocState::TITLECHANGED)
+				if (TheMsg->State == DocChangingMsg::TITLECHANGED)
 				{
 					// Document title has changed message.
 					pDocument = TheMsg->pChangingDoc;
@@ -429,7 +429,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 			break;
 			
 			// This message is sent when a new or just opened document is stable.
-			case DocChangingMsg::DocState::BORNANDSTABLE:
+			case DocChangingMsg::BORNANDSTABLE:
 			{
 				// Get the changing document pointer.
 				Document *pDocument = NULL;
@@ -456,6 +456,9 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+
+			default:
+				break;
 		}
 	}
 
@@ -466,7 +469,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case DocViewMsg::DocViewState::SELCHANGED:
+			case DocViewMsg::SELCHANGED:
 			{
 				if (TheMsg->pNewDocView != NULL)
 				{
@@ -491,6 +494,9 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 				}
 			}
 			break;
+
+			default:
+				break;
 		}
 	}
 
@@ -502,7 +508,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 		switch ( TheMsg->Reason )
 		{
 			// The selected spread has changed
-			case SpreadMsg::SpreadReason::SELCHANGED:
+			case SpreadMsg::SELCHANGED:
 			{
 				if (TheMsg->pNewSpread != NULL)
 				{
@@ -528,7 +534,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 			}
 			break;
 
-			case SpreadMsg::SpreadReason::ANIMATIONPROPERTIESCHANGED:
+			case SpreadMsg::ANIMATIONPROPERTIESCHANGED:
 			{
 				GIFAnimationPropertyTabs *pGIFAnimationPropertyTabs = GIFAnimationPropertyTabs::GetFirst();
 
@@ -545,6 +551,9 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 					}
 			}
 			break;
+
+			default:
+				break;
  		}
 	}
 
@@ -556,7 +565,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 		switch ( TheMsg->Reason )
 		{
 			// The active layer has changed.
-			case LayerMsg::LayerReason::ACTIVE_LAYER_CHANGED:
+			case LayerMsg::ACTIVE_LAYER_CHANGED:
 			{
 				if (TheMsg->pNewLayer != NULL)
 				{
@@ -564,7 +573,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 					m_pGIFAnimationProperties->SetActiveLayer(TheMsg->pNewLayer);
 
 					// While Loop flag.
-					BOOL FoundPage = FALSE;
+//					BOOL FoundPage = FALSE;
 
 					GIFAnimationPropertyTabs *pGIFAnimationPropertyTabs = GIFAnimationPropertyTabs::GetFirst();
 
@@ -594,7 +603,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 			break;
 
 			// The active layer has been updated.
-			case LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER:
+			case LayerMsg::UPDATE_ACTIVE_LAYER:
 			{
 				// While Loop flag.
 				BOOL FoundPage = FALSE;
@@ -624,8 +633,11 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 					}
 					// Get the next option's tab.
 					pGIFAnimationPropertyTabs = GIFAnimationPropertyTabs::GetNext(pGIFAnimationPropertyTabs);
-				}				
+				}
+				break;
 			}
+			default:
+				break;
 		}
 	}
 
@@ -636,7 +648,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 
 		switch ( TheMsg->State )
 		{
-			case BrowserPrvwChgdMsg::BrowserPrvwPropState::PROPERTIES_CHANGED:
+			case BrowserPrvwChgdMsg::PROPERTIES_CHANGED:
 			{
 				// The properties have changed, so update the Browser preview tab.
 
@@ -668,8 +680,10 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 					// Get the next option's tab.
 					pGIFAnimationPropertyTabs = GIFAnimationPropertyTabs::GetNext(pGIFAnimationPropertyTabs);
 				}
-			
+				break;
 			}
+			default:
+				break;
 		}
 	}
 
@@ -683,7 +697,7 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 		// Main handler for dialog type messages
 		BOOL EndDialog = FALSE;											// TRUE if we should quit the dialog
 		BOOL CommitValues = FALSE;										// TRUE if we should commit the dialog values
-		BOOL OldApplyNow = m_pGIFAnimationProperties->GetApplyNowState();	// Old ApplyNow button state  
+		/*BOOL OldApplyNow =*/ m_pGIFAnimationProperties->GetApplyNowState();	// Old ApplyNow button state  
 
 		// Make sure that the tabs know what is the current document and spread to work on.
 		Document *pDocument = Document::GetSelected();
@@ -759,6 +773,9 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 					EndDialog = TRUE;
 				}
 				break;
+
+				default:
+					break;
 				}
 			}
 
@@ -778,15 +795,14 @@ MsgResult GIFAnimationPropertyTabsDlg::Message(Msg* Message)
 		// End dialog here
 		if (EndDialog) 
 		{
-			Close();		
-			End();			
-
+			// We can only look at static variables here
 			// Remove the link to the options tabs if all dialogs have been cloosed. 
 			if(m_pGIFAnimationProperties->GetCount() < 1)
 			{
 				// Make sure that we remove our options tabs link to the dialog box class as the dialog will now be destroyed.
 				m_pGIFAnimationProperties->SetTabbedDlg(NULL);
 			}
+			return OK;
 		}
 		
 		// Check if we have been sending an init/create message, if so then set the flag False.
@@ -1023,7 +1039,7 @@ GIFAnimationPropertyTabs::GIFAnimationPropertyTabs()
 	
 ********************************************************************************************/
 
-GIFAnimationPropertyTabs::Init()
+BOOL GIFAnimationPropertyTabs::Init()
 {
 	// Do nothing for now.
 	return TRUE;
@@ -1118,14 +1134,14 @@ BOOL GIFAnimationPropertyTabs::InitGIFAnimationPropertyTabs()
 	
 ********************************************************************************************/
 
-BOOL GIFAnimationPropertyTabs::DeinitGIFAnimationPropertyTabs()
+void GIFAnimationPropertyTabs::DeinitGIFAnimationPropertyTabs()
 {
-	GIFAnimationPropertyTabs *pGIFAnimationProperty = NULL;
+//	GIFAnimationPropertyTabs *pGIFAnimationProperty = NULL;
 
 	// Remove all the Tabs.
 	GIFAnimationPropertyTabsList.DeleteAll();
 
-	return TRUE;
+	return;
 }
 
 /********************************************************************************************
@@ -1316,7 +1332,7 @@ BOOL GIFAnimationPropertyTabs::SetInitMessageState(BOOL NewState)
 
 CDlgResID GIFAnimationPropertyTabs::GetPageID()
 {
-	return NULL;
+	return 0;
 }
 
 /******************************************************************************************
@@ -1665,9 +1681,11 @@ BOOL AnimationColoursTab::CommitSection()
 		// Find out whether we're transparent or not.
 		Transparency = pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAME_TRANSPARENCY));
 
+PORTNOTE("other", "Remove FrameSGallery");
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// Set the new animation colour prefterences in the spread.
 		pSpread->SetAnimationColours( Dither, WebPal, PalCols, CurNumColsInPal, Transparency);
 
@@ -2123,6 +2141,9 @@ BOOL AnimationColoursTab::HandleMsg(DialogMsg* Msg)
 			}
 		}
 		break;
+
+		default:
+			break;
 	}
 	return TRUE;
 }  
@@ -2495,9 +2516,11 @@ BOOL AnimationPropertiesTab::CommitSection()
 		if(Loop_Continously)
 			Loop = 0;
 
+PORTNOTE("other", "Remove FrameSGallery");
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers.
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// Pass the new loop value to the spread.
 		pSpread->SetAnimationLoop(Loop);
 
@@ -2548,7 +2571,7 @@ BOOL AnimationPropertiesTab::CommitSection()
 				!pLayer->IsPageBackground())
 			{
 				// Tell the frame gallery to update its display of the frame
-				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 			}
 
 			// Move to the next frame layer in the animation
@@ -2559,7 +2582,7 @@ BOOL AnimationPropertiesTab::CommitSection()
 		pLayer = pSpread->FindActiveLayer();
 
 		// Boradcast the message.
-		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));			
+		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));			
 
 		//The new delay entry is valid.
 		PropertiesChanged = TRUE;
@@ -2861,9 +2884,11 @@ BOOL AnimationPropertiesTab::ShowDetails()
 					Layer* pLayer = pSpread->FindFirstFrameLayer();
 					if (pLayer)
 					{
+PORTNOTE("other", "Remove FrameSGallery");
+#ifndef EXCLUDE_FROM_XARALX
 						// Check that all visible layers are actually frame layers
 						FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 						// Get the delay value for the frame layer.
 						DWORD GlobalDelay = pLayer->GetFrameDelay();
 
@@ -3034,6 +3059,9 @@ BOOL AnimationPropertiesTab::HandleMsg(DialogMsg* Msg)
 			}
 		}
 		break;
+
+		default:
+			break;
 	}	
 	return TRUE;
 }  
@@ -3107,7 +3135,7 @@ BOOL AnimationPropertiesTab::HavePropertiesChanged(BOOL ValidateDelayValue)
 	if (!ok)
 		return TRUE;
 
-	BOOL UseLocalFrameDelayValues = FALSE;	// Flag to determine whether local frame delay values are being used.
+//	BOOL UseLocalFrameDelayValues = FALSE;	// Flag to determine whether local frame delay values are being used.
 	UINT32 CurrentDelay = 0;					//Current delay setting in the animation properties tab. 
 
 	// Retrieve the details stored in the current spread.
@@ -3123,7 +3151,7 @@ BOOL AnimationPropertiesTab::HavePropertiesChanged(BOOL ValidateDelayValue)
 		
 	// If "Many" is displayed in the "Delay for" edit field, then we do not want to read the value.
 	String_256 StrDelay = pPropertiesDlg->GetStringGadgetValue(_R(IDC_ANIMTAB_DELAY), NULL);
-	INT32 result = strnicmp(StrDelay, "Many", 4);
+	INT32 result = camStrnicmp(StrDelay, _T("Many"), 4);
 			
 	// Is 'Many' displayed in the delay edit field?
 	if(result == 0)
@@ -3405,7 +3433,7 @@ BOOL FramePropertiesTab::CommitSection()
 
 #ifdef _DEBUG
 		// Tell the frame gallery to update its display of the frame
-		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+		BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 
 		// Get the OILBitmap Bitmap associated with this frame layer and set its delay value and Name details.
@@ -3421,17 +3449,17 @@ BOOL FramePropertiesTab::CommitSection()
 		{
 			//if the frame layer delay values for this animation are no longer the same, force the animation properties tab to update itself.
 			if(!SameflDelayValues())
-				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 			else
 				AreDelayValuesSame = TRUE;
 
 			// Currently "Many" is displayed in the animation propertiess tab, but the frame propertiess tab delay
 			// values have changed to give all the frame layers the same delay value. Therfore, update the animation properties tab.
 			if(AreDelayValuesSame && m_IsManyDisplayed)
-				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 			
 			// Force a redraw of the frame gallery. Allows us to update frame layer Name/Delay details.
-			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 
 			return TRUE;
 		}
@@ -3443,17 +3471,17 @@ BOOL FramePropertiesTab::CommitSection()
 
 			//if the frame layer delay values for this animation are no longer the same, force the animation properties tab to update itself.
 			if(!SameflDelayValues())
-				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 			else
 				AreDelayValuesSame = TRUE;
 
 			// Currently "Many" is displayed in the animation propertiess tab, but the frame propertiess tab delay
 			// values have changed to give all the frame layers the same delay value. Therfore, update the animation properties tab.
 			if(AreDelayValuesSame && m_IsManyDisplayed)
-				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+				BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 						
 			// Force a redraw of the frame gallery. Allows us to update frame layer Name/Delay details.
-			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 
 			return TRUE;
 		}
@@ -3464,6 +3492,8 @@ BOOL FramePropertiesTab::CommitSection()
 		// Set the name in the OILBitmap.
 		pOILBitmap->SetName(FrameLayerName);
 
+PORTNOTE("other", "Disabled OpGrabFrame")
+#ifndef EXCLUDE_FROM_XARALX
 		if (PreviewDialog::GetPreviewDialog())
 		{
 			OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_FRAME_GRABFRAME); 
@@ -3475,21 +3505,22 @@ BOOL FramePropertiesTab::CommitSection()
 				ERROR3("Couldn't find OPTOKEN_FRAME_GRABALLFRAMES op descriptor");
 			}
 		}
+#endif
 
 		//if the frame layer delay values for this animation are no longer the same, force the animation properties tab to update itself.
 		if(!SameflDelayValues())
-			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 		else
 			AreDelayValuesSame = TRUE;
 
 		// Currently "Many" is displayed in the animation propertiess tab, a change to the frame properties tab delay
 		// value has caused all the frame layers to have the same delay value. Therfore, update the animation properties tab.
 		if(AreDelayValuesSame && m_IsManyDisplayed)
-			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::UPDATE_ACTIVE_LAYER));
+			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::UPDATE_ACTIVE_LAYER));
 	}
 
 	// Force a redraw of the frame gallery.
-	BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+	BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 
 	// Everything is OK!
 	return TRUE;
@@ -3693,7 +3724,7 @@ BOOL FramePropertiesTab::ShowDetails()
 
 	// Set the dialog detais
 	// Set the layer Layer Name.
-	pPropertiesDlg->SetStringGadgetValue(_R(IDC_FRAMETAB_NAME),	&pLayer->GetLayerID());
+	pPropertiesDlg->SetStringGadgetValue(_R(IDC_FRAMETAB_NAME),	pLayer->GetLayerID());
 
 	// Set the "Background" check box.
 	pPropertiesDlg->SetBoolGadgetSelected(_R(IDC_FRAMETAB_SOLID), pLayer->IsSolid());
@@ -3905,43 +3936,39 @@ BOOL FramePropertiesTab::HandleMsg(DialogMsg* Msg)
 
 		case DIM_LFT_BN_CLICKED:
 		{
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID ==_R(IDC_FRAMETAB_SOLID))
 			{
-				case _R(IDC_FRAMETAB_SOLID):
+				// If the "Background" check box is ticked, grey the "Overlay" check box.
+				BOOL Value = pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAMETAB_SOLID));
+				if (Value)
 				{
-					// If the "Background" check box is ticked, grey the "Overlay" check box.
-					BOOL Value = pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAMETAB_SOLID));
-					if (Value)
-					{
-						// Grey the 'Overlay' check box.
-						pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_OVERLAY), FALSE);
-					}
-					else
-					{
-						// Ungrey the 'Overlay' check box.
- 						pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_OVERLAY), TRUE);								
-					}
+					// Grey the 'Overlay' check box.
+					pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_OVERLAY), FALSE);
 				}
-				break;
-
-				case _R(IDC_FRAMETAB_SHOWFRAME):
+				else
 				{
-					// If the "Show frame" check box is ticked, grey the "Disaply this frame for" check box.
-					BOOL Value = pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAMETAB_SHOWFRAME));
+					// Ungrey the 'Overlay' check box.
+					pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_OVERLAY), TRUE);								
+				}
+			}
+			else if (Msg->GadgetID == _R(IDC_FRAMETAB_SHOWFRAME))
+			{
+				// If the "Show frame" check box is ticked, grey the "Disaply this frame for" check box.
+				BOOL Value = pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAMETAB_SHOWFRAME));
 
-					// Get a ptr to the active layer.
-					Layer* pLayer = pSpread->FindActiveLayer();
+				// Get a ptr to the active layer.
+				Layer* pLayer = pSpread->FindActiveLayer();
 
-					// Ensure we have a valid ptr.
-					if(!pLayer)
-						break;
-
+				// Ensure we have a valid ptr.
+				if( pLayer)
+				{
 					// The 'Show frame' check box is ticked.
 					if(Value)
 					{
 						// Ungrey the 'Delay this frame for' check box.
 						pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_DELAY), TRUE);
-
+	
 						// Pass this value onto the layer. This is necessary as when we force the frame gallery 
 						// to update itself, it takes the value stored in the layer. 
 						//pLayer->SetHiddenFrame(FALSE);
@@ -3950,17 +3977,16 @@ BOOL FramePropertiesTab::HandleMsg(DialogMsg* Msg)
 					{
 						// Grey the 'Delay this frame for' check box.  
 						pPropertiesDlg->EnableGadget(_R(IDC_FRAMETAB_DELAY), FALSE);
-
+	
 						// Pass this value onto the layer. This is necessary as when we force the frame gallery 
 						// to update itself, it takes the value stored in the layer. 
 						//pLayer->SetHiddenFrame(TRUE);
 					}
-
+	
 					// Tell the frame gallery to update its display of the frame.
 					// We do this to update the right click pop-up menu.
-					BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+					BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 				}
-				break;
 			}
 			
 			// Set the correct state of the flag.
@@ -4021,6 +4047,9 @@ BOOL FramePropertiesTab::HandleMsg(DialogMsg* Msg)
 			}			
 		}
 		break;
+
+		default:
+			break;
 	}
 	return TRUE;
 }  
@@ -4288,7 +4317,7 @@ AnimExOptns::~AnimExOptns()
 
 void AnimExOptns::Do( OpDescriptor * pOpDesc ) 
 {
-	BOOL ok = FALSE;
+//	BOOL ok = FALSE;
 
 	if (m_pGIFAnimationProperties == NULL)
 	{
@@ -4342,7 +4371,7 @@ MsgResult AnimExOptns::Message(Msg* Message)
 		// Main handler for dialog type messages
 		BOOL EndDialog = FALSE;											// TRUE if we should quit the dialog
 		BOOL CommitValues = FALSE;										// TRUE if we should commit the dialog values
-		BOOL OldApplyNow = m_pGIFAnimationProperties->GetApplyNowState();	// Old ApplyNow button state  
+		/*BOOL OldApplyNow =*/ m_pGIFAnimationProperties->GetApplyNowState();	// Old ApplyNow button state  
 
 		// Make sure that the tabs know what is the current document and spread to work on.
 		Document *pDocument = Document::GetSelected();
@@ -4397,8 +4426,11 @@ MsgResult AnimExOptns::Message(Msg* Message)
 				case DIM_CANCEL:		
 					EndDialog = TRUE;
 					break;
-				}
+
+				default:
+					break;
 			}
+		}
 
 		// Commit values here.
 		if (CommitValues)
@@ -4943,79 +4975,71 @@ BOOL PreviewInBrowserTab::HandleMsg(DialogMsg* Msg)
 
 		case DIM_LFT_BN_CLICKED:
 		{
-			switch(Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_GIF_BITMAPPREVIEW))
 			{
-				case _R(IDC_GIF_BITMAPPREVIEW):
+				// A Click on the 'Browser Preview' button
+
+PORTNOTE("other", "Disabled BrowserPreviewOptions")
+#ifndef EXCLUDE_FROM_XARALX
+				// The op cannot be invoked if the current doc. is empty.
+				// Return false if the document is empty.
+				String_256 ShadeReason;
+				OpState State = OpGrabAllFrames::GetState(&ShadeReason, NULL);
+
+				if (State.Greyed)
 				{
-					// A Click on the 'Browser Preview' button
-
-					// The op cannot be invoked if the current doc. is empty.
-					// Return false if the document is empty.
-					String_256 ShadeReason;
-					OpState State = OpGrabAllFrames::GetState(&ShadeReason, NULL);
-
-					if (State.Greyed)
-					{
-						// The current doc, is empty, inform the user.
-						InformError(_R(IDS_NOFRAMESTOPREVIEW));
-					}
-					else
-					{
-						// Preview the animtion in the browser.
-						// Store the current browser options here.
-						BrowserPreviewOptions BrowserOptions;
-
-						// Get the browser options
-						GetBrowserValues(&BrowserOptions);  	
-
-						// Invoke the OP to preview the animation.
-						OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_FRAME_BROWSERPREVIEW); 
-
-						if (pOpDesc != NULL)
-						pOpDesc->Invoke();
-					}
+					// The current doc, is empty, inform the user.
+					InformError(_R(IDS_NOFRAMESTOPREVIEW));
 				}
-				break;
-
-				case _R(IDC_PLAINBKGND):
+				else
 				{
-					// Set the correct state of the applynow flag.
-					PreviewInBrowserTab::SetApplyNowState(TRUE);
+					// Preview the animtion in the browser.
+					// Store the current browser options here.
+					BrowserPreviewOptions BrowserOptions;
 
-					// Ungrey the apply/ok/cancel buttons.
-					PreviewInBrowserTab::UngreyApplyNow();
+					// Get the browser options
+					GetBrowserValues(&BrowserOptions);  	
+
+					// Invoke the OP to preview the animation.
+					OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_FRAME_BROWSERPREVIEW); 
+
+					if (pOpDesc != NULL)
+					pOpDesc->Invoke();
 				}
-				break;
+#endif
+			}
+			else if (Msg->GadgetID == _R(IDC_PLAINBKGND))
+			{
+				// Set the correct state of the applynow flag.
+				PreviewInBrowserTab::SetApplyNowState(TRUE);
 
-				case _R(IDC_DOCBKGND):
-				{
-					// Set the correct state of the applynow flag.
-					PreviewInBrowserTab::SetApplyNowState(TRUE);
+				// Ungrey the apply/ok/cancel buttons.
+				PreviewInBrowserTab::UngreyApplyNow();
+			}
+			else if (Msg->GadgetID == _R(IDC_DOCBKGND))
+			{
+				// Set the correct state of the applynow flag.
+				PreviewInBrowserTab::SetApplyNowState(TRUE);
 
-					// Ungrey the apply/ok/cancel buttons.
-					PreviewInBrowserTab::UngreyApplyNow();
-				}
-				break;
+				// Ungrey the apply/ok/cancel buttons.
+				PreviewInBrowserTab::UngreyApplyNow();
+			}
+			else if (Msg->GadgetID == _R(IDC_CHQBKGND))
+			{
+				// Set the correct state of the applynow flag.
+				PreviewInBrowserTab::SetApplyNowState(TRUE);
 
-				case _R(IDC_CHQBKGND):
-				{
-					// Set the correct state of the applynow flag.
-					PreviewInBrowserTab::SetApplyNowState(TRUE);
+				// Ungrey the apply/ok/cancel buttons.
+				PreviewInBrowserTab::UngreyApplyNow();
+			}
+			else if (Msg->GadgetID == _R(IDC_GIF_BITMAPPREVIEW))
+			{
+				// Set the correct state of the applynow flag.
+				PreviewInBrowserTab::SetApplyNowState(TRUE);
 
-					// Ungrey the apply/ok/cancel buttons.
-					PreviewInBrowserTab::UngreyApplyNow();
-				}
-				break;	
-
-				case _R(IDC_HTMLSTUB):
-				{
-					// Set the correct state of the applynow flag.
-					PreviewInBrowserTab::SetApplyNowState(TRUE);
-
-					// Ungrey the apply/ok/cancel buttons.
-					PreviewInBrowserTab::UngreyApplyNow();
-				}
-				break;
+				// Ungrey the apply/ok/cancel buttons.
+				PreviewInBrowserTab::UngreyApplyNow();
 			}
 		}
 		break;
@@ -5031,6 +5055,9 @@ BOOL PreviewInBrowserTab::HandleMsg(DialogMsg* Msg)
 			}			
 		}			
 		break;
+
+		default:
+			break;
 	}
 	return TRUE;
 }  
@@ -5064,10 +5091,13 @@ BOOL PreviewInBrowserTab::GetBrowserValues(BrowserPreviewOptions  *pBrowserOptio
 	CommitSection();
 
 	// Force the image map flag to false.
+PORTNOTE("other", "Disabled BrowserPreviewOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL Imagemap = FALSE;
 
 	// Make a note of the options.
 	pBrowserOptions->Set(g_Background, g_InfoInHtmlStub, Imagemap);
+#endif
 
 	// Everything ok.
 	return TRUE;
@@ -5165,11 +5195,11 @@ BOOL PreviewInBrowserTab::InitSection()
 
 BOOL PreviewInBrowserTab::Declare()
 {
-	if (Camelot.DeclareSection("Browser Preview", 5))
+	if (Camelot.DeclareSection(_T("Browser Preview"), 5))
 	{
-		Camelot.DeclarePref( NULL, "BrowserBackground", (INT32*)&g_Background, 0, 3 );
-		Camelot.DeclarePref( NULL, "IncludeImageMap", &g_Imagemap, 0, 1 );
-		Camelot.DeclarePref( NULL, "IncludeInfoInHTMLStub", &g_InfoInHtmlStub, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("BrowserBackground"), (INT32*)&g_Background, 0, 3 );
+		Camelot.DeclarePref( NULL, _T("IncludeImageMap"), &g_Imagemap, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("IncludeInfoInHTMLStub"), &g_InfoInHtmlStub, 0, 1 );
 	}
 
 	// All ok

@@ -131,9 +131,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cbmpdata.h"		// CBitmapData
 
 #include "palman.h"			// MakePaletteBrowserCompatible
-#include "wbitmap.h"		// WinBitmap
 
-#include "xshelpid.h"	//For the help ID
+//#include "xshelpid.h"	//For the help ID
 
 #include "gpalopt.h" // for the palette optimiser
 #include "mrhbits.h"
@@ -153,20 +152,24 @@ CC_IMPLEMENT_DYNCREATE(OpDeleteFrame,		OpLayerGalChange);
 CC_IMPLEMENT_DYNCREATE(OpFrameProperties, Operation);
 CC_IMPLEMENT_DYNCREATE(OpAnimationProperties, Operation);
 
-CC_IMPLEMENT_DYNAMIC(GIFAnimationExportParam,	BitmapExportParam);
 
+PORTNOTE("other", "Removed GrabFrameFilter, OpGrabFrame, OpGrabAllFrames")
+#ifndef EXCLUDE_FROM_XARALX
+CC_IMPLEMENT_DYNAMIC(GIFAnimationExportParam,	BitmapExportParam);
 CC_IMPLEMENT_DYNCREATE(OpGrabFrame, Operation);
 CC_IMPLEMENT_DYNCREATE(OpGrabAllFrames, OpGrabFrame);
 CC_IMPLEMENT_DYNAMIC(GrabFrameFilter, MakeBitmapFilter);
 CC_IMPLEMENT_DYNCREATE(OpSaveAnimatedGIF, OpGrabAllFrames);
 CC_IMPLEMENT_DYNCREATE(OpBrowserPreview, OpSaveAnimatedGIF);
 
+BOOL OpGrabAllFrames::ms_ForceRefreshOfAllFrames = FALSE;
+#endif
+
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
 // This line mustn't go before any CC_IMPLEMENT_... macros
 #define new CAM_DEBUG_NEW
 
-BOOL OpGrabAllFrames::ms_ForceRefreshOfAllFrames = FALSE;
 
 //------------------------------------------------------------------------------------------
 // Methods for the OpSelectStartFrame
@@ -247,9 +250,11 @@ void OpSelectStartFrame::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// yes, so find the first layer and try to move to it
 		Layer * pLayer = pSpread->FindFirstFrameLayer();
 		if (pLayer)
@@ -350,9 +355,11 @@ void OpSelectEndFrame::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// yes, so find the last layer and try to move to it
 		Layer * pLayer = pSpread->FindLastFrameLayer();
 		if (pLayer)
@@ -501,9 +508,11 @@ void OpSelectPrevFrame::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// yes, so find the last layer and try to move to it
 		Layer * pLayer = pSpread->FindActiveLayer();
 		Layer * pPrevLayer = NULL;
@@ -656,9 +665,11 @@ void OpSelectNextFrame::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled BrowserPreviewOptions")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// yes, so find the next layer and try to move to it
 		Layer * pLayer = pSpread->FindActiveLayer();
 		Layer * pNextLayer = NULL;
@@ -765,6 +776,8 @@ OpState	OpCreateNewFrame::GetState(String_256 * pUIDescription, OpDescriptor * p
 
 void OpCreateNewFrame::Do( OpDescriptor * pOpDesc )
 {
+PORTNOTE("other", "Disabled BrowserPreviewOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	// Just find the background layer and then ask our baseclass to delete it for us
 	// Is there a selected spread?
 	Spread * pSpread = Document::GetSelectedSpread();
@@ -772,7 +785,6 @@ void OpCreateNewFrame::Do( OpDescriptor * pOpDesc )
 	{
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
 		// Use the spread as the context node
 		OpLayerGalParam Param(FRAME_NEW, pSpread);
 		Param.pLayer		= NULL;
@@ -787,6 +799,7 @@ void OpCreateNewFrame::Do( OpDescriptor * pOpDesc )
 
 	// End the operation, but we are calling DoWithParam() which we will assume does it for us.
 	//End();
+#endif
 
 	return;
 }
@@ -898,6 +911,8 @@ OpState	OpCopyFrame::GetState(String_256 * pUIDescription, OpDescriptor * pOpDes
 
 void OpCopyFrame::Do( OpDescriptor * pOpDesc )
 {
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 	// Just find the background layer and then ask our baseclass to delete it for us
 	// Is there a selected spread?
 	Spread * pSpread = Document::GetSelectedSpread();
@@ -925,7 +940,7 @@ void OpCopyFrame::Do( OpDescriptor * pOpDesc )
 
 	// End the operation, but we are calling DoWithParam() which we will assume does it for us.
 	//End();
-
+#endif
 	return;
 }
 
@@ -1051,9 +1066,11 @@ void OpDeleteFrame::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		// yes, so check that there is a presently active layer and try to delete it
 		Layer * pLayer = pSpread->FindActiveLayer();
 		if (pLayer)
@@ -1190,9 +1207,11 @@ void OpFrameProperties::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_GIFANIMPROPERTYTABS);
 
 		if (pOpDesc != NULL)
@@ -1351,9 +1370,11 @@ void OpAnimationProperties::Do( OpDescriptor * pOpDesc )
 	Spread * pSpread = Document::GetSelectedSpread();
 	if (pSpread)
 	{
+PORTNOTE("other", "Disabled FrameSGallery")
+#ifndef EXCLUDE_FROM_XARALX
 		// Check that all visible layers are actually frame layers.
 		FrameSGallery::EnsureFrameLayerIntegrity(pSpread);
-
+#endif
 		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_GIFANIMPROPERTYTABS);
 
 		if (pOpDesc != NULL)
@@ -1387,6 +1408,9 @@ void OpAnimationProperties::Do( OpDescriptor * pOpDesc )
 /********************************************************************************************
 // End of OpAnimationProperties
 ********************************************************************************************/
+
+PORTNOTE("other", "Removed GrabFrameFilter, OpGrabFrame, OpGrabAllFrames")
+#ifndef EXCLUDE_FROM_XARALX
 
 //------------------------------------------------------------------------------------------
 // Methods for the OpGrabFrame
@@ -1428,7 +1452,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 	if(ok)
@@ -1447,7 +1471,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 	 if(ok)
@@ -1466,7 +1490,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 	 if(ok)
@@ -1485,7 +1509,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 	if(ok)
@@ -1504,7 +1528,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 	if(ok)
@@ -1523,7 +1547,7 @@ BOOL OpGrabFrame::Init()
 								FALSE,							// Smart duplicate operation
 								TRUE,							// Clean operation
 								NULL,							// No vertical counterpart
-								NULL,							// String for one copy only error
+								0,								// String for one copy only error
 								(DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC) // Auto state flags
 								);
 			// end of non-undoable operations
@@ -1928,7 +1952,7 @@ void OpGrabFrame::DoWithParam(OpDescriptor * pOpDesc, OpParam* pParam)
 	if (pParam != NULL)
 	{
 		// recover the layer pointer that has been specified
-		Layer* pLayer = (Layer *) pParam->Param1;
+		Layer* pLayer = (Layer *) (void *) pParam->Param1;
 		if (pLayer)
 		{
 			ERROR3IF(!pLayer->IS_KIND_OF(Layer), "OpParam passed is not a Layer");
@@ -2279,7 +2303,7 @@ KernelBitmap* OpGrabFrame::GrabFrame()
 	m_pLayer->SetEdited(FALSE);
 #ifdef _DEBUG
 	// Tell the frame gallery to update its display of the frame
-	BROADCAST_TO_ALL(LayerMsg(m_pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+	BROADCAST_TO_ALL(LayerMsg(m_pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 
 	// return the bitmap to the caller
@@ -2617,7 +2641,7 @@ BOOL OpGrabFrame::CheckIfSingleBitmap(Layer * pLayer, KernelBitmap ** ppBitmap)
 
 	// Get some of the current export options
 	DocRect	BoundingRect	= m_ExportParams.GetAnimationBoundingRect();
-	ERROR3IF(BoundingRect.IsEmpty(),"Bounding rect not set up")
+	ERROR3IF(BoundingRect.IsEmpty(),"Bounding rect not set up");
 //	PALETTE_COLOURS	Palette = m_ExportParams.GetPaletteCols();
 //	WEB_PALETTE WebPalette	= m_ExportParams.GetPalette();
 
@@ -2764,8 +2788,8 @@ BOOL OpGrabFrame::CheckIfSingleBitmap(Layer * pLayer, KernelBitmap ** ppBitmap)
 					// Work out the position of the bitmap relative to the top left hand
 					// corner of the bounding rectangle in terms of pixels and put this
 					// in the bitmap 
-					MILLIPOINT LeftOffsetMP = rect.lox - BoundingRect.lox;
-					MILLIPOINT TopOffsetMP = BoundingRect.hiy - rect.hiy;
+					MILLIPOINT LeftOffsetMP = rect.lo.x - BoundingRect.lo.x;
+					MILLIPOINT TopOffsetMP = BoundingRect.hi.y - rect.hi.y;
 					if (LeftOffsetMP >= 0 && TopOffsetMP >= 0)
 					{
 						const UINT32 dpi = 96;
@@ -3043,12 +3067,11 @@ void OpGrabAllFrames::CreateGlobalPalette(DWORD NumColsInPalette, BOOL Regenerat
 		// Set up the visibility of the other layers using this layer
 		// as the new temporary and acting active layer
 		FrameSGallery::FixOtherLayersFromActive(pCurrentLayer);
-			
 		// This is the layer that we are adding to the global palette
 		m_pLayer = pCurrentLayer;
 
 		// Render a bitmap of the entire image being exported
-		KernelBitmap* pTestBitmap;
+		KernelBitmap* pTestBitmap=NULL;
 		m_pBitmapFilter->DoCreateBitmap(this, m_pDocument, &pTestBitmap);
 
 		// not enough memory? or no content worth talking about then give up!
@@ -3094,7 +3117,7 @@ void OpGrabAllFrames::CreateGlobalPalette(DWORD NumColsInPalette, BOOL Regenerat
 	pPalOpt->UseBrowserPalette(0);
 	pPalOpt->SetFast(TRUE);
 
-	INT32 ColoursToOptimise = max(2, NumColsInPalette-1);
+	INT32 ColoursToOptimise = camMax(2, NumColsInPalette-1);
 
 	// tell the optimiser that we have finished gathering the stats
 	pPalOpt->GenPalette(ColoursToOptimise);
@@ -3107,7 +3130,7 @@ void OpGrabAllFrames::CreateGlobalPalette(DWORD NumColsInPalette, BOOL Regenerat
 	pPalOpt->GetPalette( pGlobalPal, ColoursToOptimise);
 
 	 // we want to add a transparent colour to this palette
-	pGlobalPal->palNumEntries = min(255,pGlobalPal->palNumEntries+1);
+	pGlobalPal->palNumEntries = camMin(255,pGlobalPal->palNumEntries+1);
 
 	// the first entry in the palette is special it should be the background colour as it will
 	// be what is visible if the background is not transparent so swap the first entry into
@@ -3217,9 +3240,14 @@ void OpGrabAllFrames::Do( OpDescriptor * pOpDesc )
 		RegenerateAllFrames = TRUE;
 
 	Quality OldQuality = m_pSpread->GetAnimationQuality();
-	Quality NewQuality = m_pView->RenderQuality;
-	NewQuality.Antialias = Quality::FullAntialias;
-	NewQuality.Transparency = Quality::FullTransparency;
+
+	// AMB doesn't understand what the following lines were meant to do. Quality
+	// is a linear scale. And in any case this doesn't compile (unsurprisingly)
+	// Quality NewQuality = m_pView->RenderQuality;
+	// NewQuality.Antialias = Quality::FullAntialias;
+	// NewQuality.Transparency = Quality::FullTransparency;
+	Quality NewQuality(Quality::QualityMax);
+
 	// Save away the new quality
 	m_pSpread->SetAnimationQuality(NewQuality);
 	if (NewQuality != OldQuality)
@@ -3451,7 +3479,7 @@ void OpGrabAllFrames::Do( OpDescriptor * pOpDesc )
 			pLayer->SetEdited(FALSE);
 #ifdef _DEBUG
 			// Tell the frame gallery to update its display of the frame
-			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+			BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 		}
 
@@ -4304,7 +4332,7 @@ BOOL GIFAnimationExportParam::AddLayerAndBitmap(Layer * pLayer, KernelBitmap * p
 
 BOOL GIFAnimationExportParam::AddLayer(Layer * pLayer)
 {
-	ERROR2IF(pLayer == NULL,FALSE,"AddLayer given null layer")
+	ERROR2IF(pLayer == NULL,FALSE,"AddLayer given null layer");
 	BOOL ok = TRUE;
 
 	// If we have a null list then just allocate the first item
@@ -4353,7 +4381,7 @@ BOOL GIFAnimationExportParam::AddLayer(Layer * pLayer)
 
 BOOL GIFAnimationExportParam::AddBitmap(KernelBitmap * pBitmap)
 {
-	ERROR2IF(pBitmap == NULL,FALSE,"Addbitmap given null bitmap")
+	ERROR2IF(pBitmap == NULL,FALSE,"Addbitmap given null bitmap");
 	BOOL ok = TRUE;
 
 	// If we have a null list then just allocate the first item
@@ -4632,7 +4660,7 @@ BOOL OpSaveAnimatedGIF::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, B
 	CCDiskFile DiskFile(1024, FALSE, TRUE);
 
 	BOOL ExportedOk = TRUE;
-	TRY
+	try
 	{
 		// Export bitmaps
 		ExportedOk = m_pBitmapFilter->DoExportBitmaps(this, &DiskFile, &m_SavePath, pExportParam);
@@ -4659,7 +4687,7 @@ BOOL OpSaveAnimatedGIF::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, B
 	}
 
 	// See if there was a file io error
-	CATCH(CFileException, e)
+	catch(CFileException)
 	{
 		// Report the error if no one else did
 		if (Error::GetErrorNumber() != _R(IDN_USER_CANCELLED))
@@ -4670,7 +4698,7 @@ BOOL OpSaveAnimatedGIF::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, B
 			Error::ClearError();	// otherwise remove the error so it won't get reported
 
 		// Make sure that the file is closed and deleted
-		TRY
+		try
 		{
 			// First try and delete it (tries to close it first)
 			if (m_pBitmapFilter)
@@ -4680,17 +4708,15 @@ BOOL OpSaveAnimatedGIF::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, B
 			if (DiskFile.isOpen())
 				DiskFile.close();
 		}
-		CATCH(CFileException, e)
+		catch(CFileException)
 		{
 			// Failed to close the file - not much we can do about it really
 		}
-		END_CATCH
 
 		// Fail
 		ExportedOk = FALSE;
 	}
-	END_CATCH
-
+	
 	// Clean out the filter we created
 	delete m_pBitmapFilter;
 	m_pBitmapFilter = NULL;
@@ -4715,7 +4741,7 @@ BOOL OpSaveAnimatedGIF::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, B
 
 BOOL OpSaveAnimatedGIF::EnsureFileType(PathName * pPath)
 {
-	ERROR2IF(pPath == NULL,FALSE,"EnsureFileExtension bad path specified")
+	ERROR2IF(pPath == NULL,FALSE,"EnsureFileExtension bad path specified");
 
 	// we are essentially a GIF filter so we need that extension
 	String_32 ExtStr(_R(IDN_FILTEREXT_GIF));
@@ -4734,6 +4760,7 @@ BOOL OpSaveAnimatedGIF::EnsureFileType(PathName * pPath)
 /********************************************************************************************
 // end of OpSaveAnimatedGIF
 ********************************************************************************************/
+
 
 //------------------------------------------------------------------------------------------
 // Methods for the OpBrowserPreview
@@ -4825,7 +4852,8 @@ BOOL OpBrowserPreview::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, Bi
 	CCDiskFile DiskFile(1024, FALSE, TRUE);
 
 	BOOL ExportedOk = TRUE;
-	TRY
+
+	try
 	{
 		// Export bitmaps supressing the filename so that the user does not see the temp filename
 		ExportedOk = m_pBitmapFilter->DoExportBitmaps(this, &TempDiskFile, &m_TempPath, &m_ExportParams, TRUE);
@@ -4852,7 +4880,7 @@ BOOL OpBrowserPreview::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, Bi
 	}
 
 	// See if there was a file io error
-	CATCH(CFileException, e)
+	catch(CFileException)
 	{
 		// Report the error if no one else did
 		if (Error::GetErrorNumber() != _R(IDN_USER_CANCELLED))
@@ -4863,7 +4891,7 @@ BOOL OpBrowserPreview::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, Bi
 			Error::ClearError();	// otherwise remove the error so it won't get reported
 
 		// Make sure that the file is closed and deleted
-		TRY
+		try
 		{
 			// First try and delete it (tries to close it first)
 			if (m_pBitmapFilter)
@@ -4873,16 +4901,14 @@ BOOL OpBrowserPreview::SaveOrShowTheAnimation(PreviewDialog * pPreviewDialog, Bi
 			if (DiskFile.isOpen())
 				DiskFile.close();
 		}
-		CATCH(CFileException, e)
+		catch(CFileException)
 		{
 			// Failed to close the file - not much we can do about it really
 		}
-		END_CATCH
 
 		// Fail
 		ExportedOk = FALSE;
 	}
-	END_CATCH
 
 	///------------------------------------
 	// Now we have the file, we can go and preview it in the browser
@@ -5009,5 +5035,7 @@ BOOL OpBrowserPreview::RemoveTempFile()
 /********************************************************************************************
 // End of OpBrowserPreview
 ********************************************************************************************/
+
+#endif // EXCLUDE_FROM_XARALX
 
 

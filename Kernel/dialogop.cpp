@@ -3331,6 +3331,12 @@ BOOL DialogOp::GetWindowPosition( wxRect *pRect )
 	return DialogManager::GetWindowPosition(GetReadWriteWindowID(), pRect);
 }
 
+BOOL DialogOp::GetWindowPosition( RECT *pRect )
+{
+	// Call the Dialog Manager
+	return DialogManager::GetWindowPosition(GetReadWriteWindowID(), pRect);
+}
+
 /********************************************************************************************
 
 >	BOOL DialogOp::GetGadgetPosition(CGadgetID Gadget, RECT * pRect)
@@ -3345,6 +3351,12 @@ BOOL DialogOp::GetWindowPosition( wxRect *pRect )
 ********************************************************************************************/
 
 BOOL DialogOp::GetGadgetPosition( CGadgetID Gadget, wxRect *pRect )
+{
+	// Call the Dialog Manager
+	return DialogManager::GetGadgetPosition(GetReadWriteWindowID(), Gadget, pRect);
+}
+
+BOOL DialogOp::GetGadgetPosition( CGadgetID Gadget, RECT *pRect )
 {
 	// Call the Dialog Manager
 	return DialogManager::GetGadgetPosition(GetReadWriteWindowID(), Gadget, pRect);
@@ -3369,6 +3381,12 @@ BOOL DialogOp::SetWindowPosition( const wxRect &Rect )
 	return DialogManager::SetWindowPosition(GetReadWriteWindowID(), Rect);
 }
 
+BOOL DialogOp::SetWindowPosition( const RECT &Rect )
+{
+	// Call the Dialog Manager
+	return DialogManager::SetWindowPosition(GetReadWriteWindowID(), Rect);
+}
+
 /********************************************************************************************
 
 >	BOOL DialogOp::SetGadgetPosition(CGadgetID Gadget, const RECT& Rect)
@@ -3383,6 +3401,12 @@ BOOL DialogOp::SetWindowPosition( const wxRect &Rect )
 ********************************************************************************************/
 
 BOOL DialogOp::SetGadgetPosition( CGadgetID Gadget, const wxRect &Rect )
+{
+	// Call the Dialog Manager
+	return DialogManager::SetGadgetPosition(GetReadWriteWindowID(), Gadget, Rect);
+}
+
+BOOL DialogOp::SetGadgetPosition( CGadgetID Gadget, const RECT &Rect )
 {
 	// Call the Dialog Manager
 	return DialogManager::SetGadgetPosition(GetReadWriteWindowID(), Gadget, Rect);

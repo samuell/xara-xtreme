@@ -160,7 +160,7 @@ do something like the following, which will avoid any broadcasts.
 		class MyTimer : public KernelTimer
 		{
 		public:
-			MyTimer(MyClass * pOwner) : m_pOwner(pOwner);
+			MyTimer(MyClass * pOwner) : m_pOwner(pOwner) {}
 			virtual void Notify() {m_pOwner->OnTimer();}
 			MyClass * m_pOwner;
 		};

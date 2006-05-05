@@ -156,7 +156,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bmpsdlg.h"
 #include "urlimp.h"
 #include "urldlg.h"
-//#include "aprps.h"
+#include "aprps.h"
 #include "crthumb.h"
 #include "bmapprev.h"
 #include "opbevel.h"
@@ -467,9 +467,9 @@ PORTNOTE("other","Removed various bevel usage")
 			OpDragBox::Init() &&				// drag operation base-class
 			OpQuality::Init() &&				// init the OpQuality operations
 			BmpDlg::Init() &&					// Register Bitmap Properties Dialog
-#ifndef EXCLUDE_FROM_XARALX
 			GIFAnimationPropertyTabsDlg::Init() &&	// Register the GIF animation tabs dialog
 			AnimExOptns::Init() &&					// Register the Animation Export Options tabs dialog	
+#ifndef EXCLUDE_FROM_XARALX
 			OpConvertPathToShapes::Declare() &&		// convert path to shapes operation
 			OpChangeBrushDefinition::Declare() &&
 // WEBSTER-ranbirr-13/11/96

@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "prevwres.h"
 #include "impexpop.h"	// BitmapExportParam
 #include "nodebmp.h"	// NodeBitmap
-#include "gifutil.h"	// GDM_BACKTOBACK
+//#include "gifutil.h"	// GDM_BACKTOBACK
 #include "dlgview.h"	// DialogView
 
 //#include "rikdlg.h"		// _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER)
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "spread.h"		// GetFirstFrameLayer()
 
-#include "xshelpid.h"	//For the help ID
+//#include "xshelpid.h"	//For the help ID
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
@@ -159,7 +159,7 @@ static GadgetBubbleHelp BubbleHelp[] =
 	{	_R(IDC_PREVIEW_NEXTFRAME),	 _R(IDS_PREVIEWBH_NEXTFRAME) },
 	{	_R(IDC_PREVIEW_PREVFRAME),	 _R(IDS_PREVIEWBH_PREVFRAME) },	
 	{	_R(IDC_PREVIEW_SLIDER),		 _R(IDS_PREVIEWBH_SLIDER)	 },
-	{	NULL, NULL										 }	
+	{	0, 0										 }	
 
 };
 
@@ -240,7 +240,7 @@ UINT32			PreviewDialog::m_Delay = 0;
 
 *******************************************************************************************/
 
-PreviewDialog::PreviewDialog() : DialogOp(PreviewDialog::IDD, PreviewDialog::Mode) 
+PreviewDialog::PreviewDialog() : DialogOp(PreviewDialog::IDD, PreviewDialog::Mode), m_Timer(this)
 {
 	m_BitmapListSize			= 0;
 	m_CurrentItem				= 0;
@@ -339,7 +339,7 @@ MsgResult PreviewDialog::Message(Msg* Message)
 					SetUpCallBack();
 					
 					INT32 i = 0;
-					while (BubbleHelp[i].Gadget != NULL)						
+					while (BubbleHelp[i].Gadget)						
 					{
 						SetGadgetHelp(BubbleHelp[i].Gadget, BubbleHelp[i].BubbleID, BubbleHelp[i].BubbleID);
 						i++;
@@ -359,25 +359,23 @@ MsgResult PreviewDialog::Message(Msg* Message)
 			case DIM_SLIDER_POS_CHANGING:
 			{
 				// Messages to all the controls, handled individually
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_PREVIEW_SLIDER))
 				{
-					case _R(IDC_PREVIEW_SLIDER):								
-					{
-						// While the animation is playing, if this button is selected,
-						// the play button is clicked out, the stop button is clicked in,
-						// and the next/previous frame in the animation is displayed. 
-						PreviewDlgStop();
-						// Kill any bubble help just in case the user has bubble help up
-						// over the slider
-						ControlHelper::BubbleHelpDisable();
-
-						SetSliderPosition();												
-													
-						// Force the gadget to be repainted, 
-						// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-						InvalidateGadget(_R(IDC_REDRAW_ME));
-					}
-					break;
+					// While the animation is playing, if this button is selected,
+					// the play button is clicked out, the stop button is clicked in,
+					// and the next/previous frame in the animation is displayed. 
+					PreviewDlgStop();
+					// Kill any bubble help just in case the user has bubble help up
+					// over the slider
+PORTNOTE("other", "Remove Bubble help reference");
+#ifndef EXCLUDE_FROM_XARALX
+					ControlHelper::BubbleHelpDisable();
+#endif
+					SetSliderPosition();												
+												
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					InvalidateGadget(_R(IDC_REDRAW_ME));
 				}
 				break;	//DIM_SLIDER_POS_CHANGING:
 			}
@@ -385,109 +383,96 @@ MsgResult PreviewDialog::Message(Msg* Message)
 			case DIM_LFT_BN_CLICKED :
 			{
 				// See which button was pressed
-				switch (Msg->GadgetID)
+				if (FALSE) {}
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_PLAY))
 				{
-					case _R(IDC_PREVIEW_PLAY) :
-						{
-							// Play the animation.
-							PreviewDlgPlay();
-							
-							// Force the gadget to be repainted, 
-							// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-							InvalidateGadget(_R(IDC_REDRAW_ME));
-							break;
-						}
-
-					case _R(IDC_PREVIEW_STOP) :
-						{
-							// Stop the animation.
-							PreviewDlgStop();
-
-							// Force the gadget to be repainted, 
-							// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-							InvalidateGadget(_R(IDC_REDRAW_ME));
-							break;
-						}
-
-					case _R(IDC_PREVIEW_NEXTFRAME) :
-						{
-							//  While the animation is playing, if this button is selected,
-							//	the play button is clicked out, the stop button is clicked in,
-							//	and the next frame in the animation is displayed. 
-							PreviewNextFrame();
-													
-							// Force the gadget to be repainted, 
-							// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-							InvalidateGadget(_R(IDC_REDRAW_ME));
-
-							// Only show one frame at a time, therefore set this flag back to false. 
-							m_DisplayNextFrame = FALSE;
-
-							break;
-						}
-
-					case _R(IDC_PREVIEW_PREVFRAME) :
-						{
-							// While the animation is playing, if this button is selected,
-							// the play button is clicked out, the stop button is clicked in,
-							// and the previous frame in the animation is displayed. 
-							PreviewPreviousFrame();
-							
-							// Force the gadget to be repainted, 
-							// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-							InvalidateGadget(_R(IDC_REDRAW_ME));
-
-							// Only show one frame at a time, therefore, set this flag to false. 
-							m_DisplayPreviousFrame = FALSE;
-							break;
-						}
-
-					case _R(IDC_PREVIEW_REFRESH) :
-						{
-							// Has the refresh button been clicked, while the dlg is in an idle state.
-							if (m_SetPreviewDlgToIdleState)
-								SetDlgStateAfterDocChange();
-							else
-								SetDlgStateAfterRefresh();								
-						}
-						break;
-
-					/* case _R(IDC_PREVIEW_STARTFRAME) :
-					{
-							m_DisplayListOfBitmaps = TRUE;
-
-							// Find the first frame in our list.
-							m_pPreviewDialog->SelectFirstBitmap();
-
-							// Force the gadget to be repainted, 
-							// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-							m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
-							m_DisplayListOfBitmaps = FALSE;
-
-							break;
-						
-						}*/
-
-					/* case _R(IDC_PREVIEW_ENDFRAME) :
-						{
-						m_DisplayListOfBitmaps = TRUE;
-						// Find the first frame in our list.
-						SelectLastBitmap();
-
-						// Force the gadget to be repainted, 
-						// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
-						m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
-						m_DisplayListOfBitmaps = FALSE;
-					}
-					{
-						BOOL Valid = FALSE;
-						BOOL State = GetLongGadgetValue(Msg->GadgetID, 0, 1, NULL, &Valid);
-						//if (State)
-						//	SetLongGadgetValue(Msg->GadgetID, !State);
-						break;
-					} */
+					// Play the animation.
+					PreviewDlgPlay();
+					
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					InvalidateGadget(_R(IDC_REDRAW_ME));
 				}
-				break;
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_STOP))
+				{
+					// Stop the animation.
+					PreviewDlgStop();
+
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					InvalidateGadget(_R(IDC_REDRAW_ME));
+				}
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_NEXTFRAME))
+				{
+					//  While the animation is playing, if this button is selected,
+					//	the play button is clicked out, the stop button is clicked in,
+					//	and the next frame in the animation is displayed. 
+					PreviewNextFrame();
+											
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					InvalidateGadget(_R(IDC_REDRAW_ME));
+
+					// Only show one frame at a time, therefore set this flag back to false. 
+					m_DisplayNextFrame = FALSE;
+				}
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_PREVFRAME))
+				{
+					// While the animation is playing, if this button is selected,
+					// the play button is clicked out, the stop button is clicked in,
+					// and the previous frame in the animation is displayed. 
+					PreviewPreviousFrame();
+					
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					InvalidateGadget(_R(IDC_REDRAW_ME));
+
+					// Only show one frame at a time, therefore, set this flag to false. 
+					m_DisplayPreviousFrame = FALSE;
+				}
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_REFRESH))
+				{
+					// Has the refresh button been clicked, while the dlg is in an idle state.
+					if (m_SetPreviewDlgToIdleState)
+						SetDlgStateAfterDocChange();
+					else
+						SetDlgStateAfterRefresh();								
+				}
+				/*
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_STARTFRAME))
+				{
+					m_DisplayListOfBitmaps = TRUE;
+
+					// Find the first frame in our list.
+					m_pPreviewDialog->SelectFirstBitmap();
+
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
+					m_DisplayListOfBitmaps = FALSE;
+
+					break;
+				}*/
+
+				/*
+				else if (Msg->GadgetID == _R(IDC_PREVIEW_ENDFRAME))
+				{
+					m_DisplayListOfBitmaps = TRUE;
+					// Find the first frame in our list.
+					SelectLastBitmap();
+
+					// Force the gadget to be repainted, 
+					// causes a DIM_REDRAW\_R(IDC_REDRAW_ME) message to be sent.
+					m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
+					m_DisplayListOfBitmaps = FALSE;
+				}
+				{
+					BOOL Valid = FALSE;
+					BOOL State = GetLongGadgetValue(Msg->GadgetID, 0, 1, NULL, &Valid);
+					//if (State)
+					//	SetLongGadgetValue(Msg->GadgetID, !State);
+					break;
+				} */
 			}
 
 			case DIM_REDRAW :
@@ -495,30 +480,24 @@ MsgResult PreviewDialog::Message(Msg* Message)
 				// This is where all the redrawing is done
 				// Which control in the window is sending the redraw message (if there are many
 				// grdraw controls you can tell which is which from the Gadget ID
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_REDRAW_ME))
 				{
-					// Draw the redraw_me control in here
-					case _R(IDC_REDRAW_ME) :
-					{
-						if(m_SetPreviewDlgToIdleState)
-							// Set the Preview dialog to an idle state.
-							SetPreviewDialogToIdleState((ReDrawInfoType*) Msg->DlgMsgParam);
-						else
-							// Render this control.
-							RenderControl((ReDrawInfoType*) Msg->DlgMsgParam);												
-					}
-					break;
-
-					// there are no other controls that should get a redraw message ever
-					default :
-					{
-						// give out an error in debug builds, ignore in retail builds
-						ERROR3("Got a redraw message for a control I don't know about");
-						break;
-					}
+					if(m_SetPreviewDlgToIdleState)
+						// Set the Preview dialog to an idle state.
+						SetPreviewDialogToIdleState((ReDrawInfoType*) Msg->DlgMsgParam);
+					else
+						// Render this control.
+						RenderControl((ReDrawInfoType*) Msg->DlgMsgParam);												
+				}
+				else
+				{
+					// give out an error in debug builds, ignore in retail builds
+					ERROR3("Got a redraw message for a control I don't know about");
 				}
 				break;
 			}	
+			default:
+				break;
 		}
 	}
 	else if (MESSAGE_IS_A(Message, DocChangingMsg))
@@ -526,7 +505,7 @@ MsgResult PreviewDialog::Message(Msg* Message)
 		DocChangingMsg *Msg = (DocChangingMsg *) Message;
 		switch (Msg->State)
 		{
-			case DocChangingMsg::DocState::ABOUTTODIE:
+			case DocChangingMsg::ABOUTTODIE:
 			/*{
 				if (Msg->pOldDoc == NULL)
 				{
@@ -545,8 +524,8 @@ MsgResult PreviewDialog::Message(Msg* Message)
 				}
 				break;
 			}*/
-			case DocChangingMsg::DocState::SELCHANGED:
-			case DocChangingMsg::DocState::BORN:
+			case DocChangingMsg::SELCHANGED:
+			case DocChangingMsg::BORN:
 			/*{
 				// called when new is used,thereafter called when no docs. are around.
 				if (Msg->pNewDoc == NULL)
@@ -565,7 +544,18 @@ MsgResult PreviewDialog::Message(Msg* Message)
 			}*/
 				EndDialog = TRUE;
 			break;
+
+			default:
+				break;
 		}
+	}
+
+	// End dialog here
+	if (EndDialog) 
+	{
+		Close();				// Hide the dialog box
+		End();					// Finish the operation
+		return OK;
 	}
 
 	// Allow the base class access to the message, it will do the
@@ -573,12 +563,6 @@ MsgResult PreviewDialog::Message(Msg* Message)
 	// Must do this before the Close and End
 	Result = DialogOp::Message(Message);
 
-	// End dialog here
-	if (EndDialog) 
-	{
-		Close();				// Hide the dialog box
-		End();					// Finish the operation
-	}
 
 	// The message was for our dialog box so return that we have handled it, if necessary
 	//return (DLG_EAT_IF_HUNGRY(Msg)); 
@@ -661,12 +645,12 @@ BOOL PreviewDialog::InitDialog()
 	
 	// Set up the bitmaps for the play controls
 	// Uses the title defined in the rc file so do not specify any bitmaps
-	SetGadgetBitmaps(_R(IDC_PREVIEW_PLAY), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PREVIEW_STOP), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PREVIEW_NEXTFRAME), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PREVIEW_PREVFRAME), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PREVIEW_STARTFRAME), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PREVIEW_ENDFRAME), NULL, NULL);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_PLAY), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_STOP), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_NEXTFRAME), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_PREVFRAME), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_STARTFRAME), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PREVIEW_ENDFRAME), 0, 0);
 
 	// Reset the loop count that we are currently on
 	m_CurrentLoopCount = 0;
@@ -687,7 +671,7 @@ BOOL PreviewDialog::InitDialog()
 
 			// change the name field from saying "Frame:" to "Image:"
 			String_32 Name(_R(IDS_PREVIEW_FRAMENAMETYPESTR));
-			SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAMETYPE), &Name);
+			SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAMETYPE), Name);
 		}
 		else
 		{
@@ -723,7 +707,7 @@ BOOL PreviewDialog::InitDialog()
 
 			// change the name field from saying "Frame:" to "Image:"
 			String_32 Name(_R(IDS_PREVIEW_FRAMENAMETYPESTR));
-			SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAMETYPE), &Name);
+			SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAMETYPE), Name);
 		}
 		else
 		{
@@ -758,7 +742,7 @@ BOOL PreviewDialog::InitDialog()
 
 	// Set up the frame/layer name control
 	String_32 BlankName(TEXT(""));
-	SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), &BlankName);
+	SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), BlankName);
 
 	return TRUE;
 }
@@ -899,7 +883,7 @@ BOOL PreviewDialog::ReInitDialog()
 
 	// Set up the frame/layer name control
 	String_32 BlankName(TEXT(""));
-	SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), &BlankName);
+	SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), BlankName);
 
 	return TRUE;
 }
@@ -1101,7 +1085,7 @@ void PreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo)
 				m_pRender->SetFillColour(COLOUR_WHITE); 
 				m_pRender->DrawRect(&VirtualSize);
 
-				INT32 ThisIndex = m_CurrentItem;
+//				INT32 ThisIndex = m_CurrentItem;
 				INT32 StartIndex = m_CurrentItem;
 				BOOL StartFrameFound = FALSE;
 				// First, search out the first frame to redraw
@@ -1518,7 +1502,7 @@ KernelBitmap * PreviewDialog::GetCurrentBitmap(BOOL GetDetails)
 
 		// Set up the frame/layer name control to be the bitmap name
 		String_256 Name = pBitmapToUse->GetName();
-		SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), &Name);
+		SetStringGadgetValue(_R(IDC_PREVIEW_FRAMENAME), Name);
 	}
 
 	return pBitmapToUse;
@@ -1539,7 +1523,7 @@ KernelBitmap * PreviewDialog::GetCurrentBitmap(BOOL GetDetails)
 void PreviewDialog::IncrementCurrentBitmap()
 {
 	// Local flag to test whether to increment the slider position.
-	BOOL SliderPositionReset = FALSE;
+//	BOOL SliderPositionReset = FALSE;
 
 	// Increment the Bitmap if the user has clicked either Play or NextFrame.
 	if (m_PlayAnimation || m_DisplayNextFrame )
@@ -1653,7 +1637,7 @@ void PreviewDialog::SelectCurrentBitmap(UINT32 Position)
 void PreviewDialog::DecrementCurrentBitmap()
 {
 	//  Local flag to test whether to increment the slider position.
-	BOOL SliderPositionReset = FALSE;
+//	BOOL SliderPositionReset = FALSE;
 
 	//  Decrement the bitmap if the user has eitther clicked Play or Previous frame.
 	if(m_PlayAnimation || m_DisplayPreviousFrame)
@@ -1838,6 +1822,8 @@ BOOL PreviewDialog::SetBitmapList(BitmapExportParam* pParam, BOOL SetSlider)
 		}
 	}
 
+PORTNOTE("other", "Removed GIFAnimationExportParam")
+#ifndef EXCLUDE_FROM_XARALX
 	// Work out the bounding box of the animation and the loop count
 	if (pParam->IS_KIND_OF(GIFAnimationExportParam))
 	{
@@ -1849,6 +1835,7 @@ BOOL PreviewDialog::SetBitmapList(BitmapExportParam* pParam, BOOL SetSlider)
 		m_RequiredLoopCount = pGIFParam->GetAnimLoop();
 	}
 	else
+#endif
 	{
 		// Look through all the bitmaps to find the biggest size
 		// But we have already done this above, so use it
@@ -2056,8 +2043,8 @@ BOOL PreviewDialog::ResizeDialogToFitAnimation()
 		m_pRender = NULL;
 	}
 	
-	// Get the handle of the dialog box. This is really an HWND.
-	CWindowID hWnd = GetReadWriteWindowID();
+	// Get the handle of the dialog box. This is really an CWindowID.
+//	CWindowID hWnd = GetReadWriteWindowID();
 
 	RECT RedrawRect;
 	if (!GetGadgetPosition(_R(IDC_REDRAW_ME), &RedrawRect))
@@ -2154,7 +2141,7 @@ BOOL PreviewDialog::SetUpCallBack()
 {
 	// set the delay for the first bitmap that we are going to display
 	m_Delay = GetDelayForCurrentBitmap();
-	return m_Timer.Start(m_Delay * 10, TimerProc, FALSE);
+	return m_Timer.Start(m_Delay * 10, TRUE);
 }
 
 
@@ -2170,37 +2157,34 @@ BOOL PreviewDialog::SetUpCallBack()
 				frame.
 *******************************************************************************************/
 
-BOOL PreviewDialog::TimerProc(HiResTimer* pThisTimer, INT32 nElapsed, void* /* pvData */)
+void PreviewDialog::OnTimer()
 {
 	if (m_pPreviewDialog != NULL)
 	{
-		TRACEUSER( "JustinF", _T("%ld msec elapsed\n"), (INT32) nElapsed);
-
 		// Stop the animation if the properties are changed or the document is closd.
-		if(m_AnimationPropertiesChanged || m_pPreviewDialog->m_DocumentAboutToDie)
+		if(m_AnimationPropertiesChanged || m_DocumentAboutToDie)
 		{
 			// Stop any pending timer events.
-			if (pThisTimer->IsRunning())
-				pThisTimer->Stop();
-			return TRUE;
+			if (m_Timer.IsRunning())
+				m_Timer.Stop();
+			return;
 		}
 	
 		// Move to the next bitmap in the list
-		m_pPreviewDialog->IncrementCurrentBitmap();
+		IncrementCurrentBitmap();
 
 		// Force the gadget to be repainted
-		m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
-		m_pPreviewDialog->PaintGadgetNow(_R(IDC_REDRAW_ME));
+		InvalidateGadget(_R(IDC_REDRAW_ME));
+		PaintGadgetNow(_R(IDC_REDRAW_ME));
 
 		// Get the delay until we need to show the next frame
-		m_Delay = m_pPreviewDialog->GetDelayForCurrentBitmap();
+		m_Delay = GetDelayForCurrentBitmap();
 
 		// Reset the timer.
-		pThisTimer->Start(m_Delay * 10, TimerProc, FALSE);
+		m_Timer.Start(m_Delay * 10, FALSE);
 	}
 
-	// Please continue to send events to us.
-	return TRUE;
+	return;
 }
 
 
@@ -2236,14 +2220,16 @@ BOOL PreviewDialog::OnIdleEvent(void)
 ********************************************************************************************/
 void PreviewDialog::UpdateBubbleHelp(void)
 {
+PORTNOTE("other", "Disabled PreviewDialog bubble help")
+#ifndef EXCLUDE_FROM_XARALX
 	PreviewDialog *pPrvDlg = m_pPreviewDialog;
 	if (pPrvDlg == NULL)
 		return;
 
-	static HWND TheWindow = NULL;
+	static CWindowID TheWindow = NULL;
 	
 	if (TheWindow == NULL)
-		TheWindow = (HWND)pPrvDlg->WindowID;
+		TheWindow = (CWindowID)pPrvDlg->WindowID;
 
 	if (TheWindow == NULL)
 		return;
@@ -2257,7 +2243,7 @@ void PreviewDialog::UpdateBubbleHelp(void)
 		LastUpdate.Sample();
 
 		// Default to the mouse being "nowhere special" again
-		TheWindow = (HWND)pPrvDlg->WindowID;
+		TheWindow = (CWindowID)pPrvDlg->WindowID;
 		MousePos = NULL;
 
 		POINT MouseScreenPos;
@@ -2265,7 +2251,7 @@ void PreviewDialog::UpdateBubbleHelp(void)
 		{
 			// Only continue processing if the window under the pointer is the Preview Dialog
 			
-			HWND WindowUnder = ::WindowFromPoint(MouseScreenPos);
+			CWindowID WindowUnder = ::WindowFromPoint(MouseScreenPos);
 
 			if (WindowUnder != NULL &&
 				(WindowUnder == TheWindow || ::GetParent(WindowUnder) == TheWindow))
@@ -2278,14 +2264,14 @@ void PreviewDialog::UpdateBubbleHelp(void)
 				::ScreenToClient(TheWindow, &TempPos);
 
 				CPoint Pos(TempPos);
-				HWND WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
+				CWindowID WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
 				if (WindowUnderPointer != NULL)// && IsWindowVisible(WindowUnderPointer))
 				{
 					// Make sure that hidden windows do not provide status help!
 					INT32 WindowStyle = ::GetWindowLong(WindowUnderPointer, GWL_STYLE);
 					if ((WindowStyle & WS_VISIBLE) != 0)
 					{
-						HWND hGadget;
+						CWindowID hGadget;
 						INT32 i = 0;
 						while (BubbleHelp[i].Gadget != NULL && MousePos == NULL)
 						{
@@ -2308,11 +2294,12 @@ void PreviewDialog::UpdateBubbleHelp(void)
 		// Set up our callback handler to show the bubble help. 
 		ControlHelper::DoBubbleHelpOn(TheWindow, MousePos, PreviewDialog::HelpCallbackHandler, NULL);
 	}
+#endif
 }
 
 /********************************************************************************************
 
->	TCHAR* PreviewDialog::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData)
+>	TCHAR* PreviewDialog::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *UserData)
 
 	Author:		Ranbir_Rana (Xara Group Ltd) <camelotdev@xara.com> (Based onn Jason code)
 	Created:	21/05/97
@@ -2324,7 +2311,7 @@ void PreviewDialog::UpdateBubbleHelp(void)
 	
 ********************************************************************************************/
 
-TCHAR *PreviewDialog::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData)
+TCHAR *PreviewDialog::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *UserData)
 {
 	static String_256 HelpStringStore;
 	BOOL ReturnVal = FALSE;
@@ -2333,32 +2320,30 @@ TCHAR *PreviewDialog::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserDa
 	if (pPreviewDlg == NULL)
 		return(NULL);
 
-	switch (Item)
+	if (Item == _R(IDC_PREVIEW_PLAY))
 	{
-		case _R(IDC_PREVIEW_PLAY):
-			HelpStringStore = String_256(_R(IDS_PREVIEWBH_PLAY));
-			ReturnVal = TRUE;
-		break;
-			
-		case _R(IDC_PREVIEW_STOP):		 	     
-			HelpStringStore = String_256(_R(IDS_PREVIEWBH_STOP));
-			ReturnVal = TRUE;
-		break;
-
-		case _R(IDC_PREVIEW_NEXTFRAME):		 	     
-			HelpStringStore = String_256(_R(IDS_PREVIEWBH_NEXTFRAME));
-			ReturnVal = TRUE;
-		break;
-			
-		case _R(IDC_PREVIEW_PREVFRAME):
-			HelpStringStore = String_256(_R(IDS_PREVIEWBH_PREVFRAME));
-			ReturnVal = TRUE;
-		break;	
-
-		case _R(IDC_PREVIEW_SLIDER):
-			HelpStringStore = String_256(_R(IDS_PREVIEWBH_SLIDER));
-			ReturnVal = TRUE;
-		break;	
+		HelpStringStore = String_256(_R(IDS_PREVIEWBH_PLAY));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_PREVIEW_STOP))
+	{
+		HelpStringStore = String_256(_R(IDS_PREVIEWBH_STOP));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_PREVIEW_NEXTFRAME))
+	{
+		HelpStringStore = String_256(_R(IDS_PREVIEWBH_NEXTFRAME));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_PREVIEW_PREVFRAME))
+	{
+		HelpStringStore = String_256(_R(IDS_PREVIEWBH_PREVFRAME));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_PREVIEW_SLIDER))
+	{
+		HelpStringStore = String_256(_R(IDS_PREVIEWBH_SLIDER));
+		ReturnVal = TRUE;
 	}
 
 	if (ReturnVal)
@@ -2383,6 +2368,8 @@ TCHAR *PreviewDialog::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserDa
 
 BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 {
+PORTNOTE("other", "Disabled bitmap preview dialog live status text")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(Result == NULL, "Illegal NULL param");
 		
 	PreviewDialog* pPreviewDlg = m_pPreviewDialog;
@@ -2391,7 +2378,7 @@ BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 		return(FALSE);
 
 	// Find the main editor window
-	HWND TheWindow = (HWND)pPreviewDlg->WindowID;
+	CWindowID TheWindow = (CWindowID)pPreviewDlg->WindowID;
 	if (TheWindow == NULL)
 		return(FALSE);
 
@@ -2403,9 +2390,9 @@ BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 	// Convert to client coords in the main window
 	ScreenToClient(TheWindow, &TempPos);
 
-	// See if this is over the main window or any child, get it's HWND
+	// See if this is over the main window or any child, get it's CWindowID
 	CPoint Pos(TempPos);	
-	HWND WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
+	CWindowID WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
 	if (WindowUnderPointer == NULL)
 		return(FALSE);
 
@@ -2419,7 +2406,7 @@ BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 		return(GetStatusLineText(pPreviewDlg, 0, Result));
 
 	// Otherwise, see if we can find help for the specific gadget
-	HWND hGadget;
+	CWindowID hGadget;
 	INT32 i = 0;
 	while (BubbleHelp[i].Gadget != NULL)
 	{
@@ -2429,6 +2416,9 @@ BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 		i++;
 	}
 	return FALSE;
+#else
+	return TRUE;
+#endif
 }
 
 /************************************************************************************************
@@ -2447,23 +2437,21 @@ BOOL PreviewDialog::GetStatusLineText(String_256 *Result)
 
 BOOL PreviewDialog::GetStatusLineText(PreviewDialog *pPrvDlg, UINT32 GadgetID,String_256 *Result)
 {
-	switch (GadgetID)
+	if (GadgetID == _R(IDC_PREVIEW_PLAY))
 	{
-		case _R(IDC_PREVIEW_PLAY):
-			*Result = String_256(_R(IDS_PREVIEWST_PLAY));
-			break;
-
-		case _R(IDC_PREVIEW_STOP):
-			*Result = String_256(_R(IDS_PREVIEWST_STOP));
-			break;
-
-		case _R(IDC_PREVIEW_NEXTFRAME):
-			*Result = String_256(_R(IDS_PREVIEW_NEXTFRAME));
-			break;
-
-		case _R(IDC_PREVIEW_PREVFRAME):
-			*Result = String_256(_R(IDS_PREVIEW_PREVFRAME));
-			break;			
+		*Result = String_256(_R(IDS_PREVIEWST_PLAY));
+	}
+	else if (GadgetID == _R(IDC_PREVIEW_STOP))
+	{
+		*Result = String_256(_R(IDS_PREVIEWST_STOP));
+	}
+	else if (GadgetID == _R(IDC_PREVIEW_NEXTFRAME))
+	{
+		*Result = String_256(_R(IDS_PREVIEW_NEXTFRAME));
+	}
+	else if (GadgetID == _R(IDC_PREVIEW_PREVFRAME))
+	{
+		*Result = String_256(_R(IDS_PREVIEW_PREVFRAME));
 	}
 	return TRUE;
 }
@@ -2486,6 +2474,8 @@ BOOL PreviewDialog::DoRegenerateFrames()
 	// When in play mode, we should grab the entire animation
 	// If we were in stand by mode then grab the active frame.
 
+PORTNOTE("other", "Disabled BrowserPreviewOptions")
+#ifndef EXCLUDE_FROM_XARALX
 	// Return false if the document is empty.
 	String_256 ShadeReason;
 	OpState State = OpGrabAllFrames::GetState(&ShadeReason, NULL);
@@ -2499,6 +2489,7 @@ BOOL PreviewDialog::DoRegenerateFrames()
 		m_pPreviewDialog->InvalidateGadget(_R(IDC_REDRAW_ME));
 		return FALSE;			
 	}
+#endif
 	
 	// Temp flags to remember whether the animation was playing/How may layers existed
 	// before all the frames were regenerated.
@@ -2581,7 +2572,7 @@ BOOL PreviewDialog::DoRegenerateFrames()
 		if (pOpDesc != NULL)
 		{
 			OpParam Param;
-			Param.Param1 = (INT32)pLayerToRefresh;
+			Param.Param1 = (void *)pLayerToRefresh;
 			pOpDesc->Invoke(&Param);
 		}
 		else
