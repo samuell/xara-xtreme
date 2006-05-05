@@ -408,7 +408,7 @@ public:
 											Node*     pNode,
 											BOOL      IncludeUnitSpecifier = TRUE,
 											BOOL      EndOfList = FALSE, 
-											INT32       ListPos   = -1); 
+											INT32       ListPos   = 0); 
 
 	static BOOL SetLongGadgetValue(CWindowID WindowID, 
 							CGadgetID Gadget, 
