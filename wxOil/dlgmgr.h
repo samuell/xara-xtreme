@@ -473,7 +473,7 @@ public:
 						 Node* pNode,
 						 BOOL IncludeUnitSpecifier = TRUE,
 			             BOOL EndOfList = FALSE, 
-			     		 INT32 ListPos = 0
+			     		 INT32 ListPos = -1
 			             ); 
 
 	static BOOL SetMemoryGadgetValue( CWindowID WindowID, 
@@ -589,6 +589,10 @@ public:
 	static BOOL EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enabled); 
 	static BOOL HideGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Hide); 
 	static BOOL GadgetRedraw(CWindowID WindowID, CGadgetID Gadget, BOOL Redraw);
+
+	// This function should be called after hiding\showing a control,
+	// so the dialog can be resized
+	static void RelayoutDialog(DialogTabOp* DlgOp);
 
     // ------------------------------------------------------------------------------------- 
     // Setting the keyboard input focus.
