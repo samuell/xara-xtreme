@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
+#include "camelot.h"
 #include "dlgevt.h"
 #include "dlgmgr.h"
 #include "camframe.h"
@@ -145,6 +146,7 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_CLOSE	(DialogEventHandler::CloseEvent)
 	EVT_WINDOW_DESTROY	(DialogEventHandler::WindowDestroyEvent)
 	EVT_MOUSE_EVENTS (DialogEventHandler::MouseEvent)
+	EVT_CHILD_FOCUS( DialogEventHandler::OnSetFocus )
 	EVT_CAMDIALOG_DEFERREDMSG (wxID_ANY, DialogEventHandler::CamDialogEvent)
 	EVT_CAMDIALOG_GRIMREAPER (wxID_ANY, DialogEventHandler::GrimReaperEvent)
 	EVT_CAMDIALOG_REDRAW (wxID_ANY, DialogEventHandler::CamDialogEvent)
@@ -468,6 +470,56 @@ void DialogEventHandler::WindowDestroyEvent(wxWindowDestroyEvent& event)
 		m_GrimReaperSent = FALSE; // ensure Destroy() works
 		Destroy(); // Destroy ourselves (as opposed to the window) if this hasn't happened already
 	}
+}
+
+/********************************************************************************************
+
+>	DialogEventHandler::OnSetFocus(wxCamDialogEvent& event)
+
+
+	Author:		Luke_Hart <alex@alex.org.uk>
+	Created:	02/05/06
+	Inputs:		event - the wxEvent
+	Outputs:	-
+	Returns:	-
+	Purpose:	Passes an event to DialogManager::Event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+
+void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
+{
+	// Check if focus is going to an always focus object (may need more tests
+	// as more controls come online). If so just return allowing focus to stay
+	wxWindow*	pWnd = (wxWindow*)event.GetEventObject();
+	if( pWnd->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
+		pWnd->IsKindOf( CLASSINFO(wxComboBox) ) )
+	{
+		return;
+	}
+
+	// Scan down ancestors looking for either wxPanels (always non-modal) and
+	// wxDailogs (can be modal, so we check)
+	while( NULL != pWnd && !pWnd->IsKindOf( CLASSINFO(wxPanel) ) )
+	{
+		// Dialogs may-be modal so check
+		if( pWnd->IsKindOf( CLASSINFO(wxDialog) ) )
+		{
+			if( ((wxDialog*)pWnd)->IsModal() )
+				return;
+
+			// Non-modal dialog so do focus handling
+			break;
+		}
+
+		pWnd = pWnd->GetParent();
+	}
+
+	// Put the focus back into active view
+	TRACEUSER( "jlh92", _T("NO, that control is not allowed focus") );
+	AfxGetApp().GiveActiveCanvasFocus();
 }
 
 

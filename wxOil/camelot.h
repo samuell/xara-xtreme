@@ -138,9 +138,6 @@ public:
     void OnIdle		( wxIdleEvent  &event );
 	void OnTimer	( wxTimerEvent &event );
 
-	void OnKeyEvent	( wxKeyEvent &event );
-	void OnChar		( wxKeyEvent &event );
-	
 	void GiveActiveCanvasFocus();
 
 protected:

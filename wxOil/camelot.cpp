@@ -110,7 +110,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "Res/UKEnglish/stringtbl.h"
 #include "kernel.h"
 #include "grndrgn.h"
-#include "keypress.h"
 #include "oilmenus.h"
 
 #if !defined(__WXMSW__)
@@ -196,51 +195,12 @@ IMPLEMENT_APP( CCamApp )
 BEGIN_EVENT_TABLE( CCamApp, wxApp )
 	EVT_IDLE( CCamApp::OnIdle )
 //	EVT_TIMER( CAM_TIMER_ID, CCamApp::OnTimer )
-
-	EVT_KEY_UP(			CCamApp::OnKeyEvent )
-	EVT_KEY_DOWN(		CCamApp::OnKeyEvent )
-//	EVT_CHAR(			CCamApp::OnChar )
 END_EVENT_TABLE()
 
 DialogManager			CCamApp::m_DlgMgr;
 bool					CCamApp::s_bIsDisabled = false; // Initially system is not disabled.
 wxString				CCamApp::m_strResourcePath;
 
-void CCamApp::OnKeyEvent( wxKeyEvent &event )
-{
-	// If a control (but not a button) has focus, let it handle the key events
-	// Whilst debugging focus can end-up NULL, so we protect ourselves
-	wxWindow*			pFocusWnd = wxWindow::FindFocus();
-	wxClassInfo*		pClassInfo = NULL != pFocusWnd ? pFocusWnd->GetClassInfo() : NULL;
-	TRACEUSER( "jlh92", _T("Focus = %s\n"), pClassInfo?pClassInfo->GetClassName():_T("None") );
-	if(  NULL != pFocusWnd &&
-		 pClassInfo->IsKindOf( CLASSINFO(wxControl) ) &&
-		!pClassInfo->IsKindOf( CLASSINFO(wxButton) ) &&
-		!pClassInfo->IsKindOf( CLASSINFO(wxSlider) ) &&
-		!pClassInfo->IsKindOf( CLASSINFO(wxCamArtControl) ) &&
-		!pClassInfo->IsKindOf( CLASSINFO(wxCamDrawControl) ) ) 
-	{
-		event.Skip();
-		return;
-	}
-	
-	// Make sure the kernel knows which view/doc the event applies to, if any.
-	if( NULL != Document::GetSelected() )
-		Document::GetSelected()->SetCurrent();
-	if( NULL != DocView::GetSelected() )
-		DocView::GetSelected()->SetCurrent();
-
-	// Process keyboard messages
-	if( !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( &event ) )
-		return;
-	
-	event.Skip();
-}
-
-void CCamApp::OnChar( wxKeyEvent &event )
-{
-	TRACE( _T("CCamApp::OnCR = %c\n"), event.m_keyCode );
-}
 
 /***************************************************************************************************************************/
 
@@ -809,7 +769,8 @@ void CCamApp::DoAboutBox()
 void CCamApp::GiveActiveCanvasFocus()
 {
 	CCamView* pView = dynamic_cast<CCamView*>( m_docManager->GetCurrentView() );
-	pView->Activate( true );
+	if( NULL != pView )
+		pView->Activate( true );
 }
 
 /***************************************************************************************************************************/
