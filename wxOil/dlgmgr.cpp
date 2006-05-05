@@ -6290,7 +6290,7 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 		if( NULL != pszStringLookup )
 		{
 			Title = pszStringLookup;
-			TRACEUSER( "jlh92", _T("Page (FST) = \"%s\"\n"), Title.c_str() );
+			TRACEUSER( "jlh92", _T("Page (FST) = \"%s\"\n"), pszStringLookup );
 		}
 	}
 	if( Title.IsEmpty() )
@@ -7436,6 +7436,29 @@ BOOL DialogManager::CreateBar(DialogBarOp* DlgOp)
 	return TRUE;
 }
 
+/********************************************************************************************
+
+>	static BOOL DialogManager::CreateTabbedDialog(DialogTabOp* DlgOp, CDlgMode Mode, INT32 OpeningPage)
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	04/05/06
+	Inputs:		DlgTabOp:		The DialogTabOp to re-layout
+	Outputs:	-
+	Returns:	-
+	Purpose:	Force the dialog to relayout after control hide\show
+	Scope:		public
+	Errors:		-
+	SeeAlso:	DialogManager::CreateTabbedDialog
+
+********************************************************************************************/
+
+void DialogManager::RelayoutDialog( DialogTabOp* pDialogTabOp )
+{
+	OurPropSheet* pPropSheet = GetPropertySheetFromOp( pDialogTabOp );
+	if( NULL != pPropSheet )
+		pPropSheet->LayoutDialog();
+}
+
 
 /********************************************************************************************
 
@@ -7521,6 +7544,10 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 	DlgTagOpToPropShtList.AddHead(Item);
 
 	pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
+
+	// This will be done again later, but RegisterYourPagesInOrderPlease may,
+	// use it, so we do it here as well
+	pTabDlgOp->WindowID = (CWindowID)pPropertySheet;
 
 	// Before we can create the property sheet we must add pages to it.
 	// Let's ask the op do do this for us

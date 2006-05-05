@@ -263,12 +263,28 @@ PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
 	}
 
 	// add the imagemap and browser pages
+	bool	fUsedImapOption = false;
 	if (ok && !bExportABitmap && m_FilterType != MAKE_BITMAP_FILTER && !m_bSlicingImage)
-		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
+	{
+PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
+//		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
+		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
+		fUsedImapOption = true;
+	}
 
-	// design notes stuff on the image map page is needed in image slicing
+PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
+#ifndef EXCLUDE_FROM_XARALX// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
+	{
 		ok = AddAPage(_R(IDD_TIMAPOPTIONS));
+		fUsedImapOption = true;
+	}
+
+	// These needs to be done before the property sheet is sized, else
+	// it comes out the wrong size
+	if( ok && fUsedImapOption )
+		ImageMapOnCreate();
+#endif
 
 	return (ok); 
 }
