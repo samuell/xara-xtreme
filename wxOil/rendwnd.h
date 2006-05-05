@@ -170,6 +170,8 @@ protected:
 	void OnLeave( wxMouseEvent &event );
 #endif
 
+	void OnKey ( wxKeyEvent & event);
+
 protected:
 	CCamView* m_pView;
 

@@ -129,6 +129,8 @@ CC_IMPLEMENT_DYNCREATE( PageDropInfo, CCObject )
 // drag is initiated.
 INT32 CCamView::DragLatency = 3;
 
+INT32 CCamView::s_MouseMoveEliminationPeriod = 0;
+
 // Used to start drags after user has clicked but not moved mouse for n milliseconds.
 INT32 CCamView::DragDelay = 500;
 MonotonicTime CCamView::DragTimer;
@@ -232,6 +234,13 @@ CCamView::CCamView()
 	// Set this flag until we have been through OnActivateView once, after which we can
 	// include this view in the eat-activating-click system.
 	fJustCreated = TRUE;
+
+	// Mouse move handling
+	m_LastMouseState=0;
+	m_LastMousePosition=wxDefaultPosition;
+	m_LastMouseUsedTimestamp=0;
+	m_CouldSkipNextMouse=FALSE;
+
 }
 
 /*********************************************************************************************
@@ -436,6 +445,53 @@ bool CCamView::OnClose( bool fDeleteWindow /*= TRUE*/ )
 	}
 
 	return true;
+}
+
+/********************************************************************************************
+>	static BOOL CCamView::ReadViewPrefs()
+
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	26/11/93
+	Inputs:		-
+	Outputs:	-
+	Returns:	TRUE if the .INI file settings were loaded (or created) successfully.
+	Purpose:	Tries to load preferences for CCamView, creating them with default values
+				if they don't exist.
+	Errors:		-
+	SeeAlso:	Application::DeclareSection; Application::DeclarePref
+********************************************************************************************/
+
+BOOL CCamView::ReadViewPrefs()
+{
+	// Declare and load the .INI file settings.
+	BOOL ok =  	Camelot.DeclareSection(TEXT("Mouse"), 10) &&
+		   		Camelot.DeclarePref(TEXT("Mouse"), TEXT("DragLatency"),
+		   					   		&CCamView::DragLatency, 1, 10) &&
+		   		Camelot.DeclarePref(TEXT("Mouse"), TEXT("DragDelay"),
+		   					   		&CCamView::DragDelay, 100, 2000) &&
+		   		Camelot.DeclarePref(TEXT("Mouse"), TEXT("MoveEliminationPeriod"),
+		   					   		&CCamView::s_MouseMoveEliminationPeriod, 0, 1000) &&
+
+			 	Camelot.DeclareSection(TEXT("WindowFurniture"), 10) &&
+#ifndef EXCLUDE_FROM_XARALX
+		   	    Camelot.DeclarePref(TEXT("WindowFurniture"), TEXT("PropScrollers"),
+		   					   	   &CCamView::PropScrollersOn, FALSE, TRUE) &&
+#endif
+		   	    Camelot.DeclarePref(TEXT("WindowFurniture"), TEXT("ScrollersVisibiltyState"),
+		   					   	   &CCamView::DefaultScrollersState, FALSE, TRUE)&&
+		   	    Camelot.DeclarePref(TEXT("WindowFurniture"), TEXT("RulersVisibiltyState"),
+		   					   	   &CCamView::DefaultRulersState, FALSE, TRUE) &&
+
+#ifndef EXCLUDE_FROM_XARALX
+			 	Camelot.DeclareSection(TEXT("Windows"), 10) &&
+		   	    Camelot.DeclarePref(TEXT("Windows"), TEXT("UnzoomOnNewView"),
+		   					   	   &CCamView::UnzoomOnNewView, FALSE, TRUE) &&
+				Camelot.DeclarePref(TEXT("Windows"), TEXT("ZoomSingleView"),
+		   					   	   &CCamView::ZoomSingleView, FALSE, TRUE) &&
+#endif
+				TRUE ;
+
+	return ok;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -1862,6 +1918,7 @@ MouseOverRulerHit CCamView::IsMouseOverRuler()
 
 void CCamView::OnLButtonDown( wxMouseEvent &event )
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 //TRACEUSER("Phil", _T("OnLButtonDown\n"));
 	INT32 nID = event.GetId();
@@ -1928,6 +1985,7 @@ void CCamView::OnLButtonDown( wxMouseEvent &event )
 
 void CCamView::OnMButtonDown( wxMouseEvent &event )
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -1969,6 +2027,7 @@ void CCamView::OnMButtonDown( wxMouseEvent &event )
 
 void CCamView::OnRButtonDown( wxMouseEvent &event )
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2012,6 +2071,7 @@ void CCamView::OnRButtonDown( wxMouseEvent &event )
 
 void CCamView::OnLButtonUp(wxMouseEvent &event)
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 //TRACEUSER("Phil", _T("OnLButtonUp\n"));
 	INT32 nID = event.GetId();
@@ -2047,6 +2107,7 @@ void CCamView::OnLButtonUp(wxMouseEvent &event)
 
 void CCamView::OnMButtonUp(wxMouseEvent &event)
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2081,6 +2142,7 @@ void CCamView::OnMButtonUp(wxMouseEvent &event)
 
 void CCamView::OnRButtonUp( wxMouseEvent &event )
 {	
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2114,6 +2176,7 @@ void CCamView::OnRButtonUp( wxMouseEvent &event )
 
 void CCamView::OnLButtonDblClk(wxMouseEvent &event)
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2167,6 +2230,7 @@ void CCamView::OnLButtonDblClk(wxMouseEvent &event)
 
 void CCamView::OnMButtonDblClk(wxMouseEvent &event)
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2203,6 +2267,7 @@ void CCamView::OnMButtonDblClk(wxMouseEvent &event)
 
 void CCamView::OnRButtonDblClk( wxMouseEvent &event )
 {
+	DontSkipNextMouse();
 	// If the event is not from the RenderWindow then skip it
 	INT32 nID = event.GetId();
 	if (nID != WID_RENDERWINDOW)
@@ -2231,6 +2296,7 @@ void CCamView::OnRButtonDblClk( wxMouseEvent &event )
 
 void CCamView::OnMouseWheel( wxMouseEvent &event )
 {
+	DontSkipNextMouse();
 	HandleMouseWheelEvent( event );
 }
 
@@ -2288,6 +2354,79 @@ void CCamView::OnMouseMove( wxMouseEvent &event )
 #endif
 
 	SetCurrentStates();
+
+	wxMouseState WXCMS = ::wxGetMouseState();
+	wxPoint CurrentMousePosition(WXCMS.GetX(), WXCMS.GetY());
+	// Make a number representing the current button and control key state - we don't use this for anything
+	// other than seeing whether it has changed
+	INT32 CurrentMouseState =
+		(WXCMS.LeftDown()	?1:0) |
+		(WXCMS.MiddleDown()	?2:0) |
+		(WXCMS.RightDown()	?4:0) |
+		(WXCMS.ControlDown()?8:0) |
+		(WXCMS.ShiftDown()	?16:0) |
+		(WXCMS.AltDown()	?32:0) |
+		(WXCMS.MetaDown()	?64:0);
+#if 0
+	TRACEUSER("amb", _T("CCamView:OnMouseMove XY (%d,%d) was (%d,%d) State %2x was %2x"),
+		CurrentMousePosition.x,
+		CurrentMousePosition.y,
+		m_LastMousePosition.x,
+		m_LastMousePosition.y,
+		CurrentMouseState,
+		m_LastMouseState);
+#endif
+	INT32 CurrentTimestamp = event.GetTimestamp();
+
+	BOOL SkipThis = FALSE;
+	// wxWidgets compliant version of the PeekMessage code
+	if (!DragKeepAccuracy && s_MouseMoveEliminationPeriod)
+	{
+		// What the windows version did was look ahead in the message queue for further
+		// mouse moves. We don't have the luxury of that, so we do something slightly
+		// different, which is that we look at where the mouse pointer has gone.
+		// If it's moved, we know another mouse move event will be generated. So there
+		// is the possibility of ignoring this one. We do this if the mouse BUTTON
+		// state has not changed, the new mouse position is over the current window,
+		// and some external event hasn't happened (normally a keypress)
+
+		// If this isn't a motion event or the button state has changed, don't skip this
+		// event, or the next pure move
+		if ((event.GetEventType() != wxEVT_MOTION) || (CurrentMouseState != m_LastMouseState))
+		{
+			// Don't skip the next mouse event and don't skip this one
+			m_CouldSkipNextMouse = FALSE;
+		}
+		else
+		{
+			m_CouldSkipNextMouse = TRUE; // next mouse move is a candidate for skipping
+
+			// we know the buttons are in the same position as before (and the modifiers)
+			// and this is solely a motion event - a candidate to be skipped
+			if (m_CouldSkipNextMouse && (CurrentMousePosition != m_LastMousePosition) /*&& (CurrentMousePosition != event.GetPosition())*/)
+			{
+				// OK, we know the mouse is moving. Insert a point every 20ms regardless
+				if ((CurrentTimestamp - m_LastMouseUsedTimestamp) < s_MouseMoveEliminationPeriod)
+				{
+					SkipThis = TRUE;
+				}
+			}
+		}
+	}
+	else
+	{
+		m_CouldSkipNextMouse = FALSE;
+	}
+
+	m_LastMouseState = CurrentMouseState;
+	m_LastMousePosition = CurrentMousePosition;
+
+	if (SkipThis)
+	{
+		return;
+	}
+
+	m_LastMouseUsedTimestamp = CurrentTimestamp;
 
 PORTNOTE("other","Remove PeekMessage related code")
 #ifndef EXCLUDE_FROM_XARALX
@@ -2773,6 +2912,7 @@ PORTNOTETRACE( "other", "CCamView::OnSize - Removed ruler usage" );
 
 void CCamView::OnDragIdle(wxTimerEvent& event)
 {
+	DontSkipNextMouse();
 	// Ignore if system is disabled
 	if (CCamApp::IsDisabled())
 		return;						     	// If the system is disabled, ignore
@@ -4205,3 +4345,4 @@ BOOL ViewDragTarget::ProcessEvent(DragEventType Event,
 	}
 	return FALSE;
 }
+

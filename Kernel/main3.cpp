@@ -236,8 +236,9 @@ PORTNOTE("other","Removed more initialization")
 			ColourDragInformation::Init() &&
 			BitmapDragInformation::Init() &&
 			InitDiagnosticPrefs() &&			// Get the diagnostic preferences
-			
+#endif			
 			CCamView::ReadViewPrefs() &&
+#ifndef EXCLUDE_FROM_XARALX
 			PrintMonitor::InitPrefs() &&
 
 			BaseBar::DeclarePreferences() &&

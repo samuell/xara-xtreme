@@ -182,6 +182,8 @@ public:
 		return m_pFrame;
 	}
 
+	static BOOL ReadViewPrefs();
+
 ////////////////////////////////////////////////////////////////////////////////
 // Interface to the kernel's view onto a document and MFC's CDocument-derived
 // object.
@@ -401,7 +403,14 @@ protected:
 	BOOL OLERecaptureMouse;				// Used when OLE drags return to the view window - we resume our
 										// drag, and we have to recapture the mouse to recover properly.
 
+	// Mouse move elimination code
+	INT32 m_LastMouseState;
+	wxPoint m_LastMousePosition;
+	INT32 m_LastMouseUsedTimestamp;
+	BOOL m_CouldSkipNextMouse;
 
+public:
+	void DontSkipNextMouse() {m_CouldSkipNextMouse=FALSE;}
 
 // Static functions
 protected:
@@ -435,6 +444,9 @@ protected:
 	static MonotonicTime DragTimer;		// Used to time the drag delay above.
 
 	static INT32 ScrollBarSize;			// Width of the wider of the scroll bars
+
+public:
+	static INT32 s_MouseMoveEliminationPeriod;
 };
 
 

@@ -139,6 +139,8 @@ BEGIN_EVENT_TABLE( CRenderWnd, wxWindow )
 	EVT_MOUSEWHEEL(			CRenderWnd::OnMouseWheel )
 	EVT_SIZE(				CRenderWnd::OnSize)
 	EVT_SET_CURSOR(			CRenderWnd::OnSetCursor )
+	EVT_KEY_DOWN(			CRenderWnd::OnKey)
+	EVT_KEY_UP(				CRenderWnd::OnKey)
 	
 #if defined(__WXGTK__)
 	EVT_ENTER_WINDOW(		CRenderWnd::OnEnter )
@@ -368,6 +370,29 @@ void CRenderWnd::OnMouseMove( wxMouseEvent &event )
 #endif
 }
 
+/*********************************************************************************************
+>	void CRenderWnd::OnKey( wxKeyEvent & event )
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	4 May 2006
+	Inputs:		pointer to the event
+	Outputs:	-
+	Returns:	-
+	Purpose:	THIS DOES NOT PROCESS KEYS. It merely notes a key has been pressed and
+				stops the mouse motion mangler eating the next mouse move
+	Errors:		-
+	Scope:	    Protected
+	SeeAlso:    -
+
+**********************************************************************************************/ 
+
+void CRenderWnd::OnKey( wxKeyEvent & event )
+{
+	if (m_pView)
+		m_pView->DontSkipNextMouse();
+
+	event.Skip(); // Pass the key event on to someone who really wants it.
+}
 
 
 /*********************************************************************************************
