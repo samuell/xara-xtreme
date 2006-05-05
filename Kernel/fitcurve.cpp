@@ -844,7 +844,7 @@ double CurveFitObject::CalcMaxError(INT32 FirstPoint, INT32 LastPoint, FitPoint*
 {
 	double		Distance;
 	double		MaxDist = 0.0;
-	double 		RTotalLength = 1/(Distances[LastPoint] - Distances[FirstPoint]);
+	double 		RTotalLength = 1.0/(Distances[LastPoint] - Distances[FirstPoint]);
 	FitPoint	Point;
 
 	// Start out by putting the split point in the middle of the curve segment

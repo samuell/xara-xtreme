@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "objchge.h"
 #include "nodeblnd.h"
 #include "nodebldr.h"
+#include "ophist.h"
 
 CC_IMPLEMENT_DYNCREATE( OpRetroSmooth, SelOperation )
 
@@ -964,8 +965,6 @@ void OpRetroSmooth::GetOpName(String_256* OpName)
 	
 void OpRetroSmooth::DoRetroSmooth(NodePath* pThisNode, Path* pPath, double smoothacc)
 {
-	PORTNOTETRACE("other","OpRetroSmooth::DoRetroSmooth - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL ok;
 	// remember the selection before the operation
 	if (!DoStartSelOp(FALSE,FALSE))
@@ -1121,7 +1120,6 @@ void OpRetroSmooth::DoRetroSmooth(NodePath* pThisNode, Path* pPath, double smoot
 	//pOrigBlend->forOpRetroSmooth = FALSE;
 	// DoSmoothNodePath(pThisNode,smoothacc),this,ok);
 	End();
-#endif
 }   
 
 
