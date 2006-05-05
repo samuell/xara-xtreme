@@ -228,7 +228,7 @@ protected:
 			BOOL	InitDialog();
 			BOOL	SetUpCallBack();
 	static	TCHAR*	HelpCallbackHandler(wxWindow * Window, UINT32 Item, void *UserData);
-	static	BOOL	PreviewDialog::GetStatusLineText(PreviewDialog *pPrvDlg, UINT32 GadgetID,String_256 *Result);
+	static	BOOL	GetStatusLineText(PreviewDialog *pPrvDlg, UINT32 GadgetID,String_256 *Result);
 			BOOL	DoRegenerateFrames();
 			void	SetPreviewDialogToIdleState(ReDrawInfoType* pExtraInfo);
 	
