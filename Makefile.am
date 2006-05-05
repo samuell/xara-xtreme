@@ -9,7 +9,7 @@ PRECOMPILE_DIR =
 if PRECOMPILE_ENABLE
 	PRECOMPILE_DIR = PreComp
 endif
-SUBDIRS = $(PRECOMPILE_DIR) wxOil Kernel tools wxXtra po
+SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools po
 
 # We clean these here not in the wxOil makefile to prevent a loop
 MOSTLYCLEANFILES=wxOil/xrc/xrc.d wxOil/xrc/xrc.stamp Resources/*

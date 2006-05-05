@@ -327,6 +327,8 @@ bool CCamApp::OnInit()
 
 	TRACET(_T("CCamApp::OnInit first available time to trace"));
 
+	InitPlatform();
+
 	// Initialize resources system
 	if (!CamResource::Init()) return FALSE;
 	// Initialize the art provider - needed for dialogs
