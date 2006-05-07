@@ -12,7 +12,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                 <border>1</border>
                 <option>1</option>
-                <object class="wxStaticText" name="IDC_STATUSTEXT">
+                <object class="wxStaticText" name="IDC_SL_STATUSTEXT">
                     <font>
                         <size>8</size>
                     </font>
@@ -32,7 +32,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
-                <object class="wxGauge" name="IDC_PROGRESSGAUGE">
+                <object class="wxGauge" name="IDC_SL_PROGRESSGAUGE">
                     <size>-1,12</size>
                     <value>50</value>
                     <range>100</range>
@@ -48,7 +48,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
-                <object class="wxCamArtControl" name="IDB_SL_SDRAG0">
+               <object class="wxCamArtControl" name="IDB_SL_SDRAG0">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <optoken>LiveDrag</optoken>
                 </object>
@@ -78,7 +78,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                 <border>1</border>
-                <object class="wxStaticText" name="IDC_SL_MOUSEPOSITION">
+                <object class="wxStaticText" name="IDC_SL_MOUSEPOS">
                     <font>
                         <size>8</size>
                     </font>

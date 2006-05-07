@@ -156,30 +156,6 @@ StatusLine * StatusLine::s_pStatusLine = NULL;
 	Purpose:	Constructor for StatusLine
 *****************************************************************************/
 
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-StatusLine::StatusLine(CCStatusBar* pCCSB)
-{
-	ERROR3IF(pCCSB==NULL,"StatusLine::StatusLine() - pCCStatusBar==NULL");
-	pCCStatusBar=pCCSB;
-
-	// ensure initial updates
-	OldMemory=0;
-	MousePosDP=2;
-	TextTimer.Sample();
-	RenderTimer.Sample();
-	RenderAnimationState=0;
-	MousePosNeedsUpdatingFlag=TRUE;
-	MousePosPaneNeedsResizing=TRUE;
-//	TransparencyNeedsUpdating=TRUE;
-
-	// create a 'snapped' mouse pointer
-	pSnappedCursor = new Cursor(_R(IDCSR_SNAPPED));
-	SnappedCursorID = 0;
-
-}
-
-#else
 StatusLine::StatusLine()
 {
 	// ensure initial updates
@@ -196,8 +172,6 @@ StatusLine::StatusLine()
 	pSnappedCursor = new Cursor(_R(IDCSR_SNAPPED));
 	SnappedCursorID = 0;
 }
-
-#endif
 
 
 /*****************************************************************************
@@ -244,12 +218,6 @@ StatusLine::~StatusLine()
 
 BOOL StatusLine::OnIdle()
 {
-//	FixFPControlRegister();
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::OnIdle() - pCCStatusBar==NULL");
-#endif
-
 	// If the current doc doesn't have a doc view (e.g. it's a clipboard doc), then there's no point
 	// carrying on, because it's not a proper document, hence doen't require up-to-date status bar info.
 	if (DocView::GetSelected() == NULL)
@@ -328,12 +296,6 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 
 BOOL StatusLine::RefreshHelpText()
 {	
-//	FixFPControlRegister();
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::RefreshHelpText() - pCCStatusBar==NULL");
-#endif
-
 	// if drag op in progress, don't slow it down, just exit
 	if (Operation::GetCurrentDragOp())
 		return TRUE;
@@ -428,7 +390,7 @@ PORTNOTE("Statline", "Removed use of GetMousePosAndWindowID to abort snap proces
 		}
 		else
 		{
-PORTNOTE("statline", "Removed use of GetMousePosAndWindowID to abort snap processing")
+PORTNOTE("statline", "Removed use of ControlHelper")
 #if !defined(EXCLUDE_FROM_XARALX)
 			TextValid=ControlHelper::GetStatusLineText(&text,WinID);				// try buttons/bars
 			if (TextValid)
@@ -704,11 +666,6 @@ BOOL StatusLine::UpdateText(String_256* pText, BOOL PrefixSelDesc)
 	PrefixSelDesc = FALSE;	// Never show Selection Description in Viewer
 #endif
 
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::UpdateText() - pCCStatusBar==NULL");
-#endif
-
 	// create a string by concatenating sel desc and help text (as required)
 	String_256 text("");
 	SelRange* pSelection = 0;
@@ -740,13 +697,9 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	
 	if ((IsRestrictedAccessToColourPicker () == FALSE) && (DoControlHelp == TRUE))
 	{
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-		CString MyString;
-		pCCStatusBar->GetPaneText(0, MyString);
-
-		return pCCStatusBar->UpdatePaneText(0,&text,TRUE);
-#endif
+		BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
+		PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
+		return ok;
 	}
 	else
 	{
@@ -797,12 +750,9 @@ BOOL StatusLine::UpdateTextForColourPicker(String_256* pText, BOOL PrefixSelDesc
 	// re-sample time and update status line
 	TextTimer.Sample();
 	
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	return pCCStatusBar->UpdatePaneText(0,&text,TRUE);
-#else
-	return TRUE;
-#endif
+	BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
+	PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
+	return ok;
 }
 
 
@@ -825,10 +775,6 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 BOOL StatusLine::TruncateTextToWidth(String_256* pText, INT32 width)
 {
 	ERROR2IF(       pText==NULL,FALSE,"StatusLine::TruncateTextToPane() - pText==NULL");
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::TruncateTextToPane() - pCCStatusBar==NULL");
-#endif
 
 	// try truncating text at each successive point until it no longer fits the pane then
 	// use the last one that fitted (if text null or no truncation points use whole text)
@@ -883,10 +829,6 @@ BOOL StatusLine::GetMousePosText(String_256* pText, DocCoord MousePos, Spread* p
 {
 	ERROR2IF(       pText==NULL,FALSE,"StatusLine::GetMousePosText() - pText==NULL");
 	ERROR2IF(     pSpread==NULL,FALSE,"StatusLine::GetMousePosText() - pSpread==NULL");
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::GetMousePosText() - pCCStatusBar==NULL");
-#endif
 
 	if (dp == -1)
 		dp = MousePosDP;
@@ -921,10 +863,7 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 
 BOOL StatusLine::SetMousePosPaneWidth(Spread* pSpread)
 {	
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(     pSpread==NULL,FALSE,"StatusLine::SetMousePosPaneWidth() - pSpread==NULL");
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::SetMousePosPaneWidth() - pCCStatusBar==NULL");
 
 	// find/cache number of decimal places required to resolve a pixel with current units & scale
 	INT32 dp=2;
@@ -947,7 +886,8 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 
 	String_256 ZeroChar(_R(IDS_CONVERT_ZERO_CHAR));
 
-	for (INT32 i=0;i<dp;i++)
+	INT32 i;
+	for (i=0;i<dp;i++)
 	{
 		MousePosText += ZeroChar;
 		MousePosText += ZeroChar;
@@ -957,7 +897,12 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	MousePosText += DPSChar;
 	MousePosText += DPSChar;
 
+PORTNOTE("StatusLine", "Removed use of CCStatusBar")
+#ifndef EXCLUDE_FROM_XARALX
 	INT32 MinCoordTextWidth=pCCStatusBar->GetTextWidth(&MousePosText);
+#else
+	INT32 MinCoordTextWidth=100;
+#endif
 	
 	if (MinCoordTextWidth==-1)
 		return FALSE;
@@ -975,19 +920,24 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	MousePosText += DPSChar;
 	MousePosText += DPSChar;
 	
+PORTNOTE("StatusLine", "Removed use of CCStatusBar")
+#ifndef EXCLUDE_FROM_XARALX
 	INT32 MaxCoordTextWidth=pCCStatusBar->GetTextWidth(&MousePosText) ; 
+#else
+	INT32 MaxCoordTextWidth=100;
+#endif
+
 	if (MaxCoordTextWidth==-1)
 		return FALSE;
 	
 // set pane width
+PORTNOTE("StatusLine", "Removed use of CCStatusBar")
+#ifndef EXCLUDE_FROM_XARALX
 	INT32 TextWidth = max(MaxCoordTextWidth,MinCoordTextWidth);
 	if (pCCStatusBar->SetPaneWidth(TextWidth,_R(IDS_SL_MOUSEPOS))==FALSE)
 		return FALSE;
-
-	return ReturnValue;
-#else
-	return TRUE;
 #endif
+	return ReturnValue;
 }
 
 
@@ -1030,9 +980,6 @@ MsgResult StatusLine::Message(Msg* pMsg)
 	}
 
 
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FAIL,"StatusLine::Message() - pCCStatusBar==NULL");
 
 	// if pref units changed, or zoom changed flag mouse pos pane needs resizing
 	if (MESSAGE_IS_A(pMsg,OptionsChangingMsg) /* && ((OptionsChangingMsg*)pMsg)->State==OptionsChangingMsg::NEWUNITS */
@@ -1049,7 +996,7 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 
 	if (MESSAGE_IS_A(pMsg, DocViewMsg) && ((DocViewMsg*)pMsg)->State==DocViewMsg::SELCHANGED)
 	{
-		CMainFrame* pMainFrame = GetMainFrame();
+		CCamFrame* pMainFrame = GetMainFrame();
 		if (pMainFrame)
 		{
 			DocView* pView = ((DocViewMsg*)pMsg)->pNewDocView;
@@ -1103,12 +1050,13 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 			{
 				bState = FALSE;
 			}
-
+PORTNOTE("printing", "Removed SetPrinterColourStatus");
+#ifndef EXCLUDE_FROM_XARALX
 			pMainFrame->SetPrinterColourStatus(bState, &sPlateName);
+#endif
 		}
 
 	}
-#endif
 
 	return StandardBar::Message(pMsg);
 }
@@ -1141,10 +1089,6 @@ BOOL StatusLine::UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread,
 	{
 		ERROR2IF(     pSpread==NULL,FALSE,"StatusLine::UpdateMousePosAndSnap() - pSpread==NULL");
 		ERROR2IF(   pDocCoord==NULL,FALSE,"StatusLine::UpdateMousePosAndSnap() - pDocCoord==NULL");
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-		ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::UpdateMousePosAndSnap() - pCCStatusBar==NULL");
-#endif
 	}
 
 	BOOL ReturnValue=TRUE;
@@ -1153,11 +1097,8 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	String_256 MousePosText("");
 	if (!Blank && GetMousePosText(&MousePosText,*pDocCoord,pSpread)==FALSE)
 		ReturnValue=FALSE;
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	if (pCCStatusBar->UpdatePaneText(_R(IDS_SL_MOUSEPOS),&MousePosText,TRUE)==FALSE)
-		ReturnValue=FALSE;
-#endif
+	ReturnValue &=SetStringGadgetValue(_R(IDC_SL_MOUSEPOS), MousePosText);
+	PaintGadgetNow(_R(IDC_SL_MOUSEPOS));
 
 // WEBSTER - markn 15/1/97
 // No rulers in Webster

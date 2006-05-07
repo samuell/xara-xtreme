@@ -136,12 +136,7 @@ enum RenderState { Rendering,Paused,NotRendering,Animate };
 class StatusLine : public StandardBar
 {
 public:
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	StatusLine(CCStatusBar* pCCSB);
-#else
 	StatusLine();
-#endif
 	~StatusLine();
 	MsgResult Message(Msg* Msg);
 	BOOL OnIdle();
@@ -184,10 +179,6 @@ protected:
 
 protected:
 
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	CCStatusBar*  pCCStatusBar;
-#endif
 	MonotonicTime TextTimer;
 	MonotonicTime RenderTimer;
 	BOOL MousePosPaneNeedsResizing;

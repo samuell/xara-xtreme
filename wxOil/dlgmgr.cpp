@@ -4845,7 +4845,7 @@ void DialogManager::PaintGadgetNow(CWindowID WindowID, CGadgetID Gadget)
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return;
 
-	pGadget->Refresh();
+	pGadget->Update();
 }
 
 
