@@ -97,12 +97,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "ops.h"
-#include "camelot.h"
 
 DECLARE_SOURCE("$Revision$");
 
 #include "stdbars.h"
+#include "statline.h"
+#include "ops.h"
+#include "camelot.h"
 
 CC_IMPLEMENT_DYNCREATE(StandardBar, DialogOp)
 
@@ -291,13 +292,13 @@ BOOL StandardBar::Init()
 
 // Note we can't use the "String for only one copy" feature because we allow multiple instances
 // of this class, provided they are all for different bars (sigh).
-#define RegisterStandardBarOpDescriptor(name) \
+#define RegisterStandardBarOpDescriptor(class, name) \
 	(RegisterOpDescriptor( \
 						0, \
 						_R(IDS_BUTTBAR_M_ ## name ),				/*NORESOURCEFIX*/ \
-						CC_RUNTIME_CLASS(StandardBar), \
+						CC_RUNTIME_CLASS(class), \
 						_T("IDD_BUTTBAR_") _T(#name),		/* Use Dialog ID as Optoken */	/*NORESOURCEFIX*/ \
-						StandardBar::GetState, 				/* GetState					*/ \
+						class::GetState,	 				/* GetState					*/ \
 						0,									/* help ID 					*/ \
 						_R(IDBBL_BAR_ ## name), 			/* Bubble help				*/	/*NORESOURCEFIX*/ \
 						0, 									/* Resource ID 				*/ \
@@ -314,17 +315,18 @@ BOOL StandardBar::Init()
 					))
 
 	return (
-			RegisterStandardBarOpDescriptor(GENERAL) &&
-			RegisterStandardBarOpDescriptor(IMAGESETTING) &&
-			RegisterStandardBarOpDescriptor(WINDOW) &&
-			RegisterStandardBarOpDescriptor(ARRANGE) &&
-			RegisterStandardBarOpDescriptor(EDIT) &&
-			RegisterStandardBarOpDescriptor(FILE) &&
-			RegisterStandardBarOpDescriptor(GALLERIES) &&
-			RegisterStandardBarOpDescriptor(STANDARD) &&
-			RegisterStandardBarOpDescriptor(TOOLBAR) &&
-			RegisterStandardBarOpDescriptor(ANIMATION) &&
-			RegisterStandardBarOpDescriptor(FEATHER) &&
+			RegisterStandardBarOpDescriptor(StandardBar, GENERAL) &&
+			RegisterStandardBarOpDescriptor(StandardBar, IMAGESETTING) &&
+			RegisterStandardBarOpDescriptor(StandardBar, WINDOW) &&
+			RegisterStandardBarOpDescriptor(StandardBar, ARRANGE) &&
+			RegisterStandardBarOpDescriptor(StandardBar, EDIT) &&
+			RegisterStandardBarOpDescriptor(StandardBar, FILE) &&
+			RegisterStandardBarOpDescriptor(StandardBar, GALLERIES) &&
+			RegisterStandardBarOpDescriptor(StandardBar, STANDARD) &&
+			RegisterStandardBarOpDescriptor(StandardBar, TOOLBAR) &&
+			RegisterStandardBarOpDescriptor(StandardBar, ANIMATION) &&
+			RegisterStandardBarOpDescriptor(StandardBar, FEATHER) &&
+			RegisterStandardBarOpDescriptor(StatusLine, STATUS) &&
 			TRUE);
 
 }

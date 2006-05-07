@@ -5139,8 +5139,6 @@ void CColourBar::OnMouseMove(wxMouseEvent& event)
 				StatusLine *pStatusLine = GetApplication()->GetpStatusLine();
 				if (pStatusLine)
 					pStatusLine->UpdateText(&HelpText, STATUSLINE_SELDESC_COLBAR);
-				else
-					TRACE(_T("CColourBar::OnMouseMove() - pStatusLine==NULL"));
 
 //				TRACEUSER("Gerry", _T("CColourBar updating status to '%s'"), (LPCTSTR)HelpText);
 			}

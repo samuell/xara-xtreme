@@ -1631,8 +1631,6 @@ void OpGuideline::UpdateStatusLineAndPointer()
 		StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
 		if (pStatusLine!=NULL)
 			pStatusLine->UpdateText(&Str,STATUSLINE_SELDESC_STATBAR);
-		else
-			ERROR3("OpGuideline::UpdateStatusLineAndPointer() - pStatusLine==NULL");
 	}
 }
 
@@ -2947,9 +2945,7 @@ void OpSpreadOrigin::DoDrag(Spread* pThisSpread,DocCoord PointerPos)
 		String_256 temp(_R(IDS_OPSPREADORIGINDRAG));
 		pStatusLine->UpdateText(&temp,STATUSLINE_SELDESC_STATBAR);
 	}
-	else
-		ERROR3("OpSpreadOrigin::DoDrag() - pStatusLine==NULL");
-
+	
 	// Tell the Dragging system that we need drags to happen
 	StartDrag( DRAGTYPE_DEFERSCROLL );
 }

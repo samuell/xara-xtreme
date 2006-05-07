@@ -222,7 +222,7 @@ wxSize wxCamArtControl::DoGetBestSize() const
 
 void wxCamArtControl::FindBitmap()
 {
-	m_BestSize=(CamArtProvider::Get())->GetSize((ResourceID)GetId(), GetArtFlags(), GetLabel());
+	m_BestSize=(CamArtProvider::Get())->GetSize(GetBitmapId(), GetArtFlags(), GetLabel());
 	return;
 }
 
@@ -247,7 +247,7 @@ void wxCamArtControl::OnPaint(wxPaintEvent & event)
 	wxPaintDC dc(this);
 
 	wxRect rect = GetClientRect();
-	CamArtProvider::Get()->Draw(dc, rect, GetId(), GetArtFlags(), GetLabel());
+	CamArtProvider::Get()->Draw(dc, rect, GetBitmapId(), GetArtFlags(), GetLabel());
 }
 
 
@@ -439,7 +439,7 @@ void wxCamArtControl::Invoke()
 	wxCommandEvent ButtonEvent(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
 	ProcessEvent(ButtonEvent);
 	// If it's attached to an OpDescriptor, we invoke it.
-//	ControlList::Get()->Invoke(this);
+//	ControlList::/*Get*/()->Invoke(this);
 }
 
 /********************************************************************************************

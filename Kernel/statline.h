@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "flags.h"
 #include "camframe.h"
 #include "monotime.h"
+#include "stdbars.h"
 //#include "ed.h"
 
 class Spread;
@@ -132,7 +133,7 @@ enum RenderState { Rendering,Paused,NotRendering,Animate };
 	Purpose:	Encapsulate the status line
 ********************************************************************************************/
 
-class StatusLine : public MessageHandler
+class StatusLine : public StandardBar
 {
 public:
 PORTNOTE("StatusLine", "Removed use of CCStatusBar")
@@ -204,8 +205,12 @@ private:
 	static BOOL restrictStatusLineFunctionsToColourPicker;
 	static BOOL DoControlHelp;								// whether controls are allowed
 															// to display help text (or not)
+	static StatusLine * s_pStatusLine;
 
-	CC_DECLARE_MEMDUMP(StatusLine);              
+public:
+	static StatusLine * Get() {return s_pStatusLine;}
+
+	CC_DECLARE_DYNCREATE(StatusLine);              
 };
 
 #endif  // INC_STATUSLINE

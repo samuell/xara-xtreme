@@ -1190,8 +1190,6 @@ LRESULT ControlHelper::MyWndProc(wxWindow* Window, UINT32 Msg, WPARAM wParam, LP
 					{
 						if (pStatusLine)
 							pStatusLine->UpdateText(&Desc,STATUSLINE_SELDESC_BUTTONS);
-						else
-							ERROR3("ControlHelper::MyWndProc() - GetpStatusLine() failed");
 					}
 				}
 			}

@@ -193,6 +193,7 @@ public:
 					m_ARDelay=500;
 					m_ARRepeat=50;
 					m_AREventPending=FALSE;
+					m_BitmapId=0;
 				}
 
 	// Constructors
@@ -243,7 +244,10 @@ public:
 		}
 
 	wxString GetOpDesc() {return m_OpDesc;}
-	
+
+	const ResourceID GetBitmapId() {return m_BitmapId?m_BitmapId:GetId();}
+	void SetBitmapId(ResourceID r=0) {m_BitmapId=r; NewBitmap();}
+
 protected:
 	wxCamArtControlStyle m_CamArtControlStyle;
 	UINT32 m_Value;
@@ -261,6 +265,8 @@ protected:
 
 	void FindBitmap();
 	CamArtFlags GetArtFlags() {return (CamArtFlags)(m_CamArtControlStyle | m_State | (IsEnabled()?0:CAF_GREYED));}
+
+	ResourceID m_BitmapId;
 
 };
 

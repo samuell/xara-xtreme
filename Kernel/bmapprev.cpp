@@ -997,8 +997,6 @@ void BmapPrevDlg::UpdateStatusBar(UINT32 id)
 		String_256	strStatus(statusTextID);
 		pStatusLine->UpdateText( &strStatus, FALSE );
 	}
-	else
-		ERROR3("pStatusLine == NULL");
 }
 
 

@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 DECLARE_SOURCE("$Revision$");
 
-CC_IMPLEMENT_MEMDUMP(StatusLine, MessageHandler);
+CC_IMPLEMENT_DYNCREATE(StatusLine, StandardBar);
 
 #define new CAM_DEBUG_NEW
 
@@ -146,7 +146,7 @@ const INT32      RenderDelay=200;			// milisecond
 String_256 StatusLine::m_strPrefix(_T(""));
 BOOL StatusLine::restrictStatusLineFunctionsToColourPicker = FALSE;
 BOOL StatusLine::DoControlHelp = TRUE;
-
+StatusLine * StatusLine::s_pStatusLine = NULL;
 
 /*****************************************************************************
 >	StatusLine::StatusLine()
@@ -176,6 +176,7 @@ StatusLine::StatusLine(CCStatusBar* pCCSB)
 	// create a 'snapped' mouse pointer
 	pSnappedCursor = new Cursor(_R(IDCSR_SNAPPED));
 	SnappedCursorID = 0;
+
 }
 
 #else
@@ -213,6 +214,12 @@ StatusLine::~StatusLine()
 	{
 		delete pSnappedCursor;
 		pSnappedCursor=NULL;
+	}
+	if (this == s_pStatusLine)
+	{
+		// Only zap it out if there is a live status line. Status line objects
+		// are temporarily created when invoking bar closure
+		s_pStatusLine = NULL;
 	}
 }
 
@@ -998,6 +1005,31 @@ MsgResult StatusLine::Message(Msg* pMsg)
 {
 //	FixFPControlRegister();
 	ERROR2IF(        pMsg==NULL,FAIL,"StatusLine::Message() - pMsg==NULL");
+
+	if (IS_OUR_DIALOG_MSG(pMsg))
+	{
+		DialogMsg* Msg = (DialogMsg*)pMsg;
+	
+		switch(Msg->DlgMsg)
+		{
+			case DIM_CREATE:
+			{
+				if (s_pStatusLine)
+				{
+					ERROR3("Two status lines - that isn't meant to happen");
+					delete s_pStatusLine;
+				}
+				s_pStatusLine = this;
+			}
+
+			default:
+				break;
+
+		}
+		// Else fall through
+	}
+
+
 PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 #ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pCCStatusBar==NULL,FAIL,"StatusLine::Message() - pCCStatusBar==NULL");
@@ -1078,7 +1110,7 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	}
 #endif
 
-	return OK;
+	return StandardBar::Message(pMsg);
 }
 
 

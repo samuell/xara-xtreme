@@ -240,7 +240,6 @@ BOOL CSnap::Snap(DocCoord* pDocCoord,
 #if !defined(EXCLUDE_FROM_RALPH)
 	// update mouse position in StatusLine (with snapped mouse position)
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-	ERROR3IF(pStatusLine==NULL,"CSnap::Snap() - GetpStatusLine() returned NULL!");
 	if (pStatusLine)
 		pStatusLine->UpdateMousePosAndSnap(pDocCoord,pSpread,pDocView,NonGridSnapped);
 #endif

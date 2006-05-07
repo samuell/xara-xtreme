@@ -380,7 +380,6 @@ void CCStatusBar::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 	if (this!=NULL)
 	{
 		StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-		ERROR3IF(pStatusLine==NULL,"CCStatusBar::OnMouseMove() - pStatusLine==NULL");
 		if (pStatusLine)
 		{
 			INT32 PaneIndex=GetPaneIndexFromPoint(point);
@@ -600,7 +599,6 @@ void CCStatusBar::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 		ControlHelper::DoBubbleHelpOn(GetSafeHwnd(),PaneIndex,BubbleHelpCallBack,this);
 
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-	ERROR3IF(pStatusLine==NULL,"CCStatusBar::OnMouseMove() - pStatusLine==NULL");
 	if (pStatusLine)
 	{
 		String_256 Text("");

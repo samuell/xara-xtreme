@@ -1107,7 +1107,8 @@ PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
 //	TRACEUSER("Gerry", _T("BackgroundRender\n"));
 	// Show the user we are rendering.
 //GAT
-//	GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
+//	if (GetApplication()->GetpStatusLine())
+//		GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
 	GetApplication()->BgRendering = TRUE;
 	
 	// Do the render.
@@ -1118,7 +1119,8 @@ PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
 	// Turn off render indicator if needed.
 	if (GetCount() ==0)
 	{
-//GAT	GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
+//GAT	if (GetApplication()->GetpStatusLine())
+//			GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
 		GetApplication()->BgRendering = FALSE;
 	}
 
@@ -1195,7 +1197,8 @@ PORTNOTE("other","RenderRegionList::ImmediateRender - removed code")
 	// Start the rendering indicator going.
 PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator code" );
 #ifndef EXCLUDE_FROM_XARALX
-	GetApplication()->GetpStatusLine()->SetRenderIndicator(Rendering);
+	if (GetApplication()->GetpStatusLine())
+		GetApplication()->GetpStatusLine()->SetRenderIndicator(Rendering);
 #endif
 
 	while (pRegion != NULL)
@@ -1213,7 +1216,8 @@ PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator co
 			if ( !pView->GetForeBackMode() || bForceImmediate )
 			{
 				// Keep user up to date
-//GAT			GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
+//GAT			if (GetApplication()->GetpStatusLine())
+//GAT				GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
 				//TRACE( _T("Immediate Render now\n"));
 
 				// Render it.
@@ -1229,7 +1233,8 @@ PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator co
 
 	// Disable rendering indicator.
 //GAT
-//	GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
+//	if (GetApplication()->GetpStatusLine())
+//		GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
 }
 
 

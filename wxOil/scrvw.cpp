@@ -3526,7 +3526,6 @@ void ScreenView::OnMouseMove( wxMouseEvent &event )
 #ifndef RALPH
 
 	pStatusLine=GetApplication()->GetpStatusLine();
-	ERROR3IF(pStatusLine==NULL,"ScreenView::OnMouseMove() - GetpStatusLine() returned NULL!");
 	if (pStatusLine)
 		pStatusLine->FlagMousePosNeedsUpdating();
 #endif

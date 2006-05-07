@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<resource>
+    <object class="wxPanel" name="IDD_BUTTBAR_STATUS">
+        <label>Status Bar</label>
+        <title>Status Bar</title>
+        <tooltip>Status Bar</tooltip>
+        <help>Status Bar</help>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <border>1</border>
+                <option>1</option>
+                <object class="wxStaticText" name="IDC_STATUSTEXT">
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxALIGN_LEFT</style>
+                    <label>Nothing selected</label>
+                    <tooltip>Status bar text</tooltip>
+                    <help>Displays the current status</help>
+                </object>
+            </object>
+
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,16</size>
+            </object>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxGauge" name="IDC_PROGRESSGAUGE">
+                    <size>-1,12</size>
+                    <value>50</value>
+                    <range>100</range>
+                </object>
+            </object>
+
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,16</size>
+            </object>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDB_SL_SDRAG0">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <optoken>LiveDrag</optoken>
+                </object>
+            </object>
+
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,16</size>
+            </object>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDB_SL_SNAP">
+                    <camartstyle></camartstyle>
+                    <optoken>SnapIndicator</optoken>
+                </object>
+            </object>
+
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,16</size>
+            </object>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <border>1</border>
+                <object class="wxStaticText" name="IDC_SL_MOUSEPOSITION">
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <size>100,-1</size>
+                    <style>wxALIGN_LEFT</style>
+                    <label> </label>
+                    <tooltip>Mouse position</tooltip>
+                    <help>Displays the current mouse position</help>
+                </object>
+            </object>
+
+        </object>
+    </object>
+</resource>

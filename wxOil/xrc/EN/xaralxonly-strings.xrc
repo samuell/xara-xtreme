@@ -199,6 +199,12 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BAR_STATUS_ONE">
+					<label>That bar is already open</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ANONYMOUSBARTITLE">
 					<label>Anonymous toolbar or gallery</label>
 				</object>
@@ -225,6 +231,12 @@
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_BUTTBAR_M_WINDOW">
 					<label>&amp;Window bar;Toggle window bar</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_BUTTBAR_M_STATUS">
+					<label>&amp;Status bar;Toggle status bar</label>
 				</object>
 			</object>
 			<object class="sizeritem">

@@ -266,12 +266,6 @@ Application::~Application()
 		pDocument = (Document *) Documents.GetHead();
 	}
 
-	if (m_pStatusLine)
-	{
-		delete m_pStatusLine;
-		m_pStatusLine = NULL;
-	}
-
 //	ERROR3IF(DocComponentClasses != NULL,
 //				"Application was not properly de-initialised");
 	if (DocComponentClasses != 0) TRACE( wxT("WARNING: Application was not properly de-initialised\n") );
@@ -490,9 +484,6 @@ PORTNOTE("other","Removed init of stuff that is not supported")
 	DocComponentClasses = new List;
 	if (DocComponentClasses == NULL)
 		return FALSE;
-
-	// Temporary: Remove when Kernel StatusLine is actually created by Oil statusline
-	m_pStatusLine = new StatusLine;
 
 	// Eveything worked (gasp!)
 	return TRUE; 
@@ -1674,20 +1665,7 @@ CCStatusBar* Application::GetpCCStatusBar()
 
 StatusLine* Application::GetpStatusLine()
 {
-PORTNOTE("statusline", "getpStatusLine returning disconnected Kernel StatusLine while there is no Oil version");
-#ifndef EXCLUDE_FROM_XARALX
-	CMainFrame* mfwindow=(CMainFrame*)(AfxGetApp()->m_pMainWnd);
-
-//	ERROR2IF(mfwindow==NULL,NULL,"Application::GetpStatusLinet() - mfwindow==NULL");
-	if (mfwindow==NULL)
-		return NULL;
-
-	return mfwindow->GetpStatusLine();
-#else
-	// This is only temporary
-	return m_pStatusLine;
-
-#endif
+	return StatusLine::Get();
 }
 
 

@@ -202,6 +202,7 @@ BEGIN_EVENT_TABLE( CCamFrame, wxDocMDIParentFrame )
 	EVT_MENU( _R(IDD_BUTTBAR_TOOLBAR),				CCamFrame::OnStandardBar				)
 	EVT_MENU( _R(IDD_BUTTBAR_ANIMATION),			CCamFrame::OnStandardBar				)
 	EVT_MENU( _R(IDD_BUTTBAR_FEATHER),				CCamFrame::OnStandardBar				)
+	EVT_MENU( _R(IDD_BUTTBAR_STATUS),				CCamFrame::OnStandardBar				)
 	
 	EVT_MENU_OPEN(									CCamFrame::OnInitMenuPopup				)
 
@@ -216,6 +217,7 @@ BEGIN_EVENT_TABLE( CCamFrame, wxDocMDIParentFrame )
 	EVT_UPDATE_UI( _R(IDD_BUTTBAR_TOOLBAR),			CCamFrame::OnUpdateStandardBar			)
 	EVT_UPDATE_UI( _R(IDD_BUTTBAR_ANIMATION),		CCamFrame::OnUpdateStandardBar			)
 	EVT_UPDATE_UI( _R(IDD_BUTTBAR_FEATHER),			CCamFrame::OnUpdateStandardBar			)
+	EVT_UPDATE_UI( _R(IDD_BUTTBAR_STATUS),			CCamFrame::OnUpdateStandardBar			)
 
 	EVT_UPDATE_UI( _R(DOCVIEW_ZOOMPREVIOUS),		CCamFrame::OnUpdateZoomPrevious			)
 	EVT_UPDATE_UI( _R(DOCVIEW_QUALITYOUTLINE),		CCamFrame::OnUpdateQualityOutline		)
@@ -353,10 +355,12 @@ bool CCamFrame::Create( wxWindow *pParent, wxWindowID id, const wxString &captio
 
 BOOL CCamFrame::CreateToolbars()
 {
+#if 0
 	// Create the status bar
 	m_pStatusBar = CreateStatusBar();
 	String_256	strStatus( _R(IDS_NO_OBJECTS_SEL) );
 	m_pStatusBar->SetStatusText( strStatus );
+#endif
 	
 	CColourBar* pColourBar = new CColourBar();
 	if (pColourBar)
@@ -384,6 +388,9 @@ BOOL CCamFrame::CreateToolbars()
 
 	wxCommandEvent tbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_TOOLBAR));
 	OnStandardBar(tbe);
+
+	wxCommandEvent sbbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_STATUS));
+	OnStandardBar(sbbe);
 
 	return TRUE;
 }

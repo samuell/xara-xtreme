@@ -850,7 +850,7 @@ PORTNOTE("other","Removed RulerPair usage")
 #endif
 	// update indicator in StatusLine
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-	ERROR3IF(pStatusLine==NULL,"DocView::Init() - GetpStatusLine() returned NULL!");
+
 	if (pStatusLine)
 		pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, DocView::SolidDragging);
 
@@ -1482,7 +1482,7 @@ void DocView::OnNewView()
 
 	// update indicator in StatusLine
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-	ERROR3IF(pStatusLine==NULL,"DocView::Init() - GetpStatusLine() returned NULL!");
+
 	if (pStatusLine)
 		pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, DocView::SolidDragging);
 
@@ -3516,7 +3516,7 @@ BOOL DocView::HandleKeyPress(KeyPress* pKeyPress)
 
 					// update indicator in StatusLine
 					StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-					ERROR3IF(pStatusLine==NULL,"DocView::OnMouseMove() - GetpStatusLine() returned NULL!");
+
 					if (pStatusLine)
 						pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, m_bSolidDrag);
 					break;

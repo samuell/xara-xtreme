@@ -574,9 +574,6 @@ void BitmapExportPreviewDialog::ResetInfo(UINT32 id)
 		StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
 		if (pStatusLine != NULL)
 			pStatusLine->UpdateText(&String_256(StatusTextID),FALSE);
-		else
-			ERROR3("pStatusLine==NULL");
-
 	}
 }
 
@@ -1061,8 +1058,6 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 							if (StatusTextID != 0)
 								pStatusLine->UpdateText(&String_256(StatusTextID),FALSE);
 						}
-						else
-							ERROR3("pStatusLine==NULL");
 
 						// perform the drag operation
 						if (m_CurrentTool == PREVIEW_PUSH_TOOL)

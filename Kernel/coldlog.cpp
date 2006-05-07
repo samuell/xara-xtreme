@@ -1807,11 +1807,10 @@ void ColourEditDlg::EditThisColour(ColourList *NewParentList, IndexedColour *Col
 	OriginalColour = *ResultColour;
 
 	StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
-	ASSERT (pStatusLine);
 
 	if (EditingColour->IsNamed())
 	{
-		if (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+		if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
 		{
 			if (AutoModelChangeN)
 				DisplayModel = OriginalColour.GetColourModel();
@@ -1821,7 +1820,7 @@ void ColourEditDlg::EditThisColour(ColourList *NewParentList, IndexedColour *Col
 	}
 	else
 	{	
-		if (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+		if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
 		{
 			if (AutoModelChange)
 				DisplayModel = OriginalColour.GetColourModel();
@@ -3016,7 +3015,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		case DIM_CANCEL:				// Cancel clicked
 		{
 			StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
-			if (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+			if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
 			{
 				CloseMyself();			// And close the window
 			}
@@ -10092,11 +10091,10 @@ void ColourEditDlg::DoWithParam(OpDescriptor *MyOpDedsc, OpParam *Param)
 	if (EditingColour != NULL)
 	{
 		StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
-		ASSERT (pStatusLine);
 		
 		if (EditingColour->IsNamed())
 		{
-			if (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+			if (!pStatusLine || (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE))
 			{
 				if (AutoModelChangeN)
 				{
@@ -10281,9 +10279,8 @@ BOOL ColourEditDlg::CanYouEditThis(ColourList *ParentList, IndexedColour *Colour
 			// so we can only edit local line and fill colours.
 
 			StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
-			ASSERT (pStatusLine);
 
-			if (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+			if (!pStatusLine || (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE))
 			{
 				// Get the current line/fill colours, and see if they match the colour we were asked for
 				DocColour DocColourToCheck;

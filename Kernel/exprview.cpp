@@ -634,7 +634,8 @@ BOOL ExpressView::DoRender(CDC* pDC, DocRect drClip, const DocRect& BitmapSize,
 	{
 #ifndef RALPH
 		// Start the rendering indicator going.
-		GetApplication()->GetpStatusLine()->SetRenderIndicator(Rendering);
+		if (GetApplication()->GetpStatusLine())
+			GetApplication()->GetpStatusLine()->SetRenderIndicator(Rendering);
 #endif
 		// Render it.
 		Error::RenderThreadIn();		// Make errors close window
@@ -643,7 +644,8 @@ BOOL ExpressView::DoRender(CDC* pDC, DocRect drClip, const DocRect& BitmapSize,
 
 #ifndef RALPH
 		// Disable rendering indicator.
-		GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
+		if (GetApplication()->GetpStatusLine())
+			GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
 #endif
 		bSuccessful = TRUE;
 	}

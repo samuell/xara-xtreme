@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */        
 
 #ifndef INC_STDBARS
-#define INC_STBARS
+#define INC_STDBARS
     
 #include "undoop.h"
 #include "opdesc.h"   

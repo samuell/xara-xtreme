@@ -887,6 +887,7 @@ wxMDIChildFrame *CCamApp::CreateChildFrame(wxDocument *doc, wxView *view)
 //#endif
 
 
+	other_menu->Append( _R(IDD_BUTTBAR_STATUS),				_T("Status Bar"			"\tHmmm"), wxT(""),wxITEM_CHECK  );
 	other_menu->Append( _R(IDD_BUTTBAR_GENERAL),			_T("General Bar"		"\tHmmm"), wxT(""),wxITEM_CHECK );
 	other_menu->Append( _R(IDD_BUTTBAR_IMAGESETTING),		_T("ImageSetting Bar"	"\tHmmm"), wxT(""),wxITEM_CHECK  );
 	other_menu->Append( _R(IDD_BUTTBAR_WINDOW),				_T("Window Bar"			"\tHmmm"), wxT(""),wxITEM_CHECK  );

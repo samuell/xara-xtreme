@@ -643,7 +643,8 @@ public:
 	// Methods to allow you to set the bitmaps associated with a control
 	static void SetGadgetBitmaps(CWindowID DialogWnd, CGadgetID Gadget, UINT32 Bitmap1, UINT32 Bitmap2);
 	static void SetGadgetBitmaps(CWindowID DialogWnd, CGadgetID Gadget, const CGadgetImageList& images);
-	
+	static void SetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget, ResourceID Bitmap);
+
 	/* specific to the cc_BitmapButton control, allows you to specify both 
 	selected and unselected bitmaps */
 	static void SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget, 

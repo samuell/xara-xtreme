@@ -145,6 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartctl.h"
 #include "osrndrgn.h"
 #include "dlgtypes.h"
+#include "statline.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -339,21 +340,26 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		// of stuff to be specified. Or try and retrieve it from the DialogBarOp or similar. Anyway, for now
 		// give it some default parameters
 		wxPaneInfo paneinfo;
+		paneinfo.DestroyOnClose(FALSE);
 		if (DlgOp->IsABar())
-		{
-			paneinfo.ToolbarPane().Fixed().DestroyOnClose(FALSE);
-			if (DlgOp->IsVertical())
+		{			
+			if (DlgOp->IsKindOf(CC_RUNTIME_CLASS(StatusLine)))
+				paneinfo.Bottom().Layer(1).Row(2).LeftDockable(FALSE).RightDockable(FALSE).Floatable(FALSE).Movable(FALSE).Gripper(FALSE).CaptionVisible(FALSE).PaneBorder(FALSE);
+			else	
 			{
-				paneinfo.Left().Layer(0).GripperTop().TopDockable(FALSE).BottomDockable(FALSE);
-			}
-			else
-			{
-				paneinfo.Top().Layer(1).Row(2).LeftDockable(FALSE).RightDockable(FALSE);
+				paneinfo.ToolbarPane().Fixed();
+				if (DlgOp->IsVertical())
+				{
+					paneinfo.Left().Layer(0).GripperTop().TopDockable(FALSE).BottomDockable(FALSE);
+				}
+				else
+				{
+					paneinfo.Top().Layer(1).Row(2).LeftDockable(FALSE).RightDockable(FALSE);
+				}
 			}
 		}
 		else
 		{
-			paneinfo.DestroyOnClose(FALSE);
 			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float();
 		}
 
@@ -1659,6 +1665,34 @@ void DialogManager::SetGadgetBitmaps(CWindowID WindowID, CGadgetID Gadget, UINT3
 #endif
 }
 
+/********************************************************************************************
+
+>	void DialogManager::SetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget,
+										ResourceID Bitmap)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	07/05/2006
+	Inputs:		WindowID - Dialog box window identifier
+				Gadget - Identifier of the gadget
+				Bitmap - The resourse ID of the bitmap, or 0 for default;
+	Purpose:	This function will set the bitmaps associated with a gadget.
+
+				This works only for bitmap buttons
+
+********************************************************************************************/
+
+void DialogManager::SetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget, ResourceID Bitmap)
+{
+	wxWindow* pGadget = GetGadget(WindowID, Gadget);
+	if (!pGadget) return;
+
+	if ( pGadget->IsKindOf(CLASSINFO(wxCamArtControl))
+		)
+	{
+		((wxCamArtControl *)pGadget)->SetBitmapId(Bitmap);
+		pGadget->Refresh();
+	}
+}
 
 /********************************************************************************************
 

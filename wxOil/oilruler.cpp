@@ -659,8 +659,6 @@ void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
 		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
 	}
-	else
-		ERROR3("OILRuler::OnMouseMove() - pStatusLine==NULL");
 
 	OldMousePos = MousePos;
 }
@@ -1782,8 +1780,6 @@ void OriginGadget::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
 		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
 	}
-	else
-		ERROR3("OriginGadget::OnMouseMove() - pStatusLine==NULL");
 
 	OldMousePos = MousePos;
 }
@@ -2156,8 +2152,6 @@ void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
 		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
 	}
-	else
-		ERROR3("LegendLabel::OnMouseMove() - pStatusLine==NULL");
 
 	OldMousePos = MousePos;
 }
