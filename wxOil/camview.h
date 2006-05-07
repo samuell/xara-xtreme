@@ -249,7 +249,6 @@ public:
 	void	OnMouseWheel( wxMouseEvent &event );
 	void	OnScroll( wxScrollEvent &event);
 	void	OnDragIdle( wxTimerEvent &event);		// OnTimer(DragIdleID)
-	void	OnKeyEvent( wxKeyEvent& event );
 
 	void	OnSetCursor( wxSetCursorEvent& event );
 

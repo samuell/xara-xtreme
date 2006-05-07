@@ -107,7 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "csrstack.h"
 
 #include "rendwnd.h"
-#include "keypress.h"
 #include "docview.h"
 #include "prntview.h"
 #include "osrndrgn.h"
@@ -148,9 +147,6 @@ BEGIN_EVENT_TABLE( CCamView, wxView )
 	EVT_SIZE(CCamView::OnSize)
 	EVT_SCROLL(CCamView::OnScroll)
 	EVT_TIMER(DragIdleID, CCamView::OnDragIdle)
-
-	EVT_KEY_UP(			CCamView::OnKeyEvent )
-	EVT_KEY_DOWN(		CCamView::OnKeyEvent )
 END_EVENT_TABLE()
 
 /*********************************************************************************************
@@ -2993,36 +2989,6 @@ void CCamView::OnDragIdle(wxTimerEvent& event)
 			}
 		}
 	}
-}
-
-
-/*********************************************************************************************
->	void CCamView::OnKeyEvent(wxKeyEvent& event)
-
-	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
-	Created:	05/05/06
-	Inputs:		wxKeyEvent&		event - The event object
-	Outputs:	-
-	Returns:	-
-	Purpose:	Forward the keypress event to the central key handler
-	Errors:		-
-	Scope:		Protected
-	SeeAlso:	
-**********************************************************************************************/ 
-
-void CCamView::OnKeyEvent( wxKeyEvent &event )
-{
-	// Make sure the kernel knows which view/doc the event applies to, if any.
-	if( NULL != Document::GetSelected() )
-		Document::GetSelected()->SetCurrent();
-	if( NULL != DocView::GetSelected() )
-		DocView::GetSelected()->SetCurrent();
-
-	// Process keyboard messages
-	if( !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( &event ) )
-		return;
-	
-	event.Skip();
 }
 
 /*********************************************************************************************

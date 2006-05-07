@@ -1618,6 +1618,9 @@ BOOL KeyPress::TranslateMessage(wxKeyEvent* pMsg)
 	if (KeyDown || KeyUp)
 		ControlHelper::BubbleHelpDisable();
 #endif
+	
+	TRACEUSER( "jlh92", _T("TM - %s\n"), wxEVT_KEY_DOWN == pMsg->GetEventType() ? _T("KDN") :
+		wxEVT_KEY_UP == pMsg->GetEventType() ? _T("KUP") : _T("K??") );
 
 	// Normal key processing.
 	KeyPress* pKeyPress;

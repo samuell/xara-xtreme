@@ -107,8 +107,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "palman.h"
 #include "ccdc.h"
 //#include "prncamvw.h"
+#include "docview.h"
 #include "camview.h"
 #include "camframe.h"
+#include "keypress.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -373,13 +375,13 @@ void CRenderWnd::OnMouseMove( wxMouseEvent &event )
 /*********************************************************************************************
 >	void CRenderWnd::OnKey( wxKeyEvent & event )
 
-	Author:		Alex Bligh <alex@alex.org.uk>
-	Created:	4 May 2006
-	Inputs:		pointer to the event
+	Author:		Luke_Hart <lukeh@xara.com>
+	Created:	7 May 2006
+	Inputs:		reference to the event
 	Outputs:	-
 	Returns:	-
-	Purpose:	THIS DOES NOT PROCESS KEYS. It merely notes a key has been pressed and
-				stops the mouse motion mangler eating the next mouse move
+	Purpose:	This now the main keypress handling function. It also notes a key has been 
+				pressed and stops the mouse motion mangler eating the next mouse move.
 	Errors:		-
 	Scope:	    Protected
 	SeeAlso:    -
@@ -388,8 +390,19 @@ void CRenderWnd::OnMouseMove( wxMouseEvent &event )
 
 void CRenderWnd::OnKey( wxKeyEvent & event )
 {
+	// This is Alex Blighs (alex@alex.org.uk) mouse skip inhibition code
 	if (m_pView)
 		m_pView->DontSkipNextMouse();
+	
+	// Make sure the kernel knows which view/doc the event applies to, if any.
+	if( NULL != Document::GetSelected() )
+		Document::GetSelected()->SetCurrent();
+	if( NULL != DocView::GetSelected() )
+		DocView::GetSelected()->SetCurrent();
+
+	// Process keyboard messages
+	if( !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( &event ) )
+		return;
 
 	event.Skip(); // Pass the key event on to someone who really wants it.
 }
