@@ -339,6 +339,9 @@ public:
 					 /*HINSTANCE SubInstance, */ CDlgResID SubDlgID, 
 						CDlgMode Mode = MODELESS, INT32 OpeningPage = -1, CWindowID ParentWnd = NULL);
 private:
+
+	static void CreateRecursor(wxWindow * pwxWindow);
+
 	// Creates a DialogBarOp
 	static BOOL CreateBar(DialogBarOp* DlgOp);
 	static wxWindow* CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage);

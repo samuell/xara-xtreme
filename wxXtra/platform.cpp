@@ -8,31 +8,52 @@
 
 #include "platform.h"
 
-#if defined( __WXGTK__ )
+wxPlatformDependent * wxPlatformDependent::s_PlatformDependent = NULL;
+IMPLEMENT_DYNAMIC_CLASS(wxPlatformDependent, wxObject);
 
+#if defined( __WXGTK__ )
 #include <gtk/gtk.h>
+#endif
 
 // Platform specific Init code
-void InitPlatform()
+bool wxPlatformDependent::Init(wxClassInfo * pClassInfo)
 {
-    gtk_rc_parse_string("\n"
-                        "       style \"gtk-scale-blip-style\"\n"
-                        "       {\n"
-                        "               GtkScale::slider-length=13\n"
-                        "       }\n"
-                        "\n"
-                        "       widget_class \"*.GtkHScale\" style \"gtk-scale-blip-style\"\n"
-                        "       widget_class \"*.GtkVScale\" style \"gtk-scale-blip-style\"\n"
-                        "\n");
+    if (!pClassInfo)
+        pClassInfo = CLASSINFO(wxPlatformDependent);
+	wxASSERT(pClassInfo != NULL);
+	wxASSERT(pClassInfo->IsKindOf(CLASSINFO(wxPlatformDependent)));
+    wxASSERT(s_PlatformDependent == NULL);
+    s_PlatformDependent = (wxPlatformDependent *) pClassInfo->CreateObject();
+    wxASSERT(s_PlatformDependent != NULL);
+    if (!s_PlatformDependent) return false;
 
+    Get()->Initialise();
+	return true;
+}
+
+// Deinit static function
+void wxPlatformDependent::DeInit()
+{
+    wxASSERT(s_PlatformDependent != NULL);
+    Get()->Deinitialise();
+    delete (s_PlatformDependent);
+    s_PlatformDependent = NULL;
+}
+
+// Platform dependent stuff starts here
+
+#if defined( __WXGTK__ )
+void wxPlatformDependent::ParseGtkRcString(char * rcstring)
+{
+    gtk_rc_parse_string(rcstring);
 	return;
 }
 
-#else
-
-void InitPlaform()
+void wxPlatformDependent::SetGtkWidgetName(wxWindow * pwxWindow, char * name)
 {
-	return;
+    gtk_widget_set_name(pwxWindow->m_widget, name);
+    return;
 }
 
 #endif
+

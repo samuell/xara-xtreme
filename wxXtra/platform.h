@@ -11,6 +11,35 @@
 
 #include <wx/wx.h>
 
-void InitPlatform();
+// This is an interface class which allows use of platform dependent functions
+// without the user having to include any platform dependent includes.
+
+class wxPlatformDependent : public wxObject
+{
+public:
+    static bool Init(wxClassInfo * pClassInfo = NULL);
+
+    static void DeInit();
+
+private:
+    static wxPlatformDependent * s_PlatformDependent;
+
+public:
+    static wxPlatformDependent * Get() {return s_PlatformDependent;}
+
+protected:
+    virtual void Initialise() {} // To override
+    virtual void Deinitialise() {} // To override
+
+public:
+    virtual void InitWindow(wxWindow * pwxWindow) {} // To override
+
+#if defined( __WXGTK__ )
+    virtual void ParseGtkRcString(char * rcstring);
+    virtual void SetGtkWidgetName(wxWindow * pwxWindow, char * name);
+#endif
+
+	DECLARE_DYNAMIC_CLASS(wxPlatformDependent);
+};
 
 #endif // __WXXTRA_PLATFORM_H

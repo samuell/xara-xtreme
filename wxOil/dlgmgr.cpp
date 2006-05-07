@@ -295,6 +295,8 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 			pDialogWnd = wxXmlResource::Get()->LoadDialog((wxWindow *)ParentWnd, pDialogName);
 	}
 
+	CreateRecursor(pDialogWnd);
+
 	ERROR1IF(pDialogWnd == NULL, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
 	pDialogWnd->Hide();
 	CamArtProvider::Get()->EnsureChildBitmapsLoaded(pDialogWnd);
@@ -390,6 +392,37 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 #endif
 
 	return ok;
+}
+
+/********************************************************************************************
+
+>	static void DialogManager::CreateRecursor(wxWindow * pwxWindow)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		pWindow - pointer to window to process
+	Outputs:	None
+	Returns:	None
+	Purpose:	Initialize platform dependent resources
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void DialogManager::CreateRecursor(wxWindow * pwxWindow)
+{
+	// Process this one
+	wxPlatformDependent::Get()->InitWindow(pwxWindow);
+
+	// Now process children if any
+	wxWindowList::Node * pNode = pwxWindow->GetChildren().GetFirst();
+	while (pNode)
+	{
+		CreateRecursor(pNode->GetData());
+		pNode = pNode->GetNext();
+	}
+	return;
 }
 
 

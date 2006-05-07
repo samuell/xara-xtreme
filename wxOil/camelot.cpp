@@ -125,6 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 #include "ctrllist.h"
 #include "cartctl.h"
+#include "camplatform.h"
 //
 // Define FILELIST for recent file list on file menu.
 // Note that this currently seems to be rather unreliable.
@@ -327,11 +328,10 @@ bool CCamApp::OnInit()
 
 	TRACET(_T("CCamApp::OnInit first available time to trace"));
 
-	InitPlatform();
-
 	// Initialize resources system
 	if (!CamResource::Init()) return FALSE;
 	// Initialize the art provider - needed for dialogs
+	wxPlatformDependent::Init(CLASSINFO(CamPlatformDependent));
 	if (!CamArtProvider::Init()) return FALSE;
 	// We need this pretty early so we can handle ERROR boxes etc
 	if (!DialogEventHandler::Init()) return FALSE;
@@ -601,6 +601,7 @@ PORTNOTE("other","Removed GDI+, filelist and profilename support")
 	DialogEventHandler::DeInit();
 	// Kill of art provider
 	CamArtProvider::DeInit();
+	wxPlatformDependent::DeInit();
 	// Kill of resources
 	CamResource::DeInit();
 
