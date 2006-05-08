@@ -106,6 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/config.h>
 #include <wx/dcbuffer.h>
 #include <wx/display.h>
+#include <wx/dir.h>
 #include <wx/docmdi.h>
 #include <wx/docview.h>
 #include <wx/event.h>
