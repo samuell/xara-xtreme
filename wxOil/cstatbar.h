@@ -167,8 +167,6 @@ static StatusBarPaneData StatusLineData2[] =
 };
 
 
-// render pane animation (could be in statline.cpp but kept here next to pane defn)
-static UINT32 RenderAnimation[] = { _R(IDB_SL_REND1), _R(IDB_SL_REND2), _R(IDB_SL_REND3) };
 
 /*****************************************************************************
 >	class	CCStatusBar : public CStatusBar

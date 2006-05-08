@@ -2134,6 +2134,23 @@ void DialogOp::SetGadgetBitmap(CGadgetID Gadget, ResourceID Bitmap)
 	DialogManager::SetGadgetBitmap(GetReadWriteWindowID(), Gadget, Bitmap);
 }
 
+/********************************************************************************************
+
+>	ResourceID DialogOp::GetGadgetBitmap(CGadgetID Gadget)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	07/05/2006
+	Inputs:		GadgetID - The gadget to set the bitmaps of
+				Bitmap - The ID of the bitmap
+	Purpose:	Calls the dialog manager to set the bitmaps of the gadget
+
+********************************************************************************************/
+
+ResourceID DialogOp::GetGadgetBitmap(CGadgetID Gadget)
+{
+	// Call the dialog Manager
+	return DialogManager::GetGadgetBitmap(GetReadWriteWindowID(), Gadget);
+}
 
 
 /********************************************************************************************

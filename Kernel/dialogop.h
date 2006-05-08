@@ -434,6 +434,7 @@ public:
 	void SetGadgetBitmaps(CGadgetID GadgetID, UINT32 Bitmap1, UINT32 Bitmap2);
 	void SetGadgetBitmaps(CGadgetID GadgetID, const CGadgetImageList& imagelist);
 	void SetGadgetBitmap(CGadgetID Gadget, ResourceID Bitmap);
+	ResourceID GetGadgetBitmap(CGadgetID Gadget);
 	UINT32 GetGadgetImageCount(CGadgetID);
 	
 	// DY 23/9/99 allows you to specify indexes within a bitmap strip

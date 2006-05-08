@@ -144,7 +144,6 @@ public:
 	BOOL UpdateTextForColourPicker(String_256* ptext, BOOL PrefixSelDesc=TRUE);
 	BOOL UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread, DocView* pDocView, BOOL Snapped);
 	BOOL UpdateSolidDragIndicator(BOOL bSolidAllowed, BOOL bSolid);
-	BOOL PaneDoubleClick(INT32 PaneID);
 	BOOL SetRenderIndicator(RenderState Action);
 	void FlagMousePosNeedsUpdating() { MousePosNeedsUpdatingFlag=TRUE; };
 	BOOL MousePosNeedsUpdating() { return MousePosNeedsUpdatingFlag; };

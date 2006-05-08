@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "spread.h"
 //#include "ctrlhelp.h"
 #include "app.h"
-//#include "statline.h"
+#include "statline.h"
 //#include "dragmgr.h"
 //#include "prncamvw.h"
 #include "menuops.h"
@@ -1106,9 +1106,8 @@ PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
 
 //	TRACEUSER("Gerry", _T("BackgroundRender\n"));
 	// Show the user we are rendering.
-//GAT
-//	if (GetApplication()->GetpStatusLine())
-//		GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
+	if (GetApplication()->GetpStatusLine())
+		GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
 	GetApplication()->BgRendering = TRUE;
 	
 	// Do the render.
@@ -1119,8 +1118,8 @@ PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
 	// Turn off render indicator if needed.
 	if (GetCount() ==0)
 	{
-//GAT	if (GetApplication()->GetpStatusLine())
-//			GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
+		if (GetApplication()->GetpStatusLine())
+			GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
 		GetApplication()->BgRendering = FALSE;
 	}
 
@@ -1195,11 +1194,8 @@ PORTNOTE("other","RenderRegionList::ImmediateRender - removed code")
 	RenderRegion *pRegion = (RenderRegion *) GetHead();
 
 	// Start the rendering indicator going.
-PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator code" );
-#ifndef EXCLUDE_FROM_XARALX
 	if (GetApplication()->GetpStatusLine())
 		GetApplication()->GetpStatusLine()->SetRenderIndicator(Rendering);
-#endif
 
 	while (pRegion != NULL)
 	{
@@ -1216,8 +1212,8 @@ PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator co
 			if ( !pView->GetForeBackMode() || bForceImmediate )
 			{
 				// Keep user up to date
-//GAT			if (GetApplication()->GetpStatusLine())
-//GAT				GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
+			if (GetApplication()->GetpStatusLine())
+				GetApplication()->GetpStatusLine()->SetRenderIndicator(Animate);
 				//TRACE( _T("Immediate Render now\n"));
 
 				// Render it.
@@ -1232,9 +1228,9 @@ PORTNOTE(Other, "RenderRegionList::ImmediateRender - removed render indicator co
 	}
 
 	// Disable rendering indicator.
-//GAT
-//	if (GetApplication()->GetpStatusLine())
-//		GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
+
+	if (GetApplication()->GetpStatusLine())
+		GetApplication()->GetpStatusLine()->SetRenderIndicator(NotRendering);
 }
 
 

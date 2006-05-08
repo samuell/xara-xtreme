@@ -155,7 +155,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bubbleid.h"
 #include "filters.h"
 #include "keypress.h"
-#include "statline.h"
+
 
 // for shadow node hit-testing 
 #include "nodecont.h"
@@ -223,6 +223,7 @@ CC_IMPLEMENT_DYNAMIC(DocView, View)
 CC_IMPLEMENT_DYNAMIC(DocViewMsg, Msg)
 CC_IMPLEMENT_DYNCREATE(OpToggleFore, Operation)
 CC_IMPLEMENT_DYNCREATE(OpToggleScroll, Operation)
+CC_IMPLEMENT_DYNCREATE(OpToggleSolidDrag, Operation)
 
 
 #define new CAM_DEBUG_NEW
@@ -849,10 +850,7 @@ PORTNOTE("other","Removed RulerPair usage")
 	ERROR2IF(pRulerPair==NULL,FALSE,"DocView::Init() - failed to create RulerPair");
 #endif
 	// update indicator in StatusLine
-	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-
-	if (pStatusLine)
-		pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, DocView::SolidDragging);
+	DialogBarOp::SetSystemStateChanged();
 
 	return TRUE;
 }
@@ -1480,11 +1478,7 @@ void DocView::OnNewView()
 		}
 	}
 
-	// update indicator in StatusLine
-	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-
-	if (pStatusLine)
-		pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, DocView::SolidDragging);
+	DialogBarOp::SetSystemStateChanged();
 
 	// Change the View State so that it is no longer marked as new
 PORTNOTE("other","Removed ViewState usage")
@@ -3515,10 +3509,7 @@ BOOL DocView::HandleKeyPress(KeyPress* pKeyPress)
 					pCurrentDragOp->DragModeChanged(m_bSolidDrag);
 
 					// update indicator in StatusLine
-					StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
-
-					if (pStatusLine)
-						pStatusLine->UpdateSolidDragIndicator(m_bSolidDragSupported, m_bSolidDrag);
+					DialogBarOp::SetSystemStateChanged();
 					break;
 				}
 			}
@@ -5799,4 +5790,135 @@ BOOL OpToggleScroll::Init()
 #else
 	return FALSE;
 #endif
+}
+
+/********************************************************************************************
+
+>	OpToggleSolidDrag::OpToggleSolidDrag() : Operation()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Constructs an OpToggleSolidDrag object.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+OpToggleSolidDrag::OpToggleSolidDrag() : Operation()
+{
+
+}
+
+
+
+/********************************************************************************************
+
+>	OpToggleSolidDrag::~OpToggleSolidDrag()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Destructs an OpToggleSolidDrag object.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+OpToggleSolidDrag::~OpToggleSolidDrag()
+{
+	// Empty
+}
+
+
+
+/********************************************************************************************
+
+>	void OpToggleSolidDrag::Do(OpDescriptor*)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Inputs:		Pointer to Operation Descriptor
+	Outputs:	-
+	Returns:	-
+	Purpose:	Actually "DO" a ToggleFore operation.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void OpToggleSolidDrag::Do(OpDescriptor*)
+{
+	DocView::SolidDragging=!DocView::SolidDragging;
+	End();
+}
+
+
+
+/********************************************************************************************
+
+>	OpState OpToggleSolidDrag::GetState(String_256* UIDescription, OpDescriptor*)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Inputs:		Pointer to Operation Descriptor
+				Text Description
+	Outputs:	-
+	Returns:	-
+	Purpose:	Find the state of the OpToggleSolidDrag operation.
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+OpState OpToggleSolidDrag::GetState(String_256* UIDescription, OpDescriptor*)
+{
+	// Default to !ticked and greyed
+	OpState blobby(FALSE, TRUE);
+	blobby.Ticked = DocView::SolidDragging;
+	blobby.Greyed = FALSE;
+	return(blobby);
+}
+
+
+/********************************************************************************************
+
+>	BOOL OpToggleSolidDrag::Init()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Create an OpDescriptor for the OpToggleSolidDrag operation
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL OpToggleSolidDrag::Init()	
+{
+	return Operation::RegisterOpDescriptor( 
+											0, 
+											_R(IDS_TOGGLE_SOLIDDRAG),
+											CC_RUNTIME_CLASS(OpToggleSolidDrag), 
+											OPTOKEN_TOGGLESOLIDDRAG,
+											OpToggleSolidDrag::GetState,
+											0,						// help ID
+											0,// _R(IDBBL_FOREBACKGRNDOP),
+											0,						// bitmap ID
+											0,						// control ID
+											SYSTEMBAR_ILLEGAL,		// group bar ID
+											TRUE,
+											FALSE,
+											TRUE,
+											NULL,
+											0,
+											0,
+											TRUE
+										   );
 }

@@ -234,7 +234,8 @@ PORTNOTE("other","Removed Lots of init functions")
 	 		OpUndo::Init() &&					// Register Undo Operation
 			OpRedo::Init() &&					// Register Redo Operation
 			OpToggleFore::Init() &&				// Register Toggle fore/back render Operation
-			OpToggleDoubleBuffer::Init() &&		// Register Toggle proport scrolbar Operation
+			OpToggleDoubleBuffer::Init() &&		// Register Toggle double buffer operation
+			OpToggleSolidDrag::Init() &&		// Register Toggle solid drag operation
 			OpCut::Init() &&					// Register Cut operation
 			OpCopy::Init() &&					// Register Copy operation
 			OpPaste::Init() &&					// Register Paste operation

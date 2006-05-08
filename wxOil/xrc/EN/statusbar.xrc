@@ -50,7 +50,7 @@
                 <border>1</border>
                <object class="wxCamArtControl" name="IDB_SL_SDRAG0">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
-                    <optoken>LiveDrag</optoken>
+                    <optoken>ToggleSolidDrag</optoken>
                 </object>
             </object>
 
@@ -65,7 +65,20 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDB_SL_SNAP">
                     <camartstyle></camartstyle>
-                    <optoken>SnapIndicator</optoken>
+                </object>
+            </object>
+
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,16</size>
+            </object>
+
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDB_SL_RENDN">
+                    <camartstyle></camartstyle>
                 </object>
             </object>
 

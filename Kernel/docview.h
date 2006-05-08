@@ -124,6 +124,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camview.h"
 #include "cursor.h"
 
+#define OPTOKEN_TOGGLESOLIDDRAG		TEXT("ToggleSolidDrag")
+
 class ImportPosition;
 
 // Declare classes so that circular references are resolved and I don't need to include
@@ -681,6 +683,32 @@ public:
 	static OpState	GetState(String_256*, OpDescriptor*);	// Read the state of an operation
 };
 
+
+/********************************************************************************************
+
+>	class OpToggleSolidDrag : public Operation
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14 Mar 2006
+	Purpose:	This class represents the OpToggleSolidDrag operation.
+				Creating an instance of this class and calling its "Do" function will toggle
+				the state of the flag controlling whether double buffering is used for
+				rendering on GTK
+
+********************************************************************************************/
+
+class OpToggleSolidDrag: public Operation
+{
+	CC_DECLARE_DYNCREATE( OpToggleSolidDrag )
+	
+public:
+	OpToggleSolidDrag();											// Constructor
+	~OpToggleSolidDrag();										// Destructor
+
+	static BOOL		Init();									// Register an OpDescriptor
+	void			Do(OpDescriptor*);						// "Do" function
+	static OpState	GetState(String_256*, OpDescriptor*);	// Read the state of an operation
+};
 
 
 

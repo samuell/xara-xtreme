@@ -1696,6 +1696,32 @@ void DialogManager::SetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget, Resour
 
 /********************************************************************************************
 
+>	ResourceID DialogManager::SetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	07/05/2006
+	Inputs:		WindowID - Dialog box window identifier
+				Gadget - Identifier of the gadget
+	Returns:	The resourse ID of the bitmap
+	Purpose:	This function will get the bitmaps associated with a gadget.
+
+********************************************************************************************/
+
+ResourceID DialogManager::GetGadgetBitmap(CWindowID WindowID, CGadgetID Gadget)
+{
+	wxWindow* pGadget = GetGadget(WindowID, Gadget);
+	if (!pGadget) return 0;
+
+	if ( pGadget->IsKindOf(CLASSINFO(wxCamArtControl))
+		)
+	{
+		return ((wxCamArtControl *)pGadget)->GetBitmapId();
+	}
+	return 0;
+}
+
+/********************************************************************************************
+
 >	void DialogManager::SetGadgetBitmaps(CWindowID WindowID, CGadgetID Gadget,
 										const CGadgetImageList& imagelist)
 

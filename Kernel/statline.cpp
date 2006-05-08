@@ -148,6 +148,9 @@ BOOL StatusLine::restrictStatusLineFunctionsToColourPicker = FALSE;
 BOOL StatusLine::DoControlHelp = TRUE;
 StatusLine * StatusLine::s_pStatusLine = NULL;
 
+// render pane animation (could be in statline.cpp but kept here next to pane defn)
+static UINT32 RenderAnimation[] = { _R(IDB_SL_REND1), _R(IDB_SL_REND2), _R(IDB_SL_REND3) };
+
 /*****************************************************************************
 >	StatusLine::StatusLine()
 
@@ -263,14 +266,14 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 		// If this ever appears in retail builds it will have to be rewritten properly (it
 		// isn't internationally portable at the moment).		
 		String_256 StrBuf(TEXT(""));
-		wsprintf(StrBuf, TEXT("%dK"), Memory / 1024);
+		camSnprintf(StrBuf, 256, TEXT("%dK"), Memory / 1024);
 		if (StrBuf.Length()>4)
 			StrBuf.Insert(&String_8(TEXT(",")),StrBuf.Length()-4);
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-		if (!pCCStatusBar->UpdatePaneText(_R(IDS_SL_MEMORY),&StrBuf))
+		BOOL ok = SetStringGadgetValue(_R(IDS_SL_MEMORY),StrBuf);
+		if (ok)
+			PaintGadgetNow(_R(IDS_SL_MEMORY))
+		else
 			ReturnValue=FALSE;
-#endif
 	}
 #endif // _STATUSLINE_MEMORYPANE
 
@@ -288,8 +291,7 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 	Created:	3/1/95
 	Purpose:	refresh the help text pane of the status line
 	Returns:	FALSE if anything fails (see Errors)
-	Errors:		pCCStatusBar==NULL,
-				CCamApp::GetMousePosAndWindowID() fails,
+	Errors:		CCamApp::GetMousePosAndWindowID() fails,
 				pCCStatusBar->UpdatePaneText() fails,
 				UpdateText() fails
 *****************************************************************************/
@@ -302,7 +304,7 @@ BOOL StatusLine::RefreshHelpText()
 
 	BOOL ReturnValue=TRUE;
 	BOOL PrefixSelDesc=STATUSLINE_SELDESC_DEFAULT;
-	String_256 text("");
+	String_256 text(_T(""));
 	BOOL TextValid=FALSE;
 
 	// for new custom colour picker tool ....
@@ -412,14 +414,6 @@ PORTNOTE("StatusLine", "Removed use of ColourPicker")
 				PrefixSelDesc=STATUSLINE_SELDESC_COLBAR;
 #endif
 
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-			if (!TextValid)
-				TextValid=pCCStatusBar->GetStatusLineText(&text,WndPos,WinID);		// try StatusBar
-#endif
-			if (TextValid)
-				PrefixSelDesc=STATUSLINE_SELDESC_STATBAR;
-
 PORTNOTE("StatusLine", "Removed use of PreviewDlg")
 #ifndef EXCLUDE_FROM_XARALX
 			if (!TextValid)
@@ -495,7 +489,7 @@ PORTNOTE("StatusLine", "Removed use of Galleries")
 
 	// actually update the text
 	if (!TextValid)
-		text="";
+		text=_T("");
 	if (!UpdateText(&text,PrefixSelDesc))
 		ReturnValue=FALSE;
 
@@ -970,6 +964,7 @@ MsgResult StatusLine::Message(Msg* pMsg)
 					delete s_pStatusLine;
 				}
 				s_pStatusLine = this;
+				SetGadgetBitmap(_R(IDB_SL_SNAP), _R(IDB_SL_SNAPN)); // turn snap off by default
 			}
 
 			default:
@@ -1119,26 +1114,17 @@ PORTNOTE("StatusLine", "Removed use of Rulers")
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	// if snap indicator not reflecting the desired state, update it.
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	FlagState SnapState = pCCStatusBar->PaneState(_R(IDS_SL_SNAPPED));
-	if (Snapped && SnapState==Disable)
+	if (Snapped && (GetGadgetBitmap(_R(IDB_SL_SNAP)) != _R(IDB_SL_SNAP)))
 	{
-		if (pCCStatusBar->PaneState(_R(IDS_SL_SNAPPED), Enable)==Fail)
-			ReturnValue=FALSE;
-		// force a redraw of the snap pane
-		pCCStatusBar->UpdatePaneBitmap(_R(IDS_SL_SNAPPED),0, TRUE);
-	
+		SetGadgetBitmap(_R(IDB_SL_SNAP), _R(IDB_SL_SNAP));
+		PaintGadgetNow(_R(IDB_SL_SNAP));
 	}
-	if (!Snapped && SnapState!=Disable)
+	if (!Snapped && (GetGadgetBitmap(_R(IDB_SL_SNAP)) != _R(IDB_SL_SNAPN)))
 	{
-		if (pCCStatusBar->PaneState(_R(IDS_SL_SNAPPED), Disable)==Fail)
-			ReturnValue=FALSE;
-		// force a redraw of the snap pane
-		pCCStatusBar->UpdatePaneBitmap(_R(IDS_SL_SNAPPED),0, TRUE);
+		SetGadgetBitmap(_R(IDB_SL_SNAP), _R(IDB_SL_SNAPN));
+		PaintGadgetNow(_R(IDB_SL_SNAP));
 	}
 #endif	
-
 	
 	// if snap pointer not reflecting the desired state, update it.
 	// (The snap pointer is only shown when snapped and during a 'SnappingDrag' drag)
@@ -1163,7 +1149,6 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 
 	// and mouse position no longer needs updating
 	MousePosNeedsUpdatingFlag=FALSE;
-#endif //webster	
 	return ReturnValue;
 
 #else
@@ -1217,29 +1202,6 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 }
 
 
-
-/******************************************************************************
->	BOOL StatusLine::PaneDoubleClick(INT32 PaneID)
-
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	26/1/95
-	Purpose:	Handle double clicks on a pane
-	Inputs:		PaneID - 
-	Returns:	FALSE if anything fails (see Errors)
-	Errors:		TransparencyState() fails
-*****************************************************************************/
-BOOL StatusLine::PaneDoubleClick(INT32 PaneID)
-{
-	BOOL ReturnValue=TRUE;
-	if (PaneID == (INT32)_R(IDS_SL_SDRAG))
-	{
-		DocView::SolidDragging = ! DocView::SolidDragging;
-		UpdateSolidDragIndicator(TRUE, DocView::SolidDragging);
-	}
-
-	return ReturnValue;
-}
-
 /*****************************************************************************
 >	BOOL StatusLine::SetRenderIndicator(RenderState Action)
 
@@ -1260,18 +1222,8 @@ BOOL StatusLine::PaneDoubleClick(INT32 PaneID)
 
 BOOL StatusLine::SetRenderIndicator(RenderState Action)
 {
-//	FixFPControlRegister();
-#ifndef _STATUSLINE_RENDERPANE
-	return TRUE;
-#else
-
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR2IF(pCCStatusBar==NULL,FALSE,"StatusLine::SetRenderIndicator() - pCCStatusBar==NULL");
-#endif
-
 	INT32  RenderAnimationStates=sizeof(RenderAnimation)/sizeof(UINT32);
-	UINT32 BitmapID=NULL;
+	UINT32 BitmapID=0;
 	switch (Action)
 	{
 		case NotRendering:
@@ -1296,17 +1248,16 @@ PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 		default: ERROR2(FALSE,"StatusLine::SetRenderIndicator() - Action invalid");
 	}
 
-	if (BitmapID==NULL)
+	if (!BitmapID)
 		return TRUE;
 
 	RenderTimer.Sample();
-PORTNOTE("StatusLine", "Removed use of CCStatusBar")
-#ifndef EXCLUDE_FROM_XARALX
-	return pCCStatusBar->UpdatePaneBitmap(_R(IDS_SL_RENDERING),BitmapID,TRUE);
-#else
-	return TRUE;
-#endif
 
-#endif
+	if (BitmapID == GetGadgetBitmap(_R(IDB_SL_RENDN)))
+		return TRUE;
+	SetGadgetBitmap(_R(IDB_SL_RENDN), BitmapID);
+	PaintGadgetNow(_R(IDB_SL_RENDN));
+
+	return TRUE;
 }
 
