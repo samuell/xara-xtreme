@@ -878,6 +878,10 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// Check stderr for errors
 	// Get HowCompatible from stdout
 
+// Temporarily remove this as it is interferring with file loading
+// Looks like the loading code is using the first filter that doesn't return 0
+// rather than using the filter that returns the best score
+#if FALSE
 	wxString sCommand;
 	// Does this need double quotes to cope with spaces in filenames?
 	sCommand.Printf(_T("%s -c -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
@@ -891,13 +895,11 @@ PORTNOTE("other","PluginFilter COM bits removed")
 		if (saOutput.Count() > 0)
 		{
 			INT32 Val = wxAtoi(saOutput[0]);
+			TRACE(_T("Command '%s' returned string '%s'"), sCommand.c_str(), saOutput[0].c_str());
+			TRACE(_T("Value = %d"), Val);
 			if (Val >= 0 && Val <= 10)
 			{
 				HowCompatible = Val;
-			}
-			else
-			{
-				TRACE(_T("Command '%s' returned value of %d"), sCommand.c_str(), Val);
 			}
 		}
 		else
@@ -909,7 +911,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	{
 		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 	}
-
+#endif
 	return(HowCompatible);
 }
 
