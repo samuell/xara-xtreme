@@ -1498,7 +1498,7 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 	else
 	{
 		TRACEUSER("Gerry", _T("Deactivating the view\n"));
-
+/*
 		// Lets just try setting no selected for the time being but only if this view is the selected one
 		if (DocView::GetSelected() == pDocView)
 		{
@@ -1508,7 +1508,7 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 		else
 		{
 			TRACEUSER("Gerry", _T("Not the selected view\n"));
-		}
+		}*/
 	}
 }
 
