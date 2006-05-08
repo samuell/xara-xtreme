@@ -1380,7 +1380,9 @@ BOOL CamResource::Init()
 	{
 		if (pRem->text)
 		{
-//			ResourceID r = GetResourceID(pRem->text);
+			// Do not comment out the next line. It does something useful (make the inverse object
+			// map work for static text)
+			/*ResourceID r =*/ GetResourceID(pRem->text);
 //			TRACEUSER("amb",_T("Fixed up static init translation from %s to %d"),pRem->text,r);
 			free (pRem->text);
 		}
