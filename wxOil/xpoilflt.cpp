@@ -774,6 +774,13 @@ PORTNOTE("other","PluginFilter COM bits removed")
 		return(FALSE);
 #endif
 
+	m_FilterPath.SetPathName(_T("/home/gerry/src/XPFilter/debugu/XPFilter"));
+
+	// This should be set to some sensible path but I've hardcoded it for now
+	// We should change to making ~/.XaraLX into a directory and store the main config
+	// file and these filter config files in there
+	m_XMLFile.SetPathName(_T("~/.XPFilters/XPFilter.xml"));
+
 //	Size = 32;
 //	TCHAR Exts[32];
 //	if (rConfigKey.QueryValue(Exts, _T("Extensions"), &Size) != ERROR_SUCCESS)
@@ -850,7 +857,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 ****************************************************************************/
 
-INT32 PluginOILFilter::HowCompatible(PathName& Filename)
+INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 {
 	INT32 HowCompatible = 0;
 
@@ -864,6 +871,44 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	if (FAILED(hRes))
 		return(0);
 #endif
+
+	// Here we need to run the plugin synchronously with the following options
+	// -c -f <filename>
+
+	// Check stderr for errors
+	// Get HowCompatible from stdout
+
+	wxString sCommand;
+	// Does this need double quotes to cope with spaces in filenames?
+	sCommand.Printf(_T("%s -c -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
+
+	wxArrayString saOutput;
+	wxArrayString saErrors;
+	int code = wxExecute(sCommand, saOutput, saErrors);
+	if (code == 0)
+	{
+		// Extract the value from saOutput
+		if (saOutput.Count() > 0)
+		{
+			INT32 Val = wxAtoi(saOutput[0]);
+			if (Val >= 0 && Val <= 10)
+			{
+				HowCompatible = Val;
+			}
+			else
+			{
+				TRACE(_T("Command '%s' returned value of %d"), sCommand.c_str(), Val);
+			}
+		}
+		else
+		{
+			TRACE(_T("Command '%s' returned no output value"), sCommand.c_str());
+		}
+	}
+	else
+	{
+		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
+	}
 
 	return(HowCompatible);
 }
@@ -937,9 +982,54 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	m_pXarStream.p->AddRef();
 
 	*ppNewFile = pStreamFile;		// Return the new file pointer
-#endif
 
 	return(TRUE);
+#endif
+
+	// Here we should really run the plugin asynchronously with the following options
+	// -i -g -f <filename>
+
+	// Redirect stdout to a CCLexFile
+	// Check stderr during the Xar import and abort if an error is reported
+
+	// However to get it working quickly I shall instead:
+	// Run the plugin synchronously with the following options
+	// -i -g -f <filename> ><tempfilename>
+
+	// Check stderr for errors
+
+	// Once complete create a CCDiskFile attached to the temporary file
+	m_TempXarFile.SetPathName(_T("/tmp/xpftemp.xar"));
+
+	PathName FileName = pFile->GetPathName();
+
+	wxString sCommand;
+	// Does this need double quotes to cope with spaces in filenames?
+	sCommand.Printf(_T("%s -i -f %s > %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath(), (LPCTSTR)m_TempXarFile.GetPath());
+
+	wxArrayString saOutput;
+	wxArrayString saErrors;
+	int code = wxExecute(sCommand, saOutput, saErrors);
+	if (code != 0)
+	{
+		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
+		// Extract error from saErrors and report it
+		return(FALSE);
+	}
+
+	CCDiskFile* pTempFile = new CCDiskFile();
+	if (pTempFile)
+	{
+		if (pTempFile->open(m_TempXarFile, ios::in | ios::binary))
+		{
+			*ppNewFile = pTempFile;
+			return(TRUE);
+		}
+
+		delete pTempFile;
+	}
+
+	return(FALSE);
 }
 
 
@@ -963,10 +1053,25 @@ BOOL PluginOILFilter::GetExportFile(PathName* pPath, CCLexFile** ppNewFile)
 
 	*ppNewFile = NULL;
 
+	// Here we should run the plugin asynchronously with the following options
+	// -e -g -f <filename> -x <xmlfilename>
+
+	// The xmlfilename is a path to a user and filter specific file
+	// e.g. ~/.XaraLX/filtername.xml
+	// Create a CCLexFile derived object that sends its data to stdin
+	// Check stderr during the Xar export and abort if an error is reported
+
+	// However, this will not be trivial so intsead we will just create a 
+	// CCDiskFile attached to a temporary filename and run the export process
+	// in DoExport instead
+
+	// Generate a temporary file name
+	m_TempXarFile.SetPathName(_T("/tmp/xpftemp.xar"));
+
 	CCDiskFile* pFile = new CCDiskFile();
 	if (pFile)
 	{
-		if (pFile->open(*pPath, ios::out | ios::binary | ios::trunc))
+		if (pFile->open(m_TempXarFile, ios::out | ios::binary | ios::trunc))
 		{
 			*ppNewFile = pFile;
 			return(TRUE);
@@ -974,6 +1079,8 @@ BOOL PluginOILFilter::GetExportFile(PathName* pPath, CCLexFile** ppNewFile)
 
 		delete pFile;
 	}
+
+	return(FALSE);
 
 PORTNOTE("other","PluginFilter COM bits removed")
 #if !defined(EXCLUDE_FROM_XARALX)
@@ -1002,8 +1109,8 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 	*ppNewFile = pStreamFile;		// Return the new file pointer
 
-#endif
 	return(TRUE);
+#endif
 }
 
 
@@ -1055,6 +1162,39 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	}
 #endif
 
+	// Here we need to run the plugin synchronously with the following options
+	// -p -f <filename> -x <xmlfilename>
+
+	// The xmlfilename is a path to a user and filter specific file
+	// e.g. ~/.XaraLX/filtername.xml
+
+	// The XML is returned via the file
+
+	// Does this need double quotes to cope with spaces in filenames?
+	wxString sCommand;
+	sCommand.Printf(_T("%s -p -f %s -x %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath());
+
+	wxArrayString saOutput;
+	wxArrayString saErrors;
+	int code = wxExecute(sCommand, saOutput, saErrors);
+
+	for (INT32 i = 0; i < saErrors.GetCount(); i++)
+	{
+		TRACE(_T("stderr: %s"), saErrors[i].c_str());
+	}
+
+	if (code == 0)
+	{
+		// Change this once XML stuff is working
+//		BuildCapabilityTree(bsXML, pCapTree);
+	}
+	else
+	{
+		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
+
+		// Get error message from saErrors
+	}
+
 	return(TRUE);
 }
 
@@ -1102,6 +1242,37 @@ PORTNOTE("other","PluginFilter COM bits removed")
 		ERROR1(FALSE, _R(IDE_XPF_DOEXPORTFAILED));
 	}
 #endif
+
+	// Here we should just need to wait for the process started in GetExportFile 
+	// to finish
+	// Check stderr for errors and progress
+
+	// However for now we will instead
+	// Run the plugin synchronously with the following options
+	// -e -g -f <filename> -x <xmlfilename> < <tempfilename>
+
+	// The xmlfilename is a path to a user and filter specific file
+	// e.g. ~/.XaraLX/filtername.xml
+
+	// Check stderr for errors
+
+	wxString sCommand;
+	// Does this need double quotes to cope with spaces in filenames?
+	sCommand.Printf(_T("%s -e -f %s -x %s < %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath(), (LPCTSTR)m_TempXarFile.GetPath());
+
+	wxArrayString saOutput;
+	wxArrayString saErrors;
+	int code = wxExecute(sCommand, saOutput, saErrors);
+	for (INT32 i = 0; i < saErrors.GetCount(); i++)
+	{
+		TRACE(_T("stderr: %s"), saErrors[i].c_str());
+	}
+	if (code != 0)
+	{
+		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
+		// Extract error from saErrors and report it
+		return(FALSE);
+	}
 
 	return(TRUE);
 }

@@ -185,7 +185,7 @@ public:
 	BOOL GetExportFile(PathName* pPath, CCLexFile** ppNewFile);
 	BOOL GetCapabilities(CCLexFile* pFile, PathName* pPath, CapabilityTree* pCapTree);
 	BOOL DoExport(CCLexFile* pXarFile, PathName* pPath);
-	INT32 HowCompatible(PathName& Filename);
+	INT32 HowCompatible(PathName& FileName);
 	BOOL GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile);
 
 	void Cleanup();
@@ -223,6 +223,11 @@ PORTNOTE("other","PluginFilter XML bits removed")
 protected:
 	BOOL m_bImport;
 	BOOL m_bExport;
+
+	PathName m_FilterPath;		// Full path to filter executable
+	PathName m_XMLFile;			// Full path to filter XML config file for the current user
+	PathName m_TempXarFile;		// Full path to temporary Xar file
+
 
 PORTNOTE("other","PluginFilter COM bits removed")
 #if !defined(EXCLUDE_FROM_XARALX)
