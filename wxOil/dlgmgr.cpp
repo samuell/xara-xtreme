@@ -4856,7 +4856,7 @@ BOOL DialogManager::HighlightText(CWindowID WindowID, CGadgetID Gadget, INT32 nS
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	1/9/94
 	Inputs:		WindowID			Window identifier
-				gid			Gadget (control) identifier
+				gid			Gadget (control) identifier,  or zero for the whole window
 	Outputs:	-
 	Returns:	-
 	Purpose:	Immediate paints any invalid areas of the given control (like the Windows
@@ -4867,18 +4867,25 @@ BOOL DialogManager::HighlightText(CWindowID WindowID, CGadgetID Gadget, INT32 nS
 
 void DialogManager::PaintGadgetNow(CWindowID WindowID, CGadgetID Gadget)
 {
+	if (!Gadget)
+	{
+		((wxWindow *)WindowID)->Update();
+		wxPlatformDependent::Get()->FixUpdate((wxWindow *)WindowID);
+		return;
+	}
 	// For the time being, we do this by Hide/Unhide
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return;
 
 	pGadget->Update();
+	wxPlatformDependent::Get()->FixUpdate(pGadget);
 }
 
 
 
 /********************************************************************************************
 
->	static void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget)
+>	static void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget, BOOL EraseBackground)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/10/94
@@ -4888,14 +4895,18 @@ void DialogManager::PaintGadgetNow(CWindowID WindowID, CGadgetID Gadget)
 
 ********************************************************************************************/
 
-void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget)
+void DialogManager::InvalidateGadget(CWindowID WindowID, CGadgetID Gadget, BOOL EraseBackground /*=TRUE*/)
 {
+	if (!Gadget)
+	{
+		((wxWindow *)WindowID)->Refresh(EraseBackground);
+		return;
+	}
 	// For the time being, we do this by Hide/Unhide
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return;
 
-	pGadget->Refresh();
-
+	pGadget->Refresh(EraseBackground);
 }
 
 

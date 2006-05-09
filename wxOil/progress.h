@@ -132,7 +132,7 @@ void SmashSlowJob(void);
 
 class String_64;
 class MonotonicTime;
-class CProgressBar;
+
 
 class Progress : public CC_CLASS_MEMDUMP
 {
@@ -207,7 +207,7 @@ protected:		// Internal state variables
 
 	static MonotonicTime StartTime;			// Time the first call to Show() was made
 
-	static CProgressBar *ProgBar;			// The progress bar object (if used)
+//	static CProgressBar *ProgBar;			// The progress bar object (if used)
 
 	static BOOL AbortJob;					// used to abort jobs in ralph - fake an escape condition
 protected:		// Preferences

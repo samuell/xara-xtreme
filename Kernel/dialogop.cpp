@@ -1946,11 +1946,12 @@ void DialogOp::PaintGadgetNow(CGadgetID gid)
 
 /********************************************************************************************
 
->	void DialogOp::InvalidateGadget(CGadgetID Gadget)
+>	void DialogOp::InvalidateGadget(CGadgetID Gadget, BOOL EraseBackground=TRUE)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/10/94
 	Inputs:		Gadget - The ID of the gadget that you want to be redrawn
+				EraseBackground	TRUE if the background should be erased
 	Purpose:	Causes the Dialog Manager to tell the host os to get the gadget to be
 				redrawn. Calling this on a cc_DialogDraw gadget will cause you to receive
 				a DIM_REDRAW message in the not too distant future.
@@ -1959,10 +1960,10 @@ void DialogOp::PaintGadgetNow(CGadgetID gid)
 
 ********************************************************************************************/
 
-void DialogOp::InvalidateGadget(CGadgetID Gadget)
+void DialogOp::InvalidateGadget(CGadgetID Gadget, BOOL EraseBackground/*=TRUE*/)
 {
 	// Call the Dialog Manager
-	DialogManager::InvalidateGadget(GetReadWriteWindowID(), Gadget);
+	DialogManager::InvalidateGadget(GetReadWriteWindowID(), Gadget, EraseBackground);
 }
 
 

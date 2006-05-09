@@ -110,6 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "oilprog.h"
 //#include "progbar.h"
 #include "node.h"
+#include "statline.h"
 
 #include "progress.h"
 
@@ -123,8 +124,8 @@ CC_IMPLEMENT_MEMDUMP(Progress, CC_CLASS_MEMDUMP)
 
 BOOL Progress::AbortJob		= FALSE;		// TRUE if the we want to abort a job in ralph
 
-PORTNOTE("progress", "Removed progress system")
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+
+#if !defined(EXCLUDE_FROM_RALPH)
 
 // --- Thread activation - set to 1 to enable the delayed-show thread
 // (NOTE: The start-delay thread is currently non-operational, so turning it on
@@ -331,7 +332,7 @@ BOOL Progress::HaveJobDescription = FALSE;		// TRUE if JobDescription is a prope
 
 MonotonicTime Progress::StartTime;				// Time the first call to Show() was made
 
-CProgressBar *Progress::ProgBar = NULL;			// The progress bar object (if used)
+//CProgressBar *Progress::ProgBar = NULL;			// The progress bar object (if used)
 
 
 /********************************************************************************************
@@ -426,7 +427,7 @@ Progress::Progress(UINT32 DescriptionID, INT32 FinalCount,BOOL Delay, BOOL bEnab
 	if (bEnable)
 	{
 		ProgressCount = 0;
-		ERROR3IF(DescriptionID == NULL, "Progress constructor - Illegal NULL parameter");
+		ERROR3IF(!DescriptionID, "Progress constructor - Illegal NULL parameter");
 		Progress::Start(Delay, DescriptionID, FinalCount);
 	}
 }
@@ -530,7 +531,7 @@ BOOL Progress::SetDescription(const StringBase* const Description)
 
 void Progress::Start(BOOL Delay, UINT32 DescriptionID, INT32 IntendedFinalCount)
 {
-	if (DescriptionID == NULL)
+	if (!DescriptionID)
 		Progress::Start(Delay, (StringBase *)NULL, IntendedFinalCount);
 	else
 	{
@@ -639,8 +640,10 @@ TRACE( _T("Progress::Start ActiveDisplays = %d IntendedFinalCount = %d\n"),Activ
 
 			// And reset/redraw the progress bar display to make sure it starts from 0 again
 			// and shows the new job description (if any).
-			if (ProgBar != NULL)
-				ProgBar->SetPercent(0, TRUE, (HaveJobDescription) ? &JobDescription : NULL);
+			if (StatusLine::Get())
+			{
+				StatusLine::Get()->SetPercent(0, TRUE, (HaveJobDescription) ? &JobDescription : NULL);
+			}
 		}
 	}
 
@@ -796,24 +799,11 @@ TRACE( _T("Progress::Update ActiveDisplays = %d CurrentCount = %d FinalCount=%d\
 		// (Create if necessary) and update the progress bar, if it is needed
 		if (DisplayBar && FinalCount > 0)
 		{
-			if (ProgBar == NULL)
+			if (StatusLine::Get())
 			{
-				ProgBar = new CProgressBar;
-
-				if (ProgBar != NULL)
-				{
-					if (!ProgBar->Create((CFrameWnd *) (AfxGetApp()->m_pMainWnd), &JobDescription))
-					{
-						delete ProgBar;
-						ProgBar = NULL;
-					}
-					else
-						ProgBar->ShowWindow(SW_SHOW);
-				}
-
+				StatusLine::Get()->ShowProgress(TRUE, &JobDescription);
+				StatusLine::Get()->SetPercent(NewPercent);
 			}
-			else
-				ProgBar->SetPercent(NewPercent);
 		}
 
 		// Remember the last displayed percentage
@@ -859,13 +849,13 @@ TRACE( _T("Progress::Stop ActiveDisplays = %d \n"),ActiveDisplays);
 	if (ActiveDisplays > 0)
 		return;
 
-	if (ProgBar != NULL && CurrentPercent < 97)
+	if (StatusLine::Get() && CurrentPercent < 97)
 	{
 		// We are showing a progress bar, but have not shown "completion" of the job (99%)
 		// Briefly jump to 99% on the progress bar so the user can't see how bad our estimate
 		// of when we'd finish really was.
 
-		ProgBar->SetPercent(99);
+		StatusLine::Get()->SetPercent(99);
 
 		MonotonicTime Timer;
 		while (!Timer.Elapsed(150))
@@ -921,13 +911,9 @@ void Progress::Smash(BOOL ForceSmash)
 		GetApplication()->UpdateStatusBarText(&Blank);
 
 		// --- Remove any active progress bar
-		if (ProgBar != NULL)
+		if (StatusLine::Get())
 		{
-			delete ProgBar;
-			ProgBar = NULL;
-
-			// Make sure it disappears immediately
-			((CFrameWnd *) (AfxGetApp()->m_pMainWnd))->RecalcLayout();
+			StatusLine::Get()->ShowProgress(FALSE);
 		}
 
 		// --- And reset all variables to suitable defaults

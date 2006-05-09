@@ -387,8 +387,8 @@ public:
 	
 	//--------------------------------------------------------------------------------------
 	
-	void PaintGadgetNow(CGadgetID gid);			// immediately updates gadget's appearance
-	void InvalidateGadget(CGadgetID Gadget);	// Force the gadget to be repainted
+	void PaintGadgetNow(CGadgetID gid);		// immediately updates gadget's appearance
+	void InvalidateGadget(CGadgetID Gadget, BOOL EraseBackground=TRUE);	// Force the gadget to be repainted
 
 	// Force *part* of a kernel-drawn gadget to repaint
 	void InvalidateGadget(CGadgetID Gadget,

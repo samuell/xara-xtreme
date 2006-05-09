@@ -34,6 +34,8 @@ protected:
 public:
     virtual void InitWindow(wxWindow * pwxWindow) {} // To override
 
+    virtual void FixUpdate(wxWindow * pwxWindow, bool flush=true);
+
 #if defined( __WXGTK__ )
     virtual void ParseGtkRcString(char * rcstring);
     virtual void SetGtkWidgetName(wxWindow * pwxWindow, char * name);

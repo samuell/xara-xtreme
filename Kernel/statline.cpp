@@ -174,6 +174,10 @@ StatusLine::StatusLine()
 	// create a 'snapped' mouse pointer
 	pSnappedCursor = new Cursor(_R(IDCSR_SNAPPED));
 	SnappedCursorID = 0;
+
+	JobDescription=NULL;
+	CurrentPercent=-1;
+	ProgressShown=FALSE;
 }
 
 
@@ -1261,3 +1265,150 @@ BOOL StatusLine::SetRenderIndicator(RenderState Action)
 	return TRUE;
 }
 
+/********************************************************************************************
+>	BOOL StatusLine::ShowProgress (BOOL Show=TRUE, String_64 *JobDescrip = NULL)
+
+	Author:		Alex Bligh
+	Created:	09/05/2006
+	Inputs:		BOOL Show : TRUE to show, else false
+				JobDescription - A BRIEF string describing the job currently being undertaken.
+						This will be displayed on the progress bar if possible
+	Outputs:	-
+	Returns:	TRUE if the initialisation of the progress bar was successful.
+	Purpose:	Creates a window and associates it with this CProgressBar object. The window
+				appears immediately over the status bar.
+	Notes:		This currently assumes that it'll only ever be opened at the bottom of the
+				Main Frame window.
+	SeeAlso:	StatusLine::SetPercent; StatusLine::GetPercent
+********************************************************************************************/
+
+BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
+{
+	BOOL Invalidate=(Show != ProgressShown);
+	BOOL FirstShow=(Show && !ProgressShown);
+	// Get rid of any old text
+	if (JobDescription)
+	{
+		delete JobDescription;
+		JobDescription=NULL;
+	}
+	
+	CurrentPercent = -1;
+	if (JobDescrip == NULL)
+		JobDescription = NULL;
+	else
+		JobDescription = new String_64(*JobDescrip);
+
+	if (JobDescription && Show)
+	{
+		SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), *JobDescription);
+		Invalidate=TRUE;
+	}
+	else
+	{
+		SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), String_64(_T("")));
+		Invalidate=TRUE;
+	}
+
+	if (0 && Invalidate)
+	{
+		EnableGadget(_R(IDC_SL_PROGRESSGAUGE), Show);
+		EnableGadget(_R(IDC_SL_PROGRESSTEXT), Show);
+		InvalidateGadget(_R(IDC_SL_PROGRESSTEXT));
+		InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE));
+		PaintGadgetNow(_R(IDC_SL_PROGRESSTEXT));
+		PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+		InvalidateGadget(0);
+		PaintGadgetNow(0); // repaint the whole bar
+		PaintGadgetNow(0); // repaint the whole bar
+	}
+
+//	InvalidateGadget(0);
+//	PaintGadgetNow(0);
+	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), TRUE);
+	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+
+	ProgressShown=Show;
+
+	if (FirstShow)
+	{
+		CurrentPercent=-1;		// Force a redraw
+		SetPercent(0, TRUE);	// Force redraw of window _including background_
+	}
+
+	return TRUE;
+}
+
+
+/********************************************************************************************
+>	BOOL StatusLine::SetPercent(INT32 NewPercent,
+									BOOL ClearBackground = FALSE, String_64 *JobDescrip = NULL)
+
+	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	15/02/94
+	Inputs:		NewPercent - the new percentage value to be displayed by the progress bar
+
+				ClearBackground - Clears the entire bar background and redraws everything, rather
+				than doing a (far more efficient) update of the bar/percentage alone. Use the default
+				of FALSE unless absolutely necessary!
+
+				JobDescrip - NULL, or a pointer to a new job description - pass NULL if this hasn't
+				changed, as it makes a copy of the new string every time it is changed.	If this is
+				non-NULL, then the ClearBackground flag will be forced to TRUE to draw the new text.
+
+	Outputs:	-
+	Returns:	TRUE if it successfully makes the change.
+	Purpose:	Sets the currently displayed percentage of the progress bar. The bar
+				will be immediately redrawn to reflect the new value. Values outside the
+				range 0..99 (inclusive) are clipped to 0 or 99. No redraw will be done if
+				NewPercent equals the currently displayed value.
+	SeeAlso:	CProgressBar::GetPercent; CProgressBar::Create
+********************************************************************************************/
+
+BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
+								String_64 *JobDescrip /* =NULL */)
+// The extra argument ClearBackground is not mentioned in the help, because it
+// is used internally - When the window is first created, the background must be cleared,
+// but on normal updates this causes horrible flicker, so is to be avoided.
+{
+	if (NewPercent < 0) NewPercent = 0;
+	if (NewPercent > 99) NewPercent = 99;
+
+	// If there's no change, don't bother updating
+	if (JobDescrip == NULL && NewPercent == CurrentPercent)
+		return(TRUE);
+
+	CurrentPercent = NewPercent;
+
+	// If there is a new Job Description, change to use it
+	if (JobDescrip != NULL)
+	{
+		delete JobDescription;
+		JobDescription = new String_64(*JobDescrip);
+
+		if (JobDescription)
+		{
+			SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), *JobDescription);
+		}
+		else
+		{
+			SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), String_64(_T("")));
+		}
+
+//		InvalidateGadget(_R(IDC_SL_PROGRESSTEXT));
+//		PaintGadgetNow(_R(IDC_SL_PROGRESSTEXT));
+
+		ClearBackground = TRUE;		// Ensure that the new text is drawn
+	}
+
+	SetLongGadgetValue(_R(IDC_SL_PROGRESSGAUGE), CurrentPercent);
+//	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), ClearBackground);
+//	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+//	InvalidateGadget(0, ClearBackground);
+//	PaintGadgetNow(0); // repaint the whole bar
+
+	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), ClearBackground);
+	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+
+	return(TRUE);
+}

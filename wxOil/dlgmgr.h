@@ -608,7 +608,7 @@ public:
     // ------------------------------------------------------------------------------------- 
 	// Immediately updates gadget's appearance    
 	static void PaintGadgetNow(CWindowID WindowID, CGadgetID gid);
-	static void InvalidateGadget(CWindowID WindowID, CGadgetID Gadget);
+	static void InvalidateGadget(CWindowID WindowID, CGadgetID Gadget, BOOL EraseBackround=TRUE);
 
 				// Invalidates a specific portion of a cc_DialogDraw gadget
 	static void InvalidateGadget(CWindowID WindowID, CGadgetID Gadget,
