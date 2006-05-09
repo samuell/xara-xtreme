@@ -1284,59 +1284,34 @@ BOOL StatusLine::SetRenderIndicator(RenderState Action)
 
 BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
 {
-	BOOL Invalidate=(Show != ProgressShown);
-	BOOL FirstShow=(Show && !ProgressShown);
-	// Get rid of any old text
-	if (JobDescription)
-	{
-		delete JobDescription;
-		JobDescription=NULL;
-	}
-	
-	CurrentPercent = -1;
-	if (JobDescrip == NULL)
-		JobDescription = NULL;
-	else
-		JobDescription = new String_64(*JobDescrip);
+	BOOL ShowChanged=(Show != ProgressShown);
 
-	if (JobDescription && Show)
-	{
-		SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), *JobDescription);
-		Invalidate=TRUE;
-	}
-	else
-	{
-		SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), String_64(_T("")));
-		Invalidate=TRUE;
-	}
+	String_64 EmptyString(_T(""));
 
-	if (0 && Invalidate)
+	// Make "NULL" mean "empty string"
+	if (!JobDescrip)
+		JobDescrip=&EmptyString;
+
+	BOOL StringChanged=!JobDescription || (*JobDescription!=*JobDescrip);
+
+	// Return if nothing changed
+	if (!ShowChanged && !StringChanged)
+		return TRUE;
+
+	if (ShowChanged)
 	{
-		EnableGadget(_R(IDC_SL_PROGRESSGAUGE), Show);
-		EnableGadget(_R(IDC_SL_PROGRESSTEXT), Show);
-		InvalidateGadget(_R(IDC_SL_PROGRESSTEXT));
-		InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE));
-		PaintGadgetNow(_R(IDC_SL_PROGRESSTEXT));
-		PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
-		InvalidateGadget(0);
-		PaintGadgetNow(0); // repaint the whole bar
-		PaintGadgetNow(0); // repaint the whole bar
-	}
+		HideGadget(_R(IDC_SL_PROGRESSTEXT), !Show);
+		HideGadget(_R(IDC_SL_PROGRESSGAUGE), !Show);
+		HideGadget(_R(IDC_SL_PROGRESSPERCENT), !Show);
 
-//	InvalidateGadget(0);
-//	PaintGadgetNow(0);
-	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), TRUE);
-	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+		ProgressShown=Show;
 
-	ProgressShown=Show;
-
-	if (FirstShow)
-	{
 		CurrentPercent=-1;		// Force a redraw
-		SetPercent(0, TRUE);	// Force redraw of window _including background_
+		SetPercent(0, TRUE, JobDescrip);	// Force redraw of window _including background_; always refresh string
+		return TRUE;
 	}
 
-	return TRUE;
+	return SetPercent(CurrentPercent, StringChanged, StringChanged?JobDescrip:NULL);
 }
 
 
@@ -1380,6 +1355,11 @@ BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
 
 	CurrentPercent = NewPercent;
 
+	String_64 PercentString;
+	PercentString.MakePercent(CurrentPercent);
+	SetStringGadgetValue(_R(IDC_SL_PROGRESSPERCENT), PercentString);
+	SetLongGadgetValue(_R(IDC_SL_PROGRESSGAUGE), CurrentPercent);
+
 	// If there is a new Job Description, change to use it
 	if (JobDescrip != NULL)
 	{
@@ -1395,20 +1375,17 @@ BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
 			SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), String_64(_T("")));
 		}
 
-//		InvalidateGadget(_R(IDC_SL_PROGRESSTEXT));
-//		PaintGadgetNow(_R(IDC_SL_PROGRESSTEXT));
-
-		ClearBackground = TRUE;		// Ensure that the new text is drawn
+		InvalidateGadget(0, TRUE); // Repaint the whole bar
+		PaintGadgetNow(0);
 	}
-
-	SetLongGadgetValue(_R(IDC_SL_PROGRESSGAUGE), CurrentPercent);
-//	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), ClearBackground);
-//	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
-//	InvalidateGadget(0, ClearBackground);
-//	PaintGadgetNow(0); // repaint the whole bar
-
-	InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), ClearBackground);
-	PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+	else
+	{
+		// Just repaint the gauge
+		InvalidateGadget(_R(IDC_SL_PROGRESSGAUGE), ClearBackground);
+		InvalidateGadget(_R(IDC_SL_PROGRESSPERCENT), ClearBackground);
+		PaintGadgetNow(_R(IDC_SL_PROGRESSGAUGE));
+		PaintGadgetNow(_R(IDC_SL_PROGRESSPERCENT));
+	}
 
 	return(TRUE);
 }

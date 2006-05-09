@@ -30,12 +30,18 @@
             </object>
 
             <object class="sizeritem">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                 <border>1</border>
-                <object class="wxGauge" name="IDC_SL_PROGRESSGAUGE">
-                    <size>-1,12</size>
-                    <value>50</value>
-                    <range>100</range>
+                <option>1000</option>
+                <object class="wxStaticText" name="IDC_SL_PROGRESSTEXT">
+                    <hidden>1</hidden>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxALIGN_RIGHT</style>
+                    <label>Nothing selected</label>
+                    <tooltip>Status bar text</tooltip>
+                    <help>Displays the current status</help>
                 </object>
             </object>
 
@@ -46,14 +52,25 @@
             </object>
 
             <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxGauge" name="IDC_SL_PROGRESSGAUGE">
+                    <hidden>1</hidden>
+                    <size>-1,12</size>
+                    <value>50</value>
+                    <range>100</range>
+                </object>
+            </object>
+            <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                 <border>1</border>
-                <object class="wxStaticText" name="IDC_SL_PROGRESSTEXT">
+                <object class="wxStaticText" name="IDC_SL_PROGRESSPERCENT">
+                    <hidden>1</hidden>
                     <font>
                         <size>8</size>
                     </font>
                     <style>wxALIGN_LEFT</style>
-                    <label>Nothing selected</label>
+                    <label>00% </label>
                     <tooltip>Status bar text</tooltip>
                     <help>Displays the current status</help>
                 </object>
