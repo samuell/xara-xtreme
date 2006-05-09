@@ -12,11 +12,10 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE|wxGROW</flag>
                 <border>1</border>
                 <option>1</option>
-                <object class="wxStaticText" name="IDC_SL_STATUSTEXT">
-                    <font>
-                        <size>8</size>
-                    </font>
-                    <style>wxALIGN_LEFT|wxST_NO_AUTORESIZE</style>
+                <object class="wxCamArtControl" name="IDC_SL_STATUSTEXT">
+                    <camartstyle>wxCACS_TEXT|wxCACS_LEFT|wxCACS_EXACTFIT</camartstyle>
+                    <style>wxFULL_REPAINT_ON_RESIZE</style>
+                    <size>-1,12</size>
                     <label>Nothing Selected</label>
                     <tooltip>Status bar text</tooltip>
                     <help>Displays the current status</help>

@@ -135,8 +135,11 @@ enum CamArtFlags
 	CAF_NOINTERNALBORDER= 1<<18, // Don't paint an internal border (unused, for CACS_)
 
 	CAF_NOAUTOREPEAT	= 1<<19, // Used for CACS_
+
+	CAF_STATUSBARTEXT	= 1<<20, // Used for status bar - render bit before :: in bold, chop on word boundaries
+
 	// And this goes right at the end
-	CAF_MAX				= 1<<20,
+	CAF_MAX				= 1<<21,
 
 	// And here is the default
 	CAF_DEFAULT			= 0
@@ -242,7 +245,8 @@ protected:
 	void DeleteHashContents();
 	void ArtLoad(BOOL newbitmaps = FALSE, BOOL defer=TRUE);
 
-	wxString GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text = wxEmptyString);
+	wxString GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc, BOOL Draw=FALSE, wxCoord *w=NULL, wxCoord *h=NULL,
+								wxCoord x=0, wxCoord y=0, const wxString &text = wxEmptyString);
 
 	ResIDWithFlagsToBitmapPtr * m_pHash;
 	BOOL m_GetBitmapEventPending;

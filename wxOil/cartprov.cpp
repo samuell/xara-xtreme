@@ -859,8 +859,7 @@ void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, Ca
 
 	if (Flags & CAF_TEXT)
 	{
-		wxString ctext = GetTextInfo(Resource, Flags, dc, text);
-		dc.DrawText(ctext, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY);
+		wxString ctext = GetTextInfoOrDraw(Resource, Flags, dc, TRUE, NULL, NULL, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY, text);
 	}
 	else
 	{
@@ -904,8 +903,7 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 	if (Flags & CAF_TEXT)
 	{
 		wxScreenDC dc;
-		wxString ctext = GetTextInfo(r, Flags, dc, text);
-		dc.GetTextExtent(ctext, &w, &h);
+		wxString ctext = GetTextInfoOrDraw(r, Flags, dc, FALSE, &w, &h, 0, 0, text);
 	}
 	else
 	{
@@ -928,14 +926,17 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 
 /********************************************************************************************
 
->	wxString CamArtProvider::GetTextInfo(ResourceID r, wxDC &dc, const wxString &text = wxEmptyString)
+>	wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, wxDC &dc,  BOOL Draw=FALSE, wxCoord *w=NULL, wxCoord *h=NULL,
+											   wxCoord x=0, wxCoord y=0, const wxString &text = wxEmptyString)
 
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
 	Created:	24/04/2006
 	Inputs:		r - the resource
 				Flags - the flags
-	Outputs:	-
+				Draw = TRUE to draw the text
+				x, y - location to draw the text (if Draw is set)
+	Outputs:	w, h, pointers to fill in (can be NULL) for the text extent. Either both or neither must be NULL
 	Returns:	The text
 	Purpose:	Sets up the DC and returns the text
 	Errors:		-
@@ -943,10 +944,13 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 
 ********************************************************************************************/
 
-wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, const wxString &text)
+wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc, BOOL Draw/*=FALSE*/, wxCoord *w, wxCoord *h, wxCoord x, wxCoord y, const wxString &text)
 {
 	// find the name by looking up the ID as a string
 	const TCHAR * tcname=text;
+
+	if (w) *w=0;
+	if (h) *h=0;
 
 	if (text.IsEmpty())
 	{
@@ -969,8 +973,14 @@ wxString CamArtProvider::GetTextInfo(ResourceID r, CamArtFlags f, wxDC &dc, cons
 
 	dc.SetTextForeground(wxSystemSettings::GetColour((f & CAF_GREYED)?wxSYS_COLOUR_GRAYTEXT:wxSYS_COLOUR_BTNTEXT));
 	wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-	font.SetPointSize(7);
+	font.SetPointSize((f & CAF_HALFHEIGHT)?7:8);
 	dc.SetFont(font);
+
+	if (h && w)
+		dc.GetTextExtent(wxString(tcname), w, h);
+
+	if (Draw)
+		dc.DrawText(wxString(tcname), x, y);
 
 	return wxString(tcname);
 }

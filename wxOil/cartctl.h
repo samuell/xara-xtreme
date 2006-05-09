@@ -120,6 +120,7 @@ enum wxCamArtControlStyle
 	wxCACS_LEFT				= CAF_LEFT,
 	wxCACS_RIGHT			= CAF_RIGHT,
 	wxCACS_NOAUTOREPEAT		= CAF_NOAUTOREPEAT,
+	wxCACS_STATUSBARTEXT	= CAF_STATUSBARTEXT,
 
 	wxCACS_DEFAULT			= 0
 };
@@ -129,7 +130,7 @@ enum wxCamArtControlStyle
 >	class wxCamArtControlEvent : public wxEvent
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
-	Created:	19/12/2005
+o	Created:	19/12/2005
 	Purpose:	A derived event to allow for postprocessing of autorepeat on buttons
 	Notes:		In the OIL
 	See Also:	
@@ -242,6 +243,8 @@ public:
 			}
 			return wxControl::Enable(enable);
 		}
+
+	virtual void SetLabel(const wxString& label) {if (label!=GetLabel()) {wxControl::SetLabel(label); Refresh(TRUE);}}
 
 	wxString GetOpDesc() {return m_OpDesc;}
 
