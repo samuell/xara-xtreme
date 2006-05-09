@@ -120,6 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 
 #include "keypress.h"
+#include "fltrdisc.h"
 #include "ccdc.h"
 #include "camprofile.h"
 #include "dlgevt.h"
@@ -212,9 +213,24 @@ CCamApp::CCamApp()
 
 int CCamApp::FilterEvent( wxEvent& event )
 {
+	static long	lLastTimeStamp = 0;
+
+	if( event.GetEventType() == wxEVT_CHAR )
+	{
+		wxObject* pEventObject = event.GetEventObject();
+		TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"), 
+			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName() );
+	}
+
 	if( event.GetEventType() == wxEVT_KEY_DOWN ||
 		event.GetEventType() == wxEVT_KEY_UP )
 	{
+		// Use timestamp to detect events which are passing
+		// down the chain (which we've tested)
+		if( lLastTimeStamp == event.GetTimestamp() )
+			return -1;
+		lLastTimeStamp = event.GetTimestamp();
+
 		wxObject* pEventObject = event.GetEventObject();
 		TRACEUSER( "jlh92", _T("KeyEvent 4 %s %s\n"), 
 			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName(),
@@ -427,6 +443,8 @@ bool CCamApp::OnInit()
 	// Initialise the kernel application object & Prefs
  	if( !Camelot.Init() )
 		return false;
+
+	CDiscoverPlugin::GetInstance()->Init();
 
 	TRACET(_T("CCamApp::Calling InitKernel"));
 	// then initialise the kernel (and almost everything else)	

@@ -110,6 +110,11 @@ CDiscoverPlugin::CDiscoverPlugin()
 	m_pSingleInst = this;
 }
 
+void CDiscoverPlugin::ReadConfig( const wxString& strFile )
+{
+	TRACEUSER( "jlh92", _T("Read %s\n"), (PCTSTR)strFile );
+}
+
 bool CDiscoverPlugin::Init()
 {
 	wxDir	dir( g_strConfigPath );

@@ -110,6 +110,11 @@ public:
 	CDiscoverPlugin();
 
 	bool Init();
+
+	static CDiscoverPlugin* GetInstance()
+	{
+		return m_pSingleInst;
+	}
 };
 
 #endif//INC_FLTRDISC_H_
