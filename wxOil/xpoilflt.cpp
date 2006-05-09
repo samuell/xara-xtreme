@@ -114,6 +114,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ncntrcnt.h"
 //#include "nev.h"		// For _R(IDN_USER_CANCELLED)
 
+#include "camprocess.h"
+
 CC_IMPLEMENT_MEMDUMP(PluginOILFilter, OILFilter)
 CC_IMPLEMENT_DYNAMIC(PathNameListItem, ListItem)
 
@@ -779,7 +781,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// This should be set to some sensible path but I've hardcoded it for now
 	// We should change to making ~/.XaraLX into a directory and store the main config
 	// file and these filter config files in there
-	m_XMLFile.SetPathName(_T("~/.XPFilters/XPFilter.xml"));
+	m_XMLFile.SetPathName(_T("/home/gerry/.XPFilters/XPFilter.xml"));
 
 //	Size = 32;
 //	TCHAR Exts[32];
@@ -878,17 +880,16 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// Check stderr for errors
 	// Get HowCompatible from stdout
 
-// Temporarily remove this as it is interferring with file loading
-// Looks like the loading code is using the first filter that doesn't return 0
-// rather than using the filter that returns the best score
-#if FALSE
 	wxString sCommand;
 	// Does this need double quotes to cope with spaces in filenames?
 	sCommand.Printf(_T("%s -c -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
 
+	TRACE(_T("Running '%s'"), sCommand.c_str());
+
 	wxArrayString saOutput;
 	wxArrayString saErrors;
 	int code = wxExecute(sCommand, saOutput, saErrors);
+	TRACE(_T("wxExecute returned %d"), code);
 	if (code == 0)
 	{
 		// Extract the value from saOutput
@@ -911,7 +912,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	{
 		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 	}
-#endif
+
 	return(HowCompatible);
 }
 
@@ -994,28 +995,32 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// Redirect stdout to a CCLexFile
 	// Check stderr during the Xar import and abort if an error is reported
 
-	// However to get it working quickly I shall instead:
-	// Run the plugin synchronously with the following options
-	// -i -g -f <filename> ><tempfilename>
-
-	// Check stderr for errors
-
-	// Once complete create a CCDiskFile attached to the temporary file
 	m_TempXarFile.SetPathName(_T("/tmp/xpftemp.xar"));
+
+	CCDiskFile TempFile;
+	if (!TempFile.open(m_TempXarFile, ios::out | ios::trunc | ios::binary))
+	{
+		// report an error here
+		return FALSE;
+	}
 
 	PathName FileName = pFile->GetPathName();
 
 	wxString sCommand;
 	// Does this need double quotes to cope with spaces in filenames?
-	sCommand.Printf(_T("%s -i -f %s > %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath(), (LPCTSTR)m_TempXarFile.GetPath());
+	sCommand.Printf(_T("%s -i -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
 
-	wxArrayString saOutput;
-	wxArrayString saErrors;
-	int code = wxExecute(sCommand, saOutput, saErrors);
+	// Create a process with the TempFile as the stdout
+	// We will need to derive a new class from CamProcess to handle
+	// the processing of stderr for errors, warnings and progress
+	CamProcess TheProc(NULL, &TempFile);
+
+	int code = TheProc.Execute(sCommand);
+	TempFile.close();
 	if (code != 0)
 	{
 		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
-		// Extract error from saErrors and report it
+		// Extract error from a derived CamProcess class and report it
 		return(FALSE);
 	}
 
@@ -1180,7 +1185,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	wxArrayString saErrors;
 	int code = wxExecute(sCommand, saOutput, saErrors);
 
-	for (INT32 i = 0; i < saErrors.GetCount(); i++)
+	for (UINT32 i = 0; i < saErrors.GetCount(); i++)
 	{
 		TRACE(_T("stderr: %s"), saErrors[i].c_str());
 	}
@@ -1195,6 +1200,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 
 		// Get error message from saErrors
+		return(FALSE);
 	}
 
 	return(TRUE);
@@ -1250,8 +1256,8 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// Check stderr for errors and progress
 
 	// However for now we will instead
-	// Run the plugin synchronously with the following options
-	// -e -g -f <filename> -x <xmlfilename> < <tempfilename>
+	// Run the plugin with the following options
+	// -e -g -f <filename> -x <xmlfilename>
 
 	// The xmlfilename is a path to a user and filter specific file
 	// e.g. ~/.XaraLX/filtername.xml
@@ -1260,19 +1266,26 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 	wxString sCommand;
 	// Does this need double quotes to cope with spaces in filenames?
-	sCommand.Printf(_T("%s -e -f %s -x %s < %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath(), (LPCTSTR)m_TempXarFile.GetPath());
+	sCommand.Printf(_T("%s -e -f %s -x %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath());
 
-	wxArrayString saOutput;
-	wxArrayString saErrors;
-	int code = wxExecute(sCommand, saOutput, saErrors);
-	for (INT32 i = 0; i < saErrors.GetCount(); i++)
+	CCDiskFile TempFile(CCFILE_DEFAULTSIZE, FALSE, FALSE);
+	if (!TempFile.open(m_TempXarFile, ios::in | ios::binary))
 	{
-		TRACE(_T("stderr: %s"), saErrors[i].c_str());
+		// report an error here
+		return FALSE;
 	}
+
+	// Create a process with the TempFile as the stdin
+	// We will need to derive a new class from CamProcess to handle
+	// the processing of stderr for errors, warnings and progress
+	CamProcess TheProc(&TempFile, NULL);
+
+	int code = TheProc.Execute(sCommand);
+	TempFile.close();
 	if (code != 0)
 	{
 		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
-		// Extract error from saErrors and report it
+		// Extract error from a derived CamProcess class and report it
 		return(FALSE);
 	}
 

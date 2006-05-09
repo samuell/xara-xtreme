@@ -231,11 +231,19 @@ INT32 PluginNativeFilter::HowCompatible( PathName& Filename, ADDR HeaderStart, U
 						   UINT32 FileSize )
 {
 	// We ignore the passed in buffer and just pass the filename to the external object
-	PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
-	INT32 HowCompatible = pPluginOILFilter->HowCompatible(Filename);
+	INT32 HowCompatible = 0;
 
-	TRACEUSER( "GerryX", _T("PluginNativeFilter::HowCompatible returning = %d\n"), HowCompatible);
+	// If we don't have a filename then don't bother for now	
+	String_256 sFilename = Filename.GetPath();
+	if (!sFilename.IsEmpty())
+	{
+		PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
+// Temporarily removed to stop file loading problems
+//		HowCompatible = pPluginOILFilter->HowCompatible(Filename);
+	}
+
 	// Return the found value to the caller.
+	TRACEUSER( "GerryX", _T("PluginNativeFilter::HowCompatible returning = %d\n"), HowCompatible);
 	return HowCompatible;
 }
 
@@ -278,6 +286,8 @@ BOOL PluginNativeFilter::DoImport(SelOperation* pOp, CCLexFile* pFile, Document*
 	ERROR2IF(FALSE, pFile == NULL,"PluginNativeFilter::DoImport null file!");
 	ERROR2IF(FALSE, pDestDoc == NULL,"PluginNativeFilter::DoImport null document!");
 
+	TRACEUSER( "Gerry", _T("PluginNativeFilter::DoImport"));
+
 	PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
 
 	// Make sure the OIL filter gets cleaned up on exit
@@ -294,6 +304,8 @@ BOOL PluginNativeFilter::DoImport(SelOperation* pOp, CCLexFile* pFile, Document*
 
 	// Make sure the new file object gets deleted on exit
 	AutoDeleteCCObject TidyFile(pNewFile);
+
+	TRACEUSER( "Gerry", _T("Calling CamelotNativeFilter::DoImport\n"));
 
 	// Call the baseclass DoImport method passing the new file
 	if (!CamelotNativeFilter::DoImport(pOp, pNewFile, pDestDoc, AutoChosen, pPos, ppImportedBitmap, pPosTranslate, URL))
@@ -430,6 +442,10 @@ BOOL PluginNativeFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* 
 	// Free up any unused bitmaps in the global list
 	// (just deleting the KernelBitmaps doesn't seem to do it)
 	Camelot.GetGlobalBitmapList()->DeleteAllUnusedBitmaps();
+
+	// Make sure this is closed
+	if (pNewFile->isOpen())
+		pNewFile->close();
 
 	if (!ok)
 	{
