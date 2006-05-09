@@ -332,7 +332,7 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 #endif
 #endif
 		// Update the last virtual keycode if not a modifier
-		switch( m_LastVirtKey )
+		switch( VirtKey )
 		{
 		case WXK_SHIFT:
 		case WXK_ALT:

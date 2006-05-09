@@ -119,6 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cversion.h"
 #include "camelot.h"
 
+#include "keypress.h"
 #include "ccdc.h"
 #include "camprofile.h"
 #include "dlgevt.h"
@@ -209,11 +210,95 @@ CCamApp::CCamApp()
 {
 }
 
+int CCamApp::FilterEvent( wxEvent& event )
+{
+	if( event.GetEventType() == wxEVT_KEY_DOWN ||
+		event.GetEventType() == wxEVT_KEY_UP )
+	{
+		wxObject* pEventObject = event.GetEventObject();
+		TRACEUSER( "jlh92", _T("KeyEvent 4 %s %s\n"), 
+			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName(),
+			event.GetEventType() == wxEVT_KEY_DOWN ? _T("KD") : _T("KU") );
+		
+		// Is the object allowed to recieve keys? 
+		wxClassInfo* pClassInfo = pEventObject->GetClassInfo();
+		if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
+			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) )
+		{
+			TRACEUSER( "jlh92", _T("Control gets keys") );
+			// Yes, pass on as usual
+			return -1;
+		}
+
+		// Scan down ancestors looking for either wxPanels (always non-modal) and
+		// wxDailogs (can be modal, so we check)
+		wxWindow *pWnd = (wxWindow*)pEventObject;
+		while( NULL != pWnd && !pWnd->IsKindOf( CLASSINFO(wxPanel) ) )
+		{
+			// Dialogs may-be modal so check
+			if( pWnd->IsKindOf( CLASSINFO(wxDialog) ) )
+			{
+				// Pass event down chain if modal
+				if( ((wxDialog*)pWnd)->IsModal() )
+				{
+					TRACEUSER( "jlh92", _T("Modal dialog\n") );
+					return -1;
+				}
+
+				// Non-modal dialog so do focus handling
+				break;
+			}
+
+			pWnd = pWnd->GetParent();
+		}
+
+		// Make sure the kernel knows which view/doc the event applies to, if any.
+		if( NULL != Document::GetSelected() )
+			Document::GetSelected()->SetCurrent();
+		if( NULL != DocView::GetSelected() )
+			DocView::GetSelected()->SetCurrent();
+
+		TRACEUSER( "jlh92", _T("Handled!\n") );
+
+		// Process keyboard messages (and mark event as handled)
+		if( !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( (wxKeyEvent*)&event ) )
+			return true;
+	}
+	
+	return -1;
+}
+
 /***************************************************************************************************************************/
 //
 // Initialisation.
 //
 
+static bool GiveFocusToFocusableOffspring( wxWindow* pWnd )
+{
+	TRACEUSER( "jlh92", _T("GF2FO class %s\n"), pWnd->GetClassInfo()->GetClassName() );
+
+	// Can we give focus to passed window. Yes, give focus
+	// and return happy
+	if( pWnd->AcceptsFocus() )
+	{
+		TRACEUSER( "jlh92", _T("Focused!\n") );
+		pWnd->SetFocus();
+		return true;
+	}
+
+	// No, lets try the children then
+	wxWindowList&		lstChild = pWnd->GetChildren();
+	wxWindowListNode*	pNode = lstChild.GetFirst();
+	while( NULL != pNode )
+	{
+		if( GiveFocusToFocusableOffspring( pNode->GetData() ) )
+			return true;
+
+		pNode = pNode->GetNext();
+	}
+	
+	return false;
+}
 
 bool CCamApp::OnInit()
 {
@@ -314,7 +399,7 @@ bool CCamApp::OnInit()
 	
 	// Useful debug tracing enablers, left here for next debug session...
 //	wxLog::AddTraceMask( _T("focus") );
-	wxLog::AddTraceMask( _T("keyevent") );
+//	wxLog::AddTraceMask( _T("keyevent") );
 
 	// Initialise the MonotonicTime class
 	MonotonicTime::Init();
@@ -533,10 +618,9 @@ bool CCamApp::OnInit()
 	// Remove the splash screen
 	CamResource::DoneInit();
 
-	// Give focus to second child (status bar), parent can't have it since
+	// Give focus to any child that will take it, parent can't have it since
 	// it's a frame (see gtk_widget_grab_focus)
-	if( NULL != m_pMainFrame->GetStatusBar() )
-		m_pMainFrame->GetStatusBar()->SetFocus();
+	GiveFocusToFocusableOffspring( m_pMainFrame );
 	
 	// Create timer used for background rendering.
 //	m_Timer.SetOwner(this,CAM_TIMER_ID);

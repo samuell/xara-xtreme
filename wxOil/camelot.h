@@ -139,6 +139,8 @@ public:
 	void OnTimer	( wxTimerEvent &event );
 
 	void GiveActiveCanvasFocus();
+	
+	int FilterEvent( wxEvent& event );
 
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;
