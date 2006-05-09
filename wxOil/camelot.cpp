@@ -211,6 +211,24 @@ CCamApp::CCamApp()
 {
 }
 
+/*********************************************************************************************
+>	int CCamApp::FilterEvent( wxEvent& event )
+
+	Author:		Luke_Hart (Xara Group Ltd) <LukeH@xara.com>
+	Created:	09/05/06
+	Inputs:		A reference to the event to filter
+	Outputs:	-
+	Returns:	-
+	Purpose:	This function is used to collect the key press information for handling by
+				applictaion. It passes event unmolested for controls that are allowed focus and
+				controls within modal dialogs. It also has code to make sure that key events
+				that are passed on aren't checked again, based on the event timestamp. All other 
+				keys are passed into application keypress handling code.
+	Errors:		-
+	Scope:	    Protected
+	SeeAlso:	The focus handling document
+
+**********************************************************************************************/ 
 int CCamApp::FilterEvent( wxEvent& event )
 {
 	static long	lLastTimeStamp = 0;
