@@ -9,37 +9,15 @@
             <orient>wxHORIZONTAL</orient>
 
             <object class="sizeritem">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE|wxGROW</flag>
                 <border>1</border>
                 <option>1</option>
                 <object class="wxStaticText" name="IDC_SL_STATUSTEXT">
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxALIGN_LEFT</style>
-                    <label>Nothing selected</label>
-                    <tooltip>Status bar text</tooltip>
-                    <help>Displays the current status</help>
-                </object>
-            </object>
-
-            <object class="spacer">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                <border>1</border>
-                <size>3,16</size>
-            </object>
-
-            <object class="sizeritem">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-                <border>1</border>
-                <option>1000</option>
-                <object class="wxStaticText" name="IDC_SL_PROGRESSTEXT">
-                    <hidden>1</hidden>
-                    <font>
-                        <size>8</size>
-                    </font>
-                    <style>wxALIGN_RIGHT</style>
-                    <label>Nothing selected</label>
+                    <style>wxALIGN_LEFT|wxST_NO_AUTORESIZE</style>
+                    <label>Nothing Selected</label>
                     <tooltip>Status bar text</tooltip>
                     <help>Displays the current status</help>
                 </object>

@@ -695,9 +695,7 @@ BOOL StatusLine::UpdateText(String_256* pText, BOOL PrefixSelDesc)
 	
 	if ((IsRestrictedAccessToColourPicker () == FALSE) && (DoControlHelp == TRUE))
 	{
-		BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
-		PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
-		return ok;
+		return SetStatusText(text);
 	}
 	else
 	{
@@ -748,9 +746,7 @@ BOOL StatusLine::UpdateTextForColourPicker(String_256* pText, BOOL PrefixSelDesc
 	// re-sample time and update status line
 	TextTimer.Sample();
 	
-	BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
-	PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
-	return ok;
+	return SetStatusText(text);
 }
 
 
@@ -1266,7 +1262,7 @@ BOOL StatusLine::SetRenderIndicator(RenderState Action)
 }
 
 /********************************************************************************************
->	BOOL StatusLine::ShowProgress (BOOL Show=TRUE, String_64 *JobDescrip = NULL)
+>	BOOL StatusLine::ShowProgress (BOOL Show=TRUE, StringBase *JobDescrip = NULL)
 
 	Author:		Alex Bligh
 	Created:	09/05/2006
@@ -1282,11 +1278,11 @@ BOOL StatusLine::SetRenderIndicator(RenderState Action)
 	SeeAlso:	StatusLine::SetPercent; StatusLine::GetPercent
 ********************************************************************************************/
 
-BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
+BOOL StatusLine::ShowProgress (BOOL Show, StringBase *JobDescrip)
 {
 	BOOL ShowChanged=(Show != ProgressShown);
 
-	String_64 EmptyString(_T(""));
+	String_8 EmptyString(_T(""));
 
 	// Make "NULL" mean "empty string"
 	if (!JobDescrip)
@@ -1300,7 +1296,6 @@ BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
 
 	if (ShowChanged)
 	{
-		HideGadget(_R(IDC_SL_PROGRESSTEXT), !Show);
 		HideGadget(_R(IDC_SL_PROGRESSGAUGE), !Show);
 		HideGadget(_R(IDC_SL_PROGRESSPERCENT), !Show);
 
@@ -1308,6 +1303,7 @@ BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
 
 		CurrentPercent=-1;		// Force a redraw
 		SetPercent(0, TRUE, JobDescrip);	// Force redraw of window _including background_; always refresh string
+
 		return TRUE;
 	}
 
@@ -1317,7 +1313,7 @@ BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
 
 /********************************************************************************************
 >	BOOL StatusLine::SetPercent(INT32 NewPercent,
-									BOOL ClearBackground = FALSE, String_64 *JobDescrip = NULL)
+									BOOL ClearBackground = FALSE, StringBase *JobDescrip = NULL)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/02/94
@@ -1341,7 +1337,7 @@ BOOL StatusLine::ShowProgress (BOOL Show, String_64 *JobDescrip)
 ********************************************************************************************/
 
 BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
-								String_64 *JobDescrip /* =NULL */)
+								StringBase *JobDescrip /* =NULL */)
 // The extra argument ClearBackground is not mentioned in the help, because it
 // is used internally - When the window is first created, the background must be cleared,
 // but on normal updates this causes horrible flicker, so is to be avoided.
@@ -1364,15 +1360,15 @@ BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
 	if (JobDescrip != NULL)
 	{
 		delete JobDescription;
-		JobDescription = new String_64(*JobDescrip);
+		JobDescription = new String_256(*JobDescrip);
 
 		if (JobDescription)
 		{
-			SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), *JobDescription);
+			SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), ProgressShown?*JobDescription:StatusText);
 		}
 		else
 		{
-			SetStringGadgetValue(_R(IDC_SL_PROGRESSTEXT), String_64(_T("")));
+			SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), ProgressShown?String_256(_T("")):StatusText);
 		}
 
 		InvalidateGadget(0, TRUE); // Repaint the whole bar
@@ -1388,4 +1384,32 @@ BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
 	}
 
 	return(TRUE);
+}
+
+/********************************************************************************************
+>	BOOL StatusLine::SetStatusText(const String_256 &text)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	09/05/2006
+	Inputs:		text - the text to set it to
+
+	Outputs:	-
+	Returns:	TRUE if it successfully makes the change.
+	Purpose:	Sets the status line text. Records it. Puts it in the gadget and invalidates
+				it if the gadget is shown
+	SeeAlso:	CProgressBar::GetPercent; CProgressBar::Create
+
+********************************************************************************************/
+
+BOOL StatusLine::SetStatusText(const String_256 &text)
+{
+	StatusText = text;
+	if (!ProgressShown)
+	{
+		StatusText = text;
+		BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
+		PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
+		return ok;
+	}
+	return TRUE;
 }

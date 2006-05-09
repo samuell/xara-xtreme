@@ -202,15 +202,17 @@ public:
 
 // Progress related functions
 public:
-	BOOL ShowProgress (BOOL Show=TRUE, String_64 *JobDescrip = NULL);
+	BOOL ShowProgress (BOOL Show=TRUE, StringBase *JobDescrip = NULL);
 
 	INT32 GetPercent(void) const {return CurrentPercent;}
-	BOOL SetPercent(INT32 Percent, BOOL RedrawBackground = FALSE, String_64 *JobDescrip = NULL);
+	BOOL SetPercent(INT32 Percent, BOOL RedrawBackground = FALSE, StringBase *JobDescrip = NULL);
 
 protected:
 	INT32 CurrentPercent;			// The currently displayed percentage value
-	String_64 *JobDescription;	// NULL, or pointer to description of current job
+	String_256 *JobDescription;	// NULL, or pointer to description of current job
 	BOOL ProgressShown;
+	String_256 StatusText;
+	BOOL SetStatusText(const String_256 &text);
 
 	CC_DECLARE_DYNCREATE(StatusLine);              
 };
