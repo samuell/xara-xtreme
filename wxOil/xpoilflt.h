@@ -110,6 +110,7 @@ PORTNOTE("other","PluginFilter COM bits removed")
 #endif
 
 #include "xpfcaps.h"
+#include "xmlutils.h"
 
 class PluginNativeFilter;
 
@@ -198,27 +199,24 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	void ReleaseFilterObject();
 #endif
 
-PORTNOTE("other","PluginFilter XML bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
 //	This function is called from GetCapabilities to parse the XML
-	HRESULT BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTree);
+	BOOL BuildCapabilityTree(wxString strXML, CapabilityTree* pCapTree);
 
-	// The functions from here down to CreateColourNode are all concerned with the 
+	// The functions from here down to CreateColourNode are all concerned with the
 	// parsing of the XML and the creation of the CapabilityTree
-	HRESULT ReadOptions(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
-	HRESULT ReadRasterise(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
-	HRESULT ReadSpread(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
-	HRESULT ReadObjects(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
-	HRESULT ReadAttributes(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
-	HRESULT ReadColour(IXMLDOMNode* pNode, CapabilityTree* pCapTree);
+	BOOL ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree);
+	BOOL ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree);
+	BOOL ReadSpread(xmlNodePtr pNode, CapabilityTree* pCapTree);
+	BOOL ReadObjects(xmlNodePtr pNode, CapabilityTree* pCapTree);
+	BOOL ReadAttributes(xmlNodePtr pNode, CapabilityTree* pCapTree);
+	BOOL ReadColour(xmlNodePtr pNode, CapabilityTree* pCapTree);
 
-	HRESULT GetConvertAsType(IXMLDOMNode* pNode, XPFConvertType* pValue);
-	HRESULT GetXPFBOOL(IXMLDOMNode* pNode, LPTSTR pAttrName, XPFBOOL* pbValue);
-	HRESULT GetXPFProp(IXMLDOMNode* pNode, LPTSTR pAttrName, PropMapEntry aMap[], XPFProp* pValue);
-	XPFCapability* CreateObjectNode(IXMLDOMNode* pNode);
-	XPFCapability* CreateAttributeNode(IXMLDOMNode* pNode);
-	XPFCapability* CreateColourNode(IXMLDOMNode* pNode);
-#endif
+	BOOL GetConvertAsType(xmlNodePtr pNode, XPFConvertType* pValue);
+	BOOL GetXPFBOOL(xmlNodePtr pNode, LPTSTR pAttrName, XPFBOOL* pbValue);
+	BOOL GetXPFProp(xmlNodePtr pNode, LPTSTR pAttrName, PropMapEntry aMap[], XPFProp* pValue);
+	XPFCapability* CreateObjectNode(xmlNodePtr pNode);
+	XPFCapability* CreateAttributeNode(xmlNodePtr pNode);
+	XPFCapability* CreateColourNode(xmlNodePtr pNode);
 
 protected:
 	BOOL m_bImport;

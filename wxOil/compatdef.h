@@ -327,6 +327,7 @@ typedef float				FLOAT;
 
 typedef DWORD				HRESULT;
 const HRESULT				S_OK = 0;
+const HRESULT				E_FAIL = 0x80004005;
 
 typedef char			   *LPSTR;
 typedef const char		   *LPCSTR;

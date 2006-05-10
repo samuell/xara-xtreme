@@ -127,7 +127,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 #include "ctrllist.h"
 #include "cartctl.h"
+#include "xmlutils.h"
 #include "camplatform.h"
+
 //
 // Define FILELIST for recent file list on file menu.
 // Note that this currently seems to be rather unreliable.
@@ -236,8 +238,11 @@ int CCamApp::FilterEvent( wxEvent& event )
 	if( event.GetEventType() == wxEVT_CHAR )
 	{
 		wxObject* pEventObject = event.GetEventObject();
-		TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"), 
-			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName() );
+		if (pEventObject)
+		{
+			TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"), 
+				((wxWindow*)pEventObject)->GetClassInfo()->GetClassName() );
+		}
 	}
 
 	if( event.GetEventType() == wxEVT_KEY_DOWN ||
@@ -654,6 +659,8 @@ bool CCamApp::OnInit()
 	// Remove the splash screen
 	CamResource::DoneInit();
 
+	CXMLUtils::Initialise();
+
 	// Give focus to any child that will take it, parent can't have it since
 	// it's a frame (see gtk_widget_grab_focus)
 	GiveFocusToFocusableOffspring( m_pMainFrame );
@@ -686,6 +693,8 @@ INT32 CCamApp::OnExit( void )
 	m_docManager = std::auto_ptr<wxDocManager>( NULL );
 
 	// Now deinit everything
+
+	CXMLUtils::DeInitialise();
 
 	DeinitKernel();
 
