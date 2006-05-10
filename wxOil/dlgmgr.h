@@ -592,6 +592,7 @@ public:
 	static BOOL EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enabled); 
 	static BOOL HideGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Hide); 
 	static BOOL GadgetRedraw(CWindowID WindowID, CGadgetID Gadget, BOOL Redraw);
+	static void Layout(CWindowID WindowID, BOOL CanYield=FALSE);
 
 	// This function should be called after hiding\showing a control,
 	// so the dialog can be resized

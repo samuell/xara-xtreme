@@ -143,6 +143,8 @@ public:
 	void WindowDestroyEvent(wxWindowDestroyEvent &event);
 	void OnSetFocus(wxChildFocusEvent &event);
 	void CamDialogEvent(wxCamDialogEvent &event);
+	void MoveEvent(wxMoveEvent &event);
+	void SizeEvent(wxSizeEvent &event);
 
 	void GrimReaperEvent(wxCamDialogEvent &event);
 

@@ -150,6 +150,8 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_CAMDIALOG_DEFERREDMSG (wxID_ANY, DialogEventHandler::CamDialogEvent)
 	EVT_CAMDIALOG_GRIMREAPER (wxID_ANY, DialogEventHandler::GrimReaperEvent)
 	EVT_CAMDIALOG_REDRAW (wxID_ANY, DialogEventHandler::CamDialogEvent)
+	EVT_MOVE	(DialogEventHandler::MoveEvent)
+	EVT_SIZE	(DialogEventHandler::SizeEvent)
 END_EVENT_TABLE();
 
 DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_DEFERREDMSG)
@@ -542,6 +544,50 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 
 
 void DialogEventHandler::CamDialogEvent(wxCamDialogEvent& event)
+{
+	DialogManager::Event(this, event);
+}
+
+/********************************************************************************************
+
+>	DialogEventHandler::MoveEvent(wxMoveEvent& event)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		event - the wxEvent
+	Outputs:	-
+	Returns:	-
+	Purpose:	Passes an event to DialogManager::Event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+
+void DialogEventHandler::MoveEvent(wxMoveEvent& event)
+{
+	DialogManager::Event(this, event);
+}
+
+/********************************************************************************************
+
+>	DialogEventHandler::SizeEvent(wxSizeEvent& event)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		event - the wxEvent
+	Outputs:	-
+	Returns:	-
+	Purpose:	Passes an event to DialogManager::Event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+
+void DialogEventHandler::SizeEvent(wxSizeEvent& event)
 {
 	DialogManager::Event(this, event);
 }

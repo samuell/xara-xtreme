@@ -1067,6 +1067,20 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}	
 	else if (
+		(EventType == wxEVT_MOVE) ||
+		FALSE)
+	{
+		msg.DlgMsg = DIM_DLG_MOVED;
+		HandleMessage = TRUE;
+	}	
+	else if (
+		(EventType == wxEVT_SIZE) ||
+		FALSE)
+	{
+		msg.DlgMsg = DIM_DLG_RESIZED;
+		HandleMessage = TRUE;
+	}	
+	else if (
 		((EventType == wxEVT_CAMDIALOG_REDRAW) && (pGadget)) ||
 		FALSE)
 	{
@@ -4644,6 +4658,32 @@ BOOL DialogManager::HideGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Hide)
 	if (!pGadget) return FALSE;
 	pGadget->Show(!Hide);
 	return TRUE;
+}
+
+/********************************************************************************************
+
+>	void DialogManager::Layout(CWindowID WindowID, BOOL CanYield=FALSE)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	10/05/2006
+	Inputs:		WindowID: 		Dialog box window identifier
+	Outputs:	-
+	Returns:	-
+	Purpose:	Relayout dialog - for sizer changes
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void DialogManager::Layout(CWindowID WindowID, BOOL CanYield /*=FALSE*/)
+{
+	((wxWindow *)WindowID)->Layout();
+	if (CanYield)
+	{
+		// wxWidgets needs a yield to process these, but we can't always yield
+		wxWindowDisabler(WindowID);
+		wxYieldIfNeeded();
+	}
 }
 
 /********************************************************************************************

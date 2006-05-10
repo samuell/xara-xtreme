@@ -965,8 +965,21 @@ MsgResult StatusLine::Message(Msg* pMsg)
 				}
 				s_pStatusLine = this;
 				SetGadgetBitmap(_R(IDB_SL_SNAP), _R(IDB_SL_SNAPN)); // turn snap off by default
+				nobreak; // FALL THROUGH!
 			}
-
+			case DIM_DLG_RESIZED:
+			{
+				if (!ProgressShown)
+				{
+					// For some reason we need to do a relayout with the gadgets shown
+					HideGadget(_R(IDC_SL_PROGRESSGAUGE), FALSE);
+					HideGadget(_R(IDC_SL_PROGRESSPERCENT), FALSE);
+					Layout();					
+					HideGadget(_R(IDC_SL_PROGRESSGAUGE), !ProgressShown);
+					HideGadget(_R(IDC_SL_PROGRESSPERCENT), !ProgressShown);					
+				}
+				break;
+			}
 			default:
 				break;
 
@@ -1298,7 +1311,7 @@ BOOL StatusLine::ShowProgress (BOOL Show, StringBase *JobDescrip)
 	{
 		HideGadget(_R(IDC_SL_PROGRESSGAUGE), !Show);
 		HideGadget(_R(IDC_SL_PROGRESSPERCENT), !Show);
-
+		Layout();
 		ProgressShown=Show;
 
 		CurrentPercent=-1;		// Force a redraw

@@ -1814,6 +1814,26 @@ BOOL DialogOp::HideGadget(CGadgetID GadgetID, BOOL Hide)
 {                                                                                
 	return (DlgMgr->HideGadget(GetReadWriteWindowID(), GadgetID, Hide)); 		
 }
+
+/********************************************************************************************
+
+>	void DialogOp::Layout(BOOL CanYield = FALSE)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	10/05/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Relayout dialog - for sizer changes
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void DialogOp::Layout(BOOL CanYield /*=FALSE*/)
+{
+	DlgMgr->Layout(GetReadWriteWindowID(), CanYield);
+}
     
 /********************************************************************************************
 

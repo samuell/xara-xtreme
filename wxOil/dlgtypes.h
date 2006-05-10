@@ -216,6 +216,7 @@ enum CDlgMessage {
 					DIM_SPINCONTROLDOWN,				// Special spin control message
 
 					DIM_DLG_MOVED,					// the dialog has been moved
+					DIM_DLG_RESIZED,				// the dialog has been resized
 
 					DIM_COMMIT_BRUSH,                // special message sent by the brush dialog
 
