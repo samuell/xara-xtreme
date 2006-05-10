@@ -120,7 +120,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 
 #include "keypress.h"
-#include "fltrdisc.h"
 #include "ccdc.h"
 #include "camprofile.h"
 #include "dlgevt.h"
@@ -466,8 +465,6 @@ bool CCamApp::OnInit()
 	// Initialise the kernel application object & Prefs
  	if( !Camelot.Init() )
 		return false;
-
-	CDiscoverPlugin::GetInstance()->Init();
 
 	TRACET(_T("CCamApp::Calling InitKernel"));
 	// then initialise the kernel (and almost everything else)	
