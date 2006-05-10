@@ -859,7 +859,11 @@ void CamArtProvider::Draw(wxDC& dc, const wxRect & rect, ResourceID Resource, Ca
 
 	if (Flags & CAF_TEXT)
 	{
-		wxString ctext = GetTextInfoOrDraw(Resource, Flags, dc, TRUE, NULL, NULL, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY, text);
+		// The max width is the width of the entire control, less the internal border width
+		wxCoord MaxWidth = rect.GetWidth() - GetBorderSize(Flags).GetWidth();
+		if (MaxWidth<0)
+			MaxWidth=0;
+		wxString ctext = GetTextInfoOrDraw(Resource, Flags, dc, TRUE, NULL, NULL, brect.x+bitmapoffsetX, brect.y+bitmapoffsetY, MaxWidth, text);
 	}
 	else
 	{
@@ -903,7 +907,7 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 	if (Flags & CAF_TEXT)
 	{
 		wxScreenDC dc;
-		wxString ctext = GetTextInfoOrDraw(r, Flags, dc, FALSE, &w, &h, 0, 0, text);
+		wxString ctext = GetTextInfoOrDraw(r, Flags, dc, FALSE, &w, &h, 0, 0, -1, text);
 	}
 	else
 	{
@@ -915,19 +919,44 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 		}
 	}
 
+	wxSize Border=GetBorderSize(Flags);
+	return wxSize(w+Border.GetWidth(), h+Border.GetHeight());
+}
+
+/********************************************************************************************
+
+>	wxSize CamArtProvider::GetBorderSize(CamArtFlags Flags=CAF_DEFAULT)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	25/01/2005
+	Inputs:		Flags - the flags
+	Outputs:	-
+	Returns:	The size of the border around the control
+	Purpose:	-
+	Errors:		-
+	SeeAlso:	-
+
+Note that the internal border is the TOTAL internal border (i.e. left plus right). Border
+pixels will be allocated preferentially on left and top, to right and bottom. Rect should
+already have been inflated (wxCamArtControl does this by increasing its client area).
+
+********************************************************************************************/
+
+wxSize CamArtProvider::GetBorderSize(CamArtFlags Flags /*=CAF_DEFAULT*/)
+{
 	UINT32 InternalBorderX = (Flags & CAF_NOINTERNALBORDER)?0:2;
 	UINT32 InternalBorderY = (Flags & CAF_NOINTERNALBORDER)?0:1;
 	// 3 extra pixels for push buttons, 2 border (one on each side) and one for push displacement
 	UINT32 extraX=InternalBorderX+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
 	UINT32 extraY=InternalBorderY+3*((Flags & CAF_ALWAYS3D) || (Flags & CAF_PUSHBUTTON)); // 3 or 0
-
-	return wxSize(w+extraX, h+extraY);
+	return wxSize(extraX, extraY);
 }
 
 /********************************************************************************************
 
 >	wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, wxDC &dc,  BOOL Draw=FALSE, wxCoord *w=NULL, wxCoord *h=NULL,
-											   wxCoord x=0, wxCoord y=0, const wxString &text = wxEmptyString)
+											   wxCoord x=0, wxCoord y=0, wxCoord MaxWidth=-1, const wxString &text = wxEmptyString)
 
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
@@ -936,6 +965,7 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 				Flags - the flags
 				Draw = TRUE to draw the text
 				x, y - location to draw the text (if Draw is set)
+				MaxWidth - the maximum width or the text (use -1 when calculating for no max width)
 	Outputs:	w, h, pointers to fill in (can be NULL) for the text extent. Either both or neither must be NULL
 	Returns:	The text
 	Purpose:	Sets up the DC and returns the text
@@ -944,7 +974,8 @@ wxSize CamArtProvider::GetSize(ResourceID r, CamArtFlags Flags, const wxString &
 
 ********************************************************************************************/
 
-wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc, BOOL Draw/*=FALSE*/, wxCoord *w, wxCoord *h, wxCoord x, wxCoord y, const wxString &text)
+wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc, BOOL Draw/*=FALSE*/, wxCoord *w, wxCoord *h, wxCoord x, wxCoord y,
+											wxCoord MaxWidth /*= -1*/, const wxString &text)
 {
 	// find the name by looking up the ID as a string
 	const TCHAR * tcname=text;
@@ -976,13 +1007,102 @@ wxString CamArtProvider::GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc
 	font.SetPointSize((f & CAF_HALFHEIGHT)?7:8);
 	dc.SetFont(font);
 
-	if (h && w)
-		dc.GetTextExtent(wxString(tcname), w, h);
+	wxString RenderText(tcname);
 
-	if (Draw)
-		dc.DrawText(wxString(tcname), x, y);
+	if (!(f & CAF_STATUSBARTEXT))
+	{
+		if (h && w)
+			dc.GetTextExtent(RenderText, w, h);
+	
+		if (Draw)
+			dc.DrawText(RenderText, x, y);
+	}
+	else
+	{
+		// It's status bar text. We have to go through the tokens individually
 
-	return wxString(tcname);
+		// First tokenize the string
+		INT32 i=0;
+		wxArrayString Tokens;
+		wxArrayString Separators;
+		wxString SubString=wxEmptyString;
+		INT32 BoldBreak=-1;
+		for (i=0; i<(INT32)(RenderText.Length()); i++)
+		{
+			wxChar c = RenderText[i];
+			if ( (c==_T(';')) ||
+				 ((c==_T(':')) && (i<((INT32)RenderText.Length())-1) && (RenderText[i+1]==_T(':')) )
+				)
+			{
+				// We found a separator
+				Tokens.Add(SubString);
+				Separators.Add(wxString(c));
+
+				// Was it a colon separator?
+				if (c==_T(':'))
+				{
+					// Remember it's now bold up to here
+					BoldBreak=Tokens.GetCount();
+					// Skip over the second colon
+					i++;
+				}
+
+				SubString=wxEmptyString;
+			}
+			else
+				SubString+=c; // It's not a separator, add it to the substring
+		}
+
+		// add the final token
+		if (!SubString.IsEmpty())
+		{
+			Tokens.Add(SubString);
+			Separators.Add(wxEmptyString);
+		}
+
+		BOOL Stop = FALSE;
+		wxCoord CumWidth = 0; // The cumulative width used so far
+		wxCoord MaxHeight = 0; // The max height used so far
+		wxFont BoldFont = font;
+		BoldFont.SetWeight(wxFONTWEIGHT_BOLD);
+
+		for (i=0; i<(INT32)(Tokens.GetCount()) && !Stop; i++)
+		{
+			wxString TextBlob = Tokens[i] + Separators[i];
+
+			// Set the font up
+			if (i<BoldBreak)
+				dc.SetFont(BoldFont);
+			else
+				dc.SetFont(font);
+
+			// Find out how large this blob is
+			wxCoord ww=0;
+			wxCoord hh=0;
+			dc.GetTextExtent(TextBlob, &ww, &hh);
+
+			// Does it fit (or do we force it to fit because it is the first text)
+			if ((MaxWidth<0) || (i==0) || (CumWidth+ww<=MaxWidth))
+			{
+				// Draw it if necessary
+				if (Draw)
+					dc.DrawText(TextBlob, x+CumWidth, y);
+
+				// Account for its width
+				CumWidth+=ww;
+				if (hh>MaxHeight)
+					MaxHeight=hh;
+			}
+			else
+				Stop=TRUE;
+		}
+		if (h)
+			*h = MaxHeight;
+		if (w)
+			*w = CumWidth;
+	}
+
+	return RenderText;
 }
 
 /********************************************************************************************

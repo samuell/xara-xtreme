@@ -245,8 +245,9 @@ protected:
 	void DeleteHashContents();
 	void ArtLoad(BOOL newbitmaps = FALSE, BOOL defer=TRUE);
 
+	wxSize GetBorderSize(CamArtFlags Flags=CAF_DEFAULT);
 	wxString GetTextInfoOrDraw(ResourceID r, CamArtFlags f, wxDC &dc, BOOL Draw=FALSE, wxCoord *w=NULL, wxCoord *h=NULL,
-								wxCoord x=0, wxCoord y=0, const wxString &text = wxEmptyString);
+								wxCoord x=0, wxCoord y=0, wxCoord MaxWidth=-1, const wxString &text = wxEmptyString);
 
 	ResIDWithFlagsToBitmapPtr * m_pHash;
 	BOOL m_GetBitmapEventPending;

@@ -474,6 +474,7 @@ wxCamArtControlXmlHandler::wxCamArtControlXmlHandler() : wxXmlResourceHandler()
 	XRC_ADD_STYLE(wxCACS_LEFT);
 	XRC_ADD_STYLE(wxCACS_RIGHT);
 	XRC_ADD_STYLE(wxCACS_NOAUTOREPEAT);
+	XRC_ADD_STYLE(wxCACS_STATUSBARTEXT);
 	AddWindowStyles();
 }
 
