@@ -60,6 +60,8 @@ if STATIC_ENABLE
 		/usr/lib/libtiff.a \
 		/usr/lib/libexpat.a \
 		/usr/lib/libz.a \
+		/usr/lib/libxml2.a \
+		/usr/lib/libm.a \
 		-ldl \
 		-static-libgcc
 endif
