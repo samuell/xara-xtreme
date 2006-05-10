@@ -163,7 +163,7 @@ public:
 	// the filter name and file extension
 	// The parameter will almost certainly need to change when OILFilter::CreatePluginFilters 
 	// is implemented properly by scanning the installed filters
-	BOOL Init(const CLSID& rCLSID);
+	BOOL Init( xmlNode* pFilterNode );
 
 	BOOL IsImport() { return(m_bImport); }
 	BOOL IsExport() { return(m_bExport); }

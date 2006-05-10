@@ -171,7 +171,7 @@ PluginNativeFilter::~PluginNativeFilter()
 
 ********************************************************************************************/
 
-BOOL PluginNativeFilter::Init(const CLSID& rCLSID)
+BOOL PluginNativeFilter::Init( xmlNode* pFilterNode )
 {
 	// Get the OILFilter object
 	PluginOILFilter* pPluginOILFilter = new PluginOILFilter(this);
@@ -179,7 +179,7 @@ BOOL PluginNativeFilter::Init(const CLSID& rCLSID)
 	if (pOILFilter == NULL)
 		return FALSE;
 
-	if (!pPluginOILFilter->Init(rCLSID))
+	if (!pPluginOILFilter->Init( pFilterNode ))
 		return(FALSE);
 
 	Flags.CanImport = pPluginOILFilter->IsImport();

@@ -336,7 +336,7 @@ BOOL OILFilter::InitFilters(List& FilterList)
 BOOL OILFilter::CreatePluginFilters(List& FilterList)
 {
 	PORTNOTETRACE("filters","OILFilter::CreatePluginFilters - bodged");
-
+#if 0
 	CLSID Clsid;
 	PluginNativeFilter* pFilter = new PluginNativeFilter;
 	if (pFilter == NULL)
@@ -346,52 +346,57 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 		FilterList.AddTail(pFilter);
 	else
 		delete pFilter;
-
-#ifndef EXCLUDE_FROM_XARALX
-	// Iterate through the component category adding each filter to the filter list
-	HRESULT hRes = S_OK;
-
-	CComPtr<ICatInformation> pCatInformer;
-	hRes = pCatInformer.CoCreateInstance(CLSID_StdComponentCategoriesMgr);
-	if (FAILED(hRes))
-	{
-		// Return an error here
-		return false;
-	}
-
-	CComPtr<IEnumCLSID> pEnumCLSID;
-	CATID Categories[2] = {
-		{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x35}},
-		{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x36}}
-	};
-	hRes = pCatInformer->EnumClassesOfCategories(2, Categories, (UINT32)-1, NULL, &pEnumCLSID);
-	if (FAILED(hRes))
-	{
-		// Return an error here
-		return false;
-	}
-
-	UINT32 NumRead = 1;
-	CLSID Clsid;
-	while (NumRead != 0)
-	{
-		NumRead = 0;
-		hRes = pEnumCLSID->Next(1, &Clsid, &NumRead);
-		if (FAILED(hRes))
-			break;
-
-		if (NumRead > 0)
-		{
-			PluginNativeFilter* pFilter = new PluginNativeFilter;
-			if (pFilter == NULL) return FALSE;
-
-			if (pFilter->Init(Clsid))
-				FilterList.AddTail(pFilter);
-			else
-				delete pFilter;
-		}
-	}
 #endif
+
+	const static wxString	g_strConfigPath( _T("/usr/share/xaralx/filters") );
+	wxDir	dir( g_strConfigPath );
+	
+	if( !dir.IsOpened() )
+	{
+		// wxDir is susposed to explain why this failed, so we can just 
+		// bomb-out
+		return FALSE;
+	}
+	
+	// Scan all files in directory
+	wxString	strFilename;
+	bool		fOk = dir.GetFirst( &strFilename, _T("*"), wxDIR_FILES );
+	while( fOk )
+	{
+		strFilename = g_strConfigPath + _T("/") + strFilename;
+		
+		// Convert the filename to ASCII
+		size_t	cchFile = strFilename.Length();
+		PSTR	pszFile = (PSTR)alloca( sizeof(char) * ( cchFile + 1 ) );
+		camWcstombs( pszFile, (PCTSTR)strFilename, cchFile );
+		pszFile[cchFile] = '\0';
+		
+		// Open the xml file
+		xmlDoc*		pDoc = xmlReadFile( pszFile, NULL, 0 );
+		if( NULL != pDoc )
+		{
+			// Scan the root elements for a\some 'filter's
+			xmlNode* pRootElement = xmlDocGetRootElement( pDoc );
+			for( xmlNode* pNode = pRootElement; NULL != pNode; pNode = pNode->next )
+			{
+				if( XML_ELEMENT_NODE == pNode->type &&
+					0 == strcmp( "Filter", PCSTR(pNode->name) ) )
+				{
+					// Create a new filter, Init it and add to list if success
+					// Note will be auto deleted if not added
+					std::auto_ptr<PluginNativeFilter> pFilter( new PluginNativeFilter );
+					if( pFilter->Init( pNode ) )
+						FilterList.AddTail( pFilter.release() );
+				}
+			}
+
+			xmlFreeDoc( pDoc );
+			pDoc = NULL;
+		}
+		
+		fOk = dir.GetNext( &strFilename );
+	}
+	
 	return TRUE;
 }
 

@@ -730,7 +730,7 @@ PluginOILFilter::PluginOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 ****************************************************************************/
 
-BOOL PluginOILFilter::Init(const CLSID& rCLSID)
+BOOL PluginOILFilter::Init( xmlNode* pFilterNode )
 {
 PORTNOTE("other","PluginFilter COM bits removed")
 #if !defined(EXCLUDE_FROM_XARALX)

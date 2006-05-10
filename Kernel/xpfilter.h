@@ -125,7 +125,7 @@ public:
 	// Construction and initialisation
 	PluginNativeFilter();
 	~PluginNativeFilter();
-	BOOL Init(const CLSID& rCLSID);
+	BOOL Init( xmlNode* pFilterNode );
 
 	// HowCompatible() returns value in range 0 to 10:
 	//   0 => "Definitely Not"
