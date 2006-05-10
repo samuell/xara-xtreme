@@ -160,6 +160,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <malloc/malloc.h>
 #endif
 
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+
 template< typename T >
 T Abs( T val )
 {
