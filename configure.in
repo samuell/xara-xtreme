@@ -151,11 +151,41 @@ else
 fi
 
 # Test for libxml2
-# This is the simple version. Note that xml2-config script is also available
-# for more detailed configuration.
-LIBXML2_CFLAGS=""
-LIBXML2_LIBS=""
-PKG_CHECK_MODULES([LIBXML2], [libxml-2.0 >= 2.6])
+XML2CONFIG=xml2-config
+AC_ARG_WITH(xml2-config,
+[[  --with-xml2-config=FILE Use the given path to xml2-config when determining
+                            libxml2 configuration; defaults to "xml2-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        XML2CONFIG=$withval
+    fi
+])
+ 
+xml2version=0
+
+AC_DEFUN([XML2TEST],
+[
+	AC_REQUIRE([AC_PROG_AWK])
+	AC_MSG_CHECKING([libxml2 version])
+	if xml2version=`$XML2CONFIG --version`; then
+		AC_MSG_RESULT([$xml2version])
+	else
+		AC_MSG_RESULT([not found])
+		AC_MSG_ERROR([libxml2 is required. Try --with-xml2-config.])
+	fi
+])
+
+# Call XML2TEST func
+XML2TEST
+
+# check libxml2 version
+xml2version=`echo $xml2version | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
+if test -z "$xml2version" || test "$xml2version" -lt 2006000; then
+	AC_MSG_ERROR([libxml2 2.6 or newer is required])
+fi
+
+LIBXML2_CFLAGS="`$XML2CONFIG --cflags`"
+LIBXML2_LIBS="`$XML2CONFIG --libs`"
 
 # Define FTCONFIG
 FTCONFIG=freetype-config
