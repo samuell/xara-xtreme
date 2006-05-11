@@ -589,6 +589,11 @@ public:
 	// just created with the standard button set
 	virtual BOOL LoadFrameFromResources() {return FALSE;}
 
+	// Override this function to provide an image list
+	virtual BOOL HasImages() {return FALSE;}
+
+	virtual TabType GetTabType() {return TABTYPE_TABS;}
+
 	// The DialogOP destructor destroys the instance of the DialogTabOp and all  	
 	// associated resources. If the dialog was open then it is closed. 
 	~DialogTabOp();

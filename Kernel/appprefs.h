@@ -171,6 +171,9 @@ public:
 	// Functions to commit the values on the dialog box and its sections on ok
 	BOOL CommitDialogValues();
 
+	BOOL HasImages() {return FALSE;}
+	TabType GetTabType() {return TABTYPE_LIST;}
+
 private:
 	String_256 TitleString;					// title of dialog box
 };

@@ -131,6 +131,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/propdlg.h>
 #include <wx/xrc/xh_all.h>
 #include <wx/xrc/xmlres.h>
+#if wxUSE_LISTBOOK
+#include <wx/listbook.h>
+#endif
+#if wxUSE_CHOICEBOOK
+#include <wx/choicebk.h>
+#endif
+#if wxUSE_TREEBOOK
+#include <wx/treebook.h>
+#endif
+#if wxUSE_TOOLBOOK
+#include <wx/toolbook.h>
+#endif
+
 
 // Now platform dependent stuff
 // FreeBSD does not provide backtrace()

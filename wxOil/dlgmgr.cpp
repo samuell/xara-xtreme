@@ -228,7 +228,7 @@ DialogManager::DialogManager()
 
 				If SubDlgID is non-0, then this dialog is merged with the main one during
 				the creation of the dialog.  If it is 0, then no merging is done (the
-				DialogOp::Create() function should take care of all this), and SubInstance
+				DialogOp() function should take care of all this), and SubInstance
 				is ignored.
 
 				If it is a tabbed dialog that is being created then we can now specify the
@@ -245,9 +245,54 @@ DialogManager::DialogManager()
 
 	SeeAlso:	DialogOp::Create
 
-
-
 ********************************************************************************************/
+
+// First a private class definition
+// as this is missing two-stage create we have to use a static variable. Yuck.
+class wxDynamicPropertySheetDialog : public wxPropertySheetDialog
+{
+public:
+	wxDynamicPropertySheetDialog() {m_TabType=TABTYPE_TABS;}
+	~wxDynamicPropertySheetDialog() {}
+	void SetTabType(TabType t) {m_TabType=t;}
+protected:
+	TabType m_TabType;
+	virtual wxBookCtrlBase* CreateBookCtrl()
+	{
+		int style = wxCLIP_CHILDREN | wxBC_DEFAULT;
+
+		switch (m_TabType)
+		{
+#if wxUSE_LISTBOOK
+			case TABTYPE_LIST:
+				return new wxListbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				break;
+#endif
+#if wxUSE_CHOICEBOOK
+			case TABTYPE_CHOICE:
+				return new wxChoicebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				break;
+#endif
+#if wxUSE_TREEBOOK
+			case TABTYPE_TREE:
+				return new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				pClassInfo = CLASSINFO(wxTreebook);
+				break;
+#endif
+#if wxUSE_TOOLBOOK
+			case TABTYPE_TOOLBAR:
+				return new wxToolbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				break;
+#endif
+			case TABTYPE_TABS:
+			default:
+				return new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				break;
+		}
+
+		return NULL; // how did we get here?
+	}
+};
 
 BOOL DialogManager::Create(DialogOp* DlgOp,
 						   /* HINSTANCE MainInstance, */ CDlgResID MainDlgID,
@@ -281,7 +326,25 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 	wxWindow*		pDialogWnd = NULL;
 
 	if( DlgOp->IS_KIND_OF(DialogTabOp) && !(((DialogTabOp*)DlgOp)->LoadFrameFromResources()))
-		pDialogWnd = CreateTabbedDialog( (DialogTabOp*)DlgOp, Mode, OpeningPage );
+	{
+		// ok first try and create the property sheet
+		wxDynamicPropertySheetDialog* pPropertySheet;
+
+		// error handling done later
+		pPropertySheet = new wxDynamicPropertySheetDialog();
+		if (pPropertySheet)
+		{
+			pPropertySheet->SetTabType(((DialogTabOp*)DlgOp)->GetTabType());
+			if (!pPropertySheet->Create((wxWindow *)ParentWnd, wxID_ANY, (TCHAR*)((DialogTabOp*)DlgOp)->GetName()))
+			{
+				delete pPropertySheet;
+				pPropertySheet=NULL; // error handling done below
+			}
+			else
+				pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
+		}
+		pDialogWnd=pPropertySheet;
+	}
 	else
 	{
 		pDialogName=CamResource::GetObjectNameFail(MainDlgID);
@@ -293,9 +356,8 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 			pDialogWnd = wxXmlResource::Get()->LoadDialog((wxWindow *)ParentWnd, pDialogName);
 	}
 
-	CreateRecursor(pDialogWnd);
-
 	ERROR1IF(pDialogWnd == NULL, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
+
 	pDialogWnd->Hide();
 	CamArtProvider::Get()->EnsureChildBitmapsLoaded(pDialogWnd);
 
@@ -314,6 +376,21 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 	// Set the DialogOp's WindowID
 	DlgOp->WindowID = (CWindowID)pDialogWnd;
 	pDialogWnd->PushEventHandler(DlgOp->pEvtHandler);
+
+	if (DlgOp->IS_KIND_OF(DialogTabOp))
+	{
+		// on balance we might be best ignoring errors here - we are really now past
+		// the point of no return, and the dialog can be closed cleanly by the user
+		// but let's try anyway
+		if (!CreateTabbedDialog( (DialogTabOp*)DlgOp, Mode, OpeningPage ))
+		{
+			// try using our own tolerant delete mechanism
+			Delete(pDialogWnd, DlgOp);
+			ERROR1(FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
+		}
+	}
+
+	CreateRecursor(pDialogWnd);
 
 	// Register all the child controls
 	ControlList::Get()->RegisterWindowAndChildren(pDialogWnd, DlgOp);
@@ -6411,6 +6488,13 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 		if (pTip) Title=pTip->GetTip();
 	}
 
+	wxImageList * pImageList = pNoteBook->GetImageList();
+	if (pImageList)
+	{
+		// It has images - we should go find appropriate bitmap
+		pImageList->Add(*CamArtProvider::Get()->FindBitmap(pDialogTabOp->DlgResID));
+	}
+
 	pNoteBook->AddPage( pNewPage, Title );
 	return true;
 }
@@ -7027,7 +7111,7 @@ void DialogManager::RelayoutDialog( DialogTabOp* pDlgOp )
 
 /********************************************************************************************
 
->	static BOOL DialogManager::CreateTabbedDialog(DialogTabOp* DlgOp, CDlgMode Mode, INT32 OpeningPage)
+>	static BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/12/94
@@ -7046,8 +7130,32 @@ void DialogManager::RelayoutDialog( DialogTabOp* pDlgOp )
 
 ********************************************************************************************/
 
-wxWindow* DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage)
+BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage)
 {
+	wxBookCtrlBase * pBook = GetBookControl(pTabDlgOp->WindowID);
+	if (!pBook)
+		return TRUE; // nothing to do
+
+	wxImageList * pImageList = NULL;
+	// Add images if present
+	if (pTabDlgOp->HasImages())
+	{
+		pImageList=new wxImageList;
+		if (pImageList)
+			pBook->SetImageList(pImageList);
+	}
+
+	// Before we can create the property sheet we must add pages to it.
+	// Let's ask the op do do this for us
+	if (!(pTabDlgOp->RegisterYourPagesInOrderPlease()))
+	{
+		// We failed to add pages to the dialog so we must tidy-up and fail
+		return FALSE;
+	}
+
+	// Get the dialog sized to fit
+	RelayoutDialog(pTabDlgOp);
+
 	// First check if the OpeningPage parameter is not equal to -1, in which case this
 	// specifies the active page to be opened.
 	// Has to be an index as otherwise we have not specified the pages yet and so cannot
@@ -7072,39 +7180,6 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 		}
 #endif
 	}
-
-	// ok first try and create the property sheet
-	wxPropertySheetDialog* pPropertySheet;
-	// Because wxPropertySheetDialog is derived from an MFC object we have to cope with exceptions
-	try
-	{
-		pPropertySheet = new wxPropertySheetDialog( GetMainFrame(), wxID_ANY, (TCHAR*)pTabDlgOp->GetName()); // no doubt we shouldd o 
-//		pPropertySheet->Create(WS_POPUP | WS_SYSMENU | WS_BORDER | WS_DLGFRAME, 0)
-	}
-	catch( CMemoryException )
-	{
-		ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
-	}
-
-	// Just to  be safe
-	ERROR1IF(pPropertySheet == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
-
-	pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
-
-	// This will be done again later, but RegisterYourPagesInOrderPlease may,
-	// use it, so we do it here as well
-	pTabDlgOp->WindowID = (CWindowID)pPropertySheet;
-
-	// Before we can create the property sheet we must add pages to it.
-	// Let's ask the op do do this for us
-	if (!(pTabDlgOp->RegisterYourPagesInOrderPlease()))
-	{
-		// We failed to add pages to the dialog so we must tidy-up and fail
-		return FALSE;
-	}
-
-	// Get the dialog sized to fit
-	pPropertySheet->LayoutDialog();
 
 	// Now that the pages have been registered, check if the dialog has been opened
 	// before. If so force the new ActivePage to be specified rather than the old.
@@ -7132,7 +7207,7 @@ TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->Acti
 #endif
 	}
 
-	return pPropertySheet;
+	return TRUE;
 }
 
 

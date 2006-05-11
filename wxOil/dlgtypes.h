@@ -267,6 +267,14 @@ struct ReDrawInfoType
 	DocCoord *pMousePos;	// The position of the mouse at this event
 };
 
+enum TabType
+{
+	TABTYPE_TABS,
+	TABTYPE_LIST,
+	TABTYPE_CHOICE,
+	TABTYPE_TREE,
+	TABTYPE_TOOLBAR
+};
 
 #endif          
                                          

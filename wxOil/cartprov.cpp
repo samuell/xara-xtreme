@@ -1135,7 +1135,7 @@ wxImage * CamArtProvider::MakeBitmap(ResourceIDWithFlags ResWithFlags)
 	wxImage * pBitmap = NULL;
 
 	// find the name by looking up the ID as a string
-	const TCHAR * tcname = CamResource::GetTextFail(r);
+	const TCHAR * tcname = NULL; /*CamResource::GetTextFail(r);*/
 	if (!tcname || ( (tcname[0]==_T('-')) && !tcname[1]) )
 	{
 		// default to object name
