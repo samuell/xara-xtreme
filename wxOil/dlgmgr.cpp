@@ -276,7 +276,6 @@ protected:
 #if wxUSE_TREEBOOK
 			case TABTYPE_TREE:
 				return new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
-				pClassInfo = CLASSINFO(wxTreebook);
 				break;
 #endif
 #if wxUSE_TOOLBOOK
