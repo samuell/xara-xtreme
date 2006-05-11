@@ -334,7 +334,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		if (pPropertySheet)
 		{
 			pPropertySheet->SetTabType(((DialogTabOp*)DlgOp)->GetTabType());
-			if (!pPropertySheet->Create((wxWindow *)ParentWnd, wxID_ANY, (TCHAR*)((DialogTabOp*)DlgOp)->GetName()))
+			if (!pPropertySheet->Create((wxWindow *)ParentWnd, wxID_ANY, (TCHAR*) (*((DialogTabOp*)DlgOp)->GetName()) ))
 			{
 				delete pPropertySheet;
 				pPropertySheet=NULL; // error handling done below
@@ -342,7 +342,6 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 			else
 			{
 				pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
-				pPropertySheet->SetTitle(wxString((TCHAR*)((DialogTabOp*)DlgOp)->GetName()));
 			}
 		}
 		pDialogWnd=pPropertySheet;
