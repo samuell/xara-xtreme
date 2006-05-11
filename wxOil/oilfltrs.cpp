@@ -148,6 +148,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "xpfilter.h"
 //#include <atlbase.h>
 
+#include "xmlutils.h"
+
 CC_IMPLEMENT_MEMDUMP(OILFilter, CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_MEMDUMP(OILFilterFamily, OILFilter)
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
@@ -336,7 +338,7 @@ BOOL OILFilter::InitFilters(List& FilterList)
 BOOL OILFilter::CreatePluginFilters(List& FilterList)
 {
 	PORTNOTETRACE("filters","OILFilter::CreatePluginFilters - bodged");
-#if 1
+#if 0
 	PluginNativeFilter* pFilter = new PluginNativeFilter;
 	if (pFilter == NULL)
 		return FALSE;
@@ -380,16 +382,21 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 		{
 			// Scan the root elements for a\some 'filter's
 			xmlNode* pRootElement = xmlDocGetRootElement( pDoc );
-			for( xmlNode* pNode = pRootElement; NULL != pNode; pNode = pNode->next )
+
+			wxString strName = CXMLUtils::ConvertToWXString(pRootElement->name);
+			if (strName == _T("FilterConfig"))
 			{
-				if( XML_ELEMENT_NODE == pNode->type &&
-					0 == strcmp( "Filter", PCSTR(pNode->name) ) )
+				for( xmlNode* pNode = pRootElement->children; NULL != pNode; pNode = pNode->next )
 				{
-					// Create a new filter, Init it and add to list if success
-					// Note will be auto deleted if not added
-					std::auto_ptr<PluginNativeFilter> pFilter( new PluginNativeFilter );
-					if( pFilter->Init( pNode ) )
-						FilterList.AddTail( pFilter.release() );
+					if( XML_ELEMENT_NODE == pNode->type &&
+						0 == strcmp( "Filter", PCSTR(pNode->name) ) )
+					{
+						// Create a new filter, Init it and add to list if success
+						// Note will be auto deleted if not added
+						std::auto_ptr<PluginNativeFilter> pFilter( new PluginNativeFilter );
+						if( pFilter->Init( pNode ) )
+							FilterList.AddTail( pFilter.release() );
+					}
 				}
 			}
 
