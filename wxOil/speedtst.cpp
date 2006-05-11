@@ -273,22 +273,22 @@ void OpTimeDraw::Do(OpDescriptor*)
 
 	String_256 Buf2;
 	
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "TOTAL", PFORM(total));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("TOTAL"), PFORM(total));
 	Buf += _T(", ");
 	Buf += Buf2;
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "GDRAW", PFORM(Results[CAMPROFILE_GDRAW]));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("GDRAW"), PFORM(Results[CAMPROFILE_GDRAW]));
 	Buf += _T(", ");
 	Buf += Buf2;
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "SHADOW", PFORM(Results[CAMPROFILE_SHADOW]));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("SHADOW"), PFORM(Results[CAMPROFILE_SHADOW]));
 	Buf += _T(", ");
 	Buf += Buf2;
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "BEVEL", PFORM(Results[CAMPROFILE_BEVEL]));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("BEVEL"), PFORM(Results[CAMPROFILE_BEVEL]));
 	Buf += _T(", ");
 	Buf += Buf2;
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "BLIT", PFORM(Results[CAMPROFILE_BLIT]));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("BLIT"), PFORM(Results[CAMPROFILE_BLIT]));
 	Buf += _T(", ");
 	Buf += Buf2;
-	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "OTHER", PFORM(Results[CAMPROFILE_OTHER]));
+	Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("OTHER"), PFORM(Results[CAMPROFILE_OTHER]));
 	Buf += _T(", ");
 	Buf += Buf2;
 	
@@ -296,7 +296,7 @@ void OpTimeDraw::Do(OpDescriptor*)
 	// floating point to INT32 rounding error.
 	if (fabs(error) > 0.5/1000.0)
 	{
-		Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), "ERROR", PFORM(error));
+		Buf2.MakeMsg(_R(IDS_SPEEDTST_REDRAW_TOOK2), _T("ERROR"), PFORM(error));
 		Buf += _T(", ");
 		Buf += Buf2;
 	}
