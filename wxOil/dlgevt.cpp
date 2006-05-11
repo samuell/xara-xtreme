@@ -568,6 +568,9 @@ void DialogEventHandler::CamDialogEvent(wxCamDialogEvent& event)
 void DialogEventHandler::MoveEvent(wxMoveEvent& event)
 {
 	DialogManager::Event(this, event);
+
+	// We pretend we didn't handle it, since dialogs with sizers etc. will need it
+	event.Skip();
 }
 
 /********************************************************************************************
@@ -591,7 +594,7 @@ void DialogEventHandler::SizeEvent(wxSizeEvent& event)
 {
 	DialogManager::Event(this, event);
 	
-	// We pretend we didn't handle it, since Property Dialogs need it
+	// We pretend we didn't handle it, since dialogs with sizers etc. will need it
 	event.Skip();
 }
 
