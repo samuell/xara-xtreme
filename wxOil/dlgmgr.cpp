@@ -341,7 +341,10 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 				pPropertySheet=NULL; // error handling done below
 			}
 			else
+			{
 				pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
+				pPropertySheet->SetTitle(wxString((TCHAR*)((DialogTabOp*)DlgOp)->GetName()));
+			}
 		}
 		pDialogWnd=pPropertySheet;
 	}
@@ -6488,14 +6491,34 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 		if (pTip) Title=pTip->GetTip();
 	}
 
-	wxImageList * pImageList = pNoteBook->GetImageList();
-	if (pImageList)
+	wxImageList * pImageList = NULL;
+	wxBitmap b;
+	// Add images if present
+	if (pDialogTabOp->HasImages())
 	{
-		// It has images - we should go find appropriate bitmap
-		pImageList->Add(*CamArtProvider::Get()->FindBitmap(pDialogTabOp->DlgResID));
+		b = wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_OTHER, wxSize(32, 32));
+		//wxBitmap b = *CamArtProvider::Get()->FindBitmap(pDialogTabOp->DlgResID);
+		// b.LoadFile(_T("/tmp/foo.png"), wxBITMAP_TYPE_PNG);
+
+		// Get the image list or create one
+		pImageList = pNoteBook->GetImageList();
+		if (!pImageList)
+		{
+			pImageList = new wxImageList(b.GetWidth(), b.GetHeight());
+			if (pImageList)
+				pNoteBook->AssignImageList(pImageList);
+		}
+
 	}
 
 	pNoteBook->AddPage( pNewPage, Title );
+	// add our image
+	if (pImageList)
+	{
+		pImageList->Add(b);
+		pNoteBook->SetPageImage(pNoteBook->GetPageCount()-1, pImageList->GetImageCount()-1);
+	}
+
 	return true;
 }
 
@@ -7136,15 +7159,6 @@ BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, IN
 	if (!pBook)
 		return TRUE; // nothing to do
 
-	wxImageList * pImageList = NULL;
-	// Add images if present
-	if (pTabDlgOp->HasImages())
-	{
-		pImageList=new wxImageList;
-		if (pImageList)
-			pBook->SetImageList(pImageList);
-	}
-
 	// Before we can create the property sheet we must add pages to it.
 	// Let's ask the op do do this for us
 	if (!(pTabDlgOp->RegisterYourPagesInOrderPlease()))
@@ -7152,6 +7166,14 @@ BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, IN
 		// We failed to add pages to the dialog so we must tidy-up and fail
 		return FALSE;
 	}
+#if 0
+	// Something very odd happens with the image list so we copy and reset it
+	if (pBook->GetImageList())
+	{
+		wxImageList temp=*pBook->GetImageList();
+		pBook->SetImageList(&temp);
+	}
+#endif
 
 	// Get the dialog sized to fit
 	RelayoutDialog(pTabDlgOp);

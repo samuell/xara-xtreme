@@ -171,7 +171,7 @@ public:
 	// Functions to commit the values on the dialog box and its sections on ok
 	BOOL CommitDialogValues();
 
-	BOOL HasImages() {return FALSE;}
+	BOOL HasImages() {return TRUE;}
 	TabType GetTabType() {return TABTYPE_LIST;}
 
 private:
