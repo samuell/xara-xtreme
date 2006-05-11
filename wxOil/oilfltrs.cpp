@@ -347,9 +347,13 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 		delete pFilter;
 #endif
 
+	// Check the config dir exists, if not bomb out
 	const static wxString	g_strConfigPath( _T("/usr/share/xaralx/filters") );
+	if( !wxDir::Exists( g_strConfigPath ) )
+		return TRUE;
+
+	// Setup the directory scan
 	wxDir	dir( g_strConfigPath );
-	
 	if( !dir.IsOpened() )
 	{
 		// wxDir is susposed to explain why this failed, so we can just 
