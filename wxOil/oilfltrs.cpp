@@ -336,13 +336,12 @@ BOOL OILFilter::InitFilters(List& FilterList)
 BOOL OILFilter::CreatePluginFilters(List& FilterList)
 {
 	PORTNOTETRACE("filters","OILFilter::CreatePluginFilters - bodged");
-#if 0
-	CLSID Clsid;
+#if 1
 	PluginNativeFilter* pFilter = new PluginNativeFilter;
 	if (pFilter == NULL)
 		return FALSE;
 
-	if (pFilter->Init(Clsid))
+	if (pFilter->Init( (xmlNode*)NULL ))
 		FilterList.AddTail(pFilter);
 	else
 		delete pFilter;
