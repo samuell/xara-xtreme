@@ -380,13 +380,23 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 		xmlDoc*		pDoc = xmlReadFile( pszFile, NULL, 0 );
 		if( NULL != pDoc )
 		{
-			// Scan the root elements for a\some 'filter's
+			// Scan the root elements for FilterConfig element
 			xmlNode* pRootElement = xmlDocGetRootElement( pDoc );
-
-			wxString strName = CXMLUtils::ConvertToWXString(pRootElement->name);
-			if (strName == _T("FilterConfig"))
+			xmlNode* pConfigElem  = NULL;
+			for( xmlNode* pNode = pRootElement; NULL != pNode; pNode = pNode->next )
 			{
-				for( xmlNode* pNode = pRootElement->children; NULL != pNode; pNode = pNode->next )
+				if( XML_ELEMENT_NODE == pNode->type &&
+					0 == strcmp( "FilterConfig", PCSTR(pNode->name) ) )
+				{
+					pConfigElem = pNode;
+					break;
+				}
+			}
+			
+			if( NULL != pConfigElem )
+			{
+				// Scan the elements below FilterConfig for filters
+				for( xmlNode* pNode = pConfigElem->children; NULL != pNode; pNode = pNode->next )
 				{
 					if( XML_ELEMENT_NODE == pNode->type &&
 						0 == strcmp( "Filter", PCSTR(pNode->name) ) )
