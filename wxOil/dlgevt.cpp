@@ -590,6 +590,9 @@ void DialogEventHandler::MoveEvent(wxMoveEvent& event)
 void DialogEventHandler::SizeEvent(wxSizeEvent& event)
 {
 	DialogManager::Event(this, event);
+	
+	// We pretend we didn't handle it, since Property Dialogs need it
+	event.Skip();
 }
 
 /********************************************************************************************
