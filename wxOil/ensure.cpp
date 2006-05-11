@@ -159,8 +159,8 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 	const TCHAR* lpszRealFile = lpszFileName;
 #endif
 
-	static TCHAR BASED_CODE szMessage[] = wxT("%s, File %s, Line %d\nNo=Abort, Yes=Debug, Cancel=Continue");
-	static TCHAR BASED_CODE szMessageNoReason[] = wxT("Error %d@%s\nNo=Abort, Yes=Debug, Cancel=Continue");			// note number first
+	static TCHAR BASED_CODE szMessage[] = wxT("%s, File %s, Line %d");
+	static TCHAR BASED_CODE szMessageNoReason[] = wxT("Error %d@%s");			// note number first
 
 	// get app name or NULL if unknown (don't call assert)
 //	const TCHAR		   *pszAppName = wxGetApp().GetAppName();

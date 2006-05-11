@@ -1193,7 +1193,12 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 	if (code == 0)
 	{
-		BuildCapabilityTree(m_XMLFile.GetPath(), pCapTree);
+		BOOL bOK = BuildCapabilityTree(m_XMLFile.GetPath(), pCapTree);
+		if (!bOK)
+		{
+			// Assume BuildCapabilityTree has already set an error
+			return FALSE;
+		}
 	}
 	else
 	{
@@ -1354,133 +1359,17 @@ void PluginOILFilter::ReleaseFilterObject()
 
 ****************************************************************************/
 
-/*HRESULT PluginOILFilter::BuildCapabilityTree(BSTR bsXML, CapabilityTree* pCapTree)
-{
-	// First we need to load the XML into an XML DOM object
-	CComPtr<MSXML2::IXMLDOMDocument2> pDoc;
-	
-	HRESULT hRes = S_OK;
-	hRes = pDoc.CoCreateInstance(__uuidof(MSXML2::DOMDocument40));
-
-	doc = xmlNewDocument();
-	hRes = pDoc->setProperty(CComBSTR(_T("SelectionLanguage")), CComVariant(_T("XPath")));
-	hRes = pDoc->put_async(VARIANT_FALSE);
-	hRes = pDoc->put_preserveWhiteSpace(VARIANT_TRUE);
-	hRes = pDoc->put_validateOnParse(VARIANT_FALSE);
-	hRes = pDoc->put_resolveExternals(VARIANT_FALSE);
-
-	VARIANT_BOOL bSuccess = VARIANT_FALSE;
-	hRes = pDoc->loadXML(bsXML, &bSuccess);
-	if (bSuccess == VARIANT_FALSE)
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	// Check if the root element is correct
-	CComPtr<IXMLDOMElement> pRootElem;
-	hRes = pDoc->get_documentElement(&pRootElem);
-
-	CComBSTR bsName;
-	hRes = pRootElem->get_nodeName(&bsName);
-
-	if (!(bsName == _T("XPFilterConfig")))
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	// There are 5 phases to the parsing
-	// We will loop round until we run out of child elements
-	// After parsing a node the phase counter will be set to the phase just parsed
-	// If an element should have already been parsed (using the phase counter)
-	// then an error will be indicated
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pRootElem->get_firstChild(&pChild);
-	INT32 Phase = 0;
-
-	while (pChild)
-	{
-		CComBSTR bsChildName;
-		hRes = pChild->get_nodeName(&bsChildName);
-		
-		if (bsChildName == _T("#text"))
-		{
-			// ignore it
-		}
-		else if (bsChildName == _T("Options"))
-		{
-			if (Phase > 0)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			hRes = ReadOptions(pChild, pCapTree);		// Read the options attributes
-			Phase = 1;
-		}
-		else if (bsChildName == _T("Rasterise"))
-		{
-			if (Phase > 1)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			hRes = ReadRasterise(pChild, pCapTree);		// Read the dpi and alpha attributes
-			Phase = 2;
-		}
-		else if (bsChildName == _T("Spread"))
-		{
-			if (Phase > 2)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			hRes = ReadSpread(pChild, pCapTree);		// Read the as attribute
-			Phase = 3;
-		}
-		else if (bsChildName == _T("Objects"))
-		{
-			if (Phase > 3)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			ReadObjects(pChild, pCapTree);		// Build the tree of XPFCapability derived objects
-			Phase = 4;
-		}
-		else if (bsChildName == _T("Attributes"))
-		{
-			if (Phase > 4)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			ReadAttributes(pChild, pCapTree);	// Build the tree of XPFCapability derived objects
-			Phase = 5;
-		}
-		else if (bsChildName == _T("Colour"))
-		{
-			if (Phase > 5)
-			{
-				ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-			}
-			ReadColour(pChild, pCapTree);		// Build the tree of XPFColour objects
-			Phase = 6;
-		}
-		else
-		{
-			ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-	return S_OK;
-}*/
-
-
-BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* pCapTree)
+BOOL PluginOILFilter::BuildCapabilityTree(wxString strXmlFilename, CapabilityTree* pCapTree)
 {
 
 	// First we need to load the XML into an XML DOM object
 
-	// Set flags in Parser context here?
+	// Set Parser flags here?
+//	hRes = pDoc->setProperty(CComBSTR(_T("SelectionLanguage")), CComVariant(_T("XPath")));
+//	hRes = pDoc->put_async(VARIANT_FALSE);
+//	hRes = pDoc->put_preserveWhiteSpace(VARIANT_TRUE);
+//	hRes = pDoc->put_validateOnParse(VARIANT_FALSE);
+//	hRes = pDoc->put_resolveExternals(VARIANT_FALSE);
 
 	BOOL bOK = TRUE;
     xmlDocPtr doc;
@@ -1490,7 +1379,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 //	doc = xmlParseDoc((const xmlChar*)buf.data());	// buf will be deallocated when it goes out of scope
 
 	// If string param gives xml filename (like new LX version)
-	wxCharBuffer buf = strFilename.ToAscii();
+	wxCharBuffer buf = strXmlFilename.ToAscii();
 	doc = xmlParseFile(buf.data());					// buf will be deallocated when it goes out of scope
 #if _DEBUG
 	if (doc==NULL)
@@ -1526,7 +1415,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 0)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE0));
 			}
 			bOK = ReadOptions(pChild, pCapTree);		// Read the options attributes
 			Phase = 1;
@@ -1535,7 +1424,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 1)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE1));
 			}
 			bOK = ReadRasterise(pChild, pCapTree);		// Read the dpi and alpha attributes
 			Phase = 2;
@@ -1544,7 +1433,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 2)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE2));
 			}
 			bOK = ReadSpread(pChild, pCapTree);		// Read the as attribute
 			Phase = 3;
@@ -1553,7 +1442,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 3)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE3));
 			}
 			bOK = ReadObjects(pChild, pCapTree);		// Build the tree of XPFCapability derived objects
 			Phase = 4;
@@ -1562,7 +1451,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 4)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE4));
 			}
 			bOK = ReadAttributes(pChild, pCapTree);	// Build the tree of XPFCapability derived objects
 			Phase = 5;
@@ -1571,71 +1460,23 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strFilename, CapabilityTree* 
 		{
 			if (Phase > 5)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE5));
 			}
 			bOK = ReadColour(pChild, pCapTree);		// Build the tree of XPFColour objects
 			Phase = 6;
 		}
 		else
 		{
-			ERROR1(FALSE, _R(IDE_XPF_BADXML));
+			ERROR1(FALSE, _R(IDE_XPF_BADXML_UNEXPECTED_PHASE));
 		}
 
 		pChild = pChild->next;
 	}
 
+	xmlFreeDoc(doc);
 
 	return bOK;
 }
-
-
-/*HRESULT PluginOILFilter::ReadOptions(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	CComQIPtr<IXMLDOMElement> pElem;
-	pElem = pNode;
-	if (!pElem)
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	HRESULT hRes;
-	BoundsWriteLevel Level = BWL_NONE;
-	CComVariant vLevel;
-	hRes = pElem->getAttribute(CComBSTR(_T("boundslevel")), &vLevel);
-	if (SUCCEEDED(hRes))
-	{
-		hRes = vLevel.ChangeType(VT_BSTR);
-		if (vLevel == CComVariant(_T("none")))
-		{
-			Level = BWL_NONE;
-		}
-		else if (vLevel == CComVariant(_T("compound")))
-		{
-			Level = BWL_COMPOUND;
-		}
-		else if (vLevel == CComVariant(_T("all")))
-		{
-			Level = BWL_ALL;
-		}
-		else
-		{
-			ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-		}
-	}
-	pCapTree->SetBoundsLevel(Level);
-
-	BOOL bSelection = FALSE;
-	CComVariant vSelection;
-	hRes = pElem->getAttribute(CComBSTR(_T("selection")), &vSelection);
-	if (SUCCEEDED(hRes))
-	{
-		hRes = vSelection.ChangeType(VT_BSTR);
-		bSelection = (vSelection == CComVariant(_T("true")));
-	}
-	pCapTree->SetSelection(bSelection);
-
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree)
@@ -1657,7 +1498,7 @@ BOOL PluginOILFilter::ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	}
 	else
 	{
-		ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		ERROR1(FALSE, _R(IDE_XPF_BADXML_OPTIONS_BOUNDSLEVEL));
 	}
 
 	pCapTree->SetBoundsLevel(Level);
@@ -1670,42 +1511,6 @@ BOOL PluginOILFilter::ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::ReadRasterise(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	CComQIPtr<IXMLDOMElement> pElem;
-	pElem = pNode;
-	if (!pElem)
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	HRESULT hRes;
-	double DPI = 96.0;
-	BOOL bAlpha = TRUE;
-
-	CComVariant vDPI;
-	hRes = pElem->getAttribute(CComBSTR(_T("dpi")), &vDPI);
-	if (SUCCEEDED(hRes))
-	{
-		hRes = vDPI.ChangeType(VT_R8);
-		DPI = vDPI.dblVal;
-	}
-
-	CComVariant vAlpha;
-	hRes = pElem->getAttribute(CComBSTR(_T("alpha")), &vAlpha);
-	if (SUCCEEDED(hRes))
-	{
-		hRes = vAlpha.ChangeType(VT_BSTR);
-		bAlpha = (vAlpha == CComVariant(_T("true")));
-	}
-
-	pCapTree->SetRasterise(DPI, bAlpha);
-
-	return(S_OK);
-}
-*/
 
 
 BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
@@ -1732,43 +1537,6 @@ BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
 }
 
 
-/*HRESULT PluginOILFilter::ReadSpread(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	CComQIPtr<IXMLDOMElement> pElem(pNode);
-	if (!pElem)
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	HRESULT hRes;
-
-	CComVariant vAs;
-	XPFConvertType Type = XPFCONVTYPE_UNKNOWN;
-	hRes = pElem->getAttribute(CComBSTR(_T("as")), &vAs);
-	if (SUCCEEDED(hRes))
-	{
-		hRes = vAs.ChangeType(VT_BSTR);
-		if (vAs == CComVariant(_T("")))
-		{
-			Type = XPFCONVTYPE_NATIVE;
-		}
-		else if (vAs == CComVariant(_T("bitmap")))
-		{
-			Type = XPFCONVTYPE_BITMAP;
-		}
-		else
-		{
-			ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-		}
-	}
-
-	if (Type != XPFCONVTYPE_UNKNOWN)
-		pCapTree->SetSpreadType(Type);
-
-	return(S_OK);
-}*/
-
-
 BOOL PluginOILFilter::ReadSpread(xmlNodePtr pNode, CapabilityTree* pCapTree)
 {
 	XPFConvertType Type = XPFCONVTYPE_UNKNOWN;
@@ -1783,7 +1551,7 @@ BOOL PluginOILFilter::ReadSpread(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	}
 	else
 	{
-		ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		ERROR1(FALSE, _R(IDE_XPF_BADXML_SPREAD_CONVERTAS));
 	}
 
 	if (Type != XPFCONVTYPE_UNKNOWN)
@@ -1791,57 +1559,6 @@ BOOL PluginOILFilter::ReadSpread(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::ReadObjects(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	// We must loop through the tree of elements
-
-	// pNode is the Objects element so read the default as attribute
-
-	XPFCapability* pObjects = NULL;
-	XPFConvertType ObjectsType = XPFCONVTYPE_UNKNOWN;
-
-	HRESULT hRes;
-	hRes = GetConvertAsType(pNode, &ObjectsType);
-
-	// Loop through each child calling the CreateObjectNode recursive function
-	// for each one
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	INT32 Phase = 0;
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCap = CreateObjectNode(pChild);
-
-		if (pCap)
-		{
-			// If we have a capability node then add it to the list
-			// If we do not have a node already then set pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCap);
-			}
-			else
-			{
-				pObjects = pCap;
-			}
-			pLast = pCap;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	pCapTree->SetObjectsTree(pObjects, ObjectsType);
-
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::ReadObjects(xmlNodePtr pNode, CapabilityTree* pCapTree)
@@ -1853,8 +1570,12 @@ BOOL PluginOILFilter::ReadObjects(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	XPFCapability* pObjects = NULL;
 	XPFConvertType ObjectsType = XPFCONVTYPE_UNKNOWN;
 
-	HRESULT hRes;
-	hRes = GetConvertAsType(pNode, &ObjectsType);
+	BOOL bOK = GetConvertAsType(pNode, &ObjectsType);
+	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("ReadObjects GetConvertAsType failed\n"));
+		return FALSE;
+	}
 
 	// Loop through each child calling the CreateObjectNode recursive function
 	// for each one
@@ -1889,56 +1610,6 @@ BOOL PluginOILFilter::ReadObjects(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::ReadAttributes(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	// We must loop through the tree of elements
-
-	// pNode is the Attributes element so read the default as attribute
-
-	XPFCapability* pAttrs = NULL;
-	XPFConvertType AttrType = XPFCONVTYPE_UNKNOWN;
-
-	HRESULT hRes;
-	hRes = GetConvertAsType(pNode, &AttrType);
-
-	// Loop through each child calling the CreateAttributeNode recursive function
-	// for each one
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCap = CreateAttributeNode(pChild);
-
-		if (pCap)
-		{
-			// If we have a node then add it to the list
-			// If we do not have a node already then set m_pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCap);
-			}
-			else
-			{
-				pAttrs = pCap;
-			}
-			pLast = pCap;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	pCapTree->SetAttributesTree(pAttrs, AttrType);
-
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::ReadAttributes(xmlNodePtr pNode, CapabilityTree* pCapTree)
@@ -1952,7 +1623,10 @@ BOOL PluginOILFilter::ReadAttributes(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	BOOL bOK = GetConvertAsType(pNode, &AttrType);
 	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("ReadAttributes GetConvertAsType failed\n"));
 		return FALSE;
+	}
 
 	// Loop through each child calling the CreateAttributeNode recursive function
 	// for each one
@@ -1989,56 +1663,6 @@ BOOL PluginOILFilter::ReadAttributes(xmlNodePtr pNode, CapabilityTree* pCapTree)
 }
 
 
-/*HRESULT PluginOILFilter::ReadColour(IXMLDOMNode* pNode, CapabilityTree* pCapTree)
-{
-	// We must loop through the tree of elements
-
-	// pNode is the Attributes element so read the default as attribute
-
-	XPFCapability* pCols = NULL;
-	XPFConvertType ColType = XPFCONVTYPE_UNKNOWN;
-
-	HRESULT hRes;
-	hRes = GetConvertAsType(pNode, &ColType);
-
-	// Loop through each child calling the CreateColourNode recursive function
-	// for each one
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCap = CreateColourNode(pChild);
-
-		if (pCap)
-		{
-			// If we have a node then add it to the list
-			// If we do not have a node already then set m_pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCap);
-			}
-			else
-			{
-				pCols = pCap;
-			}
-			pLast = pCap;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	pCapTree->SetColoursTree(pCols, ColType);
-
-	return(S_OK);
-}*/
-
-
 BOOL PluginOILFilter::ReadColour(xmlNodePtr pNode, CapabilityTree* pCapTree)
 {
 	// We must loop through the tree of elements
@@ -2050,7 +1674,10 @@ BOOL PluginOILFilter::ReadColour(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	BOOL bOK = GetConvertAsType(pNode, &ColType);
 	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("ReadColour GetConvertAsType failed\n"));
 		return FALSE;
+	}
 
 	// Loop through each child calling the CreateColourNode recursive function
 	// for each one
@@ -2085,91 +1712,6 @@ BOOL PluginOILFilter::ReadColour(xmlNodePtr pNode, CapabilityTree* pCapTree)
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::GetConvertAsType(IXMLDOMNode* pNode, XPFConvertType* pValue)
-{
-	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-
-	CComQIPtr<IXMLDOMElement> pElem(pNode);
-	if (pElem)
-	{
-		HRESULT hRes;
-
-		CComVariant vAs;
-		hRes = pElem->getAttribute(CComBSTR(_T("as")), &vAs);
-		if (SUCCEEDED(hRes))
-		{
-			if (vAs.vt != VT_NULL)
-			{
-				hRes = vAs.ChangeType(VT_BSTR);
-				if (vAs == CComVariant(_T("native")))
-				{
-					AsType = XPFCONVTYPE_NATIVE;
-				}
-				else if (vAs == CComVariant(_T("simple")))
-				{
-					AsType = XPFCONVTYPE_SIMPLE;
-				}
-				else if (vAs == CComVariant(_T("stroked")))
-				{
-					AsType = XPFCONVTYPE_STROKED;
-				}
-				else if (vAs == CComVariant(_T("bitmap")))
-				{
-					AsType = XPFCONVTYPE_BITMAP;
-				}
-				else if (vAs == CComVariant(_T("bitmapfill")))
-				{
-					AsType = XPFCONVTYPE_BITMAPFILL;
-				}
-				else if (vAs == CComVariant(_T("bitmaptrans")))
-				{
-					AsType = XPFCONVTYPE_BITMAPTRANS;
-				}
-				else if (vAs == CComVariant(_T("bitmapfilltrans")))
-				{
-					AsType = XPFCONVTYPE_BITMAPFILLTRANS;
-				}
-				else if (vAs == CComVariant(_T("bitmapspan")))
-				{
-					AsType = XPFCONVTYPE_BITMAPSPAN;
-				}
-				else if (vAs == CComVariant(_T("reformat")))
-				{
-					AsType = XPFCONVTYPE_REFORMAT;
-				}
-				else if (vAs == CComVariant(_T("remove")))
-				{
-					AsType = XPFCONVTYPE_REMOVE;
-				}
-				else if (vAs == CComVariant(_T("simplergb")))
-				{
-					AsType = XPFCONVTYPE_SIMPLERGB;
-				}
-				else if (vAs == CComVariant(_T("rgb")))
-				{
-					AsType = XPFCONVTYPE_RGB;
-				}
-				else if (vAs == CComVariant(_T("cmyk")))
-				{
-					AsType = XPFCONVTYPE_CMYK;
-				}
-				else
-				{
-					ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-				}
-			}
-		}
-	}
-	else
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	*pValue = AsType;
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::GetConvertAsType(xmlNodePtr pNode, XPFConvertType* pValue)
@@ -2235,60 +1777,19 @@ BOOL PluginOILFilter::GetConvertAsType(xmlNodePtr pNode, XPFConvertType* pValue)
 			}
 			else
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_UNKNOWN_CONVTYPE));
 			}
 		}
 	}
 	else
 	{
-		ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		ERROR1(FALSE, _R(IDE_XPF_BADXML_EXPECTED_CONVTYPE));
 	}
 
 	*pValue = AsType;
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::GetXPFBOOL(IXMLDOMNode* pNode, LPTSTR pAttrName, XPFBOOL* pbValue)
-{
-	XPFBOOL bValue = XPFB_UNKNOWN;
-
-	CComQIPtr<IXMLDOMElement> pElem(pNode);
-	if (pElem)
-	{
-		HRESULT hRes;
-
-		CComVariant vVal;
-		hRes = pElem->getAttribute(CComBSTR(pAttrName), &vVal);
-		if (SUCCEEDED(hRes))
-		{
-			if (vVal.vt != VT_NULL)
-			{
-				hRes = vVal.ChangeType(VT_BSTR);
-				if (vVal == CComVariant(_T("true")))
-				{
-					bValue = XPFB_TRUE;
-				}
-				else if (vVal == CComVariant(_T("false")))
-				{
-					bValue = XPFB_FALSE;
-				}
-				else
-				{
-					ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-				}
-			}
-		}
-	}
-	else
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	*pbValue = bValue;
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::GetXPFBOOL(xmlNodePtr pNode, LPTSTR pAttrName, XPFBOOL* pbValue)
@@ -2312,65 +1813,19 @@ BOOL PluginOILFilter::GetXPFBOOL(xmlNodePtr pNode, LPTSTR pAttrName, XPFBOOL* pb
 			}
 			else
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_UNEXPECTED_BOOLVALUE));
 			}
 		}
 	}
 	else
 	{
-		ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		ERROR1(FALSE, _R(IDE_XPF_BADXML_NULLNODE));
 	}
 
 	*pbValue = bValue;
 
 	return TRUE;
 }
-
-
-/*HRESULT PluginOILFilter::GetXPFProp(IXMLDOMNode* pNode, LPTSTR pAttrName, PropMapEntry aMap[], XPFProp* pValue)
-{
-	XPFProp Value = XPFP_UNKNOWN;
-
-	CComQIPtr<IXMLDOMElement> pElem(pNode);
-	if (pElem)
-	{
-		HRESULT hRes;
-
-		CComVariant vVal;
-		hRes = pElem->getAttribute(CComBSTR(pAttrName), &vVal);
-		if (SUCCEEDED(hRes))
-		{
-			if (vVal.vt != VT_NULL)
-			{
-				hRes = vVal.ChangeType(VT_BSTR);
-
-				// Loop through the map until we find it or the NULL indicating the end
-				INT32 Index = 0;
-				while (aMap[Index].pName)
-				{
-					if (vVal == CComVariant(aMap[Index].pName))
-					{
-						Value = aMap[Index].Value;
-						break;
-					}
-					Index++;				
-				}
-				
-				if (Value == XPFP_UNKNOWN)
-				{
-					ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-				}
-			}
-		}
-	}
-	else
-	{
-		ERROR1(E_FAIL, _R(IDE_XPF_BADXML));
-	}
-
-	*pValue = Value;
-	return(S_OK);
-}*/
 
 
 BOOL PluginOILFilter::GetXPFProp(xmlNodePtr pNode, LPTSTR pAttrName, PropMapEntry aMap[], XPFProp* pValue)
@@ -2398,198 +1853,19 @@ BOOL PluginOILFilter::GetXPFProp(xmlNodePtr pNode, LPTSTR pAttrName, PropMapEntr
 
 			if (Value == XPFP_UNKNOWN)
 			{
-				ERROR1(FALSE, _R(IDE_XPF_BADXML));
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_UNEXPECTED_PROPVALUE));
 			}
 		}
 	}
 	else
 	{
-		ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		ERROR1(FALSE, _R(IDE_XPF_BADXML_NULLNODE));
 	}
 
 	*pValue = Value;
 
 	return TRUE;
 }
-
-
-/*XPFCapability* PluginOILFilter::CreateObjectNode(IXMLDOMNode* pNode)
-{
-	XPFCapability* pCap = NULL;
-
-	CComBSTR bsName;
-	HRESULT hRes = pNode->get_nodeName(&bsName);
-	
-	if (bsName == _T("#text"))
-	{
-		return(NULL);
-	}
-
-	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == _T("Layer"))
-	{
-		// Read the visible and locked attributes
-		XPFBOOL bVisible = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("visible"), &bVisible);
-		XPFBOOL bLocked = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("locked"), &bLocked);
-		XPFBOOL bPrintable = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("printable"), &bPrintable);
-		XPFBOOL bActive = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("active"), &bActive);
-		XPFBOOL bBackground = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("background"), &bBackground);
-		XPFBOOL bGuide = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("guide"), &bGuide);
-		pCap = new XPFCLayer(AsType, bVisible, bLocked, bPrintable, bActive, bBackground, bGuide);
-	}
-	else if (bsName == _T("Contour"))
-	{
-		pCap = new XPFCContour(AsType);
-	}
-	else if (bsName == _T("Shadow"))
-	{
-		// Read the type attribute
-		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aShadowTypes, &Type);
-		pCap = new XPFCShadow(AsType, Type);
-	}
-	else if (bsName == _T("Bevel"))
-	{
-		// Read the type and side attributes
-		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aBevelTypes, &Type);
-		XPFProp Side = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("side"), aBevelSides, &Side);
-		pCap = new XPFCBevel(AsType, Type, Side);
-	}
-	else if (bsName == _T("Blend"))
-	{
-		// Read the effect, oncurve, posprofile and attrprofile attributes
-		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
-		XPFBOOL bOnCurve = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("oncurve"), &bOnCurve);
-		XPFBOOL bObjProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("posprofile"), &bObjProfile);
-		XPFBOOL bAttrProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("attrprofile"), &bAttrProfile);
-		pCap = new XPFCBlend(AsType, Effect, bOnCurve, bObjProfile, bAttrProfile);
-	}
-	else if (bsName == _T("Mould"))
-	{
-		// Read the as and type attributes
-		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aMouldTypes, &Type);
-		XPFBOOL bGradFill = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("gradfill"), &bGradFill);
-		pCap = new XPFCMould(AsType, Type, bGradFill);
-	}
-	else if (bsName == _T("Rectangle"))
-	{
-		// Read the as, rounded and complex attributes
-		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
-		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
-		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
-		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
-		pCap = new XPFCRectangle(AsType, bComplex, bRounded, bStellated, bReformed);
-	}
-	else if (bsName == _T("Ellipse"))
-	{
-		// Read the as and complex attributes
-		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
-		pCap = new XPFCEllipse(AsType, bComplex);
-	}
-	else if (bsName == _T("Polygon"))
-	{
-		// Read the as, rounded, stellated and reformed attributes
-		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
-		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
-		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
-		pCap = new XPFCPolygon(AsType, bRounded, bStellated, bReformed);
-	}
-	else if (bsName == _T("Bitmap"))
-	{
-		// Read the complex and contone attributes
-		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
-		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
-		pCap = new XPFCBitmap(AsType, bComplex, bContone);
-	}
-	else if (bsName == _T("Text"))
-	{
-		// Read the onpath, complex and plain attributes
-		XPFBOOL bOnPath = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("onpath"), &bOnPath);
-		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
-		XPFBOOL bPlain = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("plain"), &bPlain);
-		XPFBOOL bAutoKern = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("autokern"), &bAutoKern);
-		XPFBOOL bJustified = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("justified"), &bJustified);
-		pCap = new XPFCText(AsType, bOnPath, bComplex, bPlain, bAutoKern, bJustified);
-	}
-	else if (bsName == _T("ClipView"))
-	{
-		pCap = new XPFCClipView(AsType);
-	}
-	else if (bsName == _T("BitmapEffect"))
-	{
-		pCap = new XPFCBitmapEffect(AsType);
-	}
-	else if (bsName == _T("Feather"))
-	{
-		pCap = new XPFCFeather(AsType);
-	}
-	else
-	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
-	}
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	INT32 Phase = 0;
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCapNode = CreateObjectNode(pChild);
-
-		if (pCapNode)
-		{
-			// If we have a node then add it to the list
-			// If we do not have a node already then set m_pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCapNode);
-			}
-			else
-			{
-				pCap->SetChild(pCapNode);
-			}
-			pLast = pCapNode;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	return(pCap);
-}*/
 
 
 XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
@@ -2600,26 +1876,34 @@ XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
 	
 	if (strName == _T("#text") || xmlNodeIsText(pNode))
 	{
+		wxString str = CXMLUtils::ConvertToWXString(xmlNodeGetContent(pNode));
+		TRACEUSER("Phil", _T("CreateObjectNode ignoring text %s\n"), (LPCTSTR)str);
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	HRESULT hRes = GetConvertAsType(pNode, &AsType);
+	BOOL bOK = GetConvertAsType(pNode, &AsType);
+	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("CreateObjectNode GetConvertAsType failed\n"));
+		return NULL;
+	}
+
 	if (strName == _T("Layer"))
 	{
 		// Read the visible and locked attributes
 		XPFBOOL bVisible = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("visible"), &bVisible);
+		bOK = GetXPFBOOL(pNode, _T("visible"), &bVisible);
 		XPFBOOL bLocked = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("locked"), &bLocked);
+		bOK = GetXPFBOOL(pNode, _T("locked"), &bLocked);
 		XPFBOOL bPrintable = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("printable"), &bPrintable);
+		bOK = GetXPFBOOL(pNode, _T("printable"), &bPrintable);
 		XPFBOOL bActive = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("active"), &bActive);
+		bOK = GetXPFBOOL(pNode, _T("active"), &bActive);
 		XPFBOOL bBackground = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("background"), &bBackground);
+		bOK = GetXPFBOOL(pNode, _T("background"), &bBackground);
 		XPFBOOL bGuide = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("guide"), &bGuide);
+		bOK = GetXPFBOOL(pNode, _T("guide"), &bGuide);
 		pCap = new XPFCLayer(AsType, bVisible, bLocked, bPrintable, bActive, bBackground, bGuide);
 	}
 	else if (strName == _T("Contour"))
@@ -2630,93 +1914,93 @@ XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
 	{
 		// Read the type attribute
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aShadowTypes, &Type);
+		bOK = GetXPFProp(pNode, _T("type"), aShadowTypes, &Type);
 		pCap = new XPFCShadow(AsType, Type);
 	}
 	else if (strName == _T("Bevel"))
 	{
 		// Read the type and side attributes
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aBevelTypes, &Type);
+		bOK = GetXPFProp(pNode, _T("type"), aBevelTypes, &Type);
 		XPFProp Side = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("side"), aBevelSides, &Side);
+		bOK = GetXPFProp(pNode, _T("side"), aBevelSides, &Side);
 		pCap = new XPFCBevel(AsType, Type, Side);
 	}
 	else if (strName == _T("Blend"))
 	{
 		// Read the effect, oncurve, posprofile and attrprofile attributes
 		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
+		bOK = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
 		XPFBOOL bOnCurve = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("oncurve"), &bOnCurve);
+		bOK = GetXPFBOOL(pNode, _T("oncurve"), &bOnCurve);
 		XPFBOOL bObjProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("posprofile"), &bObjProfile);
+		bOK = GetXPFBOOL(pNode, _T("posprofile"), &bObjProfile);
 		XPFBOOL bAttrProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("attrprofile"), &bAttrProfile);
+		bOK = GetXPFBOOL(pNode, _T("attrprofile"), &bAttrProfile);
 		pCap = new XPFCBlend(AsType, Effect, bOnCurve, bObjProfile, bAttrProfile);
 	}
 	else if (strName == _T("Mould"))
 	{
 		// Read the as and type attributes
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aMouldTypes, &Type);
+		bOK = GetXPFProp(pNode, _T("type"), aMouldTypes, &Type);
 		XPFBOOL bGradFill = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("gradfill"), &bGradFill);
+		bOK = GetXPFBOOL(pNode, _T("gradfill"), &bGradFill);
 		pCap = new XPFCMould(AsType, Type, bGradFill);
 	}
 	else if (strName == _T("Rectangle"))
 	{
 		// Read the as, rounded and complex attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
+		bOK = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
+		bOK = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
 		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
+		bOK = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
 		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
+		bOK = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
 		pCap = new XPFCRectangle(AsType, bComplex, bRounded, bStellated, bReformed);
 	}
 	else if (strName == _T("Ellipse"))
 	{
 		// Read the as and complex attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
+		bOK = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		pCap = new XPFCEllipse(AsType, bComplex);
 	}
 	else if (strName == _T("Polygon"))
 	{
 		// Read the as, rounded, stellated and reformed attributes
 		XPFBOOL bRounded = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
+		bOK = GetXPFBOOL(pNode, _T("rounded"), &bRounded);
 		XPFBOOL bStellated = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
+		bOK = GetXPFBOOL(pNode, _T("stellated"), &bStellated);
 		XPFBOOL bReformed = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
+		bOK = GetXPFBOOL(pNode, _T("reformed"), &bReformed);
 		pCap = new XPFCPolygon(AsType, bRounded, bStellated, bReformed);
 	}
 	else if (strName == _T("Bitmap"))
 	{
 		// Read the complex and contone attributes
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
+		bOK = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
+		bOK = GetXPFBOOL(pNode, _T("contone"), &bContone);
 		pCap = new XPFCBitmap(AsType, bComplex, bContone);
 	}
 	else if (strName == _T("Text"))
 	{
 		// Read the onpath, complex and plain attributes
 		XPFBOOL bOnPath = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("onpath"), &bOnPath);
+		bOK = GetXPFBOOL(pNode, _T("onpath"), &bOnPath);
 		XPFBOOL bComplex = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("complex"), &bComplex);
+		bOK = GetXPFBOOL(pNode, _T("complex"), &bComplex);
 		XPFBOOL bPlain = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("plain"), &bPlain);
+		bOK = GetXPFBOOL(pNode, _T("plain"), &bPlain);
 		XPFBOOL bAutoKern = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("autokern"), &bAutoKern);
+		bOK = GetXPFBOOL(pNode, _T("autokern"), &bAutoKern);
 		XPFBOOL bJustified = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("justified"), &bJustified);
+		bOK = GetXPFBOOL(pNode, _T("justified"), &bJustified);
 		pCap = new XPFCText(AsType, bOnPath, bComplex, bPlain, bAutoKern, bJustified);
 	}
 	else if (strName == _T("ClipView"))
@@ -2733,7 +2017,7 @@ XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
 	}
 	else
 	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
+		ERROR1(NULL, _R(IDE_XPF_BADXML_UNEXPECTED_OBJTYPE));
 	}
 
 	xmlNodePtr pChild;
@@ -2766,113 +2050,6 @@ XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
 }
 
 
-/*XPFCapability* PluginOILFilter::CreateAttributeNode(IXMLDOMNode* pNode)
-{
-	XPFCapability* pCap = NULL;
-
-	CComBSTR bsName;
-	HRESULT hRes = pNode->get_nodeName(&bsName);
-	
-	if (bsName == _T("#text"))
-	{
-		return(NULL);
-	}
-
-	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == _T("Fill"))
-	{
-		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
-		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
-		XPFBOOL bMultistage = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("multistage"), &bMultistage);
-		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
-		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
-		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
-		pCap = new XPFCFill(AsType, Shape, Repeat, bMultistage, Effect, bProfile, bContone);
-	}
-	else if (bsName == _T("FillTrans"))
-	{
-		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
-		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
-		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
-		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
-		pCap = new XPFCFillTrans(AsType, Shape, Type, Repeat, bProfile);
-	}
-	else if (bsName == _T("Line"))
-	{
-		XPFBOOL bDash = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("dash"), &bDash);
-		XPFBOOL bArrowhead = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("arrowhead"), &bArrowhead);
-		XPFProp Cap = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("cap"), aLineCaps, &Cap);
-		XPFProp Join = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("join"), aLineJoins, &Join);
-		XPFBOOL bStroke = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stroke"), &bStroke);
-		XPFBOOL bBrush = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("brush"), &bBrush);
-		pCap = new XPFCLine(AsType, bDash, bArrowhead, Cap, Join, bStroke, bBrush);
-	}
-	else if (bsName == _T("LineTrans"))
-	{
-		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
-		pCap = new XPFCLineTrans(AsType, Type);
-	}
-	else if (bsName == _T("Feather"))
-	{
-		pCap = new XPFCFeather(AsType);
-	}
-	else
-	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
-	}
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	INT32 Phase = 0;
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCapNode = CreateAttributeNode(pChild);
-
-		if (pCapNode)
-		{
-			// If we have a node then add it to the list
-			// If we do not have a node already then set m_pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCapNode);
-			}
-			else
-			{
-				pCap->SetChild(pCapNode);
-			}
-			pLast = pCapNode;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	return(pCap);
-}*/
-
-
 XPFCapability* PluginOILFilter::CreateAttributeNode(xmlNodePtr pNode)
 {
 	XPFCapability* pCap = NULL;
@@ -2881,59 +2058,67 @@ XPFCapability* PluginOILFilter::CreateAttributeNode(xmlNodePtr pNode)
 	
 	if (strName == _T("#text") || xmlNodeIsText(pNode))
 	{
+		wxString str = CXMLUtils::ConvertToWXString(xmlNodeGetContent(pNode));
+		TRACEUSER("Phil", _T("CreateAttributeNode ignoring text %s\n"), (LPCTSTR)str);
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	HRESULT hRes = GetConvertAsType(pNode, &AsType);
+	BOOL bOK = GetConvertAsType(pNode, &AsType);
+	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("CreateAttributeNode GetConvertAsType failed\n"));
+		return NULL;
+	}
+
 	if (strName == _T("Fill"))
 	{
 		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
+		bOK = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
 		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
+		bOK = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
 		XPFBOOL bMultistage = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("multistage"), &bMultistage);
+		bOK = GetXPFBOOL(pNode, _T("multistage"), &bMultistage);
 		XPFProp Effect = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
+		bOK = GetXPFProp(pNode, _T("effect"), aColourEffects, &Effect);
 		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
+		bOK = GetXPFBOOL(pNode, _T("profile"), &bProfile);
 		XPFBOOL bContone = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("contone"), &bContone);
+		bOK = GetXPFBOOL(pNode, _T("contone"), &bContone);
 		pCap = new XPFCFill(AsType, Shape, Repeat, bMultistage, Effect, bProfile, bContone);
 	}
 	else if (strName == _T("FillTrans"))
 	{
 		XPFProp Shape = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
+		bOK = GetXPFProp(pNode, _T("shape"), aFillShapes, &Shape);
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
+		bOK = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
 		XPFProp Repeat = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
+		bOK = GetXPFProp(pNode, _T("repeat"), aFillRepeats, &Repeat);
 		XPFBOOL bProfile = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("profile"), &bProfile);
+		bOK = GetXPFBOOL(pNode, _T("profile"), &bProfile);
 		pCap = new XPFCFillTrans(AsType, Shape, Type, Repeat, bProfile);
 	}
 	else if (strName == _T("Line"))
 	{
 		XPFBOOL bDash = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("dash"), &bDash);
+		bOK = GetXPFBOOL(pNode, _T("dash"), &bDash);
 		XPFBOOL bArrowhead = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("arrowhead"), &bArrowhead);
+		bOK = GetXPFBOOL(pNode, _T("arrowhead"), &bArrowhead);
 		XPFProp Cap = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("cap"), aLineCaps, &Cap);
+		bOK = GetXPFProp(pNode, _T("cap"), aLineCaps, &Cap);
 		XPFProp Join = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("join"), aLineJoins, &Join);
+		bOK = GetXPFProp(pNode, _T("join"), aLineJoins, &Join);
 		XPFBOOL bStroke = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("stroke"), &bStroke);
+		bOK = GetXPFBOOL(pNode, _T("stroke"), &bStroke);
 		XPFBOOL bBrush = XPFB_UNKNOWN;
-		hRes = GetXPFBOOL(pNode, _T("brush"), &bBrush);
+		bOK = GetXPFBOOL(pNode, _T("brush"), &bBrush);
 		pCap = new XPFCLine(AsType, bDash, bArrowhead, Cap, Join, bStroke, bBrush);
 	}
 	else if (strName == _T("LineTrans"))
 	{
 		XPFProp Type = XPFP_UNKNOWN;
-		hRes = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
+		bOK = GetXPFProp(pNode, _T("type"), aTransTypes, &Type);
 		pCap = new XPFCLineTrans(AsType, Type);
 	}
 	else if (strName == _T("Feather"))
@@ -2942,7 +2127,7 @@ XPFCapability* PluginOILFilter::CreateAttributeNode(xmlNodePtr pNode)
 	}
 	else
 	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
+		ERROR1(NULL, _R(IDE_XPF_BADXML_UNEXPECTED_ATTRTYPE));
 	}
 
 	xmlNodePtr pChild;
@@ -2975,62 +2160,6 @@ XPFCapability* PluginOILFilter::CreateAttributeNode(xmlNodePtr pNode)
 }
 
 
-/*XPFCapability* PluginOILFilter::CreateColourNode(IXMLDOMNode* pNode)
-{
-	XPFCapability* pCap = NULL;
-
-	CComBSTR bsName;
-	HRESULT hRes = pNode->get_nodeName(&bsName);
-	
-	if (bsName == _T("#text"))
-	{
-		return(NULL);
-	}
-
-	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	hRes = GetConvertAsType(pNode, &AsType);
-	if (bsName == _T("Colour"))
-	{
-		pCap = new XPFCColour(AsType);
-	}
-	else
-	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
-	}
-
-	CComPtr<IXMLDOMNode> pChild;
-	CComPtr<IXMLDOMElement> pChildElem;
-	hRes = pNode->get_firstChild(&pChild);
-	INT32 Phase = 0;
-	XPFCapability* pLast = NULL;
-
-	while (pChild)
-	{
-		XPFCapability* pCapNode = CreateColourNode(pChild);
-
-		if (pCapNode)
-		{
-			// If we have a node then add it to the list
-			// If we do not have a node already then set m_pObjects
-			if (pLast)
-			{
-				pLast->SetNext(pCapNode);
-			}
-			else
-			{
-				pCap->SetChild(pCapNode);
-			}
-			pLast = pCapNode;
-		}
-
-		CComPtr<IXMLDOMNode> pNextChild;
-		hRes = pChild->get_nextSibling(&pNextChild);
-		pChild = pNextChild;
-	}
-
-	return(pCap);
-}*/
-
 XPFCapability* PluginOILFilter::CreateColourNode(xmlNodePtr pNode)
 {
 	XPFCapability* pCap = NULL;
@@ -3039,18 +2168,26 @@ XPFCapability* PluginOILFilter::CreateColourNode(xmlNodePtr pNode)
 	
 	if (strName == _T("#text") || xmlNodeIsText(pNode))
 	{
+		wxString str = CXMLUtils::ConvertToWXString(xmlNodeGetContent(pNode));
+		TRACEUSER("Phil", _T("CreateColourNode ignoring text %s\n"), (LPCTSTR)str);
 		return(NULL);
 	}
 
 	XPFConvertType AsType = XPFCONVTYPE_UNKNOWN;
-	HRESULT hRes = GetConvertAsType(pNode, &AsType);
+	BOOL bOK = GetConvertAsType(pNode, &AsType);
+	if (!bOK)
+	{
+		TRACEUSER("Phil", _T("CreateColourNode GetConvertAsType failed\n"));
+		return NULL;
+	}
+
 	if (strName == _T("Colour"))
 	{
 		pCap = new XPFCColour(AsType);
 	}
 	else
 	{
-		ERROR1(NULL, _R(IDE_XPF_BADXML));
+		ERROR1(NULL, _R(IDE_XPF_BADXML_UNEXPECTED_COLOURTYPE));
 	}
 
 	xmlNodePtr pChild;
