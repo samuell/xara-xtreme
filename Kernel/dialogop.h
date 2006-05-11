@@ -585,6 +585,10 @@ public:
 
 	void SetPropertyPageModified(BOOL Modified);
 
+	// Override this function if the dialog's frame should be loaded from resources rather than
+	// just created with the standard button set
+	virtual BOOL LoadFrameFromResources() {return FALSE;}
+
 	// The DialogOP destructor destroys the instance of the DialogTabOp and all  	
 	// associated resources. If the dialog was open then it is closed. 
 	~DialogTabOp();

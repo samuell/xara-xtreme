@@ -141,6 +141,16 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_TOOL_ENTER, DialogEventHandler::CommandEvent)
 	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_SPINCTRL_UPDATED, DialogEventHandler::CommandEvent)
 	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_TREE_SEL_CHANGED, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, DialogEventHandler::CommandEvent)
+/*
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, DialogEventHandler::CommandEvent)
+	EVT_COMMAND	(wxID_ANY, wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, DialogEventHandler::CommandEvent)
+*/
 	EVT_COMMAND_SCROLL (wxID_ANY, DialogEventHandler::ScrollEvent)
 	EVT_SCROLL  (DialogEventHandler::ScrollEvent)
 	EVT_CLOSE	(DialogEventHandler::CloseEvent)
@@ -152,6 +162,7 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_CAMDIALOG_REDRAW (wxID_ANY, DialogEventHandler::CamDialogEvent)
 	EVT_MOVE	(DialogEventHandler::MoveEvent)
 	EVT_SIZE	(DialogEventHandler::SizeEvent)
+
 END_EVENT_TABLE();
 
 DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_DEFERREDMSG)
@@ -596,6 +607,28 @@ void DialogEventHandler::SizeEvent(wxSizeEvent& event)
 	
 	// We pretend we didn't handle it, since dialogs with sizers etc. will need it
 	event.Skip();
+}
+
+/********************************************************************************************
+
+>	DialogEventHandler::NotebookEvent(wxNotebookEvent& event)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		event - the wxEvent
+	Outputs:	-
+	Returns:	-
+	Purpose:	Passes an event to DialogManager::Event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+
+void DialogEventHandler::NotebookEvent(wxNotebookEvent& event)
+{
+	DialogManager::Event(this, event);
 }
 
 /********************************************************************************************

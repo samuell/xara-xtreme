@@ -145,6 +145,7 @@ public:
 	void CamDialogEvent(wxCamDialogEvent &event);
 	void MoveEvent(wxMoveEvent &event);
 	void SizeEvent(wxSizeEvent &event);
+	void NotebookEvent(wxNotebookEvent &event);
 
 	void GrimReaperEvent(wxCamDialogEvent &event);
 

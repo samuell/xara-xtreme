@@ -321,14 +321,14 @@ private:
 
 ********************************************************************************************/
 
-class OurPropSheet;
-typedef wxNotebookPage OurPropShtPage;
+class wxPropertySheetDialog;
+
 class DialogBarOp;
                
 class DialogManager: public CCObject  
 {
 	friend class DialogEventHandler;
-	friend class OurPropSheet; // Is a friend because when a property sheet is created 
+	friend class wxPropertySheetDialog; // Is a friend because when a property sheet is created 
 							   // it needs to call PostCreate.
 public: 
 
@@ -365,6 +365,9 @@ public:
 
 	// Brings a dialog to the top-most z-order position
 	static BOOL BringToTop(CWindowID WindowID, DialogOp* pDlgOp);
+
+	// Get the book control
+	static wxBookCtrlBase * GetBookControl(CWindowID WindowID, CGadgetID Gadget =0 );
 
 	// Function to determine if a gadget is of a type that can be ticked 
 	static BOOL IsGadgetTickable(CWindowID WindowID, 
@@ -716,7 +719,7 @@ public:
 	static void  RestoreActiveDialogState();
 
 	// functions to access property pages
-	static CDlgResID GetActivePage();
+	static CDlgResID GetActivePage(CWindowID WindowID, CGadgetID Gadget = 0);
 	void SetPropertyPageModified(BOOL Value);
 
 	// adds the control to the dialog helper class
@@ -773,11 +776,7 @@ private:
     // values which are specified by the SetGadgetRange function.                         
 	static List ScrollPageIncList; 	
 
-	// This list stores DlgTagOpToPropShtItem's. It maps a DialogTabOp to a Property sheet that it
-	// created. See the Create method for a description of why we need this. 
-	static List DlgTagOpToPropShtList; 
-                                                                
-	static OurPropSheet* GetPropertySheetFromOp( DialogTabOp* pDialogTabOp );
+	static wxPropertySheetDialog* GetPropertySheetFromOp( DialogTabOp* pDialogTabOp );
 	
 	static BOOL HandleScrollBarMsg(wxWindow *pScrollWnd, 
 											      UINT32 wParam, 
@@ -916,87 +915,6 @@ class CWindowIDItem: public ListItem
 
 
 
-// The following classes are required for the implementation of tabbed dialogs
 
-
-/********************************************************************************************
-
->	class OurPropSheet : public CPropertySheet
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/11/94
-	Purpose:	Whenever we create a DialogTabOp we need to create a windows property sheet.
-				We need to subclass from the base class as it does not support modeless dialogs
-				with the standard set of buttons.
-	SeeAlso:	-
-
-********************************************************************************************/
-
-class OurPropSheet : public wxPropertySheetDialog
-{
-public:
-	OurPropSheet( wxWindow* pParentWnd, String_256* pName, UINT32 SelPage );
-	~OurPropSheet(); 
-
-//	BOOL IsModal(void) { return !m_bModeless; };
-
-	// This very useful function is protected within the MFC base class, so we redefine it
-	// here as public, and make it return a pointer to one of our Camelot pages.
-	OurPropShtPage* GetActivePage() const
-		{ return (OurPropShtPage*)GetBookCtrl()->GetCurrentPage(); }
-
-protected:
-	std::set<wxWindow*>	m_setCreateSent;
-
-	void OnSetActive( wxNotebookEvent& event );
-
-	DECLARE_EVENT_TABLE()
-
-PORTNOTE("dialog","Removed Windows callbacks")
-#ifndef EXCLUDE_FROM_XARALX
-	// Message handlers
-	//{{AFX_MSG(OurPropSheet)
-	afx_msg INT32  OnCreate(LPCREATESTRUCT lpCreateStruct);
-//	afx_msg void OnOK();
-	afx_msg void OnClose();
-	afx_msg INT32  OnMouseActivate(CWnd* pDesktopWnd, UINT32 nHitTest, UINT32 message);
-	afx_msg void OnActivate(UINT32 nState, CWnd* pWndOther, BOOL bMinimized);
-	afx_msg void OnSysCommand( UINT32 nID, LPARAM lParam );
-//	afx_msg void OnChangeText();
-	afx_msg BOOL OnMouseWheel(UINT32 nFlags, short zDelta, CPoint pt);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-
-	// New override for VC4 version of CPropertySheet and using the close icon
-	virtual BOOL DestroyWindow();
-
-	// The WindowProc chanels suitable messages to the DialogManager
-	LRESULT WindowProc(UINT32 Message, WPARAM wParam, LPARAM lParam); 
-#endif
-
-	DECLARE_CLASS(OurPropSheet)
-	friend class DialogManager;
-};
-
-
-/********************************************************************************************
-
->	class DlgTagOpToPropShtItem: public ListItem
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	22/11/94
-	Purpose:	This list item stores a mapping between a property sheet and the DialogTabOp
-				with which it is associated. It also stores a list of pages which have been
-				added to the property sheet. 
-	SeeAlso:	DialogManager::DlgTagOpToPropShtList
-
-********************************************************************************************/
-
-class DlgTagOpToPropShtItem: public ListItem
-{
-	public:
-		DialogTabOp* pDialogTabOp; 
-		OurPropSheet* pPropertySheet;
-};
 
 #endif		// !INC_DLGMGR

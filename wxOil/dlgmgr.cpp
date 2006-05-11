@@ -151,8 +151,6 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(CGadgetImageList, CCObject);
 
-IMPLEMENT_CLASS(OurPropSheet, wxPropertySheetDialog);
-
 
 // Place all statics here please, ordered by class
 // Statics
@@ -161,7 +159,6 @@ IMPLEMENT_CLASS(OurPropSheet, wxPropertySheetDialog);
 List DialogManager::DiscardStrList;
 List DialogManager::ScrollPageIncList;
 List DialogManager::DialogPositionList;
-List DialogManager::DlgTagOpToPropShtList;
 
 wxWindow   *DialogManager::pDlgCurrent = NULL;   // Required for IsDialogMessage handling
 
@@ -283,7 +280,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 	const TCHAR*	pDialogName = NULL;
 	wxWindow*		pDialogWnd = NULL;
 
-	if( DlgOp->IS_KIND_OF(DialogTabOp) )
+	if( DlgOp->IS_KIND_OF(DialogTabOp) && !(((DialogTabOp*)DlgOp)->LoadFrameFromResources()))
 		pDialogWnd = CreateTabbedDialog( (DialogTabOp*)DlgOp, Mode, OpeningPage );
 	else
 	{
@@ -486,16 +483,6 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 	INT32	DialogWidth  = DialogRect.GetWidth();
 	INT32	DialogHeight = DialogRect.GetHeight();
 
-	OurPropSheet*	pPropSheet = NULL;
-	{
-		DlgTagOpToPropShtItem*	pItem = (DlgTagOpToPropShtItem*)DlgTagOpToPropShtList.GetHead();
-		if( NULL != pItem &&
-			pDialogOp->IS_KIND_OF(DialogTabOp) )
-		{
-			pPropSheet = pItem->pPropertySheet;
-		}
-	}
-
 	// Create the WindowIDItem which will be stored in the DialogPosition.
 	CWindowIDItem *pWinID = new CWindowIDItem;
 	if( NULL == pWinID )
@@ -506,6 +493,13 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 		pDialogWnd->Destroy();
 		ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
 	}
+
+	wxBookCtrlBase * pBook=NULL;
+	// Only do special processing for DialogTabOp
+	if (pDialogOp->IS_KIND_OF(DialogTabOp))
+		pBook=GetBookControl(pDialogWnd);
+
+	ResourceID BookGadget=pBook?pBook->GetId():0;
 
 	if (!CreatedBefore) // If this is the first time the dialog has been created then position
 						// it centrally on the screen
@@ -539,17 +533,10 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 		DlgPos->ActivePage = 0;
 		DlgPos->ActivePageIndex=0;
 
-		if (pDialogOp->IS_KIND_OF(DialogTabOp))
+		if (pBook)
 		{
 			// Record the active page.
-			ActivePage = ((wxNotebookPage*)pPropSheet->GetActivePage())->GetId();
-
-			if(pPropSheet != NULL)
-			{
-				OurPropShtPage *pPage = (OurPropShtPage *)pPropSheet->GetActivePage();
-				if(pPage != NULL)
-					ActivePage = ((wxNotebookPage*)pPropSheet->GetActivePage())->GetId();
-			}
+			ActivePage = pBook->GetCurrentPage()->GetId();
 
 			DlgPos->ActivePage = ActivePage;
 			DlgPos->ActivePageIndex = 0;	 // 0 is always the first page
@@ -572,42 +559,23 @@ PORTNOTE("dialog","Removed FontFactory usage")
 		FontFactory::ApplyFontToWindow( DialogWnd, STOCKFONT_DIALOG ); */
 #endif
 
-	// BROADCAST a create message to the active page
-	if (pDialogOp->IS_KIND_OF(DialogTabOp))
-	{
-PORTNOTE("dialog","Removed what looks like some MFC quirkyness")
-#ifndef EXCLUDE_FROM_XARALX
-		// MarkH 28/6/99 - New check to Set the ActivePage to the ActiveIndex!
-		// All related to the proplems with upgrading the MFC with VC6!
-		if(pPropSheet != NULL)
-			(OurPropShtPage*)pPropSheet->GetBookCtrl()->SetActivePage(pPropSheet->GetActiveIndex());
-#endif
-
-		BROADCAST_TO_CLASS(DialogMsg(pDialogOp->WindowID, DIM_CREATE, 0, 0, ActivePage) ,DialogOp);
-	}
-
 	// Inform the Dialog that it has been created so that it can be initialised
 	// Note that for DialogTabOp's seperate Create messages are sent for each page
-	// from the OurPropShtPage OnCreate handler.
+	// from the wxNotebookPage OnCreate handler.
 	// Alex moved this inside the if statement
-	BROADCAST_TO_CLASS( DialogMsg( pDialogOp->WindowID, DIM_CREATE, 0 ) ,DialogOp );
+	BROADCAST_TO_CLASS( DialogMsg( pDialogOp->WindowID, DIM_CREATE, 0 ), DialogOp );
 
-	if( pDialogOp->IS_KIND_OF(DialogTabOp) && 
-		NULL != pPropSheet && 
-		pPropSheet->GetActivePage() )
+	if (pBook)
 	{
-		// MarkH 28/6/99 - New bit to get the active page working in tab boxes!
-		// All related to the proplems with upgrading the MFC with VC6!
-		if(pPropSheet != NULL)
+		// BROADCAST a create message to each page
+		UINT32 i;
+		for (i=0; i<pBook->GetPageCount(); i++)
 		{
-			OurPropShtPage *pPage = (OurPropShtPage *)pPropSheet->GetActivePage();
-			if(pPage != NULL)
-			{
-				ActivePage = ((wxNotebookPage*)pPropSheet->GetActivePage())->GetId();
-			}
+			BROADCAST_TO_CLASS(DialogMsg(pDialogOp->WindowID, DIM_CREATE, BookGadget, 0, pBook->GetPage(i)->GetId()) ,DialogOp);
 		}
 
-		BROADCAST_TO_CLASS( DialogMsg( pDialogOp->WindowID, DIM_SET_ACTIVE, 0, 0, ActivePage ), DialogOp );
+		// And tell the active page which is active
+		BROADCAST_TO_CLASS( DialogMsg( pDialogOp->WindowID, DIM_SET_ACTIVE, BookGadget, 0, ActivePage ), DialogOp );
 	}
 
 	// If the dialog which has just been created is modal then disable all other
@@ -1085,7 +1053,16 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	{
 		msg.DlgMsg = DIM_DLG_RESIZED;
 		HandleMessage = TRUE;
-	}	
+	}
+	else if (
+		(EventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED) &&
+		pGadget && pGadget->IsKindOf(CLASSINFO(wxBookCtrlBase)))
+	{
+		msg.DlgMsg = DIM_SET_ACTIVE;
+		wxWindow *pPage = ((wxBookCtrlBase*)pGadget)->GetCurrentPage();
+		msg.PageID = pPage?(pPage->GetId()):0;
+		HandleMessage = TRUE;
+	}
 	else if (
 		((EventType == wxEVT_CAMDIALOG_REDRAW) && (pGadget)) ||
 		FALSE)
@@ -1270,6 +1247,62 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 
 
 
+/********************************************************************************************
+
+>	wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gadget =0)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	11/05/2006
+	Inputs:		WindowID - Dialog box window identifier
+				Gadget - Identifier of the gadget OR zero
+	Returns		pointer to the book control or NULL
+	Purpose:	This function will return a pointer to the book control in a window.
+				If the window is of type wxPropertySheetDialog then it Gadget is not
+				required
+
+********************************************************************************************/
+
+wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gadget /* =0 */)
+{
+	// No window ID? Well no book control then
+	if (!WindowID) return NULL;
+
+	// If it's a property sheet dialog then we know a quick way...
+	if (WindowID->IsKindOf(CLASSINFO(wxPropertySheetDialog)))
+		return ((wxPropertySheetDialog*)WindowID)->GetBookCtrl();
+
+	// If we were passed a gadget ID, we can go use it
+	if (Gadget)
+	{
+		wxWindow * pGadget = GetGadget(WindowID, Gadget);
+		if (pGadget->IsKindOf(CLASSINFO(wxBookCtrlBase)))
+			return (wxBookCtrlBase*)pGadget;
+		else
+			return NULL;
+	}
+
+	// See if any of the children are wxBookCtrlBase
+	wxWindowList::Node * pNode = WindowID->GetChildren().GetFirst();
+	while (pNode)
+	{
+		wxWindow * child = pNode->GetData();
+		if (child->IsKindOf(CLASSINFO(wxBookCtrlBase)))
+			return (wxBookCtrlBase*)child;
+		pNode = pNode->GetNext();
+	}
+
+	// OK, they aren't. Recurse through them
+	pNode = WindowID->GetChildren().GetFirst();
+	while (pNode)
+	{
+		wxBookCtrlBase * pBook=GetBookControl(WindowID, 0);
+		if (pBook)
+			return pBook;
+		pNode = pNode->GetNext();
+	}
+
+	return NULL;
+}
 
 
 
@@ -1386,6 +1419,12 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 		return;
 	}
 
+	wxBookCtrlBase * pBook=NULL;
+	// Only do special processing for DialogTabOp
+	if (pDlgOp->IS_KIND_OF(DialogTabOp))
+		pBook=GetBookControl(WindowID);
+//	ResourceID BookGadget=pBook?pBook->GetId():0;
+
 	// See if the dialogs has a position record  (If it's a DialogBarOp it won't have one)
 	DialogPosition* DlgPos = (DialogPosition*)DialogPositionList.GetHead();
 	CWindowIDItem* WinID;
@@ -1427,22 +1466,18 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 		// If the dialog is tabbed then we need to record the active page as well
 		// We can't find the runtime class of the DialogOp at this point because Delete can be called
 		// from its destructor
-PORTNOTE("dialog","Removed OurPropSheet usage")
-#ifndef EXCLUDE_FROM_XARALX
-		if ((pCWnd != NULL) && (pCWnd->IsKindOf(RUNTIME_CLASS(OurPropSheet))))
+		if (pBook)
 		{
-			OurPropSheet* pPropSheet = (OurPropSheet*)pCWnd;
-			OurPropShtPage* pPage = (OurPropShtPage*)pPropSheet->GetActivePage();
+			wxNotebookPage* pPage = pBook->GetCurrentPage();
 			if (pPage)
 			{
-				DlgPos->ActivePage = pPage->GetPageID();
+				DlgPos->ActivePage = pPage->GetId();
 				// Store the pages index as well
 				GetPageWindow(WindowID, DlgPos->ActivePage, &(DlgPos->ActivePageIndex));
 			}
 			else
 				ERROR3("There is no active page");
 		}
-#endif
 	}
 
 	if (pDlgOp->pEvtHandler->wxAUImanaged)
@@ -1490,37 +1525,6 @@ PORTNOTE("dialog","Removed OurPropSheet usage")
 	((wxWindow *)WindowID)->PopEventHandler(FALSE); // leave the DialogOp's destructor to delete it
 	pDlgOp->pEvtHandler->Destroy();
 
-#ifndef EXCLUDE_FROM_XARALX
-	// Is the window  a CWnd (i.e a basebar, or a Property sheet)
-	if (pCWnd != NULL)
-	{
-PORTNOTE("dialog","Removed OurPropSheet usage")
-		if (pCWnd->IsKindOf(RUNTIME_CLASS(OurPropSheet)))
-		{
-			DeletePropShtDetails((DialogTabOp*)pDlgOp);
-			OurPropSheet* ps = (OurPropSheet*)pCWnd;
-			if (ps->IsModal() && ps->IsKindOf(CLASSINFO(wxDialog)))
-)
-			{
-				// End the Modal
-				ps->EndDialog(TRUE);
-				// We cannot destroy the property sheet here because we are in its
-				// DoModal function. It will be destroyed in the Create method.
-			}
-			else
-			{
-				pCWnd->DestroyWindow();
-				delete pCWnd;
-			}
-		}
-		else
-		{
-			pCWnd->Destroy();
-		}
-	}
-	else
-#endif
-
 
 	if (pDlgOp->IsModal() && WindowID->IsKindOf(CLASSINFO(wxDialog)))
 	// A normal Modal
@@ -1554,41 +1558,7 @@ PORTNOTE("dialog","Removed OurPropSheet usage")
 	// All spick and span
 }
 
-/********************************************************************************************
 
->	void DialogManager::DeletePropShtDetails(DialogTabOp* pOp)
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	28/11/94
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	Destroys info about the property sheet associated with pOp
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-void DialogManager::DeletePropShtDetails(DialogTabOp* pOp)
-{
-	PORTNOTETRACE("dialog","DialogManager::DeletePropShtDetails - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Try to find the property sheet record
-	DlgTagOpToPropShtItem* Item = (DlgTagOpToPropShtItem*)(DlgTagOpToPropShtList.GetHead());
-	while (Item != NULL)
-	{
-		if (Item->pDialogTabOp == pOp)
-		{
-			// Delete this Item
-			delete(DlgTagOpToPropShtList.RemoveItem(Item));
-			return;
-		}
-		// Find the next property sheet record
-		Item = (DlgTagOpToPropShtItem*)(DlgTagOpToPropShtList.GetNext(Item));
-	}
-	ERROR3("Could not find property sheet record");
-#endif
-}
 
 /********************************************************************************************
 
@@ -2389,11 +2359,11 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 	wxWindow		   *WndID = pCWnd;
 /*	if (pCWnd != NULL)
 	{
-		if (pCWnd->IsKindOf(RUNTIME_CLASS(OurPropShtPage)))
+		if (pCWnd->IsKindOf(RUNTIME_CLASS(wxNotebookPage)))
 		{
 			wxWindow* Parent = pCWnd->GetParent();
 			ERROR2IF(Parent == NULL, FALSE, "Property page found without parent property sheet");
-			ERROR2IF(!(Parent->IsKindOf(RUNTIME_CLASS(OurPropSheet))), FALSE,"Property page parent not a property sheet");
+			ERROR2IF(!(Parent->IsKindOf(RUNTIME_CLASS(wxPropertySheetDialog))), FALSE,"Property page parent not a property sheet");
 			WndID = Parent->GetSafeHwnd();
 		}
 	} */
@@ -6352,7 +6322,7 @@ PORTNOTE("dialog","Programatic CB drop not supported by wx")
 
 /********************************************************************************************
 
->	OurPropSheet* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDialogTabOp )
+>	wxPropertySheetDialog* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDialogTabOp )
 
 	Author:		Luke_Hart (xara group ltd) <lukeh@xara.com>
 	created:	28/04/06
@@ -6365,18 +6335,10 @@ PORTNOTE("dialog","Programatic CB drop not supported by wx")
 
 ********************************************************************************************/
 
-OurPropSheet* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDialogTabOp )
+wxPropertySheetDialog* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDialogTabOp )
 {
-	DlgTagOpToPropShtItem* pTabItem = (DlgTagOpToPropShtItem*)(DlgTagOpToPropShtList.GetHead());
-	while (pTabItem != NULL)
-	{
-		if (pTabItem->pDialogTabOp == pDialogTabOp)
-			return pTabItem->pPropertySheet;
-
-		pTabItem = (DlgTagOpToPropShtItem*)(DlgTagOpToPropShtList.GetNext(pTabItem));
-	}
-
-	return NULL;
+	wxWindow * pWindow = pDialogTabOp->WindowID;
+	return pWindow->IsKindOf(CLASSINFO(wxPropertySheetDialog))?(wxPropertySheetDialog*)pWindow:NULL;
 }
 
 /********************************************************************************************
@@ -6401,12 +6363,10 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
 {
 	// Try to add the page to the property sheet associated with the DialogTabOp
 	// let's try and find it
-	OurPropSheet* pPropSheet = GetPropertySheetFromOp( pDialogTabOp );
-	ERROR2IF( NULL == pPropSheet, FALSE, _T("Couldn't find DialogTabOp") );
-	wxBookCtrlBase*	pNoteBook = pPropSheet->GetBookCtrl();
+	wxBookCtrlBase*	pNoteBook = GetBookControl(pDialogTabOp->WindowID);
 
 	// We need to create a page object
-	// Because OurPropShtPage is derived from an MFC object we have to cope with exceptions
+	// Because wxNotebookPage is derived from an MFC object we have to cope with exceptions
 	wxWindow*	pNewPage;
 	wxString	ObjectName;
 	try
@@ -6482,17 +6442,16 @@ CWindowID DialogManager::GetPageWindow(CWindowID Win, CDlgResID PageID, INT32* P
 		return Win; // A page is not required
 	}
 
-	wxWindow		   *pCWnd = (wxWindow *)Win;
-	ERROR3IF( pCWnd == NULL, "This is not a property sheet, the PageID should be NULL" );
+	wxBookCtrlBase*	pBookCtrl = GetBookControl(Win);
+	if (!pBookCtrl)
+	{
+		ERROR3("No BookControl found");
+		return Win;
+	}
 
-	// Ok so Win must be a property sheet, let's make sure
-	ERROR3IF( !pCWnd->IsKindOf( CLASSINFO(OurPropSheet) ), "Don't know what this window is" );
-
-	OurPropSheet* pPropertySheet = (OurPropSheet*)pCWnd;
 	wxNotebookPage* pCurrentPage;
 
 	// Find the window ID of the page
-	wxBookCtrlBase*	pBookCtrl = pPropertySheet->GetBookCtrl();
 	for (UINT32 i = 0; i < pBookCtrl->GetPageCount(); i++)
 	{
 		pCurrentPage = 	(wxNotebookPage*)(pBookCtrl->GetPage(i));
@@ -6896,29 +6855,41 @@ void DialogManager::RestoreActiveDialogState()
 
 /********************************************************************************************
 
->	static CDlgResID GetActivePage()
-
+>	static CDlgResID DialogManager::GetActivePage(CWindowID WindowID, CGadgetID Gadget = 0)
 
 	Author:		Diccon_Yamanaka (Xara Group Ltd) <camelotdev@xara.com>
+	Inputs		WindowID	- The window
+				GadgetID	- The gadget of the book control, or zero for none
 	Created:	23/3/2000
 	Returns:	the pageID of the currently active page in an open tabbed dialog, or -1 if there isn't one
 	Purpose:	To find out the currently active page in a tabbed dialog
 
+Alex unbroke this function which used to take no parameters, meaning it would only
+work reliably if only one tabbed dialog was up at a time... So if you are trying to
+call it, you now know how to fix your parameters...
+
+For an unknown reason this function returns -1 if the gadget is not found. Which I think
+is wxID_OK. Who knows
+
+DONT USE THIS FUNCTION
+
 ********************************************************************************************/
 
-CDlgResID DialogManager::GetActivePage()
+CDlgResID DialogManager::GetActivePage(CWindowID WindowID, CGadgetID Gadget /*=0*/)
 {
 	// first check to see if we have a property sheet object
-	DlgTagOpToPropShtItem* pTabItem = (DlgTagOpToPropShtItem*)DlgTagOpToPropShtList.GetHead();
-	if (pTabItem->pPropertySheet == NULL)
+	wxBookCtrlBase * pBookControl = GetBookControl(WindowID, Gadget);
+	if (pBookControl == NULL)
 		return CDlgResID(-1);
 
-	OurPropShtPage* pOurPage = pTabItem->pPropertySheet->GetActivePage();
+	wxNotebookPage* pOurPage = pBookControl->GetCurrentPage();
 	if (pOurPage == NULL)
 		return CDlgResID(-1);
 
 	return pOurPage->GetId();
 }
+
+
 
 
 /********************************************************************************************
@@ -6933,20 +6904,23 @@ CDlgResID DialogManager::GetActivePage()
 	Purpose:	Sets the modified property of the currently active property page of the current
 				tabbed dialog (if it exists)
 
+THIS ROUTINE IS FUNADAMENTALLY BROKEN - IT IS NOT PASSED A WINDOW ID SO CANNOT COPE
+WITH MORE THAN ONE OPEN DIALOG
+
 ********************************************************************************************/
 
 void DialogManager::SetPropertyPageModified(BOOL Modified)
 {
-	DlgTagOpToPropShtItem* pTabItem = (DlgTagOpToPropShtItem*)DlgTagOpToPropShtList.GetHead();
-	if (pTabItem->pPropertySheet != NULL)
-	{
 PORTNOTE( "dialog", "Removed RegisterWindowMessage usage" )
 #ifndef EXCLUDE_FROM_XARALX
+	DlgTabOpToPropShtItem* pTabItem = (DlgTabOpToPropShtItem*)DlgTabOpToPropShtList.GetHead();
+	if (pTabItem->pPropertySheet != NULL)
+	{
 		wxNotebookPage* pActivePage = pTabItem->pPropertySheet->GetActivePage();
 		if (pActivePage != NULL)
 			pActivePage->SetModified(Modified);
-#endif
 	}
+#endif
 }
 
 
@@ -6968,568 +6942,6 @@ PORTNOTE( "dialog", "Removed RegisterWindowMessage usage" )
 ControlInfo::~ControlInfo()
 {
 }
-
-PORTNOTE("dialog","Removed RegisterWindowMessage usage")
-#ifndef EXCLUDE_FROM_XARALX
-
-// OurPropSheet methods
-
-/********************************************************************************************
-
->	OurPropSheet::OurPropSheet(String_256* pName)
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/11/94
-	Inputs:		pName: The name to be displayed in the dialog's title bar
-	Purpose:	Constructs a property sheet
-
-********************************************************************************************/
-
-
-OurPropSheet::OurPropSheet(String_256* pName, UINT32 SelPage)
-	: CPropertySheet((TCHAR*)(*pName), GetMainFrame(), SelPage)	// The main frame is the owner of the sheet
-{
-}
-
-/********************************************************************************************
-
->	INT32 OurPropSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/11/94
-	Purpose:	Serves no purpose (at the moment) all functionality that used to live in here has
-				been moved into the OnInitDialog method. It may come in useful one day though.
-
-********************************************************************************************/
-
-INT32 OurPropSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
-{
-	if (CPropertySheet::OnCreate(lpCreateStruct) == -1)
-		return -1;
-
-	return 0;
-}
-
-
-/********************************************************************************************
-
->	void OurPropSheet::OnClose()
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/12/94
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	We override the OnClose method for our property sheet because the base class
-				OnClose method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	Errors:		-
-	SeeAlso:	-
-
-	Note:		This was true when using the VC2 XARAPROP.h/cpp class. Using the VC4 version
-				means that in the modeless case when the user clicks on the close icon on a
-				tabbed dialog box, this function gets called. In the modal case, this function
-				never seems to get called. We are then left with the op etc. still live.
-				CPropertySheet::DoModal calls DestroyWindow() which should be virtual.
-				This also sends a WM_DESTROY message. So, we will take advantage of this and
-				trap the call, clean our op up and then call the baseclass version.
-
-********************************************************************************************/
-
-void OurPropSheet::OnClose()
-{
-	// Inform the Dialog that the close icon has been clicked so that it can be be shut
-	// down properly
-
-	// Check if the Cancel button is present and disabled i.e. greyed. If it is then ignore
-	// the message. Do this becuase we might have greyed the cancel button to say that this
-	// is a bad move at this point in time and we do not want the close button coming along
-	// and doing the cancel action when it shoudn't.
-   	HWND hGadget = ::GetDlgItem(GetSafeHwnd(), IDCANCEL);	// Obtain gadgets window
-	ERROR3IF(hGadget == NULL, "Could not find Cancel button control on tabbed dialog");
-	BOOL ok = TRUE;
-	// Only check if control is present
-	if (hGadget)
-		ok = ::IsWindowEnabled(hGadget);					// Get current button state
-
-	// Use NULL as the page id so that the main dialog box gets the message.
-	if (ok)
-		BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-	else
-		Beep();		// Warn the user that this is a bad time to do this
-
-	// Could call the main property sheet close method to get it to do its stuff but
-	// hopefully by now the DIM_CANCEL should have done everything that we were
-	// interested in.
-	//CPropertySheet::OnClose();
-}
-
-/********************************************************************************************
-
->	virtual BOOL OurPropSheet::DestroyWindow()
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	24/7/97
-	Purpose:	We override the DestroyWindow method for our property sheet because the base class
-				DestroyWindow method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	SeeAlso:	OurPropSheet::OnClose(); CPropertySheet::OnClose();
-
-********************************************************************************************/
-
-BOOL OurPropSheet::DestroyWindow()
-{
-	// Tell the system that this is a modal close which we wont have been told about
-	// If we do this then we get a no active page error 3. Use the OnSysCommand trap instead.
-//	if (IsModal())
-//		BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-
-	return CPropertySheet::DestroyWindow();
-}
-
-/********************************************************************************************
-
->	void OurPropSheet::OnSysCommand(UINT32 nID, LPARAM lparam)
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	24/7/97
-	Purpose:	We override the OnSysCommand method for our property sheet because the base class
-				OnClose method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	SeeAlso:	OurPropSheet::DestroyWindow(); OurPropSheet::OnClose(); CPropertySheet::OnClose();
-
-********************************************************************************************/
-
-void OurPropSheet::OnSysCommand(UINT32 nID, LPARAM lparam)
-{
-	// check for clicks on the close icon
-	switch (nID & 0xFFF0)
-	{
-		case SC_CLOSE:
-		{
-			// The baseclass does this
-			/* if (m_bModeless)
-			{
-				SendMessage(WM_CLOSE);
-				return;
-			} */
-			// So we will do this
-			if (!m_bModeless)
-			{
-				BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-			}
-			break;
-		}
-	}
-	// The baseclass calls this, we have no need as we will call the baseclass
-	// Default();
-
-	// Always call the baseclass
-	CPropertySheet::OnSysCommand(nID, lparam);
-}
-
-/********************************************************************************************
-
->	void OurPropSheet::OnMouseActivate()
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	01/05/95
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	We override the OnMouseActivate method for our property sheet
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-INT32 OurPropSheet::OnMouseActivate(CWnd* pDesktopWnd, UINT32 nHitTest, UINT32 message)
-{
-	// currently has no special handling
-	return (CPropertySheet::OnMouseActivate(pDesktopWnd, nHitTest, message));
-}
-
-
-
-
-/********************************************************************************************
-
->	void OurPropSheet::OnMouseWheel()
-
-	Author:		Priestley (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/10/2000
-
-********************************************************************************************/
-
-BOOL OurPropSheet::OnMouseWheel(UINT32 nFlags, short zDelta, CPoint pt)
-{
-	TRACEUSER( "Matt", wxT("MouseWheel Movement Detected!\n") );
-	return CPropertySheet::OnMouseWheel(nFlags, zDelta, pt);
-}
-
-
-/********************************************************************************************
-
->	void OurPropSheet::OnActivate(UINT32 nState, CWnd* pWndOther, BOOL bMinimized)
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	01/05/95
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	We override the Activate method for our property sheet
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-void OurPropSheet::OnActivate(UINT32 nState, CWnd* pWndOther, BOOL bMinimized)
-{
-	// currently has no special handling
-	CPropertySheet::OnActivate(nState, pWndOther, bMinimized);
-}
-
-
-/********************************************************************************************
-
->	void OurPropSheet::OnOK()
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	01/05/95
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	We override the OnOK
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-/*
-void OurPropSheet::OnOK()
-{
-	INT32 i = 1;
-}
-*/
-
-/********************************************************************************************
-*/
-
-
-/********************************************************************************************
-
->	LRESULT OurPropSheet::WindowProc( UINT32 message, WPARAM wPara-m, LPARAM lParam )
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/4/94			   `
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	The OurPropSheet's WindowProc firstly sends the message to the dialog manager
-				so that it can dispatch it to the appropriate DialogBarOp (if neccessary).
-				Then the message is processed as normal.
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-// BODGE variable - see the next comment below. Never dereference this pointer!
-static CWnd *PropSheetWindowProcBodge = NULL;
-
-LRESULT OurPropSheet::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
-{
-	// --- START BODGE (Jason, 14/10/96) ---
-	// SendDialogMessage can cause the DialogOp to call End() and destruct itself, which in turn
-	// destructs us, which in turn means on exit from that function, we no longer exist. If this
-	// happens we must not call the base class, or we access violate!
-	// So we set a static variable, and in the destructor we change it to flag the fact that we
-	// have been destructed. We set the flag to our 'this' pointer so that we can ignore destruction
-	// of other OurPropSheets in the meantime (just in case), and have an ERROR3 to warn us of
-	// that sort of dangerous occurrence.
-	// See Also the destructor (below)
-//	ERROR3IF(PropSheetWindowProcBodge != NULL && PropSheetWindowProcBodge != this,
-//				"OurPropSheet::WindowProc - reentrantly called for a different PropSheet object!");
-	PropSheetWindowProcBodge = this;
-
-	// Now call the Dialogue manager to process the event
-	HWND OurHWND = GetSafeHwnd();
-	DialogManager::SendDialogMessage(OurHWND, Message, wParam, lParam);
-
-	if (PropSheetWindowProcBodge == NULL)		// If this is NULL, then we've committed suicide!
-		return(0);								// Return immediately before we access violate
-	// --- END BODGE ---
-
-	if (!::IsWindow(OurHWND))					// If our former window no longer exists, then
-		return(0);								// we should not call down to the base class either
-
-	BOOL OldModelessState = m_bModeless;
-
-	// When initialising a modeless property sheet, we don't want MFC to go shrinking the dialog
-	// and eating the buttons, so we pretend to be modal whilst it does its OnInitDialog business,
-	// then we revert to our old state.
-	if(Message == WM_INITDIALOG)
-	{
-		m_bModeless = FALSE;
-		//EnableStackedTabs(FALSE);
-	}
-/*
-	// Added by Craig Hamilton 24/8/00.
-	// This code has been added in order to prevent the export dialog closing when the user has
-	// entered an incorrect dpi value and has hit the enter key. The export dialog is modal and
-	// would normally close, but if we intercept the message and change it then it will not close.
-	if(Message == WM_COMMAND && !BmapPrevDlg::m_GetExportOptions)
-	{
-		Message = WM_SETFOCUS;
-	}
-	// End added.
-*/
-
-	// DY Bodge alert! In the BrushEditDialog we have changed the use of the OK button
-	// so we need to prevent it from entering the CProperySheet message loop, because
-	// someone (either MFC or dialogop, I'm not sure) tries to kill the dialog.
-	// We do this by seeing if the current active page is one of the brush edit dialog pages,
-	// and if so we'll return now
-	if((Message == WM_COMMAND) && (wParam == (WPARAM)IDOK))
-	{
-		OurPropShtPage *pPage = GetActivePage();
-		if(pPage != NULL)
-		{
-			CDlgResID PageID = pPage->GetPageID();
-			switch (PageID)
-			{
-				case _R(IDD_BRUSHEDITSPACING):
-				case _R(IDD_BRUSHEDITOFFSET):
-				case _R(IDD_BRUSHEDITSCALING):
-				case _R(IDD_BRUSHEDITEFFECTS):
-				case _R(IDD_BRUSHEDITSEQUENCE):
-				case _R(IDD_BRUSHEDITFILL):
-					return 0;
-				default:
-					break;
-					// don't do anything, just continue as normal
-			}
-		}
-	}
-
-	// Now process the message normally
-	LRESULT Res = CPropertySheet::WindowProc( Message, wParam, lParam );
-
-	if(Message == WM_INITDIALOG)
-	{
-		m_bModeless = OldModelessState;
-
-		HWND SafeHwnd = GetSafeHwnd();
-
-		// The ApplyNow button is disabled by default, we must enable this
-   		HWND hGadget = ::GetDlgItem(SafeHwnd, _R(ID_APPLY_NOW));  				 // Obtain gadgets window
-		ERROR3IF(hGadget == NULL, "Could not find Apply now button control on tabbed dialog");
-		if(hGadget != NULL)
-			::EnableWindow(hGadget, TRUE);                           // Enable window
-
-		//hGadget = ::GetDlgItem(SafeHwnd, _R(ID_HELP));  				 // Obtain gadgets window
-		hGadget = ::GetDlgItem(SafeHwnd, IDHELP);  				 // Obtain gadgets window
-		ERROR3IF(hGadget == NULL, "Could not find Help button control on tabbed dialog");
-		if(hGadget != NULL)
-			::EnableWindow(hGadget, TRUE);                           // Enable window
-
-		// Check Cancel button's there and enabled
-		hGadget = ::GetDlgItem(GetSafeHwnd(), IDCANCEL);	// Obtain gadgets window
-		ERROR3IF(hGadget == NULL, "Could not find Cancel button control on tabbed dialog");
-		if (hGadget)
-		{
-			BOOL ok = ::IsWindowEnabled(hGadget);					// Get current button state
-			if(!ok)
-				::EnableWindow(hGadget, TRUE);                           // Enable window
-		}
-
-		if(!m_bModeless)
-			DialogManager::PostCreate(GetSafeHwnd());
-	}
-
-	if(Message == WM_COMMAND)
-	{
-		if((wParam == (WPARAM)IDHELP) || (wParam == (WPARAM)_R(ID_HELP)))
-		{
-			OurPropShtPage *pActivePage = GetActivePage();
-			if(pActivePage != NULL)
-			{
-				CDlgResID PageID = pActivePage->GetPageID();
-				HelpUserPropertyPage((UINT32)PageID);
-			}
-		}
- 	}
-
-
-	return Res;
-}
-
-
-/********************************************************************************************
-
->	OurPropSheet::~OurPropSheet()
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	28/11/94
-	Purpose:	OurPropertySheet destructor, destroys the property sheet and all pages
-				that it contains
-
-********************************************************************************************/
-
-
-OurPropSheet::~OurPropSheet()
-{
-	// --- BODGE - see our WindowProc, above for details ---
-	if (this == PropSheetWindowProcBodge)	// If we're inside the WindowProc, flag the fact
-		PropSheetWindowProcBodge = NULL;	// that we have just committed suicide.
-	else
-		ERROR3("We could be suciding two OurPropSheets simultaneously - this could be bad!");
-	// --- END BODGE ---
-
-
-	for (INT32 i = 0; i < GetPageCount(); i++)
-	{
-		delete GetPage(i);
-	}
-}
-
-
-// OurPropShtPage methods
-
-
-/********************************************************************************************
-
->	OurPropShtPage::OurPropShtPage(CDlgResID DialogResID)
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/11/94
-	Inputs:		DialogResID: The Dialog resource ID associated with this page
-	Purpose:	Constructs a property sheet page
-
-********************************************************************************************/
-
-
-OurPropShtPage::OurPropShtPage(CDlgResID DialogResID) : CPropertyPage(DialogResID)
-{
-	PageID =  DialogResID;
-	CreateMessageSent = FALSE;
-}
-
-
-/********************************************************************************************
-
->	LRESULT OurPropShtPage::WindowProc( UINT32 message, WPARAM wParam, LPARAM lParam )
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	16/4/94
-	Inputs:		Usual WinProc
-	Purpose:	The OurPropShtPage's WindowProc firstly sends the message to the dialog manager
-				so that it can dispatch it to the appropriate DialogBarOp (if neccessary).
-				Then the message is processed as normal.
-
-********************************************************************************************/
-
-LRESULT OurPropShtPage::WindowProc( UINT32 Message, WPARAM wParam, LPARAM lParam )
-{
-	// We need to filter out Page InitDialog messages because
-	// a. We are not interested in them
-	// b. The first InitDialog message we receive when we are creating a property sheet should
-	// 	  be that of the Main Property sheet dialog window
-	BOOL result;
-	if (Message != WM_INITDIALOG)
-	{
-
-		// First send the message to the dialog manager
-		result = DialogManager::SendDialogMessage(	GetSafeHwnd(),
-					  				     	  			Message,
-					       	 							wParam,
-					       	 			 				lParam);
-	}
-	// this checks to see whether this Window is still around !
-	// it is possible that it has been deleted
-	if(!(IsWindow(GetSafeHwnd()))) return  0;
-
-/*
-	See note in DialogManager::SendDialogMessage() for WM_CTLCOLOREDIT (Markn 29/3/95)
-	if (Message == WM_CTLCOLOREDIT)
-		return result;
-*/
-
-	// Now process the message normally
-	return(CPropertyPage::WindowProc( Message, wParam, lParam ));
-}
-
-
-
-/********************************************************************************************
-
->	BOOL OurPropShtPage::OnSetActive()
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/11/94
-	Purpose:	We override the OnSetActive method for our property pages so that we can
-				inform the dialog when a page has been created.
-
-********************************************************************************************/
-
-BOOL OurPropShtPage::OnSetActive()
-{
-	BOOL ok = CPropertyPage::OnSetActive(); // This will create the page if it was not previously created
-
-	// Find the WindowID of the PropertySheet
-	wxWindow* PropSht = GetParent();
-	// Note: the ERROR macro's return ok which is probably the safest thing to do at this point
-	ERROR2IF(PropSht == NULL, ok, "Property sheet page has no parent");
-	ERROR2IF(!(PropSht->IsKindOf(RUNTIME_CLASS(OurPropSheet))), ok,
-		"Parent of property page is not a property sheet");
-
-
-	if (ok && (!CreateMessageSent))
-	{
-		// Inform the Dialog that a page  has been created so that it can be initialised
-
-		// SetFont
-		//FontFactory::ApplyFontToWindow(GetSafeHwnd(),STOCKFONT_DIALOGBARCLIENT);
-
-		// The first time that OnSetActive is called is in the Create method. At this point the
-		// DialogTabOp has not got a window id so we will be broadcasting to deaf ears.	This is
-		// ok though (no harm done). CreateMessageSent will be set to FALSE for this page in
-		// PostCreate
-		BROADCAST_TO_CLASS(DialogMsg(PropSht->GetSafeHwnd(), DIM_CREATE, NULL, 0, PageID), DialogOp);
-		CreateMessageSent = TRUE;
-	}
-	BROADCAST_TO_CLASS(DialogMsg(PropSht->GetSafeHwnd(), DIM_SET_ACTIVE, NULL, 0, PageID), DialogOp);
-	return ok;
-}
-
-/********************************************************************************************
-
->	BOOL OurPropShtPage::OnKillActive()
-
-	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	31/01/94
-	Returns:	Nonzero if data was updated successfully, otherwise 0.
-				At the moment we always return TRUE from this fn
-	Purpose:	Page loosing active status handling
-
-********************************************************************************************/
-
-BOOL OurPropShtPage::OnKillActive()
-{
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// Find out the state of the ApplyNow button on the property sheet
-	wxWindow* PropSht = GetParent();
-	ERROR2IF(PropSht == NULL, TRUE, "Property sheet page has no parent");
-	// Find the ApplyNow button
-	wxWindow* hApplyNow = PropSht->GetDlgItem(_R(ID_APPLY_NOW));
-	ERROR2IF(hApplyNow == NULL, TRUE, "Could not find Apply now button control on tabbed dialog");
-	return CPropertyPage::OnKillActive();
-}
-
-#endif
-
-
 
 
 
@@ -7588,11 +7000,11 @@ BOOL DialogManager::CreateBar(DialogBarOp* DlgOp)
 
 /********************************************************************************************
 
->	static BOOL DialogManager::CreateTabbedDialog(DialogTabOp* DlgOp, CDlgMode Mode, INT32 OpeningPage)
+>	static BOOL DialogManager::RelayoutDialog(DialogTabOp* DlgOp)
 
 	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
 	Created:	04/05/06
-	Inputs:		DlgTabOp:		The DialogTabOp to re-layout
+	Inputs:		DlgOp:		The DialogTabOp to re-layout
 	Outputs:	-
 	Returns:	-
 	Purpose:	Force the dialog to relayout after control hide\show
@@ -7602,11 +7014,14 @@ BOOL DialogManager::CreateBar(DialogBarOp* DlgOp)
 
 ********************************************************************************************/
 
-void DialogManager::RelayoutDialog( DialogTabOp* pDialogTabOp )
+void DialogManager::RelayoutDialog( DialogTabOp* pDlgOp )
 {
-	OurPropSheet* pPropSheet = GetPropertySheetFromOp( pDialogTabOp );
-	if( NULL != pPropSheet )
-		pPropSheet->LayoutDialog();
+	if (pDlgOp->WindowID->IsKindOf(CLASSINFO(wxPropertySheetDialog)))
+	{
+		((wxPropertySheetDialog*)(pDlgOp->WindowID))->LayoutDialog();
+	}
+	else
+		Layout(pDlgOp->WindowID);
 }
 
 
@@ -7659,11 +7074,11 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 	}
 
 	// ok first try and create the property sheet
-	OurPropSheet* pPropertySheet;
-	// Because OurPropSheet is derived from an MFC object we have to cope with exceptions
+	wxPropertySheetDialog* pPropertySheet;
+	// Because wxPropertySheetDialog is derived from an MFC object we have to cope with exceptions
 	try
 	{
-		pPropertySheet = new OurPropSheet( GetMainFrame(), pTabDlgOp->GetName(), ActivePageIndex );
+		pPropertySheet = new wxPropertySheetDialog( GetMainFrame(), wxID_ANY, (TCHAR*)pTabDlgOp->GetName()); // no doubt we shouldd o 
 //		pPropertySheet->Create(WS_POPUP | WS_SYSMENU | WS_BORDER | WS_DLGFRAME, 0)
 	}
 	catch( CMemoryException )
@@ -7673,25 +7088,6 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 
 	// Just to  be safe
 	ERROR1IF(pPropertySheet == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
-
-	// We need to store a mapping from the property sheet that we have just created
-	// to the DialogTabOp that it is associated with.We can't use a Cwnd to find the
-	// property sheet cos we ain't got one yet !
-
-	DlgTagOpToPropShtItem* Item = new DlgTagOpToPropShtItem;
-	if (Item == NULL)
-	{
-		// tidy-up
-		delete pPropertySheet;
-		ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
-	}
-
-	// Store details in the Item
-	Item->pDialogTabOp = pTabDlgOp;
-	Item->pPropertySheet = pPropertySheet;
-
-	// Now add the Item to the 	DlgTagOpToPropShtList
-	DlgTagOpToPropShtList.AddHead(Item);
 
 	pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
 
@@ -7704,9 +7100,6 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 	if (!(pTabDlgOp->RegisterYourPagesInOrderPlease()))
 	{
 		// We failed to add pages to the dialog so we must tidy-up and fail
-		// Because we have added the  DlgTagOpToPropShtItem to a list
-		// we can delete this and the property sheet itself a bit later. If we
-		// don't do this then things get too complex.
 		return FALSE;
 	}
 
@@ -7728,7 +7121,7 @@ PORTNOTE( "dialog", "Remove mainDlgID usage" );
 //			if (OpeningPage != pPosDetails->ActivePageIndex)
 //			{
 				ERROR3IF(pPropSheet == NULL, "There is no current PropertySheet");
-				OurPropShtPage* pPage = (OurPropShtPage*)pPropSheet->GetActivePage();
+				wxNotebookPage* pPage = (wxNotebookPage*)pPropSheet->GetActivePage();
 				ERROR3IF(pPage == NULL, "There is no active page");
 				pPosDetails->ActivePage = pPage->GetPageID();
 TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->ActivePage);
@@ -7800,16 +7193,16 @@ BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
 
 	if (pCWnd != NULL)
 	{
-		if (pCWnd->IsKindOf(RUNTIME_CLASS(OurPropShtPage)))
+		if (pCWnd->IsKindOf(RUNTIME_CLASS(wxNotebookPage)))
 		{
 			wxWindow* pPropertySheet = pCWnd->GetParent();
 			if (pPropertySheet)
 			{
-				ERROR2IF(!(pPropertySheet->IsKindOf(RUNTIME_CLASS(OurPropSheet))), FALSE,"Property page parent not a property sheet");
+				ERROR2IF(!(pPropertySheet->IsKindOf(RUNTIME_CLASS(wxPropertySheetDialog))), FALSE,"Property page parent not a property sheet");
 				BroadcastWindow = pPropertySheet->GetSafeHwnd(); // The destination of the message
 				ERROR2IF(BroadcastWindow == NULL, FALSE, "Property sheet window handle is NULL");
 				// We need to find the resource ID of the property sheet page
-				PageID = ((OurPropShtPage*)pCWnd)->GetPageID();
+				PageID = ((wxNotebookPage*)pCWnd)->GetPageID();
 			}
 			else
 			{
@@ -9273,185 +8666,4 @@ ListItem* CGadgetImageList::FindNextBitmap(ListItem* pContextItem, ResourceID* p
 	return (ListItem*)pItem;
 }
 
-
-// OurPropSheet methods
-
-
-BEGIN_EVENT_TABLE( OurPropSheet, wxPropertySheetDialog )
-	EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, OurPropSheet::OnSetActive )
-END_EVENT_TABLE();
-
-/********************************************************************************************
-
->	OurPropSheet::OurPropSheet(String_256* pName)
-
-	Author:		Simon
-	Created:	16/11/94
-	Inputs:		pName: The name to be displayed in the dialog's title bar				
-	Purpose:	Constructs a property sheet
-
-********************************************************************************************/
-
-
-OurPropSheet::OurPropSheet( wxWindow* pParentWnd, String_256* pName, UINT32 SelPage )
-	: wxPropertySheetDialog( pParentWnd, wxID_ANY, (TCHAR*)*pName )	// The main frame is the owner of the sheet
-{
-}
-
-/********************************************************************************************
-
->	OurPropSheet::~OurPropSheet()
-
-	Author:		Simon
-	Created:	28/11/94
-	Purpose:	OurPropertySheet destructor, destroys the property sheet and all pages 
-				that it contains
-
-********************************************************************************************/
-
-OurPropSheet::~OurPropSheet()
-{
-}
-
-
-/********************************************************************************************
-
->	void OurPropSheet::OnClose()
-
-	Author:		Neville
-	Created:	23/12/94
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	We override the OnClose method for our property sheet because the base class
-				OnClose method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	Errors:		-
-	SeeAlso:	-
-	
-	Note:		This was true when using the VC2 XARAPROP.h/cpp class. Using the VC4 version
-				means that in the modeless case when the user clicks on the close icon on a 
-				tabbed dialog box, this function gets called. In the modal case, this function
-				never seems to get called. We are then left with the op etc. still live.
-				CPropertySheet::DoModal calls DestroyWindow() which should be virtual.
-				This also sends a WM_DESTROY message. So, we will take advantage of this and
-				trap the call, clean our op up and then call the baseclass version.
-
-********************************************************************************************/
-
-PORTNOTE("dialog","Removed Windows callback - OurPropSheet::OnClose")
-#ifndef EXCLUDE_FROM_XARALX
-void OurPropSheet::OnClose()
-{
-	// Inform the Dialog that the close icon has been clicked so that it can be be shut
-	// down properly
-	
-	// Check if the Cancel button is present and disabled i.e. greyed. If it is then ignore
-	// the message. Do this becuase we might have greyed the cancel button to say that this
-	// is a bad move at this point in time and we do not want the close button coming along
-	// and doing the cancel action when it shoudn't.
-   	HWND hGadget = ::GetDlgItem(GetSafeHwnd(), IDCANCEL);	// Obtain gadgets window
-	ERROR3IF(hGadget == NULL, "Could not find Cancel button control on tabbed dialog"); 
-	BOOL ok = TRUE;
-	// Only check if control is present
-	if (hGadget)
-		ok = ::IsWindowEnabled(hGadget);					// Get current button state
-
-	// Use NULL as the page id so that the main dialog box gets the message.
-	if (ok)
-		BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-	else
-		Beep();		// Warn the user that this is a bad time to do this	
-	
-	// Could call the main property sheet close method to get it to do its stuff but
-	// hopefully by now the DIM_CANCEL should have done everything that we were
-	// interested in.
-	//CPropertySheet::OnClose();
-}
-#endif
-
-/********************************************************************************************
-
->	virtual BOOL OurPropSheet::DestroyWindow()
-
-	Author:		Neville Humphrys
-	Created:	24/7/97
-	Purpose:	We override the DestroyWindow method for our property sheet because the base class
-				DestroyWindow method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	SeeAlso:	OurPropSheet::OnClose(); CPropertySheet::OnClose();
-
-********************************************************************************************/
-
-PORTNOTE("dialog","Removed Windows callback - OurPropSheet::DestroyWindow")
-#ifndef EXCLUDE_FROM_XARALX
-BOOL OurPropSheet::DestroyWindow()
-{
-	// Tell the system that this is a modal close which we wont have been told about
-	// If we do this then we get a no active page error 3. Use the OnSysCommand trap instead.
-//	if (IsModal())
-//		BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-
-	return CPropertySheet::DestroyWindow();
-}
-#endif
-
-/********************************************************************************************
-
->	void OurPropSheet::OnSysCommand(UINT nID, LPARAM lparam)
-
-	Author:		Neville Humphrys
-	Created:	24/7/97
-	Purpose:	We override the OnSysCommand method for our property sheet because the base class
-				OnClose method will kill the dialog box without telling us, if we are Modal.
-				Therefore, the dialog has no chance to clean itself up and will instead be
-				set a DIM_CANCEL when the application is closed!
-	SeeAlso:	OurPropSheet::DestroyWindow(); OurPropSheet::OnClose(); CPropertySheet::OnClose();
-
-********************************************************************************************/
-
-PORTNOTE("dialog","Removed Windows callback - OurPropSheet::OnSysCommand")
-#ifndef EXCLUDE_FROM_XARALX
-void OurPropSheet::OnSysCommand(UINT nID, LPARAM lparam)
-{
-	// check for clicks on the close icon
-	switch (nID & 0xFFF0)
-	{
-		case SC_CLOSE:
-		{
-			// The baseclass does this
-			/* if (m_bModeless)
-			{
-				SendMessage(WM_CLOSE);
-				return;
-			} */
-			// So we will do this
-			if (!m_bModeless)
-			{
-				BROADCAST_TO_CLASS(DialogMsg(GetSafeHwnd(), DIM_CANCEL, NULL, 0, NULL), DialogOp);
-			}
-			break;
-		}
-	}
-	// The baseclass calls this, we have no need as we will call the baseclass
-	// Default();
-
-	// Always call the baseclass
-	CPropertySheet::OnSysCommand(nID, lparam); 
-}
-#endif
-
-void OurPropSheet::OnSetActive( wxNotebookEvent& event )
-{
-	wxWindow*	pPage = GetBookCtrl()->GetPage( event.GetSelection() );
-	if( m_setCreateSent.end() == m_setCreateSent.find( pPage ) )
-	{
-		BROADCAST_TO_CLASS( DialogMsg( this, DIM_CREATE, 0, 0, pPage->GetId() ), DialogOp );
-		m_setCreateSent.insert( pPage );
-	}
-
-	BROADCAST_TO_CLASS( DialogMsg( this, DIM_SET_ACTIVE, 0, 0, pPage->GetId() ), DialogOp );
-}
 
