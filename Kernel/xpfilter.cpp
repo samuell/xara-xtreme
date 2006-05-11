@@ -115,6 +115,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodedoc.h"
 #include "progress.h"
 
+#include "camprocess.h"
+
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_DYNAMIC(PluginNativeFilter, CamelotNativeFilter);
 
@@ -240,10 +242,30 @@ INT32 PluginNativeFilter::HowCompatible( PathName& Filename, ADDR HeaderStart, U
 		PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
 // Temporarily removed to stop file loading problems
 //		HowCompatible = pPluginOILFilter->HowCompatible(Filename);
+
+		// Look at the source for wxExecute
+
+		// Try using CamProcess instead
+		// Perhaps the redirection will stop the strangeness
+
+		wxString sCommand(_T("echo 1"));
+	
+		TRACE(_T("Running '%s'"), sCommand.c_str());
+	
+		CamProcess TheProc(NULL, NULL);
+
+		int code = TheProc.Execute(sCommand);
+		if (code != 0)
+		{
+			TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
+			// Extract error from a derived CamProcess class and report it
+			return(FALSE);
+		}
+
 	}
 
 	// Return the found value to the caller.
-	TRACEUSER( "GerryX", _T("PluginNativeFilter::HowCompatible returning = %d\n"), HowCompatible);
+	TRACEUSER( "Gerry", _T("PluginNativeFilter::HowCompatible returning = %d\n"), HowCompatible);
 	return HowCompatible;
 }
 

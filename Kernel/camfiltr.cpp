@@ -1695,7 +1695,7 @@ INT32 BaseCamelotFilter::HowCompatible( PathName& Filename, ADDR HeaderStart, UI
 		}
 	}
 				
-TRACEUSER( "Neville", _T("BaseCamelotFilter::HowCompatible returning = %d\n"),HowCompatible);
+TRACEUSER( "Gerry", _T("BaseCamelotFilter::HowCompatible returning = %d\n"),HowCompatible);
 	// Return the found value to the caller.
 	return HowCompatible;
 }

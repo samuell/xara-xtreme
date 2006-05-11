@@ -120,15 +120,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_MEMDUMP(PluginOILFilter, OILFilter)
 CC_IMPLEMENT_DYNAMIC(PathNameListItem, ListItem)
 
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-IMPLEMENT_DYNCREATE(PluginFilterCallback, CCmdTarget)
-
-BEGIN_INTERFACE_MAP(PluginFilterCallback, CCmdTarget)
-	INTERFACE_PART(PluginFilterCallback, __uuidof(IXPFCallback), _XPFCallback)
-END_INTERFACE_MAP()
-#endif
-
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
 #define new CAM_DEBUG_NEW
@@ -213,488 +204,6 @@ PropMapEntry aTransTypes[] = { {_T("none"), TT_NoTranspType},
 								{NULL, XPFP_UNKNOWN}};
 
 
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-/******************************************************************************************
-
->	PluginFilterCallback::PluginFilterCallback(PluginNativeFilter* pFilter = NULL)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-	Purpose:	Constructs a new PluginFilterCallback object.
-
-******************************************************************************************/
-
-PluginFilterCallback::PluginFilterCallback(PluginNativeFilter* pFilter)
-{
-	m_pFilter = pFilter;
-}
-
-
-
-
-/******************************************************************************************
-
->	PluginFilterCallback::~PluginFilterCallback()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-	Purpose:	Destructs a PluginFilterCallback object.
-
-******************************************************************************************/
-
-PluginFilterCallback::~PluginFilterCallback()
-{
-}
-
-
-
-
-/********************************************************************************************
-
->	STDMETHODIMP PluginFilterCallback::X_XPEHost::QueryInterface()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-
-********************************************************************************************/
-
-STDMETHODIMP PluginFilterCallback::X_XPFCallback::QueryInterface(REFIID iid, LPVOID* ppvObj)
-{
-	METHOD_PROLOGUE(PluginFilterCallback, _XPFCallback)
-	return pThis->ExternalQueryInterface(&iid, ppvObj);
-}
-
-
-
-
-/********************************************************************************************
-
->	STDMETHODIMP PluginFilterCallback::X_XPEHost::AddRef()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-
-********************************************************************************************/
-
-
-STDMETHODIMP_(UINT32) PluginFilterCallback::X_XPFCallback::AddRef()
-{
-	METHOD_PROLOGUE(PluginFilterCallback, _XPFCallback)
-	return pThis->ExternalAddRef();
-}
-
-
-
-
-/********************************************************************************************
-
->	STDMETHODIMP PluginFilterCallback::X_XPEHost::Release()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-
-********************************************************************************************/
-
-
-STDMETHODIMP_(UINT32) PluginFilterCallback::X_XPFCallback::Release()
-{
-	METHOD_PROLOGUE(PluginFilterCallback, _XPFCallback)
-	return pThis->ExternalRelease();
-}
-
-
-
-
-/********************************************************************************************
-
->	STDMETHODIMP PluginFilterCallback::X_XPEHost::EndEdit(INT32 EndEditFlags)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/06/2005
-
-********************************************************************************************/
-
-STDMETHODIMP PluginFilterCallback::X_XPFCallback::Progress(INT32 lProgress)
-{
-	METHOD_PROLOGUE(PluginFilterCallback, _XPFCallback)
-
-	TRACE( _T("IXPFCallback::Progress(%d)\n"), lProgress);
-
-	if (pThis->m_pFilter && lProgress > 0)
-		pThis->m_pFilter->SetProgressBarCount((UINT32)lProgress);
-
-	return S_OK;
-}
-
-
-/****************************************************************************
-
->	static BOOL PluginOILFilter::AutoRegisterFilters()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/03/2005
-
-	Returns:	TRUE if ok, FALSE if bother
-	Purpose:	Registers any plugin filter objects that aren't registered
-
-****************************************************************************/
-
-BOOL PluginOILFilter::AutoRegisterFilters()
-{
-	// Build a list of the registered filters (dll leafnames)
-
-	// Iterate through the component category adding each filter to the filter list
-	HRESULT hRes = S_OK;
-
-	CComPtr<ICatInformation> pCatInformer;
-	hRes = pCatInformer.CoCreateInstance(CLSID_StdComponentCategoriesMgr);
-	if (FAILED(hRes))
-	{
-		// Return an error here
-		return(TRUE);
-	}
-
-	CComPtr<IEnumCLSID> pEnumCLSID;
-	CATID Categories[4] = {
-							{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x35}},
-							{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x36}},
-							{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x37}},
-							{0x42F818E1, 0x9EF6, 0x4241, {0x90, 0x9B, 0x91, 0xE7, 0x83, 0xB9, 0xB9, 0x38}}
-						};
-	hRes = pCatInformer->EnumClassesOfCategories(4, Categories, (UINT32)-1, NULL, &pEnumCLSID);
-	if (FAILED(hRes))
-	{
-		// Return an error here
-		return(TRUE);
-	}
-
-	List FilterList;
-
-	UINT32 NumRead = 1;
-	CLSID Clsid;
-	while (NumRead != 0)
-	{
-		NumRead = 0;
-		hRes = pEnumCLSID->Next(1, &Clsid, &NumRead);
-		if (FAILED(hRes))
-			break;
-
-		if (NumRead > 0)
-		{
-			// Read the InProc32 regsitry entry for this Clsid
-			
-			// Generate the relevant registy key name
-			TCHAR sKey[64];
-			wsprintf(sKey, _T("CLSID\\{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}\\InProcServer32"),
-							Clsid.Data1,
-							Clsid.Data2,
-							Clsid.Data3,
-							Clsid.Data4[0],
-							Clsid.Data4[1],
-							Clsid.Data4[2],
-							Clsid.Data4[3],
-							Clsid.Data4[4],
-							Clsid.Data4[5],
-							Clsid.Data4[6],
-							Clsid.Data4[7]);
-
-			CRegKey rKey;
-			if (rKey.Open(HKEY_CLASSES_ROOT, sKey, KEY_READ) == ERROR_SUCCESS)
-			{
-				DWORD Size = 256;
-				String_256 sServer;
-				if (rKey.QueryValue(sServer, _T(""), &Size) == ERROR_SUCCESS)
-				{
-					PathName Path(sServer);
-					if (SGLibOil::FileExists(&Path))
-					{
-						PathNameListItem* pItem = new PathNameListItem(Path);
-						if (pItem)
-						{
-							FilterList.AddTail(pItem);
-//							RELTRACE(_T("Adding %s to list\n"), (LPCTSTR)Path.GetPath());
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	// Scan through the Filters folder and register any DLL whose leafname isn't in FilterList
-	String_256 sPath;
-	GetModuleFileName(NULL, sPath, 256);
-	PathName ExePath(sPath);
-	sPath = ExePath.GetLocation();
-	sPath += _T("Filters\\");
-	String_256 sFindPath(sPath);
-	sFindPath += _T("*.*");
-
-	FindFiles Finder;
-	BOOL bIsFolder = FALSE;
-	if (Finder.StartFindingFiles(&sFindPath))
-	{
-		String_256 sLeafName;
-		while (TRUE)
-		{
-			if (!Finder.FindNextFile(&sLeafName, &bIsFolder))
-				break;
-
-//			RELTRACE(_T("Testing %s\n"), (TCHAR*)sLeafName);
-
-			String_256 sFullPath(sPath);
-			sFullPath += sLeafName;
-
-			if (bIsFolder)
-			{
-				sFullPath += _T("\\");
-				sLeafName += _T(".dll");
-				sFullPath += sLeafName;
-			}
-
-			// At this point sFullPath should point at the dll
-			// Check it exists and is a DLL
-			PathName TestPath(sFullPath);
-			if (TestPath.GetType() == _T("dll") && SGLibOil::FileExists(&TestPath))
-			{
-//				RELTRACE(_T("FullPath %s\n"), (TCHAR*)sFullPath);
-
-				// If the full path of the DLL is in the installed list then 
-				// the correct version is already registered so do nothing.
-
-				// If the leafname of the DLL is in the installed list then 
-				// register the one in the Filters folder if it is newer than 
-				// the one in the installed list (this will also trap the 
-				// currently installed one not really existing).
-
-				// If the leafname is not in the installed list then register it. 
-
-				BOOL bRegister = TRUE;
-				PathNameListItem* pItem = (PathNameListItem*)FilterList.GetHead();
-				while (pItem)
-				{
-					if (sLeafName.CompareTo(pItem->m_Path.GetFileName(TRUE), FALSE) == 0)
-					{
-//						RELTRACE(_T("Leaf name is in list\n"));
-						// Found the leafname in the list
-						if (sFullPath.CompareTo(pItem->m_Path.GetPath(), FALSE) == 0)
-						{
-							// The full path is the same so do nothing
-//							RELTRACE(_T("Full path is in list\n"));
-							bRegister = FALSE;
-						}
-						else
-						{
-							// Get the version number of the installed version
-							String_64 sVerInstalled;
-							if (GetFileVersion(&(pItem->m_Path), &sVerInstalled))
-							{
-//								RELTRACE(_T("Current version is %s\n"), (TCHAR*)sVerInstalled);
-
-								// Get the version number of the Filters version
-								String_64 sVerFilters;
-								PathName FiltersPath(sFullPath);
-								if (GetFileVersion(&FiltersPath, &sVerFilters))
-								{
-//									RELTRACE(_T("This version is %s\n"), (TCHAR*)sVerFilters);
-									// If the Installed version is greater than or equal
-									// to the Filters version then don't register
-									if (CompareVersions(sVerInstalled, sVerFilters) >= 0)
-									{
-//										RELTRACE(_T("Current is new enough\n"));
-										bRegister = FALSE;
-									}
-								}
-							}
-						}
-						break;
-					}
-					pItem = (PathNameListItem*)FilterList.GetNext(pItem);
-				}
-
-				if (bRegister)
-				{
-					// Register the DLL
-					RELTRACE(_T("Registering %s\n"), (TCHAR*)sFullPath);
-					BOOL bRegOk = RegisterDLL(sFullPath);
-					RELTRACE(_T("RegisterDLL returned %s\n"), bRegOk ? _T("true") : _T("false"));
-				}
-			}
-		}
-		Finder.StopFindingFiles();
-	}
-
-	FilterList.DeleteAll();
-
-	return(TRUE);
-}
-
-
-
-/****************************************************************************
-
->	static BOOL PluginOILFilter::RegisterDLL(String_256& sPath)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/03/2005
-
-	Inputs:		sPath		- 
-	Returns:	TRUE if ok, FALSE if bother
-	Purpose:	
-
-****************************************************************************/
-
-BOOL PluginOILFilter::RegisterDLL(String_256& sPath)
-{
-	// Pointer to reg server function
-	INT32 (__stdcall *pDllRegisterServer)(void);
-
-	// Other Vars
-	HINSTANCE hThisCOM;
-	INT32 hRegResult;
-
-	// Load library into this process
-	if (hThisCOM = LoadLibraryEx(sPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH))
-	{
-		// Get pointer to standard dll registry function
-		pDllRegisterServer = GetProcAddress(hThisCOM, _T("DllRegisterServer"));
-		if (!pDllRegisterServer)
-		{
-			return FALSE;
-		}
-
-		// Tell server to register itself
-		hRegResult = pDllRegisterServer();
-		if (FAILED(hRegResult))
-		{
-			return FALSE;
-		}
-
-		FreeLibrary(hThisCOM);
-		return(TRUE);
-	}
-
-	return(FALSE);
-}
-
-
-
-
-/****************************************************************************
-
->	BOOL PluginOILFilter::GetFileVersion(PathName* pPath, String_64* pVersion)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	06/07/2005
-
-	Inputs:		pPath		- pointer to a PathName
-				pVersion	- pointer to a String_64 to recieve the version string
-	Returns:	TRUE if ok, FALSE if version number couldn't be extracted
-	Purpose:	Gets the version number (as a string) from a file's version 
-				resource.
-
-****************************************************************************/
-
-BOOL PluginOILFilter::GetFileVersion(PathName* pPath, String_64* pVersion)
-{
-	BOOL bRetVal = FALSE;
-	*pVersion = _T("0, 0, 0, 0");
-
-	if (SGLibOil::FileExists(pPath))
-	{
-		String_256 sFilename(pPath->GetPath());
-		if (sFilename.Length() <= 126)
-		{
-			DWORD dwVerHnd = 0;
-			DWORD VersionSize = GetFileVersionInfoSize(sFilename, &dwVerHnd);
-			// First get the size of the version info
-			if (VersionSize > 0)
-			{
-				BYTE* pVersionInfo = new BYTE[VersionSize];
-
-				// Now get the Version block from the dll!
-				if (pVersionInfo && GetFileVersionInfo(sFilename, NULL, VersionSize, (void*)pVersionInfo))
-				{
-					struct LANGANDCODEPAGE
-					{
-						WORD wLanguage;
-						WORD wCodePage;
-					} *lpTranslate;
-					UINT32 cbTranslate;
-
-					// Read the list of languages and code pages.
-					VerQueryValue(pVersionInfo, 
-								  TEXT("\\VarFileInfo\\Translation"),
-								  (LPVOID*)&lpTranslate,
-								  &cbTranslate);
-					
-					UINT32 ValueLen;
-					LPVOID pValue;
-					TCHAR pValName[64];
-					wsprintf(pValName, _T("\\StringFileInfo\\%04x%04x\\FileVersion"), lpTranslate[0].wLanguage, lpTranslate[0].wCodePage);
-					// Now get the value from the block
-					if (VerQueryValue((void*)pVersionInfo, pValName, &pValue, &ValueLen))
-					{
-						*pVersion = (TCHAR*)pValue;
-						bRetVal = TRUE;
-					}
-					delete [] pVersionInfo;
-				}
-			}
-		}
-	}
-
-	return(bRetVal);
-}
-
-
-/****************************************************************************
-
->	INT32 PluginOILFilter::CompareVersions(const String_64& lhs, const String_64& rhs)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	06/07/2005
-
-	Inputs:		lhs			- a version string
-				rhs			- another version string
-	Returns:	integer indicating the comparison of the versions in the 
-				standard C manner (-ve is lhs < rhs, 0 is lhs = rhs, 
-				+ve is lhs > rhs)
-	Purpose:	Compares two version strings
-
-****************************************************************************/
-
-INT32 PluginOILFilter::CompareVersions(const String_64& lhs, const String_64& rhs)
-{
-	INT32 la, lb, lc, ld;
-	INT32 ra, rb, rc, rd;
-
-	if (camSscanf(lhs, _T("%d, %d, %d, %d"), &la, &lb, &lc, &ld) != 4)
-	{
-		ASSERT(FALSE);
-		return(0);
-	}
-
-	if (camSscanf(rhs, _T("%d, %d, %d, %d"), &ra, &rb, &rc, &rd) != 4)
-	{
-		ASSERT(FALSE);
-		return(0);
-	}
-
-	if (la - ra)
-		return(la - ra);
-
-	if (lb - rb)
-		return(lb - rb);
-
-	if (lc - rc)
-		return(lc - rc);
-
-	return(ld - rd);
-}
-#endif
-
-
 
 /********************************************************************************************
 
@@ -732,113 +241,76 @@ PluginOILFilter::PluginOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 BOOL PluginOILFilter::Init( xmlNode* pFilterNode )
 {
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	// Remember the CLSID for later use
-	m_CLSID = rCLSID;
-	
-	// Generate the relevant registy key name
-	TCHAR sClassKey[64];
-	wsprintf(sClassKey, _T("CLSID\\{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}"),
-					m_CLSID.Data1,
-					m_CLSID.Data2,
-					m_CLSID.Data3,
-					m_CLSID.Data4[0],
-					m_CLSID.Data4[1],
-					m_CLSID.Data4[2],
-					m_CLSID.Data4[3],
-					m_CLSID.Data4[4],
-					m_CLSID.Data4[5],
-					m_CLSID.Data4[6],
-					m_CLSID.Data4[7]);
+	// This would look a lot neater using functions from xmlutils.h
 
-	CRegKey rClassKey;
-	if (rClassKey.Open(HKEY_CLASSES_ROOT, sClassKey, KEY_READ) != ERROR_SUCCESS)
-		return(FALSE);
+	m_InternalName = CXMLUtils::ConvertToWXString(xmlGetProp(pFilterNode, (xmlChar*)"name"));
 
-	CRegKey rServerKey;
-	if (rServerKey.Open(rClassKey, _T("InProcServer32"), KEY_READ) != ERROR_SUCCESS)
-		return(FALSE);
+	xmlNodePtr pChild = pFilterNode->children;
+	// We will loop round until we run out of child elements
+	// If an element has already been parsed then an error should be indicated
 
-	DWORD Size = _MAX_PATH;
-	TCHAR ServerPath[_MAX_PATH];
-	if (rServerKey.QueryValue(ServerPath, _T(""), &Size) != ERROR_SUCCESS)
-		return(FALSE);
-
-	if (GetFileAttributes(ServerPath) == INVALID_FILE_ATTRIBUTES)
+	while (pChild)
 	{
-		DWORD Err = GetLastError();
-		RELTRACE(_T("Error accessing filter at %s (%d)\n"), ServerPath, Err);
-		return(FALSE);
+		wxString strChildName = CXMLUtils::ConvertToWXString(pChild->name);
+		
+		if (strChildName == _T("#text") || xmlNodeIsText(pChild))
+		{
+			// ignore it
+		}
+		else if (strChildName == _T("DisplayName"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			wxString sTemp = CXMLUtils::ConvertToWXString(pStr);
+			FilterName = sTemp;
+			xmlFree(pStr);
+		}
+		else if (strChildName == _T("Extensions"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			wxString sTemp = CXMLUtils::ConvertToWXString(pStr);
+			FilterName = sTemp;
+			xmlFree(pStr);
+		}
+		else if (strChildName == _T("CanImport"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			m_CanImport = CXMLUtils::ConvertToWXString(pStr);
+			xmlFree(pStr);
+		}
+		else if (strChildName == _T("DoImport"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			m_DoImport = CXMLUtils::ConvertToWXString(pStr);
+			xmlFree(pStr);
+		}
+		else if (strChildName == _T("PrepareExport"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			m_PrepareExport = CXMLUtils::ConvertToWXString(pStr);
+			xmlFree(pStr);
+		}
+		else if (strChildName == _T("DoExport"))
+		{
+			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
+			m_DoExport = CXMLUtils::ConvertToWXString(pStr);
+			xmlFree(pStr);
+		}
+		else
+		{
+			TRACEUSER("Gerry", _T("Ignoring '%s' element"), strChildName.c_str());
+//			ERROR1(FALSE, _R(IDE_XPF_BADXML));
+		}
+
+		pChild = pChild->next;
 	}
-
-	CRegKey rConfigKey;
-	if (rConfigKey.Open(rClassKey, _T("Config"), KEY_READ) != ERROR_SUCCESS)
-		return(FALSE);
-#endif
-
-	m_FilterPath.SetPathName(_T("/home/gerry/src/XPFilter/debugu/XPFilter"));
 
 	// This should be set to some sensible path but I've hardcoded it for now
 	// We should change to making ~/.XaraLX into a directory and store the main config
 	// file and these filter config files in there
 	m_XMLFile.SetPathName(_T("/home/gerry/.XPFilters/XPFilter.xml"));
 
-//	Size = 32;
-//	TCHAR Exts[32];
-//	if (rConfigKey.QueryValue(Exts, _T("Extensions"), &Size) != ERROR_SUCCESS)
-//		return(FALSE);
-
-	TCHAR Exts[32] = _T("*.xar");
-
-	// We have to convert the plugin extension format into the XaraX format
-	TCHAR* pTokTemp = NULL;
-	TCHAR* pExt = camStrtok(Exts, _T(";"), &pTokTemp);
-	BOOL NoneFound = TRUE;
-	FilterExt = _T("");
-	while (pExt != NULL)
-	{
-		if (pExt[0] == _T('*') && pExt[1] == _T('.'))
-		{
-			pExt += 2;
-			if (camStrstr((TCHAR *)FilterExt, pExt) == NULL)
-			{
-				// Not already present - add the string.
-				if (!NoneFound)
-					// Don't add a comma if this is the first one we find.
-					FilterExt += _T(",");
-				FilterExt += pExt;
-				NoneFound = FALSE;
-			}
-		}
-
-		pExt = camStrtok(NULL, _T(";"), &pTokTemp);
-	}
-
-//	Size = 64;
-//	TCHAR TypeName[64];
-//	if (rConfigKey.QueryValue(TypeName, _T("TypeName"), &Size) != ERROR_SUCCESS)
-//		return(FALSE);
-//	FilterName = TypeName;
-
-	FilterName = _T("Plugin Test");
-
-#if !defined(EXCLUDE_FROM_XARALX)
-	CRegKey rCatKey;
-	if (rCatKey.Open(rClassKey, T("Implemented Categories"), KEY_READ) != ERROR_SUCCESS)
-		return(FALSE);
-
-	CRegKey rImpKey;
-	m_bImport = (rImpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B935}"), KEY_READ) == ERROR_SUCCESS) ||
-				(rImpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B937}"), KEY_READ) == ERROR_SUCCESS);
-
-	CRegKey rExpKey;
-	m_bExport = (rExpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B936}"), KEY_READ) == ERROR_SUCCESS) ||
-				(rExpKey.Open(rCatKey, _T("{42F818E1-9EF6-4241-909B-91E783B9B938}"), KEY_READ) == ERROR_SUCCESS);
-#endif	
-
-	m_bImport = TRUE;
-	m_bExport = TRUE;
+	m_bImport = !(m_DoImport.IsEmpty());
+	m_bExport = !(m_DoExport.IsEmpty());
 
 	return(m_bImport || m_bExport);		// If it doesn't do either then it isn't a filter
 }
@@ -864,56 +336,49 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 {
 	INT32 HowCompatible = 0;
 
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	if (!CreateFilterObject())
-		return(0);
-
-	CComBSTR bsFileName((LPCTSTR)Filename.GetPath());
-	HRESULT hRes = m_pFilterObj->HowCompatible(bsFileName, &HowCompatible);
-	if (FAILED(hRes))
-		return(0);
-#endif
-
 	// Here we need to run the plugin synchronously with the following options
 	// -c -f <filename>
 
 	// Check stderr for errors
 	// Get HowCompatible from stdout
-
-	wxString sCommand;
-	// Does this need double quotes to cope with spaces in filenames?
-	sCommand.Printf(_T("%s -c -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
-
-	TRACE(_T("Running '%s'"), sCommand.c_str());
-
-	wxArrayString saOutput;
-	wxArrayString saErrors;
-	int code = wxExecute(sCommand, saOutput, saErrors);
-	TRACE(_T("wxExecute returned %d"), code);
-	if (code == 0)
+// This currently causes file loading to get upset due to problems with the view being 
+// initialised too early (during the wxExecute)
+#if FALSE
+	if (!m_CanImport.IsEmpty())
 	{
-		// Extract the value from saOutput
-		if (saOutput.Count() > 0)
+		wxString sCommand(m_CanImport);
+		sCommand.Replace(_T("%IN%"), (LPCTSTR)FileName.GetPath());
+
+		TRACE(_T("Running '%s'"), sCommand.c_str());
+
+		wxArrayString saOutput;
+		wxArrayString saErrors;
+		int code = wxExecute(sCommand, saOutput, saErrors);
+		TRACE(_T("wxExecute returned %d"), code);
+		if (code == 0)
 		{
-			INT32 Val = wxAtoi(saOutput[0]);
-			TRACE(_T("Command '%s' returned string '%s'"), sCommand.c_str(), saOutput[0].c_str());
-			TRACE(_T("Value = %d"), Val);
-			if (Val >= 0 && Val <= 10)
+			// Extract the value from saOutput
+			if (saOutput.Count() > 0)
 			{
-				HowCompatible = Val;
+				INT32 Val = wxAtoi(saOutput[0]);
+				TRACE(_T("Command '%s' returned string '%s'"), sCommand.c_str(), saOutput[0].c_str());
+				TRACE(_T("Value = %d"), Val);
+				if (Val >= 0 && Val <= 10)
+				{
+					HowCompatible = Val;
+				}
+			}
+			else
+			{
+				TRACE(_T("Command '%s' returned no output value"), sCommand.c_str());
 			}
 		}
 		else
 		{
-			TRACE(_T("Command '%s' returned no output value"), sCommand.c_str());
+			TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 		}
 	}
-	else
-	{
-		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
-	}
-
+#endif
 	return(HowCompatible);
 }
 
@@ -941,55 +406,6 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 
 	*ppNewFile = NULL;
 
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	ERROR2IF(!m_pFilterObj, FALSE, "No filter object in GetImportFile");
-
-	if (m_pXarStream)
-		m_pXarStream.Release();
-
-	// Create an IStream for the flare data...
-	HRESULT hRes = CreateStreamOnHGlobal(NULL, FALSE, &m_pXarStream);
-	if (FAILED(hRes))
-	{
-		ERROR1(FALSE, _R(IDE_XPF_CREATESTREAMFAILED));
-	}
-
-	// Setup a callback object to handle progress
-	// TODOG: Pass something useful to callback object
-	PluginFilterCallback* pCallback = new PluginFilterCallback((PluginNativeFilter*)Parent);
-
-	// Call DoImport
-	PathName FileName = pFile->GetPathName();
-	CComBSTR bsFileName(FileName.GetPath());
-	hRes = m_pFilterObj->DoImport(bsFileName, m_pXarStream, pCallback->GetInterface());
-
-	// Delete the callback object
-	delete pCallback;
-
-	if (FAILED(hRes))
-	{
-		ERROR1(FALSE, _R(IDE_XPF_DOIMPORTFAILED));
-	}
-
-	CCOleStream* pStreamFile = new CCOleStream;
-	if (!pStreamFile)
-	{
-		ERROR1(FALSE, _R(IDE_NOMORE_MEMORY));
-	}
-
-	LARGE_INTEGER Pos = {0};
-	m_pXarStream->Seek(Pos, STREAM_SEEK_SET, NULL);
-
-	pStreamFile->attach(m_pXarStream);	// Attach to our stream
-
-	m_pXarStream.p->AddRef();
-
-	*ppNewFile = pStreamFile;		// Return the new file pointer
-
-	return(TRUE);
-#endif
-
 	// Here we should really run the plugin asynchronously with the following options
 	// -i -g -f <filename>
 
@@ -1007,9 +423,10 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 	PathName FileName = pFile->GetPathName();
 
-	wxString sCommand;
-	// Does this need double quotes to cope with spaces in filenames?
-	sCommand.Printf(_T("%s -i -f %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)FileName.GetPath());
+	wxString sCommand(m_DoImport);
+	sCommand.Replace(_T("%IN%"), (LPCTSTR)FileName.GetPath());
+
+	TRACE(_T("Running '%s'"), sCommand.c_str());
 
 	// Create a process with the TempFile as the stdout
 	// We will need to derive a new class from CamProcess to handle
@@ -1089,36 +506,6 @@ BOOL PluginOILFilter::GetExportFile(PathName* pPath, CCLexFile** ppNewFile)
 	}
 
 	return(FALSE);
-
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	if (!CreateFilterObject())
-	{
-		return(FALSE);
-	}
-
-	if (m_pXarStream)
-		m_pXarStream.Release();
-
-	// Create an IStream for the flare data...
-	HRESULT hRes = CreateStreamOnHGlobal(NULL, FALSE, &m_pXarStream);
-	if (FAILED(hRes))
-	{
-		ERROR1(FALSE, _R(IDE_XPF_CREATESTREAMFAILED));
-	}
-		
-	CCOleStream* pStreamFile = new CCOleStream(m_pXarStream);
-	if (!pStreamFile)
-	{
-		ERROR1(FALSE, _R(IDE_NOMORE_MEMORY));
-	}
-
-	m_pXarStream.p->AddRef();
-
-	*ppNewFile = pStreamFile;		// Return the new file pointer
-
-	return(TRUE);
-#endif
 }
 
 
@@ -1138,38 +525,6 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, CapabilityTree* pCapTree)
 {
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	ERROR2IF(!m_pFilterObj, FALSE, "No filter object");
-
-	String_256 sPath = pPath->GetPath();
-	ERROR2IF(sPath.IsEmpty(), FALSE, "No filename in GetCapabilities");
-
-	CComBSTR bsFileName(sPath);
-	CComBSTR bsXML;
-	// Call the filter object to do the conversion
-	HRESULT hRes = m_pFilterObj->PrepareExport(bsFileName, &bsXML);
-	if (FAILED(hRes))
-	{
-		Error::SetHResultError(hRes, m_pFilterObj, __uuidof(IXPFilter));
-		return(FALSE);
-	}
-	if (hRes == S_FALSE)
-	{
-		// User has cancelled the export so return the special error that will be ignored
-		Error::SetError(_R(IDN_USER_CANCELLED), 0);
-		return(FALSE);
-	}
-
-	// Now we build the capabilities structure from the XML
-	hRes = BuildCapabilityTree(bsXML, pCapTree);
-	if (FAILED(hRes))
-	{
-		Error::SetHResultError(hRes);
-		return(FALSE);
-	}
-#endif
-
 	// Here we need to run the plugin synchronously with the following options
 	// -p -f <filename> -x <xmlfilename>
 
@@ -1179,8 +534,11 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	// The XML is returned via the file
 
 	// Does this need double quotes to cope with spaces in filenames?
-	wxString sCommand;
-	sCommand.Printf(_T("%s -p -f %s -x %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath());
+	wxString sCommand(m_PrepareExport);
+	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
+	sCommand.Replace(_T("%XML%"), (LPCTSTR)m_XMLFile.GetPath());
+
+	TRACE(_T("Running '%s'"), sCommand.c_str());
 
 	wxArrayString saOutput;
 	wxArrayString saErrors;
@@ -1229,33 +587,6 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 {
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	ERROR2IF(!m_pFilterObj, FALSE, "No filter object\n");
-
-	// Reset the stream back to the start ready for the filter to translate it
-	pXarFile->seek(0);
-
-	CComBSTR bsFileName(pPath->GetPath());
-
-	// Should probably check the filename here and give a specific error
-
-	// Setup a callback object to handle progress
-	// TODOG: Pass something useful to callback object
-	PluginFilterCallback* pCallback = new PluginFilterCallback((PluginNativeFilter*)Parent);
-
-	// Call the filter object to do the conversion
-	HRESULT hRes = m_pFilterObj->DoExport(bsFileName, m_pXarStream, pCallback->GetInterface());
-
-	// Delete the callback object
-	delete pCallback;
-
-	if (FAILED(hRes))
-	{
-		ERROR1(FALSE, _R(IDE_XPF_DOEXPORTFAILED));
-	}
-#endif
-
 	// Here we should just need to wait for the process started in GetExportFile 
 	// to finish
 	// Check stderr for errors and progress
@@ -1269,9 +600,11 @@ PORTNOTE("other","PluginFilter COM bits removed")
 
 	// Check stderr for errors
 
-	wxString sCommand;
-	// Does this need double quotes to cope with spaces in filenames?
-	sCommand.Printf(_T("%s -e -f %s -x %s"), (LPCTSTR)m_FilterPath.GetPath(), (LPCTSTR)pPath->GetPath(), (LPCTSTR)m_XMLFile.GetPath());
+	wxString sCommand(m_DoExport);
+	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
+	sCommand.Replace(_T("%XML%"), (LPCTSTR)m_XMLFile.GetPath());
+
+	TRACE(_T("Running '%s'"), sCommand.c_str());
 
 	CCDiskFile TempFile(CCFILE_DEFAULTSIZE, FALSE, FALSE);
 	if (!TempFile.open(m_TempXarFile, ios::in | ios::binary))
@@ -1297,52 +630,6 @@ PORTNOTE("other","PluginFilter COM bits removed")
 	return(TRUE);
 }
 
-
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-/****************************************************************************
-
->	BOOL PluginOILFilter::CreateFilterObject()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	18/02/2005
-
-	Returns:	TRUE if ok, FALSE if bother
-	Purpose:	
-
-****************************************************************************/
-
-BOOL PluginOILFilter::CreateFilterObject()
-{
-	if (!m_pFilterObj)
-	{
-		HRESULT hRes = m_pFilterObj.CoCreateInstance(m_CLSID);
-		if (FAILED(hRes))
-		{
-			ERROR1_MSG(FALSE, (_R(IDE_XPF_CREATEFILTERFAILED), &(((PluginNativeFilter*)Parent)->FilterName), hRes));
-		}
-	}
-	return(TRUE);
-}
-
-
-/****************************************************************************
-
->	void PluginOILFilter::ReleaseFilterObject()
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	18/02/2005
-
-	Purpose:	
-
-****************************************************************************/
-
-void PluginOILFilter::ReleaseFilterObject()
-{
-	m_pFilterObj.Release();
-	m_pXarStream.Release();
-}
-#endif
 
 
 /****************************************************************************

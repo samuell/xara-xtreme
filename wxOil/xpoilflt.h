@@ -222,7 +222,12 @@ protected:
 	BOOL m_bImport;
 	BOOL m_bExport;
 
-	PathName m_FilterPath;		// Full path to filter executable
+	wxString m_InternalName;	// Internal name for filter (used to build path for XML config)
+	wxString m_PrepareExport;	// Command for PrepareExport
+	wxString m_DoExport;		// Command for DoExport
+	wxString m_CanImport;		// Command for CanImport
+	wxString m_DoImport;		// Command for DoImport
+
 	PathName m_XMLFile;			// Full path to filter XML config file for the current user
 	PathName m_TempXarFile;		// Full path to temporary Xar file
 
