@@ -1106,7 +1106,7 @@ BOOL StatusLine::UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread,
 	if (!Blank && GetMousePosText(&MousePosText,*pDocCoord,pSpread)==FALSE)
 		ReturnValue=FALSE;
 	ReturnValue &=SetStringGadgetValue(_R(IDC_SL_MOUSEPOS), MousePosText);
-	PaintGadgetNow(_R(IDC_SL_MOUSEPOS));
+//	PaintGadgetNow(_R(IDC_SL_MOUSEPOS)); - is there any need to paint this now? Flushes gtk buffer etc. Not a great idea.
 
 // WEBSTER - markn 15/1/97
 // No rulers in Webster

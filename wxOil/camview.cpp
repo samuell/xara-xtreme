@@ -2590,7 +2590,7 @@ PORTNOTE("other","Remove PeekMessage related code")
 	// passed on any subsequent DragPointerIdle events must be the same as this!
 	CurrentMousePos = point;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// if status line has not already been updated by someone calling CSnap::Snap(), call
 	// CSnap::Snap(), snapping to grid only, to update status line (and ruler mouse followers)
 	if (pStatusLine && pStatusLine->MousePosNeedsUpdating())
