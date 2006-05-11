@@ -141,6 +141,9 @@ public:
 	virtual bool OnSaveDocument(const wxString& filename);
 	virtual bool OnOpenDocument(const wxString& filename);
 
+	// override wxDocument::SaveAs
+	virtual bool SaveAs();
+
 	// Some CDocument emulation stuff
 	void SetModifiedFlag( BOOL fMod = TRUE ) { Modify( FALSE != fMod ); }
 
@@ -209,7 +212,6 @@ protected:
 	virtual bool OnSaveModified();
 	virtual bool DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
 	virtual bool DeleteContents();
-	virtual bool SaveAs();
 
 	BOOL RemoveExistingDocs();
 

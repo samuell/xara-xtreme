@@ -468,8 +468,16 @@ PORTNOTETRACE("other", "FileSaveAsAction does nothing");
  					)->GetActiveDocument()                  	//Get Active Document
  						)->OnFileSaveAs();                   		//SaveAs Active Document
 #else
-	wxCommandEvent		event;
-	AfxGetApp().GetDocumentManager()->OnFileSaveAs( event );
+//	wxCommandEvent		event;
+//	AfxGetApp().GetDocumentManager()->OnFileSaveAs( event );
+
+	// Don't call wxDocManager::OnFileSaveAs because that calls wxDocument non-virtual functions
+	// We need to ensure our pointer is cast to a CCamDoc*
+	// Note also that GetCurrentDocument doesn't mean "Current" in the way that the Kernel defines it!!!
+	//	(It means "Active"...)
+	wxDocument* pDoc = AfxGetApp().GetDocumentManager()->GetCurrentDocument();
+	if (pDoc && pDoc->IsKindOf(CLASSINFO(CCamDoc)))
+		((CCamDoc*)pDoc)->SaveAs();
 #endif
 }
 

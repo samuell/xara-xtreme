@@ -766,6 +766,7 @@ PORTNOTE("other", "Disabled OLE")
 	// Close the file, update the flags etc and return success.
 	if (pcszPathName) SetOriginalPath(TEXT(""));
 	m_fIsUntouched = FALSE;
+	SetModified(FALSE);
 //	StatusLine::SetDefaultPrefix();
 	return TRUE;
 
@@ -1512,13 +1513,6 @@ Document* CCamDoc::GetKernelDoc() const
 
 bool CCamDoc::OnSaveModified()
 {
-	PORTNOTETRACE("other","CCamDoc::SaveModified - do nothing");
-
-	// This here just to disable the "do you wanna save" dialog
-	// REMOVE WHEN IMPLEMENTING THIS FUNCTION!
-	SetModifiedFlag(FALSE);
-	
-#ifndef EXCLUDE_FROM_XARALX
 #ifdef STANDALONE
 	// Don't prompt in standalone version - we can't save anyway
 	return TRUE;
@@ -1539,7 +1533,7 @@ bool CCamDoc::OnSaveModified()
 	if (!IsModified()) return TRUE;
 
 	// Get filename to display in msg.
-	wxString name = m_strPathName;
+	wxString name = m_documentFile; 	// Was: m_strPathName;
 	if (name.IsEmpty())
 	{
 		// No path means untitled, so use the made-up name instead.
@@ -1552,7 +1546,7 @@ bool CCamDoc::OnSaveModified()
 		String_256 Temp(name);
 		PathName Path(Temp);
 		Temp = Path.GetTruncatedPath(20);
-		name = wxString(Temp);
+		name = (TCHAR*)Temp;
 	}
 
 	// use MakeMsg, so the context-sensitive help will work.
@@ -1589,8 +1583,8 @@ bool CCamDoc::OnSaveModified()
 
 		// And ask the question
 		Again = FALSE;
-		TRACEUSER( "Andy", _T("Creating SAVE? dialogue box\n"));
-		switch ( AskQuestion( &Question ) )
+		TRACEUSER( "Andy", _T("Creating SAVE? dialog box\n"));
+/*		switch ( AskQuestion( &Question ) )
 		{
 			case _R(IDB_CANCEL):
 				return FALSE;       // don't continue
@@ -1616,11 +1610,35 @@ bool CCamDoc::OnSaveModified()
 				ASSERT(FALSE);
 				break;
 		}
+*/
+		UINT32 answer = AskQuestion( &Question );
+		if (answer==_R(IDB_CANCEL))
+			return FALSE;       // don't continue
+
+		else if (answer==_R(IDB_SAVE))
+		{
+			// If so, either Save or Update, as appropriate
+			if (!DoSave(GetOriginalPath()))
+				return FALSE;       // don't continue
+			// else doc has been saved so it's no longer "modified"
+			SetModified(FALSE);
+		}
+
+		else if (answer==_R(IDB_DONTSAVE))
+			// If not saving changes, revert the document.
+
+			// OK, we must clear the modified flag here as the doc is no longer "dirty".
+			// If we don't then we will be prompted twice about saving open docs when
+			// we process a system shutdown message.
+			SetModified(FALSE);
+
+		else
+			ERROR3("Unexpected return from AskQuestion\n");
+
 	}
 	while (Again);
 
 	return TRUE;    // keep going
-#endif
 #endif
 	return true;
 }
@@ -1637,6 +1655,7 @@ bool CCamDoc::SaveAs()
 {
 	return wxDocument::SaveAs();
 }
+
 
 /********************************************************************************************
 
@@ -1657,10 +1676,10 @@ bool CCamDoc::SaveAs()
 
 ********************************************************************************************/
 
+PORTNOTE("other","CCamDoc::DoSave - Replaced by simpler version")
+#ifndef EXCLUDE_FROM_XARALX
 bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 {
-	PORTNOTETRACE("other","CCamDoc::DoSave - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifdef STANDALONE
 	// Do nothing on a standalone version
 	return true;
@@ -1702,21 +1721,17 @@ bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 			Answer = SaveAsNewName;
 		}
 #endif
-		switch (Answer)
-		{
-			case _R(IDS_OVERWRITE):
-				// Rename the new file to make sure we don't overwrite old
-				SaveAsNewName = FALSE;
-				break;
-			case _R(IDB_SAVEAS):
-				// Rename the new file to make sure we don't overwrite old
-				SaveAsNewName = TRUE;
-				break;
-			case _R(IDS_CANCEL):
-				// User has chosen to abort the operation
-				return FALSE;
-				break;
-		}
+		if (Answer==_R(IDS_OVERWRITE))
+			// Rename the new file to make sure we don't overwrite old
+			SaveAsNewName = FALSE;
+		else if (Answer== _R(IDB_SAVEAS))
+			// Rename the new file to make sure we don't overwrite old
+			SaveAsNewName = TRUE;
+		else if (Answer==_R(IDS_CANCEL))
+			// User has chosen to abort the operation
+			return FALSE;
+		else
+			ERROR3("Unknown Answer from AskQuestion");
 
 		// Once we have asked the question ensure that the user is not asked again
 		// We need to set the loaded flag as FALSE to effectively say that the document
@@ -1797,7 +1812,7 @@ bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 			// Disable for VC4.0/MFC 4.0 as they have fixed it.
 		#if _MFC_VER < 0x400
 			if (IsWin32c())
-			{	
+			{
 				TRACE( _T("Windows 95, testing for same file name after the event\n"));
 				if (!SaveDialog.IsValidFilename()) WeNeedToPutSaveAsDialogUpAgain = TRUE;
 			}
@@ -1827,6 +1842,8 @@ bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 	
 	BOOL isDocumentOpen = FALSE;
 
+PORTNOTETRACE("other","CCamDoc::DoSave - remove OLE usage");
+#ifndef EXCLUDE_FROM_XARALX
 #if (_OLE_VER >= 0x200)
 
 	POSITION pos = AfxGetApp()->GetFirstDocTemplatePosition();
@@ -1861,6 +1878,7 @@ bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 		isDocumentOpen = FALSE;
 
 #endif		// (OLE_VER >= 0x200)
+#endif
 
 	// End 'Already Open' check.
 
@@ -2055,10 +2073,42 @@ bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 		return FALSE;		// could not open document
 
 	}		// End of isDocumentOpen (OLE registration check)
-#endif
 #endif	// Not standalone (see first few lines)
-	return false;
 }
+#else
+
+
+bool CCamDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
+{
+#ifdef STANDALONE
+	// Do nothing on a standalone version
+	return true;
+#else
+	PORTNOTETRACE("save", "CCamDoc::DoSave grossly simplified from Xtreme version!");
+	BOOL bOK = TRUE;
+
+	// Get the name to save it as and see if it is empty
+	BOOL				SaveAsNewName = false;
+	wxString			newName = lpszPathName;
+
+	// If the name is empty, i.e. wasn't loaded as a .xar (e.g. open a tiff file) or newly created
+	// then ask the user for a name i.e. do a 'save as....' operation.
+	// Also, if we loaded an old format eps xar file and the user has chosen to not overwrite the
+	// file then we must give them a 'save as....' option.
+	if (newName.IsEmpty() || SaveAsNewName)
+	{
+		SaveAs();
+	}
+	else
+	{
+		bOK = OnSaveDocument(newName);
+	}
+
+	return bOK;
+#endif
+}
+#endif
+
 
 /********************************************************************************************
 >	virtual void CCamDoc::DeleteContents()
@@ -2105,6 +2155,15 @@ void CCamDoc::UpdateTitle()
 	// This actually sets the title to the same as it is now, but makes it recaluculate all
 	// 'Modifed' flags on the end
 	SetTitle( m_TitlePrefix );
+
+    // Notify the views that the filename has changed
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
+    while (node)
+    {
+        wxView *view = (wxView *)node->GetData();
+        view->OnChangeFilename();
+        node = node->GetNext();
+    }
 }
 
 /********************************************************************************************
@@ -2149,7 +2208,7 @@ String_256 CCamDoc::GetKernelTitle()
 
 String_256 CCamDoc::GetKernelPathName(UINT32 MaxSize)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// First off, get a copy of the string we are after
 	wxString			name = GetFilename();
 
