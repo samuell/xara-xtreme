@@ -12,6 +12,109 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE0">
+					<label>Expected Options node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE1">
+					<label>Expected Rasterise node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE2">
+					<label>Expected Spread node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE3">
+					<label>Expected Objects node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE4">
+					<label>Expected Attributes node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE5">
+					<label>Expected Colours node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_UNEXPECTED_PHASE">
+					<label>Unexpected phase node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_OPTIONS_BOUNDSLEVEL">
+					<label>Expected Options 'boundslevel' attr to be one of; 'none', 'compound', 'all'</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_SPREAD_CONVERTAS">
+					<label>Expected Spread 'as' attr to be not present or 'bitmap'</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNKNOWN_CONVTYPE">
+					<label>Expected 'as' attr to be one of; 'native', 'simple', 'stroked', 'bitmap', 'bitmapfill', 'bitmapfilltrans', 'bitmapspan', 'reformat', 'remove', 'simplergb', 'rgb', 'cmyk':</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_EXPECTED_CONVTYPE">
+					<label>Expected 'as' attr</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_BOOLVALUE">
+					<label>Expected bool attr value to be one of; 'true', 'false'</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_NULLNODE">
+					<label>Unexpected null node pointer (Internal Error)</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_PROPVALUE">
+					<label>Expected attribute value</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_OBJTYPE">
+					<label>Expected Object type to be one of; 'Layer', 'Contour', 'Shadow', 'Bevel', 'Blend', 'Mould', 'Rectangle', 'Ellipse', 'Polygon', 'Bitmap', 'Text', 'ClipView', 'BitmapEffect', 'Feather'</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_ATTRTYPE">
+					<label>Expected Attribute type to be one of; 'Fill', 'FillTrans', 'Line', 'LineTrans', 'Feather'</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_COLOURTYPE">
+					<label>Expected Colour type to be 'Colour'</label>
+				</object>
+			</object>
+
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_CREATEFILTERFAILED">
 					<label>Failed to create plugin filter object for #1%S (#2%08lx)</label>
 				</object>
