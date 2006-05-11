@@ -214,7 +214,7 @@ sub WriteGalleryHead
     print STDOUT $ddindent. "    <object class=\"wxPanel\" name=\"$name\">\n";
     print STDOUT $ddindent. "        <label>$title</label>\n";
     print STDOUT $ddindent. "        <title>$title</title>\n";
-    print STDOUT $ddindent. "        <tooltip>$title</tooltip>\n";
+#    print STDOUT $ddindent. "        <tooltip>$title</tooltip>\n";
     print STDOUT $ddindent. "        <help>$title</help>\n";
 
 # The following for wxDialog only

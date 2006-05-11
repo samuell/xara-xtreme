@@ -1348,7 +1348,6 @@
     <object class="wxPanel" name="IDD_COLOURSGALLERY">
         <label>Colour gallery</label>
         <title>Colour gallery</title>
-        <tooltip>Colour gallery</tooltip>
         <help>Colour gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -1562,7 +1561,6 @@
     <object class="wxPanel" name="IDD_LAYERSGALLERY">
         <label>Layer gallery</label>
         <title>Layer gallery</title>
-        <tooltip>Layer gallery</tooltip>
         <help>Layer gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -1734,7 +1732,6 @@
     <object class="wxPanel" name="IDD_FRAMESGALLERY">
         <label>Frame gallery</label>
         <title>Frame gallery</title>
-        <tooltip>Frame gallery</tooltip>
         <help>Frame gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -1903,7 +1900,6 @@
     <object class="wxPanel" name="IDD_BITMAPSGALLERY">
         <label>Bitmap gallery</label>
         <title>Bitmap gallery</title>
-        <tooltip>Bitmap gallery</tooltip>
         <help>Bitmap gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -2175,7 +2171,6 @@
     <object class="wxPanel" name="IDD_LINESGALLERY">
         <label>Line gallery</label>
         <title>Line gallery</title>
-        <tooltip>Line gallery</tooltip>
         <help>Line gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -2285,7 +2280,6 @@
     <object class="wxPanel" name="IDD_NAMESGALLERY">
         <label>Name gallery</label>
         <title>Name gallery</title>
-        <tooltip>Name gallery</tooltip>
         <help>Name gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -2524,7 +2518,6 @@
     <object class="wxPanel" name="FontsSGallery">
         <label>This bar should not be called FontsSGallery</label>
         <title>This bar should not be called FontsSGallery</title>
-        <tooltip>This bar should not be called FontsSGallery</tooltip>
         <help>This bar should not be called FontsSGallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -2738,7 +2731,6 @@
     <object class="wxPanel" name="IDD_LIBCLIPARTSGALLERY">
         <label>Clipart gallery</label>
         <title>Clipart gallery</title>
-        <tooltip>Clipart gallery</tooltip>
         <help>Clipart gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
@@ -2977,7 +2969,6 @@
     <object class="wxPanel" name="IDD_LIBFILLSSGALLERY">
         <label>Fills gallery</label>
         <title>Fills gallery</title>
-        <tooltip>Fills gallery</tooltip>
         <help>Fills gallery</help>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>

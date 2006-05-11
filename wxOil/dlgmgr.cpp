@@ -374,6 +374,12 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
 		if (Title.IsEmpty())
 		{
+			const TCHAR * ResString=CamResource::GetTextFail(pDialogWnd->GetId());
+			if (ResString)
+				Title=wxString(ResString);
+		}
+		if (Title.IsEmpty())
+		{
 			// Finally, in desperation, we (mis-)use the tooltip string because now the wx folks have removed
 			// the label, even though it's needed for accessibility. Aarrghh
 			wxToolTip* pTip = pDialogWnd->GetToolTip();
