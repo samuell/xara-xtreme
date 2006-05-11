@@ -240,28 +240,7 @@ INT32 PluginNativeFilter::HowCompatible( PathName& Filename, ADDR HeaderStart, U
 	if (!sFilename.IsEmpty())
 	{
 		PluginOILFilter* pPluginOILFilter = (PluginOILFilter*)pOILFilter;
-// Temporarily removed to stop file loading problems
-//		HowCompatible = pPluginOILFilter->HowCompatible(Filename);
-
-		// Look at the source for wxExecute
-
-		// Try using CamProcess instead
-		// Perhaps the redirection will stop the strangeness
-
-		wxString sCommand(_T("echo 1"));
-	
-		TRACE(_T("Running '%s'"), sCommand.c_str());
-	
-		CamProcess TheProc(NULL, NULL);
-
-		int code = TheProc.Execute(sCommand);
-		if (code != 0)
-		{
-			TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
-			// Extract error from a derived CamProcess class and report it
-			return(FALSE);
-		}
-
+		HowCompatible = pPluginOILFilter->HowCompatible(Filename);
 	}
 
 	// Return the found value to the caller.

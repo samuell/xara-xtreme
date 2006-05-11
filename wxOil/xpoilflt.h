@@ -192,13 +192,6 @@ public:
 	void Cleanup();
 
 protected:
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	// Functions to create and release the filter COM object
-	BOOL CreateFilterObject();
-	void ReleaseFilterObject();
-#endif
-
 //	This function is called from GetCapabilities to parse the XML
 	BOOL BuildCapabilityTree(wxString strXML, CapabilityTree* pCapTree);
 
@@ -228,26 +221,8 @@ protected:
 	wxString m_CanImport;		// Command for CanImport
 	wxString m_DoImport;		// Command for DoImport
 
-	PathName m_XMLFile;			// Full path to filter XML config file for the current user
+	wxFileName m_XMLFile;		// Full path to filter XML config file for the current user
 	PathName m_TempXarFile;		// Full path to temporary Xar file
-
-
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	CLSID m_CLSID;
-	CComPtr<IXPFilter> m_pFilterObj;
-	CComPtr<IStream> m_pXarStream;
-#endif
-
-public:
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	// These functions handle the COM object autoregistration
-	static BOOL AutoRegisterFilters();
-	static BOOL RegisterDLL(String_256& sPath);
-	static BOOL GetFileVersion(PathName* pPath, String_64* pVersion);
-	static INT32 CompareVersions(const String_64& lhs, const String_64& rhs);
-#endif
 };
 
 

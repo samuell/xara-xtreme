@@ -307,7 +307,12 @@ BOOL PluginOILFilter::Init( xmlNode* pFilterNode )
 	// This should be set to some sensible path but I've hardcoded it for now
 	// We should change to making ~/.XaraLX into a directory and store the main config
 	// file and these filter config files in there
-	m_XMLFile.SetPathName(_T("/home/gerry/.XPFilters/XPFilter.xml"));
+	m_XMLFile.AssignHomeDir();
+	m_XMLFile.AppendDir(_T(".XaraLXFilters"));
+	m_XMLFile.Mkdir(0777, wxPATH_MKDIR_FULL);
+
+	m_XMLFile.SetName(m_InternalName);
+	m_XMLFile.SetExt(_T("xml"));
 
 	m_bImport = !(m_DoImport.IsEmpty());
 	m_bExport = !(m_DoExport.IsEmpty());
@@ -536,7 +541,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 	// Does this need double quotes to cope with spaces in filenames?
 	wxString sCommand(m_PrepareExport);
 	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
-	sCommand.Replace(_T("%XML%"), (LPCTSTR)m_XMLFile.GetPath());
+	sCommand.Replace(_T("%XML%"), m_XMLFile.GetFullPath());
 
 	TRACE(_T("Running '%s'"), sCommand.c_str());
 
@@ -551,7 +556,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 
 	if (code == 0)
 	{
-		BOOL bOK = BuildCapabilityTree(m_XMLFile.GetPath(), pCapTree);
+		BOOL bOK = BuildCapabilityTree(m_XMLFile.GetFullPath(), pCapTree);
 		if (!bOK)
 		{
 			// Assume BuildCapabilityTree has already set an error
@@ -602,7 +607,7 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 
 	wxString sCommand(m_DoExport);
 	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
-	sCommand.Replace(_T("%XML%"), (LPCTSTR)m_XMLFile.GetPath());
+	sCommand.Replace(_T("%XML%"), m_XMLFile.GetFullPath());
 
 	TRACE(_T("Running '%s'"), sCommand.c_str());
 
