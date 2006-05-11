@@ -3278,7 +3278,7 @@ BOOL DialogTabOp::TalkToPage(CDlgResID PageID)
 
 MsgResult DialogTabOp::Message( Msg* Message )       
 {
-	PORTNOTETRACE("dialog","DialogTabOp::Message - do nothing");
+PORTNOTE("dialog","DialogTabOp::Message - do nothing")
 #ifndef EXCLUDE_FROM_XARALX
 	if (IS_OUR_DIALOG_MSG(Message))
 	{
