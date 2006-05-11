@@ -268,7 +268,7 @@ BOOL PluginOILFilter::Init( xmlNode* pFilterNode )
 		{
 			xmlChar* pStr = xmlNodeListGetString(pChild->doc, pChild->xmlChildrenNode, 1);
 			wxString sTemp = CXMLUtils::ConvertToWXString(pStr);
-			FilterName = sTemp;
+			FilterExt = sTemp;
 			xmlFree(pStr);
 		}
 		else if (strChildName == _T("CanImport"))
