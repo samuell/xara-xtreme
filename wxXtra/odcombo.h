@@ -270,5 +270,21 @@ private:
 
 
 #endif // wxUSE_OWNERDRAWNCOMBOBOX
+
+#ifdef WXXTRA_COMBO_XML_HANDLERS
+class WXDLLIMPEXP_XRC wxOwnerDrawnComboBoxXmlHandler : public wxXmlResourceHandler
+{
+DECLARE_DYNAMIC_CLASS(wxOwnerDrawnComboBoxXmlHandler)
+public:
+    wxOwnerDrawnComboBoxXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+private:
+    bool m_insideBox;
+    wxArrayString strList;
+};
+#endif
+
 #endif
     // _WX_ODCOMBO_H_
+

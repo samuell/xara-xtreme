@@ -1,11 +1,11 @@
 // $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
- 
-               Xara LX, a vector drawing and manipulation program.
-                    Copyright (C) 1993-2006 Xara Group Ltd.
-       Copyright on certain contributions may be held in joint with their
-              respective authors. See AUTHORS file for details.
+
+			Xara LX, a vector drawing and manipulation program.
+					Copyright (C) 1993-2006 Xara Group Ltd.
+	Copyright on certain contributions may be held in joint with their
+			respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-  http://www.xaraxtreme.org/developers/
+http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-  http://www.xaraxtreme.org/developers/contribute/
+http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-                        http://www.xara.com/
+	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+						http://www.xara.com/
 
 =================================XARAHEADEREND============================
- */
+*/
 
 // Implementation of the DialogManager class (bodge central)
 
@@ -200,7 +200,7 @@ DialogManager::DialogManager()
 
 	Inputs:		DlgOp:			The DialogOp we are creating a window for
 
-			    The following inputs may soon become defunct
+				The following inputs may soon become defunct
 
 				MainInstance:	Instance handle of the module that contains the dialog
 								defined by MainDlgID.
@@ -294,9 +294,9 @@ protected:
 };
 
 BOOL DialogManager::Create(DialogOp* DlgOp,
-						   /* HINSTANCE MainInstance, */ CDlgResID MainDlgID,
-						   /* HINSTANCE SubInstance, */  CDlgResID SubDlgID,
-						   CDlgMode Mode, INT32 OpeningPage, CWindowID ParentWnd)
+						/* HINSTANCE MainInstance, */ CDlgResID MainDlgID,
+						/* HINSTANCE SubInstance, */  CDlgResID SubDlgID,
+						CDlgMode Mode, INT32 OpeningPage, CWindowID ParentWnd)
 {
 	ERROR2IF(!DlgOp, FALSE, _T("Create Passed Null DialogOp"));
 	ERROR2IF(DlgOp->pEvtHandler, FALSE, _T("Window has already been created. Having two is greedy"));
@@ -317,7 +317,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 //	ERROR2IF( DlgOp->IS_KIND_OF(DialogTabOp), FALSE, _T("Tabbed dialogs not yet supported"));
 	ERROR2IF( SubDlgID !=0, FALSE, _T("Merging of dialogs not yet supported"));
 
-    // if no parent dialog window specified use the main frame window
+	// if no parent dialog window specified use the main frame window
 	if ((ParentWnd == NULL) || wxAUImanaged)
 		ParentWnd = GetMainFrame();
 
@@ -461,7 +461,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 			if (pTip) Title=pTip->GetTip();
 		}
 		if (Title.IsEmpty())
-			 Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
+			Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
 
 		wxSizer * pSizer = pDialogWnd->GetSizer();
 		if (pSizer)
@@ -535,7 +535,7 @@ void DialogManager::CreateRecursor(wxWindow * pwxWindow)
 BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 {
 	ERROR2IF( !pDialogOp || !pDialogOp->pEvtHandler || !pDialogOp->pEvtHandler->pwxWindow,
-			   FALSE, _T("Bad DialogOp / EvtHandler in DialogManager::PostCreate()"));
+			FALSE, _T("Bad DialogOp / EvtHandler in DialogManager::PostCreate()"));
 
 	wxWindow * pDialogWnd = pDialogOp->pEvtHandler->pwxWindow;
 
@@ -953,7 +953,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	We can't use switch on these - GRRR!
 	*/
 
- 	if (
+	if (
 		(EventType == wxEVT_COMMAND_BUTTON_CLICKED) ||
 		FALSE)
 	{
@@ -998,13 +998,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_COMMAND_COMBOBOX_SELECTED) ||
 		(EventType == wxEVT_COMMAND_SPINCTRL_UPDATED) ||
 		((
-		  (EventType == wxEVT_SCROLL_CHANGED) || 
-		  (EventType == wxEVT_SCROLL_THUMBTRACK) || 
-		  (EventType == wxEVT_SCROLL_THUMBRELEASE) ||
-		  (EventType == wxEVT_SCROLL_LINEUP) ||
-		  (EventType == wxEVT_SCROLL_LINEDOWN) ||
-		  (EventType == wxEVT_SCROLL_PAGEUP) ||
-		  (EventType == wxEVT_SCROLL_PAGEDOWN)
+		(EventType == wxEVT_SCROLL_CHANGED) || 
+		(EventType == wxEVT_SCROLL_THUMBTRACK) || 
+		(EventType == wxEVT_SCROLL_THUMBRELEASE) ||
+		(EventType == wxEVT_SCROLL_LINEUP) ||
+		(EventType == wxEVT_SCROLL_LINEDOWN) ||
+		(EventType == wxEVT_SCROLL_PAGEUP) ||
+		(EventType == wxEVT_SCROLL_PAGEDOWN)
 		) && !(pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Don't handle slider scroll stuff here
 		(EventType == wxEVT_COMMAND_TREE_SEL_CHANGED) ||
 		FALSE)
@@ -1030,11 +1030,11 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	}
 	else if(
 		(( (EventType == wxEVT_SCROLL_THUMBTRACK) ||
-		   (EventType == wxEVT_SCROLL_LINEUP) ||
-		   (EventType == wxEVT_SCROLL_LINEDOWN) ||
-		   (EventType == wxEVT_SCROLL_PAGEUP) ||
-		   (EventType == wxEVT_SCROLL_PAGEDOWN)
-		 ) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider movements - note SCROLL_CHANGED always comes later
+		(EventType == wxEVT_SCROLL_LINEUP) ||
+		(EventType == wxEVT_SCROLL_LINEDOWN) ||
+		(EventType == wxEVT_SCROLL_PAGEUP) ||
+		(EventType == wxEVT_SCROLL_PAGEDOWN)
+		) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider movements - note SCROLL_CHANGED always comes later
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_CHANGING;
@@ -1406,7 +1406,7 @@ wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gad
 /********************************************************************************************
 
 >	static BOOL DialogManager::IsGadgetTickable(CWindowID WindowID,
-						  						CGadgetID Gadget)
+												CGadgetID Gadget)
 
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
@@ -1419,17 +1419,17 @@ wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gad
 ********************************************************************************************/
 
 BOOL DialogManager::IsGadgetTickable(CWindowID WindowID,
-					  				 CGadgetID Gadget)
+									CGadgetID Gadget)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	// Not sure why this is an exhaustive list
 	return ( pGadget->IsKindOf(CLASSINFO(wxCheckBox)) ||
-		 	 pGadget->IsKindOf(CLASSINFO(wxButton)) ||
-		 	 (pGadget->IsKindOf(CLASSINFO(wxCamArtControl)) && (((wxCamArtControl*)pGadget)->GetStyle() & wxCACS_PUSHBUTTON)) ||
-		 	 pGadget->IsKindOf(CLASSINFO(wxBitmapButton))
-			 );
+			pGadget->IsKindOf(CLASSINFO(wxButton)) ||
+			(pGadget->IsKindOf(CLASSINFO(wxCamArtControl)) && (((wxCamArtControl*)pGadget)->GetStyle() & wxCACS_PUSHBUTTON)) ||
+			pGadget->IsKindOf(CLASSINFO(wxBitmapButton))
+			);
 }
 
 
@@ -1553,7 +1553,7 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 	if (DlgPos != NULL)
 	{
 		// Record the dialog's position so that it can be restored if the dialog is created again
-   		wxRect			DialogRect( pCWnd->GetRect() );
+		wxRect			DialogRect( pCWnd->GetRect() );
 		DlgPos->LastX = DialogRect.x;
 		DlgPos->LastY = DialogRect.y;
 		DlgPos->ActivePage = 0;
@@ -1594,7 +1594,7 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 			delete (DiscardStr->pStr); // Delete the string
 			delete(DiscardStrList.RemoveItem(DiscardStr)); // Delete the DiscardStr record
 		}
-	 	DiscardStr = Next;  // Get next string record
+		DiscardStr = Next;  // Get next string record
 	}
 
 	// Delete all scrollPageInc information associated with the dialog
@@ -1659,7 +1659,7 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 /********************************************************************************************
 
 >	BOOL DialogManager::SetComboListLength( CWindowID WindowID,
-							                CGadgetID Gadget)
+											CGadgetID Gadget)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/7/94
@@ -1720,7 +1720,7 @@ void DialogManager::SetGadgetBitmaps(CWindowID WindowID, CGadgetID Gadget, UINT3
 	PORTNOTETRACE("dialog","DialogManager::SetGadgetBitmaps - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	// Find out about the Gadget
-    HWND hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadget);
+	HWND hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadget);
 
 	// Find out the class type of the gadget
 	String_256 ClassNameStr;
@@ -1866,7 +1866,7 @@ void DialogManager::SetGadgetBitmaps(CWindowID WindowID, CGadgetID Gadget, const
 				SelectedIndex - The index number into the bitmap strip for the glyph
 								representing the buttons selected state
 				UnselectedIndex - The index number into the bitmap strip for
-								  the unselected glyph
+								the unselected glyph
 	Purpose:	This function allows you to specify bitmaps for both the
 				selected and unselected states of a bitmap button. Most likely you have
 				already selected your bitmap for the selected state in your
@@ -1883,7 +1883,7 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 	PORTNOTETRACE("dialog","DialogManager::SetBitmapButtonIndexes - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	// Find out about the Gadget
-    HWND hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadget);
+	HWND hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadget);
 
 	// Find out the class type of the gadget
 	String_256 ClassNameStr;
@@ -1903,9 +1903,9 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 /********************************************************************************************
 
 >	void DialogManager::SetGadgetBitmaps( HWND hGadget,
-										  HINSTANCE hResInstance,
-										  INT32 SelectedIndex = -1,
-										  INT32 UnselectedIndex = -1 )
+										HINSTANCE hResInstance,
+										INT32 SelectedIndex = -1,
+										INT32 UnselectedIndex = -1 )
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	05/03/2004
@@ -1921,9 +1921,9 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 
 ********************************************************************************************/
 /*void DialogManager::SetGadgetBitmaps( wxWindow *pGadget,
-									  // HINSTANCE hResInstance, //
-									  INT32 SelectedIndex,
-									  INT32 UnselectedIndex)
+									// HINSTANCE hResInstance, //
+									INT32 SelectedIndex,
+									INT32 UnselectedIndex)
 {
 	PORTNOTETRACE("dialog","DialogManager::SetGadgetBitmaps - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -1964,7 +1964,7 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 	BtnInfo.Bitmap[BBX_BMP_LARGE_UNSELECTED] = (LPTSTR)Title;
 	BtnInfo.Bitmap[BBX_BMP_SMALL_UNSELECTED] = (LPTSTR)AnsiTitle;
 
-  	BtnInfo.Bitmap[BBX_BMP_SMALL_SELECTED] = NULL;	// NULL, or name of selected bitmap
+	BtnInfo.Bitmap[BBX_BMP_SMALL_SELECTED] = NULL;	// NULL, or name of selected bitmap
 	BtnInfo.Bitmap[BBX_BMP_LARGE_SELECTED] = NULL;	// NULL, or name of selected bitmap
 
 	BtnInfo.Bitmap[BBX_BMP32_LARGE_UNSELECTED] = (LPTSTR)Title32;
@@ -1975,7 +1975,7 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 	String_256 HATitle32 = ("H");
 	HATitle32 += Ansi32Title;
 
-  	BtnInfo.Bitmap[BBX_BMP32_LARGE_SELECTED] = (LPTSTR)HTitle32;
+	BtnInfo.Bitmap[BBX_BMP32_LARGE_SELECTED] = (LPTSTR)HTitle32;
 	BtnInfo.Bitmap[BBX_BMP32_SMALL_SELECTED] = (LPTSTR)HATitle32;
 
 	BtnInfo.UnselectedIndex = UnselectedIndex;		//  Indices of glyph bitmaps within the
@@ -1990,11 +1990,11 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetUnitGadgetValue( CWindowID WindowID,
-							                CGadgetID Gadget,
-									     	UnitType DlgUnitType,
-									    	MILLIPOINT Value,
-									    	BOOL EndOfList = TRUE,
-			     		 					INT32 ListPos = 0)
+											CGadgetID Gadget,
+											UnitType DlgUnitType,
+											MILLIPOINT Value,
+											BOOL EndOfList = TRUE,
+											INT32 ListPos = 0)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/8/93
@@ -2007,16 +2007,16 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 	Outputs:	-
 	Returns:	TRUE if the gadgets value could be set as specified
@@ -2034,17 +2034,17 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 				If g1 is an integer field then the function would set the gadgets value
 				to 100.
 
-                For Windows
-                -----------
+				For Windows
+				-----------
 
-                The function can be used to set the string values of the following controls. The
-                string will have a unit suffix.
+				The function can be used to set the string values of the following controls. The
+				string will have a unit suffix.
 
-                Edit
-                Static
-                Button
-                ListBox
-                ComboBox
+				Edit
+				Static
+				Button
+				ListBox
+				ComboBox
 
 	Errors:		If the function is called on an invalid control then an ENSURE failure will
 				occur in a DEBUG build. In a retail build FALSE is returned.
@@ -2054,11 +2054,11 @@ void DialogManager::SetBitmapButtonIndexes(CWindowID WindowID, CGadgetID Gadget,
 ********************************************************************************************/
 
 BOOL DialogManager::SetUnitGadgetValue( CWindowID WindowID,
-							        CGadgetID Gadget,
+									CGadgetID Gadget,
 									UnitType Unit,
 									MILLIPOINT Value,
 									BOOL EndOfList,
-			     		 			INT32 ListPos)
+									INT32 ListPos)
 {
 	// Convert the unit value into a string
 	String_256		StrValue;
@@ -2070,13 +2070,13 @@ BOOL DialogManager::SetUnitGadgetValue( CWindowID WindowID,
 
 /********************************************************************************************
 >	BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
-							            	    	CGadgetID Gadget,
-											     	UnitType  units,
-									    			double    Value,
+													CGadgetID Gadget,
+													UnitType  units,
+													double    Value,
 													Node*     pNode,
-			    							 		BOOL      IncludeUnitSpecifier = TRUE,
+													BOOL      IncludeUnitSpecifier = TRUE,
 													BOOL      EndOfList = TRUE,
-				     		 						INT32       ListPos = 0)
+													INT32       ListPos = 0)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/10/95
@@ -2092,16 +2092,16 @@ BOOL DialogManager::SetUnitGadgetValue( CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 	Returns:	FALSE if fails
 
@@ -2131,10 +2131,10 @@ BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
-										   CGadgetID Gadget,
-										   INT32 Value,
-										   BOOL EndOfList = TRUE,
-			     						   INT32 ListPos = 0)
+										CGadgetID Gadget,
+										INT32 Value,
+										BOOL EndOfList = TRUE,
+										INT32 ListPos = 0)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	1/9/93
@@ -2146,15 +2146,15 @@ BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 
 
@@ -2181,11 +2181,11 @@ BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
 
 				The function can be used to set the values of the following controls.
 
-                Edit
-                Static
-                Button
-                ListBox
-                ComboBox
+				Edit
+				Static
+				Button
+				ListBox
+				ComboBox
 				ScrollBar
 				cc_CheckList
 				cc_Slider
@@ -2198,16 +2198,16 @@ BOOL DialogManager::SetDimensionUnitGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
-									   CGadgetID Gadget,
-									   INT32 Value,
-									   BOOL EndOfList,
-			     		 			   INT32 ListPos)
+									CGadgetID Gadget,
+									INT32 Value,
+									BOOL EndOfList,
+									INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxButton)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxBitmapButton)) )
+		pGadget->IsKindOf(CLASSINFO(wxBitmapButton)) )
 	{
 		// These bitmap buttons are meant to be tristate
 		PORTNOTETRACE("dialog","DialogManager::SetLongGadgetValue on BitmapButton - do nothing");
@@ -2272,10 +2272,10 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
-										   CGadgetID Gadget,
-										   double Value,
-										   BOOL EndOfList = TRUE,
-			     						   INT32 ListPos = 0)
+										CGadgetID Gadget,
+										double Value,
+										BOOL EndOfList = TRUE,
+										INT32 ListPos = 0)
 
 	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com> (liberally copied from Simon's SetLongGadgetValue)
 	Created:	16/12/94
@@ -2287,15 +2287,15 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 
 
@@ -2322,11 +2322,11 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 
 				The function can be used to set the values of the following controls.
 
-                Edit
-                Static
-                Button
-                ListBox
-                ComboBox
+				Edit
+				Static
+				Button
+				ListBox
+				ComboBox
 				ScrollBar
 				cc_CheckList
 				cc_Slider
@@ -2343,10 +2343,10 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
-									   CGadgetID Gadget,
-									   double Value,
-									   BOOL EndOfList,
-			     		 			   INT32 ListPos)
+									CGadgetID Gadget,
+									double Value,
+									BOOL EndOfList,
+									INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
@@ -2371,10 +2371,10 @@ BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
-								   	   		 CGadgetID Gadget,
-								       		 UINT32 IDStr,
-								       		 BOOL EndOfList = TRUE,
-			     		 			   		 INT32 ListPos = 0)
+											CGadgetID Gadget,
+											UINT32 IDStr,
+											BOOL EndOfList = TRUE,
+											INT32 ListPos = 0)
 
 
 
@@ -2389,16 +2389,16 @@ BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 
 	Outputs:	-
@@ -2429,10 +2429,10 @@ BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
-										 CGadgetID Gadget,
-								         UINT32 IDStr,
-								         BOOL EndOfList,
-			     						 INT32 ListPos)
+										CGadgetID Gadget,
+										UINT32 IDStr,
+										BOOL EndOfList,
+										INT32 ListPos)
 {
 	String_256* StrVal = new String_256(IDStr); // Obtain the string resource
 	ERROR1IF(StrVal == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
@@ -2529,10 +2529,10 @@ OpDescriptor * DialogManager::GetGadgetOpDescriptor(CWindowID WindowID, CGadgetI
 /********************************************************************************************
 
 >	BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
-										 CGadgetID Gadget,
-								         StringBase* StrVal,
-								         BOOL EndOfList,
-			     						 INT32 ListPos)
+										CGadgetID Gadget,
+										StringBase* StrVal,
+										BOOL EndOfList,
+										INT32 ListPos)
 {
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/8/93
@@ -2545,16 +2545,16 @@ OpDescriptor * DialogManager::GetGadgetOpDescriptor(CWindowID WindowID, CGadgetI
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 
 	Outputs:	-
@@ -2564,7 +2564,7 @@ OpDescriptor * DialogManager::GetGadgetOpDescriptor(CWindowID WindowID, CGadgetI
 	Purpose:	This function is used to set a gadgets string value. It can only
 				be used on gadgets with a string value type.
 
-	            For Windows
+				For Windows
 				-----------
 
 				This function can be used to set the string values of the following controls:
@@ -2584,10 +2584,10 @@ OpDescriptor * DialogManager::GetGadgetOpDescriptor(CWindowID WindowID, CGadgetI
 ********************************************************************************************/
 
 BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
-										 CGadgetID Gadget,
-								         const StringBase& StrVal,
-								         BOOL EndOfList,
-			     						 INT32 ListPos)
+										CGadgetID Gadget,
+										const StringBase& StrVal,
+										BOOL EndOfList,
+										INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
@@ -2596,13 +2596,17 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 
 	//if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{
 		if (EndOfList)
 		{
-			((wxControlWithItems *)pGadget)->Append(String);
+			if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+				((wxOwnerDrawnComboBox *)pGadget)->Append(String);
+			else
+				((wxControlWithItems *)pGadget)->Append(String);
 			return TRUE;
 		}
 
@@ -2612,31 +2616,50 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 			pGadget->SetWindowStyle(pGadget->GetWindowStyle() & ~wxCB_SORT);
 		}
 
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) && (pGadget->GetWindowStyle() & wxCB_SORT))
+		{
+			PORTNOTETRACE("dialog", "Mainting original order of combos displayed sorted is not supported");
+			pGadget->SetWindowStyle(pGadget->GetWindowStyle() & ~wxCB_SORT);
+		}
+
 		if (pGadget->IsKindOf(CLASSINFO(wxListBox)) && (pGadget->GetWindowStyle() & wxLB_SORT))
 		{
 			PORTNOTETRACE("dialog", "Mainting original order of list boxes displayed sorted is not supported");
-			pGadget->SetWindowStyle(pGadget->GetWindowStyle() & ~wxCB_SORT);
+			pGadget->SetWindowStyle(pGadget->GetWindowStyle() & ~wxLB_SORT);
 		}
 
 		if (ListPos >=0)
 		{
 			if (
 				(pGadget->IsKindOf(CLASSINFO(wxComboBox)) && (pGadget->GetWindowStyle() & wxCB_SORT)) ||
+				(pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) && (pGadget->GetWindowStyle() & wxCB_SORT)) ||
 				(pGadget->IsKindOf(CLASSINFO(wxListBox)) && (pGadget->GetWindowStyle() & wxLB_SORT)) ||
 				(pGadget->IsKindOf(CLASSINFO(wxChoice)))
 				)
 			{
 				// Control does not support inserting at a position as it is sorted. We should append it and
 				// it will appear in the right place
-				((wxControlWithItems *)pGadget)->Append(String);
+				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+					((wxOwnerDrawnComboBox *)pGadget)->Append(String);
+				else
+					((wxControlWithItems *)pGadget)->Append(String);
 				return TRUE;
 			}
-			return (((wxControlWithItems *)pGadget)->Insert(String, ListPos) <0 )?FALSE:TRUE;
+			if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+				return (((wxOwnerDrawnComboBox *)pGadget)->Insert(String, ListPos) <0 )?FALSE:TRUE;
+			else
+				return (((wxControlWithItems *)pGadget)->Insert(String, ListPos) <0 )?FALSE:TRUE;
 		}
 
 		if (pGadget->IsKindOf(CLASSINFO(wxComboBox)))
 		{
 			((wxComboBox *)pGadget)->SetValue(String);
+			return TRUE;
+		}
+
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		{
+			((wxOwnerDrawnComboBox *)pGadget)->SetValue(String);
 			return TRUE;
 		}
 
@@ -2660,10 +2683,10 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
-												  CGadgetID Gadget,
-												  CustomComboBoxControlDataItem* TheItem,
-												  BOOL EndOfList,
-			     								  INT32 ListPos)
+												CGadgetID Gadget,
+												CustomComboBoxControlDataItem* TheItem,
+												BOOL EndOfList,
+												INT32 ListPos)
 {
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com> S
 	Created:	12/8/99
@@ -2690,7 +2713,7 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 	Purpose:	This function is used to set a CustomComboBoxes item (i.e.  basically
 				insert another item)
 
-	            For Windows
+				For Windows
 				-----------
 
 				This function can be used to set items in the following controls:
@@ -2706,10 +2729,10 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
-											  CGadgetID Gadget,
-											  CustomComboBoxControlDataItem* TheItem,
-											  BOOL EndOfList,
-			     							  INT32 ListPos)
+											CGadgetID Gadget,
+											CustomComboBoxControlDataItem* TheItem,
+											BOOL EndOfList,
+											INT32 ListPos)
 {
 	PORTNOTETRACE("dialog","DialogManager::SetCustomComboGadgetValue - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -2720,7 +2743,7 @@ BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
 	GetClassName(hGadget, (TCHAR*)ClassNameStr, 255);
 
 	if ((ClassNameStr == String_64(TEXT("cc_1dBitmapComboBoxEdit"))) ||
-	    (ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))   )
+		(ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))   )
 	{
 		BOOL RetVal = FALSE;
 
@@ -2737,7 +2760,7 @@ BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
 			ASSERT (TheItem == NULL);
 
 			RetVal = SendMessage (hGadget, CB_SETCURSEL, (WPARAM) (ListPos-1), (LPARAM) 0);
-    	}
+		}
 		else if ((ListPos == -1) || (ListPos == -2))
 		{
 			ASSERT (TheItem == NULL);
@@ -2756,8 +2779,8 @@ BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SelectCustomComboGadgetValueOnString (CWindowID WindowID,
-														      CGadgetID Gadget,
-														      StringBase* StrVal)
+															CGadgetID Gadget,
+															StringBase* StrVal)
 {
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com> S
 	Created:	9/9/99
@@ -2779,8 +2802,8 @@ BOOL DialogManager::SetCustomComboGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SelectCustomComboGadgetValueOnString (CWindowID WindowID,
-														  CGadgetID Gadget,
-														  StringBase* StrVal)
+														CGadgetID Gadget,
+														StringBase* StrVal)
 {
 	PORTNOTETRACE("dialog","DialogManager::SelectCustomComboGadgetValueOnString - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -2810,10 +2833,10 @@ BOOL DialogManager::SelectCustomComboGadgetValueOnString (CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetGadgetRange(CWindowID WindowID,
-								  	   CGadgetID Gadget,
-								       INT32 Min,
-								       INT32 Max,
-								       INT32 PageInc = 1)
+									CGadgetID Gadget,
+									INT32 Min,
+									INT32 Max,
+									INT32 PageInc = 1)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	2/9/93
@@ -2825,13 +2848,13 @@ BOOL DialogManager::SelectCustomComboGadgetValueOnString (CWindowID WindowID,
 								decreased by a fixed value other than 1.
 								Eg. a scroll bar allows the user to move the scroll
 								bar's thumb a 'page' at a time. PageInc specifies how many
-	 							units the scroll bar's thumb should move.
+								units the scroll bar's thumb should move.
 
 	Returns:	-
 	Purpose:	For setting the range of a gadget.
 
-	            Fow Windows
-	            -----------
+				Fow Windows
+				-----------
 
 				For scrollbar or trackbar gadgets this function sets the scrollbar's Min and Max
 				values. The PageInc value specifies how many units the scroll bar should move
@@ -2848,10 +2871,10 @@ BOOL DialogManager::SelectCustomComboGadgetValueOnString (CWindowID WindowID,
 
 
 BOOL DialogManager::SetGadgetRange(CWindowID WindowID,
-								   CGadgetID Gadget,
-								   INT32 Min,
-								   INT32 Max,
-								   INT32 PgIncr)
+								CGadgetID Gadget,
+								INT32 Min,
+								INT32 Max,
+								INT32 PgIncr)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
@@ -2981,8 +3004,8 @@ BOOL DialogManager::SetListBoxSelection( CWindowID WindowID, CGadgetID Gadget, I
 	Returns:	TRUE if it succeeded
 	Purpose:	For setting the selection state of a gadget, or an item within a list gadget
 
-	            For Windows
-	            -----------
+				For Windows
+				-----------
 				Can be used to set the selection state for any on/off button type things
 				Can be used on combo/list boxes to (de)select items. Note that if the listbox
 				is a multiple selection box, setting the selection state of an item does NOT
@@ -3005,8 +3028,9 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 	if (!pGadget) return FALSE;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{	
 		// Support listboxes with multiple selections
@@ -3019,13 +3043,24 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 		{
 			if (SelectIt)
 			{
-				((wxControlWithItems *)pGadget)->SetSelection(Index);
+				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+					((wxOwnerDrawnComboBox *)pGadget)->SetSelection(Index);
+				else	
+					((wxControlWithItems *)pGadget)->SetSelection(Index);
 			}
 			else
 			{
 				// We clear the current selection if it is current
-				if (((wxControlWithItems *)pGadget)->GetSelection() == Index)
-					((wxControlWithItems *)pGadget)->SetSelection(wxNOT_FOUND);
+				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+				{
+					if (((wxOwnerDrawnComboBox *)pGadget)->GetSelection() == Index)
+						((wxOwnerDrawnComboBox *)pGadget)->SetSelection(wxNOT_FOUND);
+				}
+				else
+				{
+					if (((wxControlWithItems *)pGadget)->GetSelection() == Index)
+						((wxControlWithItems *)pGadget)->SetSelection(wxNOT_FOUND);
+				}	
 			}
 			return TRUE;
 		}
@@ -3037,12 +3072,19 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 				// in a control where only one thing can be selected. Give
 				// it a go then..
 				INT32 i;
-				for (i=0; i<((wxControlWithItems *)pGadget)->GetCount(); i++)
-					((wxControlWithItems *)pGadget)->SetSelection(i);
+				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+					for (i=0; i<((wxOwnerDrawnComboBox *)pGadget)->GetCount(); i++)
+						((wxOwnerDrawnComboBox *)pGadget)->SetSelection(i);
+				else
+					for (i=0; i<((wxControlWithItems *)pGadget)->GetCount(); i++)
+						((wxControlWithItems *)pGadget)->SetSelection(i);
 			}
 			else
 			{
-				((wxControlWithItems *)pGadget)->SetSelection(wxNOT_FOUND);
+				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+					((wxOwnerDrawnComboBox *)pGadget)->SetSelection(wxNOT_FOUND);
+				else
+					((wxControlWithItems *)pGadget)->SetSelection(wxNOT_FOUND);
 			}
 		}
 	}
@@ -3062,8 +3104,8 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetSelectedValueIndex(CWindowID WindowID,
-			    			    		  CGadgetID Gadget,
-						   				  INT32 Index)
+										CGadgetID Gadget,
+										INT32 Index)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/9/93
@@ -3094,8 +3136,8 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 ********************************************************************************************/
 
 BOOL DialogManager::SetSelectedValueIndex(CWindowID WindowID,
-			    			    		  CGadgetID Gadget,
-						   				  INT32 Index)
+										CGadgetID Gadget,
+										INT32 Index)
 {
 	if (Index>0)
 		return SetBoolGadgetSelected(WindowID, Gadget, TRUE, Index);
@@ -3107,10 +3149,10 @@ BOOL DialogManager::SetSelectedValueIndex(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetSelectedValueRange(CWindowID WindowID,
-			    			    		  CGadgetID Gadget,
-						   				  WORD StartIndex,
-						   				  WORD EndIndex,
-						   				  BOOL Selected)
+										CGadgetID Gadget,
+										WORD StartIndex,
+										WORD EndIndex,
+										BOOL Selected)
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/04/94
@@ -3137,10 +3179,10 @@ BOOL DialogManager::SetSelectedValueIndex(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetSelectedValueRange(CWindowID WindowID,
-			    			    		  CGadgetID Gadget,
-						   				  WORD StartIndex,
-						   				  WORD EndIndex,
-						   				  BOOL Selected)
+										CGadgetID Gadget,
+										WORD StartIndex,
+										WORD EndIndex,
+										BOOL Selected)
 {
 	INT32 i;
 	for (i=StartIndex; i<=EndIndex; i++)
@@ -3151,12 +3193,12 @@ BOOL DialogManager::SetSelectedValueRange(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetDimensionGadgetValue(CWindowID WindowID,
-							                	CGadgetID Gadget,
-									    		MILLIPOINT Value,
+												CGadgetID Gadget,
+												MILLIPOINT Value,
 												Node* pNode,
-		    							 		BOOL IncludeUnitSpecifier = TRUE,
+												BOOL IncludeUnitSpecifier = TRUE,
 												BOOL EndOfList = TRUE,
-			     		 						INT32 ListPos = 0)
+												INT32 ListPos = 0)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/6/94
@@ -3171,16 +3213,16 @@ BOOL DialogManager::SetSelectedValueRange(CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 	Outputs:	-
 	Returns:	TRUE if the gadgets value could be set as specified
@@ -3203,12 +3245,12 @@ BOOL DialogManager::SetSelectedValueRange(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
- 							                 CGadgetID Gadget,
-									    	 MILLIPOINT Value,
-											 Node* pNode,
-		    							 	 BOOL IncludeUnitSpecifier,
-									    	 BOOL EndOfList,
-			     		 					 INT32 ListPos)
+											CGadgetID Gadget,
+											MILLIPOINT Value,
+											Node* pNode,
+											BOOL IncludeUnitSpecifier,
+											BOOL EndOfList,
+											INT32 ListPos)
 {
 	DimScale		   *pDimScale = DimScale::GetPtrDimScale(pNode);
 	String_256			Str;
@@ -3222,10 +3264,10 @@ BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetMemoryGadgetValue( CWindowID WindowID,
-											  CGadgetID Gadget,
-									    	  UINT32 Value,
-									    	  BOOL EndOfList = TRUE,
-			     		 					  INT32 ListPos = 0)
+											CGadgetID Gadget,
+											UINT32 Value,
+											BOOL EndOfList = TRUE,
+											INT32 ListPos = 0)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/1/95
@@ -3237,16 +3279,16 @@ BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be a added to the end of the gadgets
-					  		 value list. (Default = TRUE)
-					  		 FALSE if the value is to be added to the ListPos position in the
-					  		 list.
+							value list. (Default = TRUE)
+							FALSE if the value is to be added to the ListPos position in the
+							list.
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to add the value to
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to add the value to
+							the top of the list simply specify EndOfList = FALSE)
 
-							 If the gadget is a ComboBox then setting ListPos = -1 will
-							 set the combo box's edit gadget field.
+							If the gadget is a ComboBox then setting ListPos = -1 will
+							set the combo box's edit gadget field.
 
 	Outputs:	-
 	Returns:	TRUE if the gadgets value could be set as specified
@@ -3262,16 +3304,16 @@ BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
 
 				SetMemoryGadgetValue(g1win, g1, 4*1024) will set g1's value to '4 Mbytes'
 
-                For Windows
-                -----------
+				For Windows
+				-----------
 
-                The function can be used to set the string values of the following controls.
+				The function can be used to set the string values of the following controls.
 
-                Edit
-                Static
-                Button
-                ListBox
-                ComboBox
+				Edit
+				Static
+				Button
+				ListBox
+				ComboBox
 
 	Errors:		If the function is called on an invalid control then an ENSURE failure will
 				occur in a DEBUG build. In a retail build FALSE is returned.
@@ -3281,10 +3323,10 @@ BOOL DialogManager::SetDimensionGadgetValue( CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetMemoryGadgetValue( CWindowID WindowID,
-										  CGadgetID Gadget,
-										  UINT32 Value,
-										  BOOL EndOfList,
-			     		 				  INT32 ListPos)
+										CGadgetID Gadget,
+										UINT32 Value,
+										BOOL EndOfList,
+										INT32 ListPos)
 {
 	String_256 StrValue;
 	Convert::BytesToString(&StrValue, Value);
@@ -3295,10 +3337,10 @@ BOOL DialogManager::SetMemoryGadgetValue( CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::SetGadgetHelp( CWindowID WindowID,
-			  						   CGadgetID Gadget,
-						    		   UINT32 BubbleID,
-						    		   UINT32 StatusID,
-						    	   	   UINT32 ModuleID = 0)
+									CGadgetID Gadget,
+									UINT32 BubbleID,
+									UINT32 StatusID,
+									UINT32 ModuleID = 0)
 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/4/95
@@ -3318,10 +3360,10 @@ BOOL DialogManager::SetMemoryGadgetValue( CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::SetGadgetHelp( CWindowID WindowID,
-		  						   CGadgetID Gadget,
-					    		   UINT32 BubbleID,
-					    		   UINT32 StatusID,
-					    	   	   UINT32 ModuleID)
+								CGadgetID Gadget,
+								UINT32 BubbleID,
+								UINT32 StatusID,
+								UINT32 ModuleID)
 {
 	PORTNOTE("dialog","DialogManager::SetGadgetHelp - do nothing")
 #ifndef EXCLUDE_FROM_XARALX
@@ -3355,12 +3397,12 @@ BOOL DialogManager::SetGadgetHelp( CWindowID WindowID,
 /********************************************************************************************
 
 >	MILLIPOINT DialogManager::GetUnitGadgetValue(CWindowID WindowID,
-				  		  					 CGadgetID Gadget,
-				   		      				 UnitType DefaultType,
-				         				     MILLIPOINT StartRange,
-			           			     		 MILLIPOINT EndRange,
-			          						 UINT32 IDSInvalidMsg,
-			       	      					 BOOL* Valid)
+											CGadgetID Gadget,
+											UnitType DefaultType,
+											MILLIPOINT StartRange,
+											MILLIPOINT EndRange,
+											UINT32 IDSInvalidMsg,
+											BOOL* Valid)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/8/93
@@ -3370,8 +3412,8 @@ BOOL DialogManager::SetGadgetHelp( CWindowID WindowID,
 				StartRange: 	Minimum gadget value
 				EndRange: 		Maximum gadget value
 				InvalidMsgID: 	Message displayed to the user when they have entered
-							  	invalid data (either not the correct type or not in the
-							  	correct range)
+								invalid data (either not the correct type or not in the
+								correct range)
 								This may be 0 if you do not wish an error to be reported
 
 	Outputs:	Valid:          Flag indicating if the value entered was valid or not.
@@ -3412,12 +3454,12 @@ BOOL DialogManager::SetGadgetHelp( CWindowID WindowID,
 ********************************************************************************************/
 
 MILLIPOINT DialogManager::GetUnitGadgetValue(CWindowID WindowID,
-				  		  				 CGadgetID Gadget,
-				   		      			 UnitType DefaultType,
-				         				 MILLIPOINT StartRange,
-			           			     	 MILLIPOINT EndRange,
-			          					 UINT32 IDSInvalidMsg,
-			       	      				 BOOL* Valid)
+										CGadgetID Gadget,
+										UnitType DefaultType,
+										MILLIPOINT StartRange,
+										MILLIPOINT EndRange,
+										UINT32 IDSInvalidMsg,
+										BOOL* Valid)
 {
 	MILLIPOINT			Value = 0; 	  // The return value
 
@@ -3452,12 +3494,12 @@ MILLIPOINT DialogManager::GetUnitGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
-						   		   		   CGadgetID Gadget,
-		       				       		   INT32 StartRange,
-		            			   		   INT32 EndRange,
-	           	  				   		   UINT32 IDSInvalidMsg,
-	           	     			   		   BOOL* Valid,
-	           	     			   		   DialogManager::PFNSTRINGTOINT32 pfnParser = ::StringToLong)
+										CGadgetID Gadget,
+										INT32 StartRange,
+										INT32 EndRange,
+										UINT32 IDSInvalidMsg,
+										BOOL* Valid,
+										DialogManager::PFNSTRINGTOINT32 pfnParser = ::StringToLong)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	1/9/93
@@ -3467,8 +3509,8 @@ MILLIPOINT DialogManager::GetUnitGadgetValue(CWindowID WindowID,
 				StartRange: 	Minimum gadget value
 				EndRange: 		Maximum gadget value
 				InvalidMsgID: 	Message displayed to the user when they have entered
-							  	invalid data (either not the correct type or not in the
-							  	correct range)
+								invalid data (either not the correct type or not in the
+								correct range)
 								This may be 0 if you do not wish an error to be reported
 				pfnParser		optional pointer to a function that converts a StringBase
 								to a INT32.  The default is:-
@@ -3530,18 +3572,18 @@ MILLIPOINT DialogManager::GetUnitGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
-						   		   	   CGadgetID Gadget,
-		       				       	   INT32 StartRange,
-		            			   	   INT32 EndRange,
-	           	  				   	   UINT32 IDSInvalidMsg,
-	           	     			   	   BOOL* Valid,
-	           	     			   	   DialogManager::PFNSTRINGTOINT32 pfnParser)
+									CGadgetID Gadget,
+									INT32 StartRange,
+									INT32 EndRange,
+									UINT32 IDSInvalidMsg,
+									BOOL* Valid,
+									DialogManager::PFNSTRINGTOINT32 pfnParser)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxButton)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxBitmapButton)) )
+		pGadget->IsKindOf(CLASSINFO(wxBitmapButton)) )
 	{
 		// These bitmap buttons are meant to be tristate
 		PORTNOTETRACE("dialog","DialogManager::GetLongGadgetValue on BitmapButton - do nothing");
@@ -3628,12 +3670,12 @@ INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
-						   		   		   CGadgetID Gadget,
-		       				       		   double StartRange,
-		            			   		   double EndRange,
-	           	  				   		   UINT32 IDSInvalidMsg,
-	           	     			   		   BOOL* Valid,
-	           	     			   		   DialogManager::PFNSTRINGTODOUBLE pfnParser = ::StringToDouble)
+										CGadgetID Gadget,
+										double StartRange,
+										double EndRange,
+										UINT32 IDSInvalidMsg,
+										BOOL* Valid,
+										DialogManager::PFNSTRINGTODOUBLE pfnParser = ::StringToDouble)
 
 	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com> (liberally copied from GetLongGadgetValue)
 	Created:	16/12/94
@@ -3643,8 +3685,8 @@ INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
 				StartRange: 	Minimum gadget value
 				EndRange: 		Maximum gadget value
 				InvalidMsgID: 	Message displayed to the user when they have entered
-							  	invalid data (either not the correct type or not in the
-							  	correct range)
+								invalid data (either not the correct type or not in the
+								correct range)
 								This may be 0 if you do not wish an error to be reported
 				pfnParser		optional pointer to a function that converts a StringBase
 								to a double.  The default is:-
@@ -3709,12 +3751,12 @@ INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
-						   		   	   CGadgetID Gadget,
-		       				       	   double StartRange,
-		            			   	   double EndRange,
-	           	  				   	   UINT32 IDSInvalidMsg,
-	           	     			   	   BOOL* Valid,
-	           	     			   	   DialogManager::PFNSTRINGTODOUBLE pfnParser)
+									CGadgetID Gadget,
+									double StartRange,
+									double EndRange,
+									UINT32 IDSInvalidMsg,
+									BOOL* Valid,
+									DialogManager::PFNSTRINGTODOUBLE pfnParser)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
@@ -3757,10 +3799,10 @@ double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::GetBoolGadgetSelected(CWindowID WindowID,
-						   					   CGadgetID Gadget,
-						   					   UINT32 IDSInvalidMsg = 0,
-						   					   BOOL* Valid = NULL,
-						   					   INT32 ListPos = 0)
+											CGadgetID Gadget,
+											UINT32 IDSInvalidMsg = 0,
+											BOOL* Valid = NULL,
+											INT32 ListPos = 0)
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	10/4/94
@@ -3768,8 +3810,8 @@ double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
 	Inputs:		WindowID: 		Dialog box window identifier
 				Gadget:		Dialog identifier
 				InvalidMsgID: 	Message displayed to the user when they have entered
-							  	invalid data (either not the correct type or not in the
-							  	correct range)
+								invalid data (either not the correct type or not in the
+								correct range)
 								This may be 0 if you do not wish an error to be reported
 				ListPos:		Specifies which item in a list to read (defaults to 0)
 
@@ -3810,25 +3852,28 @@ double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::GetBoolGadgetSelected(CWindowID WindowID,
-						   		   			CGadgetID Gadget,
-	           	  				   			UINT32 IDSInvalidMsg,
-	           	     			   			BOOL* Valid,
-	           	     			   			INT32 ListPos)
+											CGadgetID Gadget,
+											UINT32 IDSInvalidMsg,
+											BOOL* Valid,
+											INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice)) )
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice)) )
 	{
 		// Support listboxes with multiple selections
 		if (pGadget->IsKindOf(CLASSINFO(wxListBox)))
 		{
 			return ((wxListBox *)pGadget)->IsSelected(ListPos);
 		}
-
-		return (((wxControlWithItems *)pGadget)->GetSelection() == ListPos);
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+			return (((wxOwnerDrawnComboBox *)pGadget)->GetSelection() == ListPos);
+		else
+			return (((wxControlWithItems *)pGadget)->GetSelection() == ListPos);
 	}
 
 	return GetLongGadgetValue(WindowID, Gadget, 0, 1, IDSInvalidMsg, Valid);
@@ -3841,9 +3886,9 @@ BOOL DialogManager::GetBoolGadgetSelected(CWindowID WindowID,
 /********************************************************************************************
 
 >	String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
-												   CGadgetID Gadget,
-												   BOOL* Valid,
-												   INT32 ListPos = -1)
+												CGadgetID Gadget,
+												BOOL* Valid,
+												INT32 ListPos = -1)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	2/9/93
@@ -3886,9 +3931,9 @@ BOOL DialogManager::GetBoolGadgetSelected(CWindowID WindowID,
 ********************************************************************************************/
 
 String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
-											   CGadgetID Gadget,
-											   BOOL* Valid,
-											   INT32 ListPos)
+											CGadgetID Gadget,
+											BOOL* Valid,
+											INT32 ListPos)
 {
 	if (Valid)
 		*Valid = TRUE;
@@ -3901,13 +3946,22 @@ String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
 
 //	if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice)) )
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice)) )
 	{
 		if (ListPos >=0)
 		{
-			if (ListPos>=((wxControlWithItems *)pGadget)->GetCount()) goto invalid;
-			String = ((wxControlWithItems *)pGadget)->GetString(ListPos);
+			if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+			{
+				if (ListPos>=((wxOwnerDrawnComboBox *)pGadget)->GetCount()) goto invalid;
+				String = ((wxOwnerDrawnComboBox *)pGadget)->GetString(ListPos);
+			}
+			else
+			{
+				if (ListPos>=((wxControlWithItems *)pGadget)->GetCount()) goto invalid;
+				String = ((wxControlWithItems *)pGadget)->GetString(ListPos);
+			}
 			goto out;
 		}
 
@@ -3917,9 +3971,25 @@ String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
 			goto out;
 		}
 
-		INT32 sel = ((wxControlWithItems *)pGadget)->GetSelection();
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		{
+			String = ((wxOwnerDrawnComboBox *)pGadget)->GetValue();
+			goto out;
+		}
+
+		INT32 sel;
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+			sel = ((wxOwnerDrawnComboBox *)pGadget)->GetSelection();
+		else
+			sel = ((wxControlWithItems *)pGadget)->GetSelection();
+
 		if ( (sel == wxNOT_FOUND) || (sel < 0)) goto invalid;
-		String = ((wxControlWithItems *)pGadget)->GetString(sel);
+
+		if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+			String = ((wxOwnerDrawnComboBox *)pGadget)->GetString(sel);
+		else
+			String = ((wxControlWithItems *)pGadget)->GetString(sel);
+
 		goto out;
 	}
 
@@ -3944,9 +4014,9 @@ invalid:
 /********************************************************************************************
 
 >	BOOL DialogManager::GetGadgetRange(CWindowID WindowID,
-								  	   CGadgetID Gadget,
-								       INT32* Min,
-								       INT32* Max)
+									CGadgetID Gadget,
+									INT32* Min,
+									INT32* Max)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	2/9/93
@@ -3959,10 +4029,10 @@ invalid:
 
 	Purpose:	For obtaining the range of a gadget.
 
-	            For Windows
-	            -----------
+				For Windows
+				-----------
 
-	            The function returns a ScrollBar control's Min and Max values.
+				The function returns a ScrollBar control's Min and Max values.
 
 	Errors:		If the function is called on an invalid control then an ENSURE failure will
 				occur in a DEBUG build. In a retail build FALSE is returned.
@@ -3973,9 +4043,9 @@ invalid:
 
 
 BOOL DialogManager::GetGadgetRange(CWindowID WindowID,
-								   CGadgetID Gadget,
-								   INT32* Min,
-								   INT32* Max)
+								CGadgetID Gadget,
+								INT32* Min,
+								INT32* Max)
 {
 	INT32 min=0;
 	INT32 max=0;
@@ -4009,10 +4079,10 @@ BOOL DialogManager::GetGadgetRange(CWindowID WindowID,
 /********************************************************************************************
 
 >	MILLIPOINT DialogManager::GetDimensionGadgetValue(  CWindowID WindowID,
-							                			CGadgetID Gadget,
+														CGadgetID Gadget,
 														Node* pNode,
 														BOOL* Valid)
-											   			INT32 ListPos = -1)
+														INT32 ListPos = -1)
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/6/94
 	Inputs:		WindowID: 	 Dialog box window identifier
@@ -4038,10 +4108,10 @@ BOOL DialogManager::GetGadgetRange(CWindowID WindowID,
 ********************************************************************************************/
 
 MILLIPOINT DialogManager::GetDimensionGadgetValue(  CWindowID WindowID,
-							                		CGadgetID Gadget,
+													CGadgetID Gadget,
 													Node* pNode,
 													BOOL* Valid,
-												    INT32 ListPos)
+													INT32 ListPos)
 {
 	MILLIPOINT Val=72000;
 	DimScale* pDimScale = DimScale::GetPtrDimScale(pNode);
@@ -4058,9 +4128,9 @@ MILLIPOINT DialogManager::GetDimensionGadgetValue(  CWindowID WindowID,
 BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 												double*   pUnitValue,
 												UnitType* pUnitType,
-								 				CWindowID WindowID,
-								 				CGadgetID Gadget,
-								 				Node*     pNode)
+												CWindowID WindowID,
+												CGadgetID Gadget,
+												Node*     pNode)
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/9/95
 	Inputs:		WindowID   -
@@ -4078,9 +4148,9 @@ BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 												double*   pUnitValue,
 												UnitType* pUnitType,
-								 				CWindowID WindowID,
-								 				CGadgetID Gadget,
-								 				Node*     pNode)
+												CWindowID WindowID,
+												CGadgetID Gadget,
+												Node*     pNode)
 {
 	ERROR2IF(  pMPValue==NULL,FALSE,"DialogManager::GetDoubleAndUnitGadgetValue() - pMPValue==NULL");
 	ERROR2IF(pUnitValue==NULL,FALSE,"DialogManager::GetDoubleAndUnitGadgetValue() - pUnitValue==NULL");
@@ -4118,11 +4188,11 @@ BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 /********************************************************************************************
 
 >	UINT32 DialogManager::GetMemoryGadgetValue(CWindowID WindowID,
-				  		  					  CGadgetID Gadget,
-				         					  UINT32 StartRange,
-			           			     		  UINT32 EndRange,
-			          						  UINT32 IDSInvalidMsg,
-			       	      					  BOOL* Valid)
+											CGadgetID Gadget,
+											UINT32 StartRange,
+											UINT32 EndRange,
+											UINT32 IDSInvalidMsg,
+											BOOL* Valid)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/1/95
@@ -4131,8 +4201,8 @@ BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 				StartRange: 	Minimum gadget value
 				EndRange: 		Maximum gadget value
 				InvalidMsgID: 	Message displayed to the user when they have entered
-							  	invalid data (either not the correct type or not in the
-							  	correct range)
+								invalid data (either not the correct type or not in the
+								correct range)
 								This may be 0 if you do not wish an error to be reported
 
 	Outputs:	Valid:          Flag indicating if the value entered was valid or not.
@@ -4174,11 +4244,11 @@ BOOL DialogManager::GetDoubleAndUnitGadgetValue(double*   pMPValue,
 ********************************************************************************************/
 
 UINT32 DialogManager::GetMemoryGadgetValue(CWindowID WindowID,
-				  		  				  CGadgetID Gadget,
-										  UINT32 StartRange,
-			           			     	  UINT32 EndRange,
-			          					  UINT32 IDSInvalidMsg,
-			       	      				  BOOL* Valid)
+										CGadgetID Gadget,
+										UINT32 StartRange,
+										UINT32 EndRange,
+										UINT32 IDSInvalidMsg,
+										BOOL* Valid)
 {
 	BOOL IsValid;
 
@@ -4244,11 +4314,16 @@ BOOL DialogManager::DeleteAllValues(CWindowID WindowID, CGadgetID Gadget)
 
 	//if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{
 		((wxControlWithItems *)pGadget)->Clear();
+		return TRUE;
+	}
+	else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+	{
+		((wxOwnerDrawnComboBox *)pGadget)->Clear();
 		return TRUE;
 	}
 	else if ( pGadget->IsKindOf(CLASSINFO(wxTreeCtrl))
@@ -4267,9 +4342,9 @@ BOOL DialogManager::DeleteAllValues(CWindowID WindowID, CGadgetID Gadget)
 /********************************************************************************************
 
 >	BOOL DialogManager::DeleteValue(CWindowID WindowID,
-					 				CGadgetID Gadget,
-					 				BOOL EndOfList = TRUE,
-					 				INT32 ListPos = 0)
+									CGadgetID Gadget,
+									BOOL EndOfList = TRUE,
+									INT32 ListPos = 0)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/9/93
@@ -4280,11 +4355,11 @@ BOOL DialogManager::DeleteAllValues(CWindowID WindowID, CGadgetID Gadget)
 				values, for example a ListBox.
 
 				EndOfList:	 TRUE if the value is to be deleted from the end of the gadgets
-					  		 value list. (Default = TRUE)
+							value list. (Default = TRUE)
 
 				ListPos:     If EndOfList = FALSE then this input specifies the position
-							 in the list (Default = 0, so if you want to delete the value at
-							 the top of the list simply specify EndOfList = FALSE)
+							in the list (Default = 0, so if you want to delete the value at
+							the top of the list simply specify EndOfList = FALSE)
 
 	Returns:	TRUE if the value could be deleted, else FALSE.
 	Purpose:	For deleting a gadget value
@@ -4303,29 +4378,34 @@ BOOL DialogManager::DeleteAllValues(CWindowID WindowID, CGadgetID Gadget)
 ********************************************************************************************/
 
 BOOL DialogManager::DeleteValue(CWindowID WindowID,
-				 				CGadgetID Gadget,
-				 				BOOL EndOfList,
-				 				INT32 ListPos)
+								CGadgetID Gadget,
+								BOOL EndOfList,
+								INT32 ListPos)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	//if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{
 		if (EndOfList)
-		{
 			((wxControlWithItems *)pGadget)->Delete(((wxControlWithItems *)pGadget)->GetCount()-1);
-		}
 		else
-		{
 			((wxControlWithItems *)pGadget)->Delete(ListPos);
-		}
 		return TRUE;
 	}
+	else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+	{
+		if (EndOfList)
+			((wxOwnerDrawnComboBox *)pGadget)->Delete(((wxOwnerDrawnComboBox *)pGadget)->GetCount()-1);
+		else
+			((wxOwnerDrawnComboBox *)pGadget)->Delete(ListPos);
+		return TRUE;
+	}
+
 	ERROR3("Invalid control");
 	return FALSE;
 }
@@ -4333,8 +4413,8 @@ BOOL DialogManager::DeleteValue(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL GetValueCount(CWindowID WindowID,
-				   	   CGadgetID Gadget,
-				   	   INT32* Count)
+					CGadgetID Gadget,
+					INT32* Count)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/9/93
@@ -4346,8 +4426,8 @@ BOOL DialogManager::DeleteValue(CWindowID WindowID,
 
 	Purpose:	For finding the number of values stored in a gadget
 
-	            For Windows
-	            -----------
+				For Windows
+				-----------
 
 				This function can be called on ListBox and ComboBox controls to obtain the
 				number of values in their lists.
@@ -4361,22 +4441,29 @@ BOOL DialogManager::DeleteValue(CWindowID WindowID,
 
 
 BOOL DialogManager::GetValueCount(CWindowID WindowID,
-				   				  CGadgetID Gadget,
-				 				  INT32* Count)
+								CGadgetID Gadget,
+								INT32* Count)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
 	//if ( pGadget->IsKindOf(CLASSINFO(wxControlWithItems)) ) // Includes wxListBox - this seems to have false positives
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{
 		INT32 c = ((wxControlWithItems *)pGadget)->GetCount();
 		if (Count) *Count=c;
 		return TRUE;
 	}
+	else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+	{
+		INT32 c = ((wxOwnerDrawnComboBox *)pGadget)->GetCount();
+		if (Count) *Count=c;
+		return TRUE;
+	}
+
 	ERROR3("Invalid control");
 	return FALSE;
 }
@@ -4402,8 +4489,8 @@ INT32 DialogManager::GetSelectedCount(CWindowID WindowID,CGadgetID Gadget)
 	if (!pGadget) return FALSE;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice))
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice))
 		)
 	{
 		// Support listboxes with multiple selections
@@ -4414,8 +4501,9 @@ INT32 DialogManager::GetSelectedCount(CWindowID WindowID,CGadgetID Gadget)
 		}
 
 		return (((wxControlWithItems *)pGadget)->GetSelection() == wxNOT_FOUND)?0:1;
-
 	}
+	else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		return (((wxOwnerDrawnComboBox *)pGadget)->GetSelection() == wxNOT_FOUND)?0:1;
 
 	return -1;
 }
@@ -4440,8 +4528,8 @@ INT32 DialogManager::GetFirstSelectedItem( CWindowID WindowID, CGadgetID Gadget 
 	if (!pGadget) return -1;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice)) )
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice)) )
 	{
 		// Support listboxes with multiple selections
 		if (pGadget->IsKindOf(CLASSINFO(wxListBox)))
@@ -4453,10 +4541,10 @@ INT32 DialogManager::GetFirstSelectedItem( CWindowID WindowID, CGadgetID Gadget 
 			}
 			return -1;
 		}
-
 		return ((wxControlWithItems *)pGadget)->GetSelection();
-
 	}
+	else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		return ((wxOwnerDrawnComboBox *)pGadget)->GetSelection();
 
 	return -1;
 }
@@ -4497,13 +4585,18 @@ INT32* DialogManager::GetSelectedItems(CWindowID WindowID, CGadgetID Gadget)
 	if (!pGadget) return NULL;
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxListBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
-		 pGadget->IsKindOf(CLASSINFO(wxChoice)) )
+		pGadget->IsKindOf(CLASSINFO(wxComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) ||
+		pGadget->IsKindOf(CLASSINFO(wxChoice)) )
 	{
 		// Support listboxes with multiple selections
 		if (pGadget->IsKindOf(CLASSINFO(wxListBox)))
 		{
 			((wxListBox *)pGadget)->GetSelections(sels);
+		}
+		else if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		{
+			sels[0]=((wxOwnerDrawnComboBox *)pGadget)->GetSelection();
 		}
 		else
 		{
@@ -4533,16 +4626,16 @@ INT32* DialogManager::GetSelectedItems(CWindowID WindowID, CGadgetID Gadget)
 /********************************************************************************************
 
 >	BOOL DialogManager::GetValueIndex(CWindowID WindowID,
-				 	   				  CGadgetID Gadget,
-				  	   				  INT32* Index)
+									CGadgetID Gadget,
+									INT32* Index)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com> / Jason (Based on Simon's stuff...)
 	Created:	11/10/95
 	Inputs:		WindowID: 		Dialog box window identifier
 				Gadget:		Gadget identifier
 
-    Outputs:	Index: 			The index of the currently selected item in the gadget. The
-    							index value starts at 0 for the first item in the list.
+	Outputs:	Index: 			The index of the currently selected item in the gadget. The
+								index value starts at 0 for the first item in the list.
 
 								THIS CAN NOW RETURN -1 AS IT SHOULD ALWAYS OF BEEN ABLE TO DO !!!
 
@@ -4569,8 +4662,8 @@ INT32* DialogManager::GetSelectedItems(CWindowID WindowID, CGadgetID Gadget)
 ********************************************************************************************/
 
 BOOL DialogManager::GetValueIndex(CWindowID WindowID,
-				  				  CGadgetID Gadget,
-				   				  INT32* Index)
+								CGadgetID Gadget,
+								INT32* Index)
 {
 	INT32 index = GetFirstSelectedItem(WindowID, Gadget);
 	if (Index) *Index=index;
@@ -4582,16 +4675,16 @@ BOOL DialogManager::GetValueIndex(CWindowID WindowID,
 /********************************************************************************************
 
 >	BOOL DialogManager::GetValueIndex(CWindowID WindowID,
-				 	   				  CGadgetID Gadget,
-				  	   				  WORD* Index)
+									CGadgetID Gadget,
+									WORD* Index)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/9/93
 	Inputs:		WindowID: 		Dialog box window identifier
 				Gadget:		Gadget identifier
 
-    Outputs:	Index: 			The index of the currently selected item in the gadget. The
-    							index value starts at 0 for the first item in the list.
+	Outputs:	Index: 			The index of the currently selected item in the gadget. The
+								index value starts at 0 for the first item in the list.
 
 	Returns:	TRUE if the index value could be read, else FALSE.
 
@@ -4611,8 +4704,8 @@ BOOL DialogManager::GetValueIndex(CWindowID WindowID,
 ********************************************************************************************/
 
 BOOL DialogManager::GetValueIndex(CWindowID WindowID,
-				  				  CGadgetID Gadget,
-				   				  WORD* Index)
+								CGadgetID Gadget,
+								WORD* Index)
 {
 	if (Index) *Index=GetFirstSelectedItem(WindowID, Gadget);
 	return TRUE;
@@ -4915,7 +5008,7 @@ BOOL DialogManager::DefaultKeyboardFocus()
 
 /********************************************************************************************
 >	static BOOL DialogManager::HighlightText(CWindowID WindowID, CGadgetID Gadget,
-											 INT32 nStart = 0, INT32 nEnd = -1)
+											INT32 nStart = 0, INT32 nEnd = -1)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	10/11/94
@@ -4943,6 +5036,7 @@ BOOL DialogManager::HighlightText(CWindowID WindowID, CGadgetID Gadget, INT32 nS
 #ifdef _DEBUG
 	ERROR3IF( !pGadget->IsKindOf( CLASSINFO(wxListBox) ) &&
 		!pGadget->IsKindOf( CLASSINFO(wxComboBox) ) &&
+		!pGadget->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) &&
 		!pGadget->IsKindOf( CLASSINFO(wxTextCtrl) ),
 				"Wrong kind of control in DialogManager::HighlightText");
 #endif
@@ -4951,10 +5045,13 @@ BOOL DialogManager::HighlightText(CWindowID WindowID, CGadgetID Gadget, INT32 nS
 	{
 		( (wxTextCtrl *)pGadget )->SetSelection( -1, -1 );
 	}
-	else
-	if( pGadget->IsKindOf( CLASSINFO(wxComboBox) ) )
+	else if( pGadget->IsKindOf( CLASSINFO(wxComboBox) ) )
 	{
 		( (wxComboBox *)pGadget )->SetSelection( -1, -1 );
+	}
+	else if( pGadget->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) )
+	{
+		( (wxOwnerDrawnComboBox *)pGadget )->SetSelection( -1 );
 	}
 
 	return TRUE;
@@ -5344,7 +5441,7 @@ BOOL DialogManager::CustomControlMsg( wxWindow *pDlg, UINT32 wParam, INT32 lPara
 	PORTNOTETRACE("dialog","DialogManager::CustomControlMsg - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	String_256 ClassNameStr;
-    GetClassName( HWND(lParam), (TCHAR*)ClassNameStr, 255);
+	GetClassName( HWND(lParam), (TCHAR*)ClassNameStr, 255);
 	if ((ClassNameStr == String_16(TEXT("cc_BitmapButton")))||
 		ClassNameStr == String_16(TEXT("cc_SmallButton")))
 	{
@@ -5386,7 +5483,7 @@ BOOL DialogManager::CustomControlMsg( wxWindow *pDlg, UINT32 wParam, INT32 lPara
 	Inputs:		Enable:	When TRUE all dialogs are enabled
 
 				ExceptMe: An optional dialog to exclude. If a modal dialog X has just
-						  been created then all dialogs except X will need disabling
+						been created then all dialogs except X will need disabling
 	Outputs:	-
 	Returns:	-
 	Purpose:	Enables or Disables all Dialogs on the DialogOp message handler list.
@@ -5406,9 +5503,9 @@ void DialogManager::EnableAllDialogs( BOOL Enable, wxWindow *pExceptMe )
 		DialogOp	   *pDlgOp;
 		while( CurrentOp != NULL )
 		{
-	        if (CurrentOp->IS_KIND_OF(DialogOp)) // They all should be
-	        {
-	        	pDlgOp = (DialogOp*)CurrentOp;
+			if (CurrentOp->IS_KIND_OF(DialogOp)) // They all should be
+			{
+				pDlgOp = (DialogOp*)CurrentOp;
 				// Determine if the dialog has an associated window
 				if (pDlgOp->HasWindow())
 				{
@@ -5446,8 +5543,8 @@ void DialogManager::EnableAllDialogs( BOOL Enable, wxWindow *pExceptMe )
 /********************************************************************************************
 
 >	void DialogManager::SetEditGadgetType(CWindowID WindowID,
-									  CGadgetID Gadget,
-									  EditGadgetType Type)
+									CGadgetID Gadget,
+									EditGadgetType Type)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/8/93
@@ -5469,8 +5566,8 @@ void DialogManager::EnableAllDialogs( BOOL Enable, wxWindow *pExceptMe )
 
 
 void DialogManager::SetEditGadgetType(CWindowID Win,
-									  CGadgetID Gadget,
-									  EditGadgetType Type)
+									CGadgetID Gadget,
+									EditGadgetType Type)
 {
 	UINT32 IDSValidChars=0; // Resource ID of valid input characters
 	switch (Type)
@@ -5501,7 +5598,7 @@ public:
 			wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow;
 			control->SetValue(* m_stringValue);
 		}
-    return true;											/*TYPENOTE: Correct*/
+	return true;											/*TYPENOTE: Correct*/
 	}
 	virtual bool TransferFromWindow(void)	/*TYPENOTE: Correct*/
 	{
@@ -5519,8 +5616,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextValidatorFixed, wxTextValidator);
 /********************************************************************************************
 
 >	void DialogManager::SetEditGadgetType(CWindowID WindowID,
-				     					  CGadgetID Gadget,
-								 		  UINT32 IDSValidChar)
+										CGadgetID Gadget,
+										UINT32 IDSValidChar)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/8/93
@@ -5540,8 +5637,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextValidatorFixed, wxTextValidator);
 
 
 void DialogManager::SetEditGadgetType(CWindowID WindowID,
-								 CGadgetID Gadget,
-								 UINT32 IDSValidChar)
+								CGadgetID Gadget,
+								UINT32 IDSValidChar)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return;
@@ -5567,7 +5664,7 @@ void DialogManager::SetEditGadgetType(CWindowID WindowID,
 /********************************************************************************************
 
 >	void DialogManager::DualFunctionButton(CWindowID DialogWnd,
-									   CGadgetID ButtonGadget)
+									CGadgetID ButtonGadget)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/9/93
@@ -5582,7 +5679,7 @@ void DialogManager::SetEditGadgetType(CWindowID WindowID,
 ********************************************************************************************/
 
 void DialogManager::DualFunctionButton(CWindowID DialogWnd,
-									   CGadgetID ButtonGadget)
+									CGadgetID ButtonGadget)
 {
 	PORTNOTETRACE("dialog","DialogManager::DualFunctionButton - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -5593,21 +5690,21 @@ void DialogManager::DualFunctionButton(CWindowID DialogWnd,
 	GetClassName(hGadget, (TCHAR*)ClassNameStr, 255);
 
 	ENSURE((ClassNameStr == String_8(TEXT("Button"))), "DualFunctionButton function called\n"
-													  "on a gadget which is not a button");
+													"on a gadget which is not a button");
 	#endif
 
 	ControlInfo* ControlInfoPtr; 			   // This structure will be passed to the
-											   // RgtMOuseButtonProc.
+											// RgtMOuseButtonProc.
 
 	ControlInfoPtr = new ControlInfo;
 	ControlInfoPtr->pControlWnd = hGadget;
-    ControlInfoPtr->lpfnOldProc = (FARPROC) GetWindowLong(hGadget, GWL_WNDPROC);
+	ControlInfoPtr->lpfnOldProc = (FARPROC) GetWindowLong(hGadget, GWL_WNDPROC);
 
-    // Store the button control info in the dialog's Edit control info list
+	// Store the button control info in the dialog's Edit control info list
 	GetControlList( DialogWnd )->AddHead(ControlInfoPtr);
 
 	FARPROC lpfnDualFn = MakeProcInstance((FARPROC) DialogManager::RgtMouseButtonProc,
-									       AfxGetApp()->m_hInstance);
+										AfxGetApp()->m_hInstance);
 
 	// Subclass the control so that it calls the new button proc
 	SetWindowLong(hGadget, GWL_WNDPROC, (INT32) lpfnDualFn );
@@ -5617,7 +5714,7 @@ void DialogManager::DualFunctionButton(CWindowID DialogWnd,
 /********************************************************************************************
 
 >	BOOL DialogManager::MakeListBoxDragable(CWindowID DialogWnd,
-								 			CGadgetID ListGadget)
+											CGadgetID ListGadget)
 
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
@@ -5634,7 +5731,7 @@ void DialogManager::DualFunctionButton(CWindowID DialogWnd,
 
 
 BOOL DialogManager::MakeListBoxDragable(CWindowID WindowID,
-							 			CGadgetID Gadget)
+										CGadgetID Gadget)
 {
 	// This function should only be called for a LISTBOX control
 	// For the time being, we do this by Hide/Unhide
@@ -5652,9 +5749,9 @@ BOOL DialogManager::MakeListBoxDragable(CWindowID WindowID,
 /********************************************************************************************
 
 >	INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc(HWND hwnd,
-													    		  UINT32 message,
-												   				  UINT32 wParam,
-												   				  INT32 lParam)
+																UINT32 message,
+																UINT32 wParam,
+																INT32 lParam)
 
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
@@ -5672,9 +5769,9 @@ BOOL DialogManager::MakeListBoxDragable(CWindowID WindowID,
 ********************************************************************************************/
 
 INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc( wxWindow *pWnd,
-												    		  UINT32 message,
-											   				  UINT32 wParam,
-											   				  INT32 lParam)
+															UINT32 message,
+															UINT32 wParam,
+															INT32 lParam)
 {
 	PORTNOTETRACE("dialog","DialogManager::DualFunctionButton - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -5697,19 +5794,19 @@ INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc( wxWindow *pWnd,
 
 	ENSURE(CurrentCntrl != NULL, "Could not find information for a typed edit control");
 
-    // Load in the valid input characters for the edit control
-    String_256 ValidChars;
-    ValidChars.Load(CurrentCntrl->IDSValidCh, NULL);
+	// Load in the valid input characters for the edit control
+	String_256 ValidChars;
+	ValidChars.Load(CurrentCntrl->IDSValidCh, NULL);
 
-    if (message == WM_CHAR) // Character message
-    {
+	if (message == WM_CHAR) // Character message
+	{
 
-    	BOOL CharValid = FALSE;
+		BOOL CharValid = FALSE;
 
-    	INT32 LenValidChars = ValidChars.Length();
-    	TCHAR KeyCh = ((TCHAR)wParam);
-    	for (INT32 i=0; ( (i < LenValidChars) && (!CharValid) ); i++)
-    		if (((TCHAR*)ValidChars)[i] == (TCHAR)KeyCh)
+		INT32 LenValidChars = ValidChars.Length();
+		TCHAR KeyCh = ((TCHAR)wParam);
+		for (INT32 i=0; ( (i < LenValidChars) && (!CharValid) ); i++)
+			if (((TCHAR*)ValidChars)[i] == (TCHAR)KeyCh)
 			{
 				CharValid = TRUE;
 			}
@@ -5722,8 +5819,8 @@ INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc( wxWindow *pWnd,
 				(KeyCh != (TCHAR)'\r'))   // carriage return
 
 				return (0);   // An invalid character was input.
-    	}
-    }
+		}
+	}
 	else if (message==WM_DESTROY)
 		DeleteControlList( hwnd );
 
@@ -5736,9 +5833,9 @@ INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc( wxWindow *pWnd,
 /********************************************************************************************
 
 >	INT32 FAR PASCAL EXPORT DialogManager::RgtMouseButtonProc(HWND hwnd,
-        										     	  UINT32 message,
-										   				  UINT32 wParam,
-										   				  INT32 lParam)
+														UINT32 message,
+														UINT32 wParam,
+														INT32 lParam)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/9/93
@@ -5754,9 +5851,9 @@ INT32 FAR PASCAL EXPORT DialogManager::ValidateEditGadgetProc( wxWindow *pWnd,
 
 ********************************************************************************************/
 INT32 FAR PASCAL EXPORT DialogManager::RgtMouseButtonProc( wxWindow *pWnd,
-        										     	  UINT32 message,
-										   				  UINT32 wParam,
-										   				  INT32 lParam)
+														UINT32 message,
+														UINT32 wParam,
+														INT32 lParam)
 {
 	PORTNOTETRACE("dialog","DialogManager::DualFunctionButton - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -5859,7 +5956,7 @@ PORTNOTE("dialog","Removed IsFullScreenMode usage")
 	{
 		// Make sure that all dialogs have been deleted.
 		ENSURE( ((DialogPosition*)DlgPos)->DlgWinList.IsEmpty(),
-			  "Live Dialog box found whilst destoying dialog manager");
+			"Live Dialog box found whilst destoying dialog manager");
 
 		NextPos =  DialogPositionList.GetNext(DlgPos);
 		delete DialogPositionList.RemoveItem(DlgPos);
@@ -6141,7 +6238,7 @@ size_t DialogManager::SizeCtrlData(DLGITEMTEMPLATE *pControl)
 ********************************************************************************************/
 
 DLGTEMPLATE *DialogManager::MergeDialog( /*HINSTANCE MainInst, */  CDlgResID MainID,
-										 /*HINSTANCE OtherInst, */ CDlgResID OtherID)
+										/*HINSTANCE OtherInst, */ CDlgResID OtherID)
 {
 	PORTNOTETRACE("dialog","DialogManager::MergeDialog - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -6207,7 +6304,7 @@ DLGTEMPLATE *DialogManager::MergeDialog( /*HINSTANCE MainInst, */  CDlgResID Mai
 	}
 
 	// Allocate a new one, using header size + each data size.
-    // The header of 'Main' is used for the new dialog.
+	// The header of 'Main' is used for the new dialog.
 	Size = SizeDlgHeader(pDlg[0]);
 	pNew = (ADDR) CCMalloc(Size + Len[0] + Len[1]);
 
@@ -6303,8 +6400,8 @@ BOOL DialogManager::ModalDialogOpen(DialogOp** pModal)
 
 	// Look for an open modal dialog
 	for (MessageHandler* pMsgHandler = (MessageHandler*)DialogClassList->GetHead();
-		 pMsgHandler != NULL;
-		 pMsgHandler = (MessageHandler*)DialogClassList->GetNext(pMsgHandler))
+		pMsgHandler != NULL;
+		pMsgHandler = (MessageHandler*)DialogClassList->GetNext(pMsgHandler))
 	{
 		ENSURE(pMsgHandler->IsKindOf(CC_RUNTIME_CLASS(DialogOp)),
 			"MessageHandler of DialogOp class list is not a DialogOp");
@@ -6378,7 +6475,7 @@ BOOL DialogManager::IsCustomComboDropdownVisible(CWindowID WindowID, CGadgetID G
 	GetClassName(hGadget, (TCHAR*)ClassNameStr, 255);
 
 	if ((ClassNameStr == String_64(TEXT("cc_1dBitmapComboBoxEdit"))) ||
-	    (ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))   )
+		(ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))   )
 	{
 		BOOL RetVal = FALSE;
 
@@ -6445,9 +6542,9 @@ wxPropertySheetDialog* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDial
 	Created:	22/11/94
 	Inputs:		pDialogTabOp: The operation we wish to add a page too
 				DialogResID:  The resource ID of the dialog page we wish to add to the
-							  DialogTabOp
+							DialogTabOp
 				Gadget		  The gadget of the book control to add the page to (or zero to
-							  take a good guess)
+							take a good guess)
 	Outputs:	-
 	Returns:	TRUE if the page was added successfully.
 	Purpose:	Adds a page to the tabbed dialog with resource ID DialogResID.
@@ -6647,7 +6744,7 @@ BOOL DialogManager::SetTitlebarName( CWindowID Win, String_256* Name )
 PORTNOTE("dialog","Removed DialogManager::KillTimer - HWND and timer usage")
 #ifndef EXCLUDE_FROM_XARALX
 UINT32 DialogManager::SetTimer( CWindowID hWnd, UINT32 nIDEvent, UINT32 nElapse,
-							 void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD))
+							void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD))
 {
 	// Call the Windows API
 	PORTNOTETRACE("dialog","DialogManager::SetTimer - do nothing");
@@ -6957,7 +7054,7 @@ void DialogManager::RestoreActiveDialogState()
 		}
 		else
 		{
- 			// And all other dialogs
+			// And all other dialogs
 			EnableAllDialogs(TRUE);
 		}
 	}
@@ -7102,7 +7199,7 @@ BOOL DialogManager::CreateBar(DialogBarOp* DlgOp)
 	}
 	else
 	{
-    	DBWnd = new DialogBar();
+		DBWnd = new DialogBar();
 	}
 
 
@@ -7260,9 +7357,9 @@ TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->Acti
 /********************************************************************************************
 
 >   static BOOL CALLBACK EXPORT SendDialogMessage(HWND hDlg,
-				       	  						  UINT32 Message,
-				       	 						  UINT32 wParam,
-				       	 						  INT32 lParam);
+												UINT32 Message,
+												UINT32 wParam,
+												INT32 lParam);
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/8/93
@@ -7285,9 +7382,9 @@ TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->Acti
 ********************************************************************************************/
 
 BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
-				       	  						  UINT32 Message,
-				       	 			   			  UINT32 wParam,
-				       	 			   			  INT32 lParam )
+												UINT32 Message,
+												UINT32 wParam,
+												INT32 lParam )
 {
 	PORTNOTETRACE("dialog","DialogManager::SendDialogMessage - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
@@ -7862,7 +7959,7 @@ BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
 				// If the custom control redraws this, we return TRUE so that the OS/MFC
 				// does not go rampantly drawing selection rects around the item or anything
 				if (SendMessage( lpdis->hwndItem,
-								 DialogManager::MsgSlaveDrawItem, wParam, lParam ))
+								DialogManager::MsgSlaveDrawItem, wParam, lParam ))
 					return(TRUE);
 			}
 			break;
@@ -7883,7 +7980,7 @@ BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
 		//	if (Bodge >= 1)
 		//	{
 		//		// If the dialog is modal then do not let the windows Z order change
-	    //			WINDOWPOS FAR* pwp = (WINDOWPOS FAR*) lParam;  // address of WINDOWPOS structure
+		//			WINDOWPOS FAR* pwp = (WINDOWPOS FAR*) lParam;  // address of WINDOWPOS structure
 		//		pwp->flags = SWP_NOOWNERZORDER;
 		//	}
 		//	Bodge++;
@@ -7981,35 +8078,35 @@ BOOL CALLBACK EXPORT DialogManager::SendDialogMessage( wxWindow *pDlg,
 	if (Message == DialogManager::MsgDragList)
 	{
 	#if USE_COMMON_CONTROLS
-	    lpdli = (LPDRAGLISTINFO)lParam;
-    	switch (lpdli->uNotification)
-    	{
-    		case DL_BEGINDRAG:
-        		iItemToMove = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
-        		return DL_MOVECURSOR;
-    		case DL_DRAGGING:
-	        	iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
-    	    	DrawInsert(hDlg, lpdli->hWnd, iItem);
-        		if (iItem!=-1)
-            	 	return DL_MOVECURSOR;
-	        	return DL_STOPCURSOR;
-    		case DL_DROPPED:
-        		iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
- 	  	     	//if (iItem!=-1)
+		lpdli = (LPDRAGLISTINFO)lParam;
+		switch (lpdli->uNotification)
+		{
+			case DL_BEGINDRAG:
+				iItemToMove = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
+				return DL_MOVECURSOR;
+			case DL_DRAGGING:
+				iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
+				DrawInsert(hDlg, lpdli->hWnd, iItem);
+				if (iItem!=-1)
+					return DL_MOVECURSOR;
+				return DL_STOPCURSOR;
+			case DL_DROPPED:
+				iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
+				//if (iItem!=-1)
 				//{
 					//SetStringGadgetValue(
 					//ListBox_InsertString(hGadget, iItem, (INT32)(TCHAR*)(*StrVal))
-    	        	//Use list box messages to insert item at new location
-       		 	//}
-       		 	DrawInsert(hDlg, lpdli->hWnd, -1);
-       			return DL_CURSORSET;
+					//Use list box messages to insert item at new location
+				//}
+				DrawInsert(hDlg, lpdli->hWnd, -1);
+				return DL_CURSORSET;
 			default:
 				if (IsUserName("Simon"))
 					TRACE( _T("Unknown draglist message 0x%x\n"), lpdli->uNotification);
 
-    	}
+		}
 	#endif
-    }
+	}
 
 	// If the message should be handled then Route it to the appropriate DialogOp
 	if (HandleMessage)
@@ -8038,7 +8135,7 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 	PORTNOTETRACE("dialog","DialogManager::Dlg_OnCommand - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	String_256 ClassNameStr;
-    GetClassName(hwndCtl, (TCHAR*)ClassNameStr, 255);
+	GetClassName(hwndCtl, (TCHAR*)ClassNameStr, 255);
 
 	// -------------------------------------------------------------------------------------
 	// Special processing
@@ -8059,7 +8156,7 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 			DialogManager::HandleMessage = TRUE;
 			SetGadgetIDToFocus(hwnd);
 			//Move focus to the next control in the dialog.
-         	PostMessage(hwnd, WM_NEXTDLGCTL, 0, 0L) ;
+			PostMessage(hwnd, WM_NEXTDLGCTL, 0, 0L) ;
 			return;
 		}
 	}
@@ -8097,7 +8194,7 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 		}
 	}
 	else if ( (ClassNameStr == String_8(TEXT("ListBox"))) ||  // ListBox control messages
-			  (ClassNameStr == String_16(TEXT("cc_CheckList")))
+			(ClassNameStr == String_16(TEXT("cc_CheckList")))
 			)
 	{
 		switch (codeNotify)
@@ -8123,8 +8220,8 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 		}
 	}
 	else if ( (ClassNameStr == String_8(TEXT("ComboBox"))) || // ComboBox control messages
-			  (ClassNameStr == String_64(TEXT("cc_1dBitmapComboBoxEdit"))) ||
-			  (ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))
+			(ClassNameStr == String_64(TEXT("cc_1dBitmapComboBoxEdit"))) ||
+			(ClassNameStr == String_64(TEXT("cc_2dBitmapComboBoxEdit")))
 			)
 	{
 //		BOOL SetComboText = FALSE;
@@ -8156,8 +8253,8 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 				break;
 			case CBN_SELCHANGE:
 				::PostMessage(hwnd, CBN_CAM_SELCHANGE,
-							  (WPARAM) DIM_SELECTION_CHANGED,
-							  (LPARAM) Gadget);
+							(WPARAM) DIM_SELECTION_CHANGED,
+							(LPARAM) Gadget);
 				// Removed by Chris 22 March 95
 				// fixes can't cursor through combo's bug
 				//::SetFocus(NULL);						// don't do this - it's senseless
@@ -8167,8 +8264,8 @@ void DialogManager::Dlg_OnCommand( wxWindow *pWnd, INT32 id, wxWindow *pWndCtl, 
 			case CBN_SELENDOK:		// The user has confirmed their choice (seems to miss kbd input!)
 			case CBN_CLOSEUP:		// The control's dropdown is being closed
 				::PostMessage(hwnd, CBN_CAM_SELCHANGE,
-							  (WPARAM) DIM_SELECTION_CHANGED_COMMIT,
-							  (LPARAM) Gadget);
+							(WPARAM) DIM_SELECTION_CHANGED_COMMIT,
+							(LPARAM) Gadget);
 				break;
 
 			case CBN_EDITCHANGE:						   // Text in edit portion of combo has changed
@@ -8244,14 +8341,14 @@ void DialogManager::Dlg_OnScroll( wxWindow *pWnd, wxWindow *pWndCtl, UINT32 code
 	}
 
 	// Obtain scroll bars range	and current thumb position
-    INT32 ScrollMin;
-    INT32 ScrollMax;
+	INT32 ScrollMin;
+	INT32 ScrollMax;
 
 	WORD CurrentThumbPos;
 
 	if (ScrollControl)
 	{
-    	GetScrollRange(hwndCtl, SB_CTL, &ScrollMin, &ScrollMax);
+		GetScrollRange(hwndCtl, SB_CTL, &ScrollMin, &ScrollMax);
 		CurrentThumbPos = (WORD)GetScrollPos(hwndCtl, SB_CTL);
 	}
 	else if (SpinControl)
@@ -8285,14 +8382,14 @@ void DialogManager::Dlg_OnScroll( wxWindow *pWnd, wxWindow *pWndCtl, UINT32 code
 		CurrentThumbPos = (WORD) SendMessage(hwndCtl, TBM_GETPOS, 0, 0);
 	}
 
-    INT32 ScrollBarInc = 0;
+	INT32 ScrollBarInc = 0;
 	INT32 NewPos;
 
 	switch (code)
 	{
 		case SB_TOP:   	 // Same as SB_LEFT	TB_TOP
 			ScrollBarInc = -(INT32)(CurrentThumbPos - ScrollMin);
-		    break;
+			break;
 		case SB_BOTTOM: // Same as SB_RIGHT, TB_BOTTOM
 			ScrollBarInc = ScrollMax - CurrentThumbPos;
 			break;
@@ -8374,12 +8471,12 @@ void DialogManager::Dlg_OnScroll( wxWindow *pWnd, wxWindow *pWndCtl, UINT32 code
 /********************************************************************************************
 
 >	static CTreeItemID DialogManager::SetTreeGadgetItem(CWindowID wnd,
-														 CGadgetID Gadget,
-														 CTreeItemID hParent,
-														 const StringBase& str,
-														 CTreeItemID hInsAfter,
-														 INT32 iImage,
-														 CCObject* pObj = NULL)
+														CGadgetID Gadget,
+														CTreeItemID hParent,
+														const StringBase& str,
+														CTreeItemID hInsAfter,
+														INT32 iImage,
+														CCObject* pObj = NULL)
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	08/Feb/2006
@@ -8399,12 +8496,12 @@ void DialogManager::Dlg_OnScroll( wxWindow *pWnd, wxWindow *pWndCtl, UINT32 code
 ********************************************************************************************/
 
 CTreeItemID DialogManager::SetTreeGadgetItem(CWindowID wnd,
-											  CGadgetID Gadget,
-											  CTreeItemID hParent,
-											  const StringBase& str,
-											  CTreeItemID hInsAfter,
-											  INT32 iImage,
-											  CCObject* pObj)
+											CGadgetID Gadget,
+											CTreeItemID hParent,
+											const StringBase& str,
+											CTreeItemID hInsAfter,
+											INT32 iImage,
+											CCObject* pObj)
 {
 	wxWindow * pGadget = GetGadget(wnd, Gadget);
 	if (!pGadget) return CTreeItemID();

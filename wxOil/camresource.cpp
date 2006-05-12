@@ -1397,6 +1397,7 @@ BOOL CamResource::Init()
 	wxXmlResource::Get()->AddHandler(new wxCamArtControlXmlHandler);
 	wxXmlResource::Get()->AddHandler(new wxCamDrawControlXmlHandler);
 #ifdef WXXTRA_COMBO_XML_HANDLERS
+	wxXmlResource::Get()->AddHandler(new wxOwnerDrawnComboBoxXmlHandler);
 	wxXmlResource::Get()->AddHandler(new wxComboControlXmlHandler);
 #endif
 #endif

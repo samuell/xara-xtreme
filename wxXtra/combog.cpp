@@ -360,8 +360,6 @@ wxComboControlXmlHandler::wxComboControlXmlHandler()
     XRC_ADD_STYLE(wxCB_SORT);
     XRC_ADD_STYLE(wxCB_READONLY);
     XRC_ADD_STYLE(wxCB_DROPDOWN);
-    //        XRC_ADD_STYLE(wxODCB_STD_CONTROL_PAINT);
-    //        XRC_ADD_STYLE(wxCC_PAINTING_CONTROL);
     XRC_ADD_STYLE(wxCC_SPECIAL_DCLICK);
     XRC_ADD_STYLE(wxCC_ALT_KEYS);
     XRC_ADD_STYLE(wxCC_STD_BUTTON);
@@ -431,7 +429,7 @@ wxObject *wxComboControlXmlHandler::DoCreateResource()
 bool wxComboControlXmlHandler::CanHandle(wxXmlNode *node)
 {
 // Avoid GCC bug
-//    return (IsOfClass(node, wxT("wxComboContro")) ||
+//    return (IsOfClass(node, wxT("wxComboControl")) ||
 //           (m_insideBox && node->GetName() == wxT("item")));
 	bool fOurClass = node->GetPropVal(wxT("class"), wxEmptyString) == wxT("wxComboControl");
     return (fOurClass ||
