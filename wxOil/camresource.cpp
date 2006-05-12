@@ -1396,6 +1396,9 @@ BOOL CamResource::Init()
 #if !defined(EXCLUDE_FROM_XARLIB)
 	wxXmlResource::Get()->AddHandler(new wxCamArtControlXmlHandler);
 	wxXmlResource::Get()->AddHandler(new wxCamDrawControlXmlHandler);
+#ifdef WXXTRA_COMBO_XML_HANDLERS
+	wxXmlResource::Get()->AddHandler(new wxComboControlXmlHandler);
+#endif
 #endif
 
 	if (!pwxFileSystem) pwxFileSystem = new wxFileSystem;

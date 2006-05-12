@@ -18,6 +18,7 @@
 #define _WXXTRA_GENERIC_COMBOCONTROL_H_
 
 #include <wx/wx.h>
+#include "wx/xrc/xmlres.h"
 
 #if wxUSE_COMBOCONTROL
 #undef wxXTRA_COMBOCONTROL
@@ -135,6 +136,20 @@ private:
 };
 
 #endif // _WX_COMBOCONTROL_H_
+
+#define WXXTRA_COMBO_XML_HANDLERS
+
+class WXDLLIMPEXP_XRC wxComboControlXmlHandler : public wxXmlResourceHandler
+{
+DECLARE_DYNAMIC_CLASS(wxComboControlXmlHandler)
+public:
+    wxComboControlXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+private:
+    bool m_insideBox;
+    wxArrayString strList;
+};
 
 #else
 

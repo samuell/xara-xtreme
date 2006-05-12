@@ -48,7 +48,6 @@
 #else
 #define wxXTRA_COMBOCONTROL 1
 
-
 class WXDLLEXPORT wxComboPopup;
 
 //
@@ -197,6 +196,7 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
+    virtual void SetSelection(long sel) {SetSelection(sel, sel);}
     virtual void Undo();
 
     //

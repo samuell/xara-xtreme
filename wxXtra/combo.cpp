@@ -25,9 +25,10 @@
 #include <wx/wx.h>
 
 #include "combo.h"
-#if wxWXXTRA_COMBOCONTROL
+#if wxXTRA_COMBOCONTROL
 
 #include <wx/renderer.h>
+#include <wx/tooltip.h>
 
 // constants
 // ----------------------------------------------------------------------------
@@ -1178,12 +1179,13 @@ void wxComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg 
                 dc.SetBrush(bgCol);
                 dc.DrawRectangle(rect);
             }
-
+#if 0
+// Not available on 2.6 - Help!
             wxRendererNative::Get().DrawPushButton(this,
                                                    dc,
                                                    drawRect,
                                                    drawState);
-
+#endif
         }
         else
 
