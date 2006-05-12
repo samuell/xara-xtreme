@@ -1338,6 +1338,11 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 				If the window is of type wxPropertySheetDialog then it Gadget is not
 				required
 
+Note that the intelligence to use the default gadget won't be there until the window
+has been created properly and the event handler added. So if this is being called
+from a window creation function (like AddAPage) it is worth specifying the gadget
+explicitly.
+
 ********************************************************************************************/
 
 wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gadget /* =0 */)
@@ -1348,6 +1353,19 @@ wxBookCtrlBase * DialogManager::GetBookControl(CWindowID WindowID, CGadgetID Gad
 	// If it's a property sheet dialog then we know a quick way...
 	if (WindowID->IsKindOf(CLASSINFO(wxPropertySheetDialog)))
 		return ((wxPropertySheetDialog*)WindowID)->GetBookCtrl();
+
+	// Let's see if there is a default gadget to use in the DialogOp
+	if (!Gadget)
+	{
+		if ((WindowID->GetEventHandler())->IsKindOf(CLASSINFO(DialogEventHandler)))
+		{
+			DialogOp * pDialogOp = ((DialogEventHandler *)(WindowID->GetEventHandler()))->pDialogOp;
+			// If it's a DialogTabOp, ask it for its default book gadget. If there isn't
+			// one, that's OK too
+			if ((pDialogOp) && (pDialogOp->IS_KIND_OF(DialogTabOp)))
+				Gadget=((DialogTabOp*)pDialogOp)->GetDefaultBookGadget();
+		}
+	}
 
 	// If we were passed a gadget ID, we can go use it
 	if (Gadget)
@@ -6421,13 +6439,15 @@ wxPropertySheetDialog* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDial
 
 /********************************************************************************************
 
->	BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
+>	BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, CGadgetID Gadget=0)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	22/11/94
 	Inputs:		pDialogTabOp: The operation we wish to add a page too
 				DialogResID:  The resource ID of the dialog page we wish to add to the
 							  DialogTabOp
+				Gadget		  The gadget of the book control to add the page to (or zero to
+							  take a good guess)
 	Outputs:	-
 	Returns:	TRUE if the page was added successfully.
 	Purpose:	Adds a page to the tabbed dialog with resource ID DialogResID.
@@ -6437,11 +6457,11 @@ wxPropertySheetDialog* DialogManager::GetPropertySheetFromOp( DialogTabOp* pDial
 ********************************************************************************************/
 
 
-BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID)
+BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, CGadgetID Gadget)
 {
 	// Try to add the page to the property sheet associated with the DialogTabOp
 	// let's try and find it
-	wxBookCtrlBase*	pNoteBook = GetBookControl(pDialogTabOp->WindowID);
+	wxBookCtrlBase*	pNoteBook = GetBookControl(pDialogTabOp->WindowID, Gadget);
 
 	// We need to create a page object
 	// Because wxNotebookPage is derived from an MFC object we have to cope with exceptions

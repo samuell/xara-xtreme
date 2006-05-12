@@ -568,7 +568,7 @@ public:
 
 	// A function to add a dialog page to the tabbed dialog. Note that this function can be
 	// called many times before the dialog is made visible. 
-   	BOOL AddAPage(CDlgResID DialogResID); 
+   	BOOL AddAPage(CDlgResID DialogResID, CGadgetID Gadget=0); 
 
 	// Call this function before calling create. It sets the name displayed in the dialog's
 	// title bar window
@@ -593,6 +593,7 @@ public:
 	virtual BOOL HasImages() {return FALSE;}
 
 	virtual TabType GetTabType() {return TABTYPE_TABS;}
+	virtual CGadgetID GetDefaultBookGadget() {return (CGadgetID)0;}
 
 	// The DialogOP destructor destroys the instance of the DialogTabOp and all  	
 	// associated resources. If the dialog was open then it is closed. 

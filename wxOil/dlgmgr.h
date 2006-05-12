@@ -683,7 +683,7 @@ public:
 	// --------------------------------------------------------------------------------------
 	// Functions which are specific to Tabbed dialogs
 	// This function adds a page to a tabbed dialog
-	static BOOL AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID); 
+	static BOOL AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, CGadgetID Gadget=0); 
 
 	// This function maps a property sheet window ID, and a PageID to a Page window ID
 	static CWindowID GetPageWindow(CWindowID Win, CDlgResID PageID,  INT32* PageIndex = NULL);

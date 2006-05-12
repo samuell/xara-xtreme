@@ -3075,14 +3075,18 @@ DialogTabOp::DialogTabOp(CDlgResID DummyDialogResID,
 
 /********************************************************************************************
 
->	BOOL DialogTabOp::AddAPage(CDlgResID DialogResID)
+>	BOOL DialogTabOp::AddAPage(CDlgResID DialogResID, CGadgetID Gadget=0)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/11/94
 	Inputs:		DialogResID: Dialog resource ID of the page you want to add to the Tabbed 
 							 dialog. 
-
-							 
+				GadgetID:	 The gadget ID of the book control to add it to, or zero
+							 for the default one (either specified using GetDefaultBookGadget
+							 or just the first one it finds). You only need specify this if
+							 the dialog contains multiple book controls (if there are
+							 multiple book controls and only one is kernel managed, the
+							 best thing to do is to override GetDefaultBookGadget)
 	Outputs:	-
 	Returns:	-
 	Purpose:	This function adds a dialog page to the tabbed dialog. 
@@ -3100,10 +3104,10 @@ DialogTabOp::DialogTabOp(CDlgResID DummyDialogResID,
 
 ********************************************************************************************/
 
-BOOL DialogTabOp::AddAPage(CDlgResID DialogResID)
+BOOL DialogTabOp::AddAPage(CDlgResID DialogResID, CGadgetID Gadget/*=0*/)
 {	  
 	// Ask the Dialog Manager to add the page 
-	return (DlgMgr->AddAPage(this, DialogResID)); 
+	return (DlgMgr->AddAPage(this, DialogResID, Gadget)); 
 }; 
 
 /********************************************************************************************
