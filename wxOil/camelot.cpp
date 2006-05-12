@@ -261,7 +261,10 @@ int CCamApp::FilterEvent( wxEvent& event )
 		// Is the object allowed to recieve keys? 
 		wxClassInfo* pClassInfo = pEventObject->GetClassInfo();
 		if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) )
+			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
+			pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
+			pClassInfo->IsKindOf( CLASSINFO(wxComboControl) )
+			)
 		{
 			TRACEUSER( "jlh92", _T("Control gets keys") );
 			// Yes, pass on as usual
