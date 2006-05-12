@@ -767,6 +767,13 @@ PORTNOTE("other", "Disabled OLE")
 	if (pcszPathName) SetOriginalPath(TEXT(""));
 	m_fIsUntouched = FALSE;
 	SetModified(FALSE);
+	SetDocumentSaved(true);
+
+#ifdef __WXMAC__
+    wxFileName fn(pcszPathName) ;
+    fn.MacSetDefaultTypeAndCreator() ;
+#endif
+
 //	StatusLine::SetDefaultPrefix();
 	return TRUE;
 
@@ -1653,7 +1660,103 @@ doesn't work, but in the longer term it will play host to the real SaveAs code
 
 bool CCamDoc::SaveAs()
 {
-	return wxDocument::SaveAs();
+//	return wxDocument::SaveAs();
+    wxDocTemplate *docTemplate = GetDocumentTemplate();
+    if (!docTemplate)
+        return false;
+
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
+    wxString filter = docTemplate->GetDescription() + wxT(" (") + docTemplate->GetFileFilter() + wxT(")|") + docTemplate->GetFileFilter();
+
+    // Now see if there are some other template with identical view and document
+    // classes, whose filters may also be used.
+
+    if (docTemplate->GetViewClassInfo() && docTemplate->GetDocClassInfo())
+    {
+        wxList::compatibility_iterator node = wxDocManager::GetDocumentManager()->GetTemplates().GetFirst();
+        while (node)
+        {
+            wxDocTemplate *t = (wxDocTemplate*) node->GetData();
+
+            if (t->IsVisible() && t != docTemplate &&
+                t->GetViewClassInfo() == docTemplate->GetViewClassInfo() &&
+                t->GetDocClassInfo() == docTemplate->GetDocClassInfo())
+            {
+                // add a '|' to separate this filter from the previous one
+                if ( !filter.empty() )
+                    filter << wxT('|');
+
+                filter << t->GetDescription() << wxT(" (") << t->GetFileFilter() << wxT(") |")
+                       << t->GetFileFilter();
+            }
+
+            node = node->GetNext();
+        }
+    }
+#else
+    wxString filter = docTemplate->GetFileFilter() ;
+#endif
+    wxString path, name, ext;
+
+	// If this document already has a path, make Save As default to that path
+	wxString strDefaultDir = GetFilename();
+	if (!strDefaultDir.IsEmpty())
+	{
+	    wxSplitPath(strDefaultDir, &path, &name, &ext);
+		strDefaultDir = path;
+	}
+
+	if (strDefaultDir.IsEmpty())
+		strDefaultDir = docTemplate->GetDirectory();
+
+    wxString tmp = wxFileSelector(_("Save as"),
+            strDefaultDir,
+            wxFileNameFromPath(GetFilename()),
+            docTemplate->GetDefaultExtension(),
+            filter,
+            wxSAVE | wxOVERWRITE_PROMPT,
+            GetDocumentWindow());
+
+    if (tmp.empty())
+        return false;
+
+    wxString fileName(tmp);
+    wxSplitPath(fileName, & path, & name, & ext);
+
+    if (ext.empty())
+    {
+        fileName += wxT(".");
+        fileName += docTemplate->GetDefaultExtension();
+    }
+
+    SetFilename(fileName);
+    SetTitle(wxFileNameFromPath(fileName));
+
+    // Notify the views that the filename has changed
+    wxList::compatibility_iterator node = m_documentViews.GetFirst();
+    while (node)
+    {
+        wxView *view = (wxView *)node->GetData();
+        view->OnChangeFilename();
+        node = node->GetNext();
+    }
+
+    // Files that were not saved correctly are not added to the FileHistory.
+    if (!OnSaveDocument(m_documentFile))
+        return false;
+
+   // A file that doesn't use the default extension of its document template cannot be opened
+   // via the FileHistory, so we do not add it.
+   if (docTemplate->FileMatchesTemplate(fileName))
+   {
+       GetDocumentManager()->AddFileToHistory(fileName);
+   }
+   else
+   {
+       // The user will probably not be able to open the file again, so
+       // we could warn about the wrong file-extension here.
+   }
+   return true;
 }
 
 
