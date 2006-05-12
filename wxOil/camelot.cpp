@@ -437,6 +437,11 @@ bool CCamApp::OnInit()
 
 	// Register the image handler which loads PNGs (used for TBs)
 	wxImage::AddHandler( new wxPNGHandler );
+
+	// Init the BinReloc stuff (we don't really care if this fails, since it
+	// fails safe)
+	BrInitError	error;
+	br_init( &error );
 	
 	// Useful debug tracing enablers, left here for next debug session...
 //	wxLog::AddTraceMask( _T("focus") );

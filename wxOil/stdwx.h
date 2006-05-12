@@ -213,3 +213,4 @@ T Abs( T val )
 #include "memdebug.h"
 #include "exception.h"
 #include "mfccontainer.h"
+#include "binreloc.h"

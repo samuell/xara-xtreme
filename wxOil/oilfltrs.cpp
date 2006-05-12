@@ -350,12 +350,23 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 #endif
 
 	// Check the config dir exists, if not bomb out
-	const static wxString	g_strConfigPath( _T("/usr/share/xaralx/filters") );
-	if( !wxDir::Exists( g_strConfigPath ) )
-		return TRUE;
+	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
+	wxString	strConfigPath( pszDataPath, wxConvUTF8 );
+	free( pszDataPath );
+	strConfigPath += _T("/xaralx/filters");
+	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strConfigPath) );
+	if( !wxDir::Exists( strConfigPath ) )
+	{
+		// We'll try default location under debug to make life easier
+#if defined(_DEBUG)
+		strConfigPath = _T("/usr/share/xaralx/filters");
+		if( !wxDir::Exists( strConfigPath ) )
+#endif
+			return TRUE;
+	}
 
 	// Setup the directory scan
-	wxDir	dir( g_strConfigPath );
+	wxDir	dir( strConfigPath );
 	if( !dir.IsOpened() )
 	{
 		// wxDir is susposed to explain why this failed, so we can just 
@@ -368,7 +379,7 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 	bool		fOk = dir.GetFirst( &strFilename, _T("*"), wxDIR_FILES );
 	while( fOk )
 	{
-		strFilename = g_strConfigPath + _T("/") + strFilename;
+		strFilename = strConfigPath + _T("/") + strFilename;
 		
 		// Convert the filename to ASCII
 		size_t	cchFile = strFilename.Length();
