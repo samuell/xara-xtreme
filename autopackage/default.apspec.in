@@ -1,0 +1,52 @@
+# -*-shell-script-*-
+
+[Meta]
+RootName: @xaralx.org/xaralx:0.4
+DisplayName: Xara LX Vector Graphics Tool
+ShortName: xaralx
+Maintainer: Neil Howe <neil@xara.com>
+Packager: Anonymous <anonymous@nowhere.com>
+Summary: Xara LX is a vector graphics and photo tool
+URL: http://www.xaralx.org/
+License: GNU General Public License, Version 2
+SoftwareVersion: 0.4
+AutopackageTarget: 1.0
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
+# or ask on autopackage-dev if you don't understand interface versioning in autopackage.
+#
+# InterfaceVersion: 0.0
+
+[Description]
+Xara LX is primarily a vector graphics (drawing and illustration) program but is
+one of the new generation of cross-over products that handles photos and
+drawings with equal ease. See xaralx.org for details. Xara LX is currently
+incomplete as it is an ongoing port to Linux of the finished product Xara Xtreme
+(see www.xara.com/xtreme).
+
+[BuildPrepare]
+#prepareBuild
+cp -r ../xaralx/* $build_root
+
+[BuildUnprepare]
+#unprepareBuild
+
+[Imports]
+echo * | import
+
+[Prepare]
+# Dependency checking
+# require @whatever.you/need 1.0
+
+[Install]
+# Put your installation script here
+installExe bin/xaralx
+copyFiles Examples "$PREFIX/share/xaralx"
+copyFiles doc "$PREFIX/share/xaralx"
+installIcon xaralx.xpm
+installDesktop "Graphics/Vector Graphics" xaralx.desktop
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog
