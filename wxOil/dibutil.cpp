@@ -981,7 +981,22 @@ static void ReadPalette( CCLexFile *File, INT32 HowMany, size_t SizeOfRGB, LPRGB
 	if (SizeOfRGB==sizeof(RGBQUAD))
 	{		
 		// easy - standard Windows palette
+#ifdef __WXMSW__
 		File->read( Result, HowMany * (UINT32)SizeOfRGB );
+#else
+		// silly old OS2 format in chunks of three bytes
+		RGBQUAD rgbx;
+
+		// this isn't exactly efficient but it works, is endian-independent and reliable
+		while (HowMany--)
+		{
+			File->read( &rgbx, sizeof(RGBQUAD) );
+			Result->rgbBlue = rgbx.rgbRed;			// NOTE! We are swapping BGR for RGB
+			Result->rgbGreen = rgbx.rgbGreen;
+			Result->rgbRed = rgbx.rgbBlue;			// NOTE! We are swapping BGR for RGB
+			Result++;
+		}
+#endif
 	}
 	else if (SizeOfRGB==sizeof(RGBTRIPLE))
 	{
@@ -992,9 +1007,15 @@ static void ReadPalette( CCLexFile *File, INT32 HowMany, size_t SizeOfRGB, LPRGB
 		while (HowMany--)
 		{
 			File->read( &rgb, sizeof(RGBTRIPLE) );
+#ifdef __WXMSW__
 			Result->rgbBlue = rgb.rgbtBlue;
 			Result->rgbGreen = rgb.rgbtGreen;
 			Result->rgbRed = rgb.rgbtRed;
+#else
+			Result->rgbBlue = rgb.rgbtRed;			// NOTE! We are swapping BGR for RGB
+			Result->rgbGreen = rgb.rgbtGreen;
+			Result->rgbRed = rgb.rgbtBlue;			// NOTE! We are swapping BGR for RGB
+#endif
 			Result++;
 		}
 	}
