@@ -298,7 +298,7 @@ sub WriteCombo
     print STDOUT $ddindent."            <object class=\"sizeritem\">\n";
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>0</border>\n";
-    print STDOUT $ddindent."                <object class=\"wxComboBox\" name=\"$name\">\n";
+    print STDOUT $ddindent."                <object class=\"wxOwnerDrawnComboBox\" name=\"$name\">\n";
     printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 80);
     WriteFont();
     print STDOUT $ddindent."                    <style>wxCB_DROPDOWN</style>\n";

@@ -947,7 +947,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDCB_ZOOM_COMBO_BOX">
+                <object class="wxOwnerDrawnComboBox" name="IDCB_ZOOM_COMBO_BOX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -985,7 +985,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
+                <object class="wxOwnerDrawnComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -2228,7 +2228,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
+                <object class="wxOwnerDrawnComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -2492,7 +2492,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_NAMEGAL_PROP_IDX">
+                <object class="wxOwnerDrawnComboBox" name="IDC_NAMEGAL_PROP_IDX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -3206,7 +3206,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDCB_ZOOM_COMBO_BOX">
+                <object class="wxOwnerDrawnComboBox" name="IDCB_ZOOM_COMBO_BOX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -3269,7 +3269,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDCB_ZOOM_COMBO_BOX">
+                <object class="wxOwnerDrawnComboBox" name="IDCB_ZOOM_COMBO_BOX">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -3447,7 +3447,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_SIDES">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EDIT_REGSHAPETOOL_SIDES">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -3465,7 +3465,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -3665,7 +3665,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -3851,7 +3851,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -3987,7 +3987,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_GEOMETRY">
+                <object class="wxOwnerDrawnComboBox" name="IDC_GEOMETRY">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4005,7 +4005,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_MAPPING">
+                <object class="wxOwnerDrawnComboBox" name="IDC_MAPPING">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4023,7 +4023,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EFFECT">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EFFECT">
                     <size>96,-1</size>
                     <font>
                         <size>8</size>
@@ -4041,7 +4041,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_BITMAPEFFECT">
+                <object class="wxOwnerDrawnComboBox" name="IDC_BITMAPEFFECT">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4118,7 +4118,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_GEOMETRY">
+                <object class="wxOwnerDrawnComboBox" name="IDC_GEOMETRY">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4136,7 +4136,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_TRANSPTYPE">
+                <object class="wxOwnerDrawnComboBox" name="IDC_TRANSPTYPE">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4154,7 +4154,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_MAPPING">
+                <object class="wxOwnerDrawnComboBox" name="IDC_MAPPING">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -4172,7 +4172,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_BITMAPEFFECT">
+                <object class="wxOwnerDrawnComboBox" name="IDC_BITMAPEFFECT">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
@@ -5602,7 +5602,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_BRUSHTYPE">
+                <object class="wxOwnerDrawnComboBox" name="IDC_BRUSHTYPE">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -5620,7 +5620,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_STROKETYPE">
+                <object class="wxOwnerDrawnComboBox" name="IDC_STROKETYPE">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -5701,7 +5701,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EFFECT">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EFFECT">
                     <size>96,-1</size>
                     <font>
                         <size>8</size>
@@ -6046,7 +6046,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_EFFECT">
+                <object class="wxOwnerDrawnComboBox" name="IDC_EFFECT">
                     <size>96,-1</size>
                     <font>
                         <size>8</size>
@@ -6196,7 +6196,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_BEVEL_TYPE_COMBO">
+                <object class="wxOwnerDrawnComboBox" name="IDC_BEVEL_TYPE_COMBO">
                     <size>96,-1</size>
                     <font>
                         <size>8</size>
@@ -6214,7 +6214,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_BEVEL_SLIDER_COMBO">
+                <object class="wxOwnerDrawnComboBox" name="IDC_BEVEL_SLIDER_COMBO">
                     <size>96,-1</size>
                     <font>
                         <size>8</size>
@@ -6327,7 +6327,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_FONT_COMBO">
+                <object class="wxOwnerDrawnComboBox" name="IDC_FONT_COMBO">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
@@ -6343,7 +6343,7 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxComboBox" name="IDC_POINT_COMBO">
+                <object class="wxOwnerDrawnComboBox" name="IDC_POINT_COMBO">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
