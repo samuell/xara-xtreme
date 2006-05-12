@@ -241,6 +241,9 @@ PORTNOTE("dialog","Removed Windows resource'ism")
 	else
 		SubDlgInst = SubInst;
 #endif
+	
+	// User is interacting, so shouldn't be waiting!
+	OpFlags.HasOwnTimeIndicator = TRUE;
 
 	ParentDlgWnd = ParentWnd;
 }                    
