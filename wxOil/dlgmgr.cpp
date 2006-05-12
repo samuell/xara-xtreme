@@ -502,6 +502,10 @@ void DialogManager::CreateRecursor(wxWindow * pwxWindow)
 	// Process this one
 	wxPlatformDependent::Get()->InitWindow(pwxWindow);
 
+	// bodge OD combo boxes not to have scroll bars so often
+	if (pwxWindow->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+		((wxOwnerDrawnComboBox*)pwxWindow)->SetPopupMaxHeight(600);
+
 	// Now process children if any
 	wxWindowList::Node * pNode = pwxWindow->GetChildren().GetFirst();
 	while (pNode)
