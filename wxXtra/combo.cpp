@@ -1144,7 +1144,18 @@ void wxComboControlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg 
         // Need to clear button background even if m_btn is present
         // (assume non-button background was cleared just before this call so brushes are good)
         if ( paintBg )
+        {
+            wxColour bgCol;
+
+            if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
+                bgCol = GetParent()->GetBackgroundColour();
+            else
+                bgCol = GetBackgroundColour();
+
+            dc.SetBrush(bgCol);
+            dc.SetPen(bgCol);
             dc.DrawRectangle(rect);
+        }
 
         // Draw standard button
         wxRendererNative::Get().DrawComboBoxDropButton(this,
