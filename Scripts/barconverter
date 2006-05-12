@@ -450,8 +450,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_NW">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around top left</tooltip>
-                            <help>Rotate around top left of selection</help>
+                            <tooltip>Set origin to top left</tooltip>
+                            <help>Set origin to top left of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -459,8 +459,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_N">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around top centre</tooltip>
-                            <help>Rotate around top centre of selection</help>
+                            <tooltip>Set origin to top centre</tooltip>
+                            <help>Set origin to top centre of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -468,8 +468,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_NE">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around top right</tooltip>
-                            <help>Rotate around top right of selection</help>
+                            <tooltip>Set origin to top right</tooltip>
+                            <help>Set origin to top right of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -477,8 +477,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_W">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around centre left</tooltip>
-                            <help>Rotate around centre left of selection</help>
+                            <tooltip>Set origin to centre left</tooltip>
+                            <help>Set origin to centre left of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -486,8 +486,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_CENTRE">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around centre</tooltip>
-                            <help>Rotate around centre of selection</help>
+                            <tooltip>Set origin to centre</tooltip>
+                            <help>Set origin to centre of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -495,8 +495,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_E">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around centre right</tooltip>
-                            <help>Rotate around centre right of selection</help>
+                            <tooltip>Set origin to centre right</tooltip>
+                            <help>Set origin to centre right of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -504,8 +504,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_SW">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around bottom left</tooltip>
-                            <help>Rotate around bottom left of selection</help>
+                            <tooltip>Set origin to bottom left</tooltip>
+                            <help>Set origin to bottom left of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -513,8 +513,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_S">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around bottom centre</tooltip>
-                            <help>Rotate around bottom centre of selection</help>
+                            <tooltip>Set origin to bottom centre</tooltip>
+                            <help>Set origin to bottom centre of selection</help>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -522,8 +522,8 @@ sub WriteSelGrid
                         <border>0</border>
                         <object class="wxCamArtControl" name="IDC_SEL_GRID_SE">
                             <camartstyle>wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON|wxCACS_ALLOWHOVER|wxCACS_ALWAYS3D|wxCACS_NOINTERNALBORDER</camartstyle>
-                            <tooltip>Rotate around bottom right</tooltip>
-                            <help>Rotate around bottom right of selection</help>
+                            <tooltip>Set origin to bottom right</tooltip>
+                            <help>Set origin to bottom right of selection</help>
                         </object>
                     </object>
                 </object>
