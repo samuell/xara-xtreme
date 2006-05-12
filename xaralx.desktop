@@ -13,4 +13,3 @@ MimeType=image/xar;application/x-extension-xar;
 FilePattern=xaralx;
 Exec=xaralx %F
 TryExec=xaralx
-GenericName[pt_BR]=
