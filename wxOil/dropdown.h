@@ -170,7 +170,7 @@ protected:		// Useful methods to call from derived classes
 // --- Base class stuff you shouldn't have to mess with
 
 protected:
-	virtual wxSize HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item, INT32 flags, BOOL Draw);
+	virtual wxSize HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item, INT32 flags, BOOL Draw);
 				// Draws the item HandleDrawItem
 
 protected:

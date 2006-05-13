@@ -812,9 +812,9 @@ BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL 
 	dc.SetBrush(brush);
 
 	if (IsSpotColour)
-		dc.DrawEllipse(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetRight(), IconRect.GetBottom());
+		dc.DrawEllipse(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetWidth(), IconRect.GetHeight());
 	else
-		dc.DrawRectangle(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetRight(), IconRect.GetBottom());
+		dc.DrawRectangle(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetWidth(), IconRect.GetHeight());
 
 	// Finish with GBrush
 	GDrawBrush.Stop();

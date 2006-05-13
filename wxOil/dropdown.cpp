@@ -141,7 +141,7 @@ public:
 
 	virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int /*TYPENOTE: CORRECT*/ item, int /*TYPENOTE: CORRECT*/ flags ) const
 	{
-		dc.SetFont( m_font );
+		dc.SetFont( m_useFont );
 		if (m_pDropDown)
 			m_pDropDown->HandleDrawItemInternal(dc, rect, item, flags, TRUE);
 	}
@@ -149,7 +149,7 @@ public:
 	virtual wxCoord OnMeasureItem( size_t item ) const
 	{
 		wxScreenDC dc;
-		dc.SetFont( m_font );
+		dc.SetFont( m_useFont );
 		if (m_pDropDown)
 			return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetHeight();
 		else
@@ -159,7 +159,7 @@ public:
 	virtual wxCoord OnMeasureItemWidth( size_t item ) const
 	{
 		wxScreenDC dc;
-	    dc.SetFont( m_font );
+	    dc.SetFont( m_useFont );
 		if (m_pDropDown)
 			return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetWidth();
 		else
@@ -458,8 +458,10 @@ INT32 DropDown::GetNumberOfItems(void)
 
 ********************************************************************************************/
 
-wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item, INT32 flags, BOOL Draw)
+wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item, INT32 flags, BOOL Draw)
 {
+	const INT32 border = 2;
+
 	if (CCamApp::IsDisabled())			// Inside an error handler
 		return(wxDefaultSize);
 
@@ -473,9 +475,9 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item
 	if (!ItemData)
 	{
 		// It's a divider, so draw it specially - it is a simple black line across the center of the rectangle
-		wxCoord midpoint = rect.GetBottom()+rect.GetHeight()/2;
+		wxCoord midpoint = Rect.GetBottom()+Rect.GetHeight()/2;
 		if (Draw)
-			dc.DrawLine(rect.GetLeft(), midpoint, rect.GetRight(), midpoint);
+			dc.DrawLine(Rect.GetLeft(), midpoint, Rect.GetRight(), midpoint);
 		return(wxSize(-1,5));
 	}
 
@@ -485,8 +487,8 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item
 		// Call the derived class
 		wxRect def(-1,-1,-1,-1);
 		wxSize TextSize = DrawText(ItemData, dc, def, item, FALSE); // Rect is unused here as Draw is FALSE
-		TextSize.x+=4;
-		TextSize.y+=4; // This gives us the bounding rect as we leave some space around it
+		TextSize.x+=2*border;
+		TextSize.y+=2*border; // This gives us the bounding rect as we leave some space around it
 		if (HasIcon(ItemData))
 		{
 			// There is an icon. It's width is equal to the text height less 2 (deflated in both
@@ -496,6 +498,8 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item
 		return TextSize;
 	}
 	
+	wxRect rect=Rect;
+	rect.Deflate(border);
 
 	// Calculate where the colour splodge (if any) will go (also used to shift text to the right later)
 	wxRect IconRect=rect;
@@ -520,7 +524,7 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& rect, INT32 item
 		INT32 shift=IconRect.GetWidth()+6;
 		TextRect.Offset(shift,0);
 		INT32 NewWidth=TextRect.GetWidth()-shift;
-		TextRect.SetWidth(NewWidth<1?1:0);
+		TextRect.SetWidth(NewWidth<1?1:NewWidth);
 	}
 	
 	if (TextRect.GetWidth()>1)		// if there's room to draw any text, draw it
@@ -649,7 +653,7 @@ wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 ite
 	wxSize size(w,dc.GetCharHeight());
 	
 	if (Draw)
-		dc.DrawText( Text, TextRect.x + 2, TextRect.y+2 );
+		dc.DrawText( Text, TextRect.x, TextRect.y );
 
 	return size;
 }
