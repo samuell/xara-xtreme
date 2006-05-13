@@ -61,11 +61,11 @@
 	</object>
 	<object class="wxPanel" name="IDD_BLOBTAB_PG3">
 			 <pos>0,0d</pos> <size>160,100d</size>
-		<object class="wxComboBox" name="IDC_TCOMBO3">
+		<object class="wxOwnerDrawnComboBox" name="IDC_TCOMBO3">
 			 <pos>16,22d</pos> <size>56,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
-		<object class="wxComboBox" name="IDC_TCOMBO4">
+		<object class="wxOwnerDrawnComboBox" name="IDC_TCOMBO4">
 			 <pos>85,22d</pos> <size>48,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
@@ -202,11 +202,11 @@
 			 <pos>119,130d</pos> <size>35,10d</size>
 			<label>Radio6</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBO3">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO3">
 			 <pos>20,182d</pos> <size>56,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBO4">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO4">
 			 <pos>89,182d</pos> <size>48,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>

@@ -22,7 +22,7 @@
 			 <pos>167,0d</pos> <size>50,14d</size>
 			<label>Set new design</label>
 		</object>
-		<object class="wxComboBox" name="IDC_ST_STATE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_ST_STATE">
 			 <pos>225,0d</pos> <size>50,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_LIVE">
@@ -83,7 +83,7 @@
 			 <pos>110,21d</pos> <size>50,14d</size>
 			<label>&amp;Create State</label>
 		</object>
-		<object class="wxComboBox" name="IDC_MUTATE_COLOURS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_MUTATE_COLOURS">
 			 <pos>110,7d</pos> <size>98,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_DELETE_STATE">
@@ -127,7 +127,7 @@
 			 <pos>7,33d</pos> <size>144,24d</size>
 			<label>"Set Design" will take your selection as the basis for the button design of this state. All buttons in this bar will reflect this design.</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BAR_NO_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BAR_NO_COMBO">
 			 <pos>92,18d</pos> <size>60,-1d</size>
 		</object>
 		<title>Set button design in this State</title>

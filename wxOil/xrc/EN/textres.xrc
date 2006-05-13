@@ -2,10 +2,10 @@
 <resource>
 	<object class="wxDialog" name="IDD_TEXT_INFO_BAR">
 			 <pos>0,0d</pos> <size>329,171d</size>
-		<object class="wxComboBox" name="IDC_FONT_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_FONT_COMBO">
 			 <pos>56,10d</pos> <size>68,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_POINT_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_POINT_COMBO">
 			 <pos>135,10d</pos> <size>28,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BOLDBUTTON">

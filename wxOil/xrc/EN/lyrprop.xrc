@@ -27,7 +27,7 @@
 			 <pos>25,20d</pos> <size>85,55d</size>
 			<style>wxLB_SORT</style>
 		</object>
-		<object class="wxComboBox" name="IDC_GUIDETAB_COLOURLIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_GUIDETAB_COLOURLIST">
 			 <pos>55,119d</pos> <size>70,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_GUIDETAB_COLOURTEXT">

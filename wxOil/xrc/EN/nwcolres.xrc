@@ -13,7 +13,7 @@
 		<object class="wxTextCtrl" name="IDC_NEWCOL_NAME">
 			 <pos>28,4d</pos> <size>100,13d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_NEWCOL_COLLIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_NEWCOL_COLLIST">
 			 <pos>4,36d</pos> <size>124,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">

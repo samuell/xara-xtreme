@@ -37,7 +37,7 @@
 			 <pos>6,140d</pos> <size>84,10d</size>
 			<label>Rotate by &amp;270 degrees</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<title>Flip &amp; Rotate</title>
@@ -67,7 +67,7 @@
 			 <pos>94,147d</pos> <size>77,10d</size>
 			<label>Lock &amp;aspect ratio</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_DPI2">
@@ -111,7 +111,7 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxSlider" name="IDC_BFXDLG_BRIGHTNESS">
@@ -157,7 +157,7 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERMONO">
@@ -210,10 +210,10 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
 			 <pos>5,98d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">
@@ -274,7 +274,7 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxSlider" name="IDC_BFXDLG_ALC_SATURATION_SLIDER">
@@ -388,7 +388,7 @@
 			 <pos>6,140d</pos> <size>84,10d</size>
 			<label>Rotate by &amp;270 degrees</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">
@@ -434,7 +434,7 @@
 			 <pos>94,147d</pos> <size>77,10d</size>
 			<label>Lock &amp;aspect ratio</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_DPI2">
@@ -494,10 +494,10 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
 		</object>
 		<object class="wxSlider" name="IDC_BFXDLG_BRIGHTNESS">
@@ -559,7 +559,7 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERMONO">
@@ -629,10 +629,10 @@
 		<object class="wxCamDrawControl" name="IDC_BFXDLG_ORIGREDRAW2">
 			 <pos>102,6d</pos> <size>71,65d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_ORIGCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
 			 <pos>5,98d</pos> <size>77,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">

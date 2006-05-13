@@ -168,7 +168,7 @@
 		<object class="wxTextCtrl" name="IDC_DPIEDIT">
 			 <pos>115,106d</pos> <size>25,13d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_FILLQUALLIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_FILLQUALLIST">
 			 <pos>48,145d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_GROUP_PRINTLAYERS">
@@ -332,7 +332,7 @@
 			 <pos>4,-1096d</pos> <size>56,9d</size>
 			<label>Print &amp;Quality:</label>
 		</object>
-		<object class="wxComboBox" name="cmb1">
+		<object class="wxOwnerDrawnComboBox" name="cmb1">
 			 <pos>55,-1094d</pos> <size>81,-1d</size>
 		</object>
 		<object class="wxStaticText" name="stc5">
@@ -364,7 +364,7 @@
 	</object>
 	<object class="wxDialog" name="IDD_XSEPSOPS">
 			 <pos>0,0d</pos> <size>194,74d</size>
-		<object class="wxComboBox" name="IDC_DPIEDIT">
+		<object class="wxOwnerDrawnComboBox" name="IDC_DPIEDIT">
 			 <pos>10,23d</pos> <size>35,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
@@ -409,15 +409,15 @@
 			 <pos>13,92d</pos> <size>22,9d</size>
 			<label> </label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBORESOLUTION">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBORESOLUTION">
 			 <pos>110,43d</pos> <size>62,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOFREQUENCY">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOFREQUENCY">
 			 <pos>110,59d</pos> <size>62,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOTYPE">
 			 <pos>110,75d</pos> <size>84,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>

@@ -45,7 +45,7 @@
 			 <pos>7,81d</pos> <size>72,8d</size>
 			<label>Sequence progresses:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOSEQUENCETYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOSEQUENCETYPE">
 			 <pos>85,78d</pos> <size>48,-1d</size>
 		</object>
 		<title>Spacing</title>
@@ -64,7 +64,7 @@
 			 <pos>9,7d</pos> <size>57,8d</size>
 			<label>Direction from line</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOPATHOFFSETTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOPATHOFFSETTYPE">
 			 <pos>73,4d</pos> <size>55,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATICPATHOFFSETRAND">

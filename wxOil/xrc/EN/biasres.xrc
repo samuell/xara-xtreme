@@ -10,7 +10,7 @@
 			 <pos>7,129d</pos> <size>100,15d</size>
 			<style>wxSL_HORIZONTAL</style>
 		</object>
-		<object class="wxComboBox" name="IDC_BIASGAIN">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BIASGAIN">
 			 <pos>7,7d</pos> <size>24,-1d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_BIAS">

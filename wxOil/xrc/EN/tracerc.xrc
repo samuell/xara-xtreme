@@ -107,10 +107,10 @@
 			 <pos>105,210d</pos> <size>13,10d</size>
 			<label>0%</label>
 		</object>
-		<object class="wxComboBox" name="IDC_TRACER_BITMAP">
+		<object class="wxOwnerDrawnComboBox" name="IDC_TRACER_BITMAP">
 			 <pos>2,131d</pos> <size>124,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_TRACER_METHOD">
+		<object class="wxOwnerDrawnComboBox" name="IDC_TRACER_METHOD">
 			 <pos>2,149d</pos> <size>124,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEP2">

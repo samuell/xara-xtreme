@@ -5,7 +5,7 @@
 		<object class="wxTextCtrl" name="IDC_SETDELAY">
 			 <pos>70,114d</pos> <size>34,12d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_SETREMOVAL">
+		<object class="wxOwnerDrawnComboBox" name="IDC_SETREMOVAL">
 			 <pos>70,134d</pos> <size>68,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">

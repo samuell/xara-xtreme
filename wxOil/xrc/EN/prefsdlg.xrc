@@ -43,14 +43,14 @@
 			 <pos>11,110d</pos> <size>50,10d</size>
 			<label>&amp;Colour line size</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_COLOURBAR">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_COLOURBAR">
 			 <pos>86,108d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_AUTOCOLOURTXT">
 			 <pos>11,127d</pos> <size>65,10d</size>
 			<label>&amp;Edit local colours in </label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_AUTOCOLOUR">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_AUTOCOLOUR">
 			 <pos>86,125d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_OPTS_AUTOSCROLL">
@@ -120,7 +120,7 @@
 			 <pos>10,87d</pos> <size>140,10d</size>
 			<label>Ask about &amp;closing document views</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_IMPWITHLAYERS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_IMPWITHLAYERS">
 			 <pos>70,115d</pos> <size>125,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_OPTS_EDITGRP">
@@ -131,7 +131,7 @@
 			 <pos>12,148d</pos> <size>55,10d</size>
 			<label>&amp;Angle constraint</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_ANGLECONST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_ANGLECONST">
 			 <pos>70,146d</pos> <size>40,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_NUDGETXT">
@@ -180,7 +180,7 @@
 			 <pos>11,29d</pos> <size>35,10d</size>
 			<label>Paper &amp;size</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_SIZELIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_SIZELIST">
 			 <pos>60,27d</pos> <size>136,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_WIDTHTXT">
@@ -370,14 +370,14 @@
 			 <pos>11,32d</pos> <size>65,10d</size>
 			<label>&amp;Left mouse button</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_LEFTBUTTON">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_LEFTBUTTON">
 			 <pos>80,30d</pos> <size>115,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_RIGHTTXT">
 			 <pos>11,53d</pos> <size>65,10d</size>
 			<label>&amp;Right mouse button</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_RIGHTBUTTON">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_RIGHTBUTTON">
 			 <pos>80,51d</pos> <size>115,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_OPTS_RESET">
@@ -477,14 +477,14 @@
 			 <pos>11,30d</pos> <size>36,9d</size>
 			<label>&amp;Page units:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_PAGEUNITS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_PAGEUNITS">
 			 <pos>51,30d</pos> <size>81,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_OPTS_FONTUNITSTXT">
 			 <pos>11,47d</pos> <size>35,9d</size>
 			<label>&amp;Font units:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_FONTUNITS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_FONTUNITS">
 			 <pos>51,47d</pos> <size>81,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_OPTS_USERUNITSGROUP">
@@ -566,7 +566,7 @@
 		<object class="wxTextCtrl" name="IDC_OPTS_NUMBASEUNITS">
 			 <pos>11,90d</pos> <size>35,12d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_OPTS_BASEUNIT">
+		<object class="wxOwnerDrawnComboBox" name="IDC_OPTS_BASEUNIT">
 			 <pos>55,90d</pos> <size>85,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">
@@ -602,10 +602,10 @@
 			 <pos>15,55d</pos> <size>122,10d</size>
 			<label>New effects are locked by default</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBO_LIVEEFFECT_RES">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO_LIVEEFFECT_RES">
 			 <pos>113,70d</pos> <size>82,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBO_LOCKEDEFFECT_RES">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO_LOCKEDEFFECT_RES">
 			 <pos>113,87d</pos> <size>82,-1d</size>
 		</object>
 		<title>Effects &amp;&amp; Plugins</title>

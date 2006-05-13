@@ -103,7 +103,7 @@
                                             <object class="sizeritem">
                                                 <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
-                                                <object class="wxComboBox" name="IDC_T1COMBO1">
+                                                <object class="wxOwnerDrawnComboBox" name="IDC_T1COMBO1">
                                                     <size>57,-1</size>
                                                     <pos>151,63</pos>
                                                 </object>
@@ -351,7 +351,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_HORIZONTAL</flag>
                         <border>5</border>
-                        <object class="wxComboBox" name="IDC_IMAPTAB_MAPNAME">
+                        <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_MAPNAME">
                             <size>183,-1</size>
                             <pos>295,42</pos>
                             <style>wxCB_SORT</style>
@@ -369,7 +369,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxComboBox" name="IDC_IMAPTAB_APPROX">
+                        <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_APPROX">
                             <size>183,-1</size>
                             <pos>295,86</pos>
                             <style>wxCB_SORT</style>
@@ -576,21 +576,21 @@
 			 <pos>7,8d</pos> <size>30,9d</size>
 			<label>Dithering:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_DITHERING_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_DITHERING_COMBO">
 			 <pos>52,7d</pos> <size>83,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC2">
 			 <pos>7,24d</pos> <size>29,9d</size>
 			<label>Palette:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_PALETTE_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_PALETTE_COMBO">
 			 <pos>52,23d</pos> <size>83,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC3">
 			 <pos>7,40d</pos> <size>42,9d</size>
 			<label>Colour depth:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COLOUR_DEPTH_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COLOUR_DEPTH_COMBO">
 			 <pos>52,38d</pos> <size>83,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC4">
@@ -600,7 +600,7 @@
 		<object class="wxTextCtrl" name="IDC_COLOURS_USED_EDIT">
 			 <pos>52,54d</pos> <size>23,12d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_COLOR_MODEL_LIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COLOR_MODEL_LIST">
 			 <pos>80,54d</pos> <size>55,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC6">
@@ -663,7 +663,7 @@
 			 <pos>267,73d</pos> <size>25,9d</size>
 			<label>Sort By:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_T2_SORT_LIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_T2_SORT_LIST">
 			 <pos>296,71d</pos> <size>68,-1d</size>
 		</object>
 		<title>Palette Options</title>

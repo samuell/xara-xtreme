@@ -27,10 +27,10 @@
 			 <pos>59,107d</pos> <size>35,10d</size>
 			<label>Spread</label>
 		</object>
-		<object class="wxComboBox" name="IDC_ALIGNDIALOG_HORIZONTAL">
+		<object class="wxOwnerDrawnComboBox" name="IDC_ALIGNDIALOG_HORIZONTAL">
 			 <pos>4,133d</pos> <size>105,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_ALIGNDIALOG_VERTICAL">
+		<object class="wxOwnerDrawnComboBox" name="IDC_ALIGNDIALOG_VERTICAL">
 			 <pos>4,158d</pos> <size>105,-1d</size>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">

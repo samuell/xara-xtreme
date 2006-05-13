@@ -21,7 +21,7 @@
 			 <pos>13,141d</pos> <size>155,8d</size>
 			<label>File Difference:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_FILE_TYPE_LIST">
+		<object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST">
 			 <pos>121,0d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_ACTIVE2">
@@ -43,7 +43,7 @@
 			 <pos>218,141d</pos> <size>155,8d</size>
 			<label>File Difference:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_FILE_TYPE_LIST2">
+		<object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST2">
 			 <pos>326,0d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_ZOOM_TOOL">

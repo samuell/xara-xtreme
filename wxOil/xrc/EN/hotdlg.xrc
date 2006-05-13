@@ -9,7 +9,7 @@
 			 <pos>127,33d</pos> <size>97,11d</size>
 			<label>Correct URL automatically</label>
 		</object>
-		<object class="wxComboBox" name="IDC_WEBADDRESS_FRAME">
+		<object class="wxOwnerDrawnComboBox" name="IDC_WEBADDRESS_FRAME">
 			 <pos>7,53d</pos> <size>218,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>

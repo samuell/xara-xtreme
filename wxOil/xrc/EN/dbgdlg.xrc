@@ -28,7 +28,7 @@
 			 <pos>15,8d</pos> <size>20,8d</size>
 			<label>Group</label>
 		</object>
-		<object class="wxComboBox" name="IDC_DEBUGDLG_GROUP">
+		<object class="wxOwnerDrawnComboBox" name="IDC_DEBUGDLG_GROUP">
 			 <pos>40,5d</pos> <size>130,-1d</size>
 		</object>
 		<title>Camelot debug commands</title>

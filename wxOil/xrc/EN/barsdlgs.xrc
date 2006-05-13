@@ -381,16 +381,16 @@
 			 <pos>186,50d</pos> <size>16,16d</size>
 			<label>-</label>
 		</object>
-		<object class="wxComboBox" name="IDCB_ZOOM_COMBO_BOX">
+		<object class="wxOwnerDrawnComboBox" name="IDCB_ZOOM_COMBO_BOX">
 			 <pos>291,12d</pos> <size>36,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
+		<object class="wxOwnerDrawnComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
 			 <pos>258,12d</pos> <size>32,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDLB_JOINTYPE_LIST_BOX">
+		<object class="wxOwnerDrawnComboBox" name="IDLB_JOINTYPE_LIST_BOX">
 			 <pos>300,12d</pos> <size>46,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDLB_LINECAP_LIST_BOX">
+		<object class="wxOwnerDrawnComboBox" name="IDLB_LINECAP_LIST_BOX">
 			 <pos>300,12d</pos> <size>43,-1d</size>
 		</object>
 		<title>Dummy standard bar</title>
@@ -403,16 +403,16 @@
 	</object>
 	<object class="wxDialog" name="IDD_GRIDDLG">
 			 <pos>0,0d</pos> <size>329,21d</size>
-		<object class="wxComboBox" name="IDC_UNITS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_UNITS">
 			 <pos>63,4d</pos> <size>54,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_GRIDTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_GRIDTYPE">
 			 <pos>183,4d</pos> <size>54,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_DIVISIONS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_DIVISIONS">
 			 <pos>6,4d</pos> <size>48,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_SUBDIVISIONS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_SUBDIVISIONS">
 			 <pos>126,4d</pos> <size>48,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_MAKEGRID">
@@ -424,16 +424,16 @@
 	</object>
 	<object class="wxDialog" name="IDD_GRIDTOOL">
 			 <pos>0,0d</pos> <size>394,22d</size>
-		<object class="wxComboBox" name="IDC_DIVISIONS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_DIVISIONS">
 			 <pos>5,5d</pos> <size>36,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_UNITS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_UNITS">
 			 <pos>46,5d</pos> <size>54,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_SUBDIVISIONS">
+		<object class="wxOwnerDrawnComboBox" name="IDC_SUBDIVISIONS">
 			 <pos>105,5d</pos> <size>36,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_GRIDTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_GRIDTYPE">
 			 <pos>146,5d</pos> <size>54,-1d</size>
 		</object>
 		<title></title>
@@ -546,7 +546,7 @@
 	</object>
 	<object class="wxDialog" name="IDD_INFOBAR">
 			 <pos>0,0d</pos> <size>122,19d</size>
-		<object class="wxComboBox" name="IDC_LAYER_COMBO">
+		<object class="wxOwnerDrawnComboBox" name="IDC_LAYER_COMBO">
 			 <pos>10,3d</pos> <size>88,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_INVOKE_LYR_DLG">
@@ -661,10 +661,10 @@
 			 <pos>7,20d</pos> <size>24,9d</size>
 			<label>Spacing:</label>
 		</object>
-		<object class="wxComboBox" name="IDC_BRUSHTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_BRUSHTYPE">
 			 <pos>175,15d</pos> <size>28,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_STROKETYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_STROKETYPE">
 			 <pos>175,15d</pos> <size>28,-1d</size>
 		</object>
 		<title></title>
@@ -684,7 +684,7 @@
 			 <pos>5,25d</pos> <size>10,14d</size>
 			<style>wxSP_VERTICAL</style>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOBOX_LE_ORDER2">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_ORDER2">
 			 <pos>5,5d</pos> <size>85,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
@@ -692,7 +692,7 @@
 			 <pos>10,45d</pos> <size>50,8d</size>
 			<label>Change/Insert</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOBOX_LE_TYPE2">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_TYPE2">
 			 <pos>5,60d</pos> <size>85,-1d</size>
 			<style>wxCB_SORT</style>
 		</object>
@@ -708,10 +708,10 @@
 			 <pos>5,120d</pos> <size>40,14d</size>
 			<label>Remove All</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOBOX_LE_TYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_TYPE">
 			 <pos>100,60d</pos> <size>70,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOBOX_LE_ORDER">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_ORDER">
 			 <pos>100,5d</pos> <size>100,-1d</size>
 		</object>
 		<object class="wxButton" name="IDC_BUTTON_LE_ADD">
@@ -758,7 +758,7 @@
 			 <pos>55,120d</pos> <size>40,14d</size>
 			<label>Setup...</label>
 		</object>
-		<object class="wxComboBox" name="IDC_COMBOBOX_LE_RES">
+		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_RES">
 			 <pos>205,60d</pos> <size>40,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_CCBUTTON_LE_TOGGLELOCK">

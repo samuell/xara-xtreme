@@ -597,7 +597,7 @@ sub ParseComboBox
     # value. wxWidgets then centres them vertically which result in a vertical offset
     $rect[3]=-1;
 
-    print OUTPUT "\t\t<object class=\"wxComboBox\"";
+    print OUTPUT "\t\t<object class=\"wxOwnerDrawnComboBox\"";
     WriteBasicInfo (@rect, $varname);
     WriteStyle ("wxCB_SIMPLE") if ($token =~ /CBS_SIMPLE/);
     WriteStyle ("wxCB_SORT") if ($token =~ /CBS_SORT/);

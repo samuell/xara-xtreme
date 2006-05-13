@@ -2,7 +2,7 @@
 <resource>
 	<object class="wxDialog" name="IDD_COLOUREDITDLG">
 			 <pos>0,0d</pos> <size>142,126d</size>
-		<object class="wxComboBox" name="IDC_EDIT_NAMEMENU">
+		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_NAMEMENU">
 			 <pos>4,4d</pos> <size>85,-1d</size>
 		</object>
 		<object class="wxCamArtControl" name="IDC_EDIT_MAKESTYLE">
@@ -35,17 +35,17 @@
 		<object class="wxTextCtrl" name="IDC_EDIT_WEBHEX">
 			 <pos>54,128d</pos> <size>40,12d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_EDIT_COLMODEL">
+		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_COLMODEL">
 			 <pos>4,144d</pos> <size>104,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_EDIT_3D">
 			 <pos>112,144d</pos> <size>24,12d</size>
 			<label>&amp;3D</label>
 		</object>
-		<object class="wxComboBox" name="IDC_EDIT_COLTYPE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_COLTYPE">
 			 <pos>4,184d</pos> <size>133,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_EDIT_PARENTCOL">
+		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_PARENTCOL">
 			 <pos>33,200d</pos> <size>103,-1d</size>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_TINT">

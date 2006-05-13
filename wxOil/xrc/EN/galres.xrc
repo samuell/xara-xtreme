@@ -258,10 +258,10 @@
 			 <pos>116,92d</pos> <size>36,12d</size>
 			<label>Export</label>
 		</object>
-		<object class="wxComboBox" name="IDC_NAMEGAL_PROP_IDX">
+		<object class="wxOwnerDrawnComboBox" name="IDC_NAMEGAL_PROP_IDX">
 			 <pos>116,92d</pos> <size>36,-1d</size>
 		</object>
-		<object class="wxComboBox" name="IDC_LIBGAL_CLIPTHEME">
+		<object class="wxOwnerDrawnComboBox" name="IDC_LIBGAL_CLIPTHEME">
 			 <pos>116,92d</pos> <size>45,-1d</size>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">
@@ -289,7 +289,7 @@
 	</object>
 	<object class="wxDialog" name="IDD_SGDISPLAY">
 			 <pos>0,0d</pos> <size>146,39d</size>
-		<object class="wxComboBox" name="IDC_SGDISPLAY_DMODE">
+		<object class="wxOwnerDrawnComboBox" name="IDC_SGDISPLAY_DMODE">
 			 <pos>4,5d</pos> <size>139,-1d</size>
 		</object>
 		<object class="wxButton" name="wxID_OK">
@@ -365,14 +365,14 @@
 	</object>
 	<object class="wxDialog" name="IDD_SGSORT">
 			 <pos>0,0d</pos> <size>227,73d</size>
-		<object class="wxComboBox" name="IDC_GALSORT_SORT1">
+		<object class="wxOwnerDrawnComboBox" name="IDC_GALSORT_SORT1">
 			 <pos>7,17d</pos> <size>76,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE1">
 			 <pos>23,33d</pos> <size>44,10d</size>
 			<label>&amp;Reversed</label>
 		</object>
-		<object class="wxComboBox" name="IDC_GALSORT_SORT2">
+		<object class="wxOwnerDrawnComboBox" name="IDC_GALSORT_SORT2">
 			 <pos>95,17d</pos> <size>76,-1d</size>
 		</object>
 		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE2">
