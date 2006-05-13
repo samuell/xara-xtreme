@@ -377,9 +377,7 @@ BOOL ColourDropDown::UpdateSpecialEntry(StringBase *Text, DocColour *NewColour)
 			Ptr->ItemColour = *NewColour;
 			
 			// And cause the combobox to redraw
-			HWND hGadget = ::GetDlgItem(ParentDlg, ParentGadget);
-			if (hGadget != NULL)
-				::InvalidateRect(hGadget, NULL, FALSE);
+			DialogManager::InvalidateGadget(ParentDlg, ParentGadget);
 
 			return(TRUE);
 		}
@@ -452,7 +450,7 @@ BOOL ColourDropDown::FillInColourList(IndexedColour *Selected, INT32 SelectIndex
 
 		while (Ptr != NULL)
 		{
-			AddItem((DWORD) Ptr);
+			AddItem((void *) Ptr);
 			Ptr = SpecialEntries.GetNext(Ptr);
 		}
 
@@ -491,7 +489,7 @@ BOOL ColourDropDown::FillInColourList(IndexedColour *Selected, INT32 SelectIndex
 			// can safely pass NULL into IsADescendantOf())
 			if (!Ptr->IsDeleted() && Ptr->IsNamed() && !Ptr->IsADescendantOf(NotDescendantOf))
 			{
-				AddItem((DWORD) Ptr);
+				AddItem((void *) Ptr);
 				Result = TRUE;			// We've succeeded in adding at least 1 item
 				if (Ptr == Selected)
 					SelectedIndex = Index;
@@ -616,9 +614,9 @@ IndexedColour *ColourDropDown::DecodeSelection(INT32 SelectionIndex)
 	if (!SpecialEntries.IsEmpty() && SelectionIndex <= (INT32)SpecialEntries.GetCount())
 		return(NULL);
 
-	INT32 Data = GetItemData(SelectionIndex);
-	if (Data == -1)				// If the list is empty, we will get a -1 back, so weed it out
-		return(NULL);
+	void * Data = GetItemData(SelectionIndex);
+//	if (Data == -1)				// If the list is empty, we will get a -1 back, so weed it out
+//		return(NULL);
 
 	// Otherwise, it must be a colour, so fetch the colour pointer...
 	return( (IndexedColour *) Data);
@@ -703,7 +701,7 @@ void ColourDropDown::RedrawColourDropDowns(void)
 
 /********************************************************************************************
 
->	virtual BOOL ColourDropDown::HasIcon(DWORD ItemData)
+>	virtual BOOL ColourDropDown::HasIcon(void * ItemData)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
@@ -726,7 +724,7 @@ void ColourDropDown::RedrawColourDropDowns(void)
 
 ********************************************************************************************/
 
-BOOL ColourDropDown::HasIcon(DWORD ItemData)
+BOOL ColourDropDown::HasIcon(void * ItemData)
 {
 	// All our items have a colour splodge
 	return(TRUE);
@@ -736,14 +734,14 @@ BOOL ColourDropDown::HasIcon(DWORD ItemData)
 
 /********************************************************************************************
 
->	virtual BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect,
+>	virtual BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect,
 											BOOL Disabled)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
 
 	Inputs:		ItemData - Your item data
-				hDC - The DC to render into
+				dc - The DC to render into
 				IconRect - points at a rectangle (square in fact) to be drawn within
 				Disabled - TRUE if this item is disabled so the icon should be drawn greyed
 
@@ -764,14 +762,15 @@ BOOL ColourDropDown::HasIcon(DWORD ItemData)
 
 ********************************************************************************************/
 
-BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disabled)
+BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled)
 {
-	GDrawBrush.Init(hDC);
+	GDrawBrush.Init(&dc);
 	GDrawBrush.Start();
 
-	LOGBRUSH LogBrush;
-	HGDIOBJ OldPen;
-	DWORD rgb;
+	wxBrush OldBrush=dc.GetBrush();
+	wxPen OldPen=dc.GetPen();
+
+	COLORREF rgb;
 
 	BOOL IsSpotColour = FALSE;
 
@@ -779,7 +778,7 @@ BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disa
 	{
 		// The item is disabled, so just put a light grey splodge in the place of the colour
 		rgb = RGB(192, 192, 192);
-	 	OldPen = ::SelectObject(hDC, ::GetStockObject(NULL_PEN));
+	 	dc.SetPen(*wxTRANSPARENT_PEN);
 	}
 	else
 	{
@@ -801,33 +800,27 @@ BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disa
 		else
 			rgb = ConvertColourToScreenWord(CCrgbt, &(((SpecialEntry *)ItemData)->ItemColour));
 
-	 	OldPen = ::SelectObject(hDC, ::GetStockObject(BLACK_PEN));
+	 	dc.SetPen(*wxBLACK_PEN);
 	}
 
+	wxBrush brush;
 	if (GDrawBrush.Available())
-		GDrawBrush.GetLogBrush(rgb, &LogBrush);
+		GDrawBrush.GetLogBrush(rgb, &brush);
 	else
-	{
-		LogBrush.lbStyle = BS_SOLID;
-		LogBrush.lbColor = rgb;
-		LogBrush.lbHatch = 0;
-	}
+		brush=wxBrush(rgb);
 
-	HBRUSH TheBrush  = ::CreateBrushIndirect(&LogBrush);
-	HGDIOBJ OldBrush = ::SelectObject(hDC, TheBrush);
+	dc.SetBrush(brush);
 
 	if (IsSpotColour)
-		::Ellipse(hDC, IconRect->left, IconRect->top, IconRect->right, IconRect->bottom);
+		dc.DrawEllipse(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetRight(), IconRect.GetBottom());
 	else
-		::Rectangle(hDC, IconRect->left, IconRect->top, IconRect->right, IconRect->bottom);
-
-	::SelectObject(hDC, OldBrush);
-	::DeleteObject(TheBrush);
-
- 	::SelectObject(hDC, OldPen);
+		dc.DrawRectangle(IconRect.GetLeft(), IconRect.GetTop(), IconRect.GetRight(), IconRect.GetBottom());
 
 	// Finish with GBrush
 	GDrawBrush.Stop();
+
+	dc.SetBrush(OldBrush);
+	dc.SetPen(OldPen);
 
 	return(TRUE);
 }
@@ -836,15 +829,13 @@ BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disa
 
 /********************************************************************************************
 
->	virtual BOOL ColourDropDown::DrawText(DWORD ItemData, HDC hDC, RECT *TextRect)
+>	virtual wxString ColourDropDown::GetText(void * ItemData)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
 
 	Inputs:		ItemData - Your item data
-				HDC - the DC to draw into
-				TextRect - points at a rectangle in which the text should be rendered
-
+				
 	Returns:	TRUE if redraw went well
 
 	Purpose:	Draws the text for an item
@@ -863,24 +854,23 @@ BOOL ColourDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disa
 
 ********************************************************************************************/
 
-BOOL ColourDropDown::DrawText(DWORD ItemData, HDC hDC, RECT *TextRect)
+wxString ColourDropDown::GetText(void * ItemData)
 {
-	ERROR3IF(ItemData == NULL || TextRect == NULL, "NULL Itemdata/TextRect in ColourDropDown::DrawText");
+	ERROR3IF(ItemData == NULL, "NULL Itemdata in ColourDropDown::DrawText");
 
 	// Determine if it's a colour or a special item, and find the text to draw
-	LPCTSTR TextToDraw = NULL;
+	TCHAR * TextToDraw = NULL;
 
 	CCObject *Item = (CCObject *) ItemData;
 	if (Item->IsKindOf(CC_RUNTIME_CLASS(IndexedColour)))
-		TextToDraw = (LPCTSTR) ( (TCHAR *) (*((IndexedColour *)ItemData)->GetName()) );
+		TextToDraw = ( (TCHAR *) (*((IndexedColour *)ItemData)->GetName()) );
 	else
-		TextToDraw = (LPCTSTR) ( (TCHAR *) ((SpecialEntry *)ItemData)->ItemText );
+		TextToDraw = ( (TCHAR *) ((SpecialEntry *)ItemData)->ItemText );
 
-	// Draw the text...
-	if (TextToDraw != NULL)
-		::DrawText(hDC, TextToDraw, -1, TextRect, DT_LEFT | DT_VCENTER);
-
-	return(TRUE);
+	if (TextToDraw)
+		return wxString(TextToDraw);
+	else
+		return wxEmptyString;
 }
 
 
@@ -929,17 +919,19 @@ MsgResult ColourDropMsgHandler::Message(Msg* Message)
 		ColourChangingMsg *Msg = (ColourChangingMsg *) Message;
 		switch ( Msg->State )
 		{
-			case ColourChangingMsg::ColourState::LISTDESELECTED:
-//			case ColourChangingMsg::ColourState::LISTPAGED:
-//			case ColourChangingMsg::ColourState::LISTUPDATED:
-//			case ColourChangingMsg::ColourState::COLOURUPDATED:
+			case ColourChangingMsg::LISTDESELECTED:
+//			case ColourChangingMsg::LISTPAGED:
+//			case ColourChangingMsg::LISTUPDATED:
+//			case ColourChangingMsg::COLOURUPDATED:
 				ColourDropDown::UpdateForNewColourList();
 				break;
 
-			case ColourChangingMsg::ColourState::SELVIEWCONTEXTCHANGE:
+			case ColourChangingMsg::SELVIEWCONTEXTCHANGE:
 				// The colour context for the selected view has chnaged, so we must immediately
 				// force a redraw to make sure we show the colours with correction/separation.
 				ColourDropDown::RedrawColourDropDowns();
+				break;
+			default:
 				break;
 		}
 	}

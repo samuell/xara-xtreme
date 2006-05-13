@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "nev.h"		// error messages
 #include "prpsgds.h"
 #include "guides.h"
-//#include "coldrop.h"
+#include "coldrop.h"
 #include "fixmem.h"
 #include "document.h"
 //#include "markn.h"
@@ -174,11 +174,9 @@ GuidesPropertiesTab::GuidesPropertiesTab()
 																				
 GuidesPropertiesTab::~GuidesPropertiesTab()
 {
-PORTNOTE("other", "Disabled Colour Dropdown")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown != NULL)
 		delete pColourDropDown;
-#endif
+
 	GuidelineList.DeleteAll();
 }        
 
@@ -515,8 +513,6 @@ BOOL GuidesPropertiesTab::ShowGuidelines(Layer* pLayer)
 
 BOOL GuidesPropertiesTab::ShowColours()
 {
-PORTNOTE("other", "Disabled Colour Dropdown")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown != NULL)
 	{
 		IndexedColour* pIndexedColour = NULL;
@@ -553,7 +549,6 @@ PORTNOTE("other", "Disabled Colour Dropdown")
 		else
 			pColourDropDown->FillInColourList(NULL,0);
 	}
-#endif
 	return TRUE;
 }
 
@@ -649,8 +644,6 @@ BOOL GuidesPropertiesTab::UpdateGuidelineSection()
 
 BOOL GuidesPropertiesTab::ColourListChanged(Document* pDoc)
 {
-PORTNOTE("other", "Disabled Colour Dropdown")
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pPropertiesDlg == NULL,FALSE,"GuidesPropertiesTab::UpdateGuidelineSection() called with no dialog pointer");
 	ERROR2IF(pColourDropDown == NULL,FALSE,"ptr to 'colour drop down' is NULL");
 
@@ -666,7 +659,6 @@ PORTNOTE("other", "Disabled Colour Dropdown")
 		else
 			pColourDropDown->ClearList();			
 	}
-#endif
 	return TRUE;
 }
 
@@ -776,8 +768,6 @@ TRACEUSER( "Neville", _T("GuidesPropertiesTab::HandleMsg\n"));
 
 BOOL GuidesPropertiesTab::ColourChanged(INT32 Index)
 {
-PORTNOTE("other", "Disabled Colour Dropdown")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pColourDropDown == NULL || Index < 0)
 		return FALSE;
  
@@ -797,7 +787,6 @@ PORTNOTE("other", "Disabled Colour Dropdown")
 //		pLayer->SetGuideColour(pNewColour);
 //		LayerSGallery::ForceRedrawLayer(pDocument,pLayer);
 	}
-#endif
 	return TRUE;
 }
 
@@ -1010,12 +999,9 @@ BOOL GuidesPropertiesTab::InitSection()
 TRACEUSER( "Neville", _T("GuidesPropertiesTab::InitSection\n"));
 	ERROR2IF(pPropertiesDlg == NULL,FALSE,"GuidesPropertiesTab::InitSection called with no dialog pointer");
 
-PORTNOTE("other", "Disabled colour dropdown")
-#ifndef EXCLUDE_FROM_XARALX
 	pColourDropDown = new ColourDropDown;
 	if (pColourDropDown != NULL)
 		pColourDropDown->Init(pPropertiesDlg->GetReadWriteWindowID(),_R(IDC_GUIDETAB_COLOURLIST));
-#endif
 
 	ShowDetails();
 

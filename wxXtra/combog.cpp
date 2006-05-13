@@ -251,7 +251,7 @@ void wxGenericComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         DrawButton(dc,rectb,true);
 
     // paint required portion on the control
-    if ( !m_text || m_widthCustomPaint )
+    if ( (!m_text || m_widthCustomPaint) )
     {
         wxASSERT( m_widthCustomPaint >= 0 );
 
@@ -263,7 +263,10 @@ void wxGenericComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.SetFont( GetFont() );
 
         dc.SetClippingRegion(rect);
-        m_popupInterface->PaintComboControl(dc,rect);
+        if ( m_popupInterface )
+            m_popupInterface->PaintComboControl(dc,rect);
+        else
+            wxComboPopup::DefaultPaintComboControl(this,dc,rect);
     }
 }
 
@@ -277,7 +280,14 @@ void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
     if ( PreprocessMouseEvent(event,handlerFlags) )
         return;
 
-    if ( (m_windowStyle & (wxCC_SPECIAL_DCLICK|wxCB_READONLY)) == wxCB_READONLY )
+#ifdef __WXMSW__
+    const bool ctrlIsButton = true;
+#else
+    const bool ctrlIsButton = false;
+#endif
+
+    if ( ctrlIsButton &&
+         (m_windowStyle & (wxCC_SPECIAL_DCLICK|wxCB_READONLY)) == wxCB_READONLY )
     {
         // if no textctrl and no special double-click, then the entire control acts
         // as a button
@@ -401,7 +411,7 @@ wxObject *wxComboControlXmlHandler::DoCreateResource()
                         GetName());
 
         if (selection != -1)
-            control->SetSelection(selection);
+            control->SetSelection(selection, selection);
 
         SetupWindow(control);
 

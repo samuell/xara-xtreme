@@ -181,15 +181,14 @@ protected:
 // --- Winoily section
 
 protected:		// Methods that must be overridden by derived classes
-	virtual BOOL HasIcon(DWORD ItemData);
+	virtual BOOL HasIcon(void * ItemData);
 				// Returns TRUE if the item has an icon. Default is no icon
 
-	virtual BOOL DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disabled);
+	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled);
 				// Handles redraw of the icon, if any. Default is nothing gets drawn
 
-	virtual BOOL DrawText(DWORD ItemData, HDC hDC, RECT *TextRect);
-				// Handles redraw of the text for an item. Default draws nothing
-
+	virtual wxString GetText(void * ItemData);
+				// Gets the text
 
 protected:
 	GBrush GDrawBrush;								// A GBrush of our very own

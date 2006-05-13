@@ -43,7 +43,7 @@ libwxOil_a_SOURCES = \
 	drawctl.cpp filedlgs.cpp fileutil.cpp ktimer.cpp camplatform.cpp \
 	outptdib.cpp outptpng.cpp outptgif.cpp gpalopt.cpp bmpfiltr.cpp giffiltr.cpp \
 	fontbase.cpp ftfonts.cpp textfuns.cpp dragbmp.cpp xpoilflt.cpp xmlutils.cpp \
-	camprocess.cpp \
+	camprocess.cpp dropdown.cpp coldrop.cpp \
 	binreloc.c \
 	resources.cpp
 
