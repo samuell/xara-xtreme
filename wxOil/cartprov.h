@@ -229,6 +229,9 @@ public:
 	static CamArtFlags GetBitmapFlags(const wxString &str);
 	static wxString MakeBitmapFlagString(const CamArtFlags flags);
 
+	wxImage * GetMissingImage() const {return m_pMissingImage;}
+	wxBitmap * GetMissingBitmap() const {return m_pMissingBitmap;}
+
 protected:
 	ResIDWithFlagsToBitmapPtr::iterator Find(ResourceID Resource, CamArtFlags Flags, BOOL SkipArtLoad);
 

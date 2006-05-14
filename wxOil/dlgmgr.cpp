@@ -6615,15 +6615,23 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, C
 	// Add images if present
 	if (pDialogTabOp->HasImages())
 	{
-		b = *CamArtProvider::Get()->FindBitmap(DialogResID);
-		if (!b.Ok() || b.GetWidth()!=32 || b.GetHeight()!=32)
+		// Get the image list 
+		pImageList = pNoteBook->GetImageList();
+
+		wxBitmap * pBitmap = CamArtProvider::Get()->FindBitmap(DialogResID);
+		if (!pBitmap || (pBitmap==CamArtProvider::Get()->GetMissingBitmap()) || !pBitmap->Ok())
 		{
 			TRACEUSER("Phil", _T("Unable to use options tab icon %d\n"), DialogResID);
-			b = wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_OTHER, wxSize(32, 32));
+			int /*TYPENOTE: Correct */ w=32;
+			int /*TYPENOTE: Correct */ h=32;
+			if (pImageList)
+				pImageList->GetSize(0, w, h);
+			b = wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_OTHER, wxSize(w, h));
 		}
+		else
+			b= *pBitmap;
 
-		// Get the image list or create one
-		pImageList = pNoteBook->GetImageList();
+		// If there is no image list, create one
 		if (!pImageList)
 		{
 			pImageList = new wxImageList(b.GetWidth(), b.GetHeight());
