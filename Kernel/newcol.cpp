@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "coldrop.h"
 #include "collist.h"
-#include "colpick.h"
+//#include "colpick.h"
 #include "colourix.h"
 //#include "jason.h"
 #include "keypress.h"

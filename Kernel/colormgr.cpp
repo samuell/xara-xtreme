@@ -1561,7 +1561,7 @@ IndexedColour *ColourManager::GenerateNewNamedColour(ColourList *ParentList,
 		NewName.MakeMsg(_R(IDS_NEWCOLOUR));			// No name, so make it named: "New colour"
 */
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 #ifndef STANDALONE
 	// Ask for a new name for the colour. This also gives the user a chance
 	// to back out of the deal without losing their deposit (though if they didn't

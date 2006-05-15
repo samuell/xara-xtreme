@@ -67,6 +67,6 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	optsedit.cpp optsmisc.cpp optspntr.cpp optstune.cpp optsview.cpp optsgrid.cpp \
 	optspage.cpp optsundo.cpp optsscal.cpp optsunit.cpp pagesize.cpp radio.cpp \
 	xpfcaps.cpp xpfilter.cpp xpfrgn.cpp layerprp.cpp prpsgds.cpp prpslyrs.cpp \
-	aprps.cpp prevwdlg.cpp frameops.cpp
+	aprps.cpp prevwdlg.cpp frameops.cpp newcol.cpp
 
 AM_CXXFLAGS = $(XARAFLAGS)
