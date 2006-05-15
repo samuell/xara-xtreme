@@ -254,9 +254,9 @@ DocRect NodeContour::GetBoundingRect(BOOL DontUseAttrs, BOOL HitTest)
 
 	pNode = pNode->FindFirstChild();
 	
-	while (pNode && pNode != this)
+	while (pNode)
 	{
-		if (pNode->IsAnObject())
+		if (pNode->IsAnObject() && pNode!=this)
 		{
 			if (!IsBoundingRectValid)
 			{
