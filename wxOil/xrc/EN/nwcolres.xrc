@@ -15,6 +15,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_NEWCOL_COLLIST">
 			 <pos>4,36d</pos> <size>124,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>4,6d</pos> <size>24,8d</size>

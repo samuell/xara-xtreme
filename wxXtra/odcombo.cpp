@@ -688,7 +688,8 @@ void wxOwnerDrawnComboBox::Clear()
 
     m_popupInterface->Clear();
 
-    GetTextCtrl()->SetValue(wxEmptyString);
+    if (GetTextCtrl())
+        GetTextCtrl()->SetValue(wxEmptyString);
 }
 
 void wxOwnerDrawnComboBox::Delete(int n)

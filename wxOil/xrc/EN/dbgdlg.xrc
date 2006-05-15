@@ -30,6 +30,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_DEBUGDLG_GROUP">
 			 <pos>40,5d</pos> <size>130,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<title>Camelot debug commands</title>
 		<label>Camelot debug commands</label>

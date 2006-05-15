@@ -2497,7 +2497,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <optoken>NameGalleryPropertyIndex</optoken>
                 </object>
             </object>
@@ -3470,7 +3470,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3670,7 +3670,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3856,7 +3856,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3992,7 +3992,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill type</tooltip>
                     <help>Choose the type of fill</help>
                 </object>
@@ -4010,7 +4010,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
                 </object>
@@ -4028,7 +4028,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -4046,7 +4046,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -4123,7 +4123,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Transparency shape</tooltip>
                     <help>Choose the type of fill</help>
                 </object>
@@ -4141,7 +4141,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Transparency type</tooltip>
                     <help>Choose the type of transparency</help>
                 </object>
@@ -4159,7 +4159,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
                 </object>
@@ -4177,7 +4177,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -5607,7 +5607,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Select an existing brush</tooltip>
                     <help>Select an existing brush</help>
                 </object>
@@ -5625,7 +5625,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Select an existing stroke shape / pressure profile</tooltip>
                     <help>Select an existing stroke shape / pressure profile</help>
                 </object>
@@ -5706,7 +5706,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Colour blend effect</tooltip>
                     <help>Choose the way in which colours are blended together</help>
                 </object>
@@ -6051,7 +6051,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Change the colour effect</tooltip>
                     <help>Change the colour effect of the contour rings</help>
                 </object>
@@ -6201,7 +6201,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Bevel type</tooltip>
                     <help>Select the appearance of the bevel from the list</help>
                 </object>
@@ -6219,7 +6219,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                     <tooltip>Slider type</tooltip>
                     <help>Use the slider to change the bevel settings</help>
                 </object>
@@ -6332,7 +6332,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_READONLY</style>
                 </object>
             </object>
             <object class="spacer">

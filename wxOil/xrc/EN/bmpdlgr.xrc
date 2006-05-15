@@ -7,6 +7,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_SETREMOVAL">
 			 <pos>70,134d</pos> <size>68,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>14,181d</pos> <size>43,14d</size>

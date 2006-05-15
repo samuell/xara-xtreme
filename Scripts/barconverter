@@ -150,6 +150,32 @@ sub GetSize
     return $cnamemap{ $control } || $default;
 }
 
+sub GetComboStyle
+{
+    my $control = shift @_;
+    my $default = "wxCB_DROPDOWN";
+
+    my %cnamemap = (
+		    "IDC_NAMEGAL_PROP_IDX" => "wxCB_READONLY",
+		    "IDC_EDIT_REGSHAPETOOL_POS" => "wxCB_READONLY",
+		    "IDC_GEOMETRY" => "wxCB_READONLY",
+		    "IDC_MAPPING" => "wxCB_READONLY",
+		    "IDC_EFFECT" => "wxCB_READONLY",
+		    "IDC_BITMAPEFFECT" => "wxCB_READONLY",
+		    "IDC_GEOMETRY" => "wxCB_READONLY",
+		    "IDC_TRANSPTYPE" => "wxCB_READONLY",
+		    "IDC_MAPPING" => "wxCB_READONLY",
+		    "IDC_BITMAPEFFECT" => "wxCB_READONLY",
+		    "IDC_BRUSHTYPE" => "wxCB_READONLY",
+		    "IDC_STROKETYPE" => "wxCB_READONLY",
+		    "IDC_EFFECT" => "wxCB_READONLY",
+		    "IDC_BEVEL_TYPE_COMBO" => "wxCB_READONLY",
+		    "IDC_BEVEL_SLIDER_COMBO" => "wxCB_READONLY",
+		    "IDC_FONT_COMBO" => "wxCB_READONLY",
+		   );
+    return $cnamemap{ $control } || $default;
+}
+
 sub GetText
 {
     my $n = shift @_;
@@ -301,7 +327,7 @@ sub WriteCombo
     print STDOUT $ddindent."                <object class=\"wxOwnerDrawnComboBox\" name=\"$name\">\n";
     printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 80);
     WriteFont();
-    print STDOUT $ddindent."                    <style>wxCB_DROPDOWN</style>\n";
+    printf STDOUT $ddindent."                    <style>%s</style>\n", GetComboStyle($name);
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
     print STDOUT $ddindent."                </object>\n";

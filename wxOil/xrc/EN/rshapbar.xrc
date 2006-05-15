@@ -39,6 +39,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_REGSHAPETOOL_POS">
 			 <pos>73,13d</pos> <size>68,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_REGSHAPETOOL_UPPER">
 			 <pos>13,73d</pos> <size>25,12d</size>

@@ -20,9 +20,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_ES_COMBO_XBEHAVIOUR">
 			 <pos>6,155d</pos> <size>75,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_ES_COMBO_YBEHAVIOUR">
 			 <pos>92,155d</pos> <size>78,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxStaticText" name="IDC_ES_HORIZONTAL">
 			 <pos>6,145d</pos> <size>37,8d</size>

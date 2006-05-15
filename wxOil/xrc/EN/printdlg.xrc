@@ -170,6 +170,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_FILLQUALLIST">
 			 <pos>48,145d</pos> <size>48,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_GROUP_PRINTLAYERS">
 			 <pos>5,19d</pos> <size>195,30d</size>
@@ -334,6 +335,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="cmb1">
 			 <pos>55,-1094d</pos> <size>81,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxStaticText" name="stc5">
 			 <pos>5,112d</pos> <size>25,9d</size>
@@ -420,6 +422,7 @@
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOTYPE">
 			 <pos>110,75d</pos> <size>84,-1d</size>
 			<style>wxCB_SORT</style>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_CHECKSEPARATIONS">
 			 <pos>11,95d</pos> <size>89,8d</size>

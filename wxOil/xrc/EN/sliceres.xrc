@@ -85,6 +85,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_MUTATE_COLOURS">
 			 <pos>110,7d</pos> <size>98,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxButton" name="IDC_DELETE_STATE">
 			 <pos>110,40d</pos> <size>50,14d</size>
@@ -129,6 +130,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BAR_NO_COMBO">
 			 <pos>92,18d</pos> <size>60,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<title>Set button design in this State</title>
 		<label>Set button design in this State</label>

@@ -602,6 +602,7 @@ sub ParseComboBox
     WriteStyle ("wxCB_SIMPLE") if ($token =~ /CBS_SIMPLE/);
     WriteStyle ("wxCB_SORT") if ($token =~ /CBS_SORT/);
     WriteStyle ("wxCB_ALWAYS_SB") if ($token =~ /CBS_DISABLENOSCROLL/);
+    WriteStyle ("wxCB_READONLY") if ($token =~ /CBS_DROPDOWNLIST/);
     print OUTPUT "\t\t</object>\n";
 }
 

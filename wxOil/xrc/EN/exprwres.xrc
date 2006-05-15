@@ -23,6 +23,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST">
 			 <pos>121,0d</pos> <size>48,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_ACTIVE2">
 			 <pos>213,0d</pos> <size>165,151d</size>
@@ -45,6 +46,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST2">
 			 <pos>326,0d</pos> <size>48,-1d</size>
+			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxCamArtControl" name="IDC_ZOOM_TOOL">
 			 <pos>183,6d</pos> <size>20,20d</size>
