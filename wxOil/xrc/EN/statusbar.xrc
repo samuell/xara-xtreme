@@ -36,8 +36,11 @@
                     <size>-1,12</size>
                     <value>50</value>
                     <range>100</range>
+                    <tooltip>Progress indicator</tooltip>
+                    <help>Displays the progress of a slow job</help>
                 </object>
             </object>
+
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL|wxFIXED_MINSIZE</flag>
                 <border>1</border>
@@ -49,8 +52,8 @@
                     <size>30,13</size>
                     <style>wxALIGN_LEFT|wxST_NO_AUTORESIZE</style>
                     <label>100% </label>
-                    <tooltip>Status bar text</tooltip>
-                    <help>Displays the current status</help>
+                    <tooltip>Progress indicator</tooltip>
+                    <help>Displays the progress of a slow job</help>
                 </object>
             </object>
 
@@ -66,6 +69,8 @@
                <object class="wxCamArtControl" name="IDB_SL_SDRAG0">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <optoken>ToggleSolidDrag</optoken>
+                    <tooltip>Live drag indicator</tooltip>
+                    <help>Indicates the live drag state; click to change</help>
                 </object>
             </object>
 
@@ -80,6 +85,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDB_SL_SNAP">
                     <camartstyle></camartstyle>
+                    <tooltip>Snapped indicator</tooltip>
+                    <help>Indicates that the mouse position has snapped to the grid, guideline, or object</help>
                 </object>
             </object>
 
@@ -94,6 +101,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDB_SL_RENDN">
                     <camartstyle></camartstyle>
+                    <tooltip>Rendering indicator</tooltip>
+                    <help>When animated, indicates that XaraLX is rendering</help>
                 </object>
             </object>
 
