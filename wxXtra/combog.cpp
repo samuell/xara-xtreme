@@ -142,8 +142,8 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     if ( !wxComboControlBase::Create(parent,
                                      id,
                                      value,
-                                     wxDefaultPosition,
-                                     wxDefaultSize,
+                                     pos,
+                                     size,
                                      style | wxFULL_REPAINT_ON_RESIZE,
                                      wxDefaultValidator,
                                      name) )
@@ -159,7 +159,7 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     SetBackgroundStyle( wxBG_STYLE_CUSTOM ); // for double-buffering
 
     // SetSize should be called last
-    SetSize(pos.x,pos.y,size.x,size.y);
+    SetBestSize(size);
 
     return true;
 }

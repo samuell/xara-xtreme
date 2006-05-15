@@ -1125,3 +1125,4 @@ BOOL CCustomList::OnMouseWheel(UINT32 nFlags, short zDelta, CPoint pt)
 	}
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
 }
+	
