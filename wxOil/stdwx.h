@@ -104,6 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/cmdline.h>
 #include <wx/cmdproc.h>
 #include <wx/config.h>
+#include <wx/cshelp.h>
 #include <wx/dcbuffer.h>
 #include <wx/display.h>
 #include <wx/dir.h>

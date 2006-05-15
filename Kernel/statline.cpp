@@ -324,25 +324,19 @@ BOOL StatusLine::RefreshHelpText()
 	if (TextValid)
 		PrefixSelDesc=STATUSLINE_SELDESC_BARDRAG;
 
-//	CWindowID	WinID=NULL;
+	WinCoord	WndPos(0,0);
+	CWindowID	WinID=DialogManager::GetWindowUnderPointer(&WndPos);
 	DocView*	pDocView=NULL;
 	Spread*		pSpread=NULL;
-	WinCoord	WndPos(0,0);
 	DocCoord	DocPos(0,0);
 
 	// if no valid text so far (and valid current doc else something deep down goes BANG)
 	// get mouse pos (in DocCoords), handle of window it is over, DocView ptr, spread ptr
-	if (TextValid!=TRUE && Document::GetCurrent()!=NULL)
+	if (!TextValid && Document::GetCurrent()!=NULL)
 	{
-PORTNOTE("Statline", "Removed use of GetMousePosAndWindowID to abort snap processing")
-#if !defined(EXCLUDE_FROM_XARALX)
-		BOOL MouseOK=CCamApp::GetMousePosAndWindowID(&WinID,&WndPos);
-		if (!MouseOK)
-			return FALSE;
 
 		if (WinID != NULL)
-			pDocView=ScreenView::GetDocViewFromWindowID(WinID);
-#endif
+			pDocView=CCamView::GetDocViewFromWindowID(WinID);
 
 		if (pDocView != NULL)
 		{
@@ -402,6 +396,9 @@ PORTNOTE("statline", "Removed use of ControlHelper")
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_BUTTONS;
 #endif
+			TextValid=DialogManager::GetStatusLineText(&text,NULL);
+			if (TextValid)
+				PrefixSelDesc=STATUSLINE_SELDESC_BUTTONS;
 
 #ifndef STANDALONE
 			if (!TextValid)

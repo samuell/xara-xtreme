@@ -725,6 +725,10 @@ public:
 	// adds the control to the dialog helper class
 	static BOOL AddDialogControlToHelper(CWindowID WindowID, CGadgetID Gadget);
 	static BOOL RemoveDialogControlFromHelper(CWindowID, CGadgetID);
+
+	static BOOL GetStatusLineText(String_256* ptext, CWindowID window);
+	static CWindowID GetWindowUnderPointer(WinCoord * wc = NULL);
+
 public:
 PORTNOTE("dialog","Removed HWND and timer usage")
 #ifndef EXCLUDE_FROM_XARALX

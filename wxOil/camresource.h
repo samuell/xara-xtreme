@@ -114,6 +114,7 @@ class CCLexFile;
 class wxFSFile;
 class wxBimtap;
 class wxSplashScreen;
+class wxHelpProvider;
 
 typedef UINT32 ResourceID;
 
@@ -212,6 +213,7 @@ private:
 	wxFSFile * pwxFSFile;
 	static wxFileSystem * pwxFileSystem;
 	static wxLocale * m_pLocale;
+	static wxHelpProvider * m_pHelpProvider;
 
 public:
 	CCLexFile * Open ( ResourceID ID, BOOL ErrorReporting=TRUE, BOOL ExceptionThrowing=FALSE);

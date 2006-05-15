@@ -125,6 +125,7 @@ wxString * CamResource::pResourcePath = NULL;
 CamResourceRemember * CamResource::pFirstRemember=NULL;
 BOOL CamResource::HaveCheckedResourcePath = FALSE;
 wxLocale * CamResource::m_pLocale = NULL;
+wxHelpProvider * CamResource::m_pHelpProvider = NULL;
 
 ResourceStringToBitmap * CamResource::pBitmapHash = NULL;
 
@@ -133,6 +134,7 @@ TCHAR * CamResource::DefaultObjectName = _T("[Object name not Found]");
 
 wxArrayString CamResource::BitmapExtensions;
 
+#if 0
 #if !defined(EXCLUDE_FROM_XARLIB)
 // Bodge for the toolbar bitmap
 wxImage					imageBevelTool;
@@ -154,6 +156,7 @@ wxImage					imageSlicetool;
 wxImage					imageTextTool;
 wxImage					imageTransTool;
 wxImage					imageZoomTool;
+#endif
 #endif
 
 /********************************************************************************************
@@ -1504,6 +1507,7 @@ BOOL CamResource::Init()
 
 	wxYield(); // yield again to allow repaint
 
+#if 0
 	LoadwxImage(imageBevelTool, _T("lbeveltool32.png") );
 	LoadwxImage(imageBezTool, _T("lbeztool32.png") );
 	LoadwxImage(imageBlendTool, _T("lblendtool32.png") );
@@ -1527,6 +1531,12 @@ BOOL CamResource::Init()
 	TRACET(_T("CamResource::Init() Added images"));
 
 	wxYield(); // yield again to allow repaint
+#endif
+
+	m_pHelpProvider = new wxHelpControllerHelpProvider;
+	if (!m_pHelpProvider)	
+		return FALSE;
+	wxHelpProvider::Set(m_pHelpProvider);
 
 	if (!wxXmlResource::Get()->Load(GetResourceFilePath(_T("dialogs.xrc"))))
 	{
@@ -1601,6 +1611,12 @@ void CamResource::DeleteBitmapHashEntries()
 
 BOOL CamResource::DeInit()
 {
+	if (m_pHelpProvider)
+	{
+		delete m_pHelpProvider;
+		m_pHelpProvider = NULL;
+	}
+
 	if (pwxFileSystem)
 	{
 		delete (pwxFileSystem);

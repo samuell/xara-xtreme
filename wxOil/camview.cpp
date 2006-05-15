@@ -4137,6 +4137,45 @@ BOOL CCamView::CreateDragTarget(DragInformation * DragInfo)
 }
 
 
+/********************************************************************************************
+>	static DocView* ScreenView::GetDocViewFromHwnd(CWindowID WindowID)
+
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	28/7/94
+	Inputs:		The handle of the render window to find.
+	Outputs:	-
+	Returns:	A pointer to the DocView associated with a render window, or NULL if
+				there isn't one.
+	Purpose:	Given a window handle of a ScreenView render window, this function will
+				return a pointer to the kernel DocView object that renders into that
+				window, or NULL if there isn't one.
+	Errors:		-
+	SeeAlso:	-
+********************************************************************************************/
+
+DocView *CCamView::GetDocViewFromWindowID( CWindowID WindowID )
+{
+	// For all kernel documents in existence . . .
+	List* pDocList = &(GetApplication()->Documents);
+	for (Document* pKernelDoc = (Document*) pDocList->GetHead();
+		 pKernelDoc != NULL;
+		 pKernelDoc = (Document*) pDocList->GetNext(pKernelDoc))
+	{
+
+		DocView * pDocView = pKernelDoc->GetFirstDocView();
+		
+		while (pDocView)
+		{
+			if ( pDocView->GetRenderWindow() == WindowID )
+				return pDocView;
+			pDocView = pKernelDoc->GetNextDocView(pDocView);
+		}
+	} 
+
+	// Couldn't find the handle, so return nothing.
+	return NULL;
+}	
+
 
 /********************************************************************************************
 

@@ -7368,8 +7368,90 @@ TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->Acti
 
 
 
+/********************************************************************************************
 
+>	static BOOL DialogManager::GetStatusLineText(String_256* ptext, CWindowID window)
 
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	15/05/2006
+	Inputs:		window - the window ID, or NULL for the current mouse position
+	Outputs:	pText - pointer to the text to fill in
+	Returns:	TRUE on success else FALSE
+	Purpose:	Fills in the status line text from the help text if over a control
+	Scope:		Public
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL DialogManager::GetStatusLineText(String_256* ptext, CWindowID window)
+{
+	if (!ptext)
+		return FALSE;
+	wxPoint pt; // Unused
+	if (!window)
+		window=::wxFindWindowAtPointer(pt);
+	if (!window)
+		return FALSE;
+
+	wxHelpProvider * hp = wxHelpProvider::Get();
+
+	// Now some controls contain other controls, so we look down the heirarch if we can't find one
+	// immediately
+	wxString help;
+	do
+	{
+		if (!window->IsKindOf(CLASSINFO(wxControl)))
+			return FALSE;
+
+		if (hp)
+			help = hp->GetHelp(window);
+		else
+			help = ((wxControl *)window)->GetHelpText();
+
+		if (help.IsEmpty())
+		{
+			wxToolTip* pTip = window->GetToolTip();
+			if (pTip) help=pTip->GetTip();
+		}
+
+		window=window->GetParent();
+	} while (window && help.IsEmpty());
+
+	if (help.IsEmpty())
+		return FALSE;
+
+	*ptext = help;
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	static CWindowID DialogManager::GetWindowUnderPointer(WinCoord * wc=NULL)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	15/05/2006
+	Inputs:		-
+	Outputs:	wc - if non-NULL, filled in with the pointer coords
+	Returns:	the window ID under the pointer or NULL for none
+	Purpose:	Fills in the status line text from the help text if over a control
+	Scope:		Public
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+CWindowID DialogManager::GetWindowUnderPointer(WinCoord * wc /*=NULL*/)
+{
+	wxPoint pt(0,0);
+	wxWindow * w=::wxFindWindowAtPointer(pt);
+	if (wc)
+	{
+		wc->x=pt.x;
+		wc->y=pt.y;
+	}
+	return w;
+}
 
 // Old windows routine follows
 #if 0
