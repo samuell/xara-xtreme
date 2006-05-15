@@ -104,19 +104,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathname.h"
 #include "sgliboil.h"
 
-PORTNOTE("other", "Removed lots of Windows'isms" )
-#if !defined(EXCLUDE_FROM_XARALX)
-
 // Place any IMPLEMENT type statements here
 CC_IMPLEMENT_MEMDUMP(FindFiles, CC_CLASS_MEMDUMP);
 
 #define new CAM_DEBUG_NEW
 
-BOOL			FileUtil::SearchActive = FALSE;
-String_256		FileUtil::SearchPath = TEXT("");
-HANDLE			FileUtil::SearchHandle = INVALID_HANDLE_VALUE;
-WIN32_FIND_DATA	FileUtil::SearchData;
+BOOL			FileUtil::SearchActive	= FALSE;
+bool			FileUtil::s_fStarted	= false;
+String_256		FileUtil::SearchPath	= TEXT("");
+wxDir			FileUtil::s_dirSearch;
 
+PORTNOTE("other", "Removed lots of Windows'isms" )
+#if !defined(EXCLUDE_FROM_XARALX)
 
 /******************************************************************************
 
@@ -172,7 +171,7 @@ BOOL FileUtil::FindResourceFile(TCHAR* SearchFile, TCHAR* FoundFile)
 	return Found;
 }
 
-
+#endif
 
 /********************************************************************************************
 
@@ -229,10 +228,8 @@ BOOL FileUtil::StartFindingFiles(String_256 *FileSpecifier)
 		return(FALSE);
 	}
 
-	ERROR3IF(SearchHandle != INVALID_HANDLE_VALUE, "Something is fishy with me search handle");
-
 	SearchActive = TRUE;
-	SearchHandle = INVALID_HANDLE_VALUE;
+	s_fStarted	 = false;
 	SearchPath = *FileSpecifier;
 
 	return(TRUE);
@@ -282,27 +279,33 @@ BOOL FileUtil::FindNextFile(String_256 *FoundFile)
 
 	while (result)
 	{
-		if (SearchHandle == INVALID_HANDLE_VALUE)
+		wxString	strFileName;
+
+		if( !s_fStarted )
 		{
 			// find first
-			SearchHandle = ::FindFirstFile((TCHAR *)SearchPath, &SearchData);
-			result = (SearchHandle != INVALID_HANDLE_VALUE);
+			result = s_dirSearch.Open( wxGetCwd() );
+			result = result && s_dirSearch.GetFirst( &strFileName, (PCTSTR)SearchPath, wxDIR_FILES );
+			s_fStarted = result;
 		}
 		else
 		{
 			// find next
-			result = ::FindNextFile(SearchHandle, &SearchData);
+			result = s_dirSearch.GetNext( &strFileName );
 		}
 
 		if (result)
 		{
+PORTNOTE("other", "This is part of initial GetFirst" )
+#if !defined(EXCLUDE_FROM_XARALX)
 			// Only return "files" which are not system or hidden, and which aren't directories!
 			const DWORD AttrMask = FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
 
 			if ((SearchData.dwFileAttributes & AttrMask) == 0)
+#endif
 			{
 				// OK, it's a safe file to return, so return it
-				*FoundFile = SearchData.cFileName;
+				*FoundFile = (PCTSTR)strFileName;
 				return(TRUE);
 			}
 		}
@@ -339,13 +342,13 @@ BOOL FileUtil::FindNextFile(String_256 *FoundFile)
 void FileUtil::StopFindingFiles(void)
 {
 	ERROR3IF(!SearchActive, "StopFindingFiles called when StartFindingFiles not called/failed");
-	if (SearchActive && SearchHandle != NULL)
-		::FindClose(SearchHandle);
 
-	SearchHandle = INVALID_HANDLE_VALUE;
+	s_fStarted	 = false;
 	SearchActive = FALSE;
 }
 
+PORTNOTE("other", "Removed lots of Windows'isms" )
+#if !defined(EXCLUDE_FROM_XARALX)
 
 
 /********************************************************************************************

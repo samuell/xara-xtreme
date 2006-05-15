@@ -159,11 +159,9 @@ public:		// Misc
 
 private:	// Private data
 	static BOOL				SearchActive;
+	static bool				s_fStarted;
 	static String_256		SearchPath;
-#if defined(__WXMSW__)
-	static HANDLE			SearchHandle;
-	static WIN32_FIND_DATA	SearchData;
-#endif
+	static wxDir			s_dirSearch;
 };
 
 /****************************************************************************

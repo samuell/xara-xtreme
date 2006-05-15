@@ -541,8 +541,6 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 		pOp->Token == String(OPTOKEN_FILENEW_TEMPLATE9) ||
 		pOp->Token == String(OPTOKEN_FILENEW_TEMPLATE10))
 	{
-PORTNOTE("other","Remove template determination - needed find file from FileUtil")
-#ifndef EXCLUDE_FROM_XARALX
 		//First find the default template path
 		Application* pApplication=GetApplication();
 
@@ -551,6 +549,7 @@ PORTNOTE("other","Remove template determination - needed find file from FileUtil
 		//Now search that path for templates
 		//Start by setting the leaf name to *.xar
 		String_256 strSearchFilename(_R(IDS_NEWTEMPLATES_DEFAULTTEMPLATEEXTENSION));
+		TRACEUSER( "jlh92", _T("Search = %s\n"), (PCTSTR)strSearchFilename );
 
 		pathTemplates.SetFileNameAndType(strSearchFilename);
 
@@ -558,8 +557,9 @@ PORTNOTE("other","Remove template determination - needed find file from FileUtil
 		//(This code isn't particularly pleasant)
 		String_256 strNumberOfTemplate;
 
-		INT32 iPositionOfFCharacter=pOp->Token.FindNextChar('F');
-
+		INT32 iPositionOfFCharacter=pOp->Token.FindNextChar( 'F', 0 );
+		TRACEUSER( "jlh92", _T("Token = %s(%d)\n"), PCTSTR(pOp->Token), iPositionOfFCharacter );
+		
 		pOp->Token.Left(&strNumberOfTemplate, iPositionOfFCharacter);
 
 		TCHAR* pszTmp;
@@ -572,6 +572,8 @@ PORTNOTE("other","Remove template determination - needed find file from FileUtil
 		{
 			String_256 strNameOfFile;
 			PathName pathOfFile=pathTemplates;
+
+			TRACEUSER( "jlh92", _T("SFF = true\n") );
 
 			String_256 strPathOfDrawingTemplate=GetDefaultDrawingTemplate().GetPath(FALSE);
 			String_256 strPathOfAnimationTemplate=GetDefaultAnimationTemplate().GetPath(FALSE);
@@ -606,7 +608,6 @@ PORTNOTE("other","Remove template determination - needed find file from FileUtil
 
 			return OpState(FALSE, FALSE, FALSE);
 		}
-#endif
 	}
 	
 	// File/SaveAll is only available if there is a document that is "dirty".
