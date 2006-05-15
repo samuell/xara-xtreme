@@ -435,7 +435,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		}
 		else
 		{
-			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float();
+			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float()    .Dockable(FALSE); // temporarilly stop galleries from docking
 		}
 
 		if (DlgOp->IsKindOf(CC_RUNTIME_CLASS(InformationBarOp)))
