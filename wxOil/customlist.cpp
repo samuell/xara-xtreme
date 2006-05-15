@@ -1,20 +1,4 @@
 // $Id: wxOil/CustomList.cpp, 1, 01-Jan-2006, Anonymous $
-// CustomList.cpp : implementation file
-//
-// Contains the classes that make up the custom list control. These are :
-//
-// CCustomList					-	represents a custom list control to the 
-//									outside world. A calling class interacts with
-//									this class, not the helpers. (Hence perhaps
-//									the helper classes should be private nested?)
-// CCustomListScrollableArea	-	helper class containing the whole scrollable
-//									area, some of which may not be visible (ie.
-//									the verticle area is less than the area of
-//									the containing CCustomList
-// CCustomListRowWnd			-	helper class representing a list row
-//
-// Author:						MarcP
-// Date:						18/11/04
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
@@ -111,6 +95,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
+
+
+// CustomList.cpp : implementation file
+//
+// Contains the classes that make up the custom list control. These are :
+//
+// CCustomList					-	represents a custom list control to the 
+//									outside world. A calling class interacts with
+//									this class, not the helpers. (Hence perhaps
+//									the helper classes should be private nested?)
+// CCustomListScrollableArea	-	helper class containing the whole scrollable
+//									area, some of which may not be visible (ie.
+//									the verticle area is less than the area of
+//									the containing CCustomList
+// CCustomListRowWnd			-	helper class representing a list row
+//
+// Author:						MarcP
+// Date:						18/11/04
 
 #include "camtypes.h" 
 #include "customlist.h"
