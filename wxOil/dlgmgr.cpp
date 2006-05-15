@@ -1017,8 +1017,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		msg.DlgMsgParam = NO_COMMIT;
 		HandleMessage = TRUE;
 	}
-	else
-	if( EventType == wxEVT_COMMAND_TEXT_UPDATED && 	// only with WXWIN_COMPATIBILITY_EVENT_TYPES
+	else if( EventType == wxEVT_COMMAND_TEXT_UPDATED && 	// only with WXWIN_COMPATIBILITY_EVENT_TYPES
 		pGadget == wxWindow::FindFocus() )
 	{
 		msg.DlgMsg = DIM_TEXT_CHANGED;
@@ -1045,7 +1044,9 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		HandleMessage = TRUE;
 	}
 	else if(
-		((EventType == wxEVT_SCROLL_THUMBRELEASE || EventType == wxEVT_SCROLL_CHANGED) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
+		// Do not handle THUMB_RELEASE because we get a SCROLL_CHANGED anyway, and having two means we generate two SETs which will generate 2 undo records
+		// on (for instance) transparency and Bevel tools
+		((/*EventType == wxEVT_SCROLL_THUMBRELEASE ||*/ EventType == wxEVT_SCROLL_CHANGED) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_SET;
