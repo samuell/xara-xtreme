@@ -165,7 +165,7 @@ do something like the following, which will avoid any broadcasts.
 			MyClass * m_pOwner;
 		};
 		MyTimer m_Timer;
-	}
+	};
 
 ********************************************************************************************/
 

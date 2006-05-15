@@ -494,11 +494,8 @@ public:
 
 public:
 	// Setting up and killing timer events for dialog boxes
-PORTNOTE("dialog","Removed HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
-	UINT32 SetTimer(UINT32 nIDEvent, UINT32 nElapse, void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD) = NULL);
+	UINT32 SetTimer(UINT32 nIDEvent, UINT32 nElapse, void (* lpfnTimer)(void *) = NULL, void * param=NULL, BOOL OneShot=FALSE);
 	BOOL KillTimer(INT32 nIDEvent);
-#endif
 
 	// Get and set the position of a window or a gadget
 	BOOL GetWindowPosition( wxRect *pRect );

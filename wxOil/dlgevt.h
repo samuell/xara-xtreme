@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccobject.h"
 #include "dlgtypes.h"
 #include "msg.h"
+#include "ktimer.h"
 
 class	DialogManager;
 class	DialogOp;
@@ -112,6 +113,33 @@ typedef const TCHAR * EventNameString;
 
 // Declare the hash map from ResourceID to String
 WX_DECLARE_HASH_MAP( WXTYPE, EventNameString, wxIntegerHash, wxIntegerEqual, EventNumberToName );
+
+class DialogEventHandler;
+
+class DlgEvtTimer : public KernelTimer
+{
+	CC_DECLARE_DYNAMIC(DlgEvtTimer);
+friend class DialogEventHandler;
+public:
+	DlgEvtTimer(DialogEventHandler * pEvtHandler=NULL, DialogOp * pDialogOp=NULL, UINT32 IDEvent=NULL,
+				void (* lpfnTimer)(void *) = NULL, void * Param=NULL) :
+				m_pEvtHandler(pEvtHandler),
+				m_pDialogOp(pDialogOp),
+				m_IDEvent(IDEvent),
+				m_lpfnTimer(lpfnTimer),
+				m_Param(Param) {}
+	~DlgEvtTimer() {}
+protected:
+	virtual void Notify();
+	DialogEventHandler * m_pEvtHandler;
+	DialogOp *m_pDialogOp;
+	UINT32 m_IDEvent;
+	void (* m_lpfnTimer)(void *);
+	void * m_Param;
+};
+
+// Declare the hash map from integers to timers - note this CONTAINS the timers themselves
+WX_DECLARE_HASH_MAP( UINT32, DlgEvtTimer*, wxIntegerHash, wxIntegerEqual, IntegerToKernelTimer );
 
 class wxCamDialogEvent;
 
@@ -130,6 +158,7 @@ class wxCamDialogEvent;
 class DialogEventHandler : public wxEvtHandler
 {
 	friend class DialogManager;
+	friend class DlgEvtTimer;
 
 public:
 	DialogEventHandler();
@@ -148,6 +177,9 @@ public:
 	void NotebookEvent(wxNotebookEvent &event);
 
 	void GrimReaperEvent(wxCamDialogEvent &event);
+
+	UINT32 AddTimer(DialogOp * pDialogOp, UINT32 nIDEvent, UINT32 nElapse, void (* lpfnTimer)(void *) =  NULL, void * param=NULL, BOOL OneShot=FALSE);
+	BOOL DeleteTimer(UINT32 nIDEvent);
 
 	static inline const TCHAR * GetEventName(WXTYPE EventNum) // Return the EventName
 	{
@@ -168,6 +200,8 @@ private:
 	CDlgResID ID;
 	BOOL wxAUImanaged;
 	BOOL m_GrimReaperSent;
+
+	IntegerToKernelTimer m_TimerHash;
 
 	static EventNumberToName * pHash;
 	static const TCHAR * DefaultString;

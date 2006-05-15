@@ -171,6 +171,37 @@ DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_GRIMREAPER)
 DEFINE_EVENT_TYPE(wxEVT_CAMDIALOG_REDRAW)
 IMPLEMENT_DYNAMIC_CLASS( wxCamDialogEvent, wxEvent )
 
+CC_IMPLEMENT_DYNAMIC(DlgEvtTimer, KernelTimer);
+
+
+/********************************************************************************************
+
+>	void DialogEvtTimer::OnNotify()
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	15/05/2005
+	Inputs:		None
+	Outputs:	None
+	Returns:	-
+	Purpose:	Act on a timer event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void DlgEvtTimer::Notify()
+{
+	if (m_lpfnTimer)
+	{
+		(*m_lpfnTimer)(m_Param);
+	}
+	else
+	{
+		//	We need to send a DIM_TIMER to the DialogOp
+		BROADCAST_TO_CLASS(DialogMsg(m_pEvtHandler->pwxWindow, DIM_TIMER, 0, (UINT_PTR)m_IDEvent, 0), DialogOp);
+	}
+}
+
 /********************************************************************************************
 
 >	DialogEventHandler::DialogEventHandler()
@@ -220,6 +251,7 @@ DialogEventHandler::DialogEventHandler(DialogOp * pOp)
 	ID=0;
 	wxAUImanaged=FALSE;
 	m_GrimReaperSent=FALSE;
+	m_TimerHash.clear();
 }
 
 /********************************************************************************************
@@ -243,6 +275,17 @@ event handler itself
 
 DialogEventHandler::~DialogEventHandler()
 {
+	// clear out the kernel timers so they don't go off - this should have been done by Destroy()
+	while (!m_TimerHash.empty())
+	{
+		IntegerToKernelTimer::iterator current = m_TimerHash.begin();
+		DlgEvtTimer * t=current->second;
+		m_TimerHash.erase(current);
+		if (t)
+			delete t;
+	}
+	// for good measure
+	m_TimerHash.clear();
 }
 
 /********************************************************************************************
@@ -276,6 +319,18 @@ void DialogEventHandler::Destroy()
 
 	if (!m_GrimReaperSent)
 	{
+		// clear out the kernel timers so they don't go off after Destroy()
+		while (!m_TimerHash.empty())
+		{
+			IntegerToKernelTimer::iterator current = m_TimerHash.begin();
+			DlgEvtTimer * t=current->second;
+			m_TimerHash.erase(current);
+			if (t)
+				delete t;
+		}
+		// for good measure
+		m_TimerHash.clear();
+
 		// Disconnect from the DialogOp
 		if (pDialogOp)
 			pDialogOp->pEvtHandler=NULL;
@@ -873,4 +928,59 @@ void DialogEventHandler::DeInit()
 		delete (pHash);
 		pHash=NULL;
 	}
+}
+
+/********************************************************************************************
+
+>	UINT32 DialogEventHandler::AddTimer((DialogOp * pDialogOp, UINT32 nIDEvent, UINT32 nElapse,
+						void (* lpfnTimer)(void *) =  NULL, void * param=NULL, BOOL OneShot=FALSE)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		parameters for the timer
+	Outputs:	None
+	Returns:	TRUE if succeeded, FALSE if fails
+	Purpose:	Initialize resources
+	Errors:		via wxMessageBox
+	SeeAlso:	-
+
+********************************************************************************************/
+
+UINT32 DialogEventHandler::AddTimer(DialogOp * pDialogOp, UINT32 nIDEvent, UINT32 nElapse,
+			void (* lpfnTimer)(void *) /*= NULL*/, void * param/*=NULL*/, BOOL OneShot/*=FALSE*/)
+{
+	DeleteTimer(nIDEvent);	// delete any previous timer
+	DlgEvtTimer * pTimer = new DlgEvtTimer(this, pDialogOp, nIDEvent, lpfnTimer, param);
+	if (!pTimer)
+		return 0;
+
+	m_TimerHash[nIDEvent]=pTimer;
+	pTimer->Start(nElapse, OneShot);
+	return nIDEvent;
+}
+
+/********************************************************************************************
+
+>	UINT32 DialogEventHandler::DeleteTimer(UINT32 nIDEvent)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		ID of the timer
+	Outputs:	None
+	Returns:	TRUE if succeeded, FALSE if fails
+	Purpose:	Deletes a timer
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+	
+BOOL DialogEventHandler::DeleteTimer(UINT32 nIDEvent)
+{
+	IntegerToKernelTimer::iterator i=m_TimerHash.find(nIDEvent);
+	if (i==m_TimerHash.end())
+		return FALSE;
+	m_TimerHash.erase(nIDEvent);
+	return TRUE;
 }

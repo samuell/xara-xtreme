@@ -3314,36 +3314,33 @@ DialogTabOp::DialogTabOp()
   
 /********************************************************************************************
 
->	BOOL DialogOp::SetTimer(UINT32 nIDEvent, UINT32 nElapse,
-							void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD) = NULL)
+>	UINT32 DialogOp::SetTimer(UINT32 nIDEvent, UINT32 nElapse,
+							void (* lpfnTimer)(void *) = NULL,
+							void * param = NULL,
+							BOOL OneShot = FALSE)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/4/97
 	Inputs:		nIDEvent	Specifies a nonzero timer identifier.
 				nElapse		Specifies the time-out value, in milliseconds.
+				param		An opaque parameter sent to the timer function (along with nIDEvent)
 	Returns:	The timer identifier of the new timer if Nonzero, Zero means a problem.
 	Purpose:	Allows the user access to setting a timer caller back or event for a dialog box.
 				The caller can either specify a call back procedure to be called when the timer
 				goes off or if null is specified, a DIM_TIMER message will be sent.
-				This maps onto the Windows API/CWnd call.
 				The return value is effectively the handle onto the timer system. It must be
 				passed to the KillTimer member function to kill the timer. A Nonzero value
 				indicates successful allocation of the timer; non-zero implies a problem.
-
-	Note:		DIM_TIMER code is not tested.
 
 	SeeAlso:	DialogOp::KillTimer; DialogManager::SetTimer;
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed DialogOp::SetTimer - HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
-UINT32 DialogOp::SetTimer(UINT32 nIDEvent, UINT32 nElapse, void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD))
+UINT32 DialogOp::SetTimer(UINT32 nIDEvent, UINT32 nElapse, void (* lpfnTimer)(void *)/* = NULL*/, void * param/*=NULL*/, BOOL OneShot /*=FALSE*/)
 {
 	// Call the Dialog Manager
-	return DialogManager::SetTimer( GetReadWriteWindowID(), nIDEvent, nElapse, lpfnTimer );
+	return DialogManager::SetTimer( this, GetReadWriteWindowID(), nIDEvent, nElapse, lpfnTimer, param, OneShot );
 }
-#endif
 
 /********************************************************************************************
 
@@ -3362,14 +3359,11 @@ UINT32 DialogOp::SetTimer(UINT32 nIDEvent, UINT32 nElapse, void (CALLBACK EXPORT
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed DialogOp::KillTimer - HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
 BOOL DialogOp::KillTimer(INT32 nIDEvent)
 {
 	// Call the Dialog Manager
-	return DialogManager::KillTimer( GetReadWriteWindowID(), nIDEvent );
+	return DialogManager::KillTimer( this, GetReadWriteWindowID(), nIDEvent );
 }
-#endif
 
 /********************************************************************************************
 

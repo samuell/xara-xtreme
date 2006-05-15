@@ -730,12 +730,9 @@ public:
 	static CWindowID GetWindowUnderPointer(WinCoord * wc = NULL);
 
 public:
-PORTNOTE("dialog","Removed HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Setting up and killing timer events for dialog boxes
-	static UINT32 SetTimer( CWindowID hWnd, UINT32 nIDEvent, UINT32 nElapse, void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD) = NULL);
-	static BOOL KillTimer( CWindowID hWnd, INT32 nIDEvent);
-#endif
+	static UINT32 SetTimer(DialogOp *pDialogOp, CWindowID WindowID, UINT32 nIDEvent, UINT32 nElapse, void (* lpfnTimer)(void *) = NULL, void * param=NULL, BOOL OneShot=FALSE);
+	static BOOL KillTimer( DialogOp * pDialogOp, CWindowID WindowID, INT32 nIDEvent);
 
 	// Get and set the position of a window or a gadget
 	static BOOL GetWindowPosition(CWindowID WindowID, wxRect *pRect);

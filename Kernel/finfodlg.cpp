@@ -110,7 +110,7 @@ DECLARE_SOURCE("$Revision$");
 
 //#include "mario.h"				// for string resource
 //#include "peter.h"				// for string resources
-#include "reshlpid.h"			// for help resources
+//#include "reshlpid.h"			// for help resources
 //#include "peterdlg.h"			// for dialogue resources
 
 #include "document.h"  			// for reading and setting document attributes
@@ -129,10 +129,12 @@ DECLARE_SOURCE("$Revision$");
 //#include "barsdlgs.h"			// for the document info file bar controls
 #include "fontman.h"
 #include "bubbleid.h"
-#include "customlist.h"
+//#include "customlist.h"
 //#include "richard.h"
 
 //#include "will2.h"
+#include "opdesc.h"
+#include "ophist.h"
 
 // Required for the document font combo box handling
 #include "fontman.h"
@@ -474,9 +476,9 @@ BOOL FileInfo::UpdateFontList(Document*	WorkDoc)
 			// check the style
 			INT32 Style = FontItem->GetFontStyle();
 			if (Style & 1)
-				strName += " -Bold";
+				strName += _T(" -Bold");
 			if (Style & 2)
-				strName += " -Italic";
+				strName += _T(" -Italic");
 			
 			if (Handle > 0)
 			{
@@ -554,6 +556,8 @@ BOOL FileInfo::UpdateEffectsList(Document* pWorkDoc)
 
 	List ItemList;
 
+PORTNOTE("other", "Disabled bitmap effects")
+#ifndef EXCLUDE_FROM_XARALX
 	ListRange* pEffectList = pWorkDoc->GetEffectsList(500000);	// Arbitrary large number
 	if (pEffectList)
 	{
@@ -620,7 +624,7 @@ BOOL FileInfo::UpdateEffectsList(Document* pWorkDoc)
 		delete pEffectList;
 		pEffectList = NULL;
 	}
-
+#endif
 	// Put the sorted items in the list gadget
 	RefItem* pRefItem = (RefItem*)ItemList.GetHead();
 	while (pRefItem)
@@ -690,23 +694,23 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	if (WorkDoc == NULL)
 	{
 		String_8	DashString(_R(IDS_K_FINFODLG_DASH));
-		String_8	NullString = "";
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_UNDOSIZE),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_UNDOSTEPS),		&DashString);
-//		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_SPREADS),			&DashString);
-//		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_PAGES),			&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMOBJECTS),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMSELOBJECTS),	&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_LOCATION),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FILENAME),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FILESIZE),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMBITMAPS),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_BITMAPSIZE),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FRACTALS),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FRACTALSIZE),		&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_CREATIONDATE),	&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_LASTSAVEDATE),	&DashString);
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_COMMENT),			&NullString);
+		String_8	NullString = _T("");
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_UNDOSIZE),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_UNDOSTEPS),		&DashString);
+//		UpdateStringGadgetValue(_R(IDC_FILEINFO_SPREADS),			&DashString);
+//		UpdateStringGadgetValue(_R(IDC_FILEINFO_PAGES),			&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMOBJECTS),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMSELOBJECTS),	&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_LOCATION),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_FILENAME),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_FILESIZE),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMBITMAPS),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_BITMAPSIZE),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_FRACTALS),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_FRACTALSIZE),		&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_CREATIONDATE),	&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_LASTSAVEDATE),	&DashString);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_COMMENT),			&NullString);
 		return TRUE;
 	}
 
@@ -729,7 +733,7 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 		String2.MakeMsg(_R(IDS_FILEINFO_REDUCED));
 		String += String2;
 	}
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_UNDOSIZE), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_UNDOSIZE), &String);
 
 	// Now calculate the number of undo and redo steps
 	UINT32	UndoSteps = WorkDoc->GetOpHistory().GetNumUndoSteps();
@@ -748,7 +752,7 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	{
 		String_256	String3;
 		String2.MakeMsg(_R(IDS_FILEINFO_REDOSTEPS), RedoSteps); 
-		if (String.CompareTo("") != 0)
+		if (String.CompareTo(_T("")) != 0)
 			String += String_64(_R(IDS_K_FINFODLG_SEPERATOR));
 		if (RedoSteps == 1)
 			String3.MakeMsg(_R(IDS_FILEINFO_STEP));
@@ -757,14 +761,14 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 		String += String2;
 		String += String3;
 	}
-	if (String.CompareTo("") == 0)
+	if (String.CompareTo(_T("")) == 0)
 	{
 		String.MakeMsg(_R(IDS_FILEINFO_NOSTEPS)); 
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_UNDOSTEPS), &String);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_UNDOSTEPS), &String);
 	}
 	else
 	{
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_UNDOSTEPS), &String);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_UNDOSTEPS), &String);
 	}
 
 	// --
@@ -775,7 +779,7 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	if (UpdateComment)
 	{
 		String = WorkDoc->GetComment();
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_COMMENT), &String);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_COMMENT), &String);
 	}
 
 	// Now scan the document for the various object counts
@@ -897,19 +901,19 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 
 // No longer required as only one spread in version 1.0
 //	String._MakeMsg("#1%lu", Spreads);
-//	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_SPREADS), &String);
+//	UpdateStringGadgetValue(_R(IDC_FILEINFO_SPREADS), &String);
 //	String._MakeMsg("#1%lu", Pages);
-//	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_PAGES), &String);
+//	UpdateStringGadgetValue(_R(IDC_FILEINFO_PAGES), &String);
 
 	// --
 	// -- Display number of objects and number of selected objects
 	// --
 
 	// Show some of the information that we found
-	String._MakeMsg("#1%lu", Objects);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMOBJECTS), &String);
-	String._MakeMsg("#1%lu", SelObjects);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMSELOBJECTS), &String);
+	String._MakeMsg(_T("#1%lu"), Objects);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMOBJECTS), &String);
+	String._MakeMsg(_T("#1%lu"), SelObjects);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMSELOBJECTS), &String);
 
 	// --
 	// -- Display count and size of fractals in the document
@@ -925,10 +929,10 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 		if (FracList)
 			FracList->GetDocumentFractalData(WorkDoc,&FracData);
 	}
-	String._MakeMsg("#1%lu", FracData.Count);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FRACTALS), &String);
+	String._MakeMsg(_T("#1%lu"), FracData.Count);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_FRACTALS), &String);
 	Convert::BytesToString(&String, FracData.Size);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FRACTALSIZE), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_FRACTALSIZE), &String);
 
 	// --
 	// -- Display count and size of bitmaps in the document
@@ -946,11 +950,11 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 		}
 	}
 	//String._MakeMsg("#1%lu", Bitmaps);
-	String._MakeMsg("#1%lu", BitmapsCount);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_NUMBITMAPS), &String);
+	String._MakeMsg(_T("#1%lu"), BitmapsCount);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_NUMBITMAPS), &String);
 	//BytesToString(&String, BitmapSize);
 	Convert::BytesToString(&String, BitmapsSize);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_BITMAPSIZE), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_BITMAPSIZE), &String);
 
 	// Now show our final size 
 	// Add in the number of bitmaps that we found as these will be saved with the
@@ -960,7 +964,7 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	Size += BitmapsSize;
 	Size += FracData.Size;
 	Convert::BytesToString(&String, Size);
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FILESIZE), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_FILESIZE), &String);
 
 	// --
 	// -- Display Location and Filename of document
@@ -976,12 +980,12 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 		// No pathname yet, so put in a nice message
 		String.MakeMsg(_R(IDS_FILEINFO_UNSAVED));
 	}
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_LOCATION), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_LOCATION), &String);
 
 	// Now show the current filename
 	String.Empty();
 	String = WorkDoc->GetTitle();
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_FILENAME), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_FILENAME), &String);
 
 	// --
 	// -- Display Creation and Save times for the document
@@ -992,23 +996,23 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	TimeData = WorkDoc->GetCreationTime();
 	LocalEnvironment::SystemTimeToString(&String, &TimeData);
 	LocalEnvironment::SystemDateToString(&String2, &TimeData);
-	String += "  ";
+	String += _T("  ");
 	String += String2;
-	UpdateStringGadgetValue(this, _R(IDC_FILEINFO_CREATIONDATE), &String);
+	UpdateStringGadgetValue(_R(IDC_FILEINFO_CREATIONDATE), &String);
 
 	TimeData = WorkDoc->GetLastSaveTime();
 	if (TimeData != 0)
 	{
 		LocalEnvironment::SystemTimeToString(&String, &TimeData);
 		LocalEnvironment::SystemDateToString(&String2, &TimeData);
-		String += "  ";
+		String += _T("  ");
 		String += String2;
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_LASTSAVEDATE), &String);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_LASTSAVEDATE), &String);
 	}
 	else
 	{
 		String.MakeMsg(_R(IDS_FILEINFO_UNSAVED));
-		UpdateStringGadgetValue(this, _R(IDC_FILEINFO_LASTSAVEDATE), &String);
+		UpdateStringGadgetValue(_R(IDC_FILEINFO_LASTSAVEDATE), &String);
 	}
 
 #ifdef STANDALONE

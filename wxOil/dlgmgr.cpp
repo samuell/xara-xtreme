@@ -6737,8 +6737,8 @@ BOOL DialogManager::SetTitlebarName( CWindowID Win, String_256* Name )
 
 /********************************************************************************************
 
->	static BOOL DialogManager::SetTimer(HWND hWnd,	UINT32 nIDEvent, UINT32 nElapse,
-										void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD) = NULL)
+>	static BOOL DialogManager::SetTimer(DialogOp *pDialogOp, CWindowID WindowID, UINT32 nIDEvent, UINT32 nElapse,
+										void (* lpfnTimer)(void *) = NULL, void * param=NULL, BOOL OneShot =FALSE)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/4/97
@@ -6760,18 +6760,14 @@ BOOL DialogManager::SetTitlebarName( CWindowID Win, String_256* Name )
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed DialogManager::KillTimer - HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
-UINT32 DialogManager::SetTimer( CWindowID hWnd, UINT32 nIDEvent, UINT32 nElapse,
-							void (CALLBACK EXPORT* lpfnTimer)(HWND, UINT32, UINT32, DWORD))
+UINT32 DialogManager::SetTimer( DialogOp *pDialogOp, CWindowID WindowID, UINT32 nIDEvent, UINT32 nElapse,
+								void (* lpfnTimer)(void *)/* = NULL*/, void * param/*=NULL*/, BOOL OneShot /*=FALSE*/)
 {
-	// Call the Windows API
-	PORTNOTETRACE("dialog","DialogManager::SetTimer - do nothing");
-//	return ::SetTimer(hWnd, nIDEvent, nElapse, lpfnTimer);
+	if (!pDialogOp || !pDialogOp->pEvtHandler)
+		return 0;
 
-	return 0;
+	return pDialogOp->pEvtHandler->AddTimer(pDialogOp, nIDEvent, nElapse, lpfnTimer, param, OneShot);
 }
-#endif
 
 /********************************************************************************************
 
@@ -6791,17 +6787,13 @@ UINT32 DialogManager::SetTimer( CWindowID hWnd, UINT32 nIDEvent, UINT32 nElapse,
 
 ********************************************************************************************/
 
-PORTNOTE("dialog","Removed DialogManager::KillTimer - HWND and timer usage")
-#ifndef EXCLUDE_FROM_XARALX
-BOOL DialogManager::KillTimer( CWindowID Wnd, INT32 nIDEvent )
+BOOL DialogManager::KillTimer( DialogOp *pDialogOp, CWindowID Wnd, INT32 nIDEvent )
 {
-	// Call the Windows API
-	PORTNOTETRACE("dialog","DialogManager::KillTimer - do nothing");
-//	return ::KillTimer(hWnd, nIDEvent);
+	if (!pDialogOp || !pDialogOp->pEvtHandler)
+		return 0;
 
-	return 0;
+	return pDialogOp->pEvtHandler->DeleteTimer(nIDEvent);
 }
-#endif
 
 /********************************************************************************************
 
