@@ -2504,7 +2504,7 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 			}
 			else if (Msg->GadgetID == _R(IDC_FONT_COMBO))
 			{
-				if(Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT)
+				if ((Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT) || (Msg->DlgMsg == DIM_SELECTION_CHANGED))
 				{
 					// Handle selections in the font name menu.
 					INT32 SelIndex = GetSelectedValueIndex(_R(IDC_FONT_COMBO));
