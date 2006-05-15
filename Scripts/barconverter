@@ -648,7 +648,7 @@ while (<>)
 	{
 	    $bubble = "";
 	    $help = "";
-	    if ($optoken =~ /^IDBBL_/)
+	    if ($optoken =~ /^ID(BBL|S)_/)
 	    {
 		$bubble = $optoken;
 		$help = $spare1 if $spare1 =~ /^ID/;

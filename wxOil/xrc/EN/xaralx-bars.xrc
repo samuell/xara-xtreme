@@ -6333,6 +6333,8 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <tooltip>Font</tooltip>
+                    <help>Set font typeface; choose from TrueType fonts</help>
                 </object>
             </object>
             <object class="spacer">
@@ -6349,6 +6351,8 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <tooltip>Size</tooltip>
+                    <help>Set font size</help>
                 </object>
             </object>
             <object class="spacer">
@@ -6360,6 +6364,8 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxCamArtControl" name="IDC_ASPECTBIT">
+                    <tooltip>Aspect ratio</tooltip>
+                    <help>Set font aspect ratio</help>
                 </object>
             </object>
             <object class="sizeritem">
@@ -6371,6 +6377,8 @@
                     </font>
                     <size>50,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <tooltip>Aspect ratio</tooltip>
+                    <help>Set font aspect ratio</help>
                 </object>
             </object>
             <object class="spacer">
@@ -6383,6 +6391,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BOLDBUTTON">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Bold</tooltip>
+                    <help>Apply bold</help>
                 </object>
             </object>
             <object class="sizeritem">
@@ -6390,6 +6400,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_ITALICBUTTON">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Italic</tooltip>
+                    <help>Apply italic</help>
                 </object>
             </object>
             <object class="spacer">
@@ -6402,6 +6414,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_JUSTIFYLEFT">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Left justify</tooltip>
+                    <help>Left justify text</help>
                 </object>
             </object>
             <object class="sizeritem">
@@ -6409,6 +6423,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_JUSTIFYCENTRE">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Centre justify</tooltip>
+                    <help>Centre justify text</help>
                 </object>
             </object>
             <object class="sizeritem">
@@ -6416,6 +6432,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_JUSTIFYRIGHT">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Right justify</tooltip>
+                    <help>Right justify text</help>
                 </object>
             </object>
             <object class="sizeritem">
@@ -6423,6 +6441,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_JUSTIFYFULL">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Fully justify</tooltip>
+                    <help>Fully Justify text</help>
                 </object>
             </object>
             <object class="spacer">
@@ -6445,6 +6465,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SUPERSCRIPT">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Superscript</tooltip>
+                                    <help>Apply superscript</help>
                                 </object>
                             </object>
                         </object>
@@ -6459,6 +6481,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SUBSCRIPT">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Subscript</tooltip>
+                                    <help>Apply subscript</help>
                                 </object>
                             </object>
                         </object>
@@ -6495,6 +6519,8 @@
                                     </font>
                                     <size>50,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <tooltip>Line spacing</tooltip>
+                                    <help>Apply line spacing</help>
                                 </object>
                             </object>
                         </object>
@@ -6513,6 +6539,8 @@
                                     </font>
                                     <size>50,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <tooltip>Tracking (ems/1000)</tooltip>
+                                    <help>Apply tracking; units of ems/1000</help>
                                 </object>
                             </object>
                         </object>
@@ -6534,6 +6562,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SPACING_LESS">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Line spacing</tooltip>
+                                    <help>Apply line spacing</help>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -6541,6 +6571,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_SPACING_MORE">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Line spacing</tooltip>
+                                    <help>Apply line spacing</help>
                                 </object>
                             </object>
                         </object>
@@ -6555,6 +6587,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_TRACKING_LESS">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Tracking (ems/1000)</tooltip>
+                                    <help>Apply tracking; units of ems/1000</help>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -6562,6 +6596,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_TRACKING_MORE">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Tracking (ems/1000)</tooltip>
+                                    <help>Apply tracking; units of ems/1000</help>
                                 </object>
                             </object>
                         </object>
@@ -6598,6 +6634,8 @@
                                     </font>
                                     <size>50,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <tooltip>Baseline shift</tooltip>
+                                    <help>Apply a vertical baseline shift</help>
                                 </object>
                             </object>
                         </object>
@@ -6616,6 +6654,8 @@
                                     </font>
                                     <size>50,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <tooltip>Kerning (ems/1000)</tooltip>
+                                    <help>Insert or edit a horizontal kern code; units of ems/10000</help>
                                 </object>
                             </object>
                         </object>
@@ -6637,6 +6677,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_LESS">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Baseline shift</tooltip>
+                                    <help>Apply a vertical baseline shift</help>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -6644,6 +6686,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_Y_MORE">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Baseline shift</tooltip>
+                                    <help>Apply a vertical baseline shift</help>
                                 </object>
                             </object>
                         </object>
@@ -6658,6 +6702,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_LESS">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Kerning (ems/1000)</tooltip>
+                                    <help>Insert or edit a horizontal kern code; units of ems/10000</help>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -6665,6 +6711,8 @@
                                 <border>0</border>
                                 <object class="wxCamArtControl" name="IDC_KERN_BUMP_X_MORE">
                                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_HALFHEIGHT</camartstyle>
+                                    <tooltip>Kerning (ems/1000)</tooltip>
+                                    <help>Insert or edit a horizontal kern code; units of ems/10000</help>
                                 </object>
                             </object>
                         </object>
@@ -6681,6 +6729,8 @@
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_AUTOKERN">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+                    <tooltip>Automatic kerning</tooltip>
+                    <help>Use automatic kerning</help>
                 </object>
             </object>
         </object>
