@@ -658,8 +658,13 @@ bool CCamApp::OnInit()
 	// Go through the command line and load documents
 	TRACET(_T("CCamApp::Init Loading docs (if any) from command line"));
 
-	for ( UINT32 i=0 ; i<parser.GetParamCount() ; i++ )
-		m_docManager->CreateDocument(parser.GetParam(i),wxDOC_SILENT);
+	if( 0 == parser.GetParamCount() )
+		m_docManager->CreateDocument( _T(""), wxDOC_NEW );
+	else
+	{
+		for ( UINT32 i=0 ; i<parser.GetParamCount() ; i++ )
+			m_docManager->CreateDocument(parser.GetParam(i),wxDOC_SILENT);
+	}
 
 	// Remove the splash screen
 	CamResource::DoneInit();
