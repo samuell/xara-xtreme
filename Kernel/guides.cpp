@@ -2162,11 +2162,8 @@ BOOL OpGuideline::Init()
 			OpNewGuideline::Init() 		&&
 			OpSpreadOrigin::Init() 		&& 
 			OpResetSpreadOrigin::Init() &&
-PORTNOTE("other", "Removed use of OpChangeLayerColour")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 			OpChangeLayerColour::Init() &&
-#endif
 #endif
 			RegisterOpDescriptor(
 								0, 

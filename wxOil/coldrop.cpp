@@ -762,7 +762,7 @@ BOOL ColourDropDown::HasIcon(void * ItemData)
 
 ********************************************************************************************/
 
-BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled)
+BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags)
 {
 	GDrawBrush.Init(&dc);
 	GDrawBrush.Start();

@@ -184,7 +184,7 @@ protected:		// Methods that must be overridden by derived classes
 	virtual BOOL HasIcon(void * ItemData);
 				// Returns TRUE if the item has an icon. Default is no icon
 
-	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled);
+	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags);
 				// Handles redraw of the icon, if any. Default is nothing gets drawn
 
 	virtual wxString GetText(void * ItemData);

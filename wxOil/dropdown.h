@@ -132,10 +132,10 @@ protected:		// Methods that must be overridden by derived classes
 	virtual BOOL HasIcon(void * ItemData);
 				// Returns TRUE if the item has an icon. Default is no icon
 
-	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled);
+	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags);
 				// Handles redraw of the icon, if any. Default is nothing gets drawn
 
-	virtual wxSize DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 item, BOOL Draw);
+	virtual wxSize DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 item, INT32 flags, BOOL Draw);
 				// Handles redraw of the text for an item. Default draws the text
 				// returned by GetText. You this probably do not need to override this
 

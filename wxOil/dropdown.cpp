@@ -350,7 +350,10 @@ void DropDown::AddItem(void * ItemData)
 	wxOwnerDrawnComboBox * pGadget = GetBox();
 	if (!pGadget)
 		return;
-	m_pPopup->SetItemClientData(pGadget->Append(wxEmptyString), ItemData, wxClientData_Void);
+	INT32 n=pGadget->Append(wxEmptyString); // put in an empty string first
+	m_pPopup->SetItemClientData(n, ItemData, wxClientData_Void);
+	if (ItemData)
+		pGadget->SetString(n, GetText(ItemData));
 }
 
 
@@ -475,9 +478,14 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item
 	if (!ItemData)
 	{
 		// It's a divider, so draw it specially - it is a simple black line across the center of the rectangle
-		wxCoord midpoint = Rect.GetBottom()+Rect.GetHeight()/2;
+		wxCoord midpoint = Rect.GetTop()+Rect.GetHeight()/2;
 		if (Draw)
-			dc.DrawLine(Rect.GetLeft(), midpoint, Rect.GetRight(), midpoint);
+		{
+			wxPen OldPen=dc.GetPen();
+			dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT)));
+			dc.DrawLine(Rect.GetLeft(), midpoint, Rect.GetRight()+1, midpoint);
+			dc.SetPen(OldPen);
+		}
 		return(wxSize(-1,5));
 	}
 
@@ -486,7 +494,7 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item
 	{
 		// Call the derived class
 		wxRect def(-1,-1,-1,-1);
-		wxSize TextSize = DrawText(ItemData, dc, def, item, FALSE); // Rect is unused here as Draw is FALSE
+		wxSize TextSize = DrawText(ItemData, dc, def, item, flags, FALSE); // Rect is unused here as Draw is FALSE
 		TextSize.x+=2*border;
 		TextSize.y+=2*border; // This gives us the bounding rect as we leave some space around it
 		if (HasIcon(ItemData))
@@ -518,7 +526,7 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item
 
 		// Call the derived class to draw the icon
 		if (Draw)
-			DrawIcon(ItemData, dc, IconRect, !pGadget->IsEnabled());
+			DrawIcon(ItemData, dc, IconRect, !pGadget->IsEnabled(), flags);
 
 		// Shift the text to the right of the icon
 		INT32 shift=IconRect.GetWidth()+6;
@@ -531,7 +539,7 @@ wxSize DropDown::HandleDrawItemInternal(wxDC& dc, const wxRect& Rect, INT32 item
 	{
 		// Call derived class to draw the text
 		if (Draw)
-			DrawText(ItemData, dc, TextRect, item, TRUE);
+			DrawText(ItemData, dc, TextRect, item, flags, TRUE);
 	}
 
 	// Restore the DC's previous palette if we selected our one in
@@ -604,7 +612,7 @@ BOOL DropDown::HasIcon(void * ItemData)
 
 ********************************************************************************************/
 
-BOOL DropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled)
+BOOL DropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags)
 {
 	return(TRUE);
 }
@@ -613,7 +621,7 @@ BOOL DropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabl
 
 /********************************************************************************************
 
->	virtual wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 Item, BOOL Draw)
+>	virtual wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 Item, INT32 flags, BOOL Draw)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
@@ -621,6 +629,9 @@ BOOL DropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabl
 	Inputs:		ItemData - Your item data
 				wxDC& - the DC to draw into
 				TextRect - points at a rectangle in which the text should be rendered
+				Item - the index of the item
+				flags - the flags sent to OnDrawItem
+				Draw - TRUE to Draw, FALSE to just get a size
 
 	Returns:	The size of the text
 
@@ -640,9 +651,9 @@ BOOL DropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabl
 
 ********************************************************************************************/
 
-wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 item, BOOL Draw)
+wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 item, INT32 flags, BOOL Draw)
 {
-	if ( m_pPopup->GetSelection() == (INT32) item )
+	if ( (m_pPopup->GetSelection() == (INT32)item) && !(flags & wxCP_PAINTING_CONTROL) )
 		dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
 	else
 		dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
