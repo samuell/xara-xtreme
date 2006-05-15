@@ -123,6 +123,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"		// _R(IDS_NO_FONTSINDOC)
 #include "fontlist.h"
 #include "fontman.h"	// Fontmanager
+#include "cartprov.h"
 //#include "will2.h"		// _R(IDS_K_FINFODLG_DASH)
 
 class Document;
@@ -143,7 +144,7 @@ CC_IMPLEMENT_DYNCREATE(DocumentFontDropDown, ListItem);
 
 //-----------------------------------------------------------------------------------------
 // Enumerating fonts uses a callback function, which in turn needs to access the original FontDropDown caller...
-DWORD FontDropDown::CurrentFontDropDown = 0;
+void * FontDropDown::CurrentFontDropDown = 0;
 
 /********************************************************************************************
 
@@ -158,7 +159,7 @@ DWORD FontDropDown::CurrentFontDropDown = 0;
 
 FontDropItem::FontDropItem()
 {
-	FontName = "";
+	FontName = _T("");
 	Type = FC_UNDEFINED;
 }
 
@@ -209,7 +210,7 @@ BOOL FontDropEnumFont::NewFont(FontClass Type, ENUMLOGFONT *lpelf)
 	ERROR3IF(((FontDropDown *)FontDropDown::CurrentFontDropDown) == NULL, "CurrentFontDropDown is NULL in NewFont");
 	if(((FontDropDown *)FontDropDown::CurrentFontDropDown) != NULL)
 		return ((FontDropDown *)FontDropDown::CurrentFontDropDown)
-				-> AddFontToList((TCHAR *)lpelf->elfLogFont.lfFaceName, Type);
+				-> AddFontToList((TCHAR *)lpelf->elfLogFont.FaceName, Type);
 
 	return FALSE;
 }
@@ -247,7 +248,7 @@ FontDropDown::FontDropDown()
 
 FontDropDown::~FontDropDown()
 {
-	KillList();
+
 }
 
 
@@ -336,7 +337,7 @@ BOOL FontDropDown::AddFontToList(TCHAR *FontName, FontClass Type)
 		return TRUE;
 	}
 	
-	if(((FontDropItem *)TheItem)->FontName > FontName)
+	if( ((FontDropItem *)TheItem)->FontName > String_64(FontName))
 	{
 		Fonts.InsertBefore(TheItem, Item);
 		return TRUE;
@@ -352,7 +353,7 @@ BOOL FontDropDown::AddFontToList(TCHAR *FontName, FontClass Type)
 			return TRUE;
 		}
 
-		if(((FontDropItem *)TheNextItem)->FontName > FontName)
+		if(((FontDropItem *)TheNextItem)->FontName > String_64(FontName))
 		{
 			Fonts.InsertBefore(TheNextItem, Item);
 			return TRUE;
@@ -391,7 +392,7 @@ BOOL FontDropDown::FillInFontList()
 	ClearList();												// Delete combobox contents
 
 	// Setup the static class pointer variable so we can add things to this dropdown...
-	CurrentFontDropDown = (DWORD)this;
+	CurrentFontDropDown = (void *)this;
 
 	if(Fonts.GetCount() == 0)
 	{
@@ -435,7 +436,7 @@ BOOL FontDropDown::FillInFontList()
 	while (Item != NULL)
 	{
 		// Add the font in the list to the combo box
-		AddItem((DWORD) Item);
+		AddItem((void *) Item);
 
 		// Try the next item
 		Item = Fonts.GetNext(Item);
@@ -515,7 +516,7 @@ FontDropItem *FontDropDown::DecodeSelection(INT32 SelectionIndex)
 {
 	FontDropItem *Fred = (FontDropItem *) GetItemData(SelectionIndex);
 
-	if ((INT32)Fred == -1)
+	if (Fred==&TheTopItem)
 		return(NULL);
 
 	return Fred;
@@ -524,7 +525,7 @@ FontDropItem *FontDropDown::DecodeSelection(INT32 SelectionIndex)
 
 /********************************************************************************************
 
->	virtual BOOL FontDropDown::HasIcon(DWORD ItemData)
+>	virtual BOOL FontDropDown::HasIcon(void * ItemData)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
@@ -547,7 +548,7 @@ FontDropItem *FontDropDown::DecodeSelection(INT32 SelectionIndex)
 
 ********************************************************************************************/
 
-BOOL FontDropDown::HasIcon(DWORD ItemData)
+BOOL FontDropDown::HasIcon(void * ItemData)
 {
 	// All our items have a space for a truetype icon to their left
 	return(TRUE);
@@ -557,8 +558,8 @@ BOOL FontDropDown::HasIcon(DWORD ItemData)
 
 /********************************************************************************************
 
->	virtual BOOL FontDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect,
-											BOOL Disabled)
+>	virtual BOOL FontDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect,
+										BOOL Disabled, INT32 flags)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		4/10/95
@@ -585,197 +586,77 @@ BOOL FontDropDown::HasIcon(DWORD ItemData)
 
 ********************************************************************************************/
 
-BOOL FontDropDown::DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disabled)
+BOOL FontDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags)
 {
-	BOOL ReturnOK = TRUE;
+	ResourceID BitmapID = 0;
+	FontClass Type;
 
-	// 0 denotes no bmp at all...
-	INT32 BitmapID = 0;
+	if ((ItemData==&TheTopItem) || !ItemData)
+		Type = TheTopItem.Type;
+	else
+		Type = ((FontDropItem *)ItemData)->Type;
 
-	// If the item is disabled, so just put a light grey splodge in the place of the colour
-	if (!Disabled)
+	switch(Type)
 	{
-		FontClass Type;
+		case FC_TRUETYPE:
+			BitmapID = _R(IDB_TTF_SYMBOL);
+			break;
 
-		if(RedrawingTopItem || ItemData == 0)
-			Type = TheTopItem.Type;
-		else
-			Type = ((FontDropItem *)ItemData)->Type;
+		case FC_ATM:
+			BitmapID = _R(IDB_ATM_SYMBOL);
+			break;
 
-		switch(Type)
-		{
-			case FC_TRUETYPE:
-				BitmapID = _R(IDB_TTF_SYMBOL);
-				break;
+		case FC_FREETYPE:
+			BitmapID = _R(IDB_FREETYPE_SYMBOL);
+			break;
 
-			case FC_ATM:
-				BitmapID = _R(IDB_ATM_SYMBOL);
-				break;
-
-			default:
-				BitmapID = 0;
-				break;
-		}
+		default:
+			BitmapID = 0;
+			break;
 	}
 
 	if(BitmapID == 0)
 		return FALSE;
 
-	HBITMAP hBmp;
-
-	// Load bmp
-	hBmp = ::LoadBitmap(AfxGetResourceHandle(), MAKEINTRESOURCE(BitmapID));
-
-	if (hBmp == 0) 
-	{	
-		TRACEUSER( "Richard", _T("Bitmap failed to Load in FontDropDown::DrawIcon\n"));
+	wxBitmap * pBitmap = CamArtProvider::Get()->FindBitmap(BitmapID, (CamArtFlags)(CAF_DEFAULT|(Disabled?CAF_GREYED:0)));
+	if (!pBitmap)
 		return FALSE;
-	}
-	
-	// Make a Bitmap Object 
-	CBitmap Bitmap;
-	BOOL ok = Bitmap.Attach(hBmp);
 
-	if (!ok) 
-	{	
-		TRACEUSER( "Richard", _T("CBitmap failed to create in FontDropDown::DrawIcon\n"));
-		return FALSE;
-	}
+	dc.DrawBitmap(*pBitmap, IconRect.GetLeft(), IconRect.GetTop(), TRUE);
 
-	CDC MemDC;
-	// Create a Memory DC based on the screen
-	if(!MemDC.CreateCompatibleDC(0))
-	{
-		ERROR3("FontDropDown::DrawIcon Couldn't get a CDC");
-		return FALSE;
-	}
-	
-	// And select the Bitmap into it
-	CBitmap* OldBmp = MemDC.SelectObject(&Bitmap);
-
-	if (OldBmp == NULL) 
-	{
-		ERROR3("FontDropDown::DrawIcon Couldn't select bmp into cdc");
-		ReturnOK = FALSE;
-	}
-	else
-	{
-		// Plot the bitmap onto this render region
-		::BitBlt(	hDC,
-					IconRect->left, IconRect->top,
-					IconRect->right - IconRect->left, IconRect->bottom - IconRect->top, //Width, Height,
-					MemDC.m_hDC,
-					0,0,
-					SRCCOPY
-				);
-
-		// Unselect our bitmap and delete it
-		MemDC.SelectObject(OldBmp);
-
-		ok = Bitmap.DeleteObject();
-		if (!ok)
-			ERROR3("FontDropDown::DrawIcon Couldn't delete object");
-	}
-
-	return ReturnOK;
+	return TRUE;
 }
 
 
 
 /********************************************************************************************
 
->	virtual BOOL FontDropDown::DrawText(DWORD ItemData, HDC hDC, RECT *TextRect)
+>	virtual wxString FontDropDown::GetText(void * ItemData, INT32 Item)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		3/10/95
 
 	Inputs:		ItemData - Your item data
-				HDC - the DC to draw into
-				TextRect - points at a rectangle in which the text should be rendered
 
-	Returns:	TRUE if redraw went well
-
-	Purpose:	Draws the text for an item
-
-	Notes:		Called by HandleDrawItemInternal when this object has been identified as the 
-				owner of the control to be redrawn, if HasIcon returned TRUE
-
-				This method MUST be overridden by derived classes to provide redraw of their
-				FontDropDown list items. The base class draws nothing.
-
-				Note that on entry, the text FG/BG colours have been set up appropriately
-				for the state of the item (shaded, selected, etc)
-				Basically, all you have to do is find the text and do a DrawText call.
-
-	SeeAlso:	FontDropDown::DrawIcon; FontDropDown::DrawText
+	Returns:	The text
 
 ********************************************************************************************/
 
-BOOL FontDropDown::DrawText(DWORD ItemData, HDC hDC, RECT *TextRect)
+wxString FontDropDown::GetText(void * ItemData, INT32 Item)
 {
-	ERROR3IF(ItemData == NULL || TextRect == NULL, "NULL Itemdata/TextRect in FontDropDown::DrawText");
+	ERROR3IF(ItemData == NULL, "NULL Itemdata in FontDropDown::DrawText");
 
-	String_64 TextToDisplay("");
+	String_64 TextToDisplay(_T(""));
 
-	if(RedrawingTopItem || ItemData == 1 || ItemData == 0 || ItemData == -1)
+	if (!ItemData || Item<0 || (ItemData==&TheTopItem))
 		TextToDisplay = TheTopItem.FontName;
 	else
 		TextToDisplay = (((FontDropItem *)ItemData)->FontName);
 
 	// and draw the text...
-	::DrawText(hDC, (TCHAR *)TextToDisplay, -1, TextRect, DT_LEFT | DT_VCENTER);
-
-	return(TRUE);
+	return(wxString((TCHAR *)TextToDisplay));
 }
 
-
-/********************************************************************************************
-
->	virtual BOOL FontDropDown::HandleDrawItemInternal(HWND hDlg, UINT32 wParam, INT32 lParam)
-
-	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
-	Date:		4/10/95
-
-	Inputs:		hDlg - The HWND of the control which needs redrawing
-				wParam, lParam - As for the WM_DRAWITEM message
-
-	Returns:	TRUE if it handled (claimed) the message
-				FALSE if it did not handle the message
-
-	Purpose:	Overrides default redraw handler to provide special support for the '-1' item,
-				which is not necessarily in the list...
-
-	SeeAlso:	DropDown::HasIcon; DropDown::DrawIcon; DropDown::DrawText
-
-********************************************************************************************/
-
-BOOL FontDropDown::HandleDrawItemInternal(HWND hDlg, UINT32 wParam, INT32 lParam)
-{
-	// We need to know in our drawtext functions if we're redrawing the -1 item or not...
-	// Note that when this is TRUE, we cannot use the itemID and itemData fields...
-	RedrawingTopItem = FALSE;
-
-	DRAWITEMSTRUCT *pInfo = (DRAWITEMSTRUCT *)lParam;
-	if (pInfo == NULL)
-		return(FALSE);
-
-	if (CCamApp::DisableSys)			// Inside an error handler
-		return(FALSE);
-
-	// Check for the special item
-	if (lParam == -1 || (INT32)pInfo->itemID == -1 || (INT32)pInfo->itemData == -1)
-	{
-		pInfo->itemID = 0;
-		pInfo->itemData = 1;
-		RedrawingTopItem = TRUE;
-	}
-
-	BOOL ok = DropDown::HandleDrawItemInternal(hDlg, wParam, lParam);
-
-	RedrawingTopItem = FALSE;
-
-	return ok;
-}
 
 
 
@@ -882,7 +763,7 @@ BOOL DocumentFontDropDown::FillInFontList(Document * WorkDoc)
 	//ClearList();			// Delete combobox contents
 
 	// Setup the static class pointer variable so we can add things to this dropdown...
-	CurrentFontDropDown = (DWORD)this;
+	CurrentFontDropDown = (void *)this;
 
 	//if(Fonts.GetCount() == 0)
 	//{
@@ -924,14 +805,14 @@ BOOL DocumentFontDropDown::FillInFontList(Document * WorkDoc)
 				// check the style
 				INT32 Style = FontItem->GetFontStyle();
 				if(Style & 1)
-					Name += " -Bold";
+					Name += _T(" -Bold");
 				if(Style & 2)
-					Name += " -Italic";
+					Name += _T(" -Italic");
 				
 				if(Handle > 0)
 				{
 					if (FONTMANAGER->IsFontReplaced(Handle))
-						Name += " *";
+						Name += _T(" *");
 				}
 				FontClass Type = FontItem->GetFontClass();
 
@@ -960,7 +841,7 @@ BOOL DocumentFontDropDown::FillInFontList(Document * WorkDoc)
 	while (Item != NULL)
 	{
 		// Add the font in the list to the combo box
-		AddItem((DWORD) Item);
+		AddItem((void *) Item);
 
 		// Try the next item
 		Item = Fonts.GetNext(Item);

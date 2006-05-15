@@ -749,16 +749,6 @@ BOOL ColourDropDown::HasIcon(void * ItemData)
 
 	Purpose:	Draws the icon for an item
 
-	Notes:		Called by HandleDrawItemInternal when this object has been identified as the 
-				owner of the control to be redrawn, if HasIcon returned TRUE
-
-				This method MUST be overridden by derived classes to provide redraw of their
-				ColourDropDown list items. The base class does nothing.
-
-				On entry, the DC is ready for you to draw into, including having the camelot
-				palette selected in etc.
-
-	SeeAlso:	ColourDropDown::DrawIcon; ColourDropDown::DrawText
 
 ********************************************************************************************/
 
@@ -829,14 +819,15 @@ BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL 
 
 /********************************************************************************************
 
->	virtual wxString ColourDropDown::GetText(void * ItemData)
+>	virtual wxString ColourDropDown::GetText(void * ItemData, INT32 Item)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		13/9/95
 
 	Inputs:		ItemData - Your item data
+				Item - the number of the item
 				
-	Returns:	TRUE if redraw went well
+	Returns:	The text for the item
 
 	Purpose:	Draws the text for an item
 
@@ -854,15 +845,16 @@ BOOL ColourDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL 
 
 ********************************************************************************************/
 
-wxString ColourDropDown::GetText(void * ItemData)
+wxString ColourDropDown::GetText(void * ItemData, INT32 Item)
 {
 	ERROR3IF(ItemData == NULL, "NULL Itemdata in ColourDropDown::DrawText");
 
 	// Determine if it's a colour or a special item, and find the text to draw
 	TCHAR * TextToDraw = NULL;
 
-	CCObject *Item = (CCObject *) ItemData;
-	if (Item->IsKindOf(CC_RUNTIME_CLASS(IndexedColour)))
+	CCObject *pItem = (CCObject *) ItemData;
+
+	if (pItem->IsKindOf(CC_RUNTIME_CLASS(IndexedColour)))
 		TextToDraw = ( (TCHAR *) (*((IndexedColour *)ItemData)->GetName()) );
 	else
 		TextToDraw = ( (TCHAR *) ((SpecialEntry *)ItemData)->ItemText );

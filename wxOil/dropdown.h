@@ -121,10 +121,12 @@ public:			// Creation/destruction
 
 	virtual BOOL Init(CWindowID ParentWindow, CGadgetID ParentControl);
 
+	static void DropDown::KillDropDownsByWindow(CWindowID Window);
+
 protected:
 	static List CurrentDropDowns;					// A list of all currently active dropdowns
 
-
+	virtual void KillList() {} // allow reclaiming of memory on death
 
 // --- Winoily section
 
@@ -139,7 +141,7 @@ protected:		// Methods that must be overridden by derived classes
 				// Handles redraw of the text for an item. Default draws the text
 				// returned by GetText. You this probably do not need to override this
 
-	virtual wxString GetText(void * ItemData) {return wxEmptyString;}
+	virtual wxString GetText(void * ItemData, INT32 Item) {return wxEmptyString;}
 				// By default returns a dummy string
 
 

@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camframe.h"
 //#include "palman.h"
 #include "stack.h"
-//#include "dropdown.h"	// Colour/Font dropdown combo box support
+#include "dropdown.h"	// Colour/Font dropdown combo box support
 #include "unicdman.h"
 #include "appprefs.h"
 #include "helpuser.h"
@@ -1616,6 +1616,9 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 
 	// Delete all ControlInfo records
 	List* ControlInfoList = GetControlList( (wxWindow *)WindowID );
+
+	// Kill of Dropdowns
+	DropDown::KillDropDownsByWindow(WindowID);
 
 	// Remove new-form control list
 	ControlList::Get()->RemoveWindowAndChildren((wxWindow *)WindowID);

@@ -212,11 +212,8 @@ DropDown::~DropDown()
 	if (Initialised)
 	{
 		// Do any deinit here
-		Initialised=FALSE;
+		Init(NULL, 0);
 	}
-
-	if (ParentDlg != NULL)
-		CurrentDropDowns.RemoveItem(this);
 }
 
 /********************************************************************************************
@@ -245,7 +242,7 @@ wxOwnerDrawnComboBox * DropDown::GetBox()
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Date:		29/8/95
 
-	Inputs:		Window - The Window in which your dropdown list gadget resides
+	Inputs:		Window - The Window in which your dropdown list gadget resides or NULL to denitialise
 				Gadget - The GadgetID of the deropdown list gadget
 
 	Returns:	TRUE if it succeeded in connecting itself to your gadget
@@ -257,28 +254,75 @@ wxOwnerDrawnComboBox * DropDown::GetBox()
 
 BOOL DropDown::Init(CWindowID Window, CGadgetID Gadget)
 {
-	wxWindow * pGadget = DialogManager::GetGadget(Window, Gadget);
-	if (pGadget && pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
+	if (Window)
 	{
-		if (!Initialised)			// Only ever add myself to the list once
+		wxWindow * pGadget = DialogManager::GetGadget(Window, Gadget);
+		if (pGadget && pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
 		{
-			m_pPopup = new wxCamVListBoxComboPopup(this);
-			ERROR2IF(!m_pPopup, FALSE, "Could not get new list popup");
-			((wxOwnerDrawnComboBox *)pGadget)->SetPopupControl(m_pPopup);
-			CurrentDropDowns.AddHead(this);
+			if (!Initialised)			// Only ever add myself to the list once
+			{
+				m_pPopup = new wxCamVListBoxComboPopup(this);
+				ERROR2IF(!m_pPopup, FALSE, "Could not get new list popup");
+				((wxOwnerDrawnComboBox *)pGadget)->SetPopupControl(m_pPopup);
+				CurrentDropDowns.AddHead(this);
+			}
+	
+			ParentDlg = Window;
+			ParentGadget = Gadget;
+	
+			Initialised = TRUE;
+			return(TRUE);
 		}
-
-		ParentDlg = Window;
-		ParentGadget = Gadget;
-
-		Initialised = TRUE;
-		return(TRUE);
+		ERROR3("DropDown::Init failed - illegal Gadget");
+		return(FALSE);
 	}
-
-	ERROR3("DropDown::Init failed - illegal Gadget");
-	return(FALSE);
+	else
+	{
+		// release all memory
+		KillList();
+		ClearList();
+		ParentDlg=NULL;
+		ParentGadget=0;
+		Initialised=FALSE;
+		CurrentDropDowns.RemoveItem(this);
+		return TRUE;
+	}
 }
 
+/********************************************************************************************
+
+>	static void DropDown::KillDropDownsByWindow(CWindowID Window)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Date:		15/05/2005
+
+	Purpose:	Kills all the dropdowns associated with a particular window
+				This is called when that window is dying. We can't delete the dropdowns
+				but we can deinit them so they won't cause anyone eny hassle.
+
+********************************************************************************************/
+
+void DropDown::KillDropDownsByWindow(CWindowID Window)
+{
+	// First kill any associated with this window
+	DropDown *Ptr = (DropDown *) CurrentDropDowns.GetHead();
+	while (Ptr != NULL)
+	{
+		DropDown * Next = (DropDown *) CurrentDropDowns.GetNext(Ptr); // as we may remove this item from the list
+		if (Ptr->Initialised && (Ptr->ParentDlg==Window))
+			Ptr->Init(NULL, 0);
+		Ptr = Next;
+	}
+
+	// Now process children if any
+	wxWindowList::Node * pNode = Window->GetChildren().GetFirst();
+	while (pNode)
+	{
+		KillDropDownsByWindow(pNode->GetData());
+		pNode = pNode->GetNext();
+	}
+	return;
+}
 
 
 /********************************************************************************************
@@ -353,7 +397,7 @@ void DropDown::AddItem(void * ItemData)
 	INT32 n=pGadget->Append(wxEmptyString); // put in an empty string first
 	m_pPopup->SetItemClientData(n, ItemData, wxClientData_Void);
 	if (ItemData)
-		pGadget->SetString(n, GetText(ItemData));
+		pGadget->SetString(n, GetText(ItemData, n));
 }
 
 
@@ -658,7 +702,7 @@ wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 ite
 	else
 		dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
 
-	wxString Text = GetText(ItemData);
+	wxString Text = GetText(ItemData, item);
 	wxCoord w, h;
 	dc.GetTextExtent(Text, &w, &h);
 	wxSize size(w,dc.GetCharHeight());

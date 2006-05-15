@@ -187,7 +187,7 @@ protected:		// Methods that must be overridden by derived classes
 	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags);
 				// Handles redraw of the icon, if any. Default is nothing gets drawn
 
-	virtual wxString GetText(void * ItemData);
+	virtual wxString GetText(void * ItemData, INT32 Item);
 				// Gets the text
 
 protected:

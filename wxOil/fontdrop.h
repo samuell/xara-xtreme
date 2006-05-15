@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FONTDROP
 #define INC_FONTDROP
 
-//#include "dropdown.h"
+#include "dropdown.h"
 #include "fontbase.h"
 
 class Document;
@@ -165,7 +165,6 @@ class FontDropEnumFont : public OILEnumFonts
 
 ********************************************************************************************/
 
-#ifndef EXCLUDE_FROM_XARALX
 class FontDropDown : public DropDown
 {
 friend class DialogManager;
@@ -204,23 +203,19 @@ public:
 // Overriding methods
 protected:
 
-	// Returns TRUE if the item has an icon.
-	virtual BOOL HasIcon(DWORD ItemData);
+	virtual BOOL HasIcon(void * ItemData);
+				// Returns TRUE if the item has an icon. Default is no icon
 
-	// Handles redraw of the icon, if any.
-	virtual BOOL DrawIcon(DWORD ItemData, HDC hDC, RECT *IconRect, BOOL Disabled);
+	virtual BOOL DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Disabled, INT32 flags);
+				// Handles redraw of the icon, if any. Default is nothing gets drawn
 
-	// Handles redraw of the text for an item.
-	virtual BOOL DrawText(DWORD ItemData, HDC hDC, RECT *TextRect);
-
-	// Handles redrawing the top item, which may be a special case...
-	virtual BOOL HandleDrawItemInternal(HWND hDlg, UINT32 wParam, INT32 lParam);
-
+	virtual wxString GetText(void * ItemData, INT32 Item);
+				// By default returns a dummy string
 
 // Member variables
 public:
 	// this is required because enumerating fonts uses a callback function...
-	static DWORD CurrentFontDropDown;
+	static void * CurrentFontDropDown;
 	
 	// List of font items
 	List Fonts;
@@ -230,10 +225,8 @@ public:
 
 protected:
 	// True if the item above the list (-1) is being redrawn...
-	BOOL RedrawingTopItem;
 
 };
-#endif
 
 /********************************************************************************************
 
@@ -247,7 +240,6 @@ protected:
 				document rather than the fonts avalaible in the system.
 ********************************************************************************************/
 
-#ifndef EXCLUDE_FROM_XARALX
 class DocumentFontDropDown : public FontDropDown
 {
 
@@ -264,6 +256,5 @@ public:
 	BOOL FillInFontList(Document * WorkDoc);
 
 };
-#endif
 
 #endif
