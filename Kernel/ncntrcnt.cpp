@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "attrmap.h"
 #include "opcntr.h"
 //#include "app.h"
-//#include "opbevel.h"
+#include "opbevel.h"
 #include "objchge.h"
 #include "transop.h"
 #include "nodetext.h"
@@ -979,16 +979,12 @@ ChangeCode NodeContourController::OnChildChange(ObjChangeParam* pParam)
 //			ReleaseCached();
 //			pOp->DoInvalidateRegion(pSpread, BoundingRectangle);
 			
-PORTNOTE("other","Removed OpPathNudge usage")
-#ifndef EXCLUDE_FROM_XARALX
 			if( pOp->IS_KIND_OF(OpPathNudge) )
 			{
 				bRegen = TRUE;
 			}
 			// check for ops which we do nothing with
-			else
-#endif
-			if (pOp->IsKindOf(CC_RUNTIME_CLASS(TransOperation)) &&
+			else if (pOp->IsKindOf(CC_RUNTIME_CLASS(TransOperation)) &&
 				!pOp->IS_KIND_OF(OpMovePathPoint))
 			{
 				if (IsSelected())
@@ -1110,8 +1106,6 @@ PORTNOTE("other","Removed OpPathNudge usage")
 			{
 				bRegen = TRUE; //FALSE; // pasting can change the contours appearance as shapes/letters are added
 			}
-PORTNOTE("other","Removed OpDeleteTextStory & OpTextFormat usage")
-#ifndef EXCLUDE_FROM_XARALX
 			else if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpTextFormat)))
 			{
 				return NodeGroup::OnChildChange(pParam);			
@@ -1121,7 +1115,6 @@ PORTNOTE("other","Removed OpDeleteTextStory & OpTextFormat usage")
 				// regen for all other ops
 				return NodeGroup::OnChildChange(pParam);
 			}
-#endif
 			else if (pOp->IsKindOf(CC_RUNTIME_CLASS(CarbonCopyOp)))
 			{
 				bRegen = FALSE; // copying doesn't change the appearance of the contour
@@ -1254,13 +1247,10 @@ BOOL NodeContourController::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermission
 
 	if (pOp)
 	{
-PORTNOTE("other","NodeContourController::AllowOp - removed OpCreateBevel test")
-#ifndef EXCLUDE_FROM_XARALX
 		// can't bevel a contoured object
 		if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpCreateBevel)))
 			allowed = FALSE;
 		else
-#endif
 		if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpRemoveBlend)))
 		{
 			allowed = FALSE;
@@ -1395,7 +1385,7 @@ BOOL NodeContourController::RegenerateNode(UndoableOperation * pOp, BOOL bCacheR
 	{
 		List ContList;
 		NodeListItem * pItem = NULL;
-//		RegenerateContourAction* pRegenAction = NULL;
+		RegenerateContourAction* pRegenAction = NULL;
 
 		if (pOp)
 		{
@@ -1407,30 +1397,21 @@ BOOL NodeContourController::RegenerateNode(UndoableOperation * pOp, BOOL bCacheR
 			// invalidate my region first
 			ReleaseCached();
 			if (!pOp->DoInvalidateRegion(pSpread, BoundingRectangle))
-#ifndef EXCLUDE_FROM_XARALX
-				if (!pOp->DoInvalidateNodeRegion(this))
-#endif
-					return FALSE;
+				return FALSE;
 			
-	PORTNOTETRACE("other","NodeContourController::RegenerateNode - removed use of RegenerateContourAction");
 			// set up the action to regenerate the bevel on this undo operation
-#ifndef EXCLUDE_FROM_XARALX
 			if (RegenerateContourAction::Init(pOp, pOp->GetUndoActionList(),&ContList,&pRegenAction,
 				bCacheRender)  == AC_FAIL)
 			{
 				ERROR3("RegenerateContourAction::Init failed !\n");
 				return FALSE;
 			}
-#endif			
 			ContList.DeleteAll();
 
 			// invalidate my region again
 			ReleaseCached();
 			if (!pOp->DoInvalidateRegion(pSpread, BoundingRectangle))
-#ifndef EXCLUDE_FROM_XARALX
-				if (!pOp->DoInvalidateNodeRegion(this))
-#endif
-					return FALSE;
+				return FALSE;
 		}
 	}
 		
@@ -1705,8 +1686,6 @@ BOOL NodeContourController::PostImport()
 ***********************************************************************************************/
 BOOL NodeContourController::EndBlendStep(BlendNodeParam * pParam)
 {
-	PORTNOTETRACE("other","NodeContourController::EndBlendStep - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// CGS:  firstly, are we just rendering, or are we making shapes?
 
 	if (!pParam->GetHandleBecomeA ())
@@ -1740,14 +1719,6 @@ BOOL NodeContourController::EndBlendStep(BlendNodeParam * pParam)
 			// find the contour
 			NodeContour * pContourCopy = (NodeContour *)ptrCopy->FindFirstChild(CC_RUNTIME_CLASS(NodeContour));
 			ERROR2IF(pContourCopy == NULL, FALSE, "Can't find the contour node");
-
-#ifdef _DEBUG		// special debug info
-			INT32 id = ++NodeContourController::contourLastID;
-			ptrCopy->myContourID = id;
-			char strId [100];
-			wsprintf (strId, "Pushing NodeCountourController ID:  %i\n", ptrCopy->myContourID);	
-			TRACEUSER ("ChrisS", strId);
-#endif
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2227,9 +2198,6 @@ BOOL NodeContourController::EndBlendStep(BlendNodeParam * pParam)
 	}
 	
 	return TRUE;
-#else // EXCLUDE_FROM_XARALX
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
