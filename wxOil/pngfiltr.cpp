@@ -493,8 +493,6 @@ BOOL PNGFilter::GetExportOptions(BitmapExportOptions* pOptions)
 		// invoke the dialog
 		pOpDes->Invoke(&Param);
 
-PORTNOTE("BitmapPrevDlg", "Removed use of BitmapPrevDlg")
-#ifndef EXCLUDE_FROM_XARALX
 		// SMFIX
 		// we have brought the dlg up so get the options from the dlg as the graphic type may have changed
 		pOptions = BmapPrevDlg::m_pExportOptions;
@@ -502,7 +500,6 @@ PORTNOTE("BitmapPrevDlg", "Removed use of BitmapPrevDlg")
 		// check for valid options
 		//  This may get messed up, so have to use the second line below.
 		Ok = BmapPrevDlg::m_bClickedOnExport;
-#endif
 	}
 	else
 	{	
