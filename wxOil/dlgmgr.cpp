@@ -3144,7 +3144,7 @@ BOOL DialogManager::SetSelectedValueIndex(CWindowID WindowID,
 										CGadgetID Gadget,
 										INT32 Index)
 {
-	if (Index>0)
+	if (Index>=0)
 		return SetBoolGadgetSelected(WindowID, Gadget, TRUE, Index);
 	return SetBoolGadgetSelected(WindowID, Gadget, FALSE, -1);
 }
