@@ -208,8 +208,10 @@ public:
 public:
 	BOOL ShowProgress (BOOL Show=TRUE, StringBase *JobDescrip = NULL);
 
-	INT32 GetPercent(void) const {return CurrentPercent;}
+	INT32 GetPercent() const {return CurrentPercent;}
 	BOOL SetPercent(INT32 Percent, BOOL RedrawBackground = FALSE, StringBase *JobDescrip = NULL);
+
+	BOOL IsProgressShown() const {return ProgressShown;}
 
 protected:
 	INT32 CurrentPercent;			// The currently displayed percentage value

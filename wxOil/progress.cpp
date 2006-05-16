@@ -849,7 +849,7 @@ TRACE( _T("Progress::Stop ActiveDisplays = %d \n"),ActiveDisplays);
 	if (ActiveDisplays > 0)
 		return;
 
-	if (StatusLine::Get() && CurrentPercent < 97)
+	if (StatusLine::Get() && StatusLine::Get()->IsProgressShown() && CurrentPercent < 97)
 	{
 		// We are showing a progress bar, but have not shown "completion" of the job (99%)
 		// Briefly jump to 99% on the progress bar so the user can't see how bad our estimate
