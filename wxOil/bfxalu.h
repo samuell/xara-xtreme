@@ -162,7 +162,7 @@ inline double DoubleSquare(double d) { return d*d; }
 
 >	class BfxErrorRegionList : public CCObject
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	02/01/1995
 	Purpose:	Stores error region list for tracing
 
@@ -219,7 +219,7 @@ class BfxErrorRegionList : public CCObject
 
 >	class BfxALU : public CCObject
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Arithmetic and logic unit for bitmap effects
 
@@ -419,7 +419,7 @@ class BfxALU : public CCObject
 
 >	class BfxALULUT : public CCObject
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Lookup table
 

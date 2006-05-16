@@ -121,7 +121,7 @@ typedef struct
 
 >	class BfxPixelOp : public CCObject
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -201,7 +201,7 @@ class BfxPixelOp : public CCObject
 
 >	class BfxPixelOp32 : public BfxPixelOp
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	32 bit Pixel operator
 
@@ -280,7 +280,7 @@ class BfxPixelOp32 : public BfxPixelOp
 
 >	class BfxPixelOpPseudo : public BfxPixelOp
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	32 bit Pixel operator
 
@@ -353,7 +353,7 @@ class BfxPixelOpPseudo : public BfxPixelOp
 
 >	class BfxPixelOp24 : public BfxPixelOp
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	32 bit Pixel operator
 
@@ -382,7 +382,7 @@ class BfxPixelOp24 : public BfxPixelOp
 
 >	class BfxPositivePixelOp : public BfxPixelOp32
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -405,7 +405,7 @@ class BfxPositivePixelOp : public BfxPixelOp32
 
 >	class BfxThresholdPixelOp : public BfxPixelOp32
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -428,7 +428,7 @@ class BfxThresholdPixelOp : public BfxPixelOp32
 
 >	class BfxColourThresholdPixelOp : public BfxPixelOp32
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -451,7 +451,7 @@ class BfxColourThresholdPixelOp : public BfxPixelOp32
 
 >	class BfxPositivePixelOpPseudo : public BfxPixelOpPseudo
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -474,7 +474,7 @@ class BfxPositivePixelOpPseudo : public BfxPixelOpPseudo
 
 >	class BfxThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -497,7 +497,7 @@ class BfxThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
 >	class BfxColourThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Pixel operator
 
@@ -520,7 +520,7 @@ class BfxColourThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
 >	class Octree : public CCObject
 
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/1994
 	Purpose:	Colour octree
 

@@ -135,7 +135,7 @@ CC_IMPLEMENT_DYNCREATE(Octree, CCObject)
 
 >	BfxPixelOp::BfxPixelOp()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -165,7 +165,7 @@ BfxPixelOp::BfxPixelOp()
 
 >	BfxPixelOp::~BfxPixelOp()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -184,7 +184,7 @@ BfxPixelOp::~BfxPixelOp()
 
 >	BOOL BfxPixelOp::Reset()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Resets all parameters associated with the cache
@@ -210,7 +210,7 @@ BOOL BfxPixelOp::Reset()
 							  BOOL theDefaultValue);
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		pKB = pointer to the bitmap
 				theCacheStateMask = bit mask used to show cache information
@@ -263,7 +263,7 @@ BOOL BfxPixelOp::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD th
 >	BOOL BfxPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -288,7 +288,7 @@ BOOL BfxPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxPixelOp::IsInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -307,7 +307,7 @@ NB This function is inline
 >	BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed, KernelBitmap * pCurrent,
 								  KernelBitmap * pOriginal, INT32 Threshold, DWORD theColour);
 				
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		pProposed = the proposed bitmap (with new proposed grad fill)
 				pCurrent = the current bitmap (as built up)
@@ -386,7 +386,7 @@ BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitm
 
 >	BfxPixelOp32::BfxPixelOp32()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -409,7 +409,7 @@ BfxPixelOp32::BfxPixelOp32() : BfxPixelOp()
 
 >	BfxPixelOp32::~BfxPixelOp32()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -428,7 +428,7 @@ BfxPixelOp32::~BfxPixelOp32()
 
 >	BOOL BfxPixelOp32::Reset()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Resets all parameters associated with the cache
@@ -459,7 +459,7 @@ BOOL BfxPixelOp32::Reset()
 							  BOOL theDefaultValue);
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		pKB = pointer to the bitmap
 				theCacheStateMask = bit mask used to show cache information
@@ -500,7 +500,7 @@ BOOL BfxPixelOp32::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD 
 >	BOOL BfxPixelOp32::ClearEntireCache()
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	None
@@ -527,7 +527,7 @@ BOOL BfxPixelOp32::ClearEntireCache()
 >	BOOL BfxPixelOp32::ClearCachedArea()
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	None
@@ -557,7 +557,7 @@ BOOL BfxPixelOp32::ClearCachedArea()
 >	BOOL BfxPixelOp32::IsInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -575,7 +575,7 @@ NB This function is inline
 
 >	BOOL BfxPixelOp32::GetValueAdjustCache(INT32 x, INT32 y)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -604,7 +604,7 @@ BOOL BfxPixelOp32::GetValueAdjustCache(INT32 x, INT32 y)
 
 >	BOOL BfxPixelOp32::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/1/95
 	Inputs:		MinimumArea = minimum area 
 	Outputs:	FoundRegion set as per whether it's found a region
@@ -633,7 +633,7 @@ BOOL BfxPixelOp32::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 Ini
 
 >	BOOL BfxPixelOp32::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/1/95
 	Inputs:		x = start x
 				y = start y
@@ -674,7 +674,7 @@ BOOL BfxPixelOp32::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea)
 
 >	BfxPixelOpPseudo::BfxPixelOpPseudo()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -694,7 +694,7 @@ BfxPixelOpPseudo::BfxPixelOpPseudo() : BfxPixelOp()
 
 >	BfxPixelOpPseudo::~BfxPixelOpPseudo()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -713,7 +713,7 @@ BfxPixelOpPseudo::~BfxPixelOpPseudo()
 
 >	BOOL BfxPixelOpPseudo::Reset()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		None
 	Outputs:	Resets all parameters associated with the cache
@@ -739,7 +739,7 @@ BOOL BfxPixelOpPseudo::Reset()
 							  BOOL theDefaultValue);
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		pKB = pointer to the bitmap
 				theCacheStateMask = bit mask used to show cache information
@@ -794,7 +794,7 @@ BOOL BfxPixelOpPseudo::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DW
 >	BOOL BfxPositivePixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -833,7 +833,7 @@ BOOL BfxPositivePixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -875,7 +875,7 @@ BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -907,7 +907,7 @@ BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -941,7 +941,7 @@ BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -971,7 +971,7 @@ BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 >	BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		x,y = coordinates of pixel
 	Outputs:	None
@@ -1001,7 +1001,7 @@ BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 												   INT32 * R, INT32 * G, INT32 * B)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/03/95
 	Inputs:		Colour = the colour
 	Outputs:	R, G, B = rd, green, blue components
@@ -1046,7 +1046,7 @@ void BfxPixelOpPseudo::TranslateToRGB(DWORD Colour, KernelBitmap * pKB,
 
 >	BOOL BfxPixelOpPseudo::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/1/95
 	Inputs:		MinimumArea = minimum area 
 	Outputs:	FoundRegion set as per whether it's found a region
@@ -1087,7 +1087,7 @@ BOOL BfxPixelOpPseudo::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32
 >	BOOL BfxPixelOpPseudo::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea,
 									  INT32 FloodArray[BFX_PSEUDOFLOODSIZE][2], INT32 * FloodTop)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/1/95
 	Inputs:		x = start x
 				y = start y
@@ -1136,7 +1136,7 @@ BOOL BfxPixelOpPseudo::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea,
 
 >	Octree::Octree()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -1160,7 +1160,7 @@ Octree::Octree()
 
 >	Octree::~Octree()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -1184,7 +1184,7 @@ Octree::~Octree()
 
 >	BOOL Octree::Init(INT32 NumColours)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		None
 	Outputs:	Resets all parameters associated with the cache
@@ -1223,7 +1223,7 @@ BOOL Octree::Init(INT32 NumColours)
 
 >	OctreeElement * Octree::GetElement(INT32 r, INT32 g, INT32 b)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		r, g, b values to octree search for
 	Outputs:	None
@@ -1260,7 +1260,7 @@ OctreeElement * Octree::GetElement(INT32 r, INT32 g, INT32 b)
 
 >	BOOL Octree::Insert(INT32 r, INT32 g, INT32 b)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		r, g, b values to insert
 	Outputs:	None
@@ -1363,7 +1363,7 @@ BOOL Octree::Insert(INT32 r, INT32 g, INT32 b)
 >	void Octree::CheckIntegrity()
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		None
 	Outputs:	None
@@ -1420,7 +1420,7 @@ void Octree::CheckIntegrity()
 >	void Octree::Unlink(OctreeElement * pEl)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		pEl = pointer to element to unlink
 	Outputs:	None
@@ -1457,7 +1457,7 @@ void Octree::Unlink(OctreeElement * pEl)
 >	void Octree::Link(OctreeElement * pEl)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		pEl = pointer to element to unlink
 	Outputs:	None
@@ -1486,7 +1486,7 @@ void Octree::Link(OctreeElement * pEl)
 
 >	BOOL Octree::Index(RGBQUAD * Palette, OctreeElement * pEl=NULL)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		*pEl = element to index (and its children) or NULL for top element
 	Outputs:	*Palette = palette filled in as per octree
@@ -1534,7 +1534,7 @@ BOOL Octree::Index(RGBQUAD * Palette, OctreeElement * pEl)
 
 >	DWORD Octree::GetIndex(INT32 r, INT32 g, INT32 b)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/04/95
 	Inputs:		r, g, b to get
 	Outputs:	None

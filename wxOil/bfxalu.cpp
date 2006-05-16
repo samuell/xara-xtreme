@@ -198,7 +198,7 @@ for (UINT32 __b=0; __b<((UINT32)s);__b++) ((BYTE *)(void *)i)[__b]=__lut[((BYTE 
 
 >	BOOL BfxALULUT::LinearABK(double PropA, double PropB, double Offset)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	02/11/94
 	Inputs:		None
 	Outputs:	Initialises LUT
@@ -259,7 +259,7 @@ BOOL BfxALULUT::LinearABK(double PropA, double PropB, double Offset)
 
 >	BYTE BfxALULUT::BYTE GetLUT(UINT32 A, UINT32 B)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	02/11/94
 	Inputs:		A & B LUT address
 	Outputs:	None
@@ -283,7 +283,7 @@ BYTE BfxALULUT::GetLUT(UINT32 A, UINT32 B)
 
 >	BfxALU::BfxALU()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/94
 	Inputs:		None
 	Outputs:	Constructs object
@@ -308,7 +308,7 @@ BfxALU::BfxALU()
 
 >	BfxALU::~BfxALU()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/94
 	Inputs:		None
 	Outputs:	Constructs object
@@ -335,7 +335,7 @@ BfxALU::~BfxALU()
 
 >	BOOL BfxALU::Init()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	Initialises subsystem
@@ -384,7 +384,7 @@ void BfxALU::TestGD()
 
 >	BOOL BfxALU::DeInit()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	DeInitialises subsystem
@@ -413,7 +413,7 @@ BOOL BfxALU::DeInit()
 									 INT32 NewDepth=0, String_256 * pName =NULL, UINT32 ResID =0)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		pBitmap = pointer to the bitmap whose size to copy or NULL
 				XAdjust = Amount to alter X size by
@@ -555,7 +555,7 @@ KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,INT32 XAdjust,INT32 YAdju
 
 >	BOOL BfxALU::SetA(KernelBitmap *pBitmap=NULL);
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		pBitmap = pointer to the bitmap to use as an accumulator
 	Outputs:	Sets up GDraw to use the kernel bitmap as an accumulator
@@ -604,7 +604,7 @@ BOOL BfxALU::SetA(KernelBitmap * pBitmap)
 >	BOOL BfxALU::SetB(KernelBitmap *pBitmap=NULL,INT32 XOffset=0,INT32 YOffset=0,
 					  const BYTE * pTable=NULL,DWORD Style=0)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		pBitmap = pointer to the bitmap to use as B reg
 				X/YOffset = offsets in pixels
@@ -653,7 +653,7 @@ BOOL BfxALU::SetB(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE 
 
 >	BOOL BfxALU::SetB(DWORD Colour)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		Colour is the colour word we're using
 	Outputs:	Sets up GDraw to use the kernel bitmap as B reg
@@ -683,7 +683,7 @@ BOOL BfxALU::SetB(DWORD Colour)
 >	BOOL BfxALU::SetT(KernelBitmap *pBitmap=NULL,INT32 XOffset=0,INT32 YOffset=0,
 					  const BYTE * pTable=NULL,DWORD Style=0)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		pBitmap = pointer to the bitmap to use as T reg
 				X/YOffset = offsets in pixels
@@ -733,7 +733,7 @@ BOOL BfxALU::SetT(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE 
 
 >	BOOL BfxALU::SetT(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		Value is the value we're passing in
 	Outputs:	Sets up GDraw to use the kernel bitmap as T reg
@@ -762,7 +762,7 @@ BOOL BfxALU::SetT(DWORD Value)
 
 >	BOOL BfxALU::DoRect()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None 
 	Outputs:	Accumulator altered
@@ -799,7 +799,7 @@ ERROR2IF((!GC->FillRectangle(&Rect2)),FALSE,"BfxALU GDraw_FillRectangle failed")
 
 >	BOOL BfxALU::ZeroA(DWORD FillValue = 0)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		FillValue - Value to fill with 
 	Outputs:	Accumulator altered
@@ -833,7 +833,7 @@ BOOL BfxALU::ZeroA(DWORD FillValue)
 
 >	BOOL BfxALU::UseBT(DWORD TransparencyStyle=0)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		TransparencyStyle = the transparency method to use
 	Outputs:	Performs an ALU operation using B & T with a given transparency type
@@ -935,7 +935,7 @@ BOOL BfxALU::UseBT(DWORD TransparencyStyle)
 
 >	BOOL BfxALU::UseBK(DWORD TransparencyStyle,DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		TransparencyStyle = the transparency method to use
 				Value = Value of T
@@ -987,7 +987,7 @@ BOOL BfxALU::UseBK(DWORD TransparencyStyle,DWORD Value)
 
 >	BOOL BfxALU::PlotB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	Performs an ALU operation A<-B
@@ -1036,7 +1036,7 @@ BOOL BfxALU::PlotB()
 
 >	BOOL BfxALU::PlotBLUT(BfxALULUT * LUT)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	Performs an ALU operation A<-B
@@ -1087,7 +1087,7 @@ BOOL BfxALU::PlotBLUT(BfxALULUT * LUT)
 
 >	BOOL BfxALU::PartTAB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- TA + (1-T)B
@@ -1108,7 +1108,7 @@ BOOL BfxALU::PartTAB()
 
 >	BOOL BfxALU::PartMulTAB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- TAB + (1-T)B
@@ -1129,7 +1129,7 @@ BOOL BfxALU::PartMulTAB()
 
 >	BOOL BfxALU::PartRevMulTAB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- T(1-(1-A)(1-B)) + (1-T)B
@@ -1150,7 +1150,7 @@ BOOL BfxALU::PartRevMulTAB()
 
 >	BOOL BfxALU::AddTAB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- A + TB
@@ -1171,7 +1171,7 @@ BOOL BfxALU::AddTAB()
 
 >	BOOL BfxALU::SubTAB()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- A - TB
@@ -1192,7 +1192,7 @@ BOOL BfxALU::SubTAB()
 
 >	BOOL BfxALU::PartKAB(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- TA + (1-Value)B
@@ -1213,7 +1213,7 @@ BOOL BfxALU::PartKAB(DWORD Value)
 
 >	BOOL BfxALU::PartMulKAB(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- TAB + (1-Value)B
@@ -1234,7 +1234,7 @@ BOOL BfxALU::PartMulKAB(DWORD Value)
 
 >	BOOL BfxALU::PartRevMulKAB(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- Value.(1-(1-A)(1-B)) + (1-Value)B
@@ -1255,7 +1255,7 @@ BOOL BfxALU::PartRevMulKAB(DWORD Value)
 
 >	BOOL BfxALU::AddKAB(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- A + Value.B
@@ -1276,7 +1276,7 @@ BOOL BfxALU::AddKAB(DWORD Value)
 
 >	BOOL BfxALU::SubKAB(DWORD Value)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		None
 	Outputs:	A <- A - Value.B
@@ -1298,7 +1298,7 @@ BOOL BfxALU::SubKAB(DWORD Value)
 
 >	BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/1/95
 	Inputs:		Value = the threshold
 				MarkValue = the value to mark over the threshold pixels with
@@ -1367,7 +1367,7 @@ BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 >	BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue, DWORD ClearValue,
 							  double * pAError = NULL, double * pBError = NULL, INT32 * pTotalPixels = NULL)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		Value = the threshould
 				MarkValue = the value to mark positively affected pixels with
@@ -1470,7 +1470,7 @@ BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue
 >	BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
 							  double * pAError = NULL, double * pBError = NULL, INT32 * pTotalPixels = NULL)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		Value = the threshould
 				MarkValue = the value to mark positively affected pixels with
@@ -1569,7 +1569,7 @@ BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
 
 >	BOOL BfxALU::MarkBitByWord(DWORD BitMask, DWORD TheWord)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		TheWord = value to look for to mark
 	Outputs:	A |= BitMask if B=TheWord
@@ -1618,7 +1618,7 @@ BOOL BfxALU::MarkBitByWord(DWORD BitMask, DWORD TheWord)
 
 >	BOOL BfxALU::ClearBitByWord(DWORD BitMask, DWORD TheWord)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		TheWord = value to look for to mark
 	Outputs:	A &= ~BitMask if B=TheWord else intact
@@ -1666,7 +1666,7 @@ BOOL BfxALU::ClearBitByWord(DWORD BitMask, DWORD TheWord)
 
 >	BOOL BfxALU::MarkWordByBit(DWORD BitMask, DWORD MarkValue, DWORD ClearValue)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		MarkValue & ClearValue = the two workds with which to mark
 	Outputs:	A = ((B & BitMask) ? MarkValue:ClearValue);
@@ -1717,7 +1717,7 @@ BOOL BfxALU::MarkWordByBit(DWORD BitMask, DWORD MarkValue, DWORD ClearValue)
 								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area,
 								 INT32 * pSize, INT32 * pHighestChain, INT32 * pWidth, DWORD * * ppA)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		MarkValue = the value marked pixel have
 				ClearValue = the value cleared pixels have
@@ -1840,7 +1840,7 @@ BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
 								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		MarkValue = the value marked pixel have
 				ClearValue = the value cleared pixels have
@@ -1906,7 +1906,7 @@ BOOL BfxALU::MarkLargestArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValu
 								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		MarkValue = the value marked pixel have
 				ClearValue = the value cleared pixels have
@@ -1992,7 +1992,7 @@ BOOL BfxALU::MarkGivenArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
 							  BfxErrorRegionList * pERL, INT32 MinimumArea)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		MarkValue = the value marked pixel have
 				ClearValue = the value cleared pixels have
@@ -2090,7 +2090,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 
 >	BOOL BfxALU::ScanBit(DWORD BitMask, INT32 * X, INT32 * Y, INT32 * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		BitMask = the bit mask to search for
 				*X = the start X position or NULL
@@ -2169,7 +2169,7 @@ BOOL BfxALU::ScanBit(DWORD BitMask, INT32 * X, INT32 * Y, INT32 *pPixel, BOOL * 
 
 >	BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/10/94
 	Inputs:		Value = the threshold to look for
 				*X = the start X position or NULL
@@ -2414,7 +2414,7 @@ BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOO
 							  INT32 StartX, INT32 StartY, INT32 EndX, INT32 EndY, BOOL Antialias=FALSE,
 							  BOOL ColoursAreDWORDs = FALSE)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/01/95
 	Inputs:		ThePath = pointer to path to plot or NULL for whole thing
 				StartColour = COLORREF of start col
@@ -2527,7 +2527,7 @@ BOOL BfxALU::GradFillPath(Path * ThePath, DWORD StartColour, DWORD EndColour,
 
 >	BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/01/95
 	Inputs:		ThePath = the path to do
 	Outputs:	pStats filled in
@@ -2609,7 +2609,7 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 >	BOOL BfxALU::GetSize(KernelBitmap * pBitmap, INT32 * pXSize, INT32 * pYSize, INT32 * pDepth)
 
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/01/95
 	Inputs:		pBitmap
 	Outputs:	pXSize (if non NULL) contains X size,
@@ -2645,7 +2645,7 @@ BOOL BfxALU::GetSize(KernelBitmap * pBitmap, INT32 * pXSize, INT32 * pYSize, INT
 
 >	BOOL BfxALU::ByteCopyBA()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	Accumulator altered
@@ -2687,7 +2687,7 @@ BOOL BfxALU::ByteCopyBA()
 
 >	BfxErrorRegionList::BfxErrorRegionList()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -2714,7 +2714,7 @@ BfxErrorRegionList::BfxErrorRegionList()
 
 >	BfxErrorRegionList::~BfxErrorRegionList()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	Constructs object
@@ -2736,7 +2736,7 @@ BfxErrorRegionList::~BfxErrorRegionList()
 
 >	BOOL BfxErrorRegionList::Init(UINT32 Length)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		Length = no. of items that should go into list
 	Outputs:	None
@@ -2773,7 +2773,7 @@ BOOL BfxErrorRegionList::Init(UINT32 Length)
 
 >	BOOL BfxErrorRegionList::Empty()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	None
@@ -2802,7 +2802,7 @@ BOOL BfxErrorRegionList::Empty()
 
 >	BOOL BfxErrorRegionList::ResetRead()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	None
@@ -2823,7 +2823,7 @@ BOOL BfxErrorRegionList::ResetRead()
 
 >	BOOL BfxErrorRegionList::Insert(INT32 XCoord, INT32 YCoord, INT32 Area)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		XCoord, YCoord & Area = the number of the 
 	Outputs:	None
@@ -2856,7 +2856,7 @@ BOOL BfxErrorRegionList::Insert(INT32 XCoord, INT32 YCoord, INT32 Area)
 
 >	BOOL BfxErrorRegionList::Sort()
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	None
@@ -2899,7 +2899,7 @@ BOOL BfxErrorRegionList::Sort()
 
 >	BOOL BfxErrorRegionList::GetCurrent(INT32 * XCoord, INT32 * YCoord, INT32 * Area)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/02/95
 	Inputs:		None
 	Outputs:	None
@@ -2920,7 +2920,7 @@ This function returns FALSE at the end of a list (NOT to indicate an error condi
 
 >	BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge = FALSE)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		DoBodge - tries to get round a bug in the Accusoft linear interpolation resize code
 	Outputs:	*pHandle = Accusoft handle
@@ -3378,7 +3378,7 @@ BOOL BfxALU::MKB_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE 
 >	BOOL BfxALU::MakeKernelBitmap(INT32 Handle, KernelBitmap * * ppOutput, BOOL Make32Bits=FALSE,
 								  String_256 * pName =NULL, UINT32 ResID =0, BOOL DoBodge = FALSE)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		DoBodge - tries to get round a bug in the Accusoft linear interpolation resize code
 	Outputs:	*pHandle = Accusoft handle
@@ -3580,7 +3580,7 @@ if (pBBMI)
 
 >	BOOL BfxALU::FlipX(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3611,7 +3611,7 @@ BOOL BfxALU::FlipX(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::FlipY(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3644,7 +3644,7 @@ BOOL BfxALU::FlipY(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::Rotate90(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3676,7 +3676,7 @@ BOOL BfxALU::Rotate90(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::Rotate180(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3708,7 +3708,7 @@ BOOL BfxALU::Rotate180(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::Rotate270(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3740,7 +3740,7 @@ BOOL BfxALU::Rotate270(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT32 Contrast, INT32 Colour)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Brightness & Contast (-127 to +127)
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3839,7 +3839,7 @@ BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT
 
 >	BOOL BfxALU::BayerMono(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3883,7 +3883,7 @@ BOOL BfxALU::BayerMono(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3935,7 +3935,7 @@ BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::DiffusionMono(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -3981,7 +3981,7 @@ BOOL BfxALU::DiffusionMono(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::BayerColour(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4021,7 +4021,7 @@ BOOL BfxALU::BayerColour(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::PopularityColour(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4061,7 +4061,7 @@ BOOL BfxALU::PopularityColour(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::DiffusionColour(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4104,7 +4104,7 @@ BOOL BfxALU::DiffusionColour(KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::MakeGreyscale(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4145,7 +4145,7 @@ BOOL BfxALU::MakeGreyscale(KernelBitmap * * ppOutput)
 							  	
 >	BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4210,7 +4210,7 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 
 >	static BOOL BfxALU::IsGreyscaleBitmap(KernelBitmap * pKB);
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		pKB the bitmap to operate on
 	Outputs:	None
@@ -4237,7 +4237,7 @@ BOOL BfxALU::IsGreyscaleBitmap(KernelBitmap * pKB)
 
 >	static BOOL BfxALU::IsGreyscaleBitmap(OILBitmap * pKB);
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		pKB the bitmap to operate on
 	Outputs:	None
@@ -4271,7 +4271,7 @@ BOOL BfxALU::IsGreyscaleBitmap(OILBitmap * pOilBmp)
 
 >	BOOL BfxALU::Octree (KernelBitmap * * ppOutput)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		None
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -4314,7 +4314,7 @@ BOOL BfxALU::Octree (KernelBitmap * * ppOutput)
 
 >	BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Degree = degree of sharpening (+ve) or blurring (-ve)
 				Times = number of times to apply
@@ -4359,7 +4359,7 @@ BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 
 >	BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCols, TraceMethod Method)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Thresh = Threshold for a sharp edge (0-255). No dither removal at 0, highest at 255
 				QuantCols = number of quantisation colours to use (17-255 colour, 2-255 GS)
@@ -4897,7 +4897,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 >	void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], INT32 NoiseMatrix[5][5],
 				 				  BYTE * OutputLine, INT32 Width, INT32 Thresh, BOOL Mono)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/04/95
 	Inputs:		ByteLine - a ptr to 5 ptrs to extended scanlines of 32 bit source data
 				NoiseMatrix - the variable convolution matrix
@@ -4996,7 +4996,7 @@ void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], INT32 NoiseMatrix[5][5], BYTE 
 
 >	BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecialEffect Type)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Brightness & Contast (-127 to +127)
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -5080,7 +5080,7 @@ BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecia
 
 >	BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL LinearInterpolation)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Brightness & Contast (-127 to +127)
 	Outputs:	*ppOutput = a pointer to the output bitmap
@@ -5156,7 +5156,7 @@ BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL L
 >	BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Size, INT32 Width, INT32 Height,
 							INT32 Brightness, INT32 Contrast, INT32 Colour, BOOL SingleChannel)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		Source = pointer to source bytes
 				Size = size of entries
@@ -5253,7 +5253,7 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Si
 
 >	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		pBitmap pointer to bitmap
 				Line = line number
@@ -5351,7 +5351,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * 
 
 >	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 					
-	Author:		Alex
+	Author:		Alex_Bligh (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/01/95
 	Inputs:		pBitmap pointer to bitmap
 				Line = line number
