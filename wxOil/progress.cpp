@@ -857,9 +857,7 @@ TRACE( _T("Progress::Stop ActiveDisplays = %d \n"),ActiveDisplays);
 
 		StatusLine::Get()->SetPercent(99);
 
-		MonotonicTime Timer;
-		while (!Timer.Elapsed(150))
-			::wxMilliSleep(20); /* wait */ 
+		::wxMilliSleep(150); /* wait */ 
 	}
 
 	// Make sure everything is reset properly
