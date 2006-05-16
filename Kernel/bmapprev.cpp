@@ -266,9 +266,9 @@ PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
 	bool	fUsedImapOption = false;
 	if (ok && !bExportABitmap && m_FilterType != MAKE_BITMAP_FILTER && !m_bSlicingImage)
 	{
-PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
+PORTNOTE("other","Removed IDD_TPALETTE & IDD_TBROWSER - doesn't exist in resources and isn't wanted (in that order)")
 //		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
-		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
+		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS));
 		fUsedImapOption = true;
 	}
 
@@ -2552,16 +2552,20 @@ void BmapPrevDlg::HandleBitmapSizeTabMsg(DialogMsg* Msg)
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	TalkToPage(_R(IDD_TBITMAPSIZE)); 
 
+	TRACEUSER( "jlh92", _T("BmapPrevDlg::HandleBitmapSizeTabMsg") );
+
 	switch (Msg->DlgMsg)
 	{
 		case DIM_CREATE:
 		{
+			TRACEUSER( "jlh92", _T("BmapPrevDlg::HandleBitmapSizeTabMsg - DIM_CREATE") );
 			InitBitmapSizeTab();
 			break;
 		}
 
 		case DIM_TEXT_CHANGED:
 		{
+			TRACEUSER( "jlh92", _T("BmapPrevDlg::HandleBitmapSizeTabMsg - DIM_TEXT_CHANGED") );
 			if( Msg->GadgetID == _R(IDC_T1EDIT1) )
 				HandleBitmapSizeWidthChange();
 			else
@@ -2579,6 +2583,7 @@ void BmapPrevDlg::HandleBitmapSizeTabMsg(DialogMsg* Msg)
 
 		case DIM_SELECTION_CHANGED:
 		{
+			TRACEUSER( "jlh92", _T("BmapPrevDlg::HandleBitmapSizeTabMsg - DIM_SELECTION_CHANGED") );
 			if( Msg->GadgetID == _R(IDC_T1COMBO1) )
 				HandleBitmapSizeDPIChange();
 			break;
@@ -2647,6 +2652,7 @@ PORTNOTE("other","Hopefully this is no longer needed")
 		}
 
 		case DIM_SET_ACTIVE:
+			TRACEUSER( "jlh92", _T("BmapPrevDlg::HandleBitmapSizeTabMsg - DIM_SET_ACTIVE") );
 			UpdateCurrentTab();
 			break;
 
@@ -3065,6 +3071,8 @@ void BmapPrevDlg::HandleBitmapSizePutHTMLChange()
 // update all the ctrls on this tab to show the new options
 void BmapPrevDlg::RefreshBitmapSizeTab()
 {
+	TRACEUSER( "jlh92", _T("BmapPrevDlg::RefreshBitmapSizeTab") );
+
 	// set the interlocking dpi controls
 	m_LockSizeUpdates = TRUE;
 

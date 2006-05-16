@@ -367,6 +367,7 @@ BOOL MaskedFilterExportOptions::RetrieveDefaults()
 	if (!BitmapExportOptions::RetrieveDefaults())
 		return FALSE;
 
+PORTNOTE("BMPFilter", "Remove use of GetDefaultExportDither")
 #ifndef EXCLUDE_FROM_XARALX
 	UINT32 Dither = BMPFilter::GetDefaultExportDither();
 	ERROR2IF(Dither > 4, FALSE, "Dither Invalid");
