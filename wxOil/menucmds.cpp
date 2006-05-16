@@ -817,14 +817,7 @@ Technical Notes:
 
 void HelpIndexAction() 
 {
-PORTNOTETRACE("other", "HelpIndexAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
-#if (_MFC_VER >= 0x250)
-	GetMainFrame()->OnHelpIndex();
-#else
-	((CCamApp*) AfxGetApp())->OnHelpIndex();
-#endif
-#endif
+	AfxGetApp().OnHelpIndex();
 }
 
 

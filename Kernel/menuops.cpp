@@ -1437,8 +1437,6 @@ Technical Notes:
 
 void HelpOps::Do(OpDescriptor* WhichOp)
 {
-PORTNOTETRACE("other","HelpOps::Do - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if ((WhichOp->Token) ==  String(OPTOKEN_HELPUSING))
 		HelpUsingAction(); 
 	else if ((WhichOp->Token) == String(OPTOKEN_HELPINDEX))
@@ -1484,7 +1482,7 @@ PORTNOTETRACE("other","HelpOps::Do - do nothing");
 	else if ((WhichOp->Token) == String(OPTOKEN_HELPSPEC))
 		HelpSpecAction(); 
 #endif
-#endif	
+	
 	End();
 }                 
 
@@ -1507,8 +1505,6 @@ PORTNOTETRACE("other","HelpOps::Do - do nothing");
 
 OpState HelpOps::GetState(String_256* UIDescription, OpDescriptor* OpDesc)
 {
-	PORTNOTETRACE("other","HelpOps::GetState - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	//Webster_Ranbir_12\11\96
 #ifdef INC_WEB_MENU_ITEMS
 	if (OpDesc->Token == String(OPTOKEN_WEBLINK))		
@@ -1529,7 +1525,6 @@ OpState HelpOps::GetState(String_256* UIDescription, OpDescriptor* OpDesc)
 	}
 	else
 #endif //INC_WEB_MENU_ITEMS
-#endif
 		return OpState(FALSE, FALSE);
 }                                    
 
@@ -1556,8 +1551,6 @@ OpState HelpOps::GetState(String_256* UIDescription, OpDescriptor* OpDesc)
 
 BOOL HelpOps::Init()
 {
-PORTNOTETRACE("other","HelpOps::Init - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	REGOP(HELP,USING,HelpOps)
 	/* OpDescriptor* UsingOp = new OpDescriptor(
 											0, 
@@ -1700,8 +1693,6 @@ PORTNOTETRACE("other","HelpOps::Init - do nothing");
 
 #ifdef STANDALONE
 	REGOP(HELP,SPEC,HelpOps)
-#endif
-
 #endif
 
 	return TRUE;

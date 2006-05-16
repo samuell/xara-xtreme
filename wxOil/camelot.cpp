@@ -1227,6 +1227,52 @@ PORTNOTE("other","CCamApp::OnTimer - needs completing")
 		;
 }
 
+/*******************************************************************************************/
+
+void CCamApp::OnHelpIndex()
+{
+	// Get the locale id
+	wxString	strLocale( setlocale( LC_MESSAGES, NULL ), wxConvUTF8 );
+	int			ordSep = strLocale.Find( _T('_' ) );
+	if( -1 != ordSep )
+		strLocale = strLocale.Left( ordSep );
+	TRACEUSER( "jlh92", _T("Locale = %s\n"), PCTSTR(strLocale) );
+	
+	// Locale C is considered a synonym for en
+	if( strLocale == _T("C") )
+		strLocale = _T("en");
+
+	// Check the help dir exists, if not bomb out
+	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
+	wxString	strHelpPath( pszDataPath, wxConvUTF8 );
+	free( pszDataPath );
+	strHelpPath += _T("/xaralx/doc/");
+	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strHelpPath + strLocale) );
+	if( wxDir::Exists( strHelpPath + strLocale ) )
+		strHelpPath += strLocale + _T("/");
+	else
+	if( wxDir::Exists( strHelpPath + _T("en") ) )
+		strHelpPath += strLocale + _T("en/");
+	else
+	{
+		// We'll try default location under debug to make life easier
+#if defined(_DEBUG)
+		strHelpPath = _T("/usr/share/xaralx/doc/en/");
+		TRACEUSER( "jlh92", _T("Try = \"%s\"\n"), PCTSTR(strHelpPath) );
+		if( !wxDir::Exists( strHelpPath ) )
+#endif
+			return;
+	}
+
+	TRACEUSER( "jlh92", _T("Final directory = \"%s\"\n"), PCTSTR(strHelpPath) );
+
+	// Build the complete URL and launch browser
+	wxString	strUrl( _T("file://") );
+	strUrl += strHelpPath;
+	strUrl += _T("xaralx.htm");
+	wxLaunchDefaultBrowser( strUrl );
+}
+
 /***************************************************************************************************************************/
 
 

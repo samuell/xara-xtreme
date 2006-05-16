@@ -363,7 +363,6 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 			CXFTreeDlg::Init() &&				// The Xar format debug tree dialog
 #endif //XAR_TREE_DIALOG
 
-			HelpOps::Init() &&					// Register Help Operations
 			OpWhatsThis::Init() &&				// Register the "What's This?" help mode Operation
 			WindowOps::Init() &&				// Register Window Operations
 			ViewOps::Init() &&					// Register View Operations
@@ -376,6 +375,7 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 #endif //webster
 
 #endif
+			HelpOps::Init() &&					// Register Help Operations
 
 			OpMenuImport::Init() &&				// Register import operations
 			OpMenuExport::Init() &&				// Register export operations

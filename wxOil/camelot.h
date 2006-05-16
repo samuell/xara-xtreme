@@ -138,6 +138,8 @@ public:
     void OnIdle		( wxIdleEvent  &event );
 	void OnTimer	( wxTimerEvent &event );
 
+	void OnHelpIndex();
+
 	void GiveActiveCanvasFocus();
 	
 	int FilterEvent( wxEvent& event );
