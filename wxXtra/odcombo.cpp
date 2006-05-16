@@ -419,6 +419,7 @@ void wxVListBoxComboPopup::SetItemClientData( int n,
 
     m_clientDatas.SetCount(n+1,NULL);
     m_clientDatas[n] = clientData;
+    CheckWidth(n);
 }
 
 void* wxVListBoxComboPopup::GetItemClientData(int n) const
