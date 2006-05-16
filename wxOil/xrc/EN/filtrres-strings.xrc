@@ -1171,7 +1171,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SAVEAS_OVERWRITE">
-					<label>There is already a file with that name. The contents of the old file will be lost if you overwrite it. Do you want to Overwrite or Save as a new name?</label>
+					<label>There is already a file with that name. The contents of the old file will be lost if you overwrite it.\n\nDo you want to Overwrite or Save as a new name?</label>
 				</object>
 			</object>
 		</object>
