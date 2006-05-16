@@ -129,22 +129,22 @@ sub GetSize
     my $default = shift @_;
 
     my %cnamemap = (
-		    "IDC_GEOMETRY" => 128,
-		    "IDC_MAPPING" => 128,
-		    "IDC_EFFECT" => 96,
-		    "IDC_BITMAPEFFECT" => 128,
-		    "IDC_TRANSPTYPE" => 128,
+		    "IDC_GEOMETRY" => $dd?112:128,
+		    "IDC_MAPPING" => $dd?112:128,
+		    "IDC_EFFECT" => $dd?112:96,
+		    "IDC_BITMAPEFFECT" => $dd?112:128,
+		    "IDC_TRANSPTYPE" => $dd?112:128,
 		    "IDC_SEL_EDIT_XSCALE" => 30,
 		    "IDC_SEL_EDIT_YSCALE" => 30,
 		    "IDC_SEL_EDIT_SHEAR" => 30,
 		    "IDC_SEL_EDIT_ANGLE" => 30,
 		    "IDC_BEVEL_TYPE_COMBO" => 96,
 		    "IDC_BEVEL_SLIDER_COMBO" => 96,
-		    "IDC_TRANSPSLIDE" => 128,
+		    "IDC_TRANSPSLIDE" => 96,
 		    "IDC_BEVELSLIDER" => 96,
-		    "IDC_FREEHANDSLIDER" => 128,
-		    "IDC_SOFTSHADOWSLIDER" => 128,
-		    "IDC_SOFTSHADOWTRANSPSLIDER" => 128,
+		    "IDC_FREEHANDSLIDER" => 96,
+		    "IDC_SOFTSHADOWSLIDER" => 96,
+		    "IDC_SOFTSHADOWTRANSPSLIDER" => 96,
 		    "IDC_EDIT_REGSHAPETOOL_POS" => 128,
 		    "IDC_FONT_COMBO" => 128
 		   );
@@ -326,9 +326,10 @@ sub WriteCombo
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>0</border>\n";
     print STDOUT $ddindent."                <object class=\"wxOwnerDrawnComboBox\" name=\"$name\">\n";
-    printf STDOUT $ddindent."                    <size>%d,-1</size>\n",GetSize($name, 80);
+    printf STDOUT $ddindent."                    <size>%d,%d</size>\n",GetSize($name, 80), $dd?14:-1;
     WriteFont();
     printf STDOUT $ddindent."                    <style>%s</style>\n", GetComboStyle($name);
+    printf STDOUT $ddindent."                    <buttonsize>%d,-1</buttonsize>\n", $dd?15:17;
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
     print STDOUT $ddindent."                </object>\n";
@@ -571,7 +572,7 @@ sub WriteControl
     {
 	WriteSlider($name,$optoken);
     }   
-    elsif ($name =~ /^(IDC_REGSHAPETOOL_ADDCHANGE|IDC_SELPOINT|IDC_SELCOLOUR|IDC_BEZTOOLADDCHANGE|IDC_PATH_STATIC_FIRSTX|IDC_PATH_STATIC_FIRSTY|IDC_PATH_STATIC_MIDX|IDC_PATH_STATIC_MIDY|IDC_PATH_STATIC_SECONDX|IDC_PATH_STATIC_SECONDY|IDC_SMOOTHPERCENT|IDC_FREEHANDPERCENT|IDC_FREEHANDRETRO|IDC_SOFTSHADOWCENTRE_X|IDC_SOFTSHADOWCENTRE_Y)$/)
+    elsif ($name =~ /^(IDC_REGSHAPETOOL_ADDCHANGE|IDC_SELPOINT|IDC_BEZTOOLADDCHANGE|IDC_PATH_STATIC_FIRSTX|IDC_PATH_STATIC_FIRSTY|IDC_PATH_STATIC_MIDX|IDC_PATH_STATIC_MIDY|IDC_PATH_STATIC_SECONDX|IDC_PATH_STATIC_SECONDY|IDC_SMOOTHPERCENT|IDC_FREEHANDPERCENT|IDC_FREEHANDRETRO|IDC_SOFTSHADOWCENTRE_X|IDC_SOFTSHADOWCENTRE_Y|IDC_SELCOLOUR)$/)
     {
 	WriteStaticText($name,$optoken);
     }
@@ -629,6 +630,7 @@ while (<>)
     }
     elsif (/^End(Bar|Gallery)\b/)
     {
+	WriteSeparator(); # end with a separator to ensure minimum height
 	$dialogname="";
 	$ingal?WriteGalleryTail():WriteBarTail();
 	$inbar = 0;

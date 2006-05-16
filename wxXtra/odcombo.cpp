@@ -840,6 +840,11 @@ wxObject *wxOwnerDrawnComboBoxXmlHandler::DoCreateResource()
 
         control->SetPopupControl(NULL);
 
+        wxSize ButtonSize=GetSize(wxT("buttonsize"));
+
+        if (ButtonSize != wxDefaultSize)
+            control->SetButtonPosition(ButtonSize.GetWidth(), ButtonSize.GetHeight());
+
         if (selection != -1)
             control->SetSelection(selection);
 

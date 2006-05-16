@@ -392,8 +392,8 @@ BOOL CCamFrame::CreateToolbars()
 	wxCommandEvent sbbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_STATUS));
 	OnStandardBar(sbbe);
 
-	wxCommandEvent gbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_GALLERIES));
-	OnStandardBar(gbe);
+//	wxCommandEvent gbe(wxEVT_COMMAND_MENU_SELECTED, _R(IDD_BUTTBAR_GALLERIES));
+//	OnStandardBar(gbe);
 
 	return TRUE;
 }

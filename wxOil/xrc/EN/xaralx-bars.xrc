@@ -152,6 +152,11 @@
                     <optoken>TOOL25</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_IMAGESETTING">
@@ -210,6 +215,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>PrintOnAllPlates</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -362,6 +372,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>QualityOutline</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -543,6 +558,11 @@
                     <optoken>FitTextToPath</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_EDIT">
@@ -657,6 +677,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>BarCreationDlg</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -783,6 +808,11 @@
                     <optoken>PrintSetup</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_GALLERIES">
@@ -863,6 +893,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>DisplayNameGallery</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -953,6 +988,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
             </object>
@@ -991,6 +1027,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineWidth</optoken>
                 </object>
             </object>
@@ -1048,6 +1085,83 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>FeatherProfile</optoken>
                 </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGCOLOUR">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayColourGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGLAYER">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayLayerGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGFRAME">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayFrameGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGBITMAP">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayBitmapGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGLINE">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayLineGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGFONTS">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayFontsGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGCLIPART">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayClipartGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGFILLS">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayFillsGallery</optoken>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDC_BTN_SGNAME">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>DisplayNameGallery</optoken>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -1202,6 +1316,11 @@
                     <optoken>TOOL4</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_ANIMATION">
@@ -1309,6 +1428,11 @@
                     <optoken>BrowserPreview</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BUTTBAR_FEATHER">
@@ -1342,6 +1466,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>FeatherProfile</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -1544,6 +1673,11 @@
                     </object>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -1715,6 +1849,11 @@
                     <help>Make all layers editable regardless of their editable state</help>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -1882,6 +2021,11 @@
                     <tooltip>IDBBL_FRAME_MULTILAYER</tooltip>
                     <help>IDS_FRAME_STATUS_MULTILAYER</help>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             </object>
         </object>
@@ -2154,6 +2298,11 @@
                     </object>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -2234,6 +2383,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineWidth</optoken>
                 </object>
             </object>
@@ -2262,6 +2412,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>ChangeLineCap</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             </object>
         </object>
@@ -2498,8 +2653,14 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>NameGalleryPropertyIndex</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             </object>
         </object>
@@ -2713,6 +2874,11 @@
                         </object>
                     </object>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             </object>
         </object>
@@ -2952,6 +3118,11 @@
                     <optoken>LibGalClipTheme</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -3182,6 +3353,11 @@
                     </object>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -3212,6 +3388,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
             </object>
@@ -3256,6 +3433,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>ZoomSelect</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -3275,6 +3457,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
             </object>
@@ -3319,6 +3502,11 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>ZoomSelect</optoken>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -3453,6 +3641,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Number of sides</tooltip>
                     <help>Enter the number of sides the QuickShape has</help>
                 </object>
@@ -3471,6 +3660,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3583,6 +3773,11 @@
                         </object>
                     </object>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             <object class="spacer">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -3671,6 +3866,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3783,6 +3979,11 @@
                         </object>
                     </object>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
             <object class="spacer">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -3857,6 +4058,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
                 </object>
@@ -3975,6 +4177,11 @@
                 <border>1</border>
                 <size>3,28</size>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_GRADFILLDLG">
@@ -3993,6 +4200,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill type</tooltip>
                     <help>Choose the type of fill</help>
                 </object>
@@ -4011,6 +4219,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
                 </object>
@@ -4029,6 +4238,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -4047,6 +4257,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -4106,6 +4317,11 @@
                 <border>1</border>
                 <size>3,28</size>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_TRANFILLDLG">
@@ -4124,6 +4340,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Transparency shape</tooltip>
                     <help>Choose the type of fill</help>
                 </object>
@@ -4142,6 +4359,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Transparency type</tooltip>
                     <help>Choose the type of transparency</help>
                 </object>
@@ -4160,6 +4378,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
                 </object>
@@ -4178,6 +4397,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
                 </object>
@@ -4223,7 +4443,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_TRANSPSLIDE">
-                    <size>128,-1</size>
+                    <size>96,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
@@ -4249,6 +4469,11 @@
                     <tooltip>Transparency</tooltip>
                     <help>Drag slider to change the transparency of a fill handle</help>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -4861,6 +5086,11 @@
                     <tooltip>Smoothing</tooltip>
                     <help>Sets accuracy of the smoothing operation</help>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -5497,6 +5727,11 @@
                     <optoken>NameObjectsDlg</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_FREEHANDTOOL">
@@ -5510,7 +5745,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_FREEHANDSLIDER">
-                    <size>128,-1</size>
+                    <size>96,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
@@ -5608,6 +5843,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing brush</tooltip>
                     <help>Select an existing brush</help>
                 </object>
@@ -5626,9 +5862,15 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing stroke shape / pressure profile</tooltip>
                     <help>Select an existing stroke shape / pressure profile</help>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -5707,6 +5949,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Colour blend effect</tooltip>
                     <help>Choose the way in which colours are blended together</help>
                 </object>
@@ -5793,6 +6036,11 @@
                     <tooltip>Rotate along curve</tooltip>
                     <help>Rotate the objects to match the angle of the curve</help>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
@@ -5975,6 +6223,11 @@
                     <optoken>PastePerspective</optoken>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_CONTOURINFOBAR">
@@ -6052,6 +6305,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Change the colour effect</tooltip>
                     <help>Change the colour effect of the contour rings</help>
                 </object>
@@ -6184,6 +6438,11 @@
                     <help>Set line join type to bevelled</help>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_BEVELINFOBAR">
@@ -6202,6 +6461,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Bevel type</tooltip>
                     <help>Select the appearance of the bevel from the list</help>
                 </object>
@@ -6220,6 +6480,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Slider type</tooltip>
                     <help>Use the slider to change the bevel settings</help>
                 </object>
@@ -6315,6 +6576,11 @@
                     <help>Set line join type to bevelled</help>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_TEXT_INFO_BAR">
@@ -6333,6 +6599,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_READONLY</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Font</tooltip>
                     <help>Set font typeface; choose from TrueType fonts</help>
                 </object>
@@ -6351,6 +6618,7 @@
                         <size>8</size>
                     </font>
                     <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <tooltip>Size</tooltip>
                     <help>Set font size</help>
                 </object>
@@ -6733,6 +7001,11 @@
                     <help>Use automatic kerning</help>
                 </object>
             </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
         </object>
     </object>
     <object class="wxPanel" name="IDD_PENTOOLBAR">
@@ -6742,6 +7015,11 @@
         <help>Pen tool info bar</help>
         <object class="wxBoxSizer">
             <orient>wxHORIZONTAL</orient>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+            </object>
             <object class="spacer">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
@@ -6801,7 +7079,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_SOFTSHADOWSLIDER">
-                    <size>128,-1</size>
+                    <size>96,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
@@ -6837,7 +7115,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxSlider" name="IDC_SOFTSHADOWTRANSPSLIDER">
-                    <size>128,-1</size>
+                    <size>96,-1</size>
                     <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
                     <value>0</value>
                     <min>0</min>
@@ -7035,6 +7313,11 @@
                         </object>
                     </object>
                 </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
             </object>
         </object>
     </object>
