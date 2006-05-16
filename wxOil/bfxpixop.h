@@ -1,4 +1,100 @@
-// $Header: /camelot/winoil/BFXPIXOP.H 3     1/05/95 14:25 Alex $
+// $Id: wxOil/bfxpixop.h, 1, 01-Jan-2006, Anonymous $
+/* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
+================================XARAHEADERSTART===========================
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
+
+LICENSE TO USE AND MODIFY SOFTWARE
+----------------------------------
+
+This file is part of Xara LX.
+
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
+
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
+
+MARKS
+-----
+
+Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
+designs are registered or unregistered trademarks, design-marks, and/or
+service marks of Xara Group Ltd. All rights in these marks are reserved.
+
+
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
+
+=================================XARAHEADEREND============================
+ */
 // This is the header file for the bitmap effect pixop class
 
 /*
@@ -13,11 +109,11 @@ class KernelBitmap;
 
 typedef struct
 {
-	LONG rsum;
-	LONG gsum;
-	LONG bsum;
-	LONG pixels;
-	LONG index;
+	INT32 rsum;
+	INT32 gsum;
+	INT32 bsum;
+	INT32 pixels;
+	INT32 index;
 } QuantisationCell;
 
 
@@ -49,55 +145,55 @@ class BfxPixelOp : public CCObject
 
 	virtual BOOL SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD theCacheValueMask, BOOL theDefaultValue);
 	
-	virtual inline BOOL IsInRegion(LONG x, LONG y) {return DefaultValue;}
+	virtual inline BOOL IsInRegion(INT32 x, INT32 y) {return DefaultValue;}
 
 	virtual inline BOOL ClearCachedArea() {return TRUE;};
 	virtual inline BOOL ClearEntireCache() {return TRUE;};
 	virtual BOOL SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitmap * pCurrent /*B*/,
-							  KernelBitmap * pOriginal /*T*/, LONG Threshold, DWORD theColour);
+							  KernelBitmap * pOriginal /*T*/, INT32 Threshold, DWORD theColour);
 
-	virtual inline BOOL CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion)
+	virtual inline BOOL CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 							{*FoundRegion = FALSE; return TRUE;};
 
-	virtual inline DWORD ReadPixel(void * Image, LONG p) { return 0; }
-	virtual inline void TranslateToRGB(DWORD Colour, KernelBitmap * pKB, LONG * R, LONG * G, LONG * B)
-		{ *R = (LONG)(Colour >>16) & 0x0FF; *G = (LONG)(Colour>>8) & 0x0FF; *B = (LONG)(Colour/*>>0*/) & 0x0FF;return;};
+	virtual inline DWORD ReadPixel(void * Image, INT32 p) { return 0; }
+	virtual inline void TranslateToRGB(DWORD Colour, KernelBitmap * pKB, INT32 * R, INT32 * G, INT32 * B)
+		{ *R = (INT32)(Colour >>16) & 0x0FF; *G = (INT32)(Colour>>8) & 0x0FF; *B = (INT32)(Colour/*>>0*/) & 0x0FF;return;};
 
-	inline DWORD ReadOriginalPixel(LONG x, LONG y)
+	inline DWORD ReadOriginalPixel(INT32 x, INT32 y)
 		{ return ReadPixel((void *)pT, x+y*WidthRounded); };
 
-	virtual inline DWORD ReadBPixel(LONG x, LONG y)
+	virtual inline DWORD ReadBPixel(INT32 x, INT32 y)
 		{ return ReadPixel((void *)pB, x+y*WidthRounded); };
 
-	inline DWORD ReadPixel(void * Image, LONG x, LONG y) { return ReadPixel(Image, x+y*WidthRounded); };
+	inline DWORD ReadPixel(void * Image, INT32 x, INT32 y) { return ReadPixel(Image, x+y*WidthRounded); };
 
-	virtual inline void WritePixel(void * Image, LONG p, DWORD Value) { return; }
-	virtual inline DWORD TranslateToDWORD(KernelBitmap * pKB, LONG R, LONG G, LONG B)
+	virtual inline void WritePixel(void * Image, INT32 p, DWORD Value) { return; }
+	virtual inline DWORD TranslateToDWORD(KernelBitmap * pKB, INT32 R, INT32 G, INT32 B)
 		{ return ((R & 0xFF)<<16) | ((G & 0xFF)<<8) | (B & 0xFF); };
 
-	inline void WriteOriginalPixel(LONG x, LONG y, DWORD Value)
+	inline void WriteOriginalPixel(INT32 x, INT32 y, DWORD Value)
 		{ WritePixel((void *)pT, x+y*WidthRounded, Value); return; };
 
-	inline void WritePixel(void * Image, LONG x, LONG y, DWORD Value) { WritePixel(Image, x+y*WidthRounded, Value); return;};
+	inline void WritePixel(void * Image, INT32 x, INT32 y, DWORD Value) { WritePixel(Image, x+y*WidthRounded, Value); return;};
 
 	protected:
 
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 
 	DWORD * Base;
-	LONG Height;
-	LONG Width;
-	LONG WidthRounded;
+	INT32 Height;
+	INT32 Width;
+	INT32 WidthRounded;
 	DWORD Size;
 	BOOL DefaultValue;
 
-	LONG BPP;
+	INT32 BPP;
 
 	DWORD * pA;
 	DWORD * pB;
 	DWORD * pT;
 	DWORD Colour;
-	LONG Value;
+	INT32 Value;
 
 };
 
@@ -128,9 +224,9 @@ class BfxPixelOp32 : public BfxPixelOp
 
 	virtual BOOL SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD theCacheValueMask, BOOL theDefaultValue);
 	
-	inline BOOL IsCached(LONG x, LONG y) { return (( (DWORD)x>=(DWORD)Width ) || ( (DWORD)y>=(DWORD)Height ) || (!Base))?
+	inline BOOL IsCached(INT32 x, INT32 y) { return (( (DWORD)x>=(DWORD)Width ) || ( (DWORD)y>=(DWORD)Height ) || (!Base))?
 												DefaultValue:((__bfxpixop_xy(x,y) & CacheStateMask)!=0); };
-	virtual inline BOOL IsInRegion(LONG x, LONG y) {
+	virtual inline BOOL IsInRegion(INT32 x, INT32 y) {
 		if (( (DWORD)x>=(DWORD)Width ) || ( (DWORD)y>=(DWORD)Height ) || (!Base)) return DefaultValue;
 		DWORD *pix = &__bfxpixop_xy(x,y);
 		BOOL val;
@@ -140,7 +236,7 @@ class BfxPixelOp32 : public BfxPixelOp
 	virtual BOOL ClearCachedArea();
 	virtual BOOL ClearEntireCache();
 
-	virtual inline DWORD ReadPixel(void * Image, LONG p)
+	virtual inline DWORD ReadPixel(void * Image, INT32 p)
 	{
 		if ((((DWORD)p)>=Size)||!Image)
 		{
@@ -150,7 +246,7 @@ class BfxPixelOp32 : public BfxPixelOp
 		return ((DWORD *) Image)[p];
 	};
 
-	virtual inline void WritePixel(void * Image, LONG p, DWORD Value)
+	virtual inline void WritePixel(void * Image, INT32 p, DWORD Value)
 	{
 		if ((((DWORD)p)>=Size)||!Image)
 		{
@@ -161,23 +257,23 @@ class BfxPixelOp32 : public BfxPixelOp
 		return;
 	};
 
-	inline LONG GetCacheMarks() { return CacheMarks; };
+	inline INT32 GetCacheMarks() { return CacheMarks; };
 
-	virtual BOOL CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion);
+	virtual BOOL CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion);
 
 	protected:
 
-	virtual BOOL GetValueAdjustCache(LONG x, LONG y);
-	virtual BOOL FloodSearch(LONG x, LONG y, LONG MinimumArea);
+	virtual BOOL GetValueAdjustCache(INT32 x, INT32 y);
+	virtual BOOL FloodSearch(INT32 x, INT32 y, INT32 MinimumArea);
 
 	DWORD CacheStateMask;
 	DWORD CacheValueMask;
-	LONG CacheMarks;
+	INT32 CacheMarks;
 
-	LONG MinX;
-	LONG MinY;
-	LONG MaxX;
-	LONG MaxY;
+	INT32 MinX;
+	INT32 MinY;
+	INT32 MaxX;
+	INT32 MaxY;
 };
 
 /********************************************************************************************
@@ -210,13 +306,13 @@ class BfxPixelOpPseudo : public BfxPixelOp
 
 	virtual BOOL SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD theCacheValueMask, BOOL theDefaultValue);
 	
-	virtual inline BOOL IsInRegion(LONG x, LONG y) {
+	virtual inline BOOL IsInRegion(INT32 x, INT32 y) {
 		if (( (DWORD)x>=(DWORD)Width ) || ( (DWORD)y>=(DWORD)Height ) ) return DefaultValue;
 		else return IsPixelReallyInRegion(x, y);};
 
-	virtual void TranslateToRGB(DWORD Colour, KernelBitmap * pKB, LONG * R, LONG * G, LONG * B);
+	virtual void TranslateToRGB(DWORD Colour, KernelBitmap * pKB, INT32 * R, INT32 * G, INT32 * B);
 
-	virtual inline DWORD ReadPixel(void * Image, LONG p)
+	virtual inline DWORD ReadPixel(void * Image, INT32 p)
 	{
 		if ( (((DWORD)p)>=Size)||!Image)
 		{
@@ -226,7 +322,7 @@ class BfxPixelOpPseudo : public BfxPixelOp
 		return (DWORD)(((((BYTE *) Image)[p>>XShift])>>((XMask-(p & XMask))<<Log2BPP))&BPPMask);
 	};
 
-	virtual inline void WritePixel(void * Image, LONG p, DWORD Value)
+	virtual inline void WritePixel(void * Image, INT32 p, DWORD Value)
 	{
 		if ( (((DWORD)p)>=Size)||!Image)
 		{
@@ -234,23 +330,23 @@ class BfxPixelOpPseudo : public BfxPixelOp
 			return;
 		}
 		BYTE * thebyte = &(((BYTE *) Image)[p>>XShift]);
-		LONG shift = ((XMask-(p & XMask))<<Log2BPP);
+		INT32 shift = ((XMask-(p & XMask))<<Log2BPP);
 		*thebyte = (BYTE)(((*thebyte) & ~(BPPMask<<shift)) | ((Value & BPPMask)<<shift));
 		return;
 	};
 
-	virtual BOOL CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion);
+	virtual BOOL CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion);
 
 	protected:
 
-	BOOL FloodSearch(LONG x, LONG y, LONG MinimumArea,
-				  LONG FloodArray[BFX_PSEUDOFLOODSIZE][2], LONG * FloodTop);
+	BOOL FloodSearch(INT32 x, INT32 y, INT32 MinimumArea,
+				  INT32 FloodArray[BFX_PSEUDOFLOODSIZE][2], INT32 * FloodTop);
 
 
-	LONG Log2BPP;
-	LONG XShift;
-	LONG XMask;
-	LONG BPPMask;
+	INT32 Log2BPP;
+	INT32 XShift;
+	INT32 XMask;
+	INT32 BPPMask;
 };
 
 /********************************************************************************************
@@ -277,7 +373,7 @@ class BfxPixelOp24 : public BfxPixelOp
 
 	public:
 
-	virtual inline DWORD ReadBPixel(LONG x, LONG y)
+	virtual inline DWORD ReadBPixel(INT32 x, INT32 y)
 		{ return *((DWORD *)&( ((BYTE *)(pB))[y*(((Width*3)+3)&~3)+(x*3)] ) ) &0x00FFFFFF; };
 	
 };
@@ -301,7 +397,7 @@ class BfxPositivePixelOp : public BfxPixelOp32
 
 	protected:
 	
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 	
 };
 
@@ -324,7 +420,7 @@ class BfxThresholdPixelOp : public BfxPixelOp32
 
 	protected:
 
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 
 };
 
@@ -347,7 +443,7 @@ class BfxColourThresholdPixelOp : public BfxPixelOp32
 
 	protected:
 
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 
 };
 
@@ -370,7 +466,7 @@ class BfxPositivePixelOpPseudo : public BfxPixelOpPseudo
 
 	protected:
 	
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 	
 };
 
@@ -393,7 +489,7 @@ class BfxThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
 	protected:
 
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 
 };
 
@@ -416,7 +512,7 @@ class BfxColourThresholdPixelOpPseudo : public BfxPixelOpPseudo
 
 	protected:
 
-	virtual BOOL IsPixelReallyInRegion(LONG x, LONG y);
+	virtual BOOL IsPixelReallyInRegion(INT32 x, INT32 y);
 
 };
 
@@ -434,10 +530,10 @@ class OctreeElement : public SimpleCCObject
 {
 	public:
 
-	OctreeElement() { pParent=pListNext=pListPrev=NULL; for (LONG c=0; c<8; c++) pChildren[c]=NULL;
+	OctreeElement() { pParent=pListNext=pListPrev=NULL; for (INT32 c=0; c<8; c++) pChildren[c]=NULL;
 					  Pixels=Depth=R=G=B=NumChildren=0;Index=-1;};
 	~OctreeElement() {
-			for (LONG c=0; c<8; c++) if (pChildren[c])
+			for (INT32 c=0; c<8; c++) if (pChildren[c])
 			{
 				delete (pChildren[c]);
 				pChildren[c]=NULL;
@@ -445,13 +541,13 @@ class OctreeElement : public SimpleCCObject
 			pParent=pListNext=pListPrev=NULL;Pixels=Depth=R=G=B=NumChildren=0;Index=-1;
 		};
 
-	LONG Depth;
-	LONG R;
-	LONG G;
-	LONG B;
-	LONG Index;
-	LONG Pixels;
-	LONG NumChildren;
+	INT32 Depth;
+	INT32 R;
+	INT32 G;
+	INT32 B;
+	INT32 Index;
+	INT32 Pixels;
+	INT32 NumChildren;
 	OctreeElement * pChildren[8];
 	OctreeElement * pParent;
 	OctreeElement * pListNext;
@@ -467,22 +563,22 @@ class Octree : public CCObject
 	Octree();			 /* Constructor */
 	~Octree();	     /* Destructor */
 
-	BOOL Init(LONG NumColours);
-	BOOL Insert(LONG r, LONG g, LONG b);
+	BOOL Init(INT32 NumColours);
+	BOOL Insert(INT32 r, INT32 g, INT32 b);
 	BOOL Index(RGBQUAD * Palette, OctreeElement * pEl=NULL);
-	LONG GetIndex(LONG r, LONG g, LONG b);
+	INT32 GetIndex(INT32 r, INT32 g, INT32 b);
 
 	private:
 
-	OctreeElement * GetElement(LONG r, LONG g, LONG b);
+	OctreeElement * GetElement(INT32 r, INT32 g, INT32 b);
 	void CheckIntegrity();
 	void Unlink(OctreeElement * pEl);
 	void Link(OctreeElement * pEl);
 
-	LONG MaxLeaves;
-	LONG CurrentLeaves;
+	INT32 MaxLeaves;
+	INT32 CurrentLeaves;
 	OctreeElement * pTopElement;
-	LONG CurrentIndex;
+	INT32 CurrentIndex;
 
 	OctreeElement * ListHead[9 /*depth 0-8*/ ][9 /*children 0-8*/ ];
 

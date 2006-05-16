@@ -1,4 +1,100 @@
-// $Header: /camelot/winoil/BFXPIXOP.CPP 3     1/05/95 14:25 Alex $
+// $Id: wxOil/bfxpixop.cpp, 1, 01-Jan-2006, Anonymous $
+/* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
+================================XARAHEADERSTART===========================
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
+
+LICENSE TO USE AND MODIFY SOFTWARE
+----------------------------------
+
+This file is part of Xara LX.
+
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
+
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
+
+MARKS
+-----
+
+Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
+designs are registered or unregistered trademarks, design-marks, and/or
+service marks of Xara Group Ltd. All rights in these marks are reserved.
+
+
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
+
+=================================XARAHEADEREND============================
+ */
 // This file implents the bitmap pixel operations
 
 /*
@@ -143,7 +239,7 @@ BOOL BfxPixelOp::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD th
 
 	Base = (DWORD *)(void *)(((WinBitmap *)(pKB->ActualBitmap))->BMBytes);
 	Width = pBMI->biWidth;
-	LONG Bits = pBMI->biBitCount;
+	INT32 Bits = pBMI->biBitCount;
 	switch (Bits)
 	{
 		case 1 : WidthRounded = (Width+31) &~31; break;
@@ -164,7 +260,7 @@ BOOL BfxPixelOp::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD th
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -181,7 +277,7 @@ Outisiders should used the cached version BfxPixelOp::IsInRegion()
 
 ********************************************************************************************/
 
-BOOL BfxPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
 	ERROR3("How come base class BfxPixelOp::IsPixelReallyInRegion has got called?");
 	return DefaultValue;
@@ -189,7 +285,7 @@ BOOL BfxPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp::IsInRegion(LONG x, LONG y)
+>	BOOL BfxPixelOp::IsInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -209,7 +305,7 @@ NB This function is inline
 /********************************************************************************************
 
 >	BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed, KernelBitmap * pCurrent,
-								  KernelBitmap * pOriginal, LONG Threshold, DWORD theColour);
+								  KernelBitmap * pOriginal, INT32 Threshold, DWORD theColour);
 				
 	Author:		Alex
 	Created:	14/03/95
@@ -230,7 +326,7 @@ The bitmaps may be NULL if you don't want to use them
 ********************************************************************************************/
 
 BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitmap * pCurrent /*B*/,
-							  KernelBitmap * pOriginal /*T*/, LONG Threshold, DWORD theColour)
+							  KernelBitmap * pOriginal /*T*/, INT32 Threshold, DWORD theColour)
 {
 	if (pProposed)
 	{
@@ -448,8 +544,8 @@ BOOL BfxPixelOp32::ClearCachedArea()
 {
 	ERROR2IF(!Base,FALSE,"BfxPixelOp32::SetBitmap not called");
 	if ((MaxX<MinX) || (MaxY<MinY)) return TRUE;
-	LONG x;
-	LONG y;
+	INT32 x;
+	INT32 y;
 	DWORD v=~(CacheValueMask | CacheStateMask);
 	for (y=MinY; y<=MaxY; y++) for (x=MinX; x<=MaxX; x++) __bfxpixop_xy(x,y)&=v;
 	Reset();
@@ -458,7 +554,7 @@ BOOL BfxPixelOp32::ClearCachedArea()
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp32::IsInRegion(LONG x, LONG y)
+>	BOOL BfxPixelOp32::IsInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -477,7 +573,7 @@ NB This function is inline
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp32::GetValueAdjustCache(LONG x, LONG y)
+>	BOOL BfxPixelOp32::GetValueAdjustCache(INT32 x, INT32 y)
 					
 	Author:		Alex
 	Created:	14/03/95
@@ -491,7 +587,7 @@ NB This function is inline
 
 ********************************************************************************************/
 
-BOOL BfxPixelOp32::GetValueAdjustCache(LONG x, LONG y)
+BOOL BfxPixelOp32::GetValueAdjustCache(INT32 x, INT32 y)
 {
 	if (x<MinX) MinX=x;
 	if (x>MaxX) MaxX=x;
@@ -506,7 +602,7 @@ BOOL BfxPixelOp32::GetValueAdjustCache(LONG x, LONG y)
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp32::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion)
+>	BOOL BfxPixelOp32::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 					
 	Author:		Alex
 	Created:	17/1/95
@@ -525,7 +621,7 @@ you lose all your caching. Har har.
 
 ********************************************************************************************/
 
-BOOL BfxPixelOp32::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion)
+BOOL BfxPixelOp32::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 {
 	if (!ClearCachedArea()) return FALSE;	
 	if (!FloodSearch(InitialX, InitialY, MinimumArea)) return FALSE;
@@ -535,7 +631,7 @@ BOOL BfxPixelOp32::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG Initia
 
 /********************************************************************************************
 
->	BOOL BfxPixelOp32::FloodSearch(LONG x, LONG y, LONG MinimumArea)
+>	BOOL BfxPixelOp32::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea)
 					
 	Author:		Alex
 	Created:	17/1/95
@@ -553,7 +649,7 @@ BOOL BfxPixelOp32::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG Initia
 
 ********************************************************************************************/
 
-BOOL BfxPixelOp32::FloodSearch(LONG x, LONG y, LONG MinimumArea)
+BOOL BfxPixelOp32::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea)
 {
 	if (IsCached(x,y)  // We've been here before
 		|| GetCacheMarks()>=MinimumArea) // We've got enough
@@ -695,7 +791,7 @@ BOOL BfxPixelOpPseudo::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DW
 
 /********************************************************************************************
 
->	BOOL BfxPositivePixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxPositivePixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -715,26 +811,26 @@ where	A = pProposed - the proposed image (i.e. new thing with grad fill on)
 
 ********************************************************************************************/
 
-BOOL BfxPositivePixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxPositivePixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
-	LONG BE;
-	LONG AE;
+	INT32 BE;
+	INT32 AE;
 	DWORD Pixel = y*Width+x;
 
-	AE = ( IntegerSquare( ((LONG)(((AluPix32 *) pA)[Pixel].R)) - ((LONG)(((AluPix32 *) pT)[Pixel].R)))
- 	 + IntegerSquare( ((LONG)(((AluPix32 *) pA)[Pixel].G)) - ((LONG)(((AluPix32 *) pT)[Pixel].G)))
-	 + IntegerSquare( ((LONG)(((AluPix32 *) pA)[Pixel].B)) - ((LONG)(((AluPix32 *) pT)[Pixel].B))) );
+	AE = ( IntegerSquare( ((INT32)(((AluPix32 *) pA)[Pixel].R)) - ((INT32)(((AluPix32 *) pT)[Pixel].R)))
+ 	 + IntegerSquare( ((INT32)(((AluPix32 *) pA)[Pixel].G)) - ((INT32)(((AluPix32 *) pT)[Pixel].G)))
+	 + IntegerSquare( ((INT32)(((AluPix32 *) pA)[Pixel].B)) - ((INT32)(((AluPix32 *) pT)[Pixel].B))) );
 
-	BE = (IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].R)) - ((LONG)(((AluPix32 *) pT)[Pixel].R)))
- 	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].G)) - ((LONG)(((AluPix32 *) pT)[Pixel].G)))
-	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].B)) - ((LONG)(((AluPix32 *) pT)[Pixel].B))) );
+	BE = (IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].R)) - ((INT32)(((AluPix32 *) pT)[Pixel].R)))
+ 	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].G)) - ((INT32)(((AluPix32 *) pT)[Pixel].G)))
+	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].B)) - ((INT32)(((AluPix32 *) pT)[Pixel].B))) );
 
  	return ((AE<Value) && (BE>=Value));
 }
 
 /********************************************************************************************
 
->	BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -754,29 +850,29 @@ where	Colour = the colour to measure against
 
 ********************************************************************************************/
 
-BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxColourThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
-	LONG BE;
-	LONG AE;
+	INT32 BE;
+	INT32 AE;
 	DWORD Pixel = y*Width+x;
 
 	AluPix32 TheColour;
 	*(DWORD *)(void *)(&TheColour)=Colour; // Yuck
 
-	AE = ( IntegerSquare( ((LONG)(TheColour.R)) - ((LONG)(((AluPix32 *) pT)[Pixel].R))) 
- 		 + IntegerSquare( ((LONG)(TheColour.G)) - ((LONG)(((AluPix32 *) pT)[Pixel].G)))    
- 		 + IntegerSquare( ((LONG)(TheColour.B)) - ((LONG)(((AluPix32 *) pT)[Pixel].B))) ); 
+	AE = ( IntegerSquare( ((INT32)(TheColour.R)) - ((INT32)(((AluPix32 *) pT)[Pixel].R))) 
+ 		 + IntegerSquare( ((INT32)(TheColour.G)) - ((INT32)(((AluPix32 *) pT)[Pixel].G)))    
+ 		 + IntegerSquare( ((INT32)(TheColour.B)) - ((INT32)(((AluPix32 *) pT)[Pixel].B))) ); 
 
-	BE = (IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].R)) - ((LONG)(((AluPix32 *) pT)[Pixel].R)))
- 	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].G)) - ((LONG)(((AluPix32 *) pT)[Pixel].G)))
-	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].B)) - ((LONG)(((AluPix32 *) pT)[Pixel].B))) );
+	BE = (IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].R)) - ((INT32)(((AluPix32 *) pT)[Pixel].R)))
+ 	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].G)) - ((INT32)(((AluPix32 *) pT)[Pixel].G)))
+	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].B)) - ((INT32)(((AluPix32 *) pT)[Pixel].B))) );
 
  	return ((AE<Value) && (BE>=Value));
 }
 
 /********************************************************************************************
 
->	BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -796,19 +892,19 @@ where	Colour = the colour to measure against
 
 ********************************************************************************************/
 
-BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxThresholdPixelOp::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
 	DWORD Pixel = y*Width+x;
 
-	return ( (IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].R)) - ((LONG)(((AluPix32 *) pT)[Pixel].R)))
- 	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].G)) - ((LONG)(((AluPix32 *) pT)[Pixel].G)))
-	 + IntegerSquare( ((LONG)(((AluPix32 *) pB)[Pixel].B)) - ((LONG)(((AluPix32 *) pT)[Pixel].B))) ) >= Value );
+	return ( (IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].R)) - ((INT32)(((AluPix32 *) pT)[Pixel].R)))
+ 	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].G)) - ((INT32)(((AluPix32 *) pT)[Pixel].G)))
+	 + IntegerSquare( ((INT32)(((AluPix32 *) pB)[Pixel].B)) - ((INT32)(((AluPix32 *) pT)[Pixel].B))) ) >= Value );
 }
 
 
 /********************************************************************************************
 
->	BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -832,7 +928,7 @@ where	A = pProposed - the proposed image (i.e. new thing with grad fill on)
 //((((DWORD *)i)[Pixel]>>shift)&BPPMask)
 
 
-BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
 //	DWORD Pixel = (x+y*WidthRounded)>>XShift;
 //	DWORD shift = x & XMask;
@@ -842,7 +938,7 @@ BOOL BfxPositivePixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
 
 /********************************************************************************************
 
->	BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -862,7 +958,7 @@ where	Colour = the colour to measure against
 
 ********************************************************************************************/
 
-BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
 //	DWORD Pixel = (x+y*WidthRounded)>>XShift;
 //	DWORD shift = x & XMask;
@@ -872,7 +968,7 @@ BOOL BfxColourThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
 
 /********************************************************************************************
 
->	BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+>	BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 
 					
 	Author:		Alex
@@ -892,7 +988,7 @@ where	Colour = the colour to measure against
 
 ********************************************************************************************/
 
-BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
+BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(INT32 x, INT32 y)
 {
 //	DWORD Pixel = (x+y*WidthRounded)>>XShift;
 //	DWORD shift = x & XMask;
@@ -902,7 +998,7 @@ BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
 /********************************************************************************************
 
 >	void BfxPixelOpPseudo::TranslateToRGB(DWORD Colour, KernelBitmap * pKB,
-												   LONG * R, LONG * G, LONG * B)
+												   INT32 * R, INT32 * G, INT32 * B)
 
 					
 	Author:		Alex
@@ -918,7 +1014,7 @@ BOOL BfxThresholdPixelOpPseudo::IsPixelReallyInRegion(LONG x, LONG y)
 ********************************************************************************************/
 
 void BfxPixelOpPseudo::TranslateToRGB(DWORD Colour, KernelBitmap * pKB,
-											   LONG * R, LONG * G, LONG * B)
+											   INT32 * R, INT32 * G, INT32 * B)
 {
 	RGBQUAD Col;
 
@@ -948,7 +1044,7 @@ void BfxPixelOpPseudo::TranslateToRGB(DWORD Colour, KernelBitmap * pKB,
 
 /********************************************************************************************
 
->	BOOL BfxPixelOpPseudo::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion)
+>	BOOL BfxPixelOpPseudo::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 					
 	Author:		Alex
 	Created:	17/1/95
@@ -967,20 +1063,20 @@ you lose all your caching. Har har.
 
 ********************************************************************************************/
 
-BOOL BfxPixelOpPseudo::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG InitialY, BOOL * FoundRegion)
+BOOL BfxPixelOpPseudo::CheckMinimumArea(INT32 MinimumArea, INT32 InitialX, INT32 InitialY, BOOL * FoundRegion)
 {
 	// This is a bodge currently
 	*FoundRegion = FALSE;
 	if (IsInRegion(InitialX, InitialY))
 	{
 		if (MinimumArea>BFX_PSEUDOFLOODSIZE-1) MinimumArea=BFX_PSEUDOFLOODSIZE-1;
-		LONG FloodArray[BFX_PSEUDOFLOODSIZE][2];
-		LONG FloodTop=0;
+		INT32 FloodArray[BFX_PSEUDOFLOODSIZE][2];
+		INT32 FloodTop=0;
 
 		if (!FloodSearch(InitialX, InitialY, MinimumArea, FloodArray, &FloodTop)) return FALSE;
 		*FoundRegion = (FloodTop >= MinimumArea);
 
-		for (LONG n=0; n<FloodTop; n++) WriteOriginalPixel(FloodArray[n][0], FloodArray[n][1], Colour);
+		for (INT32 n=0; n<FloodTop; n++) WriteOriginalPixel(FloodArray[n][0], FloodArray[n][1], Colour);
 	}
 
 	return TRUE;
@@ -988,8 +1084,8 @@ BOOL BfxPixelOpPseudo::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG In
 
 /********************************************************************************************
 
->	BOOL BfxPixelOpPseudo::FloodSearch(LONG x, LONG y, LONG MinimumArea,
-									  LONG FloodArray[BFX_PSEUDOFLOODSIZE][2], LONG * FloodTop)
+>	BOOL BfxPixelOpPseudo::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea,
+									  INT32 FloodArray[BFX_PSEUDOFLOODSIZE][2], INT32 * FloodTop)
 					
 	Author:		Alex
 	Created:	17/1/95
@@ -1007,8 +1103,8 @@ BOOL BfxPixelOpPseudo::CheckMinimumArea(LONG MinimumArea, LONG InitialX, LONG In
 
 ********************************************************************************************/
 
-BOOL BfxPixelOpPseudo::FloodSearch(LONG x, LONG y, LONG MinimumArea,
-				  LONG FloodArray[BFX_PSEUDOFLOODSIZE][2], LONG * FloodTop)
+BOOL BfxPixelOpPseudo::FloodSearch(INT32 x, INT32 y, INT32 MinimumArea,
+				  INT32 FloodArray[BFX_PSEUDOFLOODSIZE][2], INT32 * FloodTop)
 {
 	if (IsInRegion(x,y))
 	{
@@ -1057,7 +1153,7 @@ Octree::Octree()
 	CurrentLeaves=0;
 	CurrentIndex=0;
 	pTopElement=NULL;
-	for (LONG d=0; d<=9; d++) for (LONG c=0; c<=8; c++) ListHead[d][c]=NULL;
+	for (INT32 d=0; d<=9; d++) for (INT32 c=0; c<=8; c++) ListHead[d][c]=NULL;
 }
 
 /********************************************************************************************
@@ -1086,7 +1182,7 @@ Octree::~Octree()
 
 /********************************************************************************************
 
->	BOOL Octree::Init(LONG NumColours)
+>	BOOL Octree::Init(INT32 NumColours)
 					
 	Author:		Alex
 	Created:	19/04/95
@@ -1101,7 +1197,7 @@ Octree::~Octree()
 
 ********************************************************************************************/
 
-BOOL Octree::Init(LONG NumColours)
+BOOL Octree::Init(INT32 NumColours)
 {
 	if (pTopElement)
 	{
@@ -1112,7 +1208,7 @@ BOOL Octree::Init(LONG NumColours)
 	CurrentLeaves=0;
 	CurrentIndex=0;
 
-	for (LONG d=0; d<=9; d++) for (LONG c=0; c<=8; c++) ListHead[d][c]=NULL;
+	for (INT32 d=0; d<=9; d++) for (INT32 c=0; c<=8; c++) ListHead[d][c]=NULL;
 
 	if ((pTopElement=new OctreeElement) == NULL) return FALSE; // error already set
 	// and it's already in a fairly well set up state
@@ -1125,7 +1221,7 @@ BOOL Octree::Init(LONG NumColours)
 
 /********************************************************************************************
 
->	OctreeElement * Octree::GetElement(LONG r, LONG g, LONG b)
+>	OctreeElement * Octree::GetElement(INT32 r, INT32 g, INT32 b)
 					
 	Author:		Alex
 	Created:	19/04/95
@@ -1139,7 +1235,7 @@ BOOL Octree::Init(LONG NumColours)
 
 ********************************************************************************************/
 
-OctreeElement * Octree::GetElement(LONG r, LONG g, LONG b)
+OctreeElement * Octree::GetElement(INT32 r, INT32 g, INT32 b)
 {
 	ERROR2IF(!pTopElement, NULL, "Octree not initialised");
 	OctreeElement * pEl = pTopElement;
@@ -1147,11 +1243,11 @@ OctreeElement * Octree::GetElement(LONG r, LONG g, LONG b)
 	// descend the tree till we reach the minimal cube containing the colour
 	while(TRUE)
 	{
-		LONG halfwidth=(1<<(8 - pEl->Depth))>>1;
-		LONG R=pEl->R+halfwidth;
-		LONG G=pEl->G+halfwidth;
-		LONG B=pEl->B+halfwidth;
-		LONG child=((r>=R)?1:0)+((g>=G)?2:0)+((b>=B)?4:0);
+		INT32 halfwidth=(1<<(8 - pEl->Depth))>>1;
+		INT32 R=pEl->R+halfwidth;
+		INT32 G=pEl->G+halfwidth;
+		INT32 B=pEl->B+halfwidth;
+		INT32 child=((r>=R)?1:0)+((g>=G)?2:0)+((b>=B)?4:0);
 		if (!pEl->pChildren[child]) return pEl;
 		pEl=pEl->pChildren[child];
 	}
@@ -1162,7 +1258,7 @@ OctreeElement * Octree::GetElement(LONG r, LONG g, LONG b)
 
 /********************************************************************************************
 
->	BOOL Octree::Insert(LONG r, LONG g, LONG b)
+>	BOOL Octree::Insert(INT32 r, INT32 g, INT32 b)
 					
 	Author:		Alex
 	Created:	19/04/95
@@ -1176,7 +1272,7 @@ OctreeElement * Octree::GetElement(LONG r, LONG g, LONG b)
 
 ********************************************************************************************/
 
-BOOL Octree::Insert(LONG r, LONG g, LONG b)
+BOOL Octree::Insert(INT32 r, INT32 g, INT32 b)
 {
 	//CheckIntegrity();
 	
@@ -1189,16 +1285,16 @@ BOOL Octree::Insert(LONG r, LONG g, LONG b)
 		OctreeElement * pNewEl = new OctreeElement;
 		if (!pNewEl) return FALSE;
 		pNewEl->Depth=pEl->Depth+1;
-		LONG halfwidth=(1<<(8 - pEl->Depth))>>1;
-		LONG R=pEl->R+halfwidth;
-		LONG G=pEl->G+halfwidth;
-		LONG B=pEl->B+halfwidth;
+		INT32 halfwidth=(1<<(8 - pEl->Depth))>>1;
+		INT32 R=pEl->R+halfwidth;
+		INT32 G=pEl->G+halfwidth;
+		INT32 B=pEl->B+halfwidth;
 
 		pNewEl->R=(r>=R)?R:(pEl->R);
 		pNewEl->G=(g>=G)?G:(pEl->G);
 		pNewEl->B=(b>=B)?B:(pEl->B);
 
-		LONG child=((r>=R)?1:0)+((g>=G)?2:0)+((b>=B)?4:0);
+		INT32 child=((r>=R)?1:0)+((g>=G)?2:0)+((b>=B)?4:0);
 		ERROR2IF(pEl->pChildren[child], FALSE, "Blurk! Octree element already has a child");
 		pEl->pChildren[child]=pNewEl;
 		pNewEl->pParent=pEl;
@@ -1221,7 +1317,7 @@ BOOL Octree::Insert(LONG r, LONG g, LONG b)
 		pEl=NULL;
 
 		// Seatch deepest in the tree first ...
-		for (LONG d=8; (d>=0) && !pEl; d--)
+		for (INT32 d=8; (d>=0) && !pEl; d--)
 		{
 			// ... for an element with no children ...
 			OctreeElement * plEl=ListHead[d][0];
@@ -1230,7 +1326,7 @@ BOOL Octree::Insert(LONG r, LONG g, LONG b)
 				// ... which has a parent ...
 				pEl=plEl->pParent;
 				// ... whose children have no children themselves
-				for (LONG c=0; (c<8) && pEl; c++) if (pEl->pChildren[c] && pEl->pChildren[c]->NumChildren) pEl=NULL;
+				for (INT32 c=0; (c<8) && pEl; c++) if (pEl->pChildren[c] && pEl->pChildren[c]->NumChildren) pEl=NULL;
 				plEl=plEl->pListNext;
 			}
 		}
@@ -1239,7 +1335,7 @@ BOOL Octree::Insert(LONG r, LONG g, LONG b)
 		{
 			Unlink(pEl);
 			if (!pEl->Pixels) CurrentLeaves++;
-			for (LONG c=0; c<8; c++) if (pEl->pChildren[c])
+			for (INT32 c=0; c<8; c++) if (pEl->pChildren[c])
 			{
 				pEl->Pixels+=pEl->pChildren[c]->Pixels;
 				
@@ -1283,7 +1379,7 @@ Checks the octrees integrity
 
 void Octree::CheckIntegrity()
 {
-	for (LONG d=0; d<=8; d++) for (LONG c=0; c<=8; c++)
+	for (INT32 d=0; d<=8; d++) for (INT32 c=0; c<=8; c++)
 	{
 		OctreeElement *pCheck = ListHead[d][c];
 		OctreeElement *pChild = NULL;
@@ -1295,16 +1391,16 @@ void Octree::CheckIntegrity()
 			ERROR3IF((d==0) && (pCheck!=pTopElement), "Bad top element");
 			ERROR3IF(pCheck->Depth!=d,"Bad depth");
 			ERROR3IF(pCheck->NumChildren!=c, "Bad Num Children");
-			LONG count=0;
-			LONG halfwidth=(1<<(8 - pCheck->Depth))>>1;
-			for (LONG cc=0; cc<8; cc++) if ((pChild=pCheck->pChildren[cc]/*assign*/)!=NULL)
+			INT32 count=0;
+			INT32 halfwidth=(1<<(8 - pCheck->Depth))>>1;
+			for (INT32 cc=0; cc<8; cc++) if ((pChild=pCheck->pChildren[cc]/*assign*/)!=NULL)
 			{
 			 	count++;
 				ERROR3IF(pChild->pParent != pCheck, "Bad parent link");
 				ERROR3IF(pChild->Depth != d+1, "Bad child depth");
-				LONG R=pCheck->R + ((cc&1)?halfwidth:0);
-				LONG G=pCheck->G + ((cc&2)?halfwidth:0);				
-				LONG B=pCheck->B + ((cc&4)?halfwidth:0);
+				INT32 R=pCheck->R + ((cc&1)?halfwidth:0);
+				INT32 G=pCheck->G + ((cc&2)?halfwidth:0);				
+				INT32 B=pCheck->B + ((cc&4)?halfwidth:0);
 				ERROR3IF(pChild->R != R, "Bad child R");
 				ERROR3IF(pChild->G != G, "Bad child G");
 				ERROR3IF(pChild->B != B, "Bad child B");
@@ -1430,13 +1526,13 @@ BOOL Octree::Index(RGBQUAD * Palette, OctreeElement * pEl)
 	{
 		pEl->Index=-1;
 	}
-	for (LONG c=0; c<8; c++) if (pEl->pChildren[c]) if (!Index(Palette, pEl->pChildren[c])) return FALSE;
+	for (INT32 c=0; c<8; c++) if (pEl->pChildren[c]) if (!Index(Palette, pEl->pChildren[c])) return FALSE;
 	return TRUE;
 }
 
 /********************************************************************************************
 
->	DWORD Octree::GetIndex(LONG r, LONG g, LONG b)
+>	DWORD Octree::GetIndex(INT32 r, INT32 g, INT32 b)
 					
 	Author:		Alex
 	Created:	19/04/95
@@ -1450,7 +1546,7 @@ BOOL Octree::Index(RGBQUAD * Palette, OctreeElement * pEl)
 
 ********************************************************************************************/
 
-LONG Octree::GetIndex(LONG r, LONG g, LONG b)
+INT32 Octree::GetIndex(INT32 r, INT32 g, INT32 b)
 {
 	OctreeElement * pEl=GetElement(r, g, b);
 	if (!pEl)

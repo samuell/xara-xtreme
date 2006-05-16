@@ -1,4 +1,100 @@
-// $Header: /Camelot/winoil/bfxalu.cpp 4     27/09/00 18:18 Andy $
+// $Id: wxOil/bfxalu.cpp, 1, 01-Jan-2006, Anonymous $
+/* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
+================================XARAHEADERSTART===========================
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
+
+LICENSE TO USE AND MODIFY SOFTWARE
+----------------------------------
+
+This file is part of Xara LX.
+
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
+
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
+
+MARKS
+-----
+
+Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
+designs are registered or unregistered trademarks, design-marks, and/or
+service marks of Xara Group Ltd. All rights in these marks are reserved.
+
+
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
+
+=================================XARAHEADEREND============================
+ */
 // This file implents the bitmap effect ALU
 
 /*
@@ -15,16 +111,16 @@
 #include "ccobject.h"
 #include "paths.h"
 #include "fixmem.h"
-#include "accures.h"
+//#include "accures.h"
 #include "extfilts.h"
-#include "resource.h" // for IDS_OUT_OF_MEMORY
+//#include "resource.h" // for _R(IDS_OUT_OF_MEMORY)
 #include "tracectl.h"
 #include "app.h"
 #include "bmplist.h"
 #include "bfxpixop.h"
-#include "bfxrc.h"
+//#include "bfxrc.h"
 #include "progress.h"
-#include "richard2.h"
+//#include "richard2.h"
 
 // The asm file defines FASTxxxxxx if there are fast versions of the routeines available
 #include "bfxasm.h"
@@ -88,10 +184,10 @@ CC_IMPLEMENT_DYNCREATE(BfxErrorRegionList, CCObject);
 #ifndef GAVIN_MONOCHROME_BITMAPS_BROKEN
 #define FixMono(i,s) { /* empty macro*/ }
 #else
-#define FixMono(i,s) { BYTE __lut[256]; for(ULONG __l=0;__l<256;__l++) __lut[__l]= (BYTE)(\
+#define FixMono(i,s) { BYTE __lut[256]; for(UINT32 __l=0;__l<256;__l++) __lut[__l]= (BYTE)(\
 ((__l & 0x80)>>7) + ((__l & 0x40)>>5) + ((__l & 0x20)>>3) + ((__l & 0x10)>>1) + \
 ((__l & 0x08)<<1) + ((__l & 0x04)<<3) + ((__l & 0x02)<<5) + ((__l & 0x01)<<7) ); \
-for (ULONG __b=0; __b<((ULONG)s);__b++) ((BYTE *)(void *)i)[__b]=__lut[((BYTE *)(void *)i)[__b]];}
+for (UINT32 __b=0; __b<((UINT32)s);__b++) ((BYTE *)(void *)i)[__b]=__lut[((BYTE *)(void *)i)[__b]];}
 #endif
 
 // Accusoft have a bug in their bitmap resize with interpolation which puts a grey line
@@ -121,35 +217,35 @@ Note everything in the above formula works 0..1 whereas the LUT works 0..255
 
 BOOL BfxALULUT::LinearABK(double PropA, double PropB, double Offset)
 {
-	LONG pa=(LONG)(PropA*(1<<15));
-	LONG pb=(LONG)(PropB*(1<<15));
-	LONG po=(LONG)(Offset*((1<<15)*255)+/* for rounding */(1<<14));
+	INT32 pa=(INT32)(PropA*(1<<15));
+	INT32 pb=(INT32)(PropB*(1<<15));
+	INT32 po=(INT32)(Offset*((1<<15)*255)+/* for rounding */(1<<14));
 
 	// Please note how we're *NOT* using doubles in the loop as that's
 	// sooooo sloooooow on 486SX. We use 17.15 arithmetic throughout
 
 #ifndef FASTLINEARABK
-	LONG a;
-	LONG b;
-	LONG r;
+	INT32 a;
+	INT32 b;
+	INT32 r;
 	for (a=0; a<256; a++) for (b=0; b<256; b++)
 	{
 		r=(a*pa+b*pb+po)>>15; /* we did the rounding in the offset calc */
-		LUTBYTE(a,b)=(r<0)?0:((r>255)?255:(BYTE)(LONG)(r));
+		LUTBYTE(a,b)=(r<0)?0:((r>255)?255:(BYTE)(INT32)(r));
 	}
 #else
 	FastLinearABK(Data, pa, pb, po, 256);
 #if 0
-	LONG a;
-	LONG b;
-	LONG r;
+	INT32 a;
+	INT32 b;
+	INT32 r;
 	for (a=0; a<256; a++) for (b=0; b<256; b++)
 	{
 		r=(a*pa+b*pb+po)>>15; /* we did the rounding in the offset calc */
-		if (LUTBYTE(a,b)!=((r<0)?0:((r>255)?255:(BYTE)(LONG)(r))))
+		if (LUTBYTE(a,b)!=((r<0)?0:((r>255)?255:(BYTE)(INT32)(r))))
 		{
-			TRACEUSER("Alex","Byte %x,%x was %x should be %x\n",a,b,
-				LUTBYTE(a,b),( (r<0)?0:((r>255)?255:(BYTE)(LONG)(r)) ) );
+			TRACEUSER( "Alex", _T("Byte %x,%x was %x should be %x\n"),a,b,
+				LUTBYTE(a,b),( (r<0)?0:((r>255)?255:(BYTE)(INT32)(r)) ) );
 		}
 	}
 #endif
@@ -161,7 +257,7 @@ BOOL BfxALULUT::LinearABK(double PropA, double PropB, double Offset)
 
 /********************************************************************************************
 
->	BYTE BfxALULUT::BYTE GetLUT(unsigned long A, unsigned long B)
+>	BYTE BfxALULUT::BYTE GetLUT(UINT32 A, UINT32 B)
 					
 	Author:		Alex
 	Created:	02/11/94
@@ -176,7 +272,7 @@ The addresses must be 0..255
 
 ********************************************************************************************/
 
-BYTE BfxALULUT::GetLUT(unsigned long A, unsigned long B)
+BYTE BfxALULUT::GetLUT(UINT32 A, UINT32 B)
 {
 	return LUTBYTE(A,B);
 }
@@ -313,8 +409,8 @@ BOOL BfxALU::DeInit()
 
 /********************************************************************************************
 
->	KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,LONG XAdjust=0,LONG YAdjust=0,
-									 LONG NewDepth=0, String_256 * pName =NULL, UINT ResID =0)
+>	KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,INT32 XAdjust=0,INT32 YAdjust=0,
+									 INT32 NewDepth=0, String_256 * pName =NULL, UINT32 ResID =0)
 
 					
 	Author:		Alex
@@ -344,13 +440,13 @@ If a null pointer is returned, an error is set.
 
 ********************************************************************************************/
 
-KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,LONG XAdjust,LONG YAdjust,LONG NewDepth,
-	String_256 * pName /*=NULL*/, UINT ResID /*=0*/)
+KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,INT32 XAdjust,INT32 YAdjust,INT32 NewDepth,
+	String_256 * pName /*=NULL*/, UINT32 ResID /*=0*/)
 {
-	LONG Width;
-	LONG Height;
-	LONG Depth;
-	LONG DPI;
+	INT32 Width;
+	INT32 Height;
+	INT32 Depth;
+	INT32 DPI;
 	BOOL IsTemp=TRUE;
 
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
@@ -432,18 +528,18 @@ KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,LONG XAdjust,LONG YAdjust
 
 	if ((ResID) && (BitmapName.Length()<128))
 	{
-		String_256 Mask(IDS_BFXALU_MASK_START); // " (*"
-		String_256 Mask2(IDS_BFXALU_MASK_END); // ")"
+		String_256 Mask(_R(IDS_BFXALU_MASK_START)); // " (*"
+		String_256 Mask2(_R(IDS_BFXALU_MASK_END)); // ")"
 		TCHAR Fuzz = '*';
-		String_256 Processed(IDS_BFX_PROCESSED);
+		String_256 Processed(_R(IDS_BFX_PROCESSED));
 		String_256 Res(ResID);
-		int pos = BitmapName.Sub(Mask, 0, Fuzz);
+		INT32 pos = BitmapName.Sub(Mask, 0, Fuzz);
 		if (pos>=0) if (BitmapName.Sub(Mask2, pos, Fuzz)<0) pos=-1;
 		if (pos>=0) BitmapName.Left(&BitmapName, pos);
-		BitmapName += String_8(IDS_BFXALU_PROCESSED_START);	// " (";
+		BitmapName += String_8(_R(IDS_BFXALU_PROCESSED_START));	// " (";
 		if (pos>=0) BitmapName+=Processed;
 		BitmapName+=Res;
-		BitmapName += String_8(IDS_BFXALU_PROCESSED_END); 	// ")";
+		BitmapName += String_8(_R(IDS_BFXALU_PROCESSED_END)); 	// ")";
 	}
 
 	GetApplication()->GetGlobalBitmapList()->MakeNameUnique(&BitmapName);
@@ -505,7 +601,7 @@ BOOL BfxALU::SetA(KernelBitmap * pBitmap)
 
 /********************************************************************************************
 
->	BOOL BfxALU::SetB(KernelBitmap *pBitmap=NULL,LONG XOffset=0,LONG YOffset=0,
+>	BOOL BfxALU::SetB(KernelBitmap *pBitmap=NULL,INT32 XOffset=0,INT32 YOffset=0,
 					  const BYTE * pTable=NULL,DWORD Style=0)
 					
 	Author:		Alex
@@ -528,7 +624,7 @@ pBitmap may be null to stop using this bitmap
 
 ********************************************************************************************/
 
-BOOL BfxALU::SetB(KernelBitmap * pBitmap,LONG XOffset,LONG YOffset,const BYTE * pTable,DWORD Style)
+BOOL BfxALU::SetB(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE * pTable,DWORD Style)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	if (!pBitmap)
@@ -544,8 +640,8 @@ BOOL BfxALU::SetB(KernelBitmap * pBitmap,LONG XOffset,LONG YOffset,const BYTE * 
 		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 		BPoints[0].x = XOffset; 						BPoints[0].y = YOffset;
-		BPoints[1].x = XOffset+(LONG)(pBMI->biWidth);	BPoints[1].y = YOffset;
-		BPoints[2].x = XOffset; 						BPoints[2].y = YOffset+(LONG)(pBMI->biHeight);
+		BPoints[1].x = XOffset+(INT32)(pBMI->biWidth);	BPoints[1].y = YOffset;
+		BPoints[2].x = XOffset; 						BPoints[2].y = YOffset+(INT32)(pBMI->biHeight);
 		B=pBitmap;
 		BpTable=pTable;
 		BStyle=Style;
@@ -584,7 +680,7 @@ BOOL BfxALU::SetB(DWORD Colour)
 
 /********************************************************************************************
 
->	BOOL BfxALU::SetT(KernelBitmap *pBitmap=NULL,LONG XOffset=0,LONG YOffset=0,
+>	BOOL BfxALU::SetT(KernelBitmap *pBitmap=NULL,INT32 XOffset=0,INT32 YOffset=0,
 					  const BYTE * pTable=NULL,DWORD Style=0)
 					
 	Author:		Alex
@@ -607,7 +703,7 @@ pBitmap may be null to stop using this bitmap
 
 ********************************************************************************************/
 
-BOOL BfxALU::SetT(KernelBitmap * pBitmap,LONG XOffset,LONG YOffset,const BYTE * pTable,DWORD Style)
+BOOL BfxALU::SetT(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE * pTable,DWORD Style)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	if (!pBitmap)
@@ -624,8 +720,8 @@ BOOL BfxALU::SetT(KernelBitmap * pBitmap,LONG XOffset,LONG YOffset,const BYTE * 
 // Some operations now allow 32 bit 'T' regs though they aren't used for transparency
 //		ERROR2IF((pBMI->biBitCount !=8), FALSE,"Bad BfxALU T reg");
 		TPoints[0].x = XOffset; 						TPoints[0].y = YOffset;
-		TPoints[1].x = XOffset+(LONG)(pBMI->biWidth);	TPoints[1].y = YOffset;
-		TPoints[2].x = XOffset; 						TPoints[2].y = YOffset+(LONG)(pBMI->biHeight);
+		TPoints[1].x = XOffset+(INT32)(pBMI->biWidth);	TPoints[1].y = YOffset;
+		TPoints[2].x = XOffset; 						TPoints[2].y = YOffset+(INT32)(pBMI->biHeight);
 		T=pBitmap;
 		TpTable=pTable;
 		TStyle=Style;
@@ -1200,7 +1296,7 @@ BOOL BfxALU::SubKAB(DWORD Value)
 
 /********************************************************************************************
 
->	BOOL BfxALU::MarkThresholdError(LONG Value, DWORD MarkValue, DWORD ClearValue)
+>	BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 					
 	Author:		Alex
 	Created:	18/1/95
@@ -1218,7 +1314,7 @@ This is used by the tracer routines to find an initial area to mark.
 
 ********************************************************************************************/
 
-BOOL BfxALU::MarkThresholdError(LONG Value, DWORD MarkValue, DWORD ClearValue)
+BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -1246,11 +1342,11 @@ BOOL BfxALU::MarkThresholdError(LONG Value, DWORD MarkValue, DWORD ClearValue)
 	
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 	
 #ifdef FASTMARKTHRESHOLD
 	XLONG BError = 0;
-	LONG MarkedPixels = 0;
+	INT32 MarkedPixels = 0;
 
 	FastMarkThreshold((DWORD *)(void *)pA, (DWORD *)(void *)pB, (DWORD *)(void *)pT, Size, Value, MarkValue, ClearValue,
 					 &BError, &MarkedPixels);
@@ -1258,18 +1354,18 @@ BOOL BfxALU::MarkThresholdError(LONG Value, DWORD MarkValue, DWORD ClearValue)
 	//if (pBError) *pBError = BError.MakeDouble();
 	//if (pMarkedPixels) *pMarkedPixels = MarkedPixels;
 #else
-	for (long Pixel = 0; Pixel < Size; Pixel ++)
-	 	pO[Pixel] =  (( IntegerSquare( ((LONG)(pB[Pixel].R)) - ((LONG)(pT[Pixel].R)))
-	 		 		  + IntegerSquare( ((LONG)(pB[Pixel].G)) - ((LONG)(pT[Pixel].G)))
-	 		 		  + IntegerSquare( ((LONG)(pB[Pixel].B)) - ((LONG)(pT[Pixel].B)))) >= Value ) ? MarkValue : ClearValue;
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++)
+	 	pO[Pixel] =  (( IntegerSquare( ((INT32)(pB[Pixel].R)) - ((INT32)(pT[Pixel].R)))
+	 		 		  + IntegerSquare( ((INT32)(pB[Pixel].G)) - ((INT32)(pT[Pixel].G)))
+	 		 		  + IntegerSquare( ((INT32)(pB[Pixel].B)) - ((INT32)(pT[Pixel].B)))) >= Value ) ? MarkValue : ClearValue;
 #endif
 	return TRUE;
 }
 
 /********************************************************************************************
 
->	BOOL BfxALU::MarkColourThresholdError(LONG Value, DWORD Colour, DWORD MarkValue, DWORD ClearValue,
-							  double * pAError = NULL, double * pBError = NULL, LONG * pTotalPixels = NULL)
+>	BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue, DWORD ClearValue,
+							  double * pAError = NULL, double * pBError = NULL, INT32 * pTotalPixels = NULL)
 					
 	Author:		Alex
 	Created:	27/10/94
@@ -1292,8 +1388,8 @@ This is used by the tracer routines to find positively affected areas to mark.
 
 ********************************************************************************************/
 
-BOOL BfxALU::MarkColourThresholdError(LONG Value, DWORD Colour, DWORD MarkValue, DWORD ClearValue,
-							  double * pAError, double * pBError, LONG * pTotalPixels, LONG * pMarkedPixels)
+BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue, DWORD ClearValue,
+							  double * pAError, double * pBError, INT32 * pTotalPixels, INT32 * pMarkedPixels)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -1324,13 +1420,13 @@ BOOL BfxALU::MarkColourThresholdError(LONG Value, DWORD Colour, DWORD MarkValue,
 	AluPix32 TheColour;
 	*(DWORD *)(void *)(&TheColour)=Colour; // Yuck
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 	if (pTotalPixels) *pTotalPixels = Size;
 
 #ifdef FASTMARKCOLOURTHRESHOLD
 	XLONG AError = 0;
 	XLONG BError = 0;
-	LONG MarkedPixels = 0;
+	INT32 MarkedPixels = 0;
 
 	FastMarkColourThreshold((DWORD *)(void *)pA, (DWORD *)(void *)pB, (DWORD *)(void *)pT, Size, Value, Colour,
 					 MarkValue, ClearValue, &AError, &BError, &MarkedPixels);
@@ -1342,18 +1438,18 @@ BOOL BfxALU::MarkColourThresholdError(LONG Value, DWORD Colour, DWORD MarkValue,
 #else
 	double AError = 0.0;
 	double BError = 0.0;
-	LONG BE;
-	LONG AE;
-	LONG MarkedPixels=0; 
+	INT32 BE;
+	INT32 AE;
+	INT32 MarkedPixels=0; 
 	
-	for (long Pixel = 0; Pixel < Size; Pixel ++)
-	{	AE = ( IntegerSquare( ((LONG)(TheColour.R)) - ((LONG)(pT[Pixel].R)))
-	 		 + IntegerSquare( ((LONG)(TheColour.G)) - ((LONG)(pT[Pixel].G)))
-	 		 + IntegerSquare( ((LONG)(TheColour.B)) - ((LONG)(pT[Pixel].B))) );
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++)
+	{	AE = ( IntegerSquare( ((INT32)(TheColour.R)) - ((INT32)(pT[Pixel].R)))
+	 		 + IntegerSquare( ((INT32)(TheColour.G)) - ((INT32)(pT[Pixel].G)))
+	 		 + IntegerSquare( ((INT32)(TheColour.B)) - ((INT32)(pT[Pixel].B))) );
 
-		BE = ( IntegerSquare( ((LONG)(pB[Pixel].R)) - ((LONG)(pT[Pixel].R)))
-	 		 + IntegerSquare( ((LONG)(pB[Pixel].G)) - ((LONG)(pT[Pixel].G)))
-	 		 + IntegerSquare( ((LONG)(pB[Pixel].B)) - ((LONG)(pT[Pixel].B))) );
+		BE = ( IntegerSquare( ((INT32)(pB[Pixel].R)) - ((INT32)(pT[Pixel].R)))
+	 		 + IntegerSquare( ((INT32)(pB[Pixel].G)) - ((INT32)(pT[Pixel].G)))
+	 		 + IntegerSquare( ((INT32)(pB[Pixel].B)) - ((INT32)(pT[Pixel].B))) );
 
 		AError += AE;
 		BError += BE;
@@ -1371,8 +1467,8 @@ BOOL BfxALU::MarkColourThresholdError(LONG Value, DWORD Colour, DWORD MarkValue,
 
 /********************************************************************************************
 
->	BOOL BfxALU::MarkPositive(LONG Value, DWORD MarkValue, DWORD ClearValue,
-							  double * pAError = NULL, double * pBError = NULL, LONG * pTotalPixels = NULL)
+>	BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
+							  double * pAError = NULL, double * pBError = NULL, INT32 * pTotalPixels = NULL)
 					
 	Author:		Alex
 	Created:	27/10/94
@@ -1394,8 +1490,8 @@ This is used by the tracer routines to find positively affected areas to mark.
 
 ********************************************************************************************/
 
-BOOL BfxALU::MarkPositive(LONG Value, DWORD MarkValue, DWORD ClearValue,
-							  double * pAError, double * pBError, LONG * pTotalPixels, LONG * pMarkedPixels)
+BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
+							  double * pAError, double * pBError, INT32 * pTotalPixels, INT32 * pMarkedPixels)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -1423,13 +1519,13 @@ BOOL BfxALU::MarkPositive(LONG Value, DWORD MarkValue, DWORD ClearValue,
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 	if (pTotalPixels) *pTotalPixels = Size;
 
 #ifdef FASTMARKPOSITIVE
 	XLONG AError = 0;
 	XLONG BError = 0;
-	LONG MarkedPixels = 0;
+	INT32 MarkedPixels = 0;
 
 	FastMarkPositive((DWORD *)(void *)pA, (DWORD *)(void *)pB, (DWORD *)(void *)pT, Size, Value, MarkValue, ClearValue,
 					 &AError, &BError, &MarkedPixels);
@@ -1441,18 +1537,18 @@ BOOL BfxALU::MarkPositive(LONG Value, DWORD MarkValue, DWORD ClearValue,
 #else
 	double AError = 0.0;
 	double BError = 0.0;
-	LONG BE;
-	LONG AE;
-	LONG MarkedPixels=0; 
+	INT32 BE;
+	INT32 AE;
+	INT32 MarkedPixels=0; 
 	
-	for (long Pixel = 0; Pixel < Size; Pixel ++)
-	{	AE = ( IntegerSquare( ((LONG)(pA[Pixel].R)) - ((LONG)(pT[Pixel].R)))
-	 		 + IntegerSquare( ((LONG)(pA[Pixel].G)) - ((LONG)(pT[Pixel].G)))
-	 		 + IntegerSquare( ((LONG)(pA[Pixel].B)) - ((LONG)(pT[Pixel].B))) );
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++)
+	{	AE = ( IntegerSquare( ((INT32)(pA[Pixel].R)) - ((INT32)(pT[Pixel].R)))
+	 		 + IntegerSquare( ((INT32)(pA[Pixel].G)) - ((INT32)(pT[Pixel].G)))
+	 		 + IntegerSquare( ((INT32)(pA[Pixel].B)) - ((INT32)(pT[Pixel].B))) );
 
-		BE = ( IntegerSquare( ((LONG)(pB[Pixel].R)) - ((LONG)(pT[Pixel].R)))
-	 		 + IntegerSquare( ((LONG)(pB[Pixel].G)) - ((LONG)(pT[Pixel].G)))
-	 		 + IntegerSquare( ((LONG)(pB[Pixel].B)) - ((LONG)(pT[Pixel].B))) );
+		BE = ( IntegerSquare( ((INT32)(pB[Pixel].R)) - ((INT32)(pT[Pixel].R)))
+	 		 + IntegerSquare( ((INT32)(pB[Pixel].G)) - ((INT32)(pT[Pixel].G)))
+	 		 + IntegerSquare( ((INT32)(pB[Pixel].B)) - ((INT32)(pT[Pixel].B))) );
 
 		AError += AE;
 		BError += BE;
@@ -1507,12 +1603,12 @@ BOOL BfxALU::MarkBitByWord(DWORD BitMask, DWORD TheWord)
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 
 #ifdef FASTMARKBITBYWORD
 	FastMarkBitByWord(pB, pA, Size, BitMask, TheWord);
 #else
-	for (long Pixel = 0; Pixel < Size; Pixel ++) if (pB[Pixel]==TheWord) pA[Pixel]|=BitMask; else pA[Pixel]&=~BitMask;
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++) if (pB[Pixel]==TheWord) pA[Pixel]|=BitMask; else pA[Pixel]&=~BitMask;
 #endif
 
 	return TRUE;
@@ -1555,12 +1651,12 @@ BOOL BfxALU::ClearBitByWord(DWORD BitMask, DWORD TheWord)
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 
 #ifdef FASTCLEARBITBYWORD
 	FastClearBitByWord(pB, pA, Size, BitMask, TheWord);
 #else
-	for (long Pixel = 0; Pixel < Size; Pixel ++) if (pB[Pixel]==TheWord) pA[Pixel]&=~BitMask;
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++) if (pB[Pixel]==TheWord) pA[Pixel]&=~BitMask;
 #endif
 
 	return TRUE;
@@ -1603,12 +1699,12 @@ BOOL BfxALU::MarkWordByBit(DWORD BitMask, DWORD MarkValue, DWORD ClearValue)
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 
 #ifdef FASTMARKWORDBYBIT
 	FastMarkWordByBit(pB, pA, Size, BitMask, MarkValue, ClearValue);
 #else	
-	for (long Pixel = 0; Pixel < Size; Pixel ++) pA[Pixel] = (pB[Pixel] & BitMask) ? MarkValue : ClearValue;
+	for (INT32 Pixel = 0; Pixel < Size; Pixel ++) pA[Pixel] = (pB[Pixel] & BitMask) ? MarkValue : ClearValue;
 #endif
 
 	return TRUE;
@@ -1618,8 +1714,8 @@ BOOL BfxALU::MarkWordByBit(DWORD BitMask, DWORD MarkValue, DWORD ClearValue)
 /********************************************************************************************
 
 >	BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
-								 BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area,
-								 LONG * pSize, LONG * pHighestChain, LONG * pWidth, DWORD * * ppA)
+								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area,
+								 INT32 * pSize, INT32 * pHighestChain, INT32 * pWidth, DWORD * * ppA)
 					
 	Author:		Alex
 	Created:	27/10/94
@@ -1663,8 +1759,8 @@ The areas are chain coded.
 }
 
 BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
-						     BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area,
-							 LONG * pSize, LONG * pHighestChain, LONG * pWidth, DWORD * * ppA)
+						     BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area,
+							 INT32 * pSize, INT32 * pHighestChain, INT32 * pWidth, DWORD * * ppA)
 
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
@@ -1678,20 +1774,20 @@ BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
 	
 	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
 
-	LONG Size = (pABMI->biSizeImage)>>2;
-	LONG Width = pABMI->biWidth;
-	LONG x=0;
-	LONG y=0;
-	LONG HighestChainVal = 0;
-	LONG HighestChain = -1;
+	INT32 Size = (pABMI->biSizeImage)>>2;
+	INT32 Width = pABMI->biWidth;
+	INT32 x=0;
+	INT32 y=0;
+	INT32 HighestChainVal = 0;
+	INT32 HighestChain = -1;
 
 #ifdef FASTMARKREGIONS
 	FastMarkRegions(pA, Size, Width, MarkValue, ClearValue, &HighestChain, &HighestChainVal);
 #else
-	LONG Pixel;
-	LONG TopChain;
-	LONG OtherPixel;
-	LONG SwapTemp;
+	INT32 Pixel;
+	INT32 TopChain;
+	INT32 OtherPixel;
+	INT32 SwapTemp;
 			
 	for (Pixel = 0; Pixel < Size; Pixel ++)
 	{
@@ -1708,9 +1804,9 @@ BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
 				MLATestPixel(Pixel-Width);
 				if (x!=0) MLATestPixel(Pixel-Width-1);
 			}
-			if (((LONG)(pA[TopChain]-0x80000000))>HighestChainVal)
+			if (((INT32)(pA[TopChain]-0x80000000))>HighestChainVal)
 			{
-				HighestChainVal = (LONG)(pA[TopChain]-0x80000000);
+				HighestChainVal = (INT32)(pA[TopChain]-0x80000000);
 				HighestChain = TopChain;
 			}
 		}
@@ -1741,7 +1837,7 @@ BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
 /********************************************************************************************
 
 >	BOOL BfxALU::MarkLargestArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue
-								 BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area)
+								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 
 					
 	Author:		Alex
@@ -1766,10 +1862,10 @@ This is used by the tracer routines work out the area to mark.
 ********************************************************************************************/
 
 BOOL BfxALU::MarkLargestArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
-						     BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area)
+						     BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 {
-	LONG Size;
-	LONG HighestChain;
+	INT32 Size;
+	INT32 HighestChain;
 	DWORD * pA;
 	// Our error checking done in MarkRegions
 	if (!MarkRegions(MarkValue, ClearValue, FoundRegion, InitialX, InitialY, Area,
@@ -1780,8 +1876,8 @@ BOOL BfxALU::MarkLargestArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValu
 #ifdef FASTMARKLARGESTAREA
 	FastMarkLargestArea(pA, Size, MarkValue, ClearValue, RegionValue, HighestChain);
 #else
-	LONG OtherPixel;
-	LONG Pixel;
+	INT32 OtherPixel;
+	INT32 Pixel;
 	for (Pixel = (Size-1); Pixel >= 0; Pixel--)
 	{
 		OtherPixel = Pixel;
@@ -1807,7 +1903,7 @@ BOOL BfxALU::MarkLargestArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValu
 /********************************************************************************************
 
 >	BOOL BfxALU::MarkGivenArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue
-								 BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area)
+								 BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 
 					
 	Author:		Alex
@@ -1834,15 +1930,15 @@ This is used by the tracer routines work out the area to mark.
 ********************************************************************************************/
 
 BOOL BfxALU::MarkGivenArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
-						     BOOL * FoundRegion, LONG * InitialX, LONG * InitialY, LONG * Area)
+						     BOOL * FoundRegion, INT32 * InitialX, INT32 * InitialY, INT32 * Area)
 {
-	LONG Size;
-	LONG HighestChain;
+	INT32 Size;
+	INT32 HighestChain;
 	DWORD * pA;
 	ERROR2IF((!InitialX)||(!InitialY),FALSE, "Why not pass in an InitialX & InitialY");
-	LONG ix = *InitialX;
-	LONG iy = *InitialY;
-	LONG Width;
+	INT32 ix = *InitialX;
+	INT32 iy = *InitialY;
+	INT32 Width;
 	// Our error checking done in MarkRegions
 	if (!MarkRegions(MarkValue, ClearValue, FoundRegion, InitialX, InitialY, Area,
 					 &Size, &HighestChain, &Width, &pA)) return FALSE;
@@ -1866,8 +1962,8 @@ BOOL BfxALU::MarkGivenArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
 #ifdef FASTMARKLARGESTAREA
 	FastMarkLargestArea(pA, Size, MarkValue, ClearValue, RegionValue, HighestChain);
 #else
-	LONG OtherPixel;
-	LONG Pixel;
+	INT32 OtherPixel;
+	INT32 Pixel;
 	for (Pixel = (Size-1); Pixel >= 0; Pixel--)
 	{
 		OtherPixel = Pixel;
@@ -1893,7 +1989,7 @@ BOOL BfxALU::MarkGivenArea(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
 /********************************************************************************************
 
 >	BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
-							  BfxErrorRegionList * pERL, LONG MinimumArea)
+							  BfxErrorRegionList * pERL, INT32 MinimumArea)
 
 					
 	Author:		Alex
@@ -1916,11 +2012,11 @@ This is used by the tracer routines work out the area to mark.
 ********************************************************************************************/
 
 BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD RegionValue,
-							  BfxErrorRegionList * pERL, LONG MinimumArea)
+							  BfxErrorRegionList * pERL, INT32 MinimumArea)
 {
-	LONG Pixel;
-	LONG Size;
-	LONG Width;
+	INT32 Pixel;
+	INT32 Size;
+	INT32 Width;
 	DWORD * pA;
 	BOOL FoundRegion=FALSE;
 	
@@ -1929,13 +2025,13 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 	// Empty the region list
 	if (!pERL->Empty()) return FALSE;
 
-	LONG ListSize=pERL->GetSize();
+	INT32 ListSize=pERL->GetSize();
 
 	// Most of our error checking done in MarkRegions
 	if (!MarkRegions(MarkValue, ClearValue, &FoundRegion, NULL, NULL, NULL,
 					 &Size, NULL, &Width, &pA)) return FALSE;
 
-	LONG Area;
+	INT32 Area;
 	
 	if (FoundRegion)
 	{
@@ -1948,7 +2044,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 #else
 			do
 			{
-				if ((DWORD) (Area=(LONG)(pA[Pixel])) != ClearValue) pA[Pixel]=RegionValue;
+				if ((DWORD) (Area=(INT32)(pA[Pixel])) != ClearValue) pA[Pixel]=RegionValue;
 				// We evilly use bit 30 to check for clearvalue
 			} while ( (((DWORD)Area & 0xC0000000)!=0x80000000) && (Pixel++<Size));
 #endif
@@ -1957,7 +2053,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 			{
 				if ((DWORD)(Area-0x80000000) >= (DWORD)MinimumArea)
 				{
-//					TRACEUSER("Alex","Found region at %d,%d Area %d\n",Pixel % Width, Pixel / Width, Area-0x80000000);
+//					TRACEUSER( "Alex", _T("Found region at %d,%d Area %d\n"),Pixel % Width, Pixel / Width, Area-0x80000000);
 					if (pERL->IsSpace()) pERL->Insert(Pixel % Width, Pixel / Width, Area-0x80000000);
 				}
 
@@ -1965,7 +2061,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 		} while (Pixel<Size);
 
 	}
-	if (!pERL->IsSpace()) TRACEUSER("Alex", "[[BuildErrorRegionList ran out of space]]\n");
+	if (!pERL->IsSpace()) TRACEUSER( "Alex", _T("[[BuildErrorRegionList ran out of space]]\n"));
 
 	return (pERL->Sort() && pERL->ResetRead());
 }
@@ -1979,9 +2075,9 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 		{
 			if (((Area/*assign*/=pA[Pixel])<0xFF000000) && (Area>=0x80000000))
 			{
-				if ((LONG)(Area-0x80000000) > MinimumArea)
+				if ((INT32)(Area-0x80000000) > MinimumArea)
 				{
-//					TRACEUSER("Alex","Found region at %d,%d Area %d\n",Pixel % Width, Pixel / Width, Area-0x80000000);
+//					TRACEUSER( "Alex", _T("Found region at %d,%d Area %d\n"),Pixel % Width, Pixel / Width, Area-0x80000000);
 					if (pERL->IsSpace()) pERL->Insert(Pixel % Width, Pixel / Width, Area-0x80000000);
 				}
 			}
@@ -1992,7 +2088,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 
 /********************************************************************************************
 
->	BOOL BfxALU::ScanBit(DWORD BitMask, LONG * X, LONG * Y, LONG * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
+>	BOOL BfxALU::ScanBit(DWORD BitMask, INT32 * X, INT32 * Y, INT32 * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
 					
 	Author:		Alex
 	Created:	27/10/94
@@ -2013,7 +2109,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 
 ********************************************************************************************/
 
-BOOL BfxALU::ScanBit(DWORD BitMask, LONG * X, LONG * Y, LONG *pPixel, BOOL * Found, BOOL CheckConnected)
+BOOL BfxALU::ScanBit(DWORD BitMask, INT32 * X, INT32 * Y, INT32 *pPixel, BOOL * Found, BOOL CheckConnected)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -2025,14 +2121,14 @@ BOOL BfxALU::ScanBit(DWORD BitMask, LONG * X, LONG * Y, LONG *pPixel, BOOL * Fou
 
 	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
 
-	LONG Width = pABMI->biWidth;
-	LONG Size = (pABMI->biSizeImage)>>2;
+	INT32 Width = pABMI->biWidth;
+	INT32 Size = (pABMI->biSizeImage)>>2;
 
-	LONG Pixel = 0;
+	INT32 Pixel = 0;
 	BOOL Connected = TRUE;
 	if (pPixel) Pixel=*pPixel; else if (X && Y) Pixel=(*X)+(*Y)*Width;
-	LONG tx;
-	LONG ty;
+	INT32 tx;
+	INT32 ty;
 
 	do
 	{
@@ -2071,7 +2167,7 @@ BOOL BfxALU::ScanBit(DWORD BitMask, LONG * X, LONG * Y, LONG *pPixel, BOOL * Fou
 
 /********************************************************************************************
 
->	BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
+>	BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 * pPixel, BOOL * Found, BOOL CheckConnected=FALSE)
 					
 	Author:		Alex
 	Created:	27/10/94
@@ -2092,7 +2188,7 @@ BOOL BfxALU::ScanBit(DWORD BitMask, LONG * X, LONG * Y, LONG *pPixel, BOOL * Fou
 
 ********************************************************************************************/
 
-BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG *pPixel, BOOL * Found, BOOL CheckConnected)
+BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOOL * Found, BOOL CheckConnected)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -2117,19 +2213,19 @@ BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG *pPixel, BOOL * 
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-			LONG Width = pBBMI->biWidth;
-			LONG Size = (pBBMI->biSizeImage)>>2;
+			INT32 Width = pBBMI->biWidth;
+			INT32 Size = (pBBMI->biSizeImage)>>2;
 	
-			LONG Pixel = 0;
+			INT32 Pixel = 0;
 			BOOL Connected = TRUE;
 			if (pPixel) Pixel=*pPixel; else if (X && Y) Pixel=(*X)+(*Y)*Width;
-			LONG tx;
-			LONG ty;
-			LONG tp;
+			INT32 tx;
+			INT32 ty;
+			INT32 tp;
 
-#define __scanthresh(p) (( IntegerSquare( ((LONG)(pB[p].R)) - ((LONG)(pT[p].R))) \
-		 		 		  + IntegerSquare( ((LONG)(pB[p].G)) - ((LONG)(pT[p].G))) \
-		 		 		  + IntegerSquare( ((LONG)(pB[p].B)) - ((LONG)(pT[p].B)))) >= Value )
+#define __scanthresh(p) (( IntegerSquare( ((INT32)(pB[p].R)) - ((INT32)(pT[p].R))) \
+		 		 		  + IntegerSquare( ((INT32)(pB[p].G)) - ((INT32)(pT[p].G))) \
+		 		 		  + IntegerSquare( ((INT32)(pB[p].B)) - ((INT32)(pT[p].B)))) >= Value )
 
 			do
 			{
@@ -2174,16 +2270,16 @@ BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG *pPixel, BOOL * 
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-			LONG Width = pBBMI->biWidth;
-			LONG Size = pBBMI->biSizeImage;
+			INT32 Width = pBBMI->biWidth;
+			INT32 Size = pBBMI->biSizeImage;
 	
-			LONG Pixel = 0;
+			INT32 Pixel = 0;
 			BOOL Connected = TRUE;
-			LONG WidthR = (Width+3) & ~3;
+			INT32 WidthR = (Width+3) & ~3;
 			if (pPixel) Pixel=*pPixel; else if (X && Y) Pixel=(*X)+(*Y)*WidthR;
-			LONG tx = Pixel % WidthR;
-			LONG ty = Pixel / WidthR;
-			LONG tp;
+			INT32 tx = Pixel % WidthR;
+			INT32 ty = Pixel / WidthR;
+			INT32 tp;
 
 #define __scanthresh8(p) (pB[p]!=pT[p])
 
@@ -2244,16 +2340,16 @@ BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG *pPixel, BOOL * 
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
-			LONG Width = pBBMI->biWidth;
-			LONG Size = pBBMI->biSizeImage<<3;
+			INT32 Width = pBBMI->biWidth;
+			INT32 Size = pBBMI->biSizeImage<<3;
 	
-			LONG Pixel = 0;
+			INT32 Pixel = 0;
 			BOOL Connected = TRUE;
-			LONG WidthR = (Width+31) & ~31;
+			INT32 WidthR = (Width+31) & ~31;
 			if (pPixel) Pixel=*pPixel; else if (X && Y) Pixel=(*X)+(*Y)*WidthR;
-			LONG tx = Pixel % WidthR;
-			LONG ty = Pixel / WidthR;
-			LONG tp;
+			INT32 tx = Pixel % WidthR;
+			INT32 ty = Pixel / WidthR;
+			INT32 tp;
 
 #define __scanthresh1(p) (((pB[p>>3]^pT[p>>3]) & (0x80>>(p&7))) !=0)
 
@@ -2315,7 +2411,7 @@ BOOL BfxALU::ScanThreshold(LONG Value, LONG * X, LONG * Y, LONG *pPixel, BOOL * 
 /********************************************************************************************
 
 >	BOOL BfxALU::GradFillPath(Path * ThePath, DWORD StartColour, DWORD EndColour,
-							  LONG StartX, LONG StartY, LONG EndX, LONG EndY, BOOL Antialias=FALSE,
+							  INT32 StartX, INT32 StartY, INT32 EndX, INT32 EndY, BOOL Antialias=FALSE,
 							  BOOL ColoursAreDWORDs = FALSE)
 					
 	Author:		Alex
@@ -2343,7 +2439,7 @@ are all 24.8 values (secretly), i.e. StartX=256 plots from pixel 1.
 ********************************************************************************************/
 
 BOOL BfxALU::GradFillPath(Path * ThePath, DWORD StartColour, DWORD EndColour,
-							  LONG StartX, LONG StartY, LONG EndX, LONG EndY, BOOL AntiAlias, BOOL ColoursAreDWORDs)
+							  INT32 StartX, INT32 StartY, INT32 EndX, INT32 EndY, BOOL AntiAlias, BOOL ColoursAreDWORDs)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)),FALSE,"BfxALU can't find OIL bitmap");
@@ -2486,7 +2582,7 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 	pStats->XY= ((Stats.XY).MakeDouble())/(N*255.0);
 //	pStats->Pixel = (DWORD)(Stats.C);
 
-	LONG Width = pBMI->biWidth;
+	INT32 Width = pBMI->biWidth;
 		
 	pStats->LowX = -1;
 	pStats->LowY = -1;
@@ -2494,8 +2590,8 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 
 	if (Stats.C>0)
 	{
-		ULONG Offset = ((ULONG)(Stats.C))-((ULONG)((((WinBitmap *)(A->ActualBitmap))->BMBytes)));
-		if (Offset<(ULONG)pBMI->biSizeImage)
+		UINT32 Offset = ((UINT32)(Stats.C))-((UINT32)((((WinBitmap *)(A->ActualBitmap))->BMBytes)));
+		if (Offset<(UINT32)pBMI->biSizeImage)
 		{
 			pStats->LowX = (Offset>>2) % Width;
 			pStats->LowY = (Offset>>2) / Width;
@@ -2510,7 +2606,7 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 
 /********************************************************************************************
 
->	BOOL BfxALU::GetSize(KernelBitmap * pBitmap, LONG * pXSize, LONG * pYSize, LONG * pDepth)
+>	BOOL BfxALU::GetSize(KernelBitmap * pBitmap, INT32 * pXSize, INT32 * pYSize, INT32 * pDepth)
 
 					
 	Author:		Alex
@@ -2530,7 +2626,7 @@ The non NULL pointers are filled in with the appropriate items
 
 ********************************************************************************************/
 
-BOOL BfxALU::GetSize(KernelBitmap * pBitmap, LONG * pXSize, LONG * pYSize, LONG * pDepth)
+BOOL BfxALU::GetSize(KernelBitmap * pBitmap, INT32 * pXSize, INT32 * pYSize, INT32 * pDepth)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!pBitmap) || (pBitmap->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
@@ -2538,9 +2634,9 @@ BOOL BfxALU::GetSize(KernelBitmap * pBitmap, LONG * pXSize, LONG * pYSize, LONG 
 
 	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 
-	if (pXSize) *pXSize=(LONG)(pABMI->biWidth);
-	if (pYSize) *pYSize=(LONG)(pABMI->biHeight);
-	if (pDepth) *pDepth=(LONG)(pABMI->biBitCount);
+	if (pXSize) *pXSize=(INT32)(pABMI->biWidth);
+	if (pYSize) *pYSize=(INT32)(pABMI->biHeight);
+	if (pDepth) *pDepth=(INT32)(pABMI->biBitCount);
 
 	return TRUE;
 }
@@ -2638,7 +2734,7 @@ BfxErrorRegionList::~BfxErrorRegionList()
 
 /********************************************************************************************
 
->	BOOL BfxErrorRegionList::Init(ULONG Length)
+>	BOOL BfxErrorRegionList::Init(UINT32 Length)
 					
 	Author:		Alex
 	Created:	01/02/95
@@ -2653,7 +2749,7 @@ This claims the memory for the region list. You cna init it to 0 to remove the m
 
 ********************************************************************************************/
 
-BOOL BfxErrorRegionList::Init(ULONG Length)
+BOOL BfxErrorRegionList::Init(UINT32 Length)
 {
 	if (pList) CCFree(pList);
 	pList = NULL;
@@ -2725,7 +2821,7 @@ BOOL BfxErrorRegionList::ResetRead()
 
 /********************************************************************************************
 
->	BOOL BfxErrorRegionList::Insert(LONG XCoord, LONG YCoord, LONG Area)
+>	BOOL BfxErrorRegionList::Insert(INT32 XCoord, INT32 YCoord, INT32 Area)
 					
 	Author:		Alex
 	Created:	01/02/95
@@ -2740,7 +2836,7 @@ This empties the list
 
 ********************************************************************************************/
 
-BOOL BfxErrorRegionList::Insert(LONG XCoord, LONG YCoord, LONG Area)
+BOOL BfxErrorRegionList::Insert(INT32 XCoord, INT32 YCoord, INT32 Area)
 {
 	ERROR2IF (!pList, FALSE, "No BfxErrorRegionList");
 	ERROR2IF (!IsSpace(), FALSE, "It's full! Why not use IsSpace() first like a good programmer?");
@@ -2788,7 +2884,7 @@ BOOL BfxErrorRegionList::Sort()
 	
 	while (!Sorted)
 	{
-		LONG Current = 0;
+		INT32 Current = 0;
 		Sorted = TRUE;
 		while (pList[++Current].Area !=0) if (pList[Current].Area > pList[Current-1].Area)
 		{	
@@ -2801,7 +2897,7 @@ BOOL BfxErrorRegionList::Sort()
 
 /********************************************************************************************
 
->	BOOL BfxErrorRegionList::GetCurrent(LONG * XCoord, LONG * YCoord, LONG * Area)
+>	BOOL BfxErrorRegionList::GetCurrent(INT32 * XCoord, INT32 * YCoord, INT32 * Area)
 					
 	Author:		Alex
 	Created:	01/02/95
@@ -2822,7 +2918,7 @@ This function returns FALSE at the end of a list (NOT to indicate an error condi
 
 /********************************************************************************************
 
->	BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge = FALSE)
+>	BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge = FALSE)
 					
 	Author:		Alex
 	Created:	27/01/95
@@ -2839,9 +2935,9 @@ This actually copies the bitmap. Note we'll have to fudge 32bit bmps somehow
 
 ********************************************************************************************/
 
-BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
+BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge)
 {
-	ERROR1IF((!(AccusoftFilters::pfnIMG_create_handle_keep)), FALSE, IDN_FILTERNOTPRESENT);
+	ERROR1IF((!(AccusoftFilters::pfnIMG_create_handle_keep)), FALSE, _R(IDN_FILTERNOTPRESENT));
 	ERROR2IF((!pHandle ),FALSE, "BfxALU handle parameter must be non-null");
 
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
@@ -2885,8 +2981,8 @@ BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
 		}
 	}
 
-	LONG SizeImage = pBBMI->biSizeImage;
-	int Depth = 0;
+	INT32 SizeImage = pBBMI->biSizeImage;
+	INT32 Depth = 0;
 	if (pBBMI->biBitCount == 32)
 		Depth = 24;
 	else
@@ -2902,21 +2998,21 @@ BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
 	}
 	else if (pBBMI->biBitCount == 32)
 	{
-		ULONG ScanLineSize = DIBUtil::ScanlineSize(pBBMI->biWidth, 24);
+		UINT32 ScanLineSize = DIBUtil::ScanlineSize(pBBMI->biWidth, 24);
 		SizeImage = ScanLineSize * pBBMI->biHeight;	
 	}
 #else
 	if (pBBMI->biBitCount == 32)
 	{
-		ULONG ScanLineSize = DIBUtil::ScanlineSize(pBBMI->biWidth, 24);
+		UINT32 ScanLineSize = DIBUtil::ScanlineSize(pBBMI->biWidth, 24);
 		SizeImage = ScanLineSize * pBBMI->biHeight;	
 	}
 #endif
 
 	HGLOBAL HMem = GlobalAlloc(GMEM_MOVEABLE, sizeof(BITMAPINFOHEADER) + (sizeof(DWORD)*PaletteUsed) + SizeImage);
-	ERROR1IF(!HMem, FALSE, IDS_OUT_OF_MEMORY);
+	ERROR1IF(!HMem, FALSE, _R(IDS_OUT_OF_MEMORY));
 	LPBYTE Mem = (LPBYTE) (void *) GlobalLock(HMem);
-	ERROR1IF(!Mem, FALSE, IDS_OUT_OF_MEMORY); // wierd - we've only just got it!
+	ERROR1IF(!Mem, FALSE, _R(IDS_OUT_OF_MEMORY)); // wierd - we've only just got it!
 
 	BITMAPINFOHEADER * pCBMI = (BITMAPINFOHEADER *) Mem;
 	LPBYTE pPal = Mem + sizeof(BITMAPINFOHEADER);
@@ -2975,12 +3071,12 @@ BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
 
 	if (pBBMI->biBitCount==1) FixMono(pBits, pBBMI->biSizeImage);
 
-	int result = AccusoftFilters::pfnIMG_create_handle_keep(pCBMI);
+	INT32 result = AccusoftFilters::pfnIMG_create_handle_keep(pCBMI);
 	if (result < 0)
 	{
 		GlobalUnlock(HMem);
 		GlobalFree(HMem);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	*pHandle = result;
 
@@ -2989,9 +3085,9 @@ BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
 
 /********************************************************************************************
 
->	BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
+>	BOOL BfxALU::MAH_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
 					
-	Author:		Neville Humphrys
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/09/96
 	Inputs:		Width		- Width of bitmap
 				Height		- Height of bitmap
@@ -3010,11 +3106,11 @@ BOOL BfxALU::MakeAccusoftHandle(int * pHandle, BOOL DoBodge)
 
 ********************************************************************************************/
 
-BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
+BOOL BfxALU::MAH_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
 {
 #ifdef BODGE_ACCUSOFT_RESIZE
-	UINT SourceScanline = DIBUtil::ScanlineSize(Width, Depth);
-	UINT DestScanline = 1;
+	UINT32 SourceScanline = DIBUtil::ScanlineSize(Width, Depth);
+	UINT32 DestScanline = 1;
 	if (Depth == 32)
 		DestScanline = DIBUtil::ScanlineSize(Width * 3, 24);
 	else
@@ -3024,7 +3120,7 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 	// Repeat the first pixel in the extra bodged pixels on the left hand side
 	// Copy the source bitmap to the centre section
 	// Repeat the last pixel in the extra bodged pixels on the right hand side
-	int Bytes = 1;
+	INT32 Bytes = 1;
 	switch (Depth)
 	{
 		case 4:
@@ -3035,13 +3131,13 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 			// So test the LSBit of the current x, if set we will be odd.
 			// Only move onto next byte every other pixel hence current x/2.
 			Bytes = Width;
-			for (int i = 0; i < Height; i++ )
+			for (INT32 i = 0; i < Height; i++ )
 			{
 				// Probably not the most efficient way to copy the data but it is PROVEN!
 				BYTE * pDBits = pDestBits;
 				// Duplicate the left hand pixel into the first third
 				BYTE LeftHandByte = ((*pSourceBits) & 0xF0) >> 4;
-				for (int j = 0; j < Width; j++ )
+				for (INT32 j = 0; j < Width; j++ )
 				{
 					LPBYTE pData = pDBits + j/2;
 					if (j & 1)
@@ -3051,7 +3147,7 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 				}				
 
 				BYTE Byte = 0;
-				int k = 0;
+				INT32 k = 0;
 				for (; j < (2 * Width); j++ )
 				{
 					// Get the source pixel
@@ -3101,7 +3197,7 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 		{
 			// 1 byte per pixel
 			Bytes = Width;
-			for (int i = 0; i < Height; i++ )
+			for (INT32 i = 0; i < Height; i++ )
 			{
 				BYTE * pDBits = pDestBits;
 				// Duplicate the left hand pixel into the first third
@@ -3132,14 +3228,14 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 			BYTE RightHandByte_G	= 0;
 			BYTE LeftHandByte_B		= 0;
 			BYTE RightHandByte_B	= 0;
-			for (int i = 0; i < Height; i++ )
+			for (INT32 i = 0; i < Height; i++ )
 			{
 				BYTE * pDBits = pDestBits;
 				// Duplicate the left hand pixel into the first third
 				LeftHandByte_R = *pSourceBits;
 				LeftHandByte_G = *(pSourceBits + 1);
 				LeftHandByte_B = *(pSourceBits + 2);
-				for (int j = 0; j < Width; j++ )
+				for (INT32 j = 0; j < Width; j++ )
 				{
 					*pDBits = LeftHandByte_R;
 					pDBits ++;
@@ -3158,7 +3254,7 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 				else
 				{
 					LPBYTE pSBits = pSourceBits;
-					for (int j = 0; j < Width; j++ )
+					for (INT32 j = 0; j < Width; j++ )
 					{
 						*(pDBits) = *(pSBits);
 						*(pDBits + 1) = *(pSBits + 1);
@@ -3208,9 +3304,9 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 
 /********************************************************************************************
 
->	BOOL BfxALU::MKB_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
+>	BOOL BfxALU::MKB_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
 					
-	Author:		Neville Humphrys
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/09/96
 	Inputs:		Width		- Width of bitmap
 				Height		- Height of bitmap
@@ -3229,16 +3325,16 @@ BOOL BfxALU::MAH_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 
 ********************************************************************************************/
 
-BOOL BfxALU::MKB_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
+BOOL BfxALU::MKB_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits)
 {
 #ifdef BODGE_ACCUSOFT_RESIZE
 
 	// Copy back stripping the first bodge pixels from the start of each line
-	UINT SourceScanline = DIBUtil::ScanlineSize(Width * 3, Depth);
-	UINT DestScanline = DIBUtil::ScanlineSize(Width, Depth);
+	UINT32 SourceScanline = DIBUtil::ScanlineSize(Width * 3, Depth);
+	UINT32 DestScanline = DIBUtil::ScanlineSize(Width, Depth);
 	// We need to do it the hard way and copy it by hand
 	// Remove the repeated extra bodged pixels
-	int Bytes = 1;
+	INT32 Bytes = 1;
 	switch (Depth)
 	{
 		/* case 8:
@@ -3247,7 +3343,7 @@ BOOL BfxALU::MKB_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 			Bytes = Width;
 			// For each scanline copy the middle third, which is the original bitmap
 			// back across to the destination
-			for (int i = 0; i < Height; i++ )
+			for (INT32 i = 0; i < Height; i++ )
 			{ */
 				//memcpy(pDestBits /*dest*/, pSourceBits + Bytes, DestScanline);
 			/*	pDestBits += DestScanline;
@@ -3261,7 +3357,7 @@ BOOL BfxALU::MKB_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 			Bytes = 3 * Width;
 			// For each scanline copy the middle third, which is the original bitmap
 			// back across to the destination
-			for (int i = 0; i < Height; i++ )
+			for (INT32 i = 0; i < Height; i++ )
 			{
 				memcpy(pDestBits /*dest*/, pSourceBits + Bytes, DestScanline);
 				pDestBits += DestScanline;
@@ -3279,8 +3375,8 @@ BOOL BfxALU::MKB_BodgeCopyBitmap(int Width, int Height, int Depth, LPBYTE pSourc
 
 /********************************************************************************************
 
->	BOOL BfxALU::MakeKernelBitmap(int Handle, KernelBitmap * * ppOutput, BOOL Make32Bits=FALSE,
-								  String_256 * pName =NULL, UINT ResID =0, BOOL DoBodge = FALSE)
+>	BOOL BfxALU::MakeKernelBitmap(INT32 Handle, KernelBitmap * * ppOutput, BOOL Make32Bits=FALSE,
+								  String_256 * pName =NULL, UINT32 ResID =0, BOOL DoBodge = FALSE)
 					
 	Author:		Alex
 	Created:	27/01/95
@@ -3299,18 +3395,18 @@ This actually copies the bitmap. Note we'll have to fudge 32bit bmps somehow.
 
 ********************************************************************************************/
 
-BOOL BfxALU::MakeKernelBitmap(int Handle, KernelBitmap * * ppOutput, BOOL Make32Bits,
-							  String_256 * pName, UINT ResID, BOOL DoBodge)
+BOOL BfxALU::MakeKernelBitmap(INT32 Handle, KernelBitmap * * ppOutput, BOOL Make32Bits,
+							  String_256 * pName, UINT32 ResID, BOOL DoBodge)
 {
 	ERROR3IF((!ppOutput ), "BfxALU output parameter must be non-null");
-	int width = 0;
-	int	height = 0;
-	int	bpp = 0;
+	INT32 width = 0;
+	INT32	height = 0;
+	INT32	bpp = 0;
 	
 	HANDLE MHandle = AccusoftFilters::pfnIMG_bitmap_info(Handle, &width, &height, &bpp);
 	if (Make32Bits && bpp != 24)
 	{
-		int result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
+		INT32 result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
 		ERROR2(FALSE, "Can't make a non-24 bit image into a 32 bit one guv");
 	}
 	
@@ -3331,7 +3427,7 @@ BOOL BfxALU::MakeKernelBitmap(int Handle, KernelBitmap * * ppOutput, BOOL Make32
 	if (!pKB)
 	{
 		GlobalUnlock(MHandle);
-		int result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
+		INT32 result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
 		return FALSE; // Error already set
 	}
 
@@ -3345,7 +3441,7 @@ BOOL BfxALU::MakeKernelBitmap(int Handle, KernelBitmap * * ppOutput, BOOL Make32
 	{
 		GlobalUnlock(MHandle);
 		delete pKB;
-		int result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
+		INT32 result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
 		ERROR2(FALSE,"Accusoft DLL lied about bpp / size");
 	}
 
@@ -3357,7 +3453,7 @@ BOOL BfxALU::MakeKernelBitmap(int Handle, KernelBitmap * * ppOutput, BOOL Make32
 	}
 	else
 	{
-		ULONG UsedColours = 1 << bpp;
+		UINT32 UsedColours = 1 << bpp;
 #ifdef ACCUSOFT_HAS_BROKEN_NON_FULL_PALETTES
 // Accusoft Promote_8 from monochrome returns ClrUsed=2 but has a 256 entry colour table. Arrrggghhh!
 pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
@@ -3366,7 +3462,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 		if (pBBMI->biClrImportant == 0) pBBMI->biClrImportant = UsedColours; // 0 is MS speak for maximum
 		if (UsedColours < pBBMI->biClrUsed)
 		{
-			TRACEUSER("Alex", "These Accusoft boys really know what they're doing with Palettes - NOT\n");
+			TRACEUSER( "Alex", _T("These Accusoft boys really know what they're doing with Palettes - NOT\n"));
 			pBBMI->biClrUsed = UsedColours;
 			pBBMI->biClrImportant = UsedColours;
 		}
@@ -3380,7 +3476,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 	if (pBBMI->biClrUsed > pABMI->biClrUsed)
 	{
 		pBBMI->biClrUsed = pABMI->biClrUsed;
-		TRACEUSER("Alex", "We've lost some palette information\n");
+		TRACEUSER( "Alex", _T("We've lost some palette information\n"));
 	}
 	if (pBBMI->biClrUsed < pBBMI->biClrImportant) pBBMI->biClrImportant = pBBMI->biClrUsed;			
 
@@ -3405,7 +3501,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 			if (!MKB_BodgeCopyBitmap(width, height, bpp,(LPBYTE)pB, (LPBYTE)pA))
 			{
 				GlobalUnlock(MHandle);
-				int result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
+				INT32 result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
 				delete pKB;// We can't delete it - what can we do?
 				*ppOutput = NULL;
 				return FALSE;
@@ -3425,8 +3521,8 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 	{
 		POINT tempPoints[3];
 		tempPoints[0].x = 0; 						tempPoints[0].y = 0;
-		tempPoints[1].x = (LONG)(pBBMI->biWidth);	tempPoints[1].y = 0;
-		tempPoints[2].x = 0; 						tempPoints[2].y = (LONG)(pBBMI->biHeight);
+		tempPoints[1].x = (INT32)(pBBMI->biWidth);	tempPoints[1].y = 0;
+		tempPoints[2].x = 0; 						tempPoints[2].y = (INT32)(pBBMI->biHeight);
 		SetA(pKB);
 		ZeroA();
 		GC->SetBitmapFill(pBBMI,(LPBYTE)pB,
@@ -3455,11 +3551,11 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 		ResetAccusoftDibsToRuns = FALSE;
 	}
 
-	int result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
+	INT32 result = AccusoftFilters::pfnIMG_delete_bitmap(Handle);
 	if (result < 0)
 	{
 		delete pKB;// We can't delete it - what can we do?
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 
 	*ppOutput = pKB;
@@ -3470,7 +3566,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 /*pBBMI = (LPBITMAPINFOHEADER) GlobalLock(MHandle);
 if (pBBMI)
 {
-	TRACEUSER("Alex","Accusoft DLL failed to release memory\n");
+	TRACEUSER( "Alex", _T("Accusoft DLL failed to release memory\n"));
 	GlobalUnlock(MHandle);
 	GlobalFree(MHandle);
 }*/
@@ -3500,15 +3596,15 @@ if (pBBMI)
 BOOL BfxALU::FlipX(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_flip_bitmapx(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_flip_bitmapx(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_FLIPX);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_FLIPX));
 }
 
 /********************************************************************************************
@@ -3532,15 +3628,15 @@ BOOL BfxALU::FlipX(KernelBitmap * * ppOutput)
 BOOL BfxALU::FlipY(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_flip_bitmapy(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_flip_bitmapy(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_FLIPY);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_FLIPY));
 }
 
 
@@ -3564,15 +3660,15 @@ BOOL BfxALU::FlipY(KernelBitmap * * ppOutput)
 BOOL BfxALU::Rotate90(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 9000);
+	INT32 result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 9000);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_ROTATE90);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_ROTATE90));
 }
 
 
@@ -3596,15 +3692,15 @@ BOOL BfxALU::Rotate90(KernelBitmap * * ppOutput)
 BOOL BfxALU::Rotate180(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 18000);
+	INT32 result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 18000);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_ROTATE180);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_ROTATE180));
 }
 
 
@@ -3628,21 +3724,21 @@ BOOL BfxALU::Rotate180(KernelBitmap * * ppOutput)
 BOOL BfxALU::Rotate270(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 27000);
+	INT32 result = AccusoftFilters::pfnIMG_rotate_bitmap(AccusoftHandle, 27000);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_ROTATE270);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_ROTATE270));
 }
 
 /********************************************************************************************
 
->	BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, LONG Brightness, LONG Contrast, LONG Colour)
+>	BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT32 Contrast, INT32 Colour)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -3657,22 +3753,22 @@ BOOL BfxALU::Rotate270(KernelBitmap * * ppOutput)
 
 ********************************************************************************************/
 
-BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, LONG Brightness, LONG Contrast, LONG Colour)
+BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT32 Contrast, INT32 Colour)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 #if 0
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	int result = AccusoftFilters::pfnIMG_set_lut(AccusoftHandle, (int) Brightness, (int) Contrast);
+	INT32 result = AccusoftFilters::pfnIMG_set_lut(AccusoftHandle, (INT32) Brightness, (INT32) Contrast);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_BRIGHTCONT);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_BRIGHTCONT));
 #endif
 	
-	*ppOutput = NewBitmap(B,0,0,0,NULL, IDS_BFX_BRIGHTCONT);
+	*ppOutput = NewBitmap(B,0,0,0,NULL, _R(IDS_BFX_BRIGHTCONT));
 	if (!ppOutput) return FALSE;
 	
 	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
@@ -3759,28 +3855,28 @@ BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, LONG Brightness, LONG
 BOOL BfxALU::BayerMono(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_bayer_mono(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_bayer_mono(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	
 	//AccusoftFilters::pfnIMG_runs_to_dib (AccusoftHandle);
 	ResetAccusoftDibsToRuns = TRUE;
 	
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_BAYERMONO);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_BAYERMONO));
 }
 
 /********************************************************************************************
@@ -3803,23 +3899,23 @@ BOOL BfxALU::BayerMono(KernelBitmap * * ppOutput)
 BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_halftone_mono(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_halftone_mono(AccusoftHandle);
 	
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	
 	// we MUST now call this function BEFORE we create a new bitmap from the data!
@@ -3832,7 +3928,7 @@ BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 	//AccusoftFilters::pfnIMG_display_bitmap (AccusoftHandle, GetDC (GetActiveWindow ()), 100, 0,
 	//										100,300);
 
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_HALFTONEMONO);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_HALFTONEMONO));
 }
 
 /********************************************************************************************
@@ -3855,28 +3951,28 @@ BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 BOOL BfxALU::DiffusionMono(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_diffusion_mono(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_diffusion_mono(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	
 	//AccusoftFilters::pfnIMG_runs_to_dib (AccusoftHandle);
 	ResetAccusoftDibsToRuns = TRUE;
 	
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_DIFFUSIONMONO);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_DIFFUSIONMONO));
 }
 
 
@@ -3901,24 +3997,24 @@ BOOL BfxALU::DiffusionMono(KernelBitmap * * ppOutput)
 BOOL BfxALU::BayerColour(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_bayer_color(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_bayer_color(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_BAYERCOLOUR);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_BAYERCOLOUR));
 }
 
 /********************************************************************************************
@@ -3941,24 +4037,24 @@ BOOL BfxALU::BayerColour(KernelBitmap * * ppOutput)
 BOOL BfxALU::PopularityColour(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_popularity_color(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_popularity_color(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_POPULARITYCOLOUR);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_POPULARITYCOLOUR));
 }
 
 /********************************************************************************************
@@ -3984,24 +4080,24 @@ BOOL BfxALU::DiffusionColour(KernelBitmap * * ppOutput)
 //ERROR2(FALSE, "The Accusoft boys have chosen to make this function rampantly crash");
 
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_diffusion_color(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_diffusion_color(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_DIFFUSIONCOLOUR);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_DIFFUSIONCOLOUR));
 }
 
 /********************************************************************************************
@@ -4024,24 +4120,24 @@ BOOL BfxALU::DiffusionColour(KernelBitmap * * ppOutput)
 BOOL BfxALU::MakeGreyscale(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-	int result = AccusoftFilters::pfnIMG_color_gray(AccusoftHandle);
+	INT32 result = AccusoftFilters::pfnIMG_color_gray(AccusoftHandle);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_GREYSCALE);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_GREYSCALE));
 }
 #endif //WEBSTER
 
@@ -4068,7 +4164,7 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 
-	*ppOutput = NewBitmap(B,0,0,8, NULL, IDS_BFX_GREYSCALE);
+	*ppOutput = NewBitmap(B,0,0,8, NULL, _R(IDS_BFX_GREYSCALE));
 	if (!ppOutput) return FALSE;
 	
 	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
@@ -4086,7 +4182,7 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 	LPBYTE pDBits = (((WinBitmap *)((*ppOutput)->ActualBitmap))->BMBytes);
 
 	RGBQUAD * Pal = ((RGBQUAD *)(void *)(pABMI + 1/*ptr arith*/));
-	for (long x=0;x<0x100;x++)
+	for (INT32 x=0;x<0x100;x++)
 	{	
 		Pal[x].rgbRed=Pal[x].rgbGreen=Pal[x].rgbBlue=(BYTE)x;
 		Pal[x].rgbReserved=0;
@@ -4094,9 +4190,9 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 
 	DWORD w=0;
 	DWORD v=0;
-	for (LONG y=0;y<pBBMI->biHeight;y++)
+	for (INT32 y=0;y<pBBMI->biHeight;y++)
 	{
-		for (LONG x=0; x<pBBMI->biWidth; x++)
+		for (INT32 x=0; x<pBBMI->biWidth; x++)
 		{
 			pDBits[v]=(2+pSBits[w].rgbRed+pSBits[w].rgbGreen+pSBits[w].rgbBlue)/3;
 			w++;
@@ -4191,32 +4287,32 @@ BOOL BfxALU::IsGreyscaleBitmap(OILBitmap * pOilBmp)
 BOOL BfxALU::Octree (KernelBitmap * * ppOutput)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
 	
-	int result = AccusoftFilters::pfnIMG_octree_color (AccusoftHandle, 8, NULL, 256);
+	INT32 result = AccusoftFilters::pfnIMG_octree_color (AccusoftHandle, 8, NULL, 256);
 
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_OCTREECOLOUR);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_OCTREECOLOUR));
 }
 
 
 /********************************************************************************************
 
->	BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, LONG Degree, LONG Times)
+>	BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -4232,36 +4328,36 @@ BOOL BfxALU::Octree (KernelBitmap * * ppOutput)
 
 ********************************************************************************************/
 
-BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, LONG Degree, LONG Times)
+BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
 	if (Times>20) Times=20;
-	for (int i=1; i<=Times; i++)
+	for (INT32 i=1; i<=Times; i++)
 	{
-		int result = AccusoftFilters::pfnIMG_sharpen_bitmap(AccusoftHandle, (int) Degree);
+		INT32 result = AccusoftFilters::pfnIMG_sharpen_bitmap(AccusoftHandle, (INT32) Degree);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
-		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), (Degree>0)?IDS_BFX_SHARPEN:IDS_BFX_BLUR);
+		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), (Degree>0)?_R(IDS_BFX_SHARPEN):_R(IDS_BFX_BLUR));
 }
 
 /********************************************************************************************
 
->	BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols, TraceMethod Method)
+>	BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCols, TraceMethod Method)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -4279,7 +4375,7 @@ The bitmap becomes 32 bits so use this for tracing only!
 
 ********************************************************************************************/
 
-int BfxALUQuantisationRoutine( const void *arg1, const void *arg2 )
+INT32 BfxALUQuantisationRoutine( const void *arg1, const void *arg2 )
 {
 	QuantisationCell * qc1 = *((QuantisationCell * *)(arg1));
 	QuantisationCell * qc2 = *((QuantisationCell * *)(arg2));
@@ -4300,19 +4396,19 @@ int BfxALUQuantisationRoutine( const void *arg1, const void *arg2 )
 
 #define QUANT_NUMBER (QUANT_SIZE*QUANT_SIZE*QUANT_SIZE)
 
-BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols, TraceMethod Method)
+BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCols, TraceMethod Method)
 {
-	TRACEUSER("Alex","RemoveDither called Method %d, Degree %d\n");
+	TRACEUSER( "Alex", _T("RemoveDither called Method %d, Degree %d\n"));
 	
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 
-	LONG OutputBPP=1;
-	LONG NumPasses=1;
-	LONG Width=0;
-	LONG Depth=0;
-	LONG Height=0;
-	LONG l;
-	LONG __mtemp;
+	INT32 OutputBPP=1;
+	INT32 NumPasses=1;
+	INT32 Width=0;
+	INT32 Depth=0;
+	INT32 Height=0;
+	INT32 l;
+	INT32 __mtemp;
 	if (!GetSize(B, &Width, &Height, &Depth)) return FALSE;
 
 	DWORD * InputLine[5];
@@ -4327,7 +4423,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 	if ((Method==TRACEMETHOD_256COL) && (QuantCols<17)) QuantCols=17;
 	if (QuantCols>255) QuantCols=255;
 
-	LONG TotalCols=QuantCols;
+	INT32 TotalCols=QuantCols;
 
 	*ppOutput=NULL;
 
@@ -4371,7 +4467,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			{
 				OutputBPP=8;
 				NumPasses=2;
-				for (LONG i=0; i<QUANT_SIZE; i++) for (LONG j=0; j<QUANT_SIZE; j++) for (LONG k=0; k<QUANT_SIZE; k++)
+				for (INT32 i=0; i<QUANT_SIZE; i++) for (INT32 j=0; j<QUANT_SIZE; j++) for (INT32 k=0; k<QUANT_SIZE; k++)
 				{
 					(pQuantMap)QMEMBER(i,j,k).rsum=(pQuantMap)QMEMBER(i,j,k).gsum=(pQuantMap)QMEMBER(i,j,k).bsum=(pQuantMap)QMEMBER(i,j,k).pixels=0;
 					(pQuantMap)QMEMBER(i,j,k).index=-1;
@@ -4388,7 +4484,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			break;
 	}
 
-	KernelBitmap * pKB = NewBitmap(B, 0, 0, OutputBPP, NULL, IDS_BFX_REMOVEDITHER);
+	KernelBitmap * pKB = NewBitmap(B, 0, 0, OutputBPP, NULL, _R(IDS_BFX_REMOVEDITHER));
 
 	if (!pKB)
 	{
@@ -4423,18 +4519,18 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 		}
 	}
 
-	LONG x;
-	LONG y;
+	INT32 x;
+	INT32 y;
 
 /*
-	LONG NoiseMatrix[5][5]={
+	INT32 NoiseMatrix[5][5]={
 		{  32, 128, 192, 128,  32 },
 		{ 128, 256, 256, 256, 128 },
 		{ 192, 256, 256, 256, 192 },
 		{ 128, 256, 256, 256, 128 },
 		{  32, 128, 192, 128,  32 }};
 
-	LONG NoiseMatrix[5][5]={
+	INT32 NoiseMatrix[5][5]={
 		{ 1, 2, 3, 2, 1 },
 		{ 2, 4, 4, 4, 2 },
 		{ 3, 4, 4, 4, 3 },
@@ -4442,18 +4538,18 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 		{ 1, 2, 3, 2, 1 }};
 // Sum=68
 */
-	LONG NoiseMatrix[5][5]={
+	INT32 NoiseMatrix[5][5]={
 		{ 1, 4, 6, 4, 1 },
 		{ 4, 8, 8, 8, 4 },
 		{ 6, 8, 8, 8, 6 },
 		{ 4, 8, 8, 8, 4 },
 		{ 1, 4, 6, 4, 1 }};
 
-	LONG * NoiseMatrixP[5];
+	INT32 * NoiseMatrixP[5];
 
-	LONG Distrib[256];
-	LONG Points=0;
-	for (LONG n=0; n<256; n++) Distrib[n]=0;
+	INT32 Distrib[256];
+	INT32 Points=0;
+	for (INT32 n=0; n<256; n++) Distrib[n]=0;
 
 	if (Method==TRACEMETHOD_GREYSCALE)
 	{
@@ -4465,11 +4561,11 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			QuantPoints[n]=q;
 			q+=QuantDist;
 		}
-		LONG cp=0;
+		INT32 cp=0;
 		for (n=0; n<256; n++)
 		{
 			while ((cp<QuantCols) && (n>QuantPoints[cp])) cp++;
-			Distrib[n]=(LONG)(QuantDist*(cp-1));
+			Distrib[n]=(INT32)(QuantDist*(cp-1));
 			if (Distrib[n]<0) Distrib[n]=0;
 			if (Distrib[n]>255) Distrib[n]=255;
 		}
@@ -4501,7 +4597,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 	}
 	
 
-	for (LONG Pass=0; Pass<NumPasses; Pass++)
+	for (INT32 Pass=0; Pass<NumPasses; Pass++)
 	{
 
 		// First of all we must convert a new block to 32 bpp
@@ -4524,7 +4620,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			// at y=0 we must fill in all lines, otherwise just the new line (line 4)
 			for (l=(y==0)?0:4; l<5; l++)
 			{
-				LONG sy=y+l-2;
+				INT32 sy=y+l-2;
 				if (sy<0) sy=0;
 				if (sy>=Height) sy=Height-1;
 				ConvertScanLineToDWORD(B,sy,&(InputLine[l][2]));
@@ -4534,9 +4630,9 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 
 			for (l=0; l<5; l++) ByteLine[l]=(BYTE *)InputLine[l];
 
-			LONG r;
-			LONG g;
-			LONG b;
+			INT32 r;
+			INT32 g;
+			INT32 b;
 
 			// First create the output scanline
 			BYTE * pOutput=OutputLine;
@@ -4580,7 +4676,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 					{
 						for (x=0; x<Width; x++) 
 						{
-							r=(LONG)(DWORD)(*pOutput);
+							r=(INT32)(DWORD)(*pOutput);
 							pOutput+=4;
 							Distrib[r]++;
 							Points++;
@@ -4592,7 +4688,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 						for (x=0; x<Width; x++) 
 						{
 							if (!(x&7)) *(++Dest)=0;
-							*Dest |= Distrib[(LONG)(DWORD)(*pOutput)] >> (x&7);
+							*Dest |= Distrib[(INT32)(DWORD)(*pOutput)] >> (x&7);
 							pOutput+=4;
 						}
 					}
@@ -4609,13 +4705,13 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 					{
 						for (x=0; x<Width; x++) 
 						{
-							b=(LONG)(DWORD)*(pOutput++);
-							g=(LONG)(DWORD)*(pOutput++);
-							r=(LONG)(DWORD)*(pOutput++);
+							b=(INT32)(DWORD)*(pOutput++);
+							g=(INT32)(DWORD)*(pOutput++);
+							r=(INT32)(DWORD)*(pOutput++);
 							pOutput++;
-							LONG qr=(r+QUANT_ROUND)>>QUANT_SHIFT;
-							LONG qg=(g+QUANT_ROUND)>>QUANT_SHIFT;
-							LONG qb=(b+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qr=(r+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qg=(g+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qb=(b+QUANT_ROUND)>>QUANT_SHIFT;
 							QuantisationCell * pQuantCell=&(pQuantMap)QMEMBER(qr,qg,qb);
 							pQuantCell->pixels++;
 							pQuantCell->rsum+=r;
@@ -4628,28 +4724,28 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 						BYTE * Dest = &(((BYTE *) VImage)[((Width+3)&~3)*y]);
 						for (x=0; x<Width; x++) 
 						{
-							b=(LONG)(DWORD)*(pOutput++);
-							g=(LONG)(DWORD)*(pOutput++);
-							r=(LONG)(DWORD)*(pOutput++);
+							b=(INT32)(DWORD)*(pOutput++);
+							g=(INT32)(DWORD)*(pOutput++);
+							r=(INT32)(DWORD)*(pOutput++);
 							pOutput++;
-							LONG qr=(r+QUANT_ROUND)>>QUANT_SHIFT;
-							LONG qg=(g+QUANT_ROUND)>>QUANT_SHIFT;
-							LONG qb=(b+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qr=(r+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qg=(g+QUANT_ROUND)>>QUANT_SHIFT;
+							INT32 qb=(b+QUANT_ROUND)>>QUANT_SHIFT;
 							QuantisationCell * pQuantCell=&(pQuantMap)QMEMBER(qr,qg,qb);
-							LONG Index = pQuantCell->index;
+							INT32 Index = pQuantCell->index;
 							if (Index<0)
 							{
 								// better colourtrans it then
-								LONG rsum = pQuantCell->rsum;
-								LONG gsum = pQuantCell->gsum;
-								LONG bsum = pQuantCell->bsum;
+								INT32 rsum = pQuantCell->rsum;
+								INT32 gsum = pQuantCell->gsum;
+								INT32 bsum = pQuantCell->bsum;
 
-								LONG MinD=0x7fffffff;
+								INT32 MinD=0x7fffffff;
 								Index=0;
-								for (LONG m=0; m<TotalCols; m++)
+								for (INT32 m=0; m<TotalCols; m++)
 								{
 									// Find the colour difference
-									LONG d=IntegerSquare(QuantSort[m]->rsum - rsum)
+									INT32 d=IntegerSquare(QuantSort[m]->rsum - rsum)
 											+ IntegerSquare(QuantSort[m]->gsum - gsum)
 											+ IntegerSquare(QuantSort[m]->bsum - bsum);
 									if (d<MinD)
@@ -4680,7 +4776,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			if ((y & 15)==0) Continue=ContinueSlowJob((100*y/Height+100*Pass)/NumPasses);
 			if (!Continue)
 			{
-				ERROR1RAW(IDE_BFX_ABORT);
+				ERROR1RAW(_R(IDE_BFX_ABORT));
 				for (l=0; l<5; l++) if (InputLine[l]) CCFree(InputLine[l]);
 				CCFree(OutputLine);
 				delete pKB;
@@ -4695,8 +4791,8 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			case TRACEMETHOD_MONO:
 				if (!Pass) {
 					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
-					LONG Sum=0;
-					for (LONG n=0; n<256; n++)
+					INT32 Sum=0;
+					for (INT32 n=0; n<256; n++)
 					{
 						BOOL Thresh=(Sum>Points/2)|(n==255);
 						Sum+=Distrib[n];
@@ -4713,11 +4809,11 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 					// dithering it but heh, we might as well keep white as white etc.
 
 					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
-					LONG totalpixels=Width * Height;
-					LONG pixmax=totalpixels * LONG(0xff);
-					for (LONG r=0; r<QUANT_SIZE; r+=QUANT_SIZE-1)
-						for (LONG g=0; g<QUANT_SIZE; g+=QUANT_SIZE-1) 
-							for (LONG b=0; b<QUANT_SIZE; b+=QUANT_SIZE-1) 					
+					INT32 totalpixels=Width * Height;
+					INT32 pixmax=totalpixels * INT32(0xff);
+					for (INT32 r=0; r<QUANT_SIZE; r+=QUANT_SIZE-1)
+						for (INT32 g=0; g<QUANT_SIZE; g+=QUANT_SIZE-1) 
+							for (INT32 b=0; b<QUANT_SIZE; b+=QUANT_SIZE-1) 					
 							{
 								QuantisationCell * pQuantCell=&(pQuantMap)QMEMBER(r,g,b);
 								pQuantCell->rsum=r?pixmax:0;
@@ -4739,7 +4835,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 					qsort((void *)(QuantSort),QUANT_SIZE*QUANT_SIZE*QUANT_SIZE,sizeof(QuantisationCell *),
 						&BfxALUQuantisationRoutine);
 					TotalCols=0;
-					LONG n;
+					INT32 n;
 
 					// blank the palette
 					for (n=0; n<256; n++) Palette[n].rgbRed=Palette[n].rgbBlue=Palette[n].rgbGreen=Palette[n].rgbReserved=0;
@@ -4747,9 +4843,9 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 					// Now calculate the real av RGB values for each subcube
 					for (n=0; (n<QUANT_SIZE*QUANT_SIZE*QUANT_SIZE) ; n++ ) if (QuantSort[n]->pixels>0) 
 					{
-						LONG r=(QuantSort[n]->rsum+(LONG)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
-						LONG g=(QuantSort[n]->gsum+(LONG)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
-						LONG b=(QuantSort[n]->bsum+(LONG)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
+						INT32 r=(QuantSort[n]->rsum+(INT32)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
+						INT32 g=(QuantSort[n]->gsum+(INT32)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
+						INT32 b=(QuantSort[n]->bsum+(INT32)(QuantSort[n]->pixels>>1))/QuantSort[n]->pixels;
 						if (r<0) r=0; 							// Clip
 						if (r>255) r=255;
 						if (g<0) g=0; 							// Clip
@@ -4779,7 +4875,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 			case TRACEMETHOD_GREYSCALE:
 				{
 					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
-					for (LONG c=0; c<256; c++)
+					for (INT32 c=0; c<256; c++)
 						Palette[c].rgbRed=Palette[c].rgbBlue=Palette[c].rgbGreen=(BYTE)(DWORD)c;
 				}
 				break;
@@ -4798,8 +4894,8 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 
 /********************************************************************************************
 
->	void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], LONG NoiseMatrix[5][5],
-				 				  BYTE * OutputLine, LONG Width, LONG Thresh, BOOL Mono)
+>	void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], INT32 NoiseMatrix[5][5],
+				 				  BYTE * OutputLine, INT32 Width, INT32 Thresh, BOOL Mono)
 					
 	Author:		Alex
 	Created:	28/04/95
@@ -4817,33 +4913,33 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, LONG Thresh, LONG QuantCols
 
 ********************************************************************************************/
 
-void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], LONG NoiseMatrix[5][5], BYTE * OutputLine, LONG Width, LONG Thresh, BOOL Mono)
+void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], INT32 NoiseMatrix[5][5], BYTE * OutputLine, INT32 Width, INT32 Thresh, BOOL Mono)
 {
-	for (LONG x=0; x<Width; x++) 
+	for (INT32 x=0; x<Width; x++) 
 	{
-		LONG r=0;
-		LONG g=0;
-		LONG b=0;
+		INT32 r=0;
+		INT32 g=0;
+		INT32 b=0;
 
-		LONG s=0;
+		INT32 s=0;
 
-		LONG CB=(LONG)(ByteLine[2][2*4]);
-		LONG CG=(LONG)(ByteLine[2][2*4+1]);
-		LONG CR=(LONG)(ByteLine[2][2*4+2]);
+		INT32 CB=(INT32)(ByteLine[2][2*4]);
+		INT32 CG=(INT32)(ByteLine[2][2*4+1]);
+		INT32 CR=(INT32)(ByteLine[2][2*4+2]);
 
-		for (LONG dy=0; dy<=4; dy++)
+		for (INT32 dy=0; dy<=4; dy++)
 		{	
-			for (LONG dx=0; dx<=4; dx++)
+			for (INT32 dx=0; dx<=4; dx++)
 			{
-				LONG v=NoiseMatrix[dx][dy];
+				INT32 v=NoiseMatrix[dx][dy];
 
-				LONG LB=(LONG)(DWORD)(*(ByteLine[dy]++));
-				LONG LG=(LONG)(DWORD)(*(ByteLine[dy]++));
-				LONG LR=(LONG)(DWORD)(*(ByteLine[dy]++));
+				INT32 LB=(INT32)(DWORD)(*(ByteLine[dy]++));
+				INT32 LG=(INT32)(DWORD)(*(ByteLine[dy]++));
+				INT32 LR=(INT32)(DWORD)(*(ByteLine[dy]++));
 
-				LONG dr=LR-CR;
-				LONG dg=LG-CG;
-				LONG db=LB-CB;
+				INT32 dr=LR-CR;
+				INT32 dg=LG-CG;
+				INT32 db=LB-CB;
 				if (((dr*dr)+(dg*dg)+(db*db))<=Thresh)
 				{
 					s+=v;
@@ -4918,62 +5014,62 @@ BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecia
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	ERROR2IF((!Matrix) && (Type == BFX_SFX_USER), FALSE, "Must pass a matrix for BFX_SFX_USER");
 	char matrix[9];
-	if (Type==BFX_SFX_USER) for (int i=0; i<=8; i++) matrix[i]=(char)(LONG)Matrix[i];
+	if (Type==BFX_SFX_USER) for (INT32 i=0; i<=8; i++) matrix[i]=(char)(INT32)Matrix[i];
 	
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 
 	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
 	{
-		int result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
+		INT32 result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
 		if (result < 0)
 		{
 			AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-			ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+			ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 		}
 	}
 
-	int result = AccusoftFilters::pfnIMG_process_bitmap(AccusoftHandle, (int) Type, matrix);
+	INT32 result = AccusoftFilters::pfnIMG_process_bitmap(AccusoftHandle, (INT32) Type, matrix);
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
-	UINT res = IDS_BFX_EFFECTNAME0;
+	UINT32 res = _R(IDS_BFX_EFFECTNAME0);
 	switch (Type)
 	{
 		case BFX_SFX_USER:
-			res=IDS_BFX_EFFECTNAME0;
+			res=_R(IDS_BFX_EFFECTNAME0);
 			break;
 		case BFX_SFX_ISOLATEPOINTS:
-			res=IDS_BFX_EFFECTNAME1;
+			res=_R(IDS_BFX_EFFECTNAME1);
 			break;
 		case BFX_SFX_EDGE:
-			res=IDS_BFX_EFFECTNAME2;
+			res=_R(IDS_BFX_EFFECTNAME2);
 			break;
 		case BFX_SFX_HEDGE:
-			res=IDS_BFX_EFFECTNAME3;
+			res=_R(IDS_BFX_EFFECTNAME3);
 			break;
 		case BFX_SFX_VEDGE:
-			res=IDS_BFX_EFFECTNAME4;
+			res=_R(IDS_BFX_EFFECTNAME4);
 			break;
 		case BFX_SFX_P45EDGE:
-			res=IDS_BFX_EFFECTNAME5;
+			res=_R(IDS_BFX_EFFECTNAME5);
 			break;
 		case BFX_SFX_N45EDGE:
-			res=IDS_BFX_EFFECTNAME6;
+			res=_R(IDS_BFX_EFFECTNAME6);
 			break;
 		case BFX_SFX_LAPLACIAN:
-			res=IDS_BFX_EFFECTNAME7;
+			res=_R(IDS_BFX_EFFECTNAME7);
 			break;
 		case BFX_SFX_DIALATION:
-			res=IDS_BFX_EFFECTNAME8;
+			res=_R(IDS_BFX_EFFECTNAME8);
 			break;
 		case BFX_SFX_ROBERTS:
-			res=IDS_BFX_EFFECTNAME9;
+			res=_R(IDS_BFX_EFFECTNAME9);
 			break;
 		default:
-			res=IDS_BFX_EFFECTNAME0;
+			res=_R(IDS_BFX_EFFECTNAME0);
 			break;
 	}
 
@@ -4982,7 +5078,7 @@ BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecia
 
 /********************************************************************************************
 
->	BOOL BfxALU::Resize(KernelBitmap * * ppOutput, LONG Width, LONG Height, BOOL LinearInterpolation)
+>	BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL LinearInterpolation)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -4997,30 +5093,30 @@ BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecia
 
 ********************************************************************************************/
 
-BOOL BfxALU::Resize(KernelBitmap * * ppOutput, LONG Width, LONG Height, BOOL LinearInterpolation)
+BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL LinearInterpolation)
 {
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 		
 	// Accusoft have a bug on their linear interpolation code which puts a grey line down
 	// the left hand side of the image, so we must bodge it!!!!!
 	BOOL DoBodge = FALSE;
-	int bpp = B->GetBPP();
+	INT32 bpp = B->GetBPP();
 #ifdef BODGE_ACCUSOFT_RESIZE
 	if (LinearInterpolation && (bpp == 4 || bpp == 8 || bpp == 24 || bpp == 32))
 		DoBodge = TRUE;
 #endif
 
-	int AccusoftHandle = -1;
+	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle, DoBodge))
 		return FALSE;
 
-	int result = 0;
+	INT32 result = 0;
 	if (LinearInterpolation)
 	{
 		// Accusoft require a 24bpp bitmap for linear interpolation
 		// If less than or equal 8bpp 
 //		if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 ) SCARY!!!!!
-		LONG NewWidth = Width;
+		INT32 NewWidth = Width;
 #ifdef BODGE_ACCUSOFT_RESIZE
 		// If doing the bodge to get around the Accusoft 24bpp linear interpolation problem, then
 		// we make the bitmap 3 times as wide as it should be to hide the grey pixels on the left
@@ -5035,30 +5131,30 @@ BOOL BfxALU::Resize(KernelBitmap * * ppOutput, LONG Width, LONG Height, BOOL Lin
 			if (result < 0)
 			{
 				AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-				ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+				ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 			}
 		}
-		result = AccusoftFilters::pfnIMG_resize_bitmap_interp(AccusoftHandle, (int) NewWidth, (int) Height);
+		result = AccusoftFilters::pfnIMG_resize_bitmap_interp(AccusoftHandle, (INT32) NewWidth, (INT32) Height);
 	}
 	else
 	{
 		// Do a straight resize
-		result = AccusoftFilters::pfnIMG_resize_bitmap(AccusoftHandle, (int) Width, (int) Height);
+		result = AccusoftFilters::pfnIMG_resize_bitmap(AccusoftHandle, (INT32) Width, (INT32) Height);
 	}
 	
 	if (result < 0)
 	{
 		AccusoftFilters::pfnIMG_delete_bitmap(AccusoftHandle);
-		ERROR1(FALSE, IDE_ACCUSOFT_ERROR - result);
+		ERROR1(FALSE, _R(IDE_ACCUSOFT_ERROR) - result);
 	}
 	
-	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), IDS_BFX_RESIZE, DoBodge);
+	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_RESIZE), DoBodge);
 }
 
 /********************************************************************************************
 
->	BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Size, LONG Width, LONG Height,
-							LONG Brightness, LONG Contrast, LONG Colour, BOOL SingleChannel)
+>	BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Size, INT32 Width, INT32 Height,
+							INT32 Brightness, INT32 Contrast, INT32 Colour, BOOL SingleChannel)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -5076,8 +5172,8 @@ BOOL BfxALU::Resize(KernelBitmap * * ppOutput, LONG Width, LONG Height, BOOL Lin
 
 ********************************************************************************************/
 
-BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Size, LONG Width, LONG Height,
-							LONG Brightness, LONG Contrast, LONG Colour, BOOL SingleChannel)
+BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Size, INT32 Width, INT32 Height,
+							INT32 Brightness, INT32 Contrast, INT32 Colour, BOOL SingleChannel)
 {
  	// We make a LUT which is Output = LUT[gun, sumofguns]
 
@@ -5092,9 +5188,9 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Siz
 	double PropB = dContrast / 3.0 * (1.0-dColour);
 	double Offset = dBrightness + (1.0-dContrast)*0.5;
 
-	LONG pa=(LONG)(PropA*(1<<15));
-	LONG pb=(LONG)(PropB*(1<<15));
-	LONG po=(LONG)(Offset*((1<<15)*255)+/* for rounding */(1<<14));
+	INT32 pa=(INT32)(PropA*(1<<15));
+	INT32 pb=(INT32)(PropB*(1<<15));
+	INT32 po=(INT32)(Offset*((1<<15)*255)+/* for rounding */(1<<14));
 
  	BYTE * Data = (BYTE *) CCMalloc(3*256*256);
 	if (!Data) return FALSE; // error already set
@@ -5103,13 +5199,13 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Siz
 	// sooooo sloooooow on 486SX. We use 17.15 arithmetic throughout
 
 #ifndef FASTLINEARABK
-	LONG a;
-	LONG b;
-	LONG r;
+	INT32 a;
+	INT32 b;
+	INT32 r;
 	for (a=0; a<256; a++) for (b=0; b<256*3; b++)
 	{
 		r=(a*pa+b*pb+po)>>15; /* we did the rounding in the offset calc */
-		LUTBYTE(a,b)=(r<0)?0:((r>255)?255:(BYTE)(LONG)(r));
+		LUTBYTE(a,b)=(r<0)?0:((r>255)?255:(BYTE)(INT32)(r));
 	}
 #else
 	FastLinearABK(Data, pa, pb, po, 256*3);
@@ -5119,9 +5215,9 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Siz
 
 	if (!SingleChannel)
 	{
-		for (long y = 0 ;y<Height; y++)
+		for (INT32 y = 0 ;y<Height; y++)
 		{
-			for (long x = 0; x<Width; x++)
+			for (INT32 x = 0; x<Width; x++)
 			{
 				Sum=((DWORD)Source[0])+((DWORD)Source[1])+((DWORD)Source[2]);
 				Dest[0]=LUTBYTE(Source[0], Sum);
@@ -5136,9 +5232,9 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Siz
 	}
 	else
 	{
-		for (long y = 0 ;y<Height; y++)
+		for (INT32 y = 0 ;y<Height; y++)
 		{
-			for (long x = 0; x<Width; x++)
+			for (INT32 x = 0; x<Width; x++)
 			{
 				*Dest=LUTBYTE((*Source), (*Source));
 				Source+=Size;
@@ -5155,7 +5251,7 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, LONG Siz
 
 /********************************************************************************************
 
->	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * pBuffer)
+>	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -5175,28 +5271,28 @@ THIS FUNCTION HAS NO ERROR CHECKING. How does it smell? TERRIBLE
 
 ********************************************************************************************/
 
-void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * pBuffer)
+void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 {
 	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 	RGBQUAD * pPal=(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiColors);
 	void * VImage = (((WinBitmap *)(pBitmap->ActualBitmap))->BMBytes);
-	LONG Width=pBMI->biWidth;
+	INT32 Width=pBMI->biWidth;
 	switch (pBMI->biBitCount)
 	{
 		case 32:
 		{
 			DWORD * Source = &(((DWORD *) VImage)[Width*Line]);
-			for (LONG w=0; w<Width; w++) pBuffer[w]=Source[w] & 0x00ffffff;
+			for (INT32 w=0; w<Width; w++) pBuffer[w]=Source[w] & 0x00ffffff;
 			return;
 		}
 		break; // not really needed
 		case 24:
 		{
 			BYTE * Source = &(((BYTE *) VImage)[(((Width*3)+3)&~3)*Line]);
-			LONG b=0;
-			for (LONG w=0; w<Width; w++)
+			INT32 b=0;
+			for (INT32 w=0; w<Width; w++)
 			{	
-				pBuffer[w]=(((LONG)(Source[b])))|(((LONG)(Source[b+1]))<<8)|(((LONG)(Source[b+2]))<<16);
+				pBuffer[w]=(((INT32)(Source[b])))|(((INT32)(Source[b+1]))<<8)|(((INT32)(Source[b+2]))<<16);
 				b+=3; /// Grrr MS bug prevents us from doing this efficiently
 			}
 			return;
@@ -5205,7 +5301,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * p
 		case 8:
 		{
 			BYTE * Source = &(((BYTE *) VImage)[((Width+3)&~3)*Line]);
-			for (LONG w=0; w<Width; w++)
+			for (INT32 w=0; w<Width; w++)
 			{
 				pBuffer[w]=0x00ffffff & *((DWORD *)(&pPal[Source[w]]));
 			}
@@ -5215,7 +5311,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * p
 		case 4:
 		{
 			BYTE * Source = &(((BYTE *) VImage)[(((Width+7)&~7)>>1)*Line]);
-			for (LONG w=0; w<Width; w++)
+			for (INT32 w=0; w<Width; w++)
 			{
 				pBuffer[w]=0x00ffffff & *((DWORD *)(&pPal[ (Source[w>>1]>>( (1-(w&1)) <<2) )&0xf]));
 			}
@@ -5225,7 +5321,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * p
 		case 2:
 		{
 			BYTE * Source = &(((BYTE *) VImage)[(((Width+15)&~15)>>2)*Line]);
-			for (LONG w=0; w<Width; w++)
+			for (INT32 w=0; w<Width; w++)
 			{
 				pBuffer[w]=0x00ffffff & *((DWORD *)(&pPal[ (Source[w>>2]>>( (3-(w&3)) <<1) )&0x3]));
 			}
@@ -5235,7 +5331,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * p
 		case 1:
 		{
 			BYTE * Source = &(((BYTE *) VImage)[(((Width+31)&~31)>>3)*Line]);
-			for (LONG w=0; w<Width; w++)
+			for (INT32 w=0; w<Width; w++)
 			{
 				pBuffer[w]=0x00ffffff & *((DWORD *)(&pPal[ (Source[w>>3]>>( (7-(w&7)) /*<<0*/) )&0x1]));
 			}
@@ -5253,7 +5349,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * p
 
 /********************************************************************************************
 
->	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * pBuffer)
+>	void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 					
 	Author:		Alex
 	Created:	28/01/95
@@ -5273,7 +5369,7 @@ THIS FUNCTION HAS NO ERROR CHECKING. How does it smell? TERRIBLE
 
 ********************************************************************************************/
 
-void BfxALU::ConvertScanLineFromDWORD(KernelBitmap * pBitmap, LONG Line, DWORD * pBuffer)
+void BfxALU::ConvertScanLineFromDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 {
 	return;
 }
