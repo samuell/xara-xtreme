@@ -524,11 +524,15 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		pMessageSizer->Add(pStaticBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 	}
 
+	// Perform manual expansion of newline escape sequences...
+	wxString temp = (TCHAR *)Error::GetErrorString();
+	temp.Replace(_T("\\n"), _T("\n"), TRUE);
+
     //wxTextCtrl* pMessage = new wxTextCtrl( pBox, -1, (TCHAR *)Error::GetErrorString(),
 	//									   wxDefaultPosition, wxSize(400, -1),
 	//									   wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxNO_BORDER );
 
-	wxStaticText* pMessage = new wxStaticText( pBox, -1, (TCHAR *)Error::GetErrorString(),
+	wxStaticText* pMessage = new wxStaticText( pBox, -1, temp,
 										   wxDefaultPosition, wxSize(400, -1),
 										   wxALIGN_CENTRE|wxNO_BORDER );
 	if (!pMessage)
