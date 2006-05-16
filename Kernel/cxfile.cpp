@@ -2048,7 +2048,7 @@ BOOL CXaraFile::ReadNextRecord()
 
 >	virtual void CXaraFile::AddAtomicTag(AtomicTagListItem* pItem)
 
-	Author:		Markn
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/8/96
 	Inputs:		pItem = ptr to an atomic list item
 	Returns:	-
@@ -2072,7 +2072,7 @@ void CXaraFile::AddAtomicTag(AtomicTagListItem* pItem)
 
 >	virtual void CXaraFile::AddEssentialTag(EssentialTagListItem* pItem)
 
-	Author:		Markn
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/8/96
 	Inputs:		pItem = ptr to an Essential list item
 	Returns:	-
@@ -2096,7 +2096,7 @@ void CXaraFile::AddEssentialTag(EssentialTagListItem* pItem)
 
 >	BOOL CXaraFile::WriteRemainingAtomicTagDefinitions ()
 
-	Author:		Chris Snook
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/9/2000
 	Inputs:		-
 	Outputs:	-
@@ -2132,7 +2132,7 @@ BOOL CXaraFile::WriteRemainingAtomicTagDefinitions ()
 
 >	virtual BOOL CXaraFile::IsTagInAtomicList(UINT32 Tag)
 
-	Author:		Markn
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/8/96
 	Inputs:		Tag = tag value to look for
 	Returns:	TRUE if found, FALSE otherwsie
@@ -2164,7 +2164,7 @@ BOOL CXaraFile::IsTagInAtomicList(UINT32 Tag)
 
 >	virtual BOOL CXaraFile::IsTagInEssentialList(UINT32 Tag)
 
-	Author:		Markn
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	16/8/96
 	Inputs:		Tag = tag value to look for
 	Returns:	TRUE if found, FALSE otherwsie

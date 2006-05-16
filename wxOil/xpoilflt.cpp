@@ -358,7 +358,7 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 
 		wxArrayString saOutput;
 		wxArrayString saErrors;
-		int code = wxExecute(sCommand, saOutput, saErrors);
+		INT32 code = wxExecute(sCommand, saOutput, saErrors);
 		TRACE(_T("wxExecute returned %d"), code);
 		if (code == 0)
 		{
@@ -438,7 +438,7 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 	// the processing of stderr for errors, warnings and progress
 	CamProcess TheProc(NULL, &TempFile);
 
-	int code = TheProc.Execute(sCommand);
+	INT32 code = TheProc.Execute(sCommand);
 	TempFile.close();
 	if (code != 0)
 	{
@@ -547,7 +547,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 
 	wxArrayString saOutput;
 	wxArrayString saErrors;
-	int code = wxExecute(sCommand, saOutput, saErrors);
+	INT32 code = wxExecute(sCommand, saOutput, saErrors);
 
 	for (UINT32 i = 0; i < saErrors.GetCount(); i++)
 	{
@@ -623,7 +623,7 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 	// the processing of stderr for errors, warnings and progress
 	CamProcess TheProc(&TempFile, NULL);
 
-	int code = TheProc.Execute(sCommand);
+	INT32 code = TheProc.Execute(sCommand);
 	TempFile.close();
 	if (code != 0)
 	{

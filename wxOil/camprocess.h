@@ -112,7 +112,7 @@ public:
 	CamProcess(CCLexFile* pInFile = NULL, CCLexFile* pOutFile = NULL);
 	virtual ~CamProcess();
 
-	virtual void OnTerminate(int pid, int status);
+	virtual void OnTerminate(int /*TYPENOTE: Correct*/ pid, int /*TYPENOTE: Correct*/ status);
 
 	// These are called to handle the various streams
 	// StdIn and StdOut are only called when a file isn't being used

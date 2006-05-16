@@ -142,7 +142,7 @@ public:
 
 	void GiveActiveCanvasFocus();
 	
-	int FilterEvent( wxEvent& event );
+	int /*TYPENOTE: Correct*/ FilterEvent( wxEvent& event );
 
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;

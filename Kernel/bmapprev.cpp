@@ -252,7 +252,7 @@ BOOL BmapPrevDlg::RegisterYourPagesInOrderPlease()
 	}
 	else
 	{
-PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
+PORTNOTE("other","Removed _R(IDD_TPALETTE) - doesn't exist in resources")
 #ifndef EXCLUDE_FROM_XARALX
 		// Not exporting a bitmap from the bitmap gallery
 		AddAPage(_R(IDD_TPALETTE));
@@ -266,13 +266,13 @@ PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
 	bool	fUsedImapOption = false;
 	if (ok && !bExportABitmap && m_FilterType != MAKE_BITMAP_FILTER && !m_bSlicingImage)
 	{
-PORTNOTE("other","Removed IDD_TPALETTE & IDD_TBROWSER - doesn't exist in resources and isn't wanted (in that order)")
+PORTNOTE("other","Removed _R(IDD_TPALETTE) & _R(IDD_TBROWSER) - doesn't exist in resources and isn't wanted (in that order)")
 //		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
 		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS));
 		fUsedImapOption = true;
 	}
 
-PORTNOTE("other","Removed IDD_TPALETTE - doesn't exist in resources")
+PORTNOTE("other","Removed _R(IDD_TPALETTE) - doesn't exist in resources")
 #ifndef EXCLUDE_FROM_XARALX// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
 	{

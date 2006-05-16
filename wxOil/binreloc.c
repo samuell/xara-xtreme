@@ -1,3 +1,6 @@
+// $Id: binreloc.c 757 2006-04-01 16:04:45Z alex $
+// The following line makes normalize.pl skip type fixing
+/* SKIPFIXTYPES: START */
 // $Id: appstate.cpp 836 2006-04-18 16:06:15Z gerry $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================

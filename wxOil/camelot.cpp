@@ -213,7 +213,7 @@ CCamApp::CCamApp()
 }
 
 /*********************************************************************************************
->	int CCamApp::FilterEvent( wxEvent& event )
+>	int TYPENOTE: Correct CCamApp::FilterEvent( wxEvent& event )
 
 	Author:		Luke_Hart (Xara Group Ltd) <LukeH@xara.com>
 	Created:	09/05/06
@@ -230,9 +230,9 @@ CCamApp::CCamApp()
 	SeeAlso:	The focus handling document
 
 **********************************************************************************************/ 
-int CCamApp::FilterEvent( wxEvent& event )
+int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
-	static long	lLastTimeStamp = 0;
+	static INT32	lLastTimeStamp = 0;
 
 	if( event.GetEventType() == wxEVT_CHAR )
 	{
@@ -1233,7 +1233,7 @@ void CCamApp::OnHelpIndex()
 {
 	// Get the locale id
 	wxString	strLocale( setlocale( LC_MESSAGES, NULL ), wxConvUTF8 );
-	int			ordSep = strLocale.Find( _T('_' ) );
+	INT32			ordSep = strLocale.Find( _T('_' ) );
 	if( -1 != ordSep )
 		strLocale = strLocale.Left( ordSep );
 	TRACEUSER( "jlh92", _T("Locale = %s\n"), PCTSTR(strLocale) );

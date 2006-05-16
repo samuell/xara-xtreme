@@ -1,11 +1,11 @@
 // $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
-			Xara LX, a vector drawing and manipulation program.
-					Copyright (C) 1993-2006 Xara Group Ltd.
-	Copyright on certain contributions may be held in joint with their
-			respective authors. See AUTHORS file for details.
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-http://www.xaraxtreme.org/developers/
+  http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-http://www.xaraxtreme.org/developers/contribute/
+  http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-						http://www.xara.com/
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 
 // dropdown.cpp - Drop-down list base class
 

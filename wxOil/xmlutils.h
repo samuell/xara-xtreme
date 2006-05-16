@@ -121,7 +121,7 @@ public:
 
 #if _DEBUG
 	static void Test();
-	static int example4(const char *filename, const xmlChar * xpathExpr, const xmlChar * value);
+	static INT32 example4(const char *filename, const xmlChar * xpathExpr, const xmlChar * value);
 	static void update_xpath_nodes(xmlNodeSetPtr nodes, const xmlChar * value);
 #endif
 
@@ -136,23 +136,23 @@ public:
 									const CString& strEncoding);
 
 	static IXMLDOMElementPtr AppendElement(IXMLDOMElementPtr pContext, const CString& elname, const CString* value = NULL);
-	static IXMLDOMElementPtr AppendElement(IXMLDOMElementPtr pContext, const CString& elname, const LONG lValue);
+	static IXMLDOMElementPtr AppendElement(IXMLDOMElementPtr pContext, const CString& elname, const INT32 lValue);
 	static IXMLDOMElementPtr AppendElement(IXMLDOMElementPtr pContext, const CString& elname, const BOOL bValue);
 
 	static BOOL		ReplaceElement(IXMLDOMElementPtr pElement, const CString& strElPath, const CString& strText, const BOOL bIgnoreBlank = FALSE);
-	static BOOL		ReplaceElement(IXMLDOMElementPtr pElement, const CString& strElPath, const LONG lValue);
+	static BOOL		ReplaceElement(IXMLDOMElementPtr pElement, const CString& strElPath, const INT32 lValue);
 	static BOOL		ReplaceElement(IXMLDOMElementPtr pElement, const CString& strElPath, const BOOL bValue);
 
 	static CString	GetNodeString(IXMLDOMNodePtr pNode, const CString& strNodePath, const CString& strDefault = _T(""));
-	static LONG		GetNodeLong(IXMLDOMNodePtr pNode, const CString& strNodePath, const LONG lDefault = 0);
+	static INT32		GetNodeLong(IXMLDOMNodePtr pNode, const CString& strNodePath, const INT32 lDefault = 0);
 	static BOOL		GetNodeBOOL(IXMLDOMNodePtr pNode, const CString& strNodePath, const BOOL bDefault = FALSE);
 
 	static CString	GetAttributeString(IXMLDOMElementPtr pNode, const CString& strAttrName, const CString& strDefault = _T(""));
-	static LONG		GetAttributeLong(IXMLDOMElementPtr pNode, const CString& strAttrName, const LONG lDefault = 0);
+	static INT32		GetAttributeLong(IXMLDOMElementPtr pNode, const CString& strAttrName, const INT32 lDefault = 0);
 	static BOOL		GetAttributeBOOL(IXMLDOMElementPtr pNode, const CString& strAttrName, const BOOL bDefault = FALSE);
 
 	static BOOL		SetAttribute(IXMLDOMNodePtr pNode, const CString& strName, const CString& strValue);
-	static BOOL		SetAttribute(IXMLDOMNodePtr pNode, const CString& strName, const LONG lValue);
+	static BOOL		SetAttribute(IXMLDOMNodePtr pNode, const CString& strName, const INT32 lValue);
 	static BOOL		SetAttribute(IXMLDOMNodePtr pNode, const CString& strName, const BOOL bValue);
 
 	static CString	GetNodeName(IXMLDOMNodePtr pNode);

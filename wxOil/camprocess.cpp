@@ -295,7 +295,7 @@ void CamProcess::ProcessStdErr()
 }
 
 
-void CamProcess::OnTerminate(int pid, int status)
+void CamProcess::OnTerminate(int /*TYPENOTE: Correct*/ pid, int /*TYPENOTE: Correct*/ status)
 {
 	TRACEUSER("Gerry", _T("CamProcess::OnTerminate pid = %d  status = %d"), pid, status);
 	m_bDead = true;

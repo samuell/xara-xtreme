@@ -248,7 +248,7 @@ void CXMLUtils::Test()
  *
  * Returns 0 on success and a negative value otherwise.
  */
-int CXMLUtils::example4(const char* filename, const xmlChar* xpathExpr, const xmlChar* value)
+INT32 CXMLUtils::example4(const char* filename, const xmlChar* xpathExpr, const xmlChar* value)
 {
     xmlDocPtr doc;
     xmlXPathContextPtr xpathCtx; 
@@ -311,8 +311,8 @@ int CXMLUtils::example4(const char* filename, const xmlChar* xpathExpr, const xm
  */
 void CXMLUtils::update_xpath_nodes(xmlNodeSetPtr nodes, const xmlChar* value)
 {
-    int size;
-    int i;
+    INT32 size;
+    INT32 i;
     
     assert(value);
     size = (nodes) ? nodes->nodeNr : 0;

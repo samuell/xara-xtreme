@@ -1,4 +1,6 @@
 // $Id$
+// The following line makes normalize.pl skip type fixing
+/* SKIPFIXTYPES: START */
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
