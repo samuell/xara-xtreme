@@ -121,7 +121,7 @@ public:			// Creation/destruction
 
 	virtual BOOL Init(CWindowID ParentWindow, CGadgetID ParentControl);
 
-	static void DropDown::KillDropDownsByWindow(CWindowID Window);
+	static void KillDropDownsByWindow(CWindowID Window);
 
 protected:
 	static List CurrentDropDowns;					// A list of all currently active dropdowns

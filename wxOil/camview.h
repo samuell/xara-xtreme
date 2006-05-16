@@ -419,7 +419,7 @@ protected:
 	static void Rect2wxRect(const Rect& krect, wxRect* prect);
 
 public:
-	static DocView *CCamView::GetDocViewFromWindowID( CWindowID WindowID );
+	static DocView *GetDocViewFromWindowID( CWindowID WindowID );
 
 // Static variables
 protected:
