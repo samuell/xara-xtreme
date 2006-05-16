@@ -1,4 +1,4 @@
-// $Id: camplatform.h 957 2006-05-05 09:03:18Z luke $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

@@ -1,4 +1,4 @@
-// $Id: cartctl.cpp 869 2006-04-24 14:03:18Z alex $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  

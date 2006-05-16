@@ -1,4 +1,4 @@
-// $Id: wxOil/CustomList.cpp, 1, 01-Jan-2006, Anonymous $
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
