@@ -276,7 +276,7 @@ PORTNOTE("other","Removed XPEHost usage")
 	Module::DeinitModules();	// by CMainFrame::OnDestroy() !!
 
 #ifndef EXCLUDE_BFX
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BitmapEffectBase::DeInit();
 #endif
 #endif

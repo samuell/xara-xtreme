@@ -110,11 +110,13 @@ class OILBitmap;
 #ifndef EXCLUDE_FROM_RALPH
 
 #include "gconsts.h" // For GMATRIX
+#include "tracectl.h" // for enum TraceMethod - annoying...
+
 class GDrawContext;
 class BfxALULUT;
 class Path;
 class String_256;
-enum TraceMethod;
+
 
 typedef struct
 {
@@ -330,6 +332,8 @@ class BfxALU : public CCObject
 	virtual void TestGD();
 
 #ifndef WEBSTER
+PORTNOTE("other", "Remove accusoft effects")
+#ifndef EXCLUDE_FROM_XARALX
 	// Accusoft effects
 	virtual BOOL FlipX(KernelBitmap * * ppOutput);
 	virtual BOOL FlipY(KernelBitmap * * ppOutput);
@@ -348,6 +352,7 @@ class BfxALU : public CCObject
 	virtual BOOL DiffusionColour(KernelBitmap * * ppOutput);
 	virtual BOOL PopularityColour(KernelBitmap * * ppOutput);
 	virtual BOOL MakeGreyscale(KernelBitmap * * ppOutput);
+#endif //XARALX
 #endif //WEBSTER
 	virtual BOOL MakeGreyscale32to8(KernelBitmap * * ppOutput);
 
@@ -356,11 +361,16 @@ class BfxALU : public CCObject
 	static  BOOL IsGreyscaleBitmap(OILBitmap * pOilBmp);
 #ifndef EXCLUDE_FROM_RALPH
 #ifndef WEBSTER
+PORTNOTE("other", "Remove accusoft effects")
+#ifndef EXCLUDE_FROM_XARALX
 	virtual BOOL Octree (KernelBitmap * * ppOutput);
 
 	virtual BOOL SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times);
+#endif
 	virtual BOOL RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCols, TraceMethod Method);
+#ifndef EXCLUDE_FROM_XARALX
 	virtual BOOL SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecialEffect Type);
+#endif
 #endif //WEBSTER
 
 	protected:
@@ -374,14 +384,18 @@ class BfxALU : public CCObject
 							 INT32 * pSize, INT32 * pHighestChain, INT32 * pWidth, DWORD * * ppA);	
 
 #ifndef WEBSTER
+PORTNOTE("other", "Remove accusoft effects")
+#ifndef EXCLUDE_FROM_XARALX
 	virtual BOOL MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge = FALSE);
 	virtual BOOL MakeKernelBitmap(INT32 Handle, KernelBitmap * * ppOutput, BOOL Make32Bits = FALSE,
 								  String_256 * pName = NULL, UINT32 ResID = 0, BOOL DoBodge = FALSE);
+#endif
 	virtual BOOL AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Size, INT32 Width, INT32 Height,
 							INT32 Brightness, INT32 Contrast, INT32 Colour, BOOL SingleChannel);
-
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL MAH_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits);
 	BOOL MKB_BodgeCopyBitmap(INT32 Width, INT32 Height, INT32 Depth, LPBYTE pSourceBits, LPBYTE pDestBits);
+#endif
 #endif //WEBSTER
 
 	void ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer);
@@ -428,11 +442,13 @@ This isolates the kernel classes from th storage format of the LUT
 
 ********************************************************************************************/
 
+class BfxALU;
+
 class BfxALULUT : public CCObject
 {
 	CC_DECLARE_DYNCREATE(BfxALULUT);
 
-	friend BfxALU;
+	friend class BfxALU;
 
 	//BfxALULUT(); constructors and destructors are simple
 	//~BFXALULUT();

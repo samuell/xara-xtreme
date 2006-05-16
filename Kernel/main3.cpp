@@ -185,7 +185,9 @@ PORTNOTE("other","Removed a large amount of initialization")
 			OpAlign::Init() &&					// Init the align op
 #ifndef EXCLUDE_FROM_XARALX
 			BmpPrefsDlg::Init() &&				// Init the export bitmap options dialog
+#endif
 			TraceDlg::Init() &&					// Init the trace dialog
+#ifndef EXCLUDE_FROM_XARALX
 			WebAddressDlg::Init() &&
 			PhotoCDDlg::Init() &&				// Init the import PhotoCD options dialog
 #endif

@@ -747,7 +747,7 @@ BOOL TraceRegion::Trace(INT32 InitialX, INT32 InitialY, BfxPixelOp * thepBfxPixe
 
 	pBfxPixelOp = thepBfxPixelOp;
 	
-	ERROR2IF( ((!pBfxPixelOp->IsInRegion(InitialX,InitialY))), FALSE, "Initial point not in region" )
+	ERROR2IF( ((!pBfxPixelOp->IsInRegion(InitialX,InitialY))), FALSE, "Initial point not in region" );
 
 	BOOL Bottom=FALSE;
 	while (!Bottom)
@@ -1263,7 +1263,7 @@ void TraceRegion::GenerateBezier(INT32 FirstPoint, INT32 LastPoint, TraceBoundar
 {
 	INT32 pos;
 	INT32 i;
-	INT32 NumPoints = LastPoint - FirstPoint + 1;
+//	INT32 NumPoints = LastPoint - FirstPoint + 1;
 	
 	// Build a matrix type of thing that contains the tangents scaled by the offsets
 	TraceBoundaryPoint A[FIT_STEPS+1][2];			//	Vector2 (*A)[2] = new Vector2[NumPoints+1][2];

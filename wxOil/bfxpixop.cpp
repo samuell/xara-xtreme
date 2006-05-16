@@ -105,10 +105,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bfxpixop.h"
 #include "bfxalu.h"
 #include "bitmap.h"
-#include "wbitmap.h"
+#include "oilbitmap.h"
 
 // The asm file defines FASTxxxxxx if there are fast versions of the routeines available
-#include "bfxasm.h"
+//#include "bfxasm.h"
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
@@ -231,13 +231,13 @@ BOOL BfxPixelOp::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD th
 {
 	Base = NULL;
 	ERROR2IF( ((!pKB) || (pKB->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF( (BPP && pBMI->biBitCount != BPP), FALSE, "BfxPixelOp called with incorrect BPP");
 
-	Base = (DWORD *)(void *)(((WinBitmap *)(pKB->ActualBitmap))->BMBytes);
+	Base = (DWORD *)(void *)(((CWxBitmap *)(pKB->ActualBitmap))->BMBytes);
 	Width = pBMI->biWidth;
 	INT32 Bits = pBMI->biBitCount;
 	switch (Bits)
@@ -331,13 +331,13 @@ BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitm
 	if (pProposed)
 	{
 		ERROR2IF( (pProposed->ActualBitmap==NULL) ,FALSE,"BfxPixelOp can't find OIL bitmap");
-		ERROR3IF( (!(pProposed->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxPixelOp Oil layer inconsistency");
+		ERROR3IF( (!(pProposed->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxPixelOp Oil layer inconsistency");
 		
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pProposed->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pProposed->ActualBitmap))->BMInfo->bmiHeader);
 		
 		ERROR2IF( ((pBMI->biHeight != Height) || (pBMI->biWidth != Width) || (BPP && pBMI->biBitCount !=BPP)), FALSE,
 			  "Incompatible bitmaps for BfxPixelOp::SetAuxilliaryBitmap");
-		pA = (DWORD *)(void *)(((WinBitmap *)(pProposed->ActualBitmap))->BMBytes);
+		pA = (DWORD *)(void *)(((CWxBitmap *)(pProposed->ActualBitmap))->BMBytes);
 	}
 	else
 	{
@@ -347,13 +347,13 @@ BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitm
 	if (pOriginal)
 	{
 		ERROR2IF( (pOriginal->ActualBitmap==NULL) ,FALSE,"BfxPixelOp can't find OIL bitmap");
-		ERROR3IF( (!(pOriginal->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxPixelOp Oil layer inconsistency");
+		ERROR3IF( (!(pOriginal->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxPixelOp Oil layer inconsistency");
 		
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pOriginal->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pOriginal->ActualBitmap))->BMInfo->bmiHeader);
 		
 		ERROR2IF( ((pBMI->biHeight != Height) || (pBMI->biWidth != Width) || (BPP && pBMI->biBitCount !=BPP)), FALSE,
 			  "Incompatible bitmaps for BfxPixelOp::SetAuxilliaryBitmap");
-		pT = (DWORD *)(void *)(((WinBitmap *)(pOriginal->ActualBitmap))->BMBytes);
+		pT = (DWORD *)(void *)(((CWxBitmap *)(pOriginal->ActualBitmap))->BMBytes);
 	}
 	else
 	{
@@ -363,13 +363,13 @@ BOOL BfxPixelOp::SetAuxilliaryBitmaps(KernelBitmap * pProposed /*A*/, KernelBitm
 	if (pCurrent)
 	{
 		ERROR2IF( (pCurrent->ActualBitmap==NULL) ,FALSE,"BfxPixelOp can't find OIL bitmap");
-		ERROR3IF( (!(pCurrent->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxPixelOp Oil layer inconsistency");
+		ERROR3IF( (!(pCurrent->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxPixelOp Oil layer inconsistency");
 		
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pCurrent->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pCurrent->ActualBitmap))->BMInfo->bmiHeader);
 		
 		ERROR2IF( ((pBMI->biHeight != Height) || (pBMI->biWidth != Width) || (BPP && pBMI->biBitCount !=BPP)), FALSE,
 			  "Incompatible bitmaps for BfxPixelOp::SetAuxilliaryBitmap");
-		pB = (DWORD *)(void *)(((WinBitmap *)(pCurrent->ActualBitmap))->BMBytes);
+		pB = (DWORD *)(void *)(((CWxBitmap *)(pCurrent->ActualBitmap))->BMBytes);
 	}
 	else
 	{
@@ -480,9 +480,9 @@ BOOL BfxPixelOp32::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DWORD 
 {
 	Base = NULL;
 	ERROR2IF( ((!pKB) || (pKB->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 
@@ -760,9 +760,9 @@ BOOL BfxPixelOpPseudo::SetBitmap(KernelBitmap * pKB, DWORD theCacheStateMask, DW
 {
 	Base = NULL;
 	ERROR2IF( ((!pKB) || (pKB->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
 
 	BPP=pBMI->biBitCount;
 	ERROR2IF(BPP>8, FALSE,"Pseudo colour BMP not pseudo colour");
@@ -1023,9 +1023,9 @@ void BfxPixelOpPseudo::TranslateToRGB(DWORD Colour, KernelBitmap * pKB,
 		ERROR3( "BfxALU can't find OIL bitmap");
 		return;
 	}
-	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(pKB->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader);
 
 	if ( Colour >= pBMI->biClrUsed )
 	{

@@ -144,7 +144,7 @@ BOOL InitPreTools()
 		&& InitMemory()					// Init Memory Manager
 		&& CursorStack::Init()			// Must come before tool initialisation.
 PORTNOTE("other","Removed BFX")
-#if !defined(EXCLUDE_FROM_XARALX) && !defined(EXCLUDE_BFX)
+#if !defined(EXCLUDE_BFX)
 		&& BitmapEffectBase::Init()		// must be before anything using this subsystem
 #endif
 		&& Module::InitModules()

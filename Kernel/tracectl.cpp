@@ -122,6 +122,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathproc.h"
 #include "progress.h"
 //#include "tracerc.h"
+#include "keypress.h"
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
@@ -741,7 +742,7 @@ BOOL TraceControl::Trace(BOOL * Done)
 	// want to stick in the tree, and when we have decided the trace is complete.	
 	while (TRUE)
 	{
-		ERROR1IF(BreakKeyHit(), FALSE, _R(IDS_ABORT));
+		ERROR1IF(KeyPress::IsEscapePressed(), FALSE, _R(IDS_ABORT));
 
 		// Get the next error area out.
 		// Occasionally (when there are no regions left in the error region list), this will result in a 
@@ -1144,10 +1145,10 @@ BOOL TraceControl::MarkInitialArea()
 
 			if (TRUE || ShapeFreePass || !pErrorRegionList->GetCurrent(&InitialX,&InitialY,&RegionArea)) // if no items on new list
 			{
-				double AError = 0.0;
-				double BError = 0.0;
-				INT32 TotalPixels = 0;
-				INT32 MarkedPixels = 0;
+//				double AError = 0.0;
+//				double BError = 0.0;
+//				INT32 TotalPixels = 0;
+//				INT32 MarkedPixels = 0;
 
 				INT32 theErrorThreshold = (INT32)(0.5+3.0*DoubleSquare(InitialAreaErrorThreshold * 255.0));
 				
@@ -1232,7 +1233,7 @@ BOOL TraceControl::MarkInitialArea()
 				if (!pColourThresholdPixelOp->IsInRegion(InitialX, InitialY))
 				{
 					FoundRegion=FALSE;
-					ERROR3IF(IsUserName("Alex"),"ScanThreshold lied");
+//					ERROR3IF(IsUserName("Alex"),"ScanThreshold lied");
 				}
 
 				if (!pErrorRegionList->Empty()) return FALSE;

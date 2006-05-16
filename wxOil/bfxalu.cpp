@@ -103,16 +103,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "errors.h"
 #include "bfxalu.h"
-#include "gdrawasm.h"
+#include "GDrawIntf.h"
 #include "gdrawcon.h"
 #include "bitmap.h"			  
 #include "bitmpinf.h"
-#include "wbitmap.h"
+#include "oilbitmap.h"
 #include "ccobject.h"
 #include "paths.h"
 #include "fixmem.h"
 //#include "accures.h"
-#include "extfilts.h"
+//#include "extfilts.h"
 //#include "resource.h" // for _R(IDS_OUT_OF_MEMORY)
 #include "tracectl.h"
 #include "app.h"
@@ -123,7 +123,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard2.h"
 
 // The asm file defines FASTxxxxxx if there are fast versions of the routeines available
-#include "bfxasm.h"
+// #include "bfxasm.h"
 
 // Set this whilst GDraw persists in expecting monochrome bitmaps to be screwy
 //#define GAVIN_MONOCHROME_BITMAPS_BROKEN
@@ -325,7 +325,7 @@ BfxALU::~BfxALU()
 {
 #ifndef EXCLUDE_FROM_RALPH
 	// has to be a level 3 check - we can't return an error code
-	ERROR3IF( (GC!=NULL), "Someone hasn't called the BfxALU deinit function!")
+	ERROR3IF( (GC!=NULL), "Someone hasn't called the BfxALU deinit function!");
 #endif
 }
 
@@ -461,7 +461,7 @@ KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,INT32 XAdjust,INT32 YAdju
 	else
 	{
 		ERROR2IF((pBitmap->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
 		BitmapInfo BMInfo;
 		pBitmap->ActualBitmap->GetInfo(&BMInfo);
@@ -494,13 +494,13 @@ KernelBitmap * BfxALU::NewBitmap(KernelBitmap *pBitmap,INT32 XAdjust,INT32 YAdju
 //		return FALSE;	
 //	}
 
-	ERROR2IF((pNewBitmap->ActualBitmap==NULL) || (((WinBitmap *)(pNewBitmap->ActualBitmap))->BMInfo==NULL) || (((WinBitmap *)(pNewBitmap->ActualBitmap))->BMBytes==NULL),
+	ERROR2IF((pNewBitmap->ActualBitmap==NULL) || (((CWxBitmap *)(pNewBitmap->ActualBitmap))->BMInfo==NULL) || (((CWxBitmap *)(pNewBitmap->ActualBitmap))->BMBytes==NULL),
 			  FALSE,"BfxALU can't find OIL bitmap of the new bitmap");
 	
 	if (pBitmap)
 	{
-		BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
-		BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(pNewBitmap->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(pNewBitmap->ActualBitmap))->BMInfo->bmiHeader);
 		// Copy the DPI accross
 		pBBMI->biXPelsPerMeter = pABMI->biXPelsPerMeter;
 		pBBMI->biYPelsPerMeter = pABMI->biYPelsPerMeter;
@@ -586,12 +586,12 @@ BOOL BfxALU::SetA(KernelBitmap * pBitmap)
 	else
 	{
 		ERROR2IF((pBitmap->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-//		ERROR2IF((((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader.biBitCount !=32), FALSE,
+		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+//		ERROR2IF((((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader.biBitCount !=32), FALSE,
 //				 "Bad BfxALU accumulator");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 		ERROR2IF( (!GC->SetupBitmap(pBMI->biWidth,pBMI->biHeight,pBMI->biBitCount,
-									((WinBitmap *)(pBitmap->ActualBitmap))->BMBytes)),
+									((CWxBitmap *)(pBitmap->ActualBitmap))->BMBytes)),
 				   FALSE,"GDraw didn't like BfxALU accumulator");
 		GC->SetMatrix(&identity);
 		A=pBitmap;
@@ -636,8 +636,8 @@ BOOL BfxALU::SetB(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE 
 	else
 	{
 		ERROR2IF((pBitmap->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 		BPoints[0].x = XOffset; 						BPoints[0].y = YOffset;
 		BPoints[1].x = XOffset+(INT32)(pBMI->biWidth);	BPoints[1].y = YOffset;
@@ -715,8 +715,8 @@ BOOL BfxALU::SetT(KernelBitmap * pBitmap,INT32 XOffset,INT32 YOffset,const BYTE 
 	else
 	{
 		ERROR2IF((pBitmap->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 // Some operations now allow 32 bit 'T' regs though they aren't used for transparency
 //		ERROR2IF((pBMI->biBitCount !=8), FALSE,"Bad BfxALU T reg");
 		TPoints[0].x = XOffset; 						TPoints[0].y = YOffset;
@@ -779,8 +779,8 @@ BOOL BfxALU::DoRect()
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)),FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 	RECT Rect={/*L*/0,/*T*/pBMI->biHeight,/*R*/pBMI->biWidth,/*B*/0};
 	ERROR2IF((!GC->FillRectangle(&Rect)),FALSE,"BfxALU GDraw_FillRectangle failed");
 
@@ -816,10 +816,10 @@ BOOL BfxALU::ZeroA(DWORD FillValue)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 	
-	memset(((WinBitmap *)(A->ActualBitmap))->BMBytes, FillValue ,pBMI->biSizeImage);
+	memset(((CWxBitmap *)(A->ActualBitmap))->BMBytes, FillValue ,pBMI->biSizeImage);
 #if 0
 	RECT Rect={/*L*/0,/*T*/pBMI->biHeight,/*R*/pBMI->biWidth,/*B*/0};
 	GC->SetColour((COLORREF) 0x00000000);	
@@ -864,14 +864,14 @@ BOOL BfxALU::UseBT(DWORD TransparencyStyle)
 	if ((B) && (!T)) // Bitmap B, Flat T
 	{
 		ERROR2IF((B->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
-		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((WinBitmap *)(B->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
 									BStyle | (Style<<8),
 									BPoints,
 									0,
-									((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
+									((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
@@ -886,10 +886,10 @@ BOOL BfxALU::UseBT(DWORD TransparencyStyle)
 		ERROR2IF((!GC->SetTransparency(BColour,(enum TransparencyEnum) Style)),FALSE,"Bad BfxALU BT reg");
 
 		ERROR2IF((T->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
 		ERROR2IF((pBMI->biBitCount !=8), FALSE,"Bad BfxALU T reg");
-		ERROR2IF( (!GC->SetTransparentBitmapFill(pBMI,(((WinBitmap *)(T->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetTransparentBitmapFill(pBMI,(((CWxBitmap *)(T->ActualBitmap))->BMBytes),
 									TStyle | (Style<<8),
 									TPoints,
 									0
@@ -900,14 +900,14 @@ BOOL BfxALU::UseBT(DWORD TransparencyStyle)
 	if ((B) && (T)) // Bitmap B, Bitmap T
 	{
 		ERROR2IF((B->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
-		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((WinBitmap *)(B->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
 									BStyle | (Style<<8),
 									BPoints,
 									0,
-									((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
+									((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
@@ -916,10 +916,10 @@ BOOL BfxALU::UseBT(DWORD TransparencyStyle)
 				   FALSE,"GDraw didn't like BfxALU B reg");
 
 		ERROR2IF((T->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		pBMI=&(((WinBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		pBMI=&(((CWxBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
 		ERROR2IF((pBMI->biBitCount !=8), FALSE,"Bad BfxALU T reg");
-		ERROR2IF( (!GC->SetTransparentBitmapFill(pBMI,(((WinBitmap *)(T->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetTransparentBitmapFill(pBMI,(((CWxBitmap *)(T->ActualBitmap))->BMBytes),
 									TStyle | (Style<<8),
 									TPoints,
 									0
@@ -963,14 +963,14 @@ BOOL BfxALU::UseBK(DWORD TransparencyStyle,DWORD Value)
 	else
 	{
 		ERROR2IF((B->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
-		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((WinBitmap *)(B->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
 									BStyle | (Style<<8),
 									BPoints,
 									0,
-									((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
+									((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
@@ -1012,14 +1012,14 @@ BOOL BfxALU::PlotB()
 	else
 	{
 		ERROR2IF((B->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
-		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((WinBitmap *)(B->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
 									BStyle | (Style<<8),
 									BPoints,
 									0,
-									((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
+									((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
@@ -1062,15 +1062,15 @@ BOOL BfxALU::PlotBLUT(BfxALULUT * LUT)
 	else
 	{
 		ERROR2IF((B->ActualBitmap==NULL),FALSE,"BfxALU can't find OIL bitmap");
-		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-		BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+		ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+		BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 		//ERROR2IF((pBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 		ERROR2IF( (!GC->SetTransparencyLookupTable((CONST BYTE *) (LUT->Data))),FALSE,"Bad LUT");
-		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((WinBitmap *)(B->ActualBitmap))->BMBytes),
+		ERROR2IF( (!GC->SetBitmapFill(pBMI,(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
 									BStyle | (Style<<8),
 									BPoints,
 									0,
-									((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
+									((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
 									(unsigned char *) BpTable,
@@ -1318,15 +1318,15 @@ BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!T) || (T->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pTBMI=&(((WinBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pTBMI=&(((CWxBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
@@ -1335,10 +1335,10 @@ BOOL BfxALU::MarkThresholdError(INT32 Value, DWORD MarkValue, DWORD ClearValue)
 	ERROR2IF( ((pABMI->biSizeImage != pBBMI->biSizeImage) || (pABMI->biSizeImage != pTBMI->biSizeImage)), FALSE,
 			  "Incompatible bitmaps for MarkThresholdError");
 	
-	AluPix32 * pA = (AluPix32 *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	AluPix32 * pB = (AluPix32 *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	AluPix32 * pT = (AluPix32 *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
-	DWORD * pO = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+//	AluPix32 * pA = (AluPix32 *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	AluPix32 * pB = (AluPix32 *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	AluPix32 * pT = (AluPix32 *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
+	DWORD * pO = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 	
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1393,15 +1393,15 @@ BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!T) || (T->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pTBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pTBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
@@ -1410,10 +1410,10 @@ BOOL BfxALU::MarkColourThresholdError(INT32 Value, DWORD Colour, DWORD MarkValue
 	ERROR2IF( ((pABMI->biSizeImage != pBBMI->biSizeImage) || (pABMI->biSizeImage != pTBMI->biSizeImage)), FALSE,
 			  "Incompatible bitmaps for MarkThresholdError");
 	
-	AluPix32 * pA = (AluPix32 *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	AluPix32 * pB = (AluPix32 *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	AluPix32 * pT = (AluPix32 *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
-	DWORD * pO = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+//	AluPix32 * pA = (AluPix32 *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	AluPix32 * pB = (AluPix32 *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	AluPix32 * pT = (AluPix32 *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
+	DWORD * pO = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1495,15 +1495,15 @@ BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!T) || (T->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pTBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pTBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
@@ -1512,10 +1512,10 @@ BOOL BfxALU::MarkPositive(INT32 Value, DWORD MarkValue, DWORD ClearValue,
 	ERROR2IF( ((pABMI->biSizeImage != pBBMI->biSizeImage) || (pABMI->biSizeImage != pTBMI->biSizeImage)), FALSE,
 			  "Incompatible bitmaps for MarkThresholdError");
 	
-	AluPix32 * pA = (AluPix32 *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	AluPix32 * pB = (AluPix32 *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	AluPix32 * pT = (AluPix32 *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
-	DWORD * pO = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+	AluPix32 * pA = (AluPix32 *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	AluPix32 * pB = (AluPix32 *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	AluPix32 * pT = (AluPix32 *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
+	DWORD * pO = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1586,20 +1586,20 @@ BOOL BfxALU::MarkBitByWord(DWORD BitMask, DWORD TheWord)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 
 	ERROR2IF( (pABMI->biSizeImage != pBBMI->biSizeImage), FALSE, "Incompatible bitmaps for MarkBitByWord");
 	
-	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	DWORD * pB = (DWORD *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
+	DWORD * pA = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	DWORD * pB = (DWORD *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1634,20 +1634,20 @@ BOOL BfxALU::ClearBitByWord(DWORD BitMask, DWORD TheWord)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 
 	ERROR2IF( (pABMI->biSizeImage != pBBMI->biSizeImage), FALSE, "Incompatible bitmaps for MarkBitByWord");
 	
-	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	DWORD * pB = (DWORD *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
+	DWORD * pA = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	DWORD * pB = (DWORD *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1682,20 +1682,20 @@ BOOL BfxALU::MarkWordByBit(DWORD BitMask, DWORD MarkValue, DWORD ClearValue)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	ERROR2IF((pBBMI->biBitCount !=32), FALSE,"Bad BfxALU B reg");
 
 	ERROR2IF( (pABMI->biSizeImage != pBBMI->biSizeImage), FALSE, "Incompatible bitmaps for MarkWordByBit");
 	
-	DWORD * pB = (DWORD *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+	DWORD * pB = (DWORD *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	DWORD * pA = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 
 	ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -1766,13 +1766,13 @@ BOOL BfxALU::MarkRegions(DWORD MarkValue, DWORD ClearValue,
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
 	ERROR2IF(!FoundRegion,FALSE,"Found Region flag is compulsorary");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 	
-	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+	DWORD * pA = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 
 	INT32 Size = (pABMI->biSizeImage)>>2;
 	INT32 Width = pABMI->biWidth;
@@ -2025,7 +2025,7 @@ BOOL BfxALU::BuildErrorRegionList(DWORD MarkValue, DWORD ClearValue, DWORD Regio
 	// Empty the region list
 	if (!pERL->Empty()) return FALSE;
 
-	INT32 ListSize=pERL->GetSize();
+//	INT32 ListSize=pERL->GetSize();
 
 	// Most of our error checking done in MarkRegions
 	if (!MarkRegions(MarkValue, ClearValue, &FoundRegion, NULL, NULL, NULL,
@@ -2113,13 +2113,13 @@ BOOL BfxALU::ScanBit(DWORD BitMask, INT32 * X, INT32 * Y, INT32 *pPixel, BOOL * 
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount !=32), FALSE,"Bad BfxALU A reg");
 
-	DWORD * pA = (DWORD *)(void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
+	DWORD * pA = (DWORD *)(void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
 
 	INT32 Width = pABMI->biWidth;
 	INT32 Size = (pABMI->biSizeImage)>>2;
@@ -2192,12 +2192,12 @@ BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOO
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!T) || (T->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(T->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pTBMI=&(((WinBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pTBMI=&(((CWxBitmap *)(T->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pBBMI->biBitCount != pTBMI->biBitCount), FALSE,"Bad BfxALU B reg");
 	ERROR2IF( (pTBMI->biSizeImage != pBBMI->biSizeImage), FALSE,
@@ -2208,8 +2208,8 @@ BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOO
 		case 32:
 		{
 
-			AluPix32 * pB = (AluPix32 *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-			AluPix32 * pT = (AluPix32 *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
+			AluPix32 * pB = (AluPix32 *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+			AluPix32 * pT = (AluPix32 *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -2265,8 +2265,8 @@ BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOO
 		case 8:
 		{
 
-			BYTE * pB = (BYTE *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-			BYTE * pT = (BYTE *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
+			BYTE * pB = (BYTE *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+			BYTE * pT = (BYTE *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -2335,8 +2335,8 @@ BOOL BfxALU::ScanThreshold(INT32 Value, INT32 * X, INT32 * Y, INT32 *pPixel, BOO
 		case 1:
 		{
 
-			BYTE * pB = (BYTE *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-			BYTE * pT = (BYTE *)(void *)(((WinBitmap *)(T->ActualBitmap))->BMBytes);
+			BYTE * pB = (BYTE *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+			BYTE * pT = (BYTE *)(void *)(((CWxBitmap *)(T->ActualBitmap))->BMBytes);
 	
 			ERROR3IF((sizeof(DWORD) != sizeof(AluPix32)), "OK who's broken AluPix32 not to be 32 bits");
 
@@ -2443,8 +2443,8 @@ BOOL BfxALU::GradFillPath(Path * ThePath, DWORD StartColour, DWORD EndColour,
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)),FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	DWORD Style=0;
 	GraduationTable Table;
@@ -2547,8 +2547,8 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)),FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	GMATRIX pathmatrix;
 	pathmatrix.AX=pathmatrix.BY=1<<(FX+8);pathmatrix.CX=pathmatrix.CY=pathmatrix.AY=pathmatrix.BX=0;
@@ -2563,6 +2563,26 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 	pStats->N = Stats.N;
 	double N = (double) Stats.N;
 	if (N==0) N=1;
+#if 1
+	pStats->R = ((Stats.R )*1.0)/(N*255.0);
+	pStats->R2= ((Stats.R2)*1.0)/(N*255.0*255.0);
+	pStats->RX= ((Stats.RX)*1.0)/(N*255.0);
+	pStats->RY= ((Stats.RY)*1.0)/(N*255.0);
+	pStats->G = ((Stats.G )*1.0)/(N*255.0);
+	pStats->G2= ((Stats.G2)*1.0)/(N*255.0*255.0);
+	pStats->GX= ((Stats.GX)*1.0)/(N*255.0);
+	pStats->GY= ((Stats.GY)*1.0)/(N*255.0);
+	pStats->B = ((Stats.B )*1.0)/(N*255.0);
+	pStats->B2= ((Stats.B2)*1.0)/(N*255.0*255.0);
+	pStats->BX= ((Stats.BX)*1.0)/(N*255.0);
+	pStats->BY= ((Stats.BY)*1.0)/(N*255.0);
+	pStats->X = ((Stats.X )*1.0)/(N*255.0);
+	pStats->Y = ((Stats.Y )*1.0)/(N*255.0);
+	pStats->X2= ((Stats.X2)*1.0)/(N*255.0);
+	pStats->Y2= ((Stats.Y2)*1.0)/(N*255.0);
+	pStats->XY= ((Stats.XY)*1.0)/(N*255.0);
+//	pStats->Pixel = (DWORD)(Stats.C);
+#else
 	pStats->R = ((Stats.R ).MakeDouble())/(N*255.0);
 	pStats->R2= ((Stats.R2).MakeDouble())/(N*255.0*255.0);
 	pStats->RX= ((Stats.RX).MakeDouble())/(N*255.0);
@@ -2580,7 +2600,7 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 	pStats->X2= ((Stats.X2).MakeDouble())/(N*255.0);
 	pStats->Y2= ((Stats.Y2).MakeDouble())/(N*255.0);
 	pStats->XY= ((Stats.XY).MakeDouble())/(N*255.0);
-//	pStats->Pixel = (DWORD)(Stats.C);
+#endif
 
 	INT32 Width = pBMI->biWidth;
 		
@@ -2590,7 +2610,7 @@ BOOL BfxALU::GetStatistics(Path * ThePath, KernelStatistics * pStats)
 
 	if (Stats.C>0)
 	{
-		UINT32 Offset = ((UINT32)(Stats.C))-((UINT32)((((WinBitmap *)(A->ActualBitmap))->BMBytes)));
+		UINT32 Offset = ((UINT_PTR)(Stats.C))-((UINT_PTR)((((CWxBitmap *)(A->ActualBitmap))->BMBytes)));
 		if (Offset<(UINT32)pBMI->biSizeImage)
 		{
 			pStats->LowX = (Offset>>2) % Width;
@@ -2630,9 +2650,9 @@ BOOL BfxALU::GetSize(KernelBitmap * pBitmap, INT32 * pXSize, INT32 * pYSize, INT
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!pBitmap) || (pBitmap->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(pBitmap->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
 
 	if (pXSize) *pXSize=(INT32)(pABMI->biWidth);
 	if (pYSize) *pYSize=(INT32)(pABMI->biHeight);
@@ -2664,19 +2684,19 @@ BOOL BfxALU::ByteCopyBA()
 {
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!A) || (A->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(A->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(A->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF((pABMI->biBitCount != pBBMI->biBitCount), FALSE,"Bad BfxALU A/B reg");
 	ERROR2IF( (pABMI->biSizeImage != pBBMI->biSizeImage), FALSE,
 			  "Incompatible bitmaps for ByteCopyBA()");
 	
-	void * pA = (void *)(((WinBitmap *)(A->ActualBitmap))->BMBytes);
-	void * pB = (void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
+	void * pA = (void *)(((CWxBitmap *)(A->ActualBitmap))->BMBytes);
+	void * pB = (void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
 
 	memcpy(pA, pB, pABMI->biSizeImage);
 
@@ -2914,6 +2934,8 @@ This function returns FALSE at the end of a list (NOT to indicate an error condi
 
 /* INLINE */
 
+PORTNOTE("other", "Disabled Accusoft filters")
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 
 /********************************************************************************************
@@ -2942,9 +2964,9 @@ BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge)
 
 	ERROR2IF((GC==NULL),FALSE,"BfxALU::Init not called / failed");
 	ERROR2IF( ((!B) || (B->ActualBitmap==NULL)) ,FALSE,"BfxALU can't find OIL bitmap");
-	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(WinBitmap)) )),"BfxALU Oil layer inconsistency");
+	ERROR3IF( (!(B->ActualBitmap->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap)) )),"BfxALU Oil layer inconsistency");
 
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
 
 	DWORD PaletteUsed = pBBMI->biClrUsed;
 	
@@ -3048,7 +3070,7 @@ BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge)
 	// Copy the main bitmap data across
 	if (DoBodge)
 	{
-		LPBYTE pSourceBits = ((WinBitmap *)(B->ActualBitmap))->BMBytes;
+		LPBYTE pSourceBits = ((CWxBitmap *)(B->ActualBitmap))->BMBytes;
 		if (!MAH_BodgeCopyBitmap(pBBMI->biWidth, pBBMI->biHeight, pBBMI->biBitCount, pSourceBits, pBits))
 		{
 			GlobalUnlock(HMem);
@@ -3061,11 +3083,11 @@ BOOL BfxALU::MakeAccusoftHandle(INT32 * pHandle, BOOL DoBodge)
 	{
 		if (pBBMI->biBitCount != 32)
 		{
-			memcpy(pBits /*dest*/, ((WinBitmap *)(B->ActualBitmap))->BMBytes, pBBMI->biSizeImage);
+			memcpy(pBits /*dest*/, ((CWxBitmap *)(B->ActualBitmap))->BMBytes, pBBMI->biSizeImage);
 		}
 		else
 		{
-			GC->ConvertBitmap(pBBMI, ((WinBitmap *)(B->ActualBitmap))->BMBytes, pCBMI, pBits, 8);
+			GC->ConvertBitmap(pBBMI, ((CWxBitmap *)(B->ActualBitmap))->BMBytes, pCBMI, pBits, 8);
 		}
 	}
 
@@ -3431,7 +3453,7 @@ BOOL BfxALU::MakeKernelBitmap(INT32 Handle, KernelBitmap * * ppOutput, BOOL Make
 		return FALSE; // Error already set
 	}
 
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader); // Dest
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader); // Dest
 
 	if (
 		// if our created bitmap  is not equal to the size of the accusoft one ....
@@ -3469,7 +3491,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 	}
 
 	// This is fabby Alex code. Just check out those void * rather than LPBYTE and DWORD instead of RGBQUAD
-	void * pA = (void *)(((WinBitmap *)(pKB->ActualBitmap))->BMBytes); //Dest
+	void * pA = (void *)(((CWxBitmap *)(pKB->ActualBitmap))->BMBytes); //Dest
 	void * pB = (void *)(((char *)(void *)(pBBMI)) + sizeof (BITMAPINFOHEADER) + (pBBMI->biClrUsed * sizeof (DWORD)) ); //Source
 
 	// Now fix problems with our DIB format palettes (like we don't support optimised palettes for 24 bit stuff)
@@ -3488,7 +3510,7 @@ pBBMI->biClrUsed=pBBMI->biClrImportant=UsedColours;
 			// Copy the palette across
 			if (pBBMI->biClrUsed > 0)
 			{
-				LPRGBQUAD pAPAL = &(((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors[0]); // Dest
+				LPRGBQUAD pAPAL = &(((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors[0]); // Dest
 				LPRGBQUAD pBPal = (LPRGBQUAD)(pBBMI + sizeof(BITMAPINFOHEADER)); // Source
 				memcpy(pAPAL /*dest*/, pBPal,  (pBBMI->biClrUsed * sizeof (RGBQUAD)) );
 			}
@@ -3771,8 +3793,8 @@ BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT
 	*ppOutput = NewBitmap(B,0,0,0,NULL, _R(IDS_BFX_BRIGHTCONT));
 	if (!ppOutput) return FALSE;
 	
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)((*ppOutput)->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)((*ppOutput)->ActualBitmap))->BMInfo->bmiHeader);
 
 	DWORD PaletteUsed = pBBMI->biClrUsed;
 	
@@ -3787,8 +3809,8 @@ BOOL BfxALU::BrightnessContrast(KernelBitmap * * ppOutput, INT32 Brightness, INT
 	DWORD Size;
 	LPBYTE Source;
 	LPBYTE Dest;
-	LPBYTE pSBits = (((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	LPBYTE pDBits = (((WinBitmap *)((*ppOutput)->ActualBitmap))->BMBytes);
+	LPBYTE pSBits = (((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	LPBYTE pDBits = (((CWxBitmap *)((*ppOutput)->ActualBitmap))->BMBytes);
 	
 	// We modify the image itself in the case of greyscale images
 	BOOL SingleChannel=IsGreyscaleBitmap(B);
@@ -3857,7 +3879,7 @@ BOOL BfxALU::BayerMono(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -3901,7 +3923,7 @@ BOOL BfxALU::HalftoneMono(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -3953,7 +3975,7 @@ BOOL BfxALU::DiffusionMono(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -3999,7 +4021,7 @@ BOOL BfxALU::BayerColour(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -4039,7 +4061,7 @@ BOOL BfxALU::PopularityColour(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -4082,7 +4104,7 @@ BOOL BfxALU::DiffusionColour(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -4122,7 +4144,7 @@ BOOL BfxALU::MakeGreyscale(KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -4140,6 +4162,7 @@ BOOL BfxALU::MakeGreyscale(KernelBitmap * * ppOutput)
 		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_GREYSCALE));
 }
 #endif //WEBSTER
+#endif //XARALX
 
 /********************************************************************************************
 							  	
@@ -4167,8 +4190,8 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 	*ppOutput = NewBitmap(B,0,0,8, NULL, _R(IDS_BFX_GREYSCALE));
 	if (!ppOutput) return FALSE;
 	
-	BITMAPINFOHEADER * pBBMI=&(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
-	BITMAPINFOHEADER * pABMI=&(((WinBitmap *)((*ppOutput)->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBBMI=&(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pABMI=&(((CWxBitmap *)((*ppOutput)->ActualBitmap))->BMInfo->bmiHeader);
 
 	ERROR2IF ((pBBMI->biSizeImage == 0) || (pBBMI->biCompression != BI_RGB) || (pBBMI->biHeight<0)
 			   || (pBBMI->biBitCount !=32) , FALSE,
@@ -4178,8 +4201,8 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 	ERROR2IF ((pBBMI->biWidth != pABMI->biWidth)||(pBBMI->biHeight != pABMI->biHeight)||(pABMI->biClrUsed!=0x100),
 		FALSE, "BfxALU MakeGreyscale32to8 size upset");
 	
-	RGBQUAD * pSBits = (RGBQUAD *)(void *)(((WinBitmap *)(B->ActualBitmap))->BMBytes);
-	LPBYTE pDBits = (((WinBitmap *)((*ppOutput)->ActualBitmap))->BMBytes);
+	RGBQUAD * pSBits = (RGBQUAD *)(void *)(((CWxBitmap *)(B->ActualBitmap))->BMBytes);
+	LPBYTE pDBits = (((CWxBitmap *)((*ppOutput)->ActualBitmap))->BMBytes);
 
 	RGBQUAD * Pal = ((RGBQUAD *)(void *)(pABMI + 1/*ptr arith*/));
 	for (INT32 x=0;x<0x100;x++)
@@ -4200,7 +4223,7 @@ BOOL BfxALU::MakeGreyscale32to8(KernelBitmap * * ppOutput)
 		}
 		for (;v&3;v++) pDBits[v]=0;
 	}
-	ERROR3IF((w!=(pBBMI->biSizeImage>>2) || v!=pABMI->biSizeImage), "Alex messed up MakeGreyscale32to8 bitmap sizes")
+	ERROR3IF((w!=(pBBMI->biSizeImage>>2) || v!=pABMI->biSizeImage), "Alex messed up MakeGreyscale32to8 bitmap sizes");
 	return TRUE;
 }
 
@@ -4254,10 +4277,10 @@ not return or set errors
 
 BOOL BfxALU::IsGreyscaleBitmap(OILBitmap * pOilBmp)
 {
-	if ( (!pOilBmp) || (!pOilBmp->IsKindOf(CC_RUNTIME_CLASS(WinBitmap))) )
+	if ( (!pOilBmp) || (!pOilBmp->IsKindOf(CC_RUNTIME_CLASS(CWxBitmap))) )
 		return FALSE;
 
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)pOilBmp)->BMInfo->bmiHeader);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)pOilBmp)->BMInfo->bmiHeader);
 	if ((pBMI->biBitCount!=8) || (pBMI->biClrUsed!=0x100)) return FALSE;
 	DWORD * pPal = (DWORD *)(void *)(pBMI +1 /*ptr arith*/);
 	for (DWORD x=0; x<0x100; x++) if ((pPal[x]&0x00ffffff) != (x|(x<<8)|(x<<16))) return FALSE;
@@ -4266,6 +4289,7 @@ BOOL BfxALU::IsGreyscaleBitmap(OILBitmap * pOilBmp)
 
 #ifndef WEBSTER
 #ifndef EXCLUDE_FROM_RALPH
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -4289,7 +4313,7 @@ BOOL BfxALU::Octree (KernelBitmap * * ppOutput)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_8(AccusoftHandle);
 		if (result < 0)
@@ -4333,7 +4357,7 @@ BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 	ERROR2IF((!ppOutput),FALSE, "BfxALU output parameter must be non-null");
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
 		if (result < 0)
@@ -4354,6 +4378,8 @@ BOOL BfxALU::SharpenBlur(KernelBitmap * * ppOutput, INT32 Degree, INT32 Times)
 	}
 		return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), (Degree>0)?_R(IDS_BFX_SHARPEN):_R(IDS_BFX_BLUR));
 }
+
+#endif
 
 /********************************************************************************************
 
@@ -4389,10 +4415,10 @@ INT32 BfxALUQuantisationRoutine( const void *arg1, const void *arg2 )
 #define QUANT_ROUND (1<<(QUANT_SHIFT-1))
 
 // here's what we want to do
-//#define QMEMBER(x,y,z) [((x)+QUANT_SIZE*((y)+QUANT_SIZE*(z)))]
-// and here's how to do it faster
-#define QMULT(w) (((w)<<(8-QUANT_SHIFT))+(w))
-#define QMEMBER(x,y,z) [(__mtemp=y+QMULT(z),x+QMULT(__mtemp))]
+#define QMEMBER(x,y,z) [((x)+QUANT_SIZE*((y)+QUANT_SIZE*(z)))]
+// and here's how to do it faster - but gcc doesn't like it
+//#define QMULT(w) (((w)<<(8-QUANT_SHIFT))+(w))
+//#define QMEMBER(x,y,z) [(__mtemp=y+QMULT(z),x+QMULT(__mtemp))]
 
 #define QUANT_NUMBER (QUANT_SIZE*QUANT_SIZE*QUANT_SIZE)
 
@@ -4408,7 +4434,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 	INT32 Depth=0;
 	INT32 Height=0;
 	INT32 l;
-	INT32 __mtemp;
+//	INT32 __mtemp;
 	if (!GetSize(B, &Width, &Height, &Depth)) return FALSE;
 
 	DWORD * InputLine[5];
@@ -4495,7 +4521,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 
 	if (OutputBPP==1 && Depth==1)
 	{
-		DWORD * SPalette= (DWORD*)(void*)(((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiColors);
+		DWORD * SPalette= (DWORD*)(void*)(((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiColors);
 		if ((SPalette[0] & 0x00ffffff)==0 && (SPalette[1] & 0x00ffffff)==0x00ffffff)
 		{
 			// Forsooth! It is a true mono bitmap.
@@ -4507,9 +4533,9 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 			//		as they don't have any (not by our definition anywoise)
 			// (OK, enough of that).
 
-			memcpy(/*dest*/(((WinBitmap *)(pKB->ActualBitmap))->BMBytes), /*src*/(((WinBitmap *)(B->ActualBitmap))->BMBytes),
-				   (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader.biSizeImage));
-			RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
+			memcpy(/*dest*/(((CWxBitmap *)(pKB->ActualBitmap))->BMBytes), /*src*/(((CWxBitmap *)(B->ActualBitmap))->BMBytes),
+				   (((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiHeader.biSizeImage));
+			RGBQUAD * Palette= (((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
 			Palette[0].rgbRed=Palette[0].rgbBlue=Palette[0].rgbGreen=0;
 			Palette[1].rgbRed=Palette[1].rgbBlue=Palette[1].rgbGreen=255;
 			*ppOutput=pKB;
@@ -4549,7 +4575,8 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 
 	INT32 Distrib[256];
 	INT32 Points=0;
-	for (INT32 n=0; n<256; n++) Distrib[n]=0;
+	INT32 n;
+	for (n=0; n<256; n++) Distrib[n]=0;
 
 	if (Method==TRACEMETHOD_GREYSCALE)
 	{
@@ -4657,7 +4684,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 			}
 			// Now write it back
 
-			void * VImage = (((WinBitmap *)(pKB->ActualBitmap))->BMBytes);
+			void * VImage = (((CWxBitmap *)(pKB->ActualBitmap))->BMBytes);
 			switch (Method)
 			{
 				case TRACEMETHOD_GREYSCALE:
@@ -4790,7 +4817,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 		{
 			case TRACEMETHOD_MONO:
 				if (!Pass) {
-					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
+					RGBQUAD * Palette= (((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
 					INT32 Sum=0;
 					for (INT32 n=0; n<256; n++)
 					{
@@ -4808,10 +4835,11 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 					// we can represent a full contrast range. This probably isn't necessary as we're not
 					// dithering it but heh, we might as well keep white as white etc.
 
-					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
+					RGBQUAD * Palette= (((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
 					INT32 totalpixels=Width * Height;
 					INT32 pixmax=totalpixels * INT32(0xff);
-					for (INT32 r=0; r<QUANT_SIZE; r+=QUANT_SIZE-1)
+					INT32 r;
+					for (r=0; r<QUANT_SIZE; r+=QUANT_SIZE-1)
 						for (INT32 g=0; g<QUANT_SIZE; g+=QUANT_SIZE-1) 
 							for (INT32 b=0; b<QUANT_SIZE; b+=QUANT_SIZE-1) 					
 							{
@@ -4874,7 +4902,7 @@ BOOL BfxALU::RemoveDither(KernelBitmap * * ppOutput, INT32 Thresh, INT32 QuantCo
 				break;
 			case TRACEMETHOD_GREYSCALE:
 				{
-					RGBQUAD * Palette= (((WinBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
+					RGBQUAD * Palette= (((CWxBitmap *)(pKB->ActualBitmap))->BMInfo->bmiColors);
 					for (INT32 c=0; c<256; c++)
 						Palette[c].rgbRed=Palette[c].rgbBlue=Palette[c].rgbGreen=(BYTE)(DWORD)c;
 				}
@@ -4992,6 +5020,7 @@ void BfxALU::SlowRemoveDither(BYTE * ByteLine[5], INT32 NoiseMatrix[5][5], BYTE 
 	return;
 }
 
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecialEffect Type)
@@ -5019,7 +5048,7 @@ BOOL BfxALU::SpecialEffect(KernelBitmap * * ppOutput, double * Matrix, BfxSpecia
 	INT32 AccusoftHandle = -1;
 	if (!MakeAccusoftHandle(&AccusoftHandle)) return FALSE;
 
-	if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
+	if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 )
 	{
 		INT32 result = AccusoftFilters::pfnIMG_promote_24(AccusoftHandle);
 		if (result < 0)
@@ -5115,7 +5144,7 @@ BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL L
 	{
 		// Accusoft require a 24bpp bitmap for linear interpolation
 		// If less than or equal 8bpp 
-//		if ( (((WinBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 ) SCARY!!!!!
+//		if ( (((CWxBitmap *)(B->ActualBitmap))->BMInfo->bmiHeader).biBitCount <=8 ) SCARY!!!!!
 		INT32 NewWidth = Width;
 #ifdef BODGE_ACCUSOFT_RESIZE
 		// If doing the bodge to get around the Accusoft 24bpp linear interpolation problem, then
@@ -5150,6 +5179,7 @@ BOOL BfxALU::Resize(KernelBitmap * * ppOutput, INT32 Width, INT32 Height, BOOL L
 	
 	return MakeKernelBitmap(AccusoftHandle, ppOutput, FALSE, &(B->ActualBitmap->GetName()), _R(IDS_BFX_RESIZE), DoBodge);
 }
+#endif
 
 /********************************************************************************************
 
@@ -5226,8 +5256,8 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Si
 				Source+=Size;
 				Dest+=Size;
 			}
-			Source = (LPBYTE)(void *)((((DWORD)(void *)Source) +3)&(~3));
-			Dest = (LPBYTE)(void *)((((DWORD)(void *)Dest) +3)&(~3));
+			Source = (LPBYTE)(void *)((((UINT_PTR)(void *)Source) +3)&(~3));
+			Dest = (LPBYTE)(void *)((((UINT_PTR)(void *)Dest) +3)&(~3));
 		}
 	}
 	else
@@ -5240,8 +5270,8 @@ BOOL BfxALU::AdjustBrightnessContrastColour(LPBYTE Source, LPBYTE Dest, INT32 Si
 				Source+=Size;
 				Dest+=Size;
 			}
-			Source = (LPBYTE)(void *)((((DWORD)(void *)Source) +3)&(~3));
-			Dest = (LPBYTE)(void *)((((DWORD)(void *)Dest) +3)&(~3));
+			Source = (LPBYTE)(void *)((((UINT_PTR)(void *)Source) +3)&(~3));
+			Dest = (LPBYTE)(void *)((((UINT_PTR)(void *)Dest) +3)&(~3));
 		}
 	}
 
@@ -5273,9 +5303,9 @@ THIS FUNCTION HAS NO ERROR CHECKING. How does it smell? TERRIBLE
 
 void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * pBuffer)
 {
-	BITMAPINFOHEADER * pBMI=&(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
-	RGBQUAD * pPal=(((WinBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiColors);
-	void * VImage = (((WinBitmap *)(pBitmap->ActualBitmap))->BMBytes);
+	BITMAPINFOHEADER * pBMI=&(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiHeader);
+	RGBQUAD * pPal=(((CWxBitmap *)(pBitmap->ActualBitmap))->BMInfo->bmiColors);
+	void * VImage = (((CWxBitmap *)(pBitmap->ActualBitmap))->BMBytes);
 	INT32 Width=pBMI->biWidth;
 	switch (pBMI->biBitCount)
 	{
@@ -5293,7 +5323,7 @@ void BfxALU::ConvertScanLineToDWORD(KernelBitmap * pBitmap, INT32 Line, DWORD * 
 			for (INT32 w=0; w<Width; w++)
 			{	
 				pBuffer[w]=(((INT32)(Source[b])))|(((INT32)(Source[b+1]))<<8)|(((INT32)(Source[b+2]))<<16);
-				b+=3; /// Grrr MS bug prevents us from doing this efficiently
+				b+=3; // Grrr MS bug prevents us from doing this efficiently
 			}
 			return;
 		}

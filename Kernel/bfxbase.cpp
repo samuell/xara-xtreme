@@ -172,7 +172,7 @@ operation defined algorithmically to work 100% of the time!
 
 BitmapEffectBase::~BitmapEffectBase()
 {
-	ERROR3IF((Destination!=NULL),"Bitmap effect destructor called when destination exists")
+	ERROR3IF((Destination!=NULL),"Bitmap effect destructor called when destination exists");
 	// Unforunately we habe to use ERROR3 not ERROR2 as we can't return a flag	
 }
 
@@ -472,6 +472,6 @@ It's obviously important to override this!
 
 BOOL BitmapEffectBase::Run()
 {
-	ERROR2IF(!IsAbleToRun(),FALSE,"BitmapEffectRun called at inappropriate time")
+	ERROR2IF(!IsAbleToRun(),FALSE,"BitmapEffectRun called at inappropriate time");
 	return TRUE;
 }

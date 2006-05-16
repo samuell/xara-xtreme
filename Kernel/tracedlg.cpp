@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tracectl.h"
 
 //#include "mario.h"
-#include "reshlpid.h"
+//#include "reshlpid.h"
 //#include "tracerc.h"
 //#include "rik.h"
 //#include "andy.h"
@@ -142,6 +142,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wrkrect.h"	
 
 #include "mrhbits.h"
+#include "keypress.h"
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
@@ -263,7 +264,7 @@ TraceDlg::~TraceDlg()
 {
 	pOriginal = NULL;
 	
-	if(!m_p24BitCopyNames.IsEmpty())
+	if(!m_p24BitCopyNames.empty())
 	{
 		Remove24BitTempCopy();
 	}
@@ -292,20 +293,19 @@ void TraceDlg::Remove24BitTempCopy()
 	KernelBitmap * pBmp = (KernelBitmap *)(Bitmaps->GetHead());
 	KernelBitmap * pTemp = NULL;
 
-	POSITION Pos = NULL;
 	BOOL DeleteThisBMP = FALSE;
 
 	// If we`ve got a valid BMP then do some testing!
 	while (pBmp != NULL)
 	{
 		// Get the first Copy Name from our list
-		Pos = m_p24BitCopyNames.GetHeadPosition();
+		std::list< String_256 >::iterator Pos = m_p24BitCopyNames.begin();
 
 		// While the Position and the BMP are both valid do the check!
-		while(Pos != NULL && pBmp != NULL)
+		while(Pos != m_p24BitCopyNames.end() && pBmp != NULL)
 		{
 			// Check to see if the BMP`s name matches the one held in the copy list
-			if (pBmp->GetName().CompareTo(m_p24BitCopyNames.GetAt(Pos)) == 0)
+			if (pBmp->GetName().CompareTo(*Pos) == 0)
 			{
 				// Mark this BMP For deletion!
 				DeleteThisBMP = TRUE;
@@ -315,7 +315,7 @@ void TraceDlg::Remove24BitTempCopy()
 			}
 
 			// Get the next name from the copy name list
-			m_p24BitCopyNames.GetNext(Pos);
+			Pos++;
 		}
 
 		// If this isn`t the one then get the next in the list!
@@ -339,10 +339,7 @@ void TraceDlg::Remove24BitTempCopy()
 	}
 
 	// Finished with everything so make sure the list is totally empty!
-	while(!m_p24BitCopyNames.IsEmpty())
-	{
-		m_p24BitCopyNames.RemoveHead();
-	}
+	m_p24BitCopyNames.clear();
 }
 
 /*******************************************************************************************
@@ -443,25 +440,25 @@ BOOL TraceDlg::FixOriginalComboBox()
 			Str = ((KernelBitmap*)pBmp)->ActualBitmap->GetName();
 			if (((KernelBitmap*)(pBmp)) == pOriginal)
 			{
-				SetStringGadgetValue(_R(IDC_TRACER_BITMAP),&Str, FALSE, -1);
+				SetStringGadgetValue(_R(IDC_TRACER_BITMAP),Str, FALSE, -1);
 				DoneMain = TRUE;
 				SelIndex=Index;
 			}
-			SetStringGadgetValue(_R(IDC_TRACER_BITMAP),&Str,FALSE, Index++);
+			SetStringGadgetValue(_R(IDC_TRACER_BITMAP),Str,FALSE, Index++);
 			pBmp = Bitmaps->GetNext(pBmp);
 		}
 	}
 	else
 	{
 		Str.Load(_R(IDS_K_BFXDLG_DEFAULT));
-		SetStringGadgetValue(_R(IDC_TRACER_BITMAP),&Str,TRUE, 0);
+		SetStringGadgetValue(_R(IDC_TRACER_BITMAP),Str,TRUE, 0);
 	}
 
 	Str.Load(_R(IDS_K_BFXDLG_DEFAULT));
 	SetComboListLength(_R(IDC_TRACER_BITMAP));
 	if (!DoneMain)
 	{
-		SetStringGadgetValue(_R(IDC_TRACER_BITMAP),&Str, FALSE, -1);
+		SetStringGadgetValue(_R(IDC_TRACER_BITMAP),Str, FALSE, -1);
 		SetSelectedValueIndex(_R(IDC_TRACER_BITMAP), 0);
 	}
 	else
@@ -558,9 +555,9 @@ BOOL TraceDlg::SetStatus(BOOL Tracing)
 		}
 	}
 	Temp.MakeMsg(theID, NumPaths, NumPoints);
-	SetStringGadgetValue(_R(IDC_TRACER_STATUSTEXT), &Temp);
-	EnableGadget(IDOK, Done && (!Tracing));
-	EnableGadget(IDCANCEL, !Tracing);
+	SetStringGadgetValue(_R(IDC_TRACER_STATUSTEXT), Temp);
+	EnableGadget(_R(IDOK), Done && (!Tracing));
+	EnableGadget(_R(IDCANCEL), !Tracing);
 	EnableGadget(_R(IDC_TRACER_TRACEBTN), !Tracing);
 	EnableGadget(_R(IDC_TRACER_HELP), !Tracing);
 	return TRUE;
@@ -712,7 +709,7 @@ BOOL TraceDlg::ReadParams()
 	SetLongGadgetValue(_R(IDC_TRACER_SMOOTHNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER), 0, 100, 0, NULL));
 	TraceMethod Method=GetTraceMethod();
 	BOOL Mono=(Method == TRACEMETHOD_MONO);
-	BOOL Limited=(Method == TRACEMETHOD_GREYSCALE) || (Method==TRACEMETHOD_256COL);
+//	BOOL Limited=(Method == TRACEMETHOD_GREYSCALE) || (Method==TRACEMETHOD_256COL);
 	BOOL TrueCol=(Method == TRACEMETHOD_TRUECOL);
 	INT32 Passes = GetLongGadgetValue  (_R(IDC_TRACER_PASSESNUM),	0, 100, 0, NULL);
 	if (Method != TRACEMETHOD_TRUECOL) Passes=1;
@@ -934,7 +931,7 @@ BOOL TraceDlg::DoTrace(BOOL SingleStep)
 
 			if (!Abort)
 			{
-				if (Abort = (BreakKeyHit() ==TRUE) /*Assignment*/)
+				if ((Abort = (KeyPress::IsEscapePressed() ==TRUE) /*Assignment*/))
 				{
 					ERROR1RAW(_R(IDE_TRACER_ABORT));
 				}
@@ -1038,16 +1035,16 @@ BOOL TraceDlg::RenderBitmap(ReDrawInfoType* ExtraInfo, KernelBitmap * BitmapToUs
 					// grey at top and bottom
 					INT32 NewHeight = (INT32)( 0.5 + ((double)(VirtualSize.Width()))/BMAspect);
 					if (NewHeight<1) NewHeight = 1;
-					BitmapSize.loy = (VirtualSize.Height()-NewHeight)/2;
-					BitmapSize.hiy = BitmapSize.loy + NewHeight;
+					BitmapSize.lo.y = (VirtualSize.Height()-NewHeight)/2;
+					BitmapSize.hi.y = BitmapSize.lo.y + NewHeight;
 				}
 				else
 				{
 				 	// grey on left and right
 					INT32 NewWidth = (INT32)( 0.5 + ((double)(VirtualSize.Height()))*BMAspect);
 					if (NewWidth<1) NewWidth = 1;
-					BitmapSize.lox = (VirtualSize.Width()-NewWidth)/2;
-					BitmapSize.hix = BitmapSize.lox + NewWidth;
+					BitmapSize.lo.x = (VirtualSize.Width()-NewWidth)/2;
+					BitmapSize.hi.x = BitmapSize.lo.x + NewWidth;
 				}
 
 				// And set this in our bitmap node
@@ -1142,10 +1139,10 @@ MsgResult TraceDlg::Message( Msg* Message)
 				String_256 Str2(_R(IDS_TRACER_256COL));
 				String_256 Str3(_R(IDS_TRACER_TRUECOL));
 		  	
-				SetStringGadgetValue(_R(IDC_TRACER_METHOD),&Str0,FALSE, 0);
-			  	SetStringGadgetValue(_R(IDC_TRACER_METHOD),&Str1,FALSE, 1);
-			  	SetStringGadgetValue(_R(IDC_TRACER_METHOD),&Str2,FALSE, 2);
-				SetStringGadgetValue(_R(IDC_TRACER_METHOD),&Str3,FALSE, 3);
+				SetStringGadgetValue(_R(IDC_TRACER_METHOD),Str0,FALSE, 0);
+			  	SetStringGadgetValue(_R(IDC_TRACER_METHOD),Str1,FALSE, 1);
+			  	SetStringGadgetValue(_R(IDC_TRACER_METHOD),Str2,FALSE, 2);
+				SetStringGadgetValue(_R(IDC_TRACER_METHOD),Str3,FALSE, 3);
 			
 //				SetStringGadgetValue(_R(IDC_TRACER_METHOD),&Str3, FALSE, -1);
 				SetComboListLength(_R(IDC_TRACER_METHOD));
@@ -1227,73 +1224,62 @@ MsgResult TraceDlg::Message( Msg* Message)
 			{
 				TraceMethod Method = GetTraceMethod();
 				// See which button was pressed
-				switch (Msg->GadgetID)
+				if (Msg->GadgetID == _R(IDC_TRACER_TRACEBTN))
 				{
-					case _R(IDC_TRACER_TRACEBTN) :
-					{
-						if (!DoTrace(FALSE)) InformError();
-						break;
-					}
-					case _R(IDC_TRACER_RESET) :
-					{
-						LoadSettings(DefaultSetting[(INT32)Method]);
-						break;
-					}
-					case _R(IDC_TRACER_SAVE) :
-					{
-						DefaultMode=Method;
-						SaveSettings(DefaultSetting[(INT32)Method]);
-						break;
-					}
-					case _R(IDC_TRACER_DEFAULT) :
-					{
-						LoadSettings(FactorySetting[(INT32)Method]);
-						break;
-					}
+					if (!DoTrace(FALSE)) InformError();
+				}
+				else if (Msg->GadgetID == _R(IDC_TRACER_RESET))
+				{
+					LoadSettings(DefaultSetting[(INT32)Method]);
+				}
+				else if (Msg->GadgetID == _R(IDC_TRACER_SAVE))
+				{
+					DefaultMode=Method;
+					SaveSettings(DefaultSetting[(INT32)Method]);
+				}
+				else if (Msg->GadgetID == _R(IDC_TRACER_DEFAULT))
+				{
+					LoadSettings(FactorySetting[(INT32)Method]);
 				}
 				break;
 			}
 
 			case DIM_REDRAW :
+			{
 				// This is where all the redrawing is done
 				// Which control in the window is sending the redraw message (if there are many
 				// grdraw controls you can tell which is which from the Gadget ID
 				KernelBitmap * pDestination;
 				KernelBitmap * pTemp;
 				pTraceControl->GetBitmaps(NULL, &pDestination, &pTemp);
-				switch (Msg->GadgetID)
+
+				// Draw the redraw_me control in here
+				if (Msg->GadgetID == _R(IDC_TRACER_ORIGREDRAW))
 				{
-					// Draw the redraw_me control in here
-					case _R(IDC_TRACER_ORIGREDRAW) :
-					{
-						RenderBitmap((ReDrawInfoType*) Msg->DlgMsgParam, pOriginal);
-						break;
-					}
-					case _R(IDC_TRACER_DESTREDRAW) :
-					{
-						RenderBitmap((ReDrawInfoType*) Msg->DlgMsgParam, pDestination);
-						break;
-					}
+					RenderBitmap((ReDrawInfoType*) Msg->DlgMsgParam, pOriginal);
+				}
+				else if (Msg->GadgetID == _R(IDC_TRACER_DESTREDRAW))
+				{
+					RenderBitmap((ReDrawInfoType*) Msg->DlgMsgParam, pDestination);
 				}
 				break;
+			}
 			
 			case DIM_SELECTION_CHANGED:
-				switch (Msg->GadgetID)
+			{
+				if (Msg->GadgetID == _R(IDC_TRACER_BITMAP))
 				{
-					// Draw the redraw_me control in here
-					case _R(IDC_TRACER_BITMAP) :
-					{
-						ReadOriginalComboBox();
-						break;
-					}
-					case _R(IDC_TRACER_METHOD) :
-					{
-						LoadSettings(DefaultSetting[(INT32)GetTraceMethod()]);
-						break;
-					}
+					ReadOriginalComboBox();
+				}
+				else if (Msg->GadgetID == _R(IDC_TRACER_METHOD))
+				{
+					LoadSettings(DefaultSetting[(INT32)GetTraceMethod()]);
 				}
 				break;											       
+			}
 
+			default:
+				break;
 		}
 
 		// End dialog here
@@ -1308,7 +1294,7 @@ MsgResult TraceDlg::Message( Msg* Message)
 					TraceOpParam param;
 					param.pTraceControl = pTraceControl;
 		
-					OpDescriptor* pOpDesc=OpDescriptor::FindOpDescriptor("TraceOp");
+					OpDescriptor* pOpDesc=OpDescriptor::FindOpDescriptor(_T("TraceOp"));
 					ERROR3IF_PF(pOpDesc==NULL,("Couldn't find OPTOKEN_OPTRACEOP op descriptor"));
 					pOpDesc->Invoke((OpParam*)&param);
 				}
@@ -1321,6 +1307,8 @@ MsgResult TraceDlg::Message( Msg* Message)
 			Close(); 		   
 			TRACEUSER( "Alex", _T("Calling End()\n"));
 			End(); 	 	// End of dialog 
+
+			return OK;
 	   	}
 		//return (DLG_EAT_IF_HUNGRY(Msg));   // I return EAT_MSG unless the message needs to be sent to all dialogs 
 	} else if (MESSAGE_IS_A(Message, SelChangingMsg))		// Selection changed - use new bitmap
@@ -1328,10 +1316,12 @@ MsgResult TraceDlg::Message( Msg* Message)
 		SelChangingMsg *Msg = (SelChangingMsg *) Message;
 		switch ( Msg->State )
 		{
-			case SelChangingMsg::SelectionState::SELECTIONCHANGED:
-			case SelChangingMsg::SelectionState::NODECHANGED:
+			case SelChangingMsg::SELECTIONCHANGED:
+			case SelChangingMsg::NODECHANGED:
 //				pOriginal=NULL;
 				FindBitmap();
+				break;
+			default:
 				break;
 		}
 	} else if (MESSAGE_IS_A(Message, BitmapListChangedMsg))		// Selection changed - use new bitmap
@@ -1378,15 +1368,15 @@ BOOL TraceDlg::Init()
 {  
 	INT32 Mode;
 	INT32 Setting;
-	GetApplication()->DeclareSection( "Tracer", 40);
-	GetApplication()->DeclarePref( "Tracer", "DefaultMode", &DefaultMode, 0, ((INT32)TRACEMETHOD_ILLEGAL)-1);
+	GetApplication()->DeclareSection( _T("Tracer"), 40);
+	GetApplication()->DeclarePref( _T("Tracer"), _T("DefaultMode"), &DefaultMode, 0, ((INT32)TRACEMETHOD_ILLEGAL)-1);
 	String_256 PrefName;
-	String_256 PrefBase("Tracer mode #1%d setting #2%d"); // not resourced as .ini file setting
+	String_256 PrefBase(_T("Tracer mode #1%d setting #2%d")); // not resourced as .ini file setting
 	
 	for (Mode=0; Mode<(INT32)NUM_TRACEMETHOD; Mode++) for (Setting=0; Setting<(INT32)NUM_TRACESETTING; Setting++)
 	{
 		PrefName._MakeMsg(PrefBase, Mode, Setting);
-		GetApplication()->DeclarePref( "Tracer", TEXT(PrefName), &(DefaultSetting[Mode][Setting]), 0, 100);
+		GetApplication()->DeclarePref( _T("Tracer"), PrefName, &(DefaultSetting[Mode][Setting]), 0, 100);
 	}
 
 	return (RegisterOpDescriptor(0,								// Tool ID
@@ -1670,8 +1660,8 @@ BOOL TraceOp::FindCentreInsertionPosition(Spread** Spread, DocCoord* Position)
 	
 	// Determine the centre of the view
 	WorkCoord WrkCentreOfView; 
-	WrkCentreOfView.x = WrkViewRect.lox	+ (WrkViewRect.Width()/2); 
-	WrkCentreOfView.y = WrkViewRect.loy	+ (WrkViewRect.Height()/2);
+	WrkCentreOfView.x = WrkViewRect.lo.x	+ (WrkViewRect.Width()/2); 
+	WrkCentreOfView.y = WrkViewRect.lo.y	+ (WrkViewRect.Height()/2);
 	
 	// FindEnclosing spread requires an OilCoord
 	OilCoord OilCentreOfView = WrkCentreOfView.ToOil(CurDocView->GetScrollOffsets()); 
@@ -1689,8 +1679,8 @@ BOOL TraceOp::FindCentreInsertionPosition(Spread** Spread, DocCoord* Position)
 
 	// Find the centre of the DocViewRect
    	DocCoord DocCentreOfView; 
-	DocCentreOfView.x = DocViewRect.lox	+ (DocViewRect.Width()/2); 
-	DocCentreOfView.y = DocViewRect.loy	+ (DocViewRect.Height()/2);
+	DocCentreOfView.x = DocViewRect.lo.x	+ (DocViewRect.Width()/2); 
+	DocCentreOfView.y = DocViewRect.lo.y	+ (DocViewRect.Height()/2);
 
 	// Now convert from DocCoords to spread coords
 	(*Spread)->DocCoordToSpreadCoord(&DocCentreOfView);
@@ -1726,7 +1716,8 @@ void TraceMsg::OpenOrUse(KernelBitmap * pBitmap)
 	// Only one live instance of the operation is allowed. It's probably a dialog 
 	if (!MessageHandler::MessageHandlerExists(CC_RUNTIME_CLASS(TraceDlg)))
 	{
-		OpDesc->Invoke(&OpParam((INT32)pBitmap,(INT32)NULL));		 
+		OpParam param((void *)pBitmap,(void *)NULL);
+		OpDesc->Invoke(&param);
 	}
 	else
 	{

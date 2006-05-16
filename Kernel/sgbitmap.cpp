@@ -2514,8 +2514,6 @@ PORTNOTE("other", "Remove XPE hooks")
 					}
 				}
 #endif
-PORTNOTE("other", "Disabled tracer")
-#ifndef EXCLUDE_FROM_XARALX
 				else if (Msg->GadgetID == _R(IDC_BMPGAL_TRACE))
 				{	
 					SelectedBitmap = GetSelectedBitmap();
@@ -2527,7 +2525,6 @@ PORTNOTE("other", "Disabled tracer")
 					}
 				#endif //webster
 				}
-#endif
 				/* else if (Msg->GadgetID == _R(IDC_BMPGAL_EFFECTS))
 				{	
 					SelectedBitmap = GetSelectedBitmap();
