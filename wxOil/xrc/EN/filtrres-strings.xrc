@@ -1159,7 +1159,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDW_OPENQUERY_NOTSURE">
-					<label>This file may not be suitable for this filter - are you sure you wish to open this file?</label>
+					<label>This file may not be suitable for this filter - are you sure you want to open this file?</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SAVEAS">
+					<label>Save As</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_SAVEAS_OVERWRITE">
+					<label>There is already a file with that name. The contents of the old file will be lost if you overwrite it. Do you want to Overwrite or Save as a new name?</label>
 				</object>
 			</object>
 		</object>
