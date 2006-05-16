@@ -1613,6 +1613,7 @@ BOOL CamResource::DeInit()
 {
 	if (m_pHelpProvider)
 	{
+		wxHelpProvider::Set(NULL);
 		delete m_pHelpProvider;
 		m_pHelpProvider = NULL;
 	}
