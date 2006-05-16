@@ -851,7 +851,7 @@ bool CCamDoc::OnOpenDocument( const wxString &strFilename )
 //	StatusLine::SetPrefix(String_64(_R(IDS_WAIT_OPENING_DOC_PFX)));
 
 	// Get the title from MFC - we use it as a prefix to the whole title.
-	m_TitlePrefix = (LPCTSTR) GetTitle();
+	m_TitlePrefix = wxFileNameFromPath(strFilename); //GetTitle();
 
 	// Try to open the document.
 	if( !DoOpenDocument( strFilename ) )
