@@ -859,7 +859,7 @@ TRACE( _T("Progress::Stop ActiveDisplays = %d \n"),ActiveDisplays);
 
 		MonotonicTime Timer;
 		while (!Timer.Elapsed(150))
-			/* wait */ ;
+			::wxMilliSleep(20); /* wait */ 
 	}
 
 	// Make sure everything is reset properly
