@@ -1750,6 +1750,7 @@ bool CCamDoc::SaveAs()
 			{
 				// User wants to save as some other name
 				wxSplitPath(tmp, &strPath, &strName, &strExt);
+				strName = wxFileNameFromPath(tmp);
 				tmp = _T("");
 				bShowFileSelectorAgain = TRUE;
 			}
