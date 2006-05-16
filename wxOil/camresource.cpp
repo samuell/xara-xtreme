@@ -120,7 +120,7 @@ ResIDToString * CamResource::pHash = NULL;
 ResIDToString * CamResource::pObjectNameHash = NULL;
 wxFileSystem * CamResource::pwxFileSystem = NULL;
 wxBitmap * CamResource::pSplashBitmap= NULL;
-wxSplashScreen * CamResource::pSplashScreen = NULL;
+wxAdvSplashScreen * CamResource::pSplashScreen = NULL;
 wxString * CamResource::pResourcePath = NULL;
 CamResourceRemember * CamResource::pFirstRemember=NULL;
 BOOL CamResource::HaveCheckedResourcePath = FALSE;
@@ -1714,27 +1714,27 @@ BOOL CamResource::Splash()
 {
 	TRACET(_T("CamResource::Splash() called"));
 
-	
-	wxImage Image;
-
 	if (pSplashBitmap) delete pSplashBitmap;
 	pSplashBitmap=NULL;
 
+	
+	pSplashBitmap = new wxBitmap();
+	if (!pSplashBitmap) return FALSE;
+
 	// We'd like to get the bitmap name from the resources, but, urm, we haven't yet
 	// loaded them
-	if (!LoadwxImage(Image, _T("startup-lx.png") ))
+	if (!LoadwxBitmap(*pSplashBitmap, _T("startup-lx.png") ))
 	{
 		TRACE(_T("Cannot load splash bitmap - possible resource compilation error?"));
 		return TRUE;
 	}
-	
-	pSplashBitmap = new wxBitmap(Image);
-	if (!pSplashBitmap) return FALSE;
 
-	pSplashScreen = new wxSplashScreen(*pSplashBitmap,
+	if (!pSplashBitmap->Ok()) return FALSE;
+
+	pSplashScreen = new wxAdvSplashScreen(*pSplashBitmap,
           wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_NO_TIMEOUT,
           0, NULL, -1, wxDefaultPosition, wxDefaultSize,
-          wxSIMPLE_BORDER
+          wxNO_BORDER
 #if !defined (_DEBUG)
 		  |wxSTAY_ON_TOP // Only stay on top in non-debug builds - too annoying for preinit debugging
 #endif

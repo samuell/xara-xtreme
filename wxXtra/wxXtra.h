@@ -14,3 +14,4 @@
 #include "combog.h"
 #include "odcombo.h"
 #include "platform.h"
+#include "advsplash.h"

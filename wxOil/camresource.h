@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class CCLexFile;
 class wxFSFile;
 class wxBimtap;
-class wxSplashScreen;
+class wxAdvSplashScreen;
 class wxHelpProvider;
 
 typedef UINT32 ResourceID;
@@ -250,7 +250,7 @@ private:
 	static CamResourceRemember * pFirstRemember;
 
 	static wxBitmap * pSplashBitmap;
-	static wxSplashScreen * pSplashScreen;
+	static wxAdvSplashScreen * pSplashScreen;
 
 	static ResourceStringToBitmap * pBitmapHash;
 
