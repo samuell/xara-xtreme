@@ -1709,21 +1709,60 @@ bool CCamDoc::SaveAs()
 	if (strDefaultDir.IsEmpty())
 		strDefaultDir = docTemplate->GetDirectory();
 
-    wxString tmp = wxFileSelector(_("Save as"),
-            strDefaultDir,
-            wxFileNameFromPath(GetFilename()),
-            docTemplate->GetDefaultExtension(),
-            filter,
-            wxSAVE | wxOVERWRITE_PROMPT,
-            GetDocumentWindow());
+	// We can't use wxOVERWRITE_PROMPT because is doesn't conform to our UI guidelines
+	// So we must run that logic ourselves...
+	BOOL bShowFileSelectorAgain = FALSE;
+	wxString tmp;
+	do
+	{
+		wxString title(CamResource::GetText(_R(IDS_SAVEAS)));
+		tmp = wxFileSelector(title,
+							strDefaultDir,
+							wxFileNameFromPath(GetFilename()),
+							docTemplate->GetDefaultExtension(),
+							filter,
+							wxSAVE,
+							GetDocumentWindow());
 
-    if (tmp.empty())
-        return false;
+		if (tmp.IsEmpty())
+			return false;
+
+		if (wxFileExists(tmp))
+		{
+			ErrorInfo Info;
+			Info.ErrorMsg = _R(IDS_SAVEAS_OVERWRITE);
+			Info.Button[0] = _R(IDS_OVERWRITE);
+			Info.Button[1] = _R(IDB_SAVEAS);
+			Info.Button[2] = _R(IDS_CANCEL);
+
+			UINT32 Answer = AskQuestion(&Info);
+
+			if (Answer==_R(IDS_OVERWRITE))
+			{
+				// Just use the name the user selected to overwite the existing file
+				bShowFileSelectorAgain = FALSE;
+			}
+			else if (Answer== _R(IDB_SAVEAS))
+			{
+				// User wants to save as some other name
+				tmp = _T("");
+				bShowFileSelectorAgain = TRUE;
+			}
+			else if (Answer==_R(IDS_CANCEL))
+			{
+				// User has chosen to abort the operation
+				return FALSE;
+			}
+			else
+				ERROR3("Unknown Answer from AskQuestion");
+		}
+	}
+	while (bShowFileSelectorAgain);
 
     wxString fileName(tmp);
     wxSplitPath(fileName, & path, & name, & ext);
 
-    if (ext.empty())
+    if (ext.IsEmpty())
     {
         fileName += wxT(".");
         fileName += docTemplate->GetDefaultExtension();
