@@ -107,6 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "monotime.h"
 #include "stdbars.h"
 //#include "ed.h"
+#include "ktimer.h"
 
 class Spread;
 class StringBase;
@@ -138,8 +139,8 @@ class StatusLine : public StandardBar
 public:
 	StatusLine();
 	~StatusLine();
+
 	MsgResult Message(Msg* Msg);
-	BOOL OnIdle();
 	BOOL UpdateText(String_256* ptext, BOOL PrefixSelDesc=TRUE);
 	BOOL UpdateTextForColourPicker(String_256* ptext, BOOL PrefixSelDesc=TRUE);
 	BOOL UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread, DocView* pDocView, BOOL Snapped);
@@ -166,7 +167,10 @@ public:
 	BOOL UnlockControlHelp () { DoControlHelp = TRUE; return (TRUE); }
 	BOOL AllowControlHelp () { return (DoControlHelp); }
 
+	void SetNeedsUpdate(BOOL Immediate=FALSE);
+
 protected:
+	BOOL OnIdleEvent();
 
 	BOOL SetMousePosPaneWidth(Spread* pSpread);
 	BOOL RefreshHelpText();
@@ -213,8 +217,24 @@ protected:
 	BOOL ProgressShown;
 	String_256 StatusText;
 	BOOL SetStatusText(const String_256 &text);
+	String_256 m_MousePosText;
 
-	CC_DECLARE_DYNCREATE(StatusLine);              
+	void OnTimer()
+	{
+		::wxWakeUpIdle(); // a bodge to ensure the idle handler is awake
+	}
+
+	class StatusTimer : public KernelTimer
+	{
+	public:
+		StatusTimer(StatusLine * pOwner) : m_pOwner(pOwner) {}
+		virtual void Notify() {m_pOwner->OnTimer();}
+		StatusLine * m_pOwner;
+	};
+
+	StatusTimer m_Timer;
+
+	CC_DECLARE_DYNCREATE(StatusLine);
 };
 
 #endif  // INC_STATUSLINE

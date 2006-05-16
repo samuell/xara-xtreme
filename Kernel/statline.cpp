@@ -151,6 +151,50 @@ StatusLine * StatusLine::s_pStatusLine = NULL;
 // render pane animation (could be in statline.cpp but kept here next to pane defn)
 static UINT32 RenderAnimation[] = { _R(IDB_SL_REND1), _R(IDB_SL_REND2), _R(IDB_SL_REND3) };
 
+/*
+
+Timer mechanism and the status line
+===================================
+
+Working out the status line text is actually reasonably expensive, especially
+given some of the arcane lengths we go to to get it. Painting it is
+even more expensive. And doing an Update() on it to ensure it paints
+immediately yet more so. The thing this interferes with the most is
+typing in the text tool.
+
+So we use the following algortithm:
+
+We set a timer to go off every 250ms. This is the idle timer. A little
+confusingly it is a one-shot timer, but bear with me.
+
+If something happens that requires a status line update (or is likely
+to) it calls StatusLine::NeedsUpdate(). By default what this does is
+reset the timer (so it won't go off for another 250ms). However
+it is possible to force an 'immediate' update (actually on the
+next idle event) by calling NeedsUpdate(TRUE) which simulates
+an immediate timer expiry.
+
+When the timer expires (whether or not NeedsUpdate() has been called),
+it signals to the idle event handler for the DialogOp at the lowest
+possible priority. This ensures all rendering etc. will have finished.
+
+When the idle event is received, it checks to see if NeedsUpdate()
+has been called in the interim (i.e. if the timer is running). If
+the timer is running, the idle event handler returns saying it wants
+no more idles. If not, it attempts to process the status line text.
+
+If the status line text has changed, it sets the new text (immediately)
+but only invalidates it (i.e. does not do an update).
+
+Whether or not the text changed, it then sets the timer off again
+by calling NeedsUpdate().
+
+
+*/
+
+
+
+
 /*****************************************************************************
 >	StatusLine::StatusLine()
 
@@ -159,7 +203,7 @@ static UINT32 RenderAnimation[] = { _R(IDB_SL_REND1), _R(IDB_SL_REND2), _R(IDB_S
 	Purpose:	Constructor for StatusLine
 *****************************************************************************/
 
-StatusLine::StatusLine()
+StatusLine::StatusLine() : m_Timer(this)
 {
 	// ensure initial updates
 	OldMemory=0;
@@ -178,6 +222,8 @@ StatusLine::StatusLine()
 	JobDescription=NULL;
 	CurrentPercent=-1;
 	ProgressShown=FALSE;
+
+	GetApplication()->RegisterIdleProcessor(IDLEPRIORITY_LOW, this);
 }
 
 
@@ -202,11 +248,13 @@ StatusLine::~StatusLine()
 		// are temporarily created when invoking bar closure
 		s_pStatusLine = NULL;
 	}
+
+	GetApplication()->RemoveIdleProcessor(IDLEPRIORITY_LOW, this);
 }
 
 
 /*****************************************************************************
->	BOOL StatusLine::OnIdle()
+>	BOOL StatusLine::OnIdleEvent()
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/11/94
@@ -214,79 +262,101 @@ StatusLine::~StatusLine()
 				Updates the text on the status bar if 'TextDelay' 
 				has elapsed since it was last changed.
 				Also updates the mouse position pane
-	Returns:	FALSE if anything fails (see Errors)
-				HOWEVER, the function will try to proceed
-				to keep the status line as tidy as possible
-	Errors:		pCCStatusBar==NULL,
-				RefreshHelpText() fails,
-				UpdateMousePos() fails,
-				pCCStatusBar->UpdatePaneText() fails,
+	Returns:	FALSE (to indicate we want no more idle events)
+				The wakeup from the timer will create one for us
+	Errors:		-
+
+
 *****************************************************************************/
 
-BOOL StatusLine::OnIdle()
+BOOL StatusLine::OnIdleEvent()
 {
-	// If the current doc doesn't have a doc view (e.g. it's a clipboard doc), then there's no point
-	// carrying on, because it's not a proper document, hence doen't require up-to-date status bar info.
-	if (DocView::GetSelected() == NULL)
-		return TRUE;
-
-	BOOL ReturnValue=TRUE;			// set to FALSE if any section of code fails
-
-#ifndef STANDALONE
-	// if mouse position pane needs resizing, do it (ensuring it's enabled)
-	if (MousePosPaneNeedsResizing)
+	// Don't do any status line updates if the timer is running
+	if (!m_Timer.IsRunning())
 	{
-		MousePosPaneNeedsResizing=FALSE;
-		Spread* pSpread=Document::GetSelectedSpread();
-		if (pSpread)
+
+		// If the current doc doesn't have a doc view (e.g. it's a clipboard doc), then there's no point
+		// carrying on, because it's not a proper document, hence doen't require up-to-date status bar info.
+		if (DocView::GetSelected() == NULL)
+			return FALSE;
+	
+	
+#ifndef STANDALONE
+		// if mouse position pane needs resizing, do it (ensuring it's enabled)
+		if (MousePosPaneNeedsResizing)
 		{
-			if (!SetMousePosPaneWidth(pSpread))
-				ReturnValue=FALSE;
+			MousePosPaneNeedsResizing=FALSE;
+			Spread* pSpread=Document::GetSelectedSpread();
+			if (pSpread)
+			{
+				SetMousePosPaneWidth(pSpread);
 PORTNOTE("StatusLine", "Removed use of CCStatusBar")
 #ifndef EXCLUDE_FROM_XARALX
-			if (pCCStatusBar->PaneState(_R(IDS_SL_MOUSEPOS),Enable)==Fail)
-				ReturnValue=FALSE;
+				if (pCCStatusBar->PaneState(_R(IDS_SL_MOUSEPOS),Enable)==Fail)
+					ReturnValue=FALSE;
 #endif
+			}
 		}
-	}
 #endif
 
-	// if sufficient time elapsed since status line last changed, refresh it
-	if (TextTimer.Elapsed(TextDelay,TRUE))
-		if (RefreshHelpText()==FALSE)
-			ReturnValue=FALSE;
+		RefreshHelpText();
 
 #ifdef _STATUSLINE_MEMORYPANE
-	// establish if amount of memory changed BODGE
-	MEMORYSTATUS MemState;
-	MemState.dwLength=sizeof(MEMORYSTATUS);
-	GlobalMemoryStatus(&MemState);
-	INT32 Memory=MemState.dwAvailPhys;
-	BOOL MemoryChanged=(OldMemory!=Memory);
-	OldMemory=Memory;
-
-	if (MemoryChanged)
-	{
-		// If this ever appears in retail builds it will have to be rewritten properly (it
-		// isn't internationally portable at the moment).		
-		String_256 StrBuf(TEXT(""));
-		camSnprintf(StrBuf, 256, TEXT("%dK"), Memory / 1024);
-		if (StrBuf.Length()>4)
-			StrBuf.Insert(&String_8(TEXT(",")),StrBuf.Length()-4);
-		BOOL ok = SetStringGadgetValue(_R(IDS_SL_MEMORY),StrBuf);
-		if (ok)
-			PaintGadgetNow(_R(IDS_SL_MEMORY))
-		else
-			ReturnValue=FALSE;
-	}
+		// establish if amount of memory changed BODGE
+		MEMORYSTATUS MemState;
+		MemState.dwLength=sizeof(MEMORYSTATUS);
+		GlobalMemoryStatus(&MemState);
+		INT32 Memory=MemState.dwAvailPhys;
+		BOOL MemoryChanged=(OldMemory!=Memory);
+		OldMemory=Memory;
+	
+		if (MemoryChanged)
+		{
+			// If this ever appears in retail builds it will have to be rewritten properly (it
+			// isn't internationally portable at the moment).		
+			String_256 StrBuf(TEXT(""));
+			camSnprintf(StrBuf, 256, TEXT("%dK"), Memory / 1024);
+			if (StrBuf.Length()>4)
+				StrBuf.Insert(&String_8(TEXT(",")),StrBuf.Length()-4);
+			BOOL ok = SetStringGadgetValue(_R(IDS_SL_MEMORY),StrBuf);
+			if (ok)
+				PaintGadgetNow(_R(IDS_SL_MEMORY))
+			else
+				ReturnValue=FALSE;
+		}
 #endif // _STATUSLINE_MEMORYPANE
 
-// We don't need to know that the status line failed to update normally.
-//	ENSURE(ReturnValue==TRUE, "StatusLine::OnIdle() failed!");
+		// The timer had expired, so we need to indicate we need another update
+		SetNeedsUpdate();
+	}
 
-	return TRUE;
+	// Always say we don't need more idle events
+	return FALSE;
 }
 
+/*****************************************************************************
+>	void StatusLine::SetNeedsUpdate(BOOL Immediate = FALSE);
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	16/5/2005
+	Purpose:	Indicate the status line needs an update
+	Returns:	-
+	Errors:		-
+
+*****************************************************************************/
+
+void StatusLine::SetNeedsUpdate(BOOL Immediate /*=FALSE*/)
+{
+	if (Immediate)
+	{
+		// Simulate a timer event
+		m_Timer.Stop();
+		OnTimer();
+		return;
+	}
+
+	m_Timer.Start(1000, TRUE);
+}
 
 /*****************************************************************************
 >	BOOL StatusLine::RefreshHelpText()
@@ -320,9 +390,11 @@ BOOL StatusLine::RefreshHelpText()
 	}
 
 	if (!TextValid)
+	{
 		TextValid=BaseBar::GetStatusLineText(&text);		// try bar drag
-	if (TextValid)
-		PrefixSelDesc=STATUSLINE_SELDESC_BARDRAG;
+		if (TextValid)
+			PrefixSelDesc=STATUSLINE_SELDESC_BARDRAG;
+	}
 
 	WinCoord	WndPos(0,0);
 	CWindowID	WinID=DialogManager::GetWindowUnderPointer(&WndPos);
@@ -357,7 +429,7 @@ BOOL StatusLine::RefreshHelpText()
 			// drag op in progress so we must have valid text (stops tool being interogated)
 			if (!TextValid)
 			{
-				text="";	
+				text=_T("");	
 				TextValid=TRUE;
 			}
 		}
@@ -372,11 +444,14 @@ BOOL StatusLine::RefreshHelpText()
 			if (pDocView==DocView::GetSelected())
 			{
 				OverSelectedDoc=TRUE;
-				PrefixSelDesc=STATUSLINE_SELDESC_SELDOC;
 				Tool* pTool=Tool::GetCurrent();
 				ERROR3IF(pTool==NULL,"StatusLine::RefreshHelpText() - no selected tool");
 				if (pTool)
+				{
 					TextValid=pTool->GetStatusLineText(&text,pSpread,DocPos,ClickModifiers::GetClickModifiers());
+					if (TextValid)
+						PrefixSelDesc=STATUSLINE_SELDESC_SELDOC;
+				}
 				else
 					ReturnValue=FALSE;
 			}
@@ -385,100 +460,115 @@ BOOL StatusLine::RefreshHelpText()
 				TextValid=text.Load(_R(IDS_CLICKHERETOSELECTDOC));						// over unselected doc
 				if (!TextValid)
 					ReturnValue=FALSE;
-				PrefixSelDesc=STATUSLINE_SELDESC_OTHERDOC;
+				else
+					PrefixSelDesc=STATUSLINE_SELDESC_OTHERDOC;
 			}
 		}
-		else
-		{
+
 PORTNOTE("statline", "Removed use of ControlHelper")
 #if !defined(EXCLUDE_FROM_XARALX)
+		if (!TextValid)
+		{
 			TextValid=ControlHelper::GetStatusLineText(&text,WinID);				// try buttons/bars
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_BUTTONS;
+		}
 #endif
+
+		if (!TextValid)
+		{			
 			TextValid=DialogManager::GetStatusLineText(&text,NULL);
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_BUTTONS;
+		}
 
 #ifndef STANDALONE
-			if (!TextValid)
-				TextValid=CColourBar::GetStatusLineText(&text);						// try ColourBar
+		if (!TextValid)
+		{
+			TextValid=CColourBar::GetStatusLineText(&text);						// try ColourBar
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_COLBAR;
+		}
 
 PORTNOTE("StatusLine", "Removed use of ColourPicker")
 #ifndef EXCLUDE_FROM_XARALX
-			if (!TextValid)
-				TextValid=ColourPicker::GetStatusLineText(&text);					// try Colour Editor
-#endif
+		if (!TextValid)
+		{
+			TextValid=ColourPicker::GetStatusLineText(&text);					// try Colour Editor
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_COLBAR;
+		}
 #endif
+
+#endif //STANDALONE
 
 PORTNOTE("StatusLine", "Removed use of PreviewDlg")
 #ifndef EXCLUDE_FROM_XARALX
-			if (!TextValid)
-				TextValid=PreviewDialog::GetStatusLineText(&text);					// try Preview Dialog
-#endif
+		if (!TextValid)
+		{
+			TextValid=PreviewDialog::GetStatusLineText(&text);					// try Preview Dialog
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_PREVIEWDLG;
+		}
+#endif
 
 // WEBSTER - markn 15/1/97
 // No rulers in webster
 PORTNOTE("StatusLine", "Removed use of Rulers")
 #ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
-			if (!TextValid)
-			{
-				DocView*   pDocView   = DocView::GetSelected();
-				RulerPair* pRulerPair = NULL;
-				if (pDocView!=NULL)
-					pRulerPair = pDocView->GetpRulerPair();
-				if (pRulerPair!=NULL)
-					TextValid = pRulerPair->GetStatusLineText(&text,WndPos,WinID);	// try Rulers
-			}
-#endif // WEBSTER
-#endif
+		if (!TextValid)
+		{
+			DocView*   pDocView   = DocView::GetSelected();
+			RulerPair* pRulerPair = NULL;
+			if (pDocView!=NULL)
+				pRulerPair = pDocView->GetpRulerPair();
+			if (pRulerPair!=NULL)
+				TextValid = pRulerPair->GetStatusLineText(&text,WndPos,WinID);	// try Rulers
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_STATBAR;
+		}
+#endif // WEBSTER
+#endif
 
 PORTNOTE("StatusLine", "Removed use of Galleries")
 #ifndef EXCLUDE_FROM_XARALX
 #ifndef EXCLUDE_GALS
-			if (!TextValid && WinID!=NULL)
+		if (!TextValid && WinID!=NULL)
+		{
+			// Lets try the Galleries ....
+			// ** This uses Naughty Oily stuff. (Bodge for the Viewer).
+			CWindowID ParentWnd = ::GetParent(WinID);
+			if (ParentWnd != NULL)
 			{
-				// Lets try the Galleries ....
-				// ** This uses Naughty Oily stuff. (Bodge for the Viewer).
-				CWindowID ParentWnd = ::GetParent(WinID);
-				if (ParentWnd != NULL)
+				DialogBarOp* pBar = DialogBarOp::FindDialogBarOp((UINT32)ParentWnd);
+				if (pBar != NULL && pBar->IS_KIND_OF(SuperGallery))
 				{
-					DialogBarOp* pBar = DialogBarOp::FindDialogBarOp((UINT32)ParentWnd);
-					if (pBar != NULL && pBar->IS_KIND_OF(SuperGallery))
-					{
-						CRect TargetRect;
-						::GetWindowRect(WinID, &TargetRect);
+					CRect TargetRect;
+					::GetWindowRect(WinID, &TargetRect);
 
-						// Get the screen DPI
-						INT32 DPI = 96;
-						HDC ScreenDC = CreateCompatibleDC(NULL);
-						if (ScreenDC == NULL)
-							ERROR2(FALSE, "Unable to create screen DC");
-						DPI = GetDeviceCaps(ScreenDC, LOGPIXELSY);
-						DeleteDC(ScreenDC);
+					// Get the screen DPI
+					INT32 DPI = 96;
+					HDC ScreenDC = CreateCompatibleDC(NULL);
+					if (ScreenDC == NULL)
+						ERROR2(FALSE, "Unable to create screen DC");
+					DPI = GetDeviceCaps(ScreenDC, LOGPIXELSY);
+					DeleteDC(ScreenDC);
 
-						INT32 WindowHeight = TargetRect.Height();
+					INT32 WindowHeight = TargetRect.Height();
 
-						DocCoord KernelMousePos;
-						KernelMousePos.x = ((WndPos.x) * 72000) / DPI;
-						KernelMousePos.y = ((WindowHeight - WndPos.y) * 72000) / DPI;
+					DocCoord KernelMousePos;
+					KernelMousePos.x = ((WndPos.x) * 72000) / DPI;
+					KernelMousePos.y = ((WindowHeight - WndPos.y) * 72000) / DPI;
 
-						TextValid = ((SuperGallery*)pBar)->GetStatusLineHelp(&KernelMousePos, &text);
-					}
+					TextValid = ((SuperGallery*)pBar)->GetStatusLineHelp(&KernelMousePos, &text);
+					if (TextValid)
+						PrefixSelDesc=STATUSLINE_SELDESC_STATBAR;
 				}
 			}
-#endif
-#endif
 		}
+#endif
+#endif
 
 #ifndef STANDALONE
 		// blank mouse pos if not over selected doc
@@ -1102,8 +1192,14 @@ BOOL StatusLine::UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread,
 	String_256 MousePosText("");
 	if (!Blank && GetMousePosText(&MousePosText,*pDocCoord,pSpread)==FALSE)
 		ReturnValue=FALSE;
-	ReturnValue &=SetStringGadgetValue(_R(IDC_SL_MOUSEPOS), MousePosText);
-//	PaintGadgetNow(_R(IDC_SL_MOUSEPOS)); - is there any need to paint this now? Flushes gtk buffer etc. Not a great idea.
+
+	if (MousePosText != m_MousePosText)
+	{
+		m_MousePosText= MousePosText;
+
+		ReturnValue &=SetStringGadgetValue(_R(IDC_SL_MOUSEPOS), MousePosText);
+		//	PaintGadgetNow(_R(IDC_SL_MOUSEPOS)); - is there any need to paint this now? Flushes gtk buffer etc. Not a great idea.
+	}
 
 // WEBSTER - markn 15/1/97
 // No rulers in Webster
@@ -1266,7 +1362,7 @@ BOOL StatusLine::SetRenderIndicator(RenderState Action)
 	if (BitmapID == GetGadgetBitmap(_R(IDB_SL_RENDN)))
 		return TRUE;
 	SetGadgetBitmap(_R(IDB_SL_RENDN), BitmapID);
-	PaintGadgetNow(_R(IDB_SL_RENDN));
+	//PaintGadgetNow(_R(IDB_SL_RENDN));
 
 	return TRUE;
 }
@@ -1413,12 +1509,17 @@ BOOL StatusLine::SetPercent(INT32 NewPercent, BOOL ClearBackground /* =FALSE */,
 
 BOOL StatusLine::SetStatusText(const String_256 &text)
 {
+	SetNeedsUpdate(); // Don't allow another update on idles for 250ms
+
+	if (StatusText == text)
+		return TRUE;
+
 	StatusText = text;
 	if (!ProgressShown)
 	{
-		StatusText = text;
+		TRACEUSER("amb", _T("updating status text"));
 		BOOL ok=SetStringGadgetValue(_R(IDC_SL_STATUSTEXT), text);
-		PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
+//		PaintGadgetNow(_R(IDC_SL_STATUSTEXT));
 		return ok;
 	}
 	return TRUE;

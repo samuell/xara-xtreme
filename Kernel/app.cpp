@@ -1486,12 +1486,6 @@ BOOL Application::OnIdle(BOOL IdleRedraw)
 
 //	ControlList::Idle();
 
-	StatusLine* pStatusLine=GetpStatusLine();
-	if (pStatusLine!=NULL)
-		pStatusLine->OnIdle();
-//	else
-//		ERROR3("Application::OnIdle() - pStatusLine==NULL");
-
 //	Idles=TRUE;
 
 	return Idles;
