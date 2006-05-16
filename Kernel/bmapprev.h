@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmpprefs.h"	// ExportFileType
 #include "dialogop.h"
-//#include "bmpalctrl.h"	// Required as BmapPrevDlg HasA BitmapExportPaletteControl
+#include "bmpalctrl.h"	// Required as BmapPrevDlg HasA BitmapExportPaletteControl
 
 class BitmapExportPreviewDialog;
 class BrowserPreviewOptions;
@@ -192,10 +192,7 @@ private:	// Data
 	BOOL m_bDpiSupported;								// Does the (should be) given filter support DPI?
 	BOOL m_CurrentPreview;
 	BOOL m_bPopularityValuesWanted;
-PORTNOTE("other","Removed m_PaletteControl")
-#ifndef EXCLUDE_FROM_XARALX // note nested!
 	BitmapExportPaletteControl m_PaletteControl;
-#endif //EXCLUDE_FROM_XARALX - note nested!
 	bool m_bImageMapTabCreated;
 	bool m_bBrowserPreviewTabCreated;
 	enum { CLIPBOARD_NONE, CLIPBOARD_IMAGEMAP, CLIPBOARD_HTML } m_ClipBoardUsage;

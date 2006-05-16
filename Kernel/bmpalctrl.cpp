@@ -257,9 +257,9 @@ void BitmapExportPaletteControl::InvalidateCell(ReDrawInfoType *pInfo, INT32 pal
 	GetRectForCell(paletteIndex, &cellRect, pInfo->dy);
 
 	// Add the bodge factor
-	cellRect.loy	-= m_nPixelSize;
-	cellRect.hiy	+= m_nPixelSize;
-	cellRect.hix	+= m_nPixelSize * 2;
+	cellRect.lo.y	-= m_nPixelSize;
+	cellRect.hi.y	+= m_nPixelSize;
+	cellRect.hi.x	+= m_nPixelSize * 2;
 
 	DialogManager::InvalidateGadget(m_WindowID, _R(IDC_T2_PALETTE_CONTROL), pInfo, &cellRect);
 }
@@ -406,10 +406,10 @@ void BitmapExportPaletteControl::RenderGrey(DocRect *pPaletteSize, RenderRegion 
 
 void BitmapExportPaletteControl::GetRectForCell(INT32 cell, DocRect *pRect, INT32 controlHeight)
 {
-	pRect->lox = (cell % m_nCellsPerLine) * m_nCellWidth;
-	pRect->loy = controlHeight - (cell / m_nCellsPerLine) * m_nCellHeight - m_nCellHeight;
-	pRect->hix = (cell % m_nCellsPerLine + 1) * m_nCellWidth - m_nPixelSize;
-	pRect->hiy = controlHeight - (cell / m_nCellsPerLine) * m_nCellHeight - m_nPixelSize;
+	pRect->lo.x = (cell % m_nCellsPerLine) * m_nCellWidth;
+	pRect->lo.y = controlHeight - (cell / m_nCellsPerLine) * m_nCellHeight - m_nCellHeight;
+	pRect->hi.x = (cell % m_nCellsPerLine + 1) * m_nCellWidth - m_nPixelSize;
+	pRect->hi.y = controlHeight - (cell / m_nCellsPerLine) * m_nCellHeight - m_nPixelSize;
 }
 
 void BitmapExportPaletteControl::RenderPalette(DocRect *pPaletteSize, RenderRegion *pRender, INT32 controlHeight,
@@ -603,13 +603,13 @@ void BitmapExportPaletteControl::DrawCell(DocRect *pCellRect, DocColour colour, 
 
 		// Draw a black line from top left to bottom right
 		pRender->SetLineColour(COLOUR_BLACK);
-		pRender->DrawLine(	DocCoord(pCellRect->lox, pCellRect->hiy + m_nPixelSize),
-							DocCoord(pCellRect->hix + m_nPixelSize, pCellRect->loy));
+		pRender->DrawLine(	DocCoord(pCellRect->lo.x, pCellRect->hi.y + m_nPixelSize),
+							DocCoord(pCellRect->hi.x + m_nPixelSize, pCellRect->lo.y));
 
 		// Draw a white line from top right to bottom left
 		pRender->SetLineColour(COLOUR_WHITE);
-		pRender->DrawLine(	DocCoord(pCellRect->hix + m_nPixelSize, pCellRect->hiy + m_nPixelSize),
-							DocCoord(pCellRect->lox + m_nPixelSize, pCellRect->loy + m_nPixelSize));
+		pRender->DrawLine(	DocCoord(pCellRect->hi.x + m_nPixelSize, pCellRect->hi.y + m_nPixelSize),
+							DocCoord(pCellRect->lo.x + m_nPixelSize, pCellRect->lo.y + m_nPixelSize));
 
 		return; // Stop before rending any other marks
 	}
@@ -624,10 +624,10 @@ void BitmapExportPaletteControl::DrawCell(DocRect *pCellRect, DocColour colour, 
 		
 		// Draw a rectangle in the bottom left corner of the cell
 		DocRect markRect;
-		markRect.hix	= pCellRect->lox + m_nPixelSize * 2;
-		markRect.lox	= pCellRect->lox;
-		markRect.hiy	= pCellRect->loy + m_nPixelSize * 2;
-		markRect.loy	= pCellRect->loy;
+		markRect.hi.x	= pCellRect->lo.x + m_nPixelSize * 2;
+		markRect.lo.x	= pCellRect->lo.x;
+		markRect.hi.y	= pCellRect->lo.y + m_nPixelSize * 2;
+		markRect.lo.y	= pCellRect->lo.y;
 		pRender->DrawRect(&markRect);
 	}
 
@@ -640,10 +640,10 @@ void BitmapExportPaletteControl::DrawCell(DocRect *pCellRect, DocColour colour, 
 		
 		// Draw a rectangle in the top left corner of the cell
 		DocRect markRect;
-		markRect.hix	= pCellRect->lox + m_nPixelSize * 2;
-		markRect.lox	= pCellRect->lox;
-		markRect.hiy	= pCellRect->hiy;
-		markRect.loy	= pCellRect->hiy - m_nPixelSize * 2;
+		markRect.hi.x	= pCellRect->lo.x + m_nPixelSize * 2;
+		markRect.lo.x	= pCellRect->lo.x;
+		markRect.hi.y	= pCellRect->hi.y;
+		markRect.lo.y	= pCellRect->hi.y - m_nPixelSize * 2;
 		pRender->DrawRect(&markRect);
 	}
 	

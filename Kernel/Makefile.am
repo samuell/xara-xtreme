@@ -8,7 +8,7 @@ noinst_LIBRARIES	= libKernel.a
 # the application source, library search path, and link libraries
 libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attrbev.cpp \
 	attrmap.cpp attrmgr.cpp basedoc.cpp beveler.cpp bevtrap.cpp biasgain.cpp \
-	bitfilt.cpp bitmap.cpp bitmapcachekey.cpp blndhelp.cpp blobs.cpp \
+	bitfilt.cpp bitmap.cpp bitmapcachekey.cpp blndhelp.cpp blobs.cpp bmpalctrl.cpp \
 	bmpcomp.cpp bmplist.cpp bmapprev.cpp bmpsrc.cpp brpress.cpp brshattr.cpp brshbeca.cpp \
 	brshcomp.cpp brshdata.cpp brushref.cpp bshadow.cpp cache.cpp cachfifo.cpp \
 	camfiltr.cpp capturemanager.cpp ccbhfile.cpp ccbuffil.cpp \
@@ -35,7 +35,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	nodepath.cpp nodepostpro.cpp noderect.cpp noderend.cpp nodershp.cpp nodeset.cpp \
 	nodeshad.cpp nodeshap.cpp nodetext.cpp nodetxtl.cpp nodetxts.cpp noise1.cpp \
 	noisebas.cpp noisef.cpp npaper.cpp objcache.cpp objchge.cpp objreg.cpp \
-	offattr.cpp opdesc.cpp opgrad.cpp ophist.cpp ops.cpp page.cpp pathedit.cpp \
+	offattr.cpp opdesc.cpp opgrad.cpp ophist.cpp ops.cpp palmenu.cpp page.cpp pathedit.cpp \
 	pathops.cpp pathpcs.cpp pathproc.cpp paths.cpp pathstrk.cpp pathtrap.cpp \
 	pathutil.cpp pbecomea.cpp ppairbsh.cpp ppbevel.cpp ppbrush.cpp ppstroke.cpp \
 	ppvecstr.cpp prefs.cpp princomp.cpp prnmkcom.cpp pump.cpp quality.cpp \

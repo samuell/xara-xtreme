@@ -96,13 +96,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-DECLARE_SOURCE("$Revision$");
-
 #include "camtypes.h"
 #include "palmenu.h"
 //#include "bmpreres.h"
 #include "bmpalctrl.h"
 #include "bmapprev.h"
+
+DECLARE_SOURCE("$Revision$");
 
 //  An implementation to match the declaration in the header file.
 CC_IMPLEMENT_DYNCREATE(OpPalettePopupCommand, Operation)
@@ -179,21 +179,21 @@ BOOL PaletteContextMenu::Build()
 
 BOOL OpPalettePopupCommand::InitPolymorphicCommand( TCHAR *OpToken, UINT32 MenuTextID )
 {
-	return(RegisterOpDescriptor(NULL,								// Tool ID 
+	return(RegisterOpDescriptor(0,									// Tool ID 
 								MenuTextID,		 					// String resource ID
 								CC_RUNTIME_CLASS(OpPalettePopupCommand),// Runtime class
 								OpToken, 							// Token string
 								OpPalettePopupCommand::GetCommandState,	// GetState function
-								NULL,								// help ID
-								NULL,								// bubble help
-								NULL,								// resource ID
-								NULL,								// control ID
+								0,									// help ID
+								0,									// bubble help
+								0,									// resource ID
+								0,									// control ID
 								SYSTEMBAR_ILLEGAL,					// Bar ID
 								FALSE,								// Receive system messages
 								FALSE,								// Smart duplicate operation
 								TRUE,								// Clean operation
 								NULL,								// No vertical counterpart
-								NULL,								// String for one copy only error
+								0,									// String for one copy only error
 								DONT_GREY_WHEN_SELECT_INSIDE		// Auto state flags
 								));
 }

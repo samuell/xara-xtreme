@@ -252,11 +252,8 @@ BOOL BmapPrevDlg::RegisterYourPagesInOrderPlease()
 	}
 	else
 	{
-PORTNOTE("other","Removed _R(IDD_TPALETTE) - doesn't exist in resources")
-#ifndef EXCLUDE_FROM_XARALX
 		// Not exporting a bitmap from the bitmap gallery
-		AddAPage(_R(IDD_TPALETTE));
-#endif
+		AddAPage(_R(IDD_PALETTE_TAB));
 	
 		if (!m_bSlicingImage)
 			ok = AddAPage(_R(IDD_TBITMAPSIZE));
@@ -266,13 +263,13 @@ PORTNOTE("other","Removed _R(IDD_TPALETTE) - doesn't exist in resources")
 	bool	fUsedImapOption = false;
 	if (ok && !bExportABitmap && m_FilterType != MAKE_BITMAP_FILTER && !m_bSlicingImage)
 	{
-PORTNOTE("other","Removed _R(IDD_TPALETTE) & _R(IDD_TBROWSER) - doesn't exist in resources and isn't wanted (in that order)")
+PORTNOTE("other","Removed IDD_TIMAPOPTIONS & IDD_TBROWSER - isn't wanted yet")
 //		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
 		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS));
 		fUsedImapOption = true;
 	}
 
-PORTNOTE("other","Removed _R(IDD_TPALETTE) - doesn't exist in resources")
+PORTNOTE("other","Removed IDD_TIMAPOPTIONS - isn't wanted yet")
 #ifndef EXCLUDE_FROM_XARALX// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
 	{
@@ -1008,16 +1005,13 @@ void BmapPrevDlg::UpdateStatusBar(UINT32 id)
 ********************************************************************************************/
 void BmapPrevDlg::SetPaletteSelection(INT32 index)
 {
-PORTNOTETRACE("other", "BmapPrevDlg::SetPaletteSelection - do nothing" );
-#if !defined(EXCLUDE_FROM_XARALX)	
-	if (GetCurrentPageID() != _R(IDD_TPALETTE))
+	if (GetCurrentPageID() != _R(IDD_PALETTE_TAB))
 		return;
 	
 	ReDrawInfoType info;
 	GetKernelRenderedGadgetInfo(_R(IDC_T2_PALETTE_CONTROL), &info);
 	m_PaletteControl.SetSelectedCell(&info, index);
 	RefreshPaletteLinkedControls();
-#endif
 }
 
 /********************************************************************************************
@@ -1028,16 +1022,13 @@ PORTNOTETRACE("other", "BmapPrevDlg::SetPaletteSelection - do nothing" );
 ********************************************************************************************/
 void BmapPrevDlg::SetPaletteHighlight(INT32 index)
 {
-PORTNOTETRACE("other", "BmapPrevDlg::SetPaletteSelection - do nothing" );
-#if !defined(EXCLUDE_FROM_XARALX)	
-	if (GetCurrentPageID() != _R(IDD_TPALETTE))
+	if (GetCurrentPageID() != _R(IDD_PALETTE_TAB))
 		return;
 
 	ReDrawInfoType info;
 	GetKernelRenderedGadgetInfo(_R(IDC_T2_PALETTE_CONTROL), &info);
 	m_PaletteControl.SetHighlightedCell(&info, index);
 	RefreshPaletteLinkedControls();
-#endif
 }
 
 /********************************************************************************************
@@ -1056,7 +1047,7 @@ void BmapPrevDlg::UpdateCurrentTab()
 		RefreshBitmapSizeTab();
 	}
 	else
-	if(PageID == _R(IDD_TPALETTE) )
+	if(PageID == _R(IDD_PALETTE_TAB) )
 	{
 		//TRACEUSER( "Simonk", _T("Update tab PALETTE\n"));
 		RefreshPaletteOptionsTab();
@@ -1203,12 +1194,9 @@ MsgResult BmapPrevDlg::Message( Msg* Message)
 	// Determine from what page the message originated
 	if( Msg->PageID == _R(IDD_TBITMAPSIZE) )
 		HandleBitmapSizeTabMsg(Msg); 
-PORTNOTE("other", "Remove palette usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 	else
-	if( Msg->PageID == _R(IDD_TPALETTE) )
+	if( Msg->PageID == _R(IDD_PALETTE_TAB) )
 		HandlePaletteTabMsg(Msg);
-#endif
 	else
 	if( Msg->PageID == _R(IDD_TIMAPOPTIONS) )
 		HandleImageMapTabMsg(Msg); 
@@ -1532,12 +1520,10 @@ void BmapPrevDlg::InitPaletteSortList()
 	Inputs:		Msg: The message sent from page 1 of the dialog
 	Purpose:	All messages generated from the tabbed dialog's palette tab get processed here
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::HandlePaletteTabMsg - Windows message handler")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 {
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
-	TalkToPage(_R(IDD_TPALETTE));  // The Coords Page identifier
+	TalkToPage(_R(IDD_PALETTE_TAB));  // The Coords Page identifier
 	switch (Msg->DlgMsg)
 	{
 		case DIM_CREATE:
@@ -1567,7 +1553,7 @@ void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 		}
 
 		case DIM_TEXT_CHANGED:
-			if (PageID != _R(IDD_TPALETTE) || m_LockSizeUpdates)
+			if (PageID != _R(IDD_PALETTE_TAB) || m_LockSizeUpdates)
 				break;
 
 		case DIM_KILL_FOCUS:
@@ -1642,18 +1628,27 @@ void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 
 		case DIM_LFT_BN_CLICKED:
 		{
-			switch(Msg->GadgetID)
-			{
-				case _R(IDC_T2_LOCKED_COLOUR):			HandlePaletteLockedColourButtonChange();			break;
-				case _R(IDC_T2_WEB_SAFE_COLOUR):		HandlePaletteWebSafeColourButtonChange();			break;
-				case _R(IDC_T2_TRANSPARENT_BACKGROUND):	HandlePaletteTransparentBackgroundButtonChange();	break;
-				case _R(IDC_T2_TRANSPARENT_COLOUR):		HandlePaletteTransparentColourButtonChange();		break;
-				// Gap in button bar
-				case _R(IDC_T2_DELETE_COLOUR):			HandlePaletteDeleteColourButtonChnage();			break;
-				case _R(IDC_T2_RESTORE_COLOUR):			HandlePaletteRestoreColourButtonChange();			break;
-				// Gap in button bar
-				case _R(IDC_T2_SYSTEM_COLOURS):			HandlePaletteSystemColoursButtonChnage();			break;
-			}
+			if( Msg->GadgetID == _R(IDC_T2_LOCKED_COLOUR) )
+				HandlePaletteLockedColourButtonChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_WEB_SAFE_COLOUR) )
+				HandlePaletteWebSafeColourButtonChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_TRANSPARENT_BACKGROUND) )
+				HandlePaletteTransparentBackgroundButtonChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_TRANSPARENT_COLOUR) )
+				HandlePaletteTransparentColourButtonChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_DELETE_COLOUR) )
+				HandlePaletteDeleteColourButtonChnage();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_RESTORE_COLOUR) )
+				HandlePaletteRestoreColourButtonChange();
+			else
+			if( Msg->GadgetID == _R(IDC_T2_SYSTEM_COLOURS) )
+				HandlePaletteSystemColoursButtonChnage();
+
 			RefreshPaletteOptionsTab();	// Changes may have had an effect other controls
 			break;
 		}
@@ -1684,7 +1679,6 @@ void BmapPrevDlg::HandlePaletteTabMsg(DialogMsg* Msg)
 			break;
 	};
 }
-#endif
 
 /******************************************************************************************
 >	void BmapPrevDlg::HandleDitherListChange()
@@ -1799,8 +1793,6 @@ void BmapPrevDlg::HandlePaletteColourDepthListChange()
 	m_pExportOptions->SetDepth(newDepth);
 }
 
-PORTNOTE("other","BmapPrevDlg::HandlePaletteLockedColourButtonChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteLockedColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1814,10 +1806,7 @@ void BmapPrevDlg::HandlePaletteLockedColourButtonChange()
 	}
 	SetPreviewButtonState(true); // set the preview button
 }
-#endif
 
-PORTNOTE("other","BmapPrevDlg::HandlePaletteWebSafeColourButtonChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteWebSafeColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1827,7 +1816,6 @@ void BmapPrevDlg::HandlePaletteWebSafeColourButtonChange()
 	}
 	SetPreviewButtonState(true); // set the preview button
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandleTransparentBackgroundButtonChange()
@@ -1848,8 +1836,6 @@ void BmapPrevDlg::HandlePaletteTransparentBackgroundButtonChange()
 	Created:	08/12/2000
 	Purpose:	Makes the current selected colour in the palette control transparent.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::HandlePaletteTransparentColourButtonChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1865,7 +1851,6 @@ void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 		SetPreviewButtonState(true); // set the preview button
 	}
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
@@ -1873,8 +1858,6 @@ void BmapPrevDlg::HandlePaletteTransparentColourButtonChange()
 	Created:	08/12/2000
 	Purpose:	Deletes the currently selected colour in the palette control.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::HandlePaletteDeleteColourButtonChnage - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1884,7 +1867,6 @@ void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 //	m_pExportOptions->InvalidatePalette();
 	SetPreviewButtonState(true); // set the preview button
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
@@ -1895,8 +1877,6 @@ void BmapPrevDlg::HandlePaletteDeleteColourButtonChnage()
 				function relies on its button only being enabled when the colour can be
 				restored.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::HandlePaletteRestoreColourButtonChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
 {
 	if (m_PaletteControl.GetSelectedColour() != BitmapExportPaletteControl::INVALID_COLOUR_VALUE)
@@ -1905,7 +1885,6 @@ void BmapPrevDlg::HandlePaletteRestoreColourButtonChange()
 	m_pExportOptions->InvalidatePalette();
 	SetPreviewButtonState(true); // set the preview button
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteSystemColoursButtonChnage()
@@ -1927,8 +1906,6 @@ void BmapPrevDlg::HandlePaletteSystemColoursButtonChnage()
 	Purpose:	This function responds to the user changing the current sort method and tells
 				the palette control about the change.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::HandlePaletteSortListChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteSortListChange()
 {
 	//  Get the user's selection
@@ -1953,7 +1930,6 @@ void BmapPrevDlg::HandlePaletteSortListChange()
 
 //	m_PaletteControl.RenderSoon();
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::HandlePaletteColourModelListChange()
@@ -1987,8 +1963,6 @@ void BmapPrevDlg::HandlePaletteColoursUsedChange()
 	SetPreviewButtonState(true); // set the preview button
 }
 
-PORTNOTE("other","BmapPrevDlg::HandlePaletteColourEditChange - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 {
 	BOOL valid;
@@ -2013,19 +1987,21 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 
 	BYTE *pColourWeAreChanging;	// not used in HSV mode
 
-	switch (id)
-	{
-		case _R(IDC_RED_EDIT):		pColourWeAreChanging = pR;			break;
-		case _R(IDC_GREEN_EDIT):	pColourWeAreChanging = pG;			break;
-		case _R(IDC_BLUE_EDIT):		pColourWeAreChanging = pB;			break;
-	}
+	if( id == _R(IDC_RED_EDIT) )
+		pColourWeAreChanging = pR;
+	else
+	if( id == _R(IDC_GREEN_EDIT) )
+		pColourWeAreChanging = pG;
+	else
+	if( id == _R(IDC_BLUE_EDIT) )
+		pColourWeAreChanging = pB;
 	
 	switch (m_ColorModelType)
 	{
 		case MODEL_RGBHEX:
 		{
 			INT32 t;
-			sscanf(str, "%x", &t);
+			camSscanf(str, _T("%x"), &t);
 			if (t >= 0 && t < 256)
 				*pColourWeAreChanging = t;
 			break;
@@ -2034,18 +2010,18 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 		case MODEL_RGBPERCENT:
 		{
 			float t;
-			sscanf(str, "%f", &t);
+			camSscanf(str, _T("%f"), &t);
 			double tt = t * (255.0 / 100.0); // convert from percent to 0-255
 			if (tt >= 0 && tt < 256)
-				*pColourWeAreChanging = tt + 0.5; // adding 0.5 so number rounds to nearest INT32
+				*pColourWeAreChanging = UINT8(tt + 0.5); // adding 0.5 so number rounds to nearest INT32
 			break;
 		}
 		case MODEL_RGBNUMBER:
 		{
 			INT32 t;
-			sscanf(str, "%u", &t);
+			camSscanf(str, _T("%u"), &t);
 			if (t >= 0 && t < 256)
-				*pColourWeAreChanging = t;
+				*pColourWeAreChanging = UINT8(t);
 			break;
 		}
 
@@ -2056,15 +2032,15 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 			if (id == _R(IDC_RED_EDIT))					// H component
 			{
 				INT32 t;								// temp INT32 varaible
-				sscanf(str, "%u", &t);				// read as an in
+				camSscanf(str, _T("%u"), &t);				// read as an in
 				newValue = t;						// value to be set (check range before setting)
 			}
 			else									// S & V components
 			{
 				float t;							// temp float variable (using float to keep sscanf happy)
-				sscanf(str, "%f", &t);				// read value as a float
+				camSscanf(str, _T("%f"), &t);				// read value as a float
 				t *= (float)(255.0 / 100.0);		// convert from percent to 0-255
-				newValue = t + 0.5;					// value to be set (check range before setting)
+				newValue = UINT8(t + 0.5);					// value to be set (check range before setting)
 			}
 
 
@@ -2073,12 +2049,15 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 				INT32 h, s, v;
 				DocColour colour(*pR, *pG, *pB);
 				colour.GetHSVValue(&h, &s, &v);
-				switch (id)
-				{
-					case _R(IDC_RED_EDIT):		colour.SetHSVValue(newValue, s, v);		break;
-					case _R(IDC_GREEN_EDIT):	colour.SetHSVValue(h, newValue, v);		break;
-					case _R(IDC_BLUE_EDIT):		colour.SetHSVValue(h, s, newValue);		break;
-				}
+				if( id == _R(IDC_RED_EDIT) )
+					colour.SetHSVValue(newValue, s, v);
+				else
+				if( id == _R(IDC_GREEN_EDIT) )
+					colour.SetHSVValue(h, newValue, v);
+				else
+				if( id == _R(IDC_BLUE_EDIT) )
+					colour.SetHSVValue(h, s, newValue);
+				
 				INT32 newR, newG, newB;
 				colour.GetRGBValue(&newR, &newG, &newB);
 				*pR = newR; *pG = newG; *pB = newB;
@@ -2107,7 +2086,6 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 		SetPreviewButtonState(true); // set the preview button
 	}
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteOptionsTab()
@@ -2118,8 +2096,6 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 ********************************************************************************************/
 void BmapPrevDlg::RefreshPaletteOptionsTab()
 {
-PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteOptionsTab - Do nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
 //	if (m_pExportOptions->GetSupportsPalette())
 //	{
 		if (!m_pExportOptions->IsPaletteValid())
@@ -2136,7 +2112,6 @@ PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteOptionsTab - Do nothing");
 	RefreshPaletteLinkedControls();
 
 	SetPreviewButtonState(true);
-#endif
 }
 
 /********************************************************************************************
@@ -2150,13 +2125,10 @@ PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteOptionsTab - Do nothing");
 ********************************************************************************************/
 void BmapPrevDlg::RefreshPaletteLinkedControls()
 {
-PORTNOTETRACE("other","BmapPrevDlg::RefreshPaletteLinkedControls - Do nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
 	RefreshPaletteColourModelList();
 	RefreshPaletteButtonStrip();
 	RefreshPaletteColoursUsedEdit();
 	RefreshPaletteColoursEdit();
-#endif
 }
 
 /********************************************************************************************
@@ -2281,8 +2253,6 @@ void BmapPrevDlg::RefreshPaletteColourDepthList()
 		EnableGadget(_R(IDC_COLOUR_DEPTH_COMBO), TRUE);
 }
 
-PORTNOTE("other","BmapPrevDlg::RefreshPaletteColoursUsedEdit - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 {
 	BOOL active = m_pExportOptions->GetSupportsPalette();
@@ -2300,17 +2270,19 @@ void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 		if (m_pExportOptions->DoesTempFileMatchExportOptions())
 			// if we are uptodate go with the number of colours in the palette
 			SetLongGadgetValue(_R(IDC_COLOURS_USED_EDIT), palette->NumberOfColours);
+PORTNOTE( "other", "Some very un-kernel stuff is being done, needs movinf to oil" )
+#ifndef EXCLUDE_FROM_XARALX
 		else
 			// only set the value here if it doesn't has focus
 			if (::GetFocus() != GetDlgItem(GetReadWriteWindowID(), (INT32)_R(IDC_COLOURS_USED_EDIT)))
 				SetLongGadgetValue(_R(IDC_COLOURS_USED_EDIT), m_pExportOptions->GetNumberOfUserRequestedColours());
+#endif
 	}
 	else
-		SetStringGadgetValue(_R(IDC_COLOURS_USED_EDIT), &String_16(_T("")));
+		SetStringGadgetValue(_R(IDC_COLOURS_USED_EDIT), String_16(_T("")));
 
 	m_LockSizeUpdates = FALSE;
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteColourModelList()
@@ -2321,8 +2293,6 @@ void BmapPrevDlg::RefreshPaletteColoursUsedEdit()
 				bearing on how the colour information is represented to the user, not how the
 				graphic is exported.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::RefreshPaletteColourModelList - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColourModelList()
 {
 	switch(m_ColorModelType)
@@ -2331,11 +2301,12 @@ void BmapPrevDlg::RefreshPaletteColourModelList()
 		case MODEL_RGBNUMBER:	SetSelectedDropListItem(_R(IDC_COLOR_MODEL_LIST), _R(IDS_COLOR_DISPLAY_RGB_NUMBER));	break;
 		case MODEL_RGBPERCENT:	SetSelectedDropListItem(_R(IDC_COLOR_MODEL_LIST), _R(IDS_COLOR_DISPLAY_RGB_PERCENT));	break;
 		case MODEL_HSV:			SetSelectedDropListItem(_R(IDC_COLOR_MODEL_LIST), _R(IDS_COLOR_DISPLAY_HSV));			break;
+		default: // Do nothing
+			break;
 	}
 
 	EnableGadget(_R(IDC_COLOR_MODEL_LIST), m_pExportOptions->GetSupportsPalette());
 }
-#endif
 
 /********************************************************************************************
 >	void BmapPrevDlg::RefreshPaletteColoursEdit()
@@ -2344,8 +2315,6 @@ void BmapPrevDlg::RefreshPaletteColourModelList()
 	Purpose:	Set the values of the three colour edit boxes based on the currently selected
 				palette entry and on the currently selected colour model.
 ********************************************************************************************/
-PORTNOTE("other","BmapPrevDlg::RefreshPaletteColoursEdit - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteColoursEdit()
 {
 	BOOL bPalette		= m_pExportOptions->GetSupportsPalette();
@@ -2383,9 +2352,9 @@ void BmapPrevDlg::RefreshPaletteColoursEdit()
 			case MODEL_RGBHEX:
 			{
 				TCHAR str[16];	// Temp string buffer (of abitary size)
-				sprintf(str, "%02x", r);	SetStringGadgetValue(_R(IDC_RED_EDIT),		&String_16(str));
-				sprintf(str, "%02x", g);	SetStringGadgetValue(_R(IDC_GREEN_EDIT),	&String_16(str));
-				sprintf(str, "%02x", b);	SetStringGadgetValue(_R(IDC_BLUE_EDIT),		&String_16(str));
+				camSprintf(str, _T("%02x"), r);	SetStringGadgetValue(_R(IDC_RED_EDIT),		String_16(str));
+				camSprintf(str, _T("%02x"), g);	SetStringGadgetValue(_R(IDC_GREEN_EDIT),	String_16(str));
+				camSprintf(str, _T("%02x"), b);	SetStringGadgetValue(_R(IDC_BLUE_EDIT),		String_16(str));
 				break;
 			}
 			case MODEL_RGBPERCENT:
@@ -2414,13 +2383,15 @@ void BmapPrevDlg::RefreshPaletteColoursEdit()
 				SetDoubleGadgetValue(_R(IDC_BLUE_EDIT),		v * p);			// V (as percentage)
 				break;
 			}
+			default: // Do nothing
+				break;
 		}
 	}
 	else
 	{
-		SetStringGadgetValue(_R(IDC_RED_EDIT),		&String_16(""));
-		SetStringGadgetValue(_R(IDC_GREEN_EDIT),	&String_16(""));
-		SetStringGadgetValue(_R(IDC_BLUE_EDIT),		&String_16(""));
+		SetStringGadgetValue(_R(IDC_RED_EDIT),		String_16(_T("")));
+		SetStringGadgetValue(_R(IDC_GREEN_EDIT),	String_16(_T("")));
+		SetStringGadgetValue(_R(IDC_BLUE_EDIT),		String_16(_T("")));
 	}
 
 	if(m_ColorModelType == MODEL_HSV)
@@ -2440,10 +2411,7 @@ void BmapPrevDlg::RefreshPaletteColoursEdit()
 
 	m_LockSizeUpdates = FALSE;
 }
-#endif
 
-PORTNOTE("other","BmapPrevDlg::RefreshPaletteButtonStrip - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteButtonStrip()
 {
 	if (m_PaletteControl.GetSelectedColour() == BitmapExportPaletteControl::INVALID_COLOUR_VALUE
@@ -2489,10 +2457,7 @@ void BmapPrevDlg::RefreshPaletteButtonStrip()
 	EnableGadget(_R(IDC_T2_SYSTEM_COLOURS),					m_pExportOptions->GetSupportsPalette());
 	SetLongGadgetValue(_R(IDC_T2_SYSTEM_COLOURS),			m_pExportOptions->IsUsingSystemPalette());
 }
-#endif
 
-PORTNOTE("other","BmapPrevDlg::RefreshPaletteSortList - uses colour palette")
-#ifndef EXCLUDE_FROM_XARALX
 void BmapPrevDlg::RefreshPaletteSortList()
 {
 	if (!m_pExportOptions->GetSupportsPalette())
@@ -2524,7 +2489,6 @@ void BmapPrevDlg::RefreshPaletteSortList()
 			break;
 	}
 }
-#endif
 
 // //////////////////////////////////////////////////////////////////////////////////////// //
 // //////////////////////////////////////////////////////////////////////////////////////// //
