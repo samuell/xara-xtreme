@@ -1218,7 +1218,7 @@ PORTNOTE("other", "Use SetUpExportOptions to get defaults only and not do dialog
 
 		// delete the empty file, if one was created, and try to rename the file
 		FileUtil::DeleteFile(&Path);
-		
+/*		
 #if defined(__WXGTK__) && FALSE != wxUSE_UNICODE
 		char pszTempName[256];
 		char pszFinalName[256];
@@ -1228,8 +1228,10 @@ PORTNOTE("other", "Use SetUpExportOptions to get defaults only and not do dialog
 		char* pszTempName = TempName;
 		char* pszFinalName = FinalName;
 #endif		
-		
 		bFinished = !rename(pszTempName, pszFinalName);
+*/
+		// This should do the trick but I've left the old code in case
+		bFinished = !camRename(TempName, FinalName);
 
 		if (bFinished)
 		{
