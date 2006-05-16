@@ -1696,30 +1696,34 @@ bool CCamDoc::SaveAs()
 #else
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
-    wxString path, name, ext;
+
+    wxString strPath;
+	wxString strName;
+	wxString strExt;
 
 	// If this document already has a path, make Save As default to that path
-	wxString strDefaultDir = GetFilename();
-	if (!strDefaultDir.IsEmpty())
+	wxString tmp = GetFilename();
+	if (!tmp.IsEmpty())
 	{
-	    wxSplitPath(strDefaultDir, &path, &name, &ext);
-		strDefaultDir = path;
+	    wxSplitPath(tmp, &strPath, &strName, &strExt);
 	}
 
-	if (strDefaultDir.IsEmpty())
-		strDefaultDir = docTemplate->GetDirectory();
+	if (strPath.IsEmpty())
+		strPath = docTemplate->GetDirectory();
+
+	// We want to force the use of the .xar extension...
+	strExt = docTemplate->GetDefaultExtension();
 
 	// We can't use wxOVERWRITE_PROMPT because is doesn't conform to our UI guidelines
 	// So we must run that logic ourselves...
 	BOOL bShowFileSelectorAgain = FALSE;
-	wxString tmp;
 	do
 	{
 		wxString title(CamResource::GetText(_R(IDS_SAVEAS)));
 		tmp = wxFileSelector(title,
-							strDefaultDir,
-							wxFileNameFromPath(GetFilename()),
-							docTemplate->GetDefaultExtension(),
+							strPath,
+							strName,
+							strExt,
 							filter,
 							wxSAVE,
 							GetDocumentWindow());
@@ -1745,6 +1749,7 @@ bool CCamDoc::SaveAs()
 			else if (Answer== _R(IDB_SAVEAS))
 			{
 				// User wants to save as some other name
+				wxSplitPath(tmp, &strPath, &strName, &strExt);
 				tmp = _T("");
 				bShowFileSelectorAgain = TRUE;
 			}
@@ -1760,9 +1765,9 @@ bool CCamDoc::SaveAs()
 	while (bShowFileSelectorAgain);
 
     wxString fileName(tmp);
-    wxSplitPath(fileName, & path, & name, & ext);
+    wxSplitPath(fileName, &strPath, &strName, &strExt);
 
-    if (ext.IsEmpty())
+    if (strExt.IsEmpty())
     {
         fileName += wxT(".");
         fileName += docTemplate->GetDefaultExtension();
