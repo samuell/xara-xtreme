@@ -754,7 +754,7 @@ BOOL NameGallery::OnIdleEvent()
 	}
 
 	// Don't call the base class handler.
-	return TRUE;	
+	return FALSE;	// we don't want more idles - we've either removed ourself or nothing is out of date
 }
 
 
