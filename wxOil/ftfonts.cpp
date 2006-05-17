@@ -709,14 +709,26 @@ static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont, PangoFcF
 	// We must unlock this before returning!
 	FT_Face pFreeTypeFace = pango_fc_font_lock_face(pFcFont);
 
-	if (!pFreeTypeFace->charmap ||
-		pFreeTypeFace->charmap->encoding != ( ( (FT_UInt32)('u') << 24 )
-											| ( (FT_UInt32)('n') << 16 )
-											| ( (FT_UInt32)('i') <<  8 )
-											|   (FT_UInt32)('c')       ) )
+	// The default charmap is always unicode if present, but we may
+	// have a symbol font which we may want to drive in symbol mode.
+	// Check whether there is just an Adobe custom encoding in addition
+	// to the synthesized unicode charmap and if so, use that instead.
+	FT_CharMap pCustomCharmap = NULL;
+	for (int mapnum = 0; mapnum < pFreeTypeFace->num_charmaps; mapnum++)
 	{
-		ERROR2(FALSE, "FTFontMan - no Unicode encoding present");
+		FT_CharMap pThisMap = pFreeTypeFace->charmaps[mapnum];
+		if (pThisMap->encoding == FT_ENCODING_ADOBE_CUSTOM) {
+			pCustomCharmap = pThisMap;
+			// we go on checking the other encodings
+		}
+		else if (pThisMap->encoding != FT_ENCODING_UNICODE) {
+			// there is an encoding that is neither a custom one
+			// nor a Unicode encoding, so this is a language font
+			pCustomCharmap = NULL;
+			break;
+		}
 	}
+	if (pCustomCharmap) FT_Set_Charmap(pFreeTypeFace, pCustomCharmap);
 	
 	// We should not have seen non-scalable fonts anyway, but just in case...
 	if (!FT_IS_SCALABLE(pFreeTypeFace))
