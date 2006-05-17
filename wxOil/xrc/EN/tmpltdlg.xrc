@@ -11,11 +11,11 @@
 		</object>
 		<object class="wxButton" name="IDC_TMPLTDLG_ADD">
 			 <pos>140,20d</pos> <size>50,14d</size>
-			<label>&amp;Add --&amp;gt;</label>
+			<label>&amp;Add --&gt;</label>
 		</object>
 		<object class="wxButton" name="IDC_TMPLTDLG_REMOVE">
 			 <pos>140,38d</pos> <size>50,14d</size>
-			<label>&amp;lt;-- &amp;Remove</label>
+			<label>&lt;-- &amp;Remove</label>
 		</object>
 		<object class="wxButton" name="IDC_TMPLTDLG_REMOVE_ALL">
 			 <pos>140,60d</pos> <size>50,14d</size>

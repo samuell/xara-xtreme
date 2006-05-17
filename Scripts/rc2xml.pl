@@ -263,18 +263,18 @@ sub WriteName
 sub WriteLabel
 {
     my $t=shift @_;
+    $t=~s/&/&amp;/g;
     $t=~s/</&lt;/g;
     $t=~s/>/&gt;/g;
-    $t=~s/&/&amp;/g;
     print OUTPUT "\t\t\t<label>$t</label>\n";
 }
 
 sub WriteLabel2
 {
     my $t=shift @_;
+    $t=~s/&/&amp;/g;
     $t=~s/</&lt;/g;
     $t=~s/>/&gt;/g;
-    $t=~s/&/&amp;/g;
     print OUTPUT "\t\t<label>$t</label>\n";
 }
 
@@ -316,18 +316,18 @@ sub WriteBitmap
 sub WriteTitle
 {
     my $t=shift @_;
+    $t=~s/&/&amp;/g;
     $t=~s/</&lt;/g;
     $t=~s/>/&gt;/g;
-    $t=~s/&/&amp;/g;
     print OUTPUT "\t\t<title>$t</title>\n";
 }
 
 sub WriteTooltip
 {
     my $t=shift @_;
+    $t=~s/&/&amp;/g;
     $t=~s/</&lt;/g;
     $t=~s/>/&gt;/g;
-    $t=~s/&/&amp;/g;
     print OUTPUT "\t\t<tooltip>$t</tooltip>\n";
 }
 

@@ -883,13 +883,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_EDIT_LESS">
-					<label>&amp;lt;&amp;lt;</label>
+					<label>&lt;&lt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_EDIT_MORE">
-					<label>&amp;gt;&amp;gt;</label>
+					<label>&gt;&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">

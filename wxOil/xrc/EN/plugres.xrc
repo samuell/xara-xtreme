@@ -24,11 +24,11 @@
 		</object>
 		<object class="wxStaticText" name="IDC_PLUGINPATH_PATHNAME">
 			 <pos>34,122d</pos> <size>260,12d</size>
-			<label>&amp;lt;Pathname here&amp;gt;</label>
+			<label>&lt;Pathname here&gt;</label>
 		</object>
 		<object class="wxStaticText" name="IDC_PLUGINPATH_ISPLUGIN">
 			 <pos>212,125d</pos> <size>200,12d</size>
-			<label>&amp;lt;Does index exist&amp;gt;</label>
+			<label>&lt;Does index exist&gt;</label>
 		</object>
 		<object class="wxStaticText" name="-1">
 			 <pos>7,3d</pos> <size>260,8d</size>

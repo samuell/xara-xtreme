@@ -115,7 +115,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_BITMAPFILTER_HTMLTAG">
-					<label>&amp;lt;img src="#1%S" width=#2%ld height=#3%ld&amp;gt;</label>
+					<label>&lt;img src="#1%S" width=#2%ld height=#3%ld&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -193,7 +193,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTMLEXPORT_CLOSETAGSTART">
-					<label>&amp;lt;/</label>
+					<label>&lt;/</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -247,13 +247,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTMLEXPORT_IMAGEMAP_BODY">
-					<label>&amp;lt;BODY&amp;gt;\r\n&amp;lt;IMG SRC="#1%s" USEMAP="##2%s" BORDER=0&amp;gt;\r\n&amp;lt;/BODY&amp;gt;\r\n</label>
+					<label>&lt;BODY&gt;\r\n&lt;IMG SRC="#1%s" USEMAP="##2%s" BORDER=0&gt;\r\n&lt;/BODY&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTMLEXPORT_IMAGEMAP_HEAD">
-					<label>&amp;lt;HEAD&amp;gt;\r\n&amp;lt;TITLE&amp;gt;#1%s&amp;lt;/TITLE&amp;gt;\r\n&amp;lt;/HEAD&amp;gt;\r\n</label>
+					<label>&lt;HEAD&gt;\r\n&lt;TITLE&gt;#1%s&lt;/TITLE&gt;\r\n&lt;/HEAD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -313,13 +313,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTMLEXPORT_TAGEND">
-					<label>&amp;gt;</label>
+					<label>&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTMLEXPORT_TAGSTART">
-					<label>&amp;lt;</label>
+					<label>&lt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -499,7 +499,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_WEBFILTER_HTMLTAG">
-					<label>&amp;lt;embed src="#1%S" width=#2%ld height=#3%ld type="application/vnd.xara" pluginspage="http://www.xara.com/downloads/plugin.html"&amp;gt;</label>
+					<label>&lt;embed src="#1%S" width=#2%ld height=#3%ld type="application/vnd.xara" pluginspage="http://www.xara.com/downloads/plugin.html"&gt;</label>
 				</object>
 			</object>
 		</object>

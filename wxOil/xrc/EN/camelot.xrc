@@ -135,7 +135,7 @@
 			<help>Edit linked objects</help>
 			</object>
 			<object class="wxMenuItem" name="ID_OLE_VERB_FIRST">
-			<label>&amp;lt;&amp;lt;OLE VERBS GO HERE&amp;gt;&amp;gt;</label>
+			<label>&lt;&lt;OLE VERBS GO HERE&gt;&gt;</label>
 			<help>Activate embedded or linked object</help>
 			</object>
 			</object>

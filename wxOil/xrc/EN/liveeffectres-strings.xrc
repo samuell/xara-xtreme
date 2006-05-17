@@ -97,7 +97,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_LE_1NONE">
-					<label>1. &amp;lt;None&amp;gt;</label>
+					<label>1. &lt;None&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -151,13 +151,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_LE_MANY">
-					<label>&amp;lt;Many&amp;gt;</label>
+					<label>&lt;Many&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_LE_NONE">
-					<label>&amp;lt;None&amp;gt;</label>
+					<label>&lt;None&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -187,7 +187,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_LE_ORDER_FORMAT_NONE">
-					<label>%d. &amp;lt;None&amp;gt;</label>
+					<label>%d. &lt;None&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">

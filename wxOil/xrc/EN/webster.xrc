@@ -64,7 +64,7 @@
 		</object>
 		<object class="wxRadioButton" name="IDC_ISDN">
 			 <pos>15,109d</pos> <size>120,12d</size>
-			<label>Dual ISDN or better (&amp;gt;128 Kbs)</label>
+			<label>Dual ISDN or better (&gt;128 Kbs)</label>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>5,130d</pos> <size>195,50d</size>

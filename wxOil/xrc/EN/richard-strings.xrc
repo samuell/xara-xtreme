@@ -301,7 +301,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_FONTS_GALLERY_MEDIUM_TEXT">
-					<label>&amp;lt;FontName&amp;gt;</label>
+					<label>&lt;FontName&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -691,7 +691,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TEXTTOOL_MULTIPLE">
-					<label>&amp;lt;Multiple&amp;gt;</label>
+					<label>&lt;Multiple&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">

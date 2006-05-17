@@ -721,7 +721,7 @@
 		</object>
 		<object class="wxButton" name="IDC_BUTTON_LE_ADD">
 			 <pos>55,80d</pos> <size>25,14d</size>
-			<label>New &amp;gt;</label>
+			<label>New &gt;</label>
 		</object>
 		<object class="wxButton" name="IDC_BUTTON_LE_INSERT">
 			 <pos>55,100d</pos> <size>40,14d</size>

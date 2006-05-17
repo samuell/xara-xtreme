@@ -25,19 +25,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_AN_PALINFO">
-					<label>Using an #1%d bit, #2%d colour #3%s palette&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Using an #1%d bit, #2%d colour #3%s palette&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_BANNER_BOX">
-					<label>&amp;lt;TR&amp;gt;&amp;lt;TD BGCOLOR="#eddc8b"&amp;gt;\r\n&amp;lt;CENTER&amp;gt;Best Possible Download Times&amp;lt;/CENTER&amp;gt;\r\n&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\r\n&amp;lt;TR&amp;gt;&amp;lt;TD&amp;gt;\r\n</label>
+					<label>&lt;TR&gt;&lt;TD BGCOLOR="#eddc8b"&gt;\r\n&lt;CENTER&gt;Best Possible Download Times&lt;/CENTER&gt;\r\n&lt;/TD&gt;&lt;/TR&gt;\r\n&lt;TR&gt;&lt;TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_BITMAPED_BACKGROUND">
-					<label>&amp;lt;BODY BACKGROUND="#1%s" BGPROPERTIES=FIXED TEXT="BLACK"&amp;gt;\r\n</label>
+					<label>&lt;BODY BACKGROUND="#1%s" BGPROPERTIES=FIXED TEXT="BLACK"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -61,49 +61,49 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_CHECK_BACK">
-					<label>&amp;lt;BODY BACKGROUND="#1%s" TEXT="BLACK"&amp;gt;\r\n</label>
+					<label>&lt;BODY BACKGROUND="#1%s" TEXT="BLACK"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_CLOSE_CENTER">
-					<label>&amp;lt;/CENTER&amp;gt;</label>
+					<label>&lt;/CENTER&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_CLOSE_TR">
-					<label>&amp;lt;/TR&amp;gt;\r\n</label>
+					<label>&lt;/TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DETAILS_BUILD">
-					<label>&amp;lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%" CELLSPACING="4"&amp;gt;\r\n&amp;lt;TR&amp;gt;&amp;lt;TD BGCOLOR="#ffffff"&amp;gt;\r\n&amp;lt;CENTER&amp;gt;\r\n</label>
+					<label>&lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%" CELLSPACING="4"&gt;\r\n&lt;TR&gt;&lt;TD BGCOLOR="#ffffff"&gt;\r\n&lt;CENTER&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DISPLAY_BMP">
-					<label>&amp;lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported BMP picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&amp;gt;\r\n</label>
+					<label>&lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported BMP picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DISPLAY_PIC">
-					<label>&amp;lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&amp;gt;\r\n</label>
+					<label>&lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DISPLAY_PNG">
-					<label>&amp;lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported PNG picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&amp;gt;\r\n</label>
+					<label>&lt;IMG BORDER="0" SRC="#1%s" ALT="This is an exported PNG picture" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DITHERING">
-					<label>Dithered using #1%s&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Dithered using #1%s&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -121,25 +121,25 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_EMPTY_BOX">
-					<label>&amp;lt;BR&amp;gt;\r\n&amp;lt;TABLE BORDER="0" height="250"&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TABLE&amp;gt;\r\n&amp;lt;BR&amp;gt;&amp;lt;BR&amp;gt;\r\n</label>
+					<label>&lt;BR&gt;\r\n&lt;TABLE BORDER="0" height="250"&gt;&lt;TR&gt;&lt;TD&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;\r\n&lt;BR&gt;&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_END_HTML">
-					<label>&amp;lt;/BODY&amp;gt;\r\n&amp;lt;/HTML&amp;gt;\r\n</label>
+					<label>&lt;/BODY&gt;\r\n&lt;/HTML&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_END_TABLE">
-					<label>&amp;lt;/TABLE&amp;gt;</label>
+					<label>&lt;/TABLE&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ES_TR">
-					<label>&amp;lt;/TR&amp;gt;\r\n&amp;lt;TR&amp;gt;\r\n</label>
+					<label>&lt;/TR&gt;\r\n&lt;TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -157,19 +157,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_BGCOLOUR">
-					<label>&amp;lt;BODY BGCOLOR="#1%s"&amp;gt;\r\n</label>
+					<label>&lt;BODY BGCOLOR="#1%s"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_BGIMAGE">
-					<label>&amp;lt;BODY BACKGROUND="#1%s"&amp;gt;\r\n</label>
+					<label>&lt;BODY BACKGROUND="#1%s"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_BITMAP">
-					<label>&amp;lt;P ALIGN="center"&amp;gt;\r\n&amp;lt;IMG BORDER="0" SRC="#1%s" ALT="The previewed image" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&amp;gt;&amp;lt;/P&amp;gt;\r\n&amp;lt;P&amp;gt;&amp;nbsp;&amp;lt;/P&amp;gt;\r\n</label>
+					<label>&lt;P ALIGN="center"&gt;\r\n&lt;IMG BORDER="0" SRC="#1%s" ALT="The previewed image" USEMAP="#PreviewBitmapImagemap" ISMAP="ISMAP"&gt;&lt;/P&gt;\r\n&lt;P&gt;&amp;nbsp;&lt;/P&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -181,37 +181,37 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_END">
-					<label>&amp;lt;/BODY&amp;gt;&amp;lt;/HTML&amp;gt;\r\n</label>
+					<label>&lt;/BODY&gt;&lt;/HTML&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_EXPORTED">
-					<label>&amp;lt;P ALIGN="center"&amp;gt;&amp;lt;HR&amp;gt;Exported from #1%s&amp;lt;/P&amp;gt;&amp;lt;P&amp;gt;&amp;nbsp;&amp;lt;/P&amp;gt;\r\n</label>
+					<label>&lt;P ALIGN="center"&gt;&lt;HR&gt;Exported from #1%s&lt;/P&gt;&lt;P&gt;&amp;nbsp;&lt;/P&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_HEAD">
-					<label>&amp;lt;HTML&amp;gt;\r\n&amp;lt;HEAD&amp;gt;&amp;lt;TITLE&amp;gt;Bitmap Preview&amp;lt;/TITLE&amp;gt;&amp;lt;/HEAD&amp;gt;\r\n</label>
+					<label>&lt;HTML&gt;\r\n&lt;HEAD&gt;&lt;TITLE&gt;Bitmap Preview&lt;/TITLE&gt;&lt;/HEAD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_INFO1">
-					<label>#1%s&amp;lt;BR&amp;gt;\r\n</label>
+					<label>#1%s&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_INFO2">
-					<label>#1%s&amp;lt;BR&amp;gt;\r\n</label>
+					<label>#1%s&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_PROGRAM">
-					<label>&amp;lt;TD ALIGN="LEFT" VALIGN="TOP"&amp;gt;&amp;lt;P ALIGN="right"&amp;gt;&amp;lt;A HREF="#1%s"&amp;gt;&amp;lt;IMG BORDER="0" SRC="#2%s" ALT="Visit the Xara Xtreme homepages"&amp;gt;&amp;lt;/A&amp;gt;&amp;lt;/P&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TABLE&amp;gt;\r\n</label>
+					<label>&lt;TD ALIGN="LEFT" VALIGN="TOP"&gt;&lt;P ALIGN="right"&gt;&lt;A HREF="#1%s"&gt;&lt;IMG BORDER="0" SRC="#2%s" ALT="Visit the Xara Xtreme homepages"&gt;&lt;/A&gt;&lt;/P&gt;&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -241,7 +241,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HTML_XARA">
-					<label>&amp;lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="100%"&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD ALIGN="LEFT" VALIGN="TOP"&amp;gt;&amp;lt;P ALIGN="left"&amp;gt;&amp;lt;A HREF="#1%s"&amp;gt;&amp;lt;IMG BORDER="0" SRC="#2%s" ALT="Visit the Xara Website"&amp;gt;&amp;lt;/A&amp;gt;&amp;lt;/P&amp;gt;&amp;lt;/TD&amp;gt;\r\n</label>
+					<label>&lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="100%"&gt;&lt;TR&gt;&lt;TD ALIGN="LEFT" VALIGN="TOP"&gt;&lt;P ALIGN="left"&gt;&lt;A HREF="#1%s"&gt;&lt;IMG BORDER="0" SRC="#2%s" ALT="Visit the Xara Website"&gt;&lt;/A&gt;&lt;/P&gt;&lt;/TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -265,7 +265,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_JCOMPRESSION">
-					<label>Compressed, retaining #1%d% of image quality&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Compressed, retaining #1%d% of image quality&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -283,19 +283,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_LINK_BOX">
-					<label>&amp;lt;TR&amp;gt;&amp;lt;TD BGCOLOR="#eddc8b"&amp;gt;\r\n&amp;lt;CENTER&amp;gt;&amp;lt;A HREF="#1%s"&amp;gt;#2%s&amp;lt;/A&amp;gt;&amp;lt;/CENTER&amp;gt;\r\n&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\r\n</label>
+					<label>&lt;TR&gt;&lt;TD BGCOLOR="#eddc8b"&gt;\r\n&lt;CENTER&gt;&lt;A HREF="#1%s"&gt;#2%s&lt;/A&gt;&lt;/CENTER&gt;\r\n&lt;/TD&gt;&lt;/TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_MONO">
-					<label>Using a #1%d bit, monochrome palette&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Using a #1%d bit, monochrome palette&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_NODITHER">
-					<label>Not dithered&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Not dithered&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -307,19 +307,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_PAGE_TITLE">
-					<label>&amp;lt;CENTER&amp;gt;\r\n&amp;lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%"&amp;gt;\r\n&amp;lt;TR VALIGN="middle"&amp;gt;&amp;lt;TD BGCOLOR="#eddc8b" VALIGN="middle"&amp;gt;\r\n&amp;lt;CENTER&amp;gt;&amp;lt;B&amp;gt;Xara Xtreme Browser Preview&amp;lt;/B&amp;gt;&amp;lt;/CENTER&amp;gt;\r\n&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TABLE&amp;gt;\r\n&amp;lt;BR&amp;gt;\r\n</label>
+					<label>&lt;CENTER&gt;\r\n&lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%"&gt;\r\n&lt;TR VALIGN="middle"&gt;&lt;TD BGCOLOR="#eddc8b" VALIGN="middle"&gt;\r\n&lt;CENTER&gt;&lt;B&gt;Xara Xtreme Browser Preview&lt;/B&gt;&lt;/CENTER&gt;\r\n&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;\r\n&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_PALETTEINFO">
-					<label>Using a #1%d bit, #2%d colour #3%s palette&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Using a #1%d bit, #2%d colour #3%s palette&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_PLAIN_BACKGROUND">
-					<label>&amp;lt;BODY BGCOLOR="#ffffff" TEXT="#000000"&amp;gt;\r\n</label>
+					<label>&lt;BODY BGCOLOR="#ffffff" TEXT="#000000"&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -355,43 +355,43 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SPEED_BUILD">
-					<label>&amp;lt;TABLE BORDER="1" ALIGN="CENTER" WIDTH="100%" BGCOLOR="#70A0FF"&amp;gt;\r\n&amp;lt;TR&amp;gt;\r\n&amp;lt;TD BGCOLOR="#70A0FF" WIDTH="50%" ALIGN="CENTER"&amp;gt;Speed&amp;lt;/TD&amp;gt;\r\n&amp;lt;TD BGCOLOR="#70A0FF" WIDTH="50%" ALIGN="CENTER"&amp;gt;Time&amp;lt;/TD&amp;gt;\r\n</label>
+					<label>&lt;TABLE BORDER="1" ALIGN="CENTER" WIDTH="100%" BGCOLOR="#70A0FF"&gt;\r\n&lt;TR&gt;\r\n&lt;TD BGCOLOR="#70A0FF" WIDTH="50%" ALIGN="CENTER"&gt;Speed&lt;/TD&gt;\r\n&lt;TD BGCOLOR="#70A0FF" WIDTH="50%" ALIGN="CENTER"&gt;Time&lt;/TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SPEED_BUILD2">
-					<label>&amp;lt;TD BGCOLOR="#70A0FF" WIDTH="25%" ALIGN="CENTER"&amp;gt;Speed&amp;lt;/TD&amp;gt;\r\n&amp;lt;TD BGCOLOR="#70A0FF" WIDTH="25%" ALIGN="CENTER"&amp;gt;Time&amp;lt;/TD&amp;gt;\r\n</label>
+					<label>&lt;TD BGCOLOR="#70A0FF" WIDTH="25%" ALIGN="CENTER"&gt;Speed&lt;/TD&gt;\r\n&lt;TD BGCOLOR="#70A0FF" WIDTH="25%" ALIGN="CENTER"&gt;Time&lt;/TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SPEED_END">
-					<label>&amp;lt;/TR&amp;gt;\r\n&amp;lt;/TABLE&amp;gt;\r\n&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\r\n</label>
+					<label>&lt;/TR&gt;\r\n&lt;/TABLE&gt;\r\n&lt;/TD&gt;&lt;/TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TDTR_CLOSE">
-					<label>&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\r\n</label>
+					<label>&lt;/TD&gt;&lt;/TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TEXTLINE_BR">
-					<label>#1%s&amp;lt;BR&amp;gt;</label>
+					<label>#1%s&lt;BR&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TIME_ENTRY">
-					<label>&amp;lt;TD BGCOLOR="#E0E0F0" WIDTH="50%" ALIGN="CENTER"&amp;gt;#1%s&amp;lt;/TD&amp;gt;\r\n</label>
+					<label>&lt;TD BGCOLOR="#E0E0F0" WIDTH="50%" ALIGN="CENTER"&gt;#1%s&lt;/TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TR">
-					<label>&amp;lt;TR&amp;gt;\r\n</label>
+					<label>&lt;TR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -403,19 +403,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TRTD_OPEN">
-					<label>&amp;lt;TR&amp;gt;&amp;lt;TD&amp;gt;\r\n</label>
+					<label>&lt;TR&gt;&lt;TD&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TRUECOLOUR">
-					<label>Using a #1%d bit, true colour palette&amp;lt;BR&amp;gt;\r\n</label>
+					<label>Using a #1%d bit, true colour palette&lt;BR&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_WARNING_BOX">
-					<label>&amp;lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%" CELLSPACING=4&amp;gt;\r\n&amp;lt;TR&amp;gt;&amp;lt;TD BGCOLOR="#eddc8b"&amp;gt;\r\n&amp;lt;CENTER&amp;gt;#1%s&amp;lt;/CENTER&amp;gt;\r\n&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\r\n&amp;lt;/TABLE&amp;gt;\r\n</label>
+					<label>&lt;TABLE BORDER="0" ALIGN="CENTER" WIDTH="50%" CELLSPACING=4&gt;\r\n&lt;TR&gt;&lt;TD BGCOLOR="#eddc8b"&gt;\r\n&lt;CENTER&gt;#1%s&lt;/CENTER&gt;\r\n&lt;/TD&gt;&lt;/TR&gt;\r\n&lt;/TABLE&gt;\r\n</label>
 				</object>
 			</object>
 			<object class="sizeritem">

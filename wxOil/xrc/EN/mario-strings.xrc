@@ -511,7 +511,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_EDIT_OLE_OBJECT">
-					<label>&amp;Object;&amp;lt;Help dependent on sel object. User should NOT see this message&amp;gt;</label>
+					<label>&amp;Object;&lt;Help dependent on sel object. User should NOT see this message&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
