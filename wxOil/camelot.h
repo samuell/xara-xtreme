@@ -165,6 +165,8 @@ public:
 	static BOOL MainWndMinimized;					// user maximized preference
 	static String_256 MainWndPosString;				// user window position
 
+	static BOOL bFirstRun;							// TRUE if this is the first time the app has been run
+													// (first time with this set of preferences)
 	BOOL allowRegistryWrite;						// if a copy of camelot is open, and we try do load another one,
 													// and exit (we prevent this), then we don't wan't to write to
 													// the registry !!!!

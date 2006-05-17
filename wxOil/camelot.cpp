@@ -159,6 +159,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 ********************************************************************************************/
 BOOL CCamApp::MainWndMaximized = FALSE;
 
+
 /********************************************************************************************
 
 	Preference:	MainWndMin
@@ -172,6 +173,7 @@ BOOL CCamApp::MainWndMaximized = FALSE;
 ********************************************************************************************/
 BOOL CCamApp::MainWndMinimized = FALSE;
 
+
 /********************************************************************************************
 
 	Preference:	MainWndPos
@@ -182,6 +184,20 @@ BOOL CCamApp::MainWndMinimized = FALSE;
 
 ********************************************************************************************/
 String_256 CCamApp::MainWndPosString;
+
+
+/********************************************************************************************
+
+	Preference:	FirstRun
+	Section:	Preferences
+	Range:		0 (FALSE) or 1 (TRUE)
+	Purpose:	If 1 then this is the first time this application has been run with
+				this set of preferences
+				If 0 then it has been run before
+
+********************************************************************************************/
+BOOL CCamApp::bFirstRun = TRUE;
+
 
 /***************************************************************************************************************************/
 //
@@ -520,6 +536,34 @@ bool CCamApp::OnInit()
 	m_docManager->FileHistoryLoad(Preferences::GetOilPrefs());
 #endif
 
+	// --------------------------------------------------------------------------
+	// Detect first-time run and make Open File dialog default to Examples folder
+	if (Camelot.DeclareSection(TEXT("Preferences"), 10))
+	{
+		Camelot.DeclarePref(NULL, TEXT("FirstRun"), &bFirstRun, 0, 1);
+	}
+
+	if (bFirstRun)
+	{
+		// Set File Open dialog location to our Examples folder
+		PSTR		pszDataPath = br_find_data_dir("/usr/share");
+		wxString	strConfigPath(pszDataPath, wxConvUTF8);
+		free(pszDataPath);
+		strConfigPath += _T("/xaralx/Examples");
+
+#if defined(_DEBUG)
+		// Debug-only fallback
+		if (!wxDir::Exists(strConfigPath))
+			strConfigPath = _T("/usr/share/xaralx/Examples");
+#endif
+
+		if (wxDir::Exists(strConfigPath))
+			m_docManager->SetLastDirectory(strConfigPath);
+	}
+
+	// NOTE! Set bFirstRun = FALSE in OnExit handler below
+	// --------------------------------------------------------------------------
+
 	// Set idles to only get sent to windows that want them
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED); 
 
@@ -709,6 +753,8 @@ INT32 CCamApp::OnExit( void )
 	}
 #endif
 	m_docManager = std::auto_ptr<wxDocManager>( NULL );
+
+	bFirstRun = FALSE;
 
 	// Now deinit everything
 
