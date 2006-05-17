@@ -415,7 +415,7 @@ sub WriteTextControl
     print STDOUT $ddindent."                <object class=\"wxTextCtrl\" name=\"$name\">\n";
     WriteFont();
     printf STDOUT $ddindent."                    <size>%d,14</size>\n",GetSize($name, 50);
-    print STDOUT $ddindent."                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>\n";
+    print STDOUT $ddindent."                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>\n";
     ConvertOptoken($optoken) if ($optoken ne "");
     BubbleHelp();
     print STDOUT $ddindent."                </object>\n";

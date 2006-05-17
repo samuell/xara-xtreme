@@ -3688,7 +3688,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point X</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -3708,7 +3708,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point Y</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -3894,7 +3894,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point X</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -3914,7 +3914,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point Y</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -4086,7 +4086,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point X</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -4106,7 +4106,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Centre point Y</tooltip>
                                     <help>Select values to edit here from the menu on the left</help>
                                 </object>
@@ -4646,7 +4646,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>X coordinate of the previous curve handle</help>
                                 </object>
@@ -4666,7 +4666,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>Y coordinate of the previous curve handle</help>
                                 </object>
@@ -4805,7 +4805,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>X coordinate of the selected point handle</help>
                                 </object>
@@ -4825,7 +4825,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>Y coordinate of the selected point handle</help>
                                 </object>
@@ -4964,7 +4964,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>X coordinate of the next curve handle</help>
                                 </object>
@@ -4984,7 +4984,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Point handle</tooltip>
                                     <help>Y coordinate of the next curve handle</help>
                                 </object>
@@ -5267,7 +5267,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>X coordinate of selection</tooltip>
                                     <help>Allows editing of the selected object(s) X and Y position</help>
                                 </object>
@@ -5287,7 +5287,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Y coordinate of selection</tooltip>
                                     <help>Allows editing of the selected object(s) X and Y position</help>
                                 </object>
@@ -5382,7 +5382,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Width of selection</tooltip>
                                     <help>Allows editing of the selected object(s) width and height</help>
                                 </object>
@@ -5402,7 +5402,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Height of selection</tooltip>
                                     <help>Allows editing of the selected object(s) width and height</help>
                                 </object>
@@ -5491,7 +5491,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Scale width</tooltip>
                                     <help>Allows editing of the selected object(s) scale factor</help>
                                 </object>
@@ -5511,7 +5511,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Scale height</tooltip>
                                     <help>Allows editing of the selected object(s) scale factor</help>
                                 </object>
@@ -5591,7 +5591,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Angle of selection</tooltip>
                                     <help>Allows editing of the selected object(s) angle of rotation</help>
                                 </object>
@@ -5611,7 +5611,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Skew-angle of selection</tooltip>
                                     <help>Allows editing of the selected object(s) degree of shearing</help>
                                 </object>
@@ -5912,7 +5912,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Number of steps in the blend</tooltip>
                     <help>Enter a value for the number of steps in the blend</help>
                 </object>
@@ -6268,7 +6268,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Number of steps in the contour</tooltip>
                     <help>Enter a value for the number of steps in the contour</help>
                 </object>
@@ -6341,7 +6341,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Contour Width</tooltip>
                     <help>Sets the width of the contour</help>
                 </object>
@@ -6516,7 +6516,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Bevel Settings</tooltip>
                     <help>Use the slider to change the bevel settings</help>
                 </object>
@@ -6644,7 +6644,7 @@
                         <size>8</size>
                     </font>
                     <size>30,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Aspect ratio</tooltip>
                     <help>Set font aspect ratio</help>
                 </object>
@@ -6786,7 +6786,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Line spacing</tooltip>
                                     <help>Apply line spacing</help>
                                 </object>
@@ -6806,7 +6806,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>30,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Tracking (ems/1000)</tooltip>
                                     <help>Apply tracking; units of ems/1000</help>
                                 </object>
@@ -6901,7 +6901,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>40,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Baseline shift</tooltip>
                                     <help>Apply a vertical baseline shift</help>
                                 </object>
@@ -6921,7 +6921,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>40,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Kerning (ems/1000)</tooltip>
                                     <help>Insert or edit a horizontal kern code; units of ems/10000</help>
                                 </object>
@@ -7101,7 +7101,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Shadow Parameters</tooltip>
                     <help>Drag to alter the transparency of the selected shadow(s)</help>
                 </object>
@@ -7137,7 +7137,7 @@
                         <size>8</size>
                     </font>
                     <size>50,14</size>
-                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Shadow transparency</tooltip>
                     <help>Changes the transparency of the selected shadows</help>
                 </object>
@@ -7228,7 +7228,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Horizontal position</tooltip>
                                     <help>Allows editing of the horizontal position of the selected shadow(s)</help>
                                 </object>
@@ -7248,7 +7248,7 @@
                                         <size>7</size>
                                     </font>
                                     <size>50,14</size>
-                                    <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
+                                    <style>wxTE_LEFT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Vertical position</tooltip>
                                     <help>Allows editing of the vertical position of the selected shadow(s)</help>
                                 </object>
