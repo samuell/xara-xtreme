@@ -628,7 +628,8 @@ BOOL GRenderBitmap::GetNextBand()
 		pBits = NULL;
 	}
 
-	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+//	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+	ENSURE(GetCaptureDepth()==0 || MasterCaptureIsCurrent(), "Can't set a band while there are any non-master captures running\n");
 
 	// if this is not a banded render region, then there are no more bands
 	if (!IsBanded())

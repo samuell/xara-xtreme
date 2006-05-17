@@ -412,7 +412,8 @@ BOOL GRenderDIB::SetFirstBand()
 	if (IsBanded() || pBitmapInfo!=NULL)
 		return TRUE;
 
-	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+//	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+	ENSURE(GetCaptureDepth()==0 || MasterCaptureIsCurrent(), "Can't set a band while there are any non-master captures running\n");
 
 	// They can be merged for the time being
 	CanRegionBeMerged = TRUE;
@@ -524,7 +525,8 @@ BOOL GRenderDIB::GetNextBand()
 	if (!IsBanded())
 		return FALSE;
 
-	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+//	ENSURE(GetCaptureDepth()==0, "Can't set a band while there are any captures running");
+	ENSURE(GetCaptureDepth()==0 || MasterCaptureIsCurrent(), "Can't set a band while there are any non-master captures running\n");
 
 	// ensure all offscreen rendering in previous band finished rendering
 	// NB if it didn't then GetNextBand shouldn't have been called.
