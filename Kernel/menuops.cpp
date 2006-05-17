@@ -588,6 +588,8 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 						//We failed to find a template. So remove this
 						//item from the menu.
 						FileUtil::StopFindingFiles();
+						// Don't allow any errors set while searching to propagate outside this scope
+						Error::ClearError();
 						return OpState(FALSE, FALSE, TRUE);
 					}
 
@@ -606,8 +608,14 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 
 			UIDescription->toTitle();
 
+			// Don't allow any errors set while searching to propagate outside this scope
+			Error::ClearError();
+
 			return OpState(FALSE, FALSE, FALSE);
 		}
+
+		// Don't allow any errors set while searching to propagate outside this scope
+		Error::ClearError();
 	}
 	
 	// File/SaveAll is only available if there is a document that is "dirty".
@@ -1201,7 +1209,7 @@ void DocOps::Do(OpDescriptor* WhichOp)
 	else if ((WhichOp->Token) == String(OPTOKEN_FILECLOSE))
 	{
 		// Close the file
-		FileCloseAction(); 
+		FileCloseAction();
 
 		// Always set the working doc to NULL, otherwise we try to indirect it in End().
 		// (This is safe even if the document doesn't close (e.g. modified) because we
