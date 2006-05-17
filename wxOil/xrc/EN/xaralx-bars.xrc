@@ -1022,7 +1022,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxOwnerDrawnComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
-                    <size>80,-1</size>
+                    <size>64,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -2378,7 +2378,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxOwnerDrawnComboBox" name="IDCB_LINEWIDTH_COMBO_BOX">
-                    <size>80,-1</size>
+                    <size>64,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -6613,7 +6613,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
                 <object class="wxOwnerDrawnComboBox" name="IDC_POINT_COMBO">
-                    <size>80,-1</size>
+                    <size>64,-1</size>
                     <font>
                         <size>8</size>
                     </font>
@@ -6643,7 +6643,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <size>50,14</size>
+                    <size>30,14</size>
                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                     <tooltip>Aspect ratio</tooltip>
                     <help>Set font aspect ratio</help>
@@ -6785,7 +6785,7 @@
                                     <font>
                                         <size>7</size>
                                     </font>
-                                    <size>50,14</size>
+                                    <size>30,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Line spacing</tooltip>
                                     <help>Apply line spacing</help>
@@ -6805,7 +6805,7 @@
                                     <font>
                                         <size>7</size>
                                     </font>
-                                    <size>50,14</size>
+                                    <size>30,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Tracking (ems/1000)</tooltip>
                                     <help>Apply tracking; units of ems/1000</help>
@@ -6900,7 +6900,7 @@
                                     <font>
                                         <size>7</size>
                                     </font>
-                                    <size>50,14</size>
+                                    <size>40,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Baseline shift</tooltip>
                                     <help>Apply a vertical baseline shift</help>
@@ -6920,7 +6920,7 @@
                                     <font>
                                         <size>7</size>
                                     </font>
-                                    <size>50,14</size>
+                                    <size>40,14</size>
                                     <style>wxTE_RIGHT|wxTE_PROCESS_ENTER|wxNO_BORDER</style>
                                     <tooltip>Kerning (ems/1000)</tooltip>
                                     <help>Insert or edit a horizontal kern code; units of ems/10000</help>
