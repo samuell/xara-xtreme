@@ -1095,7 +1095,13 @@ void UpdateWinMenu(wxMenu* pMenu, MenuItem* kernelMenu)
 					pMenu->Append( subMenu->GetMenuId(), subMenu->GetMenuText(), _T(""),
 						ItemKind );
 			}
-			
+
+PORTNOTE( "menu", "Remove Unimplemented menuitems from menu, under Release" )
+#if !defined(_DEBUG)
+			if( subMenu->Description == _T("Unimplemented") )
+				subMenu->ControlState.RemoveFromMenu = true;
+#endif
+
 			if( !subMenu->ControlState.RemoveFromMenu )
 			{
 				//Update the Menu Text
