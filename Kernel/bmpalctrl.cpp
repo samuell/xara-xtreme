@@ -127,7 +127,6 @@ CC_IMPLEMENT_MEMDUMP(BitmapExportPaletteControl, CC_CLASS_MEMDUMP)
 BitmapExportPaletteControl::BitmapExportPaletteControl()
  : m_MouseOverCell(INVALID_COLOUR_VALUE /* Set to none */)
  , m_SelectedCell(INVALID_COLOUR_VALUE /* Set to none */)
- , m_NumberOfColoursAtLastRedraw(0)
  , m_WindowID(0)
  , m_nPixelSize(72000 / GRenderRegion::GetDefaultDPI())
  , m_nCellWidthPixels(11)
@@ -135,6 +134,7 @@ BitmapExportPaletteControl::BitmapExportPaletteControl()
  , m_nCellWidth(m_nPixelSize * m_nCellHeightPixels)
  , m_nCellHeight(m_nPixelSize * m_nCellHeightPixels)
  , m_nCellsPerLine(30)
+ , m_NumberOfColoursAtLastRedraw(0)
 {
 }
 
