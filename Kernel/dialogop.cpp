@@ -3231,6 +3231,14 @@ void DialogTabOp::SetPropertyPageModified(BOOL Modified)
 
 DialogTabOp::~DialogTabOp()
 {
+	// We must do this before we become a DialogOp (due changes to vtable as
+	// destructors are called)
+	if (WindowID != NULL)
+	{
+		DlgMgr->Delete(WindowID, this);
+		WindowID = NULL;
+	}
+
 	//  Let's get the base class destructor to do all the work shall we
 
 };         

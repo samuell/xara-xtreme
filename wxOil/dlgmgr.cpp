@@ -861,6 +861,14 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	wxWindow * pGadget = NULL;
 	if (id) pGadget = GetGadget(pEvtHandler->pwxWindow, id);
 
+	// We tend to get this second-hand from our child, we handle this differently
+	if( NULL == pGadget &&
+		EventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED )
+	{
+		pGadget = (wxWindow *)event.GetEventObject();
+		TRACEUSER( "jlh92", _T("Notebook = %s\n"), PCTSTR(pGadget->GetClassInfo()->GetClassName()) );
+	}
+
 	// Try and find-out whether our control is part of a tabbed dialog page
 	if( NULL != pGadget )
 	{
