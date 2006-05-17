@@ -234,6 +234,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static INT32	lLastTimeStamp = 0;
 
+#if defined(_DEBUG)
 	if( event.GetEventType() == wxEVT_CHAR )
 	{
 		wxObject* pEventObject = event.GetEventObject();
@@ -243,6 +244,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 				((wxWindow*)pEventObject)->GetClassInfo()->GetClassName() );
 		}
 	}
+#endif
 
 	if( event.GetEventType() == wxEVT_KEY_DOWN ||
 		event.GetEventType() == wxEVT_KEY_UP )
