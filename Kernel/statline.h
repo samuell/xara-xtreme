@@ -223,7 +223,7 @@ protected:
 
 	void OnTimer()
 	{
-		::wxWakeUpIdle(); // a bodge to ensure the idle handler is awake
+		GetApplication()->NeedMoreIdles();
 	}
 
 	class StatusTimer : public KernelTimer

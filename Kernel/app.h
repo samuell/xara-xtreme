@@ -346,6 +346,7 @@ public:
 	BOOL OnIdle(BOOL IdleRedraw);
 	void RemoveIdleProcessor(INT32 Priority, Operation* pOp);
 	void RegisterIdleProcessor(INT32 Priority, Operation* pOp);
+	void NeedMoreIdles();
 
 	// Dubugging dump ops
 	void DumpAllOps(Document* pDoc);			// Dumps entire op history

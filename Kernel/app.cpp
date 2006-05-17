@@ -1314,6 +1314,8 @@ void Application::RegisterIdleProcessor(INT32 Priority, Operation* pOp)
 	Entry = new ListItemOpPtr;
 	Entry->pOp = pOp;
 	Current->AddTail(Entry);
+
+	NeedMoreIdles(); // ensure it gets at least a first idle event
 }
 
 
@@ -1360,7 +1362,29 @@ void Application::RemoveIdleProcessor(INT32 Priority, Operation* pOp)
 	}
 }
 
+/********************************************************************************************
 
+>	void Application::NeedMoreIdles()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	17/5/2006
+	Inputs:		-
+	Returns:	-
+	Purpose:	Tells the application we need more idles
+
+	Notes:		This tells the application that we need further idle events, e.g. in the
+				scenario of a newly added idle handler, or an idle handler that previously
+				returned FALSE now returning true. This avoids waiting for the next event.
+
+	Errors:		-
+	SeeAlso:	Application::CallIdleProcessors
+
+********************************************************************************************/
+
+void Application::NeedMoreIdles()
+{
+	CCamApp::NeedMoreIdles();
+}
 
 /********************************************************************************************
 

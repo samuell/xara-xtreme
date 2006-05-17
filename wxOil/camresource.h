@@ -214,6 +214,7 @@ private:
 	static wxFileSystem * pwxFileSystem;
 	static wxLocale * m_pLocale;
 	static wxHelpProvider * m_pHelpProvider;
+	static BOOL s_GenerateXRCCheck;
 
 public:
 	CCLexFile * Open ( ResourceID ID, BOOL ErrorReporting=TRUE, BOOL ExceptionThrowing=FALSE);
@@ -330,6 +331,8 @@ public:
 
 	static wxArrayString BitmapExtensions;
 
+	static void SetGenerateXRCCheck(BOOL flag) {s_GenerateXRCCheck=flag;}
+	static void * LoadFile( const wxString &str1, UINT32 * pSize );
 };
 
 

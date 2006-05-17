@@ -126,6 +126,7 @@ CamResourceRemember * CamResource::pFirstRemember=NULL;
 BOOL CamResource::HaveCheckedResourcePath = FALSE;
 wxLocale * CamResource::m_pLocale = NULL;
 wxHelpProvider * CamResource::m_pHelpProvider = NULL;
+BOOL CamResource::s_GenerateXRCCheck = FALSE;
 
 ResourceStringToBitmap * CamResource::pBitmapHash = NULL;
 
@@ -730,7 +731,6 @@ If an empty string is specified, it returns the overridden resource path (if one
 
 ********************************************************************************************/
 
-
 wxString CamResource::GetResourceFilePath( const wxString &str, BOOL AllowOverride )
 {
 	// If we are given a full path, then return. For the time being that's anything with a colon or a slash in it
@@ -780,6 +780,64 @@ wxString CamResource::GetResourceFilePath( const wxString &str, BOOL AllowOverri
 	return mfn + str;
 }
 
+
+/********************************************************************************************
+
+>	static void * CamResource::LoadFile( const wxString &str1, UINT32 * pSize )
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		str1 - filename to load
+	Outputs:	size - the size of the file
+	Returns:	A pointer to the file (free with free()) or NULL
+	Purpose:	-
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void * CamResource::LoadFile( const wxString &str1, UINT32* pSize )
+{
+	wxFSFile * pTwxFSFile1 = pwxFileSystem->OpenFile(str1);
+	if (!pTwxFSFile1)
+	{
+		delete pTwxFSFile1;
+		return NULL;
+	}
+
+	wxInputStream * pStream1 = pTwxFSFile1->GetStream(); // we don't have to delete this ourselves
+	if (!pStream1)
+	{
+		delete (pTwxFSFile1);
+		return NULL;
+	}
+
+	UINT32 size1=pStream1->GetSize();
+
+	if (!size1)
+	{
+		delete (pTwxFSFile1);
+		return NULL;
+	}
+
+	void * mem1 = malloc(size1+4); // safety
+	if (!mem1)
+	{
+		delete (pTwxFSFile1);
+		return NULL;
+	}
+
+	memset(mem1, 0, size1);
+	pStream1->Read(mem1, size1); // throws exceptions if can't read
+	
+	delete (pTwxFSFile1); // Closes it
+
+	if (pSize)
+		*pSize=size1;
+	return mem1;
+}
+
 /********************************************************************************************
 
 >	static BOOL CamResource::CheckResourcePath( const wxString &str1, const wxString &str2 )
@@ -806,63 +864,41 @@ BOOL CamResource::CheckResourcePath( const wxString &str1, const wxString &str2 
 {
 	if (!pwxFileSystem) return FALSE;
 
-	wxFSFile * pTwxFSFile1 = pwxFileSystem->OpenFile(str1);
-	wxFSFile * pTwxFSFile2 = pwxFileSystem->OpenFile(str2);
-	if (!pTwxFSFile1 || !pTwxFSFile2)
-	{
-		if (!pTwxFSFile1) delete pTwxFSFile1;
-		if (!pTwxFSFile1) delete pTwxFSFile1;
-		return FALSE;
-	}
+	UINT32 size1=0;
+	UINT32 size2=0;
+	void * mem1=LoadFile(str1, &size1);
+	void * mem2=LoadFile(str2, &size2);
 
-	wxInputStream * pStream1 = pTwxFSFile1->GetStream(); // we don't have to delete this ourselves
-	wxInputStream * pStream2 = pTwxFSFile2->GetStream(); // we don't have to delete this ourselves
-	if (!pStream1 || !pStream2)
-	{
-		delete (pTwxFSFile1);
-		delete (pTwxFSFile2);
-		return FALSE;
-	}
-
-	UINT32 size1=pStream1->GetSize();
-	UINT32 size2=pStream2->GetSize();
-
-	if (!size1 || !size2 || (size1 != size2))
-	{
-		delete (pTwxFSFile1);
-		delete (pTwxFSFile2);
-		return FALSE;
-	}
-
-	void * mem1 = malloc(size1+4); // safety
 	if (!mem1)
 	{
-		delete (pTwxFSFile1);
-		delete (pTwxFSFile2);
-		return FALSE;
+		if (mem2)
+			free(mem2);
+		return FALSE; // and we can't generate an xrc.check
 	}
 
-	void * mem2 = malloc(size2+4); // safety
-	if (!mem2)
+	BOOL same = mem2 && ( size1 == size2) && !memcmp(mem1, mem2, size1);
+
+	if (!same && s_GenerateXRCCheck)
 	{
-		free(mem1);
-		delete (pTwxFSFile1);
-		delete (pTwxFSFile2);
-		return FALSE;
+		wxMessageBox(_T("You have requested XaraLX to generate a checksum for resources which may not match the binary in question. "
+						"A checksum will be generated, but the program may not be stable."), _T("XaraLX Resource system warning"));
+
+		wxFile f;
+		f.Create(str2, wxFile::write);
+		if (!f.IsOpened() || (f.Write(mem1, size1) != size1))
+		{
+			wxMessageBox(_T("Failed to write xrc.check file ")+str2, _T("XaraLX resource system"));
+		}
+		f.Close();
+		same=TRUE;
 	}
 
-	memset(mem1, 0, size1);
-	memset(mem2, 0, size2);
-	pStream1->Read(mem1, size1); // throws exceptions if can't read
-	pStream2->Read(mem2, size2); // throws exceptions if can't read
-	
-	delete (pTwxFSFile1); // Closes it
-	delete (pTwxFSFile2); // Closes it
 
-	BOOL same=(!memcmp(mem1, mem2, size1));
+	if (mem1)
+		free (mem1);
 
-	free (mem1);
-	free (mem2);
+	if (mem2)
+		free (mem2);
 
 	return same;
 }

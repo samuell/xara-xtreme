@@ -168,6 +168,7 @@ public:
 	BOOL allowRegistryWrite;						// if a copy of camelot is open, and we try do load another one,
 													// and exit (we prevent this), then we don't wan't to write to
 													// the registry !!!!
+	static void NeedMoreIdles() { ::wxWakeUpIdle(); }
 };
 
 DECLARE_APP( CCamApp )
