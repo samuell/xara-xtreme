@@ -1437,7 +1437,7 @@ BOOL Application::CallIdleProcessors()
 	ListItemOpPtr *NextOp;
 
 	// If there are no registered processors, we'll return FALSE as idles aren't needed
-	BOOL MoreIdlesNeeded = CurrentOp != NULL;
+	BOOL MoreIdlesNeeded = FALSE;
 
 	while (CurrentOp != NULL)
 	{
@@ -1446,7 +1446,10 @@ BOOL Application::CallIdleProcessors()
 
 		// Call the handler, and if it claims idles, disable calling of low-priority handlers
 		if (CurrentOp->pOp->OnIdleEvent())
+		{
+			MoreIdlesNeeded = TRUE; // we need more idles
 			CallLowPriorityHandlers = FALSE;
+		}
 
 		CurrentOp = NextOp;
 	}
@@ -1455,14 +1458,12 @@ BOOL Application::CallIdleProcessors()
 	if (CallLowPriorityHandlers)
 	{
 		CurrentOp = (ListItemOpPtr*)IdleLowPriorityOps.GetHead();
-		if (CurrentOp != NULL)
-			MoreIdlesNeeded = TRUE;
 
 		while (CurrentOp != NULL)
 		{
 			// Remember the next item in the list now, in case this one deregisters itself
 			NextOp = (ListItemOpPtr *) IdleLowPriorityOps.GetNext(CurrentOp);				
-			CurrentOp->pOp->OnIdleEvent();
+			MoreIdlesNeeded = MoreIdlesNeeded || CurrentOp->pOp->OnIdleEvent();
 			CurrentOp = NextOp;
 		}
 	}
