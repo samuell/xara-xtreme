@@ -373,13 +373,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SHADOWSTRING_MANY">
-					<label>&amp;lt;Many&amp;gt;</label>
+					<label>&lt;Many&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SHADOWSTRING_NONE">
-					<label>&amp;lt;None&amp;gt;</label>
+					<label>&lt;None&gt;</label>
 				</object>
 			</object>
 			<object class="sizeritem">
