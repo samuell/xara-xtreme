@@ -1261,15 +1261,24 @@ void CCamApp::OnHelpIndex()
 		TRACEUSER( "jlh92", _T("Try = \"%s\"\n"), PCTSTR(strHelpPath) );
 		if( !wxDir::Exists( strHelpPath ) )
 #endif
+		{
+			ERROR1RAW( _R(IDS_MISSING_HELPDIR) );
 			return;
+		}
 	}
 
-	TRACEUSER( "jlh92", _T("Final directory = \"%s\"\n"), PCTSTR(strHelpPath) );
-
-	// Build the complete URL and launch browser
-	wxString	strUrl( _T("file://") );
+	// Build full path
+	wxString	strUrl;
 	strUrl += strHelpPath;
 	strUrl += _T("xaralx.htm");
+	if( !wxFile::Exists( strUrl ) )
+	{
+		ERROR1RAW( _R(IDS_MISSING_HELPINDEX) );
+		return;
+	}
+
+	// Build the complete URL and launch browser
+	strUrl.Prepend( _T("file://") );
 	wxLaunchDefaultBrowser( strUrl );
 }
 

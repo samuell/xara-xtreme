@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_HELPRC">
+		<title>String table from HELPRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_MISSING_HELPDIR">
+					<label>The directory which contains the help file is not present, no help will be avialable.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_MISSING_HELPINDEX">
+					<label>The help index file is not present, unable to display the help index.</label>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>
