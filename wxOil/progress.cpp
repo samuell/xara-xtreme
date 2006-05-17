@@ -846,8 +846,22 @@ TRACE( _T("Progress::Stop ActiveDisplays = %d \n"),ActiveDisplays);
 
 	// Decrement the usage count. The progress display remains until the count returns to zero
 	ActiveDisplays--;
+
+	if (ActiveDisplays <0)
+	{
+ 		// This should never happen but does as Op::End() calls EndSlowJob despite
+		// BeginSlowJob() not being called first. We return immediately because Progress::Smash() is
+		// expensive and not a great thing to do on every Op.
+		ActiveDisplays = 0;
+		return;
+	}
+
+	// Return if there are active displays left
 	if (ActiveDisplays > 0)
 		return;
+
+	// We have zero active displays, and before the call, had a positive number, so smash the
+	// hourglass and delete the progress bar
 
 	if (StatusLine::Get() && StatusLine::Get()->IsProgressShown() && CurrentPercent < 97)
 	{
