@@ -346,9 +346,6 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 
 	// Check stderr for errors
 	// Get HowCompatible from stdout
-// This currently causes file loading to get upset due to problems with the view being 
-// initialised too early (during the wxExecute)
-#if FALSE
 	if (!m_CanImport.IsEmpty())
 	{
 		wxString sCommand(m_CanImport);
@@ -383,7 +380,7 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 			TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 		}
 	}
-#endif
+
 	return(HowCompatible);
 }
 

@@ -396,7 +396,15 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed ruler usage")
     m_pFrame->SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
 #endif
     m_pFrame->Show(true);
-    Activate(true);
+
+	// This has been removed as it causes the problem where loaded documents
+	// don't render correctly if a wxYield happens before the document has 
+	// finished loading.  It may be possible to rewrite the handling in this 
+	// class so that the order of activation and OnInitialUpdate is not important 
+	// but efforts so far have been in vain.
+	// The view seems to be activated correctly in any case so hopefully it 
+	// should not be necessary
+//	Activate(true);
 
 	TRACEUSER("Gerry", _T("Leaving CCamView::OnCreate at 0x%08x\n"), this);
 
@@ -775,45 +783,6 @@ PORTNOTE("print","Removed Printing from OnDraw")
 
 			upd ++ ;
 		}
-
-#if FALSE
-		// Find out from the display context the rectangle bounding the invalid
-		// region.  If we can, try to use lists of rectangles.
-		wxRect		   *lpRect;
-		UINT32			count = CCDC::GetRectangleList( pDC, &lpRect );
-
-		TRACEUSER("Gerry", _T("CCamView::OnDraw called with %d regions\n"), count);
-
-		// If there's more than one rectangle then iterate through them all...
-		if (count > 1)
-		{
-			while (count--)
-			{
-				clip.x		= lpRect->x;
-				clip.x		= lpRect->y;
-				clip.width  = lpRect->width;
-				clip.height = lpRect->height;
-
-				DumpRect( pDC, &clip, "camrect1" );
-
-				pDocView->OnDraw( pDC, clip.ToOil(pDocView) );
-				lpRect++;
-			}
-		}
-		else
-		{
-			//TRACE( _T("CCamView::OnDraw doing simple rectangle stuff"));
-			
-			// . . . else handle the simple <2 rectangle code
-			pDC->GetClippingBox( clip );
-			if( !clip.IsEmpty() )
-			{
-				// Pass the drawing parameters on to the associated DocView object.
-				DumpRect( pDC, &clip, "camrect2" );
-				pDocView->OnDraw( pDC, clip.ToOil(pDocView) );
-			}
-		}
-#endif
 	}
 
 //	TRACEUSER("Gerry", _T("Leaving CCamView::OnDraw\n"));
@@ -1264,6 +1233,7 @@ void CCamView::SetScrollOffset(const WorkCoord& pos, BOOL redraw)
 
 void CCamView::OnUpdate(wxView* sender, wxObject* hint)
 {
+	TRACEUSER("Gerry", _T("CCamView::OnUpdate\n"));
 	if ( sender==NULL && !fInitialUpdate )
 	{
 		OnInitialUpdate();
@@ -1279,6 +1249,7 @@ void CCamView::OnUpdate(wxView* sender, wxObject* hint)
 //
 void CCamView::OnInitialUpdate()
 {
+	TRACEUSER("Gerry", _T("CCamView::OnInitialUpdate\n"));
 	// Set up current etc.
 	SetCurrentStates();
 
@@ -1287,6 +1258,8 @@ void CCamView::OnInitialUpdate()
 	// this view according to that.
 	if (pReadyMadeViewState != NULL)
 	{
+		TRACEUSER("Gerry", _T("Got pReadyMadeViewState\n"));
+
 		// Set the flags saved in temp. storage in the ViewState in the corresponding
 		// DocView.
 		DocView* pdv = GetDocViewPtr();
@@ -1396,9 +1369,9 @@ PORTNOTE("other","CCamView::OnInitialUpdate - code removed")
 #endif
 #endif
 
-	// Make sure the render window is repainted and inform the kernel that something
+	// Make sure the render window gets repainted and inform the kernel that something
 	// has happened.
-//	InvalidateView();
+	GetRenderWindow()->Refresh(false);
 	pDocView->ViewStateChanged();
 
 	// Indicate that we have set the position, size, focus etc so OnActivateView is safe
@@ -1534,6 +1507,8 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 
 void CCamView::SetViewStateFromThis() const
 {
+	TRACEUSER("Gerry", _T("SetViewStateFromThis\n"));
+
 	// Set the current docview.
 	pDocView->SetCurrent();
 
@@ -1582,7 +1557,9 @@ PORTNOTE("other","Removed WM_TOPMOSTENQUIRY usage - is this really needed?")
 
 void CCamView::SetThisFromViewState()
 {
-	PORTNOTETRACE("other","CCamView::SetThisFromViewState - do nothing");
+	TRACEUSER("Gerry", _T("SetThisFromViewState\n"));
+
+	PORTNOTE("other","CCamView::SetThisFromViewState - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
 	// Get a pointer to this view's frame window.
 	wxMDIChildFrame	   *pframewnd = (wxMDIChildFrame *)GetParentFrame();
@@ -1617,11 +1594,14 @@ void CCamView::SetThisFromViewState()
 
 	Coord2POINT(Status->IconPoint, &wp.ptMinPosition);
 	Rect2RECT(Status->ViewRect, &wp.rcNormalPosition);
-	
+
 	//RALPH
 	if(pframewnd)
 		pframewnd->SetWindowPlacement(&wp);
-	
+#endif
+
+	// Needs to set the window position and size
+
 	// Set the scroll offset.
 	OldOffset = Status->GetScrollPos();
 	SetScrollOffset(OldOffset);
@@ -1629,6 +1609,8 @@ void CCamView::SetThisFromViewState()
     // Set the scale factor.
 	pDocView->SetViewScale(Status->ViewScale);
 
+	PORTNOTE("other","CCamView::SetThisFromViewState - do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	// If the view was "always on top" then fake a user selection of the appropriate
 	// menu option.
 	// RALPH
@@ -1656,7 +1638,9 @@ void CCamView::SetThisFromViewState()
 
 void CCamView::UpdateViewPosition() const
 {
-//	TRACEUSER("Gerry", _T("CCamView::UpdateViewPosition\n"));
+	TRACEUSER("Gerry", _T("CCamView::UpdateViewPosition\n"));
+
+	ENSURE(Status != NULL, "No ViewState object in CCamView::UpdateViewPosition!");
 
 	wxRect rc;
 	wxFrame* pFrame = GetParentFrame();
@@ -1677,7 +1661,9 @@ void CCamView::UpdateViewPosition() const
 	// stored as it always fills the whole MDI client area of its parent.
 	wxRect2Rect(rc, &Status->ViewRect);
 
-	PORTNOTETRACE("other","CCamView::UpdateViewPosition - do nothing");
+	Status->IsMinimised = Status->IsMaximised = FALSE;
+
+	PORTNOTE("other","CCamView::UpdateViewPosition - removed GetWindowPlacement");
 #ifndef EXCLUDE_FROM_XARALX
 	ENSURE(Status != NULL, "No ViewState object in CCamView::UpdateViewPosition!");
 
@@ -1759,8 +1745,11 @@ void CCamView::ShowScrollers(BOOL Show)
 
 	// call OnSize directly to force new layout	
 	wxSize Size;
-	m_pFrame->GetClientSize(&Size.x, &Size.y);
+	m_pFrame->GetSize(&Size.x, &Size.y);
 	TRACEUSER("Gerry", _T("Force an OnSize here (%d, %d)\n"), Size.x, Size.y);
+
+	wxSizeEvent evSize(Size, 0);
+	OnSize(evSize);
 }
 
 
@@ -2761,7 +2750,7 @@ void CCamView::OnScroll(wxScrollEvent &event)
 
 void CCamView::OnSize( wxSizeEvent &event )
 {
-//	TRACEUSER("Gerry", _T("CCamView::OnSize(%d, %d)\n"), event.m_size.x, event.m_size.y);
+	TRACEUSER("Gerry", _T("CCamView::OnSize(%d, %d)\n"), event.m_size.x, event.m_size.y);
 
 	// This is called early, so if pDocView is null do nothing
 	if( NULL == pDocView )
@@ -2874,6 +2863,7 @@ PORTNOTETRACE( "other", "CCamView::OnSize - Removed ruler usage" );
 	// that have been reloaded.
 	if (fSetupDone)
 	{
+		TRACEUSER("Gerry", _T("fSetupDone so setting scroll offsets\n"));
 		WorkCoord CurrScrollPos;
 		GetScrollOffset(&CurrScrollPos);
 		SetScrollOffset(CurrScrollPos, TRUE);
