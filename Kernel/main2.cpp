@@ -122,7 +122,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dbugtree.h"
 #include "printing.h"
 #include "oilfltrs.h"
-//#include "filedlgs.h"
+#include "filedlgs.h"
 #include "nativeop.h"
 #include "filelist.h"
 #include "exceptio.h"
@@ -386,9 +386,9 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 			HelpDownloadOp::Init() &&			// Register help and support download operations
 #ifndef STANDALONE
 #endif // STANDALONE
-			BaseFileDialog::Init() &&			// Declare the open and save default paths
 			OpDroppedFile::Init() &&			// Register drag'n'drop import operations
 #endif //EXCLUDE_FROM_XARALX
+			BaseFileDialog::Init() &&			// Declare the open and save default paths
 			DummyOp::Init() &&					// Register dummy ops for unimplemented menu items
 			OpMenuLoad::Init() &&				// Register Load operation
 #ifndef STANDALONE
