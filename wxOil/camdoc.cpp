@@ -108,6 +108,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camdoc.h"
 #include "errors.h"
 #include "menuops.h"
+#include "camelot.h"
+#include "filedlgs.h"
 
 IMPLEMENT_DYNAMIC_CLASS( CCamDoc, wxDocument )
 
@@ -893,6 +895,9 @@ bool CCamDoc::OnOpenDocument( const wxString &strFilename )
 	}
 
 #endif
+
+	// Record the path we opened in a preference so it survives sessions
+	BaseFileDialog::DefaultOpenFilePath = AfxGetApp().GetDocumentManager()->GetLastDirectory();
 
 	SetOriginalPath( strFilename.c_str() );
 	
@@ -1709,7 +1714,8 @@ bool CCamDoc::SaveAs()
 	}
 
 	if (strPath.IsEmpty())
-		strPath = docTemplate->GetDirectory();
+//		strPath = docTemplate->GetDirectory();
+		strPath = (LPCTSTR) BaseFileDialog::DefaultSaveFilePath;
 
 	// We want to force the use of the .xar extension...
 	strExt = docTemplate->GetDefaultExtension();
@@ -1790,18 +1796,22 @@ bool CCamDoc::SaveAs()
     if (!OnSaveDocument(m_documentFile))
         return false;
 
-   // A file that doesn't use the default extension of its document template cannot be opened
-   // via the FileHistory, so we do not add it.
-   if (docTemplate->FileMatchesTemplate(fileName))
-   {
-       GetDocumentManager()->AddFileToHistory(fileName);
-   }
-   else
-   {
-       // The user will probably not be able to open the file again, so
-       // we could warn about the wrong file-extension here.
-   }
-   return true;
+	// Record the path we saved in a preference so it survives sessions
+	BaseFileDialog::DefaultSaveFilePath = strPath;
+
+	// A file that doesn't use the default extension of its document template cannot be opened
+	// via the FileHistory, so we do not add it.
+	if (docTemplate->FileMatchesTemplate(fileName))
+	{
+		GetDocumentManager()->AddFileToHistory(fileName);
+	}
+	else
+	{
+		// The user will probably not be able to open the file again, so
+		// we could warn about the wrong file-extension here.
+	}
+
+	return true;
 }
 
 

@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartctl.h"
 #include "xmlutils.h"
 #include "camplatform.h"
+#include "filedlgs.h"
 
 //
 // Define FILELIST for recent file list on file menu.
@@ -558,7 +559,7 @@ bool CCamApp::OnInit()
 #endif
 
 		if (wxDir::Exists(strConfigPath))
-			m_docManager->SetLastDirectory(strConfigPath);
+			BaseFileDialog::DefaultOpenFilePath = strConfigPath;
 	}
 
 	// NOTE! Set bFirstRun = FALSE in OnExit handler below

@@ -133,6 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "group.h"			// for management of blend stuff
 #include "rechblnd.h"		// so that can reset blend pointers
 //#include "urls.h"
+#include "filedlgs.h"
 
 DECLARE_SOURCE("$Revision$");  
 #define THIRTY_TWO 32
@@ -340,6 +341,7 @@ void FileOpenAction()
 {
 	// OnFileOpen needs an event, but doesn't use it
 	wxCommandEvent		event;
+	AfxGetApp().GetDocumentManager()->SetLastDirectory(BaseFileDialog::DefaultOpenFilePath);
 	AfxGetApp().GetDocumentManager()->OnFileOpen( event );
 	CCamDoc::EnableRemoveUntouchedDocs();		// Next idle event will try ro get rid of 
 												// the auto-created startup document
@@ -420,14 +422,8 @@ Technical Notes:
 
 void FileSaveAction() 
 {               
-#if 0
- 	((CCamDoc *)											
- 		(((CMDIFrameWnd *)                                      
- 			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
- 					)->GetActiveDocument()                  	//Get Active Document
- 						)->OnFileSave();                   			//Save Active Document
-#endif
 	wxCommandEvent		event;
+//	AfxGetApp().GetDocumentManager()->SetLastDirectory(BaseFileDialog::DefaultSaveFilePath);
 	AfxGetApp().GetDocumentManager()->OnFileSave( event );
 }
  
@@ -460,25 +456,18 @@ Technical Notes:
 
 void FileSaveAsAction() 
 {               
-PORTNOTETRACE("other", "FileSaveAsAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
- 	((CCamDoc *)											
- 		(((CMDIFrameWnd *)                                      
- 			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
- 					)->GetActiveDocument()                  	//Get Active Document
- 						)->OnFileSaveAs();                   		//SaveAs Active Document
-#else
-//	wxCommandEvent		event;
-//	AfxGetApp().GetDocumentManager()->OnFileSaveAs( event );
+//	AfxGetApp().GetDocumentManager()->SetLastDirectory(BaseFileDialog::DefaultSaveFilePath);
 
 	// Don't call wxDocManager::OnFileSaveAs because that calls wxDocument non-virtual functions
 	// We need to ensure our pointer is cast to a CCamDoc*
 	// Note also that GetCurrentDocument doesn't mean "Current" in the way that the Kernel defines it!!!
 	//	(It means "Active"...)
+//	wxCommandEvent		event;
+//	AfxGetApp().GetDocumentManager()->OnFileSaveAs( event );
+
 	wxDocument* pDoc = AfxGetApp().GetDocumentManager()->GetCurrentDocument();
 	if (pDoc && pDoc->IsKindOf(CLASSINFO(CCamDoc)))
 		((CCamDoc*)pDoc)->SaveAs();
-#endif
 }
 
 
