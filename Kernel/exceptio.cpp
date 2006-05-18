@@ -149,14 +149,14 @@ void OpException::Do(OpDescriptor* WhichOp)
 		if (pDocView != NULL)
 		{
 			pDocView->ForceRedraw();										// posts the paint message
-			CWnd *pWnd = DocView::GetCurrentRenderWindow();
+			CWindowID pWnd = DocView::GetCurrentRenderWindow();
 			if (pWnd)
 			{
 				// Set trap for later
 				RenderTrap = TRUE;										
 				// Now do the paint
 				TRACE( _T("Into update explosion\n"));
-				pWnd->UpdateWindow();										// do the paint
+				pWnd->Update();										// do the paint
 				TRACE( _T("Out of update explosion\n"));
 			}
 		}
