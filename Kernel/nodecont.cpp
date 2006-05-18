@@ -409,8 +409,6 @@ BOOL NodeShadowController::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionS
 	// ok, Shadows dislike certain types of Op.
 	if (pChangeOp != NULL)
 	{
-PORTNOTE("other", "Removed use of OpCreateNewMould and OpRemoveBlend from NodeShadowController::AllowOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 		// no direct moulding, please.
 		if (pChangeOp->IS_KIND_OF(OpCreateNewMould))
 		{
@@ -429,7 +427,6 @@ PORTNOTE("other", "Removed use of OpCreateNewMould and OpRemoveBlend from NodeSh
 				allowed = FALSE;
 			}
 		}
-#endif
 	}
 
 	else if (	pParam->GetChangeFlags().MultiReplaceNode && 

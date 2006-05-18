@@ -124,11 +124,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blobs.h"
 //#include "bevres.h"
 #include "lineattr.h"
-//#include "bevtool.h"
+#include "bevtool.h"
 #include "csrstack.h"
 #include "prntview.h"
-//#include "moldtool.h"
-//#include "opcntr.h"
+#include "moldtool.h"
+#include "opcntr.h"
 #include "nodecntr.h"	// for the 'becomeA' stuff
 #include "ndbldpth.h"
 #include "ncntrcnt.h"	// ContourNodePathProcessor
@@ -2320,6 +2320,7 @@ BOOL NodeBevel::DoBecomeA(BecomeA* pBecomeA)
 				if(!pConvertedBMP)
 				{
 					ERROR3("Failed To Create Bevel Bitmap Copy!");
+					return FALSE;
 				}
 				else
 				{
@@ -2704,12 +2705,9 @@ DocRect NodeBevel::GetBlobBoundingRect()
 
 	IncludeChildrensBoundingRects(&br);
 	
-PORTNOTE("other","Removed BevelTool from NodeBevel::GetBlobBoundingRect");
-#ifndef EXCLUDE_FROM_XARALX
 	// is the bevel tool active ?
 	if (Tool::GetCurrentID() != TOOLID_BEVELTOOL || !BevelTool::AmActive())
 		return br;
-#endif
 
 	DocRect BlobRect;
 
@@ -3623,15 +3621,12 @@ BOOL NodeBevel::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionState,
 	if (allowed && pOp)
 	{
 		// disallow mould and contour Ops.
-PORTNOTE("other","Removed opCreateNewMould, OpPasteEnvelope, OpPastePerspective, OpCreateContour from NodeBevel::GetBlobBoundingRect");
-#ifndef EXCLUDE_FROM_XARALX
 		if ( pOp->IsKindOf(CC_RUNTIME_CLASS(OpCreateNewMould)) ||
 			 pOp->IsKindOf(CC_RUNTIME_CLASS(OpPasteEnvelope)) ||
 			 pOp->IsKindOf(CC_RUNTIME_CLASS(OpPastePerspective)) ||
 			 pOp->IsKindOf(CC_RUNTIME_CLASS(OpCreateContour))
 			)
 			allowed = FALSE;
-#endif
 
 		if( (pOp->IsKindOf(CC_RUNTIME_CLASS(OpEditFill)) ||
 			 pOp->IsKindOf(CC_RUNTIME_CLASS(OpApplyAttribToSelected))) &&

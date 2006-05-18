@@ -127,7 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bshadow.h"
 
 // necessary for special case with bevelling
-//#include "opbevel.h"
+#include "opbevel.h"
 #include "nodebev.h"
 
 // Save/load
@@ -145,7 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 //#include "shadres.h"
 
-//#include "moldtool.h"
+#include "moldtool.h"
 //#include "mario.h"
 #include "attrappl.h"
 #include "view.h"
@@ -172,7 +172,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fthrattr.h"	// for feather bodge.
 #include "quality.h"	// for quality setting info - used for caching.
 #include "brshattr.h"	// for AttrBrushType, which we don't want applied to us.
-//#include "opfeathr.h"	// for OpChangeFeatherSize, which we don't want operating on us.
+#include "opfeathr.h"	// for OpChangeFeatherSize, which we don't want operating on us.
 #include "nodeliveeffect.h"
 #include "ophist.h"
 #include "objchge.h"
@@ -2869,8 +2869,6 @@ BOOL NodeShadow::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionState,
 	{
 		if (pOp)
 		{
-PORTNOTE("other", "Removed use of sundry Ops from NodeShadow::AllowOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 			// Shadows can't be moulded.
 			if ((pOp->IS_KIND_OF(OpCreateNewMould))				 ||
 				 pOp->IsKindOf(CC_RUNTIME_CLASS(OpPasteEnvelope)) ||
@@ -2883,7 +2881,6 @@ PORTNOTE("other", "Removed use of sundry Ops from NodeShadow::AllowOp")
 			else if (pParam->GetChangeFlags().Attribute)
 				if (pOp->IS_KIND_OF(OpChangeFeatherSize))
 					allowed = FALSE;
-#endif
 		}
 	}
 

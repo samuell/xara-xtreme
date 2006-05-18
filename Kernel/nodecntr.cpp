@@ -114,15 +114,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "blobs.h"
 #include "objchge.h"
-//#include "opbevel.h"
+#include "opbevel.h"
 #include "ophist.h"
 #include "nodeblnd.h"
 #include "ndbldpth.h"
 #include "csrstack.h"
 #include "ppbevel.h"
-//#include "opcntr.h"
+#include "opcntr.h"
 #include "nodetxts.h"
-//#include "moldtool.h"
+#include "moldtool.h"
 #include "extender.h"
 //#include "mario.h"
 #include "rsmooth.h"
@@ -1923,14 +1923,11 @@ BOOL NodeContour::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionState,
 		// ok, test for ops which we don't allow.
 		if(pOp != NULL)
 		{
-PORTNOTE("other","Removed OpCreateBevel, OpCreateNewMould, OpPasteEnvelope, OpPastePerspective usage")
 			if(
-#ifndef EXCLUDE_FROM_XARALX
 				pOp->IS_KIND_OF(OpCreateBevel) ||
 				pOp->IS_KIND_OF(OpCreateNewMould) ||
 				pOp->IS_KIND_OF(OpPasteEnvelope) ||
 				pOp->IS_KIND_OF(OpPastePerspective) ||
-#endif
 				false )
 			{
 				allowed = FALSE;
