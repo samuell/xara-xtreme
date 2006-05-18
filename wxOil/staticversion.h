@@ -95,10 +95,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-const TCHAR g_pszAppVersion[] = wxT("0.4");
+const TCHAR g_pszAppVersion[] = wxT("0.5");
 
 #define	CAMELOT_VERSION_MAJOR	0
-#define	CAMELOT_VERSION_MINOR	4
-#define	CAMELOT_VERSION			0.4
-#define	CAMELOT_VERSION_STRING	wxT("0.4 (root)")
+#define	CAMELOT_VERSION_MINOR	5
+#define	CAMELOT_VERSION			0.5
+#define	CAMELOT_VERSION_STRING	wxT("0.5 (root)")
 #define	MASTER_BUILDER	0

@@ -1,6 +1,6 @@
 AC_INIT(wxOil/camelot.cpp)
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(XaraLX, 0.4)
+AM_INIT_AUTOMAKE(XaraLX, 0.5)
 
 dnl It's recomended to put this in acinclude.m4, but including it is 
 dnl more convienent
