@@ -362,6 +362,7 @@ static bool GiveFocusToFocusableOffspring( wxWindow* pWnd )
 
 bool CCamApp::OnInit()
 {
+	::wxHandleFatalExceptions(TRUE);
 	//
 	// Parse command line. We do this early so we get flags which
 	// are useful for init, such as -u
@@ -824,6 +825,7 @@ PORTNOTE("other","Removed 3D, Extras and UserHelp support")
 	DeInitUserHelp();
 #endif
 
+	::wxHandleFatalExceptions(FALSE);
 	return wxApp::OnExit();
 }
 
@@ -1598,3 +1600,28 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
+
+
+/*********************************************************************************************
+>	void CCamApp::OnFatalException()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	09/05/06
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	This function is called whenever a fatal exception has occurred
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	-
+
+**********************************************************************************************/ 
+
+void CCamApp::OnFatalException()
+{
+	DisableSystem();
+	::wxMessageBox(_T("An extremely serious error has occurred. Xara LX must exit immediately"));
+	EnableSystem();
+	return;
+}
+

@@ -144,6 +144,8 @@ public:
 	
 	int /*TYPENOTE: Correct*/ FilterEvent( wxEvent& event );
 
+	void OnFatalException();
+
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;
 	CCamFrame			   *m_pMainFrame;
