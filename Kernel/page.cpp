@@ -268,10 +268,8 @@ String Page::Describe(BOOL Plural, BOOL Verbose)
 
 void Page::Render( RenderRegion* pRender )
 {      
-//#pragma message( __LOCMSG__ "Page::Render - do nothing" )
-//	TRACE( _T("Warning - Page::Render called\n") );
 	// If we should blow up, then blow up - don't worry, this is a very quick inline check
-//	OpException::BlowUpOnCrashMe();
+	OpException::BlowUpOnCrashMe();
 
 	// Sanity check
 	ERROR3IF(pRender == NULL,"Page::Render null render region!");

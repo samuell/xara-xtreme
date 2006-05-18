@@ -750,10 +750,8 @@ void Spread::RenderBleedArea( RenderRegion* pRender)
 
 void Spread::Render( RenderRegion* pRender )
 {
-//#pragma message( __LOCMSG__ "Spread::Render - do nothing" )
-//	TRACE( _T("Warning - Spread::Render called\n") );
 	// If we should blow up, then blow up - don't worry, this is a very quick inline check
-//	OpException::BlowUpOnCrashMe();
+	OpException::BlowUpOnCrashMe();
 
 // ralph only renders paper/pasteboard in some view modes  	
 #ifdef RALPH

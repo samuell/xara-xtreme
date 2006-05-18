@@ -394,8 +394,8 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 #ifndef STANDALONE
 			OpMenuSave::Init() &&				// Register Save operation
 #endif
-#ifndef EXCLUDE_FROM_XARALX
 			OpException::Init() &&
+#ifndef EXCLUDE_FROM_XARALX
 			InfoBarOp::Init() &&
 			InfoBarViewOp::Init() &&
 			ExternalClipboard::Init() &&		// Create the application's external clipboard manager
