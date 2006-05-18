@@ -934,6 +934,7 @@ bool CCamDoc::OnOpenDocument( const wxString &strFilename )
 #endif
 
 	SetFilename( strFilename, true );
+    SetTitle(wxFileNameFromPath(strFilename));
 	Modify(false);
 	UpdateAllViews();
 
