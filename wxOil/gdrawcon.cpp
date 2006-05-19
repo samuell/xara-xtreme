@@ -135,3 +135,36 @@ GDrawContext::~GDrawContext()
 {
 }
 
+/********************************************************************************************
+
+>	BOOL GDrawContext::SetDefaultBitmapParameters()
+
+	Author:		Alex Bligh
+	Created:	19/05/2005
+	Purpose:	Sets the default bitmap parameters so a bitmap plot afterwards does not
+				depend on the prior GDrawContext state
+
+******************************************************************************************/ 
+
+BOOL GDrawContext::SetDefaultBitmapParameters()
+{
+	BOOL ok=
+		SetBias(3, 0.0) &&
+		SetGain(3, 0.0) &&
+		SetInputRange(3, 0x00, 0xff) &&
+		SetOutputRange(3, 0x00, 0xff) &&
+		SetBrightness(0.0) &&
+		SetContone(0) &&
+		SetContrast(0.0) &&
+		SetGamma(1.0) &&
+		SetPostGamma(1.0) &&
+		SetSaturation(0.0) &&
+		Sharpen(0) &&
+		TRUE;
+	
+	SetMaxFilterSize(100);
+	SetTileSmoothingFlag( FALSE );
+	SetTileFilteringFlag( FALSE );
+	return ok;
+}
+

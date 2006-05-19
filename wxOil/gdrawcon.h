@@ -369,6 +369,8 @@ public:
 
 	virtual BOOL SaveContext(GCONTEXT* Context) = 0;
 	virtual BOOL RestoreContext(CONST GCONTEXT* Context) = 0;
+
+	virtual BOOL SetDefaultBitmapParameters();
 };
 
 

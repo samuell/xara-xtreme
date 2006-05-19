@@ -788,9 +788,7 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 		PGram[1].x = DestWidth;		PGram[1].y = 0;
 		PGram[2].x = 0;				PGram[2].y = DestHeight;
 
-		GD->SetContone(0);
-		GD->SetBias(3, 0.0);
-		GD->SetGain(3, 0.0);
+		GD->SetDefaultBitmapParameters();
 		GD->SetTileSmoothingFlag(TRUE/*FALSE*/);
 		GD->SetTileFilteringFlag(TRUE/*FALSE*/);
 
