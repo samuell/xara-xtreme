@@ -43,6 +43,7 @@ echo * | import
 # Put your installation script here
 installExe bin/xaralx
 copyFiles Examples "$PREFIX/share/xaralx"
+copyFiles Templates "$PREFIX/share/xaralx"
 copyFiles doc "$PREFIX/share/xaralx"
 installIcon xaralx.png
 installDesktop "Graphics/Vector Graphics" xaralx.desktop
