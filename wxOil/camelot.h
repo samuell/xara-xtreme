@@ -146,6 +146,9 @@ public:
 
 	void OnFatalException();
 
+private:
+	INT32 RunFalseMainLoop();
+
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;
 	CCamFrame			   *m_pMainFrame;
@@ -158,6 +161,8 @@ protected:
 
 private:
 	static DialogManager m_DlgMgr; 		// The dialog manager handles all oily dialog functions
+
+	static BOOL InInitOrDeInit;
 
 	DECLARE_EVENT_TABLE()
 

@@ -129,6 +129,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "xmlutils.h"
 #include "camplatform.h"
 #include "filedlgs.h"
+#include "progress.h"
+#include "gbrush.h"
 
 //
 // Define FILELIST for recent file list on file menu.
@@ -146,6 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define XARA_MENUGEN
 //#endif
 
+BOOL CCamApp::InInitOrDeInit = TRUE;
 
 /********************************************************************************************
 
@@ -362,6 +365,7 @@ static bool GiveFocusToFocusableOffspring( wxWindow* pWnd )
 
 bool CCamApp::OnInit()
 {
+	InInitOrDeInit = TRUE; // Don't allow the user to try carrying on working
 	::wxHandleFatalExceptions(TRUE);
 	//
 	// Parse command line. We do this early so we get flags which
@@ -736,6 +740,8 @@ bool CCamApp::OnInit()
 //	m_Timer.SetOwner(this,CAM_TIMER_ID);
 //	m_Timer.Start(CAM_TIMER_FREQUENCY);
 
+	InInitOrDeInit = FALSE; // Now allow the user a chance to save their work on a SEGV
+
 	return true;
 }
 
@@ -746,6 +752,7 @@ bool CCamApp::OnInit()
 
 INT32 CCamApp::OnExit( void )
 {
+	InInitOrDeInit = TRUE; // Don't allow them to save their work on a SEGV
 	// We can no longer stop the closedown, so flag this fact
 	Camelot.ShuttingDown(TRUE);
 
@@ -1622,9 +1629,133 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 
 void CCamApp::OnFatalException()
 {
+	static INT32 recursionguard = 0;
+
+	if (recursionguard)
+	{	
+		// Oh dear, an error occurred whilst we had our box up. Exit immediately
+		recursionguard++;
+		if (recursionguard > 1)
+		{
+			abort(); // do not even try to go through wx
+			_exit(1); // how did we get here?
+		}
+
+		// switch fatal exception handling off
+		::wxHandleFatalExceptions(FALSE);
+		TRACE(_T("CCamApp::OnFatalException() called recursively - dying now"));
+		return; // this quits the app
+	}
+
+	recursionguard++;
+
+	// Ensure we are reinstated as the signal handler
+	::wxHandleFatalExceptions(FALSE);
+	::wxHandleFatalExceptions(TRUE);
+
 	DisableSystem();
-	::wxMessageBox(_T("An extremely serious error has occurred. Xara LX must exit immediately"));
+
+	Progress::Smash(TRUE); // smash the progress bar
+	
+	// Relase the mouse if captured
+	wxWindow *pCapture=wxWindow::GetCapture();
+	if (pCapture)
+		pCapture->ReleaseMouse();
+
+	INT32 result=wxYES;
+	// Start a new block here so that these variables get released at the end
+	if (InInitOrDeInit)
+	{
+	// We'll try and get the string for the message box from resources. If the resource system is dead,
+		// they won't be able to carry on working anyway.
+		String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE2));
+		String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
+		result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR); // this will be wxOK, not wxYES
+	}
+	else
+	{
+		// We'll try and get the string for the message box from resources. If the resource system is dead,
+		// they won't be able to carry on working anyway.
+		String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE));
+		String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
+		result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR | wxYES_NO);
+	}
+
+	if (InInitOrDeInit || (result != wxYES))
+	{
+		recursionguard--;
+		return; // drop back into exception handler so as to quit.
+	}
+
+	if ( Error::IsInRenderThread() )
+	{
+		TRACE( _T("In RenderThread so clearing up system"));
+		Error::RenderThreadReset();
+		CamProfile::AtBase(CAMPROFILE_OTHER);
+	}
+
+	GBrush::ResetOnFatalError(); // this clears an annoying ensure
+
 	EnableSystem();
-	return;
+	recursionguard--;
+
+	// Zap out main loop pointer
+	m_mainLoop=NULL;
+
+	// We'd like to jump back into the main loop. We can't throw() as allegedly this doesn't work through
+	// gtk's stack frames (being C not C++) on some compilers sometimes. And destroying things might
+	// be bad. We don't do setjmp/longjmp as that would leave objects on the stack in a state where they
+	// are allocated but would be trampled on. So what we do is run another stack frame inside ourselves
+	// which is a little nasty. We simulate the wx event loop from wxEntryReal.
+	// Do not return, as this will do an abort().
+	exit(RunFalseMainLoop());
 }
 
+/*********************************************************************************************
+>	INT32 CCamApp::RunFalseMainLoop()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	09/05/06
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	This function runs a false "main" loop, doing exit clean up etc. where
+				possible - See CCamApp::OnFatalException() for how it works
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	-
+
+We assume that app initialization has already been done, or we wouldn't have been installed
+as the exception handler. So we don't do it again. Note we return from this (so the OnExit()
+stuff gets called), but that the caller should then exit() immediately.
+
+**********************************************************************************************/ 
+
+static inline void Use(void *) {}
+
+INT32 CCamApp::RunFalseMainLoop()
+{
+	class cleanupOnExit
+	{
+	public:
+		~cleanupOnExit() { wxEntryCleanup(); }
+	} cleanupOnExit;
+
+	Use(&cleanupOnExit); // suppress warning
+
+	wxTRY
+	{
+		// ensure that OnExit() is called if OnInit() had succeeded
+		class CallOnExit
+		{
+		public:
+			~CallOnExit() { wxTheApp->OnExit(); }
+		} callOnExit;
+
+		Use(&callOnExit); // suppress warning
+
+		// app execution
+		return wxTheApp->OnRun();
+	}
+	wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
+}

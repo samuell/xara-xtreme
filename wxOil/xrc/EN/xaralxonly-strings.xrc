@@ -293,6 +293,24 @@
 					<label>&amp;Options...;Invoke options dialog</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMMESSAGE">
+					<label>An extremely serious error has occurred. Xara LX may be not be able to recover. If possible, save your work under a different filename and exit immediately. Do you want to attempt to save your work before quitting?</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMMESSAGE2">
+					<label>An extremely serious error has occurred. Xara LX must quit immediately.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMTITLE">
+					<label>Xara LX</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

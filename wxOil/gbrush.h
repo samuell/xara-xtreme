@@ -143,6 +143,8 @@ public:
 	void SetSolidColours(BOOL UseSolid);
 		// Enables/disables solid colour override (to remove dithering)
 
+	static void ResetOnFatalError() {if (Current) Current->Stop();}
+
 private:
 	inline void GetLogBrushInternal( const COLORREF rgb, wxBrush* pBrush );
 

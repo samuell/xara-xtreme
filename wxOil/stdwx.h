@@ -111,6 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/docmdi.h>
 #include <wx/docview.h>
 #include <wx/event.h>
+#include <wx/except.h>
 #include <wx/fileconf.h>
 #include <wx/file.h>
 #include <wx/filesys.h>
