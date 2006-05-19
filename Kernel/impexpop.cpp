@@ -1004,91 +1004,125 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	if (DefaultExportFilterPath.Length() > 0)
 		FDialog.SetInitialDirectory(DefaultExportFilterPath);
 
-	// 'Do' the dialog and get that filename that we require
-	BOOL DlgResult = FDialog.OpenAndGetFileName();
-	if (!DlgResult)
-	{
-	//Webster-Ranbirr-12\11\96	
-	#ifdef WEBSTER
-		// If cancel is entered then ensure that our filter 
-		// is set to the previous selected filter.
-		SelectedBitmapFilter = BitmapFilter; 
-	#endif //webster
-
-		CCFree(FilterString);
-		FilterString = 0;
-		RestoreSelection();
-		End();
-		return;
-		
-	}
-
-	// Remember the filter for next time.
-	TheSelectedFilter = FDialog.GetSelectedFilterIndex();
-	if (pExportParam == 0)
-		SelectedFilter = TheSelectedFilter; 		// Using all available filters
-	else
-		SelectedBitmapFilter = TheSelectedFilter; 	// Exporting as a bitmap only
-
-	// Get the filename.
+	// We maybe asking uses to specify a file name more than
+	// once if theie first guess already exists
 	PathName Path;
-	FDialog.GetChosenFileName(&Path);
-
-	// Find the filter that the user chose
 	Filter* pFilter;
-	for (pFilter = Filter::GetFirst();
-		 pFilter != 0;
-		 pFilter = Filter::GetNext(pFilter))
+	while( true )
 	{
-		if( NULL == pFilter->pOILFilter )
-			continue;
+		// 'Do' the dialog and get that filename that we require
+		BOOL DlgResult = FDialog.OpenAndGetFileName();
+		if (!DlgResult)
+		{
+		//Webster-Ranbirr-12\11\96	
+		#ifdef WEBSTER
+			// If cancel is entered then ensure that our filter 
+			// is set to the previous selected filter.
+			SelectedBitmapFilter = BitmapFilter; 
+		#endif //webster
 
-		if (pFilter->GetFlags().CanExport && 
-			pFilter->pOILFilter->Position == TheSelectedFilter)
-				// This is the filter!
+			CCFree(FilterString);
+			FilterString = 0;
+			RestoreSelection();
+			End();
+			return;
+		}
+
+		// Remember the filter for next time.
+		TheSelectedFilter = FDialog.GetSelectedFilterIndex();
+		if (pExportParam == 0)
+			SelectedFilter = TheSelectedFilter; 		// Using all available filters
+		else
+			SelectedBitmapFilter = TheSelectedFilter; 	// Exporting as a bitmap only
+
+		// Get the filename.
+		FDialog.GetChosenFileName(&Path);
+
+		// Find the filter that the user chose
+		for (pFilter = Filter::GetFirst();
+			 pFilter != 0;
+			 pFilter = Filter::GetNext(pFilter))
+		{
+			if( NULL == pFilter->pOILFilter )
+				continue;
+
+			if (pFilter->GetFlags().CanExport && 
+				pFilter->pOILFilter->Position == TheSelectedFilter)
+					// This is the filter!
+					break;
+		}
+
+		if (pFilter == 0)
+		{
+			InformError(_R(IDT_CANT_FIND_FILTER));
+
+			// Get rid of the filter string buffer
+			CCFree(FilterString);
+			FilterString = 0;
+			RestoreSelection();
+			FailAndExecute(); 
+			End();
+			return;
+		}
+
+		// This is now taken care of in FileDlgs.cpp on the ok as it then checks if the file
+		// exists or not. If we do it here then this does not happen.
+		// Unfortunately, chnages made to the string in the dialog do not filter through
+		// and so we must fix it up here as well.
+		// Always make sure that the filter's default extension is on if the user has not
+		// specified an extension.
+		// Get the OILFilter class to check the extension for the selected or default filter
+		// matches
+		if (!pFilter->pOILFilter->DoesExtensionOfPathNameMatch(&Path))
+		{	
+			// Extension is either blank or does not match the one supplied by the filter
+			// Ask the OILFilter class to fix it for us
+			pFilter->pOILFilter->FixExtensionOfPathName(&Path);
+		}
+
+		// Ensure that the path is valid
+		if (!Path.IsValid())
+		{
+			InformError();
+
+			// Get rid of the filter string buffer
+			CCFree(FilterString);
+			FilterString = 0;
+			FailAndExecute(); 
+			RestoreSelection();
+			End();
+			return;
+		}
+
+		// We must manually check the file doesn't exit here
+		if( wxFile::Exists( Path.GetPath() ) )
+		{
+			ErrorInfo Info;
+			Info.ErrorMsg = _R(IDS_SAVEAS_OVERWRITE);
+			Info.Button[0] = _R(IDS_OVERWRITE);
+			Info.Button[1] = _R(IDB_SAVEAS);
+			Info.Button[2] = _R(IDS_CANCEL);
+
+			UINT32 Answer = AskQuestion(&Info);
+
+			if (Answer==_R(IDS_OVERWRITE))
+			{
+				// Just use the name the user selected to overwite the existing file
 				break;
-	}
-
-	if (pFilter == 0)
-	{
-		InformError(_R(IDT_CANT_FIND_FILTER));
-
-		// Get rid of the filter string buffer
-		CCFree(FilterString);
-		FilterString = 0;
-		RestoreSelection();
-		FailAndExecute(); 
-		End();
-		return;
-	}
-
-	// This is now taken care of in FileDlgs.cpp on the ok as it then checks if the file
-	// exists or not. If we do it here then this does not happen.
-	// Unfortunately, chnages made to the string in the dialog do not filter through
-	// and so we must fix it up here as well.
-	// Always make sure that the filter's default extension is on if the user has not
-	// specified an extension.
-	// Get the OILFilter class to check the extension for the selected or default filter
-	// matches
-	if (!pFilter->pOILFilter->DoesExtensionOfPathNameMatch(&Path))
-	{	
-		// Extension is either blank or does not match the one supplied by the filter
-		// Ask the OILFilter class to fix it for us
-		pFilter->pOILFilter->FixExtensionOfPathName(&Path);
-	}
-
-	// Ensure that the path is valid
-	if (!Path.IsValid())
-	{
-		InformError();
-
-		// Get rid of the filter string buffer
-		CCFree(FilterString);
-		FilterString = 0;
-		FailAndExecute(); 
-		RestoreSelection();
-		End();
-		return;
+			}
+			else if (Answer== _R(IDB_SAVEAS))
+			{
+				// User wants to save as some other name
+				continue;
+			}
+			else if (Answer==_R(IDS_CANCEL))
+			{
+				// User has chosen to abort the operation
+				return;
+			}
+			else
+				ERROR3("Unknown Answer from AskQuestion");
+		}
 	}
 
 PORTNOTE("other", "Removed BmapPrevDlg usage" )

@@ -3234,7 +3234,7 @@ void ImportFileDialog::OnLButtonDblClk( wxMouseEvent& event )
 
 ExportFileDialog::ExportFileDialog(LPCTSTR lpszFilter)
 //	: BaseFileDialog(FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, lpszFilter, NULL)
-	: BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, lpszFilter, NULL )
+	: BaseFileDialog( FALSE, 0, lpszFilter, NULL )
 {
 PORTNOTE("other", "Disabled template stuff" )
 #if !defined(EXCLUDE_FROM_XARALX)
