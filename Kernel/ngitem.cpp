@@ -883,7 +883,7 @@ PORTNOTE("other", "Removed bitmap drag handling BitmapDragInformation");
 					// a drag operation.
 					SGNameDrag* pDragInfo = new SGNameDrag(this, pMouseInfo, pMiscInfo);
 					ERRORIF(pDragInfo == 0, _R(IDE_NOMORE_MEMORY), FALSE);
-					DragManagerOp::StartDrag(pDragInfo);
+					DragManagerOp::StartDrag(pDragInfo, GetListWindow());
 				}
 				else
 #endif

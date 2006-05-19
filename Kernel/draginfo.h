@@ -125,7 +125,7 @@ class KernelBitmap;
 class CCAPI DragInformation : public CCObject
 {
 	friend class DragManagerOp;
-	friend class CaptureWnd;
+	friend class CaptureHandler;
 
 	CC_DECLARE_DYNCREATE(DragInformation)
 

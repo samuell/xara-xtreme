@@ -166,9 +166,6 @@ CCamFrame *CCamFrame::m_pMainFrame = NULL;
 
 IMPLEMENT_CLASS( CCamFrame, wxDocMDIParentFrame )
 BEGIN_EVENT_TABLE( CCamFrame, wxDocMDIParentFrame )
-	EVT_LEFT_UP(			CCamFrame::OnLButtonUp )
-	EVT_RIGHT_UP(			CCamFrame::OnRButtonUp )
-	EVT_MOTION(				CCamFrame::OnMouseMove )
 
 	EVT_MENU_RANGE( AUTO_MENU_ID_MIN, AUTO_MENU_ID_MAX, CCamFrame::OnMenuCommand			)
 
@@ -250,7 +247,6 @@ CCamFrame::CCamFrame( wxDocManager *manager, wxFrame *frame, const wxString& tit
 #if defined(USE_WXAUI)
 	m_pFrameManager = NULL;
 #endif
-	m_pCaptureWnd = NULL;
 	m_pStatusBar = NULL;
 
 	Create( frame, wxID_ANY, title, pos, size, type );
@@ -498,88 +494,6 @@ CCamFrame *GetMainFrame(void)
 }
 
 /***************************************************************************************************************************/
-
-
-void CCamFrame::StartDragManagerDrag(CaptureWnd* pWnd)
-{
-	TRACEUSER("Gerry", _T("StartDragManagerDrag"));
-	// Vector mouse capture related stuff to this "window"
-
-	if (HasCapture())
-	{
-		TRACEUSER("Gerry", _T("Already got capture"));
-	}
-
-	CaptureMouse();
-
-	if (HasCapture())
-	{
-		TRACEUSER("Gerry", _T("Got capture"));
-		m_pCaptureWnd = pWnd;
-	}
-}
-
-
-void CCamFrame::EndDragManagerDrag(CaptureWnd* pWnd)
-{
-	TRACEUSER("Gerry", _T("EndDragManagerDrag"));
-	if (m_pCaptureWnd)
-	{
-		ERROR3IF(m_pCaptureWnd != pWnd, "EndDrag different window to StartDrag");	
-
-		m_pCaptureWnd = NULL;
-		if (HasCapture())
-		{
-			ReleaseMouse();
-			if (HasCapture())
-			{
-				TRACEUSER("Gerry", _T("Still got capture"));
-			}
-			else
-			{
-				TRACEUSER("Gerry", _T("Capture released"));
-			}
-
-		}
-		else
-		{
-			TRACEUSER("Gerry", _T("Haven't got capture"));
-		}
-	}
-	else
-	{
-		TRACEUSER("Gerry", _T("No CaptureWnd"));
-	}
-}
-
-
-void CCamFrame::OnLButtonUp(wxMouseEvent& event)
-{
-	TRACEUSER("Gerry", _T("CCamFrame::OnLButtonUp"));
-	if (m_pCaptureWnd)
-		m_pCaptureWnd->OnLButtonUp(event);
-	else
-		event.Skip();
-}
-
-void CCamFrame::OnRButtonUp(wxMouseEvent& event)
-{
-	TRACEUSER("Gerry", _T("CCamFrame::OnRButtonUp"));
-	if (m_pCaptureWnd)
-		m_pCaptureWnd->OnRButtonUp(event);
-	else
-		event.Skip();
-}
-
-void CCamFrame::OnMouseMove(wxMouseEvent& event)
-{
-	if (m_pCaptureWnd)
-		m_pCaptureWnd->OnMouseMove(event);
-	else
-		event.Skip();
-}
-
-
 
 void CCamFrame::UpdateWndSize()
 {

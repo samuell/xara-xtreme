@@ -776,7 +776,7 @@ BOOL LineAttrItem::HandleEvent(SGEventType EventType, void* EventInfo, SGMiscInf
 	
 						GalleryLineDragInfo* pInfo;
 						pInfo = new GalleryLineDragInfo(this, Mouse, MiscInfo, Mouse->MenuClick);
-						if (pInfo != NULL) DragManagerOp::StartDrag(pInfo);
+						if (pInfo != NULL) DragManagerOp::StartDrag(pInfo, GetListWindow());
 					}
 				}
 

@@ -4671,7 +4671,7 @@ PORTNOTE("other","Removed ColourSGallery usage")
 #endif
 			}
 
-			DragManagerOp::StartDrag(DragCol);
+			DragManagerOp::StartDrag(DragCol, this);
 #endif
 			return;
 		}
@@ -4688,7 +4688,7 @@ PORTNOTE("other","Removed ColourSGallery usage")
 			ColourDragInformation * DragCol;
 			DragCol = new ColourDragInformation(NULL, (Modifier < 0),
 												Document::GetSelected());
-			DragManagerOp::StartDrag(DragCol);
+			DragManagerOp::StartDrag(DragCol, this);
 #endif
 			break;
 
@@ -4742,7 +4742,7 @@ PORTNOTE("other","Removed ColourSGallery usage")
 				ColourDragInformation *DragCol;
 				DragCol = new ColourDragInformation(IndexedColToDrag, (Modifier < 0),
 													Document::GetSelected());
-				DragManagerOp::StartDrag(DragCol);
+				DragManagerOp::StartDrag(DragCol, this);
 			}
 #endif
 			break;
@@ -5408,18 +5408,17 @@ BOOL CColourBar::GetStatusLineText(String_256 *Result)
 //	ASSERT_VALID(TheColourBar);
 	ERROR3IF(Result == NULL, _T("CColourBar::GetStatusLineText - NULL Result parameter is bad"));
 
-	wxPoint TempPos = ::wxGetMousePosition();
+	wxPoint ScreenPos = ::wxGetMousePosition();
 
-	wxPoint Pos(TempPos);
-	if (::wxChildWindowFromPoint(Pos, FALSE, -1) != TheColourBar)
+	if (::wxChildWindowFromPoint(ScreenPos, false, -1) != TheColourBar)
 		return(FALSE);
 
-	Pos = TheColourBar->ScreenToClient(Pos);				// make relative to window
+	wxPoint ClientPos = TheColourBar->ScreenToClient(ScreenPos);	// make relative to window
 
 	static String_64 HelpStringStore;
 //	StringBase *HelpString = NULL;
 
-	INT32 Item = TheColourBar->WhereIsMouse(Pos);
+	INT32 Item = TheColourBar->WhereIsMouse(ClientPos);
 	if (Item >= CLICKED_NOTHING)
 	{
 		switch(Item)

@@ -287,7 +287,7 @@ BOOL LibFillsSGallery::PreCreate(void)
 		// the fills to his hard disk:
 		if(CResDll::GetExecutablePath((TCHAR*)DefaultLibraryPath))
 		{
-			// Look for the resources in the main Xara X¹ folder first
+			// Look for the resources in the main Xara X folder first
 			String_256 LibDirName;
 			GetLibraryDirectoryName(&LibDirName);
 			DefaultLibraryPath += "\\";
@@ -1849,7 +1849,7 @@ BOOL SGFillsItem::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscInfo
 					DragFill = new GalleryFillsDragInfo(this, Mouse, MiscInfo,
 														Mouse->MenuClick, XSize, YSize);
 					if (DragFill != NULL)
-						DragManagerOp::StartDrag(DragFill);
+						DragManagerOp::StartDrag(DragFill, GetListWindow());
 					else
 					if(LibraryGallery::TmpDraggingBitmap != NULL)
 					{

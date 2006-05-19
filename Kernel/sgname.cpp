@@ -473,7 +473,7 @@ BOOL SGNameItem::HandleEvent(SGEventType nEventType, void* pEventInfo, SGMiscInf
 						GalleryNameDragInfo* pInfo = 
 							new GalleryNameDragInfo(this, pMouse, pMiscInfo, pAttrib,
 													pMouse->MenuClick);
-						if (pInfo != 0) DragManagerOp::StartDrag(pInfo);
+						if (pInfo != 0) DragManagerOp::StartDrag(pInfo, GetListWindow());
 					}
 				}
 					

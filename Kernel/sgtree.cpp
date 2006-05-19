@@ -2803,6 +2803,26 @@ PORTNOTE("galleries", "Disabled clipart gallery")
 
 /***********************************************************************************************
 
+>	CWindowID SGDisplayNode::GetListWindow(void)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	18/05/2006
+
+	Purpose:	Returns the window id of the list box window of the parent gallery
+
+	SeeAlso:	-
+
+***********************************************************************************************/
+
+CWindowID SGDisplayNode::GetListWindow(void)
+{
+	return(DialogManager::GetGadget(GetParentGallery()->GetReadWriteWindowID(), GetParentGallery()->GetListGadgetID()));
+}
+
+
+
+/***********************************************************************************************
+
 >	virtual void SGDisplayNode::DumpSubtree(INT32 TreeLevel = 1)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
@@ -4193,7 +4213,7 @@ BOOL SGDisplayRootScroll::HandleEvent(SGEventType EventType, void *EventInfo,
 											MouseInfo->MenuClick);
 
 					if (DragInfo != NULL)
-						DragManagerOp::StartDrag(DragInfo);
+						DragManagerOp::StartDrag(DragInfo, GetListWindow());
 				}
 			}
 			break;
@@ -5104,7 +5124,7 @@ BOOL SGDisplayGroup::HandleEvent(SGEventType EventType, void *EventInfo,
 								DragGroup = new SGListDragInfo(GetParentGallery(), this,
 																Mouse, Mouse->MenuClick);
 								if (DragGroup != NULL)
-									DragManagerOp::StartDrag(DragGroup);
+									DragManagerOp::StartDrag(DragGroup, GetListWindow());
 								// The DragWasReallyAClick handler will take care of clicks
 							}
 						}

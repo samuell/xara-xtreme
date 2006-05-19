@@ -1479,7 +1479,7 @@ BOOL SGDisplayPreviewFonts::HandleEvent(SGEventType EventType, void *EventInfo, 
 						}
 
 						if (DragFont != NULL)
-							DragManagerOp::StartDrag(DragFont);
+							DragManagerOp::StartDrag(DragFont, GetListWindow());
 					}
 					return(TRUE);		// Claim this event - nobody else can own this click
 				}
@@ -6705,7 +6705,7 @@ BOOL SGLibFontItem::HandleEvent(SGEventType EventType, void *EventInfo,
 						}
 						
 						if (DragFont != NULL)
-							DragManagerOp::StartDrag(DragFont);
+							DragManagerOp::StartDrag(DragFont, GetListWindow());
 					}
 					return TRUE;		// Claim this event - nobody else can own this click
 				}

@@ -2740,7 +2740,7 @@ BOOL SGClipartItem::HandleEvent(SGEventType EventType, void *EventInfo, SGMiscIn
 					DragClipart = new GalleryClipartDragInfo(this, Mouse, MiscInfo,
 														Mouse->MenuClick, XSize, YSize);
 					if (DragClipart != NULL)
-						DragManagerOp::StartDrag(DragClipart);
+						DragManagerOp::StartDrag(DragClipart, GetListWindow());
 					else
 					{
 						if(LibClipartSGallery::TmpDraggingBitmap != NULL)

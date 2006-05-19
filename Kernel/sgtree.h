@@ -105,8 +105,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccolor.h"
 #endif
 
-
-
 // Pre-declarations
 class Document;			// defined in document.h
 class Library;			// defined in sgscan.h
@@ -772,6 +770,8 @@ protected:		// Internal (derived class) helper methods
 	void DrawBitmap(RenderRegion *Renderer, DocRect *BoundsRect, UINT32 ResID);
 		// Draw a kernel-bitmap-resource bitmap into the gallery window
 
+	CWindowID GetListWindow(void);
+		// Gets the list box window (for starting drags)
 
 protected:		// Derived class methods for background-redraw support
 	virtual void RegisterForBGRedraw(void);
@@ -1127,11 +1127,6 @@ BOOL SGDisplayNode::IsSelected(void)
 {
 	return(Flags.Selected);
 }
-
-
-
-
-
 
 
 

@@ -1379,7 +1379,7 @@ BOOL SGDisplayKernelBitmap::HandleEvent(SGEventType EventType, void *EventInfo,
 						DragBmp = new GalleryBitmapDragInfo(this, Mouse, MiscInfo,
 															Mouse->MenuClick);
 						if (DragBmp != NULL)
-							DragManagerOp::StartDrag(DragBmp);
+							DragManagerOp::StartDrag(DragBmp, GetListWindow());
 					}
 
 					return(TRUE);		// Claim this event - nobody else can own this click

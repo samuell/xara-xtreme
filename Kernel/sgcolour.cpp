@@ -1331,7 +1331,7 @@ BOOL SGDisplayColour::HandleEvent(SGEventType EventType, void *EventInfo,
 																Mouse->MenuClick);
 
 							if (DragCol != NULL)
-								DragManagerOp::StartDrag(DragCol);
+								DragManagerOp::StartDrag(DragCol, GetListWindow());
 						}
 					}
 
@@ -1851,7 +1851,7 @@ BOOL SGDisplayLibColour::HandleEvent(SGEventType EventType, void *EventInfo,
 							DragCol = new GalleryColourDragInfo(this, Mouse, MiscInfo, Mouse->MenuClick);
 
 							if (DragCol != NULL)
-								DragManagerOp::StartDrag(DragCol);
+								DragManagerOp::StartDrag(DragCol, GetListWindow());
 						}
 					}
 

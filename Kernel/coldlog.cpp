@@ -3284,7 +3284,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 					{
 						ColourDragInformation *DragCol;
 						DragCol = new ColourDragInformation(TheColour, FALSE, (Document *)ParentList->GetParentDocument());
-						DragManagerOp::StartDrag(DragCol);
+						DragManagerOp::StartDrag(DragCol, GetReadWriteWindowID());
 					}
 				}
 */
@@ -6940,7 +6940,7 @@ void ColourEditDlg::StartDrag(ReDrawInfoType *Info)
 			{
 				ColEditorDragInfo *DragCol;
 				DragCol = new ColEditorDragInfo(TheColour, FALSE, (Document *)ParentList->GetParentDocument());
-				DragManagerOp::StartDrag(DragCol);
+				DragManagerOp::StartDrag(DragCol, GetReadWriteWindowID());
 			}
 
 			return;												// Don't pass the call on to the picker

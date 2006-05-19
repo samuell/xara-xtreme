@@ -1031,7 +1031,7 @@ BOOL SGDisplayLayer::HandleEvent(SGEventType EventType, void *EventInfo,
 						SGListDragInfo* pDragInfo = new SGListDragInfo(ParentGallery,this,Mouse,Mouse->MenuClick);
 
 						if (pDragInfo != NULL)
-							DragManagerOp::StartDrag(pDragInfo);
+							DragManagerOp::StartDrag(pDragInfo, GetParentGallery()->GetReadWriteWindowID());
 					}
 
 					return(TRUE);		// Claim this event - nobody else can own this click

@@ -124,8 +124,6 @@ private:
 
 	wxRect m_WndRect;		// Used to remember the unmin/maximised position
 
-	CaptureWnd*	m_pCaptureWnd;
-
 public:
 	CCamFrame( wxDocManager *manager, wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size,
 		   long type ); /* TYPENOTE: Correct */
@@ -151,9 +149,6 @@ public:
     /// Creates the controls and sizers
     void CreateControls();
 
-	void StartDragManagerDrag(CaptureWnd* pWnd);
-	void EndDragManagerDrag(CaptureWnd* pWnd);
-
 	void UpdateWndSize();
 
 #if !defined(USE_WXAUI)
@@ -161,10 +156,6 @@ public:
     void OnMove(wxMoveEvent &event);
 #endif
 	void OnCloseWindow(wxCloseEvent& event);
-
-	void OnMouseMove(wxMouseEvent& event);
-	void OnLButtonUp(wxMouseEvent& event);
-	void OnRButtonUp(wxMouseEvent& event);
 
 	void OnMenuCommand			( wxCommandEvent& event );
 

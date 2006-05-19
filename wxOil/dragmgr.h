@@ -110,33 +110,33 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 /********************************************************************************************
 
->	class CaptureWnd : public CWnd
+>	class CaptureHandler : public CWnd
 
-	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/01/95
-	Purpose:	A hidden window to centralise all click detection during a drag
+	Purpose:	An event handler to centralise the mouse handling during a drag
 	SeeAlso:	
 
 ********************************************************************************************/
 
-class CaptureWnd : public wxFrame
+class CaptureHandler : public wxEvtHandler
 {
-	DECLARE_DYNAMIC_CLASS(CaptureWnd)
+	DECLARE_DYNAMIC_CLASS(CaptureHandler)
 
 	friend class DragManagerOp;	
 	friend class DragInformation;
 
- public:
-	CaptureWnd(); 
-	~CaptureWnd();
-	BOOL Create();
+public:
+	CaptureHandler(wxWindow* pWindow = NULL);
+	~CaptureHandler();
 
-	void OnWindowCreate(wxWindowCreateEvent& event);
 	void OnMouseMove(wxMouseEvent& event);
 	void OnLButtonUp(wxMouseEvent& event);
 	void OnRButtonUp(wxMouseEvent& event);
 
 public:
+	BOOL StartCapture();
+
 	BOOL SetUpSolidDrag(wxPoint StartPos);
 	BOOL CleanUpSolidDrag();
 
@@ -148,13 +148,15 @@ public:
 	BOOL DrawTransparentDrag(wxPoint point, INT32 Transparency);
 
 protected:
-	wxScreenDC* pDisplayDC;
+	wxWindow* m_pWindow;
+	BOOL m_bHasCapture;
+	wxScreenDC* m_pDisplayDC;
 
-	wxBitmap* BackBitmap;
-	wxRect DragRect;	
+	wxBitmap* m_pBackBitmap;
+	wxRect m_DragRect;	
 
 	// Some things for semi-transparent drags
-	wxBitmap* MaskBitmap;
+	wxBitmap* m_pMaskBitmap;
 
 	DECLARE_EVENT_TABLE()
 };                                                                                                                                                         
@@ -184,7 +186,7 @@ class CCAPI DragManagerOp : public Operation
 friend class DragTarget;
 friend class KernelDragTarget;
 friend class OilDragTarget;
-friend class CaptureWnd;
+friend class CaptureHandler;
 friend class DragInformation;
 
 	CC_DECLARE_DYNCREATE(DragManagerOp)
@@ -198,7 +200,7 @@ protected:		// Protected constructors/Destructor
 
 
 public:			// External drag management methods
-	static void StartDrag(DragInformation *Descriptor);
+	static void StartDrag(DragInformation *Descriptor, CWindowID DragWindow);
 		// To start a drag going
 
 	static void EndDrag(INT32 Flags);
@@ -211,7 +213,7 @@ public:			// External drag management methods
 		// Returns NULL, or a pointer to the current drag manager
 	static BOOL GetStatusText(String_256 * StatusText);
 
-	static CaptureWnd * GetDragCaptureWnd();
+	static CaptureHandler * GetDragCaptureHandler();
 
 	static DragInformation * GetCurrentDragInfo();
 
@@ -275,7 +277,7 @@ private:		// private data
 
 	DragEventType LastEvent;				// Type of the last Drag Event processed	
 
-	static CaptureWnd * TheCaptureWindow;	// The window we use to centralised mouse handling
+	static CaptureHandler * TheCaptureHandler;	// The event handler we use to centralised mouse handling
 
 	static BOOL DragPending;				// Drag pending flag ie. this may be a click !		
 	
