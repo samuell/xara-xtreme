@@ -122,13 +122,47 @@ class FTFont : public FontBase
 	CC_DECLARE_DYNCREATE(FTFont)
 
 public:
-	 FTFont();
+	 FTFont(FontClass fc = FC_UNDEFINED);
 	~FTFont();
 
-	virtual FontClass GetFontClass() { return FC_FREETYPE; };
+	virtual FontClass GetFontClass() { return m_FontClass; };
 	virtual void Dump();
+ private:
+	// fonts managed by FreeType can be TrueType fonts or Type1 fonts
+	FontClass m_FontClass;
 };
 
+/********************************************************************************************
+
+>	class FTFontCacheEntry
+	   		
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/05/06
+	Purpose:	an entry in the new font list cache - used as the value part of a key/value
+				pair where the key is the face name wrapped in an ENUMLOGFONT structure
+
+********************************************************************************************/
+
+class FTFontCacheEntry
+{
+ public:
+	FontClass m_Class;
+	BOOL m_Referenced;               // used during recaching
+
+	FTFontCacheEntry(FontClass Class, BOOL Referenced):
+		m_Class(Class), m_Referenced(Referenced) {}
+	FTFontCacheEntry(): m_Class(FC_UNDEFINED), m_Referenced(FALSE) {}
+};
+
+// we need to be able to compare ENUMLOGFONTs so we can use them as the keys of a map
+bool operator<(ENUMLOGFONT &e1, ENUMLOGFONT &e2);
+
+// Our font list cache is simply a map from font name to class (plus flags).
+// This allows us to add/list entries easily and find out whether a specific
+// font is in the cache in logarithmic time (for incremental cache updates).
+// Using ENUMLOGFONTs as keys allows us to enumerate fonts more efficiently
+// because the Kernel expects to be passed ENUMLOGFONT structures.
+typedef map<ENUMLOGFONT,FTFontCacheEntry> FTFontCache;
 
 /********************************************************************************************
 
@@ -161,7 +195,7 @@ private:
 	static BOOL		CacheCompatibleFont(String_64* pFont);
 	static void		ValidateCache();
 	static void		FindClosestFont();
-	static FTFont*	CreateNewFont(String_64* pFontName);
+	static FTFont*	CreateNewFont(String_64* pFontName, FontClass Class);
 
 	// extract the Panose information
 	static OUTLINETEXTMETRIC* GetOutlineTextMetric(LOGFONT *pLogFont);
@@ -176,9 +210,24 @@ private:
 private:
 	static BOOL CacheFontCore(String_64* pFont, BOOL compatible);
 
+	// the font list cache - a cache of enumerated fonts
+	// do not confuse this with the kernel's font cache
+	// (which holds the fonts that have been used)
+	static FTFontCache* m_cache;
+
 // function called by class EnumFonts as a method for the kernel to enumerate all the installed fonts
 public:
 	static void		EnumAllFonts(OILEnumFonts* pClass);
+
+	// get a font class for a face name (FC_TRUETYPE or FC_ATM) - returns FC_UNDEFINED
+	// for non-scalable or virtual fonts or fonts that are not present
+	static FontClass GetFontClass(String_64& FaceName);
+
+	// routines for the font list cache - a cache of enumerated fonts
+	// do not confuse this with the kernel's font cache
+	static void AddFontToCache(ENUMLOGFONT& EnumLogFont);
+	static BOOL FontIsCached(ENUMLOGFONT &EnumLogFont);
+	static void UpdateCache();
 };
 
 #endif

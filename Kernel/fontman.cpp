@@ -527,6 +527,11 @@ WORD FontManager::GetNextHandle()
 
 BOOL FontManager::Init()
 {
+	// initialise the OIL cache of enumerated fonts by simply enumerating them
+	// and ignoring the result - since we do not want to see the names, we do
+	// not even have to create a subclass
+	OILEnumFonts enumerator;
+	enumerator.Execute();
 	if (!CacheDefaultFont())	
 	{
 		ERROR3("FontManager::Init() - Unable to cache the default font");

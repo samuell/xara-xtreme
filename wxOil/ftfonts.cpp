@@ -119,6 +119,7 @@ DECLARE_SOURCE( "$Revision$" );
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include FT_TRUETYPE_TABLES_H
+#include FT_TYPE1_TABLES_H
 
 #ifdef __WXGTK20__
 #include <gtk/gtk.h>
@@ -130,22 +131,34 @@ CC_IMPLEMENT_DYNCREATE( FTFont, FontBase )
 
 #define new CAM_DEBUG_NEW     
 
+// static class members
+FTFontCache* FTFontMan::m_cache = NULL;
+
 // forward declarations
 static PangoContext* GetPangoContext();
 static BOOL ToASCII(TCHAR* src, char* buffer, UINT32 len);
+static BOOL GetPangoFcFontAndFreeTypeFaceForFaceName(String_64* pFaceName,
+													 PangoFcFont** ppPangoFcFont, FT_Face* ppFreeTypeFace);
+
+// compare ENUMLOGFONT structures - needed to allow use to use ENUMLOGFONTs as map keys
+bool operator<(const ENUMLOGFONT &e1, const ENUMLOGFONT &e2)
+{
+	return e1.elfLogFont.FaceName.CompareTo(e2.elfLogFont.FaceName, FALSE) < 0;
+}
 
 /********************************************************************************************
 
 >	FTFont::FTFont()
 
-	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	12/09/95				
-	Purpose:	Default constructor
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/05/06
+	Purpose:	Constructor
 
 ********************************************************************************************/
 
-FTFont::FTFont()
+FTFont::FTFont(FontClass fc)
 {
+	m_FontClass = fc;
 }
 
 /********************************************************************************************
@@ -166,8 +179,8 @@ FTFont::~FTFont()
 
 >	void FTFont::Dump()
 
-	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	12/09/95
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/05/06
 	Purpose:	Dump the contents of this cache entry out
 
 ********************************************************************************************/
@@ -175,7 +188,12 @@ FTFont::~FTFont()
 void FTFont::Dump()
 {
 	FontBase::Dump();
-	TRACE( _T(" FontClass = FreeType\n"));
+	if (m_FontClass == FC_TRUETYPE)
+		TRACE( _T(" FontClass = TrueType\n"));
+	else if (m_FontClass == FC_ATM)
+		TRACE( _T(" FontClass = ATM\n"));
+	else 
+		TRACE( _T(" FontClass = <unknown>\n"));
 }
 
 /********************************************************************************************
@@ -210,10 +228,10 @@ BOOL FTFontMan::IsOkToCall()
 }
 
 // debugging routine to conveniently output a String_64 string
-static void DumpString64User(char* user, TCHAR* msg, String_64* pString)
+static void DumpString64User(char* user, TCHAR* msg, const String_64* pString)
 {
 	TRACEUSER(user, msg);
-	TRACEUSER(user, (TCHAR*)(*pString));  // use TCHAR* conversion operator
+	TRACEUSER(user, (const TCHAR*)(*pString));  // use TCHAR* conversion operator
 }
 
 /********************************************************************************************
@@ -290,8 +308,13 @@ BOOL FTFontMan::CacheFontCore(String_64* pFontName, BOOL compatible)
 	FontManager* pFontMan = pApp->GetFontManager();
 	ENUMLOGFONT OurEnumLogFont;
 	OurEnumLogFont.elfLogFont.FaceName = OurFontName;
-	pFontMan->SetTempFont(FC_FREETYPE, &OurFontName, &OurEnumLogFont);  // kernel copies the ENUMLOGFONT structure
-	return TRUE;
+	FontClass Class = GetFontClass(OurFontName);
+	if (Class == FC_TRUETYPE || Class == FC_ATM)
+	{
+		pFontMan->SetTempFont(Class, &OurFontName, &OurEnumLogFont);  // kernel copies the ENUMLOGFONT structure
+		return TRUE;
+	}
+	return FALSE;
 }
 
 /********************************************************************************************
@@ -362,6 +385,55 @@ void FTFontMan::ValidateCache()
 // Font enumeration
 // ****************
 
+/********************************************************************************************
+
+>	FontClass FTFontMan::GetFontClass(String_64& FaceName)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/05/06
+	Inputs:		FaceName - the name of the font we want to enquire about
+	Purpose:	Checks that the font is installed, is scalable and not a virtual font.
+				Reports	FC_TRUETYPE or FC_ATM. Reports FC_UNDEFINED if either of the above
+				is not true or if the type could not be established.
+
+********************************************************************************************/
+
+FontClass FTFontMan::GetFontClass(String_64& FaceName)
+{
+	FontClass fc = FC_UNDEFINED;
+	PangoFcFont* pPangoFcFont;
+	FT_Face pFreeTypeFace;
+	if (GetPangoFcFontAndFreeTypeFaceForFaceName(&FaceName, &pPangoFcFont, &pFreeTypeFace))
+	{
+		// At this stage, we know that the font is scalable, otherwise the above call
+		// would have returned an error already. Now, check whether this is a virtual
+		// font (e.g., "Monospace") presented to us by fontconfig. We do that by reading
+		// back the family name and comparing it to the one we passed.
+		PangoFontDescription *pRealDesc = pango_font_describe((PangoFont*)pPangoFcFont);
+		wxString wxName(pango_font_description_get_family(pRealDesc), wxConvUTF8);
+		String_64 OurFontName(wxName);
+		pango_font_description_free(pRealDesc);
+		if (OurFontName.CompareTo(FaceName, FALSE) == 0)
+		{
+			PS_FontInfoRec PSRec;
+			if (FT_Get_PS_Font_Info(pFreeTypeFace, &PSRec) != FT_Err_Invalid_Argument)
+				fc = FC_ATM;
+			else
+			{
+				if (FT_IS_SFNT(pFreeTypeFace)) fc = FC_TRUETYPE;
+				else
+				{
+					// scalable, but not PS-based and not SFNT-based, so not TrueType either
+					// ignore this for the time being, but we can probably support this type
+					// of font
+				}
+			}
+		}
+		pango_fc_font_unlock_face(pPangoFcFont);
+	}
+	return fc;
+}
+
 // To enumerate fonts using wxWidgets we need to derive from wxFontEnumerator
 // and override the OnFacename method
 class ClosestFontEnumerator: public wxFontEnumerator
@@ -389,10 +461,12 @@ bool ClosestFontEnumerator::OnFacename(const wxString& font)
 	// we need to pass a ENUMLOGFONT structure to the kernel
 	// we can pass pointers to transient structures - the kernel copies the data if it is the
 	// best match so far
+	String_64 OurFontName = font;
 	ENUMLOGFONT OurEnumLogFont;
 	OurEnumLogFont.elfLogFont.FaceName = font;
 	FontManager* pFontMan = GetApplication()->GetFontManager();
-	return pFontMan->FindClosestFontFullTry(FC_FREETYPE, &OurEnumLogFont.elfLogFont.FaceName, &OurEnumLogFont);
+	return pFontMan->FindClosestFontFullTry(FTFontMan::GetFontClass(OurFontName),
+											&OurEnumLogFont.elfLogFont.FaceName, &OurEnumLogFont);
 }
 
 /********************************************************************************************
@@ -418,10 +492,11 @@ void FTFontMan::FindClosestFont()
 class MyFontEnumerator: public wxFontEnumerator
 {
 public:
-	MyFontEnumerator(OILEnumFonts* pOilEnumerator) { m_pOilEnumerator = pOilEnumerator; };
+	enum CacheAction { FillCache, UpdateCache };
+	MyFontEnumerator(CacheAction action) { m_action = action; }
 	bool OnFacename(const wxString& font);         // TYPENOTE: Correct - overriding wx method
 private:
-	OILEnumFonts* m_pOilEnumerator;
+	CacheAction m_action;
 };
 
 /********************************************************************************************
@@ -431,16 +506,132 @@ private:
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	06/03/06
 	Inputs:		font - the Facename of an enumerated font
-	Purpose:	Callback function for font enumeration - passes call on to the OilEnumerator
+	Purpose:	Callback function for font enumeration - fills/updates the font list cache
 
 ********************************************************************************************/
 
 bool MyFontEnumerator::OnFacename(const wxString& font)
 {
 	// we need to pass a ENUMLOGFONT structure to the kernel
+	String_64 OurFontName = font;
+	
 	ENUMLOGFONT OurEnumLogFont;
-	OurEnumLogFont.elfLogFont.FaceName = font;
-	return m_pOilEnumerator->NewFont(FC_FREETYPE, &OurEnumLogFont);   // NB - kernel copies the structure
+	OurEnumLogFont.elfLogFont.FaceName = OurFontName;
+
+	if (m_action == FillCache)
+	{
+		// first of all, add the font to our cache list - we do that even with fonts that
+		// we cannot use, so we can easily see when the available font set has changed
+		FTFontMan::AddFontToCache(OurEnumLogFont);
+		TRACEUSER("wuerthne", _T("%s added to font list cache"), (TCHAR*)OurFontName);
+	}
+	else if (m_action == UpdateCache)
+	{
+		// check whether the font is in the cache already
+		// if it is, update its Referenced field as a side-effect
+		if (!FTFontMan::FontIsCached(OurEnumLogFont))
+		{
+			// not yet cached, so add it now
+			FTFontMan::AddFontToCache(OurEnumLogFont);
+			TRACEUSER("wuerthne", _T("%s added to font list cache"), (TCHAR*)OurFontName);
+		}
+	}
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	FTFontMan::FontIsCached(ENUMLOGFONT &EnumLogFont)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/05/06
+	Inputs:		EnumLogFont - the face name wrapped in a LOGFONT/ENUMLOGFONT structure
+	Returns:    TRUE if the font is in the cache
+	Purpose:	Check whether the given font is in the font list cache
+				If it is, update its Referenced field as a side-effect
+
+********************************************************************************************/
+
+BOOL FTFontMan::FontIsCached(ENUMLOGFONT &EnumLogFont)
+{
+	FTFontCache::iterator it = m_cache->find(EnumLogFont);
+	if (it != m_cache->end())
+	{
+		(*it).second.m_Referenced = TRUE;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/********************************************************************************************
+
+>	FTFontMan::AddFontToCache(ENUMLOGFONT &EnumLogFont)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/05/06
+	Inputs:		EnumLogFont - the face name wrapped in a LOGFONT/ENUMLOGFONT structure
+	Purpose:	Add the given font to the font list cache
+
+********************************************************************************************/
+
+void FTFontMan::AddFontToCache(ENUMLOGFONT &EnumLogFont)
+{
+	FontClass OurFontClass = FTFontMan::GetFontClass(EnumLogFont.elfLogFont.FaceName);
+	FTFontCacheEntry OurEntry(OurFontClass, TRUE);
+	(*m_cache)[EnumLogFont] = OurEntry;
+}
+
+/********************************************************************************************
+
+>	FTFontMan::UpdateCache()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/05/06
+	Inputs:		-
+	Purpose:	Update the font list cache to reflect the wxWidgets font enumeration
+
+********************************************************************************************/
+
+void FTFontMan::UpdateCache()
+{
+	MyFontEnumerator::CacheAction action;
+	if (m_cache)
+	{
+		// we already have a cache, so just update it incrementally
+		action = MyFontEnumerator::UpdateCache;
+		// we want to purge entries that are no longer installed, so mark all entries as unreferenced
+		// the cache update step will mark all the fonts it finds as Referenced
+		for (FTFontCache::iterator it = m_cache->begin(); it != m_cache->end(); ++it)
+			(*it).second.m_Referenced = FALSE;
+	}
+	else
+	{
+		// initial run
+		m_cache = new FTFontCache;
+		action = MyFontEnumerator::FillCache;
+	}
+	MyFontEnumerator FontEnumerator(action);
+	FontEnumerator.EnumerateFacenames();
+
+	if (action == MyFontEnumerator::UpdateCache) {
+		// delete all fonts that have been deinstalled since we last checked
+		for (FTFontCache::iterator it = m_cache->begin(); it != m_cache->end();)
+		{
+			if (!(*it).second.m_Referenced)
+			{
+				TRACEUSER("wuerthne", _T("%s removed from font list cache"),
+						  (const TCHAR*)((*it).first.elfLogFont.FaceName));
+				// NB - it++ first increments the iterator, then returns the iterator
+				//      to the current element, which is then deleted - this is safe,
+				//      as opposed to first deleting and then incrementing
+				m_cache->erase(it++);
+			}
+			else
+			{
+				++it;		
+			}
+		}
+	}
 }
 
 /********************************************************************************************
@@ -457,14 +648,28 @@ bool MyFontEnumerator::OnFacename(const wxString& font)
 void FTFontMan::EnumAllFonts(OILEnumFonts* pOilEnumerator)
 {
 	// use wxWidgets to enumerate all font families
-	TRACEUSER("wuerthne", _T("FTFonMan::EnumAllFonts"));
-	MyFontEnumerator WxEnumerator(pOilEnumerator);
-	WxEnumerator.EnumerateFacenames();	
+	TRACEUSER("wuerthne", _T("FTFontMan::EnumAllFonts"));
+
+	// we cache the results so we first check whether the cache can still be used
+	UpdateCache();
+
+	// now, simply return the information from the cache
+	BOOL go_on = TRUE;
+	for (FTFontCache::iterator it = m_cache->begin(); go_on && it != m_cache->end(); ++it)
+	{
+		FontClass OurFontClass = (*it).second.m_Class;
+		if (OurFontClass == FC_TRUETYPE || OurFontClass == FC_ATM)
+		{
+			ENUMLOGFONT EnumLogFont = (*it).first;
+			go_on = pOilEnumerator->NewFont(OurFontClass, &EnumLogFont);
+		}
+	}
+	TRACEUSER("wuerthne", _T("FTFontMan::EnumAllFonts done"));
 }
 
 /********************************************************************************************
 
->	FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
+>	FontBase* FTFontMan::CreateNewFont(String_64* pFontName)
 
 	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/9/95
@@ -476,13 +681,11 @@ void FTFontMan::EnumAllFonts(OILEnumFonts* pOilEnumerator)
 
 ********************************************************************************************/
 
-FTFont* FTFontMan::CreateNewFont(String_64* pFontName)
+FTFont* FTFontMan::CreateNewFont(String_64* pFontName, FontClass Class)
 {
 	DumpString64User("wuerthne", _T("FTFontMan::CreateNewFont"), pFontName);
-	FTFont *pFont = new FTFont;
-	if (pFont==NULL)
-		return NULL;
-	if (!pFont->Initialise(pFontName))
+	FTFont* pFont = new FTFont(Class);
+	if (pFont && !pFont->Initialise(pFontName))
 	{
 		delete pFont;
 		return NULL;
@@ -577,7 +780,7 @@ static BOOL ToASCII(TCHAR* src, char* buffer, UINT32 len)    // TYPENOTE: correc
 
 static PangoFont* GetPangoFontForFaceName(String_64* pFaceName, BOOL IsBold, BOOL IsItalic)
 {
-	DumpString64User("wuerthne", _T("FTFontMan::GetPangoFontForFaceName"), pFaceName);
+	// DumpString64User("wuerthne", _T("FTFontMan::GetPangoFontForFaceName"), pFaceName);
 
 	char ASCIIFaceName[64]; // TYPENOTE: correct (needed as parameter to Pango)
 	if (!ToASCII(*pFaceName, ASCIIFaceName, 64)) return NULL;
@@ -708,16 +911,22 @@ static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont, PangoFcF
 	// The magic call to get at the underlying FreeType data
 	// We must unlock this before returning!
 	FT_Face pFreeTypeFace = pango_fc_font_lock_face(pFcFont);
+	if (!pFreeTypeFace) {
+		pango_fc_font_unlock_face(pFcFont);
+		return FALSE;
+	}
 
 	// The default charmap is always unicode if present, but we may
 	// have a symbol font which we may want to drive in symbol mode.
-	// Check whether there is just an Adobe custom encoding in addition
-	// to the synthesized unicode charmap and if so, use that instead.
+	// Check whether there is just an Adobe custom or MS Symbol encoding
+	// in addition to the synthesized unicode charmap and if so, use that
+	// instead.
 	FT_CharMap pCustomCharmap = NULL;
 	for (int mapnum = 0; mapnum < pFreeTypeFace->num_charmaps; mapnum++)
 	{
 		FT_CharMap pThisMap = pFreeTypeFace->charmaps[mapnum];
-		if (pThisMap->encoding == FT_ENCODING_ADOBE_CUSTOM) {
+		if (pThisMap->encoding == FT_ENCODING_ADOBE_CUSTOM
+			|| pThisMap->encoding == FT_ENCODING_MS_SYMBOL) {
 			pCustomCharmap = pThisMap;
 			// we go on checking the other encodings
 		}
@@ -730,11 +939,12 @@ static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont, PangoFcF
 	}
 	if (pCustomCharmap) FT_Set_Charmap(pFreeTypeFace, pCustomCharmap);
 	
-	// We should not have seen non-scalable fonts anyway, but just in case...
+	// We do not support non-scalable fonts - do not report an error, this routine
+	// is called during font enumeration and simply returns FALSE in this case
 	if (!FT_IS_SCALABLE(pFreeTypeFace))
 	{
 		pango_fc_font_unlock_face(pFcFont);
-		ERROR2(FALSE, "FTFontMan - face not scalable!");
+		return FALSE;
 	}
 	*ppPangoFcFont = pFcFont;
 	*ppFreeTypeFace = pFreeTypeFace;

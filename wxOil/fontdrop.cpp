@@ -606,10 +606,6 @@ BOOL FontDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Di
 			BitmapID = _R(IDB_ATM_SYMBOL);
 			break;
 
-		case FC_FREETYPE:
-			BitmapID = _R(IDB_FREETYPE_SYMBOL);
-			break;
-
 		default:
 			BitmapID = 0;
 			break;

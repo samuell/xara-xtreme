@@ -114,7 +114,6 @@ typedef enum FontClass {
 	FC_DEVICE,
 	FC_TRUETYPE,
 	FC_ATM,
-	FC_FREETYPE,
 
 	// Add further font classes before this
 	FC_ILLEGAL

@@ -201,9 +201,10 @@ BOOL OILFontMan::IsOkToCall(FontClass Class)
 	switch (Class)
 	{
 		case FC_ATM:
-PORTNOTE("text","ATM never OK")
 #ifndef EXCLUDE_FROM_XARALX
 			return ATMFontMan::IsOkToCall();
+#elif defined(__WXGTK__)
+			return FTFontMan::IsOkToCall();
 #else
 			return FALSE;
 #endif
@@ -211,21 +212,16 @@ PORTNOTE("text","ATM never OK")
 		case FC_TRUETYPE:
 #ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::IsOkToCall();
-#else
-			return FALSE;
-#endif
-			break;
-		case FC_FREETYPE:
-#ifdef __WXGTK__
+#elif defined(__WXGTK__)
 			return FTFontMan::IsOkToCall();
 #else
 			return FALSE;
 #endif
 			break;
 		default:
+			ERROR3("Unknown font class passed to OILFontMan::IsOkToCall()");
 			break;
 	}
-	ERROR3("Unknown font class passed to OILFontMan::IsOkToCall()");
 	return FALSE;
 }
 
@@ -283,10 +279,12 @@ PORTNOTE("text","Never cache ATM font")
 
 				case FC_TRUETYPE:
 				{
-PORTNOTE("text","We do not use TTFontMan in wxOil")
 #ifndef EXCLUDE_FROM_XARALX
 					return TTFontMan::CacheNamedFont(pFontName);
+#elif defined(__WXGTK__)
+					return FTFontMan::CacheNamedFont(pFontName);
 #else
+PORTNOTE("text","We do not use TTFontMan in wxOil")
 					return FALSE;
 #endif
 					break;
@@ -294,22 +292,14 @@ PORTNOTE("text","We do not use TTFontMan in wxOil")
 
 				case FC_ATM:
 				{
-PORTNOTE("text","Never cache ATM font")
 #ifndef EXCLUDE_FROM_XARALX
 					return ATMFontMan::CacheNamedFont(pFontName);
-#else
-					return FALSE;
-#endif					
-					break;
-				}
-
-				case FC_FREETYPE:
-				{
-#ifdef __WXGTK__
+#elif defined(__WXGTK__)
 					return FTFontMan::CacheNamedFont(pFontName);
 #else
+PORTNOTE("text","Never cache ATM font")
 					return FALSE;
-#endif
+#endif					
 					break;
 				}
 
@@ -347,10 +337,12 @@ PORTNOTE("text","Never cache ATM font")
 
 				case FC_TRUETYPE:
 				{
-PORTNOTE("text","We do not use TTFontMan in wxOil")
 #ifndef EXCLUDE_FROM_XARALX
 					return TTFontMan::CacheCompatibleFont(pFontName);
+#elif defined(__WXGTK__)
+					return FTFontMan::CacheCompatibleFont(pFontName);
 #else
+PORTNOTE("text","We do not use TTFontMan in wxOil")
 					return FALSE;
 #endif
 					break;
@@ -358,22 +350,14 @@ PORTNOTE("text","We do not use TTFontMan in wxOil")
 
 				case FC_ATM:
 				{
-PORTNOTE("text","Never cache ATM font")
 #ifndef EXCLUDE_FROM_XARALX
 					return ATMFontMan::CacheCompatibleFont(pFontName);
-#else
-					return FALSE;
-#endif					
-				}
-
-				case FC_FREETYPE:
-				{
-#ifdef __WXGTK__
+#elif defined(__WXGTK__)
 					return FTFontMan::CacheCompatibleFont(pFontName);
 #else
+PORTNOTE("text","Never cache ATM font")
 					return FALSE;
-#endif
-					break;
+#endif					
 				}
 
 				default:
@@ -460,27 +444,23 @@ FontBase* OILFontMan::CreateNewFont(FontClass Class, String_64* pFontName)
 {
 	switch (Class)
 	{
-		case FC_FREETYPE:
-#ifdef __WXGTK__
-		case FC_UNDEFINED:
-			return FTFontMan::CreateNewFont(pFontName);
-#else
-			return NULL;
-#endif
-			break;
 		case FC_TRUETYPE:
-PORTNOTE("text","We do not use TTFontMan in wxOil")
 #ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::CreateNewFont(pFontName);
+#elif defined(__WXGTK__)
+			return FTFontMan::CreateNewFont(pFontName, Class);
 #else
+PORTNOTE("text","We do not use TTFontMan in wxOil")
 			return NULL;
 #endif
 			break;
 		case FC_ATM:
-PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return ATMFontMan::CreateNewFont(pFontName);
+#elif defined(__WXGTK__)
+			return FTFontMan::CreateNewFont(pFontName, Class);
 #else
+PORTNOTE("text","ATM deactivated")
 			return NULL;
 #endif
 			break;
@@ -510,33 +490,30 @@ OUTLINETEXTMETRIC *OILFontMan::GetOutlineTextMetric(FontClass Class, LOGFONT *pL
 {
 	switch (Class)
 	{
-		case FC_FREETYPE:
-#ifdef __WXGTK__
-			return FTFontMan::GetOutlineTextMetric(pLogFont);
-#else
-			return NULL;
-#endif
-			break;
 		case FC_TRUETYPE:
-PORTNOTE("text","TT deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return TTFontMan::GetOutlineTextMetric(pLogFont);
+#elif defined(__WXGTK__)
+			return FTFontMan::GetOutlineTextMetric(pLogFont);
 #else
+PORTNOTE("text","TT deactivated")
 			return NULL;
 #endif
 			break;
 		case FC_ATM:
-PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			return ATMFontMan::GetOutlineTextMetric(pLogFont);
+#elif defined(__WXGTK__)
+			return FTFontMan::GetOutlineTextMetric(pLogFont);
 #else
+PORTNOTE("text","ATM deactivated")
 			return NULL;
 #endif
 			break;
 		default:
+			ERROR3("OILFontMan::CreateNewFont() - Unknown font class");
 			break;
 	}
-	ERROR3("OILFontMan::CreateNewFont() - Unknown font class");
 	return NULL;
 }
 
@@ -851,33 +828,31 @@ BOOL OILFontMan::GetCharPath(FontClass fclass,
 	switch (fclass)
 	{
 		case FC_TRUETYPE:
-PORTNOTE("text","TrueType deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			Success = TextManager::GetTTCharPath(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#elif defined(__WXGTK__)
+			Success = FTFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#else
+			PORTNOTE("text","TrueType deactivated")
 #endif
 			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOTTOUTLINE));
 			break;
 
 		case FC_ATM:
-PORTNOTE("text","ATM deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 			Success = ATMFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#elif defined(__WXGTK__)
+			Success = FTFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
+#else
+			PORTNOTE("text","ATM deactivated")
 #endif
 			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOATMOUTLINE));
 			break;
 
-		case FC_FREETYPE:
-#ifdef __WXGTK__
-			Success = FTFontMan::GetCharOutline(ChDesc, ppCoords, ppVerbs, pNumCoords, pDC);
-#else
-			Success = FALSE;
-#endif
-			ERROR1IF(Success==FALSE, FALSE, _R(IDE_FONTMAN_NOFTOUTLINE));
-			break;
 		default:
+			ERROR3("Unknown font class in OILFontMan::GetCharPath");
 			break;
 	}
-	ERROR3IF(Success==FALSE,"Unknown font class in OILFontMan::GetCharPath");
 	return Success;
 }
 
@@ -1576,6 +1551,7 @@ PORTNOTE("text","We do not use ATMFontMan in wxOil")
 	// Add any further OIL Level font managers here
 }
 
+// Kernel routines using this class override this method
 BOOL OILEnumFonts::NewFont(FontClass Class, ENUMLOGFONT *lpelf)
 {
 	return FALSE;
