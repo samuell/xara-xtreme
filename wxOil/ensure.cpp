@@ -220,7 +220,8 @@ static void InternalAssert(const TCHAR * AssertDescription, const char * lpszFil
 	{
 		TRACE( wxT("In RenderThread so clearing up system") );
 		Error::RenderThreadReset();
-		UseMFC = FALSE;								// mustn't use MFC for render errors
+													// Commented out - no problem using wx for render errors
+//		UseMFC = FALSE;								// mustn't use MFC for render errors 
 	}
 
 	INT32					result;
