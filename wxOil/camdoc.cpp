@@ -653,6 +653,7 @@ bool CCamDoc::OnNewDocument()
 	// Tidy up.
 	m_bIsModifiable = TRUE;
 	SetModified(FALSE);
+	UpdateAllViews();
 //	StatusLine::SetDefaultPrefix();
 	return TRUE;
 }
