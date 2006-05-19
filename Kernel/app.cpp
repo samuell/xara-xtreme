@@ -613,14 +613,11 @@ BOOL Application::LateInit()
 	//exe path with "\templates\" on the end
 	if (m_TemplatesPath.IsEmpty())
 	{
-		PORTNOTETRACE("other","Application::LateInit - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-		TCHAR Pathname[MAX_PATH];
-		if( GetModuleFileName(NULL, Pathname, MAX_PATH) == 0 )
-			return FALSE;
+		std::auto_ptr<char> Pathname( br_find_data_dir( "/usr/share" ) );
 
 		// Put the path name into a string
-		String_256 strPathname(Pathname);
+		String_256 strPathname( Pathname.get() );
+		strPathname += _T("/xarlx/doc/");
 		PathName ModulePath(strPathname);
 
 		m_TemplatesPath = ModulePath.GetLocation(TRUE);
@@ -629,6 +626,10 @@ BOOL Application::LateInit()
 		String_256 strRelativePath(_R(IDS_NEWTEMPLATES_RELATIVEPATH));
 
 		m_TemplatesPath+=strRelativePath;
+
+#if defined(_DEBUG)
+		if( !wxDir::Exists( m_TemplatesPath ) )
+			m_TemplatesPath = _T("/usr/share/xaralx/doc/Templates/");
 #endif
 	}
 	

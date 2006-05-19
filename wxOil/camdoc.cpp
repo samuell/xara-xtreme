@@ -361,9 +361,12 @@ bool CCamDoc::LoadDefaultDocument()
 	CCLexFile		   *pFile;
 	if (Filename)
 	{
-		// Found a disk file, use that.
-//		pFile = new CCDiskFile(PathName(Filename), ios::in | ios::binary);
-		pFile = res.Open(Filename);
+		if( wxFile::Exists( Filename ) )
+			// Found a disk file, use that.
+			pFile = new CCDiskFile(PathName(Filename), ios::in | ios::binary);
+		else
+			// Else we fall back to memory
+			pFile = res.Open(Filename);
 	}
 	else
 	{

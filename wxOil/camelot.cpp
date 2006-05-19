@@ -505,6 +505,9 @@ bool CCamApp::OnInit()
 	if( !InitKernel() )
 		return false;
 
+	if( !Camelot.LateInit() )
+		return false;
+
 	TRACET(_T("CCamApp::Calling GRenderRegion::Init"));
 	if (!GRenderRegion::Init(true))
 		return false;

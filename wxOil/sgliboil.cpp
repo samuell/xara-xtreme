@@ -2861,8 +2861,8 @@ void SGLibOil::AppendSlashIfNotPresent(String_256 *Str)
 		return;
 
 	if(Str->Length() > 0)
-		if( ((TCHAR *)*Str)[Str->Length()-1] != '\\' )
-			*Str += TEXT("\\");
+		if( ((TCHAR *)*Str)[Str->Length()-1] != '/' )
+			*Str += TEXT("/");
 }
 
 

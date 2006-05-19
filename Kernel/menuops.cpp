@@ -549,7 +549,6 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 		//Now search that path for templates
 		//Start by setting the leaf name to *.xar
 		String_256 strSearchFilename(_R(IDS_NEWTEMPLATES_DEFAULTTEMPLATEEXTENSION));
-		TRACEUSER( "jlh92", _T("Search = %s\n"), (PCTSTR)strSearchFilename );
 
 		pathTemplates.SetFileNameAndType(strSearchFilename);
 

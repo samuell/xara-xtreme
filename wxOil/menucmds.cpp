@@ -252,8 +252,6 @@ PORTNOTETRACE("other", "FileNewAnimationAction does nothing");
 
 void FileNewTemplateAction(INT32 iNumberOfTemplate) 
 {               
-PORTNOTETRACE("other", "FileNewTemplateAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
 	//First we must find the name of the template to use
 
 	//So search through the templates directory
@@ -305,11 +303,12 @@ PORTNOTETRACE("other", "FileNewTemplateAction does nothing");
 
 	CCamDoc::SetNextTemplateToUse(pathTemplates);
 
-	AfxGetApp().OnFileNew();
+	// OnFileOpen needs an event, but doesn't use it
+	wxCommandEvent event;
+	AfxGetApp().GetDocumentManager()->OnFileNew( event );
 
 	CCamDoc::EnableRemoveUntouchedDocs();		// Next idle event will try ro get rid of 
 												// the auto-created startup document
-#endif
 }
 
 

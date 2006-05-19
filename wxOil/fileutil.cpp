@@ -280,12 +280,13 @@ BOOL FileUtil::FindNextFile(String_256 *FoundFile)
 	while (result)
 	{
 		wxString	strFileName;
-
+		
 		if( !s_fStarted )
 		{
 			// find first
-			result = s_dirSearch.Open( wxGetCwd() );
-			result = result && s_dirSearch.GetFirst( &strFileName, (PCTSTR)SearchPath, wxDIR_FILES );
+			PathName	path( SearchPath );
+			result = s_dirSearch.Open( path.GetLocation() );
+			result = result && s_dirSearch.GetFirst( &strFileName, (PCTSTR)path.GetFileName(), wxDIR_FILES );
 			s_fStarted = result;
 		}
 		else
