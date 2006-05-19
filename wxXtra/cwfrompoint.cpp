@@ -72,7 +72,7 @@ wxWindow* wxChildWindowFromPoint(wxWindow* win, const wxPoint& pt, bool hidden /
 
     wxPoint pos = win->GetPosition();
     wxSize sz = win->GetSize();
-    if (win->GetParent())
+    if (win->GetParent() && !win->IsTopLevel()) // Do not translate coords in TLWs as they are already screen coords
     {
         pos = win->GetParent()->ClientToScreen(pos);
     }
@@ -82,6 +82,25 @@ wxWindow* wxChildWindowFromPoint(wxWindow* win, const wxPoint& pt, bool hidden /
         return win;
     else
         return NULL;
+}
+
+// The same routine again but without the window hint
+
+wxWindow* wxChildWindowFromPoint(const wxPoint& pt, bool hidden /* =true */, int depth /* =1 */)
+{
+    // Go backwards through the list since windows
+    // on top are likely to have been appended most
+    // recently.
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetLast();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        wxWindow* found = wxChildWindowFromPoint(win, pt, hidden, depth);
+        if (found)
+            return found;
+        node = node->GetPrevious();
+    }
+    return NULL;
 }
 
 
