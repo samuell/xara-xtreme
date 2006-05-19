@@ -148,11 +148,15 @@ GDrawContext::~GDrawContext()
 
 BOOL GDrawContext::SetDefaultBitmapParameters()
 {
-	BOOL ok=
-		SetBias(3, 0.0) &&
-		SetGain(3, 0.0) &&
-		SetInputRange(3, 0x00, 0xff) &&
-		SetOutputRange(3, 0x00, 0xff) &&
+	BOOL ok= TRUE;
+	for (INT32 i=0; i<=3; i++) ok &=
+		SetBias(i, 0.0) &&
+		SetGain(i, 0.0) &&
+		SetInputRange(i, 0x00, 0xff) &&
+		SetOutputRange(i, 0x00, 0xff) &&
+		TRUE;
+
+	ok &=
 		SetBrightness(0.0) &&
 		SetContone(0) &&
 		SetContrast(0.0) &&
