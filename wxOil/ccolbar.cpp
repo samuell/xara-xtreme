@@ -5408,10 +5408,10 @@ BOOL CColourBar::GetStatusLineText(String_256 *Result)
 //	ASSERT_VALID(TheColourBar);
 	ERROR3IF(Result == NULL, _T("CColourBar::GetStatusLineText - NULL Result parameter is bad"));
 
-	wxPoint TempPos = wxGetMousePosition();
+	wxPoint TempPos = ::wxGetMousePosition();
 
 	wxPoint Pos(TempPos);
-	if (wxFindWindowAtPoint(Pos) != TheColourBar)
+	if (::wxChildWindowFromPoint(Pos, FALSE, -1) != TheColourBar)
 		return(FALSE);
 
 	Pos = TheColourBar->ScreenToClient(Pos);				// make relative to window

@@ -7391,9 +7391,8 @@ BOOL DialogManager::GetStatusLineText(String_256* ptext, CWindowID window)
 {
 	if (!ptext)
 		return FALSE;
-	wxPoint pt; // Unused
 	if (!window)
-		window=::wxFindWindowAtPointer(pt);
+		window=::wxChildWindowFromPoint(wxGetMousePosition(), FALSE, -1);
 	if (!window)
 		return FALSE;
 
@@ -7446,8 +7445,8 @@ BOOL DialogManager::GetStatusLineText(String_256* ptext, CWindowID window)
 
 CWindowID DialogManager::GetWindowUnderPointer(WinCoord * wc /*=NULL*/)
 {
-	wxPoint pt(0,0);
-	wxWindow * w=::wxFindWindowAtPointer(pt);
+	wxPoint pt=wxGetMousePosition();
+	wxWindow * w=::wxChildWindowFromPoint(pt, FALSE, -1);
 	if (wc)
 	{
 		wc->x=pt.x;

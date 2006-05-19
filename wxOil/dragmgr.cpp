@@ -1340,21 +1340,14 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					TargetRect.Inside(WinoilMousePos))
 				{
 					// Determine if the pointer is over the target window, or any of its children
-					wxWindow* WindowUnderPoint = wxFindWindowAtPoint(WinoilMousePos);
+					wxWindow* WindowUnderPoint = ::wxChildWindowFromPoint(WinoilMousePos, FALSE, -1);
 					BOOL AreOverTargetWnd = (WindowUnderPoint == TargetWindow);
-
+					
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
 						// a child-window of our window! 
-
-						// Get the mouse position in client coords
-						wxPoint ClientPoint;
-						ClientPoint.x = WinoilMousePos.x;
-						ClientPoint.y = WinoilMousePos.y;
-						ClientPoint = TargetWindow->ScreenToClient(ClientPoint);
-
-						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, ClientPoint);
+						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, WinoilMousePos);
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
 												ChildWindowUnderPoint == WindowUnderPoint);
 					}
@@ -1408,14 +1401,14 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					// window (ie dont pass on events to overlapped windows) unless we want
 					// to broadcast to all, or this target really wants to know!
 					
-					wxWindow* WindowUnderPoint = wxFindWindowAtPoint(WinoilMousePos);
+					wxWindow* WindowUnderPoint = ::wxChildWindowFromPoint(WinoilMousePos, FALSE, -1);
 					BOOL AreOverTargetWnd = (WindowUnderPoint == TargetWindow);
 
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
 						// a child-window of our window! 
-						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, ClientPoint);
+						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, WinoilMousePos);
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
 												ChildWindowUnderPoint == WindowUnderPoint);
 					}

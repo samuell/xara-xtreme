@@ -1864,8 +1864,8 @@ MouseOverRulerHit CCamView::IsMouseOverRuler()
 		return OVER_NO_RULERS;
 
 	// get the mouse position in screen coords
-	wxPoint ScrMousePos;
-	wxWindow* pWindow = ::wxFindWindowAtPointer(ScrMousePos);
+	wxPoint ScrMousePos = ::wxGetMousePosition();
+	wxWindow* pWindow = ::wxChildWindowFromPoint(ScrMousePos, FALSE, -1);
 
 	// check the HWND against the rulers
 	if (pWindow == (wxWindow*)HRuler)
