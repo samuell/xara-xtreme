@@ -160,6 +160,8 @@ protected:
 	wxTimer				m_Timer;
 
 private:
+	BOOL LaunchHelpApp(const wxString& strAppName, wxString strCommand);
+
 	static DialogManager m_DlgMgr; 		// The dialog manager handles all oily dialog functions
 
 	static BOOL InInitOrDeInit;

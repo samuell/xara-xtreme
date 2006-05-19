@@ -132,4 +132,42 @@ protected:
 	INT32 m_BytesOut;
 };
 
+
+/********************************************************************************************
+
+>	class CamLaunchProcess : public wxProcess
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/May/2006
+	Base Class:	wxProcess
+	Purpose:	Launch a long-running asynchronous process
+	SeeAlso:	CamProcess, wxProcess
+
+********************************************************************************************/
+
+class CamLaunchProcess : public wxProcess
+{
+public:
+	CamLaunchProcess();
+	virtual ~CamLaunchProcess();
+
+	BOOL 		Execute(const wxString& cmd);
+	wxKillError Terminate();
+	virtual 	INT32 Disconnect();
+
+	virtual 	void OnTerminate(int /*TYPENOTE: Correct*/ pid, int /*TYPENOTE: Correct*/ status);
+
+protected:
+	// These are called to handle the various streams
+	// StdIn and StdOut are only called when a file isn't being used
+	virtual 	void ProcessStdErr();
+
+protected:
+	bool		m_bDead;
+	bool		m_bConnected;
+	INT32 		m_ReturnCode;
+	INT32 		m_pid;
+};
+
+
 #endif // INC_CAMPROCESS

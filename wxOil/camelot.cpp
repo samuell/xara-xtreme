@@ -132,6 +132,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 #include "gbrush.h"
 
+#include "camprocess.h"
+
 //
 // Define FILELIST for recent file list on file menu.
 // Note that this currently seems to be rather unreliable.
@@ -1300,8 +1302,8 @@ void CCamApp::OnHelpIndex()
 {
 	// Get the locale id
 	wxString	strLocale( setlocale( LC_MESSAGES, NULL ), wxConvUTF8 );
-	INT32			ordSep = strLocale.Find( _T('_' ) );
-	if( -1 != ordSep )
+	INT32		ordSep = strLocale.Find( _T('_' ) );
+	if ( -1 != ordSep )
 		strLocale = strLocale.Left( ordSep );
 	TRACEUSER( "jlh92", _T("Locale = %s\n"), PCTSTR(strLocale) );
 	
@@ -1318,35 +1320,95 @@ void CCamApp::OnHelpIndex()
 	if( wxDir::Exists( strHelpPath + strLocale ) )
 		strHelpPath += strLocale + _T("/");
 	else
-	if( wxDir::Exists( strHelpPath + _T("en") ) )
-		strHelpPath += strLocale + _T("en/");
-	else
 	{
-		// We'll try default location under debug to make life easier
+		if( wxDir::Exists( strHelpPath + _T("en") ) )
+			strHelpPath += _T("en/");
 #if defined(_DEBUG)
-		strHelpPath = _T("/usr/share/xaralx/doc/en/");
-		TRACEUSER( "jlh92", _T("Try = \"%s\"\n"), PCTSTR(strHelpPath) );
-		if( !wxDir::Exists( strHelpPath ) )
-#endif
+		else
 		{
-			ERROR1RAW( _R(IDS_MISSING_HELPDIR) );
-			return;
+			// We'll try default location under debug to make life easier
+			strHelpPath = _T("/usr/share/xaralx/doc/en/");
+			TRACEUSER( "jlh92", _T("Try = \"%s\"\n"), PCTSTR(strHelpPath) );
 		}
+#endif
 	}
 
 	// Build full path
-	wxString	strUrl;
-	strUrl += strHelpPath;
+	wxString strUrl;
+	strUrl = strHelpPath;
 	strUrl += _T("xaralx.htm");
-	if( !wxFile::Exists( strUrl ) )
+	if (!wxFile::Exists(strUrl))
 	{
-		ERROR1RAW( _R(IDS_MISSING_HELPINDEX) );
-		return;
+		// Complete failure to find any local help files
+		// So go to the web site...
+		strUrl = _T("http://www.xaralx.org");
+	}
+	else
+	{
+		// Build the complete URL and launch browser
+		strUrl.Prepend(_T("file://"));
 	}
 
-	// Build the complete URL and launch browser
-	strUrl.Prepend( _T("file://") );
+	// --------------------------------------------------------------------------------------
+	// Attempt to launch common browsers to cope with our rich, Javascripted, HTML help files
+	BOOL ok;
+
+	ok = LaunchHelpApp(_T("viewhtml"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("firefox"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("mozilla"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("konqueror"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("gnome-www-default-browser"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("epiphany"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("opera"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("iexplore"), strUrl);
+	if (ok) return;
+
+	ok = LaunchHelpApp(_T("safari"), strUrl);
+	if (ok) return;
+
 	wxLaunchDefaultBrowser( strUrl );
+}
+
+BOOL CCamApp::LaunchHelpApp(const wxString& strAppName, wxString strCommand)
+{
+	strCommand.Prepend(_T(" "));
+	strCommand.Prepend(strAppName);
+
+	CamLaunchProcess* plp = new CamLaunchProcess();
+	if (plp==NULL)
+		return FALSE;
+
+	BOOL ok = plp->Execute(strCommand);
+
+	if (ok)
+	{
+		// Let this process run free!
+		plp->Disconnect();
+//		delete plp;								// This object will allegedly delete itself when the process dies
+	}
+	else
+	{
+		// Make sure we don't leave any zombie processes lying around
+		wxKillError e = plp->Terminate();		// This should result in a call to OnTerminate
+		TRACEUSER("Phil", _T("Terminating bad process returned %d\n"), e);
+//		delete plp;								// This object will allegedly delete itself when the process dies
+	}
+
+	return ok;
 }
 
 /***************************************************************************************************************************/
