@@ -332,7 +332,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ERRORBOX_DEBUGREPORT">
-					<label>Send Error Log</label>
+					<label>Generate Error &Report</label>
 				</object>
 			</object>
 		</object>
