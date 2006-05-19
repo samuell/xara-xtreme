@@ -285,7 +285,8 @@ BOOL FileUtil::FindNextFile(String_256 *FoundFile)
 		{
 			// find first
 			PathName	path( SearchPath );
-			result = s_dirSearch.Open( path.GetLocation() );
+			result = wxDir::Exists( path.GetLocation() );
+			result = result && s_dirSearch.Open( path.GetLocation() );
 			result = result && s_dirSearch.GetFirst( &strFileName, (PCTSTR)path.GetFileName(), wxDIR_FILES );
 			s_fStarted = result;
 		}
