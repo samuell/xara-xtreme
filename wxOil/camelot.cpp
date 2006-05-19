@@ -1696,8 +1696,7 @@ void CCamApp::OnFatalException()
 	if (recursionguard)
 	{	
 		// Oh dear, an error occurred whilst we had our box up. Exit immediately
-		recursionguard++;
-		if (recursionguard > 1)
+		if (recursionguard++ > 1)
 		{
 			abort(); // do not even try to go through wx
 			_exit(1); // how did we get here?
@@ -1711,59 +1710,132 @@ void CCamApp::OnFatalException()
 
 	recursionguard++;
 
-	// Ensure we are reinstated as the signal handler
-	::wxHandleFatalExceptions(FALSE);
-	::wxHandleFatalExceptions(TRUE);
+	// Put this bit in a block so strings etc. allocated are deallocated before we go generate our own stack frame
+	do
+	{
+		// Ensure we are reinstated as the signal handler
+		::wxHandleFatalExceptions(FALSE);
+		::wxHandleFatalExceptions(TRUE);
 
-	DisableSystem();
+// This bit of code is currently not operative - looking into wxDebugReport instead
+#ifdef EXCEPTION_LOCATION
+		String_256 location(_R(IDS_DOOMUNKNOWN));
+		// On platforms that support it, we try and find the appropriate error
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
+#define SWMAXLEVEL 200
+		class StackWalker : public wxStackWalker
+		{
+		public:
+			wxArrayString ArrayOfRefs;
+			wxArrayString ArrayOfDetails;
+			StackWalker() {ArrayOfRefs.SetCount(SWMAXLEVEL);ArrayOfDetails.SetCount(SWMAXLEVEL);}
+			virtual void OnStackFrame(const wxStackFrame & frame)
+			{
+				wxString details;
+				wxString fn=frame.GetFileName();
+				UINT32 line=frame.GetLine();
+				UINT32 level=frame.GetLevel();
+				details.Printf(_T("%d %s:%d %s"), level, fn.c_str(),
+							line, frame.GetName().c_str());
+#ifdef _DEBUG
+				wxLogDebug(details);
+#endif
+				if (level<SWMAXLEVEL)
+				{
+					ArrayOfDetails[level]=details;
+					details.Printf(_T("%s:%d"), fn.c_str(), line);
+					ArrayOfRefs[level]=details;
+				}
+			}
+		};
 
-	Progress::Smash(TRUE); // smash the progress bar
+		TRACE(_T("Debug trace"));
+		StackWalker s;
+		s.Walk();
+		// look 4 deep into the stack frame
+		if (s.ArrayOfRefs[5].Length() >= 3)
+			location=(const TCHAR *)(s.ArrayOfRefs[5]);
+#endif
+#endif
+
+		DisableSystem();
 	
-	// Relase the mouse if captured
-	wxWindow *pCapture=wxWindow::GetCapture();
-	if (pCapture)
-		pCapture->ReleaseMouse();
+		Progress::Smash(TRUE); // smash the progress bar
+		
+		// Relase the mouse if captured
+		wxWindow *pCapture=wxWindow::GetCapture();
+		if (pCapture)
+			pCapture->ReleaseMouse();
+	
+		if (Error::ErrorBoxRecurse)
+		{
+			INT32 result=wxYES;
 
-	INT32 result=wxYES;
-	// Start a new block here so that these variables get released at the end
-	if (InInitOrDeInit)
-	{
-	// We'll try and get the string for the message box from resources. If the resource system is dead,
-		// they won't be able to carry on working anyway.
-		String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE2));
-		String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
-		result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR); // this will be wxOK, not wxYES
-	}
-	else
-	{
-		// We'll try and get the string for the message box from resources. If the resource system is dead,
-		// they won't be able to carry on working anyway.
-		String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE));
-		String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
-		result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR | wxYES_NO);
-	}
+			// We're in an error box - don't ask the error system to put up the box, do it manually
+			if (InInitOrDeInit)
+			{
+			// We'll try and get the string for the message box from resources. If the resource system is dead,
+				// they won't be able to carry on working anyway.
+				String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE2));
+				String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
+				result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR); // this will be wxOK, not wxYES
+			}
+			else
+			{
+				// We'll try and get the string for the message box from resources. If the resource system is dead,
+				// they won't be able to carry on working anyway.
+				String_256 PortentOfDoom(_R(IDS_DOOMMESSAGE));
+				String_256 TitleOfDoom(_R(IDS_DOOMTITLE));
+				result = ::wxMessageBox(wxString((TCHAR *)PortentOfDoom), wxString((TCHAR *)TitleOfDoom), wxICON_ERROR | wxYES_NO);
+			}
+		
+			if (InInitOrDeInit || (result != wxYES))
+			{
+				recursionguard--;
+				return; // drop back into exception handler so as to quit.
+			}
+		}
+		else
+		{
+			// Use InformGeneral - this gives us the chance to produce a debug report
+			BOOL Quit=TRUE;
 
-	if (InInitOrDeInit || (result != wxYES))
-	{
+			if (InInitOrDeInit)
+				Quit = ::InformGeneral(ERRORTYPE_SERIOUS, 0, _R(IDS_DOOMMESSAGE2),
+										_R(IDS_DOOMQUITNOW), 0, 0, 0,
+										1, 1);
+			else
+				Quit = (::InformGeneral(ERRORTYPE_SERIOUS, 0, _R(IDS_DOOMMESSAGE),
+										_R(IDS_DOOMSAVEWORK), _R(IDS_DOOMQUITNOW), 0, 0,
+										1, 1) != 1);
+
+			if (InInitOrDeInit || Quit)
+			{
+				recursionguard--;
+				return; // drop back into exception handler so as to quit.
+			}
+		}
+
+	
+		if ( Error::IsInRenderThread() )
+		{
+			TRACE( _T("In RenderThread so clearing up system"));
+			Error::RenderThreadReset();
+			CamProfile::AtBase(CAMPROFILE_OTHER);
+		}
+	
+		GBrush::ResetOnFatalError(); // this clears an annoying ensure
+	
+		if (IsDisabled()) // Error box routines can enable it
+			EnableSystem();
+
 		recursionguard--;
-		return; // drop back into exception handler so as to quit.
-	}
+	
+		// Zap out main loop pointer
+		m_mainLoop=NULL;
 
-	if ( Error::IsInRenderThread() )
-	{
-		TRACE( _T("In RenderThread so clearing up system"));
-		Error::RenderThreadReset();
-		CamProfile::AtBase(CAMPROFILE_OTHER);
-	}
-
-	GBrush::ResetOnFatalError(); // this clears an annoying ensure
-
-	EnableSystem();
-	recursionguard--;
-
-	// Zap out main loop pointer
-	m_mainLoop=NULL;
-
+	} while(0);
+	
 	// We'd like to jump back into the main loop. We can't throw() as allegedly this doesn't work through
 	// gtk's stack frames (being C not C++) on some compilers sometimes. And destroying things might
 	// be bad. We don't do setjmp/longjmp as that would leave objects on the stack in a state where they

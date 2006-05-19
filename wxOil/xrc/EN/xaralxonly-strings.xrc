@@ -311,6 +311,30 @@
 					<label>Xara LX</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMUNKNOWN">
+					<label>Unknown</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMQUITNOW">
+					<label>&Exit XaraLX now</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DOOMSAVEWORK">
+					<label>Attempt to &Save your work</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ERRORBOX_DEBUGREPORT">
+					<label>Send Error Log</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

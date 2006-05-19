@@ -135,7 +135,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 static BOOL ErrorHasBeenReported = TRUE;
 static UINT32	InSetError = 0;			// In either of the SetError routines
-static UINT32 ErrorBoxRecurse = 0;	// Incremented as per how many recursive error boxes we have
+UINT32 Error::ErrorBoxRecurse = 0;	// Incremented as per how many recursive error boxes we have
 
 // Used to indicate what kind of error message is currently defined.
 typedef enum
@@ -370,6 +370,16 @@ public:
 			HelpUser(m_nHelpContext);
 #endif
 		}
+		else if (id == _R(IDS_ERRORBOX_DEBUGREPORT))
+		{
+			wxDebugReport report;
+			wxDebugReportPreviewStd preview;
+		
+			report.AddAll();
+		
+			if ( preview.Show(report) )
+				report.Process();
+		}
 		else
 		{
 			EndModal(id);
@@ -394,7 +404,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	// Make sure there is at least one valid button.
 	if (Butt1 == 0) Butt1 = _R(IDS_OK);
 
-	if (ErrorBoxRecurse)
+	if (Error::ErrorBoxRecurse)
 	{
 		// Oh dear oh dear. Someone wants to put up an error box in the error handler. This is
 		// **BAD** news. The most likely cause is an exception within this routine (or the other
@@ -405,7 +415,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		return(OK);
 	}
 
-	ErrorBoxRecurse++;
+	Error::ErrorBoxRecurse++;
 	if (ErrorMsg != 0)
 	{
 		// It's a new error message
@@ -421,6 +431,8 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 	// we should get our bitmap from the OS
 	ResourceID TitleID = 0;
+
+	ResourceID DebugReport = 0;
 
 	wxArtID bitmap=wxART_MISSING_IMAGE;
 
@@ -448,12 +460,14 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 			//MessageBeep(MB_ICONHAND);
 			bitmap = wxART_ERROR;
 			TitleID = _R(IDS_ERRORBOX_SERIOUS);
+			DebugReport = _R(IDS_ERRORBOX_DEBUGREPORT);
 			break;
 
 		case ERRORTYPE_ENSURE:
 			//MessageBeep(MB_ICONHAND);
 			bitmap = wxART_ERROR;
 			TitleID = _R(IDS_ERRORBOX_ENSURE);
+			DebugReport = _R(IDS_ERRORBOX_DEBUGREPORT);
 			break;
 
 		case ERRORTYPE_ERROR:
@@ -474,7 +488,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	if (!pBox)
 	{
 		Beep();
-		ErrorBoxRecurse--;
+		Error::ErrorBoxRecurse--;
 		return OK;
 	}
 
@@ -490,7 +504,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	if (!pVSizer)
 	{
 		Beep();
-		ErrorBoxRecurse--;
+		Error::ErrorBoxRecurse--;
 		delete pBox;
 		return OK;
 	}
@@ -500,7 +514,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	if (!pMessageSizer)
 	{
 		Beep();
-		ErrorBoxRecurse--;
+		Error::ErrorBoxRecurse--;
 		delete pBox;
 		return OK;
 	}
@@ -517,7 +531,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		if (!pStaticBitmap)
 		{
 			Beep();
-			ErrorBoxRecurse--;
+			Error::ErrorBoxRecurse--;
 			delete pBox;
 			return OK;
 		}
@@ -538,7 +552,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	if (!pMessage)
 	{
 		Beep();
-		ErrorBoxRecurse--;
+		Error::ErrorBoxRecurse--;
 		delete pBox;
 		return OK;
 	}
@@ -551,20 +565,22 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	if (!pButtonSizer)
 	{
 		Beep();
-		ErrorBoxRecurse--;
+		Error::ErrorBoxRecurse--;
 		delete pBox;
 		return OK;
 	}
     pVSizer->Add(pButtonSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-	wxButton * pButt[6]; // see help below, note we don't use zero, 5 is reserved for help
-	ResourceID butres[6];
+#define EB_MAXBUTS 7
+	wxButton * pButt[EB_MAXBUTS]; // see help below, note we don't use zero, 5 is reserved for help
+	ResourceID butres[EB_MAXBUTS];
 	butres[0]=0;
 	butres[1]=Butt1;
 	butres[2]=Butt2;
 	butres[3]=Butt3;
 	butres[4]=Butt4;
-	butres[5]=0;
+	butres[5]=0; // for IDS_HELP - see below
+	butres[6]=DebugReport;
 
 #if !defined(EXCLUDE_FROM_RALPH)
 	// See if there is any on-line help associated with the given warning/error message.
@@ -574,7 +590,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 #endif
 	
 	INT32 butt;
-	for (butt=0; butt<=5; butt++)
+	for (butt=0; butt<EB_MAXBUTS; butt++)
 	{
 		if (butres[butt])
 		{
@@ -583,15 +599,20 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 			if (!pButt[butt])
 			{
 				Beep();
-				ErrorBoxRecurse--;
+				Error::ErrorBoxRecurse--;
 				delete pBox;
 				return OK;
 			}
-			if (butres[butt] == (ResourceID)OK)
-				pButt[butt]->SetDefault();
 		}
 		else
 			pButt[butt]=NULL;
+	}
+
+	// Set the default
+	if ( ((UINT32)OK <EB_MAXBUTS) && butres[OK] && pButt[OK])
+	{
+		pButt[OK]->SetDefault();
+		pBox->SetDefaultItem(pButt[OK]);
 	}
 
     pBox->GetSizer()->Fit(pBox);
@@ -621,7 +642,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	ResourceID pressed = pBox->ShowModal();
 	INT32 result = Cancel;
 
-	for (butt=0; butt<=5; butt++)
+	for (butt=0; butt<EB_MAXBUTS; butt++)
 	{
 		if (butres[butt] == pressed)
 			result = butt;
@@ -658,7 +679,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	ErrorHasBeenReported = TRUE;
 	Error::ClearError();
 		
-	ErrorBoxRecurse--;
+	Error::ErrorBoxRecurse--;
 
 	// if we were in a drag operation, cancel it (to prevent invalid drag state) fixes #11455
 	DragManagerOp::AbortDrag();
@@ -1725,11 +1746,11 @@ void TestErrorStuff()
 void Error::DumpStack(UINT32 frames)
 {
 #ifdef _DEBUG
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) && !defined(__FreeBSD__)
 	Error::StackWalker s;
 	s.Walk(frames);
 #else
-	TRACE( _T("Request to dump stack not supported on WXMAC") );
+	TRACE( _T("Request to dump stack not supported on this platform") );
 #endif
 #endif
 }
