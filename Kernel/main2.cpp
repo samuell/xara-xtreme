@@ -294,9 +294,9 @@ PORTNOTE("other","Removed Lots of init functions")
 			OpMakeNodesShapes::Init() &&		// Register the OpMakeNodesShapes operation
 #ifndef EXCLUDE_FROM_XARALX
 			OpChangeBrush::Declare() &&         // Register the change brush operation
+#endif
 			OpApplyClipView::Init() &&			// Register the Apply ClipView operation
 			OpRemoveClipView::Init() &&			// Register the Remove ClipView operation
-#endif
 // Neville 5/8/97 remove Stroking code
 #ifdef VECTOR_STROKING
 			ValueFunction::Init() &&			// Init all value function classes

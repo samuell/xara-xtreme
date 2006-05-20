@@ -101,6 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"		// pre-compiled header
 #include "opclip.h"			// our header file
+#include "ophist.h"
 //#include "clipres.h"		// our resources
 //#include "phil.h"			// for _R(IDS_GREY_WHEN_SELECT_INSIDE)
 

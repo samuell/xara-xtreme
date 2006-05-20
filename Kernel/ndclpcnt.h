@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "group.h"		// derivation from NodeGroup
 #include "cxfrech.h"	// derivation from CamelotRecordHandler
 
-//#include "opclip.h"		// for reference to OpApplyClipView
+#include "opclip.h"		// for reference to OpApplyClipView
 
 class NodeClipView;
 class ExtendParams;
@@ -150,10 +150,7 @@ CC_DECLARE_DYNCREATE(NodeClipViewController);
 
 // methods and classes which need to be able to invoke UpdateKeyholePath().
 friend class NodeClipView;
-PORTNOTE("other","Removed OpApplyClipView usage")
-#ifndef EXCLUDE_FROM_XARALX
 friend void OpApplyClipView::Do(OpDescriptor* pOpDesc);
-#endif
 friend class UpdateCachedKeyholePathAction;
 
 public:
