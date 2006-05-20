@@ -470,8 +470,8 @@ PORTNOTE("other","Removed various bevel usage")
 			BmpDlg::Init() &&					// Register Bitmap Properties Dialog
 			GIFAnimationPropertyTabsDlg::Init() &&	// Register the GIF animation tabs dialog
 			AnimExOptns::Init() &&					// Register the Animation Export Options tabs dialog	
-#ifndef EXCLUDE_FROM_XARALX
 			OpConvertPathToShapes::Declare() &&		// convert path to shapes operation
+#ifndef EXCLUDE_FROM_XARALX
 			OpChangeBrushDefinition::Declare() &&
 // WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
