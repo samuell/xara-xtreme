@@ -1985,7 +1985,7 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 	BYTE startG = *pG;
 	BYTE startB = *pB;
 
-	BYTE *pColourWeAreChanging;	// not used in HSV mode
+	BYTE *pColourWeAreChanging = NULL;	// not used in HSV mode
 
 	if( id == _R(IDC_RED_EDIT) )
 		pColourWeAreChanging = pR;

@@ -2260,7 +2260,7 @@ BOOL AnimationColoursTab::HavePropertiesChanged()
 	CurNumColsInPal = pPropertiesDlg->GetLongGadgetValue(_R(IDC_FRAME_NUMCOLOURS), 0, 256, _R(IDS_BMPPREFS_INVALIDDELAY) ,NULL);
 
 	// Get the current dither type.
-	DITHER CurDither ;
+	DITHER CurDither = XARADITHER_NONE;
 	if (pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_FRAME_DIFFUSION)))
 		CurDither = XARADITHER_ERROR_DIFFUSION;
 
@@ -4613,7 +4613,7 @@ BOOL PreviewInBrowserTab::CommitSection()
 	if (HavePropertiesChanged())
 	{
 		//  Get the new details.
-		BrowserBackground Bgr;
+		BrowserBackground Bgr = BROWSER_BGR_NONE;
 
 		if(pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_PLAINBKGND)))     
 			Bgr = BROWSER_BGR_NONE;
@@ -4657,7 +4657,7 @@ BOOL PreviewInBrowserTab::HavePropertiesChanged()
 		return TRUE;
 
 	// Get the current details.
-	BrowserBackground Bgr;
+	BrowserBackground Bgr = BROWSER_BGR_NONE;
 
 	if(pPropertiesDlg->GetBoolGadgetSelected(_R(IDC_PLAINBKGND)))     
 		Bgr = BROWSER_BGR_NONE;

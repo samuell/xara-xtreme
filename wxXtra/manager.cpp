@@ -3475,11 +3475,11 @@ void wxFrameManager::DrawHintRect(wxWindow* pane_window,
 
 void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
 {
+    #ifdef __WXMSW__
     // try to find the pane
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
     
-    #ifdef __WXMSW__
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         MakeWindowTransparent(pane.frame, 150);
     #endif
@@ -3622,10 +3622,6 @@ void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
 {
     if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
     {
-        // try to find the pane
-        wxPaneInfo& pane = GetPane(wnd);
-        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
-
         SetActivePane(m_panes, wnd);
         Repaint();
     }

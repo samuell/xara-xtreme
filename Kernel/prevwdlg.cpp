@@ -1707,9 +1707,11 @@ BOOL PreviewDialog::SetRegeneratedBitmapInList(GIFAnimationExportParam* pParam)
 
 	// For the regenerated bitmap, retrieve it's position in the list. 
 	UINT32 BitmapNumber = pParam->GetRegeneratedBitmapPosition();
-	UINT32 BitmapCount = pParam->GetBitmapCount();
 
+#ifdef _DEBUG
+	UINT32 BitmapCount = pParam->GetBitmapCount();
 	ERROR3IF(BitmapCount != 1, "BitmapCount specifid an illegal value");
+#endif
 
 	// Ensure that a reference to this bitmap will exist.
 	DWORD Count = m_BitmapList.GetCount();
@@ -2707,9 +2709,11 @@ BOOL PreviewDialog::SetBitmapToListTail(GIFAnimationExportParam* pParam)
 	if (pParam == NULL)
 		ERROR2RAW("PreviewDialog::SetRegeneratedBitmapInList bad params");
 
+#ifdef _DEBUG
 	// Ensure we only have a single bitmap in our list.
 	UINT32 BitmapCount = pParam->GetBitmapCount();
 	ERROR3IF(BitmapCount != 1, "BitmapCount specifid an illegal value");
+#endif
 
 	// Increment the value of list size.
 	m_BitmapListSize++; 
