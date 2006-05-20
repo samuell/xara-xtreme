@@ -611,13 +611,13 @@ BOOL Application::LateInit()
 
 	//Graham 21/10/97: If it is blank, then we should use the
 	//exe path with "\templates\" on the end
-	if (m_TemplatesPath.IsEmpty())
+	if( m_TemplatesPath.IsEmpty() || !wxDir::Exists( m_TemplatesPath ) )
 	{
 		std::auto_ptr<char> Pathname( br_find_data_dir( "/usr/share" ) );
 
 		// Put the path name into a string
 		String_256 strPathname( Pathname.get() );
-		strPathname += _T("/xarlx/doc/");
+		strPathname += _T("/xarlx/");
 		PathName ModulePath(strPathname);
 
 		m_TemplatesPath = ModulePath.GetLocation(TRUE);
@@ -629,7 +629,7 @@ BOOL Application::LateInit()
 
 #if defined(_DEBUG)
 		if( !wxDir::Exists( m_TemplatesPath ) )
-			m_TemplatesPath = _T("/usr/share/xaralx/doc/Templates/");
+			m_TemplatesPath = _T("/usr/share/xaralx/Templates/");
 #endif
 	}
 	
