@@ -617,7 +617,7 @@ BOOL Application::LateInit()
 
 		// Put the path name into a string
 		String_256 strPathname( Pathname.get() );
-		strPathname += _T("/xarlx/");
+		strPathname += _T("/xaralx/");
 		PathName ModulePath(strPathname);
 
 		m_TemplatesPath = ModulePath.GetLocation(TRUE);
@@ -632,6 +632,8 @@ BOOL Application::LateInit()
 			m_TemplatesPath = _T("/usr/share/xaralx/Templates/");
 #endif
 	}
+
+	TRACEUSER( "jlh92", _T("Using %s as template store\n"), PCTSTR(m_TemplatesPath) );
 	
 	// Everything went ok
 	return TRUE;
