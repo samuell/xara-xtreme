@@ -294,7 +294,7 @@ void FileNewTemplateAction(INT32 iNumberOfTemplate)
 		}
 		FileUtil::StopFindingFiles();
 
-		if( iNumberOfTemplate >= setSortFilename.size() )
+		if( iNumberOfTemplate >= (INT32)setSortFilename.size() )
 		{
 			//We failed to find a template. So remove this
 			//item from the menu.
