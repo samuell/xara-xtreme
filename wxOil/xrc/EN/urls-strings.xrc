@@ -19,7 +19,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_URL_PRODUCT">
-					<label>http://www.xara.com/products/xtreme/</label>
+					<label>http://www.xaralx.org</label>
 				</object>
 			</object>
 			<object class="sizeritem">

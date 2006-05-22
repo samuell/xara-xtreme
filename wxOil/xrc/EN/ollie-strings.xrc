@@ -13,7 +13,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ABOUTDLG2">
-					<label>&amp;About Xara LX;Information about Xara LX ;AboutOp</label>
+					<label>&amp;About Xara Xtreme LX;Information about Xara LX ;AboutOp</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -97,7 +97,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_WEBSTER_HOME_PAGE">
-					<label>Xara Xtreme Home Page;Open the Xara Xtreme home page</label>
+					<label>Xara Xtreme LX Home Page;Open the Xara Xtreme LX home page</label>
 				</object>
 			</object>
 			<object class="sizeritem">
@@ -109,7 +109,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_XARAX_FORUM">
-					<label>Xara Xtreme Forum;Open the Xara Xtreme Forum page</label>
+					<label>Xara Xtreme Forums;Open the Xara Xtreme Forums page</label>
 				</object>
 			</object>
 			<object class="sizeritem">
