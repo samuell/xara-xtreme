@@ -138,7 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fthrattr.h"
 #include "clipattr.h"
 #include "lineattr.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 
 #include "cxfrec.h"
 #include "cxftags.h"

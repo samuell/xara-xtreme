@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "coldrop.h"
 #include "collist.h"
-//#include "colpick.h"
+#include "colpick.h"
 #include "colourix.h"
 //#include "jason.h"
 #include "keypress.h"
@@ -602,7 +602,7 @@ BOOL NewColourDlg::Init(void)
 
 >	BOOL NewColourDlg::Create()
 
-	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
+	Authofosr:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/9/95
 	Returns:	TRUE if successful, else FALSE
 	Purpose:	NewColourDlg create method 

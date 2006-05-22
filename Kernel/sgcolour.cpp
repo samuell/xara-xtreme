@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "collist.h"
 #include "colourix.h"
 #include "colormgr.h"
-//#include "colpick.h"
+#include "colpick.h"
 #include "comattrmsg.h"
 #include "docview.h"
 #include "dragcol.h"
@@ -2875,11 +2875,8 @@ SGDisplayLibColGroup * ColourSGallery::GetNextLibGroup(SGDisplayLibColGroup * pL
 
 void ColourSGallery::EditColour(ColourList *ParentList, IndexedColour *TheColour)
 {
-PORTNOTE("other", "disabled colour picker");
-#ifndef EXCLUDE_FROM_XARALX
 	ColourPicker ColPicker;
 	ColPicker.EditColour(ParentList, TheColour);
-#endif
 }
 
 

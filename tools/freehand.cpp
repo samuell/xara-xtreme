@@ -153,7 +153,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshgdgt.h"
 #include "lineattr.h"
 #include "brushmsg.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "comattrmsg.h"
 #include "pen.h"
 #include "brshname.h"
@@ -2779,12 +2779,9 @@ PORTNOTE("other", "Removed cursor bodge");
 
 void FreeHandTool::SetColourEditorProcessing(BOOL Value)
 {
-PORTNOTE("other", "Removed refernce to ColourEdit dialog");
-#ifndef EXCLUDE_FROM_XARALX
 	ColourEditDlg* pColourEditor = ColourEditDlg::GetColourEditDlg();
 	if (pColourEditor != NULL)
 		pColourEditor->SetDoTimerProcessing(Value);
-#endif
 }
 
 

@@ -1524,6 +1524,7 @@ void wxComboControlBase::SetPopupControl( wxComboPopup* iface )
 
     delete m_popupInterface;
     delete m_winPopup;
+    m_winPopup=NULL;
 
     iface->InitBase(this);
     iface->Init();

@@ -517,6 +517,11 @@ void DialogEventHandler::WindowDestroyEvent(wxWindowDestroyEvent& event)
 
 	DialogManager::Event(this, event);
 
+	// we are only interested in our window being destroyed from now on, as opposed to
+	// children of our window
+	if (event.GetEventObject() != pwxWindow)
+		return;
+
 	// Now diassociate all the window controls
 	// Note this may have already been done by DialogManager, but in that case (a) pwxWindow won't
 	// be non-NULL, and (b) we'll have removed the EventHandler from the queue, so we won't be

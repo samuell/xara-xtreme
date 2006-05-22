@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "jason.h"		// _R(IDS_COLCONTEXTNAME)
 #include "colcontx.h"	// For ColourContexts
 #include "palman.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "bmpcomp.h"	// for BitmapList
 
 CC_IMPLEMENT_DYNAMIC(ViewTab, OptionsTabs)   
@@ -474,8 +474,6 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 	// we now need to force it from in here as well (otherwise the colour editor will save the one
 	// that it is currently using - and NOT the one that we have just applied here!
 
-PORTNOTE("other", "Disabled Colour Editor dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	OpDescriptor* pOpDescriptor = (OpDescriptor*) OpDescriptor::FindOpDescriptor( OPTOKEN_COLOUREDITDLG );
 
 	String_256 Dummy;
@@ -488,15 +486,11 @@ PORTNOTE("other", "Disabled Colour Editor dialog")
 
 		pColourEditDlg->SetDefaultDisplayModel (DisplayModel);
 	}
-#endif
 
-PORTNOTE("other", "Disabled colour editor model preference writing")
-#ifndef EXCLUDE_FROM_XARALX
 	SetOk = Camelot.SetPrefValue(TEXT("Displays"), TEXT("ColourEditorAutoModel"), &AutoColourModel);
 	INT32 DisplayModelPref = (INT32)DisplayModel;	
 	SetOk = SetOk && Camelot.SetPrefValue(TEXT("Displays"), TEXT("ColourEditorDisplayModel"), &DisplayModelPref);
 	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
-#endif
 
 	// Error diffused view option
 	BOOL ViewDither = 2;
@@ -536,13 +530,10 @@ PORTNOTE("other", "Disabled colour editor model preference writing")
 //	SetOk = ProgressCursorSetPref(State);
 //	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
 
-PORTNOTE("other", "Disabled progress bar writing")
-#ifndef EXCLUDE_FROM_XARALX
 	// Show progress bar.
 	State = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_PROGRESS), 0, 1, 0, &Valid);
 	SetOk = Camelot.SetPrefValue(TEXT("Displays"), TEXT("ProgressBar"), &State);
 	ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
-#endif
 
 	// Section = Window
 
@@ -1109,15 +1100,13 @@ TRACEUSER( "Neville", _T("set colour bar mode '%d'\n"),ColourBarMode);
 	INT32 DisplayModelPref = (INT32)DisplayModel;
 	INT32 SelectedIndex = 0;
 
-PORTNOTE("other", "Disabled colour editor model preference reading")
-#ifndef EXCLUDE_FROM_XARALX
 	// First check if automatic is set.
 	ReadOk = Camelot.GetPrefValue(TEXT("Displays"), TEXT("ColourEditorAutoModel"), &ColourEditorAutoModel);
 TRACEUSER( "Neville", _T("set colour editor auto model mode '%d'\n"),ColourEditorAutoModel);
 	// Now get the display model preference 
 	ReadOk = ReadOk && Camelot.GetPrefValue(TEXT("Displays"), TEXT("ColourEditorDisplayModel"), &DisplayModelPref);
 TRACEUSER( "Neville", _T("set colour editor model '%d'\n"),DisplayModelPref);
-#endif
+
 	DisplayModel = (ColourModel)DisplayModelPref;
 	// Set up the list, passing in the default colour model, returning an index into the list
 	// of available colour models
@@ -1156,8 +1145,6 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 //		pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_HOURGLASS), FALSE);
 //	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 
-PORTNOTE("other", "Disabled progress bar reading")
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL ProgressBar = FALSE;
 	ReadOk = Camelot.GetPrefValue(TEXT("Displays"), TEXT("ProgressBar"), &ProgressBar);
 	if (ProgressBar != 0)
@@ -1165,7 +1152,6 @@ PORTNOTE("other", "Disabled progress bar reading")
 	else
 		pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_PROGRESS), FALSE);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
-#endif
 
 	// Section = Bitmaps
 	BOOL bSmoothing = TRUE;

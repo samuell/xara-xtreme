@@ -161,9 +161,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "objchge.h"
 
 // include files necessary for correctly supporting camelots CColourPicker custom control
-#include "mainfrm.h"
+//#include "mainfrm.h"
 #include "statline.h"
+#include "ophist.h"
+#include "layer.h"
 
+const ResourceID ColourEditDlg::IDD = _R(IDD_COLOUREDITDLG);
 
 //-----------------------------------------------------------------------------------------
 
@@ -406,7 +409,7 @@ static CGadgetID TintGadgetIDs[] =	// NULL terminated list of special tint gadge
 //	_R(IDC_EDIT_TINTSLIDER),
 	_R(IDC_EDIT_SHADE),
 	_R(IDC_EDIT_SHADEPERCENT),
-	NULL
+	0
 };
 
 
@@ -417,7 +420,7 @@ static CGadgetID LinkGadgetIDs[] =	// NULL terminated list of special linked-col
 	_R(IDC_EDIT_INHERIT2),
 	_R(IDC_EDIT_INHERIT3),
 	_R(IDC_EDIT_INHERIT4),
-	NULL
+	0
 };
 
 
@@ -448,7 +451,7 @@ static CGadgetID OtherGadgetIDs[] =	// NULL terminated list of all non tint/link
 	_R(IDC_MAKE_LOCAL),
 	_R(IDC_EDIT_RENAME),
 	_R(IDC_COLOURPICKER),
-	NULL
+	0
 };
 
 
@@ -477,7 +480,7 @@ static GadgetHelpInfo GadgetHelp[] =
 	{ _R(IDC_MAKE_LOCAL),		_R(IDS_EDITBH_MAKE_LOCAL)	},
 	{ _R(IDC_EDIT_RENAME),		_R(IDS_COLBAR_HNOCOLOUR) },
 	{ _R(IDC_COLOURPICKER),		_R(IDS_STATICCOLOURPICKERTOOLHELP) },
-	{ NULL, NULL }							// List terminator
+	{ 0, 0 }							// List terminator
 };
 
 
@@ -516,7 +519,7 @@ void ColourEditDlg::LoseKeyboardFocus(void)
 		if (!LoseFocusFromEditControls)
 		{
 			// AWOOGA! NASTY WINOIL CODE HACK NASTINESS YUCK YUCK YUCK !!!! ****
-			HWND Focus = ::GetFocus();
+			CWindowID Focus = wxWindow::FindFocus();
 			if (Focus != NULL)
 			{
 				static UINT32 WritableGadgets[] = 
@@ -530,15 +533,15 @@ void ColourEditDlg::LoseKeyboardFocus(void)
 					_R(IDC_EDIT_SHADE),
 					_R(IDC_COLOURPICKER),
 					//_R(IDC_EDIT_216ONLY),
-					NULL
+					0
 				};
 
 				// Look to see if the input focus belonhgs to an edit control in our window.
 				// If it does, then we won't throw the focus away - we'll return immediately.
 				INT32 i = 0;
-				while (WritableGadgets[i] != NULL)
+				while (WritableGadgets[i])
 				{
-					if (Focus == GetDlgItem((HWND)WindowID, WritableGadgets[i]))
+					if (Focus == DialogManager::GetGadget(WindowID, WritableGadgets[i]))
 						return;
 
 					i++;
@@ -557,7 +560,7 @@ void ColourEditDlg::LoseKeyboardFocus(void)
 			SetComponentInfo(3, _R(IDC_NAME_COMPONENT3), _R(IDC_EDIT_COMPONENT3), _R(IDC_EDIT_INHERIT3));
 			SetComponentInfo(4, _R(IDC_NAME_COMPONENT4), _R(IDC_EDIT_COMPONENT4), _R(IDC_EDIT_INHERIT4));	
 
-			SetAllHexComponentsInfo (-1, _R(IDC_NAME_WEBHEX), _R(IDC_EDIT_WEBHEX));
+			SetAllHexComponentsInfo ((UINT32)-1, _R(IDC_NAME_WEBHEX), _R(IDC_EDIT_WEBHEX));
 		}
 
 		TextMayBeWrong = FALSE;
@@ -658,7 +661,7 @@ ColourEditDlg::ColourEditDlg(): DialogOp(ColourEditDlg::IDD, ColourEditDlg::Mode
 	NameDropDown	= NULL;
 	ParentDropDown	= NULL;
 
-	CurrentCursorID	= NULL;
+	CurrentCursorID	= 0;
 	CurrentCursor	= NULL;
 
 	m_bDoingSetGadget = FALSE;
@@ -1019,7 +1022,7 @@ void ColourEditDlg::SetExtent(void)
 				case COLOURTYPE_TINT:
 					{
 						Gadget = _R(IDC_EDIT_TINT);
-						ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, NULL);
+						ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, 0);
 						ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, _R(IDC_EDIT_PARENTCOL));
 
 						// And if it's not a shade, hide the extra writable field
@@ -1030,8 +1033,11 @@ void ColourEditDlg::SetExtent(void)
 
 				case COLOURTYPE_LINKED:
 					Gadget = _R(IDC_EDIT_INHERIT4);
-					ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, NULL);
+					ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, 0);
 					ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, _R(IDC_EDIT_PARENTCOL));
+					break;
+
+				default:
 					break;
 			}
 		}
@@ -1103,7 +1109,8 @@ void ColourEditDlg::SetControls(void)
 	}
 
 	//Graham 16/10/97: The rename button
-	OpState opstate=GetCommandState(&ColCmd_Name, &String_256());
+	String_256 empty;
+	OpState opstate=GetCommandState(&ColCmd_Name, &empty);
 	BOOL fRenameCommandIsAvailable=opstate.Greyed;
 	EnableGadget( _R(IDC_EDIT_RENAME),  !fRenameCommandIsAvailable);
 
@@ -1158,7 +1165,7 @@ void ColourEditDlg::SetControls(void)
 				ColourPicker::GetTintAsString(EditingColour, &NewValue);
 
 			if (NewValue != CurrentValue)
-				SetStringGadgetValue(_R(IDC_EDIT_TINT), (StringBase *) &NewValue);
+				SetStringGadgetValue(_R(IDC_EDIT_TINT), NewValue);
 		}
 
 		if (CurrentColType == COLOURTYPE_SHADE && CurrentTypingGadget != _R(IDC_EDIT_SHADE))
@@ -1169,7 +1176,7 @@ void ColourEditDlg::SetControls(void)
 			ColourPicker::GetShadeValueAsString(EditingColour, 2, &NewValue);
 
 			if (NewValue != CurrentValue)
-				SetStringGadgetValue(_R(IDC_EDIT_SHADE), (StringBase *) &NewValue);
+				SetStringGadgetValue(_R(IDC_EDIT_SHADE), NewValue);
 		}
 				
 		// And set the slider to the nearest position to this value
@@ -1245,7 +1252,7 @@ void ColourEditDlg::SetControls(void)
 				ColContexts.Context[i]->GetModelName(&ModelName);
 
 				NameString.MakeMsg(_R(IDS_COLCONTEXTNAME), (TCHAR *) ModelName);
-				SetStringGadgetValue(_R(IDC_EDIT_COLMODEL), &NameString, FALSE, Index);
+				SetStringGadgetValue(_R(IDC_EDIT_COLMODEL), NameString, FALSE, Index);
 
 				if (i == (INT32)DisplayModel)
 					SelectedIndex = Index;
@@ -1284,7 +1291,7 @@ void ColourEditDlg::SetControls(void)
 
 	if (DisplayModel == COLOURMODEL_WEBRGBT || DisplayModel==COLOURMODEL_RGBT || DisplayModel==COLOURMODEL_HSVT)
 	{
-		SetAllHexComponentsInfo (-1, _R(IDC_NAME_WEBHEX), _R(IDC_EDIT_WEBHEX));
+		SetAllHexComponentsInfo ((UINT32)-1, _R(IDC_NAME_WEBHEX), _R(IDC_EDIT_WEBHEX));
 	}
 
 	// Find a safe parent for the colour to link to. If we can't find one, then
@@ -1419,15 +1426,15 @@ void ColourEditDlg::SetComponentInfo(UINT32 ComponentID, UINT32 Gadget,
 		{
 			if (DisplayModel != COLOURMODEL_WEBRGBT)
 			{
-				SetStringGadgetValue(Gadget, &CompName);
-				SetStringGadgetValue(InheritGadget, &CompName);
+				SetStringGadgetValue(Gadget, CompName);
+				SetStringGadgetValue(InheritGadget, CompName);
 				EnableGadget(Gadget, TRUE);
 				HideGadget(Gadget, FALSE);
 
 				String_8 NewText;
 				ColourPicker::GetComponentAsString(EditingColour, cc, ComponentID, &NewText);
 				EnteredSetGadgetValue();
-				SetStringGadgetValue(WritableGadget, &NewText);
+				SetStringGadgetValue(WritableGadget, NewText);
 				ExitedSetGadgetValue();
 
 				BOOL InheritsComponent = EditingColour->InheritsComponent(ComponentID);
@@ -1444,7 +1451,7 @@ void ColourEditDlg::SetComponentInfo(UINT32 ComponentID, UINT32 Gadget,
 			else
 			{
 				//SetStringGadgetValue(Gadget, &CompName);
-				SetStringGadgetValue(InheritGadget, &CompName);
+				SetStringGadgetValue(InheritGadget, CompName);
 				//EnableGadget(Gadget, TRUE);
 				//HideGadget(Gadget, FALSE);
 
@@ -1507,7 +1514,7 @@ void ColourEditDlg::SetAllHexComponentsInfo(UINT32 ComponentID, UINT32 NameGadge
 		return;
 	}
 
-	if (!(ComponentID == -1) && (NameGadget == _R(IDC_NAME_WEBHEX)) &&
+	if (!(ComponentID == (UINT32)-1) && (NameGadget == _R(IDC_NAME_WEBHEX)) &&
 		 (WritableGadget == _R(IDC_EDIT_WEBHEX)))
 	{
 		ERROR3("Calling ColourEditDlg::SetAllHexComponentsInfo for incorrect control");
@@ -1525,14 +1532,14 @@ void ColourEditDlg::SetAllHexComponentsInfo(UINT32 ComponentID, UINT32 NameGadge
 		{
 			if (DisplayModel == COLOURMODEL_RGBT || DisplayModel == COLOURMODEL_HSVT)
 			{
-				SetStringGadgetValue(NameGadget, &CompName);
+				SetStringGadgetValue(NameGadget, CompName);
 				EnableGadget(NameGadget, TRUE);
 				HideGadget(NameGadget, FALSE);
 
 				String_16 NewText;
 				ColourPicker::GetComponentsAsHexString(EditingColour, cc, ComponentID, &NewText);
 				EnteredSetGadgetValue();
-				SetStringGadgetValue(WritableGadget, &NewText);
+				SetStringGadgetValue(WritableGadget, NewText);
 				ExitedSetGadgetValue();
 
 				EnableGadget(WritableGadget, /*(!InheritsComponent) &&*/
@@ -1608,7 +1615,7 @@ void ColourEditDlg::SetColour(BOOL SetComponents)
 			
 			ERROR3IF(nIndex < 1 || nIndex > 4, "ColourEditDlg::SetColour - nIndex invalid");
 
-			if (cc->GetComponentName(nIndex, &NewValue) != NULL)
+			if (cc->GetComponentName(nIndex, &NewValue))
 			{
 				NewValue = GetStringGadgetValue(CurrentTypingGadget);
 			
@@ -1697,6 +1704,9 @@ void ColourEditDlg::SetColour(BOOL SetComponents)
 			EditingColour->SetInheritsComponent(2, GetBoolGadgetSelected(_R(IDC_EDIT_INHERIT2)));
 			EditingColour->SetInheritsComponent(3, GetBoolGadgetSelected(_R(IDC_EDIT_INHERIT3)));
 			EditingColour->SetInheritsComponent(4, GetBoolGadgetSelected(_R(IDC_EDIT_INHERIT4)));
+			break;
+
+		default:
 			break;
 	}
 
@@ -1806,11 +1816,11 @@ void ColourEditDlg::EditThisColour(ColourList *NewParentList, IndexedColour *Col
 	// redraw) do not occur.
 	OriginalColour = *ResultColour;
 
-	StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
+	StatusLine* pStatusLine = StatusLine::Get();
 
 	if (EditingColour->IsNamed())
 	{
-		if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+		if (!pStatusLine || !pStatusLine->IsRestrictedAccessToColourPicker ())
 		{
 			if (AutoModelChangeN)
 				DisplayModel = OriginalColour.GetColourModel();
@@ -1820,7 +1830,7 @@ void ColourEditDlg::EditThisColour(ColourList *NewParentList, IndexedColour *Col
 	}
 	else
 	{	
-		if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+		if (!pStatusLine || !pStatusLine->IsRestrictedAccessToColourPicker ())
 		{
 			if (AutoModelChange)
 				DisplayModel = OriginalColour.GetColourModel();
@@ -2070,7 +2080,7 @@ void ColourEditDlg::AbortColourPickerDrag()
 
 /********************************************************************************************
 
->	static BOOL DoAbortColourNow (HWND colourPicker)
+>	static BOOL DoAbortColourNow (CWindowID colourPicker)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	1/2/2000
@@ -2086,16 +2096,14 @@ void ColourEditDlg::AbortColourPickerDrag()
 
 ********************************************************************************************/
 
-BOOL ColourEditDlg::DoAbortColourNow (HWND colourPicker)
+BOOL ColourEditDlg::DoAbortColourNow (CWindowID colourPicker)
 {
 	// firstly, lets check for obvious insanity
 	
 	String_256 ClassNameStr;  // The control type
 
-	// Find out the class type of the gadget
-	GetClassName (colourPicker, (TCHAR*) ClassNameStr, 255);
-	
-	if (ClassNameStr == String_8(TEXT("cc_colPicker")))
+	// Check passed a sensible window ID
+	if (TheEditor && (TheEditor->WindowID == colourPicker))
 	{		
 		// only reset colour if we have a prior one to select (AbortColour). fixes #10649 - 
 		// crash when escape is pressed before the dropper has selected a colour...
@@ -2392,7 +2400,7 @@ void ColourEditDlg::ShadeMyself(BOOL UnShade, BOOL OtherGadgetsOnly)
 	}
 
 	INT32 i = 0;
-	while (OtherGadgetIDs[i] != NULL)
+	while (OtherGadgetIDs[i])
 	{
 		EnableGadget(OtherGadgetIDs[i], UnShade);
 		i++;
@@ -2407,14 +2415,14 @@ void ColourEditDlg::ShadeMyself(BOOL UnShade, BOOL OtherGadgetsOnly)
 		return;	
 
 	i = 0;
-	while (TintGadgetIDs[i] != NULL)
+	while (TintGadgetIDs[i])
 	{
 		EnableGadget(TintGadgetIDs[i], UnShade);
 		i++;
 	}
 
 	i = 0;
-	while (LinkGadgetIDs[i] != NULL)
+	while (LinkGadgetIDs[i])
 	{
 		EnableGadget(LinkGadgetIDs[i], UnShade);
 		i++;
@@ -2677,8 +2685,8 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 		switch ( TheMsg->State )
 		{
-			case ColourChangingMsg::ColourState::COLOURUPDATED:
-			case ColourChangingMsg::ColourState::COLOURUPDATEDINVISIBLE:
+			case ColourChangingMsg::COLOURUPDATED:
+			case ColourChangingMsg::COLOURUPDATEDINVISIBLE:
 				// If I didn't send the message and the colour is the one I'm editing,
 				// reset the controls to reflect whatever the change was.
 				// (This mainly happens as a result of undo)
@@ -2703,7 +2711,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 				}
 				break;
 
-			case ColourChangingMsg::ColourState::LISTPAGED:		// May have swapped to another list
+			case ColourChangingMsg::LISTPAGED:		// May have swapped to another list
 				if (TheMsg->NewColourList != ParentList)
 				{
 					ResultColour = NULL;						// Lose this colour
@@ -2730,17 +2738,17 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 */
 				break;
 
-			case ColourChangingMsg::ColourState::LISTDELETED:	// May have deleted this colour
+			case ColourChangingMsg::LISTDELETED:	// May have deleted this colour
 				// The ColourList we're editing in has been deleted from under us!
 				if (TheMsg->NewColourList == ParentList)
 					ShadeMyself();
 				break;
 
-			case ColourChangingMsg::ColourState::LISTDESELECTED:// No document available
+			case ColourChangingMsg::LISTDESELECTED:// No document available
 				ShadeMyself();
 				break;
 
-			case ColourChangingMsg::ColourState::LISTUPDATED:	// Colour may have been deleted
+			case ColourChangingMsg::LISTUPDATED:	// Colour may have been deleted
 				{
 					//BOOL SetControls = FALSE;
 	
@@ -2791,11 +2799,14 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 				}
 				break;
 
-			case ColourChangingMsg::ColourState::SELVIEWCONTEXTCHANGE:
+			case ColourChangingMsg::SELVIEWCONTEXTCHANGE:
 				// The selected view's colour context has chnaged, which probably affects the
 				// colour correction/separation options. We redraw using these options, so we
 				// need to redraw to reflect the new settings.
 				InvalidateAndSetControls();
+				break;
+
+			default:
 				break;
 		}
 
@@ -2807,15 +2818,18 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		SelChangingMsg *Msg = (SelChangingMsg *) Message;
 		switch ( Msg->State )
 		{
-			case SelChangingMsg::SelectionState::COLOURATTCHANGED:
-			case SelChangingMsg::SelectionState::SELECTIONCHANGED:
-			case SelChangingMsg::SelectionState::NODECHANGED:
+			case SelChangingMsg::COLOURATTCHANGED:
+			case SelChangingMsg::SELECTIONCHANGED:
+			case SelChangingMsg::NODECHANGED:
 				if (!ISentTheMessage)
 				{
 					UpdateOnNextIdle = TRUE;
 					UpdateColourEditor ();
 				}
 //					FindUsefulColourToEdit(EditingLineColour);
+				break;
+
+			default:
 				break;
 		}
 	}
@@ -2832,7 +2846,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 	{
 		// If a drag starting message comes around, pass it on to the tree
 		DragMessage *Msg = (DragMessage *) Message;
-		if (Msg->State == DragMessage::DragState::DRAGSTARTED)
+		if (Msg->State == DragMessage::DRAGSTARTED)
 		{
 			// If it's a colour drag which did NOT originate from the editor, then attach
 			// a drag target so it can be dropped into the editor.
@@ -2850,7 +2864,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 					// Last, add one for the whole window - this is lower priority than the
 					// others, so will only be active for any areas which are not claimed by
 					// the above targets
-					ColEditorDragTarget *NewTarget = new ColEditorDragTarget(this, NULL);
+					/*ColEditorDragTarget * NewTarget = */ new ColEditorDragTarget(this, 0);
 				}
 				// We don't really care if this failed...
 			}			
@@ -2985,7 +2999,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 			{
 				INT32 i = 0;
-				while (GadgetHelp[i].Gadget != NULL)
+				while (GadgetHelp[i].Gadget)
 				{
 					SetGadgetHelp(GadgetHelp[i].Gadget, GadgetHelp[i].BubbleID, GadgetHelp[i].BubbleID);
 					i++;
@@ -3014,8 +3028,8 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 		case DIM_CANCEL:				// Cancel clicked
 		{
-			StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
-			if (!pStatusLine || pStatusLine->IsRestrictedAccessToColourPicker () == FALSE)
+			StatusLine* pStatusLine = StatusLine::Get();
+			if (!pStatusLine || !pStatusLine->IsRestrictedAccessToColourPicker())
 			{
 				CloseMyself();			// And close the window
 			}
@@ -3034,9 +3048,11 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 			
 			if (Use3DDisplay == FALSE)
 			{
+PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
+#ifndef EXCLUDE_FROM_XARALX
 				if (resetColPickPos == TRUE)
 				{
-					CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
+					CWindowID hwndColPick = DialogManager::GetGadget(GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
 					ASSERT (hwndColPick);
 
 					MoveWindow (hwndColPick, colPickOrigRect.left, colPickOrigRect.top,
@@ -3045,6 +3061,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 					resetColPickPos = FALSE;
 				}
+#endif
 			}
 			else
 			{
@@ -3060,11 +3077,13 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 				
 				if ((DisplayModel == COLOURMODEL_RGBT) || (DisplayModel == COLOURMODEL_WEBRGBT) || (DisplayModel == COLOURMODEL_CMYK))
 				{
+PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
+#ifndef EXCLUDE_FROM_XARALX
 					if (resetColPickPos == FALSE)
 					{
-						CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
+						CWindowID hwndColPick = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
 						ASSERT (hwndColPick);
-						CWindowID hwndEditPicker = GetDlgItem (GetReadWriteWindowID (), _R(IDC_EDIT_PICKER));
+						CWindowID hwndEditPicker = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_EDIT_PICKER));
 						ASSERT (hwndEditPicker);
 
 						RECT colPickRect;
@@ -3082,12 +3101,15 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 						resetColPickPos = TRUE;
 					}
+#endif
 				}
 				else if ((DisplayModel == COLOURMODEL_HSVT) || (DisplayModel == COLOURMODEL_GREYT))
 				{
+PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
+#ifndef EXCLUDE_FROM_XARALX
 					if (resetColPickPos == TRUE)
 					{
-						CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
+						CWindowID hwndColPick = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
 						ASSERT (hwndColPick);
 
 						MoveWindow (hwndColPick, colPickOrigRect.left, colPickOrigRect.top,
@@ -3096,15 +3118,13 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 						resetColPickPos = FALSE;
 					}
+#endif
 				}
 			}
 
 			if (needColPickHidden == TRUE)
 			{
-				CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
-				ASSERT (hwndColPick);
-				
-				ShowWindow (hwndColPick, SW_HIDE);
+				HideGadget(_R(IDC_COLOURPICKER), TRUE);
 				
 				if (colPickHidden == FALSE)
 				{
@@ -3115,10 +3135,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 			{
 				//if (DragStartArea == CEDRAG_NONE /*&& EditingColour != NULL && !DragUpdatedOnIdle*/)
 				//{
-					CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
-					ASSERT (hwndColPick);
-
-					ShowWindow (hwndColPick, SW_SHOW);
+					HideGadget(_R(IDC_COLOURPICKER), FALSE);
 				
 					if (colPickHidden == TRUE)
 					{
@@ -3134,106 +3151,104 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 		case DIM_LFT_BN_CLICKED:
 			// Remove bubble help whenever the user clicks
+PORTNOTE("other", "Disabled BubbleHelp stuff")
+#ifndef EXCLUDE_FROM_XARALX
 			ControlHelper::BubbleHelpDisable();
+#endif
 
-			switch(Msg->GadgetID)
+			if (FALSE) {}
+#if 0
+			else if (Msg->GadgetID == _R(IDC_NATIVEPICKER))
 			{
-#if FALSE
-/*
-				case _R(IDC_NATIVEPICKER):
+				if (EditingColour != NULL)
+				{
+					Close();		// Close ourself, and replace with the native colour picker
+
+					ColourPicker NewPicker;
+					NewPicker.EditColour(ParentList, ResultColour, TRUE);
+
 					if (EditingColour != NULL)
 					{
-						Close();		// Close ourself, and replace with the native colour picker
-
-						ColourPicker NewPicker;
-						NewPicker.EditColour(ParentList, ResultColour, TRUE);
-
-						if (EditingColour != NULL)
-						{
-							delete EditingColour;
-							EditingColour = NULL;
-						}
-						End();
+						delete EditingColour;
+						EditingColour = NULL;
 					}
-					break;
-*/
+					End();
+				}
+			}
 #endif
 
 // WEBSTER - markn 11/12/96
 #ifndef WEBSTER
-				case _R(IDC_EDIT_ADVANCED):
-					// Toggling size is allowed even when we're shaded
-					Folded = !Folded;			// Toggle the folded state of the window
-					SetControls();				// And re-set the window size
-					break;
+			else if (Msg->GadgetID == _R(IDC_EDIT_ADVANCED))
+			{
+				// Toggling size is allowed even when we're shaded
+				Folded = !Folded;			// Toggle the folded state of the window
+				SetControls();				// And re-set the window size
+			}
 #endif // WEBSTER
 
-					// WEBSTER - markn 11/12/96
-				//case _R(IDC_EDIT_LINEFILL):
-				//	FindUsefulColourToEdit(GetBoolGadgetSelected(_R(IDC_EDIT_LINEFILL)));
-				//	break;
-
-				// WEBSTER - markn 14/12/96	
-				case _R(IDC_EDIT_NOCOLOUR):
-					if ( NoFillButtonDown )
-					{
-						NoFillButtonDown = FALSE;	// remember it's up
-						EditingColourHasChanged( TRUE, FALSE );
-					}
-					else
-						ApplyNoColour(EditingLineColour);//push it down
-					break;
-
-				case _R(IDC_EDIT_RENAME):
-					{
-						DoCommand(&ColCmd_Name);
-					}
-					break;
-
-
-				// WEBSTER - markn 14/12/96	
-				case _R(IDC_EDIT_216ONLY):
-					LimitTo216Only();
-					DialogManager::DefaultKeyboardFocus();  // remove the input focus from the button (yuk!)
-					break;
-
-				case _R(IDC_EDIT_DROPMENU):		// Show drop-down menu
-					{
-						// Chuck up a context sensitive menu
-						ColEditContextMenu *Bob = new ColEditContextMenu;
-						if (Bob != NULL)
-							Bob->Show();
-					}
-					break;
-
-
-				case _R(IDC_EDIT_INHERIT1):
-				case _R(IDC_EDIT_INHERIT2):
-				case _R(IDC_EDIT_INHERIT3):
-				case _R(IDC_EDIT_INHERIT4):
-					SetColour(FALSE);			// Read the new settings from the window
-					SetControls();				// Ensure controls shade/unshade as appropriate
-					break;
-
+#if 0 // WEBSTER - markn 11/12/96
+			else if (Msg->GadgetID == _R(IDC_EDIT_LINEFILL))
+			{
+				FindUsefulColourToEdit(GetBoolGadgetSelected(_R(IDC_EDIT_LINEFILL)));
+			}
+#endif
+			
+			// WEBSTER - markn 14/12/96	
+			else if (Msg->GadgetID == _R(IDC_EDIT_NOCOLOUR))
+			{
+				if ( NoFillButtonDown )
+				{
+					NoFillButtonDown = FALSE;	// remember it's up
+					EditingColourHasChanged( TRUE, FALSE );
+				}
+				else
+					ApplyNoColour(EditingLineColour);//push it down
+			}
+			else if (Msg->GadgetID == _R(IDC_EDIT_RENAME))
+			{
+				DoCommand(&ColCmd_Name);
+			}
+			// WEBSTER - markn 14/12/96	
+			else if (Msg->GadgetID == _R(IDC_EDIT_216ONLY))
+			{
+				LimitTo216Only();
+				DialogManager::DefaultKeyboardFocus();  // remove the input focus from the button (yuk!)
+			}
+			else if (Msg->GadgetID == _R(IDC_EDIT_DROPMENU))
+			{
+				// Show drop-down menu
+				// Chuck up a context sensitive menu
+				ColEditContextMenu *Bob = new ColEditContextMenu;
+				if (Bob != NULL)
+					Bob->Show();
+			}
+			else if ((Msg->GadgetID == _R(IDC_EDIT_INHERIT1)) ||
+					 (Msg->GadgetID == _R(IDC_EDIT_INHERIT2)) ||
+					 (Msg->GadgetID == _R(IDC_EDIT_INHERIT3)) ||
+					 (Msg->GadgetID == _R(IDC_EDIT_INHERIT4)))
+			{
+				SetColour(FALSE);			// Read the new settings from the window
+				SetControls();				// Ensure controls shade/unshade as appropriate
+			}
 // WEBSTER - markn 14/1/97
 // Removed click handling on unused buttons
-				case _R(IDC_EDIT_3D):
-					// 3D display mode turned on/off. Redraw the picker control to show it
-					// in the new mode.
-					Use3DDisplay = GetBoolGadgetSelected(_R(IDC_EDIT_3D));
-					InvalidateGadget(_R(IDC_EDIT_PICKER));
-					break;
-
-				case _R(IDC_EDIT_MAKESTYLE):
-					MakeNewNColour();
-					break;
+			else if (Msg->GadgetID == _R(IDC_EDIT_3D))
+			{
+				// 3D display mode turned on/off. Redraw the picker control to show it
+				// in the new mode.
+				Use3DDisplay = GetBoolGadgetSelected(_R(IDC_EDIT_3D));
+				InvalidateGadget(_R(IDC_EDIT_PICKER));
+			}
+			else if (Msg->GadgetID == _R(IDC_EDIT_MAKESTYLE))
+			{
+				MakeNewNColour();
+			}
 // can make named colours in webster #endif // WEBSTER
-
-
-				case _R(IDC_MAKE_LOCAL):
-					// handles the webster only "Make Local to Frame" button
-					OnMakeLocalToFrame();
-					break;
+			else if (Msg->GadgetID == _R(IDC_MAKE_LOCAL))
+			{
+				// handles the webster only "Make Local to Frame" button
+				OnMakeLocalToFrame();
 			}
 
 			// And then lob away the input focus again - put it back into the mainframe
@@ -3243,10 +3258,13 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		case DIM_LFT_BN_DOWN:
 //		case DIM_RGT_BN_DOWN:
 			// Remove bubble help whenever the user clicks
+PORTNOTE("other", "Disabled BubbleHelp stuff")
+#ifndef EXCLUDE_FROM_XARALX
 			ControlHelper::BubbleHelpDisable();
+#endif
 
 			// Drag methods all cope with shaded condition (EditingColour == NULL)
-			if (Msg->DlgMsgParam != NULL)
+			if (Msg->DlgMsgParam)
 			{
 				if (Msg->GadgetID == _R(IDC_EDIT_PICKER))
 				{
@@ -3332,59 +3350,52 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 				// change, we update the EditingColour, and possibly force-redraw the
 				// current-colour indicator patch, as appropriate to the change
 
-				switch (Msg->GadgetID)
+				if (( Msg->GadgetID == _R(IDC_EDIT_COMPONENT1)) ||
+					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT2)) ||
+					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT3)) ||
+					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT4)))
 				{
-					case _R(IDC_EDIT_COMPONENT1):
-					case _R(IDC_EDIT_COMPONENT2):
-					case _R(IDC_EDIT_COMPONENT3):
-					case _R(IDC_EDIT_COMPONENT4):
-					case _R(IDC_EDIT_WEBHEX):
-						// While setting the colour, make sure we don't try to update the
-						// field that the user is currently typing into!
-						CurrentTypingGadget = Msg->GadgetID;
-						SetColour();
-						CurrentTypingGadget = NULL;
+					// While setting the colour, make sure we don't try to update the
+					// field that the user is currently typing into!
+					CurrentTypingGadget = Msg->GadgetID;
+					SetColour();
+					CurrentTypingGadget = 0;
 
-						// We have to set the transparency button manually here 'cos SetColour
-						// does not write the gadgets when we're typing (it would over write 
-						// whatever we are typing!)
-						if (NoFillButtonDown)	// if it's up already don't bother redrawing
-						{
-							NoFillButtonDown = FALSE;
-							SetBoolGadgetSelected( _R(IDC_EDIT_NOCOLOUR), NoFillButtonDown);
-						}
+					// We have to set the transparency button manually here 'cos SetColour
+					// does not write the gadgets when we're typing (it would over write 
+					// whatever we are typing!)
+					if (NoFillButtonDown)	// if it's up already don't bother redrawing
+					{
+						NoFillButtonDown = FALSE;
+						SetBoolGadgetSelected( _R(IDC_EDIT_NOCOLOUR), NoFillButtonDown);
+					}
 
 
-						// Set flag to tell the 'lose focus' function to also update the
-						// text components once while it's at it - this just tidies up the
-						// appearance of the controls as soon as we lose focus.
-						TextMayBeWrong = TRUE;
-						break;
+					// Set flag to tell the 'lose focus' function to also update the
+					// text components once while it's at it - this just tidies up the
+					// appearance of the controls as soon as we lose focus.
+					TextMayBeWrong = TRUE;
+				}
+				else if (Msg->GadgetID == _R(IDC_EDIT_TINT))
+				{
+					INT32 MinValue = (EditingColour->TintIsShade()) ? -100 : 0;
+					INT32 NewValue = GetLongGadgetValue(_R(IDC_EDIT_TINT), MinValue, 100);
+					if (NewValue < MinValue) NewValue = MinValue;
+					if (NewValue > 100)	 	 NewValue = 100;
 
-					case _R(IDC_EDIT_TINT):
-						{
-							INT32 MinValue = (EditingColour->TintIsShade()) ? -100 : 0;
-							INT32 NewValue = GetLongGadgetValue(_R(IDC_EDIT_TINT), MinValue, 100);
-							if (NewValue < MinValue) NewValue = MinValue;
-							if (NewValue > 100)	 	 NewValue = 100;
+					CurrentTypingGadget = _R(IDC_EDIT_TINT);
+					SetColour(FALSE);
+					CurrentTypingGadget = 0;
+				}
+				else if (Msg->GadgetID == _R(IDC_EDIT_SHADE))
+				{
+					INT32 NewValue = GetLongGadgetValue(_R(IDC_EDIT_SHADE), -100, 100);
+					if (NewValue < -100) NewValue = -100;
+					if (NewValue > 100)	 NewValue = 100;
 
-							CurrentTypingGadget = _R(IDC_EDIT_TINT);
-							SetColour(FALSE);
-							CurrentTypingGadget = NULL;
-						}
-						break;
-
-					case _R(IDC_EDIT_SHADE):
-						{
-							INT32 NewValue = GetLongGadgetValue(_R(IDC_EDIT_SHADE), -100, 100);
-							if (NewValue < -100) NewValue = -100;
-							if (NewValue > 100)	 NewValue = 100;
-
-							CurrentTypingGadget = _R(IDC_EDIT_SHADE);
-							SetColour(FALSE);
-							CurrentTypingGadget = NULL;
-						}
-						break;
+					CurrentTypingGadget = _R(IDC_EDIT_SHADE);
+					SetColour(FALSE);
+					CurrentTypingGadget = 0;
 				}
 			}
 			break;
@@ -3443,19 +3454,19 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		
 			break;
 
+		
+		case DIM_SELECTION_CHANGED:					// Combo-box selection
 		case DIM_SELECTION_CHANGED_COMMIT:			// Combo-box selection
 			if (ISentTheMessage)
 				break;
 
-			switch (Msg->GadgetID)
+			if ((Msg->GadgetID == _R(IDC_EDIT_NAMEMENU)) ||
+				(Msg->GadgetID == _R(IDC_EDIT_COLMODEL)) ||
+				(Msg->GadgetID == _R(IDC_EDIT_COLTYPE)) ||
+				(Msg->GadgetID == _R(IDC_EDIT_PARENTCOL)))
 			{
-				case _R(IDC_EDIT_NAMEMENU):
-				case _R(IDC_EDIT_COLMODEL):
-				case _R(IDC_EDIT_COLTYPE):
-				case _R(IDC_EDIT_PARENTCOL):
-					// A dropdown list has been closed up again - turn off our focus-losing lock
-					LockLoseFocus = FALSE;
-					break;
+				// A dropdown list has been closed up again - turn off our focus-losing lock
+				LockLoseFocus = FALSE;
 			}
 
 // WEBSTER - markn 14/1/97
@@ -3512,7 +3523,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 				WORD Index;
 				GetValueIndex(_R(IDC_EDIT_COLMODEL), &Index);
 
-				if (Index >=0 && Index < MAX_COLOURMODELS)
+				if (Index < MAX_COLOURMODELS)
 				{
 					ColourContextArray ColContexts;
 					ColourContext::GetGlobalDefaults(&ColContexts);
@@ -3749,6 +3760,8 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 
 			break;
 
+		default:
+			break;
 	}
 
 	return(DialogOp::Message(Message));
@@ -4058,7 +4071,7 @@ void ColourEditDlg::RenderCross(RenderRegion *pRender, DocRect *CrossRect,
 //		White = DocColour(176L, 176L, 176L);
 
 		// Now it just gets a constraint circle around it
-		DocCoord Center((CrossRect->lox + CrossRect->hix) / 2, (CrossRect->loy + CrossRect->hiy) / 2);
+		DocCoord Center((CrossRect->lo.x + CrossRect->hi.x) / 2, (CrossRect->lo.y + CrossRect->hi.y) / 2);
 		RenderConstraint(pRender, Center, Center);
 	}
 
@@ -4192,7 +4205,7 @@ void ColourEditDlg::RenderConstraint(RenderRegion *pRender, DocCoord End1, DocCo
 	else
 	{
 		const INT32 CircleSize = (CROSSRADIUS + 1000) / 2;
-		const INT32 CPDist = (const INT32) ( ((double)CircleSize) * 0.552 );
+//		const INT32 CPDist = (const INT32) ( ((double)CircleSize) * 0.552 );
 
 		DocCoord Dist = End1 - End2;
 		double Angle = 0.0;
@@ -4402,7 +4415,8 @@ void ColourEditDlg::RenderPickerHSV(RenderRegion *pRender, DocRect *VirtualSize,
 
 		// Render a white linear-grad-transparency square over the top to get the
 		// effect of the Saturation gradient
-		pRender->SetFillColour(DocColour(0L, 0L, 0L));
+		DocColour black(0,0,0);
+		pRender->SetFillColour(black);
 
 		// Set transparency to circular 0% at center, 100% at radius, && plot it
 		if (bHSVHueAtTop)
@@ -4512,14 +4526,14 @@ else
 			if (EditingColour->InheritsComponent(2))
 			{
 				// Saturation is locked, so constrain to Value axis
-				RenderConstraint(pRender, DocCoord(TransX, ValSatSquare.hiy), 
-											DocCoord(TransX, ValSatSquare.loy));
+				RenderConstraint(pRender, DocCoord(TransX, ValSatSquare.hi.y), 
+											DocCoord(TransX, ValSatSquare.lo.y));
 			}
 			else if (EditingColour->InheritsComponent(3))
 			{
 				// Value is locked, so constrain to Saturation axis
-				RenderConstraint(pRender, DocCoord(ValSatSquare.lox, TransY), 
-											DocCoord(ValSatSquare.hix, TransY));
+				RenderConstraint(pRender, DocCoord(ValSatSquare.lo.x, TransY), 
+											DocCoord(ValSatSquare.hi.x, TransY));
 			}
 		}
 	}
@@ -5645,13 +5659,13 @@ void ColourEditDlg::RenderPickerRGB(RenderRegion *pRender, DocRect *VirtualSize,
 
 		if (Constraint == CROSSCONSTRAINED_HORZ)
 		{
-			INT32 MidY = (CrossRect.loy + CrossRect.hiy) / 2;
-			RenderConstraint(pRender, DocCoord(SquareRect.lox, MidY), DocCoord(SquareRect.hix, MidY));
+			INT32 MidY = (CrossRect.lo.y + CrossRect.hi.y) / 2;
+			RenderConstraint(pRender, DocCoord(SquareRect.lo.x, MidY), DocCoord(SquareRect.hi.x, MidY));
 		}
 		else if (Constraint == CROSSCONSTRAINED_VERT)
 		{
-			INT32 MidX = (CrossRect.lox + CrossRect.hix) / 2;
-			RenderConstraint(pRender, DocCoord(MidX, SquareRect.loy), DocCoord(MidX, SquareRect.hiy));
+			INT32 MidX = (CrossRect.lo.x + CrossRect.hi.x) / 2;
+			RenderConstraint(pRender, DocCoord(MidX, SquareRect.lo.y), DocCoord(MidX, SquareRect.hi.y));
 		}
 	}
 
@@ -5974,13 +5988,13 @@ void ColourEditDlg::RenderPickerCMYK(RenderRegion *pRender, DocRect *VirtualSize
 		// And render constraint bubbles if necessary
 		if (Constraint == CROSSCONSTRAINED_HORZ)
 		{
-			INT32 MidY = (CrossRect.loy + CrossRect.hiy) / 2;
-			RenderConstraint(pRender, DocCoord(SquareRect.lox, MidY), DocCoord(SquareRect.hix, MidY));
+			INT32 MidY = (CrossRect.lo.y + CrossRect.hi.y) / 2;
+			RenderConstraint(pRender, DocCoord(SquareRect.lo.x, MidY), DocCoord(SquareRect.hi.x, MidY));
 		}
 		else if (Constraint == CROSSCONSTRAINED_VERT)
 		{
-			INT32 MidX = (CrossRect.lox + CrossRect.hix) / 2;
-			RenderConstraint(pRender, DocCoord(MidX, SquareRect.loy), DocCoord(MidX, SquareRect.hiy));
+			INT32 MidX = (CrossRect.lo.x + CrossRect.hi.x) / 2;
+			RenderConstraint(pRender, DocCoord(MidX, SquareRect.lo.y), DocCoord(MidX, SquareRect.hi.y));
 		}
 
 		// And a cross on the Key slider too
@@ -6223,7 +6237,8 @@ void ColourEditDlg::RenderPickerDefault(RenderRegion *pRender, DocRect *VirtualS
 
 	// Count how many components we have to display
 	INT32 NumComponents = 0;
-	for (INT32 ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
+	INT32 ComponentIndex;
+	for (ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
 	{
 		if (cc->GetComponentName(ComponentIndex, NULL))
 			NumComponents++;
@@ -6510,7 +6525,8 @@ void ColourEditDlg::RenderPickerShade(RenderRegion *pRender, DocRect *VirtualSiz
 
 		// Render a white linear-grad-transparency square over the top to get the
 		// effect of the Saturation gradient
-		pRender->SetFillColour(DocColour(0L, 0L, 0L));
+		DocColour black(0,0,0);
+		pRender->SetFillColour(black);
 
 		// Set transparency to circular 0% at center, 100% at radius, && plot it
 		TransFill.SetStartPoint(&ValSatSquare.hi);
@@ -6579,7 +6595,7 @@ void ColourEditDlg::RenderPickerShade(RenderRegion *pRender, DocRect *VirtualSiz
 
 ********************************************************************************************/
 
-void ColourEditDlg::RenderControl(UINT32 GadgetToRender, ReDrawInfoType* RedrawInfo)
+	void ColourEditDlg::RenderControl(UINT32 GadgetToRender, ReDrawInfoType* RedrawInfo)
 {
 	// Use a virtual coord space of (0,0) to (dx, dy)
 	DocRect VirtualSize(0, 0, RedrawInfo->dx, RedrawInfo->dy);
@@ -6604,206 +6620,198 @@ void ColourEditDlg::RenderControl(UINT32 GadgetToRender, ReDrawInfoType* RedrawI
 
 		DialogColourInfo RedrawColours;			// Object supplying Host OS redraw colours
 
-		switch (GadgetToRender)
+		if (GadgetToRender == _R(IDC_EDIT_PICKER))
 		{
-			case _R(IDC_EDIT_PICKER):
-				{
-					// Draw a narrow plinth around the edge of the control
-					pRender->SaveContext();
+			// Draw a narrow plinth around the edge of the control
+			pRender->SaveContext();
 
-					pRender->SetLineWidth(0);
-					pRender->SetFillColour(RedrawColours.DialogBack());
-					pRender->SetLineColour(RedrawColours.ButtonShadow());
-					pRender->DrawRect(&VirtualSize);
+			pRender->SetLineWidth(0);
+			pRender->SetFillColour(RedrawColours.DialogBack());
+			pRender->SetLineColour(RedrawColours.ButtonShadow());
+			pRender->DrawRect(&VirtualSize);
 
-					pRender->SetLineColour(RedrawColours.ButtonHighlight());
-					pRender->DrawLine(VirtualSize.hi, DocCoord(VirtualSize.hi.x, VirtualSize.lo.y));
-					pRender->DrawLine(DocCoord(VirtualSize.hi.x, VirtualSize.lo.y), VirtualSize.lo);
+			pRender->SetLineColour(RedrawColours.ButtonHighlight());
+			pRender->DrawLine(VirtualSize.hi, DocCoord(VirtualSize.hi.x, VirtualSize.lo.y));
+			pRender->DrawLine(DocCoord(VirtualSize.hi.x, VirtualSize.lo.y), VirtualSize.lo);
 
-					// And deflate the rect by 2 pixels
-					VirtualSize.Inflate(-PixelSize * 4);
+			// And deflate the rect by 2 pixels
+			VirtualSize.Inflate(-PixelSize * 4);
 
-					// Now draw the original/current colour patch in the top right corner
-					DocRect PatchRect(VirtualSize);
-					PatchRect.lo.x = PatchRect.hi.x - PATCHSIZE;
-					PatchRect.lo.y = PatchRect.hi.y - PATCHSIZE;
-					GridLockRect(&PatchRect, PixelSize);
+			// Now draw the original/current colour patch in the top right corner
+			DocRect PatchRect(VirtualSize);
+			PatchRect.lo.x = PatchRect.hi.x - PATCHSIZE;
+			PatchRect.lo.y = PatchRect.hi.y - PATCHSIZE;
+			GridLockRect(&PatchRect, PixelSize);
 
-					DocColour Orig;
-					if (EditingColour == NULL)
-						Orig = DocColour(128, 128, 128);
-					else
-						Orig.MakeRefToIndexedColour(&OriginalColour);
+			DocColour Orig;
+			if (EditingColour == NULL)
+				Orig = DocColour(128, 128, 128);
+			else
+				Orig.MakeRefToIndexedColour(&OriginalColour);
 
-					DocColour PatchCol;
-					if (EditingColour == NULL)
-						PatchCol = DocColour(128, 128, 128);
-					else
-						PatchCol.MakeRefToIndexedColour(EditingColour);
+			DocColour PatchCol;
+			if (EditingColour == NULL)
+				PatchCol = DocColour(128, 128, 128);
+			else
+				PatchCol.MakeRefToIndexedColour(EditingColour);
 
-					// Patches are horizontal if the colour model is not HSV
-					BOOL HorzPatch = (DisplayModel != COLOURMODEL_HSVT);
-					
-					// But this setting is overridden for the special tint and shade modes
-					if (EditingColour != NULL && EditingColour->GetType() == COLOURTYPE_TINT)
-					{
- 						if (EditingColour->TintIsShade())
-							HorzPatch = FALSE;
-						else
-							HorzPatch = TRUE;
-					}
+			// Patches are horizontal if the colour model is not HSV
+			BOOL HorzPatch = (DisplayModel != COLOURMODEL_HSVT);
+			
+			// But this setting is overridden for the special tint and shade modes
+			if (EditingColour != NULL && EditingColour->GetType() == COLOURTYPE_TINT)
+			{
+				if (EditingColour->TintIsShade())
+					HorzPatch = FALSE;
+				else
+					HorzPatch = TRUE;
+			}
 
-					pRender->SetLineWidth(0);
-					pRender->SetLineColour(COLOUR_BLACK);
-					if (HorzPatch)
-						pRender->SetFillColour(PatchCol);
-					else
-						pRender->SetFillColour(Orig);
-					pRender->DrawRect(&PatchRect);
+			pRender->SetLineWidth(0);
+			pRender->SetLineColour(COLOUR_BLACK);
+			if (HorzPatch)
+				pRender->SetFillColour(PatchCol);
+			else
+				pRender->SetFillColour(Orig);
+			pRender->DrawRect(&PatchRect);
 
-					if (HorzPatch)
-					{
-						// Move the patch to the left for the second square
-						PatchRect.Translate(-PATCHSIZE, 0);
-						pRender->SetFillColour(Orig);
-					}
-					else
-					{
-						// Move the patch down for the second square
-						PatchRect.Translate(0, -PATCHSIZE);
-						pRender->SetFillColour(PatchCol);
-					}
+			if (HorzPatch)
+			{
+				// Move the patch to the left for the second square
+				PatchRect.Translate(-PATCHSIZE, 0);
+				pRender->SetFillColour(Orig);
+			}
+			else
+			{
+				// Move the patch down for the second square
+				PatchRect.Translate(0, -PATCHSIZE);
+				pRender->SetFillColour(PatchCol);
+			}
 
-					pRender->DrawRect(&PatchRect);
+			pRender->DrawRect(&PatchRect);
 /*
-//					DocColour Trans(COLOUR_TRANS);
-//					pRender->SetLineColour(Trans);
-					pRender->SetFillColour(Orig);
-					Path TriPath;
-					TriPath.Initialise(12, 12);
-					TriPath.FindStartOfPath();
-					TriPath.InsertMoveTo(PatchRect.lo);
-					TriPath.InsertLineTo(DocCoord(PatchRect.lo.x, PatchRect.hi.y));
-					TriPath.InsertLineTo(PatchRect.hi);
-					TriPath.IsFilled = TRUE;
-					pRender->DrawPath(&TriPath);		// Render the value square
+//			DocColour Trans(COLOUR_TRANS);
+//			pRender->SetLineColour(Trans);
+			pRender->SetFillColour(Orig);
+			Path TriPath;
+			TriPath.Initialise(12, 12);
+			TriPath.FindStartOfPath();
+			TriPath.InsertMoveTo(PatchRect.lo);
+			TriPath.InsertLineTo(DocCoord(PatchRect.lo.x, PatchRect.hi.y));
+			TriPath.InsertLineTo(PatchRect.hi);
+			TriPath.IsFilled = TRUE;
+			pRender->DrawPath(&TriPath);		// Render the value square
 */
-					pRender->RestoreContext();
-				}
+			pRender->RestoreContext();
+		
 
-				if (EditingColour != NULL && EditingColour->GetType() == COLOURTYPE_TINT)	// Tint or shade
+			if (EditingColour != NULL && EditingColour->GetType() == COLOURTYPE_TINT)	// Tint or shade
+			{
+				if (EditingColour->TintIsShade())
 				{
-					if (EditingColour->TintIsShade())
-					{
-						RenderPickerShade(pRender, &VirtualSize, PixelSize, &RedrawColours,
-												RedrawInfo->pClipRect);
-					}
-					else
-						RenderPickerTint(pRender, &VirtualSize, PixelSize, &RedrawColours);
+					RenderPickerShade(pRender, &VirtualSize, PixelSize, &RedrawColours,
+											RedrawInfo->pClipRect);
 				}
 				else
+					RenderPickerTint(pRender, &VirtualSize, PixelSize, &RedrawColours);
+			}
+			else
+			{
+				switch (DisplayModel)
 				{
-					switch (DisplayModel)
-					{
-						case COLOURMODEL_RGBT:
-						case COLOURMODEL_WEBRGBT:
-							if (Use3DDisplay)
-								RenderPickerRGB(pRender, &VirtualSize, PixelSize, &RedrawColours);
-							else
-								RenderPickerDefault(pRender, &VirtualSize, PixelSize, &RedrawColours);
-							break;
-
-						case COLOURMODEL_CMYK:
-							if (Use3DDisplay)
-								RenderPickerCMYK(pRender, &VirtualSize, PixelSize, &RedrawColours);
-							else
-								RenderPickerDefault(pRender, &VirtualSize, PixelSize, &RedrawColours);
-							break;
-
-						case COLOURMODEL_HSVT:
-							RenderPickerHSV(pRender, &VirtualSize, PixelSize, &RedrawColours,
-												RedrawInfo->pClipRect);
-							break;
-
-						default:
+					case COLOURMODEL_RGBT:
+					case COLOURMODEL_WEBRGBT:
+						if (Use3DDisplay)
+							RenderPickerRGB(pRender, &VirtualSize, PixelSize, &RedrawColours);
+						else
 							RenderPickerDefault(pRender, &VirtualSize, PixelSize, &RedrawColours);
-							break;
-					}
+						break;
+	
+					case COLOURMODEL_CMYK:
+						if (Use3DDisplay)
+							RenderPickerCMYK(pRender, &VirtualSize, PixelSize, &RedrawColours);
+						else
+							RenderPickerDefault(pRender, &VirtualSize, PixelSize, &RedrawColours);
+						break;
+	
+					case COLOURMODEL_HSVT:
+						RenderPickerHSV(pRender, &VirtualSize, PixelSize, &RedrawColours,
+											RedrawInfo->pClipRect);
+						break;
+	
+					default:
+						RenderPickerDefault(pRender, &VirtualSize, PixelSize, &RedrawColours);
+						break;
 				}
-				break;
+			}
+		}
+#if 0
+		else if (GadgetToRender == _R(IDC_EDIT_PATCH))						// Old/New/Parent-colour patch
+		{
+			pRender->SaveContext();
+
+			DocColour Trans(COLOUR_TRANS);
+			DocColour Orig;
+			if (EditingColour == NULL)
+				Orig = DocColour(128, 128, 128);
+			else
+				Orig.MakeRefToIndexedColour(&OriginalColour);
+
+			pRender->SetLineWidth(0);
+			pRender->SetLineColour(Trans);
+
+			DocColour PatchCol;
+			if (EditingColour == NULL)
+				PatchCol = DocColour(128, 128, 128);
+			else
+				PatchCol.MakeRefToIndexedColour(EditingColour);
+
+			pRender->SetFillColour(PatchCol);
+			pRender->DrawRect(&VirtualSize);
+
+			pRender->SetFillColour(Orig);
+			Path TriPath;
+			TriPath.Initialise(12, 12);
+			TriPath.FindStartOfPath();
+			TriPath.InsertMoveTo(VirtualSize.lo);
+			TriPath.InsertLineTo(DocCoord(VirtualSize.lo.x, VirtualSize.hi.y));
+			TriPath.InsertLineTo(DocCoord(VirtualSize.hi.x, VirtualSize.lo.y));
+			TriPath.IsFilled = TRUE;
+			pRender->DrawPath(&TriPath);		// Render the value square
 
 
-#if FALSE
-/*
-			case _R(IDC_EDIT_PATCH):						// Old/New/Parent-colour patch
-				{
-					pRender->SaveContext();
+#if 0
+			INT32 PatchHeight = VirtualSize.Height() / 3;
 
-					DocColour Trans(COLOUR_TRANS);
-					DocColour Orig;
-					if (EditingColour == NULL)
-						Orig = DocColour(128, 128, 128);
-					else
-						Orig.MakeRefToIndexedColour(&OriginalColour);
+			DocRect TheRect(VirtualSize);
+			TheRect.lo.y = TheRect.hi.y - PatchHeight;
+			pRender->DrawRect(&TheRect);
 
-					pRender->SetLineWidth(0);
-					pRender->SetLineColour(Trans);
+			DocColour PatchCol;
+			if (EditingColour == NULL)
+				PatchCol = DocColour(128, 128, 128);
+			else
+				PatchCol.MakeRefToIndexedColour(EditingColour);
 
-					DocColour PatchCol;
-					if (EditingColour == NULL)
-						PatchCol = DocColour(128, 128, 128);
-					else
-						PatchCol.MakeRefToIndexedColour(EditingColour);
+			pRender->SetFillColour(PatchCol);
+			TheRect.Translate(0, -PatchHeight);	// Move the patch rect down and plot
+			pRender->DrawRect(&TheRect);
 
-					pRender->SetFillColour(PatchCol);
-					pRender->DrawRect(&VirtualSize);
+			if (EditingColour != NULL && EditingColour->FindLinkedParent() != NULL)
+				PatchCol.MakeRefToIndexedColour(EditingColour->FindLinkedParent());
 
-					pRender->SetFillColour(Orig);
-					Path TriPath;
-					TriPath.Initialise(12, 12);
-					TriPath.FindStartOfPath();
-					TriPath.InsertMoveTo(VirtualSize.lo);
-					TriPath.InsertLineTo(DocCoord(VirtualSize.lo.x, VirtualSize.hi.y));
-					TriPath.InsertLineTo(DocCoord(VirtualSize.hi.x, VirtualSize.lo.y));
-					TriPath.IsFilled = TRUE;
-					pRender->DrawPath(&TriPath);		// Render the value square
-
-
-|*
-					INT32 PatchHeight = VirtualSize.Height() / 3;
-
-					DocRect TheRect(VirtualSize);
-					TheRect.lo.y = TheRect.hi.y - PatchHeight;
-					pRender->DrawRect(&TheRect);
-
-					DocColour PatchCol;
-					if (EditingColour == NULL)
-						PatchCol = DocColour(128, 128, 128);
-					else
-						PatchCol.MakeRefToIndexedColour(EditingColour);
-
-					pRender->SetFillColour(PatchCol);
-					TheRect.Translate(0, -PatchHeight);	// Move the patch rect down and plot
-					pRender->DrawRect(&TheRect);
-
-					if (EditingColour != NULL && EditingColour->FindLinkedParent() != NULL)
-						PatchCol.MakeRefToIndexedColour(EditingColour->FindLinkedParent());
-
-					pRender->SetFillColour(PatchCol);
-					TheRect.Translate(0, -PatchHeight);	// Move the patch rect down and plot
-					pRender->DrawRect(&TheRect);
-*|
-
-					pRender->RestoreContext();
-				}
-				break;
-*/
+			pRender->SetFillColour(PatchCol);
+			TheRect.Translate(0, -PatchHeight);	// Move the patch rect down and plot
+			pRender->DrawRect(&TheRect);
 #endif
 
-			default:
-				ERROR3("Render request for unsupported kernel-rendered control!");
-				break;
-		}				
+			pRender->RestoreContext();
+		}
+#endif
+		else
+		{
+			ERROR3("Render request for unsupported kernel-rendered control!");
+		}
 
 
 		// Get rid of the render region
@@ -6875,7 +6883,7 @@ void ColourEditDlg::StartDrag(ReDrawInfoType *Info)
 	{	
 		//OldMousePos = *(Info->pMousePos);
 		//HideGadget (_R(IDC_COLOURPICKER), TRUE);
-		//CWindowID hwndColPick = GetDlgItem (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
+		//CWindowID hwndColPick = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
 		//ASSERT (hwndColPick);
 				
 		//ShowWindow (hwndColPick, SW_HIDE);
@@ -7218,7 +7226,7 @@ void ColourEditDlg::DoCommand(StringBase *Command)
 #ifdef WEBSTER // Martin 16/07/97
 	else if (*Command == ColCmd_NewNColour)
 		MakeNewNColour(); //do the same thing as pressing the button!
-#endif WEBSTER
+#endif //WEBSTER
 
 	if (NewColourModel != COLOURMODEL_INDEXED && NewColourModel != DisplayModel)
 	{
@@ -8170,7 +8178,7 @@ void ColourEditDlg::SetNewValueRGB(ReDrawInfoType *Info, INT32 PixelSize, BOOL S
 
 				if (KeyPress::IsConstrainPressed())
 				{
-					ColourRGBT *ConstrainDef = (ColourRGBT *) &ColourBeforeDrag;
+//					ColourRGBT *ConstrainDef = (ColourRGBT *) &ColourBeforeDrag;
 
 					double XDiff = GetComponent(&ColourBeforeDrag, XComponent).MakeDouble() - NewX;
 					double YDiff = GetComponent(&ColourBeforeDrag, YComponent).MakeDouble() - NewY;
@@ -8457,7 +8465,7 @@ void ColourEditDlg::SetNewValueCMYK(ReDrawInfoType *Info, INT32 PixelSize, BOOL 
 
 				if (KeyPress::IsConstrainPressed())
 				{
-					ColourCMYK *ConstrainDef = (ColourCMYK *) &ColourBeforeDrag;
+//					ColourCMYK *ConstrainDef = (ColourCMYK *) &ColourBeforeDrag;
 
 					double XDiff = GetComponent(&ColourBeforeDrag, XComponent).MakeDouble() - NewX;
 					double YDiff = GetComponent(&ColourBeforeDrag, YComponent).MakeDouble() - NewY;
@@ -8633,6 +8641,9 @@ void ColourEditDlg::SetNewValueDefault(ReDrawInfoType *Info, INT32 PixelSize, BO
 			case CEDRAG_DEFAULT_COMPONENT4:
 				CurrentComponentIndex = 3;
 				break;
+
+			default:
+				break;
 		}
 	}
 
@@ -8642,7 +8653,8 @@ void ColourEditDlg::SetNewValueDefault(ReDrawInfoType *Info, INT32 PixelSize, BO
 
 	// Count how many components we have to display
 	INT32 NumComponents = 0;
-	for (INT32 ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
+	INT32 ComponentIndex;
+	for (ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
 	{
 		if (cc->GetComponentName(ComponentIndex, NULL))
 			NumComponents++;
@@ -9080,18 +9092,17 @@ BOOL ColourEditDlg::HandleIdlePointer(ReDrawInfoType *Info, String_128 *BubbleHe
 	ERROR3IF(Info == NULL || BubbleHelp == NULL || ControlID == NULL, "Illegal NULL params");
 
 	// Return a valid string no matter what happens
-	*BubbleHelp = String_128("");
-	*StatusHelp = String_256("");
-	*ControlID = NULL;							// No bubble help "control"
+	*BubbleHelp = String_128(_T(""));
+	*StatusHelp = String_256(_T(""));
+	*ControlID = 0;							// No bubble help "control"
 
 	if (EditingColour == NULL || AmShaded)		// We are shaded - abort
 		return(FALSE);
 
 	// Reset the cursor ID to none. If nobody changes this before the end of this function,
 	// then the cursor will reset to the default (arrow or whatever). See SetCursor
-	UINT32 OldCurrentCursor = CurrentCursorID;
-	CurrentCursorID = NULL;	
-
+//	UINT32 OldCurrentCursor = CurrentCursorID;
+	CurrentCursorID = 0;	
 
 	// First, calculate all the regions and stuff...
 	INT32 PixelSize = 72000 / Info->Dpi;		// Size of output pixel in millipoints
@@ -9654,7 +9665,8 @@ BOOL ColourEditDlg::HandleIdlePointerDefault(ReDrawInfoType *Info, String_128 *B
 
 	// Count how many components we have to display
 	INT32 NumComponents = 0;
-	for (INT32 ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
+	INT32 ComponentIndex;
+	for (ComponentIndex = 1; ComponentIndex <= 4; ComponentIndex++)
 	{
 		if (cc->GetComponentName(ComponentIndex, NULL))
 			NumComponents++;
@@ -9877,7 +9889,7 @@ BOOL ColourEditDlg::Init()
 								FALSE,								// Smart duplicate operation
 								TRUE,								// Clean operation
 								0,									// No vertical counterpart
-								NULL,								// String for one copy only error
+								0,									// String for one copy only error
 								DONT_GREY_WHEN_SELECT_INSIDE,		// Auto state flags
 								TRUE								// Tickable
 								));
@@ -10090,7 +10102,7 @@ void ColourEditDlg::DoWithParam(OpDescriptor *MyOpDedsc, OpParam *Param)
 
 	if (EditingColour != NULL)
 	{
-		StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
+		StatusLine* pStatusLine = StatusLine::Get();
 		
 		if (EditingColour->IsNamed())
 		{
@@ -10278,7 +10290,7 @@ BOOL ColourEditDlg::CanYouEditThis(ColourList *ParentList, IndexedColour *Colour
 			// an object. The only objects we know of like this are the current selection,
 			// so we can only edit local line and fill colours.
 
-			StatusLine* pStatusLine = GetMainFrame ()->GetpStatusLine ();
+			StatusLine* pStatusLine = StatusLine::Get();
 
 			if (!pStatusLine || (pStatusLine->IsRestrictedAccessToColourPicker () == FALSE))
 			{
@@ -10722,7 +10734,7 @@ BOOL ColourEditDlg::ExitedSetGadgetValue()
 
 /********************************************************************************************
 
->	ColEditorDragTarget::ColEditorDragTarget(HWND TheWindow, CRect *ClientArea)
+>	ColEditorDragTarget::ColEditorDragTarget(CWindowID TheWindow, CRect *ClientArea)
 						: WinoilDragTarget(TheWindow, ClientArea)
 	 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
@@ -10825,6 +10837,9 @@ BOOL ColEditorDragTarget::ProcessEvent(DragEventType Event,
 			// Return TRUE to claim the mouse while over our target area, so that
 			// our cursor shape is used
 			return(TRUE);
+
+		default:
+			break;
  	}
 
 	// Allow unknown/unwanted events to pass on to other targets
@@ -11445,9 +11460,9 @@ IndexedColour *OpMakeColourLocalToFrame::MakeColourLocalToFrame(IndexedColour *p
 	DefName = pActiveLayer->GetLayerID();
 
 	// add the name of the colour
-	DefName += " (";
+	DefName += _T(" (");
 	DefName += (TCHAR *)(*(pCol->GetName()));
-	DefName += ")";
+	DefName += _T(")");
 
 	String_64 OrigName;
 	String_64 NewName;
@@ -11672,7 +11687,10 @@ BOOL ColourEditDlg::GetColourContext(ColourModel ColModel, ColourContext** ppCon
 	// If we want a CMYK context then try to set one up with the printer profile
 	if (ColourEditDlg::bUsePrintCMYK && ColModel == COLOURMODEL_CMYK)
 	{
+PORTNOTE("other", "Disabled CMS usage")
+#ifndef EXCLUDE_FROM_XARALX
 		ColourContext *pContext;
+
 		XaraCMS* ptheCMS = GetApplication()->GetCMSManager();
 
 		if (ptheCMS != NULL)
@@ -11710,6 +11728,7 @@ BOOL ColourEditDlg::GetColourContext(ColourModel ColModel, ColourContext** ppCon
 				return(TRUE);
 			}
 		}
+#endif
 	}
 
 	// Otherwise just fall back to getting a default context for the required model

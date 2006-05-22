@@ -249,7 +249,7 @@ public:		// Overridden DialogOp interfaces
 	BOOL Create();
 	static OpState GetState(String_256*, OpDescriptor*);
 
-	enum { IDD = _R(IDD_COLOUREDITDLG) };
+	static const ResourceID IDD;
 
 	static const CDlgMode Mode;
 
@@ -312,7 +312,7 @@ public:
 	static void SetAbortColourState (AbortColourState state) { abortColourState = state; }
 	
 	static void ApplyEditingColourNow (BOOL UseAbortColour = FALSE);
-	static BOOL DoAbortColourNow (HWND colourPicker);
+	static BOOL DoAbortColourNow (CWindowID colourPicker);
 	static void DoHandleNamedcolour ();
 
 	static void SetDefaultDisplayModel (INT32 newDisplayModel);	// really a support function for

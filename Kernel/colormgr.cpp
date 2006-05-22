@@ -107,10 +107,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "app.h"
 #include "attrmgr.h"
-//#include "ccolbar.h"
+#include "ccolbar.h"
 #include "colcomp.h"
 #include "colcontx.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "colormgr.h"
 #include "docmsgs.h"
 #include "document.h"
@@ -204,10 +204,8 @@ BOOL ColourManager::Init(void)
 	if (!OpRedrawColours::Init())
 		return(FALSE);
 
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (!OpMakeColourLocalToFrame::Init())
 		return(FALSE);
-#endif
 #endif
 
 	// Init the global list of active colour contexts

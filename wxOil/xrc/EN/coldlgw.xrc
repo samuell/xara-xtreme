@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_COLOUREDITDLG">
+	<object class="wxDialog" name="IDD_COLOUREDITDLGW">
 			 <pos>0,0d</pos> <size>143,241d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_NAMEMENU">
 			 <pos>4,4d</pos> <size>85,-1d</size>

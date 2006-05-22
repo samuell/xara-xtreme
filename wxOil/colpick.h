@@ -108,7 +108,7 @@ class ColourContext;
 class IndexedColour;
 class String_8;
 class NewColourDlg;
-
+class ColourEditDlg;
 
 /********************************************************************************************
 
@@ -164,7 +164,7 @@ protected:
 				// Internal variant of the above
 	static BOOL GetStatusLineText(ColourEditDlg *Editor, UINT32 GadgetID, String_256 *Result);
 
-	static TCHAR *HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData);
+	static TCHAR *HelpCallbackHandler(CWindowID Window, UINT32 Item, void *UserData);
 	static BOOL		GetComponentHelp(ColourContext* const pSourceContext, 
 									const UINT32 ComponentIndex, StringBase& HelpString);
 
@@ -232,7 +232,7 @@ protected:		// Interfaces strictly for use by the kernel ColourEditDlg/ColourLin
 
 				// Moves all gadgets in NULL-terminated Gadgets list to lie under the
 				// given gadget (does not affect X position) (The offset to the first
-				// gadget in the list is used t calculate the amount by which to move all)
+				// gadget in the list is used to calculate the amount by which to move all)
 				// If MoveUnder == NULL, then all gadgets are moved downwards enough to
 				// ensure they are not visible in the window.
 	static void SetGadgetPositions(CWindowID WindowID,

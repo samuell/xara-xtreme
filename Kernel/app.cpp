@@ -126,7 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dbugtree.h"
 //#include "atminfo.h"
 #include "fontman.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 //#include "xaracms.h"
 //#include "prnmks.h"
 #include "camelot.h"
@@ -1249,7 +1249,7 @@ BOOL Application::ApplyDocComponents(BaseDocument *pDocument)
 
 BOOL Application::OnKeyPress(KeyPress* pKeyPress)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 PORTNOTE("other","Removed XaraCMS usage")
 	// First, pass the keypress to the Colour Editor.
 	// This is used to stop keypresses while dragging in the editor, so must be done first

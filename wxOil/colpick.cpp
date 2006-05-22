@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "scunit.h"
 #include "ctrlhelp.h"
 //#include "jason.h"
-#include "reshlpid.h"
+//#include "reshlpid.h"
 //#include "richard3.h"
 //#include "ed.h"
 
@@ -132,7 +132,7 @@ CC_IMPLEMENT_MEMDUMP(ColourPicker, CCObject)
 // can use a crap picker if they are shy of meeting new dialogues, and b) so
 // we can pick new colours/edit existing colours without having to wait for
 // a complete picker implementation to roll up...
-static BOOL UseOSPicker = FALSE;
+//static BOOL UseOSPicker = FALSE;
 
 
 // Static buffer for storing bubble help from the colour editor's picker area
@@ -410,176 +410,171 @@ BOOL ColourPicker::GetStatusLineText(ColourEditDlg *Editor, UINT32 GadgetID, Str
 	// Set the default help
 	*Result = String_256(_R(IDS_EDITST_DEFAULT));
 
-	switch (GadgetID)
+	if (FALSE) {}
+//	else if (GadgetID == _R(IDCANCEL))
+//	{
+//		*Result = String_256(_R(IDS_EDITST_CANCEL));
+//	}
+	else if (GadgetID == _R(IDC_EDIT_DROPMENU))
 	{
-//		case IDCANCEL:
-//			*Result = String_256(_R(IDS_EDITST_CANCEL));
-//			break;
-
-		case _R(IDC_EDIT_DROPMENU):
-			*Result = String_256(_R(IDS_EDITST_MENU));
-			break;
-
-		case _R(IDC_EDIT_COMPONENT1):
-			if (ColourEditDlg::DisplayModel == COLOURMODEL_HSVT)
-			{
-				*Result = String_256(_R(IDS_EDITST_COMP1));
-			}
-			else
-			{
-				if (cc != NULL)
-				{
-					String_64 CompName;
-					cc->GetComponentName(1, &CompName, TRUE);
-					Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
-				}
-			}
-			break;
-
-		case _R(IDC_EDIT_COMPONENT2):
+		*Result = String_256(_R(IDS_EDITST_MENU));
+	}
+	else if (GadgetID == _R(IDC_EDIT_COMPONENT1))
+	{
+		if (ColourEditDlg::DisplayModel == COLOURMODEL_HSVT)
+		{
+			*Result = String_256(_R(IDS_EDITST_COMP1));
+		}
+		else
+		{
 			if (cc != NULL)
 			{
 				String_64 CompName;
-				cc->GetComponentName(2, &CompName, TRUE);
+				cc->GetComponentName(1, &CompName, TRUE);
 				Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
 			}
-			break;
-
-		case _R(IDC_EDIT_COMPONENT3):
-			if (cc != NULL)
-			{
-				String_64 CompName;
-				cc->GetComponentName(3, &CompName, TRUE);
-				Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
-			}
-			break;
-
+		}
+	}
+	else if (GadgetID == _R(IDC_EDIT_COMPONENT2))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(2, &CompName, TRUE);
+			Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
+		}
+	}
+	else if (GadgetID == _R(IDC_EDIT_COMPONENT3))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(3, &CompName, TRUE);
+			Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
+		}
+	}
 // WEBSTER - markn 14/12/96
 #ifndef WEBSTER
-		case _R(IDC_EDIT_COMPONENT4):
-			if (cc != NULL)
-			{
-				String_64 CompName;
-				cc->GetComponentName(4, &CompName, TRUE);
-				Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
-			}
-			break;
-
-		case _R(IDC_EDIT_COLMODEL):
-			*Result = String_256(_R(IDS_EDITST_COLMODEL));
-			break;
-
-		case _R(IDC_EDIT_NAMEMENU):
-			*Result = String_256(_R(IDS_EDITST_NAME));
-			break;
-
-		case _R(IDC_EDIT_COLTYPE):
-			*Result = String_256(_R(IDS_EDITST_COLTYPE));
-			break;
-
-		case _R(IDC_EDIT_INHERIT1):
-		case _R(IDC_EDIT_INHERIT2):
-		case _R(IDC_EDIT_INHERIT3):
-		case _R(IDC_EDIT_INHERIT4):
-			*Result = String_256(_R(IDS_EDITST_INHERIT));
-			break;
-
-//		case _R(IDC_EDIT_PATCH):
-//		case _R(IDC_EDIT_PARENTPATCH):
-//			*Result = String_256(_R(IDS_EDITST_PARENTPATCH));
-//			break;
-
-		case _R(IDC_EDIT_PARENTCOL):
-		case _R(IDC_EDIT_PARENTNAME):
-			*Result = String_256(_R(IDS_EDITST_PARENTCOL));
-			break;
-
-		case _R(IDC_EDIT_TINT):
-		case _R(IDC_EDIT_TINTSLIDER):
-			if (Bob->GetType() == COLOURTYPE_TINT && !Bob->TintIsShade())
-				*Result = String_256(_R(IDS_EDITST_TINT1));		// It's a tint
-			else
-				*Result = String_256(_R(IDS_EDITST_TINT2));		// It's a shade
-			break;
-
-		case _R(IDC_EDIT_SHADE):
-			*Result = String_256(_R(IDS_EDITST_TINT2));			// It's a shade
-			break;
-
-		case _R(IDC_EDIT_ADVANCED):
-			if (Editor->Folded)
-				*Result = String_256(_R(IDS_EDITST_ADVANCED1));
-			else
-				*Result = String_256(_R(IDS_EDITST_ADVANCED2));
-			break;
-
-		case _R(IDC_EDIT_3D):
-			*Result = String_256(_R(IDS_EDITST_3D));
-			break;
-
-		case _R(IDC_EDIT_MAKESTYLE):
-			*Result = String_256(_R(IDS_EDITST_MAKESTYLE));
-			break;
-
-#endif // WEBSTER
-
-		case _R(IDC_EDIT_PICKER):
-			if (!StatusHelpBuffer.IsEmpty())
-				*Result = StatusHelpBuffer;
-			else
-			{
-				switch(Bob->GetType())
-				{
-				// WEBSTER - markn 14/12/96
-				#ifndef WEBSTER
-					case COLOURTYPE_TINT:
-						if (Editor->Folded)
-							*Result = String_256(_R(IDS_EDITST_PICKER1));
-						else
-							*Result = String_256(_R(IDS_EDITST_PICKER2));
-						break;
-
-					case COLOURTYPE_LINKED:
-						*Result = String_256(_R(IDS_EDITST_PICKER3));
-						break;
-				#endif // WEBSTER
-
-					case COLOURTYPE_NORMAL:
-					case COLOURTYPE_SPOT:
-					default:
-						*Result = String_256(_R(IDS_EDITST_PICKER4));
-						break;
-				}
-			}
-			break;
-
-		case _R(IDC_EDIT_216ONLY):
-			*Result = String_256(_R(IDS_EDITST_216ONLY));
-			break;
-
-		case _R(IDC_COLOURPICKER):
-			*Result = String_256(_R(IDS_STATICCOLOURPICKERTOOLHELP));
-			break;
-
-		case _R(IDC_MAKE_LOCAL):
-			*Result = String_256(_R(IDS_EDITST_MAKE_LOCAL));
-			break;
-
-
-		case _R(IDC_EDIT_NOCOLOUR):
-			*Result = String_256(_R(IDS_EDITST_SETNOCOLOUR));
-			break;
-
-		case _R(IDC_EDIT_RENAME):	 
-			*Result = String_256(_R(IDS_EDITST_RENAME));
-			break;
-
-
-		case _R(IDC_EDIT_LINEFILL):
-			*Result = String_256(_R(IDS_EDITST_LINEFILL));
-			break;
+	else if (GadgetID == _R(IDC_EDIT_COMPONENT4))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(4, &CompName, TRUE);
+			Result->MakeMsg(_R(IDS_EDITST_COMP234), (TCHAR *)CompName);
+		}
 	}
+	else if (GadgetID == _R(IDC_EDIT_COLMODEL))
+	{
+		*Result = String_256(_R(IDS_EDITST_COLMODEL));
+	}
+	else if (GadgetID == _R(IDC_EDIT_NAMEMENU))
+	{
+		*Result = String_256(_R(IDS_EDITST_NAME));
+	}
+	else if (GadgetID == _R(IDC_EDIT_COLTYPE))
+	{
+		*Result = String_256(_R(IDS_EDITST_COLTYPE));
+	}
+	else if ((GadgetID == _R(IDC_EDIT_INHERIT1)) ||
+			 (GadgetID == _R(IDC_EDIT_INHERIT2)) ||
+			 (GadgetID == _R(IDC_EDIT_INHERIT3)) ||
+			 (GadgetID == _R(IDC_EDIT_INHERIT4)))
+	{
+		*Result = String_256(_R(IDS_EDITST_INHERIT));
+	}
+//	else if ((GadgetID == _R(IDC_EDIT_PATCH)) ||
+//			 (GadgetID == _R(IDC_EDIT_PARENTPATCH)))
+//	{
+//		*Result = String_256(_R(IDS_EDITST_PARENTPATCH));
+//	}
+	else if ((GadgetID == _R(IDC_EDIT_PARENTCOL)) ||
+			 (GadgetID == _R(IDC_EDIT_PARENTNAME)))
+	{
+		*Result = String_256(_R(IDS_EDITST_PARENTCOL));
+	}
+	else if ((GadgetID == _R(IDC_EDIT_TINT)) ||
+			 (GadgetID == _R(IDC_EDIT_TINTSLIDER)))
+	{
+		if (Bob->GetType() == COLOURTYPE_TINT && !Bob->TintIsShade())
+			*Result = String_256(_R(IDS_EDITST_TINT1));		// It's a tint
+		else
+			*Result = String_256(_R(IDS_EDITST_TINT2));		// It's a shade
+	}
+	else if (GadgetID == _R(IDC_EDIT_SHADE))
+	{
+		*Result = String_256(_R(IDS_EDITST_TINT2));			// It's a shade
+	}
+	else if (GadgetID == _R(IDC_EDIT_ADVANCED))
+	{
+		if (Editor->Folded)
+			*Result = String_256(_R(IDS_EDITST_ADVANCED1));
+		else
+			*Result = String_256(_R(IDS_EDITST_ADVANCED2));
+	}
+	else if (GadgetID == _R(IDC_EDIT_3D))
+	{
+		*Result = String_256(_R(IDS_EDITST_3D));
+	}
+	else if (GadgetID == _R(IDC_EDIT_MAKESTYLE))
+	{
+		*Result = String_256(_R(IDS_EDITST_MAKESTYLE));
+	}
+#endif // WEBSTER
+	else if (GadgetID == _R(IDC_EDIT_PICKER))
+	{
+		if (!StatusHelpBuffer.IsEmpty())
+			*Result = StatusHelpBuffer;
+		else
+		{
+			switch(Bob->GetType())
+			{
+			// WEBSTER - markn 14/12/96
+			#ifndef WEBSTER
+				case COLOURTYPE_TINT:
+					if (Editor->Folded)
+						*Result = String_256(_R(IDS_EDITST_PICKER1));
+					else
+						*Result = String_256(_R(IDS_EDITST_PICKER2));
+					break;
 
+				case COLOURTYPE_LINKED:
+					*Result = String_256(_R(IDS_EDITST_PICKER3));
+					break;
+			#endif // WEBSTER
+
+				case COLOURTYPE_NORMAL:
+				case COLOURTYPE_SPOT:
+				default:
+					*Result = String_256(_R(IDS_EDITST_PICKER4));
+					break;
+			}
+		}
+	}	
+	else if (GadgetID == _R(IDC_EDIT_216ONLY))
+	{
+		*Result = String_256(_R(IDS_EDITST_216ONLY));
+	}	
+	else if (GadgetID == _R(IDC_COLOURPICKER))
+	{
+		*Result = String_256(_R(IDS_STATICCOLOURPICKERTOOLHELP));
+	}
+	else if (GadgetID == _R(IDC_MAKE_LOCAL))
+	{
+		*Result = String_256(_R(IDS_EDITST_MAKE_LOCAL));
+	}
+	else if (GadgetID == _R(IDC_EDIT_NOCOLOUR))
+	{
+		*Result = String_256(_R(IDS_EDITST_SETNOCOLOUR));
+	}
+	else if (GadgetID == _R(IDC_EDIT_RENAME))
+	{
+		*Result = String_256(_R(IDS_EDITST_RENAME));
+	}
+	else if (GadgetID == _R(IDC_EDIT_LINEFILL))
+	{
+		*Result = String_256(_R(IDS_EDITST_LINEFILL));
+	}
 #endif
 	return(TRUE);
 }
@@ -646,13 +641,15 @@ static UINT32 GadgetList[] =
 		_R(IDC_MAKE_LOCAL),
 		_R(IDC_EDIT_RENAME),
 		_R(IDC_COLOURPICKER),
-		NULL
+		0
 	};
 #endif
 
 
 BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 {
+PORTNOTE("other", "Disabled ColourPicker::GetStatusLineText()")
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	ERROR3IF(Result == NULL, "Illegal NULL param");
@@ -662,7 +659,7 @@ BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 		return(FALSE);
 
 	// Find the main editor window
-	HWND TheWindow = (HWND)Editor->WindowID;
+	CWindowID TheWindow = (CWindowID)Editor->WindowID;
 	if (TheWindow == NULL)
 		return(FALSE);
 
@@ -674,9 +671,9 @@ BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 	// Convert to client coords in the main window
 	ScreenToClient(TheWindow, &TempPos);
 
-	// See if this is over the main window or any child thereof, getting it's HWND
+	// See if this is over the main window or any child thereof, getting it's CWindowID
 	CPoint Pos(TempPos);	
-	HWND WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
+	CWindowID WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
 	if (WindowUnderPointer == NULL)
 		return(FALSE);
 
@@ -690,11 +687,11 @@ BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 		return(GetStatusLineText(Editor, 0, Result));
 
 	// Otherwise, see if we can find help for the specific gadget
-	HWND hGadget;
+	CWindowID hGadget;
 	INT32 i = 0;
-	while (GadgetList[i] != NULL)
+	while (GadgetList[i])
 	{
-		hGadget = GetDlgItem(TheWindow, GadgetList[i]);
+		hGadget = DialogManager::GetGadget(TheWindow, GadgetList[i]);
 		if (WindowUnderPointer == hGadget && GetStatusLineText(Editor, GadgetList[i], Result))
 			return(TRUE);
 		i++;
@@ -702,13 +699,16 @@ BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 
 #endif
 	return(TRUE);
+#else
+	return FALSE;
+#endif
 }
 
 
 
 /********************************************************************************************
 
->	TCHAR *ColourPicker::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData)
+>	TCHAR *ColourPicker::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *UserData)
 
 	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/9/95
@@ -725,7 +725,7 @@ BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 
 ********************************************************************************************/
 
-TCHAR *ColourPicker::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserData)
+TCHAR *ColourPicker::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *UserData)
 {
 #ifndef STANDALONE
 	static String_256 HelpStringStore;
@@ -741,171 +741,186 @@ TCHAR *ColourPicker::HelpCallbackHandler(HWND Window, UINT32 Item, void *UserDat
 	if (Bob != NULL)
 		cc = ColourContext::GetGlobalDefault(ColourEditDlg::DisplayModel);
 
-	switch (Item)
+	if (FALSE) {}
+	else if (Item == _R(IDC_EDIT_DROPMENU))
 	{
-		case _R(IDC_EDIT_DROPMENU):
-			HelpStringStore = String_256(_R(IDS_EDITBH_MENU));
+		HelpStringStore = String_256(_R(IDS_EDITBH_MENU));
+		ReturnVal = TRUE;
+	}
+	else if ((Item == _R(IDC_EDIT_PATCH1))	||	// Fake ID for current colour patch to give it a unique ID
+			 (Item == _R(IDC_EDIT_PATCH2)) ||	// Fake ID for current colour patch to give it a unique ID
+			 (Item == _R(IDC_EDIT_PATCH)) ||
+			 (Item == _R(IDC_EDIT_PICKER)))
+	{
+		// NOTE: This gives help for "Original/Current colour" patch
+		// We will only get called for this if it is necessary (pointer in correct region of control)
+		HelpStringStore = PickerBubbleBuffer; //String_256(_R(IDS_EDITBH_PARENTPATCH));
+		ReturnVal = TRUE;
+	}	
+
+	else if (Item == _R(IDC_EDIT_COMPONENT1))
+	{
+		if (cc)
+			ReturnVal = GetComponentHelp(cc, 1, HelpStringStore);
+	}
+	else if (Item == _R(IDC_EDIT_COMPONENT2))
+	{
+		if (cc)
+			ReturnVal = GetComponentHelp(cc, 2, HelpStringStore);
+	}
+	else if (Item == _R(IDC_EDIT_COMPONENT3))
+	{
+		if (cc)
+			ReturnVal = GetComponentHelp(cc, 3, HelpStringStore);
+	}
+	else if (Item == _R(IDC_EDIT_COMPONENT4))
+	{
+		if (cc)
+			ReturnVal = GetComponentHelp(cc, 4, HelpStringStore);
+	}
+#if 0
+	{
+		if (ColourEditDlg::DisplayModel == COLOURMODEL_HSVT)
+		{
+			HelpStringStore = String_256(_R(IDS_EDITBH_COMP1));
 			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_PATCH1):		// Fake ID for current colour patch to give it a unique ID
-		case _R(IDC_EDIT_PATCH2):		// Fake ID for current colour patch to give it a unique ID
-		case _R(IDC_EDIT_PATCH):
-		case _R(IDC_EDIT_PICKER):
-			// NOTE: This gives help for "Original/Current colour" patch
-			// We will only get called for this if it is necessary (pointer in correct region of control)
-			HelpStringStore = PickerBubbleBuffer; //String_256(_R(IDS_EDITBH_PARENTPATCH));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_COMPONENT1):
-		case _R(IDC_EDIT_COMPONENT2):
-		case _R(IDC_EDIT_COMPONENT3):
-		case _R(IDC_EDIT_COMPONENT4):
-			// Assumes _R(IDC_EDIT_COMPONENT1)..4 are sequential
-			if (cc != NULL)
-			{
-				ReturnVal = GetComponentHelp(cc, Item - _R(IDC_EDIT_COMPONENT1) + 1, HelpStringStore);
-			}
-			break;
-/*
-			if (ColourEditDlg::DisplayModel == COLOURMODEL_HSVT)
-			{
-				HelpStringStore = String_256(_R(IDS_EDITBH_COMP1));
-				ReturnVal = TRUE;
-			}
-			else
-			{
-				if (cc != NULL)
-				{
-					String_64 CompName;
-					cc->GetComponentName(1, &CompName, TRUE);
-					HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
-					ReturnVal = TRUE;
-				}
-			}
-			break;
-
-		case _R(IDC_EDIT_COMPONENT2):
-			if (cc != NULL)
-			{
-				String_64 CompName;
-				cc->GetComponentName(2, &CompName, TRUE);
-				HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
-				ReturnVal = TRUE;
-			}
-			break;
-
-		case _R(IDC_EDIT_COMPONENT3):
+		}
+		else
+		{
 			if (cc != NULL)
 			{
 				String_64 CompName;
-				cc->GetComponentName(3, &CompName, TRUE);
+				cc->GetComponentName(1, &CompName, TRUE);
 				HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
 				ReturnVal = TRUE;
 			}
-			break;
+		}
+	}
 
-		case _R(IDC_EDIT_COMPONENT4):
-			if (cc != NULL)
-			{
-				String_64 CompName;
-				cc->GetComponentName(4, &CompName, TRUE);
-				HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
-				ReturnVal = TRUE;
-			}
-			break;
-*/
-		case _R(IDC_EDIT_COLMODEL):
-			HelpStringStore = String_256(_R(IDS_EDITBH_COLMODEL));
+	else if (Item == _R(IDC_EDIT_COMPONENT2))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(2, &CompName, TRUE);
+			HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
 			ReturnVal = TRUE;
-			break;
+		}
+	}	
 
-		case _R(IDC_EDIT_NAMEMENU):
-			HelpStringStore = String_256(_R(IDS_EDITBH_NAME));
+	else if (Item == _R(IDC_EDIT_COMPONENT3))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(3, &CompName, TRUE);
+			HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
 			ReturnVal = TRUE;
-			break;
+		}
+	}	
 
-		case _R(IDC_EDIT_COLTYPE):
-			HelpStringStore = String_256(_R(IDS_EDITBH_COLTYPE));
+	else if (Item == _R(IDC_EDIT_COMPONENT4))
+	{
+		if (cc != NULL)
+		{
+			String_64 CompName;
+			cc->GetComponentName(4, &CompName, TRUE);
+			HelpStringStore.MakeMsg(_R(IDS_EDITBH_COMP234), (TCHAR *)CompName);
 			ReturnVal = TRUE;
-			break;
+		}
+	}	
 
-		case _R(IDC_EDIT_INHERIT1):
-		case _R(IDC_EDIT_INHERIT2):
-		case _R(IDC_EDIT_INHERIT3):
-		case _R(IDC_EDIT_INHERIT4):
-			HelpStringStore = String_256(_R(IDS_EDITBH_INHERIT));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_PARENTCOL):
-		case _R(IDC_EDIT_PARENTNAME):
-			HelpStringStore = String_256(_R(IDS_EDITBH_PARENTCOL));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_TINT):
-		case _R(IDC_EDIT_TINTSLIDER):
-			if (Bob != NULL && Bob->GetType() == COLOURTYPE_TINT && !Bob->TintIsShade())
-				HelpStringStore = String_256(_R(IDS_EDITBH_TINT1));		// It's a tint
-			else
-				HelpStringStore = String_256(_R(IDS_EDITBH_TINT2));		// It's a shade
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_SHADE):
-			HelpStringStore = String_256(_R(IDS_EDITBH_TINT2));			// It's a shade
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_ADVANCED):
-			if (Editor->Folded)
-				HelpStringStore = String_256(_R(IDS_EDITBH_ADVANCED1));
-			else
-				HelpStringStore = String_256(_R(IDS_EDITBH_ADVANCED2));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_3D):
-			HelpStringStore = String_256(_R(IDS_EDITBH_3D));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_MAKESTYLE):
-			HelpStringStore = String_256(_R(IDS_EDITBH_MAKESTYLE));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_NOCOLOUR):
-			HelpStringStore = String_256(_R(IDS_COLBAR_HNOCOLOUR));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_MAKE_LOCAL):
-			HelpStringStore = String_256(_R(IDS_EDITBH_MAKE_LOCAL));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_RENAME):	
-			HelpStringStore = String_256(_R(IDS_EDITBH_RENAME));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_LINEFILL):
-			HelpStringStore = String_256(_R(IDS_EDITBH_LINEFILL));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_EDIT_216ONLY):
-			HelpStringStore = String_256(_R(IDS_EDITBH_216ONLY));
-			ReturnVal = TRUE;
-			break;
-
-		case _R(IDC_COLOURPICKER):
-			HelpStringStore = String_256(_R(IDS_STATICCOLOURPICKERTOOLHELP));
-			ReturnVal = TRUE;
-			break;
+#endif
+	else if (Item == _R(IDC_EDIT_COLMODEL))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_COLMODEL));
+		ReturnVal = TRUE;
+	}	
+	else if (Item == _R(IDC_EDIT_NAMEMENU))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_NAME));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_COLTYPE))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_COLTYPE));
+		ReturnVal = TRUE;
+	}
+	else if ((Item == _R(IDC_EDIT_INHERIT1)) ||
+			 (Item == _R(IDC_EDIT_INHERIT2)) ||
+			 (Item == _R(IDC_EDIT_INHERIT3)) ||
+			 (Item == _R(IDC_EDIT_INHERIT4)) )
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_INHERIT));
+		ReturnVal = TRUE;
+	}
+	else if ((Item == _R(IDC_EDIT_PARENTCOL)) ||
+			 (Item == _R(IDC_EDIT_PARENTNAME)))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_PARENTCOL));
+		ReturnVal = TRUE;
+	}
+	else if ((Item == _R(IDC_EDIT_TINT)) ||
+			 (Item == _R(IDC_EDIT_TINTSLIDER)))
+	{
+		if (Bob != NULL && Bob->GetType() == COLOURTYPE_TINT && !Bob->TintIsShade())
+			HelpStringStore = String_256(_R(IDS_EDITBH_TINT1));		// It's a tint
+		else
+			HelpStringStore = String_256(_R(IDS_EDITBH_TINT2));		// It's a shade
+		ReturnVal = TRUE;
+	}	
+	else if (Item == _R(IDC_EDIT_SHADE))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_TINT2));			// It's a shade
+		ReturnVal = TRUE;
+	}	
+	else if (Item == _R(IDC_EDIT_ADVANCED))
+	{
+		if (Editor->Folded)
+			HelpStringStore = String_256(_R(IDS_EDITBH_ADVANCED1));
+		else
+			HelpStringStore = String_256(_R(IDS_EDITBH_ADVANCED2));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_3D))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_3D));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_MAKESTYLE))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_MAKESTYLE));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_NOCOLOUR))
+	{
+		HelpStringStore = String_256(_R(IDS_COLBAR_HNOCOLOUR));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_MAKE_LOCAL))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_MAKE_LOCAL));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_RENAME))	
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_RENAME));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_LINEFILL))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_LINEFILL));
+		ReturnVal = TRUE;
+	}
+	else if (Item == _R(IDC_EDIT_216ONLY))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_216ONLY));
+		ReturnVal = TRUE;
+	}	
+	else if (Item == _R(IDC_COLOURPICKER))
+	{
+		HelpStringStore = String_256(_R(IDS_STATICCOLOURPICKERTOOLHELP));
+		ReturnVal = TRUE;
 	}
 
 	if (ReturnVal)
@@ -1011,15 +1026,17 @@ BOOL ColourPicker::GetComponentHelp(ColourContext* const pSourceContext, const U
 
 void ColourPicker::UpdateBubbleHelpAndPointer(void)
 {
+PORTNOTE("other", "Disabled ColourPicker::UpdateBubbleHelpAndPointer()")
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	ColourEditDlg *Editor = ColourEditDlg::TheEditor;
 	if (Editor == NULL)
 		return;
 
-	static HWND TheWindow = NULL;
+	static CWindowID TheWindow = NULL;
 	
 	if (TheWindow == NULL)
-		TheWindow = (HWND)Editor->WindowID;
+		TheWindow = (CWindowID)Editor->WindowID;
 
 	if (TheWindow == NULL)
 		return;
@@ -1029,7 +1046,7 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 	// per second. This stops the colour editor making a CPU interference buzzing noise
 	// in my headphones while the pointer is idling over it!!
 	static MonotonicTime LastUpdate;
-	static UINT32 MousePos = NULL;
+	static UINT32 MousePos = 0;
 
 	if (LastUpdate.Elapsed(100))
 	{
@@ -1037,8 +1054,8 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 		LastUpdate.Sample();
 
 		// Default to the mouse being "nowhere special" again
-		TheWindow = (HWND)Editor->WindowID;
-		MousePos = NULL;
+		TheWindow = (CWindowID)Editor->WindowID;
+		MousePos = 0;
 
 		POINT MouseScreenPos;
 		if (::GetCursorPos(&MouseScreenPos))
@@ -1049,7 +1066,7 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 			// application maximised in front of camelot! ChildWindowFromPoint does not
 			// determine if the child window is actually *visible*!
 
-			HWND WindowUnder = ::WindowFromPoint(MouseScreenPos);
+			CWindowID WindowUnder = ::WindowFromPoint(MouseScreenPos);
 
 			if (WindowUnder != NULL &&
 				(WindowUnder == TheWindow || ::GetParent(WindowUnder) == TheWindow))
@@ -1062,18 +1079,18 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 				::ScreenToClient(TheWindow, &TempPos);
 
 				CPoint Pos(TempPos);
-				HWND WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
+				CWindowID WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
 				if (WindowUnderPointer != NULL && IsWindowVisible(WindowUnderPointer))
 				{
 					// Make sure that hidden windows do not provide status help!
 					INT32 WindowStyle = ::GetWindowLong(WindowUnderPointer, GWL_STYLE);
 					if ((WindowStyle & WS_VISIBLE) != 0)
 					{
-						HWND hGadget;
+						CWindowID hGadget;
 						INT32 i = 0;
-						while (GadgetList[i] != NULL && MousePos == NULL)
+						while (GadgetList[i] && MousePos)
 						{
-							hGadget = GetDlgItem(TheWindow, GadgetList[i]);
+							hGadget = DialogManager::GetGadget(TheWindow, GadgetList[i]);
 							if (WindowUnderPointer == hGadget)
 							{
 								MousePos = (UINT32)GadgetList[i];
@@ -1091,7 +1108,7 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 
 				if (MousePos == _R(IDC_EDIT_PICKER))
 				{
-					MousePos = NULL;	// Default to no help if anything goes wrong
+					MousePos =0;	// Default to no help if anything goes wrong
 
 					// Set up a ReDrawInfoType containing the click position info, and information
 					// that will come in handy (size of the gadget, and screen DPI)
@@ -1140,7 +1157,7 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 					StatusHelpBuffer = String_256("");
 					Editor->HandleIdlePointer(&ExtraInfo, &PickerBubbleBuffer, &StatusHelpBuffer, &MousePos);
 
-					if (MousePos == NULL)
+					if (MousePos)
 						ControlHelper::BubbleHelpDisable();		// On non-helpful bit of picker - cancel bubble help
 				}
 			}
@@ -1148,11 +1165,12 @@ void ColourPicker::UpdateBubbleHelpAndPointer(void)
 	}
 
 	// Finally, tell the bubble help system what help we want, if any
-	if (MousePos != NULL)
+	if (MousePos)
 	{
 		// Set up our callback handler to show the help if/when necessary
 		ControlHelper::DoBubbleHelpOn(TheWindow, MousePos, ColourPicker::HelpCallbackHandler, NULL);
 	}
+#endif
 #endif
 }
 
@@ -1365,15 +1383,15 @@ BOOL ColourPicker::GetComponentsAsHexString(IndexedColour *Source,
 
 		// convert strings into integers ....
 		
-		INT32 rVal = atoi ((TCHAR*) ResultR);
-		INT32 gVal = atoi ((TCHAR*) ResultG);
-		INT32 bVal = atoi ((TCHAR*) ResultB);
+		INT32 rVal = camAtoi ((const TCHAR*) ResultR);
+		INT32 gVal = camAtoi ((const TCHAR*) ResultG);
+		INT32 bVal = camAtoi ((const TCHAR*) ResultB);
 
 		// convert integers to base 16 ....
 		
-		_itoa (rVal, (TCHAR*) ResultR, 16);
-		_itoa (gVal, (TCHAR*) ResultG, 16);
-		_itoa (bVal, (TCHAR*) ResultB, 16);
+		camSprintf((TCHAR*)ResultR, _T("%X"), rVal);
+		camSprintf((TCHAR*)ResultG, _T("%X"), gVal);
+		camSprintf((TCHAR*)ResultB, _T("%X"), bVal);
 
 		String_8 Builder;//FinalResultR, FinalResultG, FinalResultB;
 
@@ -1582,9 +1600,9 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 
 	// decide if we have a 0x prefix, or a # prefix ....
 
-	TCHAR* PtrPrefix = strstr ((TCHAR*) CopyNewValue, "0x");
+	const TCHAR* PtrPrefix = cc_lstrstr (CopyNewValue, _T("0x"));
 	Single0xPrefix = (PtrPrefix != NULL) ? TRUE : FALSE;
-	TCHAR* PtrPrefix2 = strstr ((TCHAR*) CopyNewValue, "#");
+	const TCHAR* PtrPrefix2 = cc_lstrstr (CopyNewValue, _T("#"));
 	SingleHashPrefix = (PtrPrefix2 != NULL) ? TRUE : FALSE;
 
 	if (Single0xPrefix == TRUE)
@@ -1594,7 +1612,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		// not quite and simple as this - since we now need to see if theres (at least) one
 		// other 0x - and if there is, ABORT (since that cannot be a valid hex number)
 
-		PtrPrefix = strstr ((TCHAR*) CopyNewValue, "0x");
+		PtrPrefix = cc_lstrstr (CopyNewValue, _T("0x"));
 		More0xPrefixs = (PtrPrefix != NULL) ? TRUE : FALSE;
 
 		ValidStringParseSoFar = More0xPrefixs ? FALSE : TRUE;
@@ -1603,7 +1621,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		{
 			// scan for # ....
 
-			PtrPrefix2 = strstr ((TCHAR*) CopyNewValue, "#");
+			PtrPrefix2 = cc_lstrstr ((const TCHAR*) CopyNewValue, _T("#"));
 			SingleHashPrefix = (PtrPrefix2 != NULL) ? TRUE : FALSE;
 			ValidStringParseSoFar = SingleHashPrefix ? FALSE : TRUE;
 		}
@@ -1620,7 +1638,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		// not quite and simple as this - since we now need to see if theres (at least) one
 		// other # - and if there is, ABORT (since that cannot be a valid hex number)
 
-		PtrPrefix2 = strstr ((TCHAR*) CopyNewValue, "#");
+		PtrPrefix2 = cc_lstrstr ((const TCHAR*) CopyNewValue, _T("#"));
 		MoreHashPrefixs = (PtrPrefix2 != NULL) ? TRUE : FALSE;
 
 		ValidStringParseSoFar = MoreHashPrefixs ? FALSE : TRUE;
@@ -1629,7 +1647,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		{
 			// scan for 0x ....
 
-			PtrPrefix = strstr ((TCHAR*) CopyNewValue, "0x");
+			PtrPrefix = cc_lstrstr ((const TCHAR*) CopyNewValue, _T("0x"));
 			Single0xPrefix = (PtrPrefix != NULL) ? TRUE : FALSE;
 			ValidStringParseSoFar = Single0xPrefix ? FALSE : TRUE;
 		}
@@ -1679,8 +1697,11 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		if (rComponent == TRUE)		// deal with the red component
 		{	
 			No0xPrefixNewValue.Split (&rValStr, &No0xPrefixNewValue, 2, FALSE);
-			INT32 convertedVal = (INT32) strtol ((TCHAR*) rValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
-			_itoa (convertedVal, (TCHAR*) rValStr, 10);
+           INT32 convertedVal;
+           camSscanf(rValStr, _T("%X"), &convertedVal);
+           camSprintf(rValStr, _T("%d"), convertedVal);
+           //INT32 convertedVal = (INT32) strtol ((TCHAR*) rValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
+           //_itoa (convertedVal, (TCHAR*) rValStr, 10);
 
 			UnitGroup* pPossibleUnits = SourceContext->GetComponentUnitGroup(1);
 			if (pPossibleUnits == NULL)
@@ -1699,7 +1720,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 			ERROR3IF(!pUnit->IS_KIND_OF(ScaleUnit), "pUnits isn't");
 
 			double dNewVal;
-			Convert::StringToDouble(&rValStr, &dNewVal);
+           Convert::StringToDouble(rValStr, &dNewVal);
 			pUnit->ConvertTo0to1 (dNewVal);
 
 			// And set the new value
@@ -1709,8 +1730,11 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		if (gComponent == TRUE)		// deal with the green component
 		{
 			No0xPrefixNewValue.Split (&gValStr, &No0xPrefixNewValue, 2, FALSE);
-			INT32 convertedVal = (INT32) strtol ((TCHAR*) gValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
-			_itoa (convertedVal, (TCHAR*) gValStr, 10);
+           INT32 convertedVal;
+           camSscanf(gValStr, _T("%X"), &convertedVal);
+           camSprintf(gValStr, _T("%d"), convertedVal);
+           //INT32 convertedVal = (INT32) strtol ((TCHAR*) gValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
+           //_itoa (convertedVal, (TCHAR*) gValStr, 10);
 
 			UnitGroup* pPossibleUnits = SourceContext->GetComponentUnitGroup(2);
 			if (pPossibleUnits == NULL)
@@ -1729,7 +1753,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 			ERROR3IF(!pUnit->IS_KIND_OF(ScaleUnit), "pUnits isn't");
 
 			double dNewVal;
-			Convert::StringToDouble(&gValStr, &dNewVal);
+           Convert::StringToDouble(gValStr, &dNewVal);
 			pUnit->ConvertTo0to1 (dNewVal);
 
 			// And set the new value
@@ -1739,8 +1763,11 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 		if (bComponent == TRUE)		// deal with the blue component
 		{
 			No0xPrefixNewValue.Split (&bValStr, &No0xPrefixNewValue, 2, FALSE);
-			INT32 convertedVal = (INT32) strtol ((TCHAR*) bValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
-			_itoa (convertedVal, (TCHAR*) bValStr, 10);
+           INT32 convertedVal;
+           camSscanf(bValStr, _T("%X"), &convertedVal);
+           camSprintf(bValStr, _T("%d"), convertedVal);
+           //INT32 convertedVal = (INT32) strtol ((TCHAR*) bValStr, (TCHAR**) "\0", 16);//ToDec (rValStr);//atoi ((TCHAR*) rValStr);
+           //_itoa (convertedVal, (TCHAR*) bValStr, 10);
 
 			UnitGroup* pPossibleUnits = SourceContext->GetComponentUnitGroup(3);
 			if (pPossibleUnits == NULL)
@@ -1759,7 +1786,7 @@ BOOL ColourPicker::SetComponentsFromHexString(IndexedColour *Dest,
 			ERROR3IF(!pUnit->IS_KIND_OF(ScaleUnit), "pUnits isn't");
 
 			double dNewVal;
-			Convert::StringToDouble(&bValStr, &dNewVal);
+			Convert::StringToDouble(bValStr, &dNewVal);
 			pUnit->ConvertTo0to1 (dNewVal);
 
 			// And set the new value
@@ -1944,7 +1971,7 @@ BOOL ColourPicker::GetTintAsString(IndexedColour *Source, StringBase *Result)
 	if (Source->GetType() != COLOURTYPE_TINT)
 	{
 		ERROR3("ColourPicker::GetTintAsString: Source colour isn't a tint");
-		*Result = TEXT(String_8(_R(IDS_CONVERT_ZERO_CHAR))); //TEXT("0");
+		*Result = String_8(_R(IDS_CONVERT_ZERO_CHAR)); //TEXT("0");
 		return(FALSE);
 	}
 
@@ -2025,7 +2052,7 @@ BOOL ColourPicker::SetTintFromString(IndexedColour *Dest, StringBase *NewValue)
 	// Note that we ignore failure, because the number is validated below, and it
 	// only seems to retun false if crap was typed on the end of the number anyway
 	double NewVal;
-	Convert::StringToDouble(&TempString, &NewVal);
+	Convert::StringToDouble(TempString, &NewVal);
 
 	// Convert from percentage to 0.0-1.0 range
 	NewVal /= 100.0;
@@ -2101,7 +2128,7 @@ BOOL ColourPicker::GetShadeValueAsString(IndexedColour *Source, INT32 ValueIndex
 	if (Source->GetType() != COLOURTYPE_TINT)
 	{
 		ERROR3("ColourPicker::GetShadeValueAsString - Source colour isn't a tint");
-		*Result = TEXT(String_8(_R(IDS_CONVERT_ZERO_CHAR))); // TEXT("0");
+		*Result = String_8(_R(IDS_CONVERT_ZERO_CHAR)); // TEXT("0");
 		return(FALSE);
 	}
 
@@ -2184,7 +2211,7 @@ BOOL ColourPicker::SetShadeFromStrings(IndexedColour *Dest, StringBase *NewValue
 	// Note that we ignore failure, because the number is validated below, and it
 	// only seems to retun false if crap was typed on the end of the number anyway
 	double NewValX;
-	Convert::StringToDouble(&TempString, &NewValX);
+	Convert::StringToDouble(TempString, &NewValX);
 
 	// Convert from percentage to -1.0-1.0 range
 	NewValX = (-NewValX) / 100.0;
@@ -2216,7 +2243,7 @@ BOOL ColourPicker::SetShadeFromStrings(IndexedColour *Dest, StringBase *NewValue
 	// Note that we ignore failure, because the number is validated below, and it
 	// only seems to retun false if crap was typed on the end of the number anyway
 	double NewValY;
-	Convert::StringToDouble(&TempString, &NewValY);
+	Convert::StringToDouble(TempString, &NewValY);
 
 	// Convert from percentage to -1.0-1.0 range
 	NewValY /= 100.0;
@@ -2271,8 +2298,10 @@ BOOL ColourPicker::SetShadeFromStrings(IndexedColour *Dest, StringBase *NewValue
 void ColourPicker::SetWindowExtent(CWindowID WindowID,
 									CGadgetID XGadgetID, CGadgetID YGadgetID)
 {
-	HWND hXGadget = GetDlgItem((HWND)WindowID, (INT32)XGadgetID);
-	HWND hYGadget = GetDlgItem((HWND)WindowID, (INT32)YGadgetID);
+PORTNOTE("other", "Disable Colourpicker::SetWindowExtent")
+#ifndef EXCLUDE_FROM_XARALX
+	CWindowID hXGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)XGadgetID);
+	CWindowID hYGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)YGadgetID);
 
 	RECT MainWinPos;
 	RECT XGadgetPos;
@@ -2292,7 +2321,7 @@ void ColourPicker::SetWindowExtent(CWindowID WindowID,
 	// because they use the same coord space.
 
 	// Collect the screen positions of the three items
-	if (ok) ok = GetWindowRect((HWND)WindowID,&MainWinPos);
+	if (ok) ok = GetWindowRect((CWindowID)WindowID,&MainWinPos);
 	if (ok) ok = GetWindowRect(hXGadget,&XGadgetPos);
 	if (ok) ok = GetWindowRect(hYGadget,&YGadgetPos);
 
@@ -2314,6 +2343,7 @@ void ColourPicker::SetWindowExtent(CWindowID WindowID,
 			DialogManager::SetWindowPosition(WindowID, MainWinPos);
 		}
 	}
+#endif
 }
 
 
@@ -2356,35 +2386,37 @@ void ColourPicker::SetWindowExtent(CWindowID WindowID,
 void ColourPicker::SetGadgetPositions(CWindowID WindowID,
 										CGadgetID *Gadgets, CGadgetID MoveUnder)
 {
-	if (Gadgets == NULL || Gadgets[0] == NULL)
+PORTNOTE("other", "Disabled ColourPicker::SetGadgetPositions");
+#ifndef EXCLUDE_FROM_XARALX
+	if (Gadgets == NULL || !Gadgets[0])
 		return;
 
-	HWND hGadget;
+	CWindowID hGadget;
 	RECT MoveRect;
 	POINT TopLeft;
 	INT32 YShift = 10000;		// If MoveUnder == NULL, move out of the way
 
-	if (MoveUnder != NULL)
+	if (MoveUnder)
 	{
 		// Get the positions of the MoveUnder and Gadgets[0] gadgets, and work out
 		// the Y Shift to move Gadgets[0] just under the MoveUnder gadget.
 		// All calculations are done in Client coords (not screen coords)
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)MoveUnder);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)MoveUnder);
 		if (!GetWindowRect(hGadget, &MoveRect))
 			return;
 
 		TopLeft.x = MoveRect.left;
 		TopLeft.y = MoveRect.bottom;
-		ScreenToClient((HWND)WindowID, &TopLeft);
+		ScreenToClient((CWindowID)WindowID, &TopLeft);
 		YShift = -(TopLeft.y + 8);		// Remember first part of the shift
 
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[0]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[0]);
 		if (!GetWindowRect(hGadget, &MoveRect))
 			return;
 
 		TopLeft.x = MoveRect.left;
 		TopLeft.y = MoveRect.top;
-		ScreenToClient((HWND)WindowID, &TopLeft);
+		ScreenToClient((CWindowID)WindowID, &TopLeft);
 
 		YShift += TopLeft.y;			// Complete the shift calculation
 	}
@@ -2393,13 +2425,13 @@ void ColourPicker::SetGadgetPositions(CWindowID WindowID,
 		// Move the gadgets out of view: Check if we need to bother to do this
 		// (are they aready out of view?)
 
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[0]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[0]);
 		if (!GetWindowRect(hGadget, &MoveRect))
 			return;
 
 		TopLeft.x = MoveRect.left;
 		TopLeft.y = MoveRect.top;
-		ScreenToClient((HWND)WindowID, &TopLeft);
+		ScreenToClient((CWindowID)WindowID, &TopLeft);
 
 		if (abs(TopLeft.y) > 8000)		// Is it already out of the way?
 			YShift = 0;					// Yes - so don't shift it
@@ -2411,13 +2443,13 @@ void ColourPicker::SetGadgetPositions(CWindowID WindowID,
 	INT32 Index = 0;
 	while (Gadgets[Index] != 0)
 	{
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[Index]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[Index]);
 
 		if (GetWindowRect(hGadget, &MoveRect))
 		{
 			TopLeft.x = MoveRect.left;		// Convert TopLeft coord into client coords
 			TopLeft.y = MoveRect.top;
-			ScreenToClient((HWND)WindowID, &TopLeft);
+			ScreenToClient((CWindowID)WindowID, &TopLeft);
 			TopLeft.y -= YShift;
 
 			SetWindowPos(hGadget, NULL,
@@ -2427,6 +2459,7 @@ void ColourPicker::SetGadgetPositions(CWindowID WindowID,
 
 		Index++;
 	}
+#endif
 }
 
 
@@ -2478,6 +2511,8 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 													CGadgetID PickerGadget,
 													ColourModel ModelToDisplay)
 {
+PORTNOTE("other", "Disabled ColourPicker::SetComponentGadgets")
+#ifndef EXCLUDE_FROM_XARALX
 	// Find out how many visible components we're dealing with...
 	ColourContext *cc = ColourContext::GetGlobalDefault(ModelToDisplay);
 	INT32 NumComponents = 0;
@@ -2497,17 +2532,17 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 
 	RECT TheRect;
 
-	HWND hGadget;
+	CWindowID hGadget;
 	INT32 Left = 8;
 	INT32 MaxWidth = 0;
 //	if (NumComponents < 3)
 	{
 		// Use width of colour picker control
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)PickerGadget);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)PickerGadget);
 		if (hGadget && GetWindowRect(hGadget, &TheRect))
 		{
 			// convert screen rect to client position within the parent wnd
-			::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &TheRect, 2);
+			::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &TheRect, 2);
 
 			MaxWidth = TheRect.right - TheRect.left;
 			Left = TheRect.left;
@@ -2517,7 +2552,7 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 	else
 	{
 		// Use width of the window
-		if (GetClientRect((HWND)WindowID, &TheRect))
+		if (GetClientRect((CWindowID)WindowID, &TheRect))
 		{
 			MaxWidth = TheRect.right - TheRect.left;
 			MaxWidth -= 2 * Left;
@@ -2533,7 +2568,7 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 
 	// Read the writable control size and y position
 	static INT32 BaseWritableWidth = 0;
-	hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[1]);
+	hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[1]);
 	
 	if (GetWindowRect(hGadget, &TheRect))
 	{
@@ -2575,15 +2610,15 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 
 
 	// Convert the rect from screen to client coords within the parent wnd.
-	::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &TheRect, 2);
+	::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &TheRect, 2);
 
 
 	// Find the top/bottom position for the text gadgets, in client coords
 	RECT TextRect;
-	hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[0]);
+	hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[0]);
 	if (hGadget == NULL || !GetWindowRect(hGadget, &TextRect))
 		return;
-	::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &TextRect, 2);
+	::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &TextRect, 2);
 
 
 	// For each component, place the controls
@@ -2596,7 +2631,7 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 		LeftEnd = Left + (i * PairWidth);
 
 		// Move and resize (in x axis only) the text gadget
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[i*2]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[i*2]);
 		if (hGadget)
 		{
 			if (i < NumComponents)
@@ -2613,7 +2648,7 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 		LeftEnd += NewWidth + Gap;
 
 		// Move (in x axis only) the writable gadget
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[(i*2)+1]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[(i*2)+1]);
 		if (hGadget)
 		{
 			if (i < NumComponents)
@@ -2631,7 +2666,8 @@ void ColourPicker::SetComponentGadgets(CWindowID WindowID, CGadgetID *Gadgets,
 	// Finally, redraw the affected strip of the window, because the controls won't
 	TheRect.left = 0;		// Left edge of window
 	TheRect.right = 0x1000;	// Infinity as far as the window is concerned
-	::InvalidateRect((HWND)WindowID, &TheRect, TRUE);
+	::InvalidateRect((CWindowID)WindowID, &TheRect, TRUE);
+#endif
 }
 
 
@@ -2687,19 +2723,21 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 													INT32 EditWidth[]
 													)
 {
+PORTNOTE("other", "Disabled ColourPicker::SetFixedComponentGadgets")
+#ifndef EXCLUDE_FROM_XARALX
 	RECT TheRect;
 
-	HWND hGadget;
+	CWindowID hGadget;
 	INT32 Left = 0;
 	INT32 MaxWidth = 0;
 //	if (NumComponents < 3)
 	{
 		// Use width of colour picker control
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)PickerGadget);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)PickerGadget);
 		if (hGadget && GetWindowRect(hGadget, &TheRect))
 		{
 			// convert screen rect to client position within the parent wnd
-			::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &TheRect, 2);
+			::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &TheRect, 2);
 
 			MaxWidth = TheRect.right - TheRect.left;
 			Left = TheRect.left;
@@ -2707,7 +2745,7 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 	}
 
 	// Use width of the window
-//	if (GetClientRect((HWND)WindowID, &TheRect))
+//	if (GetClientRect((CWindowID)WindowID, &TheRect))
 //	{
 //		MaxWidth = TheRect.right - TheRect.left;
 //		MaxWidth -= 2 * Left;
@@ -2720,17 +2758,17 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 
 	// Find the top/bottom position for the text gadgets, in client coords
 	RECT TextRect;
-	hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[0]);
+	hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[0]);
 	if (hGadget == NULL || !GetWindowRect(hGadget, &TextRect))
 		return;
-	::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &TextRect, 2);
+	::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &TextRect, 2);
 	INT32 TextHeight = TextRect.bottom-TextRect.top;
 
 	// Get the current position of the first Editable control
 	RECT EditRect;
-	hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[1]);
+	hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[1]);
 	GetWindowRect(hGadget, &EditRect);
-	::MapWindowPoints(NULL, (HWND)WindowID, (LPPOINT) &EditRect, 2);
+	::MapWindowPoints(NULL, (CWindowID)WindowID, (LPPOINT) &EditRect, 2);
 	INT32 EditHeight = EditRect.bottom-EditRect.top;
 
 	// For each component, place the controls
@@ -2742,7 +2780,7 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 	for (i = 0; i < 5; i++)
 	{
 		// Move and resize (in x axis only) the text gadget
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[i*2]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[i*2]);
 		if (hGadget)
 		{
 			if (TextWidth[i]!=0)
@@ -2760,7 +2798,7 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 		}
 
 		// Move (in x axis only) the writable gadget
-		hGadget = GetDlgItem((HWND)WindowID, (INT32)Gadgets[(i*2)+1]);
+		hGadget = DialogManager::GetGadget((CWindowID)WindowID, (INT32)Gadgets[(i*2)+1]);
 		if (hGadget)
 		{
 			if (EditWidth[i]!=0)
@@ -2782,7 +2820,8 @@ void ColourPicker::SetFixedComponentGadgets(CWindowID WindowID, CGadgetID *Gadge
 	// Finally, redraw the affected strip of the window, because the controls won't
 	EditRect.left = 0;		// Left edge of window
 	EditRect.right = 0x1000;	// Infinity as far as the window is concerned
-	::InvalidateRect((HWND)WindowID, &EditRect, TRUE);
+	::InvalidateRect((CWindowID)WindowID, &EditRect, TRUE);
+#endif
 }
 
 

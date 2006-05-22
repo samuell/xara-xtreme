@@ -110,15 +110,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "renddlg.h"
 #include "tracedlg.h"
 #include "appprefs.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "opnudge.h"
 #include "combshps.h"
 #include "colcomp.h"
 #include "bmpcomp.h"
 #include "princomp.h"
 #include "nodebmp.h"
-//#include "dragcol.h"
-//#include "dragbmp.h"
+#include "dragcol.h"
+#include "dragbmp.h"
 #include "convert.h"
 #include "diagnost.h"
 #include "rndrgn.h"
@@ -196,9 +196,10 @@ PORTNOTE("other","Removed a large amount of initialization")
 #ifndef EXCLUDE_FROM_XARALX
 			TemplateDialog::Init() &&
 			DocPrefsDlg::Init() &&				// Init the document preference/options dialog
-
+#endif
 			StandardUnit::Init() &&				// create some standard scale units (scunit.h)
 			ColourEditDlg::Init() &&			// Init the colour editor dialogue
+#ifndef EXCLUDE_FROM_XARALX
 			OpConvertToBitmap::Init() &&
 #endif
 			OpNudge::Init() &&					// Init the nudge ops
@@ -233,10 +234,10 @@ PORTNOTE("other","Removed a large amount of initialization")
 			Convert::Init() &&					// Read number of decimal places, decimal point
 												// and thousands seperator characters from
 												// operating system .
-PORTNOTE("other","Removed more initialization")
-#ifndef EXCLUDE_FROM_XARALX
 			ColourDragInformation::Init() &&
 			BitmapDragInformation::Init() &&
+PORTNOTE("other","Removed more initialization")
+#ifndef EXCLUDE_FROM_XARALX
 			InitDiagnosticPrefs() &&			// Get the diagnostic preferences
 #endif			
 			CCamView::ReadViewPrefs() &&

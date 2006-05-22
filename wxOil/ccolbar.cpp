@@ -120,11 +120,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 #include "ccolbar.h"
 #include "colcontx.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "colmsg.h"
 #include "colormgr.h"
 #include "colourix.h"
-//#include "colpick.h"
+#include "colpick.h"
 #include "comattrmsg.h"
 #include "cursor.h"
 //#include "ctrlhelp.h"
@@ -530,8 +530,7 @@ BOOL EditButtonDragTarget::CanDropHere(DragInformation *pDragInfo)
 			if (CDInfo->GetParentDoc() != NULL)
 				ColList = CDInfo->GetParentDoc()->GetIndexedColours();
 
-PORTNOTE("other","Removed ColourEditDlg usage")
-//			return(ColourEditDlg::CanYouEditThis(ColList, Col));
+			return(ColourEditDlg::CanYouEditThis(ColList, Col));
 		}
 	}
 
@@ -1140,10 +1139,7 @@ INT32 CColourBar::GetNumberOfColours()
 
 	// If the user has the preference set then include and hence show the document
 	// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (ColourSGallery::ShowDocumentColours)
-#endif
 	{
 		if (m_pCurrentColourList == NULL)
 			m_pCurrentColourList = ColourManager::GetColourList();
@@ -1321,10 +1317,7 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt)
 
 			// If the user has the preference set then include and hence show the document
 			// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 			if (ColourSGallery::ShowDocumentColours)
-#endif
 			{
 				TheColour = FindColourByIndex(ColourCell);
 			}
@@ -1349,11 +1342,10 @@ PORTNOTE("other","Removed ColourSGallery usage")
 			
 			if ((lastColourCell != ColourCell) && (validColour == TRUE))
 			{
-PORTNOTE("other","Removed ColourEditDlg usage")
-//				ColourEditDlg* pColourEditDlg = ColourEditDlg::GetColourEditDlg ();
-//				ASSERT (pColourEditDlg);
+				ColourEditDlg* pColourEditDlg = ColourEditDlg::GetColourEditDlg ();
+				ASSERT (pColourEditDlg);
 
-//				pColourEditDlg->SetEditingColour (TheColour);
+				pColourEditDlg->SetEditingColour (TheColour);
 			}
 			
 			lastColourCell = ColourCell;
@@ -2629,10 +2621,7 @@ void CColourBar::PaintColourStrip(wxDC *pDC, const wxRect &ClipRect)
 	BOOL RedrawFinished = FALSE;
 	// If the user has the preference set then include and hence show the document
 	// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (ColourSGallery::ShowDocumentColours)
-#endif
 	{
 		// Find the leftmost displayed colour in the DisplayList sequence
 		DocColour Temp;
@@ -3256,10 +3245,7 @@ void CColourBar::CellClicked(INT32 CellIndex, BOOL SetLineColour)
 	if (CellIndex != CLICKED_NOCOLOURCELL)
 	{
 		// If the user has asked for document colours in the colour line then check these first
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 		if (ColourSGallery::ShowDocumentColours)
-#endif
 			TheColour = FindColourByIndex(CellIndex);
 
 		// If we didn't find it there check the library colours
@@ -3359,10 +3345,7 @@ TCHAR *CColourBar::HelpCallbackHandler(wxWindow* Window, INT32 Item, void *UserD
 		IndexedColour *TheColour = NULL;
 		// If the user has the preference set then include and hence show the document
 		// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 		if (ColourSGallery::ShowDocumentColours)
-#endif
 			TheColour = TheColourBar->FindColourByIndex(Item);
 
 		if (TheColour != NULL)
@@ -3472,10 +3455,7 @@ INT32 CColourBar::CalculateColourCellIndex(IndexedColour *TheColour)
 
 	// If the user has asked for document colours in the colour line then check these first
 	// Indexed Colours are document colours and so can never exist in the library groups.
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (ColourSGallery::ShowDocumentColours)
-#endif
 	{
 		IndexedColour *TestColour = m_pCurrentColourList->GetUndeletedHead();
 
@@ -3589,14 +3569,11 @@ void CColourBar::SelectionHasChangedInternal(void)
 
 	// If the user has not asked for document colours in the colour line then 
 	// no need to do any of the checks below
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (!ColourSGallery::ShowDocumentColours)
 	{
 		ForceRedrawOfRect(TheColourBar->IndicatorRect);	 		// And redraw the colour indicators
 		return;
 	}
-#endif
 
 	// If swapped documents then forget the last clicked cells
 	if (LastDocument != Document::GetSelected())
@@ -3808,10 +3785,7 @@ PORTNOTE("other","Removed ColourSGallery usage")
 
 #ifndef EXCLUDE_GALS
 			if (
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 				ColourSGallery::AutoScrollSelection && 
-#endif
 				ScrollBy != 0)
 			{
 				ScrollTheStrip(ScrollBy);
@@ -3996,15 +3970,12 @@ void CColourBar::CaptureTheMouse(void)
 void CColourBar::EditAColour(ColourList *DisplayList, IndexedColour *TheColour,
 								BOOL LineColour)
 {
-PORTNOTE("other","Removed ColourPicker usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	ColourPicker ColPicker;
 
 	if (DisplayList == NULL || TheColour == NULL)
 		ColPicker.EditColour(NULL, NULL, LineColour);	// Open, but don't edit anything
 	else
 		ColPicker.EditColour(DisplayList, TheColour);
-#endif
 }
 
 
@@ -4100,10 +4071,7 @@ DocColour * CColourBar::FindLibColourByIndex(UINT32 Index, SGDisplayLibColour **
 	UINT32 DocColours = 0;
 	// If the user has the preference set then include and hence show the document
 	// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (ColourSGallery::ShowDocumentColours)
-#endif
 	{
 		DocColours = (UINT32) m_pCurrentColourList->GetUndeletedCount();
 		if (Index < DocColours)
@@ -4640,10 +4608,7 @@ void CColourBar::OnAnyButtonDown(const wxPoint &point, INT32 Modifier)
 			ColourDragInformation *DragCol = NULL;
 			// If the user has the preference set then include and hence show the document
 			// colours
-PORTNOTE("other","Removed ColourSGallery usage")
-#if !defined(EXCLUDE_FROM_XARALX)
 			if (ColourSGallery::ShowDocumentColours)
-#endif
 				TheColour = FindColourByIndex(MousePos);
 
 			if (TheColour != NULL)

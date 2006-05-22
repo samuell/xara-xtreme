@@ -121,15 +121,15 @@ CC_IMPLEMENT_DYNCREATE(OpColEditCommand, Operation);
 
 
 
-String_32 ColCmd_Help("ColEdit:Help");
-String_32 ColCmd_Name("ColEdit:Name");
-String_32 ColCmd_HSV("ColEdit:HSV");
-String_32 ColCmd_RGB("ColEdit:RGB");
-String_32 ColCmd_CMYK("ColEdit:CMYK");
-String_32 ColCmd_Grey("ColEdit:Grey");
-String_32 ColCmd_EditParent("ColEdit:EditParent");
+String_32 ColCmd_Help(_T("ColEdit:Help"));
+String_32 ColCmd_Name(_T("ColEdit:Name"));
+String_32 ColCmd_HSV(_T("ColEdit:HSV"));
+String_32 ColCmd_RGB(_T("ColEdit:RGB"));
+String_32 ColCmd_CMYK(_T("ColEdit:CMYK"));
+String_32 ColCmd_Grey(_T("ColEdit:Grey"));
+String_32 ColCmd_EditParent(_T("ColEdit:EditParent"));
 #ifdef WEBSTER
-String_32 ColCmd_NewNColour("ColEdit:NewNColour");
+String_32 ColCmd_NewNColour(_T("ColEdit:NewNColour"));
 #endif //WEBSTER
 
 
@@ -220,21 +220,21 @@ BOOL ColEditContextMenu::Build(void)
 
 BOOL OpColEditCommand::InitPolymorphicCommand(StringBase *OpToken, UINT32 MenuTextID)
 {
-	return(RegisterOpDescriptor(NULL,								// Tool ID 
+	return(RegisterOpDescriptor(0,									// Tool ID 
 								MenuTextID,		 					// String resource ID
 								CC_RUNTIME_CLASS(OpColEditCommand),	// Runtime class
 								(TCHAR *) (*OpToken), 				// Token string
 								OpColEditCommand::GetCommandState,	// GetState function
-								NULL,								// help ID
-								NULL,								// bubble help
-								NULL,								// resource ID
-								NULL,								// control ID
+								0,									// help ID
+								0,									// bubble help
+								0,									// resource ID
+								0,									// control ID
 								SYSTEMBAR_ILLEGAL,					// Bar ID
 								FALSE,								// Recieve system messages
 								FALSE,								// Smart duplicate operation
 								TRUE,								// Clean operation
 								NULL,								// No vertical counterpart
-								NULL,								// String for one copy only error
+								0,									// String for one copy only error
 								DONT_GREY_WHEN_SELECT_INSIDE		// Auto state flags
 								));
 }

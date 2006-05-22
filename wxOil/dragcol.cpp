@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "app.h"
 #include "ccolbar.h"
-//#include "coldlog.h"
+#include "coldlog.h"
 #include "colourix.h"
 #include "colormgr.h"
 #include "devcolor.h"
