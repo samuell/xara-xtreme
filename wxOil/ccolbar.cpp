@@ -146,6 +146,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"		// For push tool cursor
 #include "sgcolour.h"		// For AutoScroll preference
 #include "statline.h"
+#include "cartprov.h"
 
 // define this to disable use of DragManagerOp to drag colours
 //#define DISABLE_COLOUR_DRAGS
@@ -1800,74 +1801,32 @@ void CColourBar::PaintEditOrNewButton(wxDC *pDC, BOOL Normal, BOOL IsEditButton)
 	pDC->SetBrush(wxNullBrush);
 	pDC->SetPen(wxNullPen);
 
-PORTNOTE("other","Removed bitmap plotting in PaintEditOrNewButton")
-#if FALSE
-// Replace this with new alpha channel buttons and simple rendering code
+	ResourceID bitmap = 0;
 
-	wxBitmap SrcBmp;
 	INT32 BmpSize = (CellSize > 15) ? 12 : 8;			// size of glyph bitmaps (8x8 and 12x12)
 		
 	if (IsEditButton)								// Load appropriate glyph bitmap
 	{
 		if (CellSize > 15)
-			SrcBmp.LoadBitmap(_R(IDB_LEDITCOL));		// 12x12 Edit glyph
+			bitmap=_R(IDB_LEDITCOL);		// 12x12 Edit glyph
 		else
-			SrcBmp.LoadBitmap(_R(IDB_EDITCOL));			// 8x8 Edit glyph
+			bitmap=_R(IDB_EDITCOL);			// 8x8 Edit glyph
 	}
 	else
 	{
 		if (CellSize > 15)
-			SrcBmp.LoadBitmap(_R(IDB_LNEWCOL));			// 12x12 New glyph
+			bitmap=_R(IDB_LNEWCOL);			// 12x12 New glyph
 		else
-			SrcBmp.LoadBitmap(_R(IDB_NEWCOL));			// 8x8 New glyph
+			bitmap=_R(IDB_NEWCOL);			// 8x8 New glyph
 	}
-		
-	wxDC SrcDC;					  					// Create source DC for glyph bitmap
-	SrcDC.CreateCompatibleDC(pDC);
 
-	wxBitmap *OldBmp = SrcDC.SelectObject(&SrcBmp);	// Select in our glyph bitmap
-	
-													// Plot the glyph, centered in button
-	TheRect.InflateRect((BmpSize - TheRect.Width())/2, (BmpSize - TheRect.Height())/2);
+	wxBitmap * pBitmap = CamArtProvider::Get()->FindBitmap(bitmap);
 
-	// Now plot the glyph bitmap. It is a masked plot - all the light grey pixels
-	// are plotted using the system COLOR_BTNFACE colour.
-	wxDC MonoDC;
-	MonoDC.CreateCompatibleDC(NULL);
-
-	// ...Now create a mono bitmap for the mask
-	wxBitmap MonoBitmap;
-	MonoBitmap.CreateBitmap(BmpSize, BmpSize, 1, 1, NULL);
-
-	wxBitmap *OldMonoBitmap = MonoDC.SelectObject(&MonoBitmap);
-
-	// Plot all light grey pixels in the glyph as black in our mask, while other pixels are white
-	MonoDC.PatBlt(0, 0, BmpSize, BmpSize, WHITENESS);
-	SrcDC.SetBkColor(RGB(192,192,192));
-	MonoDC.BitBlt(0, 0, BmpSize, BmpSize, &SrcDC, 0, 0, SRCCOPY);
-
-	pDC->SetTextColor(0L);                  // 0's in mono -> 0 (for ROP)
-	pDC->SetBkColor((COLORREF)0x00FFFFFFL); // 1's in mono -> 1
+	TheRect.Inflate((BmpSize - TheRect.GetWidth())/2, (BmpSize - TheRect.GetHeight())/2);
 
 	// Blit the glyph to screen, including its grey mask areas
-	pDC->BitBlt(TheRect.left, TheRect.top, BmpSize, BmpSize, &SrcDC, 0, 0, SRCCOPY);
-
-	// And then blit the mask shape over the top, using the correct button face colour
-	// (The areas not in the mask will not be plotted, so we are rendering the mask area only)
-	wxBrush HighlightBrush;
-	HighlightBrush.CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-
-	wxBrush *OldBrush = pDC->SelectObject(&HighlightBrush);
-
-	// draw highlight color where we have 0's in the mask, using a special RasterOp code (DSPDxax)
-	pDC->BitBlt(TheRect.left, TheRect.top, BmpSize, BmpSize,  &MonoDC, 0, 0, 0x00E20746L);
-
-	pDC->SelectObject(OldBrush);
-
-	MonoDC.SelectObject(OldMonoBitmap);
-
-	SrcDC.SelectObject(OldBmp);						// Re-select old bitmap
-#endif
+	if (pBitmap)
+		pDC->DrawBitmap(*pBitmap, TheRect.GetLeft(), TheRect.GetTop(), TRUE);
 }
 
 
