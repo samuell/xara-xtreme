@@ -578,28 +578,38 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 			String_256 strPathOfAnimationTemplate=GetDefaultAnimationTemplate().GetPath(FALSE);
 			String_256 strPathOfFile;
 
-			for (INT32 i=0; i<iNumberOfTemplate; i++)
-			{
-				do
-				{
-					if (!FileUtil::FindNextFile(&strNameOfFile))
-					{
-						//We failed to find a template. So remove this
-						//item from the menu.
-						FileUtil::StopFindingFiles();
-						// Don't allow any errors set while searching to propagate outside this scope
-						Error::ClearError();
-						return OpState(FALSE, FALSE, TRUE);
-					}
+			TRACEUSER( "jlh92", _T("DefPath = %s, %s\n"), PCTSTR(strPathOfDrawingTemplate),
+				PCTSTR(strPathOfAnimationTemplate) );
 
-					pathOfFile.SetFileNameAndType(strNameOfFile);
-					strPathOfFile=pathOfFile.GetPath(FALSE);
+			std::set<String_256>	setSortFilename;
+
+			while( FileUtil::FindNextFile( &strNameOfFile ) )
+			{
+				pathOfFile.SetFileNameAndType(strNameOfFile);
+				strPathOfFile=pathOfFile.GetFileName(TRUE);
+
+				if( 0 != strPathOfFile.CompareTo( strPathOfDrawingTemplate, FALSE ) &&
+					0 != strPathOfFile.CompareTo( strPathOfAnimationTemplate, FALSE ) )
+				{
+					setSortFilename.insert( strPathOfFile );
+					TRACEUSER( "jlh92", _T("Curr = %s\n"), PCTSTR(strPathOfFile) );
 				}
-				while (strPathOfFile.CompareTo(strPathOfDrawingTemplate, FALSE)==0 ||
-					strPathOfFile.CompareTo(strPathOfAnimationTemplate, FALSE)==0);
+			}
+			FileUtil::StopFindingFiles();
+
+			if( iNumberOfTemplate >= setSortFilename.size() )
+			{
+				// Don't allow any errors set while searching to propagate outside this scope
+				Error::ClearError();
+				return OpState(FALSE, FALSE, TRUE);
 			}
 
-			FileUtil::StopFindingFiles();
+			std::set<String_256>::iterator iter = setSortFilename.begin();
+			for( INT32 i = 1; i < iNumberOfTemplate; ++i, ++iter )
+			{ /*Do nothing!*/ }
+
+			strNameOfFile = *iter;
+			TRACEUSER( "jlh92", _T("Final(%d) = %s\n"), iNumberOfTemplate, PCTSTR(strPathOfFile) );
 
 			//We've found a file. So strip the .xar from the name, as follows...
 			pathTemplates.SetFileNameAndType(strNameOfFile);
@@ -1201,7 +1211,7 @@ void DocOps::Do(OpDescriptor* WhichOp)
 		FileNewTemplateAction(7); 
 	else if ((WhichOp->Token) == String(OPTOKEN_FILENEW_TEMPLATE8))
 		FileNewTemplateAction(8); 
-		else if ((WhichOp->Token) == String(OPTOKEN_FILENEW_TEMPLATE9))
+	else if ((WhichOp->Token) == String(OPTOKEN_FILENEW_TEMPLATE9))
 		FileNewTemplateAction(9); 
 	else if ((WhichOp->Token) == String(OPTOKEN_FILENEW_TEMPLATE10))
 		FileNewTemplateAction(10); 

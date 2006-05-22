@@ -270,6 +270,7 @@ void FileNewTemplateAction(INT32 iNumberOfTemplate)
 
 	String_256 strPathOfFile;
 
+
 	if (FileUtil::StartFindingFiles(&strTemplates))
 	{
 		String_256 strNameOfFile;
@@ -278,26 +279,36 @@ void FileNewTemplateAction(INT32 iNumberOfTemplate)
 		String_256 strPathOfDrawingTemplate=DocOps::GetDefaultDrawingTemplate().GetPath(FALSE);
 		String_256 strPathOfAnimationTemplate=DocOps::GetDefaultAnimationTemplate().GetPath(FALSE);
 		
-		for (INT32 i=0; i<iNumberOfTemplate; i++)
-		{
-			do
-			{
-				if (!FileUtil::FindNextFile(&strNameOfFile))
-				{
-					//We failed to find a template. So remove this
-					//item from the menu.
-					strNameOfFile="";
-				}
+		std::set<String_256>	setSortFilename;
 
-				pathOfFile.SetFileNameAndType(strNameOfFile);
-				strPathOfFile=pathOfFile.GetPath(FALSE);
+		while( FileUtil::FindNextFile( &strNameOfFile ) )
+		{
+			pathOfFile.SetFileNameAndType(strNameOfFile);
+			strPathOfFile=pathOfFile.GetFileName(TRUE);
+
+			if( 0 != strPathOfFile.CompareTo( strPathOfDrawingTemplate, FALSE ) &&
+				0 != strPathOfFile.CompareTo( strPathOfAnimationTemplate, FALSE ) )
+			{
+				setSortFilename.insert( strPathOfFile );
 			}
-			while (strPathOfFile.CompareTo(strPathOfDrawingTemplate, FALSE)==0 ||
-				strPathOfFile.CompareTo(strPathOfAnimationTemplate, FALSE)==0);
+		}
+		FileUtil::StopFindingFiles();
+
+		if( iNumberOfTemplate >= setSortFilename.size() )
+		{
+			//We failed to find a template. So remove this
+			//item from the menu.
+			strNameOfFile="";
 		}
 
-		FileUtil::StopFindingFiles();
+		std::set<String_256>::iterator iter = setSortFilename.begin();
+		for( INT32 i = 1; i < iNumberOfTemplate; ++i, ++iter )
+		{ /*Do nothing!*/ }
+
+		strPathOfFile = *iter;
 	}
+
+	TRACEUSER( "jlh92", _T("Opening %s\n"), PCTSTR(strPathOfFile) );
 
 	pathTemplates.SetFileNameAndType(strPathOfFile);
 
