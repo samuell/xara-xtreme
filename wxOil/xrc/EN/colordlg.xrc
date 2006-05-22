@@ -7,14 +7,17 @@
 			<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxCamArtControl" name="IDC_EDIT_MAKESTYLE">
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
 			 <pos>92,4d</pos> <size>18,14d</size>
 			<label>-</label>
 		</object>
 		<object class="wxCamArtControl" name="IDC_EDIT_216ONLY">
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
 			 <pos>107,4d</pos> <size>18,14d</size>
 			<label>-</label>
 		</object>
 		<object class="wxCamArtControl" name="IDC_EDIT_ADVANCED">
+			<enabled>0</enabled>
 			 <pos>122,4d</pos> <size>18,14d</size>
 			<label>-</label>
 		</object>
