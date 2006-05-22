@@ -940,6 +940,7 @@ bool CCamDoc::OnOpenDocument( const wxString &strFilename )
 	SetFilename( strFilename, true );
     SetTitle(wxFileNameFromPath(strFilename));
 	Modify(false);
+    m_savedYet = true;
 	UpdateAllViews();
 
 	// Tidy up.
