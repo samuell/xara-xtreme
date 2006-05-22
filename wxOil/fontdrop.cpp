@@ -505,13 +505,13 @@ BOOL FontDropDown::SetSelection(FontDropItem *TheFont)
 		{
 			TRACEUSER("wuerthne", _T("update missing item"));
 			FontDropItem *Item = (FontDropItem*)Fonts.GetTail();
-			Item->SetInfo(NewName, TheFont->Type);
+			Item->SetInfo(NewName, FC_UNDEFINED);
 			SelectedIndex = Index - 1;
 		}
 		else
 		{
 			TRACEUSER("wuerthne", _T("add missing item"));
-			FontDropItem *Item = new FontDropItem(NewName, TheFont->Type);
+			FontDropItem *Item = new FontDropItem(NewName, FC_UNDEFINED);
 			Fonts.AddTail(Item);
 			AddItem((void*) Item);
 			m_MissingItemAdded = TRUE;
@@ -653,6 +653,10 @@ BOOL FontDropDown::DrawIcon(void * ItemData, wxDC& dc, wxRect& IconRect, BOOL Di
 
 		case FC_ATM:
 			BitmapID = _R(IDB_ATM_SYMBOL);
+			break;
+
+		case FC_UNDEFINED:
+			BitmapID = _R(IDB_UNKNOWNFONT_SYMBOL);
 			break;
 
 		default:
