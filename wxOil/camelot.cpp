@@ -262,7 +262,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		wxObject* pEventObject = event.GetEventObject();
 		if (pEventObject)
 		{
-			TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"), 
+			TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"),
 				((wxWindow*)pEventObject)->GetClassInfo()->GetClassName() );
 		}
 	}
@@ -278,7 +278,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		lLastTimeStamp = event.GetTimestamp();
 
 		wxObject* pEventObject = event.GetEventObject();
-		TRACEUSER( "jlh92", _T("KeyEvent 4 %s %s\n"), 
+		TRACEUSER( "jlh92", _T("KeyEvent 4 %s %s\n"),
 			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName(),
 			event.GetEventType() == wxEVT_KEY_DOWN ? _T("KD") : _T("KU") );
 		
@@ -1377,7 +1377,7 @@ BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
 	//
 	BOOL ok;
 
-	ok = LaunchBrowserApp(_T("viewhtml"), strUrl);
+	ok = LaunchBrowserApp(_T("htmlview"), strUrl);
 	if (ok) return ok;
 
 	ok = LaunchBrowserApp(_T("firefox"), strUrl);

@@ -405,6 +405,9 @@ BOOL CamLaunchProcess::Execute(const wxString& cmd)
 {
 	m_ReturnCode = 0;		// Assume success until we find otherwise
 
+	// Make sure redirection happens
+	Redirect();
+
 	TRACEUSER("Phil", _T("Executing %s\n"), (LPCTSTR) cmd);
 	m_pid = wxExecute(cmd, wxEXEC_ASYNC, this);
 	if (m_pid==0)
