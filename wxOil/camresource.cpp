@@ -1806,8 +1806,10 @@ BOOL CamResource::DoneInit()
 #if !defined(EXCLUDE_FROM_XARLIB)
 	if (pSplashScreen)
 	{
-		delete pSplashScreen;
+        ::wxYield();
+		pSplashScreen->Destroy();
 		pSplashScreen = NULL;
+        ::wxYield();
 	}
 	if (pSplashBitmap)
 	{

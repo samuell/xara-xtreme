@@ -556,6 +556,9 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		delete pBox;
 		return OK;
 	}
+
+	CamResource::DoneInit();
+
 	pMessage->Wrap(400);
     //pMessage->Enable(false); // this annoyingly does not grey it
 	//pMessage->SetBackgroundColour(pBox->GetBackgroundColour());
@@ -619,7 +622,6 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
     pBox->GetSizer()->SetSizeHints(pBox);
     pBox->Centre();
 
-	CamResource::DoneInit();
  	// Disable the system's functionality for serious errors (i.e. stop rendering etc).
  	if (Error == ERRORTYPE_SERIOUS || Error == ERRORTYPE_ENSURE) CCamApp::DisableSystem();
 	if ( Error::IsInRenderThread() )
