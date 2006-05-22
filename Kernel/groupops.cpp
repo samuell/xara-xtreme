@@ -738,8 +738,15 @@ BOOL OpUngroup::ParentAllowsUngroup(NodeGroup* pChild)
 		// then post a message informing the user.
 		if (pParent->IsABevelController())
 			MessageID = _R(IDS_GROUPINSIDEBEVEL);
+PORTNOTE("other", "Ungroup can't localise effects yet")
+#ifndef EXCLUDE_FROM_XARALX
+// We don't need this clause when shadows can be localised in ungroup
 //		else if (pParent->IsAShadowController())	// Shadows are now PostProcessors and allow ungrouping
 //			MessageID = _R(IDS_GROUPINSIDESHADOW);
+#else
+		else if (pParent->IsAShadowController())	// Shadows are now PostProcessors and allow ungrouping
+			MessageID = _R(IDS_GROUPINSIDESHADOW);
+#endif
 		else if (pParent->IsAContourController())
 			MessageID = _R(IDS_GROUPINSIDECONTOUR);
 
