@@ -1364,33 +1364,8 @@ PORTNOTETRACE("other", "ViewFullScreenAction does nothing");
 
 void HelpXaraForumAction()
 {
-PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Opens the default Browser on XaraX's Forum Page
-	String_256 lpURL(_R(IDS_URL_FORUM));
-	HINSTANCE hChild = ShellExecute(HWND_DESKTOP, "open", (TCHAR*)lpURL, NULL, NULL, SW_SHOW);
-
-	// If the function (ShellExecute()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ((INT32)hChild <= THIRTY_TWO )
-	{
-		switch ( (INT32)hChild )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-		}
-	}	
-#endif
+	wxString strURL = CamResource::GetText(_R(IDS_URL_FORUM));
+	CCamApp::LaunchWebBrowser(strURL);
 }
 
 
@@ -1410,33 +1385,8 @@ PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
 
 void HelpWebsterHomePage()
 {
-PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Opens the default Browser on Webster's Home Page
-	String_256 lpURL(_R(IDS_URL_PRODUCT));
-	HINSTANCE hChild = ShellExecute(HWND_DESKTOP, "open", (TCHAR*)lpURL, NULL, NULL ,SW_SHOW);
-
-	// If the function (ShellExecute()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ( (INT32)hChild <= THIRTY_TWO )
-	{
-		switch ( (INT32)hChild )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-		}
-	}
-#endif
+	wxString strURL = CamResource::GetText(_R(IDS_URL_PRODUCT));
+	CCamApp::LaunchWebBrowser(strURL);
 }
 /*********************************************************************************************************************
 	void HelpXaraHomePage()
@@ -1453,33 +1403,8 @@ PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
 ***********************************************************************************************************************/
 void HelpXaraHomePage()
 {
-PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Opens the default Browser on Xara's Home Page
-	String_256 lpURL(_R(IDS_URL_XARASITE));
-	HINSTANCE hChild = ShellExecute(HWND_DESKTOP, "open", (TCHAR*)lpURL, NULL, NULL ,SW_SHOW);
-
-	// If the function (ShellExecute()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ( (INT32)hChild <= THIRTY_TWO )
-	{
-		switch ( (INT32)hChild )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-		}
-	}
-#endif
+	wxString strURL = CamResource::GetText(_R(IDS_URL_XARASITE));
+	CCamApp::LaunchWebBrowser(strURL);
 }
 
 //#endif //webster
@@ -1567,38 +1492,8 @@ PORTNOTETRACE("other","Movies index - do nothing");
 ************************************************************************************************************************/
 void WebsterHelpPages()
 {
-PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-// Old weblink way of opening browser onto hints and tips page - doesn't seem to work
-//	// Opens the default Browser on Xara's Home Page
-//	const String_256 cmd = TEXT(PRODUCT_WEBLINKEXENAME " hints/index.htm");
-//	InvokeWeblink(cmd);
-
-	// Opens the default Browser on Xara Xone we pages
-	String_256 lpURL(_R(IDS_URL_TUTORIALS));
-	HINSTANCE hChild = ShellExecute(HWND_DESKTOP, "open", (TCHAR*)lpURL, NULL, NULL ,SW_SHOW);
-
-	// If the function (ShellExecute()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ( (INT32)hChild <= THIRTY_TWO )
-	{
-		switch ( (INT32)hChild )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-		}
-	}
-#endif
+	wxString strURL = CamResource::GetText(_R(IDS_URL_TUTORIALS));
+	CCamApp::LaunchWebBrowser(strURL);
 }
 
 /*********************************************************************************************************************
@@ -1616,33 +1511,8 @@ PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
 ***********************************************************************************************************************/
 void HelpXaraPurchasePage()
 {
-PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	// Opens the default Browser on Xara's Purchase Page
-	String_256 lpURL(_R(IDS_URL_PURCHASE));
-	HINSTANCE hChild = ShellExecute(HWND_DESKTOP, "open", (TCHAR*)lpURL, NULL, NULL ,SW_SHOW);
-
-	// If the function (ShellExecute()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ( (INT32)hChild <= THIRTY_TWO )
-	{
-		switch ( (INT32)hChild )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK)/*,_R(IDS_HELP)*/);
-			}
-			break;
-		}
-	}
-#endif
+	wxString strURL = CamResource::GetText(_R(IDS_URL_PURCHASE));
+	CCamApp::LaunchWebBrowser(strURL);
 }
 
 
@@ -1664,35 +1534,7 @@ PORTNOTETRACE("other","HelpXaraPurchasePage - do nothing");
 
 BOOL InvokeWeblink(const String_256& command)
 {
-PORTNOTETRACE("other","InvokeWeblink - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	//TCHAR* pCmd = (TCHAR*)command;
-	UINT32 Error = WinExec(command, SW_SHOW);
-
-	// If the function (WebExec()) fails, then an error value that is less than or equal to 32 is returned. 
-	if ( Error <= THIRTY_TWO )
-	{
-		switch ( Error )
-		{
-			case	ERROR_FILE_NOT_FOUND:
-			case	ERROR_PATH_NOT_FOUND: 
-			case	SE_ERR_ACCESSDENIED:
-			case	SE_ERR_ASSOCINCOMPLETE:
-			{
-				InformError(_R(IDS_NO_WEB_UTILITY),_R(IDS_OK));
-			}
-			break;
-			default:
-			{
-				InformError(_R(IDS_NO_WEB_PAGE),_R(IDS_OK));
-			}
-			break;
-		}
-		
-		return FALSE;
-	}
-#endif
-	
+	CCamApp::LaunchWebBrowser(command);
 	return TRUE;
 }
 

@@ -146,6 +146,8 @@ public:
 
 	void OnFatalException();
 
+	static BOOL LaunchWebBrowser(const wxString& strUrl);
+
 private:
 	INT32 RunFalseMainLoop();
 
@@ -160,7 +162,7 @@ protected:
 	wxTimer				m_Timer;
 
 private:
-	BOOL LaunchHelpApp(const wxString& strAppName, wxString strCommand);
+	static BOOL LaunchBrowserApp(const wxString& strAppName, wxString strCommand);
 
 	static DialogManager m_DlgMgr; 		// The dialog manager handles all oily dialog functions
 

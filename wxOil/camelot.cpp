@@ -1349,41 +1349,68 @@ void CCamApp::OnHelpIndex()
 		strUrl.Prepend(_T("file://"));
 	}
 
-	// --------------------------------------------------------------------------------------
-	// Attempt to launch common browsers to cope with our rich, Javascripted, HTML help files
-	BOOL ok;
+	LaunchWebBrowser(strUrl);
 
-	ok = LaunchHelpApp(_T("viewhtml"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("firefox"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("mozilla"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("konqueror"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("gnome-www-default-browser"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("epiphany"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("opera"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("iexplore"), strUrl);
-	if (ok) return;
-
-	ok = LaunchHelpApp(_T("safari"), strUrl);
-	if (ok) return;
-
-	wxLaunchDefaultBrowser( strUrl );
 }
 
-BOOL CCamApp::LaunchHelpApp(const wxString& strAppName, wxString strCommand)
+
+/********************************************************************************************
+
+>	static BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/May/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Launch a web browser referring to a given URL
+
+********************************************************************************************/
+
+BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
+{
+	// --------------------------------------------------------------------------------------
+	// Attempt to launch common browsers to cope with our rich, Javascripted, HTML help files
+	//
+	// There are long-winded reasons for doing it this way which were discussed on the
+	// dev@xaraxtreme.org mailing list.
+	//
+	BOOL ok;
+
+	ok = LaunchBrowserApp(_T("viewhtml"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("firefox"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("mozilla"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("konqueror"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("gnome-www-default-browser"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("epiphany"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("opera"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("iexplore"), strUrl);
+	if (ok) return ok;
+
+	ok = LaunchBrowserApp(_T("safari"), strUrl);
+	if (ok) return ok;
+
+	ok = wxLaunchDefaultBrowser(strUrl);
+
+	return ok;
+}
+
+
+BOOL CCamApp::LaunchBrowserApp(const wxString& strAppName, wxString strCommand)
 {
 	strCommand.Prepend(_T(" "));
 	strCommand.Prepend(strAppName);
