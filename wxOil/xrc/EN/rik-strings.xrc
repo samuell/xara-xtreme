@@ -457,7 +457,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DEFAULTDOCNAME">
-					<label>800 by 600 drawing.xar</label>
+					<label>800_by_600_drawing.xar</label>
 				</object>
 			</object>
 			<object class="sizeritem">

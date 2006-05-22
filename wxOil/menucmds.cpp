@@ -278,6 +278,7 @@ void FileNewTemplateAction(INT32 iNumberOfTemplate)
 
 		String_256 strPathOfDrawingTemplate=DocOps::GetDefaultDrawingTemplate().GetPath(FALSE);
 		String_256 strPathOfAnimationTemplate=DocOps::GetDefaultAnimationTemplate().GetPath(FALSE);
+		strPathOfDrawingTemplate.SwapChar( _T('_'), _T(' ') );
 		
 		std::set<String_256>	setSortFilename;
 
@@ -294,7 +295,7 @@ void FileNewTemplateAction(INT32 iNumberOfTemplate)
 		}
 		FileUtil::StopFindingFiles();
 
-		if( iNumberOfTemplate >= (INT32)setSortFilename.size() )
+		if( iNumberOfTemplate > (INT32)setSortFilename.size() )
 		{
 			//We failed to find a template. So remove this
 			//item from the menu.

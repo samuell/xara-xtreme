@@ -879,45 +879,24 @@ PORTNOTE("other","Removed multi-instance flag stuff")
 
 bool CCamApp::OnRecentFile(INT32 RecentFileNumber)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	// Go and Find out about the File Number (m_pRecentFileList)
-	if (pFileList!=NULL)
+	wxFileHistory*	pFileHist = m_docManager->GetFileHistory();
+
+	if( RecentFileNumber < INT32(pFileHist->GetCount()) )
 	{
-		if (pFileList->GetSize() > RecentFileNumber)
+		wxString	FileName( pFileHist->GetHistoryFile( RecentFileNumber ) );
+
+		// Get the App to open the File
+		if (!FileName.IsEmpty())
 		{
-			// Go get the requested file out of the file list
-			CString FileName;
-			FileName = pFileList->GetFileName(RecentFileNumber);
-
-			// We do not know what type of filter to use for this file, so get it to try them all
-			OpenFileDialog::SelectedFilter = 0;
-
-			// Get the App to open the File
-			if (!FileName.IsEmpty())
-			{
-				// See if we got a document out of the deal
-				CDocument* pDoc = OpenDocumentFile(FileName);
-				if (pDoc!=NULL)
-				{
-					// Get the filename as a proper path
-					PathName Path((const char*)FileName);
-
-					// Make sure that the files name is sensible
-					MakeDocumentNative(pDoc, &Path);
-
-					// add it to the recent file list
-					// This actually moves it to the top of the list
-					AddToRecentFileList((const char*)FileName);
-
-					return TRUE;
-				}
-			}
+			// See if we got a document out of the deal
+			wxDocument* pDoc = m_docManager->CreateDocument( FileName, wxDOC_SILENT );
+			if( pDoc != NULL )
+				return true;
 		}
 	}
-#endif
 
-	// failed
-	return false;
+	// Failed to find an entry for this item
+	return false;	
 }
 
 

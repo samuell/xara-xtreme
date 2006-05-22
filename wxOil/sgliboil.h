@@ -239,6 +239,7 @@ public:
 	static INT32 FileSize(PathName *FileName);
 	static BOOL FileDelete(PathName *FileName);
  	static UINT32 FileModified(PathName *FileName);
+	static BOOL DirExists( const PathName &FileName );
 	static BOOL IsRootDirectory(String_256 *Path);
 	static void AppendSlashIfNotPresent(String_256 *Str);
 	static DWORD GetDriveSerialNumber(String_256 *PathStr);

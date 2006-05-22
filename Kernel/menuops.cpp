@@ -500,19 +500,23 @@ OpState DocOps::GetState(String_256* UIDescription, OpDescriptor* pOp)
 
 		strToReturn.toTitle();
 
+PORTNOTE("other", "Mangle file name to replace _'s with spaces")
+		strToReturn.SwapChar( _T('_'), _T(' ') );
+
 		*UIDescription=strToReturn;
 		
 		return OpState(FALSE, FALSE);
 	}
 
 	if (pOp->Token == String(OPTOKEN_FILENEW_ANIMATION))
-		
 	{
-		//Does the default animation template exist?
 PORTNOTE("other", "Remove template existance check - too annoying while it's not there!")
 #ifndef EXCLUDE_FROM_XARALX
+		//Does the default animation template exist?
 		PathName pathDefaultAnimationTemplate=GetDefaultAnimationTemplate();
 		BOOL fFileExists=SGLibOil::FileExists(&pathDefaultAnimationTemplate);
+
+		TRACEUSER( "jlh92", _T("Template Anim = %s, %d\n"), PCTSTR(pathDefaultAnimationTemplate.GetPath()), fFileExists );
 
 		String_256 strToReturn=pathDefaultAnimationTemplate.GetFileName(FALSE);
 
@@ -527,7 +531,7 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 #endif
 
 		//If not, grey the menu item
-		return OpState(FALSE, !fFileExists);
+		return OpState(FALSE, !fFileExists, TRUE);
 	}
 
 	if (pOp->Token == String(OPTOKEN_FILENEW_TEMPLATE1) ||
@@ -576,6 +580,7 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 
 			String_256 strPathOfDrawingTemplate=GetDefaultDrawingTemplate().GetPath(FALSE);
 			String_256 strPathOfAnimationTemplate=GetDefaultAnimationTemplate().GetPath(FALSE);
+			strPathOfDrawingTemplate.SwapChar( _T('_'), _T(' ') );
 			String_256 strPathOfFile;
 
 			TRACEUSER( "jlh92", _T("DefPath = %s, %s\n"), PCTSTR(strPathOfDrawingTemplate),
@@ -597,7 +602,7 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 			}
 			FileUtil::StopFindingFiles();
 
-			if( iNumberOfTemplate >= setSortFilename.size() )
+			if( iNumberOfTemplate > INT32(setSortFilename.size()) )
 			{
 				// Don't allow any errors set while searching to propagate outside this scope
 				Error::ClearError();
@@ -609,7 +614,7 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 			{ /*Do nothing!*/ }
 
 			strNameOfFile = *iter;
-			TRACEUSER( "jlh92", _T("Final(%d) = %s\n"), iNumberOfTemplate, PCTSTR(strPathOfFile) );
+			TRACEUSER( "jlh92", _T("Final(%d) = %s\n"), iNumberOfTemplate, PCTSTR(strNameOfFile) );
 
 			//We've found a file. So strip the .xar from the name, as follows...
 			pathTemplates.SetFileNameAndType(strNameOfFile);
@@ -1298,35 +1303,23 @@ BOOL DocOps::Init()
 		Camelot.DeclarePref( _T("NewTemplates"), _T("DefaultDrawingFile"), &ms_strDefaultDrawingTemplate);
 	}
 
-PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (ms_strDefaultAnimationTemplate==String_256(_T("")))
 	{
-		//Then assume it's the exe path with \templates\animation.xar on the end
-		TCHAR Pathname[MAX_PATH];
-
-		if(GetModuleFileName(NULL, Pathname, MAX_PATH) == 0) //Should be in the winoil really
-			return FALSE;
-
-		// Put the path name into a string
-		String_256 strPathOfExe(Pathname);
-		PathName pathPathOfExe(strPathOfExe);
-
-		strPathOfExe = pathPathOfExe.GetLocation(TRUE);
-
-		//And add "templates\" to the end
-		String_256 strTemplatesDirectory(_R(IDS_NEWTEMPLATES_RELATIVEPATH));
-		String_256 strNameOfAnimationTemplate(_R(IDS_NEWTEMPLATES_DEFAULTANIMATIONFILE));
-
-		String_256 strPathOfTemplate=strPathOfExe;
-		strPathOfTemplate+=strTemplatesDirectory;
-		strPathOfTemplate+=strNameOfAnimationTemplate;
+		String_256 strNameOfAnimationTemplate( _R(IDS_NEWTEMPLATES_DEFAULTANIMATIONFILE) );
+		String_256 strPathOfTemplate( GetApplication()->GetTemplatesPath() );
+		strPathOfTemplate += strNameOfAnimationTemplate;
 
 		ms_strDefaultAnimationTemplate=strPathOfTemplate;
+
+		TRACEUSER( "jlh92", _T("DefAnimTempl = %s\n"), PCTSTR(ms_strDefaultAnimationTemplate) );
 	}
 
 	if (ms_strDefaultDrawingTemplate==String_256(_T("")))
 	{
+		ms_strDefaultDrawingTemplate=String_256(_R(IDS_DEFAULTDOCNAME));
+
+PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
+#if !defined(EXCLUDE_FROM_XARALX)
 		//Then assume it's the exe path with \templates\drawing.xar on the end
 		TCHAR Pathname[MAX_PATH];
 
@@ -1348,18 +1341,8 @@ PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
 		strPathOfTemplate+=strNameOfDrawingTemplate;
 
 		ms_strDefaultDrawingTemplate=strPathOfTemplate;
-	}
-#else
-	if (ms_strDefaultAnimationTemplate==String_256(_T("")))
-	{
-		ms_strDefaultAnimationTemplate=String_256(_T("animation.xar"));
-	}
-
-	if (ms_strDefaultDrawingTemplate==String_256(_T("")))
-	{
-		ms_strDefaultDrawingTemplate=String_256(_T("default.xar"));
-	}
 #endif
+	}
 	
 	return TRUE;
 }

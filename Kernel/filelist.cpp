@@ -293,12 +293,16 @@ void FileListOp::Do(OpDescriptor* pOpDesc)
 	camStrncpy(FileNum, pOpDesc->Token, 2);
 	FileNum[2] = 0;
 
+	TRACEUSER( "jlh92", _T("Op = %s\n"), FileNum );
+
 	// make sure that it contains digits.
 	if (isdigit(FileNum[0]) && isdigit(FileNum[1]))
 	{
 		// Find out which number was chosen
 		TCHAR *pszMark;
 		INT32 RecentFileNum = camStrtol( FileNum, &pszMark, 10 );
+
+		TRACEUSER( "jlh92", _T("Recent = %d\n"), RecentFileNum );
 
 		// Ask the app to load the file specified (it will look up the file name etc)
 		WorkedOK = AfxGetApp().OnRecentFile(RecentFileNum-1);

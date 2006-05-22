@@ -1268,31 +1268,7 @@ BOOL SGLibOil::FileCopy(PathName *Source, PathName *Destination)
 
 BOOL SGLibOil::FileExists(PathName *FileName)
 {
-	PORTNOTETRACE("dialog","SGLibOil::FileExists - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	ERROR3IF(FileName == NULL || !FileName->IsValid(), "SGLibOil::FileExists problem with filename");
-
-	// Do we have read access on file ?
-	BOOL Found = FALSE;
-
-	try
-	{
-		INT32 Value = _taccess( (const TCHAR *)FileName->GetPath(), ios::in );
-		if(Value == 0)
-			Found = TRUE;
-	}
-	catch( ... )
-	{
-		// File probably not found due to exception.
-		// This can be caused by stuff such as disks not in drives, invalid pathnames...
-		Found = FALSE;
-		Error::ClearError();
-	}
-
-	return Found;
-#else
-	return TRUE;
-#endif
+	return wxFile::Exists( PCTSTR(FileName->GetPath()) );
 
 #if 0
 	CCDiskFile File;
@@ -1312,6 +1288,40 @@ BOOL SGLibOil::FileExists(PathName *FileName)
 #endif
 }
 
+/***********************************************************************************************
+
+>	static BOOL SGLibOil::DirExists(PathName *FileName)
+
+	Author:		Luke Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	21/05/06
+	Inputs:		File - Pointer to path and filename of dir
+	Returns:	Returns true if the specified dir exists
+	Purpose:	To find out whether a dir actually exists.
+	Notes:
+
+***********************************************************************************************/
+
+BOOL SGLibOil::DirExists( const PathName& FileName )
+{
+	return wxDir::Exists( PCTSTR(FileName.GetPath()) );
+
+#if 0
+	CCDiskFile File;
+	BOOL OldTEState = File.SetThrowExceptions(FALSE);
+	BOOL OldREState = File.SetReportErrors(FALSE);
+	BOOL Found = FALSE;
+	 
+	// Open file - returns false if there was an error (file doesn't exist)
+	Found = File.open(FileName->GetPath(), ios::in | ios::binary | ios::nocreate);
+	if(Found) File.close();
+		
+	File.SetThrowExceptions(OldTEState);
+	File.SetReportErrors(OldREState);
+ 	Error::ClearError();
+
+	return Found;
+#endif
+}
 
 /***********************************************************************************************
 

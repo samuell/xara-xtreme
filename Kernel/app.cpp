@@ -611,7 +611,7 @@ BOOL Application::LateInit()
 
 	//Graham 21/10/97: If it is blank, then we should use the
 	//exe path with "\templates\" on the end
-	if( m_TemplatesPath.IsEmpty() || !wxDir::Exists( m_TemplatesPath ) )
+	if( m_TemplatesPath.IsEmpty() || !SGLibOil::DirExists( m_TemplatesPath ) )
 	{
 		std::auto_ptr<char> Pathname( br_find_data_dir( "/usr/share" ) );
 
@@ -628,7 +628,7 @@ BOOL Application::LateInit()
 		m_TemplatesPath+=strRelativePath;
 
 #if defined(_DEBUG)
-		if( !wxDir::Exists( m_TemplatesPath ) )
+		if( !SGLibOil::DirExists( m_TemplatesPath ) )
 			m_TemplatesPath = _T("/usr/share/xaralx/Templates/");
 #endif
 	}
