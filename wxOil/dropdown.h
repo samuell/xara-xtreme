@@ -157,6 +157,9 @@ protected:		// Useful methods to call from derived classes
 	void AddItem(void * ItemData);
 				// Adds an item to the end of the list
 
+	void DeleteItem(INT32 index);
+				// Deletes an item
+
 	void SetSelectedIndex(INT32 SelectedIndex);
 				// Sets the index of the selected item
 

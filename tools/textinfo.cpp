@@ -2514,17 +2514,19 @@ MsgResult TextInfoBarOp::Message(Msg* Message)
 						if (NameDropDown != NULL)
 						{
 							FontDropItem *Selected = NameDropDown->DecodeSelection((INT32)SelIndex);
-
-							if (FONTMANAGER->IsFontInstalled(&Selected->FontName, Selected->Type))
+							if (Selected)
 							{
-								if (SetCurrentFontName(&Selected->FontName, Selected->Type, TRUE))
-									OnFieldChange(FontNameA);
+								if (FONTMANAGER->IsFontInstalled(&Selected->FontName, Selected->Type))
+								{
+									if (SetCurrentFontName(&Selected->FontName, Selected->Type, TRUE))
+										OnFieldChange(FontNameA);
+								}
+								else
+								{
+									InformWarning(_R(IDS_INVALIDFONT));
+									Update();
+								}
 							}
-							else
-							{
-								InformWarning(_R(IDS_INVALIDFONT));
-								Update();
-							}			 
 						}
 					}
 				}

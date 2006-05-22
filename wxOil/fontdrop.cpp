@@ -232,6 +232,7 @@ FontDropDown::FontDropDown()
 {
 	TheTopItem.FontName = _R(IDS_ATM_DEFAULT); // "Default";
 	TheTopItem.Type = FC_UNDEFINED;
+	m_MissingItemAdded = FALSE;
 }
 
 /********************************************************************************************
@@ -299,6 +300,7 @@ void FontDropDown::KillList(void)
 		delete( (FontDropItem*)((Fonts.RemoveItem(Item))) );
 		Item = Prev;
 	}
+	m_MissingItemAdded = FALSE;
 }
 
 
@@ -387,6 +389,7 @@ BOOL FontDropDown::AddFontToList(TCHAR *FontName, FontClass Type)
 BOOL FontDropDown::FillInFontList()
 {
 	ERROR2IF(ParentDlg == NULL, FALSE, "FontDropDown not properly initialised");
+	TRACEUSER("wuerthne", _T("FillInFontList"));
 
 	SetListRedraw(FALSE);										// Disable redraw while updating
 	ClearList();												// Delete combobox contents
@@ -396,6 +399,7 @@ BOOL FontDropDown::FillInFontList()
 
 	if(Fonts.GetCount() == 0)
 	{
+		TRACEUSER("wuerthne", _T("FontDropDown enumerating fonts"));
 		FontDropEnumFont EnumObj;
 		EnumObj.Execute();
 
@@ -472,6 +476,8 @@ BOOL FontDropDown::SetSelection(FontDropItem *TheFont)
 
 	INT32 SelectedIndex = -1;
 
+    TRACEUSER("wuerthne", _T("SetSelection to %s"), (TCHAR*)TheFont->FontName);
+
 	INT32 Index = 0;
 	INT32 MaxIndex = GetNumberOfItems();
 
@@ -487,8 +493,48 @@ BOOL FontDropDown::SetSelection(FontDropItem *TheFont)
 		Index++;
 	}
 
+	if (Index == MaxIndex)
+	{
+		TRACEUSER("wuerthne", _T("font not in list, Index = %d"), Index);
+		// font was not in the list, so make sure there is a special item at the
+		// end to accomodate it
+		String_64 NewName(TheFont->FontName + _T(" (missing)"));
+			
+		if (m_MissingItemAdded)
+		{
+			TRACEUSER("wuerthne", _T("update missing item"));
+			FontDropItem *Item = (FontDropItem*)Fonts.GetTail();
+			Item->SetInfo(NewName, TheFont->Type);
+			SelectedIndex = Index - 1;
+		}
+		else
+		{
+			TRACEUSER("wuerthne", _T("add missing item"));
+			FontDropItem *Item = new FontDropItem(NewName, TheFont->Type);
+			Fonts.AddTail(Item);
+			AddItem((void*) Item);
+			m_MissingItemAdded = TRUE;
+			SelectedIndex = Index;
+		}
+	}
+	else
+	{
+		// the font was in the list, so if there is a "missing" item at the end remove it
+		// (unless of course, the selected item *is* the "missing" item, but this cannot
+		// normally happen because our item has the added text " (missing)")
+		if (m_MissingItemAdded && SelectedIndex != MaxIndex - 1)
+		{
+			TRACEUSER("wuerthne", _T("remove missing item"));
+			delete( (FontDropItem*)((Fonts.RemoveItem(Fonts.GetTail()))) );
+			m_MissingItemAdded = FALSE;
+
+			// delete the item from the combo box
+			DeleteItem(MaxIndex - 1);
+		}
+	}
+	TRACEUSER("wuerthne", _T("setting index to %d"), SelectedIndex);
 	SetSelectedIndex(SelectedIndex);						// And set the appropriate selected item
-  
+	TRACEUSER("wuerthne", _T("SetSelection done"));
 	return(TRUE);
 }
 
@@ -514,6 +560,8 @@ BOOL FontDropDown::SetSelection(FontDropItem *TheFont)
 
 FontDropItem *FontDropDown::DecodeSelection(INT32 SelectionIndex)
 {
+	// do not allow the extra "missing" item to be selected
+	if (SelectionIndex == GetNumberOfItems() - 1 && m_MissingItemAdded) return NULL;
 	FontDropItem *Fred = (FontDropItem *) GetItemData(SelectionIndex);
 
 	if (Fred==&TheTopItem)

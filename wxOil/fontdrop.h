@@ -128,6 +128,8 @@ class FontDropItem : public ListItem
 
 public:
 	String_64	GetFontName() { return FontName; }
+	void SetInfo(String_64& theFontName, FontClass theType)
+		{ FontName = theFontName; Type = theType; }
 };
 
 
@@ -219,6 +221,8 @@ public:
 	
 	// List of font items
 	List Fonts;
+
+	BOOL m_MissingItemAdded;
 
 	// We need a special entry for the top item...
 	FontDropItem TheTopItem;

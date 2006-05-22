@@ -400,7 +400,33 @@ void DropDown::AddItem(void * ItemData)
 		pGadget->SetString(n, GetText(ItemData, n));
 }
 
+/********************************************************************************************
 
+>	void DropDown::DeleteItem(INT32 index)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Date:		22/05/06
+
+	Inputs:		index - the index of the item to be removed
+	Purpose:	Removes an item from the list
+
+********************************************************************************************/
+
+void DropDown::DeleteItem(INT32 index)
+{
+	wxOwnerDrawnComboBox * pGadget = GetBox();
+	if (!pGadget)
+		return;
+	INT32 count = (INT32)pGadget->GetCount();
+	if (index >= 0 && index < count)
+	{
+		pGadget->Delete(index);
+	}
+	else
+	{
+		ERROR3("DropDown::RemoveItem - attempt to delete non-existing item");
+	}
+}
 
 /********************************************************************************************
 
