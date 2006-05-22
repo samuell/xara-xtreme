@@ -498,7 +498,8 @@ BOOL FontDropDown::SetSelection(FontDropItem *TheFont)
 		TRACEUSER("wuerthne", _T("font not in list, Index = %d"), Index);
 		// font was not in the list, so make sure there is a special item at the
 		// end to accomodate it
-		String_64 NewName(TheFont->FontName + _T(" (missing)"));
+		String_64 NewName(TheFont->FontName);
+		NewName += String_64(_R(IDS_FONTMISSING));
 			
 		if (m_MissingItemAdded)
 		{
