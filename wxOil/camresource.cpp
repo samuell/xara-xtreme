@@ -1768,11 +1768,11 @@ BOOL CamResource::Splash()
 	if (!pSplashBitmap->Ok()) return FALSE;
 
 	pSplashScreen = new wxAdvSplashScreen(*pSplashBitmap,
-          wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_NO_TIMEOUT,
-          0, NULL, -1, wxDefaultPosition, wxDefaultSize,
-          wxNO_BORDER
+		wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_NO_TIMEOUT,
+		0, NULL, -1, wxDefaultPosition, wxDefaultSize,
+		wxNO_BORDER
 #if !defined (_DEBUG)
-		  |wxSTAY_ON_TOP // Only stay on top in non-debug builds - too annoying for preinit debugging
+		|wxSTAY_ON_TOP // Only stay on top in non-debug builds - too annoying for preinit debugging
 #endif
 		  );
 	if (!pSplashScreen) return FALSE;

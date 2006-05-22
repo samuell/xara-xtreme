@@ -560,11 +560,11 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	CamResource::DoneInit();
 
 	pMessage->Wrap(400);
-    //pMessage->Enable(false); // this annoyingly does not grey it
+	//pMessage->Enable(false); // this annoyingly does not grey it
 	//pMessage->SetBackgroundColour(pBox->GetBackgroundColour());
-    pMessageSizer->Add(pMessage, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
+	pMessageSizer->Add(pMessage, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
 
-    wxBoxSizer* pButtonSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer* pButtonSizer = new wxBoxSizer(wxHORIZONTAL);
 	if (!pButtonSizer)
 	{
 		Beep();
@@ -572,7 +572,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		delete pBox;
 		return OK;
 	}
-    pVSizer->Add(pButtonSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+	pVSizer->Add(pButtonSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
 #define EB_MAXBUTS 7
 	wxButton * pButt[EB_MAXBUTS]; // see help below, note we don't use zero, 5 is reserved for help
@@ -598,7 +598,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		if (butres[butt])
 		{
 			pButt[butt] = ((CamErrorDialog *)pBox)->AddErrorButton(pButtonSizer, CamResource::GetText(butres[butt]),
-																 butres[butt]);
+																butres[butt]);
 			if (!pButt[butt])
 			{
 				Beep();
@@ -618,12 +618,12 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 		pBox->SetDefaultItem(pButt[OK]);
 	}
 
-    pBox->GetSizer()->Fit(pBox);
-    pBox->GetSizer()->SetSizeHints(pBox);
-    pBox->Centre();
+	pBox->GetSizer()->Fit(pBox);
+	pBox->GetSizer()->SetSizeHints(pBox);
+	pBox->Centre();
 
- 	// Disable the system's functionality for serious errors (i.e. stop rendering etc).
- 	if (Error == ERRORTYPE_SERIOUS || Error == ERRORTYPE_ENSURE) CCamApp::DisableSystem();
+	// Disable the system's functionality for serious errors (i.e. stop rendering etc).
+	if (Error == ERRORTYPE_SERIOUS || Error == ERRORTYPE_ENSURE) CCamApp::DisableSystem();
 	if ( Error::IsInRenderThread() )
 		TRACE( _T("InformGeneral called within RenderThread => serious rendering error"));
 
