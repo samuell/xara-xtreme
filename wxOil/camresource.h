@@ -325,7 +325,7 @@ public:
 	static BOOL Init();
 	static BOOL DeInit();
 
-	static BOOL DoneInit();
+	static BOOL DoneInit(BOOL CanYield=TRUE);
 
 	static wxLocale * GetLocale() {return m_pLocale;}
 

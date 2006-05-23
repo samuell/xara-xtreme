@@ -256,6 +256,12 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static INT32	lLastTimeStamp = 0;
 
+	if (( event.GetEventType() == wxEVT_CREATE ) && (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow))))
+	{
+		// a top level window is about to be created. End the splash screen if it is up as it may obscure it
+		CamResource::DoneInit(FALSE);	
+	}
+
 #if defined(_DEBUG)
 	if( event.GetEventType() == wxEVT_CHAR )
 	{

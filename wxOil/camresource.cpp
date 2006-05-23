@@ -1785,7 +1785,7 @@ BOOL CamResource::Splash()
 
 /********************************************************************************************
 
->	static BOOL CamResource::DoneInit()
+>	static BOOL CamResource::DoneInit(BOOL CanYield=TRUE)
 
 
 	Author:		Alex_Bligh <alex@alex.org.uk>
@@ -1800,16 +1800,18 @@ BOOL CamResource::Splash()
 
 ********************************************************************************************/
 
-BOOL CamResource::DoneInit()
+BOOL CamResource::DoneInit(BOOL CanYield /*=TRUE*/)
 {
 	TRACET(_T("CamResource::DoneInit() called"));
 #if !defined(EXCLUDE_FROM_XARLIB)
 	if (pSplashScreen)
 	{
-        ::wxYield();
+        if (CanYield)
+			::wxYield();
 		pSplashScreen->Destroy();
 		pSplashScreen = NULL;
-        ::wxYield();
+		if (CanYield)
+	        ::wxYield();
 	}
 	if (pSplashBitmap)
 	{
