@@ -383,7 +383,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		// on balance we might be best ignoring errors here - we are really now past
 		// the point of no return, and the dialog can be closed cleanly by the user
 		// but let's try anyway
-		if (!CreateTabbedDialog( (DialogTabOp*)DlgOp, Mode, OpeningPage ))
+		if (!CreateTabbedDialog( (DialogTabOp*)DlgOp, Mode, OpeningPage, MainDlgID ))
 		{
 			// try using our own tolerant delete mechanism
 			Delete(pDialogWnd, DlgOp);
@@ -7290,7 +7290,8 @@ void DialogManager::RelayoutDialog( DialogTabOp* pDlgOp )
 
 ********************************************************************************************/
 
-BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage)
+BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage,
+	CDlgResID mainDlgID )
 {
 	wxBookCtrlBase * pBook = GetBookControl(pTabDlgOp->WindowID);
 	if (!pBook)
@@ -7328,42 +7329,36 @@ BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, IN
 	}
 	else
 	{
-PORTNOTE( "dialog", "Remove mainDlgID usage" );
-#ifndef EXCLUDE_FROM_XARALX
 		// Determine if this dialog has been created before
-		DialogPosition* pPosDetails = FindDialogPositionRecord(DialogManager::mainDlgID);
+		DialogPosition* pPosDetails = FindDialogPositionRecord( mainDlgID );
 		if (pPosDetails != NULL)
 		{
 			// The dialog has been created before so find out the index of the active page
 			ActivePageIndex = pPosDetails->ActivePageIndex;
 		}
-#endif
 	}
 
 	// Now that the pages have been registered, check if the dialog has been opened
 	// before. If so force the new ActivePage to be specified rather than the old.
 	if (OpeningPage != -1)
 	{
-PORTNOTE( "dialog", "Remove mainDlgID usage" );
-#ifndef EXCLUDE_FROM_XARALX
 		// Determine if this dialog has been created before
-		DialogPosition* pPosDetails = FindDialogPositionRecord(DialogManager::mainDlgID);
+		DialogPosition* pPosDetails = FindDialogPositionRecord( mainDlgID );
 		if (pPosDetails != NULL)
 		{
 			// The dialog has been created before so check if the specified page was the
 			// last active one. If it was then everything should be ok.
 //			if (OpeningPage != pPosDetails->ActivePageIndex)
 //			{
-				ERROR3IF(pPropSheet == NULL, "There is no current PropertySheet");
-				wxNotebookPage* pPage = (wxNotebookPage*)pPropSheet->GetActivePage();
+				ERROR3IF(pBook == NULL, "There is no current PropertySheet");
+				wxNotebookPage* pPage = (wxNotebookPage*)pBook->GetCurrentPage();
 				ERROR3IF(pPage == NULL, "There is no active page");
-				pPosDetails->ActivePage = pPage->GetPageID();
+				pPosDetails->ActivePage = pPage->GetId();
 TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->ActivePage);
 //				pPosDetails->ActivePage = 27666;
 				pPosDetails->ActivePageIndex = OpeningPage;
 //			}
 		}
-#endif
 	}
 
 	return TRUE;

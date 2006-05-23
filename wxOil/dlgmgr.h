@@ -344,7 +344,7 @@ private:
 
 	// Creates a DialogBarOp
 	static BOOL CreateBar(DialogBarOp* DlgOp);
-	static BOOL CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage);
+	static BOOL CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, INT32 OpeningPage, CDlgResID MainDlgID );
 
 
 	// Post create gets called after a dialog window has been created.
