@@ -102,41 +102,29 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_XPOILFLT
 
 #include "oilfltrs.h"
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-#include <atlbase.h>	// For CRegKey and CComPtr
-
-#include "xpfapi.h"
-#endif
-
 #include "xpfcaps.h"
 #include "xmlutils.h"
+#include "camprocess.h"
 
 class PluginNativeFilter;
 
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-class PluginFilterCallback : public CCmdTarget
+class PluginFilterProcess : public CamProcess
 {
-	DECLARE_DYNCREATE( PluginFilterCallback )
-
 public:
-	PluginFilterCallback(PluginNativeFilter* pFilter = NULL);	// Constructor
-	~PluginFilterCallback();									// Destructor
+	PluginFilterProcess(PluginNativeFilter* pFilter, CCLexFile* pInFile = NULL, CCLexFile* pOutFile = NULL);
+	virtual ~PluginFilterProcess();
 
-	IXPFCallback* GetInterface() { return &m_x_XPFCallback; }
+	// These are called to handle the various streams
+	virtual void ProcessStdErr();
 
-	DECLARE_INTERFACE_MAP()
-	
-	BEGIN_INTERFACE_PART(_XPFCallback, IXPFCallback)
-		STDMETHOD(Progress)(/*[in]*/INT32 lProgress);
-	END_INTERFACE_PART(_XPFCallback)
+	BOOL ReportError();
+	void ReportWarning();
 
 protected:
 	PluginNativeFilter* m_pFilter;
+	wxArrayString m_Errors;
+	wxArrayString m_Warnings;
 };
-#endif
-
 
 
 /********************************************************************************************

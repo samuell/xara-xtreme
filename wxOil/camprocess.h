@@ -124,8 +124,8 @@ public:
 	INT32 Execute(const wxString& cmd);
 
 protected:
-	bool m_bDead;
-	INT32 m_ReturnCode;
+	volatile bool m_bDead;
+	volatile INT32 m_ReturnCode;
 	CCLexFile* m_pInFile;
 	CCLexFile* m_pOutFile;
 	INT32 m_BytesIn;

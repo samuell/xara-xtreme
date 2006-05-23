@@ -351,20 +351,20 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 		wxString sCommand(m_CanImport);
 		sCommand.Replace(_T("%IN%"), (LPCTSTR)FileName.GetPath());
 
-		TRACE(_T("Running '%s'"), sCommand.c_str());
+		TRACEUSER("Gerry", _T("Running '%s'"), sCommand.c_str());
 
 		wxArrayString saOutput;
 		wxArrayString saErrors;
 		INT32 code = wxExecute(sCommand, saOutput, saErrors);
-		TRACE(_T("wxExecute returned %d"), code);
+		TRACEUSER("Gerry", _T("wxExecute returned %d"), code);
 		if (code == 0)
 		{
 			// Extract the value from saOutput
 			if (saOutput.Count() > 0)
 			{
 				INT32 Val = wxAtoi(saOutput[0]);
-				TRACE(_T("Command '%s' returned string '%s'"), sCommand.c_str(), saOutput[0].c_str());
-				TRACE(_T("Value = %d"), Val);
+				TRACEUSER("Gerry", _T("Command '%s' returned string '%s'"), sCommand.c_str(), saOutput[0].c_str());
+				TRACEUSER("Gerry", _T("Value = %d"), Val);
 				if (Val >= 0 && Val <= 10)
 				{
 					HowCompatible = Val;
@@ -372,12 +372,12 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 			}
 			else
 			{
-				TRACE(_T("Command '%s' returned no output value"), sCommand.c_str());
+				TRACEUSER("Gerry", _T("Command '%s' returned no output value"), sCommand.c_str());
 			}
 		}
 		else
 		{
-			TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
+			TRACEUSER("Gerry", _T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 		}
 	}
 
@@ -428,21 +428,25 @@ BOOL PluginOILFilter::GetImportFile(CCLexFile* pFile, CCLexFile** ppNewFile)
 	wxString sCommand(m_DoImport);
 	sCommand.Replace(_T("%IN%"), (LPCTSTR)FileName.GetPath());
 
-	TRACE(_T("Running '%s'"), sCommand.c_str());
+	TRACEUSER("Gerry", _T("Running '%s'"), sCommand.c_str());
 
 	// Create a process with the TempFile as the stdout
-	// We will need to derive a new class from CamProcess to handle
-	// the processing of stderr for errors, warnings and progress
-	CamProcess TheProc(NULL, &TempFile);
+	PluginFilterProcess* pTheProc = new PluginFilterProcess((PluginNativeFilter*)Parent, NULL, &TempFile);
 
-	INT32 code = TheProc.Execute(sCommand);
+	INT32 code = pTheProc->Execute(sCommand);
 	TempFile.close();
 	if (code != 0)
 	{
-		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
+		TRACEUSER("Gerry", _T("Execution of '%s' failed."), sCommand.c_str());
 		// Extract error from a derived CamProcess class and report it
+		pTheProc->ReportError();
+		delete pTheProc;
 		return(FALSE);
 	}
+
+	pTheProc->ReportWarning();
+	delete pTheProc;
+	pTheProc = NULL;
 
 	CCDiskFile* pTempFile = new CCDiskFile();
 	if (pTempFile)
@@ -540,16 +544,18 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
 	sCommand.Replace(_T("%XML%"), m_XMLFile.GetFullPath());
 
-	TRACE(_T("Running '%s'"), sCommand.c_str());
+	TRACEUSER("Gerry", _T("Running '%s'"), sCommand.c_str());
 
 	wxArrayString saOutput;
 	wxArrayString saErrors;
 	INT32 code = wxExecute(sCommand, saOutput, saErrors);
 
+#ifdef _DEBUG
 	for (UINT32 i = 0; i < saErrors.GetCount(); i++)
 	{
-		TRACE(_T("stderr: %s"), saErrors[i].c_str());
+		TRACEUSER("Gerry", _T("stderr: %s"), saErrors[i].c_str());
 	}
+#endif
 
 	if (code == 0)
 	{
@@ -562,7 +568,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 	}
 	else
 	{
-		TRACE(_T("Command '%s' exited with code %d"), sCommand.c_str(), code);
+		TRACEUSER("Gerry", _T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 
 		// Get error message from saErrors
 		return(FALSE);
@@ -606,7 +612,7 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 	sCommand.Replace(_T("%OUT%"), (LPCTSTR)pPath->GetPath());
 	sCommand.Replace(_T("%XML%"), m_XMLFile.GetFullPath());
 
-	TRACE(_T("Running '%s'"), sCommand.c_str());
+	TRACEUSER("Gerry", _T("Running '%s'"), sCommand.c_str());
 
 	CCDiskFile TempFile(CCFILE_DEFAULTSIZE, FALSE, FALSE);
 	if (!TempFile.open(m_TempXarFile, ios::in | ios::binary))
@@ -616,18 +622,22 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 	}
 
 	// Create a process with the TempFile as the stdin
-	// We will need to derive a new class from CamProcess to handle
-	// the processing of stderr for errors, warnings and progress
-	CamProcess TheProc(&TempFile, NULL);
+	PluginFilterProcess* pTheProc = new PluginFilterProcess((PluginNativeFilter*)Parent, &TempFile, NULL);
 
-	INT32 code = TheProc.Execute(sCommand);
+	INT32 code = pTheProc->Execute(sCommand);
+	TRACEUSER("Gerry", _T("Execute returned %d"), code);
 	TempFile.close();
 	if (code != 0)
 	{
-		TRACE(_T("Execution of '%s' failed."), sCommand.c_str());
-		// Extract error from a derived CamProcess class and report it
+		TRACEUSER("Gerry", _T("Execution of '%s' failed (%d)"), sCommand.c_str(), code);
+		// Extract error and report it
+		pTheProc->ReportError();
+		delete pTheProc;
 		return(FALSE);
 	}
+
+	pTheProc->ReportWarning();
+	delete pTheProc;
 
 	return(TRUE);
 }
@@ -650,7 +660,6 @@ BOOL PluginOILFilter::DoExport(CCLexFile* pXarFile, PathName* pPath)
 
 BOOL PluginOILFilter::BuildCapabilityTree(wxString strXmlFilename, CapabilityTree* pCapTree)
 {
-
 	// First we need to load the XML into an XML DOM object
 
 	// Set Parser flags here?
@@ -1521,11 +1530,107 @@ XPFCapability* PluginOILFilter::CreateColourNode(xmlNodePtr pNode)
 
 void PluginOILFilter::Cleanup()
 {
-PORTNOTE("other","PluginFilter COM bits removed")
-#if !defined(EXCLUDE_FROM_XARALX)
-	ReleaseFilterObject();
-#endif
 }
 
 
 
+PluginFilterProcess::PluginFilterProcess(PluginNativeFilter* pFilter, CCLexFile* pInFile, CCLexFile* pOutFile) :
+	CamProcess(pInFile, pOutFile)
+{
+	TRACEUSER("Gerry", _T("PluginFilterProcess::PluginFilterProcess"));
+	m_pFilter = pFilter;
+}
+
+
+PluginFilterProcess::~PluginFilterProcess()
+{
+	TRACEUSER("Gerry", _T("PluginFilterProcess::~PluginFilterProcess"));
+}
+
+
+void PluginFilterProcess::ProcessStdErr()
+{
+//	TRACEUSER("Gerry", _T("PluginFilterProcess::ProcessStdErr"));
+
+	if (IsErrorAvailable())
+	{
+		wxTextInputStream tis(*GetErrorStream());
+
+		// This assumes that the output is always line buffered
+//		while (!GetErrorStream()->Eof())
+		while (IsErrorAvailable())
+		{
+			wxString line;
+			line << tis.ReadLine();
+//			TRACEUSER("Gerry", _T("(stderr):%s"), line.c_str());
+
+			if (!line.IsEmpty())
+			{
+				// If line begins "MESSAGE:" then it is a debug message and can be discarded
+				wxString rest;
+				if (line.StartsWith(_T("MESSAGE:"), &rest))
+				{
+//					TRACEUSER("Gerry", _T("XPFDebug:%s"), rest.c_str());
+				}
+				else if (line.StartsWith(_T("PROGRESS:"), &rest))
+				{
+//					TRACEUSER("Gerry", _T("XPFProgress:%s"), rest.c_str());
+					if (m_pFilter)
+					{
+						unsigned long Val = wxStrtoul(rest.c_str(), NULL, 10);
+						if (Val > 0)
+						{
+//							TRACEUSER("Gerry", _T("Setting progress to %d"), Val);
+							m_pFilter->SetProgressBarCount((UINT32)Val);
+						}
+					}
+				}
+				else if (line.StartsWith(_T("WARNING:"), &rest))
+				{
+//					TRACEUSER("Gerry", _T("XPFWarning:%s"), rest.c_str());
+					m_Warnings.Add(rest);
+				}
+				else if (line.StartsWith(_T("ERROR:"), &rest))
+				{
+//					TRACEUSER("Gerry", _T("XPFError:%s"), rest.c_str());
+					m_Errors.Add(rest);
+				}
+				else
+				{
+//					TRACEUSER("Gerry", _T("XPFError:%s"), line.c_str());
+					m_Errors.Add(line);
+				}
+			}
+		}
+	}
+}
+
+
+BOOL PluginFilterProcess::ReportError()
+{
+	TRACEUSER("Gerry", _T("PluginFilterProcess::ReportError"));
+
+	// Get the first entry from m_ErrorList and pass it to Error::SetError
+	if (m_Errors.GetCount() > 0)
+	{
+		Error::SetError(0, m_Errors[0].c_str(), 0);
+	}
+	else
+	{
+		ERROR1(FALSE, _R(IDS_XPF_NO_ERROR_SET));
+	}
+
+	return(FALSE);
+}
+
+
+void PluginFilterProcess::ReportWarning()
+{
+	TRACEUSER("Gerry", _T("PluginFilterProcess::ReportWarning"));
+
+	// Show the user the contents of m_WarningList
+	for (size_t i = 0; i < m_Warnings.GetCount(); i++)
+	{
+		TRACEUSER("Gerry", _T("WARNING:%s"), m_Warnings[i].c_str());
+	}
+}

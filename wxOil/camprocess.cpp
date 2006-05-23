@@ -132,7 +132,8 @@ INT32 CamProcess::Execute(const wxString& cmd)
 	// Make sure redirection happens
 	Redirect();
 
-	if (!wxExecute(cmd, wxEXEC_ASYNC, this))
+	long pid = wxExecute(cmd, wxEXEC_ASYNC, this);
+	if (pid == 0)
 	{
 		// Report problem
 		m_bDead = true;
@@ -147,7 +148,7 @@ INT32 CamProcess::Execute(const wxString& cmd)
 	if (m_pInFile)
 	{
 		InFileLeft = m_pInFile->Size();
-		TRACEUSER("Gerry", _T("InFileSize = %d"), InFileLeft);
+//		TRACEUSER("Gerry", _T("InFileSize = %d"), InFileLeft);
 	}
 
 	// Loop until m_bDead is true
@@ -157,11 +158,13 @@ INT32 CamProcess::Execute(const wxString& cmd)
 		// Call the virtual function to process any output on stderr
 		ProcessStdErr();
 
+		wxYield();
+
 		// If we have an output file
 		if (m_pOutFile)
 		{
 			// If there is output from the process
-			if (IsInputAvailable())
+			if (!m_bDead && IsInputAvailable())
 			{
 				// Copy the data to the file
 
@@ -186,14 +189,18 @@ INT32 CamProcess::Execute(const wxString& cmd)
 		else
 		{
 			// Call the virtual function to process the output
-			ProcessStdOut();
+			if (!m_bDead)
+				ProcessStdOut();
 		}
+
+		wxYield();
 
 		// If we have an input file
 		if (m_pInFile)
 		{
 			// Copy some data to the process
-			while (bMoreInput)
+			// This was a while loop
+			if (!m_bDead && bMoreInput)
 			{
 				// If there is nothing in the buffer
 				if (ReadBytes == 0)
@@ -205,7 +212,7 @@ INT32 CamProcess::Execute(const wxString& cmd)
 					if (ReadBytes > 0)
 					{
 						// Read a buffer full
-						TRACEUSER("Gerry", _T("Reading %d"), ReadBytes);
+//						TRACEUSER("Gerry", _T("Reading %d"), ReadBytes);
 						m_pInFile->read(ReadBuffer, ReadBytes);
 
 						InFileLeft -= ReadBytes;
@@ -214,28 +221,27 @@ INT32 CamProcess::Execute(const wxString& cmd)
 				}
 
 				// If there is something in the buffer
-				if (ReadBytes > 0)
+				if (ReadBytes > 0 && GetOutputStream()->IsOk())
 				{
-					TRACEUSER("Gerry", _T("Buffer contains %d"), ReadBytes);
+//					TRACEUSER("Gerry", _T("Buffer contains %d"), ReadBytes);
 					// Try to write it to the process
 					GetOutputStream()->Write(ReadPtr, ReadBytes);
 
 					size_t Done = GetOutputStream()->LastWrite();
-					TRACEUSER("Gerry", _T("Written %d"), Done);
+//					TRACEUSER("Gerry", _T("Written %d"), Done);
 					// If we couldn't write it all
 					if (Done < ReadBytes)
 					{
-						// Update the buffer pointer and size
-						ReadBytes -= Done;
+						// Update the buffer pointer
 						ReadPtr += Done;
-						break;				// go and process the other streams
 					}
-					ReadBytes = 0;
+					// This is correct for all, part or none written
+					ReadBytes -= Done;
 				}
 				else
 				{
 					// Indicate there is no more stdin
-					TRACEUSER("Gerry", _T("Buffer is empty - closing"));
+//					TRACEUSER("Gerry", _T("Buffer is empty - closing"));
 					CloseOutput();
 					bMoreInput = false;
 				}
@@ -244,13 +250,14 @@ INT32 CamProcess::Execute(const wxString& cmd)
 		else
 		{
 			// Call the virtual function to process the input
-			ProcessStdIn();
+			if (!m_bDead)
+				ProcessStdIn();
 		}
 
 		wxYield();
 	}
 
-	TRACEUSER("Gerry", _T("Exiting with %d"), m_ReturnCode);
+//	TRACEUSER("Gerry", _T("Exiting with %d"), m_ReturnCode);
 	return m_ReturnCode;
 }
 
@@ -267,11 +274,11 @@ void CamProcess::ProcessStdOut()
 		wxTextInputStream tis(*GetInputStream());
 
 		// This assumes that the output is always line buffered
-		while (!GetInputStream()->Eof())
+		while (IsInputAvailable())
 		{
 			wxString line;
 			line << tis.ReadLine();
-			TRACEUSER("Gerry", _T("(stdout):%s"), line.c_str());
+//			TRACEUSER("Gerry", _T("(stdout):%s"), line.c_str());
 		}
 	}
 
@@ -285,11 +292,11 @@ void CamProcess::ProcessStdErr()
 		wxTextInputStream tis(*GetErrorStream());
 
 		// This assumes that the output is always line buffered
-		while (!GetErrorStream()->Eof())
+		while (IsErrorAvailable())
 		{
 			wxString line;
 			line << tis.ReadLine();
-			TRACEUSER("Gerry", _T("(stderr):%s"), line.c_str());
+//			TRACEUSER("Gerry", _T("(stderr):%s"), line.c_str());
 		}
 	}
 }
@@ -297,7 +304,7 @@ void CamProcess::ProcessStdErr()
 
 void CamProcess::OnTerminate(int /*TYPENOTE: Correct*/ pid, int /*TYPENOTE: Correct*/ status)
 {
-	TRACEUSER("Gerry", _T("CamProcess::OnTerminate pid = %d  status = %d"), pid, status);
+//	TRACEUSER("Gerry", _T("CamProcess::OnTerminate pid = %d  status = %d"), pid, status);
 	m_bDead = true;
 	m_ReturnCode = status;
 

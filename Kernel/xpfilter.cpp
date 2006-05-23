@@ -456,6 +456,7 @@ BOOL PluginNativeFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* 
 
 	String_64 Str(_R(IDS_EXPORTING_DOCUMENT));
 	StartProgressBar(&Str);
+	SetProgressBarCount(0);
 	SetTotalProgressBarCount(100);
 
 	// Call OIL layer to do the translation
@@ -1043,8 +1044,12 @@ BOOL PluginNativeFilter::WriteCurrentAttributes()
 
 BOOL PluginNativeFilter::SetProgressBarCount(UINT32 n)
 {
-//	TRACE( _T("PluginNativeFilter::SetProgressBarCount(%d)\n"), n);
-	
+	TRACE( _T("PluginNativeFilter::SetProgressBarCount(%d)\n"), n);
+
+	TRACE(_T("Offset = %d"), m_ProgressOffset);
+	TRACE(_T("pProgress = 0x%08x"), pProgress);
+	TRACE(_T("Total = %d"), TotalProgressBarCount);
+
 	ProgressBarCount = 	m_ProgressOffset + n;
 
 	if (pProgress != NULL && TotalProgressBarCount > 0)
@@ -1065,6 +1070,6 @@ BOOL PluginNativeFilter::SetProgressBarCount(UINT32 n)
 String_256 PluginNativeFilter::GetNewBitmapName()
 {
 	String_256 Str;
-	Str._MakeMsg(_T("%d"), ++m_BitmapCount);
+	Str._MakeMsg(_T("#1%d"), ++m_BitmapCount);
 	return(Str);
 }

@@ -161,6 +161,12 @@
 					<label>Preparing to export document</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_XPF_NO_ERROR_SET">
+					<label>Plugin filter reported an error but didn't provide a message</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>
