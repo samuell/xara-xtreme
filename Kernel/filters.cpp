@@ -789,9 +789,9 @@ PORTNOTETRACE("filter","Removed EPS filters usage");
 	ADD_FILTER(JPEGImportFilter)
 
 	ADD_FILTER(PNGFilter)
-	ADD_FILTER(TI_GIFFilter)
-PORTNOTETRACE("filter","Removed TIFFFilter");
+PORTNOTETRACE("filter","Removed TIFFFilter and TI_GIFFilter");
 #ifndef EXCLUDE_FROM_XARALX
+	ADD_FILTER(TI_GIFFilter)
 	ADD_FILTER(TIFFFilter)					
 #endif
 
@@ -853,8 +853,8 @@ PORTNOTE("filter","Removed EPS filters usage")
 	// HTML based filters.
 PORTNOTE("filter","Removed HTMLFilter usage")
 	ADD_FILTER(HTMLFilter)	// the HTML filter
-#endif //EXCLUDE_FROM_XARALX
 	ADD_FILTER(ImagemapFilter)
+#endif //EXCLUDE_FROM_XARALX
 
 
 #if BUILD_OTHER_TEXT_FILTERS
