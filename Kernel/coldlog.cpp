@@ -7627,8 +7627,8 @@ void ColourEditDlg::SetNewValueHSV(ReDrawInfoType *Info, INT32 PixelSize, BOOL S
 
 
 	BOOL ColourHasChanged = FALSE;
-	INT32 XPos;
-	INT32 YPos;
+	INT32 XPos=0;
+	INT32 YPos=0;
 
 	// Handle the new mouse position, using the area the drag started in (rather than
 	// the area it may now be over) to determine which components to alter
@@ -7659,18 +7659,18 @@ void ColourEditDlg::SetNewValueHSV(ReDrawInfoType *Info, INT32 PixelSize, BOOL S
 			if (XPos < 0)		XPos = 0;
 			if (XPos > Size)	XPos = Size;
 
-if (bHSVHueAtTop)
-{
-			YPos = Info->pMousePos->y - ValSatSquare.lo.y;
-			if (YPos < 0)		YPos = 0;
-			if (YPos > Size)	YPos = Size;
-}
-else
-{
-			YPos = ValSatSquare.hi.y - Info->pMousePos->y;
-			if (YPos < 0)		YPos = 0;
-			if (YPos > Size)	YPos = Size;
-}
+			if (bHSVHueAtTop)
+			{
+				YPos = Info->pMousePos->y - ValSatSquare.lo.y;
+				if (YPos < 0)		YPos = 0;
+				if (YPos > Size)	YPos = Size;
+			}
+			else
+			{
+				YPos = ValSatSquare.hi.y - Info->pMousePos->y;
+				if (YPos < 0)		YPos = 0;
+				if (YPos > Size)	YPos = Size;
+			}
 
 			double NewSat = ((double)XPos) / ((double) Size);
 			double NewVal = ((double)YPos) / ((double) Size);

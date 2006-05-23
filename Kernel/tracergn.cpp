@@ -837,7 +837,7 @@ BOOL TraceRegion::FillBoundaryBuffer(BOOL * End)
 		NewDirection = (HeadDirection-(AtCusp?1:3)) & TR_NUMDIRECTIONMASK;
 		//NewDirection = (HeadDirection-3) & TR_NUMDIRECTIONMASK;
 		Turns=0;
-		TraceBoundaryPoint NewPoint;
+		TraceBoundaryPoint NewPoint=HeadPoint; // Initialisation unnecessary but quiets the compiler
 		
 		
 		do

@@ -1398,12 +1398,14 @@ void Octree::CheckIntegrity()
 			 	count++;
 				ERROR3IF(pChild->pParent != pCheck, "Bad parent link");
 				ERROR3IF(pChild->Depth != d+1, "Bad child depth");
+#ifdef _DEBUG // avoid unused variable warnings
 				INT32 R=pCheck->R + ((cc&1)?halfwidth:0);
 				INT32 G=pCheck->G + ((cc&2)?halfwidth:0);				
 				INT32 B=pCheck->B + ((cc&4)?halfwidth:0);
 				ERROR3IF(pChild->R != R, "Bad child R");
 				ERROR3IF(pChild->G != G, "Bad child G");
 				ERROR3IF(pChild->B != B, "Bad child B");
+#endif
 				OctreeElement *pLChild = pChild;
 				while (pLChild->pListPrev) pLChild=pLChild->pListPrev;
 				ERROR3IF(pLChild!=ListHead[d+1][pLChild->NumChildren],"Child not in a list");

@@ -2093,9 +2093,9 @@ void NameGallery::ShuffleBar(INT32 BarNumber, INT32 Spacing, INT32 BarDirection,
 {
 	TRACEUSER( "GerryX", _T("ShuffleBar(%d)\n"), BarNumber);
 
-	DocCoord NextPos;
-	DocCoord FirstButtonPos;
-	DocCoord FirstButtonSubPixPos;
+	DocCoord NextPos(0,0);
+	DocCoord FirstButtonPos(0,0);
+	DocCoord FirstButtonSubPixPos(0,0);
 	DocRect	rBounds;
 	
 	SGNameItem * Order[MAX_BUTTONS_IN_A_BAR];

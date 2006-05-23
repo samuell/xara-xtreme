@@ -2606,7 +2606,7 @@ BOOL Range::FindCommonAttributes(CommonAttrSet* CommonAttributeSet,
 				if (CurrentObject->RequiresAttrib(CommonAttrItem->AttrType, CompoundAccuracy)) 
 				{
 					// Find the attribute which is applied to the CurrentObject
-					void* vpAttr;
+					void* vpAttr=NULL;
 					NodeAttribute* pAttrNode;
 					pAttrMap->Lookup(CommonAttrItem->AttrType, vpAttr);
 					pAttrNode = (NodeAttribute*)vpAttr;
