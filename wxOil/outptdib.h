@@ -124,6 +124,7 @@ class OutputDIB : public CC_CLASS_MEMDUMP
 public:
 
 	OutputDIB();
+	virtual ~OutputDIB() {}
 
 	virtual BOOL StartFile( CCLexFile *File, LPBITMAPINFOHEADER lpHeader, LPLOGPALETTE Palette,
 							UINT32 OutputDepth, DWORD CompressionType,

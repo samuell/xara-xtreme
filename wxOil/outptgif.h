@@ -162,6 +162,7 @@ class OutputGIF : public OutputDIB
 public:
 
 	OutputGIF();
+	virtual ~OutputGIF() {}
 
 	virtual BOOL StartFile( LPBITMAPINFOHEADER lpHeader, LPLOGPALETTE Palette, UINT32 OutputDepth, DWORD CompressionType,
 							UINT32 FinalHeight, INT32 ExportSize, UINT32 DitherType);
