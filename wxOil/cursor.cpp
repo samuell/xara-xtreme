@@ -578,11 +578,13 @@ void Cursor::SetActive() const
 	if (pCaptureWnd)
 		pCaptureWnd->ReleaseMouse();
 
-	// Set the global cursor
-	wxSetCursor(hCursor);
+	// Set the global cursor (but only if we have a Render window to
+	// control its scope)
+	wxWindow* pRenderWnd = DocView::GetCurrentRenderWindow();
+	if( NULL != pRenderWnd )
+		wxSetCursor(hCursor);
 
 	// If we have a RenderWindow and it doesn't have the capture then set its cursor
-	wxWindow* pRenderWnd = DocView::GetCurrentRenderWindow();
 	if( pRenderWnd != NULL && pCaptureWnd != pRenderWnd)
 		pRenderWnd->SetCursor(hCursor);
 
