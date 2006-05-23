@@ -904,9 +904,9 @@ BOOL OpMenuSave::Init()
 
 ********************************************************************************************/
 
-OpState OpMenuSave::GetState(String_256 * pUIDescription, OpDescriptor*)
+OpState OpMenuSave::GetState( String_256* pUIDescription, OpDescriptor* pDesc )
 {
-	OpState OpSt;
+	OpState OpSt( FALSE, FALSE, TRUE );
 
 	return OpSt;
 }
