@@ -1119,6 +1119,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 			else if (Answer==_R(IDS_CANCEL))
 			{
 				// User has chosen to abort the operation
+				End();
 				return;
 			}
 			else

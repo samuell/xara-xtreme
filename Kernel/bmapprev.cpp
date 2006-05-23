@@ -1760,17 +1760,17 @@ void BmapPrevDlg::HandlePalettePaletteListChange()
 ********************************************************************************************/
 void BmapPrevDlg::HandlePaletteColourDepthListChange()
 {
-	String_16 ColorDepthSelected = GetStringGadgetValue(_R(IDC_COLOUR_DEPTH_COMBO));
+	String_32 ColorDepthSelected = GetStringGadgetValue(_R(IDC_COLOUR_DEPTH_COMBO));
 
 	INT32 newDepth;
 
-	if		(ColorDepthSelected.IsIdentical(String_16(_R(IDS_COLOR_DEPTH_32))))
+	if		(ColorDepthSelected.IsIdentical(String_32(_R(IDS_COLOR_DEPTH_32))))
 		newDepth = 32;
-	else if	(ColorDepthSelected.IsIdentical(String_16(_R(IDS_COLOR_DEPTH_24))))
+	else if	(ColorDepthSelected.IsIdentical(String_32(_R(IDS_COLOR_DEPTH_24))))
 		newDepth = 24;
-	else if	(ColorDepthSelected.IsIdentical(String_16(_R(IDS_COLOR_DEPTH_8))))
+	else if	(ColorDepthSelected.IsIdentical(String_32(_R(IDS_COLOR_DEPTH_8))))
 		newDepth = 8;
-	else if	(ColorDepthSelected.IsIdentical(String_16(_R(IDS_COLOR_DEPTH_4))))
+	else if	(ColorDepthSelected.IsIdentical(String_32(_R(IDS_COLOR_DEPTH_4))))
 	{
 		newDepth = 4;
 
