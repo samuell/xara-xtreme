@@ -136,6 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "exjpeg.h"
 
 #include "fileutil.h"
+#include "sgliboil.h"
 
 //#include "resimmap.h"		// For _R(IDS_HTMLIMPORT_FILEDOWNLOAD)
 #include "webaddr.h"		// For class WebAddress
@@ -1008,7 +1009,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 	// once if theie first guess already exists
 	PathName Path;
 	Filter* pFilter;
-	while( true )
+	do
 	{
 		// 'Do' the dialog and get that filename that we require
 		BOOL DlgResult = FDialog.OpenAndGetFileName();
@@ -1095,7 +1096,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		}
 
 		// We must manually check the file doesn't exit here
-		if( wxFile::Exists( Path.GetPath() ) )
+		if( SGLibOil::FileExists( &Path ) )
 		{
 			ErrorInfo Info;
 			Info.ErrorMsg = _R(IDS_SAVEAS_OVERWRITE);
@@ -1124,6 +1125,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 				ERROR3("Unknown Answer from AskQuestion");
 		}
 	}
+	while( SGLibOil::FileExists( &Path ) ); 
 
 PORTNOTE("other", "Removed BmapPrevDlg usage" )
 #if !defined(EXCLUDE_FROM_XARALX)
