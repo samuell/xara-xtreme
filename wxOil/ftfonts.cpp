@@ -523,7 +523,7 @@ bool MyFontEnumerator::OnFacename(const wxString& font)
 		// first of all, add the font to our cache list - we do that even with fonts that
 		// we cannot use, so we can easily see when the available font set has changed
 		FTFontMan::AddFontToCache(OurEnumLogFont);
-		TRACEUSER("wuerthne", _T("%s added to font list cache"), (TCHAR*)OurFontName);
+		// TRACEUSER("wuerthne", _T("%s added to font list cache"), (TCHAR*)OurFontName);
 	}
 	else if (m_action == UpdateCache)
 	{
@@ -1013,12 +1013,25 @@ typedef struct OutlineDecompositionState {
 	FT_Vector CurrentPoint;  // we need to keep track of the current point for quadratic curve conversion
 } DecompState;
 
-// callback functions for FreeType outline decomposition - we need to use return type "INT32"
+// callback functions for FreeType outline decomposition - we need to use return type "int"   // TYPENOTE: Correct
 // rather than any of our types to conform to the FreeType interface
+
+// Unfortunately, the FreeType interface was changed for version 2.2 - the FT_Vector parameters
+// are now const.
+#if FREETYPE_MAJOR >= 2
+#if FREETYPE_MINOR >= 2
+/* new interface, make parameters const */
+#define FREETYPE_CALLBACK_CONST const
+#else
+#define FREETYPE_CALLBACK_CONST
+#endif
+#else
+#error "XaraLX requires FreeType 2"
+#endif
 
 /********************************************************************************************
 
->	static INT32 AddMoveTo(FT_Vector* to, void* user)
+>	static int AddMoveTo(FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)  // TYPENOTE: Correct
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	28/03/06
@@ -1030,7 +1043,7 @@ typedef struct OutlineDecompositionState {
 
 ********************************************************************************************/
 
-static int AddMoveTo(FT_Vector* to, void* user)  // TYPENOTE: Correct - FreeType callback interface
+static int AddMoveTo(FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)  // TYPENOTE: Correct - FreeType callback interface
 {
 	DecompState* state = (DecompState*)user;
 	if (!state->IsFirstMove) {
@@ -1051,7 +1064,7 @@ static int AddMoveTo(FT_Vector* to, void* user)  // TYPENOTE: Correct - FreeType
 
 /********************************************************************************************
 
->	static INT32 AddLineTo(FT_Vector* to, void* user)
+>	static int AddLineTo(FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)   // TYPENOTE: Correct
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	28/03/06
@@ -1063,7 +1076,7 @@ static int AddMoveTo(FT_Vector* to, void* user)  // TYPENOTE: Correct - FreeType
 
 ********************************************************************************************/
 
-static INT32 AddLineTo(FT_Vector* to, void* user)
+static int AddLineTo(FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)       // TYPENOTE: Correct - FreeType callback interface
 {
 	DecompState* state = (DecompState*)user;
 	POINT p;
@@ -1077,7 +1090,8 @@ static INT32 AddLineTo(FT_Vector* to, void* user)
 
 /********************************************************************************************
 
->	static INT32 AddConicTo(FT_Vector* control, FT_Vector* to, void* user)
+>	static int AddConicTo(FREETYPE_CALLBACK_CONST FT_Vector* control,         // TYPENOTE: Correct
+						  FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	28/03/06
@@ -1090,7 +1104,8 @@ static INT32 AddLineTo(FT_Vector* to, void* user)
 
 ********************************************************************************************/
 
-static INT32 AddConicTo(FT_Vector* control, FT_Vector* to, void* user)
+static int AddConicTo(FREETYPE_CALLBACK_CONST FT_Vector* control,             // TYPENOTE: Correct - FreeType callback interface
+					  FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)
 {
 	DecompState* state = (DecompState*)user;
 
@@ -1129,7 +1144,9 @@ static INT32 AddConicTo(FT_Vector* control, FT_Vector* to, void* user)
 
 /********************************************************************************************
 
->	static INT32 AddCubicTo(FT_Vector* control1, FT_Vector* control2, FT_Vector* to, void* user)
+>	static int AddCubicTo(FREETYPE_CALLBACK_CONST FT_Vector* control1,     // TYPENOTE: Correct
+						  FREETYPE_CALLBACK_CONST FT_Vector* control2,
+						  FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	28/03/06
@@ -1142,7 +1159,9 @@ static INT32 AddConicTo(FT_Vector* control, FT_Vector* to, void* user)
 
 ********************************************************************************************/
 
-static INT32 AddCubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector* to, void* user)
+static int AddCubicTo(FREETYPE_CALLBACK_CONST FT_Vector *control1,          // TYPENOTE: Correct
+					  FREETYPE_CALLBACK_CONST FT_Vector *control2,
+					  FREETYPE_CALLBACK_CONST FT_Vector* to, void* user)
 {
 	DecompState* state = (DecompState*)user;
 	POINT p1;
