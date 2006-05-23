@@ -1272,7 +1272,8 @@ void NodeMould::GetDebugDetails( StringBase* Str )
 void NodeMould::Transform( TransformBase& Trans )
 {
 	// Transform all the children
-	NodeRenderableInk::TransformChildren(Trans);
+	// See GroupCanTransformCached
+	NodeGroup::Transform(Trans);
 
 	// once transformed get the shape controller to transform its stuff
 	if (pMouldGeometry)
