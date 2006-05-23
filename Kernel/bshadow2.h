@@ -115,12 +115,12 @@ bool GenerateWallShadow(
 	CONST BYTE*             pSourceBitmap,
 	CONST BITMAPINFOHEADER* pDestinationInfo,
 		  BYTE*             pDestinationBitmap,
-	CONST UINT32    nRowOffsets,
-	CONST DWORD*   pLeftOffsets,
-	CONST DWORD*  pRightOffsets,
+	CONST UINT32   nRowOffsets,
+	CONST UINT32*  pLeftOffsets,
+	CONST UINT32* pRightOffsets,
 	CONST UINT32 nColumnOffsets,
-	CONST DWORD*    pLowOffsets,
-	CONST DWORD*   pHighOffsets,
+	CONST UINT32*   pLowOffsets,
+	CONST UINT32*  pHighOffsets,
 	CONST UINT32 nTranslationShift,
 	CONST BYTE*  pTranslationTable
 ) ;
@@ -132,8 +132,8 @@ bool GenerateFloorShadow(
 	CONST BITMAPINFOHEADER* pDestinationInfo,
 		  BYTE*             pDestinationBitmap,
 	CONST UINT32   nRowOffsets,
-	CONST DWORD*  pLeftOffsets,
-	CONST DWORD* pRightOffsets,
+	CONST INT32*  pLeftOffsets,
+	CONST INT32* pRightOffsets,
 	CONST UINT32  nTranslationShift,
 	CONST BYTE*  pTranslationTable
 ) ;
