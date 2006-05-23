@@ -422,7 +422,7 @@ protected:		// Internal methods
 	//(WEBSTER - markn 14/12/96)
 	void ApplyNoColour(BOOL LineColour);					// Applies no colour to the selection 
 	void LimitTo216Only();									// Snaps the colour to the closest colour in the web browser palette
-	FIXED24 ColourEditDlg::Nearest20Percent(FIXED24 n);		// Helper function for LimitTo216Only()
+	FIXED24 Nearest20Percent(FIXED24 n);		// Helper function for LimitTo216Only()
 
 	void EditThisColour(ColourList *ParentList, IndexedColour *ColourToEdit,
 						BOOL TheWindowIsOpen = TRUE);
