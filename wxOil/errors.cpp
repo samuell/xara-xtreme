@@ -372,6 +372,7 @@ public:
 		}
 		else if (id == _R(IDS_ERRORBOX_DEBUGREPORT))
 		{
+#if wxUSE_DEBUGREPORT && wxUSE_XML
 			wxDebugReport report;
 			wxDebugReportPreviewStd preview;
 		
@@ -379,6 +380,9 @@ public:
 		
 			if ( preview.Show(report) )
 				report.Process();
+#else
+			::wxMessageBox(_T("Your build was not compiled to support debug reports"));
+#endif
 		}
 		else
 		{
