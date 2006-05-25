@@ -179,6 +179,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
+#if wxUSE_DEBUGREPORT && wxUSE_XML
+#define HAVE_DEBUGREPORT
+#else
+#undef HAVE_DEBUGREPORT
+#endif
+
 template< typename T >
 T Abs( T val )
 {
@@ -217,3 +223,4 @@ T Abs( T val )
 #include "exception.h"
 #include "mfccontainer.h"
 #include "binreloc.h"
+

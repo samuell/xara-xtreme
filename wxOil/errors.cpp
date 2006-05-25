@@ -374,7 +374,7 @@ public:
 		}
 		else if (id == _R(IDS_ERRORBOX_DEBUGREPORT))
 		{
-#if wxUSE_DEBUGREPORT && wxUSE_XML
+#ifdef HAVE_DEBUGREPORT
 			wxDebugReport report;
 			wxDebugReportPreviewStd preview;
 		
@@ -383,6 +383,9 @@ public:
 			if ( preview.Show(report) )
 				report.Process();
 #else
+			// This string is not translatable in case translation errors. Note it should never
+			// appear as the button to call this is disabled where the build does not support
+			// debug reports.
 			::wxMessageBox(_T("Your build was not compiled to support debug reports"));
 #endif
 		}
@@ -612,6 +615,14 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 				delete pBox;
 				return OK;
 			}
+
+#ifndef HAVE_DEBUGREPORT
+			if (butt==6)
+			{
+				pButt[butt]->Enable(FALSE);
+			}
+#endif
+
 		}
 		else
 			pButt[butt]=NULL;
