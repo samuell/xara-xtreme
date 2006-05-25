@@ -108,10 +108,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "errors.h"
 #include "camelot.h"
 #include "strings.h"
-#include "tool.h"
 #include "basestr.h"
 #include "ensure.h"
 #if !defined(EXCLUDE_FROM_XARLIB)
+#include "tool.h"
 #include "helpuser.h"
 #include "basebar.h"		// For gallery creation error box fix...
 #include "ralphint.h"
@@ -152,6 +152,7 @@ UINT32 Error::RenderThread = 0;	// We're not in the thread
 
 wxString Error::UserName;
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 /********************************************************************************************
 
 >	ErrorInfo::ErrorInfo()
@@ -174,6 +175,7 @@ ErrorInfo::ErrorInfo()
 	Cancel    = 2;
 	Help      = 0;				// by default there is no help button
 }
+#endif
 
 /********************************************************************************************
 
@@ -957,13 +959,14 @@ void Error::SetError(UINT32 number, UINT32 module)
 	
 	TRACE( _T("Setting error: ID = %d: \"%s\"\n"), ErrorID, ErrorString);
 	InSetError--;
-}                          
+}
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 void Error::SetErrorTool(UINT32 number, UINT32 toolID)
 {
 	Error::SetError(number, Tool::GetModuleID(toolID));
 }
-
+#endif
 
 
 /********************************************************************************************
