@@ -150,12 +150,13 @@
                             </object>
                         </object>
                     </object>
-                    <object class="sizeritem">
+<!--                    <object class="sizeritem">
                         <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticBoxSizer" name="wxID_ANY">
                             <orient>wxVERTICAL</orient>
                             <label>HTML</label>
+							<hidden>1</hidden>
                             <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL</flag>
                                 <border>5</border>
@@ -163,10 +164,11 @@
                                     <pos>13,115</pos>
                                     <label>Put HTML Image Tag On Clipboard</label>
                                     <checked>0</checked>
+									<hidden>1</hidden>
                                 </object>
                             </object>
                         </object>
-                    </object>
+                    </object> -->
                 </object>
             </object>
             <object class="sizeritem">
