@@ -139,7 +139,10 @@ if ($version ne "")
 
 
 # Resource system
-# We don't bother with timestamps. Just as quick to mdsum these things like subversion does
+# get the timestamp
+my $omtime=0;
+$omtime=(stat("$outputdir/resources.h"))[9]; # this may fail, in which case it looks like it was generated at the epoch
+$omtime+=0;
 
 opendir(DIR, "$topdir/wxOil/xrc") || die "Can't open $topdir/wxOil/xrc: $!";
 my @resfiles=sort grep { /^[^\#].*\.(png|ico|cur|bmp|res|xar)$/ } readdir(DIR);
@@ -149,15 +152,37 @@ opendir(DIR, "$topdir/wxOil/xrc/$xaralanguage") || die "Can't open $topdir/wxOil
 my @xrcfiles=sort grep { /^[^\#].*\.xrc$/ } readdir(DIR);
 closedir(DIR);
 
+my $newer=0;
+
 my $f;
 foreach $f (@xrcfiles)
 {
     $f = "$topdir/wxOil/xrc/$xaralanguage/".$f;
+    if ((stat($f))[9] > $omtime)
+    {
+	$newer=1;
+    }
 }
 foreach $f (@resfiles)
 {
-    $f = "$topdir/wxOil/xrc//".$f;
+    $f = "$topdir/wxOil/xrc/".$f;
+    if ((stat($f))[9] > $omtime)
+    {
+	$newer=1;
+    }
 }
+
+if ((stat("$topdir/wxOil/xrc/$xaralanguage"))[9] > $omtime)
+{
+    $newer=1;
+}
+if ((stat("$topdir/wxOil/xrc"))[9] > $omtime)
+{
+    $newer=1;
+}
+
+# If there are no newer files, and force isn't set, exit without even doing the checksum
+exit(0) if (!$newer && !$force);
 
 my @dialogfiles = sort grep { $_ !~ /-strings\.xrc$/ } @xrcfiles;
 my @stringfiles = sort grep { $_ =~ /-strings\.xrc$/ } @xrcfiles;
