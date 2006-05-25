@@ -172,7 +172,7 @@ public:
 	BOOL CommitDialogValues();
 
 	BOOL HasImages() {return TRUE;}
-	TabType GetTabType() {return TABTYPE_LIST;}
+	TabType GetTabType() {return TABTYPE_TREE/*TABTYPE_LIST*/;}
 
 private:
 	String_256 TitleString;					// title of dialog box

@@ -8,7 +8,7 @@ noinst_LIBRARIES	= libwxXtra.a
 # the application source, library search path, and link libraries
 libwxXtra_a_SOURCES = \
 	manager.cpp wxmousestate.cpp doublebuffer.cpp cwfrompoint.cpp combo.cpp combog.cpp odcombo.cpp \
-	platform.cpp advsplash.cpp
+	platform.cpp advsplash.cpp treebook.cpp xh_treebk.cpp
 
 # make sure this does NOT have our include files in the path
 # Don't use GTK includes for now - you will need this with sub-2.6.3 but that's not supported

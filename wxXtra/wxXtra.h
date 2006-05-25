@@ -15,3 +15,5 @@
 #include "odcombo.h"
 #include "platform.h"
 #include "advsplash.h"
+#include "treebook.h"
+#include "xh_treebk.h"

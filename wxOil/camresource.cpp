@@ -1439,6 +1439,9 @@ BOOL CamResource::Init()
 	wxXmlResource::Get()->AddHandler(new wxOwnerDrawnComboBoxXmlHandler);
 	wxXmlResource::Get()->AddHandler(new wxComboControlXmlHandler);
 #endif
+#if WXXTRA_TREEBOOK
+	wxXmlResource::Get()->AddHandler(new wxTreebookXmlHandler);
+#endif
 #endif
 
 	if (!pwxFileSystem) pwxFileSystem = new wxFileSystem;

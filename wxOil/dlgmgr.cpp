@@ -273,9 +273,14 @@ protected:
 				return new wxChoicebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 				break;
 #endif
-#if wxUSE_TREEBOOK
+#if wxUSE_TREEBOOK || wxXTRA_TREEBOOK
 			case TABTYPE_TREE:
 				return new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				break;
+#else
+			// Default to a ListBook if there is no treebook availables
+			case TABTYPE_TREE:
+				return new wxListbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 				break;
 #endif
 #if wxUSE_TOOLBOOK
