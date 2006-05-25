@@ -75,6 +75,8 @@ GetOptions( "topdir|t=s" => \$topdir,
 	    "xaralanguage|x=s" => \$xaralanguage,
 	    "help!" => \$help ) || usage ("Bad option");
 
+usage() if ($help);
+
 # check the output directory exists
 mkdir ("$outputdir");
 mkdir ("$outputdir/xrc");
