@@ -129,15 +129,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"	// for AttrStrokeColour.
 
 #include "docview.h"	// for DocView.
-//#include "osrndrgn.h"	// for OSRenderRegion.
+#include "osrndrgn.h"	// for OSRenderRegion.
 
-//#include "selector.h"	// for the SelectorTool.
+#include "selector.h"	// for the SelectorTool.
 #include "spread.h"		// for class Spread
 
 #include "pbecomea.h"	// for PathBecomeA.
 
 #include "saveeps.h"	// for EPSRenderRegion and EPSExportDC
 #include "cmxrendr.h"	// for CMXRenderRegion
+#include "ophist.h"
 //#include "cmxexdc.h"	// for CMXExportDC
 
 DECLARE_SOURCE("$Revision$");
@@ -548,8 +549,6 @@ SubtreeRenderState NodeClipViewController::RenderSubtree(RenderRegion* pRender, 
 ********************************************************************************************/
 void NodeClipViewController::RenderEorDrag(RenderRegion* pRender)
 {
-	PORTNOTETRACE("other","NodeClipViewController::RenderEorDrag - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// <RANT>
 	// unfortunately, if we opt to do eor-drag-rendering for our kids (and we do),
 	// then as well as getting to render for them when we're dragged around, we also
@@ -576,7 +575,6 @@ void NodeClipViewController::RenderEorDrag(RenderRegion* pRender)
 
 	// do eor-drag-rendering for those of my lazy children which are selected.
 	RenderEorDragSelectedChildren(this, pRender);
-#endif
 }
 
 /********************************************************************************************
@@ -667,8 +665,6 @@ BOOL NodeClipViewController::ChildrenAreEorDragRenderedByMe()
 ********************************************************************************************/
 void NodeClipViewController::RenderTinyBlobs(RenderRegion* pRender)
 {
-	PORTNOTETRACE("other","NodeClipViewController::RenderTinyBlobs - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get our bounding rect, and from it the position of our tiny blob.
 	DocRect drBounds = GetBoundingRect();
 	DocCoord dcTinyPos = DocCoord(drBounds.lo.x, drBounds.hi.y);
@@ -677,7 +673,6 @@ void NodeClipViewController::RenderTinyBlobs(RenderRegion* pRender)
 	pRender->SetFillColour(COLOUR_UNSELECTEDBLOB);
 	pRender->SetLineColour(COLOUR_NONE);
 	pRender->DrawBlob(dcTinyPos, BT_UNSELECTED);
-#endif
 }
 
 /********************************************************************************************
@@ -716,15 +711,13 @@ void NodeClipViewController::RenderToolObjectBlobs(RenderRegion* pRender)
 ********************************************************************************************/
 void NodeClipViewController::RenderClipViewBlobs(RenderRegion* pRender)
 {
-	PORTNOTETRACE("other","NodeClipViewController::RenderClipViewBlobs - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// quit immediately unless the current tool is the selector tool.
 	Tool* pTool = Tool::GetCurrent();
 	if (pTool == NULL || pTool->GetID() != TOOLID_SELECTOR)
 		return;
 
 	// get the blob manager and set the colours we'll be using.
-	BlobManager* pBlobManager = GetApplication()->GetBlobManager();
+//	BlobManager* pBlobManager = GetApplication()->GetBlobManager();
 	pRender->SetLineColour(COLOUR_NONE);
 	pRender->SetFillColour(COLOUR_UNSELECTEDBLOB);
 
@@ -743,7 +736,6 @@ void NodeClipViewController::RenderClipViewBlobs(RenderRegion* pRender)
 	// this relies on Tiny blobs always being rendered whenever these blobs
 	// are rendered (which they have always been up till 06/04/2000)
 	RenderTinyBlobs(pRender);
-#endif
 }
 
 /********************************************************************************************
@@ -770,8 +762,6 @@ void NodeClipViewController::RenderClipViewBlobs(RenderRegion* pRender)
 BOOL NodeClipViewController::OnClick(	DocCoord dcClickPos, ClickType cType,
 										ClickModifiers cMods, Spread* pSpread )
 {
-	PORTNOTETRACE("other","NodeClipViewController::OnClick - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 // DEBUG
 //	TRACEUSER( "Karim", _T("NCVC::OnClick\n"), (DWORD)cType);
 
@@ -816,7 +806,7 @@ BOOL NodeClipViewController::OnClick(	DocCoord dcClickPos, ClickType cType,
 	// hand over to our base implementation.
 	if (bsCurrentInterest.Object)
 		return NodeGroup::OnClick(dcClickPos, cType, cMods, pSpread);
-#endif
+
 	// we couldn't handle the click.
 	return FALSE;
 }
@@ -906,8 +896,7 @@ BOOL NodeClipViewController::HandleKeyholeBlobClick(ClickType cType)
 ********************************************************************************************/
 BOOL NodeClipViewController::HandleContentsBlobClick(ClickType cType)
 {
-	PORTNOTETRACE("other","NodeClipViewController::OnClick - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
+
 // DEBUG
 //	TRACEUSER( "Karim", _T("NCVC::HandleContentsBlobClick; cType %s\n"),
 //													(cType == CLICKTYPE_DRAG)	? "DRAG" :
@@ -960,9 +949,6 @@ BOOL NodeClipViewController::HandleContentsBlobClick(ClickType cType)
 		((SelectorTool*)pTool)->PublicDoTranslate();
 
 	return bChangedSelection;
-#else
-	return false;
-#endif
 }
 
 /********************************************************************************************
@@ -1330,8 +1316,6 @@ BOOL NodeClipViewController::MakeShapeAndLine(	NodePath* pNodePath,
 												BecomeA* pBecomeA,
 												BOOL bClipToKeyhole )
 {
-	PORTNOTETRACE("other","NodeClipViewController::RenderEorDrag - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 // DEBUG
 //	TRACEUSER( "Karim", _T("NCVC::MakeShapeAndLine\n"));
 
@@ -1444,9 +1428,6 @@ BOOL NodeClipViewController::MakeShapeAndLine(	NodePath* pNodePath,
 	}
 
 	return ok;
-#else
-	return false;
-#endif
 }
 
 /********************************************************************************************
