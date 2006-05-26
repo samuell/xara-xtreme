@@ -1638,6 +1638,8 @@ MsgResult UnitPropertiesDlg::Message(Msg* Message)
 						if (pIsOk)
 							*pIsOk = TRUE;				// flag an ok return
 					}
+                    else
+                        Msg->DlgMsg = DIM_NONE;
 				}
 			break;
 
@@ -1715,12 +1717,15 @@ MsgResult UnitPropertiesDlg::Message(Msg* Message)
 		// Must do this before the Close and End
 		Result = DialogOp::Message(Message);
 
+// Commented out as base class closes the dialog in LX.
+#if 0
 		// End dialog here
 		if (EndDialog) 
 		{
 			Close();				// Hide the dialog box
 			End();					// Finish the operation
 		}
+#endif
 
 		// The message was for our dialog box so return that we have handled it, if necessary
 		return Result;
