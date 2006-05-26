@@ -4249,6 +4249,7 @@ BOOL SaveTemplateDialog::PrepareDialog()
 	// Select the desired path
 	if (!DefaultPath.IsEmpty())
 	{
+		TRACEUSER( "jlh92", _T("TemplDir = %s\n"), PCTSTR(DefaultPath) );
 		// Set the default path
 		SetDirectory( DefaultPath );
 	}

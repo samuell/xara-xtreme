@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "nev.h"
 //#include "rik.h"
 #include "document.h"
-//#include "filedlgs.h"
+#include "filedlgs.h"
 //#include "oilfiles.h"
 #include <stdlib.h>
 #include <errno.h>
@@ -497,12 +497,10 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 	PathName pathToPutInDialog=pCamelot->GetTemplatesPath();
 	
 	//Now create the dialog
-PORTNOTE("commonfiledlg", "Removed use of Common File Dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	SaveTemplateDialog dialogToDisplay(pathToPutInDialog);
 		
 	//And show it
-	if (dialogToDisplay.DoModal()==IDOK)
+	if (dialogToDisplay.ShowModal() == wxID_OK)
 	{
 		//Then get the path they specified, using this amazingly bad, confusing and
 		//undocumented file dialog code
@@ -511,7 +509,7 @@ PORTNOTE("commonfiledlg", "Removed use of Common File Dialog")
 		PathName pathToSaveTo;
 		dialogToDisplay.GetChosenFileName(&pathToSaveTo);
 
-		String_256 cstrPathToSaveTo=pathToSaveTo.GetPath(FALSE);
+		wxString cstrPathToSaveTo=pathToSaveTo.GetPath(FALSE);
 		dialogToDisplay.AppendExtension(&cstrPathToSaveTo);
 
 		String_256 strPathToSaveTo=cstrPathToSaveTo;
@@ -548,7 +546,6 @@ PORTNOTE("commonfiledlg", "Removed use of Common File Dialog")
 			pCamelot->SetTemplatesPath(strDefaultPath);
 		}
 	}
-#endif
 
 	// Finished the operation
 	End();
@@ -906,7 +903,7 @@ BOOL OpMenuSave::Init()
 
 OpState OpMenuSave::GetState( String_256* pUIDescription, OpDescriptor* pDesc )
 {
-	OpState OpSt( FALSE, FALSE, TRUE );
+	OpState OpSt;
 
 	return OpSt;
 }
