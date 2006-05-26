@@ -331,6 +331,9 @@ BOOL HotKey::AddHotKey(KeyPress* pKeyPress, TCHAR* pOpToken,String_32* pTextDesc
 
 BOOL HotKey::OnKeyPress(KeyPress* pKeyPress)
 {
+	TRACEUSER( "jlh92", _T("Key VK=%04x (%08x) in Hotkey\n"), pKeyPress->GetVirtKey(), 
+		pKeyPress->GetUnicode() );
+
 	BOOL Processed = FALSE;
 	BOOL DuringADrag = (Operation::GetCurrentDragOp() != NULL ||
 PORTNOTE( "other", "Removed DragManagerOp usage" )
@@ -344,11 +347,11 @@ PORTNOTE( "other", "Removed DragManagerOp usage" )
 	{
 		if (DoesHotKeyMatchKeyPress(pHotKey,pKeyPress))
 		{
-			TRACEUSER( "luke", _T("Key VK=%04x (%08x) handled as HotKey\n"), pKeyPress->GetVirtKey(), 
+			TRACEUSER( "jlh92", _T("Key VK=%04x (%08x) handled as HotKey\n"), pKeyPress->GetVirtKey(), 
 				pKeyPress->GetUnicode() );
 
 			// The key press is a hot key combination
-			if ((pHotKey->pKeyPress->IsOkInDrags() || !DuringADrag) && !pKeyPress->IsRelease())
+			if ((pHotKey->pKeyPress->IsOkInDrags() || !DuringADrag) && pKeyPress->IsPress())
 			{
 				// There is no drag happening (or the keypress works in drags), and it is a "key down" key press
 				// If the hot key's op is enabled, invoke it

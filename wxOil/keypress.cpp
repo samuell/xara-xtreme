@@ -161,6 +161,7 @@ struct ExtraUnicode
 	{CAMKEY(MENU),		CAMELOT_UNICODE_BASE + 26},
 
 	{CAMKEY(DELETE), 	CAMELOT_UNICODE_BASE + 28},
+	{CAMKEY(NUMPAD_DELETE), CAMELOT_UNICODE_BASE + 28},
 	{CAMKEY(INSERT), 	CAMELOT_UNICODE_BASE + 27},
 	{CAMKEY(HOME),   	CAMELOT_UNICODE_BASE + 29},
 	{CAMKEY(END),    	CAMELOT_UNICODE_BASE + 30},
@@ -328,7 +329,8 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 		Extended 	= VirtKey >= WXK_START;
 		PrevDown 	= m_LastVirtKey == VirtKey;
 #if FALSE != wxUSE_UNICODE
-		m_Char		= pMsg->GetRawKeyCode();
+		m_Char		= pMsg->GetUnicodeKey();
+		TRACEUSER( "jlh92", _T("m_Char = %04x Ext=%d\n"), m_Char, Extended );
 #endif
 #endif
 		// Update the last virtual keycode if not a modifier
@@ -504,6 +506,7 @@ KeyPress::KeyPress(KeyPressSysMsg* pKeySysMsg,WCHAR UnicodeChar)
 	Repeat		= pKeySysMsg->PrevDown;
 	RightHand	= pKeySysMsg->Extended;
 	Release		= (pKeySysMsg->Message == KM_KEYUP);
+	m_fIsChar	= (pKeySysMsg->Message == KM_CHAR);
 
 	Valid 		= TRUE;		// This is now a valid KeyPress object.
 }
@@ -630,6 +633,7 @@ void KeyPress::Initialise()
 	Repeat		= FALSE;
 	RightHand	= FALSE;
 	Release		= FALSE;
+	m_fIsChar	= FALSE;
 
 	// This is an invalid KeyPress object at the moment
 	Valid 		= FALSE;
@@ -937,6 +941,12 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 	
 	if (pKeySysMsg->Message == KM_CHAR)
 	{
+#if FALSE != wxUSE_UNICODE
+		NumChars = 1;
+		pWideChar[0] = pKeySysMsg->m_Char;
+
+		TRACEUSER( "jlh92", _T("Unicode = %c\n"), pKeySysMsg->m_Char );
+#else
 		// If the message is a CHAR message, then we need to generate a Unicode value ourselves
 		// using the char code (which is stored in the VirtKey field of the KeyPressSysMsg class)
 		//
@@ -984,6 +994,7 @@ KeyPress* KeyPress::MakeKeyPress(KeyPressSysMsg* pKeySysMsg)
 
 		pKeySysMsg->VirtKey = CAMKEY(CC_NONE);
 		NumChars = 1;
+#endif
 	}
 	else
 	{
@@ -1408,7 +1419,7 @@ BOOL KeyPress::EscapePressed(KeyPress* pKeyPress)
 	UINT32 VirtKey = pKeyPress->GetVirtKey();
 
 	// Only check non-auto-repeat "key down" key presses
-	if (!pKeyPress->IsRelease() && !pKeyPress->IsRepeat())
+	if (pKeyPress->IsPress() && !pKeyPress->IsRepeat())
 	{
 		if (VirtKey == CAMKEY(ESCAPE) || VirtKey == WXK_CANCEL)
 		{
@@ -1620,7 +1631,8 @@ BOOL KeyPress::TranslateMessage(wxKeyEvent* pMsg)
 #endif
 	
 	TRACEUSER( "jlh92", _T("TM - %s\n"), wxEVT_KEY_DOWN == pMsg->GetEventType() ? _T("KDN") :
-		wxEVT_KEY_UP == pMsg->GetEventType() ? _T("KUP") : _T("K??") );
+		wxEVT_KEY_UP == pMsg->GetEventType() ? _T("KUP") : wxEVT_CHAR == pMsg->GetEventType() ? _T("KCH") : 
+		_T("K??") );
 
 	// Normal key processing.
 	KeyPress* pKeyPress;

@@ -985,9 +985,13 @@ void TextTool::OnMouseMove(DocCoord PointerPos, Spread* pSpread, ClickModifiers 
 
 BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 {
+	TRACEUSER( "jlh92", _T("TextTool::OnKeyPress\n") );
+
    	// Filter out all key release events 
    	if (pKeyPress->IsRelease())
 	{
+		TRACEUSER( "jlh92", _T("Release\n") );
+
 		if (GetApplication()->FindSelection()->IsSelRangeGagged())
 		{
 			GetApplication()->FindSelection()->SetGag(FALSE);
@@ -996,9 +1000,16 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 		return FALSE;
 	}
 
+	if( !pKeyPress->IsChar() )
+		return pKeyPress->GetUnicode() == _T(' ');
+
 	// Deal with keypresses that don't dosen't depend on a focus story
 	if (HandleSpecialStoryAndNonStoryKeys(pKeyPress))
+	{
+		TRACEUSER( "jlh92", _T("SpecialStoryAndNonStoryKeys\n") );
+
 		return TRUE;
+	}
 
 	// See if a caret has been selected without updating the focus story
 	if (TextStory::GetFocusStory() == NULL)
@@ -1019,7 +1030,11 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 
 	// We need a focus story do handle a keypress
 	if (TextStory::GetFocusStory() == NULL) 
+	{
+		TRACEUSER( "jlh92", _T("GetFocusStory\n") );
+
 		return HandleSpecialNonStoryKeys(pKeyPress);
+	}
 
 	// Just to be safe let's see if the TextStory has a selected caret or selected region
 	if ( !(TextStory::GetFocusStory()->GetCaret()->IsSelected()) &&
@@ -1055,6 +1070,8 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
    	// First see if this is a special meaning key
 	if (HandleSpecialStoryKeys(pKeyPress, TextStory::GetFocusStory(), TextStory::GetFocusStory()->GetCaret()))
 	{
+		TRACEUSER( "jlh92", _T("HandleSpecialStoryKeys\n") );
+
 		return TRUE;
 	}
 	else
@@ -1064,7 +1081,7 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 				(pKeyPress->IsAlternative() && pKeyPress->IsConstrain()) ) // Ctrl & left alt down
 	 	{
 			WCHAR UnicodeValue = pKeyPress->GetUnicode();
-			TRACEUSER("wuerthne", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
+			TRACEUSER("jlh92", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
 			if (HandleDeadKeys(pKeyPress, &UnicodeValue))
 				return TRUE;
 			else
@@ -1088,12 +1105,14 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 					OpTextFormat* pOp = new OpTextFormat();
 					if (pOp != NULL)
 					{
-						TRACEUSER("wuerthne", _T("inserting Unicode char %04x"), UnicodeValue);
+						TRACEUSER("jlh92", _T("inserting Unicode char %04x"), UnicodeValue);
 						pOp->DoInsertChar(UnicodeValue, OpTextFormat::INSERT);
 						UpdateAfterTyping = TRUE;
 						return TRUE;
 					} 
 				}
+				else
+					TRACEUSER( "jlh92", _T("Rejected\n" ) );
 			}
 		}
 	}

@@ -1095,7 +1095,7 @@ void GradFillTool::OnMouseMove(DocCoord Pos, Spread* pSpread, ClickModifiers Cli
 BOOL GradFillTool::OnKeyPress(KeyPress* pKeyPress)
 {
 	if (pKeyPress->GetVirtKey() == CAMKEY(TAB) &&
-		!pKeyPress->IsRelease() &&
+		pKeyPress->IsPress() &&
 		!pKeyPress->IsRepeat())
 	{
 		// Toggle the selection state of all visible fill control points
@@ -2105,7 +2105,7 @@ void TranspTool::OnMouseMove(DocCoord Pos, Spread* pSpread, ClickModifiers Click
 BOOL TranspTool::OnKeyPress(KeyPress* pKeyPress)
 {
 	if (pKeyPress->GetVirtKey() == CAMKEY(TAB) &&
-		!pKeyPress->IsRelease() &&
+		pKeyPress->IsPress() &&
 		!pKeyPress->IsRepeat())
 	{
 		// Toggle the selection state of all visible fill control points

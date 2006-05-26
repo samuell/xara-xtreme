@@ -171,6 +171,7 @@ protected:
 #endif
 
 	void OnKey ( wxKeyEvent & event);
+	void OnChar( wxKeyEvent& event );
 
 protected:
 	CCamView* m_pView;

@@ -899,7 +899,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 // >>>> End
 
 	case CAMKEY(TAB):								// moves selection to next rendered node
-		if (!pKey->IsRelease()) HandleTabKey(ClickMods.Adjust);
+		if (pKey->IsPress()) HandleTabKey(ClickMods.Adjust);
 		break;
 
 	case CAMKEY(1):									// toggle tool blobs
@@ -909,7 +909,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 			// instead of 'absorbing' the keypress
 			return FALSE;
 		}
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			BoundsButtonChange();
 			if (pInfoBarOp != NULL)
@@ -924,7 +924,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 		{
 			return FALSE;
 		}
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			BlobStyle bs(TRUE);
 			SelectionBlobChange(bs);
@@ -940,7 +940,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 		{
 			return FALSE;
 		}
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			BlobStyle bs(FALSE, FALSE, TRUE);
 			SelectionBlobChange(bs);
@@ -952,7 +952,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(HOME):								// select first object in render order
-		if (!pKey->IsRelease())
+		if (pKey->IsPress())
 		{
 			if (SelectionSpread != NULL) NodeRenderableInk::DeselectAll();
 			HandleTabKey(FALSE);
@@ -960,7 +960,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(END):								// select last object in render order
-		if (!pKey->IsRelease())
+		if (pKey->IsPress())
 		{
 			if (SelectionSpread != NULL) NodeRenderableInk::DeselectAll();
 			HandleTabKey(TRUE);
@@ -972,7 +972,7 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 		{
 			return FALSE;
 		}
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			RotateButtonChange(SelectorInfoBarOp::fRotateMode = !SelectorInfoBarOp::fRotateMode);
 			if (pInfoBarOp != NULL)

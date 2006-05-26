@@ -936,7 +936,7 @@ void OpEditFill::DragPointerIdle(DocCoord PointerPos, ClickModifiers ClickMods, 
 BOOL OpEditFill::DragKeyPress(KeyPress* pKeyPress, BOOL bSolidDrag)
 {
 	if (pKeyPress->GetVirtKey() == CAMKEY(TAB) && 
-		!pKeyPress->IsRelease() &&
+		pKeyPress->IsPress() &&
 		!pKeyPress->IsRepeat())
 	{
 		// Toggle the continuous EOR flag

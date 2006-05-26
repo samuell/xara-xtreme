@@ -323,17 +323,11 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 			pWnd = pWnd->GetParent();
 		}
 
-		// Make sure the kernel knows which view/doc the event applies to, if any.
-		if( NULL != Document::GetSelected() )
-			Document::GetSelected()->SetCurrent();
-		if( NULL != DocView::GetSelected() )
-			DocView::GetSelected()->SetCurrent();
-
 		TRACEUSER( "jlh92", _T("Handled!\n") );
 
 		// Process keyboard messages (and mark event as handled)
-		if( !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( (wxKeyEvent*)&event ) )
-			return true;
+		if( HandleKeyPress( (wxKeyEvent&)event ) )
+			return -1;
 	}
 	
 	return -1;
@@ -867,6 +861,32 @@ PORTNOTE("other","Removed multi-instance flag stuff")
 
 	// Now close the main frame
 	m_pMainFrame->Close();
+}
+
+
+/********************************************************************************************
+
+>	void CCamApp::HandleKeyPress( wxKeyEvent& event )
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	22/05/06
+	Inputs:		event - The key \ char event to handle
+	Returns:	true if handled else false
+	Purpose:	Central handler for key and char events, using KeyPress class to route
+				events to the areas of code that need to handle them
+
+********************************************************************************************/
+
+bool CCamApp::HandleKeyPress( wxKeyEvent& event )
+{
+	// Make sure the kernel knows which view/doc the event applies to, if any.
+	if( NULL != Document::GetSelected() )
+		Document::GetSelected()->SetCurrent();
+	if( NULL != DocView::GetSelected() )
+		DocView::GetSelected()->SetCurrent();
+
+	// Process keyboard messages (returning true if it was)
+	return !CCamFrame::GetMainFrame()->IsIconized() && KeyPress::TranslateMessage( (wxKeyEvent*)&event );
 }
 
 

@@ -1049,7 +1049,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 	switch (pKey->GetVirtKey())
 	{
 	case CAMKEY(1):									// toggle tool blobs
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->HandleShadowTypeChange(SHADOWTYPE_NONE);
 			return TRUE;
@@ -1057,7 +1057,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(2):									// toggle edit blobs
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->HandleShadowTypeChange(SHADOWTYPE_WALL);
 			return TRUE;
@@ -1065,7 +1065,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(3):									// toggle fill blobs
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->HandleShadowTypeChange(SHADOWTYPE_FLOOR);
 			return TRUE;
@@ -1073,7 +1073,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(4):									// toggle bounds/rotate blobs
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->HandleShadowTypeChange(SHADOWTYPE_GLOW);
 			return TRUE;
@@ -1081,7 +1081,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(5):									// toggle bounds/rotate blobs
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->HandleShadowTypeChange(SHADOWTYPE_FEATHER);
 			return TRUE;
@@ -1089,7 +1089,7 @@ BOOL SoftShadowTool::OnKeyPress(KeyPress* pKey)
 		break;
 
 	case CAMKEY(A):									// select all shadows only
-		if (!pKey->IsRelease() && !pKey->IsModified())
+		if (pKey->IsPress() && !pKey->IsModified())
 		{
 			pSoftShadowInfoBarOp->SelectShadowsAlone();
 			return TRUE;

@@ -1183,11 +1183,11 @@ BOOL SliceTool::OnKeyPress(KeyPress *pKeyPress)
 		break;
 
 	case CAMKEY(TAB):								// moves selection to next rendered node
-		if (!pKeyPress->IsRelease()) HandleTabKey(ClickMods.Adjust);
+		if (pKeyPress->IsPress()) HandleTabKey(ClickMods.Adjust);
 		break;
 
 	case CAMKEY(HOME):								// select first object in render order
-		if (!pKeyPress->IsRelease())
+		if (pKeyPress->IsPress())
 		{
 			if (SelectionSpread != NULL)
 				NodeRenderableInk::DeselectAll();
@@ -1196,7 +1196,7 @@ BOOL SliceTool::OnKeyPress(KeyPress *pKeyPress)
 		break;
 
 	case CAMKEY(END):								// select last object in render order
-		if (!pKeyPress->IsRelease())
+		if (pKeyPress->IsPress())
 		{
 			if (SelectionSpread != NULL)
 				NodeRenderableInk::DeselectAll();

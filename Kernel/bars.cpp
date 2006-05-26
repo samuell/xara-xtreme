@@ -2248,17 +2248,17 @@ MsgResult DialogBarOp::Message(Msg* Msg)
  	 	if( KMsg->pKeyPress->GetVirtKey() == CAMKEY(ESCAPE) || 
 			KMsg->pKeyPress->GetVirtKey() == CAMKEY(CANCEL) )
 		{
-			if(BaseBar::EscPressed(!KMsg->pKeyPress->IsRelease()))
+			if(BaseBar::EscPressed( KMsg->pKeyPress->IsPress() ))
 				return EAT_MSG;
 		}
  	 	else if( KMsg->pKeyPress->GetVirtKey() == CAMKEY(CONTROL) )
 		{
-			if(BaseBar::CtlPressed(!KMsg->pKeyPress->IsRelease()))
+			if(BaseBar::CtlPressed( KMsg->pKeyPress->IsPress() ))
 				return EAT_MSG;
 		}
 		else if( KMsg->pKeyPress->GetVirtKey() == CAMKEY(MENU) )
 		{
-			if(BaseBar::AltPressed(!KMsg->pKeyPress->IsRelease()))
+			if(BaseBar::AltPressed( KMsg->pKeyPress->IsPress() ))
 		 		return EAT_MSG;
 		}
 		

@@ -16,8 +16,8 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	colcomp.cpp colcontx.cpp collist.cpp colormgr.cpp colourix.cpp colplate.cpp \
 	coord.cpp cutop.cpp cxfellp.cpp cxfile.cpp cxflists.cpp cxfmap.cpp \
 	cxfnbmp.cpp cxfpoly.cpp cxfrec.cpp cxfrech.cpp cxfrect.cpp cxfrgshp.cpp \
-	cxftext.cpp cxftfile.cpp cxftrans.cpp dbugtree.cpp dialogop.cpp doccolor.cpp \
-	doccomp.cpp doccoord.cpp docrect.cpp document.cpp docview.cpp dumbnode.cpp \
+	cxftext.cpp cxftfile.cpp cxftrans.cpp dbugtree.cpp debugdlg.cpp dialogop.cpp \
+	doccolor.cpp doccomp.cpp doccoord.cpp docrect.cpp document.cpp docview.cpp dumbnode.cpp \
 	cpp exphint.cpp extender.cpp fillattr.cpp fillramp.cpp \
 	fillval.cpp filters.cpp filtimag.cpp filtimop.cpp filtrmgr.cpp fontcomp.cpp fontlist.cpp \
 	fontman.cpp fracfill.cpp fthrattr.cpp gcache.cpp fntcache.cpp textacts.cpp \

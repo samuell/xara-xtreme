@@ -1656,7 +1656,7 @@ PORTNOTE("keypress", "Use of KeyPress class bypassed in TransOperation::DragStar
 	switch (pKeyPress->GetVirtKey())
 	{
 		case CAMKEY(ADD):
-			if (!pKeyPress->IsModified() && !pKeyPress->IsRelease() && !pKeyPress->IsRepeat())
+			if (!pKeyPress->IsModified() && pKeyPress->IsPress() && !pKeyPress->IsRepeat())
 			{
 				LeaveCopy = !LeaveCopy;
 				UpdateStatusLineAndPointer();

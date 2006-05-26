@@ -1372,7 +1372,7 @@ BOOL TransOperation::DragKeyPress(KeyPress* pKeyPress, BOOL bSolidDrag)
 	ClickMods.Alternative2 = FALSE;
 	ClickMods.Pressure = 0;
 
-	if (!pKeyPress->IsRelease() && !pKeyPress->IsRepeat())	// I.e. is this a non-auto-repeated key-down event?
+	if (pKeyPress->IsPress() && !pKeyPress->IsRepeat())	// I.e. is this a non-auto-repeated key-down event?
 	{
 		switch (pKeyPress->GetVirtKey())
 		{

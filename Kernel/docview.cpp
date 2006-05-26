@@ -3497,7 +3497,7 @@ BOOL DocView::HandleKeyPress(KeyPress* pKeyPress)
 	if (pCurrentDragOp != NULL)
 	{
 		// Handle the TAB key out here on behalf of ALL drag ops
-		if (m_bSolidDragSupported && !pKeyPress->IsRelease() && !pKeyPress->IsRepeat())	// I.e. is this a non-auto-repeated key-down event?
+		if (m_bSolidDragSupported && pKeyPress->IsPress() && !pKeyPress->IsRepeat())	// I.e. is this a non-auto-repeated key-down event?
 		{
 			switch (pKeyPress->GetVirtKey())
 			{

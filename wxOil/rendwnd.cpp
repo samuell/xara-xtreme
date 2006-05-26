@@ -143,6 +143,7 @@ BEGIN_EVENT_TABLE( CRenderWnd, wxWindow )
 	EVT_SET_CURSOR(			CRenderWnd::OnSetCursor )
 	EVT_KEY_DOWN(			CRenderWnd::OnKey)
 	EVT_KEY_UP(				CRenderWnd::OnKey)
+	EVT_CHAR(				CRenderWnd::OnChar)
 	
 #if defined(__WXGTK__)
 	EVT_ENTER_WINDOW(		CRenderWnd::OnEnter )
@@ -396,6 +397,13 @@ void CRenderWnd::OnKey( wxKeyEvent & event )
 	event.Skip(); // Pass the key event on to someone who really wants it.
 }
 
+void CRenderWnd::OnChar( wxKeyEvent & event )
+{
+	TRACEUSER( "jlh92", _T("CRenderWnd::OnChar \"%c\" \n"), event.GetUnicodeKey() );
+
+	if( !AfxGetApp().HandleKeyPress( event ) )
+		event.Skip(); // Pass the key event on to someone who really wants it.
+}
 
 /*********************************************************************************************
 >	afx_msg void CRenderWnd::OnRButtonDown(UINT32, CPoint)

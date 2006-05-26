@@ -138,6 +138,8 @@ public:
     void OnIdle		( wxIdleEvent  &event );
 	void OnTimer	( wxTimerEvent &event );
 
+	bool HandleKeyPress( wxKeyEvent &event );
+
 	void OnHelpIndex();
 
 	void GiveActiveCanvasFocus();

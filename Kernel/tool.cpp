@@ -979,7 +979,7 @@ BOOL Tool::SwitchTool(KeyPress* pKeyPress)
 				Tool* pTool = pToolSwitch->pTool;
 
 				// Is it a "key down" key press?
-				if (!pKeyPress->IsRelease())
+				if (pKeyPress->IsPress())
 				{
 					// It's a "key down" event
 
