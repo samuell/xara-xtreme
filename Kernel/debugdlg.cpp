@@ -162,7 +162,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opimgset.h"
 
 #include "opliveeffects.h"
-#include "xpehost.h"
+//#include "xpehost.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -172,7 +172,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccc.h"	// <---- not here
 #endif
 
-#include "mainfrm.h"
+//#include "mainfrm.h"
 
 CC_IMPLEMENT_DYNCREATE(DebugDlg, DialogOp)
 
@@ -415,6 +415,9 @@ MsgResult DebugDlg::Message(Msg* Message)
 					SetCommandValue(LastSelectedGroup, LastSelectedIndex);
 				}
 				break;
+			default:
+				// Do nothing
+				break;
 		}
 
 		if (EndDlg)
@@ -558,7 +561,7 @@ void DebugDlg::SetGroupList(void)
 
 	DeleteAllValues(_R(IDC_DEBUGDLG_GROUP));
 
-#define ADDGROUP(name) { Temp = TEXT(name); SetStringGadgetValue(IDC_DEBUGDLG_GROUP, &Temp); }
+#define ADDGROUP(name) { Temp = TEXT(name); SetStringGadgetValue(_R(IDC_DEBUGDLG_GROUP), Temp); }
 
 	ADDGROUP("Imagesetting (Jason)");		// Group 0
 	ADDGROUP("Jason personal debug");		// Group 1
@@ -615,7 +618,7 @@ void DebugDlg::SetCommandList(INT32 GroupIndex)
 
 	DeleteAllValues(_R(IDC_DEBUGDLG_LIST));
 
-#define ADDCOMMAND(name) { Temp = TEXT(name); SetStringGadgetValue(IDC_DEBUGDLG_LIST, &Temp); }
+#define ADDCOMMAND(name) { Temp = TEXT(name); SetStringGadgetValue(_R(IDC_DEBUGDLG_LIST), Temp); }
 
 	switch (GroupIndex)
 	{
@@ -804,7 +807,7 @@ void DebugDlg::SetCommandValue(INT32 GroupIndex, INT32 CommandIndex)
 								}
 
 								if (pCol && Count > 0)
-									Value._MakeMsg("#1%d", Count);
+									Value._MakeMsg(_T("#1%d"), Count);
 							}
 						}						
 
@@ -925,7 +928,7 @@ void DebugDlg::SetCommandValue(INT32 GroupIndex, INT32 CommandIndex)
 				case 2:	Description = TEXT("Fails memory claims after the specified number of bytes have been claimed.");
 				{
 					String_32 Number;
-					Number._MakeMsg("#1%lu", SimpleCCObject::GetLowMemoryLimit());
+					Number._MakeMsg(_T("#1%lu"), SimpleCCObject::GetLowMemoryLimit());
 					Value = Number;
 					IsEditable = TRUE;
 					break;
@@ -1037,9 +1040,9 @@ void DebugDlg::SetCommandValue(INT32 GroupIndex, INT32 CommandIndex)
 		// Add your own command group(s) here		
 	}
 
-	SetStringGadgetValue(_R(IDC_DEBUGDLG_COMMENT), &Description);
+	SetStringGadgetValue(_R(IDC_DEBUGDLG_COMMENT), Description);
 
-	SetStringGadgetValue(_R(IDC_DEBUGDLG_VALUE1), &Value);
+	SetStringGadgetValue(_R(IDC_DEBUGDLG_VALUE1), Value);
 	EnableGadget(_R(IDC_DEBUGDLG_VALUE1), IsEditable);
 }
 
@@ -1086,6 +1089,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 					}
 					break;
 
+PORTNOTE("Separations", "Removed use of SetNewColourPlate")
+#ifndef EXCLUDE_FROM_XARALX
 				case 1:  SetNewColourPlate(COLOURPLATE_COMPOSITE,0,0); break;
 				case 2:  SetNewColourPlate(COLOURPLATE_CYAN,	 0,0); break;
 				case 3:  SetNewColourPlate(COLOURPLATE_MAGENTA,	 0,0); break;
@@ -1093,7 +1098,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 				case 5:  SetNewColourPlate(COLOURPLATE_KEY,		 0,0); break;
 				case 6:
 					{
-						INT32 SpotPlate = atoi(*NewValue);
+						INT32 Pos = 0;
+						INT32 SpotPlate = NewValue->ConvertToInteger(Pos);
 						SetNewColourPlate(COLOURPLATE_SPOT,	 0,SpotPlate);
 					}
 					break;
@@ -1124,6 +1130,7 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 						}
 					}
 					break;
+#endif
 
 				default:
 					ERROR3("Unknown debug command");
@@ -1153,6 +1160,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 		case 2:		// Mike's misc controls -------------------------------------------------
 			switch (CommandIndex)
 			{
+PORTNOTE("PrintMarks", "Removed use of PrintMarksMan")
+#ifndef EXCLUDE_FROM_XARALX
 				case 0:
 				{
 					// We need to execute this one after the dialogue has closed.
@@ -1181,6 +1190,7 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 					
 				}
 				break;
+#endif
 
 				case 2:
 				{
@@ -1192,7 +1202,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 					AttrColFillRampChange* pAttrib = new AttrColFillRampChange;
 					if (pAttrib!=NULL)
 					{
-						INT32 NewVal = atol(*NewValue);
+						INT32 Pos = 0;
+						INT32 NewVal = NewValue->ConvertToInteger(Pos);
 						float pos = ((float)NewVal) / 255.0f;
 						if (pos<0.0f) pos=0.0f;
 						if (pos>1.0f) pos=1.0f;
@@ -1221,7 +1232,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 					AttrTranspFillRampChange* pAttrib = new AttrTranspFillRampChange;
 					if (pAttrib!=NULL)
 					{
-						INT32 NewVal = atol(*NewValue);
+						INT32 Pos = 0;
+						INT32 NewVal = NewValue->ConvertToInteger(Pos);
 						
 						float pos = ((float)NewVal) / 255.0f;
 						if (pos<0.0f) pos=0.0f;
@@ -1290,7 +1302,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 
 				case 2:
 				{
-					INT32 NewVal = atol(*NewValue);
+					INT32 Pos = 0;
+					INT32 NewVal = NewValue->ConvertToInteger(Pos);
 					SimpleCCObject::SetClaimLimit(NewVal);
 				}
 				break;
@@ -1309,8 +1322,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 				
 				case 5:
 				{
-					BOOL MemOK = AfxCheckMemory();
-					ERROR3IF(!MemOK, "MFC Memory check failure (look at TRACE output)");
+//					BOOL MemOK = AfxCheckMemory();
+//					ERROR3IF(!MemOK, "MFC Memory check failure (look at TRACE output)");
 				}
 				break;
 
@@ -1594,6 +1607,8 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 			{
 				switch(CommandIndex)
 				{
+PORTNOTE("LiveEffects", "Removed use of LiveEffects")
+#ifndef EXCLUDE_FROM_XARALX
 				case 0:
 					{
 						OpDescriptor* pOp = OpDescriptor::FindOpDescriptor(OPTOKEN_APPLY_LIVEEFFECT);
@@ -1601,7 +1616,7 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 						{
 							OpLiveEffectParam Param;
 							Param.bIsDestructive = FALSE;
-							Param.strOpUnique = String("Enhance");
+							Param.strOpUnique = String(_T("Enhance"));
 							pOp->Invoke(&Param);
 						}
 					}
@@ -1613,14 +1628,15 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 						{
 							OpLiveEffectParam Param;
 							Param.bIsDestructive = FALSE;
-							Param.strOpUnique = String("Enhance");
+							Param.strOpUnique = String(_T("Enhance"));
 							pOp->Invoke(&Param);
 						}
 					}
 					break;
+#endif
 				case 2:
 					{
-						XPEHost::EndEditSession(TRUE);
+//						XPEHost::EndEditSession(TRUE);
 					}
 					break;
 				case 3:
@@ -1640,9 +1656,9 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 				case 0:
 					{
 						// Set the size of a slot to something weird
-						OILFixedDockingBar* pDockBar = (OILFixedDockingBar*)(GetMainFrame()->GetDockBar(DOCKBAR_RIGHT));
-						pDockBar->SetSlotSize(0, 150);
-						GetMainFrame()->RecalcLayout();		
+//						OILFixedDockingBar* pDockBar = (OILFixedDockingBar*)(GetMainFrame()->GetDockBar(DOCKBAR_RIGHT));
+//						pDockBar->SetSlotSize(0, 150);
+//						GetMainFrame()->RecalcLayout();		
 					}
 					break;
 				}

@@ -338,10 +338,13 @@ PORTNOTE("other","Removed Lots of init functions")
 			DebugTreeDlg::Init() &&				// Temp ******
 #endif //DEBUG_TREE
 
+#if _DEBUG
+			DebugDlg::Init() &&					// Debug command dialogue - in debug builds only
+#endif //_DEBUG
+
 #ifndef EXCLUDE_FROM_XARALX
 			BlobbyTabDlg::Init() &&				// Temp ******
 #if _DEBUG
-			DebugDlg::Init() &&					// Debug command dialogue - in debug builds only
 			OpCreateFontThumbnails::Init() &&	// Debug only
 			OpConvertFileFormats::Init() &&		// Debug only
 #endif //_DEBUG
