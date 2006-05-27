@@ -3,6 +3,7 @@ Version=1.0
 Encoding=UTF-8
 Name=Xara LX
 Comment=Versatile vector graphics program
+Comment[de_DE]=Vielseitiges Vektorgraphik-Programm
 Comment[pt_BR]=Versátil programa para gráficos vetoriais
 Icon=xaralx.png
 Terminal=false

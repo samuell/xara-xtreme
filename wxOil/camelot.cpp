@@ -1382,6 +1382,14 @@ BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
 	//
 	BOOL ok;
 
+	// http://portland.freedesktop.org/wiki/TaskOpenURL
+	// ok = LaunchBrowserApp(_T("xdg-open"), strUrl);
+	// if (ok) return ok;
+
+	// http://lists.freedesktop.org/pipermail/xdg/2004-August/004489.html
+	ok = LaunchBrowserApp(_T("desktop-launch"), strUrl);
+	if (ok) return ok;
+
 	ok = LaunchBrowserApp(_T("htmlview"), strUrl);
 	if (ok) return ok;
 

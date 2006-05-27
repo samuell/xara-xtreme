@@ -184,7 +184,11 @@ if ((stat("$topdir/wxOil/xrc"))[9] > $omtime)
 }
 
 # If there are no newer files, and force isn't set, exit without even doing the checksum
-exit(0) if (!$newer && !$force);
+if (!$newer && !$force)
+{
+    print STDERR "Nothing new\n";
+    exit (0);
+}
 
 my @dialogfiles = sort grep { $_ !~ /-strings\.xrc$/ } @xrcfiles;
 my @stringfiles = sort grep { $_ =~ /-strings\.xrc$/ } @xrcfiles;
