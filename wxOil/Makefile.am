@@ -6,7 +6,7 @@
 BUILT_SOURCES	= svnversion.h resources.h
 # Note we don't clean xrc.d and xrc.stamp here to avoid a loop
 CLEANFILES		= svnversion.h
-MOSTLYCLEANFILES = resources.h xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po xrc/resources.xrs resources.cpp xrc/xrc.check
+MOSTLYCLEANFILES = resources.h xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po xrc/resources.xrs xrc/xrc.check
 noinst_LIBRARIES	= libwxOil.a
 
 # the application source, library search path, and link libraries
