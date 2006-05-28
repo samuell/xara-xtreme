@@ -259,6 +259,7 @@ if ($version ne "")
 if (!$newer && !$force)
 {
     print STDERR "Nothing new\n";
+    ok();
     exit (0);
 }
 
@@ -303,7 +304,11 @@ if (!$buildresources)
     }
 }
 
-exit(0) unless $buildresources;
+if (!$buildresources)
+{
+    ok();
+    exit(0);
+}
 
 print STDERR "Rebuilding resources - new checksum $checksum\n";
 unlink ("$outputdir/xrc/$xaralanguage/xrc.check");
@@ -353,7 +358,11 @@ foreach $i (sort @strings)
     $j=~s/\\r\\n/\\n/g;
     # strings.lst is still XML escaped. We want to remove the XML escaping here - we add C escaping to BOTH
     # later
-    # We should use proper XML unquoting here - AMB to fix
+    # We should use proper XML unquoting here - AMB to fix - could use HTML::Entities if it's around
+    # Handle quoted numbers
+    my $c;
+    $j=~s/(&\#(\d+);?)/$2 < 256 ? chr($2) : $1/eg;
+    $j=~s/(&\#[xX]([0-9a-fA-F]+);?)/$c = hex($2); $c < 256 ? chr($c) : $1/eg;
     $j=~s/&lt;/\</g;
     $j=~s/&gt;/\>/g;
     $j=~s/&quot;/\"/g;
@@ -384,4 +393,11 @@ die "Could not make resources.cpp: $!" if ($ret);
 # OK we've finished so move the checksum into the right place
 rename ("$outputdir/xrc/$xaralanguage/xrc.check", "$outputdir/xrc/xrc.check");
 
+ok();
 exit(0);
+
+# Print an OK to STDOUT
+sub ok
+{
+    print "OK\n";
+}

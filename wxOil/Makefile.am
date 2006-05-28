@@ -41,4 +41,4 @@ AM_CXXFLAGS = $(XARAFLAGS)
 
 XARALANGUAGE = @XARALANGUAGE@
 
-RESOURCEDUMMY := ${shell $(TOPDIR)/Scripts/build-resources.pl -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) }
+RESOURCEDUMMY := ${if ${strip ${shell $(TOPDIR)/Scripts/build-resources.pl -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) } }, ,${error "Resource build failed"}}
