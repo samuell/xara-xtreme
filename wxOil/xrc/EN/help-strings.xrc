@@ -7,7 +7,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_MISSING_HELPDIR">
-					<label>The directory which contains the help file is not present, no help will be avialable.</label>
+					<label>The directory which contains the help file is not present, no help will be available.</label>
 				</object>
 			</object>
 			<object class="sizeritem">

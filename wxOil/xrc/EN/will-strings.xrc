@@ -955,7 +955,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_REPLACEATTRSOP">
-					<label>&amp;Replace attributes;Replaces sepcified atributes;Replace attributes</label>
+					<label>&amp;Replace attributes;Replaces specified attributes;Replace attributes</label>
 				</object>
 			</object>
 			<object class="sizeritem">

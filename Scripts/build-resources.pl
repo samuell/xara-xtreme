@@ -4,6 +4,7 @@
 # Call with a -f argument to force build of resources even if the system doesn't think it necessary
 
 use strict;
+use Fcntl ':mode';
 
 sub usage
 {
@@ -16,14 +17,15 @@ sub usage
  buildresources.pl [options]
 
  Options:
-   -t TOPDIR                       - Build source directory (for out of tree builds)
-   -o OUTPUTDIR                    - Build output directory (defaults to "wxOil")
-   -f                              - Force rebuilding of resources
-   -x                              - setting of XARALANGUAGE
-   -n / --version x.y              - set version to x.y
-   --verbose                       - be very loud about it
-   --user                          - setting of USERNAME
-   --help                          - display this message
+   -t TOPDIR           - Build source directory (for out of tree builds)
+   -o OUTPUTDIR        - Build output directory (defaults to "wxOil")
+   -f                  - Force rebuilding of resources and svnversion
+   -x                  - setting of XARALANGUAGE
+   -n / --version x.y  - set version to x.y ; omit to prevent svnversion
+                         build
+   --verbose           - be very loud about it
+   --user              - setting of USERNAME
+   --help              - display this message
 
 EOF
 
@@ -84,67 +86,18 @@ mkdir ("$outputdir/xrc/$xaralanguage");
 
 print STDERR "Testing for new resources and svn version\n";
 
-# Firstly, let's find the svn version if one was specified (else we leave it)
-if ($version ne "")
-{
-    my $svnv;
-    $svnv=`svnversion $topdir`;
-    my $bdate;
-    $bdate= `date +"%d-%b-%y %H:%M"`;
-    chomp($bdate);
-    chomp($svnv);
-    my @svnversion;
-    my $camversionmajor;
-    my $camversionminor;
-    ($camversionmajor, $camversionminor)=split('.',$version);
-    push @svnversion, 'const TCHAR g_pszSvnVersion[] = wxT("'.$svnv.'");';
-    push @svnversion, 'const TCHAR g_pszAppVersion[] = wxT("'.$version.'");';
-    push @svnversion, "#define CAMELOT_VERSION_MAJOR $camversionmajor";
-    push @svnversion, "#define CAMELOT_VERSION_MINOR $camversionminor";
-    push @svnversion, "#define CAMELOT_VERSION $version";
-    push @svnversion, "#define CAMELOT_VERSION_STRING wxT(\"$version ($user)\")";
-    push @svnversion, "#define CAMELOT_BUILD_DATE _T(\"$bdate\")".
-
-    my $writeversion;
-    $writeversion=1;
-
-    my $i=0;
-    if (open(VERSION,"$outputdir/svnversion.h"))
-    {
-	$writeversion=$force;
-	while(<VERSION>)
-	{
-	    chomp;
-	    my $l;
-	    $l=$svnversion[$i++];
-	    # ignore differences in date, or every make would produce a new link!
-	    if (!((/CAMELOT_BUILD_DATE/) && ($l=~/CAMELOT_BUILD_DATE/)) && ($l ne $_))
-	    {
-		$writeversion=1;
-		last;
-	    }
-	}
-    }
-
-    # OK it's changed
-    if ($writeversion)
-    {
-	print STDERR "Writing svnversion.h\n";
-	open (VERSION, ">$outputdir/svnversion.h") || die "Can't write svnversion.h: $!";
-	foreach $i (@svnversion)
-	{
-	    print VERSION "$i\n";
-	}
-	close(VERSION);
-    }
-}
-
-
 # Resource system
 # get the timestamp
 my $omtime=0;
 $omtime=(stat("$outputdir/resources.h"))[9]; # this may fail, in which case it looks like it was generated at the epoch
 $omtime+=0;
+
+# And the same thing for svnversion - we look at the cached file states. When we rebuild the cache we check
+# to see if this would result in a different svnversion. The .h file might not change as not every cache file change
+# results in a new svnversion.
+my $svtime=0;
+$svtime=(stat("$outputdir/svnversion.cache"))[9]; # this may fail, in which case it looks like it was generated at the epoch
+$svtime+=0;
 
 opendir(DIR, "$topdir/wxOil/xrc") || die "Can't open $topdir/wxOil/xrc: $!";
 my @resfiles=sort grep { /^[^\#].*\.(png|ico|cur|bmp|res|xar)$/ } readdir(DIR);
@@ -155,6 +108,7 @@ my @xrcfiles=sort grep { /^[^\#].*\.xrc$/ } readdir(DIR);
 closedir(DIR);
 
 my $newer=0;
+my $svnewer=0;
 
 my $f;
 foreach $f (@xrcfiles)
@@ -163,24 +117,142 @@ foreach $f (@xrcfiles)
     if ((stat($f))[9] > $omtime)
     {
 	$newer=1;
+	$svnewer=1;
+    }
+    if ((stat($f))[9] > $svtime)
+    {
+	$svnewer=1;
     }
 }
+
 foreach $f (@resfiles)
 {
     $f = "$topdir/wxOil/xrc/".$f;
     if ((stat($f))[9] > $omtime)
     {
 	$newer=1;
+	$svnewer=1;
+    }
+    if ((stat($f))[9] > $svtime)
+    {
+	$svnewer=1;
     }
 }
 
 if ((stat("$topdir/wxOil/xrc/$xaralanguage"))[9] > $omtime)
 {
+    $svnewer=1;
     $newer=1;
+}
+if ((stat("$topdir/wxOil/xrc/$xaralanguage"))[9] > $svtime)
+{
+    $svnewer=1;
 }
 if ((stat("$topdir/wxOil/xrc"))[9] > $omtime)
 {
+    $svnewer=1;
     $newer=1;
+}
+if ((stat("$topdir/wxOil/xrc"))[9] > $svtime)
+{
+    $svnewer=1;
+}
+
+# Firstly, let's find the svn version if one was specified (else we leave it)
+if ($version ne "")
+{
+    # First determine whether we need to do a rebuild of svnversion at all
+    # We look to see if any of the files passed on the command line are
+    # newer than svnversion.h
+
+    if (open(VCACHE,"$outputdir/svnversion.cache"))
+    {
+	while(<VCACHE>)
+	{
+	    next if /^\?/; # miss stuff not under version control
+	    # Note svn status prepends $topdir unless it's "." in which case it is not needed
+	    $f=substr($_, 40, -1);
+	    my @s;
+	    @s=stat($f);
+	    my $m;
+	    $m=$s[9]+0;
+	    next if (S_ISDIR($s[2])); # ignore directories
+	    print STDERR "Checking '$f' - mtime $m\n" if ($verbose >1);
+	    if (($m == 0) || ($m > $svtime)) # catch case where file disappears
+	    {
+		$svnewer=1;
+		print STDERR "$f is NEWER, $m > $svtime \n" if ($verbose);
+	    }
+	}
+	close (VCACHE);
+    }
+    else
+    {
+	# No cache file
+	$svnewer = 1;
+    }
+
+    my $writeversion;
+    my @svnversion;
+    $writeversion=0;
+
+    if ($svnewer || $force)
+    {
+	print STDERR "Rebuilding svn version\n";
+
+	# Generate the cache
+	system ("svn status -v $topdir > $outputdir/svnversion.cache");
+	
+	my $svnv;
+	$svnv=`svnversion $topdir`;
+	my $bdate;
+	$bdate= `date +"%d-%b-%y %H:%M"`;
+	chomp($bdate);
+	chomp($svnv);
+	my $camversionmajor;
+	my $camversionminor;
+	($camversionmajor, $camversionminor)=split('.',$version);
+	push @svnversion, 'const TCHAR g_pszSvnVersion[] = wxT("'.$svnv.'");';
+	push @svnversion, 'const TCHAR g_pszAppVersion[] = wxT("'.$version.'");';
+	push @svnversion, "#define CAMELOT_VERSION_MAJOR $camversionmajor";
+	push @svnversion, "#define CAMELOT_VERSION_MINOR $camversionminor";
+	push @svnversion, "#define CAMELOT_VERSION $version";
+	push @svnversion, "#define CAMELOT_VERSION_STRING wxT(\"$version ($user)\")";
+	push @svnversion, "#define CAMELOT_BUILD_DATE _T(\"$bdate\")";
+	
+	# in case it doesn't open
+	$writeversion=1;
+	
+	my $i=0;
+	if (open(VERSION,"$outputdir/svnversion.h"))
+	{
+	    $writeversion=$force;
+	    while(<VERSION>)
+	    {
+		chomp;
+		my $l;
+		$l=$svnversion[$i++];
+		# ignore differences in date, or every make would produce a new link!
+		if (!((/CAMELOT_BUILD_DATE/) && ($l=~/CAMELOT_BUILD_DATE/)) && ($l ne $_))
+		{
+		    $writeversion=1;
+		    last;
+		}
+	    }
+	}
+    }
+
+    # OK it's changed
+    if ($writeversion)
+    {
+	print STDERR "Writing svnversion.h\n";
+	open (VERSION, ">$outputdir/svnversion.h") || die "Can't write svnversion.h: $!";
+	foreach my $i (@svnversion)
+	{
+	    print VERSION "$i\n";
+	}
+	close(VERSION);
+    }
 }
 
 # If there are no newer files, and force isn't set, exit without even doing the checksum
@@ -198,7 +270,7 @@ push @all,@xrcfiles;
 my $i;
 foreach $i (@all)
 {
-    print STDERR "Checksumming $i\n" if ($verbose);
+    print STDERR "Checksumming $i\n" if ($verbose>1);
     my $fh=new FileHandle "<$i";
     $context->add($i); # add the name of the file too
     $context->addfile($fh);
@@ -249,6 +321,10 @@ while (<STRINGS>)
 {
     chomp;
     s/^\S+\t//;
+    # escape slashes
+    s/\\/\\\\/g;
+    # escape quotes
+    s/\"/\\\"/g;
     my $s;
     $s="_(\"$_\");";
     push @strings, $s;
@@ -259,6 +335,7 @@ close(STRINGS);
 open(DIALOGS,"$wxrc -g $outputdir/xrc/dialogs.xrc|") || die "Could not read dialogs for translation: $!";
 while (<DIALOGS>)
 {
+    # Note wxrc removes XML escaping
     chomp;
     print STDERR "Dialog: $_\n" if ($verbose>2);
     push @strings,$_;
@@ -274,14 +351,22 @@ foreach $i (sort @strings)
     $j=$i;
     next if ($j =~ /^_\(\"\"\)\;\s+$/);
     $j=~s/\\r\\n/\\n/g;
-#    $j=~s/&amp;/\&/g;
+    # strings.lst is still XML escaped. We want to remove the XML escaping here - we add C escaping to BOTH
+    # later
+    # We should use proper XML unquoting here - AMB to fix
+    $j=~s/&lt;/\</g;
+    $j=~s/&gt;/\>/g;
+    $j=~s/&quot;/\"/g;
+    $j=~s/&amp;/\&/g;
     push @uniqstrings, $j;
 }
 
-open (XGETTEXT, "|".$xgettext.' --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
+my $n=1;
+open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
 foreach $i (@uniqstrings)
 {
-    print STDERR "Translate: $i\n" if ($verbose>2);
+    print STDERR "Line $n, translate: $i\n" if ($verbose>2);
+    $n++;
     print XGETTEXT "$i\n";
 }
 close (XGETTEXT);

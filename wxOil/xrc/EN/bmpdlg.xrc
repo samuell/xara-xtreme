@@ -204,7 +204,7 @@
 		</object>
 		<object class="wxCheckBox" name="IDC_ANIMOPTS_LOOP">
 			 <pos>154,182d</pos> <size>85,10d</size>
-			<label>Loop Continously</label>
+			<label>Loop Continuously</label>
 		</object>
 		<object class="wxTextCtrl" name="IDC_BMPOPTS_NUMCOLS_EDIT">
 			 <pos>86,215d</pos> <size>40,14d</size>

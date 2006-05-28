@@ -24,7 +24,7 @@
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>29,14d</pos> <size>131,8d</size>
-			<label>Copyright ? 1997 Xara Ltd.</label>
+			<label>Copyright &#169; 1997 Xara Ltd.</label>
 		</object>
 		<object class="wxCamDrawControl" name="IDC_STRIPE1">
 			 <pos>4,44d</pos> <size>196,1d</size>

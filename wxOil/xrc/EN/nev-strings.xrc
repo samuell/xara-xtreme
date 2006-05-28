@@ -133,7 +133,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SPLASHBOX_COPYRIGHT">
-					<label>© Xara Ltd 1995</label>
+					<label>&#169; Xara Group Ltd 1995</label>
 				</object>
 			</object>
 			<object class="sizeritem">

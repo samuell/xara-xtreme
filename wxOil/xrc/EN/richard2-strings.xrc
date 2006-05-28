@@ -1057,7 +1057,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_SGBITMAP_MONOCHROME">
-					<label>Monochome</label>
+					<label>Monochrome</label>
 				</object>
 			</object>
 			<object class="sizeritem">

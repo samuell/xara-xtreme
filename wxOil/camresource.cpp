@@ -591,11 +591,23 @@ BOOL CamResource::ReadStringTableFile()
 					{
 						tc=_T('?');
 						UINT32 code=tc;
-						// It's an alphanumeric form of a unicode character
+						// It's an alphanumeric form of a unicode character in hex
 #if wxUSE_UNICODE
-						sscanf((const char*)seq.mb_str(wxConvUTF8), "#x%x;", &tc);
+						sscanf((const char*)seq.mb_str(wxConvUTF8), "#x%x;", &code);
 #else
-						sscanf((const char*)seq.c_str(), "#x%x;", &tc);						
+						sscanf((const char*)seq.c_str(), "#x%x;", &code);	
+#endif
+						tc=(TCHAR)(code);
+					}
+					else if ((seq.Length()>2) && (seq.GetChar(0)==_T('#')) && ((seq.GetChar(1)>=_T('0')) && (seq.GetChar(1)<=_T('9'))))
+					{
+						tc=_T('?');
+						UINT32 code=tc;
+						// It's an alphanumeric form of a unicode character in decimal
+#if wxUSE_UNICODE
+						sscanf((const char*)seq.mb_str(wxConvUTF8), "#%d;", &code);
+#else
+						sscanf((const char*)seq.c_str(), "#%d;", &code);						
 #endif
 						tc=(TCHAR)(code);
 					}
