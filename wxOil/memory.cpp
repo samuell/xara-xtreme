@@ -114,6 +114,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <malloc/malloc.h>
 #endif
 
+#if defined(__WXGTK__)
+#include <stdio.h>
+#endif
+
 #ifdef RALPH
 #include "ralphcri.h"
 #endif
@@ -1023,6 +1027,41 @@ void GetMemoryStatus(UINT64* pPhysRam, UINT32* pLoadPercent)
 		if (pLoadPercent) *pLoadPercent = memStatus.dwMemoryLoad;
 		if (pPhysRam) *pPhysRam = memStatus.dwTotalPhys;
 	}
+#elsif defined(__WXGTK__)
+	// Assume Linux - there should really be some FreeBSD code here
+
+	/* Linux: read memory information from the kernel's /proc/meminfo interface */
+	FILE *fp;
+	unsigned long /*TYPENOTE: Correct*/ memTotalKb, memFreeKb;
+	int /*TYPENOTE: Correct*/ haveMemTotal = 0, haveMemFree = 0;
+	char lineBuf[256];
+
+	fp = fopen("/proc/meminfo", "r");
+
+	if (fp != NULL)
+	{
+		while (!haveMemTotal || !haveMemFree)
+		{
+			if (fgets(lineBuf, 256, fp) == NULL)
+				break;
+
+			if (sscanf(lineBuf, "MemTotal: %lu", &memTotalKb) == 1)
+				haveMemTotal = 1;
+			if (sscanf(lineBuf, "MemFree: %lu", &memFreeKb) == 1)
+				haveMemFree = 1;
+		}
+		fclose(fp);
+	}
+
+	if (!haveMemTotal)
+		memTotalKb = 512UL * 1024;      /* guess 512MB */
+	if (!haveMemFree)
+		memFreeKb = memTotalKb / 2;     /* guess 50% free */
+
+	if (pPhysRam != NULL)
+		*pPhysRam = (UINT64)memTotalKb * 1024;
+	if (pLoadPercent != NULL)
+		*pLoadPercent = (UINT32)(100UL - ((memFreeKb * 100UL) / memTotalKb));
 #else
 	PORTNOTETRACE("other", "GetMemoryStatus is not implemented on this architecture");
 	if (pPhysRam) *pPhysRam = 512L * 1024 * 1024;	// Guess 512M
