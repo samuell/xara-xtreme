@@ -905,7 +905,8 @@ BOOL DocumentRecordHandler::HandleLayerDetailsRecord(CXaraFileRecord* pCXaraFile
 				String_256 Prefix( _("Imported ") );
 
 				// Does the name already have the prefix string embedded in it?
-				if (cc_lstristr(Name,Prefix) == NULL)
+//				if (cc_lstristr(Name,Prefix) == NULL)
+				if (Name.Sub(Prefix) == 0)
 				{
 					// If not, append the prefix to the original name, and try again
 					Prefix += Name;

@@ -414,7 +414,7 @@ bool CCamApp::OnInit()
 	{
 		wxString			strMessage;
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__)
 		strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%03d\n"), 
 			g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
@@ -968,7 +968,7 @@ void CCamApp::DoAboutBox()
 {
 	wxString			strMessage;
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__)
 	strMessage = wxString::Format( wxT("Xara LX\nVersion: %s\nCDraw Version: %d.%03d\nUsage: XaraLX.exe [xar-file...]"), 
 		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
@@ -1876,7 +1876,9 @@ void CCamApp::OnFatalException()
 		recursionguard--;
 	
 		// Zap out main loop pointer
+#if !defined(__WXMAC__)
 		m_mainLoop=NULL;
+#endif
 
 	} while(0);
 	

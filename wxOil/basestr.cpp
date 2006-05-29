@@ -1662,7 +1662,7 @@ const TCHAR *cc_lstrstr(const TCHAR* String1, const TCHAR* String2)
 
 /**************************************************************************************
 
->	TCHAR* cc_lstristr(TCHAR *String1, TCHAR *String2)
+>	TCHAR* cc_lstristr(LPCTSTR String1, LPCTSTR *String2)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21st November 1995
@@ -1680,7 +1680,7 @@ const TCHAR *cc_lstrstr(const TCHAR* String1, const TCHAR* String2)
 
 ***************************************************************************************/
 
-TCHAR* cc_lstristr(TCHAR *String1, TCHAR *String2)
+/*TCHAR* cc_lstristr(LPCTSTR String1, LPCTSTR String2)
 {
 #if !defined(__WXMSW__)
 	return wcsstr( String1, String2 );
@@ -1714,7 +1714,7 @@ TCHAR* cc_lstristr(TCHAR *String1, TCHAR *String2)
 	return(0);
 #endif
 }
-
+*/
 
 
 /**************************************************************************************
@@ -1738,7 +1738,7 @@ TCHAR* cc_lstristr(TCHAR *String1, TCHAR *String2)
 
 ***************************************************************************************/
 
-TCHAR* cc_lstrichr(TCHAR *Str, TCHAR c)
+/*TCHAR* cc_lstrichr(TCHAR *Str, TCHAR c)
 {
 #if !defined(__WXMSW__)
 	return wcschr( Str, c );
@@ -1761,3 +1761,4 @@ TCHAR* cc_lstrichr(TCHAR *Str, TCHAR c)
     return(0);
 #endif
 }
+*/
