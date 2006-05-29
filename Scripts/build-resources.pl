@@ -75,6 +75,9 @@ GetOptions( "topdir|t=s" => \$topdir,
 	    "version|n=s" => \$version,
 	    "user|u=s" => \$user,
 	    "xaralanguage|x=s" => \$xaralanguage,
+		"wxrc=s" => \$wxrc,
+		"xgettext|g=s" => \$xgettext,
+		"checksum=s" => \$checksum,
 	    "help!" => \$help ) || usage ("Bad option");
 
 usage() if ($help);
@@ -370,15 +373,17 @@ foreach $i (sort @strings)
     push @uniqstrings, $j;
 }
 
-my $n=1;
-open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
-foreach $i (@uniqstrings)
+if ($xgettext ne "skip")
 {
-    print STDERR "Line $n, translate: $i\n" if ($verbose>2);
-    $n++;
-    print XGETTEXT "$i\n";
+	my $n=1;
+	open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
+	foreach $i (@uniqstrings)
+	{
+		print STDERR "Line $n, translate: $i\n" if ($verbose>2);
+		$n++;
+		print XGETTEXT "$i\n";
+	}
 }
-close (XGETTEXT);
 
 # Write the file to the wrong directory (deliberate)
 open(CHECK,">$outputdir/xrc/$xaralanguage/xrc.check") || die "Could not write xrc.check: $!";
