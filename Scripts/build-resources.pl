@@ -107,11 +107,11 @@ $svtime=(stat("$outputdir/svnversion.cache"))[9]; # this may fail, in which case
 $svtime+=0;
 
 opendir(DIR, "$topdir/wxOil/xrc") || die "Can't open $topdir/wxOil/xrc: $!";
-my @resfiles=sort grep { /^[^\#].*\.(png|ico|cur|bmp|res|xar)$/ } readdir(DIR);
+my @resfiles=sort grep { /^[^\.].*\.(png|ico|cur|bmp|res|xar)$/ } readdir(DIR);
 closedir(DIR);
 
 opendir(DIR, "$topdir/wxOil/xrc/$xaralanguage") || die "Can't open $topdir/wxOil/xrc/$xaralanguage: $!";
-my @xrcfiles=sort grep { /^[^\#].*\.xrc$/ } readdir(DIR);
+my @xrcfiles=sort grep { /^[^\.].*\.xrc$/ } readdir(DIR);
 closedir(DIR);
 
 my $newer=0;
@@ -280,6 +280,10 @@ foreach $i (@all)
 {
     print STDERR "Checksumming $i\n" if ($verbose>1);
     my $fh=new FileHandle "<$i";
+    if (!defined($fh))
+    {
+	die "Can't open $i for checksumming: $!";
+    }
     $context->add($i); # add the name of the file too
     $context->addfile($fh);
 }
