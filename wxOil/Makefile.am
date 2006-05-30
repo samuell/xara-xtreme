@@ -40,5 +40,6 @@ libwxOil_a_SOURCES = \
 AM_CXXFLAGS = $(XARAFLAGS)
 
 XARALANGUAGE = @XARALANGUAGE@
+WXRC = @WXRC@
 
-RESOURCEDUMMY := ${if ${strip ${shell $(TOPDIR)/Scripts/build-resources.pl -i -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) } }, ,${error "Resource build failed"}}
+RESOURCEDUMMY := ${if ${strip ${shell $(TOPDIR)/Scripts/build-resources.pl -i -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) --wxrc $(WXRC) } }, ,${error "Resource build failed"}}
