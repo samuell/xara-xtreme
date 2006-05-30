@@ -3275,6 +3275,12 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 #endif
 			if (Msg->GadgetID == _R(IDC_COLOURPICKER))
 			{
+				// This little wheeze is enough to remove hover
+				EnableGadget(_R(IDC_COLOURPICKER), FALSE);
+				EnableGadget(_R(IDC_COLOURPICKER), TRUE);
+				SetBoolGadgetSelected(_R(IDC_COLOURPICKER), FALSE);
+				InvalidateGadget(_R(IDC_COLOURPICKER));
+
 				ColourPickerDragInformation * DragCol = new ColourPickerDragInformation();
 				DragManagerOp::StartDrag(DragCol, GetReadWriteWindowID());
 				break;
@@ -3285,12 +3291,6 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 			{
 				if (Msg->GadgetID == _R(IDC_EDIT_PICKER))
 				{
-					// This little wheeze is enough to remove hover
-					EnableGadget(_R(IDC_EDIT_PICKER), FALSE);
-					EnableGadget(_R(IDC_EDIT_PICKER), TRUE);
-					SetBoolGadgetSelected(_R(IDC_EDIT_PICKER), FALSE);
-					InvalidateGadget(_R(IDC_EDIT_PICKER));
-
 					StartDrag((ReDrawInfoType*) Msg->DlgMsgParam);
 					NoFillButtonDown = FALSE;
 				}
