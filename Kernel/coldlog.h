@@ -556,6 +556,9 @@ protected:
 	void HideOrShowColourPicker();
 	void CheckDialogSize();
 
+	BOOL m_NeedsResize;
+	void NeedsResize() {m_NeedsResize = TRUE;}
+
 private:
 	void LoseKeyboardFocus(void);
 		// Lobs the keyboard focus back into the document

@@ -667,6 +667,7 @@ ColourEditDlg::ColourEditDlg(): DialogOp(ColourEditDlg::IDD, ColourEditDlg::Mode
 	CurrentCursor	= NULL;
 
 	m_bDoingSetGadget = FALSE;
+	m_NeedsResize = FALSE;
 }
 
 
@@ -981,7 +982,7 @@ void ColourEditDlg::SetExtent(void)
 		ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_PICKER));
 		#endif // WEBSTER
 		HideGadget(_R(IDC_EDIT_ADVANCEDPANEL), TRUE);
-		CheckDialogSize();
+		NeedsResize();
 		return;
 	}
 
@@ -1000,6 +1001,8 @@ void ColourEditDlg::SetExtent(void)
 	// Always unfolded.
 	Folded = FALSE; // always unfolded
 #endif // WEBSTER
+
+	NeedsResize();
 
 	if (Folded)
 	{		
@@ -1065,8 +1068,6 @@ void ColourEditDlg::SetExtent(void)
 //		SetStringGadgetValue(_R(IDC_EDIT_ADVANCED), _R(IDS_EDIT_LESS));
 #endif
 	}
-
-	CheckDialogSize();
 
 }
 
@@ -1137,6 +1138,11 @@ void ColourEditDlg::HideOrShowColourPicker()
 
 void ColourEditDlg::CheckDialogSize()
 {
+	if (!m_NeedsResize)
+		return;
+
+	m_NeedsResize=FALSE;
+
 	CWindowID pPanel=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_ADVANCEDPANEL));
 	if (pPanel)
 	{
@@ -1228,6 +1234,7 @@ void ColourEditDlg::SetControls(void)
 
 	if (State.ColType != CurrentColType)
 	{
+		NeedsResize();
 		EnableGadget(_R(IDC_EDIT_TINT), Enable);
 
 		EnableGadget(_R(IDC_EDIT_TINTNAME), Enable);
@@ -1298,6 +1305,7 @@ void ColourEditDlg::SetControls(void)
 	// Set up the combo box of available colour models
 	if (State.DisplayModel != DisplayModel)
 	{
+		NeedsResize();
 		// Shift around the component name and writable gadgets until Windows doesn't
 		// know if it's coming or going. 
 		static CGadgetID CompGadgetIDs[10] =
@@ -1374,15 +1382,15 @@ void ColourEditDlg::SetControls(void)
 
 	if (DisplayModel == COLOURMODEL_RGBT || DisplayModel == COLOURMODEL_HSVT)
 	{
-		HideGadget (_R(IDC_NAME_COMPONENT4), TRUE);
-		HideGadget (_R(IDC_EDIT_COMPONENT4), TRUE);
+		//HideGadget (_R(IDC_NAME_COMPONENT4), TRUE);
+		//HideGadget (_R(IDC_EDIT_COMPONENT4), TRUE);
 		HideGadget (_R(IDC_NAME_WEBHEX), FALSE);
 		HideGadget (_R(IDC_EDIT_WEBHEX), FALSE);
 	}
 	else
 	{
-		HideGadget (_R(IDC_NAME_COMPONENT4), FALSE);
-		HideGadget (_R(IDC_EDIT_COMPONENT4), FALSE);
+		//HideGadget (_R(IDC_NAME_COMPONENT4), FALSE);
+		//HideGadget (_R(IDC_EDIT_COMPONENT4), FALSE);
 
 		HideGadget (_R(IDC_NAME_WEBHEX), TRUE);
 		HideGadget (_R(IDC_EDIT_WEBHEX), TRUE);
@@ -1583,7 +1591,7 @@ void ColourEditDlg::SetComponentInfo(UINT32 ComponentID, UINT32 Gadget,
 			ColourContextList::GetList()->RemoveContext(&cc);			// Have finished with it
 
 	}
-	CheckDialogSize();
+	//CheckDialogSize();
 }
 
 
@@ -1657,7 +1665,7 @@ void ColourEditDlg::SetAllHexComponentsInfo(UINT32 ComponentID, UINT32 NameGadge
 			}
 		}
 	}
-	CheckDialogSize();
+	//CheckDialogSize();
 }
 
 
