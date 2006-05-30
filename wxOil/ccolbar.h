@@ -372,7 +372,7 @@ public:
 	// colour picker custom control interface functions ....
 	
 	BOOL IsColourPickerOverStripRect (wxWindow* colourPicker, wxPoint mousePt);
-	BOOL DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt);
+	BOOL DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, IndexedColour ** pTheCol=NULL);
 
 protected:			// Internal subroutine functions
 	BOOL HasNoScrollBar(INT32 DisplayedColours, INT32 MaxColours, wxRect *pStripRect = NULL);

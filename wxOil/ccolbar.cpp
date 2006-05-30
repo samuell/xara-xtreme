@@ -1276,7 +1276,7 @@ BOOL CColourBar::IsColourPickerOverStripRect (wxWindow* colourPicker, wxPoint mo
 
 /********************************************************************************************
 
->	BOOL DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt)
+>	BOOL DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, IndexedColour ** pTheCol=NULL)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	22/10/99
@@ -1289,7 +1289,7 @@ BOOL CColourBar::IsColourPickerOverStripRect (wxWindow* colourPicker, wxPoint mo
 
 ********************************************************************************************/
 
-BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt)
+BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, IndexedColour **pTheCol/*=NULL*/)
 {
 #if FALSE
 	// firstly, lets check for obvious insanity
@@ -1347,6 +1347,8 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt)
 				ASSERT (pColourEditDlg);
 
 				pColourEditDlg->SetEditingColour (TheColour);
+				if (pTheCol)
+					*pTheCol = TheColour;
 			}
 			
 			lastColourCell = ColourCell;

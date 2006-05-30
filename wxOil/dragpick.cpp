@@ -462,12 +462,48 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 {
 	Status OldStatus = m_Status;
 	m_Status = SCREEN_COLOUR;
+	DocColour col(COLOUR_TRANS);
 
 	CWindowID	WinID=::wxChildWindowFromPoint(p, FALSE, -1);
 	DocView*	pDocView=NULL;
 	Spread*		pSpread=NULL;
 	WinCoord	WndPos(0,0);
 	DocCoord	DocPos(0,0);
+
+	ColourEditDlg* pColourEditDlg = ColourEditDlg::GetColourEditDlg ();
+	// Check we can't pick from the colour picker
+	wxWindow * w = WinID;
+	while (w)
+	{
+		if (pColourEditDlg && (w==pColourEditDlg->WindowID))
+		{
+			// No picking colours from the colour editor
+			m_Status = NO_COLOUR;
+			break;
+		}
+		if (w->IsKindOf(CLASSINFO(CColourBar)));
+		{
+			wxPoint cpoint = w->ScreenToClient(p);
+			if (((CColourBar*) w)->IsColourPickerOverStripRect (w, cpoint))
+			{
+				IndexedColour * pIndexedColour = NULL;
+				m_Status = COLOURBAR_COLOUR;
+				((CColourBar*) w)->DoColourPickerColour (w, cpoint, &pIndexedColour);
+				if (pIndexedColour)
+				{
+					// Disassociate from indexed colour
+					DocColour Temp;
+					Temp.MakeRefToIndexedColour(pIndexedColour);
+					INT32 r, g, b;
+					Temp.GetRGBValue(&r, &g, &b);
+					col=DocColour(r,g,b);
+				}
+				break;
+			}
+		}
+		w=w->GetParent();
+	}
+
 	
 	if (WinID != NULL)
 		pDocView=CCamView::GetDocViewFromWindowID(WinID);
@@ -494,56 +530,6 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 			m_Status = SCREEN_COLOUR;
 		}
 	}
-#if 0
-	else
-	{
-		GetWindowRect (GetParent (GetMainFrame ()->m_hWndMDIClient), &mainFrameWindowRect);
-		
-			if (PtInRect (&colourBarWindowRect, mousePt))
-			{
-				POINT mousePt2 = mousePt;
-				ScreenToClient (colourBarWnd, &mousePt2);
-				CPoint cMousePt (mousePt2);		// for consistent interface to CColourBar stuff
-				
-				if (pCColourBar->IsColourPickerOverStripRect (hwnd, cMousePt) == TRUE)
-				{
-					validGrabLocation = TRUE;
-					grabColourBarColour = TRUE;
-
-				}
-				else
-				{
-					SetCursor (noreadToolCursor);
-					//SetProp (hwnd, "oldCursor", (HANDLE) oldCursor);
-				}
-			}
-			else
-			{
-				SetCursor (noreadToolCursor);
-
-				pStatusLine->UpdateTextForColourPicker (&(String_256 (TEXT (IDS_DRAGGINGCOLOURPICKERTOOLNOREAD))), FALSE);
-			}
-		}
-	}
-#endif
-
-	ColourEditDlg* pColourEditDlg = ColourEditDlg::GetColourEditDlg ();
-	// Check we can't pick from the colour picker
-	if ((m_Status == SCREEN_COLOUR) && pColourEditDlg)
-	{
-		wxWindow * w = WinID;
-		while (w)
-		{
-			if (w==pColourEditDlg->WindowID)
-			{
-				m_Status = NO_COLOUR;
-				break;
-			}
-			w=w->GetParent();
-		}
-	}
-
-	DocColour col(COLOUR_TRANS);
 
 	switch (m_Status)
 	{
@@ -585,7 +571,8 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 	{
 		TheColour = col;
 
-		if (m_Status != NO_COLOUR)
+		// COLOURBAR_COLOUR has already updated the colour picker
+		if ((m_Status != NO_COLOUR) && (m_Status != COLOURBAR_COLOUR))
 		{
 			IndexedColour* theIndexedColour = ColourManager::GenerateNewUnnamedColour (ColourManager::GetColourList(), &TheColour);
 	
