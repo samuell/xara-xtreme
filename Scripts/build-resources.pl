@@ -23,6 +23,10 @@ sub usage
    -x                  - setting of XARALANGUAGE
    -n / --version x.y  - set version to x.y ; omit to prevent svnversion
                          build
+   -i | --international- build internationalisation resources ; omit to
+                         prevent wxrc / xgettext etc usage
+   --xgettext PATH     - pass alternate path to xgettext
+   --wxrc PATH         - pass alternate path to wxrc
    --verbose           - be very loud about it
    --user              - setting of USERNAME
    --help              - display this message
@@ -58,7 +62,6 @@ my %tabtable;
 my %tabtableplace;
 my %tabtabledup;
 
-my $checksum="md5sum";
 my $xaralanguage="EN";
 my $xgettext="xgettext";
 my $wxrc="wxrc";
@@ -67,17 +70,18 @@ my $outputdir="wxOil";
 my $topdir=".";
 my $version="";
 my $user="unknown";
+my $international=0;
 
 GetOptions( "topdir|t=s" => \$topdir,
 	    "ouputdir|o=s" => \$outputdir,
-	    "force!" => \$force,
+	    "force|f!" => \$force,
+	    "international|i!" => \$international,
 	    "verbose|v+" => \$verbose,
 	    "version|n=s" => \$version,
 	    "user|u=s" => \$user,
 	    "xaralanguage|x=s" => \$xaralanguage,
-		"wxrc=s" => \$wxrc,
-		"xgettext|g=s" => \$xgettext,
-		"checksum=s" => \$checksum,
+	    "wxrc=s" => \$wxrc,
+	    "xgettext|g=s" => \$xgettext,
 	    "help!" => \$help ) || usage ("Bad option");
 
 usage() if ($help);
@@ -323,66 +327,66 @@ die "Failed to combine dialogs ($ret): $!" if ($ret);
 $ret=system("$topdir/Scripts/combinexrc.pl","-b","missing.png","-t","-s","-o","$outputdir/xrc/strings.lst",@xrcfiles);
 die "Failed to combine strings ($ret): $!" if ($ret);
 
-my @strings;
-open(STRINGS,"$outputdir/xrc/strings.lst") || die "Could not open strings.lst: $!";
-while (<STRINGS>)
+if ($international)
 {
-    chomp;
-    s/^\S+\t//;
-    # escape slashes
-    s/\\/\\\\/g;
-    # escape quotes
-    s/\"/\\\"/g;
-    my $s;
-    $s="_(\"$_\");";
-    push @strings, $s;
-    print STDERR "String: $s\n" if ($verbose>2);
-}
-close(STRINGS);
-
-open(DIALOGS,"$wxrc -g $outputdir/xrc/dialogs.xrc|") || die "Could not read dialogs for translation: $!";
-while (<DIALOGS>)
-{
-    # Note wxrc removes XML escaping
-    chomp;
-    print STDERR "Dialog: $_\n" if ($verbose>2);
-    push @strings,$_;
-}
-
-my @uniqstrings;
-my $last="";
-foreach $i (sort @strings)
-{
-    next if ($i eq $last);
-    $last = $i;
-    my $j;
-    $j=$i;
-    next if ($j =~ /^_\(\"\"\)\;\s+$/);
-    $j=~s/\\r\\n/\\n/g;
-    # strings.lst is still XML escaped. We want to remove the XML escaping here - we add C escaping to BOTH
-    # later
-    # We should use proper XML unquoting here - AMB to fix - could use HTML::Entities if it's around
-    # Handle quoted numbers
-    my $c;
-    $j=~s/(&\#(\d+);?)/$2 < 256 ? chr($2) : $1/eg;
-    $j=~s/(&\#[xX]([0-9a-fA-F]+);?)/$c = hex($2); $c < 256 ? chr($c) : $1/eg;
-    $j=~s/&lt;/\</g;
-    $j=~s/&gt;/\>/g;
-    $j=~s/&quot;/\"/g;
-    $j=~s/&amp;/\&/g;
-    push @uniqstrings, $j;
-}
-
-if ($xgettext ne "skip")
-{
-	my $n=1;
-	open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
-	foreach $i (@uniqstrings)
-	{
-		print STDERR "Line $n, translate: $i\n" if ($verbose>2);
-		$n++;
-		print XGETTEXT "$i\n";
-	}
+    my @strings;
+    open(STRINGS,"$outputdir/xrc/strings.lst") || die "Could not open strings.lst: $!";
+    while (<STRINGS>)
+    {
+	chomp;
+	s/^\S+\t//;
+	# escape slashes
+	s/\\/\\\\/g;
+	# escape quotes
+	s/\"/\\\"/g;
+	my $s;
+	$s="_(\"$_\");";
+	push @strings, $s;
+	print STDERR "String: $s\n" if ($verbose>2);
+    }
+    close(STRINGS);
+    
+    open(DIALOGS,"$wxrc -g $outputdir/xrc/dialogs.xrc|") || die "Could not read dialogs for translation: $!";
+    while (<DIALOGS>)
+    {
+	# Note wxrc removes XML escaping
+	chomp;
+	print STDERR "Dialog: $_\n" if ($verbose>2);
+	push @strings,$_;
+    }
+    
+    my @uniqstrings;
+    my $last="";
+    foreach $i (sort @strings)
+    {
+	next if ($i eq $last);
+	$last = $i;
+	my $j;
+	$j=$i;
+	next if ($j =~ /^_\(\"\"\)\;\s+$/);
+	$j=~s/\\r\\n/\\n/g;
+	# strings.lst is still XML escaped. We want to remove the XML escaping here - we add C escaping to BOTH
+	# later
+	# We should use proper XML unquoting here - AMB to fix - could use HTML::Entities if it's around
+	# Handle quoted numbers
+	my $c;
+	$j=~s/(&\#(\d+);?)/$2 < 256 ? chr($2) : $1/eg;
+	$j=~s/(&\#[xX]([0-9a-fA-F]+);?)/$c = hex($2); $c < 256 ? chr($c) : $1/eg;
+	$j=~s/&lt;/\</g;
+	$j=~s/&gt;/\>/g;
+	$j=~s/&quot;/\"/g;
+	$j=~s/&amp;/\&/g;
+	push @uniqstrings, $j;
+    }
+    
+    my $n=1;
+    open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
+    foreach $i (@uniqstrings)
+    {
+	print STDERR "Line $n, translate: $i\n" if ($verbose>2);
+	$n++;
+	print XGETTEXT "$i\n";
+    }
 }
 
 # Write the file to the wrong directory (deliberate)
