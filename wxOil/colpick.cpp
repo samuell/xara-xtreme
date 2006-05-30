@@ -2046,7 +2046,7 @@ BOOL ColourPicker::SetTintFromString(IndexedColour *Dest, StringBase *NewValue)
 	// Turn all percent signs in the number to spaces so the StringToDouble doesn't yell and scream
 	String_8 TempString;
 	NewValue->Left(&TempString, 7);
-	TempString.SwapChar((TCHAR) '%', (TCHAR) ' ');
+	TempString.SwapChar(_T('%'), _T(' '));
 
 	// Convert the string to a double using the global conversion routine
 	// Note that we ignore failure, because the number is validated below, and it
@@ -2205,7 +2205,7 @@ BOOL ColourPicker::SetShadeFromStrings(IndexedColour *Dest, StringBase *NewValue
 	// Turn all percent signs in the number to spaces so the StringToDouble doesn't yell and scream
 	String_8 TempString;
 	NewValueX->Left(&TempString, 7);
-	TempString.SwapChar((TCHAR) '%', (TCHAR) ' ');
+	TempString.SwapChar(_T('%'),_T(' '));
 
 	// Convert the string to a double using the global conversion routine
 	// Note that we ignore failure, because the number is validated below, and it
@@ -2237,7 +2237,7 @@ BOOL ColourPicker::SetShadeFromStrings(IndexedColour *Dest, StringBase *NewValue
 
 	// Turn all percent signs in the number to spaces so the StringToDouble doesn't yell and scream
 	NewValueY->Left(&TempString, 7);
-	TempString.SwapChar((TCHAR) '%', (TCHAR) ' ');
+	TempString.SwapChar(_T('%'),_T(' '));
 
 	// Convert the string to a double using the global conversion routine
 	// Note that we ignore failure, because the number is validated below, and it

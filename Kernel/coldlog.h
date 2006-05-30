@@ -551,6 +551,11 @@ protected:
 	Cursor *CurrentCursor;				// Current cursor object (or NULL)
 
 	BOOL	m_bDoTimerProcessing;     // flag indicates whether or not to do timer processing
+
+	void HideGadgetList(CGadgetID * Gadgets, BOOL Hide=TRUE);
+	void HideOrShowColourPicker();
+	void CheckDialogSize();
+
 private:
 	void LoseKeyboardFocus(void);
 		// Lobs the keyboard focus back into the document

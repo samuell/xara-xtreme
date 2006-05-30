@@ -431,11 +431,14 @@ static CGadgetID OtherGadgetIDs[] =	// NULL terminated list of all non tint/link
 	_R(IDC_EDIT_COMPONENT2),
 	_R(IDC_EDIT_COMPONENT3),
 	_R(IDC_EDIT_COMPONENT4),
+	_R(IDC_EDIT_WEBHEX),
 	_R(IDC_NAME_COMPONENT1),
 	_R(IDC_NAME_COMPONENT2),
 	_R(IDC_NAME_COMPONENT3),
 	_R(IDC_NAME_COMPONENT4),
+	_R(IDC_NAME_WEBHEX),
 	_R(IDC_EDIT_COLMODEL),
+	_R(IDC_EDIT_3D),
 	_R(IDC_EDIT_COLTYPE),
 	_R(IDC_EDIT_MAKESTYLE),
 #ifndef WEBSTER
@@ -453,7 +456,6 @@ static CGadgetID OtherGadgetIDs[] =	// NULL terminated list of all non tint/link
 	_R(IDC_COLOURPICKER),
 	0
 };
-
 
 typedef struct
 {
@@ -978,7 +980,8 @@ void ColourEditDlg::SetExtent(void)
 		#ifdef WEBSTER
 		ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_PICKER));
 		#endif // WEBSTER
-
+		HideGadget(_R(IDC_EDIT_ADVANCEDPANEL), TRUE);
+		CheckDialogSize();
 		return;
 	}
 
@@ -1003,16 +1006,18 @@ void ColourEditDlg::SetExtent(void)
 		// WEBSTER - markn 11/12/96
 		// Always unfolded.
 		// Changed folded to show ed fields
-		#ifndef WEBSTER
-				ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_PICKER));
+#ifndef WEBSTER
+		ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_PICKER));
 		//		SetStringGadgetValue(_R(IDC_EDIT_ADVANCED), _R(IDS_EDIT_MORE));
-				SetBoolGadgetSelected(_R(IDC_EDIT_ADVANCED), FALSE);
-		#else
-				ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_COLTYPE));
-		#endif // WEBSTER
-	}
+		SetBoolGadgetSelected(_R(IDC_EDIT_ADVANCED), FALSE);
+#else
+		ColourPicker::SetWindowExtent(WindowID, _R(IDC_EDIT_PICKER), _R(IDC_EDIT_COLTYPE));
+#endif // WEBSTER
+		HideGadget(_R(IDC_EDIT_ADVANCEDPANEL), TRUE);
+	}			
 	else
 	{
+		HideGadget(_R(IDC_EDIT_ADVANCEDPANEL), FALSE);
 		CGadgetID Gadget = _R(IDC_EDIT_COLTYPE);
 
 		if (EditingColour != NULL)	// If we have an editing colour, set tint/link controls
@@ -1022,8 +1027,12 @@ void ColourEditDlg::SetExtent(void)
 				case COLOURTYPE_TINT:
 					{
 						Gadget = _R(IDC_EDIT_TINT);
-						ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, 0);
-						ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, _R(IDC_EDIT_PARENTCOL));
+						HideGadgetList(LinkGadgetIDs, TRUE);
+						HideGadgetList(TintGadgetIDs, FALSE);
+						HideGadget (_R(IDC_EDIT_PARENTNAME), FALSE);
+						HideGadget (_R(IDC_EDIT_PARENTCOL), FALSE);
+						// ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, 0);
+						// ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, _R(IDC_EDIT_PARENTCOL));
 
 						// And if it's not a shade, hide the extra writable field
 						HideGadget(_R(IDC_EDIT_SHADE), !EditingColour->TintIsShade());
@@ -1033,11 +1042,19 @@ void ColourEditDlg::SetExtent(void)
 
 				case COLOURTYPE_LINKED:
 					Gadget = _R(IDC_EDIT_INHERIT4);
-					ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, 0);
-					ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, _R(IDC_EDIT_PARENTCOL));
+					HideGadgetList(LinkGadgetIDs, FALSE);
+					HideGadgetList(TintGadgetIDs, TRUE);
+					HideGadget (_R(IDC_EDIT_PARENTNAME), FALSE);
+					HideGadget (_R(IDC_EDIT_PARENTCOL), FALSE);
+					// ColourPicker::SetGadgetPositions(WindowID, TintGadgetIDs, 0);
+					// ColourPicker::SetGadgetPositions(WindowID, LinkGadgetIDs, _R(IDC_EDIT_PARENTCOL));
 					break;
 
 				default:
+					HideGadget (_R(IDC_EDIT_PARENTNAME), TRUE);
+					HideGadget (_R(IDC_EDIT_PARENTCOL), TRUE);
+					HideGadgetList(LinkGadgetIDs, TRUE);
+					HideGadgetList(TintGadgetIDs, TRUE);
 					break;
 			}
 		}
@@ -1048,8 +1065,97 @@ void ColourEditDlg::SetExtent(void)
 //		SetStringGadgetValue(_R(IDC_EDIT_ADVANCED), _R(IDS_EDIT_LESS));
 #endif
 	}
+
+	CheckDialogSize();
+
 }
 
+
+/********************************************************************************************
+
+>	void ColourEditDlg::HideGadgetList(CGadgetID * Gadgets, BOOL Hide=TRUE)
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+
+	Inputs:		Gadgets - NULL terminated list of gadgets
+				Hide - TRUE to hide else FALSE to show
+
+	Purpose:	Hides / shows the gadgets on the list
+
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourEditDlg::HideGadgetList(CGadgetID * Gadgets, BOOL Hide /*=TRUE*/)
+{
+	CGadgetID Gadget;
+	while ((Gadget=*(Gadgets++))) // assignment
+	{
+		HideGadget(Gadget, Hide);	
+	}
+}
+
+/********************************************************************************************
+
+>	void ColourEditDlg::HideOrShowColourPicker()
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+
+	Inputs:		-
+
+	Purpose:	Synchronize state of colour picker gadget
+
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourEditDlg::HideOrShowColourPicker()
+{
+	if (needColPickHidden != colPickHidden)
+	{
+		// this used to use Hide() but that was boring
+		EnableGadget(_R(IDC_COLOURPICKER), !needColPickHidden);
+		colPickHidden=needColPickHidden;
+		
+		//CheckDialogSize();
+	}
+}
+
+/********************************************************************************************
+
+>	void ColourEditDlg::CheckDialogSize()
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Ensure the dialog is a sensible size
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourEditDlg::CheckDialogSize()
+{
+	CWindowID pPanel=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_ADVANCEDPANEL));
+	if (pPanel)
+	{
+		pPanel->Layout();
+		pPanel->Fit();
+		pPanel->GetSizer()->SetSizeHints(pPanel);
+
+		static INT32 flag=0;
+		if (!flag)
+		{
+			flag++;
+			::wxYield();
+			flag--;
+		}
+	}
+	WindowID->Layout();
+	WindowID->Fit();
+	WindowID->GetSizer()->SetSizeHints(WindowID);
+}
 
 
 /********************************************************************************************
@@ -1382,6 +1488,8 @@ void ColourEditDlg::SetControls(void)
 	State.DisplayModel	= DisplayModel;
 	State.ResultColour	= ResultColour;
 	State.Initialised	= TRUE;
+
+	CheckDialogSize();
 }
 
 
@@ -1475,6 +1583,7 @@ void ColourEditDlg::SetComponentInfo(UINT32 ComponentID, UINT32 Gadget,
 			ColourContextList::GetList()->RemoveContext(&cc);			// Have finished with it
 
 	}
+	CheckDialogSize();
 }
 
 
@@ -1548,6 +1657,7 @@ void ColourEditDlg::SetAllHexComponentsInfo(UINT32 ComponentID, UINT32 NameGadge
 			}
 		}
 	}
+	CheckDialogSize();
 }
 
 
@@ -1610,10 +1720,20 @@ void ColourEditDlg::SetColour(BOOL SetComponents)
 
 		if (CurrentTypingGadget!=_R(IDC_EDIT_WEBHEX))
 		{
-			// The following assumes _R(IDC_EDIT_COMPONENT1)..._R(IDC_EDIT_COMPONENT4) is sequential
-			const INT32 nIndex = CurrentTypingGadget - _R(IDC_EDIT_COMPONENT1) + 1;
-			
+			// Work out the index number
+			INT32 nIndex=0;
+			if (CurrentTypingGadget  == _R(IDC_EDIT_COMPONENT1))
+				nIndex=1;
+			else if (CurrentTypingGadget  == _R(IDC_EDIT_COMPONENT2))
+				nIndex=2;
+			else if (CurrentTypingGadget  == _R(IDC_EDIT_COMPONENT3))
+				nIndex=3;
+			else if (CurrentTypingGadget  == _R(IDC_EDIT_COMPONENT4))
+				nIndex=4;
+
 			ERROR3IF(nIndex < 1 || nIndex > 4, "ColourEditDlg::SetColour - nIndex invalid");
+			if (!nIndex)
+				nIndex=1;
 
 			if (cc->GetComponentName(nIndex, &NewValue))
 			{
@@ -3045,107 +3165,6 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		case DIM_REDRAW:				// Kernel-redraw of colour patch or picker controls
 		{
 			RenderControl(Msg->GadgetID, (ReDrawInfoType*) Msg->DlgMsgParam);
-			
-			if (Use3DDisplay == FALSE)
-			{
-PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
-#ifndef EXCLUDE_FROM_XARALX
-				if (resetColPickPos == TRUE)
-				{
-					CWindowID hwndColPick = DialogManager::GetGadget(GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
-					ASSERT (hwndColPick);
-
-					MoveWindow (hwndColPick, colPickOrigRect.left, colPickOrigRect.top,
-								colPickOrigRect.right - colPickOrigRect.left,
-								colPickOrigRect.bottom - colPickOrigRect.top, FALSE);
-
-					resetColPickPos = FALSE;
-				}
-#endif
-			}
-			else
-			{
-				// this is naughty winoil code, BUT we need to dynamically relocate camelots
-				// custom colour picker control - and we can only do this with MoveWindow ()
-
-				/*	COLOURMODEL_CIET,			//	1 CIE coordinate (X,Y,Z), Transparent
-					COLOURMODEL_RGBT,			//	2 Red, Green, Blue, Transparent
-					COLOURMODEL_CMYK,			//	3 Cyan, Magenta, Yellow, Key
-					COLOURMODEL_HSVT,			//	4 Hue, Saturation, Value, Transparent
-					COLOURMODEL_GREYT,			//	5 Greyscale intensity, Transparent
-					COLOURMODEL_WEBRGBT */		//	6 Red, Green, Blue, Transparent (rrggbb)
-				
-				if ((DisplayModel == COLOURMODEL_RGBT) || (DisplayModel == COLOURMODEL_WEBRGBT) || (DisplayModel == COLOURMODEL_CMYK))
-				{
-PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
-#ifndef EXCLUDE_FROM_XARALX
-					if (resetColPickPos == FALSE)
-					{
-						CWindowID hwndColPick = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
-						ASSERT (hwndColPick);
-						CWindowID hwndEditPicker = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_EDIT_PICKER));
-						ASSERT (hwndEditPicker);
-
-						RECT colPickRect;
-						GetClientRect (hwndColPick, &colPickRect);
-						MapWindowPoints (hwndColPick, GetReadWriteWindowID (), (LPPOINT) &colPickRect, 2);
-
-						colPickOrigRect = colPickRect;
-
-						RECT editPickerRect;
-						GetClientRect (hwndEditPicker, &editPickerRect);
-						MapWindowPoints (hwndEditPicker, GetReadWriteWindowID (), (LPPOINT) &editPickerRect, 2);
-
-						MoveWindow (hwndColPick, colPickRect.left, editPickerRect.bottom - (colPickRect.bottom - colPickRect.top) - 2, colPickRect.right - colPickRect.left,
-									colPickRect.bottom - colPickRect.top, FALSE);
-
-						resetColPickPos = TRUE;
-					}
-#endif
-				}
-				else if ((DisplayModel == COLOURMODEL_HSVT) || (DisplayModel == COLOURMODEL_GREYT))
-				{
-PORTNOTE("other", "Removed bizarre colour picker reposition during redraw");
-#ifndef EXCLUDE_FROM_XARALX
-					if (resetColPickPos == TRUE)
-					{
-						CWindowID hwndColPick = DialogManager::GetGadget (GetReadWriteWindowID (), _R(IDC_COLOURPICKER));
-						ASSERT (hwndColPick);
-
-						MoveWindow (hwndColPick, colPickOrigRect.left, colPickOrigRect.top,
-									colPickOrigRect.right - colPickOrigRect.left,
-									colPickOrigRect.bottom - colPickOrigRect.top, FALSE);
-
-						resetColPickPos = FALSE;
-					}
-#endif
-				}
-			}
-
-			if (needColPickHidden == TRUE)
-			{
-				HideGadget(_R(IDC_COLOURPICKER), TRUE);
-				
-				if (colPickHidden == FALSE)
-				{
-					colPickHidden = TRUE;
-				}
-			}
-			else
-			{
-				//if (DragStartArea == CEDRAG_NONE /*&& EditingColour != NULL && !DragUpdatedOnIdle*/)
-				//{
-					HideGadget(_R(IDC_COLOURPICKER), FALSE);
-				
-					if (colPickHidden == TRUE)
-					{
-						colPickHidden = FALSE;
-					}
-				//}
-			}
-
-			InvalidateGadget(_R(IDC_COLOURPICKER));
-			PaintGadgetNow(_R(IDC_COLOURPICKER));
 		}
 		break;
 
@@ -3353,7 +3372,8 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 				if (( Msg->GadgetID == _R(IDC_EDIT_COMPONENT1)) ||
 					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT2)) ||
 					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT3)) ||
-					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT4)))
+					( Msg->GadgetID == _R(IDC_EDIT_COMPONENT4)) ||
+					( Msg->GadgetID == _R(IDC_EDIT_WEBHEX)))
 				{
 					// While setting the colour, make sure we don't try to update the
 					// field that the user is currently typing into!
@@ -3615,6 +3635,8 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 				{
 					needColPickHidden = FALSE;
 				}
+
+				HideOrShowColourPicker();
 
 				BOOL Changed = FALSE;
 
@@ -4287,6 +4309,7 @@ static void CalculateHSVPickerRects(DocRect *VirtualSize, INT32 PixelSize,
 
 	*ValSatSquare = *VirtualSize;
 	ValSatSquare->lo.y = HueRect->hi.y + 4000;	// Above the hue slider, with a gap
+	ValSatSquare->hi.x -= PATCHSIZE; // center within the area left by the patches
 
 	INT32 SquareSize = ValSatSquare->Height();
 	if (SquareSize > ValSatSquare->Width())
@@ -6595,7 +6618,7 @@ void ColourEditDlg::RenderPickerShade(RenderRegion *pRender, DocRect *VirtualSiz
 
 ********************************************************************************************/
 
-	void ColourEditDlg::RenderControl(UINT32 GadgetToRender, ReDrawInfoType* RedrawInfo)
+void ColourEditDlg::RenderControl(UINT32 GadgetToRender, ReDrawInfoType* RedrawInfo)
 {
 	// Use a virtual coord space of (0,0) to (dx, dy)
 	DocRect VirtualSize(0, 0, RedrawInfo->dx, RedrawInfo->dy);
@@ -11735,3 +11758,4 @@ PORTNOTE("other", "Disabled CMS usage")
 	*ppContext = ColourContext::GetGlobalDefault(ColModel);
 	return(FALSE);
 }
+
