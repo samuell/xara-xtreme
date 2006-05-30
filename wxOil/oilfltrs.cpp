@@ -476,8 +476,16 @@ TCHAR *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 			if (!NoneFound)
 				// Don't add a semi-colon if this is the first one we find.
 				Extensions += _T(";");
+			
+			String_16 Ext( pExt );
 			Extensions += _T("*.");
-			Extensions += pExt;
+			Ext.toLower();
+			Extensions += Ext;
+			
+			Extensions += _T(";*.");
+			Ext.toUpper();
+			Extensions += Ext;
+
 			NoneFound = FALSE;
 		}
 
