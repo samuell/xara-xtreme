@@ -1,4 +1,4 @@
-// $Id$
+// $Id: dragcol.h 751 2006-03-31 15:43:49Z alex $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
@@ -95,78 +95,79 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
+// DragCol.h - Colour DragInformation base class
 
-// draginfo.h - Definitions for global dragging system DragInformation class
 
-#ifndef INC_DRAGINFO
-#define INC_DRAGINFO
+#ifndef INC_DRAGPICK
+#define INC_DRAGPICK
 
-class Cursor;
-class DragTarget;
-class ViewDragTarget;
-class KernelBitmap;
+#include "doccolor.h"
+#include "draginfo.h"
+#include "dragtrgt.h"
 
-/*********************************************************************************************
+class IndexedColour;
 
->	class DragInformation : public CCObject
 
-	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	2/1/95
-	Purpose:	Objects derived from this abstract class are used to describe everything
-				useful to know about the current global drag. They allow drag targets to
-				decide what to do with a recieved drag.
 
-	SeeAlso:	DragManagerOp::StartDrag; DragTarget
+/********************************************************************************************
 
-	Documentation:	Docs\Specs\DragMan.doc
+>	class ColourPickerDragInformation : public DragInformation
 
-*********************************************************************************************/
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com> (upgraded by Jason)
+	Created:	05/05/94 (8/8/96)
 
-class CCAPI DragInformation : public CCObject
-{
-	friend class DragManagerOp;
-	friend class CaptureHandler;
+	Purpose:	Contains all information about a colour being dragged.
 
-	CC_DECLARE_DYNCREATE(DragInformation)
+********************************************************************************************/
 
-	
+class ColourPickerDragInformation : public DragInformation
+{ 	
+CC_DECLARE_DYNCREATE(ColourPickerDragInformation)
+
 protected:
-	DragInformation(BOOL IsAdjustDrag = FALSE);
-
+	void InitObject(void);
+		// Shared construction code
 
 public:
-	virtual void OnClick(INT32 flags, CNativePoint Point);	
+	ColourPickerDragInformation();
+		// Default constructor - DO NOT USE
 
-	virtual UINT32 GetCursorID();
-	virtual BOOL GetStatusLineText(String_256 * TheText);
-	virtual BOOL OnDrawSolidDrag(CNativePoint Origin, CNativeDC * TheDC);
+	static BOOL Init();
+		// static class initialisation
 
+
+public:		// Specialised interface
+
+public:		// Overridden interfaces
 	virtual UINT32 GetCursorID(DragTarget* pDragTarget);
-	virtual BOOL GetStatusLineText(String_256 * TheText, DragTarget* pDragTarget);
-	virtual BOOL OnDrawSolidDrag(CNativePoint Origin, CNativeDC * TheDC, DragTarget* pDragTarget);
+	virtual BOOL GetStatusLineText(String_256 *TheText, DragTarget* pDragTarget);
 
-	BOOL IsAnAdjustDrag()						{ return IsAdjustDrag; }
+	virtual UINT32 GetCursorID(void);
+ 	virtual BOOL GetStatusLineText(String_256 *TheText);
 
-public:		// Solid-dragging support
-	virtual INT32 GetDragTransparency()			{ return 0; }		// Not transparent
-	virtual KernelBitmap *GetSolidDragMask()	{ return NULL; }	// Not masked
-	virtual BOOL HasTransparentMask()			{ return FALSE; }
-	virtual wxBitmap * GetTransparentMask()		{ return NULL; }
+	virtual BOOL OnDrawSolidDrag(wxPoint Origin, wxDC *TheDC);
+	
+	virtual INT32 GetDragTransparency();
 
-public:		// Special dropping functions called for drop-on-page (called by ViewDragTarget)
-	virtual BOOL CanDropOnPage()				{ return FALSE; }
-	virtual BOOL OnPageDrop(ViewDragTarget*)	{ return FALSE; }
-	virtual BOOL OnMouseMove(wxPoint p)			{ return FALSE; }
-	virtual BOOL OnButtonUp(wxPoint p)			{ return FALSE; }
+	virtual BOOL OnMouseMove(wxPoint p);
 
-protected:	// Member variables
-	static Cursor	   *MyCursor;
+protected:
+	static INT32		DragTransparency;
 
-	BOOL				DoesSolidDrag;
-	CNativePoint		SolidDragOffset;
-	CNativeSize			SolidDragSize;
+	DocColour TheColour;	// Holds the colour definition (or references the document col)
 
-	BOOL				IsAdjustDrag;
+	enum Status
+	{
+		NO_COLOUR,
+		SCREEN_COLOUR,
+		DOC_COLOUR,
+		COLOURBAR_COLOUR
+	};
+
+	Status m_Status;
+
+	wxScreenDC ScreenDC;
+
 };
 
 #endif

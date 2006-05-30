@@ -32,7 +32,7 @@ libwxOil_a_SOURCES = \
 	outptdib.cpp outptpng.cpp outptgif.cpp gpalopt.cpp bmpfiltr.cpp giffiltr.cpp \
 	fontbase.cpp ftfonts.cpp textfuns.cpp dragbmp.cpp xpoilflt.cpp xmlutils.cpp \
 	camprocess.cpp dropdown.cpp coldrop.cpp fontdrop.cpp bfxalu.cpp bfxpixop.cpp \
-	binreloc.c exceptio.cpp colpick.cpp \
+	binreloc.c exceptio.cpp colpick.cpp dragpick.cpp \
 	resources.cpp
 
 # Keep resources.cpp on a separate line as it is odd
@@ -40,6 +40,9 @@ libwxOil_a_SOURCES = \
 AM_CXXFLAGS = $(XARAFLAGS)
 
 XARALANGUAGE = @XARALANGUAGE@
-WXRC = @WXRC@
+
+# Ensure wxrc is set to something. If wxconfig can't find it, it becomes an empty string which will upset build-resources.pl
+WXRC := ${if @WXRC@,@WXRC@,echo}
 
 RESOURCEDUMMY := ${if ${strip ${shell $(TOPDIR)/Scripts/build-resources.pl -i -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) --wxrc $(WXRC) } }, ,${error "Resource build failed"}}
+

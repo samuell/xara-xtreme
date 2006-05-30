@@ -84,6 +84,13 @@ GetOptions( "topdir|t=s" => \$topdir,
 	    "xgettext|g=s" => \$xgettext,
 	    "help!" => \$help ) || usage ("Bad option");
 
+# workaround for Gentoo wxWidgets 2.6.3.2 missing wxrc
+if ($wxrc eq "echo")
+{
+    print STRDERR "Warning: wxrc seems to be missing. Not building internationalized resources\n";
+    $international=0;
+}
+
 usage() if ($help);
 
 # check the output directory exists

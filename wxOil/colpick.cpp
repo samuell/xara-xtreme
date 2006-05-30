@@ -2825,5 +2825,36 @@ PORTNOTE("other", "Disabled ColourPicker::SetFixedComponentGadgets")
 }
 
 
+/********************************************************************************************
 
+>	void ColourPicker::RelayoutDialog(CWindowID WindowID)
 
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Ensure the dialog is a sensible size
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourPicker::RelayoutDialog(CWindowID WindowID)
+{
+	CWindowID pPanel=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_ADVANCEDPANEL));
+	if (pPanel)
+	{
+		pPanel->Layout();
+		pPanel->Fit();
+		pPanel->GetSizer()->SetSizeHints(pPanel);
+
+		static INT32 flag=0;
+		if (!flag)
+		{
+			flag++;
+			::wxYield();
+			flag--;
+		}
+	}
+	WindowID->Layout();
+	WindowID->Fit();
+	WindowID->GetSizer()->SetSizeHints(WindowID);
+}

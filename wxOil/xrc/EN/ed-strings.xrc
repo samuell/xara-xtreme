@@ -31,13 +31,13 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DRAGGINGCOLOURPICKERTOOLDOCRC">
-					<label>Release mouse button to capture documents 24-bit screen colour</label>
+					<label>Release mouse button to capture document's 24-bit screen colour</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_DRAGGINGCOLOURPICKERTOOLDOCRS">
-					<label>Release mouse button to capture documents screen colour</label>
+					<label>Release mouse button to capture document's screen colour</label>
 				</object>
 			</object>
 			<object class="sizeritem">

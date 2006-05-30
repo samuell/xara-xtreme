@@ -44,7 +44,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>1</border>
                         <object class="wxCamArtControl" name="IDC_COLOURPICKER">
-                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                            <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_NOAUTOREPEAT</camartstyle>
                             <label>-</label>
                         </object>
                     </object>

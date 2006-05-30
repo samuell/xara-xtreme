@@ -131,6 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docview.h"
 #include "dragcol.h"
 #include "dragmgr.h"
+#include "dragpick.h"
 #include "ensure.h"  
 #include "errors.h" 
 #include "helpuser.h"		// For HelpUser()
@@ -1143,24 +1144,7 @@ void ColourEditDlg::CheckDialogSize()
 
 	m_NeedsResize=FALSE;
 
-	CWindowID pPanel=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_ADVANCEDPANEL));
-	if (pPanel)
-	{
-		pPanel->Layout();
-		pPanel->Fit();
-		pPanel->GetSizer()->SetSizeHints(pPanel);
-
-		static INT32 flag=0;
-		if (!flag)
-		{
-			flag++;
-			::wxYield();
-			flag--;
-		}
-	}
-	WindowID->Layout();
-	WindowID->Fit();
-	WindowID->GetSizer()->SetSizeHints(WindowID);
+	ColourPicker::RelayoutDialog(WindowID);
 }
 
 
@@ -3289,12 +3273,24 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 #ifndef EXCLUDE_FROM_XARALX
 			ControlHelper::BubbleHelpDisable();
 #endif
+			if (Msg->GadgetID == _R(IDC_COLOURPICKER))
+			{
+				ColourPickerDragInformation * DragCol = new ColourPickerDragInformation();
+				DragManagerOp::StartDrag(DragCol, GetReadWriteWindowID());
+				break;
+			}
 
 			// Drag methods all cope with shaded condition (EditingColour == NULL)
 			if (Msg->DlgMsgParam)
 			{
 				if (Msg->GadgetID == _R(IDC_EDIT_PICKER))
 				{
+					// This little wheeze is enough to remove hover
+					EnableGadget(_R(IDC_EDIT_PICKER), FALSE);
+					EnableGadget(_R(IDC_EDIT_PICKER), TRUE);
+					SetBoolGadgetSelected(_R(IDC_EDIT_PICKER), FALSE);
+					InvalidateGadget(_R(IDC_EDIT_PICKER));
+
 					StartDrag((ReDrawInfoType*) Msg->DlgMsgParam);
 					NoFillButtonDown = FALSE;
 				}
@@ -3335,6 +3331,7 @@ PORTNOTE("other", "Disabled BubbleHelp stuff")
 */
 #endif
 			}
+			
 			break;
 
 		case DIM_MOUSE_DRAG:

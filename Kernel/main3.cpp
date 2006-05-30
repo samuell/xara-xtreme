@@ -118,6 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "princomp.h"
 #include "nodebmp.h"
 #include "dragcol.h"
+#include "dragpick.h"
 #include "dragbmp.h"
 #include "convert.h"
 #include "diagnost.h"
@@ -235,6 +236,7 @@ PORTNOTE("other","Removed a large amount of initialization")
 												// and thousands seperator characters from
 												// operating system .
 			ColourDragInformation::Init() &&
+			ColourPickerDragInformation::Init() &&
 			BitmapDragInformation::Init() &&
 PORTNOTE("other","Removed more initialization")
 #ifndef EXCLUDE_FROM_XARALX

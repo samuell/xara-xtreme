@@ -255,9 +255,20 @@ BOOL CaptureHandler::StartCapture()
 ********************************************************************************************/
 void CaptureHandler::OnLButtonUp(wxMouseEvent& event)
 {
+	if (m_pWindow)
+	{
+		wxPoint point = event.GetPosition();
+		point = m_pWindow->ClientToScreen(point);
+
+		if (DragManagerOp::CurrentManager && DragManagerOp::CurrentManager->CurrentDragInfo)
+		{
+			DragManagerOp::CurrentManager->CurrentDragInfo->OnMouseMove(point);
+			DragManagerOp::CurrentManager->CurrentDragInfo->OnButtonUp(point);
+		}
+	}
+
 	TRACEUSER("Gerry", _T("CaptureHandler::OnLButtonUp"));
 	DragManagerOp::EndDrag(1);// 1 == left click for now
-
 	// Don't call Skip as the window wont be expecting the button up
 //	event.Skip();
 }
@@ -277,6 +288,18 @@ void CaptureHandler::OnLButtonUp(wxMouseEvent& event)
 ********************************************************************************************/
 void CaptureHandler::OnRButtonUp(wxMouseEvent& event)
 {
+	if (m_pWindow)
+	{
+		wxPoint point = event.GetPosition();
+		point = m_pWindow->ClientToScreen(point);
+
+		if (DragManagerOp::CurrentManager && DragManagerOp::CurrentManager->CurrentDragInfo)
+		{
+			DragManagerOp::CurrentManager->CurrentDragInfo->OnMouseMove(point);
+			DragManagerOp::CurrentManager->CurrentDragInfo->OnButtonUp(point);
+		}
+	}
+
 	TRACEUSER("Gerry", _T("CaptureHandler::OnRButtonUp"));
 	DragManagerOp::EndDrag(-1);//	-1 == Right click for now
 
@@ -628,6 +651,10 @@ void CaptureHandler::OnMouseMove(wxMouseEvent& event)
 	{
 		wxPoint point = event.GetPosition();
 		point = m_pWindow->ClientToScreen(point);
+
+		if (DragManagerOp::CurrentManager && DragManagerOp::CurrentManager->CurrentDragInfo)
+			DragManagerOp::CurrentManager->CurrentDragInfo->OnMouseMove(point);
+
 		DrawSolidDrag(point);
 	}
 }
@@ -1111,10 +1138,14 @@ void DragManagerOp::StartDrag(DragInformation *Descriptor, CWindowID DragWindow)
 			// App->Document->View... 
 			GetApplication()->CreateDragTargets(Descriptor);
 
-				// Send an Initialise event to all registered targets
+			// Send an Initialise event to all registered targets
+
+			// Forget this - drags with no targets are perfectly legal - see colour picker
+#if 0
 #ifdef _DEBUG
 			if (pNewManager->Targets.IsEmpty())
 				TRACE( _T("DragManagerOp::StartDrag - No drag targets specified for this drag!"));
+#endif
 #endif
 			pNewManager->ProcessEvent(DRAGEVENT_INITIALISE);		
 

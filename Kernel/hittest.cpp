@@ -118,7 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshad.h"
 #include "nodecont.h"
 //#include "ndcchbmp.h"
-//#include "grndclik.h"
+#include "grndclik.h"
 #include "nodeclip.h"	// for NodeClipView
 #include "ndclpcnt.h"	// for NodeClipViewController
 #include "brshattr.h"
@@ -633,8 +633,6 @@ NodeRenderableInk* NodeRenderableInk::FindSimpleAtPointForColourPicker(Spread* p
 																	   Node* pHighNode,
 																	   Node** ppInterruptNode)
 {
-	PORTNOTETRACE("other","NodeRenderableInk::FindSimpleAtPointForColourPicker - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Find the currently active DocView.
 	DocView* pDocView = DocView::GetSelected();
 	ENSURE(pDocView != 0, "Null current DocView in NodeRenderableInk::FindFirstAtPoint");
@@ -698,9 +696,6 @@ NodeRenderableInk* NodeRenderableInk::FindSimpleAtPointForColourPicker(Spread* p
 
 	pDocView->SetForceDefaultColourContexts(bOldForce);
 	return pHitNode;
-#else
-	return NULL;
-#endif
 }
 
 

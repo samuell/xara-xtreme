@@ -247,6 +247,9 @@ protected:		// Interfaces strictly for use by the kernel ColourEditDlg/ColourLin
 													ColourModel ModelToDisplay,
 													INT32 TextWidth[],
 													INT32 EditWidth[]);
+
+	static void RelayoutDialog(CWindowID WindowID);
+
 };
 
 
