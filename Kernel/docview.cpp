@@ -4208,7 +4208,7 @@ Spread *DocView::FindEnclosingSpread(OilCoord Pos)
 	// Optimisation for simple documents:
 	// If only one chapter containing only one spread then that must be the
 	// enclosing spread!
-	if (pSpread && pSpread->FindNext()==NULL && pChapter->FindNext()==NULL)
+	if (pSpread && (pSpread->FindNext()==NULL || !pSpread->FindNext()->IsSpread()) && pChapter->FindNext()==NULL)
 		return pSpread;
 
 	// If the cursor was above the top of the document, then return the first spread
