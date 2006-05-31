@@ -693,8 +693,6 @@ Technical notes:
 
 void View::RenderPaper(RenderRegion* pRRegion, Spread* pSpread)
 {
-//#pragma message( __LOCMSG__ "View::RenderPaper - do nothing" )
-//	TRACE( _T("Warning - View::RenderPaper called\n") );
 	// We always want paper to render to the same display quality level.
 	pRRegion->SetDefaultQuality();
 
@@ -703,6 +701,7 @@ void View::RenderPaper(RenderRegion* pRRegion, Spread* pSpread)
 	// First render all the paper nodes in the tree through the given RenderRegion...
 	while (pn != NULL)
 	{
+//TRACEUSER("Phil", _T("RenderPaper for %x - %x\n"), pSpread, pn);
 		pn->Render(pRRegion);
 		pn = pn->FindNextForClippedPaperRender();
 	}

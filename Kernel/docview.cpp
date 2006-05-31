@@ -1616,9 +1616,6 @@ WorkRect DocView::GetViewRect()
 
 DocRect DocView::GetDocViewRect(Spread* pSpread)
 {
-//#pragma message( __LOCMSG__ "DocView::GetDocViewRect - do nothing" )
-//	TRACE( _T("Warning - DocView::GetDocViewRect called\n") );
-//	return DocRect();
 	ERROR3IF(pViewWindow == NULL, "DocView::GetDocViewRect called when we have no view");
 
 	INT32 ClientWidth = 0;
@@ -1745,8 +1742,6 @@ void DocView::RenderView(RenderRegion* pRRegion, Matrix& ViewTransform,
 						 BOOL fDeleteRegionAfter,
 						 BOOL bForceImmediate)
 {
-//#pragma message( __LOCMSG__ "DocView::RenderView - do nothing" )
-//	TRACE( _T("Warning - DocView::RenderView called\n") );
 	Node* pNode = NULL;
 	BOOL CleanUp = TRUE;							// TRUE if cleanup at end, FALSE if dont
 	BOOL IsMoreBands = FALSE;
@@ -1941,8 +1936,6 @@ void DocView::ContinueRenderView(RenderRegion* pRRegion, Spread* pSpread,
 								 BOOL fDeleteRegionAfter /* = TRUE */,
 								 BOOL bForceImmediate /*= FALSE*/)
 {
-//#pragma message( __LOCMSG__ "DocView::ContinueRenderView - do nothing" )
-//	TRACE( _T("Warning - DocView::ContinueRenderView called\n") );
 	// Diccon 10/5/2000 my awful flag that prevents rendering of the view from occurring
 	// whilst a brush stroke is in progress
 	if (m_bPreventRenderView == TRUE)
@@ -2021,10 +2014,6 @@ void DocView::ContinueRenderView(RenderRegion* pRRegion, Spread* pSpread,
 
 void DocView::RenderEntireView(RenderRegion* pRRegion, Spread* pSpread)
 {
-//#pragma message( __LOCMSG__ "DocView::RenderEntireView - do nothing" )
-//	TRACE( _T("Warning - DocView::RenderEntireView called\n") );
-//	Node* pNode = NULL;
-	
 	DocRect ClipRect;
 
 	Matrix ViewTransform = ConstructRenderingMatrix(pSpread);
@@ -2520,8 +2509,6 @@ void DocView::SetPrevZoomOffset(const WorkCoord& wcOffset)
 
 void DocView::ForceRedraw(BOOL ForcePaper)
 {
-//#pragma message( __LOCMSG__ "DocView::ForceRedraw - do nothing" )
-//	TRACE( _T("Warning - DocView::ForceRedraw called\n") );
 	// Make sure we use this DocView
 	SetCurrent();
 
@@ -3071,13 +3058,11 @@ void DocView::DragPointerMove(Operation* pDragOp, OilCoord PointerPos, ClickModi
 		return;						     	// If the system is disabled, ignore
 
 	// Find the spread that contains DocPos
-	// SPECIAL NOTE Diccon 26/5/2000 - because we only have one spread at the moment
-	// I don't see why we have to go to all the trouble of FindEnclosingSpread.  By profiling
-	// I reckon we can save about 25% processing time if we use GetSelectedSpread instead.
-	// If we ever move to a multi-spread system this will have to change but for now I reckon 
-	// it will be ok
+	Spread *pSpread = FindEnclosingSpread(PointerPos);
 
-	Spread *pSpread = Document::GetSelectedSpread(); // FindEnclosingSpread(PointerPos);
+// Note GetSelectedSpread is quicker in situations where you know you only have one spread
+//		but it prevents drags on multiple spread views working properly...
+//	Spread *pSpread = Document::GetSelectedSpread();
 
 	if (pSpread == NULL)
 	{
@@ -3132,14 +3117,11 @@ void DocView::DragPointerIdle(Operation* pDragOp, OilCoord PointerPos, ClickModi
 		return;						     	// If the system is disabled, ignore
 
 	// Find the spread that contains DocPos
-	// Find the spread that contains DocPos
-	// SPECIAL NOTE Diccon 26/5/2000 - because we only have one spread at the moment
-	// I don't see why we have to go to all the trouble of FindEnclosingSpread.  By profiling
-	// I reckon we can save about 25% processing time if we use GetSelectedSpread instead.
-	// If we ever move to a multi-spread system this will have to change but for now I reckon 
-	// it will be ok
+	Spread *pSpread = FindEnclosingSpread(PointerPos);
 
-	Spread *pSpread = Document::GetSelectedSpread(); // FindEnclosingSpread(PointerPos);
+// Note GetSelectedSpread is quicker in situations where you know you only have one spread
+//		but it prevents drags on multiple spread views working properly...
+//	Spread *pSpread = Document::GetSelectedSpread();
 
 	if (pSpread == NULL)
 	{
@@ -3861,7 +3843,7 @@ RenderRegion* DocView::GetFirstRenderRegion(DocRect& ClipRect, Spread *pSpread, 
 	Matrix RenderMatrix = ConstructRenderingMatrix(pSpread);
 
 	// Make render region for intersection between spread and cliprect.
-	// (Cliprect is still bodged)
+	// (Cliprect is still d)
 	DocRect SpreadClipRect = pSpread->GetWidePasteboard(this);
 
 	// Convert the coord to spread coords
@@ -4213,7 +4195,6 @@ Spread* DocView::OilToSpreadCoord(OilCoord oilpos, DocCoord* pdocpos)
 Spread *DocView::FindEnclosingSpread(OilCoord Pos)
 {
 	// Find first spread in chapter
-	Spread *pSpread = NULL;
 	Chapter* pChapter = Node::FindFirstChapter(pDoc);
 	if (pChapter==NULL)
 	{
@@ -4221,10 +4202,19 @@ Spread *DocView::FindEnclosingSpread(OilCoord Pos)
 		return NULL;
 	}
 
+	Spread* pSpread = (Spread*)pChapter->FindFirstChild();
+	ERROR3IF((pSpread == NULL) || !pSpread->IsSpread(), "Chapter has no spreads");
+
+	// Optimisation for simple documents:
+	// If only one chapter containing only one spread then that must be the
+	// enclosing spread!
+	if (pSpread && pSpread->FindNext()==NULL && pChapter->FindNext()==NULL)
+		return pSpread;
+
 	// If the cursor was above the top of the document, then return the first spread
 	// if there is one
 	if (Pos.y >= 0)
-		return (Spread*)pChapter->FindFirstChild();
+		return pSpread;
 
 	// Find this position in 64-bit work coords
 	WorkCoord WorkPos = Pos.ToWork( pVState->GetScrollPos() );
@@ -4232,7 +4222,7 @@ Spread *DocView::FindEnclosingSpread(OilCoord Pos)
 	do
 	{
 		pSpread = (Spread *) pChapter->FindFirstChild();
-		ERROR3IF((pSpread == NULL) || !pSpread->IsKindOf(CC_RUNTIME_CLASS(Spread)), 
+		ERROR3IF((pSpread == NULL) || !pSpread->IsSpread(), 
 				"Chapter has no spreads");
 
 		do
@@ -4253,7 +4243,7 @@ Spread *DocView::FindEnclosingSpread(OilCoord Pos)
 
 			// try next spread
 			pSpread = (Spread *) pSpread->FindNext();
-			ERROR3IF((pSpread != NULL) && !(pSpread->IsKindOf(CC_RUNTIME_CLASS(Spread))),
+			ERROR3IF((pSpread != NULL) && !(pSpread->IsSpread()),
 					"Spread is not a Spread!");
 
 		} while (pSpread != NULL);
@@ -5270,6 +5260,7 @@ DocCoord DocView::GetCentreCoord()
 	Document* pDocument=GetDoc();
 
 	//And find the first spread in that document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread=pDocument->FindFirstSpread();
 
 	//Check we got both of those
@@ -5316,6 +5307,7 @@ ImportPosition DocView::GetCentreImportPosition()
 	Document* pDocument=GetDoc();
 
 	//And find the first spread in that document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread=pDocument->FindFirstSpread();
 
 	//Now get the DocCoord in the centre of the view
@@ -5353,6 +5345,7 @@ DocCoord DocView::GetTopLeftCoord()
 	Document* pDocument=GetDoc();
 
 	//And find the first spread in that document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread=pDocument->FindFirstSpread();
 
 	//Check we got both of those
@@ -5397,6 +5390,7 @@ ImportPosition DocView::GetTopLeftImportPosition()
 	Document* pDocument=GetDoc();
 
 	//And find the first spread in that document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread=pDocument->FindFirstSpread();
 
 	//Now get the DocCoord in the top left of the view

@@ -125,6 +125,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodedoc.h"
 #include "backgrnd.h"	// OpBackground
 #include "animparams.h"
+#include "progress.h"
+#include "docview.h"
+#include "optsmsgs.h"
 
 //#include "prevwres.h"	// _R(IDS_TAG_LAYER_FRAMEPROPS)
 //#include "frameops.h" // for OpGrabAllFrames
@@ -174,6 +177,11 @@ Spread::Spread(): NodeRenderablePaper()
 {   
 	UserOrigin				= DocCoord(0, 0);
 	SpreadOrigin			= DocCoord(0, 0);
+   	BleedOffset				= 36000;
+	ShowDropShadow			= TRUE;
+	RalphDontShowPaper		= FALSE;
+	//AnimPropertiesParam	= constructed
+	//SpreadDimScale		= constructed
 }                    
  
 
@@ -452,9 +460,10 @@ void Spread::RenderPasteboard( RenderRegion* pRender )
 
 	// Find out the Clip rect of the render region to help decide which rectangles to try to draw
 	DocRect SpreadPasteboard = GetWidePasteboard(pRender->GetRenderView());
+
 	DocCoordToSpreadCoord(&SpreadPasteboard);
 
-	Page* CurrentPage = FindFirstPageInSpread(); 
+	Page* CurrentPage = FindFirstPageInSpread();
 	
 	// --- Divide the pasteboard up into filled rectangles and render them ---
 	
@@ -470,7 +479,7 @@ void Spread::RenderPasteboard( RenderRegion* pRender )
 #endif
 	// colour the pasteboard white to hide it if we're in ralph DRAWING_VIEW mode
 	// ( this flag is set in Render() )
-	if(RalphDontShowPaper)	
+	if (RalphDontShowPaper)	
 		COLOUR_PASTEBOARD = DocColour(255L, 255L, 255L);
 	
 	COLOUR_PASTEBOARD.SetSeparable(FALSE);		// Don't colour-separate the pasteboard
@@ -893,12 +902,13 @@ void Spread::CopyNodeContents(Spread* NodeCopy)
 							"a node pointed to by a NULL pointer"); 
 	NodeRenderablePaper::CopyNodeContents(NodeCopy); 
 	
-	// Copy those little extras across
 	NodeCopy->BleedOffset = BleedOffset;
-
 	NodeCopy->ShowDropShadow = ShowDropShadow;
-	
+	NodeCopy->SpreadOrigin = SpreadOrigin;
+	NodeCopy->UserOrigin = UserOrigin;
 	NodeCopy->m_AnimPropertiesParam = m_AnimPropertiesParam;
+	NodeCopy->SpreadDimScale = SpreadDimScale;
+	NodeCopy->RalphDontShowPaper = RalphDontShowPaper;
 }
 
   	      
@@ -1725,7 +1735,7 @@ BOOL Spread::GetPageSize(MILLIPOINT *Width, MILLIPOINT *Height, MILLIPOINT *Marg
 		MILLIPOINT Page2Height = PageRect.Height();	
 
 		// lox,loy,hix,hiy
-		if (Page2Rect.lox == PageRect.hix && Page2Rect.loy == PageRect.loy &&
+		if (Page2Rect.lo.x == PageRect.hi.x && Page2Rect.lo.y == PageRect.lo.y &&
 			Page2Width == PageWidth && Page2Height == PageHeight)
 		{
 			if (Dps != NULL)
@@ -3161,7 +3171,7 @@ BOOL Spread::ExpandPasteboardToInclude(DocRect IncludeRect)
 {
 #if NEW_PASTEBOARD
 #error ("This code has been commented out for safety. Please uncomment and try again");
-/*
+
 	Progress Hourglass;		// Ensure an hourglass is running while we're busy
 
 	// Convert the Spread coordinates "IncludeRect" into Document coordinates "IncludeDocRect"
@@ -3233,7 +3243,7 @@ BOOL Spread::ExpandPasteboardToInclude(DocRect IncludeRect)
 	{
 		// Pretend that page size has changed to cause related UI to change (rulers mainly)
 		BROADCAST_TO_ALL(OptionsChangingMsg(pParentDoc,
-							OptionsChangingMsg::OptionsState::NEWPAGESIZE));
+							OptionsChangingMsg::NEWPAGESIZE));
 	}
 
 	// Try to keep the scroll offsets sensible
@@ -3249,7 +3259,7 @@ BOOL Spread::ExpandPasteboardToInclude(DocRect IncludeRect)
 	}
 
 	return(TRUE);			// return - successful
-*/
+
 #else
 	// Pasteboard can never expand. Sniffle, Sob!
 	// We return TRUE if the pasteboard already includes the specified rectangle, and
@@ -3340,8 +3350,8 @@ void Spread::AdjustPasteboards(void)
 			// Construct a new Pasteboard rectangle of the correct size, and move it
 			// to lie just below the previous spread's pasteboard area
 			TempPasteRect = SecondPasteRect;
-			TempPasteRect.Translate(-TempPasteRect.lox, -TempPasteRect.loy);
-			TempPasteRect.Translate(FirstPasteRect.lox, FirstPasteRect.loy - TempPasteRect.Height()); 
+			TempPasteRect.Translate(-TempPasteRect.lo.x, -TempPasteRect.lo.y);
+			TempPasteRect.Translate(FirstPasteRect.lo.x, FirstPasteRect.lo.y - TempPasteRect.Height()); 
 
 			// And force the x extent of this pasteboard to match all others in this chapter
 			TempPasteRect.lo.x = ChapterBounds.lo.x;
@@ -3350,11 +3360,11 @@ void Spread::AdjustPasteboards(void)
 			// Move the spread coordinate origin so that it stays at the same relative offset
 			// from the pasteboard bottom left corner, or else all objects inside the spread
 			// will suddenly shift to a new place on (or off) the pasteboard!
-			DocCoord OriginOffset(pNextSpread->SpreadOrigin.x - pNextSpread->PasteboardRect.lox,
-									pNextSpread->SpreadOrigin.y - pNextSpread->PasteboardRect.loy);
+			DocCoord OriginOffset(pNextSpread->SpreadOrigin.x - pNextSpread->PasteboardRect.lo.x,
+									pNextSpread->SpreadOrigin.y - pNextSpread->PasteboardRect.lo.y);
 
-			pNextSpread->SpreadOrigin.x = TempPasteRect.lox + OriginOffset.x;
-			pNextSpread->SpreadOrigin.y = TempPasteRect.loy + OriginOffset.y;
+			pNextSpread->SpreadOrigin.x = TempPasteRect.lo.x + OriginOffset.x;
+			pNextSpread->SpreadOrigin.y = TempPasteRect.lo.y + OriginOffset.y;
 
 			// Set the new paste rect
 			pNextSpread->ChangePasteboardRect(TempPasteRect);

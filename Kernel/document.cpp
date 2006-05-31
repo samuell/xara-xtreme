@@ -4300,6 +4300,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportOriginInfo(EPSExportDC *pDC)
 {
 	// find the first (and currently) only spread
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = FindFirstSpread();
 	ERROR2IF(pSpread==NULL,FALSE,"Document::ExportOriginInfo() - could not find spread");
 	NodeGrid* pDefaultGrid = pSpread->FindFirstDefaultGridInSpread();
@@ -6129,6 +6130,7 @@ BOOL Document::SetDocNudge (UINT32 newVal)
 INT32 Document::GetNumLayers()
 {
 	//Find the first spread in the document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = FindFirstSpread();
 
 	//Now find the first layer in that spread
@@ -6165,6 +6167,7 @@ INT32 Document::GetNumLayers()
 BOOL Document::IsAnimated()
 {
 	//Find the first spread in the document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = FindFirstSpread();
 
 	//Find the first frame layer in that spread

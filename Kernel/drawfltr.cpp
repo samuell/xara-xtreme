@@ -545,6 +545,7 @@ BOOL AcornDrawFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 	if (Pos == NULL)
 	{
 		// For now, position Draw objects on 1st page of spread 1
+PORTNOTE("spread", "Multi-spread warning!")
 		pSpread = GetFirstSpread(DestDoc);
 		pPage = (Page *) pSpread->FindFirstPageInSpread();
 		ENSURE(pPage->IsKindOf(CC_RUNTIME_CLASS(Page)),

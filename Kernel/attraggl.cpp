@@ -219,6 +219,7 @@ NodeRenderable* DocPseudoEnumerator::FindFirst() const
 {
 	ASSERT(m_pDocument != NULL);
 
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* const pSpread = m_pDocument->FindFirstSpread();
 	ASSERT(pSpread != NULL);
 	

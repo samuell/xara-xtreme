@@ -3092,6 +3092,7 @@ void SelectorTool::HandleTabKey(BOOL fIsShifted)
 	else
 	{
 		Document* pDoc = Document::GetSelected();
+PORTNOTE("spread", "Multi-spread warning!")
 		Spread* pSpread = pDoc->FindFirstSpread();
 		if (pSpread != NULL)
 		{

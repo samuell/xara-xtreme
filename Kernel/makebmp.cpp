@@ -562,6 +562,7 @@ BOOL MakeBitmapFilter::DoCreateBitmap(Operation *pOp, Document *pDoc, KernelBitm
 	pExportBitmap = NULL;
 
 	// Get pointer to the spread to export.
+PORTNOTE("spread", "Multi-spread warning!")
 	pSpread = GetFirstSpread(pDoc);
 
 	// remember the document in the class variable
@@ -802,6 +803,7 @@ BOOL MakeBitmapFilter::InsertBitmapIntoDocument(UndoableOperation *pOp, KernelBi
 	DocRect SelRect = GetApplication()->FindSelection()->GetBoundingRect();
 
 	// For now, position Draw objects on 1st page of spread 1
+PORTNOTE("spread", "Multi-spread warning!")
 	pSpread = GetFirstSpread(DestDoc);
 	Page *pPage = (Page *) pSpread->FindFirstPageInSpread();
 	ERROR3IF(!pPage->IsKindOf(CC_RUNTIME_CLASS(Page)),

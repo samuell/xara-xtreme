@@ -163,6 +163,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opliveeffects.h"
 //#include "xpehost.h"
+#include "spread.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -579,7 +580,7 @@ void DebugDlg::SetGroupList(void)
 #if FALSE
 	ADDGROUP("Script Execution");			// Group 10
 #endif
-	ADDGROUP("Live Effects");				// Group 10
+	ADDGROUP("Phil Debug");					// Group 10
 	ADDGROUP("Gerry Debug");				// Group 11
 	// Add more groups here...
 
@@ -721,6 +722,7 @@ void DebugDlg::SetCommandList(INT32 GroupIndex)
 			ADDCOMMAND("Invoke IXaraPhotoEditor3");						// Command 1
 			ADDCOMMAND("End IXaraPhotoEditor3 Session");				// Command 2
 			ADDCOMMAND("Dump Bitmap Cache");							// Command 3
+			ADDCOMMAND("Create new spread");							// Command 4
 			break;
 
 		case 11:	// Gerry Debug ------------------------------------------
@@ -1024,6 +1026,9 @@ void DebugDlg::SetCommandValue(INT32 GroupIndex, INT32 CommandIndex)
 					break;
 				case 3:
 					Description = TEXT("Dump a description of the bitmap cache to the debug output");
+					break;
+				case 4:
+					Description = TEXT("Create a second spread! OOER!");
 					break;
 			}
 			break;
@@ -1643,6 +1648,22 @@ PORTNOTE("LiveEffects", "Removed use of LiveEffects")
 					{
 						CBitmapCache* pCache = GetApplication()->GetBitmapCache();
 						pCache->DebugDump();
+					}
+					break;
+				case 4:
+					{
+#if NEW_PASTEBOARD
+						Spread* pSpread = Document::GetSelectedSpread();
+						Spread* pNewSpread = NULL;
+						pSpread->NodeCopy((Node**)&pNewSpread);
+						if (pNewSpread)
+						{
+							pNewSpread->AttachNode(pSpread, NEXT);
+							pSpread->AdjustPasteboards();
+						}
+#else
+						InformWarning(_R(IDS_SPREADTESTWARNING));
+#endif
 					}
 					break;
 				}

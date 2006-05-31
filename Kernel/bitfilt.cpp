@@ -2437,6 +2437,7 @@ BOOL BaseBitmapFilter::DoExport(Operation *pOp, CCLexFile* pFile,
 	pExportBitmap = NULL;
 
 	// Get pointer to the spread to export.
+PORTNOTE("spread", "Multi-spread warning!")
 	pSpread = GetFirstSpread(pDoc);
 	ERROR2IF(pSpread == NULL, FALSE,"BaseCamelotFilter::DoExport no spread to export");
 
@@ -2921,6 +2922,7 @@ BOOL BaseBitmapFilter::DoExportBitmaps(Operation *pOp, CCLexFile* pFile, PathNam
 		}
 
 		// Get pointer to the spread to export.
+PORTNOTE("spread", "Multi-spread warning!")
 		pSpread = GetFirstSpread(pDoc);
 
 		UINT32 BitmapCount = pParam->GetBitmapCount();
@@ -3009,6 +3011,7 @@ BOOL BaseBitmapFilter::SetUpExportOptions(BitmapExportOptions **ppExportOptions,
 	Document *pDoc = Document::GetCurrent();
 
 	// Get pointer to the spread to export.
+PORTNOTE("spread", "Multi-spread warning!")
 	pSpread = GetFirstSpread(pDoc);
 	ERROR2IF(pSpread == NULL, FALSE,"BaseCamelotFilter::DoExport no spread to export");
 
@@ -3146,6 +3149,7 @@ BOOL BaseBitmapFilter::DoExportWithOptions(Operation* pOp, CCLexFile* pFile, Pat
 	}
 
 	// set up the pSpread
+PORTNOTE("spread", "Multi-spread warning!")
 	pSpread = GetFirstSpread(pDoc);
 
 	// deal with no selection
@@ -4213,6 +4217,7 @@ DocRect	BaseBitmapFilter::GetSizeOfDrawing(Spread *pSpread)
 		ERROR2IF(pdocCurrent==NULL, DocRect(0,0,0,0), "BaseBitmapFilter - no current document");
 
 		//And finally the current spread
+PORTNOTE("spread", "Multi-spread warning!")
 		pSpread=GetFirstSpread(pdocCurrent);
 		ERROR2IF(pSpread==NULL, DocRect(0,0,0,0), "BaseBitmapFilter - no spread");
 	}

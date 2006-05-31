@@ -1670,6 +1670,7 @@ BOOL LibClipartSGallery::LoadAndSave(void)
 #if 1	// Do an Export of the file as a png thumbnail file to the "XaraInfo" directory
 
 							Document* OurDocument = pDoc->GetKernelDoc();
+PORTNOTE("spread", "Multi-spread warning!")
 							Spread* OurSpread = OurDocument->FindFirstSpread();
 							Layer* pLayer = OurSpread->FindFirstLayer();
 							DocRect Bounds;

@@ -1313,6 +1313,7 @@ ADDR Filter::LoadInitialSegment(PathName& Path, UINT32 *Size, size_t *FileSize)
 
 Layer *Filter::GetActiveLayer(Document *pDoc)
 {
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread *pSpread = GetFirstSpread(pDoc);
 	if (pSpread != NULL)
 		return pSpread->FindActiveLayer();
@@ -1343,6 +1344,7 @@ Layer *Filter::GetActiveLayer(Document *pDoc)
 BOOL Filter::MakeSureLayerExists(Document* pDoc)
 {
 	// Find the spread that all the action is happening on
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = GetFirstSpread(pDoc);
 	if (pSpread==NULL)
 		return FALSE;
@@ -1398,6 +1400,7 @@ Spread *Filter::GetFirstSpread(Document *pDoc)
 	Chapter *pChapter = (Chapter *) pNode;
 	
 	// pSpread is a child of pChapter
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread *pSpread = (Spread *) pChapter->FindFirstChild();
 	ENSURE(pSpread->IsKindOf(CC_RUNTIME_CLASS(Spread)),
 		   "Filter::GetFirstSpread(): Could not find Spread");

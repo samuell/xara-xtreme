@@ -3460,6 +3460,7 @@ MsgResult LayerMsgHandler::Message(Msg* Message)
 			case ColourChangingMsg::LISTUPDATED:
 				if (Msg->ScopeDoc != NULL)
 				{
+PORTNOTE("spread", "Multi-spread warning!")
 					Spread* pSpread = Msg->ScopeDoc->FindFirstSpread();
 					if (pSpread != NULL)
 					{
@@ -3473,6 +3474,7 @@ MsgResult LayerMsgHandler::Message(Msg* Message)
 			case ColourChangingMsg::COLOURUPDATED:
 				if (Msg->ScopeDoc != NULL)
 				{
+PORTNOTE("spread", "Multi-spread warning!")
 					Spread* pSpread = Msg->ScopeDoc->FindFirstSpread();
 					if (pSpread != NULL)
 					{

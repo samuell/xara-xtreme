@@ -4959,6 +4959,7 @@ BOOL EPSFilter::DoExport(Operation* pOp, CCLexFile* pFile, PathName* pPath, Docu
 	TheDocument = pDoc;
 
 	// Get pointer to the spread to export.
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread *pSpread = GetFirstSpread(pDoc);
 
 	// Set up device context and render region for this export.

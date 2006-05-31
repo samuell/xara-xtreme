@@ -1533,6 +1533,7 @@ MsgResult OpZoomDescriptor::HandleButtonMsg(DialogOp*, CGadgetID)
 
 Spread* OpZoomDescriptor::GetSpread(DocView* pDocView) const
 {
+PORTNOTE("spread", "Multi-spread warning!")
 	return pDocView->GetDoc()->FindFirstSpread();
 }
 

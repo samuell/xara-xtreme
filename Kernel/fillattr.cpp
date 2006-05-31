@@ -698,6 +698,7 @@ BOOL AttrFillGeometry::OnClick( DocCoord PointerPos, ClickType Click,
 			Pixel32bpp Pix;
 
 			Document* TheDoc = Document::GetCurrent();
+PORTNOTE("spread", "Multi-spread warning! Should use the passed in spread pointer?")
 			pSpread = TheDoc->FindFirstSpread ();
 
 			if (TheDoc != NULL)

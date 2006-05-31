@@ -667,6 +667,7 @@ BOOL HTMLFilter::DoImportBitmap(HTMLTAG_TYPE TagId, SelOperation *Op, Document *
 			return FALSE;
 		
 		Spread *pSpread = NULL;
+PORTNOTE("spread", "Multi-spread warning!")
 		pSpread = GetFirstSpread(DestDoc);
 
 		// can't be NULL
@@ -1173,6 +1174,7 @@ DocCoord HTMLFilter::GetImportPosition(Document* pdocTarget, INT32 iPosNumber)
 	INT32 iReturned=0;
 
 	//Now get the first spread in the document
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* psprFirst=pdocTarget->FindFirstSpread();
 
 	//Do some checking

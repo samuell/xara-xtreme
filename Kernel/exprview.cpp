@@ -179,6 +179,7 @@ BOOL ExpressView::Init()
 	// Connect this view state to this view
 	pVState->pView = this;
 
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = pDoc->FindFirstSpread();
 	DocView* pView = pDoc->GetFirstDocView();
 
@@ -616,6 +617,7 @@ BOOL ExpressView::DoRender(CDC* pDC, DocRect drClip, const DocRect& BitmapSize,
 	m_Bpp	= Bpp;
 
 	// Convert clip rect to OIL coords
+PORTNOTE("spread", "Multi-spread warning!")
 	Spread* pSpread = pDoc->FindFirstSpread();
 	ERROR2IF(!pSpread, FALSE, "pSpread NULL");
 
