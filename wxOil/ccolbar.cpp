@@ -1305,7 +1305,7 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, 
 		UINT32 ColourCell = WhereIsMouse (mousePt);
 		static UINT32 lastColourCell = (UINT32)-1;
 
-		if ((ColourCell >= 0) && (lastColourCell != ColourCell))		// we are over a valid colour
+		if ((((INT32)ColourCell) >= 0) && (lastColourCell != ColourCell))		// we are over a valid colour
 		{
 			BOOL validColour = FALSE;
 			
