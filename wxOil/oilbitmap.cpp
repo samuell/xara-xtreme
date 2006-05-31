@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
+#include "cartprov.h"
 #include "oilbitmap.h"
 #include "ccfile.h"
 #include "dibutil.h"
@@ -3705,33 +3706,60 @@ OtherBmp->RebuildXPEBitmap();
 
 BOOL CWxBitmap::LoadBitmap(UINT32 BitmapResourceID)
 {
-	PORTNOTETRACE("other","CWxBitmap::LoadBitmap - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	CCResourceFile *ResFile = new CCResourceFile;
-	if (ResFile == NULL)
+	wxBitmap * pBitmap=CamArtProvider::Get()->FindBitmap((ResourceID)BitmapResourceID);
+	if (!pBitmap)
 		return FALSE;
 
-	if (!ResFile->open( MAKEINTRESOURCE(BitmapResourceID), RT_BITMAP ))
-	{
-		delete ResFile;
+	return CreateFromwxBitmap(pBitmap);
+}
+
+BOOL CWxBitmap::CreateFromwxBitmap(wxBitmap * pBitmap)
+{
+	wxImage i = pBitmap->ConvertToImage();
+	return CreateFromwxImage(&i);
+}
+
+BOOL CWxBitmap::CreateFromwxImage(wxImage * pImage)
+{
+	LPBITMAPINFO bmInfo;
+	LPBYTE bmBytes;
+
+	bmInfo = AllocDIB( pImage->GetWidth(), pImage->GetHeight(), 32, &bmBytes );
+	if (!bmInfo || !bmBytes)
 		return FALSE;
+
+	BMInfo=bmInfo;
+	BMBytes=bmBytes;
+
+	INT32 dpi=96;
+
+	double xppm = ((double)dpi * 10000.0)/254.0;
+	bmInfo->bmiHeader.biXPelsPerMeter = (INT32)(xppm + 0.5);
+	bmInfo->bmiHeader.biYPelsPerMeter = bmInfo->bmiHeader.biXPelsPerMeter;
+
+	CacheGeometry();
+
+	unsigned char * pData=pImage->GetData();
+	unsigned char * pAlpha=NULL;
+	if (pImage->HasAlpha())
+		pAlpha=pImage->GetAlpha();
+
+	// Reasonably rapid conversion to internal format
+	for (UINT32 YPos = 0; YPos < GetHeight(); YPos++)
+	{
+		BYTE *ScanlineStart = BMBytes + (YPos * ScanLineByteWidth);
+		INT32 off=0;
+
+		for (UINT32 XPos = 0; XPos < GetWidth(); XPos++)
+		{
+			ScanlineStart[off++] = *(pData++); //Red
+			ScanlineStart[off++] = *(pData++); //Green
+			ScanlineStart[off++] = *(pData++); //Blue
+			ScanlineStart[off++] = pAlpha?(255-*(pAlpha++)):0; // Alpha
+		}
 	}
 
-	ResFile->SetReportErrors(FALSE);
-
-	BOOL ReadOK = DIBUtil::ReadFromFile( ResFile, &BMInfo, &BMBytes, FALSE );
-		
-	// close file regardless
-	if (ResFile->isOpen())
-		ResFile->close();
-
-	// and delete it
-	delete ResFile;
-
-	return ReadOK;
-#else
-	return FALSE;
-#endif
+	return TRUE;
 }
 
 /********************************************************************************************

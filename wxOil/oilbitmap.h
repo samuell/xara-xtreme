@@ -203,6 +203,8 @@ public:
 	virtual BOOL ImportBitmap(Filter*, const BitmapInfo*, INT32);
 
  	virtual BOOL LoadBitmap(UINT32 BitmapResourceID);
+	virtual BOOL CreateFromwxBitmap(wxBitmap * pBitmap);
+	virtual BOOL CreateFromwxImage(wxImage * pImage);
 
 	virtual BOOL GetPaletteUsage(INT32 *);
 	virtual BOOL PrepareMask(INT32 PaletteEntry);
