@@ -223,6 +223,7 @@ if ($version ne "")
 	$bdate= `date +"%d-%b-%y %H:%M"`;
 	chomp($bdate);
 	chomp($svnv);
+	print STDERR "svnversion gives $svnv\n";
 	my $camversionmajor;
 	my $camversionminor;
 	($camversionmajor, $camversionminor)=split('.',$version);
@@ -366,7 +367,7 @@ if ($international)
     }
 
     my $dlines=0;
-    open(DIALOGS,"$wxrccommand|") || die "Could not read dialogs for translation: $!";
+    open(DIALOGS,"$wxrccommand|") || die "Could not read dialogs for translation [$wxrccommand]: $!";
     while (<DIALOGS>)
     {
 	# Note wxrc removes XML escaping
@@ -377,7 +378,7 @@ if ($international)
     }
     close(DIALOGS);
     
-    die "Could not read dialogs for translation (empty or bad wxrc)" if ($dlines<2);
+    die "Could not read dialogs for translation (empty or bad wxrc) [$wxrccommand]" if ($dlines<2);
 
     my @uniqstrings;
     my $last="";
