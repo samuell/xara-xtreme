@@ -162,7 +162,7 @@ void ColourPickerDragInformation::InitObject(void)
 	DoesSolidDrag = TRUE;
 	
 	// offset of colour swatch from the pointer
-	SolidDragOffset.x = -14;
+	SolidDragOffset.x = 14;
 	SolidDragOffset.y = 4;	   
 	
 	// size of the solid drag redraw
