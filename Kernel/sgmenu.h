@@ -165,7 +165,7 @@ const String_32 SGCmd_Export( _T("Export") );					// export named objects
 
 // Line Gallery commands	
 const String_32 SGCmd_ExportBrush( _T("ExportBrush") );        // exports brush to clipboard
-const String_32 SGCmd_RenameBrush( _T("Change brush name") );
+const String_32 SGCmd_RenameBrush( _T("RenameBrush") );
 
 //   + Standard commands that are handled by the base class (all you need to do is add a menu
 //     command of this name, and the base class will handle it for you)

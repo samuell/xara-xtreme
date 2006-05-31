@@ -95,7 +95,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-// sginit.cpp - Centralised initialisation for galleries
+// init.cpp - Centralised initialisation for galleries
 
 #include "camtypes.h"
 #include "sginit.h"
@@ -176,9 +176,7 @@ PORTNOTE("galleries", "Excluded various galleries")
 				LayerNameDlg::Init()				&&
 				LayerPropertyTabsDlg::Init()		&&				
 
-#ifndef EXCLUDE_FROM_XARALX
 				OpDisplayLineGallery::Init()		&&
-#endif // EXCLUDE_FROM_XARALX
 #ifdef _DEBUG // For now name gallery only on debug builds
 				OpDisplayNameGallery::Init()		&&
 #endif
@@ -187,8 +185,8 @@ PORTNOTE("galleries", "Excluded various galleries")
 #ifndef EXCLUDE_FROM_XARALX
 #ifdef VECTOR_STROKING
 				SGalleryLinePropertiesDlg::Init()	&&
-#endif // VECTOR_STROKING				
-#endif
+#endif // VECTOR_STROKING	
+#endif			
 				ColourSGallery::Init()				&&
 				OpDisplayColourGallery::Init()		&&
 				ColourNameDlg::Init()				&&

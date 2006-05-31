@@ -299,7 +299,11 @@ public:
 	BOOL DeleteBrushItem(BrushHandle Handle);  
 		// delete the item with the handle supplied
 
+PORTNOTE("other", "Removed CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 	CBrushGadget* GetBrushGadget() { return &BrushGadget;}
+#endif
+
 // Overridden Command interface (for Ops and menu support)
 public:	
 	virtual BOOL InitMenuCommands(void);
@@ -377,7 +381,10 @@ private:
 	// restored when the brush is deselcted
 	MILLIPOINT m_PreviousLineWidth;
 
+PORTNOTE("other", "Removed CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 	CBrushGadget	BrushGadget;
+#endif
 
 	static String_256* m_pFileNameArray; // stores the filenames of the default brush files loaded on startup
 	static UINT32	m_NumDefaultFiles;

@@ -2394,9 +2394,14 @@
             </object>
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                <border>1</border>
-                <object class="wxCamArtControl" name="IDLB_JOINTYPE_LIST_BOX">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                <border>0</border>
+                <object class="wxOwnerDrawnComboBox" name="IDLB_JOINTYPE_LIST_BOX">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineJoin</optoken>
                 </object>
             </object>
@@ -2407,9 +2412,14 @@
             </object>
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                <border>1</border>
-                <object class="wxCamArtControl" name="IDLB_LINECAP_LIST_BOX">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                <border>0</border>
+                <object class="wxOwnerDrawnComboBox" name="IDLB_LINECAP_LIST_BOX">
+                    <size>80,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxCB_DROPDOWN</style>
+                    <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineCap</optoken>
                 </object>
             </object>

@@ -106,7 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 
 #include "docview.h"
-#include "scrcamvw.h"
 #include "spread.h"
 #include "attrmgr.h"
 #include "grndbmp.h"
@@ -201,6 +200,8 @@ BOOL SGLineDragTarget::ProcessEvent(DragEventType Event, DragInformation *pDragI
 				// Call a subroutine to work out and set our current cursor shape
 				return(DetermineCursorShape((SuperGallery *) TargetDialog,
 											DraggedNode, pMousePos));
+			default:
+				break;
 		}
 	}
 
@@ -361,6 +362,8 @@ UINT32 GalleryLineDragInfo::GetCursorID(DragTarget* pDragTarget)
 
 			case NO_TARGET:
 				return _R(IDC_CANDROPONPAGE);
+			default:
+				break;
 		};
 
 		return _R(IDC_CANDROPONPAGE);
@@ -433,6 +436,8 @@ BOOL GalleryLineDragInfo::GetStatusLineText(String_256 * TheText, DragTarget* pD
 
 			case NO_TARGET:
 				DragString += String_64(_R(IDS_SGLDRAG_DROP_CURRENT_ATTRIBUTE)); // "Drop to set the Current Attribute";
+				break;
+			default:
 				break;
 		};
 
@@ -540,6 +545,8 @@ INT32 GalleryLineDragInfo::GetDragTransparency()
 
 KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 {
+PORTNOTE("other", "Disabled line gallery drag code")
+#ifndef EXCLUDE_FROM_XARALX
 	if (DragMask == NULL)
 	{
 		DocView *View = DocView::GetCurrent();
@@ -584,6 +591,9 @@ KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 	}
 
 	return DragMask;
+#else
+	return NULL;
+#endif
 }
 
 /********************************************************************************************
@@ -598,8 +608,10 @@ KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 
 ********************************************************************************************/
 
-BOOL OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
+BOOL GalleryLineDragInfo::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
 {
+PORTNOTE("other", "Disabled line gallery drag code")
+#ifndef EXCLUDE_FROM_XARALX
 	if (TheBitmap == NULL)
 	{
 		DocView *View = DocView::GetCurrent();
@@ -645,9 +657,9 @@ BOOL OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
 
 		delete pRegion;
 	}
-
+#endif
 	// Call base class to do the actual drawing
-	return BitmapDragInformation::OnDrawSolidDrag(Origin, TheDC);
+	return BitmapDragInformation::OnDrawSolidDrag(Origin, TheDC, pDragTarget);
 }
 
 /********************************************************************************************

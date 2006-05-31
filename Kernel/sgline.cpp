@@ -2910,6 +2910,9 @@ void OpDisplayLineGallery::Do(OpDescriptor*)
 {
 	SuperGallery *pSuperGallery = FindGallery();
 
+	if (!pSuperGallery)
+		pSuperGallery = new LineGallery();
+
 	if (pSuperGallery != NULL)
 	{
 		// Toggle the visible state of the gallery window
@@ -2948,10 +2951,6 @@ SuperGallery* OpDisplayLineGallery::FindGallery()
 			return(pSuperGallery);
 
 		ERROR3("Got the line gallery but it's not of the LineGallery class?");
-	}
-	else
-	{
-		ERROR3("Can't find the Line gallery in bars.ini!\n");
 	}
 
 	return(NULL);

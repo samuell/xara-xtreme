@@ -139,7 +139,6 @@ BrushAttrItem::BrushAttrItem(BrushAttrValue *pBrush, const String &strDescriptio
 {
 	ERROR3IF(pBrush == NULL, "Illegal NULL param");
 	m_pBrushAttrVal = pBrush;
-	INT32 i = 2;
 }
 
 
@@ -282,7 +281,6 @@ BOOL BrushAttrItem::IsEqualValueToAny(NodeAttribute** ppOtherAttribs) const
 
 	if (pAttr != NULL)
 	{
-		INT32 i = 1;
 		BrushAttrValue *pOther = (BrushAttrValue *) pAttr->GetAttributeValue();
 		//return((*m_pBrushAttrVal) == (*pOther));
 	
@@ -311,14 +309,14 @@ BOOL BrushAttrItem::IsEqualValueToAny(NodeAttribute** ppOtherAttribs) const
 BrushDefinition *BrushAttrItem::GetBrushDefinition()
 {
 	BrushHandle Handle = GetBrushHandle();
-	if(Handle != -1)
+	if(Handle != BrushHandle(-1))
 	{
 		// get the brush component
 		Document* pDoc = Document::GetCurrent();
 		ERROR2IF(pDoc == NULL, NULL, "Wheres the document?");
 		BrushComponent* pBrushComp = (BrushComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(BrushComponent));
 		ERROR2IF(pBrushComp == NULL, NULL, "No brush component");
-		return pBrushComp->FindDefinition(Handle);
+		return (BrushDefinition *)(pBrushComp->FindDefinition(Handle));
 	}
 
 	return NULL;

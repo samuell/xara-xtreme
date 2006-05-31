@@ -430,7 +430,7 @@ BOOL StrokeTypeItem::OverridesTrans()
 StrokeDefinition *StrokeTypeItem::GetStrokeDefinition()
 {
 	StrokeHandle Handle = GetStrokeHandle();
-	if(Handle != -1)
+	if(Handle != StrokeHandle(-1))
 		return StrokeComponent::FindStroke(Handle);
 
 	return NULL;

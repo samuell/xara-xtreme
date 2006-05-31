@@ -187,8 +187,8 @@ void OpChangeLineAttribOpDesc::SetGadgetText(const String& strGadgetText)
 			 pGadgetItem = (GadgetListItem*) pGadgetList->GetNext(pGadgetItem))
 		{
 			// Set each control to display the text.
-			pGadgetItem->pDialogBarOp->SetStringGadgetValue(pGadgetItem->gidGadgetID, 
-														    &((String&) strGadgetText),
+			pGadgetItem->pDialogOp->SetStringGadgetValue(pGadgetItem->gidGadgetID, 
+														    ((String&) strGadgetText),
 														    FALSE, -1);
 		}
 
@@ -234,7 +234,7 @@ BOOL OpChangeLineAttribOpDesc::SetCurrentSelectedAttrib()
 							 "::SetCurrentSelectedAttrib\n");
 */		
 		// There is no document so blank all gadgets.
-		SetGadgetText(String(""));
+		SetGadgetText(String(_T("")));
 		return TRUE;
 	}
 
@@ -318,7 +318,7 @@ void OpChangeLineAttribOpDesc::OnControlCreate(OpDescControlCreateMsg* pCreateMs
 	{
 		UINT32 nStringID = GetItemStringID(i);
 		if (nStringID == 0) break;
-		pDlg->SetStringGadgetValue(SetGadgetID, &String(nStringID));
+		pDlg->SetStringGadgetValue(SetGadgetID, String(nStringID));
 	}
 	
 	// Update the current selection within the combo etc.
@@ -363,8 +363,9 @@ void OpChangeLineAttribOpDesc::OnSelectionChange(OpDescControlMsg* pSelChangedMs
 		return;
 	}
 
+	INT32 nItemIndex;
 	// Compare the string to each item that was placed in the combo list.
-	for (INT32 nItemIndex = 0; ; nItemIndex++)
+	for (nItemIndex = 0; ; nItemIndex++)
 	{
 		// Ask the derived class to provide the string at the given index position.
 		UINT32 nTxtID = GetItemStringID(nItemIndex);
