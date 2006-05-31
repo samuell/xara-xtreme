@@ -1296,7 +1296,7 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, 
 		UINT32 ColourCell = WhereIsMouse (mousePt);
 		static UINT32 lastColourCell = (UINT32)-1;
 
-		if ((((INT32)ColourCell) >= 0) && (lastColourCell != ColourCell))		// we are over a valid colour
+		if ((((INT32)ColourCell) >= 0)/* && (lastColourCell != ColourCell)*/)		// we are over a valid colour
 		{
 			BOOL validColour = FALSE;
 			
@@ -1331,18 +1331,18 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, 
 					validColour = TRUE;
 				}
 			}
+
+			if (validColour && pTheCol)
+				*pTheCol = TheColour;
 			
-			if ((lastColourCell != ColourCell) && (validColour == TRUE))
+			if ((lastColourCell != ColourCell) && validColour)
 			{
 				ColourEditDlg* pColourEditDlg = ColourEditDlg::GetColourEditDlg ();
 				ASSERT (pColourEditDlg);
 
 				pColourEditDlg->SetEditingColour (TheColour);
-				if (pTheCol)
-					*pTheCol = TheColour;
+				lastColourCell = ColourCell;
 			}
-			
-			lastColourCell = ColourCell;
 			
 			return (TRUE);
 		}

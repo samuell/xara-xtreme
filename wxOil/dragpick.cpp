@@ -496,12 +496,7 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 					Temp.MakeRefToIndexedColour(pIndexedColour);
 					INT32 r, g, b;
 					Temp.GetRGBValue(&r, &g, &b);
-					ColourRGBT TheColourRGBT;
-					TheColourRGBT.Red = r;
-					TheColourRGBT.Green = g;
-					TheColourRGBT.Blue = b;
-					TheColourRGBT.Transparent = 0;
-					col = DOCCOLOUR_RGBT(&TheColourRGBT);
+					col = DocColour(r, g, b);
 				}
 				break;
 			}
