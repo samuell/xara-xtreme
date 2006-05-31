@@ -357,15 +357,28 @@ if ($international)
     }
     close(STRINGS);
     
-    open(DIALOGS,"$wxrc -g $outputdir/xrc/dialogs.xrc|") || die "Could not read dialogs for translation: $!";
+    my $wxrccommand;
+    $wxrccommand=$wxrc." -g $outputdir/xrc/dialogs.xrc";
+    if ($wxrc=~/ /)
+    {
+	# Some installations have an "eval" type command to set LD_PATH
+	$wxrccommand="/bin/sh -c '".$wxrccommand."'";
+    }
+
+    my $dlines=0;
+    open(DIALOGS,"$wxrccommand|") || die "Could not read dialogs for translation: $!";
     while (<DIALOGS>)
     {
 	# Note wxrc removes XML escaping
 	chomp;
 	print STDERR "Dialog: $_\n" if ($verbose>2);
 	push @strings,$_;
+	$dlines++;
     }
+    close(DIALOGS);
     
+    die "Could not read dialogs for translation (empty or bad wxrc)" if ($dlines<2);
+
     my @uniqstrings;
     my $last="";
     foreach $i (sort @strings)
