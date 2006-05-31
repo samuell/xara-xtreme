@@ -2370,6 +2370,12 @@ void OSRenderRegion::GetFixedSystemTextSize(StringBase *TheText, DocRect *Bounds
 	if(TheText == NULL || BoundsRect == NULL)
 		return;
 
+	wxFont SaveFont=RenderDC->GetFont();
+
+	wxFont FixedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	FixedFont.SetPointSize(8);
+	RenderDC->SetFont(FixedFont);
+
 	INT32 LineHeight = 0;
 	// This won't actually draw the text, instead it returns a rectangle in 'Rect'	
 	// LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect, uFormat);
@@ -2377,6 +2383,8 @@ void OSRenderRegion::GetFixedSystemTextSize(StringBase *TheText, DocRect *Bounds
 	wxCoord w, h;
 	RenderDC->GetTextExtent(Text, &w, &h);
 	wxRect Rect(0, 0, w, h);
+
+	RenderDC->SetFont(SaveFont);
 
 	wxDC * pDC = RenderDC;
 	wxSize DPI = GetFixedDCPPI(*pDC);

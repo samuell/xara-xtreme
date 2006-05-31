@@ -5008,29 +5008,25 @@ void GRenderRegion::DrawBitmap(const DocCoord &Point, UINT32 BitmapID, UINT32 To
 
 void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect, UINT32 uFormat)
 {
-	PORTNOTETRACE("other","GRenderRegion::DrawFixedSystemText - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	CFont* OldFont = NULL;
+	wxString Text = (wxString)(TCHAR *)(*TheText);
 
-	// Get the Fixed System Font to use
-	CFont *FixedSystemFont = FontFactory::GetCFont(STOCKFONT_RNDRGNFIXEDTEXT);
+	wxFont SaveFont=RenderDC->GetFont();
 
-	// Select it into the RenderDC so we can work out the rectangle
-	// required to render into
-	if (FixedSystemFont != NULL)
-		OldFont = RenderDC->SelectObject(FixedSystemFont);
+	wxFont FixedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	FixedFont.SetPointSize(8);
+	RenderDC->SetFont(FixedFont);
 
-	WinRect RectNeeded(0,0,0,0);
-	INT32 LineHeight;
+	wxDC * pDC = RenderDC;
+	wxSize DPI = OSRenderRegion::GetFixedDCPPI(*pDC);
+//	INT32 XDPI = DPI.GetWidth();
+//	INT32 YDPI = DPI.GetHeight();
+//	INT32 LineHeight = RenderDC->GetCharHeight();
 
-	// First work out the rectangle needed to plot this line of text.
-	LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &RectNeeded,
-									DT_SINGLELINE | DT_NOPREFIX | DT_CALCRECT);
+	wxCoord w, h;
+	RenderDC->GetTextExtent(Text, &w, &h);
 
-	// Put the old font back into the RenderDC
-	RenderDC->SelectObject(OldFont);
+	RenderDC->SetFont(SaveFont);
 
-	WinRect Rect;
 	INT32 PixelWidth = CalcScaledPixelWidth();
 	// Check for divide by zeros. Shouldn't happen but very bad when it happens on galleries
 	ERROR3IF(PixelWidth == 0, "GRenderRegion::DrawFixedSystemText PixelWidth = 0");
@@ -5038,100 +5034,62 @@ void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect
 		PixelWidth = 1;
 
 	// Now make a windows (pixels) rectangle from the Bounding DocRect (millipoints)
-	Rect.left = 0;
-	Rect.top  = 0;
-	Rect.right  = BoundsRect.Width()/PixelWidth;
-	Rect.bottom = BoundsRect.Height()/PixelWidth;
+	INT32 bw = BoundsRect.Width()/PixelWidth;
+	INT32 bh = BoundsRect.Height()/PixelWidth;
 
 	// Clip the windows rect so that is no bigger than the required rectangle
-	if (RectNeeded.right < Rect.right) 
-		Rect.right = RectNeeded.right;
+	if (w < bw) 
+		bw = w;
 
-	if (RectNeeded.bottom < Rect.bottom)
-		Rect.bottom = RectNeeded.bottom;
+	if (h < bh)
+		bh = h;
+
+	if ((bh<=0) || (bw<=0))		// Still a valid rectangle?
+		return;
 
 	// Create a memory DC
-	CDC MemDC;
-	MemDC.CreateCompatibleDC(RenderDC);
+	wxBitmap bitmap(bw, bh);
+	wxMemoryDC MemDC;
+	MemDC.SelectObject(bitmap);
+	MemDC.SetFont(FixedFont);
 
-	// Create an offscreen bitmap to render into
-	CBitmap TempBitmap;
-	TempBitmap.CreateCompatibleBitmap(RenderDC, Rect.Width(), Rect.Height());
+	MemDC.SetBackgroundMode(wxSOLID);
 
-	// Select the bitmap into the memory DC
-	CBitmap* OldBitmap = MemDC.SelectObject(&TempBitmap);
+	// Copy the Text colours from the RenderDC into the memory DC
+	MemDC.SetTextForeground(RenderDC->GetTextForeground());
+	MemDC.SetTextBackground(RenderDC->GetTextBackground());
 
-	// Select the Fixed System font into the MemoryDC
-	OldFont = MemDC.SelectObject(FixedSystemFont);
+	// Draw the text into the memory DC
+	MemDC.DrawText((TCHAR *) (*TheText), 0, 0);
 
-	HPALETTE NewPal;
-	HPALETTE OldPal = NULL;
+	KernelBitmap* pBitmap;
 
-	if (PaletteManager::UsePalette())
-	{
-		// Setup the palette in the memory DC
-		OldPal=PaletteManager::StartPaintPalette(MemDC.m_hDC, &NewPal);
-	}
+	// Make a new Oil Bitmap
+	OILBitmap* pOilBmp = OILBitmap::Create();
+	if (pOilBmp == NULL)
+		return;
 
-	if (Rect.right > Rect.left)		// Still a valid rectangle?
-	{
-		INT32 LineHeight;
+	// and copy the data from the resources
+	((CWxBitmap *)pOilBmp)->CreateFromwxBitmap(&bitmap);
 
-		// Force OPAQUE mode (we can't do masked plots into a DIB)
-		MemDC.SetBkMode(OPAQUE);
-	
-		// Copy the Text colours from the RenderDC into the memory DC
-		MemDC.SetTextColor(RenderDC->GetTextColor());
-		MemDC.SetBkColor(RenderDC->GetBkColor());
-
-		// Draw the text into the memory DC
-		LineHeight = MemDC.DrawText((TCHAR *) (*TheText), -1, &Rect,
-					DT_SINGLELINE | DT_NOPREFIX | DT_VCENTER);
-
-		ENSURE(LineHeight > 0, "GRenderRegion::DrawFixedSystemText failed");
-	}
-
-	// Get the BPP and DPI of the Screen
-	INT32 DeviceDepth = GetDeviceCaps( RenderDC->m_hDC, BITSPIXEL ) * 
-										GetDeviceCaps( RenderDC->m_hDC, PLANES );
-	INT32 DeviceRes = GetDeviceCaps( RenderDC->m_hDC, LOGPIXELSX );
-
-	// Windows can't cope with 16 bpp bitmaps, so we'll just use
-	// a 24 bpp bitmap for any high colour modes.
-	if (DeviceDepth > 8)
-		DeviceDepth = 24;
-
-	// Make a kernel bitmap compatible with the Screen
-	KernelBitmap* pBmp = new KernelBitmap(Rect.Width(), Rect.Height(), DeviceDepth, DeviceRes, TRUE);
-
-	LPBITMAPINFO Info = ((CWxBitmap*)pBmp->ActualBitmap)->BMInfo;
-	LPBYTE Bits = ((CWxBitmap*)pBmp->ActualBitmap)->BMBytes;
-
-	UINT32 DIBPal = DIB_RGB_COLORS;
-
-	// Copy the bitmap data from the offscreen bitmap into the new Kernel Bitmap
-	GetDIBits(MemDC.m_hDC, (HBITMAP)TempBitmap.m_hObject, 0, Rect.Height(), Bits, Info, DIBPal);
+	// Make a KernelBitmap and attach the Oil Bitmap
+	pBitmap = new KernelBitmap(pOilBmp, TRUE);	 	// TRUE = temp bitmap
+	if (pBitmap == NULL)
+		return;
 
 	// Calculate the orgin needed to centre the bitmap vertically
-	INT32 Height = Rect.Height() * PixelWidth;
+	INT32 Height = bh * PixelWidth;
 
 	DocCoord BottomLeft;
 	BottomLeft.x = BoundsRect.lo.x;
 	BottomLeft.y = (BoundsRect.lo.y + BoundsRect.Height()/2) - Height/2;
 
 	// Get gavin to plot the kernel bitmap
-	DrawBitmap(BottomLeft, pBmp);
+	DrawBitmap(BottomLeft, pBitmap);
 
 	// Delete the Kernel Bitmap
-	delete pBmp;
+	delete pBitmap;
 
-	// Tidy up the memory DC
-	if (OldPal)
-		PaletteManager::StopPaintPalette(MemDC.m_hDC, OldPal);
-
-	MemDC.SelectObject(OldBitmap);
-	MemDC.SelectObject(OldFont);
-#endif
 }
 
 
@@ -5221,51 +5179,33 @@ void GRenderRegion::GetFixedSystemTextSize(StringBase *TheText, DocRect *BoundsR
 	if(TheText == NULL || BoundsRect == NULL)
 		return;
 
-	PORTNOTETRACE("other","GRenderRegion::DrawFixedSystemText - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	CFont* OldFont = NULL;
 
-	CFont *FixedSystemFont = FontFactory::GetCFont(STOCKFONT_RNDRGNFIXEDTEXT);
-	if (FixedSystemFont != NULL)
-		OldFont = RenderDC->SelectObject(FixedSystemFont);
+	wxString Text = (wxString)(TCHAR *)(*TheText);
 
-	WinRect Rect(0,0,0,0);
-	INT32 LineHeight;
+	wxFont SaveFont=RenderDC->GetFont();
 
-	// This won't actually draw the text, instead it returns a rectangle in 'Rect'	
-	LineHeight = RenderDC->DrawText((TCHAR *) (*TheText), -1, &Rect,
-									DT_SINGLELINE | DT_NOPREFIX | DT_CALCRECT);
+	wxFont FixedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	FixedFont.SetPointSize(8);
+	RenderDC->SetFont(FixedFont);
 
-	RenderDC->SelectObject(OldFont);
+	wxDC * pDC = RenderDC;
+	wxSize DPI = OSRenderRegion::GetFixedDCPPI(*pDC);
+	INT32 XDPI = DPI.GetWidth();
+	INT32 YDPI = DPI.GetHeight();
+	INT32 LineHeight = RenderDC->GetCharHeight();
 
-	INT32 XDPI = 0, YDPI = 0;
+	wxCoord w, h;
+	RenderDC->GetTextExtent(Text, &w, &h);
 
-	if (atDpi == NULL)
-	{
-		// use the DPI of the device context ....
-		XDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSX);
-		YDPI = GetDeviceCaps(RenderDC->m_hDC, LOGPIXELSY);
-	}
-	else
-	{
-		// use the dpi that is supplied ....
-		XDPI = YDPI = static_cast <INT32> ( *atDpi + 0.5 );
-	}
-
-	if(XDPI == 0 || YDPI == 0 || LineHeight == 0)
-	{
-		ERROR3("GRenderRegion::GetFixedSystemTextSize failed");
-	  	*BoundsRect = DocRect(0, 0, 0, 0);
-		return;
-	}
+	RenderDC->SetFont(SaveFont);
 
 	// For some reason, Rect.bottom and Rect.top seem to be incorrect, so we have
 	// to use the returned LineHeight value
 
 	*BoundsRect = DocRect(0, 0,
-						  (INT32)(((double)(Rect.right - Rect.left) * IN_MP_VAL) / XDPI),
+						  (INT32)(((double)(w) * IN_MP_VAL) / XDPI),
 						  (INT32)(((double)LineHeight * IN_MP_VAL) / YDPI) );
-#endif
+
 }
 
 /********************************************************************************************

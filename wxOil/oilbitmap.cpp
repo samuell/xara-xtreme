@@ -3747,7 +3747,8 @@ BOOL CWxBitmap::CreateFromwxImage(wxImage * pImage)
 	// Reasonably rapid conversion to internal format
 	for (UINT32 YPos = 0; YPos < GetHeight(); YPos++)
 	{
-		BYTE *ScanlineStart = BMBytes + (YPos * ScanLineByteWidth);
+		// DIBs are the wrong way up
+		BYTE *ScanlineStart = BMBytes + ((GetHeight()-YPos-1) * ScanLineByteWidth);
 		INT32 off=0;
 
 		for (UINT32 XPos = 0; XPos < GetWidth(); XPos++)

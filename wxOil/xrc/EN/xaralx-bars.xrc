@@ -2436,7 +2436,7 @@
             <border>1</border>
             <object class="wxCamDrawControl" name="IDC_GALLERY_LISTBOX">
                 <style>wxFULL_REPAINT_ON_RESIZE</style>
-                <camdrawstyle>wxCDCS_SETCLIPRECT</camdrawstyle>
+                <camdrawstyle></camdrawstyle>
                 <size>400,400</size>
             </object>
         </object>

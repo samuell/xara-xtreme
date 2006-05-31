@@ -265,8 +265,16 @@ sub WriteGalleryHead
     printf STDOUT $ddindent."            <orient>wx%s</orient>\n", !IsVertical()?"HORIZONTAL":"VERTICAL";
 }
 
+sub NeedsGRenderRegion
+{
+    my $name = shift @_;
+    return 1 if ($name=~/IDD_LINESGALLERY/);
+    return 0;
+}
+
 sub WriteGalleryTail
 {
+    my $name = shift @_;
 
     print STDOUT $ddindent. "            </object>\n";
     print STDOUT $ddindent. "        </object>\n";
@@ -277,7 +285,7 @@ sub WriteGalleryTail
     printf STDOUT $ddindent."            <border>%d</border>\n",$dd?0:1;
     print STDOUT $ddindent. "            <object class=\"wxCamDrawControl\" name=\"IDC_GALLERY_LISTBOX\">\n";
     print STDOUT $ddindent. "                <style>wxFULL_REPAINT_ON_RESIZE</style>\n";
-    print STDOUT $ddindent. "                <camdrawstyle>wxCDCS_SETCLIPRECT</camdrawstyle>\n";
+    printf STDOUT $ddindent."                <camdrawstyle>%s</camdrawstyle>\n",NeedsGRenderRegion($name)?"":"wxCDCS_SETCLIPRECT";
     print STDOUT $ddindent. "                <size>400,400</size>\n";
     print STDOUT $ddindent. "            </object>\n";
     print STDOUT $ddindent. "        </object>\n";
@@ -638,8 +646,8 @@ while (<>)
     elsif (/^End(Bar|Gallery)\b/)
     {
 	WriteSeparator(); # end with a separator to ensure minimum height
+	$ingal?WriteGalleryTail($dialogname):WriteBarTail();
 	$dialogname="";
-	$ingal?WriteGalleryTail():WriteBarTail();
 	$inbar = 0;
 	$ingal = 0;
     }
