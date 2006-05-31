@@ -481,7 +481,7 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 			m_Status = NO_COLOUR;
 			break;
 		}
-		if (w->IsKindOf(CLASSINFO(CColourBar)));
+		if (w->IsKindOf(CLASSINFO(CColourBar)))
 		{
 			wxPoint cpoint = w->ScreenToClient(p);
 			if (((CColourBar*) w)->IsColourPickerOverStripRect (w, cpoint))
@@ -496,7 +496,12 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 					Temp.MakeRefToIndexedColour(pIndexedColour);
 					INT32 r, g, b;
 					Temp.GetRGBValue(&r, &g, &b);
-					col=DocColour(r,g,b);
+					ColourRGBT TheColourRGBT;
+					TheColourRGBT.Red = r;
+					TheColourRGBT.Green = g;
+					TheColourRGBT.Blue = b;
+					TheColourRGBT.Transparent = 0;
+					col = DOCCOLOUR_RGBT(&TheColourRGBT);
 				}
 				break;
 			}
@@ -504,30 +509,31 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 		w=w->GetParent();
 	}
 
-	
-	if (WinID != NULL)
-		pDocView=CCamView::GetDocViewFromWindowID(WinID);
-
-	if (pDocView != NULL)
-	{
-		OilCoord OilPos = WndPos.ToOil(pDocView, TRUE);
-		pSpread = pDocView->OilToSpreadCoord(OilPos, &DocPos);
-	}
-
+	Pixel32bpp Pix;
 	NodeRenderableInk* pNode = NULL;
 
-	Pixel32bpp Pix;
-
-	if (pDocView)		// were over an active (or inactive document)
+	if (m_Status == SCREEN_COLOUR)
 	{
-		if (pDocView==DocView::GetSelected())
+		if (WinID != NULL)
+			pDocView=CCamView::GetDocViewFromWindowID(WinID);
+	
+		if (pDocView != NULL)
 		{
-			pNode = NodeRenderableInk::FindSimpleAtPointForColourPicker (pSpread, DocPos, Pix);
-			m_Status = DOC_COLOUR;
+			OilCoord OilPos = WndPos.ToOil(pDocView, TRUE);
+			pSpread = pDocView->OilToSpreadCoord(OilPos, &DocPos);
 		}
-		else
-		{	
-			m_Status = SCREEN_COLOUR;
+	
+		if (pDocView)		// were over an active (or inactive document)
+		{
+			if (pDocView==DocView::GetSelected())
+			{
+				pNode = NodeRenderableInk::FindSimpleAtPointForColourPicker (pSpread, DocPos, Pix);
+				m_Status = DOC_COLOUR;
+			}
+			else
+			{	
+				m_Status = SCREEN_COLOUR;
+			}
 		}
 	}
 
@@ -551,7 +557,7 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 			col = DOCCOLOUR_RGBT(&TheColourRGBT);//DocColour (rValF24, gValF24, bValF24);
 		}
 
-		default:	// SCREEN_COLOUR:
+		case SCREEN_COLOUR:
 		{
 			wxColour c(*wxBLACK);
 			ScreenDC.GetPixel(p, &c);
@@ -564,6 +570,10 @@ BOOL ColourPickerDragInformation::OnMouseMove(wxPoint p)
 
 			col=DocColour(rValF24, gValF24, bValF24);
 		}
+
+		case COLOURBAR_COLOUR:
+		default:
+			break;
 
 	}
 

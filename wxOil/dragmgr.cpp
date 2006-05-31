@@ -647,12 +647,12 @@ void CaptureHandler::OnMouseMove(wxMouseEvent& event)
 		return;
 	}
 
-	if (!DragManagerOp::CurrentManager->RedrawInProgress)
+	if (DragManagerOp::CurrentManager && !DragManagerOp::CurrentManager->RedrawInProgress)
 	{
 		wxPoint point = event.GetPosition();
 		point = m_pWindow->ClientToScreen(point);
 
-		if (DragManagerOp::CurrentManager && DragManagerOp::CurrentManager->CurrentDragInfo)
+		if (DragManagerOp::CurrentManager->CurrentDragInfo)
 			DragManagerOp::CurrentManager->CurrentDragInfo->OnMouseMove(point);
 
 		DrawSolidDrag(point);

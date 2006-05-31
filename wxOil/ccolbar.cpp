@@ -1246,7 +1246,7 @@ PORTNOTE("other","Removed ColourSGallery usage")
 
 BOOL CColourBar::IsColourPickerOverStripRect (wxWindow* colourPicker, wxPoint mousePt)
 {
-	return(StripRect.Inside(mousePt));
+	return((colourPicker == this) && StripRect.Inside(mousePt));
 
 #if FALSE
 	// firstly, lets check for obvious insanity
@@ -1291,17 +1291,8 @@ BOOL CColourBar::IsColourPickerOverStripRect (wxWindow* colourPicker, wxPoint mo
 
 BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, IndexedColour **pTheCol/*=NULL*/)
 {
-#if FALSE
-	// firstly, lets check for obvious insanity
-	
-	String_256 ClassNameStr;  // The control type
-
-	// Find out the class type of the gadget
-	GetClassName (colourPicker, (TCHAR*) ClassNameStr, 255);
-	
-	if (ClassNameStr == String_8(TEXT("cc_colPicker")))
+	if (colourPicker == this)
 	{
-#endif
 		UINT32 ColourCell = WhereIsMouse (mousePt);
 		static UINT32 lastColourCell = (UINT32)-1;
 
@@ -1359,11 +1350,10 @@ BOOL CColourBar::DoColourPickerColour (wxWindow* colourPicker, wxPoint mousePt, 
 		{
 			return (TRUE);
 		}
-#if FALSE
 	}
 
-	ENSURE(FALSE, _T("DoColourPickerColour called for invalid colour picker control"));
-#endif
+	ENSURE(FALSE, "DoColourPickerColour called for invalid colour picker control");
+
 	return (FALSE);
 }
 
