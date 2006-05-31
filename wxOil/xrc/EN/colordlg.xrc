@@ -107,7 +107,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size>
+                                        <size>45,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -128,7 +128,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size>
+                                        <size>45,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -149,7 +149,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size>
+                                        <size>45,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -170,7 +170,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size>
+                                        <size>45,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -178,7 +178,7 @@
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                     <border>1</border>
                                     <option>100</option>
-                                    <size>5,1</size>
+                                    <size>1,1</size>
                                 </object>
                                 <object class="sizeritem">
                                     <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
@@ -197,7 +197,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>55,-1</size>
+                                        <size>55,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -363,7 +363,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size> 
+                                        <size>45,18</size> 
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
@@ -384,7 +384,7 @@
                                         <font>
                                             <size>8</size>
                                         </font>
-                                        <size>45,-1</size>
+                                        <size>45,18</size>
                                         <style>wxTE_LEFT|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>

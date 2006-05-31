@@ -678,6 +678,10 @@ void CaptureHandler::OnMouseMove(wxMouseEvent& event)
 
 BOOL CaptureHandler::DrawSolidDrag(wxPoint point)
 {
+	// ignore if not intialized
+	if (!m_pBackBitmap || !m_pDisplayDC)
+		return FALSE;
+
 //	TRACEUSER("Gerry", _T("DrawSolidDrag(%d, %d)"), point.x, point.y);
 
 	ERROR2IF(DragManagerOp::CurrentManager == NULL ||
