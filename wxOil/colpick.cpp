@@ -648,8 +648,6 @@ static UINT32 GadgetList[] =
 
 BOOL ColourPicker::GetStatusLineText(String_256 *Result)
 {
-PORTNOTE("other", "Disabled ColourPicker::GetStatusLineText()")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	ERROR3IF(Result == NULL, "Illegal NULL param");
@@ -663,44 +661,14 @@ PORTNOTE("other", "Disabled ColourPicker::GetStatusLineText()")
 	if (TheWindow == NULL)
 		return(FALSE);
 
-	// Get the cursor position in screen coords
-	POINT TempPos;
-	if (!::GetCursorPos(&TempPos))
-		return(FALSE);
+	wxPoint mousepos = ::wxGetMousePosition();
+	wxWindow * window=::wxChildWindowFromPoint(TheWindow, mousepos, FALSE, -1);
+	if ((!window) || (window!=::wxChildWindowFromPoint(mousepos, FALSE, -1))) // second check to ensure it is not obscured
+		return FALSE;
 
-	// Convert to client coords in the main window
-	ScreenToClient(TheWindow, &TempPos);
-
-	// See if this is over the main window or any child thereof, getting it's CWindowID
-	CPoint Pos(TempPos);	
-	CWindowID WindowUnderPointer = ::ChildWindowFromPoint(TheWindow, Pos);
-	if (WindowUnderPointer == NULL)
-		return(FALSE);
-
-	// Make sure that hidden windows do not provide status help!
-	INT32 WindowStyle = ::GetWindowLong(WindowUnderPointer, GWL_STYLE);
-	if ((WindowStyle & WS_VISIBLE) == 0)
-		return(FALSE);
-
-	// If the pointer is over main window background, return standard help
-	if (WindowUnderPointer == TheWindow)
-		return(GetStatusLineText(Editor, 0, Result));
-
-	// Otherwise, see if we can find help for the specific gadget
-	CWindowID hGadget;
-	INT32 i = 0;
-	while (GadgetList[i])
-	{
-		hGadget = DialogManager::GetGadget(TheWindow, GadgetList[i]);
-		if (WindowUnderPointer == hGadget && GetStatusLineText(Editor, GadgetList[i], Result))
-			return(TRUE);
-		i++;
-	}
-
-#endif
-	return(TRUE);
+	return GetStatusLineText(Editor, window->GetId(), Result);
 #else
-	return FALSE;
+	return(TRUE);
 #endif
 }
 
@@ -841,6 +809,11 @@ TCHAR *ColourPicker::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *Us
 		HelpStringStore = String_256(_R(IDS_EDITBH_NAME));
 		ReturnVal = TRUE;
 	}
+	else if (Item == _R(IDC_EDIT_WEBHEX))
+	{
+		HelpStringStore = String_256(_R(IDS_EDITBH_WEBHEX));
+		ReturnVal = TRUE;
+	}
 	else if (Item == _R(IDC_EDIT_COLTYPE))
 	{
 		HelpStringStore = String_256(_R(IDS_EDITBH_COLTYPE));
@@ -931,6 +904,50 @@ TCHAR *ColourPicker::HelpCallbackHandler(CWindowID Window, UINT32 Item, void *Us
 	return(NULL);
 }
 
+/********************************************************************************************
+
+>	void ColourPicker::SetBubbleHelp(CGadgetID * GadgetList)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	31/5/2006
+
+	Inputs:		GadgetList - NULL terminated list of gadgets
+
+	Returns:	-
+
+	Purpose:	Set all the bubble help up for the colour picker
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void ColourPicker::SetBubbleHelp(CGadgetID * GadgetList)
+{
+	ColourEditDlg *Editor = ColourEditDlg::TheEditor;
+	if (Editor == NULL)
+		return;
+
+	CGadgetID i;
+	while ((i=*(GadgetList++))) // assignment
+	{
+		wxWindow * pGadget = DialogManager::GetGadget(Editor->WindowID, i);
+		wxString s;
+		if (pGadget)
+		{
+			if (pGadget->IsEnabled() && pGadget->IsShown())
+			{
+				// This is OK because HelpCallbackHandler uses a disgusting static. Not my doing
+				TCHAR * pHelp = HelpCallbackHandler(Editor->WindowID, i, NULL);
+				if (pHelp)
+					s=wxString(pHelp);
+			}
+			if (!s.IsEmpty())
+				pGadget->SetToolTip(s);
+			else
+				pGadget->SetToolTip(NULL);
+		}
+	}
+}
 
 /********************************************************************************************
 

@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccolbar.h"
 #include "document.h"
 #include "basebar.h"
-//#include "colpick.h"
+#include "colpick.h"
 //#include "rulers.h"
 #include "spread.h"
 
@@ -490,15 +490,12 @@ PORTNOTE("statline", "Removed use of ControlHelper")
 				PrefixSelDesc=STATUSLINE_SELDESC_COLBAR;
 		}
 
-PORTNOTE("StatusLine", "Removed use of ColourPicker")
-#ifndef EXCLUDE_FROM_XARALX
 		if (!TextValid)
 		{
 			TextValid=ColourPicker::GetStatusLineText(&text);					// try Colour Editor
 			if (TextValid)
 				PrefixSelDesc=STATUSLINE_SELDESC_COLBAR;
 		}
-#endif
 
 #endif //STANDALONE
 

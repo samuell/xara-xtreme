@@ -160,6 +160,8 @@ public:			// Status line/Bubble help interface
 				// Update bubble help and mouse pointer shape (call on MouseMoves)
 	static void UpdateBubbleHelpAndPointer(void);
 
+	static void SetBubbleHelp(CGadgetID * GadgetList);
+
 protected:
 				// Internal variant of the above
 	static BOOL GetStatusLineText(ColourEditDlg *Editor, UINT32 GadgetID, String_256 *Result);

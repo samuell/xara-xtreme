@@ -1144,6 +1144,11 @@ void ColourEditDlg::CheckDialogSize()
 
 	m_NeedsResize=FALSE;
 
+	// Set up bubble help
+	ColourPicker::SetBubbleHelp(TintGadgetIDs);
+	ColourPicker::SetBubbleHelp(LinkGadgetIDs);
+	ColourPicker::SetBubbleHelp(OtherGadgetIDs);
+
 	ColourPicker::RelayoutDialog(WindowID);
 }
 
