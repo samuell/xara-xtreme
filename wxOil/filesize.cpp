@@ -106,7 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "ensure.h"
 #include "ccfile.h"
-#include "sgliboil.h"	// For filesize fix
 
 DECLARE_SOURCE("$Revision$");
 

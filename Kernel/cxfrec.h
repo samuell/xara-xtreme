@@ -155,6 +155,7 @@ public:
 	virtual	BOOL WriteFIXED16(FIXED16 n);
 	virtual BOOL WriteANGLE(ANGLE a);
 	virtual BOOL WriteWCHAR(WCHAR w);
+	virtual BOOL WriteWCHARs(const WCHAR* pw, UINT32 Count);
 
 	virtual	BOOL WriteCoord(const DocCoord& Coord);
 	virtual	BOOL WriteCoordTrans(const DocCoord& Coord,INT32 dx,INT32 dy);
@@ -168,8 +169,8 @@ public:
 	virtual	BOOL WriteYOrd(INT32 YOrdinate);
 	virtual BOOL WriteCCPanose(const CCPanose &MyCCPanose);
 
-	virtual	BOOL WriteASCII(TCHAR* pStr);
-	virtual	BOOL WriteUnicode(TCHAR* pStr);
+	virtual	BOOL WriteASCII(const TCHAR* pStr);
+	virtual	BOOL WriteUnicode(const TCHAR* pStr);
 PORTNOTE("other","WriteBSTR removed - Windows concept")
 #ifndef EXCLUDE_FROM_XARALX
 	virtual	BOOL WriteBSTR(_bstr_t bstr);

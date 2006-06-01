@@ -107,7 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "basestr.h"
 #include "ensure.h"
-#include "helpuser.h"
 
 
 /**************************************************************************************

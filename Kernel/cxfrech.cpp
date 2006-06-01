@@ -1532,6 +1532,7 @@ BOOL CamelotRecordHandler::IsTagInEssentialList(UINT32 Tag)
 	return FALSE;
 }
 
+
 #if !defined(EXCLUDE_FROM_XARLIB)
 BOOL CamelotRecordHandler::UnrecognisedTag(UINT32 Tag)
 {

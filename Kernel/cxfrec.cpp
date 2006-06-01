@@ -123,9 +123,7 @@ using namespace oilHardwareManager;
 #endif
 
 CC_IMPLEMENT_DYNAMIC(CXaraFileRecord,CCObject);
-#if !defined(EXCLUDE_FROM_XARLIB)
 CC_IMPLEMENT_DYNAMIC(CamelotFileRecord,CXaraFileRecord);
-#endif
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
@@ -685,6 +683,16 @@ BOOL CXaraFileRecord::WriteWCHAR(WCHAR w)
 	return (ok);
 }
 
+BOOL CXaraFileRecord::WriteWCHARs(const WCHAR* pw, UINT32 Count)
+{
+	BOOL ok = TRUE;
+	UINT32 i;
+	for (i = 0; ok && i < Count; i++)
+		ok = WriteWCHAR(pw[i]);
+	return (ok);
+}
+
+
 /********************************************************************************************
 
 >	BOOL CXaraFileRecord::WriteCoord(const DocCoord& Coord)
@@ -846,7 +854,7 @@ PORTNOTE("other","Removed CCPanose usage - write NULL")
 
 /********************************************************************************************
 
->	BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
+>	BOOL CXaraFileRecord::WriteUnicode(const TCHAR* pStr)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	23/5/96
@@ -859,7 +867,7 @@ PORTNOTE("other","Removed CCPanose usage - write NULL")
 
 ********************************************************************************************/
 
-BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
+BOOL CXaraFileRecord::WriteUnicode(const TCHAR* pStr)
 {
 	ERROR3IF(pStr == NULL,"NULL pStr");
 	if (pStr == NULL)
@@ -930,7 +938,7 @@ BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
 
 /********************************************************************************************
 
->	BOOL CXaraFileRecord::WriteASCII(TCHAR* pStr)
+>	BOOL CXaraFileRecord::WriteASCII(const TCHAR* pStr)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	23/5/96
@@ -943,7 +951,7 @@ BOOL CXaraFileRecord::WriteUnicode(TCHAR* pStr)
 
 ********************************************************************************************/
 
-BOOL CXaraFileRecord::WriteASCII(TCHAR* pStr)
+BOOL CXaraFileRecord::WriteASCII(const TCHAR* pStr)
 {
 	ERROR3IF(pStr == NULL,"NULL pStr");
 	if (pStr == NULL)

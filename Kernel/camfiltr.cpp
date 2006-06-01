@@ -232,13 +232,6 @@ CC_IMPLEMENT_DYNAMIC(BaseCamelotFilter, VectorFilter);
 CC_IMPLEMENT_MEMDUMP(InsertLevelStack,List);
 CC_IMPLEMENT_MEMDUMP(InsertLevelStackItem,ListItem);
 
-CC_IMPLEMENT_MEMDUMP(AtomicTagListItem,ListItem)
-CC_IMPLEMENT_MEMDUMP(EssentialTagListItem,ListItem)
-CC_IMPLEMENT_MEMDUMP(TagDescriptionListItem,ListItem)
-CC_IMPLEMENT_MEMDUMP(AtomicTagList,List)
-CC_IMPLEMENT_MEMDUMP(EssentialTagList,List)
-CC_IMPLEMENT_MEMDUMP(TagDescriptionList,List)
-
 CC_IMPLEMENT_MEMDUMP(CXaraFilePathRecordRefListItem,ListItem)
 CC_IMPLEMENT_MEMDUMP(CXaraFilePathRecordRefList,List)
 // WEBSTER - markn 31/1/97

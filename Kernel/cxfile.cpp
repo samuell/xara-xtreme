@@ -140,6 +140,14 @@ CC_IMPLEMENT_DYNAMIC(GeneralRecordHandler,CamelotRecordHandler);
 CC_IMPLEMENT_DYNAMIC(NULLXaraFile,CXaraFile);
 #endif
 
+CC_IMPLEMENT_MEMDUMP(AtomicTagListItem,ListItem)
+CC_IMPLEMENT_MEMDUMP(EssentialTagListItem,ListItem)
+CC_IMPLEMENT_MEMDUMP(TagDescriptionListItem,ListItem)
+CC_IMPLEMENT_MEMDUMP(AtomicTagList,List)
+CC_IMPLEMENT_MEMDUMP(EssentialTagList,List)
+CC_IMPLEMENT_MEMDUMP(TagDescriptionList,List)
+
+
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
 // Declare smart memory handling in Debug builds
@@ -187,6 +195,8 @@ CXaraFile::CXaraFile()
 #if defined(EXCLUDE_FROM_XARLIB)
 	pAtomicTagList = NULL;
 	pEssentialTagList = NULL;
+
+	EndOfFile = FALSE;
 #endif
 }
 
@@ -521,7 +531,7 @@ BOOL CXaraFile::OpenToRead(CCLexFile* pThisCCFile)
 	TotalNumBytesToRead	= 0;
 
 	BOOL ok = TRUE;
-	UINT32 n;
+	UINT32 n = 0;
 
 	// The first 8 bytes should be our unique ID sequence
 	if (ok) ok = Read(&n);
@@ -584,8 +594,17 @@ CXaraFileRecordHandler* CXaraFile::GetDefaultRecordHandler()
 BOOL StandardDefaultRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
 {
 	ERROR2IF(pCXaraFileRecord == NULL,FALSE,"NULL record ptr");
-
+#if !defined(EXCLUDE_FROM_XARLIB)
 	return UnrecognisedTag(pCXaraFileRecord->GetTag());
+#else
+
+	if (m_pfnRecordHandler)
+	{
+		return (m_pfnRecordHandler)(m_pMagic, pCXaraFileRecord);
+	}
+
+	return(TRUE);
+#endif
 }
 
 //-------------------------------------------------------------------------------------------

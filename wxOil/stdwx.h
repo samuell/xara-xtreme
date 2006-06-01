@@ -176,8 +176,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <malloc/malloc.h>
 #endif
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 #include <libxml/tree.h>
 #include <libxml/parser.h>
+#endif
 
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 #define HAVE_DEBUGREPORT
@@ -222,5 +224,7 @@ T Abs( T val )
 #include "memdebug.h"
 #include "exception.h"
 #include "mfccontainer.h"
-#include "binreloc.h"
 
+#if !defined(EXCLUDE_FROM_XARLIB)
+#include "binreloc.h"
+#endif

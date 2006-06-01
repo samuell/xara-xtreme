@@ -273,8 +273,9 @@ public:
 	BOOL AddTagDescription(TagDescriptionListItem* pItem);
 	TagDescriptionListItem* GetTagDescription(UINT32 Tag);
 
-	BOOL SetDocumentNudgeSize(UINT32 newVal);
+	BOOL UnrecognisedTag(UINT32 Tag);
 
+	BOOL SetDocumentNudgeSize(UINT32 newVal);
 #endif
 
 	void AddAtomicTag(AtomicTagListItem* pItem);
@@ -282,8 +283,6 @@ public:
 
 	BOOL IsTagInAtomicList(UINT32 Tag);
 	BOOL IsTagInEssentialList(UINT32 Tag);
-
-	BOOL UnrecognisedTag(UINT32 Tag);
 
 #if !defined(EXCLUDE_FROM_XARLIB)
 	// Path record references
