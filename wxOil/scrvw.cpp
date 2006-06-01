@@ -3260,18 +3260,6 @@ PORTNOTE("other","Disable DRAGTYPE_OLESCROLL")
 		offset.x += dx * PixelWidth;
 		offset.y -= dy * PixelHeight;
 			
-		// Check that we are not attempting to scroll past the bounds of the
-		// work area.
-		if (offset.x < Status->WorkAreaExtent.lo.x)
-			offset.x = Status->WorkAreaExtent.lo.x;
-		else if (offset.x > Status->WorkAreaExtent.hi.x)
-			offset.x = Status->WorkAreaExtent.hi.x;
-			
-		if (offset.y < Status->WorkAreaExtent.lo.y)
-			offset.y = Status->WorkAreaExtent.lo.y;
-		else if (offset.y > Status->WorkAreaExtent.hi.y)
-			offset.y = Status->WorkAreaExtent.hi.y;
-			
 		// By calling DocView to do the scroll we give it a chance to remove
 		// any blobbies it might have put on the screen.  Note that the scrollers
 		// will prevent any overscroll.

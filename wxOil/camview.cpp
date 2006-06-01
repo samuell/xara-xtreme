@@ -1185,8 +1185,16 @@ void CCamView::SetScrollOffset(const WorkCoord& pos, BOOL redraw)
 	FIXED16 PixelWidth,PixelHeight;
 	pDocView->GetPixelSize(&PixelWidth,&PixelHeight);
 
-	INT32 sx = INT32((pos.x-WorkArea.lo.x)/PixelWidth .MakeDouble());
-	INT32 sy = INT32((WorkArea.hi.y-pos.y)/PixelHeight.MakeDouble());
+	// Validate suggested ScrollOffset...
+	WorkCoord tpos = pos;
+	WorkRect wrScrollRect = GetMaxScrollRect();
+	if (tpos.x < wrScrollRect.lo.x)	tpos.x = wrScrollRect.lo.x;
+	if (tpos.y < wrScrollRect.lo.y)	tpos.y = wrScrollRect.lo.y;
+	if (tpos.x > wrScrollRect.hi.x)	tpos.x = wrScrollRect.hi.x;
+	if (tpos.y > wrScrollRect.hi.y)	tpos.y = wrScrollRect.hi.y;
+
+	INT32 sx = INT32((tpos.x-WorkArea.lo.x)/PixelWidth .MakeDouble());
+	INT32 sy = INT32((WorkArea.hi.y-tpos.y)/PixelHeight.MakeDouble());
 //	TRACEUSER("Gerry", _T("Scrolling to (%d, %d)\n"), sx, sy);
 
 	HScrollBar->SetThumbPosition(sx);
@@ -3980,31 +3988,48 @@ void CCamView::ScrollBy(INT32 dx, INT32 dy)
 	offset.y -= dy * PixelHeight;
 //	TRACEUSER("Gerry", _T("NewOffset = (%d, %d)\n"), (INT32)offset.x, (INT32)offset.y);
 
-	WorkCoord WindowSize;
-	WindowSize.x = CurrentSize.GetWidth() * PixelWidth;
-	WindowSize.y = CurrentSize.GetHeight() * PixelHeight;
-
-//	TRACEUSER("Gerry", _T("WorkArea = (%d, %d)\n"), (INT32)Status->WorkAreaExtent.hi.x, (INT32)Status->WorkAreaExtent.lo.y);
-//	TRACEUSER("Gerry", _T("WindowSize = (%d, %d)\n"), (INT32)WindowSize.x, (INT32)WindowSize.y);
-
-	// Check that we are not attempting to scroll past the bounds of the
-	// work area.
-	if (offset.x < Status->WorkAreaExtent.lo.x)
-		offset.x = Status->WorkAreaExtent.lo.x;
-	else if (offset.x > (Status->WorkAreaExtent.hi.x - WindowSize.x))
-		offset.x = Status->WorkAreaExtent.hi.x - WindowSize.x;
-
-	if (offset.y < (Status->WorkAreaExtent.lo.y + WindowSize.y))
-		offset.y = Status->WorkAreaExtent.lo.y + WindowSize.y;
-	else if (offset.y > Status->WorkAreaExtent.hi.y)
-		offset.y = Status->WorkAreaExtent.hi.y;
-
-//	TRACEUSER("Gerry", _T("SetOffset = (%d, %d)\n"), (INT32)offset.x, (INT32)offset.y);
-
 	// By calling DocView to do the scroll we give it a chance to remove
 	// any blobbies it might have put on the screen.  Note that the scrollers
 	// will prevent any overscroll.
 	pDocView->SetScrollOffsets(offset, TRUE);
+}
+
+
+/********************************************************************************************
+>	WorkRect CCamView::GetMaxScrollRect() const
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	31/May/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	WorkRect describing legal area for scroll offsets
+	Purpose:	Find the legal area in which scroll offsets can exist
+	Errors:		-
+	SeeAlso:	-
+********************************************************************************************/
+
+WorkRect CCamView::GetMaxScrollRect() const
+{
+	WorkRect wrScrollRect = Status->WorkAreaExtent;
+
+	FIXED16 PixelWidth, PixelHeight;
+	pDocView->GetPixelSize(&PixelWidth, &PixelHeight);
+
+	WorkCoord WindowSize;
+	WindowSize.x = CurrentSize.GetWidth() * PixelWidth;
+	WindowSize.y = CurrentSize.GetHeight() * PixelHeight;
+
+	if (WindowSize.x > wrScrollRect.hi.x)		// If window wider than document
+		wrScrollRect.hi.x = wrScrollRect.lo.x;	// no horz scrolling is possible
+	else
+		wrScrollRect.hi.x -= WindowSize.x;		// Restrict scrollable area to ensure view never sees outside workarea
+
+	if (WindowSize.y < wrScrollRect.lo.y)		// If window wider than document
+		wrScrollRect.lo.y = wrScrollRect.hi.y;	// no vert scrolling is possible
+	else
+		wrScrollRect.lo.y += WindowSize.y;		// Restrict scrollable area to ensure view never sees outside workarea
+
+	return wrScrollRect;
 }
 
 

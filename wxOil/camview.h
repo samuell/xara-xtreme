@@ -267,6 +267,7 @@ public:
 	void SetScrollOffset(const WorkCoord& pos, BOOL redraw = TRUE);
 	void ShowScrollers(BOOL Show); 
 	void ShowRulers(BOOL Show);
+	WorkRect GetMaxScrollRect() const;
 
 	BOOL AreRulersVisible();
 	BOOL AreScrollersVisible();
