@@ -133,14 +133,15 @@ WXTEST
 GTK_CFLAGS=""
 GTK_LIBS=""
 
+HAVE_WXRC="no"
+
 # Verify minimus requires
 vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
 if test -n "$vers" && test "$vers" -ge 2006003; then
 	WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cppflags`"
 	WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cxxflags | sed -e 's/-fno-exceptions//'`"
 	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs`"
-	WXRC="`$WXCONFIG --utility=wxrc`"
-	
+
 	# See if we are running on GTK
 	WX_GTK="no"
 	AC_MSG_CHECKING([wxWidgets GTK usage])
@@ -152,9 +153,22 @@ if test -n "$vers" && test "$vers" -ge 2006003; then
 		AC_MSG_RESULT([not found])
 	fi
 
+	AC_MSG_CHECKING([wxWidgets wxrc utility])
+	WXRC="`$WXCONFIG --utility=wxrc`"
+
+	if test "$WXRC" = "" ; then
+		AC_MSG_RESULT([not found])
+		HAVE_WXRC="no"
+	else
+		HAVE_WXRC="yes"
+		AC_MSG_RESULT([found])
+	fi
+
 else
 	AC_MSG_ERROR([wxWidgets 2.6.3 or newer is required])
 fi
+
+BUILD_POFILE=$HAVE_WXRC
 
 # Test for libxml2
 XML2CONFIG=xml2-config
@@ -284,12 +298,17 @@ case $target in
 	AC_MSG_ERROR([Architecture $target not supported])
 esac
 
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.14.3])
+PODIR=""
+if test "$BUILD_POFILE" = "yes" ; then
+	AM_GNU_GETTEXT([external])
+	AM_GNU_GETTEXT_VERSION([0.14.3])
+	PODIR=po
+fi
 
 AM_CONDITIONAL(PRECOMPILE_ENABLE, [test "$PrecompileEnable" = "yes"])
 AM_CONDITIONAL(STATIC_ENABLE, [test "$StaticEnable" = "yes"])
 AM_CONDITIONAL(DARWIN_LINK, [test "$DarwinLink" = "yes"])
+AM_CONDITIONAL(BUILD_POFILE, [test "$BUILD_POFILE" = "yes"])
 
 AC_SUBST(TOPDIR)
 AC_SUBST(WX_LIBS)
@@ -301,5 +320,6 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 AC_SUBST(CDRAW_LIB_DIR)
 AC_SUBST(LIBXML2_LIBS)
+AC_SUBST(PODIR)
 
 AC_OUTPUT(Makefile PreComp/Makefile Kernel/Makefile wxOil/Makefile tools/Makefile wxXtra/Makefile po/Makefile.in)

@@ -9,7 +9,9 @@ PRECOMPILE_DIR =
 if PRECOMPILE_ENABLE
 	PRECOMPILE_DIR = PreComp
 endif
-SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools po
+
+# Do not compile po directory if WXRC is broken (gentoo wxWidgets 2.6.3.2)
+SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools @PODIR@
 
 # We clean these here not in the wxOil makefile to prevent a loop
 MOSTLYCLEANFILES=wxOil/xrc/xrc.d wxOil/xrc/xrc.stamp Resources/*
