@@ -69,6 +69,6 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	xpfcaps.cpp xpfilter.cpp xpfrgn.cpp layerprp.cpp prpsgds.cpp prpslyrs.cpp \
 	aprps.cpp prevwdlg.cpp frameops.cpp newcol.cpp tracedlg.cpp tracectl.cpp \
 	tracergn.cpp bfxbase.cpp coldlog.cpp colmenu.cpp sgline.cpp sgline2.cpp \
-	sgstroke.cpp sgbrush.cpp lattrops.cpp la_base.cpp
+	sgstroke.cpp sgbrush.cpp lattrops.cpp la_base.cpp debugdlg.cpp
 
 AM_CXXFLAGS = $(XARAFLAGS)
