@@ -345,9 +345,6 @@ void OpChangeLineAttribOpDesc::OnControlCreate(OpDescControlCreateMsg* pCreateMs
 
 void OpChangeLineAttribOpDesc::OnSelectionChange(OpDescControlMsg* pSelChangedMsg, List*)
 {
-	// This handy error-handling function is defined elsewhere . . .
-	extern void Beep();
-
 	// Get the relevant fields.
 	DialogOp* pDlg = pSelChangedMsg->pDlgOp;									    
 	CGadgetID idSetGadgetID = pSelChangedMsg->SetGadgetID;
