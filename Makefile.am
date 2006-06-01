@@ -73,10 +73,7 @@ XaraLX$(EXEEXT) : $(XaraLX_SOURCES)
 
 UNZIP = unzip
 
-version:
-	@make -CwxOil version
-
-release: version all
+release: all
 
 resources:
 	@make -CwxOil xrc/resources.xrs ; \

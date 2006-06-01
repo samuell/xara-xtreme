@@ -25,6 +25,7 @@ sub usage
                          build
    -i | --international- build internationalisation resources ; omit to
                          prevent wxrc / xgettext etc usage
+   -s                  - build svnversion
    --xgettext PATH     - pass alternate path to xgettext
    --wxrc PATH         - pass alternate path to wxrc
    --verbose           - be very loud about it
@@ -71,11 +72,13 @@ my $topdir=".";
 my $version="";
 my $user="unknown";
 my $international=0;
+my $svnversionenable=0;
 
 GetOptions( "topdir|t=s" => \$topdir,
 	    "ouputdir|o=s" => \$outputdir,
 	    "force|f!" => \$force,
 	    "international|i!" => \$international,
+	    "svnversion|s!" => \$svnversionenable,
 	    "verbose|v+" => \$verbose,
 	    "version|n=s" => \$version,
 	    "user|u=s" => \$user,
@@ -106,6 +109,15 @@ my $omtime=0;
 $omtime=(stat("$outputdir/resources.h"))[9]; # this may fail, in which case it looks like it was generated at the epoch
 $omtime+=0;
 
+my $potime=0;
+if ($international)
+{
+    # Use the xaralx.po time if it's earlier, to force a rebuild (common case - it's missing)
+    $potime=(stat("$outputdir/xrc/xaralx.po"))[9]; # this may fail, in which case it looks like it was generated at the epoch
+    $potime+=0;
+    $omtime=$potime if ($potime<$omtime);
+}
+
 # And the same thing for svnversion - we look at the cached file states. When we rebuild the cache we check
 # to see if this would result in a different svnversion. The .h file might not change as not every cache file change
 # results in a new svnversion.
@@ -123,6 +135,7 @@ closedir(DIR);
 
 my $newer=0;
 my $svnewer=0;
+my $ponewer=0;
 
 my $f;
 foreach $f (@xrcfiles)
@@ -136,6 +149,10 @@ foreach $f (@xrcfiles)
     if ((stat($f))[9] > $svtime)
     {
 	$svnewer=1;
+    }
+    if ((stat($f))[9] > $potime)
+    {
+	$ponewer=1;
     }
 }
 
@@ -175,55 +192,76 @@ if ((stat("$topdir/wxOil/xrc"))[9] > $svtime)
 # Firstly, let's find the svn version if one was specified (else we leave it)
 if ($version ne "")
 {
-    # First determine whether we need to do a rebuild of svnversion at all
-    # We look to see if any of the files passed on the command line are
-    # newer than svnversion.h
-
-    if (open(VCACHE,"$outputdir/svnversion.cache"))
+    if ($svnversionenable)
     {
-	while(<VCACHE>)
+	# First determine whether we need to do a rebuild of svnversion at all
+	# We look to see if any of the files passed on the command line are
+	# newer than svnversion.h
+	
+	if (open(VCACHE,"$outputdir/svnversion.cache"))
 	{
-	    next if /^\?/; # miss stuff not under version control
-	    # Note svn status prepends $topdir unless it's "." in which case it is not needed
-	    $f=substr($_, 40, -1);
-	    my @s;
-	    @s=stat($f);
-	    my $m;
-	    $m=$s[9]+0;
-	    next if (S_ISDIR($s[2])); # ignore directories
-	    print STDERR "Checking '$f' - mtime $m\n" if ($verbose >1);
-	    if (($m == 0) || ($m > $svtime)) # catch case where file disappears
+	    while(<VCACHE>)
 	    {
-		$svnewer=1;
-		print STDERR "$f is NEWER, $m > $svtime \n" if ($verbose);
+		next if /^\?/; # miss stuff not under version control
+		# Note svn status prepends $topdir unless it's "." in which case it is not needed
+		$f=substr($_, 40, -1);
+		my @s;
+		@s=stat($f);
+		my $m;
+		$m=$s[9]+0;
+		next if (S_ISDIR($s[2])); # ignore directories
+		print STDERR "Checking '$f' - mtime $m\n" if ($verbose >1);
+		if (($m == 0) || ($m > $svtime)) # catch case where file disappears
+		{
+		    $svnewer=1;
+		    print STDERR "$f is NEWER, $m > $svtime \n" if ($verbose);
+		}
 	    }
+	    close (VCACHE);
 	}
-	close (VCACHE);
+	else
+	{
+	    # No cache file
+	    $svnewer = 1;
+	}
     }
     else
     {
-	# No cache file
+	# svnversion not enabled - we still have to generate something
 	$svnewer = 1;
     }
-
+	
+	
     my $writeversion;
     my @svnversion;
     $writeversion=0;
 
     if ($svnewer || $force)
     {
-	print STDERR "Rebuilding svn version\n";
-
-	# Generate the cache
-	system ("svn status -v $topdir > $outputdir/svnversion.cache");
-	
 	my $svnv;
-	$svnv=`svnversion $topdir`;
 	my $bdate;
-	$bdate= `date +"%d-%b-%y %H:%M"`;
-	chomp($bdate);
-	chomp($svnv);
-	print STDERR "svnversion gives $svnv\n";
+	if ($svnversionenable)
+	{
+	    print STDERR "Rebuilding svn version\n";
+	    
+	    # Generate the cache
+	    system ("svn status -v $topdir > $outputdir/svnversion.cache");
+	    
+	    $svnv=`svnversion $topdir`;
+	    $bdate= `date +"%d-%b-%y %H:%M"`;
+	    chomp($bdate);
+	    chomp($svnv);
+	    print STDERR "svnversion gives $svnv\n";
+	}
+	else
+	{
+	    # erase the cache so if versioning is turned back on, it recreates it
+	    unlink("$outputdir/svnversion.cache");
+	   
+	    $svnv="0000";
+	    $bdate="00-00-00 00:00";
+	}
+
 	my $camversionmajor;
 	my $camversionminor;
 	($camversionmajor, $camversionminor)=split('.',$version);
@@ -323,23 +361,21 @@ if (!$buildresources)
     }
 }
 
-if (!$buildresources)
+my $ret;
+
+if ($buildresources)
 {
-    ok();
-    exit(0);
+    print STDERR "Rebuilding resources - new checksum $checksum\n";
+    unlink ("$outputdir/xrc/$xaralanguage/xrc.check");
+    unlink ("$outputdir/xrc/xrc.check");
+
+    $ret=system("$topdir/Scripts/combinexrc.pl","-b","missing.png","-o","$outputdir/xrc/dialogs.xrc",@dialogfiles);
+    die "Failed to combine dialogs ($ret): $!" if ($ret);
+    $ret=system("$topdir/Scripts/combinexrc.pl","-b","missing.png","-t","-s","-o","$outputdir/xrc/strings.lst",@xrcfiles);
+    die "Failed to combine strings ($ret): $!" if ($ret);
 }
 
-print STDERR "Rebuilding resources - new checksum $checksum\n";
-unlink ("$outputdir/xrc/$xaralanguage/xrc.check");
-unlink ("$outputdir/xrc/xrc.check");
-
-my $ret;
-$ret=system("$topdir/Scripts/combinexrc.pl","-b","missing.png","-o","$outputdir/xrc/dialogs.xrc",@dialogfiles);
-die "Failed to combine dialogs ($ret): $!" if ($ret);
-$ret=system("$topdir/Scripts/combinexrc.pl","-b","missing.png","-t","-s","-o","$outputdir/xrc/strings.lst",@xrcfiles);
-die "Failed to combine strings ($ret): $!" if ($ret);
-
-if ($international)
+if ($international && ($buildresources || $ponewer))
 {
     my @strings;
     open(STRINGS,"$outputdir/xrc/strings.lst") || die "Could not open strings.lst: $!";
