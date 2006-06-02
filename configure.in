@@ -2,10 +2,6 @@ AC_INIT(wxOil/camelot.cpp)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(XaraLX, 0.5)
 
-dnl It's recomended to put this in acinclude.m4, but including it is 
-dnl more convienent
-builtin( include, binreloc.m4)
-
 AM_BINRELOC
 
 # Process command line arguments
@@ -154,7 +150,7 @@ vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $
 if test -n "$vers" && test "$vers" -ge 2006003; then
 	WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cppflags`"
 	WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cxxflags | sed -e 's/-fno-exceptions//'`"
-	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs`"
+	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs std,media`"
 
 	# See if we are running on GTK
 	WX_GTK="no"
