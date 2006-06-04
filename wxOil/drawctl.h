@@ -172,6 +172,7 @@ public:
 	void Init() {
 					m_CamDrawControlStyle=wxCDCS_DEFAULT;
 					m_OpDesc=wxString(_T(""));
+					m_Frozen=0;
 				}
 
 	// Constructors
@@ -189,8 +190,12 @@ public:
 
 	// EventHandlers
 	void OnPaint(wxPaintEvent & event);
+	void OnSize(wxSizeEvent & event);
 	void OnMouseEvent(wxMouseEvent & event);
 	void OnInvoke(wxCamDrawControlEvent& event);
+
+	virtual void Freeze() {m_Frozen++;}
+	virtual void Thaw() {if (m_Frozen) m_Frozen--;}
 
 	virtual void SetStyle(wxCamDrawControlStyle style) { m_CamDrawControlStyle=style; }
 	virtual wxCamDrawControlStyle GetStyle() { return m_CamDrawControlStyle;}
@@ -201,6 +206,8 @@ protected:
 	wxCamDrawControlStyle m_CamDrawControlStyle;
 
 	wxString m_OpDesc;
+
+	INT32 m_Frozen;
 
 	void Invoke();
 

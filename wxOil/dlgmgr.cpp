@@ -870,11 +870,10 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	if (id) pGadget = GetGadget(pEvtHandler->pwxWindow, id);
 
 	// We tend to get this second-hand from our child, we handle this differently
-	if( NULL == pGadget &&
-		EventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED )
+	if( !pGadget && (event.GetEventObject() != pEvtHandler->pwxWindow))
 	{
 		pGadget = (wxWindow *)event.GetEventObject();
-		TRACEUSER( "jlh92", _T("Notebook = %s\n"), PCTSTR(pGadget->GetClassInfo()->GetClassName()) );
+		id = pGadget->GetId();
 	}
 
 	// Try and find-out whether our control is part of a tabbed dialog page
@@ -1150,8 +1149,17 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_SIZE) ||
 		FALSE)
 	{
-		msg.DlgMsg = DIM_DLG_RESIZED;
-		HandleMessage = TRUE;
+		if (event.GetEventObject() != pEvtHandler->pwxWindow)
+		{
+			Defer = FALSE;
+			msg.DlgMsg = DIM_CTRL_RESIZED;
+			HandleMessage = TRUE;	
+		}
+		else
+		{
+			msg.DlgMsg = DIM_DLG_RESIZED;
+			HandleMessage = TRUE;
+		}
 	}
 	else if (
 		(EventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED) &&

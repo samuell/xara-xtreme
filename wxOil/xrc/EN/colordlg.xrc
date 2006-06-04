@@ -69,22 +69,40 @@
                         <flag>wxGROW|wxALL</flag>
                         <border>1</border>
                         <option>100</option>
-                        <minsize>120,150</minsize>
+                        <minsize>245,245</minsize>
                         <object class="wxCamDrawControl" name="IDC_EDIT_PICKER">
                             <style>wxFULL_REPAINT_ON_RESIZE</style>
-                            <size>120,150</size>
+                            <size>245,245</size>
+                            <bestsize>245,245</bestsize>
                             </object>
                     </object>
                 </object>
             </object>
             <object class="sizeritem">
                 <flag>wxGROW</flag>
-                <border>0</border>
+                <border>1</border>
                 <object class="wxPanel" name="IDC_EDIT_ADVANCEDPANEL">
                     <style>wxNO_BORDER|wxTAB_TRAVERSAL</style>
                     <hidden>1</hidden>
+                    <border>0</border>
                     <object class="wxBoxSizer">
                         <orient>wxVERTICAL</orient>
+                        <border>0</border>
+
+                        <object class="sizeritem">
+                            <flag>wxGROW|wxALL</flag>
+                            <border>0</border>
+                            <object class="wxBoxSizer">
+                                <orient>wxHORIZONTAL</orient>
+                                <object class="spacer">
+                                    <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                    <border>1</border>
+                                    <option>100</option>
+                                    <size>245,1</size>
+                                </object>
+                            </object>
+                        </object>
+
                         <object class="sizeritem">
                             <flag>wxGROW|wxALL</flag>
                             <border>1</border>

@@ -251,6 +251,19 @@ protected:		// Interfaces strictly for use by the kernel ColourEditDlg/ColourLin
 													INT32 EditWidth[]);
 
 	static void RelayoutDialog(CWindowID WindowID);
+	static void OnSize(CWindowID WindowID);
+	static void RecursiveBestSize(wxWindow * pwxWindow);
+	static BOOL OnIdleEvent(CWindowID WindowID);
+	static void OnCreate(CWindowID WindowID);
+	static void ArtificialSizeEvents(CWindowID WindowID);
+
+private:
+	static wxSize s_LastSize;
+	static wxSize s_UserSize;
+	static wxSize s_MinSize;
+	static BOOL s_InColourDialogLayout;
+	static BOOL s_JustCreated;
+	static INT32 s_IdleCounter;
 
 };
 

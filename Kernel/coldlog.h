@@ -559,6 +559,8 @@ protected:
 	BOOL m_NeedsResize;
 	void NeedsResize() {m_NeedsResize = TRUE;}
 
+	virtual BOOL OnIdleEvent();
+
 private:
 	void LoseKeyboardFocus(void);
 		// Lobs the keyboard focus back into the document

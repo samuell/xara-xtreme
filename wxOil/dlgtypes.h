@@ -224,7 +224,10 @@ enum CDlgMessage {
 					DIM_MOUSEWHEEL_DOWN,			// mousewheel scroll downwards (towards user)
 					DIM_MID_BN_DOWN,				// middle button down
 					DIM_MID_BN_UP,					// middle button up
-					DIM_MID_BN_CLICKED				// middle button pressed
+					DIM_MID_BN_CLICKED,				// middle button pressed
+
+					DIM_CTRL_RESIZED				// A control within the dialog has been resized
+
 				};	
 
 enum CDlgMode { MODAL, MODELESS }; 	// Mode of dialog box     

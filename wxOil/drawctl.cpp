@@ -118,6 +118,7 @@ BEGIN_EVENT_TABLE(wxCamDrawControl, wxControl)
 	EVT_CAMDRAWCONTROL_INVOKE(wxID_ANY, wxCamDrawControl::OnInvoke)
 	EVT_PAINT(wxCamDrawControl::OnPaint)
 	EVT_MOUSE_EVENTS(wxCamDrawControl::OnMouseEvent)
+	EVT_SIZE(wxCamDrawControl::OnSize)
 END_EVENT_TABLE();
 
 IMPLEMENT_DYNAMIC_CLASS( wxCamDrawControlXmlHandler, wxXmlResourceHandler)
@@ -179,11 +180,42 @@ BOOL wxCamDrawControl::Create( wxWindow * parent, wxWindowID id, const wxPoint& 
 
 void wxCamDrawControl::OnPaint(wxPaintEvent & event)
 {
-	wxCamDialogEvent RedrawEvent(wxEVT_CAMDIALOG_REDRAW, GetId());
+	if (!m_Frozen)
+	{
+		wxCamDialogEvent RedrawEvent(wxEVT_CAMDIALOG_REDRAW, GetId());
+		wxWindow * pParent=GetParent();
+		if (pParent)
+			pParent->GetEventHandler()->ProcessEvent(RedrawEvent);	
+	}
+}
+
+/********************************************************************************************
+
+>	void wxCamDrawControl::OnSize(wxSizeEvent & event)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	30/12/2005
+	Inputs:		event - the event
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handles resizing of a control
+	Errors:		-
+	SeeAlso:	-
+
+This is passed to the containing window's event handler for information
+
+********************************************************************************************/
+
+void wxCamDrawControl::OnSize(wxSizeEvent & event)
+{
 	wxWindow * pParent=GetParent();
 	if (pParent)
-		pParent->GetEventHandler()->ProcessEvent(RedrawEvent);	
+		pParent->GetEventHandler()->ProcessEvent(event);	
+
+	event.Skip();	// Pretend we didn't handle it
 }
+
 
 /********************************************************************************************
 

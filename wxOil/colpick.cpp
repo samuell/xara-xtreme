@@ -118,7 +118,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard3.h"
 //#include "ed.h"
 
-
+wxSize ColourPicker::s_LastSize = wxDefaultSize;
+wxSize ColourPicker::s_UserSize = wxSize(245,245);
+wxSize ColourPicker::s_MinSize = wxSize(180,100);
+BOOL ColourPicker::s_InColourDialogLayout = FALSE;
+BOOL ColourPicker::s_JustCreated = FALSE;
+INT32 ColourPicker::s_IdleCounter = 0;
 
 CC_IMPLEMENT_MEMDUMP(ColourPicker, CCObject)
 
@@ -2844,6 +2849,56 @@ PORTNOTE("other", "Disabled ColourPicker::SetFixedComponentGadgets")
 
 /********************************************************************************************
 
+>	static void ColourPicker::RecursiveBestSize(wxWindow * pwxWindow)
+
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/12/2005
+	Inputs:		pWindow - pointer to window to process
+	Outputs:	None
+	Returns:	None
+	Purpose:	Initialize platform dependent resources
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void ColourPicker::RecursiveBestSize(wxWindow * pwxWindow)
+{
+	if (pwxWindow->IsShown())
+	{
+		// Now process children if any
+		wxWindowList::Node * pNode = pwxWindow->GetChildren().GetFirst();
+		while (pNode)
+		{
+			RecursiveBestSize(pNode->GetData());
+			pNode = pNode->GetNext();
+		}
+	}
+
+	pwxWindow->InvalidateBestSize();
+
+	wxSizer * s=pwxWindow->GetSizer();
+
+	// Shrink this window around any sizer it contains
+	pwxWindow->Layout();
+	pwxWindow->Fit();
+	if (s)
+		s->SetSizeHints(pwxWindow);
+
+	if (pwxWindow->IsShown())
+		if ((s_UserSize != wxDefaultSize) && ((ResourceID)(pwxWindow->GetId()) == _R(IDC_EDIT_PICKER)))
+			pwxWindow->SetSize(s_UserSize);
+		else
+			pwxWindow->SetSize(pwxWindow->GetMinSize());
+	else
+		pwxWindow->SetSize(wxSize(1,1));
+
+	return;
+}
+
+/********************************************************************************************
+
 >	void ColourPicker::RelayoutDialog(CWindowID WindowID)
 
 	Author:		Alex Bligh
@@ -2856,22 +2911,205 @@ PORTNOTE("other", "Disabled ColourPicker::SetFixedComponentGadgets")
 
 void ColourPicker::RelayoutDialog(CWindowID WindowID)
 {
-	CWindowID pPanel=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_ADVANCEDPANEL));
-	if (pPanel)
-	{
-		pPanel->Layout();
-		pPanel->Fit();
-		pPanel->GetSizer()->SetSizeHints(pPanel);
+	static INT32 flag=0;
 
-		static INT32 flag=0;
-		if (!flag)
+	if (s_InColourDialogLayout)
+	{
+		TRACEUSER("amb", _T("Recursive colour dialog layout"));
+		return; // this should not happen
+	}
+
+	s_InColourDialogLayout = TRUE;
+
+	wxWindow * pPicker=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_PICKER));
+	if (pPicker)
+		pPicker->Freeze();
+	WindowID->Freeze();
+
+	if (pPicker && (s_UserSize != wxDefaultSize))
+	{
+		// Ensure no amount of sizing uses a different size for the picker to the one we want
+		pPicker->SetSize(pPicker->GetSize().GetWidth()+1, pPicker->GetSize().GetHeight()+1); // cause a resize
+		WindowID->Layout();
+		WindowID->Fit();
+		WindowID->GetSizer()->SetSizeHints(WindowID);
+		pPicker->SetMinSize(s_UserSize);
+		pPicker->SetMaxSize(s_UserSize);
+		pPicker->SetSize(s_UserSize);
+	}
+
+	RecursiveBestSize(WindowID);
+
+	ArtificialSizeEvents(WindowID);
+	if (!flag)
+	{
+		flag++;
+		::wxYield();
+		flag--;
+	}
+
+	// And now do it again with the minimum size for the colour picker restored so the dialog
+	// can shrink
+
+	if (pPicker && (s_UserSize != wxDefaultSize))
+	{
+		// If s_JustCreated is set, use s_UserSize
+		pPicker->SetMinSize((s_JustCreated && (s_UserSize != wxDefaultSize))?s_UserSize:s_MinSize);
+		pPicker->SetMaxSize(wxDefaultSize);
+	}
+
+	RecursiveBestSize(WindowID);
+
+	ArtificialSizeEvents(WindowID);
+	if (!flag)
+	{
+		flag++;
+		::wxYield();
+		flag--;
+	}
+
+	WindowID->Thaw();
+	if (pPicker)
+	{
+		pPicker->Thaw();
+		pPicker->Refresh();
+	}
+
+	// Now, even having done the above, believe it or not some of the GTK sizing code seems
+	// to run off idles. So we have to ignore some OnSize events because the idle events
+	// may not be out the system yet. Sigh... Why can't GTK resize sychronously?
+
+	s_IdleCounter = 3; // 3 more idle counts before we use an OnSize (somewhat arbitrary)
+	GetApplication()->NeedMoreIdles(); // wake up idle system
+	s_InColourDialogLayout = FALSE;
+}
+
+/********************************************************************************************
+
+>	void ColourPicker::ArtificialSizeEvents(CWindowID WindowID)
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Produce artificial size events recursively
+	Scope:		Protected
+
+On GTK at least, sizing does not occur synchronously. Some of it happens on size
+events from a gtk_window_size_callback. For various reasons (like the necessity
+for a wxyield) this is not great). So we produce them ourselves.
+
+********************************************************************************************/
+
+void ColourPicker::ArtificialSizeEvents(CWindowID WindowID)
+{
+	if (!WindowID->IsShown())
+		return;
+
+	// size children first
+	wxWindowList::Node * pNode = WindowID->GetChildren().GetFirst();
+	while (pNode)
+	{
+		ArtificialSizeEvents(pNode->GetData());
+		pNode = pNode->GetNext();
+	}
+
+	wxSizeEvent event( WindowID->GetSize(), WindowID->GetId() );
+	event.SetEventObject( WindowID );
+	WindowID->GetEventHandler()->ProcessEvent( event );
+}
+
+/********************************************************************************************
+
+>	void ColourPicker::OnSize(CWindowID WindowID)
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Respond to size events
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourPicker::OnSize(CWindowID WindowID)
+{
+	wxWindow * pGadget = DialogManager::GetGadget(WindowID, _R(IDC_EDIT_PICKER));
+	if (pGadget)
+	{
+		wxSize NewSize = pGadget->GetSize();
+		
+		if (s_LastSize != NewSize)
 		{
-			flag++;
-			::wxYield();
-			flag--;
+			// Record the new size
+			s_LastSize = NewSize;
+			if (!s_InColourDialogLayout && !s_IdleCounter && WindowID->IsShown())
+			{
+				// It must have been user initiated
+				s_UserSize = NewSize;
+			}
 		}
 	}
-	WindowID->Layout();
-	WindowID->Fit();
-	WindowID->GetSizer()->SetSizeHints(WindowID);
+}
+
+/********************************************************************************************
+
+>	BOOL ColourPicker::OnIdleEvent(CWindowID WindowID)
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Respond idle events
+	Scope:		Protected
+
+********************************************************************************************/
+
+BOOL ColourPicker::OnIdleEvent(CWindowID WindowID)
+{
+	if (s_InColourDialogLayout)
+		return FALSE; // That's not a real idle
+
+	if (s_IdleCounter>0)
+	{
+		s_IdleCounter--;
+	}
+
+	if (s_JustCreated && !s_IdleCounter)
+	{
+		// We've just been created so we need to do a post open resize
+		s_JustCreated=FALSE;
+		RelayoutDialog(WindowID);
+	}
+
+	return (s_IdleCounter!=0); // we want more events
+}
+
+/********************************************************************************************
+
+>	void ColourPicker::OnCreate(CWindowID WindowID)
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Inputs:		-
+	Purpose:	Respond to size events
+	Scope:		Protected
+
+********************************************************************************************/
+
+void ColourPicker::OnCreate(CWindowID WindowID)
+{
+	s_IdleCounter=0;
+	s_JustCreated=TRUE;
+
+	// Fix the window size so Open doesn't overwrite it (grrrr)
+	wxWindow * pPicker=DialogManager::GetGadget(WindowID, _R(IDC_EDIT_PICKER));
+	if (pPicker && (s_UserSize != wxDefaultSize))
+	{
+		// Ensure no amount of sizing uses a different size for the picker to the one we want
+		pPicker->SetSize(pPicker->GetSize().GetWidth()+1, pPicker->GetSize().GetHeight()+1); // cause a resize
+		WindowID->Layout();
+		WindowID->Fit();
+		WindowID->GetSizer()->SetSizeHints(WindowID);
+		pPicker->SetMinSize(s_UserSize);
+		pPicker->SetMaxSize(s_UserSize);
+		pPicker->SetSize(s_UserSize);
+	}
 }

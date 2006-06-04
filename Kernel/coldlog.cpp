@@ -669,6 +669,7 @@ ColourEditDlg::ColourEditDlg(): DialogOp(ColourEditDlg::IDD, ColourEditDlg::Mode
 
 	m_bDoingSetGadget = FALSE;
 	m_NeedsResize = FALSE;
+	GetApplication()->RegisterIdleProcessor(IDLEPRIORITY_LOW, this);
 }
 
 
@@ -690,6 +691,7 @@ ColourEditDlg::ColourEditDlg(): DialogOp(ColourEditDlg::IDD, ColourEditDlg::Mode
 
 ColourEditDlg::~ColourEditDlg()
 {
+	GetApplication()->RemoveIdleProcessor(IDLEPRIORITY_LOW, this);
 	EndTimedProcessing();
 
 	if (EditingColour != NULL)
@@ -1096,6 +1098,25 @@ void ColourEditDlg::HideGadgetList(CGadgetID * Gadgets, BOOL Hide /*=TRUE*/)
 	{
 		HideGadget(Gadget, Hide);	
 	}
+}
+
+/*****************************************************************************
+>	BOOL ColourEditDlg::OnIdleEvent()
+
+	Author:		Alex Bligh
+	Created:	30/5/2005
+	Purpose:	Idle event handler for the colour dialog
+				
+	Returns:	FALSE (to indicate we want no more idle events)
+				The wakeup from the timer will create one for us
+	Errors:		-
+
+
+*****************************************************************************/
+
+BOOL ColourEditDlg::OnIdleEvent()
+{
+	return ColourPicker::OnIdleEvent(WindowID);
 }
 
 /********************************************************************************************
@@ -3084,6 +3105,7 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 			break;
 
 		case DIM_CREATE:
+			ColourPicker::OnCreate(WindowID);
 			SetGadgetBitmaps(_R(IDC_EDIT_DROPMENU), 0, 0);
 			#ifndef WEBSTER
 			SetGadgetBitmaps(_R(IDC_EDIT_MAKESTYLE), 0, 0);
@@ -3108,6 +3130,8 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 			ResetState();				// Ensure all controls and window extent are updated
 			SetUnitGroupDefaults(DisplayModel);	// and defaults are set
 			SetControls();				// ...and update them
+
+			ColourPicker::RelayoutDialog(WindowID);
 
 			// And then lob away the input focus again - put it back into the mainframe
 			LockLoseFocus = FALSE;		// Ensure the focus lock is reset to off whenever we open
@@ -3157,7 +3181,12 @@ MsgResult ColourEditDlg::Message( Msg* Message )
 		}
  		return(OK);					// ... making sure the base class handler is NOT called (it blows up)
 
-
+		case DIM_CTRL_RESIZED:
+		{
+			if (Msg->GadgetID == _R(IDC_EDIT_PICKER))
+				ColourPicker::OnSize(WindowID);
+		}
+		break;
 
 		case DIM_REDRAW:				// Kernel-redraw of colour patch or picker controls
 		{
