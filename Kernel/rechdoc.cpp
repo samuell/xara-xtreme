@@ -464,83 +464,101 @@ BOOL DocumentRecordHandler::HandleSpreadRecord(CXaraFileRecord* pCXaraFileRecord
 	IncSpreadInsertedCount();
 
 	// If this is not the first spread in the file, ignore the rest of the file
-	if (GetSpreadInsertedCount() > 1)
+	if (GetSpreadInsertedCount() <= 1)
 	{
-		EndOfFile();
-		return TRUE;
-	}
+		// Mainstream code used between 1994 and 2006
+		//
+		// Ignore this record if we are importing into an existing file
+		if (IsImporting())
+			return TRUE;
 
-	// Ignore this record if we are importing into an existing file
-	if (IsImporting())
-		return TRUE;
+		Node* pContextNode = GetInsertContextNode();
+		ERROR2IF(pContextNode == NULL, FALSE, "What? No context node?");
 
-	Node* pContextNode = GetInsertContextNode();
-	ERROR2IF(pContextNode == NULL, FALSE, "What? No context node?");
+		// JCF: bodge insertion context.
+		if (IS_A(pContextNode, NodeSetSentinel))
+		{
+			SetInsertContextNode(0);
+			pContextNode = GetInsertContextNode();
+		}
 
-	// JCF: bodge insertion context.
-	if (IS_A(pContextNode, NodeSetSentinel))
-	{
-		SetInsertContextNode(0);
-		pContextNode = GetInsertContextNode();
-	}
+		Spread* pSpread = (Spread*) pContextNode->FindParent(CC_RUNTIME_CLASS(Spread));
+		ERROR2IF(pSpread == NULL, FALSE, "Can't find the spread");
 
-	Spread* pSpread = (Spread*) pContextNode->FindParent(CC_RUNTIME_CLASS(Spread));
-	ERROR2IF(pSpread == NULL, FALSE, "Can't find the spread");
-
-	SetLastSpreadInserted(pSpread);
-	SetInsertContextNode(pSpread);
-	InsertNextNodeAsChild();
-
-	Layer* pLayer = pSpread->FindFirstLayer();
-	if (pLayer != NULL)
-	{
-		SetInsertContextNode(pLayer);
-		InsertNextNodeAsChild();
-	}
-
-	return TRUE;
-
-/*
-	Node* pContextNode = GetInsertContextNode();
-	ERROR2IF(pContextNode == NULL,FALSE,"What? No context node?");
-
-	Node* pSpread = pContextNode->FindParent(CC_RUNTIME_CLASS(Spread));
-	if (pSpread != NULL)
-	{
+		SetLastSpreadInserted(pSpread);
 		SetInsertContextNode(pSpread);
-		InsertNextNodeAsSibling();
-	}
-
-	BOOL ok = FALSE;
-
-	{
-		Spread* pNewSpread = new Spread;
-		if (pNewSpread != NULL)
-			ok = InsertNode(pNewSpread);
-
-		SetLastSpreadInserted(pNewSpread);
 		InsertNextNodeAsChild();
 
-		NodeGrid::MakeDefaultGrid(pNewSpread);
-		Page* pPage = new Page;
-		if (pPage == NULL)
-			return FALSE;
+		Layer* pLayer = pSpread->FindFirstLayer();
+		if (pLayer != NULL)
+		{
+			SetInsertContextNode(pLayer);
+			InsertNextNodeAsChild();
+		}
 
-		pPage->AttachNode(pNewSpread,LASTCHILD);
-
-		SetInsertContextNode(pPage);
-		InsertNextNodeAsSibling();
+		return TRUE;
 	}
-
-	if (ok && pSpread != NULL)
+	else
 	{
-		pSpread->CascadeDelete();
-		delete pSpread;
-		pSpread = NULL;
+		// Multi-spread code written before 1994, resurrected in 2006 by Phil
+		//
+		// For some reason the above code assumes that a spread already
+		// exists and simply "overloads" it.
+		// Some of the logic below creates grid and page nodes in a similar
+		// vein. Not sure why...
+		//
+		Node* pContextNode = GetInsertContextNode();
+		ERROR2IF(pContextNode == NULL,FALSE,"What? No context node?");
+
+		// JCF: bodge insertion context.
+		if (IS_A(pContextNode, NodeSetSentinel))
+		{
+			SetInsertContextNode(0);
+			pContextNode = GetInsertContextNode();
+		}
+
+		Node* pSpread = pContextNode->FindParent(CC_RUNTIME_CLASS(Spread));
+		if (pSpread != NULL)
+		{
+			SetInsertContextNode(pSpread);
+			InsertNextNodeAsSibling();
+		}
+
+		BOOL ok = FALSE;
+
+		{
+			Spread* pNewSpread = new Spread;
+			if (pNewSpread != NULL)
+				ok = InsertNode(pNewSpread);
+
+			if (ok)
+			{
+				SetLastSpreadInserted(pNewSpread);
+				InsertNextNodeAsChild();
+
+				NodeGrid::MakeDefaultGrid(pNewSpread);
+
+				Page* pPage = new Page;
+				ok = (pPage != NULL);
+
+				if (ok)
+					pPage->AttachNode(pNewSpread,LASTCHILD);
+
+				SetInsertContextNode(pNewSpread);
+				InsertNextNodeAsChild();
+			}
+		}
+
+		if (!ok && pSpread != NULL)
+		{
+			pSpread->CascadeDelete();
+			delete pSpread;
+			pSpread = NULL;
+		}
+		return ok;
 	}
-	return ok;
-*/
 }
+
 
 /********************************************************************************************
 

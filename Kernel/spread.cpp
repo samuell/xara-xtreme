@@ -3592,6 +3592,9 @@ BOOL Spread::PostImport()
 		DocRect Bounds = GetBoundingRect();
 		DocCoordToSpreadCoord(&Bounds);
 		ExpandPasteboardToInclude(Bounds);
+
+		AdjustPasteboards();
+
 		return(TRUE);
 	}
 
