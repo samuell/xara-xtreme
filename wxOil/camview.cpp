@@ -3986,6 +3986,12 @@ void CCamView::ScrollBy(INT32 dx, INT32 dy)
 	pDocView->GetPixelSize(&PixelWidth, &PixelHeight);
 	offset.x += dx * PixelWidth;
 	offset.y -= dy * PixelHeight;
+
+	WorkRect wrScrollRect = GetMaxScrollRect();
+	if (offset.x < wrScrollRect.lo.x)	offset.x = wrScrollRect.lo.x;
+	if (offset.y < wrScrollRect.lo.y)	offset.y = wrScrollRect.lo.y;
+	if (offset.x > wrScrollRect.hi.x)	offset.x = wrScrollRect.hi.x;
+	if (offset.y > wrScrollRect.hi.y)	offset.y = wrScrollRect.hi.y;
 //	TRACEUSER("Gerry", _T("NewOffset = (%d, %d)\n"), (INT32)offset.x, (INT32)offset.y);
 
 	// By calling DocView to do the scroll we give it a chance to remove
