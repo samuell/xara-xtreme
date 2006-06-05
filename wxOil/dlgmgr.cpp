@@ -5321,8 +5321,9 @@ void DialogManager::ScrollKernelRenderedGadget(CWindowID WindowID, CGadgetID Gad
 			wxRect		BaseRect;
 			BaseRect.x		= RectToScroll->lo.x / PixelSize;
 			BaseRect.width	= ( RectToScroll->hi.x - RectToScroll->lo.x ) / PixelSize;
-			BaseRect.y		= ( ExtraInfo.dy - RectToScroll->lo.y ) / PixelSize;
-			BaseRect.height	= ( ExtraInfo.dy + RectToScroll->lo.y - RectToScroll->hi.y ) / PixelSize;
+			BaseRect.y		= ( ExtraInfo.dy - RectToScroll->hi.y ) / PixelSize;
+//			BaseRect.height	= ( ExtraInfo.dy + RectToScroll->lo.y - RectToScroll->hi.y ) / PixelSize;
+			BaseRect.height	= ( RectToScroll->hi.y - RectToScroll->lo.y ) / PixelSize;
 
 			// Copy the scroll area contents with a blit, and invalidate the 'hole'
 			pWinToScroll->ScrollWindow( -ScrollDX, -ScrollDY, &BaseRect );

@@ -1786,7 +1786,7 @@ BOOL CamResource::Splash()
 		wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_NO_TIMEOUT,
 		0, NULL, -1, wxDefaultPosition, wxDefaultSize,
 		wxNO_BORDER
-#if !defined (_DEBUG)
+#if 0 && !defined (_DEBUG)
 		|wxSTAY_ON_TOP // Only stay on top in non-debug builds - too annoying for preinit debugging
 #endif
 		  );
