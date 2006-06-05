@@ -25,7 +25,7 @@ else
     XaraLX_LDSOURCE = -Wl,--start-group $(XaraLX_SOURCES) -Wl,--end-group
 endif
 XaraLX_LDFLAGS		= --debug -L$(srcdir)/$(CDRAW_LIB_DIR) $(WX_LIBS) $(LIBS) $(LIBXML2_LIBS) -lCDraw
-XaraLX_LD			= $(CXX)
+XaraLX_LD			?= $(CXX)
 
 if STATIC_ENABLE
 	XaraLX_LDFLAGS	= -pthread \
