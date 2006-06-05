@@ -2860,8 +2860,18 @@ BOOL OpDisplayLineGallery::Init()
 								OPTOKEN_DISPLAY_LINE_GALLERY,
 								OpDisplayLineGallery::GetState,
 								0,                                      /* help ID */
-								_R(IDBBL_DISPLAY_LINE_GALLERY),
-								0);                                     /* bitmap ID */
+	 							_R(IDBBL_DISPLAY_LINE_GALLERY),
+				 				_R(IDC_BTN_SGLINE), // UINT32 resourceID = 0,	// resource ID
+								_R(IDC_BTN_SGLINE), // UINT32 controlID = 0,	// control ID
+								SYSTEMBAR_ILLEGAL,	  // SystemBarType GroupBarID = SYSTEMBAR_ILLEGAL,	// group bar ID
+				 				TRUE,	  // BOOL ReceiveMessages = TRUE,	// BODGE
+				 				FALSE,	  // BOOL Smart = FALSE,
+				 				TRUE,	  // BOOL Clean = TRUE,   
+								NULL,	  // OpDescriptor *pVertOpDesc = NULL,
+								0,	  // UINT32 OneOpenInstID = 0,		
+								0,	  // UINT32 AutoStateFlags = 0,
+								TRUE	  // BOOL fCheckable = FALSE
+								);
 }
 
 
