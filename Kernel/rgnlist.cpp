@@ -1303,6 +1303,7 @@ void RenderRegionList::TryTotalUnion()
 	while (pRegion != NULL)
 	{
 		View *pView = pRegion->GetRenderView();
+		Spread* pSpread = pRegion->GetRenderSpread();
 
 		// Have we optimised this region's View already?
 		if (!Views.IsViewOptimised(pView))
@@ -1332,7 +1333,9 @@ void RenderRegionList::TryTotalUnion()
 				while (pRegion2 != NULL)
 				{
 					// Is this the correct View and render context?
-					if (pRegion2->GetRenderView() == pView)
+					if (pRegion2->GetRenderView() == pView &&
+						pRegion2->GetRenderSpread() == pSpread
+						)
 					{
 						// More than one region - we can try to union them
 						TryUnion = TRUE;
@@ -1406,6 +1409,7 @@ void RenderRegionList::DoTotalUnion(RenderRegion *pRegion, View *pView,
 									DocRect TotalUnion)
 {
 	pRegion->ResetRegion(TotalUnion);
+	Spread* pSpread = pRegion->GetRenderSpread();
 
 	// Delete all the others
 	RenderRegion *pRegion2 =(RenderRegion *) GetNext(pRegion);
@@ -1417,6 +1421,7 @@ void RenderRegionList::DoTotalUnion(RenderRegion *pRegion, View *pView,
 
 		// Is this the correct DocView and render context?
 		if ((pRegion2->GetRenderView() == pView) &&
+			(pRegion2->GetRenderSpread() == pSpread) &&
 			(pRegion2->CanBeMerged()))
 		{
 			// Yes - delete this region

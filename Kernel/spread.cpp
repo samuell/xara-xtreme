@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 #include "docview.h"
 #include "optsmsgs.h"
+#include "oilbitmap.h"	// CWxBitmap
 
 //#include "prevwres.h"	// _R(IDS_TAG_LAYER_FRAMEPROPS)
 //#include "frameops.h" // for OpGrabAllFrames
@@ -609,7 +610,7 @@ void Spread::RenderDropShadows(RenderRegion* pRender)
 	pRender->GetRenderView()->GetScaledPixelSize(&ScaledPixelWidth, &ScaledPixelHeight);
 
 	// Find out how many millipoints 4 pixels is
-	MILLIPOINT DropWidth = 4 * (min(ScaledPixelWidth.MakeLong(), ScaledPixelHeight.MakeLong() )); 
+	MILLIPOINT DropWidth = 4 * (min(ScaledPixelWidth.MakeLong(), ScaledPixelHeight.MakeLong() ));
 	
 	MILLIPOINT ExtraPixel = ScaledPixelWidth.MakeLong();
 	if (PageBackgroundPresent)
@@ -637,9 +638,29 @@ void Spread::RenderDropShadows(RenderRegion* pRender)
 	                                  PageRect.HighCorner().y - DropWidth 
 									 );   
 									 
-			pRender->DrawRect(&RightHandDropShadow);        
-			
-			PageHasADropShadow = TRUE; 
+			pRender->DrawRect(&RightHandDropShadow);
+
+/*			// Attempt to render fuzzy shadow edge using bitmap...
+			{
+				DocRect r = RightHandDropShadow;
+				CWxBitmap*			pBitmap = new CWxBitmap();
+				pBitmap->LoadBitmap(_R(IDB_SPREAD_RIGHTEDGE));
+				KernelBitmap*		pkBitmap = new KernelBitmap(pBitmap, TRUE);
+
+				pRender->RenderBits(pkBitmap, (DocCoord*)&r, 2, TRUE, NULL);	// Unclean!
+	
+				if (pBitmap)
+				{
+					pBitmap->BMBytes = ((CWxBitmap*)OILBitmap::Default)->BMBytes;
+				}
+				if (pkBitmap)
+				{
+					delete pkBitmap;
+					pkBitmap = NULL;
+				}
+			}
+*/
+			PageHasADropShadow = TRUE;
 									 
 		}                                
 		
@@ -654,7 +675,28 @@ void Spread::RenderDropShadows(RenderRegion* pRender)
 								   PageRect.LowCorner().y  
 								  );         
 	        
-			pRender->DrawRect(&BottomDropShadow); 		
+			pRender->DrawRect(&BottomDropShadow);
+
+/*			// Attempt to render fuzzy shadow edge using bitmap...
+			{
+				DocRect r = BottomDropShadow;
+				CWxBitmap*			pBitmap = new CWxBitmap();
+				pBitmap->LoadBitmap(_R(IDB_SPREAD_BOTTOMEDGE));
+				KernelBitmap*		pkBitmap = new KernelBitmap(pBitmap, TRUE);
+
+				pRender->RenderBits(pkBitmap, (DocCoord*)&r, 2, TRUE, NULL);	// Unclean!
+	
+				if (pBitmap)
+				{
+					pBitmap->BMBytes = ((CWxBitmap*)OILBitmap::Default)->BMBytes;
+				}
+				if (pkBitmap)
+				{
+					delete pkBitmap;
+					pkBitmap = NULL;
+				}
+			}
+*/
 			PageHasADropShadow = TRUE; 
 		}       
 		
@@ -811,7 +853,7 @@ void Spread::Render( RenderRegion* pRender )
 		// --- Render spread dividers ---
 
 		// Set the colour for the spread divide (mid grey)
-		DocColour COLOUR_SPREADDIVIDE = DocColour(127L, 127L, 127L);
+/*		DocColour COLOUR_SPREADDIVIDE = DocColour(64L, 32L, 32L); //DocColour(127L, 127L, 127L);
 		COLOUR_SPREADDIVIDE.SetSeparable(FALSE);		// Don't colour-separate the spread divider
 
 		pRender->SetLineColour(COLOUR_SPREADDIVIDE);
@@ -830,7 +872,24 @@ void Spread::Render( RenderRegion* pRender )
 		MILLIPOINT Width = GetWidePasteboard(pView).Width();
 		MILLIPOINT Height = GetWidePasteboard(pView).Height();
 		pRender->DrawLine(DocCoord(-Width, Height), DocCoord(Width, Height));
-		
+*/
+
+		if (FindPreviousSpread()!=NULL)
+		{
+			DocColour COLOUR_SPREADDIVIDE = DocColour(64L, 32L, 32L); //DocColour(127L, 127L, 127L);
+			COLOUR_SPREADDIVIDE.SetSeparable(FALSE);		// Don't colour-separate the spread divider
+			pRender->SetFillColour(COLOUR_SPREADDIVIDE);
+
+			View *pView = pRender->GetRenderView();
+			DocRect sd = GetWidePasteboard(pView);
+			DocCoordToSpreadCoord(&sd);
+
+			FIXED16 ScaledPixelWidth;
+			FIXED16 ScaledPixelHeight;
+			pRender->GetRenderView()->GetScaledPixelSize(&ScaledPixelWidth, &ScaledPixelHeight);
+			sd.lo.y = sd.hi.y - ScaledPixelWidth.MakeLong();
+			pRender->DrawRect(&sd);
+		}
 		
 		// --- Render drop shadows ---
 		if (ShowDropShadow)
@@ -3313,8 +3372,8 @@ BOOL Spread::ExpandPasteboardToInclude(DocRect IncludeRect)
 
 void Spread::AdjustPasteboards(void)
 {
-#if NEW_PASTEBOARD
-	Chapter *ParentChapter = FindParentChapter();
+//#if NEW_PASTEBOARD
+	Chapter* ParentChapter = FindParentChapter();
 	ERROR3IF(ParentChapter == NULL, "No parent Chapter?!");
 
 	// First, find the minimum and maximum pasteboard x extents for the entire document.
@@ -3325,12 +3384,30 @@ void Spread::AdjustPasteboards(void)
 	// 1) Make sure that each following spread is shifted to the correct document coordinates
 	//    by ensuring its pasteboard is placed after this spread's one.
 	// 2) Make sure that all default grids in all spreads fully cover the pasteboards.
-	Spread *pThisSpread = ParentChapter->FindFirstSpread();
+	Spread* pThisSpread = ParentChapter->FindFirstSpread();
 
 	// Force the x extent of the first pasteboard to match all others in this chapter
 	DocRect TempPasteRect = pThisSpread->GetPasteboardRect();
 	TempPasteRect.lo.x = ChapterBounds.lo.x;
 	TempPasteRect.hi.x = ChapterBounds.hi.x;
+
+/*if (pThisSpread->FindNextSpread())
+{
+	DocCoord OriginOffset(pThisSpread->SpreadOrigin.x - pThisSpread->PasteboardRect.lo.x,
+							pThisSpread->SpreadOrigin.y - pThisSpread->PasteboardRect.lo.y);
+
+	DocRect r;
+	pThisSpread->GetPagesRect(&r);
+	pThisSpread->SpreadCoordToDocCoord(&r);
+	r.Inflate(18000);
+	INT32 ydiff = r.lo.y - TempPasteRect.lo.y;
+	TempPasteRect.lo.y = r.lo.y;
+
+	pThisSpread->SpreadOrigin.x = TempPasteRect.lo.x + OriginOffset.x;
+	pThisSpread->SpreadOrigin.y = TempPasteRect.lo.y + OriginOffset.y - ydiff;
+}
+*/
+
 	pThisSpread->ChangePasteboardRect(TempPasteRect);
 	pThisSpread->InvalidateBoundingRect();
 
@@ -3345,11 +3422,51 @@ void Spread::AdjustPasteboards(void)
 		if (pNextSpread != NULL)
 		{
 			DocRect FirstPasteRect  = pThisSpread->GetPasteboardRect(FALSE);
+/*if (pThisSpread->FindNextSpread())
+{
+	DocRect r;
+	pThisSpread->GetPagesRect(&r);
+	pThisSpread->SpreadCoordToDocCoord(&r);
+	r.Inflate(18000);
+	FirstPasteRect.lo.y = r.lo.y;
+}
+if (pThisSpread->FindPreviousSpread())
+{
+	DocRect r;
+	pThisSpread->GetPagesRect(&r);
+	pThisSpread->SpreadCoordToDocCoord(&r);
+	r.Inflate(18000);
+	FirstPasteRect.hi.y = r.hi.y;
+}
+*/
 			DocRect SecondPasteRect = pNextSpread->GetPasteboardRect(FALSE);
+			DocCoord OriginOffset(pNextSpread->SpreadOrigin.x - pNextSpread->PasteboardRect.lo.x,
+									pNextSpread->SpreadOrigin.y - pNextSpread->PasteboardRect.lo.y);
+
+/*if (pNextSpread->FindNextSpread())
+{
+	DocRect r;
+	pNextSpread->GetPagesRect(&r);
+	pNextSpread->SpreadCoordToDocCoord(&r);
+	r.Inflate(18000);
+	INT32 ydiff = r.lo.y - SecondPasteRect.lo.y;
+	SecondPasteRect.lo.y = r.lo.y;
+	OriginOffset.y -= ydiff;
+}
+if (pNextSpread->FindPreviousSpread())
+{
+	DocRect r;
+	pNextSpread->GetPagesRect(&r);
+	pNextSpread->SpreadCoordToDocCoord(&r);
+	r.Inflate(18000);
+	SecondPasteRect.hi.y = r.hi.y;
+}
+*/
 
 			// Construct a new Pasteboard rectangle of the correct size, and move it
 			// to lie just below the previous spread's pasteboard area
 			TempPasteRect = SecondPasteRect;
+
 			TempPasteRect.Translate(-TempPasteRect.lo.x, -TempPasteRect.lo.y);
 			TempPasteRect.Translate(FirstPasteRect.lo.x, FirstPasteRect.lo.y - TempPasteRect.Height()); 
 
@@ -3360,9 +3477,6 @@ void Spread::AdjustPasteboards(void)
 			// Move the spread coordinate origin so that it stays at the same relative offset
 			// from the pasteboard bottom left corner, or else all objects inside the spread
 			// will suddenly shift to a new place on (or off) the pasteboard!
-			DocCoord OriginOffset(pNextSpread->SpreadOrigin.x - pNextSpread->PasteboardRect.lo.x,
-									pNextSpread->SpreadOrigin.y - pNextSpread->PasteboardRect.lo.y);
-
 			pNextSpread->SpreadOrigin.x = TempPasteRect.lo.x + OriginOffset.x;
 			pNextSpread->SpreadOrigin.y = TempPasteRect.lo.y + OriginOffset.y;
 
@@ -3406,9 +3520,9 @@ void Spread::AdjustPasteboards(void)
 	if (pDoc != NULL)
 		pDoc->ForceRedraw();
 
-#else
-ERROR3("Spread::AdjustPasteboards is unimplemented - see Jason/Phil");
-#endif
+//#else
+//ERROR3("Spread::AdjustPasteboards is unimplemented - see Jason/Phil");
+//#endif
 }
 
 

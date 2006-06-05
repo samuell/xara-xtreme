@@ -316,6 +316,7 @@ private:
 								  ClickModifiers ClickMods,
 								  Spread* pSpread,
 								  BOOL bForceRecopy = FALSE);
+	virtual BOOL CanChangeSpread();
 
 	// function to build the appropriate transform matrix
 	virtual void BuildMatrix();
@@ -396,7 +397,6 @@ protected:
 	BOOL LeaveCopy;
 	BOOL ScaleLines;
 	BOOL TransFills;
-	BOOL CanChangeToNewSpread;
 	BOOL MouseHasMoved;
 	BOOL CanScaleLines;
 
@@ -415,10 +415,13 @@ protected:
 
 	// David Mc 12/5/99
 	// The selection when entering DoStartTransOp
-	List * m_pSelList;
+	List* m_pSelList;
 
 	// This range represents the copied and transformed nodes that are used when solid dragging
 	Range* m_pDraggedRange;
+
+	// This is the spread that contains m_pDraggedRange
+	Spread* m_pDragSpread;
 
 	BOOL m_bFirstRedraw;
 	BOOL m_bShowDraggedOutlines;

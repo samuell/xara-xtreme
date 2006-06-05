@@ -183,7 +183,6 @@ TransOperation::TransOperation(): UndoableOperation()
 	// Give all the flags default values
 	LockAspect = FALSE;
 	LeaveCopy = TRUE;
-	CanChangeToNewSpread = FALSE;
 
 	// The scale factor is used to scale the line widths and by default it is ignored
 	ScaleLines = FALSE;
@@ -571,9 +570,6 @@ void TransOperation::DoWithParam(OpDescriptor* /*pDescriptor*/, OpParam* pOpPara
 
 	SetTransformRange(TransData->pRange, NULL);
 
-	// It is not possible to move between spreads in an immediate operation
-	CanChangeToNewSpread = FALSE;
-
 	// Where was this operation started from, and are we interested
 	SetStartBlob(TransData->StartBlob);
 
@@ -663,6 +659,7 @@ void TransOperation::DragStarted(TransformData* TransData, DragTool* pTool,
 	// Copy all the data that we will want to be keeping
 	StartSpread = pSpread;
 	CurrentSpread = pSpread;
+	m_pDragSpread = pSpread;
 	RawStartPos = ClickPos;
 	StartPos = ClickPos;
 	MagStartPos = ClickPos;
@@ -767,10 +764,6 @@ void TransOperation::DragStarted(TransformData* TransData, DragTool* pTool,
 	// By default we will use the proper centre of transform. Adjust may change this later
 	CentreOfTrans = OriginalCentre;
 	
-	// it is up to the transformation in question to change this when
-	// it decides that it would be possible
-	CanChangeToNewSpread = FALSE;
-
 	// Where was this operation started from, and are we interested
 	SetStartBlob(TransData->StartBlob);
 
@@ -1290,6 +1283,9 @@ void TransOperation::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods,
 		// Try to build all the undo information
 	 	Worked = CompleteTransformation();
 
+		if (CanChangeSpread())
+			Document::SetSelectedViewAndSpread(NULL, NULL, m_pDragSpread);
+
 	 	// mark the selection cache as invalid (bounding rects etc will no longer be correct)
 		m_pTransformRange->Update();
 	}
@@ -1738,6 +1734,27 @@ void TransOperation::UpdateTransformOnDrag(DocCoord, Spread*, ClickModifiers&)
 
 /********************************************************************************************
 
+>	virtual BOOL TransOperation::CanChangeSpread()
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	05/June/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	TRUE if this transform allows the drag to be transferred to another spread
+	Purpose:	Tell the baseclass functions whether to draw drag feedback only on the start
+				spread or to allow drag rendering to be done on other spreads too.
+
+********************************************************************************************/
+
+BOOL TransOperation::CanChangeSpread()
+{
+	// Overide this function if you allow your transform to cross spread boundaries
+	return FALSE;
+}
+
+
+/********************************************************************************************
+
 >	virtual void TransOperation::BuildMatrix()
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
@@ -1940,7 +1957,7 @@ PORTNOTE("other", "Use of BeginSlowJob removed in TransOperation::CompleteTransf
 
   	// Start the selection operation which records the current selection status and 
 	// invalidates the rectangle covered by the selection and its blobs. 
-	BOOL RecordSelectionTwice = (CanChangeToNewSpread) && (StartSpread!=CurrentSpread);
+	BOOL RecordSelectionTwice = (CanChangeSpread()) && (StartSpread!=CurrentSpread);
 
 	// If the Selection only contains a single object then we pass this object as
 	// a parameter to DoStartTransOp. Otherwise the routine assumes that the 
@@ -1964,6 +1981,8 @@ PORTNOTE("other", "Use of BeginSlowJob removed in TransOperation::CompleteTransf
 		// Move the selection to a new spread here
 		if (!DoMoveNodes(*m_pTransformRange, CurrentSpread->FindActiveLayer(), LASTCHILD))
 			return FALSE;
+
+		Document::GetSelected()->ResetInsertionPosition();
 	}
 	
 	// Change the bounds then ripple them up the tree
@@ -2086,6 +2105,14 @@ BOOL TransOperation::SolidDragTransform(BOOL bForceRecopy, BOOL bForceRedraw)
 	m_PrevTransform.Transform((DocCoord*)&tr, 2);
 	//TRACEUSER( "Phil", _T("M4 Test %d %d\n"), abs(tr.lox-m_AccuracyTestRect.lox), abs(tr.loy-m_AccuracyTestRect.loy));
 
+	// We may need to move the dragged range to a new spread if the transform requires it...
+	if (CanChangeSpread() && (m_pDragSpread!=CurrentSpread))
+	{
+		// Move m_DraggedRange to the new spread
+		//TRACEUSER("Phil", _T("Move m_Dragged range to new spread!\n"));
+		bForceRecopy = TRUE;
+	}
+
 	if( bForceRecopy || 
 		abs( tr.lo.x - m_AccuracyTestRect.lo.x ) > 10 ||
 		abs( tr.lo.y - m_AccuracyTestRect.lo.y ) > 10 || 
@@ -2097,13 +2124,18 @@ BOOL TransOperation::SolidDragTransform(BOOL bForceRecopy, BOOL bForceRedraw)
 		m_pDraggedRange->DeleteNodes();
 		delete m_pDraggedRange;
 
-		m_pDraggedRange = m_pTransformRange->CloneNodes(DocView::SolidDragTimeLimit);
+		Layer* pTargetLayer = NULL;
+		if (CurrentSpread!=m_pDragSpread)
+			pTargetLayer = CurrentSpread->FindActiveLayer();	// This logic must match the final copy done in DragFinished
+
+		m_pDraggedRange = m_pTransformRange->CloneNodes(DocView::SolidDragTimeLimit, FALSE, FALSE, pTargetLayer);
 
 		if (m_pDraggedRange==NULL)
 			return FALSE;
 
 		m_pDraggedRange->SetDraggedNodes(TRUE);
 		m_pDraggedRange->SetRenderable(TRUE);
+		m_pDragSpread = CurrentSpread;
 
 		// Scan the selection, and transform each selected object.
 		Trans->bSolidDrag = TRUE;

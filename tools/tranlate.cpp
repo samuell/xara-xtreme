@@ -260,16 +260,30 @@ void OpTranslateTrans::UpdateTransformOnDrag(DocCoord PointerPos, Spread* pSprea
 	// Make a mental note of the current position
 	LastPos = PointerPos;
 
-	// Update the current spread
+	// Update the current spread (must do this if CanChangeSpread returns TRUE)
 	CurrentSpread = pSpread;
-
-	// Have a look to see if we are on a different spread now
-	if (pSpread != StartSpread)
-		CanChangeToNewSpread = TRUE;
-	else
-		CanChangeToNewSpread = FALSE;
 }
 
+
+
+/********************************************************************************************
+
+>	virtual BOOL OpTranslateTrans::CanChangeSpread()
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	05/June/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	TRUE if this transform allows the drag to be transferred to another spread
+	Purpose:	Tell the baseclass functions whether to draw drag feedback only on the start
+				spread or to allow drag rendering to be done on other spreads too.
+
+********************************************************************************************/
+
+BOOL OpTranslateTrans::CanChangeSpread()
+{
+	return TRUE;
+}
 
 
 /********************************************************************************************

@@ -121,6 +121,7 @@ class NodeBitmap;
 class AttrFillGeometry;
 class EffectsStack;
 class ListRange;
+class Layer;
 
 // Define this if you want Phil's new SelRange area and perimeter features
 //#define SELECTION_AREA_FEATURE
@@ -411,7 +412,7 @@ public:
 	virtual void AttrsHaveChanged(); 
 		 
 	virtual void SetRenderable(BOOL bNewVis = FALSE);
-	virtual Range* CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop = FALSE, BOOL bLightweight = FALSE);
+	virtual Range* CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop = FALSE, BOOL bLightweight = FALSE, Layer* pDestLayer = NULL);
 	virtual void DeleteNodes();
 	virtual void ForceRedrawView(DocView* pDocView, BOOL bReleaseCache = FALSE, BOOL bUseBlobRects = FALSE, BOOL bReleaseParentsOnly = FALSE);
 	virtual BOOL TransformNodes(TransformBase* Trans);

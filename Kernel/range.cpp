@@ -3535,7 +3535,7 @@ void Range::SetRenderable(BOOL bNewVis)
 
 /*********************************************************************************************
 
->    Range* Range::CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop, BOOL bLightweight)
+>    Range* Range::CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop, BOOL bLightweight, Layer* pDestLayer = NULL)
      Author:    Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
      Created:   11/12/2003
      Inputs: 	timelimit		- if the clone doesn't complete within timelimit, back out
@@ -3553,7 +3553,7 @@ void Range::SetRenderable(BOOL bNewVis)
 
 **********************************************************************************************/
 
-Range* Range::CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop, BOOL bLightweight)
+Range* Range::CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop, BOOL bLightweight, Layer* pDestLayer)
 {
 	Node* pNode;
 	ListRange* pCloneRange = new ListRange();
@@ -3578,15 +3578,27 @@ Range* Range::CloneNodes(UINT32 timeLimit, BOOL bCloneOnTop, BOOL bLightweight)
 		// Make sure the copy is not selected
 		pCopy->SetSelected(FALSE);
 
-		if (!bCloneOnTop)
+		if (pDestLayer==NULL)
 		{
-			// Insert the copied node right alongside the original
-			pCopy->AttachNode(pNode, NEXT, FALSE, FALSE);
+			if (!bCloneOnTop)
+			{
+				// Insert the copied node right alongside the original
+				pCopy->AttachNode(pNode, NEXT, FALSE, FALSE);
+			}
+			else
+			{
+				Node* pTail = pNode->FindParent(CC_RUNTIME_CLASS(Layer))->FindLastChild(TRUE);
+				pCopy->AttachNode(pTail, NEXT, FALSE, FALSE);
+			}
 		}
 		else
 		{
-			Node* pTail = pNode->FindParent(CC_RUNTIME_CLASS(Layer))->FindLastChild(TRUE);
-			pCopy->AttachNode(pTail, NEXT, FALSE, FALSE);
+			// Copy the node into a new target spread...
+			Node* pTail = pDestLayer->FindLastChild(TRUE);
+			if (pTail)
+				pCopy->AttachNode(pTail, NEXT, FALSE, FALSE);
+			else
+				pCopy->AttachNode(pDestLayer, FIRSTCHILD, FALSE, FALSE);
 		}
 
 		// Add the copied node to the output ListRange

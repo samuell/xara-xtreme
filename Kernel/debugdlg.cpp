@@ -1652,7 +1652,7 @@ PORTNOTE("LiveEffects", "Removed use of LiveEffects")
 					break;
 				case 4:
 					{
-#if NEW_PASTEBOARD
+//#if NEW_PASTEBOARD
 						Spread* pSpread = Document::GetSelectedSpread();
 						Spread* pNewSpread = NULL;
 						pSpread->NodeCopy((Node**)&pNewSpread);
@@ -1661,9 +1661,9 @@ PORTNOTE("LiveEffects", "Removed use of LiveEffects")
 							pNewSpread->AttachNode(pSpread, NEXT);
 							pSpread->AdjustPasteboards();
 						}
-#else
-						InformWarning(_R(IDS_SPREADTESTWARNING));
-#endif
+//#else
+//						InformWarning(_R(IDS_SPREADTESTWARNING));
+//#endif
 					}
 					break;
 				}

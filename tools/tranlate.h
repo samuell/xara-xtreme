@@ -142,6 +142,7 @@ private:
 	virtual void UpdateTransformOnDrag(DocCoord, Spread*, ClickModifiers&);
 	virtual void BuildMatrix();
 	virtual void ConstrainDrag(DocCoord*);
+	virtual BOOL CanChangeSpread();
 
 	// Member vars of the operation
 	DocCoord LastPos;
