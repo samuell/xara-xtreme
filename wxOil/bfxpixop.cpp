@@ -1379,6 +1379,7 @@ Checks the octrees integrity
 
 void Octree::CheckIntegrity()
 {
+#ifdef _DEBUG // avoid unused variable warnings
 	for (INT32 d=0; d<=8; d++) for (INT32 c=0; c<=8; c++)
 	{
 		OctreeElement *pCheck = ListHead[d][c];
@@ -1398,14 +1399,12 @@ void Octree::CheckIntegrity()
 			 	count++;
 				ERROR3IF(pChild->pParent != pCheck, "Bad parent link");
 				ERROR3IF(pChild->Depth != d+1, "Bad child depth");
-#ifdef _DEBUG // avoid unused variable warnings
 				INT32 R=pCheck->R + ((cc&1)?halfwidth:0);
 				INT32 G=pCheck->G + ((cc&2)?halfwidth:0);				
 				INT32 B=pCheck->B + ((cc&4)?halfwidth:0);
 				ERROR3IF(pChild->R != R, "Bad child R");
 				ERROR3IF(pChild->G != G, "Bad child G");
 				ERROR3IF(pChild->B != B, "Bad child B");
-#endif
 				OctreeElement *pLChild = pChild;
 				while (pLChild->pListPrev) pLChild=pLChild->pListPrev;
 				ERROR3IF(pLChild!=ListHead[d+1][pLChild->NumChildren],"Child not in a list");
@@ -1414,6 +1413,7 @@ void Octree::CheckIntegrity()
 			pCheck=pCheck->pListNext;
 		}
 	}
+#endif
 	return;
 }	
 

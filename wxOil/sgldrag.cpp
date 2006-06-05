@@ -681,7 +681,7 @@ BOOL GalleryLineDragInfo::DropStartOrEndArrow(Path* pPathHit, DocCoord DropPos,
 {
 	double NearestDist = -1;
 	BOOL GotNearest = FALSE;
-	BOOL NearestIsStart;
+	BOOL NearestIsStart = FALSE;
 
 	DocCoord* Coords = pPathHit->GetCoordArray();
 	PathVerb* Verbs  = pPathHit->GetVerbArray();
