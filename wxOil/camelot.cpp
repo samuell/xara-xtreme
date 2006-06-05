@@ -1191,7 +1191,7 @@ DialogManager *CCamApp::GetDlgManager()
 
 /********************************************************************************************
 
->	void CCamApp::DisableSystem(void)
+>	void CCamApp::DisableSystem(CWindowID WindowID = NULL)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/10/93
@@ -1205,7 +1205,7 @@ DialogManager *CCamApp::GetDlgManager()
 
 ********************************************************************************************/
 
-void CCamApp::DisableSystem()
+void CCamApp::DisableSystem(CWindowID WindowID /*=NULL*/)
 {
 // RALPH
 #ifdef RALPH
@@ -1219,7 +1219,9 @@ void CCamApp::DisableSystem()
 	wxWindow		   *pWnd;
 
 	if ( ( pWinApp = &AfxGetApp() ) != NULL )		// Note assignment using = not == on both lines
-		if ( ( pWnd = pWinApp->GetTopWindow() ) !=NULL )
+													// Don't disabled if the TLW is the error box we
+													// are disabling in favour of
+		if ( (( pWnd = pWinApp->GetTopWindow() ) !=NULL ) && (pWnd != WindowID))
 			pWnd->Enable(FALSE);					// Only perform operation if no pointers are NULL
 	s_bIsDisabled = true; // The flags value will be tested in the rendering and tool bar
 						  // code etc. When TRUE functionality will be disabled.  	

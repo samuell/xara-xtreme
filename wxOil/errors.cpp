@@ -640,7 +640,8 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	pBox->Centre();
 
 	// Disable the system's functionality for serious errors (i.e. stop rendering etc).
-	if (Error == ERRORTYPE_SERIOUS || Error == ERRORTYPE_ENSURE) CCamApp::DisableSystem();
+	if (Error == ERRORTYPE_SERIOUS || Error == ERRORTYPE_ENSURE) CCamApp::DisableSystem(pBox);
+
 	if ( Error::IsInRenderThread() )
 		TRACE( _T("InformGeneral called within RenderThread => serious rendering error"));
 

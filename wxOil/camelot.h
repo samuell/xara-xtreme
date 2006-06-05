@@ -116,7 +116,7 @@ public:
     wxMDIChildFrame *CreateChildFrame( wxDocument *doc, wxView *view );
 
 	// Functions required to enable/disable the systems functionality.   
-	static void DisableSystem(); 
+	static void DisableSystem(CWindowID WindowID=NULL); 
     static void EnableSystem();
 	static inline bool IsDisabled() {return s_bIsDisabled;}
 
