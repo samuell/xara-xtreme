@@ -112,6 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"
 #include "lineattr.h"
 #include "sgline.h"
+#include "osrndrgn.h"
 
 //#include "richard2.h"	// string resources
 
@@ -545,9 +546,9 @@ INT32 GalleryLineDragInfo::GetDragTransparency()
 
 KernelBitmap* GalleryLineDragInfo::GetSolidDragMask()
 {
-PORTNOTE("other", "Disabled line gallery drag code")
-#ifndef EXCLUDE_FROM_XARALX
-	if (DragMask == NULL)
+	// Note we abuse this call (like our base class abuses this call) to create the bitmap
+	// itself. We don't use DragMask itself anymore (i.e. it stays NULL)
+	if (!DragMask && !TheBitmap)
 	{
 		DocView *View = DocView::GetCurrent();
 		if (View == NULL)
@@ -568,15 +569,13 @@ PORTNOTE("other", "Disabled line gallery drag code")
 		Matrix ConvertMatrix;
 		FIXED16 ViewScale = 1;
 
-		CDC DisplayDC;
-		DisplayDC.CreateDC("DISPLAY", NULL, NULL, NULL); 
-
-		double dpi = (double) GetDeviceCaps( DisplayDC.m_hDC, LOGPIXELSX );
+		wxScreenDC DisplayDC;
+		double dpi = (double) OSRenderRegion::GetFixedDCPPI(DisplayDC).GetWidth();
 
 		GRenderBitmap* pMaskRegion 	= new GRenderBitmap(ClipRegion, ConvertMatrix, ViewScale, 
-														1, dpi);
+														32, dpi);
 
-
+		pMaskRegion->SetDoCompression(TRUE); // misnamed call to indicate we want transparency
 		pMaskRegion->AttachDevice(View, &DisplayDC, pSpread);
 
 		// Make a Mask Bitmap
@@ -585,81 +584,12 @@ PORTNOTE("other", "Disabled line gallery drag code")
 		pMaskRegion->StopRender();
 
 		OILBitmap* pOilMaskBmp = pMaskRegion->ExtractBitmap();
-		DragMask = new KernelBitmap(pOilMaskBmp, TRUE);	
+		TheBitmap = new KernelBitmap(pOilMaskBmp, TRUE);	
 
 		delete pMaskRegion;
 	}
 
-	return DragMask;
-#else
-	return NULL;
-#endif
-}
-
-/********************************************************************************************
-
->	BOOL GalleryLineDragInfo::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
-
-	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	10/4/95		  
-	Returns:	-
-	Purpose:	Gets the gallery item to render itself on the first OnDrawSolidDrag call.
-	SeeAlso:	-
-
-********************************************************************************************/
-
-BOOL GalleryLineDragInfo::OnDrawSolidDrag(wxPoint Origin, wxDC * TheDC, DragTarget* pDragTarget)
-{
-PORTNOTE("other", "Disabled line gallery drag code")
-#ifndef EXCLUDE_FROM_XARALX
-	if (TheBitmap == NULL)
-	{
-		DocView *View = DocView::GetCurrent();
-		if (View == NULL)
-		{
-			return NULL;
-		}
-		
-		Spread *pSpread = View->FindEnclosingSpread(OilCoord(0,0));
-		if (pSpread == NULL)
-		{
-			return NULL;
-		}
-
-		// Find the size of the rendered item.
-//		DocRect ClipRegion;
-		DocRect ClipRegion(0,0, 750*100, 750*50);
-//		ClipRegion.lo.x = ClipRegion.lo.y = 0;
-//		SourceItem->GetSize(c_eLineAttrDragTextPos, &ClipRegion.hi.x, &ClipRegion.hi.y);
-		Matrix ConvertMatrix;
-		FIXED16 ViewScale = 1;
-
-		CDC DisplayDC;
-		DisplayDC.CreateDC("DISPLAY", NULL, NULL, NULL); 
-
-		UINT32 Depth = GetDeviceCaps( DisplayDC.m_hDC, BITSPIXEL ) * 
-										GetDeviceCaps( DisplayDC.m_hDC, PLANES );
-
-		double dpi   = (double) GetDeviceCaps( DisplayDC.m_hDC, LOGPIXELSX );
-
-		GRenderBitmap* pRegion 	= new GRenderBitmap(ClipRegion, ConvertMatrix, ViewScale, 
-													Depth, dpi);
-
-		pRegion->AttachDevice(View, &DisplayDC, pSpread);
-
-		// Make the Drag Bitmap
-		pRegion->StartRender();
-	  	SourceItem->Render(pRegion, ClipRegion, c_eLineAttrDragTextPos);
-		pRegion->StopRender();
-
-		OILBitmap* pOilDragBmp = pRegion->ExtractBitmap();
-		TheBitmap = new KernelBitmap(pOilDragBmp, TRUE);	
-
-		delete pRegion;
-	}
-#endif
-	// Call base class to do the actual drawing
-	return BitmapDragInformation::OnDrawSolidDrag(Origin, TheDC, pDragTarget);
+	return BitmapDragInformation::GetSolidDragMask();
 }
 
 /********************************************************************************************
