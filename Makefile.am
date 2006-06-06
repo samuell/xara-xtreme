@@ -81,7 +81,6 @@ UNZIP = unzip
 release: all
 
 resources:
-	@make -CwxOil xrc/resources.xrs ; \
 	( rm -rf Resources ; mkdir -p Resources ; cd Resources ; $(UNZIP) -q ../wxOil/xrc/resources.xrs )
 
 ACLOCAL_AMFLAGS = -I m4

@@ -12,11 +12,12 @@ $(DEPDIR)/camtypes.h.Po:
 
 camtypes.h.gch: camtypes.h
 	if $(CXXCOMPILE) -x c++-header -MT $@ -MD -MP -MF "$(DEPDIR)/camtypes.h.Tpo" -c -o $@ $<; \
-	then mv -f "$(DEPDIR)/camtypes.h.Tpo" "$(DEPDIR)/camtypes.h.Po"; else rm -f "$(DEPDIR)/camtypes.h.Tpo"; exit 1; fi
-	make -C ../Kernel clean
-	make -C ../wxXtra clean
-	make -C ../tools clean
-	make -C ../wxOil clean
+	then mv -f "$(DEPDIR)/camtypes.h.Tpo" "$(DEPDIR)/camtypes.h.Po"; else rm -f "$(DEPDIR)/camtypes.h.Tpo"; exit 1; fi;
+	$(MAKE) -C ../Kernel clean
+	$(MAKE) -C ../wxXtra clean
+	$(MAKE) -C ../tools clean
+	$(MAKE) -C ../wxOil clean 
+
 	
 
 
