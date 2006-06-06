@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PRINTCTL
 
 #include "docrect.h"
-#include "strings.h"
 #include "list.h"
 #include "colplate.h"
 

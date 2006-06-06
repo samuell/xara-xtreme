@@ -98,13 +98,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FLASH_BUTTON_RECORD
 #define INC_FLASH_BUTTON_RECORD
 
-#include "ccobject.h"
-#include "strings.h"
 #include "swfplace.h"
 
 /********************************************************************************************
 
->	class FlashButtonRecord : public CObject
+>	class FlashButtonRecord : public CCObject
 
 	Author:		Graeme_Sutherland (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/12/99

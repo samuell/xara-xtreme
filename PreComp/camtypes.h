@@ -139,7 +139,7 @@ typedef UINT32 	TAG;
 // Try to speed up compilation times
 #include "ccobject.h"
 #include "errors.h"
-#include "strings.h"
+#include "camstring.h"
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "app.h"
 

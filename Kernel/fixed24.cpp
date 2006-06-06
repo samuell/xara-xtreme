@@ -111,8 +111,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "fixed24.h"
-#include "strings.h"
-
 
 // this is a temporary kludge for the 32-bit MS compiler
 #define	F24ASSIGN( it )		it

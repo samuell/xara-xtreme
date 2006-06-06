@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 */
 
-#include "camtypes.h" 
+#include "camtypes.h"
 //#include "inetop.h"
 
 DECLARE_SOURCE("$Revision$");
@@ -121,15 +121,14 @@ DECLARE_SOURCE("$Revision$");
 #endif
 
 #include "ops.h"
-#include "range.h"                        
-#include "strings.h"     
-#include "document.h"  
-#include "ophist.h"     
-#include "ensure.h"     
+#include "range.h"
+#include "document.h"
+#include "ophist.h"
+#include "ensure.h"
 #include "docview.h" 
 //#include "resource.h" 
 //#include "simon.h"
-#include "errors.h"   
+#include "errors.h"
 #include "selstate.h"
 #include "noderect.h"
 #include "tranform.h"

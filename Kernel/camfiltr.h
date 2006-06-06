@@ -106,7 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bmpprefs.h"	// SelectionType
 #include "doccoord.h"	
 #include "node.h"		// AttachNodeDirection 
-#include "strings.h"
 
 class CXaraFile;
 class CXaraFileRecord;

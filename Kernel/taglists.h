@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftags.h"
 #include "list.h"
 #include "listitem.h"
-#include "strings.h"
 
 /***********************************************************************************************
 

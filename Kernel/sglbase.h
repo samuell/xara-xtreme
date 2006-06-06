@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "sgallery.h"
 #include "sgtree.h"
-#include "strings.h"
 #include "msg.h"
 #include "thumb.h"
 #include "sgscan.h"

@@ -106,7 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "stockcol.h"
 //#include "lineattr.h"
 #include "ensure.h"
-#include "strings.h"
 //#include "resource.h"
 //#include "barsdlgs.h"
 //#include "errors.h"

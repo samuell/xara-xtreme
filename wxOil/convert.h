@@ -106,7 +106,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CONVERT
 #define INC_CONVERT
 
-#include "strings.h"
 #include "unittype.h"
 
 class Node;

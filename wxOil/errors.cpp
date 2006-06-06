@@ -107,8 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "errors.h"
 #include "camelot.h"
-#include "strings.h"
-#include "basestr.h"
 #include "ensure.h"
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "tool.h"

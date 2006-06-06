@@ -117,8 +117,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_XLONG
 #define INC_XLONG
 
-#include "strings.h"
-
 class CCAPI fixed16;
 
 #if defined(USE_NATIVE_XLONG)

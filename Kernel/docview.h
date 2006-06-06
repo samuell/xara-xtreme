@@ -116,7 +116,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ops.h"
 #include "monotime.h"
 #include "oilcoord.h"
-#include "strings.h"
 #include "rendtype.h"
 #include "quality.h"
 #include "docvmsg.h"

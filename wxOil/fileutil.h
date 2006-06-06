@@ -101,8 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FILEUTIL
 #define INC_FILEUTIL
 
-#include "strings.h"
-
 class PathName;
 
 

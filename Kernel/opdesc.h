@@ -104,7 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "listitem.h"
 #include "list.h"
-#include "strings.h"
 #include "pump.h"
 #include "msg.h"
 

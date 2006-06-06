@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_UNITS
 #define INC_UNITS
 
-#include "strings.h"
 #include "list.h"
 #include "unittype.h"
 #include "pump.h"

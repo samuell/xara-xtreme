@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRINTING
 #define	INC_PRINTING
 
-#include "strings.h"
 #include "ops.h"
 #include "opdesc.h"
 

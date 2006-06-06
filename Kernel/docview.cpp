@@ -126,7 +126,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccdc.h"
 #include "csrstack.h"
 #include "app.h"
-#include "strings.h"
 #include "document.h"
 #include "nodedoc.h"
 #include "chapter.h"

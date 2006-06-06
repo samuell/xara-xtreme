@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "product.h"	// for PRODUCT_BASENAME
 #include "sgliboil.h"
-#include "strings.h"
 #include "pathname.h"
 #include "sgscan.h"		// Generate code with hourglass...
 //#include "nev.h"

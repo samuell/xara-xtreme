@@ -118,13 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // All include files here
 #include <assert.h>
-#include "docrect.h"
-#include "ccobject.h"
-#include "strings.h"
-#include "basestr.h"
-#include "fixst256.h"
 //#include "binds.h"
-#include "range.h" // To be moved to noderend.cpp (currently locked)
 #include "release.h"
 
 class CCAPI NodeRenderablePaper;

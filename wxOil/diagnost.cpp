@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "diagnost.h"
 #include "app.h"
-#include "strings.h"
 #include "camelot.h"
 
 static INT32 OutputDiagnostics = 0;

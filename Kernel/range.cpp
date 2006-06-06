@@ -112,7 +112,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "range.h"   
 #include "rndrgn.h"
 //#include "simon.h"
-#include "strings.h" 
 #include "ink.h"
 #include "spread.h"
 //#include "dlgbar.h"

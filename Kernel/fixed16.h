@@ -96,6 +96,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
+class StringBase;
+
 /*
  */ 
 

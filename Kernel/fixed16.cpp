@@ -99,7 +99,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "fixed16.h"
-#include "strings.h"
 
 DECLARE_SOURCE("$Revision$");
 

@@ -117,7 +117,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "list.h"
 #include "undoop.h"
 #include "opdesc.h"   
-#include "strings.h"
 
 #define OPTOKEN_UNDO _T("Undo")
 #define OPTOKEN_REDO _T("Redo")

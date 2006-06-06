@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 	
 */
 
-#ifndef INC__STRINGS
-#define INC__STRINGS
+#ifndef INC__CAMSTRING
+#define INC__CAMSTRING
 
 // The base class variable-length Strings.
 #include "basestr.h"
@@ -120,4 +120,4 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // as typedef doesn't work properly. And also the 32-bit compiler.
 #define String String_32
 
-#endif	// INC__STRINGS
+#endif	// INC__STRING

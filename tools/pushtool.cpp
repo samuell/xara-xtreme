@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "strings.h"
 #include "docview.h"
 #include "ensure.h"
 #include "toollist.h"
