@@ -1057,8 +1057,8 @@ Node* NodeRenderableInk::FindFirstHitTest(Spread* pStartSpread,
 {
 	// Make sure that the node we start at is really a spread, as all NodeRenderableInks
 	// are children of spread nodes.
-	ENSURE(pStartSpread != 0,
-			"Node::FindFirstHitTest: pStartSpread parameter is 0!");
+	ENSURE(pStartSpread != NULL,
+			"Node::FindFirstHitTest: pStartSpread parameter is NULL!");
 	ENSURE(pStartSpread->IsSpread(),
 			"Node::FindFirstHitTest: pStartSpread parameter is not a spread!");
 
@@ -1069,27 +1069,29 @@ Node* NodeRenderableInk::FindFirstHitTest(Spread* pStartSpread,
 
 	// If the bounding box doesn't intersect the click rectangle then the given spread
 	// cannot hold any object that was clicked on.
-	if (!drSpreadBounds.IsIntersectedWith(drClickRect)) return 0;
+	if (!drSpreadBounds.IsIntersectedWith(drClickRect))
+		return NULL;
 
 	// As the spread does contain the click rectangle, begin the traversal...
 	// Call FindNextHitTest directly on the Spread so that the last item of the
 	// Spread's child list can be considered correctly.
 	Node* pFirstNode = FindNextHitTest((Node*)pStartSpread, drClickRect, pAttribMap, bExcludeLayers);
-	if (pFirstNode == 0) return 0;
+	if (pFirstNode == NULL)
+		return NULL;
 
 	// If there is an upper limit node then go through the tree until we get down to that
 	// without returning the results for hit-testing.
 	// (Or until there are no more nodes to consider!)
-	if (pHighNode != 0)
+	if (pHighNode != NULL)
 	{
-		while (pFirstNode != 0 && pFirstNode != pHighNode)
+		while (pFirstNode != NULL && pFirstNode != pHighNode)
 		{
  			pFirstNode = FindNextHitTest(pFirstNode, drClickRect, pAttribMap, bExcludeLayers);
 		}
 
 		// If we have stopped at the high node then return the next node below that in HitTest order
 		// as the "first" node...  Note that we do not want to examine child nodes of the high node.
-		if (pFirstNode != 0)
+		if (pFirstNode != NULL)
 		{
 			pFirstNode = FindNextHitTest(pFirstNode, drClickRect, pAttribMap, bExcludeLayers, TRUE);
 		}
@@ -1135,10 +1137,8 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 										 BOOL bExcludeLayers,
 										 BOOL bSkipChildren)
 {
-	if(pNode == 0)
-	{
-		return 0;
-	}
+	if (pNode == NULL)
+		return NULL;
 
 	// Storage for pointer to attribute types...
 	CCRuntimeClass* pTypeInfo;
@@ -1155,7 +1155,7 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 	{
 		// Find its right-most sibling and continue walking from there.
 		pNode = pNode->FindFirstChild();
-		while (pNode->FindNext() != 0)
+		while (pNode->FindNext() != NULL)
 		{
 			// If this node is an attribute then it's more local than anything that might
 			// be in the Attribute map (because we've just gone DOWN in the tree).
@@ -1166,7 +1166,8 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 
 				// Check if this type is already in the hash table.  If it isn't then increment
 				// the number of attribute types found
-				if (!pAttribMap->Lookup(pTypeInfo, pDummy)) nFoundAttributes++;
+				if (!pAttribMap->Lookup(pTypeInfo, pDummy))
+					nFoundAttributes++;
 
 				// Insert this local attribute into the map
 				pAttribMap->SetAt(pTypeInfo, pNode);
@@ -1175,7 +1176,7 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 			pNode = pNode->FindNext();
 		}
 	}
-	else if (pNode->FindPrevious() != 0)
+	else if (pNode->FindPrevious() != NULL)
 	{											  
 		// Otherwise, just backtrack to the immediately-previous sibling, if possible.
 		pNode = pNode->FindPrevious();
@@ -1194,13 +1195,14 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 
 			pNode = pNode->FindParent();
 		}
-		while (pNode != 0 && pNode->FindPrevious() == 0);
+		while (pNode != NULL && pNode->FindPrevious() == NULL);
 		if (pNode->IsSpread())			// Don't allow hit-testing to cross spreads
 			return NULL;
 
 		// If we broke out of the above loop because we found a parent with a previous
 		// sibling then advance to that sibling.
-		if (pNode != 0 && pNode->FindPrevious() != 0) pNode = pNode->FindPrevious();
+		if (pNode != NULL && pNode->FindPrevious() != NULL)
+			pNode = pNode->FindPrevious();
 		if (pNode->IsSpread())			// Don't allow hit-testing to cross spreads
 			return NULL;
 	}
@@ -1212,9 +1214,8 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 		// The node is an attribute.  Make sure that it no longer occurs in the
 		// attribute hash table, so that the next time RenderAppliedAttributes is
 		// called it will look for this kind.
-		if (nFoundAttributes > 0 &&
-			pAttribMap->RemoveKey(((NodeAttribute*) pNode)->GetAttributeType()))
-				nFoundAttributes--;
+		if (nFoundAttributes > 0 && pAttribMap->RemoveKey(((NodeAttribute*) pNode)->GetAttributeType()))
+			nFoundAttributes--;
 	}
 
 	
