@@ -496,7 +496,7 @@ BOOL CXaraFileTxtStory::MustConvertToOutlines(BaseCamelotFilter *pFilter, TextSt
 
 	if (pAttrMap != NULL)
 	{
-		void* pValue;
+		void* pValue=NULL;
 		pAttrMap->Lookup(CC_RUNTIME_CLASS(AttrTxtFontTypeface),pValue);
 		if (pValue != NULL)
 		{

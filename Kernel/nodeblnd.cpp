@@ -1392,7 +1392,7 @@ void NodeBlend::RenderBlendOnCurveBlobs(RenderRegion* pRegion)
 			{
 				BOOL bFinish = FALSE;
 				Node* pNodeToRender = pStart;
-				DocCoord FirstPoint;
+				DocCoord FirstPoint(0,0);
 				while (bFinish == FALSE)
 				{
 

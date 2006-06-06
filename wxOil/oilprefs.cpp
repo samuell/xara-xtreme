@@ -190,7 +190,7 @@ void OILPreferences::Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Typ
 {
 	wxString strKey = _T("/Options/") + wxString(Section) + _T("/") + wxString(PrefName);
 
-	BOOL Worked;
+	BOOL Worked=FALSE;
 
 	switch (Type)
 	{
