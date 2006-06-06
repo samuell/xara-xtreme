@@ -1189,14 +1189,20 @@ Node* NodeRenderableInk::FindNextHitTest(Node* pNode,
 		// search can be terminated.
 		do
 		{
-			if (pNode->IsSpread()) return 0;
+			if (pNode->IsSpread())		// Don't allow hit-testing to cross spreads
+				return NULL;
+
 			pNode = pNode->FindParent();
 		}
 		while (pNode != 0 && pNode->FindPrevious() == 0);
+		if (pNode->IsSpread())			// Don't allow hit-testing to cross spreads
+			return NULL;
 
 		// If we broke out of the above loop because we found a parent with a previous
 		// sibling then advance to that sibling.
 		if (pNode != 0 && pNode->FindPrevious() != 0) pNode = pNode->FindPrevious();
+		if (pNode->IsSpread())			// Don't allow hit-testing to cross spreads
+			return NULL;
 	}
 
 	// If the found node is an attribute then remove it from the attribute map because it
