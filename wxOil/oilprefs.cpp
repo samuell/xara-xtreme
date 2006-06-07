@@ -109,6 +109,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "product.h"	// PRODUCT_OPTIONS_REGISTRYKEY
 
+OILPreferences::OILPreferences()
+{
+}
+
 /********************************************************************************************
 
 >	BOOL OILPreferences::Init()
@@ -123,6 +127,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 BOOL OILPreferences::Init()
 {
+	wxStandardPaths		Paths;
+	wxString	strPath( Paths.GetUserConfigDir() );
+	strPath += _T("/.xaralx");
+
+	// Create directory iff not exist
+	if( !wxDir::Exists( strPath ) )
+		::wxMkdir( strPath );
+
+	TRACEUSER( "jlh92", _T("OILPreferences::Init %s\n"), PCTSTR(strPath) );
+
+	// Open config file
+	strPath += _T("/preferences");
+	m_pConfig = std::auto_ptr<wxConfig>( new wxConfig( _T("xaralx"), _T("Xara"), strPath ) );
+
+	TRACEUSER( "jlh92", _T("OILPreferences::Init2 %s\n"), PCTSTR(strPath) );
+	
 	// Always succeed
 	return TRUE;
 }
@@ -140,7 +160,7 @@ BOOL OILPreferences::Init()
 
 void OILPreferences::WipePreferenceFile()
 {
-	DeleteAll();
+	m_pConfig->DeleteAll();
 }
 
 /********************************************************************************************
@@ -156,9 +176,9 @@ void OILPreferences::WipePreferenceFile()
 void OILPreferences::WipeDangerousPrefs()
 {
 	// wipe the potentially dangerous settings from the registry
-	DeleteGroup(_T("Gallery"));
-	DeleteGroup(_T("Options/Templates"));
-	DeleteGroup(_T("Options/NewTemplates"));
+	m_pConfig->DeleteGroup(_T("Gallery"));
+	m_pConfig->DeleteGroup(_T("Options/Templates"));
+	m_pConfig->DeleteGroup(_T("Options/NewTemplates"));
 	
 //	DeleteRegKeyAndSubKeys (hAppStateRegKey, PRODUCT_REGISTRYKEY_GALLERY);
 //	HKEY optsKey = OpenRegKey(hAppStateRegKey, PRODUCT_REGISTRYKEY_OPTIONS);
@@ -197,7 +217,7 @@ void OILPreferences::Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Typ
 		case PREF_INT:
 		{
 			/*TYPENOTE: Correct*/ long l = (long)(*Data.pInt);
-			Worked = wxConfig::Write(strKey, l);
+			Worked = m_pConfig->Write(strKey, l);
 			break;
 		}
 		
@@ -209,17 +229,17 @@ void OILPreferences::Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Typ
 			// (Could write UINT32 prefs as strings...)
 			//
 			/*TYPENOTE: Correct*/ long l = (long)(*Data.pUInt);
-			Worked = wxConfig::Write(strKey, l);
+			Worked = m_pConfig->Write(strKey, l);
 			break;
 		}
 
 		case PREF_DOUBLE:
-			Worked = wxConfig::Write(strKey, (double)*(Data.pDouble));
+			Worked = m_pConfig->Write(strKey, (double)*(Data.pDouble));
 			break;
 			
 		case PREF_STRING:
-			Worked = wxConfig::Write(strKey, wxString((TCHAR*)*(Data.pString)));
-//			Worked = wxConfig::Write(strKey, *(Data.pString));	// use this form when StringBase derived classes support direct conversion
+			Worked = m_pConfig->Write(strKey, wxString((TCHAR*)*(Data.pString)));
+//			Worked = m_pConfig->Write(strKey, *(Data.pString));	// use this form when StringBase derived classes support direct conversion
 			break;
 			
 		default:
@@ -282,7 +302,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Use the value already in pData->Int as the value to return if the 
 			// preference is not found.
 			/*TYPENOTE: Correct*/ long l;
-			if (wxConfig::Read(strKey, &l))
+			if (m_pConfig->Read(strKey, &l))
 				*pData.pInt = (INT32)l; // Do not write directly as may be longer than 32 bits
 			break;
 		}
@@ -292,7 +312,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Note that signed value is read and cast directly into Unsigned memory
 			// allocation reversing the effects fo the cast used in Write above...
 			/*TYPENOTE: Correct*/ long l;
-			if (wxConfig::Read(strKey, &l))
+			if (m_pConfig->Read(strKey, &l))
 				*pData.pUInt = (UINT32)l; // Do not write directly as may be longer than 32 bits
 			break;
 		}
@@ -300,7 +320,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 		{
 			// Get the textual version of the double and convert it to a double.
 			// default to null string
-			wxConfig::Read(strKey, (double*)(pData.pDouble));
+			m_pConfig->Read(strKey, (double*)(pData.pDouble));
 			break;
 		}	
 		case PREF_STRING:
@@ -308,7 +328,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Just get the string - need to ask for the address of the String's
 			// text buffer so we can pass it to the SDK profile API.
 				wxString str;
-				wxConfig::Read(strKey, &str);
+				m_pConfig->Read(strKey, &str);
 				str.Truncate(256);
 				*(pData.pString) = (LPCTSTR)str;
 //				*(pData.pString) = String_256(str);	// use this form when StringBase derived classes support direct conversion
@@ -384,6 +404,6 @@ BOOL OILPreferences::OpenOutput()
 
 BOOL OILPreferences::CloseOutput()
 {
-	Flush();
+	m_pConfig->Flush();
 	return TRUE;
 }

@@ -987,12 +987,12 @@ BOOL Preferences::Init()
 	OILPrefs = new OILPreferences();
 	
 	// Flag error if it failed
-	if (OILPrefs == NULL)
+	if (OILPrefs == NULL || !OILPrefs->Init())
 		return FALSE;
 
 	// TODO: Get Appname and orgnisation name from central location? product.h?
-	OILPrefs->SetAppName(_T("XaraLX"));
-	OILPrefs->SetVendorName(_T("XaraGroup"));
+	//OILPrefs->SetAppName(_T("XaraLX"));
+	//OILPrefs->SetVendorName(_T("XaraGroup"));
 	
 	// Flag that the class has been set up and initialised and so enable the writing out 
 	// on exit.

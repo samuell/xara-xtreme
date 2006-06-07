@@ -117,9 +117,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 ********************************************************************************************/
 
 
-class OILPreferences : public wxConfig
+class OILPreferences
 {
+protected:
+	std::auto_ptr<wxConfig>	m_pConfig;
+
 public:
+	OILPreferences();
+
 	// Initialise the OILPreferences object
 	BOOL Init();
 
