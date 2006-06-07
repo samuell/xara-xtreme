@@ -336,10 +336,7 @@ BOOL HotKey::OnKeyPress(KeyPress* pKeyPress)
 
 	BOOL Processed = FALSE;
 	BOOL DuringADrag = (Operation::GetCurrentDragOp() != NULL ||
-PORTNOTE( "other", "Removed DragManagerOp usage" )
-#if 0
 						DragManagerOp::IsDragActive() ||
-#endif
 						BaseBar::IsDragging());
 
 	HotKey* pHotKey = (HotKey*)HotKeyList.GetHead();
@@ -538,9 +535,53 @@ BOOL HotKey::ReadHotKeys()
 
 BOOL HotKey::ReadHotKeysFromDisk()
 {	
-	// Not yet implemented
+	CCDiskFile file;                                // File
 
-	return FALSE;
+	// Find hotkeys file using binreloc
+	PSTR		pszDataPath = br_find_data_dir("/usr/share");
+	wxString	strFilename(pszDataPath, wxConvUTF8);
+	free(pszDataPath);
+	strFilename += _T("/xaralx/hotkeys");
+
+#if defined(_DEBUG)
+	// Debug-only fallback
+	if (!wxFile::Exists(strFilename))
+		strFilename = _T("/usr/share/xaralx/hotkeys");
+#endif
+
+//	if (!wxFile::Exists(strFilenmae))
+//		return FALSE;
+
+	PathName filepath(strFilename);
+
+	BOOL ok = TRUE;
+
+	// Prevent file errors from being reported directly to the user
+	BOOL OldThrowingState = file.SetThrowExceptions( TRUE );
+	BOOL OldReportingState = file.SetReportErrors( FALSE );
+
+	try
+	{
+		ok = file.open(filepath, ios::in);                      // Open file
+
+		if (ok)
+		{
+				ok = HotKey::ReadHotKeysFromFile(file);
+				file.close();
+		}
+	}
+
+	catch (...)
+	{
+		Error::ClearError();
+		ok = FALSE;
+	}
+
+	// Must set the exception throwing and reporting flags back to their entry states
+	file.SetThrowExceptions( OldThrowingState );
+	file.SetReportErrors( OldReportingState );
+
+	return (ok);
 }
 
 /********************************************************************************************
