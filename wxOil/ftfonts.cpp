@@ -922,7 +922,7 @@ static BOOL GetPangoFcFontAndFreeTypeFaceForPangoFont(PangoFont* pFont, PangoFcF
 	// in addition to the synthesized unicode charmap and if so, use that
 	// instead.
 	FT_CharMap pCustomCharmap = NULL;
-	for (int mapnum = 0; mapnum < pFreeTypeFace->num_charmaps; mapnum++)
+	for (INT32 mapnum = 0; mapnum < pFreeTypeFace->num_charmaps; mapnum++)
 	{
 		FT_CharMap pThisMap = pFreeTypeFace->charmaps[mapnum];
 		if (pThisMap->encoding == FT_ENCODING_ADOBE_CUSTOM

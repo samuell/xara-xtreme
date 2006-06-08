@@ -1578,7 +1578,7 @@ void PluginFilterProcess::ProcessStdErr()
 //					TRACEUSER("Gerry", _T("XPFProgress:%s"), rest.c_str());
 					if (m_pFilter)
 					{
-						unsigned long Val = wxStrtoul(rest.c_str(), NULL, 10);
+						unsigned long /*TYPENOTE: Correct*/ Val = wxStrtoul(rest.c_str(), NULL, 10);
 						if (Val > 0)
 						{
 //							TRACEUSER("Gerry", _T("Setting progress to %d"), Val);

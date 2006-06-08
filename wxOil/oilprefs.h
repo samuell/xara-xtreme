@@ -129,7 +129,7 @@ public:
 					const wxString& vendorName = wxEmptyString,
 					const wxString& localFilename = wxEmptyString,
 					const wxString& globalFilename = wxEmptyString,
-					long style = 0, wxMBConv& conv = wxConvUTF8)
+					long /*TYPENOTE: Correct*/ style = 0, wxMBConv& conv = wxConvUTF8)
 		: wxConfig(appName, vendorName, localFilename, globalFilename, style, conv) {;}
 
 	// Write a preference

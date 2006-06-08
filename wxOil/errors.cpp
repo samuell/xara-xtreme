@@ -589,7 +589,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	butres[2]=Butt2;
 	butres[3]=Butt3;
 	butres[4]=Butt4;
-	butres[5]=0; // for IDS_HELP - see below
+	butres[5]=0; // for _R(IDS_HELP) - see below
 	butres[6]=DebugReport;
 
 #if !defined(EXCLUDE_FROM_RALPH)

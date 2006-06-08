@@ -263,13 +263,13 @@ BOOL BmapPrevDlg::RegisterYourPagesInOrderPlease()
 	bool	fUsedImapOption = false;
 	if (ok && !bExportABitmap && m_FilterType != MAKE_BITMAP_FILTER && !m_bSlicingImage)
 	{
-PORTNOTE("other","Removed IDD_TIMAPOPTIONS & IDD_TBROWSER - isn't wanted yet")
+PORTNOTE("other","Removed _R(IDD_TIMAPOPTIONS) & _R(IDD_TBROWSER) - isn't wanted yet")
 //		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS)) && AddAPage(_R(IDD_TIMAPOPTIONS)) && AddAPage(_R(IDD_TBROWSER));
 		ok =  AddAPage(_R(IDD_TBITMAPOPTIONS));
 		fUsedImapOption = true;
 	}
 
-PORTNOTE("other","Removed IDD_TIMAPOPTIONS - isn't wanted yet")
+PORTNOTE("other","Removed _R(IDD_TIMAPOPTIONS) - isn't wanted yet")
 #ifndef EXCLUDE_FROM_XARALX// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
 	{
