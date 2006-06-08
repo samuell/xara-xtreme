@@ -91,6 +91,7 @@ sub usage
                                      standard output (not the temp file)
    --verbose                       - be very loud about it
    --help                          - display this message
+   --removeinclude                 - remove the specified include
 
 EOF
 
@@ -129,6 +130,7 @@ my $verbose = 0;
 my $tempext = ".$$.tmp";
 my $backupext = '.bak';
 my $backup = 1;
+my @removeinclude;
 
 my $noticestart = '/* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE';
 my $noticeend   = ' */';
@@ -139,6 +141,7 @@ my %types;
 my $newnotice;
 my @kauthors;
 my @ktypes;
+my $removeincludepat;
 
 GetOptions( "fixnl!" => \$fixnl,
 	    "fixauthors!" => \$fixauthors,
@@ -158,6 +161,7 @@ GetOptions( "fixnl!" => \$fixnl,
 	    "tempext=s" => \$tempext,
 	    "backupext=s" => \$backupext,
 	    "backup!" => \$backup,
+	    "removeinclude=s" => \@removeinclude,
 	    "help!" => \$help ) || usage ("Bad option");
 
 if ($help)
@@ -301,6 +305,12 @@ sub process
 		    print OUTPUT $iline;
 		}
 	    }
+	}
+
+	# Remove unwanted includes
+	if (scalar(@removeinclude))
+	{
+	    $line="" if ($line =~ /$removeincludepat/);
 	}
 
 	# Fix trace statements to quote the string in _T if it's not
@@ -714,5 +724,18 @@ sub readstrings
 	close (NOTICE);
 	# Delete multiple returns at the end
 	$newnotice =~ s/\n+$/\n/g;
+    }
+
+    if (scalar(@removeinclude))
+    {
+	my $i;
+	my $p="";
+	foreach $i (@removeinclude)
+	{
+	    $i=s/\./\\\./g;
+	    $p.="|" if ($p ne "");
+	    $p.="($i)"
+	}
+	$removeincludepat=qr/^\s*\#include\s+\"$p\".*$/;
     }
 }
