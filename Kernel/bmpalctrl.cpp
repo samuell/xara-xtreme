@@ -109,8 +109,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // the caller expects (ie sorted or non sorted).
 
 #include "camtypes.h"
+
 #include "bmpalctrl.h"
 
+#include "dlgmgr.h"
 #include "filedlgs.h"		// required CreateOSRenderRegion
 #include "dlgcol.h"			// required for DialogColours
 //#include "bmpreres.h"		// for _R(IDC_T2_PALETTE_CONTROL)

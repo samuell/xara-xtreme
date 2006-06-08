@@ -119,7 +119,7 @@ class Cursor;
 class KeyPress;
 class Layer;
 class ColourListComponent;
-
+class DialogColourInfo;
 
 /***********************************************************************************************
 

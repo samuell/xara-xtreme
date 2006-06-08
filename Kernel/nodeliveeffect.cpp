@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "app.h"
 #include "node.h"
 #include "nodeliveeffect.h"
+#include "docview.h"
 //#include "xpehost.h"
 #include "dibutil.h"
 #include "cxftags.h"

@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rik.h"
 //#include "markn.h"
 //#include "viewrc.h"
-//#include "docview.h"
+#include "docview.h"
 //#include "document.h"
 //#include "mainfrm.h"
 #include "infobar.h"

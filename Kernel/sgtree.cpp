@@ -101,6 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
+#include "dlgmgr.h"
 #include "document.h"	// For Document->GetTitle()
 #include "dragmgr.h"	// Drag manager (DragManagerOp::StartDrag, RedrawStarting etc)
 //#include "galres.h"		// Gallery bitmap resources

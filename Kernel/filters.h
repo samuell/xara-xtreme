@@ -236,6 +236,7 @@ class Pathname;
 
 // !!!!!!!!!!!!!!!!! DON'T ADD ANY MORE TO THE ABOVE LIST !!!!!!!!!!!!!!!!
 
+enum SelectionType { SELECTION, DRAWING, SPREAD, ABITMAP, SOMEBITMAPS, PAGE };
 
 
 /********************************************************************************************

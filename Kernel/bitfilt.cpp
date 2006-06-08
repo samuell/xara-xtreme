@@ -102,6 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "bitfilt.h"
 
+#include "docview.h"
 //#include "resource.h"	// _R(IDS_OUT_OF_MEMORY)
 //#include "camvw.h"								// sadly
 #include "layer.h"

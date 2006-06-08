@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshattr.h"
 #include "effects_stack.h"
 #include "ophist.h"
+#include "docview.h"
 
 CC_IMPLEMENT_DYNCREATE(OpApplyAttrib, SelOperation)
 CC_IMPLEMENT_DYNCREATE(OpApplyAttribToSelected, OpApplyAttrib)

@@ -102,6 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
+#include "docview.h"
 #include "ngcore.h"
 #include "ngdialog.h"
 #include "ngitem.h"

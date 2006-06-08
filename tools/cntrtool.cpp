@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "oilfiles.h"
 #include "csrstack.h"
+#include "docview.h"
 //#include "markn.h"
 #include "spread.h"
 #include "nodepath.h"

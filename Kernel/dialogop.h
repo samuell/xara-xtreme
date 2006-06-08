@@ -112,8 +112,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
      
 #include "ops.h"  	   	// Operation class  
 #include "dlgtypes.h"  	// The DialogOp types
-#include "dlgmgr.h" 	// For the wierd inclass typedef in GetLongGadgetValue
+#include "convert.h"
 
+class CGadgetImageList;
+class CustomComboBoxControlDataItem;
+class DialogManager;
 class String_256;    
 class Node;
 class RenderRegion;
@@ -325,14 +328,14 @@ public:
 			            	INT32 EndRange, 
 		           	    	UINT32 IDSInvalidMsg = 0,
 		           	    	BOOL* Valid = NULL,
-		           	    	DialogManager::PFNSTRINGTOINT32 pfnParser = Convert::StringToLong);
+		           	    	Convert::PFNSTRINGTOINT32 pfnParser = Convert::StringToLong);
 
 	double GetDoubleGadgetValue(CGadgetID GadgetID, 
 			            	double StartRange, 
 			            	double EndRange, 
 		           	    	UINT32 IDSInvalidMsg = 0,
 		           	    	BOOL* Valid = NULL,
-		           	    	DialogManager::PFNSTRINGTODOUBLE pfnParser = Convert::StringToDouble);
+		           	    	Convert::PFNSTRINGTODOUBLE pfnParser = Convert::StringToDouble);
 
 	BOOL GetDoubleAndUnitGadgetValue(double*   pMPValue,
 									 double*   pUnitValue,

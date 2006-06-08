@@ -188,6 +188,12 @@ public:
 	static  BOOL IsCharStartOfNumber(TCHAR Char);
 	static  BOOL ReadUnitType(const StringBase &Str,INT32* pPos,UnitType* pUnitType);
 	static  BOOL ReadNumber(const StringBase &Str,INT32* pPos,double* pResult);
+
+	// This defines a name for a pointer to the "string parser" function that takes
+	// a string and calculates the number from it, returning TRUE if it is valid.
+
+	typedef BOOL (*PFNSTRINGTOINT32)(const StringBase &, INT32*);
+	typedef BOOL (*PFNSTRINGTODOUBLE)(const StringBase &, double*);
  
 protected:
 	// These are the default display options

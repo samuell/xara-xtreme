@@ -109,7 +109,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxfrech.h"
 #include "cxfrec.h"
 #include "attr.h"
-#include "fillattr.h"
 #include "ink.h"
 //#include "grndbmp.h"
 

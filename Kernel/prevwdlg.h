@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class KernelBitmap;
 class RenderRegion;
-
+class DialogColourInfo;
 
 /********************************************************************************************
 

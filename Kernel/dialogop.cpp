@@ -1329,7 +1329,7 @@ INT32 DialogOp::GetLongGadgetValue(CGadgetID Gadget,
 		  			          	  INT32 EndRange, 
 	           	  			  	  UINT32 IDSInvalidMsg, 
 	           			      	  BOOL* Valid,
-	           			      	  DialogManager::PFNSTRINGTOINT32 pfnParser)
+	           			      	  Convert::PFNSTRINGTOINT32 pfnParser)
 {  
 	return DlgMgr->GetLongGadgetValue(GetReadWriteWindowID(),
 									  Gadget,
@@ -1365,7 +1365,7 @@ double DialogOp::GetDoubleGadgetValue(CGadgetID Gadget,
 		  			          	  double EndRange, 
 	           	  			  	  UINT32 IDSInvalidMsg, 
 	           			      	  BOOL* Valid,
-	           			      	  DialogManager::PFNSTRINGTODOUBLE pfnParser)
+	           			      	  Convert::PFNSTRINGTODOUBLE pfnParser)
 {  
 	return DlgMgr->GetDoubleGadgetValue(GetReadWriteWindowID(),
 									  Gadget,

@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nbevcont.h"
 #include "noderect.h"
 #include "ppbevel.h"
-
+#include "docview.h"
 // Code headers
 #include "attrmgr.h"
 #include "fillval.h"

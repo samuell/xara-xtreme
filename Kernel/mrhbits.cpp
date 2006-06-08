@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "mrhbits.h"		// TODO
+#include "view.h"
 //#include "bitmap.h"
 #include "fillattr.h"
 #include "grndrgn.h"

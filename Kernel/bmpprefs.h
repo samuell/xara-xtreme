@@ -118,8 +118,6 @@ class BmpDlgParam;
 class CXaraFileRecord;
 
 
-enum SelectionType { SELECTION, DRAWING, SPREAD, ABITMAP, SOMEBITMAPS, PAGE };
-
 enum PALETTE
 {
 	PAL_STANDARD	= 0,	// just to make sure

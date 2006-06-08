@@ -3609,7 +3609,7 @@ INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
 									INT32 EndRange,
 									UINT32 IDSInvalidMsg,
 									BOOL* Valid,
-									DialogManager::PFNSTRINGTOINT32 pfnParser)
+									Convert::PFNSTRINGTOINT32 pfnParser)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
@@ -3788,7 +3788,7 @@ double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
 									double EndRange,
 									UINT32 IDSInvalidMsg,
 									BOOL* Valid,
-									DialogManager::PFNSTRINGTODOUBLE pfnParser)
+									Convert::PFNSTRINGTODOUBLE pfnParser)
 {
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;

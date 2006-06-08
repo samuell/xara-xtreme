@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FILLATTR
 #define INC_FILLATTR
 
-#include "docview.h"
 #include "attr.h"
 #include "nodeattr.h"
 #include "msg.h"

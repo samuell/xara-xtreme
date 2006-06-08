@@ -101,6 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
+#include "docview.h"
 //#include "app.h"
 //#include "resource.h"
 #include "bevinfo.h"

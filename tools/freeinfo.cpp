@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "freehand.h"
 #include "freeinfo.h"
+#include "dlgmgr.h"
 #include "range.h"
 //#include "resource.h"
 //#include "barsdlgs.h"

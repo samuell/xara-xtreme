@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "filters.h"
 #include "ccfile.h"		// FilePos
-#include "bmpprefs.h"	// SelectionType
 #include "doccoord.h"	
 #include "node.h"		// AttachNodeDirection 
 

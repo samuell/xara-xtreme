@@ -506,19 +506,13 @@ public:
 			                  UINT32 IDSInvalidMsg = 0,  
 			                  BOOL* Valid = NULL);
 	
-	// This defines a name for a pointer to the "string parser" function that takes
-	// a string and calculates the number from it, returning TRUE if it is valid.
-
-	typedef BOOL (*PFNSTRINGTOINT32)(const StringBase &, INT32*);
-	typedef BOOL (*PFNSTRINGTODOUBLE)(const StringBase &, double*);
-
 	static INT32 GetLongGadgetValue(CWindowID WindowID,
 								   CGadgetID Gadget, 
 			            		   INT32 StartRange, 
 			            		   INT32 EndRange, 
 		           	    		   UINT32 IDSInvalidMsg = 0, 
 		           	    		   BOOL* Valid = NULL,
-								   PFNSTRINGTOINT32 pfnParser = Convert::StringToLong);
+								   Convert::PFNSTRINGTOINT32 pfnParser = Convert::StringToLong);
 
 	static double GetDoubleGadgetValue(CWindowID WindowID,
 								   CGadgetID Gadget, 
@@ -526,7 +520,7 @@ public:
 			            		   double EndRange, 
 		           	    		   UINT32 IDSInvalidMsg = 0, 
 		           	    		   BOOL* Valid = NULL,
-								   PFNSTRINGTODOUBLE pfnParser = Convert::StringToDouble);
+								   Convert::PFNSTRINGTODOUBLE pfnParser = Convert::StringToDouble);
 
 	static BOOL GetBoolGadgetSelected(CWindowID WindowID,
 						CGadgetID Gadget,
