@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_NODETXTS
 
 #include "node.h"
-#include "nodepath.h"
 #include "matrix.h"
 
+class NodePath;
 class CaretNode; 
 class VisibleTextNode;
 class TextLine;

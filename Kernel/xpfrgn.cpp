@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "strkattr.h"
 #include "brshattr.h"
 #include "vstate.h"
+#include "nodepath.h"
 #include "nodetxts.h"
 #include "nodetext.h"
 #include "nodetxtl.h"

@@ -102,25 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ops.h"
 #include "nodepath.h"
-
-class CPathPointInfo
-{
-public:
-	CPathPointInfo() { m_Point.x = m_Point.y = 0; m_Tangent = 0; }
-	
-	CPathPointInfo &operator=(CPathPointInfo CP)
-	{
-		m_Point.x = CP.m_Point.x; 
-		m_Point.y = CP.m_Point.y;							
-		m_Tangent = CP.m_Tangent;
-
-		return *this;
-	}
-
-public: //members				  
-	DocCoord	m_Point;
-	double		m_Tangent;
-};
+#include "brpress.h"
 
 /***********************************************************************************************
 

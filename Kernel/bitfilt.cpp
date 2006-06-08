@@ -161,6 +161,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "gpalopt.h"
 #include "colplate.h"
 #include "fillattr2.h"
+#include "nodetext.h"
 
 CC_IMPLEMENT_MEMDUMP(BitmapImportOptions, CC_CLASS_MEMDUMP)
 CC_IMPLEMENT_DYNAMIC(BaseBitmapFilter, BitmapFilter)

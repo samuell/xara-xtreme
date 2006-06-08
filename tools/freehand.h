@@ -109,13 +109,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccoord.h"
 #include "wrkrect.h"
 #include "binds.h"
-#include "nodepath.h"
 //#include "grndbrsh.h"
 #include "brshcomp.h"
 #include "brshdata.h"
 #include "dragtool.h"
 
-
+class NodePath;
 class Cursor;
 class FreeHandInfoBarOp;
 class NodeBrushPath;

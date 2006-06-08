@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetext.h"
 #include "nodetxtl.h" // for our text bodges
 #include "nodetxts.h"
+#include "ppbrush.h"
 
 #ifdef NEWFASTBRUSHES
 	#include "nodebmp.h"

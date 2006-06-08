@@ -154,6 +154,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "pmaskrgn.h"
 #include "ophist.h"
 #include "objchge.h"
+#include "attrmap.h"
 
 CC_IMPLEMENT_DYNCREATE(NodeBevel, NodeRenderableInk)
 CC_IMPLEMENT_DYNCREATE(BevelRecordHandler, CamelotRecordHandler)

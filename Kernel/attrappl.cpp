@@ -130,6 +130,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "effects_stack.h"
 #include "ophist.h"
 #include "docview.h"
+#include "nodetext.h"
+#include "ppbrush.h"
 
 CC_IMPLEMENT_DYNCREATE(OpApplyAttrib, SelOperation)
 CC_IMPLEMENT_DYNCREATE(OpApplyAttribToSelected, OpApplyAttrib)

@@ -107,7 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "selop.h"
 #include "biasgdgt.h"
 #include "iprofile.h"
-#include "blndtool.h"
 #include "becomea.h"
 #include "bevtrap.h"
 #include "dragtool.h"
@@ -115,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class ContourTool;
 class ContourInfoBarOp;
 class AttrJoinType;
+class BlendToolRef;
 
 #define OPTOKEN_CONTOURNODES _T("ContourNode")
 

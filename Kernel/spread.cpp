@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docview.h"
 #include "optsmsgs.h"
 #include "oilbitmap.h"	// CWxBitmap
+#include "grid.h"
 
 //#include "prevwres.h"	// _R(IDS_TAG_LAYER_FRAMEPROPS)
 //#include "frameops.h" // for OpGrabAllFrames

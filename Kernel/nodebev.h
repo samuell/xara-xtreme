@@ -105,7 +105,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // file input & output stuff
 #include "camfiltr.h"
 #include "cxftags.h"
-#include "cxfile.h"
 #include "cxfrech.h"
 #include "cxfrec.h"
 #include "attr.h"

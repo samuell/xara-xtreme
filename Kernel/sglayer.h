@@ -108,6 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layergal.h"
 
 class DocView;
+class Layer;
 
 // WEBSTER - markn 15/1/97
 // Don't need this gallery in Webster

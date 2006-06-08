@@ -104,8 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attrval.h"
 #include "cxfrech.h"
 #include "nodeattr.h"
-#include "ppbrush.h"
-#include "ndbldpth.h"
 #include "brshdata.h"
 #include "brpress.h"
 #include "samplist.h"
@@ -115,17 +113,7 @@ class FreeHandTool;
 class CDistanceSampler;
 
 
-typedef std::map< MILLIPOINT, BrushPointInfo > PointsMap;
 
-
-enum ListUpdateType
-{
-	UPDATE_NONE,
-	UPDATE_LIST,
-	UPDATE_PROPORTION,
-	UPDATE_POSITION,
-	UPDATE_LISTANDPOSITION
-};
 
 #define BRUSHPOINTSCACHE
 #define PRESSURE_INVALID 65536

@@ -103,9 +103,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rndrgn.h"
 #include "vectrndr.h"
 #include "rrcaps.h"
-#include "nodebev.h"
 #include "nodeshad.h"
 
+class NodeBevel;
+class NodeBevelBegin;
 class CCLexFile;
 class CMXExportDC;
 

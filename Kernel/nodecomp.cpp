@@ -130,6 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blendatt.h"
 //#include "mario.h"
 #include "pathops.h"
+#include "group.h"
 
 DECLARE_SOURCE( "$Revision$" );
 

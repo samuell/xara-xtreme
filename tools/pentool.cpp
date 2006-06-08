@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "jim.h"
 #include "opbreak.h"
 #include "vkextra.h"
+#include "nodepath.h"
 
 //#include "will2.h"
 

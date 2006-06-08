@@ -151,12 +151,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blndhelp.h"
 //#include "mario.h"
 #include "nodebldr.h"
+#include "nodepath.h"
 #include "pathops.h"
 #include "fthrattr.h"
 #include "pathndge.h"
 //#include "mrhbits.h"
 #include "blndtool.h"
 #include "cmxrendr.h"
+#include "attrmap.h"
 //#include "cmxexdc.h"
 
 CC_IMPLEMENT_DYNCREATE(NodeContourController, NodeGroup)

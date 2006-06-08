@@ -136,6 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "unicdman.h"
 #include "extender.h"	// for ExtendParams
 #include "ngcore.h"		// NameGallery, for stretching functionality
+#include "nodepath.h"
 
 // Resource headers
 //#include "mario.h"

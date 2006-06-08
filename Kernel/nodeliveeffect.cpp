@@ -119,6 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "blndtool.h"
 #include "nodebmp.h"
+#include "attrmap.h"
 
 // Resource headers
 //#include "resource.h"

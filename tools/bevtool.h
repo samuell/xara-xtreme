@@ -110,7 +110,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccoord.h"
 #include "wrkrect.h"
 #include "binds.h"
-#include "nodepath.h"
 #include "bevinfo.h"
 #include "clikmods.h"
 #include "dragtool.h"

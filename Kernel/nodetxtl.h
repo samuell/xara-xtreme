@@ -102,9 +102,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ink.h"
 #include "rndrgn.h"
-#include "nodetext.h"
+#include "nodetxts.h"
 #include "attrmgr.h"	// for FormatRegion::GetTracking()
 
+class EOLNode;
+class CharMetrics;
 class NodeGroup;
 class BecomeA;
 

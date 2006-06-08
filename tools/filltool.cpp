@@ -140,6 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opliveeffects.h"
 #include "effects_stack.h"
 #include "nodeliveeffect.h"
+#include "lineattr.h"
 
 // Revision Number
 DECLARE_SOURCE( "$Revision$" );
@@ -10165,6 +10166,8 @@ AttrFillGeometry* AttrRemoveStrokeTransp::MutateFill(AttrFillGeometry* FillToMut
 	return NewFill;
 }
 
+CCRuntimeClass* AttrRemoveStrokeTransp::GetAttributeType() { return CC_RUNTIME_CLASS(AttrStrokeTransp); }
+
 /********************************************************************************************
 
 >	AttrFillGeometry* AttrMakeFlatTransp::MutateFill(AttrFillGeometry* FillToMutate) 
@@ -10244,7 +10247,6 @@ NodeAttribute* AttrMakeFlatTransp::GetOtherAttrToApply(BOOL* IsMutate)
 
 	return OtherAttr;
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -154,6 +154,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragmgr.h"
 #include "lineattr.h"
 #include "effects_stack.h"
+#include "blndtool.h"
+#include "nbevcont.h"
 
 DECLARE_SOURCE( "$Revision$" );
 											 	

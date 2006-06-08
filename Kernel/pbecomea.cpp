@@ -108,6 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"	// NodePath reference.
 #include "lineattr.h"	// for line width & colour attributes.
 #include "ndclpcnt.h"	// for ClipView path constants.
+#include "attrmap.h"
 
 DECLARE_SOURCE("$Revision$");
 

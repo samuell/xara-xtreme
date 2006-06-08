@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeblnd.h"
 #include "nodeclip.h"
 #include "lineattr.h"
+#include "attrmap.h"
 
 CC_IMPLEMENT_MEMDUMP(BrushRef, BlendRef)
 CC_IMPLEMENT_MEMDUMP(BrushRefBlender, CC_CLASS_MEMDUMP);

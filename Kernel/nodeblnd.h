@@ -118,7 +118,7 @@ class NodeBlender;
 
 /********************************************************************************************
 
->	class NodeBlend: public NodeRenderableInk
+>	class NodeBlend: public NodeGroup
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com> M
 	Created:	6/10/94

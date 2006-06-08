@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attrmap.h"
 #include "printctl.h"
 #include "cxftext.h"
+#include "nodepath.h"
 //#include "swfrndr.h"
 
 // Resource headers

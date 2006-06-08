@@ -163,6 +163,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshad.h"
 #include "nodeliveeffect.h"
 #include "ophist.h"
+#include "nodebev.h"
 
 CC_IMPLEMENT_DYNAMIC(NodeShadowController, NodeEffect)
 CC_IMPLEMENT_DYNAMIC(ShadowRecordHandler, CamelotRecordHandler)

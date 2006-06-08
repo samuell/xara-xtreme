@@ -134,6 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cutop.h"
 #include "camdoc.h"
 #include "effects_stack.h"	// for EffectsStack
+#include "attrmap.h"
 
 #ifdef _DEBUG
 #include "layermsg.h"	// layer messages for redraw layer message in debug builds

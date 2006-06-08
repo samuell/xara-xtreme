@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "pathpcs.h"
 #include "brshcomp.h"
-#include "ndbldpth.h"
 #include "brshattr.h"
 #include "brpress.h"
 

@@ -121,6 +121,7 @@ class Node;
 class NodeBlend;
 class NodeBlender;
 class BlendPath;
+class CompoundNodeTreeFactory;
 
 #define OPTOKEN_BLENDNODES  	 	_T("BlendNodes")
 #define OPTOKEN_REMOVEBLEND 	 	_T("RemoveBlend")

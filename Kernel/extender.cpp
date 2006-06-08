@@ -113,6 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <list>			// for std::list.
 #include "nodeblnd.h"	// for NodeBlend
 #include "nodebldr.h"	// for NodeBlender
+#include "nodepath.h"
 
 #if 0
 #ifdef _DEBUG

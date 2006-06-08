@@ -100,12 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BECOMEA
 #define INC_BECOMEA
 
-#include "nodepath.h"
-#include "attrmap.h"
-
 class Node;
 class NodeRenderableInk;
 class UndoableOperation;
+class CCAttrMap;
 
 //-----------------
 
@@ -186,20 +184,7 @@ public:
 			UndoableOperation* pOp = NULL,
 			BOOL sel = TRUE,
 			BOOL First = FALSE
-			) : Reason(ThisReason), pClassToBecome(pClass), pUndoOp(pOp)
-			{	Select = sel;
-				pCallNode = NULL;
-				AmFirstNode = First;
-				fSilhouette = FALSE;
-				fShadowSilhouettes = FALSE;
-				insertComplexBlendStepsAsPaths = FALSE;
-				m_Count = 0;
-				m_bIsCounting = FALSE;
-				m_bBecomeANodePath = (pClassToBecome==CC_RUNTIME_CLASS(NodePath));
-				m_bInPlace = FALSE;
-				m_bSecondary = FALSE;
-				m_bPathsOnly = FALSE;
-			}
+			);
 
 	virtual ~BecomeA() { }
 
@@ -233,18 +218,10 @@ public:
 
 	// This function should be called when Reason == BECOMEA_PASSBACK 
 	// (see above for a description of this reason code)
-	virtual BOOL PassBack(NodeRenderableInk* pNewNode,NodeRenderableInk* pCreatedByNode,CCAttrMap* pAttrMap=NULL)
-	{
-		if (pAttrMap)
-		{
-			pAttrMap->DeleteAttributes();
-			delete pAttrMap;
-		}
-		return FALSE;
-	}
+	virtual BOOL PassBack(NodeRenderableInk* pNewNode,NodeRenderableInk* pCreatedByNode,CCAttrMap* pAttrMap=NULL);
 
 	// Quick function to test the common case that pClassToBecome is a CC_RUNTIME_CLASS(NodePath)
-	virtual BOOL BAPath() const {return m_bBecomeANodePath;}
+	virtual BOOL BAPath() const;
 
 	// Access functions for CanBecomeA counting
 	virtual void AddCount(UINT32 iNum) {m_Count += iNum;}

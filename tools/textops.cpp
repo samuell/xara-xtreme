@@ -154,6 +154,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "becomea.h"
 #include "opliveeffects.h"
 #include "ophist.h"
+#include "nodedoc.h"
+#include "nodepath.h"
 
 extern void Beep();
 

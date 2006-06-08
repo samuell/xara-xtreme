@@ -138,6 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "spread.h"
 #include "layer.h"
 #include "nodepostpro.h"
+#include "nodepath.h"
 
 DECLARE_SOURCE( "$Revision$" );
 

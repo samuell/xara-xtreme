@@ -100,9 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPBevel
 #define INC_OPBevel
 
-#include "nodebev.h"
-#include "nbevcont.h"
-
 #if BUILDSHADOWS
 
 //#include "selop.h"

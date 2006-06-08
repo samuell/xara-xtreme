@@ -107,9 +107,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "binds.h"
 #include "bars.h"
 //#include "viewrc.h"
-#include "nodepath.h"
 #include "penedit.h"
 
+class NodePath;
 class Cursor;
 class PenToolInfoBarOp;
 

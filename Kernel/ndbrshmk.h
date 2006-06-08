@@ -109,7 +109,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blendatt.h"
 #include "nodebldr.h"
 #include "trans2d.h"
-#include "ndbldpth.h"
 #include "brushref.h"
 #include "brshcomp.h"
 
@@ -124,7 +123,7 @@ class BaseCamelotFilter;
 
 class NodeBrush;
 class NodeBrushPath;
-
+class CPathPointInfo;
 
 /*
 enum PathOffset {OFFSET_NONE,

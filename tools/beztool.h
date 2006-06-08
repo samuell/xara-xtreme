@@ -110,13 +110,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccoord.h"
 #include "wrkrect.h"
 #include "binds.h"
-#include "nodepath.h"
 #include "rectangl.h"
 #include "rsmooth.h"
-#include "nodeblnd.h"
+
+class NodePath;
 class Cursor;
 class BezierTool;
 class Document;
+class NodeBlend;
 //class BezToolInfoBarOp;
 
 #define OPTOKEN_BEZTOOL _T("BezierTool")

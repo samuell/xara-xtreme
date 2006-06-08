@@ -134,6 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 //#include "simon.h"
 //#include "camvw.h"
+#include "nodebev.h"
 
 DECLARE_SOURCE( "$Revision$" );
 

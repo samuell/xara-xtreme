@@ -108,7 +108,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_APPLYATTRINTERACTIVE	_T("ApplyAttributeInteractive")
 
 #include "selop.h"
-#include "group.h"
 #include "fillattr.h"
 
 class AttrBrushType;

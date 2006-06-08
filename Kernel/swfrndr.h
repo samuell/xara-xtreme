@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rndrgn.h"
 #include "vectrndr.h"
 #include "nodetext.h"
-#include "nodebev.h"
 #include "nodeshad.h"
 #include "swfbitmp.h"
 #include "swftext.h"
@@ -111,6 +110,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "swfbuttn.h"
 #include "swfplace.h"
 #include "swfsprit.h"
+
+class NodeBevel;
+class NodeBevelBegin;
 
 // The following functions perform the same role as many of the macros defined in the
 // older Camelot code, but since they're based around templates, incorporate type

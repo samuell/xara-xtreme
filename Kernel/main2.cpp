@@ -182,6 +182,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "stdbars.h"
 #include "rendwnd.h"
 #include "backgrnd.h"
+#include "blndtool.h"
 #if XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif

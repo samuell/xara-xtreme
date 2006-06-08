@@ -173,6 +173,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colplate.h"	// For on-screen separated rendering
 
 #include "rendwnd.h"	// Shouldn't need this
+#include "draginfo.h"
 
 DECLARE_SOURCE("$Revision$");
 

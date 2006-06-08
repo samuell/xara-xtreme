@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define NODECOMPOUND_H
 
 #include "ink.h"
-#include "attrmap.h"
 
 class NodeCompound;
 class BlendNodeParam;

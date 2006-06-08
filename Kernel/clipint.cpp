@@ -120,6 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <math.h>		// for floor()
 
 #include "nodetxts.h"	//To add text to the clipboard
+#include "nodedoc.h"
 //#include "srvritem.h"	//for justin's clever "add-text-to-the-clipboard" function
 
 //#include "will2.h"

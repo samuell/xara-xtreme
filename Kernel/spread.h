@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "npaper.h"
 #include "convert.h"
-#include "grid.h"
 #include "dibconv.h"
 #include "paldefs.h"
 #include "animparams.h"
 
+class NodeGrid;
 
 // NEW_PASTEBOARD compile switch
 // =============================

@@ -151,6 +151,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "strkattr.h"	//For attrstroketype
 #include "ppstroke.h"
 #include "nodeclip.h"  // for pathbecomea
+#include "attrmap.h"
 
 // Put my version Number into the About box
 DECLARE_SOURCE( "$Revision$" );

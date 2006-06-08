@@ -118,7 +118,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilcoord.h"
 #include "quality.h"
 #include "docvmsg.h"
-#include "draginfo.h"
 #include "dragtrgt.h"
 #include "cursor.h"
 
@@ -141,6 +140,8 @@ class CSnap;
 class RulerPair;
 class AttrUser;
 class NodeRenderableInk;
+class DragInformation;
+class ViewDragTarget;
 
 // Enum for the RenderOnTop function. Use one of these as a reason code to pass to it
 enum OnTopCode

@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_CLIPINT
 
 #include "document.h"
-#include "nodedoc.h"
 
 
 class Layer;

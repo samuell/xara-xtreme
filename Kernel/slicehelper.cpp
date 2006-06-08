@@ -137,6 +137,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ophist.h"
 #include "nodebev.h"
+#include "nodetext.h"
 
 // global that is set when a bar property tag is imported to say how many bars there were beforehand
 // used by SliceHelper::MeshImportedLayersWithExistingButtonBars() and is defined in rechdoc.cpp

@@ -148,6 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "samplist.h"
 #include "brshattr.h"
 #include "ophist.h"
+#include "blndtool.h"
 
 #define PATRACE if(IsUserName("Peter")) TRACE
 

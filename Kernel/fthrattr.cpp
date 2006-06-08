@@ -127,6 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "blendatt.h"		// BlendAttrParam
 #include "nodeblnd.h"		// NodeBlend
 #include "attrmap.h"		// CCAttrMap
+#include "nodepath.h"
 
 // Special cases
 #include "nodedoc.h"		// NodeDocument

@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define NODELIVEFX_H
 
 #include "ink.h"
-#include "attrmap.h"
 #include "nodepostpro.h"
 #include "cxfrech.h"
 #include "biasgain.h"
@@ -114,6 +113,7 @@ PORTNOTE("other","Define dummy IXMLDOMDocumentPtr")
 typedef void		   *IXMLDOMDocumentPtr;
 #endif
 
+class CCAttrMap;
 class BitmapTranspFillAttribute;
 
 /***********************************************************************************************

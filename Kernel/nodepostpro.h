@@ -100,8 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define NODEPOSTPRO_H
 
 #include "ink.h"
-#include "attrmap.h"
 #include "nodecomp.h"
+
+class CCAttrMap;
 
 #define POSTPRO_ID_SHADOW				TEXT("Camelot/Internal/Shadow")
 #define POSTPRO_DISPLAYNAME_SHADOW		TEXT("Shadow")

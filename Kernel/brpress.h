@@ -103,10 +103,30 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BRPRESS
 #define INC_BRPRESS
 
-#include "ndbldpth.h"
 class CCObject;
 class CXaraFileRecord;
 
+class BrushPointInfo;
+typedef std::map< MILLIPOINT, BrushPointInfo > PointsMap;
+
+class CPathPointInfo
+{
+public:
+	CPathPointInfo() { m_Point.x = m_Point.y = 0; m_Tangent = 0; }
+	
+	CPathPointInfo &operator=(CPathPointInfo CP)
+	{
+		m_Point.x = CP.m_Point.x; 
+		m_Point.y = CP.m_Point.y;							
+		m_Tangent = CP.m_Tangent;
+
+		return *this;
+	}
+
+public: //members				  
+	DocCoord	m_Point;
+	double		m_Tangent;
+};
 
 /********************************************************************************************
 

@@ -115,6 +115,16 @@ class BlendedBrushDefinition;
 class BrushData;
 class Range;
 
+enum ListUpdateType
+{
+	UPDATE_NONE,
+	UPDATE_LIST,
+	UPDATE_PROPORTION,
+	UPDATE_POSITION,
+	UPDATE_LISTANDPOSITION
+};
+
+
 // indicates what type of offset from the path each object will have, e.g. all left of the path,
 // all right of the path, left then right etc.
 enum PathOffset {OFFSET_NONE,

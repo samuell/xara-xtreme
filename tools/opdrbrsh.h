@@ -103,8 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opfree.h"
 #include "brshcomp.h"
-#include "ndbldpth.h"
-#include "brshattr.h"
+#include "brpress.h"
 
 class AttrBrushType;
 class BlendRef;

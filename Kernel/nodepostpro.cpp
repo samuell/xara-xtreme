@@ -103,6 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "app.h"
 #include "node.h"
 #include "nodepostpro.h"
+#include "attrmap.h"
 
 // Resource headers
 //#include "resource.h"

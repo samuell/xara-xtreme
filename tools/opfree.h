@@ -102,12 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "doccoord.h"
 //#include "selop.h"
-#include "nodeblnd.h"
 
+class NodeBlend;
 class OpState;
 class NodePath;
 class Path;
 class Cursor;
+class NodeGroup;
 struct FreeHandJoinInfo;
 
 #define OPTOKEN_FREEHAND _T("FreeHandTool")

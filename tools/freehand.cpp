@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "freehres.h"
 #include "progress.h"
 #include "spread.h"
+#include "nodepath.h"
 
 #include "opdrbrsh.h"
 #include "opbevel.h"

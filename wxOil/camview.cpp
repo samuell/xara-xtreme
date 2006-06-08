@@ -117,6 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "vkextra.h"
 #include "brushmsg.h"
 #include "statline.h"
+#include "draginfo.h"
 
 /***************************************************************************************************************************/
 

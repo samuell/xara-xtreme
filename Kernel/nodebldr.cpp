@@ -6402,6 +6402,41 @@ CCAttrMap* BlendPath::GetCopyAttributes()
 //-------------------------------------------
 //-------------------------------------------
 
+BecomeA::BecomeA(BecomeAReason ThisReason,
+			CCRuntimeClass* pClass,
+			UndoableOperation* pOp /* = NULL */,
+			BOOL sel /*= TRUE*/,
+			BOOL First /*= FALSE*/
+			) : Reason(ThisReason), pClassToBecome(pClass), pUndoOp(pOp)
+			{	Select = sel;
+				pCallNode = NULL;
+				AmFirstNode = First;
+				fSilhouette = FALSE;
+				fShadowSilhouettes = FALSE;
+				insertComplexBlendStepsAsPaths = FALSE;
+				m_Count = 0;
+				m_bIsCounting = FALSE;
+				m_bBecomeANodePath = (pClassToBecome==CC_RUNTIME_CLASS(NodePath));
+				m_bInPlace = FALSE;
+				m_bSecondary = FALSE;
+				m_bPathsOnly = FALSE;
+			}
+
+BOOL BecomeA::BAPath() const {return m_bBecomeANodePath;}
+
+// This function should be called when Reason == BECOMEA_PASSBACK 
+// (see above for a description of this reason code)
+BOOL BecomeA::PassBack(NodeRenderableInk* pNewNode,NodeRenderableInk* pCreatedByNode,CCAttrMap* pAttrMap /*=NULL*/)
+{
+	if (pAttrMap)
+	{
+		pAttrMap->DeleteAttributes();
+		delete pAttrMap;
+	}
+	return FALSE;
+}
+
+
 /***********************************************************************************************
 
 > NodeRenderableInk * BlendBecomeA::CreateWrapNode(NodeRenderableInk * pNode, 

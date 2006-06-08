@@ -104,9 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLENDATTRPARAM
 #define INC_BLENDATTRPARAM
 
-#include "pathproc.h"
-#include "attrmap.h"
-
+class CCAttrMap;
 class NodeAttribute;
 class AttributeValue;
 class NodeRenderableInk;

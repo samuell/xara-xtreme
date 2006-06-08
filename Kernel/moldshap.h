@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "paths.h"
 #include "binds.h"
 #include "tranform.h"
-#include "nodepath.h"
 #include "nodemold.h"
 
 class KernelBitmap;

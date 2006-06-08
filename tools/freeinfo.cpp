@@ -131,6 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attrmgr.h"
 #include "docvmsg.h"
 #include "colmsg.h"
+#include "brshattr.h"
 
 DECLARE_SOURCE( "$Revision$" );
 

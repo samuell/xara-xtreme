@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bars.h"
 #include "range.h"
 #include "fillattr.h"
-#include "lineattr.h"
+#include "fillattr2.h"
 #include "biasgdgt.h"
 //#include "selop.h"
 #include "brshattr.h"
@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "opbevel.h"
 #include "dragtool.h"
 
-
+class AttrTranspFillMapping;
 class Cursor;
 class GradInfoBarOp;
 class TranspInfoBarOp;
@@ -122,6 +122,7 @@ class AttrFillMapping;
 class AttrFillEffect;
 class SelRange;
 class OpApplyAttrInteractive;
+class AttrStrokeTransp;
 
 enum FillGeometry
 {
@@ -763,7 +764,7 @@ public:
 	AttrRemoveStrokeTransp() : AttrValueChange() {}
 
 	virtual AttributeValue* GetAttributeValue() { return &Value; }
-	virtual CCRuntimeClass* GetAttributeType() { return CC_RUNTIME_CLASS(AttrStrokeTransp); }
+	virtual CCRuntimeClass* GetAttributeType();
 
 	virtual AttrFillGeometry* MutateFill(AttrFillGeometry* FillToMutate);
 

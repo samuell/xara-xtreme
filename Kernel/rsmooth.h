@@ -104,7 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_RETSMOOTH
 
 #include "selop.h"
-#include "nodepath.h"
 #include "doccoord.h"
 
 #define SMOOTH_MAX (2000*2000)
@@ -124,7 +123,7 @@ struct Set {
 
 #define ITEM_TYPE Set
 
-
+class NodePath;
 
 /******************************************************************************
 

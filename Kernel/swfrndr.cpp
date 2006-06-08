@@ -119,6 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "strkattr.h"
 #include "ppstroke.h"
 #include "brshbeca.h"
+#include "nodebev.h"
 
 // needed for oversized object warning message (in ExportAll)
 //#include "filtrres.h"

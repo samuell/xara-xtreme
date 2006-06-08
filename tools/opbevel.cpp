@@ -148,6 +148,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opliveeffects.h"
 #include "nodeliveeffect.h"
 #include "ophist.h"
+#include "nbevcont.h"
+#include "nodetext.h"
 
 // Resource headers
 //#include "bevres.h"

@@ -101,12 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PATHEDIT
 
 #include "paths.h"
-#include "nodepath.h"
 #include "rndrgn.h"
 #include "selop.h"
 #include "objchge.h"
-#include "nodeblnd.h"
-#include "blndtool.h"
 
 #define OPTOKEN_JOINSHAPEOP		_T("JoinShapes")
 #define OPTOKEN_BREAKSHAPEOP	_T("BreakShapes")
@@ -115,6 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_ADDENDPOINT		_T("AddEndpoint")
 #define OPTOKEN_AUTOCLOSEPATHS	_T("AutoClosePaths")
 
+class NodePath;
 class Document; 
 class OperationHistory;
 class SelectionState;     
@@ -125,6 +123,8 @@ class TransformBase;
 class BezierTool;
 class Cursor;
 class AttrBrushType;
+class NodeBlend;
+class NodeGroup;
 
 /********************************************************************************************
 

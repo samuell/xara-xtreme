@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "listitem.h"
 #include "list.h"
-//#include "fontbase.h"
 #include "attrmap.h"
+//#include "fontbase.h"
 
 class Document;
 class Node;

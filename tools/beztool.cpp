@@ -152,6 +152,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshad.h"
 #include "slicehelper.h"
 #include "opbevel.h"
+#include "nodebev.h"
 
 DECLARE_SOURCE("$Revision$");
 

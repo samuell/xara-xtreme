@@ -101,9 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_AI_EPS_RENDER_REGION
 
 #include "saveeps.h"
-#include "nodebev.h"
-#include "nodeshad.h"
 
+class NodeBevel;
 
 // Constants.
 const char	LinearGradient []	= "Linear Gradient";
