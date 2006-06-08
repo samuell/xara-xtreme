@@ -732,10 +732,11 @@ sub readstrings
 	my $p="";
 	foreach $i (@removeinclude)
 	{
-	    $i=s/\./\\\./g;
+	    $i=~s/\./\\\./g;
 	    $p.="|" if ($p ne "");
 	    $p.="($i)"
 	}
 	$removeincludepat=qr/^\s*\#include\s+\"$p\".*$/;
+	print STDERR "Remove pattern $removeincludepat\n" if ($verbose);
     }
 }
