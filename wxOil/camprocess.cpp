@@ -523,7 +523,7 @@ void CamLaunchProcess::ProcessStdErr()
 
 /********************************************************************************************
 
->	void CamLaunchProcess::OnTerminate(int /*TYPENOTE: Correct*/ pid, int /*TYPENOTE: Correct*/ status)
+>	void CamLaunchProcess::OnTerminate(int TYPENOTE: Correct pid, int TYPENOTE: Correct status)
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/May/2006
