@@ -190,6 +190,7 @@ class KeyPress : public CC_CLASS_MEMDUMP
 
 public:
 	static BOOL Init();
+	static FilePath GetHotKeysFilename();
 	static BOOL DispatchKeyEvent(UINT32 nMsgID, UINT32 nChar, UINT32 nRepCnt, UINT32 nFlags);
 	static BOOL	TranslateMessage( wxKeyEvent *pMsg );
 	static void ResetModifierKeys();

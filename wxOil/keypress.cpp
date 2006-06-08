@@ -404,6 +404,35 @@ BOOL KeyPress::Init()
 
 
 /********************************************************************************************
+
+> static FilePath KeyPress::GetHotKeysFilename()
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	8/Jun/2006
+	Inputs:		-
+	Outputs:	-
+	Returns:	PathName reference to location of hotkeys config file
+	Purpose:	
+
+********************************************************************************************/
+
+FilePath KeyPress::GetHotKeysFilename()
+{
+	FilePath result;
+
+	wxStandardPaths		Paths;
+	wxString	strPath( Paths.GetUserConfigDir() );
+	strPath += _T("/.xaralx/hotkeys");
+
+	if (wxFile::Exists(strPath))
+		result.SetPathName(strPath, FALSE);
+
+	return result;
+}
+
+
+
+/********************************************************************************************
 >	static BOOL KeyPress::DispatchKeyEvent(UINT32 nMsgID, UINT32 nChar, UINT32 nRepCnt, UINT32 nFlags)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>

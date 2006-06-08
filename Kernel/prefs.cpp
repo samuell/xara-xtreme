@@ -984,22 +984,17 @@ BOOL Preferences::Init()
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// Create a link to the OIL
-	OILPrefs = new OILPreferences();
+	OILPrefs = OILPreferences::Init();
 	
 	// Flag error if it failed
-	if (OILPrefs == NULL || !OILPrefs->Init())
+	if (OILPrefs == NULL)
 		return FALSE;
 
-	// TODO: Get Appname and orgnisation name from central location? product.h?
-	//OILPrefs->SetAppName(_T("XaraLX"));
-	//OILPrefs->SetVendorName(_T("XaraGroup"));
-	
-	// Flag that the class has been set up and initialised and so enable the writing out 
-	// on exit.
 	PrefsInitedOk = TRUE;
 
 	// Initialise the preference file for reading
 	return OILPrefs->OpenInput();
+
 #else //EXCLUDE_FROM_RALPH
 	// Be gone you pesky prefs system :-)
 	OILPrefs = NULL;

@@ -117,16 +117,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 ********************************************************************************************/
 
 
-class OILPreferences
+class OILPreferences : public wxConfig
 {
-protected:
-	std::auto_ptr<wxConfig>	m_pConfig;
-
 public:
-	OILPreferences();
+	// Class factory/Initialise an OILPreferences object
+	static OILPreferences* Init();
 
-	// Initialise the OILPreferences object
-	BOOL Init();
+	// Constructor (I wish I didn't have to duplicate this here but don't know any way
+	// to avoid it)
+	OILPreferences( const wxString& appName = wxEmptyString,
+					const wxString& vendorName = wxEmptyString,
+					const wxString& localFilename = wxEmptyString,
+					const wxString& globalFilename = wxEmptyString,
+					long style = 0, wxMBConv& conv = wxConvUTF8)
+		: wxConfig(appName, vendorName, localFilename, globalFilename, style, conv) {;}
 
 	// Write a preference
 	void Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Type, PrefData pData);

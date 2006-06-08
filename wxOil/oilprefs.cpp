@@ -109,27 +109,28 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "product.h"	// PRODUCT_OPTIONS_REGISTRYKEY
 
-OILPreferences::OILPreferences()
-{
-}
 
 /********************************************************************************************
 
->	BOOL OILPreferences::Init()
+>	static OILPreferences* OILPreferences::Init()
 
-	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	24/8/93
-	Returns:	TRUE if initialisation succeeded, FALSE otherwise.
+	Author:		Luke_Hart & Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	8/Jun/2006
+	Returns:	OILPreferences objects if initialisation succeeded, NULL otherwise.
 	Purpose:	Performs any initialisation of the OIL layer preferences mechanisms that
-				may fail.  (Under Windows, this is all handled by MFC).
+				may fail.
 
 ********************************************************************************************/
 
-BOOL OILPreferences::Init()
+OILPreferences* OILPreferences::Init()
 {
 	wxStandardPaths		Paths;
 	wxString	strPath( Paths.GetUserConfigDir() );
 	strPath += _T("/.xaralx");
+
+	// Delete any file that exists where the directory should be
+	if (wxFile::Exists(strPath))
+		::wxRemoveFile(strPath);
 
 	// Create directory iff not exist
 	if( !wxDir::Exists( strPath ) )
@@ -137,14 +138,14 @@ BOOL OILPreferences::Init()
 
 	TRACEUSER( "jlh92", _T("OILPreferences::Init %s\n"), PCTSTR(strPath) );
 
-	// Open config file
+	// Open config storage
 	strPath += _T("/preferences");
-	m_pConfig = std::auto_ptr<wxConfig>( new wxConfig( _T("xaralx"), _T("Xara"), strPath ) );
+	OILPreferences* pPrefs = new OILPreferences(_T("xaralx"), _T("Xara"), strPath);
 
 	TRACEUSER( "jlh92", _T("OILPreferences::Init2 %s\n"), PCTSTR(strPath) );
 	
-	// Always succeed
-	return TRUE;
+	// Return the object we made or a NULL pointer if we failed
+	return pPrefs;
 }
 
 /********************************************************************************************
@@ -160,7 +161,7 @@ BOOL OILPreferences::Init()
 
 void OILPreferences::WipePreferenceFile()
 {
-	m_pConfig->DeleteAll();
+	DeleteAll();
 }
 
 /********************************************************************************************
@@ -176,9 +177,9 @@ void OILPreferences::WipePreferenceFile()
 void OILPreferences::WipeDangerousPrefs()
 {
 	// wipe the potentially dangerous settings from the registry
-	m_pConfig->DeleteGroup(_T("Gallery"));
-	m_pConfig->DeleteGroup(_T("Options/Templates"));
-	m_pConfig->DeleteGroup(_T("Options/NewTemplates"));
+	DeleteGroup(_T("Gallery"));
+	DeleteGroup(_T("Options/Templates"));
+	DeleteGroup(_T("Options/NewTemplates"));
 	
 //	DeleteRegKeyAndSubKeys (hAppStateRegKey, PRODUCT_REGISTRYKEY_GALLERY);
 //	HKEY optsKey = OpenRegKey(hAppStateRegKey, PRODUCT_REGISTRYKEY_OPTIONS);
@@ -217,7 +218,7 @@ void OILPreferences::Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Typ
 		case PREF_INT:
 		{
 			/*TYPENOTE: Correct*/ long l = (long)(*Data.pInt);
-			Worked = m_pConfig->Write(strKey, l);
+			Worked = wxConfig::Write(strKey, l);
 			break;
 		}
 		
@@ -229,17 +230,17 @@ void OILPreferences::Write(LPTCHAR Section, LPTCHAR PrefName, PreferenceType Typ
 			// (Could write UINT32 prefs as strings...)
 			//
 			/*TYPENOTE: Correct*/ long l = (long)(*Data.pUInt);
-			Worked = m_pConfig->Write(strKey, l);
+			Worked = wxConfig::Write(strKey, l);
 			break;
 		}
 
 		case PREF_DOUBLE:
-			Worked = m_pConfig->Write(strKey, (double)*(Data.pDouble));
+			Worked = wxConfig::Write(strKey, (double)*(Data.pDouble));
 			break;
 			
 		case PREF_STRING:
-			Worked = m_pConfig->Write(strKey, wxString((TCHAR*)*(Data.pString)));
-//			Worked = m_pConfig->Write(strKey, *(Data.pString));	// use this form when StringBase derived classes support direct conversion
+			Worked = wxConfig::Write(strKey, wxString((TCHAR*)*(Data.pString)));
+//			Worked = wxConfig::Write(strKey, *(Data.pString));	// use this form when StringBase derived classes support direct conversion
 			break;
 			
 		default:
@@ -302,7 +303,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Use the value already in pData->Int as the value to return if the 
 			// preference is not found.
 			/*TYPENOTE: Correct*/ long l;
-			if (m_pConfig->Read(strKey, &l))
+			if (wxConfig::Read(strKey, &l))
 				*pData.pInt = (INT32)l; // Do not write directly as may be longer than 32 bits
 			break;
 		}
@@ -312,7 +313,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Note that signed value is read and cast directly into Unsigned memory
 			// allocation reversing the effects fo the cast used in Write above...
 			/*TYPENOTE: Correct*/ long l;
-			if (m_pConfig->Read(strKey, &l))
+			if (wxConfig::Read(strKey, &l))
 				*pData.pUInt = (UINT32)l; // Do not write directly as may be longer than 32 bits
 			break;
 		}
@@ -320,7 +321,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 		{
 			// Get the textual version of the double and convert it to a double.
 			// default to null string
-			m_pConfig->Read(strKey, (double*)(pData.pDouble));
+			wxConfig::Read(strKey, (double*)(pData.pDouble));
 			break;
 		}	
 		case PREF_STRING:
@@ -328,7 +329,7 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 			// Just get the string - need to ask for the address of the String's
 			// text buffer so we can pass it to the SDK profile API.
 				wxString str;
-				m_pConfig->Read(strKey, &str);
+				wxConfig::Read(strKey, &str);
 				str.Truncate(256);
 				*(pData.pString) = (LPCTSTR)str;
 //				*(pData.pString) = String_256(str);	// use this form when StringBase derived classes support direct conversion
@@ -354,6 +355,9 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 
 BOOL OILPreferences::OpenInput()
 {
+	// Tell wxWidgets this is the default wxConfig object
+	wxConfig::Set(this);
+
 	return TRUE;
 }
 
@@ -371,6 +375,8 @@ BOOL OILPreferences::OpenInput()
 
 BOOL OILPreferences::CloseInput()
 {
+	wxConfig::Set(NULL);
+
 	return TRUE;
 }
 
@@ -404,6 +410,6 @@ BOOL OILPreferences::OpenOutput()
 
 BOOL OILPreferences::CloseOutput()
 {
-	m_pConfig->Flush();
+	Flush();
 	return TRUE;
 }

@@ -537,22 +537,9 @@ BOOL HotKey::ReadHotKeysFromDisk()
 {	
 	CCDiskFile file;                                // File
 
-	// Find hotkeys file using binreloc
-	PSTR		pszDataPath = br_find_data_dir("/usr/share");
-	wxString	strFilename(pszDataPath, wxConvUTF8);
-	free(pszDataPath);
-	strFilename += _T("/xaralx/hotkeys");
-
-#if defined(_DEBUG)
-	// Debug-only fallback
-	if (!wxFile::Exists(strFilename))
-		strFilename = _T("/usr/share/xaralx/hotkeys");
-#endif
-
-//	if (!wxFile::Exists(strFilenmae))
-//		return FALSE;
-
-	PathName filepath(strFilename);
+	FilePath filepath = KeyPress::GetHotKeysFilename();
+	if (!filepath.IsValid())
+		return FALSE;
 
 	BOOL ok = TRUE;
 
@@ -581,7 +568,7 @@ BOOL HotKey::ReadHotKeysFromDisk()
 	file.SetThrowExceptions( OldThrowingState );
 	file.SetReportErrors( OldReportingState );
 
-	return (ok);
+	return ok;
 }
 
 /********************************************************************************************
