@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "npaper.h"
 #include "doccolor.h"
-#include "convert.h"
 #include "units.h"
 
 // The following enum defines the eight select blobs of a grid in a specific way. These values are used to
