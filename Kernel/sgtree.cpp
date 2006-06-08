@@ -124,6 +124,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "webster.h"
 //#include "inetop.h"
 
+#include "bars.h"
+
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNAMIC(SGDisplayNode,  CCObject)
 	CC_IMPLEMENT_DYNAMIC(SGDisplayRoot,  SGDisplayNode)

@@ -107,8 +107,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dockbar.h"
 //#include "opdesc.h"
 //#include "barmsg.h"
-#include "biasgdgt.h"
-#include "biasgain.h"
+
+class CBiasGainGadget;
+class CProfileBiasGain;
 
 // Markn 7-3-97
 // DEFAULT_TOOL_INFOBAR_SLOT defines the default tool info bar slot.  The infobar should always go in the slot underneath

@@ -103,6 +103,7 @@ class BrushData;
 class AttrBrushType;
 #include "brshcomp.h"
 
+class InformationBarOp;
 
 class CBrushGadget
 {

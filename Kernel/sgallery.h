@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGALLERY
 #define INC_SGALLERY
 
-#include "bars.h"
 #include "sgtree.h"
 #include "sgscan.h"
 #include "dlgtypes.h"
+#include "dialogop.h"
 
 #define   GSAFECLASS(TheClass)     (TheClass?TheClass:CC_RUNTIME_CLASS(DialogOp))
 
