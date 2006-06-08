@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "quality.h"
 #include "docvmsg.h"
 #include "draginfo.h"
-#include "camview.h"
+#include "dragtrgt.h"
 #include "cursor.h"
 
 #define OPTOKEN_TOGGLESOLIDDRAG		TEXT("ToggleSolidDrag")

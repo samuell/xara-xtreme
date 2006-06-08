@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragbmp.h"
 //#include "viewrc.h"
 //#include "resource.h"
-
+#include "camview.h"
 #include "docview.h"
 #include "spread.h"
 #include "attrmgr.h"

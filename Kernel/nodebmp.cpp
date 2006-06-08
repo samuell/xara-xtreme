@@ -166,6 +166,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //This includes the Hot Link class
 #include "userattr.h"
 //#include "webattr.h"
+#include "camview.h"
 
 #ifdef PHOTOSHOPPLUGINS
 // Only add in if required - general plug-in removal at present

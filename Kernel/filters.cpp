@@ -151,6 +151,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "giffiltr.h"		// Transparent and interlaced GIF filter``
 #include "htmlfltr.h"		// HTML filter
+#include "lineattr.h"
 
 //#include "andy.h"			//For _R(IDM_OVERWRITE)
 //#include "resource.h"		//For _R(IDS_CANCEL)

@@ -168,6 +168,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dlgcthlp.h"
 //#include "xpehost.h"
 #include "editsel.h"
+#include "camview.h"
 
 // Normal exe's and standalones
 BOOL InitPostTools2()

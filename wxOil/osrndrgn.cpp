@@ -147,6 +147,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "mrhbits.h"
 #include "strkattr.h"
 #include "cartprov.h"
+#include "lineattr.h"
 
 DECLARE_SOURCE("$Revision$");
 

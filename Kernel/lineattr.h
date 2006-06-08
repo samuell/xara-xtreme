@@ -105,6 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "doccolor.h"
 #include "attr.h"
 #include "fillattr.h"
+#include "fillattr2.h"
 #include "rndrgn.h"
 
 class BlendAttrParam;

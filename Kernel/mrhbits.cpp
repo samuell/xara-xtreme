@@ -104,6 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fillattr.h"
 #include "grndrgn.h"
 #include "grndbmp.h"
+#include "fillattr2.h"
 //#include "docview.h"
 //#include "grptrans.h"
 //#include "ndcchbmp.h"

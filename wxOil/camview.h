@@ -119,18 +119,6 @@ class CCPrintInfo;
 class PrintControl;
 class Rect;
 
-enum ObjectDragTarget
-{
-	NO_TARGET,
-	FILL_TARGET,
-	LINE_TARGET,
-	STARTCOL_TARGET,
-	ENDCOL_TARGET,
-	ENDCOL2_TARGET,
-	ENDCOL3_TARGET,
-	MANY_TARGET
-};
-
 enum MouseOverRulerHit
 {
 	OVER_NO_RULERS,

@@ -102,9 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define CSRSTACK__INC
 
 
-// This object lives in the OIL layer.
-#include "cursor.h"
-
+class Cursor;
 
 
 /********************************************************************************************

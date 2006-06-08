@@ -122,7 +122,7 @@ class NodeShadowPassback;
 
 class GRenderRegion;
 class GRenderRegionWrapper;
-
+class BitmapTranspFillAttribute;
 
 
 /***********************************************************************************************

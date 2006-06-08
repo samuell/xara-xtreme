@@ -108,7 +108,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "biasgdgt.h"
 #include "iprofile.h"
 #include "biasgain.h"
-#include "nodeblnd.h"
 #include "nodershp.h"
 #include "range.h"
 #include "matrix.h"

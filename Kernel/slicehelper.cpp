@@ -136,6 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h" // for the line width inclusion part of the GetNodeBounding()
 
 #include "ophist.h"
+#include "nodebev.h"
 
 // global that is set when a bar property tag is imported to say how many bars there were beforehand
 // used by SliceHelper::MeshImportedLayersWithExistingButtonBars() and is defined in rechdoc.cpp

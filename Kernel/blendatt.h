@@ -122,6 +122,8 @@ enum ColourBlendType	{  	COLOURBLEND_FADE,
 							COLOURBLEND_NONE
 						};
 
+enum EditState {EDIT_STEPS, EDIT_DISTANCE,};
+enum EndObject {NONE, FIRST, LAST};
 
 /********************************************************************************************
 

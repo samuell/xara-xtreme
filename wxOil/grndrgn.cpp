@@ -193,6 +193,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //GAT #include "prdlgctl.h"
 
 #include "camprofile.h"
+#include "fillattr2.h"
 
 DECLARE_SOURCE("$Revision$");
 

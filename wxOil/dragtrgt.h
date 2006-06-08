@@ -110,6 +110,17 @@ class DragInformation;
 class KeyPress;
 class OilCoord;
 
+enum ObjectDragTarget
+{
+	NO_TARGET,
+	FILL_TARGET,
+	LINE_TARGET,
+	STARTCOL_TARGET,
+	ENDCOL_TARGET,
+	ENDCOL2_TARGET,
+	ENDCOL3_TARGET,
+	MANY_TARGET
+};
 
 
 /*********************************************************************************************

@@ -110,6 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshattr.h"
 #include "fillramp.h"
 #include "fthrattr.h"
+#include "fillattr2.h"
 
 // The implements to match the declares in the .h file.
 CC_IMPLEMENT_MEMDUMP(XPFCapability, CC_CLASS_MEMDUMP);

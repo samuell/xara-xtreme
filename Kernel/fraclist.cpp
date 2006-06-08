@@ -108,6 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fillattr.h"
 #include "app.h"
 #include "bitmpinf.h"
+#include "fillattr2.h"
 
 CC_IMPLEMENT_MEMDUMP( CachedFractal, ListItem )
 CC_IMPLEMENT_MEMDUMP( GlobalFractalList, List )

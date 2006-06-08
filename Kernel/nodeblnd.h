@@ -116,8 +116,6 @@ class BlendPath;
 class NodeBlendPath;
 class NodeBlender;
 
-enum EditState {EDIT_STEPS, EDIT_DISTANCE,};
-enum EndObject {NONE, FIRST, LAST};
 /********************************************************************************************
 
 >	class NodeBlend: public NodeRenderableInk

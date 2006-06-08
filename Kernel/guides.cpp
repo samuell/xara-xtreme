@@ -121,6 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sprdmsg.h"
 #include "document.h"
 #include "qualattr.h"
+#include "camview.h"
 //#include "markn.h"
 //#include "ed.h"
 //#include "tim.h"

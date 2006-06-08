@@ -141,6 +141,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bmpsdlgr.h"	// _R(IDS_ON_FRAME_OUTSIDE_NOREF)
 #include "effects_stack.h"
 #include "bars.h"
+#include "fillattr2.h"
 
 DECLARE_SOURCE( "$Revision$" );    
 

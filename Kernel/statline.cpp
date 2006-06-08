@@ -128,6 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colcontx.h"
 #include "colormgr.h"
 #include "opimgset.h"
+#include "camview.h"
 
 DECLARE_SOURCE("$Revision$");
 

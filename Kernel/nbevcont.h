@@ -104,13 +104,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "control.h"
 #include "group.h"
 #include "cxfrec.h"		// CXaraFileRecord
-#include "nodebev.h"
 #include "clipattr.h"
 
 class ContextMenu;
 class ExtendParams;
 class BlendNodeParam;
 class AttrClipView;
+class NodeBevel;
 
 /********************************************************************************************
 

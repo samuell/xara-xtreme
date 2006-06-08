@@ -97,8 +97,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 //
 
-//#include "bitmap.h"
-#include "fillval.h"
+class BitmapFillAttribute;
 
 #ifndef INC_CBMPBITS
 #define INC_CBMPBITS

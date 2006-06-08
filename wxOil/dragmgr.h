@@ -106,7 +106,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragmsg.h"
 #include "dragtrgt.h"
 #include "list.h"
-#include "cursor.h"
+
+class Cursor;
+enum ObjectDragTarget;
 
 /********************************************************************************************
 

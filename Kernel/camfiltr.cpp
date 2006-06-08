@@ -219,6 +219,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "nodeliveeffect.h"
 #include "hardwaremanager.h"
+
+#include "fillattr2.h"
+
 using namespace oilHardwareManager;
 
 //----------------------------------------------------------------------------

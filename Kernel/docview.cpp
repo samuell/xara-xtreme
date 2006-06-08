@@ -154,7 +154,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bubbleid.h"
 #include "filters.h"
 #include "keypress.h"
-
+#include "nodebev.h"
 
 // for shadow node hit-testing 
 #include "nodecont.h"

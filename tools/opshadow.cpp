@@ -118,6 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "objchge.h"
 #include "nodetxts.h"
 #include "list.h"
+#include "fillattr2.h"
 
 // Resource headers
 //#include "shadres.h"

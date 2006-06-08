@@ -160,10 +160,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "xpehost.h"		// For OPTOKEN_XPE_EDIT
 #include "qualattr.h"
 #include "bfxop.h"			// useful BFX plug-in related operations
+#include "fillattr2.h"
 
 #ifdef PHOTOSHOPPLUGINS
 #include "plugmngr.h"	// CheckHaveDetailsOnPlugIns
 #endif //PHOTOSHOPPLUGINS
+
+#include "camview.h"
 
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNCREATE(BitmapSGallery, SuperGallery)

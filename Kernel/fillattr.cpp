@@ -22653,6 +22653,77 @@ BOOL FillAttrRecordHandler::HandleFillEffectRecord(CXaraFileRecord* pCXaraFileRe
 	return FALSE;
 }
 
+// Lots of simple virtual functions. Note these were declared in the class, but being virtual they won't
+// be inlined anyway (as an address for them is needed) so we might as well get the compile benefit
+DocColour* AttrFillGeometry::GetStartColour()	{ return ATTRVALUE()->GetStartColour(); }
+DocColour* AttrFillGeometry::GetEndColour()		{ return ATTRVALUE()->GetEndColour();  }
+DocColour* AttrFillGeometry::GetEndColour2()	{ return ATTRVALUE()->GetEndColour2(); }
+DocColour* AttrFillGeometry::GetEndColour3()	{ return ATTRVALUE()->GetEndColour3(); }
+UINT32*	   AttrFillGeometry::GetStartTransp()	{ return ATTRVALUE()->GetStartTransp(); }
+UINT32*	   AttrFillGeometry::GetEndTransp()		{ return ATTRVALUE()->GetEndTransp();  }
+UINT32*	   AttrFillGeometry::GetEndTransp2()	{ return ATTRVALUE()->GetEndTransp2(); }
+UINT32*	   AttrFillGeometry::GetEndTransp3()	{ return ATTRVALUE()->GetEndTransp3(); }
+DocCoord*  AttrFillGeometry::GetStartPoint()	{ return ATTRVALUE()->GetStartPoint(); }
+DocCoord*  AttrFillGeometry::GetEndPoint()		{ return ATTRVALUE()->GetEndPoint();  }
+DocCoord*  AttrFillGeometry::GetEndPoint2()		{ return ATTRVALUE()->GetEndPoint2(); }
+DocCoord*  AttrFillGeometry::GetEndPoint3()		{ return ATTRVALUE()->GetEndPoint3(); }
+CProfileBiasGain& AttrFillGeometry::GetProfile ()	{ return ATTRVALUE()->GetProfile (); }
+
+void AttrFillGeometry::SetStartColour(DocColour* NewCol){ ATTRVALUE()->SetStartColour(NewCol); }
+void AttrFillGeometry::SetEndColour(DocColour* NewCol)  { ATTRVALUE()->SetEndColour(NewCol); }
+void AttrFillGeometry::SetEndColour2(DocColour* NewCol) { ATTRVALUE()->SetEndColour2(NewCol); }
+void AttrFillGeometry::SetEndColour3(DocColour* NewCol) { ATTRVALUE()->SetEndColour3(NewCol); }
+void AttrFillGeometry::SetStartTransp(UINT32* NewTransp){ ATTRVALUE()->SetStartTransp(NewTransp); }
+void AttrFillGeometry::SetEndTransp(UINT32* NewTransp)	{ ATTRVALUE()->SetEndTransp(NewTransp); }
+void AttrFillGeometry::SetEndTransp2(UINT32* NewTransp)	{ ATTRVALUE()->SetEndTransp2(NewTransp); }
+void AttrFillGeometry::SetEndTransp3(UINT32* NewTransp)	{ ATTRVALUE()->SetEndTransp3(NewTransp); }
+void AttrFillGeometry::SetStartPoint(DocCoord* Pos)	   	{ ATTRVALUE()->SetStartPoint(Pos); }
+void AttrFillGeometry::SetEndPoint(DocCoord* Pos)		{ ATTRVALUE()->SetEndPoint(Pos); }
+void AttrFillGeometry::SetEndPoint2(DocCoord* Pos)		{ ATTRVALUE()->SetEndPoint2(Pos); }
+void AttrFillGeometry::SetEndPoint3(DocCoord* Pos)		{ ATTRVALUE()->SetEndPoint3(Pos); }
+void AttrFillGeometry::SetProfile (CProfileBiasGain& SetWith) { ATTRVALUE()->SetProfile(SetWith); }
+
+UINT32  AttrFillGeometry::GetTranspType()	{ return ATTRVALUE()->GetTranspType(); }
+UINT32	AttrFillGeometry::GetDPI()			{ return ATTRVALUE()->GetDPI(); }
+UINT32	AttrFillGeometry::GetFractalDPI()	{ return ATTRVALUE()->GetFractalDPI(); }
+UINT32	AttrFillGeometry::GetFractalDim()	{ return ATTRVALUE()->GetFractalDim(); }
+INT32   AttrFillGeometry::GetSeed()			{ return ATTRVALUE()->GetSeed(); }
+FIXED16 AttrFillGeometry::GetGraininess()	{ return ATTRVALUE()->GetGraininess(); }
+FIXED16 AttrFillGeometry::GetGravity()		{ return ATTRVALUE()->GetGravity(); }
+FIXED16 AttrFillGeometry::GetSquash()		{ return ATTRVALUE()->GetSquash(); }
+BOOL    AttrFillGeometry::GetTileable()		{ return ATTRVALUE()->GetTileable(); }
+double	AttrFillGeometry::GetNoiseScale()	{ return ATTRVALUE()->GetNoiseScale(); }
+
+void	AttrFillGeometry::SetTranspType(UINT32 NewType)		{		 ATTRVALUE()->SetTranspType(NewType); }
+BOOL	AttrFillGeometry::SetDPI(UINT32 NewDpi)				{ return ATTRVALUE()->SetDPI(NewDpi); }
+BOOL	AttrFillGeometry::SetFractalDPI(UINT32 NewDpi)		{ return ATTRVALUE()->SetFractalDPI(NewDpi); }
+void	AttrFillGeometry::SetFractalDim(UINT32 NewDim)		{		 ATTRVALUE()->SetFractalDim(NewDim); }
+BOOL    AttrFillGeometry::SetSeed(INT32 NewSeed)			{ return ATTRVALUE()->SetSeed(NewSeed); }
+BOOL    AttrFillGeometry::SetGraininess(FIXED16 NewGrain) { return ATTRVALUE()->SetGraininess(NewGrain); }
+BOOL    AttrFillGeometry::SetGravity(FIXED16 NewGrav)		{ return ATTRVALUE()->SetGravity(NewGrav); }
+BOOL    AttrFillGeometry::SetSquash(FIXED16 NewSquash)	{ return ATTRVALUE()->SetSquash(NewSquash); }
+BOOL    AttrFillGeometry::SetTileable(BOOL NewTile)		{ return ATTRVALUE()->SetTileable(NewTile); }
+BOOL	AttrFillGeometry::SetNoiseScale(double ns)		{ return ATTRVALUE()->SetNoiseScale(ns); }
+
+BOOL 	AttrFillGeometry::RecalcFractal() { return ATTRVALUE()->RecalcFractal(); }
+BOOL	AttrFillGeometry::Randomise()	 { return ATTRVALUE()->Randomise(); }
+
+BOOL	AttrFillGeometry::AttachBitmap(KernelBitmap* NewBitmap) { return ATTRVALUE()->AttachBitmap(NewBitmap); }
+BOOL	AttrFillGeometry::DetachBitmap() { return ATTRVALUE()->DetachBitmap(); }
+KernelBitmap* AttrFillGeometry::GetBitmap() { return ATTRVALUE()->GetBitmap(); }
+BOOL	AttrFillGeometry::CopyBitmap(KernelBitmap* CopyBitmap) { return ATTRVALUE()->CopyBitmap(CopyBitmap); }
+
+KernelBitmapRef* AttrFillGeometry::GetBitmapRef() { return ATTRVALUE()->GetBitmapRef(); }
+
+INT32 AttrFillGeometry::GetTesselation() { return ATTRVALUE()->GetTesselation(); }
+void AttrFillGeometry::SetTesselation(INT32 NewTess) { ATTRVALUE()->SetTesselation(NewTess); }
+BOOL AttrFillGeometry::IsPerspective() { return ATTRVALUE()->IsPerspective(); }
+ColourRamp*		  AttrFillGeometry::GetColourRamp() { return ATTRVALUE()->GetColourRamp(); }
+TransparencyRamp* AttrFillGeometry::GetTranspRamp() { return ATTRVALUE()->GetTranspRamp(); }
+void AttrFillGeometry::SetColourRamp(ColourRamp* New) { ATTRVALUE()->SetColourRamp (New); }
+void AttrFillGeometry::SetTranspRamp(TransparencyRamp* New) { ATTRVALUE()->SetTranspRamp(New); }
+
+
 /********************************************************************************************
 
 >	virtual void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
@@ -22946,7 +23017,7 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 
 			pRecord->ReadINT32(&Seed);
 			pRecord->ReadFIXED16(&Graininess);
-			pRecord->ReadFIXED16(&Gravity);
+			pRecord->ReadFIXED16(M&Gravity);
 			pRecord->ReadFIXED16(&Squash);
 			pRecord->ReadINT32(&DPI);
 			pRecord->ReadBYTE(&Tileable);

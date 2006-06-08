@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ncntrcnt.h"
 //#include "nev.h"		// For _R(IDN_USER_CANCELLED)
 #include "xmlutils.h"
+#include "fillattr2.h"
 
 #include "camprocess.h"
 

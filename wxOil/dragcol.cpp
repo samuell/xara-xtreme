@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camframe.h"
 //#include "resource.h"
 #include "sgcolour.h"
-
+#include "camview.h"
 #include "attrmgr.h"
 #include "fillattr.h"
 #include "ink.h"

@@ -101,7 +101,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_STATUSLINE
 
 #include "pump.h"
-#include "cursor.h"
 #include "flags.h"
 #include "camframe.h"
 #include "monotime.h"
@@ -111,6 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class Spread;
 class StringBase;
+class Cursor;
 
 #define STATUSLINE_SELDESC_DEFAULT		1	// over dialogs, outside app window
 #define STATUSLINE_SELDESC_BARDRAG		0

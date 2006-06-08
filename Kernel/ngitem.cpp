@@ -139,6 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 //#include "justin3.h"
 #include "slicehelper.h"
+#include "fillattr2.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

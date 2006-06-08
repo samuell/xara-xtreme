@@ -114,13 +114,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#ifdef BUILDSHADOWS
 
-#include "fillval.h"
-
 class NodeBevelController;
 class ExtendParams;
 class SumAllPathsElem;
 class NodeCompound;
-
+class BitmapTranspFillAttribute;
 
 /***********************************************************************************************
 

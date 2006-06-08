@@ -151,7 +151,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bmpalint.h"	// for BitmapExportPaletteInterface::InvalidateSortedPalette()
 #include "oilfltrs.h"	// for the find filter fn
 #include "slicehelper.h"
-#include "fillattr.h"	// for attrflatcolourfill
+#include "fillattr2.h"
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe
