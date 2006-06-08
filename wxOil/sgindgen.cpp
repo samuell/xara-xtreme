@@ -130,7 +130,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bmpexdoc.h"
 #include "bmpfiltr.h"
 #include "prvwflt.h"
-#include "docview.h" */
+#include "docview.h"
+*/
 
 extern BOOL MakeShortPath(LPTSTR lpszPath, size_t cchMaxLen);
 

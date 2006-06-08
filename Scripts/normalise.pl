@@ -53,7 +53,7 @@ sub usage
  Options:
    --fixnl    / --no-fixnl         - strip out carriage returns, make
                                      sure file ends in a newline (default: on)
-   --fixauthors / --no-fix-authors - substitute deprecated author codes
+   --fixauthors / --no-fixauthors  - substitute deprecated author codes
                                      with email addresses etc. (default: on)
    --fixtypes / --no-fixtypes      - change references to deprecated types
                                      to new types (default: on)
@@ -310,7 +310,11 @@ sub process
 	# Remove unwanted includes
 	if (scalar(@removeinclude))
 	{
-	    $line="" if ($line =~ /$removeincludepat/);
+	    if ($line =~ /$removeincludepat/)
+	    {
+		chomp($line);
+		$line="//$line - in camtypes.h [AUTOMATICALLY REMOVED]\n";
+	    }
 	}
 
 	# Fix trace statements to quote the string in _T if it's not
@@ -736,7 +740,8 @@ sub readstrings
 	    $p.="|" if ($p ne "");
 	    $p.="($i)"
 	}
-	$removeincludepat=qr/^\s*\#include\s+\"$p\".*$/;
+#	$removeincludepat="^\\s*\\#include\\s+\\\"$p\\\".*\$";
+	$removeincludepat=qr/^\s*\#include\s+\"($p)\".*$/;
 	print STDERR "Remove pattern $removeincludepat\n" if ($verbose);
     }
 }
