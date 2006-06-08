@@ -50,6 +50,21 @@ my %targetdependencies;
 # the reverse hash
 my %includedependencies;
 
+# Filenames
+my %fnhash;
+
+# Directories
+my @dirs=( "GDraw", "Kernel", "PreComp", "Kernel", "tools", "wxOil", "wxXtra" );
+
+# the hash of direct includes
+my %di;
+# and its reverse
+my %diby;
+
+# counts of total includes
+my %cincluded;
+my %ctarget;
+
 my $target="";
 my $includedfile="";
 my $explain=0;
@@ -67,6 +82,130 @@ GetOptions( "target|t=s" => \$target,
 
 usage() if ($help);
 
+sub counttarget
+{
+    my $f=shift @_;
+    my $l=shift @_;
+    my $c=shift @_;
+    return $ctarget{$f} if (defined($ctarget{$f}));
+
+    my $children=($di{$f} eq "")?0:1;
+    my $count=1;
+
+    if ($children)
+    {
+	my $t;
+	foreach $t (sort split(/\s+/,$di{$f}))
+	{
+	    # detect loops
+	    if ($c!~/ $t /)
+	    {
+		$count+=counttarget($t, $l+1, $c." ".$t." ");
+	    }
+	}
+    }
+    $ctarget{$f}=$count;
+    return $count;
+}
+
+sub countincluded
+{
+    my $f=shift @_;
+    my $l=shift @_;
+    my $c=shift @_;
+    return $cincluded{$f} if (defined($cincluded{$f}));
+
+    my $children=($diby{$f} eq "")?0:1;
+    my $count=1;
+
+    if ($children)
+    {
+	my $t;
+	foreach $t (sort split(/\s+/,$diby{$f}))
+	{
+	    # detect loops
+	    if ($c!~/ $t /)
+	    {
+		$count+=countincluded($t, $l+1, $c." ".$t." ");
+	    }
+	}
+    }
+    $cincluded{$f}=$count;
+    return $count;
+}
+
+sub bytarget
+{
+    my $x=($ctarget{$b}<=>$ctarget{$a});
+    return $x?$x:($a<=>$b);
+}
+
+sub explaintarget
+{
+    my $f=shift @_;
+    my $l=shift @_;
+    my $c=shift @_;
+    my $lh=sprintf("[%3d]",$l).("  " x $l);
+    my $children=($di{$f} eq "")?0:1;
+    if ($children)
+    {
+	printf "$lh $f which includes %d other files:\n",$ctarget{$f}-1;
+	my $t;
+	foreach $t (sort bytarget split(/\s+/,$di{$f}))
+	{
+	    # detect loops
+	    if ($c=~/ $t /)
+	    {
+		print "$lh   $t (already included)\n";
+	    }
+	    else
+	    {
+		explaintarget($t, $l+1, $c." ".$t." ");
+	    }
+	}
+    }
+    else
+    {
+	print "$lh $f\n";
+    }
+}
+
+sub byincluded
+{
+    my $x=($cincluded{$b}<=>$cincluded{$a});
+    return $x?$x:($a<=>$b);
+}
+
+sub explainincluded
+{
+    my $f=shift @_;
+    my $l=shift @_;
+    my $c=shift @_;
+    my $lh=sprintf("[%3d]",$l).("  " x $l);
+    my $children=($diby{$f} eq "")?0:1;
+    if ($children)
+    {
+	printf "$lh $f which is included by %d other files:\n",$cincluded{$f}-1;
+	my $t;
+	foreach $t (sort byincluded split(/\s+/,$diby{$f}))
+	{
+	    # detect loops
+	    if ($c=~/ $t /)
+	    {
+		print "$lh   $t (already included)\n";
+	    }
+	    else
+	    {
+		explainincluded($t, $l+1, $c." ".$t." ");
+	    }
+	}
+    }
+    else
+    {
+	print "$lh $f\n";
+    }
+}
+
 sub dotarget
 {
     my $n = shift @_;
@@ -81,6 +220,7 @@ sub dotarget
 	else
 	{
 	    printf "$n: $a\n";
+	    explaintarget($n,0) if ($explain);
 	}
 
     }
@@ -111,6 +251,7 @@ sub doinclude
 	else
 	{
 	    printf "$n: $a\n";
+	    explainincluded($n,0) if ($explain);
 	}
 
     }
@@ -177,7 +318,73 @@ sub getdepend
     return sort(keys %deps);
 }
 
+sub getfilename
+{
+    my $f = shift @_;
+    return ($fnhash{$f}) if (defined($fnhash{$f}));
 
+    my $ff = $f;
+    $ff=~s/^lib\w+-//;
+    $ff=~s/\.gch$//;
+    $ff=~s/\.o$/.cpp/;
+    my $ff2= $ff;
+    $ff2=~s/\.cpp$/.c/;
+
+    my $d;
+    foreach $d (@dirs)
+    {
+	if (-e "$d/$ff")
+	{
+	    $fnhash{$f}="$d/$ff";
+	    return $fnhash{$f};
+	}
+	if (-e "$d/$ff2")
+	{
+	    $fnhash{$f}="$d/$ff2";
+	    return $fnhash{$f};
+	}
+
+    }
+    print STDERR "Can't find file $f (looking for $ff)\n" if ($verbose);
+    $fnhash{$f}="";
+    return "";
+}
+
+sub processdirect
+{
+    my $f = shift @_;
+    
+    my $fn = getfilename($f);
+    return if ($fn eq "");
+
+    open (DEPFILE, $fn) || die ("Can't open deps file $fn - maybe you need to build first: $!");
+
+    print STDERR "Processing $fn\n" if $verbose;
+    
+    my $line;
+    while (defined($line=<DEPFILE>))
+    {
+	chomp $line;
+	# Handle continuation characters
+	if ($line =~ s/\\\s*$//)
+	{
+	    $line .= " ".<DEPFILE>;
+	    redo unless eof(DEPFILE);
+	}
+	
+        # Remove C++ comments
+	$line=~s/\/\/.*$//;
+
+	next unless $line=~ /^\s*#include\s+[\"\<](\w+\.h)[\"\>]/;
+
+	my $d=basename($1);
+	if (defined($includedependencies{$d}))
+	{
+	    print STDERR "  includes $d\n" if ($verbose>2);
+	    $di{$f}.=" ".$d;
+	}
+    }
+}
 
 sub process
 {
@@ -278,6 +485,56 @@ my $d;
 foreach $d (sort keys %includedependencies)
 {
     $includedependencies{$d}=join(" ",sort split(" ",$includedependencies{$d}));
+}
+
+# Process files manually if necessary
+if ($explain)
+{
+    my $f;
+    my %seen=();
+    my @allfiles=keys %targetdependencies;
+    push @allfiles, keys %includedependencies;
+    foreach $f (sort ( grep { ! $seen{$_} ++ } @allfiles ))
+    {
+	processdirect($f);
+    }
+    foreach $f (sort keys %di)
+    {
+	my $l=$di{$f};
+	$l=~s/\s+/ /g;
+	$l=~s/^\s+//g;
+	$l=~s/\s+$//g;
+	my @l=sort(split(/\s+/,$l));
+	$di{$f}=join(" ",@l);
+	my $i;
+	foreach $i (@l)
+	{
+	    $diby{$i}.=" ".$f;
+	}
+    }
+    foreach $f (sort keys %di)
+    {
+	print STDERR "Counting target $f\n" if ($verbose);
+	counttarget($f);
+    }
+
+    print STDERR "Done counting targets\n" if ($verbose);
+
+    foreach $f (sort keys %diby)
+    {
+	my $l=$diby{$f};
+	$l=~s/\s+/ /g;
+	$l=~s/^\s+//g;
+	$l=~s/\s+$//g;
+	my @l=sort(split(/\s+/,$l));
+	$diby{$f}=join(" ",@l);
+    }
+    foreach $f (sort keys %diby)
+    {
+	print STDERR "Counting inclusion $f\n" if ($verbose);
+	countincluded($f);
+    }
+    print STDERR "Done counting inclusions\n" if ($verbose);
 }
 
 if ($target ne "")
