@@ -98,5 +98,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // This file merely includes the auto-generated resources.h
 // NO OTHER FILE SHOULD INCLUDE THIS
+#include "camtypes.h"
 
 #include "resources.h"

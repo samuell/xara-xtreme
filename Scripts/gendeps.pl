@@ -22,6 +22,7 @@ sub usage
  Options:
    -t target           - Print files that "target" depends on
    -i includedfile     - Print targets that depend on includedfile
+   -w                  - warn if camtypes.h is not the first included file
    -e                  - Explain why (in context of -t or -n)
                          This may take some time
    -n                  - Just print the totals
@@ -71,12 +72,13 @@ my $explain=0;
 my $help=0;
 my $verbose=0;
 my $total=0;
-
+my $warning=0;
 
 GetOptions( "target|t=s" => \$target,
             "includedfile|i=s" => \$includedfile,
             "explain|f!" => \$explain,
             "total|n!" => \$total,
+            "warning|w!" => \$warning,
             "verbose|v+" => \$verbose,
             "help!" => \$help ) || usage ("Bad option");
 
@@ -361,6 +363,8 @@ sub processdirect
 
     print STDERR "Processing $fn\n" if $verbose;
     
+    my $firstinclude = 1;
+
     my $line;
     while (defined($line=<DEPFILE>))
     {
@@ -378,6 +382,16 @@ sub processdirect
 	next unless $line=~ /^\s*#include\s+[\"\<](\w+\.h)[\"\>]/;
 
 	my $d=basename($1);
+
+	if ($firstinclude)
+	{
+	    $firstinclude = 0;
+	    if ($warning && ($d ne "camtypes.h") && ($fn=~/.cpp$/) && ($fn!~/^wxXtra\//))
+	    {
+		print "$fn: Does not include camtypes.h first - has $d\n";
+	    }
+	}
+
 	if (defined($includedependencies{$d}))
 	{
 	    print STDERR "  includes $d\n" if ($verbose>2);
@@ -488,7 +502,7 @@ foreach $d (sort keys %includedependencies)
 }
 
 # Process files manually if necessary
-if ($explain)
+if ($explain || $warning)
 {
     my $f;
     my %seen=();
