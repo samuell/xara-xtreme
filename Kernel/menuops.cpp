@@ -1580,8 +1580,6 @@ BOOL HelpOps::Init()
 
 
 	// REGOP(HELP, DEMOS, HelpOps);
-PORTNOTE("movies", "Removed use of movies until we have some")
-#if 0
 	OpDescriptor* DemosOp = new OpDescriptor(
 												0, 
 												_R(IDS_HELP_MOVIES),
@@ -1593,7 +1591,6 @@ PORTNOTE("movies", "Removed use of movies until we have some")
 												0 );
 
 	ERRORIF(!DemosOp, _R(IDE_NOMORE_MEMORY), FALSE);
-#endif
 
 	//Webster_Ranbir_12\11\96
 #ifdef INC_WEB_MENU_ITEMS

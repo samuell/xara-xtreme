@@ -107,9 +107,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h" 
 //#include <afxext.h>
 
+#include <wx/mediactrl.h>
+
 #include "menucmds.h"
 #include "camelot.h"
-//#include "mainfrm.h"
+#include "camframe.h"
 #include "camdoc.h"
 //#include "camvw.h"
 #include "ensure.h"
@@ -875,7 +877,36 @@ void HelpGalleriesAction()
 
 void HelpDemosAction()
 {
-	HelpOnlineDemos();
+#if 1
+	wxString			strVideoPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
+	if( !wxDir::Exists( strVideoPath ) )
+	{
+#if defined(_DEBUG)
+		// We'll try default location under debug to make life easier
+		strVideoPath = _T("/usr/share");
+#endif
+	}
+
+	wxString			strBinaryPath( strVideoPath );
+	strBinaryPath += _("/xaralx/bin");
+	strVideoPath += _("/xaralx/video");
+
+	wxString			strCommand( strBinaryPath + _T("/mplayer -slave \"") );
+	strCommand += strVideoPath + _T("/Part 1 master inc audio smaller_q35_fr15_hi.ogm\"");
+
+	TRACEUSER( "jlh92", _T("Executing %s\n"), PCTSTR(strCommand) );
+
+	wxProcess* pProcess = new wxProcess;
+	wxExecute( strCommand, wxEXEC_SYNC, pProcess );
+#else
+	wxWindow*		pWnd	= new wxTopLevelWindow( CCamFrame::GetMainFrame(), wxID_ANY, _T("Demo Video") );
+	wxSizer*		pSizer	= new wxBoxSizer( wxHORIZONTAL );
+	wxMediaCtrl*	pMedia	= new wxMediaCtrl( pWnd, wxID_ANY, _T("AbsBegin.ogm") );
+	pSizer->Add( pMedia );
+	pMedia->Play();
+	pWnd->SetSizer( pSizer );
+#endif
+//	HelpOnlineDemos();
 }
 
 
