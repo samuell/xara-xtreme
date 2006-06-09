@@ -444,7 +444,7 @@ sub process
 
 	    $depend{$dep}=$depend{$dep}.$dependson;
 	    # pretend everything depends on camtypes (it ought to in the main)
-	    $depend{$dep}.="camtypes.h.gch " unless ($dep eq "camtypes.h.gch");
+	    $depend{$dep}.="camtypes.h.gch " unless (($dep eq "camtypes.h.gch") || ($dep =~/\.h$/));
 
 	    remembertarget($dep);
 	}
