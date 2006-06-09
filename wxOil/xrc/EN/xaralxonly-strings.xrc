@@ -341,6 +341,12 @@
 					<label> (missing)</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_MPLAYER_MISSING">
+					<label>The movie replay resources aren't present, please check the install</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

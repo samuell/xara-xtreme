@@ -896,8 +896,13 @@ void HelpDemosAction()
 
 	TRACEUSER( "jlh92", _T("Executing %s\n"), PCTSTR(strCommand) );
 
-	wxProcess* pProcess = new wxProcess;
-	wxExecute( strCommand, wxEXEC_SYNC, pProcess );
+	wxProcess*	pProcess = new wxProcess;
+	// NB this should return -1 for failure, but instead is returning 255
+	long /*TYPENOTE: CORRECT*/ lResult = wxExecute( strCommand, wxEXEC_SYNC, pProcess );
+	if( 255 == lResult )
+		InformWarning( _R(IDS_MPLAYER_MISSING), _R(IDS_OK) );
+
+	TRACEUSER( "jlh92", _T("Exec err = %d\n"), lResult );
 #else
 	wxWindow*		pWnd	= new wxTopLevelWindow( CCamFrame::GetMainFrame(), wxID_ANY, _T("Demo Video") );
 	wxSizer*		pSizer	= new wxBoxSizer( wxHORIZONTAL );
