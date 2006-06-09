@@ -383,6 +383,8 @@ if ($international && ($buildresources || $ponewer))
     {
 	chomp;
 	s/^\S+\t//;
+	# skip completely blank lines
+	next if (/^\s*$/);
 	# escape slashes
 	s/\\/\\\\/g;
 	# escape quotes
@@ -408,6 +410,8 @@ if ($international && ($buildresources || $ponewer))
     {
 	# Note wxrc removes XML escaping
 	chomp;
+	# zap blank lines
+	next if (/^_\(\"\s*\"\)/);
 	print STDERR "Dialog: $_\n" if ($verbose>2);
 	push @strings,$_;
 	$dlines++;
