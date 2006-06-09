@@ -892,7 +892,7 @@ void HelpDemosAction()
 	strVideoPath += _("/xaralx/video");
 
 	wxString			strCommand( strBinaryPath + _T("/mplayer -slave \"") );
-	strCommand += strVideoPath + _T("/Part 1 master inc audio smaller_q35_fr15_hi.ogm\"");
+	strCommand += strVideoPath + _T("/Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm\"");
 
 	TRACEUSER( "jlh92", _T("Executing %s\n"), PCTSTR(strCommand) );
 
