@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TEXTINFO
 #define INC_TEXTINFO
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontbase.h"
 
 class TextTool;

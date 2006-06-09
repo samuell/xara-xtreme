@@ -105,13 +105,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #ifdef BUILDSHADOWS
 
-#include "tool.h"
-#include "selop.h"
-#include "doccoord.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "wrkrect.h"
-#include "binds.h"
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bevinfo.h"
-#include "clikmods.h"
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragtool.h"
 
 class Cursor;

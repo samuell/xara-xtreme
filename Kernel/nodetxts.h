@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODETXTS
 #define INC_NODETXTS
 
-#include "node.h"
-#include "matrix.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodePath;
 class CaretNode; 

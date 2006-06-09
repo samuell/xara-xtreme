@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h" 
 #include "stack.h"
-#include "errors.h"
-#include "ensure.h"
-#include "listitem.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

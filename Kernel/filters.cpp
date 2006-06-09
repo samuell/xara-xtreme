@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "epsfiltr.h"
 //#include "coreleps.h"
 //#include "aw_eps.h"
@@ -109,31 +109,31 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ai8_eps.h"
 //#include "drawfltr.h"
 //#include "textfltr.h"
-#include "oilfltrs.h"
-#include "errors.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
-#include "fixmem.h"
-#include "document.h"
-#include "rndrgn.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "group.h"
-#include "app.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpfiltr.h"
-#include "fillattr.h"
-#include "attrmgr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "native.h"			// The new designed native filter, used for v2
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "layer.h"
 //#include "nev.h"
 //#include "coplfilr.h"
 //#include "cdrfiltr.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ben.h"
 //#include "freeeps.h"
 //#include "rik.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 //#include "peter.h"
 #include "sgliboil.h"		// FileExists

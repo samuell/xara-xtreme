@@ -102,22 +102,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 //#include "grptrans.h"
 #include "groupops.h"
-#include "group.h"
-#include "undoop.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h" 
 //#include "simon.h"
-#include "errors.h" 
-#include "ensure.h"   
-#include "docview.h"              
-#include "opdesc.h"
+//#include "errors.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h"               - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "nodeattr.h"     
-#include "ink.h"
-#include "app.h"
-#include "document.h"
-#include "spread.h"
+//#include "nodeattr.h"      - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 #include "fthrattr.h"
 #include "opliveeffects.h"

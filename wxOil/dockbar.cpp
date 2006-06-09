@@ -97,12 +97,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "ensure.h"
-#include "dockbar.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dockbar.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "childbar.h"
 #include "camframe.h"
 //#include "camafx.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "basebar.h"
 
 #define IS_CHICAGO ((LOBYTE(LOWORD(GetVersion()))) > 3)

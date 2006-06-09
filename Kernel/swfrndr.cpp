@@ -97,20 +97,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 #include "camtypes.h"
 #include "vectrndr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodetxtl.h"
 #include "fixedasm.h"		// For Div32by32 ().
-#include "ccmaths.h"
-#include "pathshap.h"
+//#include "ccmaths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathshap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "webaddr.h"
 #include "webattr.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "swfrndr.h"
 #include "swfexpdc.h"
 #include "slicehelper.h"	// For FindNextOfClass. ()
-#include "fillattr.h"
-#include "range.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rendsel.h"
 #include "gclips.h"
 

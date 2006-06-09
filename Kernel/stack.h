@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_STACK
 // Declaration of the stack and MarkedStack classes
 
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

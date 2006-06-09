@@ -102,28 +102,28 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "binds.h"
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "barsdlgs.h" 
-#include "stockcol.h"
-#include "rndrgn.h"
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pentool.h"
 #include "oilfiles.h"
 //#include "viewrc.h"
 //#include "mike.h"
 #include "csrstack.h"
 #include "blobs.h"
-#include "app.h"
-#include "docview.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"
 #include "nodepath.h"
 //#include "mainfrm.h"
 #include "osrndrgn.h"
 #include "penedit.h"
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathedit.h"
 #include "cutop.h"
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "keypress.h"
 //#include "jim.h"
 #include "opbreak.h"

@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PLUGINUNDOOP
 #define INC_PLUGINUNDOOP
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class KernelBitmapRef;
 class NodeBitmap;

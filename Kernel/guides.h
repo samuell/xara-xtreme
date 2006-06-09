@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GUIDES_H
 #define INC_GUIDES_H
 
-#include "ink.h"
-#include "doccolor.h"
-#include "undoop.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "snap.h"
 //#include "dialogop.h"
 #if !defined(EXCLUDE_FROM_RALPH)

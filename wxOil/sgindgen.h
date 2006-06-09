@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGINDGEN
 #define INC_SGINDGEN
 
-#include "pathname.h"
-#include "thumb.h"
-#include "ccfile.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

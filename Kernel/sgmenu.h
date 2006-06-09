@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_SGMENU
 
 #include "contmenu.h"
-#include "ops.h"
-#include "sgallery.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 

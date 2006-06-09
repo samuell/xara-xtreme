@@ -100,13 +100,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "brshbeca.h"
-#include "becomea.h"
-#include "undoop.h"
-#include "ink.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 #include "nodepath.h"
 #include "nodebldr.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ophist.h"
 
 CC_IMPLEMENT_MEMDUMP(HandleBrushBecomeA, CC_CLASS_MEMDUMP);

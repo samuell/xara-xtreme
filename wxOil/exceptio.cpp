@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "exceptio.h"
 //#include "andy.h"
 //#include "alex.h"
-#include "errors.h"
-#include "docview.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

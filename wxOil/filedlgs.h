@@ -107,8 +107,8 @@ PORTNOTE("other", "XPDialog doesn't make sense" )
 #define XPDialog
 #endif
 
-#include "filters.h" 
-#include "monotime.h"
+//#include "filters.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class PathName;
 class String_256;

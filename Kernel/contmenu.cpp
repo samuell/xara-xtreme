@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilmenus.h"
 #include "menupref.h"
 #include "cutop.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "effects_stack.h"
 #include "opliveeffects.h"
 

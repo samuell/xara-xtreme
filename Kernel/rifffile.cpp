@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "rifffile.h"
-#include "errors.h"
-#include "fixmem.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "riffdata.h"
 
 DECLARE_SOURCE("$Revision$");

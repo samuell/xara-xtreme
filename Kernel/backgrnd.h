@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BACKGROUND_H
 #define INC_BACKGROUND_H
 
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #if !defined(EXCLUDE_FROM_RALPH)
 

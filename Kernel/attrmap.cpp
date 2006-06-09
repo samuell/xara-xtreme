@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "attrmap.h"
-#include "nodeattr.h"
-#include "ink.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "attrmgr.h"
-#include "attrval.h"
-#include "spread.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodedoc.h"
 #include "glatable.h"
 

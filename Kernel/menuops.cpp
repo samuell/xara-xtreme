@@ -116,17 +116,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camelot.h"
 //#include "mainfrm.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camdoctp.h"
 #include "camdoc.h"
 
 #include "menuops.h"
 #include "menucmds.h"
-#include "ensure.h"
-#include "errors.h"
-#include "tool.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "mario.h"
 #include "helpids.h"
@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "peter.h"
 //#include "will.h"
 //#include "justin.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 //#include "tooldlg.h"
 #include "progress.h"
@@ -152,7 +152,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fileutil.h"	//For file util function
 //#include "rik.h"		//For _R(IDS_DEFAULTDOCNAME)
 
-#include "group.h"		// for blends
+//#include "group.h"		// for blends - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"		// for the sub menu stuff
 
 //#include "webdialog.h"	// specials/update dialogs

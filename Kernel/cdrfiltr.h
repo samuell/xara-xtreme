@@ -104,15 +104,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CDRFILTER
 #define INC_CDRFILTER
 
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcomp.h"
 #include "impcol.h"
 #include "rifffile.h"
-#include "fixst256.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cdrform.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cdrbitm.h"
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class TextStory;
 

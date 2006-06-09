@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLENDHELP
 #define INC_BLENDHELP
 
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathpcs.h"
 
 class BlendNodeParam;

@@ -104,40 +104,40 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 ********************************************************************************************/
 
 #include "camtypes.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 #include "vstate.h"
 #include "wrkrect.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
-#include "monotime.h"
-#include "rndrgn.h"
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 #include "grndrgn.h"
 #include "paper.h"
-#include "oilcoord.h"
-#include "doccoord.h"
-#include "winrect.h"
-#include "oilrect.h"
-#include "errors.h"
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "winrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "will.h"
 #include "camelot.h" 		// For DisableSys flag
 #include "ccdc.h"
 #include "csrstack.h"
-#include "app.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodedoc.h"
 #include "chapter.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "snap.h"
 //#include "progress.h"
 #include "lineattr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "nodeshap.h"
 #include "nodershp.h"
@@ -146,13 +146,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "zoomops.h"
 #include "viewmenu.h"
 #include "menuops.h"
-#include "clikmods.h"
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodetxts.h"
 //#include "rulers.h"
 #include "dlgmgr.h"
 //#include "bubbleid.h"
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "keypress.h"
 #include "nodebev.h"
 
@@ -162,7 +162,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nbevcont.h"
 
 #include "pushtool.h"	// For OpPush
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #ifdef PHOTOSHOPPLUGINS
 #include "plugmngr.h"	// CheckHaveDetailsOnPlugIns

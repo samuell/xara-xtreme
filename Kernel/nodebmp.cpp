@@ -103,31 +103,31 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "nodebmp.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "rndrgn.h"
-#include "doccolor.h"
-#include "fillattr.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 //#include "progress.h"
 //#include "cameleps.h"
 //#include "ai_epsrr.h"
 #include "bitmpinf.h"
 #include "nodepath.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "draginfo.h"
 //#include "scrcamvw.h"
 #include "cliptype.h"
 #include "attrmap.h"
 
 //#include "colormgr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 //#include "justin2.h"
 //#include "sglfills.h"
 //#include "xpehost.h"
 #include "grndrgn.h"
-#include "matrix.h"
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeliveeffect.h"
 
 // These are for CheckGreyscaleBitmap
@@ -140,18 +140,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 //#include "bmplist.h"
 #include "bmpcomp.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will.h"
 #include "qualattr.h"
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will2.h"
-#include "capturemanager.h"
+//#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fthrattr.h"
 #include "ophist.h"
 #include "objchge.h"
 
 // headers for the new file format
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfnbmp.h"
 
 // stuff for CMX rubbish

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_BMAPPREV
 
 #include "bmpprefs.h"	// ExportFileType
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpalctrl.h"	// Required as BmapPrevDlg HasA BitmapExportPaletteControl
 
 class BitmapExportPreviewDialog;

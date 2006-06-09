@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "usercord.h"
-#include "doccoord.h"
-#include "spread.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

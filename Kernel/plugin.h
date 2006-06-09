@@ -111,8 +111,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PLUGINITEM
 #define INC_PLUGINITEM
 
-#include "list.h"
-#include "pathname.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class KernelBitmap;
 class Document;

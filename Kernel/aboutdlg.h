@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_ABOUTDLG
 #define INC_ABOUTDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 #define OPTOKEN_ABOUTDLG _T("AboutDlg")    

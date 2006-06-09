@@ -101,11 +101,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "nodedoc.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
   
 CC_IMPLEMENT_DYNAMIC(NodeDocument, NodeRenderablePaper)          
 

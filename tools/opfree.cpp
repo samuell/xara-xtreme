@@ -108,24 +108,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 //#include "rik.h"
 //#include "viewrc.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "paper.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mainfrm.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fitcurve.h"
-#include "app.h"
-#include "spread.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "freehand.h"
 #include "pen.h"
 #include "progress.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "pathedit.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "keypress.h"
 //#include "freehres.h"
 #include "objchge.h"

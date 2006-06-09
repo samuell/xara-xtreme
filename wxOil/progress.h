@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef	PROGRESS__INC
 #define	PROGRESS__INC
 
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // **** DEPRECATED INTERFACE **** 
 // Use the calls provided by the ProgressState class (kernel\progstat.h) in future. DO NOT USE these ones!

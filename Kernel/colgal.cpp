@@ -105,15 +105,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccolbar.h"
 #include "coldlog.h"
 #include "colgal.h"
 #include "colmsg.h"
 #include "colormgr.h"
 #include "colpick.h"
-#include "ensure.h"
-#include "fillattr.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
 //#include "jason.h"
 #include "lineattr.h"

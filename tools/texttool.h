@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TEXTTOOL
 #define INC_TEXTTOOL
 
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h"
 
 class Cursor;

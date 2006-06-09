@@ -110,10 +110,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 // code headers
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "csrstack.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilfiles.h"
 #include "opshadow.h"
 #include "shadinfo.h"

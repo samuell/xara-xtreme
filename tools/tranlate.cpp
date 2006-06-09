@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "tranlate.h"
 
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rik.h"
 //#include "clikdrag.h"
 

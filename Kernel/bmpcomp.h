@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef	INC_BMPCOMP
 #define	INC_BMPCOMP
 
-#include "list.h"
-#include "doccomp.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class OILBitmap;
 class BitmapInfo;

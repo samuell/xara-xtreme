@@ -5,7 +5,7 @@
 /* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
 
 #include "camtypes.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "zdeflate.h"
 #include "zstream.h"

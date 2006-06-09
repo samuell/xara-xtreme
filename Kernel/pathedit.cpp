@@ -104,26 +104,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathedit.h"
 
 // Code headers
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "csrstack.h"
-#include "cursor.h"
-#include "document.h"
-#include "docview.h"
-#include "fixmem.h"				// for CCMalloc and CCFree
-#include "group.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h"				// for CCMalloc and CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"			// for getting the line width of a NodePath
 #include "nodepath.h"
 #include "ndtxtpth.h"
-#include "nodeattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 #include "pathops.h"
 #include "progress.h"
-#include "tool.h"
-#include "tranform.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bubbleid.h"
 #include "ndbldpth.h"
 #include "nodeblnd.h"
@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "simon.h"
 //#include "viewrc.h"
 //#include "phil.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshattr.h"
 #include "opbevel.h"
 #include "nodemold.h"

@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rik.h"
 //#include "markn.h"
 //#include "viewrc.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "document.h"
 //#include "mainfrm.h"
 #include "infobar.h"
@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attrbev.h"
 //#include "attrmgr.h"
 //#include "nodebev.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cntrtool.h"
 #include "gclips.h"
 #include "bubbleid.h"

@@ -99,20 +99,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Brush Component and Brush Definition headers
 
 #include "camtypes.h"
-#include "app.h"
-#include "camfiltr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshcomp.h"
 #include "linecomp.h"
 //#include "colormgr.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brushref.h"
 //#include "freehand.h"
-#include "xlong.h"
+//#include "xlong.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ppbrush.h"
 #include "brshattr.h"
 //#include "sgline.h"
@@ -121,8 +121,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "clipint.h"
 #include "nodebldr.h"
 #include "bldbrdef.h"
-#include "fillattr.h"
-#include "fillval.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "brshdata.h"
 //#include "swfrndr.h"
@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshad.h"
 #include "nodecntr.h"
 #include "nodebev.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "opdrbrsh.h"
 #include "toollist.h"
 //#include "freeinfo.h"

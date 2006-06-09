@@ -107,8 +107,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_REPLACEATTRS 			_T("ReplaceAttributes")
 #define OPTOKEN_APPLYATTRINTERACTIVE	_T("ApplyAttributeInteractive")
 
-#include "selop.h"
-#include "fillattr.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class AttrBrushType;
 //class AttrFillGeometry;

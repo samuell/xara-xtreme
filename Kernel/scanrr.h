@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SCANRR
 #define INC_SCANRR
 
-#include "rndrgn.h"
-#include "rrcaps.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

@@ -107,11 +107,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif
 #include "textfuns.h"
 #include "fontman.h"		// includes fontbase.h
-#include "errors.h"
-#include "doccoord.h"
-#include "pathtype.h"
-#include "txtattr.h"
-#include "app.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "fontimpl.h"       // private definitions
 //#include "mike.h"

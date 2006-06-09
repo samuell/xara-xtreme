@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef	INC_MAKEBMP
 #define	INC_MAKEBMP
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "giffiltr.h"
 
 #define OPTOKEN_CONVERTTOBITMAP _T("ConvertToBitmap")	

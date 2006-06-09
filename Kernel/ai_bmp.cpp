@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "ai_bmp.h"
 
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 
 #include "ai5_eps.h"

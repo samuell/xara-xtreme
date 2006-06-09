@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bblwnd.h"
 
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fonts.h"
 #include "camelot.h"	// IsWin32s
 

@@ -101,11 +101,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGLCART
 #define INC_SGLCART
 
-#include "sgallery.h"
-#include "sgtree.h"
-#include "sgscan.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sglib.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragbmp.h"
 #include "sgdrag.h"
 #include "sglbase.h"

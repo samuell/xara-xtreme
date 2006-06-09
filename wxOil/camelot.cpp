@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "camdoc.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 #include "camframe.h"
 //#include "Res/UKEnglish/stringtbl.h"

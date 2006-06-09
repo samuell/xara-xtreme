@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodecntr.h"		// NodeContour::GenerateContourPathForNode
 //#include "doccolor.h"		// DocColour and COLOUR_BLACK
 #include "lineattr.h"		// AttrLineWidth
-#include "fillval.h"		// BitmapFillAttribute, TransparencyFillAttribute
+//#include "fillval.h"		// BitmapFillAttribute, TransparencyFillAttribute - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "offscrn.h"		// GRenderRegionWrapper
 
 // Tags, messages and other UI stuff
-#include "attrmgr.h"		// enum AttrIndex
+//#include "attrmgr.h"		// enum AttrIndex - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "feather.h"		// _R(IDS_FEATHER_ATTR_ID)
 //#include "mario.h"			// _R(IDE_NOMORE_MEMORY)
 
@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndrgn.h"		// GRenderRegion
 
 // Fiddling with bitmaps - offscreen and feather transp bmps
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
 
 // Caching contour path and updating on pseudo AllowOps
@@ -136,8 +136,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Saving and loading
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Printing
 //#include "saveeps.h"

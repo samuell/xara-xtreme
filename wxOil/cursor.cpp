@@ -103,16 +103,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "cursor.h"
-#include "ensure.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "oiltool.h"
 //#include "resource.h"
-#include "tool.h"
-#include "errors.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 #include "csrstack.h"
 #include "cartprov.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
 
 //#include "hotlink.h"  //For the pointing hand cursor

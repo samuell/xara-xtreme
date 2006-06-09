@@ -9,7 +9,7 @@ echo animparams.h app.h arrows.h attr.h attrmgr.h attrval.h barmsg.h bars.h base
 
 # Note do NOT process wxXtra or PreComp
 DIRS="GDraw Kernel tools wxOil"
-(cat $TMPFILE2 ; find $DIRS '(' -name '*.cpp' -or -name '*.c' -or -name '*.h' ')' -and -not -name camtypes.h -and -not -name `cat $TMPFILE | perl -pe 's/\s+$//g;s/^\s+//g;s/\s+/\ -and \-not \-name /g'` | egrep -v "wxOil/(xrc/)?(resources|winresources).cpp" ) | xargs Scripts/normalise.pl --no-fixauthors --no-fixtypes --fixnl --no-fixtrace --no-fixoptoken --no-fixresource --no-fixsvn --no-fixkeys --no-fixralph --no-fixnotice | tee /tmp/x
+(cat $TMPFILE2 ; find $DIRS '(' -name '*.cpp' -or -name '*.c' -or -name '*.h' ')' -and -not -name camtypes.h -and -not -name binreloc.c -and -not -name `cat $TMPFILE | perl -pe 's/\s+$//g;s/^\s+//g;s/\s+/\ -and \-not \-name /g'` | egrep -v "wxOil/(xrc/)?(resources|winresources).cpp" ) | xargs Scripts/normalise.pl --no-fixauthors --no-fixtypes --fixnl --no-fixtrace --no-fixoptoken --no-fixresource --no-fixsvn --no-fixkeys --no-fixralph --no-fixnotice | tee /tmp/x
 rm $TMPFILE
 rm $TMPFILE2
 

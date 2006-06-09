@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CMXFILTER
 #define INC_CMXFILTER
 
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CMXExportDC;
 class CMXRenderRegion;

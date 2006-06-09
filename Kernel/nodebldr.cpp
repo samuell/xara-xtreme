@@ -102,27 +102,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "ops.h"
-#include "fillattr.h"
-#include "document.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "osrndrgn.h"
 
 #include "nodepath.h"
 #include "ophist.h"
-#include "becomea.h"
-#include "trans2d.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "blendatt.h"
 #include "qualattr.h"
 //#include "markn.h"
 #include "gblend.h"
 #include "gwinding.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 //#include "grndclik.h"
 #include "ndbldpth.h"
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aw_eps.h"
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "cameleps.h"
@@ -130,14 +130,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "nodeblnd.h"
 #include "nodebldr.h"
 
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
 
 #include "brshattr.h"

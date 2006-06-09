@@ -100,16 +100,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GRADFILL
 #define INC_GRADFILL
 
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h"
-#include "bars.h"
-#include "range.h"
-#include "fillattr.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillattr2.h"
 #include "biasgdgt.h"
 //#include "selop.h"
 #include "brshattr.h"
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "opbevel.h"
 #include "dragtool.h"
 

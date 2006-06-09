@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLOBS
 #define INC_BLOBS
 
-#include "doccoord.h"
-#include "pump.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pump.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodeRenderable;
 class RenderRegion;

@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "clipmap.h"
 
 // --- text includes  **** !!!! BODGE
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "nodetext.h"
 #include "nodetxtl.h"
@@ -119,17 +119,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // --- Bitmap Mapping includes
 #include "bitmpinf.h"
-#include "dibutil.h"
-#include "fixmem.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 #include "nodebmp.h"
 #include "wbitmap.h"
 #include "scrcamvw.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // ---
-#include "ccfile.h"
-#include "filters.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "nev.h"
 
 #include "cmxifltr.h"

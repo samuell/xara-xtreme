@@ -97,11 +97,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "nodecomp.h"
-#include "group.h"
+//#include "nodecomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Save/load
-#include "cxfrec.h"		// CXaraFileRecord
+//#include "cxfrec.h"		// CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "cxftags.h"
 
@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "cntres.h"
 #include "gdraw.h"
 #include "gclips.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "blobs.h"
 #include "objchge.h"

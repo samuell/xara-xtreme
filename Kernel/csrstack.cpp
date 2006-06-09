@@ -104,10 +104,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "csrstack.h"
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "cursor.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision $");
 

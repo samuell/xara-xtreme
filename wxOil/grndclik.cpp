@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "grndclik.h"
 #include "ccdc.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC( GRenderClick, GRenderDIB )
 CC_IMPLEMENT_DYNAMIC( GRenderClickColour, GRenderClick )

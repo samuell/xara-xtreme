@@ -124,12 +124,12 @@ DECLARE_SOURCE("$Revision$");
 
 #include "camtypes.h"
 
-#include "app.h"		// For GetApplication()
+//#include "app.h"		// For GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
 #include "sgbase.h"		// **** INCLUDE YOUR HEADER HERE! ****
 
 #include "ccdc.h"		// For render-into-dialogue support
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 
 //#include "richard2.h"	// For _R(IDS_SGBASE_)... example resource strings - remove this after making your own...

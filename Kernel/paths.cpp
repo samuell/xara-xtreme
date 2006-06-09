@@ -102,20 +102,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #if !defined(EXCLUDE_FROM_XARLIB)
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #endif
-#include "paths.h"
-#include "memory.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <math.h>
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathutil.h"
-#include "handles.h"
+//#include "handles.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathproc.h"
 #include "vector.h"
 
 #if !defined(EXCLUDE_FROM_XARLIB)
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 #include "pen.h"
 //	#include "pathutil.h"

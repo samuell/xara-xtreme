@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "hotlink.h"		//For USERATTRKEY_WEBADDRESS
 
 #include "cxftags.h"
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

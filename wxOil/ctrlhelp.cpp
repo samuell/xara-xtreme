@@ -104,15 +104,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ctrlhelp.h"
 
-#include "app.h"
-#include "fixmem.h"
-#include "errors.h"
-#include "ensure.h"
-#include "opdesc.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
 #include "bblwnd.h"
-#include "ops.h"
-#include "tool.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"
 //#include "fonts.h"
 #include "keypress.h"

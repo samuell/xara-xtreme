@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Ilan 22/5/00
 /////////////////////////////
 
-#include "attrval.h"
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //

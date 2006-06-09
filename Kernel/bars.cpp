@@ -103,26 +103,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "camelot.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ensure.h"
 #include "oilfiles.h"
 //#include "ccfile.h"
 //#include "markn.h"
 #include "camframe.h"
-#include "dockbar.h"
+//#include "dockbar.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"      // read as "menu.h", gets the bindings for menu strings
 //#include "msg.h"
 //#include "simon.h"
 //#include "fixst256.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "prefs.h"
 #include "camelot.h"
 #include "gallery.h"
-#include "sgallery.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "barsdlgs.h"
 //#include "chris.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "keymsg.h"
 #include "keypress.h"
 #include "basebar.h"

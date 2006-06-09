@@ -103,10 +103,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "opbezier.h"	
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "beztool.h"
 #include "blobs.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jim.h"
 #include "nodepath.h"
 #include "progress.h"

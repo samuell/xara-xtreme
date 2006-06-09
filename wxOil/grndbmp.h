@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define	INC_GRNDBMP
 
 #include "grnddib.h"
-#include "dibconv.h"
+//#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class OILBitmap;
 

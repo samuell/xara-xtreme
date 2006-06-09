@@ -95,7 +95,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #ifndef INC_FLASH_FONT_RECORD
 #define INC_FLASH_FONT_RECORD

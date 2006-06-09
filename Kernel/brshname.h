@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef BRSHNAME
 #define BRSHNAME
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshcomp.h"
 
 /********************************************************************************************

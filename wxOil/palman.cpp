@@ -102,16 +102,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 //GAT #include "mainfrm.h"
 #include "palman.h"
 //GAT #include "dlgbar.h"
 //GAT #include "ccolbar.h"
 #include "rendwnd.h"
-#include "fixmem.h"
-#include "dibutil.h"	// for identity palette
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h"	// for identity palette - in camtypes.h [AUTOMATICALLY REMOVED]
 //GAT #include "bitbutn.h"	// for WM_CAM_PALETTECHANGE
 #ifdef RALPH
 #include "ralphdoc.h"	// For foreground / background forcing...

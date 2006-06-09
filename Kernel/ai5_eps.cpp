@@ -106,15 +106,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <stdio.h>
 
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "nev.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccdc.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "fillattr.h"
-#include "docview.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opbevel.h"
 #include "progress.h"        
 #include "ai_grad.h"        

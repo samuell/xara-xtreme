@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_REGION
 #define INC_REGION
 
-#include "docrect.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

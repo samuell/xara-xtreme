@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "vstate.h"
-#include "oilcoord.h"
-#include "docview.h"
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW

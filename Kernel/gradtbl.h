@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GRADTBL
 #define INC_GRADTBL
 
-#include "gconsts.h"
-#include "gradtype.h"
-#include "colmodel.h"
-#include "biasgain.h"			// for CProfileBiasGain (i.e.  profiled fills/transparency!)
+//#include "gconsts.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "gradtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h"			// for CProfileBiasGain (i.e.  profiled fills/transparency!) - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class DocColour;
 class ColourContext;

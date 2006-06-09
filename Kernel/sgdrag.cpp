@@ -105,14 +105,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galres.h"
 //#include "galstr.h"
 //#include "resource.h"
-#include "sgallery.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgdrag.h"
-#include "sgtree.h"
-#include "oilcoord.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 DECLARE_SOURCE("$Revision$");

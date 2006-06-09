@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_BMPFILTR
 
 #include "bitfilt.h"
-#include "outptdib.h"
+//#include "outptdib.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpprefs.h"  // SelectionType
 //#include "imglib.h"
 //#include "accures.h"

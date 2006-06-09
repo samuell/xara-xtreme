@@ -100,15 +100,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FEATHRATTR
 
 // structs, typedefs, defines
-#include "unittype.h"
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // class definitions
 //	1 - call classes member functions,
 //	2 - use the class type for one of the members (not required if have pointer to class ??)
 //	3 - to derive a superclass??
 #include "offattr.h"
-#include "biasgain.h"
-#include "cxfrech.h"
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // for MAX_SHADOW_BLUR
 #include "bshadow.h"

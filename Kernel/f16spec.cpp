@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "f16spec.h"
 //#include "source.h"
 #include <math.h>
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "andy.h"
 
 DECLARE_SOURCE("$Revision$");

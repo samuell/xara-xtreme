@@ -102,13 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "cxftree.h"
-#include "node.h"
-#include "document.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
 #include "oildbug.h"
 #include "nodedoc.h"
-#include "app.h"
-#include "ccobject.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include <ios.h>
 #include "bubbleid.h"
@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxfile.h"
 #include "cxftfile.h"
 #include "cxftags.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // new tree control stuff
 #include "clipint.h"

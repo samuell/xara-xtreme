@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_STRKCOMP
 #define INC_STRKCOMP
 
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "linecomp.h"
 #include "linedef.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BaseCamelotFilter;
 class CXaraFileRecord;

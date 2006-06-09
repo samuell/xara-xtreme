@@ -102,32 +102,32 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "saveeps.h"
 #include "ccdc.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 //#include "simon.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "opscale.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 #include "blobs.h"
-#include "app.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rechgrp.h"
 #include "cmxrendr.h"
 //#include "cmxexdc.h"
 #include "extender.h"
 #include "nodeblnd.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebldr.h"
-#include "capturemanager.h"
+//#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "phil.h"				// for _R(IDB_CACHE_MARK)
 #include "lineattr.h"
-#include "spread.h"
-#include "dibutil.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeliveeffect.h"
 #include "scanrr.h"
 //#include "pmaskrgn.h"

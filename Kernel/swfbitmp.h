@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FLASH_BITMAP_RECORD
 #define INC_FLASH_BITMAP_RECORD
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_DLGCOL
 
 
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /***********************************************************************************************

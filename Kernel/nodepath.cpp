@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"
 
 #include <math.h>
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "contmenu.h"
 #include "lineattr.h"
@@ -118,10 +118,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 #include "saveeps.h"
 
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 #include "cxfile.h"
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rechpath.h"
 
 //#include "simon.h"
@@ -143,7 +143,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "blendatt.h"
 #include "nodebldr.h"
 //#include "ndbldpth.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gblend.h"
 #include "blndhelp.h"
 #include "opdrbrsh.h"

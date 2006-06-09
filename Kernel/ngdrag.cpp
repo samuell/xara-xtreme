@@ -107,17 +107,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ngitem.h"
 #include "ngsetop.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sginit.h"
 #include "dragmgr.h"
 
 #include "scrvw.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "ink.h"
-#include "attrmgr.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccdc.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 #include "grndbmp.h"
 #include "wbitmap.h"

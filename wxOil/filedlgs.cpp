@@ -101,21 +101,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"		// IsNewWindowsUI
 
 #include "filedlgs.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
 //#include "rik.h"
 //#include "andy.h"
 //#include "mario.h"			// for _R(IDE_NOMORE_MEMORY)
 //#include "nev.h"			// for _R(IDN_IMPORTBUTTON) etc
 //#include "resource.h"
-#include "oilfltrs.h"
-#include "fixmem.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "native.h"			// The new designed native filter, used for v2
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "custmsg.h"
 #include "helpuser.h"
 #include "camelot.h"
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmapprev.h"
 #include "bmpfiltr.h"
 
@@ -141,9 +141,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // New for preview bitmaps
 #include "dlgcol.h"			// DialogColourInfo
 #include "dlgview.h"		// DialogView
-#include "docview.h"		// DocView
+//#include "docview.h"		// DocView - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"		// OSRenderRegion
-#include "bitmap.h"			// KernelBitmap
+//#include "bitmap.h"			// KernelBitmap - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"		// NodeBitmap
 #include "bitmpinf.h"		// BitmapInfo
 #include "oilbitmap.h"		// CWxBitmap

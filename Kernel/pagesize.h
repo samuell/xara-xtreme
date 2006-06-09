@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PAGESIZES
 #define INC_PAGESIZES
 
-#include "listitem.h"
-#include "list.h"
-#include "units.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Page sizes that are allowed in the sizes list
 // The ordering of the ids must correspond to the ordering of the page size

@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define EXPORT_TEXT 0
 #endif
 
-#include "ink.h"
-#include "matrix.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"
 #include "textfuns.h"
 

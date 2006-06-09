@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "jpgermgr.h"
 
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "filtrres.h"		// for Error strings
 
 // Place any IMPLEMENT type statements here

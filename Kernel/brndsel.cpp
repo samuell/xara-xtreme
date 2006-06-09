@@ -97,26 +97,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 #include "camtypes.h"
 //#include "simon.h"
-#include "msg.h"
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "xshelpid.h"	//For the help ID
 
 // includes for additions to the rendering tree
-#include "nodeattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "app.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "bitmpinf.h"
 #include "bmpfiltr.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 #include "bmpexdoc.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
 
 #include "grndbmp.h"

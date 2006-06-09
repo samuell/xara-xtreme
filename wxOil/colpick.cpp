@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colormgr.h"
 #include "colourix.h"
 #include "colpick.h"
-#include "convert.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "scunit.h"
 #include "ctrlhelp.h"
 //#include "jason.h"

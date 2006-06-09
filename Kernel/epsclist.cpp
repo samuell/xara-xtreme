@@ -96,7 +96,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 #include "camtypes.h"
-#include "epsclist.h"
+//#include "epsclist.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "epscdef.h"
 
 CC_IMPLEMENT_DYNAMIC ( EPSCommentList, CCObject )

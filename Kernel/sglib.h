@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGLIB
 #define INC_SGLIB
 
-#include "bitmap.h"
-#include "sgallery.h"
-#include "sgtree.h"
-#include "sgscan.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camnet.h"
 
 /************************************************************************************/

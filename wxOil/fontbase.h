@@ -107,9 +107,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FONTBASE
 #define INC_FONTBASE
 
-#include "fontclass.h"
-#include "pathtype.h"
-#include "txtattr.h"
+//#include "fontclass.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccpanose.h"
 
 class  DocCoord;

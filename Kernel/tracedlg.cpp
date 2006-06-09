@@ -116,22 +116,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ccdc.h"		// specific #includes needed for kernel-rendered dialogues
 #include "dlgcol.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 
-#include "app.h"
-#include "range.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "bitmpinf.h"
 #include "chapter.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "noderend.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "docview.h"
-#include "trans2d.h"
-#include "monotime.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 //#include "resource.h"
 //#include "barsdlgs.h"			// for the tracer dialog bar control

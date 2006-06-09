@@ -102,13 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "rechbmpp.h"	// BitmapPropertiesRecordHandler for importing bitmaps from v2 native/web files
 #include "bmpcomp.h"	// Document bitmap component, handles import of bitmaps
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfile.h"		// CXaraFile file handling class for version 2 native filter 
 #include "cxftags.h"	// TAG_DEFINEBITMAP_**** 
 //#include "sgliboil.h"	// Wav stuff
-#include "cxfrec.h"		// The main record handling class
+//#include "cxfrec.h"		// The main record handling class - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "bitmap.h"		// KernelBitmap
+//#include "bitmap.h"		// KernelBitmap - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "xmlutils.h"	// CXMLUtils (and msxml2.h)
 //#include "xpehost.h"	// XPEHost
 

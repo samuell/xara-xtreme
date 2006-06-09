@@ -106,25 +106,25 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #ifndef EXCLUDE_GALS
 
-#include "app.h"		// For GetApplication()
+//#include "app.h"		// For GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
-#include "convert.h"	// For Millipoint convs
-#include "fillval.h"
+//#include "convert.h"	// For Millipoint convs - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
-#include "bitmap.h"		// For bitmap stuff !
+//#include "bitmap.h"		// For bitmap stuff ! - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"	// For more bitmap stuff
 #include "nodebmp.h"	// For bitmap drawing stuff
 //#include "galres.h"
-#include "sgallery.h"
-#include "fixmem.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "wbitmap.h"
 //#include "richard.h"	
-#include "sgscan.h"
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgscanf.h"
 #include "sglib.h"
-#include "thumb.h"
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontpgen.h"	// For Font thumbnail generation
-#include "basestr.h"
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 #include "sgliboil.h"	// For various stuff
 #include "dlgmgr.h"
@@ -141,8 +141,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragmgr.h"
 #include "scrcamvw.h"
 //#include "viewrc.h"		// FOR _R(IDC_CANDROPONPAGE)
-#include "docview.h"
-#include "spread.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // For drag masks
 #include "grndbmp.h"

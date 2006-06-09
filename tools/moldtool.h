@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MOULDTOOL
 #define INC_MOULDTOOL
 
-#include "tool.h"
-#include "doccoord.h"
-#include "bars.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodemold.h"
 #include "moldedit.h"
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragtool.h"
 
 class Cursor;

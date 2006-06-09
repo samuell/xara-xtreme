@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 **************************************************************************************/
 
 #include "camtypes.h"
-#include "basestr.h"
-#include "ensure.h"
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /**************************************************************************************

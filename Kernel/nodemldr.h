@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEMOULDER
 #define INC_NODEMOULDER
 
-#include "ink.h"
-#include "rndrgn.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "selop.h"
-#include "becomea.h"
-#include "group.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_NODEMOULDER _T("MoulderObject")
 

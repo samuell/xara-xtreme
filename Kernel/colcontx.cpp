@@ -103,15 +103,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcontx.h"
 #include "colormgr.h"
 #include "colourix.h"
 #include "colplate.h"
-#include "doccolor.h"
-#include "ensure.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "scunit.h"
 
 #if defined(EXCLUDE_FROM_RALPH) || defined(EXCLUDE_FROM_XARALX)

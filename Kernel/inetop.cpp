@@ -98,16 +98,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "sgliboil.h"
 
-#include "app.h"		
+//#include "app.h"		 - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
 #include "sglcart.h"
 #include "sgfonts.h"
 #include "sglib.h"
-#include "sgscan.h"		
+//#include "sgscan.h"		 - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgscanf.h"	
-#include "errors.h"
-#include "oilfltrs.h"
-#include "selop.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filedlgs.h"
 //#include "resource.h"	// _R(IDS_CANCEL)
 #include "camdoc.h"

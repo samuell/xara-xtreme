@@ -104,14 +104,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "backgrnd.h"	// OpBackground
 
-#include "document.h"
-#include "spread.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "layer.h"
 #include "sprdmsg.h"	// SpreadMsg
 #include "nodershp.h"	// NodeRegularShape
 #include "lineattr.h"	// AttrStrokeColourChange
-#include "attrmgr.h"	// AttributeManager
+//#include "attrmgr.h"	// AttributeManager - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"	// QualityAttribute
 
 //#include "galstr.h"		// _R(IDS_BACKGROUNDLAYERNAME)

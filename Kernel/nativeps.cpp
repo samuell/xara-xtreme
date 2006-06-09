@@ -101,18 +101,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "nativeps.h"
 //#include "filtrres.h"
 //#include "rik.h"
 //#include "tim.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cversion.h"
 #include "progress.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpcomp.h"
-#include "docview.h"
-#include "fillval.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opgrad.h"
 #include "nodetext.h"
 //#include "nev.h"
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <strstream>
 #include "fontman.h"
 #include "expbmp.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "colormgr.h"	// for ColourManager (see NativeRenderRegion::OutputGradFillColours)
 
 // An implement to match the Declare in the .h file.

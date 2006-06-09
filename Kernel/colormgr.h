@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "colourix.h"
 #include "collist.h"
-#include "pump.h"
-#include "undoop.h" 
+//#include "pump.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colmsg.h"       
 //#include "xaracms.h"
 

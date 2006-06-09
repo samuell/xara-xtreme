@@ -111,10 +111,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#ifndef WEBSTER
 
 //#include "barsdlgs.h"	// _R(IDD_BARCONTROLSTORE), _R(IDC_BTN_UNITSETUPDLG) ...
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "dialogop.h"	// DialogOp header
+//#include "dialogop.h"	// DialogOp header - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "optsres.h"	// error strings
 //#include "will.h"		// for _R(IDS_CLOSEDOCS)
 //#include "resource.h"	// for _R(IDS_CANCEL)
@@ -126,7 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prpslyrs.h"	// Layer properties tab handler
 #include "prpsgds.h"	// Guides properties tab handler
 
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sprdmsg.h"	// spread messages
 #include "layermsg.h"	// spread messages
 #include "colmsg.h"		// more messages

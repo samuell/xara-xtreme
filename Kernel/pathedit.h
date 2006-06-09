@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PATHEDIT
 #define INC_PATHEDIT
 
-#include "paths.h"
-#include "rndrgn.h"
-#include "selop.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 
 #define OPTOKEN_JOINSHAPEOP		_T("JoinShapes")

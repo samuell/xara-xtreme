@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "mainfrm.h"
 //#include "tim.h"
-#include "errors.h"
-#include "ensure.h"
-#include "app.h"
-#include "document.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h" 
 #include "bubbleid.h"
 

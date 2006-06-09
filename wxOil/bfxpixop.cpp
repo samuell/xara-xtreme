@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bfxpixop.h"
 #include "bfxalu.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
 
 // The asm file defines FASTxxxxxx if there are fast versions of the routeines available

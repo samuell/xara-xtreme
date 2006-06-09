@@ -106,12 +106,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeshap.h"
 //#include "osrndrgn.h"
 #include "nodepath.h"
-#include "ops.h"
-#include "document.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "snap.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "extender.h"
 
 #include "ophist.h"

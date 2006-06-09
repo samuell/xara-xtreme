@@ -110,17 +110,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "optsmsgs.h"
 //#include "printdlg.h"
 #include "princomp.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "isetres.h"
 #include "colplate.h"
 #include "printmsg.h"
 //#include "markn.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "printdlg.h"
 #include "prdlgctl.h"
 //#include "barsdlgs.h"
 #include "camelot.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prnmks.h"
 #include "prnmkcom.h"
 #include "colmsg.h"
@@ -131,8 +131,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef _DEBUG
 #include "noderect.h"
 #include "layer.h"
-#include "spread.h"
-#include "fillval.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sglayer.h"
 #include "keypress.h"
 #include "printprg.h"

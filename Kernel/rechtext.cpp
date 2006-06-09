@@ -109,22 +109,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "ccpanose.h"
 
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "nodetext.h"
 #include "nodetxtl.h"
 #include "nodetxts.h"
 
-#include "cxfdefs.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "impstr.h"
 #include "rechtext.h"
 
 #include "fontman.h"
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontcomp.h"
 
 // to match the declare in the header file

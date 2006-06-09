@@ -99,10 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef NODELIVEFX_H
 #define NODELIVEFX_H
 
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepostpro.h"
-#include "cxfrech.h"
-#include "biasgain.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Define this if you want to pick up the development of the Feather Effect
 #define FEATHER_EFFECT

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BFXBASE
 #define INC_BFXBASE
 
-#include "listitem.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class KernelBitmap;
 class BfxALU;

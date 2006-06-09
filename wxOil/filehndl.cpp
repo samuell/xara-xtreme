@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 //#include "ensure.h"
-#include "ccfile.h"	// main ccfile class definitions
+//#include "ccfile.h"	// main ccfile class definitions - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include <io.h>		// _get_osfhandle
 
 // This is not compulsory, but you may as well put it in so that the correct version

@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PropertyTabsS
 #define INC_PropertyTabsS
 
-#include "dialogop.h"
-#include "unittype.h"
-#include "units.h"		// units e.g. Millimeters
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h"		// units e.g. Millimeters - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

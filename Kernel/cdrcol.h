@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "impcol.h"
 #include "cdrform.h"
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define IMPORTED_TO_DOCCOLOUR(X, Y) DocColour X((Y).Model, &((Y).Colour));
 

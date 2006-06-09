@@ -102,22 +102,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef EXCLUDE_GALS
 #include "bfxalu.h"
 #include "textfuns.h"
-#include "errors.h"
-#include "bitmap.h"			  
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h"			   - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 #include "wbitmap.h"
-#include "outptdib.h"
-#include "paths.h"
-#include "trans2d.h"
+//#include "outptdib.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontpgen.h"
 #include "progress.h"
-#include "sgallery.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgcol.h"
 #include "unicdman.h"
 
-#include "thumb.h" // not normally needed
+//#include "thumb.h" // not normally needed - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNAMIC(StringToBitmap, BitmapEffectBase)

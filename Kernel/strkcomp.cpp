@@ -102,17 +102,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "strkcomp.h"
 
-#include "app.h"
-#include "camfiltr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "colormgr.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "ppvecstr.h"
 //#include "sgline.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "strkattr.h"
 #include "linecomp.h"
 #include "linedef.h"

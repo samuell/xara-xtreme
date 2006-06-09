@@ -103,10 +103,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SHAPEOPS
 #define INC_SHAPEOPS
 
-#include "doccoord.h"
-#include "paths.h"
-#include "ops.h"
-#include "selop.h"						 
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h"						  - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_EDITREGULARSHAPE	_T("EditRegularShape")
 #define OPTOKEN_DRAGREGULARSHAPE	_T("DragRegularShape")

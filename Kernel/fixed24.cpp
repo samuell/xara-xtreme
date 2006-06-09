@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "fixed24.h"
+//#include "fixed24.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // this is a temporary kludge for the 32-bit MS compiler
 #define	F24ASSIGN( it )		it

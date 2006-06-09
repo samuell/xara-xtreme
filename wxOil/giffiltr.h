@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_GIFFILTR
 
 #include "maskfilt.h"
-#include "outptgif.h"
+//#include "outptgif.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpprefs.h"  	// SelectionType
 //#include "accures.h"
 

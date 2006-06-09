@@ -99,17 +99,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // A JPEG import filter 
 
 #include "camtypes.h"
-#include "filters.h"
-#include "oilfltrs.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
 //#include "dibutil.h"
 //#include "filtrres.h"
 //#include "resource.h"		// for _R(IDS_OUT_OF_MEMORY)
 //#include "imglib.h"			// for JPEG
 #include "grndbmp.h"
-#include "camfiltr.h"		// for BaseCamelotFilter progress update
-#include "app.h"			// Camelot!!
-#include "convert.h"
+//#include "camfiltr.h"		// for BaseCamelotFilter progress update - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h"			// Camelot!! - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "exjpeg.h"
 #include "jpgdest.h"
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "progress.h"
 #include "bmapprev.h"	// tab preview dialog
-#include "cxfrec.h"		// for CXaraFileRecord
+//#include "cxfrec.h"		// for CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "exphint.h"
 

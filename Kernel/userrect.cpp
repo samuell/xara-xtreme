@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "userrect.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 
@@ -411,7 +411,7 @@ Initial revision
 
 DECLARE_SOURCE("$Revision$");
 
-#include "docrect.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 >	DocRect UserRect::ToSpread(Spread* pSpread)

@@ -107,16 +107,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 /*
 */ 
 #include "camtypes.h"  
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
              
 #include "ophist.h"  
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 #include "helpids.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "barsdlgs.h"
 #include <limits.h>

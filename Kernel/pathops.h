@@ -106,10 +106,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_SELECTALLPATHPOINTS _T("SelectAllPathPoints")
 #define OPTOKEN_DESELECTALLPATHPOINTS _T("DeSelectAllPathPoints")
 
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h"
-#include "selop.h"
-#include "msg.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /********************************************************************************************

@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MENUOPS
 #define INC_MENUOPS
 
-#include "ops.h"
-#include "opdesc.h"                            
-#include "pathname.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h"                             - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Menu Popup Op Tokens
 

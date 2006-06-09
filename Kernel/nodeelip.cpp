@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h"
 //#include "aw_eps.h"
 #include "blobs.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "opsmpshp.h"
 //#include "osrndrgn.h"
 //#include "rik.h"

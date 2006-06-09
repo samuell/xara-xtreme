@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "linedef.h"
 //#include "colormgr.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(LineDefinition, CCObject)
 

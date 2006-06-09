@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ccdc.h"		// specific #includes needed for kernel-rendered dialogues
 #include "dlgcol.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 
 // This is not compulsory, but you may as well put it in so that the correct version

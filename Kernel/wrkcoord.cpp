@@ -98,8 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h" 
-#include "wrkcoord.h" 
-#include "oilcoord.h" 
+//#include "wrkcoord.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilcoord.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

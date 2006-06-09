@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "pen.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will.h"
 #include "camelot.h"
 //#include "gdihlp16.h"

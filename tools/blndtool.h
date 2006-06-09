@@ -100,18 +100,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLENDTOOL
 #define INC_BLENDTOOL
 
-#include "tool.h"
-#include "doccoord.h"
-#include "bars.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "biasgdgt.h"
-#include "iprofile.h"
-#include "biasgain.h"
+//#include "iprofile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodershp.h"
-#include "range.h"
-#include "matrix.h"
-#include "selstate.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selstate.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragtool.h"
 
 class Cursor;

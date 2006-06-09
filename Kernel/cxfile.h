@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CXFILE
 #define INC_CXFILE
 
-#include "doccoord.h"
-#include "list.h"
-#include "ccfile.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "taglists.h"
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #if defined(EXCLUDE_FROM_XARLIB)
 #include "xarlib.h"
 #endif

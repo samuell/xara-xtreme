@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_APPPREFS
 
 //#include "prefsdlg.h"
-#include "dialogop.h"
-#include "unittype.h"
-#include "units.h"		// units e.g. Millimeters
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h"		// units e.g. Millimeters - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pagesize.h"	// page sizes
 //#include "nev.h"		// _R(IDN_APPLICATIONOPTS)
 

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEMOULDINK
 #define INC_NODEMOULDINK
 
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodeMould;
 class kernelBitmap;

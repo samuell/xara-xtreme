@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DRAGPICK
 #define INC_DRAGPICK
 
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "draginfo.h"
-#include "dragtrgt.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class IndexedColour;
 

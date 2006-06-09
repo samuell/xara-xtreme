@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef NGSETOP_H
 #define NGSETOP_H
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ngiter.h"
 
 class SGNameItem;

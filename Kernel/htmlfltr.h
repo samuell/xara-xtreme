@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // include
 #include "textfltr.h"
-#include "pathname.h"
-#include "selop.h"
-#include "ccfile.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "htmllist.h"
 
 

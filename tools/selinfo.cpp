@@ -101,17 +101,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "dlgtypes.h"
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "selector.h"
 #include "selinfo.h"
-#include "selmsg.h"
-#include "spread.h"
-#include "app.h"
-#include "docview.h"
-#include "rndrgn.h"
+//#include "selmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opnudge.h"
 //#include "justin.h"
-#include "fillattr.h"	// For CC_RUNTIME_CLASS(AttrFillChanged)
+//#include "fillattr.h"	// For CC_RUNTIME_CLASS(AttrFillChanged) - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "optsmsgs.h"
 #include "userrect.h"
 //#include "barsdlgs.h"
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "slicehelper.h"	//For helper functions
 
 //But I had to include all of these to get it to work!!...
-#include "cxfrech.h"		//For CamelotRecordHandler
+//#include "cxfrech.h"		//For CamelotRecordHandler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"		//For UserAttr
 #include "tmpltatr.h"		//For TemplateAttribute
 

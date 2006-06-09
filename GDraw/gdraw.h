@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NEW_GDRAW
 #define	INC_NEW_GDRAW
 
-#include "gconsts.h"
+//#include "gconsts.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /*

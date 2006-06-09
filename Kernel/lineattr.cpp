@@ -101,25 +101,25 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
     
 #include "camtypes.h"                          
 #include "lineattr.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "simon.h"
 //#include "tim.h"
 //#include "will.h"
-#include "attrmgr.h"
-#include "tranform.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "app.h"
-#include "fixed16.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixed16.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
 #include "nodepath.h"
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rechattr.h"	// Record handling classes for attributes
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfdash.h"	// Default dash pattern references
 #include "cxfarrow.h"	// Default arrow head/tail references
 #include "cxfcols.h"	// REF_DEFAULTCOLOUR_TRANSPARENT ...

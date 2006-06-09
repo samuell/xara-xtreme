@@ -99,15 +99,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BMPSDLG
 #define INC_BMPSDLG
 
-#include "dialogop.h"
-#include "bitmap.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 PORTNOTE("gif","Removed gifutil usage")
 #ifndef EXCLUDE_FROM_XARALX
 #include "gifutil.h"
 #endif
 
-#include "outptgif.h"
+//#include "outptgif.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BmpDlgParam;
 

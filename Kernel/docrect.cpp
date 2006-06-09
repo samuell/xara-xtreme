@@ -98,8 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "docrect.h"
-#include "ensure.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 
@@ -414,7 +414,7 @@ Initial revision
 DECLARE_SOURCE("$Revision$");
 
 #include "userrect.h"
-#include "oilrect.h"
+//#include "oilrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 >	DocRect DocRect::ToSpread(Spread* pSpread, View* pView)

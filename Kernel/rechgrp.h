@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_RECHGRP
 #define INC_RECHGRP
 
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CXaraFileRecord;
 

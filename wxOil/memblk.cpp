@@ -105,11 +105,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <errno.h>
 
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "andy.h"
 //#include "simon.h"				// for _R(IDS_CONTINUE)
-#include "memblk.h"
-#include "ensure.h"
+//#include "memblk.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 
 #ifndef WIN32

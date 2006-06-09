@@ -110,29 +110,29 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ngsentry.h"
 #include "ngsetop.h"
 
-#include "app.h"
-#include "docrect.h"
-#include "ink.h"
-#include "rndrgn.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragmgr.h"
 #include "keypress.h"
 
-#include "bitmap.h"				// bitmaps
+//#include "bitmap.h"				// bitmaps - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "cxfrech.h"			// names
-#include "attrval.h"
+//#include "cxfrech.h"			// names - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 
 #include "fontman.h"			// fonts
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"
 #include "nodetxtl.h"
 #include "nodetext.h"
 
-#include "doccolor.h"			// colours
+//#include "doccolor.h"			// colours - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
 
 //#include "galres.h"

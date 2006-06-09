@@ -111,15 +111,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "guides.h"
 #include "snap.h"
-#include "stockcol.h"
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rndrgn.h"
-#include "attr.h"
-#include "view.h"
-#include "docview.h"
-#include "spread.h"
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "sprdmsg.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
 #include "camview.h"
 //#include "markn.h"
@@ -142,15 +142,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "viewrc.h"
 #include "csrstack.h"
 //#include "justin.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "statline.h"
 #include "toollist.h"
 
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 
 #if !defined(EXCLUDE_FROM_RALPH)

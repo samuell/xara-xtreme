@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "oppull.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "phil.h"
-#include "document.h"
-#include "range.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

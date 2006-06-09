@@ -110,44 +110,44 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 DECLARE_SOURCE("$Revision$");
 
-#include "ccobject.h"
-#include "node.h"  
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "paper.h"
 #include "dumbnode.h"  
-#include "docrect.h"   
-#include "ensure.h" 
+//#include "docrect.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"   
 //#include "simon.h"
-#include "nodeattr.h" 
+//#include "nodeattr.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rndrgn.h" 
 //#include "bitmapcache.h"
 //#include "resource.h"
-#include "docview.h"
-#include "errors.h"
-#include "stockcol.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rendbits.h"
 #include "nodepath.h"
 #include "noderend.h"
 #include "camelot.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h" // for _R(IDE_NOMORE_MORY)
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodedoc.h"
 #include "blobs.h"
 #include "objreg.h"
 #include "layer.h"
-#include "basedoc.h"
-#include "fillattr.h"
+//#include "basedoc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "gdraw.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "grndrgn.h"			// for REAL_GDRAW
 #include "snap.h"
 #include "contmenu.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodetxtl.h"
 #include "attrmap.h"
@@ -155,10 +155,10 @@ DECLARE_SOURCE("$Revision$");
 #include "extender.h"			// for ExtendParams
 //#include "swfrndr.h"
 //#include "bitmapcache.h"
-#include "capturemanager.h"
+//#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeliveeffect.h"
 #include "cxftags.h"
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "layermsg.h"	// LayerMsg::LayerReason::REDRAW_LAYER
 

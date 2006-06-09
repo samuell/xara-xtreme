@@ -103,12 +103,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "viewmenu.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "menuops.h"
 #include "coldlog.h"
 #include "snapops.h"
-#include "app.h"
-#include "ink.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "mkshapes.h"
 #include "mkstroke.h"

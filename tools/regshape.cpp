@@ -103,12 +103,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "regshape.h"	
 
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "csrstack.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "finfodlg.h"
 //#include "justin.h"
 //#include "markn.h"
@@ -118,11 +118,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oprshape.h"
 #include "optsmsgs.h"
 //#include "peter.h"		
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rshapbar.h"
 //#include "simon.h"
 #include "shapeops.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "viewrc.h"	 
 //#include "will2.h"
 

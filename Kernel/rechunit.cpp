@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "rechunit.h"	// UnitsRecordHandler for importing units from v2 native/web files
 #include "unitcomp.h"	// Document units component, handles import of units
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
-#include "cxfrec.h"		// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
+//#include "cxfrec.h"		// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfunits.h"	// default export unit types
 
 DECLARE_SOURCE("$Revision$");

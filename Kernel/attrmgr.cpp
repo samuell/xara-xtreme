@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Include files 
 #include "camtypes.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "fixmem.h"
-#include "app.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
 //#include "simon.h"
 #include "attrappl.h"
@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "coldlog.h"
 
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 #include "ophist.h"
 

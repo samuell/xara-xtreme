@@ -105,9 +105,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodecont.h"	// for NodeShadowController.
 #include "nbevcont.h"	// for NodeBevelController.
 #include "layer.h"		// for Layer.
-#include "becomea.h"	// for BecomeA.
-#include "range.h"		// for SelRange.
-#include "undoop.h"		// for UndoableOperation.
+//#include "becomea.h"	// for BecomeA. - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h"		// for SelRange. - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h"		// for UndoableOperation. - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodershp.h"	// for NodeRegularShape.
 #include "objchge.h"	// for ObjChange stuff.
 #include <list>			// for std::list.

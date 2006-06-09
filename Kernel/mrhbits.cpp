@@ -99,9 +99,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "mrhbits.h"		// TODO
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bitmap.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 #include "grndbmp.h"
 #include "fillattr2.h"

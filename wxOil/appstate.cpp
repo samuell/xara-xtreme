@@ -105,12 +105,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camdoc.h"
 #include "ccmdikid.h"
 #include "scrcamvw.h"

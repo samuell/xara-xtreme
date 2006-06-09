@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRINCOMP
 #define INC_PRINCOMP
 
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class EPSExportDC;
 class PrintControl;

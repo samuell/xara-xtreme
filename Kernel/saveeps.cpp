@@ -108,32 +108,32 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <ctype.h>
 #include <time.h>
 
-#include "pathname.h"
-#include "document.h"
-#include "errors.h"
-#include "ensure.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "paper.h"
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 #include "kerneldc.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userenv.h"
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cameleps.h"
-#include "view.h"
-#include "txtattr.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "psrndrgn.h"
 #include "psdc.h"
 #include "nativeps.h"	// The old style EPS native filter, used in v1.1
-#include "fixmem.h"		// for CCFree()
-#include "release.h"
-#include "app.h"
+//#include "fixmem.h"		// for CCFree() - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "release.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 #include "colplate.h"
 #include "clipattr.h"	// for ClipRegionAttribute.

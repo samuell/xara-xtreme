@@ -102,21 +102,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "nodetxtl.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "becomea.h"
-#include "group.h"
-#include "paths.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "nodeattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "nodetext.h"
 #include "nodetxts.h"
 //#include "simon.h"
 //#include "textinfo.h"
-#include "matrix.h"
-#include "docview.h"
-#include "document.h"
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "cameleps.h"
 #include "pathproc.h"
 #include "fontman.h"

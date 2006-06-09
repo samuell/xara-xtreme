@@ -102,22 +102,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "layer.h"
 //#include "simon.h"
-#include "ensure.h"
-#include "spread.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 //#include "mario.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodedoc.h"
 #include "blobs.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aw_eps.h"
 #include "ccdc.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "ben.h"
 //#include "prdlgctl.h"
 #include "printctl.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 //#include "sglayer.h"
 //#include "cameleps.h"
@@ -133,10 +133,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "markn.h"
 #include "qualattr.h"
 
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "layermsg.h"	// layer messages
 //#include "prevwres.h"	// _R(IDS_FRAMENAMEUNIQUEFORM) _R(IDS_TAG_LAYER_FRAMEPROPS) ...

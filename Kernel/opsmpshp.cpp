@@ -106,16 +106,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opsmpshp.h"
 
 // Code headers
-#include "app.h"
-#include "attrmgr.h"
-#include "document.h"
-#include "docview.h"
-#include "fillattr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "noderect.h"
 #include "progress.h"
 #include "objchge.h"
-#include "rndrgn.h"
-#include "trans2d.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Resource headers
 //#include "mario.h"

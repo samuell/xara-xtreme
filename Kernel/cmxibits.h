@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef CMXIBITS_H
 #define CMXIBITS_H
 
-#include "list.h"
-#include "fixst256.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
-#include "attr.h"
-#include "arrows.h"
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "arrows.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cmxistut.h"
 
 

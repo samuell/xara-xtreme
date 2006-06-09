@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef OPDRAGBX_H
 #define OPDRAGBX_H
 
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 enum  DragType;
 enum  StockColour;

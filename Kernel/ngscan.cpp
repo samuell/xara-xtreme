@@ -111,19 +111,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "extender.h"
 #include <algorithm>
 
-#include "app.h"
-#include "undoop.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
-#include "ink.h"
-#include "nodeattr.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "keypress.h"
 #include "nodebmp.h"		// for NodeBitmap
 #include "nodershp.h"		// for NodeRegularShape
 #include "ophist.h"
 
-#include "cxfrech.h"		// TemplateAttribute
-#include "attrval.h"
+//#include "cxfrech.h"		// TemplateAttribute - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_NATIVEOP
 
 
-#include "selop.h"
-#include "pathname.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define	OPTOKEN_NATIVELOAD		wxT("NativeLoad")
 #define	OPTOKEN_NATIVESAVE		wxT("NativeSave")

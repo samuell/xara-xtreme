@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_STATUSLINE
 #define INC_STATUSLINE
 
-#include "pump.h"
-#include "flags.h"
+//#include "pump.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "flags.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
-#include "monotime.h"
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "stdbars.h"
 //#include "ed.h"
 #include "ktimer.h"

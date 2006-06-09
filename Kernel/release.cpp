@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "release.h"
+//#include "release.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brandinf.h"
 //#include "justin2.h"
-#include "app.h"		// Camelot object
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // these are packed so that a brander program can easily find & verify them
 

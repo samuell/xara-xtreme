@@ -105,11 +105,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PUSHTOOL
 
 
-#include "tool.h"
-#include "ops.h"
-#include "doccoord.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "wrkrect.h"
-#include "binds.h"
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bars.h"
 
 

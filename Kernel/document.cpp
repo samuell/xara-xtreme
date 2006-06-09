@@ -105,34 +105,34 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <stdlib.h>  	// for rand() fn
 
 #include "camdoc.h"
-#include "document.h"
-#include "docmsgs.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docmsgs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "dumbnode.h"
 #include "noderect.h"
-#include "ensure.h" 
+//#include "ensure.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"        
 #include "colcontx.h"
 //#include "doccolor.h"
 //#include "colourix.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "readeps.h"
-#include "app.h"
-#include "errors.h"
-#include "docview.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 #include "grid.h"
 #include "nodedoc.h"
 #include "chapter.h"
 #include "page.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "wrkrect.h"
-#include "fixmem.h"
-#include "msg.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sprdmsg.h"
 #include "layer.h"
 #include "insertnd.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 //#include "native.h"			// The new designed native filter, used for v2
 //#include "nativeps.h"		// The old style EPS native filter, used in v1.1

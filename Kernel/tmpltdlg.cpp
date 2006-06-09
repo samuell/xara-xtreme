@@ -98,21 +98,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // The dialog that lets Mr Smart User make attributes templatable
 
 #include "camtypes.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "tmpltdlg.h"
 
 //#include "tmpltres.h"
 //#include "barsdlgs.h"		// _R(IDD_BARCONTROLSTORE)
 #include "xshelpid.h"
 
-#include "app.h"			//for GetApplication()
-#include "document.h"
-#include "attrmgr.h"
+//#include "app.h"			//for GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "attrval.h"
-#include "nodeattr.h"
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 
@@ -123,7 +123,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "attraggl.h"
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opnode.h"
 
 #include "tmpltarg.h"

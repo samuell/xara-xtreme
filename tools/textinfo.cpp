@@ -114,18 +114,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 #include "nodetxtl.h"
 #include "texttool.h"
-#include "prefs.h"
-#include "app.h"
-#include "txtattr.h"
-#include "attrmgr.h"
-#include "errors.h"
+//#include "prefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "textops.h"
 #include "optsmsgs.h"
 #include "nodetext.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "finfodlg.h"
-#include "app.h"
-#include "spread.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fonts.h"
 //#include "atminfo.h"
 #include "fontman.h"
@@ -134,7 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "sgfonts.h"
 #include "localenv.h"
 #include "unicdman.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camvw.h"
 #include "blobs.h"
 

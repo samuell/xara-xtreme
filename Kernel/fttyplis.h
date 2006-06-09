@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FTTYPLIS
 #define INC_FTTYPLIS
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 typedef enum
 {

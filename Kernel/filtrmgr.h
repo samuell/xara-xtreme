@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FILTRMGR
 
 #include "ccarray.h"
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 typedef UINT32 FileFormatID;
 

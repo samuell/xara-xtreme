@@ -99,14 +99,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //*/
  
 #include "camtypes.h"
-#include "selop.h" 
+//#include "selop.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ophist.h"
-#include "document.h"
-#include "selstate.h"
-#include "app.h"
-#include "ensure.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selstate.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 DECLARE_SOURCE("$Revision$");

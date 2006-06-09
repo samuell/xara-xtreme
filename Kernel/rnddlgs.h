@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_RNDDLGS
 #define INC_RNDDLGS
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 class RenderRegion;
 class DocRect;
 struct ReDrawInfoType;

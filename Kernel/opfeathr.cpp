@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opfeathr.h"
 #include "fthrattr.h"
-#include "undoop.h"
-#include "spread.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "resource.h" 
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
 //#include "assoc.h"
 #include "bubbleid.h"
@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "optsmsgs.h"		// OptionsChangingMsg
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 
 // not supported yet

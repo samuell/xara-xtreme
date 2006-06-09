@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "opdragbx.h"
 //#include "app.h"
-#include "docview.h"
-#include "rndrgn.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "stockcol.h"
 
 

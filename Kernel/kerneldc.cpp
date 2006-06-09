@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "kerneldc.h"
 #include "colourix.h"
-#include "fixmem.h"
-#include "epsfiltr.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

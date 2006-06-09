@@ -101,12 +101,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_NODEMOULDGROUP
 
 
-#include "ink.h"
-#include "rndrgn.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "selop.h"
 #include "moldshap.h"
-#include "group.h"
-#include "becomea.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_NODEMOULDGROUP _T("MouldGroupObject")
 

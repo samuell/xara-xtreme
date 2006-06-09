@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_STRKATTR
 #define INC_STRKATTR
 
-#include "attrval.h"
-#include "cxfrech.h"
-#include "nodeattr.h"
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 class PathProcessorStroke;

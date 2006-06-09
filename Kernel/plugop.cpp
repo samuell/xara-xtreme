@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "plugres.h"		// _R(IDS_PLUGIN_FAMILY)
 
 #include "plugmngr.h"		// main plug-in manager
-#include "app.h"			// GetApplication()
+//#include "app.h"			// GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "pshpop.h"			// PhotoShopContextMenu
 #include "bfxop.h"			// BfxContextMenu

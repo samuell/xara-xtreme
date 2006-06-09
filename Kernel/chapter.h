@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CHAPTER
 #define	INC_CHAPTER
 
-#include "npaper.h"			// for NodeRenderablePaper
+//#include "npaper.h"			// for NodeRenderablePaper - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class RenderRegion;
 class Spread;

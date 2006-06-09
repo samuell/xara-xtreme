@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "htmldwnd.h"
 #include "htmlfltr.h"
 //#include "webster.h"
-#include "docmsgs.h"
+//#include "docmsgs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "resimmap.h"	//For _R(IDS_HTML_DOWNLOADFAILED)
 

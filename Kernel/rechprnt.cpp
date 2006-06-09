@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "cxfrec.h"
-#include "cxfrech.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 //#include "prnmkcom.h"
 //#include "princomp.h"

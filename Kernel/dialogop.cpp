@@ -112,20 +112,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
                      
 #include "camtypes.h" 
 
-#include "document.h"  		// Temp  
+//#include "document.h"  		// Temp   - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"   
 //#include "simon.h"
 //#include "tim.h"
 //#include "phil.h"
-#include "dialogop.h" 		// DialogOp header 
+//#include "dialogop.h" 		// DialogOp header  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"
-#include "ensure.h"  
-#include "errors.h" 
+//#include "ensure.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h" 
-#include "dlgtypes.h" 
+//#include "dlgtypes.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h" 
-#include "msg.h" 
-#include "docview.h"
+//#include "msg.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "colcontx.h"
 
 #include "ccdc.h"			// For redraw with RenderRegions
@@ -133,8 +133,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grnddib.h"
 #include "osrndrgn.h"
 #include "dlgview.h"
-#include "docmsgs.h"
-#include "docvmsg.h"
+//#include "docmsgs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docvmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "reshlpid.h"		// for _R(ID_CC_HELP_BUTTON) etc
 #include "helpuser.h"

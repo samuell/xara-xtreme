@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MKSTROKE
 #define INC_MKSTROKE 
 
-#include "selop.h"        
+//#include "selop.h"         - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_MAKE_STROKE _T("ConvertToStroke")
    

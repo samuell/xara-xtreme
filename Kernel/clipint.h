@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CLIPINT
 #define INC_CLIPINT
 
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 class Layer;

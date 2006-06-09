@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "xshelpid.h"		//For the help ID
 //#include "helppath.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"			// the string r%dc%d is in here
 #include "progress.h"
 #include "osrndrgn.h"
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "exjpeg.h"			// jpeg export options
 
 #include "page.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "mrhbits.h"		// for the bitmap render in to test if a slice is empty
 #include "selall.h"			// for the select all op in the test if a slice is empty
@@ -137,7 +137,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "webattr.h"		// for the URL attrib
 
 // for the use of wix temple attribs
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

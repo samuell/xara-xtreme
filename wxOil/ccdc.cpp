@@ -103,12 +103,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "ccdc.h"
-#include "fixmem.h"
-#include "ensure.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "gdimagic.h"
 //#include "tim.h"
-#include "errors.h"
-#include "colmodel.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 
 

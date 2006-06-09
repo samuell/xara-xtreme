@@ -104,14 +104,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodebmp.h"
 
 //#include "combshps.h"
-#include "ink.h"
-#include "paths.h"
-#include "fillattr.h"
-#include "biasgain.h"
-#include "becomea.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathpcs.h"
-#include "biasgain.h"
-#include "gconsts.h"
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "gconsts.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodeShadowController;
 class TrapsList;

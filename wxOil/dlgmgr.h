@@ -108,12 +108,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //------------------------------------------------------------------------------------------
 // Include files
  
-#include "ccobject.h" 
-#include "dlgtypes.h"  // Dialog types        
-#include "listitem.h"
-#include "basestr.h" 
-#include "list.h"
-#include "convert.h"  
+//#include "ccobject.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dlgtypes.h"  // Dialog types         - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "basestr.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "stack.h"
 //#include "xaraprop.h"
 

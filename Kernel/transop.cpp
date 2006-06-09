@@ -100,14 +100,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h" 
-#include "document.h"
-#include "selstate.h"
-#include "ensure.h"
-#include "trans2d.h"
-#include "ink.h"
-#include "spread.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selstate.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 //#include "progress.h"
 #include "selector.h"
@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "clikdrag.h"
 #include "cutop.h"
 //#include "mario.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodecont.h"
 //#include "dragtool.h"	// for DragTool.
 
@@ -125,14 +125,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "slicehelper.h"	//For helper functions
 
 //But I had to include all of these to get it to work!!...
-#include "cxfrech.h"		//For CamelotRecordHandler
+//#include "cxfrech.h"		//For CamelotRecordHandler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"		//For UserAttr
 #include "tmpltatr.h"		//For TemplateAttribute
 #include "ophist.h"
 
 //Graham 30/9/96: Need to maintain a node list for Drop Copy
-#include "list.h"
-#include "range.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // declare this files version number to the program and give our name in memory dumps
 DECLARE_SOURCE("$Revision$");

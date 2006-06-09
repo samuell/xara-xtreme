@@ -103,15 +103,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "pathops.h"
 								
-#include "app.h"
-#include "document.h"
-#include "docview.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"				  						
 #include "pathedit.h"
 #include "objchge.h"
 //#include "peter.h"
 #include "progress.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 DECLARE_SOURCE("$Revision$");

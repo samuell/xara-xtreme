@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPTSINET
 #define INC_OPTSINET
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "appprefs.h"
 //#include "webster.h"
 

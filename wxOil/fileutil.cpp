@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fileutil.h"
 
 #include "camelot.h"
-#include "pathname.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgliboil.h"
 
 // Place any IMPLEMENT type statements here

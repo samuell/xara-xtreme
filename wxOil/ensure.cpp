@@ -98,8 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"  
 
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 //#include "andy.h"
 //#include "simon.h"				// for _R(IDS_CONTINUE)

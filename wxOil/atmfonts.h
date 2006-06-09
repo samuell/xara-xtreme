@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "atm.h"
 #include "fontbase.h"
-#include "pathtype.h"
+//#include "pathtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CharDescription;
 class DocCoord;

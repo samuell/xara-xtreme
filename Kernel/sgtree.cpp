@@ -102,21 +102,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "dlgmgr.h"
-#include "document.h"	// For Document->GetTitle()
+//#include "document.h"	// For Document->GetTitle() - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragmgr.h"	// Drag manager (DragManagerOp::StartDrag, RedrawStarting etc)
 //#include "galres.h"		// Gallery bitmap resources
 //#include "galstr.h"		// Gallery string resources
 //#include "scroller.h"	// For scroll bar width
-#include "sgallery.h"	// SuperGallery definitions
+//#include "sgallery.h"	// SuperGallery definitions - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgdrag.h"		// Scroll bar drag target/info
-#include "sgtree.h"		// This file's associated header
+//#include "sgtree.h"		// This file's associated header - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sglib.h"		// For virtualising static switch
 //#include "sglcart.h"
 
 #include "ccdc.h"		// For render-into-dialogue support
 //#include "sglfills.h"
 #include "dlgcol.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "grnddib.h"
 
 //#include "richard3.h"	// For _R(IDS_GALLERY_PREPARE_FOR_UNFOLD)
@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "webster.h"
 //#include "inetop.h"
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Implement the dynamic class bits...
 CC_IMPLEMENT_DYNAMIC(SGDisplayNode,  CCObject)

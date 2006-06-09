@@ -108,8 +108,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "GDrawIntf.h"
 #include "XaDrwOld.h"
 #include "GVersion.h"
-#include "fixmem.h"
-#include "errors.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gradtbl.h"
 
 #include "grndrgn.h"

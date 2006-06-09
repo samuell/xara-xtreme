@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TEXTFLTR
 #define INC_TEXTFLTR
 
-#include "ccfile.h"
-#include "filters.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "stack.h"
 
 

@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ai_layer.h"
 
 //#include "tim.h"
-#include "filters.h"
-#include "oilfltrs.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision");
 

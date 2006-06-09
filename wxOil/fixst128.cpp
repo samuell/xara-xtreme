@@ -97,7 +97,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "fixst128.h"
+//#include "fixst128.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /**************************************************************************************

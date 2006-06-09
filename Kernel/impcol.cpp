@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "colcomp.h"	// colour document component
 //#include "resource.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colormgr.h"
 #include "progress.h"
 //#include "ben.h"

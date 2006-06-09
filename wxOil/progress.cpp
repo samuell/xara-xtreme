@@ -101,15 +101,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 //#include "jason.h"
 #include "keypress.h"
 //#include "mainfrm.h"
-#include "monotime.h"
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "oilprog.h"
 //#include "progbar.h"
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "statline.h"
 
 #include "progress.h"

@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FILLATTR2
 #define INC_FILLATTR2
 
-#include "fillattr.h"
-#include "fillval.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /***********************************************************************************************
 

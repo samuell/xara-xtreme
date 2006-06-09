@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_RIFFFILE
 
 #include "riffform.h"
-#include "list.h"
-#include "ccfile.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 typedef enum {
 	RIFFOBJECTTYPE_NONE,			// initial condition

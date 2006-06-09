@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef NODEPOSTPRO_H
 #define NODEPOSTPRO_H
 
-#include "ink.h"
-#include "nodecomp.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodecomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CCAttrMap;
 

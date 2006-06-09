@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_EXPHINT
 #define INC_EXPHINT
 
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 enum ExportHintBitmapType
 {

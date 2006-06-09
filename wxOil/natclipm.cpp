@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "natclipm.h"
 
 #include "clipint.h"
-#include "spread.h"
-#include "group.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 
 CC_IMPLEMENT_DYNCREATE(NativeClipMap, ClipboardMapping)

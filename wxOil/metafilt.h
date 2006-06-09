@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_METAFILT
 #define	INC_METAFILT
 
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "clipmap.h"
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class WinBitmap;
 class NodeBitmap;

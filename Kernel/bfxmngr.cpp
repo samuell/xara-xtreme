@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bfxopun.h"		// BfxPlugInUndoOp
 #include "bfxdlg2.h"		// BfxPlugInDlg
 
-#include "app.h"			// GetApplication()
+//#include "app.h"			// GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "menuitem.h"		// MenuItem
 #include "menupref.h"		// CreateMenuItem
 

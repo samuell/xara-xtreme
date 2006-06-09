@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodebrsh.h"
 //#include "group.h"
 //#include "rndrgn.h"
-#include "document.h"
-#include "app.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 //#include "nodershp.h"
 #include "ndbrshpt.h"

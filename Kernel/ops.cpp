@@ -120,40 +120,40 @@ DECLARE_SOURCE("$Revision$");
 #include "ralphdoc.h"
 #endif
 
-#include "ops.h"
-#include "range.h"
-#include "document.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ophist.h"
-#include "ensure.h"
-#include "docview.h" 
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h" 
 //#include "simon.h"
-#include "errors.h"
-#include "selstate.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selstate.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "noderect.h"
-#include "tranform.h"
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "spread.h"
-#include "bars.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "menuops.h"
 #include "blobs.h"
 #include "sprdmsg.h"
 #include "layer.h"
 #include "lineattr.h"
-#include "trans2d.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 #include "chapter.h"
 #include "nodetxts.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cutop.h"
 #include "dbugtree.h"
 //#include "ralphcri.h"
 #include "layermsg.h"	// LayerMsg::LayerReason::REDRAW_LAYER
 
-#include "cxfrech.h"
-#include "attrval.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

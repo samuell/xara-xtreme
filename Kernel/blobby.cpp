@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 /*
 */
 #include "camtypes.h"
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 
@@ -121,11 +121,11 @@ DECLARE_SOURCE("$Revision$");
 #include "lineattr.h"
 //#include "resource.h"
 #include "page.h"
-#include "docview.h"
-#include "document.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "simon.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "blobtab.h"
 #include <stdlib.h>
 

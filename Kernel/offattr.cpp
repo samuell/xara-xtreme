@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "offattr.h"
 
 #include "GDrawIntf.h"
@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndrgn.h"		// GRenderRegion
 
 // Bitmap manipulation
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
 
 //#include "winrect.h"		// CalculateWinRect

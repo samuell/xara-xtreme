@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "appprefs.h"
 #include "optsinet.h"	// dialog/gadget ids
 //#include "optsres.h"	// _R(IDS_PROXY)...
-#include "app.h"		// Camelot object
-#include "document.h"	// document object
-#include "spread.h"		// spread object
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h"	// document object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h"		// spread object - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"		// page object
 //#include "webster.h"
 #include "camnet.h"

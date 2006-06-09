@@ -106,11 +106,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // No rulers in Webster
 #ifndef WEBSTER
 
-#include "errors.h"
-#include "docview.h"
-#include "document.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rulers.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sprdmsg.h"
 #include "optsmsgs.h"
 #include "userrect.h"

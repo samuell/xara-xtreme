@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "layer.h"		// knowing about layers
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // for the use of wix temple attribs
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

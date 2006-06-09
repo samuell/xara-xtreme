@@ -101,20 +101,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ppstroke.h"
 
-#include "attrmgr.h"
-#include "fillval.h"
-#include "paths.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathstrk.h"
 #include "pathtrap.h"
 #include "qualattr.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "strkattr.h"
 #include "valfunc.h"
 #include "nodetxtl.h" // for the format region
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 #include "lineattr.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshattr.h"
 #include "ai_epsrr.h"	// for definition of AIEPSRenderRegion. Only used in ProcessStroke()
 

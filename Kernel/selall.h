@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SELALL
 #define INC_SELALL
 
-#include "ops.h"
-#include "opdesc.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Op Tokens
 #define OPTOKEN_EDITSELECTALL	_T("SelectAll")

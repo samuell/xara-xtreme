@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "webop.h"
 #include "nativeop.h"
-#include "filters.h"
-#include "oilfltrs.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "filtrres.h"
 
 //#include "barsdlgs.h"

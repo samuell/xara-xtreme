@@ -104,17 +104,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "simon.h"
 
 #include "transop.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "slice.h"
 
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 
 #include "progress.h"
-#include "fillval.h"
-#include "fillattr.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "ngcore.h"
 #include "ngitem.h"

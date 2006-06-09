@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <stdlib.h>
 #include "fonts.h"
-#include "errors.h"
-#include "ensure.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 #include "camelot.h"
 #include "unicdman.h"

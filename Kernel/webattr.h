@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_WEBATTR
 #define INC_WEBATTR
 
-#include "nodeattr.h"
-#include "attr.h"
-#include "attrval.h"
-#include "rndrgn.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "hotlink.h"
 #include "webaddr.h" //Class WebAddress
 

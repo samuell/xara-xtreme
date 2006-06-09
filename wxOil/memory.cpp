@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "handles.h"
-#include "ensure.h"
-#include "memory.h"
-#include "errors.h"
-#include "memblk.h"
+//#include "handles.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "memblk.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #if !defined(__WXMAC__)
 #include <malloc.h>
 #else

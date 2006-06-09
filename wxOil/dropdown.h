@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DROPDOWN
 #define INC_DROPDOWN
 
-#include "dlgtypes.h"
-#include "list.h"
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 class DialogManager;

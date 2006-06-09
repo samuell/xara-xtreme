@@ -101,14 +101,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"
 #include "fracfill.h"
 //WEBSTER-Martin-14/01/97
 #ifndef EXCLUDE_BFX
 //#include "bfxasm.h"
 #endif
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe

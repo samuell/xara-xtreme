@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_IMPBMP
 #define INC_IMPBMP
 
-#include "list.h"
-#include "listitem.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BitmapListComponent;
 class KernelBitmap;

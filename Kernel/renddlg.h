@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Find out about the DialogOp Class
-#include "dialogop.h"
-#include "doccolor.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_RENDERDEMODLG _T("RenderDemoDlg")
 

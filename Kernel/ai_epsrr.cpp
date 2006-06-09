@@ -106,19 +106,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "vectrndr.h"
 #include "ccdc.h"
-#include "colmodel.h"
-#include "fillattr.h"
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opbevel.h"
 #include "swfexpdc.h"
 #include "swfrndr.h"
 #include "slicehelper.h"
 #include "fillramp.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
-#include "bitmap.h"
-#include "range.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rendsel.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"		// for FontManager - for writing font changes to overflow text
 #include "colplate.h"		// for ColourPlate - in overflow text functions
 #include "colourix.h"		// for Indexed Colour - for writing colour changes to overflow

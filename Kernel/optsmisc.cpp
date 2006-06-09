@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "prefsdlg.h"	// dialog/gadget ids
 //#include "optsres.h"	// error strings
 #include "optsmisc.h"
-#include "app.h"		// Camelot object
-#include "spread.h"		// So that knows spreads are derived from nodes
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h"		// So that knows spreads are derived from nodes - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sprdmsg.h"	// spread messages
 
 CC_IMPLEMENT_DYNAMIC(MiscTab, OptionsTabs)   

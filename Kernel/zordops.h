@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_ZORDOPS
 
 
-#include "selop.h"        
+//#include "selop.h"         - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_BRINGTOFRONT _T("BringToFront")
 #define OPTOKEN_PUTTOBACK _T("PutToBack")  

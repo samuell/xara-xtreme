@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BRSHATTR
 #define INC_BRSHATTR
 
-#include "attrval.h"
-#include "cxfrech.h"
-#include "nodeattr.h"
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshdata.h"
 #include "brpress.h"
 #include "samplist.h"

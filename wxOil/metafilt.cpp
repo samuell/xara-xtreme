@@ -101,39 +101,39 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "metafilt.h"
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "andy.h"
 //#include "rik.h"
 #include "gdimagic.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 #include "nodepath.h"
-#include "pathname.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilfiles.h"
 #include "csrstack.h"
 #include "progress.h"        
 #include "page.h"
-#include "trans2d.h"
-#include "fillattr.h"
-#include "attrmgr.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "accures.h"
-#include "docview.h"
-#include "rndrgn.h"
-#include "ccfile.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "osrndrgn.h"
 #include "camvw.h"
 #include "wbitmap.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "nodetxts.h"
 #include "nodeelip.h"
 
 #include "clipext.h"	// External clipboard
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "metaview.h"
 //#include "richard2.h"
 

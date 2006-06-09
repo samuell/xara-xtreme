@@ -97,8 +97,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-#include "list.h"
-#include "listitem.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CXaraFileRecord;
 class TextChar;

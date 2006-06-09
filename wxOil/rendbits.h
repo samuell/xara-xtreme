@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_RENDBITS
 
 #include "osrndrgn.h"
-#include "docrect.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 enum BitmapContents

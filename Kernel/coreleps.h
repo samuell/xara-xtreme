@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CORELEPS
 #define INC_CORELEPS
 
-#include "epsfiltr.h"
+//#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

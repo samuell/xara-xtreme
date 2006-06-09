@@ -105,27 +105,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
-#include "spread.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "layer.h"
-#include "ensure.h"
-#include "errors.h"
-#include "dlgtypes.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 #include "bmpprefs.h"
 //#include "bmpres.h"		// general bitmap filter based resources
 //#include "accures.h"	// general Accusoft dll resources
 //#include "simon.h"
-#include "dialogop.h"	// DialogOp header
+//#include "dialogop.h"	// DialogOp header - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"		// Dialog manager class
-#include "msg.h"
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rikdlg.h"		// _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER)
 #include "osrndrgn.h"
 #include "grndrgn.h"	// for max bitmap width function
 #include "bitfilt.h"	// BaseBitmapFilter 
 //#include "justin2.h"
-#include "units.h"		// for pixel units
+//#include "units.h"		// for pixel units - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will3.h"
 //#include "reshlpid.h"
 #include "makebmp.h"
@@ -143,13 +143,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "impexpop.h"	// BitmapExportParam
 #include "fileutil.h"
 //#include "bmpsdlg.h"	// BmpDlgParam
-#include "cxfrec.h"		// for CXaraFileRecord
+//#include "cxfrec.h"		// for CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ngprop.h"		// for the NamedExportProp::m_fApplyNotExport flag.
 //#include "bmpreres.h"	// for _R(IDS_PREVIEW_APPLY)
 //#include "registry.h"
 //#include "desnotes.h"
 #include "bmpalint.h"	// for BitmapExportPaletteInterface::InvalidateSortedPalette()
-#include "oilfltrs.h"	// for the find filter fn
+//#include "oilfltrs.h"	// for the find filter fn - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "slicehelper.h"
 #include "fillattr2.h"
 

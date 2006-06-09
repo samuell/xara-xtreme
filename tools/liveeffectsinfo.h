@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef LIVEEFFECTSINFO_INC
 #define LIVEEFFECTSINFO_INC
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "xmlutils.h"
 #include "valfunc.h"  // for valuefunctionID
 

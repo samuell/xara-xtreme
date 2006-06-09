@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_COLOURIX
 
 
-#include "colmodel.h"
-#include "list.h"
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcontx.h"
 
 

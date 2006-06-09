@@ -100,14 +100,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #if !defined(__WXMAC__)
 #include <malloc.h>
 #else
 #include <malloc/malloc.h>
 #endif
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "tunemem.h"

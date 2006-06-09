@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // This file holds classes concerned with fill ramps. 
 // Currently colour ramps and transparancy ramps have been implemented fully.
 
-#include "list.h"
-#include "doccolor.h"
-#include "doccoord.h"
-#include "fillattr.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define FILLRAMP_INDEXBASE 1024
 #define FILLRAMP_ILLEGALINDEX (FILLRAMP_INDEXBASE-1)

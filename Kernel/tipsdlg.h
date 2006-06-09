@@ -99,9 +99,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TIPSDLG
 #define INC_TIPSDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tipsres.h"
-#include "fixst256.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "txtattr.h"		// for Justification
 
 

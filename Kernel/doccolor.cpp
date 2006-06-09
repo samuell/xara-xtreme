@@ -107,8 +107,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colormgr.h"
 #include "colourix.h"
 #include "colplate.h"
-#include "doccolor.h"
-#include "ensure.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 CC_IMPLEMENT_MEMDUMP(DocColour, CC_CLASS_MEMDUMP)

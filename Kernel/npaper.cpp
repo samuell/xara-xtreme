@@ -102,12 +102,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //*/
 
 #include "camtypes.h"
-#include "npaper.h"
-#include "errors.h"
+//#include "npaper.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodedoc.h"
-#include "oilcoord.h"
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
   
 CC_IMPLEMENT_DYNAMIC(NodeRenderablePaper, NodeRenderableBounded)
 

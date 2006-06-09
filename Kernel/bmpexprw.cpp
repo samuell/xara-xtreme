@@ -108,13 +108,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dlgview.h"	// DialogView
 #include "keypress.h"	// For Adjust key pressed test
 #include "csrstack.h"
-#include "attr.h"		// for DM_EORPEN
+//#include "attr.h"		// for DM_EORPEN - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fileutil.h"
 #include "bitfilt.h"	// the BaseBitmapFilter
 //#include "nev.h"
 //#include "tim.h"
 #include "statline.h"	// for the status line
-#include "app.h"		// for Document
+//#include "app.h"		// for Document - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "giffiltr.h"	// for TI_GIFFilter
 #include "exjpeg.h"		// for JPEGExportFilter
 #include "progress.h"
@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bmpreres.h"
 #include "bmapprev.h"
 //#include "accures.h"
-#include "oilfltrs.h"	// for find filter ext
+//#include "oilfltrs.h"	// for find filter ext - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"	// for BitmapInfo
 
 DECLARE_SOURCE("$Revision$");

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 //#include "camconfig.h"
-#include "camresource.h"
+//#include "camresource.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "cartctl.h"
@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif
 
 //#include "camelot.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define PRELOAD_BITMAPS 0
 

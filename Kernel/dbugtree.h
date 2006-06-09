@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DBUGTREE
 #define INC_DBUGTREE
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // -----------------------------------------------------------------------------------------
 // DebugTreeDlg for displaying the Camelot tree

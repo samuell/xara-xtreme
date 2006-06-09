@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PALMAN
 #define INC_PALMAN
 
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CDC;
 class CPalette;

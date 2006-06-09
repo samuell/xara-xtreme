@@ -107,10 +107,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camdoc.h"
 #include "scrcamvw.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prntview.h"
-#include "docview.h"
-#include "spread.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "printdlg.h"
 #include "prdlgctl.h"
 #include "princomp.h"
@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tim.h"
 #include "camelot.h"
 //#include "resource.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prnmks.h"
 #include "opbevel.h"
 

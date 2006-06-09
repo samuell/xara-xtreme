@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_WRKRECT
 #define INC_WRKRECT
 
-#include "wrkcoord.h"
+//#include "wrkcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /***********************************************************************************************

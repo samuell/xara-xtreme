@@ -103,13 +103,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "rendbits.h"
-#include "docview.h"
-#include "ensure.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccdc.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 #include "grndclik.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // RealClickClass is the class name to use for generic 'bitmap click' class whic
 // exands to either OSRenderBitmap or GRenderClick

@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 // Find out about the DialogOp Class
-#include "dialogop.h"
-#include "doccolor.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "undoop.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "tracectl.h"
 //#include <afxtempl.h>
 

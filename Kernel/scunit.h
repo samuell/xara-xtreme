@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Definition of the scale units class
 
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /*********************************************************************************************
 

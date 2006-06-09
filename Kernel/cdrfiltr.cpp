@@ -107,21 +107,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "cdrfiltr.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ben.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "cdrcol.h"
 #include "rifffile.h"
 #include "cdrform.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodershp.h"
 //#include "resource.h"
-#include "fixst256.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ndoptmz.h"
 #include "collist.h"
 #include "layer.h"
@@ -131,14 +131,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 //#include "textinfo.h"
 #include "zoomops.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodemold.h"
 #include "moldshap.h"
 #include "ndmldpth.h"
 #include "nodemldr.h"
 //#include "nev.h"
 #include "fontman.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "cmxres.h"
 #include "cmxifltr.h"		// so we can pass stuff to it nicely
 

@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRINTMARKS
 #define INC_PRINTMARKS
 
-#include "list.h"
-#include "listitem.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lddirect.h"
-#include "doccoord.h"
-#include "docrect.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class String_256;
 class NodeGroup;

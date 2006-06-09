@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camdoc.h"
 #include "camelot.h"
 #include "lddirect.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colormgr.h"
 #include "bmpcomp.h"
 

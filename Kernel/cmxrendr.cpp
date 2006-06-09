@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "cmxrendr.h"
 #include "cmxexdc.h"
-#include "view.h"
-#include "spread.h"
-#include "attrmgr.h"
-#include "rrcaps.h"
-#include "fixmem.h"
-#include "range.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rendsel.h"
 #include "nbevcont.h"
 

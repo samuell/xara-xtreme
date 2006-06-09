@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_TOOLLIST
 
 
-#include "list.h"
-#include "listitem.h"
-#include "ccobject.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 class OILTool;  		// #include "oiltool.h"
 
 /********************************************************************************************

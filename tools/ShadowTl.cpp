@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <objbase.h>
 #include <initguid.h>
 
-#include "nodeattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Place any IMPLEMENT type statements here
 CC_IMPLEMENT_MEMDUMP(CCWobJob, CC_CLASS_MEMDUMP)

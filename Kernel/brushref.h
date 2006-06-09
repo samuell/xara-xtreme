@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "nodebldr.h"
 
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BitmapFillAttribute;
 

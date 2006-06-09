@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef LA_BASE_H
 #define LA_BASE_H
 
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /********************************************************************************************

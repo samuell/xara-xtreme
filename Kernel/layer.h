@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_LAYER
 #define	INC_LAYER
 
-#include "npaper.h"
-#include "convert.h"
-#include "bitmap.h"
-#include "quality.h"
+//#include "npaper.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Document;
 class DocView;

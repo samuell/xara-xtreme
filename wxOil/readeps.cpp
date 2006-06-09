@@ -108,12 +108,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <strstrea.h>
 #include <ctype.h>
 
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "docrect.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"        
-#include "doccolor.h"
-#include "ensure.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "readeps.h"
 

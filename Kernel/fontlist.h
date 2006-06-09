@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FONTLIST
 #define INC_FONTLIST
 
-#include "listitem.h"
-#include "list.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 //#include "fontbase.h"
 

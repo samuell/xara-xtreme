@@ -103,12 +103,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEREGSHAPE
 #define INC_NODEREGSHAPE
 
-#include "doccoord.h"
-#include "docrect.h"
-#include "ink.h"
-#include "paths.h"
-#include "trans2d.h"
-#include "pathshap.h" //For the PathShape typedef enum
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathshap.h" //For the PathShape typedef enum - in camtypes.h [AUTOMATICALLY REMOVED]
 
 const UINT32 REGULARSHAPE_MINSIDES = 3;
 const UINT32 REGULARSHAPE_MAXSIDES = 99;

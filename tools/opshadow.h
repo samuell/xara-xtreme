@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #ifdef BUILDSHADOWS
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrappl.h"
-#include "biasgain.h"
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "shadinfo.h"	// for SoftShadowInfoBarData
 #include "menuitem.h"
 #include "effects_stack.h"

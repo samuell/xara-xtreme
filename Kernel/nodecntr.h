@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef NODECNTR_H
 #define NODECNTR_H
 
-#include "becomea.h"
-#include "biasgain.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class ExtendParams;
 class NodeContourController;

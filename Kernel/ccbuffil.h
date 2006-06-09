@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CCBUFFIL
 #define INC_CCBUFFIL
 
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

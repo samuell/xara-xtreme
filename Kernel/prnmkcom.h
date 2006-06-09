@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DOCPRINTMARKS
 #define INC_DOCPRINTMARKS
 
-#include "list.h"
-#include "listitem.h"
-#include "doccomp.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BaseCamelotFilter;
 class CXaraFileRecord;

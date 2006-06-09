@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_METAVIEW
 #define INC_METAVIEW
 
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

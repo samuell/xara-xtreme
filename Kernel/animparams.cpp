@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "animparams.h"
+//#include "animparams.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(AnimPropertiesParam, OpParam)
 

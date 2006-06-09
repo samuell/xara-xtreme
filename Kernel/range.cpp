@@ -103,26 +103,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  
 #include "camtypes.h" 
 
-#include "app.h"
-#include "document.h"
-#include "docmsgs.h"
-#include "docview.h"
-#include "ensure.h" 
-#include "node.h"
-#include "range.h"   
-#include "rndrgn.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docmsgs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
-#include "ink.h"
-#include "spread.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "dlgbar.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sprdmsg.h"
 #include "layer.h"
-#include "fillattr.h"
-#include "attrmgr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "peter.h"
 #include "nodetext.h"
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxtl.h"
 #include "nodetxts.h"
 #include "nodecont.h"
@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resimmap.h"	//For _R(IDS_SINGLELAYER_INSIDE)
 //#include "bmpsdlgr.h"	// _R(IDS_ON_FRAME_OUTSIDE_NOREF)
 #include "effects_stack.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillattr2.h"
 
 DECLARE_SOURCE( "$Revision$" );    

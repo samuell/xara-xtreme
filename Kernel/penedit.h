@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PENEDIT
 #define INC_PENEDIT
 
-#include "selop.h"
-#include "stockcol.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // #include "pentool.h"
 

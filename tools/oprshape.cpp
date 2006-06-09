@@ -103,24 +103,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "oprshape.h"	
 
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "csrstack.h"
-#include "cursor.h"
-#include "docview.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "noderect.h"
 #include "nodershp.h"
 //#include "peter.h"
 #include "progress.h"							   
 //#include "resource.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "shapeops.h"
-#include "tool.h"
-#include "trans2d.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "viewrc.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE( "$Revision$" );
 

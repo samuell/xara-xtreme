@@ -101,12 +101,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_LINEATTR
 #define INC_LINEATTR
 
-#include "nodeattr.h"
-#include "doccolor.h"
-#include "attr.h"
-#include "fillattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillattr2.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BlendAttrParam;
 class BaseCamelotFilter;

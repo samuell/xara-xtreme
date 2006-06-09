@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_COLLIST
 #define INC_COLLIST
 
-#include "errors.h"
-#include "list.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BaseDocument;
 

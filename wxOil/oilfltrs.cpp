@@ -101,13 +101,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "pathname.h"
-#include "document.h"
-#include "ensure.h"
-#include "errors.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "rik.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "accures.h"		// General Accusoft DLL strings
 //#include "nev.h"			// _R(IDN_USER_CANCELLED), _R(IDN_FILTERNOTPRESENT), _R(IDS_OPMENUIMPORT_ONE), _R(IDS_OPMENUEXPORT_ONE)
 #ifndef WEBSTER
@@ -138,7 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resimmap.h"		//Imagemap resources
 #include "prvwflt.h"		// for preview filters
 
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "metafilt.h"
 //#include "enhmeta.h"
 

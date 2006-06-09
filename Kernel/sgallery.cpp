@@ -99,10 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 #include "dragmsg.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
 //#include "galres.h"
 //#include "jason.h"
@@ -110,16 +110,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camframe.h"
 #include "progress.h"
 //#include "resource.h"	// For _R(IDS_OK) (dammit!)
-#include "sgallery.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgdrag.h"
 #include "sgmenu.h"
-#include "sgtree.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "thumbmsg.h"
 //#include "sglinepr.h"
 
 #include "ccdc.h"		// For render-into-dialogue support
 #include "dlgcol.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 
 #include "sgindgen.h"	// For ReplaceCharacters function (which should be in stringbase)

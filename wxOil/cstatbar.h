@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CCSTATUSBAR
 #define INC_CCSTATUSBAR
 
-#include "flags.h"
+//#include "flags.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ed.h"
 //#include "eddlg.h"
 

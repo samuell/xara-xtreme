@@ -107,8 +107,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 													
-#include "list.h"
-#include "ensure.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC( List, CCObject )
 

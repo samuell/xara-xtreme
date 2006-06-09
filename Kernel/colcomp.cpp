@@ -105,17 +105,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "colcomp.h"
 
-#include "basedoc.h"
-#include "app.h"
+//#include "basedoc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "collist.h"
 #include "colormgr.h"
-#include "colmodel.h"
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aw_eps.h"
 #include "cameleps.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccdc.h"
 #include "colourix.h"
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "resource.h"
 //#include "grndrgn.h"
@@ -124,13 +124,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "unicdman.h"
 //#include "sgcolour.h"
 
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
-#include "cxfdefs.h"	// SIZE_DEFINERGBCOLOUR SIZE_DEFINECOMPLEXCOLOUR
+//#include "cxfdefs.h"	// SIZE_DEFINERGBCOLOUR SIZE_DEFINECOMPLEXCOLOUR - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfcols.h"	// REF_DEFAULTCOLOUR_TRANSPARENT
 #include "cxfile.h"		// CXF_UNKNOWN_SIZE
 #include "expcol.h"		// ExportedColours handling class
-#include "cxfrec.h"		// CXaraFileRecord handler
+//#include "cxfrec.h"		// CXaraFileRecord handler - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "filtrres.h"	// _R(IDS_NATIVE_COLOURWARNING)
 
 DECLARE_SOURCE("$Revision$");

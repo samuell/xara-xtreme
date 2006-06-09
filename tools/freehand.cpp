@@ -102,19 +102,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"	// _R(IDS_OUTOFMEMORY)
 //#include "barsdlgs.h"
 //#include "mario.h"
 //#include "rik.h"
 //#include "markn.h"
 //#include "viewrc.h"
-#include "docview.h"
-#include "document.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mainfrm.h"
 #include "infobar.h"
 #include "csrstack.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 #include "oilfiles.h"
 #include "blobs.h"
@@ -128,12 +128,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ezmodule.h"
 //#include "freehres.h"
 #include "progress.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 
 #include "opdrbrsh.h"
 #include "opbevel.h"
-#include "range.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 //#include "will2.h"
@@ -146,7 +146,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brushref.h"
 #include "brshcomp.h"
 #include "ppbrush.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshattr.h"
 #include "sgline.h"
 #include "progress.h"

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FREEEPS
 #define INC_FREEEPS
 
-#include "epsfiltr.h"
+//#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "impcol.h"
 
 

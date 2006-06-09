@@ -107,13 +107,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "optsres.h"	// error strings
 #include "optspage.h"
 #include "optsmsgs.h"
-#include "app.h"		// Camelot object
-#include "document.h"	// document object
-#include "spread.h"		// spread object
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h"	// document object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h"		// spread object - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"		// page object
-#include "units.h"		// units
+//#include "units.h"		// units - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pagesize.h"	// Page sizes available e.g. A4
-#include "trans2d.h"	// 2d translation matrix
+//#include "trans2d.h"	// 2d translation matrix - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "progress.h"	// Begin/EndSlowJob
 

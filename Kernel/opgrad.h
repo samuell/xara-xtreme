@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPGRAD
 #define INC_OPGRAD
 
-#include "selop.h"
-#include "fillattr.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrappl.h"
-#include "flags.h"
+//#include "flags.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillramp.h"
 
 #define OPTOKEN_GRADFILL 	_T("GraduatedFill")

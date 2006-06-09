@@ -101,11 +101,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "sgstroke.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ppstroke.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "strkattr.h"
 
 #include "dlgcol.h"

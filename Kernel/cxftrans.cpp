@@ -108,11 +108,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 /*
-#include "matrix.h"
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftrans.h"
 */
 /********************************************************************************************

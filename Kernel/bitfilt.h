@@ -100,14 +100,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BITFILT
 #define INC_BITFILT
 
-#include "fixst256.h"
-#include "filters.h"
-#include "docrect.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpprefs.h"  // SelectionType
-#include "dibconv.h"   // for XARADITHER enum
-#include "quality.h"
+//#include "dibconv.h"   // for XARADITHER enum - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpsrc.h"		// for OFFSET
-#include "pathname.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filtimop.h"	//For ImagemapFilterOptions
 
 class GRenderRegion;

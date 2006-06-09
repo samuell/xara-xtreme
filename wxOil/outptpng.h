@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OUTPTPNG
 #define	INC_OUTPTPNG
 
-#include "ccfile.h"						// needs FilePos
-#include "dibconv.h"					// needs DIBConvert
-#include "dibutil.h"					// needs FNPTR_SCANLINE
-#include "outptdib.h"	
+//#include "ccfile.h"						// needs FilePos - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibconv.h"					// needs DIBConvert - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h"					// needs FNPTR_SCANLINE - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "outptdib.h"	 - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "outptgif.h"					// TI_GIF_TRANSINTER	
 #include <png.h>
 //#include "accuflts.h"					// PNG

@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // handles CMX commands
 
 #include "camtypes.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "riffform.h"
 #include "progress.h"
 #include "nodepath.h"
@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cmxidata.h"
 #include "cmxibits.h"
 #include "cmxibitm.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "riffform.h"
 #include "progress.h"
 #include "nodepath.h"

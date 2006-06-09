@@ -108,12 +108,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "optsunit.h"
 //#include "prefsdlg.h"	// dialog/gadget ids
 //#include "optsres.h"	// error strings
-#include "app.h"		// Camelot object
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"	// _R(IDS_OK)
 #include "optsmsgs.h"	// options changing messages class
-#include "document.h"	// document object
+//#include "document.h"	// document object - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grid.h" 		// checking if deleted units in grid
-#include "spread.h"		// checking if deleted units in grid
+//#include "spread.h"		// checking if deleted units in grid - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "radio.h"		// class RadioGroup
 #include "scunit.h"		// class ScaleUnit
 

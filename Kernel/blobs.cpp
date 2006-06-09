@@ -102,15 +102,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "blobs.h"
-#include "rndrgn.h"
-#include "docview.h"
-#include "range.h"
-#include "app.h"
-#include "ink.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
-#include "docvmsg.h"
-#include "fillattr.h"
-#include "tool.h"
+//#include "docvmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Declare the source version number
 DECLARE_SOURCE("$Revision$");

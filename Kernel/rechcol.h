@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class ColourListComponent;
 
 // Header for the attribute record handling classes for the v2 file format
-#include "cxfrech.h"
-#include "colmodel.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CXaraFileRecord;
 

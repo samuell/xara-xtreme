@@ -103,15 +103,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "bmpcomp.h"
-#include "bmplist.h"
-#include "bitmap.h"
+//#include "bmplist.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"
 #include "bmpsrc.h"
 #include "ccbuffil.h"
-#include "list.h"
-#include "errors.h"
-#include "app.h"
-#include "fillattr.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will.h"
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 
@@ -132,16 +132,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "expbmp.h"		// ExportedBitmaps handling class
 #include "impbmp.h"		// ImportedBitmaps handling class
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	// TAG_DEFINEBITMAP_****
 #include "cxfile.h"		// CXF_UNKNOWN_SIZE
-#include "cxfrech.h"	// CXaraFileRecordHandler
+//#include "cxfrech.h"	// CXaraFileRecordHandler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "expcol.h"		// ExportedColours handling class
-#include "cxfrec.h"		// CXaraFileRecord handler
+//#include "cxfrec.h"		// CXaraFileRecord handler - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"		// _R(IDT_CANT_FIND_FILTER)
 //#include "filtrres.h"	// _R(IDS_DONT_SUPPORT_BITMAP_TYPE) _R(IDS_NATIVE_BITMAPWARNING)
 #include "bitfilt.h"	// BaseBitmapFlter
-#include "fixmem.h"		// CCMalloc, CCFree
+//#include "fixmem.h"		// CCMalloc, CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_MEMDUMP( BitmapList, List )
 CC_IMPLEMENT_DYNAMIC( BitmapListComponentClass, DocComponentClass )

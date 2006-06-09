@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CLIPEXT
 #define INC_CLIPEXT
 
-#include "list.h"
-#include "ops.h"
-#include "selop.h"
-#include "view.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "clipmap.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "scrcamvw.h"
 
 

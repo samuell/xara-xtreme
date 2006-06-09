@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_THUMBMSG
 #define INC_THUMBMSG
 
-#include "pump.h"
-#include "thumb.h"
+//#include "pump.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class DragManagerOp;
 class DragInformation;

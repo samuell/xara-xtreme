@@ -105,10 +105,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camelot.h"
 #include "camdoc.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 
 // An implement to match the Declare in the .h file.

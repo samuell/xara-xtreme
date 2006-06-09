@@ -111,19 +111,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetext.h"
 
 // Code headers
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "becomea.h"
 #include "blobs.h"
 //#include "cameleps.h"
 #include "cliptype.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdraw.h"
 #include "grndrgn.h"
 #include "lineattr.h"
 #include "nodetxtl.h"
 #include "nodetxts.h"
 #include "snap.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "texttool.h"
 #include "textops.h"
 #include "attrmap.h"

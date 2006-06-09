@@ -104,15 +104,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GRNDRGN
 #define INC_GRNDRGN
 
-#include "rndrgn.h"
-#include "rendtype.h"
-#include "winrect.h"
-#include "ops.h"
-#include "paths.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rendtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "winrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdrawcon.h"
-#include "monotime.h"
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "GDrawIntf.h"
-#include "rrcaps.h"
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class GradFillAttribute;
 class BitmapFillAttribute;

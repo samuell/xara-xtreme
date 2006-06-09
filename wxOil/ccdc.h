@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CCDC
 #define	INC_CCDC
 
-#include "rendtype.h"
-#include "doccoord.h"
+//#include "rendtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CCDCListItem : public ListItem
 {

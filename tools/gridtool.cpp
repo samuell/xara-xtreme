@@ -101,33 +101,33 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
-#include "range.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"
 //#include "simon.h"
 //#include "viewrc.h"
-#include "errors.h"
-#include "docview.h"
-#include "cursor.h"
-#include "rndrgn.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 #include "osrndrgn.h"
 //#include "resource.h"
 //#include "barsdlgs.h"
 #include "paper.h"
-#include "node.h"
-#include "document.h"
-#include "undoop.h"
-#include "bars.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilfiles.h"
 #include "camelot.h"
 #include "mainfrm.h"
-#include "convert.h"
-#include "units.h"
-#include "msg.h"
-#include "opdesc.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cutop.h"
 #include "progress.h"
 #include "bubbleid.h"

@@ -108,9 +108,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "plugmngr.h"		// main plug-in manager
 #include "bfxitem.h"		// useful Bfx plug-in related items
-#include "app.h"			// GetApplication()
+//#include "app.h"			// GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "bitmap.h"			// KernelBitmap
+//#include "bitmap.h"			// KernelBitmap - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "simon.h"			// _R(IDS_NO_DOC) _R(IDS_NO_OBJECTS_SELECTED)
 //#include "nodebmp.h"		// NodeBitmap

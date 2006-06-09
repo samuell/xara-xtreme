@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_WEBADDRESS
  
 #include "webflags.h"	//Class WebCorrectFlags
-#include "pathname.h"	//Class PathName
+//#include "pathname.h"	//Class PathName - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /*********************************************************************************************
 

@@ -102,14 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "brushref.h"
 #include "nodebldr.h"
-#include "docrect.h"
-#include "doccoord.h"
-#include "fillval.h"
-#include "fillattr.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebldr.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "nodecomp.h"
+//#include "nodecomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gblend.h"
 #include "nodeblnd.h"
 #include "nodeclip.h"

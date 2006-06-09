@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BASEBAR
 #define INC_BASEBAR
 
-#include "dockbar.h" 
-#include "bars.h"
+//#include "dockbar.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 #ifndef WIN32

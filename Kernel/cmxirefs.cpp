@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "riffform.h"
-#include "ccfile.h"
-#include "document.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
 #include "collist.h"
 

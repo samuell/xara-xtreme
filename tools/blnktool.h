@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLANKTOOL
 #define INC_BLANKTOOL
 
-#include "tool.h"
-#include "doccoord.h"
-#include "bars.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Cursor;
 class Spread;

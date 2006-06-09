@@ -104,12 +104,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 
-#include "attr.h"
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "userattr.h"
-#include "ink.h"
-#include "fillattr.h"
-#include "attrmgr.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
 #include "pathstrk.h"
 

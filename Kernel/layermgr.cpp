@@ -105,24 +105,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Include files 
 #include "camtypes.h"
 #include "layermgr.h"
-#include "fixst256.h"
-#include "ensure.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mainfrm.h" 
 #include "infobar.h" 
 //#include "simon.h"
 //#include "mario.h"
-#include "errors.h"
-#include "document.h"
-#include "docview.h"
-#include "spread.h"
-#include "ink.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 //#include "sliceres.h" // for the resource id move to active layer
 #include "objchge.h" // for the allow op flags
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "will2.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

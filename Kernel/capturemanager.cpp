@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //
 
 #include "camtypes.h"
-#include "capturemanager.h"
+//#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 #include "clipattr.h"	// so we know what a ClipRegionAttribute is.
 

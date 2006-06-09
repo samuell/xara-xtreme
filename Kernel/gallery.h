@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #if FALSE
 // GALLERIES ARE DEFUNCT - SEE SuperGallery INSTEAD
 
-#include "bars.h"
-#include "document.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ordlist.h"
 
 

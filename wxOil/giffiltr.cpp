@@ -102,16 +102,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "giffiltr.h"
 //#include "andy.h"
-#include "oilfltrs.h"
-#include "app.h"
-#include "dibutil.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndbmp.h"
 #include "nodebmp.h"
 #include "bmpfiltr.h"
 #include "progress.h"
 #include "oilbitmap.h"	// Windows specific bitmap information
-#include "docview.h"	// DocView
-#include "fixmem.h"
+//#include "docview.h"	// DocView - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "richard2.h"	// resource strings _R(IDS_GIFFILTR_FAILED_MASK)
 //#include "accures.h"	// Accusoft filter ids and messages 
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "maskfilt.h"	// MaskedFilter class
 //#include "bmpsdlg.h"
 //#include "frameops.h"	// GIFAnimationExportParam
-#include "spread.h"		// Pasteboard rect
+//#include "spread.h"		// Pasteboard rect - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bmapprev.h"	// tab preview dialog
 #include "palman.h"		// MakePaletteBrowserCompatible
 #include "sprdmsg.h"	// SpreadMsg::ANIMATIONPROPERTIESCHANGED
@@ -132,14 +132,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camdoc.h"
 #include "menuops.h"
 
-#include "outptdib.h"
+//#include "outptdib.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bmapprev.h"
-#include "cxfrec.h"		// for CXaraFileRecord
+//#include "cxfrec.h"		// for CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "mrhbits.h"	//  For CBMPBits::RenderSelectionToBMP
 #include "selall.h"		//  For OPTOKEN_EDITSELECTALL
 #include "bmpprefs.h"
-#include "animparams.h"
+//#include "animparams.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

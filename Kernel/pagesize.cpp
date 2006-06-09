@@ -103,13 +103,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "pagesize.h"
-#include "errors.h"
-#include "units.h"		// units
-#include "convert.h"	// conversion utilities
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h"		// units - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h"	// conversion utilities - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "will2.h"
 
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilfiles.h"
 //#include "nev.h"
 #include <limits.h>		// INT32_MAX 

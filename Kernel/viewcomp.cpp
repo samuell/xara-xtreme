@@ -103,21 +103,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "viewcomp.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "webparam.h"
 //#include "xarprefs.h"
 //#include "webprefs.h"
 #include "bitfilt.h"		// For standard bounds calc routines.
-#include "quality.h"
-#include "docview.h"
-#include "spread.h"
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rechview.h"
 
 #include "zoomops.h"

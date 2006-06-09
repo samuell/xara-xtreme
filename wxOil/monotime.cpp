@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //*/
 
 #include "camtypes.h"
-#include "monotime.h"
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

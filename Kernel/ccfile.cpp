@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 //#include "costream.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "zstream.h"
 // WEBSTER-Martin-29/12/96 no accusoft stuff
 #ifndef WEBSTER
@@ -115,8 +115,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif //WEBSTER
 
 #include <errno.h>
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "mario.h"
 //#include "nev.h"

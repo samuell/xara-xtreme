@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGSCANF
 #define INC_SGSCANF
 
-#include "thumb.h"
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class PathName;
 class SuperGallery;

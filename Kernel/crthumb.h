@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CREATEFONTTHUMBNAILS
 #define INC_CREATEFONTTHUMBNAILS
 
-#include "ops.h" //class Operation
+//#include "ops.h" //class Operation - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class SGDisplayPreviewFonts;
 

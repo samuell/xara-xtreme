@@ -103,20 +103,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "vstate.h"
-#include "errors.h"
-#include "doccoord.h"
-#include "oilcoord.h"
-#include "docview.h"
-#include "document.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
-#include "rndrgn.h"
-#include "app.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 #include "ccdc.h"
 #include "chapter.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "scanrr.h"
 #include "grndbmp.h"
 #include "maskedrr.h"
@@ -138,7 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ndcchbmp.h"
 #include "nodebev.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "prnmks.h"
 //#include "prnmkcom.h"
 

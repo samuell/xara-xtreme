@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_MODLIST
 
 
-#include "list.h"
-#include "listitem.h"
-#include "ccobject.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Module;		// #include "module.h"
 class OILModule; 	// #include "oilmods.h"

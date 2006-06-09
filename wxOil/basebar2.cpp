@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 //#include "dlgbar.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
 #include "oilmods.h"
 #include "dlgmgr.h"
@@ -110,26 +110,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "childbar.h"
 //#include "bbutdef.h"
 //#include "ctrlhelp.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 //#include "ctl3d.h"
 //#include "fonts.h"
 #include "gallery.h"
-#include "sgallery.h"
-#include "tool.h"
-#include "app.h"
-#include "docview.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 #include "keypress.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "selector.h"
 //#include "reshelp.h"
 //#include "dragmgr.h"
 //#include "custmsg.h"
-#include "cursor.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 //#include "phil.h"
-#include "convert.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 //#include "will2.h"						// for HideDisableGadgetAndResuffleBar and
 										// ShowEnableGadgetAndResuffleBar

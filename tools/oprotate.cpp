@@ -103,10 +103,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "oprotate.h"
 
-#include "app.h"
-#include "docview.h"
-#include "ink.h"
-#include "trans2d.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rik.h"
 #include "selector.h"
 //#include "clikdrag.h"

@@ -114,8 +114,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_SGBASE
 
 
-#include "sgallery.h"
-#include "sgtree.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 class TEMPLATE;		// TO DO: You may or not need this

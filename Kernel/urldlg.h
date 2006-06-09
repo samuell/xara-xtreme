@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_URLIMPORTDLG
 #define INC_URLIMPORTDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "webaddr.h"
 
 /********************************************************************************************

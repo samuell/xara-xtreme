@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FLASH_EXPORT_DC
 
 #include "kerneldc.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "swfshape.h"
 #include "swfbitmp.h"

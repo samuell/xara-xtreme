@@ -105,13 +105,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <iostream>
 #include <stdarg.h>
 
-#include "basestr.h"
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "fixmem.h"				// for CCMalloc, etc...
+//#include "fixmem.h"				// for CCMalloc, etc... - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "reshelp.h"
 //#include "oilmods.h"			// for OILModule::xx
 #if !defined(EXCLUDE_FROM_XARLIB)
-#include "convert.h"			// for MakePercent
+//#include "convert.h"			// for MakePercent - in camtypes.h [AUTOMATICALLY REMOVED]
 #endif
 
 //#include "Res/UKEnglish/stringtbl.h"

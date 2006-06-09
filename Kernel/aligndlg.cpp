@@ -104,24 +104,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 DECLARE_SOURCE("$Revision$");
 
 #include "camelot.h"
-#include "dlgtypes.h" 
+//#include "dlgtypes.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aligndlg.h" 
 //#include "mario.h"
 //#include "ed.h"
 //#include "eddlg.h"
-#include "document.h"
-#include "app.h"
-#include "trans2d.h"
-#include "fixmem.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rnddlgs.h"
 #include "ccdc.h"
 #include "progress.h"
 #include "grnddib.h"
-#include "fillval.h"
-#include "spread.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "dialogop.h"
-#include "selmsg.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
 #include "dlgcol.h"
 //#include "barsdlgs.h"

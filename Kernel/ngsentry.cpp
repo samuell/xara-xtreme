@@ -109,12 +109,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "opbarcreation.h"
 
-#include "selop.h"
-#include "cxfdefs.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
-#include "attrval.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

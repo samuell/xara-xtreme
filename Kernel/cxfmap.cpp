@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfmap.h"
 
 CC_IMPLEMENT_DYNAMIC(CXaraFileMapTagToHandler,CCObject);

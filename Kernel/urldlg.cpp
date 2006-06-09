@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "urlres.h"		//URL dialog resources
 //#include "resimmap.h"	//URL import string resources
 
-#include "msg.h"
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "xshelpid.h"	//For the help ID
 

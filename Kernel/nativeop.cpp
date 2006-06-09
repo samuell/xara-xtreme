@@ -102,14 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "nativeop.h"
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "native.h"		// proper native filter designed by us
 #include "nativeps.h"	// old native filter based on eps, used for version 1.1  
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "nev.h"
 //#include "rik.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filedlgs.h"
 //#include "oilfiles.h"
 #include <stdlib.h>
@@ -117,12 +117,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "barsdlgs.h"
 #include "webop.h"
 //#include "filtrres.h"	// New native filter strings
-#include "fixmem.h"		// CCFree
+//#include "fixmem.h"		// CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 
 #include "camdoc.h"		// for CCamDoc::GetTemplateFilename
 //#include "justin3.h"	// for _R(IDS_SAVE_AS_DEFAULT_EMBEDDED)
-#include "app.h"		// GetApplication
+//#include "app.h"		// GetApplication - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgliboil.h"	// for SGLibOil::FileExists
 //#include "resimmap.h"	// for various resources
 

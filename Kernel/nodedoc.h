@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEDOC
 #define	INC_NODEDOC
 
-#include "npaper.h"
+//#include "npaper.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class BaseDocument;
 

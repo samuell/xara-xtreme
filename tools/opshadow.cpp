@@ -110,14 +110,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 // Code headers
-#include "app.h"
-#include "document.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeshad.h"
 #include "progress.h"
 #include "objchge.h"
 #include "nodetxts.h"
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillattr2.h"
 
 // Resource headers
@@ -128,11 +128,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 
 #include "opbevel.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "shadtool.h"
 #include "shadinfo.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeblnd.h"
 #include "nodebldr.h"
 #include "blobs.h"

@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_FEATHERSIZE		_T("FeatherSize")
 #define OPTOKEN_FEATHERPROFILE	_T("FeatherProfile")
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "biasgdgt.h"		// for CBiasGainGadget
-#include "node.h"			// NodeHidden
+//#include "node.h"			// NodeHidden - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opliveeffects.h"
 #include "effects_stack.h"
 

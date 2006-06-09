@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "coplfilr.h"
 
-#include "app.h"
-#include "ccfile.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cdrcol.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "optsunit.h"
 #include "progress.h"
 #include "scunit.h"

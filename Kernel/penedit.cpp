@@ -104,17 +104,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "penedit.h"
 //#include "mike.h"
 #include "osrndrgn.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "document.h"
-#include "ops.h"
-#include "selop.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathedit.h"
-#include "app.h"
-#include "stockcol.h"
-#include "spread.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNCREATE( OpPenHandles, Operation )
 CC_IMPLEMENT_DYNCREATE( OpPenDragBlobs, OpPenHandles )

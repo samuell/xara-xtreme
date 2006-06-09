@@ -115,17 +115,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxtl.h"
 #include "nodetxts.h"
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "camfiltr.h"
-#include "cxfrec.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftext.h"
 #include "keypress.h"
 #include "vkextra.h"
-#include "becomea.h"
-#include "group.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 //#include "filtrres.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /***********************************************************************************************

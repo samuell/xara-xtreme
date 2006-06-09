@@ -99,17 +99,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfile.h"
-#include "cxfdefs.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #if !defined(EXCLUDE_FROM_XARLIB)
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #endif
 
 //#include "ccpanose.h"
-#include "fixmem.h"
-#include "paths.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "unicdman.h"
 
 #include "fttyplis.h"

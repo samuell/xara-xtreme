@@ -100,13 +100,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "outptdib.h"
-#include "ensure.h"
-#include "dibutil.h"
-#include "fixmem.h"
-#include "errors.h"
+//#include "outptdib.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "andy.h"
-#include "dibconv.h"
+//#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"		// For hourglass stuff
 #include "bmapprev.h"
 

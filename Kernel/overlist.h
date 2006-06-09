@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef OVERRIDELIST
 #define OVERRIDELIST
 
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "overitem.h"	//OverrideListItem
 
 /***********************************************************************************************

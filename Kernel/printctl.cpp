@@ -102,15 +102,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcontx.h"
 #include "colourix.h"
 #include "colormgr.h"
 #include "colplate.h"
 #include "camelot.h"
-#include "convert.h"
-#include "document.h"
-#include "docview.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "justin2.h"
 //#include "markn.h"
 #include "osrndrgn.h"
@@ -119,11 +119,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "printctl.h"
 #include "prntview.h"
 //#include "resource.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
-#include "view.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prnmks.h"
 //#include "isetres.h"
 

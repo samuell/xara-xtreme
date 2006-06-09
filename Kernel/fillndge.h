@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FILLNDGE
 
 #include "tranlate.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_FILLNUDGE 		_T("FillNudge")
 

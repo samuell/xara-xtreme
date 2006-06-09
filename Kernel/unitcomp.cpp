@@ -110,20 +110,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "resource.h"	// _R(IDS_OUT_OF_MEMORY)
 
-#include "basedoc.h"
-#include "app.h"
+//#include "basedoc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	// TAG_DEFINERGBCOLOUR TAG_DEFINECOMPLEXCOLOUR
-#include "cxfdefs.h"	// SIZE_DEFINERGBCOLOUR SIZE_DEFINECOMPLEXCOLOUR
+//#include "cxfdefs.h"	// SIZE_DEFINERGBCOLOUR SIZE_DEFINECOMPLEXCOLOUR - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfcols.h"	// REF_DEFAULTCOLOUR_TRANSPARENT
 #include "cxfile.h"		// CXF_UNKNOWN_SIZE
 //#include "expcol.h"		// ExportedColours handling class
-#include "cxfrec.h"		// CXaraFileRecord handler
+//#include "cxfrec.h"		// CXaraFileRecord handler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfunits.h"	// default export unit types
 //#include "filtrres.h"	// _R(IDS_NATIVE_UNITSWARNING)
 
-#include "unittype.h"
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

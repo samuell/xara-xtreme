@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_COLPLATE
 #define INC_COLPLATE
 
-#include "doccolor.h"
-#include "listitem.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class IndexedColour;
 

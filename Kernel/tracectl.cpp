@@ -104,20 +104,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tracectl.h"
 #include "tracergn.h"
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "nodebmp.h"
 #include "bitmpinf.h"
 #include "bfxalu.h"
 #include "bfxpixop.h"
 #include "nodepath.h"
 #include "lineattr.h"
-#include "group.h"
-#include "fillval.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilprog.h"
 //#include "andy.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fitcurve.h"
 #include "pathproc.h"
 #include "progress.h"

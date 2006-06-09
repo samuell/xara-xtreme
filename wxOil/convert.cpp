@@ -112,13 +112,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Better find out about the string class and all the other types and stuff
 
 #include "camtypes.h"							// Good ol' Camtypes
-#include "ccmaths.h"							// 64 bit muldiv
-#include "convert.h"							// function prototypes
+//#include "ccmaths.h"							// 64 bit muldiv - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h"							// function prototypes - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"								// For unit constants
-#include "node.h"
-#include "spread.h"
-#include "units.h"
-#include "app.h"								// Camelot object
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h"								// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "peter.h"								// _R(IDS_MEMORYFORMAT_BYTE) ...
 #include "localenv.h"							// for locale string settings
 //#include "richard3.h"							// more naughty inline strings...

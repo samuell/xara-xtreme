@@ -110,17 +110,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
       
 
 #include "camtypes.h"
-#include "selstate.h"  
-#include "ensure.h"  
-#include "docview.h"
-#include "range.h" 
-#include "app.h" 
-#include "node.h"                    
-#include "ink.h"
+//#include "selstate.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h"                     - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-#include "spread.h"
-#include "fillattr.h"	// for AttrFillGeometry::LastRenderedMesh
-#include "tool.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h"	// for AttrFillGeometry::LastRenderedMesh - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 
 DECLARE_SOURCE("$Revision$");     

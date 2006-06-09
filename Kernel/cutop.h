@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CUTOP
 #define INC_CUTOP
 
-#include "selop.h"        
-#include "trans2d.h"
+//#include "selop.h"         - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class DocCoord;
 

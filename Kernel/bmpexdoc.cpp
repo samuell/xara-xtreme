@@ -100,14 +100,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmpexdoc.h"
 #include "layer.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will2.h"		// For layer name
 #include "nodebmp.h"
 #include "bitmpinf.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "lineattr.h"	// AttrStrokeColour
-#include "fillattr.h"	// AttrFillGeometry
+//#include "fillattr.h"	// AttrFillGeometry - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

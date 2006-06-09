@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BARCREATIONDLG
 #define INC_BARCREATIONDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_BARCREATIONDLG _T("BarCreationDlg")
 #define OPTOKEN_BARSTATESDLG _T("BarStatesDlg")

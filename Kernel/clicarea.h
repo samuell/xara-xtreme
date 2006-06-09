@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define IMAGEMAPCLICKABLEAREA
 
 #include "overitem.h"
-#include "docrect.h"
-#include "paths.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "flatfact.h"
 
 class CCLexFile;

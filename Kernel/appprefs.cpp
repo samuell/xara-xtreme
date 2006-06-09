@@ -105,18 +105,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"		// Camelot object
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"	// _R(IDD_BARCONTROLSTORE), _R(IDC_BTN_UNITSETUPDLG) ...
 //#include "barsdlgs.h"	// _R(IDD_BARCONTROLSTORE), _R(IDC_BTN_UNITSETUPDLG) ...
 //#include "simon.h"		// _R(IDS_UNIT_DLG_OPEN) ...
 //#include "mario.h"		// _R(IDS_FILEOPTIONS) ...
-#include "dialogop.h"	// DialogOp header
+//#include "dialogop.h"	// DialogOp header - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"		// _R(IDS_UTILOPTIONS) ...
 //#include "markn.h"		// unit dialog box strings (_R(IDS_UNITDLG))
 //#include "optsres.h"	// error strings
-#include "units.h"		// units
-#include "docview.h"
-#include "document.h"
+//#include "units.h"		// units - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "printmsg.h"
 //#include "printdlg.h"
 #include "camelot.h"

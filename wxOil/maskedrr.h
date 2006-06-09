@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_MASKEDRR
 
 #include "grndbmp.h"
-#include "rrcaps.h"
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class FlatTranspFillAttribute;
 class StrokeTranspAttribute;

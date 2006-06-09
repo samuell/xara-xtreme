@@ -102,11 +102,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "basedoc.h"
+//#include "basedoc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcomp.h"
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dumbnode.h"
 //#include "jason.h"
 #include "nodedoc.h"

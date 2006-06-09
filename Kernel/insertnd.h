@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // InsertNode - a node which indicates the current insertion position in each document
 
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************
 >	class InsertionNode : public Node

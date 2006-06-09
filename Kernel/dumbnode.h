@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // A collection of nodes which do nothing but sit there.
 
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************
 >	class StartDocument : public Node

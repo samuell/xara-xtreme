@@ -226,17 +226,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccpanose.h"
 //#include "fontbase.h"
 #include "fontman.h"
 
 #include "cxftags.h"
-#include "cxfrec.h"
-#include "camfiltr.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "filtrres.h"	// _R(IDS_NATIVE_FONTWARNING)
 
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontcomp.h"
 
 #include "ttfonts.h"

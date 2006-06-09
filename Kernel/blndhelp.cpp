@@ -98,19 +98,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // ppbevel - Definition of bevel BevelPathProcessor class
 
 #include "camtypes.h"
-#include "ink.h"
-#include "paths.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "blendatt.h"
 #include "blndhelp.h"
 #include "attrmap.h"
 #include "nodebldr.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 #include "ndbldpth.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gblend.h"
-#include "nodecomp.h"
+//#include "nodecomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fthrattr.h"
 
 CC_IMPLEMENT_DYNAMIC(BlendHelpers, CCObject);

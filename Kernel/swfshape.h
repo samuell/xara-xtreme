@@ -98,8 +98,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FLASH_SHAPE_RECORD
 #define INC_FLASH_SHAPE_RECORD
 
-#include "ccobject.h"
-#include "doccolor.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define SWF_MAX_COLOURS				8
 #define SWF_MAX_PIXEL_DIMENSION		4350		// maximum size of an object in pixels. Actually this 

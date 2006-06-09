@@ -104,14 +104,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragmgr.h"
 #include "keypress.h"
-#include "oilcoord.h"
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
-#include "cursor.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gbrush.h"
 #include "grndrgn.h"
 

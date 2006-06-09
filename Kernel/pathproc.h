@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PATHPROC
 #define INC_PATHPROC
 
-#include "paths.h"
-#include "ccobject.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define PROC_CACHE_SIZE 0x1000
 

@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CONTEXTMENU
 #define INC_CONTEXTMENU
 
-#include "doccoord.h"
-#include "clikmods.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class MenuItem;
 class Spread;

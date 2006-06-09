@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 DECLARE_SOURCE("$Revision$");
 
 #include "camelot.h"
-#include "dlgtypes.h" 
+//#include "dlgtypes.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "finfodlg.h" 
 
 //#include "mario.h"				// for string resource
@@ -113,16 +113,16 @@ DECLARE_SOURCE("$Revision$");
 //#include "reshlpid.h"			// for help resources
 //#include "peterdlg.h"			// for dialogue resources
 
-#include "document.h"  			// for reading and setting document attributes
+//#include "document.h"  			// for reading and setting document attributes - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "localenv.h"			// for locale string settings
-#include "node.h"				// for tree scanning calls
-#include "spread.h"				// for Spread
+//#include "node.h"				// for tree scanning calls - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h"				// for Spread - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"				// for Page
-#include "group.h"				// for NodeGroup
+//#include "group.h"				// for NodeGroup - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"			// for NodeBitmap
 #include "bitmpinf.h"			// for BitmapInfo
-#include "app.h"				// for GetApplication
-#include "convert.h"			// for StringToBytes and BytesToString 
+//#include "app.h"				// for GetApplication - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h"			// for StringToBytes and BytesToString  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"			// for TextStory node.
 #include "fontlist.h"			// for the document font list
 #include "progress.h"
@@ -133,7 +133,7 @@ DECLARE_SOURCE("$Revision$");
 //#include "richard.h"
 
 //#include "will2.h"
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ophist.h"
 
 // Required for the document font combo box handling

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OBJCHANGE
 #define INC_OBJCHANGE
 
-#include "node.h"	// for ChangeCode enum
+//#include "node.h"	// for ChangeCode enum - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Node;
 class UndoableOperation;

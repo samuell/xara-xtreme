@@ -101,11 +101,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODESHAP
 #define INC_NODESHAP
 
-#include "ink.h"
-#include "tranform.h"
-#include "paths.h"
-#include "doccoord.h"
-#include "docrect.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class RenderRegion;
 class Spread;

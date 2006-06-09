@@ -101,19 +101,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "pathstrk.h"
 
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathtrap.h"
 #include "valfunc.h"
 
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colormgr.h"
 #include "dbugtree.h"
-#include "fillattr.h"		// For debug/test code 
-#include "group.h"
+//#include "fillattr.h"		// For debug/test code  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "nodepath.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 CC_IMPLEMENT_MEMDUMP(PathStroker, CC_CLASS_MEMDUMP)

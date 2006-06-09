@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_NODEBMP
 
 
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "noderect.h"
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "xpehost.h"	// For OPTOKEN_XPE_EDIT
 
 class SelOperation;

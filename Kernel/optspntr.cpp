@@ -110,9 +110,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "prefsdlg.h"	// dialog/gadget ids
 //#include "optsres.h"	// error strings
 #include "optspntr.h"
-#include "app.h"		// Camelot object
-#include "units.h"		// units
-#include "binds.h"		// ButtonFunction
+//#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h"		// units - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "binds.h"		// ButtonFunction - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(PointersTab, OptionsTabs)   
 

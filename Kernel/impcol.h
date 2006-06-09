@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_IMPCOL
 #define INC_IMPCOL
 
-#include "list.h"
-#include "listitem.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
-#include "colmodel.h"
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class ColourListComponent;
 

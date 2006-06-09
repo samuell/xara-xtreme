@@ -103,15 +103,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "webattr.h"
 //#include "hotlink.h"
 //#include "mario.h"		//For _R(IDE_NOMORE_MEMORY)
-#include "attrmgr.h"
-#include "app.h"
-#include "fixed16.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixed16.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
-#include "ink.h"
-#include "camfiltr.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 #include "rechattr.h"	// Record handling classes for attributes
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resimmap.h"	//_R(IDS_TAG_WEBADDRESS)
 DECLARE_SOURCE("$Revision$");
 

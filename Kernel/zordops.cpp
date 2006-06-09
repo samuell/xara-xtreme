@@ -139,20 +139,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h" 
 #include "zordops.h"
 //#include "simon.h" 
-#include "errors.h" 
-#include "ensure.h"   
-#include "docview.h" 
-#include "opdesc.h"
+//#include "errors.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "app.h"
-#include "ink.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 //#include "markn.h"
 #include "bubbleid.h"
 
 //#include "prevwres.h"	// _R(IDS_COMBINELAYERSTOFRAMELAYER)
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "layergal.h"	// LayerStateAction
 #include "sprdmsg.h"	// SpreadMsg::SpreadReason::LAYERCHANGES
 #include "layermsg.h"	// UPDATE_ACTIVE_LAYER

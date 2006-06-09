@@ -99,10 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // 2D Matrix transformation classes
 
 #include "camtypes.h"
-#include "docrect.h"
-#include "matrix.h"
-#include "trans2d.h"
-#include "errors.h"
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(Trans2DMatrix, TransInvertable)
 

@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "XaDrwOld.h"		// GDraw device context funcitons
 //#include "ndcchbmp.h"		// NodeCacheBitmap
 #include "oilbitmap.h"		// WinBitmap class
-#include "capturemanager.h"	// CaptureManager
+//#include "capturemanager.h"	// CaptureManager - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "prntview.h"		// for PrintView. I'm only temporary - delete me when done with.
 

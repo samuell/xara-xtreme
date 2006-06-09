@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_EXPCOL
 #define INC_EXPCOL
 
-#include "list.h"
-#include "listitem.h"
-#include "colmodel.h"	// PColourRGBT
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h"	// PColourRGBT - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class ColourListComponent;
 class IndexedColour;

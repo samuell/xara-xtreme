@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dlgevt.h"
 #include "wxmousestate.h"
 #include "dlgmgr.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNCREATE(ControlList, CCObject)
 ControlList * ControlList::m_pControlList = NULL;

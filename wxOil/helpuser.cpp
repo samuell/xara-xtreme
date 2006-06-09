@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <stdlib.h>
 #include "camelot.h"
 //#include "mainfrm.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "errorbox.h"
 
 #include "helpuser.h"

@@ -102,14 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "freeeps.h"
-#include "oilfltrs.h"
-#include "filters.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ben.h"
-#include "fixstr64.h"
+//#include "fixstr64.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcomp.h"
 #include "colourix.h"
 #include "collist.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 
 DECLARE_SOURCE("$Revision$");

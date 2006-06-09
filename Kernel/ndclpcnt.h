@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NDCLPCNT
 #define INC_NDCLPCNT
 
-#include "group.h"		// derivation from NodeGroup
-#include "cxfrech.h"	// derivation from CamelotRecordHandler
+//#include "group.h"		// derivation from NodeGroup - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h"	// derivation from CamelotRecordHandler - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "opclip.h"		// for reference to OpApplyClipView
 

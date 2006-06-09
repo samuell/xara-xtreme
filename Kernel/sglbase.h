@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGLBASE
 #define INC_SGLBASE
 
-#include "sgallery.h"
-#include "sgtree.h"
-#include "msg.h"
-#include "thumb.h"
-#include "sgscan.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "inetop.h"
 //#include "stl.h"
 #include <list>

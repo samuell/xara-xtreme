@@ -101,24 +101,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // The implementation of the NodeRenderableInk attribute optimisation routines 
 
 #include "camtypes.h"
-#include "node.h"
-#include "nodeattr.h"
-#include "list.h"
-#include "listitem.h"
-#include "errors.h"
-#include "ensure.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objreg.h"
 #include "ndoptmz.h"
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodedoc.h"
 #include "ndmldgrp.h"
 #include "nodemldr.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // for the template attribute
-#include "cxfrech.h"
-#include "attrval.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h" 
 

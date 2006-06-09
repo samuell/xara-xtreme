@@ -105,16 +105,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "prntview.h"
 
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 #include "ccdc.h"
-#include "document.h"
-#include "rndrgn.h"
-#include "spread.h"
-#include "node.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "princomp.h"
 #include "printctl.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prncamvw.h"
 #include "vstate.h"
 

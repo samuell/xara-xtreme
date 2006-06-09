@@ -104,10 +104,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilmods.h"
 #include "module.h"
 #include "modlist.h"
-#include "tool.h"
-#include "ensure.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "viewrc.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "zoomtool.h"
 //#include "pushtool.h"

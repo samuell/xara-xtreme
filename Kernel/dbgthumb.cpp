@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //GTODO: Tidy up these includes
 #include "camtypes.h"
 
-#include "pathname.h"
-#include "app.h"			//For Camelot.GetFilterManager()
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h"			//For Camelot.GetFilterManager() - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h"		//For _R(IDD_BARCONTROLSTORE)
 
 #include "urlimp.h"

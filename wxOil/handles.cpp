@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "handles.h"						// include the header file
-#include "ensure.h"
-#include "memblk.h"
+//#include "handles.h"						// include the header file - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "memblk.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /*==========================================================================================*/

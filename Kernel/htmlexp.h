@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_HTMLEXPORTFILTERS
 #define INC_HTMLEXPORTFILTERS
 
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CCLexFile;
 

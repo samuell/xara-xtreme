@@ -99,10 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "layer.h"
-#include "group.h"
-#include "colmodel.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "combshps.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 
 #include "cmxform.h"

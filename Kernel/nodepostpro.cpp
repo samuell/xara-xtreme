@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
-#include "node.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepostpro.h"
 #include "attrmap.h"
 
@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 //#include "mario.h"
 #include "lineattr.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE( "$Revision$" );
 

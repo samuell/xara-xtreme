@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 //#include "control.h"
-#include "group.h"
-#include "cxfrec.h"		// CXaraFileRecord
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h"		// CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "clipattr.h"
 
 class ContextMenu;

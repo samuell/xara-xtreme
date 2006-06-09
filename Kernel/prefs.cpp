@@ -103,14 +103,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "prefs.h"
+//#include "prefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilprefs.h"
-#include "ensure.h"
-#include "basestr.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "justin.h"
 //#include "optsres.h"	// general options based resources
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 static BOOL PrefsInitedOk = FALSE;
 

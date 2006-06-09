@@ -109,7 +109,7 @@ DECLARE_SOURCE( "$Revision$" );
 
 #include "ftfonts.h"
 #include "fontman.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "textfuns.h"
 #include "oilpanse.h"
 

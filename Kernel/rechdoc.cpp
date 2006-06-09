@@ -103,24 +103,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include <libintl.h>
 
 //#include "selop.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "layer.h"
 #include "grid.h"
 #include "chapter.h"
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "camfiltr.h"	// BaseCamelotFilter
+//#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "unitcomp.h"	// UnitListComponent
 #include "guides.h"		// NodeGuideline
 
 #include "ngsentry.h"	// NodeSetSentinel & NodeSetProperty
-#include "cxfrech.h"	// TemplateAttribute
-#include "attrval.h"
+//#include "cxfrech.h"	// TemplateAttribute - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 #include "nodetxts.h"	// For CC_RUNTIME_CLASS(BaseTextClass)
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "will2.h"
 //#include "simon.h"		// _R(IDS_LAYER_DESCRS)

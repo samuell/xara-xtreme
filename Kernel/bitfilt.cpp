@@ -102,11 +102,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "bitfilt.h"
 
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"	// _R(IDS_OUT_OF_MEMORY)
 //#include "camvw.h"								// sadly
 #include "layer.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 //#include "tim.h"
 #include "grndbmp.h"
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "extfilts.h"	// Accusoft filters
 #endif //WEBSTER
 //#include "selop.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpexdoc.h"
 #include "impexpop.h"
 //#include "will3.h"		// for _R(IDS_GENOPTPALMSGID)
@@ -136,7 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmapprev.h"
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "filtimag.h"	//The imagemap filter class
 #include "filtrmgr.h"	//The Filter Manager - used to find the imagemap filter

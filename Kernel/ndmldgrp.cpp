@@ -117,15 +117,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tim.h"
 #include "nodepath.h"
 #include "nodebmp.h"
-#include "matrix.h"
-#include "trans2d.h"
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "aw_eps.h"
 
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "webster.h"
 #include "taglists.h"
 

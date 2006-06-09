@@ -104,31 +104,31 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <strstrea.h>
 #include "pathnmex.h" 
 #include "sgscanf.h"
-#include "sgscan.h"
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "galstr.h"
-#include "pathname.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sginit.h"
 #include "sglcart.h"	// This .cpp file's corresponding header
 #include "sglib.h"
-#include "sgtree.h"
-#include "thumb.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "thumbmsg.h"
 #include "grnddib.h"
 //#include "galres.h"
 //#include "richard.h"
 //#include "simon.h"		// _R(IDC_CONTINUE)
 #include "sgliboil.h"
-#include "errors.h"
-#include "fixmem.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filedlgs.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "camelot.h"
 
 #include "dragmgr.h"
 //#include "viewrc.h"		// FOR _R(IDC_CANDROPONPAGE)
 //#include "resource.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "spread.h"
 
 #include "sgrmfile.h"	// For Lib settings

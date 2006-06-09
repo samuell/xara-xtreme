@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_IMAGEMAPFILTERDLG
 #define INC_IMAGEMAPFILTERDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filtimop.h"
 #include "bmpprefs.h"	//For SelectionType
 

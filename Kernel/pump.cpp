@@ -99,15 +99,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // */ 
 
 #include "camtypes.h"
-#include "pump.h" 
-#include "ensure.h"	
-#include "errors.h"
-#include "list.h"
-#include "listitem.h"
-#include "msg.h"
-#include "document.h"
-#include "docview.h"
-#include "app.h"
+//#include "pump.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"	 - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "comattrmsg.h"
 #include "optsmsgs.h"
 #include "colmsg.h"

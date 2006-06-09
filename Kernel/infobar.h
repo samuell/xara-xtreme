@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_INFOBAR
 #define INC_INFOBAR
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 #define OPTOKEN_INFOBAR _T("InfoBar")       

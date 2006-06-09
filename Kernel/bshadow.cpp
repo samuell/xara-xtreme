@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 #include "bshadow.h"
-#include "gconsts.h"
-#include "dibutil.h"
-#include "bitmap.h"
-#include "fillattr.h"
+//#include "gconsts.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdraw.h"
 
 #include "camprofile.h"

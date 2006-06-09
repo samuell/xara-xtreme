@@ -101,20 +101,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ndbrshmk.h"
 #include "attrmap.h"
 //#include "progress.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ndbrshpt.h"
 #include "nodebrsh.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndbmp.h"
 //#include "camvw.h"
 //#include "scrcamvw.h"
 #include "grndrgn.h"
 //#include "grndbrsh.h"
-#include "quality.h"
-#include "bitmap.h"
-#include "quality.h"
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
 
 class QualityAttribute;

@@ -111,8 +111,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colormgr.h"
 #include "devcolor.h"
 #include "dlgmgr.h"
-#include "docview.h"
-#include "errors.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 
 

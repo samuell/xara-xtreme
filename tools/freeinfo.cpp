@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "freehand.h"
 #include "freeinfo.h"
 #include "dlgmgr.h"
-#include "range.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "barsdlgs.h"
 //#include "rikdlg.h"
@@ -128,8 +128,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brpress.h"
 #include "valfunc.h"
 //#include "will.h" // for the 'many' string
-#include "attrmgr.h"
-#include "docvmsg.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docvmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colmsg.h"
 #include "brshattr.h"
 

@@ -102,16 +102,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGFRAME
 #define INC_SGFRAME
 
-#include "sgallery.h"
-#include "sgtree.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "layergal.h"
 
 #include "sglayer.h"
 #include "bmpprefs.h"  // For PALETTE Type
-#include "quality.h"
-#include "paldefs.h"
-#include "animparams.h"
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paldefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "animparams.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class DocView;
 class UndoableOperation;

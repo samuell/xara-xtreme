@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "sgdrag.h"
 #include "dragbmp.h"
-#include "dragtrgt.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class SGNameItem;
 class DragTarget;

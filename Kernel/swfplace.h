@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FLASH_PLACE_OBJECT
 #define INC_FLASH_PLACE_OBJECT
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define FLASH_FIRST_ID	1						// The ID of the first object to render.
 

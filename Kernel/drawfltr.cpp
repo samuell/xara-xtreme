@@ -106,25 +106,25 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <afxdlgs.h>
 
-#include "pathname.h"
-#include "document.h"
-#include "docview.h"
-#include "errors.h"
-#include "ensure.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "paper.h"
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 #include "lineattr.h"
 #include "progress.h"			// for the progress indicator
 //#include "tim.h"
-#include "fixmem.h"
-#include "oilfltrs.h"
-#include "group.h"
-#include "spread.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "trans2d.h"
-#include "attrmgr.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 DECLARE_SOURCE("$Revision$");

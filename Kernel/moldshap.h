@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MOULDSHAPES
 #define INC_MOULDSHAPES
 
-#include "paths.h"
-#include "binds.h"
-#include "tranform.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodemold.h"
 
 class KernelBitmap;

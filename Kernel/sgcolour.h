@@ -102,12 +102,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "coplfilr.h"		// For PalettePrefix
-#include "doccolor.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragcol.h"
-#include "pathname.h"
-#include "sgallery.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgdrag.h"
-#include "sgtree.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 // Prototypes

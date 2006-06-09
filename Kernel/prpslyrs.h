@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PROPERTIESLAYERS
 #define INC_PROPERTIESLAYERS
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "property.h"
 #include "layerprp.h"
 

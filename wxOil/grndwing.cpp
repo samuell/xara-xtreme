@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndwing.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilmods.h"
 #include "camelot.h"
 

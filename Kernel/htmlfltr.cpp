@@ -98,19 +98,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h" 
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "filtrres.h"
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "htmlfltr.h"
 #include "htmllist.h"
 #include "backgrnd.h"
 //#include "htmldwnd.h"
 #include "fileutil.h"
-#include "fixmem.h"		// CCMalloc, CCFree
-#include "spread.h"		// See FindFirstImportPosition below
+//#include "fixmem.h"		// CCMalloc, CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h"		// See FindFirstImportPosition below - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cutop.h"		// To get the duplication distance
 #include "webaddr.h"	// class WebAddress
-#include "docview.h"	//For DocView::FindTopLeftImportPosition
+//#include "docview.h"	//For DocView::FindTopLeftImportPosition - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "resimmap.h"	//For some resources
 

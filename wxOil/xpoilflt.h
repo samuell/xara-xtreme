@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_XPOILFLT
 #define INC_XPOILFLT
 
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "xpfcaps.h"
 #include "xmlutils.h"
 #include "camprocess.h"

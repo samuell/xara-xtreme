@@ -100,9 +100,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define	INC_DLGEVT
 
 #include "drawctl.h"
-#include "ccobject.h"
-#include "dlgtypes.h"
-#include "msg.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ktimer.h"
 
 class	DialogManager;

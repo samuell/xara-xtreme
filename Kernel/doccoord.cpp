@@ -98,18 +98,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "doccoord.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "usercord.h"
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "paper.h"
-#include "xmatrix.h"
-#include "spread.h"
+//#include "xmatrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "oilcoord.h"
-#include "view.h"
-#include "document.h"
+//#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /********************************************************************************************

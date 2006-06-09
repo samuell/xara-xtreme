@@ -111,10 +111,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "optsscal.h"
 #include "optsmsgs.h"
 //#include "app.h"		// Camelot object
-#include "docview.h"
-#include "spread.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "nev.h"
-#include "document.h"	// document object
+//#include "document.h"	// document object - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(ScaleTab, OptionsTabs)   
 			  

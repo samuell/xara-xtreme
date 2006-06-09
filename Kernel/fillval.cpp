@@ -104,24 +104,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "ink.h"
-#include "rndrgn.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 #include "osrndrgn.h"
 #include "macros.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opgrad.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "attrmap.h"
 
 #include "fracfill.h"
-#include "bitmap.h" 	// For Test Only
+//#include "bitmap.h" 	// For Test Only - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"
 #include "oilbitmap.h" 	// For Test Only
-#include "dibutil.h" 	// For Test Only
+//#include "dibutil.h" 	// For Test Only - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "progress.h"
 
@@ -129,12 +129,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "colcontx.h"	// For Test Only
 
 //#include "will.h"		// For bitmap error ID
-#include "monotime.h"	// For Fractal Seed
+//#include "monotime.h"	// For Fractal Seed - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "blendatt.h"
 //#include "jason.h"		// For Default Colour Text IDs
 #include "colormgr.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "nodemold.h"	// For NodeMould definition
 #include "moldpers.h"	// For MouldPerspective definition

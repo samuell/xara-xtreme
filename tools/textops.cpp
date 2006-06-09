@@ -120,38 +120,38 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "markg.h"	
 
 // Code headers
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "clipint.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "invalid.h"
 #include "layer.h"
 #include "nodetext.h"
 #include "nodetxtl.h"
 #include "nodetxts.h"
 #include "objchge.h"
-#include "ops.h"
-#include "paths.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "textacts.h"
 #include "textfuns.h"
 #include "textinfo.h"
 #include "texttool.h"
-#include "trans2d.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "peter.h"
 //#include "simon.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ndtxtpth.h"
 #include "cutop.h"
 //#include "will.h"
 #include "fontman.h"
 //#include "barsdlgs.h"			// for the fit txt to curve bar control
 #include "bubbleid.h"
-#include "nodecomp.h"
+//#include "nodecomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "slicehelper.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opliveeffects.h"
 #include "ophist.h"
 #include "nodedoc.h"

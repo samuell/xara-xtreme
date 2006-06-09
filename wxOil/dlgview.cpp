@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "dlgview.h"
 #include "vstate.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 
 DECLARE_SOURCE("$Revision$");

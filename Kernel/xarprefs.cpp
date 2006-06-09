@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "app.h"
-#include "spread.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "layer.h"
 
@@ -114,14 +114,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "xarprefs.h"
 //#include "filtrres.h"	// _R(IDS_NativePrefsDlg)
 
-#include "ensure.h"
-#include "errors.h"
-#include "dlgtypes.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 
-#include "dialogop.h"	// DialogOp header
+//#include "dialogop.h"	// DialogOp header - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"		// Dialogue manager class
-#include "msg.h"
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
  	 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe

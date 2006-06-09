@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PBECOMEA
 #define INC_PBECOMEA
 
-#include "becomea.h"	// derivation from BecomeA.
+//#include "becomea.h"	// derivation from BecomeA. - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 

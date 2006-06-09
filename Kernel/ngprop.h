@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef NGPROP_H
 #define NGPROP_H
 
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "extender.h"	// for extend byte-flags
 #include <list>
 

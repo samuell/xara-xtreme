@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 // camconfig.h must be included immediately after camtypes.h
 //#include "camconfig.h"
-#include "errors.h"
-#include "ensure.h"
-#include "matrix.h"
-#include "docrect.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "matrix.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "xadrwold.h"
 #include "macros.h"
 //#include "grndrgn.h"

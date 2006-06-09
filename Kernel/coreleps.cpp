@@ -108,10 +108,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <strstrea.h>
 
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
-#include "oilfltrs.h"
-#include "fillattr.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cdrfiltr.h"
 
 

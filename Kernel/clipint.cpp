@@ -102,14 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
 //#include "clipext.h"	// External (oil) clipboard stuff
 #include "clipint.h"	// Internal clipboard stuff
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 //#include "simon.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
 #include "collist.h"
 #include "cliptype.h"

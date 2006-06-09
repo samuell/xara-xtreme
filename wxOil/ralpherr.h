@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef IDTOHRESULT_H
 #define IDTOHRESULT_H
 
-#include "ralphint.h"
+//#include "ralphint.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "andy.h"
 //#include "will.h"

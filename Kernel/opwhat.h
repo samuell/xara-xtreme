@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //class NodeGroup;
 
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_WHATSTHIS _T("WhatsThis")
    

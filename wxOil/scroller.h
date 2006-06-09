@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define SCROLLER__INC
 
 #include "camelot.h"
-#include "ccmaths.h"
+//#include "ccmaths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 /////////////////////////////////////////////////////////////////////////////

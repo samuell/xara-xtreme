@@ -104,24 +104,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "makebmp.h"
 //#include "resource.h"
-#include "app.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "bitmpinf.h"
 #include "bmpfiltr.h"
 //#include "simon.h"
 //#include "will3.h"
-#include "docview.h"
-#include "clikmods.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxtl.h"
 #include "grndbmp.h"
 #include "wrkrect.h"
 #include "colplate.h"
 #include "colcontx.h"
 #include "bmapprev.h"
-#include "rrcaps.h"
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "resimmap.h"	//_R(IDE_EXPORT_NODRAWING)
 

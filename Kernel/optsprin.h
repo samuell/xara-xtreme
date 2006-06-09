@@ -103,13 +103,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPTSPRIN
 #define INC_OPTSPRIN
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "appprefs.h"
 #include "printctl.h"
 
 //--------------------------------------------------
 class Layer;
-#include "stockcol.h"
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

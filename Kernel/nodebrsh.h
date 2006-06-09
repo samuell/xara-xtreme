@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEBRSH
 #define INC_NODEBRSH
 
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodeBrushMaker;
 class NodeBrushPath;

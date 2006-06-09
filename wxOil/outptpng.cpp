@@ -97,12 +97,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "ensure.h"
-#include "dibutil.h"
-#include "fixmem.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "andy.h"
-#include "dibconv.h"
+//#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"		// For hourglass stuff
 
 //#include "resource.h"		// _R(IDS_OUT_OF_MEMORY)
@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Replacements for some libpng functions
 #include "pngfuncs.h"
 
-#include "camfiltr.h"	// BaseCamelotFilter
+//#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define	new	CAM_DEBUG_NEW
 

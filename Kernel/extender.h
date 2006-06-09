@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_EXTENDER
 #define INC_EXTENDER
 
-#include "doccoord.h"	// for DocCoord member variables
+//#include "doccoord.h"	// for DocCoord member variables - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // types of extend-action.
 static const BYTE X_EXTEND	= 1;

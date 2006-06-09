@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "chcklist.h"	// for CTextCheckListBox
 #include "extender.h"	// for bitwise extend-type flags
-#include "dialogop.h"	// for DialogOp
+//#include "dialogop.h"	// for DialogOp - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class SGNameItem;
 

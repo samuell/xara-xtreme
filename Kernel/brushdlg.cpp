@@ -118,10 +118,10 @@ DECLARE_SOURCE("$Revision$");
 #include "opbevel.h"
 #include "freeinfo.h"
 #include "sgline.h"
-#include "fixstr32.h"
+//#include "fixstr32.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 #include "freehand.h"
-#include "fixst256.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // firstly - I apologise for the lack of comments in this code - BUT I have more important
 // things to be doing than writing comments at the moment ....

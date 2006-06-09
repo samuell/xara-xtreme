@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_WEBADDRESSDLG
 #define INC_WEBADDRESSDLG
 
-#include "dialogop.h"
-#include "selop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "webattr.h"
 
 #define OPTOKEN_WEBADDRESSDLG _T("WebAddressDlg")

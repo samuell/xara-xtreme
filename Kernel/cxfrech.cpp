@@ -98,20 +98,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Implementation of the record handler class of the v2 file format
 
 #include "camtypes.h"
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "doccolor.h"
 #if !defined(EXCLUDE_FROM_XARLIB)
 #include "colcomp.h"
 #include "bmpcomp.h"
 #include "unitcomp.h"
 #include "infocomp.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #else
 #include "cxfile.h"
 #endif
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 
 DECLARE_SOURCE("$Revision$");

@@ -114,13 +114,13 @@ DECLARE_SOURCE("$Revision$");
 
 //#include "dialogop.h"
 //#include "barsdlgs.h"
-#include "rndrgn.h"
-#include "stockcol.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
 //#include "rikdlg.h"
 
-#include "bars.h"
-#include "msg.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 

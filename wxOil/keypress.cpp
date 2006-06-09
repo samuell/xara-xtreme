@@ -104,11 +104,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "keypress.h"
 #include "vkextra.h"
 #include "camelot.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "hotkeys.h"
 #include "keymsg.h"
-#include "docview.h"
-#include "document.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ctrlhelp.h"
 //#include "basebar.h"
 //#include "dragmgr.h"

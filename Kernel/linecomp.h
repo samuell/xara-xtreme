@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_LINECOMP
 
 
-#include "doccomp.h"
-#include "camfiltr.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "linedef.h"
 class LineDefinition;
 class BaseCamelotFilter;

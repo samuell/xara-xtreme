@@ -112,12 +112,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will2.h"
 
 // Code headers
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "csrstack.h"
 #include "unicdman.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "keypress.h"
 #include "nodetext.h"
 #include "nodetxts.h"
@@ -126,8 +126,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilfiles.h"
 #include "opscale.h"
 #include "opsquash.h"
-#include "selmsg.h"
-#include "txtattr.h"
+//#include "selmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "textinfo.h"
 #include "textops.h"
 #include "textfuns.h"
@@ -135,7 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 #include "nodemold.h"
 #include "cutop.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 #include "nodepostpro.h"
 #include "nodepath.h"

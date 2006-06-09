@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 // #include "fontbase.h" - included in fontman.h
 #include "fontman.h"
-#include "errors.h"
-#include "txtattr.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "richard2.h"
 
 DECLARE_SOURCE( "$Revision$" );

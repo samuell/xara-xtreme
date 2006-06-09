@@ -106,12 +106,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PROPERTIESGUIDES
 #define INC_PROPERTIESGUIDES
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layerprp.h"
 #include "snap.h"
-#include "listitem.h"
-#include "list.h"
-#include "undoop.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class NodeGuideline;
 class Layer;

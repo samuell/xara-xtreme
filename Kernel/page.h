@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PAGE
 #define	INC_PAGE
 
-#include "npaper.h"
-#include "doccolor.h"
+//#include "npaper.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class RenderRegion;
 

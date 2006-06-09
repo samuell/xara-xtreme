@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_XPFRGN
 #define INC_XPFRGN
 
-#include "view.h"
-#include "becomea.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class PluginNativeFilter;
 class CapabilityTree;

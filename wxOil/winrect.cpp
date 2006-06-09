@@ -102,10 +102,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "winrect.h"
-#include "oilrect.h"
-#include "ensure.h"
-#include "view.h"
+//#include "winrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 DECLARE_SOURCE("$Revision$");
 

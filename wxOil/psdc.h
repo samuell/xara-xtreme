@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PSDC
 
 #include "kerneldc.h"
-#include "wincoord.h"
+//#include "wincoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Size of buffer used to xfer PostScript data to device.
 #define MAX_PSBUF (512)

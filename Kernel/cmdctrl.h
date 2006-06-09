@@ -119,9 +119,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CMD_CONTROL
 #define INC_CMD_CONTROL
 
-#include "list.h"
-#include "listitem.h" 
-#include "opdesc.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 >	class CCAPI CmdControl : public ListItem

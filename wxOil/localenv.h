@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_LOCALENV
 #define INC_LOCALENV
 
-#include "opdesc.h"
-#include "msg.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

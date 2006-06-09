@@ -99,18 +99,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_APRPS
 #define INC_APRPS
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "property.h"
 #include "layerprp.h"
 #include "snap.h"
-#include "listitem.h"
-#include "list.h"
-#include "undoop.h"
-#include "unittype.h"
-#include "units.h"		
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h"		 - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "property.h"	
 #include "sgframe.h"
-#include "msg.h"
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cbmpdata.h"
 
 //#pragma message("After includes")

@@ -100,14 +100,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CONTOURTOOL
 #define INC_CONTOURTOOL
 
-#include "tool.h"
-#include "doccoord.h"
-#include "bars.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "biasgdgt.h"
-#include "iprofile.h"
-#include "becomea.h"
+//#include "iprofile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bevtrap.h"
 #include "dragtool.h"
 

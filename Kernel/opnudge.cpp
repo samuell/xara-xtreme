@@ -102,13 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "opnudge.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"
 //#include "resource.h"
-#include "range.h"
-#include "spread.h"
-#include "document.h"
-#include "docview.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ophist.h"
 
 
@@ -116,7 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "slicehelper.h"	//For helper functions
 
 //But I had to include all of these to get it to work!!...
-#include "cxfrech.h"		//For CamelotRecordHandler
+//#include "cxfrech.h"		//For CamelotRecordHandler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"		//For UserAttr
 #include "tmpltatr.h"		//For TemplateAttribute
 

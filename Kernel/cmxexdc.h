@@ -101,14 +101,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define __CMXEXDC_H
 
 #include "kerneldc.h"
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cmxform.h"
-#include "pathtype.h"
-#include "docrect.h"
-#include "gradtype.h"
-#include "attr.h"
-#include "arrows.h"
-#include "bitmap.h"
+//#include "pathtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "gradtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "arrows.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Filter;
 class CCDiskFile;

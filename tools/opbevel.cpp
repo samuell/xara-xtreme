@@ -109,19 +109,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 // Code headers
-#include "app.h"
-#include "document.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrbev.h"
 #include "nodebev.h"
 #include "progress.h"
 #include "objchge.h"
-#include "becomea.h"
-#include "attrmgr.h"
-#include "nodeattr.h"
-#include "fillattr.h"
-#include "fillval.h"
-#include "list.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"
 #include "nodetxtl.h"
 #include "nodeblnd.h"
@@ -129,16 +129,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodemold.h"
 #include "mkshapes.h"
 #include "groupops.h"
-#include "range.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "bevtool.h"
-#include "view.h"
-#include "docview.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodecont.h"
 #include "nodeshad.h"
 #include "opshadow.h"
 #include "textops.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 #include "nodetxts.h"
 #include "nodeblnd.h"

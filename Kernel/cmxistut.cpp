@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // flag for parsing the header file
 #define COMPILING_CMXISTUT_CPP
 
-#include "ccfile.h"
-#include "fixmem.h"
-#include "basestr.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "cmxistut.h"
 #include "cmxifltr.h"

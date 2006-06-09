@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "app.h"
 //#include "resource.h"
 #include "bevinfo.h"
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "unittype.h"
 //#include "attrmgr.h"
 //#include "attrbev.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "bevtool.h"
 #include "selall.h"

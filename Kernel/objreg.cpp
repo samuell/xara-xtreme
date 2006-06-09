@@ -101,19 +101,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "objreg.h"
-#include "listitem.h"
-#include "list.h"
-#include "ensure.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "node.h"
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "noderect.h"
-#include "errors.h"
-#include "group.h"
-#include "fillattr.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
 #include "nodebmp.h"
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"
 #include "nodershp.h"
 #include "nodetext.h"

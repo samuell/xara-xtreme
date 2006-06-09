@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BFXDLG
 #define INC_BFXDLG
 
-#include "dialogop.h"
-#include "undoop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_BFXOP _T("BfxOp")
 

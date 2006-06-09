@@ -100,11 +100,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGLIBOIL
 #define INC_SGLIBOIL
 
-#include "selop.h"
-#include "opdesc.h"
-#include "ops.h"
-#include "ccobject.h"
-#include "thumb.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "scrvw.h"
 
 class Library;

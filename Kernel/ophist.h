@@ -114,9 +114,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPHIST
 #define INC_OPHIST
     
-#include "list.h"
-#include "undoop.h"
-#include "opdesc.h"   
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_UNDO _T("Undo")
 #define OPTOKEN_REDO _T("Redo")

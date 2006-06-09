@@ -105,16 +105,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #if !defined(EXCLUDE_FROM_XARLIB)
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "helpuser.h"
 #include "basebar.h"		// For gallery creation error box fix...
-#include "ralphint.h"
+//#include "ralphint.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ralphdoc.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ralpherr.h"
 #include "camprofile.h"
 #include "cartprov.h"

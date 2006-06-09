@@ -115,19 +115,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "grndbmp.h"
 #include "colcontx.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
-#include "dibutil.h"
-#include "dibconv.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
-#include "outptdib.h"
+//#include "outptdib.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "palman.h"
 #include "progress.h"
 #include "GDrawIntf.h"			// GAT
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "app.h"		// GetApplication
+//#include "app.h"		// GetApplication - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmapprev.h"
 
 #define FIXEDBANDSIZE 512

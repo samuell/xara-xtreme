@@ -99,11 +99,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "jpglib_namespace.h"
 #include "jpgermgr.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "andy.h"			// for _R(IDE_FILEREADERROR)
 
 #include "jpgsrc.h"

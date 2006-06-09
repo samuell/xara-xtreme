@@ -111,11 +111,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef SGNAME_H
 #define SGNAME_H
 
-#include "sgallery.h"
-#include "sgtree.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgdrag.h"
 #include "dragbmp.h"
-#include "dragtrgt.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "attrsets.h"
 

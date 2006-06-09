@@ -101,15 +101,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ppbevel.h"
 
-#include "paths.h"
-#include "rndrgn.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathtrap.h"
 #include "bevtrap.h"
-#include "view.h"
-#include "docview.h"
-#include "fillval.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gclips.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrbev.h"
 
 CC_IMPLEMENT_DYNAMIC(BevelPathProcessor, PathProcessor);

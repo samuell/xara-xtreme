@@ -100,25 +100,25 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "attrappl.h"
-#include "attrmgr.h"
-#include "document.h"
-#include "ink.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 #include "linwthop.h"
 //#include "mario.h"
 #include "nodedoc.h"
 //#include "simon.h"
-#include "group.h"
-#include "fillattr.h"
-#include "app.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
 //#include "will.h"		// for _R(IDS_APPLYTONODEOP)
 #include "ndoptmz.h"	// for NodeAttributePtrItem
 #include "objchge.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "fillndge.h"
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxtl.h"
 //#include "jason.h"
 #include "colormgr.h"
@@ -129,7 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshattr.h"
 #include "effects_stack.h"
 #include "ophist.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "ppbrush.h"
 

@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TRACERGN
 #define INC_TRACERGN
 
-#include "coord.h"
-#include "doccoord.h"
+//#include "coord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class UndoableOperation;
 class Path;

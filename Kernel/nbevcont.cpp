@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef BUILDSHADOWS
 
 // code headers
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 //#include "osrndrgn.h"
 #include "nodebev.h"
@@ -122,24 +122,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // text class includes
 #include "nodetxts.h"
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "textops.h"
-#include "arrows.h"
+//#include "arrows.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bevinfo.h"
 
 // Save/load
-#include "cxfrec.h"		// CXaraFileRecord
+//#include "cxfrec.h"		// CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrbev.h"
 //#include "bevtool.h"
 //#include "blndtool.h"
 #include "blobs.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bevres.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "contmenu.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "txtattr.h"
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrbev.h"
 #include "nodecont.h"
 #include "csrstack.h"
@@ -147,7 +147,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "attrmap.h"
 #include "opcntr.h"
 #include "nodeblnd.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "extender.h"
 #include "ngcore.h"		// NameGallery, for stretching functionality
 #include "blendatt.h"

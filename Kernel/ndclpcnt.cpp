@@ -104,18 +104,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "clipres.h"	// ClipView resources
 #include "nodeclip.h"	// so we can use NodeClipView and PathBecomeA
 
-#include "cxfrec.h"		// save/load
+//#include "cxfrec.h"		// save/load - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	//
-#include "cxfdefs.h"	//
-#include "camfiltr.h"	//
+//#include "cxfdefs.h"	// - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h"	// - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "becomea.h"	// make shapes stuff
+//#include "becomea.h"	// make shapes stuff - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "extender.h"	// extend stuff
 //#include "ngcore.h"
 
 #include "nodepath.h"	// NodePath reference
-#include "node.h"		// for PreRenderChildren stuff
+//#include "node.h"		// for PreRenderChildren stuff - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdraw.h"		// for GDraw calls
 //#include "mario.h"		// for _R(IDE_NOMORE_MEMORY)
 
@@ -128,11 +128,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "lineattr.h"	// for AttrStrokeColour.
 
-#include "docview.h"	// for DocView.
+//#include "docview.h"	// for DocView. - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"	// for OSRenderRegion.
 
 #include "selector.h"	// for the SelectorTool.
-#include "spread.h"		// for class Spread
+//#include "spread.h"		// for class Spread - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "pbecomea.h"	// for PathBecomeA.
 

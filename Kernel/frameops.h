@@ -102,12 +102,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_FRAMEOPS
 
 //#include "dialogop.h"
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layergal.h"
 
 #include "makebmp.h"	// MakeBitmapFilter
 #include "impexpop.h"	// OpMenuExport BitmapExportParam
-#include "animparams.h"	// AnimPropertiesParam
+//#include "animparams.h"	// AnimPropertiesParam - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#if _DEBUG // removal of these ops from non-debug builds
 

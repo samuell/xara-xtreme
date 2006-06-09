@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // OpToken
 #define OPTOKEN_CHANGELINEWIDTH _T("ChangeLineWidth")
 
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 >	class ChangeLineWidthOpDesc : public OpDescriptor

@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "valfunc.h"
 
 #include "cxftags.h"
-#include "cxfrec.h"
-#include "fixmem.h"
-#include "list.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 CC_IMPLEMENT_DYNAMIC(ValueFunction,						ListItem)

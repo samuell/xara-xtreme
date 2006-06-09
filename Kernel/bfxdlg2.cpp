@@ -104,34 +104,34 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bfxrc.h"
 #include "bfxdlg2.h"
 #include "bfxdlg.h"		// BfxMsg
-#include "bitmap.h"
-#include "bmplist.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bmplist.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilprog.h"
 
 #include "ccdc.h"		// specific #includes needed for kernel-rendered dialogues
 #include "dlgcol.h"
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 
-#include "app.h"
-#include "range.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "bitmpinf.h"
 //#include "bmplist.h"
 #include "bmpcomp.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmapfx.h"
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "csrstack.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
 #include "page.h"
-#include "spread.h"
-#include "trans2d.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rikdlg.h"
 //#include "resource.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h"			// for the bitmap effects bar control
 #include "wrkrect.h"
 

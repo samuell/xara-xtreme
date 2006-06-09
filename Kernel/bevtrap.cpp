@@ -96,7 +96,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 #include "camtypes.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathproc.h"
 #include "pathtrap.h"
 #include "bevtrap.h"

@@ -129,7 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will2.h"
 #include "bmpcomp.h"	// BitmapListComponent
 #include "bubbleid.h"
-#include "cursor.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "gerry.h"		// new fill type strings (only things in the file)
 //#include "biasres.h"
 #include "nodeshad.h"

@@ -105,9 +105,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef LATTROPS_H
 #define LATTROPS_H
 
-#include "opdesc.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "la_base.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_CHANGE_LINE_JOIN	TEXT("ChangeLineJoin")
 #define OPTOKEN_CHANGE_LINE_CAP		TEXT("ChangeLineCap")

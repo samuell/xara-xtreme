@@ -104,24 +104,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <math.h>
 
-#include "ensure.h"
-#include "rndrgn.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 #include "paper.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"
-#include "convert.h"
-#include "spread.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grid.h"
-#include "units.h"
-#include "document.h"
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "camfiltr.h"	// BaseCamelot filter
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h"	// BaseCamelot filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "unitcomp.h"	// UnitListComponent
 
 const UINT32 MIN_PIX_RENDER_COUNT 	= 10;	// Min distance between rendered grid points, in pixels

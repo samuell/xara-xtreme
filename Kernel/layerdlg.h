@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_LAYERDLG
 #define INC_LAYERDLG
 
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 class LyrDetails; 
 
 #define OPTOKEN_LAYERDLG _T("LayerDlg")    

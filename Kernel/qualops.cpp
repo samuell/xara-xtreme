@@ -103,13 +103,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "qualops.h"
 #include "menuops.h"
 //#include "mario.h"
-#include "docview.h"
-#include "ensure.h"
-#include "app.h"
-#include "dialogop.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "rik.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h"
 #include "bubbleid.h"
 #include "brushmsg.h"

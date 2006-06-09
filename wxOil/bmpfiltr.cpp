@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "bmpfiltr.h"
 //#include "andy.h"
-#include "oilfltrs.h"
-#include "app.h"
-#include "dibutil.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndbmp.h"
 #include "nodebmp.h"
 #ifndef WEBSTER
@@ -112,11 +112,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif //WEBSTER
 #include "oilbitmap.h"	// Platform specific bitmap information
 
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "accuflts.h"	// instead of imglib.h for 'BMP_UNCOMPRESSED'
 #include "bmapprev.h"	// tab preview dialog
-#include "cxfrec.h"		// for CXaraFileRecord
+//#include "cxfrec.h"		// for CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "exjpeg.h"
 
 CC_IMPLEMENT_DYNAMIC(BMPFilter, BaseBitmapFilter)

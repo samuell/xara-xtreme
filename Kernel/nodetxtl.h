@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODETXTL
 #define INC_NODETXTL
 
-#include "ink.h"
-#include "rndrgn.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetxts.h"
-#include "attrmgr.h"	// for FormatRegion::GetTracking()
+//#include "attrmgr.h"	// for FormatRegion::GetTracking() - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class EOLNode;
 class CharMetrics;

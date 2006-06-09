@@ -102,24 +102,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "dlgmgr.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
-#include "fixst256.h"
-#include "fixstr8.h"
-#include "list.h"
-#include "ensure.h"
-#include "errors.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixstr8.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "infobar.h"
-#include "fixmem.h"
-#include "msg.h"
-#include "bars.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "dlgbar.h"
 //#include "cheklist.h"
 //#include "custmsg.h"
 //#include "sgallery.h"
 //#include "galbar.h"
-#include "document.h"
-#include "docview.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccdc.h"
 //#include "bitbutn.h"
 //#include "bitc1ded.h"
@@ -144,7 +144,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 #include "cartctl.h"
 #include "osrndrgn.h"
-#include "dlgtypes.h"
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "statline.h"
 
 DECLARE_SOURCE("$Revision$");

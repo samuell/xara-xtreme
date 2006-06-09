@@ -105,27 +105,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
-#include "attrmgr.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccolbar.h"
 #include "colcomp.h"
 #include "colcontx.h"
 #include "coldlog.h"
 #include "colormgr.h"
-#include "docmsgs.h"
-#include "document.h"
-#include "docview.h"
+//#include "docmsgs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 #include "lineattr.h"
 #include "newcol.h"		// For NewColourDlg
 #include "nodeblnd.h"	// For NodeBlend, for Blend bodge
 #include "objchge.h"
 #include "opimgset.h"
-#include "ops.h"
-#include "spread.h"
-#include "tool.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fillramp.h"
-#include "bitmapcache.h"
+//#include "bitmapcache.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "colmsg.h"
 

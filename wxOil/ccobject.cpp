@@ -107,10 +107,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <new>
 #endif
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 
 

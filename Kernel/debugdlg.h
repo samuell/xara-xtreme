@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_DEBUGDLG
 
 
-#include "ops.h"
-#include "dialogop.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 #define OPTOKEN_DEBUGDLG _T("DebugDlg")

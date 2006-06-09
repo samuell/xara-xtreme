@@ -103,12 +103,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "xpfrgn.h"
 
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "xpfilter.h"
 #include "xpfcaps.h"
-#include "rrcaps.h"
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "insertnd.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opcntr.h"
 #include "lineattr.h"
 #include "strkattr.h"

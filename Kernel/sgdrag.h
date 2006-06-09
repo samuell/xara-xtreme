@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "draginfo.h"
-#include "dragtrgt.h"
-#include "monotime.h"
-#include "sgallery.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "monotime.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 
 class SGDisplayRootScroll;

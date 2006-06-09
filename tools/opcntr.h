@@ -119,9 +119,9 @@ class AttrStrokeType;
 class AttrBrushType;
 
 #include "blendatt.h"
-#include "biasgain.h"
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "selop.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 >	class CreateContourParam : public OpParam

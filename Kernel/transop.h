@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_TRANSOP
 #define INC_TRANSOP         
 
-#include "binds.h"
-#include "undoop.h"
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Karim MacDonald 14/10/1999
 // we don't hold a pointer to a SelectorTool any more - it's now a pointer to a DragTool.

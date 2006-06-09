@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colormgr.h"
 //#include "lineattr.h"
 //#include "ink.h"
@@ -114,30 +114,30 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mario.h"
 //#include "simon.h"
 //#include "tim.h"
-#include "tranform.h"
-#include "app.h"
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "opgrad.h"
-#include "docview.h"
-#include "fixmem.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
 #include "bitmpinf.h"
 //#include "filltool.h"
-#include "attrmgr.h"
-#include "paths.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fracfill.h"
-#include "dibutil.h"
-#include "bitmap.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilbitmap.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will.h"
 #include "ndoptmz.h"
 #include "attrmap.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rechattr.h"	// Record handling classes for attributes
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfcols.h"	// REF_DEFAULTCOLOUR_TRANSPARENT ...
 
 #include "blendatt.h"

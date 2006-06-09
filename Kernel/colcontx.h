@@ -102,13 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_COLCONTX
 
 
-#include "colcarry.h"
-#include "colmodel.h"
-#include "doccolor.h"
-#include "document.h"
-#include "ensure.h"
-#include "list.h"
-#include "listitem.h"
+//#include "colcarry.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "xaracms.h"
 
 

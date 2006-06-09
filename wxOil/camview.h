@@ -99,11 +99,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_CAMVIEW_H
 
 //#include "docview.h"
-#include "ink.h"
-#include "clikmods.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rendwnd.h"
 #include "wrkrect.h"
-#include "dragtrgt.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Forward definitions
 class CRenderWnd;

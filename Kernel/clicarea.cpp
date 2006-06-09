@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resimmap.h"		//The HTML Export resources
 //#include "hotlink.h"		//For _R(IDS_WEBADDRESS_SHORT_SELF)
 #include "filtimag.h"		//Because everything that's written is done by the ImagemapFilter
-#include "app.h"			//For the pointer to the application
+//#include "app.h"			//For the pointer to the application - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filtrmgr.h"		//To find the ImagemapFilter
 
 

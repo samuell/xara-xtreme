@@ -96,7 +96,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /////////////////////////////////////////////////////////////////////////////
 // operations to help in debugging. They are present in both retail and debug

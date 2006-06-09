@@ -99,17 +99,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "list.h"
-#include "range.h"
-#include "dialogop.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gadget.h"
 #include "uielem.h"
-#include "nodeattr.h"		// for AttributeIdentifier
+//#include "nodeattr.h"		// for AttributeIdentifier - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attraggl.h"
 
 #include "attrappl.h"
-#include "ink.h"
-#include "nodeattr.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "visiattr.h"
 #include "tmpltdlg.h"
@@ -117,8 +117,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tmpltres.h"
 //#include "richard2.h"		// for _R(IDS_ERRORS_UNKNOWN)
 
-#include "document.h"
-#include "spread.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
 #include "nodedoc.h"
 

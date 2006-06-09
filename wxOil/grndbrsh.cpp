@@ -105,15 +105,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndbrsh.h"
 #include "grnddib.h"
 #include "grndrgn.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
 #include "gdrawasm.h"
 #include "palman.h"
 #include "scrvw.h"
 #include "scrcamvw.h"
-#include "view.h"
-#include "fixmem.h"
-#include "spread.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "freehand.h"
 #include "freeinfo.h"

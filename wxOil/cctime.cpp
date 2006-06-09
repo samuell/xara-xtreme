@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "basestr.h"
-#include "convert.h"
+//#include "basestr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cctime.h"
 #include <time.h>
 

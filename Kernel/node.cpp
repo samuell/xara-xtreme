@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"                          
 //#include "mario.h"    // for _R(IDE_NOMORE_MEMORY)    
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "chapter.h"
 #include "nodedoc.h"
 #include "page.h"
@@ -116,13 +116,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"
 #include "ndoptmz.h"
 #include "dbugtree.h"
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 #include "nodetxts.h"
 
 #include "extender.h"
 #include "ngcore.h"		// NameGallery, for stretching functionality
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #ifdef RALPH
 #include "ralphcri.h"

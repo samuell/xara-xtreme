@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "prvwflt.h"
 
-#include "oilfltrs.h"
+//#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "accures.h"	// Accusoft errors and messages - and lots of resource ids
 //#include "rik.h"		// _R(IDS_BUILDINGPREVIEW)
 //#include "filtrres.h"	// _R(IDS_IMPORTMSG_PNG)
@@ -113,8 +113,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tim.h"		// _R(IDT_AIEPS_FILTERNAME)
 #include "grndbmp.h"	// For GRenderBitmap.
 #include "ai_epsrr.h"	// For AIEPSRenderRegion.
-#include "docview.h"
-#include "view.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 						
 // This is not compulsory, registers the correct version of your file in the .exe
 DECLARE_SOURCE("$Revision$");

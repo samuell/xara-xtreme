@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MODULE
 #define INC_MODULE
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class OILModule; 		// #include "oilmods.h"
 class ModuleList; 		// #include "modlist.h"

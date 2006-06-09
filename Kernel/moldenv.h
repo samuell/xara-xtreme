@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_ENVELOPE
 
 #include "moldshap.h"
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodemold.h"
 #include "gmould.h"
 

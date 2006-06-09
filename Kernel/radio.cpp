@@ -99,8 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "dlgtypes.h"
-#include "dialogop.h"
+//#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "radio.h"
 
 

@@ -101,13 +101,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camelot.h"
 #include "liveeffectstool.h"
 #include "liveeffectsinfo.h"
-#include "range.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "barsdlgs.h"
 //#include "justin2.h"
 //#include "will.h" // for the 'many' string
-#include "attrmgr.h"
-#include "docvmsg.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docvmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colmsg.h"
 #include "brushmsg.h"
 //#include "liveeffectres.h"

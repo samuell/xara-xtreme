@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPFREE
 #define INC_OPFREE
 
-#include "doccoord.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "selop.h"
 
 class NodeBlend;

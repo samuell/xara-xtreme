@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CARTPROV
 #define	INC_CARTPROV
 
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class CamArtCacheEntry;
 class wxCamArtProviderEvent;

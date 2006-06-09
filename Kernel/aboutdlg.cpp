@@ -106,21 +106,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  
 #include "aboutdlg.h"   
 //#include "aboutres.h"   
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"
 #include "dragmgr.h"
-#include "ensure.h"  
-#include "errors.h" 
+//#include "ensure.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "ollie.h"
-#include "release.h"
+//#include "release.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
 
 #include "ccdc.h"			// For render-into-dialogue support
 #include "dlgcol.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 #include "cversion.h"
 #include "product.h"

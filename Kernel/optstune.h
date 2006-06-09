@@ -103,9 +103,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OPTSTUNE
 #define INC_OPTSTUNE
 
-#include "unittype.h"
-#include "dialogop.h"
-#include "units.h"
+//#include "unittype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "appprefs.h"
 
 /********************************************************************************************

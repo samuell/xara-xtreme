@@ -105,15 +105,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilfiles.h"
 #include "csrstack.h"
 //#include "viewrc.h"
-#include "app.h"
-#include "docview.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "markn.h"
 //#include "mike.h"
 #include "moldtool.h"
 #include "osrndrgn.h"
 #include "nodeshap.h"
-#include "opdesc.h"
-#include "paths.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "moldpers.h"
 #include "moldenv.h"
 #include "moldedit.h"
@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layer.h"
 #include "objchge.h"
 #include "keypress.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 #include "ophist.h"
 

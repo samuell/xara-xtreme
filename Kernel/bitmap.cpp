@@ -103,19 +103,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 //#include "mario.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"
-#include "list.h"
-#include "errors.h"
-#include "app.h"
-#include "fillval.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will.h"
 //#include "phil.h"
 //#include "simon.h"
 //#include "resource.h"
 //#include "nativeps.h"	// The old style EPS native filter, used in v1.1
 //#include "clipint.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 //#include "devcolor.h"
 #include "gradtbl.h"
@@ -123,11 +123,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bitfilt.h"	// BaseBitmapFilter
 #include "camelot.h"	// BaseCamelotFilter
-#include "ccfile.h"		// CCFile
+//#include "ccfile.h"		// CCFile - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpsrc.h"		// BitmapSource
 
 //#ifndef WEBSTER		// Code now in DIBUtil 10/11/97 Neville 
-#include "dibutil.h"	// put it back for DIBUtil::IsGreyscaleBitmap
+//#include "dibutil.h"	// put it back for DIBUtil::IsGreyscaleBitmap - in camtypes.h [AUTOMATICALLY REMOVED]
 //#endif //WEBSTER
 #include "bitmapfx.h"
 //#include "xpehost.h"

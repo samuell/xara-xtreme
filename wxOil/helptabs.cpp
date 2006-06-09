@@ -132,7 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "exceptio.h"
 #include "gbrushop.h"
 #include "tooldlg.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "selall.h"
 #include "dbugtree.h"
 #include "pen.h"
@@ -194,7 +194,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "filtrres.h"
 //#include "markn.h"
 //#include "cmxres.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathops.h"
 #include "opbreak.h"
 #include "tipsdlg.h"

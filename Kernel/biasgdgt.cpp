@@ -105,13 +105,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "biasgdgt.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "biasres.h"
 #include "biasdlg.h"
 
 #include "ccomboud.h"			// this class now needs to know about CustomComboBoxControlDataItem
 //#include "app.h"				// for the new bitmap resources
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // we'd best have this as well ....
 

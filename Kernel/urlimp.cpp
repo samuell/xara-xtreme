@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "pathname.h"
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h"		//For _R(IDD_BARCONTROLSTORE)
 
 #include "urlimp.h"

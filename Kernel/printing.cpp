@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 #include "printing.h"
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 #include "menucmds.h"
 #include "helpids.h"

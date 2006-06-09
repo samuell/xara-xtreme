@@ -105,9 +105,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 #include "nodetxtl.h"
 #include "nodetext.h"
-#include "fixmem.h"
-#include "txtattr.h"
-#include "app.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 
 DECLARE_SOURCE("$Revision$");

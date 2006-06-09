@@ -100,17 +100,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "doccomp.h"
-#include "cxfrech.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "styles.h"
 
-#include "app.h"
-#include "basedoc.h"
-#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "basedoc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"	// TAG_...
-#include "cxfdefs.h"	// 
+//#include "cxfdefs.h"	//  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfile.h"		// CXF_UNKNOWN_SIZE
-#include "cxfrec.h"		// CXaraFileRecord handler
+//#include "cxfrec.h"		// CXaraFileRecord handler - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 #include "tmpltarg.h"

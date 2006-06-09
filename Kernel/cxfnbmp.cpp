@@ -109,11 +109,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "nodebmp.h"
 
-#include "camfiltr.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfile.h"
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfnbmp.h"
 
 /********************************************************************************************

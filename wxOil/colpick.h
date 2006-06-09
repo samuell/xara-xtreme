@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_COLPICK
 #define INC_COLPICK
 
-#include "colmodel.h"
+//#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class ColourList;
 class ColourContext;

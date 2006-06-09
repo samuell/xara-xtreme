@@ -105,14 +105,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 //#include "resource.h"
 #include "moldedit.h"
-#include "ops.h"
-#include "app.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodemold.h"
 #include "nodemldr.h"
 #include "ndmldgrp.h"
 #include "ndmldpth.h"
-#include "docview.h"
-#include "document.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "moldpers.h"
 #include "pathedit.h"
 //#include "mike.h"

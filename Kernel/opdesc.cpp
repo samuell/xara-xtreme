@@ -102,20 +102,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "opdesc.h"
-#include "ensure.h"
-#include "ops.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "dialogop.h"
 #include "menuops.h"
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "oilprog.h"			// For Beep fn
 #include "progress.h"
 //#include "simon.h"
 //#include "phil.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camdoc.h"
-#include "app.h"
-#include "tool.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ctrllist.h"
 
 DECLARE_SOURCE("$Revision$");

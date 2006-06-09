@@ -95,10 +95,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "swfshape.h"	// For FlashColour.
-#include "fixst256.h"
+//#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #ifndef INC_FLASH_TEXT_RECORD
 #define INC_FLASH_TEXT_RECORD

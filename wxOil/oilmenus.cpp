@@ -107,17 +107,17 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
          
 #include "camtypes.h"
 #include "oilmenus.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "menupref.h"
-#include "opdesc.h"
-#include "ensure.h"
-#include "errors.h"
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h" 
 #include "contmenu.h"
 #include "menuops.h"
 
 #include "plugmngr.h"	// PlugInManager
-#include "app.h"		// GetApplication()
+//#include "app.h"		// GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"	// GetMainFrame()
 #include "camelot.h"	// wxGetApp
 

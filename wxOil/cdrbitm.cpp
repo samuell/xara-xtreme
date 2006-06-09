@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "cdrbitm.h"
 #include "cdrform.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "wbitmap.h"
 #include "cdrfiltr.h"
 

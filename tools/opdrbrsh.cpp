@@ -100,26 +100,26 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "opdrbrsh.h"
-#include "trans2d.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pen.h"
-#include "docview.h"
-#include "spread.h"
-#include "app.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opfree.h"
 //#include "resource.h"
 #include "freehand.h"
 #include "csrstack.h"
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "combshps.h"
 //#include "rik.h"
 //#include "bubbleid.h"
 #include "ndbldpth.h"
 //#include "mario.h"
 #include "progress.h"
-#include "range.h"
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "grndbrsh.h"
 #include "objchge.h"
-#include "nodeattr.h"
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrmap.h"
 #include "nodershp.h"
 #include "opbevel.h"
@@ -132,8 +132,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "lineattr.h"
 #include "freehand.h"
 //#include "freehres.h"
-#include "fixmem.h"
-#include "ccobject.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rsmooth.h"
 #include "camelot.h"
 #include "nodeshad.h"

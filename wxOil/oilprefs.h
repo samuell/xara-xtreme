@@ -99,7 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OILPREFS
 #define INC_OILPREFS
 
-#include "prefs.h"
+//#include "prefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 /********************************************************************************************
 

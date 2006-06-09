@@ -104,8 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camview.h"
 //#include "draginfo.h"
 //#include "dragtrgt.h"
-#include "ink.h"
-#include "clikmods.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rendwnd.h"
 #include "wrkrect.h"
 //#include "oilruler.h"

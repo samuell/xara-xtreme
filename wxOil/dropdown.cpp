@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camelot.h"
 #include "dropdown.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "palman.h"
 
 

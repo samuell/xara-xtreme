@@ -109,12 +109,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camnet.h"
 #include "sgliboil.h"
 //#include "webster.h"
-#include "thumb.h"
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "registry.h"
 //#include "resource.h"
 //#include "simon.h"
 //#include "tim.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "helpdownload.h"
 
 using namespace InetUtils;

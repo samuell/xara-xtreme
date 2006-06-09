@@ -102,11 +102,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "bfxitem.h"
-#include "app.h"		// GetApplication
+//#include "app.h"		// GetApplication - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "plugres.h"	// _R(IDS_PLUGIN_)....
 #include "wbitmap.h"	// WinBitmap
-#include "dibutil.h"	// DIBUtil
+//#include "dibutil.h"	// DIBUtil - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpcomp.h"	// BitmapList
 //#include "fixmem.h"		// CCMalloc, CCFree
 //#include "progress.h"	// Progress

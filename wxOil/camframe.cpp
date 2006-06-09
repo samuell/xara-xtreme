@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camelot.h"
 #include "camframe.h"
-#include "camresource.h"
+//#include "camresource.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "Res/tbbitmap.h"
 
@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "menuops.h"
 #include "qualops.h"
 #include "zoomops.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "speedtst.h"
 #include "oilmenus.h"
 

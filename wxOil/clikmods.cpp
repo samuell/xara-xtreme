@@ -101,10 +101,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "clikmods.h"
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pen.h"
-#include "app.h"
-#include "binds.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "binds.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "wxXtra/wxmousestate.h"
 //#include "phil.h"
 

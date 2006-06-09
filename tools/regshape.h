@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_REGSHAPETOOL
 #define INC_REGSHAPETOOL
 
-#include "bars.h"
-#include "doccoord.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodershp.h"
 #include "shapeops.h"
 //#include "peter.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "viewrc.h"
 #include "dragtool.h"
 

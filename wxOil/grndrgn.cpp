@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // camconfig.h must be included immediately after camtypes.h
 #include "camconfig.h"
 
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // Includes (alphabetically ordered for convenience)
 //#include "andy.h"
@@ -124,14 +124,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "csrstack.h"
 
 #include "devcolor.h"
-#include "dibconv.h"			// GAT
+//#include "dibconv.h"			// GAT - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "dibutil.h"
 //#include "document.h"
 //#include "ensure.h"
 //#include "errors.h"
 #include "f16spec.h"			// for IsMathCoprocInstalled
-#include "fillattr.h"
-#include "fixmem.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //GAT #include "fonts.h"				// For FixedSystem font from the FontFactory
 //#include "fracfill.h"
 #include "fuzzclip.h"
@@ -185,7 +185,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // Offscreen rendering system - Ilan
 #include "offattr.h"
 #include "offscrn.h"
-#include "capturemanager.h"
+//#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "clipattr.h"	// so we know what a ClipRegionAttribute is.
 

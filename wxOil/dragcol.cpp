@@ -103,13 +103,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ccolbar.h"
 #include "coldlog.h"
 #include "colourix.h"
 #include "colormgr.h"
 #include "devcolor.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragcol.h"
 #include "dragmgr.h"
 #include "keypress.h"
@@ -117,9 +117,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 #include "sgcolour.h"
 #include "camview.h"
-#include "attrmgr.h"
-#include "fillattr.h"
-#include "ink.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 
 #include "palman.h"

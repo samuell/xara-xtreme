@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DRAWFLTR
 #define INC_DRAWFLTR
 
-#include "ccfile.h"
-#include "filters.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class Node;
 

@@ -106,10 +106,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifdef RALPH
 
 #include "ralphdoc.h"
-#include "docview.h"
-#include "document.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ralphvw.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "toollist.h"
 
 #include "nativeop.h"
@@ -117,15 +117,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndrgn.h"
 //#include "mario.h"
 #include "product.h"
-#include "ccfile.h"
-#include "filters.h"
-#include "spread.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 #include "grndbmp.h"
 #include "ralphprn.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <iostream.h>
-#include "filters.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
 #include "camelot.h"
 #include "ralphcri.h"

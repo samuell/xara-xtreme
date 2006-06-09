@@ -104,14 +104,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <errno.h>
 
-#include "ensure.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "tim.h"
 
 #include "zstream.h"
 //#include "nev.h"
-#include "ralphint.h"
+//#include "ralphint.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ralphdoc.h"
                         
 DECLARE_SOURCE("$Revision$");

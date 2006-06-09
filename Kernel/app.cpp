@@ -98,27 +98,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colormgr.h"
-#include "document.h"
-#include "rndrgn.h"
-#include "ensure.h"
-#include "prefs.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "prefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "pump.h"
-#include "ops.h"
-#include "dialogop.h"
-#include "bars.h"
-#include "opdesc.h"
-#include "range.h"
+//#include "pump.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objreg.h"
 #include "pen.h"
 #include "blobs.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "clipint.h"
-#include "doccomp.h"
+//#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "keypress.h"
-#include "tool.h"
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "keymsg.h"
 #include "hotkeys.h"
 #include "statline.h"

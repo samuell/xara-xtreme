@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODECLIP
 #define INC_NODECLIP
 
-#include "node.h"			// derivation from NodeRenderableInk.
+//#include "node.h"			// derivation from NodeRenderableInk. - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "clipattr.h"		// for our ClipRegionAttribute member.
 
 /********************************************************************************************

@@ -103,8 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_NODECACHEBMP
 
 #include "nodebmp.h"
-#include "bitmap.h"
-#include "cxfrech.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class ExtendParams;
 

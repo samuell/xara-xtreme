@@ -102,24 +102,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "sgscan.h"
+//#include "sgscan.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <string.h>
 #include <io.h>
 #include <fcntl.h>
 #include <sys\stat.h>
 #include "sgscanf.h"
-#include "bitmap.h"
-#include "ccfile.h"
-#include "pathname.h"
-#include "thumb.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "thumb.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "richard.h"
-#include "fixmem.h"
-#include "app.h"		// for pref stuff...
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h"		// for pref stuff... - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
-#include "sgallery.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sglib.h"
-#include "sgtree.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgfonts.h"
 #include "sglcart.h"
 #include "sglfills.h"

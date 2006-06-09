@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // 
 #include "camtypes.h"
 //#include "richard3.h"
-#include "convert.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "scunit.h"
 
 CC_IMPLEMENT_MEMDUMP(Qualifier, CC_CLASS_MEMDUMP)

@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "webaddr.h"
 
-#include "ccobject.h"
-#include "pathname.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "pathname.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "resimmap.h"
 	

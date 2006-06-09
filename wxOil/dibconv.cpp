@@ -102,13 +102,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "dibconv.h"
+//#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdraw.h"					// temp bodge
 #include "grndrgn.h"
 //#include "grndbmp.h"				// GRenderBitmap
 #include "GDrawIntf.h"
-#include "fixmem.h"					// CCMalloc, CCFree
-#include "dibutil.h"				// DIBUtil::ScanlineSize
+//#include "fixmem.h"					// CCMalloc, CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dibutil.h"				// DIBUtil::ScanlineSize - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "palman.h"
 
 CC_IMPLEMENT_MEMDUMP( DIBConvert, CC_CLASS_MEMDUMP )

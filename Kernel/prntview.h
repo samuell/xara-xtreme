@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRNTVIEW
 #define INC_PRNTVIEW
 
-#include "view.h"
-#include "oilrect.h"
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "oilrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "printctl.h"
 
 class CDC;

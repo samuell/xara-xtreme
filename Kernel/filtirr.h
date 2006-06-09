@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef IMAGEMAPRENDERREGION
 #define IMAGEMAPRENDERREGION
 
-#include "rndrgn.h"
-#include "rrcaps.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "rrcaps.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "filtimop.h"
 #include "imagemap.h"
 

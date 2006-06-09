@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ngsentry.h"
 #include "ngsetop.h"
 
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sginit.h"
 #include "comattrmsg.h"
 
@@ -121,7 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "justin3.h"
 #include "slicehelper.h"
 // for the use of wix temple attribs
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "userattr.h"
 #include "tmpltatr.h"
 

@@ -101,9 +101,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_AI_EPS
 #define INC_AI_EPS
 
-#include "epsfiltr.h"
-#include "list.h"
-#include "document.h"
+//#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "impbmp.h"
 
 // All the commands used by AI EPS files.

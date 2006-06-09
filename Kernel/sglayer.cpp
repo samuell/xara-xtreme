@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#define EXCLUDE_GALS
 //#endif
 
-#include "app.h"		// For GetApplication()
+//#include "app.h"		// For GetApplication() - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "gallery.h"	// For _R(IDC_GALLERY_LISTBOX)
 //#include "galres.h"
 //#include "galstr.h"
@@ -117,22 +117,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sglayer.h"
 #include "sgmenu.h"
 
-#include "ink.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 //#include "markn.h"
 //#include "resource.h"
 //#include "barsdlgs.h" 
 //#include "simon.h"
 #include "sprdmsg.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dragmgr.h"
-#include "docvmsg.h"
+//#include "docvmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "ccdc.h"		// For render-into-dialogue support
-#include "fillval.h"
+//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grnddib.h"
 #include "guides.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layerprp.h"
 #include "layermsg.h"
 //#include "richard2.h"

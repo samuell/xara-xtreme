@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_OPIMGSET
 
 #include "colplate.h"
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // The following Ops are defined in this file:
 #define OPTOKEN_COMPOSITEPREVIEW	_T("CompositePreview")

@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define CMXIDATA_H
 
 #include "cmxibits.h"
-#include "list.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 
 class CMXImportLayer;

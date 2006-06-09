@@ -112,14 +112,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_BLOBBY
 #define INC_BLOBBY
     
-#include "undoop.h"
-#include "opdesc.h"   
-#include "doccolor.h"
-#include "ops.h"  	   	// Operation class  
-#include "dlgtypes.h"  	// The DialogOp types
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "opdesc.h"    - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ops.h"  	   	// Operation class   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dlgtypes.h"  	// The DialogOp types - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "dlgmgr.h"		// the dialogue box manager 
-#include "convert.h"
-#include "dialogop.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define OPTOKEN_BLOBBY _T("Blobby")
 

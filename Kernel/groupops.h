@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GROUPOPS
 #define INC_GROUPOPS 
 
-#include "selop.h"
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
         
 class NodeGroup;
 class NodeGroupTransparency;

@@ -108,19 +108,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ctrlhelp.h"
 #include "optsmsgs.h"
 //#include "scrvw.h"
-#include "docview.h"
-#include "app.h"
-#include "tool.h"
-#include "errors.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "cstatbar.h"
 #include "ccolbar.h"
-#include "document.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "basebar.h"
 #include "colpick.h"
 //#include "rulers.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "sgallery.h"
 
 //#include "prevwdlg.h"

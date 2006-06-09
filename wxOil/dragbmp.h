@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_DRAGBMP
 
 #include "draginfo.h"
-#include "dragtrgt.h"
+//#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class KernelBitmap;
 class CWxBitmap;

@@ -99,24 +99,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 #include "ppairbsh.h"		// PathProcessorStrokeAirbrush
 #include "ppstroke.h"		// PathProcessorStroke
 #include "ppvecstr.h"		// PathProcessorStrokeVector
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "strkattr.h"
 #include "strkcomp.h"
 #include "valfunc.h"
 
 // Native file load/save includes
-#include "camfiltr.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 //#include "tim.h"			// For _R(IDE_FILE_WRITE_ERROR)
 
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "pbecomea.h" // for pathbecomea
 // Stroke classes

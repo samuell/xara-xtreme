@@ -96,7 +96,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 #include "camtypes.h"
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ai5_eps.h"
 #include "ai_layer.h"
 

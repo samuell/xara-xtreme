@@ -100,13 +100,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_NODEBLDR
 #define INC_NODEBLDR
 
-#include "tranform.h"
-#include "doccoord.h"
-#include "docrect.h"
-#include "ink.h"
-#include "paths.h"
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blendatt.h"
-#include "becomea.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class RenderRegion;
 class Spread;

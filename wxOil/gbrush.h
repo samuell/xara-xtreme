@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GBRUSH
 #define	INC_GBRUSH
 
-#include "listitem.h"
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 class DocColour;
 class ColourContext;

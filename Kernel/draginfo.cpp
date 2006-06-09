@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "draginfo.h"
 #include "dragmsg.h"
-#include "cursor.h"
+//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"
 //#include "mario.h"
 

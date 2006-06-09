@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colcontx.h"
 #include "colourix.h"
 #include "colormgr.h"
-#include "doccolor.h"
-#include "ensure.h"
+//#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 
 CC_IMPLEMENT_DYNAMIC(IndexedColour, ListItem)

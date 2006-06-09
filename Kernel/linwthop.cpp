@@ -102,21 +102,21 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "linwthop.h"
-#include "dialogop.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
-#include "document.h"
-#include "convert.h"
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrappl.h"
 //#include "mario.h"
 //#include "simon.h"
-#include "bars.h"
-#include "app.h"
-#include "selmsg.h"
-#include "range.h"
-#include "attrmgr.h"
-#include "tool.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selmsg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <limits.h>
-#include "selmsg.h"  
+//#include "selmsg.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "assoc.h"
 
 // There is no maximum line width. We set it to a large positive INT32 value

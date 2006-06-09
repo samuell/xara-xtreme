@@ -100,8 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_SGLINE
 #define INC_SGLINE
 
-#include "sgallery.h"
-#include "sgtree.h"
+//#include "sgallery.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brshgdgt.h"
 
 

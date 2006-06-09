@@ -101,25 +101,25 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "errors.h"
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "tracergn.h"
-#include "fixmem.h"
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "trans2d.h"
+//#include "trans2d.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // for test
-#include "app.h"
-#include "range.h"
-#include "node.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "node.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodebmp.h"
 #include "bitmpinf.h"
 #include "chapter.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "page.h"
 #include "bfxtest.h"
 #include "bfxalu.h"
 #include "bfxpixop.h"
-#include "ccmaths.h"
+//#include "ccmaths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // This is not compulsory, but you may as well put it in so that the correct version
 // of your file can be registered in the .exe

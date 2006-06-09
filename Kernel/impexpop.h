@@ -101,8 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_IMPORTEXPORTOP
 #define INC_IMPORTEXPORTOP
 
-#include "filters.h"
-#include "selop.h"
+//#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bmpsdlg.h"
 
 // These used to be are OILy as they used to invoke common dialogs etc

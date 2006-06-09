@@ -102,14 +102,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "mkstroke.h" 
 
 // code headers
-#include "app.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "objchge.h"
 #include "mkshapes.h" 
 
-#include "becomea.h"
-#include "group.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeblnd.h"
 
 #include "progress.h"

@@ -100,12 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "cxftfile.h"
-#include "cxfrec.h"
-#include "cxfrech.h"
-#include "cxfdefs.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxfmap.h"
 
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "progress.h"
 //#include "filtrres.h"
 
@@ -115,10 +115,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccbuffil.h"
 
 #include "cxftags.h"	// The tag definitions
-#include "cxfdefs.h"	// The constants
+//#include "cxfdefs.h"	// The constants - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "zutil.h"		// ZLIB_VERSIONNO
 
-#include "camfiltr.h"	// BaseCamelotFilter
+//#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "fttyplis.h"
 

@@ -102,9 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_PREVIEWDLG
 
 // Find out about the DialogOp Class
-#include "dialogop.h"
-#include "list.h"
-#include "listitem.h"
+//#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ktimer.h"
 //#include "impexpop.h"
 #include "frameops.h"

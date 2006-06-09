@@ -102,15 +102,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "rsmooth.h"
 #include "nodepath.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <math.h>
-#include "memory.h"
+//#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mike.h"
-#include "undoop.h"
-#include "document.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
 #include "nodeblnd.h"
 #include "nodebldr.h"

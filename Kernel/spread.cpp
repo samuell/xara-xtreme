@@ -100,33 +100,33 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "camtypes.h"
-#include "spread.h"
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "simon.h"
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "rndrgn.h"
 #include "page.h"
 #include "exceptio.h"		// For BlowUpOnCrashMe() method      
 #include "chapter.h"
 //#include "mario.h"			// amounst other things _R(IDE_NOMORE_MEMORY)
 #include "layer.h"
-#include "convert.h"
-#include "view.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "sglayer.h"
 #include "usercord.h"
 //#include "tim.h"
 
-#include "cxfrec.h"
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "viewcomp.h"
 #include "unitcomp.h"
 
 #include "nodedoc.h"
 #include "backgrnd.h"	// OpBackground
-#include "animparams.h"
+//#include "animparams.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "optsmsgs.h"
 #include "oilbitmap.h"	// CWxBitmap
 #include "grid.h"

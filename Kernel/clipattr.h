@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_CLIPATTR
 #define INC_CLIPATTR
 
-#include "attrval.h"	// derivation from AttributeValue.
-#include "paths.h"		// for Path member variable.
+//#include "attrval.h"	// derivation from AttributeValue. - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "paths.h"		// for Path member variable. - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "clipres.h"
 
 /********************************************************************************************

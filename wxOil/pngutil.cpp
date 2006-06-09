@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pngutil.h"
 #include "pngprgrs.h"
 
-#include "ensure.h"
-#include "fixmem.h"
-#include "errors.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "camfiltr.h"		// BaseCamelotFilter
+//#include "camfiltr.h"		// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h"		// _R(IDS_OUT_OF_MEMORY)
 //#include "accures.h"		// _R(IDW_CANCELLEDBMPIMPORT)
 //#include "andy.h"			// _R(IDE_FORMATNOTSUPPORTED)

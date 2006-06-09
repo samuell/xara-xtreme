@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "gallery.h"
 
-#include "sgallery.h"	// To replace the colour gallery with a supergallery
+//#include "sgallery.h"	// To replace the colour gallery with a supergallery - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sgcolour.h"
 
 

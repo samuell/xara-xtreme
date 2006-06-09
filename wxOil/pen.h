@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PEN
 #define	INC_PEN
 
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #define MAXPRESSURE 1023
 #define JOYMAX 65536

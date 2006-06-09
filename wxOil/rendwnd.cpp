@@ -103,11 +103,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "rendwnd.h"
 #include "camelot.h"							// for IsWin32s()
-#include "ensure.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "palman.h"
 #include "ccdc.h"
 //#include "prncamvw.h"
-#include "docview.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 #include "camframe.h"
 #include "keypress.h"

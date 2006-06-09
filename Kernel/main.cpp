@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "clipext.h"
 #include "clipint.h"
-#include "docview.h"
-#include "tool.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "module.h"
 #include "bfxbase.h"
 #include "printing.h"
@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fntcache.h"
 #include "sginit.h"
 #include "sgliboil.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "oilmenus.h"
 //#include "oilruler.h"
 #include "layer.h"

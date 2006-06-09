@@ -107,22 +107,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragmgr.h"
 #include "keypress.h"
 #include "camframe.h"
-#include "bitmap.h"
+//#include "bitmap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bitmpinf.h"	
 #include "oilbitmap.h"
 
 #include "grndrgn.h"
 #include "gdrawcon.h"
-#include "dibutil.h"
+//#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "gbrush.h"
 #include "camelot.h"	// for IsWin32s()
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-#include "sgtree.h"
+//#include "sgtree.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndbmp.h"
-#include "docview.h"
-#include "spread.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "palman.h"
 
 DECLARE_SOURCE("$Revision$");

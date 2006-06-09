@@ -104,13 +104,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_SLICE_TRANSLATE	_T("SliceTranslate")
 
 #include "dragtool.h"
-#include "doccoord.h"
-#include "bars.h"
+//#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "selector.h"	// to derive OpSliceDragBox from OpSelectorDragBox.
 #include "ngscan.h"		// to derive CompileCollisionBoxScan from NodeScan.
-#include "listitem.h"	// to derive RectList from List.
-#include "list.h"		// for List.
-#include "docrect.h"	// for DocRect.
+//#include "listitem.h"	// to derive RectList from List. - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "list.h"		// for List. - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docrect.h"	// for DocRect. - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h"	// to derive OpSliceTranslate from TransOperation.
 
 class Cursor;

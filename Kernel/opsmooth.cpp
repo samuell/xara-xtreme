@@ -105,10 +105,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 //#include "barsdlgs.h" 
 //#include "mike.h"
-#include "ops.h"
+//#include "ops.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "opsmooth.h"
-#include "app.h"
-#include "document.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
 #include "ophist.h"
 //#include "jim.h"

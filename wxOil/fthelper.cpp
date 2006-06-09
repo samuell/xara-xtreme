@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "fthelper.h"
 #include "fileutil.h"
-#include "ccfile.h"
+//#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #define NO_CAMTYPES
 #include "templman.h"	// Scary bits
 

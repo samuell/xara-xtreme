@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef FREEINFO_INC
 #define FREEINFO_INC
 
-#include "bars.h"
+//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 class BevelTool;
 class BevelInfo;
 class BevelBlob;

@@ -104,13 +104,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "simon.h"
 //#include "mario.h"
 //#include "tim.h"
-#include "ensure.h"
-#include "spread.h"
+//#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "cxftags.h"
-#include "cxfdefs.h"
-#include "cxfrec.h"
-#include "camfiltr.h"
+//#include "cxfdefs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(Chapter, NodeRenderablePaper)          
 

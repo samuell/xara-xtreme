@@ -101,11 +101,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "blendatt.h"
 #include "pathpcs.h"
-#include "cxfrech.h"
-#include "biasgain.h"
-#include "quality.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "quality.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "qualattr.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "control.h"
 
 class NodeContour;

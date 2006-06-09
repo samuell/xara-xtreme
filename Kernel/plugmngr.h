@@ -102,8 +102,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PLUGINMANAGER
 #define INC_PLUGINMANAGER
 
-#include "list.h"
-#include "listitem.h"
+//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "listitem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "plugin.h"
 #include "plugop.h"
 

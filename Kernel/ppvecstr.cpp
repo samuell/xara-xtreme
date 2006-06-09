@@ -101,19 +101,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ppvecstr.h"
 
-#include "attrmgr.h"
-#include "docview.h"
-#include "document.h"
-#include "fillattr.h"
-#include "fixmem.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "grndbmp.h"
 #include "nodepath.h"
-#include "paths.h"
+//#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "pathstrk.h"
 #include "pathtrap.h"
 #include "qualattr.h"
-#include "rndrgn.h"
-#include "spread.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "strkattr.h"
 #include "valfunc.h"
 

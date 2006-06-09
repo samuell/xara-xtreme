@@ -120,20 +120,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dragcol.h"
 #include "dragpick.h"
 #include "dragbmp.h"
-#include "convert.h"
+//#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "diagnost.h"
-#include "rndrgn.h"
+//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
-#include "ccobject.h"
+//#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "scrcamvw.h"
-#include "docview.h"
-#include "document.h"
-#include "clikmods.h"
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "transop.h"
-#include "attrmgr.h"
+//#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ctrlhelp.h"
 //#include "fonts.h"
-#include "units.h"
+//#include "units.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "menuops.h"
 #include "hotkeys.h"
 //#include "oilkeys.h"
@@ -141,12 +141,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 #include "oilmenus.h"
 #include "clipint.h"
-#include "fillattr.h"
+//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 #include "fntcache.h"
 #include "pathops.h"
 #include "tunemem.h"
-#include "epsfiltr.h"
+//#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "prncamvw.h"
 //#include "oilruler.h"
 //#include "registry.h"
@@ -162,7 +162,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "hlinkdlg.h"
 #include "strkcomp.h"
 #include "tmpltdlg.h"
-#include "cxfrech.h"
+//#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "styles.h"
 #include "brshcomp.h"
 //#include "dlgcthlp.h"

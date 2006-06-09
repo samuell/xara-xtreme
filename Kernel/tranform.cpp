@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-#include "tranform.h"
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 // file version number
 DECLARE_SOURCE("$Revision$");

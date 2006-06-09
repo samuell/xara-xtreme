@@ -97,22 +97,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
  */
 
 #include "camtypes.h"
-#include "undoop.h"
+//#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "ophist.h"
 
-#include "range.h"                        
-#include "document.h"  
-#include "ensure.h"     
-#include "selstate.h"
-#include "tranform.h"
-#include "docview.h"
+//#include "range.h"                         - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "document.h"   - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "ensure.h"      - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "selstate.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "tranform.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
-#include "ink.h"
-#include "spread.h"
-#include "fixmem.h"
+//#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodepath.h"
-#include "app.h"
+//#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cpyact.h"
 #include "clipint.h"
 #include "pathedit.h"
@@ -122,10 +122,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "markn.h"
 #include "progress.h"
 #include "invalid.h"
-#include "becomea.h"
-#include "nodeattr.h"
+//#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+//#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "objchge.h"
-#include "group.h"
+//#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeblnd.h"
 #include "nodetxtl.h"
 #include "nodetxts.h"
