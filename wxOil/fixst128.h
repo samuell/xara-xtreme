@@ -96,15 +96,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-// To handle (non-Unicode) muti-byte character sets, double the width of
-// fixed-length character buffers.
-#undef	FIX_LEN_BUFSIZE
-#ifdef _UNICODE
-#define	FIX_LEN_BUFSIZE		(128 + 1)
-#else
-#define	FIX_LEN_BUFSIZE		((128 + 1) * 2)
-#endif
-
 #ifndef INC__FIXSTRING128
 #define INC__FIXSTRING128
 
@@ -123,6 +114,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class CCAPI String_128 : public StringBase
 {
+	static const INT32 FIX_LEN_BUFSIZE;
+
 private:
 	void CopyConstruct( const StringBase &other );
 	
@@ -140,7 +133,7 @@ public:
 	virtual BOOL Alloc(INT32 nSize);
 
 private:
-	TCHAR fixedbuf[FIX_LEN_BUFSIZE];
+	TCHAR fixedbuf[FIX_LEN_BUFM(128)];
 };
 
 

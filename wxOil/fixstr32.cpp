@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 //#include "fixstr32.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
+DEFINE_BUFSIZE(32);
 
 /**************************************************************************************
 >	String_32::String_32(const TCHAR* psz = 0)
@@ -173,7 +174,7 @@ String_32::String_32(UINT32 resID, UINT32 hinst)
 	*(text = fixedbuf) = 0;
 	length = FIX_LEN_BUFSIZE;
 	if (!Load(resID, hinst))
-	{
+	{	
 		ERROR3("String resource failed to load");
 		TCHAR buf[128];
 		camSnprintf(buf, 128, TEXT("<%X:%X>"), (INT32) resID, (INT32) hinst);

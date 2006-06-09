@@ -146,6 +146,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "errors.h"
 // #include <stdarg.h>
 
+#ifdef _UNICODE
+#define FIX_LEN_BUFM(x) ((x)+1)
+#else
+#define FIX_LEN_BUFM(x) (((x)+1)*2)
+#endif
+
+#define DEFINE_BUFSIZE(x) const INT32 String_ ## x::FIX_LEN_BUFSIZE = FIX_LEN_BUFM(x);
+
 // Maximum number of characters in a string resource.
 const size_t MAX_STRING_RES_LENGTH = 255;
 const INT32 str_MAXEXCEPTIONS = 30;

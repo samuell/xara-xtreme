@@ -95,8 +95,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-#undef	FIX_LEN_BUFSIZE
-#define	FIX_LEN_BUFSIZE		(8 + 1)
 
 #ifndef INC__FIXSTRING8
 #define INC__FIXSTRING8
@@ -116,6 +114,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class CCAPI String_8 : public StringBase
 {
+	static const INT32 FIX_LEN_BUFSIZE;
+
 private:
 	void CopyConstruct( const StringBase &other );
 	
@@ -130,7 +130,7 @@ public:
 	virtual BOOL Alloc(INT32 nSize);
 
 private:
-	TCHAR fixedbuf[FIX_LEN_BUFSIZE];
+	TCHAR fixedbuf[FIX_LEN_BUFM(8)];
 };
 
 

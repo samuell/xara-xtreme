@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 //#include "fixstr8.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
+DEFINE_BUFSIZE(8);
 
 /**************************************************************************************
 >	String_8::String_8(const TCHAR* psz = 0)

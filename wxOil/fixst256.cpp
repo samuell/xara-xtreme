@@ -99,6 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 //#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
+DEFINE_BUFSIZE(256);
+
 
 /**************************************************************************************
 >	String_256::String_256(const TCHAR* psz = 0)
