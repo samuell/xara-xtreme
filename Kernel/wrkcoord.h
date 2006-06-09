@@ -116,10 +116,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_WRKCOORD
 #define INC_WRKCOORD
 
-#ifndef INC_CAMTYPES
-#include "camtypes.h"
-#endif
-
 #include "ccmaths.h"						// for XLONG
 #include "coord.h"							// for Coord
 

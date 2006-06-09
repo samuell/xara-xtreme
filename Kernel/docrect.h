@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_DOCRECT
 #define INC_DOCRECT
 
-#include "camtypes.h"
 #include "doccoord.h"
 
 // extra headers for DocRect class

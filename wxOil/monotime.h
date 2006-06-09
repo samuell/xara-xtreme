@@ -110,10 +110,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_MONOTIME
 #define INC_MONOTIME
 
-#ifndef INC_CAMTYPES
-#include "camtypes.h"
-#endif
-
 /********************************************************************************************
 
 >	class MonotonicTime

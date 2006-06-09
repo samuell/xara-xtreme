@@ -115,10 +115,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include <math.h>
 
-#ifndef INC_CAMTYPES
-#include "camtypes.h"
-#endif
-
 class CAMAPI Coord
 {
 public:
