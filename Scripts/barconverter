@@ -153,7 +153,9 @@ sub GetSize
 		    "IDC_SPACING_EDIT" => 30,
 		    "IDC_TRACKING_EDIT" => 30,
 		    "IDC_KERN_EDIT_Y" => 40,
-		    "IDC_KERN_EDIT_X" => 40
+		    "IDC_KERN_EDIT_X" => 40,
+		    "IDLB_JOINTYPE_LIST_BOX" => 96,
+		    "IDLB_LINECAP_LIST_BOX" => 96
 		   );
     return $cnamemap{ $control } || $default;
 }
@@ -180,6 +182,8 @@ sub GetComboStyle
 		    "IDC_BEVEL_TYPE_COMBO" => "wxCB_READONLY",
 		    "IDC_BEVEL_SLIDER_COMBO" => "wxCB_READONLY",
 		    "IDC_FONT_COMBO" => "wxCB_READONLY",
+		    "IDLB_JOINTYPE_LIST_BOX" => "wxCB_READONLY",
+		    "IDLB_LINECAP_LIST_BOX" => "wxCB_READONLY"
 		   );
     return $cnamemap{ $control } || $default;
 }

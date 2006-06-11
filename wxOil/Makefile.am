@@ -6,7 +6,10 @@
 BUILT_SOURCES	= svnversion.h resources.h
 # Note we don't clean xrc.d and xrc.stamp here to avoid a loop
 CLEANFILES		= svnversion.h
-MOSTLYCLEANFILES = resources.h xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po xrc/resources.xrs xrc/xrc.check
+# explicitly remove resources.h from TOPDIR as well. It should not be there on an out of tree build,
+# but running build-resources manually (or switching to an out-of-tree build) can leave it there
+# which then confuses things
+MOSTLYCLEANFILES = $(TOPDIR)/wxOil/resources.h resources.h xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po xrc/resources.xrs xrc/xrc.check
 noinst_LIBRARIES	= libwxOil.a
 
 # the application source, library search path, and link libraries
