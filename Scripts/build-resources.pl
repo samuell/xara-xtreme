@@ -382,15 +382,17 @@ if ($international && ($buildresources || $ponewer))
     while (<STRINGS>)
     {
 	chomp;
-	s/^\S+\t//;
-	# skip completely blank lines
-	next if (/^\s*$/);
+	s/(^\S+)\t//;
+	my $comment=$1;
+	# skip completely blank lines or a single hyphen
+	next if (/^\s*((-)?)\s*$/);
 	# escape slashes
 	s/\\/\\\\/g;
 	# escape quotes
 	s/\"/\\\"/g;
 	my $s;
-	$s="_(\"$_\");";
+	$s="/* $comment */ _(\"$_\");";
+#	$s="_(\"$_\");";
 	push @strings, $s;
 	print STDERR "String: $s\n" if ($verbose>2);
     }
@@ -410,8 +412,8 @@ if ($international && ($buildresources || $ponewer))
     {
 	# Note wxrc removes XML escaping
 	chomp;
-	# zap blank lines
-	next if (/^_\(\"\s*\"\)/);
+	# zap blank lines and single hyphens
+	next if (/^_\(\"\s*((-)?)\"\)/);
 	print STDERR "Dialog: $_\n" if ($verbose>2);
 	push @strings,$_;
 	$dlines++;
@@ -445,7 +447,7 @@ if ($international && ($buildresources || $ponewer))
     }
     
     my $n=1;
-    open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
+    open (XGETTEXT, "|".$xgettext.' --from-code ISO-8859-1 --force-po -k_ -c -C -i - --no-location --copyright-holder "Xara Group Ltd" --msgid-bugs-address=bugs@xara.com -d xaralx -o '.$outputdir."/xrc/xaralx.po") || die "Can't run $xgettext: $!";
     foreach $i (@uniqstrings)
     {
 	print STDERR "Line $n, translate: $i\n" if ($verbose>2);
