@@ -354,12 +354,12 @@ public:
 	void UngetToken();
 
 	// Get status information...
-	UINT32 		 GetLineNumber()	{ return Line;      }
-	UINT32  		 GecharOffset()	{ return Ofs;       }
-	virtual	INT32 GetCharsRead()  	{ return CharsRead; }
-	LexTokenType GetTokenType() 	{ return TokenType; }
-	const TCHAR *GetTokenBuf() 		{ return TokenBuf;  }
-	BOOL 		 IsLexerInitialised() { return LexerInitialised; }
+	UINT32			GetLineNumber()			{ return Line;      }
+	UINT32			GetCharOffset()			{ return Ofs;       }
+	virtual	INT32	GetCharsRead()  		{ return CharsRead; }
+	LexTokenType	GetTokenType() 			{ return TokenType; }
+	const TCHAR		*GetTokenBuf() 			{ return TokenBuf;  }
+	BOOL 			IsLexerInitialised()	{ return LexerInitialised; }
 
 	// Token writing routines.
 	// These very simple functions allow your token output code to look
