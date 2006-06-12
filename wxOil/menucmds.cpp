@@ -873,36 +873,38 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
-
-
-void HelpDemosAction()
+static void StartMovie( const wxString &strFile )
 {
-#if 1
-	wxString			strVideoPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
-	if( !wxDir::Exists( strVideoPath ) )
+	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
+	if( !wxDir::Exists( strDataPath ) )
 	{
 #if defined(_DEBUG)
 		// We'll try default location under debug to make life easier
-		strVideoPath = _T("/usr/share");
+		strDataPath = _T("/usr/share");
 #endif
 	}
 
-	wxString			strBinaryPath( strVideoPath );
-	strBinaryPath += _("/xaralx/bin");
+	wxString			strVideoPath( strDataPath );
 	strVideoPath += _("/xaralx/video");
-
-	wxString			strCommand( strBinaryPath + _T("/mplayer -slave \"") );
-	strCommand += strVideoPath + _T("/Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm\"");
-
-	TRACEUSER( "jlh92", _T("Executing %s\n"), PCTSTR(strCommand) );
-
-	wxProcess*	pProcess = new wxProcess;
-	// NB this should return -1 for failure, but instead is returning 255
-	long /*TYPENOTE: CORRECT*/ lResult = wxExecute( strCommand, wxEXEC_SYNC, pProcess );
+	
+	wxString			strCommand( _T("mplayer -slave \"") );
+	strCommand += strVideoPath + _T("/") + strFile + _T("\"");	
+	long /*TYPENOTE: CORRECT*/ lResult = wxExecute( strCommand, wxEXEC_SYNC, NULL );
 	if( 255 == lResult )
-		InformWarning( _R(IDS_MPLAYER_MISSING), _R(IDS_OK) );
+	{
+		strCommand = strDataPath + _T("/xaralx/bin/mplayer -slave \"");
+		strCommand += strVideoPath + strVideoPath + _T("/") + strFile + _T("\"");
 
-	TRACEUSER( "jlh92", _T("Exec err = %d\n"), lResult );
+		lResult = wxExecute( strCommand, wxEXEC_SYNC, NULL );
+		if( 255 == lResult )
+			InformWarning( _R(IDS_MPLAYER_MISSING), _R(IDS_OK) );
+	}
+}
+
+void HelpDemosAction()
+{
+#if 0
+	StartMovie( _T("Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm") );
 #else
 	wxWindow*		pWnd	= new wxTopLevelWindow( CCamFrame::GetMainFrame(), wxID_ANY, _T("Demo Video") );
 	wxSizer*		pSizer	= new wxBoxSizer( wxHORIZONTAL );
