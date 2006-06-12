@@ -397,8 +397,8 @@ void VectorFileRenderRegion::DrawBitmapBlob( const DocCoord	&Point,
 ********************************************************************************************/
 
 void VectorFileRenderRegion::DrawBitmapBlob( const DocCoord	&Point,
-											  UINT32				BitmapID,
-											  UINT32				ToolID )
+											  UINT32				BitmapID/*,
+											  UINT32				ToolID*/ )
 {
 	ENSURE( FALSE, "DrawBitmapBlob called while exporting!" );
 }

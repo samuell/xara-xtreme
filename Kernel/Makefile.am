@@ -71,6 +71,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	tracergn.cpp bfxbase.cpp coldlog.cpp colmenu.cpp sgline.cpp sgline2.cpp \
 	sgstroke.cpp sgbrush.cpp lattrops.cpp la_base.cpp maskedrr.cpp  \
 	cameleps.cpp epscdef.cpp epsclist.cpp epssitem.cpp epsstack.cpp \
-	nativeps.cpp epsfiltr.cpp aw_eps.cpp saveeps.cpp
+	nativeps.cpp epsfiltr.cpp aw_eps.cpp saveeps.cpp vectrndr.cpp kerneldc.cpp \
+	release.cpp
 
 AM_CXXFLAGS = $(XARAFLAGS)

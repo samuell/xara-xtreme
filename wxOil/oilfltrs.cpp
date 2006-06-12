@@ -754,7 +754,7 @@ BOOL OILFilter::FixExtensionOfPathName(PathName *Path)
 }
 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 ***** Definition of the OILy parts for individual filters								*****
@@ -811,8 +811,8 @@ AI8EPSOILFilter::AI8EPSOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 #endif
 
-PORTNOTE("EpsFilter", "Removed use of EPS filters")
-#if !defined(EXCLUDE_FROM_XARALX)
+
+
 /********************************************************************************************
 
 >	ArtWorksEPSOILFilter::EPSOILFilter()
@@ -865,11 +865,10 @@ NativeEPSOILFilter::NativeEPSOILFilter(Filter* pFilter) : CamelotEPSOILFilter(pF
 	FilterExt.Load(_R(IDS_FILTEREXT_NATIVE));
 }
 
-#endif
 
 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -1125,7 +1124,7 @@ CMXImportOILFilter::CMXImportOILFilter(Filter *pFilter) : OILFilter(pFilter)
 #endif
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -1223,7 +1222,7 @@ AldusFormatOILFilter::AldusFormatOILFilter(Filter *pFilter, LPTCHAR UserName, LP
 	FilterExt = Extension;
 }
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 
 /********************************************************************************************
 
@@ -1241,7 +1240,7 @@ BMPOILFilter::BMPOILFilter(Filter *pFilter) : OILFilter(pFilter)
 	FilterExt.Load(_R(IDT_FILTEREXT_BMP));
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -1348,7 +1347,7 @@ String_64 GIFOILFilter::GetFilterName(UINT32 NumberToExport)
 		return FilterName;
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 
@@ -1432,7 +1431,7 @@ IOCAOILFilter::IOCAOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 
 
 /********************************************************************************************
@@ -1505,7 +1504,7 @@ PNGOILFilter::PNGOILFilter(Filter* pFilter) : OILFilter(pFilter)
 	FilterExt.Load(_R(IDS_FILTEREXT_PNG));
 } 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH) 
 
 
 /********************************************************************************************
@@ -1824,7 +1823,7 @@ ImagemapOILFilter::ImagemapOILFilter(Filter* pFilter) : OILFilter(pFilter)
 } 
 
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 // No text filters as the wonderful new system really encourages innovation!
 #if BUILD_OTHER_TEXT_FILTERS
@@ -2023,4 +2022,4 @@ HTMLOILFilter::HTMLOILFilter(Filter *pFilter) : OILFilter(pFilter)
 
 
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH

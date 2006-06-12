@@ -160,7 +160,7 @@ KernelDC::KernelDC(RenderType rType) : CCDC(rType)
 
 ********************************************************************************************/
 
-KernelDC::KernelDC(CDC *pDC, RenderType rType) : CCDC(pDC, rType)
+KernelDC::KernelDC(CNativeDC *pDC, RenderType rType) : CCDC(pDC, rType)
 {
 	// Initialise other fields.
 	LineWidth = 0;
@@ -263,7 +263,7 @@ BOOL KernelDC::OutputCoord(DocCoord& Coord, EPSAccuracy Accuracy)
 
 BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 {
-	char Buf[20];
+	TCHAR Buf[20];
 	INT32 Integer;
 	INT32 Fraction;
 
@@ -283,24 +283,24 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 			// If fraction is 0, just output integer value.
 			if (Fraction == 0)
 			{
-				wsprintf(Buf, "%d", Integer);
+				camSprintf(Buf, _T("%d"), Integer);
 			}
 			else if (FullAccuracy)
 			{
 				// Full 3dp accuracy
 				if ((n < 0) && (Integer == 0))
-					wsprintf(Buf, "-%d.%.3d", Integer, Abs(Fraction));
+					camSprintf(Buf, _T("-%d.%.3d"), Integer, Abs(Fraction));
 				else
-					wsprintf(Buf, "%d.%.3d", Integer, Abs(Fraction));
+					camSprintf(Buf, _T("%d.%.3d"), Integer, Abs(Fraction));
 			}
 			else
 			{
 				// Normal 2dp accuracy
 				Fraction /= 10;
 				if ((n < 0) && (Integer == 0))
-					wsprintf(Buf, "-%d.%.2d", Integer, Abs(Fraction));
+					camSprintf(Buf, _T("-%d.%.2d"), Integer, Abs(Fraction));
 				else
-					wsprintf(Buf, "%d.%.2d", Integer, Abs(Fraction));
+					camSprintf(Buf, _T("%d.%.2d"), Integer, Abs(Fraction));
 			}
 			break;
 
@@ -312,7 +312,7 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 				Integer = (n - 500) / 1000;
 
 			// Output to string (accurate to 0dp)
-			wsprintf(Buf, "%d", Integer);
+			camSprintf(Buf, _T("%d"), Integer);
 			break;
 
 		case ACCURACY_ROUNDUP:
@@ -323,7 +323,7 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 				Integer = n / 1000;
 
 			// Output to string (accurate to 0dp)
-			wsprintf(Buf, "%d", Integer);
+			camSprintf(Buf, _T("%d"), Integer);
 			break;
 	}
 
@@ -354,9 +354,9 @@ BOOL KernelDC::OutputColourValue(UINT32 n)
 	INT32 Fraction = ((n % 255) * 100) / 255;
 
 	// Output to string
-	char Buf[20];
+	TCHAR Buf[20];
 	// Ensure we always get at least 2 decimal figures with %.2d
-	wsprintf(Buf, "%d.%.2d", Integer, Abs(Fraction));
+	camSprintf(Buf, _T("%d.%.2d"), Integer, Abs(Fraction));
 	return OutputToken(Buf);
 }
 
@@ -441,7 +441,7 @@ BOOL KernelDC::OutputNamedColour(DocColour *pCol, ColourContext* pContext)
 		{
 			// This is a 'no colour' type colour, so output a zero-length colour name,
 			// as this is the only way we can handle this at the moment.
-			if (!OutputString(""))
+			if (!OutputString(_T("")))
 				return FALSE;
 		}
 		else
@@ -461,7 +461,7 @@ BOOL KernelDC::OutputNamedColour(DocColour *pCol, ColourContext* pContext)
 	}
 
 	// Always tint 0
-	return OutputToken("0");
+	return OutputToken(_T("0"));
 }
 
 
@@ -498,7 +498,7 @@ BOOL KernelDC::OutputColourName(DocColour *pCol)
 		{
 			// This is a 'no colour' type colour, so output a zero-length colour name,
 			// as this is the only way we can handle this at the moment.
-			ok = OutputString("");
+			ok = OutputString(_T(""));
 		}
 		else
 		{
@@ -547,7 +547,7 @@ BOOL KernelDC::OutputString(TCHAR *pString)
 	// Copy the string, looking for embedded delimiters.
 	INT32 src = 0,
 		dst = 1;
-	while ( (pString[src] != _T(0)) && (dst < 120 ) )	//while ((pString[src] != 0) && (dst < 120))-adapted for DBCS
+	while ( (pString[src]) && (dst < 120 ) )	//while ((pString[src] != 0) && (dst < 120))-adapted for DBCS
 	{
 		if( (pString[src]== _T('(')) || (pString[src]==_T(')')) || (pString[src]== _T('\\')) )
 	  //if( (pString[src] == '(')    || (pString[src] == ')')      || (pString[src] == '\\') )-adapted for DBCS
@@ -625,7 +625,7 @@ BOOL KernelDC::OutputMatrix(Matrix * M)
 BOOL KernelDC::OutputValue(INT32 Value)
 {
 	TCHAR buf[30];
-	_stprintf(buf, "%ld", Value);
+	camSprintf(buf, _T("%d"), Value);
 	return OutputToken(buf);
 }
 
@@ -646,7 +646,7 @@ BOOL KernelDC::OutputValue(INT32 Value)
 BOOL KernelDC::OutputValue(UINT32 Value)
 {
 	TCHAR buf[30];
-	_stprintf(buf, "%lu", Value);
+	camSprintf(buf, _T("%u"), Value);
 	return OutputToken(buf);
 }
 
@@ -671,7 +671,7 @@ BOOL KernelDC::OutputReal(double Value)
 	// Save floating point in scientific notation (because otherwise the number output
 	// could be very long, e.g. 6.2e66 or similar would be very long if we didn't use
 	// the exponent syntax).
-	_stprintf(buf, "%g", Value);
+	camSprintf(buf, _T("%g"), Value);
 	return OutputToken(buf);
 }
 
@@ -701,14 +701,14 @@ BOOL KernelDC::OutputFloat(const double Value, const UINT32 DecPl)
 
 	switch (DecPl)
 	{
-		case 1: _stprintf(buf,"%.1f",Value); break;
-		case 2: _stprintf(buf,"%.2f",Value); break;
-		case 4: _stprintf(buf,"%.4f",Value); break;
-		case 5: _stprintf(buf,"%.5f",Value); break;
-		case 6: _stprintf(buf,"%.6f",Value); break;
-		case 7: _stprintf(buf,"%.7f",Value); break;
-		case 8: _stprintf(buf,"%.8f",Value); break;
-		default:_stprintf(buf,"%.3f",Value); break;
+		case 1: camSprintf(buf,_T("%.1f"),Value); break;
+		case 2: camSprintf(buf,_T("%.2f"),Value); break;
+		case 4: camSprintf(buf,_T("%.4f"),Value); break;
+		case 5: camSprintf(buf,_T("%.5f"),Value); break;
+		case 6: camSprintf(buf,_T("%.6f"),Value); break;
+		case 7: camSprintf(buf,_T("%.7f"),Value); break;
+		case 8: camSprintf(buf,_T("%.8f"),Value); break;
+		default:camSprintf(buf,_T("%.3f"),Value); break;
 	}
 
 	// supress a few trailing zero's
@@ -758,7 +758,7 @@ BOOL KernelDC::OutputFloat(const double Value, const UINT32 DecPl)
 BOOL KernelDC::OutputArray(INT32* Array, INT32 ArraySize)
 {
 	// Output the 'ArrayStart'
-	if (!OutputToken("["))
+	if (!OutputToken(_T("[")))
 		return FALSE;
 
 	// Output the actual array elements
@@ -769,7 +769,7 @@ BOOL KernelDC::OutputArray(INT32* Array, INT32 ArraySize)
 	}
 
 	// Output the 'ArrayEnd'
-	if (!OutputToken("]"))
+	if (!OutputToken(_T("]")))
 		return FALSE;
 
 	return TRUE;
@@ -891,11 +891,11 @@ void KernelDC::ConvertToHex(BYTE *Data, UINT32 Length, TCHAR *Buf)
 		INT32 Nybble = (Data[DataOfs] & 0xF0) >> 4;
 		ENSURE(Nybble < 16, "Bad hex digit in KernelDC::ConvertToHex");
 
-		char Ch;
+		TCHAR Ch;
 		if (Nybble < 10)
-			Ch = '0' + (char) Nybble;
+			Ch = '0' + (TCHAR) Nybble;
 		else
-			Ch = 'A' + (char) (Nybble - 10);
+			Ch = 'A' + (TCHAR) (Nybble - 10);
 
 		Buf[DestOfs++] = Ch;
 
@@ -903,9 +903,9 @@ void KernelDC::ConvertToHex(BYTE *Data, UINT32 Length, TCHAR *Buf)
 		ENSURE(Nybble < 16, "Bad hex digit in KernelDC::ConvertToHex");
 
 		if (Nybble < 10)
-			Ch = '0' + (char) Nybble;
+			Ch = '0' + (TCHAR) Nybble;
 		else
-			Ch = 'A' + (char) (Nybble - 10);
+			Ch = 'A' + (TCHAR) (Nybble - 10);
 
 		Buf[DestOfs++] = Ch;
 
@@ -968,7 +968,7 @@ INT32 KernelDC::EndASCII85Output()
 	INT32 nBytes = FlushASCII85Buffer();
 
 	// End of ASCII85 data, so output the ASCII85 EOD marker.
-	char EOD[] = "~>";
+	TCHAR EOD[] = _T("~>");
 	OutputDirect((LPBYTE) EOD, 2);
 	OutputNewLine();
 
@@ -1127,7 +1127,7 @@ INT32 KernelDC::ConvertToASCII85(BYTE *Src, UINT32 Length, BYTE *Dest)
 */
 
 	// Start at the beginning of the buffer
-	INT32 SrcOfs = 0;
+//	INT32 SrcOfs = 0;
 	INT32 DstOfs = 0;
 
 	while (Length > 0)
@@ -1233,7 +1233,7 @@ INT32 KernelDC::ConvertFromASCII85(BYTE *Src, UINT32 Length, BYTE *Dest)
 									 85 * 85 * 85 * 85 };
 
 	// Start at the beginning of the buffer
-	INT32 SrcOfs = 0;
+//	INT32 SrcOfs = 0;
 	INT32 DstOfs = 0;
 	BOOL FoundEOD = FALSE;
 
@@ -1537,7 +1537,11 @@ BYTE *KernelDC::RunLengthDecode(BYTE *Data, INT32 *pLength)
 	}
 
 	// Sanity checks
-	ERROR2IF(j != Size, (*pLength = 0, NULL), "Incorrect decoding of Run length data");
+	if (j!=Size)
+	{
+		*pLength=0;
+		ERROR2(NULL, "Incorrect decoding of Run length data");
+	}
 
 	// Ok, we've decoded it.
 	*pLength = j;

@@ -100,10 +100,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 //#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "epsfiltr.h"
+#include "epsfiltr.h"
 //#include "coreleps.h"
-//#include "aw_eps.h"
-//#include "cameleps.h"
+#include "aw_eps.h"
+#include "cameleps.h"
 //#include "ai_eps.h"
 //#include "ai5_eps.h"
 //#include "ai8_eps.h"
@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "native.h"			// The new designed native filter, used for v2
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "layer.h"
 //#include "nev.h"
 //#include "coplfilr.h"
@@ -759,15 +759,17 @@ BOOL Filter::InitFilters()
 #if BUILD_TEXT_FILTERS
 	ADD_FILTER(TextFilterFamily)
 #endif
+#endif
 	// Create, initialise and install the Generic EPS import filter
 #ifndef STANDALONE
 	ADD_FILTER(GenericEPSFilter)
 #endif
-#endif
 
+#ifndef EXCLUDE_FROM_XARALX
 // Remove this next line to add the CDR / CMX filters...
 #ifndef NOCDRCMX
 	ADD_FILTER(PaletteFilterFamily)
+#endif
 #endif
 
 	// Create, initialise and install the other supported filters:
@@ -777,11 +779,8 @@ PORTNOTETRACE("filter","Removed CamelotWebFilter usage");
 #ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(CamelotWebFilter)		// The minimalistic form of the v2 native filter
 #endif
-PORTNOTETRACE("filter","Removed EPS filters usage");
-#ifndef EXCLUDE_FROM_XARALX
-//	ADD_FILTER(CamelotEPSFilter)
-//	ADD_FILTER(CamelotNativeEPSFilter)	// The old style EPS native filter, used in v1.1
-#endif
+	ADD_FILTER(CamelotEPSFilter)
+	ADD_FILTER(CamelotNativeEPSFilter)	// The old style EPS native filter, used in v1.1
 	// Winoil filters are initialised here to prevent the drop-down list from being
 	// mis-ordered.
 
@@ -811,7 +810,7 @@ PORTNOTE("filter","Removed FlashFilter usage")
 	// Other filters in alphabetical order.
 PORTNOTE("filter","Removed filters usage")
 #ifndef EXCLUDE_FROM_XARALX
-/*	ADD_FILTER(AcornDrawFilter)
+	ADD_FILTER(AcornDrawFilter)
 
 	// Adobe AI / EPS filters.
 	ADD_FILTER(AIEPSFilter)
@@ -819,8 +818,11 @@ PORTNOTE("filter","Removed filters usage")
 	ADD_FILTER(AI8EPSFilter)
 
 	ADD_FILTER(PhotoShopEPSFilter)
+#endif
 
-	ADD_FILTER(ArtWorksEPSFilter) */
+	ADD_FILTER(ArtWorksEPSFilter)
+PORTNOTE("filter","Removed filters usage")
+#ifndef EXCLUDE_FROM_XARALX
 
 //	ADD_FILTER(BMPFilter)
 

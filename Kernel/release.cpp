@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 //#include "release.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "brandinf.h"
+//#include "brandinf.h"
 //#include "justin2.h"
 //#include "app.h"		// Camelot object - in camtypes.h [AUTOMATICALLY REMOVED]
 
@@ -111,6 +111,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // lets declare a Unicode version of the name, which will be much harder to find
 
+PORTNOTE("other", "Removed branding stuff")
+#ifndef EXCLUDE_FROM_XARALX
 // put these in a different segment to the others
 #pragma data_seg( "CAMELOT", "DATA" )
 struct
@@ -127,20 +129,35 @@ struct
 	BRANDED_COMPANY_UNICODE
 };
 
+#endif
+
+#ifndef BRANDED_NAME_MAX
+	#define BRANDED_NAME_MAX 255
+#endif
+
 #pragma data_seg()
-struct
+struct p
 {
 	UINT32	Magic;
 	UINT32	Serial;
-	char	Name[BRANDED_NAME_MAX];
-	char	Company[BRANDED_NAME_MAX];
+	TCHAR	Name[BRANDED_NAME_MAX];
+	TCHAR	Company[BRANDED_NAME_MAX];
 } PublicInfo =
+#ifndef EXCLUDE_FROM_XARALX
 {
 	BRANDED_MAGIC1,
 	BRANDED_SERIALNUMBER,
 	BRANDED_NAME,
 	BRANDED_COMPANY
 };
+#else
+{
+	0,
+	0,
+	_T("Unregistered user"),
+	_T("Unregistered company")
+};
+#endif
 
 // bug - before 28/2/97 only allocated 10 chars so when it puts 101- and then the
 // number to 9 places it will overflow into the next string. This string dictates
@@ -158,15 +175,15 @@ static TCHAR szCompany[]		= _T("Company");
 // this returns the obvious user name. Not hidden at all
 
 
-// Why was this class written to use type char, not TCHAR?   This is a royal pain in the backside.
+// Why was this class written to use type TCHAR, not TCHAR?   This is a royal pain in the backside.
 
-const char *ReleaseInfo::GetInfo()
+const TCHAR *ReleaseInfo::GetInfo()
 {
-	static char buf[256];
+	static TCHAR buf[256];
 
 #ifndef STANDALONE
-//	wsprintf(buf, "%s (#101-%09ld)", PublicInfo.Name, PublicInfo.Serial );
-//	wsprintf(buf, TEXT("%s (#%s)"), ReleaseInfo::GetLicensee(), ReleaseInfo::GetSerialNumber());
+//	camSprintf(buf, "%s (#101-%09ld)", PublicInfo.Name, PublicInfo.Serial );
+//	camSprintf(buf, TEXT("%s (#%s)"), ReleaseInfo::GetLicensee(), ReleaseInfo::GetSerialNumber());
 
 	String_256 jcf;
 	jcf.MakeMsg(_R(IDS_RELEASE_INFO_FORMAT), ReleaseInfo::GetLicensee(), ReleaseInfo::GetSerialNumber());
@@ -181,15 +198,15 @@ const char *ReleaseInfo::GetInfo()
 
 //***************************************************************************
 
-const char* ReleaseInfo::GetLicensee()
+const TCHAR* ReleaseInfo::GetLicensee()
 {
-	static char buffer[64];
-#ifdef _DEBUG
-	char* pLogName=_tgetenv("LOGNAME");
+	static TCHAR buffer[64];
+#if !defined(EXCLUDE_FROM_XARALX) && defined(_DEBUG)
+	TCHAR* pLogName=_tgetenv(TCHAR);
 	if (pLogName!=NULL)
-		wsprintf(buffer,"%s",pLogName);
+		camSprintf(buffer,_T("%s"),pLogName);
 	else
-		wsprintf(buffer,"%s","NoLogName");
+		camSprintf(buffer,_T("%s"),("NoLogName"));
 #else
 	// read the licensee preference value into a string
 	String_256 Str;
@@ -198,12 +215,12 @@ const char* ReleaseInfo::GetLicensee()
 	{
 		// copy the string into the return buffer
 		TCHAR* StringBuf = (TCHAR*)Str;
-		wsprintf(buffer, "%s", StringBuf);
+		camSprintf(buffer, _T("%s"), StringBuf);
 	}
 	else
 	{
 		// something went wrong so use a default, the bound in one
-		wsprintf(buffer,"%s",PublicInfo.Name);
+		camSprintf(buffer,_T("%s"),PublicInfo.Name);
 	}
 #endif
 
@@ -212,9 +229,9 @@ const char* ReleaseInfo::GetLicensee()
 
 //***************************************************************************
 
-const char* ReleaseInfo::GetSerialNumber()
+const TCHAR* ReleaseInfo::GetSerialNumber()
 {
-	static char buffer[64];
+	static TCHAR buffer[64];
 
 	// read the serial number preference value into a string
 	String_256 Str;
@@ -223,12 +240,12 @@ const char* ReleaseInfo::GetSerialNumber()
 	{
 		// copy the string into the return buffer
 		TCHAR* StringBuf = (TCHAR*)Str;
-		wsprintf(buffer, "%s", StringBuf);
+		camSprintf(buffer, _T("%s"), StringBuf);
 	}
 	else
 	{
 		// something went wrong so use a default, the bound in one
-		wsprintf(buffer,"101-%09ld",PublicInfo.Serial);
+		camSprintf(buffer,_T("101-%09ld"),PublicInfo.Serial);
 	}
 
 	return buffer;
@@ -236,9 +253,9 @@ const char* ReleaseInfo::GetSerialNumber()
 
 //***************************************************************************
 
-const char* ReleaseInfo::GetCompany()
+const TCHAR* ReleaseInfo::GetCompany()
 {
-	static char buffer[64];
+	static TCHAR buffer[64];
 	// read the company preference value into a string
 	String_256 Str;
 	BOOL ok = Camelot.GetPrefDirect(szUISection, szCompany, &Str);
@@ -246,12 +263,12 @@ const char* ReleaseInfo::GetCompany()
 	{
 		// coy the string into the return buffer
 		TCHAR* StringBuf = (TCHAR*)Str;
-		wsprintf(buffer, "%s", StringBuf);
+		camSprintf(buffer, _T("%s"), StringBuf);
 	}
 	else
 	{
 		// something went wrong so use a default, the bound in one
-		wsprintf(buffer,"%s",PublicInfo.Company);
+		camSprintf(buffer,_T("%s"),PublicInfo.Company);
 	}
 
 	return buffer;
@@ -275,13 +292,13 @@ const char* ReleaseInfo::GetCompany()
 ***********************************************************************************************/
 void ReleaseInfo::CacheProfileSettings()
 {
-	strcpy(PublicInfo.Name, GetLicensee());
+	camStrcpy(PublicInfo.Name, GetLicensee());
 #ifndef WEBSTER
 	// No serial number in Webster v2.0.
 	// This happens too early to get resources.
-	strcpy(szCachedSerial, GetSerialNumber());
+	camStrcpy(szCachedSerial, GetSerialNumber());
 #endif
-	strcpy(PublicInfo.Company, GetCompany());
+	camStrcpy(PublicInfo.Company, GetCompany());
 }
 
 /***********************************************************************************************

@@ -116,10 +116,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class ReleaseInfo
 {
 public:
-	static const char* GetInfo();
-	static const char* GetLicensee();
-	static const char* GetSerialNumber();
-	static const char* GetCompany();
+	static const TCHAR* GetInfo();
+	static const TCHAR* GetLicensee();
+	static const TCHAR* GetSerialNumber();
+	static const TCHAR* GetCompany();
 
 	static void CacheProfileSettings();
 	static BOOL RestoreProfileSettings();
@@ -129,7 +129,7 @@ protected:
 
 private:
 	UINT32 SerialNumber;
-	const char *Name;
+	const TCHAR *Name;
 };
 
 #endif

@@ -144,7 +144,7 @@ class KernelDC : public CCDC
 {
 public:
 	KernelDC(RenderType Type);
-	KernelDC(wxDC* pDC, RenderType Type);
+	KernelDC(CNativeDC * pDC, RenderType Type);
 
 public:
 	// Functions to output in PostScript format.
