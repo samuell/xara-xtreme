@@ -161,41 +161,41 @@ enum
 CommandMap FreeHandEPSFilter::FHCommands[] =
 {
 	// colours
-	EPSC_Xa,		"Xa",
-	EPSC_xa,		"xa",
-	EPSC_Ka,		"Ka",
-	EPSC_ka,		"ka",
+	{ EPSC_Xa,		"Xa" },
+	{ EPSC_xa,		"xa" },
+	{ EPSC_Ka,		"Ka" },
+	{ EPSC_ka,		"ka" },
 
 	// fills
-	EPSC_radfill,	"radfill",
-	EPSC_recfill,	"recfill",
-	EPSC_load,		"load",
+	{ EPSC_radfill,	"radfill" },
+	{ EPSC_recfill,	"recfill" },
+	{ EPSC_load,	"load" },
 
 	// colour list stuff
-	EPSC_BeginSetup,"%%BeginSetup",
-	EPSC_def,		"def",
-	EPSC_newcmykcustomcolor, "newcmykcustomcolor",
+	{ EPSC_BeginSetup, "%%BeginSetup"},
+	{ EPSC_def,		"def" },
+	{ EPSC_newcmykcustomcolor, "newcmykcustomcolor" },
 
 	// text stuff
-	EPSC_makesetfont, "makesetfont",
-	EPSC_ts,		"ts",
-	EPSC_sts,		"sts",
+	{ EPSC_makesetfont, "makesetfont" },
+	{ EPSC_ts,		"ts" },
+	{ EPSC_sts,		"sts" },
 
 	// complex path stuff
-	EPSC_eomode,	"eomode",
-	EPSC_true,		"true",
-	EPSC_false,		"false",
+	{ EPSC_eomode,	"eomode" },
+	{ EPSC_true,	"true" },
+	{ EPSC_false,	"false" },
 
 	// misc stuff
-	EPSC_concat,	"concat",
-	EPSC_vms,		"vms",
-	EPSC_vmr,		"vmr",
-	EPSC_vmrs,		"vmrs",
-	EPSC_stob,		"stob",
-	EPSC_fhsetspreadallow, "fhsetspreadallow",
+	{ EPSC_concat,	"concat" },
+	{ EPSC_vms,		"vms" },
+	{ EPSC_vmr,		"vmr" },
+	{ EPSC_vmrs,	"vmrs" },
+	{ EPSC_stob,	"stob" },
+	{ EPSC_fhsetspreadallow, "fhsetspreadallow" },
 
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	"Invalid" }
 };
 
 /********************************************************************************************

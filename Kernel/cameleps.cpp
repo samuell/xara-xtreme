@@ -699,39 +699,39 @@ BOOL CamelotEPSFilter::ProcessToken()
 
 			switch (ObjectID)
 			{
-				case TAG_FONTFLAGS:
+				case EOTAG_FONTFLAGS:
 				{
 					if (!ProcessFontFlags())
 						goto EPSError;
 				}
 				break;
 
-				case TAG_BITMAPFLAGS:
+				case EOTAG_BITMAPFLAGS:
 				{
 					if (!ProcessBitmapFlags())
 						goto EPSError;
 				}
 				break;
 
-				case TAG_TEXTWRAPPED:
+				case EOTAG_TEXTWRAPPED:
 				{
 					if (!FindEndOfTag())
 						goto EPSError;
 				}
 				break;
 
-				case TAG_FONTTYPE:
+				case EOTAG_FONTTYPE:
 				{
 					if (!ProcessFontType())
 						goto EPSError;
 				}
 				break;
 
-				case TAG_GUIDELAYER:
-				case TAG_GUIDELINE:
+				case EOTAG_GUIDELAYER:
+				case EOTAG_GUIDELINE:
 					break;
 
-				case TAG_MOULDTHRESHOLD:
+				case EOTAG_MOULDTHRESHOLD:
 				{
 					if (!ProcessMouldThreshold())
 						goto EPSError;

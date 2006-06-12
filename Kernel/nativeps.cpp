@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "nativeps.h"
+#include "nativeps.h"
 //#include "filtrres.h"
 //#include "rik.h"
 //#include "tim.h"
@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetext.h"
 //#include "nev.h"
 #include "zstream.h"	// zipping stream class
-#include <strstream>
+#include <sstream>
 #include "fontman.h"
 #include "expbmp.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -153,10 +153,10 @@ typedef enum
 CommandMap CamelotNativeEPSFilter::NativeCommands[] =
 {
 	// Bitmap Pool Tokens
-	EPSC_cbmp,		"cbmp",
+	{ EPSC_cbmp,		"cbmp" },
 
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	"Invalid" }
 };
 
 
@@ -298,9 +298,9 @@ BOOL CamelotNativeEPSFilter::Init()
 	FilterInfo.Load(FilterInfoID);
 
 	// Preference to turn native file compression on or off
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
-		Camelot.DeclarePref( NULL, "CompressNative", &CompressNative, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("CompressNative"), &CompressNative, 0, 1 );
 	}
 
 	// All ok
@@ -321,7 +321,7 @@ BOOL CamelotNativeEPSFilter::Init()
 
 BOOL CamelotNativeEPSFilter::SetNativeCompression(BOOL NewState)
 {
-	BOOL OldState = CompressNative;
+//	BOOL OldState = CompressNative;
 	CompressNative = NewState;
 	return CompressNative;
 }
@@ -460,7 +460,7 @@ BOOL CamelotNativeEPSFilter::ProcessToken()
 
 			// Next thing will be a pool item
 			TRACEUSER( "Rik", _T("Got a Bitmap pool item....\n"));
-			PendingBitmap = PENDING_BITMAP_POOLITEM;
+			m_PendingBitmap = PENDING_BITMAP_POOLITEM;
 			break;
 		}
 
@@ -714,7 +714,7 @@ BOOL CamelotNativeEPSFilter::ProcessToken()
 					break;
 
 				case TRANSPFILL_TEXTURE:
-					PendingBitmap = PENDING_BITMAP_TRANSPFILL;
+					m_PendingBitmap = PENDING_BITMAP_TRANSPFILL;
 					BitmapAttrs.Coords[0] = StartPoint;
 					BitmapAttrs.Coords[1] = EndPoint;
 					BitmapAttrs.Coords[2] = EndPoint2;
@@ -724,7 +724,7 @@ BOOL CamelotNativeEPSFilter::ProcessToken()
 					break;
 
 				case TRANSPFILL_NEWTEXTURE:
-					PendingBitmap = PENDING_BITMAP_TRANSPFILL;
+					m_PendingBitmap = PENDING_BITMAP_TRANSPFILL;
 					BitmapAttrs.Coords[0] = StartPoint;
 					BitmapAttrs.Coords[1] = EndPoint;
 					BitmapAttrs.Coords[2] = EndPoint2;

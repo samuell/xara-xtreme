@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "saveeps.h"
 
-#include <afxdlgs.h>
+//#include <afxdlgs.h>
 #include <ctype.h>
 #include <time.h>
 
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tim.h"
 #include "kerneldc.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "userenv.h"
+//#include "userenv.h"
 //#include "doccomp.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colourix.h"
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
