@@ -903,7 +903,7 @@ static void StartMovie( const wxString &strFile )
 
 void HelpDemosAction()
 {
-#if 0
+#if 1
 	StartMovie( _T("Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm") );
 #else
 	wxWindow*		pWnd	= new wxTopLevelWindow( CCamFrame::GetMainFrame(), wxID_ANY, _T("Demo Video") );
