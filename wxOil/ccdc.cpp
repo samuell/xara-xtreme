@@ -234,6 +234,9 @@ CCDC::~CCDC()
 
 CCDC *CCDC::ConvertFromNativeDC( CNativeDC* pDC )
 {
+	if (!pDC)
+		return NULL;
+
 	// Scan the DCList to find the item
 	CCDC * pItem = (CCDC*)s_DCList.GetHead();
 	while (pItem)
