@@ -629,18 +629,26 @@ void CCamView::SetCurrentStates()
 
 CNativeDC* CCamView::GetRenderDC() const
 {
-	wxClientDC* pDC = NULL;
-	
-	if (RenderWindow)
-	{
-		pDC = new wxClientDC(RenderWindow);
-		if (pDC)
-		{
-			CCDC::RegisterDC(pDC);
-		}
-	}
+	return RenderWindow?RenderWindow->GetClientDC():NULL;
+}
 
-	return(pDC);
+/********************************************************************************************
+
+>	void CCamView::DoneWithDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Hints that we've done with our DC
+	SeeAlso:	View; PaperRenderRegion.
+
+Note this is merely a hint. This routine is not guaranteed to eb called
+
+********************************************************************************************/
+
+void CCamView::DoneWithDC() const
+{
+	if (RenderWindow)
+		RenderWindow->DoneWithDC();
 }
 
 /*********************************************************************************************

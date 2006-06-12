@@ -154,6 +154,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ai_bmp.h"
 //#include "epsclist.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "epscdef.h"
+#include "nodetext.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -806,121 +807,121 @@ Path *EPSClipContext::GetClipRegion()
 CommandMap EPSFilter::Commands[] =
 {
 	// Path Construction operators
-	{ EPSC_l,		"l" },
-	{ EPSC_c,		"c" },
-	{ EPSC_m,		"m" },
-	{ EPSC_L,		"L" },
-	{ EPSC_C,		"C" },
-	{ EPSC_v,		"v" },
-	{ EPSC_V,		"V" },
-	{ EPSC_y,		"y" },
-	{ EPSC_Y,		"Y" },
+	{ EPSC_l,		_T("l") },
+	{ EPSC_c,		_T("c") },
+	{ EPSC_m,		_T("m") },
+	{ EPSC_L,		_T("L") },
+	{ EPSC_C,		_T("C") },
+	{ EPSC_v,		_T("v") },
+	{ EPSC_V,		_T("V") },
+	{ EPSC_y,		_T("y") },
+	{ EPSC_Y,		_T("Y") },
 
 	// Colour operators
-	{ EPSC_g,		"g" },
-	{ EPSC_G,		"G" },
-	{ EPSC_k,		"k" },
-	{ EPSC_K,		"K" },
-	{ EPSC_x,		"x" },
-	{ EPSC_X,		"X" },
-	{ EPSC_p,		"p" },
-	{ EPSC_P,		"P" },
+	{ EPSC_g,		_T("g") },
+	{ EPSC_G,		_T("G") },
+	{ EPSC_k,		_T("k") },
+	{ EPSC_K,		_T("K") },
+	{ EPSC_x,		_T("x") },
+	{ EPSC_X,		_T("X") },
+	{ EPSC_p,		_T("p") },
+	{ EPSC_P,		_T("P") },
 	
 	// Path Painting operators
-	{ EPSC_N,		"N" },
-	{ EPSC_n,		"n" },
-	{ EPSC_F,		"F" },
-	{ EPSC_f,		"f" },
-	{ EPSC_S,		"S" },
-	{ EPSC_s,		"s" },
-	{ EPSC_B,		"B" },
-	{ EPSC_b,		"b" },
-	{ EPSC__u,		"*u" },
-	{ EPSC__U,		"*U" },
+	{ EPSC_N,		_T("N") },
+	{ EPSC_n,		_T("n") },
+	{ EPSC_F,		_T("F") },
+	{ EPSC_f,		_T("f") },
+	{ EPSC_S,		_T("S") },
+	{ EPSC_s,		_T("s") },
+	{ EPSC_B,		_T("B") },
+	{ EPSC_b,		_T("b") },
+	{ EPSC__u,		_T("*u") },
+	{ EPSC__U,		_T("*U") },
 
 	// Group operators
-	{ EPSC_u,		"u" },
-	{ EPSC_U,		"U" },
+	{ EPSC_u,		_T("u") },
+	{ EPSC_U,		_T("U") },
 	
 	// Graphics state operators
-	{ EPSC_A,		"A" },
-	{ EPSC_d,		"d" },
-	{ EPSC_i,		"i" },
-	{ EPSC_D,		"D" },
-	{ EPSC_j,		"j" },
-	{ EPSC_J,		"J" },
-	{ EPSC_M,		"M" },
-	{ EPSC_w,		"w" },
+	{ EPSC_A,		_T("A") },
+	{ EPSC_d,		_T("d") },
+	{ EPSC_i,		_T("i") },
+	{ EPSC_D,		_T("D") },
+	{ EPSC_j,		_T("j") },
+	{ EPSC_J,		_T("J") },
+	{ EPSC_M,		_T("M") },
+	{ EPSC_w,		_T("w") },
 
 	// Special operators
-	{ EPSC_ArrayStart,"[" },
-	{ EPSC_ArrayEnd,"]" },
-	{ EPSC_Slash,	"/" },
+	{ EPSC_ArrayStart,_T("[") },
+	{ EPSC_ArrayEnd,_T("]") },
+	{ EPSC_Slash,	_T("/") },
 
 	// Overprint operators
-	{ EPSC_O,		"O" },
-	{ EPSC_R,		"R" },
+	{ EPSC_O,		_T("O") },
+	{ EPSC_R,		_T("R") },
 
 	// Clipping operators
-	{ EPSC_q,		"q" },
-	{ EPSC_Q,		"Q" },
-	{ EPSC_H,		"H" },
-	{ EPSC_h,		"h" },
-	{ EPSC_W,		"W" },
+	{ EPSC_q,		_T("q") },
+	{ EPSC_Q,		_T("Q") },
+	{ EPSC_H,		_T("H") },
+	{ EPSC_h,		_T("h") },
+	{ EPSC_W,		_T("W") },
 	
 	// Text operators
-	{ EPSC_To,		"To" },
-	{ EPSC_TO,		"TO" },
-	{ EPSC_Tp,		"Tp" },
-	{ EPSC_TP,		"TP" },
+	{ EPSC_To,		_T("To") },
+	{ EPSC_TO,		_T("TO") },
+	{ EPSC_Tp,		_T("Tp") },
+	{ EPSC_TP,		_T("TP") },
 
 	// Matrix operators
-	{ EPSC_Tm,		"Tm" },
-	{ EPSC_Td,		"Td" },
-	{ EPSC_T_,		"T*" },
-	{ EPSC_TR,		"TR" },
+	{ EPSC_Tm,		_T("Tm") },
+	{ EPSC_Td,		_T("Td") },
+	{ EPSC_T_,		_T("T*") },
+	{ EPSC_TR,		_T("TR") },
 
 	// Text Attribute operators
-	{ EPSC_Tr,		"Tr" },
-	{ EPSC_Tf,		"Tf" },
-	{ EPSC_Ta,		"Ta" },
-	{ EPSC_Tl,		"Tl" },
-	{ EPSC_Tt,		"Tt" },
-	{ EPSC_TW,		"TW" },
-	{ EPSC_Tw,		"Tw" },
-	{ EPSC_TC,		"TC" },
-	{ EPSC_Tc,		"Tc" },
-	{ EPSC_Ts,		"Ts" },
-	{ EPSC_Ti,		"Ti" },
-	{ EPSC_Tz,		"Tz" },
-	{ EPSC_TA,		"TA" },
-	{ EPSC_Tq,		"Tq" },
+	{ EPSC_Tr,		_T("Tr") },
+	{ EPSC_Tf,		_T("Tf") },
+	{ EPSC_Ta,		_T("Ta") },
+	{ EPSC_Tl,		_T("Tl") },
+	{ EPSC_Tt,		_T("Tt") },
+	{ EPSC_TW,		_T("TW") },
+	{ EPSC_Tw,		_T("Tw") },
+	{ EPSC_TC,		_T("TC") },
+	{ EPSC_Tc,		_T("Tc") },
+	{ EPSC_Ts,		_T("Ts") },
+	{ EPSC_Ti,		_T("Ti") },
+	{ EPSC_Tz,		_T("Tz") },
+	{ EPSC_TA,		_T("TA") },
+	{ EPSC_Tq,		_T("Tq") },
 
 	// Text Body operators
-	{ EPSC_Tx,		"Tx" },
-	{ EPSC_Tj,		"Tj" },
-	{ EPSC_TX,		"TX" },
-	{ EPSC_Tk,		"Tk" },
-	{ EPSC_TK,		"TK" },
-	{ EPSC_Tplus,	"T+" },
-	{ EPSC_Tminus,	"T-" },
+	{ EPSC_Tx,		_T("Tx") },
+	{ EPSC_Tj,		_T("Tj") },
+	{ EPSC_TX,		_T("TX") },
+	{ EPSC_Tk,		_T("Tk") },
+	{ EPSC_TK,		_T("TK") },
+	{ EPSC_Tplus,	_T("T+") },
+	{ EPSC_Tminus,	_T("T-") },
 
 	// Misc
-	{ EPSC_showpage,"showpage" },
-	{ EPSC_end,		"end" },
-	{ EPSC_ctx,		"ctx" },
-	{ EPSC_ctex,	"ctex" },
+	{ EPSC_showpage,_T("showpage") },
+	{ EPSC_end,		_T("end") },
+	{ EPSC_ctx,		_T("ctx") },
+	{ EPSC_ctex,	_T("ctex") },
 
-	{ EPSC_Invalid,	"Invalid" },
+	{ EPSC_Invalid,	_T("Invalid") },
 
-	{ EPSC_Name,	"Name" },
-	{ EPSC_Integer,	"Integer" },
-	{ EPSC_Double,	"Double" },
-	{ EPSC_FixedPoint,"FixedPt" },
-	{ EPSC_String,	"String" },
-	{ EPSC_Comment,	"Comment" },
-	{ EPSC_EOL,		"EOL" },
-	{ EPSC_EOF,		"EOF" }
+	{ EPSC_Name,	_T("Name") },
+	{ EPSC_Integer,	_T("Integer") },
+	{ EPSC_Double,	_T("Double") },
+	{ EPSC_FixedPoint,_T("FixedPt") },
+	{ EPSC_String,	_T("String") },
+	{ EPSC_Comment,	_T("Comment") },
+	{ EPSC_EOL,		_T("EOL") },
+	{ EPSC_EOF,		_T("EOF") }
 };
 
 
@@ -1109,7 +1110,7 @@ BOOL EPSFilter::InitPrefs()
 	while (camStrclen(FontMappings[i][0]) > 0)
 	{
 		Camelot.SetPrefDirect( _T("EPSFontMapping"), 
-							  &FontMappings[i][0][0], 
+							  (TCHAR *) &FontMappings[i][0][0], 
 							  &FontMappings[i][1][0]); 
 		i++;
 	}
@@ -1381,15 +1382,17 @@ BOOL EPSFilter::IsDefaultDocRequired(const TCHAR* pcszPathName)
 
 INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
+	// This function is not unicode
+
 	// Check the first line in EPS file
-	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
+	if (strncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
 	}
 
 	// !PS-Adobe line is ok - check creator line...
-	istrstream HeaderFile((char *) pFileHeader, HeaderSize);
+	std::istringstream HeaderFile((char *) pFileHeader, ios_base::in /*HeaderSize*/);
 	char Buffer[200];
 
 	UINT32 Lines = 0;
@@ -1400,14 +1403,14 @@ INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// Return TRUE if this file was created by Illustrator, or has been exported in 
 		// Illustrator format.
-		if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
+		if (strncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
 			// We definitely want this.
 			return 8;
 
-		if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
+		if (strncmp(Buffer, "%%Creator:", 10) == 0)
 		{
 			// Found the creator line - does it contain the word Illustrator?
-			if (camStrstr(Buffer, "Illustrator") != NULL)
+			if (strstr(Buffer, "Illustrator") != NULL)
 				return 9;
 			else
 				break;
@@ -1415,7 +1418,7 @@ INT32 EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (strncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -1478,6 +1481,7 @@ BOOL EPSFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 	{
 		// OK, we will have to check for a preview bmp and skip to the Postscript if there is one
 		// read the first 4 bytes and see if they match the magic PostScript word
+		// Note this works in non-unicode mode
 		char Buf[4];
 		
 		// clear the buffer
@@ -1595,8 +1599,7 @@ BOOL EPSFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 	INT32 filesize = EPSFile->Size();
 	if (filesize == -1)
 	{
-		if (IsUserName("JustinF"))
-			TRACE( _T("Couldn't take size of the EPS file\n"));
+		TRACEUSER("JustinF", _T("Couldn't take size of the EPS file\n"));
 		return FALSE;
 	}
 
@@ -1725,7 +1728,7 @@ BOOL EPSFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 
 BOOL EPSFilter::HandleToken()
 {
-	BOOL Error = FALSE;	
+//	BOOL Error = FALSE;	
 
 	// At the end of a line or the file?
 	if ((Token != EPSC_EOL) && (Token != EPSC_EOF))
@@ -1780,7 +1783,7 @@ void EPSFilter::DecodeToken()
 	//
 	// Determine what we just read into TokenBuf.
 	//
-	ENSURE(camStrcmp(TokenBuf,"}bd") != 0, "Found a }bd token!");
+	ENSURE(camStrcmp(TokenBuf,_T("}bd")) != 0, "Found a }bd token!");
 		
 	// Not interested in comments, unless it's actually a strange token
 	if (Token == EPSC_Comment)
@@ -1810,7 +1813,7 @@ void EPSFilter::DecodeToken()
 
 	while (TokenBuf[i] != 0)
 	{
-		char c = TokenBuf[i];
+		TCHAR c = TokenBuf[i];
 		
 		if (c == '.')
 		{
@@ -1871,7 +1874,8 @@ void EPSFilter::DecodeToken()
 		{
 			// Floating point
 			Token = EPSC_Double;
-			TokenData.Double = atof(TokenBuf);
+			TokenData.Double=0.0;
+			camSscanf(TokenBuf,_T("%f"),TokenData.Double);
 		}
 		else if (FoundDot)
 		{
@@ -1883,7 +1887,8 @@ void EPSFilter::DecodeToken()
 		{
 			// Integer
 			Token = EPSC_Integer;
-			TokenData.Long = _ttol(TokenBuf);
+			TokenData.Long=0;
+			camSscanf(TokenBuf,_T("%d"),TokenData.Long);
 		}
 
 		return; // All done - found a number
@@ -1979,6 +1984,9 @@ BOOL EPSFilter::GetToken()
 		case TOKEN_COMMENT:
 			Token = EPSC_Comment;
 			break; // Comments may be tokens in some EPS formats.
+
+		default:
+			break;
 	}
 
 	ENSURE((EPSFile->GetTokenType() == TOKEN_NORMAL) || (EPSFile->GetTokenType() == TOKEN_COMMENT), 
@@ -2043,6 +2051,9 @@ BOOL EPSFilter::GetLineToken()
 			Token = EPSC_Comment;
 			DecodeToken();
 			return TRUE;
+
+		default:
+			break;
 	}
 
 	ENSURE((EPSFile->GetTokenType() == TOKEN_NORMAL) || 
@@ -2476,7 +2487,7 @@ void EPSFilter::MakeLayerNameUnique(String_256& LayerName, Spread *pSpread)
 			{
 				// Try adding a number instead of "Imported"
 				TCHAR NumBuf[10];
-				wsprintf(NumBuf, TEXT(" %d"), Number);
+				camSprintf(NumBuf, TEXT(" %d"), Number);
 				NewName = LayerName;
 				NewName += NumBuf;
 
@@ -2692,7 +2703,8 @@ BOOL EPSFilter::AddAttributes(NodeRenderableBounded *pNode, BOOL Stroked, BOOL F
 			(StrokeColourAttribute *) CurrentAttrs[ATTR_STROKECOLOUR].pAttr;
 
 		OldCol = pAttr->Colour;
-		if (!SetLineColour(DocColour(COLOUR_TRANS)))
+		DocColour trans(COLOUR_TRANS);
+		if (!SetLineColour(trans))
 			return FALSE;
 	}
 
@@ -2774,9 +2786,9 @@ void EPSFilter::GetEPSColour(DocColour *DestCol,
 			pIndexed = pColours->FindNamedColour((TCHAR *) (*ColName), DestCol, 
 												 (TintVal * 100) / FixedPointScale);
 
-			if (IsUserName("Tim") && (pIndexed == NULL))
+			if (!pIndexed)
 			{
-				TRACE( _T("Unable to find named colour: %s\n"), (TCHAR *) (*ColName));
+				TRACEUSER("Tim", _T("Unable to find named colour: %s\n"), (TCHAR *) (*ColName));
 			}
 		}
 		else
@@ -2803,9 +2815,9 @@ void EPSFilter::GetEPSColour(DocColour *DestCol,
 		{
 			pIndexed = pColours->FindNamedColour(String_64(_R(IDS_K_EPSFILTER_UNNAMED)), DestCol, 100, TRUE);
 
-			if (IsUserName("Tim") && (pIndexed == NULL))
+			if (!pIndexed)
 			{
-				TRACE( _T("Unable to construct an unnamed colour\n"));
+				TRACEUSER("Tim", _T("Unable to construct an unnamed colour\n"));
 			}
 		}
 	}
@@ -3758,6 +3770,9 @@ BOOL EPSFilter::ProcessEndOfPath ( void )
 				return FALSE;
 			}
 			break;
+
+		default:
+			break;
 	}
 
 	if (EPSFlags.ComplexPath == 0)
@@ -3983,12 +3998,12 @@ BOOL EPSFilter::ProcessUnfilledPath ( void )
 
 BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 {
-	if ((camStrncmp(TokenBuf, "%%Trailer", 9) == 0) ||
-		(camStrncmp(TokenBuf, "%%PageTrailer", 13) == 0))
+	if ((camStrncmp(TokenBuf, _T("%%Trailer"), 9) == 0) ||
+		(camStrncmp(TokenBuf, _T("%%PageTrailer"), 13) == 0))
 	{
 		ProcessEPSTrailer();
 	}
-	else if (camStrncmp(TokenBuf, "%%BoundingBox:", 14) == 0)
+	else if (camStrncmp(TokenBuf, _T("%%BoundingBox:"), 14) == 0)
 	{
 		ProcessBoundingBox();
 	}
@@ -4039,8 +4054,8 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 
 					// Special case for brain-damaged formats that don't bother to
 					// bracket prolog segments correctly
-					if ((camStrncmp(TokenBuf, "%%EndProlog", 11) == 0) ||
-						(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0))
+					if ((camStrncmp(TokenBuf, _T("%%EndProlog"), 11) == 0) ||
+						(camStrncmp(TokenBuf, _T("%%EndSetup"), 10) == 0))
 					{
 						// Found the end of the prolog/setup - this means we're not in the
 						// prolog or setup processing loop (otherwise the above test
@@ -4103,7 +4118,7 @@ BOOL EPSFilter::ProcessComment(BOOL BypassDocComponents)
 BOOL EPSFilter::ProcessFilterComment()
 {
 	// This is the base class - there are no EPS comments specific to this filter.
-	if (camStrncmp(TokenBuf, "%%XSScript", 10) == 0)
+	if (camStrncmp(TokenBuf, _T("%%XSScript"), 10) == 0)
 	{
 		TextComment[0]=2;
 		return TRUE;
@@ -4166,7 +4181,7 @@ BOOL EPSFilter::ProcessEPSComment()
 		// Get the next token
 		GetToken();
 
-		if ((Token != EPSC_Comment) || (camStrncmp(TokenBuf, "%%+", 3) != 0))
+		if ((Token != EPSC_Comment) || (camStrncmp(TokenBuf, _T("%%+"), 3) != 0))
 		{
 			// Not a continuation comment - so we're finished
 			if (Result == EPSCommentOK)
@@ -4268,34 +4283,60 @@ BOOL EPSFilter::ProcessBoundingBox()
 	DocRect BBox;
 
 	// Take a copy of the bounding box line so we can decompose it.
-	char BBoxStr[50];
+	TCHAR BBoxStr[50];
 	camStrncpy(BBoxStr, TokenBuf + 14, 50);
 
 	// Extract the minimum values (converting to millipoints)
+	TCHAR *Next = BBoxStr;
+	TCHAR *Num;
 
-	char *Num = _tcstok(BBoxStr, " ");
-	if (Num == NULL)
+	Num=Next;
+	while(*Next && (*Next!=_T(' ')))
+		Next++;
+	if (*Next)
+		*(Next++)=0;
+	if (!Num || !*Num)
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
-	BBox.lo.x = _ttol(Num) * 1000;
+	BBox.lo.x = 0;
+	camScanf(Num, _T("%d"), &BBox.lo.x);
+	BBox.lo.x *= 1000;
 
-	Num = _tcstok(NULL, " ");
-	if (Num == NULL)
+	Num=Next;
+	while(*Next && (*Next!=_T(' ')))
+		Next++;
+	if (*Next)
+		*(Next++)=0;
+	if (!Num || !*Num)
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
-	BBox.lo.y = _ttol(Num) * 1000;
+	BBox.lo.y = 0;
+	camScanf(Num, _T("%d"), &BBox.lo.y);
+	BBox.lo.y *= 1000;
 
-	Num = _tcstok(NULL, " ");
-	if (Num == NULL)
+	Num=Next;
+	while(*Next && (*Next!=_T(' ')))
+		Next++;
+	if (*Next)
+		*(Next++)=0;
+	if (!Num || !*Num)
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
-	BBox.hi.x = _ttol(Num) * 1000;
+	BBox.hi.x = 0;
+	camScanf(Num, _T("%d"), &BBox.hi.x);
+	BBox.hi.x *= 1000;
 
-	Num = _tcstok(NULL, " ");
-	if (Num == NULL)
+	Num=Next;
+	while(*Next && (*Next!=_T(' ')))
+		Next++;
+	if (*Next)
+		*(Next++)=0;
+	if (!Num || !*Num)
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
-	BBox.hi.y = _ttol(Num) * 1000;
+	BBox.hi.y = 0;
+	camScanf(Num, _T("%d"), &BBox.hi.y);
+	BBox.hi.y *= 1000;
 
 	// Is this bounding box within the spread area?
 	if (!SpreadRect.ContainsRect(BBox))
@@ -4322,7 +4363,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 void EPSFilter::HandleEPSError()
 {
 	// Error - EPS contains a syntax error.
-	TRACE( _T("EPS syntax error at token <%s> (line %ld, char %d)\n"), 
+	TRACE( _T("EPS syntax error at token <%s> (line %ld, TCHAR %d)\n"), 
 		  TokenBuf, EPSFile->GetLineNumber(), EPSFile->GetCharOffset());
 
 	// Destroy any half-created paths
@@ -4429,7 +4470,7 @@ BOOL EPSFilter::ProcessGroup()
 
 /********************************************************************************************
 
->	char *EPSFilter::GetEPSCommand(EPSCommand Cmd)
+>	TCHAR *EPSFilter::GetEPSCommand(EPSCommand Cmd)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	24/02/94
@@ -4440,7 +4481,7 @@ BOOL EPSFilter::ProcessGroup()
 
 ********************************************************************************************/
 
-char *EPSFilter::GetEPSCommand(EPSCommand Cmd)
+TCHAR *EPSFilter::GetEPSCommand(EPSCommand Cmd)
 {
 	INT32 i = 0;
 	while (Commands[i].Cmd != EPSC_Invalid)
@@ -4487,7 +4528,7 @@ BOOL EPSFilter::ExportBinaryHeader(CCLexFile* pFile)
 {
 #ifdef DO_EXPORT
 	// Output the header here
-	char Buf[30];
+	TCHAR Buf[30];
 
 	// Clear it to zero
 	memset(Buf, 0, 30);
@@ -4723,16 +4764,15 @@ BOOL EPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 	if (ExportDCPtr == NULL)
 		return FALSE;
 
-	TRY
+	try
 	{
 		ExportDCPtr->Init(pFile);
 	}
-	CATCH(CFileException, e)
+	catch(CFileException)
 	{
 		// Could not open the export file - return error
 		return FALSE;
 	}
-	END_CATCH
 
 	// Get the position of the first page, and use this to set the origin.
 	Page *pPage = pSpread->FindFirstPageInSpread(); 
@@ -4763,7 +4803,7 @@ BOOL EPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 			return FALSE;
 
 		// Attach to the right device.
-		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr, pSpread);
+		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr->GetDC(), pSpread);
 	}
 
 	// Inform all the document components that we are about to export
@@ -4995,7 +5035,7 @@ PORTNOTE("spread", "Multi-spread warning!")
 		INT32 Length = EPSEnd - EPSStart;
 		if (Length < 1024)
 		{
-			const char PadChar = '\n';
+			const TCHAR PadChar = '\n';
 			// Pad the file up the required size
 			FilePos	CurrentPosition = pFile->tell();
 			while ((CurrentPosition - EPSEnd) < 1024)
@@ -5037,13 +5077,13 @@ void EPSFilter::RemoveMessage(CCLexFile* pFile)
 {
 #ifdef DO_EXPORT
 	// What we are looking for
-	char Message[] =  "1992 ACCUSOFT INC, ALL RIGHTS RESERVED";
-	String_64 Replace("Xara Studio, Xara Studio, Xara Studio.");
+	TCHAR Message[] =  _T("1992 ACCUSOFT INC, ALL RIGHTS RESERVED");
+	String_64 Replace(_T("Xara Studio, Xara Studio, Xara Studio."));
 	INT32 Length = camStrlen(Message);
-	char Ch = 0;
+	TCHAR Ch = 0;
 	FilePos StartOfStr = 0;
 
-	TRY
+	try
 	{
 		// Go to the start of the Preview bitmap
 		if (pFile->seekIn(PreviewStart, ios::beg).fail())
@@ -5053,25 +5093,27 @@ void EPSFilter::RemoveMessage(CCLexFile* pFile)
 		INT32 CharsToSearch = PreviewEnd - PreviewStart;
 		INT32 MatchedChars = 0;
 		
-		// Get the first char and start looking
-		pFile->get(Ch);
+		// Get the first TCHAR and start looking
+		char cch;
+		pFile->get(cch);
+		Ch=TCHAR(cch); // convert using 1:1 map
 		while ((!pFile->eof()) && (!pFile->fail()) && (MatchedChars<Length) && (CharsToSearch>0))
 		{
-			// Count this char
+			// Count this TCHAR
 			CharsToSearch--;
 
 			// see if matches our string
 			if (Ch==Message[MatchedChars])
 			{
-				// see if it is the first char in the string
+				// see if it is the first TCHAR in the string
 				if (MatchedChars==0)
 				{
-					// We have just read the first char so the start is
+					// We have just read the first TCHAR so the start is
 					// where we are now, minus 1
 					StartOfStr = pFile->tell() - 1;
 				}
 
-				// Count the char
+				// Count the TCHAR
 				MatchedChars++;
 			}
 			else
@@ -5080,8 +5122,10 @@ void EPSFilter::RemoveMessage(CCLexFile* pFile)
 				MatchedChars=0;
 			}
 
-			// Get the next char in the file and return if there is a problem
-			pFile->get(Ch);
+			// Get the next TCHAR in the file and return if there is a problem
+			char cch;
+			pFile->get(cch);
+			Ch=TCHAR(cch); // convert using 1:1 map
 		}
 
 		// If we found the whole string, replace it
@@ -5094,12 +5138,12 @@ void EPSFilter::RemoveMessage(CCLexFile* pFile)
 		}
 	}
 
-	CATCH(CFileException, e)
+	catch(CFileException)
 	{
 		// There was a problem, so don't change the message
 		return;
 	}
-	END_CATCH
+	
 #endif
 }
 
@@ -5209,7 +5253,7 @@ INT32 EPSFilter::DecodeHexString(ADDR pData, INT32 Length, INT32 nStart)
 	// Decode the string two characters at a time
 	for (INT32 i = nStart; (i < TokenLen) && (i < MaxOfs); i += 2)
 	{
-		char Ch = camToupper(TokenBuf[i]);
+		TCHAR Ch = camToupper(TokenBuf[i]);
 		BYTE Byte;
 
 		// Decode first digit.
@@ -5417,7 +5461,7 @@ BOOL EPSFilter::ProcessText()
 				if (!Stack.Pop(&Text))
 					goto error;
 
-				char * buf = (TCHAR*)Text;
+				TCHAR * buf = (TCHAR*)Text;
 				INT32 len = Text.Length();
 			
 				TextChar* pCh = NULL;
@@ -5425,7 +5469,7 @@ BOOL EPSFilter::ProcessText()
 				for ( INT32 i = 0; i < len; i++)
 				{
 					// check for a carriage return
-					if (buf[i]=='\r')
+					if (buf[i]==_T('\r'))
 					{
 						PastAnEOL = TRUE;
 
@@ -5927,7 +5971,8 @@ BOOL EPSFilter::SetStrokeColourNone()
 
 	// Line Colour must be NONE.
 	StrokeColourAttribute* pLineCol = (StrokeColourAttribute*)CurrentAttrs[ATTR_STROKECOLOUR].pAttr;
-	pLineCol->SetStartColour(&DocColour(COLOUR_NONE));
+	DocColour none(COLOUR_NONE);
+	pLineCol->SetStartColour(&none);
 	// All worked ok.
 	return TRUE;
 }
@@ -5965,7 +6010,8 @@ BOOL EPSFilter::SetFillColourNone()
 
 	// Fill Colour must be NONE.
 	FlatFillAttribute* pFillCol = (FlatFillAttribute*)CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
-	pFillCol->SetStartColour(&DocColour(COLOUR_NONE));
+	DocColour none(COLOUR_NONE);
+	pFillCol->SetStartColour(&none);
 	// All worked ok.
 	return TRUE;
 }

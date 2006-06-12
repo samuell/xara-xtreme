@@ -135,7 +135,7 @@ public:
 	ArtWorksEPSFilter();
 	BOOL Init();
 	BOOL PrepareToExport(CCLexFile*, Spread *pSpread);
-	char* GetEPSCommand(EPSCommand Cmd);
+	TCHAR* GetEPSCommand(EPSCommand Cmd);
 	virtual BOOL NeedsPrintComponents ( void );
 
 	virtual BitmapFilterSupport GetBitmapSupportLevel();

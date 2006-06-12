@@ -137,7 +137,7 @@ class NodeRect;
 //
 // This is an arbitrary name chosen which assumes the user will never decide to
 // name a colour with this sequence of characters (reasonably safe assumption).
-#define ImmediateColourFudgeyBodgeName ("ciamcawahh42")
+#define ImmediateColourFudgeyBodgeName (_T("ciamcawahh42"))
 
 // The factor to scale standard EPS coordinates by to convert them to Camelot 
 // internal coordinates.
@@ -281,7 +281,7 @@ class CommandMap
 {
 public:
 	EPSCommand Cmd;
-	char       CmdStr[20];
+	TCHAR       CmdStr[20];
 };
 
 /********************************************************************************************
@@ -481,7 +481,7 @@ public:
 	// Must it export the print componets?
 	virtual BOOL NeedsPrintComponents ( void );
 
-	char *GetEPSCommand(EPSCommand Cmd);
+	TCHAR *GetEPSCommand(EPSCommand Cmd);
 
 	EPSExportDC *GetExportDC() { return ExportDCPtr; }
 	EPSRenderRegion* GetExportRegion() { return ExportRegion; }
@@ -616,7 +616,7 @@ protected:
 	CCLexFile *EPSFile;
 	
 	// Buffer to hold the current token
-	const char *TokenBuf;
+	const TCHAR *TokenBuf;
 	
 	// How many characters we had read the last time we updated the progress display.
 	INT32 LastProgressUpdate;
@@ -630,8 +630,8 @@ protected:
 		INT32		Long;
 		FIXEDPOINT	FixedPoint;
 		double		Double;
-		char   	   *String;
-		char       *Comment;
+		TCHAR   	*String;
+		TCHAR       *Comment;
 	} TokenData;
 
 	// The EPS stack - quite handy!

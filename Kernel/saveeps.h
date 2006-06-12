@@ -255,7 +255,7 @@ protected:
 	// Member variables.
 	BOOL			ValidPen;
 	CCLexFile		*ExportFile;
-	char			*CreatorString;
+	TCHAR			*CreatorString;
 
 	// This render regions caps. We keep a cached version here as it can be needed in rendering
 	RRCaps Caps;

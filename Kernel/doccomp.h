@@ -180,7 +180,7 @@ public:
 	virtual BOOL WriteEPSComments(EPSFilter *);
 	virtual BOOL WriteScript(EPSFilter*);
 
-	virtual ProcessEPSResult ProcessEPSComment(EPSFilter *, const char *);
+	virtual ProcessEPSResult ProcessEPSComment(EPSFilter *, const TCHAR *);
 	virtual void EndOfEPSComment(EPSFilter *);
 
 	// More general function to control progress display.

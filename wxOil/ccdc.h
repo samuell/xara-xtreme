@@ -104,61 +104,58 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rendtype.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "doccoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
-class CCDCListItem : public ListItem
+
+class CCDC : public ListItem
 {
-public:
-	CC_DECLARE_DYNAMIC(CCDCListItem)
-
-	CCDCListItem(CNativeDC* pDC, RenderType Type = RENDERTYPE_SCREEN, BOOL bDeleteDC = TRUE)
-	{
-		m_pDC = pDC;
-		m_Type = Type;
-		m_bDeleteDC = bDeleteDC;
-	}
-	virtual ~CCDCListItem()
-	{
-		if (m_bDeleteDC && m_pDC)
-			delete m_pDC;
-	}
-
-	CNativeDC* GetDC() { return(m_pDC); }
-	RenderType GetRenderType() { return(m_Type); }
-
-protected:
-	CNativeDC* m_pDC;
-	RenderType m_Type;
-	BOOL m_bDeleteDC;
-};
-
-class CCDC : public wxDC
-{
-	DECLARE_ABSTRACT_CLASS( CCDC )
+	CC_DECLARE_DYNAMIC( CCDC )
 
 public:
-	CCDC( RenderType );
+	CCDC( RenderType = RENDERTYPE_NONE);
 	CCDC( CNativeDC*, RenderType = RENDERTYPE_NONE );
 	~CCDC();
 
 protected:
 	RenderType Type;				// type of device being rendered to
 	LPRGNDATA lpRgnData;			// NULL if none
+	CNativeDC * m_pDC;
+	BOOL m_bDeleteDC;
 
 public:
+	CNativeDC* GetDC() const { return(m_pDC); }
+	operator CNativeDC & () { return (*m_pDC); }
+	void SetDC (CNativeDC * dc, BOOL bDeleteDC = TRUE);
+	RenderType GetRenderType() const { return Type; }
+
 	static UINT32 GetRectangleList(wxDC*, wxRect**);
 	static RenderType GetType(CNativeDC*, BOOL);
 	static BOOL IsPaperWanted(RenderType);
-	static BOOL RegisterDC(CNativeDC* pDC, RenderType rType = RENDERTYPE_SCREEN, BOOL bDeleteDC = TRUE);
 	static BOOL CleanUpDCs(void);
+	static CCDC *ConvertFromNativeDC( CNativeDC* pDC );
+
+
 
 protected:
 	static List s_DCList;
 };
 
-class CCPaintDC : public wxPaintDC
+class CCPaintDC : public CCDC
 {
 public:
 	CCPaintDC( wxWindow * );
 	~CCPaintDC();
+
+private:
+	wxPaintDC m_DC;
+};
+
+class CCClientDC : public CCDC
+{
+public:
+	CCClientDC( wxWindow * );
+	~CCClientDC();
+
+private:
+	wxClientDC m_DC;
 };
 
 

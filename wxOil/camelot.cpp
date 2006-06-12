@@ -1279,7 +1279,7 @@ void CCamApp::OnIdle( wxIdleEvent &event )
 	}
 
 	// First thing we will clean up any "temporary" DCs
-	CCDC::CleanUpDCs();
+//	CCDC::CleanUpDCs();
 
 	ControlList::Idle();
 

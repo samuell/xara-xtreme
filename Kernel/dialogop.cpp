@@ -2690,7 +2690,7 @@ RenderRegion* DialogOp::CreateGRenderRegion(DocRect* pRequiredSize, ReDrawInfoTy
 	if (pRender!=NULL)
 	{
 		// Try and create the bitmap etc
-		if (pRender->AttachDevice(pDialogView, ExtraInfo->pDC, NULL))
+		if (pRender->AttachDevice(pDialogView, ExtraInfo->pDC->GetDC(), NULL))
 		{
 			// Try and start the render region
 			if (pRender->StartRender())

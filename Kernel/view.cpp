@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 #include "camtypes.h"
-
+#include "camview.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "vstate.h"
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -220,6 +220,8 @@ View::View()
 
 View::~View()
 {
+	DoneWithDC();
+	
 	if (this == Current)
 		SetNoCurrent();
 
@@ -245,7 +247,24 @@ View::~View()
 	}
 }
 
+/********************************************************************************************
 
+>	void View::DoneWithDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Hints that we've done with our DC
+	SeeAlso:	View; PaperRenderRegion.
+
+Note this is merely a hint. This routine is not guaranteed to eb called
+
+********************************************************************************************/
+
+void View::DoneWithDC()
+{
+	if (pViewWindow)
+		pViewWindow->DoneWithDC();
+}
 
 /********************************************************************************************
 
@@ -3579,7 +3598,7 @@ RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans
 	{
 		// Attach a device to the scanning render region
 		// Since this rr does no real rendering, it does not need a Device context
-		Scanner.AttachDevice(this, NULL, pSpread);
+		Scanner.AttachDevice(this, (CNativeDC *)NULL, pSpread);
 
 		// Get it ready to render
 		Scanner.SetMatrix(ViewTrans);

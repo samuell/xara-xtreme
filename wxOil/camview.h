@@ -198,7 +198,8 @@ public:
 // Painting.
 
 public:
-	CNativeDC *GetRenderDC() const;
+	virtual CNativeDC *GetRenderDC() const;
+	virtual void DoneWithDC() const;
 	void GetClientSize(/* TYPENOTE: Correct */ int * width, /*TYPENOTE: Correct */ int * height) const;
 	
 	virtual void OnDraw( wxDC *pDc );

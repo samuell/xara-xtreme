@@ -116,7 +116,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // It is set to be 10 rectangles by default.
 #define MAX_REGIONS (sizeof(RGNDATAHEADER) + (40 * sizeof(RECT)))
 
-CC_IMPLEMENT_DYNAMIC(CCDCListItem, ListItem)
 
 
 /********************************************************************************************
@@ -137,7 +136,7 @@ CC_IMPLEMENT_DYNAMIC(CCDCListItem, ListItem)
 
 // so we can runtime-check it
 
-IMPLEMENT_ABSTRACT_CLASS( CCDC, wxDC )
+CC_IMPLEMENT_DYNAMIC( CCDC, ListItem )
 
 List CCDC::s_DCList;
 
@@ -162,6 +161,8 @@ CCDC::CCDC( RenderType rType )
 {
 	lpRgnData = NULL;
 	Type = rType;
+	m_pDC = NULL;
+	m_bDeleteDC = TRUE;
 }
 
 /*********************************************************************************************
@@ -181,10 +182,12 @@ CCDC::CCDC( RenderType rType )
 
 *********************************************************************************************/ 
 
-CCDC::CCDC( wxDC *pDc, RenderType rType )
+CCDC::CCDC( CNativeDC *pDC, RenderType rType )
 {
 	lpRgnData = NULL;
 	Type = rType;
+	m_pDC = pDC;
+	m_bDeleteDC = FALSE;
 }
 
 /*********************************************************************************************
@@ -204,6 +207,7 @@ CCDC::CCDC( wxDC *pDc, RenderType rType )
 
 CCDC::~CCDC()
 {
+	SetDC(NULL);
 	CCFree(lpRgnData);
 	lpRgnData = NULL;
 
@@ -214,7 +218,7 @@ CCDC::~CCDC()
 
 /*********************************************************************************************
 
->	static CCDC *ConvertFromCDC( CDC* pCDC )
+>	static CCDC *CCDC::ConvertFromNativeDC( CNativeDC* pDC )
 
 	Author:		Andy_Pennell (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/10/93
@@ -228,11 +232,19 @@ CCDC::~CCDC()
 
 *********************************************************************************************/ 
 
-static CCDC *ConvertFromNativeDC( CNativeDC* pCDC )
+CCDC *CCDC::ConvertFromNativeDC( CNativeDC* pDC )
 {
-	if( !pCDC->IsKindOf( CLASSINFO(CCDC) ) )
-		return NULL;
-	return (CCDC *)pCDC;
+	// Scan the DCList to find the item
+	CCDC * pItem = (CCDC*)s_DCList.GetHead();
+	while (pItem)
+	{
+		if (pItem->GetDC() == pDC)
+			return pItem;
+
+		pItem = (CCDC*)s_DCList.GetNext(pItem);
+	}
+
+	return NULL;
 }
 
 /*********************************************************************************************
@@ -297,16 +309,6 @@ RenderType CCDC::GetType( CNativeDC* pDC, BOOL bCalculate)
 
 	if (pCCDC == NULL)
 	{
-		// Scan the DCList to find the item
-		CCDCListItem* pItem = (CCDCListItem*)s_DCList.GetHead();
-		while (pItem)
-		{
-			if (pItem->GetDC() == pDC)
-				return(pItem->GetRenderType());
-
-			pItem = (CCDCListItem*)s_DCList.GetNext(pItem);
-		}
-
 		PORTNOTETRACE("other","CCDC::GetType - can't calculate device type yet");
 #ifndef EXCLUDE_FROM_XARALX
 		if (bCalculate)
@@ -435,19 +437,6 @@ BOOL CCDC::IsPaperWanted( RenderType rType )
 }
 
 
-BOOL CCDC::RegisterDC(CNativeDC* pDC, RenderType rType, BOOL bDeleteDC)
-{
-	CCDCListItem* pItem = new CCDCListItem(pDC, rType, bDeleteDC);
-	if (pItem)
-	{
-		s_DCList.AddTail(pItem);
-		return(TRUE);
-	}
-
-	return(FALSE);
-}
-
-
 BOOL CCDC::CleanUpDCs(void)
 {
 	// Delete all the entries in the list (the item destructors will delete the DCs)
@@ -457,7 +446,26 @@ BOOL CCDC::CleanUpDCs(void)
 }
 
 
+void CCDC::SetDC (CNativeDC * dc, BOOL bDeleteDC /*= TRUE*/)
+{
+	if (m_pDC == dc)
+		return;
 
+	if (m_pDC)
+	{
+		if (m_bDeleteDC)
+			delete (m_pDC);
+		// take us off the list
+		s_DCList.RemoveItem(this);
+	}
+	m_pDC = dc;
+	if (m_pDC)
+	{
+		m_bDeleteDC = bDeleteDC;
+		// put us on the list
+		s_DCList.AddTail(this);
+	}
+}
 
 /********************************************************************************************
 
@@ -489,10 +497,10 @@ BOOL CCDC::CleanUpDCs(void)
 
 *********************************************************************************************/ 
 
-CCPaintDC::CCPaintDC(wxWindow *pWnd) : wxPaintDC(pWnd)
+CCPaintDC::CCPaintDC(wxWindow *pWnd) : CCDC(RENDERTYPE_SCREEN), m_DC(pWnd)
 {
 	// Register this DC with the DC type system and set that it is temporary
-	CCDC::RegisterDC(this, RENDERTYPE_SCREEN, FALSE);
+	CCDC::SetDC(&m_DC, FALSE);
 
 #ifndef EXCLUDE_FROM_XARALX
 	// Loose the old region data
@@ -563,5 +571,48 @@ CCPaintDC::CCPaintDC(wxWindow *pWnd) : wxPaintDC(pWnd)
 *********************************************************************************************/ 
 
 CCPaintDC::~CCPaintDC()
+{
+}
+
+/*********************************************************************************************
+
+>	CCClientDC::CCClientDC(CWnd* pWnd)
+
+	Author:		Andy_Pennell (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	11/10/93
+	Inputs:		Pointer to owner window.
+	Outputs:	None
+	Returns:	None
+	Purpose:	Constructor for CCClientDC which gets the update rectangle list before doing
+				a BeginPaint.
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	CCDC;RenderType
+
+*********************************************************************************************/ 
+
+CCClientDC::CCClientDC(wxWindow *pWnd) : CCDC(RENDERTYPE_SCREEN), m_DC(pWnd)
+{
+	// Register this DC with the DC type system and set that it is temporary
+	CCDC::SetDC(&m_DC, FALSE);
+}
+
+
+/*********************************************************************************************
+
+>	CCClientDC::~CCClientDC()
+
+	Author:		Andy_Pennell (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	11/10/93
+	Inputs:		None
+	Outputs:	None
+	Returns:	None
+	Purpose:	Destructor for CCClientDC which does an EndPaint.
+	Errors:		-
+	Scope:	    Public
+
+*********************************************************************************************/ 
+
+CCClientDC::~CCClientDC()
 {
 }

@@ -564,7 +564,7 @@ public:
 	virtual BOOL WriteEPSFonts(EPSFilter *);
 	virtual BOOL WriteEPSComments(EPSFilter *);
 	virtual BOOL WriteEPSTrailer(EPSFilter *);
-	virtual ProcessEPSResult ProcessEPSComment(EPSFilter *, const char *);
+	virtual ProcessEPSResult ProcessEPSComment(EPSFilter *, const TCHAR *);
 	virtual void EndOfEPSComment(EPSFilter *);
 
 	// More general function to control progress display.

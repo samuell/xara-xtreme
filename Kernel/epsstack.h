@@ -112,7 +112,7 @@ class FIXEDPOINT
 {
 public:
 	INT32 Long;
-	void FromAscii(const char *FltPtString);
+	void FromAscii(const TCHAR *FltPtString);
 	operator INT32() const { return (INT32) Long; }
 	FIXEDPOINT& operator= (INT32 Val) { this->Long = Val; return *this; }
 };
@@ -174,14 +174,14 @@ public:
 	BOOL Push(const INT32);
 	BOOL Push(const FIXEDPOINT);
 	BOOL Push(const double);
-	BOOL Push(const char*, BOOL IsName = FALSE);
+	BOOL Push(const TCHAR*, BOOL IsName = FALSE);
 	BOOL Push(const EPSCommand Cmd);
 	
 	BOOL Pop(INT32 *);
 	BOOL Pop(UINT32 *);
 	BOOL Pop(FIXEDPOINT *);
 	BOOL Pop(double *);
-	BOOL Pop(char*);
+	BOOL Pop(TCHAR*);
 	BOOL Pop(StringBase*);
 
 	BOOL PopCmd(EPSCommand*);

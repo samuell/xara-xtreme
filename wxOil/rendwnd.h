@@ -110,6 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define OPTOKEN_TOGGLEDOUBLEBUFFER		TEXT("ToggleDoubleBuffer")
 
+class CCClientDC;
 class CCamView;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -142,6 +143,9 @@ public:
 
 	static void SetDoubleBuffer (BOOL DoubleBuffer);
 	static BOOL GetDoubleBuffer () {return m_DoubleBuffer;}
+
+	virtual wxClientDC * GetClientDC();
+	virtual void DoneWithDC();
 
 /////////////////////////////////////////////////////////////////////////////
 // Generated message map functions
@@ -180,6 +184,8 @@ protected:
 	static void ReflectDoubleBufferingInChildren(wxWindow * pWindow);
 
 	DECLARE_EVENT_TABLE()
+
+	CCClientDC * m_pCCClientDC;
 };
 
 

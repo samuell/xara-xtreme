@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "aw_eps.h"
 
-#include <strstrea.h>
+#include <sstream>
 #include <math.h>
 
 #include "nodepath.h"
@@ -133,79 +133,79 @@ CC_IMPLEMENT_DYNAMIC(ArtWorksEPSFilter, EPSFilter)
 // This is the array of ArtWorks EPS command/keyword names.
 CommandMap ArtWorksEPSFilter::ArtWorksCommands[] =
 {
-	EPSC_aoa,		"aoa",
-	EPSC_aafs,		"aafs",
+	{ EPSC_aoa,		_T("aoa")},
+	{ EPSC_aafs,		_T("aafs")},
 	
 	// Path related procedures
-	EPSC_ar,		"ar",
-	EPSC_arr,		"arr",
-	EPSC_ae,		"ae",
-	EPSC_apl,		"apl",
-	EPSC_apc,		"apc",
-	EPSC_aof,		"aof",
+	{ EPSC_ar,		_T("ar")},
+	{ EPSC_arr,		_T("arr")},
+	{ EPSC_ae,		_T("ae")},
+	{ EPSC_apl,		_T("apl")},
+	{ EPSC_apc,		_T("apc")},
+	{ EPSC_aof,		_T("aof")},
 	
 	// Text related procedures
-	EPSC_asto,		"asto",
-	EPSC_aeto,		"aeto",
-	EPSC_aco,		"aco",
-	EPSC_atc,		"atc",
-	EPSC_atph,		"atph",
-	EPSC_atof,		"atof",
+	{ EPSC_asto,		_T("asto")},
+	{ EPSC_aeto,		_T("aeto")},
+	{ EPSC_aco,		_T("aco")},
+	{ EPSC_atc,		_T("atc")},
+	{ EPSC_atph,		_T("atph")},
+	{ EPSC_atof,		_T("atof")},
 	
 	// Blend related procedures
-	EPSC_asbd,		"asbd",
-	EPSC_aebd,		"aebd",
-	EPSC_asbr,		"asbr",
-	EPSC_aebr,		"aebr",
+	{ EPSC_asbd,		_T("asbd")},
+	{ EPSC_aebd,		_T("aebd")},
+	{ EPSC_asbr,		_T("asbr")},
+	{ EPSC_aebr,		_T("aebr")},
 	
 	// Mould related procedures
-	EPSC_asev,		"asev",
-	EPSC_aeev,		"aeev",
-	EPSC_aspr,		"aspr",
-	EPSC_aepr,		"aepr",
-	EPSC_amm,		"amm",
-	EPSC_aml,		"aml",
-	EPSC_amc,		"amc",
-	EPSC_amcp,		"amcp",
-	EPSC_amep,		"amep",
+	{ EPSC_asev,		_T("asev")},
+	{ EPSC_aeev,		_T("aeev")},
+	{ EPSC_aspr,		_T("aspr")},
+	{ EPSC_aepr,		_T("aepr")},
+	{ EPSC_amm,		_T("amm")},
+	{ EPSC_aml,		_T("aml")},
+	{ EPSC_amc,		_T("amc")},
+	{ EPSC_amcp,		_T("amcp")},
+	{ EPSC_amep,		_T("amep")},
 	
 	// Group related procedures
-	EPSC_anu,		"anu",
+	{ EPSC_anu,		_T("anu")},
 	
 	// Linear/radial fills
-	EPSC_az,		"az",
-	EPSC_ax,		"ax",
-	EPSC_axm,		"axm",
+	{ EPSC_az,		_T("az")},
+	{ EPSC_ax,		_T("ax")},
+	{ EPSC_axm,		_T("axm")},
 	
 	// Overprint related procedures
-	EPSC_axop,		"axop",
+	{ EPSC_axop,		_T("axop")},
 	
 	// Others(!)
-	EPSC_awr,		"awr",
-	EPSC_asc,		"asc",
-	EPSC_aec,		"aec",
-	EPSC_aca,		"aca",
-	EPSC_asah,		"asah",
-	EPSC_aeah,		"aeah",
-	EPSC_asat,		"asat",
-	EPSC_aeat,		"aeat",
+	{ EPSC_awr,		_T("awr")},
+	{ EPSC_asc,		_T("asc")},
+	{ EPSC_aec,		_T("aec")},
+	{ EPSC_aca,		_T("aca")},
+	{ EPSC_asah,		_T("asah")},
+	{ EPSC_aeah,		_T("aeah")},
+	{ EPSC_asat,		_T("asat")},
+	{ EPSC_aeat,		_T("aeat")},
 	
 	// Procedures that define a text object
-	EPSC_atp,		"atp",
-	EPSC_atf,		"atf",
-	EPSC_atxy,		"atxy",
-	EPSC_atrk,		"atrk",
-	EPSC_akrn,		"akrn",
+	{ EPSC_atp,		_T("atp")},
+	{ EPSC_atf,		_T("atf")},
+	{ EPSC_atxy,		_T("atxy")},
+	{ EPSC_atrk,		_T("atrk")},
+	{ EPSC_akrn,		_T("akrn")},
 	
 	// Layer procedure
-	EPSC_alyr,		"alyr",
+	{ EPSC_alyr,		_T("alyr")},
 	
 	// Sprite procedure
-	EPSC_ass,		"ass",
-	EPSC_aes,		"aes",
+	{ EPSC_ass,		_T("ass")},
+	{ EPSC_aes,		_T("aes")},
 
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	_T("Invalid")}
 };
 
 /********************************************************************************************
@@ -288,15 +288,17 @@ BOOL ArtWorksEPSFilter::Init()
 
 INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
+	// this function is not Unicode
+
 	// Check the first line in EPS file
-	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
+	if (strncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
 	}
 
 	// !PS-Adobe line is ok - check creator line...
-	istrstream HeaderFile((char *) pFileHeader, HeaderSize);
+	std::istringstream HeaderFile((char *) pFileHeader, ios_base::in /*, HeaderSize*/);
 	char Buffer[200];
 
 	UINT32 Lines = 0;
@@ -306,11 +308,11 @@ INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		Lines++;
 
 		// Return TRUE if this file was created by ArtWorks
-		if (camStrncmp(Buffer, "%%Creator: ArtWorks", 19) == 0)
+		if (strncmp(Buffer, "%%Creator: ArtWorks", 19) == 0)
 		{
 			// ArtWorks is the creator - but has it exported it in an alien format?
 			// Return 10 if it hasn't, 1 if it has.
-			if (camStrstr(Buffer, "exported") == NULL)
+			if (strstr(Buffer, "exported") == NULL)
 				return 10;
 			else
 				// 5 because it *might* be "ArtWorks (exported by Mr. Blobby)", and
@@ -320,7 +322,7 @@ INT32 ArtWorksEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (strncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -385,7 +387,7 @@ BOOL ArtWorksEPSFilter::PrepareToExport(CCLexFile* pFile, Spread *pSpread)
 			return FALSE;
 
 		// Attach to the right device.
-		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr, pSpread);
+		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr->GetDC(), pSpread);
 	}
 
 	// All ok
@@ -955,7 +957,7 @@ NoMemory:
 
 /********************************************************************************************
 
->	char *ArtWorksEPSFilter::GetEPSCommand(EPSCommand Cmd)
+>	TCHAR *ArtWorksEPSFilter::GetEPSCommand(EPSCommand Cmd)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/02/94
@@ -966,7 +968,7 @@ NoMemory:
 
 ********************************************************************************************/
 
-char *ArtWorksEPSFilter::GetEPSCommand(EPSCommand Cmd)
+TCHAR *ArtWorksEPSFilter::GetEPSCommand(EPSCommand Cmd)
 {
 	INT32 i = 0;
 	while (ArtWorksCommands[i].Cmd != EPSC_Invalid)
@@ -1519,7 +1521,7 @@ BOOL ArtWorksEPSFilter::EndMould()
 {
 	// Sanity check
 	ERROR3IF(!pNode->IsKindOf(CC_RUNTIME_CLASS(NodeMouldGroup)), "No mouldgroup in ArtWorksEPSFilter::EndMould");
-	NodeMouldGroup* pNodeMGroup = (NodeMouldGroup*)pNode;
+//	NodeMouldGroup* pNodeMGroup = (NodeMouldGroup*)pNode;
 	pNode = pNode->FindParent();
 	ERROR3IF(!pNode->IsKindOf(CC_RUNTIME_CLASS(NodeMould)), "No MouldParent in ArtWorksEPSFilter::EndMould");
 	NodeMould* pNodeMould = (NodeMould*)pNode;
@@ -2258,7 +2260,7 @@ ArtWorksEPSRenderRegion::ArtWorksEPSRenderRegion(DocRect ClipRect,
 												 FIXED16 ViewScale) 
 	: EPSRenderRegion(ClipRect, ConvertMatrix, ViewScale)
 {
-	CreatorString = "ArtWorks";
+	CreatorString = _T("ArtWorks");
 }
 
 
@@ -2323,11 +2325,11 @@ void ArtWorksEPSRenderRegion::GetValidPathAttributes()
 		// Output the fill type
 		if (pFillAttr->IsKindOf(CC_RUNTIME_CLASS(LinearFillAttribute)))
 		{
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 		}
 		else if (pFillAttr->IsKindOf(CC_RUNTIME_CLASS(RadialFillAttribute)))
 		{
-			pDC->OutputToken("2");
+			pDC->OutputToken(_T("2"));
 		}
 		else
 		{
@@ -2348,7 +2350,7 @@ void ArtWorksEPSRenderRegion::GetValidPathAttributes()
 		pDC->OutputCoord(pGradFillAttr->EndPoint);
 
 		// Output the grad fill token
-		pDC->OutputToken("ax");
+		pDC->OutputToken(_T("ax"));
 		pDC->OutputNewLine();
 	}
 
@@ -2361,15 +2363,15 @@ void ArtWorksEPSRenderRegion::GetValidPathAttributes()
 		{
 			case NonZeroWinding:
 				// Change winding rule to 0, which means non-zero in ArtWorks EPS.
-				pDC->OutputToken("0");
-				pDC->OutputToken("awr");
+				pDC->OutputToken(_T("0"));
+				pDC->OutputToken(_T("awr"));
 				pDC->OutputNewLine();
 				break;
 
 			case EvenOddWinding:
 				// Change winding rule to 1, which means even-odd in ArtWorks EPS.
-				pDC->OutputToken("1");
-				pDC->OutputToken("awr");
+				pDC->OutputToken(_T("1"));
+				pDC->OutputToken(_T("awr"));
 				pDC->OutputNewLine();
 				break;
 
@@ -2410,25 +2412,25 @@ BOOL ArtWorksEPSRenderRegion::WriteEPSBoundingBox ( void )
 	const double	Scale			= 25.4 / 72000.0;
 
 	// Cast a pointer to the appropriate DC.
-	KernelDC		*pDC			= static_cast<KernelDC*> ( RenderDC );
+	KernelDC		*pDC			= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	DocRect			PageBounds		= RenderSpread->GetPageBounds ();
 	DocRect			DrawingBounds	= RenderSpread->GetDrawingSize ();
 	TCHAR			Buffer [256];
 
 	// Set up the output buffer.
-	_stprintf( Buffer, "%gmm %gmm",
+	camSnprintf( Buffer, 256, _T("%gmm %gmm"),
 			   static_cast<double> ( PageBounds.Width () )  * Scale,
 			   static_cast<double> ( PageBounds.Height () ) * Scale );
 
 	// Output the page size data.
-	pDC->OutputToken	("%%DocumentPageSize:");
+	pDC->OutputToken	(_T("%%DocumentPageSize:"));
 	pDC->OutputToken	( Buffer );
 	pDC->OutputNewLine	();
 
 	// Write the AW bounding box out. I'm doing this manually because ArtWorks runs at a
 	// higher resolution than standard EPS files. This way I get an extra two decimal
 	// places of accuracy.
-	pDC->OutputToken	( "%%BoundingBox:" );
+	pDC->OutputToken	( _T("%%BoundingBox:") );
 	pDC->OutputCoord	( DrawingBounds.lo, ACCURACY_NORMAL );
 	pDC->OutputCoord	( DrawingBounds.hi, ACCURACY_NORMAL );
 	pDC->OutputNewLine	();
@@ -2454,12 +2456,12 @@ BOOL ArtWorksEPSRenderRegion::WriteEPSBoundingBox ( void )
 BOOL ArtWorksEPSRenderRegion::WriteEPSTrailerComments ( void )
 {
 	// Get a pointer to the kernel DC.
-	KernelDC	*pDC	= static_cast<KernelDC*> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Write out the trailer comments.
-	pDC->OutputToken	( "%%Trailer" );
+	pDC->OutputToken	( _T("%%Trailer") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "showpage" );
+	pDC->OutputToken	( _T("showpage") );
 	pDC->OutputNewLine	();
 
 	// Success.

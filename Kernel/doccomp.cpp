@@ -475,7 +475,7 @@ BOOL DocComponent::WriteScript(EPSFilter* pFilter)
 /********************************************************************************************
 
 >	ProcessEPSResult DocComponent::ProcessEPSComment(EPSFilter *pFilter, 
-													 const char *pComment)
+													 const THCAR *pComment)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/08/94
@@ -514,7 +514,7 @@ BOOL DocComponent::WriteScript(EPSFilter* pFilter)
 ********************************************************************************************/
 
 ProcessEPSResult DocComponent::ProcessEPSComment(EPSFilter *pFilter, 
-												 const char *pComment)
+												 const TCHAR *pComment)
 {
 	return EPSCommentUnknown;
 }

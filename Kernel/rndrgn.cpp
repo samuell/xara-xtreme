@@ -659,6 +659,11 @@ RenderRegion::~RenderRegion()
 		pCapture = GetTopCapture();
 	}
 
+	if (RenderView)
+	{
+		RenderView->DoneWithDC(); // hint that we might like to drop this DC so a fresh one will be created
+	}
+	
 	if( m_fOwned )
 	{
 		delete RenderDC;
@@ -850,6 +855,12 @@ BOOL RenderRegion::CopyRenderInfo( const RenderRegion &Other)
 	SeeAlso:	RenderRegion::InitDevice
 
 ********************************************************************************************/
+
+BOOL RenderRegion::AttachDevice(View* ViewToAttach, CCDC* DCToAttach,
+								Spread* SpreadToAttach, bool fOwned /*= false*/)
+{
+	return AttachDevice(ViewToAttach, DCToAttach->GetDC(), SpreadToAttach, fOwned);
+}
 
 BOOL RenderRegion::AttachDevice(View* ViewToAttach, wxDC* DCToAttach,
 								Spread* SpreadToAttach, bool fOwned /*= false*/)

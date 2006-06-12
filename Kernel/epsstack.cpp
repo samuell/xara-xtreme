@@ -112,7 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 /********************************************************************************************
 
->	void FIXEDPOINT::FromAscii(const char *FltPtString)
+>	void FIXEDPOINT::FromAscii(const TCHAR *FltPtString)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/02/94
@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 ********************************************************************************************/
 
-void FIXEDPOINT::FromAscii(const char *Str)
+void FIXEDPOINT::FromAscii(const TCHAR *Str)
 {
 	// Initialise data member.
 	Long = 0;
@@ -141,19 +141,22 @@ void FIXEDPOINT::FromAscii(const char *Str)
 	{
 		// Found a decimal point - extract the integer and fractional parts and use them
 		// to construct the fixed point number.
-		char Tmp[20];
-		strcpy(Tmp, Str);
+		TCHAR Tmp[20];
+		camStrcpy(Tmp, Str);
 		Tmp[i] = 0;
-		Long = (atol(Tmp) * 1000);
+		Long = 0;
+		camScanf(Tmp, _T("%d"), &Long);
+		Long *= 1000;
 
 		// Force fraction to be 3 digits at the most (as we only store with 3 digits accuracy)
 		Tmp[i + 4] = 0;
 
 		// Convert fraction to integer
-		INT32 Frac = atol(Tmp + i + 1);
+		INT32 Frac = 0;
+		camScanf(&(Tmp[i+1]), _T("%d"), &Frac);
 
 		// The fraction can be of the form .1, .10, or .100 - we must scale it correctly.
-		INT32 FracLen = strlen(Tmp + i + 1);
+		INT32 FracLen = camStrlen(Tmp + i + 1);
 
 		if (FracLen == 1)
 			Frac *= 100;
@@ -171,7 +174,9 @@ void FIXEDPOINT::FromAscii(const char *Str)
 	else
 	{
 		// No decimal point found - just scale the integer part.
-		Long = (atol(Str) * 1000);
+		Long = 0;
+		camScanf(Str, _T("%d"), &Long);
+		Long *= 1000;
 	}
 }
 
@@ -325,18 +330,18 @@ BOOL EPSStack::Push ( const double Double )
 
 /********************************************************************************************
 
->	BOOL EPSStack::Push ( const char *pString,
+>	BOOL EPSStack::Push ( const TCHAR *pString,
 						  BOOL IsName = FALSE )
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/10/93
 	Inputs:		pString - pointer to the string data to push onto the stack.
 	Returns:	TRUE if successful, FALSE if out of memory or stack space.
-	Purpose:	Push a char* string item onto the stack.
+	Purpose:	Push a TCHAR* string item onto the stack.
 
 ********************************************************************************************/
 
-BOOL EPSStack::Push ( const char *pString,
+BOOL EPSStack::Push ( const TCHAR *pString,
 					  BOOL IsName )
 {
 	EPSStackItem *pItem = new EPSStackItem;
@@ -352,9 +357,9 @@ BOOL EPSStack::Push ( const char *pString,
 	}
 	
 	// Try to copy string
-	char *NewStr = new char[strlen(pString) + 1];
+	TCHAR *NewStr = new TCHAR[camStrlen(pString) + 1];
 	ERRORIF(NewStr == NULL,  _R(IDT_EPS_NOMEMORY), FALSE);
-	strcpy(NewStr, pString);
+	camStrcpy(NewStr, pString);
 
 	// Initialise stack item.
 	pItem->Init ( NewStr );
@@ -609,17 +614,17 @@ BOOL EPSStack::Pop ( double *pDouble )
 
 /********************************************************************************************
 
->	BOOL EPSStack::Pop(char* pString)
+>	BOOL EPSStack::Pop(TCHAR* pString)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/10/93
 	Outputs:	pString - the buffer to put the string value into.
 	Returns:	TRUE if there is a string value on the top of the stack; FALSE if not.
-	Purpose:	Pop a char* string value from the top of the stack.
+	Purpose:	Pop a TCHAR* string value from the top of the stack.
 
 ********************************************************************************************/
 
-BOOL EPSStack::Pop ( char* pString )
+BOOL EPSStack::Pop ( TCHAR* pString )
 {
 	// Get pointer to the stack item.
 	EPSStackItem *pItem = static_cast<EPSStackItem*> ( RemoveHead () );
@@ -632,7 +637,7 @@ BOOL EPSStack::Pop ( char* pString )
 	if ( pItem->Type == EPSTYPE_STRING )
 	{
 		// Correct type - remove item from stack and return to caller.
-		strcpy ( pString, pItem->Data.pString );
+		camStrcpy ( pString, pItem->Data.pString );
 		delete pItem;
 		return TRUE;
 	}

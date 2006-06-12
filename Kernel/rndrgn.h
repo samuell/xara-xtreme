@@ -382,7 +382,8 @@ public:
 	// Function to copy all the parameters from another render region to this render region
 	virtual BOOL CopyRenderInfo( const RenderRegion &Other);
 
-	virtual BOOL AttachDevice(View *, CNativeDC *, Spread *SpreadToAttach = NULL, bool fOwned = false );
+	virtual BOOL AttachDevice(View *, CNativeDC *, Spread *SpreadToAttach = NULL, bool fOwned = false ); // OVERRIDE THIS
+	virtual BOOL AttachDevice(View *, CCDC *, Spread *SpreadToAttach = NULL, bool fOwned = false ); // DO NOT OVERRIDE THIS
 	virtual BOOL InitDevice();
 
 	virtual BOOL ImmediateRender();

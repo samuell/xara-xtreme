@@ -186,96 +186,96 @@ typedef enum
 CommandMap CamelotEPSFilter::CamelotCommands[] =
 {
 	// Line/Fill colours
-	{ EPSC_cx,		"cx" },
-	{ EPSC_cX,		"cX" },
-	{ EPSC_ck,		"ck" },
-	{ EPSC_cK,		"cK" },
+	{ EPSC_cx,		_T("cx") },
+	{ EPSC_cX,		_T("cX") },
+	{ EPSC_ck,		_T("ck") },
+	{ EPSC_cK,		_T("cK") },
 
 	// Stroke transparency
-	{ EPSC_cst,		"cst" },
+	{ EPSC_cst,		_T("cst") },
 		  			  
 	// Arrow heads
-	{ EPSC_csah,	"csah" },
-	{ EPSC_ceah,	"ceah" },
+	{ EPSC_csah,	_T("csah") },
+	{ EPSC_ceah,	_T("ceah") },
 
 	// Dash Patterns
-	{ EPSC_cdp,		"cdp" },
+	{ EPSC_cdp,		_T("cdp") },
 
 	// Bitmap objects/bitmap fills
-	{ EPSC_cbm,		"cbm" },
-	{ EPSC_csbm,	"csbm" },
-	{ EPSC_cebm,	"cebm" },
+	{ EPSC_cbm,		_T("cbm") },
+	{ EPSC_csbm,	_T("csbm") },
+	{ EPSC_cebm,	_T("cebm") },
 
 	// Chromatic fill geometries
-	{ EPSC_caz,		"caz" },
-	{ EPSC_cax,		"cax" },
+	{ EPSC_caz,		_T("caz") },
+	{ EPSC_cax,		_T("cax") },
 	
 	// Transparent fill geometries
-	{ EPSC_cxt,		"cxt" },
+	{ EPSC_cxt,		_T("cxt") },
 
 	// Chromatic fill effects
-	{ EPSC_cxe,		"cxe" },
+	{ EPSC_cxe,		_T("cxe") },
 
 	// Chromatic fill mappings
-	{ EPSC_cxm,		"cxm" },
+	{ EPSC_cxm,		_T("cxm") },
 
 	// Transparent fill mappings
-	{ EPSC_cxmt,	"cxmt" },
+	{ EPSC_cxmt,	_T("cxmt") },
 
 	// Blends
-	{ EPSC_csbd,	"csbd" },
-	{ EPSC_cebd,	"cebd" },
-	{ EPSC_csbr,	"csbr" },
-	{ EPSC_cebr,	"cebr" },
+	{ EPSC_csbd,	_T("csbd") },
+	{ EPSC_cebd,	_T("cebd") },
+	{ EPSC_csbr,	_T("csbr") },
+	{ EPSC_cebr,	_T("cebr") },
 
 	// Regular shapes
-	{ EPSC_csrs,	"csrs" },
-	{ EPSC_crsp,	"crsp" },
-	{ EPSC_crstm,	"crstm" },
-	{ EPSC_crsp1,	"crsp1" },
-	{ EPSC_crsp2,	"crsp2" },
-	{ EPSC_cers,	"cers" },
+	{ EPSC_csrs,	_T("csrs") },
+	{ EPSC_crsp,	_T("crsp") },
+	{ EPSC_crstm,	_T("crstm") },
+	{ EPSC_crsp1,	_T("crsp1") },
+	{ EPSC_crsp2,	_T("crsp2") },
+	{ EPSC_cers,	_T("cers") },
 
 	// Mould commands
-	{ EPSC_csev,	"csev" },
-	{ EPSC_ceev,	"ceev" },
-	{ EPSC_cspr,	"cspr" },
-	{ EPSC_cepr,	"cepr" },
-	{ EPSC_csmp,	"csmp" },
-	{ EPSC_cemp,	"cemp" },
-	{ EPSC_csso,	"csso" },
-	{ EPSC_ceso,	"ceso" },
-	{ EPSC_csdo,	"csdo" },
-	{ EPSC_cedo,	"cedo" },
+	{ EPSC_csev,	_T("csev") },
+	{ EPSC_ceev,	_T("ceev") },
+	{ EPSC_cspr,	_T("cspr") },
+	{ EPSC_cepr,	_T("cepr") },
+	{ EPSC_csmp,	_T("csmp") },
+	{ EPSC_cemp,	_T("cemp") },
+	{ EPSC_csso,	_T("csso") },
+	{ EPSC_ceso,	_T("ceso") },
+	{ EPSC_csdo,	_T("csdo") },
+	{ EPSC_cedo,	_T("cedo") },
 
 	// Text commands
- 	{ EPSC_ctf,		"ctf" },
- 	{ EPSC_ctb,		"ctb" },
-	{ EPSC_cti,		"cti" },
-	{ EPSC_cts,		"cts" },
-	{ EPSC_ctp,		"ctp" },
-	{ EPSC_ctls,	"ctls" },
+ 	{ EPSC_ctf,		_T("ctf") },
+ 	{ EPSC_ctb,		_T("ctb") },
+	{ EPSC_cti,		_T("cti") },
+	{ EPSC_cts,		_T("cts") },
+	{ EPSC_ctp,		_T("ctp") },
+	{ EPSC_ctls,	_T("ctls") },
 
-	{ EPSC_cso,		"cso" },
-	{ EPSC_ceo,		"ceo" },
-	{ EPSC_cfft,	"cfft" },
-	{ EPSC_cftf, 	"cftf" },
-	{ EPSC_cbot,	"cbot" },
+	{ EPSC_cso,		_T("cso") },
+	{ EPSC_ceo,		_T("ceo") },
+	{ EPSC_cfft,	_T("cfft") },
+	{ EPSC_cftf, 	_T("cftf") },
+	{ EPSC_cbot,	_T("cbot") },
 
-	{ EPSC_cpal,	"cpal" },
+	{ EPSC_cpal,	_T("cpal") },
 
 	// Guide layer & guideline
-	{ EPSC_glyr,	"glyr" },
-	{ EPSC_glne,	"glne" },
+	{ EPSC_glyr,	_T("glyr") },
+	{ EPSC_glne,	_T("glne") },
 
-	{ EPSC_cmth,	"cmth" },
+	{ EPSC_cmth,	_T("cmth") },
 
-	{ EPSC_cag,		"cag" },
+	{ EPSC_cag,		_T("cag") },
 
-	{ EPSC_cbti,	"cbti" },
+	{ EPSC_cbti,	_T("cbti") },
 
 	// Sentinel
-	{ EPSC_Invalid,	"Invalid" }
+	{ EPSC_Invalid,	_T("Invalid") }
 };
 
 /********************************************************************************************
@@ -642,7 +642,7 @@ void CamelotEPSFilter::LookUpToken()
 	INT32 i = 0;
 	while (CamelotCommands[i].Cmd != EPSC_Invalid)
 	{
-		if (strcmp(TokenBuf, CamelotCommands[i].CmdStr) == 0)
+		if (camStrcmp(TokenBuf, CamelotCommands[i].CmdStr) == 0)
 		{
 			// Found the token - set the token variable and return success
 			Token = CamelotCommands[i].Cmd;
@@ -752,11 +752,11 @@ BOOL CamelotEPSFilter::ProcessToken()
 						LexTokenType Type = EPSFile->GetTokenType();
 						if ((Type != TOKEN_EOL) && (Type != TOKEN_EOF))
 						{
-							if (strcmp(TokenBuf, "cso") == 0)
+							if (camStrcmp(TokenBuf, _T("cso")) == 0)
 							{
 								ObjectNesting++;
 							}
-							else if (strcmp(TokenBuf, "ceo") == 0)
+							else if (camStrcmp(TokenBuf, _T("ceo")) == 0)
 							{
 								ObjectNesting--;
 							}							
@@ -1405,7 +1405,7 @@ NoMemory:
 
 ********************************************************************************************/
 
-char *CamelotEPSFilter::GetEPSCommand(EPSCommand Cmd)
+TCHAR *CamelotEPSFilter::GetEPSCommand(EPSCommand Cmd)
 {
 	INT32 i = 0;
 	while (CamelotCommands[i].Cmd != EPSC_Invalid)

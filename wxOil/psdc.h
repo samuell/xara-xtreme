@@ -131,6 +131,7 @@ public:
 
 // Used for rendering text via GDI
 // (It is a simple cache system).
+class CFont;
 class PSDCFontInfo
 {
 public:

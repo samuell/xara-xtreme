@@ -268,7 +268,7 @@ public:
 	BOOL Init();
 	BOOL IsDefaultDocRequired(const TCHAR* pcszPathName);
 	BOOL PrepareToExport(CCLexFile*, Spread* pSpread);
-	char* GetEPSCommand(EPSCommand Cmd);
+	TCHAR* GetEPSCommand(EPSCommand Cmd);
 	BOOL ExportBitmap(KernelBitmap&);
 	
 	// This filter can include a Preview Bmp

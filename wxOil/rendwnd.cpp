@@ -154,7 +154,7 @@ END_EVENT_TABLE()
 BOOL CRenderWnd::m_DoubleBuffer = FALSE;
 
 CRenderWnd::CRenderWnd(CCamView* pView) :
-	m_pView(pView)
+	m_pView(pView), m_pCCClientDC(NULL)
 {
 	// Nothing else to do for now...
 }
@@ -162,6 +162,56 @@ CRenderWnd::CRenderWnd(CCamView* pView) :
 CRenderWnd::~CRenderWnd()
 {
 	TRACEUSER("Gerry", _T("Deleting CRenderWnd at 0x%08x\n"), this);
+	if (m_pCCClientDC)
+	{
+		delete(m_pCCClientDC);
+		m_pCCClientDC = NULL;
+	}
+}
+
+/*********************************************************************************************
+>	virtual wxClientDC * CRenderWnd::GetClientDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Inputs:		None
+	Outputs:	None
+	Returns:	Pointer to the CCClientDC
+	Purpose:	Returns a pointer to the appropriate client DC, allocating it if necessary
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:    CCamView::OnCreate()
+
+**********************************************************************************************/ 
+
+wxClientDC * CRenderWnd::GetClientDC()
+{
+	if (!m_pCCClientDC)
+		m_pCCClientDC = new CCClientDC(this); // OK if it fails
+	return (wxClientDC*)(m_pCCClientDC?m_pCCClientDC->GetDC():NULL);
+}
+
+/*********************************************************************************************
+>	virtual wxClientDC * CRenderWnd::GetClientDC()
+
+>	void CCamView::DoneWithDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Hints that we've done with our DC
+	SeeAlso:	View; PaperRenderRegion.
+
+Note this is merely a hint. This routine is not guaranteed to eb called
+
+**********************************************************************************************/ 
+
+void CRenderWnd::DoneWithDC()
+{
+	if (m_pCCClientDC)
+	{
+		delete m_pCCClientDC;
+		m_pCCClientDC=NULL;
+	}
 }
 
 /*********************************************************************************************
@@ -226,7 +276,7 @@ void CRenderWnd::OnPaint( wxPaintEvent &evnt )
 //		wxPalette* OldPal = PaletteManager::StartPaintPalette(&dc);
 
 		if (m_pView)
-			m_pView->OnDraw(&dc);
+			m_pView->OnDraw(dc.GetDC());
 
 //		PaletteManager::StopPaintPalette(&dc, OldPal);
 	}

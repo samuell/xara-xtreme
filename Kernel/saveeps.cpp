@@ -158,7 +158,7 @@ EPSRenderRegion::EPSRenderRegion(DocRect ClipRect, Matrix ConvertMatrix, FIXED16
 	VectorFileRenderRegion(ClipRect, ConvertMatrix, ViewScale)
 {
 	ValidPen = FALSE;
-	CreatorString = "Adobe Illustrator 3.0 (exported by Camelot)";
+	CreatorString = _T("Adobe Illustrator 3.0 (exported by Camelot)");
 
 	ExportFile = NULL;
 	m_bValidPathAttrs = TRUE;
@@ -209,7 +209,7 @@ BOOL EPSRenderRegion::Init()
 
 ********************************************************************************************/
 
-BOOL EPSRenderRegion::AttachDevice(View* pView, CDC* pDC, Spread* pSpread)
+BOOL EPSRenderRegion::AttachDevice(View* pView, CNativeDC* pDC, Spread* pSpread, bool /*fOwned = false*/)
 {
 	// Sanity checks
 //	ENSURE(pView == NULL, "Bad window pointer in EPSRenderRegion::AttachDevice");
@@ -254,7 +254,7 @@ BOOL EPSRenderRegion::InitDevice ()
 	GetRenderRegionCaps(&Caps);
 
 	// Buffer used to build up the %%For and %%CreationDate comments.
-	char buf[300];
+	TCHAR buf[300];
 
 	// Find out which document we're using
 	ENSURE(RenderView->GetDoc() != NULL, "View's document is NULL!");
@@ -266,7 +266,7 @@ BOOL EPSRenderRegion::InitDevice ()
 	WriteEPSVersion ();
 
 	// Name of program that created this file.
-	pDC->OutputToken	( "%%Creator:" );
+	pDC->OutputToken	( _T("%%Creator:") );
 	pDC->OutputToken	( CreatorString );
 	pDC->OutputNewLine	();
 	
@@ -274,13 +274,13 @@ BOOL EPSRenderRegion::InitDevice ()
 	WriteFileVersion ( pDC );
 
 	// Output the %%For comment
-	_stprintf(buf, "%%%%For: (%s) (%s)", ReleaseInfo::GetLicensee(), ReleaseInfo::GetCompany());
+	camSprintf(buf, _T("%%%%For: (%s) (%s)"), ReleaseInfo::GetLicensee(), ReleaseInfo::GetCompany());
 	pDC->OutputToken(buf);
 	pDC->OutputNewLine();
 
 	// The title of the picture
    	String_256 DocumentTitle = TheDocument->GetTitle();
-	_stprintf(buf, "%%%%Title: (%s)", (TCHAR *) DocumentTitle);
+	camSprintf(buf, _T("%%%%Title: (%s)"), (TCHAR *) DocumentTitle);
 	pDC->OutputToken(buf);
 	pDC->OutputNewLine();
 
@@ -288,7 +288,18 @@ BOOL EPSRenderRegion::InitDevice ()
 	time_t Now;
 	time(&Now);
 	struct tm *pNow = localtime(&Now);
+#if 1
+	char buf2[100];
+	strftime(buf2, 100, "%%%%CreationDate: (%d/%m/%y) (%I:%M %p)", pNow);
+	INT32 i;
+	while (buf2[i])
+	{
+		buf[i]=buf2[i]; // 1:1 char/TCHAR conversion
+	}
+
+#else
 	_tcsftime(buf, 100, "%%%%CreationDate: (%d/%m/%y) (%I:%M %p)", pNow);
+#endif
 	pDC->OutputToken(buf);
 	pDC->OutputNewLine();
 
@@ -331,11 +342,11 @@ BOOL EPSRenderRegion::InitDevice ()
 	}
 
 	// No more comments
-	pDC->OutputToken	( "%%EndComments" );
+	pDC->OutputToken	( _T("%%EndComments") );
 	pDC->OutputNewLine	();
 
 	// Do the prolog...
-	pDC->OutputToken	( "%%BeginProlog" );
+	pDC->OutputToken	( _T("%%BeginProlog") );
 	pDC->OutputNewLine	();
 
 	// Do the render region specific prolog.
@@ -355,11 +366,11 @@ BOOL EPSRenderRegion::InitDevice ()
 		pComponent = TheDocument->EnumerateDocComponents(pComponent);
 	}
 
-	pDC->OutputToken("%%EndProlog");
+	pDC->OutputToken(_T("%%EndProlog"));
 	pDC->OutputNewLine();
 
 	// Do the setup...
-	pDC->OutputToken("%%BeginSetup");
+	pDC->OutputToken(_T("%%BeginSetup"));
 	pDC->OutputNewLine();
 
 	// Do the render region specific setup.
@@ -384,7 +395,7 @@ BOOL EPSRenderRegion::InitDevice ()
 	WriteGradientFills ( TheDocument );
 
 	// Wrap up the header section
-	pDC->OutputToken("%%EndSetup");
+	pDC->OutputToken(_T("%%EndSetup"));
 	pDC->OutputNewLine();
 
 	// We are into the main script of the EPS file here, so give the
@@ -474,8 +485,8 @@ BOOL EPSRenderRegion::SaveAttribute(UINT32 Index, AttributeValue *pAttr, BOOL Te
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	19/3/95
-	Inputs:		ch      - unicode value of char
-				pMatrix - matrix specifying transforms to place char correctly in document
+	Inputs:		ch      - unicode value of TCHAR
+				pMatrix - matrix specifying transforms to place TCHAR correctly in document
 	Returns:	FALSE if fails
 	Purpose:	
 ********************************************************************************************/
@@ -498,18 +509,18 @@ BOOL EPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 // BODGE TEXT - need to account for unicode!
 	KernelDC *pDC = (KernelDC *) RenderDC;
 
-	char Buf[64];
+	TCHAR Buf[64];
 
-	wsprintf(Buf,"%c",ch);
+	camSprintf(Buf,_T("%c"),ch);
 
 	pDC->OutputString(Buf);
-	pDC->OutputToken("Tx");
+	pDC->OutputToken(_T("Tx"));
 	pDC->OutputNewLine();
 
 #else
 	// just do what RenderRegion::RenderChar() would do!
 
-	// create the char's path
+	// create the TCHAR's path
 	Path* pCharPath=CreateCharPath(ch,pMatrix);
 	if (pCharPath==NULL)
 		return FALSE;
@@ -540,15 +551,15 @@ BOOL EPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 
 BOOL EPSRenderRegion::WriteNewLine ( void )
 {
-	EPSExportDC	*pDC	= static_cast<EPSExportDC*> ( RenderDC );
+	EPSExportDC	*pDC	= static_cast<EPSExportDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Check for changed attributes.
 	GetValidPathAttributes ();
 	GetValidTextAttributes ();
 
 	// Output the tokens
-	pDC->OutputToken	( "(\\r)" );
-	pDC->OutputToken	( "TX" );
+	pDC->OutputToken	( _T("(\\r)") );
+	pDC->OutputToken	( _T("TX") );
 	pDC->OutputNewLine	();
 
 	return TRUE;
@@ -573,7 +584,7 @@ void EPSRenderRegion::OutputFontName()
 
 	String_64 FontName;
 	String_64 EncodedFontName;
-	String_64 Append("/_");
+	String_64 Append(_T("/_"));
 
 	// get information about the current font
 	FONTMANAGER->GetFontName(RR_TXTFONTTYPEFACE(), FontName);
@@ -582,7 +593,7 @@ void EPSRenderRegion::OutputFontName()
 	// appears to map an existing, encoded font name onto its Postscript counterpart.
 	FONTMANAGER->EncodeAndMapFontName(FontName, EncodedFontName, GetFontStyle());
 	
-	EncodedFontName.Insert(&Append,0);
+	EncodedFontName.Insert(Append,0);
 	pDC->OutputToken((TCHAR *)EncodedFontName);
 
 	// Output the fontsize next
@@ -590,7 +601,7 @@ void EPSRenderRegion::OutputFontName()
 	pDC->OutputFloat(PointSize,3);
 	
 	// finally do output the font token
-	pDC->OutputToken("Tf");
+	pDC->OutputToken(_T("Tf"));
 	pDC->OutputNewLine();
 }
 
@@ -753,16 +764,16 @@ void EPSRenderRegion::OutputTextRenderMode ()
 
 	switch (Style)
 	{
-		case 0: pDC->OutputToken("3 Tr");		// Invisible
+		case 0: pDC->OutputToken(_T("3 Tr"));		// Invisible
 				pDC->OutputNewLine();
 				break;
-		case 1: pDC->OutputToken("0 Tr");		// filled only
+		case 1: pDC->OutputToken(_T("0 Tr"));		// filled only
 				pDC->OutputNewLine();
 				break;
-		case 2: pDC->OutputToken("1 Tr");		// stroked only
+		case 2: pDC->OutputToken(_T("1 Tr"));		// stroked only
 				pDC->OutputNewLine();
 				break;
-		case 3: pDC->OutputToken("2 Tr");		// filled and stroked
+		case 3: pDC->OutputToken(_T("2 Tr"));		// filled and stroked
 				pDC->OutputNewLine();
 				break;
 	}
@@ -785,7 +796,7 @@ void EPSRenderRegion::OutputTextAspectRatio ()
 	KernelDC *pDC = (KernelDC *) RenderDC;
 
    	pDC->OutputReal(RR_TXTASPECTRATIO().MakeDouble()*100.0);	// convert from ratio to %
-   	pDC->OutputToken("Tz");
+   	pDC->OutputToken(_T("Tz"));
 	pDC->OutputNewLine();
 }
 
@@ -809,7 +820,7 @@ void EPSRenderRegion::OutputTextTracking ()
 	// 1 em = point size of font.
 	// Tracking internally =millipoints.
    	pDC->OutputValue(RR_TXTTRACKING());
-   	pDC->OutputToken("Tt");
+   	pDC->OutputToken(_T("Tt"));
 	pDC->OutputNewLine();
 }
 
@@ -845,7 +856,7 @@ void EPSRenderRegion::OutputTextJustification ()
    		pDC->OutputValue((INT32)3);
 		break;
 	}
-   	pDC->OutputToken("Ta");
+   	pDC->OutputToken(_T("Ta"));
 	pDC->OutputNewLine();
 }
 
@@ -897,7 +908,7 @@ void EPSRenderRegion::OutputTextLineSpacing ()
 
 	pDC->OutputReal(ptLineSpace);
 	pDC->OutputReal(ptParaSpace);
-	pDC->OutputToken("Tl");
+	pDC->OutputToken(_T("Tl"));
 	pDC->OutputNewLine();
 }
 
@@ -920,7 +931,7 @@ void EPSRenderRegion::OutputTextBaselineShift ()
 	// format = rise Ts
 	double BaseLine = ((double)RR_TXTBASELINE())/1000;
 	pDC->OutputFloat(BaseLine,3);
-	pDC->OutputToken("Ts");
+	pDC->OutputToken(_T("Ts"));
 	pDC->OutputNewLine();
 }
 
@@ -946,19 +957,19 @@ void EPSRenderRegion::OutputTextSubSuperScript ()
 	double offset = (pScript->Offset).MakeDouble();
 	double size = (pScript->Size).MakeDouble();
 
-	pDC->OutputToken("%%XSScript");
+	pDC->OutputToken(_T("%%XSScript"));
 	pDC->OutputNewLine();
 
 	double rise = FontSize*offset;
 
 	pDC->OutputFloat(rise,3);
-	pDC->OutputToken("Ts");
+	pDC->OutputToken(_T("Ts"));
 	pDC->OutputNewLine();
 
 	double ptsize = FontSize*size;
 
 	String_64 MappedFont;
-	String_64 Append("/_");
+	String_64 Append(_T("/_"));
 
 	String_64 FontName;
 	FONTMANAGER->GetFontName(RR_TXTFONTTYPEFACE(), FontName);
@@ -968,12 +979,12 @@ void EPSRenderRegion::OutputTextSubSuperScript ()
 
 	// Graeme (14-6-00) - I should add ascent and descent values, but Camelot doesn't
 	// seem to store them anywhere.
-	MappedFont.Insert(&Append,0);
+	MappedFont.Insert(Append,0);
 	pDC->OutputToken((TCHAR *)MappedFont);
 	pDC->OutputFloat(ptsize,3);
 	// Output the ascent.
 	// Output the descent.
-	pDC->OutputToken("Tf");
+	pDC->OutputToken(_T("Tf"));
 	pDC->OutputNewLine();
 }
 
@@ -1079,7 +1090,7 @@ void EPSRenderRegion::OutputLineWidth()
 
 	// Set line width
 	pDC->OutputUserSpaceValue(RR_LINEWIDTH());
-	pDC->OutputToken("w");
+	pDC->OutputToken(_T("w"));
 	pDC->OutputNewLine();
 }
 
@@ -1100,7 +1111,7 @@ void EPSRenderRegion::OutputJoinType()
 
 	// Set line Join Type
 	pDC->OutputValue((UINT32)RR_JOINTYPE());
-	pDC->OutputToken("j");
+	pDC->OutputToken(_T("j"));
 	pDC->OutputNewLine();
 }
 
@@ -1167,7 +1178,7 @@ void EPSRenderRegion::OutputDashPattern()
 	// If the dash patterns need scaling, then we need to scale them
 	// here, as Illustrator format uses absolute sizes for the dash
 	// patterns, rather than the 'relative to line width' that we use
-	INT32 DashLineWidth 	= RR_DASHPATTERN().LineWidth;
+//	INT32 DashLineWidth 	= RR_DASHPATTERN().LineWidth;
 	INT32 LineWidth 		= RR_LINEWIDTH();
 
 	BOOL DoScale = RR_DASHPATTERN().ScaleWithLineWidth;
@@ -1210,7 +1221,7 @@ void EPSRenderRegion::OutputDashPattern()
 	INT32 Offset = LongMulFixed16(RR_DASHPATTERN().DashStart, Scale);
 	pDC->OutputUserSpaceValue(Offset);
 
-	pDC->OutputToken("d");
+	pDC->OutputToken(_T("d"));
 	pDC->OutputNewLine();
 }
 
@@ -1231,7 +1242,7 @@ void EPSRenderRegion::OutputStartCap()
 
 	// Set line cap style
 	pDC->OutputValue((UINT32)RR_STARTCAP());
-	pDC->OutputToken("J");
+	pDC->OutputToken(_T("J"));
 	pDC->OutputNewLine();
 }
 
@@ -1248,7 +1259,7 @@ void EPSRenderRegion::OutputStartCap()
 
 void EPSRenderRegion::OutputMitreLimit()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+//	KernelDC *pDC = (KernelDC *) RenderDC;
 
 		// Set mitre limit
 
@@ -1325,14 +1336,14 @@ void EPSRenderRegion::OutputStrokeCMYKColour()
 		if (RR_STROKECOLOUR().FindParentIndexedColour() == NULL)
 		{
 			// Unnamed colour - just add 'K' token
-			pDC->OutputToken("K");
+			pDC->OutputToken(_T("K"));
 		}
 		else
 		{
 			// Named colour - add Name, tint value, and 'X' token
 			pDC->OutputColourName(&(RR_STROKECOLOUR()));
-			pDC->OutputValue(0l);
-			pDC->OutputToken("X");
+			pDC->OutputValue((INT32)0);
+			pDC->OutputToken(_T("X"));
 		}
 	}
 	else
@@ -1344,13 +1355,13 @@ void EPSRenderRegion::OutputStrokeCMYKColour()
 			RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 			BYTE c = 0xFF - CMYK.Key;
 			pDC->OutputColourValue(c);
-			pDC->OutputToken("G");
+			pDC->OutputToken(_T("G"));
 		}
 		else
 		{
 			RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 			pDC->OutputColour(&CMYK);
-			pDC->OutputToken("X");
+			pDC->OutputToken(_T("X"));
 		}
 	}
 
@@ -1402,15 +1413,15 @@ void EPSRenderRegion::OutputStrokeRGBColour()
 		if (RR_STROKECOLOUR().FindParentIndexedColour() == NULL)
 		{
 			// Unnamed colour - just add 'XA' token
-			pDC->OutputToken ("XA");
+			pDC->OutputToken (_T("XA"));
 		}
 		else
 		{
 			// Named colour - add Name, tint value, RGB flag and 'XX' token
 			pDC->OutputColourName (&(RR_STROKECOLOUR()));
-			pDC->OutputValue(0l);
-			pDC->OutputValue(1l);
-			pDC->OutputToken("XX");
+			pDC->OutputValue((INT32)0);
+			pDC->OutputValue((INT32)1);
+			pDC->OutputToken(_T("XX"));
 		}
 	}
 	else
@@ -1424,13 +1435,13 @@ void EPSRenderRegion::OutputStrokeRGBColour()
 			RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 			BYTE c = 0xFF - CMYK.Key;
 			pDC->OutputColourValue(c);
-			pDC->OutputToken("G");
+			pDC->OutputToken(_T("G"));
 		}
 		else
 		{
 			RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 			pDC->OutputColour(&CMYK);
-			pDC->OutputToken("X");
+			pDC->OutputToken(_T("X"));
 		}
 	}
 
@@ -1500,14 +1511,14 @@ void EPSRenderRegion::OutputFillCMYKColour()
 		if (RR_FILLCOLOUR().FindParentIndexedColour() == NULL)
 		{
 			// Unnamed colour - add 'k' token
-			pDC->OutputToken("k");
+			pDC->OutputToken(_T("k"));
 		}
 		else
 		{
 			// Named colour - add Name, tint and 'x' token
 			pDC->OutputColourName(&(RR_FILLCOLOUR()));
-			pDC->OutputValue(0l);
-			pDC->OutputToken("x");
+			pDC->OutputValue((INT32)0);
+			pDC->OutputToken(_T("x"));
 		}
 	}
 	else
@@ -1519,13 +1530,13 @@ void EPSRenderRegion::OutputFillCMYKColour()
 			RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 			BYTE c = 0xFF - CMYK.Key;
 			pDC->OutputColourValue(c);
-			pDC->OutputToken("g");
+			pDC->OutputToken(_T("g"));
 		}
 		else
 		{
 			RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 			pDC->OutputColour(&CMYK);
-			pDC->OutputToken("k");
+			pDC->OutputToken(_T("k"));
 		}
 	}
 
@@ -1572,15 +1583,15 @@ void EPSRenderRegion::OutputFillRGBColour()
 		if (RR_FILLCOLOUR().FindParentIndexedColour() == NULL)
 		{
 			// Unnamed colour - add 'Xa' token
-			pDC->OutputToken("Xa");
+			pDC->OutputToken(_T("Xa"));
 		}
 		else
 		{
 			// Named colour - add Name, tint, RGB flag and 'Xx' token
 			pDC->OutputColourName(&(RR_FILLCOLOUR()));
-			pDC->OutputValue(0l);
-			pDC->OutputValue(1l);
-			pDC->OutputToken("Xx");
+			pDC->OutputValue((INT32)0);
+			pDC->OutputValue((INT32)1);
+			pDC->OutputToken(_T("Xx"));
 		}
 	}
 	else
@@ -1592,13 +1603,13 @@ void EPSRenderRegion::OutputFillRGBColour()
 			RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 			BYTE c = 0xFF - CMYK.Key;
 			pDC->OutputColourValue(c);
-			pDC->OutputToken("g");
+			pDC->OutputToken(_T("g"));
 		}
 		else
 		{
 			RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 			pDC->OutputColour(&CMYK);
-			pDC->OutputToken("k");
+			pDC->OutputToken(_T("k"));
 		}
 	}
 
@@ -1755,13 +1766,13 @@ void EPSRenderRegion::ExportPath(Path *DrawPath, BOOL DataOnly, BOOL PureDataOnl
 	if (CompoundPath && !PureDataOnly)
 	{
 		// Bracket compound paths./
-		pDC->OutputToken("*u");
+		pDC->OutputToken(_T("*u"));
 		pDC->OutputNewLine();
 	}
 
 	// Work out how to render the path (stroke, fill, both, none, etc.)
-	char PathTypeOpen[2] = "N";
-	char PathTypeClosed[2];
+	TCHAR PathTypeOpen[2] = _T("N");
+	TCHAR PathTypeClosed[2];
 
 	// Work out if the path is filled.
 	BOOL IsFilled = TRUE;
@@ -1807,7 +1818,7 @@ void EPSRenderRegion::ExportPath(Path *DrawPath, BOOL DataOnly, BOOL PureDataOnl
 	while(ReadPos < NumCoords)
 	{
 		// Find out the type of element that we are over (after the close flag has been removed)
-		Coord P[4];
+//		Coord P[4];
 		switch ( (Verbs[ReadPos]) & (~PT_CLOSEFIGURE) )
 		{
 			case PT_MOVETO:
@@ -1879,7 +1890,7 @@ void EPSRenderRegion::ExportPath(Path *DrawPath, BOOL DataOnly, BOOL PureDataOnl
 	if (CompoundPath && !PureDataOnly)
 	{
 		// End compound path
-		pDC->OutputToken("*U");
+		pDC->OutputToken(_T("*U"));
 		pDC->OutputNewLine();
 	}
 }
@@ -2147,10 +2158,10 @@ BOOL EPSRenderRegion::EndLayer ()
 BOOL EPSRenderRegion::WriteEPSVersion ( void )
 {
 	// Cast a pointer to the appropriate DC.
-	KernelDC *pDC = static_cast<KernelDC*> ( RenderDC );
+	KernelDC *pDC = static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Output the standard EPS header start token.
-	pDC->OutputToken	( "%!PS-Adobe-2.0 EPSF-1.2" );
+	pDC->OutputToken	( _T("%!PS-Adobe-2.0 EPSF-1.2") );
 	pDC->OutputNewLine	();
 
 	// Success.
@@ -2174,7 +2185,7 @@ BOOL EPSRenderRegion::WriteEPSVersion ( void )
 BOOL EPSRenderRegion::WriteEPSBoundingBox ( void )
 {
 	// Cast a pointer to the appropriate DC.
-	KernelDC	*pDC	= static_cast<KernelDC*> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	DocRect		BBox	= RenderSpread->GetBoundingRect ();
 
 	// Bounding box type stuff - get the spread's bounding box and convert from DocCoords
@@ -2182,7 +2193,7 @@ BOOL EPSRenderRegion::WriteEPSBoundingBox ( void )
 	RenderSpread->DocCoordToSpreadCoord(&BBox);
 
 	// Write the bounding box to the file.
-	pDC->OutputToken	( "%%BoundingBox:" );
+	pDC->OutputToken	( _T("%%BoundingBox:") );
 	pDC->OutputCoord	( BBox.lo, ACCURACY_ROUNDDOWN );
 	pDC->OutputCoord	( BBox.hi, ACCURACY_ROUNDUP );
 	pDC->OutputNewLine	();
@@ -2275,7 +2286,7 @@ BOOL EPSRenderRegion::WriteEPSProlog ( EPSFilter	*pFilter,
 BOOL EPSRenderRegion::WriteEPSTrailerComments ( void )
 {
 	// Get a pointer to the kernel DC.
-	KernelDC	*pDC		= static_cast<KernelDC*>	( RenderDC );
+	KernelDC	*pDC		= static_cast<KernelDC*>	( CCDC::ConvertFromNativeDC(RenderDC) );
 	EPSExportDC	*pExportDC	= static_cast<EPSExportDC*>	( pDC );
 	EPSFilter	*pFilter	= static_cast<EPSFilter *>	( pExportDC->GetParentFilter () );
 	Document	*pDocument	= RenderView->GetDoc ();
@@ -2283,11 +2294,11 @@ BOOL EPSRenderRegion::WriteEPSTrailerComments ( void )
 	ENSURE ( pDocument != NULL, "View's document is NULL!" );
 
 	// Write out the page trailer.
-	pDC->OutputToken	( "%%PageTrailer" );
+	pDC->OutputToken	( _T("%%PageTrailer") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "showpage" );
+	pDC->OutputToken	( _T("showpage") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%%Trailer" );
+	pDC->OutputToken	( _T("%%Trailer") );
 	pDC->OutputNewLine	();
 
 	// Write out the Documents trailer comments
@@ -2297,7 +2308,7 @@ BOOL EPSRenderRegion::WriteEPSTrailerComments ( void )
 	WriteEndCompressionState ( pDC );
 
 	// End of file token.
-	pDC->OutputToken	( "%%EOF" );
+	pDC->OutputToken	( _T("%%EOF") );
 	pDC->OutputNewLine	();
 
 	// Success!
@@ -2641,7 +2652,7 @@ BOOL EPSExportDC::Init(CCLexFile* pFile)
 BOOL EPSExportDC::OutputNewLine()
 {
 	// Graeme (22-2-00) - Windows uses \r\n as the newline code in its files.
-	static char NewLine[] = "\r\n";
+	static TCHAR NewLine[] = _T("\r\n");
 	if (ExportFile->write(NewLine, 2).fail())
 		// Error occured
 		return FALSE;
@@ -2682,7 +2693,7 @@ BOOL EPSExportDC::OutputNewLine()
 BOOL EPSExportDC::OutputToken(TCHAR *Str)
 {
 	// Special tokens
-	static char Space = ' ';
+	static TCHAR Space = ' ';
 
 	if (LineWidth > 100)
 	{

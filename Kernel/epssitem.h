@@ -109,7 +109,7 @@ class FIXEDPOINT;
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/10/93
 	Purpose:	This class provides objects that make up an EPSStack object.  The object
-				is polymorphic, and can contain either a INT32, a double, or a char* string
+				is polymorphic, and can contain either a INT32, a double, or a TCHAR* string
 				object.
 	SeeAlso:	EPSStack
 
@@ -126,7 +126,7 @@ public:
 	void Init ( INT32 );
 	void Init ( FIXEDPOINT );
 	void Init ( double );
-	void Init ( char *Str, BOOL IsName = FALSE );
+	void Init ( TCHAR *Str, BOOL IsName = FALSE );
 	void Init ( EPSCommand );
 	
 	union
@@ -134,7 +134,7 @@ public:
 		INT32		Long;
 		FIXEDPOINT	FixedPoint;
 		double		Double;
-		char		*pString;
+		TCHAR		*pString;
 		EPSCommand	Cmd;
 	} Data;
 

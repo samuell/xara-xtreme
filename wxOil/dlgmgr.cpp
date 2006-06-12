@@ -1203,7 +1203,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 			ExtraInfo.dx = (((INT32)WindowSize.GetWidth())*72000) / ExtraInfo.Dpi;
 			ExtraInfo.dy = (((INT32)WindowSize.GetHeight())*72000) / ExtraInfo.Dpi;
 		
-			MyDc.BeginDrawing();
+			MyDc.GetDC()->BeginDrawing();
 
 			wxRegionIterator upd(pGadget->GetUpdateRegion()); // get the update rect list
 
@@ -1224,7 +1224,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 
 				if (UseClipRect)
 				{
-					MyDc.SetClippingRegion(ClipRect);
+					MyDc.GetDC()->SetClippingRegion(ClipRect);
 					ClipRect.Inflate(1,1); // work around wxRect problems.
 				}
 				else
@@ -1254,7 +1254,7 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 				upd ++ ;
 			}
 		
-			MyDc.EndDrawing();		
+			MyDc.GetDC()->EndDrawing();		
 		
 			// if (OldPalette)
 			//	PaletteManager::StopPaintPalette(hDC, OldPalette);

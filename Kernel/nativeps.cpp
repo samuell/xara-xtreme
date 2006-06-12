@@ -153,10 +153,10 @@ typedef enum
 CommandMap CamelotNativeEPSFilter::NativeCommands[] =
 {
 	// Bitmap Pool Tokens
-	{ EPSC_cbmp,		"cbmp" },
+	{ EPSC_cbmp,	_T("cbmp") },
 
 	// Sentinel
-	{ EPSC_Invalid,	"Invalid" }
+	{ EPSC_Invalid,	_T("Invalid") }
 };
 
 
@@ -962,15 +962,17 @@ NoMemory:
 
 INT32 CamelotNativeEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
+	// This function is NOT unicode
+
 	// Check the first line in EPS file
-	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
+	if (strncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
 	}
 
 	// !PS-Adobe line is ok - check creator line...
-	istrstream HeaderFile((char *) pFileHeader, HeaderSize);
+	std::istringstream HeaderFile((char *) pFileHeader, ios_base::in /* HeaderSize*/);
 	char Buffer[200];
 
 	UINT32 Lines = 0;
@@ -980,12 +982,12 @@ INT32 CamelotNativeEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		Lines++;
 
 		// if the file is native camelot, return indicating strong 'interest'!
-		if (camStrncmp(Buffer, "%%Creator: Xara Studio (Native)", 31) == 0)
+		if (strncmp(Buffer, "%%Creator: Xara Studio (Native)", 31) == 0)
 			return 10;
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (strncmp(Buffer, "%%Compression:", 14)==0)
 			break;
 	}
 
@@ -1239,9 +1241,9 @@ INT32 CamelotNativeEPSFilter::ImportBinary(ADDR pData, INT32 Length)
 {
 	// read chars until we get a >
 	INT32 CountDown = 50;
-	char Ch;
+	TCHAR Ch;
 	do {
-		// Read a char
+		// Read a TCHAR
 		if (EPSFile->read(&Ch, 1).fail())
 		{
 			HandleEPSError();
@@ -1266,7 +1268,7 @@ INT32 CamelotNativeEPSFilter::ImportBinary(ADDR pData, INT32 Length)
 		return FALSE;
 	}
 
-	// Read char and check that it is a <
+	// Read TCHAR and check that it is a <
 	if (EPSFile->read(&Ch, 1).fail())
 	{
 		HandleEPSError();
@@ -1317,18 +1319,18 @@ INT32 CamelotNativeEPSFilter::ImportBinary(ADDR pData, INT32 Length)
 BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 {
 	// read the build version number of the app which saved this file
-	if (camStrncmp(TokenBuf, "%%Creator: Xara Studio (Native)", 31) == 0)
+	if (camStrncmp(TokenBuf, _T("%%Creator: Xara Studio (Native)"), 31) == 0)
 	{
-		BuildVersionNumber = atof(TokenBuf+31);
 		return TRUE;
 	}
 
 	// Go and have a look at the token buffer and see if it is our special
 	// file version comment. If so, then extract the version number from it. 
-	if (camStrncmp(TokenBuf, "%%File version:", 15)==0)
+	if (camStrncmp(TokenBuf, _T("%%File version:"), 15)==0)
 	{
-		char* pVersion = ((char*)TokenBuf)+15;
-		double Version = atof(pVersion);
+		TCHAR* pVersion = &(((TCHAR*)TokenBuf)[15]);
+		double Version=0.0;
+		camSscanf(pVersion, _T("%f"), &Version);
 		TRACEUSER( "Neville", _T("Native file version = %f\n"), Version);
 		FileVersionNumber = Version;
 		// Must stop later file versions loading back into this version.
@@ -1347,7 +1349,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	
 	// Go and have a look at the token buffer and see if it is our special
 	// compression comment
-	if (camStrncmp(TokenBuf, "%%Compression:", 14)==0)
+	if (camStrncmp(TokenBuf, _T("%%Compression:"), 14)==0)
 	{
 //#ifdef STANDALONE
 //		// First release of the file viewer will not have the native file compression
@@ -1363,8 +1365,8 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 //		// We recokonised the token but it is invalid
 //		return TRUE;
 //#endif
-		char* pType = ((char*)TokenBuf)+14;
-		CompressionType = _ttoi(pType);
+		TCHAR* pType = &(((TCHAR*)TokenBuf)[14]);
+		camSscanf(pType, _T("%d"), &CompressionType);
 		TRACEUSER( "Neville", _T("CamelotNativeEPSFilter::ProcessFilterComment compression type %d\n"), CompressionType);
 
 		// We have found our compression token so turn compression on
@@ -1383,10 +1385,11 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (camStrncmp(TokenBuf, "%%Compression info:", 19)==0)
+	if (camStrncmp(TokenBuf, _T("%%Compression info:"), 19)==0)
 	{
-		char* pVersion = ((char*)TokenBuf)+19;
-		double CompVersion = atof(pVersion);
+		TCHAR* pVersion = &(((TCHAR*)TokenBuf)[19]);
+		double CompVersion=0.0;
+		camSscanf(pVersion, _T("%f"), &CompVersion);
 		TRACEUSER( "Neville", _T("Compression version = %f\n"), CompVersion);
 		double StreamVersion = GZipFile::GetStreamVersionNo();
 		// If the version stored in the file is later than the one in the stream class
@@ -1404,7 +1407,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (camStrncmp(TokenBuf, "%%EndCompression:", 17)==0)
+	if (camStrncmp(TokenBuf, _T("%%EndCompression:"), 17)==0)
 	{
 		// We have found our compression token so turn compression on
 		BOOL ok = EPSFile->SetCompression(FALSE);
@@ -1421,16 +1424,16 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 		return TRUE;
 	}
-	if (camStrncmp(TokenBuf, "%%EndCompressionInfo:", 21)==0)
+	if (camStrncmp(TokenBuf, _T("%%EndCompressionInfo:"), 21)==0)
 	{
 		return TRUE;
 	}
 	  
 	// Go and have a look at the token buffer and see if it looks like bitmap count
-	if (camStrncmp(TokenBuf, "%%BitmapPoolCount", 17)==0)
+	if (camStrncmp(TokenBuf, _T("%%BitmapPoolCount"), 17)==0)
 	{
-		char* pCount = ((char*)TokenBuf)+17;
-		BitmapCount = _ttoi(pCount);
+		TCHAR* pCount = &(((TCHAR*)TokenBuf)[17]);
+		camSscanf(pCount, _T("%d"), &BitmapCount);
 		TRACEUSER( "Rik", _T("%d\n"), BitmapCount);
 
 		// There are no bitmaps in this file
@@ -1447,7 +1450,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	}
 
 	// Check for any text comments
-	if (camStrncmp(TokenBuf, "%%XSScript",	10)==0)
+	if (camStrncmp(TokenBuf, _T("%%XSScript"), 10)==0)
 	{
 		TextComment[0]=2;
 		return TRUE;
@@ -2299,8 +2302,8 @@ void NativeRenderRegion::GetValidTextAttributes()
 
 	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/05/95
-	Inputs:		ch      - unicode value of char
-				pMatrix - matrix specifying transforms to place char correctly in document
+	Inputs:		ch      - unicode value of TCHAR
+				pMatrix - matrix specifying transforms to place TCHAR correctly in document
 	Returns:	FALSE if fails
 	Purpose:	
 
@@ -2332,7 +2335,7 @@ BOOL NativeRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 #else
 	// just do what RenderRegion::RenderChar() would do!
 
-	// create the char's path
+	// create the TCHAR's path
 	Path* pCharPath=CreateCharPath(ch,pMatrix);
 	if (pCharPath==NULL)
 		return FALSE;
@@ -2368,7 +2371,7 @@ BOOL NativeRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 BOOL NativeRenderRegion::WriteFileVersion(KernelDC *pDC)
 {
 	// Buffer used to build up the file version comment.
-	char buf[50];
+	TCHAR buf[50];
 
 	// Output the current file version in the format 1.00 for NativeFileVersion 100
 	_stprintf(buf, "%%%%File version: %.2f", WriteNativeVersion);
@@ -2436,7 +2439,7 @@ TRACEUSER( "Neville", _T("WriteCompressionState\n"));
 		// We must output text rather than numbers and must never output LF or CR in the
 		// middle as this will screw the lexer
 		double StreamVersion = GZipFile::GetStreamVersionNo();
-		char buf[300];
+		TCHAR buf[300];
 		_stprintf(buf, " %.2fD", StreamVersion);	// version in form 0.92 followed by D for deflated
 		pDC->OutputToken(buf);
 TRACEUSER( "Neville", _T("WriteCompressionState wrote version %.2f\n"),StreamVersion); 
@@ -2676,7 +2679,7 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	//ExportFile.setMode(filebuf::binary);
 
 	// Output a character to mark the begining of the binary section
-	static char Begin = '>';
+	static TCHAR Begin = '>';
 	if (ExportFile->write(&Begin, 1).fail())
 		// Error
 		return -1;
@@ -2700,7 +2703,7 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	if (Padding > 0)
 	{
 		// Put the string "00" into a Buffer
-		char Buffer[2];
+		TCHAR Buffer[2];
 		Buffer[0] = 0;
 		Buffer[1] = 0;
 
@@ -2717,7 +2720,7 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	}
 
 	//output an end marker
-	static char End = '<';
+	static TCHAR End = '<';
 	if (ExportFile->write(&End, 1).fail())
 		// Error
 		return -1;

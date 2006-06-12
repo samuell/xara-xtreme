@@ -3366,7 +3366,7 @@ BOOL ReadNextString(StringBase* pString, INT32 MaxLen, char* Comment, INT32* Off
 /********************************************************************************************
 
 >	ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter, 
-												 const char *pComment)
+												 const TCHAR *pComment)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	01/08/94
@@ -3402,7 +3402,7 @@ BOOL ReadNextString(StringBase* pString, INT32 MaxLen, char* Comment, INT32* Off
 ********************************************************************************************/
 
 ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter, 
-										     const char *pComment)
+										     const TCHAR *pComment)
 {
 	PORTNOTETRACE("filters","Document::ProcessEPSComment - do nothing");
 #ifndef EXCLUDE_FROM_XARALX

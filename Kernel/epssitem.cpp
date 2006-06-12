@@ -191,19 +191,19 @@ void EPSStackItem::Init(double Double)
 
 /********************************************************************************************
 
->	void EPSStackItem::Init(char *pString, BOOL IsName = FALSE)
+>	void EPSStackItem::Init(TCHAR *pString, BOOL IsName = FALSE)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/10/93
 	Inputs:		pString -  pointer to the data to put into the stack item.
 				IsName - this is true if the string is a PostScript name object, and FALSE
 				if it is a PostScript string object.
-	Purpose:	Initialise an EPSStackItem object to hold a char * string.  
+	Purpose:	Initialise an EPSStackItem object to hold a TCHAR * string.  
 				The string is copied.
 
 ********************************************************************************************/
 
-void EPSStackItem::Init(char *pString, BOOL IsName)
+void EPSStackItem::Init(TCHAR *pString, BOOL IsName)
 {
 	if (IsName)
 		Type = EPSTYPE_NAME;
