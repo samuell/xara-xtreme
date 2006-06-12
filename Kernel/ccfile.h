@@ -356,7 +356,7 @@ public:
 	// Get status information...
 	UINT32 		 GetLineNumber()	{ return Line;      }
 	UINT32  		 GecharOffset()	{ return Ofs;       }
-	virtual	INT32 GecharsRead()  	{ return CharsRead; }
+	virtual	INT32 GetCharsRead()  	{ return CharsRead; }
 	LexTokenType GetTokenType() 	{ return TokenType; }
 	const TCHAR *GetTokenBuf() 		{ return TokenBuf;  }
 	BOOL 		 IsLexerInitialised() { return LexerInitialised; }
