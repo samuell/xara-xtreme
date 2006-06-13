@@ -6052,7 +6052,8 @@ BOOL EPSFilter::ProcessRectangle(NodeRect* pRect, NodeRegularShape* pQuickShape)
 			double RotAngle = atan2((double)RenderMajor.y-Centre.y,(double)RenderMajor.x-Centre.x) - (PI/2);
 			//double SkewAngle= atan2(pQuickShape->GetUTMinorAxes().y,pQuickShape->GetUTMinorAxes().x) - (PI/2);
 
-			Trans2DMatrix TransMat(Matrix(ANGLE(RotAngle*(180/PI))));
+			Matrix	mat( ANGLE( RotAngle * ( 180 / PI ) ) );
+			Trans2DMatrix TransMat( mat );
 			TransMat *= Trans2DMatrix(Centre.x,Centre.y);
 			pQuickShape->Transform(TransMat);
 		}
@@ -6108,7 +6109,8 @@ BOOL EPSFilter::ProcessEllipse(NodeEllipse* pEllipse, NodeRegularShape* pQuickSh
 			double RotAngle = atan2((double)RenderMajor.y-Centre.y,(double)RenderMajor.x-Centre.x) - (PI/2);
 			//double SkewAngle= atan2(pQuickShape->GetUTMinorAxes().y,pQuickShape->GetUTMinorAxes().x) - (PI/2);
 
-			Trans2DMatrix TransMat(Matrix(ANGLE(RotAngle*(180/PI))));
+			Matrix mat( ANGLE( RotAngle * ( 180 / PI ) ) );
+			Trans2DMatrix TransMat( mat );
 			TransMat *= Trans2DMatrix(Centre.x,Centre.y);
 			pQuickShape->Transform(TransMat);
 		}
