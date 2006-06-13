@@ -122,7 +122,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fontman.h"		// for FontManager - for writing font changes to overflow text
 #include "colplate.h"		// for ColourPlate - in overflow text functions
 #include "colourix.h"		// for Indexed Colour - for writing colour changes to overflow
-
+#include "nodebev.h"
+#include "layer.h"
+#include "clipattr.h"
 
 CC_IMPLEMENT_DYNAMIC(AIEPSRenderRegion, EPSRenderRegion)
 
@@ -163,7 +165,7 @@ AIEPSRenderRegion::AIEPSRenderRegion ( DocRect	ClipRect,
 	m_pRadialGradList	= NULL;
 
 	// Initialise the creator string to show that it's an AI file.
-	CreatorString = "Adobe Illustrator(TM) 7.0 by Xara.";
+	CreatorString = _T("Adobe Illustrator(TM) 7.0 by Xara.");
 }
 
 /********************************************************************************************
@@ -226,13 +228,13 @@ BOOL AIEPSRenderRegion::ExportBitmap ( NodeBitmap	*pNodeBMP )
 BOOL AIEPSRenderRegion::ExportBevel ( NodeBevel	*pBevel )
 {
 	// Set up the local variables.
-	KernelDC				*pDC			= static_cast<KernelDC *> ( RenderDC );
+	KernelDC				*pDC			= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	RangeControl			ControlFlags	( TRUE, TRUE );
 	Range					ToRender		( pBevel, pBevel, ControlFlags );
 	KernelBitmap			*pBitmap		= NULL;
 	Path					*pSourcePath	= &( pBevel->InkPath );
 	DocRect					Bounds			= pBevel->GetBoundingRect ();
-	DocCoord				Position		( Bounds.lox, Bounds.hiy );
+	DocCoord				Position		( Bounds.lo.x, Bounds.hi.y );
 	double					Width			= static_cast<double> ( Bounds.Width () );
 	double					Height			= static_cast<double> ( Bounds.Height () );
 
@@ -269,7 +271,7 @@ BOOL AIEPSRenderRegion::ExportBevel ( NodeBevel	*pBevel )
 	// Write the end of mask operator. (ChrisG 16/01/01) If we've written a mask.
 	if (pSourcePath->GetNumCoords () != 0)
 	{
-		pDC->OutputToken	( "Q" );
+		pDC->OutputToken	( _T("Q") );
 		pDC->OutputNewLine	();
 	}
 
@@ -304,8 +306,8 @@ BOOL AIEPSRenderRegion::ExportShadow ( OILBitmap	*pBitmap,
 									   DocRect		&Bounds )
 {
 	// Set up the local variables.
-	KernelDC	*pDC			= static_cast<KernelDC *> ( RenderDC );
-	DocCoord	Position		( Bounds.lox, Bounds.hiy );
+//	KernelDC	*pDC			= static_cast<KernelDC *> ( RenderDC );
+	DocCoord	Position		( Bounds.lo.x, Bounds.hi.y );
 	double		Width			= static_cast<double> ( Bounds.Width () ) / 1000;
 	double		Height			= static_cast<double> ( Bounds.Height () ) / 1000;
 	double		BMPWidth		= static_cast<double> ( pBitmap->GetWidth () );
@@ -327,7 +329,7 @@ BOOL AIEPSRenderRegion::ExportShadow ( OILBitmap	*pBitmap,
 	m_d	= Height / BMPHeight;
 
 	// Write out the bitmap header.
-	WriteBitmapHeader ( BMPWidth, BMPHeight );
+	WriteBitmapHeader ( (INT32)BMPWidth, (INT32)BMPHeight );
 
 	// Export the bitmap.
 	WriteContoneBody ( pBitmap );
@@ -382,14 +384,14 @@ BOOL AIEPSRenderRegion::StartLayer ( Layer	*pLayer )
 	// Catch null pointers to layers.
 	if ( pLayer != NULL )
 	{
-		KernelDC	*pDC			= static_cast<KernelDC *> ( RenderDC );
-		char		LayerName [258];
+		KernelDC	*pDC			= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
+		TCHAR		LayerName [258];
 
 		// Set up the layer's name.
-		sprintf ( LayerName, "(%s)", ( TCHAR* ) pLayer->GetLayerID () );
+		camSprintf ( LayerName, _T("(%s)"), ( TCHAR* ) pLayer->GetLayerID () );
 
 		// Start a layer definition.
-		pDC->OutputToken	( "%AI5_BeginLayer" );
+		pDC->OutputToken	( _T("%AI5_BeginLayer") );
 		pDC->OutputNewLine	();
 
 		// Set the layer's properties.
@@ -410,12 +412,12 @@ BOOL AIEPSRenderRegion::StartLayer ( Layer	*pLayer )
 		pDC->OutputValue	( ( UINT32 ) 0 );					// Green intensity.
 
 		// Write out the Lb tag.
-		pDC->OutputToken	( "Lb" );
+		pDC->OutputToken	( _T("Lb") );
 		pDC->OutputNewLine	();
 
 		// Set the layer's name.
 		pDC->OutputToken	( LayerName );
-		pDC->OutputToken	( "Ln" );
+		pDC->OutputToken	( _T("Ln") );
 		pDC->OutputNewLine	();
 
 		// Tell Camelot that there is an active layer.
@@ -443,7 +445,7 @@ BOOL AIEPSRenderRegion::StartLayer ( Layer	*pLayer )
 
 BOOL AIEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 {
-	char buf[20];
+	TCHAR buf[20];
 	BOOL result = FALSE;		// assume failure if nothing given.
 
 	if (m_bTextAsShapes)
@@ -459,7 +461,7 @@ BOOL AIEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 			KernelDC *pDC = (KernelDC *) RenderDC;
 
 			pDC->OutputMatrix(pMatrix);
-			pDC->OutputToken("Tm");
+			pDC->OutputToken(_T("Tm"));
 			pDC->OutputNewLine();
 		}
 
@@ -470,7 +472,7 @@ BOOL AIEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 		if (ExportingOnPath ())
 		{
 			OverflowTextFinishGap ();
-			wsprintf (buf,"%c",ch);
+			camSprintf (buf,_T("%c"),ch);
 			OverflowTextWrite (buf);
 		}
 	}
@@ -560,10 +562,10 @@ void AIEPSRenderRegion::Initialise()
 BOOL AIEPSRenderRegion::WriteEPSVersion ( void )
 {
 	// Cast the pointer to an appropriate DC.
-	KernelDC *pDC = static_cast<KernelDC *> ( RenderDC );
+	KernelDC *pDC = static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Output the special AIEPS header start token.
-	pDC->OutputToken	( "%!PS-Adobe-3.0" );
+	pDC->OutputToken	( _T("%!PS-Adobe-3.0") );
 	pDC->OutputNewLine	();
 
 	return TRUE;
@@ -589,7 +591,7 @@ BOOL AIEPSRenderRegion::WriteEPSProcessColours ( void )
 	KernelDC *pDC = ( KernelDC * ) RenderDC;
 
 	// Output the process colours
-	pDC->OutputToken	( "%%DocumentProcessColors: Cyan Magenta Yellow Black" );
+	pDC->OutputToken	( _T("%%DocumentProcessColors: Cyan Magenta Yellow Black") );
 	pDC->OutputNewLine	();
 
 	return TRUE;
@@ -621,9 +623,9 @@ BOOL AIEPSRenderRegion::WriteEPSResources ( EPSFilter	*pFilter,
 	pDocument->WriteEPSResources ( pFilter );
 
 	// Add a few things necessary for the AI file format.
-	pDC->OutputToken	( "%AI3_ColorUsage: Color" );
+	pDC->OutputToken	( _T("%AI3_ColorUsage: Color") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%AI5_FileFormat 2.0" );
+	pDC->OutputToken	( _T("%AI5_FileFormat 2.0") );
 	pDC->OutputNewLine	();
 
 	// All done.
@@ -705,15 +707,15 @@ BOOL AIEPSRenderRegion::WriteGradientFills ( Document *pDocument )
 BOOL AIEPSRenderRegion::WriteLinearFill ( FillGeometryAttribute * pFill, EFFECTTYPE effect, INT32 id )
 {
 	// Extract the fill attribute - this is necessary for processing the fill type.
-	KernelDC				*pDC				= static_cast<KernelDC *> ( RenderDC );
+	KernelDC				*pDC				= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	INT32						Colours				= 2;
-	char					GradientName [32];
+	TCHAR					GradientName [32];
 	DocColour				StartColour			= *( pFill->GetStartColour () );
 	DocColour				EndColour;
 	ColourRamp				*pRamp				= pFill->GetColourRamp ();
 
 	// The fill is, or can be approximated by, a linear fill.
-	sprintf ( GradientName, "(%s %d)", LinearGradient, id );
+	camSprintf ( GradientName, _T("(%s %d)"), LinearGradient, id );
 
 	// (ChrisG 16/01/01) Four colour fill MUST come first, as it's derived from Three
 	//	colour fill, and returns valid for IsThreeColFill().
@@ -766,7 +768,7 @@ BOOL AIEPSRenderRegion::WriteLinearFill ( FillGeometryAttribute * pFill, EFFECTT
 	}
 
 	// Write the gradient's header.
-	pDC->OutputToken	( "%AI5_BeginGradient:" );
+	pDC->OutputToken	( _T("%AI5_BeginGradient:") );
 	pDC->OutputToken	( GradientName );
 	pDC->OutputNewLine	();
 
@@ -774,9 +776,9 @@ BOOL AIEPSRenderRegion::WriteLinearFill ( FillGeometryAttribute * pFill, EFFECTT
 	pDC->OutputToken	( GradientName );
 	pDC->OutputValue	( static_cast<INT32> ( LinearFill ) );
 	pDC->OutputValue	( static_cast<INT32> ( Colours ) );
-	pDC->OutputToken	( "Bd" );
+	pDC->OutputToken	( _T("Bd") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "[" );
+	pDC->OutputToken	( _T("[") );
 	pDC->OutputNewLine	();
 
 	// (ChrisG 3/4/2001) Get bias and convert to 0-100 range (from -1 to +1)
@@ -852,9 +854,9 @@ BOOL AIEPSRenderRegion::WriteLinearFill ( FillGeometryAttribute * pFill, EFFECTT
 	WriteGradientEntry ( &StartColour, 0, bias );
 
 	// Write out the end of gradient tokens.
-	pDC->OutputToken	( "BD" );
+	pDC->OutputToken	( _T("BD") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%AI5_EndGradient" );
+	pDC->OutputToken	( _T("%AI5_EndGradient") );
 	pDC->OutputNewLine	();
 
 	// It worked!
@@ -878,15 +880,15 @@ BOOL AIEPSRenderRegion::WriteLinearFill ( FillGeometryAttribute * pFill, EFFECTT
 BOOL AIEPSRenderRegion::WriteRadialFill (FillGeometryAttribute * pFill, EFFECTTYPE effect, INT32 id)
 {
 	// Extract the fill attribute - this is necessary for processing the fill type.
-	KernelDC				*pDC				= static_cast<KernelDC *> ( RenderDC );
+	KernelDC				*pDC				= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	INT32						Colours				= 2;
-	char					GradientName [32];
+	TCHAR					GradientName [32];
 	DocColour				StartColour			= *( pFill->GetStartColour () );
 	DocColour				EndColour			= *( pFill->GetEndColour () );
 	ColourRamp				*pRamp				= pFill->GetColourRamp ();
 
 	// The fill is, or can be approximated by, a Radial fill.
-	sprintf ( GradientName, "(%s %d)", RadialGradient, id );
+	camSprintf ( GradientName, _T("(%s %d)"), RadialGradient, id );
 
 	// Count the number of colours.
 	if ( pRamp != NULL )
@@ -911,7 +913,7 @@ BOOL AIEPSRenderRegion::WriteRadialFill (FillGeometryAttribute * pFill, EFFECTTY
 	}
 
 	// Write the gradient's header.
-	pDC->OutputToken	( "%AI5_BeginGradient:" );
+	pDC->OutputToken	( _T("%AI5_BeginGradient:") );
 	pDC->OutputToken	( GradientName );
 	pDC->OutputNewLine	();
 
@@ -919,9 +921,9 @@ BOOL AIEPSRenderRegion::WriteRadialFill (FillGeometryAttribute * pFill, EFFECTTY
 	pDC->OutputToken	( GradientName );
 	pDC->OutputValue	( static_cast<INT32> ( RadialFill ) );
 	pDC->OutputValue	( static_cast<INT32> ( Colours ) );
-	pDC->OutputToken	( "Bd" );
+	pDC->OutputToken	( _T("Bd") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "[" );
+	pDC->OutputToken	( _T("[") );
 	pDC->OutputNewLine	();
 
 	// (ChrisG 3/4/2001) Get bias and convert to 0-100 range (from -1 to +1)
@@ -972,9 +974,9 @@ BOOL AIEPSRenderRegion::WriteRadialFill (FillGeometryAttribute * pFill, EFFECTTY
 	WriteGradientEntry ( &EndColour, 100, 50 );
 
 	// Write out the end of gradient tokens.
-	pDC->OutputToken	( "BD" );
+	pDC->OutputToken	( _T("BD") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%AI5_EndGradient" );
+	pDC->OutputToken	( _T("%AI5_EndGradient") );
 	pDC->OutputNewLine	();
 
 	// It worked!
@@ -1007,7 +1009,7 @@ BOOL AIEPSRenderRegion::WriteGradientEntry ( DocColour	*pColour,
 	PColourCMYK	CMYKColour;								// The colour to be stored.
 
 	KernelDC	*pDC		= (KernelDC *) RenderDC;	// A pointer to the export DC used.
-	char		Line [80];								// Contains the string to be stored.
+	TCHAR		Line [80];								// Contains the string to be stored.
 
 	// (ChrisG 3/4/2001) 
 	if (Midpoint < 13)
@@ -1023,7 +1025,7 @@ BOOL AIEPSRenderRegion::WriteGradientEntry ( DocColour	*pColour,
 		// Use RGB syntax.
 		pColour->GetRGBValue ( &red, &green, &blue );
 
-		sprintf ( Line, "2 %d %d%%_Bs", Midpoint, Position );
+		camSprintf ( Line, _T("2 %d %d%%_Bs"), Midpoint, Position );
 		pDC->OutputColour		( &CMYKColour );
 		pDC->OutputColourValue	( red );
 		pDC->OutputColourValue	( green );
@@ -1036,7 +1038,7 @@ BOOL AIEPSRenderRegion::WriteGradientEntry ( DocColour	*pColour,
 
 		// It is necessary to build the output line like this, so that there isn't a space
 		// between the position of the colour, and the %_Bs operator.
-		sprintf ( Line, "1 %d %d%%_Bs", Midpoint, Position );	// Build the output string.
+		camSprintf ( Line, _T("1 %d %d%%_Bs"), Midpoint, Position );	// Build the output string.
 
 		pDC->OutputColour	( &CMYKColour );				// Write the colour to the file.
 		pDC->OutputToken	( Line );						// Write the output string out.
@@ -1133,10 +1135,10 @@ BOOL AIEPSRenderRegion::WriteFillEffectSteps (	DocColour *pColour1,
 		for (INT32 i=1; i<NumFillEmulationSteps + 1; i++)
 		{
 			// increment each colour value and the position
-			h2 = h1 + (i * hAdd);
-			s2 = s1 + (i * sAdd);
-			v2 = v1 + (i * vAdd);
-			pos2 = pos1 + (i * posAdd);
+			h2 = (INT32)(h1 + (i * hAdd));
+			s2 = (INT32)(s1 + (i * sAdd));
+			v2 = (INT32)(v1 + (i * vAdd));
+			pos2 = (INT32)(pos1 + (i * posAdd));
 
 			// wrap the hue around if it's gone past 360 deg or 0 deg.
 			if (h2>=360)
@@ -1220,12 +1222,12 @@ BOOL AIEPSRenderRegion::EndLayer ()
 	if ( m_ActiveLayer )
 	{
 		// Cast the RenderDC pointer into a useful form.
-		KernelDC	*pDC	= static_cast<KernelDC *> ( RenderDC );
+		KernelDC	*pDC	= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 		// Write out the end of layer tag.
-		pDC->OutputToken	( "LB" );
+		pDC->OutputToken	( _T("LB") );
 		pDC->OutputNewLine	();
-		pDC->OutputToken	( "%AI5_EndLayer" );
+		pDC->OutputToken	( _T("%AI5_EndLayer") );
 		pDC->OutputNewLine	();
 
 		// Set m_ActiveLayer to be FALSE.
@@ -1264,7 +1266,7 @@ void AIEPSRenderRegion::WriteGradientFillInstance ()
 	DocCoord				Delta		= EndPoint - StartPoint;
 	double					Angle		= 90.0f;
 	double					Length		= FlashExportDC::CalculateLength ( Delta );
-	char					Name [80];
+	TCHAR					Name [80];
 	BOOL					IsRadial	= pFillAttr->IsARadialFill () ||
 										  pFillAttr->IsASquareFill ();
 	INT32					id			= 0;
@@ -1278,13 +1280,13 @@ void AIEPSRenderRegion::WriteGradientFillInstance ()
 		if ( IsRadial )
 		{
 			// Set up the name to show that it's a radial gradient.
-			sprintf ( Name, "(%s %d)", RadialGradient, id );
+			camSprintf ( Name, _T("(%s %d)"), RadialGradient, id );
 		}
 		// Otherwise it's represented by a linear fill.
 		else
 		{
 			// Set up the name to show that it's a linear gradient.
-			sprintf ( Name, "(%s %d)", LinearGradient, id );
+			camSprintf ( Name, _T("(%s %d)"), LinearGradient, id );
 		
 			// Reset the end point value if we're dealing with a three colour fill.
 			if ( pFillAttr->IsAThreeColFill () )
@@ -1345,12 +1347,12 @@ void AIEPSRenderRegion::WriteGradientFillInstance ()
 		Length /= 1000;
 
 		// Write out the appropriate fill record.
-		pDC->OutputToken	( "1" );				// It is a clipped gradient.
+		pDC->OutputToken	( _T("1") );				// It is a clipped gradient.
 		pDC->OutputToken	( Name );				// The gradient's name.
 		pDC->OutputCoord	( StartPoint );			// Start point for the gradient fill.
 		pDC->OutputReal		( Angle );				// The angle of the fill from the X-Axis.
 		pDC->OutputReal		( Length );				// The length of the matrix.
-		pDC->OutputToken	( "1 0 0 1 0 0 Bg" );	// Matrix manipulating the fill. (Unused.)
+		pDC->OutputToken	( _T("1 0 0 1 0 0 Bg") );	// Matrix manipulating the fill. (Unused.)
 		pDC->OutputNewLine	();
 
 	}	// End of IsGradientFillValidForExport.
@@ -1407,7 +1409,7 @@ BOOL AIEPSRenderRegion::LoadBitmapMatrix ( NodeBitmap	*pNodeBMP )
 
 	double			SinRotate	= sin ( Angle );
 	double			CosRotate	= cos ( Angle );
-	double			Skew		= 0;
+//	double			Skew		= 0;
 
 	DocCoord		LowLeft		= pNodeBMP->Parallel [3];	// Low corner of the bitmap.
 	DocCoord		TopLeft		= pNodeBMP->Parallel [0];	// Max Y corner.
@@ -1553,16 +1555,16 @@ BOOL AIEPSRenderRegion::WriteLoadedMatrix ( void )
 {
 	// Cast the DC pointer to be a KernelDC pointer. This allows it to access useful member
 	// functions.
-	KernelDC	*pDC	= static_cast<KernelDC *> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Write the matrix.
-	pDC->OutputToken	( "[" );
+	pDC->OutputToken	( _T("[") );
 	pDC->OutputReal		( m_a );
 	pDC->OutputReal		( m_b );
 	pDC->OutputReal		( m_c );
 	pDC->OutputReal		( m_d );
 	pDC->OutputCoord	( m_T );
-	pDC->OutputToken	( "]" );
+	pDC->OutputToken	( _T("]") );
 
 	return TRUE;
 }
@@ -1588,7 +1590,7 @@ BOOL AIEPSRenderRegion::WriteLoadedMatrix ( void )
 
 BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 {
-	KernelDC	*pDC		= static_cast<KernelDC*> ( RenderDC );	// DC for export file.
+	KernelDC	*pDC		= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );	// DC for export file.
 	DocCoord	*Coords		= MaskPath->GetCoordArray();
 	PathVerb	*Verbs		= MaskPath->GetVerbArray();
 	INT32			NumCoords	= MaskPath->GetNumCoords();
@@ -1601,7 +1603,7 @@ BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 		if (OutputGroupToken)
 		{
 			// Start the mask.
-			pDC->OutputToken	( "q" );
+			pDC->OutputToken	( _T("q") );
 			pDC->OutputNewLine	();
 		}
 
@@ -1617,7 +1619,7 @@ BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 				IsCompound = TRUE;
 
 				// Write the tag to indicate that it's a compound path.
-				pDC->OutputToken	( "*u" );
+				pDC->OutputToken	( _T("*u") );
 				pDC->OutputNewLine	();
 				break;
 			}
@@ -1635,7 +1637,7 @@ BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 		while(ReadPos < NumCoords)
 		{
 			// Find out the type of element that we are over (after the close flag has been removed)
-			Coord P[4];
+//			Coord P[4];
 			switch ( (Verbs[ReadPos]) & (~PT_CLOSEFIGURE) )
 			{
 				case PT_MOVETO:
@@ -1695,12 +1697,12 @@ BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 		{
 
 			// End compound path
-			pDC->OutputToken("*U");
+			pDC->OutputToken(_T("*U"));
 			pDC->OutputNewLine();
 		}
 
 		// Wrap up the mask.
-		pDC->OutputToken	( "0 O" );
+		pDC->OutputToken	( _T("0 O") );
 		pDC->OutputNewLine	();
 
 	}	// End of if there is a clip path.
@@ -1723,14 +1725,14 @@ BOOL AIEPSRenderRegion::WriteMask ( Path *MaskPath, BOOL OutputGroupToken )
 
 BOOL AIEPSRenderRegion::WriteMaskTags ()
 {
-	KernelDC	*pDC	= static_cast<KernelDC*> ( RenderDC );	// DC for export file.
+	KernelDC	*pDC	= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );	// DC for export file.
 
 	// Write out the mask definition tags.
-	pDC->OutputToken	( "h" );
+	pDC->OutputToken	( _T("h") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "W" );
+	pDC->OutputToken	( _T("W") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "n" );
+	pDC->OutputToken	( _T("n") );
 	pDC->OutputNewLine	();
 
 	return TRUE;
@@ -1753,7 +1755,7 @@ BOOL AIEPSRenderRegion::WriteMaskTags ()
 BOOL AIEPSRenderRegion::WriteBitmapRecord ( OILBitmap	*pBitmap )
 {
 	// Set up the local variables.
-	KernelDC	*pDC		= static_cast<KernelDC*> ( RenderDC );
+//	KernelDC	*pDC		= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	INT32		Width		= static_cast<INT32> ( pBitmap->GetWidth () );
 	INT32		Height		= static_cast<INT32> ( pBitmap->GetHeight () );
 
@@ -1790,12 +1792,12 @@ BOOL AIEPSRenderRegion::WriteBitmapHeader ( INT32 Width,
 											INT32 Height )
 {
 	// Set up kernel DC up in an appropriate form.
-	KernelDC	*pDC	= static_cast<KernelDC *> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Declare the bitmap record.
-	pDC->OutputToken	( "%AI5_File:" );
+	pDC->OutputToken	( _T("%AI5_File:") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%AI5_BeginRaster" );
+	pDC->OutputToken	( _T("%AI5_BeginRaster") );
 	pDC->OutputNewLine	();
 
 	// (ChrisG 23/11/00) The Xh operator has been removed, as it wasn't correct (it didn't 
@@ -1812,7 +1814,7 @@ BOOL AIEPSRenderRegion::WriteBitmapHeader ( INT32 Width,
 //	pDC->OutputValue	( Width );
 //	pDC->OutputValue	( Height );
 //	pDC->OutputValue	( 0l );
-//	pDC->OutputToken	( "Xh" );
+//	pDC->OutputToken	( _T("Xh") );
 //	pDC->OutputNewLine	();
 
 
@@ -1822,7 +1824,7 @@ BOOL AIEPSRenderRegion::WriteBitmapHeader ( INT32 Width,
 	WriteLoadedMatrix ();
 
 	// The bounds of the bitmap.
-	pDC->OutputToken	( "0 0" );
+	pDC->OutputToken	( _T("0 0") );
 	pDC->OutputValue	( Width );
 	pDC->OutputValue	( Height );
 
@@ -1833,16 +1835,16 @@ BOOL AIEPSRenderRegion::WriteBitmapHeader ( INT32 Width,
 
 	// These values are always constant, and so I don't need to worry about
 	// them changing.
-	pDC->OutputToken	( "8 3 0 0 0 0" );
+	pDC->OutputToken	( _T("8 3 0 0 0 0") );
 	pDC->OutputNewLine	();
 
 	// Write out the file size.
-	pDC->OutputToken	( "%%BeginData:" );
+	pDC->OutputToken	( _T("%%BeginData:") );
 	pDC->OutputValue	( static_cast<INT32> ( Height * Width * 3 ) );
 	pDC->OutputNewLine	();
 
 	// Wrap out the XI operator.
-	pDC->OutputToken	( "XI" );
+	pDC->OutputToken	( _T("XI") );
 	pDC->OutputNewLine	();
  
 	return TRUE;
@@ -1871,11 +1873,11 @@ BOOL AIEPSRenderRegion::WriteBitmapBody ( OILBitmap	*pBitmap,
 										  INT32		Height )
 {
 	// Set up the local variables.
-	KernelDC	*pDC	= static_cast<KernelDC*> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	INT32			Count	= 0;
 
 	// Write the initial %.
-	pDC->OutputToken	( "%" );
+	pDC->OutputToken	( _T("%") );
 
 	// Write out the bitmap data. It's necessary to go backwards through y
 	// otherwise the bitmap is rendered upside down.
@@ -1884,18 +1886,18 @@ BOOL AIEPSRenderRegion::WriteBitmapBody ( OILBitmap	*pBitmap,
 		for ( INT32 x = 0; x < Width; x++ )
 		{
 			Pixel32bpp	BMPPixel	= pBitmap->ReadPixel32bpp ( x, y );
-			char		Output [7];
+			TCHAR		Output [7];
 
 			// Wrap the line to keep the file tidy.
 			if ( Count >= 10 )
 			{
 				pDC->OutputNewLine	();
-				pDC->OutputToken	( "%" );
+				pDC->OutputToken	( _T("%") );
 				Count = 0;
 			}
 
 			// Translate the RGB values into an ASCII string.
-			sprintf ( Output, "%.2X%.2X%.2X", BMPPixel.Red, BMPPixel.Green, BMPPixel.Blue );
+			camSprintf ( Output, _T("%.2X%.2X%.2X"), BMPPixel.Red, BMPPixel.Green, BMPPixel.Blue );
 
 			// And output them. I'm writing directly to the file because the OutputToken ()
 			// function introduces spaces between the values, which is not a good thing for
@@ -1933,13 +1935,13 @@ BOOL AIEPSRenderRegion::WriteBitmapBody ( OILBitmap	*pBitmap,
 BOOL AIEPSRenderRegion::WriteContoneBody ( OILBitmap	*pBitmap )
 {
 	// Set up the local variables.
-	KernelDC	*pDC	= static_cast<KernelDC*> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC*> ( CCDC::ConvertFromNativeDC(RenderDC) );
 	INT32		Width	= static_cast<INT32> ( pBitmap->GetWidth () );
 	INT32		Height	= static_cast<INT32> ( pBitmap->GetHeight () );
 	INT32			Count	= 0;
 
 	// Write the initial %.
-	pDC->OutputToken	( "%" );
+	pDC->OutputToken	( _T("%") );
 
 	// Write out the bitmap data. It's necessary to go backwards through y
 	// otherwise the bitmap is rendered upside down.
@@ -1949,7 +1951,7 @@ BOOL AIEPSRenderRegion::WriteContoneBody ( OILBitmap	*pBitmap )
 		{
 			UINT32			Index		= pBitmap->ReadPixelGreyscale ( x, y );
 			DocColour		PixelColour	= pBitmap->GetContonePaletteEntry ( Index );
-			char			Output [7];
+			TCHAR			Output [7];
 			INT32			lRed;
 			INT32			lGreen;
 			INT32			lBlue;
@@ -1961,12 +1963,12 @@ BOOL AIEPSRenderRegion::WriteContoneBody ( OILBitmap	*pBitmap )
 			if ( Count >= 10 )
 			{
 				pDC->OutputNewLine	();
-				pDC->OutputToken	( "%" );
+				pDC->OutputToken	( _T("%") );
 				Count = 0;
 			}
 
 			// Translate the RGB values into an ASCII string.
-			sprintf ( Output, "%.2X%.2X%.2X", lRed, lGreen, lBlue );
+			camSprintf ( Output, _T("%.2X%.2X%.2X"), lRed, lGreen, lBlue );
 
 			// And output them. I'm writing directly to the file because the OutputToken ()
 			// function introduces spaces between the values, which is not a good thing for
@@ -2004,14 +2006,14 @@ BOOL AIEPSRenderRegion::WriteContoneBody ( OILBitmap	*pBitmap )
 BOOL AIEPSRenderRegion::WriteBitmapTail ( void )
 {
 	// Set up kernel DC up in an appropriate form.
-	KernelDC	*pDC	= static_cast<KernelDC *> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	// Wrap up the bitmap record.
-	pDC->OutputToken	( "%%EndData" );
+	pDC->OutputToken	( _T("%%EndData") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "XH" );
+	pDC->OutputToken	( _T("XH") );
 	pDC->OutputNewLine	();
-	pDC->OutputToken	( "%AI5_EndRaster" );
+	pDC->OutputToken	( _T("%AI5_EndRaster") );
 	pDC->OutputNewLine	();
 
 	// ChrisG (27/10/00).
@@ -2020,7 +2022,7 @@ BOOL AIEPSRenderRegion::WriteBitmapTail ( void )
 	//	etc... Whereas the 'N' token clears all this info, so any text objects or paths which
 	//	follow the bitmap were picking up colour and line info for an unfilled/unstroked path,
 	//	rather than the current attributes.
-	pDC->OutputToken	( "F" );
+	pDC->OutputToken	( _T("F") );
 	pDC->OutputNewLine	();
 
 	// The colours are no longer valid, as the bitmap definition has invalidated them.
@@ -2044,26 +2046,26 @@ BOOL AIEPSRenderRegion::WriteBitmapTail ( void )
 void AIEPSRenderRegion::OutputWindingRule ()
 {
 	// Set up kernel DC up in an appropriate form.
-	KernelDC	*pDC	= static_cast<KernelDC *> ( RenderDC );
+	KernelDC	*pDC	= static_cast<KernelDC *> ( CCDC::ConvertFromNativeDC(RenderDC) );
 
 	if (RR_WINDINGRULE() == EvenOddWinding)
 	{
 		// Even-Odd winding (Camelot's default)
-		pDC->OutputValue (1l);
+		pDC->OutputValue ((INT32)1);
 	}
 	else if (RR_WINDINGRULE() == NonZeroWinding)
 	{
 		// Non-Zero winding (EPS's default)
-		pDC->OutputValue (0l);
+		pDC->OutputValue ((INT32)0);
 	}
 	else
 	{
 		// Positive or negative winding (only Even-Odd and Non-Zero are supported in AI7),
 		//	so assume that we're using camelot's default rule.
-		pDC->OutputValue (1l);
+		pDC->OutputValue ((INT32)1);
 	}
 
-	pDC->OutputToken ("XR");
+	pDC->OutputToken (_T("XR"));
 	pDC->OutputNewLine ();
 }
 
@@ -2087,7 +2089,7 @@ void AIEPSRenderRegion::OutputLineWidth()
 	if (ExportingOnPath ())
 	{
 		OverflowTextStartGap ();
-		sprintf (buf, "%.2f w\n", ((double) RR_LINEWIDTH())/1000);
+		camSprintf (buf, _T("%.2f w\n"), ((double) RR_LINEWIDTH())/1000);
 		OverflowTextWrite (buf);
 	}
 
@@ -2113,7 +2115,7 @@ void AIEPSRenderRegion::OutputJoinType()
 	if (ExportingOnPath ())
 	{
 		OverflowTextStartGap ();
-		sprintf (buf, "%d j\n", (UINT32)RR_JOINTYPE());
+		camSprintf (buf, _T("%d j\n"), (UINT32)RR_JOINTYPE());
 		OverflowTextWrite (buf);
 	}
 
@@ -2159,7 +2161,7 @@ void AIEPSRenderRegion::OutputStartCap()
 	if (ExportingOnPath ())
 	{
 		OverflowTextStartGap ();
-		sprintf (buf, "%d J\n", (UINT32)RR_STARTCAP());
+		camSprintf (buf, _T("%d J\n"), (UINT32)RR_STARTCAP());
 		OverflowTextWrite (buf);
 	}
 
@@ -2239,7 +2241,7 @@ void AIEPSRenderRegion::OutputFontName()
 
 		String_64 FontName;
 		String_64 EncodedFontName;
-		String_64 Append("/_");
+		String_64 Append(_T("/_"));
 
 		// get information about the current font
 		FONTMANAGER->GetFontName(RR_TXTFONTTYPEFACE(), FontName);
@@ -2248,13 +2250,13 @@ void AIEPSRenderRegion::OutputFontName()
 		// appears to map an existing, encoded font name onto its Postscript counterpart.
 		FONTMANAGER->EncodeAndMapFontName(FontName, EncodedFontName, GetFontStyle());
 		
-		EncodedFontName.Insert(&Append,0);
+		EncodedFontName.Insert(Append,0);
 
 		// Output the fontsize next
 		double PointSize = ((double)RR_TXTFONTSIZE())/1000;
 		
 		// finally do output the font token
-		sprintf (buffer, "%s %.1f Tf\n", (TCHAR *)EncodedFontName, PointSize);
+		camSprintf (buffer, _T("%s %.1f Tf\n"), (TCHAR *)EncodedFontName, PointSize);
 		OverflowTextWrite (buffer);
 	}
 	EPSRenderRegion::OutputFontName ();
@@ -2291,13 +2293,13 @@ void AIEPSRenderRegion::OutputTextRenderMode ()
 
 		switch (Style)
 		{
-			case 0: OverflowTextWrite ("3 Tr\n");	// Invisible
+			case 0: OverflowTextWrite (_T("3 Tr\n"));	// Invisible
 					break;
-			case 1: OverflowTextWrite ("0 Tr\n");	// filled only
+			case 1: OverflowTextWrite (_T("0 Tr\n"));	// filled only
 					break;
-			case 2: OverflowTextWrite ("1 Tr\n");	// stroked only
+			case 2: OverflowTextWrite (_T("1 Tr\n"));	// stroked only
 					break;
-			case 3: OverflowTextWrite ("2 Tr");	// filled and stroked
+			case 3: OverflowTextWrite (_T("2 Tr"));	// filled and stroked
 					break;
 		}
 	}
@@ -2324,7 +2326,7 @@ void AIEPSRenderRegion::OutputTextAspectRatio ()
 	if (ExportingOnPath ())
 	{
 		OverflowTextStartGap ();
-		sprintf (buf, "%.0f Tz\n", (RR_TXTASPECTRATIO().MakeDouble()*100.0));	// convert from ratio to %
+		camSprintf (buf, _T("%.0f Tz\n"), (RR_TXTASPECTRATIO().MakeDouble()*100.0));	// convert from ratio to %
    		OverflowTextWrite (buf);
 	}
 
@@ -2353,7 +2355,7 @@ void AIEPSRenderRegion::OutputTextTracking ()
 	if (ExportingOnPath ())
 	{
 		OverflowTextStartGap ();
-		sprintf (buf, "%d Tt\n", RR_TXTTRACKING());
+		camSprintf (buf, _T("%d Tt\n"), RR_TXTTRACKING());
 		OverflowTextWrite (buf);
 	}
 
@@ -2383,16 +2385,16 @@ void AIEPSRenderRegion::OutputTextJustification ()
 		switch (RR_TXTJUSTIFICATION())
    		{
    		case JLEFT: 
-   			sprintf (buf, "%d Ta\n", ((INT32)0));
+   			camSprintf (buf, _T("%d Ta\n"), ((INT32)0));
 			break;
 		case JRIGHT: 
-   			sprintf (buf, "%d Ta\n", ((INT32)2));
+   			camSprintf (buf, _T("%d Ta\n"), ((INT32)2));
 			break;
 		case JCENTRE: 
-   			sprintf (buf, "%d Ta\n", ((INT32)1));
+   			camSprintf (buf, _T("%d Ta\n"), ((INT32)1));
 			break;
 		case JFULL: 
-   			sprintf (buf, "%d Ta\n", ((INT32)3));
+   			camSprintf (buf, _T("%d Ta\n"), ((INT32)3));
 			break;
 		}
 		OverflowTextWrite (buf);
@@ -2452,7 +2454,7 @@ void AIEPSRenderRegion::OutputTextLineSpacing ()
 		else
 			ptLineSpace = absLineSpace/1000;
 
-		sprintf (buf, "%.0f %.0f Tl\n", ptLineSpace, ptParaSpace);
+		camSprintf (buf, _T("%.0f %.0f Tl\n"), ptLineSpace, ptParaSpace);
 		OverflowTextWrite (buf);
 	}
 
@@ -2480,7 +2482,7 @@ void AIEPSRenderRegion::OutputTextBaselineShift ()
 	{
 		OverflowTextStartGap ();
 		double BaseLine = ((double)RR_TXTBASELINE())/1000;
-		sprintf (buf, "%.1f Ts\n", BaseLine);
+		camSprintf (buf, _T("%.1f Ts\n"), BaseLine);
 		OverflowTextWrite (buf);
 	}
 
@@ -2514,17 +2516,17 @@ void AIEPSRenderRegion::OutputTextSubSuperScript ()
 		double offset = (pScript->Offset).MakeDouble();
 		double size = (pScript->Size).MakeDouble();
 
-		OverflowTextWrite ("%%XSScript\n");
+		OverflowTextWrite (_T("%%XSScript\n"));
 
 		double rise = FontSize*offset;
 
-		sprintf (buf, "%.1f Ts\n", rise);
+		camSprintf (buf, _T("%.1f Ts\n"), rise);
 		OverflowTextWrite (buf);
 
 		double ptsize = FontSize*size;
 
 		String_64 MappedFont;
-		String_64 Append("/_");
+		String_64 Append(_T("/_"));
 
 		String_64 FontName;
 		FONTMANAGER->GetFontName(RR_TXTFONTTYPEFACE(), FontName);
@@ -2534,9 +2536,9 @@ void AIEPSRenderRegion::OutputTextSubSuperScript ()
 
 		// Graeme (14-6-00) - I should add ascent and descent values, but Camelot doesn't
 		// seem to store them anywhere.
-		MappedFont.Insert(&Append,0);
+		MappedFont.Insert(Append,0);
 
-		sprintf (buf, "%s %.1f Tf\n",(TCHAR *)MappedFont, ptsize);
+		camSprintf (buf, _T("%s %.1f Tf\n"),(TCHAR *)MappedFont, ptsize);
 		// Output the ascent.
 		// Output the descent.
 		OverflowTextWrite (buf);
@@ -2626,17 +2628,28 @@ void AIEPSRenderRegion::OverflowTextFinish ()
 	fclose (m_fpOverflowText);
 	m_fpOverflowText = NULL;
 
-		// copy info into actual EPS file.
-	char buffer [1025];
+	// copy info into actual EPS file.
+	char cbuffer [1025];
+	TCHAR buffer [1025];
 	KernelDC *pDC = (KernelDC *) RenderDC;
 	FILE * fp;
 
 		// Write out the Extra info.
 	fp = fopen ("OverFlow.txt", "r+t");
 
-	while (fgets (buffer, 1024, fp) != NULL)
+	while (fgets (cbuffer, 1024, fp) != NULL)
 	{
-			// deal with newlines.
+		char c;
+		INT32 i;
+		cbuffer[1024]=0;
+		do
+		{
+			c=cbuffer[i];
+			buffer[i]=c; // 1:1 CHAR->TCHAR conversion
+			i++;
+		} while (c);
+			
+		// deal with newlines.
 		pDC->OutputToken (buffer);
 		pDC->OutputNewLine ();
 	}
@@ -2666,7 +2679,7 @@ void AIEPSRenderRegion::OverflowTextStartGap ()
 	// if we're not in a gap, finish writing the old TX block and start a new gap, 
 	if (m_bInTextGap == FALSE)
 	{
-		OverflowTextWrite (") TX\n");
+		OverflowTextWrite (_T(") TX\n"));
 		m_bInTextGap = TRUE;
 	}
 }
@@ -2690,7 +2703,7 @@ void AIEPSRenderRegion::OverflowTextFinishGap ()
 	// if we're in a text gap (for changing the attributes), start writing a new TX block.
 	if (m_bInTextGap == TRUE)
 	{
-		OverflowTextWrite ("(");
+		OverflowTextWrite (_T("("));
 		m_bInTextGap = FALSE;
 	}
 }
@@ -2711,8 +2724,10 @@ void AIEPSRenderRegion::OverflowTextFinishGap ()
 void AIEPSRenderRegion::OverflowTextWrite (TCHAR * text)
 {
 	ASSERT (ExportingOnPath ());
-
-	fprintf (m_fpOverflowText, "%s", text);
+	while (*text)
+	{
+		fprintf (m_fpOverflowText, "%c", *text++);
+	}
 }
 
 
@@ -2736,7 +2751,7 @@ void AIEPSRenderRegion::OverflowTextWriteSingleColour (UINT32 n)
 	TCHAR buf[20];
 
 	// Convert to points, getting integer and fractional parts
-	sprintf (buf, "%.2f ", ((double) n) / 255);
+	camSprintf (buf, _T("%.2f "), ((double) n) / 255);
 	OverflowTextWrite (buf);
 }
 
@@ -2821,9 +2836,9 @@ void AIEPSRenderRegion::OverflowTextWriteNamedColour(DocColour *pCol, ColourCont
 		else
 		{
 			// Otherwise make up a colour name (see epsfiltr.h).
-			OverflowTextWrite ("(");
+			OverflowTextWrite (_T("("));
 			OverflowTextWrite (ImmediateColourFudgeyBodgeName);
-			OverflowTextWrite (")");
+			OverflowTextWrite (_T(")"));
 		}
 	}
 	else
@@ -2831,13 +2846,13 @@ void AIEPSRenderRegion::OverflowTextWriteNamedColour(DocColour *pCol, ColourCont
 		// Got an indexed colour - output its name
 		// (Pass in TRUE to get a unique-identifier for local colours rather than "Local colour")
 		String_64 *ColName = pIndCol->GetName(TRUE);
-		OverflowTextWrite ("(");
+		OverflowTextWrite (_T("("));
 		OverflowTextWrite ((TCHAR *) (*ColName));
-		OverflowTextWrite (")");
+		OverflowTextWrite (_T(")"));
 	}
 
 	// Always tint 0
-	OverflowTextWrite (" 0 ");
+	OverflowTextWrite (_T(" 0 "));
 }
 
 /********************************************************************************************
@@ -2868,14 +2883,14 @@ void AIEPSRenderRegion::OverflowTextWriteColourName (DocColour *pCol)
 		{
 			// This is a 'no colour' type colour, so output a zero-length colour name,
 			// as this is the only way we can handle this at the moment.
-			OverflowTextWrite ("()");
+			OverflowTextWrite (_T("()"));
 		}
 		else
 		{
 			// Otherwise make up a colour name (see epsfiltr.h).
-			OverflowTextWrite ("(");
+			OverflowTextWrite (_T("("));
 			OverflowTextWrite (ImmediateColourFudgeyBodgeName);
-			OverflowTextWrite (")");
+			OverflowTextWrite (_T(")"));
 		}
 	}
 	else
@@ -2883,9 +2898,9 @@ void AIEPSRenderRegion::OverflowTextWriteColourName (DocColour *pCol)
 		// Got an indexed colour - output its name
 		// (Pass in TRUE to get a unique-identifier for local colours rather than "Local colour")
 		String_64 *ColName = pIndCol->GetName(TRUE);
-		OverflowTextWrite ("(");
+		OverflowTextWrite (_T("("));
 		OverflowTextWrite ((TCHAR *) (*ColName));
-		OverflowTextWrite (")");
+		OverflowTextWrite (_T(")"));
 	}
 }
 
@@ -3103,13 +3118,13 @@ void AIEPSRenderRegion::OutputFillRGBColour ()
 			if (RR_FILLCOLOUR().FindParentIndexedColour() == NULL)
 			{
 				// Unnamed colour - just add 'Xa' token
-				OverflowTextWrite ("Xa\n");
+				OverflowTextWrite (_T("Xa\n"));
 			}
 			else
 			{
 				// Named colour - add Name, tint value, RGB flag and 'Xx' token
 				OverflowTextWriteColourName (&(RR_FILLCOLOUR()));
-				OverflowTextWrite (" 0 1 Xx\n");
+				OverflowTextWrite (_T(" 0 1 Xx\n"));
 			}
 		}
 		else
@@ -3123,13 +3138,13 @@ void AIEPSRenderRegion::OutputFillRGBColour ()
 				RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 				BYTE c = 0xFF - CMYK.Key;
 				OverflowTextWriteSingleColour (c);
-				OverflowTextWrite ("g\n");
+				OverflowTextWrite (_T("g\n"));
 			}
 			else
 			{
 				RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("x\n");
+				OverflowTextWrite (_T("x\n"));
 			}
 		}
 	}
@@ -3174,13 +3189,13 @@ void AIEPSRenderRegion::OutputFillCMYKColour ()
 				// retrieve the colour value
 				RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("k\n");
+				OverflowTextWrite (_T("k\n"));
 			}
 			else
 			{
 				// Named colour
 				OverflowTextWriteNamedColour (&(RR_FILLCOLOUR()), pContext);
-				OverflowTextWrite ("x\n");
+				OverflowTextWrite (_T("x\n"));
 			}
 		}
 		else
@@ -3192,13 +3207,13 @@ void AIEPSRenderRegion::OutputFillCMYKColour ()
 				RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 				BYTE c = 0xFF - CMYK.Key;
 				OverflowTextWriteSingleColour (c);
-				OverflowTextWrite ("g\n");
+				OverflowTextWrite (_T("g\n"));
 			}
 			else
 			{
 				RR_FILLCOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("x\n");
+				OverflowTextWrite (_T("x\n"));
 			}
 		}
 	}
@@ -3251,13 +3266,13 @@ void AIEPSRenderRegion::OutputStrokeRGBColour ()
 			if (RR_STROKECOLOUR().FindParentIndexedColour() == NULL)
 			{
 				// Unnamed colour - just add 'XA' token
-				OverflowTextWrite ("XA\n");
+				OverflowTextWrite (_T("XA\n"));
 			}
 			else
 			{
 				// Named colour - add Name, tint value, RGB flag and 'XX' token
 				OverflowTextWriteColourName (&(RR_STROKECOLOUR()));
-				OverflowTextWrite (" 0 1 XX\n");
+				OverflowTextWrite (_T(" 0 1 XX\n"));
 			}
 		}
 		else
@@ -3271,13 +3286,13 @@ void AIEPSRenderRegion::OutputStrokeRGBColour ()
 				RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 				BYTE c = 0xFF - CMYK.Key;
 				OverflowTextWriteSingleColour (c);
-				OverflowTextWrite ("G\n");
+				OverflowTextWrite (_T("G\n"));
 			}
 			else
 			{
 				RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("X\n");
+				OverflowTextWrite (_T("X\n"));
 			}
 		}
 	}
@@ -3321,13 +3336,13 @@ void AIEPSRenderRegion::OutputStrokeCMYKColour ()
 				// retrieve the colour value
 				RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("K\n");
+				OverflowTextWrite (_T("K\n"));
 			}
 			else
 			{
 				// Named colour
 				OverflowTextWriteNamedColour (&(RR_STROKECOLOUR()), pContext);
-				OverflowTextWrite ("X\n");
+				OverflowTextWrite (_T("X\n"));
 			}
 		}
 		else
@@ -3339,13 +3354,13 @@ void AIEPSRenderRegion::OutputStrokeCMYKColour ()
 				RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 				BYTE c = 0xFF - CMYK.Key;
 				OverflowTextWriteSingleColour (c);
-				OverflowTextWrite ("G\n");
+				OverflowTextWrite (_T("G\n"));
 			}
 			else
 			{
 				RR_STROKECOLOUR().GetCMYKValue(pContext, &CMYK);
 				OverflowTextWriteColour (&CMYK);
-				OverflowTextWrite ("X\n");
+				OverflowTextWrite (_T("X\n"));
 			}
 		}
 	}
@@ -3585,7 +3600,7 @@ INT32 AIEPSRenderRegion::FindGradientInCache (FillGeometryAttribute * pFill, EFF
 ********************************************************************************************/
 void AIEPSRenderRegion::BuildGradientCache (Node * pStartNode)
 {
-	Node * pChild	= NULL;
+//	Node * pChild	= NULL;
 
 	// Set up the gradient searching system
 	AIEPSGradientScanRenderRegion scanRR (this);
@@ -3673,7 +3688,7 @@ void AIEPSRenderRegion::WriteGradientCount ()
 	if (numFills)
 	{
 		pDC->OutputValue (numFills);
-		pDC->OutputToken ("Bn");
+		pDC->OutputToken (_T("Bn"));
 		pDC->OutputNewLine ();
 	}
 }

@@ -220,7 +220,7 @@ BOOL AI8EPSFilter::Init()
 INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	UINT32	Lines	= 0;
-	char	*Buffer	= NULL;
+	TCHAR	*Buffer	= NULL;
 
 	// !PS-Adobe line is ok - check creator line...
 	CCMemTextFile HeaderFile ( reinterpret_cast<char *> ( pFileHeader ), HeaderSize );
@@ -238,7 +238,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 	{
 		// Get the current line from the file.
 		HeaderFile.GetLineToken();
-		Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf () );
+		Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf () );
 
 		// Ensure that it's OK.
 		ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
@@ -246,19 +246,19 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, _T("%!PS-Adobe"), 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
 			{
 				HeaderFile.GetLineToken();
-				Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf() );
+				Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf() );
 				ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
 				Lines++;
 
 				// Return TRUE if this file was created by Illustrator, or has been exported in 
 				// Illustrator format.
-				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(R) 8", 33) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: Adobe Illustrator(R) 8"), 33) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
@@ -267,7 +267,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// Check to see if it's from Illustrator 9. If you're writing a dedicated AI9
 				// filter, then you really should remove this code.
-				else if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(R) 9", 33) == 0)
+				else if (camStrncmp(Buffer, _T("%%Creator: Adobe Illustrator(R) 9"), 33) == 0)
 				{
 					// We probably want this. Note: I'm returning 9 because a native AI9
 					// filter would return 10, and if this code is left in, it will be
@@ -276,10 +276,10 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 					return 9;
 				}
 
-				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, "Illustrator(R) 8") != NULL)
+					if (camStrstr(Buffer, _T("Illustrator(R) 8")) != NULL)
 					{
 						HeaderFile.close();
 						return 10;
@@ -287,7 +287,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 					
 					// Try to see if it's Illustrator 9. Again, remove this code when you're
 					// writing a dedicated AI9 filter.
-					else if (camStrstr(Buffer, "Illustrator(R) 9") != NULL)
+					else if (camStrstr(Buffer, _T("Illustrator(R) 9")) != NULL)
 					{
 						HeaderFile.close();
 						return 9;
@@ -302,7 +302,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 					break;
 			}
 
@@ -316,7 +316,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 			break;
 	}
 

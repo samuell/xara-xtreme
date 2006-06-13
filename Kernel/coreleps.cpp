@@ -105,14 +105,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "coreleps.h"
 
-#include <strstrea.h>
+#include <sstream>
 
 #include "nodepath.h"
 //#include "paths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "tim.h"
 //#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "cdrfiltr.h"
+//#include "cdrfiltr.h"
 
 
 DECLARE_SOURCE("$Revision$");

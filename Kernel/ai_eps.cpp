@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "ai_eps.h"
 #include "ai_epsrr.h"
-#include <strstrea.h>
+#include <sstream>
 #include <stdio.h>
 
 #include "nodepath.h"
@@ -115,6 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "page.h"
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "layer.h"
 #include "opbevel.h"
 #include "progress.h"        
 #include "ai_grad.h"        
@@ -136,13 +137,13 @@ static EPSCommand DeferredToken = 0;
 CommandMap AIEPSFilter::AICommands[] =
 {
 	// Text handling
-	EPSC_z,			"z",
-	EPSC_e,			"e",
-	EPSC_T,			"T",
-	EPSC_t,			"t",
+	{ EPSC_z,			_T("z")},
+	{ EPSC_e,			_T("e")},
+	{ EPSC_T,			_T("T")},
+	{ EPSC_t,			_T("t")},
 	
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	_T("Invalid") }
 };
 
 /********************************************************************************************
@@ -229,7 +230,7 @@ BOOL AIEPSFilter::Init()
 INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	UINT32	Lines	= 0;
-	char	*Buffer	= NULL;
+	TCHAR	*Buffer	= NULL;
 
 	// !PS-Adobe line is ok - check creator line...
 	CCMemTextFile HeaderFile ( reinterpret_cast<char *> ( pFileHeader ), HeaderSize );
@@ -247,7 +248,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 	{
 		// Get the current line from the file.
 		HeaderFile.GetLineToken();
-		Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf () );
+		Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf () );
 
 		// Ensure that it's OK.
 		ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
@@ -255,19 +256,19 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, _T("%!PS-Adobe"), 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
 			{
 				HeaderFile.GetLineToken();
-				Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf() );
+				Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf() );
 				ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
 				Lines++;
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator", 28) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: Adobe Illustrator"), 28) == 0)
 				{
 					// We definitely want this.
 		 			HeaderFile.close();
@@ -275,7 +276,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				}
 
 				// Another variation on the Illustrator theme
-				if (camStrncmp(Buffer, "%%Creator: AI", 13) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: AI"), 13) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
@@ -283,7 +284,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				}
 
 				// yet another variation (see cru_logo.eps for this one)
-				if (camStrncmp(Buffer, "%%Creator: ps2ai.ps", 19) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: ps2ai.ps"), 19) == 0)
 				{
 					HeaderFile.close ();
 					return 9;
@@ -291,10 +292,10 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If there is a creator field, see if it mentions Illustrator
 				// NOTE: this test must be the last one of the "Creator:" tests.
-				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, "Illustrator") != NULL)
+					if (camStrstr(Buffer, _T("Illustrator")) != NULL)
 					{
 						HeaderFile.close();
 						return 9;
@@ -305,7 +306,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 					break;
 			}
 
@@ -319,7 +320,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 			break;
 	}
 
@@ -371,7 +372,7 @@ BOOL AIEPSFilter::PrepareToExport(CCLexFile* pFile, Spread *pSpread)
 		return FALSE;
 
 	// Attach to the right device.
-	ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr, pSpread);
+	ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr->GetDC(), pSpread);
 
 	// All ok
 	return TRUE;
@@ -720,7 +721,7 @@ NoMemory:
 
 /********************************************************************************************
 
->	char *AIEPSFilter::GetEPSCommand(EPSCommand Cmd)
+>	TCHAR *AIEPSFilter::GetEPSCommand(EPSCommand Cmd)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/02/94
@@ -731,7 +732,7 @@ NoMemory:
 
 ********************************************************************************************/
 
-char *AIEPSFilter::GetEPSCommand(EPSCommand Cmd)
+TCHAR *AIEPSFilter::GetEPSCommand(EPSCommand Cmd)
 {
 	INT32 i = 0;
 	while (AICommands[i].Cmd != EPSC_Invalid)
@@ -804,10 +805,11 @@ BOOL AIEPSFilter::WriteNodes ( RenderRegion	*pRegion,
 	Node				*pBGNode	= NULL;
 
 	// Set the background colour.
-	pRegion->SetBackgroundColour ( FlashFilter::GetPageColour ( pSpread, &pBGNode ) );
+	DocColour bg(FlashFilter::GetPageColour ( pSpread, &pBGNode ) );
+	pRegion->SetBackgroundColour ( bg );
 
 	// Export the file, but catch any file errors.
-	TRY
+	try
 	{
 		// (ChrisG 5/4/2001) Find the first non-guide layer.
 		while (pLayer && pLayer->IsGuide ())
@@ -827,7 +829,7 @@ BOOL AIEPSFilter::WriteNodes ( RenderRegion	*pRegion,
 		}
 	}	// TRY
 
-	CATCH ( CFileException, e )
+	catch ( CFileException)
 	{
 		// Didn't work - report failure to caller.
 		if ( pDC )
@@ -837,7 +839,7 @@ BOOL AIEPSFilter::WriteNodes ( RenderRegion	*pRegion,
 			EndSlowJob ();
 		success = FALSE;
 	}
-	END_CATCH
+	
 #endif
 
 	return success;
@@ -997,7 +999,7 @@ BOOL PhotoShopEPSFilter::Init()
 INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	UINT32	Lines	= 0;
-	char	*Buffer	= NULL;
+	TCHAR	*Buffer	= NULL;
 
 	// !PS-Adobe line is ok - check creator line...
 	CCMemTextFile HeaderFile ( reinterpret_cast<char *> ( pFileHeader ), HeaderSize );
@@ -1015,7 +1017,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 	{
 		// Get the current line from the file.
 		HeaderFile.GetLineToken();
-		Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf () );
+		Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf () );
 
 		// Ensure that it's OK.
 		ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
@@ -1023,19 +1025,19 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, _T("%!PS-Adobe"), 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
 			{
 				HeaderFile.GetLineToken();
-				Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf() );
+				Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf() );
 				ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
 				Lines++;
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (camStrncmp(Buffer, "%%Creator: Adobe Photoshop", 26) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: Adobe Photoshop"), 26) == 0)
 				{
 					// We definitely want this.
 		 			HeaderFile.close();
@@ -1044,7 +1046,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 					break;
 			}
 
@@ -1058,7 +1060,7 @@ INT32 PhotoShopEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 			break;
 	}
 
@@ -1086,7 +1088,7 @@ BOOL PhotoShopEPSFilter::PrepareToImport()
 	// Display error message.
 	String_256 WarnMsg;
 
-	WarnMsg.MakeMsg(_R(IDT_IMPORTMSG_PHOTOSHOPEPS), "");
+	WarnMsg.MakeMsg(_R(IDT_IMPORTMSG_PHOTOSHOPEPS), _T(""));
 	Error::SetError(0, WarnMsg, 0);
 
 	return FALSE;

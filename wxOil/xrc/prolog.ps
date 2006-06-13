@@ -1,0 +1,361 @@
+/bd{bind def}bind def/ld{load def}bind def/xd{exch def}bind def/sv{save}bd
+/rs{restore}bd/gs{gsave}bd/gr{grestore}bd/bg{begin}bd/en{end}bd/level2
+/languagelevel where{pop languagelevel 2 ge}{false}ifelse def/setseps{
+/v_gseps xd}bd/setplate{/v_plate xd}bd/setkgray{/v_keyg xd}bd/setmono{
+/v_mono xd}bd/rgb2gray{0.109 mul exch 0.586 mul add exch 0.305 mul
+add}bd/cmyk2rgb{3{dup 5 -1 roll add dup 1 gt{pop 1}if 1 exch sub exch}repeat
+pop}bd/rgb2cmyk{3{1.0 exch sub 3 1 roll}repeat 3 copy 2 copy gt{exch}if
+pop 2 copy gt{exch}if pop dup 0.5 gt{0.5 sub dup 3{5 1 roll dup 3 1
+roll sub}repeat 5 1 roll pop}{pop 0}ifelse}bd/cmyk2hsb{3{dup 5 -1 roll
+add 1 exch sub dup 0 lt{pop 0}if exch}repeat pop rgb2hsb}bd/rgb2hsb{setrgbcolor
+currenthsbcolor}bd/readcurve{exch 255.0 mul 0.5 add cvi get 255.0 div}bd
+/rgb2devcmyk{3 copy dup 3 1 roll eq 3 1 roll eq v_keyg 1 eq and and{pop
+pop 1 exch sub 0 0 0 4 -1 roll}{/ucurve where{pop 3{1.0 exch sub 3
+1 roll}repeat 3 copy 2 copy gt{exch}if pop 2 copy gt{exch}if pop dup
+ucurve readcurve exch bcurve readcurve clamp01 3{5 1 roll dup 3 1 roll
+sub clamp01}repeat 5 1 roll pop 4 1 roll ycurve readcurve 4 1 roll
+mcurve readcurve 4 1 roll ccurve readcurve 4 1 roll}{rgb2cmyk}ifelse}ifelse}def
+/rgb2keyG{3 copy dup 3 1 roll eq 3 1 roll eq and{pop pop}{Max3}ifelse
+1 exch sub bcurve readcurve clamp01}bd/rgb2key{Max3 1 exch sub bcurve
+readcurve clamp01}bd/rgb2cyanG{3 copy dup 3 1 roll eq 3 1 roll eq and{pop
+pop pop 0}{rgb2cyan}ifelse}bd/rgb2cyan{3 copy Max3 1 exch sub ucurve
+readcurve 4 1 roll pop pop 1 exch sub exch sub ccurve readcurve clamp01}bd
+/rgb2magentaG{3 copy dup 3 1 roll eq 3 1 roll eq and{pop pop pop 0}{rgb2magenta}ifelse}bd
+/rgb2magenta{3 copy Max3 1 exch sub ucurve readcurve 4 1 roll pop
+1 exch sub 3 1 roll pop sub mcurve readcurve clamp01}bd/rgb2yellowG{3
+copy dup 3 1 roll eq 3 1 roll eq and{pop pop pop 0}{rgb2yellow}ifelse}bd
+/rgb2yellow{3 copy Max3 1 exch sub ucurve readcurve 4 1 roll 1 exch
+sub 4 1 roll pop pop sub ycurve readcurve clamp01}bd/rgb2plategray{v_keyg
+0 eq v_plate v_cpky eq{{rgb2key}{rgb2keyG}ifelse}{v_plate v_cpyl eq{{rgb2yellow}{rgb2yellowG}ifelse}{v_plate
+v_cpmg eq{{rgb2magenta}{rgb2magentaG}ifelse}{v_plate v_cpcy eq{{rgb2cyan}{rgb2cyanG}ifelse}{{rgb2key}{rgb2keyG}ifelse}ifelse}ifelse}ifelse}ifelse
+1 exch sub setgray}bd/dc{0 def}bd/aca{/v_cpnone 0 def/v_cpcy 1 def
+/v_cpyl 2 def/v_cpmg 3 def/v_cpky 4 def/v_gseps 0 def/v_keyg 0 def
+/v_plate v_cpnone def/v_mono 0 def/v_wr dc/v_fc dc/v_fm dc/v_fy dc
+/v_fk dc/v_fg dc/v_fr dc/v_fg dc/v_fb dc/v_sc dc/v_sm dc/v_sy dc/v_sk
+dc/v_sg dc/v_sr dc/v_sg dc/v_sb dc/v_sct 0 def/v_fct 0 def/v_ft 0 def
+/v_cxe 0 def/v_cxm 0 def/v_sa -1 def/v_ea -1 def/sR dc/sG dc/sB dc
+/mR dc/mG dc/mB dc/eR dc/eG dc/eB dc/sC dc/sM dc/sY dc/sK dc/eC dc
+/eM dc/eY dc/eK dc/sH dc/sS dc/sV dc/eH dc/eS dc/eV dc/sGy dc/eGy
+dc/mGy dc/ci_datasrc dc/ci_matrix dc/ci_dataleft dc/ci_buf dc/ci_dataofs
+dc/ci_y dc/rciBuf dc/cbslw dc/cmiBuf dc/cPalette dc/cpci_datasrc dc
+/cpci_matrix dc/cpci_bpp dc/cpci_y dc/cpci_sampsleft dc/cpci_nextcol
+dc/cpci_buf dc/startX dc/startY dc/endX dc/endY dc/endX2 dc/endY2 dc
+/fillX dc/urx dc/ury dc/llx dc/lly dc/incD dc/distance dc/slice dc
+/startangle dc/Steps dc/incH dc/incS dc/incV dc/incR dc/incG dc/incB
+dc/incGy dc 0.25 setlinewidth [] 0 setdash 0 setlinejoin 0 setlinecap}bd
+aca/setplategray{v_plate v_cpky eq{1 exch sub setgray pop pop pop}{v_plate
+v_cpyl eq{pop 1 exch sub setgray pop pop}{v_plate v_cpmg eq{pop pop
+1 exch sub setgray pop}{v_plate v_cpcy eq{pop pop pop 1 exch sub setgray}{1
+exch sub setgray pop pop pop}ifelse}ifelse}ifelse}ifelse}bd/setplatecolor{v_plate
+v_cpky eq{1 exch sub 0 0 0 4 -1 roll setcmykcolor pop pop pop}{v_plate
+v_cpyl eq{pop 1 exch sub 0 0 0 4 2 roll setcmykcolor pop pop}{v_plate
+v_cpmg eq{pop pop 1 exch sub 0 0 0 4 1 roll setcmykcolor pop}{v_plate
+v_cpcy eq{pop pop pop 1 exch sub 0 0 0 setcmykcolor}{1 exch sub 0 0
+0 4 -1 roll setcmykcolor pop pop pop}ifelse}ifelse}ifelse}ifelse}bd
+/setcmykcolor where{pop}{/setcmykcolor{cmyk2rgb setrgbcolor}bd}ifelse
+/setlogcmykcolor{v_gseps 1 eq{v_mono 1 eq{1 exch sub setgray pop pop
+pop}{setcmykcolor}ifelse}{v_mono 1 eq{cmyk2rgb rgb2gray setgray}{setcmykcolor}ifelse}ifelse}bd
+/setlogrgbcolor{v_gseps 1 eq{v_mono 1 eq{rgbtoplategray}{rgb2devcmyk
+setplatecolor}ifelse}{v_mono 1 eq{rgb2gray setgray}{systemdict begin
+setrgbcolor end}ifelse}ifelse}bd/setfillcolor{v_fct 0 eq{v_fc v_fm
+v_fy v_fk setlogcmykcolor}{v_fr v_fg v_fb setlogrgbcolor}ifelse}bd
+/setstrokecolor{v_sct 0 eq{v_sc v_sm v_sy v_sk setlogcmykcolor}{v_sr
+v_sg v_sb setlogrgbcolor}ifelse}bd/setgfillcmyk{v_gseps 1 eq{v_mono
+1 eq{cmyk2rgb rgb2plategray}{cmyk2rgb rgb2devcmyk setplatecolor}ifelse}{v_mono
+1 eq{cmyk2rgb rgb2gray setgray}{setcmykcolor}ifelse}ifelse}bd/setgfillrgb{v_gseps
+1 eq{v_mono 1 eq{rgb2plategray}{rgb2devcmyk setplatecolor}ifelse}{v_mono
+1 eq{rgb2gray setgray}{systemdict begin setrgbcolor end}ifelse}ifelse}bd
+/setgfillhsb{v_gseps 1 eq{v_mono 1 eq{systemdict begin sethsbcolor
+currentrgbcolor end rgb2plategray}{systemdict begin sethsbcolor currentrgbcolor
+end rgb2devcmyk setplatecolor}ifelse}{v_mono 1 eq{systemdict begin
+sethsbcolor currentgray end setgray}{systemdict begin sethsbcolor end}ifelse}ifelse}bd
+/Max{2 copy lt{exch}if pop}bd/Max3{2 copy lt{exch}if pop 2 copy lt{exch}if
+pop}bd/Min{2 copy gt{exch}if pop}bd/Min3{2 copy gt{exch}if pop 2 copy
+gt{exch}if pop}bd/clamp{3 1 roll Max 2 1 roll Min}bd/clamp01{0 Max
+1 Min}bd/Pythag{dup mul exch dup mul add sqrt}bd/ssc{DeviceRGB setcolorspace
+setcolor}bd/ssg{setgray}bd/p_render{}def/p_count 0 def/vis_flag true
+def/DataString 3 string def/DataSrc{currentfile DataString readhexstring
+pop}bd/DataStr1 1 string def/DataStr2 1 string def/DataStr3 1 string
+def/DataSrc1{DataStr1}bd/DataSrc2{DataStr2}bd/DataSrc3{DataStr3}bd
+/colorimage where{pop/ci{colorimage}bd}{/ci{pop pop/ci_datasrc exch
+def matrix invertmatrix/ci_matrix exch def pop/ci_dataleft 0 def/ci_buf()def
+/ci_dataofs 0 def 0 1 3 -1 roll 1 sub{/ci_y exch def dup 0 1 3 -1
+roll 1 sub{0 1 2{pop ci_dataleft 0 eq{ci_datasrc dup length/ci_dataleft
+exch def/ci_buf exch def/ci_dataofs 0 def}if ci_buf ci_dataofs get
+255 div/ci_dataofs ci_dataofs 1 add def/ci_dataleft ci_dataleft 1 sub
+def}for setrgbcolor dup ci_y 3 -1 roll 1 add ci_y 1 add 4 copy 5 1
+roll 4 2 roll 5 -1 roll 1 1 4{pop ci_matrix transform 8 2 roll}for
+m l l l closepath fill}for}for pop}bd}ifelse/rci{/rciBuf 4 index 3
+index mul 7 add 8 div floor cvi string def{currentfile rciBuf readhexstring
+pop}bind false 3 ci}bd/cbsl{2 eq/cbslL2 xd 5 index/cbslw xd translate
+scale 8 [ 3 index 0 0 5 index 0 0 ] cbslL2{/DataStr1 cbslw string def
+currentfile/ASCII85Decode filter/RunLengthDecode filter DataStr1 readstring
+pop pop/DataStr2 cbslw string def currentfile/ASCII85Decode filter
+/RunLengthDecode filter DataStr2 readstring pop pop/DataStr3 cbslw
+string def currentfile/ASCII85Decode filter/RunLengthDecode filter
+DataStr3 readstring pop pop{DataStr1}bind{DataStr2}bind{DataStr3}bind
+true}{/DataSrc load false}ifelse 3 ci}bd/gbsl{2 eq/gbslL2 xd 5 index
+/gbslw xd translate scale 8 [ 3 index 0 0 5 index 0 0 ] gbslL2{/DataStr1
+gbslw string def currentfile/ASCII85Decode filter/RunLengthDecode filter
+DataStr1 readstring pop pop{DataStr1}bind}{/DataStr1 gbslw string def
+currentfile DataSrc1 readhexstring pop pop{DataStr1}bind}ifelse image}bd
+/cmi{/cmiBuf 4 index 3 index mul 7 add 8 div floor cvi string def{currentfile
+cmiBuf readhexstring pop}bind image}bd/cpal{4 mul string/cPalette exch
+def currentfile cPalette readhexstring pop}bd/cpci{/cpci_datasrc exch
+def matrix invertmatrix/cpci_matrix exch def/cpci_bpp exch def cpci_init
+0 1 3 -1 roll 1 sub{/cpci_y exch def dup cpci_bpp 4 eq{cpci_sampsleft
+1 eq{/cpci_sampsleft 0 def}if}if 0 1 3 -1 roll 1 sub{cpci_nextcol dup
+cpci_y 3 -1 roll 1 add cpci_y 1 add 4 copy 5 1 roll 4 2 roll 5 -1 roll
+1 1 4{pop cpci_matrix transform 8 2 roll}for m l l l closepath fill}for}for
+pop}bd/cpci_init{/cpci_sampsleft 0 def}bd/cpci_buf 1 string def/cpci_nextcol{cpci_bpp
+1 eq{cpci_sampsleft 0 eq{currentfile cpci_buf readhexstring pop pop
+/cpci_sampsleft 8 def}if cpci_buf dup 0 get dup 1 and setgray -1 bitshift
+1 exch put/cpci_sampsleft cpci_sampsleft 1 sub def}{cpci_bpp 4 eq{cpci_sampsleft
+0 eq{currentfile cpci_buf readhexstring pop pop/cpci_sampsleft 2 def}if
+cpci_buf 0 get dup 15 and exch -4 bitshift cpci_buf 0 3 -1 roll put
+/cpci_sampsleft cpci_sampsleft 1 sub def}{currentfile cpci_buf readhexstring
+pop 0 get}ifelse 4 mul dup 2 add cPalette exch get 255 div exch dup
+1 add cPalette exch get 255 div exch cPalette exch get 255 div setrgbcolor}ifelse}bd
+/setup1asciiproc{[ currentfile mystring/readhexstring cvx/pop cvx
+] cvx bind}bd/setup1binaryproc{[ currentfile mystring/readstring cvx
+/pop cvx ] cvx bind}bd level2{save/dontloadlevel1 xd}if/iw 0 def/ih
+0 def/im_save 0 def/setupimageproc 0 def/polarity 0 def/smoothflag
+0 def/mystring 0 def/bpc 0 def/beginimage{/im_save save def dup 0 eq{pop
+/setup1binaryproc}{1 eq{/setup1asciiproc}{(error, can't use level2 data acquisition procs for level1)print
+flush}ifelse}ifelse/setupimageproc exch ld/polarity xd/smoothflag xd
+/imat xd/mystring exch string def/bpc xd/ih xd/iw xd}bd/endimage{im_save
+restore}bd/1bitbwcopyimage{1 setgray 0 0 moveto 0 1 rlineto 1 0 rlineto
+0 -1 rlineto closepath fill 0 setgray iw ih polarity imat setupimageproc
+imagemask}bd/1bitcopyimage{setrgbcolor 0 0 moveto 0 1 rlineto 1 0 rlineto
+0 -1 rlineto closepath fill setrgbcolor iw ih polarity imat setupimageproc
+imagemask}bd/1bitmaskimage{setrgbcolor iw ih polarity [iw 0 0 ih 0
+0] setupimageproc imagemask}bd level2{dontloadlevel1 restore}if level2
+not{save/dontloadlevel2 xd}if/setup2asciiproc{currentfile/ASCII85Decode
+filter/RunLengthDecode filter}bd/setup2binaryproc{currentfile/RunLengthDecode
+filter}bd/myimagedict 9 dict dup begin/ImageType 1 def/MultipleDataSource
+false def end def/im_save 0 def/setupimageproc 0 def/polarity 0 def
+/smoothflag 0 def/mystring 0 def/bpc 0 def/ih 0 def/iw 0 def/beginimage{
+/im_save save def dup 2 eq{pop/setup2binaryproc}{dup 3 eq{pop/setup2asciiproc}{0
+eq{/setup1binaryproc}{/setup1asciiproc}ifelse}ifelse}ifelse/setupimageproc
+exch ld{[ 1 0 ]}{[ 0 1 ]}ifelse/polarity xd/smoothflag xd/imat xd/mystring
+exch string def/bpc xd/ih xd/iw xd}bd/endimage{im_save restore}bd/1bitbwcopyimage{1
+ssg 0 0 moveto 0 1 rlineto 1 0 rlineto 0 -1 rlineto closepath fill
+0 ssg myimagedict dup begin/Width iw def/Height ih def/Decode polarity
+def/ImageMatrix imat def/DataSource setupimageproc def/BitsPerComponent
+1 def/Interpolate smoothflag def end imagemask}bd/1bitcopyimage{ssc
+0 0 moveto 0 1 rlineto 1 0 rlineto 0 -1 rlineto closepath fill ssc
+myimagedict dup begin/Width iw def/Height ih def/Decode polarity def
+/ImageMatrix imat def/DataSource setupimageproc def/BitsPerComponent
+1 def/Interpolate smoothflag def end imagemask}bd/1bitmaskimage{ssc
+myimagedict dup begin/Width iw def/Height ih def/Decode polarity def
+/ImageMatrix imat def/DataSource setupimageproc def/BitsPerComponent
+1 def/Interpolate smoothflag def end imagemask}bd level2 not{dontloadlevel2
+restore}if
+level2{save/dontloadlevel1 xd}if/startnoload{{/noload save def}if}bd
+/endnoload{{noload restore}if}bd/testsystemdict{where{systemdict eq{true}{false}ifelse}{false}ifelse}bd
+/ncolors 1 def/colorimage where{pop true}{false}ifelse{/ncolors 0
+statusdict begin/processcolors where{pop pop processcolors}{/deviceinfo
+where{pop deviceinfo/Colors known{pop{deviceinfo/Colors get}}if}if}ifelse
+end def ncolors 0 ne{/colorimage testsystemdict/setcolortransfer testsystemdict
+/currentcolortransfer testsystemdict/currentcmykcolor testsystemdict
+and and and not{/ncolors 0 def}if}if}if ncolors dup 1 ne exch dup 3
+ne exch 4 ne and and{/ncolors 0 def}if ncolors 1 eq dup dup not startnoload{
+/expandbw{expandfactor mul round cvi bwclut exch get 255 div}bd/doclutimage{bwclut
+colorclut pop/bwclut xd bpc dup 8 eq{pop 255}{4 eq{15}{3}ifelse}ifelse
+/expandfactor xd [/expandbw load/exec load dup currenttransfer exch
+] cvx bind settransfer iw ih bpc imat setupimageproc image}bd}if not
+endnoload ncolors dup 3 eq exch 4 eq or dup dup not startnoload{/nullproc{{}}def
+/concatutil{/exec load 7 -1 roll/exec load}bd/defsubclut{1 add getinterval
+def}bd/spconcattransfer{/Dclut exch def/Cclut exch def/Bclut exch def
+/Aclut exch def/ncompute exch ld currentcolortransfer [{Aclut ncompute}concatutil
+] cvx [{Bclut ncompute}concatutil ] cvx [{Cclut ncompute}concatutil
+] cvx [{Dclut ncompute}concatutil ] cvx setcolortransfer}bd/setuprgbcluts{
+/bit3x rgbclut length 3 sub def/bit1x bit3x 3 idiv def/rclut rgbclut
+def/gclut rclut 1 bit3x defsubclut/bclut rclut 2 bit3x defsubclut}bd}if
+not endnoload ncolors 3 eq dup dup not startnoload{/3compute{exch bit3x
+mul round cvi get 255 div}bd/doclutimage{/rgbclut xd pop setuprgbcluts
+/3compute rclut gclut bclut dup spconcattransfer iw ih bpc imat [
+setupimageproc/exec load/dup load dup ] cvx nullproc nullproc true
+3 colorimage}bd}if not endnoload ncolors 4 eq dup dup not startnoload{
+/stuffclut{cmykindex 3 -1 roll put}bd/ftoint{1 exch sub 255 mul round
+cvi}bd/4compute{exch bit4x mul round cvi get 255 div}bd/computecmykclut{setuprgbcluts
+/bit4x rgbclut length 3 idiv 4 mul 4 sub def/cmykclut bit4x 4 add
+string def/cclut cmykclut def/mclut cclut 1 bit4x defsubclut/yclut
+cclut 2 bit4x defsubclut/kclut cclut 3 bit4x defsubclut/cmykindex 0
+def 0 1 bit1x{dup/cmykindex exch bit1x exch sub 4 mul def 3 mul dup
+rclut exch get 255 div exch dup gclut exch get 255 div exch bclut exch
+get 255 div setrgbcolor currentcmykcolor ftoint kclut stuffclut ftoint
+yclut stuffclut ftoint mclut stuffclut ftoint cclut stuffclut}for}bd
+/doclutimage{/rgbclut xd pop invalidcolortable?{computecmykclut}if
+/4compute cclut mclut yclut kclut spconcattransfer iw ih bpc imat
+[ setupimageproc/exec load/dup load dup dup ] cvx nullproc nullproc
+nullproc true 4 colorimage}bd}if not endnoload ncolors 0 eq dup dup
+not startnoload{/lookupandstore{3 mul 3 getinterval putinterval exch
+3 add exch 3 copy}bd/8lookup/lookupandstore ld/4lookup{/byte 1 index
+def -4 bitshift lookupandstore byte 15 and lookupandstore}bd/2lookup{
+/byte 1 index def -6 bitshift lookupandstore byte -4 bitshift 3 and
+lookupandstore byte -2 bitshift 3 and lookupandstore byte 3 and lookupandstore}bd
+/colorexpand{mystringexp 0 rgbclut 3 copy 7 -1 roll/mylookup load
+forall pop pop pop pop pop}bd/createexpandstr{/mystringexp exch mystring
+length mul string def}bd/doclutimage{/rgbclut xd pop/mylookup bpc 8
+eq{3 createexpandstr/8lookup}{bpc 4 eq{6 createexpandstr/4lookup}{12
+createexpandstr/2lookup}ifelse}ifelse ld iw ih bpc imat [ setupimageproc
+/exec load/colorexpand load/exec load] cvx false 3 colorimage}bd}if
+not endnoload/colorimage where{pop true}{false}ifelse dup{/do24image{iw
+ih 8 imat setupimageproc false 3 colorimage}bd}if dup dup startnoload
+not{/rgbtogray{/str xd/len str length def/smlen len 3 idiv def/rstr
+str def/gstr str 1 len 1 sub getinterval def/bstr str 2 len 2 sub getinterval
+def str dup 0 1 smlen 1 sub{dup 3 mul rstr 1 index get .3 mul gstr
+2 index get .59 mul add bstr 3 -1 roll get .11 mul add round cvi put
+dup}for pop 0 smlen getinterval}bd/do24image{iw ih 8 imat [ setupimageproc
+/exec load/rgbtogray load/exec load ] cvx bind image}bd}if endnoload
+/doimage{iw ih 8 imat setupimageproc image}bd level2{dontloadlevel1
+restore}if level2 not{save/dontloadlevel2 xd}if/myappcolorspace/DeviceRGB
+def/rgbclut 0 def/doclutimage{/rgbclut xd pop bpc dup 8 eq{pop 255}{4
+eq{15}{3}ifelse}ifelse/hival xd [/Indexed myappcolorspace hival rgbclut]
+setcolorspace myimagedict dup begin/Width iw def/Height ih def/Decode
+[0 hival] def/ImageMatrix imat def/DataSource setupimageproc def/BitsPerComponent
+bpc def/Interpolate smoothflag def end image}bd/do24image{myappcolorspace
+setcolorspace myimagedict dup begin/Width iw def/Height ih def/Decode
+[0 1 0 1 0 1] def/ImageMatrix imat def/DataSource setupimageproc def
+/BitsPerComponent 8 def/Interpolate smoothflag def end image}bd level2
+not{dontloadlevel2 restore}if
+/NumSteps{dtransform matrix defaultmatrix idtransform Pythag currentscreen
+pop pop 72 exch div div}bd/FindMinSteps{v_ft 4 eq{urx startX sub abs
+llx startX sub abs Max ury startY sub abs lly startY sub abs Max Pythag
+2 3.14159265 mul mul 0}{v_ft 2 eq{endY startY sub endX startX sub Pythag
+endY2 startY sub endX2 startX sub Pythag gt{endY startY sub endX startX
+sub}{endY2 startY sub endX2 startX sub}ifelse}{endY startY sub endX
+startX sub}ifelse}ifelse NumSteps}bd/cxe{/v_cxe exch def}bd/cxm{pop
+/v_cxm exch def}bd/cxmt{pop pop}bd/cxt{pop}bd/S_eoclip{currentflat{{eoclip}stopped{dup
+currentflat exch sub 20 gt{([Error: PathTooComplex; OffendingCommand: eoclip]\n)print
+flush exit}{currentflat 2 add setflat}ifelse}{exit}ifelse}loop setflat}bd
+/S_clip{currentflat{{clip}stopped{dup currentflat exch sub 20 gt{([Error: PathTooComplex; OffendingCommand: clip]\n)print
+flush exit}{currentflat 2 add setflat}ifelse}{exit}ifelse}loop setflat}bd
+/S_eofill{currentflat{{eofill}stopped{dup currentflat exch sub 20
+gt{([Error: PathTooComplex; OffendingCommand: eofill]\n)print flush
+exit}{currentflat 2 add setflat}ifelse}{exit}ifelse}loop setflat}bd
+/gpbbx{pathbbox/ury exch def/urx exch def/lly exch def/llx exch def}bd
+/lineargfill{initgfill{false initgfx/distance endX startX sub endY
+startY sub Pythag def/incD distance Steps div def endY startY sub endX
+startX sub atan newpath llx lly urx ury Bx startX startY translate
+rotate gpbbx eGy ssg newpath llx lly urx ury Bx S_eofill sGy ssg newpath
+llx lly 0 ury Bx S_eofill/fillX 0 def 0 1 Steps 1 sub{stepgfx newpath
+fillX lly fillX incD add dup/fillX exch def ury Bx S_eofill pop}for}if}bd
+/radialgfill{initgfill{false initgfx/distance endX startX sub endY
+startY sub Pythag def/incD distance Steps div def eGy ssg newpath llx
+lly urx ury Bx S_eofill/distance 0 def 0 1 Steps 1 sub{stepgfx newpath
+startX startY distance 0 360 arc closepath distance incD add dup/distance
+exch def 0 rmoveto startX startY distance 0 360 arc closepath S_eofill
+pop}for}if}bd/ellipticgfill{initgfill{true initgfx sGy ssg newpath
+llx lly urx ury Bx S_eofill [ endX startX sub endY startY sub endX2
+startX sub endY2 startY sub startX startY ] concat Steps 1 sub -1 0{stepgfx
+/i exch def 0 0 moveto 0 0 i Steps div 0 360 arc fill}for}if}bd/conicalgfill{initgfill{urx
+startX sub abs llx startX sub abs Max ury startY sub abs lly startY
+sub abs Max Pythag startY endY sub startX endX sub Pythag div/radius
+exch def true initgfx [ endX startX sub endY startY sub startY endY
+sub endX startX sub startX startY ] concat/slice 180 Steps div def
+/startangle 0 def Steps -1 0{pop stepgfx 0 0 moveto 0 0 radius startangle
+neg dup slice add arc fill 0 0 moveto 0 0 radius startangle dup slice
+add dup/startangle exch def arc fill}for}if}bd/initgfill{gpbbx{S_eoclip}{S_clip}ifelse
+startX endX eq startY endY eq and sGy eGy eq or dup{sGy ssg newpath
+llx lly urx ury Bx S_eofill}if not}bd/initgfx{/flag exch def flag{sGy
+eGy/sGy exch def/eGy exch def}if eGy sGy sub abs 256 mul FindMinSteps
+Min 256 Min ceiling 1 Max/Steps exch def eGy sGy sub Steps div/incGy
+exch def sGy/mGy exch def}bd/stepgfx{mGy ssg mGy incGy add/mGy exch
+def}bd/linearfill{initfill{false initfx endX startX sub endY startY
+sub Pythag/distance exch def/incD distance Steps div def endY startY
+sub endX startX sub atan newpath llx lly urx ury Bx startX startY translate
+rotate gpbbx v_cxe 0 eq{eR eG eB setgfillrgb}{eH eS eV setgfillhsb}ifelse
+newpath llx lly urx ury Bx S_eofill v_cxe 0 eq{sR sG sB setgfillrgb}{sH
+sS sV setgfillhsb}ifelse newpath llx lly 0 ury Bx S_eofill/fillX 0
+def 0 1 Steps 1 sub{stepfx newpath fillX lly fillX incD add dup/fillX
+exch def ury Bx S_eofill pop}for}if}bd/radialfill{initfill{false initfx
+endX startX sub endY startY sub Pythag/distance exch def/incD distance
+Steps div def v_cxe 0 eq{eR eG eB setgfillrgb}{eH eS eV setgfillhsb}ifelse
+newpath llx lly urx ury Bx S_eofill/distance 0 def 0 1 Steps 1 sub{stepfx
+newpath startX startY distance 0 360 arc closepath distance incD add
+dup/distance exch def 0 rmoveto startX startY distance 0 360 arc closepath
+S_eofill pop}for}if}bind def/ellipticalfill{initfill{true initfx v_cxe
+0 eq{sR sG sB setgfillrgb}{sH sS sV setgfillhsb}ifelse newpath llx
+lly urx ury Bx S_eofill [ endX startX sub endY startY sub endX2 startX
+sub endY2 startY sub startX startY ] concat Steps 1 sub -1 0{stepfx
+/i exch def 0 0 moveto 0 0 i Steps div 0 360 arc fill}for v_cxe 0
+eq{sR sG sB eR eG eB/sB exch def/sG exch def/sR exch def/eB exch def
+/eG exch def/eR exch def}if}if}bd/conicalfill{initfill{urx startX
+sub abs llx startX sub abs Max ury startY sub abs lly startY sub abs
+Max Pythag startY endY sub startX endX sub Pythag div/radius exch def
+true initfx [ endX startX sub endY startY sub startY endY sub endX
+startX sub startX startY ] concat/slice 180 Steps div def/startangle
+0 def Steps -1 0{pop stepfx 0 0 moveto 0 0 radius startangle neg dup
+slice add arc fill 0 0 moveto 0 0 radius startangle dup slice add dup
+/startangle exch def arc fill}for}if}bd/initfill{gpbbx{S_eoclip}{S_clip}ifelse
+startX endX eq startY endY eq and v_cxe 2 ne sR eR eq sG eG eq and
+sB eB eq and and or dup{sR sG sB setgfillrgb newpath llx lly urx ury
+Bx S_eofill}if not}bd/initfx{/flag exch def v_cxe 0 eq{flag{sR sG sB
+eR eG eB/sB exch def/sG exch def/sR exch def/eB exch def/eG exch def
+/eR exch def}if eR sR sub abs 256 mul eG sG sub abs 256 mul Max eB
+sB sub abs 256 mul Max FindMinSteps Min 256 Min ceiling 1 Max/Steps
+exch def/incR eR sR sub Steps div def/incG eG sG sub Steps div def
+/incB eB sB sub Steps div def sR/mR exch def sG/mG exch def sB/mB
+exch def}{sR sG sB rgb2hsb/sV exch def/sS exch def/sH exch def eR eG
+eB rgb2hsb/eV exch def/eS exch def/eH exch def eH sH sub abs v_cxe
+1 eq{dup 0.5 gt{1 exch sub}if}{dup 0.5 lt{1 exch sub}if}ifelse 256
+mul eS sS sub abs 256 mul Max eV sV sub abs 256 mul Max FindMinSteps
+Min 256 Min ceiling 1 Max/Steps exch def v_cxe 1 eq{/incH eH sH sub
+dup abs 0.5 gt{dup 0 ge{1 sub}{1 add}ifelse}if Steps div def/incS eS
+sS sub Steps div def/incV eV sV sub Steps div def}{/incH eH sH sub
+dup abs 0.5 le{dup 0 ge{1 sub}{1 add}ifelse}if Steps div def/incS eS
+sS sub Steps div def/incV eV sV sub Steps div def}ifelse flag{/sH eH
+/eH sH def def/sS eS/eS sS def def/sV eV/eV sV def def/incH incH neg
+def/incS incS neg def/incV incV neg def}if}ifelse}bd/stepfx{v_cxe 0
+eq{mR mG mB setgfillrgb mR incR add/mR exch def mG incG add/mG exch
+def mB incB add/mB exch def}{sH sS sV setgfillhsb sH incH add dup 0
+le{1 add}{dup 1 ge{1 sub}if}ifelse/sH exch def sS incS add/sS exch
+def sV incV add/sV exch def}ifelse}bd
+/ar{}bd/arr{pop pop pop pop pop pop pop}bd/ae{pop pop pop pop pop
+pop}bd/aoa{pop}bd/apl{pop}bd/apc{}bd/aof{pop pop}bd/aafs{pop pop pop}bd
+/O{pop}bd/R{pop}bd/axop{pop pop pop pop}bd/g{/v_ft 0 def/v_fc 0 def
+/v_fm 0 def/v_fy 0 def 1 exch sub/v_fk exch def/v_fct 0 def}bd/G{
+/v_sc 0 def/v_sm 0 def/v_sy 0 def 1 exch sub/v_sk exch def/v_sct 0
+def}bd/k{/v_fk exch def/v_fy exch def/v_fm exch def/v_fc exch def/v_ft
+0 def/v_fct 0 def}bd/K{/v_sk exch def/v_sy exch def/v_sm exch def/v_sc
+exch def/v_sct 0 def}bd/Xa{/v_fb exch def/v_fg exch def/v_fr exch def
+/v_ft 0 def/v_fct 1 def}bd/XA{/v_sb exch def/v_sg exch def/v_sr exch
+def/v_sct 1 def}bd/a_tc{exch pop 1 exch sub dup 3 -1 roll exch div
+exch dup 4 -1 roll exch div 3 1 roll dup 5 -1 roll exch div 4 1 roll
+5 -1 roll exch div 4 1 roll}bd/x{a_tc k}bd/X{a_tc K}bd/Xx{0 eq{x}{pop
+pop Xa}ifelse}bd/XX{0 eq{X}{pop pop XA}ifelse}bd/awr{/v_wr exch def}bd
+/w{setlinewidth}bd/j{setlinejoin}bd/J{setlinecap}bd/d{setdash}bd/asc{pop
+pop J}bd/aec{pop pop J}bd/csah{pop pop pop}bd/ceah{pop pop pop}bd/cst{pop
+pop}bd/cdp{pop}bd/m{moveto}bd/l{lineto}bd/c{curveto}bd/Bx{4 copy 5
+1 roll 4 2 roll 5 -1 roll m l l l closepath}bd/Cp{Bx clip newpath}bd
+/a_fp{gsave v_wr 0 ne v_ft 0 eq{setfillcolor{eofill}{fill}ifelse}{v_ft
+1 eq{linearfill}{v_ft 2 eq{ellipticalfill}{v_ft 3 eq{radialfill}{v_ft
+4 eq{conicalfill}{v_ft 8 eq{lineargfill}{v_ft 9 eq{ellipticgfill}{v_ft
+10 eq{radialgfill}{conicalgfill}ifelse}ifelse}ifelse}ifelse}ifelse}ifelse}ifelse}ifelse
+grestore}bd/*u{/p_count p_count 1 add def}bd/*U{/p_count p_count 1
+sub def p_count 0 eq{vis_flag{p_render}{newpath}ifelse}if}bd/B{/p_render{a_fp
+setstrokecolor stroke}bd p_count 0 eq{vis_flag{p_render}{newpath}ifelse}if}bd
+/b{closepath B}bd/F{/p_render{a_fp newpath}bd p_count 0 eq{vis_flag{p_render}{newpath}ifelse}if}bd
+/f{closepath F}bd/S{/p_render{setstrokecolor stroke}bd p_count 0 eq{vis_flag{p_render}{newpath}ifelse}if}bd
+/s{closepath S}bd/H{/p_render{newpath}bd p_count 0 eq{vis_flag{p_render}{newpath}ifelse}if}bd
+/h{closepath H}bd/N{H}bd/n{h}bd/cag{dup 7 add/v_ft exch def dup 2
+eq{pop/endY2 exch def/endX2 exch def}{7 eq{pop pop/v_ft 8 def}if}ifelse
+/endY exch def/endX exch def/startY exch def/startX exch def/eGy exch
+def/sGy exch def}bd/caz{dup/v_ft exch def dup 2 eq{pop/endY2 exch def
+/endX2 exch def}{7 eq{pop pop/v_ft 1 def}if}ifelse/endY exch def/endX
+exch def/startY exch def/startX exch def/eB exch def/eG exch def/eR
+exch def/sB exch def/sG exch def/sR exch def}bd/cax{dup/v_ft exch def
+dup 2 eq{pop/endY2 exch def/endX2 exch def}{7 eq{pop pop/v_ft 1 def}if}ifelse
+/endY exch def/endX exch def/startY exch def/startX exch def pop pop
+8 3 roll pop pop/sB exch def/sG exch def/sR exch def/eB exch def/eG
+exch def/eR exch def}bd/axm{/endY exch def/endX exch def/startY exch
+def/startX exch def}bd/alyr{pop pop 1 eq{true}{false}ifelse/vis_flag
+exch def pop pop}bd
+/t{moveto show}bd/ts{moveto false charpath S}bd/tf{moveto true charpath
+F}bd/tb{3 copy moveto true charpath F moveto false charpath S}bd/selectfont
+where{pop}{/selectfont{dup type/integertype eq{exch findfont exch scalefont
+setfont}{exch findfont exch makefont setfont}ifelse}bd}ifelse/sf{selectfont}bd
+/u{}bd/U{}bd/anu{pop}bd
+/csbd{8{pop}repeat}bd/cebd{}bd/csbr{8{pop}repeat}bd/cebr{}bd

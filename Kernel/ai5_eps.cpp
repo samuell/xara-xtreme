@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ai_eps.h"
 #include "ai5_eps.h"
 #include "ai_epsrr.h"
-#include <strstrea.h>
+#include <sstream>
 #include <stdio.h>
 
 #include "nodepath.h"
@@ -121,6 +121,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ai_bmp.h"
 #include "ai_layer.h"  
 #include "swffiltr.h"
+#include "layer.h"
 
 DECLARE_SOURCE("$Revision");
 
@@ -132,54 +133,54 @@ CC_IMPLEMENT_DYNAMIC(AI5EPSFilter, AIEPSFilter)
 CommandMap AI5EPSFilter::AI5Commands[] =
 {
 	// Graduated fills
-	EPSC_Bd,		"Bd",
-	EPSC_Bm,		"Bm",
-	EPSC_Bc,		"Bc",
-	EPSC__Bs,		"%_Bs",
-	EPSC__BS,		"%_BS",
-	EPSC__Br,		"%_Br",
-	EPSC_BD,		"BD",
-	EPSC_Bg,		"Bg",
-	EPSC_Bb,		"Bb",
-	EPSC_BB,		"BB",
-	EPSC_Bh,		"Bh",
-	EPSC_HexStart,	"<",
-	EPSC_HexEnd,	">",
+	{ EPSC_Bd,		_T("Bd")},
+	{ EPSC_Bm,		_T("Bm")},
+	{ EPSC_Bc,		_T("Bc")},
+	{ EPSC__Bs,		_T("%_Bs")},
+	{ EPSC__BS,		_T("%_BS")},
+	{ EPSC__Br,		_T("%_Br")},
+	{ EPSC_BD,		_T("BD")},
+	{ EPSC_Bg,		_T("Bg")},
+	{ EPSC_Bb,		_T("Bb")},
+	{ EPSC_BB,		_T("BB")},
+	{ EPSC_Bh,		_T("Bh")},
+	{ EPSC_HexStart,	_T("<")},
+	{ EPSC_HexEnd,	_T(">")},
 
 	// Layer stuff
-	EPSC_Lb,		"Lb",
-	EPSC_LB,		"LB",
-	EPSC_Ln,		"Ln",
+	{ EPSC_Lb,		_T("Lb")},
+	{ EPSC_LB,		_T("LB")},
+	{ EPSC_Ln,		_T("Ln")},
 
 	// Path tweaks
-	EPSC_Ap,		"Ap",
-	EPSC_Ar,		"Ar",
-	EPSC_XR,		"XR",
+	{ EPSC_Ap,		_T("Ap")},
+	{ EPSC_Ar,		_T("Ar")},
+	{ EPSC_XR,		_T("XR")},
 	
 	// bitmaps
-	EPSC_XI,		"XI",
-	EPSC_XF,		"XF",
-	EPSC_XG,		"XG",
-	EPSC_Xh,		"Xh",
-	EPSC_XH,		"XH",
+	{ EPSC_XI,		_T("XI")},
+	{ EPSC_XF,		_T("XF")},
+	{ EPSC_XG,		_T("XG")},
+	{ EPSC_Xh,		_T("Xh")},
+	{ EPSC_XH,		_T("XH")},
 
 	// unknown
-	EPSC_XP,		"XP",
+	{ EPSC_XP,		_T("XP")},
 
 	// object tags
-	EPSC_XT,		"XT",
+	{ EPSC_XT,		_T("XT")},
 
 	// spurious
-	EPSC_Xm,		"Xm",
+	{ EPSC_Xm,		_T("Xm")},
 
 	// RGB Colours
-	EPSC_Xa,		"Xa",
-	EPSC_XA,		"XA",
-	EPSC_Xx,		"Xx",
-	EPSC_XX,		"XX",
+	{ EPSC_Xa,		_T("Xa")},
+	{ EPSC_XA,		_T("XA")},
+	{ EPSC_Xx,		_T("Xx")},
+	{ EPSC_XX,		_T("XX")},
 
 	// Sentinel
-	EPSC_Invalid,	"Invalid"
+	{ EPSC_Invalid,	_T("Invalid")}
 };
 
 /********************************************************************************************
@@ -256,7 +257,7 @@ BOOL AI5EPSFilter::Init()
 INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	UINT32	Lines	= 0;
-	char	*Buffer	= NULL;
+	TCHAR	*Buffer	= NULL;
 
 	// !PS-Adobe line is ok - check creator line...
 	CCMemTextFile HeaderFile ( reinterpret_cast<char *> ( pFileHeader ), HeaderSize );
@@ -274,7 +275,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 	{
 		// Get the current line from the file.
 		HeaderFile.GetLineToken();
-		Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf () );
+		Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf () );
 
 		// Ensure that it's OK.
 		ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
@@ -282,42 +283,42 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 		// Increment the line counter.
 		Lines++;
 
-		if (camStrncmp(Buffer, "%!PS-Adobe", 10) == 0)
+		if (camStrncmp(Buffer, _T("%!PS-Adobe"), 10) == 0)
 		{
 			// Now find the %%Creator string.
 			while ((Lines < 100) && !HeaderFile.eof())
 			{
 				HeaderFile.GetLineToken();
-				Buffer = const_cast<char *> ( HeaderFile.GetTokenBuf() );
+				Buffer = const_cast<TCHAR *> ( HeaderFile.GetTokenBuf() );
 				ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
 				Lines++;
 
 				// Return TRUE if this file was created by Illustrator, or has been exported
 				// in Illustrator format.
-				if (camStrncmp(Buffer, "%%Creator: Adobe Illustrator(TM) 5", 34) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator: Adobe Illustrator(TM) 5"), 34) == 0)
 				{
 					// We definitely want this.
 					HeaderFile.close();
 					return 10;
 				}
 
-				if (camStrncmp(Buffer, "%%Creator:", 10) == 0)
+				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, "Illustrator(TM) 5") != NULL)
+					if (camStrstr(Buffer, _T("Illustrator(TM) 5")) != NULL)
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// we'll accept version 7.0 as well
-					else if ((camStrstr(Buffer, "Illustrator(TM) 7") != NULL) ||
-							 (camStrstr(Buffer, "Illustrator(R) 7") != NULL))
+					else if ((camStrstr(Buffer, _T("Illustrator(TM) 7")) != NULL) ||
+							 (camStrstr(Buffer, _T("Illustrator(R) 7")) != NULL))
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// Catch FreeHand generated EPS files.
-					else if (camStrstr(Buffer, "FreeHand") != NULL)
+					else if (camStrstr(Buffer, _T("FreeHand")) != NULL)
 					{
 						HeaderFile.close();
 						return 8;
@@ -328,7 +329,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 				// If we find the compression token then stop the search as we don't want to
 				// start looking in the compressed data!
-				if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+				if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 					break;
 			}
 
@@ -342,7 +343,7 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 			break;
 	}
 
@@ -940,7 +941,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 {
 	BOOL ok = TRUE;
 
-	if (camStrncmp(TokenBuf, "%AI5_BeginGradient", 18) == 0)
+	if (camStrncmp(TokenBuf, _T("%AI5_BeginGradient"), 18) == 0)
 	{
 		ENSURE(!mbReadingGradFill, "Already reading a grad fill!");
 
@@ -969,7 +970,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 		// Put the token back onto the input stream to allow the caller to use it.
 		EPSFile->UngetToken();
 	}
-	else if (camStrncmp(TokenBuf, "%AI5_EndGradient", 16) == 0)
+	else if (camStrncmp(TokenBuf, _T("%AI5_EndGradient"), 16) == 0)
 	{
 		ENSURE(mbReadingGradFill, "Not reading a grad fill!");
 
@@ -1054,19 +1055,19 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 	else if ( camStrncmp ( TokenBuf, _T( "%AI3_EndPattern" ), 15 ) == 0 )
 	{
 		// NOP for now.
-		INT32 NOP = 0;
+//		INT32 NOP = 0;
 		return TRUE;
 	}
 	else if ( camStrncmp ( TokenBuf, _T ( "%AI6_BeginPatternLayer" ), 22 ) == 0 )
 	{
 		// NOP for now.
-		INT32 NOP = 0;
+//		INT32 NOP = 0;
 		return TRUE;
 	}
 	else if (camStrncmp(TokenBuf, _T("%AI6_EndPatternLayer"), 20) == 0)
 	{
 		// NOP for now.
-		INT32 NOP = 0;
+//		INT32 NOP = 0;
 		return TRUE;
 	}
 
@@ -1076,7 +1077,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 
 /********************************************************************************************
 
->	char *AI5EPSFilter::GetEPSCommand(EPSCommand Cmd)
+>	TCHAR *AI5EPSFilter::GetEPSCommand(EPSCommand Cmd)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/02/94
@@ -1087,7 +1088,7 @@ BOOL AI5EPSFilter::ProcessFilterComment()
 
 ********************************************************************************************/
 
-char *AI5EPSFilter::GetEPSCommand(EPSCommand Cmd)
+TCHAR *AI5EPSFilter::GetEPSCommand(EPSCommand Cmd)
 {
 	INT32 i = 0;
 	while (AI5Commands[i].Cmd != EPSC_Invalid)

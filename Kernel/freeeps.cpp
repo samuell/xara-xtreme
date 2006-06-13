@@ -161,41 +161,41 @@ enum
 CommandMap FreeHandEPSFilter::FHCommands[] =
 {
 	// colours
-	{ EPSC_Xa,		"Xa" },
-	{ EPSC_xa,		"xa" },
-	{ EPSC_Ka,		"Ka" },
-	{ EPSC_ka,		"ka" },
+	{ EPSC_Xa,		_T("Xa") },
+	{ EPSC_xa,		_T("xa") },
+	{ EPSC_Ka,		_T("Ka") },
+	{ EPSC_ka,		_T("ka") },
 
 	// fills
-	{ EPSC_radfill,	"radfill" },
-	{ EPSC_recfill,	"recfill" },
-	{ EPSC_load,	"load" },
+	{ EPSC_radfill,	_T("radfill") },
+	{ EPSC_recfill,	_T("recfill") },
+	{ EPSC_load,	_T("load") },
 
 	// colour list stuff
-	{ EPSC_BeginSetup, "%%BeginSetup"},
-	{ EPSC_def,		"def" },
-	{ EPSC_newcmykcustomcolor, "newcmykcustomcolor" },
+	{ EPSC_BeginSetup, _T("%%BeginSetup")},
+	{ EPSC_def,		_T("def") },
+	{ EPSC_newcmykcustomcolor, _T("newcmykcustomcolor") },
 
 	// text stuff
-	{ EPSC_makesetfont, "makesetfont" },
-	{ EPSC_ts,		"ts" },
-	{ EPSC_sts,		"sts" },
+	{ EPSC_makesetfont, _T("makesetfont") },
+	{ EPSC_ts,		_T("ts") },
+	{ EPSC_sts,		_T("sts") },
 
 	// complex path stuff
-	{ EPSC_eomode,	"eomode" },
-	{ EPSC_true,	"true" },
-	{ EPSC_false,	"false" },
+	{ EPSC_eomode,	_T("eomode") },
+	{ EPSC_true,	_T("true") },
+	{ EPSC_false,	_T("false") },
 
 	// misc stuff
-	{ EPSC_concat,	"concat" },
-	{ EPSC_vms,		"vms" },
-	{ EPSC_vmr,		"vmr" },
-	{ EPSC_vmrs,	"vmrs" },
-	{ EPSC_stob,	"stob" },
-	{ EPSC_fhsetspreadallow, "fhsetspreadallow" },
+	{ EPSC_concat,	_T("concat") },
+	{ EPSC_vms,		_T("vms") },
+	{ EPSC_vmr,		_T("vmr") },
+	{ EPSC_vmrs,	_T("vmrs") },
+	{ EPSC_stob,	_T("stob") },
+	{ EPSC_fhsetspreadallow, _T("fhsetspreadallow") },
 
 	// Sentinel
-	{ EPSC_Invalid,	"Invalid" }
+	{ EPSC_Invalid,	_T("Invalid") }
 };
 
 /********************************************************************************************
@@ -360,14 +360,14 @@ void FreeHandEPSFilter::CleanUpAfterImport(BOOL Successful)
 INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
 	// Check the first line in EPS file
-	if (camStrncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
+	if (strncmp((char *) pFileHeader, "%!PS-Adobe", 10) != 0)
 	{
 		// Incorrect version of EPS header line - we don't want this
 		return 0;
 	}
 
 	// !PS-Adobe line is ok - check creator line...
-	char *Buffer;
+	TCHAR *Buffer;
 	CCMemTextFile HeaderFile((char *)pFileHeader, HeaderSize);
 	if(HeaderFile.IsMemFileInited() == FALSE || HeaderFile.InitLexer() == FALSE)
 	{
@@ -382,20 +382,20 @@ INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 	while ((Lines < 20) && !HeaderFile.eof())
 	{
 		HeaderFile.GetLineToken();
-		Buffer = (char *)HeaderFile.GetTokenBuf();
+		Buffer = (TCHAR *)HeaderFile.GetTokenBuf();
 		ERROR2IF(Buffer == 0, 0, "Returned buffer from lex file == 0");
 		Lines++;
 
 		// Return TRUE if this file was created by Illustrator, or has been exported in 
 		// Illustrator format.
-		if (camStrncmp(Buffer, "%%Creator: ", 11) == 0 && strstr(Buffer, "FreeHand") != 0)
+		if (camStrncmp(Buffer, _T("%%Creator: "), 11) == 0 && camStrstr(Buffer, _T("FreeHand")) != 0)
 		{
 			// found a plausible creator string - but it could be any version
 			// (3.0 for the Mac gives it's version number here, but the PC one doesn't)
 			HaveCreatorString = TRUE;
 		}
 
-		if (camStrncmp(Buffer, "%%DocumentProcSets: FreeHand_header 3 ", 38) == 0 && HaveCreatorString)
+		if (camStrncmp(Buffer, _T("%%DocumentProcSets: FreeHand_header 3 "), 38) == 0 && HaveCreatorString)
 		{
 			// I'll have that then.
 			HeaderFile.close();
@@ -404,7 +404,7 @@ INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// If we find the compression token then stop the search as we don't want to start
 		// looking in the compressed data!
-		if (camStrncmp(Buffer, "%%Compression:", 14)==0)
+		if (camStrncmp(Buffer, _T("%%Compression:"), 14)==0)
 			break;
 	}
 
@@ -877,7 +877,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 
 			 		if(EPSFile->GetTokenType() == TOKEN_NORMAL)
 			 		{
-			 			if(camStrcmp(TokenBuf, "spots") == 0)
+			 			if(camStrcmp(TokenBuf, _T("spots")) == 0)
 						{
 							// check to see if the array is about to start
 							if(!EPSFile->GetToken())
@@ -891,7 +891,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 						}
 					}
 				
-					if(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0)
+					if(camStrncmp(TokenBuf, _T("%%EndSetup"), 10) == 0)
 					{
 						TRACEUSER( "Ben", _T("Met end of setup without finding spots\n"));
 						break;
@@ -923,7 +923,7 @@ BOOL FreeHandEPSFilter::ProcessToken()
 
 			 		if(EPSFile->GetTokenType() == TOKEN_COMMENT)
 			 		{
-						if(camStrncmp(TokenBuf, "%%EndSetup", 10) == 0)
+						if(camStrncmp(TokenBuf, _T("%%EndSetup"), 10) == 0)
 						{
 							TRACEUSER( "Ben", _T("Found end of setup\n"));
 							Found = TRUE;
@@ -1077,7 +1077,7 @@ BOOL FreeHandEPSFilter::DiscardFillSubType()
 			String_64 Str;
 			if(!Stack.Pop(&Str))
 				return FALSE;
-			if(camStrcmp(Str, "{") == 0)
+			if(camStrcmp(Str, _T("{")) == 0)
 				Done = TRUE;		// found end of this bit
 		}
 		else

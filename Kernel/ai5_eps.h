@@ -180,7 +180,7 @@ class AI5EPSFilter : public AIEPSFilter
 public:
 	AI5EPSFilter();
 	BOOL Init();
-	char* GetEPSCommand(EPSCommand Cmd);
+	TCHAR* GetEPSCommand(EPSCommand Cmd);
 
 	// Allow a layer to be set with property flags.
 	BOOL CreateLayer ( String_256	&LayerName,
@@ -191,7 +191,7 @@ public:
 	// data access
 	EPSStack&	GetStack()			{	return Stack;		}
 	CCLexFile*	GetEPSFile()		{	return EPSFile;		}
-	const char*	GetTokenBuf()		{	return TokenBuf;	}
+	const TCHAR*	GetTokenBuf()	{	return TokenBuf;	}
 	INT32& GetLastProgressUpdate()	{	return LastProgressUpdate;	}
 
 protected:
