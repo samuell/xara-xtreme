@@ -146,8 +146,8 @@ AI5Gradient::~AI5Gradient()
 //////////////////////////////////////////////////////////////////////
 
 AIGradientProcessor::AIGradientProcessor() :
-	mpCurrentFill(0),
-	mbGradFillTooComplex(FALSE)
+	mbGradFillTooComplex(FALSE),
+	mpCurrentFill(0)
 {
 	// The last ramp point is set to 101, since this is effectively a
 	// counter from 100 down to 0.

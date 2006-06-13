@@ -100,7 +100,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodetxtl.h"
-#include "fixedasm.h"		// For Div32by32 ().
 //#include "ccmaths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "pathshap.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "webaddr.h"
@@ -252,8 +251,8 @@ void FlashRenderRegion::DrawPathToOutputDevice ( Path *PathToRender,
 
 	// Set up the position for the place object record...
 	Bounds = mpShapeTail->GetBoundingBox ();
-	LowCorner.x = Bounds.lox;
-	LowCorner.y = Bounds.hiy;
+	LowCorner.x = Bounds.lo.x;
+	LowCorner.y = Bounds.hi.y;
 
 	// ... and create it.
 	PlaceObject ( FlashPlaceObject::GetShapeCount (), FLASH_SHAPE, &LowCorner, TRUE );
@@ -285,7 +284,7 @@ BOOL FlashRenderRegion::ProcessPath ( Path *pPath )
 	StrokeColourAttribute	*pStrokeColour	= NULL;
 	TranspFillAttribute		*pTransp		= NULL;
 	DocColour				*pColour		= NULL;
-	FlashExportDC			*FlashDC		= ( FlashExportDC * ) RenderDC;
+//	FlashExportDC			*FlashDC		= ( FlashExportDC * ) RenderDC;
 
 	// Step 2:	If this is the first path to be processed, mpShape will be NULL. Therefore
 	//			create a new element. Otherwise add one to the end of the existing list.
@@ -486,8 +485,7 @@ BOOL FlashRenderRegion::ExportCharacter ( TextChar *pTheLetter )
 					  ( ATTR_TXTITALIC ) )->ItalicOn;
 
 	// And finally, it's offset and relative size values.
-	TxtScriptAttribute *pScript = ( TxtScriptAttribute* ) GetCurrentAttribute
-								  ( ATTR_TXTSCRIPT );
+//	TxtScriptAttribute *pScript = ( TxtScriptAttribute* ) GetCurrentAttribute  ( ATTR_TXTSCRIPT );
 
 
 	// Flash doesn't seem to support fonts with obscure aspect ratios, so maybe set
@@ -591,8 +589,8 @@ BOOL FlashRenderRegion::ExportCharacter ( TextChar *pTheLetter )
 	// Fill in the font's characteristics:
 	
 	// Font size.
-	INT32		Offset	= ( pScript->Offset ).GetRawLong ();
-	INT32		Ratio	= ( pScript->Size ).GetRawLong ();
+//	INT32		Offset	= ( pScript->Offset ).GetRawLong ();
+//	INT32		Ratio	= ( pScript->Size ).GetRawLong ();
 
 	MILLIPOINT	Size	= ( ( TxtFontSizeAttribute* ) GetCurrentAttribute
 						  ( ATTR_TXTFONTSIZE ) )->FontSize;
@@ -604,14 +602,14 @@ BOOL FlashRenderRegion::ExportCharacter ( TextChar *pTheLetter )
 	mpTextTail->SetAscent ( pTheLetter->GetFontAscent () );
 
 	// Calculate the baseline of the font.
-	double		dDiv	= ( double ) Ratio * ( double ) FLASH_FIXED_ONE;
-	double		dBase	= ( double ) ( Size - pTheLetter->GetFontDescent () ) / dDiv;
+//	double		dDiv	= ( double ) Ratio * ( double ) FLASH_FIXED_ONE;
+//	double		dBase	= ( double ) ( Size - pTheLetter->GetFontDescent () ) / dDiv;
 
 	// And the offset.
-	double		dOffset	= Size * ( ( double ) Offset / ( double ) FLASH_FIXED_ONE );
+//	double		dOffset	= Size * ( ( double ) Offset / ( double ) FLASH_FIXED_ONE );
 
 	// Use these to calculate the y offset value for the text.
-	double		dYOff	= dBase - dOffset - ( double ) pTheLetter->GetBaseLineShift ();
+//	double		dYOff	= dBase - dOffset - ( double ) pTheLetter->GetBaseLineShift ();
 
 	// mpTextTail->SetBaseline ( ( INT32 ) dYOff, Index );
 	mpTextTail->SetOffset ( 0 , Index );
@@ -705,8 +703,8 @@ BOOL FlashRenderRegion::ExportBevel ( NodeBevel *pBevel )
 
 		// Record the details of the fill.
 		mpShapeTail->SetStartPoint	( Bounds.lo );
-		mpShapeTail->SetEndPoint	( DocCoord ( Bounds.hix, Bounds.loy ) );
-		mpShapeTail->SetEndPoint2	( DocCoord ( Bounds.lox, Bounds.hiy ) );
+		mpShapeTail->SetEndPoint	( DocCoord ( Bounds.hi.x, Bounds.lo.y ) );
+		mpShapeTail->SetEndPoint2	( DocCoord ( Bounds.lo.x, Bounds.hi.y ) );
 		mpShapeTail->SetFill		( FLASH_CLIPPED_BITMAP );
 
 		// Record the size and ID number of the bitmap used.
@@ -768,10 +766,10 @@ BOOL FlashRenderRegion::ExportShadow ( Path *pShadowPath,
 	DocColour		ShadColour	= *( ( ( FillGeometryAttribute* ) GetCurrentAttribute
 								 ( ATTR_FILLGEOMETRY ) )->GetStartColour () );
 	DocRect			PathBounds	= pShadowPath->GetBoundingRect ();
-	DocCoord		EndPoint1	( PathBounds.hix, PathBounds.loy );
-	DocCoord		EndPoint2	( PathBounds.lox, PathBounds.hiy );
+	DocCoord		EndPoint1	( PathBounds.hi.x, PathBounds.lo.y );
+	DocCoord		EndPoint2	( PathBounds.lo.x, PathBounds.hi.y );
 	WORD			BitmapID	= FlashPlaceObject::GetBitmapCount ();
-	FlashExportDC	*pFlashDC	= static_cast <FlashExportDC*> ( GetRenderDC() );
+	FlashExportDC	*pFlashDC	= static_cast <FlashExportDC*> ( CCDC::ConvertFromNativeDC(GetRenderDC()) );
 
 	TRACEUSER( "Graeme", _T("Entering ExportShadow!\n") );
 
@@ -1891,8 +1889,8 @@ BOOL FlashRenderRegion::ProcessBitmapTransp ( TranspFillAttribute *pTransparency
 	OILBitmap			*pBitmap		= ( pBMFill->GetBitmap () )->GetActualBitmap ();
 	DocColour			*pStartColour	= pFill->GetStartColour ();
 	FlashExportDC		*pFlashDC		= ( FlashExportDC * ) RenderDC;
-	BOOL				IsContone		= TRUE;
-	FlashBitmapRecord	*pRecord		= mpBitmap;
+//	BOOL				IsContone		= TRUE;
+//	FlashBitmapRecord	*pRecord		= mpBitmap;
 
 	// If we've got a bitmap fill applied too, we want to export that. So just set the
 	// object up with a flat fill.

@@ -125,6 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "swfplace.h"	// For FlashPlaceObject.
 
 #include "swffiltr.h"	// Definition of this class.
+#include "layer.h"
 
 CC_IMPLEMENT_DYNAMIC ( FlashFilter, VectorFilter )
 
@@ -281,7 +282,7 @@ BOOL FlashFilter::DoExport ( Operation* pOp,
 	mpBackgroundCol = &BackgroundCol;
 
 	// Set up the origin of the bounding rectangle according to the Flash file specification.
-	DocCoord			Origin		( mPageRect.lox, mPageRect.hiy );		// Flash's lox, loy.
+	DocCoord			Origin		( mPageRect.lo.x, mPageRect.hi.y );		// Flash's lox, loy.
 
 	// Initialise the render region.
 	SWFRegion.Init ();
@@ -304,8 +305,7 @@ BOOL FlashFilter::DoExport ( Operation* pOp,
 		}
 		else
 		{
-			TRACEUSER ( "Graeme",
-						"Tried to open non-CCDiskFile in FlashFilter::DoExport\n" );
+			TRACEUSER ( "Graeme", _T("Tried to open non-CCDiskFile in FlashFilter::DoExport\n") );
 			return FALSE;
 		}
 	}
@@ -425,7 +425,7 @@ BOOL FlashFilter::WriteNodes ( RenderRegion *pRegion,
 #ifdef DO_EXPORT
 
 	// Export the file, but catch any file errors.
-	TRY
+	try
 	{
 		// This function parses through the Camelot tree in common with the other export
 		// loops. Unlike the other loops, it builds up four linked lists as dictionaries
@@ -442,8 +442,8 @@ BOOL FlashFilter::WriteNodes ( RenderRegion *pRegion,
 
 		// Find the first node that we should export from this spread
 		Spread *pSpread = pRegion->GetRenderSpread ();
-		Node *pLayer = ( Node * ) pSpread->FindFirstLayer ();
 /*
+		Node *pLayer = ( Node * ) pSpread->FindFirstLayer ();
 		Node *pNode = pSpread->FindFirstForExport( pRegion, TRUE, VisibleLayersOnly, CheckSelected );
 
 		if ( mpBackground != NULL && pNode == mpBackground )
@@ -540,7 +540,7 @@ BOOL FlashFilter::WriteNodes ( RenderRegion *pRegion,
 	}
 
 	// Handle any file errors, or other exceptions.
-	CATCH ( CFileException, e )
+	catch ( CFileException )
 	{
 		// Didn't work - report failure to caller.
 		if ( pDC )
@@ -550,7 +550,6 @@ BOOL FlashFilter::WriteNodes ( RenderRegion *pRegion,
 			EndSlowJob ();
 		return FALSE;
 	}
-	END_CATCH
 
 	// All ok
 	return TRUE;

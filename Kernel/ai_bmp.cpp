@@ -121,8 +121,8 @@ DECLARE_SOURCE("$Revision");
 //////////////////////////////////////////////////////////////////////
 
 AIBitmapProcessor::AIBitmapProcessor() :
-	mLastIndex(0),
-	mpNewBitmap(0)
+	mpNewBitmap(0),
+	mLastIndex(0)
 {
 
 }
@@ -607,7 +607,8 @@ INT32 AIBitmapProcessor::DecodeHexStringAsCMYK( AI5EPSFilter& filter, ADDR& pCur
 	double dRed, dGreen, dBlue;
 	double dKey;
 
-	for ( UINT32 i = nStart; i < nTokenLen; i += 2 )
+	UINT32 i;
+	for ( i = nStart; i < nTokenLen; i += 2 )
 	{
 		/////////////////
 		//	read in the CMYK value one component at at time
@@ -711,7 +712,8 @@ INT32 AIBitmapProcessor::DecodeHexStringAsRGB( AI5EPSFilter& filter, ADDR& pCurr
 	// Decode the string two characters at a time 
 	/////////////////
 
-	for ( UINT32 i = nStart; i < nTokenLen; i += 2 )
+	UINT32 i;
+	for ( i = nStart; i < nTokenLen; i += 2 )
 	{
 		RGBVal[nShift] = 0;
 

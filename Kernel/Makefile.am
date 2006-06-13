@@ -72,7 +72,10 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	sgstroke.cpp sgbrush.cpp lattrops.cpp la_base.cpp maskedrr.cpp  \
 	cameleps.cpp epscdef.cpp epsclist.cpp epssitem.cpp epsstack.cpp \
 	nativeps.cpp epsfiltr.cpp aw_eps.cpp saveeps.cpp vectrndr.cpp kerneldc.cpp \
-	release.cpp ai_eps.cpp ai8_eps.cpp ai5_eps.cpp ai_epsrr.cpp freeeps.cpp
+	release.cpp ai_eps.cpp ai8_eps.cpp ai5_eps.cpp ai_epsrr.cpp ai_layer.cpp \
+	ai_bmp.cpp ai_grad.cpp freeeps.cpp swffiltr.cpp swfrndr.cpp swfbitmp.cpp \
+	swfbuttn.cpp swffont.cpp swfplace.cpp swfrndr.cpp swfshape.cpp swfsprit.cpp \
+	swfexpdc.cpp swftext.cpp
 
 
 AM_CXXFLAGS = $(XARAFLAGS)

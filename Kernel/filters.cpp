@@ -104,9 +104,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "coreleps.h"
 #include "aw_eps.h"
 #include "cameleps.h"
-//#include "ai_eps.h"
-//#include "ai5_eps.h"
-//#include "ai8_eps.h"
+#include "ai_eps.h"
+#include "ai5_eps.h"
+#include "ai8_eps.h"
 //#include "drawfltr.h"
 //#include "textfltr.h"
 //#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -131,7 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "cdrfiltr.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ben.h"
-//#include "freeeps.h"
+#include "freeeps.h"
 //#include "rik.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
@@ -802,23 +802,19 @@ PORTNOTETRACE("filter","Removed TIFFFilter and TI_GIFFilter");
 
 #ifndef STANDALONE
 
-PORTNOTE("filter","Removed FlashFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(FlashFilter)
-#endif
 
 	// Other filters in alphabetical order.
 PORTNOTE("filter","Removed filters usage")
 #ifndef EXCLUDE_FROM_XARALX
 	ADD_FILTER(AcornDrawFilter)
-
+#endif
 	// Adobe AI / EPS filters.
 	ADD_FILTER(AIEPSFilter)
 	ADD_FILTER(AI5EPSFilter)
 	ADD_FILTER(AI8EPSFilter)
 
 	ADD_FILTER(PhotoShopEPSFilter)
-#endif
 
 	ADD_FILTER(ArtWorksEPSFilter)
 PORTNOTE("filter","Removed filters usage")
@@ -850,9 +846,11 @@ PORTNOTE("filter","Removed EPS filters usage")
 	ADD_FILTER(Corel4EPSFilter)
 
 	ADD_FILTER(CorelPaletteFilter)
-
+#endif
 	ADD_FILTER(FreeHandEPSFilter)
 
+PORTNOTE("filter","Removed filters usage")
+#ifndef EXCLUDE_FROM_XARALX
 	// HTML based filters.
 PORTNOTE("filter","Removed HTMLFilter usage")
 	ADD_FILTER(HTMLFilter)	// the HTML filter

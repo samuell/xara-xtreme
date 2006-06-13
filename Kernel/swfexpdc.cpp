@@ -98,9 +98,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <math.h>
 #include <string.h>
 
-#include "camelot.h"
 #include "camtypes.h"
 
+#include "camelot.h"
 #include "colormgr.h"
 //#include "colmodel.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ccfile.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "docrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "doccolor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "zstream.h"
+//#include "zstream.h"
 
 #include "fontman.h"
 //#include "app.h"			// For FONTMANAGER - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -230,8 +230,8 @@ BOOL FlashExportDC::CreateHeader ( DocColour Background,
 {
 	// Calculate the size of the image. To save complications, I've moved the image to
 	// 0,0, rather than from whatever bounds Camelot uses.
-	mLowCorner.x = ImageBounds.lox / FLASH_SCALE;
-	mLowCorner.y = ImageBounds.hiy / FLASH_SCALE;
+	mLowCorner.x = ImageBounds.lo.x / FLASH_SCALE;
+	mLowCorner.y = ImageBounds.hi.y / FLASH_SCALE;
 
 	Transform ( &ImageBounds );
 
@@ -288,17 +288,17 @@ BOOL FlashExportDC::EndFile ( void )
 BOOL FlashExportDC::WriteBoundingBox ( DocRect Bounds )
 {
 	// Calculate the number of significant bits needed to store the co-ordinates.
-	UINT32 Bits = CountBits ( Max ( Absol ( Bounds.lox ),
-								  Absol ( Bounds.loy ),
-								  Absol ( Bounds.hix ),
-								  Absol ( Bounds.hiy ) ) );
+	UINT32 Bits = CountBits ( Max ( Absol ( Bounds.lo.x ),
+								  Absol ( Bounds.lo.y ),
+								  Absol ( Bounds.hi.x ),
+								  Absol ( Bounds.hi.y ) ) );
 
 	// Write the bounding box to a file.
 	if ( WriteBits ( Bits, 5 ) &&
-		 WriteBits ( Bounds.lox, Bits ) &&
-		 WriteBits ( Bounds.hix, Bits ) &&
-		 WriteBits ( Bounds.loy, Bits ) &&
-		 WriteBits ( Bounds.hiy, Bits ) )
+		 WriteBits ( Bounds.lo.x, Bits ) &&
+		 WriteBits ( Bounds.hi.x, Bits ) &&
+		 WriteBits ( Bounds.lo.y, Bits ) &&
+		 WriteBits ( Bounds.hi.y, Bits ) )
 	{
 		ByteAlign ();
 		return TRUE;
@@ -652,7 +652,7 @@ BOOL FlashExportDC::WritePath ( FlashShapeRecord *pPath )
 	WORD		ID			= FLASH_FIRST_ID + FlashPlaceObject::GetBitmapCount () +
 							  FlashPlaceObject::GetFontCount () +
 							  FlashPlaceObject::GetTextCount () + pPath->GetShapeID ();
-	DocCoord	MoveTo		( Bounds.lox, Bounds.hiy );
+	DocCoord	MoveTo		( Bounds.lo.x, Bounds.hi.y );
 	double		Tolerance	= 100.0f;
 	FlashColour	LineColour	= pPath->GetLineColour ();
 	WORD		LineWidth	= pPath->GetLineWidth ();
@@ -704,7 +704,7 @@ BOOL FlashExportDC::WritePath ( FlashShapeRecord *pPath )
 
 	// Calculate the difference between the original curve and the generated curve. This
 	// creates it as 5% of the diagonal of the bounding box.
-	Tolerance = ( sqrt ( ( Bounds.hix * Bounds.hix ) + ( Bounds.hiy * Bounds.hiy ) ) ) / 20;
+	Tolerance = ( sqrt ( ( Bounds.hi.x * Bounds.hi.x ) + ( Bounds.hi.y * Bounds.hi.y ) ) ) / 20;
 
 	// Write the edge record.
 	WriteEdgeRecord ( Coords, &MoveTo, Verb, NumCoords, Lines, Fills, 0,
@@ -1326,8 +1326,8 @@ void FlashExportDC::Transform ( DocRect *Bounds )
 	// Calculate the new hi co-ordinates for the bounding box.
 	INT32 HiX;
 	INT32 HiY;
-	INT32 dX = Bounds->hix - Bounds->lox;
-	INT32 dY = Bounds->hiy - Bounds->loy;
+	INT32 dX = Bounds->hi.x - Bounds->lo.x;
+	INT32 dY = Bounds->hi.y - Bounds->lo.y;
 	
 	// Catch rounding errors.
 	if ( ( dX % FLASH_SCALE ) > ( FLASH_SCALE / 2 ) )
@@ -1349,10 +1349,10 @@ void FlashExportDC::Transform ( DocRect *Bounds )
 	}
 
 	// And write them into the data structure.
-	Bounds->lox = 0;
-	Bounds->loy = 0;
-	Bounds->hix = HiX;
-	Bounds->hiy = HiY;
+	Bounds->lo.x = 0;
+	Bounds->lo.y = 0;
+	Bounds->hi.x = HiX;
+	Bounds->hi.y = HiY;
 }
 
 /********************************************************************************************
@@ -2264,6 +2264,7 @@ BOOL FlashExportDC::WriteDefineFontInfo ( FlashFontRecord *pRecord )
 	UINT32 Size = wcslen ( pGlyphs );
 
 	// Create an array to store the characters in.
+#if 0
 	char ASCIIChars [FLASH_TEXT_ARRAY_SIZE];
 
 	// Convert the unicode characters into ASCII characters.
@@ -2273,6 +2274,13 @@ BOOL FlashExportDC::WriteDefineFontInfo ( FlashFontRecord *pRecord )
 		// Write the string out to disk.
 		Write ( ASCIIChars, Size );
 	}
+#else
+	// Bodge using wx
+	wxString temp(pGlyphs);
+	Write (temp.mb_str(), Size);
+
+#endif
+	
 
 	WriteTagSize ( StartPos );
 
@@ -2875,10 +2883,20 @@ BOOL FlashExportDC::WriteGetURL ( FlashButtonRecord *pButton )
 	StartPos = ExportFile->tell();				// Get the start position of the file.
 
 	// Step 4:	Record the strings to the file.
-	Write ( ( BYTE* ) pURL, strlen ( pURL ) );	// Write a string of the URL.
+
+	// Write ( ( BYTE* ) pURL, strlen ( pURL ) );	// Write a string of the URL.
+	TCHAR * pC=pURL;
+	while (*pC)
+	{
+		WriteByte(*(pC++));	// 1:1 TCHAR to CHAR conversion
+	}
 	WriteByte ( 0 );							// Terminate the string.
-	Write ( ( BYTE* ) pFrame,					// Write the frame to insert the URL into.
-			strlen ( pFrame ) );
+	// Write ( ( BYTE* ) pFrame, strlen ( pFrame ) );	// Write the frame to insert the URL into.
+	pC=pFrame;
+	while (*pC)
+	{
+		WriteByte(*(pC++));	// 1:1 TCHAR to CHAR conversion
+	}
 
 	// Step 5:	Fill in the record length.
 	EndPos = ExportFile->tell ();				// Get the file position.

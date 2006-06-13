@@ -5731,7 +5731,7 @@ CCFile &CCMemTextFile::read( char &buf )
 		return *this;
 	}
     
-	TCHAR* tempMemFile 	= (TCHAR*) MemFile;			// Cast MemFile to a TCHAR pointer
+	char* tempMemFile 	= (char*) MemFile;			// Cast MemFile to a TCHAR pointer
 
 	if (!eof())
 	{
@@ -6024,7 +6024,7 @@ CCFile& CCMemTextFile::write(const StringBase& buf, UINT32 length)
 BOOL CCMemTextFile::eof() const
 {
 	// Cast pointer to memory file to TCHAR
-    TCHAR* tempMemFile = (TCHAR*) MemFile;
+    char* tempMemFile = (char*) MemFile;
 
 	if ((CurrentPos == (FileSize - 1)) || (tempMemFile[CurrentPos] == END_OF_FILE))
 		return TRUE;
