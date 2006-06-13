@@ -1670,7 +1670,7 @@ BOOL EPSFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 				
 		// All work has been completed.
 		EndSlowJob();
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 		DialogBarOp::UpdateStateOfAllBars();
 #endif
 		return FALSE;
@@ -1704,7 +1704,7 @@ BOOL EPSFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 
 	// End job and inform caller of the success or failure of the venture.
 	EndSlowJob();
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	DialogBarOp::UpdateStateOfAllBars();
 #endif
 	return Success;

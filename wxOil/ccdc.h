@@ -158,5 +158,16 @@ private:
 	wxClientDC m_DC;
 };
 
+class CCDummyDC : public CCDC
+{
+public:
+	CCDummyDC(RenderType r = RENDERTYPE_NONE) : CCDC(r) { SetDC(&m_DC, FALSE); }
+	CCDummyDC(CNativeDC * pNativeDC, RenderType r = RENDERTYPE_NONE) : CCDC(pNativeDC, r) { }
+	~CCDummyDC() { }
+
+private:
+	wxMemoryDC m_DC;
+};
+
 
 #endif

@@ -140,7 +140,7 @@ class Filter;
 
 ********************************************************************************************/
 
-class KernelDC : public CCDC
+class KernelDC : public CCDummyDC
 {
 public:
 	KernelDC(RenderType Type);

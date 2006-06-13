@@ -291,11 +291,14 @@ BOOL EPSRenderRegion::InitDevice ()
 #if 1
 	char buf2[100];
 	strftime(buf2, 100, "%%%%CreationDate: (%d/%m/%y) (%I:%M %p)", pNow);
-	INT32 i;
-	while (buf2[i])
+	INT32 i=0;
+	char c;
+	do
 	{
-		buf[i]=buf2[i]; // 1:1 char/TCHAR conversion
-	}
+		c=buf2[i];
+		buf[i]=c; // 1:1 char/TCHAR conversion
+		i++;
+	} while (c);
 
 #else
 	_tcsftime(buf, 100, "%%%%CreationDate: (%d/%m/%y) (%I:%M %p)", pNow);

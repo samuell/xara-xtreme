@@ -407,6 +407,7 @@ BOOL CamelotEPSFilter::IsDefaultDocRequired(const TCHAR* pcszPathName)
 
 INT32 CamelotEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 {
+	// THIS ROUTINE IS NOT UNICODE
 	// Check the first line in EPS file
 	if (strncmp((char *) pFileHeader, "%!PS-Adobe-2.0 EPSF-1.2", 23) != 0)
 	{
@@ -546,22 +547,25 @@ void CamelotEPSFilter::CleanUpAfterImport(BOOL Successful)
 
 BOOL CamelotEPSFilter::GetExportOptions( )
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+PORTNOTE("other", "Remove XSEPSExportOptions")
+#ifndef EXCLUDE_FROM_XARALX
+#if !defined(EXCLUDE_FROM_RALPH)
 	XSEPSExportOptions XSOpts;
 
 	// Keep Control Helper system informed
 	ControlHelper::InformModalDialogOpened();
 		 
-	INT32 reason = XSOpts.DoModal();
+	ResourceID reason = XSOpts.DoModal();
 
 	// Keep Control Helper system informed
 	ControlHelper::InformModalDialogClosed();				
 	
-	if (reason != IDOK)
+	if (reason != _R(IDOK))
 	{
 		// User decided not to export - abort.
 		return FALSE;
 	}
+#endif
 #endif
 	return TRUE;
 }
@@ -585,7 +589,7 @@ BOOL CamelotEPSFilter::GetExportOptions( )
 
 BOOL CamelotEPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Use base class to do most of it
 	if (!EPSFilter::PrepareToExport(pFile, pSpread))
 		return FALSE;
@@ -611,7 +615,7 @@ BOOL CamelotEPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 			return FALSE;
 
 		// Attach to the right device.
-		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr, pSpread);
+		ExportRegion->AttachDevice(DocView::GetSelected(), ExportDCPtr->GetDC(), pSpread);
 	}
 #endif
 	// All ok
@@ -1394,7 +1398,7 @@ NoMemory:
 
 /********************************************************************************************
 
->	char *CamelotEPSFilter::GetEPSCommand(EPSCommand Cmd)
+>	TCHAR *CamelotEPSFilter::GetEPSCommand(EPSCommand Cmd)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/02/94
@@ -1528,7 +1532,7 @@ void CamelotEPSFilter::BitmapPoolAttach(KernelBitmap* pBitmap)
 
 BOOL CamelotEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BitmapInfo Info;
 	String_256 BitmapName;
 
@@ -1542,13 +1546,13 @@ BOOL CamelotEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 		{
 			TRACEUSER( "Will", _T("Exporting bitmap with Transparent Index %d\n"), TransparencyIndex);
 
-			ExportDCPtr->OutputValue((INT32) TAG_BITMAPFLAGS);
-			ExportDCPtr->OutputToken("cso");	// Start of new object type
+			ExportDCPtr->OutputValue((INT32) EOTAG_BITMAPFLAGS);
+			ExportDCPtr->OutputToken(_T("cso"));	// Start of new object type
 
 			ExportDCPtr->OutputValue((INT32) TransparencyIndex);
-			ExportDCPtr->OutputToken("cbti");	// Index of the colour that is transparent
+			ExportDCPtr->OutputToken(_T("cbti"));	// Index of the colour that is transparent
 
-			ExportDCPtr->OutputToken("ceo");	// End of new object type
+			ExportDCPtr->OutputToken(_T("ceo"));	// End of new object type
 			ExportDCPtr->OutputNewLine();
 		}
 	}
@@ -1558,7 +1562,7 @@ BOOL CamelotEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 	BitmapName = TheBitmap.ActualBitmap->GetName();
 
 	// Write them out to the EPS file.
-	ExportDCPtr->OutputString((char*)BitmapName);
+	ExportDCPtr->OutputString((TCHAR*)BitmapName);
 	ExportDCPtr->OutputValue((UINT32) Info.PixelWidth);
 	ExportDCPtr->OutputValue((UINT32) Info.PixelHeight);
 	ExportDCPtr->OutputValue((UINT32) Info.PixelDepth);
@@ -1568,17 +1572,17 @@ BOOL CamelotEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 
 	// Bitmap type is 0 as this is the type that exports all the bitmap data
 	// Type 1 is used as a reference to a bitmap in the pool
-	ExportDCPtr->OutputToken("0");
+	ExportDCPtr->OutputToken(_T("0"));
 
 	// Write out the bitmap start token
-	ExportDCPtr->OutputToken("csbm");
+	ExportDCPtr->OutputToken(_T("csbm"));
 	ExportDCPtr->OutputNewLine();
 
 	// Write out the bitmap data
 	TheBitmap.ActualBitmap->ExportBitmap(ExportRegion);
 
 	// Write out the bitmap end token
-	ExportDCPtr->OutputToken("cebm");
+	ExportDCPtr->OutputToken(_T("cebm"));
 	ExportDCPtr->OutputNewLine();
 #endif
 	// All ok
@@ -3076,7 +3080,7 @@ BOOL CamelotEPSFilter::ProcessGuideLayer()
 		return FALSE;
 	}
 
-#if defined(EXCLUDE_FROM_RALPH) || defined(EXCLUDE_FROM_XARALX)
+#if defined(EXCLUDE_FROM_RALPH)
 	// In ralph we dont want to import guideline layers
 #else
 	if (Filter::ImportWithLayers)
@@ -3181,7 +3185,7 @@ EPSFontCache::EPSFontCache()
 	Valid = FALSE;
 };
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // CamelotEPSRenderRegion methods.
@@ -3205,7 +3209,7 @@ CamelotEPSRenderRegion::CamelotEPSRenderRegion(DocRect ClipRect,
 												 FIXED16 ViewScale) 
 	: ArtWorksEPSRenderRegion(ClipRect, ConvertMatrix, ViewScale)
 {
-	CreatorString = "Xara X";
+	CreatorString = _T("Xara X");
 
 	SepTables = NULL;
 }
@@ -3531,13 +3535,13 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 				if (UnnamedColours)
 				{
 					if (GreyFill)
-						pDC->OutputToken("cag");
+						pDC->OutputToken(_T("cag"));
 					else
-						pDC->OutputToken("caz");
+						pDC->OutputToken(_T("caz"));
 				}
 				else
 				{
-					pDC->OutputToken("cax");
+					pDC->OutputToken(_T("cax"));
 				}
 				pDC->OutputNewLine();
 			}
@@ -3603,15 +3607,15 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 				pDC->OutputValue((INT32) (pFill->GetTileable()));
 
 				// Always Fractal type 1 at present
-				pDC->OutputToken("1");
+				pDC->OutputToken(_T("1"));
 
 				// This is a fractal fill
 				pDC->OutputValue((INT32) CAMEPS_FILL_FRACTAL);
 
 				if (UnnamedColours)
-					pDC->OutputToken("caz");
+					pDC->OutputToken(_T("caz"));
 				else
-					pDC->OutputToken("cax");
+					pDC->OutputToken(_T("cax"));
 				pDC->OutputNewLine();
 			}
 			else if (pFillAttr->IsKindOf(CC_RUNTIME_CLASS(BitmapFillAttribute)) && Caps.BitmapFills)
@@ -3663,9 +3667,9 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 						pDC->OutputValue((INT32) CAMEPS_FILL_BITMAP);
 
 					if (UnnamedColours)
-						pDC->OutputToken("caz");
+						pDC->OutputToken(_T("caz"));
 					else
-						pDC->OutputToken("cax");
+						pDC->OutputToken(_T("cax"));
 
 					pDC->OutputNewLine();
 
@@ -3686,7 +3690,7 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 		pDC->OutputValue(EffectType);
 	
 		// Output the fill effect token
-		pDC->OutputToken("cxe");
+		pDC->OutputToken(_T("cxe"));
 		pDC->OutputNewLine();
 	}
 
@@ -3708,10 +3712,10 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 		pDC->OutputValue((UINT32) MappingType);
 
 		// Allow for future extension of fill mappings.	
-		pDC->OutputToken("0");
+		pDC->OutputToken(_T("0"));
 
 		// Output the fill mapping token
-		pDC->OutputToken("cxm");
+		pDC->OutputToken(_T("cxm"));
 		pDC->OutputNewLine();
 	}
 
@@ -3724,15 +3728,15 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 		{
 			case NonZeroWinding:
 				// Change winding rule to 0, which means non-zero in Camelot EPS.
-				pDC->OutputToken("0");
-				pDC->OutputToken("awr");
+				pDC->OutputToken(_T("0"));
+				pDC->OutputToken(_T("awr"));
 				pDC->OutputNewLine();
 				break;
 
 			case EvenOddWinding:
 				// Change winding rule to 1, which means even-odd in Camelot EPS.
-				pDC->OutputToken("1");
-				pDC->OutputToken("awr");
+				pDC->OutputToken(_T("1"));
+				pDC->OutputToken(_T("awr"));
 				pDC->OutputNewLine();
 				break;
 
@@ -3811,7 +3815,7 @@ BOOL CamelotEPSRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColou
 
 		// Write out the tint value. This isn't actually used at the moment, but is left 
 		//	for possible future expansion
-		pDC->OutputValue (0l);
+		pDC->OutputValue ((INT32)0);
 	}
 
 	// And the End colour.
@@ -3827,7 +3831,7 @@ BOOL CamelotEPSRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColou
 
 		// Write out the tint value. This isn't actually used at the moment, but is left 
 		//	for possible future expansion
-		pDC->OutputValue (0l);
+		pDC->OutputValue ((INT32)0);
 	}
 
 	// Return TRUE for no names used, FALSE for names used.
@@ -3930,13 +3934,13 @@ BOOL CamelotEPSRenderRegion::WriteProlog(KernelDC *pDC)
 
 	// Put some comments out to mark our procset
 	pDC->OutputNewLine();
-	pDC->OutputToken("%%BeginResource: procset XaraStudio1Dict");
+	pDC->OutputToken(_T("%%BeginResource: procset XaraStudio1Dict"));
 	pDC->OutputNewLine();
-	pDC->OutputToken("% Copyright (c) 1995,1996 Xara Ltd");
+	pDC->OutputToken(_T("% Copyright (c) 1995,1996 Xara Ltd"));
 	pDC->OutputNewLine();
 
 	// Start a new dictionary to avoid clashes...
-	pDC->OutputToken("/XaraStudio1Dict 300 dict def XaraStudio1Dict begin");
+	pDC->OutputToken(_T("/XaraStudio1Dict 300 dict def XaraStudio1Dict begin"));
 	pDC->OutputNewLine();
 
 	// Read each line from the file and output it to the DC.
@@ -3958,9 +3962,9 @@ BOOL CamelotEPSRenderRegion::WriteProlog(KernelDC *pDC)
 	WriteSepFunctions(pDC);
 
 	// Put some comments/code out to mark our procset end
-	pDC->OutputToken("end");
+	pDC->OutputToken(_T("end"));
 	pDC->OutputNewLine();
-	pDC->OutputToken("%%EndResource");
+	pDC->OutputToken(_T("%%EndResource"));
 	pDC->OutputNewLine();
 
 	return TRUE;
@@ -3996,7 +4000,7 @@ BOOL CamelotEPSRenderRegion::WriteSetup(KernelDC *pDC)
 	} 
 
 	// Output some code so that we use our dictionary
-	pDC->OutputToken("save XaraStudio1Dict begin");
+	pDC->OutputToken(_T("save XaraStudio1Dict begin"));
 	pDC->OutputNewLine();
 
 	// Read each line from the file and output it to the DC.
@@ -4036,7 +4040,7 @@ BOOL CamelotEPSRenderRegion::WriteEPSTrailerComments ( void )
 	//	this is no longer controlled by Start- and StopRender, we have restore here. This should 
 	//	be done to close the 'save-restore' block started in WriteSetup.
 	KernelDC *pDC = (KernelDC *) RenderDC;
-	pDC->OutputToken("end restore");
+	pDC->OutputToken(_T("end restore"));
 	pDC->OutputNewLine();
 
 	// Call the base class to over-ride the native render region version.
@@ -4109,10 +4113,10 @@ BOOL CamelotEPSRenderRegion::WriteEPSTrailerComments ( void )
 void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *SrcBuffer,
 														INT32 PixelWidth)
 {
-	ERROR3IF(DestBuffer == NULL || SrcBuffer == NULL || PixelWidth < 1, "Illegal params");
-	ERROR3IF(SepTables == NULL, "No separation tables!?");
+	ERROR3IF(DestBuffer == NULL || SrcBuffer == NULL || PixelWidth < 1, _T("Illegal params"));
+	ERROR3IF(SepTables == NULL, _T("No separation tables!?"));
 	ERROR3IF(CurrentColContext->GetColourPlate() == NULL,
-				"The separation ColourPlate has gone missing!");
+				_T("The separation ColourPlate has gone missing!"));
 
 	// --- A wee macro to find the Maximum of R,G,B, and place it into a variable called 
 	// Temp, which we define right now in function scope so it's always available
@@ -4132,6 +4136,13 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 											// END of the table for optimisation - precalcs (255 - Temp)
 
 
+PORTNOTE("cms", "Disabled colour separations");
+#ifndef EXCLUDE_FROM_XARALX
+	BOOL PrintRGBBlackAsKey=XaraCMS::PrintRGBBlackAsKey;
+#else
+	BOOL PrintRGBBlackAsKey=TRUE;
+#endif
+
 	// I've unrolled the shared code for each plate in order to optimise the inner loop
 	switch (CurrentColContext->GetColourPlate()->GetType())
 	{
@@ -4143,16 +4154,16 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 				{
 					TEMPMAX(SrcBuffer[i], SrcBuffer[i+1], SrcBuffer[i+2]);
 
-					if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+					if (!PrintRGBBlackAsKey || Temp > 0)
 					{
 						Ink = 255 - SrcBuffer[i];			// Cyan ink is (255 - Red)
 
 						// Look up UCR(Key), which is UCR(255 - Temp), but the 255 is precalculated
 						// into the base address above, so we i with (-Temp)!
-						Ink -= UCR[-Temp];
-
-						// Ink is now the ink value for the given plate. Crop at 0
-						if (Ink < 0)
+						// Make Ink the ink value for the given plate. Crop at 0
+						if ((UINT32)Ink>(UINT32)UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
 							Ink = 0;
 
 						Ink = LUT[Ink];
@@ -4176,16 +4187,16 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 				{
 					TEMPMAX(SrcBuffer[i], SrcBuffer[i+1], SrcBuffer[i+2]);
 
-					if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+					if (!PrintRGBBlackAsKey || Temp > 0)
 					{
 						Ink = 255 - SrcBuffer[i+1];			// Magenta ink is (255 - Green)
 
 						// Look up UCR(Key), which is UCR(255 - Temp), but the 255 is precalculated
 						// into the base address above, so we i with (-Temp)!
-						Ink -= UCR[-Temp];
-
-						// Ink is now the ink value for the given plate. Crop at 0
-						if (Ink < 0)
+						// Make Ink the ink value for the given plate. Crop at 0
+						if ((UINT32)Ink>(UINT32)UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
 							Ink = 0;
 
 						Ink = LUT[Ink];
@@ -4209,16 +4220,16 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 				{
 					TEMPMAX(SrcBuffer[i], SrcBuffer[i+1], SrcBuffer[i+2]);
 
-					if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+					if (!PrintRGBBlackAsKey || Temp > 0)
 					{
 						Ink = 255 - SrcBuffer[i+2];			// Yellow ink is (255 - Blue)
 
 						// Look up UCR(Key), which is UCR(255 - Temp), but the 255 is precalculated
 						// into the base address above, so we i with (-Temp)!
-						Ink -= UCR[-Temp];
-
-						// Ink is now the ink value for the given plate. Crop at 0
-						if (Ink < 0)
+						// Make Ink the ink value for the given plate. Crop at 0
+						if ((UINT32)Ink>(UINT32)UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
 							Ink = 0;
 
 						Ink = LUT[Ink];
@@ -4243,7 +4254,7 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 					// Get the maximum of R,G,B into Temp
 					TEMPMAX(SrcBuffer[i], SrcBuffer[i+1], SrcBuffer[i+2]);
 
-					if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+					if (!PrintRGBBlackAsKey || Temp > 0)
 					{
 						// Key = 255 - Temp. Look up Key in the Black Generation table
 						Ink = BGT[255 - Temp];
@@ -4268,7 +4279,7 @@ void CamelotEPSRenderRegion::ColourSeparateScanline24(BYTE *DestBuffer, BYTE *Sr
 
 
 		default:
-			ERROR3("Unsupported separation plate!");
+			ERROR3(_T("Unsupported separation plate!"));
 			break;
 	}
 
@@ -4324,7 +4335,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 		return SLOWJOB_FAILURE;
 
 	// Get the 'Actual' windows Bitmap
-	WinBitmap *WinBM = (WinBitmap*)pBitmap->ActualBitmap;
+	CWxBitmap *WinBM = (CWxBitmap*)pBitmap->ActualBitmap;
 
 	// Is it valid ?
 	if ((WinBM->BMInfo==NULL) || (WinBM->BMBytes==NULL))
@@ -4356,7 +4367,8 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 		LPBYTE OriginalBuffer  = WinBM->BMBytes;
 		LPBYTE ConvertedBuffer = WinBM->BMBytes;
 
-		for (INT32 i=0; i<Height; i++)
+		INT32 i;
+		for (i=0; i<Height; i++)
 		{
 			DIBUtil::Convert32to24(Width, OriginalBuffer, ConvertedBuffer);
 			OriginalBuffer += ScanlineBytes;
@@ -4389,7 +4401,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 	}
 
 	// make sure we have a 24bpp bitmap
-	ERROR3IF(BitmapDepth!=24, "Non 24bpp bitmap found in DrawMaskedBitmap");
+	ERROR3IF(BitmapDepth!=24, _T("Non 24bpp bitmap found in DrawMaskedBitmap"));
 
 	// Work out the coords to blit to, taking into acount the differnt dpis of the
 	// source and destination bitmaps.
@@ -4410,7 +4422,9 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 	{
 		// Find destination device resolution (e.g. PostScript printer)
 		if (RenderDC!=NULL)
-			DestDpi = RenderDC->GetDeviceCaps(LOGPIXELSY);
+			DestDpi = RenderDC->GetPPI().GetWidth();
+PORTNOTE("printing", "Exclude CCPrintInfo");
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 		// If printing, then see if we should do level 2.
@@ -4421,7 +4435,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			if (pInfo != NULL)
 			{
 				PrintControl *pPrCtrl = pInfo->GetPrintControl();
-				ERROR3IF(pPrCtrl == NULL, "Unexpected NULL pointer");
+				ERROR3IF(pPrCtrl == NULL, _T("Unexpected NULL pointer"));
 
 				if (pPrCtrl->GetPSLevel() == PSLEVEL_2)
 					// Printing to a level 2 device - party on!
@@ -4429,6 +4443,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			}
 		}
 #endif	//webster
+#endif
 	}
 
 	// Work out the ratio between to two
@@ -4450,8 +4465,8 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 	{
 		// Usual GDI conversion (used for PostScript printers)
 		WinRect WinClipRect = OSRenderRegion::DocRectToWin(RenderMatrix, ClipRect, DestDpi);
-		Origin.x = WinClipRect.left;
-		Origin.y = WinClipRect.bottom;
+		Origin.x = WinClipRect.GetLeft();
+		Origin.y = WinClipRect.GetBottom();
 	}
 
 	// Inform progress object how high this band is
@@ -4469,7 +4484,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 
 	// Get a buffer for RGB channel separation (for level 2) and colour separation
 	BYTE *pRGBBuf = (BYTE *) CCMalloc(Width);
-	ERROR2IF(pRGBBuf == NULL, SLOWJOB_FAILURE, "No memory for RGB buffer");
+	ERROR2IF(pRGBBuf == NULL, SLOWJOB_FAILURE, _T("No memory for RGB buffer"));
 
 	// How many bytes to a destination scanline
 	INT32 ScanLineBytes = DIBUtil::ScanlineSize(Width, BitmapDepth);
@@ -4500,13 +4515,13 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			}
 		}
 
-		ERROR3IF(SepTables == NULL, "Can't generate separation tables in CamelotEPSRenderRegion");
+		ERROR3IF(SepTables == NULL, _T("Can't generate separation tables in CamelotEPSRenderRegion"));
 	}
 
 	// Now copy the Bits from our Kernel Bitmap into the Memory DC, scan line at a time
 	MaskRegion MaskInfo;
 	pMask->GetFirstMaskRegion(&MaskInfo);
-	TRY
+	try
 	{
 		while (MaskInfo.Length!=0)
 		{
@@ -4530,7 +4545,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			{
 				// We are doing some sort of colour separation, so copy the data across, colour
 				// separating it as we go
-				ERROR3IF(BytesPerPixel != 3, "non-24bpp scanline unsupported");
+				ERROR3IF(BytesPerPixel != 3, _T("non-24bpp scanline unsupported"));
 				ColourSeparateScanline24(DestBuffer, SrcBuffer, RegionWidth);
 			}
 
@@ -4548,9 +4563,9 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			INT32 DestWidth = INT32(ceil(RegionWidth*Ratio));
 			INT32 DestHeight = INT32(ceil(1*Ratio));
 
-			pDC->OutputToken("sv");
+			pDC->OutputToken(_T("sv"));
 			pDC->OutputValue(RegionWidth);
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 
 
 			if (IsCamelotEPS)
@@ -4573,15 +4588,15 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 
 			// Tell the proc whether this is L1 or L2 compatible data
 			if (UseLevel2)
-				pDC->OutputToken("2");
+				pDC->OutputToken(_T("2"));
 			else
-				pDC->OutputToken("1");
+				pDC->OutputToken(_T("1"));
 
 			// Rendering primitive.
 			if (SepTables == NULL)
-				pDC->OutputToken("cbsl");		// 24-bpp colour scanline
+				pDC->OutputToken(_T("cbsl"));		// 24-bpp colour scanline
 			else
-				pDC->OutputToken("gbsl");		// 8-bpp greyscale scanline
+				pDC->OutputToken(_T("gbsl"));		// 8-bpp greyscale scanline
 
 
 			// Output bitmap data - format depends on whether we can do Level 2 or not
@@ -4597,7 +4612,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 
 				for (INT32 i = 0; i < NumStreams; i++)
 				{
-					ERROR3IF(RegionWidth > Width, "I didn't allocate enough memory!");
+					ERROR3IF(RegionWidth > Width, _T("I didn't allocate enough memory!"));
 
 					// Copy this component into the buffer
 					for (INT32 j = 0; j < RegionWidth; j++)
@@ -4611,7 +4626,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 						return SLOWJOB_FAILURE;
 
 					// Send to output stream as RLE encoded ASCII85 data.
-					INT32 nBytes = pDC->OutputASCII85(pRGBBuf, RegionWidth);
+					/*INT32 nBytes =*/ pDC->OutputASCII85(pRGBBuf, RegionWidth);
 
 					if (!pDC->EndASCII85Output())
 						// Error
@@ -4623,7 +4638,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 				// Just output as L1 ASCIIHex encoded data
 				if (SepTables != NULL)
 				{
-					// Colour separating, so reduce the 24-bit (R=G=B) greyscale to 8bpp by getting the "red" channel
+					// Colour separating, so reduce the 24-bit (R=G=B) greyscale to 8bpp by getting the _T("red") channel
 					for (INT32 j = 0; j < RegionWidth; j++)
 						pRGBBuf[j] = TempBitmapBytes[j * 3];
 					pDC->OutputRawBinary(pRGBBuf, RegionWidth, 1);
@@ -4635,7 +4650,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 				}
 			}
 
-			pDC->OutputToken("rs");
+			pDC->OutputToken(_T("rs"));
 			pDC->OutputNewLine();
 
 			// Update the progress display if necessary.
@@ -4651,7 +4666,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 			pMask->GetNextMaskRegion(&MaskInfo);
 		}
 	}
-	CATCH(CFileException, e)
+	catch(CFileException)
 	{
 		FreeDIB(TempBitmapInfo, TempBitmapBytes);
 
@@ -4660,7 +4675,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 
 		return SLOWJOB_FAILURE;
 	}
-	END_CATCH
+
 
 	// Update bitmap info to what it was before we started
 	TempBitmapInfo->bmiHeader.biSizeImage = (Width*3);
@@ -4707,7 +4722,7 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	// get overall matrix - attribute matrix concatenated with given matrix if supplied
 	Matrix matrix;
 	if (GetCharAttributeMatrix(&matrix)==FALSE)
-		return NULL;
+		return FALSE;
 	if (pMatrix)
 		matrix*=*pMatrix;
 
@@ -4748,7 +4763,7 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 
 	// Graham 5/8/96: Changed this to work with MBCS
 	// Set up a string buffer for the output character
-	char cBuffer[3];
+	TCHAR cBuffer[3];
 
 	//Convert the character over to a MBCS index number
 	UINT32 uiCharNumber = UnicodeManager::UnicodeToMultiByte(ch);
@@ -4799,7 +4814,7 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	if (FlatFill && Filled && !Stroked)
 	{
 		// Simple flat filled text with no outline, so render normally.
-		pKernelDC->OutputToken("t");
+		pKernelDC->OutputToken(_T("t"));
 	}
 	else
 	{
@@ -4808,15 +4823,15 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 		{
 			if (Filled)
 				// Stroke and fill it
-				pKernelDC->OutputToken("tb");
+				pKernelDC->OutputToken(_T("tb"));
 			else
 				// Just stroke it
-				pKernelDC->OutputToken("ts");
+				pKernelDC->OutputToken(_T("ts"));
 		}
 		else
 		{
 			// Just fill it
-			pKernelDC->OutputToken("tf");
+			pKernelDC->OutputToken(_T("tf"));
 		}
 	}
 
@@ -4919,7 +4934,7 @@ BOOL CamelotEPSRenderRegion::SelectNewFont ( WORD		Typeface,
 
 	// Look up font in INI file.
 	String_256 MappedFontName;
-	if (!Camelot.GetPrefDirect("EPSFontMapping", (TCHAR *) Encoded, &MappedFontName))
+	if (!Camelot.GetPrefDirect(_T("EPSFontMapping"), (TCHAR *) Encoded, &MappedFontName))
 	{
 		// No preference - map to Times-Roman variant
 		if (Bold)
@@ -4950,10 +4965,10 @@ BOOL CamelotEPSRenderRegion::SelectNewFont ( WORD		Typeface,
 	// Select this font by prefixing with a forward slash to make it into a name.
 	KernelDC *pKernelDC = (KernelDC *) RenderDC;
 	String_8 Slash(TEXT("/"));
-	MappedFontName.Insert(&Slash, 0);
+	MappedFontName.Insert(Slash, 0);
 	pKernelDC->OutputToken((TCHAR *) MappedFontName);
 	pKernelDC->OutputUserSpaceValue(CorrectedSize);
-	pKernelDC->OutputToken("sf");
+	pKernelDC->OutputToken(_T("sf"));
 
 	// Font cache is now valid
 	FontInfo.Valid 	  = TRUE;
@@ -5013,7 +5028,7 @@ BOOL CamelotEPSRenderRegion::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic
 
 	// Look up font in INI file.
 	String_256 MappedFontName;
-	if (!Camelot.GetPrefDirect("EPSFontMapping", (TCHAR *) Encoded, &MappedFontName))
+	if (!Camelot.GetPrefDirect(_T("EPSFontMapping"), (TCHAR *) Encoded, &MappedFontName))
 	{
 		// No preference - map to Times-Roman variant
 		if (Bold)
@@ -5035,14 +5050,14 @@ BOOL CamelotEPSRenderRegion::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic
 	// Select this font by prefixing with a forward slash to make it into a name.
 	KernelDC *pKernelDC = (KernelDC *) RenderDC;
 	String_8 Slash(TEXT("/"));
-	MappedFontName.Insert(&Slash, 0);
+	MappedFontName.Insert(Slash, 0);
 	pKernelDC->OutputToken((TCHAR *) MappedFontName);
 
 	// Get the default text height, and work out how to scale to PostScript's default of
 	// 1 user space unit (i.e. 1 pt)
 	double ScaleFactor = TextManager::GetDefaultHeight() / 1000.0;
-	char MatrixBuf[100];
-	_stprintf(MatrixBuf, "[%.3f %.3f %.3f %.3f 0 0]", 
+	TCHAR MatrixBuf[100];
+	camSprintf(MatrixBuf, _T("[%.3f %.3f %.3f %.3f 0 0]"), 
 		    (double) (abcd[0].MakeDouble() * ScaleFactor),
 		    (double) (abcd[1].MakeDouble() * ScaleFactor),
 		    (double) (abcd[2].MakeDouble() * ScaleFactor),
@@ -5051,7 +5066,7 @@ BOOL CamelotEPSRenderRegion::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic
 	pKernelDC->OutputToken(MatrixBuf);
 	
 	// Select the complex font
-	pKernelDC->OutputToken("sf");
+	pKernelDC->OutputToken(_T("sf"));
 
 	// Font cache is now valid
 	FontInfo.Valid 	  = TRUE;
@@ -5217,6 +5232,8 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 		if (EPSFilter::XSEPSExportPSType == 2)
 			UseLevel2 = TRUE;
 	}
+PORTNOTE("printing", "Exclude CCPrintInfo");
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 	else if (IsPrinting())
@@ -5237,13 +5254,15 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 	}
 
 #endif //webster
+#endif // EXCLUDE_FROM_XARALX
+
 	// Work out the coords of the destination rectangle
-	INT32 DestX = 0;
-	INT32 DestY = 0;
+//	INT32 DestX = 0;
+//	INT32 DestY = 0;
 
 	KernelDC *pDC = (KernelDC *) RenderDC;
 
-	pDC->OutputToken("sv");
+	pDC->OutputToken(_T("sv"));
 
 	// Dimensions of bitmap
 	pDC->OutputValue(Width);
@@ -5319,7 +5338,7 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 	// Now output the matrix - colorimage expects the inverse of this matrix, i.e.
 	// it needs the matrix which maps the destination area to the 1-1 rectangle at
 	// the origin (cos PostScript is weird like that).
-	pDC->OutputToken("[");
+	pDC->OutputToken(_T("["));
 
 	// NB. We have to do some 'bespoke' matrix maths here, because we need to work
 	// 	   in points, and our Matrix class is not accurate enough (notably the e and 
@@ -5360,6 +5379,8 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 		e[0] = ((double) (Coords[3].x - DCOrigin.x)) / UnitSize;
 		f[0] = ((double) (Coords[3].y - DCOrigin.y)) / UnitSize;
 	}
+PORTNOTE ("other", "Disabled postscript printing transform")
+#ifndef EXCLUDE_FROM_XARALX
 	else
 	{
 		// Printing to PostScript - convert to Window co-ordinates, using the DC.
@@ -5376,6 +5397,7 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 		e[0] = (double) PSCoords[3].x;
 		f[0] = (double) PSCoords[3].y;
 	}
+#endif
 
 	// Calculate the inverse of the above.
 	double Det = a[0] * d[0] - b[0] * c[0];
@@ -5419,22 +5441,22 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 		pDC->OutputReal(f[1]);
 	}
 
-	pDC->OutputToken("]");
+	pDC->OutputToken(_T("]"));
 
 	// Default values for smoothing and polarity
-	pDC->OutputToken("false");
-	pDC->OutputToken("false");
+	pDC->OutputToken(_T("false"));
+	pDC->OutputToken(_T("false"));
 
 	// Normally we use ASCII Hex encoding, but for Level 2 specific output, we use ASCII85.
 	if (UseLevel2)
 		// Run length encoded and ASCII85 encoded
-		pDC->OutputToken("3");
+		pDC->OutputToken(_T("3"));
 	else
 		// Simple level 1 compatible ASCII Hex encoding.
-		pDC->OutputToken("1");
+		pDC->OutputToken(_T("1"));
 
 	// Set up the image procs
-	pDC->OutputToken("beginimage");
+	pDC->OutputToken(_T("beginimage"));
 
 	if (SepTables != NULL && !IsContoned)
 	{
@@ -5450,7 +5472,7 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 			return FALSE;
 		}
 
-		pDC->OutputToken("doclutimage");		// Colour separation to 8bpp greyscale image
+		pDC->OutputToken(_T("doclutimage"));		// Colour separation to 8bpp greyscale image
 
 		pDC->OutputNewLine();
 
@@ -5522,12 +5544,12 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 					pDC->OutputReal(Result.Blue.MakeDouble());
 
 					// Use special colour 1bpp operator
-					pDC->OutputToken("1bitcopyimage");
+					pDC->OutputToken(_T("1bitcopyimage"));
 				}
 				else
 				{
 					// Normal black and white image
-					pDC->OutputToken("1bitbwcopyimage");
+					pDC->OutputToken(_T("1bitbwcopyimage"));
 				}
 				break;
 
@@ -5556,7 +5578,7 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 					}
 
 					// Use the procedure for rendering paletted images.
-					pDC->OutputToken("doclutimage");
+					pDC->OutputToken(_T("doclutimage"));
 				}
 				else if (BMInfo.NumPaletteEntries > 0)
 				{
@@ -5568,20 +5590,20 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 					}
 
 					// Use the procedure for rendering paletted images.
-					pDC->OutputToken("doclutimage");
+					pDC->OutputToken(_T("doclutimage"));
 				}
 				else
 				{
 					// It's a greyscale image - use the image operator.
 					// (Jason here: I reckon the postscript for doimage doesn't work. This is
 					// probably OK, because camelot can't theoretically have a non-paletted image?)
-					pDC->OutputToken("doimage");
+					pDC->OutputToken(_T("doimage"));
 				}
 				break;
 
 			case 24:
 			case 32:									// 32bpp is output as 24bpp data
-				pDC->OutputToken("do24image");			// Normal composite colour 24bpp image
+				pDC->OutputToken(_T("do24image"));			// Normal composite colour 24bpp image
 				break;
 
 			default:
@@ -5602,9 +5624,9 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 
 	// Clean up image stuff
 	pDC->OutputNewLine();
-	pDC->OutputToken("endimage");
+	pDC->OutputToken(_T("endimage"));
 
-	pDC->OutputToken("rs");
+	pDC->OutputToken(_T("rs"));
 	pDC->OutputNewLine();
 
 	return TRUE;
@@ -5698,7 +5720,7 @@ BOOL CamelotEPSRenderRegion::DrawClippedBitmap(Path *DrawPath)
 	ExportPath(DrawPath, TRUE, TRUE);
 
 	// Save the context
-	pDC->OutputToken("gs");
+	pDC->OutputToken(_T("gs"));
 
 	// export a 'clip' command. note that if our current winding rule is for even-odd
 	// winding, we must export an 'eoclip' command instead.
@@ -5730,10 +5752,10 @@ BOOL CamelotEPSRenderRegion::DrawClippedBitmap(Path *DrawPath)
 		return FALSE;
 
 	// Restore the context
-	pDC->OutputToken("gr");
+	pDC->OutputToken(_T("gr"));
 
 	// Work out if we should stroke the path
-	char PathType[2] = "N";
+	TCHAR PathType[2] = _T("N");
 
 	if (!RR_STROKECOLOUR().IsTransparent())
 	{

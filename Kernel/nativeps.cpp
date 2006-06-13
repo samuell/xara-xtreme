@@ -125,7 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_DYNAMIC(CamelotNativeEPSFilter, CamelotEPSFilter);
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 CC_IMPLEMENT_DYNAMIC(NativeRenderRegion, CamelotEPSRenderRegion);
 #endif
 
@@ -1473,7 +1473,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 
 EPSExportDC* CamelotNativeEPSFilter::CreateExportDC()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	return new NativeExportDC(this);
 #else
 	return NULL;
@@ -1518,7 +1518,7 @@ BOOL CamelotNativeEPSFilter::GetExportOptions( )
 
 BOOL CamelotNativeEPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Use base class to do most of it
 	if (!CamelotEPSFilter::PrepareToExport(pFile, pSpread)) return FALSE;
 
@@ -1547,7 +1547,7 @@ BOOL CamelotNativeEPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 			pDocView = DocView::GetSelected(); // help! use selected docview
 
 		// Attach to the right device.
-		ExportRegion->AttachDevice(pDocView, ExportDCPtr, pSpread);
+		ExportRegion->AttachDevice(pDocView, ExportDCPtr->GetDC(), pSpread);
 	}
 #endif
 	// Thats it
@@ -1576,7 +1576,7 @@ BOOL CamelotNativeEPSFilter::PrepareToExport(CCLexFile* pFile, Spread* pSpread)
 
 BOOL CamelotNativeEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// If this is the bitmap pool, then save out some data
 	if (IsSavingBitmapPool)
 	{
@@ -1623,14 +1623,14 @@ BOOL CamelotNativeEPSFilter::ExportBitmap(KernelBitmap& TheBitmap)
 		ExportDCPtr->OutputValue((UINT32) BitmapPoolNum);
 
 		// Bitmap type is always 1 to represent a reference (0 is an actual bitmap)
-		ExportDCPtr->OutputToken("1");
+		ExportDCPtr->OutputToken(_T("1"));
 
 		// Write out the bitmap start token
-		ExportDCPtr->OutputToken("csbm");
+		ExportDCPtr->OutputToken(_T("csbm"));
 		ExportDCPtr->OutputNewLine();
 
 		// Write out the bitmap end token
-		ExportDCPtr->OutputToken("cebm");
+		ExportDCPtr->OutputToken(_T("cebm"));
 		ExportDCPtr->OutputNewLine();
 
 		// All ok
@@ -1682,7 +1682,7 @@ double CamelotNativeEPSFilter::SmartGetBuildNumber()
 	return BuildNumber;
 }
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // NativeRenderRegion
@@ -1704,7 +1704,7 @@ double CamelotNativeEPSFilter::SmartGetBuildNumber()
 NativeRenderRegion::NativeRenderRegion(DocRect ClipRect, Matrix ConvertMatrix, FIXED16 ViewScale) :
 					CamelotEPSRenderRegion(ClipRect, ConvertMatrix, ViewScale)
 {
-	CreatorString = "Xara Studio (Native) " CAMELOT_VERSION_STRING;
+	CreatorString = _T("Xara Studio (Native) ") CAMELOT_VERSION_STRING;
 
 	// Flag that we have not started up the compressor ok by default.
 	CompressionInitedOk = FALSE;
@@ -1829,7 +1829,7 @@ void NativeRenderRegion::GetValidPathAttributes()
 			pDC->OutputReal((pArrow->StartArrow.GetArrowWidth()).MakeDouble());
 			pDC->OutputReal((pArrow->StartArrow.GetArrowHeight()).MakeDouble());
 
-			pDC->OutputToken("csah");
+			pDC->OutputToken(_T("csah"));
 			pDC->OutputNewLine();
 		}
 	}
@@ -1848,7 +1848,7 @@ void NativeRenderRegion::GetValidPathAttributes()
 			pDC->OutputReal((pArrow->EndArrow.GetArrowWidth()).MakeDouble());
 			pDC->OutputReal((pArrow->EndArrow.GetArrowHeight()).MakeDouble());
 
-			pDC->OutputToken("ceah");
+			pDC->OutputToken(_T("ceah"));
 			pDC->OutputNewLine();
 		}
 	}
@@ -1862,7 +1862,7 @@ void NativeRenderRegion::GetValidPathAttributes()
 		TRACEUSER( "Will", _T("Outputing Dash Pattern, ID=%d\n"),pDash->DashPattern.GetDashID());
 
 		pDC->OutputValue((INT32)pDash->DashPattern.GetDashID());
-		pDC->OutputToken("cdp");
+		pDC->OutputToken(_T("cdp"));
 		pDC->OutputNewLine();
 	}
 
@@ -1903,7 +1903,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 		// Output transparency type...
 		pDC->OutputValue((UINT32) TranspType);
 
-		pDC->OutputToken("cst");
+		pDC->OutputToken(_T("cst"));
 		pDC->OutputNewLine();
 	}
 
@@ -2019,7 +2019,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 			pDC->OutputValue((INT32) (pFractalFill->GetTileable()));
 
 			// Always Fractal type 1 at present
-			pDC->OutputToken("1");
+			pDC->OutputToken(_T("1"));
 
 			TRACEUSER( "Will", _T("Exporting new fractal transp\n"));
 			
@@ -2034,7 +2034,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 				 Caps.BitmapFills)
 		{
 			// Texture fill - output texture fill command:
-			BitmapFillAttribute *pBitmapFill = (BitmapFillAttribute *) pFillAttr;
+//			BitmapFillAttribute *pBitmapFill = (BitmapFillAttribute *) pFillAttr;
 
 			// Output the 3 fill points...
 			DocCoord *Point;
@@ -2094,7 +2094,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 		pDC->OutputValue((UINT32) FillType);
 	
 		// Output the transparent fill token
-		pDC->OutputToken("cxt");
+		pDC->OutputToken(_T("cxt"));
 		pDC->OutputNewLine();
 
 		// If this is a bitmap-based transprency fill, output the bitmap
@@ -2123,10 +2123,10 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 		pDC->OutputValue((UINT32) MappingType);
 
 		// Allow for future extension of fill mappings.	
-		pDC->OutputToken("0");
+		pDC->OutputToken(_T("0"));
 
 		// Output the fill mapping token
-		pDC->OutputToken("cxmt");
+		pDC->OutputToken(_T("cxmt"));
 		pDC->OutputNewLine();
 	}
 }
@@ -2180,39 +2180,39 @@ void NativeRenderRegion::GetValidTextAttributes()
 			// ATM fonts which have the same name as true type fonts.
 			if (Class!=FC_TRUETYPE)
 			{
-				pDC->OutputValue((INT32)TAG_FONTTYPE);
-				pDC->OutputToken("cso");
+				pDC->OutputValue((INT32)EOTAG_FONTTYPE);
+				pDC->OutputToken(_T("cso"));
 				pDC->OutputValue((INT32)Class);
-				pDC->OutputToken("cftf");
-				pDC->OutputToken("ceo");
+				pDC->OutputToken(_T("cftf"));
+				pDC->OutputToken(_T("ceo"));
 				pDC->OutputNewLine();
 			}
 
-			BOOL ok = FONTMANAGER->GetFontName(pFontAttr->HTypeface, OutputFont);
+			/*BOOL ok =*/ FONTMANAGER->GetFontName(pFontAttr->HTypeface, OutputFont);
 			OutputFont.SwapChar(' ','-');
 
 			pDC->OutputToken((TCHAR *)OutputFont);
-			pDC->OutputToken("ctf");
+			pDC->OutputToken(_T("ctf"));
 			pDC->OutputNewLine();
 
 			if ((pFontAttr->IsBold) || (pFontAttr->IsItalic))
 			{
 				// font flags a bold or italic substyle.
 
-				pDC->OutputValue((INT32)TAG_FONTFLAGS);
-				pDC->OutputToken("cso");
+				pDC->OutputValue((INT32)EOTAG_FONTFLAGS);
+				pDC->OutputToken(_T("cso"));
 				pDC->OutputNewLine();
-				pDC->OutputToken("cfft");
+				pDC->OutputToken(_T("cfft"));
 				pDC->OutputNewLine();
-				pDC->OutputToken("ceo");
+				pDC->OutputToken(_T("ceo"));
 				pDC->OutputNewLine();
 
 				pDC->OutputValue((INT32) pFontAttr->IsBold);
-				pDC->OutputToken("ctb");
+				pDC->OutputToken(_T("ctb"));
  				pDC->OutputNewLine();
 
 				pDC->OutputValue((INT32) pFontAttr->IsItalic);
-				pDC->OutputToken("cti");
+				pDC->OutputToken(_T("cti"));
  				pDC->OutputNewLine();
 			}
 		}
@@ -2222,7 +2222,7 @@ void NativeRenderRegion::GetValidTextAttributes()
    	{
 		// Output the fontsize next
 		pDC->OutputValue(RR_TXTFONTSIZE());
-		pDC->OutputToken("ctp");
+		pDC->OutputToken(_T("ctp"));
 		pDC->OutputNewLine();
    	}		 
 
@@ -2231,7 +2231,7 @@ void NativeRenderRegion::GetValidTextAttributes()
 		// read the bold attribute value explicitly	(dont use RR_TXTBOLD)
 		BOOL Bold = ( (TxtBoldAttribute*)(CurrentAttrs[ATTR_TXTBOLD].pAttr) )->BoldOn; 
 		pDC->OutputValue((INT32)Bold);
-		pDC->OutputToken("ctb");
+		pDC->OutputToken(_T("ctb"));
  		pDC->OutputNewLine();
    	}		 
 
@@ -2240,7 +2240,7 @@ void NativeRenderRegion::GetValidTextAttributes()
 		// read the italic attribute value explicitly (dont use RR_TXTITALIC)
 		BOOL Italic =  ( (TxtItalicAttribute*)(CurrentAttrs[ATTR_TXTITALIC].pAttr) )->ItalicOn;
 		pDC->OutputValue((INT32)Italic);
-		pDC->OutputToken("cti");
+		pDC->OutputToken(_T("cti"));
  		pDC->OutputNewLine();
    	}		
 
@@ -2256,7 +2256,7 @@ void NativeRenderRegion::GetValidTextAttributes()
 		MILLIPOINT ptsize = (MILLIPOINT)(FontSize*size);	// pointsize in millipoints
 		pDC->OutputValue(rise);
 		pDC->OutputValue(ptsize);
-		pDC->OutputToken("cts");
+		pDC->OutputToken(_T("cts"));
 		pDC->OutputNewLine();
 	}
 
@@ -2286,7 +2286,7 @@ void NativeRenderRegion::GetValidTextAttributes()
 			pDC->OutputValue((INT32)1);		 
 		}
 
-		pDC->OutputToken("ctls");
+		pDC->OutputToken(_T("ctls"));
 		pDC->OutputNewLine();
 	}
 
@@ -2329,7 +2329,7 @@ BOOL NativeRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	INT32 NumCodes = 1;
 	pDC->OutputValue(CharOut);
 	pDC->OutputValue(NumCodes);
-	pDC->OutputToken("ctx");
+	pDC->OutputToken(_T("ctx"));
 	pDC->OutputNewLine();
 
 #else
@@ -2374,7 +2374,7 @@ BOOL NativeRenderRegion::WriteFileVersion(KernelDC *pDC)
 	TCHAR buf[50];
 
 	// Output the current file version in the format 1.00 for NativeFileVersion 100
-	_stprintf(buf, "%%%%File version: %.2f", WriteNativeVersion);
+	camSprintf(buf, _T("%%%%File version: %.2f"), WriteNativeVersion);
 	pDC->OutputToken(buf);
 	pDC->OutputNewLine();
 
@@ -2427,12 +2427,12 @@ TRACEUSER( "Neville", _T("WriteCompressionState\n"));
 		CompressionInitedOk = TRUE;
 
 		// Could require some compression here...
-		pDC->OutputToken("%%Compression: ");
+		pDC->OutputToken(_T("%%Compression: "));
 		// The compression type that we are using.
-		pDC->OutputToken("0 ");
+		pDC->OutputToken(_T("0 "));
 		pDC->OutputNewLine();
 		// Output an extra line to sync to 
-		pDC->OutputToken("%%Compression info:");
+		pDC->OutputToken(_T("%%Compression info:"));
 
         // Write a very simple .gz header:
 		// Just output the two magic numbers plus a status word plus a flags word
@@ -2440,7 +2440,7 @@ TRACEUSER( "Neville", _T("WriteCompressionState\n"));
 		// middle as this will screw the lexer
 		double StreamVersion = GZipFile::GetStreamVersionNo();
 		TCHAR buf[300];
-		_stprintf(buf, " %.2fD", StreamVersion);	// version in form 0.92 followed by D for deflated
+		camSprintf(buf, _T(" %.2fD"), StreamVersion);	// version in form 0.92 followed by D for deflated
 		pDC->OutputToken(buf);
 TRACEUSER( "Neville", _T("WriteCompressionState wrote version %.2f\n"),StreamVersion); 
 		pDC->OutputNewLine();
@@ -2481,10 +2481,10 @@ TRACEUSER( "Neville", _T("WriteEndCompressionState\n"));
 	if (CamelotNativeEPSFilter::GetNativeCompression() && CompressionInitedOk)
 	{
 		// Could require some compression ending here...
-		pDC->OutputToken("%%EndCompression: ");
+		pDC->OutputToken(_T("%%EndCompression: "));
 		pDC->OutputNewLine();
 		// Output an extra line to sync to 
-		pDC->OutputToken("%%EndCompressionInfo: ");
+		pDC->OutputToken(_T("%%EndCompressionInfo: "));
 		pDC->OutputNewLine();
 
 		// Now that we have written out compression token to say that this is a compressed file,
@@ -2604,7 +2604,7 @@ BOOL NativeRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColour* E
 
 		// Write out the tint value. This isn't actually used at the moment, but is left 
 		//	for possible future expansion
-		pDC->OutputValue (0l);
+		pDC->OutputValue ((INT32)0);
 	}
 
 	// And the End colour.
@@ -2618,7 +2618,7 @@ BOOL NativeRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColour* E
 
 		// Write out the tint value. This isn't actually used at the moment, but is left 
 		//	for possible future expansion
-		pDC->OutputValue (0l);
+		pDC->OutputValue ((INT32)0);
 	}
 
 	// Return TRUE for no names used, FALSE for names used.
@@ -2702,7 +2702,7 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 
 	if (Padding > 0)
 	{
-		// Put the string "00" into a Buffer
+		// Put the string  into a Buffer
 		TCHAR Buffer[2];
 		Buffer[0] = 0;
 		Buffer[1] = 0;
@@ -2732,4 +2732,4 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	return nBytes;
 }
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH

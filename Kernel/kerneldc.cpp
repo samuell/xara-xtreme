@@ -128,7 +128,7 @@ DECLARE_SOURCE("$Revision$");
 
 ********************************************************************************************/
 
-KernelDC::KernelDC(RenderType rType) : CCDC(rType)
+KernelDC::KernelDC(RenderType rType) : CCDummyDC(rType)
 {
 	// Initialise other fields.
 	LineWidth = 0;
@@ -160,7 +160,7 @@ KernelDC::KernelDC(RenderType rType) : CCDC(rType)
 
 ********************************************************************************************/
 
-KernelDC::KernelDC(CNativeDC *pDC, RenderType rType) : CCDC(pDC, rType)
+KernelDC::KernelDC(CNativeDC *pDC, RenderType rType) : CCDummyDC(pDC, rType)
 {
 	// Initialise other fields.
 	LineWidth = 0;

@@ -1515,8 +1515,8 @@ BOOL EPSStack::IsEmpty()
 
 void EPSStack::Dump(EPSFilter *pFilter)
 {
-#if defined(_DEBUG) && !defined(EXCLUDE_FROM_XARALX)
-	if (!IsUserName("Tim") && !IsUserName("Ben"))
+#if defined(_DEBUG)
+	if (!Error::IsUserName("Tim") && !Error::IsUserName("Ben"))
 		return;
 
 	TRACE( _T("EPS STACK DUMP START\n\n"));	
