@@ -146,6 +146,11 @@ bool operator<(const ENUMLOGFONT &e1, const ENUMLOGFONT &e2)
 	return e1.elfLogFont.FaceName.CompareTo(e2.elfLogFont.FaceName, FALSE) < 0;
 }
 
+bool operator==(const ENUMLOGFONT &e1, const ENUMLOGFONT &e2)
+{
+	return e1.elfLogFont.FaceName.CompareTo(e2.elfLogFont.FaceName, FALSE) == 0;
+}
+
 /********************************************************************************************
 
 >	FTFont::FTFont()
@@ -512,7 +517,17 @@ private:
 
 bool MyFontEnumerator::OnFacename(const wxString& font)
 {
-	// we need to pass a ENUMLOGFONT structure to the kernel
+	// we need to pass an ENUMLOGFONT structure to the kernel
+	// TRACEUSER("wuerthne", _T("OnFacename %s"), (const TCHAR*)font);
+
+	// We can only handle names that have less than 64 characters. Longer
+	// names are not sensible but there are silly fonts out there that have
+	// names exceeding our limit (even though the one font that highlighted
+	// this problem seemed to have its copyright message reported as the name
+	// which would look silly on the menu anyway). Truncating the name does
+	// not make any sense because we would not be able to handle it later on,
+	// so the best we can do is to silently ignore the font.
+	if (font.length() > 63) return TRUE;
 	String_64 OurFontName = font;
 	
 	ENUMLOGFONT OurEnumLogFont;
