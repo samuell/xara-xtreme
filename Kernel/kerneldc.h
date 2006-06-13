@@ -155,6 +155,7 @@ public:
 	virtual BOOL OutputNewLine();
 	virtual BOOL OutputToken(TCHAR*);
 	virtual BOOL OutputDirect(BYTE *, INT32);
+	virtual BOOL OutputTCHARAsChar(TCHAR *Buf, INT32 nBytes);
 
 	void SetOrigin(DocCoord&);
 	DocCoord GetOrigin() { return Origin; }

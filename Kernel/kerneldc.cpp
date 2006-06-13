@@ -1661,6 +1661,44 @@ BOOL KernelDC::OutputDirect(BYTE *, INT32)
 }
 
 
+
+/********************************************************************************************
+
+>	BOOL KernelDC::OutputTCHARAsChar(TCHAR *Buf, INT32 nBytes)
+
+	Author:		Alex Bligh
+	Created:	13/06/2006
+	Inputs:		Buf - the bytes to send to the stream.
+				nBytes - the number of bytes to send to the stream (i.e the number of
+				TCHARs to read)
+	Returns:	TRUE if all the bytes were sent ok;
+				FALSE if not.
+	Purpose:	Send bytes directly to the PostScript stream with no alteration or padding.
+				Used for sending binary/hex data to stream. We send the BYTE equal to
+				the TCHAR with no conversion
+	SeeAlso:	KernelDC::OutputNewLine; KernelDC::OutputToken
+
+********************************************************************************************/
+
+BOOL KernelDC::OutputTCHARAsChar(TCHAR *Buf, INT32 nBytes)
+{
+	if (sizeof(TCHAR) == sizeof(char))
+		return OutputDirect((BYTE *)Buf, nBytes);
+
+	BYTE * pByte=new BYTE[nBytes];
+	if (!pByte)
+		return FALSE;
+
+	INT32 i;
+	for (i=0; i<nBytes; i++)
+		pByte[i]=Buf[i]; // 1:1 copy
+
+	BOOL ok=OutputDirect(pByte, nBytes);
+
+	delete (pByte);
+	return ok;
+}
+
 //
 // ExportDC class
 //

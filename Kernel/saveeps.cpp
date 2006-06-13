@@ -260,7 +260,7 @@ BOOL EPSRenderRegion::InitDevice ()
 	ENSURE(RenderView->GetDoc() != NULL, "View's document is NULL!");
 	Document *TheDocument = RenderView->GetDoc();
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output the standard EPS header affair...
 	WriteEPSVersion ();
@@ -2656,7 +2656,7 @@ BOOL EPSExportDC::OutputNewLine()
 {
 	// Graeme (22-2-00) - Windows uses \r\n as the newline code in its files.
 	static TCHAR NewLine[] = _T("\r\n");
-	if (ExportFile->write(NewLine, 2).fail())
+	if (!OutputTCHARAsChar(NewLine, 2))
 		// Error occured
 		return FALSE;
 
@@ -2696,7 +2696,7 @@ BOOL EPSExportDC::OutputNewLine()
 BOOL EPSExportDC::OutputToken(TCHAR *Str)
 {
 	// Special tokens
-	static TCHAR Space = ' ';
+	static TCHAR Space = _T(' ');
 
 	if (LineWidth > 100)
 	{
@@ -2711,7 +2711,7 @@ BOOL EPSExportDC::OutputToken(TCHAR *Str)
 	// Pad with a space (unless at the beginning of the line)
 	if (LineWidth > 0)
 	{
-		if (ExportFile->write(&Space, 1).fail())
+		if (!OutputTCHARAsChar(&Space, 1))
 			// Error
 			return FALSE;
 		LineWidth++;
@@ -2719,7 +2719,7 @@ BOOL EPSExportDC::OutputToken(TCHAR *Str)
 
 	// Write the token out to the file
 	INT32 Len = camStrlen(Str);
-	if (ExportFile->write(Str, Len).fail())
+	if (!OutputTCHARAsChar(Str, Len))
 		// Error
 		return FALSE;
 
@@ -2757,6 +2757,7 @@ BOOL EPSExportDC::OutputDirect(BYTE *Buf, INT32 nBytes)
 	// All ok
 	return TRUE;
 }
+
 
 
 

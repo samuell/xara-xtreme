@@ -126,7 +126,7 @@ $svtime=(stat("$outputdir/svnversion.cache"))[9]; # this may fail, in which case
 $svtime+=0;
 
 opendir(DIR, "$topdir/wxOil/xrc") || die "Can't open $topdir/wxOil/xrc: $!";
-my @resfiles=sort grep { /^[^\.].*\.(png|ico|cur|bmp|res|xar)$/ } readdir(DIR);
+my @resfiles=sort grep { /^[^\.].*\.(png|ico|cur|bmp|res|xar|ps)$/ } readdir(DIR);
 closedir(DIR);
 
 opendir(DIR, "$topdir/wxOil/xrc/$xaralanguage") || die "Can't open $topdir/wxOil/xrc/$xaralanguage: $!";

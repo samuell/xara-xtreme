@@ -706,7 +706,7 @@ BOOL PrintPSRenderRegion::WriteSepFunctions(KernelDC *pDC)
 	{
 		// Copy this line to output.
 		ScreenFile.read(&LineBuf);
-		pDC->OutputDirect((BYTE *) pBuf, LineBuf.Length());
+		pDC->OutputTCHARAsChar(pBuf, LineBuf.Length());
 		pDC->OutputNewLine();
 	}
 	
@@ -1170,7 +1170,7 @@ BOOL PrintPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 		String_32 LineBuf("0 g");
 		LineBuf += '\n';
 		TCHAR *pBuf = (TCHAR *) LineBuf;
-		pPSDC->OutputDirect((BYTE *)pBuf, LineBuf.Length());
+		pPSDC->OutputTCHARAsChar(pBuf, LineBuf.Length());
 		*/
 	}
 

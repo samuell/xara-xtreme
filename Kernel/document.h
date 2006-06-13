@@ -613,19 +613,19 @@ protected:
 	BOOL AIExportTrailer(EPSExportDC *pDC);
 
 	// Functions to Import stuff again
-	ProcessEPSResult ImportPageInfo(char* Comment);
-	ProcessEPSResult ImportDocumentComment(char* Comment);
-	ProcessEPSResult ImportViewInfo(char* Comment);
-	ProcessEPSResult ImportRulerState(char* Comment);
-	ProcessEPSResult ImportStateInfo(char* Comment);
-	ProcessEPSResult ImportQualityInfo(char* Comment);
-	ProcessEPSResult ImportGridInfo(char* Comment);
-	ProcessEPSResult ImportFlagInfo(char* Comment);
-	ProcessEPSResult ImportUnitInfo(char* Comment);
-	ProcessEPSResult ImportDateInfo(char* Comment);
-	ProcessEPSResult ImportUndoInfo(char* Comment);
-	ProcessEPSResult ImportDefaultUnitsInfo(char* Comment);
-	ProcessEPSResult ImportOriginInfo(char* Comment);
+	ProcessEPSResult ImportPageInfo(TCHAR* Comment);
+	ProcessEPSResult ImportDocumentComment(TCHAR* Comment);
+	ProcessEPSResult ImportViewInfo(TCHAR* Comment);
+	ProcessEPSResult ImportRulerState(TCHAR* Comment);
+	ProcessEPSResult ImportStateInfo(TCHAR* Comment);
+	ProcessEPSResult ImportQualityInfo(TCHAR* Comment);
+	ProcessEPSResult ImportGridInfo(TCHAR* Comment);
+	ProcessEPSResult ImportFlagInfo(TCHAR* Comment);
+	ProcessEPSResult ImportUnitInfo(TCHAR* Comment);
+	ProcessEPSResult ImportDateInfo(TCHAR* Comment);
+	ProcessEPSResult ImportUndoInfo(TCHAR* Comment);
+	ProcessEPSResult ImportDefaultUnitsInfo(TCHAR* Comment);
+	ProcessEPSResult ImportOriginInfo(TCHAR* Comment);
 
 	// Data members.
 	BOOL DocIsImporting;

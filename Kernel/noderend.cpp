@@ -4737,11 +4737,11 @@ BOOL NodeRenderableBounded::ContainsNonMixTransparency(RenderRegion* pRegion)
 
 BOOL NodeRenderableInk::ExportRender ( RenderRegion *pRender )
 {
-	PORTNOTETRACE("other","NodeRenderableBounded::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// The return value.
 	BOOL Result = FALSE;
 
+	PORTNOTETRACE("other","NodeRenderableInk::ExportRender - ignore FlashRenderRegion");
+#ifndef EXCLUDE_FROM_XARALX
 	// Is this a FlashRenderRegion?
 	if ( pRender->IsKindOf ( CC_RUNTIME_CLASS ( FlashRenderRegion ) ) )
 	{
@@ -4751,11 +4751,9 @@ BOOL NodeRenderableInk::ExportRender ( RenderRegion *pRender )
 		// Call the appropriate method in the vector file render region class.
 		Result = pFlash->ExportRenderableNode ( this );
 	}
+#endif
 
 	return Result;
-#else
-	return FALSE;
-#endif
 }
 
 //------------------------------------------------------------------------------------------

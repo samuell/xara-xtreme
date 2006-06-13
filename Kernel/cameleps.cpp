@@ -3950,7 +3950,7 @@ BOOL CamelotEPSRenderRegion::WriteProlog(KernelDC *pDC)
 	while (!PrologFile.read(&LineBuf).eof())
 	{
 		// Copy this line to output.
-		pDC->OutputDirect((BYTE *) pBuf, LineBuf.Length());
+		pDC->OutputTCHARAsChar(pBuf, LineBuf.Length());
 		pDC->OutputNewLine();
 	}
 
@@ -4010,7 +4010,7 @@ BOOL CamelotEPSRenderRegion::WriteSetup(KernelDC *pDC)
 	while (!SetupFile.read(&LineBuf).eof())
 	{
 		// Copy this line to output.
-		pDC->OutputDirect((BYTE *) pBuf, LineBuf.Length());
+		pDC->OutputTCHARAsChar(pBuf, LineBuf.Length());
 		pDC->OutputNewLine();
 	}
 

@@ -109,19 +109,19 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDM_PS_PROLOG">
-					<label>PROLOG_PS</label>
+					<label>prolog.ps</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDM_PS_SETUP">
-					<label>SETUP_PS</label>
+					<label>setup.ps</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDM_PS_SPOTFUNCS">
-					<label>SPOTFUNCS_PS</label>
+					<label>spotfunc.ps</label>
 				</object>
 			</object>
 			<object class="sizeritem">

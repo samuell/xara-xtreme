@@ -135,10 +135,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 //#include "native.h"			// The new designed native filter, used for v2
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "saveeps.h"
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "saveeps.h"
 #include "zoomops.h"
-//#include "qualops.h"
+#include "qualops.h"
 //#include "ai_eps.h"
 //#include "ai_epsrr.h"
 #include "fontlist.h"
@@ -2900,10 +2900,13 @@ BOOL Document::WriteEPSProlog ( EPSFilter *pFilter )
 
 BOOL Document::WriteEPSFonts(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSFonts - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if ( (pFilter->IS_KIND_OF(CamelotNativeEPSFilter)) ||
+PORTNOTE("filters", "Disabled AIPESFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	     (pFilter->IS_KIND_OF(AIEPSFilter))
+#else
+		FALSE
+#endif
 	   )
 	{
 		EPSExportDC *pDC = pFilter->GetExportDC();
@@ -2926,9 +2929,9 @@ BOOL Document::WriteEPSFonts(EPSFilter *pFilter)
 			FONTMANAGER->EncodeAndMapFontName(FontName, EFont, Style);
 
 			if (first)
-				pDC->OutputToken("%%DocumentFonts:");
+				pDC->OutputToken(_T("%%DocumentFonts:"));
 			else
-				pDC->OutputToken("%%+");	
+				pDC->OutputToken(_T("%%+"));	
 
 			pDC->OutputToken((TCHAR*)EFont);
 			pDC->OutputNewLine();
@@ -2937,7 +2940,6 @@ BOOL Document::WriteEPSFonts(EPSFilter *pFilter)
 			pItem = CurFontList.GetNextItem(pItem);	
 		}
 	}
-#endif
 	return TRUE;
 }
 
@@ -2964,16 +2966,14 @@ BOOL Document::WriteEPSFonts(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSResources(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSResources - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Graeme (24/3/00) - Removed the IsKindOf ( AIEPSFilter ) calls because this is now
 	// only called from the AI render region.
 	EPSExportDC *pDC = pFilter->GetExportDC();
 
-	pDC->OutputToken("%%DocumentNeededResources:");
+	pDC->OutputToken(_T("%%DocumentNeededResources:"));
 
 	AIExportResources(pDC,TRUE);
-#endif
+
 	return TRUE;
 }
 
@@ -3001,7 +3001,7 @@ BOOL Document::WriteEPSResources(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSSetup(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSFonts - do nothing");
+	PORTNOTETRACE("filters","Document::WriteEPSFonts ignore AIEPS");
 #ifndef EXCLUDE_FROM_XARALX
 	// only do something if the filter is an Illustrator one
 	if (pFilter->IS_KIND_OF(AIEPSFilter))
@@ -3044,8 +3044,6 @@ BOOL Document::WriteEPSSetup(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSComments(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSComments - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// only do something if the filter is a Native one
 	if (pFilter->IS_KIND_OF(CamelotNativeEPSFilter))
 	{
@@ -3057,7 +3055,7 @@ BOOL Document::WriteEPSComments(EPSFilter *pFilter)
 		EPSExportDC *pDC = pFilter->GetExportDC();
 
 		// The Page List comment:
-		pDC->OutputToken("%%DocumentInfo");
+		pDC->OutputToken(_T("%%DocumentInfo"));
 		pDC->OutputNewLine();
 
 		// Export the Units. These should really be saved out as early as possible
@@ -3108,7 +3106,7 @@ BOOL Document::WriteEPSComments(EPSFilter *pFilter)
 		// reset the origin so must both be imported before the origin is finally set
 		ExportOriginInfo(pDC);
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -3135,7 +3133,7 @@ BOOL Document::WriteEPSComments(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSTrailer(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSTrailer - do nothing");
+	PORTNOTETRACE("filters","Document::WriteEPSTrailer - ignore AIEPS");
 #ifndef EXCLUDE_FROM_XARALX
 	// only do something if the filter is an Illustrator one
 	if (pFilter->IS_KIND_OF(AIEPSFilter))
@@ -3143,9 +3141,9 @@ BOOL Document::WriteEPSTrailer(EPSFilter *pFilter)
 		EPSExportDC *pDC = pFilter->GetExportDC();
 		AIExportTrailer(pDC);
 	}	
-
-	ExportTextTrailer(pFilter);
 #endif
+	ExportTextTrailer(pFilter);
+
 	return TRUE;
 }
 
@@ -3153,7 +3151,7 @@ BOOL Document::WriteEPSTrailer(EPSFilter *pFilter)
 
 /********************************************************************************************
 
->	BOOL ReadNextNumber(INT32* Number, char* Comment, INT32* Offset)
+>	BOOL ReadNextNumber(INT32* Number, TCHAR* Comment, INT32* Offset)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/2/95
@@ -3168,7 +3166,7 @@ BOOL Document::WriteEPSTrailer(EPSFilter *pFilter)
 
 ********************************************************************************************/
 
-BOOL ReadNextNumber(INT32* Number, char* Comment, INT32* Offset)
+BOOL ReadNextNumber(INT32* Number, TCHAR* Comment, INT32* Offset)
 {
 	INT32& i = *Offset;
 	BOOL IsNegative = FALSE;
@@ -3188,7 +3186,8 @@ BOOL ReadNextNumber(INT32* Number, char* Comment, INT32* Offset)
 	if (isdigit(Comment[i]))
 	{
 		// get the Number
-		*Number = atol( Comment + i );
+		*Number=0;
+		camScanf(&(Comment[i]),"%d",Number);
 
 		// Set the sign
 		if (IsNegative)
@@ -3208,7 +3207,7 @@ BOOL ReadNextNumber(INT32* Number, char* Comment, INT32* Offset)
 
 /********************************************************************************************
 
->	BOOL ReadNextNumber(UINT32* Number, char* Comment, INT32* Offset)
+>	BOOL ReadNextNumber(UINT32* Number, TCHAR* Comment, INT32* Offset)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	07/07/95
@@ -3223,7 +3222,7 @@ BOOL ReadNextNumber(INT32* Number, char* Comment, INT32* Offset)
 
 ********************************************************************************************/
 
-BOOL ReadNextNumber(UINT32* Number, char* Comment, INT32* Offset)
+BOOL ReadNextNumber(UINT32* Number, TCHAR* Comment, INT32* Offset)
 {
 	INT32& i = *Offset;
 
@@ -3235,7 +3234,8 @@ BOOL ReadNextNumber(UINT32* Number, char* Comment, INT32* Offset)
 	if (isdigit(Comment[i]))
 	{
 		// get the Number
-		*Number = strtoul( Comment + i, NULL, 0 );
+		*Number=0;
+		camScanf(&(Comment[i]),"%ud",Number);
 
 		// Skip to the next number
 		while (isdigit(Comment[i]))
@@ -3253,7 +3253,7 @@ BOOL ReadNextNumber(UINT32* Number, char* Comment, INT32* Offset)
 
 /********************************************************************************************
 
->	BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
+>	BOOL ReadNextNumber(double* Number, TCHAR* Comment, INT32* Offset)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/2/95
@@ -3268,7 +3268,7 @@ BOOL ReadNextNumber(UINT32* Number, char* Comment, INT32* Offset)
 
 ********************************************************************************************/
 
-BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
+BOOL ReadNextNumber(double* Number, TCHAR* Comment, INT32* Offset)
 {
 	INT32& i = *Offset;
 
@@ -3280,7 +3280,8 @@ BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
 	if (!camIsspace(Comment[i]))
 	{
 		// get the Number
-		*Number = atof(Comment+i);
+		*Number=0.0;
+		camScanf(&(Comment[i]),"%f",Number);
 
 		// Skip to the next number
 		while (!camIsspace(Comment[i]))
@@ -3297,7 +3298,7 @@ BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
 
 /********************************************************************************************
 
->	BOOL GetNextString(StringBase* pString, INT32 MaxLen, char* Comment, INT32* Offset))
+>	BOOL GetNextString(StringBase* pString, INT32 MaxLen, TCHAR* Comment, INT32* Offset))
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/3/95
@@ -3313,7 +3314,7 @@ BOOL ReadNextNumber(double* Number, char* Comment, INT32* Offset)
 
 ********************************************************************************************/
 
-BOOL ReadNextString(StringBase* pString, INT32 MaxLen, char* Comment, INT32* Offset)
+BOOL ReadNextString(StringBase* pString, INT32 MaxLen, TCHAR* Comment, INT32* Offset)
 {
 	INT32& i = *Offset;
 	TCHAR TempStr[256];
@@ -3404,8 +3405,6 @@ BOOL ReadNextString(StringBase* pString, INT32 MaxLen, char* Comment, INT32* Off
 ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter, 
 										     const TCHAR *pComment)
 {
-	PORTNOTETRACE("filters","Document::ProcessEPSComment - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// OK, to begin with, set the current doc and view to this doc and it's first view.
 	SetCurrent();
 	if (GetFirstDocView() != NULL){
@@ -3414,16 +3413,16 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 	if ((pFilter->IS_KIND_OF(CamelotNativeEPSFilter)) && !IsImporting())
 	{
 		// Take a copy of the comment
-		char Comment[256];
+		TCHAR Comment[256];
 		camStrcpy(Comment, pComment);
 
 		// Look for Document info
-		if (camStrncmp(pComment, "%%NativePageList", 16) == 0)
+		if (camStrncmp(pComment, _T("%%NativePageList"), 16) == 0)
 		{
 			// Found the page description table
 			return EPSCommentOK;
 		}
-		else if (camStrncmp(pComment, "%%DocumentInfo", 14) == 0)
+		else if (camStrncmp(pComment, _T("%%DocumentInfo"), 14) == 0)
 		{
 			// Found the page description table
 			// Set the Documents Comment to nothing
@@ -3432,7 +3431,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 
 			return EPSCommentOK;
 		}
-		else if (camStrncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, _T("%%+"), 3) == 0)
 		{
 			// Assume we do not know about this comment until we can prove that we do.
 			//
@@ -3441,7 +3440,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 			// processing at unknown comments and can cause immense problems.			
 
 			ProcessEPSResult Result = EPSCommentUnknown;
-			char InfoType = pComment[3];
+			TCHAR InfoType = pComment[3];
 			switch (InfoType)
 			{
 				// The Document Info Comment (as seen in the Document Info dialog in the File menu)
@@ -3502,7 +3501,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 					// Load in the new view quality
 					Result = ImportQualityInfo(Comment);
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 					// update all the view quality sliders
 					QualitySliderDescriptor::Update();
 #endif
@@ -3565,16 +3564,16 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 		// can position the objects correctly.
 
 		// Take a copy of the comment
-		char Comment[256];
+		TCHAR Comment[256];
 		camStrcpy(Comment, pComment);
 
 		// Look for Document info
-		if (camStrncmp(pComment, "%%NativePageList", 16) == 0)
+		if (camStrncmp(pComment, _T("%%NativePageList"), 16) == 0)
 		{
 			// Found the page description table
 			return EPSCommentOK;
 		}
-		else if (camStrncmp(pComment, "%%DocumentInfo", 14) == 0)
+		else if (camStrncmp(pComment, _T("%%DocumentInfo"), 14) == 0)
 		{
 			// Found the page description table
 			// Set the Documents Comment to nothing
@@ -3583,11 +3582,11 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 
 			return EPSCommentOK;
 		}
-		else if (camStrncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, _T("%%+"), 3) == 0)
 		{
 			// Default to recognising this comment - all we care about is extracting the page origin.
 			ProcessEPSResult Result = EPSCommentOK;
-			char InfoType = pComment[3];
+			TCHAR InfoType = pComment[3];
 			if (InfoType == 'p')
 			{
 				// Set the default version
@@ -3641,7 +3640,7 @@ ProcessEPSResult Document::ProcessEPSComment(EPSFilter *pFilter,
 			return Result;
 		}
 	}
-#endif
+
 	return EPSCommentUnknown;
 }
 
@@ -3810,7 +3809,7 @@ BOOL Document::ExportPageInfo(EPSExportDC *pDC)
 		FALSE, "Document::Export(something)(): Could not find Spread");
 
 	// get something to put all the page info into
-	char Buffer[256];
+	TCHAR Buffer[256];
 	MILLIPOINT Width, Height;
 	MILLIPOINT Margin, Bleed;
 	BOOL Dps, ShowDropShadow;
@@ -3823,15 +3822,12 @@ BOOL Document::ExportPageInfo(EPSExportDC *pDC)
 	if (Worked)
 	{
 		// Build a string with all the data in it
-		sprintf(Buffer, "%d %d %d %d %d %d %d", Version, (INT32)Width, (INT32)Height, (INT32)Margin, (INT32)Bleed, Dps, ShowDropShadow);
+		camSprintf(Buffer, _T("%d %d %d %d %d %d %d"), Version, (INT32)Width, (INT32)Height, (INT32)Margin, (INT32)Bleed, Dps, ShowDropShadow);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 		// Output the line to the file
-		pDC->OutputToken("%%+p");
+		pDC->OutputToken(_T("%%+p"));
 		pDC->OutputToken(Buffer);
 		pDC->OutputNewLine();
-#endif
 	}
 
 	return TRUE;
@@ -3893,12 +3889,9 @@ BOOL Document::ExportDocumentComment(EPSExportDC *pDC)
 			if (Dest>0)
 			{
 				OneLine[Dest] = 0;
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
-				pDC->OutputToken("%%+c");
+				pDC->OutputToken(_T("%%+c"));
 				pDC->OutputToken(OneLine);
 				pDC->OutputNewLine();
-#endif
 				Dest = 0;
 			}
 		}
@@ -3913,12 +3906,9 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 	if (Dest>0)
 	{
 		OneLine[Dest] = 0;
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
-		pDC->OutputToken("%%+c");
+		pDC->OutputToken(_T("%%+c"));
 		pDC->OutputToken(OneLine);
 		pDC->OutputNewLine();
-#endif
 		Dest = 0;
 	}
 #endif
@@ -3951,17 +3941,14 @@ BOOL Document::ExportRulerState(EPSExportDC *pDC)
 
 	if (pView!=NULL)
 	{
-//		INT32 Version =0;
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
+		INT32 Version =0;
 		// Export it
-		pDC->OutputToken("%%+r");
+		pDC->OutputToken(_T("%%+r"));
 		// buffer the version number,ruler and scroller state
-		char Buffer[256];
-		_stprintf(Buffer, "%d %ld %ld", Version, pView->AreScrollersVisible(),pView->AreRulersVisible());
+		TCHAR Buffer[256];
+		camSprintf(Buffer, _T("%d %ld %ld"), Version, pView->AreScrollersVisible(),pView->AreRulersVisible());
 		pDC->OutputToken(Buffer);
 		pDC->OutputNewLine();
-#endif
 	}
 
 	return TRUE;
@@ -3991,7 +3978,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportViewInfo(EPSExportDC *pDC)
 {
 	// A buffer
-	char Buffer[256];
+	TCHAR Buffer[256];
 
 	// Find the view to get the info from
 	// don't do DocView* pView = DocView::GetSelected(); as it breaks save all
@@ -4038,17 +4025,14 @@ BOOL Document::ExportViewInfo(EPSExportDC *pDC)
 				String_32 RealScale = pDimScale->GetRealScaleStr();
 
 				// Build the comment for the scroll offsets etc
-				sprintf(Buffer, "%d %d %d %d %d", Version, XOffset, YOffset, (INT32)(ScaleFactor*1000), Active);
+				camSprintf(Buffer, _T("%d %d %d %d %d"), Version, XOffset, YOffset, (INT32)(ScaleFactor*1000), Active);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 				// Export it
-				pDC->OutputToken("%%+v");
+				pDC->OutputToken(_T("%%+v"));
 				pDC->OutputToken(Buffer);
 				pDC->OutputString(DrawingScale);
 				pDC->OutputString(RealScale);
 				pDC->OutputNewLine();
-#endif
 			}
 		}
 	}
@@ -4078,7 +4062,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportStateInfo(EPSExportDC *pDC)
 {
 	// A buffer
-	char Buffer[512];
+	TCHAR Buffer[512];
 
 	// Find the view to get the info from
 	// don't do DocView* pView = DocView::GetSelected(); as it breaks save all
@@ -4103,14 +4087,14 @@ BOOL Document::ExportStateInfo(EPSExportDC *pDC)
 		BOOL AllLayersVisible	= IsAllVisible();
 
 		// Init the buffer with the version numbet
-		sprintf(Buffer,"%d ",Version);
+		camSprintf(Buffer,_T("%d "),Version);
 
 		// Build the comment string
 		switch (Version)
 		{
 			case 1:
 				// Write verison 1 flags (*Note* the space after the last '%d' - this is important)
-				sprintf( Buffer + strlen( Buffer ), "%d %d %d %d ", ShowGuides, SnapToGuides, 
+				camSprintf( Buffer + camStrlen( Buffer ), _T("%d %d %d %d "), ShowGuides, SnapToGuides, 
 					Multilayer, AllLayersVisible);
 				// Fall through for version 0 flags
 
@@ -4124,7 +4108,7 @@ BOOL Document::ExportStateInfo(EPSExportDC *pDC)
 				// In order to reduce the possibility of bugs, I'm instituting a dummy
 				// sixth parameter, and altering the code that reads it in.
 
-				sprintf( Buffer + strlen( Buffer ), "%d %d %d %d %d %d", ShowGrid, SnapToGrid, 
+				camSprintf( Buffer + camStrlen( Buffer ), _T("%d %d %d %d %d %d"), ShowGrid, SnapToGrid, 
 					SnapToMagObjects, SnapToObjects, ForeBackMode, 0);
 				break;	// Stop here. Version 0 was the first
 		
@@ -4133,13 +4117,10 @@ BOOL Document::ExportStateInfo(EPSExportDC *pDC)
 				break;
 		}
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 		// Export it
-		pDC->OutputToken("%%+s");
+		pDC->OutputToken(_T("%%+s"));
 		pDC->OutputToken(Buffer);
 		pDC->OutputNewLine();
-#endif
 	}
 
 	return TRUE;
@@ -4164,7 +4145,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportQualityInfo(EPSExportDC *pDC)
 {
 	// A buffer
-	char Buffer[256];
+	TCHAR Buffer[256];
 
 	// Find the view to get the info from
 	// don't do DocView* pView = DocView::GetSelected(); as it breaks save all
@@ -4178,15 +4159,12 @@ BOOL Document::ExportQualityInfo(EPSExportDC *pDC)
 		INT32 Version = 0;
 
 		// Build the Comment
-		sprintf(Buffer, "%d %d", Version, ViewQuality);
+		camSprintf(Buffer, _T("%d %d"), Version, ViewQuality);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 		// Export it
-		pDC->OutputToken("%%+q");
+		pDC->OutputToken(_T("%%+q"));
 		pDC->OutputToken(Buffer);
 		pDC->OutputNewLine();
-#endif
 	}
 
 	return TRUE;
@@ -4208,7 +4186,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportGridInfo(EPSExportDC *pDC)
 {
 	// A buffer
-	char Buffer[256];
+	TCHAR Buffer[256];
 
 	// Start off from the default spread
 	// Find the first spread to get the page info from
@@ -4259,15 +4237,12 @@ BOOL Document::ExportGridInfo(EPSExportDC *pDC)
 					GridType TypeOfGrid   = pGrid->GetGridType();
 
 					// Build the Comment
-					sprintf(Buffer, "%d %f %d %d %d", Version, Divisions, SubDivisions, (INT32)Unit, (INT32)TypeOfGrid);
+					camSprintf(Buffer, _T("%d %f %d %d %d"), Version, Divisions, SubDivisions, (INT32)Unit, (INT32)TypeOfGrid);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 					// Export it
-					pDC->OutputToken("%%+g");
+					pDC->OutputToken(_T("%%+g"));
 					pDC->OutputToken(Buffer);
 					pDC->OutputNewLine();
-#endif
 
 					// once we have found a grid and saved it, then we want to stop.
 					// This version only saves the default grid.
@@ -4311,17 +4286,14 @@ PORTNOTE("spread", "Multi-spread warning!")
 	pDefaultGrid->GetOrigin(&Origin.x, &Origin.y);
 
 	// Build the Comment
-	char Buffer[256];	// a buffer
+	TCHAR Buffer[256];	// a buffer
 	INT32 Version = 0;
-	sprintf(Buffer, "%d %d %d", Version, Origin.x, Origin.y);
+	camSprintf(Buffer, _T("%d %d %d"), Version, Origin.x, Origin.y);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Export it
-	pDC->OutputToken("%%+o");
+	pDC->OutputToken(_T("%%+o"));
 	pDC->OutputToken(Buffer);
 	pDC->OutputNewLine();
-#endif
 
 	return TRUE;
 }
@@ -4419,15 +4391,12 @@ BOOL Document::ExportUnitInfo(EPSExportDC *pDC)
 			ERROR3("Document::ExportUnitInfo - nBytes > EUI_BUFFER_SIZE - 1");
 			return FALSE;
 		}
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 		// Export it
-		pDC->OutputToken("%%+u");
+		pDC->OutputToken(_T("%%+u"));
 		pDC->OutputToken(Buffer);
 		pDC->OutputString(UnitToken);
 		pDC->OutputString(UnitName);
 		pDC->OutputNewLine();
-#endif
 		// Find the next unit in the list
 		pUnit = (Unit*)pDocUnitList->GetNext(pUnit);
 	}
@@ -4481,15 +4450,12 @@ BOOL Document::ExportDefaultUnitsInfo(EPSExportDC *pDC)
 		// Build the Comment
 		camSnprintf(Buffer, 256, _T("%d"), Version);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 		// Export the font and pages units as a line of info
-		pDC->OutputToken("%%+U");
+		pDC->OutputToken(_T("%%+U"));
 		pDC->OutputToken(Buffer);
 		pDC->OutputString(PageUnitToken);
 		pDC->OutputString(FontUnitToken);
 		pDC->OutputNewLine();
-#endif
 	}
 #endif
 	return TRUE;
@@ -4513,7 +4479,7 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 BOOL Document::ExportDateInfo(EPSExportDC *pDC)
 {
 	// A buffer
-	char Buffer[256];
+	TCHAR Buffer[256];
 
 	// Set the last saved date to now
 	SetLastSaveTime();
@@ -4523,15 +4489,12 @@ BOOL Document::ExportDateInfo(EPSExportDC *pDC)
 	time_t LastSaved = GetLastSaveTime();
 
 	// Make a string out of them
-	sprintf(Buffer, "%d %ld %ld", 0, Creation, LastSaved);
+	camSprintf(Buffer, _T("%d %ld %ld"), 0, Creation, LastSaved);
 
-PORTNOTE("filters","Removed EPSExportDC usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Export them
-	pDC->OutputToken("%%+d");
+	pDC->OutputToken(_T("%%+d"));
 	pDC->OutputToken(Buffer);
 	pDC->OutputNewLine();
-#endif
 	return TRUE;
 }
 
@@ -4550,10 +4513,13 @@ PORTNOTE("filters","Removed EPSExportDC usage")
 
 BOOL Document::ExportTextSetup(EPSFilter* pFilter)
 {
-	PORTNOTETRACE("filters","Document::ExportTextSetup - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if ( (pFilter->IS_KIND_OF(CamelotNativeEPSFilter)) ||
+PORTNOTE("filters", "Disabled AIPESFilter")
+#ifndef EXCLUDE_FROM_XARALX
 	     (pFilter->IS_KIND_OF(AIEPSFilter))
+#else
+		FALSE
+#endif
 	   )
 	{
 		// Output the colour table in ArtWorks format.
@@ -4576,14 +4542,14 @@ BOOL Document::ExportTextSetup(EPSFilter* pFilter)
 			FONTMANAGER->EncodeAndMapFontName(FontName, EFont, Style);
 
 			// The Page List comment:
-			pDC->OutputToken("%%IncludeFont:");
+			pDC->OutputToken(_T("%%IncludeFont:"));
 			pDC->OutputToken((TCHAR*)EFont);
 			pDC->OutputNewLine();
 		
 			pItem = CurFontList.GetNextItem(pItem);	
 		}
 	}
-#endif
+
 	return TRUE;
 }
 
@@ -4626,23 +4592,20 @@ BOOL Document::ExportTextTrailer(EPSFilter* pFilter)
 
 BOOL Document::ExportUndoInfo(EPSExportDC *pDC)
 {
-	PORTNOTETRACE("filters","Document::ExportUndoInfo - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Find the size of the operation history
 	UINT32 Size = GetOpHistory().GetMaxSize();
 
 	// get something to put the operation history size info into
-	char Buffer[256];
+	TCHAR Buffer[256];
 	INT32 Version = 0;
 
 	// Build a string with all the data in it
-	_stprintf(Buffer, "%d %lu", Version, Size);
+	camSprintf(Buffer, _T("%d %lu"), Version, Size);
 
 	// Output the line to the file
-	pDC->OutputToken("%%+h");
+	pDC->OutputToken(_T("%%+h"));
 	pDC->OutputToken(Buffer);
 	pDC->OutputNewLine();
-#endif
 	return TRUE;
 }
 
@@ -4661,24 +4624,21 @@ BOOL Document::ExportUndoInfo(EPSExportDC *pDC)
 
 BOOL Document::AIExportResources(EPSExportDC *pDC, BOOL first)
 {
-	PORTNOTETRACE("filters","Document::AIExportResources - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (!first)
-		pDC->OutputToken("%%+");
+		pDC->OutputToken(_T("%%+"));
 
 	// Graeme (28-3-00) - I've updated these to bring them in line with the procset
 	// definitions from Fireworks 3 and CorelDraw 9. These have upgraded the file
 	// to AI version 7.0, and should hopefully offer gradient fill support.
-	pDC->OutputToken ( "procset Adobe_level2_AI5 1.2 0 " );			pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_packedarray 2.0 0" );		pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_ColorImage_AI6 1.1 0" );	pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_cshow 2.0 8" );			pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_cmykcolor 1.1 0" );		pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_customcolor 1.0 0" );		pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_typography_AI5 1.0 1" );	pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_pattern_AI3 1.0 1" );		pDC->OutputNewLine ();
-	pDC->OutputToken ( "%%+ procset Adobe_Illustrator_AI5 1.2 0" );	pDC->OutputNewLine (); 
-#endif
+	pDC->OutputToken ( _T("procset Adobe_level2_AI5 1.2 0 ") );			pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_packedarray 2.0 0") );		pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_ColorImage_AI6 1.1 0") );	pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_cshow 2.0 8") );			pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_cmykcolor 1.1 0") );		pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_customcolor 1.0 0") );		pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_typography_AI5 1.0 1") );	pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_pattern_AI3 1.0 1") );		pDC->OutputNewLine ();
+	pDC->OutputToken ( _T("%%+ procset Adobe_Illustrator_AI5 1.2 0") );	pDC->OutputNewLine (); 
 	return TRUE;
 }
 
@@ -4697,18 +4657,15 @@ BOOL Document::AIExportResources(EPSExportDC *pDC, BOOL first)
 
 BOOL Document::AIExportProlog(EPSExportDC *pDC)
 {
-	PORTNOTETRACE("filters","Document::AIExportProlog - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	pDC->OutputToken("%%IncludeResource: procset Adobe_level2_AI5 1.2 0");			pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_packedarray 2.0 0");			pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_ColorImage_AI6 1.1 0");		pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_cshow 2.0 8");				pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_cmykcolor 1.1 0");			pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_customcolor 1.0 0");			pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_typography_AI5 1.1 0");		pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_pattern_AI3 1.0 1");			pDC->OutputNewLine();
-	pDC->OutputToken("%%IncludeResource: procset Adobe_Illustrator_AI5 1.2 0");		pDC->OutputNewLine();
-#endif
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_level2_AI5 1.2 0"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_packedarray 2.0 0"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_ColorImage_AI6 1.1 0"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_cshow 2.0 8"));				pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_cmykcolor 1.1 0"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_customcolor 1.0 0"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_typography_AI5 1.1 0"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_pattern_AI3 1.0 1"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("%%IncludeResource: procset Adobe_Illustrator_AI5 1.2 0"));		pDC->OutputNewLine();
 	return TRUE;
 }
 
@@ -4728,30 +4685,27 @@ BOOL Document::AIExportProlog(EPSExportDC *pDC)
 
 BOOL Document::AIExportCharEncoding(EPSExportDC *pDC)
 {
-	PORTNOTETRACE("filters","Document::AIExportCharEncoding - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Temporarily output an inline encoding. This should really be read from a file.
-	pDC->OutputToken("["); pDC->OutputNewLine();
-	pDC->OutputToken("39/quotesingle 96/grave 128/Adieresis/Aring/Ccedilla/Eacute/Ntilde/Odieresis"); pDC->OutputNewLine();
-	pDC->OutputToken("/Udieresis/aacute/agrave/acircumflex/adieresis/atilde/aring/ccedilla/eacute"); pDC->OutputNewLine();
-	pDC->OutputToken("/egrave/ecircumflex/edieresis/iacute/igrave/icircumflex/idieresis/ntilde"); pDC->OutputNewLine();
-	pDC->OutputToken("/oacute/ograve/ocircumflex/odieresis/otilde/uacute/ugrave/ucircumflex"); pDC->OutputNewLine();
-	pDC->OutputToken("/udieresis/dagger/degree/cent/sterling/section/bullet/paragraph/germandbls"); pDC->OutputNewLine();
-	pDC->OutputToken("/registered/copyright/trademark/acute/dieresis/.notdef/AE/Oslash"); pDC->OutputNewLine();
-	pDC->OutputToken("/.notdef/plusminus/.notdef/.notdef/yen/mu/.notdef/.notdef"); pDC->OutputNewLine();
-	pDC->OutputToken("/.notdef/.notdef/.notdef/ordfeminine/ordmasculine/.notdef/ae/oslash"); pDC->OutputNewLine();
-	pDC->OutputToken("/questiondown/exclamdown/logicalnot/.notdef/florin/.notdef/.notdef"); pDC->OutputNewLine();
-	pDC->OutputToken("/guillemotleft/guillemotright/ellipsis/.notdef/Agrave/Atilde/Otilde/OE/oe"); pDC->OutputNewLine();
-	pDC->OutputToken("/endash/emdash/quotedblleft/quotedblright/quoteleft/quoteright/divide"); pDC->OutputNewLine();
-	pDC->OutputToken("/.notdef/ydieresis/Ydieresis/fraction/currency/guilsinglleft/guilsinglright"); pDC->OutputNewLine();
-	pDC->OutputToken("/fi/fl/daggerdbl/periodcentered/quotesinglbase/quotedblbase/perthousand"); pDC->OutputNewLine();
-	pDC->OutputToken("/Acircumflex/Ecircumflex/Aacute/Edieresis/Egrave/Iacute/Icircumflex"); pDC->OutputNewLine();
-	pDC->OutputToken("/Idieresis/Igrave/Oacute/Ocircumflex/.notdef/Ograve/Uacute/Ucircumflex"); pDC->OutputNewLine();
-	pDC->OutputToken("/Ugrave/dotlessi/circumflex/tilde/macron/breve/dotaccent/ring/cedilla"); pDC->OutputNewLine();
-	pDC->OutputToken("/hungarumlaut/ogonek/caron"); pDC->OutputNewLine();
-	pDC->OutputToken("TE");
+	pDC->OutputToken(_T("[")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("39/quotesingle 96/grave 128/Adieresis/Aring/Ccedilla/Eacute/Ntilde/Odieresis")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/Udieresis/aacute/agrave/acircumflex/adieresis/atilde/aring/ccedilla/eacute")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/egrave/ecircumflex/edieresis/iacute/igrave/icircumflex/idieresis/ntilde")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/oacute/ograve/ocircumflex/odieresis/otilde/uacute/ugrave/ucircumflex")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/udieresis/dagger/degree/cent/sterling/section/bullet/paragraph/germandbls")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/registered/copyright/trademark/acute/dieresis/.notdef/AE/Oslash")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/.notdef/plusminus/.notdef/.notdef/yen/mu/.notdef/.notdef")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/.notdef/.notdef/.notdef/ordfeminine/ordmasculine/.notdef/ae/oslash")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/questiondown/exclamdown/logicalnot/.notdef/florin/.notdef/.notdef")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/guillemotleft/guillemotright/ellipsis/.notdef/Agrave/Atilde/Otilde/OE/oe")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/endash/emdash/quotedblleft/quotedblright/quoteleft/quoteright/divide")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/.notdef/ydieresis/Ydieresis/fraction/currency/guilsinglleft/guilsinglright")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/fi/fl/daggerdbl/periodcentered/quotesinglbase/quotedblbase/perthousand")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/Acircumflex/Ecircumflex/Aacute/Edieresis/Egrave/Iacute/Icircumflex")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/Idieresis/Igrave/Oacute/Ocircumflex/.notdef/Ograve/Uacute/Ucircumflex")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/Ugrave/dotlessi/circumflex/tilde/macron/breve/dotaccent/ring/cedilla")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("/hungarumlaut/ogonek/caron")); pDC->OutputNewLine();
+	pDC->OutputToken(_T("TE"));
 	pDC->OutputNewLine();
-#endif
 	return TRUE;
 }
 
@@ -4811,33 +4765,30 @@ BOOL Document::AIExportFontEncoding(EPSExportDC *pDC)
 
 BOOL Document::AIExportFontEncoding(EPSExportDC *pDC, String_64& FontName, INT32 Style)
 {
-	PORTNOTETRACE("filters","Document::AIExportFontEncoding - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	String_64 EFont;
 
 	// Graeme (31-3-00) - Map the encoded name onto the PS font name.
 	FONTMANAGER->EncodeAndMapFontName(FontName, EFont, Style);
 
-	String_256 Line("%AI3_BeginEncoding: _");
+	String_256 Line(_T("%AI3_BeginEncoding: _"));
 
 	Line+=(TCHAR*)EFont;
-	Line+=" ";
+	Line+=_T(" ");
 	Line+=(TCHAR*)EFont;
 	pDC->OutputToken((TCHAR*)Line);
 	pDC->OutputNewLine();
 
-	Line="[/_";
+	Line=_T("[/_");
 	Line+=(TCHAR*)EFont;
-	Line+="/";
+	Line+=_T("/");
 	Line+=(TCHAR*)EFont;
-	Line+=" 0 0 1 TZ";
+	Line+=_T(" 0 0 1 TZ");
 	pDC->OutputToken((TCHAR*)Line);
 	pDC->OutputNewLine();
 
-	Line="%AI3_EndEncoding";
+	Line=_T("%AI3_EndEncoding");
 	pDC->OutputToken((TCHAR*)Line);
 	pDC->OutputNewLine();
-#endif
 	return TRUE;
 }
 
@@ -4856,24 +4807,21 @@ BOOL Document::AIExportFontEncoding(EPSExportDC *pDC, String_64& FontName, INT32
 
 BOOL Document::AIExportExtras(EPSExportDC *pDC)
 {
-	PORTNOTETRACE("filters","Document::AIExportExtras - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	pDC->OutputToken("Adobe_level2_AI5 /initialize get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_packedarray /initialize get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_ColorImage_AI6  /initialize get exec");	pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_cshow /initialize get exec");			pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_cmykcolor /initialize get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_customcolor /initialize get exec");		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_level2_AI5 /initialize get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_packedarray /initialize get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_ColorImage_AI6  /initialize get exec"));	pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_cshow /initialize get exec"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_cmykcolor /initialize get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_customcolor /initialize get exec"));		pDC->OutputNewLine();
 	
 		// ChrisG (31/10/00) Changed typography line to match Illustrator and CorelDraw.
 		//	This allows photoshop to import the file correctly.
-	pDC->OutputToken("Adobe_Illustrator_AI5_vars Adobe_Illustrator_AI5");
-	pDC->OutputToken("Adobe_typography_AI5 /initialize get exec");	pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_Illustrator_AI5_vars Adobe_Illustrator_AI5"));
+	pDC->OutputToken(_T("Adobe_typography_AI5 /initialize get exec"));	pDC->OutputNewLine();
 		// End of typography output.
 
-	pDC->OutputToken("Adobe_pattern_AI3 /initialize get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_Illustrator_AI5 /initialize get exec");	pDC->OutputNewLine();
-#endif
+	pDC->OutputToken(_T("Adobe_pattern_AI3 /initialize get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_Illustrator_AI5 /initialize get exec"));	pDC->OutputNewLine();
 	return TRUE;
 }
 
@@ -4891,18 +4839,15 @@ BOOL Document::AIExportExtras(EPSExportDC *pDC)
 
 BOOL Document::AIExportTrailer(EPSExportDC *pDC)
 {
-	PORTNOTETRACE("filters","Document::AIExportTrailer - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
-	pDC->OutputToken("Adobe_Illustrator_AI5 /terminate get exec");	pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_level2_AI5 /terminate get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_packedarray /terminate get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_ColorImage_AI6 /terminate get exec");	pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_cshow /terminate get exec");			pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_cmykcolor /terminate get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_customcolor /terminate get exec");		pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_typography_AI5 /terminate get exec");	pDC->OutputNewLine();
-	pDC->OutputToken("Adobe_pattern_AI3 /terminate get exec");		pDC->OutputNewLine();
-#endif
+	pDC->OutputToken(_T("Adobe_Illustrator_AI5 /terminate get exec"));	pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_level2_AI5 /terminate get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_packedarray /terminate get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_ColorImage_AI6 /terminate get exec"));	pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_cshow /terminate get exec"));			pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_cmykcolor /terminate get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_customcolor /terminate get exec"));		pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_typography_AI5 /terminate get exec"));	pDC->OutputNewLine();
+	pDC->OutputToken(_T("Adobe_pattern_AI3 /terminate get exec"));		pDC->OutputNewLine();
 	return TRUE;
 }
 
@@ -4919,7 +4864,7 @@ BOOL Document::AIExportTrailer(EPSExportDC *pDC)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportPageInfo(char* Comment)
+ProcessEPSResult Document::ImportPageInfo(TCHAR* Comment)
 {
 	// Set the default version
 	INT32 Version = -1;
@@ -5004,7 +4949,7 @@ ProcessEPSResult Document::ImportPageInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportDocumentComment(char* Comment)
+>	ProcessEPSResult Document::ImportDocumentComment(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5014,20 +4959,20 @@ ProcessEPSResult Document::ImportPageInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportDocumentComment(char* Comment)
+ProcessEPSResult Document::ImportDocumentComment(TCHAR* Comment)
 {
 	// Check that this comment line ended in a CR
-	size_t				StrLength = strlen( Comment );
+	size_t	StrLength = camStrlen( Comment );
 	
 	// If the string was too long, then mark it as an error
 	if (StrLength>=254)
 		return EPSCommentSyntaxError;
 
 	// check to see if this line should have a CR in it
-	if (Comment[StrLength-1]=='^')
+	if (Comment[StrLength-1]==_T('^'))
 	{
-		Comment[StrLength-1] = '\r';
-		Comment[StrLength] = '\n';
+		Comment[StrLength-1] = _T('\r');
+		Comment[StrLength] = _T('\n');
 		Comment[StrLength+1] = 0;
 	}
 
@@ -5045,7 +4990,7 @@ ProcessEPSResult Document::ImportDocumentComment(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportViewInfo(char* Comment)
+>	ProcessEPSResult Document::ImportViewInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5055,7 +5000,7 @@ ProcessEPSResult Document::ImportDocumentComment(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportViewInfo(char* Comment)
+ProcessEPSResult Document::ImportViewInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	INT32 Version = -1;
@@ -5173,7 +5118,7 @@ ProcessEPSResult Document::ImportViewInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportStateInfo(char* Comment)
+>	ProcessEPSResult Document::ImportStateInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5187,7 +5132,7 @@ ProcessEPSResult Document::ImportViewInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportStateInfo(char* Comment)
+ProcessEPSResult Document::ImportStateInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// The version of the state info and the read position in the string
@@ -5312,7 +5257,7 @@ ProcessEPSResult Document::ImportStateInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportQualityInfo(char* Comment)
+>	ProcessEPSResult Document::ImportQualityInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5322,7 +5267,7 @@ ProcessEPSResult Document::ImportStateInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportQualityInfo(char* Comment)
+ProcessEPSResult Document::ImportQualityInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// The version of the state info and the read position in the string
@@ -5369,7 +5314,7 @@ ProcessEPSResult Document::ImportQualityInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportGridInfo(char* Comment)
+>	ProcessEPSResult Document::ImportGridInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5379,7 +5324,7 @@ ProcessEPSResult Document::ImportQualityInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportGridInfo(char* Comment)
+ProcessEPSResult Document::ImportGridInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// The version of the state info and the read position in the string
@@ -5503,7 +5448,7 @@ ProcessEPSResult Document::ImportGridInfo(char* Comment)
 
 
 /********************************************************************************************
->	ProcessEPSResult Document::ImportOriginInfo(char* Comment)
+>	ProcessEPSResult Document::ImportOriginInfo(TCHAR* Comment)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	11/10/95
@@ -5516,7 +5461,7 @@ ProcessEPSResult Document::ImportGridInfo(char* Comment)
 				don't abort importing if an error is encountered so the doc can be recovered
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportOriginInfo(char* Comment)
+ProcessEPSResult Document::ImportOriginInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// find the selected spread in the doc, and it's default grid
@@ -5560,7 +5505,7 @@ ProcessEPSResult Document::ImportOriginInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportRulerState(char* Comment)
+>	ProcessEPSResult Document::ImportRulerState(TCHAR* Comment)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5570,7 +5515,7 @@ ProcessEPSResult Document::ImportOriginInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportRulerState(char* Comment)
+ProcessEPSResult Document::ImportRulerState(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	INT32 Version = -1;
@@ -5627,7 +5572,7 @@ ProcessEPSResult Document::ImportRulerState(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportFlagInfo(char* Comment)
+>	ProcessEPSResult Document::ImportFlagInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/3/95
@@ -5637,7 +5582,7 @@ ProcessEPSResult Document::ImportRulerState(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportFlagInfo(char* Comment)
+ProcessEPSResult Document::ImportFlagInfo(TCHAR* Comment)
 {
 	return EPSCommentOK;
 }
@@ -5645,7 +5590,7 @@ ProcessEPSResult Document::ImportFlagInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportUnitInfo(char* Comment)
+>	ProcessEPSResult Document::ImportUnitInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/3/95
@@ -5658,7 +5603,7 @@ ProcessEPSResult Document::ImportFlagInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportUnitInfo(char* Comment)
+ProcessEPSResult Document::ImportUnitInfo(TCHAR* Comment)
 {
 	// If there is no valid DocUnit list in this document then give up
 	ERROR3IF(pDocUnitList==NULL,"Document::ImportUnitInfo null pDocUnitList");
@@ -5756,7 +5701,7 @@ ProcessEPSResult Document::ImportUnitInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportDefaultUnitsInfo(char* Comment)
+>	ProcessEPSResult Document::ImportDefaultUnitsInfo(TCHAR* Comment)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/9/95
@@ -5770,7 +5715,7 @@ ProcessEPSResult Document::ImportUnitInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportDefaultUnitsInfo(char* Comment)
+ProcessEPSResult Document::ImportDefaultUnitsInfo(TCHAR* Comment)
 {
 // In viewer leave these alone as not useful
 #ifndef STANDALONE
@@ -5832,7 +5777,7 @@ ProcessEPSResult Document::ImportDefaultUnitsInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportDateInfo(char* Comment)
+>	ProcessEPSResult Document::ImportDateInfo(TCHAR* Comment)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/3/95
@@ -5842,7 +5787,7 @@ ProcessEPSResult Document::ImportDefaultUnitsInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportDateInfo(char* Comment)
+ProcessEPSResult Document::ImportDateInfo(TCHAR* Comment)
 {
 #if !defined(EXCLUDE_FROM_RALPH)
 	// The version of the state info and the read position in the string
@@ -5886,7 +5831,7 @@ ProcessEPSResult Document::ImportDateInfo(char* Comment)
 
 /********************************************************************************************
 
->	ProcessEPSResult Document::ImportUndoInfo(char* Comment)
+>	ProcessEPSResult Document::ImportUndoInfo(TCHAR* Comment)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	06/07/95
@@ -5896,7 +5841,7 @@ ProcessEPSResult Document::ImportDateInfo(char* Comment)
 
 ********************************************************************************************/
 
-ProcessEPSResult Document::ImportUndoInfo(char* Comment)
+ProcessEPSResult Document::ImportUndoInfo(TCHAR* Comment)
 {
 	// The version of the state info and the read position in the string
 	INT32 Version = -1;
