@@ -276,6 +276,7 @@ public:
 									BOOL fDeleteRegionAfter = TRUE,
 									BOOL bForceImmediate = FALSE) = 0;
 	virtual wxDC* GetRenderDC() = 0;
+	virtual void AllocateDC();
 	virtual void DoneWithDC();
 	virtual BOOL RenderTreeCallback(Node* pNode, RenderRegion* pRender) {return TRUE;}
 

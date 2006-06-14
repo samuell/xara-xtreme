@@ -651,6 +651,26 @@ void CCamView::DoneWithDC() const
 		RenderWindow->DoneWithDC();
 }
 
+/********************************************************************************************
+
+>	void CCamView::AllocateDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Hints that we've done with our DC
+	SeeAlso:	View; PaperRenderRegion.
+
+Note this is merely a hint. This routine is not guaranteed to eb called
+
+********************************************************************************************/
+
+void CCamView::AllocateDC() const
+{
+	if (RenderWindow)
+		RenderWindow->AllocateDC();
+}
+
+
 /*********************************************************************************************
 >	void CCamView::GetClientSize(int * pWidth, int * pHeight) const    TYPENOTE: Correct
 

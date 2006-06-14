@@ -144,6 +144,7 @@ BEGIN_EVENT_TABLE( CRenderWnd, wxWindow )
 	EVT_KEY_DOWN(			CRenderWnd::OnKey)
 	EVT_KEY_UP(				CRenderWnd::OnKey)
 	EVT_CHAR(				CRenderWnd::OnChar)
+	EVT_IDLE(				CRenderWnd::OnIdle)
 	
 #if defined(__WXGTK__)
 	EVT_ENTER_WINDOW(		CRenderWnd::OnEnter )
@@ -156,17 +157,51 @@ BOOL CRenderWnd::m_DoubleBuffer = FALSE;
 CRenderWnd::CRenderWnd(CCamView* pView) :
 	m_pView(pView), m_pCCClientDC(NULL)
 {
+	m_DCUsers=0;
 	// Nothing else to do for now...
 }
 
 CRenderWnd::~CRenderWnd()
 {
 	TRACEUSER("Gerry", _T("Deleting CRenderWnd at 0x%08x\n"), this);
-	if (m_pCCClientDC)
+	if (m_DCUsers)
 	{
-		delete(m_pCCClientDC);
-		m_pCCClientDC = NULL;
+		ERROR3("CRenderWnd::~CRenderWnd non-zero DC user count - leaking a DC");
 	}
+	else
+	{
+		if (m_pCCClientDC)
+		{
+			delete(m_pCCClientDC);
+			m_pCCClientDC = NULL;
+		}
+	}
+}
+
+/*********************************************************************************************
+>	virtual void CRenderWnd::AllocateDC(BOOL KeepIt=TRUE)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Inputs:		None
+	Outputs:	None
+	Returns:	Pointer to the CCClientDC
+	Purpose:	Returns a pointer to the appropriate client DC, allocating it if necessary
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:    CCamView::OnCreate()
+
+**********************************************************************************************/ 
+
+void CRenderWnd::AllocateDC(BOOL KeepIt/*=TRUE*/)
+{
+	ERROR3IF((m_DCUsers && !m_pCCClientDC), "We have users, but no client DC");
+	if (!m_pCCClientDC)
+		m_pCCClientDC = new CCClientDC(this); // OK if it fails
+	
+	if (KeepIt)
+		m_DCUsers++;
+	return;
 }
 
 /*********************************************************************************************
@@ -187,14 +222,12 @@ CRenderWnd::~CRenderWnd()
 wxClientDC * CRenderWnd::GetClientDC()
 {
 	if (!m_pCCClientDC)
-		m_pCCClientDC = new CCClientDC(this); // OK if it fails
+		AllocateDC(FALSE);
 	return (wxClientDC*)(m_pCCClientDC?m_pCCClientDC->GetDC():NULL);
 }
 
 /*********************************************************************************************
->	virtual wxClientDC * CRenderWnd::GetClientDC()
-
->	void CCamView::DoneWithDC()
+>	void CRenderWnd::DoneWithDC()
 
 	Author:		Alex Bligh <alex@alex.org.uk>
 	Created:	12/06/2006
@@ -207,7 +240,30 @@ Note this is merely a hint. This routine is not guaranteed to eb called
 
 void CRenderWnd::DoneWithDC()
 {
-	if (m_pCCClientDC)
+	ERROR3IF((m_DCUsers<=0), "We have no users, but I'm being told I'm done with");
+
+	if (m_DCUsers>0)
+		m_DCUsers--;
+
+	// Note we use a lazy-destroy from our idle handler
+}
+
+/*********************************************************************************************
+>	void CRenderWnd::OnIdle()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Laze deletion of our client DC on idle
+	SeeAlso:	View; PaperRenderRegion.
+
+We appear to need to create and delete DCs or rendering into the first RenderWindow doesn't
+work. Who knows why.
+
+**********************************************************************************************/ 
+
+void CRenderWnd::OnIdle(wxIdleEvent &event)
+{
+	if ((m_DCUsers<=0) && m_pCCClientDC)
 	{
 		delete m_pCCClientDC;
 		m_pCCClientDC=NULL;
@@ -236,6 +292,7 @@ BOOL CRenderWnd::Create(const wxRect& rect,
 						wxWindow *pParent, UINT32 id)
 {
 	BOOL ok=wxWindow::Create(pParent, id, rect.GetTopLeft(), rect.GetSize(), wxNO_FULL_REPAINT_ON_RESIZE);
+	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 #if defined(__WXGTK__)
 	::SetDoubleBuffer(this, m_DoubleBuffer);
 #endif

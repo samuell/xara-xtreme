@@ -145,6 +145,7 @@ public:
 	static BOOL GetDoubleBuffer () {return m_DoubleBuffer;}
 
 	virtual wxClientDC * GetClientDC();
+	virtual void AllocateDC(BOOL KeepIt=TRUE);
 	virtual void DoneWithDC();
 
 /////////////////////////////////////////////////////////////////////////////
@@ -176,12 +177,15 @@ protected:
 
 	void OnKey ( wxKeyEvent & event);
 	void OnChar( wxKeyEvent& event );
+	void OnIdle( wxIdleEvent& event );
 
 protected:
 	CCamView* m_pView;
 
 	static BOOL m_DoubleBuffer;
 	static void ReflectDoubleBufferingInChildren(wxWindow * pWindow);
+
+	INT32 m_DCUsers;
 
 	DECLARE_EVENT_TABLE()
 

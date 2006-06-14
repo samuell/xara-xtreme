@@ -249,6 +249,25 @@ View::~View()
 
 /********************************************************************************************
 
+>	void View::AllocateDC()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	12/06/2006
+	Purpose:	Hints that we've done with our DC
+	SeeAlso:	View; PaperRenderRegion.
+
+Note this is merely a hint. This routine is not guaranteed to eb called
+
+********************************************************************************************/
+
+void View::AllocateDC()
+{
+	if (pViewWindow)
+		pViewWindow->AllocateDC();
+}
+
+/********************************************************************************************
+
 >	void View::DoneWithDC()
 
 	Author:		Alex Bligh <alex@alex.org.uk>

@@ -199,6 +199,7 @@ public:
 
 public:
 	virtual CNativeDC *GetRenderDC() const;
+	virtual void AllocateDC() const;
 	virtual void DoneWithDC() const;
 	void GetClientSize(/* TYPENOTE: Correct */ int * width, /*TYPENOTE: Correct */ int * height) const;
 	

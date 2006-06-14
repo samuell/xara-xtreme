@@ -659,11 +659,7 @@ RenderRegion::~RenderRegion()
 		pCapture = GetTopCapture();
 	}
 
-	if (RenderView)
-	{
-		RenderView->DoneWithDC(); // hint that we might like to drop this DC so a fresh one will be created
-	}
-	
+
 	if( m_fOwned )
 	{
 		delete RenderDC;
@@ -1127,12 +1123,17 @@ void RenderRegion::DefaultRender(BOOL bForceImmediate /*= FALSE*/)
 
 	if (RenderView)
 	{
+		RenderView->AllocateDC();
 		RenderDC = RenderView->GetRenderDC();
 		if (RenderDC)
 		{
+			View * pView = RenderView; // as ContinueRenderView can delete the RenderRegion (i.e. "this").
    			RenderView->SetCurrent();
 			(RenderView->GetDoc())->SetCurrent();
 			RenderView->ContinueRenderView(this, RenderSpread, TRUE, TRUE, bForceImmediate);
+
+			// This MUST pair with AllocateDC
+			pView->DoneWithDC(); // hint that we might like to drop this DC so a fresh one will be created
 		}
 		else
 		{
@@ -1140,9 +1141,7 @@ void RenderRegion::DefaultRender(BOOL bForceImmediate /*= FALSE*/)
 //			Error::SetError(_R(IDT_INTERNAL_ERROR), 0);
 //			InformError();
 			TRACE(_T("Failed to get a DC for rendering in RenderRegion::DefaultRender\n"));
-			return;
 		}
-
 	}
 }
 

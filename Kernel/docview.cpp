@@ -2527,6 +2527,9 @@ void DocView::ForceRedraw(BOOL ForcePaper)
 	// find type of rendering device
 	CCamView *pCamView = GetConnectionToOilView();
 	ERROR2IF(pCamView == NULL, (void)0, "DocView::ForceRedraw: DocView has no CamView");
+
+	pCamView->AllocateDC(); // allocate a DC
+
 	CNativeDC* pDevContext = pCamView->GetRenderDC();
 	const RenderType rType = CCDC::GetType(pDevContext, TRUE);
 
@@ -2596,6 +2599,8 @@ void DocView::ForceRedraw(BOOL ForcePaper)
 			}
 		}
 	}
+
+	pCamView->DoneWithDC(); // deallocate a DC
 }
 
 
@@ -3869,6 +3874,8 @@ RenderRegion* DocView::GetFirstRenderRegion(DocRect& ClipRect, Spread *pSpread, 
 		}
 
 		CNativeDC* pDC = pViewWindow->GetRenderDC();
+		ERROR3IF(!pDC, "No allocated DC");
+
 		RenderRegion *NewRegion =	View::NewRenderRegion(SpreadClipRect, RenderMatrix, 
 									pDC, pSpread, rType);
 
