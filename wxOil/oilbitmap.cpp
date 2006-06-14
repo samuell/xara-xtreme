@@ -126,8 +126,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "printctl.h"
 //#include "richard2.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "colcontx.h"
-//#include "colormgr.h"
+#include "colcontx.h"
+#include "colormgr.h"
+#include "colplate.h"
 
 #include "bitfilt.h"	// BaseBitmapFilter
 //#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -1150,7 +1151,7 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportBitmap(RenderRegion *pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 RebuildXPEBitmap();
 	// Check the render region type
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
@@ -1164,6 +1165,8 @@ RebuildXPEBitmap();
 			// Error!
 			return FALSE;
 	}
+PORTNOTE("cmx", "Disabled CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// CMX render region... get the DC
@@ -1388,6 +1391,7 @@ RebuildXPEBitmap();
 		return TRUE;
 	}
 #endif
+#endif
 	// If we got here, no errors occured.
 	return TRUE;
 }
@@ -1424,7 +1428,7 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportBitmapPaletteInternal(RenderRegion *pRegion, INT32 NumColours, RGBQUAD *pSrcCLUT)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 RebuildXPEBitmap();
 	// Sanity check
 	ERROR3IF((BMInfo->bmiHeader.biBitCount != 1) &&
@@ -1447,7 +1451,7 @@ RebuildXPEBitmap();
 	}
 
 	// Find the output DC
-	KernelDC *pDC = (KernelDC *) pRegion->GetRenderDC();
+	KernelDC *pDC = (KernelDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 
 	// First, clear all entries to black
 	memset(pCLUT, 0, ClutSize);
@@ -1483,9 +1487,9 @@ RebuildXPEBitmap();
 
 	// Greyscale palette complete - output it as a hex string
 	pDC->OutputNewLine();
-	pDC->OutputToken("<");
+	pDC->OutputToken(_T("<"));
 	pDC->OutputRawBinary(pCLUT, ClutSize);
-	pDC->OutputToken(">");
+	pDC->OutputToken(_T(">"));
 	pDC->OutputNewLine();
 
 	// Ok, now do the colour palette.
@@ -1509,9 +1513,9 @@ RebuildXPEBitmap();
 
 	// RGB palette complete - output it as a hex string
 	pDC->OutputNewLine();
-	pDC->OutputToken("<");
+	pDC->OutputToken(_T("<"));
 	pDC->OutputRawBinary(pCLUT, ClutSize * 3);
-	pDC->OutputToken(">");
+	pDC->OutputToken(_T(">"));
 	pDC->OutputNewLine();
 
 	// Clean up
@@ -1545,7 +1549,7 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportBitmapPalette(RenderRegion *pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 RebuildXPEBitmap();
 	// Check the render region type
 	if (!pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
@@ -1574,9 +1578,9 @@ RebuildXPEBitmap();
 
 
 	// Not renderable (it's CamelotEPS), so we can output the bitmap as raw binary
-	KernelDC *pDC = (KernelDC *) pRegion->GetRenderDC();
+	KernelDC *pDC = (KernelDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 
-	pDC->OutputToken("%Camelot: Bitmap palette");
+	pDC->OutputToken(_T("%Camelot: Bitmap palette"));
 	pDC->OutputRawBinary((BYTE *) BMInfo->bmiColors, 
 						 BMInfo->bmiHeader.biClrUsed * sizeof(RGBQUAD));
 	pDC->OutputNewLine();
@@ -1616,7 +1620,7 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportSeparatedPalette(RenderRegion *pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	ERROR3IF(pRegion == NULL, "Illegal NULL params");
 	if (!pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
 	{
@@ -1632,17 +1636,18 @@ BOOL CWxBitmap::ExportSeparatedPalette(RenderRegion *pRegion)
 			"Not colour separating in ExportSeparatedBitmapPalette");
 
 RebuildXPEBitmap();
-	KernelDC *pDC = (KernelDC *) pRegion->GetRenderDC();
+	KernelDC *pDC = (KernelDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 	BYTE pCLUT[256 * 3];
 
+	INT32 i;
 	// Do a greyscale intensity CLUT
-	for (INT32 i = 0; i < 256; i++)
+	for (i = 0; i < 256; i++)
 		pCLUT[i] = i;
 
 	pDC->OutputNewLine();
-	pDC->OutputToken("<");
+	pDC->OutputToken(_T("<"));
 	pDC->OutputRawBinary(pCLUT, 256);
-	pDC->OutputToken(">");
+	pDC->OutputToken(_T(">"));
 	pDC->OutputNewLine();
 
 	// And do a 24bit RGB CLUT
@@ -1650,9 +1655,9 @@ RebuildXPEBitmap();
 		pCLUT[i] = pCLUT[i+1] = pCLUT[i+2] = i/3;
 
 	pDC->OutputNewLine();
-	pDC->OutputToken("<");
+	pDC->OutputToken(_T("<"));
 	pDC->OutputRawBinary(pCLUT, 256 * 3);
-	pDC->OutputToken(">");
+	pDC->OutputToken(_T(">"));
 	pDC->OutputNewLine();
 
 #endif
@@ -1684,7 +1689,7 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportContonePalette(RenderRegion *pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 RebuildXPEBitmap();
 	ERROR2IF(m_pContonePalette == NULL, FALSE, "No contone palette to export!");
 
@@ -1735,13 +1740,13 @@ RebuildXPEBitmap();
 
 BOOL CWxBitmap::ExportBitmapData(RenderRegion *pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 RebuildXPEBitmap();
 	// Check the render region type
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
 	{
 		// It's Camelot EPS - export the bitmap.
-		KernelDC *pDC = (KernelDC *) pRegion->GetRenderDC();
+		KernelDC *pDC = (KernelDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 		Filter *pFilter = pDC->GetParentFilter();
 
 		// Find out if it needs to be renderable
@@ -1752,6 +1757,8 @@ RebuildXPEBitmap();
 
 		if (Renderable)
 		{
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 // WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 			if (pRegion->IsPrinting())
@@ -1773,6 +1780,7 @@ RebuildXPEBitmap();
 			}
 			else
 #endif //webster
+#endif // EXCLUDE_FROM_XARALX
 			{
 				// Use the EPS preference.
 				if (EPSFilter::XSEPSExportPSType == 2)
@@ -1782,7 +1790,7 @@ RebuildXPEBitmap();
 
 		// Export the bitmap pixel data itself.
 		if (!Renderable)
-			pDC->OutputToken("%Camelot: Bitmap data");
+			pDC->OutputToken(_T("%Camelot: Bitmap data"));
 		pDC->OutputNewLine();
 		
 		// Do each scanline...
@@ -1981,8 +1989,6 @@ RebuildXPEBitmap();
 BOOL CWxBitmap::ExportSeparatedData(RenderRegion *pRegion, BYTE *SepTables)
 {
 #ifndef STANDALONE
-	PORTNOTETRACE("other","CWxBitmap::ExportSeparatedData - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(pRegion == NULL || SepTables == NULL, "Illegal NULL params");
 
 	if (!pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
@@ -1992,7 +1998,7 @@ BOOL CWxBitmap::ExportSeparatedData(RenderRegion *pRegion, BYTE *SepTables)
 	}
 
 RebuildXPEBitmap();
-	KernelDC *pDC = (KernelDC *) pRegion->GetRenderDC();
+	KernelDC *pDC = (KernelDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 	Filter *pFilter = pDC->GetParentFilter();
 
 	// If it is renderable, find out if we can use Level 2 features.
@@ -2001,6 +2007,8 @@ RebuildXPEBitmap();
 
 	if (Renderable)
 	{
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 		if (pRegion->IsPrinting())
@@ -2015,16 +2023,17 @@ RebuildXPEBitmap();
 		}
 		else
 #endif //webster
+#endif
 			UseLevel2 = (EPSFilter::XSEPSExportPSType == 2);			// Use the EPS preference.
 	}
 
 	// Export the bitmap pixel data itself.
 	if (!Renderable)
-		pDC->OutputToken("%Camelot: Bitmap data");
+		pDC->OutputToken(_T("%Camelot: Bitmap data"));
 	pDC->OutputNewLine();
 	
 	// Get some useful constants...
-	const INT32 BitsPerPixel	= BMInfo->bmiHeader.biBitCount;
+//	const INT32 BitsPerPixel	= BMInfo->bmiHeader.biBitCount;
 	const INT32 PixelWidth	= BMInfo->bmiHeader.biWidth;
 	const INT32 PixelHeight	= BMInfo->bmiHeader.biHeight;
 	const INT32 ByteWidth	= PixelWidth;
@@ -2094,7 +2103,6 @@ RebuildXPEBitmap();
 		ERROR3("EndASCII85Output failed");
 		return(FALSE);
 	}
-#endif
 	return(TRUE);
 #else
 	ERROR2(FALSE,"CWxBitmap::SeparateBitmapData being called in Viewer version!");
@@ -2258,8 +2266,6 @@ void CWxBitmap::ColourSeparateScanline32to8(ColourContext *OutputContext, BYTE *
 												BYTE *DestBuffer, Pixel32bpp *SrcBuffer,
 												INT32 PixelWidth)
 {
-	PORTNOTETRACE("other","CWxBitmap::ColourSeparateScanline32to8 - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(DestBuffer == NULL || SrcBuffer == NULL || PixelWidth < 1, "Illegal params");
 	ERROR3IF(SepTables == NULL, "No separation tables!?");
 	ERROR3IF(OutputContext == NULL || OutputContext->GetColourPlate() == NULL,
@@ -2313,37 +2319,50 @@ void CWxBitmap::ColourSeparateScanline32to8(ColourContext *OutputContext, BYTE *
 			break;
 	}
 
+PORTNOTE("printing", "Disabled XaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
+	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
+#else
+	BOOL PrintRGBBlackAsKey = TRUE;
+#endif
+
 	for (i = 0; i < PixelWidth; i++)
 	{
 		// It's colour, so get the maximum of R,G,B into Temp
 		TEMPMAX(SrcBuffer[i].Red, SrcBuffer[i].Green, SrcBuffer[i].Blue);
 
-		if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+		if (!PrintRGBBlackAsKey || Temp > 0)
 		{
 			switch (Plate)
 			{
 				case COLOURPLATE_CYAN:
 					Ink = 255 - SrcBuffer[i].Red;		// Cyan ink is (255 - Red)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				case COLOURPLATE_MAGENTA:
 					Ink = 255 - SrcBuffer[i].Green;		// Magenta ink is (255 - Green)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				case COLOURPLATE_YELLOW:
 					Ink = 255 - SrcBuffer[i].Blue;		// Yellow ink is (255 - Blue)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				default:
 					Ink = 255 - Temp;					// Black ink is (255 - Temp)
 					break;
 			}
-
-			if (Ink < 0)
-				Ink = 0;
 
 			Ink = LUT[Ink];
 		}
@@ -2357,7 +2376,6 @@ void CWxBitmap::ColourSeparateScanline32to8(ColourContext *OutputContext, BYTE *
 		else
 			DestBuffer[i] = 255 - Ink;
 	} 
-#endif
 	// And finally, vape our helper macro
 	#undef TEMPMAX
 }
@@ -2381,8 +2399,6 @@ void CWxBitmap::ColourSeparateScanline32to8(ColourContext *OutputContext, BYTE *
 
 void CWxBitmap::ColourSeparate32to32(ColourPlate *pPlate, BYTE *SepTables)
 {
-	PORTNOTETRACE("other","CWxBitmap::ColourSeparateScanline32to32 - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(SepTables == NULL, "No separation tables!?");
 	ERROR3IF(pPlate == NULL, "The separation ColourPlate has gone missing!");
 
@@ -2434,37 +2450,50 @@ void CWxBitmap::ColourSeparate32to32(ColourPlate *pPlate, BYTE *SepTables)
 			break;
 	}
 
+PORTNOTE("printing", "Disabled XaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
+	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
+#else
+	BOOL PrintRGBBlackAsKey = TRUE;
+#endif
+
 	for (i = 0; i < NumPixels; i++)
 	{
 		// It's colour, so get the maximum of R,G,B into Temp
 		TEMPMAX(pPixel[i].Red, pPixel[i].Green, pPixel[i].Blue);
 
-		if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+		if (!PrintRGBBlackAsKey || Temp > 0)
 		{
 			switch (Plate)
 			{
 				case COLOURPLATE_CYAN:
 					Ink = 255 - pPixel[i].Red;		// Cyan ink is (255 - Red)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				case COLOURPLATE_MAGENTA:
 					Ink = 255 - pPixel[i].Green;	// Magenta ink is (255 - Green)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				case COLOURPLATE_YELLOW:
 					Ink = 255 - pPixel[i].Blue;		// Yellow ink is (255 - Blue)
-					Ink -= UCR[-Temp];
+					if (Ink>UCR[-Temp])
+						Ink -= UCR[-Temp];
+					else
+						Ink=0;
 					break;
 
 				default:
 					Ink = 255 - Temp;					// Black ink is (255 - Temp)
 					break;
 			}
-
-			if (Ink < 0)
-				Ink = 0;
 
 			Ink = LUT[Ink];
 		}
@@ -2503,7 +2532,6 @@ void CWxBitmap::ColourSeparate32to32(ColourPlate *pPlate, BYTE *SepTables)
 				break;
 		}
 	} 
-#endif
 	// And finally, vape our helper macro
 	#undef TEMPMAX
 }
@@ -2523,8 +2551,6 @@ void CWxBitmap::ColourSeparate32to32(ColourPlate *pPlate, BYTE *SepTables)
 
 OILBitmap* CWxBitmap::MakeSeparatedCopy(ColourPlate *pPlate, BYTE *SepTables)
 {
-	PORTNOTETRACE("other","CWxBitmap::MakeSeparatedCopy - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(SepTables == NULL, "No separation tables!?");
 	ERROR3IF(pPlate == NULL, "The separation ColourPlate has gone missing!");
 
@@ -2597,6 +2623,13 @@ OILBitmap* CWxBitmap::MakeSeparatedCopy(ColourPlate *pPlate, BYTE *SepTables)
 			break;
 	}
 
+PORTNOTE("printing", "Disabled XaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
+	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
+#else
+	BOOL PrintRGBBlackAsKey = TRUE;
+#endif
+
 	for (scan = 0; scan < BMInfo->bmiHeader.biHeight; scan++)
 	{
 		GetScanline32bpp(scan, TRUE, pScanline);
@@ -2605,32 +2638,38 @@ OILBitmap* CWxBitmap::MakeSeparatedCopy(ColourPlate *pPlate, BYTE *SepTables)
 			// It's colour, so get the maximum of R,G,B into Temp
 			TEMPMAX(pScanline[i].Red, pScanline[i].Green, pScanline[i].Blue);
 
-			if (!XaraCMS::PrintRGBBlackAsKey || Temp > 0)
+			if (!PrintRGBBlackAsKey || Temp > 0)
 			{
 				switch (Plate)
 				{
 					case COLOURPLATE_CYAN:
 						Ink = 255 - pScanline[i].Red;		// Cyan ink is (255 - Red)
-						Ink -= UCR[-Temp];
+						if (Ink>UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
+							Ink=0;
 						break;
 
 					case COLOURPLATE_MAGENTA:
 						Ink = 255 - pScanline[i].Green;		// Magenta ink is (255 - Green)
-						Ink -= UCR[-Temp];
+						if (Ink>UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
+							Ink=0;
 						break;
 
 					case COLOURPLATE_YELLOW:
 						Ink = 255 - pScanline[i].Blue;		// Yellow ink is (255 - Blue)
-						Ink -= UCR[-Temp];
+						if (Ink>UCR[-Temp])
+							Ink -= UCR[-Temp];
+						else
+							Ink=0;
 						break;
 
 					default:
 						Ink = 255 - Temp;					// Black ink is (255 - Temp)
 						break;
 				}
-
-				if (Ink < 0)
-					Ink = 0;
 
 				Ink = LUT[Ink];
 			}
@@ -2686,9 +2725,6 @@ OILBitmap* CWxBitmap::MakeSeparatedCopy(ColourPlate *pPlate, BYTE *SepTables)
 		FreeDIB(pNewInfo, pNewBits);
 	}
 	return pNewBitmap;
-#else
-	return NULL;
-#endif
 }
 
 

@@ -192,7 +192,7 @@ BOOL CMXRenderRegion::InitDevice()
 	ENSURE(RenderView->GetDoc() != NULL, "View's document is NULL!");
 	Document *TheDocument = RenderView->GetDoc();
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	cmxDC = (CMXExportDC *)RenderDC;
 
 	// Set up render region
@@ -243,7 +243,7 @@ void CMXRenderRegion::DrawPathToOutputDevice(Path *DrawPath, PathShape)
 BOOL CMXRenderRegion::ExportPath ( Path *DrawPath, BOOL DataOnly )
 {
 	// Get the device context for our export file.
-	KernelDC	*pDC		= ( KernelDC * ) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	DocCoord*	Coords		= DrawPath->GetCoordArray();
 	PathVerb*	Verbs		= DrawPath->GetVerbArray();

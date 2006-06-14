@@ -5313,10 +5313,7 @@ PORTNOTETRACE("filter","Removed OILFilter usage");
 GenericEPSFilter::GenericEPSFilter()
 {
 	// This is the generic EPS filter, so we want all EPS filters in it.
-PORTNOTE("filter","Removed EPSFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
-		pFilterType = CC_RUNTIME_CLASS(EPSFilter);
-#endif
+	pFilterType = CC_RUNTIME_CLASS(EPSFilter);
 }
 
 /********************************************************************************************

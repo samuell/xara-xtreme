@@ -510,7 +510,7 @@ BOOL EPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	GetValidTextAttributes();
 
 // BODGE TEXT - need to account for unicode!
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	TCHAR Buf[64];
 
@@ -583,7 +583,7 @@ BOOL EPSRenderRegion::WriteNewLine ( void )
 
 void EPSRenderRegion::OutputFontName()
 {
-   	KernelDC *pDC = (KernelDC *) RenderDC;
+   	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	String_64 FontName;
 	String_64 EncodedFontName;
@@ -753,7 +753,7 @@ void EPSRenderRegion::GetValidTextAttributes()
 
 void EPSRenderRegion::OutputTextRenderMode ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	INT32 Style=0;
 
@@ -796,7 +796,7 @@ void EPSRenderRegion::OutputTextRenderMode ()
 
 void EPSRenderRegion::OutputTextAspectRatio ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
    	pDC->OutputReal(RR_TXTASPECTRATIO().MakeDouble()*100.0);	// convert from ratio to %
    	pDC->OutputToken(_T("Tz"));
@@ -817,7 +817,7 @@ void EPSRenderRegion::OutputTextAspectRatio ()
 
 void EPSRenderRegion::OutputTextTracking ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Must be output in 1/1000 of an em.
 	// 1 em = point size of font.
@@ -841,7 +841,7 @@ void EPSRenderRegion::OutputTextTracking ()
 
 void EPSRenderRegion::OutputTextJustification ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output aspect ratio in %, 100 is default
    	switch (RR_TXTJUSTIFICATION())
@@ -875,7 +875,7 @@ void EPSRenderRegion::OutputTextJustification ()
 
 void EPSRenderRegion::OutputTextLineSpacing ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output line spacing in points.
 	// format - paraspace linespace Tl
@@ -928,7 +928,7 @@ void EPSRenderRegion::OutputTextLineSpacing ()
 
 void EPSRenderRegion::OutputTextBaselineShift ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output baseline shift in points
 	// format = rise Ts
@@ -951,7 +951,7 @@ void EPSRenderRegion::OutputTextBaselineShift ()
 
 void EPSRenderRegion::OutputTextSubSuperScript ()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output sub/superscript
 	double FontSize = ((double)RR_TXTFONTSIZE())/1000;			    	// in millipoints	 12pt = 12000 mp
@@ -1089,7 +1089,7 @@ void EPSRenderRegion::OutputWindingRule ()
 
 void EPSRenderRegion::OutputLineWidth()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Set line width
 	pDC->OutputUserSpaceValue(RR_LINEWIDTH());
@@ -1110,7 +1110,7 @@ void EPSRenderRegion::OutputLineWidth()
 
 void EPSRenderRegion::OutputJoinType()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Set line Join Type
 	pDC->OutputValue((UINT32)RR_JOINTYPE());
@@ -1172,7 +1172,7 @@ void EPSRenderRegion::OutputDashPatternInit()
 
 void EPSRenderRegion::OutputDashPattern()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Set dash pattern
 	INT32 NumEls = RR_DASHPATTERN().Elements;
@@ -1241,7 +1241,7 @@ void EPSRenderRegion::OutputDashPattern()
 
 void EPSRenderRegion::OutputStartCap()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Set line cap style
 	pDC->OutputValue((UINT32)RR_STARTCAP());
@@ -1262,7 +1262,7 @@ void EPSRenderRegion::OutputStartCap()
 
 void EPSRenderRegion::OutputMitreLimit()
 {
-//	KernelDC *pDC = (KernelDC *) RenderDC;
+//	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 		// Set mitre limit
 
@@ -1320,7 +1320,7 @@ void EPSRenderRegion::OutputStrokeColour()
 
 void EPSRenderRegion::OutputStrokeCMYKColour()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	PColourCMYK CMYK;
 
@@ -1389,7 +1389,7 @@ void EPSRenderRegion::OutputStrokeCMYKColour()
 
 void EPSRenderRegion::OutputStrokeRGBColour()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Colour values.
 	INT32 red;
@@ -1493,7 +1493,7 @@ void EPSRenderRegion::OutputFillColour()
 
 void EPSRenderRegion::OutputFillCMYKColour()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	PColourCMYK CMYK;
 
@@ -1563,7 +1563,7 @@ void EPSRenderRegion::OutputFillCMYKColour()
 
 void EPSRenderRegion::OutputFillRGBColour()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	INT32 red;
 	INT32 green;
@@ -1739,7 +1739,7 @@ void EPSRenderRegion::ExportPath(Path *DrawPath, BOOL DataOnly, BOOL PureDataOnl
 	}
 
 	// Get the device context for our export file.
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	DocCoord* Coords = DrawPath->GetCoordArray();
 	PathVerb* Verbs  = DrawPath->GetVerbArray();
@@ -2491,7 +2491,7 @@ void EPSRenderRegion::SetClipRegion(ClipRegionAttribute* pClipAttr, BOOL Temp)
 		RenderRegion::SetClipRegion(pClipAttr, Temp);
 
 		// Get the device context for our export file.
-		KernelDC *pDC = (KernelDC *) RenderDC;
+		KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 		// export a 'gsave' command.
 		pDC->OutputToken(TEXT("gsave"));
@@ -2556,7 +2556,7 @@ void EPSRenderRegion::RestoreClipRegion(ClipRegionAttribute* pClipAttr, BOOL Tem
 		RenderRegion::RestoreClipRegion(pClipAttr, Temp);
 
 		// Get the device context for our export file.
-		KernelDC *pDC = (KernelDC *) RenderDC;
+		KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 		// export a 'grestore' command.
 		pDC->OutputToken(TEXT("grestore"));

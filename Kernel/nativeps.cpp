@@ -1809,7 +1809,7 @@ BOOL NativeRenderRegion::WriteSetup(KernelDC *pDC)
 
 void NativeRenderRegion::GetValidPathAttributes()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Find out what this render region can do.
 	RRCaps Caps;
@@ -1885,7 +1885,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 		// No - so don't do anything
 		return;
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	if (SetLastOutputAttribute(ATTR_STROKETRANSP))
 	{
@@ -2147,7 +2147,7 @@ void NativeRenderRegion::GetValidTransparencyAttributes()
 
 void NativeRenderRegion::GetValidTextAttributes()
 {
-   	KernelDC *pDC = (KernelDC *) RenderDC;
+   	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	/* In native format documents we output 
 		fontname			= <fontname> ctf
@@ -2323,7 +2323,7 @@ BOOL NativeRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	GetValidPathAttributes();
 	GetValidTextAttributes();
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	INT32 CharOut = (INT32)ch;
 	INT32 NumCodes = 1;
@@ -2575,7 +2575,7 @@ void NativeRenderRegion::OutputStrokeColour ()
 
 BOOL NativeRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColour* EndCol, ColourContext* pContext)
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	bool outputNames = FALSE;
 
 	if ((StartCol->FindParentIndexedColour() == NULL) &&

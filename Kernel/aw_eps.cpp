@@ -2313,7 +2313,7 @@ BOOL ArtWorksEPSRenderRegion::StartRender()
 void ArtWorksEPSRenderRegion::GetValidPathAttributes()
 {
 #ifdef DO_EXPORT
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	FillGeometryAttribute *pFillAttr = (FillGeometryAttribute *) CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
 

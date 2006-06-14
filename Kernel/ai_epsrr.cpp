@@ -306,7 +306,7 @@ BOOL AIEPSRenderRegion::ExportShadow ( OILBitmap	*pBitmap,
 									   DocRect		&Bounds )
 {
 	// Set up the local variables.
-//	KernelDC	*pDC			= static_cast<KernelDC *> ( RenderDC );
+//	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	DocCoord	Position		( Bounds.lo.x, Bounds.hi.y );
 	double		Width			= static_cast<double> ( Bounds.Width () ) / 1000;
 	double		Height			= static_cast<double> ( Bounds.Height () ) / 1000;
@@ -458,7 +458,7 @@ BOOL AIEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 		// Only do this for text on paths
 		if (ExportingOnPath ())
 		{
-			KernelDC *pDC = (KernelDC *) RenderDC;
+			KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 			pDC->OutputMatrix(pMatrix);
 			pDC->OutputToken(_T("Tm"));
@@ -588,7 +588,7 @@ BOOL AIEPSRenderRegion::WriteEPSVersion ( void )
 BOOL AIEPSRenderRegion::WriteEPSProcessColours ( void )
 {
 	// Cast a pointer to the appropriate DC.
-	KernelDC *pDC = ( KernelDC * ) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output the process colours
 	pDC->OutputToken	( _T("%%DocumentProcessColors: Cyan Magenta Yellow Black") );
@@ -617,7 +617,7 @@ BOOL AIEPSRenderRegion::WriteEPSResources ( EPSFilter	*pFilter,
 											Document	*pDocument )
 {
 	// Cast a pointer to the appropriate DC.
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	
 	// Call the export method in the document.
 	pDocument->WriteEPSResources ( pFilter );
@@ -1008,7 +1008,7 @@ BOOL AIEPSRenderRegion::WriteGradientEntry ( DocColour	*pColour,
 	INT32 blue;											//
 	PColourCMYK	CMYKColour;								// The colour to be stored.
 
-	KernelDC	*pDC		= (KernelDC *) RenderDC;	// A pointer to the export DC used.
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	TCHAR		Line [80];								// Contains the string to be stored.
 
 	// (ChrisG 3/4/2001) 
@@ -1258,7 +1258,7 @@ BOOL AIEPSRenderRegion::EndLayer ()
 
 void AIEPSRenderRegion::WriteGradientFillInstance ()
 {
-	KernelDC				*pDC		= ( KernelDC* ) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	FillGeometryAttribute	*pFillAttr	= ( FillGeometryAttribute* )
 											CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
 	DocCoord				StartPoint	= *( pFillAttr->GetStartPoint () );
@@ -2631,7 +2631,7 @@ void AIEPSRenderRegion::OverflowTextFinish ()
 	// copy info into actual EPS file.
 	char cbuffer [1025];
 	TCHAR buffer [1025];
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	FILE * fp;
 
 		// Write out the Extra info.
@@ -3663,7 +3663,7 @@ void AIEPSRenderRegion::BuildGradientCacheUsingScanner (Node * pNode, AIEPSGradi
 ********************************************************************************************/
 void AIEPSRenderRegion::WriteGradientCount ()
 {
-	KernelDC * pDC		= ( KernelDC* ) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	ListFill * pList	= m_pLinearGradList;
 	INT32 numFills		= 0;
 

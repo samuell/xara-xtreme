@@ -139,8 +139,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "saveeps.h"
 #include "zoomops.h"
 #include "qualops.h"
-//#include "ai_eps.h"
-//#include "ai_epsrr.h"
+#include "ai_eps.h"
+#include "ai_epsrr.h"
 #include "fontlist.h"
 #include "fontman.h"
 #include "progress.h"
@@ -2901,12 +2901,7 @@ BOOL Document::WriteEPSProlog ( EPSFilter *pFilter )
 BOOL Document::WriteEPSFonts(EPSFilter *pFilter)
 {
 	if ( (pFilter->IS_KIND_OF(CamelotNativeEPSFilter)) ||
-PORTNOTE("filters", "Disabled AIPESFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	     (pFilter->IS_KIND_OF(AIEPSFilter))
-#else
-		FALSE
-#endif
 	   )
 	{
 		EPSExportDC *pDC = pFilter->GetExportDC();
@@ -3001,8 +2996,6 @@ BOOL Document::WriteEPSResources(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSSetup(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSFonts ignore AIEPS");
-#ifndef EXCLUDE_FROM_XARALX
 	// only do something if the filter is an Illustrator one
 	if (pFilter->IS_KIND_OF(AIEPSFilter))
 	{
@@ -3013,7 +3006,6 @@ BOOL Document::WriteEPSSetup(EPSFilter *pFilter)
 		AIExportCharEncoding(pDC);
 		AIExportFontEncoding(pDC);
 	}
-#endif
 	return TRUE;
 }
 
@@ -3133,15 +3125,12 @@ BOOL Document::WriteEPSComments(EPSFilter *pFilter)
 
 BOOL Document::WriteEPSTrailer(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","Document::WriteEPSTrailer - ignore AIEPS");
-#ifndef EXCLUDE_FROM_XARALX
 	// only do something if the filter is an Illustrator one
 	if (pFilter->IS_KIND_OF(AIEPSFilter))
 	{
 		EPSExportDC *pDC = pFilter->GetExportDC();
 		AIExportTrailer(pDC);
 	}	
-#endif
 	ExportTextTrailer(pFilter);
 
 	return TRUE;
@@ -4514,12 +4503,7 @@ BOOL Document::ExportDateInfo(EPSExportDC *pDC)
 BOOL Document::ExportTextSetup(EPSFilter* pFilter)
 {
 	if ( (pFilter->IS_KIND_OF(CamelotNativeEPSFilter)) ||
-PORTNOTE("filters", "Disabled AIPESFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	     (pFilter->IS_KIND_OF(AIEPSFilter))
-#else
-		FALSE
-#endif
 	   )
 	{
 		// Output the colour table in ArtWorks format.

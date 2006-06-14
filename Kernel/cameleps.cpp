@@ -3348,7 +3348,7 @@ void CamelotEPSRenderRegion::GetRenderRegionCaps(RRCaps* pCaps)
 
 void CamelotEPSRenderRegion::GetValidPathAttributes()
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	FillGeometryAttribute *pFillAttr = 
 		(FillGeometryAttribute *) CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
@@ -3782,7 +3782,7 @@ void CamelotEPSRenderRegion::GetValidPathAttributes()
 
 BOOL CamelotEPSRenderRegion::OutputGradFillColours(DocColour* StartCol, DocColour* EndCol, ColourContext* pContext)
 {
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	bool outputNames = FALSE;
 
 	if ((StartCol->FindParentIndexedColour() == NULL) &&
@@ -4039,7 +4039,7 @@ BOOL CamelotEPSRenderRegion::WriteEPSTrailerComments ( void )
 	// (ChrisG 3/1/01) - Output some code so that we stop using our dictionary, Since
 	//	this is no longer controlled by Start- and StopRender, we have restore here. This should 
 	//	be done to close the 'save-restore' block started in WriteSetup.
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	pDC->OutputToken(_T("end restore"));
 	pDC->OutputNewLine();
 
@@ -4315,7 +4315,7 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 {
 #ifndef STANDALONE
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Make sure the world is in one piece
 	if ((pBitmap==NULL) || (pMask==NULL))
@@ -4757,7 +4757,7 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	}
 
 	// Render the character in the specified position...
-	KernelDC *pKernelDC = (KernelDC *) RenderDC;
+	KernelDC *pKernelDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Output character
 
@@ -4963,7 +4963,7 @@ BOOL CamelotEPSRenderRegion::SelectNewFont ( WORD		Typeface,
 		CorrectedSize = ((Size + 500) / 1000) * 1000;
 
 	// Select this font by prefixing with a forward slash to make it into a name.
-	KernelDC *pKernelDC = (KernelDC *) RenderDC;
+	KernelDC *pKernelDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	String_8 Slash(TEXT("/"));
 	MappedFontName.Insert(Slash, 0);
 	pKernelDC->OutputToken((TCHAR *) MappedFontName);
@@ -5048,7 +5048,7 @@ BOOL CamelotEPSRenderRegion::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic
 	}
 
 	// Select this font by prefixing with a forward slash to make it into a name.
-	KernelDC *pKernelDC = (KernelDC *) RenderDC;
+	KernelDC *pKernelDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 	String_8 Slash(TEXT("/"));
 	MappedFontName.Insert(Slash, 0);
 	pKernelDC->OutputToken((TCHAR *) MappedFontName);
@@ -5260,7 +5260,7 @@ PORTNOTE("printing", "Exclude CCPrintInfo");
 //	INT32 DestX = 0;
 //	INT32 DestY = 0;
 
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	pDC->OutputToken(_T("sv"));
 
@@ -5706,7 +5706,7 @@ void CamelotEPSRenderRegion::DrawPathToOutputDevice(Path *DrawPath, PathShape)
 BOOL CamelotEPSRenderRegion::DrawClippedBitmap(Path *DrawPath)
 {
 	// Get a device context
-	KernelDC *pDC = (KernelDC *) RenderDC;
+	KernelDC *pDC = (KernelDC*)CCDC::ConvertFromNativeDC(RenderDC);
 
 	// What we do is: export the path, save the graphics context, use the path as a clipping 
 	// region, render the bitmap, restore the graphics context, and optionally stroke the

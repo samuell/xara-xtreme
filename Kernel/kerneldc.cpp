@@ -823,7 +823,7 @@ INT32 KernelDC::OutputRawBinary(BYTE *Data, UINT32 Length, UINT32 Alignment)
 		// Convert the next chunk to hex and write it out
 		TCHAR HexBuf[80];
 		ConvertToHex(Data, ChunkLength, HexBuf);
-		if (!OutputDirect((BYTE *) HexBuf, ChunkLength * 2))
+		if (!OutputTCHARAsChar(HexBuf, ChunkLength * 2))
 		{
 			// Error
 			return -1;
@@ -845,7 +845,7 @@ INT32 KernelDC::OutputRawBinary(BYTE *Data, UINT32 Length, UINT32 Alignment)
 			// Output it however many times we need to
 			while (Padding > 0)
 			{
-				if (!OutputDirect((BYTE *) HexBuf, 2))
+				if (!OutputTCHARAsChar(HexBuf, 2))
 					// Error
 					return -1;
 
@@ -969,7 +969,7 @@ INT32 KernelDC::EndASCII85Output()
 
 	// End of ASCII85 data, so output the ASCII85 EOD marker.
 	TCHAR EOD[] = _T("~>");
-	OutputDirect((LPBYTE) EOD, 2);
+	OutputTCHARAsChar(EOD, 2);
 	OutputNewLine();
 
 	// Free up the buffers
