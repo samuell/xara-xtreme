@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRDLGCTL
 #define INC_PRDLGCTL
 
-#include <afxdlgs.h>	// Contains the def of CPrintDialog
+//#include <afxdlgs.h>	// Contains the def of CPrintDialog
 #include "printctl.h"	// Defines PrintControl
 #include "printprg.h"	// The print progress dialogue
 

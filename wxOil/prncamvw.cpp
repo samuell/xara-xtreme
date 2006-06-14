@@ -106,13 +106,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prncamvw.h"
 
 #include "camdoc.h"
-#include "scrcamvw.h"
 //#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prntview.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "printdlg.h"
-#include "prdlgctl.h"
+//#include "prdlgctl.h"
 #include "princomp.h"
 #include "printctl.h"
 #include "psrndrgn.h"
@@ -128,7 +127,7 @@ DECLARE_SOURCE("$Revision$");
 #define new CAM_DEBUG_NEW
 #define USERNAME "Mike"
 
-BOOL PrintMonitor::StartPrintJob(HDC PrintJobDC)
+BOOL PrintMonitor::StartPrintJob(CNativeDC * PrintJobDC)
 {
 	// Make sure we don't already have a print job going.
 	if (CurrentPrintJob != NULL)
@@ -172,7 +171,7 @@ BOOL PrintMonitor::IsPrintStatusOK()
 	if (CurrentPrintJob != NULL)
 	{
 		// Use a semaphore structure here so we don't do this more than once.
-		HDC PrintDC = CurrentPrintJob;
+		CNativeDC * PrintDC = CurrentPrintJob;
 		CurrentPrintJob = NULL;
 		::AbortDoc(PrintDC);
 
@@ -265,7 +264,7 @@ BOOL PrintMonitor::InitPrefs()
 
 
 // No current print job.
-HDC PrintMonitor::CurrentPrintJob = NULL;
+CNativeDC * PrintMonitor::CurrentPrintJob = NULL;
 BOOL PrintMonitor::PrintingIsActive = FALSE;
 BOOL PrintMonitor::FullRedrawNeeded = FALSE;
 
@@ -316,18 +315,18 @@ void ScreenView::OnFilePrint()
 
 	// get default print info
 	CCPrintInfo *pPrintInfo;
-	TRY
+	try
 	{
 		pPrintInfo = new CCPrintInfo(KernelDoc,this);
 	}
-	CATCH(CException, e)
+	catch(CException)
 	{
 		// Out of memory - report error and exit.
 		Error::SetError(_R(IDS_OUT_OF_MEMORY));
 		InformError();
 		return;
 	}
-	END_CATCH
+
 
 	ASSERT(pPrintInfo->m_pPD != NULL);    // must be set
 	BOOL StartedPrinting = FALSE;
@@ -1274,7 +1273,7 @@ BOOL ScreenView::PrintPaper(CDC *pPrintDC,
 				HRGN hBandRgn;
 				hBandRgn = ::CreateRectRgnIndirect(&pPrintInfo->m_rectDraw);
 				ERROR2IF(hBandRgn == NULL, FALSE, "CreateRectRgnIndirect() failed!");
-				ERROR3IF(pPrintDC->GetSafeHdc() == NULL, "Bad HDC in dcPrint!");
+				ERROR3IF(pPrintDC->GetSafeHdc() == NULL, "Bad CNativeDC * in dcPrint!");
 				ERROR2IF(::SelectClipRgn(pPrintDC->GetSafeHdc(), hBandRgn) == 0,
 						 FALSE, "SelectClipRgn() failed!");
 

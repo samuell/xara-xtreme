@@ -107,12 +107,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "colourix.h"
+#include "colourix.h"
 //#include "cxfrec.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "cxfrech.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftags.h"
 //#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "printctl.h"
+#include "printctl.h"
 #include "saveeps.h"
 
 DECLARE_SOURCE("$Revision$");
@@ -151,11 +151,9 @@ BOOL PrintComponentClass::Init()
 	// Register it
 	GetApplication()->RegisterDocComponent(pClass);
 
-PORTNOTE("print","Removed PrintControl usage")
-#ifndef EXCLUDE_FROM_XARALX
-	if (Camelot.DeclareSection("Printing",1))
-		Camelot.DeclarePref("Printing", "AppPrintMethod", 	(INT32*)(&PrintControl::AppPrintMethod)); */
-#endif
+	if (Camelot.DeclareSection(_T("Printing"),1))
+		Camelot.DeclarePref(_T("Printing"), _T("AppPrintMethod"), 	(INT32*)(&PrintControl::AppPrintMethod));
+
 	// All ok
 	return TRUE;
 }
@@ -178,8 +176,6 @@ PORTNOTE("print","Removed PrintControl usage")
 
 BOOL PrintComponentClass::AddComponent(BaseDocument *pDocument)
 {
-	PORTNOTETRACE("print","PrintComponentClass::AddComponent - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Check to see if this document already has a print component; if so, leave it alone.
 	if (pDocument->GetDocComponent(CC_RUNTIME_CLASS(PrintComponent)) != NULL)
 		return TRUE;
@@ -202,7 +198,7 @@ BOOL PrintComponentClass::AddComponent(BaseDocument *pDocument)
 
 	// All ok - add the component to the document.
 	pDocument->AddDocComponent(pComponent);
-#endif
+
 	return TRUE;
 }
 
@@ -273,10 +269,7 @@ PrintComponent::~PrintComponent()
 	// Delete our print control object
 	if (pPrCtrl != NULL)
 	{
-	PORTNOTETRACE("print","PrintComponent::~PrintComponent - pPrCtrl NOT deleted");
-#ifndef EXCLUDE_FROM_XARALX
 		delete pPrCtrl;
-#endif
 		pPrCtrl = NULL;
 	}
 }
@@ -467,12 +460,9 @@ BOOL PrintComponent::OutputValue(UINT32 Token,INT32 Value)
 
 	BOOL ok = TRUE;
 
-	PORTNOTETRACE("print","PrintComponentClass::OutputValue - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (ok) ok = pExportDC->OutputToken(PCTokenStr[Token]);
 	if (ok) ok = pExportDC->OutputValue(Value);
 	if (ok) ok = pExportDC->OutputNewLine();
-#endif
 
 	return ok;
 }
@@ -485,12 +475,9 @@ BOOL PrintComponent::OutputValue(UINT32 Token,FIXED16 Value)
 
 	BOOL ok = TRUE;
 
-	PORTNOTETRACE("print","PrintComponentClass::OutputValue - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (ok) ok = pExportDC->OutputToken(PCTokenStr[Token]);
 	if (ok) ok = pExportDC->OutputReal(Value.MakeDouble());
 	if (ok) ok = pExportDC->OutputNewLine();
-#endif
 	return ok;
 }
 
@@ -531,8 +518,6 @@ BOOL PrintComponent::WriteEPSComments(EPSFilter *pFilter)
 
 	BOOL ok = TRUE;
 
-	PORTNOTETRACE("print","PrintComponentClass::WriteEPSComments - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (ok) ok = OutputValue(PCTOKEN_SECTIONNAME,		PC_SECTION_VERSION);
 
 	if (ok) ok = OutputValue(PCTOKEN_WHOLESPREAD,		pPrCtrl->IsWholeSpread());
@@ -572,7 +557,7 @@ BOOL PrintComponent::WriteEPSComments(EPSFilter *pFilter)
 
 	// reset the DC ptr to NULL (ready for next time)
 	pExportDC = NULL;
-#endif
+
 	return ok;
 }
 
@@ -610,8 +595,6 @@ ProcessEPSResult PrintComponent::ProcessEPSComment(EPSFilter *pFilter,
 
 	ProcessEPSResult Result = EPSCommentUnknown;
 
-	PORTNOTETRACE("print","PrintComponentClass::ProcessEPSComment - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	PCToken Token = GetToken(pComment);
 
 	if (Token != PCTOKEN_UNKNOWN)
@@ -657,12 +640,13 @@ ProcessEPSResult PrintComponent::ProcessEPSComment(EPSFilter *pFilter,
 			case PCTOKEN_DPSPRINTRANGE:		pPrCtrl->SetDPSPrintRange(PrintRangeDPS(n));		break;
 			case PCTOKEN_ALLTEXTASSHAPES:	pPrCtrl->SetTextOptions((PrintTextOptions) n);		break;
 //			case PCTOKEN_PRINTMETHOD:		pPrCtrl->SetPrintMethod(PrintMethodType(n));		break;
+			default:
+				break;
 		}
 
 		// Let the print control object know we have finished importing (for the moment at least)
 		pPrCtrl->EndImport();
 	}
-#endif
 	return Result;
 }
 
@@ -695,7 +679,7 @@ BOOL PrintComponent::EndExport(BaseCamelotFilter *pFilter, BOOL Success)
 // WEBSTER - markn 14/2/97
 // No print records needed in Webster
 #ifndef WEBSTER
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (pFilter == NULL)
 	{
 		ERROR3("PrintComponent::EndExport filter is null!");
@@ -721,8 +705,8 @@ BOOL PrintComponent::EndExport(BaseCamelotFilter *pFilter, BOOL Success)
 		}	
 	}
 
-#endif		
 #endif // WEBSTER
+#endif
 	return(ok);
 }
 
@@ -748,7 +732,7 @@ BOOL PrintComponent::ExportPrintSettings(BaseCamelotFilter *pFilter)
 {
 	BOOL ok = TRUE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 	// --- Write the record
 	CXaraFileRecord Rec(TAG_PRINTERSETTINGS, TAG_PRINTERSETTINGS_SIZE);
@@ -866,7 +850,7 @@ BOOL PrintComponent::ExportPrintSettings(BaseCamelotFilter *pFilter)
 	#undef OutputValueU
 	#undef OutputValueS
 	#undef OutputValue16
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 
 	return(ok);
 }
@@ -893,7 +877,7 @@ BOOL PrintComponent::ExportImagesetting(BaseCamelotFilter *pFilter)
 {
 	BOOL ok = TRUE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 	TypesetInfo *TInfo = GetPrintControl()->GetTypesetInfo();
 	if (TInfo == NULL)
@@ -920,6 +904,8 @@ BOOL PrintComponent::ExportImagesetting(BaseCamelotFilter *pFilter)
 			case SCRTYPE_MEZZOTINT:		Func = 8;	break;
 			case SCRTYPE_SQUARE:		Func = 9;	break;
 			case SCRTYPE_DITHER:		Func = 10;	break;
+			default:
+				break;
 		}
 		ok = Rec.WriteUINT16(Func);
 	}
@@ -968,7 +954,7 @@ BOOL PrintComponent::ExportColourPlate(BaseCamelotFilter *pFilter, ColourPlate *
 	ERROR3IF(pPlate == NULL, "Illegal NULL params");
 
 	BOOL ok = TRUE;
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 	// --- Save any referenced spot colour
 	IndexedColour *pCol = pPlate->GetSpotColour();
@@ -993,6 +979,8 @@ BOOL PrintComponent::ExportColourPlate(BaseCamelotFilter *pFilter, ColourPlate *
 		case COLOURPLATE_YELLOW:	Type = 3; break;
 		case COLOURPLATE_KEY:		Type = 4; break;
 		case COLOURPLATE_SPOT:		Type = 5; break;
+		default:
+			break;
 	}
 																	//	Size	Total
 	if (ok)  ok = Rec.WriteBYTE(Type);								//	1		1
@@ -1033,7 +1021,7 @@ BOOL PrintComponent::ExportColourPlate(BaseCamelotFilter *pFilter, ColourPlate *
 
 void PrintComponent::ImportPrintSettings(CXaraFileRecord* Rec)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 
 	PORTNOTETRACE("print","PrintComponent::ImportPrintSettings - do nothing");
@@ -1206,7 +1194,7 @@ void PrintComponent::ImportPrintSettings(CXaraFileRecord* Rec)
 
 void PrintComponent::ImportImagesetting(CXaraFileRecord* Rec)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	PORTNOTETRACE("print","PrintComponent::ImportImagesetting - do nothing");
 	TypesetInfo *TInfo = GetPrintControl()->GetTypesetInfo();
 	if (TInfo == NULL)
@@ -1296,7 +1284,7 @@ void PrintComponent::ImportImagesetting(CXaraFileRecord* Rec)
 
 void PrintComponent::ImportColourPlate(CXaraFileRecord* Rec, CamelotRecordHandler *pHandler)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	BOOL ok = TRUE;
 
 	PORTNOTETRACE("print","PrintComponent::ImportColourPlate - do nothing");

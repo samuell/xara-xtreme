@@ -134,6 +134,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "psrndrgn.h"
 #include "psdc.h"
 //#include "printstr.h"
+#include <stdlib.h>
 
 CC_IMPLEMENT_MEMDUMP(LoadPrintMarks, LoadDirect);
 CC_IMPLEMENT_MEMDUMP(PrintMarksMan, CC_CLASS_MEMDUMP);
@@ -339,7 +340,7 @@ PrintMark::PrintMark()
 PrintMark::~PrintMark()
 {
 	MarkPosition* pMarkPos;
-	while (pMarkPos=(MarkPosition*)MarkPositions.RemoveTail())
+	while ((pMarkPos=(MarkPosition*)MarkPositions.RemoveTail()))
 		delete pMarkPos;
 }
 
@@ -752,7 +753,7 @@ void PrintMarksCache::Invalidate()
 {
 	// destroy all marks in the cache.
 	PrintMarkItem* pItem;
-	while (pItem=(PrintMarkItem*)PrintMarkCache.RemoveTail())
+	while ((pItem=(PrintMarkItem*)PrintMarkCache.RemoveTail())) // assignment
 		delete pItem;
 	// Make sure the crop and text info handles don't reference anything
 	CropMarkHandle=0;
@@ -935,10 +936,10 @@ BOOL PrintMarksCache::DecodeCachedLayer(Layer* pLayer)
 
 	BOOL IsValid = FALSE;
 	BOOL IsCustomMark = FALSE;
-	if (Token == String_16("%PRINTMARK"))				// This text must not be internationalised
+	if (Token == String_16(_T("%PRINTMARK")))				// This text must not be internationalised
 		IsValid = TRUE;
 
-	if (!IsValid && Token == String_16("%CUSTOMMAR"))	// This text must not be internationalised
+	if (!IsValid && Token == String_16(_T("%CUSTOMMAR")))	// This text must not be internationalised
 	{
 		IsValid = TRUE;
 		IsCustomMark = TRUE;
@@ -1077,7 +1078,7 @@ BOOL PrintMarksCache::DecodeMarkFormat(const String_256 *pFormatString, PrintMar
 	MarkOrient NewOrient;
 
 	const TCHAR COMMA	= TEXT(',');		// This text must not be internationalised
-	const TCHAR EQUALS	= TEXT('=');
+//	const TCHAR EQUALS	= TEXT('=');
 	const TCHAR QUOTES	= TEXT('"');
 	const TCHAR PLUS	= TEXT('+');
 	const TCHAR SPACE	= TEXT(' ');
@@ -1090,7 +1091,7 @@ BOOL PrintMarksCache::DecodeMarkFormat(const String_256 *pFormatString, PrintMar
 	// Turn on the exceptions function in the string reading class
 	StringBase::EnableExceptionHandler();
 
-	TRY 
+	//try 
 	{
 		// toast everything up to the first quote
 		pos = Name.FindNextChar(QUOTES);
@@ -1143,8 +1144,8 @@ BOOL PrintMarksCache::DecodeMarkFormat(const String_256 *pFormatString, PrintMar
 		pMark->SetDefaultState(Enabled);
 
 		// The remainder of this string is a format list
-		BOOL format=FALSE;
-		BOOL eos=FALSE;
+//		BOOL format=FALSE;
+//		BOOL eos=FALSE;
 
 		// Turn our exception handler off but don't pop it.
 		StringBase::DisableExceptionHandler(FALSE);
@@ -1219,13 +1220,15 @@ BOOL PrintMarksCache::DecodeMarkFormat(const String_256 *pFormatString, PrintMar
 			}
 		}
 	}
-	CATCH (CUserException, e)
+PORTNOTE("other", "Disabled random use of MFC CUserException in Kernel code")
+#ifndef EXCLUDE_FROM_XARALX
+	catch (CUserException)
 	{
 		// An exception has been thrown which means
 		// we failed to parse this string, so simply report failure
 		AllIsWell = FALSE;
 	}
-	END_CATCH
+#endif
 
 	// Switch off the exception state finally, (and of course pop it)!
 	StringBase::DisableExceptionHandler();
@@ -1253,12 +1256,12 @@ UINT32 PrintMarksCache::DecodeToMarkType(const String_256* Name) const
 {
 	ERROR2IF(Name == NULL, MarkType_Unknown, "NULL pointer passed to DecodeToMarkType");
 	
-	if ((*Name)==String_16("_R(ID_NONE)")) 	return MarkType_Unknown;
-	if ((*Name)==String_16("_R(ID_STAR)")) 	return MarkType_Star;
-	if ((*Name)==String_16("_R(ID_REGM)")) 	return MarkType_Registration;
-	if ((*Name)==String_16("_R(ID_CBAR)")) 	return MarkType_ColourBar;
-	if ((*Name)==String_16("_R(ID_GBAR)")) 	return MarkType_GreyBar;
-	if ((*Name)==String_16("_R(ID_INFO)")) 	return MarkType_Information;
+	if ((*Name)==String_16(_T("ID_NONE"))) 	return MarkType_Unknown; /*NORESOURCEFIX*/
+	if ((*Name)==String_16(_T("ID_STAR"))) 	return MarkType_Star; /*NORESOURCEFIX*/ 
+	if ((*Name)==String_16(_T("ID_REGM"))) 	return MarkType_Registration; /*NORESOURCEFIX*/
+	if ((*Name)==String_16(_T("ID_CBAR"))) 	return MarkType_ColourBar; /*NORESOURCEFIX*/
+	if ((*Name)==String_16(_T("ID_GBAR"))) 	return MarkType_GreyBar; /*NORESOURCEFIX*/
+	if ((*Name)==String_16(_T("ID_INFO"))) 	return MarkType_Information; /*NORESOURCEFIX*/
 	
 	return MarkType_Unknown;
 }
@@ -1451,13 +1454,17 @@ BOOL PrintMarksCache::UpdateTextInfoMark(Document* pDocument, RenderRegion* pRRe
 	Style.lfPitchAndFamily	=0x12;
 	camStrncpy(Style.lfFaceName, TEXT("Times New Roman\0"), 16);
 */
-	String_64 FontName("Courier New");
+	String_64 FontName(_T("Courier New"));
 	MILLIPOINT FontSize = 9*1000;
 
 	// now create the text story to put in the mark.
 	TextStory *pStory;
 	DocColour TextCol(COLOUR_BLACK);
-	pStory = TextStory::CreateFromChars(DocCoord(0,0), (TCHAR *)TextInfo, NULL, pDocument, NULL, FALSE, &TextCol);
+#ifdef _UNICODE
+	pStory = TextStory::CreateFromChars(DocCoord(0,0), NULL, (TCHAR *)TextInfo, pDocument, NULL, FALSE, &TextCol);
+#else
+	pStory = TextStory::CreateFromChars(DocCoord(0,0), (char *)TextInfo, NULL, pDocument, NULL, FALSE, &TextCol);
+#endif
 	if (pStory==NULL)
 	{
 		// deleting this will delete the mark position
@@ -1716,7 +1723,7 @@ PageRectList::~PageRectList()
 void PageRectList::DeleteAll()
 {
 	PageRect* pItem;
-	while (pItem=((PageRect*)RemoveTail()))
+	while ((pItem=((PageRect*)RemoveTail()))) // assignment
 		delete pItem;
 }
 
@@ -1848,21 +1855,25 @@ BOOL PrintMarksMan::ConstructCache()
 
 	BOOL ok=FALSE;
 	// otherwise do some serious stuff.
-	TCHAR SearchFile[] = "mrktmpl.xar";
-	TCHAR *OutputBuff = new TCHAR[_MAX_PATH];
-	if (OutputBuff)
+	TCHAR SearchFile[] = _T("mrktmpl.xar");
+//	TCHAR *OutputBuff = new TCHAR[_MAX_PATH];
+	if (1 /*OutputBuff*/)
 	{
 		LoadPrintMarks LdPrintMark;
 		// try to find the search file...
+		StringVar s(CamResource::GetResourceFilePath(SearchFile));
+PORTNOTE("other", "Disabled printmark resource file finding")
+#ifndef EXCLUDE_FROM_XARALX
 		ok = FileUtil::FindResourceFile(SearchFile, OutputBuff);
+#endif
 		// Add a crop mark bits.
 		ok = ok && PMMCache.CreateCropMark();
 		// Add a text info mark too.
 		ok = ok && PMMCache.CreateTextInfoMark();
 		// Get the winoil level direct loader to do its stuff
-		ok = ok && LdPrintMark.Execute(OutputBuff);
+		ok = ok && LdPrintMark.Execute(s);
 		// delete the allocated buffer
-		delete OutputBuff;
+//		delete OutputBuff;
 	}
 	// return all is well/not well
 	return (TemplateCached=ok);
@@ -2185,7 +2196,7 @@ void PrintMarksMan::StartPrinting()
 	// now cache the print time
 	CCTime MyTime;
 	PMMCache.CachedTime.Empty();
-	String_64 TimeFormat("%dy/%mt/%yr  %th.%mn %pm");
+	String_64 TimeFormat(_T("%dy/%mt/%yr  %th.%mn %pm"));
 	MyTime.ConvertStandardDateAndTime(&TimeFormat, &PMMCache.CachedTime);
 }
 
@@ -2428,8 +2439,10 @@ void PrintMarksMan::RenderPrintMarks(PrintMarksComponent *pComp,
 	MILLIPOINT adjbleed = AdjustedBleed();
 
 	// is this region a postscript render region?
-	BOOL IsPostScript = pRRegion->IS_KIND_OF(PrintPSRenderRegion);
+PORTNOTE("printing", "disabled print mark generation use of PrintPSRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL OldClipState = FALSE;
+	BOOL IsPostScript = pRRegion->IS_KIND_OF(PrintPSRenderRegion);
 	PSPrintDC *pPrintDC = NULL;
 
 	// configure the postscript clipping region
@@ -2443,7 +2456,8 @@ void PrintMarksMan::RenderPrintMarks(PrintMarksComponent *pComp,
 		// Disable the print clipping for the moment
 		OldClipState = pPrintDC->SetClipping(FALSE);
 	}
-		
+#endif		
+
 	// check for any user doc marks
 	DocPrintMark* pDocMark = pComp->GetFirstMark();
 	if (pDocMark!=NULL)
@@ -2464,6 +2478,8 @@ void PrintMarksMan::RenderPrintMarks(PrintMarksComponent *pComp,
 		}
 	}
 
+PORTNOTE("printing", "disabled print mark generation use of PrintPSRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	// finalise any bleed area clipping in PostScript
 	if (IsPostScript)
 	{
@@ -2476,6 +2492,7 @@ void PrintMarksMan::RenderPrintMarks(PrintMarksComponent *pComp,
 			// ClipToBleed(pRRegion,pSpread);
 		}
 	}
+#endif
 }
 
 
@@ -2509,6 +2526,8 @@ void PrintMarksMan::ClipToBleed(RenderRegion* pRRegion,Spread *pSpread)
 	if ( !ShowPrintMarks( (Document *) (pSpread->FindOwnerDoc()) ) )
 		return;
 
+PORTNOTE("printing", "disabled print mark generation use of PrintPSRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	// dont render to a none postscript region
 	if ( !IS_A(pRRegion, PrintPSRenderRegion) )
 		return;
@@ -2526,6 +2545,7 @@ void PrintMarksMan::ClipToBleed(RenderRegion* pRRegion,Spread *pSpread)
 	// BODGE ALERT
 	// Mike 02/09/96 - We should be performing stacked clipping. This is not the place
 	//                 to alter the postscript clip region but if will suffice for now.
+#endif
 }
 
 
@@ -2807,19 +2827,19 @@ void PrintMarksMan::RenderPrintMarksAroundRect(PrintMarksComponent *pComp,
 
 			if (pPrevPage)
 			{
-				sl=(PrevPageRect.hix==CurrPageRect.lox);
-				sr=(PrevPageRect.lox==CurrPageRect.hix);
-				sb=(PrevPageRect.hiy==CurrPageRect.loy);
-				st=(PrevPageRect.loy==CurrPageRect.hiy);
+				sl=(PrevPageRect.hi.x==CurrPageRect.lo.x);
+				sr=(PrevPageRect.lo.x==CurrPageRect.hi.x);
+				sb=(PrevPageRect.hi.y==CurrPageRect.lo.y);
+				st=(PrevPageRect.lo.y==CurrPageRect.hi.y);
 			}
 
 			if (pNextPage)
 			{
 				NextPageRect=pNextPage->GetPageRect();
-				sl=sl || (NextPageRect.hix==CurrPageRect.lox);
-				sr=sr || (NextPageRect.lox==CurrPageRect.hix);
-				sb=sb || (NextPageRect.hiy==CurrPageRect.loy);
-				st=st || (NextPageRect.loy==CurrPageRect.hiy);
+				sl=sl || (NextPageRect.hi.x==CurrPageRect.lo.x);
+				sr=sr || (NextPageRect.lo.x==CurrPageRect.hi.x);
+				sb=sb || (NextPageRect.hi.y==CurrPageRect.lo.y);
+				st=st || (NextPageRect.lo.y==CurrPageRect.hi.y);
 			}
 
 			
@@ -2944,51 +2964,51 @@ void PageMarkRegions::Initialise(const DocRect& page, INT32 bleed)
 	INT32 blox,bloy,bhix,bhiy;
 	
 	// calculate the bleed bbox
-	blox = page.lox-bleed;
-	bloy = page.loy-bleed;
-	bhix = page.hix+bleed;
-	bhiy = page.hiy+bleed;
+	blox = page.lo.x-bleed;
+	bloy = page.lo.y-bleed;
+	bhix = page.hi.x+bleed;
+	bhiy = page.hi.y+bleed;
 
 	INT32 hi = CROPAREA_SIZE;
 	INT32 spc = CROPAREA_SIZE/4;
-	INT32 slenx = (page.hix-page.lox-4*spc)/10;
-	INT32 sleny = (page.hiy-page.loy-4*spc)/10;
+	INT32 slenx = (page.hi.x-page.lo.x-4*spc)/10;
+	INT32 sleny = (page.hi.y-page.lo.y-4*spc)/10;
 	INT32 wlenx = 8*slenx;
 	INT32 wleny = 8*sleny;
-	INT32 cx=(page.lox+page.hix)>>1;
-	INT32 cy=(page.loy+page.hiy)>>1;
+	INT32 cx=(page.lo.x+page.hi.x)>>1;
+	INT32 cy=(page.lo.y+page.hi.y)>>1;
 	
 	// top left corner
 	Region[0].Pos = DocRect(blox-hi, bhiy, blox, bhiy+hi);
 
 	// 3 along top edge	
-	Region[1].Pos = DocRect(page.lox+spc, bhiy, page.lox+spc+slenx, bhiy+hi);
+	Region[1].Pos = DocRect(page.lo.x+spc, bhiy, page.lo.x+spc+slenx, bhiy+hi);
 	Region[2].Pos = DocRect(cx-(wlenx>>1), bhiy, cx+(wlenx>>1), bhiy+hi);
-	Region[3].Pos = DocRect(page.hix-spc-slenx, bhiy, page.hix-spc, bhiy+hi);
+	Region[3].Pos = DocRect(page.hi.x-spc-slenx, bhiy, page.hi.x-spc, bhiy+hi);
 
 	// top right corner
 	Region[4].Pos = DocRect(bhix, bhiy, bhix+hi, bhiy+hi);
 
 	// 3 down right edge
-	Region[5].Pos = DocRect(bhix, page.hiy-spc-sleny, bhix+hi, page.hiy-spc);
+	Region[5].Pos = DocRect(bhix, page.hi.y-spc-sleny, bhix+hi, page.hi.y-spc);
 	Region[6].Pos = DocRect(bhix, cy-(wleny>>1), bhix+hi, cy+(wleny>>1));
-	Region[7].Pos = DocRect(bhix, page.loy+spc, bhix+hi, page.loy+spc+sleny);
+	Region[7].Pos = DocRect(bhix, page.lo.y+spc, bhix+hi, page.lo.y+spc+sleny);
 
 	// bottom right corner
 	Region[8].Pos = DocRect(bhix, bloy-hi, bhix+hi, bloy);
 
 	// 3 along bottom edge
-	Region[9].Pos  = DocRect(page.hix-spc-slenx, bloy-hi, page.hix-spc, bloy);
+	Region[9].Pos  = DocRect(page.hi.x-spc-slenx, bloy-hi, page.hi.x-spc, bloy);
 	Region[10].Pos = DocRect(cx-(wlenx>>1), bloy-hi, cx+(wlenx>>1), bloy);
-	Region[11].Pos = DocRect(page.lox+spc, bloy-hi, page.lox+spc+slenx, bloy);
+	Region[11].Pos = DocRect(page.lo.x+spc, bloy-hi, page.lo.x+spc+slenx, bloy);
 
 	// bottom left corner
 	Region[12].Pos = DocRect(blox-hi, bloy-hi, blox, bloy);
 
 	// 3 up left edge
-	Region[13].Pos = DocRect(blox-hi, page.loy+spc, blox, page.loy+spc+sleny);
+	Region[13].Pos = DocRect(blox-hi, page.lo.y+spc, blox, page.lo.y+spc+sleny);
 	Region[14].Pos = DocRect(blox-hi, cy-(wleny>>1), blox, cy+(wleny>>1));
-	Region[15].Pos = DocRect(blox-hi, page.hiy-spc-sleny, blox, page.hiy-spc);
+	Region[15].Pos = DocRect(blox-hi, page.hi.y-spc-sleny, blox, page.hi.y-spc);
 
 	for (INT32 i=0; i<16; i++)
 		Region[i].Valid=Region[i].OrientX=TRUE;
@@ -3156,8 +3176,8 @@ void MarkFormatRegion::Empty()
 void MarkFormatRegion::SetPosition(const DocRect &Position)
 {
 	TheBounds = Position;
-	MkCx = (TheBounds.lox + TheBounds.hix)>>1;
-	MkCy = (TheBounds.loy + TheBounds.hiy)>>1;
+	MkCx = (TheBounds.lo.x + TheBounds.hi.x)>>1;
+	MkCy = (TheBounds.lo.y + TheBounds.hi.y)>>1;
 }
 
 
@@ -3206,19 +3226,19 @@ BOOL MarkFormatRegion::AddMark(PrintMarkItem *pMark, MarkFormat *pForm)
 	{
 		if (pForm->Top)
 		{
-			DocCoord anchor = DocCoord(TheBounds.lox,TheBounds.hiy); 
+			DocCoord anchor = DocCoord(TheBounds.lo.x,TheBounds.hi.y); 
 			ok = MakeMark(pMark, anchor, FALSE, FALSE, TRUE, FALSE, 0, h, rt, &TLeft);
 		}
 		
 		if (pForm->Middle)
 		{
-			DocCoord anchor = DocCoord(TheBounds.lox,MkCy);
+			DocCoord anchor = DocCoord(TheBounds.lo.x,MkCy);
 			ok = MakeMark(pMark, anchor, FALSE, TRUE, TRUE, TRUE, 0, h>>1, rt, &MLeft);		
 		}
 		
 		if (pForm->Bottom)
 		{
-			DocCoord anchor = DocCoord(TheBounds.lox,TheBounds.loy);
+			DocCoord anchor = DocCoord(TheBounds.lo.x,TheBounds.lo.y);
 			ok = MakeMark(pMark, anchor, FALSE, FALSE, TRUE, TRUE, 0, 0, rt, &BLeft);
 		}
 	}
@@ -3227,7 +3247,7 @@ BOOL MarkFormatRegion::AddMark(PrintMarkItem *pMark, MarkFormat *pForm)
 	{
 		if (pForm->Top)
 		{
-			DocCoord anchor = DocCoord(MkCx,TheBounds.hiy); 
+			DocCoord anchor = DocCoord(MkCx,TheBounds.hi.y); 
 			ok = MakeMark(pMark, anchor, TRUE, FALSE, TRUE, FALSE, w>>1, h, rt, &TCentre);
 		}
 		
@@ -3239,7 +3259,7 @@ BOOL MarkFormatRegion::AddMark(PrintMarkItem *pMark, MarkFormat *pForm)
 		
 		if (pForm->Bottom)
 		{
-			DocCoord anchor = DocCoord(MkCx,TheBounds.loy);
+			DocCoord anchor = DocCoord(MkCx,TheBounds.lo.y);
 			ok = MakeMark(pMark, anchor, TRUE, FALSE, TRUE, TRUE, w>>1, 0, rt, &BCentre);
 		}
 	}
@@ -3248,19 +3268,19 @@ BOOL MarkFormatRegion::AddMark(PrintMarkItem *pMark, MarkFormat *pForm)
 	{
 		if (pForm->Top)
 		{
-			DocCoord anchor = DocCoord(TheBounds.hix,TheBounds.hiy); 
+			DocCoord anchor = DocCoord(TheBounds.hi.x,TheBounds.hi.y); 
 			ok = MakeMark(pMark, anchor, FALSE, FALSE, FALSE, FALSE, w, h, rt, &TRight);
 		}
 		
 		if (pForm->Middle)
 		{
-			DocCoord anchor = DocCoord(TheBounds.hix,MkCy);
+			DocCoord anchor = DocCoord(TheBounds.hi.x,MkCy);
 			ok = MakeMark(pMark, anchor, FALSE, TRUE, FALSE, TRUE, w, h>>1, rt, &MRight);		
 		}
 		
 		if (pForm->Bottom)
 		{
-			DocCoord anchor = DocCoord(TheBounds.hix,TheBounds.loy);
+			DocCoord anchor = DocCoord(TheBounds.hi.x,TheBounds.lo.y);
 			ok = MakeMark(pMark, anchor, FALSE, FALSE, FALSE, TRUE, w, 0, rt, &BRight);
 		}
 	}

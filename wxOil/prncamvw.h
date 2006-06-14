@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class PrintMonitor : public SimpleCCObject
 {
 public:
-	static BOOL StartPrintJob(HDC);
+	static BOOL StartPrintJob(CNativeDC *);
 	static void EndPrintJob();
 	static BOOL IsPrintStatusOK();
 	static BOOL InitPrefs();
@@ -142,7 +142,7 @@ public:
 	static BOOL FullRedrawNeeded;
 
 protected:
-	static HDC CurrentPrintJob;
+	static CNativeDC * CurrentPrintJob;
 	static INT32 MySeriousErrorCount;
 	static BOOL PrintingIsActive;
 };

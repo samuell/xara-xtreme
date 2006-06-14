@@ -141,7 +141,7 @@ DECLARE_SOURCE("$Revision$");
 BOOL LoadDirect::Execute(const TCHAR* lpszFilename)
 {
 	// find our main application object
-	CCamApp	*pApp = (CCamApp*)AfxGetApp();
+	CCamApp	*pApp = (CCamApp*)&AfxGetApp();
 	if (!pApp)
 		return FALSE;
 
@@ -179,7 +179,10 @@ BOOL LoadDirect::Execute(const TCHAR* lpszFilename)
 
 BOOL LoadDirect::ExecuteHelper(CCamApp* pApp, const TCHAR* lpszFilename)
 {
-	BOOL ok;
+	BOOL ok=TRUE;
+
+	PORTNOTETRACE("other", "Disabled LoadDirect::ExecuteHelper");
+#ifndef EXCLUDE_FROM_XARALX
 
 	// now call the supporting open document function
 	CDocument* pLoadDirectDoc = pApp->OpenHiddenDocument(lpszFilename);
@@ -197,6 +200,7 @@ BOOL LoadDirect::ExecuteHelper(CCamApp* pApp, const TCHAR* lpszFilename)
 	// finally toast the loaded document. 
 	pCamDoc->SetModified(FALSE);
 	pCamDoc->OnCloseDocument();
+#endif
 
 	return ok;
 }

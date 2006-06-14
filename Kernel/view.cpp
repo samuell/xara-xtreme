@@ -82,7 +82,7 @@ the text between the start and end of this header (marked
 XARAHEADERSTART and XARAHEADEREND).
 
 
-MARKS
+		MARKS
 -----
 
 Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
@@ -121,26 +121,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndbmp.h"
 #include "maskedrr.h"
 #include "oilbitmap.h"
-//#include "princomp.h"
+#include "princomp.h"
 #include "printctl.h"
 //#include "prncamvw.h"
 //#include "prdlgctl.h"
 #include "cameleps.h"
 //#include "tim.h"
-//#include "progress.h"
+#include "progress.h"
 //#include "prdlgctl.h"
 #include "qualattr.h"
-//#include "pmaskrgn.h"
+#include "pmaskrgn.h"
 #include "layer.h"
 #include "colcontx.h"
 #include "colormgr.h"
 //#include "colplate.h"
 //#include "ndcchbmp.h"
 #include "nodebev.h"
+#include "prncamvw.h"
 
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "prnmks.h"
-//#include "prnmkcom.h"
+#include "prnmks.h"
+#include "prnmkcom.h"
 
 #ifdef RALPH
 #include "ralphdoc.h"
@@ -225,7 +226,6 @@ View::~View()
 	if (this == Current)
 		SetNoCurrent();
 
-//#pragma message( __LOCMSG__ "Removed ColourContextList usage" )
 	// Decommission all colour contexts that we own
 	ColourContextList  *cclist = ColourContextList::GetList();
 	ERROR3IF( cclist == NULL, "No ColourContextList? What's up?" );
@@ -736,8 +736,6 @@ void View::RenderPaper(RenderRegion* pRRegion, Spread* pSpread)
 		{
 			if (pDocView->GetShowPrintBorders())
 			{
-				PORTNOTETRACE("other","View::RenderPaper - removed print borders");
-#ifndef EXCLUDE_FROM_XARALX
 				PrintComponent* pPrComp = (PrintComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(PrintComponent));
 				if (pPrComp != NULL)
 				{
@@ -745,7 +743,6 @@ void View::RenderPaper(RenderRegion* pRRegion, Spread* pSpread)
 					if (pPrCtrl != NULL)
 						pPrCtrl->RenderPrintBorder(pRRegion);
 				}
-#endif
 			}
 		}
 	}	
@@ -782,7 +779,7 @@ void View::RenderPaper(RenderRegion* pRRegion, Spread* pSpread)
 
 BOOL View::RenderPageMarks(RenderRegion *pCurrRegion, Matrix &ViewTrans, DocRect &ClipRect, Spread *pSpread)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 #ifndef STANDALONE
 
 /*
@@ -844,12 +841,9 @@ BOOL View::RenderPageMarks(RenderRegion *pCurrRegion, Matrix &ViewTrans, DocRect
 				if (pMarksMan!=NULL)
 				{
 					// find this documents print mark component.
-PORTNOTE("other","Removed PrintMarksComponent usage")
-#ifndef EXCLUDE_FROM_XARALX
 					PrintMarksComponent* pMarksComp = (PrintMarksComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(PrintMarksComponent));
 					if (pMarksComp != NULL)
 						pMarksMan->RenderPrintMarks(pMarksComp, pCurrRegion, ViewTrans, ClipRect, pSpread);
-#endif
 				}
 			}
 		}
@@ -887,7 +881,6 @@ PORTNOTE("other","Removed PrintMarksComponent usage")
 
 void View::OnDraw( CNativeDC *pDevContext, OilRect OilClipRect )
 {
-//#pragma message( __LOCMSG__ "View::OnDraw - do nothing" )
 	if (CCamApp::IsDisabled())
 		return;						     	// If the system is disabled, ignore
 
@@ -1160,9 +1153,6 @@ Matrix View::ConstructRenderingMatrix(Spread *pSpread)
 ********************************************************************************************/
 Matrix View::ConstructScaledRenderingMatrix(Spread *pSpread, double ScaleFactor)
 {
-//#pragma message( __LOCMSG__ "View::ConstructScaledRenderingMatrix - do nothing" )
-//	TRACE( _T("Warning - View::ConstructScaledRenderingMatrix called\n") );
-//	return Matrix();
 	// Get the PIXELISED origin of spread coordinates, in document coords
 	DocCoord SpreadCoordOrigin = pSpread->GetSpreadCoordOrigin(TRUE, this);
 
@@ -1399,9 +1389,6 @@ void View::SetScaledPixelSize(FIXED16 NewScaledPixelWidth, FIXED16 NewScaledPixe
 
 ColourContext *View::GetColourContext(ColourModel Model, BOOL ReturnNULLIfNone)
 {
-//#pragma message( __LOCMSG__ "View::GetColourContext - do nothing" )
-//	TRACE( _T("Warning - View::GetColourContext called\n") );
-//	return NULL;
 	// If our internal flag is set, we will return a default global colour context
 	// This allows View::RenderOptimalBitmapPhase to create RenderRegions which will
 	// not colour spearate or correct (as we want to do the correction as a post process
@@ -1520,8 +1507,6 @@ ColourPlate *View::GetColourPlate(void)
 
 void View::SetColourPlate(ColourPlate *NewPlate, BOOL bSendContextChanged)
 {
-	PORTNOTETRACE("other","View::SetColourPlate - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (ColPlate != NULL)
 	{
 		delete ColPlate;
@@ -1559,7 +1544,6 @@ void View::SetColourPlate(ColourPlate *NewPlate, BOOL bSendContextChanged)
 	// the selected view have been changed
 	if (bSendContextChanged && this == DocView::GetSelected())
 		ColourManager::SelViewContextHasChanged();
-#endif
 }
 
 
@@ -1611,8 +1595,6 @@ void View::SetColourPlate(ColourPlate *NewPlate, BOOL bSendContextChanged)
 
 void View::SetColourContext(ColourModel Model, ColourContext *NewContext)
 {
-	PORTNOTETRACE("other","View::SetColourContext - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ColourContextList *cclist = ColourContextList::GetList();
 	ERROR3IF(cclist == NULL, "No ColourContextList? What's up?");
 
@@ -1643,7 +1625,6 @@ void View::SetColourContext(ColourModel Model, ColourContext *NewContext)
 			ShouldDeleteContext[Model] = FALSE;
 		}
 	}
-#endif
 }
 
 /********************************************************************************************
@@ -1658,7 +1639,7 @@ void View::SetColourContext(ColourModel Model, ColourContext *NewContext)
 
 ProgressDisplay::ProgressDisplay()
 {
-	PORTNOTETRACE("other","ProgressDisplay::ProgressDisplay - do nothing");
+	PORTNOTETRACE("printing","Disabled CCPrintInfo");
 #ifndef EXCLUDE_FROM_XARALX
 	//	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
@@ -1668,8 +1649,9 @@ ProgressDisplay::ProgressDisplay()
 	pPrintInfo = NULL;
 #endif
 #endif //webster
+#endif
 	DoProgressDisplay = FALSE;
-	BOOL IsPrinting = FALSE;
+	IsPrinting = FALSE;
 	NumNodesRendered = 0;
 	LastProgressUpdate = 0;
 	ProgressInterval = 1;
@@ -1679,7 +1661,6 @@ ProgressDisplay::ProgressDisplay()
 	// when exporting only a few nodes that have lots of transparency.
 	// We use 256 (a power of 2) so that muls and divs are fast.
 	ProgressScaleFactor = 256;
-#endif
 }
 
 
@@ -1699,8 +1680,6 @@ ProgressDisplay::ProgressDisplay()
 
 void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanner)
 {
-	PORTNOTETRACE("other","ProgressDisplay::SetUp - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	// Work out if we need a progress display
 	IsPrinting = pRender->IsPrinting();
@@ -1730,6 +1709,8 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 
 	// Work out whether to count just selected objects, or all of them.
 	BOOL CountAllObjects = TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -1739,7 +1720,7 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 		CountAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 	}
 #endif //webster
-
+#endif
 	if (CountAllObjects)
 	{
 		// Count *all* objects
@@ -1802,7 +1783,13 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 		// Check to see if we do not do the first stage, - if not then we do the whole
 		// thing as a bitmap without bothering with the mask (becuase it's too much for
 		// most printer drivers to cope with).
-		if ((PrintMonitor::PrintMaskType==PrintMonitor::MASK_SIMPLE) &&
+		if (
+PORTNOTE("printing", "Force optimal mask")
+#ifndef EXCLUDE_FROM_XARALX
+			(PrintMonitor::PrintMaskType==PrintMonitor::MASK_SIMPLE) &&
+#else
+			(0) &&
+#endif
 			(CCDC::GetType(pRender->GetRenderDC(), TRUE) != RENDERTYPE_PRINTER_PS))
 		{
 			FirstStageCount = 0;
@@ -1810,6 +1797,8 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 	}
 
 	INT32 Range = FirstStageCount + SecondStageCount + ThirdStageCount;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting)
@@ -1829,6 +1818,7 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 	}
 	else
 #endif //wesbter
+#endif
 	{
 		// Start progress display (with no initial delay) for Camelot EPS export
 		String_64 ExportMsg(_R(IDT_EXPORTMSG_CAMEPS));
@@ -1840,7 +1830,6 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 #else
 	// Do nothing as not required on standalone viewer
 	return;
-#endif
 #endif
 
 }
@@ -1863,8 +1852,6 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 
 BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 {
-	PORTNOTETRACE("other","ProgressDisplay::IncProgress - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	NumNodesRendered++;
@@ -1872,16 +1859,21 @@ BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && (pPrintInfo != NULL) && (pPrintInfo->m_bContinuePrinting == FALSE))
 		// User has cancelled job
 		return FALSE;
 #endif //webster
+#endif
 	if ((NumNodesRendered * ProgressScaleFactor) > (LastProgressUpdate + ProgressInterval))
 	{
 		// Time to update the progress display.
 		LastProgressUpdate = NumNodesRendered * ProgressScaleFactor;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 		if (IsPrinting && pPrintInfo != NULL)
@@ -1895,6 +1887,7 @@ BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 		}
 		else
 #endif //webster
+#endif
 			return ContinueSlowJob(LastProgressUpdate);
 	}
 
@@ -1902,9 +1895,6 @@ BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 
 	// All ok
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -1923,8 +1913,6 @@ BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 
 BOOL ProgressDisplay::FirstStageDone()
 {
-	PORTNOTETRACE("other","ProgressDisplay::FirstStageDone - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	NumNodesRendered = FirstStageCount;
@@ -1932,21 +1920,21 @@ BOOL ProgressDisplay::FirstStageDone()
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
 		pPrintInfo->SetSliderSubRangePos(NumNodesRendered * ProgressScaleFactor);
 	else
 #endif //webster
+#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 
 #endif
 
 	// All ok
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -1965,8 +1953,6 @@ BOOL ProgressDisplay::FirstStageDone()
 
 BOOL ProgressDisplay::SecondStageDone()
 {
-	PORTNOTETRACE("other","ProgressDisplay::SecondStageDone - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	NumNodesRendered = FirstStageCount + SecondStageCount;
@@ -1974,6 +1960,8 @@ BOOL ProgressDisplay::SecondStageDone()
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -1987,15 +1975,13 @@ BOOL ProgressDisplay::SecondStageDone()
 	}
 	else
 #endif //webster
+#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 
 #endif
 
 	// All ok
 	return TRUE;
-#else
-	return false;
-#endif
 }
 
 /********************************************************************************************
@@ -2012,13 +1998,10 @@ BOOL ProgressDisplay::SecondStageDone()
 
 void ProgressDisplay::AllStagesDone()
 {
-	PORTNOTETRACE("other","ProgressDisplay::AllStagesDone - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	// If we are exporting EPS, end the progress indicator as we're all done.
 	if (DoProgressDisplay && !IsPrinting)
 		EndSlowJob();
-#endif
 #endif
 }
 
@@ -2086,8 +2069,6 @@ void ProgressDisplay::StartBitmapPhaseBand(INT32 TotalNumScanlines)
 
 BOOL ProgressDisplay::BitmapPhaseBandRenderedTo(INT32 ScanlinesRendered)
 {
-	PORTNOTETRACE("other","ProgressDisplay::AllStagesDone - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	if (!DoProgressDisplay)
@@ -2100,6 +2081,8 @@ BOOL ProgressDisplay::BitmapPhaseBandRenderedTo(INT32 ScanlinesRendered)
 		BandOffset = BandSize;
 	INT32 ProgressPos = (NumNodesRendered * ProgressScaleFactor) + BandOffset;
 
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	// Update progress indicators
@@ -2114,15 +2097,13 @@ BOOL ProgressDisplay::BitmapPhaseBandRenderedTo(INT32 ScanlinesRendered)
 	}
 	else
 #endif //webster
+#endif
 		return ContinueSlowJob(ProgressPos);
 
 #endif
 
 	// All ok
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -2141,8 +2122,6 @@ BOOL ProgressDisplay::BitmapPhaseBandRenderedTo(INT32 ScanlinesRendered)
 
 BOOL ProgressDisplay::EndBitmapPhaseBand()
 {
-	PORTNOTETRACE("other","ProgressDisplay::EndBitmapPhaseBand - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	if (!DoProgressDisplay)
@@ -2152,6 +2131,8 @@ BOOL ProgressDisplay::EndBitmapPhaseBand()
 	NumNodesRendered += (BandSize / ProgressScaleFactor);
 	if (NumNodesRendered > (FirstStageCount + SecondStageCount))
 		NumNodesRendered = (FirstStageCount + SecondStageCount);
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -2165,13 +2146,11 @@ BOOL ProgressDisplay::EndBitmapPhaseBand()
 	}
 	else
 #endif //webster
+#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 #endif
 	// All ok
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -2197,7 +2176,6 @@ BOOL ProgressDisplay::EndBitmapPhaseBand()
 
 ********************************************************************************************/
 
-//#pragma message( __LOCMSG__ "Removed View render functions" )
 SlowJobResult View::RenderSimpleNodes(Node *pNode, RenderRegion *pRender,
 							 ProgressDisplay& Progress, Node *pLastComplexNode)
 {
@@ -2208,7 +2186,7 @@ SlowJobResult View::RenderSimpleNodes(Node *pNode, RenderRegion *pRender,
 	BOOL RenderAllObjects = TRUE;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	PORTNOTETRACE("print","View::RenderSimpleNodes - removed printing code");
+	PORTNOTETRACE("print","Disabled CCPrintInfo");
 #ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsPrinting())
 	{
@@ -2421,12 +2399,12 @@ public:
 		if (!m_bCount && pNode == m_pNextAction)
 		{
 			BOOL bIsComplex = m_bNextComplex;
-			TRACE( _T("OPRC# BeforeSubtree 0x%08x - %s\n"), pNode, pNode->GetRuntimeClass()->GetClassName());
-			TRACE( _T("Hit Start of %s span\n"), bIsComplex ? "complex" : "simple" );
+			TRACEUSER("noone", _T("OPRC# BeforeSubtree 0x%08x - %s\n"), pNode, pNode->GetRuntimeClass()->GetClassName());
+			TRACEUSER("noone", _T("Hit Start of %s span\n"), bIsComplex ? "complex" : "simple" );
 			// If we have been doing a complex span then we need to render it now
 			if (m_bDoingComplex)
 			{
-				TRACE( _T("Try to render the last complex span NumNodes = %d\n"), m_ComplexCount);
+				TRACEUSER("noone", _T("Try to render the last complex span NumNodes = %d\n"), m_ComplexCount);
 				RenderLastComplexSpan(pRegion, pNode);
 			}
 			
@@ -2434,9 +2412,9 @@ public:
 			m_pNextAction = m_pScanRR->FindNextFromList();
 			m_bNextComplex = m_pScanRR->IsThisNodeComplex();
 			m_NextBoundsRect = m_pScanRR->GetSpanBounds();
-			TRACE( _T("NextBounds = (%d, %d) - (%d, %d)\n"), m_NextBoundsRect.lo.x, m_NextBoundsRect.lo.y, 
+			TRACEUSER("noone", _T("NextBounds = (%d, %d) - (%d, %d)\n"), m_NextBoundsRect.lo.x, m_NextBoundsRect.lo.y, 
 				m_NextBoundsRect.hi.x, m_NextBoundsRect.hi.y );
-			TRACE( _T("NextAction is %s 0x%08x - %s\n"), m_bNextComplex ? _T("complex") : _T("simple"), m_pNextAction, 
+			TRACEUSER("noone", _T("NextAction is %s 0x%08x - %s\n"), m_bNextComplex ? _T("complex") : _T("simple"), m_pNextAction, 
 				m_pNextAction ? m_pNextAction->GetRuntimeClass()->GetClassName() : _T("") );
 			m_ComplexCount = 0;
 			m_pComplexStart = bIsComplex ? pNode : NULL;
@@ -2461,9 +2439,6 @@ public:
 protected:
 	BOOL RenderLastComplexSpan(RenderRegion* pRegion, Node* pNextSpanStart)
 	{
-//	#pragma message( __LOCMSG__ "OptimalPrintRenderCallback::RenderLastComplexSpan - do nothing" )
-//		TRACE( _T("Warning - OptimalPrintRenderCallback::RenderLastComplexSpan called\n") );
-//		return false;
 		// Call RenderOptimalBitmapPhase to handle this
 		SlowJobResult BitmapResult;
 		DocRect ClipRect = pRegion->GetClipRect();
@@ -2633,8 +2608,6 @@ public:
 
 	virtual BOOL BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState)
 	{
-		PORTNOTETRACE("other","OptimalBitmapRenderCallback::BeforeSubtree - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 //		if (!m_bCount)
 //		{
 //			TRACE( _T("OBRC%s# BeforeSubtree 0x%08x - %s\n", m_bRenderMask?"M":"B"), pNode, pNode->GetRuntimeClass()->GetClassName());
@@ -2687,7 +2660,6 @@ public:
 				TRACE( _T("OBRC# Bad RenderState in BeforeSubtree\n"));
 				break;
 		}
-#endif		
 		return(FALSE);
 	}
 
@@ -2743,13 +2715,14 @@ private:
 
 ********************************************************************************************/
 
-PORTNOTE("other","Removed View render functions")
-#ifndef EXCLUDE_FROM_XARALX
 RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTrans, Spread* pSpread,
 										BOOL PrintPaper)
 {
 //	TRACEUSER( "Gerry", _T("View::RenderOptimalView\n"));
+PORTNOTE("printing", "Force optimal mask")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(PrintMonitor::PrintMaskType!=PrintMonitor::MASK_OPTIMAL, "PrintMaskType must be OPTIMAL here\n");
+#endif
 
 	// Find out what the host render region is capable of
 	RRCaps Caps;
@@ -2768,7 +2741,7 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 
 	// Attach a device to the scanning render region
 	// Since this rr does no real rendering, it does not need a Device context
-	Scanner.AttachDevice(this, NULL, pSpread);
+	Scanner.AttachDevice(this, (CNativeDC*) NULL, pSpread);
 
 	// Get it ready to render
 	Scanner.SetMatrix(ViewTrans);
@@ -2782,6 +2755,8 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 
 		// Work out whether we need to render all objects, or just the selected ones.
 		BOOL RenderAllObjects = TRUE;
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 		CCPrintInfo *pPrintInfo = NULL;
 		if (Printing)
 		{
@@ -2798,6 +2773,7 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 		// We going to analyse the document
 		if (pPrintInfo != NULL)
 			pPrintInfo->SetAnalysing();
+#endif
 
 		ScannerRenderCallback ScanCallback(this, RenderAllObjects, &Scanner);
 
@@ -2813,9 +2789,12 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 //		Scanner.DumpNodeRuns();
 #endif
 
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 		// We going to print the document now
 		if (pPrintInfo != NULL)
 			pPrintInfo->SetPrinting();
+#endif
 
 		// Set up the matrix and clipping rect
 		pRender->SetMatrix(ViewTrans);
@@ -2896,7 +2875,6 @@ OptimalRenderError:
 
 	return Result;
 }
-#endif
 
 /********************************************************************************************
 
@@ -2943,8 +2921,6 @@ SlowJobResult View::RenderOptimalBitmapPhase(DocRect& ClipRect, Matrix& ViewTran
 											BOOL bPrintPaper, INT32& NodesSoFar, ProgressDisplay* pProgress,
 											INT32 TotalProgress)
 {
-	PORTNOTETRACE("other","View::RenderOptimalBitmapPhase - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	TRACEUSER( "Gerry", _T("View::RenderOptimalBitmapPhase TotalProgress = %d\n"), TotalProgress);
 
 	INT32 EndProgress = NodesSoFar + TotalProgress;
@@ -2991,15 +2967,15 @@ SlowJobResult View::RenderOptimalBitmapPhase(DocRect& ClipRect, Matrix& ViewTran
 	{
 		TRACE( _T("Very small rectangle\n"));
 	}
-	TempPixels = (INT32)(((double)BitmapClipRect.lox) / dPixelWidth);
-	BitmapClipRect.lox = (INT32)(((double)TempPixels) * dPixelWidth);
+	TempPixels = (INT32)(((double)BitmapClipRect.lo.x) / dPixelWidth);
+	BitmapClipRect.lo.x = (INT32)(((double)TempPixels) * dPixelWidth);
 	if (BitmapClipRect.Width() < dPixelWidth)
-		BitmapClipRect.hix = BitmapClipRect.lox + dPixelWidth;
+		BitmapClipRect.hi.x = (INT32)(BitmapClipRect.lo.x + dPixelWidth);
 	
-	TempPixels = (INT32)(((double)BitmapClipRect.loy) / dPixelWidth);
-	BitmapClipRect.loy = (INT32)(((double)TempPixels) * dPixelWidth);
+	TempPixels = (INT32)(((double)BitmapClipRect.lo.y) / dPixelWidth);
+	BitmapClipRect.lo.y = (INT32)(((double)TempPixels) * dPixelWidth);
 	if (BitmapClipRect.Height() < dPixelWidth)
-		BitmapClipRect.hiy = BitmapClipRect.loy + dPixelWidth;
+		BitmapClipRect.hi.y = INT32(BitmapClipRect.lo.y + dPixelWidth);
 
 	// Markn 26/10/95
 	// Find out if this render region is printing or not.
@@ -3055,7 +3031,7 @@ SlowJobResult View::RenderOptimalBitmapPhase(DocRect& ClipRect, Matrix& ViewTran
 	}
 
 	// Count the nodes in this complex run
-	BOOL StartCounting = FALSE;
+//	BOOL StartCounting = FALSE;
 	INT32 TotalBands = MaskedBitmap.GetNumBands();
 
 	// Count the nodes to be rendered so we can calculate the increment to use
@@ -3125,7 +3101,8 @@ SlowJobResult View::RenderOptimalBitmapPhase(DocRect& ClipRect, Matrix& ViewTran
 		MaskedBitmap.SetMaskDrawingMode(FALSE);
 
 		MaskedBitmap.SaveContext();
-		MaskedBitmap.SetFillColour(DocColour(255,255,255));
+		DocColour white(255,255,255);
+		MaskedBitmap.SetFillColour(white);
 		MaskedBitmap.DrawRect(&DrawRect);
 		MaskedBitmap.RestoreContext();
 
@@ -3182,7 +3159,8 @@ delete pRealMaskBmp;
 			else
 			{
 				BitmapRR.SaveContext();
-				BitmapRR.SetFillColour(DocColour(255,255,255));
+				DocColour white(255,255,255);
+				BitmapRR.SetFillColour(white);
 				BitmapRR.DrawRect(&DrawRect);
 				BitmapRR.RestoreContext();
 			}
@@ -3286,9 +3264,9 @@ pRealBmp->AttachDebugCopyToCurrentDocument("TestBmp");
 
 		// Get the next bands ready
 		BOOL MoreMaskedBands = MaskedBitmap.GetNextBand();
-TRACEUSER( "Phil", _T("GetNextBand (Before) %d, %d\n"), BitmapRR.GetClipRect().loy, BitmapRR.GetClipRect().hiy);
+TRACEUSER( "Phil", _T("GetNextBand (Before) %d, %d\n"), BitmapRR.GetClipRect().lo.y, BitmapRR.GetClipRect().hi.y);
 		MoreBands = BitmapRR.GetNextBand();
-TRACEUSER( "Phil", _T("GetNextBand (After)  %d, %d\n"), BitmapRR.GetClipRect().loy, BitmapRR.GetClipRect().hiy);
+TRACEUSER( "Phil", _T("GetNextBand (After)  %d, %d\n"), BitmapRR.GetClipRect().lo.y, BitmapRR.GetClipRect().hi.y);
 		ERROR3IF(MoreMaskedBands!=MoreBands, "Bands don't match");
 if (MoreMaskedBands!=MoreBands)
 	MoreBands = FALSE;
@@ -3311,7 +3289,6 @@ if (MoreMaskedBands!=MoreBands)
 		pProgress->SetNodesRendered(NodesSoFar);
 
 	TRACEUSER( "Gerry", _T("End of View::RenderOptimalBitmapPhase\n"));
-#endif	
 	return SLOWJOB_SUCCESS;
 }
 
@@ -3345,7 +3322,6 @@ public:
 
 	virtual BOOL BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState)
 	{
-//	#pragma message( __LOCMSG__ "SimplePrintRenderCallback::BeforeSubtree - do nothing" )
 //		TRACE( _T("Warning - SimplePrintRenderCallback::BeforeSubtree called\n") );
 //		TRACE( _T("SPRC# BeforeSubtree 0x%08x - %s\n"), pNode, pNode->GetRuntimeClass()->GetClassName());
 
@@ -3521,7 +3497,6 @@ Technical notes:
 
 	render all remaining shapes (may be all the shapes, if there were no complex ones)
 */
-//#pragma message( __LOCMSG__ "Removed View render functions" )
 RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans, Spread* pSpread,
 										BOOL PrintPaper)
 {
@@ -3531,11 +3506,15 @@ RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans
 	BOOL bIsOnScreen = pRender->IS_KIND_OF(GRenderRegion);
 
 	// if the preference says we should not be in this function then call the other function
-	PORTNOTETRACE("print","View::RenderSimpleView - removed printing code");
+	if (!bIsOnScreen &&
+PORTNOTE("printing", "Force optimal mask")
 #ifndef EXCLUDE_FROM_XARALX
-	if (!bIsOnScreen && PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL)
-		return RenderOptimalView(pRender, ViewTrans, pSpread, PrintPaper);
+		PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL
+#else
+		(1)
 #endif
+		)
+		return RenderOptimalView(pRender, ViewTrans, pSpread, PrintPaper);
 
 	// Find out what the host render region is capable of
 	RRCaps Caps;
@@ -3794,25 +3773,29 @@ RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans
 	This means we don't render too much in each band, and we stop rendering when we should.
 */
 
-//#pragma message( __LOCMSG__ "Removed View render functions" )
 SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTrans, Spread* pSpread,
 							 		  RenderRegion* pHostRegion, Node* pFirstComplex, Node* pLastComplex,
 							 		  BOOL bRenderAll, BOOL bPrintPaper, ProgressDisplay& Progress)
 {
-	PORTNOTETRACE("other","View::RenderBitmapPhase - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 //	TRACEUSER( "Gerry", _T("View::RenderBitmapPhase\n"));
 
 	BOOL bIsOnScreen = pHostRegion->IS_KIND_OF(GRenderRegion);
 
-	ERROR3IF(!bIsOnScreen && PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL, "PrintMaskType must be SIMPLE or MASKED here\n");
+	ERROR3IF(!bIsOnScreen &&
+PORTNOTE("printing", "Force optimal mask")
+#ifndef EXCLUDE_FROM_XARALX
+			 PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL,
+#else
+			1,
+#endif
+			"PrintMaskType must be SIMPLE or MASKED here\n");
 
 	// This needs to be done in 2 phases - one to create the bitmap we will blit into the
 	// host render region and one to create the mask to show us which parts of the bitmap
 	// need to be blitted. First we will create the bitmap to blit into the host.
 	// create the bitmap render region
-	CDC* pDC = pHostRegion->GetRenderDC();
+	// CDC* pDC = pHostRegion->GetRenderDC();
 
 	double Dpi;
 	if (bIsOnScreen)
@@ -3865,7 +3848,12 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 	BOOL DoMaskedBlit = FALSE;
 	if (//IsWin32NT() || 
 		bIsOnScreen ||
+PORTNOTE("printing", "Force optimal mask")
+#ifndef EXCLUDE_FROM_XARALX
 		(PrintMonitor::PrintMaskType==PrintMonitor::MASK_MASKED) ||
+#else
+		(0) ||
+#endif
 		(CCDC::GetType(pHostRegion->GetRenderDC(), TRUE) == RENDERTYPE_PRINTER_PS) ||
 		IS_A(pHostRegion, CamelotEPSRenderRegion))
 	{
@@ -3972,7 +3960,8 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 		{
 			// Draw it into the real bitmap
 			BitmapRR.SaveContext();
-			BitmapRR.SetFillColour(DocColour(255,255,255));
+			DocColour white(255,255,255);
+			BitmapRR.SetFillColour(white);
 			BitmapRR.DrawRect(&DrawRect);
 			BitmapRR.RestoreContext();
 		}
@@ -4020,7 +4009,8 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 
 		// Fill the mask in "simple"
 		MaskedBitmap.SaveContext();
-		MaskedBitmap.SetFillColour(DocColour(255,255,255));
+		DocColour white(255,255,255);
+		MaskedBitmap.SetFillColour(white);
 		MaskedBitmap.DrawRect(&DrawRect);
 		MaskedBitmap.RestoreContext();
 
@@ -4144,7 +4134,6 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 //	TRACEUSER( "Gerry", _T("End of View::RenderBitmapPhase\n"));
 
 	// all worked
-#endif
 	return SLOWJOB_SUCCESS;
 }
 
@@ -4171,8 +4160,6 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 
 ********************************************************************************************/
 
-PORTNOTE("other","Removed View render functions")
-#ifndef EXCLUDE_FROM_XARALX
 SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRender,
 							 ProgressDisplay& Progress, Node *pLastComplexNode)
 {
@@ -4181,6 +4168,8 @@ SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRende
 	BOOL RenderAllObjects = TRUE;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsPrinting())
 	{
 		CCPrintInfo *pPrintInfo = CCPrintInfo::GetCurrent();
@@ -4191,6 +4180,7 @@ SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRende
 			RenderAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 		}
 	}
+#endif
 #endif //webster
 	// Render nodes into specified render region
 	while ((pNode!=NULL) && (pNode != pLastComplexNode))
@@ -4215,7 +4205,6 @@ SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRende
 	return SLOWJOB_FAILURE;
 #endif
 }
-#endif
 
 
 /********************************************************************************************
@@ -4234,8 +4223,6 @@ SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRende
 
 PrintControl *View::GetPrintControl()
 {
-	PORTNOTE("other","View::GetPrintControl - do nothing")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 
 	if (pDoc == NULL)
@@ -4258,9 +4245,6 @@ PrintControl *View::GetPrintControl()
 #else
 	return NULL;
 #endif
-#endif
-
-	return NULL;
 }
 
 
@@ -4281,8 +4265,6 @@ PrintControl *View::GetPrintControl()
 
 void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* pScanner)
 {
-	PORTNOTETRACE("other","ProgressDisplay::SetUpOptimal - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	// Work out if we need a progress display
 	IsPrinting = pRender->IsPrinting();
@@ -4299,6 +4281,8 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 
 	// Work out whether to count just selected objects, or all of them.
 	BOOL CountAllObjects = TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if ((IsPrinting) && (pPrintInfo!=NULL))
@@ -4307,12 +4291,15 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 		CountAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 	}
 #endif //webster
+#endif
 
 	OptimalPrintRenderCallback MyCallback(pRender->GetRenderView(), pSpread, CountAllObjects, pScanner, FALSE, &TotalNodes, NULL, TRUE);
 	pRender->RenderTree(pSpread, FALSE, FALSE, &MyCallback);
 
 	TRACE( _T("TotalNodes = %d\n"), TotalNodes);
 
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	// Set up the slider according to the printing flag
@@ -4335,6 +4322,7 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 	}
 	else
 #endif //webster
+#endif
 	{
 		// Start progress display (with no initial delay) for Camelot EPS export
 		String_64 ExportMsg(_R(IDT_EXPORTMSG_CAMEPS));
@@ -4344,7 +4332,6 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 	// Provide a progress update for every 1%
 	ProgressInterval = (TotalNodes * ProgressScaleFactor) / 100;
 	TRACE( _T("ProgressInterval = %d\n"), ProgressInterval);
-#endif
 #endif
 }
 
@@ -4365,8 +4352,6 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 
 BOOL ProgressDisplay::SetNodesRendered(INT32 NumNodes)
 {
-	PORTNOTETRACE("other","ProgressDisplay::SetUpOptimal - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	// If we have advanced a node, then update
 	if (NumNodes>NumNodesRendered)
@@ -4378,18 +4363,23 @@ BOOL ProgressDisplay::SetNodesRendered(INT32 NumNodes)
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && (pPrintInfo != NULL) && (pPrintInfo->m_bContinuePrinting == FALSE))
 		// User has cancelled job
 		return FALSE;
 #endif //webster
+#endif
 	if ((NumNodesRendered * ProgressScaleFactor) > (LastProgressUpdate + ProgressInterval))
 	{
 		// Time to update the progress display.
 		LastProgressUpdate = NumNodesRendered * ProgressScaleFactor;
 	//	WEBSTER-ranbirr-13/11/96
-	#ifndef WEBSTER
+PORTNOTE("printing","Disabled CCPrintInfo")
+#ifndef EXCLUDE_FROM_XARALX
+#ifndef WEBSTER
 		if (IsPrinting && pPrintInfo != NULL)
 		{
 			// Update slider
@@ -4400,7 +4390,8 @@ BOOL ProgressDisplay::SetNodesRendered(INT32 NumNodes)
 				return FALSE;
 		}
 		else
-	#endif //webster
+#endif //webster
+#endif
 			return ContinueSlowJob(LastProgressUpdate);
 	}
 
@@ -4408,7 +4399,5 @@ BOOL ProgressDisplay::SetNodesRendered(INT32 NumNodes)
 
 	// All ok
 	return TRUE;
-#endif
-	return false;
 }
 

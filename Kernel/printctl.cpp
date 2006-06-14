@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "justin2.h"
 //#include "markn.h"
 #include "osrndrgn.h"
-#include "prdlgctl.h"
+//#include "prdlgctl.h"
 #include "princomp.h"
 #include "printctl.h"
 #include "prntview.h"
@@ -290,17 +290,17 @@ String_256 PrintControl::BuildPrintInfoStr()
 		default: ERROR3_PF(("Unknown fit type (%d)",FitType)); break;
 	}
 
-	char* format = "%.2lf%%";
+	TCHAR* format = _T("%.2lf%%");
 	double fScale = Scale.MakeDouble();
 	INT32 n = INT32((fScale*100)+0.5);
 
 	if (n % 100 == 0)
-		format = "%.0lf%%";
+		format = _T("%.0lf%%");
 	else if (n % 10 == 0)
-		format = "%.1lf%%";
+		format = _T("%.1lf%%");
 
-	char s[100];
-	_stprintf(s,format,fScale);
+	TCHAR s[100];
+	camSprintf(s,format,fScale);
 	Str += s;
 
 	switch (Orient)
@@ -347,11 +347,11 @@ String_256 PrintControl::BuildPrintInfoStr()
 					if (PatchInfo.Rotate)
 					{	INT32 t = w;	w = h;	h = t;	}
 
-					Rect.lox = PatchInfo.XTrans;
-					Rect.loy = PatchInfo.YTrans;
+					Rect.lo.x = PatchInfo.XTrans;
+					Rect.lo.y = PatchInfo.YTrans;
 
-					Rect.hix = Rect.lox + (INT32((double(w) * ScaleFactor)+0.5));
-					Rect.hiy = Rect.loy + (INT32((double(h) * ScaleFactor)+0.5));
+					Rect.hi.x = Rect.lo.x + (INT32((double(w) * ScaleFactor)+0.5));
+					Rect.hi.y = Rect.lo.y + (INT32((double(h) * ScaleFactor)+0.5));
 
 					if (PrintableArea.ContainsRect(Rect))
 						NumPages++;
@@ -382,7 +382,7 @@ String_256 PrintControl::BuildPrintInfoStr()
 
 	if (NumPages >= 1)
 	{
-		wsprintf(s, TEXT("%ld") ,NumPages);
+		camSprintf(s, TEXT("%ld") ,NumPages);
 		Str += s;
 
 		if (NumPages == 1)
@@ -439,6 +439,8 @@ String_256 PrintControl::BuildPaperSizeStr()
 		Str += TempStr;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
+PORTNOTE("printing", "Disabled Use of CCPrintDialog")
+#ifndef EXCLUDE_FROM_XARALX
 		INT32 PrScale;
 		if (CCPrintDialog::GetScale(&PrScale))
 		{
@@ -448,10 +450,11 @@ String_256 PrintControl::BuildPaperSizeStr()
 
 				TCHAR s[100];
 				String_32 jcf(_R(IDS_PERCENT_FORMAT));
-				wsprintf(s, jcf, (INT32) PrScale);
+				camSprintf(s, jcf, (INT32) PrScale);
 				Str += s;
 			}
 		}
+#endif
 #endif //webster
 		pDimScale->SetActiveState(ActiveState);
 	}
@@ -618,9 +621,11 @@ BOOL PrintControl::SetUp(Spread* pThisSpread, BOOL RedrawPrintBorders)
 
 BOOL PrintControl::CalcPrintAreaVars(BOOL RedrawPrintBorders)
 {
+PORTNOTE("printing", "Disabled Use of CCPrintDialog")
+#ifndef EXCLUDE_FROM_XARALX
 	// Calc the print area origin
-	Origin.x = TotalPrintArea.lox;
-	Origin.y = TotalPrintArea.hiy;
+	Origin.x = TotalPrintArea.lo.x;
+	Origin.y = TotalPrintArea.hi.y;
 
 	//-------------------------
 	// Find out the dimensions of the printer's paper (in MILLIPOINTS)
@@ -645,8 +650,8 @@ BOOL PrintControl::CalcPrintAreaVars(BOOL RedrawPrintBorders)
 #endif //webster
 	//-------------------------
 	// Calc the width and height of the print area
-	PageWidth  = TotalPrintArea.hix - TotalPrintArea.lox;
-	PageHeight = TotalPrintArea.hiy - TotalPrintArea.loy;
+	PageWidth  = TotalPrintArea.hi.x - TotalPrintArea.lo.x;
+	PageHeight = TotalPrintArea.hi.y - TotalPrintArea.lo.y;
 
 	// If double page spread AND printing single pages, half the width for each page printed
 	if (DPS && !WholeSpread) 
@@ -660,6 +665,7 @@ BOOL PrintControl::CalcPrintAreaVars(BOOL RedrawPrintBorders)
 	if (Orient == PRINTORIENTATION_SIDEWAYS)
 		Swap(PageWidth,PageHeight);
 
+#endif
 	return TRUE;
 }
 
@@ -1582,9 +1588,12 @@ INT32 PrintControl::GetDotsPerInch()
 		// Set up the local variable to the max auto dpi!
 		INT32 PrinterDPI = MAXAUTOBITMAPDPI;
 
+PORTNOTE("printing", "Disabled Use of CCPrintDialog")
+#ifndef EXCLUDE_FROM_XARALX
 		// Get the printer resolution (if this fails, choose the maximum setting)
 		if (!CCPrintDialog::GetResolution(&PrinterDPI))
 			PrinterDPI = MAXAUTOBITMAPDPI; // Failing could change the variable so reset it!
+#endif
 
 		// Make the DPI half the printer res
 		DotsPerInch = PrinterDPI >> 1;
@@ -1753,12 +1762,15 @@ PrintRangeObj PrintControl::GetObjPrintRange()
 BOOL PrintControl::CalcNumPaper()
 {
 	BOOL CanMultiCopy;
+PORTNOTE("printing", "Disabled Use of CCPrintDialog")
+#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER	
 	// Can the printer do multiple copies?
 	if (!CCPrintDialog::CanMultiCopy(&CanMultiCopy))
 		return FALSE;
 #endif //webster
+#endif
 	INT32 NumActualPiecesOfPaper = NumPrintablePages * NumCopies;	// Num pieces of paper that will come out of printer
 
 	// NumPaper will be the number of pieces of paper we will print to
@@ -1983,8 +1995,8 @@ BOOL PrintControl::GetNextPaper()
 				m = (PaperNumber-1) / (MaxPaperNumber / NumPrintablePages);
 			}
 
-			PatchClipRect.lox += (OrigPageWidth*m);
-			PatchClipRect.hix  = PatchClipRect.lox + OrigPageWidth;
+			PatchClipRect.lo.x += (OrigPageWidth*m);
+			PatchClipRect.hi.x  = PatchClipRect.lo.x + OrigPageWidth;
 		}
 		else
 		{
@@ -1993,13 +2005,13 @@ BOOL PrintControl::GetNextPaper()
 				// Here we have a DPS, we are printing individual pages, but we are either
 				// printing left-only or right-only pages
 				//
-				// So if right only, add the page width to the lox coord to move the area to the right hand side.
-				// In either case, the patch clip rect hix will be lox+OrigPageWidth.
+				// So if right only, add the page width to the lo.x coord to move the area to the right hand side.
+				// In either case, the patch clip rect hi.x will be lo.x+OrigPageWidth.
 
 				if (DPSPrintRange == PRINTRANGEDPS_RIGHTPAGES)
-					PatchClipRect.lox += OrigPageWidth;
+					PatchClipRect.lo.x += OrigPageWidth;
 
-				PatchClipRect.hix = PatchClipRect.lox + OrigPageWidth;
+				PatchClipRect.hi.x = PatchClipRect.lo.x + OrigPageWidth;
 			}
 		}					
 
@@ -2202,14 +2214,16 @@ BOOL PrintControl::StartPlatePrinting(PrintView *pPrintView, UINT32 *const pErrN
 	// If there's no view, drawing will be rather tricky
 	if (pPrintView == NULL)
 	{
-		ERROR3("Sanity check, The view is NULL during StartPlatePrinting!")
+		ERROR3("Sanity check, The view is NULL during StartPlatePrinting!");
 		return FALSE;
 	}
 
 	// Get hold of the resident colour management system
 	ColourContext *pContext;
-	XaraCMS* ptheCMS=GetApplication()->GetCMSManager();
 
+PORTNOTE("cms", "Disabled XaraCMS");
+#ifndef EXCLUDE_FROM_XARALX
+	XaraCMS* ptheCMS=GetApplication()->GetCMSManager();
 	if (ptheCMS!=NULL)
 	{
 		// First try to set the printer context specified in the ini file read
@@ -2269,6 +2283,7 @@ BOOL PrintControl::StartPlatePrinting(PrintView *pPrintView, UINT32 *const pErrN
 		}
 	}
 	else
+#endif
 	{
 		// Create a logical colour context. This isn't strictly necessary, as the view will default to
 		// using the global default (logical) context anyway, but we might as well be safe
@@ -2318,7 +2333,7 @@ void PrintControl::EndPlatePrinting(PrintView *pPrintView)
 	// If there's no view, drawing will be rather tricky
 	if (pPrintView == NULL)
 	{
-		ERROR3("Sanity check, The view is NULL during StartPlatePrinting!")
+		ERROR3("Sanity check, The view is NULL during StartPlatePrinting!");
 		return;
 	}
 	
@@ -2525,9 +2540,9 @@ void PrintControl::RenderPrintBorder(RenderRegion* pRRegion)
 			// PagePrintArea defines the portion of the spread that is printable (this
 			// is either the whole spread, or a single page when printing DPS & individual pages)
 			DocRect PagePrintArea = TotalPrintArea;
-			PagePrintArea.lox += OrigPageWidth*PageNum;
-			PagePrintArea.hix = PagePrintArea.lox + OrigPageWidth;
-			PagePrintArea.hiy = PagePrintArea.loy + OrigPageHeight;
+			PagePrintArea.lo.x += OrigPageWidth*PageNum;
+			PagePrintArea.hi.x = PagePrintArea.lo.x + OrigPageWidth;
+			PagePrintArea.hi.y = PagePrintArea.lo.y + OrigPageHeight;
 
 			// PrbleArea will define the printable area in relation to the current spread
 			DocRect PrbleArea = PagePrintArea;
@@ -2538,27 +2553,27 @@ void PrintControl::RenderPrintBorder(RenderRegion* pRRegion)
 			// If printing sideways, the width and height of the printable area should be swapped
 			if (Orient == PRINTORIENTATION_SIDEWAYS)
 			{
-				PrbleArea.hix = PrbleArea.lox+ScaledPAHeight;
-				PrbleArea.hiy = PrbleArea.loy+ScaledPAWidth;
+				PrbleArea.hi.x = PrbleArea.lo.x+ScaledPAHeight;
+				PrbleArea.hi.y = PrbleArea.lo.y+ScaledPAWidth;
 				PrbleArea.Translate(ScaledPATopMargin,ScaledPALeftMargin);
 				PrbleArea.Translate(-ScaledTopMargin,-ScaledLeftMargin);
 
 				PaperArea = PrbleArea;
 				PaperArea.Translate(-ScaledPATopMargin,-ScaledPALeftMargin);
-				PaperArea.hix = PaperArea.lox + ScaledPaperHeight;
-				PaperArea.hiy = PaperArea.loy + ScaledPaperWidth;
+				PaperArea.hi.x = PaperArea.lo.x + ScaledPaperHeight;
+				PaperArea.hi.y = PaperArea.lo.y + ScaledPaperWidth;
 			}
 			else
 			{
-				PrbleArea.hix = PrbleArea.lox+ScaledPAWidth;
-				PrbleArea.loy = PrbleArea.hiy-ScaledPAHeight;
+				PrbleArea.hi.x = PrbleArea.lo.x+ScaledPAWidth;
+				PrbleArea.lo.y = PrbleArea.hi.y-ScaledPAHeight;
 				PrbleArea.Translate(ScaledPALeftMargin,-ScaledPATopMargin);
 				PrbleArea.Translate(-ScaledLeftMargin,ScaledTopMargin);
 
 				PaperArea = PrbleArea;
 				PaperArea.Translate(-ScaledPALeftMargin,ScaledPATopMargin);
-				PaperArea.hix = PaperArea.lox + ScaledPaperWidth;
-				PaperArea.loy = PaperArea.hiy - ScaledPaperHeight;
+				PaperArea.hi.x = PaperArea.lo.x + ScaledPaperWidth;
+				PaperArea.lo.y = PaperArea.hi.y - ScaledPaperHeight;
 			}
 
 			// We need to draw four grey slabs that show the areas on the page that will
@@ -2568,19 +2583,19 @@ void PrintControl::RenderPrintBorder(RenderRegion* pRRegion)
 			pRRegion->SetFillColour(COLOUR_MIDGREY);
 
 			DocRect Slab = PagePrintArea;
-			Slab.hix = PrbleArea.lox;
+			Slab.hi.x = PrbleArea.lo.x;
 			RenderRect(pRRegion,Slab,TRUE);
 
 			Slab = PagePrintArea;
-			Slab.lox = PrbleArea.hix;
+			Slab.lo.x = PrbleArea.hi.x;
 			RenderRect(pRRegion,Slab,TRUE);
 
 			Slab = PagePrintArea;
-			Slab.hiy = PrbleArea.loy;
+			Slab.hi.y = PrbleArea.lo.y;
 			RenderRect(pRRegion,Slab,TRUE);
 
 			Slab = PagePrintArea;
-			Slab.loy = PrbleArea.hiy;
+			Slab.lo.y = PrbleArea.hi.y;
 			RenderRect(pRRegion,Slab,TRUE);
 
 			pRRegion->SetFillColour(COLOUR_BLACK);
@@ -3525,7 +3540,7 @@ ColourPlate *TypesetInfo::CreateColourPlate()
 void TypesetInfo::DestroyPlateList()
 {
 	ColourPlate *pPlate;
-	while (pPlate=(ColourPlate*)PrintingPlates.RemoveTail())
+	while ((pPlate=(ColourPlate*)PrintingPlates.RemoveTail())) // Assignment
 		delete pPlate;
 
 	// We have no plates, so it's best to vape our current pointers

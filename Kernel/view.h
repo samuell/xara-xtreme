@@ -283,10 +283,7 @@ public:
 												// get/set numeric value
 
 	// Functions to render complex shapes into simple render regions
-PORTNOTE("other","Removed View render functions")
-#ifndef EXCLUDE_FROM_XARALX
 	RenderViewResult RenderOptimalView(RenderRegion*r, Matrix&, Spread*, BOOL);
-#endif
 	SlowJobResult RenderOptimalBitmapPhase(DocRect& ClipRect, Matrix&, Spread*, RenderRegion*, Node*, Node*,
 						   	BOOL RenderAllObjects, BOOL bPrintPaper, INT32&, ProgressDisplay* pProgress, INT32 TotalProgress);
 
@@ -303,13 +300,10 @@ PORTNOTE("other","Removed View render functions")
 protected:
 	virtual void RenderPaper(RenderRegion*, Spread*);
 
-PORTNOTE("other","Removed View render functions")
 	SlowJobResult RenderSimpleNodes(Node *pNode, RenderRegion *pRender,
 						   ProgressDisplay& Progress, Node *pLastComplexNode = NULL);
-#ifndef EXCLUDE_FROM_XARALX
 	SlowJobResult RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRender,
 						   ProgressDisplay& Progress, Node *pLastComplexNode = NULL);
-#endif
 
 private:
 	static PaperRenderRegion* pPaperRegion;		// Region to use when rendering paper only

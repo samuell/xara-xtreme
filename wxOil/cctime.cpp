@@ -460,7 +460,7 @@ void CCTime::GetCurrentTime()
     // Set time zone from TZ environment variable. If TZ is not set,
     // operating system default is used, otherwise PST8PDT is used
     // (Pacific standard time, daylight savings).
-    _tzset();
+//    _tzset();
 
 	time( &long_time );                // Get time as long integer.
 	newtime = localtime( &long_time ); // Convert to local time.
@@ -531,11 +531,15 @@ void CCGmtTime::GetCurrentTime()
 {
 	time_t osBinaryTime;
 	time(&osBinaryTime);
-	CTime t(osBinaryTime);
+	struct tm *p_tm;
 
 	cctime *p_time = GetTimeStruct();
-	struct tm *p_tm;
+#ifdef __WXMSW__
+	CTime t(osBinaryTime);
 	p_tm = t.GetGmtTm(NULL);
+#else
+	p_tm=gmtime( &osBinaryTime ); // Convert to local time.
+#endif
 
 	p_time->tm_sec	= p_tm->tm_sec;
 	p_time->tm_min	= p_tm->tm_min;
