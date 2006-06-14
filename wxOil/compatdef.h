@@ -692,6 +692,9 @@ typedef wxMenu				CNativeMenu;
 
 inline void Beep() {wxBell();}
 
+inline double camAtof(TCHAR * s) { double r=0.0; camScanf(s, "%f", &r); return r;}
+inline INT32 camAtol(TCHAR * s) { INT32 r=0; camScanf(s, "%d", &r); return r;}
+
 // The following line makes normalize.pl stop skipping this file
 // Leave it at the end
 /* SKIPFIXTYPES: END */

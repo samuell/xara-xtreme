@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeelip.h"
 
 //#include "app.h"
-//#include "aw_eps.h"
+#include "aw_eps.h"
 #include "blobs.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "opsmpshp.h"
@@ -241,8 +241,6 @@ String NodeEllipse::Describe(BOOL Plural, BOOL Verbose)
 void NodeEllipse::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSRenderRegion)))
 	{
 		// Output "ArtWorks ellipse" token
@@ -254,10 +252,9 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		pDC->OutputCoord(Parallel[2]);
 
 		// And the token itself
-		pDC->OutputToken("ae");
+		pDC->OutputToken(_T("ae"));
 		pDC->OutputNewLine();
 	}
-#endif
 #endif
 }
 

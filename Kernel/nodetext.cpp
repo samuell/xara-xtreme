@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "becomea.h"
 #include "blobs.h"
-//#include "cameleps.h"
+#include "cameleps.h"
 #include "cliptype.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "gdraw.h"
@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "printctl.h"
 #include "cxftext.h"
 #include "nodepath.h"
-//#include "swfrndr.h"
+#include "swfrndr.h"
 
 // Resource headers
 //#include "mario.h"
@@ -140,7 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "webattr.h"			//For the GetClickableRectangle functions
 #include "brshattr.h"
 
-//#include "ai_epsrr.h"
+#include "ai_epsrr.h"
 
 DECLARE_SOURCE("$Revision$")
 
@@ -2031,7 +2031,7 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 
 	// render the character through the matrix with current attributes in RenderRegion
 
-PORTNOTE("other", "printing and AI export deactivated")
+PORTNOTE("printing", "printing deactivated")
 #ifndef EXCLUDE_FROM_XARALX
 	// If the render region is a printing region then maybe print as shapes.
 	if (pRenderRegion->IsPrinting())
@@ -2044,6 +2044,7 @@ PORTNOTE("other", "printing and AI export deactivated")
 			return pRenderRegion->RenderRegion::RenderChar(GetUnicodeValue(), &matrix);
 		}
 	}
+#endif
 
 		// if we're exporting to illustrator, make the text position relative to
 		// the page.
@@ -2065,7 +2066,6 @@ PORTNOTE("other", "printing and AI export deactivated")
 			}
 		}
 	}
-#endif
 
 	// Render into the given region region as characters
 	BOOL Result =  pRenderRegion->RenderChar(GetUnicodeValue(), &matrix);
@@ -2166,8 +2166,6 @@ void TextChar::RenderEorDrag(RenderRegion* pRenderRegion)
 
 BOOL TextChar::ExportRender ( RenderRegion *pRegion )
 {
-	PORTNOTETRACE("text","TextChar::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL bResult = FALSE;
 
 	// If the RenderRegion is a FlashRenderRegion, use custom Flash export code.
@@ -2190,8 +2188,6 @@ BOOL TextChar::ExportRender ( RenderRegion *pRegion )
 	//			from rendering the character out as paths as well as text. (If there's
 	//			been an error, bResult will have been set to FALSE.)
 	return bResult;
-#endif
-	return false;
 }
 
 /********************************************************************************************
@@ -2266,7 +2262,6 @@ BOOL TextChar::Snap(DocCoord* pDocCoord)
 {
 	BOOL Snapped = FALSE;
 
-	PORTNOTETRACE("text","TextChar::Snap - do nothing");
 #if !defined(EXCLUDE_FROM_RALPH)
 //	MILLIPOINT SnapDist    = CSnap::GetSnapDist();
 //	MILLIPOINT SqrSnapDist = SnapDist*SnapDist;
@@ -2774,17 +2769,14 @@ BOOL CaretNode::RenderObjectBlobsCore(RenderRegion* pRenderRegion)
 BOOL CaretNode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 // BODGE TEXT - need to export caret in a comment!
  	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
-		EPSExportDC *pDC=(EPSExportDC*)pRegion->GetRenderDC();
+		/*EPSExportDC *pDC=*/(EPSExportDC*)pRegion->GetRenderDC();
 // 		pDC->OutputToken("ctk");
 //		pDC->OutputNewLine();
 		return TRUE;
 	}
-#endif
 #endif
 	return FALSE;
 }
@@ -3531,8 +3523,6 @@ BOOL EOLNode::CanWriteChildrenNative(BaseCamelotFilter *pFilter)
 BOOL EOLNode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 
 	// (ChrisG - 3/11/00)
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(AIEPSRenderRegion)))
@@ -3544,9 +3534,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 	}
 
 	return pRegion->WriteNewLine ();
-#else
-	return FALSE;
-#endif
 #else
 	return FALSE;
 #endif
@@ -3628,8 +3615,6 @@ KernCode::KernCode(Node* ContextNode, AttachNodeDirection Direction,
 BOOL KernCode::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
  	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output any valid text attributes necessary
@@ -3643,11 +3628,10 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		INT32 autokern = 0;
 		pDC->OutputValue(autokern);
 		pDC->OutputValue(-(Value.x));
- 		pDC->OutputToken("Tk");
+ 		pDC->OutputToken(_T("Tk"));
 		pDC->OutputNewLine();
 		return TRUE;
 	}
-#endif
 #endif
 	return FALSE;
 }

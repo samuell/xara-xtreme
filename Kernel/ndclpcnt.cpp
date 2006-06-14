@@ -2544,8 +2544,6 @@ void NodeClipViewController::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
 void NodeClipViewController::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -2553,6 +2551,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		pDC->OutputToken(_T("q"));
 		pDC->OutputNewLine();
 	}
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -2579,8 +2579,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeClipViewController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -2591,6 +2589,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+PORTNOTE("epsfilter", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...

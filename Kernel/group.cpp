@@ -228,8 +228,6 @@ NodeGroup::NodeGroup(Node* ContextNode,
 void NodeGroup::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -237,6 +235,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		pDC->OutputToken(_T("u"));
 		pDC->OutputNewLine();
 	}
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -251,8 +251,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeGroup::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -263,6 +261,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...

@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ophist.h"
 //#include "rndrgn.h"
 #include "aw_eps.h"
-//#include "cameleps.h"
+#include "cameleps.h"
 #include "objchge.h"
 #include "nodebldr.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -1655,8 +1655,6 @@ BOOL NodeBlend::Remap(UINT32 RemapRef,DocCoord PosStart,DocCoord PosEnd,DocCoord
 void NodeBlend::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (IS_A(pRegion, CamelotEPSRenderRegion))
 		// We ust want the paths in EPS.
 		return;
@@ -1676,7 +1674,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			pDC->OutputValue(INT32(m_NotAntialiased));	// The "don't antialias blend steps" flag
 			pDC->OutputValue(INT32(m_NumBlendSteps));	// Num blend steps
 			pDC->OutputValue(INT32(1));				// Version (Important that this is the last param!!!)
-			pDC->OutputToken("csbd");				// Camelot "start blend" token
+			pDC->OutputToken(_T("csbd"));				// Camelot "start blend" token
 			pDC->OutputNewLine();
 		}
 		else 
@@ -1692,12 +1690,11 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 				pDC->OutputValue(INT32(1));				// Version
 				pDC->OutputValue(INT32(0));				// Expanded flag
 				pDC->OutputValue(GetNumInkObjects());	// Num objects we are blending
-				pDC->OutputToken("asbd");				// ArtWorks "start blend" token
+				pDC->OutputToken(_T("asbd"));				// ArtWorks "start blend" token
 				pDC->OutputNewLine();
 			}
 		}
 	}
-#endif
 #endif
 }
 
@@ -1710,7 +1707,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
      Inputs:	pRegion = ptr to the export render region to export to
      Outputs:	
      Returns:	TRUE if ok, FALSE if something went wrong
-     Purpose: 	Called after this node and all of its children have been rendered to the export region.
+     Purpose: 	Called afterCamelotEPSFilter this node and all of its children have been rendered to the export region.
 				This outputs the "end blend" command.
 				Supports ArtWorks EPS and Camelot EPS
      Errors:    
@@ -1720,8 +1717,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeBlend::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (IS_A(pRegion, CamelotEPSRenderRegion))
 		// We just want the paths in EPS.
 		return FALSE;
@@ -1732,18 +1727,17 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 		if (pRegion->IS_KIND_OF(CamelotEPSRenderRegion))
 		{
-			pDC->OutputToken("cebd");				// Camelot "end blend" token
+			pDC->OutputToken(_T("cebd"));				// Camelot "end blend" token
 			pDC->OutputNewLine();
 		}
 		else if (IsArtWorksEPSCompatible())
 		{
-			pDC->OutputToken("aebd");				// ArtWorks "end blend" token
+			pDC->OutputToken(_T("aebd"));				// ArtWorks "end blend" token
 			pDC->OutputNewLine();
 		}
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
-#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

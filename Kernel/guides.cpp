@@ -472,8 +472,6 @@ void NodeGuideline::PreExportRender(RenderRegion* pRegion)
 // WEBSTER - markn 14/1/97
 #ifndef WEBSTER
 #ifdef DO_EXPORT
-PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
@@ -488,7 +486,6 @@ PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
 		pDC->OutputToken(_T("glne"));			// Camelot "guideline" token
 		pDC->OutputNewLine();
 	}
-#endif
 #endif
 #endif // WEBSTER
 }
@@ -511,8 +508,6 @@ BOOL NodeGuideline::ExportRender(RenderRegion* pRegion)
 // WEBSTER - markn 14/1/97
 #ifndef WEBSTER
 #ifdef DO_EXPORT
-PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		/*EPSExportDC *pDC = */ (EPSExportDC *) pRegion->GetRenderDC();
@@ -520,7 +515,6 @@ PORTNOTE("EPSRenderRegion", "Removed use fo EPSRenderRegion")
 //		pDC->OutputToken(_T("ceo"));			// Output end extended object token
 //		pDC->OutputNewLine();
 	}
-#endif
 #endif
 #endif // WEBSTER
 	return TRUE;
@@ -597,11 +591,8 @@ SubtreeRenderState NodeGuideline::RenderSubtree(RenderRegion* pRender, Node** pp
 	if (pRender->IsPrinting())
 		return SUBTREE_NORENDER;
 
-PORTNOTE("epsrr", "Removed use of EPSRenderRegion")
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (pRender->IS_KIND_OF(EPSRenderRegion))
 		return SUBTREE_NORENDER;
-#endif
 
 	return SUBTREE_ROOTANDCHILDREN;
 #else
@@ -636,10 +627,7 @@ BOOL NodeGuideline::NeedsToExport(RenderRegion *pRender,BOOL VisibleLayersOnly, 
 // WEBSTER - markn 14/1/97
 #ifdef DO_EXPORT
 #ifndef WEBSTER
-PORTNOTE("NativeRenderRegion","Removed NativeRenderRegion usage")
-#ifndef EXCLUDE_FROM_XARALX
 	return (pRender->IS_KIND_OF(NativeRenderRegion));
-#endif
 #endif // WEBSTER
 #endif
 	return FALSE;
@@ -1451,12 +1439,7 @@ void OpGuideline::DoDrag(Spread* pThisSpread,DocCoord PointerPos)
 
 	RenderMyDragBlobs();
 
-PORTNOTE("keypress", "Use of KeyPress class bypassed in TransOperation::DragStarted");
-#ifndef EXCLUDE_FROM_XARALX
 	LeaveCopy = KeyPress::IsKeyPressed(CAMKEY(ADD));
-#else
-	LeaveCopy = FALSE;
-#endif
 
 	if (pCursor == NULL)
 	{
@@ -1652,8 +1635,6 @@ void OpGuideline::UpdateStatusLineAndPointer()
 BOOL OpGuideline::DragKeyPress(KeyPress* pKeyPress, BOOL bSolidDrag)
 {
 	BOOL Processed = FALSE;
-PORTNOTE("keypress", "Use of KeyPress class bypassed in TransOperation::DragStarted");
-#ifndef EXCLUDE_FROM_XARALX
 	switch (pKeyPress->GetVirtKey())
 	{
 		case CAMKEY(ADD):
@@ -1670,7 +1651,6 @@ PORTNOTE("keypress", "Use of KeyPress class bypassed in TransOperation::DragStar
 			Processed = TRUE;
 			break;
 	}
-#endif
 	return Processed;
 }
 

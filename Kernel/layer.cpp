@@ -113,18 +113,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "aw_eps.h"
 #include "ccdc.h"
 //#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "ben.h"
 //#include "prdlgctl.h"
 #include "printctl.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
-//#include "sglayer.h"
-//#include "cameleps.h"
+#include "sglayer.h"
+#include "cameleps.h"
 #include "colourix.h"
 #include "colmsg.h"
 #include "cmxrendr.h"
-//#include "ai_epsrr.h"
+#include "ai_epsrr.h"
 //-#include "cmxexdc.h"
 //#include "tim.h"
 
@@ -432,10 +432,11 @@ SubtreeRenderState Layer::RenderSubtree(RenderRegion *pRender, Node** ppNextNode
 	if (pRender->IsHitDetect() && IsLocked())
 		return SUBTREE_NORENDER;
 
-	PORTNOTE("printing","Layer::RenderSubtree - removed printing code and CamelotEPSRenderRegion reference");
+if (FALSE) {}
+PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
 #ifndef EXCLUDE_FROM_XARALX
 	// If we are printing then we do special things
-	if (pRender->IsPrinting())
+	else if (pRender->IsPrinting())
 	{
 		// Ignore non-printable layers (i.e. don't ever print background layers)
 		if (!IsPrintable())
@@ -466,10 +467,10 @@ SubtreeRenderState Layer::RenderSubtree(RenderRegion *pRender, Node** ppNextNode
 		}
 
 	}
+#endif
 	else if (IS_A(pRender,CamelotEPSRenderRegion))
 		return (IsVisible() && IsPrintable()) ? SUBTREE_ROOTANDCHILDREN : SUBTREE_NORENDER;
 	else
-#endif
 	{
 		// Normal rendering
 		//
@@ -552,11 +553,8 @@ BOOL Layer::NeedsToExport(RenderRegion *pRender, BOOL VisibleLayersOnly, BOOL Ch
 {
 #ifdef DO_EXPORT
 	// If this is export as a ART file, we want to save all the layers
-PORTNOTE("NativeRR", "Removed use of NativeRenderRegion")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IS_KIND_OF(NativeRenderRegion))
 		return TRUE;
-#endif
 
 	// If there's a filter running
 	// and it's trying to export just one layer
@@ -573,7 +571,7 @@ PORTNOTE("NativeRR", "Removed use of NativeRenderRegion")
 	// if this is an export as a CMX file, we don't want invisible layers
 	// as CMX doesn't support non-visible stuff so we can't save it and
 	// get the file looking the same
-PORTNOTE("CMXRenderRegion", "Removed use of CMXRenderRegion")
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
 #ifndef EXCLUDE_FROM_XARALX
 	if(!IsVisible() && pRender->IS_KIND_OF(CMXRenderRegion))
 		return FALSE;
@@ -983,8 +981,6 @@ Layer* Layer::FindPrevFrameLayer()
 
 BOOL Layer::HidingNode()
 {
-	PORTNOTETRACE("other","Layer::HidingNode - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Call the base class first
 	if (!Node::HidingNode())
 		return FALSE;
@@ -1009,12 +1005,15 @@ BOOL Layer::HidingNode()
 		}
 		else
 		{
+PORTNOTE("other", "Disabled frame gallery")
+#ifndef EXCLUDE_FROM_XARALX
 			// Choose the next/prev frame layer to be the new active one
 			Layer* pNewActiveLayer = FindPrevFrameLayer();
 			if (pNewActiveLayer == NULL)
 				pNewActiveLayer = FindNextFrameLayer();
 			if (pNewActiveLayer != NULL)
 				FrameSGallery::MakeActiveLayer(pNewActiveLayer);
+#endif
 		}
 	}
 
@@ -1039,7 +1038,7 @@ BOOL Layer::HidingNode()
 					pLayer->SetEdited(TRUE);
 #ifdef _DEBUG
 					// Tell the frame gallery to update its display of the frame
-					BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::LayerReason::REDRAW_LAYER));
+					BROADCAST_TO_ALL(LayerMsg(pLayer, LayerMsg::REDRAW_LAYER));
 #endif
 				}
 
@@ -1048,7 +1047,6 @@ BOOL Layer::HidingNode()
 			}
 		}
 	}
-#endif
 	return TRUE;
 }
 
@@ -2397,8 +2395,6 @@ DocRect Layer::GetBlobBoundingRect()
 void Layer::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("EPSFilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if(pRegion->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSRenderRegion)))
 	{
 		// export layers in ArtWorks-type EPS render regions
@@ -2466,6 +2462,8 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 
 		pDC->OutputNewLine();
 	}
+PORTNOTE("cmx", "Disabled CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -2492,8 +2490,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 BOOL Layer::ExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("EPSFilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	// Can only export guide layers in Native format
 	if (Guide && pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
@@ -2502,6 +2498,8 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 		pDC->OutputToken(_T("ceo"));
 		pDC->OutputNewLine();
 	}
+PORTNOTE("cmx", "Disabled CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -2510,7 +2508,7 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 
 		return TRUE;
 	}
-
+#endif
 	// Graeme (11-4-00) - Added call to AIEPSRenderRegion to export layers in that format.
 	else if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( AIEPSRenderRegion ) ) )
 	{
@@ -2523,8 +2521,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 		// Return TRUE to avoid calling the standard exporter code.
 		return TRUE;
 	}
-
-#endif
 #endif
 
 	return FALSE;
@@ -3238,12 +3234,9 @@ void Layer::ColourChanged(IndexedColour* pChangedColour)
 
 	if (pChangedColour == pColour)
 	{
-PORTNOTE("dialog","Removed LayerGallery usage");
-#ifndef EXCLUDE_FROM_XARALX
 		Document* pDoc = Document::GetCurrent();
 		if (pDoc != NULL)
 			LayerSGallery::ForceRedrawLayer(pDoc,this);
-#endif
 	}
 #endif
 #endif // WEBSTER

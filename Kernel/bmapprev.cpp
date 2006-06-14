@@ -456,7 +456,7 @@ void BmapPrevDlg::DoWithParam(OpDescriptor*, OpParam* pParam)
 		case GIF:
 		case TI_GIF:
 		{
-PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
+PORTNOTETRACE("other", "Removed GIFExportOptions check" );
 #if !defined(EXCLUDE_FROM_XARALX)
 			GIFExportOptions* pGIFOptions = (GIFExportOptions*)m_pExportOptions;
 			ERROR3IF(!pGIFOptions->IS_KIND_OF(GIFExportOptions), "pGIFOptions isn't");
@@ -472,7 +472,7 @@ PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
 		}
 		case MAKE_BITMAP_FILTER:
 		{
-PORTNOTETRACE("other", "Removed CamelotEPSFilter check" );
+PORTNOTETRACE("other", "Removed MakeBitmapExportOptions check" );
 #if !defined(EXCLUDE_FROM_XARALX)
 			MakeBitmapExportOptions* pMkBOptions = (MakeBitmapExportOptions*)m_pExportOptions;
 			ERROR3IF(!pMkBOptions->IS_KIND_OF(MakeBitmapExportOptions), "pMkBOptions isn't");

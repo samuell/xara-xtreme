@@ -127,7 +127,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard2.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "colcontx.h"
-///#include "colormgr.h"
+//#include "colormgr.h"
 
 #include "bitfilt.h"	// BaseBitmapFilter
 //#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -2894,14 +2894,11 @@ BOOL CWxBitmap::ImportBitmap(Filter *pFilter, const BitmapInfo *pInfo, INT32 Bit
 			return FALSE;
 	}
 	
-PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	if (!pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSFilter)))
 	{
 		ENSURE(FALSE, "Trying to import a bitmap with a non-Camelot EPS filter");
 		return FALSE;
 	}
-#endif
 	
 	// Sanity checks
 	ENSURE((pInfo->PixelDepth == 1) ||
@@ -2972,8 +2969,6 @@ PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
 	// And read in the image data
 //	if (IsUserName("Alex")) if (BitmapType !=0) return(TRUE);
 
-PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	// Read in the Bitmap info
 	if (pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotNativeEPSFilter)))
 	{
@@ -2990,7 +2985,6 @@ PORTNOTETRACE("other","Removed CamelotNativeEPSFilter usage");
 		return TRUE;
 	}
 	else
-#endif
 	{
 		// Load it all in, in one go.
 		return pEPSFilter->ImportBinary(BMBytes, BMInfo->bmiHeader.biSizeImage);

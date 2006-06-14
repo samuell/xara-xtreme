@@ -266,14 +266,11 @@ void PathProcessorStroke::ProcessPath(Path *pPath,
 	// (ChrisG 4/11/00) - Use smoothed paths with AIExport. This is only done for the export, as the smooth
 	//	path creation function is about five times slower than the non-smoothed one.
 	Path * pOutput = NULL;
-	PORTNOTETRACE("other","PathProcessorStroke::ProcessPath - removed AIEPSRenderRegion support");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsKindOf (CC_RUNTIME_CLASS (AIEPSRenderRegion)))
 	{
 		pOutput = CreateSmoothVarWidthStroke(pPath, pRender, LineWidth);
 	}
 	else
-#endif
 	{
 		pOutput = CreateVarWidthStroke(pPath, pRender, LineWidth);
 	}

@@ -123,15 +123,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // text class includes
 #include "nodetxts.h"
 //#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "textops.h"
+#include "textops.h"
 //#include "arrows.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bevinfo.h"
 
 // Save/load
 //#include "cxfrec.h"		// CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "attrbev.h"
-//#include "bevtool.h"
-//#include "blndtool.h"
+#include "bevtool.h"
+#include "blndtool.h"
 #include "blobs.h"
 //#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bevres.h"
@@ -846,16 +846,11 @@ DocRect NodeBevelController::GetBlobBoundingRect()
 	br = BoundingRectangle;
 	
 	// is the bevel tool active ?
-PORTNOTE("other","Use of BevelTool removed from NodeBevelController::GetBlobBoundingRect");
-#ifndef EXCLUDE_FROM_XARALX
 	if (Tool::GetCurrentID() != TOOLID_BEVELTOOL ||
 		!BevelTool::AmActive())
 	{
 		return NodeGroup::GetBlobBoundingRect();
 	}
-#else
-	return NodeGroup::GetBlobBoundingRect();
-#endif
 
 	DocRect BlobRect;
 
@@ -1153,11 +1148,8 @@ ChangeCode 	NodeBevelController::OnChildChange(ObjChangeParam* pParam)
 							// with bevels!).  (Actually NodeCompound::OnChildChange())
 	}
 
-PORTNOTE("other","Removed OpCreateBevel from NodeBevelController::OnChildChange");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pUndoOp->IsKindOf(CC_RUNTIME_CLASS(OpCreateBevel)))
 		return CC_OK;
-#endif
 
 	// first, invalidate my region
 //	if (pParam->GetChangeType() == OBJCHANGE_FINISHED)
@@ -1204,13 +1196,10 @@ PORTNOTE("other","Removed OpCreateBevel from NodeBevelController::OnChildChange"
 
 	// Karim 20/12/2000		added to fix an update bug - shadow & bevel some text,
 	//						enter some more & shadow doesn't get correct bounds from bevel.
-//PORTNOTE("other","Removed OpTextUndoable from NodeBevelController::OnChildChange");
-#ifndef EXCLUDE_FROM_XARALX
 	else if (pUndoOp->IS_KIND_OF (OpTextUndoable))
 	{
 		RegenerateNode(pUndoOp, FALSE, FALSE);
 	}
-#endif
 
 	else if (pUndoOp->IsKindOf(CC_RUNTIME_CLASS(TransOperation)) &&
 		!pUndoOp->IS_KIND_OF(OpMovePathPoint))
@@ -2033,8 +2022,6 @@ void NodeBevelController::PreExportRender( RenderRegion* pRender )
 	TRACEUSER( "MarkH", _T("PreExport Rendering NODEBEVEL! <------------------------\n"));
 
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "start group" token
@@ -2057,6 +2044,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			}
 		}
 	}
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRender->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -2071,8 +2060,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeBevelController::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 	{
 		// Output "end group" token
@@ -2086,6 +2073,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+PORTNOTE("cmx", "Removed use of CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if(pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -2094,11 +2083,10 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 		return TRUE;
 	}
-
+#endif
 	if(m_pBevel)
 		m_pBevel->SetConvertingFlag();
 
-#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;
@@ -2357,8 +2345,6 @@ BOOL NodeBevelController::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionSt
 	if (pOp)
 	{
 		// can't contour a bevelled object
-PORTNOTE("other","Removed OpCreateContour from NodeBevelController::AllowOp");
-#ifndef EXCLUDE_FROM_XARALX
 		if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpCreateContour)) ||
 			pOp->IsKindOf(CC_RUNTIME_CLASS(OpChangeContourWidth)))
 		{
@@ -2369,7 +2355,6 @@ PORTNOTE("other","Removed OpCreateContour from NodeBevelController::AllowOp");
 			allowed = FALSE;
 			pParam->SetReasonForDenial(_R(IDS_CANT_REMOVE_BLEND_WHEN_BEVELLED));
 		}
-#endif
 	}
 
 	if (pParam->GetDirection() != OBJCHANGE_CALLEDBYCHILD ||

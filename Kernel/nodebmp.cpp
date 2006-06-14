@@ -110,8 +110,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 //#include "progress.h"
-//#include "cameleps.h"
-//#include "ai_epsrr.h"
+#include "cameleps.h"
+#include "ai_epsrr.h"
 #include "bitmpinf.h"
 #include "nodepath.h"
 //#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cliptype.h"
 #include "attrmap.h"
 
-//#include "colormgr.h"
+#include "colormgr.h"
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
 //#include "justin2.h"
@@ -624,8 +624,6 @@ void NodeBitmap::PreExportRender(RenderRegion*)
 BOOL NodeBitmap::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSRenderRegion)))
 	{
 		// Get valid transparency fill for this object
@@ -700,13 +698,13 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 					PColourCMYK CMYK;
 					StartCol.GetCMYKValue(&CMYK);
 					pDC->OutputColour(&CMYK);
-					pDC->OutputToken("K");
+					pDC->OutputToken(_T("K"));
 				}
 				else
 				{
 					// Named colour
 					pDC->OutputNamedColour(&StartCol);
-					pDC->OutputToken("X");
+					pDC->OutputToken(_T("X"));
 				}
 
 				pDC->OutputNewLine();
@@ -730,13 +728,13 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 					PColourCMYK CMYK;
 					EndCol.GetCMYKValue(&CMYK);
 					pDC->OutputColour(&CMYK);
-					pDC->OutputToken("k");
+					pDC->OutputToken(_T("k"));
 				}
 				else
 				{
 					// Named colour
 					pDC->OutputNamedColour(&EndCol);
-					pDC->OutputToken("x");
+					pDC->OutputToken(_T("x"));
 				}
 
 				pDC->OutputNewLine();
@@ -747,7 +745,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 				pDC->OutputCoord(Coords[i]);
 
 			// ...then the bitmap object token.
-			pDC->OutputToken("cbm");
+			pDC->OutputToken(_T("cbm"));
 			pDC->OutputNewLine();
 
 			// ...and then the bitmap data itself.
@@ -774,12 +772,12 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			// the viewer), telling the main program that the following
 			// object is really a bitmap object
 						
-			pDC->OutputValue((INT32) TAG_BITMAPFLAGS);
-			pDC->OutputToken("cso");	// Start of new object type
+			pDC->OutputValue((INT32) EOTAG_BITMAPFLAGS);
+			pDC->OutputToken(_T("cso"));	// Start of new object type
 
-			pDC->OutputToken("cbot");	// Flag the next bitmap fill as an object
+			pDC->OutputToken(_T("cbot"));	// Flag the next bitmap fill as an object
 
-			pDC->OutputToken("ceo");	// End of new object type
+			pDC->OutputToken(_T("ceo"));	// End of new object type
 			pDC->OutputNewLine();
 
 			// Now output the Bitmap fill
@@ -788,7 +786,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			pDC->OutputCoord(Coords[0]);
 
 			pDC->OutputValue((INT32) CAMEPS_FILL_BITMAP);
-			pDC->OutputToken("cax");
+			pDC->OutputToken(_T("cax"));
 			pDC->OutputNewLine();
 
 			// ...and then the bitmap data itself.
@@ -797,21 +795,21 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			// Now output a filled path for the Viewer to render
 			// This will be skipped over by the new import code
 			pDC->OutputCoord(Coords[0]);
-			pDC->OutputToken(TEXT("m"));
+			pDC->OutputToken(_T("m"));
 			pDC->OutputNewLine();
 			pDC->OutputCoord(Coords[1]);
-			pDC->OutputToken(TEXT("l"));
+			pDC->OutputToken(_T("l"));
 			pDC->OutputNewLine();
 			pDC->OutputCoord(Coords[2]);
-			pDC->OutputToken(TEXT("l"));
+			pDC->OutputToken(_T("l"));
 			pDC->OutputNewLine();
 			pDC->OutputCoord(Coords[3]);
-			pDC->OutputToken(TEXT("l"));
+			pDC->OutputToken(_T("l"));
 			pDC->OutputNewLine();
 			pDC->OutputCoord(Coords[0]);
-			pDC->OutputToken(TEXT("l"));
+			pDC->OutputToken(_T("l"));
 			pDC->OutputNewLine();
-			pDC->OutputToken("F");	// Filled path
+			pDC->OutputToken(_T("F"));	// Filled path
 			pDC->OutputNewLine();
 		}
 		
@@ -841,6 +839,8 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
+PORTNOTE("cmx", "Disabled CMXRenderRegion")
+#ifndef EXCLUDE_FROM_XARALX
 	else if (pRegion->IsKindOf(CC_RUNTIME_CLASS(CMXRenderRegion)))
 	{
 		// mark start of a group...
@@ -854,6 +854,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 		return TRUE;
 	}
+#endif
 	else if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( AIEPSRenderRegion ) ) )
 	{
 		// Grab a pointer to the AIEPS_RenderRegion.
@@ -863,7 +864,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		return pAIEPSRR->ExportBitmap ( this );
 	}
 
-#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

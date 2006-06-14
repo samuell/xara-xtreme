@@ -2124,8 +2124,6 @@ INT32 ColourListComponent::GetIndexColourNumber(IndexedColour *pCol)
 
 BOOL ColourListComponent::EPSStartImport(EPSFilter *pFilter)
 {
-	PORTNOTETRACE("filters","ColourListComponent::EPSStartImport - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Is this a Camelot EPS filter?
 	BOOL CamelotEPS = pFilter->IS_KIND_OF(CamelotEPSFilter);
 
@@ -2141,9 +2139,6 @@ BOOL ColourListComponent::EPSStartImport(EPSFilter *pFilter)
 
 	// Must have worked
 	return TRUE;
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -2163,8 +2158,6 @@ BOOL ColourListComponent::EPSStartImport(EPSFilter *pFilter)
 
 void ColourListComponent::EPSEndImport(EPSFilter *pFilter, BOOL Success)
 {
-	PORTNOTETRACE("filters","ColourListComponent::EPSEndImport - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(pNewColours == NULL, "No colour table in EndEPSImport");
 
 	// If we didn't even get to initialise, then return quietly.
@@ -2186,7 +2179,6 @@ void ColourListComponent::EPSEndImport(EPSFilter *pFilter, BOOL Success)
 	// Finally, delete the IndexedColour table.
 	delete pNewColours;
 	pNewColours = NULL;
-#endif
 }
 
 
@@ -2254,8 +2246,6 @@ void ColourListComponent::AddNewColour(IndexedColour *pNewCol)
 BOOL ColourListComponent::WriteEPSComments(EPSFilter *pFilter)
 {
 #ifdef DO_EXPORT
-PORTNOTE("EPSFilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pFilter->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSFilter)))
 	{
 		// Is it a Camelot specific filter?
@@ -2378,7 +2368,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 			
 		}
 	}
-#endif
 #endif
 	// All ok.
 	return TRUE;
@@ -2834,35 +2823,33 @@ BOOL ColourListComponent::SaveColourAndChildren(IndexedColour *pCol, EPSExportDC
 ProcessEPSResult ColourListComponent::ProcessEPSComment(EPSFilter *pFilter, 
 														PCTSTR pComment)
 {
-	PORTNOTETRACE("filters","ColourListComponent::ProcessEPSComment - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pFilter->IsKindOf(CC_RUNTIME_CLASS(ArtWorksEPSFilter)))
 	{
 		// Is it a Camelot specific filter?
 		BOOL CamelotEPS = pFilter->IsKindOf(CC_RUNTIME_CLASS(CamelotEPSFilter));
 
 		// ArtWorks EPS (or derivative)
-		if (camStrncmp(pComment, "%%AWColourTable", 15) == 0)
+		if (camStrncmp(pComment, _T("%%AWColourTable"), 15) == 0)
 		{
 			// Found a colour table
 			return EPSCommentOK;
 		}
-		else if (camStrncmp(pComment, "%%JWColourTable", 15) == 0)
+		else if (camStrncmp(pComment, _T("%%JWColourTable"), 15) == 0)
 		{
 			// Found a version 1.1 extended colour table
 			return EPSCommentOK;			
 		}
-		else if (camStrncmp(pComment, "%%+", 3) == 0)
+		else if (camStrncmp(pComment, _T("%%+"), 3) == 0)
 		{
 			// Found a colour - add it to the colour list for the document.
 
 			// Take a copy of this comment
-			char Comment[256];
+			TCHAR Comment[256];
 			camStrcpy(Comment, pComment);
 
 			// Find out the colour model (c, h, r, or t)
 			INT32 i = 3;
-			char ColModel = Comment[i++];
+			TCHAR ColModel = Comment[i++];
 
 			// Check for special types (NB a colour cannot be both a spot colour and
 			// a linked colour).
@@ -2895,7 +2882,7 @@ ProcessEPSResult ColourListComponent::ProcessEPSComment(EPSFilter *pFilter,
 				if (isdigit(Comment[i]))
 				{
 					// Yes - extract it and skip past it.
-					ColourNesting = _ttol(Comment+i);
+					ColourNesting = camAtol(Comment+i);
 
 					while (isdigit(Comment[i]))
 						i++;
@@ -2928,7 +2915,7 @@ ProcessEPSResult ColourListComponent::ProcessEPSComment(EPSFilter *pFilter,
 				i++;
 
 			// Got it - copy it out of the string (skip the opening parenthesis)
-			char ColName[128];
+			TCHAR ColName[128];
 			i = ExtractString(Comment, i+1, ColName);
 			String_64 ColNameS = ColName;
 
@@ -3056,7 +3043,6 @@ ProcessEPSResult ColourListComponent::ProcessEPSComment(EPSFilter *pFilter,
 			return EPSCommentOK;
 		}
 	}
-#endif
 	// Ignore all other comments
 	return EPSCommentUnknown;
 }
@@ -3192,46 +3178,45 @@ void ColourListComponent::ReadEPS_RGB( ColourRGBT *pCol, PTSTR pComment,
 void ColourListComponent::ReadEPS_CMYK(ColourCMYK *pCol, PTSTR pComment, 
 								   NewColourInfo *pColourInfo)
 {
-	PORTNOTETRACE("filters","ColourListComponent::ReadEPS_CMYK - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL Linked = (pColourInfo != NULL) && (pColourInfo->Type == COLOURTYPE_LINKED);
 
-	char *Value = _tcstok(pComment, " \t");
+	TCHAR *State = NULL;
+	TCHAR *Value = camStrtok(pComment, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
-			pCol->Cyan = atof(Value);
+			pCol->Cyan = camAtof(Value);
 	}
 
-	Value = _tcstok(NULL, " \t");
+	Value = camStrtok(NULL, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[1] = TRUE;
 		else
-			pCol->Magenta = atof(Value);
+			pCol->Magenta = camAtof(Value);
 	}
 
-	Value = _tcstok(NULL, " \t");
+	Value = camStrtok(NULL, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (strcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[2] = TRUE;
 		else
-			pCol->Yellow = atof(Value);
+			pCol->Yellow = camAtof(Value);
 	}
 
-	Value = _tcstok(NULL, " \t");
+	Value = camStrtok(NULL, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[3] = TRUE;
 		else
-			pCol->Key = atof(Value);
+			pCol->Key = camAtof(Value);
 	}
-#endif
+
 }
 
 /********************************************************************************************
@@ -3256,40 +3241,39 @@ void ColourListComponent::ReadEPS_CMYK(ColourCMYK *pCol, PTSTR pComment,
 void ColourListComponent::ReadEPS_HSV(ColourHSVT *pCol, PTSTR pComment,
 								  NewColourInfo *pColourInfo)
 {
-	PORTNOTETRACE("filters","ColourListComponent::ReadEPS_HSV - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL Linked = (pColourInfo != NULL) && (pColourInfo->Type == COLOURTYPE_LINKED);
 
-	char *Value = _tcstok(pComment, " \t");
+	TCHAR *State = NULL;
+	TCHAR *Value = camStrtok(pComment, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
-			pCol->Hue = atof(Value) / 360.0;
+			pCol->Hue = camAtof(Value) / 360.0;
 	}
 
-	Value = _tcstok(NULL, " \t");
+	Value = camStrtok(NULL, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[1] = TRUE;
 		else
-			pCol->Saturation = atof(Value) / 100.0;
+			pCol->Saturation = camAtof(Value) / 100.0;
 	}
 
-	Value = _tcstok(NULL, " \t");
+	Value = camStrtok(NULL, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[2] = TRUE;
 		else
-			pCol->Value = atof(Value) / 100.0;
+			pCol->Value = camAtof(Value) / 100.0;
 	}
 
 	// No transparency
 	pCol->Transparent = 0.0;
-#endif
+
 }
 
 /********************************************************************************************
@@ -3314,17 +3298,16 @@ void ColourListComponent::ReadEPS_HSV(ColourHSVT *pCol, PTSTR pComment,
 void ColourListComponent::ReadEPS_Grey(ColourGreyT *pCol, PTSTR pComment,
 								   NewColourInfo *pColourInfo)
 {
-	PORTNOTETRACE("filters","ColourListComponent::ReadEPS_Grey - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL Linked = (pColourInfo != NULL) && (pColourInfo->Type == COLOURTYPE_LINKED);
 
-	char *Value = _tcstok(pComment, " \t");
+	TCHAR * State=NULL;
+	TCHAR *Value = camStrtok(pComment, _T(" \t"), &State);
 	if (Value != NULL)
 	{
-		if (Linked && (camStrcmp(Value, "-") == 0))
+		if (Linked && (camStrcmp(Value, _T("-")) == 0))
 			pColourInfo->Inherits[0] = TRUE;
 		else
-			pCol->Intensity = atof(Value);
+			pCol->Intensity = camAtof(Value);
 	}
 
 	// Clear the reserved words to 0.
@@ -3333,7 +3316,6 @@ void ColourListComponent::ReadEPS_Grey(ColourGreyT *pCol, PTSTR pComment,
 
 	// No transparency
 	pCol->Transparent = 0.0;
-#endif
 }
 
 /********************************************************************************************

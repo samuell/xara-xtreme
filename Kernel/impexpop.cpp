@@ -129,7 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "barsdlgs.h"		// for the import/export bar controls
 
 #include "bitfilt.h"		// BaseBitmapFilter
-//#include "cameleps.h"
+#include "cameleps.h"
 //#include "oilfltrs.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "will3.h"
 #include "bmpsdlg.h"
@@ -370,12 +370,7 @@ void OpMenuImport::Do(OpDescriptor*)
 	{
 		if( NULL != pFilter->pOILFilter )
 		{
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 			if( ( pFilter->GetFlags().CanImport && !IS_A( pFilter, CamelotEPSFilter ) ) &&
-#else
-			if( pFilter->GetFlags().CanImport &&
-#endif
 				pFilter->pOILFilter->Position == SelectedFilter )
 			{
 				TRACEUSER( "luke", _T("%s is THE filter (%d)"),
@@ -1151,8 +1146,6 @@ PORTNOTE("other", "Removed BmapPrevDlg usage" )
 	// Graeme (11-4-00) - Added FILTERID_AIEPS to stop the warnings when doing an
 	// AI format export. After all, the AIEPS filter is probably better specified
 	// these days than the other EPS filters.
-PORTNOTE("other", "Removed EPSFilter usage" )
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (TheSelectedFilterID != FILTERID_CAMELOT_EPS &&
 		TheSelectedFilterID != FILTERID_NATIVE_EPS &&
 		TheSelectedFilterID != FILTERID_AIEPS
@@ -1177,7 +1170,6 @@ PORTNOTE("other", "Removed EPSFilter usage" )
 			return;
 		}
 	}
-#endif
 
 	BOOL fExportedOk = FALSE;
 

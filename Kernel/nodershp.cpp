@@ -106,9 +106,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
-//#include "cameleps.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "swfrndr.h"		// For the Flash render region class.
+#include "cameleps.h"
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "swfrndr.h"		// For the Flash render region class.
 #include "contmenu.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -3969,16 +3969,13 @@ void NodeRegularShape::SetTransformMatrix(const Matrix* newmatrix)
 void NodeRegularShape::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(NativeRenderRegion)))
 	{
 		// Output "start regular shape" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("csrs");
+		pDC->OutputToken(_T("csrs"));
 		pDC->OutputNewLine();
 	}
-#endif
 #endif
 }
 
@@ -4001,8 +3998,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeRegularShape::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(NativeRenderRegion)))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
@@ -4038,7 +4033,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		pDC->OutputCoord(UTMinorAxes);
 		pDC->OutputValue(IsFilled);
 		pDC->OutputValue(IsStroked);
-		pDC->OutputToken("crsp");
+		pDC->OutputToken(_T("crsp"));
 		pDC->OutputNewLine();
 
 		// Output the transformation matrix
@@ -4051,19 +4046,19 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		pDC->OutputReal(billy[3].MakeDouble());
 		pDC->OutputUserSpaceValue(bobby[0]);
 		pDC->OutputUserSpaceValue(bobby[1]);
-		pDC->OutputToken("crstm");
+		pDC->OutputToken(_T("crstm"));
 		pDC->OutputNewLine();
 
 		// Output the paths for the shape's two edges
 		((EPSRenderRegion*)pRegion)->ExportPath(&EdgePath1, TRUE);
-		pDC->OutputToken("crsp1");
+		pDC->OutputToken(_T("crsp1"));
 		pDC->OutputNewLine();
 		((EPSRenderRegion*)pRegion)->ExportPath(&EdgePath2, TRUE);
-		pDC->OutputToken("crsp2");
+		pDC->OutputToken(_T("crsp2"));
 		pDC->OutputNewLine();
 
 		// End the regular shape object
-		pDC->OutputToken("cers");
+		pDC->OutputToken(_T("cers"));
 		pDC->OutputNewLine();
 				
 		// Tell caller we rendered ourselves ok
@@ -4078,7 +4073,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		return static_cast<FlashRenderRegion*> ( pRegion )->ExportRenderableNode ( this );
 	}
 
-#endif
 #endif
 	// Render the node in the normal way
 	return FALSE;

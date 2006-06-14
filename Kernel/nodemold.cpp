@@ -133,7 +133,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aw_eps.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "moldtool.h"
 //#include "fillattr.h" 	// For AttrFillGeometry::RemovePerspective() - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "resource.h" 	// For _R(IDS_OK)/CANCEL
@@ -2500,8 +2500,6 @@ ChangeCode NodeMould::RemouldAll(UndoableOperation* pUndoOp)
 void NodeMould::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		PreExportCAMEPS(pRegion);
@@ -2513,7 +2511,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		PreExportAWEPS(pRegion);
 		return;
 	}
-#endif
 #endif
 }
 
@@ -2536,14 +2533,11 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeMould::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 		return PostExportCAMEPS(pRegion);
 
 	if (pRegion->IS_KIND_OF(ArtWorksEPSRenderRegion))
 		return PostExportAWEPS(pRegion);
-#endif
 #endif
 	return FALSE;
 }
@@ -2553,8 +2547,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 void NodeMould::PreExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	MouldSpace mSpace = DescribeGeometry();
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
@@ -2564,14 +2556,14 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		case MOULDSPACE_ENVELOPE:
 			if (IsDetached())
 				InformWarning(_R(IDS_SAVE_WHILE_DETACHEDE), _R(IDS_OK));
-			pDC->OutputToken("csev");			// Camelot "start envelope" token
+			pDC->OutputToken(_T("csev"));			// Camelot "start envelope" token
 
 			break;
 
 		case MOULDSPACE_PERSPECTIVE:
 			if (IsDetached())
 				InformWarning(_R(IDS_SAVE_WHILE_DETACHEDP), _R(IDS_OK));
-			pDC->OutputToken("cspr");			// Camelot "start perspective" token
+			pDC->OutputToken(_T("cspr"));			// Camelot "start perspective" token
 			break;
 
 		default:
@@ -2585,16 +2577,15 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 	INT32 Threshold = GetGeometry()->GetThreshold();
 	if (Threshold != MOULD_V1THRESHOLD)
 	{
-		pDC->OutputValue((INT32)TAG_MOULDTHRESHOLD);
-		pDC->OutputToken("cso");
+		pDC->OutputValue((INT32)EOTAG_MOULDTHRESHOLD);
+		pDC->OutputToken(_T("cso"));
 		pDC->OutputNewLine();
 		pDC->OutputValue(Threshold);
-		pDC->OutputToken("cmth");
+		pDC->OutputToken(_T("cmth"));
 		pDC->OutputNewLine();
-		pDC->OutputToken("ceo");
+		pDC->OutputToken(_T("ceo"));
 		pDC->OutputNewLine();
 	}
-#endif
 #endif
 }
 
@@ -2604,24 +2595,21 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeMould::PostExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	MouldSpace mSpace = DescribeGeometry();
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 
 	switch (mSpace)
 	{
 		case MOULDSPACE_ENVELOPE:
-			pDC->OutputToken("ceev");			// Camelot "end envelope" token
+			pDC->OutputToken(_T("ceev"));			// Camelot "end envelope" token
 			break;
 		case MOULDSPACE_PERSPECTIVE:
-			pDC->OutputToken("cepr");			// Camelot "end perspective" token
+			pDC->OutputToken(_T("cepr"));			// Camelot "end perspective" token
 			break;
 		default:
 			break;
 	}
 	pDC->OutputNewLine();
-#endif
 #endif
 
 	return TRUE;

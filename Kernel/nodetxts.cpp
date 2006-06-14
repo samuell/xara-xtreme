@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "becomea.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"							
-//#include "cameleps.h"
+#include "cameleps.h"
 #include "contmenu.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -126,8 +126,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "textfuns.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "ai_epsrr.h"
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "ai_epsrr.h"
 #include "progress.h"
 //#include "camfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "cxftext.h"
@@ -2766,8 +2766,6 @@ BOOL TextStory::FormatAndChildren(UndoableOperation* pUndoOp, BOOL UseNodeFlags,
 void TextStory::PreExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL exportingAsShapes = FALSE;
 
 	// Determine whether or not to export AI text as shapes (i.e. if there are any 
@@ -2801,7 +2799,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 				pDC->OutputValue((INT32)0);
 
 			// text object token
- 			pDC->OutputToken("To");
+ 			pDC->OutputToken(_T("To"));
  			pDC->OutputNewLine();
 
 			// output the story matrix. We need to make this relative to the spread the
@@ -2829,7 +2827,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			// null start point
 			pDC->OutputValue((INT32)0);
 			// start path
-			pDC->OutputToken("Tp");
+			pDC->OutputToken(_T("Tp"));
 			pDC->OutputNewLine();
 
 			// export the path
@@ -2903,7 +2901,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			}
 
 			// end path
-			pDC->OutputToken("TP");
+			pDC->OutputToken(_T("TP"));
 			pDC->OutputNewLine();
 
 			if (pRegion->IsKindOf(CC_RUNTIME_CLASS(AIEPSRenderRegion)))
@@ -2919,17 +2917,17 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 				// (ChrisG - 8/11/00) Added support for automatic kerning.
 				if (AutoKern)
-					pDC->OutputValue (1l);
+					pDC->OutputValue ((INT32)1);
 				else
-					pDC->OutputValue (0l);
+					pDC->OutputValue ((INT32)0);
 
-				pDC->OutputToken ("TA");				   // automatic kerning TA
+				pDC->OutputToken (_T("TA"));				   // automatic kerning TA
 				pDC->OutputNewLine();
-    			pDC->OutputToken("0 0 0 TC");			   // Character spacing TC
+    			pDC->OutputToken(_T("0 0 0 TC"));			   // Character spacing TC
 				pDC->OutputNewLine();
-    			pDC->OutputToken("100 100 100 TW");		   // Word spacing TW
+    			pDC->OutputToken(_T("100 100 100 TW"));		   // Word spacing TW
 				pDC->OutputNewLine();
-    			pDC->OutputToken("0 0 0 Ti");			   // Line indentation Ti
+    			pDC->OutputToken(_T("0 0 0 Ti"));			   // Line indentation Ti
 				pDC->OutputNewLine();
 
 				// (ChrisG - 3/11/00)
@@ -2943,7 +2941,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		{
 			// Output "extras" token for text
 			EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-			EPSRenderRegion* pEPSRegion = (EPSRenderRegion*)pRegion;
+//			EPSRenderRegion* pEPSRegion = (EPSRenderRegion*)pRegion;
 
 			INT32 WordWrapping = (IsWordWrapping() ? 1 : 0);
 			pDC->OutputValue(WordWrapping);
@@ -2961,7 +2959,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 			// Output version zero and token
 			pDC->OutputValue((INT32)0);
-			pDC->OutputToken("ctex");
+			pDC->OutputToken(_T("ctex"));
 			pDC->OutputNewLine();
 
 			// Version one stuff
@@ -2970,11 +2968,10 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 
 			// Output version and token
 			pDC->OutputValue((INT32)1);
-			pDC->OutputToken("ctex");
+			pDC->OutputToken(_T("ctex"));
 			pDC->OutputNewLine();*/
 		}
 	}
-#endif
 #endif
 }
 
@@ -2993,8 +2990,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL TextStory::ExportRender(RenderRegion* pRegion)
 {
 #if EXPORT_TEXT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	// (ChrisG 8/11/00) - Reset the 'exporting text as shapes' flag, so that it's valid for 
 	//	the next text story - also don't export the 'end of text object' data if we aren't 
 	//	exporting a text object.
@@ -3014,7 +3009,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 	{
 		// Output "End text object" token
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("TO");
+		pDC->OutputToken(_T("TO"));
 		pDC->OutputNewLine();
 
 		// output token if text is wrapped
@@ -3022,16 +3017,15 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		{
 			if (WillStoryWrapOnPath())
 			{
-				pDC->OutputValue((INT32)TAG_TEXTWRAPPED);
-				pDC->OutputToken("cso");
+				pDC->OutputValue((INT32)EOTAG_TEXTWRAPPED);
+				pDC->OutputToken(_T("cso"));
 				pDC->OutputNewLine();
-				pDC->OutputToken("ceo");
+				pDC->OutputToken(_T("ceo"));
 				pDC->OutputNewLine();
 			}
 		}
 		return TRUE;
 	}
-#endif
 #endif
 	return FALSE;	
 }

@@ -598,12 +598,7 @@ TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		// import list - you can't hide it from just one list. It must be availiable though
 		// to give it's nice little error message. Other instances of this below.
 		if (
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 			( ( GetImport && Flags.CanImport && !IS_A( pFilter, CamelotEPSFilter ) )
-#else
-			( ( GetImport && Flags.CanImport )
-#endif
 				|| (!GetImport && Flags.CanExport)) && NULL != pFilter->pOILFilter &&
 				Flags.ShowFilter && (pFilter->IsKindOf(pTypeOfFilter)) && FilterCanCope
 		   )
@@ -680,12 +675,7 @@ PORTNOTE("filter", "Removed use fo GIFFilter")
 		if( NULL != pFilter->pOILFilter )
 		{
 			if (
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 				( ( GetImport && Flags.CanImport && !IS_A( pFilter, CamelotEPSFilter ) )
-#else
-				( ( GetImport && Flags.CanImport )
-#endif
 					|| (!GetImport && Flags.CanExport)) &&
 					Flags.ShowFilter && (pFilter->IsKindOf(pTypeOfFilter)) && FilterCanCope
 			   )
@@ -2474,12 +2464,7 @@ TCHAR* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 		// little bit of a bodge here to stop the CamelotEPSFilter from appearing in the
 		// import list - you can't hide it from just one list. It must be availiable though
 		// to give it's nice little error message. Other instances of this below.
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 		if (Flags.CanImport && Flags.ShowFilter && !IS_A(pFilter, CamelotEPSFilter))
-#else
-		if (Flags.CanImport && Flags.ShowFilter )
-#endif
 		{
 			// Add the space required to put this into the filter string
 			// (add 1 for the separating '|' character)
@@ -2508,12 +2493,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 	{
 		FilterFlags Flags = pFilter->GetFlags();
 
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 		if (Flags.CanImport && Flags.ShowFilter && !IS_A(pFilter, CamelotEPSFilter))
-#else
-		if (Flags.CanImport && Flags.ShowFilter )
-#endif
 		{
 			// Add this filter into the list
 			camStrcat(FilterString, pFilter->pOILFilter->ConstructFilterString());
@@ -2521,12 +2501,7 @@ PORTNOTE("other", "Removed CamelotEPSFilter check" )
 			pFilter->pOILFilter->Position = Position;
 
 			// see if it is the native filter
-PORTNOTE("other", "Removed CamelotEPSFilter check" )
-#if !defined(EXCLUDE_FROM_XARALX)
 			if (IS_A(pFilter, CamelotNativeEPSFilter))
-#else
-			if( false )
-#endif
 			{
 				*NativeFilterPos = Position;
 			}

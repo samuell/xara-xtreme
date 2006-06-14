@@ -124,8 +124,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "aw_eps.h"
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "cameleps.h"
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "cameleps.h"
 #include "attrmap.h"
 #include "progress.h"
 
@@ -6906,8 +6906,6 @@ BOOL HandleBecomeA::PassBack(Path* pBlendedPath,CCAttrMap* pBlendedAttrMap,UINT3
 void NodeBlender::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	// Ensure that we are initialised (if it can be done!!)
 	if (!Reinit())
 		return;
@@ -6932,7 +6930,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			pDC->OutputValue(m_ObjIndexEnd);	// Index to object at end of blend
 			pDC->OutputValue(m_PathIndexStart);	// Path index to el num of start path
 			pDC->OutputValue(m_PathIndexEnd);	// Path index to el num of end path
-			pDC->OutputToken("csbr");			// Camelot "start blender" token
+			pDC->OutputToken(_T("csbr"));			// Camelot "start blender" token
 			pDC->OutputNewLine();
 
 		}
@@ -6951,7 +6949,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 					pDC->OutputValue(INT32(GetNumBlendSteps()+1));				// The number of blend steps (+1 for AW)
 					pDC->OutputValue(GetAWStartPathIndex());					// Get start path index
 					pDC->OutputValue(GetAWEndPathIndex());						// Get end path index
-					pDC->OutputToken("asbr");									// ArtWorks "start blender" token
+					pDC->OutputToken(_T("asbr"));									// ArtWorks "start blender" token
 					pDC->OutputNewLine();
 
 					// Blend is done
@@ -6971,7 +6969,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 	// These two lines will output the first pair of blendable paths - useful for testing
 	//pRefStart->GetFirstBlendPath()->GetNodePath()->Render(pRegion);
 	//pRefEnd  ->GetFirstBlendPath()->GetNodePath()->Render(pRegion);
-#endif
 #endif
 }
 
@@ -6994,8 +6991,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeBlender::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	// Ensure that we are initialised (if it can be done!!)
 	if (!Reinit())
 		return FALSE;
@@ -7011,7 +7006,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		}
 		else if (pRegion->IS_KIND_OF(NativeRenderRegion))
 		{
-			pDC->OutputToken("cebr");				// Camelot "end blender" token
+			pDC->OutputToken(_T("cebr"));				// Camelot "end blender" token
 			pDC->OutputNewLine();
 		}
 		else
@@ -7022,7 +7017,7 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 			{
 				if (pNodeBlend->IsArtWorksEPSCompatible())
 				{
-					pDC->OutputToken("aebr");				// ArtWorks "end blender" token
+					pDC->OutputToken(_T("aebr"));				// ArtWorks "end blender" token
 					pDC->OutputNewLine();
 				}
 			}
@@ -7030,7 +7025,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
-#endif
 #endif
 	// Render this node in the normal way
 	return FALSE;

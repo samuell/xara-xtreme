@@ -799,9 +799,6 @@ BOOL BitmapListComponent::WriteEPSComments(EPSFilter *pFilter)
 BOOL BitmapListComponent::WriteScript(EPSFilter* pFilter)
 {
 #ifdef DO_EXPORT
-PORTNOTE("EPSFilter", "Removed use of EPSFilter")
-#if !defined(EXCLUDE_FROM_XARALX)
-
 	// This only happens in Native EPS
 	if (pFilter->IS_KIND_OF(CamelotNativeEPSFilter))
 	{
@@ -857,7 +854,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 	}
 
 #endif
-#endif
 	return TRUE;
 }
 
@@ -883,8 +879,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 BOOL BitmapListComponent::ExportBitmapPoolItem(INT32 BitmapNum, EPSFilter* pFilter, EPSExportDC* pDC, KernelBitmap* pBitmap)
 {
 #ifdef DO_EXPORT
-PORTNOTE("EPSFilter", "Removed use of EPSFilter")
-#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(pBitmap->HasBeenDeleted(), FALSE, "Trying to export a deleted bitmap");
 	
 	if (pFilter->IS_KIND_OF(CamelotNativeEPSFilter))
@@ -901,7 +895,6 @@ PORTNOTE("EPSFilter", "Removed use of EPSFilter")
 		// Tell caller we rendered ourselves ok
 		return TRUE;
 	}
-#endif
 #endif
 	return FALSE;
 }

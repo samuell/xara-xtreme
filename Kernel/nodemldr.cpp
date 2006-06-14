@@ -110,8 +110,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ndmldink.h"
 #include "ndmldgrp.h"
 //#include "nodeattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "cameleps.h"
+#include "nativeps.h"		// The old style EPS native filter, used in v1.1
+#include "cameleps.h"
 #include "aw_eps.h"
 //#include "oilprog.h"
 
@@ -1330,8 +1330,6 @@ BOOL NodeMoulder::NeedsToExport(RenderRegion* pRender, BOOL VisibleLayersOnly,
 	if (pRender==NULL)
 		return TRUE;
 
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	// dont export to native documents
 	if (pRender->IS_KIND_OF(NativeRenderRegion))
 		return FALSE;
@@ -1348,9 +1346,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		return (IsSelected() || IsChildOfSelected() || IsParentOfSelected());
 	else
 		return TRUE;
-#else
-	return FALSE;
-#endif
 #else
 	return FALSE;
 #endif
@@ -1376,8 +1371,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 void NodeMoulder::PreExportRender(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(CamelotEPSRenderRegion))
 	{
 		PreExportCAMEPS(pRegion);
@@ -1389,7 +1382,6 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 		PreExportAWEPS(pRegion);
 		return;
 	}
-#endif
 #endif
 }
 
@@ -1412,14 +1404,11 @@ PORTNOTE("epsfilter", "Removed use of EPSFilter")
 BOOL NodeMoulder::ExportRender(RenderRegion* pRegion) 
 {
 #ifdef DO_EXPORT
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(CamelotEPSRenderRegion))
 		return PostExportCAMEPS(pRegion);
 
 	if (pRegion->IS_KIND_OF(ArtWorksEPSRenderRegion))
 		return PostExportAWEPS(pRegion);
-#endif
 #endif	
 	return FALSE;
 }
@@ -1443,15 +1432,12 @@ void NodeMoulder::PreExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
 	// Make sure this token goes out only in Native documents
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("csdo");			// Camelot "start mould destin" token
+		pDC->OutputToken(_T("csdo"));			// Camelot "start mould destin" token
 		pDC->OutputNewLine();
 	}
-#endif
 #endif
 }
 
@@ -1460,16 +1446,13 @@ BOOL NodeMoulder::PostExportCAMEPS(RenderRegion* pRegion)
 {
 #ifdef DO_EXPORT
 	// Make sure this token goes out only in Native documents
-PORTNOTE("epsfilter", "Removed use of EPSFilter")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
-		pDC->OutputToken("cedo");			// Camelot "end mould destin" token
+		pDC->OutputToken(_T("cedo"));			// Camelot "end mould destin" token
 		pDC->OutputNewLine();
 		return TRUE;
 	}
-#endif
 #endif
 	// Otherwise render as paths (e.g. in EPS)
 	return FALSE;

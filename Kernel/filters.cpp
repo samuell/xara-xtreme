@@ -841,7 +841,7 @@ PORTNOTE("filter","Removed CMXFilterX usage")
 
 
 	// Corel EPS filters.
-PORTNOTE("filter","Removed EPS filters usage")
+PORTNOTE("filter","Removed Corel EPS filters usage")
 	ADD_FILTER(Corel3EPSFilter)
 	ADD_FILTER(Corel4EPSFilter)
 
@@ -1843,12 +1843,7 @@ BOOL Filter::ExportRender ( RenderRegion *pRegion, BOOL MaskedRender)
 
 	// We need special handling for Camelot EPS 
 	// (NB. but not native files - do not change this to IS_KIND_OF!)
-PORTNOTE("filter","Removed EPSFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL IsCamelotEPS = IS_A(pRegion, CamelotEPSRenderRegion);
-#else
-	BOOL IsCamelotEPS = FALSE;
-#endif
 
 	// Get the DC for this export operation
 	// This can be NULL, in the case of bitmap export, or a CMetaFileDC in the case
@@ -1856,27 +1851,19 @@ PORTNOTE("filter","Removed EPSFilter usage")
 	// pDC otherwise the CATCH handlers will fail as there is no ExportFile. Also the
 	// progress bar message will fail.
 	// The CDC can be Null if we are talking about bitmap export
-//	CNativeDC* pCDC = pRegion->GetRenderDC();
+	CNativeDC* pCDC = pRegion->GetRenderDC();
 	ExportDC* pDC = NULL;
 	NumNodes = 0;
 
 	// At present, it appears that only EPS derived filters have a file attached and so
 	// are the only ones which use an ExportDC. All bitmap filters use NULL.
-PORTNOTE("filter","Removed EPSFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if( pCDC != NULL && this->IS_KIND_OF(EPSFilter))
-		pDC = (ExportDC*)pCDC;
-#endif
+		pDC = (ExportDC*)CCDC::ConvertFromNativeDC(pCDC);
 	
 	// Find out how big the document and document components are...
 	// (We only do this for EPS files)
-PORTNOTE("filter","Removed EPSFilter usage")
 	if(
-#ifndef EXCLUDE_FROM_XARALX
 		this->IS_KIND_OF(EPSFilter) &&
-#else
-		FALSE && 
-#endif
 		!IsCamelotEPS)
 	{
 		// First, we ask the document itself
@@ -1933,11 +1920,9 @@ PORTNOTE("filter","Removed EPSFilter usage")
 	BOOL bVisibleLayersOnly = ExportVisibleLayersOnly();
 	BOOL bSelectedOnly = ExportSelectionOnly(MaskedRender);
 
-PORTNOTE("filter","Removed EPSFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (IsCamelotEPS)
 	{
-		//TRY
+		try
 		{
 			// Special 3-stage rendering needed for Camelot EPS to be renderable.
 			View *pView = DocView::GetSelected();
@@ -1960,21 +1945,18 @@ PORTNOTE("filter","Removed EPSFilter usage")
 			// Finished render region - close down region (i.e. output trailer).
 			((EPSRenderRegion *) pRegion)->CloseDown();
 		}
-#if 0
-		CATCH(CFileException, e)
+
+		catch(CFileException)
 		{
 			// Didn't work - report failure to caller.
 			if (pDC)
 				pDC->ExportFile->SetThrowExceptions(FALSE);
 			return FALSE;
 		}
-		END_CATCH
-#endif
 		// All ok
 		return TRUE;
 	}
 	else
-#endif
 	{
 		FilterRenderCallback MyCallback(this, TRUE, bVisibleLayersOnly, bSelectedOnly);
 		pRegion->RenderTree(pNode, FALSE, FALSE, &MyCallback);
