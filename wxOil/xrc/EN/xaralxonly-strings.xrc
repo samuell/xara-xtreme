@@ -347,6 +347,12 @@
 					<label>The movie replay resources aren't present, please check the install</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_NO_MEDIACTRL">
+					<label>The version of wxWidgets which this application application was built against doesn't support wxMediaCtrl, no video replay will happen</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

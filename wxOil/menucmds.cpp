@@ -873,6 +873,7 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
+#if wxUSE_MEDIACTRL
 enum
 {
 	wxID_MEDIACTRL
@@ -947,6 +948,7 @@ void CReplayWnd::OnLoaded( wxMediaEvent& )
 	TRACEUSER( "luke", _T("Play Video\n") );
 	m_pMediaCtrl->Play();
 }
+#endif
 
 static void StartMovie( const wxString &strFile )
 {
@@ -978,6 +980,7 @@ static void StartMovie( const wxString &strFile )
 
 static void StartMovieNative( const wxString &strFile )
 {
+#if wxUSE_MEDIACTRL
 	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
 	if( !wxDir::Exists( strDataPath ) )
 	{
@@ -992,6 +995,9 @@ static void StartMovieNative( const wxString &strFile )
 	
 	CReplayWnd*		pWnd	= new CReplayWnd( CCamFrame::GetMainFrame() );
 	pWnd->Load( strVideoPath + _T("/") + strFile );
+#else
+	InformWarning( _R(IDS_NO_MEDIACTRL), _R(IDS_OK) );
+#endif	
 }
 
 
