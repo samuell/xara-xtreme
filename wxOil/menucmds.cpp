@@ -876,40 +876,37 @@ void HelpGalleriesAction()
 #if wxUSE_MEDIACTRL
 enum
 {
-	wxID_MEDIACTRL
+	wxID_MEDIACTRL			= wxID_HIGHEST + 1,
+	wxID_CLOSE_BUTTON
 };
 
 class CReplayWnd : public wxDialog
 {
 private:
 	wxMediaCtrl*	m_pMediaCtrl;
+	wxSizer*		m_pSizer;
 
 public:
-	CReplayWnd( wxWindow *pWnd ) : wxDialog( pWnd, wxID_ANY, _T("Movie Replay") )
-	{
-		m_pMediaCtrl = new wxMediaCtrl;
-
-		m_pMediaCtrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize, 0 );
-		wxSizer*	pSizer	= new wxBoxSizer( wxHORIZONTAL );
-		pSizer->Add( m_pMediaCtrl );
-
-		SetSizer( pSizer );
-	}
+	CReplayWnd( wxWindow *pWnd );
 	virtual ~CReplayWnd()
 	{
-		TRACEUSER( "luke", _T("Destruct CRW\n") );
+		TRACEUSER( "jlh92", _T("Destruct CRW\n") );
 	}
 
 	void Load( const wxString& str )
 	{
-		TRACEUSER( "luke", _T("Load Video\n") );
+		TRACEUSER( "jlh92", _T("Load Video\n") );
 		m_pMediaCtrl->Load( str );
+
+		m_pSizer->Fit( this );
+		m_pSizer->SetSizeHints( this );
 	}
 
 	void OnClose( wxCloseEvent& event );
 	void OnCreate( wxWindowCreateEvent& event );
 	void OnDestroy( wxWindowDestroyEvent& event );
+
+	void OnCloseButton( wxCommandEvent& event );
 
 	void OnLoaded( wxMediaEvent& event );
 
@@ -919,34 +916,75 @@ public:
 
 IMPLEMENT_CLASS( CReplayWnd, wxDialog )
 BEGIN_EVENT_TABLE( CReplayWnd, wxDialog )
-	EVT_CLOSE(			CReplayWnd::OnClose )
-	EVT_WINDOW_DESTROY( CReplayWnd::OnDestroy )
-	EVT_WINDOW_CREATE(	CReplayWnd::OnCreate )
+//	EVT_CLOSE(			CReplayWnd::OnClose )
+//	EVT_WINDOW_DESTROY( CReplayWnd::OnDestroy )
+//	EVT_WINDOW_CREATE(	CReplayWnd::OnCreate )
+
+	EVT_BUTTON(			wxID_CLOSE_BUTTON,	CReplayWnd::OnCloseButton )
 
 	EVT_MEDIA_LOADED(	wxID_MEDIACTRL, CReplayWnd::OnLoaded )
 END_EVENT_TABLE()
 
+CReplayWnd::CReplayWnd( wxWindow *pWnd ) : wxDialog( pWnd, wxID_ANY, _T("Movie Replay"), wxDefaultPosition,
+												wxDefaultSize, wxSYSTEM_MENU | wxCAPTION )
+{
+	m_pSizer	= new wxBoxSizer( wxVERTICAL );
+	
+	m_pMediaCtrl = new wxMediaCtrl;
+	m_pMediaCtrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
+						wxDefaultPosition, wxDefaultSize, 0 );
+	m_pSizer->Add( m_pMediaCtrl, 0, wxALL, 0 );
+
+	{
+		wxSizer*	pHSizer = new wxBoxSizer( wxHORIZONTAL );
+		
+		wxButton*	pButton = new wxButton( this, wxID_CLOSE_BUTTON, _T("Close") );
+		pHSizer->Add( pButton, 0, wxLEFT | wxBOTTOM | wxTOP, 5  );
+
+		wxSlider*	pSlider = new wxSlider( this, wxID_ANY, 127, 0, 255 );
+		pHSizer->Add( pSlider, 1, wxEXPAND | wxALL, 5 );
+
+		m_pSizer->Add( pHSizer );
+	}
+
+	SetSizer( m_pSizer );
+}
+
 void CReplayWnd::OnCreate( wxWindowCreateEvent& )
 {
-	TRACEUSER( "luke", _T("Create video\n") );
+	TRACEUSER( "jlh92", _T("Create video\n") );
 }
 
 void CReplayWnd::OnDestroy( wxWindowDestroyEvent& )
 {
-	TRACEUSER( "luke", _T("Destroy video\n") );
+	TRACEUSER( "jlh92", _T("Destroy video\n") );
 	m_pMediaCtrl->Stop();
 }
 
 void CReplayWnd::OnClose( wxCloseEvent& )
 {
-	TRACEUSER( "luke", _T("Close video\n") );
+	TRACEUSER( "jlh92", _T("Close video\n") );
 	m_pMediaCtrl->Stop();
 }
 
 void CReplayWnd::OnLoaded( wxMediaEvent& )
 {
-	TRACEUSER( "luke", _T("Play Video\n") );
+	TRACEUSER( "jlh92", _T("Play Video\n") );
 	m_pMediaCtrl->Play();
+}
+
+void CReplayWnd::OnCloseButton( wxCommandEvent& )
+{
+	TRACEUSER( "jlh92", _T("Close button\n") );
+	
+	if( NULL != m_pMediaCtrl )
+	{
+		m_pMediaCtrl->Stop();
+		delete m_pMediaCtrl;
+		m_pMediaCtrl = NULL;
+	}
+
+	Close();
 }
 #endif
 
@@ -995,6 +1033,8 @@ static void StartMovieNative( const wxString &strFile )
 	
 	CReplayWnd*		pWnd	= new CReplayWnd( CCamFrame::GetMainFrame() );
 	pWnd->Load( strVideoPath + _T("/") + strFile );
+	
+	pWnd->Show( true );
 #else
 	InformWarning( _R(IDS_NO_MEDIACTRL), _R(IDS_OK) );
 #endif	
