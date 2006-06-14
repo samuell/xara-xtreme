@@ -388,7 +388,8 @@ INT32 FreeHandEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 
 		// Return TRUE if this file was created by Illustrator, or has been exported in 
 		// Illustrator format.
-		if (camStrncmp(Buffer, _T("%%Creator: "), 11) == 0 && camStrstr(Buffer, _T("FreeHand")) != 0)
+		if (camStrncmp( (const TCHAR *)Buffer, _T("%%Creator: "), 11) == 0 && 
+			camStrstr( (const TCHAR*)Buffer, _T("FreeHand")) != 0)
 		{
 			// found a plausible creator string - but it could be any version
 			// (3.0 for the Mac gives it's version number here, but the PC one doesn't)

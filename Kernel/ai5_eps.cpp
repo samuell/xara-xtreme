@@ -305,20 +305,20 @@ INT32 AI5EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, _T("Illustrator(TM) 5")) != NULL)
+					if (camStrstr( (const TCHAR*)Buffer, _T("Illustrator(TM) 5")) != NULL)
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// we'll accept version 7.0 as well
-					else if ((camStrstr(Buffer, _T("Illustrator(TM) 7")) != NULL) ||
-							 (camStrstr(Buffer, _T("Illustrator(R) 7")) != NULL))
+					else if ((camStrstr( (const TCHAR*)Buffer, _T("Illustrator(TM) 7")) != NULL) ||
+							 (camStrstr( (const TCHAR*)Buffer, _T("Illustrator(R) 7")) != NULL))
 					{
 						HeaderFile.close();
 						return 10;
 					}
 					// Catch FreeHand generated EPS files.
-					else if (camStrstr(Buffer, _T("FreeHand")) != NULL)
+					else if (camStrstr( (const TCHAR*)Buffer, _T("FreeHand")) != NULL)
 					{
 						HeaderFile.close();
 						return 8;

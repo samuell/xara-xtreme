@@ -704,7 +704,7 @@ BOOL FlashExportDC::WritePath ( FlashShapeRecord *pPath )
 
 	// Calculate the difference between the original curve and the generated curve. This
 	// creates it as 5% of the diagonal of the bounding box.
-	Tolerance = ( sqrt ( ( Bounds.hi.x * Bounds.hi.x ) + ( Bounds.hi.y * Bounds.hi.y ) ) ) / 20;
+	Tolerance = ( sqrt ( double( Bounds.hi.x * Bounds.hi.x ) + double( Bounds.hi.y * Bounds.hi.y ) ) ) / 20;
 
 	// Write the edge record.
 	WriteEdgeRecord ( Coords, &MoveTo, Verb, NumCoords, Lines, Fills, 0,
@@ -1109,8 +1109,8 @@ BOOL FlashExportDC::ExportCurve ( DocCoord &Start,
 		// it seems to be running properly. I suspect that the problem was that when
 		// an indefinate value is returned, the INT32 would be set as a strange value,
 		// which caused problems for the if... statement below.
-		double Distance = sqrt ( ( Difference.x * Difference.x )
-								 + ( Difference.y * Difference.y ) );
+		double Distance = sqrt ( double( Difference.x * Difference.x )
+								 + double( Difference.y * Difference.y ) );
 
 		// I've been having trouble with values of Distance where it's an infinite value,
 		// which Visual C stores as -1.#IND. This should keep it under control

@@ -295,7 +295,7 @@ INT32 AIEPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, _T("Illustrator")) != NULL)
+					if (camStrstr( (const TCHAR*)Buffer, _T("Illustrator")) != NULL)
 					{
 						HeaderFile.close();
 						return 9;

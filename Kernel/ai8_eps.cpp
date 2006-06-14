@@ -279,7 +279,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 				if (camStrncmp(Buffer, _T("%%Creator:"), 10) == 0)
 				{
 					// Found the creator line - does it contain the word Illustrator?
-					if (camStrstr(Buffer, _T("Illustrator(R) 8")) != NULL)
+					if (camStrstr( (const TCHAR*)Buffer, _T("Illustrator(R) 8")) != NULL)
 					{
 						HeaderFile.close();
 						return 10;
@@ -287,7 +287,7 @@ INT32 AI8EPSFilter::EPSHeaderIsOk(ADDR pFileHeader, UINT32 HeaderSize)
 					
 					// Try to see if it's Illustrator 9. Again, remove this code when you're
 					// writing a dedicated AI9 filter.
-					else if (camStrstr(Buffer, _T("Illustrator(R) 9")) != NULL)
+					else if (camStrstr( (const TCHAR*)Buffer, _T("Illustrator(R) 9")) != NULL)
 					{
 						HeaderFile.close();
 						return 9;
