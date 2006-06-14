@@ -873,6 +873,81 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
+enum
+{
+	wxID_MEDIACTRL
+};
+
+class CReplayWnd : public wxDialog
+{
+private:
+	wxMediaCtrl*	m_pMediaCtrl;
+
+public:
+	CReplayWnd( wxWindow *pWnd ) : wxDialog( pWnd, wxID_ANY, _T("Movie Replay") )
+	{
+		m_pMediaCtrl = new wxMediaCtrl;
+
+		m_pMediaCtrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize, 0 );
+		wxSizer*	pSizer	= new wxBoxSizer( wxHORIZONTAL );
+		pSizer->Add( m_pMediaCtrl );
+
+		SetSizer( pSizer );
+	}
+	virtual ~CReplayWnd()
+	{
+		TRACEUSER( "luke", _T("Destruct CRW\n") );
+	}
+
+	void Load( const wxString& str )
+	{
+		TRACEUSER( "luke", _T("Load Video\n") );
+		m_pMediaCtrl->Load( str );
+	}
+
+	void OnClose( wxCloseEvent& event );
+	void OnCreate( wxWindowCreateEvent& event );
+	void OnDestroy( wxWindowDestroyEvent& event );
+
+	void OnLoaded( wxMediaEvent& event );
+
+	DECLARE_CLASS( CReplayWnd )
+	DECLARE_EVENT_TABLE();
+};
+
+IMPLEMENT_CLASS( CReplayWnd, wxDialog )
+BEGIN_EVENT_TABLE( CReplayWnd, wxDialog )
+	EVT_CLOSE(			CReplayWnd::OnClose )
+	EVT_WINDOW_DESTROY( CReplayWnd::OnDestroy )
+	EVT_WINDOW_CREATE(	CReplayWnd::OnCreate )
+
+	EVT_MEDIA_LOADED(	wxID_MEDIACTRL, CReplayWnd::OnLoaded )
+END_EVENT_TABLE()
+
+void CReplayWnd::OnCreate( wxWindowCreateEvent& )
+{
+	TRACEUSER( "luke", _T("Create video\n") );
+}
+
+void CReplayWnd::OnDestroy( wxWindowDestroyEvent& )
+{
+	TRACEUSER( "luke", _T("Destroy video\n") );
+	m_pMediaCtrl->Stop();
+}
+
+void CReplayWnd::OnClose( wxCloseEvent& )
+{
+	TRACEUSER( "luke", _T("Close video\n") );
+	m_pMediaCtrl->Stop();
+}
+
+void CReplayWnd::OnLoaded( wxMediaEvent& )
+{
+	TRACEUSER( "luke", _T("Play Video\n") );
+	m_pMediaCtrl->Play();
+}
+
 static void StartMovie( const wxString &strFile )
 {
 	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
@@ -893,7 +968,7 @@ static void StartMovie( const wxString &strFile )
 	if( 255 == lResult )
 	{
 		strCommand = strDataPath + _T("/xaralx/bin/mplayer -slave \"");
-		strCommand += strVideoPath + strVideoPath + _T("/") + strFile + _T("\"");
+		strCommand += strVideoPath + _T("/") + strFile + _T("\"");
 
 		lResult = wxExecute( strCommand, wxEXEC_SYNC, NULL );
 		if( 255 == lResult )
@@ -901,18 +976,37 @@ static void StartMovie( const wxString &strFile )
 	}
 }
 
+static void StartMovieNative( const wxString &strFile )
+{
+	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
+	if( !wxDir::Exists( strDataPath ) )
+	{
+#if defined(_DEBUG)
+		// We'll try default location under debug to make life easier
+		strDataPath = _T("/usr/share");
+#endif
+	}
+
+	wxString			strVideoPath( strDataPath );
+	strVideoPath += _("/xaralx/video");
+	
+	CReplayWnd*		pWnd	= new CReplayWnd( CCamFrame::GetMainFrame() );
+	pWnd->Load( strVideoPath + _T("/") + strFile );
+}
+
+
 void HelpDemosAction()
 {
-#if 1
 	StartMovie( _T("Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm") );
-#else
-	wxWindow*		pWnd	= new wxTopLevelWindow( CCamFrame::GetMainFrame(), wxID_ANY, _T("Demo Video") );
-	wxSizer*		pSizer	= new wxBoxSizer( wxHORIZONTAL );
-	wxMediaCtrl*	pMedia	= new wxMediaCtrl( pWnd, wxID_ANY, _T("AbsBegin.ogm") );
-	pSizer->Add( pMedia );
-	pMedia->Play();
-	pWnd->SetSizer( pSizer );
-#endif
+
+//	HelpOnlineDemos();
+}
+
+
+void HelpDemosNativeAction()
+{
+	StartMovieNative( _T("Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm") );
+
 //	HelpOnlineDemos();
 }
 

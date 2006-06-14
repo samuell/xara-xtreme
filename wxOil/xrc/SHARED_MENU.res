@@ -173,6 +173,7 @@ MENU "SHARED"
 		END
 		
 		MENUITEM "HelpDemos"
+		MENUITEM "HelpDemosNative"
 		MENUITEM "TipsDlg"			SEPARATOR
 		MENUITEM "Update"				SEPARATOR
 		MENUITEM "Register"			SEPARATOR
