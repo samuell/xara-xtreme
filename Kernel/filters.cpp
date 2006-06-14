@@ -148,6 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "swffiltr.h"		// For the SWF export filter.
 //#include "extfilts.h"		// For the TIFF filter.
 #include "kerneldc.h"
+#include "xsepsops.h"
 
 #include "giffiltr.h"		// Transparent and interlaced GIF filter``
 #include "htmlfltr.h"		// HTML filter
@@ -890,7 +891,7 @@ PORTNOTE("filter","Removed FlareTemplateFilter usage")
 	Camelot.DeclarePref(_T("Filters"), _T("AddUnnamedColours"), &AddUnnamedColours); 
 
 #endif
-
+	XSEPSExportOptions::Init();
 	BaseBitmapFilter::InitBaseClass();
 	// All ok
 	return TRUE;

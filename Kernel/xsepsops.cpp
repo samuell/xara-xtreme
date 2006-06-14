@@ -104,7 +104,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 #include "xsepsops.h"
 //#include "printdlg.h"
-#include "mainfrm.h"
 #include "epsfiltr.h"
 //#include "markn.h"
 //#include "resource.h"
@@ -112,26 +111,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 DECLARE_SOURCE("$Revision: 2 $");
 
-//---------------------------------
-
-BEGIN_MESSAGE_MAP(XSEPSExportOptions,CDialog)
-	//{{AFX_MSG_MAP(CPrintDialog)
-	ON_COMMAND_EX(_R(IDC_XSEPSOPSHELP),	OnCommand)
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-IMPLEMENT_DYNAMIC(XSEPSExportOptions,CDialog)
-
-//---------------------------------
+CC_IMPLEMENT_DYNCREATE(XSEPSExportOptions, DialogOp)
 
 #define new CAM_DEBUG_NEW
+
+const CDlgMode XSEPSExportOptions::Mode = MODAL ;// Mode of the dialog
+const UINT32 XSEPSExportOptions::IDD = _R(IDD_XSEPSOPS);
+BOOL XSEPSExportOptions::Aborted = FALSE;
 
 /********************************************************************************************
 
 >	XSEPSExportOptions::XSEPSExportOptions()
 
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	30/5/95
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
 	Inputs:		-
 	Returns:	-
 	Purpose:	Constructs the dlg.
@@ -139,17 +132,18 @@ IMPLEMENT_DYNAMIC(XSEPSExportOptions,CDialog)
 
 ********************************************************************************************/
 
-XSEPSExportOptions::XSEPSExportOptions() : CDialog(_R(IDD_XSEPSOPS), GetMainFrame())
+
+XSEPSExportOptions::XSEPSExportOptions(): DialogOp(XSEPSExportOptions::IDD, XSEPSExportOptions::Mode)
 {
 }
 
 
 /********************************************************************************************
 
->	BOOL XSEPSExportOptions::OnInitDialog()
+>	BOOL XSEPSExportOptions::Do(OpDescriptor*)
 
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	30/5/95
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
 	Inputs:		-
 	Returns:	TRUE if OK, FALSE otherwise
 	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
@@ -157,34 +151,63 @@ XSEPSExportOptions::XSEPSExportOptions() : CDialog(_R(IDD_XSEPSOPS), GetMainFram
 
 ********************************************************************************************/
 
-BOOL XSEPSExportOptions::OnInitDialog()
-{	
-	if (CDialog::OnInitDialog())
-	{
-		TCHAR s[256];
-		wsprintf(s, TEXT("%d"), (INT32) EPSFilter::XSEPSExportDPI);
-		SetDlgItemText(_R(IDC_DPIEDIT), s);
-
-		/*
-		CheckDlgButton(_R(IDC_PSLEVELAUTO),	EPSFilter::XSEPSExportPSType == 0);
-		CheckDlgButton(_R(IDC_PSLEVEL1),	EPSFilter::XSEPSExportPSType == 1);
-		CheckDlgButton(_R(IDC_PSLEVEL2),	EPSFilter::XSEPSExportPSType == 2);
-		*/
-
-		CheckDlgButton(_R(IDC_EXPORTTEXTASCURVES), EPSFilter::XSEPSExportTextAsCurves);
-
-		return TRUE;
-	}
-	else
-		return FALSE;
+void XSEPSExportOptions::Do(OpDescriptor*)
+{
+	Create(); // Modal dialog, so this will actually run the dialog
 }
 
 /********************************************************************************************
 
->	void XSEPSExportOptions::OnOK()
+>	BOOL XSEPSExportOptions::GetState(String_256*, OpDescriptor*)
 
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	31/5/95
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
+	SeeAlso:	-
+
+********************************************************************************************/
+
+OpState	XSEPSExportOptions::GetState(String_256*, OpDescriptor*)
+{
+	OpState OpSt;
+	return(OpSt);
+}
+
+/********************************************************************************************
+
+>	BOOL XSEPSExportOptions::XSEPSExportOptions::Init()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL XSEPSExportOptions::Init()
+{
+	return (RegisterOpDescriptor(
+									0,
+									_R(IDD_XSEPSOPS),
+									CC_RUNTIME_CLASS(XSEPSExportOptions),
+									OPTOKEN_XSEPSEXPORTOPTIONS,
+									XSEPSExportOptions::GetState,
+									0,	/* help ID */
+									0, 	/* bubble help*/
+									0	/* bitmap ID */
+									));
+}
+
+/********************************************************************************************
+
+>	MsgResult XSEPSExportOptions::Message( Msg* Message)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
 	Inputs:		-
 	Returns:	-
 	Purpose:	Overrides the default OnOK() func so that we can check the values set by the user.
@@ -193,66 +216,68 @@ BOOL XSEPSExportOptions::OnInitDialog()
 
 ********************************************************************************************/
 
-void XSEPSExportOptions::OnOK()
+MsgResult XSEPSExportOptions::Message( Msg* Message)
 {
-	// DPI ed field
-	BOOL TranslatedOK;
-	UINT32 DPI = GetDlgItemInt(_R(IDC_DPIEDIT),&TranslatedOK,FALSE);
-	if (!TranslatedOK || DPI < 10)
-		DPI = 10;
 
-	if (DPI > 600)
-		DPI = 600;
-
-	if (DPI > 300)
+	if (IS_OUR_DIALOG_MSG(Message))
 	{
-		INT32 b = InformWarning(_R(IDS_EXPORT_BIGDPI),_R(IDS_OK),_R(IDS_CANCEL));
-		if (b != 1)
-			return;
+		DialogMsg* Msg = (DialogMsg*)Message;
+		// Handle ok button
+		if (Msg->DlgMsg == DIM_CREATE)
+		{
+			SetLongGadgetValue(_R(IDC_DPIEDIT), 150, FALSE, 0);
+			SetLongGadgetValue(_R(IDC_DPIEDIT), 200, FALSE, 1);
+			SetLongGadgetValue(_R(IDC_DPIEDIT), 300, FALSE, 2);
+			SetLongGadgetValue(_R(IDC_DPIEDIT), (INT32) EPSFilter::XSEPSExportDPI, FALSE, -1);
+	
+			/*
+			SetBoolGadgetSelected(_R(IDC_PSLEVELAUTO),	EPSFilter::XSEPSExportPSType == 0);
+			SetBoolGadgetSelected(_R(IDC_PSLEVEL1),	EPSFilter::XSEPSExportPSType == 1);
+			SetBoolGadgetSelected(_R(IDC_PSLEVEL2),	EPSFilter::XSEPSExportPSType == 2);
+			*/
+	
+			SetBoolGadgetSelected(_R(IDC_EXPORTTEXTASCURVES), EPSFilter::XSEPSExportTextAsCurves);
+		}
+		else if (Msg->DlgMsg == DIM_COMMIT)
+		{
+			Aborted = FALSE;
+			// DPI ed field
+			UINT32 DPI = GetLongGadgetValue(_R(IDC_DPIEDIT),10,2400);
+			if (DPI < 10)
+				DPI = 10;
+		
+			if (DPI > 600)
+				DPI = 600;
+
+			if (DPI > 300)
+			{
+				INT32 b = InformWarning(_R(IDS_EXPORT_BIGDPI),_R(IDS_OK),_R(IDS_CANCEL));
+				if (b != 1)
+					Aborted = TRUE;
+			}
+
+			if (Aborted)
+			{
+				Msg->DlgMsg=DIM_NONE; // prevent dialog from going away
+			}
+			else
+			{
+				/*
+				// Job 10463: remove PS Level bits - default to Level 2
+				INT32 ps = 0;
+				if (GetBoolGadgetSelected(_R(IDC_PSLEVEL1)))
+					ps = 1;
+				if (GetBoolGadgetSelected(_R(IDC_PSLEVEL2)))
+					ps = 2;
+				*/
+			
+				EPSFilter::XSEPSExportDPI 	 = DPI;
+				// EPSFilter::XSEPSExportPSType = ps;
+			
+				EPSFilter::XSEPSExportTextAsCurves = GetBoolGadgetSelected(_R(IDC_EXPORTTEXTASCURVES));
+			}	
+		}
 	}
-
-	/*
-	// Job 10463: remove PS Level bits - default to Level 2
-	INT32 ps = 0;
-	if (IsDlgButtonChecked(_R(IDC_PSLEVEL1)))
-		ps = 1;
-	if (IsDlgButtonChecked(_R(IDC_PSLEVEL2)))
-		ps = 2;
-	*/
-
-	EPSFilter::XSEPSExportDPI 	 = DPI;
-	// EPSFilter::XSEPSExportPSType = ps;
-
-	EPSFilter::XSEPSExportTextAsCurves = IsDlgButtonChecked(_R(IDC_EXPORTTEXTASCURVES));
-
-	CDialog::OnOK();
-}
-
-/********************************************************************************************
-
->	BOOL XSEPSExportOptions::OnCommand()
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	1/6/95
-	Inputs:		-
-	Returns:	TRUE if all ok, FALSE if an error occurs
-	Purpose:	Called when something happends to one of our controls
-
-				Only used to trap Help button events, at the moment
-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-BOOL XSEPSExportOptions::OnCommand(UINT32 GadgetID)
-{
-	switch (GadgetID)
-	{
-		case _R(IDC_XSEPSOPSHELP):
-			HelpUser(*this);
-			break;
-	}
-
-	return TRUE;
+	return DialogOp::Message(Message);
 }
 

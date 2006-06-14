@@ -159,7 +159,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "will2.h"
 
-//#include "xsepsops.h"		// export eps options
+#include "xsepsops.h"		// export eps options
 #include "ctrlhelp.h"		// ControlHelper class
 
 #include "unicdman.h"		// For MBCS support
@@ -547,25 +547,12 @@ void CamelotEPSFilter::CleanUpAfterImport(BOOL Successful)
 
 BOOL CamelotEPSFilter::GetExportOptions( )
 {
-PORTNOTE("other", "Remove XSEPSExportOptions")
-#ifndef EXCLUDE_FROM_XARALX
 #if !defined(EXCLUDE_FROM_RALPH)
-	XSEPSExportOptions XSOpts;
-
-	// Keep Control Helper system informed
-	ControlHelper::InformModalDialogOpened();
-		 
-	ResourceID reason = XSOpts.DoModal();
-
-	// Keep Control Helper system informed
-	ControlHelper::InformModalDialogClosed();				
+	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(CC_RUNTIME_CLASS(XSEPSExportOptions)); 
+	if ( pOpDesc )
+		pOpDesc->Invoke();
 	
-	if (reason != _R(IDOK))
-	{
-		// User decided not to export - abort.
-		return FALSE;
-	}
-#endif
+	return !XSEPSExportOptions::Aborted;
 #endif
 	return TRUE;
 }

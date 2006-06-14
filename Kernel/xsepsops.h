@@ -100,6 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_XSEPSOPS
 #define INC_XSEPSOPS
 
+#define OPTOKEN_XSEPSEXPORTOPTIONS _T("XSEPSExpOpts")
+
 /********************************************************************************************
 
 >	class XSEPSExportOptions : public CDialog
@@ -111,24 +113,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 ********************************************************************************************/
 
-class XSEPSExportOptions : public CDialog
-{
+class XSEPSExportOptions: public DialogOp
+{         
+	CC_DECLARE_DYNCREATE( XSEPSExportOptions )  
 public:
-	XSEPSExportOptions::XSEPSExportOptions();
-	virtual ~XSEPSExportOptions() { }
 
-	virtual void OnOK();
-	virtual BOOL OnInitDialog();
+	XSEPSExportOptions(); 
+	MsgResult Message( Msg* Message );  
+	void Do(OpDescriptor*);		// "Do" function        
+	static BOOL Init();
+	static OpState GetState(String_256*, OpDescriptor*);	
 
-protected:
-	//{{AFX_MSG(XSEPSExportOptions)
-	afx_msg BOOL OnCommand(UINT32 GadgetID);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-
-private:
-	DECLARE_DYNAMIC(XSEPSExportOptions)
-};
-
+	static BOOL Aborted;
+	static const UINT32 IDD;
+	static const CDlgMode Mode;   
+}; 
 
 #endif  // INC_XSEPSOPS
