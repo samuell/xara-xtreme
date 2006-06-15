@@ -132,6 +132,8 @@ BOOL PrintMonitor::StartPrintJob(CNativeDC * PrintJobDC)
 	// Make sure we don't already have a print job going.
 	if (CurrentPrintJob != NULL)
 	{
+PORTNOTE("printing", "Don't call ::AbortDoc")
+#ifndef EXCLUDE_FROM_XARALX
 		// Print job going already - must have been terminated early if the
 		// user has initiated another print job, so clean it up first.
 		if (::AbortDoc(CurrentPrintJob) <= 0)
@@ -140,6 +142,7 @@ BOOL PrintMonitor::StartPrintJob(CNativeDC * PrintJobDC)
 			CurrentPrintJob = NULL;
 			ERROR1(FALSE, _R(IDE_ALREADY_PRINTING));
 		}
+#endif
 	}
 
 	// Ok, starting a print job - keep a record of it.
@@ -155,6 +158,8 @@ void PrintMonitor::EndPrintJob()
 
 BOOL PrintMonitor::IsPrintStatusOK()
 {
+PORTNOTE("printing", "Disabled IsPrintStatusOK()")
+#ifndef EXCLUDE_FROM_XARALX
 	if (CCamApp::SeriousErrorCount == MySeriousErrorCount)
 	{
 		// We haven't had a serious error so any current print job will be
@@ -194,6 +199,7 @@ BOOL PrintMonitor::IsPrintStatusOK()
 #endif //webster
 	// Re-enable print Operation, and return result to caller.
 	SetPrintingActive(FALSE);
+#endif
 	return TRUE;
 }
 
@@ -276,6 +282,8 @@ BOOL PrintMonitor::PrintWithDriverBands = TRUE;
 BOOL PrintMonitor::PrintWithMask = TRUE;
 PrintMonitor::MaskType PrintMonitor::PrintMaskType = MASK_OPTIMAL;
 
+PORTNOTE("printing", "Disabled lots of printing code")
+#ifndef EXCLUDE_FROM_XARALX
 
 static RECT DriverBand;
 static RECT TestBand;
@@ -1464,3 +1472,4 @@ void ScreenView::EnumeratePagePatches(CCPrintInfo *pPrintInfo)
 }
 
 #endif //webster
+#endif //EXCLUDE_FROM_XARALX

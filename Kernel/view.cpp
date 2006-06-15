@@ -1802,13 +1802,7 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 		// Check to see if we do not do the first stage, - if not then we do the whole
 		// thing as a bitmap without bothering with the mask (becuase it's too much for
 		// most printer drivers to cope with).
-		if (
-PORTNOTE("printing", "Force optimal mask")
-#ifndef EXCLUDE_FROM_XARALX
-			(PrintMonitor::PrintMaskType==PrintMonitor::MASK_SIMPLE) &&
-#else
-			(0) &&
-#endif
+		if ((PrintMonitor::PrintMaskType==PrintMonitor::MASK_SIMPLE) &&
 			(CCDC::GetType(pRender->GetRenderDC(), TRUE) != RENDERTYPE_PRINTER_PS))
 		{
 			FirstStageCount = 0;
@@ -2738,10 +2732,7 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 										BOOL PrintPaper)
 {
 //	TRACEUSER( "Gerry", _T("View::RenderOptimalView\n"));
-PORTNOTE("printing", "Force optimal mask")
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR3IF(PrintMonitor::PrintMaskType!=PrintMonitor::MASK_OPTIMAL, "PrintMaskType must be OPTIMAL here\n");
-#endif
 
 	// Find out what the host render region is capable of
 	RRCaps Caps;
@@ -3525,14 +3516,7 @@ RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans
 	BOOL bIsOnScreen = pRender->IS_KIND_OF(GRenderRegion);
 
 	// if the preference says we should not be in this function then call the other function
-	if (!bIsOnScreen &&
-PORTNOTE("printing", "Force optimal mask")
-#ifndef EXCLUDE_FROM_XARALX
-		PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL
-#else
-		(1)
-#endif
-		)
+	if (!bIsOnScreen &&	PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL)
 		return RenderOptimalView(pRender, ViewTrans, pSpread, PrintPaper);
 
 	// Find out what the host render region is capable of
@@ -3547,8 +3531,9 @@ PORTNOTE("printing", "Force optimal mask")
 
 	// Work out whether we need to render all objects, or just the selected ones.
 	BOOL RenderAllObjects = TRUE;
+PORTNOTE("other", "disabled CCPrintInfo");
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
-/*GAT
 	CCPrintInfo *pPrintInfo = NULL;
 	if (!bIsOnScreen && pRender->IsPrinting())
 	{
@@ -3560,9 +3545,8 @@ PORTNOTE("printing", "Force optimal mask")
 			RenderAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 		}
 	}
-*/
 #endif //webster
-
+#endif
 	// Create and set up a new Scanning render region
 	ScanningRenderRegion Scanner(pRender->IsPrinting());
 
@@ -3572,10 +3556,10 @@ PORTNOTE("printing", "Force optimal mask")
 	{
 		// Now check the print method to determine if we need to do a three-pass render
 		// Get document pointer
-//		Document* pDoc = GetDoc();
+		Document* pDoc = GetDoc();
 
 		// Get print information for this document.
-/*GAT	PrintComponent *pPrint = (PrintComponent *) pDoc->GetDocComponent(CC_RUNTIME_CLASS(PrintComponent));
+		PrintComponent *pPrint = (PrintComponent *) pDoc->GetDocComponent(CC_RUNTIME_CLASS(PrintComponent));
 		if (pPrint)
 		{
 			PrintControl *pPrintControl = pPrint->GetPrintControl();
@@ -3587,7 +3571,7 @@ PORTNOTE("printing", "Force optimal mask")
 				}
 			}
 		}
-*/	}
+	}
 
 	// Declare some useful vars before the scanning chunk
 //	Node* pFirstInkNode = NULL;
@@ -3610,11 +3594,14 @@ PORTNOTE("printing", "Force optimal mask")
 		Scanner.SetHostRRCaps(Caps);
 
 		//	WEBSTER-ranbirr-13/11/96
+PORTNOTE("other", "disabled CCPrintInfo");
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 		// We going to analyse the document
-//GAT	if (pPrintInfo != NULL)
-//			pPrintInfo->SetAnalysing();
+		if (pPrintInfo != NULL)
+			pPrintInfo->SetAnalysing();
 #endif //webster
+#endif
 		// Find the first node to render
 //		pFirstInkNode = pSpread->FindFirstForUnclippedInkRender(&Scanner);
 //		Scanner.SetRenderState(pFirstInkNode);
@@ -3629,17 +3616,19 @@ PORTNOTE("printing", "Force optimal mask")
 	}
 	
 	//	WEBSTER-ranbirr-13/11/96
+PORTNOTE("other", "disabled CCPrintInfo");
+#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 	// We going to print the document now
-//GAT
-//	if (pPrintInfo != NULL)
-//		pPrintInfo->SetPrinting();
+	if (pPrintInfo != NULL)
+		pPrintInfo->SetPrinting();
 #endif //webster
+#endif
 
 	// Ok, we now have a Scanning render region that has all the info we need to know in it.
 	// See if there were any complex shapes in the region
 	// If we didn't do a scan then pretend there is one complex node
-	//INT32 NumComplex = bDoScan ? Scanner.GetNumComplex() : 1;
+	/*INT32 NumComplex =*/ bDoScan ? Scanner.GetNumComplex() : 1;
 
 	// Oh well, there are complex shapes to draw, so we had better do the comlpex thing
 
@@ -3711,7 +3700,6 @@ PORTNOTE("printing", "Force optimal mask")
 	// We always do it under NT, or to a PostScript printer or EPS file; under other conditions
 	// we are controlled by the printing preference.
 	BOOL DoMaskedBlit = FALSE;
-/*GAT
 	if (//IsWin32NT() || 
 		bIsOnScreen ||
 		(PrintMonitor::PrintMaskType==PrintMonitor::MASK_MASKED) ||
@@ -3720,7 +3708,6 @@ PORTNOTE("printing", "Force optimal mask")
 	{
 		DoMaskedBlit = bDoScan;				// Don't render simple phase if not scanning
 	}
-*/
 	SimplePrintRenderCallback MyCallback(this, pSpread, RenderAllObjects, &Scanner, DoMaskedBlit, PrintPaper, &NodesRendered, &Progress);
 	pRender->RenderTree(pSpread, FALSE, FALSE, &MyCallback);
 
@@ -3802,19 +3789,14 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 	BOOL bIsOnScreen = pHostRegion->IS_KIND_OF(GRenderRegion);
 
 	ERROR3IF(!bIsOnScreen &&
-PORTNOTE("printing", "Force optimal mask")
-#ifndef EXCLUDE_FROM_XARALX
 			 PrintMonitor::PrintMaskType==PrintMonitor::MASK_OPTIMAL,
-#else
-			1,
-#endif
 			"PrintMaskType must be SIMPLE or MASKED here\n");
 
 	// This needs to be done in 2 phases - one to create the bitmap we will blit into the
 	// host render region and one to create the mask to show us which parts of the bitmap
 	// need to be blitted. First we will create the bitmap to blit into the host.
 	// create the bitmap render region
-	// CDC* pDC = pHostRegion->GetRenderDC();
+//	CNativeDC* pDC = pHostRegion->GetRenderDC();
 
 	double Dpi;
 	if (bIsOnScreen)
@@ -3867,12 +3849,7 @@ PORTNOTE("printing", "Force optimal mask")
 	BOOL DoMaskedBlit = FALSE;
 	if (//IsWin32NT() || 
 		bIsOnScreen ||
-PORTNOTE("printing", "Force optimal mask")
-#ifndef EXCLUDE_FROM_XARALX
 		(PrintMonitor::PrintMaskType==PrintMonitor::MASK_MASKED) ||
-#else
-		(0) ||
-#endif
 		(CCDC::GetType(pHostRegion->GetRenderDC(), TRUE) == RENDERTYPE_PRINTER_PS) ||
 		IS_A(pHostRegion, CamelotEPSRenderRegion))
 	{

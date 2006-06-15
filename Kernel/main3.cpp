@@ -147,7 +147,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "pathops.h"
 #include "tunemem.h"
 //#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "prncamvw.h"
+#include "prncamvw.h"
 //#include "oilruler.h"
 //#include "registry.h"
 #include "appstate.h"
@@ -244,9 +244,9 @@ PORTNOTE("other","Removed more initialization")
 			InitDiagnosticPrefs() &&			// Get the diagnostic preferences
 #endif			
 			CCamView::ReadViewPrefs() &&
-#ifndef EXCLUDE_FROM_XARALX
 			PrintMonitor::InitPrefs() &&
 
+#ifndef EXCLUDE_FROM_XARALX
 			BaseBar::DeclarePreferences() &&
 
 			TransOperation::DeclarePrefs() &&
