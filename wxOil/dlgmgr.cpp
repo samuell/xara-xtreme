@@ -346,7 +346,18 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 			}
 			else
 			{
-				pPropertySheet->CreateButtons( wxOK|wxCANCEL|wxHELP );
+				wxStdDialogButtonSizer *sizer = new wxStdDialogButtonSizer();
+				wxButton * ok=new wxButton(pPropertySheet, wxID_OK);
+				sizer->AddButton(ok); // Add an OK button
+				sizer->AddButton(new wxButton(pPropertySheet, wxID_CANCEL)); // Add a Cancel button
+				sizer->AddButton(new wxButton(pPropertySheet, wxID_APPLY)); // Add an Apply button
+				sizer->AddButton(new wxButton(pPropertySheet, wxID_HELP)); // Add a Help button
+				ok->SetDefault();
+				ok->SetFocus();
+				pPropertySheet->SetAffirmativeId(wxID_OK);
+				sizer->Realize();
+			    pPropertySheet->GetInnerSizer()->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
+    			pPropertySheet->GetInnerSizer()->AddSpacer(2);
 			}
 		}
 		pDialogWnd=pPropertySheet;
