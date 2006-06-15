@@ -200,7 +200,7 @@ DECLARE_SOURCE("$Revision$");
 
 // Declare all the classes in this file and ask for memory tracking
 CC_IMPLEMENT_DYNAMIC( GRenderRegion, RenderRegion )
-//CC_IMPLEMENT_DYNCREATE(OpGDraw, Operation)
+CC_IMPLEMENT_DYNCREATE(OpGDraw, Operation)
 
 #define new CAM_DEBUG_NEW
 
@@ -218,7 +218,7 @@ CC_IMPLEMENT_DYNAMIC( GRenderRegion, RenderRegion )
 #endif
 
 
-//BOOL GRenderRegion::WantDoGDraw = TRUE;				// TRUE if user wants it
+BOOL GRenderRegion::WantDoGDraw = TRUE;				// TRUE if user wants it
 UINT32 GRenderRegion::WantGDrawDepth;					// desired depth of off-screen bitmap
 //BOOL GRenderRegion::WantNoPalette;					// TRUE if palette switching not wanted
 //UINT32 GRenderRegion::WantBlitMode;					// 0=auto, 1=Streth, 2=SetDIB, 3=BitBlt, 4=BadDDB
@@ -227,7 +227,7 @@ UINT32 GRenderRegion::WantGDrawDepth;					// desired depth of off-screen bitmap
 //BOOL GRenderRegion::WantWinG;						// TRUE for WinG rendering
 INT32  GRenderRegion::WhichTransparency = 0;			// type of transparency
 
-//BOOL GRenderRegion::CanDoGDraw;						// TRUE if it is physically permitted
+BOOL GRenderRegion::CanDoGDraw;						// TRUE if it is physically permitted
 //BOOL GRenderRegion::CanDoPalIndices;				// TRUE if GDI does DIB_PAL_INDICES
 //BOOL GRenderRegion::CanSetPalette;					// TRUE if screen has palette support
 //BOOL GRenderRegion::CanDoDeepDIBs; 					// TRUE if understands 16- and 32-bpp DIBs
@@ -522,11 +522,11 @@ BOOL GRenderRegion::Init( BOOL bFirstTime )
 	
 	if (bFirstTime)
 	{
-//		CanDoGDraw = FALSE;
+		CanDoGDraw = FALSE;
 
 		if (Camelot.DeclareSection( _T("DebugFlags"), 20))
 		{
-//			Camelot.DeclarePref( NULL, "UseGdraw", &WantDoGDraw, FALSE, TRUE );
+			Camelot.DeclarePref( NULL, _T("UseGdraw"), &WantDoGDraw, FALSE, TRUE );
 			Camelot.DeclarePref( NULL, _T("GDrawDepth"), &WantGDrawDepth, 0, 32 );
 //			Camelot.DeclarePref( NULL, "DontUsePalette", &WantNoPalette, FALSE, TRUE );
 //			Camelot.DeclarePref( NULL, "BlitMode", &WantBlitMode, 0, 4 );
@@ -585,7 +585,7 @@ PORTNOTE("other","Can't handle different DPIs, using X")
 		if (!pRealGD->Init())							// checks version etc
 		{
 			GDrawImpossible = TRUE;
-//			CanDoGDraw = FALSE;
+			CanDoGDraw = FALSE;
 			Error::SetError( _R(IDW_BADGDRAW), NULL, 0 );
 			InformWarning();							// tell the user his DLL is wrong
 			Error::ClearError();						// else we won't start up
@@ -646,7 +646,7 @@ PORTNOTE("other","GRenderRegion::Init - Removed palette code")
 		)
 	   )
 	{
-//		CanDoGDraw = TRUE;
+		CanDoGDraw = TRUE;
 /*
 		// DIB_PAL_INDICES is not available on Win32s or Chicago
 		// or on 256 colour fixed palette devices
@@ -750,8 +750,6 @@ PORTNOTE("other","GRenderRegion::Init - Removed palette code")
 //	if (WantWinG)
 //		GRenderWinG::Init( bFirstTime );
 
-PORTNOTE("other","GRenderRegion::Init - Removed OpGDraw registration")
-#ifndef EXCLUDE_FROM_XARALX
 	if (!Operation::RegisterOpDescriptor(
 						0,
 						_R(IDS_GDRAW),
@@ -763,7 +761,6 @@ PORTNOTE("other","GRenderRegion::Init - Removed OpGDraw registration")
 						0	// bitmap ID
 						))
 		return FALSE; 
-#endif
 
 	if (!GBrush::InitGBrush( bFirstTime ))
 		return FALSE;
@@ -3642,8 +3639,6 @@ BOOL GRenderRegion::RenderBitmapFill(Path *PathToDraw, BitmapFillAttribute* Fill
 	// --- Add Separation Style bits as approriate to the current colour separation mode
 	// Currently, the only "separation" option we use is composite print preview
 	// SepStyle for the SetBitmapFill functions are always in the MS byte of Style
-PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
-#ifndef EXCLUDE_FROM_XARALX
 	if (bpp > 8)	// Only needed for deep bitmaps
 	{
 		// If we've got a valid colour plate and it is a composite preview
@@ -3655,6 +3650,8 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 			{
 				// Find the colour manager (if there is one), and ask it for the 15-bit RGB
 				// printer colour matching lookup table
+PORTNOTE("cms", "DisabledXaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
 				XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 				if (lpCMSMan != NULL)
 				{
@@ -3675,6 +3672,7 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 //						BitmapBits = WinBM->BMBytes;		// And make sure we update this
 					}
 				}
+#endif
 			}
 			else if (CurrentColContext->GetColourPlate()->GetType() == COLOURPLATE_SPOT)
 			{
@@ -3686,10 +3684,13 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 				pSepTables = (BYTE *) CCMalloc(5 * 256 * sizeof(BYTE));
 				if (pSepTables != NULL)
 				{
-					XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 					String_256 PrintProfile;
+PORTNOTE("cms", "DisabledXaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
+					XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 					if (lpCMSMan)
 						lpCMSMan->GetPrinterProfile(&PrintProfile);
+#endif
 					ColourContextCMYK *cc = new ColourContextCMYK(RenderView, &PrintProfile);
 					if (cc->GetProfileTables(pSepTables))
 					{
@@ -3704,7 +3705,7 @@ PORTNOTE("other","GRenderRegion::RenderBitmapFill - removed separation code")
 			}
 		}
 	}
-#endif
+
 	BOOL Result = FALSE; // function working correctly
 
 	if (bDoBitmapFill)
@@ -4768,8 +4769,7 @@ void GRenderRegion::DrawBitmap(const DocCoord &Point, KernelBitmap* pBitmap)
 	// --- Add Separation Style bits as approriate to the current colour separation mode
 	// Currently, the only "separation" option we use is composite print preview
 	// SepStyle for the SetBitmapFill functions are always in the MS byte of Style
-PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
-#ifndef EXCLUDE_FROM_XARALX
+
 	if (WinBM->GetBPP() > 8)	// Only needed for deep bitmaps
 	{
 		// If we've got a valid colour plate and it is a composite preview
@@ -4779,6 +4779,8 @@ PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
 		{
 			// Find the colour manager (if there is one), and ask it for the 15-bit RGB
 			// printer colour matching lookup table
+PORTNOTE("cms", "DisabledXaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
 			XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 			if (lpCMSMan != NULL)
 			{
@@ -4793,9 +4795,10 @@ PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
 					Style |= (BitmapConversion & 3) << 27;
 				}
 			}
+#endif
 		}
 	}
-#endif
+
 	BYTE *BitmapBits = WinBM->BMBytes;
 
 	// Plot the Bitmap
@@ -4879,8 +4882,6 @@ void GRenderRegion::DrawBitmap(const DocRect& rect, KernelBitmap* pBitmap)
 	// --- Add Separation Style bits as approriate to the current colour separation mode
 	// Currently, the only "separation" option we use is composite print preview
 	// SepStyle for the SetBitmapFill functions are always in the MS byte of Style
-PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
-#ifndef EXCLUDE_FROM_XARALX
 	if (WinBM->GetBPP() > 8)	// Only needed for deep bitmaps
 	{
 		// If we've got a valid colour plate and it is a composite preview
@@ -4890,6 +4891,8 @@ PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
 		{
 			// Find the colour manager (if there is one), and ask it for the 15-bit RGB
 			// printer colour matching lookup table
+PORTNOTE("cms", "DisabledXaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
 			XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 			if (lpCMSMan != NULL)
 			{
@@ -4904,9 +4907,9 @@ PORTNOTE("other","GRenderRegion::DrawBitmap - removed separation code")
 					Style |= (BitmapConversion & 3) << 27;
 				}
 			}
+#endif
 		}
 	}
-#endif
 	BYTE *BitmapBits = WinBM->BMBytes;
 
 	// Plot the Bitmap
@@ -5751,8 +5754,8 @@ BOOL GRenderRegion::InitDevice()
 RenderRegion* GRenderRegion::Create(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 ViewScale,
 									RenderType rType, View* pView, BOOL bForce32BPP)
 {
-//	if (CanDoGDraw && WantDoGDraw)
-//	{
+	if (CanDoGDraw && WantDoGDraw)
+	{
 		if (rType==RENDERTYPE_SCREEN)
 		{
 PORTNOTE("other","We no longer handle less than 32bit per pixel")
@@ -5807,8 +5810,6 @@ PORTNOTE("other","We no longer handle less than 32bit per pixel")
 
 				// Now check for separated rendering and alter the RRCaps of the new region
 				// to simulate a printing render region
-PORTNOTE("other","GRenderRegion::Create - removed separation code")
-#ifndef EXCLUDE_FROM_XARALX
 			if (pView->GetColourPlate() != NULL && !pView->GetColourPlate()->IsDisabled())
 				{
 					ColourPlateType PlateType = pView->GetColourPlate()->GetType();
@@ -5816,6 +5817,8 @@ PORTNOTE("other","GRenderRegion::Create - removed separation code")
 					{
 						// First try to set this view to using a printing colour context
 						// so the separations appear the same on screen as on the printer
+PORTNOTE("cms", "DisabledXaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
 						XaraCMS* ptheCMS=GetApplication()->GetCMSManager();
 						if (ptheCMS != NULL)
 						{
@@ -5825,13 +5828,17 @@ PORTNOTE("other","GRenderRegion::Create - removed separation code")
 							if (pContext)
 								pView->SetColourContext(COLOURMODEL_CMYK, pContext);
 						}
-
+#endif
 						// Now check what sort of printer we have to get the RenderRegion Caps correct
+PORTNOTE("printing", "Assume postscript")
+#ifndef EXCLUDE_FROM_XARALX
 						UINT32 PrintType = CCPrintDialog::IsPostscript() ? 2 : 1;
+#else
+						UINT32 PrintType = 2;
+#endif
 						pRegion->SetSimulatePrinting(PrintType);
 					}
 				}
-#endif
 			}
 
 			// return the region pointer
@@ -5839,8 +5846,8 @@ PORTNOTE("other","GRenderRegion::Create - removed separation code")
 		}
 		else if ((rType==RENDERTYPE_PRINTER) || (rType==RENDERTYPE_PRINTER_PS))
 		{
-PORTNOTE("other","GRenderRegion::Create - removed separation code")
-#if !defined(STANDALONE) && !defined(EXCLUDE_FROM_XARALX)	// GAT
+PORTNOTE("printing", "Disabled GRenderPrint")
+#ifndef EXCLUDE_FROM_XARALX
 			// Always use 24 bit for printers, which means 32bit because Gavin can't do
 			// 24-bit bitmaps.
 			UINT32 BitmapDepth = 32;
@@ -5863,10 +5870,11 @@ PORTNOTE("other","GRenderRegion::Create - removed separation code")
 			return new GRenderPrint(ClipRegion, ConvertMatrix, ViewScale, 
 									BitmapDepth, PrintDPI);
 #else
+			ERROR3("Can't create a GRenderPrint because we haven't ported it yet");
 			return NULL;
 #endif
 		}
-//	}
+	}
 
 	return NULL;
 }
@@ -6772,8 +6780,8 @@ void GRenderRegion::DrawCross(const DocCoord &Point, const UINT32 Size)
 
 BOOL GRenderRegion::StrokePathAvailable()
 {
-//	return CanDoGDraw;
-	return TRUE;
+	return CanDoGDraw;
+//	return TRUE;
 }
 
 /********************************************************************************************
@@ -6819,8 +6827,8 @@ INT32 GRenderRegion::StrokePathToPath(
 		JointType LineJoin,
 		CONST DashType *Dash)
 {
-//	if (!CanDoGDraw)
-//		return -1;
+	if (!CanDoGDraw)
+		return -1;
 
 	CapStyles CapS = (LineCaps==LineCapButt) ? CAPS_BUTT : (LineCaps==LineCapRound) ? CAPS_ROUND : CAPS_SQUARE;
 	JoinStyles JoinS = (LineJoin==MitreJoin) ? JOIN_MITER :	(LineJoin==RoundJoin) ? JOIN_ROUND : JOIN_BEVEL;
@@ -7446,8 +7454,6 @@ SlowJobResult GRenderRegion::DrawMaskedBitmap(const DocRect &Rect, KernelBitmap*
 	// --- Add Separation Style bits as approriate to the current colour separation mode
 	// Currently, the only "separation" option we use is composite print preview
 	// SepStyle for the SetBitmapFill functions are always in the MS byte of Style
-PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
-#ifndef EXCLUDE_FROM_XARALX
 	if (WinBM->GetBPP() > 8)	// Only needed for deep bitmaps
 	{
 		// If we've got a valid colour plate and it is a composite preview
@@ -7458,6 +7464,8 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 			{
 				// Find the colour manager (if there is one), and ask it for the 15-bit RGB
 				// printer colour matching lookup table
+PORTNOTE("cms", "Disabled XaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
 				XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 				if (lpCMSMan != NULL)
 				{
@@ -7472,6 +7480,7 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 						Style |= (BitmapConversion & 3) << 19;
 					}
 				}
+#endif
 			}
 			else if (RenderView->GetColourPlate()->GetType() == COLOURPLATE_SPOT)
 			{
@@ -7479,14 +7488,17 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 			}
 			else if (RenderView->GetColourPlate()->GetType() != COLOURPLATE_NONE)
 			{
-				DWORD Plate = RenderView->GetColourPlate()->GetType() - COLOURPLATE_CYAN;
+//				DWORD Plate = RenderView->GetColourPlate()->GetType() - COLOURPLATE_CYAN;
 				pSepTables = (BYTE *) CCMalloc(5 * 256 * sizeof(BYTE));
 				if (pSepTables != NULL)
 				{
-					XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 					String_256 PrintProfile;
+PORTNOTE("cms", "Disabled XaraCMS")
+#ifndef EXCLUDE_FROM_XARALX
+					XaraCMS* lpCMSMan = GetApplication()->GetCMSManager();
 					if (lpCMSMan)
 						lpCMSMan->GetPrinterProfile(&PrintProfile);
+#endif
 					ColourContextCMYK *cc = new ColourContextCMYK(RenderView, &PrintProfile);
 					if (cc->GetProfileTables(pSepTables))
 					{
@@ -7497,7 +7509,7 @@ PORTNOTE("other","GRenderRegion::DrawMaskedBitmap - removed separation code")
 			}
 		}
 	}
-#endif
+
 	if (bForceToWhite)
 	{
 		// First we need to set all the pixels as transparent white
@@ -8984,7 +8996,7 @@ BOOL GRenderRegion::GetBitmapPointers(LPBITMAPINFO* ppInfo, LPBYTE* ppBits, BOOL
 	Errors:		None
 
 *******************************************************************/
-/*
+
 void OpGDraw::Do(OpDescriptor*)
 {
 	GRenderRegion::WantDoGDraw ^= TRUE;
@@ -8999,7 +9011,6 @@ void OpGDraw::Do(OpDescriptor*)
 
 	End();
 }
-*/
 
 
 /*******************************************************************
@@ -9015,11 +9026,10 @@ void OpGDraw::Do(OpDescriptor*)
 	Errors:		None
 
 *******************************************************************/
-/*
+
 OpGDraw::OpGDraw()
 {
 }
-*/
 
 
 /*******************************************************************
@@ -9035,7 +9045,7 @@ OpGDraw::OpGDraw()
 	Errors:		None
 
 *******************************************************************/
-/*
+
 OpState OpGDraw::GetState(String_256*, OpDescriptor*)
 {
 	OpState OpSt;
@@ -9051,4 +9061,3 @@ OpState OpGDraw::GetState(String_256*, OpDescriptor*)
 
 	return OpSt;
 }
-*/

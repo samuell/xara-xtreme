@@ -1116,12 +1116,10 @@ void Node::UnlinkNodeFromTree(BaseDocument *pOwnerDoc)
 		pOwnerDoc->DecNodeCount();
 
 	// Inform classes that may be holding pointers to this node
-PORTNOTE("other","Removed RenderRegionList usage")
-#ifndef EXCLUDE_FROM_XARALX
 	RenderRegionList* pRList = GetApplication()->GetRegionList();
 	if (pRList)
 		pRList->HandleNodeDeletion(this);
-#endif
+
 	if (pOwnerDoc && pOwnerDoc->IsKindOf(CC_RUNTIME_CLASS(Document)))
 		((Document*)pOwnerDoc)->HandleNodeDeletion(this);
 

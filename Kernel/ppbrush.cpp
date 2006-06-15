@@ -137,7 +137,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "group.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 #include "ophist.h"
-
+#include "vectrndr.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -587,11 +587,8 @@ TRACEUSER( "Phil", _T("PathProcessorBrush::ProcessPath:  rendered with path\n"))
 	m_LastScalingRendered = m_CurrentScaling;
 
 	// If we are printing or exporting then don't do the clip test
-	BOOL bScan = pRender->IsKindOf(CC_RUNTIME_CLASS(ScanningRenderRegion)); 
-	PORTNOTETRACE("other","PathProcessorBrush::ProcessPath - removed printing/exporting test");
-#ifndef EXCLUDE_FROM_XARALX
+	BOOL bScan = pRender->IsKindOf(CC_RUNTIME_CLASS(ScanningRenderRegion))
 				|| pRender->IsKindOf(CC_RUNTIME_CLASS(VectorFileRenderRegion));
-#endif
 
 	BOOL bContinue = TRUE;
 

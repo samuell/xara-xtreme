@@ -113,8 +113,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ctrlhelp.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "statline.h"
-//#include "dragmgr.h"
-//#include "prncamvw.h"
+#include "dragmgr.h"
+#include "prncamvw.h"
 #include "menuops.h"
 
 DECLARE_SOURCE("$Revision$");
@@ -1035,8 +1035,6 @@ BOOL RenderRegionList::BackgroundRender()
 	// print monitor not present on viewer
 
 	// Make sure printing is ok.
-PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
-#ifndef EXCLUDE_FROM_XARALX
 	if (!PrintMonitor::IsPrintStatusOK())
 	{
 		// No - a print job has gone wrong, so we delete all printing render regions
@@ -1059,7 +1057,7 @@ PORTNOTE("print","RenderRegionList::BackgroundRender - removed printing code")
 		// Reset the last rendered render region
 		LastRendered = NULL;
 	}
-#endif
+
 	if (GetCount() == 0)
 	{
 //		TRACE( wxT("BGR - No regions\n") );
@@ -1147,8 +1145,6 @@ void RenderRegionList::ImmediateRender(BOOL bForceImmediate)
 	if ( CCamApp::IsDisabled() )
 		return;					     	// If he has got the system disabled, ignore
 
-PORTNOTE("other","RenderRegionList::ImmediateRender - removed printing code")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef STANDALONE
 	// Make sure printing is ok.
 	if (!PrintMonitor::IsPrintStatusOK())
@@ -1174,18 +1170,18 @@ PORTNOTE("other","RenderRegionList::ImmediateRender - removed printing code")
 		LastRendered = NULL;
 	}
 #endif
-#endif
 	if (GetCount() == 0)
 		return;
 
-PORTNOTE("other","RenderRegionList::ImmediateRender - removed code")
+PORTNOTE("other", "Disabled ControlHelper")
 #ifndef EXCLUDE_FROM_XARALX
 	if (ControlHelper::IsUserInterfaceCaptured())
 		return; 	// No bg rendering if UI is captured (e.g. menu is up)
+#endif
 	if (DragManagerOp::IsDragActive())
 		return; 	// No bg rendering if a DragManager op is active (NB this is for
 					// colour/bitmap/bar drags only - not doc operation drags)
-#endif
+
 	if(ViewOps::IsFullScreenPending()) // no bg rendering if we are about to enter full screen mode
 	 	return;
 

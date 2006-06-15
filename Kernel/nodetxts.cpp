@@ -148,7 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ralphcri.h" // For RalphCriticalSection
 #endif
 
-//#include "opbevel.h"	// For determining if a gradient fill is used in a TextStory.
+#include "opbevel.h"	// For determining if a gradient fill is used in a TextStory.
 
 DECLARE_SOURCE("$Revision$")				
 
@@ -5405,8 +5405,6 @@ String_256 TextStory::GetStoryAsString()
 ********************************************************************************************/
 BOOL TextStory::IsGradientFilled ()
 {
-	PORTNOTETRACE("text","TextStory::IsGradientFilled - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ListItem	*pItem			= NULL;
 	List		GradientList;
 	BOOL		filled			= FALSE;
@@ -5437,7 +5435,4 @@ BOOL TextStory::IsGradientFilled ()
 	GradientList.DeleteAll();
 
 	return filled;
-#else
-	return true;
-#endif
 }

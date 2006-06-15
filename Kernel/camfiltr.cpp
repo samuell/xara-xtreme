@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "unitcomp.h"	// units component, record handling classes for units
 #include "infocomp.h"	// doc info component, record handling classes for document information
 #include "viewcomp.h"	// view component, record handling classes for view records
-//#include "princomp.h"	// print component, record handling classes for font records
+#include "princomp.h"	// print component, record handling classes for font records
 #include "fontcomp.h"	// font component, record handling classes for font records
 
 #include "cxfile.h"		// The core v2 format class
@@ -177,7 +177,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rechshad.h"	// ShadowRecordHandler
 #include "nodebev.h"	// BevelRecordHandler
 
-//#include "xarprefs.h"	// The base Xara file preferences dialogue.
+#include "xarprefs.h"	// The base Xara file preferences dialogue.
 //#include "webprefs.h"	// Web options dialog handler
 #include "webparam.h"	// WebPrefsDlgParam class
 #include "prvwflt.h"	// for PreviewBitmap::PreviewBitmapSize
@@ -3471,9 +3471,8 @@ BOOL BaseCamelotFilter::DoImport(SelOperation* pOp, CCLexFile* pFile, Document* 
 		// All work has been completed.
 		//EndSlowJob();
 	
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 		// Ensure all the bars are updated to reflect the new document
-PORTNOTE("other","Removed DialogBarOp usage")
 		DialogBarOp::UpdateStateOfAllBars();
 #endif
 		
@@ -3670,13 +3669,8 @@ BOOL BaseCamelotFilter::GetExportOptions( WebPrefsDlgParam *pPrefs )
 
 OpDescriptor* BaseCamelotFilter::GetDialogueOp ( void )
 {
-	PORTNOTETRACE("other","BaseCamelotFilter::GetDialogueOp - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// Just return the found OpDescriptor.
 	return OpDescriptor::FindOpDescriptor( CC_RUNTIME_CLASS( NativePrefsDlg ) );
-#else
-	return NULL;
-#endif
 }
 
 /********************************************************************************************
@@ -3805,8 +3799,7 @@ BOOL BaseCamelotFilter::FindDocComponents()
 			pInfoComponent = (DocInfoComponent*)pComponent;
 		else if (pComponent->IS_KIND_OF(ViewComponent))
 			pViewComponent = (ViewComponent*)pComponent;
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-PORTNOTE("print","Removed PrintComponent usage")
+#if !defined(EXCLUDE_FROM_RALPH)
 		else if (pComponent->IS_KIND_OF(PrintComponent))
 			pPrintComponent = (PrintComponent*)pComponent;
 #endif
@@ -3822,9 +3815,7 @@ PORTNOTE("print","Removed PrintComponent usage")
 			pUnitsComponent == NULL ||
 			pInfoComponent	== NULL ||
 			pViewComponent	== NULL ||
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 			pPrintComponent	== NULL ||
-#endif
 			pFontComponent	== NULL)
 	{
 		ERROR3("Unable to find ptrs to all the objects required for import/export");

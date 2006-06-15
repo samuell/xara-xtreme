@@ -925,7 +925,7 @@ BOOL PrintComponent::ExportImagesetting(BaseCamelotFilter *pFilter)
 	if (ok)
 		pFilter->Write(&Rec);
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 	return(ok);
 }
 
@@ -999,7 +999,7 @@ BOOL PrintComponent::ExportColourPlate(BaseCamelotFilter *pFilter, ColourPlate *
 	if (ok)
 		pFilter->Write(&Rec);
 
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 	return(ok);
 }
 

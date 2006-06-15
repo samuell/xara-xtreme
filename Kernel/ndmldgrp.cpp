@@ -624,7 +624,7 @@ BOOL NodeMouldGroup::NeedsToExport(RenderRegion* pRender, BOOL VisibleLayersOnly
 	if (pRender==NULL)
 		return TRUE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// only export to native documents!
 	if (pRender->GetRuntimeClass() == CC_RUNTIME_CLASS(NativeRenderRegion))
 		return TRUE;
@@ -651,7 +651,7 @@ BOOL NodeMouldGroup::NeedsToExport(RenderRegion* pRender, BOOL VisibleLayersOnly
  
 void NodeMouldGroup::PreExportRender(RenderRegion* pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 	{
 		PreExportNATEPS(pRegion);
@@ -684,7 +684,7 @@ void NodeMouldGroup::PreExportRender(RenderRegion* pRegion)
  
 BOOL NodeMouldGroup::ExportRender(RenderRegion* pRegion) 
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (pRegion->IS_KIND_OF(NativeRenderRegion))
 		return PostExportNATEPS(pRegion);
 
@@ -711,7 +711,7 @@ BOOL NodeMouldGroup::ExportRender(RenderRegion* pRegion)
 
 void NodeMouldGroup::PreExportNATEPS(RenderRegion* pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 	pDC->OutputToken(_T("csso"));			// Camelot "start mould source" token
 	pDC->OutputNewLine();
@@ -721,7 +721,7 @@ void NodeMouldGroup::PreExportNATEPS(RenderRegion* pRegion)
 
 BOOL NodeMouldGroup::PostExportNATEPS(RenderRegion* pRegion)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
 	pDC->OutputToken(_T("ceso"));			// Camelot "end mould source" token
 	pDC->OutputNewLine();

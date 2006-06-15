@@ -157,13 +157,10 @@ DragTarget::DragTarget()
 
 DragTarget::~DragTarget()
 {
-//	PORTNOTE("other", "Removed DragManagerOp usage")
-//#ifndef EXCLUDE_FROM_XARALX
 	// Just ensure that this target is not still registered with the manager
 	DragManagerOp *Mgr = DragManagerOp::GetCurrentManager();
 	if (Mgr != NULL)
 		Mgr->DeregisterTarget(this);
-//#endif
 }
 
 

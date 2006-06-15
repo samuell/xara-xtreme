@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "oilbitmap.h"
 
 // Caching contour path and updating on pseudo AllowOps
-//#include "opfeathr.h"		// RegenerateFeatherContourAction
+#include "opfeathr.h"		// RegenerateFeatherContourAction
 #include "objchge.h"		// ObjChange and AllowOp stuff
 #include "transop.h"		// TransOperation - optimise which operations trigger recontour
 
@@ -1491,8 +1491,6 @@ BOOL FeatherAttrValue::RegenerateOuterContourOnNextRedraw(UndoableOperation* pOp
 	{
 		if (pOp != NULL)
 		{
-PORTNOTE("other","Removed RegenerateFeatherContourAction usage")
-#ifndef EXCLUDE_FROM_XARALX
 			// make this undoable
 			RegenerateFeatherContourAction* pAct = NULL;
 			if (RegenerateFeatherContourAction::Init(pOp, pOp->GetUndoActionList(), this, m_pOuterContour, &pAct) == AC_FAIL)
@@ -1500,7 +1498,6 @@ PORTNOTE("other","Removed RegenerateFeatherContourAction usage")
 				TRACEALL( _T("FeatherAttrValue::RegenerateOuterContourOnNextRedraw; Could not record undo information.\n"));
 				return FALSE;
 			}
-#endif
 		}
 		// don't actually delete the old outer contour
 		// if it's been saved via the undoable operation.

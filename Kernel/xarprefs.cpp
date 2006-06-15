@@ -1,8 +1,5 @@
 // $Id$
 // XarPrefs.cpp
-//
-// This file implements the dialogue box that allows the user to set the export native file
-// preferences.
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
@@ -102,6 +99,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 /*
 */
+
+//
+// This file implements the dialogue box that allows the user to set the export native file
+// preferences.
 
 #include "camtypes.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -349,8 +350,6 @@ MsgResult NativePrefsDlg::Message(Msg* Message)
 
 		MsgResult Result;
 
-		BOOL EndDialog = FALSE;		// TRUE if we should quit the dialog
-
 		// Should now handle the required messages that we respond to
 		switch (Msg->DlgMsg)
 		{
@@ -378,7 +377,6 @@ MsgResult NativePrefsDlg::Message(Msg* Message)
 							ERROR3 ( "mpParams is not set!" );
 						}
 
-						EndDialog = TRUE;				// Flag to close and end
 					}
 				}
 			break;
@@ -394,21 +392,16 @@ MsgResult NativePrefsDlg::Message(Msg* Message)
 					ERROR3 ( "mpParams is not set!" );
 				}
 
-				EndDialog = TRUE;						// Flag to close and end
 			break;
+
+			default:
+				break;
 		}
 
 		// Allow the base class access to the message, it will do the
 		// DLG_EAT_IF_HUNGRY(Msg) for us
 		// Must do this before the Close and End
 		Result = DialogOp::Message ( Message );
-
-		// End dialog here
-		if ( EndDialog ) 
-		{
-			Close ();				// Hide the dialog box
-			End ();					// Finish the operation
-		}
 
 		// The message was for our dialog box so return that we have handled it, if necessary
 		return Result;

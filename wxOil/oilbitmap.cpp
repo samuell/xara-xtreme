@@ -1757,14 +1757,14 @@ RebuildXPEBitmap();
 
 		if (Renderable)
 		{
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 // WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 			if (pRegion->IsPrinting())
 			{
 
 #ifndef STANDALONE
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 				// Get the print info for this job.
 				CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
 				if (pInfo != NULL)
@@ -1775,12 +1775,15 @@ PORTNOTE("printing", "Disabled printing")
 						UseLevel2 = TRUE;
 				}
 #else
+				UseLevel2 = TRUE;
+#endif // EXCLUDE_FROM_XARALX
+
+#else
 	ERROR2(FALSE,"CWxBitmap::ExportBitmapData trying to print on Viewer version!");
 #endif
 			}
 			else
 #endif //webster
-#endif // EXCLUDE_FROM_XARALX
 			{
 				// Use the EPS preference.
 				if (EPSFilter::XSEPSExportPSType == 2)
@@ -2007,12 +2010,12 @@ RebuildXPEBitmap();
 
 	if (Renderable)
 	{
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 		if (pRegion->IsPrinting())
 		{
+PORTNOTE("printing", "Disabled printing")
+#ifndef EXCLUDE_FROM_XARALX
 			// Get the print info for this job.
 			CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
 			if (pInfo != NULL)
@@ -2020,10 +2023,13 @@ PORTNOTE("printing", "Disabled printing")
 				PrintControl *pPrCtrl = pInfo->GetPrintControl();
 				UseLevel2 = (pPrCtrl->GetPSLevel() == PSLEVEL_2);
 			}
+#else
+			UseLevel2 = TRUE;
+#endif
 		}
 		else
 #endif //webster
-#endif
+
 			UseLevel2 = (EPSFilter::XSEPSExportPSType == 2);			// Use the EPS preference.
 	}
 

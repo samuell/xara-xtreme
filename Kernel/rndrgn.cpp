@@ -6688,8 +6688,6 @@ void RenderRegion::ColourCorrectBitmap(BitmapFillAttribute* Fill, BITMAPINFO *In
 										   256, *Palette, Fill->GetProfile());
 		return;
 	}
-PORTNOTE("other", "RenderRegion: no colour correction for paletted bitmaps");
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// --- If it's a paletted bitmap, then we just colour-correct the palette
 	if (Info->bmiHeader.biBitCount <= 8)
 	{
@@ -6723,7 +6721,6 @@ PORTNOTE("other", "RenderRegion: no colour correction for paletted bitmaps");
 		}
 		return;
 	}
-#endif
 }
 
 

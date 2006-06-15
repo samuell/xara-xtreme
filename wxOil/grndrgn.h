@@ -156,7 +156,7 @@ class GRenderRegion : public RenderRegion
 	CC_DECLARE_DYNAMIC( GRenderRegion )
 
 	friend class GBrush;							// so it can get to our vars etc
-//	friend class OpGDraw;
+	friend class OpGDraw;
 //	friend class OpGFPU;
 	friend class GRenderRegionWrapper;
 	friend class ConcurrentRenderer;
@@ -425,7 +425,7 @@ private:
 protected:
 	// don't make these into bitfields, as they get setup by the preferences code which
 	// won't be able to cope
-//	static BOOL WantDoGDraw;										// TRUE if user wants it
+	static BOOL WantDoGDraw;										// TRUE if user wants it
 	static UINT32 WantGDrawDepth;										// desired depth of off-screen bitmap
 //	static BOOL WantNoPalette;										// TRUE if palette switching not wanted
 //	static UINT32 WantBlitMode;										// 0=auto, 1=Stretch, 2=SetDIB, 3=BitBlt
@@ -437,7 +437,7 @@ protected:
 	static INT32  WhichTransparency;
 	static INT32  ViewDither;											// GDraw dither style used for Views
 
-//	static BOOL CanDoGDraw;											// TRUE if it is physically permitted
+	static BOOL CanDoGDraw;											// TRUE if it is physically permitted
 																	// GAT: Set if GDraw initialises OK.
 	static BOOL CanDoPalIndices;									// TRUE if GDI does DIB_PAL_INDICES
 	static BOOL CanSetPalette;										// TRUE if screen has palette support
@@ -628,7 +628,7 @@ class OpDescriptor;
 	Notes:		Will be on a dialog somewhere eventually
 
 ********************************************************************************************/
-/*
+
 class OpGDraw : public Operation
 {
 	CC_DECLARE_DYNCREATE( OpGDraw )
@@ -643,7 +643,7 @@ public:
 };
 
 #define	OPTOKEN_GDRAW		_T("GDrawToggle")
-*/
+
 // We now always have CDraw (which pretends to be GDraw)
 //#define REAL_GDRAW 1
 

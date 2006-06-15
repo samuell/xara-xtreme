@@ -163,8 +163,6 @@ void BitmapExportPaletteInterface::InvalidateSortedPalette()
 
 INT32 BitmapExportPaletteInterface::GetNumberOfColours()
 {
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	if (BmapPrevDlg::m_pExportOptions->GetSupportsPalette())
 	{
 		ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
@@ -172,7 +170,6 @@ PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
 		return palette->NumberOfColours;
 	}
 	else
-#endif
 		return 0;
 }
 
@@ -182,14 +179,9 @@ BYTE BitmapExportPaletteInterface::GetRed(INT32 index)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	return palette->Data[m_PaletteSortedToReal[index]].Red;
-#else
-	return 0;
-#endif
 }
 
 BYTE BitmapExportPaletteInterface::GetGreen(INT32 index)
@@ -198,14 +190,9 @@ BYTE BitmapExportPaletteInterface::GetGreen(INT32 index)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	return palette->Data[m_PaletteSortedToReal[index]].Green;
-#else
-	return 0;
-#endif
 }
 
 BYTE BitmapExportPaletteInterface::GetBlue(INT32 index)
@@ -214,14 +201,9 @@ BYTE BitmapExportPaletteInterface::GetBlue(INT32 index)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	return palette->Data[m_PaletteSortedToReal[index]].Blue;
-#else
-	return 0;
-#endif
 }
 
 INT32 BitmapExportPaletteInterface::GetFlags(INT32 index)
@@ -230,14 +212,9 @@ INT32 BitmapExportPaletteInterface::GetFlags(INT32 index)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	return palette->Data[m_PaletteSortedToReal[index]].Flags;
-#else
-	return 0;
-#endif
 }
 
 void BitmapExportPaletteInterface::SetRed(INT32 index, BYTE red)
@@ -246,13 +223,10 @@ void BitmapExportPaletteInterface::SetRed(INT32 index, BYTE red)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	palette->Data[m_PaletteSortedToReal[index]].Red = red;
 	palette->Data[m_PaletteSortedToReal[index]].Flags &= LOCKED_COLOUR;
-#endif
 }
 
 void BitmapExportPaletteInterface::SetGreen(INT32 index, BYTE green)
@@ -261,13 +235,10 @@ void BitmapExportPaletteInterface::SetGreen(INT32 index, BYTE green)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	palette->Data[m_PaletteSortedToReal[index]].Green = green;
 	palette->Data[m_PaletteSortedToReal[index]].Flags &= LOCKED_COLOUR;
-#endif
 }
 
 void BitmapExportPaletteInterface::SetBlue(INT32 index, BYTE blue)
@@ -276,13 +247,10 @@ void BitmapExportPaletteInterface::SetBlue(INT32 index, BYTE blue)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	palette->Data[m_PaletteSortedToReal[index]].Blue = blue;
 	palette->Data[m_PaletteSortedToReal[index]].Flags &= LOCKED_COLOUR;
-#endif
 }
 
 void BitmapExportPaletteInterface::SetFlags(INT32 index, INT32 flags)
@@ -291,12 +259,9 @@ void BitmapExportPaletteInterface::SetFlags(INT32 index, INT32 flags)
 
 	ERROR3IF(index == -1, "Function called with an invalid palette index");
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 	palette->Data[m_PaletteSortedToReal[index]].Flags = flags;
-#endif
 }
 
 void BitmapExportPaletteInterface::ValidateSortedPalette()
@@ -371,11 +336,9 @@ BitmapExportPaletteInterface::PaletteSortType BitmapExportPaletteInterface::GetP
 ******************************************************************************************/
 INT32 BitmapExportPaletteInterface::LuminanceComparisonFn(const INT32 *arg1, const INT32 *arg2)
 {
-//	INT32 paletteIndex1	= *arg1;
-//	INT32 paletteIndex2	= *arg2;
+	INT32 paletteIndex1	= *arg1;
+	INT32 paletteIndex2	= *arg2;
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 
@@ -425,9 +388,6 @@ PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
 	ERROR3IF(blue1 != blue2, "This is not possible!");
 
 	return 0;	// The red, green and blue are equal
-#else
-	return -1;
-#endif
 }
 
 /******************************************************************************************
@@ -442,11 +402,9 @@ PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
 ******************************************************************************************/
 INT32 BitmapExportPaletteInterface::HueComparisonFn(const INT32 *arg1, const INT32 *arg2)
 {
-//	INT32 paletteIndex1	= *arg1;
-//	INT32 paletteIndex2	= *arg2;
+	INT32 paletteIndex1	= *arg1;
+	INT32 paletteIndex2	= *arg2;
 
-PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	ExtendedPalette	*palette = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	ERROR3IF(!palette, "There is no palette - This should never happen");
 
@@ -496,7 +454,4 @@ PORTNOTE("BmpPrevDlg", "Removed use of Bitmap Preview dialog")
 
 	
 	return 0;	// Everything is eqaul
-#else
-	return -1;
-#endif
 }

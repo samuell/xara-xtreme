@@ -153,7 +153,7 @@ DECLARE_SOURCE("$Revision$");
 #include "attrmap.h"
 #include "ralphdoc.h"
 #include "extender.h"			// for ExtendParams
-//#include "swfrndr.h"
+#include "swfrndr.h"
 //#include "bitmapcache.h"
 //#include "capturemanager.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeliveeffect.h"
@@ -4740,8 +4740,6 @@ BOOL NodeRenderableInk::ExportRender ( RenderRegion *pRender )
 	// The return value.
 	BOOL Result = FALSE;
 
-	PORTNOTETRACE("other","NodeRenderableInk::ExportRender - ignore FlashRenderRegion");
-#ifndef EXCLUDE_FROM_XARALX
 	// Is this a FlashRenderRegion?
 	if ( pRender->IsKindOf ( CC_RUNTIME_CLASS ( FlashRenderRegion ) ) )
 	{
@@ -4751,7 +4749,6 @@ BOOL NodeRenderableInk::ExportRender ( RenderRegion *pRender )
 		// Call the appropriate method in the vector file render region class.
 		Result = pFlash->ExportRenderableNode ( this );
 	}
-#endif
 
 	return Result;
 }

@@ -2031,8 +2031,6 @@ BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 
 	// render the character through the matrix with current attributes in RenderRegion
 
-PORTNOTE("printing", "printing deactivated")
-#ifndef EXCLUDE_FROM_XARALX
 	// If the render region is a printing region then maybe print as shapes.
 	if (pRenderRegion->IsPrinting())
 	{
@@ -2044,7 +2042,6 @@ PORTNOTE("printing", "printing deactivated")
 			return pRenderRegion->RenderRegion::RenderChar(GetUnicodeValue(), &matrix);
 		}
 	}
-#endif
 
 		// if we're exporting to illustrator, make the text position relative to
 		// the page.
@@ -2318,9 +2315,10 @@ BOOL TextChar::Snap(DocCoord* pDocCoord)
 
 BOOL TextChar::SupportsClipboardFormat(InternalClipboardFormat *Format) const
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// TextChars can be exported as either "vector" or "text" data
-	return(Format->IsSameFormat(InternalClipboardFormat(CLIPTYPE_TEXT)));
+	InternalClipboardFormat textformat(CLIPTYPE_TEXT);
+	return(Format->IsSameFormat(textformat));
 #else
 	return FALSE;
 #endif

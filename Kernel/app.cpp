@@ -128,7 +128,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fontman.h"
 #include "coldlog.h"
 //#include "xaracms.h"
-//#include "prnmks.h"
+#include "prnmks.h"
 #include "camelot.h"
 //#include "ralphcri.h"
 #include "ralphdoc.h"
@@ -392,7 +392,7 @@ PORTNOTE("other","Removed init of stuff that is not supported")
 	if (!FontMgr->Init())
 		return FALSE;
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 #ifndef STANDALONE
 #ifndef WEBSTER
 // Do not do do on Webster as this conflicts with the CleanUpAfterExport code in BaseCamelotFilter
@@ -402,7 +402,11 @@ PORTNOTE("other","Removed init of stuff that is not supported")
 	if (TheMarksManager == NULL)
 		return FALSE;
 #endif // WEBSTER
+#endif
+#endif
 
+#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#ifndef STANDALONE
 #ifdef FREEHANDPLUGINS
 // Only add in if required - general plug-in removal at present
 	// Create the external (Freehand Xtra) API object
@@ -748,7 +752,7 @@ PORTNOTE("other","Removed un-=impl. stuff")
 		FontMgr = NULL;
 	}
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 #ifndef STANDALONE
 #ifndef WEBSTER
 // Do not do do on Webster as this conflicts with the CleanUpAfterExport code in BaseCamelotFilter

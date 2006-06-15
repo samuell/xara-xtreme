@@ -135,9 +135,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftags.h"	// TAG_SHADOW
 //#include "cxfrec.h"		// CXaraFileRecord - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camfiltr.h"	// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "swfrndr.h"	// FlashRenderRegion
+#include "swfrndr.h"	// FlashRenderRegion
 #include "cmxrendr.h"	// CMXRenderRegion
-//#include "ai_epsrr.h"	// AIEPSRenderRegion
+#include "ai_epsrr.h"	// AIEPSRenderRegion
 //#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "lineattr.h"
 
@@ -1713,8 +1713,6 @@ String NodeShadow::Describe(BOOL Plural, BOOL Verbose)
 ********************************************************************************************/
 BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 {
-	PORTNOTETRACE("other","NodeShadow::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	enum ShadowFilterType
 	{
 		NONE,
@@ -1723,7 +1721,10 @@ BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 		AIEPS
 	};
 	ShadowFilterType ftExportFilter	=	pRegion->IS_KIND_OF(FlashRenderRegion)	? FLASH	:
+PORTNOTE("cmx","NodeShadow::ExportRender - ignore CMX ")
+#ifndef EXCLUDE_FROM_XARALX
 									pRegion->IS_KIND_OF(CMXRenderRegion)	? CMX	:
+#endif
 									pRegion->IS_KIND_OF(AIEPSRenderRegion)	? AIEPS	:
 									NONE;
 
@@ -1751,6 +1752,8 @@ BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 	}
 	break;
 
+PORTNOTE("cmx","NodeShadow::ExportRender - ignore CMX ")
+#ifndef EXCLUDE_FROM_XARALX
 	// CMX export.
 	case CMX:
 	{
@@ -1760,14 +1763,16 @@ BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 										GetBoundingRect () );
 	}
 	break;
+#endif
 
 	// AI EPS export.
 	case AIEPS:
 	{
+		DocRect brect = GetBoundingRect();
 		AIEPSRenderRegion	*pAIEPS		= static_cast<AIEPSRenderRegion*> ( pRegion );
 		bResult = pAIEPS->ExportShadow(	m_ShadowBitmap->GetActualBitmap (),
 										GetTransp(),
-										GetBoundingRect () );
+										brect );
 	}
 	break;
 
@@ -1778,9 +1783,6 @@ BOOL NodeShadow::ExportRender( RenderRegion *pRegion )
 	}
 
 	return bResult;
-#else
-	return FALSE;
-#endif
 }
 
 

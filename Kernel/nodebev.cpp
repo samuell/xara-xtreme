@@ -135,9 +135,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodetxts.h"
 //#include "mario.h"		// _R(IDE_NOMORE_MEMORY)
 #include "extender.h"	// for Extender code
-//#include "swfrndr.h"	// For the FlashRenderRegion custom export code.
+#include "swfrndr.h"	// For the FlashRenderRegion custom export code.
 #include "cmxrendr.h"	// For the CMXRenderRegion custom export code.
-//#include "ai_epsrr.h"	// For the AIEPSRenderRegion custom export code.
+#include "ai_epsrr.h"	// For the AIEPSRenderRegion custom export code.
 #include "rsmooth.h"
 #include "contmenu.h"
 #include "blndhelp.h"
@@ -151,7 +151,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brshattr.h"
 #include "fthrattr.h"	// for AttrFeather
 //#include "filtirr.h"
-//#include "pmaskrgn.h"
+#include "pmaskrgn.h"
 #include "ophist.h"
 #include "objchge.h"
 #include "attrmap.h"
@@ -1203,8 +1203,6 @@ void NodeBevel::Render(RenderRegion* pRender)
 					return;
 				}
 			}
-	PORTNOTETRACE("other","NodeBevel::Render - removed Flash support");
-#ifndef EXCLUDE_FROM_XARALX
 			else if(pRender->IsKindOf(CC_RUNTIME_CLASS(FlashRenderRegion)))
 			{
 				INT32 NewDPI = 96;
@@ -1217,7 +1215,6 @@ void NodeBevel::Render(RenderRegion* pRender)
 				RenderBitmapForDisplay(pRender);
 				m_AmConvertingToShapes = OldFlag;
 			}
-#endif
 		}
 
 		// Now set up the palette (depending on contrast)
@@ -1314,12 +1311,9 @@ BOOL NodeBevel::RenderBitmapForDisplay(RenderRegion * pRegion)
 	if(pRegion)
 		m_LastPixelSize = pRegion->GetScaledPixelWidth();
 
-	PORTNOTETRACE("other","NodeBevel::RenderBitmapForDisplay - removed printing support");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRegion && pRegion->IS_KIND_OF(PrintingMaskedRenderRegion))
 		CalculateBitmapSize(&m_BitmapWidth, &m_BitmapHeight, pRegion);
 	else
-#endif
 		CalculateBitmapSize(&m_BitmapWidth, &m_BitmapHeight, NULL);
 
 	// Get the pixel size of the current clipping rect! SHOULD be pixel alligned.
@@ -1845,9 +1839,7 @@ void NodeBevel::CalculateBitmapSize(INT32 * retnWid,  INT32 * retnHei, RenderReg
 
 	PORTNOTETRACE("other","NodeBevel::CalculateBitmapSize - removed printing support");
 	if(Document::GetCurrent() && Document::GetCurrent()->GetFirstDocView()
-#ifndef EXCLUDE_FROM_XARALX
 			 && !(pRegion && pRegion->IS_KIND_OF(PrintingMaskedRenderRegion))
-#endif
 		)
 		PixSize = (MILLIPOINT)((double)PixSize / (Document::GetCurrent()->GetFirstDocView())->GetViewScale().MakeDouble());
 	
@@ -1859,13 +1851,8 @@ void NodeBevel::CalculateBitmapSize(INT32 * retnWid,  INT32 * retnHei, RenderReg
 	double lHeight = dr.Height() / PixSize;
 	
 	// Check to see if we`re not printing and then Scale up the values!
-	PORTNOTETRACE("other","NodeBevel::CalculateBitmapSize - removed printing support");
-#ifndef EXCLUDE_FROM_XARALX
 	if ((!pControl->IsPrinting() && !m_AmConvertingToShapes) ||
 		(pRegion && pRegion->IS_KIND_OF(PrintingMaskedRenderRegion)))
-#else
-	if (!m_AmConvertingToShapes)
-#endif
 	{
 		// If the current render regions scale value is greater than 0 do the following
 		if (pRegion && PixSize > 0 )
@@ -3499,8 +3486,6 @@ DocRect NodeBevel::GetInsideBoundingRect()
 ********************************************************************************************/
 void NodeBevel::RenderNodesForPrinting(RenderRegion * pRender)
 {
-	PORTNOTETRACE("other","NodeBevel::RenderNodesForPrinting - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// first, save the context
 	pRender->SaveContext();
 
@@ -3522,7 +3507,6 @@ void NodeBevel::RenderNodesForPrinting(RenderRegion * pRender)
 	}
 
 	pRender->RestoreContext();
-#endif
 }
 
 /********************************************************************************************
@@ -3847,11 +3831,9 @@ PORTNOTE("other","Removed ImagemapRenderRegion usage")
 ********************************************************************************************/
 BOOL NodeBevel::ExportRender( RenderRegion *pRegion )
 {
-	PORTNOTETRACE("other","NodeBevel::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL bResult = FALSE;
 
-	NodeBevelController * pController = (NodeBevelController *)FindParent();
+//	NodeBevelController * pController = (NodeBevelController *)FindParent();
 
 	// Step 1:	If the RenderRegion is a FlashRenderRegion, use custom Flash export code.
 	if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( FlashRenderRegion ) ) )
@@ -3864,7 +3846,8 @@ BOOL NodeBevel::ExportRender( RenderRegion *pRegion )
 		//			This is where all the hard work is done.
 		bResult = pFlash->ExportBevel ( this );
 	}
-
+PORTNOTE("cmx", "Removed CMX Support")
+#ifndef EXCLUDE_FROM_XARALX
 	// Step 2:	Otherwise check whether it's a CMXRenderRegion.
 	else if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( CMXRenderRegion ) ) )
 	{
@@ -3875,7 +3858,7 @@ BOOL NodeBevel::ExportRender( RenderRegion *pRegion )
 		//			This is where all the hard work is done.
 		bResult = pCMX->ExportBevel ( this );
 	}
-
+#endif
 	// Step 3:	Otherwise check whether it's an AIEPSRenderRegion.
 	else if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( AIEPSRenderRegion ) ) )
 	{
@@ -3891,9 +3874,6 @@ BOOL NodeBevel::ExportRender( RenderRegion *pRegion )
 	//			from rendering the character out as paths as well as text. (If there's
 	//			been an error, bResult will have been set to FALSE.)
 	return bResult;
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -4177,11 +4157,9 @@ SubtreeRenderState NodeBevelBegin::RenderSubtree(RenderRegion* pRender, Node** p
 
 BOOL NodeBevelBegin::ExportRender ( RenderRegion *pRegion )
 {
-	PORTNOTETRACE("other","NodeBevelBegin::ExportRender - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	BOOL bResult = FALSE;
 
-	NodeBevelController * pController = (NodeBevelController *)FindParent();
+//	NodeBevelController * pController = (NodeBevelController *)FindParent();
 
 	// Step 1:	Test whether the render region is a Flash one. If so, invoke it's custom
 	//			export code.
@@ -4197,6 +4175,8 @@ BOOL NodeBevelBegin::ExportRender ( RenderRegion *pRegion )
 	}
 	// Step 2:	Test whether the render region is a CMX one. If so, invoke it's custom
 	//			export code.
+PORTNOTE("cmx", "Removed CMX Support")
+#ifndef EXCLUDE_FROM_XARALX
 	else if ( pRegion->IsKindOf ( CC_RUNTIME_CLASS ( CMXRenderRegion ) ) )
 	{
 		// Step 2a:	Cast the pRegion pointer to be a CMXRenderRegion pointer, so that
@@ -4206,6 +4186,7 @@ BOOL NodeBevelBegin::ExportRender ( RenderRegion *pRegion )
 		// Step 2b:	Invoke the stub function within the CMX render region.
 		bResult = pCMX->ExportBevelBegin ( this );
 	}
+#endif
 	// render bitmap stuff
 	else
 	{
@@ -4219,9 +4200,6 @@ BOOL NodeBevelBegin::ExportRender ( RenderRegion *pRegion )
 	//			from rendering the character out as paths as well as text. (If there's
 	//			been an error, bResult will have been set to FALSE.)
 	return bResult;
-#else
-	return FALSE;
-#endif
 }
 
 //#endif
