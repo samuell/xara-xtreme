@@ -2640,7 +2640,7 @@ void AIEPSRenderRegion::OverflowTextFinish ()
 	while (fgets (cbuffer, 1024, fp) != NULL)
 	{
 		char c;
-		INT32 i;
+		INT32 i=0;
 		cbuffer[1024]=0;
 		do
 		{
