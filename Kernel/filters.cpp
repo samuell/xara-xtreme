@@ -1840,6 +1840,9 @@ BOOL Filter::DeleteExportFile(CCDiskFile * pDiskFile)
 BOOL Filter::ExportRender ( RenderRegion *pRegion, BOOL MaskedRender)
 {
 #ifdef DO_EXPORT
+	// Disable bitmap caching but remember the old state so we can set it back
+	ScopedFlagSetter fsBitmapCacheing(NodeRenderableBounded::bEnableCacheing, FALSE);
+
 	ERROR2IF(pRegion==NULL,FALSE,"Filter::ExportRender null render region supplied");
 
 	// We need special handling for Camelot EPS 
