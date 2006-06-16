@@ -910,7 +910,7 @@ String_64 *IndexedColour::GetName(BOOL ReturnTrueID)
 			{
 				Name = new String_64;
 				if (Name != NULL)
-					Name->_MakeMsg( TEXT("_#1%p"), this );
+					Name->_MakeMsg( TEXT("_#1%ld"), (UINT32)(UINT_PTR)(this) );
 			}
 
 			if (Name != NULL)

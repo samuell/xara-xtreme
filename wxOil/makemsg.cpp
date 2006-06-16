@@ -213,7 +213,7 @@ INT32 __cdecl StringBase::_MakeMsg(const TCHAR* fmt ...)
 enum ArgType
 {
 	LITERAL, CHAR_ARG, SIGNED_INT_ARG, SIGNED_INT32_ARG, UNSIGNED_INT_ARG,
-	UNSIGNED_INT32_ARG, CHAR_POINTER_ARG, STRING_POINTER_ARG
+	UNSIGNED_INT32_ARG, CHAR_POINTER_ARG, STRING_POINTER_ARG, UINT_PTR_ARG
 };
 
 
@@ -335,6 +335,9 @@ INT32 StringBase::BuildList(const TCHAR* format)
 								break;
 							case TEXT('d'):  case TEXT('i'):
 								kind = SIGNED_INT_ARG;
+								break;
+							case TEXT('p'): // a pointer
+								kind = UINT_PTR_ARG;
 								break;
 							case TEXT('u'): case TEXT('x'): case TEXT('X'):
 								kind = UNSIGNED_INT_ARG;
@@ -465,6 +468,10 @@ INT32 StringBase::CCvsprintf(const TCHAR* layout, va_list va)
 					// type 's' - long pointer to array of (constant) char
 					case CHAR_POINTER_ARG:
 						camSnprintf(temp, 512, p->str, va_arg(va, LPCTSTR));
+						break;
+					// type 'p' a pointer
+					case UINT_PTR_ARG:
+						camSnprintf(temp, 512, p->str, va_arg(va, UINT_PTR));
 						break;
 					// type 'S' - a pointer to a StringBase.  First change the
 					// %S format specifier, which is our own, into a sprintf()
