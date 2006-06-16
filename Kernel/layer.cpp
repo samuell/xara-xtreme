@@ -432,9 +432,7 @@ SubtreeRenderState Layer::RenderSubtree(RenderRegion *pRender, Node** ppNextNode
 	if (pRender->IsHitDetect() && IsLocked())
 		return SUBTREE_NORENDER;
 
-if (FALSE) {}
-PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
-#ifndef EXCLUDE_FROM_XARALX
+
 	// If we are printing then we do special things
 	else if (pRender->IsPrinting())
 	{
@@ -445,6 +443,8 @@ PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
 		// Added this since we want to print what we see - might need looking at ?
 		return IsVisible() ? SUBTREE_ROOTANDCHILDREN : SUBTREE_NORENDER;
 
+PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
+#ifndef EXCLUDE_FROM_XARALX
 		// Otherwise, get the print control
 		
 		CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
@@ -465,9 +465,9 @@ PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
 			// Print all foreground layers, regardless of visibility.
 			return SUBTREE_ROOTANDCHILDREN;
 		}
+#endif
 
 	}
-#endif
 	else if (IS_A(pRender,CamelotEPSRenderRegion))
 		return (IsVisible() && IsPrintable()) ? SUBTREE_ROOTANDCHILDREN : SUBTREE_NORENDER;
 	else

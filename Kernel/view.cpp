@@ -2413,7 +2413,7 @@ public:
 		{
 			BOOL bIsComplex = m_bNextComplex;
 			TRACEUSER("noone", _T("OPRC# BeforeSubtree 0x%08x - %s\n"), pNode, pNode->GetRuntimeClass()->GetClassName());
-			TRACEUSER("noone", _T("Hit Start of %s span\n"), bIsComplex ? "complex" : "simple" );
+			TRACEUSER("noone", _T("Hit Start of %s span\n"), bIsComplex ? _T("complex") : _T("simple") );
 			// If we have been doing a complex span then we need to render it now
 			if (m_bDoingComplex)
 			{
