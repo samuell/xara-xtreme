@@ -1,0 +1,8 @@
+This file records an audit trail of changes made to the xaralx build server
+that in some way affect the binary packages produced on it. Recording changes
+in this file means that the xaralx svn revision number will increase each time
+there is a build server change, which should mean that we never build 2 differing
+binary packages that have the same revision number.
+
+Date/Time	Change Description
+---------	------------------
