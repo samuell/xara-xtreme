@@ -129,11 +129,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "transop.h"
 //#include "opfeathr.h"
 
-//#include "pmaskrgn.h"
+#include "pmaskrgn.h"
 #include "scanrr.h"
 
-//#include "pmaskrgn.h"
-#include "scanrr.h"
 #include "ophist.h"
 
 DECLARE_SOURCE( "$Revision$" );
@@ -1170,8 +1168,6 @@ void NodeBitmapEffect::RenderAfterSubtree(RenderRegion* pRender)
 					// through the tree to do different aspects of printing. The
 					// PrintingMaskedRenderRegion produces a monochrome mask so we
 					// definitely don't want to cache that!
-PORTNOTE("printing", "NodeBitmapEffect::RenderAfterSubtree - removed use of PrintingMaskedRenderRegion")
-#if !defined(EXCLUDE_FROM_XARALX)
 					if (pRender->IsKindOf(CC_RUNTIME_CLASS(PrintingMaskedRenderRegion)))
 					{
 						double PixelWidth = GetPixelWidth();
@@ -1183,7 +1179,6 @@ PORTNOTE("printing", "NodeBitmapEffect::RenderAfterSubtree - removed use of Prin
 
 						bCached = FALSE;
 					}
-#endif
 
 					// If we failed to cache the captured bitmap then release it
 					if (lpProcessedInfo!=NULL && lpProcessedBits!=NULL && !bCached)
