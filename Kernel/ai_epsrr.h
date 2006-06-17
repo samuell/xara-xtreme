@@ -105,8 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 class NodeBevel;
 
 // Constants.
-const char	LinearGradient []	= "Linear Gradient";
-const char	RadialGradient []	= "Radial Gradient";
+const TCHAR	LinearGradient []	= _T("Linear Gradient");
+const TCHAR	RadialGradient []	= _T("Radial Gradient");
 const INT32	LinearFill			= 0;
 const INT32	RadialFill			= 1;
 

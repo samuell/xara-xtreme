@@ -5871,7 +5871,7 @@ CCFile& CCMemTextFile::read( StringBase *pBuf )
 
 /********************************************************************************************
 
->	CCFile& CCMemTextFile::write(const TCHAR& buf)
+>	CCFile& CCMemTextFile::write(const char& buf)
 
 	Author:		Mario_Shamtani (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	6/9/93

@@ -2679,13 +2679,13 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	//ExportFile.setMode(filebuf::binary);
 
 	// Output a character to mark the begining of the binary section
-	static TCHAR Begin = '>';
-	if (ExportFile->write(&Begin, 1).fail())
+	static TCHAR Begin = _T('>');
+	if (!OutputTCHARAsChar(&Begin, 1))
 		// Error
 		return -1;
 
 	// Output the line of binary data
-	if (ExportFile->write(Data, Length).fail())
+	if (!OutputDirect(Data, Length))
 	{
 		// Error
 		return -1;
@@ -2710,7 +2710,7 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 		// Output it however many times we need to
 		while (Padding > 0)
 		{
-			if (ExportFile->write(Buffer, 1).fail())
+			if (OutputTCHARAsChar(Buffer, 1))
 				// Error
 				return -1;
 
@@ -2720,8 +2720,8 @@ INT32 NativeExportDC::OutputRawBinary(BYTE* Data, UINT32 Length, UINT32 Alignmen
 	}
 
 	//output an end marker
-	static TCHAR End = '<';
-	if (ExportFile->write(&End, 1).fail())
+	static TCHAR End = _T('<');
+	if (!OutputTCHARAsChar(&End, 1))
 		// Error
 		return -1;
 		

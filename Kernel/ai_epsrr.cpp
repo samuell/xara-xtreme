@@ -1902,7 +1902,7 @@ BOOL AIEPSRenderRegion::WriteBitmapBody ( OILBitmap	*pBitmap,
 			// And output them. I'm writing directly to the file because the OutputToken ()
 			// function introduces spaces between the values, which is not a good thing for
 			// the AI file format. This way, it's much happier. :)
-			if ( ExportFile->write ( Output, 6 ).fail () )
+			if ( !pDC->OutputTCHARAsChar ( Output, 6 ) )
 			{
 				// There's been a problem.
 				return FALSE;
@@ -1973,7 +1973,7 @@ BOOL AIEPSRenderRegion::WriteContoneBody ( OILBitmap	*pBitmap )
 			// And output them. I'm writing directly to the file because the OutputToken ()
 			// function introduces spaces between the values, which is not a good thing for
 			// the AI file format. This way, it's much happier. :)
-			if ( ExportFile->write ( Output, 6 ).fail () )
+			if ( !pDC->OutputTCHARAsChar ( Output, 6 ) )
 			{
 				// There's been a problem.
 				return FALSE;

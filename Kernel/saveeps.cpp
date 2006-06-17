@@ -222,7 +222,7 @@ BOOL EPSRenderRegion::AttachDevice(View* pView, CNativeDC* pDC, Spread* pSpread,
 //	CurrentRenderState = pSpread->FindFirstForExport(this, FALSE);
 
 	// Get a pointer to the CCDiskFile object
-	EPSExportDC* pEPSDC = (EPSExportDC*) pDC;
+	EPSExportDC* pEPSDC = (EPSExportDC*) CCDC::ConvertFromNativeDC(pDC);
 	ExportFile = pEPSDC->ExportFile;
 
 	// All okey dokey
