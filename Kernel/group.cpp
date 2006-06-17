@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodeliveeffect.h"
 #include "scanrr.h"
-//#include "pmaskrgn.h"
+#include "pmaskrgn.h"
 #include "blndhelp.h"
 //#include "mrhbits.h"
 #include "transop.h"
@@ -574,11 +574,8 @@ BOOL NodeGroup::CaptureTight(RenderRegion* pRender)
 			cbmp.nPriority = CACHEPRIORITY_TEMPBITMAP_HIGH;
 			cbmp.bFullCoverage = bFullCoverage;
 
-PORTNOTE("other","Removed PrintingMaskedRenderRegion usage")
 			if ( cbmp.IsValid() 
-#ifndef EXCLUDE_FROM_XARALX
 				 && !pRender->IsKindOf(CC_RUNTIME_CLASS(PrintingMaskedRenderRegion))
-#endif
 				)
 			{
 				pBitmapCache->StoreBitmap(inky, cbmp);

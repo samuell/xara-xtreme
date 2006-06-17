@@ -154,8 +154,8 @@ CC_IMPLEMENT_DYNAMIC(View, ListItem)
 #define new CAM_DEBUG_NEW
 
 #ifdef _DEBUG
-	#define _DEBUG_ATTACH_OPTIMAL_BITMAP
-	#define _DEBUG_ATTACH_OPTIMAL_MASK
+//	#define _DEBUG_ATTACH_OPTIMAL_BITMAP
+//	#define _DEBUG_ATTACH_OPTIMAL_MASK
 #endif
 
 //-----------------------------------------------------------------------------------------//
