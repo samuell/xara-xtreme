@@ -217,6 +217,11 @@
 			 <pos>54,82d</pos> <size>50,14d</size>
 			<label>&amp;Suspend</label>
 		</object>
+		<object class="wxStaticText" name="IDC_CURRENTPERCENTAGE">
+			 <pos>6,68d</pos> <size>146,10d</size>
+			<label>0%</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxSlider" name="IDC_PRINTPROGSLIDER">
 			 <pos>6,58d</pos> <size>146,10d</size>
 			<style>wxSL_HORIZONTAL</style>
@@ -228,6 +233,11 @@
 		<object class="wxStaticText" name="IDC_DOCNAME">
 			 <pos>44,4d</pos> <size>108,10d</size>
 			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>4,14d</pos> <size>35,10d</size>
+			<label>Printer:</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxStaticText" name="IDC_PRINTERNAME">
 			 <pos>44,14d</pos> <size>108,10d</size>
@@ -248,6 +258,11 @@
 		<object class="wxStaticText" name="IDC_PLATENUMBER">
 			 <pos>32,44d</pos> <size>120,10d</size>
 			<label>-</label>
+		</object>
+		<object class="wxStaticText" name="IDC_TILETITLE">
+			 <pos>84,34d</pos> <size>15,10d</size>
+			<label>Tile:</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxStaticText" name="IDC_TILENUMBER">
 			 <pos>103,34d</pos> <size>47,10d</size>
@@ -323,8 +338,18 @@
 			 <pos>5,25d</pos> <size>155,35d</size>
 			<label>Print Objects</label>
 		</object>
+		<object class="wxStaticText" name="stc2">
+			 <pos>24,-1075d</pos> <size>24,9d</size>
+			<label>&amp;From:</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxTextCtrl" name="edt1">
 			 <pos>52,-1073d</pos> <size>26,12d</size>
+		</object>
+		<object class="wxStaticText" name="stc3">
+			 <pos>82,-1075d</pos> <size>16,9d</size>
+			<label>&amp;To:</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxTextCtrl" name="edt2">
 			 <pos>102,-1073d</pos> <size>26,12d</size>
@@ -356,6 +381,11 @@
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>5,130d</pos> <size>215,15d</size>
 			<label></label>
+		</object>
+		<object class="wxStaticText" name="IDC_PRINTLAYOUTINFO">
+			 <pos>10,133d</pos> <size>205,10d</size>
+			<label>Custom fit; 100% Upright: 1 page fits on the paper</label>
+			<style>wxALIGN_CENTRE</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_GROUP_PRINTPAGES">
 			 <pos>5,65d</pos> <size>155,35d</size>
@@ -451,6 +481,21 @@
 			 <pos>12,35d</pos> <size>79,10d</size>
 			<label>Use &amp;custom settings</label>
 		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC2">
+			 <pos>19,46d</pos> <size>80,8d</size>
+			<label>Target printer resolution</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC4">
+			 <pos>19,60d</pos> <size>80,8d</size>
+			<label>Default screen frequency</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_SSTATIC6">
+			 <pos>21,75d</pos> <size>78,11d</size>
+			<label>Screen/Dot type</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxStaticText" name="IDC_PRINT_DOCNAMETEXT">
 			 <pos>5,5d</pos> <size>91,8d</size>
 			<label>Colour separation options for</label>
@@ -487,6 +532,11 @@
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>23,20d</pos> <size>19,8d</size>
 			<label>Angle</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>9,36d</pos> <size>33,8d</size>
+			<label>Frequency</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDITANGLE">
 			 <pos>45,17d</pos> <size>47,12d</size>

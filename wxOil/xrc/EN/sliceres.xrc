@@ -128,6 +128,11 @@
 			 <pos>7,33d</pos> <size>144,24d</size>
 			<label>"Set Design" will take your selection as the basis for the button design of this state. All buttons in this bar will reflect this design.</label>
 		</object>
+		<object class="wxStaticText" name="IDC_STATE_TEXT">
+			 <pos>92,6d</pos> <size>60,10d</size>
+			<label>MouseOver state</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BAR_NO_COMBO">
 			 <pos>92,18d</pos> <size>60,-1d</size>
 			<style>wxCB_READONLY</style>

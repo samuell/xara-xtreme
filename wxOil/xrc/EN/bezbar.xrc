@@ -104,6 +104,36 @@
 			 <pos>49,74d</pos> <size>20,8d</size>
 			<label>100%</label>
 		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_FIRSTX">
+			 <pos>8,4d</pos> <size>6,8d</size>
+			<label>X</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_FIRSTY">
+			 <pos>8,20d</pos> <size>6,8d</size>
+			<label>Y</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_MIDX">
+			 <pos>48,4d</pos> <size>6,8d</size>
+			<label>X</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_SECONDX">
+			 <pos>88,4d</pos> <size>6,8d</size>
+			<label>X</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_MIDY">
+			 <pos>48,20d</pos> <size>6,8d</size>
+			<label>Y</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_PATH_STATIC_SECONDY">
+			 <pos>88,20d</pos> <size>6,8d</size>
+			<label>Y</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<title>Dialog</title>
 		<label>Dialog</label>
 	</object>

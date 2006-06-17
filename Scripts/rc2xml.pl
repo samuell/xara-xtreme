@@ -493,10 +493,13 @@ sub ReadInputFile
 
 
 # LTEXT           "Radius",IDC_STATIC,9,67,23,8
+# CTEXT           "Radius",IDC_STATIC,9,67,23,8
+# RTEXT           "Radius",IDC_STATIC,9,67,23,8
 sub ParseStaticText
 {
     my $phrase = shift @_;
     my $varname = shift @_;
+    my $type = shift @_;
     my $token = PeekToken ();
     while ($token !~ /^\d+$/ )
     {
@@ -511,6 +514,8 @@ sub ParseStaticText
     print OUTPUT "\t\t<object class=\"wxStaticText\"";
     WriteBasicInfo (@rect, $varname);
     WriteLabel ($phrase);
+    WriteStyle ("wxALIGN_CENTRE") if ($type eq "CTEXT");
+    WriteStyle ("wxALIGN_RIGHT") if ($type eq "RTEXT");
     print OUTPUT "\t\t</object>\n";
 }
 
@@ -999,11 +1004,11 @@ sub ParseControls ()
 	    $varname = GetToken ();
 	    ParseRadioButton ($label, $varname);
 	}
-	elsif ($token eq "LTEXT")
+	elsif (($token eq "LTEXT") || ($token eq "CTEXT") || ($token eq "RTEXT"))
 	{
 	    $label = GetQuoteField ();
 	    $varname = GetToken ();
-	    ParseStaticText ($label, $varname);
+	    ParseStaticText ($label, $varname, $token);
 	}
 	elsif ($token eq "EDITTEXT")
 	{

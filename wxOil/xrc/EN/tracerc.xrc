@@ -119,6 +119,11 @@
 			 <pos>135,131d</pos> <size>124,11d</size>
 			<label></label>
 		</object>
+		<object class="wxStaticText" name="IDC_TRACER_STATUSTEXT">
+			 <pos>137,133d</pos> <size>120,8d</size>
+			<label></label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxButton" name="IDC_TRACER_HELP">
 			 <pos>263,58d</pos> <size>50,14d</size>
 			<label>&amp;Help</label>

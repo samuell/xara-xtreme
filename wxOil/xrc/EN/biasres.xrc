@@ -2,6 +2,36 @@
 <resource>
 	<object class="wxDialog" name="IDD_BIASGAIN">
 			 <pos>0,0d</pos> <size>124,149d</size>
+		<object class="wxStaticText" name="IDC_STATIC1">
+			 <pos>9,94d</pos> <size>7,9d</size>
+			<label>-1</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC2">
+			 <pos>47,94d</pos> <size>5,9d</size>
+			<label>0</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC3">
+			 <pos>81,94d</pos> <size>9,9d</size>
+			<label>+1</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC4">
+			 <pos>9,121d</pos> <size>7,9d</size>
+			<label>-1</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC5">
+			 <pos>47,121d</pos> <size>5,9d</size>
+			<label>0</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC6">
+			 <pos>81,121d</pos> <size>9,9d</size>
+			<label>+1</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxSlider" name="IDC_SLIDER_BIAS">
 			 <pos>7,102d</pos> <size>100,15d</size>
 			<style>wxSL_HORIZONTAL</style>

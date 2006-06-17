@@ -21,6 +21,11 @@
 			 <pos>5,102d</pos> <size>20,8d</size>
 			<label>Value</label>
 		</object>
+		<object class="wxStaticText" name="IDC_DEBUGDLG_COMMENT">
+			 <pos>0,120d</pos> <size>175,15d</size>
+			<label>Description</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxListBox" name="IDC_DEBUGDLG_LIST">
 			 <pos>40,20d</pos> <size>130,75d</size>
 		</object>

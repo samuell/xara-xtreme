@@ -360,6 +360,11 @@
 			 <pos>107,20d</pos> <size>50,14d</size>
 			<label>&amp;Cancel</label>
 		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>2,7d</pos> <size>24,8d</size>
+			<label>Name:</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxCamDrawControl" name="IDC_COLNAME_PATCH">
 			 <pos>8,20d</pos> <size>12,12d</size>
 		</object>

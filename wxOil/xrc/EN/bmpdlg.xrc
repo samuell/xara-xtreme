@@ -296,9 +296,19 @@
 			 <pos>10,97d</pos> <size>10,8d</size>
 			<label>0%</label>
 		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>78,97d</pos> <size>20,8d</size>
+			<label>100%</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxSlider" name="IDC_BMPOPTS_QUALITY">
 			 <pos>10,107d</pos> <size>79,15d</size>
 			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_BMPOPTS_PERCENT">
+			 <pos>93,107d</pos> <size>20,10d</size>
+			<label>50%</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_JPGOPTS_PROGRESSIVE">
 			 <pos>10,131d</pos> <size>60,13d</size>

@@ -30,6 +30,11 @@
 			 <pos>11,29d</pos> <size>45,10d</size>
 			<label>Cache usage:</label>
 		</object>
+		<object class="wxStaticText" name="IDC_CACHEUSAGE">
+			 <pos>61,28d</pos> <size>25,11d</size>
+			<label>100</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>88,29d</pos> <size>8,8d</size>
 			<label>%</label>

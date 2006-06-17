@@ -587,6 +587,11 @@
 	</object>
 	<object class="wxDialog" name="IDD_NAMEDLG_NAME_TEMPLATE">
 			 <pos>0,0d</pos> <size>183,70d</size>
+		<object class="wxStaticText" name="IDC_NAMEDLG_DESC">
+			 <pos>14,8d</pos> <size>152,16d</size>
+			<label>Not enough memory!</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>14,32d</pos> <size>40,10d</size>
 			<label>New name:</label>
@@ -611,6 +616,11 @@
 	</object>
 	<object class="wxDialog" name="IDD_NAMEDLG_RENAME_TEMPLATE">
 			 <pos>0,0d</pos> <size>183,70d</size>
+		<object class="wxStaticText" name="IDC_NAMEDLG_DESC">
+			 <pos>14,8d</pos> <size>152,16d</size>
+			<label>Not enough memory!</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>14,32d</pos> <size>40,10d</size>
 			<label>New name:</label>

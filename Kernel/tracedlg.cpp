@@ -581,12 +581,12 @@ BOOL TraceDlg::SetStatus(BOOL Tracing)
 BOOL TraceDlg::LoadSettings(INT32 * pSettings)
 {
 	SetLongGadgetValue(_R(IDC_TRACER_PASSESNUM), 		pSettings[0]);
-	SetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 		100-pSettings[1]); 
-	SetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER),	50- pSettings[2]); 
-	SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 		100-pSettings[3]); 
-	SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 		100-pSettings[4]); 
-	SetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 	100-pSettings[5]); 
-	SetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER), 	100-pSettings[6]); 
+	SetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 		pSettings[1]); 
+	SetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER),	pSettings[2]); 
+	SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 		pSettings[3]); 
+	SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 		pSettings[4]); 
+	SetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 	pSettings[5]); 
+	SetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER), 	pSettings[6]); 
 	return ReadParams();
 }
 
@@ -606,13 +606,13 @@ BOOL TraceDlg::LoadSettings(INT32 * pSettings)
 *******************************************************************************************/
 BOOL TraceDlg::SaveSettings(INT32 * pSettings)
 {
-	pSettings[0]=    (INT32)GetLongGadgetValue(_R(IDC_TRACER_PASSESNUM) 		,0, 100, 0, NULL);
-	pSettings[1]=100-(INT32)GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER) 		,0, 100, 0, NULL); 
-	pSettings[2]=50- (INT32)GetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER)	,0, 100, 0, NULL); 
-	pSettings[3]=100-(INT32)GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER) 		,0, 100, 0, NULL); 
-	pSettings[4]=100-(INT32)GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER) 		,0, 100, 0, NULL); 
-	pSettings[5]=100-(INT32)GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER) 	,0, 100, 0, NULL); 
-	pSettings[6]=100-(INT32)GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER) 	,0, 100, 0, NULL); 
+	pSettings[0]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_PASSESNUM) 		,0, 100, 0, NULL);
+	pSettings[1]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER) 		,0, 100, 0, NULL); 
+	pSettings[2]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER)	,0, 100, 0, NULL); 
+	pSettings[3]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER) 		,0, 100, 0, NULL); 
+	pSettings[4]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER) 		,0, 100, 0, NULL); 
+	pSettings[5]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER) 	,0, 100, 0, NULL); 
+	pSettings[6]=(INT32)GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER) 	,0, 100, 0, NULL); 
 	return TRUE;
 }
 
@@ -702,12 +702,12 @@ BOOL TraceDlg::SetTraceMethod(TraceMethod Method)
 
 BOOL TraceDlg::ReadParams()
 {
-	SetLongGadgetValue(_R(IDC_TRACER_BLURNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 0, 100, 0, NULL));
-	SetLongGadgetValue(_R(IDC_TRACER_MINAREANUM), 50-GetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER), 0, 100, 0, NULL));
-	SetLongGadgetValue(_R(IDC_TRACER_ACCURACYNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 0, 100, 0, NULL));
-	SetLongGadgetValue(_R(IDC_TRACER_ICTNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 0, 100, 0, NULL));
-	SetLongGadgetValue(_R(IDC_TRACER_FCTNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 0, 100, 0, NULL));
-	SetLongGadgetValue(_R(IDC_TRACER_SMOOTHNUM), 100-GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_BLURNUM),    GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_MINAREANUM), GetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_ACCURACYNUM),GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_ICTNUM),     GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_FCTNUM),     GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 0, 100, 0, NULL));
+	SetLongGadgetValue(_R(IDC_TRACER_SMOOTHNUM),  GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER), 0, 100, 0, NULL));
 	TraceMethod Method=GetTraceMethod();
 	BOOL Mono=(Method == TRACEMETHOD_MONO);
 //	BOOL Limited=(Method == TRACEMETHOD_GREYSCALE) || (Method==TRACEMETHOD_256COL);
@@ -774,14 +774,14 @@ BOOL TraceDlg::WriteParams()
 								);
 
 
-	MinimumArea 						= 50-GetLongGadgetValue  (_R(IDC_TRACER_MINAREASLIDER),	0, 100, 0, NULL);	
-	MaximumInitialAreaErrorThreshold 	= 0.01+0.003*(double)(100-GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER),		0, 100, 0, NULL));
-	MinimumInitialAreaErrorThreshold 	= 0.01+0.003*(double)(100-GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER),		0, 100, 0, NULL));
-	MaxPixelError 						= 0.45+0.16*(double)(/*100-*/GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER),    	0, 100, 0, NULL));
+	MinimumArea 						= GetLongGadgetValue  (_R(IDC_TRACER_MINAREASLIDER),	0, 100, 0, NULL);	
+	MaximumInitialAreaErrorThreshold 	= 0.01+0.003*(double)(GetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER),		0, 100, 0, NULL));
+	MinimumInitialAreaErrorThreshold 	= 0.01+0.003*(double)(GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER),		0, 100, 0, NULL));
+	MaxPixelError 						= 0.45+0.16*(double)(100-GetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER),    	0, 100, 0, NULL)); // Inversion intentional
 	MinPixelError = MaxPixelError;
-	Blur 								= (double)(100-GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER),    	0, 100, 0, NULL));
-	Smooth 								= (double)(100-GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER),    	0, 100, 0, NULL));
-	QuantColours					 	= 0.01*(double)(/*100-*/GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER),	0, 100, 0, NULL));
+	Blur 								= (double)(GetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER),    	0, 100, 0, NULL));
+	Smooth 								= (double)(GetLongGadgetValue(_R(IDC_TRACER_SMOOTHSLIDER),    	0, 100, 0, NULL));
+	QuantColours					 	= 0.01*(double)(GetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER),	0, 100, 0, NULL)); // Inversion intentional
 	
 	if (QuantColours<0) QuantColours=0;
 	QuantColours=QuantColours*QuantColours; // spread it out a little at the low end (i.e. high end on the slider)
@@ -1104,23 +1104,23 @@ MsgResult TraceDlg::Message( Msg* Message)
 
 				SetGadgetRange    (_R(IDC_TRACER_BLURSLIDER), 0, 100, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_BLURSLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
-//				SetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 100-50); 
+//				SetLongGadgetValue(_R(IDC_TRACER_BLURSLIDER), 50); 
 
 				SetGadgetRange    (_R(IDC_TRACER_ACCURACYSLIDER), 0, 100, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_ACCURACYSLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
-//				SetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 100-50); 
+//				SetLongGadgetValue(_R(IDC_TRACER_ACCURACYSLIDER), 50); 
 
 				SetGadgetRange    (_R(IDC_TRACER_MINAREASLIDER), 0, 50, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_MINAREASLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
-//				SetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER), 50-25); 
+//				SetLongGadgetValue(_R(IDC_TRACER_MINAREASLIDER), 25); 
 
 				SetGadgetRange    (_R(IDC_TRACER_ICTSLIDER), 0, 100, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_ICTSLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
-//				SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 100-35); 
+//				SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 35); 
 
 				SetGadgetRange    (_R(IDC_TRACER_FCTSLIDER), 0, 100, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_FCTSLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
-//				SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 100-25); 
+//				SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 25); 
 
 				SetGadgetRange    (_R(IDC_TRACER_SMOOTHSLIDER), 0, 100, 1);
 				SetGadgetBitmaps  (_R(IDC_TRACER_SMOOTHSLIDER), _R(IDB_QUALITYBASE), _R(IDB_QUALITYSLIDER));
@@ -1170,8 +1170,8 @@ MsgResult TraceDlg::Message( Msg* Message)
 					if (!OurMessage && (Msg->GadgetID == _R(IDC_TRACER_ICTSLIDER) || Msg->GadgetID == _R(IDC_TRACER_FCTSLIDER)))
 					{
 						// We must fix sliders
-						INT32 CurrentInit = 100-GetLongGadgetValue  (_R(IDC_TRACER_ICTSLIDER),	0, 100, 0, NULL);
-						INT32 CurrentFinal = 100-GetLongGadgetValue  (_R(IDC_TRACER_FCTSLIDER),	0, 100, 0, NULL);
+						INT32 CurrentInit = GetLongGadgetValue  (_R(IDC_TRACER_ICTSLIDER),	0, 100, 0, NULL);
+						INT32 CurrentFinal = GetLongGadgetValue  (_R(IDC_TRACER_FCTSLIDER),	0, 100, 0, NULL);
 
 						OurMessage++;
 
@@ -1179,22 +1179,22 @@ MsgResult TraceDlg::Message( Msg* Message)
 						{
 							if (Passes<=1)
 							{
-								SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 100-CurrentFinal);
+								SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), CurrentFinal);
 							}
 							else if (CurrentInit<=CurrentFinal)
 							{
-								SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), 100-((CurrentFinal>=100)?100:CurrentFinal+1));
+								SetLongGadgetValue(_R(IDC_TRACER_ICTSLIDER), ((CurrentFinal>=100)?100:CurrentFinal+1));
 							}
 						}
 						else
 						{
 							if (Passes<=1)
 							{
-								SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 100-CurrentInit);
+								SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), CurrentInit);
 							}
 							else if (CurrentInit<=CurrentFinal)
 							{
-								SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), 100-((CurrentInit<=0)?0:CurrentInit-1));
+								SetLongGadgetValue(_R(IDC_TRACER_FCTSLIDER), ((CurrentInit<=0)?0:CurrentInit-1));
 							}
 						}
 

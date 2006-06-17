@@ -30,6 +30,26 @@
 		<object class="wxTextCtrl" name="IDC_EDIT_COMPONENT4">
 			 <pos>96,128d</pos> <size>20,12d</size>
 		</object>
+		<object class="wxStaticText" name="IDC_NAME_COMPONENT1">
+			 <pos>4,130d</pos> <size>16,8d</size>
+			<label>M</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_NAME_COMPONENT2">
+			 <pos>32,127d</pos> <size>16,8d</size>
+			<label>M</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_NAME_COMPONENT3">
+			 <pos>60,127d</pos> <size>16,8d</size>
+			<label>M</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_NAME_COMPONENT4">
+			 <pos>88,127d</pos> <size>16,8d</size>
+			<label>M</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_COLMODEL">
 			 <pos>400,147d</pos> <size>104,-1d</size>
 			<style>wxCB_READONLY</style>

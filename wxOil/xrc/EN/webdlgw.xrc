@@ -18,9 +18,19 @@
 			 <pos>22,59d</pos> <size>10,8d</size>
 			<label>0%</label>
 		</object>
+		<object class="wxStaticText" name="IDC_WEBOPTS_100PERCENT">
+			 <pos>86,59d</pos> <size>20,8d</size>
+			<label>100%</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxSlider" name="IDC_WEBOPTS_QUALITY">
 			 <pos>22,70d</pos> <size>73,15d</size>
 			<style>wxSL_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticText" name="IDC_WEBOPTS_PERCENT">
+			 <pos>108,70d</pos> <size>19,10d</size>
+			<label>50%</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxStaticBox" name="ID_STATIC">
 			 <pos>144,2d</pos> <size>55,41d</size>

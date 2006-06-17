@@ -166,6 +166,11 @@
 			 <pos>10,101d</pos> <size>141,10d</size>
 			<label>Make &amp;groups be transparent as a whole</label>
 		</object>
+		<object class="wxStaticText" name="IDC_OPTS_INFO3">
+			 <pos>10,5d</pos> <size>50,10d</size>
+			<label>General options</label>
+			<style>wxALIGN_CENTRE</style>
+		</object>
 		<title> General </title>
 		<label> General </label>
 	</object>
@@ -273,6 +278,11 @@
 			 <pos>5,47d</pos> <size>195,27d</size>
 			<label>Gallery cache</label>
 		</object>
+		<object class="wxStaticText" name="IDC_OPTS_CACHETXT">
+			 <pos>17,59d</pos> <size>124,10d</size>
+			<label>&amp;Number of items cached per group:</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxTextCtrl" name="IDC_OPTS_CACHESIZE">
 			 <pos>145,57d</pos> <size>50,12d</size>
 		</object>
@@ -311,8 +321,18 @@
 		<object class="wxTextCtrl" name="IDC_EDIT_CACHE_SIZE">
 			 <pos>145,150d</pos> <size>50,12d</size>
 		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>16,147d</pos> <size>125,20d</size>
+			<label>Percentage of memory to use for caching groups, layers and live effects:</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_CURRENTCACHE">
 			 <pos>145,167d</pos> <size>50,12d</size>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC_">
+			 <pos>16,169d</pos> <size>125,8d</size>
+			<label>Percentage of cache currently used:</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<title> Tune-ups </title>
 		<label> Tune-ups </label>
@@ -607,9 +627,24 @@
 			 <pos>145,15d</pos> <size>50,14d</size>
 			<label>Setup...</label>
 		</object>
+		<object class="wxStaticText" name="IDC_STATIC">
+			 <pos>10,18d</pos> <size>131,8d</size>
+			<label>Set folders for plugins and effects:</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
 		<object class="wxCheckBox" name="IDC_CHECK_NEW_EFFECTS_LOCKED">
 			 <pos>15,55d</pos> <size>122,10d</size>
 			<label>New effects are locked by default</label>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC_LIVEEFFECT_RES">
+			 <pos>11,70d</pos> <size>100,12d</size>
+			<label>Default live effect resolution:</label>
+			<style>wxALIGN_RIGHT</style>
+		</object>
+		<object class="wxStaticText" name="IDC_STATIC_LOCKEDEFFECT_RES">
+			 <pos>11,87d</pos> <size>100,12d</size>
+			<label>Default locked effect resolution:</label>
+			<style>wxALIGN_RIGHT</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO_LIVEEFFECT_RES">
 			 <pos>113,70d</pos> <size>82,-1d</size>
