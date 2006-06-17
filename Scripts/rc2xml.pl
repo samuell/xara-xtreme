@@ -208,6 +208,14 @@ sub SplitHelp
     return 1;
 }
 
+# Add a style
+sub AddStyle
+{
+    my $newstyle = shift @_;
+    my $rstyle = shift @_;
+    $$rstyle.=(($$rstyle ne "")?"|":"").$newstyle;
+}
+
 # Read a rectangle
 sub ReadRect
 {
@@ -523,21 +531,20 @@ sub ParseStaticText
 sub ParseTextCtrl
 {
     my $varname = shift @_;
-    my $token = PeekToken ();
-    while ($token !~ /^\d+$/ )
+    my $token;
+    my $GotOrs = ReadOrs (\$token);
+    my @rect;
+    if (ReadRect(\@rect))
     {
-	GetToken ();
-	$token = PeekToken ();
+	ReadOrs (\$token) unless $GotOrs;
     }
 
-    # read position
-    my @rect;
-    ReadRect(\@rect);
-
+    my $style;
     print OUTPUT "\t\t<object class=\"wxTextCtrl\"";
     WriteBasicInfo (@rect, $varname);
+    AddStyle ("wxTE_READONLY",\$style) if ($token =~ /ES_READONLY/);
+    WriteStyle($style);
     print OUTPUT "\t\t</object>\n";
-
 }
 
 # AUTOCHECKBOX "&log.", ID_XLOG, 25, 24, 21, 12
@@ -602,12 +609,14 @@ sub ParseComboBox
     # value. wxWidgets then centres them vertically which result in a vertical offset
     $rect[3]=-1;
 
+    my $style;
     print OUTPUT "\t\t<object class=\"wxOwnerDrawnComboBox\"";
     WriteBasicInfo (@rect, $varname);
-    WriteStyle ("wxCB_SIMPLE") if ($token =~ /CBS_SIMPLE/);
-    WriteStyle ("wxCB_SORT") if ($token =~ /CBS_SORT/);
-    WriteStyle ("wxCB_ALWAYS_SB") if ($token =~ /CBS_DISABLENOSCROLL/);
-    WriteStyle ("wxCB_READONLY") if ($token =~ /CBS_DROPDOWNLIST/);
+    AddStyle ("wxCB_SIMPLE",\$style) if ($token =~ /CBS_SIMPLE/);
+    AddStyle ("wxCB_SORT",\$style) if ($token =~ /CBS_SORT/);
+    AddStyle ("wxCB_ALWAYS_SB",\$style) if ($token =~ /CBS_DISABLENOSCROLL/);
+    AddStyle ("wxCB_READONLY",\$style) if ($token =~ /CBS_DROPDOWNLIST/);
+    WriteStyle($style);
     print OUTPUT "\t\t</object>\n";
 }
 

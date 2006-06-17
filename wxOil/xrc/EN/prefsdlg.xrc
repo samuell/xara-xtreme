@@ -328,6 +328,7 @@
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_CURRENTCACHE">
 			 <pos>145,167d</pos> <size>50,12d</size>
+			<style>wxTE_READONLY</style>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC_">
 			 <pos>16,169d</pos> <size>125,8d</size>

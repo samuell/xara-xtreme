@@ -451,8 +451,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOTYPE">
 			 <pos>110,75d</pos> <size>84,-1d</size>
-			<style>wxCB_SORT</style>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_CHECKSEPARATIONS">
 			 <pos>11,95d</pos> <size>89,8d</size>
