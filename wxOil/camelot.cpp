@@ -254,7 +254,7 @@ CCamApp::CCamApp()
 **********************************************************************************************/ 
 int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
-	static INT32	lLastTimeStamp = 0;
+	static /*TYPENOTE: Correct*/ long	lLastTimeStamp = 0;
 
 	if (( event.GetEventType() == wxEVT_CREATE ) && (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow))))
 	{
