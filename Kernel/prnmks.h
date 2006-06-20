@@ -139,6 +139,9 @@ class LoadPrintMarks : public LoadDirect
 {
 	CC_DECLARE_MEMDUMP(LoadPrintMarks);
 
+    public:
+        virtual ~LoadPrintMarks() {}
+
 	protected:
 		virtual BOOL OnLoadDocument(Document* pKernelDoc);
 };
@@ -521,7 +524,7 @@ class MarkFormatRegion : public CC_CLASS_MEMDUMP
 	public:
 		 MarkFormatRegion();
 		 MarkFormatRegion(const DocRect &Position);
-		~MarkFormatRegion();
+		 virtual ~MarkFormatRegion();
 
 		 void Empty();
 		 void SetPosition(const DocRect& Position);

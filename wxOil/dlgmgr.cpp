@@ -1877,7 +1877,7 @@ void DialogManager::SetGadgetBitmaps(CWindowID WindowID, CGadgetID Gadget, const
 		ERROR3IF(pCAP==NULL, "Can't find CamArtProvider!");
 
 		ListItem* pItem = NULL;
-		ResourceID resID;
+		ResourceID resID=0;
 		pItem = imagelist.FindFirstBitmap(&resID);
 		while (pItem)
 		{

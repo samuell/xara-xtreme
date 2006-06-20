@@ -2237,7 +2237,7 @@ BOOL EPSFilter::InsertNewNode(Node *pNewNode)
 BOOL EPSFilter::AttachAllNodes()
 {
 	BOOL Success = TRUE;
-	NodeGroup *pGroup;
+	NodeGroup *pGroup=NULL;
 
 	if (UseLayers)
 	{
@@ -5556,7 +5556,7 @@ BOOL EPSFilter::ProcessText()
 
 			case EPSC_Ta:	// Justification
 			{
-				Justification JustVal;
+				Justification JustVal=JLEFT;
 				INT32 Justify;
 				if (!Stack.Pop(&Justify))
 					goto error;

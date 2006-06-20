@@ -1133,7 +1133,7 @@ INT32 KernelDC::ConvertToASCII85(BYTE *Src, UINT32 Length, BYTE *Dest)
 	while (Length > 0)
 	{
 		// Encode four bytes as five characters.
-		UINT32 n;
+		UINT32 n=0;
 		
 		if (Length >= 4)
 		{

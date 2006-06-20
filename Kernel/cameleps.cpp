@@ -5355,7 +5355,10 @@ PORTNOTE("printing", "Exclude CCPrintInfo");
 
 	DocCoord DCOrigin = pDC->GetOrigin();
 
+PORTNOTE ("other", "Disabled postscript printing transform")
+#ifndef EXCLUDE_FROM_XARALX
 	if (IsCamelotEPS)
+#endif
 	{
 		dWidth *= UnitSize;
 		dHeight *= UnitSize;

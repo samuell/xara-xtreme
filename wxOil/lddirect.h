@@ -122,6 +122,7 @@ class LoadDirect : public CC_CLASS_MEMDUMP
 	CC_DECLARE_MEMDUMP(LoadDirect);
 
 	public:
+        virtual ~LoadDirect() {}
 		BOOL Execute(const TCHAR* lpszFilename);
 
 	protected:
@@ -129,6 +130,7 @@ class LoadDirect : public CC_CLASS_MEMDUMP
 
 	private:
 		BOOL ExecuteHelper(CCamApp* pApp, const TCHAR* lpszFilename);
+
 };
 
 

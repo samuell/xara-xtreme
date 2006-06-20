@@ -1761,7 +1761,7 @@ PrintRangeObj PrintControl::GetObjPrintRange()
 
 BOOL PrintControl::CalcNumPaper()
 {
-	BOOL CanMultiCopy;
+	BOOL CanMultiCopy=TRUE;
 PORTNOTE("printing", "Disabled Use of CCPrintDialog")
 #ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96

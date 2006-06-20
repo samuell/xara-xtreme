@@ -2875,6 +2875,7 @@ OptimalRenderError:
 
 	// Unlink the RenderRegion from list and error if it was not there
 	BOOL InList = Camelot.DeleteRenderRegion(pRender);
+    CAM_USE(InList); // Suppress unused variable warning on retail build
 	ERROR3IF(!InList, "DocView::RenderOptimalView tried to delete a RenderRegion not in the list");
 
 	// Instruct the render region to commit suicide. This call doesn't work on a CamelotEPS
@@ -3278,8 +3279,8 @@ TRACEUSER( "Phil", _T("GetNextBand (Before) %d, %d\n"), BitmapRR.GetClipRect().l
 		MoreBands = BitmapRR.GetNextBand();
 TRACEUSER( "Phil", _T("GetNextBand (After)  %d, %d\n"), BitmapRR.GetClipRect().lo.y, BitmapRR.GetClipRect().hi.y);
 		ERROR3IF(MoreMaskedBands!=MoreBands, "Bands don't match");
-if (MoreMaskedBands!=MoreBands)
-	MoreBands = FALSE;
+        if (MoreMaskedBands!=MoreBands)
+	       MoreBands = FALSE;
 
 	} while (MoreBands);
 
@@ -4101,6 +4102,7 @@ SlowJobResult View::RenderBitmapPhase(DocRect& ComplexClipRect, Matrix& ViewTran
 		// Get the next bands ready
 		BOOL MoreMaskedBands = MaskedBitmap.GetNextBand();
 		MoreBands = BitmapRR.GetNextBand();
+        CAM_USE(MoreMaskedBands); // suppress unused variable wanring on retail builds
 		ERROR3IF(MoreMaskedBands!=MoreBands, "Bands don't match");
 
 		// Update progress display

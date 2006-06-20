@@ -869,6 +869,7 @@ BOOL EPSStack::PopColour(PColourCMYK *Col, TintType Tint,
 {
 	double Cyan, Magenta, Yellow, Key;
 	FIXEDPOINT TintValue;
+	TintValue=0; // Warning suppression
 
 	if (Tint != TINT_NONE)
 	{
@@ -1087,7 +1088,7 @@ BOOL EPSStack::Pop(Matrix *pMatrix, BOOL UseBrackets)
 {
 	if (UseBrackets)
 	{
-		EPSCommand Cmd;
+		EPSCommand Cmd=EPSC_Invalid;
 		PopCmd(&Cmd);
 		if (Cmd != EPSC_ArrayEnd)
 			return FALSE;
@@ -1104,7 +1105,7 @@ BOOL EPSStack::Pop(Matrix *pMatrix, BOOL UseBrackets)
 
 	if (UseBrackets)
 	{
-		EPSCommand Cmd;
+		EPSCommand Cmd=EPSC_Invalid;
 		PopCmd(&Cmd);
 		if (Cmd != EPSC_ArrayStart)
 			return FALSE;
@@ -1298,7 +1299,7 @@ BOOL EPSStack::PopArray(INT32 *Array, INT32* Elements)
 	}
 	
 	// First this we find should be the 'Array End' command (']')
-	EPSCommand Cmd;
+	EPSCommand Cmd=EPSC_Invalid;
 	PopCmd(&Cmd);
 	if (Cmd != EPSC_ArrayEnd)
 	{
@@ -1329,7 +1330,7 @@ BOOL EPSStack::PopArray(INT32 *Array, INT32* Elements)
 		if (GetType() != EPSTYPE_COMMAND)
 		{
 			// Pop the array member
-			double Double;
+			double Double=0.0;
 			if (!Pop(&Double))
 			{
 				delete TempArray;
@@ -1398,7 +1399,7 @@ BOOL EPSStack::DiscardArray()
 		return FALSE;
 	}
 	
-	EPSCommand Cmd;
+	EPSCommand Cmd=EPSC_Invalid;
 	PopCmd(&Cmd);
 	if (Cmd != EPSC_ArrayEnd)
 	{

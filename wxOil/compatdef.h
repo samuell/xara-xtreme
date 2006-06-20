@@ -695,6 +695,10 @@ inline void Beep() {wxBell();}
 inline double camAtof(TCHAR * s) { double r=0.0; camScanf(s, "%f", &r); return r;}
 inline INT32 camAtol(TCHAR * s) { INT32 r=0; camScanf(s, "%d", &r); return r;}
 
+// Macro to get rid of unused variable warnings
+inline void CamUse(void * p) {}
+#define CAM_USE(x) do {CamUse( & x );} while(0)
+
 #ifndef _MAX_PATH
 #define _MAX_PATH _POSIX_PATH_MAX
 #endif
