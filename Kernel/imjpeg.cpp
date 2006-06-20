@@ -1123,7 +1123,7 @@ void JPEGImportFilter::ReadImage()
 		//
 		// Swap red and blue channels.
 		//
-#if defined(__WXMSW__)
+#if !defined(__WXMSW__) && defined(BIG_ENDIAN)
 		if ( m_uBitsPerPixel==24 )
 		{
 			BYTE* pLine = pCurrentScanLine;

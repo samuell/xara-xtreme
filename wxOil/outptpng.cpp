@@ -736,7 +736,7 @@ TRACEUSER( "Jonathan", _T("PNG write: rowbytes %d color_type %d\n"),png_ptr->row
 		//png_set_packing(png_ptr);
 
 		// flip bgr pixels to rgb
-#if !defined(__WXGTK__)
+#if !defined(__WXMSW__) && defined(BIG_ENDIAN)
 		png_set_bgr(png_ptr);
 #endif
 

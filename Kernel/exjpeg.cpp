@@ -1358,6 +1358,12 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 				pConverter->Convert(pBitmapLine, pExportBuffer, 1, FALSE);
 			}
 
+#if !defined(__WXMSW__) && defined(BIG_ENDIAN)
+			RGBTRIPLE* pExportRGB = (RGBTRIPLE*)pExportLine;
+			for( unsigned ord = 0; ord < Width; ++ord, ++ pExportRGB )
+				std::swap( pExportRGB->rgbtBlue, pExportRGB->rgbtRed );
+#endif
+
 			libJPEG::jpeg_write_scanlines(&m_cinfo, &pExportLine, 1);
 
 			if (pFilterForUpdate != NULL)

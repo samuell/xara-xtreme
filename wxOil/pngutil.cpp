@@ -332,7 +332,7 @@ BOOL PNGUtil::ReadFromFile( CCLexFile *File, LPBITMAPINFO *Info, LPBYTE *Bits,
 				png_set_gamma(png_ptr, screen_gamma, 0.45455);
 		}
 		
-#if !defined(__WXGTK__)
+#if defined(__WXGTK__)
 		/* flip the RGB pixels to BGR (or RGBA to BGRA) */
 		if (color_type & PNG_COLOR_MASK_COLOR)
 			png_set_bgr(png_ptr);
