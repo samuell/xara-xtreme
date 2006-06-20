@@ -6344,10 +6344,18 @@ LPBYTE GRenderRegion::StaticPlotBitmap( wxDC* hDC, UINT32 ColourFlag,
 		// so inverting the alpha channel would not be correct, and it's
 		// possible that the transparency channel will not always be zero).
 		//
-		for( UINT32 x=0; x<Width; ++x )
 #if defined(__WXGTK__)
-			pDLine[x] = pSBuffer[x] | 0xff000000;
+		for( UINT32 x=0; x<Width; ++x )
+		{
+			BYTE* pS = pBYTE(pSBuffer+x);
+			BYTE* pD = pBYTE(pDLine  +x);
+			pD[0] = pS[2];
+			pD[1] = pS[1];
+			pD[2] = pS[0];
+			pD[3] = 0xFF;
+		}
 #else
+		for( UINT32 x=0; x<Width; ++x )
 			pDLine[x] = pSBuffer[x];
 #endif
 		pSBuffer -= lpBitmapInfo->bmiHeader.biWidth;
