@@ -2945,7 +2945,7 @@ void ColourPicker::RelayoutDialog(CWindowID WindowID)
 	if (!flag)
 	{
 		flag++;
-		::wxYield();
+		wxPlatformDependent::Get()->RealYield();
 		flag--;
 	}
 
@@ -2965,7 +2965,7 @@ void ColourPicker::RelayoutDialog(CWindowID WindowID)
 	if (!flag)
 	{
 		flag++;
-		::wxYield();
+		wxPlatformDependent::Get()->RealYield();
 		flag--;
 	}
 

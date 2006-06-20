@@ -83,3 +83,16 @@ void wxPlatformDependent::SetGtkWidgetName(wxWindow * pwxWindow, char * name)
 
 #endif
 
+void wxPlatformDependent::RealYield()
+{
+#if defined( __WXGTK__ )
+    int i=0;
+    do
+    {
+        gdk_flush();
+        ::wxYield();
+    } while (gtk_events_pending() && (i++<10));
+#else
+    ::wxYield();
+#endif
+}

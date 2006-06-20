@@ -41,6 +41,8 @@ public:
     virtual void SetGtkWidgetName(wxWindow * pwxWindow, char * name);
 #endif
 
+    virtual void RealYield();
+
 	DECLARE_DYNAMIC_CLASS(wxPlatformDependent);
 };
 
