@@ -978,51 +978,27 @@ static BOOL UnpackRle8( CCLexFile *File, const BITMAPINFOHEADER& Header, LPBYTE 
 
 static void ReadPalette( CCLexFile *File, INT32 HowMany, size_t SizeOfRGB, LPRGBQUAD Result )
 {
-	if (SizeOfRGB==sizeof(RGBQUAD))
-	{		
-		// easy - standard Windows palette
-#ifdef __WXMSW__
-		File->read( Result, HowMany * (UINT32)SizeOfRGB );
-#else
-		// silly old OS2 format in chunks of three bytes
-		RGBQUAD rgbx;
-
-		// this isn't exactly efficient but it works, is endian-independent and reliable
-		while (HowMany--)
-		{
-			File->read( &rgbx, sizeof(RGBQUAD) );
-			Result->rgbBlue = rgbx.rgbRed;			// NOTE! We are swapping BGR for RGB
-			Result->rgbGreen = rgbx.rgbGreen;
-			Result->rgbRed = rgbx.rgbBlue;			// NOTE! We are swapping BGR for RGB
-			Result++;
-		}
-#endif
-	}
-	else if (SizeOfRGB==sizeof(RGBTRIPLE))
+	// this isn't exactly efficient but it works, is endian-independent and reliable
+	while (HowMany--)
 	{
-		// silly old OS2 format in chunks of three bytes
-		RGBTRIPLE rgb;
-
-		// this isn't exactly efficient but it works, is endian-independent and reliable
-		while (HowMany--)
-		{
-			File->read( &rgb, sizeof(RGBTRIPLE) );
-#ifdef __WXMSW__
-			Result->rgbBlue = rgb.rgbtBlue;
-			Result->rgbGreen = rgb.rgbtGreen;
-			Result->rgbRed = rgb.rgbtRed;
-#else
-			Result->rgbBlue = rgb.rgbtRed;			// NOTE! We are swapping BGR for RGB
-			Result->rgbGreen = rgb.rgbtGreen;
-			Result->rgbRed = rgb.rgbtBlue;			// NOTE! We are swapping BGR for RGB
-#endif
-			Result++;
+		// Read byte by byte so we get endianness right
+		File->read( &(Result->rgbBlue), sizeof(BYTE));
+		File->read( &(Result->rgbGreen), sizeof(BYTE));
+		File->read( &(Result->rgbRed), sizeof(BYTE));
+		if (SizeOfRGB==sizeof(RGBQUAD))
+		{	
+			File->read( &(Result->rgbReserved), sizeof(BYTE));
 		}
+		else if (SizeOfRGB==sizeof(RGBTRIPLE))
+		{
+			Result->rgbReserved=0;
+		}
+		else
+		{
+			ENSURE(FALSE, "Strange RGB size if ReadPalette");
+		}
+		Result++;
 	}
-	#ifdef _DEBUG
-	else
-		ENSURE(FALSE, "Strange RGB size if ReadPalette");
-	#endif
 }
 
 // 1 to make up transparency, 0 for normal
