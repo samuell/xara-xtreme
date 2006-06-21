@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "andy.h"
 //#include "dibconv.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "progress.h"		// For hourglass stuff
-//#include "gifutil.h"		// GIF header definitions
+#include "gifutil.h"		// GIF header definitions
 //#include "string.h"			// memcpy
 //#include "camfiltr.h"		// BaseCamelotFilter - in camtypes.h [AUTOMATICALLY REMOVED]
 
@@ -444,8 +444,6 @@ BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, BOOL Enhanced, INT32 TransC
 ********************************************************************************************/
 BOOL OutputGIF::OutputGifFileHeader(CCLexFile *File, LPBITMAPINFOHEADER pInfo, BOOL Enhanced, INT32 TransColour, LPLOGPALETTE pPalette, LPRGBQUAD pQuadPalette)
 {
-PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR2IF(pInfo==NULL,FALSE,"OutputGIF::OutputGifHeader BitmapInfo pointer is null");
 	ERROR2IF(pPalette==NULL && pQuadPalette==NULL,FALSE,"OutputGIF::OutputGifHeader Bitmap palette pointer is null");
@@ -599,9 +597,6 @@ PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
 	}
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
-#else
-	return FALSE;
-#endif
 }	
 
 
@@ -622,8 +617,6 @@ PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
 ********************************************************************************************/
 BOOL OutputGIF::OutputGifImageExtensionHeader(CCLexFile *File, BOOL InterlaceState, INT32 TransparentColour, UINT32 Delay, UINT32 RestoreType)
 {
-PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR3IF(RestoreType > 3, "Unknown GIF image restore type");
 
@@ -675,9 +668,6 @@ PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
 	}
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
-#else
-	return FALSE;
-#endif
 }	
 
 
@@ -855,8 +845,6 @@ BOOL OutputGIF::OutputGifImageBits(CCLexFile *File, LPBYTE pBlockStart, BOOL Int
 								   LPRGBQUAD pDestPalette, UINT32 PaletteColourDepth, UINT32 NewBitsPerPixel)
 
 {
-PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(File==NULL,FALSE,"OutputGIF::OutputGifHeader File pointer is null");
 	ERROR2IF(pBlockStart==NULL,FALSE,"OutputGIF::OutputGifHeader BitmapInfo pointer is null");
 
@@ -1014,9 +1002,6 @@ PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
 	}
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
-#else
-	return FALSE;
-#endif
 }	
 
 
@@ -1391,8 +1376,6 @@ nomatch:
 
 void OutputGIF::OutputCode( code_int code )
 {
-PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
-#ifndef EXCLUDE_FROM_XARALX
     cur_accum &= masks[ cur_bits ];
 
     if( cur_bits > 0 )
@@ -1442,7 +1425,6 @@ PORTNOTETRACE("GIFFilter", "Removed use of GIF code");
 
         OutputFile->flush();
     }
-#endif
 }
 
 /********************************************************************************************

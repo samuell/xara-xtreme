@@ -23,7 +23,7 @@ libwxOil_a_SOURCES = \
 	memblk.cpp memory.cpp monotime.cpp mtrand.cpp oilbitmap.cpp oilcoord.cpp \
 	oildbug.cpp oilrect.cpp pathname.cpp pathnmex.cpp pen.cpp sgliboil.cpp \
 	tunemem.cpp unicdman.cpp vstate.cpp wincoord.cpp oilfiles.cpp oilmenus.cpp \
-	winrect.cpp grndrgn.cpp osrndrgn.cpp grndbmp.cpp rendbits.cpp \
+	gifutil.cpp giffiltr.cpp winrect.cpp grndrgn.cpp osrndrgn.cpp grndbmp.cpp rendbits.cpp \
 	palman.cpp gdrawcon.cpp fuzzclip.cpp cursor.cpp pngfiltr.cpp pngutil.cpp \
 	maskfilt.cpp oilfltrs.cpp speedtst.cpp gbrush.cpp grnddib.cpp grndclik.cpp \
 	offscrn.cpp camprofile.cpp localenv.cpp camresource.cpp oilmods.cpp \

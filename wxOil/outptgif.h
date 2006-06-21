@@ -105,29 +105,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "dibconv.h"					// needs DIBConvert
 #include "dibutil.h"					// needs FNPTR_SCANLINE
 #include "outptdib.h"	
-//#include "gifutil.h"					// GIF header definitions
-
-// From gifutil.h
-enum GIFDisposalMethod
-{
-	GDM_NONE		= 0,	// No disposal specified. The decoder is not required to take any action.
-	GDM_LEAVE		= 1,	// Do not dispose. The graphic is to be left in place.
-	GDM_BACKTOBACK	= 2,	// Restore to background color. The area used by the graphic must be restored to the background color.
-	GDM_PREVIOUS	= 3		// Restore to previous. The decoder is required to restore the area overwritten by the graphic with what was there prior to rendering the graphic.
-};
+#include "gifutil.h"					// GIF header definitions
 
 #define GIFBITS    		12
 #define MAX_LWZ_BITS	12
 #define HSIZE  			5003            // 80% occupancy
-
-typedef INT32	code_int;
-typedef INT32	count_int;
-
-const INT32 maxbits = GIFBITS;            				// user settable max # bits/code
-const code_int maxmaxcode = (code_int)1 << GIFBITS; 	// should NEVER generate this code
-
-const code_int hsize = HSIZE;              		// for dynamic table sizing
-
 
 #define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
 
