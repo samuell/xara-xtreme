@@ -2933,7 +2933,9 @@ void ColourPicker::RelayoutDialog(CWindowID WindowID)
 		pPicker->SetSize(pPicker->GetSize().GetWidth()+1, pPicker->GetSize().GetHeight()+1); // cause a resize
 		WindowID->Layout();
 		WindowID->Fit();
-		WindowID->GetSizer()->SetSizeHints(WindowID);
+		wxSizer * pSizer = WindowID->GetSizer();
+		if (pSizer)
+			pSizer->SetSizeHints(WindowID);
 		pPicker->SetMinSize(s_UserSize);
 		pPicker->SetMaxSize(s_UserSize);
 		pPicker->SetSize(s_UserSize);
