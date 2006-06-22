@@ -1945,16 +1945,9 @@ void NodeBevel::SetUpBitmapPalette(RenderRegion * pRegion, DocColour FlatColour)
 		else
 		{
 			// Translated colour table values used ONLY for Non Transparent Flat filled Bevels
-	PORTNOTE("other","NodeBevel::SetUpBitmapPalette - palette bodge")
-#if defined(__WXGTK__)
-			pPalette[i].rgbRed   = pGD->TranslateBevelValue(i,Blue ) ;
-			pPalette[i].rgbGreen = pGD->TranslateBevelValue(i,Green) ;
-			pPalette[i].rgbBlue  = pGD->TranslateBevelValue(i,Red  ) ;
-#else
 			pPalette[i].rgbRed   = pGD->TranslateBevelValue(i,Red  ) ;
 			pPalette[i].rgbGreen = pGD->TranslateBevelValue(i,Green) ;
 			pPalette[i].rgbBlue  = pGD->TranslateBevelValue(i,Blue ) ;
-#endif
 		}
 		pPalette[i].rgbReserved = 0 ;
 	}
