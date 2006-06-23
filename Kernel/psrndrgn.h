@@ -133,7 +133,7 @@ class PrintPSRenderRegion : public CamelotEPSRenderRegion
 		virtual BOOL StopRender();
 		virtual BOOL CloseDown();
 		virtual void ConditionalSuicide ( void );
-		static BOOL InitPSDevice(wxDC* pDC, PrintView *pPrintView);
+		static BOOL InitPSDevice(CNativeDC * pDC, PrintView *pPrintView);
 		virtual BOOL RenderChar(WCHAR ch, Matrix* pMatrix);
 
 				BOOL PushClipRegion(KernelDC*, const DocRect& Rect);

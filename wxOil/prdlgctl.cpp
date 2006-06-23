@@ -105,13 +105,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prdlgctl.h"
 //#include "printdlg.h"
-#include "printprg.h"
+//#include "printprg.h"
 #include "princomp.h"
 #include "optsprin.h"
-#include <winspool.h>
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "printmsg.h"
-#include "camvw.h"
 #include "prnprefs.h"	// PrintPrefsDlg;;InvokeDialog
 #include "helpuser.h"
 #include "camelot.h"
@@ -122,14 +120,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 //#include "markn.h"
 #include "unicdman.h"
-#include "fonts.h"
+//#include "fonts.h"
 #include "printctl.h"
 #include "prnmks.h"
+#include "psdc.h"
 //#include "jason.h"		// Error messages
 //#include "resource.h"	// _R(IDS_OK)/CANCEL
 //#include "simon.h"		// _R(IDS_HELP)
 
-#include <dlgs.h>       // for standard control IDs for commdlg
 
 #ifdef _DEBUG
 #include "optsprin.h"
@@ -138,6 +136,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define Swap(a,b)       { (a)^=(b), (b)^=(a), (a)^=(b); }
 
+PORTNOTE("printing", "Disabled message map stuff")
+#ifndef EXCLUDE_FROM_XARALX
 //---------------------------------
 
 //	WEBSTER-ranbirr-12/11/96
@@ -157,9 +157,12 @@ END_MESSAGE_MAP()
 
 //---------------------------------
 
-IMPLEMENT_DYNAMIC(CCPrintDialog, CPrintDialog)
-CC_IMPLEMENT_DYNAMIC(PrintMsg,Msg)
 #endif //webster
+#endif
+
+IMPLEMENT_DYNAMIC_CLASS(CCPrintDialog, wxPrintDialog)
+CC_IMPLEMENT_DYNAMIC(PrintMsg,Msg)
+
 
 //---------------------------------
 // This is the new Win95-compatible DOCINFO structure that has two extra fields, lpszDatatype & fwType.
@@ -198,7 +201,7 @@ typedef NEW_DOCINFOA NEW_DOCINFO;
 #ifndef WEBSTER
 
 BOOL	CCPrintDialog::GotPrinterSettings	= FALSE;
-SIZEL 	CCPrintDialog::PrPaperSize;
+wxSize 	CCPrintDialog::PrPaperSize;
 BOOL  	CCPrintDialog::PrPortrait			= TRUE;
 INT32	CCPrintDialog::PrScale				= 100;
 BOOL	CCPrintDialog::PrMultiCopies 		= FALSE;
@@ -221,13 +224,14 @@ BOOL	CCPrintDialog::IgnorePrntData		= FALSE;
 CCPrintInfo*   CCPrintInfo::pCurrent			= NULL;	// Ptr to the last constructed CCPrintInfo
 #endif //webster
 
-char	CCPrintToFileDialog::FileName[FILENAMEBUFSIZE]	= {'\0'};
+#ifndef EXCLUDE_FROM_XARALX
+TCHAR	CCPrintToFileDialog::FileName[FILENAMEBUFSIZE]	= {_T('\0')};
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 CCPrintDialog* CCPrintDialog::pCurrentCCPrintDialog = NULL;
-CPrintDialog*  CCPrintDialog::pDlgSetup				= NULL;
+wxPrintDialog*  CCPrintDialog::pDlgSetup				= NULL;
 #endif //webster
-void FixFPControlRegister();
+#endif
 
 //---------------------------------
 
@@ -247,7 +251,8 @@ void FixFPControlRegister();
 #define IN_TO_MP(n) (MILLIPOINT((double(IN_MP_VAL)*n)+0.5))
 #define MM_TO_MP(n) (MILLIPOINT((double(MM_MP_VAL)*n)+0.5))
 
-#define DMPAPER_LISTEND (DMPAPER_LAST+1)
+//#define wxPAPER_LISTEND (wxPAPER_LAST+1)
+#define wxPAPER_LISTEND ((UINT32)(-1))
 
 struct PaperSizesType
 {
@@ -256,87 +261,87 @@ struct PaperSizesType
 	MILLIPOINT	Height;
 } pPaperSizes[] = 
 {
-	{ DMPAPER_LETTER, 		IN_TO_MP(8.5), 		IN_TO_MP(11)  	}, 	// Letter 8 1/2 x 11 in               
-	{ DMPAPER_LETTERSMALL,	IN_TO_MP(8.5), 		IN_TO_MP(11)  	},	// Letter Small 8 1/2 x 11 in         
-	{ DMPAPER_TABLOID,		IN_TO_MP(11),		IN_TO_MP(17)  	},	// Tabloid 11 x 17 in                 
-	{ DMPAPER_LEDGER,		IN_TO_MP(17),		IN_TO_MP(11)  	},	// Ledger 17 x 11 in                  
-	{ DMPAPER_LEGAL,		IN_TO_MP(8.5),		IN_TO_MP(14)  	},	// Legal 8 1/2 x 14 in                
-	{ DMPAPER_STATEMENT,	IN_TO_MP(5.5),		IN_TO_MP(8.5) 	},	// Statement 5 1/2 x 8 1/2 in         
-	{ DMPAPER_EXECUTIVE,	IN_TO_MP(7.25),		IN_TO_MP(10.5)	},	// Executive 7 1/4 x 10 1/2 in        
+	{ wxPAPER_LETTER, 		IN_TO_MP(8.5), 		IN_TO_MP(11)  	}, 	// Letter 8 1/2 x 11 in               
+	{ wxPAPER_LETTERSMALL,	IN_TO_MP(8.5), 		IN_TO_MP(11)  	},	// Letter Small 8 1/2 x 11 in         
+	{ wxPAPER_TABLOID,		IN_TO_MP(11),		IN_TO_MP(17)  	},	// Tabloid 11 x 17 in                 
+	{ wxPAPER_LEDGER,		IN_TO_MP(17),		IN_TO_MP(11)  	},	// Ledger 17 x 11 in                  
+	{ wxPAPER_LEGAL,		IN_TO_MP(8.5),		IN_TO_MP(14)  	},	// Legal 8 1/2 x 14 in                
+	{ wxPAPER_STATEMENT,	IN_TO_MP(5.5),		IN_TO_MP(8.5) 	},	// Statement 5 1/2 x 8 1/2 in         
+	{ wxPAPER_EXECUTIVE,	IN_TO_MP(7.25),		IN_TO_MP(10.5)	},	// Executive 7 1/4 x 10 1/2 in        
 
-	{ DMPAPER_A3,			MM_TO_MP(297),		MM_TO_MP(420)	},	// A3 297 x 420 mm                    
-	{ DMPAPER_A4, 			MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 210 x 297 mm                    
-	{ DMPAPER_A4SMALL,		MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 Small 210 x 297 mm              
-	{ DMPAPER_A5,			MM_TO_MP(148),		MM_TO_MP(210)	},	// A5 148 x 210 mm                    
-	{ DMPAPER_B4,			MM_TO_MP(250),		MM_TO_MP(354)	},	// B4 250 x 354                       
-	{ DMPAPER_B5,			MM_TO_MP(182),		MM_TO_MP(257)	},	// B5 182 x 257 mm                    
+	{ wxPAPER_A3,			MM_TO_MP(297),		MM_TO_MP(420)	},	// A3 297 x 420 mm                    
+	{ wxPAPER_A4, 			MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 210 x 297 mm                    
+	{ wxPAPER_A4SMALL,		MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 Small 210 x 297 mm              
+	{ wxPAPER_A5,			MM_TO_MP(148),		MM_TO_MP(210)	},	// A5 148 x 210 mm                    
+	{ wxPAPER_B4,			MM_TO_MP(250),		MM_TO_MP(354)	},	// B4 250 x 354                       
+	{ wxPAPER_B5,			MM_TO_MP(182),		MM_TO_MP(257)	},	// B5 182 x 257 mm                    
 
-	{ DMPAPER_FOLIO,		IN_TO_MP(8.5),		IN_TO_MP(13)	},	// Folio 8 1/2 x 13 in                
-	{ DMPAPER_QUARTO,		MM_TO_MP(215),		MM_TO_MP(275)	},	// Quarto 215 x 275 mm                
-	{ DMPAPER_10X14,		IN_TO_MP(10),		IN_TO_MP(14)	},	// 10x14 in                           
-	{ DMPAPER_11X17,		IN_TO_MP(11),		IN_TO_MP(17)	},	// 11x17 in                           
-	{ DMPAPER_NOTE,			IN_TO_MP(8.5),		IN_TO_MP(11)	},	// Note 8 1/2 x 11 in                 
+	{ wxPAPER_FOLIO,		IN_TO_MP(8.5),		IN_TO_MP(13)	},	// Folio 8 1/2 x 13 in                
+	{ wxPAPER_QUARTO,		MM_TO_MP(215),		MM_TO_MP(275)	},	// Quarto 215 x 275 mm                
+	{ wxPAPER_10X14,		IN_TO_MP(10),		IN_TO_MP(14)	},	// 10x14 in                           
+	{ wxPAPER_11X17,		IN_TO_MP(11),		IN_TO_MP(17)	},	// 11x17 in                           
+	{ wxPAPER_NOTE,			IN_TO_MP(8.5),		IN_TO_MP(11)	},	// Note 8 1/2 x 11 in                 
 
-	{ DMPAPER_ENV_9,		IN_TO_MP(3.875),	IN_TO_MP(8.875)	},	// Envelope #9 3 7/8 x 8 7/8 in
-	{ DMPAPER_ENV_10,		IN_TO_MP(4.125),	IN_TO_MP(9.5)	},	// Envelope #10 4 1/8 x 9 1/2 in        
-	{ DMPAPER_ENV_11,		IN_TO_MP(4.5),		IN_TO_MP(10.375)},	// Envelope #11 4 1/2 x 10 3/8 in       
-	{ DMPAPER_ENV_12,		IN_TO_MP(4.75),		IN_TO_MP(11)	},	// Envelope #12 4 3/4 x 11 in          
-	{ DMPAPER_ENV_14,		IN_TO_MP(5),		IN_TO_MP(11.5)	},	// Envelope #14 5 x 11 1/2 in           
+	{ wxPAPER_ENV_9,		IN_TO_MP(3.875),	IN_TO_MP(8.875)	},	// Envelope #9 3 7/8 x 8 7/8 in
+	{ wxPAPER_ENV_10,		IN_TO_MP(4.125),	IN_TO_MP(9.5)	},	// Envelope #10 4 1/8 x 9 1/2 in        
+	{ wxPAPER_ENV_11,		IN_TO_MP(4.5),		IN_TO_MP(10.375)},	// Envelope #11 4 1/2 x 10 3/8 in       
+	{ wxPAPER_ENV_12,		IN_TO_MP(4.75),		IN_TO_MP(11)	},	// Envelope #12 4 3/4 x 11 in          
+	{ wxPAPER_ENV_14,		IN_TO_MP(5),		IN_TO_MP(11.5)	},	// Envelope #14 5 x 11 1/2 in           
 
-	{ DMPAPER_CSHEET,		IN_TO_MP(17),		IN_TO_MP(22)	},	// C size sheet 17 x 22 in
-	{ DMPAPER_DSHEET,		IN_TO_MP(22),		IN_TO_MP(34)	},	// D size sheet 22 x 34 in
-	{ DMPAPER_ESHEET,		IN_TO_MP(34),		IN_TO_MP(44)	},	// E size sheet 34 x 44 in
+	{ wxPAPER_CSHEET,		IN_TO_MP(17),		IN_TO_MP(22)	},	// C size sheet 17 x 22 in
+	{ wxPAPER_DSHEET,		IN_TO_MP(22),		IN_TO_MP(34)	},	// D size sheet 22 x 34 in
+	{ wxPAPER_ESHEET,		IN_TO_MP(34),		IN_TO_MP(44)	},	// E size sheet 34 x 44 in
 
-	{ DMPAPER_ENV_DL,		MM_TO_MP(110),		MM_TO_MP(220)	},	// Envelope DL 110 x 220mm            
-	{ DMPAPER_ENV_C5,		MM_TO_MP(162),		MM_TO_MP(229)	},	// Envelope C5 162 x 229 mm           
-	{ DMPAPER_ENV_C3,		MM_TO_MP(324),		MM_TO_MP(458)	},	// Envelope C3  324 x 458 mm          
-	{ DMPAPER_ENV_C4,		MM_TO_MP(229),		MM_TO_MP(324)	},	// Envelope C4  229 x 324 mm          
-	{ DMPAPER_ENV_C6,		MM_TO_MP(114),		MM_TO_MP(162)	},	// Envelope C6  114 x 162 mm          
-	{ DMPAPER_ENV_C65,		MM_TO_MP(114),		MM_TO_MP(229)	},	// Envelope C65 114 x 229 mm          
+	{ wxPAPER_ENV_DL,		MM_TO_MP(110),		MM_TO_MP(220)	},	// Envelope DL 110 x 220mm            
+	{ wxPAPER_ENV_C5,		MM_TO_MP(162),		MM_TO_MP(229)	},	// Envelope C5 162 x 229 mm           
+	{ wxPAPER_ENV_C3,		MM_TO_MP(324),		MM_TO_MP(458)	},	// Envelope C3  324 x 458 mm          
+	{ wxPAPER_ENV_C4,		MM_TO_MP(229),		MM_TO_MP(324)	},	// Envelope C4  229 x 324 mm          
+	{ wxPAPER_ENV_C6,		MM_TO_MP(114),		MM_TO_MP(162)	},	// Envelope C6  114 x 162 mm          
+	{ wxPAPER_ENV_C65,		MM_TO_MP(114),		MM_TO_MP(229)	},	// Envelope C65 114 x 229 mm          
 
-	{ DMPAPER_ENV_B4,		MM_TO_MP(250),		MM_TO_MP(353)	},	// Envelope B4  250 x 353 mm          
-	{ DMPAPER_ENV_B5,		MM_TO_MP(176),		MM_TO_MP(250)	},	// Envelope B5  176 x 250 mm          
-	{ DMPAPER_ENV_B6,		MM_TO_MP(176),		MM_TO_MP(125)	},	// Envelope B6  176 x 125 mm          
-	{ DMPAPER_ENV_ITALY,	MM_TO_MP(110),		MM_TO_MP(230)	},	// Envelope 110 x 230 mm              
+	{ wxPAPER_ENV_B4,		MM_TO_MP(250),		MM_TO_MP(353)	},	// Envelope B4  250 x 353 mm          
+	{ wxPAPER_ENV_B5,		MM_TO_MP(176),		MM_TO_MP(250)	},	// Envelope B5  176 x 250 mm          
+	{ wxPAPER_ENV_B6,		MM_TO_MP(176),		MM_TO_MP(125)	},	// Envelope B6  176 x 125 mm          
+	{ wxPAPER_ENV_ITALY,	MM_TO_MP(110),		MM_TO_MP(230)	},	// Envelope 110 x 230 mm              
 
-	{ DMPAPER_ENV_MONARCH,	IN_TO_MP(3.875),	IN_TO_MP(7.5)	},	// Envelope Monarch 3.875 x 7.5 in    
-	{ DMPAPER_ENV_PERSONAL,	IN_TO_MP(3.625),	IN_TO_MP(6.5)	},	// 6 3/4 Envelope 3 5/8 x 6 1/2 in    
+	{ wxPAPER_ENV_MONARCH,	IN_TO_MP(3.875),	IN_TO_MP(7.5)	},	// Envelope Monarch 3.875 x 7.5 in    
+	{ wxPAPER_ENV_PERSONAL,	IN_TO_MP(3.625),	IN_TO_MP(6.5)	},	// 6 3/4 Envelope 3 5/8 x 6 1/2 in    
 
-	{ DMPAPER_FANFOLD_US,			IN_TO_MP(14.875),	IN_TO_MP(11)	},	// US Std Fanfold 14 7/8 x 11 in      
-	{ DMPAPER_FANFOLD_STD_GERMAN,	IN_TO_MP(8.5),		IN_TO_MP(12)	},	// German Std Fanfold 8 1/2 x 12 in   
-	{ DMPAPER_FANFOLD_LGL_GERMAN,	IN_TO_MP(8.5),		IN_TO_MP(13)	},	// German Legal Fanfold 8 1/2 x 13 in 
+	{ wxPAPER_FANFOLD_US,			IN_TO_MP(14.875),	IN_TO_MP(11)	},	// US Std Fanfold 14 7/8 x 11 in      
+	{ wxPAPER_FANFOLD_STD_GERMAN,	IN_TO_MP(8.5),		IN_TO_MP(12)	},	// German Std Fanfold 8 1/2 x 12 in   
+	{ wxPAPER_FANFOLD_LGL_GERMAN,	IN_TO_MP(8.5),		IN_TO_MP(13)	},	// German Legal Fanfold 8 1/2 x 13 in 
 
 #if(WINVER >= 0x0400)
-	{ DMPAPER_ISO_B4,				MM_TO_MP(250),		MM_TO_MP(353)	},	// B4 (ISO) 250 x 353 mm
-	{ DMPAPER_JAPANESE_POSTCARD,	MM_TO_MP(100),		MM_TO_MP(148)	},	// Japanese Postcard 100 x 148 mm     
-	{ DMPAPER_9X11,					IN_TO_MP(9),		IN_TO_MP(11)	},	// 9 x 11 in                          
-	{ DMPAPER_10X11,				IN_TO_MP(10),		IN_TO_MP(11)	},	// 10 x 11 in                         
-	{ DMPAPER_15X11,				IN_TO_MP(15),		IN_TO_MP(11)	},	// 15 x 11 in                         
-	{ DMPAPER_ENV_INVITE,			MM_TO_MP(220),		MM_TO_MP(220)	},	// Envelope Invite 220 x 220 mm       
-//	{ DMPAPER_RESERVED_48,			MM_TO_MP(250),		MM_TO_MP(353)	},	// RESERVED--DO NOT USE               
-//	{ DMPAPER_RESERVED_49,			MM_TO_MP(250),		MM_TO_MP(353)	},	// RESERVED--DO NOT USE               
-	{ DMPAPER_LETTER_EXTRA,			IN_TO_MP(9.5),		IN_TO_MP(12)	},	// Letter Extra 9 \275 x 12 in        
-	{ DMPAPER_LEGAL_EXTRA,			IN_TO_MP(9.5),		IN_TO_MP(15)	},	// Legal Extra 9 \275 x 15 in         
-	{ DMPAPER_TABLOID_EXTRA,		IN_TO_MP(11.69),	IN_TO_MP(18)	},	// Tabloid Extra 11.69 x 18 in        
-	{ DMPAPER_A4_EXTRA,				IN_TO_MP(9.27),		IN_TO_MP(12.69)	},	// A4 Extra 9.27 x 12.69 in           
-	{ DMPAPER_LETTER_TRANSVERSE,	IN_TO_MP(8.5),		IN_TO_MP(11)	},	// Letter Transverse 8 \275 x 11 in   
-	{ DMPAPER_A4_TRANSVERSE,		MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 Transverse 210 x 297 mm         
-	{ DMPAPER_LETTER_EXTRA_TRANSVERSE,IN_TO_MP(9.5),	IN_TO_MP(12)	},	// Letter Extra Transverse 9\275 x 12 in 
-	{ DMPAPER_A_PLUS,				MM_TO_MP(227),		MM_TO_MP(356)	},	// SuperA/SuperA/A4 227 x 356 mm      
-	{ DMPAPER_B_PLUS,				MM_TO_MP(305),		MM_TO_MP(487)	},	// SuperB/SuperB/A3 305 x 487 mm      
-	{ DMPAPER_LETTER_PLUS,			IN_TO_MP(8.5),		IN_TO_MP(12.69)	},	// Letter Plus 8.5 x 12.69 in         
-	{ DMPAPER_A4_PLUS,				MM_TO_MP(210),		MM_TO_MP(330)	},	// A4 Plus 210 x 330 mm               
-	{ DMPAPER_A5_TRANSVERSE,		MM_TO_MP(148),		MM_TO_MP(210)	},	// A5 Transverse 148 x 210 mm         
-	{ DMPAPER_B5_TRANSVERSE,		MM_TO_MP(182),		MM_TO_MP(257)	},	// B5 (JIS) Transverse 182 x 257 mm   
-	{ DMPAPER_A3_EXTRA,				MM_TO_MP(322),		MM_TO_MP(445)	},	// A3 Extra 322 x 445 mm              
-	{ DMPAPER_A5_EXTRA,				MM_TO_MP(174),		MM_TO_MP(235)	},	// A5 Extra 174 x 235 mm              
-	{ DMPAPER_B5_EXTRA,				MM_TO_MP(201),		MM_TO_MP(276)	},	// B5 (ISO) Extra 201 x 276 mm        
-	{ DMPAPER_A2,					MM_TO_MP(420),		MM_TO_MP(594)	},	// A2 420 x 594 mm                    
-	{ DMPAPER_A3_TRANSVERSE,		MM_TO_MP(297),		MM_TO_MP(420)	},	// A3 Transverse 297 x 420 mm         
-	{ DMPAPER_A3_EXTRA_TRANSVERSE,	MM_TO_MP(322),		MM_TO_MP(445)	},	// A3 Extra Transverse 322 x 445 mm   
+	{ wxPAPER_ISO_B4,				MM_TO_MP(250),		MM_TO_MP(353)	},	// B4 (ISO) 250 x 353 mm
+	{ wxPAPER_JAPANESE_POSTCARD,	MM_TO_MP(100),		MM_TO_MP(148)	},	// Japanese Postcard 100 x 148 mm     
+	{ wxPAPER_9X11,					IN_TO_MP(9),		IN_TO_MP(11)	},	// 9 x 11 in                          
+	{ wxPAPER_10X11,				IN_TO_MP(10),		IN_TO_MP(11)	},	// 10 x 11 in                         
+	{ wxPAPER_15X11,				IN_TO_MP(15),		IN_TO_MP(11)	},	// 15 x 11 in                         
+	{ wxPAPER_ENV_INVITE,			MM_TO_MP(220),		MM_TO_MP(220)	},	// Envelope Invite 220 x 220 mm       
+//	{ wxPAPER_RESERVED_48,			MM_TO_MP(250),		MM_TO_MP(353)	},	// RESERVED--DO NOT USE               
+//	{ wxPAPER_RESERVED_49,			MM_TO_MP(250),		MM_TO_MP(353)	},	// RESERVED--DO NOT USE               
+	{ wxPAPER_LETTER_EXTRA,			IN_TO_MP(9.5),		IN_TO_MP(12)	},	// Letter Extra 9 \275 x 12 in        
+	{ wxPAPER_LEGAL_EXTRA,			IN_TO_MP(9.5),		IN_TO_MP(15)	},	// Legal Extra 9 \275 x 15 in         
+	{ wxPAPER_TABLOID_EXTRA,		IN_TO_MP(11.69),	IN_TO_MP(18)	},	// Tabloid Extra 11.69 x 18 in        
+	{ wxPAPER_A4_EXTRA,				IN_TO_MP(9.27),		IN_TO_MP(12.69)	},	// A4 Extra 9.27 x 12.69 in           
+	{ wxPAPER_LETTER_TRANSVERSE,	IN_TO_MP(8.5),		IN_TO_MP(11)	},	// Letter Transverse 8 \275 x 11 in   
+	{ wxPAPER_A4_TRANSVERSE,		MM_TO_MP(210),		MM_TO_MP(297)	},	// A4 Transverse 210 x 297 mm         
+	{ wxPAPER_LETTER_EXTRA_TRANSVERSE,IN_TO_MP(9.5),	IN_TO_MP(12)	},	// Letter Extra Transverse 9\275 x 12 in 
+	{ wxPAPER_A_PLUS,				MM_TO_MP(227),		MM_TO_MP(356)	},	// SuperA/SuperA/A4 227 x 356 mm      
+	{ wxPAPER_B_PLUS,				MM_TO_MP(305),		MM_TO_MP(487)	},	// SuperB/SuperB/A3 305 x 487 mm      
+	{ wxPAPER_LETTER_PLUS,			IN_TO_MP(8.5),		IN_TO_MP(12.69)	},	// Letter Plus 8.5 x 12.69 in         
+	{ wxPAPER_A4_PLUS,				MM_TO_MP(210),		MM_TO_MP(330)	},	// A4 Plus 210 x 330 mm               
+	{ wxPAPER_A5_TRANSVERSE,		MM_TO_MP(148),		MM_TO_MP(210)	},	// A5 Transverse 148 x 210 mm         
+	{ wxPAPER_B5_TRANSVERSE,		MM_TO_MP(182),		MM_TO_MP(257)	},	// B5 (JIS) Transverse 182 x 257 mm   
+	{ wxPAPER_A3_EXTRA,				MM_TO_MP(322),		MM_TO_MP(445)	},	// A3 Extra 322 x 445 mm              
+	{ wxPAPER_A5_EXTRA,				MM_TO_MP(174),		MM_TO_MP(235)	},	// A5 Extra 174 x 235 mm              
+	{ wxPAPER_B5_EXTRA,				MM_TO_MP(201),		MM_TO_MP(276)	},	// B5 (ISO) Extra 201 x 276 mm        
+	{ wxPAPER_A2,					MM_TO_MP(420),		MM_TO_MP(594)	},	// A2 420 x 594 mm                    
+	{ wxPAPER_A3_TRANSVERSE,		MM_TO_MP(297),		MM_TO_MP(420)	},	// A3 Transverse 297 x 420 mm         
+	{ wxPAPER_A3_EXTRA_TRANSVERSE,	MM_TO_MP(322),		MM_TO_MP(445)	},	// A3 Extra Transverse 322 x 445 mm   
 #endif 
 
-	{ DMPAPER_LISTEND,0,0 }
+	{ wxPAPER_LISTEND,0,0 }
 };
 
 //---------------------------------
@@ -345,6 +350,7 @@ void Beep();
 
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
+
 
 /********************************************************************************************
 
@@ -359,12 +365,13 @@ void Beep();
 
 ********************************************************************************************/
 
-CCPrintDialog::CCPrintDialog(Document* pDoc,BOOL PrintSetUpOnly) : CPrintDialog(PrintSetUpOnly)
+CCPrintDialog::CCPrintDialog(CCPrintInfo * pDialogData, Document* pDoc,BOOL PrintSetUpOnly) : wxPrintDialog(NULL, pDialogData)
 {
 	pDocument = pDoc;
 	PrintPrefsOpen 		= FALSE;
 	PrintPrefsChanged 	= FALSE;
 }
+
 
 /********************************************************************************************
 
@@ -386,6 +393,8 @@ CCPrintDialog::CCPrintDialog(Document* pDoc,BOOL PrintSetUpOnly) : CPrintDialog(
 
 CCPrintDialog::~CCPrintDialog()
 {
+PORTNOTE("printing", "removed m_pd.hDC reference")
+#ifndef EXCLUDE_FROM_XARALX
 	if (m_pd.hDC != NULL)
 	{
 		::DeleteDC(m_pd.hDC);
@@ -397,6 +406,7 @@ CCPrintDialog::~CCPrintDialog()
 	// handles into CWinApp::m_hDevNames and CWinApp::m_hDevMode member vars.
 	// Freeing the handles here could make the app's handles invalid, hence making it impossible
 	// to print anything.
+#endif
 }
 
 /********************************************************************************************
@@ -429,7 +439,7 @@ PrintControl* CCPrintDialog::GetPrintControl()
 	return pPrCtrl;
 }
 
-
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 >	static UINT32 CALLBACK CCPrintDialog::PrintHookProc(HWND hwnd, UINT32 nMsg,
@@ -1157,8 +1167,8 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		// The dmPaperSize field has been initialised, so look up the paper dimensions
 		// if this value is not 0
 		// Note: I discovered a page in MSDN on 7/2/96 that states that a paper size value
-		// of DMPAPER_USER means "get size from dmPaperWidth & dmPaperLength"
-		if (pDevMode->dmPaperSize != 0 && pDevMode->dmPaperSize != DMPAPER_USER)
+		// of wxPAPER_USER means "get size from dmPaperWidth & dmPaperLength"
+		if (pDevMode->dmPaperSize != 0 && pDevMode->dmPaperSize != wxPAPER_USER)
 			InitPaperSize = LookUpPaperSize(pDevMode->dmPaperSize,&PrPaperSize);
 	}
 
@@ -1185,7 +1195,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		// OK, we still haven't got the paper size yet AND the width and length fields have been
 		// initialised
 
-		// Paper size is defined in dmPaperWidth and dmPaperLength when dmPaperSize == 0 OR dmPaperSize == DMPAPER_USER
+		// Paper size is defined in dmPaperWidth and dmPaperLength when dmPaperSize == 0 OR dmPaperSize == wxPAPER_USER
 		// Each dimension is defined in tenths of a millimeter
 		PrPaperSize.cx = MM_TO_MP(double(pDevMode->dmPaperWidth)/10);
 		PrPaperSize.cy = MM_TO_MP(double(pDevMode->dmPaperLength)/10);
@@ -1197,7 +1207,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		// If we still haven't managed to get the paper size, then error in debug builds
 		// and set the paper size to a sensible default
 		ERROR3("Unable to extract paper size from given DEVMODE");
-		LookUpPaperSize(DMPAPER_A4,&PrPaperSize);
+		LookUpPaperSize(wxPAPER_A4,&PrPaperSize);
 	}
 
 	// ---------------------------------
@@ -1484,11 +1494,11 @@ BOOL CCPrintDialog::IsPostscript()
 
 /********************************************************************************************
 
->	static BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,SIZEL* pPaperSize)
+>	static BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,wxSize* pPaperSize)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	6/4/95
-	Inputs:		PaperSizeID = ID of the paper, i.e. DMPAPER_?
+	Inputs:		PaperSizeID = ID of the paper, i.e. wxPAPER_?
 				pPaperSize	= ptr to place to put dimensions in (defined in MILLIPOINTS)
 	Returns:	TRUE means found, FALSE otherwise
 	Purpose:	This looks up the paper size in our table of standard paper sizes, and puts the dimensions
@@ -1500,11 +1510,11 @@ BOOL CCPrintDialog::IsPostscript()
 
 ********************************************************************************************/
 
-BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,SIZEL* pPaperSize)
+BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,wxSize* pPaperSize)
 {
 	ERROR2IF(pPaperSize == NULL,FALSE,"pPaperSize is NULL");
 
-	for(INT32 i=0;pPaperSizes[i].ID != DMPAPER_LISTEND;i++)
+	for(INT32 i=0;pPaperSizes[i].ID != wxPAPER_LISTEND;i++)
 	{
 		if (pPaperSizes[i].ID == PaperSizeID)
 		{
@@ -1521,11 +1531,11 @@ BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,SIZEL* pPaperSize)
 
 /********************************************************************************************
 
->	static BOOL CCPrintDialog::GetPaperSize(SIZEL* pPaperSize, BOOL RedrawPrintBorders = TRUE)
+>	static BOOL CCPrintDialog::GetPaperSize(wxSize* pPaperSize, BOOL RedrawPrintBorders = TRUE)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/4/95
-	Inputs:		pPaperSize = ptr to a SIZEL struct to place the size of the paper into
+	Inputs:		pPaperSize = ptr to a wxSize struct to place the size of the paper into
 				RedrawPrintBorders	- True (Default) to force a redraw of docs
 	Returns:	TRUE means OK, FALSE otherwise
 	Purpose:	Retrieves the physical size of the printer's paper, in MILLIPOINTS
@@ -1545,7 +1555,7 @@ BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,SIZEL* pPaperSize)
 
 ********************************************************************************************/
 
-BOOL CCPrintDialog::GetPaperSize(SIZEL* pPaperSize, BOOL RedrawPrintBorders)
+BOOL CCPrintDialog::GetPaperSize(wxSize* pPaperSize, BOOL RedrawPrintBorders)
 {
 	ERROR2IF(pPaperSize == NULL,FALSE,"NULL paper size param");
 
@@ -2343,6 +2353,8 @@ DEVMODE* CCPrintDialog::GetSystemDevMode(HWND hWnd,LPCTSTR pDriverName,LPCTSTR p
 	return pDevMode;
 }
 
+#endif
+
 //-----------------------------------------------------------------------------------------
 
 /********************************************************************************************
@@ -2365,6 +2377,8 @@ CCPrintInfo::CCPrintInfo()
 	pOriginalPD = NULL;
 	Initialised = FALSE;
 	pDocument	= NULL;
+	pCCDC = NULL;
+	m_bContinuePrinting = TRUE;
 }
 
 
@@ -2396,7 +2410,16 @@ CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 	pPrCtrl		= NULL;
 	pPrgDlg		= NULL;
 	pCCamView	= pCCamVw;
+	pCCDC 		= NULL;
+	m_bContinuePrinting = TRUE;
 
+	EnableHelp(TRUE);
+	EnablePageNumbers(FALSE); // Make this TRUE to enable multiple pages
+	EnablePrintToFile(TRUE);
+	EnableSelection(TRUE); // we should test here whether or not there is a selection
+
+PORTNOTE("printing", "Disabled creation of a print dialog inside a CCPrintInfo structure")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pDocument != NULL && pCCamView != NULL)
 	{
 		pOurPD = new CCPrintDialog(pDocument);
@@ -2410,6 +2433,9 @@ CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 		else
 		{	ERROR3("Unable to create a CCPrintDialog object"); }
 	}
+#else
+	Initialised = TRUE;
+#endif
 
 	ERROR3IF(pDocument == NULL,"CCPrintInfo has NULL document ptr");
 	ERROR3IF(pCCamView == NULL,"CCPrintInfo has NULL CCamView ptr");
@@ -2441,19 +2467,124 @@ CCPrintInfo::~CCPrintInfo()
 
 	if (Initialised)
 	{
+PORTNOTE("printing", "Disabled deletion of a print dialog inside printinfo structure")
+#ifndef EXCLUDE_FROM_XARALX
 		// restore base classes original CPrintDialog ptr
 		m_pPD = pOriginalPD;
+#endif
 
 		// Delete our CCPrintDialog
 		if (pOurPD != NULL)
 			delete pOurPD;
 
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 		// Delete our print progress dialog
 		if (pPrgDlg != NULL)
 			delete pPrgDlg;
+#endif
+	}
+
+	if (pCCDC)
+	{
+		delete pCCDC;
+		pCCDC=NULL;
 	}
 
 	CCPrintInfo::pCurrent = NULL;
+}
+
+
+/********************************************************************************************
+
+>	CNativeDC * CCPrintInfo::GetDC() const
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	22/6/2006
+	Inputs:		-
+	Returns:	The CNativeDC
+	Purpose:	Utility function to get to the underlying DC
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+CNativeDC * CCPrintInfo::GetDC() const
+{
+	return pCCDC?pCCDC->GetDC():NULL;
+}
+
+/********************************************************************************************
+
+>	BOOL CCPrintInfo::OnPreparePrinting()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	22/6/2006
+	Inputs:		-
+	Returns:	TRUE to print, FALSE to not print
+	Purpose:	Brings up a print dialog
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL CCPrintInfo::OnPreparePrinting()
+{
+	// Zap any existing print dialog
+	if (pOurPD)
+	{
+		delete pOurPD;
+		pOurPD = NULL;
+	}
+
+	pOurPD = new CCPrintDialog(this, pDocument);
+	if (!pOurPD)
+	{
+		return FALSE;
+	}
+	
+	// Get rid of any existing CCDC
+	if (!pCCDC)
+		delete pCCDC;
+
+	pCCDC = NULL;
+
+	ResourceID ret = pOurPD->ShowModal();
+	if ( (ret == wxID_CANCEL) || !pOurPD->GetPrintDialogData().Ok())
+	{
+		delete pOurPD;
+		pOurPD = NULL;
+		return FALSE;
+	}
+
+	// They pressed print
+	wxDC * dc = pOurPD->GetPrintDC(); // we now own the DC.
+	
+	// Overwrite our own settings
+	*((wxPrintDialogData *)this)=pOurPD->GetPrintDialogData();
+	pCCDC = NULL;
+
+	if ((!dc) || !(dc->IsKindOf(CLASSINFO(wxPostScriptDC))) )
+	{
+		if (dc)
+			delete dc;
+		delete pOurPD;
+		pOurPD = NULL;
+		ERROR2(FALSE, "CCPrintInfo::OnPreparePrinting() got a non-Postscript DC back. Please recompile without --with-libgnomeprint for the time being");
+	}
+
+	pCCDC = new PSPrintDC(dc);
+	if (!pCCDC)
+	{
+		delete dc;
+		delete pOurPD;
+		pOurPD = NULL;
+		return FALSE;
+	}
+
+	pCCDC->SetDC(dc, TRUE); // now deleting the CCDC will delete the DC too
+
+	return TRUE;
 }
 
 
@@ -2528,6 +2659,8 @@ BOOL CCPrintInfo::StartPrinting()
 
 	ERROR3IF(pPrgDlg != NULL,"StartPrinting() called with non-NULL pPrgDlg. Did you call EndPrinting() last time?");
 
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	ControlHelper::InformModalDialogOpened();
 
 	// Create and initialise the print progress dialog
@@ -2545,7 +2678,7 @@ BOOL CCPrintInfo::StartPrinting()
 	pPrgDlg->SetSliderPos(0);
 
 	pPrgDlg->Show();
-
+#endif
 
 	return TRUE;
 }
@@ -2579,6 +2712,8 @@ BOOL CCPrintInfo::EndPrinting()
 	if (pMarksMan)
 		pMarksMan->EndPrinting();
 
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	// now destroy the print dialogue
 	if (pPrgDlg != NULL)
 	{
@@ -2588,6 +2723,7 @@ BOOL CCPrintInfo::EndPrinting()
 	}		
 
 	ControlHelper::InformModalDialogClosed();
+#endif
 
 	return (ok);
 }
@@ -2715,10 +2851,14 @@ BOOL CCPrintInfo::GetNextPatch(PrintPatchInfo* pPatchInfo)
 			}
 		}
 
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 		// And set the page, plate, and tile numbers
 		pPrgDlg->SetPageNumber(	pPatchInfo->PaperNumber, pPatchInfo->MaxPaperNumber,
 								CurrentPlate, MaxPlates, (TCHAR *) PlateName,
 								pPatchInfo->PatchNumber, pPatchInfo->MaxPatchNumber);
+#endif
+
 	}
 
 	return ok;
@@ -2799,8 +2939,11 @@ void CCPrintInfo::EndPlatePrinting(PrintView *pPrintView)
 
 void CCPrintInfo::SetSliderSubRangeMax(INT32 Max)
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 		pPrgDlg->SetSliderSubRangeMax(Max);
+#endif
 }
 
 /********************************************************************************************
@@ -2826,8 +2969,11 @@ void CCPrintInfo::SetSliderSubRangeMax(INT32 Max)
 
 void CCPrintInfo::SetSliderSubRangePos(INT32 Pos)
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 		pPrgDlg->SetSliderSubRangePos(Pos);
+#endif
 }
 
 /********************************************************************************************
@@ -2849,12 +2995,15 @@ void CCPrintInfo::SetSliderSubRangePos(INT32 Pos)
 
 void CCPrintInfo::SetAnalysing()
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 	{
 		pPrgDlg->SetAnalysing();
 		if (pDocument != NULL)
 			pPrgDlg->SetDocName(pDocument->GetTitle());
 	}
+#endif
 }
 
 /********************************************************************************************
@@ -2875,12 +3024,15 @@ void CCPrintInfo::SetAnalysing()
 
 void CCPrintInfo::SetPrinting()
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 	{
 		pPrgDlg->SetPrinting();
 		if (pDocument != NULL)
 			pPrgDlg->SetDocName(pDocument->GetTitle());
 	}
+#endif
 }
 
 /********************************************************************************************
@@ -2899,9 +3051,14 @@ void CCPrintInfo::SetPrinting()
 
 INT32 CCPrintInfo::SetAbortProc(CDC* pCDC)
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pCDC == NULL,SP_ERROR,"Given NULL CDC ptr");
 
 	return (pCDC->SetAbortProc(PrintProgressDlg::AbortProc));
+#else
+	return 0;
+#endif
 }
 
 /********************************************************************************************
@@ -2924,7 +3081,12 @@ INT32 CCPrintInfo::SetAbortProc(CDC* pCDC)
 
 BOOL CCPrintInfo::Abort()
 {
+PORTNOTE("printing", "Disabled print progress dialog")
+#ifndef EXCLUDE_FROM_XARALX
 	return (!PrintProgressDlg::AbortProc(0,0));
+#else
+	return FALSE;
+#endif
 }
 
 /********************************************************************************************
@@ -2962,23 +3124,10 @@ BOOL CCPrintInfo::SetUpDocInfo(DOCINFO** ppDocInfo)
 	{
 		// Zero all struct members
 		memset(pNewDocInfo,0,sizeof(NEW_DOCINFO));
-
-		// Are we in Win95?
-		if (IsWindows95())	//IsWin32c())
-		{
-			// Win95, so make this look like the new DOCINFO struct by making cbSize the size of
-			// the new struct.
-			// Also set fwType to be DI_APPBANDING.
-			pNewDocInfo->cbSize = sizeof(NEW_DOCINFO);
-			pNewDocInfo->fwType = DI_APPBANDING;
-		}
-		else
-			pNewDocInfo->cbSize = sizeof(DOCINFO);		// Make it Win3.1 & WinNT compatible
+		pNewDocInfo->cbSize = sizeof(NEW_DOCINFO);
 
 		// set up document title
 		DocTitle = pDocument->GetTitle();
-		if (DocTitle.GetLength() > 31)
-			DocTitle.ReleaseBuffer(31);
 
 		pNewDocInfo->lpszDocName = DocTitle;
 		pNewDocInfo->lpszOutput = NULL;
@@ -2991,6 +3140,8 @@ BOOL CCPrintInfo::SetUpDocInfo(DOCINFO** ppDocInfo)
 
 		ERROR3IF(pPrCtrl == NULL,"Unable to get ptr to the PrintControl object");
 
+PORTNOTE("printing", "Disabled print to file")
+#ifndef EXCLUDE_FROM_XARALX
 		if (pPrCtrl != NULL && pPrCtrl->GetPrintToFile())
 		{
 			// Keep Control Helper system informed
@@ -3007,6 +3158,7 @@ BOOL CCPrintInfo::SetUpDocInfo(DOCINFO** ppDocInfo)
 			// Keep Control Helper system informed
 			ControlHelper::InformModalDialogClosed();
 		}
+#endif
 	}
 
 	if (!ok && pNewDocInfo != NULL)
@@ -3025,6 +3177,9 @@ BOOL CCPrintInfo::SetUpDocInfo(DOCINFO** ppDocInfo)
 //-----------------------------------------------------------------------------------------
 
 #endif //webster
+
+PORTNOTE("printing", "Disabled CCPrintToFileDialog")
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -3140,4 +3295,4 @@ LPSTR CCPrintToFileDialog::GetFullPathNamePtr()
 	return FileName;
 }
 
-
+#endif

@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prncamvw.h"
 #include "vstate.h"
-
+#include "osrndrgn.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -151,8 +151,11 @@ PrintView::PrintView(Document *pOwnerDoc)
 
 	// BODGE ALERT!!! Do this properly sometime.
 	pVState = new ViewState;
+PORTNOTE("printing", "removed broken memory handling")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pVState == NULL) 
 		AfxThrowMemoryException();
+#endif
 
 	// Connect this view state to this view
 	pVState->pView = this;
@@ -213,7 +216,7 @@ PrintView::~PrintView()
 
 ********************************************************************************************/
 
-CDC *PrintView::GetRenderDC()
+CNativeDC *PrintView::GetRenderDC()
 {
 	return PrintDC;
 }
@@ -546,7 +549,7 @@ DocRect PrintView::GetDocViewRect(Spread* pSpread)
 
 ********************************************************************************************/
 
-void PrintView::AttachToDC(CDC *pDC)
+void PrintView::AttachToDC(CNativeDC *pDC)
 {
 	// Use this DC.
 	PrintDC = pDC;
@@ -555,8 +558,8 @@ void PrintView::AttachToDC(CDC *pDC)
 	// get and remember the pixel size (used by PrintView::SetPixelSize()).
 	if (PrintDC != NULL)
 	{
-		INT32 pixwidth = pDC->GetDeviceCaps(LOGPIXELSX);
-		INT32 pixheight = pDC->GetDeviceCaps(LOGPIXELSY);
+		INT32 pixwidth  = OSRenderRegion::GetFixedDCPPI(*pDC).GetWidth();
+		INT32 pixheight = OSRenderRegion::GetFixedDCPPI(*pDC).GetHeight();;
 		
 		// Set our own idea of pixel size.
 		PixelWidth  = FIXED16(72000.0 / pixwidth);
@@ -583,7 +586,7 @@ void PrintView::AttachToDC(CDC *pDC)
 
 ********************************************************************************************/
 
-void PrintView::MakeNewRenderRegion(Spread* pSpread, DocRect ClipRect, CDC* pDevContext, RenderType rType, BOOL PaintPaper, Node* pInvalidNode)
+void PrintView::MakeNewRenderRegion(Spread* pSpread, DocRect ClipRect, CNativeDC* pDevContext, RenderType rType, BOOL PaintPaper, Node* pInvalidNode)
 {
 	// Construct the transformation matrix for the spread.
 	Matrix RenderMatrix = ConstructRenderingMatrix(pSpread);
@@ -738,7 +741,7 @@ Matrix PrintView::ConstructRenderingMatrix(Spread *pSpread)
 
 ********************************************************************************************/
 
-void PrintView::OnDraw(CDC* pDevContext, OilRect OilClipRect)
+void PrintView::OnDraw(CNativeDC* pDevContext, OilRect OilClipRect)
 {
 	if (CCamApp::IsDisabled())
 		return;						     	// If the system is disabled, ignore

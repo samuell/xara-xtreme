@@ -137,6 +137,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // so we can runtime-check it
 
 CC_IMPLEMENT_DYNAMIC( CCDC, ListItem )
+CC_IMPLEMENT_DYNAMIC( CCPaintDC, CCDC )
+CC_IMPLEMENT_DYNAMIC( CCClientDC, CCDC )
+CC_IMPLEMENT_DYNAMIC( CCDummyDC, CCDC )
 
 List CCDC::s_DCList;
 
@@ -186,8 +189,9 @@ CCDC::CCDC( CNativeDC *pDC, RenderType rType )
 {
 	lpRgnData = NULL;
 	Type = rType;
-	m_pDC = pDC;
+	m_pDC=NULL;
 	m_bDeleteDC = FALSE;
+	SetDC(pDC, FALSE); // previously m_pDC = pDC;
 }
 
 /*********************************************************************************************

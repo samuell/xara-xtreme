@@ -125,13 +125,13 @@ class PrintPSRenderRegion;
 class PassThruBuffer
 {
 public:
-	short nCount;
-	char  Data[MAX_PSBUF + 1];
+	INT32 nCount;
+	TCHAR  Data[MAX_PSBUF + 1];
+	char   CharData[MAX_PSBUF+1];
 };
 
 // Used for rendering text via GDI
 // (It is a simple cache system).
-class CFont;
 class PSDCFontInfo
 {
 public:
@@ -144,8 +144,8 @@ public:
 	MILLIPOINT Width;
 	MILLIPOINT Height;
 	ANGLE Rotation;
-	CFont *pRenderFont;
-	CFont *pOldFont;
+	wxFont * pRenderFont;
+	wxFont * pOldFont;
 };
 
 /********************************************************************************************
@@ -161,8 +161,9 @@ public:
 
 class PSPrintDC : public KernelDC
 {
+	CC_DECLARE_DYNAMIC(PSPrintDC)
 public:
-	PSPrintDC(CDC *pDC);
+	PSPrintDC(CNativeDC *pDC);
 	~PSPrintDC();
 
 	// Functions to do the actual output to the PostScript printer.
@@ -201,12 +202,11 @@ public:
 protected:
 
 	BOOL MakeRoomInBuffer(INT32);
-
+	void WritePSchar(char * pBuf, INT32 nBytes);
+	void WritePSTCHAR(TCHAR * pBuf, INT32 nBytes);
+	
 	// Used for pending output.
 	PassThruBuffer Buffer;
-
-	// Escape code for passing data through depends on platform.
-	WORD PassThruEscape;
 
 	// The transforms to use when outputting user space values.
 	// The matrix is used for co-ordinates; the FIXED16 is used to convert distances

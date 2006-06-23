@@ -221,8 +221,6 @@ View::View()
 
 View::~View()
 {
-	DoneWithDC();
-	
 	if (this == Current)
 		SetNoCurrent();
 

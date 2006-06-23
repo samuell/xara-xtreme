@@ -132,7 +132,7 @@ enum MouseOverRulerHit
 	{ ((ViewClass*)m_pView)->Handler( event ); }
 
 /*******************************************************************************
->	class CCamView : public CView
+>	class CCamView : public wxView
 
 	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com> H
 	Created:	01/07/05
@@ -204,9 +204,9 @@ public:
 	void GetClientSize(/* TYPENOTE: Correct */ int * width, /*TYPENOTE: Correct */ int * height) const;
 	
 	virtual void OnDraw( wxDC *pDc );
-PORTNOTE("print","Removed CPrintInfo usage")
+PORTNOTE("printing", "Disabled CCamView::OnPreparePrinting")
 #ifndef EXCLUDE_FROM_XARALX
-	virtual BOOL OnPreparePrinting( CPrintInfo *pInfo );
+	virtual BOOL OnPreparePrinting( CCPrintInfo *pInfo );
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

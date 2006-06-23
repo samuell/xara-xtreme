@@ -533,7 +533,7 @@ void PrintSetupAction()
 {               
 PORTNOTETRACE("other", "PrintSetupAction does nothing");
 #if !defined(EXCLUDE_FROM_XARALX)
-	((CCamApp*) AfxGetApp())->OnFilePrintSetup();
+	((CCamApp*) AfxGetApp()).OnFilePrintSetup();
 #endif
 }
 #endif //webster
@@ -565,30 +565,10 @@ Technical Notes:
 #ifndef WEBSTER
 void PrintAction() 
 {               
-#if !defined(STANDALONE) && !defined(EXCLUDE_FROM_XARALX)
-/*
- 	((CCamView *)											
- 		(((CMDIFrameWnd *)                                      
- 			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
- 					)->GetActiveView()                  		//Get Active Document
- 						)->OnFilePrint();                   		//Print Active Document
-*/
-
-	CWinApp* pApp = AfxGetApp();
-	if (pApp != NULL)
-	{
-		CMDIFrameWnd* pWin = (CMDIFrameWnd*) (pApp->m_pMainWnd);
-		if (pWin != NULL)
-		{
-			CMDIChildWnd* pChildWin = pWin->MDIGetActive();
-			if (pChildWin != NULL)
-			{
-				CCamView* pCCamView = (CCamView*) (pChildWin->GetActiveView());
-				if (pCCamView != NULL)
-					pCCamView->OnFilePrint();
-			}
-		}
-	}
+#if !defined(STANDALONE)
+	wxView * pView = AfxGetApp().GetDocumentManager()->GetCurrentView();
+	if (pView && pView->IsKindOf(CLASSINFO(CCamView)))
+		((CCamView*)pView)->OnFilePrint();
 
 #endif
 }
@@ -622,14 +602,9 @@ Technical Notes:
 
 void PrintPreviewAction() 
 {               
-PORTNOTETRACE("other", "PrintPreviewAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
- 	((CCamView *)											
- 		(((CMDIFrameWnd *)                                      
- 			((AfxGetApp())->m_pMainWnd))->MDIGetActive()   	//Get Active Child Window
- 					)->GetActiveView()                  		//Get Active Document
- 						)->OnFilePrintPreview();                   	//Print Preview Doc
-#endif
+	wxView * pView = AfxGetApp().GetDocumentManager()->GetCurrentView();
+	if (pView && pView->IsKindOf(CLASSINFO(CCamView)))
+		((CCamView*)pView)->OnFilePrintPreview();
 }
  
 /********************************************************************************************

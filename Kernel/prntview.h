@@ -105,9 +105,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "oilrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "printctl.h"
 
-class CDC;
-class ScreenView;
-
 class PrintView : public View
 {
 	CC_DECLARE_DYNAMIC(PrintView)
@@ -123,8 +120,8 @@ public:
 	virtual BOOL GetForeBackMode();
 	virtual void SetForeBackMode(BOOL);
 	virtual void SetViewPixelSize();
-	void AttachToDC(CDC *pDC);
-	void OnDraw(CDC*, OilRect);
+	void AttachToDC(CNativeDC *pDC);
+	void OnDraw(CNativeDC*, OilRect);
 
 	// Interface to OIL view
 	virtual BOOL ViewStateChanged();
@@ -133,12 +130,13 @@ public:
 	static void CorrectRotatedRectangle(Rect *);
 
 protected:
-	void PrintRegion(Spread *pSpread, DocRect ClipRect, CDC *pDevContext, RenderType rType);
+	void PrintRegion(Spread *pSpread, DocRect ClipRect, CNativeDC *pDevContext, RenderType rType);
 	CNativeDC		   *PrintDC;
 
 	// Function to build the render regions that are needed to print
-	virtual void MakeNewRenderRegion(Spread *, DocRect, CDC *, RenderType, BOOL PaintPaper = FALSE, Node* pInvalidNode = NULL);
+	virtual void MakeNewRenderRegion(Spread *, DocRect, CNativeDC *, RenderType, BOOL PaintPaper = FALSE, Node* pInvalidNode = NULL);
 
+public:
 	Matrix ConstructRenderingMatrix(Spread *pSpread);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

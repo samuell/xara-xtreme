@@ -343,8 +343,8 @@ PORTNOTE("other","Removed Lots of init functions")
 			DebugDlg::Init() &&					// Debug command dialogue - in debug builds only
 #endif //_DEBUG
 
-#ifndef EXCLUDE_FROM_XARALX
 			BlobbyTabDlg::Init() &&				// Temp ******
+#ifndef EXCLUDE_FROM_XARALX
 #if _DEBUG
 			OpCreateFontThumbnails::Init() &&	// Debug only
 			OpConvertFileFormats::Init() &&		// Debug only
@@ -370,6 +370,7 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 			OpWhatsThis::Init() &&				// Register the "What's This?" help mode Operation
 			WindowOps::Init() &&				// Register Window Operations
 			ViewOps::Init() &&					// Register View Operations
+#endif //EXCLUDE_FROM_XARALX
 //WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 #ifndef STANDALONE
@@ -378,7 +379,6 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 #endif //STANDALONE
 #endif //webster
 
-#endif
 			HelpOps::Init() &&					// Register Help Operations
 
 			OpMenuImport::Init() &&				// Register import operations

@@ -142,6 +142,7 @@ class Filter;
 
 class KernelDC : public CCDummyDC
 {
+	CC_DECLARE_DYNAMIC(KernelDC)
 public:
 	KernelDC(RenderType Type);
 	KernelDC(CNativeDC * pDC, RenderType Type);

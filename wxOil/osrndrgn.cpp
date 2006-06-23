@@ -636,12 +636,7 @@ BOOL OSRenderRegion::AttachDevice(View* ViewToAttach, wxDC* DCToAttach, Spread* 
 	
 	ENSURE(RenderDC != NULL,"Attempted to attach Invalid DC to RenderRegion");
 	// If it is a PrinterDC then set our flag to say we are Printing
-	PORTNOTE("other","OSRenderRegion::AttachDevice - removed printing support");
-#if !defined(EXCLUDE_FROM_XARALX)
-	RenderFlags.Printing = RenderDC->IsPrinting();
-#else
-	RenderFlags.Printing = false;
-#endif
+	RenderFlags.Printing = CCDC::ConvertFromNativeDC(RenderDC)->IsPrinting();
 
 	// All ok
 	return TRUE;
@@ -1594,7 +1589,8 @@ void OSRenderRegion::SetOSDrawingMode()
 	switch (DrawingMode)
 	{
 		case DM_COPYPEN:
-			RenderDC->SetLogicalFunction(wxCOPY);
+			if (!RenderDC->IsKindOf(CLASSINFO(wxPostScriptDC))) // ignore for PS as it is the only option and
+				RenderDC->SetLogicalFunction(wxCOPY);// it asserts (ridiculous but true)
 			break;
 		case DM_EORPEN:
 		case DM_EORDITHER:

@@ -226,7 +226,7 @@ BOOL GIFUtil::ReadFromFile( CCLexFile *File, LPBITMAPINFO *Info, LPBYTE *Bits,
 			int ColorResolution = (((Header.giFlags >> 4) & 0x07) + 1);
 			GlobalPaletteSize	= 2 << (Header.giFlags & 0x07);
 			Background			= Header.giBackground;
-			int AspectRatio		= Header.giAspect;
+//			int AspectRatio		= Header.giAspect;
 
 TRACEUSER("Neville",_T("Gif Global Width = %d Height = %d\n"), m_GlobalWidth, m_GlobalHeight);
 TRACEUSER("Neville",_T("Gif ColorResolution = %d\n"), ColorResolution);

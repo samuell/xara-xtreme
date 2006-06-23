@@ -100,9 +100,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRDLGCTL
 #define INC_PRDLGCTL
 
-//#include <afxdlgs.h>	// Contains the def of CPrintDialog
 #include "printctl.h"	// Defines PrintControl
-#include "printprg.h"	// The print progress dialogue
+//#include "printprg.h"	// The print progress dialogue
 
 class Document;
 //	WEBSTER-ranbirr-12/11/96
@@ -117,9 +116,13 @@ class PrintProgressDlg;
 class CDC;
 class CCamView;
 
+
+struct DOCINFO;
+struct DEVMODE;
+
 /********************************************************************************************
 
->	class CCPrintInfo : public CPrintInfo
+>	class CCPrintInfo : public wxPrintDialogData
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/3/95
@@ -129,7 +132,7 @@ class CCamView;
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 
-class CCPrintInfo : public CPrintInfo
+class CCPrintInfo : public wxPrintDialogData
 {
 public:
 	CCPrintInfo();	// Does nothing - do not use this constuctor
@@ -165,20 +168,39 @@ public:
 
 	// Locks/Unlocks the print progress dialogue (if any) to make sure it doesn't update
 	// the progress slider etc during some critical operation.
-	void LockProgressUpdate(BOOL Locked) { if (pPrgDlg != NULL) pPrgDlg->LockProgressUpdate(Locked); }
+	void LockProgressUpdate(BOOL Locked) {
+PORTNOTE("printing", "Disabled Print Progress Dialog")
+#ifndef EXCLUDE_FROM_XARALX
+		 if (pPrgDlg != NULL) pPrgDlg->LockProgressUpdate(Locked);
+#endif
+	 }
 
 private:
 	BOOL 			Initialised;	// TRUE if Init() has been successfully called
 	BOOL			Printing;		// TRUE after StartPrinting() called - FALSE after EndPrinting()
 	CCPrintDialog*	pOurPD;			// Ptr to one of our own print dialogs (derived from CPrintDialog)
-	CPrintDialog*	pOriginalPD;	// Original dlg created by base class constructor
+	wxPrintDialog*	pOriginalPD;	// Original dlg created by base class constructor
 	Document*		pDocument;		// Ptr to associated document
-	CString			DocTitle;		// The title of the assciated document
+	String_256		DocTitle;		// The title of the assciated document
 	PrintControl*	pPrCtrl;		// Ptr to print control that will control print layout
 	PrintProgressDlg* pPrgDlg;		// Ptr to the print progress dlg, created by StartPrinting()
 	CCamView*		pCCamView;		// Ptr to the CCamView that is doing the print job
 
+	CCDC * 			pCCDC;			// Ptr to our CCDC
+
 	static CCPrintInfo*	pCurrent;	// Ptr to the last constructed CCPrintInfo
+
+// New methods for XaraLX
+
+public:
+	BOOL OnPreparePrinting();
+
+	CCDC *	GetCCDC() const {return pCCDC;}
+	CNativeDC * GetDC() const;
+
+	BOOL	m_bContinuePrinting;
+
+	wxRect	m_rectDraw;
 };
 
 #endif //webster
@@ -195,13 +217,15 @@ private:
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 
-class CCPrintDialog : public CPrintDialog
+class CCPrintDialog : public wxPrintDialog
 {
 // There is no memory stuff (Declare_Memdump etc) as this is an MFC derived class
 public:
-	CCPrintDialog(Document* pDoc,BOOL PrintSetUpOnly = FALSE);
+	CCPrintDialog(CCPrintInfo * pDialogData=NULL, Document* pDoc=NULL, BOOL PrintSetUpOnly = FALSE);
 	~CCPrintDialog();
 
+PORTNOTE("printing", "Disabled various CCPrintDialog overrides")
+#ifndef EXCLUDE_FROM_XARALX
 	// Called by MFC to initialise the dlg's controls
 	virtual BOOL OnInitDialog();
 
@@ -215,9 +239,10 @@ public:
 	// Called by MFC when user clicks on Cancel
 	// Copies the original print control back into doc's print control
 	virtual void OnCancel();
+#endif
 
 	// Functions for retrieving info on the default printer
-	static BOOL GetPaperSize(SIZEL* pPaperSize, BOOL RedrawPrintBorders = TRUE);
+	static BOOL GetPaperSize(wxSize* pPaperSize, BOOL RedrawPrintBorders = TRUE);
 	static BOOL GetPrintableArea(DocRect* pPrintableArea);
 	static BOOL GetPrintMargins(INT32* pLeft = NULL,INT32* pTop = NULL,INT32* pRight = NULL,INT32* pBottom = NULL);
 	static BOOL GetResolution(INT32* pDPI,INT32* pXDPI = NULL,INT32* pYDPI = NULL);
@@ -226,29 +251,22 @@ public:
 	static BOOL IsPostscript();
 
 	// Funcs to call when the printer settings change
-	static BOOL UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
-	static BOOL UpdatePrinterSettings(CPrintDialog* pPrDlg,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
-  	BOOL UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE);
-  	static BOOL UpdateAppPrinterSettings(BOOL RedrawPrintBorders = TRUE);
+	static BOOL UpdatePrinterSettings(DEVMODE* pDevMode,wxDC * hdc,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
+	static BOOL UpdatePrinterSettings(wxPrintDialog* pPrDlg,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
+	BOOL UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE);
+	static BOOL UpdateAppPrinterSettings(BOOL RedrawPrintBorders = TRUE);
 
 	// Creates a DC using given global memory handles for DEVNAMES and DEVMODE structures
-	static HDC CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode);
+//	static HDC CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode);
 
 	// Func that retrieves the print control func associated with attached doc
 	PrintControl* GetPrintControl();
-
-	// This checks for the Problems help button being clicked in the Print dialog.
-	static UINT32 CALLBACK PrintHookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
-
-	// This checks for the help button being clicked in the Print Setup dialog.
-	static UINT32 CALLBACK SetupHookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam);
 
 	// This group of functions are used to cope with the selected printer disappearing
 	// For example, when the user closes a connection, or renames a printer via the printer manager
 	static void		ResetToDefaultPrinter();
 	static void		ClosePrintDialogs();
 	static void		InformResetToDefaultPrinter(BOOL ClosingDlgs);
-	static CWnd*	GetPrintCWnd();
 	static BOOL		IgnorePrintData()		{ return IgnorePrntData; }
 	static void		ResetIgnorePrintData()	{ IgnorePrntData = FALSE; }
 	static void		FreeGlobalHandle(HGLOBAL* pHandle);
@@ -266,12 +284,12 @@ private:
 
 	// Functions for collecting printer settings
 	static BOOL GetPrinterSettings(BOOL RedrawPrintBorders = TRUE);
-	static BOOL LookUpPaperSize(UINT32 PaperSizeID,SIZEL* pPaperSize);
+	static BOOL LookUpPaperSize(UINT32 PaperSizeID,wxSize * pPaperSize);
 
 	// Current printer setting
 	// All dimensions (paper size, margins, etc) are in MILLIPOINTS
 	static BOOL		GotPrinterSettings;			// TRUE when we have a set of valid printer settings
-	static SIZEL 	PrPaperSize;				// Size (in MILLIPOINTS) of the printer's paper
+	static wxSize 	PrPaperSize;				// Size (in MILLIPOINTS) of the printer's paper
 	static BOOL  	PrPortrait;					// TRUE when the printer is set for portrait, FALSE for landscape
 	static INT32		PrScale;					// Printer scale factor percentage (i.e. 100 = 100%)
 	static BOOL		PrMultiCopies;				// TRUE when printer can do multiple copies itself
@@ -285,7 +303,7 @@ private:
 	static BOOL		PrPostscript;				// TRUE if the printer is a Postscript printer
 
 //	static DEVMODE* GetSystemDevMode();
-	static DEVMODE* GetSystemDevMode(HWND hWnd,LPCTSTR pDriverName,LPCTSTR pDeviceName,LPCTSTR pPortName);
+//	static DEVMODE* GetSystemDevMode(HWND hWnd,LPCTSTR pDriverName,LPCTSTR pDeviceName,LPCTSTR pPortName);
 
 	BOOL PrintPrefsOpen;
 	BOOL PrintPrefsChanged;
@@ -294,23 +312,25 @@ private:
 
 	static BOOL ReopenMainDlg;
 
-	static CPrintDialog*  pDlgSetup;
+	static wxPrintDialog*  pDlgSetup;
 	static CCPrintDialog* pCurrentCCPrintDialog;
 	static BOOL InformPrinterReset;
 	static BOOL IgnorePrntData;
 
 protected:
 	//{{AFX_MSG(CCPrintDialog)
-	afx_msg BOOL OnCommand(UINT32 GadgetID);
-	afx_msg void OnPrintSetup();				// Called when user clicks on the Setup... button
+//	afx_msg BOOL OnCommand(UINT32 GadgetID);
+//	afx_msg void OnPrintSetup();				// Called when user clicks on the Setup... button
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+//	DECLARE_MESSAGE_MAP()
 
 private:
-	DECLARE_DYNAMIC(CCPrintDialog)
+	DECLARE_DYNAMIC_CLASS(CCPrintDialog)
 };
 #endif //webster
 
+PORTNOTE("printing", "Disabled CCPrintToFileDialog")
+#ifndef EXCLUDE_FROM_XARALX
 /********************************************************************************************
 
 >	class CCPrintToFileDialog : public CFileDialog
@@ -323,7 +343,7 @@ private:
 
 #define FILENAMEBUFSIZE 256
 
-class CCPrintToFileDialog : public CFileDialog
+class CCPrintToFileDialog : public wxFileDialog
 {
 // There is no memory stuff (Declare_Memdump etc) as this is an MFC derived class
 public:
@@ -337,6 +357,7 @@ private:
 	static TCHAR FileName[FILENAMEBUFSIZE];
 	String_64 Title;
 };
+#endif //EXCLUDE_FROM_XARALX
 
 #endif  // INC_PRDLGCTL
 

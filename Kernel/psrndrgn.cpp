@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "tim.h"
 #include "oilfiles.h"
 #include "unicdman.h"  //For MBCS support
-#include "xaracms.h"
+//#include "xaracms.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "printctl.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -162,7 +162,7 @@ PrintPSRenderRegion::PrintPSRenderRegion(DocRect ClipRect,
 
 PrintPSRenderRegion::~PrintPSRenderRegion()
 {
-	PSPrintDC *pPSPrintDC = (PSPrintDC *) RenderDC;
+	PSPrintDC *pPSPrintDC = (PSPrintDC *) CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Restore OS context - just pretend we want to do some OS output
 	pPSPrintDC->StartOSOutput();
@@ -173,8 +173,9 @@ PrintPSRenderRegion::~PrintPSRenderRegion()
 	pPSPrintDC->StartOSOutput();
 
 	// Karim 06/06/2000 - free the memory! (hope this doesn't blow up something else...)
-	delete pPSPrintDC;
-	pPSPrintDC = NULL;
+	// AB: Don't do this. RenderRegion's destructor deletes RenderDC
+	//	delete pPSPrintDC;
+	//	pPSPrintDC = NULL;
 }
 
 
@@ -198,14 +199,13 @@ PrintPSRenderRegion::~PrintPSRenderRegion()
 
 BOOL PrintPSRenderRegion::InitDevice()
 {
-	// Use the current DC to make and install a new one that is suitable for rendering
-	// PostScript to directly.
-	PSPrintDC *pPSPrintDC = new PSPrintDC(RenderDC);
-	if (pPSPrintDC == NULL)
-		return FALSE;
+	// Ensure the current DC is suitable for postscript rendering
 
-	// Install this new DC and tell it how to transform co-ords.
-	RenderDC = pPSPrintDC;
+	CCDC *pCCDC = CCDC::ConvertFromNativeDC( RenderDC );
+	ERROR2IF(!pCCDC || !pCCDC->IsKindOf(CC_RUNTIME_CLASS(PSPrintDC)), FALSE, "Trying to InitDevice on a non-Postscript CCDC");
+
+	PSPrintDC *pPSPrintDC = (PSPrintDC *) pCCDC;
+
 	pPSPrintDC->SetDCTransforms(RenderMatrix, RenderView);
 
 	// Call base class - note that unlike other InitDevice() implementations, we don't
@@ -236,14 +236,14 @@ BOOL PrintPSRenderRegion::InitDevice()
 BOOL PrintPSRenderRegion::StartRender()
 {
 	// If we are being restarted, reinstate our dictionary on the stack
-	BOOL Restarted = RenderFlags.ValidDevice;
+//	BOOL Restarted = RenderFlags.ValidDevice;
 
 	// Call base class first
 	if (!EPSRenderRegion::StartRender())
 		return FALSE;
 
 	// Attach the DC to this render region.
-	PSPrintDC *pPSPrintDC = (PSPrintDC *) RenderDC;
+	PSPrintDC *pPSPrintDC = (PSPrintDC *) CCDC::ConvertFromNativeDC(RenderDC);
 	pPSPrintDC->SetDCTransforms(RenderMatrix, RenderView);
 	pPSPrintDC->AttachRenderRegion(this);
 
@@ -276,7 +276,7 @@ BOOL PrintPSRenderRegion::StopRender()
 	BOOL bHaveRendered = EPSRenderRegion::StopRender();
 
 	// Flush our buffered PostScript device context.
-	PSPrintDC *pPSPrintDC = (PSPrintDC *) RenderDC;
+	PSPrintDC *pPSPrintDC = (PSPrintDC *) CCDC::ConvertFromNativeDC(RenderDC);
 	pPSPrintDC->FlushDC();
 
 	// Detach the DC from this render region.
@@ -425,37 +425,37 @@ BOOL PrintPSRenderRegion::WriteSepTables(KernelDC *pDC)
 		return TRUE;
 
 	// output cyan
-	BOOL ok = pDC->OutputToken("/ccurve [");
+	BOOL ok = pDC->OutputToken(_T("/ccurve ["));
 	ok = ok && WriteSepTablesHelper(pDC, Table);
-	ok = ok && pDC->OutputToken("] def");
+	ok = ok && pDC->OutputToken(_T("] def"));
 	ok = ok && pDC->OutputNewLine();
 
 	// output magenta
-	ok = ok && pDC->OutputToken("/mcurve [");
+	ok = ok && pDC->OutputToken(_T("/mcurve ["));
 	ok = ok && WriteSepTablesHelper(pDC, Table+256);
-	ok = ok && pDC->OutputToken("] def");
+	ok = ok && pDC->OutputToken(_T("] def"));
 	ok = ok && pDC->OutputNewLine();
 
 	// output yellow
-	ok = ok && pDC->OutputToken("/ycurve [");
+	ok = ok && pDC->OutputToken(_T("/ycurve ["));
 	ok = ok && WriteSepTablesHelper(pDC, Table+512);
-	ok = ok && pDC->OutputToken("] def");
+	ok = ok && pDC->OutputToken(_T("] def"));
 	ok = ok && pDC->OutputNewLine();
 
 	// output ucr
-	ok = ok && pDC->OutputToken("/ucurve [");
+	ok = ok && pDC->OutputToken(_T("/ucurve ["));
 	ok = ok && WriteSepTablesHelper(pDC, Table+768);
-	ok = ok && pDC->OutputToken("] def");
+	ok = ok && pDC->OutputToken(_T("] def"));
 	ok = ok && pDC->OutputNewLine();
 
 	// output black generation
-	ok = ok && pDC->OutputToken("/bcurve [");
+	ok = ok && pDC->OutputToken(_T("/bcurve ["));
 	ok = ok && WriteSepTablesHelper(pDC, Table+1024);
-	ok = ok && pDC->OutputToken("] def");
+	ok = ok && pDC->OutputToken(_T("] def"));
 	ok = ok && pDC->OutputNewLine();
 
 	// Enable separations
-	ok = ok && pDC->OutputToken("1 setseps");
+	ok = ok && pDC->OutputToken(_T("1 setseps"));
 	ok = ok && pDC->OutputNewLine();
 
 	// Is this a mono plate?
@@ -466,19 +466,19 @@ BOOL PrintPSRenderRegion::WriteSepTables(KernelDC *pDC)
 	switch (Type)
 	{
 		case COLOURPLATE_CYAN:
-			ok = ok && pDC->OutputToken("v_cpcy setplate");
+			ok = ok && pDC->OutputToken(_T("v_cpcy setplate"));
 			ok = ok && pDC->OutputNewLine();
 		break;
 		case COLOURPLATE_MAGENTA:
-			ok = ok && pDC->OutputToken("v_cpmg setplate");
+			ok = ok && pDC->OutputToken(_T("v_cpmg setplate"));
 			ok = ok && pDC->OutputNewLine();
 		break;
 		case COLOURPLATE_YELLOW:
-			ok = ok && pDC->OutputToken("v_cpyl setplate");
+			ok = ok && pDC->OutputToken(_T("v_cpyl setplate"));
 			ok = ok && pDC->OutputNewLine();
 		break;
 		case COLOURPLATE_KEY:
-			ok = ok && pDC->OutputToken("v_cpky setplate");
+			ok = ok && pDC->OutputToken(_T("v_cpky setplate"));
 			ok = ok && pDC->OutputNewLine();
 		break;
 		case COLOURPLATE_SPOT:
@@ -487,6 +487,9 @@ BOOL PrintPSRenderRegion::WriteSepTables(KernelDC *pDC)
 			// really the same as mono c,m,y,k
 			mono=TRUE;
 		break;
+		default:
+			ERROR3("What kind of a plate is that?");
+			break;
 
 	}
 
@@ -494,9 +497,9 @@ BOOL PrintPSRenderRegion::WriteSepTables(KernelDC *pDC)
 	// colour fill and stroke functions will set colour using the
 	// setgray function or setcmyk
 	if (mono)
-		ok = ok && pDC->OutputToken("1 setmono");
+		ok = ok && pDC->OutputToken(_T("1 setmono"));
 	else
-		ok = ok && pDC->OutputToken("0 setmono");
+		ok = ok && pDC->OutputToken(_T("0 setmono"));
 	ok = ok && pDC->OutputNewLine();
 
 	// All ok
@@ -563,7 +566,7 @@ BOOL PrintPSRenderRegion::WritePlateName(KernelDC *pDC)
 	pSeparation->GetDescription(&platename);
 	TCHAR* pPlate = (TCHAR*)platename;
 	// ok output the textural name
-	BOOL ok = pDC->OutputToken("%%PlateColor :");
+	BOOL ok = pDC->OutputToken(_T("%%PlateColor :"));
 	ok = ok && pDC->OutputToken(pPlate);
 	ok = ok && pDC->OutputNewLine();
 
@@ -643,15 +646,15 @@ BOOL PrintPSRenderRegion::WritePlateScreen(KernelDC *pDC)
 	pInfo->GetScreenName(scrtype, &ScreenName);
 		
 	String_256 fred;
-	fred += String_8("{");
+	fred += String_8(_T("{"));
 	fred += ScreenName;
-	fred += String_8("}");
+	fred += String_8(_T("}"));
 
 	// ok output 'freq ang screenfunc setscreen'
 	BOOL ok = pDC->OutputFloat(freq, 4);
 	ok = ok && pDC->OutputFloat(ang, 4);
 	ok = ok && pDC->OutputToken(fred);
-	ok = ok && pDC->OutputToken("setscreen");
+	ok = ok && pDC->OutputToken(_T("setscreen"));
 	ok = ok && pDC->OutputNewLine();
 
 	return ok;
@@ -738,7 +741,7 @@ BOOL PrintPSRenderRegion::WriteSepFunctions(KernelDC *pDC)
 
 BOOL PrintPSRenderRegion::PushClipRegion(KernelDC *pDC, const DocRect& Rect)
 {
-	BOOL ok = pDC->OutputToken("gs");
+	BOOL ok = pDC->OutputToken(_T("gs"));
 	ok = ok && pDC->OutputNewLine();
 	ok = ok && WriteClipRegion(pDC,Rect);
 	return ok;
@@ -763,7 +766,7 @@ BOOL PrintPSRenderRegion::PushClipRegion(KernelDC *pDC, const DocRect& Rect)
 
 BOOL PrintPSRenderRegion::PopClipRegion(KernelDC *pDC)
 {
-	BOOL ok = pDC->OutputToken("gr");
+	BOOL ok = pDC->OutputToken(_T("gr"));
 	ok = ok && pDC->OutputNewLine();
 	return ok;
 }
@@ -846,7 +849,7 @@ BOOL PrintPSRenderRegion::WritePhotoNegative(KernelDC *pDC)
 
 BOOL PrintPSRenderRegion::WriteSetTransfer(KernelDC *pDC)
 {
-	BOOL ok = pDC->OutputToken("{1 exch sub} settransfer");
+	BOOL ok = pDC->OutputToken(_T("{1 exch sub} settransfer"));
 	     ok = ok && pDC->OutputNewLine();
 	return ok;
 }
@@ -895,7 +898,7 @@ BOOL PrintPSRenderRegion::WriteRenderPaper(KernelDC *pDC)
 
 BOOL PrintPSRenderRegion::WriteFillPaper(KernelDC *pDC)
 {
-	BOOL ok = pDC->OutputToken("gsave clippath 1 setgray fill grestore");
+	BOOL ok = pDC->OutputToken(_T("gsave clippath 1 setgray fill grestore"));
 		 ok = ok && pDC->OutputNewLine();
 	return ok;
 }
@@ -922,6 +925,8 @@ BOOL PrintPSRenderRegion::WriteFillPaper(KernelDC *pDC)
 
 BOOL PrintPSRenderRegion::OutputPSHeader()
 {
+PORTNOTE("printing", "Don't output strange rectangles")
+#ifndef EXCLUDE_FROM_XARALX
 	// If running under Win95 or Win31, but not any flavour of WinNT, then begin with some
 	// fake GDI output to force the buggy Postscript driver to flush its output buffer.
 	if (IsWin32s())
@@ -943,6 +948,7 @@ BOOL PrintPSRenderRegion::OutputPSHeader()
 		RenderDC->SelectObject(pOldPn);
 		RenderDC->SelectObject(pOldBr);
 	}
+#endif
 
 	// Use the current DC to make a new one that is suitable for rendering
 	// PostScript to directly.
@@ -950,7 +956,7 @@ BOOL PrintPSRenderRegion::OutputPSHeader()
 	if (pPSPrintDC == NULL) return FALSE;
 
 	// Set up this - don't need it but the DC might get upset if it has no view.
-	RenderDC = pPSPrintDC;
+	RenderDC = pPSPrintDC->GetDC();
 	pPSPrintDC->SetDCTransforms(RenderMatrix, RenderView);
 
 	// Tell the DC (i) we want to do OS output - this prevents it from outputting a
@@ -1001,7 +1007,7 @@ void PrintPSRenderRegion::DeInitialise()
 }
 
 
-BOOL PrintPSRenderRegion::InitPSDevice(CDC *pDC, PrintView *pPrintView)
+BOOL PrintPSRenderRegion::InitPSDevice(CNativeDC *pDC, PrintView *pPrintView)
 {
 	// Make a new PSRenderRegion, and use it to output out PostScript header.
 	DocRect DummyRect;
@@ -1040,6 +1046,8 @@ BOOL PrintPSRenderRegion::InitPSDevice(CDC *pDC, PrintView *pPrintView)
 
 BOOL PrintPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 {
+PORTNOTE("printing", "Disabled PS text rendering")
+#ifndef EXCLUDE_FROM_XARALX
 	// If it is stroked or not simple flat fill, or not a standard ASCII character then we 
 	//	must do this as paths.
 	BOOL FlatFill = IS_A(CurrentAttrs[ATTR_FILLGEOMETRY].pAttr, FlatFillAttribute);
@@ -1062,7 +1070,7 @@ BOOL PrintPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	// get overall matrix - attribute matrix concatenated with given matrix if supplied
 	Matrix matrix;
 	if (GetCharAttributeMatrix(&matrix)==FALSE)
-		return NULL;
+		return FALSE;
 	if (pMatrix)
 		matrix*=*pMatrix;
 
@@ -1119,7 +1127,7 @@ BOOL PrintPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 		Rotation += FIXED16(1.5 * PI);
 #endif
 	// Simple transformation - we can do this with a GDI font.
-	PSPrintDC *pPSDC = (PSPrintDC *) RenderDC;
+	PSPrintDC *pPSDC = (PSPrintDC *) CCDC::ConvertFromNativeDC(RenderDC);
 	if (!pPSDC->StartOSOutput())
 		return FALSE;
 
@@ -1221,120 +1229,7 @@ BOOL PrintPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	// Finished doing GDI output
 	if (!pPSDC->EndOSOutput())
 		return FALSE;
-
+#endif
 	return TRUE;
 }
 
-
-
-
-
-
-
-
-
-/*
-BOOL PrintPSRenderRegion::OutputPSHeader()
-{
-	// If running under Win95, do some fake GDI output to force the buggy
-	// driver to flush its buffer.
-	if (IsWin32c() || IsWin32NT())
-	{
-#if 0
-		// Ideally, we could use a white brush here, but for some reason this can cause
-		// the driver to get its idea of what the current fill colour is mixed up, so
-		// we use black instead.
-
-		// Draw a pixel-sized rectangle outside page area (theoretically!)
-		CBrush BlackBrush;
-		BlackBrush.CreateStockObject(BLACK_BRUSH);
-		CRect Dummy(-2,-2,-1,-1);
-		RenderDC->FillRect(&Dummy, &BlackBrush);
-#endif
-		// Peter - 25/10/95 - first it used a white brush but then was changed to use a black
-		// brush and plot off the page.  This made PostScript printing under 95 not work at
-		// all(!) so we are reverting to the previous way
-		CBrush WhiteBrush;
-		WhiteBrush.CreateStockObject(WHITE_BRUSH);
-		CRect Dummy(0,0,1,1);
-		RenderDC->FillRect(&Dummy, &WhiteBrush);
-
-#if 0
-		// Now do some text output to to get it to load its text dictionaries in.
-		// This has the side effect of getting it to not delete our dictionary from
-		// the VM (nice of it to do so, but actually we wanted to use it).
-
-		// Create the font and select it into the DC
-		CFont *pFont, *pOldFont;
-		TRY
-		{
-			pFont = new CFont;
-		}
-		CATCH (CMemoryException, e)
-		{
-			return FALSE;
-		}
-		END_CATCH
-
-		if (pFont->CreateFont(10, 0, 0, 0, FW_NORMAL, 0, 
-							  FALSE, FALSE, DEFAULT_CHARSET, 
-							  OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS,
-						   	  PROOF_QUALITY, DEFAULT_PITCH | FF_DONTCARE, 
-						   	  "Arial") == 0)
-		{
-			// Can't create font - abort
-			delete pFont;
-			return FALSE;
-		}
-
-		pOldFont = RenderDC->SelectObject(pFont);
-
-		// Draw some text in white
-		CString Text("*");
-		COLORREF OldFgCol = RenderDC->SetTextColor(RGB(255,255,255));
-		COLORREF OldBgCol = RenderDC->SetBkColor(RGB(255,255,255));
-		RenderDC->TextOut(20, 20, Text);
-
-		// Select old font back into DC, and restore colours
-		RenderDC->SelectObject(pOldFont);
-		RenderDC->SetTextColor(OldFgCol);
-		RenderDC->SetBkColor(OldBgCol);
-
-		// Delete the font
-		delete pFont;
-#endif
-	}
-
-	// Use the current DC to make a new one that is suitable for rendering
-	// PostScript to directly.
-	PSPrintDC *pPSPrintDC = new PSPrintDC(RenderDC);
-	if (pPSPrintDC == NULL)
-		return FALSE;
-
-	// Set up this - don't need it but the DC might get upset if it has no view.
-	RenderDC = pPSPrintDC;
-	pPSPrintDC->SetDCTransforms(RenderMatrix, RenderView);
-
-	// Tell the DC we want to do OS output - this prevents it from outputting a reference
-	// to our dictionary before we have defined it (because it's trying to set up the
-	// PostScript C ready for Camelot EPS commands).
-	if (!pPSPrintDC->StartOSOutput())
-		// Error
-		return FALSE;
-
-#if 0
-	// Write out our procset - no %%BeginProlog because we have to do this on each page.
-	if (!WriteProlog(pPSPrintDC))
-		// Error 
-		return FALSE;
-#endif
-
-	// Tell the DC we have finished doing our 'OS' output. :-)
-	if (!pPSPrintDC->EndOSOutput())
-		// Error
-		return FALSE;
-
-
-	return TRUE;
-}
-*/

@@ -126,6 +126,8 @@ public:
 	void SetDC (CNativeDC * dc, BOOL bDeleteDC = TRUE);
 	RenderType GetRenderType() const { return Type; }
 
+	virtual BOOL IsPrinting() const { return (Type == RENDERTYPE_PRINTER) || (Type == RENDERTYPE_PRINTER_PS); }
+
 	static UINT32 GetRectangleList(wxDC*, wxRect**);
 	static RenderType GetType(CNativeDC*, BOOL);
 	static BOOL IsPaperWanted(RenderType);
@@ -140,6 +142,7 @@ protected:
 
 class CCPaintDC : public CCDC
 {
+	CC_DECLARE_DYNAMIC( CCPaintDC )
 public:
 	CCPaintDC( wxWindow * );
 	~CCPaintDC();
@@ -150,6 +153,7 @@ private:
 
 class CCClientDC : public CCDC
 {
+	CC_DECLARE_DYNAMIC( CCClientDC )
 public:
 	CCClientDC( wxWindow * );
 	~CCClientDC();
@@ -160,6 +164,7 @@ private:
 
 class CCDummyDC : public CCDC
 {
+	CC_DECLARE_DYNAMIC( CCDummyDC )
 public:
 	CCDummyDC(RenderType r = RENDERTYPE_NONE) : CCDC(r) { SetDC(&m_DC, FALSE); }
 	CCDummyDC(CNativeDC * pNativeDC, RenderType r = RENDERTYPE_NONE) : CCDC(pNativeDC, r) { }

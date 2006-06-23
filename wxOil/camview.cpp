@@ -118,6 +118,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "brushmsg.h"
 #include "statline.h"
 #include "draginfo.h"
+#include "prdlgctl.h"
+#include "prncamvw.h"
+#include "opbevel.h"
+#include "psrndrgn.h"
+#include "prnmks.h"
+#include "princomp.h"
 
 /***************************************************************************************************************************/
 
@@ -346,7 +352,7 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed ruler usage")
 	HRuler->LinkToKernel(pRulers->GetpHorizontalRuler());
 	VRuler->LinkToKernel(pRulers->GetpVerticalRuler());
 #endif
-	ENSURE(pDocView != 0, "ScreenView::ScreenView can't get a new DocView!");
+	ENSURE(pDocView != 0, "CCamView::ScreenView can't get a new DocView!");
 	pDocView->ConnectToOilView(this);
 	
 	// find the last view so we can use some of it's settings to create the new
@@ -576,7 +582,7 @@ ViewState* CCamView::GetViewState() const
 	Created:	25/9/95
 	Inputs:		pvs			the new view-state
 	Returns:	pointer to the old view-state
-	Purpose:	Sets this CamView's shared ViewState object.
+	Purpose:	Sets this CCamView's shared ViewState object.
 	SeeAlso:	CCamView::GetViewState
 ********************************************************************************************/
 
@@ -621,7 +627,7 @@ void CCamView::SetCurrentStates()
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	02/09/95
 	Returns:	pointer to a CNativeDC for rendering into this view
-	Purpose:	Access function for this CamView's device context.
+	Purpose:	Access function for this CCamView's device context.
 	Errors:		-
 	SeeAlso:	-
 
@@ -765,9 +771,7 @@ void CCamView::OnDraw( wxDC* pDC )
 	(pDocView->GetDoc())->SetCurrent();
 
 	// Are we printing?
-PORTNOTE("print","Removed Printing from OnDraw")
-#ifndef EXCLUDE_FROM_XARALX
-	if (pDC->IsPrinting())
+	if (CCDC::ConvertFromNativeDC(pDC)->IsPrinting())
 	{
 		//TRACE( _T("BAD ! CCamView::OnDraw reckons we're printing\n"));
 #ifndef STANDALONE
@@ -777,8 +781,9 @@ PORTNOTE("print","Removed Printing from OnDraw")
 		// Find out from the display context the rectangle bounding the invalid
 		// region.
 		WinRect clip;
+		pDC->GetClippingBox(clip);
 
-		if (pDC->GetClipBox(&clip) == NULLREGION) 
+		if (clip.IsEmpty())
 			return;
 
 		// Pass the drawing parameters on to the associated PrintView object.
@@ -789,7 +794,6 @@ PORTNOTE("print","Removed Printing from OnDraw")
 #endif
 	}
 	else
-#endif
 	{
 		WinRect clip;
 
@@ -848,6 +852,893 @@ LRESULT CCamView::OnRenderView( WPARAM, LPARAM lp )
 	return 0;
 }
 
+#define USERNAME "Mike"
+
+//static RECT DriverBand;
+//static RECT TestBand;
+
+/********************************************************************************************
+
+>	void CCamView::OnFilePrint()
+
+	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	02/09/95
+	Purpose:	The main printing control function.  This is a modified version of the MFC
+				one because MFC does not allow the concept of having a mapping between
+				pages and physical pieces of paper other than 1 to 1.  i.e. MFC can't handle
+				two-up printing, fit lots, pamphlet printing etc.
+	Errors:		-
+	SeeAlso:	CView::OnFilePrint(); CCamView::OnFilePrintPreview()
+
+********************************************************************************************/
+//	WEBSTER-ranbirr-12/11/96
+#ifndef WEBSTER
+void CCamView::OnFilePrint()
+{
+#ifndef _DEBUG
+	::wxMessageBox(_T("Printing currently disabled in retail builds"));
+	return;
+#endif
+
+	SetCurrentStates();
+
+	// Set Current states...
+	Document* KernelDoc = GetDocument()->GetKernelDoc();
+	ENSURE(KernelDoc != NULL, "Oh no!!");
+	KernelDoc->SetCurrent();
+	pDocView->SetCurrent();
+
+	TRACEUSER( USERNAME, _T("OnFilePrint()\n"));
+
+	// get default print info
+	CCPrintInfo *pPrintInfo;
+	pPrintInfo = new CCPrintInfo(KernelDoc,this);
+	if (!pPrintInfo)
+	{
+		// Out of memory - report error and exit.
+		Error::SetError(_R(IDS_OUT_OF_MEMORY));
+		InformError();
+		return;
+	}
+
+
+	// Make sure the user can't get 2 print dialog boxes up
+	PrintMonitor::SetPrintingActive(TRUE);
+
+	// Now bring up the print dialog
+	if (!pPrintInfo->OnPreparePrinting())
+	{
+		TRACEUSER( USERNAME, _T("OnPreparePrinting() returned FALSE\n"));
+		delete pPrintInfo;
+		PrintMonitor::SetPrintingActive(FALSE);
+		return;
+	}
+
+	List CompoundNodeList;
+	NodeCompound * pCompound = NULL;
+	NodeListItem * pItem = NULL;
+	// Get ourselves a print view and attach it to this CCamView.
+	// NB. Must be after the user has clicked OK on print dialog, as we set up
+	//     anti-aliasing etc. in PrintView constructor.
+	// Delete any old print view
+	if (pPrintView != NULL)
+	{
+		delete pPrintView;
+		pPrintView = NULL;
+		delete pPrintInfo;
+		PrintMonitor::SetPrintingActive(FALSE);
+		ERROR2((void)0, "OnPreparePrinting(): we already have a PrintView!");
+	}
+	// make a new one
+	pPrintView = new PrintView(pDocView->GetDoc());
+	if (pPrintView == NULL)
+	{
+		delete pPrintInfo;
+		PrintMonitor::SetPrintingActive(FALSE);
+		ERROR2((void)0, "Not enough memory to create PrintView object");
+	}
+	// and connect it to the OilView
+	if (!pPrintView->ConnectToOilView(this))
+	{
+		delete pPrintView;
+		pPrintView = NULL;
+		delete pPrintInfo;
+		PrintMonitor::SetPrintingActive(FALSE);
+		ERROR2((void)0, "Unable to attach PrintView to CCamView.");
+	}
+
+	double dpi = 96.0;
+
+	PrintControl* pPrCtrl = NULL;
+	PrintComponent* pComp = (PrintComponent*)KernelDoc->GetDocComponent(CC_RUNTIME_CLASS(PrintComponent));
+	if (pComp != NULL)
+		pPrCtrl = pComp->GetPrintControl();
+
+	if (pPrCtrl != NULL)
+		pPrCtrl->SetUp(KernelDoc->GetSelectedSpread());
+
+	wxString strTemp;
+
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("Entering print loop\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+
+//	ERROR3IF(pPrintInfo->m_pPD->m_pd.hDC == NULL, "NULL DC when trying to print.");
+	// must be set (did you remember to call DoPreparePrinting?)
+
+	// Let's see if we can start printing...
+	if ((!pPrintInfo->GetDC()) || 
+		!PrintMonitor::StartPrintJob(pPrintInfo->GetDC()))
+	{
+		TRACEUSER( USERNAME, _T("StartPrintJob() screwed up\n"));
+
+		// No - something went wrong.
+		if (!pPrintInfo->GetDC())
+		{
+			// No DC - set a generic "we can't print" error.
+			Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+		}
+
+		// Tell user and exit.
+		InformError();
+		delete pPrintInfo;
+		PrintMonitor::SetPrintingActive(FALSE);
+		return;
+	}
+
+	// OnBeginPrinting(pPrintInfo->GetDC(), pPrintInfo);
+
+	// Get access to our print control object
+	PrintControl *pPrintControl = pPrintView->GetPrintControl();
+
+	Spread * pSpread = Document::GetSelectedSpread();
+
+	// disable main window while printing & init printing status dialog
+//	AfxGetMainWnd()->EnableWindow(FALSE);
+
+PORTNOTE("printing", "Disable pDocInfo stuff");
+#ifndef EXCLUDE_FROM_XARALX
+	// set up document info and start the document printing process
+	DOCINFO* pDocInfo = NULL;
+
+	// start document printing process
+	if  ((pPrintInfo->SetAbortProc(&dcPrint) < 0) ||
+		 !pPrintInfo->SetUpDocInfo(&pDocInfo) 	  ||		// SetUpDocInfo() allocs a DOCINFO for pDocInfo
+		 pDocInfo == NULL 						  ||
+#else
+	if (
+#endif
+		 (!pPrintInfo->GetDC()->StartDoc(wxString((TCHAR *)(Document::GetSelected()->GetTitle()))))
+		)
+	{
+		TRACEUSER( USERNAME, _T("Unable to start document\n"));
+
+		// enable main window before proceeding
+//		AfxGetMainWnd()->EnableWindow(TRUE);
+
+		// cleanup and show error message
+//		OnEndPrinting(&dcPrint, pPrintInfo);
+
+		BOOL PrintToFileUserAborted = pPrintInfo->GetPrintControl ()->GetPrintToFile ();
+
+		delete pPrintInfo;
+		pPrintInfo = NULL;
+		PrintMonitor::EndPrintJob();
+
+		// Lose our PrintView
+		delete pPrintView;
+		pPrintView = NULL;
+
+PORTNOTE("printing", "Disabled pDocInfo")
+#ifndef EXCLUDE_FROM_XARALX
+		// Delete a the docinfo object
+		if (pDocInfo != NULL)
+		{
+			delete pDocInfo;
+			pDocInfo = NULL;
+		}
+#endif
+
+//		dcPrint.Detach();   // will be cleaned up by CPrintInfo destructor
+		if (!PrintToFileUserAborted)
+		{
+			InformError(_R(AFX_IDP_FAILED_TO_START_PRINT));
+		}
+		PrintMonitor::SetPrintingActive(FALSE);
+		return;
+	}
+
+	BOOL StartedPrinting = FALSE;
+
+	// CGS:  any blended compound nodes MUST be tagged as having been generated for printing
+	NodeGroup::SetIsForPrinting (TRUE);
+
+	// begin page printing loop
+	BOOL bError = TRUE;
+
+	// Set up the print layout system.
+	// This allows GetNextPaper() and ReprintPaper() functions
+	// to be called.
+	if (!pPrintInfo->StartPrinting())
+	{
+		TRACEUSER( USERNAME, _T("StartPrinting() failed\n"));
+		// Error in starting printing.
+		Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+		goto ExitPrint;
+	}
+
+	// Must remember to tell print info object when we are done.
+	StartedPrinting = TRUE;
+
+	// Work out if we should do our own PostScript
+	BOOL DoPostScript;
+	if ((pPrintControl->GetPrintMethod() == PRINTMETHOD_NORMAL) &&
+		(pPrintInfo->GetCCDC()->GetRenderType() == RENDERTYPE_PRINTER_PS))
+	{
+		// Not printing as a bitmap and it is a PostScript printer so mark it as such.
+		DoPostScript = TRUE;
+	}
+	else
+	{
+		// Either it's not a PostScript printer or we are printing as a bitmap,
+		// so don't do weird PostScript stuff
+		DoPostScript = FALSE;
+	}
+
+	// If we are printing as bitmap, then set the "Printing blah.art" message in the dialog.
+	// (This is done by RenderSimpleView() when we are printing normally).
+	if ((pPrintControl->GetPrintMethod() != PRINTMETHOD_NORMAL) && (pPrintInfo != NULL))
+		// We going to print the document now
+		pPrintInfo->SetPrinting();
+
+PORTNOTE("printing", "Disable banding call");
+#ifndef EXCLUDE_FROM_XARALX
+	// Ask the printer if it supports banding. We don't actually need the result of this call,
+	// but asking the printer about banding has the side effect that the printer driver then
+	// knows that we support banding! If we don't do this, then some printing (e.g. to an HP DeskJet
+	// on Win3.1) simply chucks out blank pages, because the driver thinks we can't band, and there
+	// isn't enough memory/disc space (or something) to do the page in one go.
+	//
+	// BLOCK
+	{
+		BOOL BandInfoSupported = FALSE;
+		WORD wEscape = BANDINFO;
+		if (!DoPostScript && 
+			PrintMonitor::PrintWithDriverBands &&
+			dcPrint.Escape(QUERYESCSUPPORT, sizeof(WORD), (LPCSTR) &wEscape, NULL) > 0)
+		{
+			// The BANDINFO Escape is supported  -  but we don't actually care!
+			BandInfoSupported = TRUE;
+		}
+	}
+#endif
+
+	// DMc 22-7-99
+	// MRH 11/9/00 - Major rewrite of the below david code. Fixed major logic problem and
+	// cut out the regeneratenodes function as this is not required!
+	BevelTools::GetAllNodesUnderNode(pSpread, &CompoundNodeList, CC_RUNTIME_CLASS(NodeCompound));
+	
+	dpi = OSRenderRegion::GetFixedDCPPI(*pPrintInfo->GetDC()).GetWidth();
+
+	if (pPrintControl)
+		dpi = (double)pPrintControl->GetDotsPerInch();
+	
+	pItem = (NodeListItem *)CompoundNodeList.GetHead();
+	
+	while (pItem)
+	{
+		pCompound = (NodeCompound *)pItem->pNode;
+		
+		if (pCompound)
+		{
+			if (pCompound->RegenerateForPrinting())
+			{
+				pCompound->SetDPI(dpi);
+				pCompound->SetPrinting(TRUE);
+			}
+		}
+		
+		pItem = (NodeListItem *)CompoundNodeList.GetNext(pItem);
+	}
+	
+	TRACEUSER( "DavidM", _T("Beginning print dpi %d\n"), dpi);
+
+	// Loop around for each physical page ("paper") we have to print. Note that now we may print out
+	// multiple physical pieces of paper for each "paper" (page) as we may do C, M, Y, K plates etc.
+
+	while (pPrintInfo->MorePaper())
+	{
+		// Start off the print marks system bits for this paper
+		// We lock progress window updates during this call so that the progress window will
+		// ignore all attempts to update the display.
+		pPrintInfo->LockProgressUpdate(TRUE);
+			EnumeratePagePatches(pPrintInfo);
+		pPrintInfo->LockProgressUpdate(FALSE);
+
+		// Initialise the plate printing system for any plates of this page
+		// It also sets up GetNextPlate() and ReprintPlate functions
+		UINT32 plateerr;
+		if (!pPrintInfo->StartPlatePrinting(pPrintView, &plateerr))
+		{
+			TRACEUSER( USERNAME, _T("StartPlatePrinting() failed\n"));
+			// Error in startplateprinting! the error id may have been returned
+			// We ignore the id if zero, ie StartPlatePrinting reported it.
+			if (plateerr>0)
+			{
+				String_64 reason;
+				String_256 ErrorMsg;
+				BOOL ok = ( reason.Load(plateerr) );
+				ok = ok && ( ErrorMsg.MakeMsg( _R(IDE_PRINT_ERROR), (LPCTSTR) reason) > 0);
+				if (ok)
+					Error::SetError(_R(IDE_PRINT_ERROR), (TCHAR *) ErrorMsg, 0);
+				else
+					Error::SetError(_R(IDE_PRINT_USERABORT));
+			}
+			goto ExitPrint;
+		}
+		
+		// Loop around for each logical plate we have to print - this generates a piece of physical
+		// paper out of the printer on each pass.
+		while (pPrintInfo->MorePlates())
+		{
+			// Get the first "paper" (plate or page) to print
+			pPrintInfo->GetNextPaper();
+
+			// and set up the plate printing system ready to print the next plate on the next pass
+			if (!pPrintInfo->SetNextPlate(pPrintView))
+			{
+				TRACEUSER( USERNAME, _T("SetNextPlate() failed!\n"));
+				// Error in starting printing.
+				Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+				pPrintInfo->EndPlatePrinting(pPrintView);
+				goto ExitPrint;
+			}
+
+			// Now, prepare this paper (plate/page) for printing
+			TRACEUSER( USERNAME, _T("Starting physical page\n"));			
+//			OnPrepareDC(pPrintInfo->GetDC(), pPrintInfo);
+
+			// check for end of print
+			if (!pPrintInfo->m_bContinuePrinting || pPrintInfo->Abort())
+			{
+				TRACEUSER( USERNAME, _T("Print abort 1\n"));
+				pPrintInfo->EndPlatePrinting(pPrintView);
+				goto ExitPrint;
+			}
+
+			// attempt to start the current paper
+			pPrintInfo->GetDC()->StartPage();
+			if (0) // error handling non-existant
+			{
+				TRACEUSER( USERNAME, _T("Unable to StartPage()\n"));
+				Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+				pPrintInfo->EndPlatePrinting(pPrintView);
+				goto ExitPrint;
+			}				  
+
+			// Is it a PostScript printer?
+			if (DoPostScript)
+			{
+				// Yes, so before we start the page, we send our PostScript procset to the device.
+				if (!PrintPSRenderRegion::InitPSDevice(pPrintInfo->GetDC(), pPrintView))
+				{
+					TRACEUSER( USERNAME, _T("Unable to Init PS device\n"));
+					Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+					pPrintInfo->EndPlatePrinting(pPrintView);
+					goto ExitPrint;
+				}
+			}
+
+PORTNOTE("printing", "Disable banding call");
+#ifndef EXCLUDE_FROM_XARALX
+			// If banding, find the first band to print
+			// Only use driver banding if the preference says so, and never band
+			// to PS devices (yes, the Win95 PS driver supports banding, except
+			// not really and it just screws up).
+			if (PrintMonitor::PrintWithDriverBands && !DoPostScript)
+			{
+				// Do the driver banding
+				dcPrint.Escape(NEXTBAND, 0, NULL, (LPSTR) &DriverBand);
+
+				TRACEUSER( USERNAME, _T("INITIALBAND: (%d,%d), (%d, %d)\n"),
+						 DriverBand.left, DriverBand.top, DriverBand.right, DriverBand.bottom);
+			}
+#endif
+
+			TRACEUSER( USERNAME, _T("Starting PrintPaper() loop...\n"));
+
+			// Now render the paper into each band.
+			BOOL MoreBands = TRUE;
+			while (MoreBands)
+			{
+				TRACEUSER( USERNAME, _T("Calling PrintPaper()...\n"));
+				// Print this piece of paper (to the current band)
+				if (!PrintPaper(pPrintInfo->GetDC(), pPrintInfo, pPrintControl))
+				{
+					// Something went wrong - quit and abort print job.
+					TRACEUSER( USERNAME, _T("PrintPaper() failed\n"));
+					Error::SetError(_R(IDE_PRINT_ERROR_SYSTEM));
+					pPrintInfo->EndPlatePrinting(pPrintView);
+					goto ExitPrint;
+				}
+
+				// Only use driver banding if the preference says so, and never band to PS devices.
+				MoreBands = FALSE;		// Assume no more bands until told otherwise
+PORTNOTE("printing", "Disable banding call");
+#ifndef EXCLUDE_FROM_XARALX
+				if (PrintMonitor::PrintWithDriverBands && !DoPostScript)
+				{
+					// We've printed this band - see if printer driver has any bands left,
+					// NB we kludge this as some drivers keep returning the same band...fabby eh?
+					dcPrint.Escape(NEXTBAND, 0, NULL, (LPSTR) &DriverBand);
+					TRACEUSER( USERNAME, _T("Driver returned valid band: (%d,%d), (%d, %d)\n"),
+							  DriverBand.left, DriverBand.top, DriverBand.right, DriverBand.bottom);
+
+					// If it does, then we need to loop around to print this physical piece of paper
+					// into the next band...
+					if (!IsRectEmpty(&DriverBand))
+					{
+						TRACEUSER( USERNAME, _T("Forcing a reprint of paper [for band: (%d,%d), (%d, %d)]\n"),
+								  DriverBand.left, DriverBand.top, DriverBand.right, DriverBand.bottom);
+						MoreBands = TRUE;
+					}
+					else
+					{
+						TRACEUSER( USERNAME, _T("End of bands for this page\n"));
+					}
+				}
+#endif
+
+				// If we're going to print more bands, then set up the "paper" for the next band
+				if (MoreBands)
+				{
+					// Tell the print control that we want the same "paper" again, rather than moving
+					// on to the next one.
+					pPrintControl->ReprintPaper();
+
+					// And reset all the PrintInfo data for this "paper" ready for the next band
+					pPrintInfo->GetNextPaper();
+				}
+			}
+
+			TRACEUSER( USERNAME, _T("Ending physical page\n"));
+			
+			// End of page clean up.
+			// Note that we don't check for an error from EndPage() because due to
+			// a bug (in Windows/GDI) it returns -1 when using banding.
+			// The MS workaround is to not check the return value!
+			pPrintInfo->GetDC()->EndPage();
+
+			if (!pPrintInfo->m_bContinuePrinting || pPrintInfo->Abort())
+			{
+				TRACEUSER( USERNAME, _T("Print abort 2\n"));
+				pPrintInfo->EndPlatePrinting(pPrintView);
+				goto ExitPrint;
+			}
+		
+			// Any more plates to print?, if so we need to print the plate as a complete new page.
+			// We set ReprintPaper so that the next pass tries to print the same "paper" (document page)
+			// again, but we've moved it on to the next plate (in SetNextPlate, above), so we'll actually
+			// be rendering a different plate the next time around.
+			if (pPrintInfo->MorePlates())
+				pPrintControl->ReprintPaper();
+		}	
+
+		// End the plate printing function
+		pPrintInfo->EndPlatePrinting(pPrintView);
+	}
+
+	// Set the flag to indicate that we're exiting happily
+	bError = FALSE;
+
+
+ExitPrint:
+	// cleanup document printing process
+	PrintMonitor::EndPrintJob();
+
+	if (!bError)
+		pPrintInfo->GetDC()->EndDoc();
+	else
+	{
+		TRACEUSER( USERNAME, _T("ExitPrint: an error occured()\n"));
+		// An error occured - abort the job.
+//		pPrintInfo->GetDC()->AbortDoc();
+
+		// If the user did not cancel the job, report what went wrong.
+		if (!pPrintInfo->Abort())
+			InformError();
+	}
+
+//	AfxGetMainWnd()->EnableWindow();    // enable main window
+
+//	OnEndPrinting(pPrintInfo->GetDC(), pPrintInfo);    // clean up after printing
+
+	// Clean up kernel printing code
+	if (StartedPrinting)
+		pPrintInfo->EndPrinting();
+
+PORTNOTE("printing", "Remove DOCINFO stuff");
+#ifndef EXCLUDE_FROM_XARALX
+	// Delete a the docinfo object
+	if (pDocInfo != NULL)
+	{
+		delete pDocInfo;
+		pDocInfo = NULL;
+	}
+#endif
+
+	PrintMonitor::SetPrintingActive(FALSE);
+
+	// Lose our PrintView (if it exists) - not needed anymore.
+	if (pPrintView)
+	{
+		delete pPrintView;
+		pPrintView = NULL;
+	}
+
+
+	if (pPrintInfo)
+	{
+		delete pPrintInfo;
+		pPrintInfo = NULL;
+	}
+
+	// If we need to redraw everything then do it.
+	if (PrintMonitor::FullRedrawNeeded)
+	{
+		// iterate through all the documents and get them to redraw themselves
+		Document* pDoc = (Document*) Camelot.Documents.GetHead();
+
+		while (pDoc!=NULL)
+		{
+			// Get it to redraw itself
+			pDoc->ForceRedraw();
+
+			// get the next document in the list
+			pDoc = (Document*) Camelot.Documents.GetNext(pDoc);
+		}
+	}
+
+	// mark the PrintMonitor as not needing a redraw
+	PrintMonitor::WantFullRedraw(FALSE);
+
+	// DMc restore the compound nodes dpi's
+	pItem = (NodeListItem *)CompoundNodeList.GetHead();
+	
+	while (pItem)
+	{
+		pCompound = (NodeCompound *)pItem->pNode;
+		
+		if (pCompound)
+		{
+			if (pCompound->RegenerateForPrinting())
+			{
+				pCompound->SetDPI(96.0);
+				pCompound->SetPrinting(FALSE);
+			
+				pCompound->RegenerateNode(NULL, FALSE);
+			}
+		}
+		
+		pItem = (NodeListItem *)CompoundNodeList.GetNext(pItem);
+	}	
+
+	CompoundNodeList.DeleteAll();
+
+	NodeGroup::KillAllBlendBecomeAConsLists (FALSE, TRUE);
+	NodeGroup::SetIsForPrinting (FALSE);
+
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("Exiting print loop\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+	TRACEUSER( "ChrisS", _T("------------------------------------------------------------------------\n"));
+}
+
+#endif //webster
+
+
+
+// Size of bands to use when printing as bitmap.
+#define BAND_HEIGHT (128)
+
+/********************************************************************************************
+
+>	BOOL ScreenCamView::PrintPaper(CDC *pPrintDC, 
+								   CCPrintInfo *pPrintInfo,
+								   PrintControl *pPrintControl)
+
+	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	05/11/95
+	Inputs:		pPrintDC - the (printer) device context to print to.
+				pPrintInfo - the object to use for layout control.
+	Returns:	TRUE if the paper was printed ok;
+				FALSE if not.
+	Purpose:	Prints all the ink onto a physical piece of paper.  This includes coping
+				with patches (multiple copies on one piece of paper, and banding bitmap
+				printing to improve performance.
+	Errors:		pPrintDC has a bad DC handle => ERROR3
+				Problem with setting up clipping region => ERROR2
+	SeeAlso:	ScreenCamView::OnFilePrint; ScreenCamView::GetPrintClipRect
+
+********************************************************************************************/
+//	WEBSTER-ranbirr-12/11/96
+#ifndef WEBSTER
+BOOL CCamView::PrintPaper(CNativeDC *pPrintDC, 
+							CCPrintInfo *pPrintInfo, 
+							PrintControl *pPrintControl)
+{
+//	TRACEUSER( "Tim", _T("PrintPaper() started\n"));
+
+//	TRACEUSER( "Tim", _T("PrintPaper() printing band=(%d,%d),(%d,%d)\n"),
+//			  DriverBand.left, DriverBand.top, DriverBand.right, DriverBand.bottom);
+
+
+	// Page successfully started, so now render the page by doing each 'patch'
+	// in turn.  Note that we store the patch information in the print view,
+	// which the view will use when setting up to render
+	// (see PrintView::ConstructRenderingMatrix())
+	while (pPrintInfo->GetNextPatch(&pPrintView->PatchInfo))
+	{
+		// Tell the view what scale this is.
+		pPrintView->SetViewScale(pPrintView->PatchInfo.Scale / FIXED16(100));
+
+		// Set up drawing rect to entire page (in logical coordinates)
+		wxRect r(wxPoint(0, 0), pPrintDC->GetSize());
+		wxCoord x1=pPrintDC->DeviceToLogicalX(r.GetLeft());
+		wxCoord x2=pPrintDC->DeviceToLogicalX(r.GetRight()+1);
+		wxCoord y1=pPrintDC->DeviceToLogicalY(r.GetTop());
+		wxCoord y2=pPrintDC->DeviceToLogicalY(r.GetBottom()+1);
+		wxCoord lowx=wxMin(x1,x2);
+		wxCoord highx=wxMax(x1,x2);
+		wxCoord lowy=wxMin(y1,y2);
+		wxCoord highy=wxMax(y1,y2);
+		pPrintInfo->m_rectDraw=wxRect(wxPoint(lowx,lowy),wxSize(highx-lowx,highy-lowy));
+
+		// Let's band this to make performance acceptable.
+
+		// Bodge banding - many printer drivers don't do banding so performance
+		// is a dog (i.e. not enough memory to print on my 32Mb machine!)
+		const INT32 BandHeight = BAND_HEIGHT;
+		INT32 BottomOfPage = pPrintInfo->m_rectDraw.GetBottom()+1; //+1 is wxRect stupidity
+//		const INT32 PageHeight = pPrintInfo->m_rectDraw.GetBottom() - pPrintInfo->m_rectDraw.GetTop();
+
+		// Find print control object for this document, to see if we are
+		// printing via bitmap, and so if we need to band the output.
+		PrintMethodType PrintType;
+		PrintType = pPrintControl->GetPrintMethod();
+
+		// Work out whether or not to use banding for printing.
+		// (i.e. are we printing with a bitmap?)
+		if ((PrintType == PRINTMETHOD_AABITMAP) ||
+			(PrintType == PRINTMETHOD_BITMAP))
+		{
+			// Banding is required - set up first band.
+			pPrintInfo->SetSliderSubRangeMax(pPrintInfo->m_rectDraw.GetHeight() / BAND_HEIGHT);
+			pPrintInfo->m_rectDraw.height = BandHeight;
+		}
+
+		INT32 CurrentBand = 0;
+
+		TRACEUSER( "Tim", _T("Rectangle: (%d,%d), (%d,%d) BottomOfPage=%d\n"),
+				 pPrintInfo->m_rectDraw.GetLeft(), pPrintInfo->m_rectDraw.GetTop(),
+				 pPrintInfo->m_rectDraw.GetRight()+1,pPrintInfo->m_rectDraw.GetBottom()+1,
+				 BottomOfPage);
+
+		while (pPrintInfo->m_rectDraw.GetBottom()+1 <= BottomOfPage)
+	    {
+			// Update slider
+			if ((PrintType == PRINTMETHOD_AABITMAP) ||
+				(PrintType == PRINTMETHOD_BITMAP))
+			{
+				// Doing our own banding, so update progress slider.
+				pPrintInfo->SetSliderSubRangePos(CurrentBand);
+			}
+
+			//
+			// Strange stuff to work out what area to print in this band.
+			//
+			WinRect OILClip = GetPrintClipRect(pPrintDC, pPrintInfo);
+
+			// Check for no intersection.
+			if (!OILClip.IsEmpty())
+			{
+				// Put this clip region into print info structure.
+				pPrintInfo->m_rectDraw = OILClip;
+
+				wxRect oldclip(wxPoint(0,0), wxSize(0,0));
+				pPrintDC->GetClippingBox(oldclip);
+				pPrintDC->SetClippingRegion(pPrintInfo->m_rectDraw);
+
+				// Print the band.
+				pPrintView->SetCurrent();
+				OnPrint(pPrintDC, pPrintInfo);
+
+				pPrintDC->SetClippingRegion(oldclip);
+
+				if (!pPrintInfo->m_bContinuePrinting || pPrintInfo->Abort())
+					// Printing has finished.
+					return FALSE;
+			}
+
+			// Is this the last band?
+			if (pPrintInfo->m_rectDraw.GetBottom()+1 < BottomOfPage)
+			{
+				// No - get the next band.
+				pPrintInfo->m_rectDraw.y = pPrintInfo->m_rectDraw.GetBottom()+1;
+				pPrintInfo->m_rectDraw.height = BandHeight;
+
+				// Limit to bottom of page if necessary.
+				if (pPrintInfo->m_rectDraw.GetBottom()+1 > BottomOfPage)
+					pPrintInfo->m_rectDraw.height -= pPrintInfo->m_rectDraw.GetBottom()+1 - BottomOfPage;
+			}
+			else
+			{
+				// No bands left - so we're done here.
+				TRACEUSER( "Tim", _T("No bespoke banding\n"));
+				break;
+			}
+
+			CurrentBand++;
+		}
+	}
+
+	TRACEUSER( "Tim", _T("PrintPaper() finished\n"));
+
+	// All worked ok
+	return TRUE;
+}
+#endif //webster
+
+
+/********************************************************************************************
+
+>	WinRect CCamView::GetPrintClipRect(CDC *pPrintDC, CCPrintInfo *pPrintInfo)
+
+	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	05/11/95
+	Inputs:		pPrintDC - the device context we are printing to - we need this because
+						   otherwise the PrintView object can't compute the rendering
+						   matrix, which we need in order to find out the position of the
+						   patch on the DC.
+				pPrintInfo - the print info object, which specifies the window onto the
+							 page/DC that we can print into.
+	Returns:	The intersection of the area of the current patch (as held in 
+				ScreenCamView::pPrintView->PatchInfo) and the printable area of the DC,
+				in WinCoords.
+	Purpose:	Works out which area of the paper to print on, given the current patch
+				(as held in the PrintView object), and the printing area specified by
+				the CCPrintInfo object.
+	SeeAlso:	ScreenCamView::PrintPaper; PrintView::ConstructRenderingMatrix
+
+********************************************************************************************/
+//	WEBSTER-ranbirr-12/11/96
+#ifndef WEBSTER
+WinRect CCamView::GetPrintClipRect(CNativeDC *pPrintDC, CCPrintInfo *pPrintInfo)
+{
+	// We need to attach the PrintView while we are doing this so it knows how big
+	// the pixels are and so on.
+	pPrintView->AttachToDC(pPrintDC);
+
+	// Get the rendering matrix for this patch
+	Spread *pSpread = Document::GetSelectedSpread(); // Should be PatchInfo.pSpread
+	Matrix TheMatrix = pPrintView->ConstructRenderingMatrix(pSpread);
+
+	// Use matrix to transform clip rect of patch to Oil coords.
+	DocRect ClipRect = pPrintView->PatchInfo.GetClipRect(FALSE,FALSE);
+
+	// turn this clip rect into an OilRect
+	OilRect PatchClipRect(OilCoord(ClipRect.lo.x, ClipRect.lo.y),
+					      OilCoord(ClipRect.hi.x, ClipRect.hi.y));
+
+	TheMatrix.transform(&PatchClipRect.lo);
+	TheMatrix.transform(&PatchClipRect.hi);
+
+	// Rendering transform may involve a rotation so correct if necesary.
+	pPrintView->CorrectRotatedRectangle((Rect *) &PatchClipRect);
+
+	// We need to inflate the clipping rectangle as this is used to determin the
+	// bitmap size when rendering to AABITMAP output (and BITMAP).
+	// Ok, There is a problem here.... We need to set the clip rectangle to cover
+	// the crop area too. Otherwise, when rendering text as text, GDI will bin the
+	// crop mark text we render. We do this after the transform to avoid the transform
+	// scaling this unscalable value.
+	pPrintView->PatchInfo.InflateRectBy(&PatchClipRect, TRUE, TRUE);
+
+	// Convert the OIL cliprect to logical GDI units
+	WinRect WinClipRect;
+	WinClipRect = PatchClipRect.ToWin(pPrintView);
+
+	// Find intersection with clip rect.
+	WinRect OILClip=WinClipRect;
+	OILClip.Intersect(pPrintInfo->m_rectDraw);
+
+	// Finished messing with the PrintView for the mo so we can detach the DC.
+	// It is eventually re-attached (in ScreenCamView::OnDraw()) when we call OnPrint().
+	pPrintView->AttachToDC(NULL);
+
+	return OILClip;
+}
+#endif //webster
+
+/********************************************************************************************
+
+>	void CCamView::EnumeratePagePatches(CCPrintInfo *pPrintInfo)
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	14/09/96
+	Inputs:		pPrintInfo - the print info object, which specifies the window onto the
+							 page/DC that we can print into.
+	Returns:	
+	Purpose:	In order to locate crop marks / registration marks etc correctly, we need
+				to work out the bounds of all patches printed on a single sheet of paper.
+				This routine does just that.
+				
+********************************************************************************************/
+//	WEBSTER-ranbirr-12/11/96
+#ifndef WEBSTER
+void CCamView::EnumeratePagePatches(CCPrintInfo *pPrintInfo)
+{
+#ifndef EXCLUDE_FROM_RALPH
+#ifndef STANDALONE
+
+	DocRect Bounds;
+	DocRect cliprect;
+	INT32 bleed;
+	BOOL emuldwn;
+
+	// get a pointer to the print marks manager
+	PrintMarksMan *pMarksMan = GetApplication()->GetMarksManager();
+	if (pMarksMan==NULL)
+		return;
+
+	// Destroy what we may already have from a previous piece of paper
+	pMarksMan->ResetPageRects();
+
+	PrintPatchInfo* pPatchInfo = &pPrintView->PatchInfo;
+	if (pPrintInfo->GetNextPaper())
+	{
+		// scan through each patch on the first paper region
+		while (pPrintInfo->GetNextPatch(pPatchInfo))
+		{
+			// Get raw patch clip rectangle
+			cliprect = pPatchInfo->GetClipRect(FALSE,FALSE);
+			bleed = pPatchInfo->GetBleed();
+			emuldwn = pPatchInfo->EmulsionDown;
+			// dont inflate by the bleed, this is passed in and used by the print marks manager
+			//cliprect.Inflate(pPatchInfo->Bleed);
+			// Build a Spread=>OS conversion matrix for this patch
+			Matrix TheMatrix = pPrintView->ConstructRenderingMatrix(pPatchInfo->pSpread);
+			// transform the patch
+			TheMatrix.transform(&cliprect.lo);
+			TheMatrix.transform(&cliprect.hi);
+			// Rendering matrix may involve a rotation when printing so correct the rectangle
+			// for this if necessary.
+			pPrintView->CorrectRotatedRectangle((Rect *)&cliprect);
+			// tell the marks manager about these bounds.
+			pMarksMan->AddPageRect(cliprect);
+		}
+	}
+	
+	// Get the marks manager to update its imagesetting rect
+	pMarksMan->SetImagesettingRect();
+	pMarksMan->SetBleed(bleed);
+	pMarksMan->SetEmulsionDown(emuldwn);
+	
+	// reprint this piece of paper so we dont upset the print system
+	pPrintInfo->ReprintPaper();
+
+#endif
+#endif
+}
+
+#endif //webster
+
+PORTNOTE("printing", "Disabled lots of printing code")
+#ifndef EXCLUDE_FROM_XARALX
+
 /*********************************************************************************************
 >	BOOL CCamView::OnPreparePrinting(CPrintInfo* pInfo)
 
@@ -863,49 +1754,56 @@ LRESULT CCamView::OnRenderView( WPARAM, LPARAM lp )
 
 **********************************************************************************************/ 
 
-PORTNOTE("print","Removed CPrintInfo usage")
-#ifndef EXCLUDE_FROM_XARALX
 BOOL CCamView::OnPreparePrinting(CPrintInfo* pInfo)
-{
-	SetCurrentStates();
-
-	// default preparation
-	return DoPreparePrinting(pInfo);
-}
-#endif
-
-/////////////////////////////////////////////////////////////////////////////
-// Menu functions
-
-/*********************************************************************************************
->	void CCamView::OnFilePrint()
-
-	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	ages ago
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	Simply makes CView::OnFilePrint() have public scope.  Used by
-				the menu system.
-	Errors:		-
-	Scope:		Public
-	SeeAlso:	CView::OnFilePrint(); CCamView::OnFilePrintPreview()
-
-**********************************************************************************************/ 
-//	WEBSTER-ranbirr-12/11/96
-#ifndef WEBSTER
-
-void CCamView::OnFilePrint()
 {
 #ifndef STANDALONE
 
-	SetCurrentStates();
+//	if (!CCPrintDialog::OnPreparePrinting(pInfo,pDocView->GetDoc()))
+//		ERROR2(FALSE,"Unable to initialise the customized print dialog");
 
-//	CView::OnFilePrint();
+	// default preparation
+	BOOL Result = CCamView::DoPreparePrinting(pInfo);
+	if (!Result)
+		return FALSE;
+
+	// Check because brainless CView only checks for valid DC in debug builds - handy eh? NOT!
+	if (pInfo->m_pPD->m_pd.hDC == NULL)
+	{
+		ERROR1(FALSE,_R(IDE_NULL_PRINTDC));
+		//ERROR2(FALSE, "No valid DC returned by print dialog!");
+	}
+
+	// Get ourselves a print view and attach it to this CCamView.
+	// NB. Must be after the user has clicked OK on print dialog, as we set up
+	//     anti-aliasing etc. in PrintView constructor.
+	if (pPrintView != NULL)
+	{
+		delete pPrintView;
+		pPrintView = NULL;
+		ERROR2(FALSE, "OnPreparePrinting(): we already have a PrintView!");
+	}
+
+	pPrintView = new PrintView(pDocView->GetDoc());
+	if (pPrintView == NULL)
+		ERROR2(FALSE, "Not enough memory to create PrintView object");
+
+	if (!pPrintView->ConnectToOilView(this))
+	{
+		delete pPrintView;
+		pPrintView = NULL;
+		ERROR2(FALSE, "Unable to attach PrintView to CCamView.");
+	}
 
 #endif
+
+	// OK if we got this far.
+	return TRUE;
 }
-#endif	//webster
+
+#endif //EXCLUDE_FROM_XARALX
+
+/////////////////////////////////////////////////////////////////////////////
+// Menu functions
 
 
 
@@ -952,7 +1850,7 @@ void CCamView::OnFilePrintPreview()
 				rectangle will be redrawn at some time in the (near) future.
 	Errors:	    -
 	Scope:		Public
-	SeeAlso:	class CRendWnd; ScreenView::OnDraw()
+	SeeAlso:	class CRendWnd; CCamView::OnDraw()
 
 **********************************************************************************************/ 
 
@@ -1003,7 +1901,7 @@ void CCamView::InvalidateView(const OilRect* pRect, BOOL updatenow)
 
 BOOL CCamView::StartDrag(Operation* pOp, DragType type, BOOL KeepAccuracy)
 {
-	ENSURE(	pCurrentDragOp == 0, "ScreenView::StartDrag: pCurrentDragOp is not zero");
+	ENSURE(	pCurrentDragOp == 0, "CCamView::StartDrag: pCurrentDragOp is not zero");
 	
 	// This has been commented out as some screen drivers can not handle the mouse drifting
 	// off the top of the screen.
@@ -1040,7 +1938,7 @@ BOOL CCamView::StartDrag(Operation* pOp, DragType type, BOOL KeepAccuracy)
 				Kills the timer set in StartDrag().
 	Errors:		ASSERTion failure if ScreenView was not already in "drag mode".	
 	Scope:		Public
-	SeeAlso:	ScreenView::StartDrag(); ScreenView::HandleDragEvent()
+	SeeAlso:	CCamView::StartDrag(); CCamView::HandleDragEvent()
 
 **********************************************************************************************/ 
 
@@ -1051,7 +1949,7 @@ BOOL CCamView::EndDrag(Operation*)
 	// Prevent a very nasty recursive ENSURE!
 	if (!CCamApp::IsDisabled())
 	{
-		ENSURE(pCurrentDragOp != 0, "ScreenView::EndDrag: pCurrentDragOp is zero");
+		ENSURE(pCurrentDragOp != 0, "CCamView::EndDrag: pCurrentDragOp is zero");
 	}
 #endif	// _DEBUG
 */
@@ -1125,7 +2023,7 @@ BOOL CCamView::GetCurrentMousePos(OilCoord* pMousePos) const
 				and inverted - the mother of all bodges).
 	Errors:		-
 	Scope:		Public
-	SeeAlso:	ScreenView::GetWorkAreaExtent(); CScroller::SetPageSize();
+	SeeAlso:	CCamView::GetWorkAreaExtent(); CScroller::SetPageSize();
 				CScroller::SetScrollRange(); class CRendWnd
 
 **********************************************************************************************/ 
@@ -1165,7 +2063,7 @@ void CCamView::SetWorkAreaExtent(const WorkRect& area, BOOL redraw)
 				combining then into a WorkCoord.
 	Errors:		-
 	Scope:		Public
-	SeeAlso:	ScreenView::SetScrollOffset(); CScroller::GetScrollPos()
+	SeeAlso:	CCamView::SetScrollOffset(); CScroller::GetScrollPos()
 
 **********************************************************************************************/ 
 
@@ -1264,7 +2162,7 @@ void CCamView::SetScrollOffset(const WorkCoord& pos, BOOL redraw)
 				view/frame to the position given in the ViewState object.
 	Errors:	    -
 	Scope:		Protected
-	SeeAlso:	ScreenView::SetThisFromViewState; ScreenView::SetViewStateFromThis;
+	SeeAlso:	CCamView::SetThisFromViewState; CCamView::SetViewStateFromThis;
 				DocView::ViewStateChanged
 **********************************************************************************************/ 
 
@@ -1537,7 +2435,7 @@ void CCamView::OnActivateView( bool bActivate, wxView* pActiveView, wxView* pDea
 				independent form, and stores them in the ViewState.
 	Errors:	    -
 	Scope:		Private
-	SeeAlso:	ScreenView::OnInitialUpdate; ScreenView::SetThisFromViewState();
+	SeeAlso:	CCamView::OnInitialUpdate; CCamView::SetThisFromViewState();
 				DocView::ViewStateChanged(); class ViewState
 
 **********************************************************************************************/ 
@@ -1588,7 +2486,7 @@ PORTNOTE("other","Removed WM_TOPMOSTENQUIRY usage - is this really needed?")
 				view is opened on a saved document.
 	Errors:		-
 	Scope:	    Private
-	SeeAlso:	ScreenView::SetViewStateFromThis(); ScreenView::OnInitialUpdate()
+	SeeAlso:	CCamView::SetViewStateFromThis(); CCamView::OnInitialUpdate()
 
 **********************************************************************************************/ 
 
@@ -2039,7 +2937,7 @@ void CCamView::OnMButtonDown( wxMouseEvent &event )
 				the coordinates of the mouse cursor.
 	Outputs:	-
 	Returns:	-
-	Purpose:	Same as for ScreenView::OnLButtonDown(), but for the right mouse button.
+	Purpose:	Same as for CCamView::OnLButtonDown(), but for the right mouse button.
 	Errors:		-
 	Scope:		Protected
 	SeeAlso:	class CRendWnd; CCamView::HandleDragEvent(); CCamView::OnLButtonDown()
@@ -2242,7 +3140,7 @@ void CCamView::OnLButtonDblClk(wxMouseEvent &event)
 				the coordinates of the mouse cursor.
 	Outputs:	-
 	Returns:	-
-	Purpose:	Passes a middle-button double-click to ScreenView::HandleDragEvent().
+	Purpose:	Passes a middle-button double-click to CCamView::HandleDragEvent().
 	Errors:		-
 	Scope:		Protected
 	SeeAlso:	class CRendWnd; CCamView::HandleDragEvent()
@@ -2279,7 +3177,7 @@ void CCamView::OnMButtonDblClk(wxMouseEvent &event)
 				the coordinates of the mouse cursor
 	Outputs:	-
 	Returns:	-
-	Purpose:	Same as ScreenView::OnLButtonDblClk(), bit for the right button.
+	Purpose:	Same as CCamView::OnLButtonDblClk(), bit for the right button.
 	Errors:		-
 	Scope:		Protected
 	SeeAlso:	class CRendWnd; CCamView::OnLButtonDblClk()
@@ -2926,8 +3824,8 @@ PORTNOTETRACE( "other", "CCamView::OnSize - Removed ruler usage" );
 				until the drag is finished.
 	Errors:		-
 	Scope:		Protected
-	SeeAlso:	ScreenView::HandleDragEvent(); DocView::DragPointerMove();
-				ScreenView::GetClickMods();
+	SeeAlso:	CCamView::HandleDragEvent(); DocView::DragPointerMove();
+				CCamView::GetClickMods();
 
 **********************************************************************************************/ 
 
@@ -2940,7 +3838,7 @@ void CCamView::OnDragIdle(wxTimerEvent& event)
 
 	// This window should never get a timer event that does not occur between calls to
 	// StartDrag() and EndDrag().
-//	ENSURE(pCurrentDragOp != 0, "ScreenView::StartDrag: pCurrentDragOp is null");
+//	ENSURE(pCurrentDragOp != 0, "CCamView::StartDrag: pCurrentDragOp is null");
 
 	// Find out which keys/buttons are being held down at the moment.  The mouse buttons
 	// are more difficult, as they may have been swapped.
@@ -3301,7 +4199,7 @@ PORTNOTE("other","Removed reading of keyboard autorepeat rate")
 
 
 /********************************************************************************************
->	BOOL ScreenView::HandleMouseWheelEvent(UINT32 nFlags, short zDelta, wxPoint pt)
+>	BOOL CCamView::HandleMouseWheelEvent(UINT32 nFlags, short zDelta, wxPoint pt)
 	Author:		Priestley (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/10/2000
 	Purpose:	Handle MouseWheel for Scroll document and Zoom operations
@@ -3337,7 +4235,7 @@ BOOL CCamView::HandleMouseWheelEvent( wxMouseEvent &event )
 	INT32 zDelta = event.GetWheelRotation();
 	INT32 zStep = event.GetWheelDelta();
 
-	PORTNOTETRACE("other","ScreenView::HandleMouseWheelEvent - removed gallery bits");
+	PORTNOTETRACE("other","CCamView::HandleMouseWheelEvent - removed gallery bits");
 #ifndef EXCLUDE_FROM_XARALX
 	// We need to know if the mouse pointer is over a Gallery, and if it is what the
 	// HWND of that Gallery is, so that I can send it a scroll message...
@@ -3490,7 +4388,7 @@ BOOL CCamView::HandleMouseWheelEvent( wxMouseEvent &event )
 
 
 /*********************************************************************************************
->	void ScreenView::HandleButtonUp(UINT32 nFlags, wxPoint point)
+>	void CCamView::HandleButtonUp(UINT32 nFlags, wxPoint point)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9th Sept 1993
@@ -3504,7 +4402,7 @@ BOOL CCamView::HandleMouseWheelEvent( wxMouseEvent &event )
 				whenever a mouse button is released.
 	Errors:		-
 	Scope:		Private
-	SeeAlso:	ScreenView::GetClickMods(); ScreenView::OnLButtonDown(); ScreenView::OnRButtonDown()
+	SeeAlso:	CCamView::GetClickMods(); CCamView::OnLButtonDown(); CCamView::OnRButtonDown()
 				DocView::OnClick()
 
 **********************************************************************************************/ 
@@ -3628,7 +4526,7 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 
 			FirstClickButton = 0;
 
-			//Then pass the Up-Click message to ScreenView::OnClick
+			//Then pass the Up-Click message to CCamView::OnClick
 			pDocView->OnClick(((WinCoord*) &point)->ToOil(pDocView, TRUE), CLICKTYPE_UP, LastClickMods);
 		}
 	}
@@ -3641,7 +4539,7 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 		if (pCurrentDragOp != NULL)
 		{
 			//Yes, as expected.
-			//Pass the Up-Click message to ScreenView::OnClick
+			//Pass the Up-Click message to CCamView::OnClick
 			pDocView->OnClick(((WinCoord*) &point)->ToOil(pDocView, TRUE), CLICKTYPE_UP, LastClickMods);
 		}
 		//If not, something odd has happened - perhaps the user has clicked fast
@@ -4069,7 +4967,7 @@ WorkRect CCamView::GetMaxScrollRect() const
 
 
 /********************************************************************************************
->	BOOL ScreenView::IsTopmost() const
+>	BOOL CCamView::IsTopmost() const
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	17/11/93
@@ -4187,7 +5085,7 @@ BOOL CCamView::CreateDragTarget(DragInformation * DragInfo)
 
 
 /********************************************************************************************
->	static DocView* ScreenView::GetDocViewFromHwnd(CWindowID WindowID)
+>	static DocView* CCamView::GetDocViewFromHwnd(CWindowID WindowID)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	28/7/94

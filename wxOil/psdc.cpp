@@ -116,6 +116,8 @@ DECLARE_SOURCE("$Revision$");
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontman.h"
 
+CC_IMPLEMENT_DYNAMIC(PSPrintDC, KernelDC);
+
 /********************************************************************************************
 
 >	PSDCFontInfo::PSDCFontInfo()
@@ -135,7 +137,7 @@ PSDCFontInfo::PSDCFontInfo()
 
 /********************************************************************************************
 
->	PSPrintDC::PSPrintDC(CDC *pDC)
+>	PSPrintDC::PSPrintDC(CNativeDC *pDC)
 
 	Author:		Tim_Browse (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	23/04/95
@@ -144,23 +146,11 @@ PSDCFontInfo::PSDCFontInfo()
 
 ********************************************************************************************/
 
-PSPrintDC::PSPrintDC(CDC *pDC) : KernelDC(pDC, RENDERTYPE_PRINTER_PS)
+PSPrintDC::PSPrintDC(CNativeDC *pDC) : KernelDC(pDC, RENDERTYPE_PRINTER_PS)
 {
 	// Initialise the buffer to being empty.
 	Buffer.nCount = 0;
 	Buffer.Data[0] = 0;
-
-	// Work out which Escape to use - OS-dependent.
-	if (IsWin32NT() || IsWin32c())
-	{
-		// Do not use POSTSCRIPT_DATA - it screws up under NT (the buffer pointers
-		// seem to get out of sync).
-		PassThruEscape = POSTSCRIPT_PASSTHROUGH; // Fails with Win16 driver
-	}
-	else
-	{
-		PassThruEscape = PASSTHROUGH;
-	}
 
 	// No view yet
 	pView = NULL;
@@ -182,6 +172,7 @@ PSPrintDC::PSPrintDC(CDC *pDC) : KernelDC(pDC, RENDERTYPE_PRINTER_PS)
 
 	// Suppress the output of a postscript clipping region
 	UsePSLevelClipping = FALSE;
+
 }
 
 
@@ -200,7 +191,7 @@ PSPrintDC::~PSPrintDC()
 	// Deselect the normal rendering font from the DC
 	if (FontInfo.pRenderFont != NULL)
 	{
-		SelectObject(FontInfo.pOldFont);
+		GetDC()->SetFont(*FontInfo.pOldFont);
 		FontInfo.pOldFont = NULL;
 		delete FontInfo.pRenderFont;
 		FontInfo.pRenderFont = NULL;
@@ -225,7 +216,7 @@ PSPrintDC::~PSPrintDC()
 
 BOOL PSPrintDC::OutputNewLine()
 {
-	static char NewLine[] = "\n";
+	static TCHAR NewLine[] = _T("\n");
 
 	// Make sure we have enough room in the buffer
 	if (!MakeRoomInBuffer(camStrlen(NewLine)))
@@ -298,7 +289,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 		}
 
 		// save the graphics state
-		OutputToken("save");
+		OutputToken(_T("save"));
 		OutputNewLine();
 
 		if (!pPSRegion->WritePhotoNegative(this))
@@ -318,7 +309,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 			return FALSE;
 
 		OutputNewLine();
-		OutputToken("XaraStudio1Dict begin");
+		OutputToken(_T("XaraStudio1Dict begin"));
 		OutputNewLine();
 
 		// Now output the setscreen function for this plate
@@ -335,8 +326,8 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 	}	
 
 	// Special tokens
-	static char Space = ' ';
-	static char NewLine[] = "\n";
+//	static TCHAR Space = _T(' ');
+//	static TCHAR NewLine[] = _T("\n");
 
 	if (LineWidth > 70)
 	{
@@ -353,7 +344,7 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 			return FALSE;
 
 		// Add space to buffer
-		camStrcat(Buffer.Data, " ");
+		camStrcat(Buffer.Data, _T(" "));
 		Buffer.nCount++;
 
 		// Update line width record.
@@ -420,23 +411,12 @@ BOOL PSPrintDC::OutputDirect(BYTE *Buf, INT32 nBytes)
 		// Work out how much we can send this time around.
 		INT32 nBytesToSend = min(nBytes, MAX_PSBUF);
 
-		// Put data into our buffer
-		memcpy(Buffer.Data, Buf, nBytesToSend);
-
-		// Update buffer count and send data
-		Buffer.nCount = (short) nBytesToSend;
-		if (Escape(PassThruEscape, (INT32) Buffer.nCount, (LPCSTR) &Buffer, NULL) <= 0)
-			// Error!
-			return FALSE;
+		WritePSchar((char *)Buf, nBytesToSend);
 
 		// Update variables to reflect sending this number of bytes
 		nBytes -= nBytesToSend;
 		Buf += nBytesToSend;
 	}
-
-	// Clear out buffer
-	Buffer.nCount = 0;
-	Buffer.Data[0] = 0;
 
 	// All ok
 	return TRUE;
@@ -458,26 +438,106 @@ BOOL PSPrintDC::OutputDirect(BYTE *Buf, INT32 nBytes)
 
 BOOL PSPrintDC::FlushPSBuffer()
 {
-	if (Buffer.nCount == 0)
+	if (Buffer.nCount <= 0)
 		// Nothing to flush
 		return TRUE;
 
 	// Get system to flush any of its data first.
-	Escape(FLUSHOUTPUT, NULL, NULL, NULL);
+	// (don't have to do anything here)
 
-	// Send data to printer
-	if (Escape(PassThruEscape, (INT32) Buffer.nCount, (LPCSTR) &Buffer, NULL) <= 0)
-		// Error!
-		return FALSE;
+	if (Buffer.nCount>MAX_PSBUF) // MAX_PSBUF itself is legal
+	{
+		Buffer.nCount=MAX_PSBUF;
+		ERROR3("Postscript buffer overrun");
+	}
 
+	// Ensure the buffer is zero terminated
+	WritePSTCHAR(Buffer.Data, Buffer.nCount);
+	
 	// Clear out buffer
 	Buffer.nCount = 0;
 	Buffer.Data[0] = 0;
 
-	// Ok if we get here
 	return TRUE;
 }
 
+
+/********************************************************************************************
+
+>	void PSPrintDC::WritePSTCHAR(TCHAR * pBuf, INT32 nBytes)
+
+	Author:		Alex Bligh
+	Created:	23/06/2006
+	Returns:	-
+	Purpose:	Writes nBytes of TCHAR to the output stream. Uses Buffer.chardata as a
+				scratch area. Max of MAX_PSBUF can be written at a time
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void PSPrintDC::WritePSTCHAR(TCHAR * pBuf, INT32 nBytes)
+{
+	if ((nBytes>MAX_PSBUF) || (nBytes<=0))
+	{
+		ERROR3("Bad PSPrintDC write");
+		return;
+	}
+
+	if (sizeof(TCHAR) == sizeof(char))
+	{
+		WritePSchar((char *)pBuf, nBytes);
+		return;
+	}
+
+	INT32 i;
+	for (i=0; i<nBytes; i++)
+	{
+		ERROR3IF(!pBuf[i], "Zero byte in PS buffer");
+		Buffer.CharData[i]=pBuf[i]; // 1:1 copy
+	}
+
+	Buffer.CharData[nBytes]=0; // safe as chardata one larger than MAX_PSBUF
+	((wxPostScriptDC *)GetDC())->PsPrint(Buffer.CharData);
+}
+
+/********************************************************************************************
+
+>	void PSPrintDC::WritePSchar(char * pBuf, INT32 nBytes)
+
+	Author:		Alex Bligh
+	Created:	23/06/2006
+	Returns:	-
+	Purpose:	Writes nBytes of TCHAR to the output stream. Uses Buffer.chardata as a
+				scratch area. Max of MAX_PSBUF can be written at a time
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void PSPrintDC::WritePSchar(char * pBuf, INT32 nBytes)
+{
+	if ((nBytes>MAX_PSBUF) || (nBytes<=0))
+	{
+		ERROR3("Bad PSPrintDC write");
+		return;
+	}
+
+#ifdef _DEBUG
+	INT32 i;
+	for (i=0; i<nBytes; i++)
+	{
+		if (!pBuf[i])
+		{
+			ERROR3("Zero byte in PS Buffer!");
+			break;
+		}
+	}
+#endif
+
+	// Need to copy it so we can safely zero terminate it
+	memcpy(Buffer.CharData, pBuf, nBytes);
+	Buffer.CharData[nBytes]=0; // safe as chardata one larger than MAX_PSBUF
+	((wxPostScriptDC *)GetDC())->PsPrint(Buffer.CharData);
+}
 
 /********************************************************************************************
 
@@ -711,7 +771,7 @@ BOOL PSPrintDC::StartOSOutput()
 	{
 		// We need to restore the GDI context - this involves removing our dictionary
 		// from the dictionary stack, and calling restore.
-		if (!OutputToken("end restore") || !OutputNewLine())
+		if (!OutputToken(_T("end restore")) || !OutputNewLine())
 			// Error
 			return FALSE;
 		
@@ -777,6 +837,9 @@ BOOL PSPrintDC::EndOSOutput()
 BOOL PSPrintDC::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic, 
 							  MILLIPOINT Width, MILLIPOINT Height, ANGLE Rotation)
 {
+PORTNOTE("printing", "Removed postscript printing of text")
+#ifndef EXCLUDE_FROM_XARALX
+
 	// Check to see if it is cached
 	if ((FontInfo.pRenderFont != NULL) &&
 		(FontInfo.Typeface == Typeface) &&
@@ -800,7 +863,7 @@ BOOL PSPrintDC::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic,
 	// Not the cached font - ok, deselect and delete the cached font.
 	if (FontInfo.pOldFont != NULL)
 	{
-		SelectObject(FontInfo.pOldFont);
+		GetDC->SetFont(*FontInfo.pOldFont);
 		FontInfo.pOldFont = NULL;
 	}
 
@@ -811,15 +874,9 @@ BOOL PSPrintDC::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic,
 	}
 
 	// Create the font and select it into the DC
-	TRY
-	{
-		FontInfo.pRenderFont = new CFont;
-	}
-	CATCH (CMemoryException, e)
-	{
+	FontInfo.pRenderFont = new wxFont;
+	if (!FontInfo.pRenderFont)
 		return FALSE;
-	}
-	END_CATCH
 
 	// Work out the font weight - bold or normal?
 	INT32 FontWeight = Bold ? FW_BOLD : FW_NORMAL;
@@ -910,7 +967,7 @@ BOOL PSPrintDC::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic,
 			if (TRUE) //RFlags.Metafile)
 			{
 				// Metafile - we need to use the screen DC to do this
-				CDC *pDesktopDC = CWnd::GetDesktopWindow()->GetDC();
+				CNativeDC *pDesktopDC = CWnd::GetDesktopWindow()->GetDC();
 
 				// Get the metrics
 				FontInfo.pOldFont = pDesktopDC->SelectObject(FontInfo.pRenderFont);
@@ -990,6 +1047,9 @@ BOOL PSPrintDC::SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic,
 
 	// Font created and selected ok
 	return TRUE;
+#else
+	return FALSE; // hopefully it will print as curves
+#endif
 }
 
 

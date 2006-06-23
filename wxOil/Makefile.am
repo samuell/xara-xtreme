@@ -36,7 +36,7 @@ libwxOil_a_SOURCES = \
 	fontbase.cpp ftfonts.cpp textfuns.cpp dragbmp.cpp xpoilflt.cpp xmlutils.cpp \
 	camprocess.cpp dropdown.cpp coldrop.cpp fontdrop.cpp bfxalu.cpp bfxpixop.cpp \
 	binreloc.c exceptio.cpp colpick.cpp dragpick.cpp sgldrag.cpp cctime.cpp \
-	lddirect.cpp prncamvw.cpp \
+	lddirect.cpp prncamvw.cpp prdlgctl.cpp psdc.cpp \
 	resources.cpp
 
 # Keep resources.cpp on a separate line as it is odd

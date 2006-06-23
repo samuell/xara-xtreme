@@ -1731,13 +1731,13 @@ BOOL ScreenView::OnPreparePrinting(CPrintInfo* pInfo)
 {
 #ifndef STANDALONE
 
-//	if (!CCPrintDialog::OnPreparePrinting(pInfo,pDocView->GetDoc()))
-//		ERROR2(FALSE,"Unable to initialise the customized print dialog");
+	if (!CCPrintDialog::OnPreparePrinting(pInfo,pDocView->GetDoc()))
+		ERROR2(FALSE,"Unable to initialise the customized print dialog");
 
 	// default preparation
-	BOOL Result = CCamView::DoPreparePrinting(pInfo);
-	if (!Result)
-		return FALSE;
+//	BOOL Result = CCamView::DoPreparePrinting(pInfo);
+//	if (!Result)
+//		return FALSE;
 
 	// Check because brainless CView only checks for valid DC in debug builds - handy eh? NOT!
 	if (pInfo->m_pPD->m_pd.hDC == NULL)
