@@ -1686,8 +1686,8 @@ void CCamView::EnumeratePagePatches(CCPrintInfo *pPrintInfo)
 
 	DocRect Bounds;
 	DocRect cliprect;
-	INT32 bleed;
-	BOOL emuldwn;
+	INT32 bleed=0;
+	BOOL emuldwn=FALSE;
 
 	// get a pointer to the print marks manager
 	PrintMarksMan *pMarksMan = GetApplication()->GetMarksManager();
