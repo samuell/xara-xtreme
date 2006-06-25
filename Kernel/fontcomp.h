@@ -173,7 +173,6 @@ private:
 	String_64 mFullFontName;
 	String_64 mTypeFaceName;
 	FontClass mFontClass;
-//#pragma message( __LOCMSG__ "Removed CCPanose usage" )
 	CCPanose mPanoseNumber;
 };
 

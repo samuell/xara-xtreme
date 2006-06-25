@@ -480,7 +480,6 @@ PORTNOTE("other","Removed init of stuff that is not supported")
 #endif // VECTOR_STROKING
 
 	// Set up the Bitmap Cache...
-//#pragma message( __LOCMSG__ "Removed BitmapCache usage" )
 	TheBitmapCache = new CBitmapCache();
 	TheBitmapCache->Initialise();					// Initialise with default settings
 
@@ -800,7 +799,6 @@ PORTNOTE("other","Removed un-=impl. stuff")
 		m_pObjCache = NULL;
 	}
 
-//#pragma message( __LOCMSG__ "Remove BitmapCache usage" )
 	if (TheBitmapCache)
 	{
 		TheBitmapCache->DeInitialise();
@@ -929,9 +927,6 @@ BOOL Application::DestroyCCC()
 
 ***********************************************************************************************/
 
-//#pragma message( __LOCMSG__ "Removed RenderRegionList usage" )
-#if 1
-
 RenderRegionList* Application::GetRegionList()
 {
  	return &RenderList;
@@ -1010,7 +1005,6 @@ BOOL Application::DeleteRenderRegion(RenderRegion *Region)
 	return TRUE;
 }
 
-#endif
 
 /********************************************************************************************
 
@@ -1029,8 +1023,6 @@ BOOL Application::DeleteRenderRegion(RenderRegion *Region)
 
 BOOL Application::ServiceRendering(BOOL bImmediate)
 { 
-//#pragma message( __LOCMSG__ "Application::ServiceRendering - do nothing" )
-//	TRACE( wxT("Warning - Application::ServiceRendering called\n") );
 #ifdef RALPH
 #ifdef _DEBUG
 	if(::GetCurrentThreadId() == RalphDocument::GetImportingThreadID())

@@ -139,9 +139,6 @@ FIXED16 GetCurrentViewScale()
 
 MILLIPOINT ConvertMeasurementToMillipointsAtCurrentViewScale(INT32 Width, UnitType type)
 {
-//#pragma message( __LOCMSG__ "ConvertMeasurementToMillipointsAtCurrentViewScale - do nothing" )
-//	TRACE( _T("Warning - ConvertMeasurementToMillipointsAtCurrentViewScale called\n") );
-//	return MILLIPOINT(0);
 	const double dpi = (double)GRenderRegion::GetDefaultDPI();
 	const double MillipointsPerPixel = (dpi <= 0) ? 750.0 : MILLIPOINTS_PER_INCH / dpi;
 
@@ -169,9 +166,6 @@ MILLIPOINT ConvertMeasurementToMillipointsAtCurrentViewScale(INT32 Width, UnitTy
 
 UINT32 ConvertMillipointsToPixelsAtCurrentViewScale(MILLIPOINT mp)
 {
-//#pragma message( __LOCMSG__ "ConvertMillipointsToPixelsAtCurrentViewScale - do nothing" )
-//	TRACE( _T("Warning - ConvertMillipointsToPixelsAtCurrentViewScale called\n") );
-//	return 0;
 	const double dpi = (double)GRenderRegion::GetDefaultDPI();
 	const double MillipointsPerPixel = (dpi <= 0) ? 750.0 : MILLIPOINTS_PER_INCH / dpi;
 
@@ -251,8 +245,6 @@ BOOL OffscreenAttrValue::IsDifferent(AttributeValue*)
  ********************************************************************************************/
 void OffscreenAttrValue::Render(RenderRegion *pRender, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "OffscreenAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - OffscreenAttrValue::Render called\n") );
 	// Debug test for an offscreen attribute being Render()'ed multiple times without
 	// OffscreenRenderingCompleted() being called. This is easily caused by:
 	//	1.	rendering code which isn't bracketed by calls to SaveContext() / RestoreContext()
@@ -295,8 +287,6 @@ void OffscreenAttrValue::Render(RenderRegion *pRender, BOOL Temp)
  ********************************************************************************************/
 void OffscreenAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "OffscreenAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - OffscreenAttrValue::Restore called\n") );
 	pRegion->RestoreOffscreen(this);
 }
 

@@ -218,9 +218,6 @@ ToolList::~ToolList()
 
 ToolListItem *ToolList::Add(Tool *NewTool, UINT32 ParentID)
 {
-//#pragma message( __LOCMSG__ "ToolList::Add - do nothing" )
-//	TRACE( _T("Warning - ToolList::Add called\n") );
-//	return NULL;
 	// Construct a tentative list item
 	ToolListItem *NewItem = new ToolListItem(NewTool, ParentID);
     if (NewItem == NULL)

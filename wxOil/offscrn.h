@@ -118,8 +118,6 @@ class ConcurrentRenderer;
 #define MILLIPOINTS_PER_INCH	72000.0
 #define INCHES_PER_METRE		(100.0 / 2.54)
 
-//#pragma message( __LOCMSG__ "We're only interested in the consts for now" )
-#if 1
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -272,7 +270,5 @@ private:
 	GDrawContext* m_pNewGD;
 	View* m_pView;
 };
-
-#endif//0
 
 #endif //INC_OFFSCREEN_RR

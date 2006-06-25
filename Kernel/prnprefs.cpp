@@ -488,7 +488,7 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 					OptionsTabs::GreyApplyNow();
 					// remove the apply now button as not required.
 					CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
-					TalkToPage(NULL);						// Select the main tab
+					TalkToPage(0);						// Select the main tab
 					HideGadget(_R(ID_APPLY_NOW), TRUE);			// hide button on main tab
 					TalkToPage(PageID);						// Select the originally selected tab
 
@@ -555,6 +555,9 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 					OkUsed = FALSE;		// Flag ok used
 					EndDialog = TRUE;
 					break;
+
+				default:
+					break;
 			}
 		}
 
@@ -566,6 +569,7 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 			// Operation and hence close the dialog box
 			if (!ok)
 			{
+				Msg->DlgMsg = DIM_NONE; // prevent baseclass from removing the dialog
 				EndDialog = FALSE;	// Values not correct so do not allow exit
 			}
 		}
@@ -606,12 +610,14 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 				pOptionsTabs = OptionsTabs::GetNext(pOptionsTabs);
 			}
 			
+			// Note this destroys "this". Hence don't call the base class
 			Close();				// Hide the dialog box
 			End();					// Finish the operation
 			
 			// Make sure that we remove our options tabs link to the dialog box class
 			// as the dialog will now be destroyed
 			OptionsTabs::pPrefsDlg = NULL;
+			return Result;
 		}
 
 		// Check if have been sending an init/create message and if so then set flag False.

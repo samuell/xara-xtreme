@@ -181,8 +181,6 @@ void ClipRegionAttribute::Render(RenderRegion* pRender, BOOL Temp)
 //																			(DWORD)m_pClipPath);
 //	TRACEUSER( "Karim", _T("pClipAttr 0x%x Render()'ed by RR 0x%x\n"),
 //									(DWORD)this, (DWORD)pRender);
-//#pragma message( __LOCMSG__ "ClipRegionAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - ClipRegionAttribute::Render called\n") );
 	pRender->SetClipRegion(this, Temp);
 }
 
@@ -209,8 +207,6 @@ void ClipRegionAttribute::Restore(RenderRegion* pRender, BOOL Temp)
 //																			(DWORD)m_pClipPath);
 //	TRACEUSER( "Karim", _T("pClipAttr 0x%x Restore()'ed by RR 0x%x\n"),
 //									(DWORD)this, (DWORD)pRender);
-//#pragma message( __LOCMSG__ "ClipRegionAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - ClipRegionAttribute::Restore called\n") );
 	pRender->RestoreClipRegion(this, Temp);
 }
 
@@ -360,8 +356,6 @@ AttrClipView::~AttrClipView()
 
 void AttrClipView::Render( RenderRegion* pRender )
 {
-//#pragma message( __LOCMSG__ "ClipRegionAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - ClipRegionAttribute::Restore called\n") );
 	// check the pointer and also make sure that we`re allowed to render
 	if (!pRender || !m_DoRender)
 		return;

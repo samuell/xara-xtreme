@@ -270,9 +270,6 @@ NodeCompound::~NodeCompound()
 **********************************************************************************************/
 ChangeCode NodeCompound::OnChildChange(ObjChangeParam* pParam)
 {
-//#pragma message( __LOCMSG__ "NodeCompound::OnChildChange - do nothing" )
-//	TRACE( _T("Warning - NodeCompound::OnChildChange called\n") );
-//	return CC_FAIL;
 	if (IsNodeHidden())
 		return CC_OK;
 	
@@ -315,7 +312,7 @@ ChangeCode NodeCompound::OnChildChange(ObjChangeParam* pParam)
 	DocRect Bounds = BoundingRectangle;
 
 	BlobManager* BlobMgr = GetApplication()->GetBlobManager();
-//	INT32 BlobSize = 0;
+	INT32 BlobSize = 0;
 
 	if (!pOp && pParam->GetChangeType() == OBJCHANGE_FINISHED &&
 		pParam->GetDirection() == OBJCHANGE_CALLEDBYCHILD &&
@@ -327,7 +324,7 @@ ChangeCode NodeCompound::OnChildChange(ObjChangeParam* pParam)
 		
 	if (BlobMgr)
 	{
-		BlobMgr->GetBlobSize();
+		BlobSize = BlobMgr->GetBlobSize();
 	}
 
 	if (pParam->GetChangeType() == OBJCHANGE_STARTING)
@@ -389,10 +386,7 @@ ChangeCode NodeCompound::OnChildChange(ObjChangeParam* pParam)
 					{
 						if (pItem->pNode)
 						{
-PORTNOTE("text","Removed PrePostTextAction::DoFormatStory usage")
-#ifndef EXCLUDE_FROM_XARALX
 							PrePostTextAction::DoFormatStory(pOp, (TextStory *) pItem->pNode, TRUE);
-#endif
 						}
 
 						pItem = (NodeListItem *)TextNodeList.GetNext(pItem);
@@ -477,8 +471,6 @@ PORTNOTE("text","Removed PrePostTextAction::DoFormatStory usage")
 			{
 				bRegen = FALSE;
 			}
-PORTNOTE("text","Removed OpTextFormat usage")
-#ifndef EXCLUDE_FROM_XARALX
 			else if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpTextFormat)))
 			{
 				// indicates a change in the text (e.g. the user has typed in)
@@ -504,9 +496,6 @@ PORTNOTE("text","Removed OpTextFormat usage")
 
 				bCache = TRUE;
 			}
-#endif
-PORTNOTE("text","Removed OpDeleteTextStory usage")
-#ifndef EXCLUDE_FROM_XARALX
 			else if (pOp->IsKindOf(CC_RUNTIME_CLASS(OpDeleteTextStory)))
 			{
 				// indicates that a text story has been deleted - so if my inside
@@ -518,7 +507,6 @@ PORTNOTE("text","Removed OpDeleteTextStory usage")
 					bRegen = FALSE;
 				}
 			}
-#endif
 			else
 			{
 				// regen for all other ops
@@ -1563,10 +1551,7 @@ BOOL NodeCompound::AllowOp_AccountForCompound(ObjChangeParam* pParam,
 		Flags.TransformNode || 
 		Flags.RegenerateNode ||
 		( pChangeOp != NULL 
-PORTNOTE("text","Removed OpTextUndoable usage")
-#ifndef EXCLUDE_FROM_XARALX
 		  && pChangeOp->IS_KIND_OF( OpTextUndoable )
-#endif
 		 ) )
 	{
 

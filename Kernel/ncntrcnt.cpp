@@ -428,8 +428,6 @@ void NodeContourController::SelectInRect(const DocRect& Rect, SelStateAction st)
 ***********************************************************************************************/
 void NodeContourController::Render(RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "NodeContourController::Render - do nothing" )
-//	TRACE( _T("Warning - NodeContourController::Render called\n") );
 	if (m_bInsetPath)
 	{
 		PathProcessor * pProc = pRender->GetFirstPathProcessor();
@@ -496,9 +494,6 @@ void NodeContourController::EnableInsetPathPathProcessor()
 ***********************************************************************************************/
 SubtreeRenderState NodeContourController::RenderSubtree(RenderRegion* pRender, Node** ppNextNode, BOOL bClip)
 {
-//#pragma message( __LOCMSG__ "NodeContourController::RenderSubtree - do nothing" )
-//	TRACE( _T("Warning - NodeContourController::RenderSubtree called\n") );
-//	return SUBTREE_ROOTANDCHILDREN;
 	if (m_bInsetPath && pRender!=NULL && !pRender->IsPrinting())
 	{
 		// create & push the path processor
@@ -3086,8 +3081,6 @@ void ContourNodePathProcessor::ProcessPath ( Path * pPath,
 											 RenderRegion * pRegion,
 											 PathShape ShapePath )
 {
-//#pragma message( __LOCMSG__ "ContourNodeTreeFactory::ProcessPath - do nothing" )
-//	TRACE( _T("Warning - ContourNodeTreeFactory::ProcessPath called\n") );
 	UINT32 StrokeWidth = 0;
 	
 	if (m_bActive && pPath->IsClosed())
@@ -3405,8 +3398,6 @@ void InsetPathPathProcessor::ProcessPath(Path *pPath,
 							 RenderRegion *pRender,
 							 PathShape ShapePath)
 {
-//#pragma message( __LOCMSG__ "ContourNodeTreeFactory::ProcessPath - do nothing" )
-//	TRACE( _T("Warning - ContourNodeTreeFactory::ProcessPath called\n") );
 	if (m_bActive)
 		return;
 

@@ -1120,7 +1120,6 @@ void Operation::SetQuickRender(BOOL bNewState, Operation* pQROp)
 		if (pDocView)
 		{
 			pDocView->FlushRedraw();
-//#pragma message( __LOCMSG__ "Removed RenderRegionList usage" )
 			GetApplication()->ServiceRendering(TRUE);
 		}
 	}

@@ -675,8 +675,6 @@ void NodeShadow::Transform( TransformBase& Trans )
 ***********************************************************************************************/
 void NodeShadow::Render(RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "NodeShadow::Render - do nothing" )
-//	TRACE( _T("Warning - NodeShadow::Render called\n") );
 	m_bHaveTransformed = FALSE;
 	m_RenderBitmaps    = FALSE;
 
@@ -1326,9 +1324,6 @@ NodePath * NodeShadow::CreateShadowPassbackNode()
 **********************************************************************************************/
 BOOL NodeShadow::RenderBitmapForDisplay(RenderRegion* pRegion, List* pList)
 {
-//#pragma message( __LOCMSG__ "NodeShadow::RenderBitmapForDisplay - do nothing" )
-//	TRACE( _T("Warning - NodeShadow::RenderBitmapForDisplay called\n") );
-//	return false;
 	// the shadow bitmap is cached, using the last scaled pixel width and quality settings.
 	MILLIPOINT CurrentPixWidth = pRegion->GetScaledPixelWidth();
 	enum Quality::Fill CurrentQuality = pRegion->RRQuality.GetFillQuality();
@@ -1481,9 +1476,6 @@ BOOL NodeShadow::RenderBitmapForDisplay(RenderRegion* pRegion, List* pList)
 ********************************************************************************************/
 BOOL NodeShadow::RenderBitmapForDisplay()
 {
-//#pragma message( __LOCMSG__ "NodeShadow::RenderBitmapForDisplay - do nothing" )
-//	TRACE( _T("Warning - NodeShadow::RenderBitmapForDisplay called\n") );
-//	return false;
 	// Create a bitmap-shadower containing the shadow silhouette.
 	BitmapShadower* pBmpShadower = BitmapShadower::CreateSilhouetteBitmap((NodeShadowController*)GetParentController());
 	if (pBmpShadower == NULL)
@@ -2496,9 +2488,6 @@ void NodeShadow::UpdateAfterWallOffset()
 ********************************************************************************************/
 BOOL NodeShadow::PostImport()
 {
-//#pragma message( __LOCMSG__ "NodeShadow::PostImport - do nothing" )
-//	TRACE( _T("Warning - NodeShadow::PostImport called\n") );
-
 	NodeAttribute* pAttrTransp;
 	if (FindAppliedAttribute(CC_RUNTIME_CLASS(AttrTranspFillGeometry), &pAttrTransp) &&
 		!pAttrTransp->IsADefaultAttr())
@@ -3247,8 +3236,6 @@ BOOL NodeShadow::MakeShadow(LPBITMAPINFO lpInfo, LPBYTE lpBits, DocRect orect)
 ********************************************************************************************/
 BOOL NodeShadow::RenderShadow(RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "NodeShadow::RenderShadow - do nothing" )
-//	TRACE( _T("Warning - NodeShadow::RenderShadow called\n") );
 	enum Quality::Fill CurrentQuality = pRender->RRQuality.GetFillQuality();
 
 	pRender->SaveContext();
@@ -3660,8 +3647,6 @@ BOOL BitmapShadower::CalculateBoundsAndScale1()
 
 BOOL BitmapShadower::CalculateBoundsAndScale2WithGRR()
 {
-//#pragma message( __LOCMSG__ "BitmapShadower::CalculateBoundsAndScale2WithGRR - do nothing" )
-//	TRACE( _T("Warning - BitmapShadower::CalculateBoundsAndScale2WithGRR called\n") );
 	// leave a pixel-width's safety-margin around the bitmap.
 	// we don't use GetScaledPixelWidth(), as that is not always correct!
 	FIXED16 ScaleFactor;
@@ -3697,8 +3682,6 @@ BOOL BitmapShadower::CalculateBoundsAndScale2WithGRR()
 
 BOOL BitmapShadower::CalculateBoundsAndScale2NoGRR()
 {
-//#pragma message( __LOCMSG__ "BitmapShadower::CalculateBoundsAndScale2NoGRR - do nothing" )
-//	TRACE( _T("Warning - BitmapShadower::CalculateBoundsAndScale2NoGRR called\n") );
 	// we have no render region, but we need a render matrix,
 	// so we must get the view to construct a render matrix for us.
 	View* pView = View::GetCurrent();
@@ -3785,8 +3768,6 @@ BOOL BitmapShadower::CalculateBoundsAndScale2NoGRR()
 ********************************************************************************************/
 BOOL BitmapShadower::CreateOffscreenRR()
 {
-//#pragma message( __LOCMSG__ "BitmapShadower::CreateOffscreenRR - do nothing" )
-//	TRACE( _T("Warning - BitmapShadower::CreateOffscreenRR called\n") );
 	// create a concurrent renderer please, scaling it up if necessary.
 	// ConcurrentRenderer creates a new GRenderRegion, based on the given GRenderRegion.
 	m_pRendWrap = GRenderRegionWrapper::GetConcurrentRenderer(	m_pGRR,
@@ -3856,9 +3837,7 @@ BOOL BitmapShadower::CreateOffscreenRR()
 ********************************************************************************************/
 BOOL BitmapShadower::RenderShadowedNodeOffscreen()
 {
-//#pragma message( __LOCMSG__ "BitmapShadower::RenderShadowedNodeOffscreen - do nothing" )
-//	TRACE( _T("Warning - BitmapShadower::RenderShadowedNodeOffscreen called\n") );
-// if we're rendering our shadowed nodes, then we need to pre-render all
+	// if we're rendering our shadowed nodes, then we need to pre-render all
 	// attributes which indirectly apply to it via the controller,
 	// *except* for offscreen attributes, as they're meant to divert rendering offscreen
 	// for our *controller* node, not us.
@@ -3988,8 +3967,6 @@ BOOL BitmapShadower::RenderShadowedNodeOffscreen()
 ********************************************************************************************/
 BOOL BitmapShadower::RenderShadowedNodeOffscreen()
 {
-//#pragma message( __LOCMSG__ "BitmapShadower::RenderShadowedNodeOffscreen - do nothing" )
-//	TRACE( _T("Warning - BitmapShadower::RenderShadowedNodeOffscreen called\n") );
 	// if we're rendering our shadowed nodes, then we need to pre-render all
 	// attributes which indirectly apply to it via the controller,
 	// *except* for offscreen attributes, as they're meant to divert rendering offscreen

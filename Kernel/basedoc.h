@@ -229,7 +229,6 @@ public:
 // Colour: Default colour context array, document IndexedColour list
 
 protected:
-//#pragma message( __LOCMSG__ "DefaultColourContexts removed - We don't do any drawing yet" )
 	ColourContextArray	DefaultColourContexts;
 
 public:

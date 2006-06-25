@@ -373,9 +373,6 @@ BOOL PathBecomeA::PassBack(	NodeRenderableInk* pNewNode,
 ********************************************************************************************/
 Path* PathBecomeA::ExtractOutlineAsPath(NodePath* pSrcNodePath, CCAttrMap* pAttrMap)
 {
-//#pragma message( __LOCMSG__ "PathBecomeA::ExtractOutlineAsPath - do nothing" )
-//	TRACE( _T("Warning - PathBecomeA::ExtractOutlineAsPath called\n") );
-//	return NULL;
 	// we can accept NULL inputs - we just don't do any processing for them.
 	if (pAttrMap == NULL || pSrcNodePath == NULL)
 		return NULL;

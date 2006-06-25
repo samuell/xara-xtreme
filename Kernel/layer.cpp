@@ -3125,8 +3125,6 @@ DocColour* Layer::GetGuideColour()
 
 void Layer::SetGuideColour(IndexedColour* pIndexedColour)
 {
-//#pragma message( __LOCMSG__ "Layer::SetGuideColour - do nothing" )
-//	TRACE( _T("Warning - Layer::SetGuideColour called\n") );
 	if (pGuideColour == NULL)
 		pGuideColour = new DocColour();
 
@@ -3137,7 +3135,6 @@ void Layer::SetGuideColour(IndexedColour* pIndexedColour)
 			ColourValue r = ColourValue(double(GuideLayerRed)   / double(COL_MAX));
 			ColourValue g = ColourValue(double(GuideLayerGreen) / double(COL_MAX));
 			ColourValue b = ColourValue(double(GuideLayerBlue)  / double(COL_MAX));
-//#pragma message( __LOCMSG__ "Removed IndexedColour usage" )
 			pIndexedColour = new IndexedColour(r,g,b);
 			pIndexedGuideColour = pIndexedColour;
 		}

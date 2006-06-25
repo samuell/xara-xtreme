@@ -291,7 +291,6 @@ DIBConvert::~DIBConvert()
 
 BOOL DIBConvert::Init()
 {
-//#pragma message( __LOCMSG__ "Removed GDrawAsm usage" )
 	if (ConvertContext == NULL)
 		ConvertContext = new GDrawAsm();
 
@@ -305,8 +304,6 @@ BOOL DIBConvert::Init()
 
 void DIBConvert::DeInit()
 {
-//#pragma message( __LOCMSG__ "DIBConvert::DeInit - do nothing" )
-//	TRACE( wxT("Warning - DIBConvert::DeInit called\n") );
 	if (ConvertContext != NULL)
 	{
 		delete ConvertContext;
@@ -317,9 +314,6 @@ void DIBConvert::DeInit()
 
 GDrawContext* DIBConvert::GetConvertContext(void)
 {
-//#pragma message( __LOCMSG__ "DIBConvert::GetConvertContext - do nothing" )
-//	TRACE( wxT("Warning - DIBConvert::GetConvertContext called\n") );
-//	return NULL;
 	if (ConvertContext != NULL)
 		return(ConvertContext);
 	else

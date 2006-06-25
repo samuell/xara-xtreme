@@ -182,8 +182,10 @@ BOOL OILModule::Init()
 
 	HINSTANCE hLibrary = (HINSTANCE)HINSTANCE_ERROR;
 
-#pragma message( __LOCMSG__ "Removed SetErrorMode usage" )
-//	SetErrorMode( SEM_NOOPENFILEERRORBOX );						// don't cause errors
+PORTNOTE("other", "Removed SetErrorMode usage" )
+#ifndef EXCLUDE_FROM_XARALX
+	SetErrorMode( SEM_NOOPENFILEERRORBOX );						// don't cause errors
+#endif
 	
 	// Still need the DLLs for the module/tool resources.
 
@@ -261,8 +263,10 @@ BOOL OILModule::Init()
 AbnormalExit:
 	// Out of memory - clean up and fail
 	TRACEUSER( "Tim", _T("OILModule::Init(): memory exhausted") );
-#pragma message( __LOCMSG__ "Removed SetErrorMode usage" )
+PORTNOTE("other", "Removed FreeLibrary usage" )
+#ifndef EXCLUDE_FROM_XARALX
 //	FreeLibrary(hLibrary);
+#endif
 	DLLs[0] = (HINSTANCE)HINSTANCE_ERROR;
 	DLLCount--;
 	return FALSE;

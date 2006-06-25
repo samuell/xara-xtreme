@@ -348,8 +348,6 @@ BOOL OverprintLineAttrValue::Init(void)
 void OverprintLineAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 {
 	// Stack the current overprint attribute and set ourselves up as the new one
-//#pragma message( __LOCMSG__ "OverprintLineAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - OverprintLineAttrValue::Render called\n") );
 	pRegion->SetLineOverprint(this, Temp);
 }
 
@@ -376,8 +374,6 @@ void OverprintLineAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 
 void OverprintLineAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "OverprintLineAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - OverprintLineAttrValue::Restore called\n") );
 	pRegion->RestoreLineOverprint(this, Temp);
 }
 
@@ -859,8 +855,6 @@ BOOL OverprintFillAttrValue::Init(void)
 void OverprintFillAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 {
 	// Stack the current overprint attribute and set ourselves up as the new one
-//#pragma message( __LOCMSG__ "OverprintFillAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - OverprintFillAttrValue::Render called\n") );
 	pRegion->SetFillOverprint(this, Temp);
 }
 
@@ -887,8 +881,6 @@ void OverprintFillAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 
 void OverprintFillAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "OverprintFillAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - OverprintFillAttrValue::Restore called\n") );
 	pRegion->RestoreFillOverprint(this, Temp);
 }
 
@@ -1370,8 +1362,6 @@ BOOL PrintOnAllPlatesAttrValue::Init(void)
 void PrintOnAllPlatesAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 {
 	// Stack the current overprint attribute and set ourselves up as the new one
-//#pragma message( __LOCMSG__ "PrintOnAllPlatesAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - PrintOnAllPlatesAttrValue::Render called\n") );
 	pRegion->SetPrintOnAllPlates(this, Temp);
 }
 
@@ -1398,8 +1388,6 @@ void PrintOnAllPlatesAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 
 void PrintOnAllPlatesAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "PrintOnAllPlatesAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - PrintOnAllPlatesAttrValue::Restore called\n") );
 	pRegion->RestorePrintOnAllPlates(this, Temp);
 }
 

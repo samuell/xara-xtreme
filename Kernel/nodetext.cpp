@@ -1745,7 +1745,6 @@ Path* AbstractTextChar::CreateMetricsRectPath()
 
 BOOL AbstractTextChar::ReCacheMetrics(FormatRegion* pFormatRegion)
 {
-	PORTNOTE("text","AbstractTextChar::ReCacheMetrics - do nothing");
 #ifndef DISABLE_TEXT_RENDERING
 	// get metrics for this char with current attribute stack
 	CharMetrics metrics;
@@ -2005,7 +2004,6 @@ void TextChar::Render(RenderRegion* pRenderRegion)
 
 BOOL TextChar::RenderCore(RenderRegion* pRenderRegion)
 {
-	PORTNOTE("text","TextChar::RenderCore - do nothing");
 #ifndef DISABLE_TEXT_RENDERING
 	ERROR2IF(pRenderRegion == NULL, FALSE, "TextChar::RenderCore() - pRenderRegion == NULL");
 
@@ -2200,7 +2198,6 @@ BOOL TextChar::ExportRender ( RenderRegion *pRegion )
 
 BOOL TextChar::CreateNodePath(NodePath** ppNodePath, FormatRegion* pFormatRegion)
 {
-	PORTNOTE("text","TextChar::CreateNodePath - do nothing");
 #ifndef DISABLE_TEXT_RENDERING
 	ERROR2IF(pFormatRegion==NULL,FALSE,"TextChar::CreateNodePath() - pFormatRegion==NULL");
 	ERROR2IF(   ppNodePath==NULL,FALSE,"TextChar::CreateNodePath() - ppNodePath==NULL");

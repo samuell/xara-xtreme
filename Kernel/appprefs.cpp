@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "appprefs.h"
 //#include "prefsdlg.h"	// _R(IDD_APPLICATIONOPTIONS)
-//#include "prnprefs.h"	// PrintingPrefs dialog box
+#include "prnprefs.h"	// PrintingPrefs dialog box
 #include "optsinet.h"
 // The options tabs themselves
 //#include "optsedit.h"	// Edit tab handler
@@ -1245,9 +1245,8 @@ BOOL AppPrefsDlg::Init()
 	// Set up our special print options dialog box as well as this is effectively the
 	// same dialog box.
 //	WEBSTER-ranbirr-13/11/96
-#pragma message( __LOCMSG__ "Removed PrintPrefsDlg::Init usage" )
 #ifndef WEBSTER
-//	InitOK = InitOK && PrintPrefsDlg::Init();
+	InitOK = InitOK && PrintPrefsDlg::Init();
 #endif //webster
 
 

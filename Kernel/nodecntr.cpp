@@ -1983,8 +1983,6 @@ BOOL NodeContour::AllowOp(ObjChangeParam *pParam, BOOL SetOpPermissionState,
 ***********************************************************************************************/
 void NodeContour::RenderTinyBlobs(RenderRegion * pRender)
 {
-//#pragma message( __LOCMSG__ "NodeContour::RenderEorDrag - do nothing" )
-//	TRACE( _T("Warning - NodeContour::RenderEorDrag called\n") );
 	// Set the line colours etc as we need them
 	pRender->SaveContext();
 	pRender->SetLineColour(COLOUR_NONE);

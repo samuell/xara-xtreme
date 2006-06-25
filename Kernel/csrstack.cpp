@@ -114,7 +114,6 @@ DECLARE_SOURCE("$Revision $");
 // Own up in memory dumps
 CC_IMPLEMENT_MEMDUMP(CursorStack, CC_CLASS_MEMDUMP)
 
-//#pragma message( __LOCMSG__ "CAM_DEBUG_NEW won't work" )
 #define new CAM_DEBUG_NEW
 
 

@@ -140,8 +140,8 @@ DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(GenerateIndexFile, CCObject)
 CC_IMPLEMENT_DYNCREATE(IndGenFileBuffer, CCObject)
 
-#pragma message( __LOCMSG__ "sgindgen.cpp STRIPPED" )
-#if 0
+PORTNOTE("other", "Removed most of sgindgen.cpp" )
+#ifndef EXCLUDE_FROM_XARALX
 
 #define new CAM_DEBUG_NEW
 

@@ -717,8 +717,6 @@ BOOL NodeRegularShape::BuildShapePath(Path** RenderPath)
 ********************************************************************************************/
 void NodeRegularShape::Render ( RenderRegion* pRender )
 {
-//#pragma message( __LOCMSG__ "NodeRegularShape::Render - do nothing" )
-//	TRACE( _T("Warning - NodeRegularShape::Render called\n") );
 	Path* pRenderPath = NULL;
 
 	// Attempt to build a shape path.
@@ -744,8 +742,6 @@ void NodeRegularShape::Render ( RenderRegion* pRender )
 ********************************************************************************************/
 void NodeRegularShape::RenderEorDrag( RenderRegion* pRender )
 {
-//#pragma message( __LOCMSG__ "NodeRegularShape::RenderEorDrag - do nothing" )
-//	TRACE( _T("Warning - NodeRegularShape::RenderEorDrag called\n") );
 	Path* RenderPath = NULL;
 	
 	if (BuildShapePath(&RenderPath))

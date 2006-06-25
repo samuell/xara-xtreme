@@ -852,8 +852,6 @@ BOOL NodeMould::CanBecomeA(BecomeA* pBecomeA)
 
 BOOL NodeMould::DoBecomeA(BecomeA* pBecomeA)
 {
-//#pragma message( __LOCMSG__ "NodeMould::DoBecomeA - do nothing" )
-//	TRACE( _T("Warning - NodeMould::DoBecomeA called\n") );
 	BOOL ok;
 
 	switch (pBecomeA->GetReason())
@@ -1571,9 +1569,6 @@ BOOL NodeMould::CreateAllMoulderObjects(UndoableOperation* pOp)
 
 NodeMoulder* NodeMould::CreateNewMoulder(UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::CreateNewMoulder - do nothing" )
-//	TRACE( _T("Warning - NodeMould::CreateNewMoulder called\n") );
-//	return NULL;
 	BOOL ok;
 
 	// first find the mould group 
@@ -1622,9 +1617,6 @@ NodeMoulder* NodeMould::AddNewMoulder(	Node* pContextNode,
 										AttachNodeDirection Direction,
  										UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::AddNewMoulder - do nothing" )
-//	TRACE( _T("Warning - NodeMould::AddNewMoulder called\n") );
-//	return NULL;
 	BOOL ok;
 
 	// create a new moulder object
@@ -1682,9 +1674,6 @@ NodeMouldPath* NodeMould::CreateNewMouldShape(	Path* pShape,
 										 		DocRect* const pDestin,
 										 		UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::CreateNewMouldShape - do nothing" )
-//	TRACE( _T("Warning - NodeMould::CreateNewMouldShape called\n") );
-//	return NULL;
 	ERROR2IF(pShape==NULL, NULL, "NodeMould::CreateNewMouldShape() called with a null path");
 
 	// Note, we do not record the mouldspace in our class because
@@ -1821,9 +1810,6 @@ NodeMouldPath* NodeMould::AddNewMouldShape(	Path* pShape,
 
 NodeMouldGroup* NodeMould::CreateNewMouldGroup(UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::CreateNewMouldGroup - do nothing" )
-//	TRACE( _T("Warning - NodeMould::CreateNewMouldGroup called\n") );
-//	return NULL;
 	// Create a mould group object
 	NodeMouldGroup*	pMouldGroup;
 	ALLOC_WITH_FAIL( pMouldGroup, new NodeMouldGroup, pOp);
@@ -1849,9 +1835,6 @@ NodeMouldGroup* NodeMould::CreateNewMouldGroup(UndoableOperation* pOp)
 
 NodeMouldGroup* NodeMould::AddNewMouldGroup(UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::AddNewMouldGroup - do nothing" )
-//	TRACE( _T("Warning - NodeMould::AddNewMouldGroup called\n") );
-//	return NULL;
 	BOOL ok;
 
 	// Create a mould group object
@@ -1907,9 +1890,6 @@ BOOL NodeMould::FillMouldGroup(	NodeMouldGroup* pMouldGroup,
 								List* NodeList,
 								UndoableOperation* pOp)
 {
-//#pragma message( __LOCMSG__ "NodeMould::FillMouldGroup - do nothing" )
-//	TRACE( _T("Warning - NodeMould::FillMouldGroup called\n") );
-//	return false;
 	BOOL ok;
 	Node* pObj;
 
@@ -2644,9 +2624,6 @@ BOOL NodeMould::PostExportAWEPS(RenderRegion* pRegion)
 
 BOOL NodeMould::PostImport()
 {
-//#pragma message( __LOCMSG__ "NodeMould::PostImport - do nothing" )
-//	TRACE( _T("Warning - NodeMould::PostImport called\n") );
-
 	// if theres already some moulded objects then fine....
 	if (CountMoulders()>0)
 		return TRUE;

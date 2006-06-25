@@ -407,8 +407,6 @@ LineWidthAttribute::LineWidthAttribute()
 
 void LineWidthAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "LineWidthAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - LineWidthAttribute::Render called\n") );
 	pRegion->SetLineWidth(this, Temp);
 }
 
@@ -431,8 +429,6 @@ void LineWidthAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void LineWidthAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "LineWidthAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - LineWidthAttribute::Restore called\n") );
 	pRegion->RestoreLineWidth(this, Temp);
 }
 
@@ -690,8 +686,6 @@ DashPatternAttribute::~DashPatternAttribute()
 
 void DashPatternAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "DashPatternAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - LineWidthAttribute::Render called\n") );
 	pRegion->SetDashPattern(this, Temp);
 }
 
@@ -712,8 +706,6 @@ void DashPatternAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void DashPatternAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "DashPatternAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - LineWidthAttribute::Restore called\n") );
 	pRegion->RestoreDashPattern(this, Temp);
 }
 
@@ -1576,15 +1568,11 @@ BOOL DashPatternAttribute::IsDifferent(AttributeValue *pAttr)
 
 void EndArrowAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "EndArrowAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - EndArrowAttribute::Render called\n") );
 	pRegion->SetEndArrow(this, Temp);
 }
 
 void EndArrowAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "EndArrowAttribute::Restore - do nothing" );
-//	TRACE( wxT("Warning - EndArrowAttribute::Restore called\n") );
 	pRegion->RestoreEndArrow(this, Temp);
 }
 
@@ -1683,8 +1671,6 @@ BOOL EndArrowAttribute::Init()
 
 void DrawingModeAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "DrawingModeAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - DrawingModeAttribute::Render called\n") );
 	pRegion->SetDrawingMode(this, Temp);
 }
 
@@ -1707,8 +1693,6 @@ void DrawingModeAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void DrawingModeAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "DrawingModeAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - DrawingModeAttribute::Restore called\n") );
 	pRegion->RestoreDrawingMode(this, Temp);
 }
 
@@ -1753,15 +1737,11 @@ MitreLimitAttribute::MitreLimitAttribute()
 
 void MitreLimitAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "MitreLimitAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - MitreLimitAttribute::Restore called\n") );
 	pRegion->RestoreMitreLimit(this, Temp);
 }
 
 void MitreLimitAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "MitreLimitAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - MitreLimitAttribute::Render called\n") );
 	pRegion->SetMitreLimit(this, Temp);
 }
 
@@ -1824,15 +1804,11 @@ WindingRuleAttribute::WindingRuleAttribute()
 
 void WindingRuleAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "WindingRuleAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - WindingRuleAttribute::Restore called\n") );
 	pRegion->RestoreWindingRule(this, Temp);
 }
 
 void WindingRuleAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "WindingRuleAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - WindingRuleAttribute::Render called\n") );
 	pRegion->SetWindingRule(this, Temp);
 }
 
@@ -1904,15 +1880,11 @@ BOOL StartCapAttribute::IsDifferent(AttributeValue *pAttr)
 
 void StartCapAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StartCapAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - StartCapAttribute::Restore called\n") );
 	pRegion->RestoreStartCap(this, Temp);
 }
 
 void StartCapAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StartCapAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - StartCapAttribute::Render called\n") );
 	pRegion->SetStartCap(this, Temp);
 }
 
@@ -1967,15 +1939,11 @@ BOOL JoinTypeAttribute::IsDifferent(AttributeValue *pAttr)
 
 void JoinTypeAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "JoinTypeAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - JoinTypeAttribute::Restore called\n") );
 	pRegion->RestoreJoinType(this, Temp);
 }
 
 void JoinTypeAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "JoinTypeAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - JoinTypeAttribute::Render called\n") );
 	pRegion->SetJoinType(this, Temp);
 }
 
@@ -2018,15 +1986,11 @@ BOOL JoinTypeAttribute::Init()
 
 void StartArrowAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StartArrowAttribute::Render - do nothing" )
-//	TRACE( wxT("Warning - StartArrowAttribute::Render called\n") );
 	pRegion->SetStartArrow(this, Temp);
 }
 
 void StartArrowAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StartArrowAttribute::Restore - do nothing" )
-//	TRACE( wxT("Warning - StartArrowAttribute::Restore called\n") );
 	pRegion->RestoreStartArrow(this, Temp);
 }
 

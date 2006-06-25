@@ -207,7 +207,6 @@ NodeRenderablePaper::NodeRenderablePaper(Node* ContextNode,
 
 SubtreeRenderState NodeRenderablePaper::RenderSubtree(RenderRegion* pRender, Node** ppNextNode, BOOL bClip)
 {
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	if (pRender && pRender->RenderPaperAsInk())
 		return SUBTREE_ROOTANDCHILDREN;
 

@@ -301,7 +301,6 @@ typedef enum
 
 ********************************************************************************************/
 
-//#pragma message( __LOCMSG__ "SubRenderContext removed" )
 class SubRenderContext : public CCObject
 {
 	CC_DECLARE_DYNAMIC(SubRenderContext);
@@ -325,7 +324,6 @@ public:
 
 ********************************************************************************************/
 
-//#pragma message( __LOCMSG__ "SubTreeRenderContext removed" )
 class SubTreeRenderContext : public SubRenderContext
 {
 	CC_DECLARE_DYNAMIC(SubTreeRenderContext);
@@ -369,7 +367,6 @@ class CCAPI RenderRegion : public ListItem
 
 	CC_DECLARE_DYNAMIC( RenderRegion )
     
-//#pragma message( __LOCMSG__ "RenderRegion stripped" )
 public:
 	// Render Region Creation and Destruction
 	RenderRegion();

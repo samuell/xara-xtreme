@@ -225,7 +225,7 @@ public:
 	See also:	
 
 ********************************************************************************************/
-//#pragma message( __LOCMSG__ "Removed OpLiveEffect - derived from SelSelOperation" )
+
 class OpLiveEffect : public SelOperation
 {
 // Give my name out in memory dumps.

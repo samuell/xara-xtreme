@@ -247,7 +247,6 @@ Document::Document(BOOL bIsAHiddenDoc)
 	BleedOffset = DefBleedSize;
 
 	// Set up our array of default colour contexts by copying the 'global' array
-//#pragma message( __LOCMSG__ "DefaultColourContexts remove - no drawing yet" )
 	ColourContext::GetGlobalDefaults( &DefaultColourContexts );
 
 	// Add this document to the list of all documents in Camelot

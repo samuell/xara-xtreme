@@ -372,8 +372,6 @@ void Node::Render( RenderRegion* pRender ) {};
 ********************************************************************************************/
 void Node::RenderTreeAtomic(RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "Node::RenderTreeAtomic - do nothing" )
-//	TRACE( _T("Warning - Node::RenderTreeAtomic called\n") );
 	ERROR3IF(pRender == NULL, "Node::RenderTreeAtomic; NULL pRender parameter not allowed!");
 
 	pRender->RenderTree(this, FALSE);
@@ -3942,8 +3940,6 @@ Node* Node::FindFirstForClippedInkRender( DocRect* pClipRect,
 Node *Node::FindChildToRender(DocRect *const pClipRect, RenderRegion *const pRender, BOOL ExcludeLockedLayers,
 							  Node* pStopNode)
 {
-//#pragma message( __LOCMSG__ "Node::FindChildToRender - do nothing" )
-//	TRACE( _T("Warning - Node::FindChildToRender called\n") );
 	ENSURE(this != NULL, "FindChildToRender called on NULL pointer");
 
 	Node *pNode = this;
@@ -4033,8 +4029,6 @@ Node* Node::FindNextForClippedInkRender( DocRect* pClipRect,
 										 BOOL ExcludeLockedLayers,
 										 Node* pStopNode) 	      
 {              
-//#pragma message( __LOCMSG__ "Node::FindNextForClippedInkRender - do nothing" )
-//	TRACE( _T("Warning - Node::FindNextForClippedInkRender called\n") );
 	ENSURE(pRender != NULL, "Render region NULL in FindNextForClippedInkRender"); 
 	Node* pNode = this; 
 	BOOL IsSpread = pNode->IsSpread();
@@ -4157,8 +4151,6 @@ Node *Node::FindFirstForUnclippedInkRender(RenderRegion* pRender)
 
 Node *Node::FindChildToRenderUnclipped(RenderRegion *const pRender)
 {
-//#pragma message( __LOCMSG__ "Node::FindChildToRenderUnclipped - do nothing" )
-//	TRACE( _T("Warning - Node::FindChildToRenderUnclipped called\n") );
 	ENSURE(this != NULL, "FindChildToRenderUnclipped called on NULL pointer");
 
 	Node *pNode = this;
@@ -4244,8 +4236,6 @@ Node *Node::FindChildToRenderUnclipped(RenderRegion *const pRender)
 
 Node* Node::FindNextForUnclippedInkRender(RenderRegion *pRender)
 {              
-//#pragma message( __LOCMSG__ "Node::FindNextForUnclippedInkRender - do nothing" )
-//	TRACE( _T("Warning - Node::FindNextForUnclippedInkRender called\n") );
 	ENSURE(pRender != NULL, "Render region NULL in FindNextForUnclippedInkRender"); 
 	Node* pNode = this; 
 

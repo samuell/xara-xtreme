@@ -287,10 +287,12 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 	{
 		Message = KM_KEYUP;
 	}
-#pragma message( __LOCMSG__ "Removed Windows IME usage" )
-/*	case WM_IME_CHAR:
+PORTNOTE("other", "Removed Windows IME usage" )
+#ifndef EXCLUDE_FROM_XARALX
+	case WM_IME_CHAR:
 		TRACE( _T("IME\n"));
-		break; */
+		break;
+#endif
 	else
 	{
 		// Message was not one we're interested in, so the KeyPressSysMsg object is invalid
@@ -317,8 +319,8 @@ KeyPressSysMsg::KeyPressSysMsg(wxKeyEvent* pMsg)
 			return;
 		}
 		
-#pragma message( __LOCMSG__ "Removed some keypress mangling" )
-#if 0
+PORTNOTE("other", "Removed some keypress mangling" )
+#ifndef EXCLUDE_FROM_XARALX
 		RepeatCount = KeyData & 0xffff;
 		ScanCode	= (KeyData >> 16) & 0xff;
 		Extended 	= (KeyData & (1<<24)) != 0;
@@ -451,23 +453,24 @@ FilePath KeyPress::GetHotKeysFilename()
 
 BOOL KeyPress::DispatchKeyEvent(UINT32 nMsgID, UINT32 nChar, UINT32 nRepCnt, UINT32 nFlags)
 {
-#pragma message( __LOCMSG__ "BaseTextClass::PreOpProcessing - do nothing" )
-	TRACE( _T("Warning - BaseTextClass::PreOpProcessing called") );
-/*	// For compatibility with existing code we must repackage the unpacked message.
+	// Make sure the kernel knows which view/doc the event applies to, if any.
+	if (Document::GetSelected() != NULL) Document::GetSelected()->SetCurrent();
+	if (DocView::GetSelected() != NULL)  DocView::GetSelected()->SetCurrent();
+
+PORTNOTETRACE("other,", "BaseTextClass::PreOpProcessing - do nothing" );
+#ifndef EXCLUDE_FROM_XARALX
+	// For compatibility with existing code we must repackage the unpacked message.
 	// NB. the RHS of the lParam expression will work for Win16 as well.
 	MSG msg;
 	msg.message = nMsgID;
 	msg.wParam  = nChar;
 	msg.lParam  = (nRepCnt & 0xFFFF) | ((((LPARAM) nFlags) & 0xFFFF) << 16);
-
-	// Make sure the kernel knows which view/doc the event applies to, if any.
-	if (Document::GetSelected() != NULL) Document::GetSelected()->SetCurrent();
-	if (DocView::GetSelected() != NULL)  DocView::GetSelected()->SetCurrent();
 	
 	// Call the key-press system.
-	return TranslateMessage(&msg); */
-
+	return TranslateMessage(&msg);
+#else
 	return true;
+#endif
 }
 
 
@@ -1364,7 +1367,8 @@ BOOL KeyPress::IsGalleryCtrlPressed(void)
 
 BOOL KeyPress::IsEscapePressed()
 {
-#pragma message( __LOCMSG__ "KeyPress::IsEscapePressed - do nothing" )
+PORTNOTE("other", "KeyPress::IsEscapePressed - do nothing" )
+#ifndef EXCLUDE_FROM_XARALX
 //	TRACE( _T("Warning - KeyPress::IsEscapePressed called") );
 /*	BOOL EscapePressed = (GetAsyncKeyState(CAMKEY(ESCAPE)) != 0);
 	BOOL Pressed       = EscapePressed || (GetAsyncKeyState(CAMKEY(CANCEL)) != 0);
@@ -1412,7 +1416,7 @@ BOOL KeyPress::IsEscapePressed()
 	}
 
 	return (Pressed); */
-
+#endif
 	return false;
 }
 
@@ -1598,8 +1602,10 @@ BOOL KeyPress::GenerateCharMessage(wxKeyEvent* pMsg)
 					// Only post the ASCII value if one's been specified via the Num key pad
 					// (i.e. the value >= 0)
 			 		//TRACE( _T("-*-*-*-- Posting WM_CHAR. Val = %ld\n"),KeyPress::AsciiVal);
-#pragma message( __LOCMSG__ "Removed PostMessage usage - WM_CHAR from ascii code" )
-//					Processed = ::PostMessage(pMsg->hwnd,WM_CHAR,KeyPress::AsciiVal % 256,1);
+PORTNOTE("other", "Removed PostMessage usage - WM_CHAR from ascii code" )
+#ifndef EXCLUDE_FROM_XARALX
+					Processed = ::PostMessage(pMsg->hwnd,WM_CHAR,KeyPress::AsciiVal % 256,1);
+#endif
 				}
 				//TRACE( _T("-*-*-*-- (keyup) Invalidating ascii val. Val = %ld\n"),KeyPress::AsciiVal);
 				KeyPress::ValidAsciiVal = FALSE;
@@ -1844,9 +1850,9 @@ void KeyPress::RemoveVirtualKeyCode(UINT32 VCode, WCHAR Unicode)
 
 void KeyPress::DumpKeyMessage(wxKeyEvent* pMsg)
 {
-#pragma message( __LOCMSG__ "KeyPress::DumpKeyMessage - do nothing" )
-	TRACE( _T("Warning - KeyPress::DumpKeyMessage called") );
-/*	//if (!IsUserName("Markn")) return;
+	PORTNOTETRACE("other", "KeyPress::DumpKeyMessage - do nothing" );
+#ifndef EXCLDUE_FROM_XARALX
+	//if (!IsUserName("Markn")) return;
 
 	KeyPressSysMsg KeySysMsg(pMsg);
 	WCHAR c = 1;
@@ -1900,7 +1906,8 @@ void KeyPress::DumpKeyMessage(wxKeyEvent* pMsg)
 			TRACE( _T("KeyPress::AlternativeStateLeft  = %lx\n"),KeyPress::AlternativeStateLeft);
 			TRACE( _T("KeyPress::AlternativeStateRight = %lx\n"),KeyPress::AlternativeStateRight);
 		}
-	} */
+	}
+#endif
 }
 #endif	// _DEBUG
 

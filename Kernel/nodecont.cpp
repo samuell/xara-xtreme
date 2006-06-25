@@ -4038,8 +4038,6 @@ void NodeShadowController::RenderAfterSubtree(RenderRegion* pRender)
 
 BOOL NodeShadowController::FindCachedEffect(CBitmapCache* pBitmapCache)
 {
-//#pragma message( __LOCMSG__ "Removed CBitmapCache usage" )
-//	return false;
 	CBitmapCacheKey inky(this, GetPixelWidth(), 0);						// Get cached BMP for this ORIGINAL node at our dpi
 	CCachedBitmap cbmp;
 	BOOL bFoundCached = pBitmapCache->Lookup(inky, cbmp);

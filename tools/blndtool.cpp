@@ -585,9 +585,6 @@ void BlendTool::OnClick( DocCoord PointerPos, ClickType Click, ClickModifiers Cl
 {
 	if (ClickMods.Menu) return;							// Don't do anything if the user clicked the Menu button
 
-//#pragma message( __LOCMSG__ "BlendTool::OnClick - do nothing" )
-//	TRACE( _T("Warning - BlendTool::OnClick called\n") );
-
 	ERROR3IF_PF(pSpread==NULL,("pSpread is NULL"));
 
 	if (Click == CLICKTYPE_DRAG)

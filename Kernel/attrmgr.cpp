@@ -238,8 +238,6 @@ void AttributeManager::FindDefaultColour(ColourList *ColList,
 										 UINT32 NameResID,
 										 DocColour *Result)
 {
-//#pragma message( __LOCMSG__ "AttributeManager::FindDefaultColour- do nothing" )
-//	TRACE( wxT("Warning - AttributeManager::FindDefaultColour called\n") );
 	ERROR3IF(Result == NULL, "AttrMgr: FindDefaultColour - NULL Result param is illegal");
 	if (Result == NULL)
 		return;
@@ -1601,8 +1599,6 @@ void AttributeManager::AddAttributeToGroup(AttributeGroup* pAttrGroup,
 static BOOL UpdateDeletedColour(ColourList *ColList, DocColour *TheColour,
 								IndexedColour **NewDefault)
 {
-//#pragma message( __LOCMSG__ "UpdateDeletedColour - do nothing" )
-//	TRACE( wxT("Warning - UpdateDeletedColour called\n") );
 	if (TheColour == NULL)			// No colour to fix!
 		return FALSE;
 

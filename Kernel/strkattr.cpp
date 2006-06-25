@@ -695,8 +695,6 @@ BOOL StrokeTypeAttrValue::Init(void)
 
 void StrokeTypeAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeTypeAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - StrokeTypeAttrValue::Render called\n") );
 	// Stack the current attribute and set ourselves up as the new one
 	pRegion->SetStrokeType(this, Temp);
 
@@ -732,8 +730,6 @@ void StrokeTypeAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 
 void StrokeTypeAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "StrokeTypeAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - StrokeTypeAttrValue::Restore called\n") );
 	pRegion->RestoreStrokeType(this, Temp);
 }
 
@@ -767,8 +763,6 @@ void StrokeTypeAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 
 void StrokeTypeAttrValue::GoingOutOfScope(RenderRegion *pRegion)
 {
-//#pragma message( __LOCMSG__ "StrokeTypeAttrValue::GoingOutOfScope - do nothing" )
-//	TRACE( _T("Warning - StrokeTypeAttrValue::GoingOutOfScope called\n") );
 	if (pProcessor != NULL)
 		pRegion->PopPathProcessor();
 }
@@ -1479,8 +1473,6 @@ BOOL VariableWidthAttrValue::Init(void)
 
 void VariableWidthAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "VariableWidthAttrValue::Render - do nothing" )
-//	TRACE( _T("Warning - VariableWidthAttrValue::Render called\n") );
 	pRegion->SetVariableWidth(this, Temp);
 }
 
@@ -1507,8 +1499,6 @@ void VariableWidthAttrValue::Render(RenderRegion *pRegion, BOOL Temp)
 
 void VariableWidthAttrValue::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "VariableWidthAttrValue::Restore - do nothing" )
-//	TRACE( _T("Warning - VariableWidthAttrValue::Restore called\n") );
 	pRegion->RestoreVariableWidth(this, Temp);
 }
 

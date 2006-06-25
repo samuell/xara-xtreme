@@ -1287,9 +1287,6 @@ BOOL BitmapListComponent::LoadBitmapDefinition(CXaraFileRecordHandler *pXFileRec
 											   CXaraFile * pCXFile,
 											   INT32 Tag, UINT32 Size, UINT32 RecordNumber)
 {
-//#pragma message( __LOCMSG__ "BitmapListComponent::LoadBitmapDefinition - do nothing" )
-//	TRACE( _T("Warning - BitmapListComponent::LoadBitmapDefinition called\n") );
-//	return false;
 	ERROR2IF(pXFileRecHandler == NULL,FALSE,"BitmapListComponent::LoadBitmapDefinition NULL pXFileRecHandler");
 	ERROR2IF(pCXFile == NULL,FALSE,"BitmapListComponent::LoadBitmapDefinition NULL pCXFile");
 	ERROR2IF(pImportedBitmaps == NULL,FALSE,"BitmapListComponent::LoadBitmapDefinition NULL pImportedBitmaps");

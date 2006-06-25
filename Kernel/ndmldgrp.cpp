@@ -555,8 +555,6 @@ BOOL NodeMouldGroup::ShowingNode()
 
 SubtreeRenderState NodeMouldGroup::RenderSubtree(RenderRegion* pRender, Node** ppNextNode, BOOL bClip)
 {
-//#pragma message( __LOCMSG__ "NodeMouldGroup::RenderSubtree - do nothing" )
-//	TRACE( _T("Warning - NodeMouldGroup::RenderSubtree called\n") );
 	if (pRender && pRender->RenderPaperAsInk())
 		return SUBTREE_ROOTANDCHILDREN;
 

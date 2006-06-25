@@ -1603,9 +1603,6 @@ DocRect Path::GetBoundingRect()	const
 #if !defined(EXCLUDE_FROM_XARLIB)
 BOOL Path::GetTrueBoundingRect(DocRect* pRect, MILLIPOINT LineWidth, CCAttrMap* pAttrMap)
 {
-//#pragma message( __LOCMSG__ "Path::GetTrueBoundingRect - do nothing" )
-//	TRACE( _T("Warning - Path::GetTrueBoundingRect called\n") );
-//	return false;
 	// validate inputs.
 	if (pRect == NULL)
 	{
@@ -5619,8 +5616,6 @@ BOOL Path::StrokePathToPath(MILLIPOINT 	LineWidth,
 							double 		Flatness,
 							BOOL 		Close)
 {
-//#pragma message( __LOCMSG__ "Path::StrokePathToPath - do nothing" )
-//	TRACE( _T("Warning - Path::StrokePathToPath called\n") );
 	if (pDest == NULL) pDest = this;
 
 	UINT32 NewFlatness = (UINT32)Flatness;
@@ -5730,9 +5725,6 @@ INT32 Path::InitializeContourValues(UINT32 Width, JoinStyles JoinS, BOOL IsAnOut
 //////////////////////////////////////////////////////////////////////////////////////
 INT32 Path::GetContourForStep(Path* pDest, double StepValue)
 {
-//#pragma message( __LOCMSG__ "Path::GetContourForStep - do nothing" )
-//	TRACE( _T("Warning - Path::GetContourForStep called\n") );
-//	return 0;
 	// First Check to see if the Path pasted in is valid!
 	ERROR2IF(pDest==NULL,0,"Init GenPathContour Recieved a NULL Pointer!");
 
@@ -6761,8 +6753,6 @@ BOOL Path::InsertSectionAtEnd(const Path* Other, INT32 StartSlot, INT32 NumSlots
 BOOL Path::FindNearestPoint(DocCoord pos, UINT32 flags, INT32* position)
 {
 #if !defined(EXCLUDE_FROM_XARLIB)
-//#pragma message( __LOCMSG__ "Path::FindNearestPoint - do nothing" )
-//	TRACE( _T("Warning - Path::FindNearestPoint called\n") );
 	// If neither ENDPOINTS or CONTROLPOINTS flags are set, return FALSE since the caller
 	// obviously doesn't want to look at anything!
 	if (!(flags & (POINTFLAG_ENDPOINTS | POINTFLAG_CONTROLPOINTS)))

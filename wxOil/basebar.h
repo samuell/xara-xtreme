@@ -287,44 +287,6 @@ public:
     DECLARE_DYNAMIC_CLASS( BaseBar )
     DECLARE_EVENT_TABLE()
 
-#pragma message( __LOCMSG__ "Removed MessageMap - hopefully very temporarily" )
-/*	// Generated message map functions
-	//{{AFX_MSG(BaseBar)
-	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
-	afx_msg void OnNcPaint();
-	afx_msg BOOL OnNcActivate(BOOL bActive);
-	afx_msg INT32 OnMouseActivate( CWnd* pDesktopWnd, UINT32 nHitTest, UINT32 message );
-	afx_msg void OnActivate( UINT32 nState, CWnd* pWndOther, BOOL bMinimized );
-	afx_msg void OnActivateApp( BOOL  bActive, HTASK  hTask );   
-	afx_msg void OnPaint();
-	afx_msg UINT32 OnNcHitTest(wxPoint point);
-	afx_msg void OnMouseMove(UINT32 nFlags, wxPoint point);
-	afx_msg void OnNcRButtonDown(UINT32 nHitTest, wxPoint point);
-	afx_msg void OnNcLButtonDown(UINT32 nHitTest, wxPoint point);
-	afx_msg void OnLButtonDown(UINT32 nFlags, wxPoint point);
-	afx_msg void OnLButtonUp(UINT32 nFlags, wxPoint point);
-	afx_msg void OnLButtonDblClk( UINT32 nFlags, wxPoint point );
-	afx_msg void OnParentNotify( UINT32 message, LPARAM lParam );  
-	afx_msg void OnDestroy();
-	afx_msg void OnKillFocus( CWnd* Wnd );
-	afx_msg void OnSetFocus( CWnd* Wnd );
-	afx_msg void OnDrawItem( INT32 nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct );
-	afx_msg BOOL OnMouseWheel(UINT32 nFlags, short zDelta, wxPoint pt);
-	
-	//}}AFX_MSG
-
-	afx_msg LRESULT DoResize(WPARAM , LPARAM);
-	afx_msg void 	ListLostFocus(void);
-	afx_msg void 	ListSelChanged(void);
-	afx_msg LRESULT SetControlFocus(WPARAM state , LPARAM Hwnd);
-	afx_msg LRESULT StartControlDrag(WPARAM state , LPARAM Hwnd);
-	afx_msg LRESULT EndControlDrag(WPARAM state , LPARAM Hwnd);
-	afx_msg LRESULT MoveBar(WPARAM NewDockType,LPARAM NewPos);
-	afx_msg LRESULT GetBarSize(WPARAM DockType , LPARAM ControlSize);
-	afx_msg LRESULT QueryIsBar(WPARAM , LPARAM );
-	DECLARE_MESSAGE_MAP() */
-
-
 protected:
 	
 	// -------------------------------------------------------------------------------------
@@ -596,8 +558,9 @@ protected:
 	wxRect HorizontalLargeRect;
 	wxRect VerticalLargeRect;
 
- #pragma message( __LOCMSG__ "Removed font members" )
-/*	// Font to paint caption
+PORTNOTE("other", "removed fonts from bars")
+#ifndef EXCLUDE_FROM_XARALX
+	// Font to paint caption
 	wxFont * TitleFont;
 
  	// Font to use in bars
@@ -605,10 +568,10 @@ protected:
 
 	// Fonts to use in double decker controls
 	wxFont * SmallThinFont;
-	wxFont * LargeThinFont; */
+	wxFont * LargeThinFont;
+#endif
 
-
- 	// Is Bar an InfoBar 
+	// Is Bar an InfoBar 
 	BOOL ThisIsAnInfoBar ;
 
 

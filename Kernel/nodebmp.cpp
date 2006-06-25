@@ -574,8 +574,6 @@ PORTNOTE("liveeffects", "XPE menu option disabled")
 
 void NodeBitmap::Render(RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "NodeBitmap::Render - do nothing" )
-//	TRACE( _T("Warning - NodeBitmap::Render called\n") );
 	// No need to render if we are going to supply directly to a capture
 	Capture* pCapture = pRender->GetTopCapture();
 	if (!(pCapture && pCapture->ConsumeDirectBitmap(this)))

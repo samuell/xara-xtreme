@@ -259,8 +259,6 @@ TxtFontTypefaceAttribute::TxtFontTypefaceAttribute(UINT32 TypefaceHandle)
 
 void TxtFontTypefaceAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtFontTypefaceAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtFontTypefaceAttribute::Restore called\n") );
 	pRegion->SetTxtFontTypeface(this, Temp);
 }
 
@@ -280,8 +278,6 @@ void TxtFontTypefaceAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtFontTypefaceAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtFontTypefaceAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtFontTypefaceAttribute::Restore called\n") );
 	pRegion->RestoreTxtFontTypeface(this, Temp);
 }
 
@@ -485,8 +481,6 @@ TxtFontSizeAttribute::TxtFontSizeAttribute(MILLIPOINT fontSize)
 
 void TxtFontSizeAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtFontSizeAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtFontSizeAttribute::Restore called\n") );
 	pRegion->SetTxtFontSize(this, Temp);
 }
 
@@ -506,8 +500,6 @@ void TxtFontSizeAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtFontSizeAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtFontSizeAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtFontSizeAttribute::Restore called\n") );
 	pRegion->RestoreTxtFontSize(this, Temp);
 }
 
@@ -707,8 +699,6 @@ TxtBoldAttribute::TxtBoldAttribute(BOOL boldOn)
 
 void TxtBoldAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtBoldAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TxtBoldAttribute::Render called\n") );
 	pRegion->SetTxtBold(this, Temp);
 }
 
@@ -728,8 +718,6 @@ void TxtBoldAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtBoldAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtBoldAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtBoldAttribute::Restore called\n") );
 	pRegion->RestoreTxtBold(this, Temp);
 }
 
@@ -928,8 +916,6 @@ TxtItalicAttribute::TxtItalicAttribute(BOOL italicOn)
 
 void TxtItalicAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtItalicAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtItalicAttribute::Restore called\n") );
 	pRegion->SetTxtItalic(this, Temp);
 }
 
@@ -949,8 +935,6 @@ void TxtItalicAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtItalicAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtItalicAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtItalicAttribute::Restore called\n") );
 	pRegion->RestoreTxtItalic(this, Temp);
 }
 
@@ -1149,8 +1133,6 @@ TxtUnderlineAttribute::TxtUnderlineAttribute(BOOL underlined)
 
 void TxtUnderlineAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtUnderlineAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TxtUnderlineAttribute::Render called\n") );
 	pRegion->SetTxtUnderline(this, Temp);
 }
 
@@ -1170,8 +1152,6 @@ void TxtUnderlineAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtUnderlineAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtUnderlineAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtUnderlineAttribute::Restore called\n") );
 	pRegion->RestoreTxtUnderline(this, Temp);
 }
 
@@ -1364,8 +1344,6 @@ TxtAspectRatioAttribute::TxtAspectRatioAttribute(FIXED16 aspect)
 
 void TxtAspectRatioAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtAspectRatioAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtAspectRatioAttribute::Restore called\n") );
 	pRegion->SetTxtAspectRatio(this, Temp);
 }
 
@@ -1385,8 +1363,6 @@ void TxtAspectRatioAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtAspectRatioAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtAspectRatioAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtAspectRatioAttribute::Restore called\n") );
 	pRegion->RestoreTxtAspectRatio(this, Temp);
 }
 
@@ -1590,8 +1566,6 @@ TxtJustificationAttribute::TxtJustificationAttribute(Justification Justify)
 
 void TxtJustificationAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtJustificationAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtJustificationAttribute::Restore called\n") );
 	pRegion->SetTxtJustification(this, Temp);
 }
 
@@ -1611,8 +1585,6 @@ void TxtJustificationAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtJustificationAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtJustificationAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtJustificationAttribute::Restore called\n") );
 	pRegion->RestoreTxtJustification(this, Temp);
 }
 
@@ -1814,8 +1786,6 @@ TxtTrackingAttribute::TxtTrackingAttribute(MILLIPOINT tracking)
 
 void TxtTrackingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtTrackingAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TxtTrackingAttribute::Render called\n") );
 	pRegion->SetTxtTracking(this, Temp);
 }
 
@@ -1835,8 +1805,6 @@ void TxtTrackingAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtTrackingAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtTrackingAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtTrackingAttribute::Restore called\n") );
 	pRegion->RestoreTxtTracking(this, Temp);
 }
 
@@ -2039,8 +2007,6 @@ TxtScriptAttribute::TxtScriptAttribute(FIXED16 offset, FIXED16 size)
 
 void TxtScriptAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtScriptAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TxtScriptAttribute::Render called\n") );
 	pRegion->SetTxtScript(this, Temp);
 }
 
@@ -2060,8 +2026,6 @@ void TxtScriptAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtScriptAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtScriptAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtScriptAttribute::Restore called\n") );
 	pRegion->RestoreTxtScript(this, Temp);
 }
 
@@ -2261,8 +2225,6 @@ TxtBaseLineAttribute::TxtBaseLineAttribute(MILLIPOINT value)
 
 void TxtBaseLineAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtBaseLineAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtBaseLineAttribute::Restore called\n") );
 	pRegion->SetTxtBaseLine(this, Temp);
 }
 
@@ -2282,8 +2244,6 @@ void TxtBaseLineAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtBaseLineAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtBaseLineAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtBaseLineAttribute::Restore called\n") );
 	pRegion->RestoreTxtBaseLine(this, Temp);
 }
 
@@ -2530,8 +2490,6 @@ BOOL TxtLineSpaceAttribute::IsARatio()const
 
 void TxtLineSpaceAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtLineSpaceAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - TxtLineSpaceAttribute::Render called\n") );
 	pRegion->SetTxtLineSpace(this, Temp);
 }
 
@@ -2551,8 +2509,6 @@ void TxtLineSpaceAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void TxtLineSpaceAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "TxtLineSpaceAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - TxtLineSpaceAttribute::Restore called\n") );
 	pRegion->RestoreTxtLineSpace(this, Temp);
 }
 
@@ -2783,8 +2739,6 @@ AttrTxtFontTypeface::AttrTxtFontTypeface()
 
 void AttrTxtFontTypeface::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtFontTypeface::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtFontTypeface::Render called\n") );
 	pRegion->SetTxtFontTypeface(&Value, FALSE);
 }
 
@@ -3101,8 +3055,6 @@ AttrTxtBold::AttrTxtBold()
 
 void AttrTxtBold::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtBold::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtBold::Render called\n") );
 	pRegion->SetTxtBold(&Value, FALSE);
 }
 
@@ -3388,8 +3340,6 @@ AttrTxtItalic::AttrTxtItalic()
 
 void AttrTxtItalic::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtItalic::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtItalic::Render called\n") );
 	pRegion->SetTxtItalic(&Value, FALSE);
 }
 
@@ -3676,8 +3626,6 @@ AttrTxtFontSize::AttrTxtFontSize()
 
 void AttrTxtFontSize::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtFontSize::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtFontSize::Render called\n") );
 	pRegion->SetTxtFontSize(&Value, FALSE);
 }
 
@@ -3977,8 +3925,6 @@ AttrTxtUnderline::AttrTxtUnderline()
 
 void AttrTxtUnderline::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtUnderline::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtUnderline::Render called\n") );
 	pRegion->SetTxtUnderline(&Value, FALSE);
 }
 
@@ -4247,8 +4193,6 @@ AttrTxtAspectRatio::AttrTxtAspectRatio()
 
 void AttrTxtAspectRatio::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtAspectRatio::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtAspectRatio::Render called\n") );
 	pRegion->SetTxtAspectRatio(&Value, FALSE);
 }
 
@@ -4542,8 +4486,6 @@ AttrTxtJustification::AttrTxtJustification()
 
 void AttrTxtJustification::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtJustification::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtJustification::Render called\n") );
 	pRegion->SetTxtJustification(&Value, FALSE);
 }
 
@@ -4849,8 +4791,6 @@ AttrTxtTracking::AttrTxtTracking()
 
 void AttrTxtTracking::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtTracking::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtTracking::Render called\n") );
 	pRegion->SetTxtTracking(&Value, FALSE);
 }
 
@@ -5134,8 +5074,6 @@ AttrTxtScript::AttrTxtScript()
 
 void AttrTxtScript::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtScript::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtScript::Render called\n") );
 	pRegion->SetTxtScript(&Value, FALSE);
 }
 
@@ -5421,8 +5359,6 @@ AttrTxtBaseLine::AttrTxtBaseLine()
 
 void AttrTxtBaseLine::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtBaseLine::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtBaseLine::Render called\n") );
 	pRegion->SetTxtBaseLine(&Value, FALSE);
 }
 
@@ -5770,8 +5706,6 @@ AttrTxtLineSpace::AttrTxtLineSpace(FIXED16 ratio)
 
 void AttrTxtLineSpace::Render( RenderRegion* pRegion)
 {
-//#pragma message( __LOCMSG__ "AttrTxtLineSpace::Render - do nothing" )
-//	TRACE( _T("Warning - AttrTxtLineSpace::Render called\n") );
 	pRegion->SetTxtLineSpace(&Value, FALSE);
 }
 

@@ -322,7 +322,6 @@ void NodeClipView::Render(RenderRegion* pRender)
 
 	// In the hit-test render-loop we do *not*
 	// want to directly cause any clipping. at all other times, we render away.
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	if (!pRender->IsHitDetect())
 		SetGDrawClippingRegion(pRender);
 }

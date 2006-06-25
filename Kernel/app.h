@@ -242,7 +242,6 @@ public:
 
 	BOOL CreateDragTargets(DragInformation * DragInfo);
 
-//#pragma message( __LOCMSG__ "Removed RenderRegionList usage" )
 	void AddRenderRegion(RenderRegion *);
 	BOOL DeleteRenderRegion(RenderRegion *);
 	void DeleteRenderRegions(Document *pDoc) 
@@ -370,7 +369,6 @@ protected:
 
 private:
 
-//#pragma message( __LOCMSG__ "Removed RenderRegionList usage" )
 	RenderRegionList RenderList;
 	BOOL ImmediateRenderPending;
 

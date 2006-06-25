@@ -444,8 +444,6 @@ BOOL Spread::IsSpread() const
 
 void Spread::RenderPasteboard( RenderRegion* pRender )
 {                     
-//#pragma message( __LOCMSG__ "Spread::RenderPasteboard- do nothing" )
-//	TRACE( _T("Warning - Spread::RenderPasteboard called\n") );
 	// Ensure we don't dither the filled areas
 	pRender->SetSolidColours(TRUE);
 
@@ -583,8 +581,6 @@ void Spread::RenderPasteboard( RenderRegion* pRender )
 
 void Spread::RenderDropShadows(RenderRegion* pRender) 
 {             
-//#pragma message( __LOCMSG__ "Spread::RenderDropShadows- do nothing" )
-//	TRACE( _T("Warning - Spread::RenderDropShadows called\n") );
 	// If we have the new page background layer present then we needn't bother redrawing the
 	// page as we might get a flash of white as we redraw
 	// Therefore, we don't need to add a pixel on the right hand side page border
@@ -744,8 +740,6 @@ void Spread::RenderDropShadows(RenderRegion* pRender)
 
 void Spread::RenderBleedArea( RenderRegion* pRender) 
 {                                
-//#pragma message( __LOCMSG__ "Spread::RenderBleedArea - do nothing" )
-//	TRACE( _T("Warning - Spread::RenderBleedArea called\n") );
     if  (BleedOffset != 0)
     {                                 
 		// Draw a rectangle BleedOffset outside the common bounding rectangle of all pages

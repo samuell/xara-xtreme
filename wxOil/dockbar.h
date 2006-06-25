@@ -219,8 +219,10 @@ public:
 	virtual wxSize GetBarSize () = 0;
 #ifdef _DEBUG
 	virtual void AssertValid() const;
-#pragma message( __LOCMSG__ "Removed OILDockingBar::Dump" )
-//	virtual void Dump(CDumpContext& dc) const;
+PORTNOTE("other", "Removed OILDockingBar::Dump" )
+#ifndef EXCLUDE_FROM_XARALX
+	virtual void Dump(CDumpContext& dc) const;
+#endif
 	void Dump_List();
 #endif
 
@@ -228,8 +230,10 @@ protected:
     DECLARE_DYNAMIC_CLASS( OILDockingBar )
     DECLARE_EVENT_TABLE()
 
-#pragma message( __LOCMSG__ "Removed OILDockingBar::OnUpdateCmdUI" )
-//	void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler) ;
+PORTNOTE("other", "Removed OILDockingBar::OnUpdateCmdUI" )
+#ifndef EXCLUDE_FROM_XARALX
+	void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler) ;
+#endif
 
 	//{{AFX_MSG(OILDockingBar)
    	//}}AFX_MSG
@@ -299,20 +303,23 @@ public:
 	BOOL	SetSlotSize(INT32 SlotNo, INT32 NewSize);
 
 	BOOL  DeleteBars();
-#pragma message( __LOCMSG__ "Removed OILFixedDockingBar::RepositionWindow" )
-//	void 	RepositionWindow(AFX_SIZEPARENTPARAMS FAR* lpLayout, 
-//				wxWindow* wxWindow*, LPCRECT lpRect);
+PORTNOTE("other", "Removed OILDockingBar::RepositionWindow" )
+#ifndef EXCLUDE_FROM_XARALX
+	void 	RepositionWindow(AFX_SIZEPARENTPARAMS FAR* lpLayout, 
+				wxWindow* wxWindow*, LPCRECT lpRect);
+#endif
 
 	static void DoNotTidyBars () { allowTidyBars = FALSE; }
 	static void AllowTidyBars () { allowTidyBars = TRUE; }
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
-#pragma message( __LOCMSG__ "Removed OILFixedDockingBar::Dump" )
-//	virtual void Dump(CDumpContext& dc) const;
+PORTNOTE("other", "Removed OILDockingBar::Dump" )
+#ifndef EXCLUDE_FROM_XARALX
+	virtual void Dump(CDumpContext& dc) const;
 	void Dump_List();
 #endif
-
+#endif
 protected:
 	// to erase the background
 	wxBrush BackBrush;

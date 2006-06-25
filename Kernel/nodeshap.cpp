@@ -465,7 +465,6 @@ void NodeSimpleShape::UpdateShape()
 void NodeSimpleShape::Render(RenderRegion* pRender)
 {            
 	// render the path
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRender->DrawPath(&InkPath);
 }  
 
@@ -487,7 +486,6 @@ void NodeSimpleShape::RenderEorDrag( RenderRegion* pRender )
 {
 	// Render an EORed version of the shape. For a simple object such
 	// as this we can render it as normal
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRender->DrawPath(&InkPath);
 }
 

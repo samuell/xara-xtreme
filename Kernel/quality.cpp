@@ -348,8 +348,6 @@ INT32 Quality::GetQuality() const
 
 void QualityAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "QualityAttribute::Render - do nothing" )
-//	TRACE( _T("Warning - QualityAttribute::Render called\n") );
 	pRegion->SetQuality(this, Temp);
 }
 
@@ -371,8 +369,6 @@ void QualityAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void QualityAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "QualityAttribute::Restore - do nothing" )
-//	TRACE( _T("Warning - QualityAttribute::Restore called\n") );
 	pRegion->RestoreQuality(this, Temp);
 }
 
@@ -523,8 +519,6 @@ AttrQuality::AttrQuality()
 
 void AttrQuality::Render( RenderRegion* pRender)
 {
-//#pragma message( __LOCMSG__ "AttrQuality::Render - do nothing" )
-//	TRACE( _T("Warning - AttrQuality::Render called\n") );
 	pRender->SetQuality(&Value, FALSE);
 
 	Layer* pLayer = (Layer*)FindParent(CC_RUNTIME_CLASS(Layer));

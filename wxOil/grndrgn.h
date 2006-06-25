@@ -168,7 +168,6 @@ public:
 	GRenderRegion(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 ViewScale, UINT32 Depth, double dpi);
 	virtual ~GRenderRegion();
 
-//#pragma message( __LOCMSG__ "GRenderRegion is stripped" )
 	static BOOL Init();
 
 	// these are the virtual fns we need to instantiate a class

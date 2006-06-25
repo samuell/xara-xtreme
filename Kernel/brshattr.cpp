@@ -2490,8 +2490,6 @@ DocRect BrushAttrValue::GetAttrBoundingRect(NodeRenderableInk* pParent, CCAttrMa
 
 	if (pParent->IsATextChar())
 	{	
-	PORTNOTETRACE("text","BrushAttrValue::GetAttrBoundingRect - removed IsATextChar code");
-#ifndef EXCLUDE_FROM_XARALX
 		// text always has to be different doesn't it..
 	
 		// create a format region to keep an attribute stack
@@ -2523,7 +2521,6 @@ DocRect BrushAttrValue::GetAttrBoundingRect(NodeRenderableInk* pParent, CCAttrMa
 	
 		m_CachedBRect = ReturnRect;
 		return ReturnRect;
-#endif
 	}
 
 	// Still nothing? Last resort time.  

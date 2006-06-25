@@ -512,8 +512,6 @@ DocRect NodeClipViewController::GetEorDragBoundingRect()
 ********************************************************************************************/
 SubtreeRenderState NodeClipViewController::RenderSubtree(RenderRegion* pRender, Node** ppNextNode, BOOL bClip)
 {
-//#pragma message( __LOCMSG__ "NodeClipViewController::RenderSubtree - do nothing" )
-//	TRACE( _T("Warning - NodeClipViewController::RenderSubtree called\n") );
 	if (pRender && !pRender->IsPrinting())
 	{
 		// ensure our cached keyhole path is up to date.
@@ -1629,7 +1627,6 @@ BOOL NodeClipViewController::InkHasClearLineColour(NodeRenderableInk* pInkNode)
 	{
 		DocColour* pLineColour = ((AttrStrokeColour*)pAppliedAttr)->GetStartColour();
 		if (pLineColour != NULL)
-//#pragma message( __LOCMSG__ "Removed DocColour usage" )
 			return pLineColour->IsTransparent();
 	}
 	return FALSE;

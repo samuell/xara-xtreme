@@ -366,9 +366,6 @@ void NodeGrid::Render( RenderRegion* /*pRender*/ )
 
 SubtreeRenderState NodeGrid::RenderSubtree(RenderRegion *pRender, Node** ppNextNode, BOOL bClip)
 {
-//#pragma message( __LOCMSG__ "NodeGrid::RenderSubtree - do nothing" )
-//	TRACE( _T("Warning - NodeGrid::RenderSubtree called\n") );
-//	return SUBTREE_ROOTANDCHILDREN;
 	// If no cliprect supplied, assume we do need to render
 	if (pRender==NULL || !bClip)
 		return SUBTREE_ROOTANDCHILDREN;
@@ -626,9 +623,6 @@ DocRect NodeGrid::GetBoundingRect()
 
 DocRect NodeGrid::GetBlobBoundingRect()
 {
-//#pragma message( __LOCMSG__ "NodeGrid::GetBlobBoundingRect - do nothing" )
-//	TRACE( _T("Warning - NodeGrid::GetBlobBoundingRect called\n") );
-//	return DocRect();
 	// Find the paths bounding rectangle
 	DocRect Rect = GridBoundingRect;
 

@@ -541,8 +541,6 @@ void FeatherAttrValue::GetMinimumOffscreenBmpDimensions(UINT32* RequiredWidth, U
  ********************************************************************************************/
 void FeatherAttrValue::OffscreenRenderingCompleted(RenderRegion *pRender, LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits, DocRect BitmapRect)
 {
-//#pragma message( __LOCMSG__ "FeatherAttrValue::OffscreenRenderingCompleted - do nothing" )
-//	TRACE( _T("Warning - FeatherAttrValue::OffscreenRenderingCompleted called\n") );
 //	TRACEUSER( "Gerry", _T("Feather attribute OffscreenRenderingCompleted (0x%08x)\n"), this);
 //	TRACEUSER( "Phil", _T("Feather attribute OffscreenRenderingCompleted (0x%08x)\n"), this);
 
@@ -803,8 +801,6 @@ BOOL FeatherAttrValue::DoesOffscreenBmpRequireTransp(GRenderRegion* pGRR)
 	if (DoesOffscreenBMPCaptureBackground())
 		return FALSE;
 
-//#pragma message( __LOCMSG__ "Removed GRenderRegion usage" )
-//		return false;
 	if (pGRR == NULL)
 	{
 		ERROR3("FeatherAttrValue::DoesOffscreenBmpRequireTransp; Invalid params!");
@@ -948,10 +944,6 @@ LPBITMAPINFO FeatherAttrValue::CreateSilhouetteBitmap(GRenderRegion* GRR,
 													  LPBYTE* ppBmpBits,
 													  Path* pOutline)
 {
-//#pragma message( __LOCMSG__ "FeatherAttrValue::CreateSilhouetteBitmap - do nothing" )
-//	TRACE( _T("Warning - FeatherAttrValue::CreateSilhouetteBitmap called\n") );
-//	return NULL;
-
 //	ERROR3IF(m_pOffscreenBmpInfo == NULL,
 //			"FeatherAttrValue::CreateSilhouetteBitmap; No offscreen bitmap info.");
 

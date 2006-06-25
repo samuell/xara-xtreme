@@ -307,7 +307,6 @@ void AttrWebAddress::Render( RenderRegion* pRender)
 	Value.SetClickableRectangleInRendering(GetClickableRectangle());
 
 	//Then set our WebAddressAttribute member variable into that render region
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRender->SetWebAddress(&Value, FALSE);
 }
 
@@ -927,7 +926,6 @@ WebAddressAttribute& WebAddressAttribute::operator= (const WebAddressAttribute& 
 
 void WebAddressAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRegion->SetWebAddress(this, Temp);
 }
 
@@ -944,7 +942,6 @@ void WebAddressAttribute::Render(RenderRegion *pRegion, BOOL Temp)
 
 void WebAddressAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
 {
-//#pragma message( __LOCMSG__ "Removed RenderRegion usage" )
 	pRegion->RestoreWebAddress(this, Temp);
 }
 

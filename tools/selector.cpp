@@ -120,7 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "selector.h"
 #include "selinfo.h"
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "progress.h"
+#include "progress.h"
 #include "keypress.h"
 #include "vkextra.h"
 #include "insertnd.h"
@@ -1020,9 +1020,10 @@ void SelectorTool::SetKeyDownCursor(ClickModifiers cmods)
 	DocCoord dcMousePos;
 	if( DocView::GetCurrentMousePos( &pSpread, &dcMousePos ) &&
 		Tool::GetCurrentID()== TOOLID_SELECTOR )
-#pragma message( __LOCMSG__ "Removed NameGallery usage" )
-		/*	&&
-		!BaseBar::IsDragging()) */
+PORTNOTE("other", "Removed bar drag usage")
+#ifndef EXCLUDE_FROM_XARALX
+		&& !BaseBar::IsDragging())
+#endif
 	{
 //		StartSpread = pSpread;
 //		ClickStart = dcMousePos;
@@ -5834,8 +5835,7 @@ void OpSelectorDragBox::DragFinished(DocCoord PointerPos, ClickModifiers ClickMo
 	RenderDragBlobs(BoundingRect, StartSpread, bSolidDrag);
 
 	// Put the hourglass up
-#pragma message( __LOCMSG__ "Removed BeginSlowJob usage" )
-//	BeginSlowJob();
+	BeginSlowJob();
 
 	// Go and try and select a few things
 	if (Success)
@@ -6117,8 +6117,7 @@ void OpDragRotateCentre::DragFinished(DocCoord dcPos, ClickModifiers mods,
 									  Spread* pSpread, BOOL fDragOK, BOOL bSolidDrag)
 {
 	// Put the hourglass up
-#pragma message( __LOCMSG__ "Removed BeginSlowJob usage" )
-//	BeginSlowJob();
+	BeginSlowJob();
 
 	// Act on the termination status of the drag operation.
 	if (fDragOK)
