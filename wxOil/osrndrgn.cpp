@@ -389,12 +389,10 @@ RenderRegion* OSRenderRegion::Create(DocRect ClipRect, Matrix ConvertMatrix,
 	}
 	else if ((rType == RENDERTYPE_PRINTER) || (rType == RENDERTYPE_PRINTER_PS))
 	{
-		PORTNOTETRACE("other","OSRenderRegion::Create - printing disabled");
-#if !defined(EXCLUDE_FROM_XARALX)
 #ifndef STANDALONE
 		// Work out what kind of printer region to get - find document's print control info.
 		Document *pDoc = pView->GetDoc();
-		ERROR3IF(pDoc == NULL, "No document attached to view when printing!")
+		ERROR3IF(pDoc == NULL, "No document attached to view when printing!");
 		if (pDoc != NULL)
 		{
 			// Get print information for this document.
@@ -424,7 +422,6 @@ RenderRegion* OSRenderRegion::Create(DocRect ClipRect, Matrix ConvertMatrix,
 			// Yes - make a PostScript render region
 			return new PrintPSRenderRegion(ClipRect, ConvertMatrix, ViewScale);
 		}
-#endif
 #endif
 		// If we get here, then we should use normal OS rendering.
 //		TRACE(_T("Creating PRINTER region (%d, %d) - (%d, %d)  OSRenderRegion\n"), ClipRect.lo.x, ClipRect.lo.y, ClipRect.hi.x, ClipRect.hi.y);

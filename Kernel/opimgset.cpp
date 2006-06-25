@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "mainfrm.h"
+#include "camframe.h"
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "barsdlgs.h"
 #include "colcontx.h"
@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opimgset.h"
 #include "progress.h"
 //#include "simon.h"			// for _R(IDS_NO_OBJECTS_SELECTED)
-#include "xaracms.h"
+//#include "xaracms.h"
 //#include "gerry.h"
 
 
@@ -368,7 +368,7 @@ void OpShowPrinterColours::Do(OpDescriptor *OpDesc)
 	{
 		String Token = OpDesc->Token;
 		INT32 WhichToggle = 0;
-		INT32 WhichSpot = 0;
+//		INT32 WhichSpot = 0;
 		INT32 TokenSpot = 0;
 		ColourPlateType TokenPlate = COLOURPLATE_NONE;
 		IndexedColour* pSpotColour = NULL;
@@ -417,9 +417,12 @@ void OpShowPrinterColours::Do(OpDescriptor *OpDesc)
 			// To restore normal view, we just remove any attached ColourPlate from the view
 			DocView::GetSelected()->SetColourPlate(NULL);
 			ColourManager::SelViewContextHasChanged();	// Redraw everything which is affected
-			CMainFrame* pMainFrame = GetMainFrame();
+PORTNOTE("printing", "Disabled SetPrinterColourStatus")
+#ifndef EXCLUDE_FROM_XARALX
+			CCamFrame* pMainFrame = CCamFrame::GetMainFrame();
 			if (pMainFrame)
 				pMainFrame->SetPrinterColourStatus(FALSE);
+#endif
 		}
 		else
 		{
@@ -429,10 +432,12 @@ void OpShowPrinterColours::Do(OpDescriptor *OpDesc)
 			// we get XaraCMS to cache its lookup table now. If no deep bitmaps are rendered,
 			// this is wasteful, but better than getting a several-second delay part-way
 			// through the next document redraw.
+PORTNOTE("printing", "Disabled SetPrinterColourStatus")
+#ifndef EXCLUDE_FROM_XARALX
 			Progress::Start();		// Fail to show an hourglass (this doesn't work for some reason)
 			DWORD *Dummy = GetApplication()->GetCMSManager()->GetPaperViewTable();
 			Progress::Stop();
-			CMainFrame* pMainFrame = GetMainFrame();
+			CCamFrame* pMainFrame = CCamFrame::GetMainFrame();
 			if (pMainFrame)
 			{
 				String_256 sPlateName;
@@ -462,6 +467,7 @@ void OpShowPrinterColours::Do(OpDescriptor *OpDesc)
 				
 				pMainFrame->SetPrinterColourStatus(TRUE, &sPlateName);
 			}
+#endif
 		}
 	}
 
@@ -862,7 +868,7 @@ BOOL OpOverprintLine::Init()
 						FALSE,						// Smart duplicate operation
 						FALSE,						// NOT Clean operation
 						NULL,						// No vertical counterpart
-						NULL,						// String for one copy only error
+						0,							// String for one copy only error
 						GREY_WHEN_NO_SELECTION |	// Auto state flags
 						DONT_GREY_WHEN_SELECT_INSIDE
 					));
@@ -1019,7 +1025,7 @@ BOOL OpOverprintFill::Init()
 						FALSE,						// No smart duplicate operation
 						FALSE,						// Not Clean operation
 						NULL,						// No vertical counterpart
-						NULL,						// String for one copy only error
+						0,							// String for one copy only error
 						GREY_WHEN_NO_SELECTION |	// Auto state flags
 						DONT_GREY_WHEN_SELECT_INSIDE
 					));
@@ -1178,7 +1184,7 @@ BOOL OpPrintOnAllPlates::Init()
 						FALSE,						// Smart duplicate operation
 						FALSE,						// NOT Clean operation
 						NULL,						// No vertical counterpart
-						NULL,						// String for one copy only error
+						0,							// String for one copy only error
 						GREY_WHEN_NO_SELECTION |	// Auto state flags
 						DONT_GREY_WHEN_SELECT_INSIDE
 					));

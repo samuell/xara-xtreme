@@ -839,7 +839,6 @@ BOOL DIBUtil::PlotDeepDIB( wxDC *pDC, LPBITMAPINFO lpBitmapInfo, LPBYTE lpBits, 
 
 		if (!PlotDownwards) DestY -= ThisSlice;
 
-	PORTNOTETRACE("other","GRenderRegion::GetRecommendedPalette - removed printing code");
 		if( Hint == CONVHINT_PRINTER )
 		{ 
 			// printers have to do it this way else they don't half-tone correctly

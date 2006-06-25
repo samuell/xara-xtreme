@@ -1661,10 +1661,7 @@ PORTNOTE("other", "Disabled internet tab")
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	ADD_OPTIONSTAB(PointersTab)		// Mouse
-PORTNOTE("other", "Disabled print general tab")
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintGeneralTab)	// Output
-#endif
 #endif //webster
 	ADD_OPTIONSTAB(PageTab)			// Page
 #ifdef PHOTOSHOPPLUGINS
@@ -1673,16 +1670,10 @@ PORTNOTE("other", "Disabled print general tab")
 #endif
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-PORTNOTE("other", "Disabled print layout tab")
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintLayoutTab)	// Print layout
-#endif
 	ADD_OPTIONSTAB(ScaleTab)		// Scaling
 #ifdef BUILD_SEPARATIONS
-PORTNOTE("other", "Disabled print separations tab")
-#ifndef EXCLUDE_FROM_XARALX
 	ADD_OPTIONSTAB(PrintSepsTab)	// Separation (Colour) 
-#endif
 #endif
 	ADD_OPTIONSTAB(TuneTab)			// Tune ups
 //	ADD_OPTIONSTAB(UndoTab)

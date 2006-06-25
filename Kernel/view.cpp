@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "princomp.h"
 #include "printctl.h"
 //#include "prncamvw.h"
-//#include "prdlgctl.h"
+#include "prdlgctl.h"
 #include "cameleps.h"
 //#include "tim.h"
 #include "progress.h"
@@ -1656,8 +1656,6 @@ void View::SetColourContext(ColourModel Model, ColourContext *NewContext)
 
 ProgressDisplay::ProgressDisplay()
 {
-	PORTNOTETRACE("printing","Disabled CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 	//	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 #ifndef STANDALONE
@@ -1666,7 +1664,6 @@ ProgressDisplay::ProgressDisplay()
 	pPrintInfo = NULL;
 #endif
 #endif //webster
-#endif
 	DoProgressDisplay = FALSE;
 	IsPrinting = FALSE;
 	NumNodesRendered = 0;
@@ -1726,8 +1723,6 @@ void ProgressDisplay::SetUp(RenderRegion *pRender, ScanningRenderRegion *pScanne
 
 	// Work out whether to count just selected objects, or all of them.
 	BOOL CountAllObjects = TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -1737,7 +1732,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 		CountAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 	}
 #endif //webster
-#endif
 	if (CountAllObjects)
 	{
 		// Count *all* objects
@@ -1808,8 +1802,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 
 	INT32 Range = FirstStageCount + SecondStageCount + ThirdStageCount;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting)
@@ -1829,7 +1821,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 	else
 #endif //wesbter
-#endif
 	{
 		// Start progress display (with no initial delay) for Camelot EPS export
 		String_64 ExportMsg(_R(IDT_EXPORTMSG_CAMEPS));
@@ -1870,21 +1861,16 @@ BOOL ProgressDisplay::IncProgress(INT32 NumNodes)
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && (pPrintInfo != NULL) && (pPrintInfo->m_bContinuePrinting == FALSE))
 		// User has cancelled job
 		return FALSE;
 #endif //webster
-#endif
 	if ((NumNodesRendered * ProgressScaleFactor) > (LastProgressUpdate + ProgressInterval))
 	{
 		// Time to update the progress display.
 		LastProgressUpdate = NumNodesRendered * ProgressScaleFactor;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 		if (IsPrinting && pPrintInfo != NULL)
@@ -1898,8 +1884,7 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 		}
 		else
 #endif //webster
-#endif
-			return ContinueSlowJob(LastProgressUpdate);
+		return ContinueSlowJob(LastProgressUpdate);
 	}
 
 #endif
@@ -1931,15 +1916,12 @@ BOOL ProgressDisplay::FirstStageDone()
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
 		pPrintInfo->SetSliderSubRangePos(NumNodesRendered * ProgressScaleFactor);
 	else
 #endif //webster
-#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 
 #endif
@@ -1971,8 +1953,6 @@ BOOL ProgressDisplay::SecondStageDone()
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -1986,7 +1966,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 	else
 #endif //webster
-#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 
 #endif
@@ -2092,8 +2071,6 @@ BOOL ProgressDisplay::BitmapPhaseBandRenderedTo(INT32 ScanlinesRendered)
 		BandOffset = BandSize;
 	INT32 ProgressPos = (NumNodesRendered * ProgressScaleFactor) + BandOffset;
 
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	// Update progress indicators
@@ -2108,7 +2085,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 	else
 #endif //webster
-#endif
 		return ContinueSlowJob(ProgressPos);
 
 #endif
@@ -2142,8 +2118,6 @@ BOOL ProgressDisplay::EndBitmapPhaseBand()
 	NumNodesRendered += (BandSize / ProgressScaleFactor);
 	if (NumNodesRendered > (FirstStageCount + SecondStageCount))
 		NumNodesRendered = (FirstStageCount + SecondStageCount);
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && pPrintInfo != NULL)
@@ -2157,7 +2131,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 	else
 #endif //webster
-#endif
 		return ContinueSlowJob(NumNodesRendered * ProgressScaleFactor);
 #endif
 	// All ok
@@ -2197,8 +2170,6 @@ SlowJobResult View::RenderSimpleNodes(Node *pNode, RenderRegion *pRender,
 	BOOL RenderAllObjects = TRUE;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	PORTNOTETRACE("print","Disabled CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsPrinting())
 	{
 		CCPrintInfo *pPrintInfo = CCPrintInfo::GetCurrent();
@@ -2209,7 +2180,6 @@ SlowJobResult View::RenderSimpleNodes(Node *pNode, RenderRegion *pRender,
 			RenderAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 		}
 	}
-#endif
 #endif //webster
 	// Render nodes into specified render region
 	while ((pNode!=NULL) && (pNode != pLastComplexNode))
@@ -2763,8 +2733,6 @@ RenderViewResult View::RenderOptimalView(RenderRegion* pRender, Matrix& ViewTran
 
 		// Work out whether we need to render all objects, or just the selected ones.
 		BOOL RenderAllObjects = TRUE;
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 		CCPrintInfo *pPrintInfo = NULL;
 		if (Printing)
 		{
@@ -2776,12 +2744,11 @@ PORTNOTE("printing", "Disabled printing")
 			}
 		}
 
-		BOOL ReallyPrinting = Printing && (pPrintInfo != NULL);
+//		BOOL ReallyPrinting = Printing && (pPrintInfo != NULL);
 
 		// We going to analyse the document
 		if (pPrintInfo != NULL)
 			pPrintInfo->SetAnalysing();
-#endif
 
 		ScannerRenderCallback ScanCallback(this, RenderAllObjects, &Scanner);
 
@@ -2797,12 +2764,9 @@ PORTNOTE("printing", "Disabled printing")
 //		Scanner.DumpNodeRuns();
 #endif
 
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 		// We going to print the document now
 		if (pPrintInfo != NULL)
 			pPrintInfo->SetPrinting();
-#endif
 
 		// Set up the matrix and clipping rect
 		pRender->SetMatrix(ViewTrans);
@@ -3530,8 +3494,6 @@ RenderViewResult View::RenderSimpleView(RenderRegion* pRender, Matrix& ViewTrans
 
 	// Work out whether we need to render all objects, or just the selected ones.
 	BOOL RenderAllObjects = TRUE;
-PORTNOTE("other", "disabled CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 	CCPrintInfo *pPrintInfo = NULL;
 	if (!bIsOnScreen && pRender->IsPrinting())
@@ -3545,7 +3507,6 @@ PORTNOTE("other", "disabled CCPrintInfo");
 		}
 	}
 #endif //webster
-#endif
 	// Create and set up a new Scanning render region
 	ScanningRenderRegion Scanner(pRender->IsPrinting());
 
@@ -3593,14 +3554,11 @@ PORTNOTE("other", "disabled CCPrintInfo");
 		Scanner.SetHostRRCaps(Caps);
 
 		//	WEBSTER-ranbirr-13/11/96
-PORTNOTE("other", "disabled CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 		// We going to analyse the document
 		if (pPrintInfo != NULL)
 			pPrintInfo->SetAnalysing();
 #endif //webster
-#endif
 		// Find the first node to render
 //		pFirstInkNode = pSpread->FindFirstForUnclippedInkRender(&Scanner);
 //		Scanner.SetRenderState(pFirstInkNode);
@@ -3615,14 +3573,11 @@ PORTNOTE("other", "disabled CCPrintInfo");
 	}
 	
 	//	WEBSTER-ranbirr-13/11/96
-PORTNOTE("other", "disabled CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 	// We going to print the document now
 	if (pPrintInfo != NULL)
 		pPrintInfo->SetPrinting();
 #endif //webster
-#endif
 
 	// Ok, we now have a Scanning render region that has all the info we need to know in it.
 	// See if there were any complex shapes in the region
@@ -4164,8 +4119,6 @@ SlowJobResult View::RenderSimpleNodesUnclipped(Node *pNode, RenderRegion *pRende
 	BOOL RenderAllObjects = TRUE;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRender->IsPrinting())
 	{
 		CCPrintInfo *pPrintInfo = CCPrintInfo::GetCurrent();
@@ -4176,7 +4129,6 @@ PORTNOTE("printing", "Disabled printing")
 			RenderAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 		}
 	}
-#endif
 #endif //webster
 	// Render nodes into specified render region
 	while ((pNode!=NULL) && (pNode != pLastComplexNode))
@@ -4277,8 +4229,6 @@ void ProgressDisplay::SetUpOptimal(RenderRegion *pRender, ScanningRenderRegion* 
 
 	// Work out whether to count just selected objects, or all of them.
 	BOOL CountAllObjects = TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if ((IsPrinting) && (pPrintInfo!=NULL))
@@ -4287,27 +4237,17 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 		CountAllObjects = (pPrCtrl->GetObjPrintRange() == PRINTRANGEOBJ_ALL);
 	}
 #endif //webster
-#endif
 
 	OptimalPrintRenderCallback MyCallback(pRender->GetRenderView(), pSpread, CountAllObjects, pScanner, FALSE, &TotalNodes, NULL, TRUE);
 	pRender->RenderTree(pSpread, FALSE, FALSE, &MyCallback);
 
 	TRACE( _T("TotalNodes = %d\n"), TotalNodes);
 
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	// Set up the slider according to the printing flag
 	if (IsPrinting)
 	{
-//		if (pPrintInfo == NULL)
-//		{
-//			ERROR2RAW("No PrintInfo object found!");
-//			InformError();
-//			return;
-//		}
-
 		if (pPrintInfo != NULL)
 		{
 			// actually set the slider
@@ -4318,7 +4258,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 	}
 	else
 #endif //webster
-#endif
 	{
 		// Start progress display (with no initial delay) for Camelot EPS export
 		String_64 ExportMsg(_R(IDT_EXPORTMSG_CAMEPS));
@@ -4359,22 +4298,17 @@ BOOL ProgressDisplay::SetNodesRendered(INT32 NumNodes)
 	if (!DoProgressDisplay)
 		// No progress display needed.
 		return TRUE;
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (IsPrinting && (pPrintInfo != NULL) && (pPrintInfo->m_bContinuePrinting == FALSE))
 		// User has cancelled job
 		return FALSE;
 #endif //webster
-#endif
 	if ((NumNodesRendered * ProgressScaleFactor) > (LastProgressUpdate + ProgressInterval))
 	{
 		// Time to update the progress display.
 		LastProgressUpdate = NumNodesRendered * ProgressScaleFactor;
 	//	WEBSTER-ranbirr-13/11/96
-PORTNOTE("printing","Disabled CCPrintInfo")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 		if (IsPrinting && pPrintInfo != NULL)
 		{
@@ -4387,7 +4321,6 @@ PORTNOTE("printing","Disabled CCPrintInfo")
 		}
 		else
 #endif //webster
-#endif
 			return ContinueSlowJob(LastProgressUpdate);
 	}
 

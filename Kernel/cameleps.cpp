@@ -139,7 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dibutil.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "native.h"			// The new designed native filter, used for v2
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
-//#include "psdc.h"
+#include "psdc.h"
 #include "osrndrgn.h"
 //#include "prdlgctl.h"
 #include "progress.h"
@@ -5355,10 +5355,7 @@ PORTNOTE("printing", "Exclude CCPrintInfo");
 
 	DocCoord DCOrigin = pDC->GetOrigin();
 
-PORTNOTE ("other", "Disabled postscript printing transform")
-#ifndef EXCLUDE_FROM_XARALX
 	if (IsCamelotEPS)
-#endif
 	{
 		dWidth *= UnitSize;
 		dHeight *= UnitSize;
@@ -5369,10 +5366,9 @@ PORTNOTE ("other", "Disabled postscript printing transform")
 		e[0] = ((double) (Coords[3].x - DCOrigin.x)) / UnitSize;
 		f[0] = ((double) (Coords[3].y - DCOrigin.y)) / UnitSize;
 	}
-PORTNOTE ("other", "Disabled postscript printing transform")
-#ifndef EXCLUDE_FROM_XARALX
 	else
 	{
+		ERROR3IF(!pDC->IsKindOf(CC_RUNTIME_CLASS(PSPrintDC)), "KernelDC is not a PSPrintDC - how did that happen?");
 		// Printing to PostScript - convert to Window co-ordinates, using the DC.
 		PSPrintDC *pPSDC = (PSPrintDC *) pDC;
 
@@ -5387,7 +5383,6 @@ PORTNOTE ("other", "Disabled postscript printing transform")
 		e[0] = (double) PSCoords[3].x;
 		f[0] = (double) PSCoords[3].y;
 	}
-#endif
 
 	// Calculate the inverse of the above.
 	double Det = a[0] * d[0] - b[0] * c[0];

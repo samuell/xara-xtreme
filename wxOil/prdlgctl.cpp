@@ -1473,6 +1473,8 @@ HDC CCPrintDialog::CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode)
 	return hDC;
 }
 
+#endif // EXCLUDE_FROM_XARALX
+
 /********************************************************************************************
 
 >	static BOOL CCPrintDialog::IsPostscript()
@@ -1488,9 +1490,17 @@ HDC CCPrintDialog::CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode)
 
 BOOL CCPrintDialog::IsPostscript()
 {
+PORTNOTE("printing", "Make printer always appear to be postscript")
+#ifndef EXCLUDE_FROM_XARALX
 	GetPrinterSettings();
 	return PrPostscript;
+#else
+	return TRUE;
+#endif
 }
+
+PORTNOTE("printing", "disabled lots of printer dialog code")
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 

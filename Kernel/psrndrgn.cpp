@@ -170,7 +170,7 @@ PrintPSRenderRegion::~PrintPSRenderRegion()
 	// Flush the DC
 	pPSPrintDC->FlushDC();
 
-	pPSPrintDC->StartOSOutput();
+	pPSPrintDC->EndOSOutput();
 
 	// Karim 06/06/2000 - free the memory! (hope this doesn't blow up something else...)
 	// AB: Don't do this. RenderRegion's destructor deletes RenderDC

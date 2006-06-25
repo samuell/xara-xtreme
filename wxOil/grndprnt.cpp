@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fixmem.h"
 #include "osrndrgn.h"
 #include "view.h"
-#include "wbitmap.h"
+#include "oilbitmap.h"
 
 CC_IMPLEMENT_DYNAMIC(GRenderPrint, GRenderDIB)
 
@@ -186,7 +186,7 @@ BOOL GRenderPrint::StartRender()
 
 	// we need a white background, which on non-palette devices (all we can cope
 	// with currently) is 0xFF a lot.
-	memset( lpBits, 0xFF, lpBitmapInfo->bmiHeader.biSizeImage );
+	memset( pBits, 0xFF, pBitmapInfo->bmiHeader.biSizeImage );
 
 	// If we're colour separating then we want to DISABLE separations for the entire
 	// rendering-to-a-bitmap process, and we will then colour separate the resultant
@@ -284,12 +284,12 @@ GRenderPrint::~GRenderPrint()
 	// Free up the bitmap here, as the call to FreeLPBits in the
 	// GRenderDIB will not call the correct version (the virtual-ness will be
 	// broken as it is called from a destructor
-	if (lpBitmapInfo!=NULL)
+	if (pBitmapInfo!=NULL)
 	{
-//		FreeLPBits( lpBitmapInfo, lpBits );
+//		FreeLPBits( pBitmapInfo, pBits );
 		FreeOffscreenState();
-		lpBitmapInfo = NULL;
-		lpBits = NULL;
+		pBitmapInfo = NULL;
+		pBits = NULL;
 	}
 }
 
@@ -326,7 +326,10 @@ BOOL GRenderPrint::InitDevice()
 	// GDI16 generates an error for it (invalid value 4)
 	// Note2: The MFC version of this function looks like the 16-bit API call,
 	// so we call the API directly here.
+PORTNOTE("printing", "Don't SetStretchBltMode")
+#ifndef EXCLUDE_FROM_XARALX
 	::SetStretchBltMode(RenderDC->m_hDC, HALFTONE);
+#endif
 
 	return TRUE;
 }
@@ -346,19 +349,19 @@ BOOL GRenderPrint::InitDevice()
 
 BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDisplayBits)
 {
-	INT32 BitmapWidth = lpBitmapInfo->bmiHeader.biWidth;
-	INT32 BitmapHeight = lpBitmapInfo->bmiHeader.biHeight;
+	INT32 BitmapWidth = pBitmapInfo->bmiHeader.biWidth;
+	INT32 BitmapHeight = pBitmapInfo->bmiHeader.biHeight;
 
 	if (RenderView != NULL && RenderView->GetColourPlate() != NULL && 
 		!RenderView->GetColourPlate()->IsDisabled())
 	{
 		// We currently can't handle anything less than 8bpp bitmaps here, as we
 		// write the output data to our bitmap in 8bpp format.
-		ERROR2IF(BitmapDepth < 8, FALSE, "Unexpectedly low BPP in GRenderPrint::DisplayBits");
+		ERROR2IF(uBitmapDepth < 8, FALSE, "Unexpectedly low BPP in GRenderPrint::DisplayBits");
 
 		// We're colour separating. We must separate the entire bitmap down to
 		// an 8bpp greyscale format
-		WinBitmap Bitmap(lpBitmapInfo, lpBits);
+		CWxBitmap Bitmap(pBitmapInfo, pBits);
 
 		// We are doing a colour separation - find the separation tables
 		BYTE *SepTables = NULL;
@@ -393,7 +396,7 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 			return(FALSE);
 		}
 
-		BYTE *pOutputBuffer = lpBits;				// We'll overwrite our bitmap with the separated data
+		BYTE *pOutputBuffer = pBits;				// We'll overwrite our bitmap with the separated data
 		for (INT32 y = 0; y < PixelHeight; y++)
 		{
 			// Get this scanline as a 32bpp generic structure
@@ -405,27 +408,27 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 
 		// Make sure that the new 8bpp bitmap has a greyscale palette on it - if it was not 8bpp,
 		// then we must realloc the header info to get enough room in it for a 256 colour palette.
-		if (lpBitmapInfo->bmiHeader.biBitCount != 8)
+		if (pBitmapInfo->bmiHeader.biBitCount != 8)
 		{
-			FreeDIB(lpBitmapInfo, NULL, NULL, FALSE);								// Free the info (ONLY)
-			lpBitmapInfo = AllocDIB(PixelWidth, PixelHeight, 8, NULL, NULL, FALSE);	// Realloc the info
+			FreeDIB(pBitmapInfo, NULL, NULL, FALSE);								// Free the info (ONLY)
+			pBitmapInfo = AllocDIB(PixelWidth, PixelHeight, 8, NULL, NULL, FALSE);	// Realloc the info
 		}
 
 		// And fill in the palette to a greyscale
 		for (INT32 i = 0; i < 256; i++)
 		{
-			lpBitmapInfo->bmiColors[i].rgbRed = 
-				lpBitmapInfo->bmiColors[i].rgbGreen = 
-					lpBitmapInfo->bmiColors[i].rgbBlue = i;
+			pBitmapInfo->bmiColors[i].rgbRed = 
+				pBitmapInfo->bmiColors[i].rgbGreen = 
+					pBitmapInfo->bmiColors[i].rgbBlue = i;
 
-			lpBitmapInfo->bmiColors[i].rgbReserved = 0;
+			pBitmapInfo->bmiColors[i].rgbReserved = 0;
 		}
 
 		// Free our separation tables and temporary scanline
 		CCFree(SepTables);
 		CCFree(TempScanline);
 
-		// Finally, poke the WinBitmap we created so that it doesn't delete OUR
+		// Finally, poke the CWxBitmap we created so that it doesn't delete OUR
 		// bitmap info and bytes (which we only lent it) when it is deleted
 		Bitmap.BMInfo  = NULL;
 		Bitmap.BMBytes = NULL;
@@ -434,31 +437,31 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 	{
 		// Not colour separating, but if it's a 32bpp bitmap, we need to convert to something 
 		// that StretchDIBits (below) can understand
-		if (BitmapDepth == 32)
+		if (uBitmapDepth == 32)
 		{
 			// Can't plot 32bpp bitmaps to GDI as 16-bit GDI doesn't understand them,
 			// so we convert to 24bpp bitmap in-situ and render that...
 
 			// How many bytes to a source scanline?
-			const INT32 ScanlineBytes = DIBUtil::ScanlineSize(BitmapWidth, BitmapDepth );
+			const INT32 ScanlineBytes = DIBUtil::ScanlineSize(BitmapWidth, uBitmapDepth );
 
 			// How many bytes to a destination scanline
 			const INT32 DestlineBytes = DIBUtil::ScanlineSize(BitmapWidth, 24);
 
 			// Now convert the bitmap in-situ
-			LPBYTE OriginalBuffer  = lpBits;
-			LPBYTE ConvertedBuffer = lpBits;
+			LPBYTE OriginalBuffer  = pBits;
+			LPBYTE ConvertedBuffer = pBits;
 
 			for (INT32 i = 0; i < BitmapHeight; i++)
 			{
 				DIBUtil::Convert32to24(BitmapWidth, OriginalBuffer, ConvertedBuffer);
-				OriginalBuffer += ScanlineBytes;
-				ConvertedBuffer += DestlineBytes;
+				OriginalBuffer += (UINT_PTR) ScanlineBytes;
+				ConvertedBuffer += (UINT_PTR) DestlineBytes;
 			}
 
 			// Update bitmap info to show it is now a 24bpp bitmap...
-			lpBitmapInfo->bmiHeader.biBitCount  = 24;
-			lpBitmapInfo->bmiHeader.biSizeImage = DestlineBytes * BitmapHeight;
+			pBitmapInfo->bmiHeader.biBitCount  = 24;
+			pBitmapInfo->bmiHeader.biSizeImage = DestlineBytes * BitmapHeight;
 		}
 	}
 
@@ -466,17 +469,22 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 	//RenderDC->GetClipBox(&clip);
 	clip = OSRenderRegion::DocRectToWin(RenderView, RenderMatrix, CurrentClipRect, 0, 0, 0, 0);
 
+PORTNOTE("printing", "Attempt to use StaticPlotBitmap instead of StretchDIBits")
+#ifndef EXCLUDE_FROM_XARALX
 	INT32 Scanlines = StretchDIBits(RenderDC->m_hDC,
 								  clip.left, clip.top,
 								  clip.Width(), clip.Height(),
 								  0, 0,
 								  BitmapWidth, BitmapHeight,
-								  lpBits,
-								  lpBitmapInfo,
+								  pBits,
+								  pBitmapInfo,
 								  DIB_RGB_COLORS,
 								  SRCCOPY);
 
 	ERROR3IF(Scanlines == GDI_ERROR, "No scanlines copied in GRenderPrint::DisplayBits()!");
+#else
+	GRenderRegion::StaticPlotBitmap(RenderDC, DIB_RGB_COLORS, pBitmapInfo, pBits, clip.x, clip.y, clip.width, clip.height, NULL, 0, 0);
+#endif
 
 	return TRUE;
 }

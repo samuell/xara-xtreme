@@ -135,11 +135,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "sglayer.h"
 #include "keypress.h"
-#include "printprg.h"
+//#include "printprg.h"
 #endif
 
 //#include "will2.h"
-#include "customlist.h"
+//#include "customlist.h"
 
 CC_IMPLEMENT_DYNAMIC(PrintBaseTab,  		OptionsTabs)
 CC_IMPLEMENT_DYNAMIC(PrintGeneralTab, 		PrintBaseTab)
@@ -166,6 +166,22 @@ static BOOL IgnoreTextChangedMsgs = FALSE;
 PrintControl PrintBaseTab::LocalPrintControl;
 Document *PrintBaseTab::pLastPrintControlDocument = NULL;
 
+static CGadgetID ScreenIDs[] =	// NULL terminated list of Screen control IDs
+{
+	//Screen types
+	_R(SCREEN_TYPE_BASE),
+	_R(IDS_SCRTYPE_SPOT1),
+	_R(IDS_SCRTYPE_SPOT2),
+	_R(IDS_SCRTYPE_TRIPLESPOT1),
+	_R(IDS_SCRTYPE_TRIPLESPOT2),
+	_R(IDS_SCRTYPE_ELLIPTICAL),
+	_R(IDS_SCRTYPE_LINE),
+	_R(IDS_SCRTYPE_CROSSHATCH),
+	_R(IDS_SCRTYPE_MEZZOTINT),
+	_R(IDS_SCRTYPE_SQUARE),
+	_R(IDS_SCRTYPE_DITHER),
+	0
+};
 
 
 /********************************************************************************************
@@ -332,7 +348,7 @@ BOOL PrintBaseTab::TalkToPage()
 void PrintBaseTab::UpdateDocName()
 {
 	if (pPrefsDlg != NULL && TalkToPage())
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME),GetDocumentName());
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME),*GetDocumentName());
 }
 
 
@@ -775,6 +791,7 @@ BOOL PrintBaseTab::HandleMsg(DialogMsg* Msg)
 
 
 		case DIM_CANCEL:
+		{
 			// Vape the cached print control info
 			pLastPrintControlDocument = NULL;
 
@@ -782,6 +799,10 @@ BOOL PrintBaseTab::HandleMsg(DialogMsg* Msg)
 			// plate list, which ensures there are no IndexedColours left "in use" when we exit
 			PrintControl BlankPC;
 			LocalPrintControl = BlankPC;
+			break;
+		}
+
+		default:
 			break;
 	}
 
@@ -895,93 +916,89 @@ BOOL PrintGeneralTab::HandleMsg(DialogMsg* Msg)
 	{
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			// Print layers
+			else if (Msg->GadgetID == _R(IDC_ALLFOREGROUND))
 			{
-				// Print layers
-				case _R(IDC_ALLFOREGROUND):
-					LocalPrintControl.SetPrintLayers(PRINTLAYERS_ALLFOREGROUND);
-					break;
-				case _R(IDC_VISIBLEFOREGROUND):
-					LocalPrintControl.SetPrintLayers(PRINTLAYERS_VISIBLEFOREGROUND);
-					break;
-
-				/*
-				// Job 10463: remove PS Level bits - default to Level 2
-				// Postscript language level
-				case _R(IDC_PSLEVELAUTO):
-					LocalPrintControl.SetPSLevel(PSLEVEL_AUTO);
-					break;
-				case _R(IDC_PSLEVEL1):
-					LocalPrintControl.SetPSLevel(PSLEVEL_1);
-					break;
-				case _R(IDC_PSLEVEL2):
-					LocalPrintControl.SetPSLevel(PSLEVEL_2);
-					break;
-				*/
-
-				// Print method
-				case _R(IDC_PRINTMETHOD_NORMAL):
-					LocalPrintControl.SetPrintMethod(PRINTMETHOD_NORMAL);
-					ShowDetails();
-					break;
-				case _R(IDC_PRINTMETHOD_BITMAP):
-					LocalPrintControl.SetPrintMethod(PRINTMETHOD_BITMAP);
-					ShowDetails();
-					break;
-				case _R(IDC_PRINTMETHOD_AABITMAP):
-					LocalPrintControl.SetPrintMethod(PRINTMETHOD_AABITMAP);
-					ShowDetails();
-					break;
-
-				// Bitmap DPI
-				case _R(IDC_DPIAUTO):
-					LocalPrintControl.SetBitmapResMethod(BITMAPRES_AUTO);
-					ShowDetails();
-					break;
-
-				case _R(IDC_DPIMANUAL):
-					LocalPrintControl.SetBitmapResMethod(BITMAPRES_MANUAL);
-					ShowDetails();
-					break;
-
-				// Text options
-				case _R(IDC_ALLTEXTASSHAPES):
-				{
-					PrintTextOptions pto = LocalPrintControl.GetTextOptions();
-					pto = (pto == PRINTTEXTOPTIONS_NORMAL) ? PRINTTEXTOPTIONS_ALLTEXTASSHAPES
-														   : PRINTTEXTOPTIONS_NORMAL;
-					LocalPrintControl.SetTextOptions(pto);
-					ShowDetails();
-					break;
-				}
+				LocalPrintControl.SetPrintLayers(PRINTLAYERS_ALLFOREGROUND);
 			}
+			else if (Msg->GadgetID == _R(IDC_VISIBLEFOREGROUND))
+			{
+				LocalPrintControl.SetPrintLayers(PRINTLAYERS_VISIBLEFOREGROUND);
+			}
+#if 0
+			// Job 10463: remove PS Level bits - default to Level 2
+			// Postscript language level
+			else if (Msg->GadgetID == _R(IDC_PSLEVELAUTO))
+			{
+				LocalPrintControl.SetPSLevel(PSLEVEL_AUTO);
+			}
+			else if (Msg->GadgetID == _R(IDC_PSLEVEL1))
+			{
+				LocalPrintControl.SetPSLevel(PSLEVEL_1);
+			}
+			else if (Msg->GadgetID == _R(IDC_PSLEVEL2))
+			{
+				LocalPrintControl.SetPSLevel(PSLEVEL_2);
+			}
+#endif
+			// Print method
+			else if (Msg->GadgetID == _R(IDC_PRINTMETHOD_NORMAL))
+			{
+				LocalPrintControl.SetPrintMethod(PRINTMETHOD_NORMAL);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_PRINTMETHOD_BITMAP))
+			{
+				LocalPrintControl.SetPrintMethod(PRINTMETHOD_BITMAP);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_PRINTMETHOD_AABITMAP))
+			{
+				LocalPrintControl.SetPrintMethod(PRINTMETHOD_AABITMAP);
+				ShowDetails();
+			}
+
+			// Bitmap DPI
+			else if (Msg->GadgetID == _R(IDC_DPIAUTO))
+			{
+				LocalPrintControl.SetBitmapResMethod(BITMAPRES_AUTO);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_DPIMANUAL))
+			{
+				LocalPrintControl.SetBitmapResMethod(BITMAPRES_MANUAL);
+				ShowDetails();
+			}
+			// Text options
+			else if (Msg->GadgetID == _R(IDC_ALLTEXTASSHAPES))
+			{
+				PrintTextOptions pto = LocalPrintControl.GetTextOptions();
+				pto = (pto == PRINTTEXTOPTIONS_NORMAL) ? PRINTTEXTOPTIONS_ALLTEXTASSHAPES
+														: PRINTTEXTOPTIONS_NORMAL;
+				LocalPrintControl.SetTextOptions(pto);
+				ShowDetails();
+			}
+
 			break; 
 
 		case DIM_SELECTION_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_FILLQUALLIST))
 			{
-				case _R(IDC_FILLQUALLIST):
-					{
-						WORD Index;
-						pPrefsDlg->GetValueIndex(_R(IDC_FILLQUALLIST),&Index); 
-						LocalPrintControl.SetFillQuality(PrintFillQuality(Index));
-						ShowDetails();
-					}
-					break;
+				WORD Index;
+				pPrefsDlg->GetValueIndex(_R(IDC_FILLQUALLIST),&Index); 
+				LocalPrintControl.SetFillQuality(PrintFillQuality(Index));
+				ShowDetails();
 			}
 			break;
 
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (Msg->GadgetID == _R(IDC_DPIEDIT))
 			{
-				case _R(IDC_DPIEDIT):
-					{
-						INT32 DPI = pPrefsDlg->GetLongGadgetValue(_R(IDC_DPIEDIT),0,0);
-						LocalPrintControl.SetDotsPerInch(DPI);
-					}
-					break;
+				INT32 DPI = pPrefsDlg->GetLongGadgetValue(_R(IDC_DPIEDIT),0,0);
+				LocalPrintControl.SetDotsPerInch(DPI);
 			}
 			break;
 
@@ -1018,6 +1035,7 @@ BOOL PrintGeneralTab::CommitSection()
 
 	if (!TalkToPage())
 		return TRUE;	// Just return if TalkToPage() fails
+
 /*
 	//---
 	// RANGE CHECK ALL VALUES TO MAKE SURE THEY ARE SENSIBLE
@@ -1045,20 +1063,22 @@ BOOL PrintGeneralTab::CommitSection()
 	pPrCtrl->SetPrintLayers((Result) ? PRINTLAYERS_ALLFOREGROUND : PRINTLAYERS_VISIBLEFOREGROUND);
 
 	CGadgetID PSGadgets[] = { _R(IDC_PSLEVELAUTO), _R(IDC_PSLEVEL1), _R(IDC_PSLEVEL2), NULL };
-	switch(pPrefsDlg->GetRadioGroupSelected(PSGadgets))
-	{
-		case _R(IDC_PSLEVELAUTO):	pPrCtrl->SetPSLevel(PSLEVEL_AUTO);	break;
-		case _R(IDC_PSLEVEL1):		pPrCtrl->SetPSLevel(PSLEVEL_1);		break;
-		case _R(IDC_PSLEVEL2):		pPrCtrl->SetPSLevel(PSLEVEL_2);		break;
-	}
+	ResourceID PSRadio = pPrefsDlg->GetRadioGroupSelected(PSGadgets);
+	if (PSRadio == _R(IDC_PSLEVELAUTO))
+		pPrCtrl->SetPSLevel(PSLEVEL_AUTO);
+	else if (PSRadio == _R(IDC_PSLEVEL1))
+		pPrCtrl->SetPSLevel(PSLEVEL_1);
+	else if (PSRadio == _R(IDC_PSLEVEL2))
+		pPrCtrl->SetPSLevel(PSLEVEL_2);
 
 	CGadgetID MethodGadgets[] = { _R(IDC_PRINTMETHOD_NORMAL), _R(IDC_PRINTMETHOD_BITMAP), _R(IDC_PRINTMETHOD_AABITMAP), NULL };
-	switch(pPrefsDlg->GetRadioGroupSelected(MethodGadgets))
-	{
-		case _R(IDC_PRINTMETHOD_NORMAL):	pPrCtrl->SetPrintMethod(PRINTMETHOD_NORMAL);	break;
-		case _R(IDC_PRINTMETHOD_BITMAP):	pPrCtrl->SetPrintMethod(PRINTMETHOD_BITMAP);	break;
-		case _R(IDC_PRINTMETHOD_AABITMAP):	pPrCtrl->SetPrintMethod(PRINTMETHOD_AABITMAP);	break;
-	}
+	ResourceID MethodRadio = GetRadioGroupSelected(MethodGadgets));
+	if (MethodRadio == _R(IDC_PRINTMETHOD_NORMAL))
+		pPrCtrl->SetPrintMethod(PRINTMETHOD_NORMAL);
+	else if (MethodRadio == _R(IDC_PRINTMETHOD_BITMAP))
+		pPrCtrl->SetPrintMethod(PRINTMETHOD_BITMAP);
+	else if (MethodRadio == _R(IDC_PRINTMETHOD_AABITMAP))
+		pPrCtrl->SetPrintMethod(PRINTMETHOD_AABITMAP);
 
 	CGadgetID DPIGadgets[] = { _R(IDC_DPIAUTO), _R(IDC_DPIMANUAL), NULL };
 	Result = (pPrefsDlg->GetRadioGroupSelected(DPIGadgets) == _R(IDC_DPIAUTO));
@@ -1127,7 +1147,7 @@ BOOL PrintGeneralTab::ShowDetails()
 	else
 		Str.Load(_R(IDS_K_OPTSPRIN_NORMAL));
 
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINTMETHOD_NORMAL),&Str);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINTMETHOD_NORMAL),Str);
 
 	// Bitmap resolution
 	BitmapResMethod brm = LocalPrintControl.GetBitmapResMethod();
@@ -1139,7 +1159,7 @@ BOOL PrintGeneralTab::ShowDetails()
 	if (pm == PRINTMETHOD_NORMAL) 	Str.Load(_R(IDS_K_OPTSPRIN_TRANSRES));
 	if (pm == PRINTMETHOD_BITMAP) 	Str.Load(_R(IDS_K_OPTSPRIN_BITMAPRES));
 	if (pm == PRINTMETHOD_AABITMAP) Str.Load(_R(IDS_K_OPTSPRIN_AABITMAPRES));
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_GROUP_DPI),&Str);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_GROUP_DPI),Str);
 
 	//  Fill quality group
 	pPrefsDlg->SetSelectedValueIndex(_R(IDC_FILLQUALLIST),INT32(LocalPrintControl.GetFillQuality()));
@@ -1301,45 +1321,49 @@ BOOL PrintLayoutTab::HandleMsg(DialogMsg* Msg)
 		case DIM_LFT_BN_CLICKED:
 			OptionsTabs::SetApplyNowState(TRUE);
 
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			// Orientation
+			else if (Msg->GadgetID == _R(IDC_BTN_UPRIGHT))
 			{
-				// Orientation
-				case _R(IDC_BTN_UPRIGHT):
-					LocalPrintControl.SetPrintOrient(PRINTORIENTATION_UPRIGHT);
-					ShowDetails();
-					break;
-				case _R(IDC_BTN_SIDEWAYS):
-					LocalPrintControl.SetPrintOrient(PRINTORIENTATION_SIDEWAYS);
-					ShowDetails();
-					break;
-
-				// DPS buttons
-				case _R(IDC_DPS_INDIVIDUALPAGES):
-					LocalPrintControl.SetWholeSpread(FALSE);
-					ShowDetails();
-					break;
-				case _R(IDC_DPS_WHOLESPREAD):
-					LocalPrintControl.SetWholeSpread(TRUE);
-					ShowDetails();
-					break;
-
-				// Fit type
-				case _R(IDC_BESTFIT):
-					LocalPrintControl.SetFitType(PRINTFIT_BEST);
-					ShowDetails();
-					break;
-				case _R(IDC_CUSTOMFIT):
-					LocalPrintControl.SetFitType(PRINTFIT_CUSTOM);
-					ShowDetails();
-					break;
-				case _R(IDC_MULTIPLEFIT):
-					LocalPrintControl.SetFitType(PRINTFIT_MULTIPLE);
-					ShowDetails();
-					break;
-				case _R(IDC_BESTFITPAPER):
-					LocalPrintControl.SetFitType(PRINTFIT_BESTPAPER);
-					ShowDetails();
-					break;
+				LocalPrintControl.SetPrintOrient(PRINTORIENTATION_UPRIGHT);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_BTN_SIDEWAYS))
+			{
+				LocalPrintControl.SetPrintOrient(PRINTORIENTATION_SIDEWAYS);
+				ShowDetails();
+			}
+			// DPS buttons
+			else if (Msg->GadgetID == _R(IDC_DPS_INDIVIDUALPAGES))
+			{
+				LocalPrintControl.SetWholeSpread(FALSE);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_DPS_WHOLESPREAD))
+			{
+				LocalPrintControl.SetWholeSpread(TRUE);
+				ShowDetails();
+			}
+			// Fit type
+			else if (Msg->GadgetID == _R(IDC_BESTFIT))
+			{
+				LocalPrintControl.SetFitType(PRINTFIT_BEST);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_CUSTOMFIT))
+			{
+				LocalPrintControl.SetFitType(PRINTFIT_CUSTOM);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_MULTIPLEFIT))
+			{
+				LocalPrintControl.SetFitType(PRINTFIT_MULTIPLE);
+				ShowDetails();
+			}
+			else if (Msg->GadgetID == _R(IDC_BESTFITPAPER))
+			{
+				LocalPrintControl.SetFitType(PRINTFIT_BESTPAPER);
+				ShowDetails();
 			}
 			break;
 
@@ -1352,72 +1376,72 @@ BOOL PrintLayoutTab::HandleMsg(DialogMsg* Msg)
 
 			if (!IgnoreTextChangedMsgs)
 			{
-				switch (Msg->GadgetID)
+				if (FALSE) {}
+				// Scale ed field
+				else if (Msg->GadgetID == _R(IDC_SCALEEDIT))
 				{
-					// Scale ed field
-					case _R(IDC_SCALEEDIT):
-						{
-							double Scale = pPrefsDlg->GetDoubleGadgetValue(_R(IDC_SCALEEDIT),0,0);
-							// We need to range check the value before converting it to a Fixed 16
-							if (Scale > 32000.0) Scale = 32000.0;
-							if (Scale < 0)		 Scale = 0.0;
-							LocalPrintControl.SetScale(FIXED16(Scale));
-							ShowDetails(NULL,_R(IDC_SCALEEDIT));
-						}
-						break;
-
-					// Custom fit ed fields
-					case _R(IDC_TOPEDIT):
-						LocalPrintControl.SetTopMargin(pPrefsDlg->GetUnitGadgetValue(_R(IDC_TOPEDIT),CurrentPageUnits,0,0));
-						ShowDetails(NULL,_R(IDC_TOPEDIT));
-						break;
-					case _R(IDC_LEFTEDIT):
-						LocalPrintControl.SetLeftMargin(pPrefsDlg->GetUnitGadgetValue(_R(IDC_LEFTEDIT),CurrentPageUnits,0,0));
-						ShowDetails(NULL,_R(IDC_LEFTEDIT));
-						break;
-					case _R(IDC_WIDTHEDIT):
-						LocalPrintControl.SetWidth(pPrefsDlg->GetUnitGadgetValue(_R(IDC_WIDTHEDIT),CurrentPageUnits,0,0));
-						ShowDetails(NULL,_R(IDC_WIDTHEDIT));
-						break;
-					case _R(IDC_HEIGHTEDIT):
-						LocalPrintControl.SetHeight(pPrefsDlg->GetUnitGadgetValue(_R(IDC_HEIGHTEDIT),CurrentPageUnits,0,0));
-						ShowDetails(NULL,_R(IDC_HEIGHTEDIT));
-						break;
-
-					// Multiple fit ed fields
-					case _R(IDC_ROWSEDIT):
-						LocalPrintControl.SetRows(pPrefsDlg->GetLongGadgetValue(_R(IDC_ROWSEDIT),0,0));
-						ShowDetails(NULL,_R(IDC_ROWSEDIT));
-						break;
-					case _R(IDC_COLUMNSEDIT):
-						LocalPrintControl.SetColumns(pPrefsDlg->GetLongGadgetValue(_R(IDC_COLUMNSEDIT),0,0));
-						ShowDetails(NULL,_R(IDC_COLUMNSEDIT));
-						break;
-					case _R(IDC_GUTTEREDIT):
-						LocalPrintControl.SetGutter(pPrefsDlg->GetUnitGadgetValue(_R(IDC_GUTTEREDIT),CurrentPageUnits,0,0));
-						ShowDetails(NULL,_R(IDC_GUTTEREDIT));
-						break;
+					double Scale = pPrefsDlg->GetDoubleGadgetValue(_R(IDC_SCALEEDIT),0,0);
+					// We need to range check the value before converting it to a Fixed 16
+					if (Scale > 32000.0) Scale = 32000.0;
+					if (Scale < 0)		 Scale = 0.0;
+					LocalPrintControl.SetScale(FIXED16(Scale));
+					ShowDetails(NULL,_R(IDC_SCALEEDIT));
+				}
+				// Custom fit ed fields
+				else if (Msg->GadgetID == _R(IDC_TOPEDIT))
+				{
+					LocalPrintControl.SetTopMargin(pPrefsDlg->GetUnitGadgetValue(_R(IDC_TOPEDIT),CurrentPageUnits,0,0));
+					ShowDetails(NULL,_R(IDC_TOPEDIT));
+				}
+				else if (Msg->GadgetID == _R(IDC_LEFTEDIT))
+				{
+					LocalPrintControl.SetLeftMargin(pPrefsDlg->GetUnitGadgetValue(_R(IDC_LEFTEDIT),CurrentPageUnits,0,0));
+					ShowDetails(NULL,_R(IDC_LEFTEDIT));
+				}
+				else if (Msg->GadgetID == _R(IDC_WIDTHEDIT))
+				{
+					LocalPrintControl.SetWidth(pPrefsDlg->GetUnitGadgetValue(_R(IDC_WIDTHEDIT),CurrentPageUnits,0,0));
+					ShowDetails(NULL,_R(IDC_WIDTHEDIT));
+				}
+				else if (Msg->GadgetID == _R(IDC_HEIGHTEDIT))
+				{
+					LocalPrintControl.SetHeight(pPrefsDlg->GetUnitGadgetValue(_R(IDC_HEIGHTEDIT),CurrentPageUnits,0,0));
+					ShowDetails(NULL,_R(IDC_HEIGHTEDIT));
+				}
+				// Multiple fit ed fields
+				else if (Msg->GadgetID == _R(IDC_ROWSEDIT))
+				{
+					LocalPrintControl.SetRows(pPrefsDlg->GetLongGadgetValue(_R(IDC_ROWSEDIT),0,0));
+					ShowDetails(NULL,_R(IDC_ROWSEDIT));
+				}
+				else if (Msg->GadgetID == _R(IDC_COLUMNSEDIT))
+				{
+					LocalPrintControl.SetColumns(pPrefsDlg->GetLongGadgetValue(_R(IDC_COLUMNSEDIT),0,0));
+					ShowDetails(NULL,_R(IDC_COLUMNSEDIT));
+				}
+				else if (Msg->GadgetID == _R(IDC_GUTTEREDIT))
+				{
+					LocalPrintControl.SetGutter(pPrefsDlg->GetUnitGadgetValue(_R(IDC_GUTTEREDIT),CurrentPageUnits,0,0));
+					ShowDetails(NULL,_R(IDC_GUTTEREDIT));
 				}
 			}
 			break;
 
 		case DIM_KILL_FOCUS:
 			{
-				CGadgetID List[] = { 0, NULL };
-				switch (Msg->GadgetID)
+				CGadgetID List[] = { 0, 0 };
+				// Edit fields
+				if ((Msg->GadgetID == _R(IDC_SCALEEDIT)) ||
+					(Msg->GadgetID == _R(IDC_ROWSEDIT)) ||
+					(Msg->GadgetID == _R(IDC_COLUMNSEDIT)) ||
+					(Msg->GadgetID == _R(IDC_GUTTEREDIT)) ||
+					(Msg->GadgetID == _R(IDC_TOPEDIT)) ||
+					(Msg->GadgetID == _R(IDC_LEFTEDIT)) ||
+					(Msg->GadgetID == _R(IDC_WIDTHEDIT)) ||
+					(Msg->GadgetID == _R(IDC_HEIGHTEDIT)) )
 				{
-					// Edit fields
-					case _R(IDC_SCALEEDIT):
-					case _R(IDC_ROWSEDIT):
-					case _R(IDC_COLUMNSEDIT):
-					case _R(IDC_GUTTEREDIT):
-					case _R(IDC_TOPEDIT):
-					case _R(IDC_LEFTEDIT):
-					case _R(IDC_WIDTHEDIT):
-					case _R(IDC_HEIGHTEDIT):
-						List[0] = Msg->GadgetID;
-						ShowDetails(List,NULL);
-						break;
+					List[0] = Msg->GadgetID;
+					ShowDetails(List, 0);
 				}
 			}
 			break;
@@ -1504,13 +1528,14 @@ BOOL PrintLayoutTab::CommitSection()
 	pPrCtrl->SetWholeSpread(Result);
 
 	CGadgetID FitGadgets[] = { _R(IDC_BESTFIT), _R(IDC_CUSTOMFIT), _R(IDC_MULTIPLEFIT), NULL };
-	switch(pPrefsDlg->GetRadioGroupSelected(FitGadgets))
-	{
-		case _R(IDC_BESTFIT):		pPrCtrl->SetFitType(PRINTFIT_BEST);		break;
-		case _R(IDC_CUSTOMFIT):		pPrCtrl->SetFitType(PRINTFIT_CUSTOM);	break;
-		case _R(IDC_MULTIPLEFIT):	pPrCtrl->SetFitType(PRINTFIT_MULTIPLE);	break;
-	}
-
+	ResourceID FitRadio = GetRadioGroupSelected(FitGadgets))
+	if (FitRadio == _R(IDC_BESTFIT))
+		pPrCtrl->SetFitType(PRINTFIT_BEST);
+	else if (FitRadio == _R(IDC_CUSTOMFIT))
+		pPrCtrl->SetFitType(PRINTFIT_CUSTOM);
+	else if (FitRadio == _R(IDC_MULTIPLEFIT))
+		pPrCtrl->SetFitType(PRINTFIT_MULTIPLE);
+	
 	double Scale = pPrefsDlg->GetDoubleGadgetValue(_R(IDC_SCALEEDIT),0,0);
 	// We need to range check the value before converting it to a Fixed 16
 	if (Scale > 32000.0) Scale = 32000.0;
@@ -1599,7 +1624,7 @@ BOOL PrintLayoutTab::InitSection()
 
 BOOL PrintLayoutTab::ShowDetails()
 {
-	return ShowDetails(NULL,NULL);
+	return ShowDetails(NULL, 0);
 }
 
 /******************************************************************************************
@@ -1632,7 +1657,7 @@ BOOL PrintLayoutTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 										_R(IDC_BTN_UPRIGHT),_R(IDC_SCALEEDIT),_R(IDC_BESTFIT),
 										_R(IDC_TOPEDIT),_R(IDC_LEFTEDIT),_R(IDC_WIDTHEDIT),_R(IDC_HEIGHTEDIT),
 										_R(IDC_ROWSEDIT),_R(IDC_COLUMNSEDIT),_R(IDC_GUTTEREDIT),
-										NULL };
+										0 };
 
 	// If no gadget list is given, fall back to the list of all gadgets
 	if (pGadgetIDList == NULL)
@@ -1645,103 +1670,98 @@ BOOL PrintLayoutTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 	String_256 Str;
 	String_256 Dash = "-";
 	
-	for (INT32 i=0;pGadgetIDList[i] != NULL;i++)
+	for (INT32 i=0; pGadgetIDList[i]; i++)
 	{
 		// Ignore the the exclude gadget
 		if (pGadgetIDList[i] == Exclude)
 			continue;
 
-		switch (pGadgetIDList[i])
+		if (FALSE) {}
+		else if (pGadgetIDList[i] == _R(IDC_LAYOUTINFO))
 		{
-			case _R(IDC_LAYOUTINFO):
-				// Display that print info
-				Str = LocalPrintControl.BuildPrintInfoStr();
-				pPrefsDlg->SetStringGadgetValue(_R(IDC_LAYOUTINFO),&Str);
-				break;
+			// Display that print info
+			Str = LocalPrintControl.BuildPrintInfoStr();
+			pPrefsDlg->SetStringGadgetValue(_R(IDC_LAYOUTINFO),Str);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_PAPERSIZEINFO))
+		{
+			// Display the paper size
+			Str = LocalPrintControl.BuildPaperSizeStr();
+			pPrefsDlg->SetStringGadgetValue(_R(IDC_PAPERSIZEINFO),Str);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_DPS_WHOLESPREAD))
+		{
+			// Reflect the Whole Spread flag
+			BOOL WholeSpread = LocalPrintControl.IsWholeSpread();
+			pPrefsDlg->SetBoolGadgetSelected(_R(IDC_DPS_WHOLESPREAD),WholeSpread);
+			pPrefsDlg->SetBoolGadgetSelected(_R(IDC_DPS_INDIVIDUALPAGES),!WholeSpread);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_BTN_UPRIGHT))
+		{
+			// Set the orientation bitmap buttons
+			BOOL Upright = (LocalPrintControl.GetPrintOrient() == PRINTORIENTATION_UPRIGHT);
+			pPrefsDlg->SetBoolGadgetSelected(_R(IDC_BTN_UPRIGHT),Upright);
+			pPrefsDlg->SetBoolGadgetSelected(_R(IDC_BTN_SIDEWAYS),!Upright);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_SCALEEDIT))	
+		{
+			// Set the scale factor field
+			FIXED16 Scale = LocalPrintControl.GetScale();
+			pPrefsDlg->SetDoubleGadgetValue(_R(IDC_SCALEEDIT),Scale.MakeDouble());
+		}
+		else if (pGadgetIDList[i] == _R(IDC_BESTFIT))
+		{
+			// The fit radio buttons
+			CGadgetID FitList[] = { _R(IDC_BESTFIT),_R(IDC_CUSTOMFIT),_R(IDC_MULTIPLEFIT),_R(IDC_BESTFITPAPER), 0 };
 
-			case _R(IDC_PAPERSIZEINFO):
-				// Display the paper size
-				Str = LocalPrintControl.BuildPaperSizeStr();
-				pPrefsDlg->SetStringGadgetValue(_R(IDC_PAPERSIZEINFO),&Str);
-				break;
-
-			case _R(IDC_DPS_WHOLESPREAD):
-				{
-					// Reflect the Whole Spread flag
-					BOOL WholeSpread = LocalPrintControl.IsWholeSpread();
-					pPrefsDlg->SetBoolGadgetSelected(_R(IDC_DPS_WHOLESPREAD),WholeSpread);
-					pPrefsDlg->SetBoolGadgetSelected(_R(IDC_DPS_INDIVIDUALPAGES),!WholeSpread);
-				}
-				break;
-
-			case _R(IDC_BTN_UPRIGHT):
-				{
-					// Set the orientation bitmap buttons
-					BOOL Upright = (LocalPrintControl.GetPrintOrient() == PRINTORIENTATION_UPRIGHT);
-					pPrefsDlg->SetBoolGadgetSelected(_R(IDC_BTN_UPRIGHT),Upright);
-					pPrefsDlg->SetBoolGadgetSelected(_R(IDC_BTN_SIDEWAYS),!Upright);
-				}
-				break;
-
-			case _R(IDC_SCALEEDIT):	
-				{
-					// Set the scale factor field
-					FIXED16 Scale = LocalPrintControl.GetScale();
-					pPrefsDlg->SetDoubleGadgetValue(_R(IDC_SCALEEDIT),Scale.MakeDouble());
-				}
-				break;
-
-			case _R(IDC_BESTFIT):
-				{
-					// The fit radio buttons
-					CGadgetID FitList[] = { _R(IDC_BESTFIT),_R(IDC_CUSTOMFIT),_R(IDC_MULTIPLEFIT),_R(IDC_BESTFITPAPER), NULL };
-
-					switch (LocalPrintControl.GetFitType())
-					{
-						case PRINTFIT_BEST:		pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_BESTFIT));		break;
-						case PRINTFIT_CUSTOM:	pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_CUSTOMFIT));	break;
-						case PRINTFIT_MULTIPLE:	pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_MULTIPLEFIT));	break;
-						case PRINTFIT_BESTPAPER:pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_BESTFITPAPER));	break;
-						default: ERROR2(FALSE,"Unknown print fit type");
-					}
-				}
-				break;
-
-			case _R(IDC_TOPEDIT):
-				// Custom fit editable values
-				if (ShowMargins)
-					pPrefsDlg->SetUnitGadgetValue(_R(IDC_TOPEDIT),	CurrentPageUnits, LocalPrintControl.GetTopMargin());
-				else
-					pPrefsDlg->SetStringGadgetValue(_R(IDC_TOPEDIT),&Dash);
-				break;
-			case _R(IDC_LEFTEDIT):
-				// Custom fit editable values
-				if (ShowMargins)
-					pPrefsDlg->SetUnitGadgetValue(_R(IDC_LEFTEDIT),	CurrentPageUnits, LocalPrintControl.GetLeftMargin());
-				else
-					pPrefsDlg->SetStringGadgetValue(_R(IDC_LEFTEDIT),&Dash);
-				break;
-
-			case _R(IDC_WIDTHEDIT):
-				pPrefsDlg->SetUnitGadgetValue(_R(IDC_WIDTHEDIT),CurrentPageUnits, LocalPrintControl.GetWidth());
-				break;
-			case _R(IDC_HEIGHTEDIT):
-				pPrefsDlg->SetUnitGadgetValue(_R(IDC_HEIGHTEDIT),CurrentPageUnits, LocalPrintControl.GetHeight());
-				break;
-
-			case _R(IDC_ROWSEDIT):
-				pPrefsDlg->SetLongGadgetValue(_R(IDC_ROWSEDIT),	LocalPrintControl.GetRows());
-				break;
-			case _R(IDC_COLUMNSEDIT):
-				pPrefsDlg->SetLongGadgetValue(_R(IDC_COLUMNSEDIT),LocalPrintControl.GetColumns());
-				break;
-			case _R(IDC_GUTTEREDIT):
-				pPrefsDlg->SetUnitGadgetValue(_R(IDC_GUTTEREDIT),CurrentPageUnits, LocalPrintControl.GetGutter());
-				break;
-
-			default:
-				ERROR3_PF(("Unknown gadget ID (%D)",pGadgetIDList));
-				break;
+			switch (LocalPrintControl.GetFitType())
+			{
+				case PRINTFIT_BEST:		pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_BESTFIT));		break;
+				case PRINTFIT_CUSTOM:	pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_CUSTOMFIT));	break;
+				case PRINTFIT_MULTIPLE:	pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_MULTIPLEFIT));	break;
+				case PRINTFIT_BESTPAPER:pPrefsDlg->SetRadioGroupSelected(FitList,_R(IDC_BESTFITPAPER));	break;
+				default: ERROR2(FALSE,"Unknown print fit type");
+			}
+		}
+		else if (pGadgetIDList[i] == _R(IDC_TOPEDIT))
+		{
+			// Custom fit editable values
+			if (ShowMargins)
+				pPrefsDlg->SetUnitGadgetValue(_R(IDC_TOPEDIT),	CurrentPageUnits, LocalPrintControl.GetTopMargin());
+			else
+				pPrefsDlg->SetStringGadgetValue(_R(IDC_TOPEDIT), Dash);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_LEFTEDIT))
+		{	
+			// Custom fit editable values
+			if (ShowMargins)
+				pPrefsDlg->SetUnitGadgetValue(_R(IDC_LEFTEDIT),	CurrentPageUnits, LocalPrintControl.GetLeftMargin());
+			else
+				pPrefsDlg->SetStringGadgetValue(_R(IDC_LEFTEDIT), Dash);
+		}
+		else if (pGadgetIDList[i] == _R(IDC_WIDTHEDIT))
+		{
+			pPrefsDlg->SetUnitGadgetValue(_R(IDC_WIDTHEDIT),CurrentPageUnits, LocalPrintControl.GetWidth());
+		}
+		else if (pGadgetIDList[i] == _R(IDC_HEIGHTEDIT))
+		{
+			pPrefsDlg->SetUnitGadgetValue(_R(IDC_HEIGHTEDIT),CurrentPageUnits, LocalPrintControl.GetHeight());
+		}
+		else if (pGadgetIDList[i] == _R(IDC_ROWSEDIT))
+		{
+			pPrefsDlg->SetLongGadgetValue(_R(IDC_ROWSEDIT),	LocalPrintControl.GetRows());
+		}
+		else if (pGadgetIDList[i] == _R(IDC_COLUMNSEDIT))
+		{
+			pPrefsDlg->SetLongGadgetValue(_R(IDC_COLUMNSEDIT),LocalPrintControl.GetColumns());
+		}
+		else if (pGadgetIDList[i] == _R(IDC_GUTTEREDIT))
+		{
+			pPrefsDlg->SetUnitGadgetValue(_R(IDC_GUTTEREDIT),CurrentPageUnits, LocalPrintControl.GetGutter());
+		}
+		else
+		{
+			ERROR3_PF(("Unknown gadget ID (%D)",pGadgetIDList));
 		}
 	}
 
@@ -1775,10 +1795,10 @@ BOOL PrintLayoutTab::EnableControls()
 	if (!TalkToPage())
 		return(TRUE);
 
-	BOOL BestFit 	 = (LocalPrintControl.GetFitType() == PRINTFIT_BEST);
+//	BOOL BestFit 	 = (LocalPrintControl.GetFitType() == PRINTFIT_BEST);
 	BOOL CustomFit 	 = (LocalPrintControl.GetFitType() == PRINTFIT_CUSTOM);
 	BOOL MultipleFit = (LocalPrintControl.GetFitType() == PRINTFIT_MULTIPLE);
-	BOOL BestFitPaper= (LocalPrintControl.GetFitType() == PRINTFIT_BESTPAPER);
+//	BOOL BestFitPaper= (LocalPrintControl.GetFitType() == PRINTFIT_BESTPAPER);
 
 	// Controls available all the time
 	EnableControl(_R(IDC_BESTFIT),			TRUE);
@@ -1822,7 +1842,10 @@ BOOL PrintLayoutTab::EnableControls()
 	EnableControl(_R(IDC_DPS_INDIVIDUALPAGES),	LocalPrintControl.IsDoublePageSpread());
 
 	// If in windows 95, hide the picture boxes as they don't slab in, and go against Win95 look & feel
+PORTNOTE("other", "Assume new windows UI")
+#ifndef EXCLUDE_FROM_XARALX
 	if (CCamApp::IsNewWindowsUI()) //IsWindows95())
+#endif
 	{
 		if (pPrefsDlg != NULL)
 		{
@@ -1852,6 +1875,8 @@ BOOL PrintLayoutTab::EnableControls()
 
 void PrintLayoutTab::TestPrinting(PrintControl* pPrCtrl)
 {
+PORTNOTE("printing", "Disable PrintLayoutTab::TestPrinting")
+#ifndef EXCLUDE_FROM_XARALX
 	if (pPrCtrl != NULL && pPrCtrl->StartPrinting())
 	{
 		BOOL Aborted = FALSE;
@@ -1931,7 +1956,7 @@ void PrintLayoutTab::TestPrinting(PrintControl* pPrCtrl)
 			if (!Aborted && pLayer != NULL && PatchInfo.pSpread != NULL)
 			{
 				TCHAR name[256];
-				_stprintf(name,"Page %d",PatchInfo.PaperNumber);
+				camSprintf(name,_T("Page %d"),PatchInfo.PaperNumber);
 				pLayer->SetLayerID(String_256(name));
 				pLayer->AttachNode(PatchInfo.pSpread,LASTCHILD);
 				pLayer->SetVisible(FALSE);
@@ -1949,6 +1974,7 @@ void PrintLayoutTab::TestPrinting(PrintControl* pPrCtrl)
 		pPrCtrl->EndPrinting();
 		Document::GetCurrent()->ForceRedraw();
 	}
+#endif
 }
 
 void PrintLayoutTab::MakeRectangle(Layer* pLayer,DocRect Rect, StockColour Col)
@@ -1977,10 +2003,8 @@ void PrintLayoutTab::MakeRectangle(Layer* pLayer,DocRect Rect, StockColour Col)
 
 
 /************************************************************************************************
-*************************************************************************************************
 CLASS PrintSepsTab
  Adrian, 17/06/96
- /************************************************************************************************
 ************************************************************************************************/
 
 /************************************************************************************************
@@ -2070,94 +2094,88 @@ BOOL PrintSepsTab::HandleMsg(DialogMsg* Msg)
 
 
 		case DIM_LFT_BN_CLICKED:
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			// Separations checkbox
+			else if (Msg->GadgetID == _R(IDC_CHECKSEPARATIONS))
 			{
-				// Separations checkbox
-				case _R(IDC_CHECKSEPARATIONS):
-					{
-						BOOL DoSeparations = pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKSEPARATIONS));
-						pTypesetInfo->SetSeparations(DoSeparations);
+				BOOL DoSeparations = pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKSEPARATIONS));
+				pTypesetInfo->SetSeparations(DoSeparations);
 
-						// Toggle the OutputPrintersMarks state automatically
-						if (pTypesetInfo->OutputPrintersMarks() != DoSeparations)
-						{
-							pTypesetInfo->SetOutputPrintersMarks(DoSeparations);
+				// Toggle the OutputPrintersMarks state automatically
+				if (pTypesetInfo->OutputPrintersMarks() != DoSeparations)
+				{
+					pTypesetInfo->SetOutputPrintersMarks(DoSeparations);
 
-							// Make sure the print layout tab updates scale factors etc suitably
-							BROADCAST_TO_ALL(PrintMsg(PrintMsg::SETTINGSCHANGED));
-						}
+					// Make sure the print layout tab updates scale factors etc suitably
+					BROADCAST_TO_ALL(PrintMsg(PrintMsg::SETTINGSCHANGED));
+				}
 
-						// And let the imagesetting tab know that the seps state has changed
-						BROADCAST_TO_ALL(OptionsChangingMsg(OptionsChangingMsg::SEPARATIONSENABLED));
+				// And let the imagesetting tab know that the seps state has changed
+				BROADCAST_TO_ALL(OptionsChangingMsg(OptionsChangingMsg::SEPARATIONSENABLED));
 
-						// Adjust the shading of controls as appropriate, and make sure things like
-						// the page size are updated to take printers marks into account
-						PageSizeHasChanged();
-						OptionsTabs::SetApplyNowState(TRUE);
-					}
-					break;
-
-				case _R(IDC_CHECKPROCESS):
-					{
-						// If the "print spot colours as process colours" option is changed,
-						// interactively update the plate list
-						IndexedColour::ForceSpotsToBeProcess(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKPROCESS)));
-						ShowDetails();
-						OptionsTabs::SetApplyNowState(TRUE);
-					}
-					break;
-			
-				case _R(IDC_PRINTERDEFAULTS):
-					EnableControl(_R(IDC_COMBORESOLUTION),	FALSE);
-					EnableControl(_R(IDC_COMBOFREQUENCY),	FALSE);
-					EnableControl(_R(IDC_COMBOTYPE),		FALSE);
-
-					pTypesetInfo->SetScreening(FALSE);		// Disable screening
-					pTypesetInfo->ResetAllPlatesToDefaultScreens();
-					ShowDetails();							// Make sure colour plate list resets to defaults
-
-					OptionsTabs::SetApplyNowState(TRUE);
-					break;
-
-				case _R(IDC_CUSTOMSETTINGS):
-					EnableControl(_R(IDC_COMBORESOLUTION),	TRUE);
-					EnableControl(_R(IDC_COMBOFREQUENCY),	TRUE);
-					EnableControl(_R(IDC_COMBOTYPE),		TRUE);
-
-					pTypesetInfo->SetScreening(TRUE);
-					OptionsTabs::SetApplyNowState(TRUE);
-					break;
-
-				case _R(IDC_PLATEPROPS):
-					if (pTypesetInfo->AreSeparating())
-					{
-						String_256 GreyReason;
-						OpState DlgState = SepsDlg::GetState(&GreyReason, NULL);
-
-						if (!DlgState.Greyed)
-						{
-							// Store away the current plate settings in our local print control
-							ReadCurrentPlateSettings(pTypesetInfo);
-
-							ColourPlate *pPlate = GetSelectedPlate();
-							if (pPlate != NULL)
-							{
-								if (SepsDlg::InvokeDialog(pPlate, this))
-								{
-									// The angle or frequency has been changed by the user, so make sure that
-									// screening is auto-enabled...
-									if (!pTypesetInfo->AreScreening())
-										pTypesetInfo->SetScreening(TRUE);
-								}
-
-								ShowDetails(); //update tab data - maybe it should check whether the dialog returned with OK or Cancel 
-								OptionsTabs::SetApplyNowState(TRUE);
-							}
-						}
-					}
-					break;
+				// Adjust the shading of controls as appropriate, and make sure things like
+				// the page size are updated to take printers marks into account
+				PageSizeHasChanged();
+				OptionsTabs::SetApplyNowState(TRUE);
 			}
-			break;
+			else if (Msg->GadgetID == _R(IDC_CHECKPROCESS))
+			{
+				// If the "print spot colours as process colours" option is changed,
+				// interactively update the plate list
+				IndexedColour::ForceSpotsToBeProcess(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKPROCESS)));
+				ShowDetails();
+				OptionsTabs::SetApplyNowState(TRUE);
+			}
+			else if (Msg->GadgetID == _R(IDC_PRINTERDEFAULTS))
+			{
+				EnableControl(_R(IDC_COMBORESOLUTION),	FALSE);
+				EnableControl(_R(IDC_COMBOFREQUENCY),	FALSE);
+				EnableControl(_R(IDC_COMBOTYPE),		FALSE);
+
+				pTypesetInfo->SetScreening(FALSE);		// Disable screening
+				pTypesetInfo->ResetAllPlatesToDefaultScreens();
+				ShowDetails();							// Make sure colour plate list resets to defaults
+
+				OptionsTabs::SetApplyNowState(TRUE);
+			}
+			else if (Msg->GadgetID == _R(IDC_CUSTOMSETTINGS))
+			{
+				EnableControl(_R(IDC_COMBORESOLUTION),	TRUE);
+				EnableControl(_R(IDC_COMBOFREQUENCY),	TRUE);
+				EnableControl(_R(IDC_COMBOTYPE),		TRUE);
+
+				pTypesetInfo->SetScreening(TRUE);
+				OptionsTabs::SetApplyNowState(TRUE);
+			}
+			else if (Msg->GadgetID == _R(IDC_PLATEPROPS))
+			{
+				if (pTypesetInfo->AreSeparating())
+				{
+					String_256 GreyReason;
+					OpState DlgState = SepsDlg::GetState(&GreyReason, NULL);
+
+					if (!DlgState.Greyed)
+					{
+						// Store away the current plate settings in our local print control
+						ReadCurrentPlateSettings(pTypesetInfo);
+
+						ColourPlate *pPlate = GetSelectedPlate();
+						if (pPlate != NULL)
+						{
+							if (SepsDlg::InvokeDialog(pPlate, this))
+							{
+								// The angle or frequency has been changed by the user, so make sure that
+								// screening is auto-enabled...
+								if (!pTypesetInfo->AreScreening())
+									pTypesetInfo->SetScreening(TRUE);
+							}
+
+							ShowDetails(); //update tab data - maybe it should check whether the dialog returned with OK or Cancel 
+							OptionsTabs::SetApplyNowState(TRUE);
+						}
+					}
+				}
+			}
 
 		case DIM_TEXT_CHANGED:
 			// Enable the Apply button 
@@ -2165,94 +2183,88 @@ BOOL PrintSepsTab::HandleMsg(DialogMsg* Msg)
 			break;
 
 		case DIM_FOCUS_LOST:
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_COMBORESOLUTION))
 			{
-				case _R(IDC_COMBORESOLUTION):
-					pTypesetInfo->SetPrintResolution(pPrefsDlg->GetLongGadgetValue(_R(IDC_COMBORESOLUTION), 100, 10000));
-					break;
+				pTypesetInfo->SetPrintResolution(pPrefsDlg->GetLongGadgetValue(_R(IDC_COMBORESOLUTION), 100, 10000));
+			}
+			else if (Msg->GadgetID == _R(IDC_COMBOFREQUENCY))
+			{
+				BOOL valid = TRUE;
+				// Check that the value is within range, if not warn the user and fall back to a default value
+				
+				double NewVal = pPrefsDlg->GetDoubleGadgetValue(_R(IDC_COMBOFREQUENCY), 2, 1000, _R(IDS_INVALID_FREQUENCY), &valid);
+				if (valid) // update the default frequency
+				{
+					pTypesetInfo->SetScreening(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CUSTOMSETTINGS)));
+					if (pTypesetInfo->AreScreening())
+						pTypesetInfo->SetDefaultScreenFrequency(NewVal, TRUE);
+				}
 
-
-				case _R(IDC_COMBOFREQUENCY):
-					{
-						BOOL valid = TRUE;
-						// Check that the value is within range, if not warn the user and fall back to a default value
-						
-						double NewVal = pPrefsDlg->GetDoubleGadgetValue(_R(IDC_COMBOFREQUENCY), 2, 1000, _R(IDS_INVALID_FREQUENCY), &valid);
-						if (valid) // update the default frequency
-						{
-							pTypesetInfo->SetScreening(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CUSTOMSETTINGS)));
-							if (pTypesetInfo->AreScreening())
-								pTypesetInfo->SetDefaultScreenFrequency(NewVal, TRUE);
-						}
-
-						ShowDetails();
-					}
-					break;
+				ShowDetails();
 			}
 			break;
 
 		
 		case DIM_SELECTION_CHANGED:
-			switch(Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_COMBOFREQUENCY)) // make sure a change in the default frequency is reflected in the plate list
 			{
-				case _R(IDC_COMBOFREQUENCY): // make sure a change in the default frequency is reflected in the plate list
-					pTypesetInfo->SetScreening(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CUSTOMSETTINGS)));
-					if (pTypesetInfo->AreScreening())
-						pTypesetInfo->SetDefaultScreenFrequency(pPrefsDlg->GetDoubleGadgetValue(_R(IDC_COMBOFREQUENCY), 2, 1000), TRUE);
+				pTypesetInfo->SetScreening(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CUSTOMSETTINGS)));
+				if (pTypesetInfo->AreScreening())
+					pTypesetInfo->SetDefaultScreenFrequency(pPrefsDlg->GetDoubleGadgetValue(_R(IDC_COMBOFREQUENCY), 2, 1000), TRUE);
 
-					ShowDetails();
-					break;
-
-				case _R(IDC_COMBORESOLUTION):
-					pTypesetInfo->SetPrintResolution(pPrefsDlg->GetLongGadgetValue(_R(IDC_COMBORESOLUTION), 100, 10000));
-					break;
-
-				case _R(IDC_COMBOTYPE):
-					pTypesetInfo->SetScreenFunction((ScreenType) (pPrefsDlg->GetSelectedValueIndex(_R(IDC_COMBOTYPE)) + 1));
-					break;
-
-				case _R(IDC_LISTCOLOURS):
-					// Store away the current plate settings in our local print control
-					if (pTypesetInfo->AreSeparating())
-						ReadCurrentPlateSettings(pTypesetInfo);
-					break;
+				ShowDetails();
 			}
+			else if (Msg->GadgetID == _R(IDC_COMBORESOLUTION))
+			{
+				pTypesetInfo->SetPrintResolution(pPrefsDlg->GetLongGadgetValue(_R(IDC_COMBORESOLUTION), 100, 10000));
+			}
+			else if (Msg->GadgetID == _R(IDC_COMBOTYPE))
+			{
+				pTypesetInfo->SetScreenFunction((ScreenType) (pPrefsDlg->GetSelectedValueIndex(_R(IDC_COMBOTYPE)) + 1));
+			}
+			else if (Msg->GadgetID == _R(IDC_LISTCOLOURS))
+			{
+				// Store away the current plate settings in our local print control
+				if (pTypesetInfo->AreSeparating())
+					ReadCurrentPlateSettings(pTypesetInfo);
+			}			
 			OptionsTabs::SetApplyNowState(TRUE); // enable the Apply button
 			break;
 
 
 		case DIM_SELECTION_CHANGED_COMMIT:
 			OptionsTabs::SetApplyNowState(TRUE);
-			switch (Msg->GadgetID)
+			if (FALSE) {}
+			else if (Msg->GadgetID == _R(IDC_LISTCOLOURS))
 			{
-				case _R(IDC_LISTCOLOURS):
-					if (pTypesetInfo->AreSeparating())
+				if (pTypesetInfo->AreSeparating())
+				{
+					String_256 GreyReason;
+					OpState DlgState = SepsDlg::GetState(&GreyReason, NULL);
+
+					if (!DlgState.Greyed)
 					{
-						String_256 GreyReason;
-						OpState DlgState = SepsDlg::GetState(&GreyReason, NULL);
+						// Store away the current plate settings in our local print control
+						ReadCurrentPlateSettings(pTypesetInfo);
 
-						if (!DlgState.Greyed)
+						// And give the user a properties dialogue to edit in
+						ColourPlate *pPlate = GetSelectedPlate();
+						if (pPlate != NULL)
 						{
-							// Store away the current plate settings in our local print control
-							ReadCurrentPlateSettings(pTypesetInfo);
-
-							// And give the user a properties dialogue to edit in
-							ColourPlate *pPlate = GetSelectedPlate();
-							if (pPlate != NULL)
+							if (SepsDlg::InvokeDialog(pPlate, this))
 							{
-								if (SepsDlg::InvokeDialog(pPlate, this))
-								{
-									// The angle or frequency has been changed by the user, so make sure that
-									// screening is auto-enabled...
-									if (!pTypesetInfo->AreScreening())
-										pTypesetInfo->SetScreening(TRUE);
-								}
+								// The angle or frequency has been changed by the user, so make sure that
+								// screening is auto-enabled...
+								if (!pTypesetInfo->AreScreening())
+									pTypesetInfo->SetScreening(TRUE);
 							}
-
-							ShowDetails(); //update tab data - maybe it should check whether the dialog returned with OK or Cancel
 						}
+
+						ShowDetails(); //update tab data - maybe it should check whether the dialog returned with OK or Cancel
 					}
-					break;
+				}
 			}
 			break;
 
@@ -2289,12 +2301,14 @@ MsgResult PrintSepsTab::Message(Msg *pMessage)
 
 		switch ( TheMsg->State )
 		{
-			case ColourChangingMsg::ColourState::COLOURUPDATED:
-			case ColourChangingMsg::ColourState::COLOURUPDATEDINVISIBLE:
-			case ColourChangingMsg::ColourState::LISTUPDATED:
+			case ColourChangingMsg::COLOURUPDATED:
+			case ColourChangingMsg::COLOURUPDATEDINVISIBLE:
+			case ColourChangingMsg::LISTUPDATED:
 				// Only handle these messages - others will be handled implicitly
 				// by the Document/View changing handlers.
 				ShowDetails();
+				break;
+			default:
 				break;
 		}
 	}
@@ -2439,6 +2453,8 @@ void PrintSepsTab::ReadCurrentPlateSettings(TypesetInfo *pTypesetInfo)
 	BOOL DoSeparations = pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKSEPARATIONS));
 	pTypesetInfo->SetSeparations(DoSeparations);
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// Read back the settings from the list view
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 	if (pListGadget)
@@ -2462,7 +2478,7 @@ void PrintSepsTab::ReadCurrentPlateSettings(TypesetInfo *pTypesetInfo)
 				String_256 Frequency;
 				pListGadget->GetItemString(Angle, j, 4);
 				pListGadget->GetItemString(Frequency, j, 5);
-				pPlate->SetScreenInfo(atof((TCHAR*) Angle) , atof((TCHAR*) Frequency));
+				pPlate->SetScreenInfo(camAtof((TCHAR*) Angle) , camAtof((TCHAR*) Frequency));
 
 				pPlate = pTypesetInfo->GetNextPlate(pPlate);
 			}
@@ -2472,6 +2488,7 @@ void PrintSepsTab::ReadCurrentPlateSettings(TypesetInfo *pTypesetInfo)
 	{
 		ERROR3("Failed to find list gadget");
 	}
+#endif
 }
 
 
@@ -2498,6 +2515,8 @@ BOOL PrintSepsTab::InitSection()
 	{
 		TalkToPage();
 		// First retrieve the custom list control object and set the column widths
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 		ERROR2IF(!pListGadget, FALSE, "No list gadget");
 		pListGadget->SetColumnWidth(0, GetSystemMetrics(SM_CXMENUCHECK) + 4); // Check 1
@@ -2518,6 +2537,7 @@ BOOL PrintSepsTab::InitSection()
 			pListGadget->SetSelectedItemIndex(0);
 
 		return(Result);
+#endif
 	}
 
 	return FALSE;
@@ -2544,11 +2564,13 @@ BOOL PrintSepsTab::GreySection()
 {
 	if (TalkToPage())
 	{
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		// Delete the contents of the list
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 		if (pListGadget != NULL)
 				pListGadget->DeleteAllItems();		
-
+#endif
 		// Destroy the plate list to avoid all kinds of problems that might arise if it contained spot plates 
 		TypesetInfo *pTypesetInfo = LocalPrintControl.GetTypesetInfo();
 		ERROR2IF(pTypesetInfo == NULL, TRUE, "Can't find typesetting info structure");
@@ -2644,10 +2666,10 @@ BOOL PrintSepsTab::UpdateSection(String_256 *DocumentName)
 		return(FALSE);
 
 	// Set the new document name
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME), DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME), *DocumentName);
 
 	// And show the new details
-	ShowDetails(NULL, NULL);
+	ShowDetails(NULL, 0);
 	
 	return TRUE;
 }
@@ -2671,7 +2693,7 @@ BOOL PrintSepsTab::UpdateSection(String_256 *DocumentName)
 
 BOOL PrintSepsTab::ShowDetails()
 {
-	return ShowDetails(NULL,NULL);
+	return ShowDetails(NULL,0);
 }
 
 
@@ -2701,10 +2723,12 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 
 	if (IsAllGreyed() || pDocument == NULL)	// Don't try to fill in anything when the window is shaded
 	{
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 		if (pListGadget != NULL)
 			pListGadget->DeleteAllItems();
-
+#endif
 		EnableControls();
 		return(TRUE);
 	}
@@ -2743,7 +2767,7 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 			Selected = i;
 
 		Temp._MakeMsg(TEXT("#1%ld"), Resolution[i]);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBORESOLUTION), &Temp, FALSE, i);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBORESOLUTION), Temp, FALSE, i);
 		i++;
 	}
 // As usual, this call causes dreadful gadget flicker
@@ -2754,7 +2778,7 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 	else
 	{
 		Temp._MakeMsg(TEXT("#1%ld"), tpInfo->GetPrintResolution());
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBORESOLUTION), &Temp, FALSE, -1);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBORESOLUTION),Temp, FALSE, -1);
 	}
 
 	//Set up the screen frequency list (just a default value at this stage)  
@@ -2782,7 +2806,7 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 			Selected = i;
 
 		Temp._MakeMsg(TEXT("#1%ld"), Frequency[i]);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOFREQUENCY), &Temp, FALSE, i);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOFREQUENCY), Temp, FALSE, i);
 		i++;
 	}
 // As usual, this call causes dreadful gadget flicker
@@ -2796,22 +2820,26 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 //		ConvertDoubleToMinString(tpInfo->GetDefaultScreenFrequency(), &Temp);
 		INT32 IntFreq = (INT32) floor(tpInfo->GetDefaultScreenFrequency());
 		Temp._MakeMsg(TEXT("#1%d"), IntFreq);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOFREQUENCY), &Temp, FALSE, -1);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOFREQUENCY), Temp, FALSE, -1);
 	}
 
 	//Set up the screen types list
 	pPrefsDlg->DeleteAllValues(_R(IDC_COMBOTYPE));
-	for (i = 0; i < NO_OF_SCREENS_SUPPORTED; i++)
+
+	for (i = 0; ScreenIDs[i]; i++)
 	{
-		String_256 screenType((UINT32) SCREEN_TYPE_BASE + i);
-		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOTYPE), &screenType, FALSE, i);
+		String_256 screenType(ScreenIDs[i]);
+		pPrefsDlg->SetStringGadgetValue(_R(IDC_COMBOTYPE), screenType, FALSE, i);
 	}
+
 	pPrefsDlg->SetSelectedValueIndex(_R(IDC_COMBOTYPE), ((INT32)tpInfo->GetScreenFunction()) - 1);
 
 	// Set the "Print colour separations" checkbox
 	pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKSEPARATIONS), tpInfo->AreSeparating());
 
 	// Set up the separations list box
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 	ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
 
@@ -2820,11 +2848,12 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 	if (SelectedItem < 0)
 		SelectedItem = 0;
 
-	// Set the "print spot colours as process colours" flag appropriately
-	pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKPROCESS), IndexedColour::AreSpotsForcedToProcess());
-
 	// Clear the gadget out and rebuild it for the (new) plate list
 	pListGadget->DeleteAllItems();
+#endif
+
+	// Set the "print spot colours as process colours" flag appropriately
+	pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKPROCESS), IndexedColour::AreSpotsForcedToProcess());
 
 	// Call CreatePlateList to ensure that the list of printing plates is set up
 	// This will just update the list (if necessary) if it has been previously created
@@ -2877,9 +2906,9 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 //			plateAngle.MakeMsg(_R(IDS_DEGREES), Angle);
 //			String_256 DegreeFormat(_R(IDS_DEGREES));			
 			//_stprintf((TCHAR *)plateAngle, (TCHAR *)DegreeFormat, Angle);
-//			_stprintf((TCHAR *)plateAngle,"%.*f°", precision,  Angle);
+//			_stprintf((TCHAR *)plateAngle,"%.*f", precision,  Angle);
 			Convert::DoubleToString(Angle, (StringBase *) &plateAngle, AnglePrecision);
-			plateAngle += TEXT("°");		// Let's give the internationalisation boys a heart attack
+			plateAngle += TEXT("");		// Let's give the internationalisation boys a heart attack
 
 //			plateFrequency.MakeMsg(_R(IDS_LPI_FLOAT), Frequency);			
 //			String_256 FreqFormat(_R(IDS_LPI_FLOAT));
@@ -2896,6 +2925,8 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 			PColourRGBT RGB;
 			cc->ConvertColour(&PlateCol, (ColourPacked *) &RGB);
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 			ok = pListGadget->AddColourListItem(plateDescription, RGB.Red, RGB.Green, RGB.Blue,
 												pPlate->GetType() == COLOURPLATE_SPOT);
 			ERROR3IF(!ok, "Failed to add item to list");
@@ -2909,7 +2940,7 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 
 			pListGadget->SetSwitchState(!pPlate->IsDisabled(), i, 0);
 			pListGadget->SetSwitchState(pPlate->Overprints(), i, 1);
-
+#endif
 			pPlate = tpInfo->GetNextPlate(pPlate);
 		}
 		else
@@ -2920,8 +2951,11 @@ BOOL PrintSepsTab::ShowDetails(CGadgetID* pGadgetIDList, CGadgetID Exclude)
 	// Shade/unshade the controls as appropriate
 	EnableControls();
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// And re-select the previously selected (or first) item in the plate list
 	pListGadget->SetSelectedItemIndex(SelectedItem);
+#endif
 
 	return TRUE;
 }
@@ -3006,8 +3040,11 @@ ColourPlate* PrintSepsTab::GetSelectedPlate()
 		return(NULL);
 
 	ERROR2IF(pPrefsDlg == NULL,FALSE,"Error in PrintSepsTab::GetSelectedPlate() : unexpected null pointer");
+
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	ColourPlate* pPlate = NULL;
-	
+
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_LISTCOLOURS));
 	if (pListGadget)
 	{
@@ -3028,6 +3065,7 @@ ColourPlate* PrintSepsTab::GetSelectedPlate()
 	}
 	else
 		ERROR3("Cannot find list gadget");
+#endif
 
 	return(NULL); // return NULL if no plate is selected
 }
@@ -3118,17 +3156,17 @@ void SepsDlg::InitControls(void)
 	String_256 plateDescr;
 	plateDescr.MakeMsg(_R(IDS_SEPPROPERTIES), (TCHAR *) Temp);
 
-	SetStringGadgetValue(_R(IDC_PLATECAPTION), &plateDescr);
+	SetStringGadgetValue(_R(IDC_PLATECAPTION), plateDescr);
 
 	//Screen frequency  
 	String_256 frequency;
-	_stprintf((TCHAR*) frequency, "%1.4f", float(pColourPlate->GetScreenFrequency()));
-	SetStringGadgetValue(_R(IDC_EDITFREQUENCY), &frequency, TRUE);
+	camSprintf((TCHAR*) frequency, _T("%1.4f"), double(pColourPlate->GetScreenFrequency()));
+	SetStringGadgetValue(_R(IDC_EDITFREQUENCY), frequency, TRUE);
 
 	//Screen angle  
 	String_256 angle;
-	_stprintf((TCHAR*) angle, "%1.4f", float(pColourPlate->GetScreenAngle()));
-	SetStringGadgetValue(_R(IDC_EDITANGLE), &angle, TRUE);
+	camSprintf((TCHAR*) angle, _T("%1.4f"), double(pColourPlate->GetScreenAngle()));
+	SetStringGadgetValue(_R(IDC_EDITANGLE), angle, TRUE);
 
 	//'Print this ink' checkbox
 	SetBoolGadgetSelected(_R(IDC_CHECKPRINT), !pColourPlate->IsDisabled());
@@ -3229,6 +3267,8 @@ MsgResult SepsDlg::HandleMessage(DialogMsg* Msg)
 				else if (Msg->GadgetID == _R(IDC_CHECKOVERPRINT))
 					pLocalColourPlate->SetOverprint(GetBoolGadgetSelected(_R(IDC_CHECKOVERPRINT)));
 			}
+		default:
+			break;
 
 	}
 	// Always call the base class, or things like help buttons won't work
@@ -3453,33 +3493,29 @@ BOOL PrintImagesetterTab::HandleMsg(DialogMsg* Msg)
 				TypesetInfo *tpInfo = LocalPrintControl.GetTypesetInfo();
 				ERROR2IF(tpInfo == NULL, TRUE, "No typesetInfo?!");
 
-				switch (Msg->GadgetID)
+				if (FALSE) {}
+				else if (Msg->GadgetID == _R(IDC_CHECKPMARKS))
 				{
-					case _R(IDC_CHECKPMARKS):
-						{
-							tpInfo->SetOutputPrintersMarks(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKPMARKS)));
+					tpInfo->SetOutputPrintersMarks(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKPMARKS)));
 
-							// Make sure the print layout tab updates scale factors etc suitably
-							BROADCAST_TO_ALL(PrintMsg(PrintMsg::SETTINGSCHANGED));
+					// Make sure the print layout tab updates scale factors etc suitably
+					BROADCAST_TO_ALL(PrintMsg(PrintMsg::SETTINGSCHANGED));
 
-							// And shade/unshade the controls as appropriate
-							EnableControls();
-						}
-						break;
-
-					case _R(IDC_CHECKOPBLACK):
-						tpInfo->SetOverprintBlack(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKOPBLACK)));
-						break;
-
-					case _R(IDC_CHECKNEGATIVE):
-						tpInfo->SetPhotoNegative(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKNEGATIVE)));
-						break;
-
-					case _R(IDC_CHECKREFLECT):
-						tpInfo->SetEmulsionDown(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKREFLECT)));
-						break;
+					// And shade/unshade the controls as appropriate
+					EnableControls();
 				}
-
+				else if (Msg->GadgetID == _R(IDC_CHECKOPBLACK))
+				{
+					tpInfo->SetOverprintBlack(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKOPBLACK)));
+				}
+				else if (Msg->GadgetID == _R(IDC_CHECKNEGATIVE))
+				{
+					tpInfo->SetPhotoNegative(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKNEGATIVE)));
+				}
+				else if (Msg->GadgetID == _R(IDC_CHECKREFLECT))
+				{
+					tpInfo->SetEmulsionDown(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKREFLECT)));
+				}
 				OptionsTabs::SetApplyNowState(TRUE);
 			}
 			break;
@@ -3525,9 +3561,12 @@ BOOL PrintImagesetterTab::GreySection()
 		pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKNEGATIVE), FALSE);
 		pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKOPBLACK), FALSE);
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 		if (pListGadget != NULL)
 			pListGadget->DeleteAllItems();
+#endif
 
 		EnableControl((CGadgetID) _R(IDC_PRINT_DOCNAME), FALSE);
 		EnableControl((CGadgetID) _R(IDC_ISTATIC1), FALSE);
@@ -3598,16 +3637,21 @@ void PrintImagesetterTab::EnsureSensiblePrintMarks(void)
 
 	OptionsTabs::SetApplyNowState(TRUE);
 
+	INT32 SelIndex = 0;
+
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 	if (!pListGadget)
 		return;
 
-	INT32 SelIndex = pListGadget->GetSelectedItemIndex();
+	SelIndex = pListGadget->GetSelectedItemIndex();
 	if (SelIndex < 0)		// No selected item?!
 		return;
 
 	if (!pListGadget->GetSwitchState(SelIndex, 0))
 		return;				// Selected Item is disabled, so no problem
+#endif
 
 	PrintMarksMan* pMarksMan = GetApplication()->GetMarksManager();
 	if (pMarksMan == NULL)
@@ -3652,8 +3696,11 @@ void PrintImagesetterTab::EnsureSensiblePrintMarks(void)
 		if (Index != SelIndex)
 		{
 			ThisMark = pMarkItem->GetPrintMark();
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 			if (ThisMark != NULL && ThisMark->GetType() == TypeToKill)		// Kill all other marks of this type
 				pListGadget->SetSwitchState(FALSE, Index, 0);
+#endif
 		}
 
 		pMarkItem = pMarksMan->PMMCache.GetNextMark(pMarkItem);
@@ -3696,6 +3743,8 @@ MsgResult PrintImagesetterTab::Message(Msg *pMessage)
 				// state whenever it is changed
 				ShowDetails();
 				break;
+			default:
+				break;
 		}
 	}
 
@@ -3732,6 +3781,8 @@ BOOL PrintImagesetterTab::CommitSection()
 	TypesetInfo* tpInfo = /*GetPrintControl()->*/LocalPrintControl.GetTypesetInfo();
 	ERROR2IF(tpInfo == NULL,FALSE,"Error in PrintImagesetterTab::CommitSection() : unexpected null pointer");
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// Get a pointer to the print marks list
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 	if (pListGadget)
@@ -3777,6 +3828,7 @@ BOOL PrintImagesetterTab::CommitSection()
 	{
 		ERROR3("Failed to find list gadget");
 	}
+#endif
 
 	// Set the general imagesetting flags
 	tpInfo->SetOverprintBlack(pPrefsDlg->GetBoolGadgetSelected(_R(IDC_CHECKOPBLACK)));
@@ -3820,11 +3872,14 @@ BOOL PrintImagesetterTab::InitSection()
 		if (!TalkToPage())
 			return TRUE;
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		// Set up the printer marks list
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 		ERROR2IF(!pListGadget, FALSE, "No list gadget");
 		pListGadget->SetColumnWidth(0, GetSystemMetrics(SM_CXMENUCHECK) + 2); // Check box
 		pListGadget->SetColumnWidth(1, 20); // bitmap
+#endif
 
 		// Fill in all the controls, and enable/disable as appropriate
 		UpdateSection(OptionsTabs::GetDocumentName());
@@ -3857,7 +3912,7 @@ BOOL PrintImagesetterTab::UpdateSection(String_256 *DocumentName)
 		return(FALSE);
 
 	// Set the docuemnt name
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME), DocumentName);
+	pPrefsDlg->SetStringGadgetValue(_R(IDC_PRINT_DOCNAME), *DocumentName);
 
 	// And set up all the other controls
 	ShowDetails();
@@ -3886,10 +3941,12 @@ BOOL PrintImagesetterTab::ShowDetails()
 {
 	if (IsAllGreyed() || pDocument == NULL)		// Don't try to fill in anything when the window is shaded
 	{
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 		if (pListGadget != NULL)
 			pListGadget->DeleteAllItems();
-
+#endif
 		EnableControls();
 		return(TRUE);
 	}
@@ -3909,10 +3966,13 @@ BOOL PrintImagesetterTab::ShowDetails()
 	// Set the global "output printers marks" checkbox state
 	pPrefsDlg->SetBoolGadgetSelected(_R(IDC_CHECKPMARKS), tpInfo->OutputPrintersMarks());
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// And set up the marks list
 	CCustomList* pListGadget = CCustomList::GetGadget(pPrefsDlg->GetReadWriteWindowID(), _R(IDC_PRINTERMARKSLIST));
 	if (!pListGadget)
 		return(FALSE);
+#endif
 
 	PrintMarksMan* pMarksMan = GetApplication()->GetMarksManager();
 	ERROR3IF(pMarksMan == NULL, "No print mark manager?");
@@ -3923,8 +3983,11 @@ BOOL PrintImagesetterTab::ShowDetails()
 
 	PrintMarkItem* pMarkItem = pMarksMan->PMMCache.GetFirstMark();
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// Vape and re-build the marks list
 	pListGadget->DeleteAllItems();
+#endif
 
 	while (pDocument && pMarkItem)
 	{
@@ -3932,6 +3995,12 @@ BOOL PrintImagesetterTab::ShowDetails()
 		// Get the handle of this print mark item
 		UINT32 handle = pMarkItem->GetHandle();
 		// Get the bitmap ID for this type of mark
+
+PORTNOTE("other", "While CCustomList, mark 2 variables as used to avoid warnings")
+		// Mark the above as used
+		CAM_USE(pMarksComp);
+		CAM_USE(handle);
+
 		ERROR2IF(!pMarkItem->GetPrintMark(), FALSE, "Illegal NULL pointer");
 
 		UINT32 ImageID = _R(IDB_PRINTMARK_UNKNOWNMK);
@@ -3945,20 +4014,28 @@ BOOL PrintImagesetterTab::ShowDetails()
 			case MarkType_Crop:			ImageID = _R(IDB_PRINTMARK_CROPMK);			GreyedID = _R(IDB_PRINTMARK_GREYED_CROPMK);			break;
 			case MarkType_GreyBar:		ImageID = _R(IDB_PRINTMARK_GRAYBARMK);		GreyedID = _R(IDB_PRINTMARK_GRAYBARMK);			break;
 			case MarkType_ColourBar:	ImageID = _R(IDB_PRINTMARK_COLOURBARMK);	GreyedID = _R(IDB_PRINTMARK_GREYED_COLOURBARMK);		break;
+			default:
+				break;
 		}
 
 		String_256 markDescription(pMarkItem->GetPrintMark()->GetMarkMenuText());
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 		pListGadget->AddItem(markDescription, ImageID, GreyedID);
 
 		if (pMarksComp)
-			pListGadget->SetSwitchState((BOOL) pMarksComp->FindMark(handle), (pListGadget->GetItemCount() - 1), 0);
+			pListGadget->SetSwitchState(NULL != pMarksComp->FindMark(handle), (pListGadget->GetItemCount() - 1), 0);
+#endif
 
 		// find the next print mark item
 		pMarkItem = pMarksMan->PMMCache.GetNextMark(pMarkItem);
 	}
 
+PORTNOTE("other", "Disabled CCustomList")
+#ifndef EXCLUDE_FROM_XARALX
 	// And make the first item in the list selected
 	pListGadget->SetSelectedItemIndex(0);
+#endif
 
 	EnableControls();
 

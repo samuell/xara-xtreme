@@ -153,7 +153,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#endif
 
 //#include "grnddib.h"
-//GAT #include "grndprnt.h"
+#include "grndprnt.h"
 #include "grndrgn.h"
 //GAT #include "grndwing.h"
 //#include "gversion.h"
@@ -5846,8 +5846,6 @@ PORTNOTE("printing", "Assume postscript")
 		}
 		else if ((rType==RENDERTYPE_PRINTER) || (rType==RENDERTYPE_PRINTER_PS))
 		{
-PORTNOTE("printing", "Disabled GRenderPrint")
-#ifndef EXCLUDE_FROM_XARALX
 			// Always use 24 bit for printers, which means 32bit because Gavin can't do
 			// 24-bit bitmaps.
 			UINT32 BitmapDepth = 32;
@@ -5869,10 +5867,6 @@ PORTNOTE("printing", "Disabled GRenderPrint")
 
 			return new GRenderPrint(ClipRegion, ConvertMatrix, ViewScale, 
 									BitmapDepth, PrintDPI);
-#else
-			ERROR3("Can't create a GRenderPrint because we haven't ported it yet");
-			return NULL;
-#endif
 		}
 	}
 

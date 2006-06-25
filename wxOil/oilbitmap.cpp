@@ -122,8 +122,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "andy.h"
 //#include "extfilts.h"	// Accusoft filters (load that bitmap!)
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "prdlgctl.h"
-//#include "printctl.h"
+#include "prdlgctl.h"
+#include "printctl.h"
 //#include "richard2.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "colcontx.h"
@@ -1763,8 +1763,6 @@ RebuildXPEBitmap();
 			{
 
 #ifndef STANDALONE
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 				// Get the print info for this job.
 				CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
 				if (pInfo != NULL)
@@ -1774,10 +1772,6 @@ PORTNOTE("printing", "Disabled printing")
 						// Printing to a level 2 device - party on!
 						UseLevel2 = TRUE;
 				}
-#else
-				UseLevel2 = TRUE;
-#endif // EXCLUDE_FROM_XARALX
-
 #else
 	ERROR2(FALSE,"CWxBitmap::ExportBitmapData trying to print on Viewer version!");
 #endif
@@ -2014,8 +2008,6 @@ RebuildXPEBitmap();
 #ifndef WEBSTER
 		if (pRegion->IsPrinting())
 		{
-PORTNOTE("printing", "Disabled printing")
-#ifndef EXCLUDE_FROM_XARALX
 			// Get the print info for this job.
 			CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
 			if (pInfo != NULL)
@@ -2023,9 +2015,6 @@ PORTNOTE("printing", "Disabled printing")
 				PrintControl *pPrCtrl = pInfo->GetPrintControl();
 				UseLevel2 = (pPrCtrl->GetPSLevel() == PSLEVEL_2);
 			}
-#else
-			UseLevel2 = TRUE;
-#endif
 		}
 		else
 #endif //webster
@@ -2325,7 +2314,7 @@ void CWxBitmap::ColourSeparateScanline32to8(ColourContext *OutputContext, BYTE *
 			break;
 	}
 
-PORTNOTE("printing", "Disabled XaraCMS")
+PORTNOTE("cms", "Disabled XaraCMS")
 #ifndef EXCLUDE_FROM_XARALX
 	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
 #else
@@ -2456,7 +2445,7 @@ void CWxBitmap::ColourSeparate32to32(ColourPlate *pPlate, BYTE *SepTables)
 			break;
 	}
 
-PORTNOTE("printing", "Disabled XaraCMS")
+PORTNOTE("cms", "Disabled XaraCMS")
 #ifndef EXCLUDE_FROM_XARALX
 	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
 #else
@@ -2629,7 +2618,7 @@ OILBitmap* CWxBitmap::MakeSeparatedCopy(ColourPlate *pPlate, BYTE *SepTables)
 			break;
 	}
 
-PORTNOTE("printing", "Disabled XaraCMS")
+PORTNOTE("cms", "Disabled XaraCMS")
 #ifndef EXCLUDE_FROM_XARALX
 	BOOL PrintRGBBlackAsKey = XaraCMS::PrintRGBBlackAsKey;
 #else

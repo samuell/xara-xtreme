@@ -1094,8 +1094,6 @@ void DebugDlg::InvokeCommand(INT32 GroupIndex, INT32 CommandIndex, StringBase *N
 					}
 					break;
 
-PORTNOTE("Separations", "Removed use of SetNewColourPlate")
-#ifndef EXCLUDE_FROM_XARALX
 				case 1:  SetNewColourPlate(COLOURPLATE_COMPOSITE,0,0); break;
 				case 2:  SetNewColourPlate(COLOURPLATE_CYAN,	 0,0); break;
 				case 3:  SetNewColourPlate(COLOURPLATE_MAGENTA,	 0,0); break;
@@ -1135,7 +1133,6 @@ PORTNOTE("Separations", "Removed use of SetNewColourPlate")
 						}
 					}
 					break;
-#endif
 
 				default:
 					ERROR3("Unknown debug command");
@@ -1165,8 +1162,6 @@ PORTNOTE("Separations", "Removed use of SetNewColourPlate")
 		case 2:		// Mike's misc controls -------------------------------------------------
 			switch (CommandIndex)
 			{
-PORTNOTE("PrintMarks", "Removed use of PrintMarksMan")
-#ifndef EXCLUDE_FROM_XARALX
 				case 0:
 				{
 					// We need to execute this one after the dialogue has closed.
@@ -1195,7 +1190,6 @@ PORTNOTE("PrintMarks", "Removed use of PrintMarksMan")
 					
 				}
 				break;
-#endif
 
 				case 2:
 				{
