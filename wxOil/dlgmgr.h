@@ -348,7 +348,7 @@ private:
 
 
 	// Post create gets called after a dialog window has been created.
-	static BOOL PostCreate(DialogOp * pDialogOp);
+	static BOOL PostCreate(DialogOp * pDialogOp, INT32 OpeningPage);
 
 public:
 	// This should eventually be the only Create method that we require. If the DialogOp is 

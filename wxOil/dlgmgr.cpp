@@ -415,7 +415,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 	ControlList::Get()->ReflectAllStates(); // might as well do the processing before the bar / dialog appears
 
 	// we call this directly now
-	BOOL ok = PostCreate(DlgOp);
+	BOOL ok = PostCreate(DlgOp, OpeningPage);
 
 	if( ok && 
 		Mode == MODAL && 
@@ -555,7 +555,7 @@ void DialogManager::CreateRecursor(wxWindow * pwxWindow)
 
 ********************************************************************************************/
 
-BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
+BOOL DialogManager::PostCreate(DialogOp * pDialogOp, INT32 OpeningPage)
 {
 	ERROR2IF( !pDialogOp || !pDialogOp->pEvtHandler || !pDialogOp->pEvtHandler->pwxWindow,
 			FALSE, _T("Bad DialogOp / EvtHandler in DialogManager::PostCreate()"));
@@ -566,8 +566,22 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 	INT32 DlgX=0; // Dialog box X position
 	INT32 DlgY=0; // Dialog box Y position
 	CDlgResID ActivePage=0; // Active page for tabbed dialogs
+	UINT32 ActivePageIndex=0;
 
 	BOOL CreatedBefore = FALSE; // TRUE if the dialog has been created before
+
+	wxBookCtrlBase * pBook=NULL;
+	// Only do special processing for DialogTabOp
+	if (pDialogOp->IS_KIND_OF(DialogTabOp))
+		pBook=GetBookControl(pDialogWnd);
+
+	ResourceID BookGadget=pBook?pBook->GetId():0;
+
+	if (pBook && (OpeningPage>=0))
+	{
+		ActivePage = pBook->GetPage(OpeningPage)->GetId();
+		ActivePageIndex = OpeningPage;
+	}
 
 	// Search the DialogPositionList to see if the dialog has been created before
 	DialogPosition* DlgPos = FindDialogPositionRecord(pDialogOp->pEvtHandler->ID);
@@ -575,7 +589,21 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 	{
 		DlgX = DlgPos->LastX;
 		DlgY = DlgPos->LastY;
-		ActivePage = DlgPos->ActivePage;
+
+		// Find the last active page if there was one
+		if (OpeningPage<0)
+		{
+			ActivePage = DlgPos->ActivePage;
+			ActivePageIndex = DlgPos->ActivePageIndex;
+			if (pBook && ((ActivePageIndex<0) ||
+						  (ActivePageIndex >= pBook->GetPageCount()) ||
+						  ((UINT32)(pBook->GetPage(ActivePageIndex)->GetId()) != ActivePage)
+						))
+			{
+				ActivePageIndex=0;
+				ActivePage = pBook->GetPage(0)->GetId();
+			}
+		}
 		CreatedBefore = TRUE;
 	}
 
@@ -595,12 +623,6 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 		ERROR1(FALSE, _R(IDS_OUT_OF_MEMORY));
 	}
 
-	wxBookCtrlBase * pBook=NULL;
-	// Only do special processing for DialogTabOp
-	if (pDialogOp->IS_KIND_OF(DialogTabOp))
-		pBook=GetBookControl(pDialogWnd);
-
-	ResourceID BookGadget=pBook?pBook->GetId():0;
 
 	if (!CreatedBefore) // If this is the first time the dialog has been created then position
 						// it centrally on the screen
@@ -637,10 +659,8 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp)
 		if (pBook)
 		{
 			// Record the active page.
-			ActivePage = pBook->GetCurrentPage()->GetId();
-
 			DlgPos->ActivePage = ActivePage;
-			DlgPos->ActivePageIndex = 0;	 // 0 is always the first page
+			DlgPos->ActivePageIndex = ActivePageIndex;
 		}
 		// Add the position record to the DialogPositionList
 		DialogPositionList.AddHead((ListItem*)DlgPos);
@@ -677,6 +697,7 @@ PORTNOTE("dialog","Removed FontFactory usage")
 
 		// And tell the active page which is active
 		BROADCAST_TO_CLASS( DialogMsg( pDialogOp->WindowID, DIM_SET_ACTIVE, BookGadget, 0, ActivePage ), DialogOp );
+		pBook->SetSelection(ActivePageIndex);
 	}
 
 	// If the dialog which has just been created is modal then disable all other
@@ -7376,7 +7397,7 @@ BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, IN
 //			if (OpeningPage != pPosDetails->ActivePageIndex)
 //			{
 				ERROR3IF(pBook == NULL, "There is no current PropertySheet");
-				wxNotebookPage* pPage = (wxNotebookPage*)pBook->GetCurrentPage();
+				wxNotebookPage* pPage = (wxNotebookPage*)(pBook->GetPage(OpeningPage));
 				ERROR3IF(pPage == NULL, "There is no active page");
 				pPosDetails->ActivePage = pPage->GetId();
 TRACEUSER( "MarkH", _T("CreateTabbedDialog ActivePage = %d\n"),pPosDetails->ActivePage);
