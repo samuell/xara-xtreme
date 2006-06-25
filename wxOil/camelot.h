@@ -148,6 +148,8 @@ public:
 
 	void OnFatalException();
 
+	void OnFilePrintSetup();
+
 	static BOOL LaunchWebBrowser(const wxString& strUrl);
 
 private:

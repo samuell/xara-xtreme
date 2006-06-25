@@ -130,6 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camplatform.h"
 #include "filedlgs.h"
 #include "progress.h"
+#include "prdlgctl.h"
 #include "gbrush.h"
 
 #include "camprocess.h"
@@ -845,6 +846,32 @@ PORTNOTE("other","Removed 3D, Extras and UserHelp support")
 	return wxApp::OnExit();
 }
 
+//  WEBSTER-ranbirr-12/11/96
+#ifndef WEBSTER
+void CCamApp::OnFilePrintSetup()
+{
+#ifndef STANDALONE
+	Document *pDoc = Document::GetSelected();
+	DocView *pDocView = DocView::GetSelected();
+
+	if (pDoc && pDocView && pDocView->GetConnectionToOilView())
+	{
+		// Inform the user if we have switched to using the default printer on the system
+		// before opening the print setup dlg.
+		CCPrintDialog::InformResetToDefaultPrinter(FALSE);
+	
+		// This no longer calls the base class OnFilePrint() function.
+		// Instead, we involke the print dlg ourselves so that we can update our
+		// printer settings when the dlg is closed via the user clicking on OK
+		// (7/4/95 - Markn)
+
+		CCPrintInfo printinfo(pDoc, pDocView->GetConnectionToOilView());
+		printinfo.OnPreparePrinting(TRUE);			
+	}
+	
+#endif
+}
+#endif
 
 void CCamApp::OnAppExit()
 {
@@ -1718,6 +1745,9 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 /*********************************************************************************************

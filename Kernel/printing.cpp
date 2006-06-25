@@ -113,6 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "helpids.h"
 #include "bubbleid.h"
 #include "prncamvw.h"
+#include "prdlgctl.h"
 //#include "barsdlgs.h"
 //#include "nev.h"		// _R(IDS_FILE_PRINT_ONE)
 
@@ -154,10 +155,13 @@ OpPrint::OpPrint(): Operation()
 
 ********************************************************************************************/
 
-OpState OpPrint::GetState(String_256*, OpDescriptor*)
+OpState OpPrint::GetState(String_256*, OpDescriptor* WhichOp)
 {
+	BOOL ForceGreyed = FALSE;
+	if ((WhichOp->Token) == (String(OPTOKEN_PRINT_SETUP)))
+		ForceGreyed=!CCPrintInfo::HasPrintSetup();
 	// not ticked, greyed only if already printing (or the print dialog is open).
-	return OpState( FALSE, PrintMonitor::IsPrintingActive() );
+	return OpState( FALSE, PrintMonitor::IsPrintingActive() || ForceGreyed);
 }
 
 

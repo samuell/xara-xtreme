@@ -531,10 +531,7 @@ Technical Notes:
 #ifndef WEBSTER
 void PrintSetupAction() 
 {               
-PORTNOTETRACE("other", "PrintSetupAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
-	((CCamApp*) AfxGetApp()).OnFilePrintSetup();
-#endif
+	AfxGetApp().OnFilePrintSetup();
 }
 #endif //webster
 /********************************************************************************************

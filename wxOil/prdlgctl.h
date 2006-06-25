@@ -166,14 +166,7 @@ public:
 
 	static CCPrintInfo* GetCurrent()	{ return pCurrent; }
 
-	// Locks/Unlocks the print progress dialogue (if any) to make sure it doesn't update
-	// the progress slider etc during some critical operation.
-	void LockProgressUpdate(BOOL Locked) {
-PORTNOTE("printing", "Disabled Print Progress Dialog")
-#ifndef EXCLUDE_FROM_XARALX
-		 if (pPrgDlg != NULL) pPrgDlg->LockProgressUpdate(Locked);
-#endif
-	 }
+	void LockProgressUpdate(BOOL Locked);
 
 private:
 	BOOL 			Initialised;	// TRUE if Init() has been successfully called
@@ -193,7 +186,8 @@ private:
 // New methods for XaraLX
 
 public:
-	BOOL OnPreparePrinting();
+	BOOL OnPreparePrinting(BOOL bPrintSetupOnly = FALSE);
+	static BOOL HasPrintSetup();
 
 	CCDC *	GetCCDC() const {return pCCDC;}
 	CNativeDC * GetDC() const;
@@ -207,7 +201,7 @@ public:
 
 /********************************************************************************************
 
->	class CCPrintDialog : public CPrintDialog
+>	class CCPrintDialog : public wxPrintDialog
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	29/3/95

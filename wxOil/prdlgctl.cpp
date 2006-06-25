@@ -877,6 +877,8 @@ void CCPrintDialog::ClosePrintDialogs()
 	}
 }
 
+#endif
+
 /********************************************************************************************
 
 >	static void CCPrintDialog::InformResetToDefaultPrinter(BOOL ClosingDlgs)
@@ -912,6 +914,8 @@ void CCPrintDialog::InformResetToDefaultPrinter(BOOL ClosingDlgs)
 		InformPrinterReset = FALSE;
 	}
 }
+
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -2523,11 +2527,11 @@ CNativeDC * CCPrintInfo::GetDC() const
 
 /********************************************************************************************
 
->	BOOL CCPrintInfo::OnPreparePrinting()
+>	BOOL CCPrintInfo::OnPreparePrinting(BOOL bPrintSetupOnly)
 
 	Author:		Alex Bligh <alex@alex.org.uk>
 	Created:	22/6/2006
-	Inputs:		-
+	Inputs:		bPrintSetupOnly - true to just bring up the print setup dialog
 	Returns:	TRUE to print, FALSE to not print
 	Purpose:	Brings up a print dialog
 
@@ -2535,7 +2539,7 @@ CNativeDC * CCPrintInfo::GetDC() const
 
 ********************************************************************************************/
 
-BOOL CCPrintInfo::OnPreparePrinting()
+BOOL CCPrintInfo::OnPreparePrinting(BOOL bPrintSetupOnly /*=FALSE*/)
 {
 	// Zap any existing print dialog
 	if (pOurPD)
@@ -2555,6 +2559,45 @@ BOOL CCPrintInfo::OnPreparePrinting()
 		delete pCCDC;
 
 	pCCDC = NULL;
+
+	// Bring up a native print setup dialog if possible
+	wxPrintFactory* factory = wxPrintFactory::GetFactory();
+
+	// Use the print dialog if we can
+	if (bPrintSetupOnly && factory->HasPrintSetupDialog())
+	{
+		// The print setup dialog should change the
+		// print data in-place if not cancelled.
+
+		wxDialog *dialog = factory->CreatePrintSetupDialog( NULL,
+															 &(pOurPD->GetPrintDialogData().GetPrintData()) );
+		if (dialog->ShowModal() == wxID_OK)
+		{
+PORTNOTE("printing", "don't do UpdatePrinterSettings")
+#ifndef EXCLUDE_FROM_XARALX
+			CCPrintDialog::UpdatePrinterSettings(pOurPD);
+#endif
+		}
+
+		// If we are to ignore the printer data (because the selected printer has been deleted, renamed, etc)
+		// then we must reset the global memory handles that hold the data, as the settings they contain
+		// no longer refer to a printer known by the host system
+		if (CCPrintDialog::IgnorePrintData())
+		{
+PORTNOTE("printing", "don't do FreeGlobalHandle")
+#ifndef EXCLUDE_FROM_XARALX
+			CCPrintDialog::FreeGlobalHandle(&m_hDevMode);
+			CCPrintDialog::FreeGlobalHandle(&m_hDevNames);
+#endif
+			CCPrintDialog::ResetIgnorePrintData();
+		}
+
+		dialog->Destroy();
+
+		delete pOurPD;
+		pOurPD = NULL;
+		return FALSE;
+	}
 
 	ResourceID ret = pOurPD->ShowModal();
 	if ( (ret == wxID_CANCEL) || !pOurPD->GetPrintDialogData().Ok())
@@ -2594,6 +2637,46 @@ BOOL CCPrintInfo::OnPreparePrinting()
 	return TRUE;
 }
 
+/********************************************************************************************
+
+>	BOOL CCPrintInfo::HasPrintSetup()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	22/6/2006
+	Inputs:		-
+	Returns:	TRUE if a print setup dialog can be brought up
+	Purpose:	
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL CCPrintInfo::HasPrintSetup()
+{
+	wxPrintFactory* factory = wxPrintFactory::GetFactory();
+	return (factory->HasPrintSetupDialog());
+}
+
+/********************************************************************************************
+
+>	BOOL CCPrintInfo::LockProgressUpdate(BOOL Locked)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	22/6/2006
+	Inputs:		Locked - to lock the progress update
+	Returns:	
+	Purpose:	Locks/Unlocks the print progress dialogue (if any) to make sure it doesn't
+				update the progress slider etc during some critical operation.
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void CCPrintInfo::LockProgressUpdate(BOOL Locked)
+{
+	 if (pPrgDlg != NULL)
+		pPrgDlg->LockProgressUpdate(Locked);
+}
 
 /********************************************************************************************
 
