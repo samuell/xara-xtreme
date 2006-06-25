@@ -437,6 +437,8 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 	{
 		// Not colour separating, but if it's a 32bpp bitmap, we need to convert to something 
 		// that StretchDIBits (below) can understand
+PORTNOTE("printing", "Do not convert down BPP")
+#ifndef EXCLUDE_FROM_XARALX
 		if (uBitmapDepth == 32)
 		{
 			// Can't plot 32bpp bitmaps to GDI as 16-bit GDI doesn't understand them,
@@ -463,6 +465,7 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 			pBitmapInfo->bmiHeader.biBitCount  = 24;
 			pBitmapInfo->bmiHeader.biSizeImage = DestlineBytes * BitmapHeight;
 		}
+#endif
 	}
 
 	WinRect clip;

@@ -1229,7 +1229,9 @@ PORTNOTE("printing", "Disabled PS text rendering")
 	// Finished doing GDI output
 	if (!pPSDC->EndOSOutput())
 		return FALSE;
-#endif
 	return TRUE;
+#else
+	return RenderRegion::RenderChar(ch, pMatrix);
+#endif	
 }
 
