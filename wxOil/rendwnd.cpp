@@ -106,7 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "palman.h"
 #include "ccdc.h"
-//#include "prncamvw.h"
+#include "prncamvw.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camview.h"
 #include "camframe.h"
@@ -322,12 +322,7 @@ BOOL CRenderWnd::Create(const wxRect& rect,
 **********************************************************************************************/ 
 void CRenderWnd::OnPaint( wxPaintEvent &evnt )
 {
-#ifndef EXCLUDE_FROM_XARALX
 	if ((!CCamApp::IsDisabled()) && (!PrintMonitor::IsPrintingNow()))
-#else
-	// print monitor not present on standalone versions
-	if (!CCamApp::IsDisabled())
-#endif
 	{
 		CCPaintDC dc(this);
 //		wxPalette* OldPal = PaletteManager::StartPaintPalette(&dc);
@@ -339,37 +334,29 @@ void CRenderWnd::OnPaint( wxPaintEvent &evnt )
 	}
 	else
 	{
-#ifndef EXCLUDE_FROM_XARALX
 		// if we were printing, we have to draw something - white will do
 		if (PrintMonitor::IsPrintingNow())
 		{
-/*				// Draw a white rectangle here
-			CPaintDC MyPaint(this);
+			// Draw a white rectangle here
+			wxPaintDC MyPaint(this);
 
 			// Lets have a white brush...
-			CBrush WhiteBrush;
-			WhiteBrush.CreateStockObject(WHITE_BRUSH);
-			CBrush* pOldBrush = MyPaint.SelectObject(&WhiteBrush);
+			MyPaint.SetBrush(wxBrush(wxColour(*wxWHITE)));
+			MyPaint.SetPen(*wxTRANSPARENT_PEN);
 
-			// and no pen please
-			CPen NoPen;
-			NoPen.CreateStockObject(NULL_PEN);
-			CPen* pOldPen = MyPaint.SelectObject(&NoPen);
-		
-			// Draw the rect.
-			CRect RedrawRect(&MyPaint.m_ps.rcPaint);
-			RedrawRect.InflateRect(2,2);
-			MyPaint.Rectangle(RedrawRect);
+			wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
 
-			// Put the old brush and pen back
-			MyPaint.SelectObject(pOldPen);
-			MyPaint.SelectObject(pOldBrush);
-			
-			// ask for a full redraw at the end
-			PrintMonitor::WantFullRedraw(TRUE); */
+			while (upd)
+			{
+				wxRect rect(upd.GetRect());
+				MyPaint.DrawRectangle(rect);
+				upd++;
+			}
+
+  			// ask for a full redraw at the end
+			PrintMonitor::WantFullRedraw(TRUE);
 		}
 		else
-#endif
 		{
 			wxPaintDC dc( this );								// Clear paint condition 
 		}

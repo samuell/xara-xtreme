@@ -314,6 +314,8 @@ void PrintProgressDlg::SetSliderPos(INT32 pos)
 		String_32 Percent;
 		Percent.MakeMsg(_R(IDS_PRINT_PROG_PERCENT), (INT32) p);
 		SetStringGadgetValue(_R(IDC_CURRENTPERCENTAGE), Percent);
+		PaintGadgetNow(_R(IDC_CURRENTPERCENTAGE));
+		PaintGadgetNow(_R(IDC_PRINTPROGSLIDER));
 	}
 }
 
@@ -342,7 +344,10 @@ void PrintProgressDlg::SetSliderSubRangePos(INT32 pos)
 void PrintProgressDlg::SetDocName(LPCTSTR pDocName)
 {
 	if (pDocName != NULL)
+	{
 		SetStringGadgetValue(_R(IDC_DOCNAME), String_256(pDocName));
+		PaintGadgetNow(_R(IDC_DOCNAME));
+	}
 }
 
 //--------------------------------------------
@@ -350,7 +355,10 @@ void PrintProgressDlg::SetDocName(LPCTSTR pDocName)
 void PrintProgressDlg::SetPrinterName(LPCTSTR pPrinterName)
 {
 	if (pPrinterName != NULL)
+	{
 		SetStringGadgetValue(_R(IDC_PRINTERNAME), String_256(pPrinterName));
+		PaintGadgetNow(_R(IDC_PRINTERNAME));
+	}
 }
 
 //--------------------------------------------
@@ -361,7 +369,11 @@ void PrintProgressDlg::SetPortName(LPCTSTR pPortName)
 // really very useful info, so we've removed it to simplify the dialog
 //
 //	if (pPortName != NULL)
+//	{
 //		SetStringGadgetValue(_R(IDC_PORTNAME), String_256(pPortName));
+//		PaintGadgetNow(_R(IDC_PORTNAME));
+//	}
+
 }
 
 //--------------------------------------------
@@ -403,7 +415,7 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 	// Set the page info
 	Str.MakeMsg(_R(IDS_PRINT_PROG_PAGE), PageNumber, MaxPageNumber);
 	SetStringGadgetValue(_R(IDC_PAGENUMBER), Str);
-
+	PaintGadgetNow(_R(IDC_PORTNAME));
 
 	// Set the plate info
 	if (MaxPlateNumber > 0 && pPlateName != NULL)
@@ -412,7 +424,7 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 		Str.MakeMsg(_R(IDS_PRINT_PROG_COMPOSITE));
 
 	SetStringGadgetValue(_R(IDC_PLATENUMBER), Str);
-
+	PaintGadgetNow(_R(IDC_PLATENUMBER));
 
 	// Set the tile info
 	if (MaxTileNumber > 1)
@@ -423,6 +435,8 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 
 	HideGadget(_R(IDC_TILETITLE), (MaxTileNumber <= 1));
 	HideGadget(_R(IDC_TILENUMBER), (MaxTileNumber <= 1));
+	PaintGadgetNow(_R(IDC_TILETITLE));
+	PaintGadgetNow(_R(IDC_TILENUMBER));
 
 	// Make sure we don't get a div by zero or a nasty negative in the calculations below
 	if (MaxPageNumber < 1)		MaxPageNumber = 1;
@@ -456,7 +470,15 @@ BOOL PrintProgressDlg::AbortProc()
 		// Ignore
 		return TRUE;
 
+	pPrintProgressDlg->PaintGadgetNow(0);
+
+	// Save current doc view etc. around yield as paint can destroy them.
+	DocView * pCurrentDocView = DocView::GetCurrent();
+	Document * pCurrentDocument = Document::GetCurrent();
 	::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
+	pCurrentDocument->SetCurrent();
+	pCurrentDocView->SetCurrent();
+
 	return Aborted;
 }
 

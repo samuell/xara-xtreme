@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "colormgr.h"
 #include "opimgset.h"
 #include "camview.h"
+#include "prncamvw.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -272,6 +273,9 @@ StatusLine::~StatusLine()
 
 BOOL StatusLine::OnIdleEvent()
 {
+	if (PrintMonitor::IsPrintingNow())
+		return FALSE;
+
 	// Don't do any status line updates if the timer is running
 	if (!m_Timer.IsRunning())
 	{

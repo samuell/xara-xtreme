@@ -901,7 +901,6 @@ void CCamView::OnFilePrint()
 		return;
 	}
 
-
 	// Make sure the user can't get 2 print dialog boxes up
 	PrintMonitor::SetPrintingActive(TRUE);
 
@@ -913,6 +912,13 @@ void CCamView::OnFilePrint()
 		PrintMonitor::SetPrintingActive(FALSE);
 		return;
 	}
+
+	// Get some paints out of the way
+	::wxSafeYield(FALSE);
+
+	// Ensure the current documents remain the same
+	KernelDoc->SetCurrent();
+	pDocView->SetCurrent();
 
 	List CompoundNodeList;
 	NodeCompound * pCompound = NULL;
@@ -1378,6 +1384,9 @@ PORTNOTE("printing", "Remove DOCINFO stuff");
 		pPrintView = NULL;
 	}
 
+	// Deleting the print view appears to unset the current document, so fix it
+	KernelDoc->SetCurrent();
+	pDocView->SetCurrent();
 
 	if (pPrintInfo)
 	{
