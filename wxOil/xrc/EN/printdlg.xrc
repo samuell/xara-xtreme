@@ -2,12 +2,31 @@
 <resource>
 	<object class="wxPanel" name="IDD_OPTSTAB_PRINTLAYOUT">
 			 <pos>0,0d</pos> <size>206,188d</size>
+		<object class="wxStaticLine" name="IDC_PLAYOUTLINE1">
+			<size>400,-1</size>
+			<pos>6,190</pos>
+		<style>wxLI_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticLine" name="IDC_PLAYOUTLINE2">
+			<size>400,-1</size>
+			<pos>6,230</pos>
+			<style>wxLI_HORIZONTAL</style>
+		</object>
+		<object class="wxStaticLine" name="IDC_PLAYOUTLINE3">
+			<size>400,-1</size>
+			<pos>6,315</pos>
+			<style>wxLI_HORIZONTAL</style>
+		</object>
 		<object class="wxCamArtControl" name="IDC_BTN_UPRIGHT">
-			 <pos>45,55d</pos> <size>24,24d</size>
+			<pos>45,55d</pos>
+			<size>16,16d</size>
+			<camartstyle>wxCACS_TOOLBACKGROUND|wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON</camartstyle>	
 			<label>-</label>
 		</object>
 		<object class="wxCamArtControl" name="IDC_BTN_SIDEWAYS">
-			 <pos>69,55d</pos> <size>24,24d</size>
+			<pos>69,55d</pos>
+			<size>16,16d</size>
+			<camartstyle>wxCACS_TOOLBACKGROUND|wxCACS_PUSHBUTTON|wxCACS_TOGGLEBUTTON</camartstyle>	
 			<label>-</label>
 		</object>
 		<object class="wxTextCtrl" name="IDC_SCALEEDIT">
@@ -26,6 +45,10 @@
 			 <pos>10,95d</pos> <size>35,10d</size>
 			<label>&amp;Best fit</label>
 			<style>wxRB_GROUP</style>
+		</object>
+		<object class="wxRadioButton" name="IDC_BESTFITPAPER">
+			 <pos>105,95d</pos> <size>95,10d</size>
+			<label>&amp;Automatic fit</label>
 		</object>
 		<object class="wxRadioButton" name="IDC_CUSTOMFIT">
 			 <pos>10,115d</pos> <size>45,10d</size>
@@ -60,10 +83,6 @@
 			 <pos>105,59d</pos> <size>20,8d</size>
 			<label>Scale:</label>
 		</object>
-		<object class="wxStaticBox" name="IDC_STATIC">
-			 <pos>85,395d</pos> <size>25,0d</size>
-			<label>tits 1</label>
-		</object>
 		<object class="wxStaticText" name="IDC_LEFTTEXT">
 			 <pos>72,132d</pos> <size>15,8d</size>
 			<label>Left:</label>
@@ -92,10 +111,6 @@
 			 <pos>140,156d</pos> <size>23,8d</size>
 			<label>Gutter:</label>
 		</object>
-		<object class="wxStaticBox" name="IDC_STATIC">
-			 <pos>145,390d</pos> <size>55,0d</size>
-			<label>tits 2</label>
-		</object>
 		<object class="wxStaticText" name="IDC_PRINT_DOCNAMETEXT">
 			 <pos>5,5d</pos> <size>70,8d</size>
 			<label>Print layout options for</label>
@@ -123,11 +138,6 @@
 		<object class="wxStaticText" name="IDC_PAPERSIZEINFO">
 			 <pos>50,38d</pos> <size>146,10d</size>
 			<label>210mm x 297mm</label>
-		</object>
-		<object class="wxRadioButton" name="IDC_BESTFITPAPER">
-			 <pos>105,95d</pos> <size>95,10d</size>
-			<label>&amp;Automatic fit</label>
-			<style>wxRB_GROUP</style>
 		</object>
 		<title>Print layout</title>
 		<label>Print layout</label>
@@ -171,6 +181,11 @@
 		<object class="wxOwnerDrawnComboBox" name="IDC_FILLQUALLIST">
 			 <pos>48,145d</pos> <size>48,-1d</size>
 			<style>wxCB_READONLY</style>
+			<content>
+				<item>High</item>
+				<item>Normal</item>
+				<item>Low</item>
+			</content>
 		</object>
 		<object class="wxStaticBox" name="IDC_GROUP_PRINTLAYERS">
 			 <pos>5,19d</pos> <size>195,30d</size>
@@ -207,6 +222,10 @@
 		<object class="wxStaticBox" name="IDC_GROUP_TEXTOPTIONS">
 			 <pos>105,133d</pos> <size>95,30d</size>
 			<label>Text options</label>
+		</object>
+		<object class="wxCheckBox" name="IDC_ALLTEXTASSHAPES">
+			 <pos>110,146d</pos> <size>85,12d</size>
+			<label>Print all text as shapes</label>
 		</object>
 		<title> Output </title>
 		<label> Output </label>

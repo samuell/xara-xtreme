@@ -592,11 +592,6 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 			OptionsTabs::GreyApplyNow();
 		}
 
-		// Allow the base class access to the message, it will do the
-		// DLG_EAT_IF_HUNGRY(Msg) for us
-		// Must do this before the Close and End
-		Result = DialogTabOp::Message(Message);
-
 		// End dialog here
 		if (EndDialog) 
 		{
@@ -617,8 +612,13 @@ TRACEUSER( "Neville", _T("PrintPrefsDlg::Message PageID = %d\n"),Msg->PageID);
 			// Make sure that we remove our options tabs link to the dialog box class
 			// as the dialog will now be destroyed
 			OptionsTabs::pPrefsDlg = NULL;
-			return Result;
+			return OK;
 		}
+
+		// Allow the base class access to the message, it will do the
+		// DLG_EAT_IF_HUNGRY(Msg) for us
+		// Must do this before the Close and End
+		Result = DialogTabOp::Message(Message);
 
 		// Check if have been sending an init/create message and if so then set flag False.
 		// Only do this in the init/create case as we might be sent one of these and then

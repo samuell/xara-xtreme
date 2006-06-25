@@ -153,6 +153,9 @@ public:
 	static void SetCurrentDlg(PrintPrefsDlg* pDlg);	// Access to the current open dlg
 	static void CloseCurrentDlg();					// Forces the dlg to close
 
+	BOOL HasImages() {return TRUE;}
+	TabType GetTabType() {return TABTYPE_TREE/*TABTYPE_LIST*/;}
+
 private:
 	// Set up explicit details about this dialog box such as the id and type
 	static const CDlgResID IDD;				// Dialog box id
