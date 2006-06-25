@@ -115,7 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 //#include "ben.h"
-//#include "prdlgctl.h"
+#include "prdlgctl.h"
 #include "printctl.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "jason.h"
@@ -443,8 +443,6 @@ SubtreeRenderState Layer::RenderSubtree(RenderRegion *pRender, Node** ppNextNode
 		// Added this since we want to print what we see - might need looking at ?
 		return IsVisible() ? SUBTREE_ROOTANDCHILDREN : SUBTREE_NORENDER;
 
-PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
-#ifndef EXCLUDE_FROM_XARALX
 		// Otherwise, get the print control
 		
 		CCPrintInfo *pInfo = CCPrintInfo::GetCurrent();
@@ -465,7 +463,6 @@ PORTNOTE("printing","Layer::RenderSubtree - removed printing code  reference")
 			// Print all foreground layers, regardless of visibility.
 			return SUBTREE_ROOTANDCHILDREN;
 		}
-#endif
 
 	}
 	else if (IS_A(pRender,CamelotEPSRenderRegion))

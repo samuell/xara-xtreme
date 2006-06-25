@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prdlgctl.h"
 //#include "printdlg.h"
-//#include "printprg.h"
+#include "printprg.h"
 #include "princomp.h"
 #include "optsprin.h"
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -2487,12 +2487,9 @@ PORTNOTE("printing", "Disabled deletion of a print dialog inside printinfo struc
 		if (pOurPD != NULL)
 			delete pOurPD;
 
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 		// Delete our print progress dialog
 		if (pPrgDlg != NULL)
-			delete pPrgDlg;
-#endif
+			pPrgDlg->Done(); // this deletes it
 	}
 
 	if (pCCDC)
@@ -2669,12 +2666,12 @@ BOOL CCPrintInfo::StartPrinting()
 
 	ERROR3IF(pPrgDlg != NULL,"StartPrinting() called with non-NULL pPrgDlg. Did you call EndPrinting() last time?");
 
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
-	ControlHelper::InformModalDialogOpened();
 
+	OpDescriptor* pOpDesc = (OpDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_PRINT_PROGRESS );
+	if ( pOpDesc )
+		pOpDesc->Invoke();
 	// Create and initialise the print progress dialog
-	pPrgDlg = new PrintProgressDlg(pCCamView);
+	pPrgDlg = PrintProgressDlg::Get();
 	if (pPrgDlg == NULL)
 	{
 		pPrCtrl->EndPrinting();
@@ -2683,12 +2680,9 @@ PORTNOTE("printing", "Disabled print progress dialog")
 	}
 
 	//pPrgDlg->SetDocName(pDocument->GetTitle());
-	pPrgDlg->SetPrinterName(pOurPD->GetDeviceName());
-	pPrgDlg->SetPortName(pOurPD->GetPortName());
+	pPrgDlg->SetPrinterName(GetPrintData().GetPrinterName());
+	pPrgDlg->SetPortName(GetPrintData().GetPrinterCommand());
 	pPrgDlg->SetSliderPos(0);
-
-	pPrgDlg->Show();
-#endif
 
 	return TRUE;
 }
@@ -2722,18 +2716,12 @@ BOOL CCPrintInfo::EndPrinting()
 	if (pMarksMan)
 		pMarksMan->EndPrinting();
 
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	// now destroy the print dialogue
 	if (pPrgDlg != NULL)
 	{
-		pPrgDlg->DestroyWindow();
-		delete pPrgDlg;
+		pPrgDlg->Done();
 		pPrgDlg = NULL;
 	}		
-
-	ControlHelper::InformModalDialogClosed();
-#endif
 
 	return (ok);
 }
@@ -2861,13 +2849,10 @@ BOOL CCPrintInfo::GetNextPatch(PrintPatchInfo* pPatchInfo)
 			}
 		}
 
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 		// And set the page, plate, and tile numbers
 		pPrgDlg->SetPageNumber(	pPatchInfo->PaperNumber, pPatchInfo->MaxPaperNumber,
 								CurrentPlate, MaxPlates, (TCHAR *) PlateName,
 								pPatchInfo->PatchNumber, pPatchInfo->MaxPatchNumber);
-#endif
 
 	}
 
@@ -2949,11 +2934,8 @@ void CCPrintInfo::EndPlatePrinting(PrintView *pPrintView)
 
 void CCPrintInfo::SetSliderSubRangeMax(INT32 Max)
 {
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 		pPrgDlg->SetSliderSubRangeMax(Max);
-#endif
 }
 
 /********************************************************************************************
@@ -2979,11 +2961,8 @@ PORTNOTE("printing", "Disabled print progress dialog")
 
 void CCPrintInfo::SetSliderSubRangePos(INT32 Pos)
 {
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 		pPrgDlg->SetSliderSubRangePos(Pos);
-#endif
 }
 
 /********************************************************************************************
@@ -3005,15 +2984,12 @@ PORTNOTE("printing", "Disabled print progress dialog")
 
 void CCPrintInfo::SetAnalysing()
 {
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 	{
 		pPrgDlg->SetAnalysing();
 		if (pDocument != NULL)
 			pPrgDlg->SetDocName(pDocument->GetTitle());
 	}
-#endif
 }
 
 /********************************************************************************************
@@ -3034,15 +3010,12 @@ PORTNOTE("printing", "Disabled print progress dialog")
 
 void CCPrintInfo::SetPrinting()
 {
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
 	if (pPrgDlg != NULL)
 	{
 		pPrgDlg->SetPrinting();
 		if (pDocument != NULL)
 			pPrgDlg->SetDocName(pDocument->GetTitle());
 	}
-#endif
 }
 
 /********************************************************************************************
@@ -3061,7 +3034,7 @@ PORTNOTE("printing", "Disabled print progress dialog")
 
 INT32 CCPrintInfo::SetAbortProc(CDC* pCDC)
 {
-PORTNOTE("printing", "Disabled print progress dialog")
+PORTNOTE("printing", "Disabled SetAbortProc bits")
 #ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pCDC == NULL,SP_ERROR,"Given NULL CDC ptr");
 
@@ -3091,12 +3064,7 @@ PORTNOTE("printing", "Disabled print progress dialog")
 
 BOOL CCPrintInfo::Abort()
 {
-PORTNOTE("printing", "Disabled print progress dialog")
-#ifndef EXCLUDE_FROM_XARALX
-	return (!PrintProgressDlg::AbortProc(0,0));
-#else
-	return FALSE;
-#endif
+	return PrintProgressDlg::AbortProc();
 }
 
 /********************************************************************************************

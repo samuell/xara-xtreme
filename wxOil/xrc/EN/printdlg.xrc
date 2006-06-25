@@ -222,9 +222,9 @@
 			<label>0%</label>
 			<style>wxALIGN_CENTRE</style>
 		</object>
-		<object class="wxSlider" name="IDC_PRINTPROGSLIDER">
+		<object class="wxGauge" name="IDC_PRINTPROGSLIDER">
 			 <pos>6,58d</pos> <size>146,10d</size>
-			<style>wxSL_HORIZONTAL</style>
+			<style>wxGA_HORIZONTAL</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>24,200d</pos> <size>100,0d</size>

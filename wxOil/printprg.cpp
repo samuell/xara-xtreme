@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "printprg.h"
 //#include "printdlg.h"
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "custmsg.h"
+//#include "custmsg.h"
 //#include "markn.h"
 //#include "simon.h"
 //#include "andy.h"
@@ -119,79 +119,164 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 DECLARE_SOURCE("$Revision$");
 
+CC_IMPLEMENT_DYNCREATE(PrintProgressDlg, DialogOp)
+
 #define new CAM_DEBUG_NEW
 
+const CDlgMode PrintProgressDlg::Mode = MODELESS ;// Mode of the dialog
+const UINT32 PrintProgressDlg::IDD = _R(IDD_PRINTPROGRESS);
+BOOL PrintProgressDlg::Aborted = FALSE;
 PrintProgressDlg* PrintProgressDlg::pPrintProgressDlg = NULL;
 
 const INT32 SLIDER_MAX = 0x08000000;
 
-// Fix for MFC4 - names are missing or slightly changed so we replace them as for MFC3.
-#ifndef AfxGetWinState
-#define AfxGetWinState() _afxWinState
-#define AFX_WIN_STATE _AFX_WIN_STATE
-#endif
+/********************************************************************************************
+
+>	PrintProgressDlg::PrintProgressDlg()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	-
+	Purpose:	Constructs the dlg.
+	SeeAlso:	-
+
+********************************************************************************************/
 
 
-//--------------------------------------------
-
-PrintProgressDlg::PrintProgressDlg(CWnd* pParent)
+PrintProgressDlg::PrintProgressDlg(): DialogOp(PrintProgressDlg::IDD, PrintProgressDlg::Mode)
 {
-	// Init variables to semi-sensible defaults
+	if (pPrintProgressDlg)
+	{
+		pPrintProgressDlg->Done();
+		pPrintProgressDlg = NULL;
+	}
+
 	SliderMax = SLIDER_MAX;
 	SliderCurPercent = -1;
 	SliderSubRangeMax = SLIDER_MAX;
 	SliderSubRangeBase = 0;
 	SliderSubRangeStep = 1;
 
-
-	Create(_R(IDD_PRINTPROGRESS), pParent);      // modeless !
-#ifndef RALPH
-	AfxGetWinState()->m_bUserAbort = FALSE;
-#endif
-
-	ERROR3IF(pPrintProgressDlg != NULL,"Static pPrintProgressDlg is NOT NULL");
 	pPrintProgressDlg = this;
 
-	SetSliderMax(SLIDER_MAX);
-	SetSliderPos(0);
 	Printing = FALSE;
 	IgnoreUpdates = FALSE;
+	Aborted = FALSE;
 }
 
-//--------------------------------------------
 
-BOOL PrintProgressDlg::OnInitDialog()
+/********************************************************************************************
+
+>	BOOL PrintProgressDlg::Do(OpDescriptor*)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void PrintProgressDlg::Do(OpDescriptor*)
 {
-//	SetWindowText(AfxGetAppName());		-- no, "Printing" is a better title than "Camelot", thanks... 
-	CenterWindow();
-	IgnoreUpdates = FALSE;
-	return CDialog::OnInitDialog();
+	Create();
+	Open();
 }
 
-//--------------------------------------------
+/********************************************************************************************
 
-void PrintProgressDlg::OnCancel()
+>	BOOL PrintProgressDlg::GetState(String_256*, OpDescriptor*)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
+	SeeAlso:	-
+
+********************************************************************************************/
+
+OpState	PrintProgressDlg::GetState(String_256*, OpDescriptor*)
 {
-	if (CCamApp::DisableSys)
-		return;
+	OpState OpSt;
+	return(OpSt);
+}
 
-#ifndef RALPH
-	if (!AfxGetWinState()->m_bUserAbort)
+/********************************************************************************************
+
+>	BOOL PrintProgressDlg::PrintProgressDlg::Init()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	TRUE if OK, FALSE otherwise
+	Purpose:	Inits the dialog's controls, and calls the base classes OnInitDialog() function
+	SeeAlso:	-
+
+********************************************************************************************/
+
+BOOL PrintProgressDlg::Init()
+{
+	return (RegisterOpDescriptor(
+									0,
+									_R(IDD_PRINTPROGRESS),
+									CC_RUNTIME_CLASS(PrintProgressDlg),
+									OPTOKEN_PRINT_PROGRESS,
+									PrintProgressDlg::GetState,
+									0,	/* help ID */
+									0, 	/* bubble help*/
+									0	/* bitmap ID */
+									));
+}
+
+/********************************************************************************************
+
+>	MsgResult PrintProgressDlg::Message( Msg* Message)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	14/06/2006
+	Inputs:		-
+	Returns:	-
+	Purpose:	Overrides the default OnOK() func so that we can check the values set by the user.
+				If dodgy values have been put in, the user is warned.
+	SeeAlso:	-
+
+********************************************************************************************/
+
+MsgResult PrintProgressDlg::Message( Msg* Message)
+{
+	if (IS_OUR_DIALOG_MSG(Message))
 	{
-		INT32 b = InformWarning(_R(IDS_PRINT_SUSPEND),_R(IDS_ABORT),_R(IDS_CONTINUE));
-
-		if (b == 1)
+		DialogMsg* Msg = (DialogMsg*)Message;
+		// Handle ok button
+		if (Msg->DlgMsg == DIM_CREATE)
 		{
-			AfxGetWinState()->m_bUserAbort = TRUE;  // flag that user aborted print
-			CDialog::OnCancel();
+			SetSliderMax(SLIDER_MAX);
+			SetSliderPos(0);
+			IgnoreUpdates = FALSE;
+		}
+		else if (Msg->DlgMsg == DIM_CANCEL)
+		{
+			if (CCamApp::IsDisabled())
+				return OK;
+
+			INT32 b = InformWarning(_R(IDS_PRINT_SUSPEND),_R(IDS_ABORT),_R(IDS_CONTINUE));
+	
+			if (b == 1)
+			{
+				Aborted = TRUE;
+			}
+			return OK; // Do not pass to the base class as this will destroy the dialog - we do that elsewhere
 		}
 	}
-	else
-#endif
-	{
-		CDialog::OnCancel();
-	}
+	return DialogOp::Message(Message);
 }
+
+
+
+
 
 //--------------------------------------------
 
@@ -200,13 +285,7 @@ void PrintProgressDlg::SetSliderMax(INT32 max)
 	SliderMax 	  	 = max;
 	SliderCurPercent = -1;
 
-	CWnd* pGadget = GetDlgItem(_R(IDC_PRINTPROGSLIDER));
-	
-	if (pGadget != NULL)
-	{
-		::SendMessage(pGadget->GetSafeHwnd(),WM_SET_MIN,0,LPARAM(0));
-		::SendMessage(pGadget->GetSafeHwnd(),WM_SET_MAX,0,LPARAM(max));
-	}
+	SetGadgetRange(_R(IDC_PRINTPROGSLIDER), 0, max);
 }
 
 //--------------------------------------------
@@ -230,17 +309,11 @@ void PrintProgressDlg::SetSliderPos(INT32 pos)
 	{
 		SliderCurPercent = p;
 
-		CWnd* pGadget = GetDlgItem(_R(IDC_PRINTPROGSLIDER));
+		SetLongGadgetValue(_R(IDC_PRINTPROGSLIDER), (INT32)pos);
 	
-		if (pGadget != NULL)
-		{
-			::SendMessage(pGadget->GetSafeHwnd(),WM_SET_POSITION,0,LPARAM(pos));
-			::SendMessage(pGadget->GetSafeHwnd(),WM_PAINT,0,0);
-		}
-
 		String_32 Percent;
 		Percent.MakeMsg(_R(IDS_PRINT_PROG_PERCENT), (INT32) p);
-		SetDlgItemText(_R(IDC_CURRENTPERCENTAGE), (TCHAR *)Percent);
+		SetStringGadgetValue(_R(IDC_CURRENTPERCENTAGE), Percent);
 	}
 }
 
@@ -266,18 +339,10 @@ void PrintProgressDlg::SetSliderSubRangePos(INT32 pos)
 
 //--------------------------------------------
 
-void PrintProgressDlg::Show()
-{
-	ShowWindow(SW_SHOW);
-	UpdateWindow();
-}
-
-//--------------------------------------------
-
 void PrintProgressDlg::SetDocName(LPCTSTR pDocName)
 {
 	if (pDocName != NULL)
-		SetDlgItemText(_R(IDC_DOCNAME),  (TCHAR*)pDocName);
+		SetStringGadgetValue(_R(IDC_DOCNAME), String_256(pDocName));
 }
 
 //--------------------------------------------
@@ -285,7 +350,7 @@ void PrintProgressDlg::SetDocName(LPCTSTR pDocName)
 void PrintProgressDlg::SetPrinterName(LPCTSTR pPrinterName)
 {
 	if (pPrinterName != NULL)
-		SetDlgItemText(_R(IDC_PRINTERNAME), pPrinterName);
+		SetStringGadgetValue(_R(IDC_PRINTERNAME), String_256(pPrinterName));
 }
 
 //--------------------------------------------
@@ -296,7 +361,7 @@ void PrintProgressDlg::SetPortName(LPCTSTR pPortName)
 // really very useful info, so we've removed it to simplify the dialog
 //
 //	if (pPortName != NULL)
-//		SetDlgItemText(_R(IDC_PORTNAME), pPortName);
+//		SetStringGadgetValue(_R(IDC_PORTNAME), String_256(pPortName));
 }
 
 //--------------------------------------------
@@ -337,7 +402,7 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 
 	// Set the page info
 	Str.MakeMsg(_R(IDS_PRINT_PROG_PAGE), PageNumber, MaxPageNumber);
-	SetDlgItemText(_R(IDC_PAGENUMBER), (TCHAR*)Str);
+	SetStringGadgetValue(_R(IDC_PAGENUMBER), Str);
 
 
 	// Set the plate info
@@ -346,23 +411,18 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 	else
 		Str.MakeMsg(_R(IDS_PRINT_PROG_COMPOSITE));
 
-	SetDlgItemText(_R(IDC_PLATENUMBER), (TCHAR *)Str);
+	SetStringGadgetValue(_R(IDC_PLATENUMBER), Str);
 
 
 	// Set the tile info
 	if (MaxTileNumber > 1)
 	{
 		Str.MakeMsg(_R(IDS_PRINT_PROG_TILE), TileNumber, MaxTileNumber);
-		SetDlgItemText(_R(IDC_TILENUMBER), (TCHAR *)Str);
+		SetStringGadgetValue(_R(IDC_TILENUMBER), Str);
 	}
 
-	// If there is no tile info, we hide both the tile gadgets
-	CWnd *Gadget = GetDlgItem(_R(IDC_TILETITLE));
-	if (Gadget)
-		Gadget->ShowWindow((MaxTileNumber <= 1) ? SW_HIDE : SW_SHOWNORMAL);
-	Gadget = GetDlgItem(_R(IDC_TILENUMBER));
-	if (Gadget)
-		Gadget->ShowWindow((MaxTileNumber <= 1) ? SW_HIDE : SW_SHOWNORMAL);
+	HideGadget(_R(IDC_TILETITLE), (MaxTileNumber <= 1));
+	HideGadget(_R(IDC_TILENUMBER), (MaxTileNumber <= 1));
 
 	// Make sure we don't get a div by zero or a nasty negative in the calculations below
 	if (MaxPageNumber < 1)		MaxPageNumber = 1;
@@ -387,53 +447,18 @@ void PrintProgressDlg::SetPageNumber(INT32 PageNumber,  INT32 MaxPageNumber,
 }
 
 
-
 //--------------------------------------------
 //--------------------------------------------
 
-BOOL CALLBACK PrintProgressDlg::AbortProc(HDC,INT32 code)
+BOOL PrintProgressDlg::AbortProc()
 {
-	if (CCamApp::DisableSys)
+	if (CCamApp::IsDisabled() || !pPrintProgressDlg)
 		// Ignore
 		return TRUE;
 
-#ifndef RALPH
-	AFX_WIN_STATE* pWinState = AfxGetWinState();
-	MSG msg;
-
-   	while (!pWinState->m_bUserAbort &&
-   		::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
-   	{
-		// Do we have a printing dialog?
-		if (pPrintProgressDlg != NULL)
-		{
-	        // Yes - process any messages for the Cancel dialog box.
-	        if (!pPrintProgressDlg->IsDialogMessage(&msg)) 
-    	    {
-        	    TranslateMessage((LPMSG) &msg);
-            	DispatchMessage((LPMSG) &msg);
-	        }
-		}
-		else
-		{
-			TranslateMessage((LPMSG) &msg);
-			DispatchMessage((LPMSG) &msg);
-		}
-    }
-
-	// If the code is 0, there's no error, otherwise an error has occurred.
-	// The error could be a SP_USERABORT generated from the print manager
-	if (code != NULL && !pWinState->m_bUserAbort)
-	{
-		pWinState->m_bUserAbort = TRUE;
-		if (pPrintProgressDlg != NULL)
-			pPrintProgressDlg->EndDialog(IDCANCEL);
-	}		
-
-	return !pWinState->m_bUserAbort;
-#else
-	return TRUE;
-#endif
+	::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
+	return Aborted;
 }
+
 
 #endif //webster

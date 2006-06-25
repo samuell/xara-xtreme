@@ -159,6 +159,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "viewcomp.h"
 #include "fontcomp.h"
 #include "prnmkcom.h"
+#include "printprg.h"
 #include "hlinkdlg.h"
 #include "strkcomp.h"
 #include "tmpltdlg.h"
@@ -245,6 +246,7 @@ PORTNOTE("other","Removed more initialization")
 #endif			
 			CCamView::ReadViewPrefs() &&
 			PrintMonitor::InitPrefs() &&
+			PrintProgressDlg::Init() &&
 
 #ifndef EXCLUDE_FROM_XARALX
 			BaseBar::DeclarePreferences() &&

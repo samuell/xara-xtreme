@@ -141,7 +141,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nativeps.h"		// The old style EPS native filter, used in v1.1
 #include "psdc.h"
 #include "osrndrgn.h"
-//#include "prdlgctl.h"
+#include "prdlgctl.h"
 #include "progress.h"
 #include "textfuns.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -4410,8 +4410,6 @@ SlowJobResult CamelotEPSRenderRegion::DrawMaskedBitmap(const DocRect &Rect, Kern
 		// Find destination device resolution (e.g. PostScript printer)
 		if (RenderDC!=NULL)
 			DestDpi = RenderDC->GetPPI().GetWidth();
-PORTNOTE("printing", "Exclude CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 		// If printing, then see if we should do level 2.
@@ -4430,7 +4428,6 @@ PORTNOTE("printing", "Exclude CCPrintInfo");
 			}
 		}
 #endif	//webster
-#endif
 	}
 
 	// Work out the ratio between to two
@@ -5219,8 +5216,6 @@ BOOL CamelotEPSRenderRegion::DrawParallelogramBitmap(DocCoord *Coords, OILBitmap
 		if (EPSFilter::XSEPSExportPSType == 2)
 			UseLevel2 = TRUE;
 	}
-PORTNOTE("printing", "Exclude CCPrintInfo");
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 	else if (IsPrinting())
@@ -5241,7 +5236,6 @@ PORTNOTE("printing", "Exclude CCPrintInfo");
 	}
 
 #endif //webster
-#endif // EXCLUDE_FROM_XARALX
 
 	// Work out the coords of the destination rectangle
 //	INT32 DestX = 0;

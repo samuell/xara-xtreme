@@ -104,7 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_PRINTPRG
 #define INC_PRINTPRG
 
-struct DOCINFO;
+#define OPTOKEN_PRINT_PROGRESS _T("PrintProgress")
 
 /********************************************************************************************
 
@@ -120,16 +120,25 @@ struct DOCINFO;
 
 ********************************************************************************************/
 
-class PrintProgressDlg : public Dialog
+class PrintProgressDlg : public DialogOp
 {
+	CC_DECLARE_DYNCREATE( PrintProgressDlg )  
 public:
-	PrintProgressDlg::PrintProgressDlg(CWnd* pParent);
+	PrintProgressDlg::PrintProgressDlg();
 	virtual ~PrintProgressDlg() { pPrintProgressDlg = NULL; }
 
+	MsgResult Message( Msg* Message );  
+	void Do(OpDescriptor*);		// "Do" function        
+	static BOOL Init();
+	static OpState GetState(String_256*, OpDescriptor*);	
+
+	static const UINT32 IDD;
+	static const CDlgMode Mode;
+	static BOOL Aborted;
 
 public:
-	virtual BOOL OnInitDialog();
-	virtual void OnCancel();
+//	virtual BOOL OnInitDialog();
+//	virtual void OnCancel();
 
 	void SetSliderMax(INT32 max);
 	void SetSliderPos(INT32 pos);
@@ -139,7 +148,6 @@ public:
 
 
 public:
-	void Show();
 	void SetDocName(LPCTSTR pDocName);
 	void SetPrinterName(LPCTSTR pPrinterName);
 	void SetPortName(LPCTSTR pPortName);
@@ -149,6 +157,8 @@ public:
 
 	// While the dlg is Locked, calls to SetPageNumber functions will be ignored
 	void LockProgressUpdate(BOOL Locked) { IgnoreUpdates = Locked; }
+
+	void Done() {Close(); End();}
 
 public:
 	void SetAnalysing()	{ Printing = FALSE; }
@@ -169,10 +179,13 @@ private:
 
 public:
 	// The call back function for the print dialog.
-	static BOOL CALLBACK AbortProc(HDC, INT32);
+	static BOOL AbortProc();
 
 private:
 	static PrintProgressDlg* pPrintProgressDlg;		// Ptr to dlg used by AbortProc()
+
+public:
+	static PrintProgressDlg * Get() {return pPrintProgressDlg;}
 };
 
 

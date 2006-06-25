@@ -1837,7 +1837,6 @@ void NodeBevel::CalculateBitmapSize(INT32 * retnWid,  INT32 * retnHei, RenderReg
 	if(pRegion)
 		PixSize = pRegion->GetScaledPixelWidth();
 
-	PORTNOTETRACE("other","NodeBevel::CalculateBitmapSize - removed printing support");
 	if(Document::GetCurrent() && Document::GetCurrent()->GetFirstDocView()
 			 && !(pRegion && pRegion->IS_KIND_OF(PrintingMaskedRenderRegion))
 		)
