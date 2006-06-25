@@ -473,11 +473,11 @@ BOOL PrintProgressDlg::AbortProc()
 	pPrintProgressDlg->PaintGadgetNow(0);
 
 	// Save current doc view etc. around yield as paint can destroy them.
-	DocView * pCurrentDocView = DocView::GetCurrent();
+	View * pCurrentView = View::GetCurrent();
 	Document * pCurrentDocument = Document::GetCurrent();
 	::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
 	pCurrentDocument->SetCurrent();
-	pCurrentDocView->SetCurrent();
+	pCurrentView->SetCurrent();
 
 	return Aborted;
 }
