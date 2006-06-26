@@ -241,41 +241,6 @@ BOOL XPFRenderRegion::StopRender()
 
 void XPFRenderRegion::DrawPathToOutputDevice(Path* pPathToRender, PathShape)
 {
-	if (m_pTransInfo && m_pTransInfo->IsCommonType())
-	{
-		// Path rendering happens in two parts, the fill and the stroke
-		// so these must be checked separately
-
-		if (pPathToRender->IsFilled)
-		{
-			// Get the fill attribute
-			FillGeometryAttribute* pFillAttr = (FillGeometryAttribute*) CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
-			
-			// If it is not a no-colour flat fill then
-
-			if (!IS_A(pFillAttr, FlatFillAttribute) || !(RR_FILLCOLOUR().IsTransparent()))
-			{
-				// Get the current Transparency Fill Geometry
-				TranspFillAttribute* pTransAttr = RR_FILLTRANSP();
-
-				// And update the common type object
-				m_pTransInfo->UpdateCommonType(pTransAttr->GetTranspType());
-			}
-		}
-
-		if (pPathToRender->IsStroked)
-		{
-			// If the stroke colour is not transparent
-			if (!(RR_STROKECOLOUR().IsTransparent()))
-			{
-				// Get the current Transparency Fill Geometry
-				StrokeTranspAttribute* pTransAttr = RR_STROKETRANSP();
-
-				// And update the common type object
-				m_pTransInfo->UpdateCommonType(pTransAttr->GetTranspType());
-			}
-		}
-	}
 }
 
 
