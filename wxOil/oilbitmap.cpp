@@ -3778,9 +3778,10 @@ BOOL CWxBitmap::CreateFromwxImage(wxImage * pImage)
 
 		for (UINT32 XPos = 0; XPos < GetWidth(); XPos++)
 		{
-			ScanlineStart[off++] = *(pData++); //Red
-			ScanlineStart[off++] = *(pData++); //Green
-			ScanlineStart[off++] = *(pData++); //Blue
+			ScanlineStart[off++] = pData[2]; //Red
+			ScanlineStart[off++] = pData[1]; //Green
+			ScanlineStart[off++] = pData[0]; //Blue
+			pData+=(UINT_PTR)3;
 			ScanlineStart[off++] = pAlpha?(255-*(pAlpha++)):0; // Alpha
 		}
 	}
