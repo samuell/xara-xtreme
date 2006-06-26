@@ -204,6 +204,9 @@ PropMapEntry aTransTypes[] = { {_T("none"), TT_NoTranspType},
 								{_T("bevel"), TT_BEVEL},
 								{NULL, XPFP_UNKNOWN}};
 
+PropMapEntry aContentOnly[] = { {_T("text"), XPFP_CONTENTONLY_TEXT},
+								{_T("plaintext"), XPFP_CONTENTONLY_PLAINTEXT},
+								{NULL, XPFP_UNKNOWN}};
 
 
 /********************************************************************************************
@@ -710,59 +713,68 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strXmlFilename, CapabilityTre
 		{
 			// ignore it
 		}
-		else if (strChildName == _T("Options"))
+		else if (strChildName == _T("Private"))
 		{
 			if (Phase > 0)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE0));
 			}
-			bOK = ReadOptions(pChild, pCapTree);		// Read the options attributes
+			// Ignore the entire element
 			Phase = 1;
 		}
-		else if (strChildName == _T("Rasterise"))
+		else if (strChildName == _T("Options"))
 		{
 			if (Phase > 1)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE1));
 			}
-			bOK = ReadRasterise(pChild, pCapTree);		// Read the dpi and alpha attributes
+			bOK = ReadOptions(pChild, pCapTree);		// Read the options attributes
 			Phase = 2;
 		}
-		else if (strChildName == _T("Spread"))
+		else if (strChildName == _T("Rasterise"))
 		{
 			if (Phase > 2)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE2));
 			}
-			bOK = ReadSpread(pChild, pCapTree);		// Read the as attribute
+			bOK = ReadRasterise(pChild, pCapTree);		// Read the dpi and alpha attributes
 			Phase = 3;
 		}
-		else if (strChildName == _T("Objects"))
+		else if (strChildName == _T("Spread"))
 		{
 			if (Phase > 3)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE3));
 			}
-			bOK = ReadObjects(pChild, pCapTree);		// Build the tree of XPFCapability derived objects
+			bOK = ReadSpread(pChild, pCapTree);		// Read the as attribute
 			Phase = 4;
 		}
-		else if (strChildName == _T("Attributes"))
+		else if (strChildName == _T("Objects"))
 		{
 			if (Phase > 4)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE4));
 			}
-			bOK = ReadAttributes(pChild, pCapTree);	// Build the tree of XPFCapability derived objects
+			bOK = ReadObjects(pChild, pCapTree);		// Build the tree of XPFCapability derived objects
 			Phase = 5;
 		}
-		else if (strChildName == _T("Colour"))
+		else if (strChildName == _T("Attributes"))
 		{
 			if (Phase > 5)
 			{
 				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE5));
 			}
-			bOK = ReadColour(pChild, pCapTree);		// Build the tree of XPFColour objects
+			bOK = ReadAttributes(pChild, pCapTree);	// Build the tree of XPFCapability derived objects
 			Phase = 6;
+		}
+		else if (strChildName == _T("Colour"))
+		{
+			if (Phase > 6)
+			{
+				ERROR1(FALSE, _R(IDE_XPF_BADXML_PHASE6));
+			}
+			bOK = ReadColour(pChild, pCapTree);		// Build the tree of XPFColour objects
+			Phase = 7;
 		}
 		else
 		{
@@ -816,6 +828,8 @@ BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
 {
 	double DPI = 96.0;
 	BOOL bAlpha = TRUE;
+	long Compression = 200;
+	String_256 CommonTrans;
 	wxString str;
 
 	str = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"dpi"));
@@ -830,7 +844,19 @@ BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
 		bAlpha = (str == _T("true"));
 	}
 
-	pCapTree->SetRasterise(DPI, bAlpha);
+	str = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"compression"));
+	if (!str.IsEmpty())
+	{
+		str.ToLong(&Compression);
+	}
+
+	str = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"commontrans"));
+	if (!str.IsEmpty())
+	{
+		CommonTrans = str;
+	}
+
+	pCapTree->SetRasterise(DPI, bAlpha, (INT32)Compression, CommonTrans);
 
 	return TRUE;
 }
@@ -1203,7 +1229,9 @@ XPFCapability* PluginOILFilter::CreateObjectNode(xmlNodePtr pNode)
 		bOK = GetXPFBOOL(pNode, _T("background"), &bBackground);
 		XPFBOOL bGuide = XPFB_UNKNOWN;
 		bOK = GetXPFBOOL(pNode, _T("guide"), &bGuide);
-		pCap = new XPFCLayer(AsType, bVisible, bLocked, bPrintable, bActive, bBackground, bGuide);
+		XPFProp ContentOnly = XPFP_UNKNOWN;
+		bOK = GetXPFProp(pNode, _T("onlycontent"), aContentOnly, &ContentOnly);
+		pCap = new XPFCLayer(AsType, bVisible, bLocked, bPrintable, bActive, bBackground, bGuide, ContentOnly);
 	}
 	else if (strName == _T("Contour"))
 	{

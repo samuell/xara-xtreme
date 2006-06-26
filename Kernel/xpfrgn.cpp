@@ -135,7 +135,9 @@ CC_IMPLEMENT_DYNAMIC(XPFView, View);
 
 /********************************************************************************************
 
->	XPFRenderRegion::XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps)
+>	XPFRenderRegion::XPFRenderRegion(PluginNativeFilter* pFilter, 
+										CapabilityTree* pPlugCaps, 
+										CommonTransInfo* pTransInfo)
 
 	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	6/4/95
@@ -144,10 +146,11 @@ CC_IMPLEMENT_DYNAMIC(XPFView, View);
 
 ********************************************************************************************/
 
-XPFRenderRegion::XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps)
+XPFRenderRegion::XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps, CommonTransInfo* pTransInfo)
 {
 	m_pFilter = pFilter;
-	m_PixelsPerInch = pPlugCaps->GetRasteriseDPI();
+	m_PixelsPerInch = pPlugCaps ? pPlugCaps->GetRasteriseDPI() : 96.0;
+	m_pTransInfo = pTransInfo;
 }
 
 
@@ -238,6 +241,41 @@ BOOL XPFRenderRegion::StopRender()
 
 void XPFRenderRegion::DrawPathToOutputDevice(Path* pPathToRender, PathShape)
 {
+	if (m_pTransInfo && m_pTransInfo->IsCommonType())
+	{
+		// Path rendering happens in two parts, the fill and the stroke
+		// so these must be checked separately
+
+		if (pPathToRender->IsFilled)
+		{
+			// Get the fill attribute
+			FillGeometryAttribute* pFillAttr = (FillGeometryAttribute*) CurrentAttrs[ATTR_FILLGEOMETRY].pAttr;
+			
+			// If it is not a no-colour flat fill then
+
+			if (!IS_A(pFillAttr, FlatFillAttribute) || !(RR_FILLCOLOUR().IsTransparent()))
+			{
+				// Get the current Transparency Fill Geometry
+				TranspFillAttribute* pTransAttr = RR_FILLTRANSP();
+
+				// And update the common type object
+				m_pTransInfo->UpdateCommonType(pTransAttr->GetTranspType());
+			}
+		}
+
+		if (pPathToRender->IsStroked)
+		{
+			// If the stroke colour is not transparent
+			if (!(RR_STROKECOLOUR().IsTransparent()))
+			{
+				// Get the current Transparency Fill Geometry
+				StrokeTranspAttribute* pTransAttr = RR_STROKETRANSP();
+
+				// And update the common type object
+				m_pTransInfo->UpdateCommonType(pTransAttr->GetTranspType());
+			}
+		}
+	}
 }
 
 
@@ -1031,7 +1069,7 @@ BOOL XPFRenderCallback::BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node**
 					BOOL bNonAlphaTrans = DoesNodeUseNonAlphaTrans(pNode);
 					TRACEUSER("Gerry", _T("XPFRC# Converting %s to bitmap (%s)\n"), pNode->GetRuntimeClass()->m_lpszClassName, bNonAlphaTrans ? _T("NonAlpha") : _T("Alpha"));
 
-					NodeBitmap* pNodeToAttach = RenderNodesToBitmap(pNode, pNode, bNonAlphaTrans);
+					Node* pNodeToAttach = RenderNodesToBitmap(pNode, pNode, bNonAlphaTrans);
 					if (pNodeToAttach)
 					{
 						// Attach the new node into the output tree
@@ -1500,40 +1538,44 @@ BOOL XPFRenderCallback::DoesNodeUseNonAlphaTrans(Node* pRootNode)
 	// transparency types (anywhere in its subtree)
 
 	// If this isn't a renderable ink node then get out
-	if (!pRootNode->IS_KIND_OF(NodeRenderableInk))
-		return(FALSE);
+	// It might be a layer or spread which are paper nodes!
+//	if (!pRootNode->IS_KIND_OF(NodeRenderableInk))
+//		return(FALSE);
 
-	NodeRenderableInk* pInkNode = (NodeRenderableInk*)pRootNode;
-	// Basically, it just needs to check any transparency attributes
-	// First it needs to check the attributes applied above this node in the tree
-
-	AttrStrokeTransp* pStrkAttr = (AttrStrokeTransp*)(pInkNode->FindAppliedAttribute(CC_RUNTIME_CLASS(AttrStrokeTransp), TRUE));
-	if (pStrkAttr)
+	if (pRootNode->IsAnObject())
 	{
-		UINT32 Type = pStrkAttr->GetTranspType();
-		if (Type != TT_NoTranspType &&
-			Type != TT_Mix &&
-			Type != TT_DARKEN &&
-			Type != TT_LIGHTEN &&
-			Type != TT_BRIGHTNESS &&
-			Type != TT_BEVEL)
+		NodeRenderableInk* pInkNode = (NodeRenderableInk*)pRootNode;
+		// Basically, it just needs to check any transparency attributes
+		// First it needs to check the attributes applied above this node in the tree
+
+		AttrStrokeTransp* pStrkAttr = (AttrStrokeTransp*)(pInkNode->FindAppliedAttribute(CC_RUNTIME_CLASS(AttrStrokeTransp), TRUE));
+		if (pStrkAttr)
 		{
-			return(TRUE);
+			UINT32 Type = pStrkAttr->GetTranspType();
+			if (Type != TT_NoTranspType &&
+				Type != TT_Mix &&
+				Type != TT_DARKEN &&
+				Type != TT_LIGHTEN &&
+				Type != TT_BRIGHTNESS &&
+				Type != TT_BEVEL)
+			{
+				return(TRUE);
+			}
 		}
-	}
 
-	AttrFillGeometry* pFillAttr = (AttrFillGeometry*)(pInkNode->FindAppliedAttribute(CC_RUNTIME_CLASS(AttrTranspFillGeometry), TRUE));
-	if (pFillAttr)
-	{
-		UINT32 Type = pFillAttr->GetTranspType();
-		if (Type != TT_NoTranspType &&
-			Type != TT_Mix &&
-			Type != TT_DARKEN &&
-			Type != TT_LIGHTEN &&
-			Type != TT_BRIGHTNESS &&
-			Type != TT_BEVEL)
+		AttrFillGeometry* pFillAttr = (AttrFillGeometry*)(pInkNode->FindAppliedAttribute(CC_RUNTIME_CLASS(AttrTranspFillGeometry), TRUE));
+		if (pFillAttr)
 		{
-			return(TRUE);
+			UINT32 Type = pFillAttr->GetTranspType();
+			if (Type != TT_NoTranspType &&
+				Type != TT_Mix &&
+				Type != TT_DARKEN &&
+				Type != TT_LIGHTEN &&
+				Type != TT_BRIGHTNESS &&
+				Type != TT_BEVEL)
+			{
+				return(TRUE);
+			}
 		}
 	}
 
@@ -2028,12 +2070,12 @@ BOOL XPFRenderCallback::ConvertNodesForPass4()
 
 			// Render the node span to a bitmap
 			BOOL bNonAlphaTrans = DoesNodeUseNonAlphaTrans(pNode);
-			NodeBitmap* pNodeBmp = RenderNodesToBitmap(pNode, pNode, bNonAlphaTrans);
-			if (!pNodeBmp)
+			Node* pNewNode = RenderNodesToBitmap(pNode, pNode, bNonAlphaTrans);
+			if (!pNewNode)
 				return(FALSE);
 
 			// Attach the new node as the previous of the first in the span
-			pNodeBmp->AttachNode(pNode, PREV);
+			pNewNode->AttachNode(pNode, PREV);
 
 			// Delete the node we have just replaced
 			pNode->CascadeDelete();
@@ -2081,12 +2123,12 @@ BOOL XPFRenderCallback::ConvertNodesForPass5()
 		TRACEUSER( "Gerry", _T("SpanListItem 0x%08x (%s) to 0x%08x (%s)\n"), pItem->m_pFirstNode, pItem->m_pFirstNode->GetRuntimeClass()->m_lpszClassName, pItem->m_pLastNode, pItem->m_pLastNode->GetRuntimeClass()->m_lpszClassName);
 
 		// Render the node span to a bitmap
-		NodeBitmap* pNodeBmp = RenderNodesToBitmap(pItem->m_pFirstNode, pItem->m_pLastNode, pItem->m_bNonAlphaTrans);
-		if (!pNodeBmp)
+		Node* pNewNode = RenderNodesToBitmap(pItem->m_pFirstNode, pItem->m_pLastNode, pItem->m_bNonAlphaTrans);
+		if (!pNewNode)
 			return(FALSE);
 
 		// Attach the new node as the previous of the first in the span
-		pNodeBmp->AttachNode(pItem->m_pFirstNode, PREV);
+		pNewNode->AttachNode(pItem->m_pFirstNode, PREV);
 
 		// Delete all the nodes in the span
 		Node* pNode = pItem->m_pFirstNode;
@@ -2115,10 +2157,75 @@ BOOL XPFRenderCallback::ConvertNodesForPass5()
 }
 
 
+/****************************************************************************
+
+>	BOOL XPFRenderCallback::FindCommonTransTypeToApply(Node* pFirstNode, Node* pLastNode, UINT32* pCommonType)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	15/06/2006
+
+	Inputs:		pFirstNode	- pointer to a Node
+				pLastNode	- pointer to a Node
+				pCommonType	- pointer to a UINT32
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL XPFRenderCallback::FindCommonTransTypeToApply(Node* pFirstNode, Node* pLastNode, UINT32* pCommonType)
+{
+	// If CommonTrans isn't set then return false
+	if (!m_pCapTree->HasRasteriseCommonTrans())
+		return(FALSE);
+	
+	// Render the node span using an XPFRenderRegion and XPFSpanRenderCallback
+	// to track the transparency used
+	View *pView = View::GetCurrent();
+	Spread* pSpread = pFirstNode->FindParentSpread();;
+
+	CommonTransInfo TransInfo;
+	
+	// Create and set up a new XPFRenderRegion
+	XPFRenderRegion XPFRegion(NULL, NULL, &TransInfo);
+
+	// Attach a device to the scanning render region
+	// Since this rr does no real rendering, it does not need a Device context
+	XPFRegion.AttachDevice(pView, NULL, pSpread);
+
+	// Start the render region and return if it fails
+	if (XPFRegion.StartRender())
+	{			
+		TRACEUSER( "Gerry", _T("Rendering nodes from 0x%08x to 0x%08x\n"), pFirstNode, pLastNode);
+		XPFSpanRenderCallback SpanCallback(pFirstNode, pLastNode, FALSE);
+		// Call RenderTree to do the rendering
+		XPFRegion.RenderTree(pSpread, FALSE, FALSE, &SpanCallback);
+
+		// Thats all the nodes rendered, so stop rendering
+		XPFRegion.StopRender();
+
+		// Check the CommonTransInfo
+		if (TransInfo.IsCommonType())
+		{
+			UINT32 CommonType = TransInfo.GetCommonType();
+			if (CommonType != TT_Mix)
+			{
+				*pCommonType = CommonType;
+				return(TRUE);
+			}
+		}
+	}
+	else
+	{
+		ERROR2(FALSE, "StartRender failed");
+	}
+
+	return(FALSE);
+}
+
 
 /****************************************************************************
 
->	NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans)
+>	Node* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans)
 
 	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	31/10/2005
@@ -2134,14 +2241,49 @@ BOOL XPFRenderCallback::ConvertNodesForPass5()
 
 ****************************************************************************/
 
-NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans)
+Node* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans)
 {
+	// First we detect the single layer case for various bits of special handling
+	BOOL bOldLayerVisibility = FALSE;
+	Layer* pSingleLayer = NULL;
+	Spread* pSingleSpread = NULL;
+	if (pFirstNode == pLastNode)
+	{
+		if (pFirstNode->IsLayer())
+		{
+			pSingleLayer = (Layer*)pFirstNode;
+			bOldLayerVisibility = pSingleLayer->GetVisibleFlagState();
+			pSingleLayer->SetVisible(TRUE);
+		}
+		if (pFirstNode->IsSpread())
+		{
+			pSingleSpread = (Spread*)pFirstNode;
+		}
+	}
+	
 	// Find the bounding rect of the nodes and determine if the background needs
 	// to be rendered
 	DocRect SpanBounds;
-	BOOL bBackground = bNonAlphaTrans;
-	if (!m_pCapTree->GetRasteriseAlpha())
+	BOOL bBackground = FALSE;
+	BOOL bForceMix = FALSE;
+	BOOL bAlpha = m_pCapTree->GetRasteriseAlpha();
+	UINT32 TransToApply = TT_NoTranspType;
+	if (!bAlpha)
+	{
 		bBackground = TRUE;
+	}
+	else
+	{
+		if (FindCommonTransTypeToApply(pFirstNode, pLastNode, &TransToApply))
+		{
+			bBackground = FALSE;
+			bForceMix = TRUE;
+		}
+		else
+		{
+			bBackground = bNonAlphaTrans;
+		}
+	}
 
 	Node* pNode = pFirstNode;
 	while (pNode)
@@ -2165,59 +2307,125 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 	FIXED16 TempScale(1.0);
 	double Dpi = m_pCapTree->GetRasteriseDPI();
 
-	// Make sure that SpanBounds wont end up as a zero-sized rectangle
+	// Make sure that SpanBounds is an exact multiple of pixels and is at 
+	// pixel multiples and is not zero-sized
 	double MPPerPix = 72000.0 / Dpi;
+
+	INT32 IntVal = (INT32)floor((double)SpanBounds.lo.x / MPPerPix);
+	SpanBounds.lo.x = (INT32)floor((double)IntVal * MPPerPix);
+	IntVal = (INT32)floor((double)SpanBounds.lo.y / MPPerPix);
+	SpanBounds.lo.y = (INT32)floor((double)IntVal * MPPerPix);
+	IntVal = (INT32)ceil((double)SpanBounds.hi.x / MPPerPix);
+	SpanBounds.hi.x = (INT32)ceil((double)IntVal * MPPerPix);
+	IntVal = (INT32)ceil((double)SpanBounds.hi.y / MPPerPix);
+	SpanBounds.hi.y = (INT32)ceil((double)IntVal * MPPerPix);
+
 	if (SpanBounds.Width() < MPPerPix)
-		SpanBounds.hi.x = SpanBounds.lo.x + (INT32)(MPPerPix + 0.5);
+		SpanBounds.hi.x = (INT32)ceil((double)SpanBounds.lo.x + MPPerPix);
 	if (SpanBounds.Height() < MPPerPix)
-		SpanBounds.hi.y = SpanBounds.lo.y + (INT32)(MPPerPix + 0.5);
+		SpanBounds.hi.y = (INT32)ceil((double)SpanBounds.lo.y + MPPerPix);
+
+	// Create a full 32bpp RGBA for the mask
+	// This is so that the antialiased pixels are handled correctly in the mask
+	// Rendering into a 1bpp mask only sets half of the edge pixels that an 
+	// anti-aliased render does and the mask spreading feature doesn't correctly 
+	// account for the difference
+	GRenderBitmap MaskBitmap(SpanBounds, ViewTrans, TempScale, 32, Dpi);
+	if (bBackground && bAlpha)
+	{
+		MaskBitmap.m_DoCompression = TRUE;
+		MaskBitmap.AttachDevice(pView, NULL, pSpread);
+
+		if (MaskBitmap.StartRender())
+		{
+			// Save the context here so we can clear everything up later
+			MaskBitmap.SaveContext();
+
+			// Best quality please
+			QualityAttribute *pQualAttr = new QualityAttribute();
+			pQualAttr->QualityValue.SetQuality(QUALITY_MAX);
+			MaskBitmap.SetQuality(pQualAttr, TRUE);
+
+			XPFSpanRenderCallback MaskCallback(pFirstNode, pLastNode, FALSE);
+			MaskBitmap.RenderTree(pSpread, FALSE, FALSE, &MaskCallback);
+
+			// Save the context here so we can clear everything up later
+			MaskBitmap.RestoreContext();
+
+			// Tell the render region we are done rendering
+			MaskBitmap.StopRender();
+		}
+	}
 
 	GRenderBitmap BitmapRR(SpanBounds, ViewTrans, TempScale, 32, Dpi);
 	if (!bBackground)
 		BitmapRR.m_DoCompression = TRUE;
+	BitmapRR.SetForceMixTransparency(bForceMix);
+	BitmapRR.SetUsingSmoothedBitmaps(TRUE);		// Make sure we do high quality
 	BitmapRR.AttachDevice(pView, NULL, pSpread);
 
 	// Start rendering into the bitmap
-	if (!BitmapRR.StartRender())
+	if (BitmapRR.StartRender())
+	{
+		// Save the context here so we can clear everything up later
+		BitmapRR.SaveContext();
+
+		if (bBackground)
+		{
+			// Draw required background
+			DocRect DrawRect = SpanBounds;
+			// Inflate the rect by 2 pixels
+			DrawRect.Inflate( (INT32)(2*72000.0/Dpi + 0.5) );
+
+			BitmapRR.SaveContext();
+			DocColour White(255,255,255);
+			BitmapRR.SetFillColour(White);
+			BitmapRR.DrawRect(&DrawRect);
+			BitmapRR.RestoreContext();
+		}
+
+		// Best quality please
+		QualityAttribute *pQualAttr = new QualityAttribute();
+		pQualAttr->QualityValue.SetQuality(QUALITY_MAX);
+		BitmapRR.SetQuality(pQualAttr, TRUE);
+
+		// Render the relevant span of the tree
+		TRACEUSER("Gerry", _T("Rendering nodes from 0x%08x to 0x%08x%s\n"), pFirstNode, pLastNode, bBackground ? _T(" with background") : _T(""));
+		XPFSpanRenderCallback SpanCallback(pFirstNode, pLastNode, bBackground);
+		BitmapRR.RenderTree(pSpread, FALSE, FALSE, &SpanCallback);
+
+		// This should stop any captures
+		BitmapRR.RestoreContext();
+
+		// Stop rendering
+		BitmapRR.StopRender();
+
+		// Reset the layer visiblity to the correct value
+		if (pSingleLayer)
+			pSingleLayer->SetVisible(bOldLayerVisibility);
+	}
+	else
 	{
 		ERROR2(NULL, "StartRender failed in RenderNodesToBitmap");
 	}
 
-	// Save the context here so we can clear everything up later
-	BitmapRR.SaveContext();
-
-	if (bBackground)
-	{
-		// Draw required background
-		DocRect DrawRect = SpanBounds;
-		// Inflate the rect by 2 pixels
-		DrawRect.Inflate( (INT32)(2*72000.0/Dpi + 0.5) );
-
-		BitmapRR.SaveContext();
-		BitmapRR.SetFillColour(COLOUR_WHITE);
-		BitmapRR.DrawRect(&DrawRect);
-		BitmapRR.RestoreContext();
-	}
-
-	// Best quality please
-	QualityAttribute *pQualAttr = new QualityAttribute();
-	pQualAttr->QualityValue.SetQuality(QUALITY_MAX);
-	BitmapRR.SetQuality(pQualAttr, TRUE);
-
-	// Render the relevant span of the tree
-	TRACEUSER("Gerry", _T("Rendering nodes from 0x%08x to 0x%08x%s\n"), pFirstNode, pLastNode, bBackground ? _T(" with background") : _T(""));
-	XPFSpanRenderCallback SpanCallback(pFirstNode, pLastNode, bBackground);
-	BitmapRR.RenderTree(pSpread, FALSE, FALSE, &SpanCallback);
-
-	// This should stop any captures
-	BitmapRR.RestoreContext();
-
-	// Stop rendering
-	BitmapRR.StopRender();
-
+	// Get the rendered OILBitmap
 	OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
-	String_256 BmpName = m_pFilter->GetNewBitmapName();
+	String_256 BmpName(m_pFilter->GetNewBitmapName());
 	pFullBitmap->SetName(BmpName);
+
+	if (bBackground && bAlpha)
+	{
+		// Merge in the mask info to knock out the surrounding areas
+		OILBitmap* pMaskBitmap = MaskBitmap.ExtractBitmap();
+		pFullBitmap->CopyFullyTransparentFrom(pMaskBitmap);
+
+		// We can't delete an OILBitmap directly so we create a 
+		// KernelBitmap and then delete that
+		KernelBitmap* pTempBmp = KernelBitmap::MakeKernelBitmap(pMaskBitmap);
+		delete pTempBmp;
+	}
+	
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
 
 	// Attach the bitmap to this document or a copy will be created when 
@@ -2232,16 +2440,55 @@ NodeBitmap* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLast
 
 	// Create a NodeBitmap not in the tree
 	NodeBitmap* pNodeBmp = new NodeBitmap();
-	if (!pNodeBmp)
-	{
-		return(NULL);
-	}
+	ERROR2IF(!pNodeBmp, NULL, "Failed to create NodeBitmap");
 
 	pNodeBmp->SetUpPath();
 	pNodeBmp->CreateShape(SpanBounds);
 	pNodeBmp->BitmapRef.Attach(pRealBmp);		// Attach the correct bitmap
 	pNodeBmp->ApplyDefaultBitmapAttrs(NULL);	// Apply the correct attrs
 
+	// If we should be applying a non-mix transparency then do so
+	if (TransToApply != TT_NoTranspType && TransToApply != TT_Mix)
+	{
+		AttrFlatTranspFill* pTrans = new AttrFlatTranspFill(pNodeBmp, FIRSTCHILD);
+		if (pTrans)
+		{
+			pTrans->SetTranspType(TransToApply);
+			UINT32 TransVal = 0;
+			pTrans->SetStartTransp(&TransVal);
+		}
+	}
+
+	if (pSingleSpread)
+	{
+		// Copy the spread and create a default layer
+		Spread* pNewSpread = (Spread*)(pSingleSpread->PublicCopy());
+		ERROR2IF(!pNewSpread, NULL, "Failed to create Spread");
+
+		Layer* pNewLayer = new Layer(pNewSpread, FIRSTCHILD, String_256("Layer 1"));
+		ERROR2IF(!pNewLayer, NULL, "Failed to create Layer");
+
+		// Attach the NodeBitmap as the first child of the new layer
+		pNodeBmp->AttachNode(pNewLayer, FIRSTCHILD);
+
+		// Return the new spread node
+		return(pNewSpread);
+	}
+
+	if (pSingleLayer)
+	{
+		// Create a shallow copy of the layer
+		Layer* pNewLayer = (Layer*)(pSingleLayer->PublicCopy());
+		ERROR2IF(!pNewLayer, NULL, "Failed to create Layer");
+
+		// Attach the NodeBitmap as the first child of the new layer
+		pNodeBmp->AttachNode(pNewLayer, FIRSTCHILD);
+
+		// Return the new layer node
+		return(pNewLayer);
+	}
+
+	// Just return the NodeBitmap
 	return(pNodeBmp);
 }
 
@@ -2654,6 +2901,200 @@ KernelBitmap* XPFRenderCallback::RenderFillAndTransToBitmap(Node* pNode, DocRect
 
 	return(pRealBmp);
 }
+
+
+/****************************************************************************
+
+>	BOOL XPFSpanRenderCallback::BeforeNode(RenderRegion* pRegion, Node* pNode)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/06/2006
+
+	Inputs:		pRegion		- pointer to a RenderRegion
+				pNode		- pointer to a Node
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL XPFSpanRenderCallback::BeforeNode(RenderRegion* pRegion, Node* pNode)
+{
+//	char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
+//	TRACE( _T("XPFSpanRC# BeforeNode    0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
+	
+	BOOL bRender = FALSE;
+	switch (m_RenderState)
+	{
+		case RS_BEFORESPAN:
+			if (m_bBackground || pNode->IsAnAttribute() || pNode->IsANodeClipView())
+			{
+				// Let it render normally
+				bRender = TRUE;
+			}
+			break;
+
+		case RS_INSPAN:
+			bRender = TRUE;
+			break;
+		
+		case RS_AFTERSPAN:
+			// Must skip everything until the end
+			bRender = FALSE;
+			break;
+
+		default:
+			TRACE( _T("XPFSpanRC# Bad RenderState in BeforeNode\n"));
+			break;
+	}			
+
+//	TRACE( _T("XPFSpanRC# BeforeNode    0x%08x - %s	returning %s\n", pNode, pNode->GetRuntimeClass()->m_lpszClassName, bRender ? "true" : "false"));
+	return(bRender);
+}
+
+
+/****************************************************************************
+
+>	BOOL XPFSpanRenderCallback::BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/06/2006
+
+	Inputs:		pRegion		- pointer to a RenderRegion
+				pNode		- pointer to a Node
+				ppNextNode	- pointer to a pointer to a Node
+				bClip		- 
+				pState		- pointer to a SubtreeRenderState
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL XPFSpanRenderCallback::BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState)
+{
+//	char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
+//	TRACE( _T("XPFSpanRC# BeforeSubtree 0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
+
+	switch (m_RenderState)
+	{
+		case RS_BEFORESPAN:
+			if (pNode == m_pFirstNode)
+			{
+//				TRACE( _T("XPFSpanRC# Start of span\n"));
+				// Change state to be in the span
+				m_RenderState = RS_INSPAN;
+			}
+			else if (!pNode->IsAnAttribute() && !m_bBackground && !pNode->IsNodeInSubtree(m_pFirstNode))
+			{
+				// The first node isn't in this subtree so don't bother rendering it
+				*pState = SUBTREE_NORENDER;
+				return(TRUE);
+			}
+			break;
+
+		case RS_INSPAN:
+			break;
+
+		case RS_AFTERSPAN:
+			// Don't render this subtree
+			*pState = SUBTREE_NORENDER;
+			return(TRUE);
+			break;
+
+		default:
+			TRACE( _T("XPFSpanRC# Bad RenderState in BeforeSubtree\n"));
+			break;
+	}			
+	
+	return(FALSE);
+}
+		
+
+/****************************************************************************
+
+>	BOOL XPFSpanRenderCallback::AfterSubtree(RenderRegion* pRegion, Node* pNode)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/06/2006
+
+	Inputs:		pRegion		- pointer to a RenderRegion
+				pNode		- pointer to a Node
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL XPFSpanRenderCallback::AfterSubtree(RenderRegion* pRegion, Node* pNode)
+{
+//	char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
+//	TRACE( _T("XPFSpanRC# AfterSubtree    0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
+
+	// By default we do want RenderAfterSubtree to be called
+	BOOL bStopRender = FALSE;
+	switch (m_RenderState)
+	{
+		case RS_BEFORESPAN:
+			if (!m_bBackground && !pNode->IsNodeInSubtree(m_pFirstNode))
+			{
+				// The first node isn't in this subtree so don't bother rendering it
+				bStopRender = TRUE;
+			}
+			break;
+
+		case RS_INSPAN:
+			if (pNode == m_pLastNode)
+			{
+//				TRACE( _T("XPFSpanRC# End of span\n"));
+				// Change state to be after the span
+				m_RenderState = RS_AFTERSPAN;
+			}
+			break;
+		
+		case RS_AFTERSPAN:
+			// Must skip everything until the end
+			bStopRender = TRUE;
+			break;
+
+		default:
+			TRACE( _T("XPFSpanRC# Bad RenderState in AfterSubtree\n"));
+			break;
+	}			
+//	TRACE( _T("XPFSpanRC# AfterSubtree  0x%08x - %s	returning %s\n", pNode, pNode->GetRuntimeClass()->m_lpszClassName, bStopRender ? "true" : "false"));
+	return(bStopRender);
+}
+
+
+
+CommonTransInfo::CommonTransInfo()
+{
+	m_bCommonType = TRUE;
+	m_CommonType = TT_NoTranspType;
+}
+
+void CommonTransInfo::UpdateCommonType(UINT32 Type)
+{
+	if (m_bCommonType)
+	{
+		if (Type == TT_NoTranspType ||
+			Type == TT_DARKEN ||
+			Type == TT_LIGHTEN ||
+			Type == TT_BRIGHTNESS ||
+			Type == TT_BEVEL)
+		{
+			Type = TT_Mix;		// These are all mix
+		}
+
+		if (m_CommonType == TT_NoTranspType)
+			m_CommonType = Type;
+		else if (m_CommonType != Type)
+			m_bCommonType = FALSE;
+	}
+}
+
+UINT32 CommonTransInfo::GetCommonType()
+{
+	return(m_bCommonType ? m_CommonType : TT_NoTranspType);
+}
+
 
 
 /****************************************************************************

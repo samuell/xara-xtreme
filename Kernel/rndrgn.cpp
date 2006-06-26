@@ -382,6 +382,8 @@ RenderRegion::RenderRegion()
 	m_fOwned = FALSE;
 	ScaleFactor = FIXED16(1);
 
+	m_bForceMix = FALSE;
+
 //	double m_dboostm = 1.0;
 //	double m_dboostc = 0.0;
 
@@ -484,6 +486,8 @@ RenderRegion::RenderRegion(DocRect ClipRect, Matrix ConvertMatrix, FIXED16 ViewS
 	m_bRenderTreeTimeSlice = FALSE;
 	m_countTotal = 0;
 	m_countStored = 0;
+
+	m_bForceMix = FALSE;
 
 #ifdef _DEBUG
 	m_CurrentContextLevel = 0;
@@ -591,6 +595,8 @@ RenderRegion::RenderRegion(const RenderRegion &other)
 	m_bRenderTreeTimeSlice = other.m_bRenderTreeTimeSlice;
 	m_countTotal = other.m_countTotal;
 	m_countStored = other.m_countStored;
+
+	m_bForceMix = other.m_bForceMix;
 
 #ifdef _DEBUG
 	m_CurrentContextLevel = 0;
@@ -2620,8 +2626,43 @@ void RenderRegion::RestoreLineColour(StrokeColourAttribute *pAttr, BOOL Temp)
 
 void RenderRegion::SetLineTransp(StrokeTranspAttribute *pAttr, BOOL Temp)
 {
+	StrokeTranspAttribute* pNewAttr = NULL;
+	if (m_bForceMix)
+	{
+		UINT32 Type = pAttr->GetTranspType();
+		if (Type != TT_NoTranspType &&
+			Type != TT_Mix &&
+			Type != TT_DARKEN &&
+			Type != TT_LIGHTEN &&
+			Type != TT_BRIGHTNESS &&
+			Type != TT_BEVEL)
+		{
+			if (Temp)
+			{
+				pNewAttr = pAttr;
+			}
+			else
+			{
+				pNewAttr = (StrokeTranspAttribute*)(pAttr->GetRuntimeClass()->CreateObject());
+				if (pNewAttr)
+				{
+					pNewAttr->SimpleCopy(pAttr);
+				}
+			}
+
+		}
+	}
+
+	if (pNewAttr)
+	{
+		pNewAttr->SetTranspType(TT_Mix);
+		Temp = TRUE;
+	}
+	else
+		pNewAttr = pAttr;
+
 	// Save the current attribute and set up the new one
-	if (SaveAttribute(ATTR_STROKETRANSP, pAttr, Temp))
+	if (SaveAttribute(ATTR_STROKETRANSP, pNewAttr, Temp))
 	{
 		// The line attributes need to be reset before drawing anything.
 		SetLineAttributes(CHANGEATTR_STROKETRANSP);
@@ -2996,15 +3037,50 @@ void RenderRegion::RestoreFillEffect(FillEffectAttribute *pAttr, BOOL Temp)
 
 void RenderRegion::SetTranspFillGeometry(TranspFillAttribute *pAttr, BOOL Temp)
 {
+	TranspFillAttribute* pNewAttr = NULL;
+	if (m_bForceMix)
+	{
+		UINT32 Type = pAttr->GetTranspType();
+		if (Type != TT_NoTranspType &&
+			Type != TT_Mix &&
+			Type != TT_DARKEN &&
+			Type != TT_LIGHTEN &&
+			Type != TT_BRIGHTNESS &&
+			Type != TT_BEVEL)
+		{
+			if (Temp)
+			{
+				pNewAttr = pAttr;
+			}
+			else
+			{
+				pNewAttr = (TranspFillAttribute*)(pAttr->GetRuntimeClass()->CreateObject());
+				if (pNewAttr)
+				{
+					pNewAttr->SimpleCopy(pAttr);
+				}
+			}
+
+		}
+	}
+
+	if (pNewAttr)
+	{
+		pNewAttr->SetTranspType(TT_Mix);
+		Temp = TRUE;
+	}
+	else
+		pNewAttr = pAttr;
+
 	// Save the current attribute
-	if (SaveAttribute(ATTR_TRANSPFILLGEOMETRY, pAttr, Temp))
+	if (SaveAttribute(ATTR_TRANSPFILLGEOMETRY, pNewAttr, Temp))
 	{
 		// The fill attributes need to be reset before drawing anything.
 		SetFillAttributes(CHANGEATTR_TRANSP_GEOMETRY);
 
 		// The capture system needs to know about non-MIX transparencies being set
 		// because it can't capture them in RGBT bitmaps...
-		UINT32 ttype = pAttr->GetTranspType();
+		UINT32 ttype = pNewAttr->GetTranspType();
 		ERROR3IF(ttype<TT_NoTranspType || ttype>TT_MAX, "Someone's trying to set an unknown transp type!");
 
 //		if (!(ttype==TT_NoTranspType || ttype==TT_Mix))

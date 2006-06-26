@@ -141,6 +141,9 @@ typedef enum XPFBOOL
 
 typedef INT32 XPFProp;
 
+#define XPFP_CONTENTONLY_TEXT 1
+#define XPFP_CONTENTONLY_PLAINTEXT 2
+
 #define XPFP_UNKNOWN -1
 #define XPFP_SHADOWTYPE_WALL 1
 #define XPFP_SHADOWTYPE_FLOOR 2
@@ -247,6 +250,9 @@ protected:
 	virtual BOOL DoAttributesMatch(RenderRegion* pRegion) { return(FALSE); }
 	virtual BOOL DoesColourMatch(DocColour* pColour) { return(FALSE); }
 
+	BOOL AreAllChildrenText(Node* pRootNode, BOOL bPlain);
+	BOOL IsTextStoryPlain(Node* pNode);
+
 protected:
 	XPFCapability* m_pNext;
 	XPFCapability* m_pChild;
@@ -313,7 +319,8 @@ public:
 				XPFBOOL bPrintable, 
 				XPFBOOL bActive, 
 				XPFBOOL bBackground, 
-				XPFBOOL bGuide)
+				XPFBOOL bGuide,
+				XPFProp ContentOnly)
 		: XPFCComplexClass(CC_RUNTIME_CLASS(Layer), ConvertType)
 	{
 		m_bVisible = bVisible;
@@ -322,6 +329,7 @@ public:
 		m_bActive = bActive;
 		m_bBackground = bBackground;
 		m_bGuide = bGuide;
+		m_ContentOnly = ContentOnly;
 	}
 	virtual ~XPFCLayer()
 	{
@@ -337,6 +345,7 @@ protected:
 	XPFBOOL m_bActive;
 	XPFBOOL m_bBackground;
 	XPFBOOL m_bGuide;
+	XPFProp m_ContentOnly;
 };
 
 
@@ -693,7 +702,6 @@ public:
 
 protected:
 	virtual BOOL DoesNodeMatch(Node* pNode);
-	BOOL IsNodePlain(Node* pNode);
 	BOOL IsNodeJustified(Node* pNode);
 
 protected:
@@ -1023,6 +1031,7 @@ public:
 		m_bSelection = FALSE;
 		m_RasteriseDPI = 96.0;
 		m_bRasteriseAlpha = TRUE;
+		m_BitmapCompression = 200;
 		m_SpreadType = XPFCONVTYPE_NATIVE;
 		m_pObjects = NULL;
 		m_ObjectsType = XPFCONVTYPE_NATIVE;
@@ -1071,10 +1080,12 @@ public:
 	
 	void SetSpreadType(XPFConvertType Type) { m_SpreadType = Type; }
 
-	void SetRasterise(double DPI, BOOL bAlpha)
+	void SetRasterise(double DPI, BOOL bAlpha, INT32 Compression, const String_256& CommonTrans)
 	{
 		m_RasteriseDPI = DPI;
 		m_bRasteriseAlpha = bAlpha;
+		m_BitmapCompression = Compression;
+		m_CommonTrans = CommonTrans;
 	}
 
 	void SetObjectsTree(XPFCapability* pObjects, XPFConvertType ObjectsType)
@@ -1103,6 +1114,10 @@ public:
 
 	double GetRasteriseDPI() { return(m_RasteriseDPI); }
 	BOOL GetRasteriseAlpha() { return(m_bRasteriseAlpha); }
+	BOOL GetBitmapCompression() { return(m_BitmapCompression); }
+	BOOL HasRasteriseCommonTrans() { return(!m_CommonTrans.IsEmpty()); }
+	// Move this into cpp file when implemented
+	BOOL IsRasteriseCommonTrans(UINT32 Type);
 
 	XPFCapability* GetObjects(void) const { return(m_pObjects); }
 	XPFCapability* GetAttributes(void) const { return(m_pAttributes); }
@@ -1119,6 +1134,8 @@ protected:
 
 	double m_RasteriseDPI;
 	BOOL m_bRasteriseAlpha;
+	INT32 m_BitmapCompression;
+	String_256 m_CommonTrans;
 
 	XPFConvertType m_SpreadType;
 	

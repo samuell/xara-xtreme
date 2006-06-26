@@ -4270,4 +4270,34 @@ void CWxBitmap::ReplaceBitmap(LPBYTE pBytes, LPBITMAPINFO pInfo)
 }
 
 
+void CWxBitmap::CopyFullyTransparentFrom(OILBitmap* pBitmap)
+{
+	if (GetWidth() != pBitmap->GetWidth() ||
+		GetHeight() != pBitmap->GetHeight() ||
+		GetBPP() != 32 ||
+		pBitmap->GetBPP() != 32)
+	{
+		ERROR3("Incompatible bitmaps passed to CopyFullyTransparentFrom");
+		return;
+	}
 
+	// Pointers to the pixel we are dealing with
+	UINT32* pMask = (UINT32*)(pBitmap->GetBitmapBits());
+	UINT32* pDest = (UINT32*)GetBitmapBits();
+
+	// Loop through all the pixels
+	for (UINT32 j=0; j < pBitmap->GetHeight(); j++)
+	{
+		for (UINT32 i=0; i < pBitmap->GetWidth(); i++)
+		{
+			// If this bit is background then set the corresponding pixel 
+			// in the output bitmap to fully transparent black
+			if (*pMask == 0xFF000000)
+				*pDest = 0xFF000000;
+
+			// Move to the next pixel
+			pMask++;
+			pDest++;
+		}
+	}
+}

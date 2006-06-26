@@ -235,6 +235,8 @@ public:
 	virtual UINT32 GetHorizontalDPI();
 	virtual UINT32 GetVerticalDPI();
 
+	virtual void CopyFullyTransparentFrom(OILBitmap* pBitmap);
+
 	// these are public but MUST NOT be used from kernel code
 
 	LPBITMAPINFO		BMInfo;		// The information on the bitmap

@@ -140,10 +140,17 @@ typedef UINT32 	TAG;
 #include "ccobject.h"
 #include "errors.h"
 #include "camstring.h"
-#include "paldefs.h"
-#if !defined(EXCLUDE_FROM_XARLIB)
-#include "app.h"
 
+#include "ccfile.h"
+#include "list.h"
+#include "listitem.h"
+#include "fixmem.h"
+#include "memblk.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
+
+#include "paldefs.h"
+#include "app.h"
 #include "document.h"
 #include "docview.h"
 #include "range.h"
@@ -153,14 +160,20 @@ typedef UINT32 	TAG;
 #include "ink.h"
 #include "nodeattr.h"
 #include "attrval.h"
-#include "paths.h"
 #include "undoop.h"
 #include "bars.h"
 #include "sgallery.h"
 
+#endif
+
+#include "paths.h"
+#include "cxfdefs.h"
+#include "cxfrech.h"
+#include "cxfrec.h"
+
+#if !defined(EXCLUDE_FROM_XARLIB)
 // Alex added these which are included by more than 100 files
 #include "camfiltr.h"
-#include "cxfrech.h"
 #include "npaper.h"
 #include "iprofile.h"
 #include "biasgain.h"
@@ -170,12 +183,12 @@ typedef UINT32 	TAG;
 #include "nodecomp.h"
 #include "rrcaps.h"
 #include "fillval.h"
-#include "cxfdefs.h"
 #include "becomea.h"
-#include "cxfrec.h"
 #include "group.h"
 
 #endif
+
+
 
 //-----------------------------------------------------------------------------------------//
 // Some globally useful coordinate values...

@@ -141,6 +141,7 @@ PluginNativeFilter::PluginNativeFilter()
 	m_ProgressOffset = 0;
 	m_bSaveXPEBitmaps = TRUE;	// For now we will default this to saving out the bitmaps
 	m_BoundsLevel = BWL_NONE;
+	m_BitmapCompression = 200;      // Default to full PNG quality
 	m_BitmapCount = 0;
 }
 
@@ -381,6 +382,9 @@ BOOL PluginNativeFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* 
 
 	// Update our bounds write level
 	m_BoundsLevel = PlugCaps.GetBoundsLevel();
+
+	// Update our bitmap compression setting
+	m_BitmapCompression = PlugCaps.GetBitmapCompression();
 
 	KernelBitmap::SetCreateTracker(&m_BitmapList);
 
@@ -765,7 +769,7 @@ BOOL PluginNativeFilter::GetExportOptions( WebPrefsDlgParam *pPrefs )
 INT32 PluginNativeFilter::GetBitmapCompression()
 {
 	// Always use a lossless format such as PNG in native files
-	return 200;
+	return m_BitmapCompression;
 }
 
 /********************************************************************************************

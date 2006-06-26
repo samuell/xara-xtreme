@@ -222,6 +222,7 @@ protected:
 	BOOL m_bSaveXPEBitmaps;
 
 	BoundsWriteLevel m_BoundsLevel;
+	INT32 m_BitmapCompression;
 
 	List m_BitmapList;
 	INT32 m_BitmapCount;

@@ -712,6 +712,8 @@ public:
 	void SetImmediateRender(BOOL SetVal)	{RenderFlags.bImmediateRender = SetVal;}
 	BOOL GetImmediateRender() const			{return RenderFlags.bImmediateRender;}
 
+	void SetForceMixTransparency(BOOL bForceMix) { m_bForceMix = bForceMix; }
+
 	/////////////////////////////////////////////////////////////////////
 	//
 	// New Capture system
@@ -932,6 +934,9 @@ protected:
 
 	// Used to record a connection to a filter
 	Filter* m_pFilter;
+
+	// Used to force all non-alpha compatible transparency to mix
+	BOOL m_bForceMix;
 
 //	double m_dboostm;
 //	double m_dboostc;

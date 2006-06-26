@@ -399,6 +399,8 @@ PORTNOTE("other","Removed XML stuff")
 	virtual	BOOL		RebuildXPEBitmap();
 	virtual BOOL		NeedsXPERebuild();
 
+	virtual void CopyFullyTransparentFrom(OILBitmap* pBitmap) = 0;
+
 protected:
 	String_256 m_BitmapName;
 	UINT32 m_BitmapAnimDelay;

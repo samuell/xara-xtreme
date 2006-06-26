@@ -187,6 +187,156 @@ XPFConvertType XPFCapability::GetConvertTypeForAttrs(RenderRegion* pRegion)
 }
 
 
+BOOL XPFCapability::AreAllChildrenText(Node* pRootNode, BOOL bPlain)
+{
+	Node* pNode = pRootNode->FindFirstChild();
+	while (pNode)
+	{
+		// Check this node
+		if (pNode->IsAnObject())
+		{
+			// If it is a group then check its children
+			if (pNode->IsAGroup() && !AreAllChildrenText(pNode, bPlain))
+				return(FALSE);
+
+			// If it is not a text story then return false
+			if (!IS_A(pNode, TextStory))
+				return(FALSE);
+
+			if (bPlain && !IsTextStoryPlain(pNode))
+				return(FALSE);
+		}
+			
+		// Move on to the next node
+		pNode = pNode->FindNext();
+	}
+
+	return(TRUE);
+}
+
+
+/****************************************************************************
+
+>	BOOL XPFCapability::IsTextStoryPlain(Node* pNode)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	17/08/2005
+
+	Returns:	TRUE if the node only contains "plain" text, FALSE if it doesn't
+	Purpose:	This determines if a text story only contains simple text.
+				This is currently defined as flat fill, flat fill trans, 
+				constant line width, no dash patterns etc...
+
+****************************************************************************/
+
+BOOL XPFCapability::IsTextStoryPlain(Node* pNode)
+{
+//	TRACEUSER( "Gerry", _T("IsTextStoryPlain(%s)\n"), pNode->GetRuntimeClass()->m_lpszClassName);
+
+	// If the node has children then we must loop through them testing each
+	Node* pChild = pNode->FindFirstChild();
+	while (pChild)
+	{
+		if (!IsTextStoryPlain(pChild))
+			return(FALSE);
+
+		pChild = pChild->FindNext();
+	}
+
+	if (pNode->IsAnAttribute())
+	{
+		NodeAttribute* pAttr = (NodeAttribute*)pNode;
+
+		// These don't return a sensible value from GetAttributeIndex so 
+		// we have to check the runtime class
+		if (pAttr->GetAttributeType() == CC_RUNTIME_CLASS(AttrFillGeometry))
+		{
+			if (!pAttr->IsAFlatFill())
+				return(FALSE);
+		}
+		else if (pAttr->GetAttributeType() == CC_RUNTIME_CLASS(AttrTranspFillGeometry))
+		{
+			if (!pAttr->IsAFlatFill())
+				return(FALSE);
+
+			TranspFillAttribute* pTrans = (TranspFillAttribute*)(pAttr->GetAttributeValue());
+			// Get the type
+			UINT32 Type = pTrans->GetTranspType();
+			// If we are flat, mix and 0% trans
+			if (Type != TT_Mix ||
+				*(pTrans->GetStartTransp()) != 0)
+			{
+				return(FALSE);
+			}
+		}
+		else
+		{
+			switch (pAttr->GetAttributeIndex())
+			{
+				case ATTR_FILLGEOMETRY:
+				case ATTR_TRANSPFILLGEOMETRY:
+				{
+					TRACEUSER( "Gerry", _T("FillGeometry attribute not trapped\n"));
+				}
+				break;
+
+				case ATTR_DASHPATTERN:
+				{
+					DashPatternAttribute* pDash = (DashPatternAttribute*)(pAttr->GetAttributeValue());
+					DashPatternAttribute NoDash;
+					// If the attribute is different to the "no dash" then return FALSE
+					// then we do not match
+					if (NoDash.IsDifferent(pDash))
+						return(FALSE);
+				}
+				break;
+
+				case ATTR_STROKETYPE:
+				{
+					StrokeTypeAttrValue* pStroke = (StrokeTypeAttrValue*)(pAttr->GetAttributeValue());
+					StrokeTypeAttrValue DefStroke;
+					if (!((*pStroke) == DefStroke))
+						return(FALSE);
+				}
+				break;
+
+				case ATTR_VARWIDTH:
+				{
+					VariableWidthAttrValue* pVarWidth = (VariableWidthAttrValue*)(pAttr->GetAttributeValue());
+					VariableWidthAttrValue DefVarWidth;
+					if (!((*pVarWidth) == DefVarWidth))
+						return(FALSE);
+				}
+				break;
+
+				case ATTR_BRUSHTYPE:
+				{
+					BrushAttrValue* pBrush = (BrushAttrValue*)(pAttr->GetAttributeValue());
+					BrushAttrValue DefBrush;
+					if (DefBrush.IsDifferent(pBrush))
+						return(FALSE);
+				}
+				break;
+				
+				case ATTR_FEATHER:
+				{
+					FeatherAttrValue* pFeather = (FeatherAttrValue*)(pAttr->GetAttributeValue());
+					if (pFeather->GetFeatherSize() != 0)
+						return(FALSE);
+				}
+				break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+	// We've got this far so there are no non-plain attributes and we can return TRUE
+	return(TRUE);
+}
+
+
 
 BOOL XPFCComplexClass::DoesNodeMatch(Node* pNode)
 {
@@ -220,6 +370,17 @@ BOOL XPFCLayer::DoesNodeMatch(Node* pNode)
 
 	if (m_bGuide != XPFB_UNKNOWN && pLayer->IsGuide() != m_bGuide)
 		return(FALSE);
+
+	if (m_ContentOnly != XPFP_UNKNOWN)
+	{
+		// Currently we only support text and plaintext
+		// Loop through subtree checking all objects
+		// If not a text story then return false
+		// If doing plaintext then if not plain return false
+
+		if (!AreAllChildrenText(pNode, (m_ContentOnly == XPFP_CONTENTONLY_PLAINTEXT)))
+			return(FALSE);
+	}
 
 	return(TRUE);
 }
@@ -506,8 +667,8 @@ BOOL XPFCText::DoesNodeMatch(Node* pNode)
 	if (m_bPlain != XPFB_UNKNOWN)
 	{
 		// Scan story for non-plain attributes
-		BOOL bPlain = IsNodePlain(pStory);
-		TRACEUSER( "Gerry", _T("IsNodePlain returned %s\n"), bPlain ? _T("true") : _T("false"));
+		BOOL bPlain = IsTextStoryPlain(pStory);
+		TRACEUSER( "Gerry", _T("IsTextStoryPlain returned %s\n"), bPlain ? _T("true") : _T("false"));
 		if (bPlain != m_bPlain)
 			return(FALSE);
 	}
@@ -527,128 +688,6 @@ BOOL XPFCText::DoesNodeMatch(Node* pNode)
 			return(FALSE);
 	}
 	
-	return(TRUE);
-}
-
-
-/****************************************************************************
-
->	BOOL XPFCText::IsNodePlain(Node* pNode)
-
-	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	17/08/2005
-
-	Returns:	TRUE if the node only contains "plain" text, FALSE if it doesn't
-	Purpose:	This determines if a text story only contains simple text.
-				This is currently defined as flat fill, flat fill trans, 
-				constant line width, no dash patterns etc...
-
-****************************************************************************/
-
-BOOL XPFCText::IsNodePlain(Node* pNode)
-{
-//	TRACEUSER( "Gerry", _T("IsNodePlain(%s)\n"), pNode->GetRuntimeClass()->m_lpszClassName);
-
-	// If the node has children then we must loop through them testing each
-	Node* pChild = pNode->FindFirstChild();
-	while (pChild)
-	{
-		if (!IsNodePlain(pChild))
-			return(FALSE);
-
-		pChild = pChild->FindNext();
-	}
-
-	if (pNode->IsAnAttribute())
-	{
-		NodeAttribute* pAttr = (NodeAttribute*)pNode;
-
-		// These don't return a sensible value from GetAttributeIndex so 
-		// we have to check the runtime class
-		if (pAttr->GetAttributeType() == CC_RUNTIME_CLASS(AttrFillGeometry))
-		{
-			if (!pAttr->IsAFlatFill())
-				return(FALSE);
-		}
-		else if (pAttr->GetAttributeType() == CC_RUNTIME_CLASS(AttrTranspFillGeometry))
-		{
-			if (!pAttr->IsAFlatFill())
-				return(FALSE);
-
-			TranspFillAttribute* pTrans = (TranspFillAttribute*)(pAttr->GetAttributeValue());
-			// Get the type
-			UINT32 Type = pTrans->GetTranspType();
-			// If we are flat, mix and 0% trans
-			if (Type != TT_Mix ||
-				*(pTrans->GetStartTransp()) != 0)
-			{
-				return(FALSE);
-			}
-		}
-		else
-		{
-			switch (pAttr->GetAttributeIndex())
-			{
-				case ATTR_FILLGEOMETRY:
-				case ATTR_TRANSPFILLGEOMETRY:
-				{
-					TRACEUSER( "Gerry", _T("FillGeometry attribute not trapped\n"));
-				}
-				break;
-
-				case ATTR_DASHPATTERN:
-				{
-					DashPatternAttribute* pDash = (DashPatternAttribute*)(pAttr->GetAttributeValue());
-					DashPatternAttribute NoDash;
-					// If the attribute is different to the "no dash" then return FALSE
-					// then we do not match
-					if (NoDash.IsDifferent(pDash))
-						return(FALSE);
-				}
-				break;
-
-				case ATTR_STROKETYPE:
-				{
-					StrokeTypeAttrValue* pStroke = (StrokeTypeAttrValue*)(pAttr->GetAttributeValue());
-					StrokeTypeAttrValue DefStroke;
-					if (!((*pStroke) == DefStroke))
-						return(FALSE);
-				}
-				break;
-
-				case ATTR_VARWIDTH:
-				{
-					VariableWidthAttrValue* pVarWidth = (VariableWidthAttrValue*)(pAttr->GetAttributeValue());
-					VariableWidthAttrValue DefVarWidth;
-					if (!((*pVarWidth) == DefVarWidth))
-						return(FALSE);
-				}
-				break;
-
-				case ATTR_BRUSHTYPE:
-				{
-					BrushAttrValue* pBrush = (BrushAttrValue*)(pAttr->GetAttributeValue());
-					BrushAttrValue DefBrush;
-					if (DefBrush.IsDifferent(pBrush))
-						return(FALSE);
-				}
-				break;
-				
-				case ATTR_FEATHER:
-				{
-					FeatherAttrValue* pFeather = (FeatherAttrValue*)(pAttr->GetAttributeValue());
-					if (pFeather->GetFeatherSize() != 0)
-						return(FALSE);
-				}
-				break;
-
-				default:
-					break;
-			}
-		}
-	}
-
-	// We've got this far so there are no non-plain attributes and we can return TRUE
 	return(TRUE);
 }
 
@@ -1028,6 +1067,32 @@ BOOL XPFCFeather::DoAttributesMatch(RenderRegion* pRegion)
 }
 
 
+BOOL CapabilityTree::IsRasteriseCommonTrans(UINT32 Type)
+{
+	String_16 TransStr;
+
+	if (Type == TT_StainGlass)
+		TransStr = _T("stained");
+	else if (Type == TT_Bleach)
+		TransStr = _T("bleach");
+	else if (Type == TT_CONTRAST)
+		TransStr = _T("contrast");
+	else if (Type == TT_SATURATION)
+		TransStr = _T("saturation");
+	else if (Type == TT_LUMINOSITY)
+		TransStr = _T("luminosity");
+	else if (Type == TT_HUE)
+		TransStr = _T("hue");
+	else
+		return(FALSE);
+
+	if (camStrstr(m_CommonTrans, TransStr) != NULL)
+		return(TRUE);
+
+	return(FALSE);
+}
+
+
 // Pass 1 can return the following convert types:
 // Spread: native, bitmap, simple
 // Layer: native, bitmap, simple
@@ -1128,6 +1193,12 @@ void CapabilityTree::GetConvertTypePass3(Node* pNode, XPFRenderRegion* pRegion, 
 
 XPFConvertType CapabilityTree::GetConvertTypePass4(Node* pNode, XPFRenderRegion* pRegion)
 {
+	// This pass must NOT convert any spreads or layers to bitmap as that will 
+	// have been done during the first pass but the spread/layer node will still 
+	// be present in the tree
+	if (pNode->IsSpread() || pNode->IsLayer())
+		return(XPFCONVTYPE_NATIVE);
+
 	XPFConvertType Type = GetObjectsType();
 	XPFCapability* pItem = GetObjects();
 	while (pItem)

@@ -107,6 +107,7 @@ class CapabilityTree;
 class TextStory;
 class TextLine;
 class FormatRegion;
+class CommonTransInfo;
 
 /********************************************************************************************
 
@@ -124,7 +125,7 @@ class XPFRenderRegion : public RenderRegion
 	CC_DECLARE_DYNAMIC(XPFRenderRegion);
 
 	// Construction and destruction
-	XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps);
+	XPFRenderRegion(PluginNativeFilter* pFilter, CapabilityTree* pPlugCaps, CommonTransInfo* pTransInfo = NULL);
 	~XPFRenderRegion();
 
 	virtual BOOL AttachDevice(View*, CNativeDC*, Spread* SpreadToAttach = NULL);
@@ -177,6 +178,22 @@ class XPFRenderRegion : public RenderRegion
 protected:
 	PluginNativeFilter* m_pFilter;
 	double m_PixelsPerInch;
+	CommonTransInfo* m_pTransInfo;
+};
+
+
+class CommonTransInfo
+{
+public:
+	CommonTransInfo();
+
+	BOOL IsCommonType() { return(m_bCommonType); }
+	void UpdateCommonType(UINT32 Type);
+	UINT32 GetCommonType();
+
+protected:
+	BOOL m_bCommonType;
+	UINT32 m_CommonType;
 };
 
 
@@ -257,7 +274,7 @@ protected:
 	void RemoveChildAttrs(Node* pNode, CCRuntimeClass* pClass);
 	NodeAttribute* FindChildAttr(Node* pNode, CCRuntimeClass* pClass);
 
-	NodeBitmap* RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans);
+	Node* RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, BOOL bNonAlphaTrans);
 	KernelBitmap* RenderFillToBitmap(Node* pNode, DocRect& BoundsRect);
 	KernelBitmap* RenderTransToBitmap(Node* pNode, DocRect& BoundsRect, UINT32* pTransType);
 	KernelBitmap* RenderFillAndTransToBitmap(Node* pNode, DocRect& BoundsRect);
@@ -267,6 +284,7 @@ protected:
 	BOOL CopyAttributesFromNode(Node* pDestNode, Node* pSrcNode);
 
 	BOOL DoesNodeUseNonAlphaTrans(Node* pRootNode);
+	BOOL FindCommonTransTypeToApply(Node* pFirstNode, Node* pLastNode, UINT32* pCommonType);
 
 private:
 	INT32 m_ConvertPass;
@@ -301,116 +319,9 @@ public:
 		m_RenderState = RS_BEFORESPAN;
 	}
 
-	virtual BOOL BeforeNode(RenderRegion* pRegion, Node* pNode)
-	{
-//		char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
-//		TRACE( _T("XPFSpanRC# BeforeNode    0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
-		
-		BOOL bRender = FALSE;
-		switch (m_RenderState)
-		{
-			case RS_BEFORESPAN:
-				if (m_bBackground || pNode->IsAnAttribute() || pNode->IsANodeClipView())
-				{
-					// Let it render normally
-					bRender = TRUE;
-				}
-				break;
-
-			case RS_INSPAN:
-				bRender = TRUE;
-				break;
-			
-			case RS_AFTERSPAN:
-				// Must skip everything until the end
-				bRender = FALSE;
-				break;
-
-			default:
-				TRACE( _T("XPFSpanRC# Bad RenderState in BeforeNode\n"));
-				break;
-		}			
-//		TRACE( _T("XPFSpanRC# BeforeNode    0x%08x - %s	returning %s\n", pNode, pNode->GetRuntimeClass()->m_lpszClassName, bRender ? "true" : "false"));
-		return(bRender);
-	}
-
-	virtual BOOL BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState)
-	{
-//		char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
-//		TRACE( _T("XPFSpanRC# BeforeSubtree 0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
-
-		switch (m_RenderState)
-		{
-			case RS_BEFORESPAN:
-				if (pNode == m_pFirstNode)
-				{
-//					TRACE( _T("XPFSpanRC# Start of span\n"));
-					// Change state to be in the span
-					m_RenderState = RS_INSPAN;
-				}
-				else if (!pNode->IsAnAttribute() && !m_bBackground && !pNode->IsNodeInSubtree(m_pFirstNode))
-				{
-					// The first node isn't in this subtree so don't bother rendering it
-					*pState = SUBTREE_NORENDER;
-					return(TRUE);
-				}
-				break;
-
-			case RS_INSPAN:
-				break;
-
-			case RS_AFTERSPAN:
-				// Don't render this subtree
-				*pState = SUBTREE_NORENDER;
-				return(TRUE);
-				break;
-
-			default:
-				TRACE( _T("XPFSpanRC# Bad RenderState in BeforeSubtree\n"));
-				break;
-		}			
-		
-		return(FALSE);
-	}
-		
-	virtual BOOL AfterSubtree(RenderRegion* pRegion, Node* pNode)
-	{
-//		char* pStateStr = (m_RenderState == RS_INSPAN) ? "in" : (m_RenderState == RS_AFTERSPAN) ? "after" : "before";
-//		TRACE( _T("XPFSpanRC# AfterSubtree    0x%08x - %s  %s\n"), pNode, pNode->GetRuntimeClass()->m_lpszClassName, pStateStr);
-
-		// By default we do want RenderAfterSubtree to be called
-		BOOL bStopRender = FALSE;
-		switch (m_RenderState)
-		{
-			case RS_BEFORESPAN:
-				if (!m_bBackground && !pNode->IsNodeInSubtree(m_pFirstNode))
-				{
-					// The first node isn't in this subtree so don't bother rendering it
-					bStopRender = TRUE;
-				}
-				break;
-
-			case RS_INSPAN:
-				if (pNode == m_pLastNode)
-				{
-//					TRACE( _T("XPFSpanRC# End of span\n"));
-					// Change state to be after the span
-					m_RenderState = RS_AFTERSPAN;
-				}
-				break;
-			
-			case RS_AFTERSPAN:
-				// Must skip everything until the end
-				bStopRender = TRUE;
-				break;
-
-			default:
-				TRACE( _T("XPFSpanRC# Bad RenderState in AfterSubtree\n"));
-				break;
-		}			
-//		TRACE( _T("XPFSpanRC# AfterSubtree  0x%08x - %s	returning %s\n", pNode, pNode->GetRuntimeClass()->m_lpszClassName, bStopRender ? "true" : "false"));
-		return(bStopRender);
-	}
+	virtual BOOL BeforeNode(RenderRegion* pRegion, Node* pNode);
+	virtual BOOL BeforeSubtree(RenderRegion* pRegion, Node* pNode, Node** ppNextNode, BOOL bClip, SubtreeRenderState* pState);
+	virtual BOOL AfterSubtree(RenderRegion* pRegion, Node* pNode);
 
 protected:
 	Node* m_pFirstNode;					// pointer to first node in span

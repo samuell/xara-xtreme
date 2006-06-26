@@ -13,43 +13,49 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE0">
-					<label>Expected Options node</label>
+					<label>Unexpected Private node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE1">
-					<label>Expected Rasterise node</label>
+					<label>Unexpected Options node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE2">
-					<label>Expected Spread node</label>
+					<label>Unexpected Rasterise node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE3">
-					<label>Expected Objects node</label>
+					<label>Unexpected Spread node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE4">
-					<label>Expected Attributes node</label>
+					<label>Unexpected Objects node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE5">
-					<label>Expected Colours node</label>
+					<label>Unexpected Attributes node</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDE_XPF_BADXML_PHASE6">
+					<label>Unexpected Colours node</label>
 				</object>
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDE_XPF_UNEXPECTED_PHASE">
-					<label>Unexpected phase node</label>
+					<label>Unexpected element</label>
 				</object>
 			</object>
 			<object class="sizeritem">
