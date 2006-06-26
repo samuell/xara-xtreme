@@ -109,7 +109,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ink.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
-//#include "progress.h"
+#include "progress.h"
 #include "selector.h"
 #include "objchge.h"
 #include "keypress.h"
@@ -1930,8 +1930,7 @@ BOOL TransOperation::CompleteTransformation()
 		return FALSE;
 
 	// Ideally we should put the hourglass on here, it will be turned off in the End method
-PORTNOTE("other", "Use of BeginSlowJob removed in TransOperation::CompleteTransformation()");
-//	BeginSlowJob();
+	BeginSlowJob();
 
 	// Set the flags in the transform according to the flags set here
 	Trans->TransFills = TransFills;
