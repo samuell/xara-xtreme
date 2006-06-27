@@ -695,7 +695,6 @@ BOOL CaptureHandler::DrawSolidDrag(wxPoint point)
 	if(!DragManagerOp::CurrentManager->CurrentDragInfo->DoesSolidDrag)
 	   	return TRUE;
 
-//#ifndef __WXGTK__
 	INT32 DragTransparency = DragManagerOp::CurrentManager->CurrentDragInfo->
 															GetDragTransparency();
 	// If the Drag Info says it wants to be transparent,
@@ -708,7 +707,6 @@ BOOL CaptureHandler::DrawSolidDrag(wxPoint point)
 		// If the Transparency Drag fails (eg. not enough resources under Win32s !!)
 		// then just fall though, and try a normal solid drag .....
 	}
-//#endif
 
 	// offset mouse pos by drag offset
 	point += DragManagerOp::CurrentManager->CurrentDragInfo->SolidDragOffset;

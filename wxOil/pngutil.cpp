@@ -332,11 +332,9 @@ BOOL PNGUtil::ReadFromFile( CCLexFile *File, LPBITMAPINFO *Info, LPBYTE *Bits,
 				png_set_gamma(png_ptr, screen_gamma, 0.45455);
 		}
 		
-#if defined(__WXGTK__)
 		/* flip the RGB pixels to BGR (or RGBA to BGRA) */
 		if (color_type & PNG_COLOR_MASK_COLOR)
 			png_set_bgr(png_ptr);
-#endif
 
 		/* Scan the palletes */
 		png_colorp pPalette;
@@ -493,15 +491,6 @@ BOOL PNGUtil::ReadFromFile( CCLexFile *File, LPBITMAPINFO *Info, LPBYTE *Bits,
 			{
 				File->GotError( _R(IDS_PNG_ERR_READ_PALETTE) ); // Should be bad palette error
 			}
-
-#if defined(__WXGTK__)
-			// Convert palettes for Linuxs BGR ordering (would be nice if png_set_bgr
-			// did this)
-			for( INT32 ord = 0; ord < PaletteSize; ++ord )
-			{
-				std::swap( lpPalette[ord].rgbBlue, lpPalette[ord].rgbRed );
-			}
-#endif
 		} 
 		else if (png_get_bit_depth(png_ptr, info_ptr) * png_get_channels(png_ptr, info_ptr) <= 8 
 			&& png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_GRAY)

@@ -1463,11 +1463,11 @@ BOOL CXaraFileRecord::ReadUnicode(TCHAR* pStr,UINT32 MaxChars)
 		if (ok) *pBuf++ = b2;
 
 		// Yick, Linux has 4 byte unicdoe chars
-#if defined(__WXGTK__)
-		*pBuf++ = '\0';
-		*pBuf++ = '\0';
-#endif		
-		
+		if (sizeof(TCHAR) == 4)
+		{
+			*pBuf++ = '\0';
+			*pBuf++ = '\0';
+		}	
 	}
 #else
 	BYTE* pBufEnd = pBuf+MaxChars;

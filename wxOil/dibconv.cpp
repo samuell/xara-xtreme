@@ -114,9 +114,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_MEMDUMP( DIBConvert, CC_CLASS_MEMDUMP )
 
 #if defined(__WXGTK__)
-#define GetLastError() 0
+#define GetLastError() (0)
 #elif defined(__WXMAC__)
-#define GetLastError() 0
+#define GetLastError() (0)
 #endif
 
 // these classes are never referred to outside this source file, so they live in the .cpp

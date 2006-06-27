@@ -2462,7 +2462,7 @@ BOOL GradTable32::BuildPaletteInternalHSV(DocColour &StartCol, DocColour &EndCol
 					const double T = V * (1.0 - (S * (1.0 - F)));
 
 // Define a wee macro to make this all a lot more readable
-#if defined(__WXGTK__)
+#if 0
 #define SETRGBENTRY(P1,P2,P3) pRGBTable[col].rgbRed = (BYTE)P3; pRGBTable[col].rgbGreen = (BYTE)P2; pRGBTable[col].rgbBlue = (BYTE)P1;
 #else
 #define SETRGBENTRY(P1,P2,P3) pRGBTable[col].rgbRed = (BYTE)P1; pRGBTable[col].rgbGreen = (BYTE)P2; pRGBTable[col].rgbBlue = (BYTE)P3;
