@@ -210,6 +210,9 @@ TransOperation::TransOperation(): UndoableOperation()
 	m_bShowOriginalOutlines = FALSE;
 	m_bRangeCacheTransformed = TRUE;
 	m_bRangeFullyTransformed = TRUE;
+
+	StartSpread = NULL;
+	CurrentSpread = NULL;
 }
 
 /********************************************************************************************
