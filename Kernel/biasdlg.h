@@ -104,10 +104,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 #include "rnddlgs.h"
-#include "transop.h"///"selop.h"
-//#include "biasgain.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "transop.h"//"selop.h"
+#include "biasgain.h"
 #include "biasgdgt.h"
-
+#include "bitmapdropdown.h"
 
 
 
@@ -117,29 +117,29 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 
-///-------------------------------------------------------------------------------------------------
-///
-///	class  CBiasGainDlg
-///
-///	Author:     Harrison Ainsworth
-///	Date:		05/99
-///	Purpose:	be a dialog for inputing a bias/gain choice. to be owned and called from a 
-///				CBiasGainGadget
-///	Implemen-	DoWithParam() is supplied with a pointer to the owning gadget (in the OpParam), this 
-///	tation:		is mainly used to tell the gadget when the dlg is running, which the gadget uses to 
-///				ensure that only one (of its) dlgs is running at a time. So: you can have multiple of
-///				these biasgain dialogs running, but each is used for a different purpose and is owned 
-///				by a separate gadget.
-///
-///-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//
+//	class  CBiasGainDlg
+//
+//	Author:     Harrison Ainsworth
+//	Date:		05/99
+//	Purpose:	be a dialog for inputing a bias/gain choice. to be owned and called from a 
+//				CBiasGainGadget
+//	Implemen-	DoWithParam() is supplied with a pointer to the owning gadget (in the OpParam), this 
+//	tation:		is mainly used to tell the gadget when the dlg is running, which the gadget uses to 
+//				ensure that only one (of its) dlgs is running at a time. So: you can have multiple of
+//				these biasgain dialogs running, but each is used for a different purpose and is owned 
+//				by a separate gadget.
+//
+//-------------------------------------------------------------------------------------------------
 
 class  CBiasGainDlg  :  public  DialogOp
 {         
 	CC_DECLARE_DYNCREATE( CBiasGainDlg )
 
-public: ///-----------------------------------------------------------------------------------------
+public: //-----------------------------------------------------------------------------------------
 
-	/// standard object services -------------------------------
+	// standard object services -------------------------------
 	
 						CBiasGainDlg ();
 	
@@ -147,23 +147,24 @@ public: ///---------------------------------------------------------------------
 	//					CBiasGainDlg ( const CBiasGainDlg& );
 	//CBiasGainDlg&		operator= ( const CBiasGainDlg& );
 
-	/// --------------------------------------------------------
+	// --------------------------------------------------------
 
 
-	/// constants ----------------------------------------------
+	// constants ----------------------------------------------
 	static const UINT32	IDD;
 	static const CDlgMode	Mode;
 
 
-	/// usual interface ----------------------------------------
+	// usual interface ----------------------------------------
 	static	BOOL		Init ();
 	static	OpState		GetState ( String_256*,  OpDescriptor* );
 
 	void				Do ( OpDescriptor* );
-						/// OwningGadgetParams: param1 is a CBiasGainGadget*, and param2 is a CProfileBiasGain*
+						// OwningGadgetParams: param1 is a CBiasGainGadget*, and param2 is a CProfileBiasGain*
 	void				DoWithParam ( OpDescriptor*,  OpParam* OwningGadgetParams );
 	virtual	MsgResult	Message( Msg* );
 
+	
 	// DMc
 	// Sets the profile for the dialog, and updates all the controls
 	//void SetProfile(CProfileBiasGain const &Profile);
@@ -178,7 +179,7 @@ public: ///---------------------------------------------------------------------
 	// we need direct access the dialogs 'edited' biasgain within elans feathering bar ....
 	CProfileBiasGain GetCurrentDialogProfile ();
 
-protected: ///--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--
+protected: //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--
 
 	virtual	void		DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo );
 	virtual	void		DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo );
@@ -186,10 +187,11 @@ protected: ///--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--
 	virtual	void		DrawTranspFillInterpolate ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo );
 
 
-	/// sliders interface --------------------------------------
+	// sliders interface --------------------------------------
 	virtual	void		InitSliders  ( CProfileBiasGain const& );
 	virtual	void		WriteSliders ( CProfileBiasGain const& );
 	virtual	void		ReadSliders  ( CProfileBiasGain& );
+	virtual void		InitiProfileCombobox();
 			void		InitOneSlider( CGadgetID GadgetID );
 			void		WriteOneSlider ( AFp ValueMinus1ToPlus1, CGadgetID GadgetID );
 			AFp			ReadOneSlider ( CGadgetID GadgetID );
@@ -201,102 +203,61 @@ protected: ///--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--
 	static const INT32	kSliderMax_s;
 
 
-	/// edit boxes interface -----------------------------------
+	// edit boxes interface -----------------------------------
 	virtual	void		InitEditBoxes  ( CProfileBiasGain const& );
 	virtual	void		WriteEditBoxes ( CProfileBiasGain const& );
 	virtual	void		ReadEditBoxes  ( CProfileBiasGain& );
 
-private: ///////////////////////////////////////////////////////////////////////////////////////////
+private: /////////////////////////////////////////////////////////////
 
-	/// functions ----------------------------------------------
-	///
-	/// message handlers
+	// functions ----------------------------------------------
+	//
+	// message handlers
 	virtual	void		HandleSliderPosChanging ( CDlgMessage const&,  CProfileBiasGain& );
 	virtual	void		HandleSliderPosSet      ( CDlgMessage const&,  CProfileBiasGain& );
 	virtual	void		HandleCommit            ( CDlgMessage const&,  CProfileBiasGain& );
 	virtual	void		HandleInput             ( CDlgMessage const&,  CProfileBiasGain& );
 
-	/// communicate bias gain values to outside
+	// communicate bias gain values to outside
 	virtual void		BroadcastMessage ( CDlgMessage const&,  CProfileBiasGain const& )		const;
 
 
-	/// members ------------------------------------------------
-	/// 
-	/// ptr to the owning gadget
-			CBiasGainGadget*	pOwningGadget_m;
+	// members ------------------------------------------------
+	// 
+	// ptr to the owning gadget
+	CBiasGainGadget*	pOwningGadget_m;
 
-	/// the 'contained' profile gadget		(CGS - 10/1/99)
-			CBiasGainGadget BiasGainGadget;
+	// the 'contained' profile gadget		(CGS - 10/1/99)
+	CBiasGainGadget BiasGainGadget;
 
-	/// identifier for this particular instance
-			CGadgetID			Id_m;
+	// identifier for this particular instance
+	CGadgetID			Id_m;
 
-	/// the curve representation
-			CProfileBiasGain	BiasGain_m;
+	CBitmapDropDown* m_pobddStandardProfile;
 
-	/// whether we disabled all controls or not (i.e.  whether we were asked to display MANY
-	/// profiles
-		BOOL manyDisabledControls;
+	// the curve representation
+	CProfileBiasGain	BiasGain_m;
 
-	/// whether we should render an object profile or a fill profile internally
-	/// (by default we render using an object profile)
-		BOOL useFillProfile;
+	// whether we disabled all controls or not (i.e.  whether we were asked to display MANY
+	// profiles
+	BOOL manyDisabledControls;
 
-	/// whether we should render an object profile or a transparency fill profile internally
-	/// (by default we render using an object profile)
-		BOOL useTranspFillProfile;
+	// whether we should render an object profile or a fill profile internally
+	// (by default we render using an object profile)
+	BOOL useFillProfile;
+
+	// whether we should render an object profile or a transparency fill profile internally
+	// (by default we render using an object profile)
+	BOOL useTranspFillProfile;
 
 
-	/// disallowed
+private:
+	// Copying is disallowed
 						CBiasGainDlg ( const CBiasGainDlg& );
 	CBiasGainDlg&		operator= ( const CBiasGainDlg& );
 
 
 }; 
-
-
-
-
-
-///-------------------------------------------------------------------------------------------------
-///
-///	class  OpBiasGain
-///
-///	Author:     Harrison Ainsworth
-///	Date:		05/99
-///	Purpose:	
-///	Implemen-	
-///	tation:		
-///	Invariants:	
-///
-///-------------------------------------------------------------------------------------------------
-
-/*class  OpBiasGain  :  public  SelOperation
-{         
-	CC_DECLARE_DYNCREATE( OpBiasGain )
-
-public:
-
-					OpBiasGain ();
-	//				~OpBiasGain ();
-	
-	//				OpBiasGain ( const OpBiasGain& );
-	//OpBiasGain&	operator= ( const OpBiasGain& );
-
-
-	static	BOOL	Init ();
-	static	OpState	GetState ( String_256*,  OpDescriptor* );
-
-	void			DoWithParam ( OpDescriptor*,  OpParam*);
-
-protected:
-private:
-
-	//void OpBiasGain::AlignOneAxis(AlignType Align, INT32 NumObjs, XLONG SumObjWidths,
-	//						   INT32 SelRectLow, INT32 SelRectHigh, ObjInfo* x, INT32* dx);
-
-};*/
-
 
 
 

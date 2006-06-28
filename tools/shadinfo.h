@@ -104,6 +104,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #ifdef BUILDSHADOWS
 
+
+#include "biasgdgt.h"
 // all necessary #includes are taken care of by pre-compiled header.
 
 class SoftShadowTool;
@@ -248,10 +250,7 @@ private:
 	double GetDarknessSlider(BOOL* pValid);
 
 public:
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 	CBiasGainGadget  BiasGainGadget_m;
-#endif
 
 private:
 

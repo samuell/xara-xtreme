@@ -108,8 +108,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "opdesc.h"
 //#include "barmsg.h"
 
-class CBiasGainGadget;
-class CProfileBiasGain;
 
 // Markn 7-3-97
 // DEFAULT_TOOL_INFOBAR_SLOT defines the default tool info bar slot.  The infobar should always go in the slot underneath
@@ -877,7 +875,6 @@ public:
 	static BOOL Write(HKEY hSubKey);
 
 	virtual void CloseProfileDialog (CBiasGainGadget& Gadget);
-	virtual void DisallowInteractiveProfiles () { InteractiveProfiles = FALSE; }
 	//static void AllowInteractiveProfiles () {}
 
 protected:
@@ -894,9 +891,6 @@ protected:
 	virtual void HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID);
 	virtual void HandleProfileSelChangingMsg (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID);
 	virtual CProfileBiasGain* GetProfileFromSelection (CGadgetID ProfileGadgetID, BOOL* bMany, BOOL* bAllSameType);
-	virtual void ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID);
-	virtual void ChangeProfile (CProfileBiasGain* Profile, CGadgetID GadgetID);
-	virtual void ChangeProfileOnIdle (CProfileBiasGain* Profile, CGadgetID GadgetID);
 
 private:
 	static DockBarType			Dock;
@@ -906,7 +900,6 @@ private:
 	static InformationBarOp*	CurrentInfoBarOp;
 	static BOOL					Visible;
 	static BOOL					Hidden;
-	BOOL						InteractiveProfiles;
 };
 
 

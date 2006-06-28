@@ -106,7 +106,27 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 class DialogManager;
-class wxCamVListBoxComboPopup;
+class DropDown;
+
+
+
+class wxCamVListBoxComboPopup : public wxVListBoxComboPopup
+{
+friend class DropDown;
+public:
+	wxCamVListBoxComboPopup(DropDown * pDropDown=NULL);
+	~wxCamVListBoxComboPopup();
+
+	virtual void	OnDrawItem(wxDC& dc, const wxRect& rect, int /*TYPENOTE: CORRECT*/ item, int /*TYPENOTE: CORRECT*/ flags) const;
+	virtual wxCoord OnMeasureItem(size_t item) const;
+	virtual wxCoord OnMeasureItemWidth(size_t item) const;
+
+protected:
+	DropDown* m_pDropDown;
+};
+
+
+
 
 class DropDown : public ListItem
 {

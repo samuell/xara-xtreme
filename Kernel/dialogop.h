@@ -123,6 +123,8 @@ class RenderRegion;
 class DocRect;
 class DialogEventHandler;
 struct ReDrawInfoType;
+class CBiasGainGadget;
+class CProfileBiasGain;
 
   
 /********************************************************************************************
@@ -470,6 +472,15 @@ public:
 
 	BOOL SendMessageToControl(OpDescriptor * OpDesc, DialogMsg* Msg, BOOL Processed=FALSE);
 
+	// Profiles-related functions.
+	virtual void DisallowInteractiveProfiles() { m_bInteractiveProfiles = FALSE; }
+
+	
+protected:
+	void ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID);
+	virtual void ChangeProfile (CProfileBiasGain* Profile, CGadgetID GadgetID);
+	virtual void ChangeProfileOnIdle (CProfileBiasGain* Profile, CGadgetID GadgetID);
+
 
 protected:
 	CDlgResID DlgResID;    // Dialog resource (for main, possibly only dialog)
@@ -531,6 +542,8 @@ protected:
 
 private:
 	UINT32 MagicWord;
+	BOOL   m_bInteractiveProfiles;
+
 };  
 
 

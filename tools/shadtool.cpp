@@ -382,10 +382,7 @@ void SoftShadowTool::SelectChange(BOOL isSelected)
 		}
 		DestroyCursors();
 
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 		pSoftShadowInfoBarOp->CloseProfileDialog (pSoftShadowInfoBarOp->BiasGainGadget_m);
-#endif
 
 		// Remove the info bar from view by deleting the actual underlying window
 		pSoftShadowInfoBarOp->Delete();

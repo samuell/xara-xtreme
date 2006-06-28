@@ -129,7 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "will2.h"
 #include "bmpcomp.h"	// BitmapListComponent
 #include "bubbleid.h"
-//#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+
 //#include "gerry.h"		// new fill type strings (only things in the file)
 //#include "biasres.h"
 #include "nodeshad.h"
@@ -140,7 +140,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "opliveeffects.h"
 #include "effects_stack.h"
 #include "nodeliveeffect.h"
-#include "lineattr.h"
 
 // Revision Number
 DECLARE_SOURCE( "$Revision$" );
@@ -814,10 +813,7 @@ void GradFillTool::SelectChange(BOOL isSelected)
 			CurrentCursorID = 0;
 		}
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 		pGradInfoBarOp->CloseProfileDialog (pGradInfoBarOp->m_BiasGainGadget);
-#endif
 
      	pGradInfoBarOp->Delete();
 
@@ -1096,7 +1092,7 @@ void GradFillTool::OnMouseMove(DocCoord Pos, Spread* pSpread, ClickModifiers Cli
 BOOL GradFillTool::OnKeyPress(KeyPress* pKeyPress)
 {
 	if (pKeyPress->GetVirtKey() == CAMKEY(TAB) &&
-		pKeyPress->IsPress() &&
+		!pKeyPress->IsRelease() &&
 		!pKeyPress->IsRepeat())
 	{
 		// Toggle the selection state of all visible fill control points
@@ -1788,10 +1784,7 @@ void TranspTool::SelectChange(BOOL isSelected)
 			CurrentCursorID = 0;
 		}
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
        	pTranspInfoBarOp->CloseProfileDialog(pTranspInfoBarOp->m_BiasGainGadget);
-#endif
 		
 		pTranspInfoBarOp->Delete();
 
@@ -2106,7 +2099,7 @@ void TranspTool::OnMouseMove(DocCoord Pos, Spread* pSpread, ClickModifiers Click
 BOOL TranspTool::OnKeyPress(KeyPress* pKeyPress)
 {
 	if (pKeyPress->GetVirtKey() == CAMKEY(TAB) &&
-		pKeyPress->IsPress() &&
+		!pKeyPress->IsRelease() &&
 		!pKeyPress->IsRepeat())
 	{
 		// Toggle the selection state of all visible fill control points
@@ -2820,16 +2813,12 @@ MsgResult GradInfoBarOp::Message(Msg* Message)
 				switch (Msg->DlgMsg)
 				{
 					case DIM_LFT_BN_CLICKED:
-					{
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 						HandleProfileButtonClick (m_BiasGainGadget, _R(IDC_BIASGAIN));
-#endif
-					}
-					break;
+						break;
+
 					default:
 						ProfileSelectionChange( Msg, Msg->GadgetID );
-					break;
+						break;
 				}
 			}
 
@@ -2894,10 +2883,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 			GradFillTool::DisableFillNudge();
 		}
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 		HandleProfileSelChangingMsg (m_BiasGainGadget, _R(IDC_BIASGAIN));
-#endif
 
 		ShowInfo();
 /*
@@ -2923,10 +2909,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 	if (MESSAGE_IS_A(Message, SelChangingMsg))
 	{
 		//ShowInfo();		// done in above call anyway - so not needed here ....
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 		HandleProfileSelChangingMsg (m_BiasGainGadget, _R(IDC_BIASGAIN));
-#endif
 		ShowInfo();
 	}
 
@@ -3122,14 +3105,8 @@ CProfileBiasGain* GradInfoBarOp::GetProfileFromSelection(CGadgetID GadgetID, BOO
 			return (NULL);
 		}
 	}
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 	if (m_BiasGainGadget.GetUseFillProfile () == FALSE)		// biasgain dialog is configured
-															// as an 'object' spacing
-#else
-	if (TRUE)
-#endif
-	{
+	{														// as an 'object' spacing
 		ShadowList.DeleteAll();
 		if (*bMany == TRUE)
 		{
@@ -3156,11 +3133,8 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 
 			if (pFirstNodeShadow)
 			{	
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 				m_BiasGainGadget.SetStartColour (pFirstNodeShadow->GetStartColour ());
 				m_BiasGainGadget.SetEndColour (pFirstNodeShadow->GetEndColour ());
-#endif
 
 				// we also need to find ourselves an effect type (i.e.  fade, rainbow or alt rainbow)
 
@@ -3217,12 +3191,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 					}
 
 					if (CommonEffect != NULL)
-					{
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 						m_BiasGainGadget.SetFillEffect (TheEffect);
-#endif
-					}
 
 			//		delete (TheEffect);
 				}
@@ -3301,11 +3270,8 @@ void GradInfoBarOp::InitControls()
 
 	Mode = NOFILL;
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
-	m_BiasGainGadget.LinkControlButton( this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
+	m_BiasGainGadget.Init(this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG));
 	m_BiasGainGadget.ToggleFillProfile ();
-#endif
 
 	ShowInfo();
 }           
@@ -5245,12 +5211,7 @@ void GradInfoBarOp::EnableControls()
 				// NOTE:  this is the code that closes the profile dialog when you have it open for a single
 				// fill; and then shift select a different fill ....
 				if (Mode == MANYFILLS)
-				{
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 					CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
-				}
 			break;
 
 			case GRADFILL:
@@ -5766,26 +5727,17 @@ AttrFillGeometry* GradInfoBarOp::MakeFillMutator()
    	
 	 	case (FGMENU_THREECOL):
 			Fill = new AttrThreeColColourFill;
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 			break;
    	
 	 	case (FGMENU_FOURCOL):
 			Fill = new AttrFourColColourFill;
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 			break;
    	
 	 	case (FGMENU_BITMAP):
 			Fill = new AttrBitmapColourFill;
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 
 			Default = KernelBitmap::MakeKernelBitmap();
 			if (Default == NULL)
@@ -6123,16 +6075,12 @@ MsgResult TranspInfoBarOp::Message(Msg* Message)
 				switch (Msg->DlgMsg)
 				{
 					case DIM_LFT_BN_CLICKED:
-					{
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 						HandleProfileButtonClick (m_BiasGainGadget, _R(IDC_BIASGAIN));
-#endif
-					}
-					break;
+						break;
+
 					default:
 						ProfileSelectionChange( Msg, Msg->GadgetID );
-					break;
+						break;
 				}
 			}
 
@@ -6424,10 +6372,7 @@ PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
 			TranspTool::DisableFillNudge();
 		}
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 		HandleProfileSelChangingMsg (m_BiasGainGadget, _R(IDC_BIASGAIN));
-#endif
 
 		ShowInfo();
 /*
@@ -6648,11 +6593,8 @@ CProfileBiasGain* TranspInfoBarOp::GetProfileFromSelection(CGadgetID GadgetID, B
 		
 		if (pFirstNodeShadow)
 		{
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			m_BiasGainGadget.SetStartTransp (pFirstNodeShadow->GetStartTransp ());
 			m_BiasGainGadget.SetEndTransp (pFirstNodeShadow->GetEndTransp ());
-#endif
 		}
 
 //		ShadowList.DeleteAll();
@@ -6768,11 +6710,8 @@ void TranspInfoBarOp::InitControls()
 
 	Mode = NOFILL;
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
-	m_BiasGainGadget.LinkControlButton ( this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
+	m_BiasGainGadget.Init(this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG));
 	m_BiasGainGadget.ToggleTranspFillProfile ();
-#endif
 
 	ShowInfo();
 }           
@@ -8757,10 +8696,7 @@ void TranspInfoBarOp::EnableControls()
 					EnableGadget (_R(IDC_SELCOLOUR), FALSE);
 				}
 
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 				CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 			break;
 
 			case GRADFILL:
@@ -9924,18 +9860,12 @@ AttrFillGeometry* TranspInfoBarOp::MakeFillMutator()
 
 	 	case (FGMENU_THREECOLTRANSP):
 			Fill = new AttrThreeColTranspFill;
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 			break;
 
 	 	case (FGMENU_FOURCOLTRANSP):
 			Fill = new AttrFourColTranspFill;
-PORTNOTETRACE("other","filltool.cpp - removed m_BiasGainGadget use");
-#ifndef EXCLUDE_FROM_XARALX
 			CloseProfileDialog (m_BiasGainGadget);		// cause fill type cannot be profiled!
-#endif
 			break;
 
 	 	case (FGMENU_BITMAPTRANSP):
@@ -10166,8 +10096,6 @@ AttrFillGeometry* AttrRemoveStrokeTransp::MutateFill(AttrFillGeometry* FillToMut
 	return NewFill;
 }
 
-CCRuntimeClass* AttrRemoveStrokeTransp::GetAttributeType() { return CC_RUNTIME_CLASS(AttrStrokeTransp); }
-
 /********************************************************************************************
 
 >	AttrFillGeometry* AttrMakeFlatTransp::MutateFill(AttrFillGeometry* FillToMutate) 
@@ -10247,6 +10175,7 @@ NodeAttribute* AttrMakeFlatTransp::GetOtherAttrToApply(BOOL* IsMutate)
 
 	return OtherAttr;
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

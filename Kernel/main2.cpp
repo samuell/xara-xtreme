@@ -496,8 +496,8 @@ PORTNOTE("other","Removed various bevel usage")
 #endif
 			OpQuality::Init() &&  				// init the OpQuality operations
 #endif
-#ifndef EXCLUDE_FROM_XARALX
 			CBiasGainDlg::Init() &&
+#ifndef EXCLUDE_FROM_XARALX
 			CBrushEditDlg::Init () &&
 			OpSelectBrush::Declare() &&
 			CNameBrushDlg::Init() &&

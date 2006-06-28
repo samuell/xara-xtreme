@@ -228,11 +228,9 @@ void SoftShadowInfoBarOp::Init()
 	UpdateGadgetBlurSlider();
 	UpdateGadgetTranspSlider();
 
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
-	BiasGainGadget_m.LinkControlButton( this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
+//	BiasGainGadget_m.LinkControlButton( this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
+	BiasGainGadget_m.Init(this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
 	BiasGainGadget_m.ToggleFillProfile ();
-#endif
 }
 
 
@@ -880,8 +878,6 @@ void SoftShadowInfoBarOp::DoChangeShadowPosIncremental(MILLIPOINT incx, MILLIPOI
 
 void SoftShadowInfoBarOp::HandleProfileSelChangingMsg(CBiasGainGadget& Gadget, CGadgetID GadgetID)
 {
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 //	BOOL ok = (GadgetID == _R(IDC_BIASGAIN));
 
 //	ERROR2IF(ok==FALSE, FALSE, "Invalid gadgetID passed");
@@ -915,7 +911,6 @@ PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
 	{
 		EnableGadget(GadgetID, !bNone);
 	}
-#endif
 }
 
 
@@ -1100,13 +1095,9 @@ MsgResult SoftShadowInfoBarOp::Message(Msg* Message)
 				switch (Msg->DlgMsg)
 				{
 					case DIM_LFT_BN_CLICKED:
-					{
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 						HandleProfileButtonClick (BiasGainGadget_m, _R(IDC_BIASGAIN));
-#endif
-					}
-					break;
+						break;
+					
 					default:
 						ProfileSelectionChange( Msg, Msg->GadgetID );
 					break;
@@ -1323,10 +1314,7 @@ PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
 //		if (pSoftShadowTool != NULL)
 //			pSoftShadowTool->SelectionHasChanged();
 
-PORTNOTE("BiasGain", "Removed use of CBiasGainGadget in SoftShadowInfoBarOp")
-#if !defined(EXCLUDE_FROM_XARALX)
 		HandleProfileSelChangingMsg(BiasGainGadget_m, _R(IDC_BIASGAIN));
-#endif
 
 		if (SliderDragged)
 		{

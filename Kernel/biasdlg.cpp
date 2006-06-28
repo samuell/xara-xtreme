@@ -114,14 +114,14 @@ DECLARE_SOURCE("$Revision$");
 
 //#include "dialogop.h"
 //#include "barsdlgs.h"
-//#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "stockcol.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "rndrgn.h"
+#include "stockcol.h"
 #include "qualattr.h"
 //#include "rikdlg.h"
 
-//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "msg.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-
+// #include "bars.h"
+// #include "msg.h"
+#include "dlgmgr.h"
 
 
 
@@ -133,12 +133,12 @@ CC_IMPLEMENT_DYNCREATE( CBiasGainDlg,  DialogOp )
 
 
 
-/// statics ///
+// statics //
 
 const	UINT32		CBiasGainDlg::IDD   =  _R(IDD_BIASGAIN);
 const	CDlgMode	CBiasGainDlg::Mode  =  MODELESS;
 
-const	INT32		CBiasGainDlg::kSliderLength_s      =  INT32( 100 );
+const	INT32		CBiasGainDlg::kSliderLength_s      =  INT32( 200 );
 const	INT32		CBiasGainDlg::kSliderHalfLength_s  =  kSliderLength_s / INT32( 2 );
 const	INT32		CBiasGainDlg::kSliderMin_s         =  -( kSliderHalfLength_s );
 const	INT32		CBiasGainDlg::kSliderMax_s         =  +( kSliderHalfLength_s );
@@ -154,44 +154,30 @@ CBiasGainDlg::CBiasGainDlg ()
 	  Id_m( 0 ),
 	  BiasGain_m()
 {
+	m_pobddStandardProfile = NULL;
 }
 
 
 CBiasGainDlg::~CBiasGainDlg ()
 {
+	delete m_pobddStandardProfile;
 	//EndTimedProcessing();
 }
 
 
-/*CBiasGainDlg::CBiasGainDlg ( const CBiasGainDlg& )
+
+
+/****************************************************************************************
+Function  : CBiasGainDlg::Init
+Author    : Mikhail Tatarnikov
+Purpose   : Creates an OpDescriptor for a CBiasGainDlg dialog
+Returns   : BOOL - TRUE if succeeded, FALSE otherwise.
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+BOOL CBiasGainDlg::Init()
 {
-
-}
-
-
-CBiasGainDlg&  CBiasGainDlg::operator= ( const CBiasGainDlg& )
-{
-
-}*/
-
-
-/******************************************************************************
->	BOOL CBiasGainDlg::Init()
-
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	29/9/94
-	Returns:	FALSE if it fails (due to lack of memory)
-	Purpose:	Creates an OpDescriptor for a CBiasGainDlg dialog
-******************************************************************************/
-
-BOOL  CBiasGainDlg::Init ()
-{
-	/*// init array holding coords of diagram rects on dialog in all alignments
-	CBiasGainDlg::CalcDiagramRectsOneAxis(CBiasGainDlg::DiagRectX,DiagRectWidth,
-		DiagRectOrderX,DiagRectGapX,DiagWidth-1);
-	CBiasGainDlg::CalcDiagramRectsOneAxis(CBiasGainDlg::DiagRectY,DiagRectHeight,
-		DiagRectOrderY,DiagRectGapY,DiagHeight-1);*/
-
 	return  RegisterOpDescriptor(
 		0,									// Tool ID
  		_R(IDS_BIASGAINDLG),					// String resource ID
@@ -199,9 +185,11 @@ BOOL  CBiasGainDlg::Init ()
  		OPTOKEN_BIASGAIN_DLG,				// Token string
  		CBiasGainDlg::GetState,				// GetState function
 		0,									// Help ID
-		_R(IDBBL_BIASGAIN),						// Bubble ID
-		_R(IDD_BARCONTROLSTORE),				// Resource ID
-		_R(IDC_BIASGAIN),						// Control ID
+		_R(IDBBL_BIASGAIN),					// Bubble ID
+		_R(IDD_BARCONTROLSTORE),			// Resource ID
+		0,									// _R(IDC_BIASGAIN) - We don't need the automatic enabling/disabling control -
+											// everything can be done by the toolbar only, since no one else knows about the fill type
+											// (the control state depends on in).
 		SYSTEMBAR_EDIT,						// Bar ID
 		TRUE,								// Recieve system messages
 		FALSE,								// Smart duplicate operation
@@ -210,8 +198,8 @@ BOOL  CBiasGainDlg::Init ()
 		0,									// String for one copy only
 		( DONT_GREY_WHEN_SELECT_INSIDE | GREY_WHEN_NO_CURRENT_DOC ) // Auto state flags
 	);
+}
 
-}   
 
 
 /******************************************************************************
@@ -223,66 +211,84 @@ BOOL  CBiasGainDlg::Init ()
 				ie. whether or not it is greyed on the menu etc!!!
 ******************************************************************************/
 
-OpState	CBiasGainDlg::GetState ( String_256* pHelpString,  OpDescriptor* )
+/****************************************************************************************
+Function  : OpStateCBiasGainDlg::GetState
+Author    : Mikhail Tatarnikov
+Purpose   : Returns the OpState of the CBiasGainDlg dialogue operation
+			(whether or not it should be greyed on the menu etc)
+Returns   : void
+Exceptions: 
+Parameters: [in] String_256*   pHelpString - 
+            [in] OpDescriptor*			   - 
+Notes     : 
+****************************************************************************************/
+OpState	CBiasGainDlg::GetState(String_256* pHelpString, OpDescriptor*)
 {
 
 	static OpState  DialogState;
 	DialogState.Greyed = FALSE;
-	/*DialogState.Greyed=GetApplication()->FindSelection()->Count()==0;
-	if (DialogState.Greyed)
-		pHelpString->MakeMsg(_R(IDS_CBiasGainDlg_GREY));*/
+
 	return  DialogState;
 
 }
 
 
-/******************************************************************************
->	void CBiasGainDlg::Do(OpDescriptor*)
 
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	29/9/94 
-	Purpose:	Creates and shows a CBiasGainDlg dialog
-******************************************************************************/
-
-void  CBiasGainDlg::Do ( OpDescriptor* )
+/****************************************************************************************
+Function  : CBiasGainDlg::Do
+Author    : Mikhail Tatarnikov
+Purpose   : Creates and shows a CBiasGainDlg dialog
+Returns   : void
+Exceptions: 
+Parameters: [in/out] OpDescriptor* - 
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::Do(OpDescriptor*)
 {
-
 	Create();
 	Open();
-
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		Creates and shows a CBiasGainDlg dialog
-///	Preconditions:	OpParam* OwningGadgetParams param1 is really a CBiasGainGadget* and
-///					param2 is really a CProfileBiasGain*
-///-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//	Author:			Harrison Ainsworth
+//	Date:			07/99
+//	Purpose:		Creates and shows a CBiasGainDlg dialog
+//	Preconditions:	OpParam* OwningGadgetParams param1 is really a CBiasGainGadget* and
+//					param2 is really a CProfileBiasGain*
+//-------------------------------------------------------------------------------------------------
 
-void  CBiasGainDlg::DoWithParam ( OpDescriptor*,  OpParam* OwningGadgetParams )
+/****************************************************************************************
+Function  : CBiasGainDlg::DoWithParam
+Author    : Mikhail Tatarnikov
+Purpose   : Creates and shows a CBiasGainDlg dialog
+Returns   : void
+Exceptions: 
+Parameters: [in] OpDescriptor*				 - 
+            [in] OpParam*	   OwningGadgetParams - the dialog parameters (param1 is a CBiasGainGadget*
+													and param2 is really a CProfileBiasGain*)
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::DoWithParam(OpDescriptor*, OpParam* OwningGadgetParams)
 {
 	BOOL noProfile = FALSE;
-
-	/// extract the param info: an owning gadget ptr, and input biasgain value
+	
+	// extract the param info: an owning gadget ptr, and input biasgain value
+	pOwningGadget_m  =  reinterpret_cast<CBiasGainGadget*>((void*)(OwningGadgetParams->Param1));
+	pOwningGadget_m->SetCBaisGainDlg (this);
+	
+	const CProfileBiasGain* invokeOn = reinterpret_cast<CProfileBiasGain const*>((void*)(OwningGadgetParams->Param2));
+	
+	if (invokeOn != NULL)
 	{
-		pOwningGadget_m  =  reinterpret_cast<CBiasGainGadget*>( OwningGadgetParams->Param1 );
-		pOwningGadget_m->SetCBaisGainDlg (this);
-		
-		const CProfileBiasGain* invokeOn = reinterpret_cast<CProfileBiasGain const*>( OwningGadgetParams->Param2 );
-		
-		if (invokeOn != NULL)
-		{
-			BiasGain_m = *(invokeOn);
-		}
-		else
-		{
-			noProfile = TRUE;
-		}
+		BiasGain_m = *(invokeOn);
+	}
+	else
+	{
+		noProfile = TRUE;
 	}
 
-	/// get the ID
+	// get the ID
 	if( pOwningGadget_m != 0 )
 	{
 		Id_m  =  pOwningGadget_m->GetGadgetID();
@@ -303,49 +309,45 @@ void  CBiasGainDlg::DoWithParam ( OpDescriptor*,  OpParam* OwningGadgetParams )
 	}
 
 
-	/// set the dialog title
+	// set the dialog title
+	if( pOwningGadget_m != 0 )
 	{
-		if( pOwningGadget_m != 0 )
-		{
-			String_256  Title;
-			pOwningGadget_m->GetDialogTitle( Title );
-			DialogManager::SetTitlebarName( WindowID,  &Title );
-		}
-
+		String_256  Title;
+		pOwningGadget_m->GetDialogTitle( Title );
+		DialogManager::SetTitlebarName( WindowID,  &Title );
 	}
 
 	if (noProfile == TRUE)
 	{
-		SetCustomComboGadgetValue ( _R(IDC_BIASGAIN), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
+//		SetCustomComboGadgetValue ( _R(IDC_BIASGAINCOMBO), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
+		m_pobddStandardProfile->SetSelectedIndex(-1);
 
 		// and disable all other controls ....
-
 		DisableAllControls ();
 	}
 
-	/// tell the owning gadget that this dialog has opened
+	// tell the owning gadget that this dialog has opened
 	if( pOwningGadget_m != 0 )
 	{
 		pOwningGadget_m->DialogHasOpened();
 	}
-
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		handle messages for this dialog - including create/cancel and slider and edit 
-///					interaction
-///	Preconditions:	pMessage is valid
-///-------------------------------------------------------------------------------------------------
-
-MsgResult  CBiasGainDlg::Message ( Msg* Message )
+/****************************************************************************************
+Function  : CBiasGainDlg::Message
+Author    : Mikhail Tatarnikov
+Purpose   : handle messages for this dialog - including create/cancel and slider and edit
+Returns   : MsgResult -
+Exceptions: 
+Parameters: [in] Msg* Message - an incoming message to handle
+Notes     : 
+****************************************************************************************/
+MsgResult CBiasGainDlg::Message(Msg* Message)
 {
-
 	if( IS_OUR_DIALOG_MSG( Message ) )
 	{
-		DialogMsg* Msg  =  static_cast<DialogMsg*>( Message );//dynamic_cast<DialogMsg*>( Message );   /// needs rtti enabled
+		DialogMsg* Msg  =  static_cast<DialogMsg*>( Message );//dynamic_cast<DialogMsg*>( Message );   // needs rtti enabled
 
 		switch( Msg->DlgMsg )
 		{	
@@ -361,15 +363,12 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 				useFillProfile = FALSE;
 				useTranspFillProfile = FALSE;
 				
-				/// initialise gadgets
+				// initialise gadgets
 				InitSliders( BiasGain_m );
 				InitEditBoxes( BiasGain_m );
+				InitiProfileCombobox();
 
-				// just for testing ....
-				BiasGainGadget.Init (this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN), _R(IDS_BIASGAIN));
-				EnableGadget (_R(IDC_BIASGAIN), TRUE);
-
-				InitBiasGainGadget ( BiasGain_m );
+				InitBiasGainGadget(BiasGain_m);	// Setup combobox with the current bias.
 
 				InvalidateGadget( _R(IDC_CURVE) );
 				InvalidateGadget( _R(IDC_CURVEINTERPOLATE) );
@@ -381,21 +380,22 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 
 			case DIM_CANCEL :
 			{
-				if (!(IsCustomComboDropdownVisible (_R(IDC_BIASGAIN))))
+				if (!(IsCustomComboDropdownVisible (_R(IDC_BIASGAINCOMBO))))
 				{
 					Close();
 					//End();
-					DlgMgr->Delete( WindowID, this );
+					//DlgMgr->Delete( WindowID, this );
 
-					/// tell the owning gadget that this dialog has closed
+					// tell the owning gadget that this dialog has closed
 					if( pOwningGadget_m != 0 )
 					{
 						pOwningGadget_m->DialogHasClosed();
+						return DLG_EAT_IF_HUNGRY(Msg);	// We cna't do anything else here, since the dialog has just been deleted.
 					}
 				}
 				else
 				{
-					CloseDropdown (_R(IDC_BIASGAIN), FALSE);
+					CloseDropdown (_R(IDC_BIASGAINCOMBO), FALSE);
 				}
 				break;
 			}
@@ -404,7 +404,7 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 				DialogManager::DefaultKeyboardFocus();
 			break;
 
-			/// slider interaction messages
+			// slider interaction messages
 			case DIM_SLIDER_POS_CHANGING :
 			{
 				BiasGain_m.SetGeneratesInfiniteUndo (TRUE);
@@ -427,7 +427,7 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 				break;
 			}
 
-			/// edit box interaction messages
+			// edit box interaction messages
 			case DIM_COMMIT :
 			{
 				HandleCommit( Msg->DlgMsg,  BiasGain_m );
@@ -463,15 +463,15 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 
 			case DIM_SELECTION_CHANGED:
 			{
-				if (Msg->GadgetID == _R(IDC_BIASGAIN))
+				if (Msg->GadgetID == _R(IDC_BIASGAINCOMBO))
 				{
 					WORD  DropdownListIndex;
-					GetValueIndex( _R(IDC_BIASGAIN), &DropdownListIndex );
+					GetValueIndex( _R(IDC_BIASGAINCOMBO), &DropdownListIndex );
 
 					switch( DropdownListIndex )
 					{
-						/// get preset value to match the dropdown list index
-						///
+						// get preset value to match the dropdown list index
+						//
 						case  0 :
 						case  1 :
 						case  2 :
@@ -496,21 +496,17 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 							BiasGainGadget.SetInfobarGadgetID (pOwningGadget_m->GetGadgetID ());
 							BiasGainGadget.Message (Msg);//pOwningGadget_m->Message (Msg);
 						}
+						HandleInput(Msg->DlgMsg, BiasGain_m);
 					}
 					DialogManager::DefaultKeyboardFocus();
 				}
 			}
+			
+			default:
+				break;
 		}
+	
 	}
-	/*else if( MESSAGE_IS_A( Message, SelChangingMsg ) )
-	{
-		// if selection has changed, update state of dialog
-		if ( ((SelChangingMsg*)Message)->State == SelChangingMsg::SELECTIONCHANGED )
-		{
-			UpdateState();
-		}
-	}*/
-
 
 	// Pass all unhandled messages to base class for default processing!
 	return  DialogOp::Message( Message );
@@ -520,20 +516,20 @@ MsgResult  CBiasGainDlg::Message ( Msg* Message )
 
 
 
-/// protected //////////////////////////////////////////////////////////////////////////////////////
+// protected //////////////////////////////////////////////////////////
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		Draw graph/curve illustration of the profile function
-///	Preconditions:	ReDrawInfoType* ExtraInfo somehow (mystery to me) refers to a dlg picture control
-///					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
-///	Postconditions:	the dlg control is drawn into
-///-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//	Author:			Harrison Ainsworth
+//	Date:			07/99
+//	Purpose:		Draw graph/curve illustration of the profile function
+//	Preconditions:	ReDrawInfoType* ExtraInfo somehow (mystery to me) refers to a dlg picture control
+//					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
+//	Postconditions:	the dlg control is drawn into
+//-------------------------------------------------------------------------------------------------
 
-void  CBiasGainDlg::DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo )
+void  CBiasGainDlg::DrawCurve( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo )
 {
-	/// drawing constants:  overall resolution, curve steps, curve width, colors
+	// drawing constants:  overall resolution, curve steps, curve width, colors
 	static const INT32  kWidth      =  15000;
 	static const INT32  kHeight     =  15000;
 	static const INT32  kStep       =     20;
@@ -553,14 +549,14 @@ void  CBiasGainDlg::DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoT
 	{
 		pRenderRegion->SaveContext();
 
-		/// set drawing quality
+		// set drawing quality
 		Quality           QualityThing( Quality::QualityMax );
 		QualityAttribute  AntiAliasQualityAttr( QualityThing );
 		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   /// doesnt enable antialiasing
+		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   // doesnt enable antialiasing
 		
 
-		/// draw the background
+		// draw the background
 		pRenderRegion->SetLineColour( kBackgoundOutline );
 		if (manyDisabledControls == FALSE)
 		{
@@ -574,25 +570,25 @@ void  CBiasGainDlg::DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoT
 
 		if (manyDisabledControls == FALSE)
 		{
-			/// draw curve
+			// draw curve
 			{
-				/// make a copy of the biasgain object with the right scaling to calculate
-				/// curve points for the drawing area
+				// make a copy of the biasgain object with the right scaling to calculate
+				// curve points for the drawing area
 				CProfileBiasGain  DiagramMapper( CurveShape );
 				DiagramMapper.SetIntervals( AFp( 0.0 ), AFp( kWidth ) );
 
-				/// create a path to hold the geometry of the curve
+				// create a path to hold the geometry of the curve
 				Path  CurvePath;
 				CurvePath.Initialise( kWidth );
 				CurvePath.IsFilled  =  FALSE;
 				CurvePath.FindStartOfPath();
 
 
-				/// make the first point on the curve
+				// make the first point on the curve
 				static const DocCoord  StartPoint( 0, 0 );
 				CurvePath.InsertMoveTo( StartPoint );
 
-				/// step through the x axis calculating points on the curve
+				// step through the x axis calculating points on the curve
 				for( INT32 x = kStep  ;  x < kWidth  ;  x += kStep )
 				{
 					const AFp       CurvePointFp  =  DiagramMapper.MapInterval( AFp( x ) );
@@ -601,16 +597,16 @@ void  CBiasGainDlg::DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoT
 					CurvePath.InsertLineTo( CurrentPoint );
 				}
 
-				/// connect the last looped step of the curve to the corner of the diagram
+				// connect the last looped step of the curve to the corner of the diagram
 				static const DocCoord  EndPoint( kWidth, kWidth );
 				CurvePath.InsertLineTo( EndPoint );
 
 
-				/// set some line drawing choices
+				// set some line drawing choices
 				pRenderRegion->SetLineWidth( kLineWidth );
 				pRenderRegion->SetLineColour( kCurve );
 
-				/// render the path of the curve
+				// render the path of the curve
 				pRenderRegion->DrawPath( &CurvePath );
 			}
 		}
@@ -620,18 +616,18 @@ void  CBiasGainDlg::DrawCurve ( const CProfileBiasGain& CurveShape,  ReDrawInfoT
 	}
 }
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			17/1/2000
-///	Purpose:		Draw an (interpolated) graph/curve illustration of the profile function
-///	Preconditions:	ReDrawInfoType* ExtraInfo refers to a dlg picture control
-///					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
-///	Postconditions:	the dlg control is drawn into
-///-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//	Author:			Chris Snook
+//	Date:			17/1/2000
+//	Purpose:		Draw an (interpolated) graph/curve illustration of the profile function
+//	Preconditions:	ReDrawInfoType* ExtraInfo refers to a dlg picture control
+//					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
+//	Postconditions:	the dlg control is drawn into
+//-------------------------------------------------------------------------------------------------
 
 void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo )
 {
-	/// drawing constants:  overall resolution, curve steps, curve width, colors
+	// drawing constants:  overall resolution, curve steps, curve width, colors
 	static const INT32  kWidth      =  ExtraInfo->dx;
 	static const INT32  kBitWidth   =  kWidth/14;
 	static const INT32  kHeight     =  ExtraInfo->dy;
@@ -655,13 +651,13 @@ void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  
 	{
 		pRenderRegion->SaveContext();
 
-		/// set drawing quality
+		// set drawing quality
 		Quality           QualityThing( Quality::QualityMax );
 		QualityAttribute  AntiAliasQualityAttr( QualityThing );
 		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   /// doesnt enable antialiasing		
+		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   // doesnt enable antialiasing		
 
-		/// draw the background
+		// draw the background
 		pRenderRegion->SetLineColour( kBackgoundOutline );
 		if (manyDisabledControls == FALSE)
 		{
@@ -677,12 +673,12 @@ void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  
 		{
 			// render ....
 
-			static const xOffset = (kHalfHeight - kQuartHeight) + kHalfLineWidth;
+			static const AFp xOffset = (kHalfHeight - kQuartHeight) + kHalfLineWidth;
 
 			CProfileBiasGain  DiagramMapper( CurveShape );
 			DiagramMapper.SetIntervals( AFp( 0.0 ), AFp( kWidth - (2*xOffset)) );
 
-			/// create a path to hold the geometry of the curve
+			// create a path to hold the geometry of the curve
 			Path  CurvePath;
 			CurvePath.Initialise( kWidth );
 			CurvePath.IsFilled  =  FALSE;
@@ -696,9 +692,9 @@ void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  
 			static const DocCoord vc1 ( 0, kHalfHeight - kQuartHeight );
 			static const DocCoord vc2 ( 0, kHalfHeight + kQuartHeight );
 
-			static DocCoord  StartPoint (xOffset, kHalfHeight - kQuartHeight);
+			static DocCoord  StartPoint ((INT32)xOffset, kHalfHeight - kQuartHeight);
 			CurvePath.InsertMoveTo( StartPoint );
-			static DocCoord  EndStartPoint (xOffset, kHalfHeight + kQuartHeight);
+			static DocCoord  EndStartPoint ((INT32)xOffset, kHalfHeight + kQuartHeight);
 			CurvePath.InsertLineTo( EndStartPoint );
 
 			for (INT32 i = 1; i < 13/*19*/; i++)
@@ -715,16 +711,16 @@ void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  
 				CurvePath.InsertLineTo( vi2 );
 			}
 
-			static DocCoord  StartEndPoint (kWidth - xOffset, kHalfHeight - kQuartHeight);
+			static DocCoord  StartEndPoint (kWidth - (INT32)xOffset, kHalfHeight - kQuartHeight);
 			CurvePath.InsertMoveTo( StartEndPoint );
-			static DocCoord  EndPoint (kWidth - xOffset, kHalfHeight + kQuartHeight);
+			static DocCoord  EndPoint (kWidth - (INT32)xOffset, kHalfHeight + kQuartHeight);
 			CurvePath.InsertLineTo( EndPoint );
 
-			/// set some line drawing choices
+			// set some line drawing choices
 			pRenderRegion->SetLineWidth( kLineWidth );
 			pRenderRegion->SetLineColour( kCurve );
 
-			/// render the path of the curve
+			// render the path of the curve
 			pRenderRegion->DrawPath( &CurvePath );
 		}
 
@@ -735,31 +731,31 @@ void  CBiasGainDlg::DrawCurveInterpolate ( const CProfileBiasGain& CurveShape,  
 
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			2/2/2000
-///	Purpose:		Draw an (interpolated) fill illustration of the profile function
-///	Preconditions:	ReDrawInfoType* ExtraInfo refers to a dlg picture control
-///					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
-///	Postconditions:	the dlg control is drawn into
-///-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//	Author:			Chris Snook
+//	Date:			2/2/2000
+//	Purpose:		Draw an (interpolated) fill illustration of the profile function
+//	Preconditions:	ReDrawInfoType* ExtraInfo refers to a dlg picture control
+//					CBiasGainDlg derives from DialogOp - so that CreateGRenderRegion() is accessible
+//	Postconditions:	the dlg control is drawn into
+//-------------------------------------------------------------------------------------------------
 
 void  CBiasGainDlg::DrawFillInterpolate ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo )
 {
-	/// drawing constants:  overall resolution, curve steps, curve width, colors
+	// drawing constants:  overall resolution, curve steps, curve width, colors
 	static const INT32  kWidth      =  ExtraInfo->dx;
-	static const INT32  kBitWidth   =  kWidth/20;
+//	static const INT32  kBitWidth   =  kWidth/20;
 	static const INT32  kHalfWidth  =  kWidth/2;
 	static const INT32  kHeight     =  ExtraInfo->dy;
 	static const INT32  kHalfHeight =  kHeight/2;
-	static const INT32  kQuartHeight = kHeight/4;
+//	static const INT32  kQuartHeight = kHeight/4;
 	static const INT32  kLineWidth  =  2000;
-	static const INT32  kHalfLineWidth = kLineWidth/2;
+//	static const INT32  kHalfLineWidth = kLineWidth/2;
 
 	static const StockColour  kBackgoundOutline  =  COLOUR_NONE;
 	static const StockColour  kBackgound         =  COLOUR_WHITE;
 	static const StockColour  kBackgoundMany     =  COLOUR_LTGREY;	// for the MANY case
-	static const StockColour  kCurve             =  COLOUR_BLUE;
+//	static const StockColour  kCurve             =  COLOUR_BLUE;
 	static /*const*/ StockColour  kStartColour   =  COLOUR_BLACK;
 	static /*const*/ StockColour  kEndColour     =  COLOUR_WHITE;
 
@@ -773,13 +769,13 @@ void  CBiasGainDlg::DrawFillInterpolate ( const CProfileBiasGain& CurveShape,  R
 	{
 		pRenderRegion->SaveContext();
 
-		/// set drawing quality
+		// set drawing quality
 		Quality           QualityThing( Quality::QualityMax );
 		QualityAttribute  AntiAliasQualityAttr( QualityThing );
 		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   /// doesnt enable antialiasing		
+		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   // doesnt enable antialiasing		
 
-		/// draw the background
+		// draw the background
 		pRenderRegion->SetLineColour( kBackgoundOutline );
 		if (manyDisabledControls == FALSE)
 		{
@@ -866,23 +862,23 @@ void  CBiasGainDlg::DrawFillInterpolate ( const CProfileBiasGain& CurveShape,  R
 
 void  CBiasGainDlg::DrawTranspFillInterpolate ( const CProfileBiasGain& CurveShape,  ReDrawInfoType* ExtraInfo )
 {
-	/// drawing constants:  overall resolution, curve steps, curve width, colors
+	// drawing constants:  overall resolution, curve steps, curve width, colors
 	static const INT32  kWidth      =  ExtraInfo->dx;
-	static const INT32  kBitWidth   =  kWidth/20;
+//	static const INT32  kBitWidth   =  kWidth/20;
 	static const INT32  kHalfWidth  =  kWidth/2;
 	static const INT32  kHeight     =  ExtraInfo->dy;
 	static const INT32  kHalfHeight =  kHeight/2;
-	static const INT32  kQuartHeight = kHeight/4;
+//	static const INT32  kQuartHeight = kHeight/4;
 	static const INT32  kLineWidth  =  2000;
-	static const INT32  kHalfLineWidth = kLineWidth/2;
+//	static const INT32  kHalfLineWidth = kLineWidth/2;
 
 	static const StockColour  kBackgoundOutline  =  COLOUR_NONE;
 	static const StockColour  kBackgound         =  COLOUR_WHITE;
 	static const StockColour  kBackgoundMany     =  COLOUR_LTGREY;	// for the MANY case
 	static const StockColour  kCurve             =  COLOUR_WHITE;
 	static const StockColour  kCurve2             =  COLOUR_BLUE;//COLOUR_BLACK;//COLOUR_MAGENTA;
-	static /*const*/ StockColour  kStartColour   =  COLOUR_BLACK;
-	static /*const*/ StockColour  kEndColour     =  COLOUR_WHITE;
+//	static /*const*/ StockColour  kStartColour   =  COLOUR_BLACK;
+//	static /*const*/ StockColour  kEndColour     =  COLOUR_WHITE;
 
 
 	DocRect  RenderRect( 0, 0,  kWidth, kHeight );
@@ -894,13 +890,13 @@ void  CBiasGainDlg::DrawTranspFillInterpolate ( const CProfileBiasGain& CurveSha
 	{
 		pRenderRegion->SaveContext();
 
-		/// set drawing quality
+		// set drawing quality
 		Quality           QualityThing( Quality::QualityMax );
 		QualityAttribute  AntiAliasQualityAttr( QualityThing );
 		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   /// doesnt enable antialiasing		
+		//pRenderRegion->RRQuality.SetQuality( QUALITY_MAX );   // doesnt enable antialiasing		
 
-		/// draw the background
+		// draw the background
 		pRenderRegion->SetLineColour( kBackgoundOutline );
 		if (manyDisabledControls == FALSE)
 		{
@@ -995,17 +991,17 @@ void  CBiasGainDlg::DrawTranspFillInterpolate ( const CProfileBiasGain& CurveSha
 
 
 
-/// sliders interface ------------------------------------------------------------------------------
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		initialise the dialog box slider controls, including setting positions
-///	Preconditions:	slider control IDs are defined
-///	Postconditions:	sliders have the right range and appearence, and an intial position
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::InitSliders ( CProfileBiasGain const& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::InitSliders
+Author    : Mikhail Tatarnikov
+Purpose   : Initializes and updates the sliders
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& BiasGain - a value to update sliders wiht.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InitSliders(CProfileBiasGain const& BiasGain)
 {
 
 	InitOneSlider( _R(IDC_SLIDER_BIAS) );
@@ -1015,44 +1011,64 @@ void  CBiasGainDlg::InitSliders ( CProfileBiasGain const& BiasGain )
 
 }
 
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			18/1/2000
-///	Purpose:		initialise the bias gain gadgets displayed (i.e.  selected/applied) image
-///	Preconditions:	BiasGain is valid
-///	Postconditions:	_R(IDC_BIASGAIN) displays the correct profile image
-///-------------------------------------------------------------------------------------------------
-
-void CBiasGainDlg::InitBiasGainGadget ( CProfileBiasGain const& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::InitiProfileCombobox
+Author    : Mikhail Tatarnikov
+Purpose   : Initializes the profile combobox
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InitiProfileCombobox()
 {
-	WORD profileIndex;
+	// Check if we have already been initialized.
+	if (m_pobddStandardProfile)
+	{
+		delete m_pobddStandardProfile;
+		m_pobddStandardProfile = NULL;
+	}
 
-	profileIndex = BiasGainGadget.FindPresetBiasGain (BiasGain);
-	profileIndex++;			// cause we need to
+	m_pobddStandardProfile = new CBitmapDropDown;
+	m_pobddStandardProfile->Init(WindowID, _R(IDC_BIASGAINCOMBO));
 	
-	// *sniff* *sniff* - I smell a nasty bug !  Or at least I did before I fixed it ....
-
-	if (profileIndex != 6)		// its a defined profile
-	{
-		SetCustomComboGadgetValue ( _R(IDC_BIASGAIN), (CustomComboBoxControlDataItem*) NULL, TRUE, profileIndex);
-	}
-	else						// its a custom profile
-	{
-		SetCustomComboGadgetValue ( _R(IDC_BIASGAIN), (CustomComboBoxControlDataItem*) NULL, TRUE, -2);
-	}
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE1), _T(""));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE2), _T(""));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE3), _T(""));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE4), _T(""));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE5), _T(""));
+	
+	m_pobddStandardProfile->SetUnselectedIntem(_R(IDB_PROFILE6), _T(""));
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		set the dlg slider controls to express the values in the biasgain object
-///	Preconditions:	slider control IDs are defined
-///	Postconditions:	slider controls thumbs move to representative positions
-///-------------------------------------------------------------------------------------------------
+/****************************************************************************************
+Function  : CBiasGainDlg::InitBiasGainGadget
+Author    : Mikhail Tatarnikov
+Purpose   : Updates profile combobox with a value.
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& BiasGain - the value to initialize with
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InitBiasGainGadget(CProfileBiasGain const& BiasGain)
+{
+	INT32 iProfileIndex = BiasGainGadget.FindPresetBiasGain(BiasGain);
+	
+	m_pobddStandardProfile->SetSelectedIndex(iProfileIndex);
+}
 
-void  CBiasGainDlg::WriteSliders ( CProfileBiasGain const& BiasGain )
+
+/****************************************************************************************
+Function  : CBiasGainDlg::WriteSliders
+Author    : Mikhail Tatarnikov
+Purpose   : Updates slider to display the supplied bias/gain value
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& BiasGain - the value to initialize sliders with.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::WriteSliders(CProfileBiasGain const& BiasGain)
 {
 
 	WriteOneSlider( BiasGain.GetBias(), _R(IDC_SLIDER_BIAS) );
@@ -1061,67 +1077,56 @@ void  CBiasGainDlg::WriteSliders ( CProfileBiasGain const& BiasGain )
 
 }
 
-/*void CBiasGainDlg::SetProfile(CProfileBiasGain const &Profile)
-{
-	// set the variable
-	BiasGain_m = Profile;
-	
-	// write the sliders
-	WriteSliders(Profile);
 
-	// draw the curve
-	InvalidateGadget( _R(IDC_CURVE) );
-	InvalidateGadget( _R(IDC_CURVEINTERPOLATE) );
-	PaintGadgetNow(_R(IDC_CURVE));
-	PaintGadgetNow ( _R(IDC_CURVEINTERPOLATE) );
-}*/
-
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			17/1/2000
-///	Purpose:		invoke the dialog with this CBiasGainGadget, using this CProfileBiasGain, and
-///					whether the dialog needs to be configured for MANY different profile selections
-///	Preconditions:	pInvokeWith and pInvokeOn are valid
-///	Postconditions:	the dialog is displayed, and pInvokeWith is 'known' as where we route messages to
-///-------------------------------------------------------------------------------------------------
-
-void CBiasGainDlg::InvokeVia (CBiasGainGadget& pInvokeWith, CProfileBiasGain* pInvokeOn, BOOL bMany)
+/****************************************************************************************
+Function  : CBiasGainDlg::InvokeVia
+Author    : Mikhail Tatarnikov
+Purpose   : Invoke the bias/gain dialog
+Returns   : void
+Exceptions: 
+Parameters: [in] CBiasGainGadget&  pInvokeWith - the parent control (used for routing messages);
+            [in] CProfileBiasGain* pInvokeOn   - an initial value to display;
+            [in] BOOL			   bMany	   - 
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InvokeVia(CBiasGainGadget& pInvokeWith, CProfileBiasGain* pInvokeOn, BOOL bMany)
 {
 	OpDescriptor*  pOpDescriptor = OpDescriptor::FindOpDescriptor( OPTOKEN_BIASGAIN_DLG );
 	if( pOpDescriptor != 0 )
 	{
 		if (pInvokeOn != NULL)
 		{
-			OpParam  Param( reinterpret_cast<INT32>( &pInvokeWith ),  reinterpret_cast<INT32>( pInvokeOn ) );
+			OpParam  Param( reinterpret_cast<void*>( &pInvokeWith ),  reinterpret_cast<void*>( pInvokeOn ) );
 			DoWithParam( pOpDescriptor, &Param );
 		}
 		else if (bMany == TRUE)					// we need to display the many setting ....
 		{
-			OpParam  Param( reinterpret_cast<INT32>( &pInvokeWith ),  reinterpret_cast<INT32>( pInvokeOn ) );
+			OpParam  Param( reinterpret_cast<void*>( &pInvokeWith ),  reinterpret_cast<void*>( pInvokeOn ) );
 			DoWithParam( pOpDescriptor, &Param );
 		}
 		else	// I'm not sure if this is ever called - BUT we'd best provide a 'default' anyway
 		{
 			CProfileBiasGain defaultInvokeOn;
 
-			OpParam  Param( reinterpret_cast<INT32>( &pInvokeWith ),  reinterpret_cast<INT32>( &defaultInvokeOn ) );
+			OpParam  Param( reinterpret_cast<void*>( &pInvokeWith ),  reinterpret_cast<void*>( &defaultInvokeOn ) );
 			DoWithParam( pOpDescriptor, &Param );
 		}
 	}
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			17/1/2000
-///	Purpose:		if *this* dialog is open (and the selection has changed) - then we need to reset
-///					the contents of the dialog to reflect this
-///	Preconditions:	ReInitOn is valid
-///	Postconditions:	the dialog display is updated to reflect the supplied CProfileBiasGain object
-///-------------------------------------------------------------------------------------------------
 
-void CBiasGainDlg::ReInitialiseDialog (CProfileBiasGain* ReInitOn, BOOL bMany)
+/****************************************************************************************
+Function  : CBiasGainDlg::ReInitialiseDialog
+Author    : Mikhail Tatarnikov
+Purpose   : Initializes the dialog with new bias/gain value
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain* ReInitOn - a bias/gain value to initialize with;
+            [in] BOOL			   bMany	- 
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::ReInitialiseDialog(CProfileBiasGain* ReInitOn, BOOL bMany)
 {
 	if (ReInitOn != NULL)					// woopey!!!!  we have a profile - lets display it ....
 	{
@@ -1134,9 +1139,10 @@ void CBiasGainDlg::ReInitialiseDialog (CProfileBiasGain* ReInitOn, BOOL bMany)
 			EnableAllControls ();
 		}
 	
-		/// reinitialise gadgets ....
+		// reinitialise gadgets ....
 		InitSliders( BiasGain_m );
 		InitEditBoxes( BiasGain_m );
+		InitiProfileCombobox();
 		InitBiasGainGadget ( BiasGain_m );
 
 		// redraw profile ....
@@ -1145,25 +1151,25 @@ void CBiasGainDlg::ReInitialiseDialog (CProfileBiasGain* ReInitOn, BOOL bMany)
 	}
 	else if (bMany == TRUE)					// we need to display the many setting ....
 	{
-		SetCustomComboGadgetValue ( _R(IDC_BIASGAIN), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
-
+//		SetCustomComboGadgetValue ( _R(IDC_BIASGAINCOMBO), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
+		m_pobddStandardProfile->SetSelectedIndex(-1);
+		
 		// and disable all other controls ....
-
 		DisableAllControls ();
 	}
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			17/1/2000
-///	Purpose:		disables all controls within the dialog in response to the MANY display mode
-///					which (incedently) is also set by this function
-///	Preconditions:	-
-///	Postconditions:	the dialog display is updated with all controls disabled (except _R(IDC_BIASGAIN))
-///-------------------------------------------------------------------------------------------------
-
-void CBiasGainDlg::DisableAllControls ()
+/****************************************************************************************
+Function  : CBiasGainDlg::DisableAllControls
+Author    : Mikhail Tatarnikov
+Purpose   : Disable all dialog controls.
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::DisableAllControls()
 {
 	manyDisabledControls = TRUE;
 
@@ -1186,16 +1192,17 @@ void CBiasGainDlg::DisableAllControls ()
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			17/1/2000
-///	Purpose:		enables all controls within the dialog in response to cancelling the MANY
-///					display mode which (incedently) is also set by this function
-///	Preconditions:	-
-///	Postconditions:	the dialog display is updated with all controls enabled (except _R(IDC_BIASGAIN))
-///-------------------------------------------------------------------------------------------------
 
-void CBiasGainDlg::EnableAllControls ()
+/****************************************************************************************
+Function  : CBiasGainDlg::EnableAllControls
+Author    : Mikhail Tatarnikov
+Purpose   : Enable all dialog controls
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::EnableAllControls()
 {
 	manyDisabledControls = FALSE;
 
@@ -1217,47 +1224,50 @@ void CBiasGainDlg::EnableAllControls ()
 	InvalidateGadget( _R(IDC_CURVEINTERPOLATE) );
 }
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Chris Snook
-///	Date:			15/3/2000
-///	Purpose:		return the current biasgain profile
-///	Preconditions:	-
-///	Postconditions:	-
-///-------------------------------------------------------------------------------------------------
 
-CProfileBiasGain CBiasGainDlg::GetCurrentDialogProfile ()
+/****************************************************************************************
+Function  : CBiasGainDlg::GetCurrentDialogProfile
+Author    : Mikhail Tatarnikov
+Purpose   : Return the current biasgain profile
+Returns   : CProfileBiasGain - the current bias/gain value.
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+CProfileBiasGain CBiasGainDlg::GetCurrentDialogProfile()
 {
 	return (BiasGain_m);
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		get values from the dlg slider controls and put them into a biasgain object
-///	Preconditions:	slider control IDs are defined
-///	Postconditions:	biasgain value 'matches' the slider positions
-///-------------------------------------------------------------------------------------------------
 
-void  CBiasGainDlg::ReadSliders ( CProfileBiasGain& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::ReadSliders
+Author    : Mikhail Tatarnikov
+Purpose   : Reads slider values
+Returns   : void
+Exceptions: 
+Parameters: [out] CProfileBiasGain& BiasGain - the bias/gain value to read from sliders to.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::ReadSliders(CProfileBiasGain& BiasGain)
 {
-
 	BiasGain.SetBias( ReadOneSlider( _R(IDC_SLIDER_BIAS) ) );
-
 	BiasGain.SetGain( ReadOneSlider( _R(IDC_SLIDER_GAIN) ) );
-
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		initialise a dialog box slider control
-///	Preconditions:	slider control matching the ID does exist
-///	Postconditions:	sliders have the right range and appearence
-///-------------------------------------------------------------------------------------------------
 
-void  CBiasGainDlg::InitOneSlider( CGadgetID GadgetID )
+/****************************************************************************************
+Function  : CBiasGainDlg::InitOneSlider
+Author    : Mikhail Tatarnikov
+Purpose   : Initialize a slider
+Returns   : void
+Exceptions: 
+Parameters: [in] CGadgetID GadgetID - a slider to initialize.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InitOneSlider(CGadgetID GadgetID)
 {
 
 	SetGadgetRange( GadgetID, kSliderMin_s, kSliderMax_s );
@@ -1265,38 +1275,36 @@ void  CBiasGainDlg::InitOneSlider( CGadgetID GadgetID )
 
 }
 
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		set a dlg slider control to express a [-1,+1] fp value
-///	Preconditions:	ValueMinus1ToPlus1  is in the range [-1,+1]
-///					slider control matching the ID does exist
-///	Postconditions:	slider control thumb moves to representative position
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::WriteOneSlider ( AFp ValueMinus1ToPlus1, CGadgetID GadgetID )
+/****************************************************************************************
+Function  : CBiasGainDlg::WriteOneSlider
+Author    : Mikhail Tatarnikov
+Purpose   : Set a value to a slider.
+Returns   : void
+Exceptions: 
+Parameters: [in] AFp	   ValueMinus1ToPlus1 - a new slider value;
+            [in] CGadgetID GadgetID			  - a slider to update.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::WriteOneSlider(AFp ValueMinus1ToPlus1, CGadgetID GadgetID)
 {
-
-	const INT32  SliderValue  =  INT32( -ValueMinus1ToPlus1 * AFp( kSliderHalfLength_s ) + AFp(0.5) );
+	const INT32  SliderValue  =  INT32( ValueMinus1ToPlus1 * AFp( kSliderHalfLength_s ) + AFp(0.5) );
 	SetLongGadgetValue( GadgetID,  SliderValue );
-
 }
 
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		get the position of a dlg slider control as a [-1,+1] fp value
-///	Preconditions:	slider control matching the ID does exist
-///	Postconditions:	return value is in the range [-1,+1]
-///-------------------------------------------------------------------------------------------------
-
-AFp  CBiasGainDlg::ReadOneSlider ( CGadgetID GadgetID )
+/****************************************************************************************
+Function  : CBiasGainDlg::ReadOneSlider
+Author    : Mikhail Tatarnikov
+Purpose   : Reads the value from a slider
+Returns   : AFp - the slider value.
+Exceptions: 
+Parameters: [in] CGadgetID GadgetID - the slider to read from.
+Notes     : Return value is in the range [-1,+1]
+****************************************************************************************/
+AFp CBiasGainDlg::ReadOneSlider(CGadgetID GadgetID)
 {
 
-	const INT32  SliderValue         =  GetLongGadgetValue( GadgetID, kSliderMin_s, kSliderMax_s );
-	const AFp   ValueMinus1ToPlus1  =  -AFp( SliderValue ) / AFp( kSliderHalfLength_s );
+	const INT32 iSliderValue	   =  GetLongGadgetValue( GadgetID, kSliderMin_s, kSliderMax_s );
+	const AFp   ValueMinus1ToPlus1 =  AFp(iSliderValue) / AFp(kSliderHalfLength_s);
 
 	return  ValueMinus1ToPlus1;
 
@@ -1305,74 +1313,59 @@ AFp  CBiasGainDlg::ReadOneSlider ( CGadgetID GadgetID )
 
 
 
-/// edit boxes interface ---------------------------------------------------------------------------
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		initialise the dialog box edit controls, including setting values
-///	Preconditions:	
-///	Postconditions:	edit controls have a value matching the biasgain input
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::InitEditBoxes ( CProfileBiasGain const& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::InitEditBoxes
+Author    : Mikhail Tatarnikov
+Purpose   : initialise the dialog box edit controls, including setting values
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& BiasGain - the value to initalize the edit boxes with.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::InitEditBoxes(CProfileBiasGain const& BiasGain)
 {
-
 	WriteEditBoxes( BiasGain );
-
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		set dlg edit controls to the values of a biasgain object
-///	Preconditions:	edit controls and matching defined IDs exist
-///	Postconditions:	edit controls have a value matching the biasgain input
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::WriteEditBoxes ( CProfileBiasGain const& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::WriteEditBoxes
+Author    : Mikhail Tatarnikov
+Purpose   : Update the edit boxes
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& BiasGain - the value to update the edit boxes with.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::WriteEditBoxes(CProfileBiasGain const& BiasGain)
 {
+	const AFp  BiasMinus1ToPlus1  =  BiasGain.GetBias();
+	SetDoubleGadgetValue( _R(IDC_EDIT_BIAS),  BiasMinus1ToPlus1 );
 
-	/// bias edit
-	{
-		const AFp  BiasMinus1ToPlus1  =  BiasGain.GetBias();
-		SetDoubleGadgetValue( _R(IDC_EDIT_BIAS),  BiasMinus1ToPlus1 );
-	}
-
-	/// gain edit
-	{
-		const AFp  GainMinus1ToPlus1  =  BiasGain.GetGain();
-		SetDoubleGadgetValue( _R(IDC_EDIT_GAIN),  GainMinus1ToPlus1 );
-	}
-
+	const AFp  GainMinus1ToPlus1  =  BiasGain.GetGain();
+	SetDoubleGadgetValue( _R(IDC_EDIT_GAIN),  GainMinus1ToPlus1 );
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		get values from the dlg edit controls and put them into a biasgain object
-///					clamp the edit control values into biasgain range
-///	Preconditions:	edit controls and matching defined IDs exist
-///	Postconditions:	biasgain values equal the edit controls' values
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::ReadEditBoxes ( CProfileBiasGain& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainDlg::ReadEditBoxes
+Author    : Mikhail Tatarnikov
+Purpose   : Reads the bias/gain value from the edit box controls
+Returns   : void
+Exceptions: 
+Parameters: [out] CProfileBiasGain& BiasGain - the value read.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::ReadEditBoxes(CProfileBiasGain& BiasGain)
 {
 
-	/// read the values into the biasgain object
-	{
-		const AFp  BiasMinus1ToPlus1  =  AFp( GetDoubleGadgetValue( _R(IDC_EDIT_BIAS), double(-1.0), double(+1.0) ) );
-		BiasGain.SetBias( BiasMinus1ToPlus1 );
-	}
-	{
-		const AFp  GainMinus1ToPlus1  =  AFp( GetDoubleGadgetValue( _R(IDC_EDIT_GAIN), double(-1.0), double(+1.0) ) );
-		BiasGain.SetGain( GainMinus1ToPlus1 );
-	}
+	const AFp  BiasMinus1ToPlus1  =  AFp( GetDoubleGadgetValue( _R(IDC_EDIT_BIAS), double(-1.0), double(+1.0) ) );
+	BiasGain.SetBias( BiasMinus1ToPlus1 );
 
+	const AFp  GainMinus1ToPlus1  =  AFp( GetDoubleGadgetValue( _R(IDC_EDIT_GAIN), double(-1.0), double(+1.0) ) );
+	BiasGain.SetGain( GainMinus1ToPlus1 );
 
-	/// write the clamped-into-range values back into the edit boxes
+	// write the clamped-into-range values back into the edit boxes
 	WriteEditBoxes( BiasGain );
 
 }
@@ -1383,149 +1376,117 @@ void  CBiasGainDlg::ReadEditBoxes ( CProfileBiasGain& BiasGain )
 
 
 
-
-/// private ////////////////////////////////////////////////////////////////////////////////////////
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		carry out actions in response to a slider pos changing message
-///	Preconditions:	ensured by input types
-///	Postconditions:	the BiasGain input reflects the slider values, and the edit boxes, sliders and
-///					diagram all match each other.
-///					a message containing the BiasGain values is broadcast.
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::HandleSliderPosChanging
-(
-	CDlgMessage const&	Message,
-	CProfileBiasGain&	BiasGain
-)
+/****************************************************************************************
+Function  : CBiasGainDlg::HandleSliderPosChanging
+Author    : Mikhail Tatarnikov
+Purpose   : Handles slider DIM_SLIDER_POS_CHANGING messages
+Returns   : void
+Exceptions: 
+Parameters: [in] CDlgMessage const& Message  - a message from edit box controls;
+            [in] CProfileBiasGain&  BiasGain - the current bias/gain value.
+Notes     : 
+****************************************************************************************/
+void  CBiasGainDlg::HandleSliderPosChanging(CDlgMessage const& Message, CProfileBiasGain& BiasGain)
 {
 
-	{
-		/// read values from sliders (both (simplifies code)) into biasgain object
-		ReadSliders( BiasGain );
+	// read values from sliders (both (simplifies code)) into biasgain object
+	ReadSliders( BiasGain );
 
-		/// make the edit boxes agree with the sliders
-		WriteEditBoxes( BiasGain );
+	// make the edit boxes agree with the sliders
+	WriteEditBoxes( BiasGain );
 
-		/// and make the profile control show a custom image (cause after all, now we have
-		/// a custom bias/gain)
+	// Make the profile control show a custom image (cause after all, now we have
+	// a custom bias/gain).
+	
+	m_pobddStandardProfile->SetSelectedIndex(-1);
 
-		//WORD DropdownListIndex;
-		//GetValueIndex( _R(IDC_BIASGAIN), &DropdownListIndex );
-
-		//if (DropdownListIndex != 5)
-		//{
-			SetCustomComboGadgetValue ( _R(IDC_BIASGAIN), (CustomComboBoxControlDataItem*) NULL, TRUE, -2);
-		//}
-	}
-
-
-	/// do general input handling
+	// do general input handling
 	HandleInput( Message,  BiasGain );
-
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		carry out actions in response to a slider pos set message
-///	Preconditions:	ensured by input types
-///	Postconditions:	the BiasGain input reflects the slider values, and the edit boxes, sliders and
-///					diagram all match each other.
-///					a message containing the BiasGain values is broadcast.
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::HandleSliderPosSet
-(
-	CDlgMessage const&	Message,
-	CProfileBiasGain&	BiasGain
-)
+/****************************************************************************************
+Function  : CBiasGainDlg::HandleSliderPosSet
+Author    : Mikhail Tatarnikov
+Purpose   : Handles slider DIM_SLIDER_POS_SET messages
+Returns   : void
+Exceptions: 
+Parameters: [in] CDlgMessage const& Message  - a message from edit box controls;
+            [in] CProfileBiasGain&  BiasGain - the current bias/gain value.
+Notes     : 
+****************************************************************************************/
+void  CBiasGainDlg::HandleSliderPosSet(CDlgMessage const& Message, CProfileBiasGain& BiasGain)
 {
-	/// do the same as slider changing
+	// do the same as slider changing
 	HandleSliderPosChanging( Message,  BiasGain );
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		carry out actions in response to a commit message
-///	Preconditions:	ensured by input types
-///	Postconditions:	the BiasGain input reflects the editbox values, and the edit boxes, sliders and
-///					diagram all match each other.
-///					a message containing the BiasGain values is broadcast.
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::HandleCommit
-(
-	CDlgMessage const&	Message,
-	CProfileBiasGain&	BiasGain
-)
+/****************************************************************************************
+Function  : CBiasGainDlg::HandleCommit
+Author    : Mikhail Tatarnikov
+Purpose   : Handles DIM_COMMIT message from the dialog's edit boxes
+Returns   : void
+Exceptions: 
+Parameters: [in] CDlgMessage const& Message  - a message from edit box controls;
+            [in] CProfileBiasGain&  BiasGain - the current bias/gain value.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::HandleCommit(CDlgMessage const& Message, CProfileBiasGain& BiasGain)
 {
+	// read values from edit boxes (both (simplifies code)) into biasgain object
+	ReadEditBoxes( BiasGain_m );
 
-	{
-		/// read values from edit boxes (both (simplifies code)) into biasgain object
-		ReadEditBoxes( BiasGain_m );
+	// make the sliders agree with the edit boxes
+	WriteSliders( BiasGain_m );
 
-		/// make the sliders agree with the edit boxes
-		WriteSliders( BiasGain_m );
-	}
-
-
-	/// do general input handling
+	// do general input handling
 	HandleInput( Message,  BiasGain );
 
 }
 
 
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		carry out actions in response to a general input message
-///	Preconditions:	ensured by input types
-///	Postconditions:	a redrawing of the diagram is 'prompted'
-///					a message containing the BiasGain values is broadcast.
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::HandleInput
-(
-	CDlgMessage const&	Message,
-	CProfileBiasGain&	BiasGain
-)
+/****************************************************************************************
+Function  : CBiasGainDlg::HandleInput
+Author    : Mikhail Tatarnikov
+Purpose   : Handles a message from the dialog controls.
+Returns   : void
+Exceptions: 
+Parameters: [in] CDlgMessage const& Message  - an input message to handle;
+            [in] CProfileBiasGain&  BiasGain - the current bias/gain value.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::HandleInput(CDlgMessage const& Message, CProfileBiasGain& BiasGain)
 {
 
-	/// prompt a diagram redraw to illustrate the new values
+	// prompt a diagram redraw to illustrate the new values
 	InvalidateGadget( _R(IDC_CURVE) );
 	InvalidateGadget( _R(IDC_CURVEINTERPOLATE) );
 
-	/// send message
-	BroadcastMessage( Message,  BiasGain_m );
+	// Broadcast a special profile change message, allowing all interested parties
+	// to handle it. Depending on the input type we send either interactive or final change.
+	if (Message == DIM_SLIDER_POS_CHANGING)
+		BroadcastMessage(DIM_PROFILE_CHANGING,  BiasGain_m);
+	else if (Message == DIM_SLIDER_POS_IDLE)
+		BroadcastMessage(DIM_PROFILE_CHANGEIDLE,  BiasGain_m);
+	else
+		BroadcastMessage(DIM_PROFILE_CHANGED,  BiasGain_m);
 
 }
 
 
-
-
-///-------------------------------------------------------------------------------------------------
-///	Author:			Harrison Ainsworth
-///	Date:			07/99
-///	Purpose:		communicate the biasgain values to the outside
-///	Preconditions:	ensured by input types
-///	Postconditions:	a message containing the biasgain values is sent out
-///-------------------------------------------------------------------------------------------------
-
-void  CBiasGainDlg::BroadcastMessage
-(
-	CDlgMessage const&			Message,
-	CProfileBiasGain const&		BiasGain
-)	const
+/****************************************************************************************
+Function  : CBiasGainDlg::BroadcastMessage
+Author    : Mikhail Tatarnikov
+Purpose   : Broadcasts a message to all DialogOp-derived classes, sending the current profile as parameter
+Returns   : void
+Exceptions: 
+Parameters: [in] CDlgMessage const&		 Message  - a message to broadcast;
+            [in] CProfileBiasGain const& BiasGain - the profile value to send with the message.
+Notes     : 
+****************************************************************************************/
+void CBiasGainDlg::BroadcastMessage(CDlgMessage const& Message, CProfileBiasGain const& BiasGain) const
 {
-
-	BROADCAST_TO_CLASS( DialogMsg( 0, Message, Id_m, reinterpret_cast<INT32>( &BiasGain ) ),  DialogBarOp );
-
+	BROADCAST_TO_CLASS(DialogMsg(0, Message, Id_m, reinterpret_cast<UINT_PTR>(&BiasGain)), DialogOp);
 }
 

@@ -426,11 +426,8 @@ void ContourTool::SelectChange(BOOL isSelected)
 		}
 		DestroyCursors();
 
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
 		pContourInfoBarOp->CloseProfileDialog (pContourInfoBarOp->m_BiasGainObjectGadget);
 		pContourInfoBarOp->CloseProfileDialog (pContourInfoBarOp->m_BiasGainAttrGadget);
-#endif
 
 		// Remove the info bar from view by deleting the actual underlying window
 		pContourInfoBarOp->Delete();
@@ -1658,12 +1655,12 @@ MsgResult ContourInfoBarOp::Message(Msg* Message)
 				m_BetweenViews = FALSE;
 				// Initialise the infobar controls here
 				// This is sent when you create the infobar in your tool startup code
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
-				m_BiasGainObjectGadget.LinkControlButton ( this, _R(IDC_CONTOUROBJECTBIASGAIN), _R(IDBBL_CONTOUROBJECTBIASGAIN), _R(IDS_CONTOUROBJECTBIASGAIN) );
-				m_BiasGainAttrGadget.LinkControlButton ( this, _R(IDC_CONTOURATTRBIASGAIN), _R(IDBBL_CONTOURATTRBIASGAIN), _R(IDS_CONTOURATTRBIASGAIN) );
+//				m_BiasGainObjectGadget.LinkControlButton ( this, _R(IDC_CONTOUROBJECTBIASGAIN), _R(IDBBL_CONTOUROBJECTBIASGAIN), _R(IDS_CONTOUROBJECTBIASGAIN) );
+//				m_BiasGainAttrGadget.LinkControlButton ( this, _R(IDC_CONTOURATTRBIASGAIN), _R(IDBBL_CONTOURATTRBIASGAIN), _R(IDS_CONTOURATTRBIASGAIN) );
+				m_BiasGainObjectGadget.Init(this, _R(IDC_CONTOUROBJECTBIASGAIN), _R(IDBBL_CONTOUROBJECTBIASGAIN), _R(IDS_CONTOUROBJECTBIASGAIN));
+				m_BiasGainAttrGadget.Init(this, _R(IDC_CONTOURATTRBIASGAIN), _R(IDBBL_CONTOURATTRBIASGAIN), _R(IDS_CONTOURATTRBIASGAIN));
 				m_BiasGainAttrGadget.ToggleFillProfile ();
-#endif
+				
 				DisallowInteractiveProfiles ();
 				
 				SetGadgetHelp(_R(IDC_BTN_CONTOURSTEPS), _R(IDBBL_CONTOURSTEPSEDIT), _R(IDS_CONTOURSTEPSEDIT));
@@ -1678,18 +1675,10 @@ PORTNOTE("other", "Removed CBiasGainGadget")
 
 			case DIM_LFT_BN_CLICKED:
 			{
-				if (FALSE) {}
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
-				else if (Msg->GadgetID == _R(IDC_CONTOUROBJECTBIASGAIN))
-				{
+				if (Msg->GadgetID == _R(IDC_CONTOUROBJECTBIASGAIN))
 					HandleProfileButtonClick (m_BiasGainObjectGadget, _R(IDC_CONTOUROBJECTBIASGAIN));
-				}
 				else if (Msg->GadgetID == _R(IDC_CONTOURATTRBIASGAIN))
-				{
 					HandleProfileButtonClick (m_BiasGainAttrGadget, _R(IDC_CONTOURATTRBIASGAIN));
-				}
-#endif
 				else if (Msg->GadgetID == _R(IDC_REMOVECONTOUR))
 				{
 					OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_REMOVECONTOUR);
@@ -1920,13 +1909,10 @@ PORTNOTE("other", "Removed CBiasGainGadget")
 			BlobMgr->RenderToolBlobsOn(m_pTool, pSelected, NULL);
 
 			TRACEUSER( "MarkH", _T("Selected Spread = 0x%x\n"),pSelected);
+		
+			HandleProfileSelChangingMsg (m_BiasGainObjectGadget, _R(IDC_CONTOUROBJECTBIASGAIN));
+			HandleProfileSelChangingMsg (m_BiasGainAttrGadget, _R(IDC_CONTOURATTRBIASGAIN));
 		}
-
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
-		HandleProfileSelChangingMsg (m_BiasGainObjectGadget, _R(IDC_CONTOUROBJECTBIASGAIN));
-		HandleProfileSelChangingMsg (m_BiasGainAttrGadget, _R(IDC_CONTOURATTRBIASGAIN));
-#endif
 	}
 	else if (MESSAGE_IS_A(Message, DocViewMsg))
 	{

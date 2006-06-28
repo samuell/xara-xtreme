@@ -219,6 +219,8 @@ DialogOp::DialogOp(CDlgResID DialogResID, CDlgMode Mode,
 
 	pEvtHandler = NULL;
 
+	m_bInteractiveProfiles = TRUE;
+
 PORTNOTE("dialog","Removed Windows resource'ism")
 #ifndef EXCLUDE_FROM_XARALX
 	// Make the main resource instance the uk.dll one, or whatever, if it exists
@@ -3681,4 +3683,101 @@ BOOL DialogOp::SendMessageToControl(OpDescriptor * OpDesc, DialogMsg* DlgMsg, BO
 		}		
 	}
 	return DestroyWindow;
+}
+
+
+
+/********************************************************************************************
+
+>	void ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID)
+
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/1/2000
+	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
+	Outputs:	-
+	Returns:	-
+	Purpose:	Responds to CGadgetID's corresponding profile dialog messages.  Profile
+				changes are applied (internally) through ChangeProfile ()
+	Errors:		-
+	SeeAlso:	InformationBarOp::ChangeProfile ()
+
+********************************************************************************************/
+void DialogOp::ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID)
+{
+	CProfileBiasGain* pBiasGainValue = NULL;
+	switch (Message->DlgMsg)
+	{
+	case DIM_PROFILE_CHANGED:
+		pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
+		ChangeProfile( pBiasGainValue, GadgetID );
+		break;
+			
+	case DIM_PROFILE_CHANGING:
+		if (m_bInteractiveProfiles == TRUE)
+		{
+			pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
+			ChangeProfile( pBiasGainValue, GadgetID );
+		}
+		break;
+
+	case DIM_PROFILE_CHANGEIDLE:
+		pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
+		ChangeProfileOnIdle( pBiasGainValue, GadgetID );
+		break;
+
+	default:
+		break;
+	} // end switch (message)
+}
+
+
+/********************************************************************************************
+
+>	void ChangeProfile (CProfileBiasGain& Profile, CGadgetID GadgetID)
+
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	19/1/2000
+	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
+	Outputs:	-
+	Returns:	-
+	Purpose:	Actually applies the profile to the selection.  This base class function
+				does nothing.  It MUST be overidden within InformationBarOp derived classes.
+
+				Take a look at tools\blendtool.cpp for an example of this.
+	Errors:		-
+	SeeAlso:	InformationBarOp::ProfileSelectionChange ()
+
+********************************************************************************************/
+
+void DialogOp::ChangeProfile (CProfileBiasGain* Profile, CGadgetID GadgetID)
+{
+	return;
+}
+
+/********************************************************************************************
+
+>	void ChangeProfileOnIdle (CProfileBiasGain& Profile, CGadgetID GadgetID)
+
+	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	9/8/2000
+	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
+	Outputs:	-
+	Returns:	-
+	Purpose:	This is a special version of the ChangeProfile () function.  It is only called
+				when the user has stopped moving the mouse whilst dragging a profile slider.  In
+				this way, camelot now possess TRUE idle slider processing.
+	
+				Actually applies the profile to the selection (which should be non-undoable).
+				This base class function does nothing.
+				It MUST be overidden within InformationBarOp derived classes.
+
+				Take a look at tools\blendtool.cpp for an example of this.
+	Errors:		-
+	SeeAlso:	InformationBarOp::ProfileSelectionChange (), InformationBarOp::ChangeProfile ()
+
+********************************************************************************************/
+
+void DialogOp::ChangeProfileOnIdle (CProfileBiasGain* Profile, CGadgetID GadgetID)
+{
+	return;
 }

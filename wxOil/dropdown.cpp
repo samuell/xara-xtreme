@@ -131,44 +131,43 @@ CC_IMPLEMENT_DYNCREATE(DropDown, ListItem)
 
 List DropDown::CurrentDropDowns;
 
-class wxCamVListBoxComboPopup : public wxVListBoxComboPopup
+wxCamVListBoxComboPopup::wxCamVListBoxComboPopup(DropDown * pDropDown) :
+	wxVListBoxComboPopup(),
+	m_pDropDown(pDropDown)
 {
-friend class DropDown;
-public:
-	wxCamVListBoxComboPopup(DropDown * pDropDown=NULL) :
-		wxVListBoxComboPopup(), m_pDropDown(pDropDown) {} 
-	~wxCamVListBoxComboPopup() {}
+} 
 
-	virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int /*TYPENOTE: CORRECT*/ item, int /*TYPENOTE: CORRECT*/ flags ) const
-	{
-		dc.SetFont( m_useFont );
-		if (m_pDropDown)
-			m_pDropDown->HandleDrawItemInternal(dc, rect, item, flags, TRUE);
-	}
+wxCamVListBoxComboPopup::~wxCamVListBoxComboPopup()
+{
+}
 
-	virtual wxCoord OnMeasureItem( size_t item ) const
-	{
-		wxScreenDC dc;
-		dc.SetFont( m_useFont );
-		if (m_pDropDown)
-			return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetHeight();
-		else
-			return 24;
-	}
+void wxCamVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, int /*TYPENOTE: CORRECT*/ item, int /*TYPENOTE: CORRECT*/ flags) const
+{
+	dc.SetFont( m_useFont );
+	if (m_pDropDown)
+		m_pDropDown->HandleDrawItemInternal(dc, rect, item, flags, TRUE);
+}
 
-	virtual wxCoord OnMeasureItemWidth( size_t item ) const
-	{
-		wxScreenDC dc;
-	    dc.SetFont( m_useFont );
-		if (m_pDropDown)
-			return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetWidth();
-		else
-			return -1; // default - will be measured from text width
-	}
+wxCoord wxCamVListBoxComboPopup::OnMeasureItem(size_t item) const
+{
+	wxScreenDC dc;
+	dc.SetFont( m_useFont );
+	if (m_pDropDown)
+		return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetHeight();
+	else
+		return 24;
+}
 
-protected:
-	DropDown * m_pDropDown;
-};
+wxCoord wxCamVListBoxComboPopup::OnMeasureItemWidth( size_t item ) const
+{
+	wxScreenDC dc;
+	dc.SetFont( m_useFont );
+	if (m_pDropDown)
+		return m_pDropDown->HandleDrawItemInternal(dc, wxRect(-1, -1, -1, -1), item, 0, FALSE).GetWidth();
+	else
+		return -1; // default - will be measured from text width
+}
+
 
 
 /********************************************************************************************

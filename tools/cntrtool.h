@@ -349,7 +349,7 @@ private:
 
 class ContourInfoBarOp : public InformationBarOp
 {
-	CC_DECLARE_DYNCREATE( ContourInfoBarOp )  
+	CC_DECLARE_DYNCREATE( ContourInfoBarOp )
 public:
 	ContourInfoBarOp() 
 	{	
@@ -386,19 +386,14 @@ private:
 
 	void ChangeBitmapButtonState(CGadgetID GadgetID, BOOL* CurrentState); //DY 13/9/99 function to change the state of a bitmap button, 
 	void InitialiseObjectGainGadget(CGadgetID GadgetID, UINT32 BubbleID, UINT32 StatusID)
-		{
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
-			 m_BiasGainObjectGadget.Init(this, GadgetID, BubbleID, StatusID); }  ;   // DY 16/9/99					
-#endif
-		}
+	{
+			 m_BiasGainObjectGadget.Init(this, GadgetID, BubbleID, StatusID);   // DY 16/9/99
+	};
+	
 	void InitialiseAttrGainGadget(CGadgetID GadgetID, UINT32 BubbleID, UINT32 StatusID)
-		{
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
-			m_BiasGainAttrGadget.Init(this, GadgetID, BubbleID, StatusID);
-#endif
-		}  ;   // DY 16/9/99					
+	{
+		m_BiasGainAttrGadget.Init(this, GadgetID, BubbleID, StatusID);
+	};   // DY 16/9/99
 	
 	void ChangeProfile(CProfileBiasGain* Profile, CGadgetID GadgetID);
 	void ChangeProfileOnIdle(CProfileBiasGain* Profile, CGadgetID GadgetID);
@@ -415,11 +410,8 @@ PORTNOTE("other", "Removed CBiasGainGadget")
 	Spread* m_BlobsSpread;
 public:
 
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX	
 	CBiasGainGadget  m_BiasGainObjectGadget;  // the profile gadget added 16/9/99
 	CBiasGainGadget  m_BiasGainAttrGadget;  // the profile gadget added 16/9/99
-#endif
 
 	BOOL GetInsetPathFlag() { return m_bInsetPath; }
 

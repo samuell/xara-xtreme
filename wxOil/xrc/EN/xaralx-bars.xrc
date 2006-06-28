@@ -4281,7 +4281,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Profile</tooltip>
                     <help>Choose the rate of fading across colours</help>
                 </object>
@@ -4421,7 +4421,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Profile</tooltip>
                     <help>Choose the rate of fading across colours</help>
                 </object>
@@ -5973,7 +5973,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BLENDOBJECTBIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Position profile</tooltip>
                     <help>Select one of the options to edit the blend objects position profile</help>
                 </object>
@@ -5987,7 +5987,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BLENDATTRBIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Attribute profile</tooltip>
                     <help>Select one of the options to edit the blend attributes profile </help>
                 </object>
@@ -6388,7 +6388,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_CONTOUROBJECTBIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Position profile</tooltip>
                     <help>Select one of the options to edit the contour objects position profile</help>
                 </object>
@@ -6397,7 +6397,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_CONTOURATTRBIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Attribute profile</tooltip>
                     <help>Select one of the options to edit the contour attributes profile </help>
                 </object>
@@ -7161,7 +7161,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_BIASGAIN">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <tooltip>Profile</tooltip>
                     <help>Choose the rate of fading across colours</help>
                 </object>

@@ -427,11 +427,8 @@ private:
 
 	public:
 
-PORTNOTE("other", "Removed CBiasGainGadget");
-#ifndef EXCLUDE_FROM_XARALX
 	CBiasGainGadget  m_BiasGainGadgetPosition;  // the profile gadget added 16/9/99
 	CBiasGainGadget  m_BiasGainGadgetAttribute;
-#endif
 
 };
 

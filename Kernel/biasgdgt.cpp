@@ -105,13 +105,13 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "biasgdgt.h"
-//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "bars.h"
 //#include "biasres.h"
 #include "biasdlg.h"
 
-#include "ccomboud.h"			// this class now needs to know about CustomComboBoxControlDataItem
+//#include "ccomboud.h"			// this class now needs to know about CustomComboBoxControlDataItem
 //#include "app.h"				// for the new bitmap resources
-//#include "fillval.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "fillval.h"
 
 // we'd best have this as well ....
 
@@ -130,7 +130,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // statics definitions
 
-const INT32	  CBiasGainGadget::kNumberOfPresets_s( eNumberOfPresets );
 const double  CBiasGainGadget::kBiasPresets_s[ eNumberOfPresets ]  =  { 0.0,  0.5, -0.5,  0.0,  0.0 };
 const double  CBiasGainGadget::kGainPresets_s[ eNumberOfPresets ]  =  { 0.0,  0.0,  0.0,  0.5, -0.5 };
 
@@ -178,8 +177,8 @@ void CBiasGainGadget::SetFillEffect(FillEffectAttribute* NewFillEffect)
 //-------------------------------------------------------------------------------------------------
 
 CBiasGainGadget::CBiasGainGadget ()
-	: pOwningBar_m( 0 ),
-	  GadgetID_m( 0 ),
+//	: pOwningBar_m( 0 ),
+	: GadgetID_m( 0 ),
 	  BubbleID_m( 0 ),
 	  StatusID_m( 0 ),
 	  pDialog_m( 0 )
@@ -230,342 +229,109 @@ CBiasGainGadget::~CBiasGainGadget ()
 
 
 
-/*CBiasGainGadget::CBiasGainGadget ( const CBiasGainGadget& Other )
+
+
+
+
+/****************************************************************************************
+Function  : CBiasGainGadget::Init
+Author    : Mikhail Tatarnikov
+Purpose   : Initializes the gadget
+Returns   : void
+Exceptions: 
+Parameters: [in] DialogOp* pOwningDialog - the parent dialog;
+            [in] CGadgetID GadgetID		 - the gadget ID;
+            [in] UINT32	   BubbleID		 - tooltip help string ID;
+            [in] UINT32	   StatusID		 - status bar string ID.
+Notes     : 
+****************************************************************************************/
+void CBiasGainGadget::Init(DialogOp* pOwningDialog, CGadgetID GadgetID, UINT32 BubbleID, UINT32 StatusID)
 {
-}
-
-
-
-
-CBiasGainGadget&  CBiasGainGadget::operator= ( const CBiasGainGadget& Other )
-{
-
-	return  *this;
-
-}*/
-
-
-
-
-
-
-
-
-//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		ersatz constructor
-//	Preconditions:	OwningBar points to a InformationBarOp, and the input IDs all refer to resource 
-//					entities
-//-------------------------------------------------------------------------------------------------
-
-void  CBiasGainGadget::Init
-(
-	InformationBarOp*	pOwningBar,
-	CGadgetID			GadgetID,
-	UINT32				BubbleID,
-	UINT32				StatusID
-)
-{ 
-	// check preconditions
-	if( ( pOwningBar != 0 ) && ( GadgetID != 0 ) && ( BubbleID != 0 ) && ( StatusID != 0 ) )
-	{
-		// set members
-		{
-			//pOwningBar_m = NULL;					// MUST be set via LinkInfoBar
-			pOwningBar_m  =  pOwningBar;
-			GadgetID_m    =  GadgetID;
-			InfobarGadgetID_m = -1;
-			BubbleID_m    =  BubbleID;
-			StatusID_m    =  StatusID;
-		}
-
-
-		pOwningBar->DeleteAllValues( GadgetID );
-
-		String_64 Str;
-
-		CustomComboBoxControlDataItem* theItem = NULL;
-			/*
-	------>		CustomComboBoxControlData is a public class which contains:
-				RECT itemRect;			// the bounds of our item (do not init - calculated auto)
-				BOOL itemInPos;			// whether there is an item in this position
-				BOOL mouseOverItem;		// whether the mouse is over this item (used to indicate
-										// mouse selection focus)
-				BOOL itemSelected;		// whether the item is selected or not
-	------>		HBITMAP itemBmp;		// the items bitmap (if we need to directly store it)
-			*/
-
-		HINSTANCE hMain = AfxGetResourceHandle();
-
-		for (INT32 i = 0; i < 6; i++)
-		{
-			theItem = new CustomComboBoxControlDataItem ();
-
-			if (theItem)
-			{	
-				switch (i)
-				{
-					case 0:
-						Str.Load( _R(IDS_PROFILE1) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE1)));
-					break;
-					case 1:
-						Str.Load( _R(IDS_PROFILE2) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE2)));
-					break;
-					case 2:
-						Str.Load( _R(IDS_PROFILE3) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE3)));
-					break;
-					case 3:
-						Str.Load( _R(IDS_PROFILE4) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE4)));
-					break;
-					case 4:
-						Str.Load( _R(IDS_PROFILE5) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE5)));
-					break;
-					case 5:
-						Str.Load( _R(IDS_PROFILE6) );
-						theItem->itemBmp =
-							(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE6)));
-					break;
-				}
-
-				theItem->itemName = Str;
-				theItem->itemID = i;
-				pOwningBar->SetCustomComboGadgetValue ( GadgetID, theItem, TRUE, 0);
-				theItem = NULL;
-			}
-		}
-
-		//*pOwningBar->*/SetGadgetWritable( pOwningBar->WindowID,  GadgetID, TRUE );
-		HWND gadget = ::GetDlgItem(pOwningBar->WindowID, GadgetID);
-		SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
-		pOwningBar->SetGadgetHelp( GadgetID,  BubbleID,  StatusID);
-	}
-
-}
-
-void  CBiasGainGadget::LinkControlButton
-(
-	InformationBarOp*	pOwningBar,
-	CGadgetID			GadgetID,
-	UINT32				BubbleID,
-	UINT32				StatusID
-)
-{ 
-	// check preconditions
-	if( ( pOwningBar != 0 ) && ( GadgetID != 0 ) && ( BubbleID != 0 ) && ( StatusID != 0 ) )
-	{
-		// set members
-		{
-			pOwningBar_m  =  pOwningBar;
-			GadgetID_m    =  GadgetID;
-			InfobarGadgetID_m = -1;				// set this to an (obviously) invalid value
-												// we use to route our data back to the relevant
-												// infobar button ....  (which originiates from
-												// within the CBiasGainGadget on the
-												// CBiasGainDlg
-			BubbleID_m    =  BubbleID;
-			StatusID_m    =  StatusID;
-			useFillProfile = FALSE;
-			useTranspFillProfile = FALSE;
-		}
-
-		HWND gadget = ::GetDlgItem(pOwningBar->WindowID, GadgetID);
-		SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
-		pOwningBar->SetGadgetHelp( GadgetID,  BubbleID,  StatusID);
-	}
-}
-
-//void CBiasGainGadget::LinkInfoBar (InformationBarOp* pBarOp/*, CBiasGainDlg* pMyDlg*//*, CBiasGainGadget& pBarCtrl*/)
-//{
-	//pOwningBar_m = pBarOp; //pDialog_m = pMyDlg; //InfobarGadgetID_m = pBarCtrl.GetGadgetID ();
-//}
-
-void  CBiasGainGadget::Init
-(
-	DialogOp*	pOwningDialog,
-	CGadgetID	GadgetID,
-	UINT32		BubbleID,
-	UINT32		StatusID
-)
-{ 
 	// check preconditions
 	if( ( pOwningDialog != 0 ) && ( GadgetID != 0 ) && ( BubbleID != 0 ) && ( StatusID != 0 ) )
 	{
 		// set members
-		{
-			pOwningBar_m = NULL;					// MUST be set via LinkInfoBar
-			pOwningDialog_m  =  pOwningDialog;
-			GadgetID_m		 =  GadgetID;
-			InfobarGadgetID_m = -1;
-			BubbleID_m       =  BubbleID;
-			StatusID_m       =  StatusID;
-		}
-
-		pOwningDialog->DeleteAllValues( GadgetID );
-
-		String_64 Str;
-
-		CustomComboBoxControlDataItem* theItem = NULL;
-			/*
-	------>		CustomComboBoxControlData is a public class which contains:
-				RECT itemRect;			// the bounds of our item (do not init - calculated auto)
-				BOOL itemInPos;			// whether there is an item in this position
-				BOOL mouseOverItem;		// whether the mouse is over this item (used to indicate
-										// mouse selection focus)
-				BOOL itemSelected;		// whether the item is selected or not
-	------>		HBITMAP itemBmp;		// the items bitmap (if we need to directly store it)
-			*/
-
-		HINSTANCE hMain = AfxGetResourceHandle();
-
-		for (INT32 i = 0; i < 5/*6*/; i++)
-		{
-			theItem = new CustomComboBoxControlDataItem ();
-			
-			switch (i)
-			{
-				case 0:
-					Str.Load( _R(IDS_PROFILE1) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE1)));
-				break;
-				case 1:
-					Str.Load( _R(IDS_PROFILE2) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE2)));
-				break;
-				case 2:
-					Str.Load( _R(IDS_PROFILE3) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE3)));
-				break;
-				case 3:
-					Str.Load( _R(IDS_PROFILE5) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE5)));
-				break;
-				case 4:
-					Str.Load( _R(IDS_PROFILE4) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE4)));
-				break;
-				/*case 5:
-					Str.Load( _R(IDS_PROFILE6) );
-					theItem->itemBmp =
-						(HBITMAP) LoadBitmap (hMain, MAKEINTRESOURCE(_R(IDB_PROFILE6)));
-				break;*/
-			}
-
-			theItem->itemName = Str;
-			theItem->itemID = i;
-			pOwningDialog->SetCustomComboGadgetValue ( GadgetID, theItem, TRUE, 0);
-			theItem = NULL;
-		}
-
-		//*pOwningBar->*/SetGadgetWritable( pOwningBar->WindowID,  GadgetID, TRUE );
-		HWND gadget = ::GetDlgItem(pOwningDialog->WindowID, GadgetID);
-		SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
-		pOwningDialog->SetGadgetHelp( GadgetID,  BubbleID,  StatusID);
+		pOwningDialog_m   = pOwningDialog;
+		GadgetID_m		  = GadgetID;
+		InfobarGadgetID_m = (CGadgetID)-1;
+		BubbleID_m        = BubbleID;
+		StatusID_m        = StatusID;
 	}
-
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		grey-out or enable the gadget
-//-------------------------------------------------------------------------------------------------
-
-void  CBiasGainGadget::Enable ( BOOL Enable )
+/****************************************************************************************
+Function  : CBiasGainGadget::Enable
+Author    : Mikhail Tatarnikov
+Purpose   : Enables/disables the gadget.
+Returns   : void
+Exceptions: 
+Parameters: [in] BOOL Enable - TRUE for enabling, FALSE for disabling.
+Notes     : 
+****************************************************************************************/
+void CBiasGainGadget::Enable(BOOL Enable)
 {
-
-	pOwningBar_m->EnableGadget( GadgetID_m, Enable );
-
+	pOwningDialog_m->EnableGadget(GadgetID_m, Enable);
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		
-// Postconditions:	returned value is 1 greater than the maximum value passable as an Index to 
-//					GetPresetBiasGainValue()
-//-------------------------------------------------------------------------------------------------
 
-WORD  CBiasGainGadget::GetNumberOfPresets ()   const
+
+/****************************************************************************************
+Function  : CBiasGainGadget::GetPresetBiasGainValue
+Author    : Mikhail Tatarnikov
+Purpose   : Obtains the preset value based on its index
+Returns   : void
+Exceptions: 
+Parameters: [in]  WORD				Index - the index of preset to obtain;
+            [out] CProfileBiasGain& Value - preset value for the index.
+Notes     : Reverse operation for FindPresetBiasGain().
+****************************************************************************************/
+void CBiasGainGadget::GetPresetBiasGainValue(WORD Index, CProfileBiasGain& Value) const
 {
-
-	return  WORD( kNumberOfPresets_s );
-
-}
-
-
-//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		
-// Preconditions:	Index is <= 5 and >= 0
-// Postconditions:	Value is set to a preset corresponding to Index
-//-------------------------------------------------------------------------------------------------
-
-void  CBiasGainGadget::GetPresetBiasGainValue ( WORD Index,  CProfileBiasGain& Value )   const
-{
-
 	// check preconditions
-	if( Index <= WORD( kNumberOfPresets_s ) )
+	if( Index <= WORD(eNumberOfPresets) )
 	{
 		Value.SetBiasGain( AFp( kBiasPresets_s[ Index ] ),  AFp( kGainPresets_s[ Index ] ) );
 	}
-
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Chris Snook
-//	Date:			18/1/2000
-//	Purpose:		Allows the gadget to be responsible for finding the correct profile index
-//					(which is to be displayed within the dialog)
-// Preconditions:	Value is valid
-// Postconditions:	Returned value is set to the corresponding index (or custom)
-//-------------------------------------------------------------------------------------------------
 
-WORD CBiasGainGadget::FindPresetBiasGain ( CProfileBiasGain const& Value )   const
+/****************************************************************************************
+Function  : CBiasGainGadget::FindPresetBiasGain
+Author    : Mikhail Tatarnikov
+Purpose   : Finds a preset index based on the value, or -1 if couldn't find (custom preset).
+Returns   : INT32 - the found preset index.
+Exceptions: 
+Parameters: [in] CProfileBiasGain const& Value - the preset we'll search for.
+Notes     : Reverse operation for GetPresetBiasGainValue().
+****************************************************************************************/
+INT32 CBiasGainGadget::FindPresetBiasGain(CProfileBiasGain const& Value) const
 {
 	CProfileBiasGain preset;
-	for (WORD i = 0; i < GetNumberOfPresets (); i++)
+	for (INT32 i = 0; i < (INT32)eNumberOfPresets; i++)
 	{
 		GetPresetBiasGainValue (i, preset);
 		if (Value == preset)
-		{
-			return (i);					// is a preset
-		}
+			return i;					// is a preset
 	}
 	
-	return (GetNumberOfPresets ());		// is a custom
+	return -1;		// is a custom
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Chris Snook
-//	Date:			17/1/2000
-//	Purpose:		if linked dialog is open (and the selection has changed) - then we need to reset
-//					the contents of the dialog to reflect this
-//	Preconditions:	ReInitOn is valid
-//	Postconditions:	the linked dialog display is updated to reflect the supplied CProfileBiasGain object
-//-------------------------------------------------------------------------------------------------
-
-void CBiasGainGadget::ReInitialiseDialog (CProfileBiasGain* ReInitOn, BOOL bMany)
+/****************************************************************************************
+Function  : CBiasGainGadget::ReInitialiseDialog
+Author    : Mikhail Tatarnikov
+Purpose   : Updates the dialog with a profile value
+Returns   : void
+Exceptions: 
+Parameters: [in] CProfileBiasGain* ReInitOn - the new value to display in the dialog;
+            [in] BOOL			   bMany	- 
+Notes     : 
+****************************************************************************************/
+void CBiasGainGadget::ReInitialiseDialog(CProfileBiasGain* ReInitOn, BOOL bMany)
 {
 	if (/*(ReInitOn != NULL) &&*/ (pDialog_m != NULL))
 	{
@@ -576,117 +342,70 @@ void CBiasGainGadget::ReInitialiseDialog (CProfileBiasGain* ReInitOn, BOOL bMany
 	}
 }
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Chris Snook
-//	Date:			15/3/2000
-//	Purpose:		return the current biasgain profile
-//	Preconditions:	-
-//	Postconditions:	The linked dialog MUST be open
-//-------------------------------------------------------------------------------------------------
 
-CProfileBiasGain CBiasGainGadget::GetCurrentDialogProfile ()
+/****************************************************************************************
+Function  : CBiasGainGadget::GetCurrentDialogProfile
+Author    : Mikhail Tatarnikov
+Purpose   : Reads the dialog profile value
+Returns   : CProfileBiasGain - the value currently displayed in the dialog.
+Exceptions: 
+Parameters: None
+Notes     : The linked dialog MUST be open
+****************************************************************************************/
+CProfileBiasGain CBiasGainGadget::GetCurrentDialogProfile()
 {
-		ERROR3IF (!IsDialogOpen (), "The dialogue isn't open - something is seriously wrong!");
-		return (pDialog_m->GetCurrentDialogProfile ());
+	ERROR3IF (!IsDialogOpen (), "The dialogue isn't open - something is seriously wrong!");
+	return (pDialog_m->GetCurrentDialogProfile ());
 }
 
 
-// handle messages --------------------------------------------------------------------------------
-
-void  CBiasGainGadget::Message ( DialogMsg* pMessage )
+/****************************************************************************************
+Function  : CBiasGainGadget::Message
+Author    : Mikhail Tatarnikov
+Purpose   : Message handling routine
+Returns   : void
+Exceptions: 
+Parameters: [in] DialogMsg* pMessage - a message to handle
+Notes     : 
+****************************************************************************************/
+void  CBiasGainGadget::Message(DialogMsg* pMessage)
 {
-
 	Message( pMessage,  CProfileBiasGain() );
-
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		handle messages directed at the gadget - currently those indicating a selection
-//					of a dropdown item - which will be either a preset value or a request to launch
-//					a dialog
-//	Preconditions:	input message validly points to a DialogMsg
-//-------------------------------------------------------------------------------------------------
-
-void  CBiasGainGadget::Message ( DialogMsg* pMessage,  CProfileBiasGain const& BiasGain )
+/****************************************************************************************
+Function  : CBiasGainGadget::Message
+Author    : Mikhail Tatarnikov
+Purpose   : Message handling routing
+Returns   : void
+Exceptions: 
+Parameters: [in] DialogMsg*				 pMessage - an incoming message;
+            [in] CProfileBiasGain const& BiasGain -
+Notes     : 
+****************************************************************************************/
+void CBiasGainGadget::Message(DialogMsg* pMessage, CProfileBiasGain const& BiasGain)
 {
-
-	static const WORD  kLaunchDialog( 5 );
-
-
-	switch( pMessage->DlgMsg )
-	{
-		case DIM_SELECTION_CHANGED :
-		{
-			WORD  DropdownListIndex;
-			if (pOwningBar_m != NULL) { pOwningBar_m->GetValueIndex( GadgetID_m, &DropdownListIndex ); }
-			else { pOwningDialog_m->GetValueIndex( GadgetID_m, &DropdownListIndex ); }
-
-			switch( DropdownListIndex )
-			{
-				// get preset value to match the dropdown list index
-				//
-				case  0 :
-				case  1 :
-				case  2 :
-				case  3 :
-				case  4 :
-				{
-					CProfileBiasGain  SelectedProfile;
-
-					GetPresetBiasGainValue( DropdownListIndex, SelectedProfile );
-					SelectedProfile.SetGeneratesInfiniteUndo (FALSE);
-					// since a value has been chosen from the range of presets, a dialog (if present) is no longer needed
-					//CloseDialog();
-
-					// send a message back to the owning infobar to give it the chosen value
-					/*if (pOwningBar_m != NULL )*/ { BROADCAST_TO_CLASS( DialogMsg( 0, DIM_COMMIT, InfobarGadgetID_m, reinterpret_cast<INT32>( &SelectedProfile ) ),  DialogBarOp ); }
-
-					break;
-				}
-
-				// launch a dialog box to allow value to be set
-				//
-				/*case  kLaunchDialog :
-				{
-					if( pDialog_m == 0 )
-					{
-						OpDescriptor*  pOpDescriptor  =  OpDescriptor::FindOpDescriptor( OPTOKEN_BIASGAIN_DLG );
-						if( pOpDescriptor != 0 )
-						{
-							pDialog_m  =  new CBiasGainDlg();
-
-							pDialog_m->LinkInfoBar (pOwningBar_m);
-
-							OpParam  Param( reinterpret_cast<INT32>( this ),  reinterpret_cast<INT32>( &BiasGain ) );
-							pDialog_m->DoWithParam( pOpDescriptor, &Param );
-						}
-					}
-					break;
-				}*/
-			}
-			break;
-		}
-	}
-
 }
 
 
-void  CBiasGainGadget::CloseDialog ()
+/****************************************************************************************
+Function  : CBiasGainGadget::CloseDialog
+Author    : Mikhail Tatarnikov
+Purpose   : Close the related dialog
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void  CBiasGainGadget::CloseDialog()
 {
-
 	if( pDialog_m != 0 )
 	{
 		DialogMsg  MessageCancel( 0, DIM_CANCEL, GadgetID_m );
 
 		pDialog_m->Message( &MessageCancel );
-
-		// the above also (indirectly) retoggles the controlling buttons state
-		//pOwningBar_m->SetLongGadgetValue (GadgetID_m, 0);
 	}
-
 }
 
 
@@ -696,75 +415,67 @@ void  CBiasGainGadget::CloseDialog ()
 
 
 
-/*//-------------------------------------------------------------------------------------------------
-//	Author:			Harrison Ainsworth
-//	Date:			06/99
-//	Purpose:		
-//	Preconditions:	
-//	Postconditions:	
-//-------------------------------------------------------------------------------------------------
-
-CProfileBiasGainDlg*  CBiasGainGadget::GetDialog ()   const
+/****************************************************************************************
+Function  : CBiasGainGadget::DialogHasOpened
+Author    : Mikhail Tatarnikov
+Purpose   : Handling the dialog opening event
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void  CBiasGainGadget::DialogHasOpened()
 {
-
-	return  pBiasGainDlg_m;
-
-}*/
-
-
-void  CBiasGainGadget::DialogHasOpened ()
-{
+	// Put the gadet into the pushed state.
+	pOwningDialog_m->SetLongGadgetValue(GadgetID_m, 1);
 }
 
 
-void  CBiasGainGadget::DialogHasClosed ()
+/****************************************************************************************
+Function  : CBiasGainGadget::DialogHasClosed()
+Author    : Mikhail Tatarnikov
+Purpose   : Handling the dialog closing event
+Returns   : void
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+void  CBiasGainGadget::DialogHasClosed()
 {
-
 	delete  pDialog_m;
 	pDialog_m  =  0;
 
-	// and retoggle the controlling button
-	pOwningBar_m->SetLongGadgetValue (GadgetID_m, 0);
+	// Unpush the gadget.
+	pOwningDialog_m->SetLongGadgetValue(GadgetID_m, 0);
 }
 
 
-CGadgetID  CBiasGainGadget::GetGadgetID ()   const
+/****************************************************************************************
+Function  : CBiasGainGadget::GetGadgetID
+Author    : Mikhail Tatarnikov
+Purpose   : Returns ID of the attached adget
+Returns   : CGadgetID - the attached gadget ID
+Exceptions: 
+Parameters: None
+Notes     : 
+****************************************************************************************/
+CGadgetID CBiasGainGadget::GetGadgetID() const
 {
-
 	return  GadgetID_m;
-
 }
 
 
-void  CBiasGainGadget::GetDialogTitle ( String_256& DlgTitle )   const
+/****************************************************************************************
+Function  : CBiasGainGadget::GetDialogTitle
+Author    : Mikhail Tatarnikov
+Purpose   : Returns the dialog title
+Returns   : void
+Exceptions: 
+Parameters: [out] String_256& DlgTitle - the dialog title.
+Notes     : 
+****************************************************************************************/
+void  CBiasGainGadget::GetDialogTitle(String_256& DlgTitle) const
 {
-
 	DlgTitle.Load( BubbleID_m );
-
-}
-
-/*void CBiasGainGadget::SetDialogBiasGain(CProfileBiasGain const& Profile)
-{
-	if (pDialog_m)
-	{
-		pDialog_m->SetProfile(Profile);
-	}
-}*/
-
-void CBiasGainGadget::SetGadgetWritable(CWindowID WindowID, INT32 id, BOOL enable)
-{
-	// Get the window handle of the gadget, from the gadget ID
-	HWND gadget = ::GetDlgItem(WindowID, id);
-
-	// See if it's got a child window (it may be a Combo Box)
-	HWND hEdit = ::ChildWindowFromPoint(gadget, CPoint(1,1));
-
-	if (hEdit)				// Was there a child window ?
-		gadget = hEdit;		// Yes, so send the message to it
-
- 	if (enable)
-		::SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
-	else
-		::SendMessage(gadget, EM_SETREADONLY, TRUE, 0);		// Set the Read Only Flag
 }
 

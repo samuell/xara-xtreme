@@ -226,8 +226,15 @@ enum CDlgMessage {
 					DIM_MID_BN_UP,					// middle button up
 					DIM_MID_BN_CLICKED,				// middle button pressed
 
-					DIM_CTRL_RESIZED				// A control within the dialog has been resized
+					DIM_CTRL_RESIZED,				// A control within the dialog has been resized
 
+							// Profile (bias-gain) - related messages.
+					DIM_PROFILE_CHANGED,			// A profile-changing message, sent by the profile dialog
+													// to a toolbar.
+					DIM_PROFILE_CHANGING,			// The same as DIM_PROFILE_CHANGED, but sent before profile finally
+													// was changed. E.g. slider sends DIM_PROFILE_CHANGING while the user moves
+													// the knob and DIM_PROFILE_CHANGED when he releases it (sets the filnal position).
+					DIM_PROFILE_CHANGEIDLE			// Changing the 
 				};	
 
 enum CDlgMode { MODAL, MODELESS }; 	// Mode of dialog box     

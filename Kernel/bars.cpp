@@ -6169,7 +6169,8 @@ MsgResult SystemBarOp::Message(Msg* Msg)
 ********************************************************************************************/
 
 InformationBarOp::InformationBarOp(CCRuntimeClass* Class): DialogBarOp(Class) 
-{ InteractiveProfiles = TRUE; } 
+{
+}
 
 /********************************************************************************************
 
@@ -6189,7 +6190,8 @@ InformationBarOp::InformationBarOp(CCRuntimeClass* Class): DialogBarOp(Class)
 
 InformationBarOp::InformationBarOp(String_32& NewName,CCRuntimeClass* Class): 
 	DialogBarOp(NewName, Class) 
-{ InteractiveProfiles = TRUE; } 
+{
+}
 
 
 /********************************************************************************************
@@ -6258,12 +6260,9 @@ MsgResult InformationBarOp::Message(Msg* Message)
 	SeeAlso:	-
 
 ********************************************************************************************/
-
 void InformationBarOp::HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID)
 {
-#pragma message( __LOCMSG__ "InformationBarOp::HandleProfileButtonClick - do nothing" )
-	TRACE( _T("Warning - InformationBarOp::HandleProfileButtonClick called") );
-/*	if (!(Gadget.IsDialogOpen ()))
+	if (!(Gadget.IsDialogOpen ()))
 	{
 		CBiasGainDlg* pDialog_m  =  new CBiasGainDlg();
 		BOOL bMany = FALSE, bAllSameType = TRUE;
@@ -6278,7 +6277,7 @@ void InformationBarOp::HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadge
 	else
 	{
 		Gadget.CloseDialog ();
-	} */
+	}
 }
 
 
@@ -6327,9 +6326,7 @@ void InformationBarOp::HandleProfileButtonClick (CBiasGainGadget& Gadget, CGadge
 
 void InformationBarOp::HandleProfileSelChangingMsg (CBiasGainGadget& Gadget, CGadgetID ProfileGadgetID)
 {
-#pragma message( __LOCMSG__ "InformationBarOp::HandleProfileSelChangingMsg - do nothing" )
-	TRACE( _T("Warning - InformationBarOp::HandleProfileSelChangingMsg called") );
-/*	BOOL bMany = FALSE, bAllSameType = TRUE;
+	BOOL bMany = FALSE, bAllSameType = TRUE;
 	CProfileBiasGain* appliedBiasGain = GetProfileFromSelection (ProfileGadgetID, &bMany, &bAllSameType);
 
 	if (Gadget.IsDialogOpen ())
@@ -6378,7 +6375,7 @@ void InformationBarOp::HandleProfileSelChangingMsg (CBiasGainGadget& Gadget, CGa
 	else if (bAllSameType == FALSE)
 	{
 		EnableGadget (ProfileGadgetID, FALSE);
-	} */
+	}
 }
 
 
@@ -6439,111 +6436,8 @@ CProfileBiasGain* InformationBarOp::GetProfileFromSelection (CGadgetID ProfileGa
 }
 
 
-/********************************************************************************************
-
->	void ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID)
-
-	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	19/1/2000
-	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
-	Outputs:	-
-	Returns:	-
-	Purpose:	Responds to CGadgetID's corresponding profile dialog messages.  Profile
-				changes are applied (internally) through ChangeProfile ()
-	Errors:		-
-	SeeAlso:	InformationBarOp::ChangeProfile ()
-
-********************************************************************************************/
-
-void InformationBarOp::ProfileSelectionChange (DialogMsg* Message, CGadgetID GadgetID)
-{	
-	switch (Message->DlgMsg)
-	{
-		/// messages from the profile dialogs
-		case DIM_COMMIT :
-		case DIM_SLIDER_POS_SET :
-		case DIM_SLIDER_POS_CHANGING :   /// uncomment this line if rendering is fast enough
-		{
-			if (Message->DlgMsg != DIM_SLIDER_POS_CHANGING)
-			{
-				CProfileBiasGain* /*const**/  pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
-				ChangeProfile( pBiasGainValue, GadgetID );
-				break;
-			}
-			else
-			{
-				if (InteractiveProfiles == TRUE)
-				{
-					CProfileBiasGain* /*const**/  pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
-					ChangeProfile( pBiasGainValue, GadgetID );
-					break;
-				}
-			}
-		}
-		break;
-
-		case DIM_SLIDER_POS_IDLE :
-		{
-			CProfileBiasGain* /*const**/  pBiasGainValue  =  reinterpret_cast<CProfileBiasGain* /*const**/>( Message->DlgMsgParam );
-			ChangeProfileOnIdle( pBiasGainValue, GadgetID );
-		}
-		break;
-
-		default: break;
-	} // end switch (message)
-}
 
 
-/********************************************************************************************
-
->	void ChangeProfile (CProfileBiasGain& Profile, CGadgetID GadgetID)
-
-	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	19/1/2000
-	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
-	Outputs:	-
-	Returns:	-
-	Purpose:	Actually applies the profile to the selection.  This base class function
-				does nothing.  It MUST be overidden within InformationBarOp derived classes.
-
-				Take a look at tools\blendtool.cpp for an example of this.
-	Errors:		-
-	SeeAlso:	InformationBarOp::ProfileSelectionChange ()
-
-********************************************************************************************/
-
-void InformationBarOp::ChangeProfile (CProfileBiasGain* Profile, CGadgetID GadgetID)
-{
-	return;
-}
-
-/********************************************************************************************
-
->	void ChangeProfileOnIdle (CProfileBiasGain& Profile, CGadgetID GadgetID)
-
-	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	9/8/2000
-	Inputs:		CBiasGainGadget& and its GadgetID (for added safety)
-	Outputs:	-
-	Returns:	-
-	Purpose:	This is a special version of the ChangeProfile () function.  It is only called
-				when the user has stopped moving the mouse whilst dragging a profile slider.  In
-				this way, camelot now possess TRUE idle slider processing.
-	
-				Actually applies the profile to the selection (which should be non-undoable).
-				This base class function does nothing.
-				It MUST be overidden within InformationBarOp derived classes.
-
-				Take a look at tools\blendtool.cpp for an example of this.
-	Errors:		-
-	SeeAlso:	InformationBarOp::ProfileSelectionChange (), InformationBarOp::ChangeProfile ()
-
-********************************************************************************************/
-
-void InformationBarOp::ChangeProfileOnIdle (CProfileBiasGain* Profile, CGadgetID GadgetID)
-{
-	return;
-}
 
 /********************************************************************************************
 

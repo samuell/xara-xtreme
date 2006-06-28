@@ -100,20 +100,20 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_GRADFILL
 #define INC_GRADFILL
 
-//#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "tool.h"
 #include "transop.h"
-//#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "range.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "fillattr2.h"
+#include "bars.h"
+#include "range.h"
+#include "fillattr.h"
+#include "lineattr.h"
 #include "biasgdgt.h"
 //#include "selop.h"
 #include "brshattr.h"
-//#include "list.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "list.h"
 //#include "opbevel.h"
 #include "dragtool.h"
 
-class AttrTranspFillMapping;
+
 class Cursor;
 class GradInfoBarOp;
 class TranspInfoBarOp;
@@ -122,7 +122,6 @@ class AttrFillMapping;
 class AttrFillEffect;
 class SelRange;
 class OpApplyAttrInteractive;
-class AttrStrokeTransp;
 
 enum FillGeometry
 {
@@ -539,10 +538,7 @@ private:
 	INT32 SliderMax;
 
 public:
-PORTNOTE("other","filltool.cpp - removed m_BiasGainGadget use")
-#ifndef EXCLUDE_FROM_XARALX
-	CBiasGainGadget  m_BiasGainGadget;
-#endif
+	CBiasGainGadget  m_BiasGainGadget;	// Gadget for invoking bias gain dialog
 };
 	
 
@@ -693,10 +689,7 @@ private:
 	AttrValueChange* m_pDragTransp;
 
 public:
-PORTNOTE("other","filltool.cpp - removed m_BiasGainGadget use")
-#ifndef EXCLUDE_FROM_XARALX
-	CBiasGainGadget  m_BiasGainGadget;
-#endif
+	CBiasGainGadget  m_BiasGainGadget;	// Gadget for invoking the bias gain dialog.
 };
 
 /********************************************************************************************
@@ -764,7 +757,7 @@ public:
 	AttrRemoveStrokeTransp() : AttrValueChange() {}
 
 	virtual AttributeValue* GetAttributeValue() { return &Value; }
-	virtual CCRuntimeClass* GetAttributeType();
+	virtual CCRuntimeClass* GetAttributeType() { return CC_RUNTIME_CLASS(AttrStrokeTransp); }
 
 	virtual AttrFillGeometry* MutateFill(AttrFillGeometry* FillToMutate);
 

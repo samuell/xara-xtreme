@@ -410,11 +410,9 @@ void BlendTool::SelectChange(BOOL isSelected)
 		DestroyCursors();
 
 		// we need to close down any profile dialogs that are currently open ....
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX
 		pBlendInfoBarOp->CloseProfileDialog (pBlendInfoBarOp->m_BiasGainGadgetPosition);
 		pBlendInfoBarOp->CloseProfileDialog (pBlendInfoBarOp->m_BiasGainGadgetAttribute);
-#endif
+		
 		// BEFORE we do the next call !!!! Cause otherwise pBlendInfoBarOp will
 		// have been "deleted", and the above will access violate!
 
@@ -1430,16 +1428,14 @@ MsgResult BlendInfoBarOp::Message(Msg* Message)
 			case DIM_CREATE:
 			{
 
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX
 				// code added Diccon Yamanaka 9/99
-				/// init profile gadgets
-				{
-					m_BiasGainGadgetPosition.LinkControlButton ( this, _R(IDC_BLENDOBJECTBIASGAIN), _R(IDBBL_BLENDOBJECTBIASGAIN), _R(IDS_BLENDOBJECTBIASGAIN)	);
-					m_BiasGainGadgetAttribute.LinkControlButton ( this, _R(IDC_BLENDATTRBIASGAIN),	_R(IDBBL_BLENDATTRBIASGAIN),   _R(IDS_BLENDATTRBIASGAIN)	);
-					m_BiasGainGadgetAttribute.ToggleFillProfile ();
-				}
-#endif
+				// init profile gadgets
+//				m_BiasGainGadgetPosition.LinkControlButton ( this, _R(IDC_BLENDOBJECTBIASGAIN), _R(IDBBL_BLENDOBJECTBIASGAIN), _R(IDS_BLENDOBJECTBIASGAIN)	);
+//				m_BiasGainGadgetAttribute.LinkControlButton ( this, _R(IDC_BLENDATTRBIASGAIN),	_R(IDBBL_BLENDATTRBIASGAIN),   _R(IDS_BLENDATTRBIASGAIN)	);
+				m_BiasGainGadgetPosition.Init(this, _R(IDC_BLENDOBJECTBIASGAIN), _R(IDBBL_BLENDOBJECTBIASGAIN), _R(IDS_BLENDOBJECTBIASGAIN));
+				m_BiasGainGadgetAttribute.Init(this, _R(IDC_BLENDATTRBIASGAIN),	_R(IDBBL_BLENDATTRBIASGAIN), _R(IDS_BLENDATTRBIASGAIN));
+				m_BiasGainGadgetAttribute.ToggleFillProfile ();
+				
 				SetGadgetHelp(_R(IDC_BTN_BLENDSTEPS), _R(IDBBL_BLENDSTEPSEDIT), _R(IDS_BLENDSTEPSEDIT));
 
 				// these two buttons need different bitmaps for their selected and 
@@ -1506,19 +1502,9 @@ PORTNOTE("other", "Removed CBiasGainGadget")
 
 				}
 				else if (Msg->GadgetID == _R(IDC_BLENDOBJECTBIASGAIN))
-				{
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX
 					HandleProfileButtonClick (m_BiasGainGadgetPosition, _R(IDC_BLENDOBJECTBIASGAIN));
-#endif
-				}
 				else if (Msg->GadgetID == _R(IDC_BLENDATTRBIASGAIN))
-				{
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX
 					HandleProfileButtonClick (m_BiasGainGadgetAttribute, _R(IDC_BLENDATTRBIASGAIN));
-#endif
-				}
 				else if (Msg->GadgetID == _R(IDC_BTN_ONETOONE))
 				{
 					// DY 13/9/99 if button is down then pop it up 
@@ -1666,11 +1652,15 @@ PORTNOTE("other", "Removed CBiasGainGadget")
 	if (MESSAGE_IS_A(Message, SelChangingMsg))
 	{
 		UpdateInfoBarState();
-PORTNOTE("other", "Removed CBiasGainGadget")
-#ifndef EXCLUDE_FROM_XARALX
-		HandleProfileSelChangingMsg (m_BiasGainGadgetPosition, _R(IDC_BLENDOBJECTBIASGAIN));
-		HandleProfileSelChangingMsg (m_BiasGainGadgetAttribute, _R(IDC_BLENDATTRBIASGAIN));
-#endif
+		
+		if (this != NULL && this->HasWindow())
+		{
+			if (BlendTool::IsCurrent())
+			{
+				HandleProfileSelChangingMsg (m_BiasGainGadgetPosition, _R(IDC_BLENDOBJECTBIASGAIN));
+				HandleProfileSelChangingMsg (m_BiasGainGadgetAttribute, _R(IDC_BLENDATTRBIASGAIN));
+			}
+		}
 	}
 
 	// Pass the message on to the immediate base class
