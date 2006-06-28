@@ -3710,19 +3710,11 @@ BOOL DIBUtil::Convert24to8( LPBITMAPINFO pSourceInfo, LPBYTE pSourceBits,
 	RGBTRIPLE *pPal = pPalette;
 	for (UINT32 i = 0; i < NumberOfPaletteEntries; i++)
 	{
-#if defined(__WXMSW__)
 		lpPalette->rgbRed = pPal->rgbtRed;
-#else
-		lpPalette->rgbRed = pPal->rgbtBlue;
-#endif
 		pLogPalette->palPalEntry[i].peRed = pPal->rgbtRed;
 		lpPalette->rgbGreen = pPal->rgbtGreen;
 		pLogPalette->palPalEntry[i].peGreen = pPal->rgbtGreen;
-#if defined(__WXMSW__)
 		lpPalette->rgbBlue = pPal->rgbtBlue;
-#else
-		lpPalette->rgbBlue = pPal->rgbtRed;
-#endif
 		pLogPalette->palPalEntry[i].peBlue = pPal->rgbtBlue;
 		pLogPalette->palPalEntry[i].peFlags = 0x00;
 		lpPalette->rgbReserved = 0x00;
