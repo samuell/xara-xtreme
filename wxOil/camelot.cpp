@@ -257,7 +257,11 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static /*TYPENOTE: Correct*/ long	lLastTimeStamp = 0;
 
-	if (( event.GetEventType() == wxEVT_CREATE ) && (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow))))
+	if (( event.GetEventType() == wxEVT_CREATE )
+		&& (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow)))
+		&& !(event.GetEventObject()->IsKindOf(CLASSINFO(wxAdvSplashScreen))) // Don't trigger this on the creation of the splash screen itself
+		&& !(event.GetEventObject()->IsKindOf(CLASSINFO(wxSplashScreen)))
+		)
 	{
 		// a top level window is about to be created. End the splash screen if it is up as it may obscure it
 		CamResource::DoneInit(FALSE);	
