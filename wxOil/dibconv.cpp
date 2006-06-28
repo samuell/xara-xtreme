@@ -818,12 +818,9 @@ Conv24to8::Conv24to8(UINT32 Width, LPLOGPALETTE Palette, UINT32 DitherType)
 
 Conv24to8::~Conv24to8()
 {
-	PORTNOTETRACE("other","DIBConvert::~Conv24to8 - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	GRenderRegion::EnsurePalette(-1);
 	if (InputBuffer32bpp != NULL)
 		CCFree(InputBuffer32bpp);
-#endif
 }
 
 BOOL Conv24to8::Convert( LPBYTE Input, LPBYTE Output, UINT32 Height, BOOL FirstStrip )
