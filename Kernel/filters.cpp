@@ -422,10 +422,7 @@ Filter::Filter ()
 Filter::~Filter()
 {
 	// Destroy the associated OILFilter object
-	PORTNOTETRACE("filter","Removed OILFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	delete pOILFilter;
-#endif
 
 	// Destory any temporary saved fill attribute
 	if (FillAttr.Temp)
