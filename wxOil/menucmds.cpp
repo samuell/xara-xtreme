@@ -1139,8 +1139,6 @@ PORTNOTETRACE("other", "ViewStatusBarAction does nothing");
 
 void ViewRulersAction() 
 {
-PORTNOTETRACE("other", "ViewRulersAction does nothing");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Get the currently selected view pointer. (can be NULL if no documents!)
 	DocView *pView = DocView::GetSelected();
 	
@@ -1148,9 +1146,8 @@ PORTNOTETRACE("other", "ViewRulersAction does nothing");
 	{
 		BOOL NewState = ! pView->AreRulersVisible();
 		pView->ShowViewRulers(NewState);
-		ScreenCamView::SetDefaultRulersState(NewState);
+		CCamView::SetDefaultRulersState(NewState);
 	}
-#endif	
 }
 /********************************************************************************************
 

@@ -100,20 +100,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_OILRULERS
 #define INC_OILRULERS
 
-#ifndef __AFXWIN_H__
-#include <afxwin.h>
-#endif
-#ifndef __AFXDLGS_H__
-#include <afxdlgs.h>
-#endif
-
-#include <afxpriv.h>
 #include "guides.h"
 
 class WinCoord;
 class WinRect;
 class DovView;
-class ScreenCamView;
+class CCamView;
 class RulerBase;
 class OILHorizontalRuler;
 
@@ -128,52 +120,57 @@ enum MouseFollowerRenderType { RenderOn, RenderOff };
 #ifndef EXCLUDE_FROM_RALPH
 
 /********************************************************************************************
->	class LegendLabel : public CWnd
+>	class LegendLabel : public wxWindow
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/3/94
 	Purpose:	This is the class for the "set origin" gadget, 
 ********************************************************************************************/
 
-class LegendLabel : public CWnd
+class LegendLabel : public wxWindow
 {
 	friend class  OILHorizontalRuler;
-	DECLARE_DYNAMIC(LegendLabel)
+	DECLARE_DYNAMIC_CLASS(LegendLabel)
 
 public:
 	LegendLabel();
 	virtual	~LegendLabel();
-	BOOL Create(CWnd* pParentWindow);
+	BOOL Create(wxWindow* pParentWindow, INT32 id);
 	
 	void ShowLabel(BOOL show);
 	BOOL PositionLegend();
 
-	CPoint ClientToParentClient(CPoint point);
+	wxPoint ClientToParentClient(wxPoint point);
 
-	BOOL GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd);
+	BOOL GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd);
 
 protected:
 	BOOL SetLegendText(StringBase* pText);
 	BOOL SetLegendSize();
 
-	//{{AFX_MSG(LegendLabel)
-		afx_msg void OnPaint();   	
-		afx_msg void OnLButtonDown(UINT32 nFlags, CPoint point);
-		afx_msg void OnRButtonUp(UINT32 nFlags, CPoint point);
-		afx_msg void OnLButtonDblClk(UINT32 nFlags, CPoint point);
-		afx_msg void OnMouseMove(UINT32 nFlags, CPoint point);
-   	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+protected:
+	// wxWindows OIL message handlers and related functions
+	void DoPaint(wxDC* pDC);
+
+	void OnPaint(wxPaintEvent &event);
+
+	void OnSize(wxSizeEvent &event);
+	void OnLButtonDown(wxMouseEvent& event);
+	void OnLButtonDblClk(wxMouseEvent& event);
+	void OnRButtonUp(wxMouseEvent& event);
+	void OnMouseMove(wxMouseEvent& event);
 
 protected:
 	UINT32 LegendWidth;
 	UINT32 LegendHeight;
 	String_256 LegendText;
+
+	DECLARE_EVENT_TABLE()
 };
 
 
 /********************************************************************************************
->	class OILRuler : public CWnd
+>	class OILRuler : public wxWindow
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/3/94
@@ -182,77 +179,84 @@ protected:
 				and handles all mouse events fo the rulers 
 *********************************************************************************************/
 
-class OILRuler : public CWnd
+class OILRuler : public wxWindow
 {
-	DECLARE_DYNAMIC(OILRuler)
+	DECLARE_DYNAMIC_CLASS(OILRuler)
 
 public:
 	OILRuler();
 	virtual	~OILRuler();
-	virtual BOOL PostCreate() =0;
-	BOOL Create(CWnd* pParentWindow);	
+	virtual BOOL PostCreate() {return FALSE;}
+	BOOL Create(CCamView* pOwnerView, INT32 id);
 	void LinkToKernel(RulerBase* pKRuler) { pKernelRuler=pKRuler; }
 
 	static BOOL GetMinGraticuleSpacing(OilRect* pSpacing, DocView* pDocView);
-	static BOOL GetTextSize(OilRect* pTextSize, StringBase* pText, DocView* pDocView);
-	static BOOL GetTextSize(WinRect* pTextSize, StringBase* pText);
+	static BOOL GetTextSize(OilRect* pTextSize, LPCTSTR str, DocView* pDocView);
+	static BOOL GetTextSize(WinRect* pTextSize, LPCTSTR str);
+	static void PatB(wxDC* pDC, INT32 x, INT32 y, INT32 dx, INT32 dy, wxColour rgb);
 
-	CPoint  ClientToOtherClient(CWnd* pOtherCWnd, CPoint point);
-	WinRect ClientToOtherClient(CWnd* pOtherCWnd, WinRect  WR);
+	wxPoint  ClientToOtherClient(wxWindow* pOtherCWnd, wxPoint point);
+	WinRect ClientToOtherClient(wxWindow* pOtherCWnd, WinRect  WR);
 
-	OilCoord ClientToOil(DocView* pDocView, CPoint point);
+	OilCoord ClientToOil(DocView* pDocView, wxPoint point);
 	OilRect  ClientToOil(DocView* pDocView, WinRect  WR);
 
-	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel) =0;
+	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str) {return FALSE;}
 	virtual BOOL DrawMinorGraticule(OilCoord GratOilPos, INT32 ExtraSize=0);
 
 	BOOL PaintMouseFollower(OilCoord OilPos, DocView* pDocView, MouseFollowerRenderType RenderType);
-	BOOL  DrawMouseFollower(OilCoord OilPos, DocView* pDocView, MouseFollowerRenderType RenderType, CDC* pDC);
+	BOOL  DrawMouseFollower(OilCoord OilPos, DocView* pDocView, MouseFollowerRenderType RenderType, wxDC* pDC);
 
-	BOOL GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd);
+	BOOL GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd);
 
-	void ShowRuler(BOOL show);
+	virtual void ShowRuler(BOOL show);
 	void UpdateRuler();
 
 	static BOOL Init();
 	static void Deinit();
 	static INT32 GetRenderWidth() { return RenderWidth; }
 	static UINT32 GetWidth()       { return RulerWidth; }
+	static wxFont GetRulerFont();
 
 protected:
-	virtual BOOL IsHorizontal() =0;
-	virtual BOOL StartDrag(UINT32 nFlags,CPoint point);
+	virtual BOOL IsHorizontal() {return FALSE;}
+	virtual BOOL StartDrag(UINT32 nFlags, wxPoint point);
 
-	//{{AFX_MSG(OILRuler)
-		afx_msg void OnPaint();   	
-   		afx_msg void OnLButtonDown(UINT32 nFlags, CPoint point);
-		afx_msg void OnRButtonUp(UINT32 nFlags, CPoint point);
-		afx_msg void OnLButtonDblClk(UINT32 nFlags, CPoint point);
-		afx_msg void OnMouseMove(UINT32 nFlags, CPoint point);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+protected:
+	// wxWindows OIL message handlers and related functions
+	void DoPaint(wxDC* pDC);
+
+	void OnPaint(wxPaintEvent &event);
+
+	void OnLButtonDown(wxMouseEvent& event);
+	void OnLButtonDblClk(wxMouseEvent& event);
+	void OnRButtonUp(wxMouseEvent& event);
+	void OnMouseMove(wxMouseEvent& event);
+
 
 public:
-	static String_256 *FontName;		// read from .ini file
+	static String_256*	FontName;		// read from .ini file
 	static INT32        FontSize;
 
 protected:
-	static INT32 RenderWidth;	// renderable width of ruler, determined by the font specified in the .ini
-	static UINT32 RulerWidth;		// offset to next bar - NOT NECESSARILY THE PHYSICAL OR LOGICAL WIDTH OF THE RULER!
-	static INT32 CharHeight;
-	static INT32 CharWidth;
+	static INT32 		RenderWidth;	// renderable width of ruler, determined by the font specified in the .ini
+	static UINT32 		RulerWidth;		// offset to next bar - NOT NECESSARILY THE PHYSICAL OR LOGICAL WIDTH OF THE RULER!
+	static INT32 		CharHeight;
+	static INT32 		CharWidth;
 
 	// vars to pass info from OIL OnPaint() to low level OIL render funtions, transparent to intermediate kernel code
-	static CPaintDC* pPaintDC;
-	static DocView*  pPaintDocView;
-	static CSize     RulerToDocOffset;
+	static wxDC* 		pPaintDC;
+	static DocView*  	pPaintDocView;
+	static wxSize     	RulerToDocOffset;
 
 	static OpGuidelineParam NewGuidelineParam;
 
-	ScreenCamView* pParentWnd;
-	RulerBase*     pKernelRuler;
+	CCamView*			m_pOwnerView;
+	RulerBase*			pKernelRuler;
 
 	BOOL InDrag;
+
+	DECLARE_EVENT_TABLE()
 };
 
 
@@ -266,17 +270,18 @@ protected:
 class OILHorizontalRuler : public OILRuler
 {
 	friend class LegendLabel;
-	DECLARE_DYNAMIC(OILHorizontalRuler)
+	DECLARE_DYNAMIC_CLASS(OILHorizontalRuler)
 
 public:
 	OILHorizontalRuler();
 	~OILHorizontalRuler();
 	virtual BOOL PostCreate();
 
-	void CalcPosFromParentClient(LPRECT lpRect);
+	void CalcPosFromParentClient(WinRect* lpRect);
 	void ScrollRuler(INT32 amount);
 
-	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel);
+	virtual void ShowRuler(BOOL show);
+	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str);
 
 	BOOL PositionLegend();
 	BOOL SetLegendText(StringBase* pText);
@@ -284,12 +289,8 @@ public:
 	LegendLabel* GetpLegendLabel() { return pLegend; }
 
 protected:
-	virtual BOOL StartDrag(UINT32 nFlags,CPoint point);
+	virtual BOOL StartDrag(UINT32 nFlags, wxPoint point);
 	virtual BOOL IsHorizontal(){ return TRUE ;};
-
-	//{{AFX_MSG(OILHorizontalRuler)
-   	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
 
 private:
 	LegendLabel* pLegend;
@@ -305,65 +306,68 @@ private:
 
 class OILVerticalRuler : public OILRuler
 {
-	DECLARE_DYNAMIC(OILVerticalRuler)
+	DECLARE_DYNAMIC_CLASS(OILVerticalRuler)
 
 public:
 	OILVerticalRuler();
 	virtual BOOL PostCreate();
 
-	void CalcPosFromParentClient(LPRECT lpRect);
+	void CalcPosFromParentClient(WinRect* lpRect);
 	void ScrollRuler(INT32 amount);
 
-	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel);
+	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str);
 
 protected:
-	virtual BOOL StartDrag(UINT32 nFlags,CPoint point);
+	virtual BOOL StartDrag(UINT32 nFlags, wxPoint point);
 	virtual BOOL IsHorizontal(){ return FALSE ;};
 
-	//{{AFX_MSG(OILVerticalRuler)
-   	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
 };
 
 
 /********************************************************************************************
->	class OriginGadget : public CWnd
+>	class OriginGadget : public wxWindow
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/3/94
 	Purpose:	This is the class for the "set origin" gadget, 
 ********************************************************************************************/
 
-class OriginGadget : public CWnd
+class OriginGadget : public wxWindow
 {
-	DECLARE_DYNAMIC(OriginGadget)
+	DECLARE_DYNAMIC_CLASS(OriginGadget)
 
 public:
 	OriginGadget();
 	virtual	~OriginGadget();
-	BOOL Create(CWnd* pParentWindow);
+	BOOL Create(CCamView* pOwnerView, INT32 id);
 	
 	void ShowGadget(BOOL show);
-	void CalcPosFromParentClient(LPRECT lpRect);
+	void CalcPosFromParentClient(WinRect* lpRect);
 
-	BOOL GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd);
-	static TCHAR* BubbleHelpCallBack(HWND hWnd, UINT32 PaneIndex, void* UserData);
-	BOOL PlotMaskedBitmap(CDC* destDC, CBitmap* srcBitmap, INT32 SrcOffset,
+	BOOL GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd);
+#if !defined(EXCLUDE_FROM_XARALX)
+	static TCHAR* BubbleHelpCallBack(CWindowID hWnd, UINT32 PaneIndex, void* UserData);
+#endif
+	BOOL PlotMaskedBitmap(wxDC* destDC, wxBitmap* srcBitmap, INT32 SrcOffset,
 								INT32 xPlotOffset,INT32 yPlotOffset, INT32 width, INT32 height);
-protected:
-	//{{AFX_MSG(OriginGadget)
-		afx_msg void OnPaint();   	
-		afx_msg void OnLButtonDown(UINT32 nFlags, CPoint point);
-		afx_msg void OnRButtonUp(UINT32 nFlags, CPoint point);
-		afx_msg void OnLButtonDblClk(UINT32 nFlags, CPoint point);
-		afx_msg void OnMouseMove(UINT32 nFlags, CPoint point);
-   	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
 
 protected:
-	ScreenCamView* pParentWnd;
+	// Windows OIL message handlers and related functions
+	void DoPaint(wxDC* pDC);
 
-	CBitmap* pGlyph;
+	void OnPaint(wxPaintEvent &event);
+
+	void OnLButtonDown(wxMouseEvent& event);
+	void OnLButtonDblClk(wxMouseEvent& event);
+	void OnRButtonUp(wxMouseEvent& event);
+	void OnMouseMove(wxMouseEvent& event);
+
+protected:
+	CCamView* m_pOwnerView;
+
+	wxBitmap* pGlyph;
+
+	DECLARE_EVENT_TABLE()
 };
 
 #endif

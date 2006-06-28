@@ -112,7 +112,7 @@ class NodeRenderableInk;
 // WEBSTER - markn 15/1/97
 // No rulers in Webster, same as RALPH
 #ifndef WEBSTER
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************
 >	class RulerBase : public CCObject
@@ -224,7 +224,7 @@ public:
 			  OriginGadget* pOGadget);
 
 	MsgResult Message(Msg* Msg);
-	BOOL      GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd);
+	BOOL      GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd);
 	BOOL      Update();
 	BOOL      UpdateRedrawData();
 

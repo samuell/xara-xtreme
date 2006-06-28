@@ -119,7 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sgliboil.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "oilmenus.h"
-//#include "oilruler.h"
+#include "oilruler.h"
 #include "layer.h"
 //#include "atminst.h"
 #include "progress.h"
@@ -356,12 +356,12 @@ PORTNOTE("other","Removed ATMInstall usage")
 	View::Deinit();
 #if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	SGLibOil::TidyUp();
+//	DeInitRegistry();
+#endif
 // WEBSTER - markn 15/1/97
 // No rulers in Webster
 #ifndef WEBSTER
 	OILRuler::Deinit();
-#endif
-//	DeInitRegistry();
 #endif
 
 	// Deinit static rendering stuff

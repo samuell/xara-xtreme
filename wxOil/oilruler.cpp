@@ -107,14 +107,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "oilruler.h"
-#include "mainfrm.h"
-#include "camafx.h"
+//#include "mainfrm.h"
+//#include "camafx.h"
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mario.h"
 //#include "winrect.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "scrcamvw.h"
+#include "camview.h"
 #include "rulers.h"
-#include "fonts.h"
+//#include "fonts.h"
 #include "guides.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
@@ -127,72 +127,150 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "basebar.h"
 #include "brushmsg.h"
 
-#ifdef _DEBUG
-	#undef THIS_FILE
-	static char BASED_CODE THIS_FILE[] = __FILE__;
-#endif
+//#ifdef _DEBUG
+//	#undef THIS_FILE
+//	static char BASED_CODE THIS_FILE[] = __FILE__;
+//#endif
 
 #define MAJOR_GRAT_LEN 6
 #define MIN_PIXEL_GRATICULE_SPACING_X 5
 #define MIN_PIXEL_GRATICULE_SPACING_Y 5
 
 // statics ...
-String_256 			*OILRuler::FontName        = NULL; /*String_256(_R(IDS_OILRULER_SMALL_FONTS)); "Small Fonts";*/ // - read from .ini
-INT32        			OILRuler::FontSize         = 7;				// read from .ini
-INT32       			OILRuler::RenderWidth      = 0;		// this is set up on app start up 
-UINT32       			OILRuler::RulerWidth       = 0;		// actually offset to next bar (based on RenderWidth)
-INT32       			OILRuler::CharHeight       = 0;
-INT32       			OILRuler::CharWidth        = 0;
+String_256*			OILRuler::FontName         = NULL; /*String_256(_R(IDS_OILRULER_SMALL_FONTS)); "Small Fonts";*/ // - read from .ini
+INT32        		OILRuler::FontSize         = 7;				// read from .ini
+INT32       		OILRuler::RenderWidth      = 0;		// this is set up on app start up
+UINT32       		OILRuler::RulerWidth       = 0;		// actually offset to next bar (based on RenderWidth)
+INT32       		OILRuler::CharHeight       = 0;
+INT32       		OILRuler::CharWidth        = 0;
 DocView*   			OILRuler::pPaintDocView    = NULL;
-CPaintDC*  			OILRuler::pPaintDC         = NULL;
-CSize      			OILRuler::RulerToDocOffset = WinCoord(0,0);
+wxDC*		  		OILRuler::pPaintDC         = NULL;
+wxSize      		OILRuler::RulerToDocOffset = wxSize(0,0);
 OpGuidelineParam	OILRuler::NewGuidelineParam;
-
-
-/********************************************************************************************
->	void PatB(CDC* hDC, INT32 x, INT32 y, INT32 dx, INT32 dy, COLORREF rgb)
-
-	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com> (Some MFC dude, actually)
-	Created:	14/3/94
-	Inputs:		hDC - destination DC
-				x,y,dx,dy - rectangle to fill
-				rgb - colour to fill with
-	Purpose:	Paints a rectangle in the given (dithered) colour
-				It looks pretty hideous, but this is how the MFC buttonbar does it...
-				The conclusions that this leads to are left as an exercise for the reader.
-				(OK, so they're not. It suggest that either MFC sux, or plotting text is
-				easier/faster than creating a brush, in which case Windoze sux)
-********************************************************************************************/
-
-static void NEAR PASCAL PatB(CDC* cDC, INT32 x, INT32 y, INT32 dx, INT32 dy, COLORREF rgb)
-{
-	RECT rect;
-	rect.left	= x;
-	rect.top	= y;
-	rect.right	= x + dx;
-	rect.bottom	= y + dy;
-
-	cDC->SetBkColor(rgb);
-	cDC->ExtTextOut(0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
-}
- 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //									 OILRuler Base Class
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(OILRuler ,CWnd)
+IMPLEMENT_DYNAMIC_CLASS(OILRuler, wxWindow)
 
-BEGIN_MESSAGE_MAP( OILRuler,CWnd)
-	//{{AFX_MSG_MAP( OILRuler )
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONUP()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP( )
+BEGIN_EVENT_TABLE( OILRuler, wxWindow )
+	EVT_LEFT_DOWN(		OILRuler::OnLButtonDown)
+	EVT_LEFT_DCLICK(	OILRuler::OnLButtonDblClk)
+	EVT_RIGHT_UP(		OILRuler::OnRButtonUp)
+	EVT_MOTION(			OILRuler::OnMouseMove)
+	EVT_PAINT(			OILRuler::OnPaint)
+END_EVENT_TABLE()
+
+
+/********************************************************************************************
+>	static BOOL OILRuler::Init()
+
+	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	25/9/95
+	Returns:	FALSE if fails
+	Purpose:	read the font name and size for the ruler from the .ini file
+				and use this to determine the size of the rulers
+********************************************************************************************/
+
+BOOL OILRuler::Init()
+{
+	if (FontName == NULL)
+		FontName = new String_256(_R(IDS_OILRULER_SMALL_FONTS));
+
+	BOOL ok=GetApplication()->DeclareSection(_T("Rulers"), 2);
+	if (ok && FontName != NULL) ok=GetApplication()->DeclarePref(_T("Rulers"), _T("FontName"), FontName);
+	if (ok) ok=GetApplication()->DeclarePref(_T("Rulers"), _T("FontSize"), &FontSize, 2,72);
+	if (!ok)
+		return FALSE;
+	ERROR2IF(FontName == NULL,FALSE,"OILRuler::SetRenderWidth() - couldn't create a string_256 - eek !");
+	if (FontName->Length()==0)
+		FontName->Load(_R(IDS_OILRULER_SMALL_FONTS));
+	ERROR2IF(FontName->Length()==0,FALSE,"OILRuler::SetRenderWidth() - invalid FontName in .ini file");
+
+	WinRect WinTextSize;
+	ok=GetTextSize(&WinTextSize, _T("8"));
+	if (!ok)
+		return FALSE;
+
+	CharHeight  = WinTextSize.GetHeight();
+	CharWidth   = WinTextSize.GetWidth();
+	RenderWidth = CharWidth*3 + 4;
+
+	return TRUE;
+}
+
+
+/********************************************************************************************
+>	static void OILRuler::Deinit()
+
+	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	15/11/95
+	Purpose:	return memory 'new'd by the Init function
+********************************************************************************************/
+
+void OILRuler::Deinit()
+{
+	if(FontName != NULL)
+	{
+		delete FontName;
+		FontName = NULL;
+	}
+}
+
+
+
+
+/********************************************************************************************
+>	static wxFont OILRuler::GetRulerFont()
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	28/Jun/2006
+	Purpose:	Get a stock font for use in rulers
+********************************************************************************************/
+
+wxFont OILRuler::GetRulerFont()
+{
+PORTNOTE("ruler", "Temporarilly replace font factory with direct wxFont access")
+#if !defined(EXCLUDE_FROM_XARALX)
+		wxFont font = FontFactory::GetFont(STOCKFONT_RULERS);
+#else
+	wxFont FixedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+	FixedFont.SetPointSize(OILRuler::FontSize);		// 6 is too small, 7 is too big, really...
+
+	return FixedFont;
+#endif
+}
+
+
+
+
+/********************************************************************************************
+>	void OILRuler::PatB(wxDC* pDC, INT32 x, INT32 y, INT32 dx, INT32 dy, wxColour rgb)
+
+	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	14/3/94
+	Inputs:		hDC - destination DC
+				x,y,dx,dy - rectangle to fill
+				rgb - colour to fill with
+	Purpose:	Paints a rectangle in the given (dithered) colour
+********************************************************************************************/
+
+void OILRuler::PatB(wxDC* pDC, INT32 x, INT32 y, INT32 dx, INT32 dy, wxColour rgb)
+{
+	wxRect rect;
+	rect.x	= x;
+	rect.y	= y;
+	rect.width	= dx;
+	rect.height	= dy;
+
+	wxBrush brush(rgb);
+	pDC->SetBrush(brush);
+	pDC->DrawRectangle(rect);
+}
+
+
 
 
 /********************************************************************************************
@@ -222,7 +300,7 @@ OILRuler::OILRuler()
 
 
 /********************************************************************************************
->	BOOL OILRuler::Create(CWnd* pParentWindow)
+>	BOOL OILRuler::Create(CCamView* pOwnerView, INT32 id)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -231,39 +309,23 @@ OILRuler::OILRuler()
 	Purpose:	Creates the ruler window.
 ********************************************************************************************/
                     
-BOOL OILRuler::Create(CWnd* pParentWindow)
+BOOL OILRuler::Create(CCamView* pOwnerView, INT32 id)
 { 
-	BOOL CreatedWindow;
-	ENSURE(pParentWnd,"DockingBar must have a Parent");
+	ERROR2IF(pOwnerView==NULL, FALSE, "DockingBar must have a Parent");
 	
-	pParentWnd = (ScreenCamView*) pParentWindow;
+	m_pOwnerView = pOwnerView;
 
-	CRect rect;			// Rectangle for Create
-	rect.SetRectEmpty();
-	DWORD style = WS_CHILD  | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
-	if(RULER_BORDERS)
-		style |=WS_BORDER;
-	#ifndef WIN32
-		DWORD
-	#endif
-	
-	// create the HWND
-	CreatedWindow = CWnd::Create(NULL,
-						AfxRegisterWndClass(CS_DBLCLKS,0,0,0),
-						style,
-						rect,
-						pParentWnd,
-						0,
-						NULL);
-	
+	if (!wxWindow::Create(pOwnerView->GetParentFrame(), id, wxDefaultPosition, wxSize(RulerWidth, RulerWidth), wxNO_BORDER))
+		return(FALSE);
+
 	PostCreate();
 
-	return CreatedWindow;
+	return TRUE;
 }
 
 
 /********************************************************************************************
->	virtual BOOL OILRuler::StartDrag(UINT32 nFlags,CPoint point)
+>	virtual BOOL OILRuler::StartDrag(UINT32 nFlags, wxPoint point)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -271,7 +333,7 @@ BOOL OILRuler::Create(CWnd* pParentWindow)
 	Purpose:	base StartDrag function  - don't call
 ********************************************************************************************/
                     
-BOOL OILRuler::StartDrag(UINT32 nFlags,CPoint point)
+BOOL OILRuler::StartDrag(UINT32 nFlags, wxPoint point)
 { 
 	return TRUE;
 }
@@ -288,7 +350,7 @@ BOOL OILRuler::StartDrag(UINT32 nFlags,CPoint point)
 
 void OILRuler::ShowRuler(BOOL show)
 {
-	ShowWindow(show ? SW_SHOWNA : SW_HIDE);
+	Show(show);
 	
 	BROADCAST_TO_ALL(ScreenChangeMsg());
 
@@ -296,6 +358,8 @@ void OILRuler::ShowRuler(BOOL show)
 	{
 		// we need to take into account camelots new floating toolbar ....
 
+PORTNOTE("ruler", "Removed code to move floating toolbars")
+#if !defined(EXCLUDE_FROM_XARALX)
 		DockBarType DockBarType;// = DOCKBAR_FLOAT;
 		KernelBarPos * pKernelBarPos;
 
@@ -334,6 +398,7 @@ void OILRuler::ShowRuler(BOOL show)
 				}
 			}
 		}
+#endif
 	}
 } 
 
@@ -349,8 +414,8 @@ void OILRuler::ShowRuler(BOOL show)
 
 void OILRuler::UpdateRuler()
 {
-	Invalidate();
-	UpdateWindow();
+	Refresh();
+	Update();
 } 
 
 
@@ -368,28 +433,49 @@ OILRuler::~OILRuler()
  
 
 /*********************************************************************************************
->	afx_msg void OILRuler::OnPaint()
+>	void OILRuler::OnPaint( wxPaintEvent &evnt )
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	ages ago
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Redraws the colour bar
+	Errors:		-
+
+**********************************************************************************************/ 
+void OILRuler::OnPaint( wxPaintEvent &evnt )
+{
+	// Always create this so that the area is validated
+	wxPaintDC dc(this);
+
+	if (!CCamApp::IsDisabled())
+	{
+		DoPaint(&dc);
+	}
+}
+
+
+
+/*********************************************************************************************
+>	void OILRuler::DoPaint(wxDC* pDC)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/8/95
 	Purpose:	Paints the client area of the Ruler which isn't covered by child windows,
 				in response to a WM_PAINT message.
-/**********************************************************************************************/ 
+**********************************************************************************************/
 
-void OILRuler::OnPaint()
+void OILRuler::DoPaint(wxDC* pDC)
 {
-	// prevent recursive redraws when an error ocurs
-	if (CCamApp::DisableSys)
-		return;
-
 	// get and validate a few pointers before we start
-	DocView* pDocView=pParentWnd->GetDocViewPtr();
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
 	if (pDocView==NULL)
 	{
 		ERROR2RAW("OILRuler::OnPaint() - pDocView==NULL");
 		return;
 	}
-	CWnd* pRenderWnd=pDocView->GetRenderWindow();
+	wxWindow* pRenderWnd=pDocView->GetRenderWindow();
 	if (pRenderWnd==NULL)
 	{
 		ERROR2RAW("OILRuler::OnPaint() - pRenderWnd==NULL");
@@ -398,103 +484,84 @@ void OILRuler::OnPaint()
 
 	// get the update region in docview OilCoords
 	WinRect RulerUpdateRect;
-	GetUpdateRect(&RulerUpdateRect);
+	pDC->GetClippingBox(&RulerUpdateRect.x, &RulerUpdateRect.y, &RulerUpdateRect.width, &RulerUpdateRect.height);
+	if (RulerUpdateRect.IsEmpty())
+		RulerUpdateRect = GetClientRect();
 	OilRect UpdateOilRect = ClientToOil(pDocView,RulerUpdateRect);
 
 	// cache the offsets from ruler to doc window relative coords
 	// note only x valid when painting horizontal ruler and only y valid for painting vertical ruler
 	WinRect UpdateRect = ClientToOtherClient(pRenderWnd,RulerUpdateRect);
-	ERROR3IF(UpdateRect.Width()!=RulerUpdateRect.Width() || UpdateRect.Height()!=RulerUpdateRect.Height(),"OILRuler::OnPaint() - ruler and doc window have incompatible coordinate spaces");
-	RulerToDocOffset = CSize(UpdateRect.left-RulerUpdateRect.left, UpdateRect.bottom-RulerUpdateRect.bottom);
+	ERROR3IF(UpdateRect.GetWidth()!=RulerUpdateRect.GetWidth() || UpdateRect.GetHeight()!=RulerUpdateRect.GetHeight(),"OILRuler::OnPaint() - ruler and doc window have incompatible coordinate spaces");
+	RulerToDocOffset = wxSize(UpdateRect.x-RulerUpdateRect.x, UpdateRect.GetBottomEx()-RulerUpdateRect.GetBottomEx());
 
-	// Create a painting DC
-	CPaintDC dc(this);
-	dc.SetROP2(R2_COPYPEN);
 
 	// read the necessary colours
-	COLORREF BackCol  = ::GetSysColor(COLOR_BTNFACE);
-	COLORREF TopLeft  = ::GetSysColor(COLOR_BTNHIGHLIGHT);
-	COLORREF BotRight = ::GetSysColor(COLOR_BTNSHADOW);
-	COLORREF TextCol  = ::GetSysColor(COLOR_BTNTEXT);
+	wxColour BackCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+	wxColour TopLeft  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
+	wxColour BotRight = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+	wxColour TextCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
 
   	// get info about client rect
-	CRect ClientRect;
-	GetClientRect(&ClientRect);
-	INT32 left   = ClientRect.left;
-	INT32 top    = ClientRect.top;
-	INT32 width  = ClientRect.Width();
-	INT32 height = ClientRect.Height();
-	INT32 right  = left + width;
-	INT32 bottom = top  + height;
-	if (IsHorizontal() && height!=RenderWidth || !IsHorizontal() && width!=RenderWidth)
-		ERROR3_PF(("OILRuler::OnPaint() - ruler client size (%d,%d) and RenderWidth (%d) incompatible!",width,height,RenderWidth));
+	wxRect ClientRect = GetClientRect();
+	INT32 left   = ClientRect.x;
+	INT32 top    = ClientRect.y;
+	INT32 width  = ClientRect.GetWidth();
+	INT32 height = ClientRect.GetHeight();
+//	INT32 right  = left + width;
+//	INT32 bottom = top  + height;
+//	if (IsHorizontal() && height!=RenderWidth || !IsHorizontal() && width!=RenderWidth)
+//		ERROR3_PF(("OILRuler::OnPaint() - ruler client size (%d,%d) and RenderWidth (%d) incompatible!",width,height,RenderWidth));
 
 	// render the background
-	PatB(&dc, left,top, width,height, BackCol);
+	wxPen penNoOutline(BackCol, 0, wxTRANSPARENT);
+	pDC->SetPen(penNoOutline);
+	PatB(pDC, left,top, width,height, BackCol);
 	
 	// paint borders to be over written by graticules
-	if(IsHorizontal())
+/*	if(IsHorizontal())
 	{
-		PatB(&dc, left+1,top+1,  width-2,1,  TopLeft);	// horizontal ruler top    hi-light
-		PatB(&dc, left+1,bottom, width-1,-1, BotRight);	// horizontal ruler bottom lo-light
+		PatB(pDC, left+1,top+1,  width-2,1,  TopLeft);	// horizontal ruler top    hi-light
+		PatB(pDC, left+1,bottom, width-1,-1, BotRight);	// horizontal ruler bottom lo-light
 	}
 	else
 	{
-		PatB(&dc, left+1,top+1,  1,height-2, TopLeft);	// vertical ruler left  hi-light
-		PatB(&dc,  right,top+1, -1,height-1, BotRight);	// vertical ruler right lo-light
+		PatB(pDC, left+1,top+1,  1,height-2, TopLeft);	// vertical ruler left  hi-light
+		PatB(pDC,  right,top+1, -1,height-1, BotRight);	// vertical ruler right lo-light
 	}
-	
+*/
+	pDC->SetPen(wxPen(*wxBLACK, 1, wxSOLID));		// Restore previous Pen
+
 	// get the kernel to render the ruler
 	if (pKernelRuler)
 	{
 		// store pointers to CDC and DocView required for redraw
-		pPaintDC      = &dc;
+		pPaintDC      = pDC;
 		pPaintDocView = pDocView;
 
 		// set up DC objects required to draw the ruler
-		CPen PaintPen(PS_SOLID,0,TextCol);
-		CPen*    pOldPaintPen    = pPaintDC->SelectObject(&PaintPen);
-		INT32      OldBkMode       = pPaintDC->SetBkMode(TRANSPARENT);
-		COLORREF OldPaintTextCol = pPaintDC->SetTextColor(TextCol);
-		HGDIOBJ  pOldPaintFont   = pPaintDC->SelectObject(FontFactory::GetFont(STOCKFONT_RULERS));
-		if (pOldPaintPen==NULL || pOldPaintFont==NULL)
-		{
-			ERROR2RAW("OILRuler::OnPaint() - pPaintDC->SelectObject() failed");
-			return;
-		}
+		pDC->SetTextForeground(TextCol);
+		pDC->SetBackgroundMode(wxTRANSPARENT);
+		pDC->SetFont(GetRulerFont());
 
 		// draw the ruler
 		pKernelRuler->Redraw(&UpdateOilRect);
-
-		// restore DC
-		HGDIOBJ  pTempFont   = pPaintDC->SelectObject(pOldPaintFont);
-		COLORREF TempTextCol = pPaintDC->SetTextColor(OldPaintTextCol);
-		INT32      TempBkMode  = pPaintDC->SetBkMode(OldBkMode);
-		CPen*    pTempPen    = pPaintDC->SelectObject(pOldPaintPen);
-		if (pTempPen==NULL || pTempFont==NULL)
-		{
-			ERROR2RAW("OILRuler::OnPaint() - pPaintDC->SelectObject() failed");
-			return;
-		}
-
-		// ensure pointers to DC and DocView are reset
-		pPaintDC      = NULL;
-		pPaintDocView = NULL;
 	}
 
 	// paint the bits of the border that need to cover the ruler rendering
-	if(IsHorizontal())
+/*	if(IsHorizontal())
 	{
-		PatB(&dc,   left,top,    1,height,   BackCol);	// horizontal ruler light grey left edge
-		PatB(&dc, left+1,top+1,  1,height-2, TopLeft);	// horizontal ruler left  hi-light
-		PatB(&dc,  right,top+1, -1,height-1, BotRight);	// horizontal ruler right lo-light
+		PatB(pDC,   left,top,    1,height,   BackCol);	// horizontal ruler light grey left edge
+		PatB(pDC, left+1,top+1,  1,height-2, TopLeft);	// horizontal ruler left  hi-light
+		PatB(pDC,  right,top+1, -1,height-1, BotRight);	// horizontal ruler right lo-light
 	}
 	else
 	{
-		PatB(&dc,   left,top,    width-1,1,  BackCol);	// vertical ruler top light grey top edge   
-		PatB(&dc, left+1,top+1,  width-2,1,  TopLeft);	// vertical ruler top    hi-light
-		PatB(&dc, left+1,bottom, width-1,-1, BotRight);	// vertical ruler bottom lo-light
+		PatB(pDC,   left,top,    width-1,1,  BackCol);	// vertical ruler top light grey top edge
+		PatB(pDC, left+1,top+1,  width-2,1,  TopLeft);	// vertical ruler top    hi-light
+		PatB(pDC, left+1,bottom, width-1,-1, BotRight);	// vertical ruler bottom lo-light
 	}
+*/
 }
 
 
@@ -529,15 +596,14 @@ BOOL OILRuler::DrawMinorGraticule(OilCoord GratOilPos, INT32 ExtraSize)
 		GratWinRect = WinRect(RenderWidth-MinorGratLen, GratWinPos.y-1, RenderWidth, GratWinPos.y);
 
 	// draw the graticule
-	BOOL ok=(pPaintDC->Rectangle(&GratWinRect)!=0);
-	ERROR2IF(!ok,FALSE,"OILRuler::DrawMinorGraticule() - pPaintDC->Rectangle() failed");
+	pPaintDC->DrawRectangle(GratWinRect);
 
 	return TRUE;
 }
 
 
 /********************************************************************************************
->	afx_msg void OILRuler::OnLButtonDown(UINT32 nFlags, CPoint point);
+>	afx_msg void OILRuler::OnLButtonDown(wxMouseEvent& event);
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -546,14 +612,16 @@ BOOL OILRuler::DrawMinorGraticule(OilCoord GratOilPos, INT32 ExtraSize)
 	Purpose:	process LButtonDoown event 
 ********************************************************************************************/
                     
-void OILRuler::OnLButtonDown(UINT32 nFlags, CPoint point)
+void OILRuler::OnLButtonDown(wxMouseEvent& event)
 {
-	StartDrag(nFlags,point);
+	PORTNOTE("ruler", "TODO: Set nFlags");
+	UINT32 nFlags = 0;
+	StartDrag(nFlags, event.GetPosition());
 }
 
 
 /********************************************************************************************
->	void OILRuler::OnRButtonUp(UINT32 nFlags, CPoint point);
+>	void OILRuler::OnRButtonUp(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/10/95
@@ -562,10 +630,14 @@ void OILRuler::OnLButtonDown(UINT32 nFlags, CPoint point)
 	Purpose:	Handle left button up events - pop-up context sensitive menu
 ********************************************************************************************/
                     
-void OILRuler::OnRButtonUp(UINT32 nFlags, CPoint point)
+void OILRuler::OnRButtonUp(wxMouseEvent& event)
 {
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint point = event.GetPosition();
+
 	// get a few pointers - no error checking yet!
-	DocView* pDocView = pParentWnd->GetDocViewPtr();
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
 	Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
 	if (pDocView==NULL || pSpread==NULL)
 	{
@@ -598,7 +670,7 @@ void OILRuler::OnRButtonUp(UINT32 nFlags, CPoint point)
 
 
 /********************************************************************************************
->	void OILRuler::OnLButtonDblClk(UINT32 nFlags, CPoint point);
+>	void OILRuler::OnLButtonDblClk(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -607,10 +679,14 @@ void OILRuler::OnRButtonUp(UINT32 nFlags, CPoint point)
 	Purpose:	handle left button double clicks
 ********************************************************************************************/
                     
-void OILRuler::OnLButtonDblClk(UINT32 nFlags, CPoint point)
+void OILRuler::OnLButtonDblClk(wxMouseEvent& event)
 {
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint point = event.GetPosition();
+
 	// get a few ponters
-	DocView* pDocView = pParentWnd->GetDocViewPtr();
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
 	Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
 	if (pDocView==NULL || pSpread==NULL)
 	{
@@ -637,7 +713,7 @@ void OILRuler::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 
 
 /********************************************************************************************
->	void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos);
+>	void OILRuler::OnMouseMove(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -646,9 +722,13 @@ void OILRuler::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 	Purpose:	handle mouse moves over the ruler
 ********************************************************************************************/
                     
-void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos)
+void OILRuler::OnMouseMove(wxMouseEvent& event)
 {
-	static CPoint OldMousePos = CPoint(0,0);
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint MousePos = event.GetPosition();
+
+	static wxPoint OldMousePos = wxPoint(0,0);
 	if (MousePos==OldMousePos)
 		return;
 
@@ -656,8 +736,8 @@ void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 	if (pStatusLine)
 	{
 		String_256 Text("");
-		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
-		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
+		GetStatusLineText(&Text, WinCoord(MousePos.x, MousePos.y), this);
+		pStatusLine->UpdateText(&Text, STATUSLINE_SELDESC_STATBAR);
 	}
 
 	OldMousePos = MousePos;
@@ -665,7 +745,7 @@ void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 
 
 /******************************************************************************
->	BOOL OILRuler::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+>	BOOL OILRuler::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -676,11 +756,11 @@ void OILRuler::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 	Purpose:	if over a ruler return status line help
 ******************************************************************************/
 
-BOOL OILRuler::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+BOOL OILRuler::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 {
 	ERROR2IF(pText==NULL,FALSE,"OILRuler::GetStatusLineText() - pText==NULL");
 
-	if (GetSafeHwnd()!=hWnd)
+	if (this!=hWnd)
 		return FALSE;
 
 	UINT32 StatusHelpID = IsHorizontal() ? _R(IDS_HRULER_SH) : _R(IDS_VRULER_SH);
@@ -711,7 +791,7 @@ BOOL OILRuler::GetMinGraticuleSpacing(OilRect* pSpacing, DocView* pDocView)
 
 
 /********************************************************************************************
->	static BOOL OILRuler::GetTextSize(OilRect* pTextSize, StringBase* pText, DocView* pDocView)
+>	static BOOL OILRuler::GetTextSize(OilRect* pTextSize, LPCTSTR str, DocView* pDocView)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/9/95
@@ -721,13 +801,13 @@ BOOL OILRuler::GetMinGraticuleSpacing(OilRect* pSpacing, DocView* pDocView)
 	Returns:	FALSE if fails
 ********************************************************************************************/
                     
-BOOL OILRuler::GetTextSize(OilRect* pTextSize, StringBase* pText, DocView* pDocView)
+BOOL OILRuler::GetTextSize(OilRect* pTextSize, LPCTSTR str, DocView* pDocView)
 {
 	ERROR2IF(pTextSize==NULL,FALSE,"OILRuler::GetTextSize() - pTextSize==NULL");
 	ERROR2IF( pDocView==NULL,FALSE,"OILRuler::GetTextSize() - pDocView==NULL");
 
 	WinRect WinTextSize;
-	BOOL ok=GetTextSize(&WinTextSize,pText);
+	BOOL ok=GetTextSize(&WinTextSize, str);
 	if (!ok)
 		return FALSE;
 
@@ -737,7 +817,7 @@ BOOL OILRuler::GetTextSize(OilRect* pTextSize, StringBase* pText, DocView* pDocV
 
 
 /********************************************************************************************
->	static BOOL OILRuler::GetTextSize(WinRect* pTextSize, StringBase* pText)
+>	static BOOL OILRuler::GetTextSize(WinRect* pTextSize, LPCTSTR str)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/9/95
@@ -746,44 +826,39 @@ BOOL OILRuler::GetTextSize(OilRect* pTextSize, StringBase* pText, DocView* pDocV
 	Returns:	FALSE if fails
 ********************************************************************************************/
                     
-BOOL OILRuler::GetTextSize(WinRect* pTextSize, StringBase* pText)
+BOOL OILRuler::GetTextSize(WinRect* pTextSize, LPCTSTR str)
 {
 	ERROR2IF(pTextSize==NULL,FALSE,"OILRuler::GetTextSize() - pTextSize==NULL");
-	ERROR2IF(    pText==NULL,FALSE,"OILRuler::GetTextSize() - pText==NULL");
+	ERROR2IF(      str==NULL,FALSE,"OILRuler::GetTextSize() - pText==NULL");
 
-	TRY
+	try
 	{
 		// create a screen compatible DC to find the size of the text
-		CDC dc;		// may throw CResourceException exception
-		if (dc.CreateCompatibleDC(NULL)==FALSE)
-			ERROR2(FALSE,"OILRuler::GetTextSize() - CreateCompatibleDC() failed");
+		wxScreenDC dc;
 
-		HGDIOBJ pOldFont = dc.SelectObject(FontFactory::GetFont(STOCKFONT_RULERS));
-		ERROR2IF(pOldFont==NULL,FALSE,"OILRuler::GetTextSize() - failed to select font");
+		wxFont font = GetRulerFont();
+		dc.SetFont(font);
 
-		TCHAR* pchars   = (TCHAR*)*pText;
-		INT32   TextLen  = pText->Length();
-		CSize  TextSize = dc.GetTextExtent(pchars,TextLen);
-		pTextSize->left   = 0;
-		pTextSize->top    = 0;
-		pTextSize->right  = TextSize.cx;
-		pTextSize->bottom = TextSize.cy;
+		wxSize TextSize(0,0);
+		wxString Text(str);
+		dc.GetTextExtent(Text, &TextSize.x, &TextSize.y);
+		pTextSize->x   = 0;
+		pTextSize->y    = 0;
+		pTextSize->SetRightEx(TextSize.x);
+		pTextSize->SetBottomEx(TextSize.y);
 
-		HGDIOBJ pFont = dc.SelectObject(pOldFont);
-		ERROR2IF(pFont==NULL,FALSE,"OILRuler::GetTextSize() - failed to reselct old font");
 	}
-	CATCH (CResourceException, e)
+	catch (...)
 	{
-		ERROR2(FALSE,"OILRuler::GetTextSize() - failed to create dc");
+		ERROR2(FALSE, "OILRuler::GetTextSize() - failed to create dc");
 	}
-	END_CATCH
 
 	return TRUE;
 }
 
 
 /********************************************************************************************
->	WinRect OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, WinRect WR)
+>	WinRect OILRuler::ClientToOtherClient(wxWindow* pOtherCWnd, WinRect WR)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -794,16 +869,25 @@ BOOL OILRuler::GetTextSize(WinRect* pTextSize, StringBase* pText)
 	Note:		Nice if this was in a parent CCWnd class
 ********************************************************************************************/
 
-WinRect OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, WinRect WR)
+WinRect OILRuler::ClientToOtherClient(wxWindow* pOtherCWnd, WinRect WR)
 {
-	ClientToScreen(&WR);
-	pOtherCWnd->ScreenToClient(&WR);
+	wxPoint tl = WR.GetTopLeft();
+	wxPoint br = WR.GetBottomRightEx();
+
+	ClientToScreen(tl);
+	ClientToScreen(br);
+	pOtherCWnd->ScreenToClient(tl);
+	pOtherCWnd->ScreenToClient(br);
+
+	WR.SetTopLeft(tl);
+	WR.SetBottomRightEx(br);
+
 	return WR;
 }
 
 
 /********************************************************************************************
->	CPoint OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, CPoint point)
+>	wxPoint OILRuler::ClientToOtherClient(wxWindow* pOtherCWnd, wxPoint point)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -814,10 +898,10 @@ WinRect OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, WinRect WR)
 	Note:		Nice if this was in a parent CCWnd class
 ********************************************************************************************/
 
-CPoint OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, CPoint point)
+wxPoint OILRuler::ClientToOtherClient(wxWindow* pOtherCWnd, wxPoint point)
 {
-	ClientToScreen(&point);
-	pOtherCWnd->ScreenToClient(&point);
+	ClientToScreen(point);
+	pOtherCWnd->ScreenToClient(point);
 	return point;
 }
 
@@ -836,14 +920,14 @@ CPoint OILRuler::ClientToOtherClient(CWnd* pOtherCWnd, CPoint point)
 
 OilRect OILRuler::ClientToOil(DocView* pDocView, WinRect WR)
 {
-	CWnd* pRenderWnd = pDocView->GetRenderWindow();
+	wxWindow* pRenderWnd = pDocView->GetRenderWindow();
 	ERROR2IF(pRenderWnd==NULL,OilRect(OilCoord(0,0),OilCoord(0,0)),"OILRuler::ClientToOil() - pRenderWnd==NULL");
 	return ClientToOtherClient(pRenderWnd,WR).ToOil(pDocView);
 }
 
 
 /********************************************************************************************
->	OilCoord OILRuler::ClientToOil(DocView* pDocView, CPoint point)
+>	OilCoord OILRuler::ClientToOil(DocView* pDocView, wxPoint point)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -854,65 +938,12 @@ OilRect OILRuler::ClientToOil(DocView* pDocView, WinRect WR)
 	Note:		Nice if this was in CWnd class but this is MFC, could do with a CCWnd class
 ********************************************************************************************/
 
-OilCoord OILRuler::ClientToOil(DocView* pDocView, CPoint point)
+OilCoord OILRuler::ClientToOil(DocView* pDocView, wxPoint point)
 {
-	CWnd* pRenderWnd = pDocView->GetRenderWindow();
+	wxWindow* pRenderWnd = pDocView->GetRenderWindow();
 	ERROR2IF(pRenderWnd==NULL,OilCoord(0,0),"OILRuler::ClientToOil() - pRenderWnd==NULL");
-	CPoint DocPoint = ClientToOtherClient(pRenderWnd,point);
+	wxPoint DocPoint = ClientToOtherClient(pRenderWnd,point);
 	return WinCoord(DocPoint.x,DocPoint.y).ToOil(pDocView);
-}
-
-
-/********************************************************************************************
->	static void OILRuler::Deinit()
-
-	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	15/11/95
-	Purpose:	return memory 'new'd by the Init function
-********************************************************************************************/
-
-void OILRuler::Deinit()
-{
-	if(FontName != NULL)
-	{
-		delete FontName;
-		FontName = NULL;
-	}
-}
-
-/********************************************************************************************
->	static BOOL OILRuler::Init()
-
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	25/9/95
-	Returns:	FALSE if fails
-	Purpose:	read the font name and size for the ruler from the .ini file
-				and use this to determine the size of the rulers
-********************************************************************************************/
-
-BOOL OILRuler::Init()
-{
-	if(FontName == NULL)
-		FontName = new String_256(_R(IDS_OILRULER_SMALL_FONTS));
-
-	BOOL ok=GetApplication()->DeclareSection("Rulers",2);
-	if (ok && FontName != NULL) ok=GetApplication()->DeclarePref("Rulers", "FontName", FontName);
-	if (ok) ok=GetApplication()->DeclarePref("Rulers", "FontSize", &FontSize, 2,72);
-	if (!ok)
-		return FALSE;
-	ERROR2IF(FontName == NULL,FALSE,"OILRuler::SetRenderWidth() - couldn't create a string_256 - eek !");
-	ERROR2IF(FontName->Length()==0,FALSE,"OILRuler::SetRenderWidth() - invalid FontName in .ini file");
-
-	WinRect WinTextSize;
-	ok=GetTextSize(&WinTextSize,&String_8(_R(IDS_OILRULER_DEFAULT_TEXT_SIZE)/*"8"*/));
-	if (!ok)
-		return FALSE;
-
-	CharHeight  = WinTextSize.Height();
-	CharWidth   = WinTextSize.Width();
-	RenderWidth = CharWidth*3 + 4;
-
-	return TRUE;
 }
 
 
@@ -933,15 +964,15 @@ BOOL OILRuler::PaintMouseFollower(OilCoord OilPos, DocView* pDocView,
 								  MouseFollowerRenderType RenderType)
 {
 	// get hold of a dc (if in middle of OnPaint(), pPaintDC should be valid)
-	CDC* pDC=pPaintDC;
-	BOOL LocalDC = (pDC==NULL);
-	if (LocalDC)
-		pDC=GetDC();
+	wxDC* pDC = pPaintDC;
+//	BOOL LocalDC = (pDC==NULL);
+//	if (LocalDC)
+//		pDC=GetDC();
 
-	BOOL ok = DrawMouseFollower(OilPos,pDocView,RenderType,pDC);
+	BOOL ok = DrawMouseFollower(OilPos, pDocView, RenderType, pDC);
 
-	if (LocalDC)
-		ReleaseDC(pDC);
+//	if (LocalDC)
+//		ReleaseDC(pDC);
 
 	return ok;
 }
@@ -961,7 +992,7 @@ BOOL OILRuler::PaintMouseFollower(OilCoord OilPos, DocView* pDocView,
 **********************************************************************************************/
 
 BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
-								 MouseFollowerRenderType RenderType, CDC* pDC)
+								 MouseFollowerRenderType RenderType, wxDC* pDC)
 {
 	ERROR2IF(pDocView==NULL,FALSE,"OILRuler::DrawMouseFollower() - pDocView==NULL");
 	ERROR2IF(     pDC==NULL,FALSE,"OILRuler::DrawMouseFollower() - pDC==NULL");
@@ -975,20 +1006,9 @@ BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
 		FollowerWinRect = WinRect(0,WinPos.y-1,RenderWidth,WinPos.y-1);
 
 	// set up dc
-	COLORREF FollowerColor = RGB(0,255,0);
-	CPen     pen(PS_SOLID,0,FollowerColor);
-	CPen*    pOldPen   = pDC->SelectObject(&pen);
-	INT32      OldROP2   = pDC->SetROP2(R2_NOT);
-	ERROR2IF(pOldPen==NULL,FALSE,"OILRuler::DrawMouseFollower() - pDC->SelectObject() failed");
-
-	// render the follower
-	pDC->MoveTo(FollowerWinRect.left, FollowerWinRect.top);
-	pDC->LineTo(FollowerWinRect.right,FollowerWinRect.bottom);
-
-	// restore the dc
-	INT32     TempROP2   = pDC->SetROP2(OldROP2);
-	CPen*   pTempPen   = pDC->SelectObject(pOldPen);
-	ERROR2IF(pTempPen==NULL,FALSE,"OILRuler::DrawMouseFollower() - pDC->SelectObject() failed");
+	wxPen pen(*wxGREEN, 1, wxSOLID);
+	pDC->SetPen(pen);
+	pDC->DrawLine(FollowerWinRect.GetLeft(), FollowerWinRect.GetTop(), FollowerWinRect.GetRightEx(), FollowerWinRect.GetBottomEx());
 
 	return TRUE;
 }
@@ -998,13 +1018,7 @@ BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
 // 				OILHorizontalRuler
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(OILHorizontalRuler ,OILRuler)
-
-BEGIN_MESSAGE_MAP( OILHorizontalRuler, OILRuler )
-	//{{AFX_MSG_MAP( OILHorizontalRuler )
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP( )
-
+IMPLEMENT_DYNAMIC_CLASS(OILHorizontalRuler, wxWindow)
 
 /********************************************************************************************
 >	OILHorizontalRuler::OILHorizontalRuler()
@@ -1030,7 +1044,7 @@ OILHorizontalRuler::OILHorizontalRuler()
                     
 OILHorizontalRuler::~OILHorizontalRuler()
 {
-	if(pLegend)
+	if (pLegend)
 	{
 		delete pLegend;
 		pLegend=NULL;
@@ -1048,12 +1062,12 @@ OILHorizontalRuler::~OILHorizontalRuler()
 ********************************************************************************************/
                     
 BOOL OILHorizontalRuler::PostCreate()
-{ 
+{
 	pLegend = new LegendLabel;
-	if(!pLegend)
+	if (pLegend == NULL)
 		return FALSE;
 
-	pLegend->Create(this);
+	pLegend->Create(this, -1);
 
 	return TRUE;
 }
@@ -1069,20 +1083,18 @@ BOOL OILHorizontalRuler::PostCreate()
                     
 void OILHorizontalRuler::ScrollRuler(INT32 amount)
 { 
-		
-	CRect ClipRect;
-	GetClientRect(&ClipRect);
-	ClipRect.left+=2;
-	ClipRect.right--;
+	WinRect ClipRect;
+	ClipRect = GetClientRect();
+	ClipRect.x+=2;
+	ClipRect.SetRightEx(ClipRect.GetRightEx()-1);
 
-	ScrollWindow(amount,0,&ClipRect,&ClipRect);
-	UpdateWindow();
-		
+	ScrollWindow(amount, 0, &ClipRect);
+	Update();
 }
 
 
 /********************************************************************************************
->	virtual BOOL OILHorizontalRuler::StartDrag(UINT32 nFlags,CPoint point)
+>	virtual BOOL OILHorizontalRuler::StartDrag(UINT32 nFlags, wxPoint point)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -1090,22 +1102,22 @@ void OILHorizontalRuler::ScrollRuler(INT32 amount)
 	Purpose:	StartDrag function .
 ********************************************************************************************/
                     
-BOOL OILHorizontalRuler::StartDrag(UINT32 nFlags,CPoint point)
+BOOL OILHorizontalRuler::StartDrag(UINT32 nFlags, wxPoint point)
 { 
 	NewGuidelineParam.Method 	= GUIDELINEOPMETHOD_NEW_DRAG;
 	NewGuidelineParam.Type 		= GUIDELINE_HORZ;
 
 	String_256 OpToken(OPTOKEN_GUIDELINE);
 
-	if (pParentWnd != NULL)
-		pParentWnd->InvokeDragOp(&OpToken,&NewGuidelineParam,nFlags,point);
+	if (m_pOwnerView != NULL)
+		m_pOwnerView->InvokeDragOp(&OpToken ,&NewGuidelineParam, nFlags, point);
 
 	return TRUE;
 }
 
 
 /*********************************************************************************************
->	virtual void OILHorizontalRuler::CalcPosFromParentClient(LPRECT lpRect)
+>	virtual void OILHorizontalRuler::CalcPosFromParentClient(wxRect* lpRect)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	ages ago
@@ -1117,26 +1129,26 @@ BOOL OILHorizontalRuler::StartDrag(UINT32 nFlags,CPoint point)
 				the CHorzScroller.
 **********************************************************************************************/ 
 
-void OILHorizontalRuler::CalcPosFromParentClient(LPRECT lpRect)
+void OILHorizontalRuler::CalcPosFromParentClient(WinRect* lpRect)
 {
-	CRect parentRect;
-	GetParent()->GetClientRect(&parentRect);
-	if(RULER_BORDERS)
+	WinRect parentRect;
+	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
+	if (RULER_BORDERS)
 	{
-	  parentRect.top --;
-	  parentRect.left -=2;
+	  parentRect.y --;
+	  parentRect.x -=2;
 	}
 	
-	lpRect->left   = parentRect.left + RulerWidth;
-	lpRect->top    = parentRect.top;
-	lpRect->right  = parentRect.right+1;
-	lpRect->bottom = parentRect.top  + RulerWidth;
+	lpRect->x   = parentRect.x + RulerWidth;
+	lpRect->y    = parentRect.y;
+	lpRect->SetRightEx(parentRect.GetRightEx()+1);
+	lpRect->SetBottomEx(parentRect.y  + RulerWidth);
 	
 }
 
 
 /*********************************************************************************************
->	BOOL OILHorizontalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel)
+>	BOOL OILHorizontalRuler::DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	3/9/95
@@ -1149,9 +1161,9 @@ void OILHorizontalRuler::CalcPosFromParentClient(LPRECT lpRect)
 				and selecting the correct objects into it
 **********************************************************************************************/ 
 
-BOOL OILHorizontalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel)
+BOOL OILHorizontalRuler::DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str)
 {
-	ERROR2IF(pGratLabel   ==NULL,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pGrtaLabel==NULL");
+	ERROR2IF(str		  ==NULL,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pGrtaLabel==NULL");
 	ERROR2IF(pPaintDC     ==NULL,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pPaintDC==NULL");
 	ERROR2IF(pPaintDocView==NULL,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pPaintDocView==NULL");
 
@@ -1162,17 +1174,16 @@ BOOL OILHorizontalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGr
 	// draw the major graticule in 2 halves with a gap for the text between
 	INT32 GratLen = MAJOR_GRAT_LEN;
 	WinRect GratWinRect(GratWinPos.x, RenderWidth-MAJOR_GRAT_LEN, GratWinPos.x+1, RenderWidth);
-	BOOL ok=(pPaintDC->Rectangle(&GratWinRect)!=0);
-	ERROR2IF(!ok,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pPaintDC->Rectangle() failed");
+	pPaintDC->DrawRectangle(GratWinRect);
 
 	// draw the graticule label (centred about grat pos)
-	TCHAR* pText    = (TCHAR*)*pGratLabel;
-	INT32   TextLen  = pGratLabel->Length();
-	CSize  TextSize = pPaintDC->GetTextExtent(pText,TextLen);	// real text width not necessarily == CharWidth*LextLen with proportional fonts
-	INT32   Textx    = GratWinPos.x-TextSize.cx/2;				// centre text about grat (+1 for gap to right - left inclusive)
-	INT32   Texty    = RenderWidth-(GratLen+TextSize.cy);
-	ok=(pPaintDC->TextOut(Textx,Texty,pText,TextLen)!=0);		// actual digits drawn 1 pixel beyond, and 2 pixels below this point
-	ERROR2IF(!ok,FALSE,"OILHorizontalRuler::DrawMajorGraticule() - pPaintDC->TextOut() failed");
+	wxSize TextSize(0,0);
+	wxString Text(str);
+	pPaintDC->GetTextExtent(Text, &TextSize.x, &TextSize.y);
+
+	INT32   Textx    = GratWinPos.x-TextSize.x/2;				// centre text about grat (+1 for gap to right - left inclusive)
+	INT32   Texty    = RenderWidth-(GratLen+TextSize.y);
+	pPaintDC->DrawText(Text, Textx, Texty);						// actual digits drawn 1 pixel beyond, and 2 pixels below this point
 
 	return TRUE;
 }
@@ -1222,17 +1233,28 @@ BOOL OILHorizontalRuler::SetLegendText(StringBase* pText)
 }
 
 
+/*********************************************************************************************
+>	void OILHorizontalRuler::ShowRuler(BOOL show)
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	25/8/95
+	Inputs:		show - FALSE to hide the ruler
+	Purpose:	Shows or hides this ruler
+**********************************************************************************************/ 
+
+void OILHorizontalRuler::ShowRuler(BOOL show)
+{
+	OILRuler::ShowRuler(show);
+	if (pLegend)
+		pLegend->ShowLabel(show);
+} 
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 // 				OILVerticalRuler
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(OILVerticalRuler ,OILRuler)
-
-BEGIN_MESSAGE_MAP( OILVerticalRuler, OILRuler )
-	//{{AFX_MSG_MAP( OILVerticalRuler )
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP( )
-
+IMPLEMENT_DYNAMIC_CLASS(OILVerticalRuler, wxWindow)
 
 /********************************************************************************************
 >	OILVerticalRuler::OILVerticalRuler()
@@ -1273,18 +1295,18 @@ BOOL OILVerticalRuler::PostCreate()
                     
 void OILVerticalRuler::ScrollRuler(INT32 amount)
 { 
-	CRect ClipRect;
-	GetClientRect(&ClipRect);
-	ClipRect.top +=2;
-	ClipRect.bottom --;
+	WinRect ClipRect;
+	ClipRect = GetClientRect();
+	ClipRect.y+=2;
+	ClipRect.SetBottomEx(ClipRect.GetBottomEx()-1);
 
-	ScrollWindow(0,amount,&ClipRect,&ClipRect);
-	UpdateWindow();
+	ScrollWindow(0, amount, &ClipRect);
+	Update();
 }
 
 
 /********************************************************************************************
->	virtual BOOL OILVerticalRuler::StartDrag(UINT32 nFlags,CPoint point)
+>	virtual BOOL OILVerticalRuler::StartDrag(UINT32 nFlags, wxPoint point)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -1292,22 +1314,22 @@ void OILVerticalRuler::ScrollRuler(INT32 amount)
 	Purpose:	Sends a start vertical guideline drag message.
 ********************************************************************************************/
                     
-BOOL OILVerticalRuler::StartDrag(UINT32 nFlags,CPoint point)
+BOOL OILVerticalRuler::StartDrag(UINT32 nFlags, wxPoint point)
 { 
 	NewGuidelineParam.Method 	= GUIDELINEOPMETHOD_NEW_DRAG;
 	NewGuidelineParam.Type 		= GUIDELINE_VERT;
 
 	String_256 OpToken(OPTOKEN_GUIDELINE);
 
-	if (pParentWnd != NULL)
-		pParentWnd->InvokeDragOp(&OpToken,&NewGuidelineParam,nFlags,point);
+	if (m_pOwnerView != NULL)
+		m_pOwnerView->InvokeDragOp(&OpToken, &NewGuidelineParam, nFlags, point);
 
 	return TRUE;
 }
 
 
 /*********************************************************************************************
->	virtual void OILVerticalRuler::CalcPosFromParentClient(LPRECT lpRect)
+>	virtual void OILVerticalRuler::CalcPosFromParentClient(wxRect* lpRect)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	ages ago
@@ -1319,24 +1341,24 @@ BOOL OILVerticalRuler::StartDrag(UINT32 nFlags,CPoint point)
 				the CVertical ruler.
 **********************************************************************************************/ 
 
-void OILVerticalRuler::CalcPosFromParentClient(LPRECT lpRect)
+void OILVerticalRuler::CalcPosFromParentClient(WinRect* lpRect)
 {
-	CRect parentRect;
-	GetParent()->GetClientRect(&parentRect);
-	if(RULER_BORDERS)
+	WinRect parentRect;
+	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
+	if (RULER_BORDERS)
 	{
-	  parentRect.top -=2;
-	  parentRect.left --;
+	  parentRect.y -= 2;
+	  parentRect.y--;
 	}
-	lpRect->left   = parentRect.left;
-	lpRect->top    = parentRect.top  + RulerWidth;
-	lpRect->right  = parentRect.left + RulerWidth;
-	lpRect->bottom = parentRect.bottom+1;
+	lpRect->x   = parentRect.x;
+	lpRect->y    = parentRect.y  + RulerWidth;
+	lpRect->SetRightEx(parentRect.x + RulerWidth);
+	lpRect->SetBottomEx(parentRect.GetBottomEx()+1);
 }
 
 
 /*********************************************************************************************
->	BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel)
+>	BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	3/9/95
@@ -1349,9 +1371,9 @@ void OILVerticalRuler::CalcPosFromParentClient(LPRECT lpRect)
 				and selecting the correct objects into it
 **********************************************************************************************/ 
 
-BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGratLabel)
+BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str)
 {
-	ERROR2IF(pGratLabel   ==NULL,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pGrtaLabel==NULL");
+	ERROR2IF(str		  ==NULL,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pGrtaLabel==NULL");
 	ERROR2IF(pPaintDC     ==NULL,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pPaintDC==NULL");
 	ERROR2IF(pPaintDocView==NULL,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pPaintDocView==NULL");
 
@@ -1359,25 +1381,25 @@ BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGrat
 	WinCoord GratWinPos = GratOilPos.ToWin(pPaintDocView);
 	GratWinPos -= RulerToDocOffset;
 
+	wxString Text(str);
+
 	// get width of gap for text
-	INT32 TextLen  = pGratLabel->Length();
+	INT32 TextLen  = Text.Length();
 	INT32 GapWidth = CharWidth*max(2,TextLen)+1;		// +1 for gap to right (left already included)
 
 	// draw the major graticule in 2 halves with a gap for the text between
 	INT32 GratLen = min(MAJOR_GRAT_LEN,RenderWidth-(GapWidth+1));
 	WinRect GratWinRect(RenderWidth-GratLen, GratWinPos.y-1, RenderWidth, GratWinPos.y);
-	BOOL ok=(pPaintDC->Rectangle(&GratWinRect)!=0);
-	ERROR2IF(!ok,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pPaintDC->Rectangle() failed");
+	pPaintDC->DrawRectangle(GratWinRect);
 
 	// draw the graticule label (centred about grat pos)
-	TCHAR* pText     = (TCHAR*)*pGratLabel;
-	CSize  TextSize  = pPaintDC->GetTextExtent(pText,TextLen);	// real text width not necessarily == CharWidth*LextLen with proportional fonts
-	INT32   TextWidth = TextSize.cx+1;							// +1 for gap to right (left already included)
+	wxSize TextSize(0,0);
+	pPaintDC->GetTextExtent(Text, &TextSize.x, &TextSize.y);
+	INT32	TextWidth = TextSize.x+1;
 	INT32   Offset    = (GapWidth-TextWidth)/2;					// offset to centre text in text gap (if proportional font)
 	INT32   Textx     = RenderWidth-GratLen-(TextWidth+Offset);
-	INT32   Texty     = GratWinPos.y-TextSize.cy/2-1;
-	ok=(pPaintDC->TextOut(Textx,Texty,pText,TextLen)!=0);		// actual digits drawn 1 pixel beyond, and 2 pixels below this point
-	ERROR2IF(!ok,FALSE,"OILVerticalRuler::DrawMajorGraticule() - pPaintDC->TextOut() failed");
+	INT32   Texty     = GratWinPos.y-TextSize.y/2-1;
+	pPaintDC->DrawText(Text, Textx, Texty);						// actual digits drawn 1 pixel beyond, and 2 pixels below this point
 
 	return TRUE;
 }
@@ -1387,18 +1409,15 @@ BOOL OILVerticalRuler::DrawMajorGraticule(OilCoord GratOilPos, StringBase* pGrat
 //									 OriginGadget Class
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(OriginGadget ,CWnd)
+IMPLEMENT_DYNAMIC_CLASS(OriginGadget, wxWindow)
 
-BEGIN_MESSAGE_MAP(OriginGadget,CWnd)
-	//{{AFX_MSG_MAP( OriginGadget )
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONUP()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP( )
-
+BEGIN_EVENT_TABLE( OriginGadget, wxWindow )
+	EVT_LEFT_DOWN(		OriginGadget::OnLButtonDown)
+	EVT_LEFT_DCLICK(	OriginGadget::OnLButtonDblClk)
+	EVT_RIGHT_UP(		OriginGadget::OnRButtonUp)
+	EVT_MOTION(			OriginGadget::OnMouseMove)
+	EVT_PAINT(			OriginGadget::OnPaint)
+END_EVENT_TABLE()
 
 /********************************************************************************************
 >	OriginGadget::OriginGadget()
@@ -1411,6 +1430,8 @@ END_MESSAGE_MAP( )
 OriginGadget::OriginGadget()
 { 
 	pGlyph = NULL;
+PORTNOTE("ruler", "Removed use of CBitmap")
+#if !defined(EXCLUDE_FROM_XARALX)
 	pGlyph = new CBitmap;
 	if(pGlyph)
 	{
@@ -1420,6 +1441,7 @@ OriginGadget::OriginGadget()
 			pGlyph = NULL;
 		}
 	}
+#endif
 }
 
 
@@ -1434,7 +1456,7 @@ OriginGadget::OriginGadget()
 
 void OriginGadget::ShowGadget(BOOL show)
 {
-	ShowWindow(show ? SW_SHOWNA : SW_HIDE);
+	Show(show);
 }
 
  
@@ -1477,10 +1499,12 @@ OriginGadget::~OriginGadget()
 
 
 
-BOOL OriginGadget::PlotMaskedBitmap(CDC* destDC, CBitmap* srcBitmap, INT32 SrcOffset,
+BOOL OriginGadget::PlotMaskedBitmap(wxDC* destDC, wxBitmap* srcBitmap, INT32 SrcOffset,
 								INT32 xPlotOffset,INT32 yPlotOffset, INT32 width, INT32 height)
 {
 	
+PORTNOTE("ruler", "Removed use of Windows stuff")
+#if !defined(EXCLUDE_FROM_XARALX)
 	ERROR2IF(srcBitmap == NULL,FALSE,"NULL Bitmap in PlotMaskedBitmap()");
 	ERROR2IF(destDC == NULL,FALSE,"NULL DC in PlotMaskedBitmap()");
 
@@ -1536,12 +1560,39 @@ BOOL OriginGadget::PlotMaskedBitmap(CDC* destDC, CBitmap* srcBitmap, INT32 SrcOf
 	// clean up DC's
 	hDCMono.SelectObject(oldmonobitmap);
 	scrDC.SelectObject(OldSrcBitmap);
+#endif
+
 	return TRUE;
 }
 
 
+/*********************************************************************************************
+>	void OriginGadget::OnPaint( wxPaintEvent &evnt )
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	ages ago
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Redraws the colour bar
+	Errors:		-
+
+**********************************************************************************************/ 
+void OriginGadget::OnPaint( wxPaintEvent &evnt )
+{
+	// Always create this so that the area is validated
+	wxPaintDC dc(this);
+
+	if (!CCamApp::IsDisabled())
+	{
+		DoPaint(&dc);
+	}
+}
+
+
+
 /********************************************************************************************
->	afx_msg void OriginGadget::OnPaint()
+>	void OriginGadget::DoPaint(wxDC* pDC)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/8/95
@@ -1549,12 +1600,10 @@ BOOL OriginGadget::PlotMaskedBitmap(CDC* destDC, CBitmap* srcBitmap, INT32 SrcOf
 				Mask plots the origin glyph
 ********************************************************************************************/
 
-void OriginGadget::OnPaint()
+void OriginGadget::DoPaint(wxDC* pDC)
 {
-	// prevent recursive redraws when an error ocurs
-	if (CCamApp::DisableSys)
-		return;
-
+PORTNOTE("ruler", "Removed use of Windows stuff")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Create a painting DC.
 	CPaintDC dc(this);
 	dc.SetROP2(R2_COPYPEN);
@@ -1587,11 +1636,12 @@ void OriginGadget::OnPaint()
 	PatB(&dc,  left+1,top+1,          1,height-2, TopLeft);		// left
 	PatB(&dc,  left+1,bottom,   width-1,-1,       BotRight);	// bottom
 	PatB(&dc, right,top+1,         -1,height-1,   BotRight);	// right
+#endif
 }
 
 
 /*********************************************************************************************
->	virtual void OriginGadget::CalcPosFromParentClient(LPRECT lpRect)
+>	virtual void OriginGadget::CalcPosFromParentClient(WinRect* lpRect)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/8/95
@@ -1603,22 +1653,24 @@ void OriginGadget::OnPaint()
 				the OriginGadget.
 **********************************************************************************************/ 
 
-void OriginGadget::CalcPosFromParentClient(LPRECT lpRect)
+void OriginGadget::CalcPosFromParentClient(WinRect* lpRect)
 {
-	CRect parentRect;
-	GetParent()->GetClientRect(&parentRect);
-	if(RULER_BORDERS)
+	wxRect parentRect;
+	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
+	if (RULER_BORDERS)
 	{
-	  parentRect.top --;
-	  parentRect.left --;
+	  parentRect.y --;
+	  parentRect.x --;
 	}
-	lpRect->left   = parentRect.left ;
-	lpRect->top    = parentRect.top;
-	lpRect->right  = parentRect.left + OILRuler::GetWidth();
-	lpRect->bottom = parentRect.top  + OILRuler::GetWidth();
+	lpRect->x   = parentRect.x ;
+	lpRect->y    = parentRect.y;
+	lpRect->SetRightEx(parentRect.x + OILRuler::GetWidth());
+	lpRect->SetBottomEx(parentRect.y  + OILRuler::GetWidth());
 
 	// we need to take into account camelots new floating toolbar ....
 
+PORTNOTE("ruler", "Removed use of Kernel toolbars")
+#if !defined(EXCLUDE_FROM_XARALX)
 	DockBarType DockBarType;// = DOCKBAR_FLOAT;
 	KernelBarPos * pKernelBarPos;
 
@@ -1652,12 +1704,13 @@ void OriginGadget::CalcPosFromParentClient(LPRECT lpRect)
 			}
 		}
 	}
+#endif
 	
 }
 
 
 /********************************************************************************************
->	BOOL OriginGadget::Create(CWnd* pParentWindow)
+>	BOOL OriginGadget::Create(CCamView* pOwnerView, INT32 id)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -1666,38 +1719,21 @@ void OriginGadget::CalcPosFromParentClient(LPRECT lpRect)
 	Purpose:	Creates an OriginGadget object.
 ********************************************************************************************/
 
-BOOL OriginGadget::Create(CWnd* pParentWindow)
+BOOL OriginGadget::Create(CCamView* pOwnerView, INT32 id)
 { 
-	BOOL CreatedWindow;
-	ENSURE(pParentWindow,"DockingBar must have a Parent");
+	ENSURE(pOwnerView,"DockingBar must have a Parent");
 
-	pParentWnd = (ScreenCamView*) pParentWindow;
+	m_pOwnerView = pOwnerView;
 
-	CRect rect;			// Rectangle for Create
-	rect.SetRectEmpty();
-	DWORD style = WS_CHILD  | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
-	if(RULER_BORDERS)
-		style |=WS_BORDER;
-	#ifndef WIN32
-		DWORD
-	#endif
-	
-	// create the HWND
-	CreatedWindow = CWnd::Create(NULL,
-						AfxRegisterWndClass(CS_DBLCLKS,0,0,0),
-						style,
-						rect,
-						pParentWindow,
-						0,
-						NULL);
+	if (!wxWindow::Create(pOwnerView->GetParentFrame(), id, wxDefaultPosition, wxSize(OILRuler::GetWidth(), OILRuler::GetWidth()), wxNO_BORDER))
+		return(FALSE);
 
-
-	return CreatedWindow;
+	return TRUE;
 }
 
 
 /********************************************************************************************
->	void OriginGadget::OnLButtonDown(UINT32 nFlags, CPoint point);
+>	void OriginGadget::OnLButtonDown(wxMouseEvent& event);
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -1706,17 +1742,21 @@ BOOL OriginGadget::Create(CWnd* pParentWindow)
 	Purpose:	handle left button downs
 ********************************************************************************************/
                     
-void OriginGadget::OnLButtonDown(UINT32 nFlags, CPoint point)
+void OriginGadget::OnLButtonDown(wxMouseEvent& event)
 {
+	PORTNOTE("ruler", "TODO: Set nFlags");
+	UINT32 nFlags = 0;
+	wxPoint point = event.GetPosition();
+
 	String_256 OpToken(OPTOKEN_SPREADORIGIN);
 
-	if (pParentWnd != NULL)
-		pParentWnd->InvokeDragOp(&OpToken,NULL,nFlags,point);
+	if (m_pOwnerView != NULL)
+		m_pOwnerView->InvokeDragOp(&OpToken, NULL, nFlags, point);
 }
 
 
 /********************************************************************************************
->	void OriginGadget::OnRButtonUp(UINT32 nFlags, CPoint point);
+>	void OriginGadget::OnRButtonUp(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	9/10/95
@@ -1725,15 +1765,19 @@ void OriginGadget::OnLButtonDown(UINT32 nFlags, CPoint point)
 	Purpose:	Handle left button up events - pop-up context sensitive menu
 ********************************************************************************************/
                     
-void OriginGadget::OnRButtonUp(UINT32 nFlags, CPoint point)
+void OriginGadget::OnRButtonUp(wxMouseEvent& event)
 {
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint point = event.GetPosition();
+
 	OriginContextMenu* pOriginMenu = new OriginContextMenu;
 	pOriginMenu->Show();
 }
 
 
 /********************************************************************************************
->	void OriginGadget::OnLButtonDblClk(UINT32 nFlags, CPoint point);
+>	void OriginGadget::OnLButtonDblClk(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -1742,8 +1786,12 @@ void OriginGadget::OnRButtonUp(UINT32 nFlags, CPoint point)
 	Purpose:	handle left button double clicks
 ********************************************************************************************/
                     
-void OriginGadget::OnLButtonDblClk(UINT32 nFlags, CPoint point)
+void OriginGadget::OnLButtonDblClk(wxMouseEvent& event)
 {
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint point = event.GetPosition();
+
 	if (OpResetSpreadOrigin::GetState(NULL,NULL).Greyed==FALSE)
 	{
 	 	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_RESETSPREADORIGIN);
@@ -1756,7 +1804,7 @@ void OriginGadget::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 
 
 /********************************************************************************************
->	void OriginGadget::OnMouseMove(UINT32 nFlags, CPoint MousePos);
+>	void OriginGadget::OnMouseMove(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -1765,20 +1813,27 @@ void OriginGadget::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 	Purpose:	handle mouse moves over Origin
 ********************************************************************************************/
                     
-void OriginGadget::OnMouseMove(UINT32 nFlags, CPoint MousePos)
+void OriginGadget::OnMouseMove(wxMouseEvent& event)
 {
-	static CPoint OldMousePos = CPoint(0,0);
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint MousePos = event.GetPosition();
+
+	static wxPoint OldMousePos = wxPoint(0,0);
 	if (MousePos==OldMousePos)
 		return;
 
-	ControlHelper::DoBubbleHelpOn(GetSafeHwnd(),0,BubbleHelpCallBack,this);
+PORTNOTE("rulers", "Bubble help removed from OriginGadget")
+#if !defined(EXCLUDE_FROM_XARALX)
+	ControlHelper::DoBubbleHelpOn(GetSafeHwnd(), 0, BubbleHelpCallBack,this);
+#endif
 
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
 	if (pStatusLine)
 	{
 		String_256 Text("");
-		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
-		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
+		GetStatusLineText(&Text, WinCoord(MousePos.x, MousePos.y), this);
+		pStatusLine->UpdateText(&Text, STATUSLINE_SELDESC_STATBAR);
 	}
 
 	OldMousePos = MousePos;
@@ -1786,7 +1841,7 @@ void OriginGadget::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 
 
 /******************************************************************************
->	static TCHAR* OriginGadget::BubbleHelpCallBack(HWND hWnd, UINT32 PaneIndex, void* UserData)
+>	static TCHAR* OriginGadget::BubbleHelpCallBack(CWindowID hWnd, UINT32 PaneIndex, void* UserData)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -1798,7 +1853,9 @@ void OriginGadget::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 	Returns:	pointer to text, or NULL if fails
 ******************************************************************************/
 
-TCHAR* OriginGadget::BubbleHelpCallBack(HWND, UINT32 PaneIndex, void*)
+PORTNOTE("rulers", "Bubble help removed from OriginGadget")
+#if !defined(EXCLUDE_FROM_XARALX)
+TCHAR* OriginGadget::BubbleHelpCallBack(CWindowID, UINT32 PaneIndex, void*)
 {
 	static String_64 BubbleHelpText("");
 
@@ -1806,10 +1863,11 @@ TCHAR* OriginGadget::BubbleHelpCallBack(HWND, UINT32 PaneIndex, void*)
 
 	return (TCHAR*)BubbleHelpText;
 }
+#endif
 
 
 /******************************************************************************
->	BOOL OriginGadget::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+>	BOOL OriginGadget::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -1820,11 +1878,11 @@ TCHAR* OriginGadget::BubbleHelpCallBack(HWND, UINT32 PaneIndex, void*)
 	Purpose:	if over origin gadget return status line help
 ******************************************************************************/
 
-BOOL OriginGadget::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+BOOL OriginGadget::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 {
 	ERROR2IF(pText==NULL,FALSE,"OILRuler::GetStatusLineText() - pText==NULL");
 
-	if (GetSafeHwnd()!=hWnd)
+	if (this!=hWnd)
 		return FALSE;
 
 	return (pText->Load(_R(IDS_ORIGIN_SH))!=0);
@@ -1835,18 +1893,15 @@ BOOL OriginGadget::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hW
 //		LegendLabel Class
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC(LegendLabel ,CWnd)
+IMPLEMENT_DYNAMIC_CLASS(LegendLabel, wxWindow)
 
-BEGIN_MESSAGE_MAP(LegendLabel,CWnd)
-	//{{AFX_MSG_MAP( LegendLabel )
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONUP()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP( )
-
+BEGIN_EVENT_TABLE( LegendLabel, wxWindow )
+	EVT_LEFT_DOWN(		LegendLabel::OnLButtonDown)
+	EVT_LEFT_DCLICK(	LegendLabel::OnLButtonDblClk)
+	EVT_RIGHT_UP(		LegendLabel::OnRButtonUp)
+	EVT_MOTION(			LegendLabel::OnMouseMove)
+	EVT_PAINT(			LegendLabel::OnPaint)
+END_EVENT_TABLE()
 
 /********************************************************************************************
 >	LegendLabel::LegendLabel()
@@ -1874,7 +1929,7 @@ LegendLabel::LegendLabel()
 
 void LegendLabel::ShowLabel(BOOL show)
 {
-	ShowWindow(show ? SW_SHOWNA : SW_HIDE);
+	Show(show);
 }
 
  
@@ -1891,71 +1946,75 @@ LegendLabel::~LegendLabel()
 }
 
 
+/*********************************************************************************************
+>	void LegendLabel::OnPaint( wxPaintEvent &evnt )
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	ages ago
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Redraws the colour bar
+	Errors:		-
+
+**********************************************************************************************/ 
+void LegendLabel::OnPaint( wxPaintEvent &evnt )
+{
+	// Always create this so that the area is validated
+	wxPaintDC dc(this);
+
+	if (!CCamApp::IsDisabled())
+	{
+		DoPaint(&dc);
+	}
+}
+
+
+
 /********************************************************************************************
->	afx_msg void LegendLabel::OnPaint()
+>	afx_msg void LegendLabel::DoPaint(wxDC* pDC)
 
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/8/95
 	Purpose:	Paints the client area of the Legend Label
 ********************************************************************************************/
 
-void LegendLabel::OnPaint()
+void LegendLabel::DoPaint(wxDC* pDC)
 {
-	// prevent recursive redraws when an error ocurs
-	if (CCamApp::DisableSys)
-		return;
-
-	// Create a painting DC.
-	CPaintDC dc(this);
-	dc.SetROP2(R2_COPYPEN);
-	
 	// read the necessary colours
-	COLORREF BackCol  = ::GetSysColor(COLOR_BTNFACE);
-	COLORREF BotRight = ::GetSysColor(COLOR_BTNHIGHLIGHT);
-	COLORREF TopLeft  = ::GetSysColor(COLOR_BTNSHADOW);
-	COLORREF TextCol  = ::GetSysColor(COLOR_BTNTEXT);
+	wxColour BackCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+	wxColour TopLeft  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
+	wxColour BotRight = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+	wxColour TextCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
 
   	// get info about client rect
-	CRect ClientRect;
-	GetClientRect(&ClientRect);
-	INT32 left   = ClientRect.left;
-	INT32 top    = ClientRect.top;
-	INT32 width  = ClientRect.Width();
-	INT32 height = ClientRect.Height();
+	wxRect ClientRect = GetClientRect();
+	INT32 left   = ClientRect.x;
+	INT32 top    = ClientRect.y;
+	INT32 width  = ClientRect.GetWidth();
+	INT32 height = ClientRect.GetHeight();
 	INT32 right  = left + width;
 	INT32 bottom = top  + height;
 
-	// paint the background
-	PatB(&dc, left,top, width,height, BackCol);
-
+	// render the background
+	wxPen penNoOutline(BackCol, 0, wxTRANSPARENT);
+	pDC->SetPen(penNoOutline);
+	OILRuler::PatB(pDC, left,top, width,height, BackCol);
+	
 	// set up dc to paint transparent black text in correct font
-	INT32      OldBkMode  = dc.SetBkMode(TRANSPARENT);
-	COLORREF OldTextCol = dc.SetTextColor(TextCol);
-	HGDIOBJ  pOldFont   = dc.SelectObject(FontFactory::GetFont(STOCKFONT_RULERS));
-	if (pOldFont==NULL)
-	{
-		ERROR2RAW("LegendLabel::OnPaint() - dc.SelectObject() failed");
-		return;
-	}
+	pDC->SetTextForeground(TextCol);
+	pDC->SetBackgroundMode(wxTRANSPARENT);
+	pDC->SetFont(OILRuler::GetRulerFont());
 
 	// now draw the legend text formated into the client area
-	dc.DrawText((TCHAR*)LegendText, -1, &ClientRect, DT_CENTER|DT_VCENTER|DT_SINGLELINE);
-
-	// restore the dc
-	HGDIOBJ  pTempFont   = dc.SelectObject(pOldFont);
-	COLORREF TempTextCol = dc.SetTextColor(OldTextCol);
-	INT32      TempBkMode  = dc.SetBkMode(OldBkMode);
-	if (pTempFont==NULL)
-	{
-		ERROR2RAW("LegendLabel::OnPaint() - dc.SelectObject() failed");
-		return;
-	}
+	wxString Text((LPCTSTR)LegendText);
+	pDC->DrawText(Text, ClientRect.x, ClientRect.y);
 
 	// paint hi/lo light
-	PatB(&dc,  left,top,    width-1,1,        TopLeft);		// top
-	PatB(&dc,  left,top,          1,height-1, TopLeft);		// left
-	PatB(&dc,  left,bottom,   width,-1,       BotRight);	// bottom
-	PatB(&dc, right,top,         -1,height,   BotRight);	// right
+	OILRuler::PatB(pDC,  left,top,    width-1,1,        TopLeft);		// top
+	OILRuler::PatB(pDC,  left,top,          1,height-1, TopLeft);		// left
+	OILRuler::PatB(pDC,  left,bottom,   width,-1,       BotRight);	// bottom
+	OILRuler::PatB(pDC, right,top,         -1,height,   BotRight);	// right
 }
 
 
@@ -1977,8 +2036,8 @@ BOOL LegendLabel::SetLegendText(StringBase* pText)
 	if (ok)
 	{
 		ok=PositionLegend();
-		Invalidate();
-		UpdateWindow();
+		Refresh();
+		Update();
 	}
 
 	return ok;
@@ -1999,12 +2058,12 @@ BOOL LegendLabel::SetLegendText(StringBase* pText)
 BOOL LegendLabel::SetLegendSize()
 {
 	WinRect WinTextSize;
-	BOOL ok=OILRuler::GetTextSize(&WinTextSize,&LegendText);
+	BOOL ok=OILRuler::GetTextSize(&WinTextSize, (LPCTSTR)LegendText);
 	if (!ok)
 		return FALSE;
 
-	LegendHeight = WinTextSize.Height() +2;		// add pixel border top and bottom
-	LegendWidth  = WinTextSize.Width()  +2+7;	// add border + 3 pixel gap each end + pixel to right to balance 1 to left
+	LegendHeight = WinTextSize.GetHeight() +2;		// add pixel border top and bottom
+	LegendWidth  = WinTextSize.GetWidth()  +2+7;	// add border + 3 pixel gap each end + pixel to right to balance 1 to left
 
 	return TRUE;
 }
@@ -2022,25 +2081,25 @@ BOOL LegendLabel::SetLegendSize()
 BOOL LegendLabel::PositionLegend()
 {
 	// get the client area of the horizontal ruler
-	CRect ParentRect;
-	GetParent()->GetClientRect(&ParentRect);
+	WinRect ParentRect;
+	ParentRect = GetParent()->GetClientRect();
 	
 	// determine position of window
-	CRect LegendRect;
-	LegendRect.top 	  = (ParentRect.Height() -  LegendHeight)/2;	// centre vertically
-	LegendRect.bottom = ParentRect.bottom    -  LegendRect.top;		// with same gap at bottom
-	LegendRect.right  = ParentRect.right     - (LegendRect.top+6);	// and this gap plus some from right end of ruler
-	LegendRect.left   = LegendRect.right     -  LegendWidth;
+	WinRect LegendRect;
+	LegendRect.y 	  = (ParentRect.GetHeight()-LegendHeight)/2;	// centre vertically
+	LegendRect.SetBottomEx(ParentRect.GetBottomEx()-LegendRect.y);		// with same gap at bottom
+	LegendRect.SetRightEx(ParentRect.GetRightEx()-(LegendRect.y+6));	// and this gap plus some from right end of ruler
+	LegendRect.x   = LegendRect.GetRightEx()-LegendWidth;
 
 	// actually move the window
-	MoveWindow(&LegendRect, TRUE);
+	SetSize(LegendRect);
 
 	return TRUE;
 }
 
 
 /********************************************************************************************
->	BOOL LegendLabel::Create(CWnd* pParentWindow)
+>	BOOL LegendLabel::Create(wxWindow* pParentWindow, INT32 id)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -2049,40 +2108,19 @@ BOOL LegendLabel::PositionLegend()
 	Purpose:	Creates an LegendLabel object.
 ********************************************************************************************/
                     
-BOOL LegendLabel::Create(CWnd* pParentWindow)
+BOOL LegendLabel::Create(wxWindow* pParentWindow, INT32 id)
 { 
-	BOOL CreatedWindow;
 	ENSURE(pParentWindow,"DockingBar must have a Parent");
 
+	if (!wxWindow::Create(pParentWindow, id, wxDefaultPosition, wxSize(10, 20), wxNO_BORDER))
+		return(FALSE);
 
-	CRect rect;			// Rectangle for Create
-	rect.SetRectEmpty();
-	DWORD style = WS_CHILD  | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
-
-	// what is this supposed to do?!
-	#ifndef WIN32
-		DWORD
-	#endif
-	
-	// create the HWND
-	CreatedWindow = CWnd::Create(NULL,
-						AfxRegisterWndClass(CS_DBLCLKS,0,0,0),
-						style,
-						rect,
-						pParentWindow,
-						0,
-						NULL);
-
-	// size the window to fit the legend text
-	if(CreatedWindow)
-		SetLegendSize();
-
-	return CreatedWindow;
+	return TRUE;
 }
 
 
 /********************************************************************************************
->	void LegendLabel::OnLButtonDown(UINT32 nFlags, CPoint point);
+>	void LegendLabel::OnLButtonDown(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -2091,14 +2129,14 @@ BOOL LegendLabel::Create(CWnd* pParentWindow)
 	Purpose:	handle left button down events - pass on to parent ruler
 ********************************************************************************************/
                     
-void LegendLabel::OnLButtonDown(UINT32 nFlags, CPoint point)
+void LegendLabel::OnLButtonDown(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnLButtonDown(nFlags, ClientToParentClient(point));
+	((OILHorizontalRuler*)GetParent())->OnLButtonDown(event);
 }
 
 
 /********************************************************************************************
->	void LegendLabel::OnRButtonUp(UINT32 nFlags, CPoint point);
+>	void LegendLabel::OnRButtonUp(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -2107,14 +2145,14 @@ void LegendLabel::OnLButtonDown(UINT32 nFlags, CPoint point)
 	Purpose:	handle left button up events -  pass on to parent ruler
 ********************************************************************************************/
                     
-void LegendLabel::OnRButtonUp(UINT32 nFlags, CPoint point)
+void LegendLabel::OnRButtonUp(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnRButtonUp(nFlags, ClientToParentClient(point));
+	((OILHorizontalRuler*)GetParent())->OnRButtonUp(event);
 }
 
 
 /********************************************************************************************
->	void LegendLabel::OnLButtonDblClk(UINT32 nFlags, CPoint point);
+>	void LegendLabel::OnLButtonDblClk(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -2123,14 +2161,14 @@ void LegendLabel::OnRButtonUp(UINT32 nFlags, CPoint point)
 	Purpose:	handle left button double click events - pass on to parent ruler
 ********************************************************************************************/
                     
-void LegendLabel::OnLButtonDblClk(UINT32 nFlags, CPoint point)
+void LegendLabel::OnLButtonDblClk(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnLButtonDblClk(nFlags, ClientToParentClient(point));
+	((OILHorizontalRuler*)GetParent())->OnLButtonDblClk(event);
 }
 
 
 /********************************************************************************************
->	void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos);
+>	void LegendLabel::OnMouseMove(wxMouseEvent& event);
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -2139,9 +2177,13 @@ void LegendLabel::OnLButtonDblClk(UINT32 nFlags, CPoint point)
 	Purpose:	handle mousemoves over ruler legend label
 ********************************************************************************************/
                     
-void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos)
+void LegendLabel::OnMouseMove(wxMouseEvent& event)
 {
-	static CPoint OldMousePos = CPoint(0,0);
+	PORTNOTE("ruler", "TODO: Set nFlags");
+//	UINT32 nFlags = 0;
+	wxPoint MousePos = event.GetPosition();
+
+	static wxPoint OldMousePos = wxPoint(0,0);
 	if (MousePos==OldMousePos)
 		return;
 
@@ -2149,7 +2191,7 @@ void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 	if (pStatusLine)
 	{
 		String_256 Text("");
-		GetStatusLineText(&Text,MousePos,GetSafeHwnd());
+		GetStatusLineText(&Text, WinCoord(MousePos.x, MousePos.y), this);
 		pStatusLine->UpdateText(&Text,STATUSLINE_SELDESC_STATBAR);
 	}
 
@@ -2158,7 +2200,7 @@ void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 
 
 /******************************************************************************
->	BOOL LegendLabel::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+>	BOOL LegendLabel::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
@@ -2169,11 +2211,11 @@ void LegendLabel::OnMouseMove(UINT32 nFlags, CPoint MousePos)
 	Purpose:	if over a ruler legend return status line help
 ******************************************************************************/
 
-BOOL LegendLabel::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+BOOL LegendLabel::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 {
 	ERROR2IF(pText==NULL,FALSE,"LegendLabel::GetStatusLineText() - pText==NULL");
 
-	if (GetSafeHwnd()!=hWnd)
+	if (this!=hWnd)
 		return FALSE;
 
 	return (pText->Load(_R(IDS_RULER_LEGEND_SH))!=0);
@@ -2181,7 +2223,7 @@ BOOL LegendLabel::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWn
 
 
 /********************************************************************************************
->	CPoint LegendLabel::ClientToParentClient(CPoint point)
+>	wxPoint LegendLabel::ClientToParentClient(wxPoint point)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -2191,10 +2233,10 @@ BOOL LegendLabel::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWn
 	Note:		Nice if this was in a parent CCWnd class
 ********************************************************************************************/
                     
-CPoint LegendLabel::ClientToParentClient(CPoint point)
+wxPoint LegendLabel::ClientToParentClient(wxPoint point)
 {
-	ClientToScreen(&point);
-	GetParent()->ScreenToClient(&point);
+	ClientToScreen(point);
+	GetParent()->ScreenToClient(point);
 	return point;
 }
 

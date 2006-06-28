@@ -130,7 +130,7 @@ CC_IMPLEMENT_MEMDUMP(OriginContextMenu, ContextMenu)
 #define new CAM_DEBUG_NEW
 
 #define MAX_LEGEND_CHARS       12
-#define LABEL_SPACING_STRING "8888"
+#define LABEL_SPACING_STRING _T("8888")
 #define ACCEPTIBLE_DEVIATION_FROM_INTEGER 1e-10
 #define NEAR_ENOUGH_INTEGER(a) ( fabs(fmod(a,1)) < ACCEPTIBLE_DEVIATION_FROM_INTEGER )
 #define MAKE_INTEGER(a)        (     (INT32)( (a) + ACCEPTIBLE_DEVIATION_FROM_INTEGER*3 ) )
@@ -190,7 +190,7 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	INT32 LastGrat  = (INT32)ceil(End)*pRD->GratStep;
 
 	// plot each major graticule from the first to the last
-	String_8 GratLabelText("");
+	String_8 GratLabelText(_T(""));
 	INT32 Grat=FirstGrat;
 	while (Grat<=LastGrat)
 	{
@@ -202,7 +202,7 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 		ERROR3IF(!NEAR_ENOUGH_INTEGER(fabs(Grat*pRD->ScaleFactor)),"RulerBase::Redraw() - Grat label should be integer!");
 		INT32 GratLabel=MAKE_INTEGER(fabs(Grat*pRD->ScaleFactor));
 		Convert::LongToString(GratLabel,&GratLabelText);
-		pOILRuler->DrawMajorGraticule(GratOilPos,&GratLabelText);
+		pOILRuler->DrawMajorGraticule(GratOilPos, (LPCTSTR)GratLabelText);
 
 		// draw minor grats
 		INT32       MinorGrats   = pRD->MinorGrats;
@@ -406,7 +406,7 @@ BOOL RulerPair::UpdateRedrawData()
 
 	// determine the minimum distance between major graticules (in Doc/Spread/UserCoords)
 	OilRect LabelSizeOilRect;
-	ok = OILRuler::GetTextSize(&LabelSizeOilRect,&String_8(LABEL_SPACING_STRING),pDocView);
+	ok = OILRuler::GetTextSize(&LabelSizeOilRect,LABEL_SPACING_STRING,pDocView);
 	ERROR2IF(!ok,FALSE,"RulerPair::UpdateRedrawData() - OILRuler::GetTextSize() failed");
 	DocRect    LabelSizeDocRect = LabelSizeOilRect.ToDoc(pSpread,pDocView);
 	MILLIPOINT MinLabelSpacing  = max(LabelSizeDocRect.Width(),LabelSizeDocRect.Height());
@@ -436,10 +436,10 @@ BOOL RulerPair::UpdateRedrawData()
 	UserRect PasteBoardUserRect = PasteSpreadRect.ToUser(pSpread);
 
 	// hence the start and end values in terms of ruler units
-	double XStart = fabs(PasteBoardUserRect.lox/GratStepSize)*GratStep;
-	double XEnd   = fabs(PasteBoardUserRect.hix/GratStepSize)*GratStep;
-	double YStart = fabs(PasteBoardUserRect.loy/GratStepSize)*GratStep;
-	double YEnd   = fabs(PasteBoardUserRect.hiy/GratStepSize)*GratStep;
+	double XStart = fabs(PasteBoardUserRect.lo.x/GratStepSize)*GratStep;
+	double XEnd   = fabs(PasteBoardUserRect.hi.x/GratStepSize)*GratStep;
+	double YStart = fabs(PasteBoardUserRect.lo.y/GratStepSize)*GratStep;
+	double YEnd   = fabs(PasteBoardUserRect.hi.y/GratStepSize)*GratStep;
 
 	// hence a scale factor to keep the labels in the range 1..999
 	double LogMax  = log10(max(max(XStart,XEnd),max(YStart,YEnd)));
@@ -468,12 +468,12 @@ BOOL RulerPair::UpdateRedrawData()
 	INT32   VisibleGratStep     = GratStep    *GratFreq;
 
 	// determine the legend unit multiplier
-	String_32 LegendUnitMultiplier("");
+	String_32 LegendUnitMultiplier(_T(""));
 	if (GratStep*ScaleFactor!=GridStepSizeInUnits)
 	{
 		TCHAR mult[4]={' ',(TCHAR)0xD7,' ','\0'};		// ie a space followed by the multiply symbol
 		LegendUnitMultiplier = mult;
-		String_32 LegendUnitSize("");
+		String_32 LegendUnitSize(_T(""));
 		double GratUnit=GridStepSizeInUnits/GratStep;	// ie 1in=>1in, 10in=>1in, 2.54in=>2.54in
 		ok=Convert::DoubleToString(GratUnit/ScaleFactor,&LegendUnitSize);
 		SafeAppendString(&LegendUnitMultiplier,LegendUnitSize,FALSE);
@@ -687,7 +687,7 @@ BOOL RulerPair::UpdateMouseFollowers(DocCoord* pDocCoord)
 
 
 /******************************************************************************
->	BOOL RulerPair::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+>	BOOL RulerPair::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/10/95
@@ -698,7 +698,7 @@ BOOL RulerPair::UpdateMouseFollowers(DocCoord* pDocCoord)
 	Purpose:	if over a component of the rulers, get the associated help text
 ******************************************************************************/
 
-BOOL RulerPair::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
+BOOL RulerPair::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID hWnd)
 {
 	ERROR2IF(pText==NULL,FALSE,"RulerPair::GetStatusLineText() - pText==NULL");
 
@@ -709,14 +709,15 @@ BOOL RulerPair::GetStatusLineText(String_256* pText, CPoint MousePos, HWND hWnd)
  	ERROR2IF(pOriginGadget==NULL,FALSE,"RulerPair::GetStatusLineText() - pOriginGadget==NULL");
 	ERROR2IF(   pOilVRuler==NULL,FALSE,"RulerPair::GetStatusLineText() - pOilVRuler==NULL");
 	ERROR2IF(   pOilHRuler==NULL,FALSE,"RulerPair::GetStatusLineText() - pOilHRuler==NULL");
+
 	LegendLabel* pLegendLabel = pOilHRuler->GetpLegendLabel();
 	ERROR2IF(pLegendLabel==NULL,FALSE,"RulerPair::GetStatusLineText() - pLegendLabel==NULL");
 
 	BOOL valid=FALSE;
-	if (!valid) valid =    pOilVRuler->GetStatusLineText(pText,MousePos,hWnd);
-	if (!valid) valid =    pOilHRuler->GetStatusLineText(pText,MousePos,hWnd);
-	if (!valid) valid =  pLegendLabel->GetStatusLineText(pText,MousePos,hWnd);
-	if (!valid) valid = pOriginGadget->GetStatusLineText(pText,MousePos,hWnd);
+	if (!valid) valid =    pOilVRuler->GetStatusLineText(pText, MousePos, hWnd);
+	if (!valid) valid =    pOilHRuler->GetStatusLineText(pText, MousePos, hWnd);
+	if (!valid) valid =  pLegendLabel->GetStatusLineText(pText, MousePos, hWnd);
+	if (!valid) valid = pOriginGadget->GetStatusLineText(pText, MousePos, hWnd);
 
 	return valid;
 }

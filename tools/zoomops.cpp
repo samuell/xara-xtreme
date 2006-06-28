@@ -130,7 +130,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "bubbleid.h"
 
 #if !defined(EXCLUDE_FROM_RALPH)
-//#include "rulers.h"
+#include "rulers.h"
 #endif
 
 #ifdef _BATCHING   
@@ -2849,8 +2849,7 @@ BOOL OpZoomComboDescriptor::Update(BOOL fRefreshList)
 // WEBSTER - markn 15/1/97
 // No rulers in Webster
 #ifndef WEBSTER
-PORTNOTE("other", "Removed Ruler usage");
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// update the rulers after every scale change
 	if (pDocView->GetpRulerPair()) pDocView->GetpRulerPair()->Update();
 #endif

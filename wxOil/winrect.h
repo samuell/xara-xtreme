@@ -137,9 +137,15 @@ public:
 	// Alternate versions of these functions that deal with exclusive bottom and right
     INT32 GetRightEx()  const { return x + width; }
 	INT32 GetBottomEx() const { return y + height; }
+	wxPoint GetBottomRightEx() const {return wxPoint(x + width, y + height);}
 
     void SetRightEx(INT32 right) { width = right - x; }
     void SetBottomEx(INT32 bottom) { height = bottom - y; }
+	void SetBottomRightEx(const wxPoint& pt)
+	{
+		width = pt.x - x;
+		height = pt.y - y;
+	}
 
 	OilRect ToOil(View *pView) const;
 };                                            

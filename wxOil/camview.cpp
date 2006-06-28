@@ -111,6 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prntview.h"
 #include "osrndrgn.h"
 #include "scroller.h"
+#include "rulers.h"
 //#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "localenv.h"
 #include "zoomops.h"
@@ -124,6 +125,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "psrndrgn.h"
 #include "prnmks.h"
 #include "princomp.h"
+#include "oilruler.h"
 
 /***************************************************************************************************************************/
 
@@ -294,24 +296,23 @@ bool CCamView::OnCreate( wxDocument *pDoc, /* TYPENOTE: Correct */ long flags )
 	TRACEUSER("Gerry", _T("CCamView::OnCreate at 0x%08x\n"), this);
 
 	// Construct the (C++) child windows.
-PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller / ruler usage")
 	RenderWindow = new CRenderWnd(this);
 	HScrollBar = new CWinScroller(TRUE);
 	VScrollBar = new CWinScroller(FALSE);
-
+PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller corner usage")
 #ifndef EXCLUDE_FROM_XARALX
 	Corner = new CScrollerCorner;
+#endif // EX_LX
 	HRuler = new OILHorizontalRuler;
 	VRuler = new OILVerticalRuler;
 	OGadget = new OriginGadget;
-#endif // EX_LX
 	if (!RenderWindow
 		|| !HScrollBar 
 		|| !VScrollBar 
 #ifndef EXCLUDE_FROM_XARALX
 		|| !Corner 
-		|| !HRuler ||!VRuler	||!OGadget
 #endif // EX_LX
+		|| !HRuler ||!VRuler	||!OGadget
 		)
 	{
 		Error::SetError(_R(IDE_CREATE_VIEW_FAILED), 0);
@@ -332,9 +333,9 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller / ruler usage")
 		|| !HScrollBar->Create(m_pFrame, WID_HSCROLLBAR, wxPoint(-100, -100))
 		|| !VScrollBar->Create(m_pFrame, WID_VSCROLLBAR, wxPoint(-100, -100))
 //		|| !Corner->Create("", "", 0, rcARect, this, WID_SIZECORNER)
-//		|| !HRuler->Create(this, WID_HRULER)
-//		|| !VRuler->Create(this, WID_VRULER)
-//		|| !OGadget->Create(this, WID_RULERORIGIN)
+		|| !HRuler->Create(this, WID_HRULER)
+		|| !VRuler->Create(this, WID_VRULER)
+		|| !OGadget->Create(this, WID_RULERORIGIN)
 		)
 	{
 		Error::SetError(_R(IDE_CREATE_VIEW_FAILED), 0);
@@ -345,13 +346,10 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller / ruler usage")
 	CreateNewDocView();
 
 	// init the kernel rulers and establish pointer links to them
-PORTNOTE("other","ScreenCamView::OnCreate - Removed ruler usage")
-#ifndef EXCLUDE_FROM_XARALX
 	RulerPair* pRulers=pDocView->GetpRulerPair();
 	pRulers->Init(pDocView,HRuler,VRuler,OGadget);
 	HRuler->LinkToKernel(pRulers->GetpHorizontalRuler());
 	VRuler->LinkToKernel(pRulers->GetpVerticalRuler());
-#endif
 	ENSURE(pDocView != 0, "CCamView::ScreenView can't get a new DocView!");
 	pDocView->ConnectToOilView(this);
 	
@@ -448,10 +446,10 @@ bool CCamView::OnClose( bool fDeleteWindow /*= TRUE*/ )
 
 #ifndef EXCLUDE_FROM_XARALX
 		Corner = NULL;
+#endif // EX_LX
 		HRuler = NULL;
 		VRuler = NULL;
 		OGadget = NULL;
-#endif // EX_LX
 
 	}
 
@@ -2716,22 +2714,27 @@ void CCamView::ShowRulers(BOOL Show)
 // WEBSTER - markn 15/1/97
 // No rulers in Webster
 #ifndef WEBSTER
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	if(!VRuler||!HRuler)
+#if !defined(EXCLUDE_FROM_RALPH)
+	if (!VRuler||!HRuler)
 		return;
 
-	// Set flags and Show/Hide the Scrollers
-	if(VRuler)
+	// Set flags and Show/Hide the Rulers
+	if (VRuler)
 		VRuler->ShowRuler(Show);
-	if(HRuler)
+
+	if (HRuler)
 		HRuler->ShowRuler(Show);
+
+	if (OGadget)
+		OGadget->ShowGadget(Show);
 
 	Status->RulersVisible = Show;
 
 	// call OnSize directly to force new layout	
-	CRect WRect;
-	GetClientRect(&WRect);
-	SendMessage(WM_SIZE, SIZE_RESTORED, MAKELPARAM(WRect.Width(), WRect.Height()));
+	wxSize Size;
+	m_pFrame->GetSize(&Size.x, &Size.y);
+	wxSizeEvent evSize(Size, 0);
+	OnSize(evSize);
 #endif
 #endif // WEBSTER
 }
@@ -2754,7 +2757,7 @@ void CCamView::ShowRulers(BOOL Show)
 
 BOOL CCamView::AreRulersVisible()
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
  	if(Status)
  		return Status->RulersVisible;
 #endif
@@ -3707,9 +3710,8 @@ void CCamView::OnSize( wxSizeEvent &event )
 	wxSize NewSize( event.GetSize() );
 //	TRACEUSER("Gerry", _T("CCamView::OnSize Size = (%d, %d)\n"), NewSize.x, NewSize.y);
 
-	wxSize ClientSize;
-	m_pFrame->GetClientSize(&ClientSize.x, &ClientSize.y);
-	wxRect RenderRect(ClientSize);
+	wxRect ClientRect = m_pFrame->GetClientRect();
+	wxRect RenderRect = ClientRect;
 
 	// Check for irrelevant or potty messages.
 	if (NewSize.x <= 0 || NewSize.y <= 0)
@@ -3720,30 +3722,30 @@ void CCamView::OnSize( wxSizeEvent &event )
 
 	if (Status->RulersVisible)
 	{
-PORTNOTETRACE( "other", "CCamView::OnSize - Removed ruler usage" );
-#if !defined(EXCLUDE_FROM_XARALX)
 		// Get size of rulers and shove the left and top of the RenderRect in
 		// This is all old code and needs fixing
-		wxRect hRect, vRect, oRect;
+		WinRect hRect, vRect, oRect;
 
 	 	HRuler->CalcPosFromParentClient(&hRect);
-		HRuler->MoveWindow(&hRect, TRUE);
+		HRuler->SetSize(hRect);
 		HRuler->PositionLegend();
 		
-		CurrentSize.top = 0 + hRect.Height() ;
+		RenderRect.y += hRect.GetHeight();
+		RenderRect.height -= hRect.GetHeight();
 			
 	 	VRuler->CalcPosFromParentClient(&vRect);
-		VRuler->MoveWindow(&vRect, TRUE);
-		CurrentSize.left = 0 + vRect.Width(); 
+		VRuler->SetSize(vRect);
+
+		RenderRect.x += vRect.GetWidth();
+		RenderRect.width -= vRect.GetWidth();
 
 	 	OGadget->CalcPosFromParentClient(&oRect);
-		OGadget->MoveWindow(&oRect, TRUE);
+		OGadget->SetSize(oRect);
 		if (RULER_BORDERS)
 		{
-			CurrentSize.top --;
-			CurrentSize.left--; 
+			RenderRect.y--;
+			RenderRect.x--; 
 		}
-#endif
 	}
 
 	if (Status->ScrollersVisible)
@@ -3757,11 +3759,11 @@ PORTNOTETRACE( "other", "CCamView::OnSize - Removed ruler usage" );
 		VScrollBar->GetBestSize(&VScrSize.x, &VScrSize.y);
 //		TRACEUSER("Gerry", _T("VScroll BestSize = (%d, %d)\n"), VScrSize.x, VScrSize.y);
 
-		wxRect HScrRect(RenderRect.x, RenderRect.height - HScrSize.y, RenderRect.width - VScrSize.x, HScrSize.y);
+		wxRect HScrRect(RenderRect.x, ClientRect.height - HScrSize.y, RenderRect.width - VScrSize.x, HScrSize.y);
 //		TRACEUSER("Gerry", _T("HScrRect = (%d, %d) [%d, %d]\n"), HScrRect.x, HScrRect.y, HScrRect.width, HScrRect.height);
 		HScrollBar->SetSize(HScrRect);
 
-		wxRect VScrRect(RenderRect.width - VScrSize.x, RenderRect.y, VScrSize.x, RenderRect.height - HScrSize.y);
+		wxRect VScrRect(ClientRect.width - VScrSize.x, RenderRect.y, VScrSize.x, RenderRect.height - HScrSize.y);
 //		TRACEUSER("Gerry", _T("VScrRect = (%d, %d) [%d, %d]\n"), VScrRect.x, VScrRect.y, VScrRect.width, VScrRect.height);
 		VScrollBar->SetSize(VScrRect);
 
@@ -3971,7 +3973,7 @@ void CCamView::ScrollTo(const WorkCoord& offset)
 		GetRenderWindow()->ScrollWindow(-dx, -dy);
 	}
 	
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (Status->RulersVisible)
 	{
 		if(HRuler)
@@ -4738,16 +4740,16 @@ void CCamView::HandleDragScrolling(wxPoint point)
 
 //	TRACEUSER("Gerry", _T("AdjPoint = (%d, %d)\n"), point.x, point.y);
 	
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
 	// This is used to allow guidelines to be deleted by dropping on to the rulers - normally
 	// we would start to auto scroll at this point which is a little off putting..
 	if (AutoScrollExcludeRulers && CurrentDragType != DRAGTYPE_OLESCROLL)
 	{
 		UINT32 RulerWidth = OILRuler::GetWidth();
-		wrSize.left -= RulerWidth;
-		wrSize.top -= RulerWidth;	
+//		wrSize.left -= RulerWidth;
+//		wrSize.top -= RulerWidth;
+		wrSize.SetLeft(wrSize.GetLeft()-RulerWidth);
+		wrSize.SetTop(wrSize.GetTop()-RulerWidth);
 	}
-#endif
 
 	// Now check for deferred scrolling
 	if (CurrentDragType == DRAGTYPE_DEFERSCROLL)

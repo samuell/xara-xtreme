@@ -148,7 +148,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "tunemem.h"
 //#include "epsfiltr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "prncamvw.h"
-//#include "oilruler.h"
+#include "oilruler.h"
 //#include "registry.h"
 #include "appstate.h"
 //#include "basebar.h"
@@ -296,8 +296,9 @@ PORTNOTE("other","Removed even more initialization")
 #endif
 			TunedMemory::Init()	&&				// declare prefs for the memory manager
 
-#ifndef EXCLUDE_FROM_XARALX
 			OILRuler::Init() &&					// set the ruler widths depending on .ini font settings
+
+#ifndef EXCLUDE_FROM_XARALX
 			InitRegistry() &&					// register us with the shell etc
 			InitAppState()	&&					// get workspace prefs
 #endif

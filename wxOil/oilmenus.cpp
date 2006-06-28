@@ -1120,11 +1120,13 @@ PORTNOTE( "menu", "Remove Unimplemented menuitems from menu, under Release" )
 						TRACE( _T("Check %s\n"), (PCTSTR)subMenu->GetMenuText() );
 						
 						//Tick Menu Item
-						pMenu->Check( subMenu->GetMenuId(), true );
+						if (pMenu->FindItem(subMenu->GetMenuId())->IsCheckable())
+							pMenu->Check( subMenu->GetMenuId(), true );
 					}
 					else
 						//UnTick Menu Item
-						pMenu->Check( subMenu->GetMenuId(), false );
+						if (pMenu->FindItem(subMenu->GetMenuId())->IsCheckable())
+							pMenu->Check( subMenu->GetMenuId(), false );
 				}
 			}
 			else

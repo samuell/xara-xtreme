@@ -149,7 +149,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "clikmods.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
 #include "nodetxts.h"
-//#include "rulers.h"
+#include "rulers.h"
 #include "dlgmgr.h"
 //#include "bubbleid.h"
 //#include "filters.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -801,10 +801,7 @@ DocView::~DocView()
 	// delete the rulers (must be done first to prevent them receiving doc view dying messages)
 	if(pRulerPair)
 	{
-		PORTNOTETRACE("other","DocView::~DocView - pRulerPair not deleted");
-#ifndef EXCLUDE_FROM_XARALX
 		delete pRulerPair;
-#endif
 	}
 	pRulerPair=NULL;
 
@@ -844,11 +841,9 @@ BOOL DocView::Init()
 {
 	pRulerPair = NULL;
 
-PORTNOTE("other","Removed RulerPair usage")
-#ifndef EXCLUDE_FROM_XARALX
 	pRulerPair = new RulerPair();
 	ERROR2IF(pRulerPair==NULL,FALSE,"DocView::Init() - failed to create RulerPair");
-#endif
+
 	// update indicator in StatusLine
 	DialogBarOp::SetSystemStateChanged();
 
@@ -5086,10 +5081,7 @@ void DocView::ShowViewScrollers(BOOL fIsVisible)
 
 void DocView::ShowViewRulers(BOOL fIsVisible)
 {
-	PORTNOTETRACE("other","DocView::ShowViewRulers - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	pViewWindow->ShowRulers(fIsVisible);
-#endif
 }
 
 
@@ -5109,12 +5101,7 @@ void DocView::ShowViewRulers(BOOL fIsVisible)
 
 BOOL DocView::AreRulersVisible()
 {
-	PORTNOTETRACE("other","DocView::AreRulersVisible - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	return pViewWindow->AreRulersVisible( );
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -5134,12 +5121,7 @@ BOOL DocView::AreRulersVisible()
 
 BOOL DocView::AreScrollersVisible()
 {
-	PORTNOTE("other","DocView::AreScrollersVisible - do nothing")
-#ifndef EXCLUDE_FROM_XARALX
 	return pViewWindow->AreScrollersVisible( );
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************

@@ -1975,8 +1975,6 @@ Technical Notes:
 
 void ViewOps::Do(OpDescriptor* WhichOp)
 {
-	PORTNOTETRACE("other","ViewOps::Do - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	DoFullScreen = FALSE;
 	if ((WhichOp->Token) == String(OPTOKEN_VIEWFULLSCREEN))
 	{
@@ -1999,7 +1997,7 @@ void ViewOps::Do(OpDescriptor* WhichOp)
 		ViewScrollBarsAction();
 	else if ((WhichOp->Token) == String(OPTOKEN_VIEWRULERS))
 		ViewRulersAction();
-#endif
+
 	End();
 }                 
 
@@ -2022,8 +2020,6 @@ void ViewOps::Do(OpDescriptor* WhichOp)
 
 OpState ViewOps::GetState(String_256* UIDescription, OpDescriptor* WhichOp)
 {
-	PORTNOTETRACE("other","ViewOps::GetState - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if ((WhichOp->Token) ==  String(OPTOKEN_VIEWTOOLBAR))
 		return ViewToolBarState();
 	else if ((WhichOp->Token) == String(OPTOKEN_VIEWSTATUSBAR))
@@ -2036,7 +2032,7 @@ OpState ViewOps::GetState(String_256* UIDescription, OpDescriptor* WhichOp)
 		return ViewScrollBarsState();
 	else if ((WhichOp->Token) == String(OPTOKEN_VIEWRULERS))
 		return ViewRulersState();
-#endif
+
 	return OpState(FALSE, FALSE);
 }                                    
 
@@ -2058,8 +2054,6 @@ OpState ViewOps::GetState(String_256* UIDescription, OpDescriptor* WhichOp)
 
 BOOL ViewOps::Init()
 {
-PORTNOTETRACE("other","ViewOps::Init - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	/*OpDescriptor* ToolOp = new OpDescriptor(
 											0, 
 											_R(IDS_VIEW_TOOLBAR),
@@ -2081,7 +2075,15 @@ PORTNOTETRACE("other","ViewOps::Init - do nothing");
 												ViewOps::GetState,
 												0,
 												0,
-												0,0,TRUE );
+												0,
+												0,
+												TRUE,
+												FALSE,				// Smart
+												TRUE,				// Clean
+												0,					// OneOpenInstID
+												0,					// AutoStateFlags
+												TRUE				// fCheckable
+												);
 
 	ERRORIF(!ColourOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
@@ -2096,6 +2098,8 @@ PORTNOTETRACE("other","ViewOps::Init - do nothing");
 												0,
 												0,0,TRUE  );
 */
+PORTNOTETRACE("other","ViewOps::Init - do nothing");
+#ifndef EXCLUDE_FROM_XARALX
 	BOOL FullScreenOp = RegisterOpDescriptor(
 												0,
 												_R(IDS_VIEW_FULLSCREEN),
@@ -2112,6 +2116,7 @@ PORTNOTETRACE("other","ViewOps::Init - do nothing");
 
 //      REGOP(VIEW,FULLSCREEN,ViewOps)
 	ERRORIF(!FullScreenOp, _R(IDE_NOMORE_MEMORY), FALSE);
+#endif
 
 	OpDescriptor* ScrollBarsOp = new OpDescriptor(
 												0, 
@@ -2121,7 +2126,15 @@ PORTNOTETRACE("other","ViewOps::Init - do nothing");
 												ViewOps::GetState,
 												0,
 												0,
-												0,0,TRUE  );
+												0,
+												0,
+												TRUE,
+												FALSE,				// Smart
+												TRUE,				// Clean
+												0,					// OneOpenInstID
+												0,					// AutoStateFlags
+												TRUE				// fCheckable
+												);
 
 	ERRORIF(!ScrollBarsOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
@@ -2136,13 +2149,16 @@ PORTNOTETRACE("other","ViewOps::Init - do nothing");
 												_R(IDBBL_PAGERULERS),
 												_R(IDD_BARCONTROLSTORE),
 												_R(IDC_PAGERULERS),
-												SYSTEMBAR_VIEW,
-												TRUE
+												TRUE,				// ReceiveMessages
+												FALSE,				// Smart
+												TRUE,				// Clean
+												0,					// OneOpenInstID
+												0,					// AutoStateFlags
+												TRUE				// fCheckable
 												);
 
 	ERRORIF(!RulerOp, _R(IDE_NOMORE_MEMORY), FALSE);
 	//REGOP(VIEW,COLOURBAR,ViewOps)
-#endif
 	return TRUE;
 }
 

@@ -77,7 +77,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	swfbuttn.cpp swffont.cpp swfplace.cpp swfrndr.cpp swfshape.cpp swfsprit.cpp \
 	swfexpdc.cpp swftext.cpp pmaskrgn.cpp printctl.cpp prnmkcom.cpp prnmks.cpp \
 	xsepsops.cpp xarprefs.cpp printing.cpp prntview.cpp psrndrgn.cpp opimgset.cpp \
-	optsprin.cpp prnprefs.cpp
+	optsprin.cpp prnprefs.cpp rulers.cpp
 
 
 AM_CXXFLAGS = $(XARAFLAGS)
