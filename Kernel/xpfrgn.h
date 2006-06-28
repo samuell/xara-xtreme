@@ -190,10 +190,12 @@ public:
 	BOOL IsCommonType() { return(m_bCommonType); }
 	void UpdateCommonType(UINT32 Type);
 	UINT32 GetCommonType();
+	BOOL UsesNonAlpha() { return(m_bUsesNonAlpha); }
 
 protected:
 	BOOL m_bCommonType;
 	UINT32 m_CommonType;
+	BOOL m_bUsesNonAlpha;
 };
 
 

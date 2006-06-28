@@ -1381,6 +1381,10 @@ MsgHelpTuple atplMsgTopics[] =
 			_R(IDM_OVERWRITE_INJECT),
 			0,
 
+	_R(IDS_HELPPATH_Plugin_Filters),
+			_R(IDS_XPF_MIXEDTRANSLAYER),
+			0,
+
 	// End of table.
 	0
 };

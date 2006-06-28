@@ -2076,6 +2076,12 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELPPATH_Plugin_Filters">
+					<label>IDH_Plugin_Filters</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="Tips">
 					<label></label>
 				</object>

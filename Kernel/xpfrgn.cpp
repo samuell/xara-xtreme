@@ -2213,6 +2213,21 @@ BOOL XPFRenderCallback::FindCommonTransTypeToApply(Node* pFirstNode, Node* pLast
 				return(TRUE);
 			}
 		}
+		else
+		{
+			if (TransInfo.UsesNonAlpha())
+			{
+				if (pFirstNode == pLastNode && IS_A(pFirstNode, Layer))
+				{
+					Layer* pLayer = (Layer*)pFirstNode;
+					String_256 LayerName = pLayer->GetLayerID();
+					String_256 WarningMsg;
+					WarningMsg.MakeMsg(_R(IDS_XPF_MIXEDTRANSLAYER), &LayerName);
+					Error::SetError(_R(IDS_XPF_MIXEDTRANSLAYER),WarningMsg,0);
+					InformWarning();		
+				}
+			}
+		}
 	}
 	else
 	{
