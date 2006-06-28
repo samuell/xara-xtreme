@@ -493,7 +493,7 @@ TCHAR *OILFilter::ConstructFilterString(UINT32 NumberToExport)
 	}
 
 	FilterStr += Extensions;
-	FilterStr += _T(") |");
+	FilterStr += _T(")|");
 	FilterStr += Extensions;
 
 	// Return a pointer to the string.

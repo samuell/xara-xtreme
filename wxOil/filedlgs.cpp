@@ -584,7 +584,19 @@ TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		{
 			BaseBitmapFilter* pBitmapFilter = (BaseBitmapFilter*)pFilter;
 			if (pBitmapFilter->IsThisBppOk(Bpp))
-				FilterCanCope = TRUE;	
+			{
+				// Webster - RanbirR - 25\02\97  
+				// If this is a single bitmap and the the Bpp is 24, 
+				// then we do not want to dipsplay *.gif in the export filter List.
+				// Only allow the format for Animated GIF's (even though they do not 
+				// support 24 colour bitmaps.) We later convert to an 8 Bpp. 
+				// This fixes an animated GIF export bug in Camelot.
+				// At present we error if the first bitmap in our animated gif is 24Bpp.
+				if (pFilter->FilterID ==  FILTERID_TI_GIF && Bpp == 24 && BitmapCount == 1)
+					FilterCanCope = FALSE;
+				else
+					FilterCanCope = TRUE;
+			}
 			else
 				FilterCanCope = FALSE;
 
@@ -604,8 +616,10 @@ TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		   )
 		{
 			// Add the space required to put this into the filter string
-			// (add 1 for the separating '|' character)
-			FilterSize += camStrlen(pFilter->pOILFilter->ConstructFilterString(BitmapCount)) + 1;
+			// (add 1 for the separating '|' character when not the first)
+			if (FilterSize != 0)
+				FilterSize += 1;
+			FilterSize += camStrlen(pFilter->pOILFilter->ConstructFilterString(BitmapCount));
 		}
 
 		// Try the next filter
@@ -620,9 +634,8 @@ TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 		return NULL;
 	}
 	
-	
-	// Add two for the final "|" and the 0 terminator.
-	FilterSize += 2;
+	// Add one for the final terminator.
+	FilterSize += 1;
 
 	// Try to get this string
 	TCHAR *FilterString = (TCHAR *) CCMalloc(FilterSize * sizeof(TCHAR));
@@ -654,13 +667,9 @@ TCHAR *BaseFileDialog::BuildFilterString(BOOL GetImport,
 				// support 24 colour bitmaps.) We later convert to an 8 Bpp. 
 				// This fixes an animated GIF export bug in Camelot.
 				// At present we error if the first bitmap in our animated gif is 24Bpp.
-PORTNOTE("filter", "Removed use fo GIFFilter")
-#ifndef EXCLUDE_FROM_XARALX
 				if (pFilter->FilterID ==  FILTERID_TI_GIF && Bpp == 24 && BitmapCount == 1)
 					FilterCanCope = FALSE;
-
 				else
-#endif
 					FilterCanCope = TRUE;
 			}
 			else
@@ -681,8 +690,9 @@ PORTNOTE("filter", "Removed use fo GIFFilter")
 			   )
 			{
 				// Add this filter into the list
+				if (Position != 0)
+					camStrcat(FilterString, _T("|"));
 				camStrcat(FilterString, pFilter->pOILFilter->ConstructFilterString(BitmapCount));
-				camStrcat(FilterString, _T("|"));
 				pFilter->pOILFilter->Position = Position;
 
 				// Is this the filter we used last?
@@ -700,9 +710,6 @@ PORTNOTE("filter", "Removed use fo GIFFilter")
 		// Try the next filter
 		pFilter = Filter::GetNext(pFilter);
 	}
-
-	// Terminate the string
-	camStrcat(FilterString, _T("|"));
 
 	// All ok
 	return FilterString;
