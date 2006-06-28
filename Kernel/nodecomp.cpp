@@ -110,6 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 
 // operation headers
+#include "ophist.h"
 #include "transop.h"
 #include "attrappl.h"
 
@@ -1756,8 +1757,6 @@ BOOL NodeCompound::DoBecomeA(BecomeA* pBecomeA)
 ********************************************************************************************/
 NodeGroup* NodeCompound::BecomeAGroup(UndoableOperation* pUndoOp)
 {
-	PORTNOTETRACE("other","NodeCompound::BecomeAGroup - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// we can't do a thing without an Op...
 //	if (pUndoOp == NULL)
 //	{
@@ -1850,9 +1849,6 @@ NodeGroup* NodeCompound::BecomeAGroup(UndoableOperation* pUndoOp)
 	}
 
 	return ok ? pGroup : NULL;
-#else
-	return NULL;
-#endif
 }
 
 
