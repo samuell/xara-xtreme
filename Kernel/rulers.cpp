@@ -444,7 +444,7 @@ BOOL RulerPair::UpdateRedrawData()
 	// hence a scale factor to keep the labels in the range 1..999
 	double LogMax  = log10(max(max(XStart,XEnd),max(YStart,YEnd)));
 	INT32   MaxDP   = (INT32)floor(LogMax);
-	double ScaleFactor = (MaxDP<=2) ? 1 : 1/pow(10,MaxDP-2);
+	double ScaleFactor = (MaxDP<=2) ? 1 : 1/pow(10.0,MaxDP-2);
 
 	// determine how often major graticules can be drawn (ie 1 in N, where N is 1eX, 2eX, 5eX)
 	// (note: all done accurately with integers and multiplies)
