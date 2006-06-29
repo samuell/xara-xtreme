@@ -3725,7 +3725,6 @@ void CCamView::OnSize( wxSizeEvent &event )
 	if (Status->RulersVisible)
 	{
 		// Get size of rulers and shove the left and top of the RenderRect in
-		// This is all old code and needs fixing
 		WinRect hRect, vRect, oRect;
 
 	 	HRuler->CalcPosFromParentClient(&hRect);
@@ -3743,11 +3742,6 @@ void CCamView::OnSize( wxSizeEvent &event )
 
 	 	OGadget->CalcPosFromParentClient(&oRect);
 		OGadget->SetSize(oRect);
-		if (RULER_BORDERS)
-		{
-			RenderRect.y--;
-			RenderRect.x--; 
-		}
 	}
 
 	if (Status->ScrollersVisible)
@@ -4649,6 +4643,7 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 
 	It does this:
 		Posts itself a WM_LBUTTONDOWN message with the flags and point provided
+	NOTE: Not any more! Now calls HandleDragEvent directly...
 
 	and in HandleDragEvent()
 		Creates an instance of the op specified by OpToken
@@ -4657,14 +4652,14 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 
 BOOL CCamView::InvokeDragOp(String_256* pOpToken,OpParam* pParam,UINT32 Flags,wxPoint point)
 {
-	PORTNOTETRACE("other","CCamView::InvokeDragOp - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	DragOpToken  = *pOpToken;
 	pDragOpParam = pParam;
 	DragOpInvoke = TRUE;
 
-	PostMessage(WM_LBUTTONDOWN,Flags,point.x | (point.y << 16));
-#endif
+	// NOTE: May need to post a pseudo mouse event here if some of the subtleties of click
+	// handling are required, but this works fine for simple drags
+	HandleDragEvent(MK_LBUTTON, Flags, point, CLICKTYPE_SINGLE);
+
 	return TRUE;
 }
 

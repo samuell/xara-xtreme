@@ -126,6 +126,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard2.h"	// For naughty inline strings...
 #include "basebar.h"
 #include "brushmsg.h"
+#include "cartprov.h"
 
 //#ifdef _DEBUG
 //	#undef THIS_FILE
@@ -137,8 +138,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define MIN_PIXEL_GRATICULE_SPACING_Y 5
 
 // statics ...
-String_256*			OILRuler::FontName         = NULL; /*String_256(_R(IDS_OILRULER_SMALL_FONTS)); "Small Fonts";*/ // - read from .ini
-INT32        		OILRuler::FontSize         = 7;				// read from .ini
+String_256*			OILRuler::FontName         = NULL; /*String_256(_R(IDS_OILRULER_SMALL_FONTS)); "Small Fonts";*/ // - read from config
+INT32        		OILRuler::FontSize         = 7;				// read from config
 INT32       		OILRuler::RenderWidth      = 0;		// this is set up on app start up
 UINT32       		OILRuler::RulerWidth       = 0;		// actually offset to next bar (based on RenderWidth)
 INT32       		OILRuler::CharHeight       = 0;
@@ -170,7 +171,7 @@ END_EVENT_TABLE()
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	25/9/95
 	Returns:	FALSE if fails
-	Purpose:	read the font name and size for the ruler from the .ini file
+	Purpose:	read the font name and size for the ruler from config
 				and use this to determine the size of the rulers
 ********************************************************************************************/
 
@@ -187,7 +188,7 @@ BOOL OILRuler::Init()
 	ERROR2IF(FontName == NULL,FALSE,"OILRuler::SetRenderWidth() - couldn't create a string_256 - eek !");
 	if (FontName->Length()==0)
 		FontName->Load(_R(IDS_OILRULER_SMALL_FONTS));
-	ERROR2IF(FontName->Length()==0,FALSE,"OILRuler::SetRenderWidth() - invalid FontName in .ini file");
+	ERROR2IF(FontName->Length()==0,FALSE,"OILRuler::SetRenderWidth() - invalid FontName in config");
 
 	WinRect WinTextSize;
 	ok=GetTextSize(&WinTextSize, _T("8"));
@@ -291,11 +292,7 @@ OILRuler::OILRuler()
 	// so the offset to the next bar etc must only account for 1 of the 2 border pixels
 	ERROR3IF(RenderWidth==0,"OILRuler::OILRuler() - RenderWidth==0 (not initialised!)");
 
-// BODGE RULER - this should be OILRuler::RenderWidth+1 and OILRuler::RenderWidth !!!
-	if(RULER_BORDERS)
-		RulerWidth = RenderWidth+2;
-	else
-		RulerWidth = RenderWidth;
+	RulerWidth = RenderWidth;
 }
 
 
@@ -508,28 +505,28 @@ void OILRuler::DoPaint(wxDC* pDC)
 	INT32 top    = ClientRect.y;
 	INT32 width  = ClientRect.GetWidth();
 	INT32 height = ClientRect.GetHeight();
-//	INT32 right  = left + width;
-//	INT32 bottom = top  + height;
+	INT32 right  = left + width;
+	INT32 bottom = top  + height;
 //	if (IsHorizontal() && height!=RenderWidth || !IsHorizontal() && width!=RenderWidth)
 //		ERROR3_PF(("OILRuler::OnPaint() - ruler client size (%d,%d) and RenderWidth (%d) incompatible!",width,height,RenderWidth));
 
 	// render the background
 	wxPen penNoOutline(BackCol, 0, wxTRANSPARENT);
 	pDC->SetPen(penNoOutline);
-	PatB(pDC, left,top, width,height, BackCol);
+//	PatB(pDC, left,top, width,height, BackCol);		// Unneeded?
 	
 	// paint borders to be over written by graticules
-/*	if(IsHorizontal())
+	if (IsHorizontal())
 	{
-		PatB(pDC, left+1,top+1,  width-2,1,  TopLeft);	// horizontal ruler top    hi-light
-		PatB(pDC, left+1,bottom, width-1,-1, BotRight);	// horizontal ruler bottom lo-light
+		PatB(pDC, left,top,  width,1,  TopLeft);	// horizontal ruler top    hi-light
+		PatB(pDC, left,bottom-1, width,1, BotRight);	// horizontal ruler bottom lo-light
 	}
 	else
 	{
-		PatB(pDC, left+1,top+1,  1,height-2, TopLeft);	// vertical ruler left  hi-light
-		PatB(pDC,  right,top+1, -1,height-1, BotRight);	// vertical ruler right lo-light
+		PatB(pDC, left,top,  1,height, TopLeft);	// vertical ruler left  hi-light
+		PatB(pDC,  right-1,top, 1,height, BotRight);	// vertical ruler right lo-light
 	}
-*/
+
 	pDC->SetPen(wxPen(*wxBLACK, 1, wxSOLID));		// Restore previous Pen
 
 	// get the kernel to render the ruler
@@ -546,10 +543,17 @@ void OILRuler::DoPaint(wxDC* pDC)
 
 		// draw the ruler
 		pKernelRuler->Redraw(&UpdateOilRect);
+
+		pPaintDC = NULL;
+		pPaintDocView = NULL;
 	}
 
+	pDC->SetPen(penNoOutline);
+
 	// paint the bits of the border that need to cover the ruler rendering
-/*	if(IsHorizontal())
+PORTNOTE("rulers", "Removed attempt to draw ruler ends because ScrollWindow seems to ignore specified area (WXGTK)")
+#if !defined(EXCLUDE_FROM_XARALX)
+	if (IsHorizontal())
 	{
 		PatB(pDC,   left,top,    1,height,   BackCol);	// horizontal ruler light grey left edge
 		PatB(pDC, left+1,top+1,  1,height-2, TopLeft);	// horizontal ruler left  hi-light
@@ -561,7 +565,10 @@ void OILRuler::DoPaint(wxDC* pDC)
 		PatB(pDC, left+1,top+1,  width-2,1,  TopLeft);	// vertical ruler top    hi-light
 		PatB(pDC, left+1,bottom, width-1,-1, BotRight);	// vertical ruler bottom lo-light
 	}
-*/
+#endif
+
+	pDC->SetPen(wxPen(*wxBLACK, 1, wxSOLID));		// Restore previous Pen
+
 }
 
 
@@ -685,7 +692,7 @@ void OILRuler::OnLButtonDblClk(wxMouseEvent& event)
 //	UINT32 nFlags = 0;
 	wxPoint point = event.GetPosition();
 
-	// get a few ponters
+	// get a few pointers
 	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
 	Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
 	if (pDocView==NULL || pSpread==NULL)
@@ -739,6 +746,22 @@ void OILRuler::OnMouseMove(wxMouseEvent& event)
 		GetStatusLineText(&Text, WinCoord(MousePos.x, MousePos.y), this);
 		pStatusLine->UpdateText(&Text, STATUSLINE_SELDESC_STATBAR);
 	}
+
+/*	Attempt to update mouse followers when pointer over ruler
+	Doesn't work...
+	DocView* pView = m_pOwnerView->GetDocViewPtr();
+	if (pView!=NULL)
+	{
+		wxWindow* pRenderWnd=pView->GetRenderWindow();
+		wxPoint wcoord = ClientToOtherClient(pRenderWnd, MousePos);
+		OilCoord ocoord = ( (WinCoord *)&wcoord )->ToOil(pView, TRUE);
+		Spread* pSpread = Document::GetSelectedSpread();
+		DocCoord dcoord = ocoord.ToDoc(pSpread, pView);
+		RulerPair* pRulerPair = pView->GetpRulerPair();
+		if (pRulerPair!=NULL)
+			pRulerPair->UpdateMouseFollowers(&dcoord);
+	}
+*/
 
 	OldMousePos = MousePos;
 }
@@ -965,14 +988,14 @@ BOOL OILRuler::PaintMouseFollower(OilCoord OilPos, DocView* pDocView,
 {
 	// get hold of a dc (if in middle of OnPaint(), pPaintDC should be valid)
 	wxDC* pDC = pPaintDC;
-//	BOOL LocalDC = (pDC==NULL);
-//	if (LocalDC)
-//		pDC=GetDC();
+	if (pDC)
+	{
+		BOOL ok = DrawMouseFollower(OilPos, pDocView, RenderType, pDC);
+		return ok;
+	}
 
-	BOOL ok = DrawMouseFollower(OilPos, pDocView, RenderType, pDC);
-
-//	if (LocalDC)
-//		ReleaseDC(pDC);
+	wxPaintDC dc(this);
+	BOOL ok = DrawMouseFollower(OilPos, pDocView, RenderType, &dc);
 
 	return ok;
 }
@@ -1005,10 +1028,12 @@ BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
 	else
 		FollowerWinRect = WinRect(0,WinPos.y-1,RenderWidth,WinPos.y-1);
 
-	// set up dc
+	// set up dc and draw
 	wxPen pen(*wxGREEN, 1, wxSOLID);
 	pDC->SetPen(pen);
+	pDC->SetLogicalFunction(wxINVERT);
 	pDC->DrawLine(FollowerWinRect.GetLeft(), FollowerWinRect.GetTop(), FollowerWinRect.GetRightEx(), FollowerWinRect.GetBottomEx());
+	pDC->SetLogicalFunction(wxCOPY);
 
 	return TRUE;
 }
@@ -1067,7 +1092,8 @@ BOOL OILHorizontalRuler::PostCreate()
 	if (pLegend == NULL)
 		return FALSE;
 
-	pLegend->Create(this, -1);
+//	pLegend->Create(this, -1);
+	pLegend->Create(this, m_pOwnerView->GetParentFrame(), -1);
 
 	return TRUE;
 }
@@ -1085,8 +1111,8 @@ void OILHorizontalRuler::ScrollRuler(INT32 amount)
 { 
 	WinRect ClipRect;
 	ClipRect = GetClientRect();
-	ClipRect.x+=2;
-	ClipRect.SetRightEx(ClipRect.GetRightEx()-1);
+//	ClipRect.x+=1;
+//	ClipRect.SetWidth(ClipRect.GetWidth()-2);
 
 	ScrollWindow(amount, 0, &ClipRect);
 	Update();
@@ -1133,15 +1159,10 @@ void OILHorizontalRuler::CalcPosFromParentClient(WinRect* lpRect)
 {
 	WinRect parentRect;
 	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
-	if (RULER_BORDERS)
-	{
-	  parentRect.y --;
-	  parentRect.x -=2;
-	}
 	
 	lpRect->x   = parentRect.x + RulerWidth;
 	lpRect->y    = parentRect.y;
-	lpRect->SetRightEx(parentRect.GetRightEx()+1);
+	lpRect->SetRightEx(parentRect.GetRightEx()); //+1);
 	lpRect->SetBottomEx(parentRect.y  + RulerWidth);
 	
 }
@@ -1297,8 +1318,8 @@ void OILVerticalRuler::ScrollRuler(INT32 amount)
 { 
 	WinRect ClipRect;
 	ClipRect = GetClientRect();
-	ClipRect.y+=2;
-	ClipRect.SetBottomEx(ClipRect.GetBottomEx()-1);
+//	ClipRect.y+=1;
+//	ClipRect.SetHeight(ClipRect.GetHeight()-2);
 
 	ScrollWindow(0, amount, &ClipRect);
 	Update();
@@ -1345,15 +1366,11 @@ void OILVerticalRuler::CalcPosFromParentClient(WinRect* lpRect)
 {
 	WinRect parentRect;
 	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
-	if (RULER_BORDERS)
-	{
-	  parentRect.y -= 2;
-	  parentRect.y--;
-	}
+
 	lpRect->x   = parentRect.x;
 	lpRect->y    = parentRect.y  + RulerWidth;
 	lpRect->SetRightEx(parentRect.x + RulerWidth);
-	lpRect->SetBottomEx(parentRect.GetBottomEx()+1);
+	lpRect->SetBottomEx(parentRect.GetBottomEx()); //+1);
 }
 
 
@@ -1430,18 +1447,7 @@ END_EVENT_TABLE()
 OriginGadget::OriginGadget()
 { 
 	pGlyph = NULL;
-PORTNOTE("ruler", "Removed use of CBitmap")
-#if !defined(EXCLUDE_FROM_XARALX)
-	pGlyph = new CBitmap;
-	if(pGlyph)
-	{
-		if(! pGlyph->LoadBitmap(_R(IDB_ORIGINBMP)))
-		{	
-			delete pGlyph;
-			pGlyph = NULL;
-		}
-	}
-#endif
+	pGlyph = CamArtProvider::Get()->FindBitmap(_R(IDB_ORIGINBMP)); //, (CamArtFlags)(CAF_DEFAULT|(Disabled?CAF_GREYED:0)));
 }
 
 
@@ -1470,99 +1476,7 @@ void OriginGadget::ShowGadget(BOOL show)
 
 OriginGadget::~OriginGadget()
 {
-	// kill the bitmap
-	if (pGlyph)
-		delete pGlyph;
-}
-
-
-/********************************************************************************************
->	void PlotMaskedBitmap(CDC* destDC, CBitmap* srcBitmap, INT32 x, INT32 y, INT32 width, INT32 height)
-
-	Author:		Jason_Williams (Xara Group Ltd) <camelotdev@xara.com> and Chris
-	Created:	14/3/94
-	Inputs:		destDC    - DC into which the BMP will be plotted
-				srcBitmap - NULL, or the source bitmap
-				x, y, width, height - rectangle to plot into
-	Purpose:	Plots the given bitmap (srcDC) into the given rectangle of the destination
-				(destDC).
-				if srcDC == NULL, then just fills the button with grey, else...
-********************************************************************************************/
-
-// Raster Ops, used to...
-
-// Plot colour in the glyph bitmaps transparent (grey) regions
-#define ROP_DSPDxax  0x00E20746L
-
-// Plot colour in the glyph bitmaps non-transparent (coloured) regions
-#define ROP_PSDPxax  0x00B8074AL
-
-
-
-BOOL OriginGadget::PlotMaskedBitmap(wxDC* destDC, wxBitmap* srcBitmap, INT32 SrcOffset,
-								INT32 xPlotOffset,INT32 yPlotOffset, INT32 width, INT32 height)
-{
-	
-PORTNOTE("ruler", "Removed use of Windows stuff")
-#if !defined(EXCLUDE_FROM_XARALX)
-	ERROR2IF(srcBitmap == NULL,FALSE,"NULL Bitmap in PlotMaskedBitmap()");
-	ERROR2IF(destDC == NULL,FALSE,"NULL DC in PlotMaskedBitmap()");
-
-	// always fill the entire background with BTNFACE to make sure we don't
-	// miss any pixels 
-
-	PatB(destDC, 0, 0, width, height, GetSysColor(COLOR_BTNFACE));
-	
-	// create a screen dc
-	CDC scrDC ;
-	scrDC.CreateCompatibleDC(destDC);
-	
-	// and select the bitmap into it
-	CBitmap* OldSrcBitmap = (CBitmap *) scrDC.SelectObject(srcBitmap);
-
-	// create a mask for the button glyph... First a DC
-	CDC hDCMono ;
-	hDCMono.CreateCompatibleDC(NULL);
-
-	// create a mono bitmap for the mask
-	CBitmap hbmMono ; 
-	hbmMono.CreateBitmap(width, height, 1, 1, NULL);
-	
-	CBitmap * oldmonobitmap = (CBitmap *)hDCMono.SelectObject(&hbmMono);
-
-	// initalize the bitmapto white (all 1's)
-	hDCMono.PatBlt(0, 0, width, height, WHITENESS);
-
-	// plot all non-magenta  pixels in the glyph as black in our mask
-	scrDC.SetBkColor( RGB(255,0,255));
-	hDCMono.BitBlt(xPlotOffset, yPlotOffset, width, height, &scrDC,
-			SrcOffset, 0, SRCCOPY);
-
-	destDC->SetTextColor(0L);                  // 0's in mono -> 0 (for ROP)
-	destDC->SetBkColor((COLORREF)0x00FFFFFFL); // 1's in mono -> 1
-
-	// plot the glyph 
-	destDC->BitBlt( xPlotOffset, yPlotOffset, width, height,
-					&scrDC, SrcOffset, 0, SRCCOPY);
-		
-	// fill with the normal BTNFACE colour
-	CBrush HighlightBrush ; 
-	HighlightBrush.CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-
-	CBrush* hbrOld = (CBrush *) destDC->SelectObject(&HighlightBrush);
-	if (hbrOld != NULL)
-	{
-		// draw highlight color where we have 0's in the mask
-		destDC->BitBlt(0,0, width, height,  &hDCMono, 0, 0, ROP_DSPDxax);
-		destDC->SelectObject(hbrOld);
-	}
-	
-	// clean up DC's
-	hDCMono.SelectObject(oldmonobitmap);
-	scrDC.SelectObject(OldSrcBitmap);
-#endif
-
-	return TRUE;
+	// NOTE: CamArtProvider owns pGlyph and will delete it itself
 }
 
 
@@ -1602,41 +1516,38 @@ void OriginGadget::OnPaint( wxPaintEvent &evnt )
 
 void OriginGadget::DoPaint(wxDC* pDC)
 {
-PORTNOTE("ruler", "Removed use of Windows stuff")
-#if !defined(EXCLUDE_FROM_XARALX)
-	// Create a painting DC.
-	CPaintDC dc(this);
-	dc.SetROP2(R2_COPYPEN);
-	
 	// read the necessary colours
-	COLORREF BackCol  = ::GetSysColor(COLOR_BTNFACE);
-	COLORREF TopLeft  = ::GetSysColor(COLOR_BTNHIGHLIGHT);
-	COLORREF BotRight = ::GetSysColor(COLOR_BTNSHADOW);
-  
+	wxColour BackCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+	wxColour TopLeft  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
+	wxColour BotRight = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+	wxColour TextCol  = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+
   	// get info about client rect
-	CRect ClientRect;
-	GetClientRect(&ClientRect);
-	INT32 left   = ClientRect.left;
-	INT32 top    = ClientRect.top;
-	INT32 width  = ClientRect.Width();
-	INT32 height = ClientRect.Height();
+	wxRect ClientRect = GetClientRect();
+	INT32 left   = ClientRect.x;
+	INT32 top    = ClientRect.y;
+	INT32 width  = ClientRect.GetWidth();
+	INT32 height = ClientRect.GetHeight();
 	INT32 right  = left + width;
 	INT32 bottom = top  + height;
+
+	// render the background
+	wxPen penNoOutline(BackCol, 0, wxTRANSPARENT);
+	pDC->SetPen(penNoOutline);
+	OILRuler::PatB(pDC, left,top, width,height, BackCol);
+	
+	pDC->SetBackgroundMode(wxTRANSPARENT);
 
 	// plot the little orign bitmap in the centre of this window
 	INT32 BitmapSize = 15;	
 	INT32 offset     = (width-BitmapSize)/2;
-	PlotMaskedBitmap(&dc,pGlyph,0,offset,offset,width,height);
+	pDC->DrawBitmap(*pGlyph, offset, offset, true);
 
 	// paint the hi/lo lights
-//	PatB(&dc,  left,top,    width-1,1,        TopLeft);		// top
-//	PatB(&dc,  left,top,          1,height-1, TopLeft);		// left
-
-	PatB(&dc,  left+1,top+1,    width-2,1,        TopLeft);		// top
-	PatB(&dc,  left+1,top+1,          1,height-2, TopLeft);		// left
-	PatB(&dc,  left+1,bottom,   width-1,-1,       BotRight);	// bottom
-	PatB(&dc, right,top+1,         -1,height-1,   BotRight);	// right
-#endif
+	OILRuler::PatB(pDC,  left,top,    width-1,1,        TopLeft);		// top
+	OILRuler::PatB(pDC,  left,top,          1,height-1, TopLeft);		// left
+	OILRuler::PatB(pDC,  left,bottom,   width,-1,       BotRight);	// bottom
+	OILRuler::PatB(pDC, right,top,         -1,height,   BotRight);	// right
 }
 
 
@@ -1657,11 +1568,7 @@ void OriginGadget::CalcPosFromParentClient(WinRect* lpRect)
 {
 	wxRect parentRect;
 	parentRect = m_pOwnerView->GetParentFrame()->GetClientRect();
-	if (RULER_BORDERS)
-	{
-	  parentRect.y --;
-	  parentRect.x --;
-	}
+
 	lpRect->x   = parentRect.x ;
 	lpRect->y    = parentRect.y;
 	lpRect->SetRightEx(parentRect.x + OILRuler::GetWidth());
@@ -1914,7 +1821,9 @@ END_EVENT_TABLE()
 LegendLabel::LegendLabel()
 {
 	LegendText = _R(IDS_OILRULER_INCHES); // "Inches";
- 	LegendWidth = LegendHeight = 0;
+ 	LegendWidth = 0;
+	LegendHeight = 0;
+	m_pHorzRuler = NULL;
 }
 
 
@@ -2008,7 +1917,7 @@ void LegendLabel::DoPaint(wxDC* pDC)
 
 	// now draw the legend text formated into the client area
 	wxString Text((LPCTSTR)LegendText);
-	pDC->DrawText(Text, ClientRect.x, ClientRect.y);
+	pDC->DrawText(Text, ClientRect.x+3, ClientRect.y+1);
 
 	// paint hi/lo light
 	OILRuler::PatB(pDC,  left,top,    width-1,1,        TopLeft);		// top
@@ -2081,15 +1990,18 @@ BOOL LegendLabel::SetLegendSize()
 BOOL LegendLabel::PositionLegend()
 {
 	// get the client area of the horizontal ruler
+	ERROR2IF(m_pHorzRuler==NULL, FALSE, "No Horz ruler pointer in LegendLable::PositionLegend");
+
 	WinRect ParentRect;
-	ParentRect = GetParent()->GetClientRect();
+	ParentRect = m_pHorzRuler->GetClientRect();
 	
 	// determine position of window
 	WinRect LegendRect;
-	LegendRect.y 	  = (ParentRect.GetHeight()-LegendHeight)/2;	// centre vertically
-	LegendRect.SetBottomEx(ParentRect.GetBottomEx()-LegendRect.y);		// with same gap at bottom
-	LegendRect.SetRightEx(ParentRect.GetRightEx()-(LegendRect.y+6));	// and this gap plus some from right end of ruler
-	LegendRect.x   = LegendRect.GetRightEx()-LegendWidth;
+	LegendRect.y 	  = (ParentRect.GetHeight()-LegendHeight)/2;		// centre vertically
+	LegendRect.x   = ParentRect.GetWidth()-LegendWidth-LegendRect.y-6;	// align right with same gap as vertical (plus a bit)
+	LegendRect.SetWidth(LegendWidth);									// and this gap plus some from right end of ruler
+	LegendRect.SetHeight(LegendHeight);									// with same gap at bottom
+TRACEUSER("Phil", _T("LegendRect %d %d %d %d\n"), LegendRect.x, LegendRect.y, LegendRect.width, LegendRect.height);
 
 	// actually move the window
 	SetSize(LegendRect);
@@ -2099,7 +2011,7 @@ BOOL LegendLabel::PositionLegend()
 
 
 /********************************************************************************************
->	BOOL LegendLabel::Create(wxWindow* pParentWindow, INT32 id)
+>	BOOL LegendLabel::Create(OILHorizontalRuler* pHorzRuler, wxWindow* pParentWindow, INT32 id)
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/3/94
@@ -2108,9 +2020,12 @@ BOOL LegendLabel::PositionLegend()
 	Purpose:	Creates an LegendLabel object.
 ********************************************************************************************/
                     
-BOOL LegendLabel::Create(wxWindow* pParentWindow, INT32 id)
+BOOL LegendLabel::Create(OILHorizontalRuler* pHorzRuler, wxWindow* pParentWindow, INT32 id)
 { 
-	ENSURE(pParentWindow,"DockingBar must have a Parent");
+	ERROR2IF(pHorzRuler==NULL, FALSE, "DockingBar must have a Parent");
+	ERROR2IF(pParentWindow==NULL, FALSE, "DockingBar must have a Parent");
+
+	m_pHorzRuler = pHorzRuler;
 
 	if (!wxWindow::Create(pParentWindow, id, wxDefaultPosition, wxSize(10, 20), wxNO_BORDER))
 		return(FALSE);
@@ -2131,7 +2046,8 @@ BOOL LegendLabel::Create(wxWindow* pParentWindow, INT32 id)
                     
 void LegendLabel::OnLButtonDown(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnLButtonDown(event);
+//	((OILHorizontalRuler*)GetParent())->OnLButtonDown(event);
+	m_pHorzRuler->OnLButtonDown(event);
 }
 
 
@@ -2147,7 +2063,8 @@ void LegendLabel::OnLButtonDown(wxMouseEvent& event)
                     
 void LegendLabel::OnRButtonUp(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnRButtonUp(event);
+//	((OILHorizontalRuler*)GetParent())->OnRButtonUp(event);
+	m_pHorzRuler->OnRButtonUp(event);
 }
 
 
@@ -2163,7 +2080,8 @@ void LegendLabel::OnRButtonUp(wxMouseEvent& event)
                     
 void LegendLabel::OnLButtonDblClk(wxMouseEvent& event)
 {
-	((OILHorizontalRuler*)GetParent())->OnLButtonDblClk(event);
+//	((OILHorizontalRuler*)GetParent())->OnLButtonDblClk(event);
+	m_pHorzRuler->OnLButtonDblClk(event);
 }
 
 
@@ -2236,7 +2154,8 @@ BOOL LegendLabel::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindo
 wxPoint LegendLabel::ClientToParentClient(wxPoint point)
 {
 	ClientToScreen(point);
-	GetParent()->ScreenToClient(point);
+//	GetParent()->ScreenToClient(point);
+	m_pHorzRuler->ScreenToClient(point);
 	return point;
 }
 

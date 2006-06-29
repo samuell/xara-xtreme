@@ -117,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "basebar.h"
 #include "colpick.h"
-//#include "rulers.h"
+#include "rulers.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 //#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -1205,8 +1205,6 @@ BOOL StatusLine::UpdateMousePosAndSnap(DocCoord* pDocCoord, Spread* pSpread,
 
 // WEBSTER - markn 15/1/97
 // No rulers in Webster
-PORTNOTE("StatusLine", "Removed use of Rulers")
-#ifndef EXCLUDE_FROM_XARALX
 #ifndef WEBSTER
 	// and update ruler mouse followers
 	DocView* pView = DocView::GetSelected();
@@ -1217,7 +1215,6 @@ PORTNOTE("StatusLine", "Removed use of Rulers")
 			ReturnValue = pRulerPair->UpdateMouseFollowers(pDocCoord);
 	}
 #endif // WEBSTER
-#endif
 
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER

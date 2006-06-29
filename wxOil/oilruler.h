@@ -109,7 +109,6 @@ class CCamView;
 class RulerBase;
 class OILHorizontalRuler;
 
-#define RULER_BORDERS    1
 #define MAX_RULER_DIGITS 3
 
 enum MouseFollowerRenderType { RenderOn, RenderOff }; 
@@ -135,7 +134,7 @@ class LegendLabel : public wxWindow
 public:
 	LegendLabel();
 	virtual	~LegendLabel();
-	BOOL Create(wxWindow* pParentWindow, INT32 id);
+	BOOL Create(OILHorizontalRuler* pHorzRuler, wxWindow* pParentWindow, INT32 id);
 	
 	void ShowLabel(BOOL show);
 	BOOL PositionLegend();
@@ -164,6 +163,7 @@ protected:
 	UINT32 LegendWidth;
 	UINT32 LegendHeight;
 	String_256 LegendText;
+	OILHorizontalRuler* m_pHorzRuler;
 
 	DECLARE_EVENT_TABLE()
 };
@@ -348,8 +348,6 @@ public:
 #if !defined(EXCLUDE_FROM_XARALX)
 	static TCHAR* BubbleHelpCallBack(CWindowID hWnd, UINT32 PaneIndex, void* UserData);
 #endif
-	BOOL PlotMaskedBitmap(wxDC* destDC, wxBitmap* srcBitmap, INT32 SrcOffset,
-								INT32 xPlotOffset,INT32 yPlotOffset, INT32 width, INT32 height);
 
 protected:
 	// Windows OIL message handlers and related functions
