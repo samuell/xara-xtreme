@@ -873,9 +873,11 @@ LRESULT CCamView::OnRenderView( WPARAM, LPARAM lp )
 #ifndef WEBSTER
 void CCamView::OnFilePrint()
 {
+#if 0
 #ifndef _DEBUG
 	::wxMessageBox(_T("Printing currently disabled in retail builds"));
 	return;
+#endif
 #endif
 
 	SetCurrentStates();

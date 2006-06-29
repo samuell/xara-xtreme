@@ -292,6 +292,35 @@ BOOL PSPrintDC::OutputToken(TCHAR *Str)
 		OutputToken(_T("save"));
 		OutputNewLine();
 
+		// wxWidgets and Windows both use (0,0) to mean the top left hand origin of the
+		// paper in logical coordinates. However, they do something rather different in
+		// terms of physical coordinates. What windows printer drivers do (and thus what
+		// Camelot expects) is use a postcript page transformation matrix to invert the
+		// page, and for the postscript to be written in native DPI coordinates with the
+		// origin at the TOP left of the page. What wxWidgets does is write its postscript
+		// in the more natural way with the origin at the BOTTOM of the page, and handle
+		// the coordinate inversion wihin wxWidgets.
+		//
+		// Note that this means while our internally generated PS expects a transformation
+		// matrix that flips the Y coordinate (as the windows drivers produce). We
+		// can't change the transformation matrix in the prologue because this would
+		// affect wxWidgets output (and also it's technically difficult to do). We can't
+		// change our own rendering matrix (so we produce the right coordinates) because
+		// lots of things seem to explode with a matrix which flips the Y access (negative
+		// scale factors etc.). We can't just change the coordinates we write because
+		// other things (e.g. bitmaps) use the native render matrix. So what we do is
+		// temporarily invert the PS transformation matrix during the period of our output.
+		// This seems arcane but reasonably extensive research suggests it is the best
+		// way forward. It's restored before we do any OS output.
+
+		TCHAR flipbuf[256];
+		INT32 translate = GetDC()->GetSize().GetHeight();
+		camSprintf(flipbuf, _T("0 %d translate 1 -1 scale"), translate);
+		OutputToken(flipbuf);
+		OutputNewLine();
+
+		// Now start plate writing etc.
+
 		if (!pPSRegion->WritePhotoNegative(this))
 			return FALSE;
 
@@ -678,13 +707,7 @@ BOOL PSPrintDC::OutputCoord(DocCoord& Coord, EPSAccuracy Accuracy)
 	// We need a view to scale the coords.
 	ERROR2IF(pView == NULL, FALSE, "No view attached to PostScript DC!");
 
-	// Use the rendering matrix of our parent render region to transform
-	// the co-ordinate to device units before proceeding.
-	OilCoord NewCoord(Coord.x, Coord.y);
-	RenderMatrix.transform(&NewCoord);
-
-	// Convert to Windows device units.
-	WinCoord PSCoord = NewCoord.ToWin(pView);
+	WinCoord PSCoord = TransformCoord(Coord);
 
 	// Output to PostScript stream.
 	BOOL Ok = (OutputValue(PSCoord.x) && OutputValue(PSCoord.y));

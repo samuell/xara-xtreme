@@ -128,7 +128,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"	// _R(IDS_OK)/CANCEL
 //#include "simon.h"		// _R(IDS_HELP)
 
-
 #ifdef _DEBUG
 #include "optsprin.h"
 #include "keypress.h"
@@ -2541,6 +2540,8 @@ CNativeDC * CCPrintInfo::GetDC() const
 
 BOOL CCPrintInfo::OnPreparePrinting(BOOL bPrintSetupOnly /*=FALSE*/)
 {
+	wxPostScriptDC::SetResolution(600); // temporary bodge
+
 	// Zap any existing print dialog
 	if (pOurPD)
 	{
