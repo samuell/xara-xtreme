@@ -124,7 +124,7 @@ class PrintProgressDlg : public DialogOp
 {
 	CC_DECLARE_DYNCREATE( PrintProgressDlg )  
 public:
-	PrintProgressDlg::PrintProgressDlg();
+	PrintProgressDlg();
 	virtual ~PrintProgressDlg() { pPrintProgressDlg = NULL; }
 
 	MsgResult Message( Msg* Message );  
