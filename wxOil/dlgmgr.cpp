@@ -7488,8 +7488,9 @@ CWindowID DialogManager::GetWindowUnderPointer(WinCoord * wc /*=NULL*/)
 {
 	wxPoint pt=wxGetMousePosition();
 	wxWindow * w=::wxChildWindowFromPoint(pt, FALSE, -1);
-	if (wc)
+	if (wc && w)
 	{
+		pt = w->ScreenToClient(pt);
 		wc->x=pt.x;
 		wc->y=pt.y;
 	}

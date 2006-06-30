@@ -845,7 +845,8 @@ void SelectorTool::OnMouseMove(DocCoord dcPos, Spread* pSpread, ClickModifiers m
 //	ClickStart = dcPos;
 
 	// If there isn't any selection, or it's in a different spread, then do nothing.
-	if (SelectionSpread == NULL || SelectionSpread != pSpread) return;
+//	if (SelectionSpread == NULL || SelectionSpread != pSpread)
+//		return;
 	
 	String_256 str;
 	Cursor* pPointerShape;
