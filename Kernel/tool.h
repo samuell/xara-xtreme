@@ -116,6 +116,7 @@ class ToolList;
 class ToolListItem;
 class Spread;
 class KeyPress;
+class RulerBase;
 
 // Everyone tool needs a valid Tool ID. They get allocated here. Camelot
 // tools written by us should have an ID in the range 2 - 49. The range
@@ -357,6 +358,17 @@ public:
 
 	// Allow the selection and deselection of a tool
 	virtual void SelectChange(BOOL IsSelected);
+
+	// Allow the Current Tool to modify coordinates displayed on the Ruler
+	virtual void GetRulerCoord(const DocRect, UserRect*);
+
+	// Allow the Current Tool to handle Ruler clicks
+	virtual BOOL OnRulerClick( DocCoord PointerPos,
+							   ClickType Click,
+							   ClickModifiers Mods,
+							   Spread* pSpread,
+							   RulerBase* pRuler
+							 );
 
 	// Easy access to the tool's info structure
 	ToolListItem *Parent;

@@ -128,6 +128,26 @@ WinCoord::WinCoord(INT32 x, INT32 y) : wxPoint(x, y)
 
 
 /********************************************************************************************
+>	WinCoord::WinCoord(INT32 x, INT32 y)
+
+	Author: 	Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	5/8/93
+	Inputs:		Two integers (either signed 16 or 32 bits, depending on the Windows platform).
+	Outputs:	-
+	Returns:	-
+	Purpose:	Constructor for a WinCoord.  Calls CPoint::CPoint(x, y)
+	Errors:		None.
+	See Also:	class CPoint
+
+********************************************************************************************/
+
+WinCoord::WinCoord(wxPoint pt) : wxPoint(pt)
+{
+}
+
+
+
+/********************************************************************************************
 >	OilCoord WinCoord::ToOil(View *pView, BOOL PixelCentre = FALSE) const
 
 	Author: 	Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>

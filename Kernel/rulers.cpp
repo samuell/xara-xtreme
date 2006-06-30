@@ -117,6 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grid.h"
 #include "appprefs.h"
 #include "layerprp.h"
+#include "camelot.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -175,7 +176,12 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 		return TRUE;
 
 	// Convert the OilRect to a UserRect and limit to spread's paste board
-	UserRect UpdateRect = pUpdateOilRect->ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView).ToUser(pSpread);
+	DocRect drect = pUpdateOilRect->ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
+	UserRect UpdateRect = drect.ToUser(pSpread);
+
+	// Give the current tool the chance to modify the UserCoord displayed by the ruler
+	Tool::GetCurrent()->GetRulerCoord(drect, &UpdateRect);
+
 	MILLIPOINT LoLimit = GetOrd(pRD->PasteBoardUserRect.lo);
 	MILLIPOINT HiLimit = GetOrd(pRD->PasteBoardUserRect.hi);
 	if (GetOrd(UpdateRect.lo)<LoLimit) UpdateRect.lo=MakeCoord(LoLimit);
@@ -237,6 +243,68 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 
 	return TRUE;
 }
+
+
+/********************************************************************************************
+
+> 	BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
+
+    Author: 	Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+    Created:	30/Jun/2006
+	Inputs:		PointerPos - Position of click from OS
+				Click - Type of click (single, double or drag)
+				Mods - Other inputs which modify the meaning of the click
+    Purpose:    Convert click coordinates into DocCoords and pass them on to the current
+			    tool.
+                   			                                     
+********************************************************************************************/
+/*	Technical notes:
+				This routine also converts the click position into WorkCoords and keeps it
+				for those routines which need it. They can get it by calling
+				GetClickWorkCoord so long as the ViewState hasn't changed in the meantime.
+
+********************************************************************************************/
+
+BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
+{
+	ERROR3IF(pRulerPair==NULL, "pRulerPair unexpectedly NULL");
+	ERROR3IF(pRulerPair->GetpSpread()==NULL, "pRulerPair->pSpread unexpectedly NULL");
+	ERROR3IF(pRulerPair->GetpDocView()==NULL, "pRulerPair->pDocView unexpectedly NULL");
+
+	// Ignore if system is disabled
+	if (CCamApp::IsDisabled())
+		return FALSE;						     	// If the system is disabled, ignore
+
+	// grab the focus if it's stuck in  a control somewhere
+//	DialogManager::DefaultKeyboardFocus();	
+	
+	// Find the spread in which the click happened
+	Spread *pSpread = pRulerPair->GetpSpread();
+
+	if (pSpread == NULL)
+	{
+		ERROR3("Could not find Ruler pair spread");
+		return FALSE; // Exit reasonably nicely
+	}
+
+	// When the user clicks on a spread which is not the selected spread then this spread becomes
+	// selected and the selection is cleared.
+	// NOPE! Since this click occurred on a Ruler, not on the page, the Tool::OnRulerClick handler
+	// must make the choice about setting the selected spread IFF it handles the click
+//	Document::SetSelectedViewAndSpread(pDoc, this, pSpread);
+
+	// First of all convert the OilRect into device coords
+	DocCoord DocPos = PointerPos.ToDoc( pSpread, pRulerPair->GetpDocView() );
+	
+	// Convert the coord to spread coords
+	pSpread->DocCoordToSpreadCoord(&DocPos);
+
+	if (Tool::GetCurrent())
+		return Tool::GetCurrent()->OnRulerClick(DocPos, Click, Mods, pSpread, this);
+
+	return FALSE;
+}
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -434,6 +502,9 @@ BOOL RulerPair::UpdateRedrawData()
 	DocRect  PasteSpreadRect = pSpread->GetPasteboardRect(FALSE, pDocView);
 	pSpread->DocCoordToSpreadCoord(&PasteSpreadRect);
 	UserRect PasteBoardUserRect = PasteSpreadRect.ToUser(pSpread);
+
+	// Give the current tool the chance to modify the UserCoord displayed by the ruler
+	Tool::GetCurrent()->GetRulerCoord(PasteSpreadRect, &PasteBoardUserRect);
 
 	// hence the start and end values in terms of ruler units
 	double XStart = fabs(PasteBoardUserRect.lo.x/GratStepSize)*GratStep;

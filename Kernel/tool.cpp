@@ -1523,6 +1523,62 @@ void Tool_v1::SelectChange(BOOL /*IsSelected*/)
 	// Override me!
 }
 
+/********************************************************************************************
+
+>	virtual void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		dr - DocRect to be converted into tool-specific coordinate space
+	Outputs:	ur - UserRect containing optionally modified version of dr
+	Purpose:	Gives the current tool the chance to change the coordinates
+				displayed on the ruler
+
+********************************************************************************************/
+
+void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
+{
+	// Override me if you want!
+	// Note that overriding this function implies that you will ensure the redraw of the rulers
+	// as you enter and leave your tool.
+}
+
+
+
+
+/********************************************************************************************
+
+>	virtual BOOL Tool_v1::OnRulerClick( DocCoord PointerPos,
+										ClickType Click,
+										ClickModifiers Mods,
+										Spread* pSpread
+									  )
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		PointerPos	- SpreadCoord of click within spread
+				Click		- Type of click enum
+				Mods		- Modifier flags struct
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Outputs:	-
+	Returns:	TRUE if this click event was handled
+				FALSE if not
+	Purpose:	Gives the current tool the chance to handle ruler clicks in preference
+				to other handlers
+
+********************************************************************************************/
+
+BOOL Tool_v1::OnRulerClick( DocCoord PointerPos,
+							ClickType Click,
+							ClickModifiers Mods,
+							Spread* pSpread,
+							RulerBase* pRuler
+							)
+{
+	// Override me if you want!
+	return FALSE;
+}
+
 
 
 

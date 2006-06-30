@@ -137,6 +137,8 @@ public:
 
 	BOOL Redraw(OilRect* pOilRect);
 
+	virtual BOOL OnRulerClick(OilCoord, ClickType, ClickModifiers);
+
 protected:
 	RulerPair* pRulerPair;
 	OILRuler*  pOILRuler;

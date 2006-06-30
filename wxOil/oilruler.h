@@ -101,13 +101,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define INC_OILRULERS
 
 #include "guides.h"
+#include "camview.h"
 
 class WinCoord;
 class WinRect;
 class DovView;
-class CCamView;
 class RulerBase;
 class OILHorizontalRuler;
+class CRenderWnd;
 
 #define MAX_RULER_DIGITS 3
 
@@ -221,6 +222,11 @@ public:
 protected:
 	virtual BOOL IsHorizontal() {return FALSE;}
 	virtual BOOL StartDrag(UINT32 nFlags, wxPoint point);
+	virtual BOOL HandleRulerDragEvent(UINT32 Button, UINT32 nFlags, WinCoord point, ClickType t);
+	virtual BOOL HandleRulerUpEvent(UINT32 Button, WinCoord point);
+
+	CRenderWnd* GetRenderWindow() {return m_pOwnerView ? m_pOwnerView->GetRenderWindow() : NULL;}
+	void SetCurrentStates();
 
 protected:
 	// wxWindows OIL message handlers and related functions
@@ -228,10 +234,20 @@ protected:
 
 	void OnPaint(wxPaintEvent &event);
 
-	void OnLButtonDown(wxMouseEvent& event);
-	void OnLButtonDblClk(wxMouseEvent& event);
-	void OnRButtonUp(wxMouseEvent& event);
+//	void OnLButtonDown(wxMouseEvent& event);
+//	void OnLButtonDblClk(wxMouseEvent& event);
+//	void OnRButtonUp(wxMouseEvent& event);
 	void OnMouseMove(wxMouseEvent& event);
+
+	void 	OnLButtonDown( wxMouseEvent &event );
+	void 	OnLButtonDblClk( wxMouseEvent &event );
+	void 	OnLButtonUp( wxMouseEvent &event );
+	void 	OnMButtonDown( wxMouseEvent &event );
+	void 	OnMButtonDblClk( wxMouseEvent &event );
+	void 	OnMButtonUp( wxMouseEvent &event );
+	void 	OnRButtonDown( wxMouseEvent &event );
+	void 	OnRButtonDblClk( wxMouseEvent &event );
+	void 	OnRButtonUp( wxMouseEvent &event );
 
 
 public:
@@ -245,6 +261,7 @@ protected:
 	static INT32 		CharWidth;
 
 	// vars to pass info from OIL OnPaint() to low level OIL render funtions, transparent to intermediate kernel code
+	// This is a bit NASTY!
 	static wxDC* 		pPaintDC;
 	static DocView*  	pPaintDocView;
 	static wxSize     	RulerToDocOffset;
@@ -253,6 +270,12 @@ protected:
 
 	CCamView*			m_pOwnerView;
 	RulerBase*			pKernelRuler;
+
+	ClickType			m_LastClickType;		// click type of last START_DRAG
+	UINT32				m_LastClickButton;		// buttons down on last START_DRAG
+	wxPoint				m_LastClickPoint;		// mouse position of last START_DRAG
+	ClickModifiers		m_LastClickMods;		// ClickMods on last mouse event (NOT modified by button-up events!)
+	UINT32 				m_FirstClickButton;		// Which button started the drag (if dragging).
 
 	BOOL InDrag;
 

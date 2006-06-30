@@ -157,9 +157,15 @@ OpGuidelineParam	OILRuler::NewGuidelineParam;
 IMPLEMENT_DYNAMIC_CLASS(OILRuler, wxWindow)
 
 BEGIN_EVENT_TABLE( OILRuler, wxWindow )
-	EVT_LEFT_DOWN(		OILRuler::OnLButtonDown)
-	EVT_LEFT_DCLICK(	OILRuler::OnLButtonDblClk)
-	EVT_RIGHT_UP(		OILRuler::OnRButtonUp)
+	EVT_LEFT_DOWN( 		OILRuler::OnLButtonDown)
+	EVT_LEFT_DCLICK( 	OILRuler::OnLButtonDblClk)
+	EVT_LEFT_UP( 		OILRuler::OnLButtonUp)
+	EVT_MIDDLE_DOWN( 	OILRuler::OnMButtonDown)
+	EVT_MIDDLE_DCLICK( 	OILRuler::OnMButtonDblClk)
+	EVT_MIDDLE_UP( 	 	OILRuler::OnMButtonUp)
+	EVT_RIGHT_DOWN( 	OILRuler::OnRButtonDown)
+	EVT_RIGHT_DCLICK( 	OILRuler::OnRButtonDblClk)
+	EVT_RIGHT_UP( 	 	OILRuler::OnRButtonUp)
 	EVT_MOTION(			OILRuler::OnMouseMove)
 	EVT_PAINT(			OILRuler::OnPaint)
 END_EVENT_TABLE()
@@ -610,69 +616,24 @@ BOOL OILRuler::DrawMinorGraticule(OilCoord GratOilPos, INT32 ExtraSize)
 
 
 /********************************************************************************************
->	afx_msg void OILRuler::OnLButtonDown(wxMouseEvent& event);
+>	void OILRuler::OnLButtonDown(wxMouseEvent& event);
 
-	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	5/3/94
-	Inputs:		nFlags - 
-				point  -
-	Purpose:	process LButtonDoown event 
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
 ********************************************************************************************/
                     
 void OILRuler::OnLButtonDown(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-	UINT32 nFlags = 0;
-	StartDrag(nFlags, event.GetPosition());
-}
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_LBUTTON, nFlags, (WinCoord)event.GetPosition(), CLICKTYPE_SINGLE);
 
-
-/********************************************************************************************
->	void OILRuler::OnRButtonUp(wxMouseEvent& event);
-
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	9/10/95
-	Inputs:		nFlags - 
-				point  -
-	Purpose:	Handle left button up events - pop-up context sensitive menu
-********************************************************************************************/
-                    
-void OILRuler::OnRButtonUp(wxMouseEvent& event)
-{
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
-	wxPoint point = event.GetPosition();
-
-	// get a few pointers - no error checking yet!
-	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
-	Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
-	if (pDocView==NULL || pSpread==NULL)
-	{
-		ERROR3("OILRuler::OnLButtonUp() - pDocView==NULL || pSpread==NULL");
-		return;
-	}
-
-	// convert to spread coords
-	OilCoord MouseOilPos    = ClientToOil(pDocView,point);
-	DocCoord MouseSpreadPos = MouseOilPos.ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
-	CSnap SnapObject(pDocView,pSpread);
-	SnapObject.Snap(&MouseSpreadPos,FALSE);
-
-	// precharge static buffer with all the info to insert a new guide
-	// at the click point on the off chance this is the option the user chooses from
-	// the menu - as it is not poosible to pass params via the pop-up menu system
-	if (IsHorizontal())
-		GuidelinePropDlg::SetNewGuidelineParams(GUIDELINE_VERT, MouseSpreadPos.x);
-	else
-		GuidelinePropDlg::SetNewGuidelineParams(GUIDELINE_HORZ, MouseSpreadPos.y);
-//	// insert immediate (witout dialog)
-//	if (IsHorizontal())
-//		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_VERT, MouseSpreadPos.x);
-//	else
-//		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_HORZ, MouseSpreadPos.y);
-
-	RulerContextMenu* pRulerMenu = new RulerContextMenu;
-	pRulerMenu->Show();
+	if (!bHandled)
+		StartDrag(nFlags, event.GetPosition());
 }
 
 
@@ -688,35 +649,425 @@ void OILRuler::OnRButtonUp(wxMouseEvent& event)
                     
 void OILRuler::OnLButtonDblClk(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
 	wxPoint point = event.GetPosition();
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_LBUTTON, nFlags, (WinCoord)point, CLICKTYPE_DOUBLE);
 
-	// get a few pointers
-	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
-	Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
-	if (pDocView==NULL || pSpread==NULL)
+	if (!bHandled)
 	{
-		ERROR3("OILRuler::OnLButtonDblClk() - pDocView==NULL || pSpread==NULL");
-		return;
+		// get a few pointers
+		DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+		Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
+		if (pDocView==NULL || pSpread==NULL)
+		{
+			ERROR3("OILRuler::OnLButtonDblClk() - pDocView==NULL || pSpread==NULL");
+			return;
+		}
+	
+		OilCoord MouseOilPos    = ClientToOil(pDocView,point);
+		DocCoord MouseSpreadPos = MouseOilPos.ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
+		CSnap SnapObject(pDocView,pSpread);
+		SnapObject.Snap(&MouseSpreadPos,FALSE);
+	
+		if (IsHorizontal())
+			OpNewGuideline::SetNewGuidelineParam(GUIDELINE_VERT, MouseSpreadPos.x);
+		else
+			OpNewGuideline::SetNewGuidelineParam(GUIDELINE_HORZ, MouseSpreadPos.y);
+	
+		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_NEWGUIDELINE2);
+		if (pOpDesc!=NULL)
+			pOpDesc->Invoke();
+		else
+			ERROR3("OILRuler::OnLButtonDblClk() - FindOpDescriptor(OPTOKEN_NEWGUIDELINE) failed");
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnLButtonUp(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnLButtonUp(wxMouseEvent& event)
+{
+	BOOL bHandled = HandleRulerUpEvent(MK_LBUTTON, (WinCoord)event.GetPosition());
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnMButtonDown(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnMButtonDown(wxMouseEvent& event)
+{
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_MBUTTON, nFlags, (WinCoord)event.GetPosition(), CLICKTYPE_SINGLE);
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnMButtonDblClk(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnMButtonDblClk(wxMouseEvent& event)
+{
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_MBUTTON, nFlags, event.GetPosition(), CLICKTYPE_DOUBLE);
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnMButtonUp(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnMButtonUp(wxMouseEvent& event)
+{
+	BOOL bHandled = HandleRulerUpEvent(MK_MBUTTON, event.GetPosition());
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnRButtonDown(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnRButtonDown(wxMouseEvent& event)
+{
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_RBUTTON, nFlags, event.GetPosition(), CLICKTYPE_SINGLE);
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnRButtonDblClk(wxMouseEvent& event);
+
+	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	30/Jun/2006
+	Inputs:		event - wxMouseEvent object
+	Outputs:	-
+	Returns:	-
+	Purpose:	Handle mouse event
+
+********************************************************************************************/
+                    
+void OILRuler::OnRButtonDblClk(wxMouseEvent& event)
+{
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	BOOL bHandled = HandleRulerDragEvent(MK_RBUTTON, nFlags, event.GetPosition(), CLICKTYPE_DOUBLE);
+
+	if (!bHandled)
+	{
+		// We do nothing in this case
+	}
+}
+
+
+/********************************************************************************************
+>	void OILRuler::OnRButtonUp(wxMouseEvent& event);
+
+	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	9/10/95
+	Inputs:		nFlags - 
+				point  -
+	Purpose:	Handle left button up events - pop-up context sensitive menu
+********************************************************************************************/
+                    
+void OILRuler::OnRButtonUp(wxMouseEvent& event)
+{
+	wxPoint point = event.GetPosition();
+	BOOL bHandled = HandleRulerUpEvent(MK_RBUTTON, point);
+
+	if (!bHandled)
+	{
+		// get a few pointers - no error checking yet!
+		DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+		Spread*  pSpread  = pKernelRuler->GetpRulerPair()->GetpSpread();
+		if (pDocView==NULL || pSpread==NULL)
+		{
+			ERROR3("OILRuler::OnLButtonUp() - pDocView==NULL || pSpread==NULL");
+			return;
+		}
+	
+		// convert to spread coords
+		OilCoord MouseOilPos    = ClientToOil(pDocView,point);
+		DocCoord MouseSpreadPos = MouseOilPos.ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
+		CSnap SnapObject(pDocView,pSpread);
+		SnapObject.Snap(&MouseSpreadPos,FALSE);
+	
+		// precharge static buffer with all the info to insert a new guide
+		// at the click point on the off chance this is the option the user chooses from
+		// the menu - as it is not poosible to pass params via the pop-up menu system
+		if (IsHorizontal())
+			GuidelinePropDlg::SetNewGuidelineParams(GUIDELINE_VERT, MouseSpreadPos.x);
+		else
+			GuidelinePropDlg::SetNewGuidelineParams(GUIDELINE_HORZ, MouseSpreadPos.y);
+	//	// insert immediate (witout dialog)
+	//	if (IsHorizontal())
+	//		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_VERT, MouseSpreadPos.x);
+	//	else
+	//		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_HORZ, MouseSpreadPos.y);
+	
+		RulerContextMenu* pRulerMenu = new RulerContextMenu;
+		pRulerMenu->Show();
+	}
+}
+
+
+
+
+/********************************************************************************************
+>	BOOL OILRuler::HandleRulerDragEvent(UINT32 Button, UINT32 nFlags, wxPoint point, ClickType t)
+
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	ages ago
+	Inputs:		Button - the actual button being pressed for a click/double click event.
+				nFlags - The mouse button flags
+				point - the coordinate of the mouse cursor
+				t -  the kind of mouse event (button up/down, move, drag start/finish etc.)
+	Outputs:	-
+	Returns:    -
+	Purpose:    Gathers together Windows information about a mouse event and passes it on to
+				the kernel, by calling DocView::OnClick()
+				HandleDragEvent needs to be called from OnTimer code so rather than 
+				synthesizing a wxMouseEvent object this function has been left taking 
+				non-wx params
+	Errors:		-
+	Scope:		Private
+	SeeAlso:	CCamView::GetClickMods(); CCamView::OnLButtonDown(); CCamView::OnRButtonDown()
+				DocView::OnClick()
+
+********************************************************************************************/ 
+
+/********************************************************************************************
+
+Technical notes (by Tim):
+
+The Button is parameter is necessary, because sometimes when we get the *first* button
+down event, nFlags has more than one mouse button bit set.  This only happens when you
+rampantly click buttons very quickly but nevertheless we *do* need to know which button
+was pressed, otherwise we never release the drag event and we end up with button-up-drag
+city.
+
+I assume this is due to some latency in Windows, e.g., it gets a button down event, and
+while preparing it goes and reads the mouse button state and meanwhile another button has
+been pressed so we get a button down event with nFlags indicating more than one button
+is down.
+
+********************************************************************************************/ 
+
+BOOL OILRuler::HandleRulerDragEvent(UINT32 Button, UINT32 nFlags, WinCoord point, ClickType t)
+{
+	if (pKernelRuler==NULL)
+		return FALSE;
+
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+
+	if (DocView::GetSelected() != pDocView)
+	{
+		// If selected doc is null, let's select it anyway.
+		if (DocView::GetSelected() == NULL)
+		{
+			// We're in a weird state that should never happen but does - a document
+			// has the focus, but isn't selected
+			Document* pKDoc =NULL;
+			if(pDocView)
+				pKDoc = pDocView->GetDoc();
+
+			if (pKDoc)
+			{
+				Document::SetSelectedViewAndSpread(pKDoc, pDocView, NULL);
+			}
+			
+		}
+		return FALSE;
 	}
 
-	OilCoord MouseOilPos    = ClientToOil(pDocView,point);
-	DocCoord MouseSpreadPos = MouseOilPos.ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
-	CSnap SnapObject(pDocView,pSpread);
-	SnapObject.Snap(&MouseSpreadPos,FALSE);
+	SetCurrentStates();
 
-	if (IsHorizontal())
-		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_VERT, MouseSpreadPos.x);
-	else
-		OpNewGuideline::SetNewGuidelineParam(GUIDELINE_HORZ, MouseSpreadPos.y);
+	// Find out which buttons etc are down.
+	m_LastClickMods = ClickModifiers::GetClickModifiers(nFlags);
 
- 	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_NEWGUIDELINE2);
-	if (pOpDesc!=NULL)
-		pOpDesc->Invoke();
-	else
-		ERROR3("OILRuler::OnLButtonDblClk() - FindOpDescriptor(OPTOKEN_NEWGUIDELINE) failed");
+	// If it's the first single click, then reset the drag delay timer, and ask for a 
+	// Windows timer.
+	if (((t == CLICKTYPE_SINGLE) || (t == CLICKTYPE_DOUBLE)) && 
+		(m_FirstClickButton == 0))
+	{
+		// Remember this event.
+		m_LastClickPoint = point;
+		m_LastClickType = t;
+		m_LastClickButton = Button;
+		m_FirstClickButton = Button;
+//		m_DragTimer.Sample();
+
+		// Ask the system for a timer.
+		// The timer is used to generate DragPointerIdle events, which are not directly
+		// supported by Windows.
+//		UINT32 rate = 100;
+PORTNOTE("other","Removed reading of keyboard autorepeat rate")
+#ifndef EXCLUDE_FROM_XARALX
+		::SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &rate, 0);
+#endif
+
+//		m_DragIdleTimer.Start(rate);
+	}
+
+	// Convert the click position to OIL coordinates before passing to the kernel.
+	OilCoord ocoord = ClientToOil(pDocView, point);
+	return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
 }
+
+
+
+/*********************************************************************************************
+>	BOOL OILRuler::HandleRulerUpEvent(UINT32 Button, WinCoord point)
+
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	9th Sept 1993
+	Inputs:		Button - which mouse button has been released.
+				nFlags - The mouse button flags.
+				point - the coordinate of the mouse cursor.
+	Outputs:	-
+	Returns:    -
+	Purpose:    Finishes the current drag, if there is one, by elucidating the state of
+				the buttons etc and calling DragDFinished() in the kernel (DocView).  Called
+				whenever a mouse button is released.
+	Errors:		-
+	Scope:		Private
+	SeeAlso:	CCamView::GetClickMods(); CCamView::OnLButtonDown(); CCamView::OnRButtonDown()
+				DocView::OnClick()
+
+**********************************************************************************************/ 
+
+BOOL OILRuler::HandleRulerUpEvent(UINT32 Button, WinCoord point)
+{
+	if (pKernelRuler==NULL)
+		return FALSE;
+
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+
+	if (DocView::GetSelected() != pDocView)
+	{
+//		ENSURE(pCurrentDragOp == NULL, "Drag operation in a view that isn't 'selected' !!");
+		return FALSE;
+	}
+
+	// Set Current states...
+	SetCurrentStates();
+
+	// Convert WinCoord click point to OilCoord AND take any ruler offsets into account
+	OilCoord ocoord = ClientToOil(pDocView, point);
+
+	// Was the button that went up the first one that went down?
+	if (Button==m_FirstClickButton)
+	{
+		//Yes it was.
+		//Is there a drag currently running?
+/*		if (m_pCurrentDragOp != NULL)
+		{
+			// Yes there is.
+			// Release the capture and terminate the drag.  Note that we try to release
+			// the mouse capture as soon as possible after a drag has finished, in case the
+			// DragFinished method below brings up a dialog box or something.
+			if (GetRenderWindow() && GetRenderWindow()->GetCapture()==GetRenderWindow())
+				GetRenderWindow()->ReleaseMouse();
+			return pKernelRuler->DragFinished(m_pCurrentDragOp, ocoord, m_LastClickMods, TRUE);
+
+		}
+		else
+*/		{
+			// No drag is currently running
+			// Kill the timer started in HandleDragEvent(), 
+			// as we don't want to wait for a drag anymore.
+//			m_DragIdleTimer.Stop();
+
+			m_FirstClickButton = 0;
+
+			//Then pass the Up-Click message to CCamView::OnClick
+			return pKernelRuler->OnRulerClick(ocoord, CLICKTYPE_UP, m_LastClickMods);
+		}
+	}
+	else
+	{
+		//No, the button that went up was not the first one to go down.
+		//In that case, we expect the first button that went down is still down and
+		//hence there is a drag running.
+		//Is there a drag running?
+/*		if (m_pCurrentDragOp != NULL)
+		{
+			//Yes, as expected.
+			//Pass the Up-Click message to CCamView::OnClick
+			return pKernelRuler->OnRulerClick(ocoord, CLICKTYPE_UP, m_LastClickMods);
+		}
+*/
+	}
+
+	return FALSE;
+}
+
+
 
 
 /********************************************************************************************
@@ -731,8 +1082,7 @@ void OILRuler::OnLButtonDblClk(wxMouseEvent& event)
                     
 void OILRuler::OnMouseMove(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
+//	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint MousePos = event.GetPosition();
 
 	static wxPoint OldMousePos = wxPoint(0,0);
@@ -1036,6 +1386,32 @@ BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
 	pDC->SetLogicalFunction(wxCOPY);
 
 	return TRUE;
+}
+
+
+/********************************************************************************************
+>	void OILRuler::SetCurrentStates()
+
+	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	15/6/96
+	Inputs:		-
+	Purpose:	Set the  View and Document current
+	SeeAlso:	
+********************************************************************************************/
+
+void OILRuler::SetCurrentStates()
+{
+	if (m_pOwnerView)
+	{
+		DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+		if (pDocView)
+		{
+			pDocView->SetCurrent();
+			Document* pKernelDoc = pDocView->GetDoc();
+			if (pKernelDoc)
+				pKernelDoc->SetCurrent();
+		}
+	}
 }
 
 
@@ -1651,8 +2027,7 @@ BOOL OriginGadget::Create(CCamView* pOwnerView, INT32 id)
                     
 void OriginGadget::OnLButtonDown(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-	UINT32 nFlags = 0;
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint point = event.GetPosition();
 
 	String_256 OpToken(OPTOKEN_SPREADORIGIN);
@@ -1674,8 +2049,7 @@ void OriginGadget::OnLButtonDown(wxMouseEvent& event)
                     
 void OriginGadget::OnRButtonUp(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
+//	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint point = event.GetPosition();
 
 	OriginContextMenu* pOriginMenu = new OriginContextMenu;
@@ -1695,8 +2069,7 @@ void OriginGadget::OnRButtonUp(wxMouseEvent& event)
                     
 void OriginGadget::OnLButtonDblClk(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
+	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint point = event.GetPosition();
 
 	if (OpResetSpreadOrigin::GetState(NULL,NULL).Greyed==FALSE)
@@ -1722,8 +2095,7 @@ void OriginGadget::OnLButtonDblClk(wxMouseEvent& event)
                     
 void OriginGadget::OnMouseMove(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
+//	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint MousePos = event.GetPosition();
 
 	static wxPoint OldMousePos = wxPoint(0,0);
@@ -2097,8 +2469,7 @@ void LegendLabel::OnLButtonDblClk(wxMouseEvent& event)
                     
 void LegendLabel::OnMouseMove(wxMouseEvent& event)
 {
-	PORTNOTE("ruler", "TODO: Set nFlags");
-//	UINT32 nFlags = 0;
+//	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint MousePos = event.GetPosition();
 
 	static wxPoint OldMousePos = wxPoint(0,0);

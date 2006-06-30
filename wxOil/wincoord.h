@@ -127,6 +127,7 @@ class CCAPI WinCoord : public wxPoint
 public:
 	WinCoord() : wxPoint() {}
 	WinCoord(INT32 x, INT32 y);
+	WinCoord(wxPoint pt);
 
 	OilCoord ToOil(View *pView, BOOL PixelCentre = FALSE) const;
 };
