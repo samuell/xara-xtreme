@@ -54,7 +54,7 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-				<object class="wxStaticText" name="IDE_XPF_UNEXPECTED_PHASE">
+				<object class="wxStaticText" name="IDE_XPF_BADXML_UNEXPECTED_PHASE">
 					<label>Unexpected element</label>
 				</object>
 			</object>
