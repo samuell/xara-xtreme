@@ -573,6 +573,11 @@ void TransOperation::DoWithParam(OpDescriptor* /*pDescriptor*/, OpParam* pOpPara
 
 	SetTransformRange(TransData->pRange, NULL);
 
+	// Set spread pointers now to keep CompleteTransformation happy even
+	// though we don't expect them to be used or changed in Immediate transforms
+	StartSpread = NULL;
+	CurrentSpread = StartSpread;
+
 	// Where was this operation started from, and are we interested
 	SetStartBlob(TransData->StartBlob);
 
