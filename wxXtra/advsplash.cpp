@@ -33,9 +33,12 @@ END_EVENT_TABLE()
  * slightly too small.
  */
 
-wxAdvSplashScreen::wxAdvSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style)
+wxAdvSplashScreen::wxAdvSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
 {
+    // Do the create here, not as a chained constructor, so the
+    // RTTI is in place for the Mac which sends events immediately
+    Create(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style);
+
     // At least for GTK+ 2.0, this hint is not available.
 #if defined(__WXGTK20__)
 #if GTK_CHECK_VERSION(2,2,0)
