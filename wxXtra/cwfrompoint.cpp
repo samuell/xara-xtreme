@@ -31,7 +31,22 @@
 
 wxWindow* wxChildWindowFromPoint(wxWindow* win, const wxPoint& pt, bool hidden /* =true */, int depth /* =1 */)
 {
-    if (!(hidden || win->IsShown()))
+    bool shown = win->IsShown();
+
+    if (win->IsKindOf(CLASSINFO(wxMDIChildFrame)))
+    {
+        wxWindow * pParent=win;
+        // Look for a wxMDIParentFrame
+        while ((pParent = /*assignment*/ pParent->GetParent()) && !(pParent->IsKindOf(CLASSINFO(wxMDIParentFrame)))) {}
+        if (pParent)
+        {
+            // If this isn't the active child, then treat it as if it was hidden.
+            if (((wxMDIParentFrame *)pParent)->GetActiveChild() != win)
+                shown=FALSE;
+        }
+    }
+
+    if (!(hidden || shown))
         return NULL;
 
     // Hack for wxNotebook case: at least in wxGTK, all pages
