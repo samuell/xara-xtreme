@@ -374,11 +374,32 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 			ERROR2(FALSE, "Cannot attach device or start rendering");
 		}
 
+
 		DocCoord Coords[4];
 		Coords[0]=DocCoord(CurrentClipRect.lo.x, CurrentClipRect.hi.y);
 		Coords[1]=CurrentClipRect.hi;
 		Coords[2]=DocCoord(CurrentClipRect.hi.x, CurrentClipRect.lo.y);
 		Coords[3]=CurrentClipRect.lo;
+
+		// Handle rotation of the bitmap. The problem here is that the bitmap itself is always horizontally
+		// oriented, so we need to make sure the rect we put it in is of the right orientation.
+		ANGLE angle=0;
+		RenderMatrix.Decompose(NULL, NULL, &angle);
+		double dangle=angle.MakeDouble();
+
+		if (dangle<0)
+			dangle+=PI; // make angle positive
+
+		while (dangle>PI/4) // we really mean >0, but allow for rounding. We know it's a multiple of 90.
+		{
+			// rotate the coordinate set used. Note we are not rotating the coordinates
+			DocCoord save=Coords[3];
+			Coords[3]=Coords[2];
+			Coords[2]=Coords[1];
+			Coords[1]=Coords[0];
+			Coords[0]=save;
+			dangle-=PI/2;
+		}
 
 		CWxBitmap oilbitmap(pBitmapInfo, pBits); // note this bitmap thinks it owns the bits and bitmap info
 		pRender->DrawParallelogramBitmap(Coords, &oilbitmap);
