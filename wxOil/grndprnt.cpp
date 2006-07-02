@@ -112,6 +112,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "osrndrgn.h"
 #include "view.h"
 #include "oilbitmap.h"
+#include "psdc.h"
+#include "psrndrgn.h"
 
 CC_IMPLEMENT_DYNAMIC(GRenderPrint, GRenderDIB)
 
@@ -349,6 +351,49 @@ PORTNOTE("printing", "Don't SetStretchBltMode")
 
 BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDisplayBits)
 {
+
+	CCDC * pCCDC = CCDC::ConvertFromNativeDC(RenderDC);
+	BOOL ToNativePS = (pCCDC->IsKindOf(CC_RUNTIME_CLASS(PSPrintDC)));
+
+	if (ToNativePS)
+	{
+		// wxPostscriptDC does not really support stretched blitting of bitmaps. On a good day
+		// when it works it scales the bitmap before outputting it, which means the PS is huge
+		// So we get our native DC to do it.
+
+		// Note that this colour corrects, and separates for us.
+
+		// Set up a PrintPSRenderRegion with the same parameters
+		PrintPSRenderRegion * pRender = new PrintPSRenderRegion(CurrentClipRect, RenderMatrix, ScaleFactor);
+		ERROR2IF(!pRender, FALSE, "Cannot create PrintPSRenderRegion");
+
+		// Try and create the bitmap etc
+		if (!pRender->AttachDevice(RenderView, RenderDC, NULL) || !pRender->StartRender())
+		{
+			delete pRender;
+			ERROR2(FALSE, "Cannot attach device or start rendering");
+		}
+
+		DocCoord Coords[4];
+		Coords[0]=DocCoord(CurrentClipRect.lo.x, CurrentClipRect.hi.y);
+		Coords[1]=CurrentClipRect.hi;
+		Coords[2]=DocCoord(CurrentClipRect.hi.x, CurrentClipRect.lo.y);
+		Coords[3]=CurrentClipRect.lo;
+
+		CWxBitmap oilbitmap(pBitmapInfo, pBits); // note this bitmap thinks it owns the bits and bitmap info
+		pRender->DrawParallelogramBitmap(Coords, &oilbitmap);
+		// now remove the bits and info so that the renderregion can delete them itself
+		LPBYTE DummypBits=NULL;
+		LPBITMAPINFO DummypBitmapInfo=NULL;
+		oilbitmap.ExtractBitsAndInfo(&DummypBits, &DummypBitmapInfo);
+
+		pRender->StopRender();
+
+		delete pRender;
+
+		return TRUE;
+	}
+
 	INT32 BitmapWidth = pBitmapInfo->bmiHeader.biWidth;
 	INT32 BitmapHeight = pBitmapInfo->bmiHeader.biHeight;
 
@@ -437,9 +482,8 @@ BOOL GRenderPrint::DisplayBits(LPBITMAPINFO lpDisplayBitmapInfo, LPBYTE lpDispla
 	{
 		// Not colour separating, but if it's a 32bpp bitmap, we need to convert to something 
 		// that StretchDIBits (below) can understand
-PORTNOTE("printing", "Do not convert down BPP")
-#ifndef EXCLUDE_FROM_XARALX
-		if (uBitmapDepth == 32)
+PORTNOTE("printing", "Do not convert down BPP except under PS")
+		if (ToNativePS && (uBitmapDepth == 32))
 		{
 			// Can't plot 32bpp bitmaps to GDI as 16-bit GDI doesn't understand them,
 			// so we convert to 24bpp bitmap in-situ and render that...
@@ -465,7 +509,6 @@ PORTNOTE("printing", "Do not convert down BPP")
 			pBitmapInfo->bmiHeader.biBitCount  = 24;
 			pBitmapInfo->bmiHeader.biSizeImage = DestlineBytes * BitmapHeight;
 		}
-#endif
 	}
 
 	WinRect clip;
@@ -486,7 +529,31 @@ PORTNOTE("printing", "Attempt to use StaticPlotBitmap instead of StretchDIBits")
 
 	ERROR3IF(Scanlines == GDI_ERROR, "No scanlines copied in GRenderPrint::DisplayBits()!");
 #else
-	GRenderRegion::StaticPlotBitmap(RenderDC, DIB_RGB_COLORS, pBitmapInfo, pBits, clip.x, clip.y, clip.width, clip.height, NULL, 0, 0);
+
+
+	// First of all get it into a bitmap we can understand
+	wxBitmap Bitmap(BitmapWidth, BitmapHeight, 24);
+	wxMemoryDC MemDC;
+	MemDC.SelectObject(Bitmap);
+	GRenderRegion::StaticPlotBitmap(&MemDC, DIB_RGB_COLORS, pBitmapInfo, pBits, 0, 0, BitmapWidth, BitmapHeight, NULL, 0, 0);
+
+	//Bitmap.SaveFile(_T("/tmp/x.png"), wxBITMAP_TYPE_PNG);
+
+	// Now blit this to the printer, stretching as appropriate
+#if 0
+	RenderDC->Blit(clip.x, clip.y, clip.GetWidth(), clip.GetHeight(), &MemDC, 0, 0);
+#else
+	INT32 fwidth = clip.GetWidth();
+	INT32 fheight = clip.GetHeight();
+    wxBitmap bitmap( (int)fwidth, (int)fheight, 24 );
+    wxMemoryDC memDC;
+    memDC.SelectObject(bitmap);
+    memDC.Blit(0, 0, fwidth, fheight, &MemDC, 0, 0);
+
+	//bitmap.SaveFile(_T("/tmp/y.png"), wxBITMAP_TYPE_PNG);
+
+	RenderDC->DrawBitmap(bitmap, clip.x, clip.y);
+#endif
 #endif
 
 	return TRUE;

@@ -163,6 +163,8 @@ PrintProgressDlg::PrintProgressDlg(): DialogOp(PrintProgressDlg::IDD, PrintProgr
 	Printing = FALSE;
 	IgnoreUpdates = FALSE;
 	Aborted = FALSE;
+
+	UpdateTime.Sample();
 }
 
 
@@ -256,6 +258,7 @@ MsgResult PrintProgressDlg::Message( Msg* Message)
 			SetSliderMax(SLIDER_MAX);
 			SetSliderPos(0);
 			IgnoreUpdates = FALSE;
+			UpdateTime.Sample();
 		}
 		else if (Msg->DlgMsg == DIM_CANCEL)
 		{
@@ -470,14 +473,22 @@ BOOL PrintProgressDlg::AbortProc()
 		// Ignore
 		return TRUE;
 
+	// Note this only paints the gadget if it is invalidated
 	pPrintProgressDlg->PaintGadgetNow(0);
 
-	// Save current doc view etc. around yield as paint can destroy them.
-	View * pCurrentView = View::GetCurrent();
-	Document * pCurrentDocument = Document::GetCurrent();
-	::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
-	pCurrentDocument->SetCurrent();
-	pCurrentView->SetCurrent();
+	// Only sample if 750ms of printing has elapsed as the yield can take a while
+	if (pPrintProgressDlg->UpdateTime.Elapsed(750))
+	{
+		// Save current doc view etc. around yield as paint can destroy them.
+		View * pCurrentView = View::GetCurrent();
+		Document * pCurrentDocument = Document::GetCurrent();
+		::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
+		pCurrentDocument->SetCurrent();
+		pCurrentView->SetCurrent();
+
+		// resample after the yield
+		pPrintProgressDlg->UpdateTime.Sample();
+	}
 
 	return Aborted;
 }

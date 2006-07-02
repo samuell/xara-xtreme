@@ -410,6 +410,9 @@ public:
 	virtual void OutputStrokeColour ();
 	virtual void OutputFillColour ();
 
+	virtual BOOL DrawParallelogramBitmap(DocCoord *Coords, OILBitmap *pBitmap, EFFECTTYPE Effect = EFFECT_RGB,
+				 DocColour *StartCol = NULL, DocColour *EndCol = NULL);
+
 protected:
 	virtual BOOL WriteEPSBoundingBox ( void );
 	virtual BOOL WriteProlog(KernelDC*);
@@ -417,8 +420,6 @@ protected:
 	virtual BOOL WriteEPSTrailerComments ( void );
 
 	BOOL DrawClippedBitmap(Path *DrawPath);
-	BOOL DrawParallelogramBitmap(DocCoord *Coords, OILBitmap *pBitmap, EFFECTTYPE Effect = EFFECT_RGB,
-								 DocColour *StartCol = NULL, DocColour *EndCol = NULL);
 
 	BOOL SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic, MILLIPOINT Size);
 	BOOL SelectNewFont(WORD Typeface, BOOL Bold, BOOL Italic, FIXED16 *abcd);

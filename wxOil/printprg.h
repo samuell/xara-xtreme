@@ -177,6 +177,8 @@ private:
 
 	BOOL IgnoreUpdates;				// TRUE if the dlg is locked against showing any updated info
 
+	MonotonicTime UpdateTime;
+
 public:
 	// The call back function for the print dialog.
 	static BOOL AbortProc();
