@@ -559,8 +559,6 @@ INT32 GlobalBitmapList::GetDocumentBitmapSize(Document* pDoc)
 
 BOOL GlobalBitmapList::IsUsedInDocument(Document * pDoc, OILBitmap* pOILBmp)
 {
-	PORTNOTETRACE("other","GlobalBitmapList::IsUsedInDocument - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pDoc == NULL || pOILBmp == NULL,FALSE,"GlobalBitmapList::IsUsedInDocument Bad params!");
 	
 	// Get the bitmap list for the specified document
@@ -579,6 +577,8 @@ BOOL GlobalBitmapList::IsUsedInDocument(Document * pDoc, OILBitmap* pOILBmp)
 				return TRUE;
 			}
 
+PORTNOTETRACE("other","GlobalBitmapList::IsUsedInDocument - skip XPE master bit");
+#ifndef EXCLUDE_FROM_XARALX
 			// Check whether this bitmap is an XPE master
 			if (pBmp->ActualBitmap)
 			{
@@ -588,11 +588,11 @@ BOOL GlobalBitmapList::IsUsedInDocument(Document * pDoc, OILBitmap* pOILBmp)
 				if (pMaster == pOILBmp)
 					return TRUE;
 			}
+#endif
 
 			pKBmp = pBitmaps->GetNext(pKBmp);
 		}
 	}
-#endif
 
 	// Bitmap not found and so return FALSE
 	return FALSE;
