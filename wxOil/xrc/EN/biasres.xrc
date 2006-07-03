@@ -2,6 +2,14 @@
 <resource>
 	<object class="wxDialog" name="IDD_BIASGAIN">
 			 <pos>0,0d</pos> <size>124,149d</size>
+		<object class="wxStaticBox" name="IDC_BIASGAIN_CURVEDISPLAYGROUP">
+			 <pos>3,3d</pos> <size>118,88d</size>
+			<label></label>
+		</object>
+		<object class="wxStaticBox" name="IDC_BIASGAIN_CURVECONTROLGROUP">
+			 <pos>3,92d</pos> <size>118,54d</size>
+			<label></label>
+		</object>
 		<object class="wxStaticText" name="IDC_STATIC1">
 			 <pos>4,98d</pos> <size>7,9d</size>
 			<label>-1</label>
@@ -59,14 +67,6 @@
 		</object>
 		<object class="wxCamDrawControl" name="IDC_CURVEINTERPOLATE">
 			 <pos>7,69d</pos> <size>110,15d</size>
-		</object>
-		<object class="wxStaticText" name="IDC_STATIC10">
-			 <pos>3,90d</pos> <size>118,57d</size>
-			<label></label>
-		</object>
-		<object class="wxStaticText" name="IDC_STATIC9">
-			 <pos>3,3d</pos> <size>118,85d</size>
-			<label></label>
 		</object>
 		<title>Profile</title>
 		<label>Profile</label>

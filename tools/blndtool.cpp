@@ -1642,7 +1642,7 @@ MsgResult BlendInfoBarOp::Message(Msg* Message)
 		}
 
 
-		if (( Msg->GadgetID == _R(IDC_BLENDOBJECTBIASGAIN)) || (Msg->GadgetID == _R(IDC_BLENDOBJECTBIASGAIN)))
+		if (( Msg->GadgetID == _R(IDC_BLENDOBJECTBIASGAIN)) || (Msg->GadgetID == _R(IDC_BLENDATTRBIASGAIN)))
 		{  
 			ProfileSelectionChange( Msg, Msg->GadgetID );
 		}

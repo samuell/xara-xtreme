@@ -231,6 +231,8 @@ void SoftShadowInfoBarOp::Init()
 //	BiasGainGadget_m.LinkControlButton( this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
 	BiasGainGadget_m.Init(this, _R(IDC_BIASGAIN), _R(IDBBL_BIASGAIN),  _R(IDS_BIASGAINDLG) );
 	BiasGainGadget_m.ToggleFillProfile ();
+	
+	UpdateInfoBar();
 }
 
 
@@ -577,6 +579,7 @@ void SoftShadowInfoBarOp::UpdateInfoBar()
 			pSoftShadowInfoBar->EnableGadget(_R(IDC_SOFTSHADOWCENTRE_X_MORE) ,FALSE);
 			pSoftShadowInfoBar->EnableGadget(_R(IDC_SOFTSHADOWCENTRE_Y_LESS) ,FALSE);
 			pSoftShadowInfoBar->EnableGadget(_R(IDC_SOFTSHADOWCENTRE_Y_MORE) ,FALSE);
+			pSoftShadowInfoBar->EnableGadget(_R(IDC_BIASGAIN) ,FALSE);
 			
 			// the following are enabled anyway to enable users to set a blur &
 			// create a shadow
@@ -878,6 +881,10 @@ void SoftShadowInfoBarOp::DoChangeShadowPosIncremental(MILLIPOINT incx, MILLIPOI
 
 void SoftShadowInfoBarOp::HandleProfileSelChangingMsg(CBiasGainGadget& Gadget, CGadgetID GadgetID)
 {
+
+	InformationBarOp::HandleProfileSelChangingMsg(Gadget, GadgetID);
+	return;
+
 //	BOOL ok = (GadgetID == _R(IDC_BIASGAIN));
 
 //	ERROR2IF(ok==FALSE, FALSE, "Invalid gadgetID passed");
@@ -942,8 +949,8 @@ CProfileBiasGain* SoftShadowInfoBarOp::GetProfileFromSelection(CGadgetID GadgetI
 	NodeShadowController* pMasterProfile = pSoftShadowTool->GetShadowEditField(smBIASGAIN, &bProfileNone, &bProfileConsistent, &bProfileMany);
 //	NodeShadowController* pMasterType = pSoftShadowTool->GetShadowEditField(smTYPE);
 
-	*bMany = bProfileMany || bProfileNone;
-	*bAllSameType = bProfileConsistent || bProfileNone;
+	*bMany = bProfileMany ;
+	*bAllSameType = bProfileConsistent && !bProfileNone;
 
 	if (pMasterProfile)
 	{
