@@ -138,7 +138,6 @@ public:
 
 	virtual BOOL IsABaseTextClass() const		{ return TRUE; }
 	virtual BOOL IsSetCandidate() const			{ return FALSE; }
-	virtual BOOL IsCompound() const				{ return TRUE; }		// See also NodeCompound
 
 	// All text objects need to be associated with the BaseTextClass current attribute group
 	virtual CCRuntimeClass* GetCurrentAttribGroup(); 
@@ -275,6 +274,7 @@ public:
 	String_256 GetStoryAsString();
 
 	virtual BOOL IsSetCandidate() const		{ return TRUE; }
+	virtual BOOL IsCompound() const				{ return TRUE; }		// See also NodeCompound
 
 	virtual Node* SimpleCopy();
 	void CopyNodeContents(TextStory* NodeCopy);

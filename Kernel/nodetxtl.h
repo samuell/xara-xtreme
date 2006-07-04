@@ -239,6 +239,7 @@ public:
 	virtual INT32 ComplexHide(UndoableOperation* pOp, Node* pNextNode);
 
 	virtual BOOL IsSetCandidate() const		{ return TRUE; }
+	virtual BOOL IsCompound() const			{ return TRUE; }		// See also NodeCompound
 
 	virtual UINT32 GetNodeSize() const; 	
 	virtual void GetDebugDetails(StringBase* Str); // Can be deleted before we ship
