@@ -556,7 +556,7 @@ BOOL TextObjRecordHandler::ReadTextStoryWordWrapInfo(CXaraFileRecord *pCXaraFile
 // This is to prevent text stories overflowing when a font has been substituted.
 // It was decided that it is better for each individual line to extend past the format width, rather than
 // letting the story potentially create extra lines due to formatting width characters into the same width
-#if defined(EXCLUDE_FROM_RALPH) || defined(EXCLUDE_FROM_XARALX)
+#if defined(EXCLUDE_FROM_RALPH)
 		WordWrapOn = FALSE;
 #endif
 
