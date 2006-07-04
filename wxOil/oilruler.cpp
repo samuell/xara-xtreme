@@ -2069,7 +2069,7 @@ void OriginGadget::OnRButtonUp(wxMouseEvent& event)
                     
 void OriginGadget::OnLButtonDblClk(wxMouseEvent& event)
 {
-	UINT32 nFlags = ClickModifiers::SynthesizeMouseEventFlags(event);
+	/*UINT32 nFlags =*/ ClickModifiers::SynthesizeMouseEventFlags(event);
 	wxPoint point = event.GetPosition();
 
 	if (OpResetSpreadOrigin::GetState(NULL,NULL).Greyed==FALSE)

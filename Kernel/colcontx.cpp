@@ -152,10 +152,10 @@ CC_IMPLEMENT_MEMDUMP(ColourContextGreyT,	ColourContext)
 
 ColourContextArray ColourContext::GlobalDefaultContext = 
 {
+	{ NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL,
-	NULL, NULL, NULL, NULL
+	NULL, NULL, NULL, NULL }
 };
 
 

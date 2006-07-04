@@ -134,6 +134,7 @@ CC_IMPLEMENT_DYNAMIC(CCMemTextFile, CCMemFile);
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW
 
+#define CHAR_EOF ((char)EOF)
 
 /********************************************************************************************
 
@@ -2854,7 +2855,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 		if (RetValue == 0)
 		{
 			// found end of file so make sure we return an EOF as the data
-			Ch = EOF;
+			Ch = CHAR_EOF;
 		}
 
 		if (IOFile->fail())
@@ -2869,7 +2870,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 	}
 	
 	// check if found the EOF
-	if (Ch == EOF)
+	if (Ch == CHAR_EOF)
 	{
 		// Mark the EOF has having been reached.
 		IOFile->clear(ios::eofbit);
@@ -2888,7 +2889,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 	{
 		// Must leave 1 character space in the buffer if we reach the maximum buffer size
 		// so that we can fit the terminating zero in below.
-		while ((Max>1) && (Ch!=CR) && (Ch!=LF) && (Ch!=EOF))
+		while ((Max>1) && (Ch!=CR) && (Ch!=LF) && (Ch!=CHAR_EOF))
 		{
 			// store the char we read
 			Text[Off++] = Ch;
@@ -2920,7 +2921,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 		if (RetValue == 0)
 		{
 			// found end of file so make sure we return an EOF as the data
-			Ch = EOF;
+			Ch = CHAR_EOF;
 		}
 
 		if (IOFile->fail())
@@ -2936,7 +2937,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 		}
 		
 		// See if we have reached the end of the file
-		if (Ch==EOF)
+		if (Ch==CHAR_EOF)
 		{
 			// Mark the End Of File
 			IOFile->clear(ios::eofbit);
@@ -2967,7 +2968,7 @@ CCFile& CCStreamFile::read(StringBase* buf)
 		}
 
 		// See if we have reached the end of the file
-		if (Ch==EOF)
+		if (Ch==CHAR_EOF)
 		{
 			// Mark the End Of File
 			IOFile->clear(ios::eofbit);
@@ -3018,7 +3019,7 @@ CCFile &CCStreamFile::read( char &buf )
 			if (RetValue == 0)
 			{
 				// found end of file so make sure we return an EOF as the data
-				Ch = EOF;
+				Ch = CHAR_EOF;
 			}
 
 			if (IOFile->fail())
@@ -3509,7 +3510,7 @@ CCFile& CCStreamFile::get( char &buf )
 			if (RetValue == 0)
 			{
 				// end of file reached so return the EOF character
-				buf = EOF;
+				buf = CHAR_EOF;
 			}
 			else
 				buf = outbuf;

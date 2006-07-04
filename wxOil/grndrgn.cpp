@@ -6835,7 +6835,7 @@ INT32 GRenderRegion::StrokePathToPath(
 	CapStyles CapS = (LineCaps==LineCapButt) ? CAPS_BUTT : (LineCaps==LineCapRound) ? CAPS_ROUND : CAPS_SQUARE;
 	JoinStyles JoinS = (LineJoin==MitreJoin) ? JOIN_MITER :	(LineJoin==RoundJoin) ? JOIN_ROUND : JOIN_BEVEL;
 
-	DASH GDash = { 0, 0, 0 };
+	DASH GDash = { 0, 0, { 0 } };
 
 	if(Dash)
 		memcpy(&GDash,Dash,sizeof(GDash));

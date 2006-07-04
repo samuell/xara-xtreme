@@ -163,11 +163,11 @@ ColourMatrix ColourMatrix::Boost(double d)
 	{
 		double cc = (1.0-d)/2.0; // Add constant boost to centre colour change
 		elements_t e = {
-			d,   0.0, 0.0, 0.0, 0.0,
+			{ d,   0.0, 0.0, 0.0, 0.0,
 			0.0, d,   0.0, 0.0, 0.0,
 			0.0, 0.0, d,   0.0, 0.0,
 			0.0, 0.0, 0.0, 1.0, 0.0,
-			cc,  cc,  cc,  0.0, 1.0
+			cc,  cc,  cc,  0.0, 1.0 }
 			};
 		r.elements = e;
 	}
@@ -194,11 +194,11 @@ ColourMatrix ColourMatrix::Whiten()
 {
 	ColourMatrix r;
 	elements_t e = {
-		0.0, 0.0, 0.0, 0.0, 0.0,
+		{ 0.0, 0.0, 0.0, 0.0, 0.0,
 		0.0, 0.0, 0.0, 0.0, 0.0,
 		0.0, 0.0, 0.0, 0.0, 0.0,
 		0.0, 0.0, 0.0, 1.0, 0.0,
-		1.0, 1.0, 1.0, 0.0, 1.0
+		1.0, 1.0, 1.0, 0.0, 1.0 }
 		};
 	r.elements=e;
 	return r;
@@ -224,11 +224,11 @@ ColourMatrix ColourMatrix::Grey()
 {
 	ColourMatrix r;
 	elements_t e = {
-		0.1, 0.1, 0.1, 0.0, 0.0,
+		{ 0.1, 0.1, 0.1, 0.0, 0.0,
 		0.1, 0.1, 0.1, 0.0, 0.0,
 		0.1, 0.1, 0.1, 0.0, 0.0,
 		0.0, 0.0, 0.0, 1.0, 0.0,
-		0.6, 0.6, 0.6, 0.0, 1.0
+		0.6, 0.6, 0.6, 0.0, 1.0 }
 		};
 	r.elements=e;
 	return r;
