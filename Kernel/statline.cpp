@@ -239,11 +239,18 @@ StatusLine::StatusLine() : m_Timer(this)
 
 StatusLine::~StatusLine()
 {
-	if (pSnappedCursor!=NULL)
+	if (pSnappedCursor != NULL)
 	{
 		delete pSnappedCursor;
-		pSnappedCursor=NULL;
+		pSnappedCursor = NULL;
 	}
+
+	if (JobDescription != NULL)
+	{
+		delete JobDescription;
+		JobDescription = NULL;
+	}
+
 	if (this == s_pStatusLine)
 	{
 		// Only zap it out if there is a live status line. Status line objects
