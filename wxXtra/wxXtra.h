@@ -6,7 +6,9 @@
 // This file merely includes all the headers from wxXtra, and is included
 // by wxstd.h
 
-#include "manager.h"
+#include "framemanager.h"
+#include "floatpane.h"
+#include "dockart.h"
 #include "doublebuffer.h"
 #include "cwfrompoint.h"
 #include "combo.h"

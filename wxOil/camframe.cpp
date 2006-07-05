@@ -142,11 +142,29 @@ public:
 			GetMainFrame()->UpdateWndSize();
 		event.Skip();
 	}
+
 	void OnMove(wxMoveEvent &event)
 	{
 		if (GetMainFrame())
 			GetMainFrame()->UpdateWndSize();
 		event.Skip();
+	}
+
+	void OnPaneClose(wxFrameManagerEvent& event)
+	{
+		// For now just pretend cancel was clicked. This is sufficient to fool
+		// dialogmanager into closing the window it would seem
+		wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+		wxWindow * pWindow = NULL;
+		if (event.GetPane() && event.GetPane()->IsOk() )
+			pWindow = event.GetPane()->window;
+		if (pWindow && !pWindow->IsBeingDeleted())
+		{
+			cancelEvent.SetEventObject( pWindow );
+			pWindow->GetEventHandler()->AddPendingEvent(cancelEvent);
+		}
+	
+		event.Veto(); // Stop wxAUI doing anything about it
 	}
 
 	DECLARE_EVENT_TABLE()
@@ -156,6 +174,7 @@ IMPLEMENT_CLASS( CamFrameManager, wxFrameManager )
 BEGIN_EVENT_TABLE( CamFrameManager, wxFrameManager )
 	EVT_SIZE(CamFrameManager::OnSize)
 	EVT_MOVE(CamFrameManager::OnMove)
+	EVT_AUI_PANECLOSE(CamFrameManager::OnPaneClose)
 END_EVENT_TABLE()
 
 #endif
@@ -525,6 +544,7 @@ void CCamFrame::OnMove(wxMoveEvent &event)
 	// We want to skip the event even when we do have a FrameManager
 	event.Skip();
 }
+
 #endif
 
 void CCamFrame::OnCloseWindow(wxCloseEvent& event)

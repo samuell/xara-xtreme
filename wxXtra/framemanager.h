@@ -1,21 +1,35 @@
-// $Id$
-/* @@tag:xara-cn-tp@@ THIRD PARTY COPYRIGHT */
-// The following line makes normalize.pl skip type fixing
-/* SKIPFIXTYPES: START */
-
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        manager.h
+// Name:        wx/aui/framemanager.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-05-17
-// RCS-ID:      
+// RCS-ID:      $Id: framemanager.h,v 1.8 2006/07/05 16:37:55 BIW Exp $
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXAUI_WXAUI_H
-#define __WXAUI_WXAUI_H
+#ifndef _WXXTRA_FRAMEMANAGER_H_
+#define _WXXTRA_FRAMEMANAGER_H_
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#include <wx/wx.h>
+
+#if wxUSE_AUI
+#undef wxXTRA_AUI
+#else
+#define wxXTRA_AUI 1
+
+#include <wx/dynarray.h>
+#include <wx/gdicmn.h>
+#include <wx/window.h>
+#include <wx/timer.h>
+#include <wx/sizer.h>
+
+#define WXDLLIMPEXP_AUI WXDLLEXPORT
 
 enum wxFrameManagerDock
 {
@@ -93,10 +107,10 @@ class wxDockInfo;
 class wxDockArt;
 class wxFrameManagerEvent;
 
-WX_DECLARE_OBJARRAY(wxDockInfo, wxDockInfoArray);
-WX_DECLARE_OBJARRAY(wxDockUIPart, wxDockUIPartArray);
-WX_DECLARE_OBJARRAY(wxPaneButton, wxPaneButtonArray);
-WX_DECLARE_OBJARRAY(wxPaneInfo, wxPaneInfoArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockInfo, wxDockInfoArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockUIPart, wxDockUIPartArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneButton, wxPaneButtonArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneInfo, wxPaneInfoArray, WXDLLIMPEXP_AUI);
 WX_DEFINE_ARRAY_PTR(wxPaneInfo*, wxPaneInfoPtrArray);
 WX_DEFINE_ARRAY_PTR(wxDockInfo*, wxDockInfoPtrArray);
 
@@ -106,7 +120,7 @@ extern wxPaneInfo wxNullPaneInfo;
 
 
 
-class WXDLLEXPORT wxPaneInfo
+class WXDLLIMPEXP_AUI wxPaneInfo
 {
 public:
 
@@ -125,7 +139,7 @@ public:
         min_size = wxDefaultSize;
         max_size = wxDefaultSize;
         dock_proportion = 0;
-        
+
         DefaultPane();
     }
 
@@ -193,7 +207,7 @@ public:
     bool HasMinimizeButton() const { return HasFlag(buttonMinimize); }
     bool HasPinButton() const { return HasFlag(buttonPin); }
     bool HasGripperTop() const { return HasFlag(optionGripperTop); }
-    
+
     wxPaneInfo& Window(wxWindow* w) { window = w; return *this; }
     wxPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
@@ -227,7 +241,7 @@ public:
     wxPaneInfo& PaneBorder(bool visible = true) { return SetFlag(optionPaneBorder, visible); }
     wxPaneInfo& Gripper(bool visible = true) { return SetFlag(optionGripper, visible); }
     wxPaneInfo& GripperTop(bool attop = true) { return SetFlag(optionGripperTop, attop); }
-    wxPaneInfo& CloseButton(bool visible = true) { return SetFlag(buttonClose, visible); }  
+    wxPaneInfo& CloseButton(bool visible = true) { return SetFlag(buttonClose, visible); }
     wxPaneInfo& MaximizeButton(bool visible = true) { return SetFlag(buttonMaximize, visible); }
     wxPaneInfo& MinimizeButton(bool visible = true) { return SetFlag(buttonMinimize, visible); }
     wxPaneInfo& PinButton(bool visible = true) { return SetFlag(buttonPin, visible); }
@@ -235,7 +249,7 @@ public:
     wxPaneInfo& TopDockable(bool b = true) { return SetFlag(optionTopDockable, b); }
     wxPaneInfo& BottomDockable(bool b = true) { return SetFlag(optionBottomDockable, b); }
     wxPaneInfo& LeftDockable(bool b = true) { return SetFlag(optionLeftDockable, b); }
-    wxPaneInfo& RightDockable(bool b = true) { return SetFlag(optionRightDockable, b); } 
+    wxPaneInfo& RightDockable(bool b = true) { return SetFlag(optionRightDockable, b); }
     wxPaneInfo& Floatable(bool b = true) { return SetFlag(optionFloatable, b); }
     wxPaneInfo& Movable(bool b = true) { return SetFlag(optionMovable, b); }
     wxPaneInfo& Dockable(bool b = true)
@@ -251,14 +265,14 @@ public:
                  optionCaption | optionPaneBorder | buttonClose;
         return *this;
     }
-    
+
     wxPaneInfo& CentrePane() { return CenterPane(); }
     wxPaneInfo& CenterPane()
     {
         state = 0;
         return Center().PaneBorder().Resizable();
     }
-     
+
     wxPaneInfo& ToolbarPane()
     {
         DefaultPane();
@@ -277,7 +291,7 @@ public:
             state &= ~flag;
         return *this;
     }
-    
+
     bool HasFlag(unsigned int flag) const
     {
         return (state & flag) ? true:false;
@@ -302,7 +316,7 @@ public:
         optionDestroyOnClose  = 1 << 12,
         optionToolbar         = 1 << 13,
         optionActive          = 1 << 14,
-	optionGripperTop      = 1 << 15,
+        optionGripperTop      = 1 << 15,
 
         buttonClose           = 1 << 24,
         buttonMaximize        = 1 << 25,
@@ -344,7 +358,7 @@ public:
 
 
 
-class WXDLLEXPORT wxFrameManager : public wxEvtHandler
+class WXDLLIMPEXP_AUI wxFrameManager : public wxEvtHandler
 {
 friend class wxFloatingPane;
 
@@ -354,13 +368,13 @@ public:
                    unsigned int flags = wxAUI_MGR_DEFAULT);
     virtual ~wxFrameManager();
     void UnInit();
-    
+
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
-    
+
     void SetFrame(wxFrame* frame);
     wxFrame* GetFrame() const;
-    
+
     void SetArtProvider(wxDockArt* art_provider);
     wxDockArt* GetArtProvider() const;
 
@@ -370,25 +384,25 @@ public:
 
     bool AddPane(wxWindow* window,
                  const wxPaneInfo& pane_info);
-                 
+
     bool AddPane(wxWindow* window,
                  int direction = wxLEFT,
                  const wxString& caption = wxEmptyString);
-                 
+
     bool InsertPane(wxWindow* window,
                  const wxPaneInfo& pane_info,
                  int insert_level = wxAUI_INSERT_PANE);
-                 
+
     bool DetachPane(wxWindow* window);
 
     wxString SavePerspective();
-    
+
     bool LoadPerspective(const wxString& perspective,
                  bool update = true);
-    
+
     void Update();
 
-private:
+protected:
 
     void DrawHintRect(wxWindow* pane_window,
                        const wxPoint& pt,
@@ -427,7 +441,7 @@ private:
     void OnFloatingPaneMoving(wxWindow* window);
     void OnFloatingPaneMoved(wxWindow* window);
     void OnFloatingPaneActivated(wxWindow* window);
-    void OnFloatingPaneClosed(wxWindow* window);
+    void OnFloatingPaneClosed(wxWindow* window, wxCloseEvent& evt);
     void OnFloatingPaneResized(wxWindow* window, const wxSize& size);
     void Render(wxDC* dc);
     void Repaint(wxDC* dc = NULL);
@@ -437,11 +451,10 @@ private:
     void GetPanePositionsAndSizes(wxDockInfo& dock,
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
-    void ShowHint(const wxRect& rect);
-    void HideHint();
-    void RemoveHint();
+    virtual void ShowHint(const wxRect& rect);
+    virtual void HideHint();
 
-private:
+protected:
 
     // events
     void OnPaint(wxPaintEvent& event);
@@ -456,7 +469,7 @@ private:
     void OnChildFocus(wxChildFocusEvent& event);
     void OnHintFadeTimer(wxTimerEvent& event);
 
-private:
+protected:
 
     enum
     {
@@ -468,7 +481,7 @@ private:
         actionDragFloatingPane
     };
 
-private:
+protected:
 
     wxFrame* m_frame;            // the frame being managed
     wxDockArt* m_art;            // dock art object which does all drawing
@@ -491,7 +504,7 @@ private:
     wxWindow* m_hint_wnd;        // transparent hint window (for now, only msw)
     wxTimer m_hint_fadetimer;    // transparent fade timer (for now, only msw)
     int m_hint_fadeamt;          // transparent fade amount (for now, only msw)
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -499,19 +512,23 @@ private:
 
 // event declarations/classes
 
-class WXDLLEXPORT wxFrameManagerEvent : public wxEvent
+class WXDLLIMPEXP_AUI wxFrameManagerEvent : public wxEvent
 {
 public:
     wxFrameManagerEvent(wxEventType type) : wxEvent(0, type)
     {
         pane = NULL;
         button = 0;
+        veto_flag = false;
+        canveto_flag = true;
     }
 
     wxFrameManagerEvent(const wxFrameManagerEvent& c) : wxEvent(c)
     {
         pane = c.pane;
         button = c.button;
+        veto_flag = c.veto_flag;
+        canveto_flag = c.canveto_flag;
     }
 
     wxEvent *Clone() const { return new wxFrameManagerEvent(*this); }
@@ -520,142 +537,21 @@ public:
     void SetButton(int b) { button = b; }
     wxPaneInfo* GetPane() { return pane; }
     int GetButton() { return button; }
-
+    
+    void Veto(bool veto = true) { veto_flag = veto; }
+    bool GetVeto() const { return veto_flag; }
+    void SetCanVeto(bool can_veto) { canveto_flag = can_veto; }
+    bool CanVeto() const { return  canveto_flag && veto_flag; }
+    
 public:
     wxPaneInfo* pane;
     int button;
+    bool veto_flag;
+    bool canveto_flag;
 };
 
 
-
-
-// dock art provider code - a dock provider provides all drawing
-// functionality to the wxAui dock manager.  This allows the dock
-// manager to have plugable look-and-feels
-
-class wxDockArt
-{
-public:
-
-    wxDockArt() { }
-    virtual ~wxDockArt() { }
-
-    virtual int GetMetric(int id) = 0;
-    virtual void SetMetric(int id, int new_val) = 0;
-    virtual void SetFont(int id, const wxFont& font) = 0;
-    virtual wxFont GetFont(int id) = 0;
-    virtual wxColour GetColour(int id) = 0;
-    virtual void SetColour(int id, const wxColor& colour) = 0;
-    wxColor GetColor(int id) { return GetColour(id); }
-    void SetColor(int id, const wxColor& color) { SetColour(id, color); }
-    
-    virtual void DrawSash(wxDC& dc,
-                          int orientation,
-                          const wxRect& rect) = 0;
-
-    virtual void DrawBackground(wxDC& dc,
-                          int orientation,
-                          const wxRect& rect) = 0;
-
-    virtual void DrawCaption(wxDC& dc,
-                          const wxString& text,
-                          const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
-
-    virtual void DrawGripper(wxDC& dc,
-                          const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
-
-    virtual void DrawBorder(wxDC& dc,
-                          const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
-
-    virtual void DrawPaneButton(wxDC& dc,
-                          int button,
-                          int button_state,
-                          const wxRect& rect,
-                          wxPaneInfo& pane) = 0;
-};
-
-
-// this is the default art provider for wxFrameManager.  Dock art
-// can be customized by creating a class derived from this one,
-// or replacing this class entirely
-
-class wxDefaultDockArt : public wxDockArt
-{
-public:
-
-    wxDefaultDockArt();
-
-    int GetMetric(int metric_id);
-    void SetMetric(int metric_id, int new_val);
-    wxColour GetColour(int id);
-    void SetColour(int id, const wxColor& colour);
-    void SetFont(int id, const wxFont& font);
-    wxFont GetFont(int id);
-
-    void DrawSash(wxDC& dc,
-                  int orientation,
-                  const wxRect& rect);
-
-    void DrawBackground(wxDC& dc,
-                  int orientation,
-                  const wxRect& rect);
-
-    void DrawCaption(wxDC& dc,
-                  const wxString& text,
-                  const wxRect& rect,
-                  wxPaneInfo& pane);
-
-    void DrawGripper(wxDC& dc,
-                  const wxRect& rect,
-                  wxPaneInfo& pane);
-
-    void DrawBorder(wxDC& dc,
-                  const wxRect& rect,
-                  wxPaneInfo& pane);
-
-    void DrawPaneButton(wxDC& dc,
-                  int button,
-                  int button_state,
-                  const wxRect& rect,
-                  wxPaneInfo& pane);
-
-protected:
-
-    void DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active);
-
-protected:
-
-    wxPen m_border_pen;
-    wxBrush m_sash_brush;
-    wxBrush m_background_brush;
-    wxBrush m_gripper_brush;
-    wxFont m_caption_font;
-    wxBitmap m_inactive_close_bitmap;
-    wxBitmap m_inactive_pin_bitmap;
-    wxBitmap m_active_close_bitmap;
-    wxBitmap m_active_pin_bitmap;
-    wxPen m_gripper_pen1;
-    wxPen m_gripper_pen2;
-    wxPen m_gripper_pen3;
-    wxColour m_active_caption_colour;
-    wxColour m_active_caption_gradient_colour;
-    wxColour m_active_caption_text_colour;
-    wxColour m_inactive_caption_colour;
-    wxColour m_inactive_caption_gradient_colour;
-    wxColour m_inactive_caption_text_colour;
-    int m_border_size;
-    int m_caption_size;
-    int m_sash_size;
-    int m_button_size;
-    int m_gripper_size;
-    int m_gradient_type;
-};
-
-
-class wxDockInfo
+class WXDLLIMPEXP_AUI wxDockInfo
 {
 public:
     wxDockInfo()
@@ -720,7 +616,7 @@ public:
 };
 
 
-class wxDockUIPart
+class WXDLLIMPEXP_AUI wxDockUIPart
 {
 public:
     enum
@@ -733,7 +629,7 @@ public:
         typePaneSizer,
         typeBackground,
         typePaneBorder,
-        typePaneButton,
+        typePaneButton
     };
 
     int type;                // ui part type (see enum above)
@@ -747,7 +643,7 @@ public:
 };
 
 
-class wxPaneButton
+class WXDLLIMPEXP_AUI wxPaneButton
 {
 public:
     int button_id;        // id of the button (e.g. buttonClose)
@@ -758,12 +654,9 @@ public:
 
 // wx event machinery
 
-
-// right now the only event that works is wxEVT_AUI_PANEBUTTON. A full
-// spectrum of events will be implemented in the next incremental version
-
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON, 0)   
+    DECLARE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON, 0)
+    DECLARE_EVENT_TYPE(wxEVT_AUI_PANECLOSE, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
@@ -773,6 +666,10 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
 
 #define EVT_AUI_PANEBUTTON(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxFrameManagerEventHandler(func))
+#define EVT_AUI_PANECLOSE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
 
 
-#endif
+#endif // wxUSE_AUI
+#endif //_WX_FRAMEMANAGER_H_
+
