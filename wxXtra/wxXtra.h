@@ -7,7 +7,6 @@
 // by wxstd.h
 
 #include "manager.h"
-#include "wxmousestate.h"
 #include "doublebuffer.h"
 #include "cwfrompoint.h"
 #include "combo.h"

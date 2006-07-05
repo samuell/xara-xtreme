@@ -102,7 +102,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartctl.h"
 #include "cartprov.h"
 #include "dlgevt.h"
-#include "wxmousestate.h"
 #include "dlgmgr.h"
 //#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 

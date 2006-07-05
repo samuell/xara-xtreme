@@ -19,13 +19,6 @@
 #include <wx/minifram.h>
 #include <wx/image.h>
 #include "manager.h"
-#include "wxmousestate.h"
-
-#define WXAUI_USE_WXGETMOUSESTATE 1
-
-#if !defined( WXAUI_USE_WXGETMOUSESTATE ) && defined ( __WXGTK__ )
-extern "C" { void* gdk_window_get_pointer(void*, int*, int*, unsigned int*); }
-#endif
 
 // -- various array and event implementations --
 
@@ -778,25 +771,7 @@ private:
     // functionality to wxWidgets itself)
     static bool isMouseDown()
     {
-#ifdef WXAUI_USE_WXGETMOUSESTATE
-        return wxGetMouseState().LeftDown();
-#else
-        #ifdef __WXMSW__
-        return (GetKeyState( VK_LBUTTON ) & (1<<15)) ? true : false;
-        #endif
-
-        #ifdef __WXGTK__
-        int x, y;
-        unsigned int m;
-        gdk_window_get_pointer(NULL, &x, &y, &m);
-        return (m & 0x100) ? true : false;
-        //return (m & 0x1F00) ? true : false;
-        #endif
-        
-        #ifdef __WXMAC__
-        return GetCurrentButtonState() & 0x01 ;
-        #endif
-#endif
+        return ::wxGetMouseState().LeftDown();
     }
 
 private:
