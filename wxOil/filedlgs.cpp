@@ -2241,7 +2241,7 @@ BOOL DestroyOSRenderRegion(RenderRegion* pRender)
 ********************************************************************************************/
 
 OpenFileDialog::OpenFileDialog(LPCTSTR FilterString)
-  : BaseFileDialog( TRUE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
+  : BaseFileDialog( TRUE, wxFILE_MUST_EXIST, FilterString )
 {
 	// Set some defaults
 	NativeFilterPos = 0;
@@ -2549,7 +2549,7 @@ TCHAR* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 ********************************************************************************************/
 
 SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, const String_256& DefPath, const String_256& DefName)
-  : BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
+  : BaseFileDialog( FALSE, wxFILE_MUST_EXIST, FilterString )
 //  : BaseFileDialog(FALSE, OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
 {
 	// Make a note of this lot
@@ -2589,7 +2589,7 @@ SaveFileDialog::SaveFileDialog(LPCTSTR FilterString, const String_256& DefPath, 
 	const String_256& DocumentName)
 PORTNOTE("other", "Disabled template stuff" )
 //	: BaseFileDialog( FALSE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FilterString)
-	: BaseFileDialog( FALSE, wxFILE_MUST_EXIST | wxHIDE_READONLY, FilterString )
+	: BaseFileDialog( FALSE, wxFILE_MUST_EXIST, FilterString )
 {
 	// Make a note of this lot
 	DefaultName = DefName;
@@ -2998,7 +2998,7 @@ URLs to be typed into the "File name" field, but it was stopping wildcard search
 ImportFileDialog::ImportFileDialog(LPCTSTR lpszFilter)
 //  :	BaseFileDialog(TRUE, ((CCamApp::IsNewWindowsUI()) ? OFN_ENABLETEMPLATE : 0) | 
 //			OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, lpszFilter, NULL)
-	: BaseFileDialog( TRUE, wxFILE_MUST_EXIST | wxHIDE_READONLY, lpszFilter, NULL )
+	: BaseFileDialog( TRUE, wxFILE_MUST_EXIST, lpszFilter, NULL )
 {
 PORTNOTE("other", "Disabled template stuff" )
 #if !defined(EXCLUDE_FROM_XARALX)

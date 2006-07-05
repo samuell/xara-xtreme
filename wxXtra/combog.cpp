@@ -24,7 +24,7 @@
 
 #include "combog.h"
 
-#if wxXTRA_COMBOCONTROL
+#if wxXTRA_COMBOCTRL
 
 #include <wx/dcbuffer.h>
 

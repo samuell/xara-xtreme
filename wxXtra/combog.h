@@ -18,12 +18,13 @@
 #define _WXXTRA_GENERIC_COMBOCONTROL_H_
 
 #include <wx/wx.h>
-#include "wx/xrc/xmlres.h"
+#include <wx/xrc/xmlres.h>
 
-#if wxUSE_COMBOCONTROL
-#undef wxXTRA_COMBOCONTROL
+#if wxUSE_COMBOCTRL
+#undef wxXTRA_COMBOCTRL
 #else
-#define wxXTRA_COMBOCONTROL 1
+#define wxXTRA_COMBOCTRL 1
+#define wxComboCtrl wxComboControl
 
 #include "combo.h"
 

@@ -572,7 +572,7 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 	if( pWnd->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxComboBox) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
-		pWnd->IsKindOf( CLASSINFO(wxComboControl) ) )
+		pWnd->IsKindOf( CLASSINFO(wxComboCtrl) ) )
 	{
 		return;
 	}
@@ -829,7 +829,7 @@ BOOL DialogEventHandler::Init()
     HASHEVENTNAME(wxEVT_END_SESSION);
     HASHEVENTNAME(wxEVT_QUERY_END_SESSION);
     HASHEVENTNAME(wxEVT_ACTIVATE_APP);
-    HASHEVENTNAME(wxEVT_POWER);
+//    HASHEVENTNAME(wxEVT_POWER);
     HASHEVENTNAME(wxEVT_ACTIVATE);
     HASHEVENTNAME(wxEVT_CREATE);
     HASHEVENTNAME(wxEVT_DESTROY);

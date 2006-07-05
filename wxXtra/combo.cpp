@@ -25,7 +25,7 @@
 #include <wx/wx.h>
 
 #include "combo.h"
-#if wxXTRA_COMBOCONTROL
+#if wxXTRA_COMBOCTRL
 
 #include <wx/renderer.h>
 #include <wx/tooltip.h>

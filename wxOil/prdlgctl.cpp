@@ -2765,7 +2765,7 @@ BOOL CCPrintInfo::StartPrinting()
 
 	//pPrgDlg->SetDocName(pDocument->GetTitle());
 	pPrgDlg->SetPrinterName(GetPrintData().GetPrinterName());
-	pPrgDlg->SetPortName(GetPrintData().GetPrinterCommand());
+//	pPrgDlg->SetPortName(GetPrintData().GetPrinterCommand());
 	pPrgDlg->SetSliderPos(0);
 
 	return TRUE;

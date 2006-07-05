@@ -8,6 +8,8 @@
 
 #include "cwfrompoint.h"
 
+#include <wx/notebook.h>
+
 // wxChildWindowFromPoint
 //
 // This is a routine derived from wxFindWindowAtPoint (the unexported variant thereof).

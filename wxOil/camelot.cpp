@@ -298,7 +298,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
 			pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxComboControl) )
+			pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) )
 			)
 		{
 			TRACEUSER( "jlh92", _T("Control gets keys") );

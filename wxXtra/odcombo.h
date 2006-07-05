@@ -19,10 +19,11 @@
 
 #include <wx/wx.h>
 
-#if wxUSE_OWNERDRAWNCOMBOBOX
-#undef wxXTRA_OWNERDRAWNCOMBOBOX
+#if wxUSE_ODCOMBOBOX
+#undef wxXTRA_ODCOMBOBOX
+#include <wx/odcombo.h>
 #else
-#define wxXTRA_OWNERDRAWNCOMBOBOX 1
+#define wxXTRA_ODCOMBOBOX 1
 
 #include <wx/ctrlsub.h>
 #include <wx/vlbox.h>
@@ -50,7 +51,7 @@ enum
 {
     // when set, we are painting the selected item in control,
     // not in the popup
-    wxCP_PAINTING_CONTROL           = 0x0001
+    wxODCB_PAINTING_CONTROL           = 0x0001
 };
 
 

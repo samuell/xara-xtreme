@@ -198,7 +198,7 @@ void wxCamBitmapDropdownPopup::PaintComboControl(wxDC& dc, const wxRect& rect)
 //		m_combo->DrawFocusBackground(dc,rect,0);
         
         // Draw the control regardless whether it has an item selected or not.
-		OnDrawItem(dc, rect, m_value, wxCP_PAINTING_CONTROL);
+		OnDrawItem(dc, rect, m_value, wxODCB_PAINTING_CONTROL);
 		
 		return;
     }
@@ -256,8 +256,14 @@ wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, i
         height = 50;
 
     // Take scrollbar into account in width calculations
+#if wxCHECK_VERSION(2,7,0)
+	// Oh dear, someone made the member private
+PORTNOTE("wx", "m_widestWidth not able to be read")
+	int iWidth = 50;
+#else
     int iWidth = m_widestWidth;
-    if (bNeedScrollbar)
+#endif
+	if (bNeedScrollbar)
     	iWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 //	int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     

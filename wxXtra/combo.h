@@ -19,6 +19,12 @@
 
 #include <wx/wx.h>
 
+#if wxUSE_COMBOCTRL
+#undef wxXTRA_COMBOCTRL
+#include <wx/combo.h>
+#else
+#define wxXTRA_COMBOCTRL 1
+
 /*
    A few words about all the classes defined in this file are probably in
    order: why do we need extra wxComboControl and wxComboPopup classes?
@@ -42,11 +48,6 @@
    impossible to have a class deriving from both wxListBx and from it, so
    instead it is just a mix-in.
  */
-
-#if wxUSE_COMBOCONTROL
-#undef wxXTRA_COMBOCONTROL
-#else
-#define wxXTRA_COMBOCONTROL 1
 
 class WXDLLEXPORT wxComboPopup;
 

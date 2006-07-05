@@ -461,7 +461,9 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 										// tool switch that deletes them deleting the window.
 		}
 
-		wxString Title = pDialogWnd->GetTitle();
+		wxString Title = *wxEmptyString;
+		if (pDialogWnd->IsKindOf(CLASSINFO(wxDialog)))
+			Title=((wxDialog *)pDialogWnd)->GetTitle();
 		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
 		if (Title.IsEmpty())
 		{
@@ -3033,7 +3035,7 @@ BOOL DialogManager::SetListBoxSelection( CWindowID WindowID, CGadgetID Gadget, I
 		else
 		{
 			INT32 i;
-			for (i=0; i<((wxListBox *)pGadget)->GetCount(); i++)
+			for (i=0; i<(INT32)((wxListBox *)pGadget)->GetCount(); i++)
 			{
 				if (SelectIt)
 				{
@@ -3137,10 +3139,10 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 				// it a go then..
 				INT32 i;
 				if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
-					for (i=0; i<((wxOwnerDrawnComboBox *)pGadget)->GetCount(); i++)
+					for (i=0; i<(INT32)((wxOwnerDrawnComboBox *)pGadget)->GetCount(); i++)
 						((wxOwnerDrawnComboBox *)pGadget)->SetSelection(i);
 				else
-					for (i=0; i<((wxControlWithItems *)pGadget)->GetCount(); i++)
+					for (i=0; i<(INT32)((wxControlWithItems *)pGadget)->GetCount(); i++)
 						((wxControlWithItems *)pGadget)->SetSelection(i);
 			}
 			else
@@ -4018,12 +4020,12 @@ String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
 		{
 			if (pGadget->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)))
 			{
-				if (ListPos>=((wxOwnerDrawnComboBox *)pGadget)->GetCount()) goto invalid;
+				if (ListPos>=(INT32)((wxOwnerDrawnComboBox *)pGadget)->GetCount()) goto invalid;
 				String = ((wxOwnerDrawnComboBox *)pGadget)->GetString(ListPos);
 			}
 			else
 			{
-				if (ListPos>=((wxControlWithItems *)pGadget)->GetCount()) goto invalid;
+				if (ListPos>=(INT32)((wxControlWithItems *)pGadget)->GetCount()) goto invalid;
 				String = ((wxControlWithItems *)pGadget)->GetString(ListPos);
 			}
 			goto out;
@@ -6650,7 +6652,9 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, C
 	// Just to  be safe
 	ERROR1IF(pNewPage == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
 
-	wxString Title = pNewPage->GetTitle();
+	wxString Title = *wxEmptyString;
+	if (pNewPage->IsKindOf(CLASSINFO(wxDialog)))
+		Title=((wxDialog *)pNewPage)->GetTitle();
 	if (Title.IsEmpty()) 
 		Title = pNewPage->GetLabel(); // because wxPanel doesn't seem to support a title
 	if( Title.IsEmpty() )

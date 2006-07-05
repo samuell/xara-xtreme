@@ -26,7 +26,7 @@
 
 #include "odcombo.h"
 // Only compile stuff if this is not already in WX
-#if wxXTRA_OWNERDRAWNCOMBOBOX
+#if wxXTRA_ODCOMBOBOX
 
 #include <wx/renderer.h>
 
@@ -101,7 +101,7 @@ void wxVListBoxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
         m_combo->DrawFocusBackground(dc,rect,0);
         if ( m_value >= 0 )
         {
-            OnDrawItem(dc,rect,m_value,wxCP_PAINTING_CONTROL);
+            OnDrawItem(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
             return;
         }
     }
@@ -152,7 +152,7 @@ void wxVListBoxComboPopup::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t
 // This is called from wxVListBoxComboPopup::OnDrawItem, with text colour and font prepared
 void wxVListBoxComboPopup::OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
 {
-    if ( flags & wxCP_PAINTING_CONTROL )
+    if ( flags & wxODCB_PAINTING_CONTROL )
     {
         dc.DrawText( m_combo->GetValue(),
                      rect.x + m_combo->GetTextIndent(),

@@ -3461,7 +3461,7 @@ BOOL OSRenderRegion::DrawTransformedBitmap(NodeBitmap *pNodeBitmap)
 
 				if (pwxImage)
 				{
-					wxBitmap TheBitmap(pwxImage);
+					wxBitmap TheBitmap(*pwxImage);
 					RenderDC->DrawBitmap(TheBitmap, DestTopLeft.x, DestTopLeft.y, TRUE);
 					delete pwxImage;
 				}

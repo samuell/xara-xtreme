@@ -20,6 +20,7 @@
 
 #if wxUSE_AUI
 #undef wxXTRA_AUI
+#include <wx/aui/floatpane.h>
 #else
 #define wxXTRA_AUI 1
 

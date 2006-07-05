@@ -22,6 +22,7 @@
 
 #if wxUSE_AUI
 #undef wxXTRA_AUI
+#include <wx/aui/dockart.h>
 #else
 #define wxXTRA_AUI 1
 

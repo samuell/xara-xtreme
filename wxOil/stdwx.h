@@ -116,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/except.h>
 #include <wx/fileconf.h>
 #include <wx/file.h>
+#include <wx/filedlg.h>
 #include <wx/filesys.h>
 #include <wx/fontenum.h>
 #include <wx/fs_mem.h>

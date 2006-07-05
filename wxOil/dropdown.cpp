@@ -724,7 +724,7 @@ wxSize DropDown::DrawText(void * ItemData, wxDC& dc, wxRect& TextRect, INT32 ite
 {
 	if (Draw)
 	{
-		if ( (m_pPopup->wxVListBox::GetSelection() == (INT32)item) && !(flags & wxCP_PAINTING_CONTROL) )
+		if ( (m_pPopup->wxVListBox::GetSelection() == (INT32)item) && !(flags & wxODCB_PAINTING_CONTROL) )
 			dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
 		else
 			dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
