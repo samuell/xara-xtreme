@@ -5641,7 +5641,7 @@ DocCoord OpDragStoryPathLeftIndent::InternalConstrain(DocCoord Current, ClickMod
 
 	INT32 NearEl=0;
 	double mu=0.0;
-//	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
+	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
 	DocCoord LinePoint = mpStoryPath->InkPath.ClosestPointTo(mu, NearEl);
 
 	// We need to stop the left hand blob going past the right hand one.
@@ -5676,7 +5676,7 @@ DocCoord OpDragStoryPathRightIndent::InternalConstrain(DocCoord Current, ClickMo
 	
 	INT32 NearEl=0;
 	double mu=0.0;
-//	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
+	double SqrDist = mpStoryPath->InkPath.SqrDistanceToPoint(Current, &NearEl, &mu);
 	DocCoord LinePoint = mpStoryPath->InkPath.ClosestPointTo(mu, NearEl);
 
 	// We need to stop the right hand blob going past the left hand one.
