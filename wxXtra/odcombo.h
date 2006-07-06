@@ -125,6 +125,8 @@ public:
     wxCoord GetTotalHeight() const { return EstimateTotalHeight(); }
     wxCoord GetLineHeight(int line) const { return OnGetLineHeight(line); }
 
+	int GetWidestItemWidth() { return m_widestWidth; }
+
 protected:
 
     // Called by OnComboDoubleClick and OnComboKeyEvent

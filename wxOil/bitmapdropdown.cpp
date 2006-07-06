@@ -256,13 +256,7 @@ wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, i
         height = 50;
 
     // Take scrollbar into account in width calculations
-#if wxCHECK_VERSION(2,7,0)
-	// Oh dear, someone made the member private
-PORTNOTE("wx", "m_widestWidth not able to be read")
-	int iWidth = 50;
-#else
-    int iWidth = m_widestWidth;
-#endif
+    int iWidth = GetWidestItemWidth();
 	if (bNeedScrollbar)
     	iWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 //	int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
