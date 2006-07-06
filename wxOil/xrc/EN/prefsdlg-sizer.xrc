@@ -1061,8 +1061,6 @@
                         <flag>wxALIGN_RIGHT|wxALL</flag>
                         <border>5</border>
                         <object class="wxButton" name="IDC_OPTS_RESET">
-                            <size>112,24</size>
-                            <pos>180,117</pos>
                             <label>Reset &amp;defaults</label>
                         </object>
                     </object>
