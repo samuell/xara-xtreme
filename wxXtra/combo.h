@@ -22,8 +22,10 @@
 #if wxUSE_COMBOCTRL
 #undef wxXTRA_COMBOCTRL
 #include <wx/combo.h>
+#define wxIndex unsigned int
 #else
 #define wxXTRA_COMBOCTRL 1
+#define wxIndex int
 
 /*
    A few words about all the classes defined in this file are probably in
@@ -49,10 +51,11 @@
    instead it is just a mix-in.
  */
 
+class WXDLLIMPEXP_CORE wxTextCtrl;
 class WXDLLEXPORT wxComboPopup;
 
 //
-// New window styles for wxComboControlBase
+// New window styles for wxComboCtrlBase
 //
 enum
 {
@@ -69,7 +72,7 @@ enum
 };
 
 
-// wxComboControl internal flags
+// wxComboCtrl internal flags
 enum
 {
     // First those that can be passed to Customize.
@@ -100,8 +103,8 @@ enum
 };
 
 
-// Namespace for wxComboControl feature flags
-struct wxComboControlFeatures
+// Namespace for wxComboCtrl feature flags
+struct wxComboCtrlFeatures
 {
     enum
     {
@@ -128,12 +131,12 @@ struct wxComboControlFeatures
 };
 
 
-class WXDLLEXPORT wxComboControlBase : public wxControl
+class WXDLLEXPORT wxComboCtrlBase : public wxControl
 {
     friend class wxComboPopup;
 public:
     // ctors and such
-    wxComboControlBase() : wxControl() { Init(); }
+    wxComboCtrlBase() : wxControl() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -144,7 +147,7 @@ public:
                 const wxValidator& validator,
                 const wxString& name);
 
-    virtual ~wxComboControlBase();
+    virtual ~wxComboCtrlBase();
 
     // show/hide popup window
     virtual void ShowPopup();
@@ -158,10 +161,17 @@ public:
 
     // set interface class instance derived from wxComboPopup
     // NULL popup can be used to indicate default in a derived class
-    virtual void SetPopupControl( wxComboPopup* popup );
+    void SetPopupControl( wxComboPopup* popup )
+    {
+        DoSetPopupControl(popup);
+    }
 
     // get interface class instance derived from wxComboPopup
-    wxComboPopup* GetPopupControl() const { return m_popupInterface; }
+    wxComboPopup* GetPopupControl()
+    {
+        EnsurePopupControl();
+        return m_popupInterface;
+    }
 
     // get the popup window containing the popup control
     wxWindow *GetPopupWindow() const { return m_winPopup; }
@@ -302,7 +312,7 @@ public:
     // flags: wxRendererNative flags: wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
     //                                wxCONTROL_SELECTED: list item is selected
     //                                wxCONTROL_DISABLED: control/item is disabled
-    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
+    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const;
 
     // Returns true if focus indicator should be drawn in the control.
     bool ShouldDrawFocus() const
@@ -373,9 +383,14 @@ protected:
     // Creates popup window, calls interface->Create(), etc
     void CreatePopup();
 
+    // Destroy popup window and all related constructs
+    void DestroyPopup();
+
     // override the base class virtuals involved in geometry calculations
-    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
+
+    // NULL popup can be used to indicate default in a derived class
+    virtual void DoSetPopupControl(wxComboPopup* popup);
 
     // ensures there is atleast the default popup
     void EnsurePopupControl();
@@ -395,7 +410,7 @@ protected:
     void OnTextCtrlEvent(wxCommandEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // Set customization flags (directs how wxComboControlBase helpers behave)
+    // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
     // Dispatches size event and refreshes
@@ -510,30 +525,30 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    DECLARE_ABSTRACT_CLASS(wxComboControlBase)
+    DECLARE_ABSTRACT_CLASS(wxComboCtrlBase)
 };
 
 
 // ----------------------------------------------------------------------------
 // wxComboPopup is the interface which must be implemented by a control to be
-// used as a popup by wxComboControl
+// used as a popup by wxComboCtrl
 // ----------------------------------------------------------------------------
 
 
 // wxComboPopup internal flags
 enum
 {
-    wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboControlBase after Create is called
+    wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboCtrlBase after Create is called
 };
 
 
 class WXDLLEXPORT wxComboPopup
 {
-    friend class wxComboControlBase;
+    friend class wxComboCtrlBase;
 public:
     wxComboPopup()
     {
-        m_combo = (wxComboControlBase*) NULL;
+        m_combo = (wxComboCtrlBase*) NULL;
         m_iFlags = 0;
     }
 
@@ -569,12 +584,12 @@ public:
     // Default implementation draws value as string.
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
 
-    // Receives key events from the parent wxComboControl.
+    // Receives key events from the parent wxComboCtrl.
     // Events not handled should be skipped, as usual.
     virtual void OnComboKeyEvent( wxKeyEvent& event );
 
     // Implement if you need to support special action when user
-    // double-clicks on the parent wxComboControl.
+    // double-clicks on the parent wxComboCtrl.
     virtual void OnComboDoubleClick();
 
     // Return final size of popup. Called on every popup, just prior to OnShow.
@@ -604,22 +619,21 @@ public:
     }
 
     // Default PaintComboControl behaviour
-    static void DefaultPaintComboControl( wxComboControlBase* combo,
+    static void DefaultPaintComboControl( wxComboCtrlBase* combo,
                                           wxDC& dc,
                                           const wxRect& rect );
 
 protected:
-    wxComboControlBase* m_combo;
+    wxComboCtrlBase* m_combo;
     wxUint32            m_iFlags;
 
 private:
-    // Called in wxComboControlBase::SetPopupControl
-    void InitBase(wxComboControlBase *combo)
+    // Called in wxComboCtrlBase::SetPopupControl
+    void InitBase(wxComboCtrlBase *combo)
     {
         m_combo = combo;
     }
 };
-
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent header defining the real class

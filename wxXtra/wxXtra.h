@@ -14,6 +14,7 @@
 #include "combo.h"
 #include "combog.h"
 #include "odcombo.h"
+#include "xh_odcombo.h"
 #include "platform.h"
 #include "advsplash.h"
 #include "treebook.h"

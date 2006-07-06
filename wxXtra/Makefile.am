@@ -8,7 +8,7 @@ noinst_LIBRARIES	= libwxXtra.a
 # the application source, library search path, and link libraries
 libwxXtra_a_SOURCES = \
 	framemanager.cpp floatpane.cpp dockart.cpp \
-	doublebuffer.cpp cwfrompoint.cpp combo.cpp combog.cpp odcombo.cpp \
+	doublebuffer.cpp cwfrompoint.cpp combo.cpp combog.cpp odcombo.cpp xh_odcombo.cpp\
 	platform.cpp advsplash.cpp treebook.cpp xh_treebk.cpp
 
 # make sure this does NOT have our include files in the path

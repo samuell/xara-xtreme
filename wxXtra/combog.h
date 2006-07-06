@@ -24,7 +24,6 @@
 #undef wxXTRA_COMBOCTRL
 #else
 #define wxXTRA_COMBOCTRL 1
-#define wxComboCtrl wxComboControl
 
 #include "combo.h"
 
@@ -32,7 +31,7 @@
 #if !defined(wxCOMBOCONTROL_FULLY_FEATURED)
 
 // ----------------------------------------------------------------------------
-// Generic wxComboControl
+// Generic wxComboCtrl
 // ----------------------------------------------------------------------------
 
 #if defined(__WXUNIVERSAL__)
@@ -45,12 +44,13 @@
 
 #endif
 
+extern WXDLLIMPEXP_DATA_CORE(const wxChar *) wxComboBoxNameStr;
 
-class WXDLLEXPORT wxGenericComboControl : public wxComboControlBase
+class WXDLLEXPORT wxGenericComboControl : public wxComboCtrlBase
 {
 public:
     // ctors and such
-    wxGenericComboControl() : wxComboControlBase() { Init(); }
+    wxGenericComboControl() : wxComboCtrlBase() { Init(); }
 
     wxGenericComboControl(wxWindow *parent,
                           wxWindowID id = wxID_ANY,
@@ -60,7 +60,7 @@ public:
                           long style = 0,
                           const wxValidator& validator = wxDefaultValidator,
                           const wxString& name = wxComboBoxNameStr)
-        : wxComboControlBase()
+        : wxComboCtrlBase()
     {
         Init();
 
@@ -78,7 +78,7 @@ public:
 
     virtual ~wxGenericComboControl();
 
-    static int GetFeatures() { return wxComboControlFeatures::All; }
+    static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
 #if defined(__WXUNIVERSAL__)
     // we have our own input handler and our own actions
@@ -107,15 +107,15 @@ private:
 
 #ifndef _WX_COMBOCONTROL_H_
 
-// If native wxComboControl was not defined, then prepare a simple
+// If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
 
-class WXDLLEXPORT wxComboControl : public wxGenericComboControl
+class WXDLLEXPORT wxComboCtrl : public wxGenericComboControl
 {
 public:
-    wxComboControl() : wxGenericComboControl() {}
+    wxComboCtrl() : wxGenericComboControl() {}
 
-    wxComboControl(wxWindow *parent,
+    wxComboCtrl(wxWindow *parent,
                    wxWindowID id = wxID_ANY,
                    const wxString& value = wxEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
@@ -128,33 +128,19 @@ public:
         (void)Create(parent, id, value, pos, size, style, validator, name);
     }
 
-    virtual ~wxComboControl() {}
+    virtual ~wxComboCtrl() {}
 
 protected:
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxComboControl)
+    DECLARE_DYNAMIC_CLASS(wxComboCtrl)
 };
 
 #endif // _WX_COMBOCONTROL_H_
 
-#define WXXTRA_COMBO_XML_HANDLERS
-
-class WXDLLIMPEXP_XRC wxComboControlXmlHandler : public wxXmlResourceHandler
-{
-DECLARE_DYNAMIC_CLASS(wxComboControlXmlHandler)
-public:
-    wxComboControlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
-private:
-    bool m_insideBox;
-    wxArrayString strList;
-};
-
 #else
 
-#define wxGenericComboControl   wxComboControl
+#define wxGenericComboControl   wxComboCtrl
 
 #endif // !defined(wxCOMBOCONTROL_FULLY_FEATURED)
 

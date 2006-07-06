@@ -25,7 +25,7 @@
 #include "combog.h"
 
 #if wxXTRA_COMBOCTRL
-
+#include "combo.h"
 #include <wx/dcbuffer.h>
 
 // ----------------------------------------------------------------------------
@@ -81,13 +81,13 @@
 // wxGenericComboControl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericComboControl, wxComboControlBase)
+BEGIN_EVENT_TABLE(wxGenericComboControl, wxComboCtrlBase)
     EVT_PAINT(wxGenericComboControl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxGenericComboControl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericComboControl, wxComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericComboControl, wxComboCtrlBase)
 
 void wxGenericComboControl::Init()
 {
@@ -139,14 +139,14 @@ bool wxGenericComboControl::Create(wxWindow *parent,
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
 
     // create main window
-    if ( !wxComboControlBase::Create(parent,
-                                     id,
-                                     value,
-                                     pos,
-                                     size,
-                                     style | wxFULL_REPAINT_ON_RESIZE,
-                                     wxDefaultValidator,
-                                     name) )
+    if ( !wxComboCtrlBase::Create(parent,
+                                  id,
+                                  value,
+                                  pos,
+                                  size,
+                                  style | wxFULL_REPAINT_ON_RESIZE,
+                                  wxDefaultValidator,
+                                  name) )
         return false;
 
     // Create textctrl, if necessary
@@ -158,7 +158,7 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     // Set background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM ); // for double-buffering
 
-    // SetSize should be called last
+    // SetBestSize should be called last
     SetBestSize(size);
 
     return true;
@@ -356,97 +356,8 @@ bool wxGenericComboControl::PerformAction(const wxControlAction& action,
 
 // If native wxComboControl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
-#ifndef _WX_COMBOCONTROL_H_
-IMPLEMENT_DYNAMIC_CLASS(wxComboControl, wxGenericComboControl)
-#endif
-
-#ifdef WXXTRA_COMBO_XML_HANDLERS
-IMPLEMENT_DYNAMIC_CLASS(wxComboControlXmlHandler, wxXmlResourceHandler)
-
-wxComboControlXmlHandler::wxComboControlXmlHandler()
-: wxXmlResourceHandler() , m_insideBox(false)
-{
-    XRC_ADD_STYLE(wxCB_SIMPLE);
-    XRC_ADD_STYLE(wxCB_SORT);
-    XRC_ADD_STYLE(wxCB_READONLY);
-    XRC_ADD_STYLE(wxCB_DROPDOWN);
-    XRC_ADD_STYLE(wxCC_SPECIAL_DCLICK);
-    XRC_ADD_STYLE(wxCC_ALT_KEYS);
-    XRC_ADD_STYLE(wxCC_STD_BUTTON);
-    XRC_ADD_STYLE(wxCC_BUTTON_OUTSIDE_BORDER);
-    XRC_ADD_STYLE(wxCC_POPUP_ON_MOUSE_UP);
-    XRC_ADD_STYLE(wxCC_NO_TEXT_AUTO_SELECT);
-    AddWindowStyles();
-}
-
-wxObject *wxComboControlXmlHandler::DoCreateResource()
-{
-    if( m_class == wxT("wxComboControl"))
-    {
-        // find the selection
-        long selection = GetLong( wxT("selection"), -1 );
-
-        // need to build the list of strings from children
-        m_insideBox = true;
-        CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
-        wxString *strings = (wxString *) NULL;
-        if (strList.GetCount() > 0)
-        {
-            strings = new wxString[strList.GetCount()];
-            int count = strList.GetCount();
-            for (int i = 0; i < count; i++)
-                strings[i]=strList[i];
-        }
-
-        XRC_MAKE_INSTANCE(control, wxComboControl)
-
-        control->Create(m_parentAsWindow,
-                        GetID(),
-                        GetText(wxT("value")),
-                        GetPosition(), GetSize(),
-                        /*strList.GetCount(),*/
-                        /*strings,*/
-                        GetStyle(),
-                        wxDefaultValidator,
-                        GetName());
-
-        if (selection != -1)
-            control->SetSelection(selection, selection);
-
-        SetupWindow(control);
-
-        if (strings != NULL)
-            delete[] strings;
-        strList.Clear();    // dump the strings
-
-        return control;
-    }
-    else
-    {
-        // on the inside now.
-        // handle <item>Label</item>
-
-        // add to the list
-        wxString str = GetNodeContent(m_node);
-        if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
-            str = wxGetTranslation(str);
-        strList.Add(str);
-
-        return NULL;
-    }
-}
-
-bool wxComboControlXmlHandler::CanHandle(wxXmlNode *node)
-{
-// Avoid GCC bug
-//    return (IsOfClass(node, wxT("wxComboControl")) ||
-//           (m_insideBox && node->GetName() == wxT("item")));
-	bool fOurClass = node->GetPropVal(wxT("class"), wxEmptyString) == wxT("wxComboControl");
-    return (fOurClass ||
-           (m_insideBox && node->GetName() == wxT("item")));
-}
-
-
+#ifndef _WXXTRA_COMBOCONTROL_H_
+IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboControl)
 #endif
 
 #endif // !wxCOMBOCONTROL_FULLY_FEATURED
