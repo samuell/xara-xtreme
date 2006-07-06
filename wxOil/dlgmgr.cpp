@@ -461,7 +461,7 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 										// tool switch that deletes them deleting the window.
 		}
 
-		wxString Title = *wxEmptyString;
+		wxString Title = wxEmptyString;
 		if (pDialogWnd->IsKindOf(CLASSINFO(wxDialog)))
 			Title=((wxDialog *)pDialogWnd)->GetTitle();
 		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
@@ -6652,7 +6652,7 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, C
 	// Just to  be safe
 	ERROR1IF(pNewPage == NULL, FALSE, _R(IDS_OUT_OF_MEMORY));
 
-	wxString Title = *wxEmptyString;
+	wxString Title = wxEmptyString;
 	if (pNewPage->IsKindOf(CLASSINFO(wxDialog)))
 		Title=((wxDialog *)pNewPage)->GetTitle();
 	if (Title.IsEmpty()) 
