@@ -260,11 +260,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_NAMEGAL_PROP_IDX">
 			 <pos>116,92d</pos> <size>36,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_LIBGAL_CLIPTHEME">
 			 <pos>116,92d</pos> <size>45,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>4,80d</pos> <size>152,28d</size>
@@ -293,7 +293,7 @@
 			 <pos>0,0d</pos> <size>146,39d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_SGDISPLAY_DMODE">
 			 <pos>4,5d</pos> <size>139,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>3,23d</pos> <size>43,14d</size>
@@ -375,7 +375,7 @@
 			 <pos>0,0d</pos> <size>227,73d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_GALSORT_SORT1">
 			 <pos>7,17d</pos> <size>76,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE1">
 			 <pos>23,33d</pos> <size>44,10d</size>
@@ -383,7 +383,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_GALSORT_SORT2">
 			 <pos>95,17d</pos> <size>76,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_GALSORT_REVERSE2">
 			 <pos>111,33d</pos> <size>44,10d</size>

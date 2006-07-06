@@ -108,7 +108,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BMPOPTS_TIFF">
 			 <pos>165,99d</pos> <size>70,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>220,10d</pos> <size>50,14d</size>
@@ -196,7 +196,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_ANIMOPTS_REMOVAL">
 			 <pos>55,180d</pos> <size>67,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_RESTORE_STATIC">
 			 <pos>21,178d</pos> <size>30,10d</size>

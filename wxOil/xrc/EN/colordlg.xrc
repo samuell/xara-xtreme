@@ -21,7 +21,7 @@
                             </font>
                             <size>80,-1</size>
                             <buttonsize>17,-1</buttonsize>
-                            <style>wxCB_READONLY</style>
+                            <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -236,7 +236,7 @@
                                         </font>
                                         <size>80,-1</size>
                                         <buttonsize>17,-1</buttonsize>
-                                        <style>wxCB_READONLY</style>
+                                        <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
                                 <object class="sizeritem">
@@ -324,7 +324,7 @@
                                         </font>
                                         <size>80,-1</size>
                                         <buttonsize>17,-1</buttonsize>
-                                        <style>wxCB_READONLY</style>
+                                        <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
                             </object>
@@ -354,7 +354,7 @@
                                         </font>
                                         <size>80,-1</size>
                                         <buttonsize>17,-1</buttonsize>
-                                        <style>wxCB_READONLY</style>
+                                        <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                     </object>
                                 </object>
                             </object>

@@ -140,7 +140,7 @@
                                 <border>5</border>
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_COLOURBAR">
                                     <pos>129,175</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -156,7 +156,7 @@
                                 <border>5</border>
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_AUTOCOLOUR">
                                     <pos>129,203</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                         </object>
@@ -320,7 +320,7 @@
                         <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_IMPWITHLAYERS">
                             <size>250,-1</size>
                             <pos>105,186</pos>
-                            <style>wxCB_READONLY</style>
+                            <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                         </object>
                     </object>
                 </object>
@@ -355,6 +355,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_ANGLECONST">
                                     <size>60,-1</size>
                                     <pos>105,237</pos>
+                                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -469,7 +470,7 @@
                                 <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_SIZELIST">
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1034,7 +1035,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_LEFTBUTTON">
                                     <size>172,-1</size>
                                     <pos>120,48</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1052,7 +1053,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_RIGHTBUTTON">
                                     <size>172,-1</size>
                                     <pos>120,82</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                         </object>
@@ -1322,7 +1323,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_PAGEUNITS">
                                     <size>121,-1</size>
                                     <pos>76,48</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1340,7 +1341,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_FONTUNITS">
                                     <size>121,-1</size>
                                     <pos>76,76</pos>
-                                    <style>wxCB_READONLY</style>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                         </object>
@@ -1564,7 +1565,7 @@
                                         <object class="wxOwnerDrawnComboBox" name="IDC_OPTS_BASEUNIT">
                                             <size>150,-1</size>
                                             <pos>82,146</pos>
-                                            <style>wxCB_READONLY</style>
+                                            <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                                         </object>
                                     </object>
                                 </object>
@@ -1678,6 +1679,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_COMBO_LIVEEFFECT_RES">
                                     <size>123,-1</size>
                                     <pos>169,113</pos>
+                                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1695,6 +1697,7 @@
                                 <object class="wxOwnerDrawnComboBox" name="IDC_COMBO_LOCKEDEFFECT_RES">
                                     <size>123,-1</size>
                                     <pos>169,141</pos>
+                                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                                 </object>
                             </object>
                         </object>

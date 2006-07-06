@@ -356,7 +356,7 @@
                         <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_MAPNAME">
                             <size>183,-1</size>
                             <pos>295,42</pos>
-                            <style>wxCB_SORT|wxCB_READONLY</style>
+                            <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -374,7 +374,7 @@
                         <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_APPROX">
                             <size>183,-1</size>
                             <pos>295,86</pos>
-                            <style>wxCB_SORT|wxCB_READONLY</style>
+                            <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -580,7 +580,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_DITHERING_COMBO">
 			 <pos>52,7d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY</style>
+			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC2">
 			 <pos>7,24d</pos> <size>29,9d</size>
@@ -588,7 +588,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_PALETTE_COMBO">
 			 <pos>52,23d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY</style>
+			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC3">
 			 <pos>7,40d</pos> <size>42,9d</size>
@@ -596,7 +596,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COLOUR_DEPTH_COMBO">
 			 <pos>52,38d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY</style>
+			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC4">
 			 <pos>7,56d</pos> <size>43,9d</size>
@@ -607,7 +607,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COLOR_MODEL_LIST">
 			 <pos>80,54d</pos> <size>55,-1d</size>
-			 <style>wxCB_READONLY</style>
+			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_T2STATIC6">
 			 <pos>7,72d</pos> <size>20,9d</size>
@@ -671,7 +671,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_T2_SORT_LIST">
 			 <pos>296,71d</pos> <size>68,-1d</size>
-			 <style>wxCB_READONLY</style>
+			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<title>Palette Options</title>
 		<label>Palette Options</label>

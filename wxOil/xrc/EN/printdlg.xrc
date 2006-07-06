@@ -180,7 +180,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_FILLQUALLIST">
 			 <pos>48,145d</pos> <size>48,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 			<content>
 				<item>High</item>
 				<item>Normal</item>
@@ -379,7 +379,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="cmb1">
 			 <pos>55,-1094d</pos> <size>81,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="stc5">
 			 <pos>5,112d</pos> <size>25,9d</size>
@@ -417,7 +417,7 @@
 			 <pos>0,0d</pos> <size>194,74d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_DPIEDIT">
 			 <pos>10,23d</pos> <size>35,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_EXPORTTEXTASCURVES">
 			 <pos>10,52d</pos> <size>80,10d</size>
@@ -462,15 +462,15 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBORESOLUTION">
 			 <pos>110,43d</pos> <size>62,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOFREQUENCY">
 			 <pos>110,59d</pos> <size>62,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOTYPE">
 			 <pos>110,75d</pos> <size>84,-1d</size>
-			<style>wxCB_SORT|wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_CHECKSEPARATIONS">
 			 <pos>11,95d</pos> <size>89,8d</size>

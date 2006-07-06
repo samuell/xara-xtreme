@@ -39,7 +39,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<title>Flip &amp; Rotate</title>
 		<label>Flip &amp; Rotate</label>
@@ -70,7 +70,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_BFXDLG_DPI2">
 			 <pos>59,109d</pos> <size>49,8d</size>
@@ -115,7 +115,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxSlider" name="IDC_BFXDLG_BRIGHTNESS">
 			 <pos>67,98d</pos> <size>102,14d</size>
@@ -162,7 +162,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_BFXDLG_BAYERMONO">
 			 <pos>4,103d</pos> <size>82,10d</size>
@@ -216,11 +216,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
 			 <pos>5,98d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">
 			 <pos>99,83d</pos> <size>68,59d</size>
@@ -282,7 +282,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxSlider" name="IDC_BFXDLG_ALC_SATURATION_SLIDER">
 			 <pos>54,112d</pos> <size>28,14d</size>
@@ -503,7 +503,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_ORIGCOMBO">
 			 <pos>5,81d</pos> <size>37,-1d</size>
@@ -642,7 +642,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BFXDLG_EFFECTCOMBO">
 			 <pos>5,98d</pos> <size>77,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_BFXDLG_GRPCUSTOM">
 			 <pos>99,83d</pos> <size>68,59d</size>

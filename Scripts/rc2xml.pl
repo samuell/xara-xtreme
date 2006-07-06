@@ -616,6 +616,7 @@ sub ParseComboBox
     AddStyle ("wxCB_SORT",\$style) if ($token =~ /CBS_SORT/);
     AddStyle ("wxCB_ALWAYS_SB",\$style) if ($token =~ /CBS_DISABLENOSCROLL/);
     AddStyle ("wxCB_READONLY",\$style) if ($token =~ /CBS_DROPDOWNLIST/);
+    AddStyle ("wxTE_PROCESS_ENTER",\$style);
     WriteStyle($style);
     print OUTPUT "\t\t</object>\n";
 }

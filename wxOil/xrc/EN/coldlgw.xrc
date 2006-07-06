@@ -4,7 +4,7 @@
 			 <pos>0,0d</pos> <size>143,241d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_NAMEMENU">
 			 <pos>4,4d</pos> <size>85,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCamArtControl" name="IDC_EDIT_LINEFILL">
 			 <pos>107,400d</pos> <size>18,14d</size>
@@ -52,7 +52,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_COLMODEL">
 			 <pos>400,147d</pos> <size>104,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxCheckBox" name="IDC_EDIT_3D">
 			 <pos>11200,147d</pos> <size>24,12d</size>
@@ -60,11 +60,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_COLTYPE">
 			 <pos>3,165d</pos> <size>135,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_EDIT_PARENTCOL">
 			 <pos>36,183d</pos> <size>103,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_TINT">
 			 <pos>35,201d</pos> <size>20,13d</size>

@@ -50,7 +50,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_BIASGAINCOMBO">
 			 <pos>7,7d</pos> <size>24,-1d</size>
-		<style>wxCB_READONLY</style>
+		<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_BIAS">
 			 <pos>95,102d</pos> <size>22,12d</size>

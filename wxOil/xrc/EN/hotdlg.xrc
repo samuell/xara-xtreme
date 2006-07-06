@@ -11,7 +11,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_WEBADDRESS_FRAME">
 			 <pos>7,53d</pos> <size>218,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxRadioButton" name="IDC_WEBADDRESS_OBJECTSHAPE">
 			 <pos>18,83d</pos> <size>79,11d</size>

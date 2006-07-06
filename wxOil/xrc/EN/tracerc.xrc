@@ -109,11 +109,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_TRACER_BITMAP">
 			 <pos>2,131d</pos> <size>124,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_TRACER_METHOD">
 			 <pos>2,149d</pos> <size>124,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_TRACER_3DFRAMEP2">
 			 <pos>135,131d</pos> <size>124,11d</size>

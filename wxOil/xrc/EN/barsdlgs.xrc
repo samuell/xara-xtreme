@@ -405,11 +405,11 @@
 			 <pos>0,0d</pos> <size>329,21d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_UNITS">
 			 <pos>63,4d</pos> <size>54,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_GRIDTYPE">
 			 <pos>183,4d</pos> <size>54,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_DIVISIONS">
 			 <pos>6,4d</pos> <size>48,-1d</size>
@@ -431,14 +431,14 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_UNITS">
 			 <pos>46,5d</pos> <size>54,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_SUBDIVISIONS">
 			 <pos>105,5d</pos> <size>36,-1d</size>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_GRIDTYPE">
 			 <pos>146,5d</pos> <size>54,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<title></title>
 		<label></label>
@@ -552,7 +552,7 @@
 			 <pos>0,0d</pos> <size>122,19d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_LAYER_COMBO">
 			 <pos>10,3d</pos> <size>88,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="IDC_INVOKE_LYR_DLG">
 			 <pos>101,3d</pos> <size>12,12d</size>
@@ -701,7 +701,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_ORDER2">
 			 <pos>5,5d</pos> <size>85,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC_LE_CHANGEINSERT">
 			 <pos>10,45d</pos> <size>50,8d</size>
@@ -709,7 +709,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBOBOX_LE_TYPE2">
 			 <pos>5,60d</pos> <size>85,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="IDC_BUTTON_LE_EDIT">
 			 <pos>5,80d</pos> <size>25,14d</size>

@@ -35,7 +35,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="ID_STATICDECIMAL_1136">
 			 <pos>6,132d</pos> <size>140,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
 			 <pos>6,122d</pos> <size>142,9d</size>
@@ -43,7 +43,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="ID_STATICDECIMAL_1137">
 			 <pos>6,132d</pos> <size>142,-1d</size>
-			<style>wxCB_SORT|wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>154,26d</pos> <size>50,14d</size>
@@ -103,7 +103,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="ID_STATICDECIMAL_1136">
 			 <pos>6,132d</pos> <size>90,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="ID_STATICDECIMAL_1091">
 			 <pos>6,122d</pos> <size>142,9d</size>
@@ -111,7 +111,7 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="ID_STATICDECIMAL_1137">
 			 <pos>6,132d</pos> <size>142,-1d</size>
-			<style>wxCB_SORT|wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxButton" name="wxID_OK">
 			 <pos>154,26d</pos> <size>50,14d</size>

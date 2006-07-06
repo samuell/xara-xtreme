@@ -4,11 +4,11 @@
 			 <pos>0,0d</pos> <size>188,165d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_IMAGEMAP_MAPNAME">
 			 <pos>45,7d</pos> <size>135,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_IMAGEMAP_APPROX">
 			 <pos>106,26d</pos> <size>75,-1d</size>
-			<style>wxCB_READONLY</style>
+			<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_IMAGEMAP_WIDTH">
 			 <pos>47,55d</pos> <size>30,14d</size>

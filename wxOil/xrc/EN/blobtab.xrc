@@ -63,11 +63,11 @@
 			 <pos>0,0d</pos> <size>160,100d</size>
 		<object class="wxOwnerDrawnComboBox" name="IDC_TCOMBO3">
 			 <pos>16,22d</pos> <size>56,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_TCOMBO4">
 			 <pos>85,22d</pos> <size>48,-1d</size>
-			<style>wxCB_SORT|wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticText" name="IDC_TSTDEF">
 			 <pos>16,11d</pos> <size>30,8d</size>
@@ -204,11 +204,11 @@
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO3">
 			 <pos>20,182d</pos> <size>56,-1d</size>
-			<style>wxCB_SORT</style>
+			<style>wxCB_SORT|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxOwnerDrawnComboBox" name="IDC_COMBO4">
 			 <pos>89,182d</pos> <size>48,-1d</size>
-			<style>wxCB_SORT|wxCB_READONLY</style>
+			<style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
 		</object>
 		<object class="wxStaticBox" name="IDC_STCONV">
 			 <pos>4,160d</pos> <size>233,86d</size>
