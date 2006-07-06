@@ -1487,6 +1487,8 @@ BOOL CamResource::Init()
 	// This is because it tries to initialize the MIME system (sigh)
 	wxMemoryFSHandler::AddFile(_T("resources"), pFile, Length); // Irritatingly does not return errors
 
+	wxXmlResource::Get()->SetFlags(wxXRC_NO_RELOADING); // reloading fails with assert due to missing timestamps
+
 #if !defined(EXCLUDE_FROM_XARLIB)
 	// Add bitmap extenstions
 	BitmapExtensions.Add(_T("png"));

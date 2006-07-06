@@ -259,7 +259,7 @@ BOOL CCResourceFile::open(LPCTSTR ResName, LPCTSTR WXUNUSED(ResType), FileAccess
 	pStream->Read( MemFile, FileSize );
 	
 	// If we haven't read all the file, we must have failed
-	return wxSTREAM_EOF == pStream->GetLastError();
+	return (pStream->LastRead() == FileSize);
 
 #if 0
 	HRSRC   	hResource;
