@@ -185,7 +185,7 @@ sub GetComboStyle
 		    "IDLB_JOINTYPE_LIST_BOX" => "wxCB_READONLY",
 		    "IDLB_LINECAP_LIST_BOX" => "wxCB_READONLY"
 		   );
-    return $cnamemap{ $control } || $default;
+    return ( $cnamemap{ $control } || $default )."|wxTE_PROCESS_ENTER";
 }
 
 sub GetText
@@ -1394,7 +1394,7 @@ sub BuildOptokenMap
 
 sub BuildStringTable
 {
-    open (ST, "wxOil/xrc/strings.lst");
+    open (ST, "debug/wxOil/xrc/strings.lst");
     while (<ST>)
     {
 	chomp;

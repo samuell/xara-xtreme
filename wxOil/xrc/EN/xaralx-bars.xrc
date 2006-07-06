@@ -987,7 +987,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
@@ -1026,7 +1026,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineWidth</optoken>
                 </object>
@@ -1463,7 +1463,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_FEATHERPROFILE_GDGT">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <optoken>FeatherProfile</optoken>
                 </object>
             </object>
@@ -2382,7 +2382,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineWidth</optoken>
                 </object>
@@ -2400,7 +2400,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineJoin</optoken>
                 </object>
@@ -2418,7 +2418,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ChangeLineCap</optoken>
                 </object>
@@ -2662,7 +2662,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>NameGalleryPropertyIndex</optoken>
                 </object>
@@ -3397,7 +3397,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
@@ -3466,7 +3466,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <optoken>ZoomCombo</optoken>
                 </object>
@@ -3650,7 +3650,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Number of sides</tooltip>
                     <help>Enter the number of sides the QuickShape has</help>
@@ -3669,7 +3669,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
@@ -3875,7 +3875,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
@@ -4067,7 +4067,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Editable items</tooltip>
                     <help>Select items from this menu to edit</help>
@@ -4209,7 +4209,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill type</tooltip>
                     <help>Choose the type of fill</help>
@@ -4228,7 +4228,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
@@ -4247,7 +4247,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
@@ -4266,7 +4266,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
@@ -4349,7 +4349,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Transparency shape</tooltip>
                     <help>Choose the type of fill</help>
@@ -4368,7 +4368,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Transparency type</tooltip>
                     <help>Choose the type of transparency</help>
@@ -4387,7 +4387,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill tiling</tooltip>
                     <help>Choose the rate of fade from one point to another</help>
@@ -4406,7 +4406,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
@@ -5852,7 +5852,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing brush</tooltip>
                     <help>Select an existing brush</help>
@@ -5871,7 +5871,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing stroke shape / pressure profile</tooltip>
                     <help>Select an existing stroke shape / pressure profile</help>
@@ -5958,7 +5958,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Colour blend effect</tooltip>
                     <help>Choose the way in which colours are blended together</help>
@@ -6314,7 +6314,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Change the colour effect</tooltip>
                     <help>Change the colour effect of the contour rings</help>
@@ -6470,7 +6470,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Bevel type</tooltip>
                     <help>Select the appearance of the bevel from the list</help>
@@ -6489,7 +6489,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Slider type</tooltip>
                     <help>Use the slider to change the bevel settings</help>
@@ -6608,7 +6608,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY</style>
+                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Font</tooltip>
                     <help>Set font typeface; choose from TrueType fonts</help>
@@ -6627,7 +6627,7 @@
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_DROPDOWN</style>
+                    <style>wxCB_DROPDOWN|wxTE_PROCESS_ENTER</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Size</tooltip>
                     <help>Set font size</help>
