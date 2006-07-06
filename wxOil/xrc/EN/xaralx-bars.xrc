@@ -1082,7 +1082,7 @@
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>1</border>
                 <object class="wxCamArtControl" name="IDC_FEATHERPROFILE_GDGT">
-                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
                     <optoken>FeatherProfile</optoken>
                 </object>
             </object>

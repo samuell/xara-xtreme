@@ -329,16 +329,16 @@ public:
 	// Function to initialise the profile gadget 
 	virtual void OnControlCreate(OpDescControlCreateMsg* CreateMsg);	
 	// Function to handle a selection from the profile gadgets dropdown/edit boxes
+	virtual MsgResult Message(Msg* Msg);
+
+	
 	virtual void OnSelectionChange(OpDescControlMsg* SelChangedMsg, List* GadgetList);
 	// Function to handle profile gadget when changed by sliders
 	virtual void OnSliderSet(OpDescControlMsg* SelChangedMsg);
 	// Function to handle profile gadget when changed by sliders
 	virtual void OnSliderChanging(OpDescControlMsg* SliderChangingMsg);
 
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	static CBiasGainGadget  m_BiasGainGadget;
-#endif
 
 	static void SetBoolGadgetSelected (CGadgetID Gadget, BOOL IsSelected);
 

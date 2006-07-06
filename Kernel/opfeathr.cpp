@@ -150,10 +150,7 @@ CC_IMPLEMENT_DYNAMIC(ChangeFeatherProfileOpDesc, UndoableOpDescriptor)
 
 #define new CAM_DEBUG_NEW
 
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 CBiasGainGadget		ChangeFeatherProfileOpDesc::m_BiasGainGadget;
-#endif
 
 const MILLIPOINT	MaxFeatherSize = ((const MILLIPOINT)(MAX_FEATHERSIZE_MP));
 const MILLIPOINT	ChangeFeatherSizeSliderOpDesc::MinSlider = 0;
@@ -1421,16 +1418,35 @@ ChangeFeatherProfileOpDesc::ChangeFeatherProfileOpDesc(
 
 void ChangeFeatherProfileOpDesc::OnControlCreate(OpDescControlCreateMsg* CreateMsg)
 {
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	DialogOp* pDlg = CreateMsg->pDlgOp;
 	CGadgetID GadgetID = CreateMsg->SetGadgetID;
 
 	// link the profile gadget to its controlling button/infobar ....	
-	m_BiasGainGadget.LinkControlButton((InformationBarOp*) pDlg, GadgetID,_R(IDBBL_BIASGAIN),_R(IDS_BIASGAINDLG));
+	m_BiasGainGadget.Init(pDlg, GadgetID, _R(IDBBL_BIASGAIN), _R(IDS_BIASGAINDLG));
 	m_BiasGainGadget.ToggleFillProfile();
-#endif
 }
+
+
+
+MsgResult ChangeFeatherProfileOpDesc::Message(Msg* pMessage)
+{
+	if (MESSAGE_IS_A(pMessage, OpDescControlMsg))
+	{
+		OpDescControlMsg* pOpDescCtrlMsg = reinterpret_cast<OpDescControlMsg*>(pMessage);
+		if (pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGED || pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGEIDLE || 
+			pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGING)
+		{
+			CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
+		
+			FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
+			OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
+			Op->DoWithParam(this, &Param);
+		}
+	}
+	
+	return UndoableOpDescriptor::Message(pMessage);
+}
+
 
 /********************************************************************************************
 
@@ -1450,8 +1466,6 @@ void ChangeFeatherProfileOpDesc::OnSelectionChange(OpDescControlMsg* SelChangedM
 	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
 	// this just to get the following working + it would also slow things down somewhat ....
 	
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 
 	SliderChanging =  FALSE;
@@ -1460,7 +1474,6 @@ PORTNOTE("other", "Removed CBiasGainGadget usage")
 	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
 	OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
 	Op->DoWithParam(this, &Param);
-#endif
 }
 
 /********************************************************************************************
@@ -1480,9 +1493,7 @@ void ChangeFeatherProfileOpDesc::OnSliderSet(OpDescControlMsg* SelChangedMsg)
 	// ILAN:  Although it is possible for me to ammend the SelChangedMsg message so that the new
 	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
 	// this just to get the following working + it would also slow things down somewhat ....
-	
-PORTNOTE("effect", "Removed BiasGain usage")
-#ifndef EXCLUDE_FROM_XARALX
+
 	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 
 	if (SliderChanging)
@@ -1501,7 +1512,6 @@ PORTNOTE("effect", "Removed BiasGain usage")
 	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
 	OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
 	Op->DoWithParam(this, &Param);
-#endif
 }
 
 /********************************************************************************************
@@ -1522,8 +1532,6 @@ void ChangeFeatherProfileOpDesc::OnSliderChanging(OpDescControlMsg* SliderChangi
 	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
 	// this just to get the following working + it would also slow things down somewhat ....
 	
-PORTNOTE("effect", "Removed BiasGain usage")
-#ifndef EXCLUDE_FROM_XARALX
 	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 
 	if (SliderChanging)
@@ -1543,7 +1551,6 @@ PORTNOTE("effect", "Removed BiasGain usage")
 	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
 	OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
 	Op->DoWithParam(this, &Param);
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1623,8 +1630,6 @@ OpState OpChangeFeatherProfile::GetState(String_256* UIDescription, OpDescriptor
 
 void OpChangeFeatherProfile::Do(OpDescriptor* pOp)
 {
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (!(ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen ()))
 	{
 		CBiasGainDlg* pDialog_m  =  new CBiasGainDlg();
@@ -1678,7 +1683,6 @@ void ChangeFeatherProfileOpDesc::SetBoolGadgetSelected (CGadgetID Gadget, BOOL I
 			Gadgets.DeleteAll();
 		}
 	}*/
-#endif
 }
 
 
@@ -1993,8 +1997,6 @@ void OpChangeFeatherProfile::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 
 BOOL OpChangeFeatherProfile::OnSelChangingMsg(SelChangingMsg::SelectionState State)
 {
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen ())
 	{	
 		CProfileBiasGain CommonProfile;
@@ -2023,7 +2025,7 @@ PORTNOTE("other", "Removed CBiasGainGadget usage")
 				ChangeFeatherProfileOpDesc::m_BiasGainGadget.ReInitialiseDialog(&CommonProfile, FALSE);
 		}
 	}
-#endif
+	
 	return (TRUE);
 }
 
@@ -2105,8 +2107,6 @@ ActionCode ChangeFeatherProfileAction::Execute()
 										UndoProf,
 										&pAction );
 
-PORTNOTE ("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen())
 	{
 		// only way I can think of to get the profile dialog to reinialise itself is
@@ -2114,7 +2114,6 @@ PORTNOTE ("other", "Removed CBiasGainGadget usage")
 
 		BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::SELECTIONCHANGED, FALSE));
 	}
-#endif
 
 	return Act;
 }
@@ -2235,8 +2234,6 @@ ActionCode ChangeFeatherEffectProfileAction::Execute()
 	if (Act==AC_OK)
 		m_pFeatherEffect->SetProfile(m_LastProfile);
 
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen())
 	{
 		// only way I can think of to get the profile dialog to reinialise itself is
@@ -2244,7 +2241,6 @@ PORTNOTE("other", "Removed CBiasGainGadget usage")
 
 		BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::SELECTIONCHANGED, FALSE));
 	}
-#endif
 
 	return Act;
 }
@@ -2328,8 +2324,6 @@ ActionCode ChangeFeatherEffectAction::Execute()
 		m_pFeatherEffect->SetProfile(m_LastProfile);
 	}
 
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen())
 	{
 		// only way I can think of to get the profile dialog to reinitialise itself is
@@ -2337,7 +2331,6 @@ PORTNOTE("other", "Removed CBiasGainGadget usage")
 		BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::SELECTIONCHANGED, FALSE));
 //		BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::EFFECTSTACKCHANGED)); 
 	}
-#endif
 
 	return Act;
 }
@@ -2390,8 +2383,6 @@ ActionCode RegenerateFeatherContourAction::Execute()
 												UndoPath,
 												&pAction );
 
-PORTNOTE("other", "Removed CBiasGainGadget usage")
-#ifndef EXCLUDE_FROM_XARALX
 	if (ChangeFeatherProfileOpDesc::m_BiasGainGadget.IsDialogOpen())
 	{
 		// only way I can think of to get the profile dialog to reinialise itself is
@@ -2399,7 +2390,6 @@ PORTNOTE("other", "Removed CBiasGainGadget usage")
 
 		BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::SELECTIONCHANGED, FALSE));
 	}
-#endif
 
 	return Act;
 }
