@@ -1400,6 +1400,8 @@ ChangeFeatherProfileOpDesc::ChangeFeatherProfileOpDesc(
 						 resourceID, controlID, ReceiveMessages, Smart,
 						 Clean, 0, AutoStateFlags )
 {
+	m_bProfileChanging		= FALSE;
+	m_bProfileInitialChange = TRUE;
 }
 
 /********************************************************************************************
@@ -1433,48 +1435,17 @@ MsgResult ChangeFeatherProfileOpDesc::Message(Msg* pMessage)
 	if (MESSAGE_IS_A(pMessage, OpDescControlMsg))
 	{
 		OpDescControlMsg* pOpDescCtrlMsg = reinterpret_cast<OpDescControlMsg*>(pMessage);
-		if (pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGED || pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGEIDLE || 
-			pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGING)
-		{
-			CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 		
-			FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
-			OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
-			Op->DoWithParam(this, &Param);
-		}
+		if (pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGED)
+			OnProfileChanged(pOpDescCtrlMsg);
+		else if (pOpDescCtrlMsg->DlgMsg == DIM_PROFILE_CHANGING)
+			OnProfileChanging(pOpDescCtrlMsg);
 	}
 	
 	return UndoableOpDescriptor::Message(pMessage);
 }
 
 
-/********************************************************************************************
-
->	void ChangeFeatherProfileOpDesc::OnSelectionChange(OpDescControlMsg* SelChangedMsg, List* GadgetList)
-
-	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	15/3/2000
-
-	Purpose:	This function is called when a new selection is selected within the profile
-				dialogs dropdown.  This particular implementation gets the new profile value.
-
-********************************************************************************************/
-
-void ChangeFeatherProfileOpDesc::OnSelectionChange(OpDescControlMsg* SelChangedMsg, List* GadgetList)
-{
-	// ILAN:  Although it is possible for me to ammend the SelChangedMsg message so that the new
-	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
-	// this just to get the following working + it would also slow things down somewhat ....
-	
-	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
-
-	SliderChanging =  FALSE;
-	InitialStateChange = TRUE;
-
-	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
-	OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
-	Op->DoWithParam(this, &Param);
-}
 
 /********************************************************************************************
 
@@ -1483,12 +1454,11 @@ void ChangeFeatherProfileOpDesc::OnSelectionChange(OpDescControlMsg* SelChangedM
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/3/2000
 
-	Purpose:	This function is called when the slider is set within the profile dialog.
-				This particular implementation gets the new profile value.
+	Purpose:	Process the profile chenged message (it's send from BiasGain dialog
+				when the combobox is changed or when a slider is set (probably after dragging).
 
 ********************************************************************************************/
-
-void ChangeFeatherProfileOpDesc::OnSliderSet(OpDescControlMsg* SelChangedMsg)
+void ChangeFeatherProfileOpDesc::OnProfileChanged(OpDescControlMsg* SelChangedMsg)
 {
 	// ILAN:  Although it is possible for me to ammend the SelChangedMsg message so that the new
 	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
@@ -1496,18 +1466,18 @@ void ChangeFeatherProfileOpDesc::OnSliderSet(OpDescControlMsg* SelChangedMsg)
 
 	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 
-	if (SliderChanging)
+	if (m_bProfileChanging)
 	{
 		// expect SliderChanging to be true before a set is called. Already saved initial 
 		// state in first Op initiated by OpSliderChanging()
-		InitialStateChange = FALSE;
+		m_bProfileInitialChange = FALSE;
 	}
 	else
 	{
-		// Is this possible?
-		InitialStateChange = TRUE;
+		m_bProfileInitialChange = TRUE;
 	}
-	SliderChanging = FALSE;
+	
+	m_bProfileChanging = FALSE;
 
 	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
 	OpChangeFeatherProfile* Op = new OpChangeFeatherProfile();
@@ -1521,12 +1491,12 @@ void ChangeFeatherProfileOpDesc::OnSliderSet(OpDescControlMsg* SelChangedMsg)
 	Author:		Chris_Snook (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/3/2000
 
-	Purpose:	This function is called when the slider is moved within the profile dialog.
-				This particular implementation gets the new profile value.
+	Purpose:	Handles profile changing message. Usually sent by BiasGain dialog when user
+				drags a slider (after the user finished dragging, DIM_PROFILE_CHANGED message
+				is sent).
 
 ********************************************************************************************/
-
-void ChangeFeatherProfileOpDesc::OnSliderChanging(OpDescControlMsg* SliderChangingMsg)
+void ChangeFeatherProfileOpDesc::OnProfileChanging(OpDescControlMsg* SliderChangingMsg)
 {
 	// ILAN:  Although it is possible for me to ammend the SelChangedMsg message so that the new
 	// profile is part of it (i.e.  like how the other profiles work); it is not worth me doing
@@ -1534,18 +1504,18 @@ void ChangeFeatherProfileOpDesc::OnSliderChanging(OpDescControlMsg* SliderChangi
 	
 	CProfileBiasGain NewBiasGain = m_BiasGainGadget.GetCurrentDialogProfile();
 
-	if (SliderChanging)
+	if (m_bProfileChanging)
 	{
 		// Successive slider changing message
 		// Don't add to undo history
-		InitialStateChange = FALSE;
+		m_bProfileInitialChange = FALSE;
 	}
 	else
 	{
 		// Store selections initial feather states so that it can be saved in undo list
-		// once all sliding has finished (ie. in OnSliderSet())
-		SliderChanging = TRUE;
-		InitialStateChange = TRUE;
+		// once all sliding has finished (ie. in OnProfileChanged())
+		m_bProfileChanging		= TRUE;
+		m_bProfileInitialChange = TRUE;
 	}
 
 	FeatherProfileOpParam Param(NewBiasGain, OpChangeFeatherSize::GetEditContext());
@@ -1847,7 +1817,7 @@ void OpChangeFeatherProfile::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 		return;
 	}
 
-	if (((ChangeFeatherProfileOpDesc*)pOp)->SliderChanging)
+	if (((ChangeFeatherProfileOpDesc*)pOp)->m_bProfileChanging)
 	{
 		// Prevent slow renderers from doing their stuff while we try to
 		// show the results of the feather op interactively.
@@ -1953,7 +1923,7 @@ void OpChangeFeatherProfile::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 		SucceedAndDiscard();
 	}
 
-	if (!((ChangeFeatherProfileOpDesc*)pOp)->InitialStateChange)
+	if (!((ChangeFeatherProfileOpDesc*)pOp)->m_bProfileInitialChange)
 	{
 		// don't want op in op hist
 		// nb Action::Init modifies the ophist size in anticipation of the op being added
@@ -1961,7 +1931,7 @@ void OpChangeFeatherProfile::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 		SucceedAndDiscard();
 	}
 
-	if (((ChangeFeatherProfileOpDesc*)pOp)->SliderChanging)
+	if (((ChangeFeatherProfileOpDesc*)pOp)->m_bProfileChanging)
 	{
 		// Prevent slow renderers from doing their stuff while we try to
 		// show the results of the feather op interactively.

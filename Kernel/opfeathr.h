@@ -332,20 +332,21 @@ public:
 	virtual MsgResult Message(Msg* Msg);
 
 	
-	virtual void OnSelectionChange(OpDescControlMsg* SelChangedMsg, List* GadgetList);
-	// Function to handle profile gadget when changed by sliders
-	virtual void OnSliderSet(OpDescControlMsg* SelChangedMsg);
-	// Function to handle profile gadget when changed by sliders
-	virtual void OnSliderChanging(OpDescControlMsg* SliderChangingMsg);
+	// Function to handle profile changed message (e.g. when sliders in BiasDialog are set or a profile in
+	// combobox selected)
+	virtual void OnProfileChanged(OpDescControlMsg* SelChangedMsg);
+	// Function to handle profile changing (e.g. when slider is moving).
+	virtual void OnProfileChanging(OpDescControlMsg* SliderChangingMsg);
 
 	static CBiasGainGadget  m_BiasGainGadget;
 
 	static void SetBoolGadgetSelected (CGadgetID Gadget, BOOL IsSelected);
 
 public:
-	BOOL SliderChanging;		// set to true when opdesc receives a slider changing message
-	BOOL InitialStateChange;	// set to true when the op should record itself in the ophist list
-								// so that its actions are undoable (by OpUndo)
+	BOOL m_bProfileChanging;	// Indicates whether the profile is changing (e.g. when user drags a slider in
+								// the BiasGain dialog).
+	BOOL m_bProfileInitialChange;	// set to true when the op should record itself in the ophist list
+									// so that its actions are undoable (by OpUndo)
 };
 
 /********************************************************************************************
