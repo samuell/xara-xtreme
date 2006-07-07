@@ -298,13 +298,24 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
 			pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) )
+			pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) ) ||
+			pClassInfo->IsKindOf( CLASSINFO(wxVListBox) )
 			)
 		{
 			TRACEUSER( "jlh92", _T("Control gets keys") );
 			// Yes, pass on as usual
 			return -1;
 		}
+
+#if defined(DEBUG_KEYPRESS_SPEW)
+		while( NULL != pClassInfo )
+		{
+			TRACEUSER( "jlh92", _T("Class %s\n"), PCTSTR(pClassInfo->GetClassName()) );
+
+			PCTSTR	pszName = pClassInfo->GetBaseClassName1();
+			pClassInfo = NULL == pszName ? NULL : wxClassInfo::FindClass( pszName );
+		}
+#endif
 
 		// Scan down ancestors looking for either wxPanels (always non-modal) and
 		// wxDailogs (can be modal, so we check)
