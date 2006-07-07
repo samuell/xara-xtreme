@@ -293,29 +293,40 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName(),
 			event.GetEventType() == wxEVT_KEY_DOWN ? _T("KD") : _T("KU") );
 		
-		// Is the object allowed to recieve keys? 
-		wxClassInfo* pClassInfo = pEventObject->GetClassInfo();
-		if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) ) ||
-			pClassInfo->IsKindOf( CLASSINFO(wxVListBox) )
-			)
+		// Is the object allowed to recieve keys? We have to go done the object hierarchy
+		// since some control (notably Combos) will produce temporary windows which can get
+		// key events.
+		wxWindow* pScanObj = (wxWindow*)pEventObject;
+		while( NULL != pScanObj )
 		{
-			TRACEUSER( "jlh92", _T("Control gets keys") );
-			// Yes, pass on as usual
-			return -1;
-		}
-
+			wxClassInfo* pClassInfo = pScanObj->GetClassInfo();
 #if defined(DEBUG_KEYPRESS_SPEW)
-		while( NULL != pClassInfo )
-		{
-			TRACEUSER( "jlh92", _T("Class %s\n"), PCTSTR(pClassInfo->GetClassName()) );
-
-			PCTSTR	pszName = pClassInfo->GetBaseClassName1();
-			pClassInfo = NULL == pszName ? NULL : wxClassInfo::FindClass( pszName );
-		}
+			{
+				wxClassInfo *pTmpInfo = pClassInfo;
+				while( NULL != pTmpInfo )
+				{
+					TRACEUSER( "jlh92", _T("Class %s\n"), PCTSTR(pTmpInfo->GetClassName()) );
+		
+					PCTSTR	pszName = pTmpInfo->GetBaseClassName1();
+					pTmpInfo = NULL == pszName ? NULL : wxClassInfo::FindClass( pszName );
+				}
+				TRACEUSER( "jlh92", _T("----------------------\n") );
+			}
 #endif
+
+			if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
+				pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
+				pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
+				pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) )
+				)
+			{
+				TRACEUSER( "jlh92", _T("Control gets keys") );
+				// Yes, pass on as usual
+				return -1;
+			}
+
+			pScanObj = pScanObj->GetParent();
+		}
 
 		// Scan down ancestors looking for either wxPanels (always non-modal) and
 		// wxDailogs (can be modal, so we check)
