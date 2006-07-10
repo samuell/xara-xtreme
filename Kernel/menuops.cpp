@@ -1586,7 +1586,7 @@ BOOL HelpOps::Init()
 
 	ERRORIF(!IndexOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
-
+#if defined(ENABLE_MOVIES)
 	// REGOP(HELP, DEMOS, HelpOps);
 	OpDescriptor* DemosOp = new OpDescriptor(
 												0, 
@@ -1613,6 +1613,7 @@ BOOL HelpOps::Init()
 												0 );
 
 	ERRORIF(!DemosNativeOp, _R(IDE_NOMORE_MEMORY), FALSE);
+#endif
 
 	//Webster_Ranbir_12\11\96
 #ifdef INC_WEB_MENU_ITEMS

@@ -1,6 +1,6 @@
 AC_INIT(wxOil/camelot.cpp)
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(XaraLX, 0.5)
+AM_INIT_AUTOMAKE(XaraLX, 0.6)
 
 # BinReloc sets CFLAGS and CXXFLAGS, so we have to undo this
 inCFLAGS=$CFLAGS
