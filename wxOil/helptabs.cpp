@@ -106,8 +106,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 
 #include "helptabs.h"
-#include "xshelpid.h"
-#include "reshlpid.h"
+//#include "xshelpid.h"
+//#include "reshlpid.h"
 //#include "bfxrc.h"
 //#include "prefsdlg.h"
 //#include "printdlg.h"
@@ -201,8 +201,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "ollie.h"
 //#include "resimmap.h"
 #include "tmpltdlg.h"
-#include "bfxdlg2.h"	// OPTOKEN_BFXDLG_FLIPROTATE ...
-#include "slice.h"
+//#include "bfxdlg2.h"	// OPTOKEN_BFXDLG_FLIPROTATE ...
+//#include "slice.h"
 #include "prnprefs.h"
 #include "opclip.h"
 #include "opfeathr.h"
@@ -227,241 +227,241 @@ DECLARE_SOURCE("$Revision$");
 // the appropriate help topics.
 DialogHelpTuple atplDialogTopics[] =
 {
-	"AboutDlg",							0,								_R(IDS_HELPPATH_Misc_Xara_Ltd),
+	{_T("AboutDlg"),						0,								_R(IDS_HELPPATH_Misc_Xara_Ltd)},
 
 // Neville 14/10/97
 #ifndef WEBSTER
-	"WebPrefsDlg",						0,								_R(IDS_HELPPATH_Dialog_Web_Export),
-	"NativePrefsDlg",					0,								_R(IDS_HELPPATH_Dialog_Xar_Export),
+	{_T("WebPrefsDlg"),						0,								_R(IDS_HELPPATH_Dialog_Web_Export)},
+	{_T("NativePrefsDlg"),					0,								_R(IDS_HELPPATH_Dialog_Xar_Export)},
 #else
-	"WebPrefsDlg",						0,								_R(IDS_HELPPATH_Dialog_WEB_File_Options),
+	{_T("WebPrefsDlg"),						0,								_R(IDS_HELPPATH_Dialog_WEB_File_Options)},
 #endif
 
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"SepsDlg",							0,								_R(IDS_HELPPATH_Dialog_Separation_Properties),
+	{_T("SepsDlg"),							0,								_R(IDS_HELPPATH_Dialog_Separation_Properties)},
 #endif	//webster
 
 	// This is the main application options dialog box and all its tabs
-	"AppPrefsDlg",						0,								_R(IDS_HELPPATH_Command_Options),
+	{_T("AppPrefsDlg"),						0,								_R(IDS_HELPPATH_Command_Options)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View),
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View)},
 #endif	//webster
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page),
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter),
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin),
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter)},
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif//webster
-	"AppPrefsDlg",						_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler),
+	{_T("AppPrefsDlg"),						_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler)},
 
-	"ArrangeAlignment",					0,								_R(IDS_HELPPATH_Command_Alignment),
+	{_T("ArrangeAlignment"),					0,								_R(IDS_HELPPATH_Command_Alignment)},
 #ifndef WEBSTER
 // Old forms
-//	"BfxDlg",							0,								_R(IDS_HELPPATH_Command_Bitmap_Effects),
-//	"BfxDlg",							_R(IDD_BFXDLG_PG1),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate),
-//	"BfxDlg",							_R(IDD_BFXDLG_PG2),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize),
-//	"BfxDlg",							_R(IDD_BFXDLG_PG3),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast),
-//	"BfxDlg",							_R(IDD_BFXDLG_PG4),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth),
-//	"BfxDlg",							_R(IDD_BFXDLG_PG5),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Special),
+//	{_T("BfxDlg"),							0,								_R(IDS_HELPPATH_Command_Bitmap_Effects)},
+//	{_T("BfxDlg"),							_R(IDD_BFXDLG_PG1),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate)},
+//	{_T("BfxDlg"),							_R(IDD_BFXDLG_PG2),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize)},
+//	{_T("BfxDlg"),							_R(IDD_BFXDLG_PG3),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast)},
+//	{_T("BfxDlg"),							_R(IDD_BFXDLG_PG4),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth)},
+//	{_T("BfxDlg"),							_R(IDD_BFXDLG_PG5),					_R(IDS_HELPPATH_Command_Bitmap_Effects_Special)},
 // New forms
-	"BfxFlipAndRotateDlg",				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate),
-	"BfxResizeDlg",						0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize),
-	"BfxBrightnessContrastDlg",			0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast),
-	"BfxColourDepthDlg",				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth),
-	"BfxSpecialEffectsDlg",				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Special),
+	{_T("BfxFlipAndRotateDlg"),				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate)},
+	{_T("BfxResizeDlg"),						0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize)},
+	{_T("BfxBrightnessContrastDlg"),			0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast)},
+	{_T("BfxColourDepthDlg"),				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth)},
+	{_T("BfxSpecialEffectsDlg"),				0,								_R(IDS_HELPPATH_Command_Bitmap_Effects_Special)},
 #endif	//webster
-	"BmpPrefsDlg",						0,								_R(IDS_HELPPATH_Dialog_Bitmap_Export),
+	{_T("BmpPrefsDlg"),						0,								_R(IDS_HELPPATH_Dialog_Bitmap_Export)},
 #ifndef WEBSTER
-	"CCPrintDialog", 					0,								_R(IDS_HELPPATH_Command_Print),
-	"CCPrintSetupDialog",				0,								_R(IDS_HELPPATH_Command_Print_Setup),
+	{_T("CCPrintDialog"), 					0,								_R(IDS_HELPPATH_Command_Print)},
+	{_T("CCPrintSetupDialog"),				0,								_R(IDS_HELPPATH_Command_Print_Setup)},
 #endif	//webster
 
-	"ColourEditDlg",					0,								_R(IDS_HELPPATH_Misc_Colour_Editor),
-	"ColourNameDlg",					0,								_R(IDS_HELPPATH_Misc_Colour_Editor),
+	{_T("ColourEditDlg"),					0,								_R(IDS_HELPPATH_Misc_Colour_Editor)},
+	{_T("ColourNameDlg"),					0,								_R(IDS_HELPPATH_Misc_Colour_Editor)},
 
-	"CustomizeBarDlg",					0,								_R(IDS_HELPPATH_Command_Control_Bars),
+	{_T("CustomizeBarDlg"),					0,								_R(IDS_HELPPATH_Command_Control_Bars)},
 #ifndef WEBSTER
-	"XSEPSExportOptions",				0,								_R(IDS_HELPPATH_Dialog_CorelXARA_EPS_Export),
+	{_T("XSEPSExportOptions"),				0,								_R(IDS_HELPPATH_Dialog_CorelXARA_EPS_Export)},
 #endif	//webster
 
 #ifndef EXCLUDE_FROM_RALPH
-	"FileInfo",							0,								_R(IDS_HELPPATH_Command_Document_Info),
+	{_T("FileInfo"),							0,								_R(IDS_HELPPATH_Command_Document_Info)},
 #endif
-	"GIFAnimationPropertyTabsDlg",		0,								_R(IDS_HELPPATH_Dialog_Animation_Properties),
-	"GIFAnimationPropertyTabsDlg",		_R(IDD_TAB_FRAME_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Frame_Properties),
-	"GIFAnimationPropertyTabsDlg",		_R(IDD_TAB_ANIMATION_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Animation_Properties_Animation_Looping_and_Speed),
-	"GIFAnimationPropertyTabsDlg",		_R(IDD_TAB_ANIMATION_COLOURS),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Animation_Colors),
-	"GIFAnimationPropertyTabsDlg",		_R(IDD_TAB_PREVIEW_IN_BROWSER),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Preview_in_Browser),
+	{_T("GIFAnimationPropertyTabsDlg"),		0,								_R(IDS_HELPPATH_Dialog_Animation_Properties)},
+	{_T("GIFAnimationPropertyTabsDlg"),		_R(IDD_TAB_FRAME_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Frame_Properties)},
+	{_T("GIFAnimationPropertyTabsDlg"),		_R(IDD_TAB_ANIMATION_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Animation_Properties_Animation_Looping_and_Speed)},
+	{_T("GIFAnimationPropertyTabsDlg"),		_R(IDD_TAB_ANIMATION_COLOURS),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Animation_Colors)},
+	{_T("GIFAnimationPropertyTabsDlg"),		_R(IDD_TAB_PREVIEW_IN_BROWSER),		_R(IDS_HELPPATH_Dialog_Animation_Properties_Preview_in_Browser)},
 					
 	// This is the op which is defined so that you can go straight to the grid and rulers tab
-	"GridTabAppPrefsDlg",				0,								_R(IDS_HELPPATH_Command_Options),
+	{_T("GridTabAppPrefsDlg"),				0,								_R(IDS_HELPPATH_Command_Options)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View),
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View)},
 #endif	//webster
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page),
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin),
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif	//webster
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler),
-	"GridTabAppPrefsDlg",				_R(IDD_OPTSTAB_INTERNET),			_R(IDS_HELPPATH_Command_Options_Internet),
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler)},
+	{_T("GridTabAppPrefsDlg"),				_R(IDD_OPTSTAB_INTERNET),			_R(IDS_HELPPATH_Command_Options_Internet)},
 		
 #ifndef WEBSTER
-	"GuidePropertiesDlg",				0,								_R(IDS_HELPPATH_Dialog_Layer_Properties),
-	"GuidePropertiesDlg",				_R(IDD_TAB_GUIDELINE_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Layer_Properties),
-	"GuidePropertiesDlg",				_R(IDD_TAB_LAYER_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Layer_Properties),
+	{_T("GuidePropertiesDlg"),				0,								_R(IDS_HELPPATH_Dialog_Layer_Properties)},
+	{_T("GuidePropertiesDlg"),				_R(IDD_TAB_GUIDELINE_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Layer_Properties)},
+	{_T("GuidePropertiesDlg"),				_R(IDD_TAB_LAYER_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Layer_Properties)},
 
-	"GuidesPropertiesTab",				0,								_R(IDS_HELPPATH_Dialog_Guideline_Properties),
+	{_T("GuidesPropertiesTab"),				0,								_R(IDS_HELPPATH_Dialog_Guideline_Properties)},
 
-	"GuidelinePropDlg",					0,								_R(IDS_HELPPATH_Dialog_Guideline_Properties),
+	{_T("GuidelinePropDlg"),					0,								_R(IDS_HELPPATH_Dialog_Guideline_Properties)},
 			
-	"LayerNameDlg",						0,								_R(IDS_HELPPATH_Dialog_Name_Layer),
+	{_T("LayerNameDlg"),						0,								_R(IDS_HELPPATH_Dialog_Name_Layer)},
 
-	"LayerPropertyTabsDlg",				0,								_R(IDS_HELPPATH_Dialog_Layer_Properties),
-	"LayerPropertyTabsDlg",				_R(IDD_TAB_GUIDELINE_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Layer_Properties),
-	"LayerPropertyTabsDlg",				_R(IDD_TAB_LAYER_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Layer_Properties),
+	{_T("LayerPropertyTabsDlg"),				0,								_R(IDS_HELPPATH_Dialog_Layer_Properties)},
+	{_T("LayerPropertyTabsDlg"),				_R(IDD_TAB_GUIDELINE_PROPERTIES),	_R(IDS_HELPPATH_Dialog_Layer_Properties)},
+	{_T("LayerPropertyTabsDlg"),				_R(IDD_TAB_LAYER_PROPERTIES),		_R(IDS_HELPPATH_Dialog_Layer_Properties)},
 #endif	//webster
 
 	//"NameDialog",						0,								_R(IDS_HELPPATH_Command_Wizard_Properties),
 
-	"ImagemapDlg",						0,								_R(IDS_HELPPATH_Dialog_Image_Map_Export_Options),
-	"OpenFileDialog",					0,								_R(IDS_HELPPATH_Command_Open),
-	"SaveFileDialog",					0,								_R(IDS_HELPPATH_Command_Save_As),
-	"SaveTemplateDialog",				0,								_R(IDS_HELPPATH_Save_Template_Dialog),
-	"ImportFileDialog",					0,								_R(IDS_HELPPATH_Command_Import),
-	"ExportFileDialog",					0,								_R(IDS_HELPPATH_Command_Export),
+	{_T("ImagemapDlg"),						0,								_R(IDS_HELPPATH_Dialog_Image_Map_Export_Options)},
+	{_T("OpenFileDialog"),					0,								_R(IDS_HELPPATH_Command_Open)},
+	{_T("SaveFileDialog"),					0,								_R(IDS_HELPPATH_Command_Save_As)},
+	{_T("SaveTemplateDialog"),				0,								_R(IDS_HELPPATH_Save_Template_Dialog)},
+	{_T("ImportFileDialog"),					0,								_R(IDS_HELPPATH_Command_Import)},
+	{_T("ExportFileDialog"),					0,								_R(IDS_HELPPATH_Command_Export)},
 
 	// This is the op which is defined so that you can go straight to the page tab
-	"PageTabAppPrefsDlg",				0,								_R(IDS_HELPPATH_Command_Options),
+	{_T("PageTabAppPrefsDlg"),				0,								_R(IDS_HELPPATH_Command_Options)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View),
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View)},
 #endif	//webster
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page),
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin),
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif	//webster
-	"PageTabAppPrefsDlg",				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler),
+	{_T("PageTabAppPrefsDlg"),				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler)},
 
-	"PasteSpecialDlg",					0,								_R(IDS_HELPPATH_Dialog_Paste_Special),
+	{_T("PasteSpecialDlg"),					0,								_R(IDS_HELPPATH_Dialog_Paste_Special)},
 
-	"PreviewDialog",					0,								_R(IDS_HELPPATH_Command_Preview_All_Frames),
+	{_T("PreviewDialog"),					0,								_R(IDS_HELPPATH_Command_Preview_All_Frames)},
 #ifndef WEBSTER
-	"PhotoCDDlg",						0,								_R(IDS_HELPPATH_Dialog_PhotoCD_Import),
+	{_T("PhotoCDDlg"),						0,								_R(IDS_HELPPATH_Dialog_PhotoCD_Import)},
 	
-	"PrintPrefsDlg",					0,								_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"PrintPrefsDlg",					_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"PrintPrefsDlg",					_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"PrintPrefsDlg",					_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations),
-	"PrintPrefsDlg",					_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter),
+	{_T("PrintPrefsDlg"),					0,								_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("PrintPrefsDlg"),					_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("PrintPrefsDlg"),					_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("PrintPrefsDlg"),					_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations)},
+	{_T("PrintPrefsDlg"),					_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter)},
 
 	// This is the op which is defined so that you can go straight to the print tab
-	"PrintTabPrintPrefsDlg",			0,								_R(IDS_HELPPATH_Command_Options_Print_Layout), //?????
-	"PrintTabPrintPrefsDlg",			_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"PrintTabPrintPrefsDlg",			_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations),
-	"PrintTabPrintPrefsDlg",			_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"PrintTabPrintPrefsDlg",			_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter),
-	"PrintProblems",					0,								_R(IDS_HELPPATH_Trouble_Print),
+	{_T("PrintTabPrintPrefsDlg"),			0,								_R(IDS_HELPPATH_Command_Options_Print_Layout)}, //?????
+	{_T("PrintTabPrintPrefsDlg"),			_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("PrintTabPrintPrefsDlg"),			_R(IDD_OPTSTAB_PRINTPRINT),			_R(IDS_HELPPATH_Command_Options_Separations)},
+	{_T("PrintTabPrintPrefsDlg"),			_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("PrintTabPrintPrefsDlg"),			_R(IDD_OPTSTAB_IMAGESETTING),		_R(IDS_HELPPATH_Command_Options_Imagesetter)},
+	{_T("PrintProblems"),					0,								_R(IDS_HELPPATH_Trouble_Print)},
 #endif	//webster
 
 	// This is the op which is defined so that you can go straight to the scale tab
-	"ScaleTabAppPrefsDlg",				0,								_R(IDS_HELPPATH_Command_Options),
+	{_T("ScaleTabAppPrefsDlg"),				0,								_R(IDS_HELPPATH_Command_Options)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View),
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View)},
 #endif	//webster
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page),
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin),
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif	//webster
-	"ScaleTabAppPrefsDlg",				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler),
+	{_T("ScaleTabAppPrefsDlg"),				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler)},
 	
-	"SGalleryOptionsDlg",				0,								_R(IDS_HELPPATH_Dialog_Gallery_Properties),
-	"SGallerySearchDlg",				0,								_R(IDS_HELPPATH_Dialog_Gallery_Find_Dialog),
-	"SGallerySortDlg",					0,								_R(IDS_HELPPATH_Dialog_Gallery_Sort_Dialog),
-	"SGalleryAddFolderDlg",				0,								_R(IDS_HELPPATH_Dialog_Gallery_Add_Folder),
+	{_T("SGalleryOptionsDlg"),				0,								_R(IDS_HELPPATH_Dialog_Gallery_Properties)},
+	{_T("SGallerySearchDlg"),				0,								_R(IDS_HELPPATH_Dialog_Gallery_Find_Dialog)},
+	{_T("SGallerySortDlg"),					0,								_R(IDS_HELPPATH_Dialog_Gallery_Sort_Dialog)},
+	{_T("SGalleryAddFolderDlg"),				0,								_R(IDS_HELPPATH_Dialog_Gallery_Add_Folder)},
 
 	//"TemplateDialog",					0,								_R(IDS_HELPPATH_Command_Wizard_Properties),
-	"ToolbarDlg",						0,								_R(IDS_HELPPATH_Command_Control_Bars),
-	"ToolnameDlg",						0,								_R(IDS_HELPPATH_Command_Control_Bars),
+	{_T("ToolbarDlg"),						0,								_R(IDS_HELPPATH_Command_Control_Bars)},
+	{_T("ToolnameDlg"),						0,								_R(IDS_HELPPATH_Command_Control_Bars)},
 #ifndef WEBSTER
-	"TraceDlg",							0,								_R(IDS_HELPPATH_Command_Bitmap_Tracer),
+	{_T("TraceDlg"),							0,								_R(IDS_HELPPATH_Command_Bitmap_Tracer)},
 #endif //Webster
 
 	// This is the op which is defined so that you can go straight to the units tab
-	"UnitsTabAppPrefsDlg",				0,								_R(IDS_HELPPATH_Command_Options),
+	{_T("UnitsTabAppPrefsDlg"),				0,								_R(IDS_HELPPATH_Command_Options)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View),
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_VIEW),				_R(IDS_HELPPATH_Command_Options_View)},
 #endif	//webster
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page),
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_MISC),				_R(IDS_HELPPATH_Command_Options_General)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PAGE),				_R(IDS_HELPPATH_Command_Options_Page)},
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output),
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin),
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_UNITS),				_R(IDS_HELPPATH_Command_Options_Units)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_TUNE),				_R(IDS_HELPPATH_Command_Options_Tuneups)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_SCALE),				_R(IDS_HELPPATH_Command_Options_Scaling)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_POINTERS),			_R(IDS_HELPPATH_Command_Options_Mouse)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTLAYOUT),		_R(IDS_HELPPATH_Command_Options_Print_Layout)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PRINTGENERAL),		_R(IDS_HELPPATH_Command_Options_Output)},
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_PLUGINS),			_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif	//webster
-	"UnitsTabAppPrefsDlg",				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler),
+	{_T("UnitsTabAppPrefsDlg"),				_R(IDD_OPTSTAB_GRID),				_R(IDS_HELPPATH_Command_Options_Grid_and_Ruler)},
 #ifndef WEBSTER
-	"UnitPropertiesDlg",				0,								_R(IDS_HELPPATH_Dialog_Unit_Properties),
+	{_T("UnitPropertiesDlg"),				0,								_R(IDS_HELPPATH_Dialog_Unit_Properties)},
 #endif	//webster
 
-	"URLImportDlg",						0,								_R(IDS_HELPPATH_Command_Import_from_Web),
-	"WebAddressDlg",					0,								_R(IDS_HELPPATH_Command_Web_Address),
-	"BmpDlg",							0,								_R(IDS_HELPPATH_Dialog_Bitmap_Properties),
-	"GIFExportFileDialog",				0,								_R(IDS_HELPPATH_Command_Export_Animated_GIF),
-	"NameObjectsDlg",					0,								_R(IDS_HELPPATH_Dialog_Name_Objects),
-	"RenameObjectsDlg",					0,								_R(IDS_HELPPATH_Dialog_Rename_Objects),
-	"ExtendSetsDlg",					0,								_R(IDS_HELPPATH_Name_Gallery_Extend_Dialog_Box),
-	"BarCreationDlg",					0,								_R(IDS_HELPPATH_NavBar_Create_Dialog_Box),
-	"BarStatesDlg",						0,								_R(IDS_HELPPATH_NavBar_Edit_States_Dialog_Box),
-	"BarRedefineStateDlg",				0,								_R(IDS_HELPPATH_NavBar_Edit_Design_Dialog_Box),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITSPACING),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Spacing),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITOFFSET),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Offset),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITSCALING),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Scaling),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITEFFECTS),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Rotation),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITSEQUENCE),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Sequence),
-	"BrushEditDialog",					_R(IDD_BRUSHEDITFILL),				_R(IDS_HELPPATH_Dialog_Edit_Brush_Properties),
-	"CInitBrushNameDlg",				0,								_R(IDS_HELPPATH_How_Adding_Custom_Brush_Strokes),
+	{_T("URLImportDlg"),						0,								_R(IDS_HELPPATH_Command_Import_from_Web)},
+	{_T("WebAddressDlg"),					0,								_R(IDS_HELPPATH_Command_Web_Address)},
+	{_T("BmpDlg"),							0,								_R(IDS_HELPPATH_Dialog_Bitmap_Properties)},
+	{_T("GIFExportFileDialog"),				0,								_R(IDS_HELPPATH_Command_Export_Animated_GIF)},
+	{_T("NameObjectsDlg"),					0,								_R(IDS_HELPPATH_Dialog_Name_Objects)},
+	{_T("RenameObjectsDlg"),					0,								_R(IDS_HELPPATH_Dialog_Rename_Objects)},
+	{_T("ExtendSetsDlg"),					0,								_R(IDS_HELPPATH_Name_Gallery_Extend_Dialog_Box)},
+	{_T("BarCreationDlg"),					0,								_R(IDS_HELPPATH_NavBar_Create_Dialog_Box)},
+	{_T("BarStatesDlg"),						0,								_R(IDS_HELPPATH_NavBar_Edit_States_Dialog_Box)},
+	{_T("BarRedefineStateDlg"),				0,								_R(IDS_HELPPATH_NavBar_Edit_Design_Dialog_Box)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITSPACING),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Spacing)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITOFFSET),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Offset)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITSCALING),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Scaling)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITEFFECTS),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Rotation)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITSEQUENCE),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Sequence)},
+	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITFILL),				_R(IDS_HELPPATH_Dialog_Edit_Brush_Properties)},
+	{_T("CInitBrushNameDlg"),				0,								_R(IDS_HELPPATH_How_Adding_Custom_Brush_Strokes)},
 	NULL, 0, 0
 };
 
@@ -471,241 +471,245 @@ DialogHelpTuple atplDialogTopics[] =
 // as menu items.
 OpHelpTuple atplOpTopics[] =
 {
-	OPTOKEN_FILE_MENU,						_R(IDS_HELPPATH_Menu_File),
-		OPTOKEN_FILENEW,					_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_DRAWING,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_ANIMATION,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE1,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE2,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE3,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE4,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE5,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE6,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE7,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE8,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE9,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILENEW_TEMPLATE10,			_R(IDS_HELPPATH_Command_New),
-		OPTOKEN_FILEOPEN,					_R(IDS_HELPPATH_Command_Open),
-		OPTOKEN_FILECLOSE, 					_R(IDS_HELPPATH_Command_Close),
-		OPTOKEN_FILESAVE,					_R(IDS_HELPPATH_Command_Save),
-		OPTOKEN_FILESAVEAS,					_R(IDS_HELPPATH_Command_Save_As),
+	{OPTOKEN_FILE_MENU,						_R(IDS_HELPPATH_Menu_File)},
+		{OPTOKEN_FILENEW,					_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_DRAWING,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_ANIMATION,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE1,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE2,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE3,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE4,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE5,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE6,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE7,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE8,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE9,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILENEW_TEMPLATE10,			_R(IDS_HELPPATH_Command_New)},
+		{OPTOKEN_FILEOPEN,					_R(IDS_HELPPATH_Command_Open)},
+		{OPTOKEN_FILECLOSE, 					_R(IDS_HELPPATH_Command_Close)},
+		{OPTOKEN_FILESAVE,					_R(IDS_HELPPATH_Command_Save)},
+		{OPTOKEN_FILESAVEAS,					_R(IDS_HELPPATH_Command_Save_As)},
 #ifndef WEBSTER
-		OPTOKEN_FILESAVEALL,				_R(IDS_HELPPATH_Command_Save_All),
-		OPTOKEN_SAVEASDEFAULT,				_R(IDS_HELPPATH_Command_Save_As_Template),
+		{OPTOKEN_FILESAVEALL,				_R(IDS_HELPPATH_Command_Save_All)},
+		{OPTOKEN_SAVEASDEFAULT,				_R(IDS_HELPPATH_Command_Save_As_Template)},
 #endif	//webster
-		"Import",							_R(IDS_HELPPATH_Command_Import),
-		OPTOKEN_URLIMPORT,					_R(IDS_HELPPATH_Command_Import_from_Web),
-		"Export",							_R(IDS_HELPPATH_Command_Export),
-		OPTOKEN_SAVEANIMATEDGIF,			_R(IDS_HELPPATH_Command_Export_Animated_GIF),
-		OPTOKEN_IMAGESLICE,					_R(IDS_HELPPATH_Command_Slice_Image),
+		{_T("Import"),							_R(IDS_HELPPATH_Command_Import)},
+		{OPTOKEN_URLIMPORT,					_R(IDS_HELPPATH_Command_Import_from_Web)},
+		{_T("Export"),							_R(IDS_HELPPATH_Command_Export)},
+		{OPTOKEN_SAVEANIMATEDGIF,			_R(IDS_HELPPATH_Command_Export_Animated_GIF)},
+#if !defined(EXCLUDE_FROM_XARALX)
+		{OPTOKEN_IMAGESLICE,					_R(IDS_HELPPATH_Command_Slice_Image)},
+#endif
 #ifndef EXCLUDE_FROM_RALPH
-		OPTOKEN_FILEINFO,  					_R(IDS_HELPPATH_Command_Document_Info),
+		{OPTOKEN_FILEINFO,  					_R(IDS_HELPPATH_Command_Document_Info)},
 #endif
 //WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
-		OPTOKEN_PRINT_SETUP,				_R(IDS_HELPPATH_Command_Print_Setup),
-		OPTOKEN_PRINT,         				_R(IDS_HELPPATH_Command_Print),
-		OPTOKEN_PRINTOPTIONSDLG,			_R(IDS_HELPPATH_Command_Print_Options),
+		{OPTOKEN_PRINT_SETUP,				_R(IDS_HELPPATH_Command_Print_Setup)},
+		{OPTOKEN_PRINT,         				_R(IDS_HELPPATH_Command_Print)},
+		{OPTOKEN_PRINTOPTIONSDLG,			_R(IDS_HELPPATH_Command_Print_Options)},
 #endif	//webster
-		OPTOKEN_MRU_FILE1,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE2,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE3,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE4,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE5,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE6,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE7,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE8,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_MRU_FILE9,					_R(IDS_HELPPATH_Command_1234),
-		OPTOKEN_EXIT,						_R(IDS_HELPPATH_Command_Exit),
+		{OPTOKEN_MRU_FILE1,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE2,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE3,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE4,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE5,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE6,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE7,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE8,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_MRU_FILE9,					_R(IDS_HELPPATH_Command_1234)},
+		{OPTOKEN_EXIT,						_R(IDS_HELPPATH_Command_Exit)},
 	
-	OPTOKEN_EDIT_MENU,						_R(IDS_HELPPATH_Menu_Edit),
-		OPTOKEN_UNDO,						_R(IDS_HELPPATH_Command_Undo),
-		OPTOKEN_REDO, 						_R(IDS_HELPPATH_Command_Undo),
-		OPTOKEN_CUT,						_R(IDS_HELPPATH_Command_Cut),
-		OPTOKEN_COPY,						_R(IDS_HELPPATH_Command_Copy),
-		OPTOKEN_PASTE,						_R(IDS_HELPPATH_Command_Paste),
-		OPTOKEN_PASTEATTRIBUTES,			_R(IDS_HELPPATH_Command_Paste_Attributes),
-		OPTOKEN_DELETE,						_R(IDS_HELPPATH_Command_Delete),
-		OPTOKEN_EDITSELECTALL,				_R(IDS_HELPPATH_Command_Select_All),
-		OPTOKEN_EDITSELECTNONE,				_R(IDS_HELPPATH_Command_Clear_Selection),
-		OPTOKEN_DUPLICATE,					_R(IDS_HELPPATH_Command_Duplicate),
-		OPTOKEN_EDITCLONE,					_R(IDS_HELPPATH_Command_Clone),
+	{OPTOKEN_EDIT_MENU,						_R(IDS_HELPPATH_Menu_Edit)},
+		{OPTOKEN_UNDO,						_R(IDS_HELPPATH_Command_Undo)},
+		{OPTOKEN_REDO, 						_R(IDS_HELPPATH_Command_Undo)},
+		{OPTOKEN_CUT,						_R(IDS_HELPPATH_Command_Cut)},
+		{OPTOKEN_COPY,						_R(IDS_HELPPATH_Command_Copy)},
+		{OPTOKEN_PASTE,						_R(IDS_HELPPATH_Command_Paste)},
+		{OPTOKEN_PASTEATTRIBUTES,			_R(IDS_HELPPATH_Command_Paste_Attributes)},
+		{OPTOKEN_DELETE,						_R(IDS_HELPPATH_Command_Delete)},
+		{OPTOKEN_EDITSELECTALL,				_R(IDS_HELPPATH_Command_Select_All)},
+		{OPTOKEN_EDITSELECTNONE,				_R(IDS_HELPPATH_Command_Clear_Selection)},
+		{OPTOKEN_DUPLICATE,					_R(IDS_HELPPATH_Command_Duplicate)},
+		{OPTOKEN_EDITCLONE,					_R(IDS_HELPPATH_Command_Clone)},
 
-	OPTOKEN_ARRANGE_MENU,					_R(IDS_HELPPATH_Menu_Arrange),
+	{OPTOKEN_ARRANGE_MENU,					_R(IDS_HELPPATH_Menu_Arrange)},
 #ifdef WEBSTER
-		OPTOKEN_MOVELAYERINFRONT,			_R(IDS_HELPPATH_Command_Move_to_Next_Frame),
+		{OPTOKEN_MOVELAYERINFRONT,			_R(IDS_HELPPATH_Command_Move_to_Next_Frame)},
 #else
-		OPTOKEN_MOVELAYERINFRONT,			_R(IDS_HELPPATH_Command_Move_to_Layer_in_Front),		
+		{OPTOKEN_MOVELAYERINFRONT,			_R(IDS_HELPPATH_Command_Move_to_Layer_in_Front)},		
 #endif
-		OPTOKEN_BRINGTOFRONT,				_R(IDS_HELPPATH_Command_Bring_to_Front),
-		OPTOKEN_MOVEFORWARDS,				_R(IDS_HELPPATH_Command_Move_Forwards),
-		OPTOKEN_MOVEBACKWARDS,				_R(IDS_HELPPATH_Command_Move_Backwards),
-		OPTOKEN_PUTTOBACK,					_R(IDS_HELPPATH_Command_Put_to_Back),
+		{OPTOKEN_BRINGTOFRONT,				_R(IDS_HELPPATH_Command_Bring_to_Front)},
+		{OPTOKEN_MOVEFORWARDS,				_R(IDS_HELPPATH_Command_Move_Forwards)},
+		{OPTOKEN_MOVEBACKWARDS,				_R(IDS_HELPPATH_Command_Move_Backwards)},
+		{OPTOKEN_PUTTOBACK,					_R(IDS_HELPPATH_Command_Put_to_Back)},
 #ifdef WEBSTER
-		OPTOKEN_MOVELAYERBEHIND,			_R(IDS_HELPPATH_Command_Move_to_Previous_Frame),
+		{OPTOKEN_MOVELAYERBEHIND,			_R(IDS_HELPPATH_Command_Move_to_Previous_Frame)},
 #else
-		OPTOKEN_MOVELAYERBEHIND,			_R(IDS_HELPPATH_Command_Move_to_Layer_Behind),		
+		{OPTOKEN_MOVELAYERBEHIND,			_R(IDS_HELPPATH_Command_Move_to_Layer_Behind)},		
 #endif
-		OPTOKEN_GROUP,						_R(IDS_HELPPATH_Command_Group),
-		OPTOKEN_UNGROUP,					_R(IDS_HELPPATH_Command_Ungroup),
-		OPTOKEN_GROUPTRANSP,				_R(IDS_HELPPATH_Command_Group_Transparency),
-		OPTOKEN_UNGROUPTRANSP,				_R(IDS_HELPPATH_Command_Ungroup_Transparency),
-		OPTOKEN_APPLY_CLIPVIEW,				_R(IDS_HELPPATH_Command_Apply_ClipView),
-		OPTOKEN_REMOVE_CLIPVIEW,			_R(IDS_HELPPATH_Command_Apply_ClipView),				// NB.
-		OPTOKEN_ARRANGEALIGNMENT,			_R(IDS_HELPPATH_Command_Alignment),
+		{OPTOKEN_GROUP,						_R(IDS_HELPPATH_Command_Group)},
+		{OPTOKEN_UNGROUP,					_R(IDS_HELPPATH_Command_Ungroup)},
+		{OPTOKEN_GROUPTRANSP,				_R(IDS_HELPPATH_Command_Group_Transparency)},
+		{OPTOKEN_UNGROUPTRANSP,				_R(IDS_HELPPATH_Command_Ungroup_Transparency)},
+		{OPTOKEN_APPLY_CLIPVIEW,				_R(IDS_HELPPATH_Command_Apply_ClipView)},
+		{OPTOKEN_REMOVE_CLIPVIEW,			_R(IDS_HELPPATH_Command_Apply_ClipView)},				// NB.
+		{OPTOKEN_ARRANGEALIGNMENT,			_R(IDS_HELPPATH_Command_Alignment)},
 #ifndef WEBSTER
-		OPTOKEN_JOINSHAPEOP,				_R(IDS_HELPPATH_Command_Join_Shapes),
-		OPTOKEN_BREAKSHAPEOP,				_R(IDS_HELPPATH_Command_Break_Shapes),
+		{OPTOKEN_JOINSHAPEOP,				_R(IDS_HELPPATH_Command_Join_Shapes)},
+		{OPTOKEN_BREAKSHAPEOP,				_R(IDS_HELPPATH_Command_Break_Shapes)},
 #endif	//webster
-		OPTOKEN_COMBINESHAPES,				_R(IDS_HELPPATH_Command_Combine_Shapes),
-			OPTOKEN_ADDSHAPES,				_R(IDS_HELPPATH_Command_Add_Shapes),
-			OPTOKEN_SUBTRACTSHAPES,			_R(IDS_HELPPATH_Command_Subtract_Shapes),
-			OPTOKEN_INTERSECTSHAPES,		_R(IDS_HELPPATH_Command_Intersect_Shapes),
-			OPTOKEN_SLICESHAPES,			_R(IDS_HELPPATH_Command_Slice_Shapes),
-		OPTOKEN_MAKE_SHAPES,				_R(IDS_HELPPATH_Command_Convert_to_Shapes),
-		OPTOKEN_CONVERTPATHTOSHAPES,		_R(IDS_HELPPATH_Command_Convert_Line_to_Shape),
-		OPTOKEN_CONVERTTOBITMAP,			_R(IDS_HELPPATH_Command_Create_Bitmap_Copy),
-		OPTOKEN_FITTEXTTOPATH,				_R(IDS_HELPPATH_Command_Fit_Text_To_Curve),
+		{OPTOKEN_COMBINESHAPES,				_R(IDS_HELPPATH_Command_Combine_Shapes)},
+			{OPTOKEN_ADDSHAPES,				_R(IDS_HELPPATH_Command_Add_Shapes)},
+			{OPTOKEN_SUBTRACTSHAPES,			_R(IDS_HELPPATH_Command_Subtract_Shapes)},
+			{OPTOKEN_INTERSECTSHAPES,		_R(IDS_HELPPATH_Command_Intersect_Shapes)},
+			{OPTOKEN_SLICESHAPES,			_R(IDS_HELPPATH_Command_Slice_Shapes)},
+		{OPTOKEN_MAKE_SHAPES,				_R(IDS_HELPPATH_Command_Convert_to_Shapes)},
+		{OPTOKEN_CONVERTPATHTOSHAPES,		_R(IDS_HELPPATH_Command_Convert_Line_to_Shape)},
+		{OPTOKEN_CONVERTTOBITMAP,			_R(IDS_HELPPATH_Command_Create_Bitmap_Copy)},
+		{OPTOKEN_FITTEXTTOPATH,				_R(IDS_HELPPATH_Command_Fit_Text_To_Curve)},
 
 #ifdef PHOTOSHOPPLUGINS
-		OPTOKEN_PLUGINS_UNDO_MENU,			_R(IDS_HELPPATH_Menu_Plugin),
-		OPTOKEN_PLUGINS_PARSING,			_R(IDS_HELPPATH_Menu_Plugin),
-		OPTOKEN_PLUGSDLG,					_R(IDS_HELPPATH_Command_Options_Plugin),
+		{OPTOKEN_PLUGINS_UNDO_MENU,			_R(IDS_HELPPATH_Menu_Plugin)},
+		{OPTOKEN_PLUGINS_PARSING,			_R(IDS_HELPPATH_Menu_Plugin)},
+		{OPTOKEN_PLUGSDLG,					_R(IDS_HELPPATH_Command_Options_Plugin)},
 #endif
 
-	OPTOKEN_UTILS_MENU,						_R(IDS_HELPPATH_Menu_Utilities),
-		"DisplayColourGallery",				_R(IDS_HELPPATH_Command_Colour_Gallery),
+	{OPTOKEN_UTILS_MENU,						_R(IDS_HELPPATH_Menu_Utilities)},
+		{_T("DisplayColourGallery"),				_R(IDS_HELPPATH_Command_Colour_Gallery)},
 #ifndef WEBSTER
-		"DisplayLayerGallery",				_R(IDS_HELPPATH_Command_Layer_Gallery),
+		{_T("DisplayLayerGallery"),				_R(IDS_HELPPATH_Command_Layer_Gallery)},
 #endif	//Webster
-		"DisplayBitmapGallery",				_R(IDS_HELPPATH_Command_Bitmap_Gallery),
+		{_T("DisplayBitmapGallery"),				_R(IDS_HELPPATH_Command_Bitmap_Gallery)},
 #ifndef WEBSTER
-		"DisplayLineGallery",				_R(IDS_HELPPATH_Command_Line_Attribute_Gallery),
+		{_T("DisplayLineGallery"),				_R(IDS_HELPPATH_Command_Line_Attribute_Gallery)},
 #endif	//webster
-		"DisplayFontsGallery",				_R(IDS_HELPPATH_Command_Font_Gallery),
-		"DisplayFrameGallery",				_R(IDS_HELPPATH_Command_Frame_Gallery),
-		"DisplayClipartGallery",			_R(IDS_HELPPATH_Command_Clipart_Gallery),
-		"DisplayFillsGallery",				_R(IDS_HELPPATH_Command_Fill_Gallery),
-		"DisplayNameGallery",				_R(IDS_HELPPATH_Command_Name_Gallery),
-		OPTOKEN_COLOUREDITDLG,				_R(IDS_HELPPATH_Misc_Colour_Editor),					// ????????
+		{_T("DisplayFontsGallery"),				_R(IDS_HELPPATH_Command_Font_Gallery)},
+		{_T("DisplayFrameGallery"),				_R(IDS_HELPPATH_Command_Frame_Gallery)},
+		{_T("DisplayClipartGallery"),			_R(IDS_HELPPATH_Command_Clipart_Gallery)},
+		{_T("DisplayFillsGallery"),				_R(IDS_HELPPATH_Command_Fill_Gallery)},
+		{_T("DisplayNameGallery"),				_R(IDS_HELPPATH_Command_Name_Gallery)},
+		{OPTOKEN_COLOUREDITDLG,				_R(IDS_HELPPATH_Misc_Colour_Editor)},					// ????????
 #ifndef WEBSTER
 #ifdef BUILD_SEPARATIONS
-		OPTOKEN_IMAGESETTING,				_R(IDS_HELPPATH_Command_Imagesetting),
-		OPTOKEN_OVERPRINTFILL,				_R(IDS_HELPPATH_Command_Overprint_Fill),
-		OPTOKEN_OVERPRINTLINE,				_R(IDS_HELPPATH_Command_Overprint_Line),
-		OPTOKEN_PRINTONALLPLATES,			_R(IDS_HELPPATH_Command_Print_On_All_Plates),
+		{OPTOKEN_IMAGESETTING,				_R(IDS_HELPPATH_Command_Imagesetting)},
+		{OPTOKEN_OVERPRINTFILL,				_R(IDS_HELPPATH_Command_Overprint_Fill)},
+		{OPTOKEN_OVERPRINTLINE,				_R(IDS_HELPPATH_Command_Overprint_Line)},
+		{OPTOKEN_PRINTONALLPLATES,			_R(IDS_HELPPATH_Command_Print_On_All_Plates)},
 #endif	// BUILD_SEPARATIONS
 //		OPTOKEN_BFXDLG,						_R(IDS_HELPPATH_Command_Bitmap_Effects),
-		OPTOKEN_BFXDLG_FLIPROTATE,			_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate),
-		OPTOKEN_BFXDLG_RESIZE,				_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize),
-		OPTOKEN_BFXDLG_BRIGHTNESSCONTRAST,	_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast),
-		OPTOKEN_BFXDLG_COLOURDEPTH,			_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth),
-		OPTOKEN_BFXDLG_SPECIALEFFECTS,		_R(IDS_HELPPATH_Command_Bitmap_Effects_Special),
-		OPTOKEN_TRACEDLG,					_R(IDS_HELPPATH_Command_Bitmap_Tracer),
+#if !defined(EXCLUDE_FROM_XARALX)
+		{OPTOKEN_BFXDLG_FLIPROTATE,			_R(IDS_HELPPATH_Command_Bitmap_Effects_Flip_and_Rotate)},
+		{OPTOKEN_BFXDLG_RESIZE,				_R(IDS_HELPPATH_Command_Bitmap_Effects_Resize)},
+		{OPTOKEN_BFXDLG_BRIGHTNESSCONTRAST,	_R(IDS_HELPPATH_Command_Bitmap_Effects_Brightness_and_Contrast)},
+		{OPTOKEN_BFXDLG_COLOURDEPTH,			_R(IDS_HELPPATH_Command_Bitmap_Effects_Colour_Depth)},
+		{OPTOKEN_BFXDLG_SPECIALEFFECTS,		_R(IDS_HELPPATH_Command_Bitmap_Effects_Special)},
+		{OPTOKEN_TRACEDLG,					_R(IDS_HELPPATH_Command_Bitmap_Tracer)},
+#endif
 #endif	//webster
-		OPTOKEN_WEBADDRESSDLG,				_R(IDS_HELPPATH_Command_Web_Address),
-		OPTOKEN_UTILOPTIONS,				_R(IDS_HELPPATH_Command_Options),
-		OPTOKEN_FRAME_ANIPROPERTIES,		_R(IDS_HELPPATH_Dialog_Animation_Properties),
-		OPTOKEN_FRAME_GRABALLFRAMES,		_R(IDS_HELPPATH_Command_Preview_All_Frames),
-		OPTOKEN_FRAME_BROWSERPREVIEW,		_R(IDS_HELPPATH_Command_Preview_Animation_in_Browser),
+		{OPTOKEN_WEBADDRESSDLG,				_R(IDS_HELPPATH_Command_Web_Address)},
+		{OPTOKEN_UTILOPTIONS,				_R(IDS_HELPPATH_Command_Options)},
+		{OPTOKEN_FRAME_ANIPROPERTIES,		_R(IDS_HELPPATH_Dialog_Animation_Properties)},
+		{OPTOKEN_FRAME_GRABALLFRAMES,		_R(IDS_HELPPATH_Command_Preview_All_Frames)},
+		{OPTOKEN_FRAME_BROWSERPREVIEW,		_R(IDS_HELPPATH_Command_Preview_Animation_in_Browser)},
 //		OPTOKEN_TEMPLATEDLG,				_R(IDS_HELPPATH_Command_Wizard_Properties),
 
 #ifdef STANDALONE
-		OPTOKEN_TIMEDRAW,					_R(IDS_HELPPATH_Command_Time_Redraw),				// only in viewer
+		{OPTOKEN_TIMEDRAW,					_R(IDS_HELPPATH_Command_Time_Redraw)},				// only in viewer
 #endif 
 
-	OPTOKEN_WINDOW_MENU,					_R(IDS_HELPPATH_Menu_Window),
-		OPTOKEN_WINDOWNEWVIEW,				_R(IDS_HELPPATH_Command_New_View),
-		OPTOKEN_WINDOWTILE,					_R(IDS_HELPPATH_Command_Arrange_Views),
-		OPTOKEN_WINDOWCASCADE,				_R(IDS_HELPPATH_Command_Cascade_Views),
-		OPTOKEN_WINDOWARRANGE,				_R(IDS_HELPPATH_Command_Arrange_Icons),
-		OPTOKEN_TOOLBARDLG,					_R(IDS_HELPPATH_Command_Control_Bars),
+	{OPTOKEN_WINDOW_MENU,					_R(IDS_HELPPATH_Menu_Window)},
+		{OPTOKEN_WINDOWNEWVIEW,				_R(IDS_HELPPATH_Command_New_View)},
+		{OPTOKEN_WINDOWTILE,					_R(IDS_HELPPATH_Command_Arrange_Views)},
+		{OPTOKEN_WINDOWCASCADE,				_R(IDS_HELPPATH_Command_Cascade_Views)},
+		{OPTOKEN_WINDOWARRANGE,				_R(IDS_HELPPATH_Command_Arrange_Icons)},
+		{OPTOKEN_TOOLBARDLG,					_R(IDS_HELPPATH_Command_Control_Bars)},
 #ifndef WEBSTER
-		OPTOKEN_BARS_MENU,					_R(IDS_HELPPATH_Command_Bars),
-			OPTOKEN_VIEWCOLOURBAR,			_R(IDS_HELPPATH_Command_Colour_Line),
-			OPTOKEN_VIEWSTATUSBAR,			_R(IDS_HELPPATH_Command_Status_Line),
-			OPTOKEN_VIEWSCROLLBARS,			_R(IDS_HELPPATH_Command_Scrollbars),
-			OPTOKEN_VIEWRULERS,				_R(IDS_HELPPATH_Command_Rulers),
-		OPTOKEN_VIEWFULLSCREEN,				_R(IDS_HELPPATH_Command_Fullscreen),
+		{OPTOKEN_BARS_MENU,					_R(IDS_HELPPATH_Command_Bars)},
+			{OPTOKEN_VIEWCOLOURBAR,			_R(IDS_HELPPATH_Command_Colour_Line)},
+			{OPTOKEN_VIEWSTATUSBAR,			_R(IDS_HELPPATH_Command_Status_Line)},
+			{OPTOKEN_VIEWSCROLLBARS,			_R(IDS_HELPPATH_Command_Scrollbars)},
+			{OPTOKEN_VIEWRULERS,				_R(IDS_HELPPATH_Command_Rulers)},
+		{OPTOKEN_VIEWFULLSCREEN,				_R(IDS_HELPPATH_Command_Fullscreen)},
 #endif	//Webster
-		OPTOKEN_SHOWGRID,					_R(IDS_HELPPATH_Command_Show_Grid),
-		OPTOKEN_SNAPTOGRID,					_R(IDS_HELPPATH_Command_Snap_To_Grid),
+		{OPTOKEN_SHOWGRID,					_R(IDS_HELPPATH_Command_Show_Grid)},
+		{OPTOKEN_SNAPTOGRID,					_R(IDS_HELPPATH_Command_Snap_To_Grid)},
 // WEBSTER - markn 15/1/97
 // Removed these ops as they are not used
 #ifndef WEBSTER
-		OPTOKEN_SHOWGUIDES,					_R(IDS_HELPPATH_Command_Show_Guides),
-		OPTOKEN_SNAPTOGUIDES,				_R(IDS_HELPPATH_Command_Snap_to_Guides),
-		OPTOKEN_SNAPTOOBJECTS,				_R(IDS_HELPPATH_Command_Snap_To_Objects),
-		OPTOKEN_SHOWPRINTBORDERS,			_R(IDS_HELPPATH_Command_Print_Borders),
+		{OPTOKEN_SHOWGUIDES,					_R(IDS_HELPPATH_Command_Show_Guides)},
+		{OPTOKEN_SNAPTOGUIDES,				_R(IDS_HELPPATH_Command_Snap_to_Guides)},
+		{OPTOKEN_SNAPTOOBJECTS,				_R(IDS_HELPPATH_Command_Snap_To_Objects)},
+		{OPTOKEN_SHOWPRINTBORDERS,			_R(IDS_HELPPATH_Command_Print_Borders)},
 #endif // WEBSTER
-		OPTOKEN_WINDOWQUALITY,				_R(IDS_HELPPATH_Command_Quality),                                 
-			OPTOKEN_QUALITYANTIALIASED,		_R(IDS_HELPPATH_Command_Quality),
-			OPTOKEN_QUALITYNORMAL,			_R(IDS_HELPPATH_Command_Quality),
-			OPTOKEN_QUALITYSIMPLE,			_R(IDS_HELPPATH_Command_Quality),
-			OPTOKEN_QUALITYOUTLINE,			_R(IDS_HELPPATH_Command_Quality),
+		{OPTOKEN_WINDOWQUALITY,				_R(IDS_HELPPATH_Command_Quality)},                                 
+			{OPTOKEN_QUALITYANTIALIASED,		_R(IDS_HELPPATH_Command_Quality)},
+			{OPTOKEN_QUALITYNORMAL,			_R(IDS_HELPPATH_Command_Quality)},
+			{OPTOKEN_QUALITYSIMPLE,			_R(IDS_HELPPATH_Command_Quality)},
+			{OPTOKEN_QUALITYOUTLINE,			_R(IDS_HELPPATH_Command_Quality)},
 #ifndef WEBSTER
-		OPTOKEN_COMPOSITEPREVIEW,			_R(IDS_HELPPATH_Command_Composite_Print_Preview),
+		{OPTOKEN_COMPOSITEPREVIEW,			_R(IDS_HELPPATH_Command_Composite_Print_Preview)},
 #endif // WEBSTER
 
-	OPTOKEN_HELP_MENU,						_R(IDS_HELPPATH_Menu_Help),
-		OPTOKEN_HELPINDEX,					_R(IDS_HELPPATH_Command_Contents),
-		OPTOKEN_HELPTOOLS,					_R(IDS_HELPPATH_Misc_Tools),
+	{OPTOKEN_HELP_MENU,						_R(IDS_HELPPATH_Menu_Help)},
+		{OPTOKEN_HELPINDEX,					_R(IDS_HELPPATH_Command_Contents)},
+		{OPTOKEN_HELPTOOLS,					_R(IDS_HELPPATH_Misc_Tools)},
 #ifndef WEBSTER
-		OPTOKEN_HELPGALLERIES,				_R(IDS_HELPPATH_Overview_Galleries),
+		{OPTOKEN_HELPGALLERIES,				_R(IDS_HELPPATH_Overview_Galleries)},
 #endif // WEBSTER
-		OPTOKEN_HELPDEMOS,					_R(IDS_HELPPATH_Misc_Demos),
+		{OPTOKEN_HELPDEMOS,					_R(IDS_HELPPATH_Misc_Demos)},
 #ifndef WEBSTER
-		OPTOKEN_HELPTECHSUPPORT,			_R(IDS_HELPPATH_Misc_Tech_Support),
+		{OPTOKEN_HELPTECHSUPPORT,			_R(IDS_HELPPATH_Misc_Tech_Support)},
 #endif // WEBSTER
-		OPTOKEN_TIPSDLG,					_R(IDS_HELPPATH_Command_Tip_of_the_Day),
-		OPTOKEN_WEBLINK,					_R(IDS_HELPPATH_Command_Use_Help_From_CD),
-		OPTOKEN_XARAX_FORUM,				_R(IDS_HELPPATH_Command_Xara_On_The_Web),
-		OPTOKEN_WEBSTER_HOME_PAGE,			_R(IDS_HELPPATH_Command_Xara_On_The_Web),
-		OPTOKEN_XARA_HOME_PAGE,				_R(IDS_HELPPATH_Command_Xara_On_The_Web),
-		OPTOKEN_XARA_PURCHASE_PAGE,			_R(IDS_HELPPATH_Command_Xara_On_The_Web),
-		OPTOKEN_XARA_WEB_MENU,				_R(IDS_HELPPATH_Command_Xara_On_The_Web),
-		OPTOKEN_HINTS_AND_TIPS_PAGES,		_R(IDS_HELPPATH_Command_Xara_On_The_Web),
+		{OPTOKEN_TIPSDLG,					_R(IDS_HELPPATH_Command_Tip_of_the_Day)},
+		{OPTOKEN_WEBLINK,					_R(IDS_HELPPATH_Command_Use_Help_From_CD)},
+		{OPTOKEN_XARAX_FORUM,				_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
+		{OPTOKEN_WEBSTER_HOME_PAGE,			_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
+		{OPTOKEN_XARA_HOME_PAGE,				_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
+		{OPTOKEN_XARA_PURCHASE_PAGE,			_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
+		{OPTOKEN_XARA_WEB_MENU,				_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
+		{OPTOKEN_HINTS_AND_TIPS_PAGES,		_R(IDS_HELPPATH_Command_Xara_On_The_Web)},
 
 #ifndef EXCLUDE_FROM_RALPH
-		OPTOKEN_ABOUTDLG,					_R(IDS_HELPPATH_Command_About_Studio),
+		{OPTOKEN_ABOUTDLG,					_R(IDS_HELPPATH_Command_About_Studio)},
 #endif
 
 	// Other Operations (not on menus).
-	OPTOKEN_PASTEATSAMEPOS,					_R(IDS_HELPPATH_Command_Paste_at_Same_Position),
-	OPTOKEN_PAGESIZEDLG,					_R(IDS_HELPPATH_Command_Options_Page),
+	{OPTOKEN_PASTEATSAMEPOS,					_R(IDS_HELPPATH_Command_Paste_at_Same_Position)},
+	{OPTOKEN_PAGESIZEDLG,					_R(IDS_HELPPATH_Command_Options_Page)},
 
 #ifndef WEBSTER
-	TOOL_OPTOKEN_BEZTOOL,					_R(IDS_HELPPATH_Tool_Shape),
-	TOOL_OPTOKEN_REGSHAPE,					_R(IDS_HELPPATH_Tool_QuickShape),
-	TOOL_OPTOKEN_BLEND,						_R(IDS_HELPPATH_Tool_Blend),
-	TOOL_OPTOKEN_MOULD,						_R(IDS_HELPPATH_Tool_Mould),
-	TOOL_OPTOKEN_SELECTOR,					_R(IDS_HELPPATH_Tool_Selector),
-	TOOL_OPTOKEN_FREEHAND,					_R(IDS_HELPPATH_Tool_Freehand)	,
-	TOOL_OPTOKEN_PEN,						_R(IDS_HELPPATH_Tool_Pen)	,	
-	TOOL_OPTOKEN_RECTANGLE,					_R(IDS_HELPPATH_Tool_Rectangle)	,
-	TOOL_OPTOKEN_ELLIPSE,					_R(IDS_HELPPATH_Tool_Ellipse)	,
-	TOOL_OPTOKEN_GRADFILL,					_R(IDS_HELPPATH_Tool_Fill)		,
-	TOOL_OPTOKEN_TRANSP,					_R(IDS_HELPPATH_Tool_Transparency)	,
-	TOOL_OPTOKEN_SOFTSHADOW,				_R(IDS_HELPPATH_Tool_Shadow),		
-	TOOL_OPTOKEN_BEVEL,						_R(IDS_HELPPATH_Tool_Bevel)		,	
-	TOOL_OPTOKEN_CONTOUR,					_R(IDS_HELPPATH_Tool_Contour),		
-	TOOL_OPTOKEN_ZOOM,						_R(IDS_HELPPATH_Tool_Zoom)	,		
+	{TOOL_OPTOKEN_BEZTOOL,					_R(IDS_HELPPATH_Tool_Shape)},
+	{TOOL_OPTOKEN_REGSHAPE,					_R(IDS_HELPPATH_Tool_QuickShape)},
+	{TOOL_OPTOKEN_BLEND,						_R(IDS_HELPPATH_Tool_Blend)},
+	{TOOL_OPTOKEN_MOULD,						_R(IDS_HELPPATH_Tool_Mould)},
+	{TOOL_OPTOKEN_SELECTOR,					_R(IDS_HELPPATH_Tool_Selector)},
+	{TOOL_OPTOKEN_FREEHAND,					_R(IDS_HELPPATH_Tool_Freehand)	},
+	{TOOL_OPTOKEN_PEN,						_R(IDS_HELPPATH_Tool_Pen)	},	
+	{TOOL_OPTOKEN_RECTANGLE,					_R(IDS_HELPPATH_Tool_Rectangle)	},
+	{TOOL_OPTOKEN_ELLIPSE,					_R(IDS_HELPPATH_Tool_Ellipse)	},
+	{TOOL_OPTOKEN_GRADFILL,					_R(IDS_HELPPATH_Tool_Fill)		},
+	{TOOL_OPTOKEN_TRANSP,					_R(IDS_HELPPATH_Tool_Transparency)	},
+	{TOOL_OPTOKEN_SOFTSHADOW,				_R(IDS_HELPPATH_Tool_Shadow)},		
+	{TOOL_OPTOKEN_BEVEL,						_R(IDS_HELPPATH_Tool_Bevel)		},	
+	{TOOL_OPTOKEN_CONTOUR,					_R(IDS_HELPPATH_Tool_Contour)},		
+	{TOOL_OPTOKEN_ZOOM,						_R(IDS_HELPPATH_Tool_Zoom)	},		
 
 
-	OPTOKEN_REVERSESTORYPATH,				_R(IDS_HELPPATH_Command_Reverse_Text_on_Curve),
+	{OPTOKEN_REVERSESTORYPATH,				_R(IDS_HELPPATH_Command_Reverse_Text_on_Curve)},
 #endif // WEBSTER
 
-	TOOL_OPTOKEN_TEXT,						_R(IDS_HELPPATH_Tool_Text),
+	{TOOL_OPTOKEN_TEXT,						_R(IDS_HELPPATH_Tool_Text)},
 
 #ifndef WEBSTER
-	OPTOKEN_TOGGLEPRINTASSHAPES,			_R(IDS_HELPPATH_Command_Print_Text_as_Shapes),
-	OPTOKEN_MAKELINESOP,					_R(IDS_HELPPATH_Tool_Shape_Straight),
-	OPTOKEN_MAKECURVESOP,					_R(IDS_HELPPATH_Tool_Shape_Curved),
-	OPTOKEN_DELETEPOINTSOP,					_R(IDS_HELPPATH_Tool_Shape_Delete),
-	OPTOKEN_BREAKATPOINTS,					_R(IDS_HELPPATH_Tool_Shape_Break),
-	OPTOKEN_SELECTALLPATHPOINTS,			_R(IDS_HELPPATH_Popup_Point_Handle_Select_All_Points),
-	OPTOKEN_DESELECTALLPATHPOINTS,			_R(IDS_HELPPATH_Popup_Point_Handle_Deselect_All_Handles),
-	OPTOKEN_FRAME_GRABFRAME,				_R(IDS_HELPPATH_Command_Preview_All_Frames),
+	{OPTOKEN_TOGGLEPRINTASSHAPES,			_R(IDS_HELPPATH_Command_Print_Text_as_Shapes)},
+	{OPTOKEN_MAKELINESOP,					_R(IDS_HELPPATH_Tool_Shape_Straight)},
+	{OPTOKEN_MAKECURVESOP,					_R(IDS_HELPPATH_Tool_Shape_Curved)},
+	{OPTOKEN_DELETEPOINTSOP,					_R(IDS_HELPPATH_Tool_Shape_Delete)},
+	{OPTOKEN_BREAKATPOINTS,					_R(IDS_HELPPATH_Tool_Shape_Break)},
+	{OPTOKEN_SELECTALLPATHPOINTS,			_R(IDS_HELPPATH_Popup_Point_Handle_Select_All_Points)},
+	{OPTOKEN_DESELECTALLPATHPOINTS,			_R(IDS_HELPPATH_Popup_Point_Handle_Deselect_All_Handles)},
+	{OPTOKEN_FRAME_GRABFRAME,				_R(IDS_HELPPATH_Command_Preview_All_Frames)},
 #endif // WEBSTER
 	
 	NULL, 0

@@ -183,6 +183,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rendwnd.h"
 #include "backgrnd.h"
 #include "blndtool.h"
+#include "helpuser.h"
 #if XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif
@@ -510,6 +511,7 @@ PORTNOTE("other","Removed various bevel usage")
 			OpLiveEffect::Init() &&				// Register the liveeffects ops (now done by LiveEffecttool)
 			&& NodeBitmapEffect::Init() &&
 #endif
+			InitUserHelp() &&
 			TRUE;
 }
 

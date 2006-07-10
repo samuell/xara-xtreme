@@ -2486,10 +2486,7 @@ MsgResult DialogOp::Message( Msg* Message )
 					// Invoke the help system and mark this message as completely processed.  If we
 					// don't and instead fall through to the base-class handler, the base class might
 					// conceivably fail the message	(as it doesn't know anything about it).
-PORTNOTE("other","DialogOp::Message - Help system disabled")
-#ifndef EXCLUDE_FROM_XARALX
 					HelpUser(*this);
-#endif
 					return DLG_EAT_IF_HUNGRY(pDlgMsg);
 				}
 				break;
@@ -3295,8 +3292,6 @@ BOOL DialogTabOp::TalkToPage(CDlgResID PageID)
 
 MsgResult DialogTabOp::Message( Msg* Message )       
 {
-PORTNOTE("dialog","DialogTabOp::Message - do nothing")
-#ifndef EXCLUDE_FROM_XARALX
 	if (IS_OUR_DIALOG_MSG(Message))
 	{
 		DialogMsg* pDlgMsg = (DialogMsg*) Message;
@@ -3310,7 +3305,6 @@ PORTNOTE("dialog","DialogTabOp::Message - do nothing")
 			}
 		}
 	} 
-#endif
 	return DialogOp::Message(Message); // Let the base class do the rest
 }
 

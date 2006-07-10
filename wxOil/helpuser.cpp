@@ -169,12 +169,11 @@ DECLARE_SOURCE("$Revision$");
 ///////////////////////////////////////////////////////////////////////////////////////////
 //	Implementation.
 
-// These store the full paths to the help-file and, on Windows NT, the 16-bit stub program
-// that runs 16-bit system help on that platform.
+// These store the full paths to the help-file
+static String_256		achzHelpPath;
+
 PORTNOTE("help", "Help function unimplemented!")
 #if !defined(EXCLUDE_FROM_XARALX)
-
-static TCHAR achzHelpPath[_MAX_PATH];
 static TCHAR achzMoviesHelpPath[_MAX_PATH];
 // static TCHAR achzStubPath[_MAX_PATH];
 
@@ -184,14 +183,11 @@ static TCHAR achzSpecPath[_MAX_PATH];
 
 // This holds a handle to our message filter hook that traps F1 being pressed in dialogs.
 static HHOOK hF1Hook = NULL;
-
 #endif
 
-#ifndef EXCLUDE_FROM_XARALX
 // This is set to TRUE if we use the help at all.  It reminds us to shut the help engine
 // down when we quit.
 static BOOL fHaveUsedHelp = FALSE;
-#endif
 
 #ifdef STANDALONE
 static BOOL fHaveUsedSpecHelp = FALSE;
@@ -224,10 +220,8 @@ static UINT32 nNextMessageHelpContext = 0;
 	SeeAlso:	HelpUser
 ********************************************************************************************/
 
-#if !defined(EXCLUDE_FROM_XARALX)
 static DWORD LookupDialogTopic(LPCTSTR lpcszLookupClass, UINT32 nPageResID)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
 	// Check we're not being passed junk.
 //	ERROR3IF(lpcszLookupClass == NULL, "No dialog class in LookupDialogTopic");
 		
@@ -247,7 +241,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	// Couldn't find such a dialog class.
 	return 0;
 }
-#endif
 
 
 
@@ -425,7 +418,7 @@ static LRESULT CALLBACK EXPORT F1HookProc(INT32 nCode, WPARAM wParam, LPARAM lPa
 	// Pass this event on to the next hook proc if it's valid.
 	return (fHandleOK) ? ::CallNextHookEx(hF1Hook, nCode, wParam, lParam) : 0;
 }
-
+#endif
 
 
 /********************************************************************************************
@@ -447,6 +440,7 @@ static LRESULT CALLBACK EXPORT F1HookProc(INT32 nCode, WPARAM wParam, LPARAM lPa
 
 static BOOL RunOilHelp(LPCTSTR lpcszHelpPath, UINT32 nCommand, DWORD dwData)
 {
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Firing up the help engine can take a while, so show an hour-glass cursor.
 	HCURSOR hOldCursor;
 	HCURSOR hBusyCursor = ::LoadCursor(NULL, _R(IDC_WAIT));
@@ -454,6 +448,7 @@ static BOOL RunOilHelp(LPCTSTR lpcszHelpPath, UINT32 nCommand, DWORD dwData)
 
 	// We always pass the handle of the main-frame window as the "owning" window.
 	HWND hwndInvoker = GetMainFrame()->GetSafeHwnd();
+#endif
 
 	// If we are running on a pure 32-bit platform such as Windows NT then we must fake
 	// the WinHelp() function, as we want the 16-bit engine to be run, not WINHLP32.EXE.
@@ -472,25 +467,21 @@ static BOOL RunOilHelp(LPCTSTR lpcszHelpPath, UINT32 nCommand, DWORD dwData)
 		fOk = TRUE;
 		if(nCommand != HELP_QUIT)
 		{
-			CString strHelpFileName(lpcszHelpPath);
-			CString Context = "";
+			wxString strHelpFileName(lpcszHelpPath);
+			wxString Context = _T("");
 			if (dwData)
 			{
-				if (Context.LoadString(dwData))
+				Context = PCTSTR(String_256( dwData ));
+				if (_T("") != Context)
 					// so that the string table contains a bit less, the ::/xarax/ and .htm
 					// are here, because they are common to every HTML help path.
-					strHelpFileName += "::/xarax/" + Context + ".htm";
+					strHelpFileName += _T("xarax/") + Context + _T(".htm");
 			}
-			strHelpFileName += ">mainwin";	// not entirely sure why this is there... WS4 has it.
 
-			HWND hwnd = HtmlHelp(
-				 GetDesktopWindow(),
-				 strHelpFileName,
-				 HH_DISPLAY_TOPIC,
-				 NULL);
+			CCamApp::LaunchWebBrowser( strHelpFileName );
 		}
 
-
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Get some slightly useful information if it all goes horribly wrong.
 #ifdef _DEBUG
 	if (!fOk) TRACEUSER( "Ollie", _T("RunOilHelp failed - last error: %lu\n"),
@@ -499,9 +490,10 @@ static BOOL RunOilHelp(LPCTSTR lpcszHelpPath, UINT32 nCommand, DWORD dwData)
 
 	// Undo the hour-glass cursor and return a success code.
 	if (hBusyCursor != NULL) ::SetCursor(hOldCursor);
+#endif
+
 	return fOk;
 }
-#endif
 
 
 
@@ -579,14 +571,9 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 static BOOL ShowHelp(UINT32 nCommand, DWORD dwData)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	BOOL fResult = RunOilHelp(achzHelpPath, nCommand, dwData);
 	if (!fHaveUsedHelp && fResult) fHaveUsedHelp = TRUE;
 	return fResult;
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -610,23 +597,21 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUser(const DialogOp& DlgOp)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Work out which page within the dialog is visible, if appropriate.  We begin by
 	// assuming this isn't relevant.
 	UINT32 nPageResID = 0;
 	if (DlgOp.IsKindOf(TABBED_DIALOG_CLASS))
 	{
 		// Work out which is the active (top-most) page within the tabbed dialog.
-		HWND hwnd = (HWND) DlgOp.WindowID;
-		if (hwnd != NULL)
+		wxWindow* pWnd = (wxWindow*) DlgOp.WindowID;
+		if (pWnd != NULL)
 		{
 			// We got the window handle, get its MFC CWnd analogue.
-			OurPropSheet* pSheet = (OurPropSheet*) CWnd::FromHandlePermanent(hwnd);
+			wxBookCtrlBase* pSheet = DialogManager::GetBookControl( pWnd );
 			if (pSheet != NULL)
 			{
 				// Ask it for the resource ID of its currently active page.
-				nPageResID = (UINT32) pSheet->GetActivePage()->GetPageID();
+				nPageResID = (UINT32) pSheet->GetCurrentPage()->GetId();
 			}
 #ifdef _DEBUG
 			else
@@ -658,9 +643,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 	// Show this topic in the help system and return a success code.
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -1098,59 +1080,23 @@ UINT32 GetNextMsgHelpContext()
 ********************************************************************************************/
 
 // Forward references to helper functions
-BOOL InitHelpPath(LPTSTR achzExePath, LPCTSTR achzLocalem, BOOL bMainHelp);
+BOOL InitHelpPath(BOOL bMainHelp);
 BOOL HelpFileExists(LPTSTR FileName);
 
 BOOL InitUserHelp()
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
 #if !defined(EXCLUDE_FROM_XARALX)
-	// We need to know where the helpfile and possibly the NT helper program are
-	// stored on disk.  We know they should be in the same directory as the Camelot
-	// executable, so find out where this is.
-	TCHAR achzExePath[_MAX_PATH];
-	if (::GetModuleFileName(AfxGetInstanceHandle(), achzExePath, _MAX_PATH) == 0)
-	{
-		TRACEUSER( "Ollie", _T("GetModuleFileName failed in InitUserHelp\n"));
-		return FALSE;
-	}
-
 	// If we have any deferred file copies, deal with them now...
 	HelpDownloadOp::DoDeferredFileCopy();
-
-	// Make the path into its "short form", ie. 8.3 MS-DOS compatible.  This is necessary
-	// as Windows NT doesn't like paths with spaces, even though it allows them (eg.
-	// CreateProcess will fail when parsing the image path / command line).
-#ifdef _DEBUG
-	ERROR3IF(!MakeShortPath(achzExePath, _MAX_PATH), "MakeShortPath failed in InitUserHelp");
-#else
-	MakeShortPath(achzExePath, _MAX_PATH);
 #endif
 
 	// init main help file:
-	BOOL bOK = InitHelpPath(achzExePath, (LPCTSTR)CResDll::GetCurrentLocale(), TRUE);
-	if (!bOK)
-		// Fallback to UK English
-		bOK = InitHelpPath(achzExePath, _T("ENG"), TRUE);
-	if (!bOK)
-		// Fallback to US English
-		bOK = InitHelpPath(achzExePath, _T("ENU"), TRUE);
+	BOOL bOK = InitHelpPath(TRUE);
 
 	// init movies help file
-	bOK = InitHelpPath(achzExePath, (LPCTSTR)CResDll::GetCurrentLocale(), FALSE);
-	if (!bOK)
-		// Fallback to UK English
-		bOK = InitHelpPath(achzExePath, _T("ENG"), FALSE);
-	if (!bOK)
-		// Fallback to US English
-		bOK = InitHelpPath(achzExePath, _T("ENU"), FALSE);
+	bOK = bOK && InitHelpPath(FALSE);
 
-#ifdef STANDALONE
-	// Make the path to the standalone version's helpfile advert.
-	MAKEPATH(achzSpecPath, achzDrive, achzDirectory, TEXT("XSPEC"), TEXT("HLP"));
-//	TRACEUSER( "JustinF", _T("Special help path is %s\n"), (LPCTSTR) achzSpecPath);
-#endif	
-
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Install a message filter hook to trap F1 being pressed in dialogs etc.  We don't need
 	// one for menus as our "custom menu code" (ha ha ha) does this already.
 	hF1Hook = ::SetWindowsHookEx(WH_MSGFILTER, F1HookProc, NULL, ::GetCurrentThreadId());
@@ -1159,70 +1105,55 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	// Success!?!
 	return hF1Hook != NULL;
 #else
-	return TRUE;
+	return bOK;
 #endif
 }
 
 
-PORTNOTE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 // --------------------------------------------------------------------------------
-BOOL InitHelpPath(LPTSTR achzExePath, LPCTSTR achzLocale, BOOL bMainHelp)
+BOOL InitHelpPath(BOOL bMainHelp)
 {
-	// The above gave us a path and a filename.  Extract the path components.
-	TCHAR achzDrive[_MAX_DRIVE], achzDirectory[_MAX_DIR],
-		  achzFileName[_MAX_FNAME], achzExtn[_MAX_EXT];
-	SPLITPATH(achzExePath, achzDrive, achzDirectory, achzFileName, achzExtn);
-
-	// Look for the localised help file in the HelpAndSupport folder now!
-	camStrcat(achzDirectory, _T("HelpAndSupport\\"));
-	camStrcat(achzDirectory, achzLocale);
-	camStrcat(achzDirectory, _T("\\"));
-
-	// Now put them back together, substituting the help database's filename.
-	if(bMainHelp)
+	if( !bMainHelp )
 	{
-		MAKEPATH(achzHelpPath, achzDrive, achzDirectory, TEXT(PRODUCT_HELPFILENAME), TEXT("CHM"));
-		return HelpFileExists(achzHelpPath);
+		PORTNOTETRACE("help", "InitHelpPath does not support Movie path yet");
 	}
+
+	// Get the locale id
+	wxString	strLocale( setlocale( LC_MESSAGES, NULL ), wxConvUTF8 );
+	INT32		ordSep = strLocale.Find( _T('_' ) );
+	if ( -1 != ordSep )
+		strLocale = strLocale.Left( ordSep );
+	TRACEUSER( "jlh92", _T("Locale = %s\n"), PCTSTR(strLocale) );
+	
+	// Locale C is considered a synonym for en
+	if( strLocale == _T("C") )
+		strLocale = _T("en");
+
+	// Check the help dir exists, if not bomb out
+	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
+	wxString	strHelpPath( pszDataPath, wxConvUTF8 );
+	free( pszDataPath );
+	strHelpPath += _T("/xaralx/doc/");
+	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strHelpPath + strLocale) );
+	if( wxDir::Exists( strHelpPath + strLocale ) )
+		strHelpPath += strLocale + _T("/");
 	else
 	{
-		MAKEPATH(achzMoviesHelpPath, achzDrive, achzDirectory, TEXT(PRODUCT_MOVIESHELPFILENAME), TEXT("CHM"));
-		return HelpFileExists(achzMoviesHelpPath);
-	}
-}
-
-
-// --------------------------------------------------------------------------------
-BOOL HelpFileExists(LPTSTR FileName)
-{
-	ERROR3IF(FileName==NULL, "HelpFileExists problem with filename");
-	if (FileName==NULL)
-		return FALSE;
-
-	// Do we have read access on file ?
-	BOOL Found = FALSE;
-
-	TRY
-	{
-		INT32 Value = _taccess(FileName, ios::in | ios::nocreate);
-		if (Value == 0)
-			Found = TRUE;
-	}
-	CATCH_ALL(e)
-	{
-		// File probably not found due to exception.
-		// This can be caused by stuff such as disks not in drives, invalid pathnames...
-		Found = FALSE;
-		Error::ClearError();
-	}
-	END_CATCH_ALL
-
-	return Found;
-}
+		if( wxDir::Exists( strHelpPath + _T("en") ) )
+			strHelpPath += _T("en/");
+#if defined(_DEBUG)
+		else
+		{
+			// We'll try default location under debug to make life easier
+			strHelpPath = _T("/usr/share/xaralx/doc/en/");
+			TRACEUSER( "jlh92", _T("Try = \"%s\"\n"), PCTSTR(strHelpPath) );
+		}
 #endif
+	}
 
-
+	achzHelpPath = strHelpPath;
+	return wxDir::Exists( strHelpPath );
+}
 
 
 /********************************************************************************************

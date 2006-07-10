@@ -1030,6 +1030,13 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 			Defer=FALSE; 
 			HandleMessage = TRUE;
 		}
+		else if (id == _R(wxID_HELP))
+		{
+			// Our clients expect this ID, so keep them happy
+			msg.DlgMsg = DIM_LFT_BN_CLICKED;
+			msg.GadgetID = _R(ID_HELP);
+			HandleMessage = TRUE;
+		}
 		else
 		{
 			msg.DlgMsg = DIM_LFT_BN_CLICKED;
