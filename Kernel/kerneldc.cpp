@@ -268,14 +268,24 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 	INT32 Integer;
 	INT32 Fraction;
 
+	const TCHAR * negative=_T("-");
+	const TCHAR * positive=_T("");
+	const TCHAR * sign = positive;
+
 	// Convert millipoint to EPS user space value in desired format.
 	switch (Accuracy)
 	{
 		case ACCURACY_NORMAL:
 			// Convert to points, getting integer and fractional parts
-			// NB. As we take the integer part, we have to watch out for the case when
-			//     the number converts to the range -1 < x < 0 as the integer part will
-			//     be 0, and hence we won't get a minus sign, so we put one in ourselves.
+			// invert the sign if necessary
+			if (n<0)
+			{
+				sign=negative;
+				n=-n;
+			}
+
+			// as n is positive (or zero), this works in the way expected. Both
+			// Integer and fraction are >=0 too.	
 			Integer  = n / 1000;
 			Fraction = n % 1000;
 
@@ -288,29 +298,22 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 			}
 			else if (FullAccuracy)
 			{
-				// Full 3dp accuracy
-				if ((n < 0) && (Integer == 0))
-					camSprintf(Buf, _T("-%d.%.3d"), Integer, Abs(Fraction));
-				else
-					camSprintf(Buf, _T("%d.%.3d"), Integer, Abs(Fraction));
+				camSprintf(Buf, _T("%s%d.%.3d"), sign, Integer, Fraction);
 			}
 			else
 			{
 				// Normal 2dp accuracy
-				Fraction /= 10;
-				if ((n < 0) && (Integer == 0))
-					camSprintf(Buf, _T("-%d.%.2d"), Integer, Abs(Fraction));
-				else
-					camSprintf(Buf, _T("%d.%.2d"), Integer, Abs(Fraction));
+				Fraction=(Fraction+5)/10;
+				camSprintf(Buf, _T("%s%d.%.2d"), sign, Integer, Fraction);
 			}
 			break;
 
 		case ACCURACY_ROUNDDOWN:
 			// Convert to points, getting integer part.
 			if (n < 0)
-				Integer = n / 1000;
+				Integer = (n - 999)/ 1000;
 			else
-				Integer = (n - 500) / 1000;
+				Integer = (n) / 1000;
 
 			// Output to string (accurate to 0dp)
 			camSprintf(Buf, _T("%d"), Integer);
@@ -319,9 +322,9 @@ BOOL KernelDC::OutputUserSpaceValue(MILLIPOINT n, EPSAccuracy Accuracy)
 		case ACCURACY_ROUNDUP:
 			// Convert to points, getting integer part.
 			if (n < 0)
-				Integer = (n + 500) / 1000;
+				Integer = (n) / 1000;
 			else
-				Integer = n / 1000;
+				Integer = (n + 999) / 1000;
 
 			// Output to string (accurate to 0dp)
 			camSprintf(Buf, _T("%d"), Integer);
