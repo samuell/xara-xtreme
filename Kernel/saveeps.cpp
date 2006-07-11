@@ -2201,6 +2201,12 @@ BOOL EPSRenderRegion::WriteEPSBoundingBox ( void )
 	pDC->OutputCoord	( BBox.hi, ACCURACY_ROUNDUP );
 	pDC->OutputNewLine	();
 
+	// Write a hires bounding box to the file.
+	pDC->OutputToken	( _T("%%HiResBoundingBox:") );
+	pDC->OutputCoord	( BBox.lo, ACCURACY_NORMAL );
+	pDC->OutputCoord	( BBox.hi, ACCURACY_NORMAL );
+	pDC->OutputNewLine	();
+
 	// Success.
 	return TRUE;
 }
