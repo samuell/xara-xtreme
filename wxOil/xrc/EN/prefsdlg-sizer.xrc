@@ -10,7 +10,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="wxID_STATIC">
@@ -23,9 +23,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_VIEW" />
                     </object>
                 </object>
             </object>
@@ -241,9 +239,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_MISC.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_MISC" />
                     </object>
                 </object>
             </object>
@@ -499,7 +495,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="IDC_OPTS_INFO">
@@ -513,9 +509,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_PAGE" />
                     </object>
                 </object>
             </object>
@@ -744,9 +738,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_TUNE" />
                     </object>
                 </object>
             </object>
@@ -1018,7 +1010,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="IDC_OPTS_INFO">
@@ -1032,9 +1024,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_SCALE.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_SCALE" />
                     </object>
                 </object>
             </object>
@@ -1142,7 +1132,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="IDC_OPTS_INFO">
@@ -1156,9 +1146,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_POINTERS.png </bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_POINTERS" />
                     </object>
                 </object>
             </object>
@@ -1291,7 +1279,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="IDC_OPTS_INFO">
@@ -1305,9 +1293,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_GRID.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_GRID" />
                     </object>
                 </object>
             </object>
@@ -1479,11 +1465,10 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxStaticText" name="IDC_OPTS_INFO">
-                            <pos>7,8</pos>
                             <font>
                                 <family>swiss</family>
                             </font>
@@ -1493,9 +1478,7 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_UNITS.png</bitmap>
-                        </object>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_UNITS" />
                     </object>
                 </object>
             </object>
