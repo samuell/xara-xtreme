@@ -418,6 +418,12 @@
 					<label>Arrange windows as non-overlapping tiles</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_INITIALISATION_ERROR">
+					<label>A sub-system has failed to initialise correctly, without correctly reporting an error. The application will now close-down.</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

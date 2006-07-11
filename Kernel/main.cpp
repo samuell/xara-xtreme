@@ -161,21 +161,22 @@ DECLARE_SOURCE("$Revision$");
 
 BOOL InitKernel()
 {
-	if (InitPreTools() &&
-	
-		Tool::InitTools() &&			   	// Init Modules and tools (keep last) 
-
-		InitPostTools1() &&
-		InitPostTools2()
-
-		)					
-		return TRUE;
-	else
+	bool	fSuccess = true;
+	if( !InitPreTools() ||
+		!Tool::InitTools() ||			   	// Init Modules and tools (keep last) 
+		!InitPostTools1() ||
+		!InitPostTools2()
+		)
 	{
+		if( 0 == Error::GetErrorNumber() )
+			Error::SetError( _R(IDS_INITIALISATION_ERROR) );
+
 		InformError();
 		TRACE( _T("InitKernel failed - will exit very soon\n"));
-		return FALSE;
+		fSuccess = false;
 	}
+
+	return fSuccess;
 }
 
 /*******************************************************************
