@@ -1,14 +1,39 @@
-<?xml version="1.0" encoding="ANSI_X3.4-1968"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwidgets.org/wxxrc">
     <object class="wxPanel" name="IDD_OPTSTAB_VIEW">
         <size>309,305</size>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="wxID_STATIC">
-                    <label>Window options</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="wxID_STATIC">
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Window options</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
@@ -197,6 +222,38 @@
         <size>309,305</size>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="wxID_STATIC">
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>General</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_MISC.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
+                </object>
+            </object>
             <object class="sizeritem">
                 <flag>wxGROW|wxALL</flag>
                 <border>5</border>
@@ -437,11 +494,36 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="IDC_OPTS_INFO">
-                    <pos>7,8</pos>
-                    <label>Page layout options for</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="IDC_OPTS_INFO">
+                            <pos>7,8</pos>
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Page layout options for</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
@@ -452,7 +534,7 @@
                     <label>Paper</label>
                     <object class="sizeritem">
                         <flag>wxGROW</flag>
-						<border>5</border>
+                        <border>5</border>
                         <object class="wxFlexGridSizer">
                             <cols>2</cols>
                             <rows>2</rows>
@@ -460,10 +542,10 @@
                             <hgap>0</hgap>
                             <growablecols>0,1</growablecols>
                             <object class="sizeritem">
-                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-								<border>5</border>
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <border>5</border>
                                 <object class="wxStaticText" name="IDC_OPTS_SIZENAME">
-									<label>Paper &amp;size</label>
+                                    <label>Paper &amp;size</label>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -559,7 +641,7 @@
                             <vgap>0</vgap>
                             <hgap>0</hgap>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_OPTS_MARGINTXT">
                                     <pos>15,160</pos>
@@ -643,6 +725,38 @@
         <size>309,305</size>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="wxID_STATIC">
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Tune-ups</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
+                </object>
+            </object>
             <object class="sizeritem">
                 <flag>wxGROW|wxALL</flag>
                 <border>5</border>
@@ -899,11 +1013,36 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="IDC_OPTS_INFO">
-                    <pos>7,8</pos>
-                    <label>Scaling for</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="IDC_OPTS_INFO">
+                            <pos>7,8</pos>
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Scaling for</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_SCALE.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
@@ -998,11 +1137,36 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="IDC_OPTS_INFO">
-                    <pos>7,8</pos>
-                    <label>Mouse options</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="IDC_OPTS_INFO">
+                            <pos>7,8</pos>
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Mouse options</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_POINTERS.png </bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
@@ -1122,11 +1286,36 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="IDC_OPTS_INFO">
-                    <pos>7,8</pos>
-                    <label>Grid and Ruler options for</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="IDC_OPTS_INFO">
+                            <pos>7,8</pos>
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Grid and Ruler options for</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_GRID.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
@@ -1285,11 +1474,36 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxStaticText" name="IDC_OPTS_INFO">
-                    <pos>7,8</pos>
-                    <label>Units for</label>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_TOP|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxStaticText" name="IDC_OPTS_INFO">
+                            <pos>7,8</pos>
+                            <font>
+                                <family>swiss</family>
+                            </font>
+                            <label>Units for</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_UNITS.png</bitmap>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="wxID_STATIC">
+                    <style>wxLI_HORIZONTAL</style>
                 </object>
             </object>
             <object class="sizeritem">
