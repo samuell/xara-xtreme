@@ -23,7 +23,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_VIEW" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_VIEW.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -239,7 +241,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_MISC" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_MISC.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -509,7 +513,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_PAGE" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -738,7 +744,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_TUNE" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_TUNE.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -1024,7 +1032,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_SCALE" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_SCALE.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -1146,7 +1156,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_POINTERS" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_POINTERS.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -1293,7 +1305,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_GRID" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_GRID.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -1478,7 +1492,9 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-						<object class="wxCamArtControl" name="IDD_OPTSTAB_UNITS" />
+                        <object class="wxStaticBitmap" name="wxID_STATIC">
+                            <bitmap>IDD_OPTSTAB_UNITS.png</bitmap>
+                        </object>
                     </object>
                 </object>
             </object>
