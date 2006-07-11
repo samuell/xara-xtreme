@@ -23,8 +23,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_VIEW.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_VIEW">
+							<label> View </label>
                         </object>
                     </object>
                 </object>
@@ -241,8 +241,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_MISC.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_MISC">
+							<label> General </label>
                         </object>
                     </object>
                 </object>
@@ -513,8 +513,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_PAGE.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_PAGE">
+							<label> Page </label>
                         </object>
                     </object>
                 </object>
@@ -744,8 +744,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_TUNE.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_TUNE">
+							<label> Tune-ups </label>
                         </object>
                     </object>
                 </object>
@@ -1032,8 +1032,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_SCALE.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_SCALE">
+							<label> Scaling </label>
                         </object>
                     </object>
                 </object>
@@ -1156,8 +1156,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_POINTERS.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_POINTERS">
+							<label> Mouse </label>
                         </object>
                     </object>
                 </object>
@@ -1305,8 +1305,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_GRID.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_GRID">
+							<label> Grid and Ruler </label>
                         </object>
                     </object>
                 </object>
@@ -1492,8 +1492,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxStaticBitmap" name="wxID_STATIC">
-                            <bitmap>IDD_OPTSTAB_UNITS.png</bitmap>
+						<object class="wxCamArtControl" name="IDD_OPTSTAB_UNITS">
+							<label> Units </label>
                         </object>
                     </object>
                 </object>
