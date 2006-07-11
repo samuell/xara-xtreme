@@ -1152,7 +1152,8 @@ BOOL InitHelpPath(BOOL bMainHelp)
 	}
 
 	achzHelpPath = strHelpPath;
-	return wxDir::Exists( strHelpPath );
+	PORTNOTE( "help", "We should check and report non-existant help directory at some point" )
+	return TRUE; // wxDir::Exists( strHelpPath );
 }
 
 
