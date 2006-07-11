@@ -4747,7 +4747,7 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 
 	// Graham 5/8/96: Changed this to work with MBCS
 	// Set up a string buffer for the output character
-	TCHAR cBuffer[3];
+	char cBuffer[3];
 
 	//Convert the character over to a MBCS index number
 	UINT32 uiCharNumber = UnicodeManager::UnicodeToMultiByte(ch);
@@ -4770,16 +4770,22 @@ BOOL CamelotEPSRenderRegion::RenderChar(WCHAR ch, Matrix* pMatrix)
 	//So let's check if we've got a one-byte or a two-byte character. We do this
 	//by saying...is cBuffer[0] zero?
 
-	if (cBuffer[0]==0)
+    // First we copy it byte by byte into a TCHAR buffer
+	TCHAR tcBuffer[3];
+	tcBuffer[0]=cBuffer[0];
+	tcBuffer[1]=cBuffer[1];
+	tcBuffer[2]=cBuffer[2];
+
+	if (tcBuffer[0]==0)
 		//It's a standard ASCII character, one byte long.
 		//So we only want to pass the second byte of cBuffer - cBuffer[1] -
 		//to OutputString
-		pKernelDC->OutputString(&cBuffer[1]);
+		pKernelDC->OutputString(&tcBuffer[1]);
 	else
 		//The character is two bytes long (that is, it's a foreign character).
 		//So we want to pass the whole of cBuffer - starting from cBuffer[0] -
 		//to OutputString
-		pKernelDC->OutputString(&cBuffer[0]);
+		pKernelDC->OutputString(&tcBuffer[0]);
 
 	//And that's the end of Graham's MBCS code. Now back to Tim.
 

@@ -2787,7 +2787,7 @@ void TextStory::PreExportRender(RenderRegion* pRegion)
 		if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
 		{
 			// Output "start text object" token
-			EPSExportDC *pDC = (EPSExportDC *) pRegion->GetRenderDC();
+			EPSExportDC *pDC = (EPSExportDC *) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC());
 			EPSRenderRegion* pEPSRegion = (EPSRenderRegion*)pRegion;
 
 			NodePath* pPath = GetTextPath();

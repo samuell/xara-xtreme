@@ -1859,7 +1859,7 @@ void FontManager::EncodeFontName(String_64& FontName, String_64& Encoded, INT32 
 	String_32 Match;
 	
 	// Replace all spaces with a hyphen.
- 	Copy.SwapChar(' ','-');
+ 	Copy.SwapChar(_T(' '),_T('-'));
 
 	INT32 Length = Copy.Length();
 
