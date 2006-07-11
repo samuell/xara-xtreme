@@ -139,6 +139,17 @@ AC_ARG_WITH(language,
     fi
 ])
 
+RESOURCE_DIR_DEFINE=
+AC_ARG_WITH(resource-dir,
+[[  --with-resource-dir=DIR The absoulte path to root of resource directory
+                            structure; defaults to using binreloc before 
+                            falling back to /usr/share/xaralx]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        RESOURCE_DIR_DEFINE=-DRESOURCE_DIR=$withval
+    fi
+])
+
 wxversion=0
 
 AC_DEFUN([WXTEST],
@@ -165,7 +176,7 @@ vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $
 if test -n "$vers" && test "$vers" -ge 2006003; then
 	WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cppflags`"
 	WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cxxflags | sed -e 's/-fno-exceptions//'`"
-	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs std,media`"
+	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs std`"
 
 	# See if we are running on GTK
 	WX_GTK="no"
@@ -292,8 +303,8 @@ if test "$StaticEnable" = "yes"; then
 fi
 
 # pass the Pango, FreeType and GTK flags (required for wxGTK font rendering)
-CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS $LIBXML2_CFLAGS"
-CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS $LIBXML2_CFLAGS"
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS $LIBXML2_CFLAGS $RESOURCE_DIR_DEFINE"
+CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS $PANGO_CFLAGS $FT_CFLAGS $GTK_CFLAGS $LIBXML2_CFLAGS $RESOURCE_DIR_DEFINE"
 
 AC_MSG_CHECKING([Linker])
 case $host in

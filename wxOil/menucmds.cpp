@@ -845,6 +845,8 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
+#if defined(EMABLE_MOVIES)
+
 #if wxUSE_MEDIACTRL
 enum
 {
@@ -1028,7 +1030,18 @@ void HelpDemosNativeAction()
 //	HelpOnlineDemos();
 }
 
+#else
 
+void HelpDemosAction()
+{
+}
+
+
+void HelpDemosNativeAction()
+{
+}
+
+#endif
 
 void HelpTechSupportAction()
 {
