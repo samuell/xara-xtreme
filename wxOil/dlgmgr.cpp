@@ -275,7 +275,12 @@ protected:
 #endif
 #if wxUSE_TREEBOOK || wxXTRA_TREEBOOK
 			case TABTYPE_TREE:
-				return new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				{
+					wxTreebook * t = new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+					if (t)
+						t->GetTreeCtrl()->SetIndent(0);
+					return t;
+				}
 				break;
 #else
 			// Default to a ListBook if there is no treebook availables

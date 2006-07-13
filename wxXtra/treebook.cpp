@@ -28,6 +28,31 @@
 #include <wx/imaglist.h>
 #include <wx/settings.h>
 
+// This overrides the dumb implementation in wx2.6
+class wxCamTreeCtrl : public wxTreeCtrl
+{
+public:
+    wxCamTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxTR_DEFAULT_STYLE,
+               const wxValidator &validator = wxDefaultValidator,
+               const wxString& name = wxTreeCtrlNameStr) :
+				wxTreeCtrl(parent, id, pos, size, style, validator, name), m_fixedBestSize(160,80) {}
+
+	virtual wxSize DoGetBestSize() const
+	{
+    	return m_fixedBestSize;
+	}
+
+	virtual void SetFixedBestSize(wxSize s)
+	{
+		m_fixedBestSize=s;
+	}
+
+	wxSize m_fixedBestSize;
+};
+
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -100,7 +125,7 @@ wxTreebook::Create(wxWindow *parent,
                             style, wxDefaultValidator, name) )
         return false;
 
-    m_bookctrl = new wxTreeCtrl
+    m_bookctrl = new wxCamTreeCtrl
                  (
                     this,
                     wxID_TREEBOOKTREEVIEW,
@@ -802,8 +827,6 @@ wxSize wxTreebook::GetControllerSize() const
         return wxSize(0,0);
 
     wxSize cbestsize = m_bookctrl->GetBestSize();
-
-    cbestsize.SetWidth(200); // ***BODGE FOR OPTIONS DIALOG***
 
     wxSize sizeClient = GetClientSize(),
                  sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
