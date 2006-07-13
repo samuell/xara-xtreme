@@ -1130,10 +1130,8 @@ BOOL InitHelpPath(BOOL bMainHelp)
 		strLocale = _T("en");
 
 	// Check the help dir exists, if not bomb out
-	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
-	wxString	strHelpPath( pszDataPath, wxConvUTF8 );
-	free( pszDataPath );
-	strHelpPath += _T("/xaralx/doc/");
+	wxString	strHelpPath( (PCTSTR)CCamApp::GetResourceDirectory() );
+	strHelpPath += _T("/doc/");
 	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strHelpPath + strLocale) );
 	if( wxDir::Exists( strHelpPath + strLocale ) )
 		strHelpPath += strLocale + _T("/");

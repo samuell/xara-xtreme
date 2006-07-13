@@ -616,12 +616,8 @@ BOOL Application::LateInit()
 	//exe path with "\templates\" on the end
 	if( m_TemplatesPath.IsEmpty() || !SGLibOil::DirExists( m_TemplatesPath ) )
 	{
-		std::auto_ptr<char> Pathname( br_find_data_dir( "/usr/share" ) );
-
 		// Put the path name into a string
-		String_256 strPathname( Pathname.get() );
-		strPathname += _T("/xaralx/");
-		PathName ModulePath(strPathname);
+		PathName ModulePath( CCamApp::GetResourceDirectory() );
 
 		m_TemplatesPath = ModulePath.GetLocation(TRUE);
 

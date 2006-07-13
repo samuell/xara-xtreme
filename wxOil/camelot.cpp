@@ -227,6 +227,7 @@ END_EVENT_TABLE()
 DialogManager			CCamApp::m_DlgMgr;
 bool					CCamApp::s_bIsDisabled = false; // Initially system is not disabled.
 wxString				CCamApp::m_strResourcePath;
+String_256				CCamApp::m_strResourceDirPath;
 
 
 /***************************************************************************************************************************/
@@ -537,6 +538,37 @@ bool CCamApp::OnInit()
  	if( !Camelot.Init() )
 		return false;
 
+	// --------------------------------------------------------------------------
+	// Detect first-time run and make Open File dialog default to Examples folder
+	if (Camelot.DeclareSection(TEXT("Preferences"), 10))
+	{
+		Camelot.DeclarePref(NULL, TEXT("FirstRun"), &bFirstRun, 0, 1);
+	}
+
+	// Check the resource dir exists
+	Camelot.DeclarePref( NULL, TEXT("ResourceDir"), &m_strResourceDirPath );
+	if( bFirstRun )
+	{
+#if !defined(RESOURCE_DIR)
+		std::auto_ptr<char> pszDataPath( br_find_data_dir( "/usr/share" ) );
+		m_strResourceDirPath = ( pszDataPath.get() );
+		m_strResourceDirPath += _T("/xaralx");
+		TRACEUSER( "luke", _T("Using resource directory \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
+	#if defined(_DEBUG)
+		if( !wxDir::Exists( PCTSTR(m_strResourceDirPath) ) )
+		{
+			// We'll try default location under debug to make life easier
+			m_strResourceDirPath = _T("/usr/share/xaralx");
+			TRACEUSER( "luke", _T("Try = \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
+		}
+	#endif
+#else
+		// The "" is needed to stop the macro expanding to LRESOURCE_DIR
+		m_strResourceDirPath = _T(""RESOURCE_DIR);
+#endif
+	}
+	TRACEUSER( "luke", _T("ResDir = %s\n"), PCTSTR(m_strResourceDirPath) );
+
 	TRACET(_T("CCamApp::Calling InitKernel"));
 	// then initialise the kernel (and almost everything else)	
 	if( !InitKernel() )
@@ -578,20 +610,11 @@ bool CCamApp::OnInit()
 	m_docManager->FileHistoryLoad(Preferences::GetOilPrefs());
 #endif
 
-	// --------------------------------------------------------------------------
-	// Detect first-time run and make Open File dialog default to Examples folder
-	if (Camelot.DeclareSection(TEXT("Preferences"), 10))
-	{
-		Camelot.DeclarePref(NULL, TEXT("FirstRun"), &bFirstRun, 0, 1);
-	}
-
 	if (bFirstRun)
 	{
 		// Set File Open dialog location to our Examples folder
-		PSTR		pszDataPath = br_find_data_dir("/usr/share");
-		wxString	strConfigPath(pszDataPath, wxConvUTF8);
-		free(pszDataPath);
-		strConfigPath += _T("/xaralx/Examples");
+		wxString	strConfigPath( (TCHAR*)m_strResourceDirPath );
+		strConfigPath += _T("/Examples");
 
 #if defined(_DEBUG)
 		// Debug-only fallback
@@ -1038,6 +1061,10 @@ void CCamApp::DoAboutBox()
 	(void)wxMessageBox( strMessage, wxT("About Xara LX") );
 }
 
+StringBase& CCamApp::GetResourceDirectory()
+{
+	return m_strResourceDirPath;
+}
 
 void CCamApp::GiveActiveCanvasFocus()
 {
@@ -1376,10 +1403,8 @@ void CCamApp::OnHelpIndex()
 		strLocale = _T("en");
 
 	// Check the help dir exists, if not bomb out
-	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
-	wxString	strHelpPath( pszDataPath, wxConvUTF8 );
-	free( pszDataPath );
-	strHelpPath += _T("/xaralx/doc/");
+	wxString	strHelpPath( (TCHAR*)m_strResourceDirPath );
+	strHelpPath += _T("/doc/");
 	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strHelpPath + strLocale) );
 	if( wxDir::Exists( strHelpPath + strLocale ) )
 		strHelpPath += strLocale + _T("/");

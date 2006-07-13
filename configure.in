@@ -146,7 +146,7 @@ AC_ARG_WITH(resource-dir,
                             falling back to /usr/share/xaralx]],
 [
     if test "$withval" != "yes" -a "$withval" != ""; then
-        RESOURCE_DIR_DEFINE=-DRESOURCE_DIR=$withval
+        RESOURCE_DIR_DEFINE="-DRESOURCE_DIR=\\\"$withval\\\""
     fi
 ])
 

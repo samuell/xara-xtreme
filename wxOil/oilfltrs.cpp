@@ -350,10 +350,8 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 #endif
 
 	// Check the config dir exists, if not bomb out
-	PSTR		pszDataPath = br_find_data_dir( "/usr/share" );
-	wxString	strConfigPath( pszDataPath, wxConvUTF8 );
-	free( pszDataPath );
-	strConfigPath += _T("/xaralx/filters");
+	wxString	strConfigPath( (TCHAR*)CCamApp::GetResourceDirectory() );
+	strConfigPath += _T("/filters");
 	TRACEUSER( "jlh92", _T("Using filter discovery directory \"%s\"\n"), PCTSTR(strConfigPath) );
 	if( !wxDir::Exists( strConfigPath ) )
 	{
@@ -364,6 +362,8 @@ BOOL OILFilter::CreatePluginFilters(List& FilterList)
 #endif
 			return TRUE;
 	}
+
+	TRACEUSER( "luke", _T("Using %s as filter store\n"), PCTSTR(strConfigPath) );
 
 	// Setup the directory scan
 	wxDir	dir( strConfigPath );

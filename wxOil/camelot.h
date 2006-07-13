@@ -152,6 +152,9 @@ public:
 
 	static BOOL LaunchWebBrowser(const wxString& strUrl);
 
+	// Get the path to the root of the resource directory structure
+	static StringBase& GetResourceDirectory();
+
 private:
 	INT32 RunFalseMainLoop();
 
@@ -161,7 +164,8 @@ protected:
 
 	static bool			s_bIsDisabled;
 
-	static wxString		m_strResourcePath;
+	static wxString		m_strResourcePath;		// The usually bound in resources
+	static String_256	m_strResourceDirPath;	// External resources (i.e. help files)
 
 	wxTimer				m_Timer;
 

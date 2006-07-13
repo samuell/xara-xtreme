@@ -964,7 +964,7 @@ void CReplayWnd::OnCloseButton( wxCommandEvent& )
 
 static void StartMovie( const wxString &strFile )
 {
-	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
+	wxString			strDataPath( CCamApp::GetResourceDirectory() );
 	if( !wxDir::Exists( strDataPath ) )
 	{
 #if defined(_DEBUG)
@@ -974,7 +974,7 @@ static void StartMovie( const wxString &strFile )
 	}
 
 	wxString			strVideoPath( strDataPath );
-	strVideoPath += _("/xaralx/video");
+	strVideoPath += _("/video");
 	
 	wxString			strCommand( _T("mplayer -slave \"") );
 	strCommand += strVideoPath + _T("/") + strFile + _T("\"");	
@@ -993,7 +993,7 @@ static void StartMovie( const wxString &strFile )
 static void StartMovieNative( const wxString &strFile )
 {
 #if wxUSE_MEDIACTRL
-	wxString			strDataPath( br_find_data_dir( "/usr/share" ), wxConvUTF8 );
+	wxString			strDataPath( CCamApp::GetResourceDirectory() );
 	if( !wxDir::Exists( strDataPath ) )
 	{
 #if defined(_DEBUG)
@@ -1003,7 +1003,7 @@ static void StartMovieNative( const wxString &strFile )
 	}
 
 	wxString			strVideoPath( strDataPath );
-	strVideoPath += _("/xaralx/video");
+	strVideoPath += _("/video");
 	
 	CReplayWnd*		pWnd	= new CReplayWnd( CCamFrame::GetMainFrame() );
 	pWnd->Load( strVideoPath + _T("/") + strFile );
