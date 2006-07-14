@@ -547,7 +547,7 @@ bool CCamApp::OnInit()
 
 	// Check the resource dir exists
 	Camelot.DeclarePref( NULL, TEXT("ResourceDir"), &m_strResourceDirPath );
-	if( bFirstRun )
+	if( bFirstRun || m_strResourceDirPath == _T("") )
 	{
 #if !defined(RESOURCE_DIR)
 		std::auto_ptr<char> pszDataPath( br_find_data_dir( "/usr/share" ) );
