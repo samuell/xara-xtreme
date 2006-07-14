@@ -139,6 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layer.h"
 #include "nodepostpro.h"
 #include "nodepath.h"
+#include "usercord.h"
 
 DECLARE_SOURCE( "$Revision$" );
 
@@ -969,6 +970,59 @@ void TextTool::OnMouseMove(DocCoord PointerPos, Spread* pSpread, ClickModifiers 
 	}
 }
 
+void TextTool::GetRulerOrigin(Spread* pSpread, UserCoord *pOrigin)
+{
+	TRACEUSER("wuerthne", _T("GetRulerOrigin"));
+	if (TextInfoBarOp::IsRulerOriginClaimed())
+	{
+		TRACEUSER("wuerthne", _T("set origin"));
+		pOrigin->x = TextInfoBarOp::GetRulerOrigin();
+	}
+}
+
+void TextTool::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground)
+{
+	// we only draw onto the horizontal ruler and only if we have claimed it
+	if (!TextInfoBarOp::IsRulerOriginClaimed()) return;
+	TRACEUSER("wuerthne", _T("RenderRulerBlobs"));
+	// draw the highlighted background or the blobs
+	if (IsBackground)
+	{
+		TextInfoBarOp::HighlightRulerSection(pRuler, UpdateRect);
+	}
+	else
+	{
+		TextInfoBarOp::RenderRulerBlobs(pRuler, UpdateRect);
+	}
+}
+
+/********************************************************************************************
+
+>   BOOL TextTool::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+								Spread* pSpread, RulerBase* pRuler)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:     nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
+				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+				Click		- Type of click enum
+				Mods		- Modifier flags struct
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Returns:    TRUE to claim the click
+	Purpose:	Called when the user has clicked on the ruler and we are the current tool
+
+********************************************************************************************/
+
+BOOL TextTool::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+							Spread* pSpread, RulerBase* pRuler)
+{
+	if (!TextInfoBarOp::IsRulerOriginClaimed()) return FALSE;
+
+	TRACEUSER("wuerthne", _T("TextTool OnRulerClick %d at %d"), Click, PointerPos.x);
+	return TextInfoBarOp::OnRulerClick(nFlags, PointerPos, Click, Mods, pSpread, pRuler);
+}
+
 
 
 /********************************************************************************************
@@ -1400,6 +1454,17 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 					Errored = !pOp->DoReturn(OpTextFormat::INSERT);
 				else
 					Errored = TRUE;
+				UsedTheKeypress = TRUE;
+			}
+			break;
+		case CAMKEY(TAB):
+			if (!pKeyPress->IsAlternative() && !pKeyPress->IsConstrain())
+			{
+				/*##*/
+				OpTextFormat* pOp = new OpTextFormat();
+				if (pOp != NULL)
+					Errored = !pOp->DoTab();
+				else
 				UsedTheKeypress = TRUE;
 			}
 			break;
@@ -2264,6 +2329,9 @@ BOOL TextTool::OnToolDeselect()
 	// Clear the focus, remembering what it was for possible later reselection
 	pLastFocusStory = TextStory::GetFocusStory();
 	TextStory::SetFocusStory(NULL);
+
+	// make sure the ruler is redrawn if we had claimed it
+	TextInfoBarOp::ReleaseRuler();
 	CurrentTool = FALSE;
 
 	return ok;

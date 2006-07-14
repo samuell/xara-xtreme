@@ -137,12 +137,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "camvw.h"
 #include "blobs.h"
+#include "rulers.h"
+#include "usercord.h"
+#include "dlgmgr.h"
+
+// For tab stop dragging
+#include "csrstack.h"
 
 DECLARE_SOURCE( "$Revision$" );
 
 CC_IMPLEMENT_DYNCREATE(TextInfoBarOp,InformationBarOp)
 CC_IMPLEMENT_DYNCREATE(TextInfoBarData,CCObject)
 CC_IMPLEMENT_DYNCREATE(TextInfoBarEnumFont, OILEnumFonts )
+CC_IMPLEMENT_DYNCREATE(TextRulerBarData, CCObject)
+CC_IMPLEMENT_DYNCREATE(TabStopDragOp, Operation)
+
+#define TABSTOPDRAG_CURSORID_UNSET -1
 
 // Must come after the last CC_IMPLEMENT.. macro
 #define new CAM_DEBUG_NEW     
@@ -164,6 +174,8 @@ const INT32 FontSizeMax    = 999999;	// millipoints
 const INT32 FontAspectMin  = 1;		// percent
 const INT32 FontAspectMax  = 9999;	// percent
 
+const INT32 CurrentTabButtonPos = -36;    // in pixels measured from the origin
+
 #define INVALID_ATTVAL -1000000
 // statics ...
 double TextInfoBarOp::SuperScriptSize;
@@ -178,9 +190,15 @@ BOOL			  TextInfoBarOp::RegainCaretAfterOp = FALSE;
 
 UnitType          TextInfoBarOp::CurrentFontUnits = COMP_POINTS;
 TextInfoBarData   TextInfoBarOp::InfoData;
+TextRulerBarData  TextInfoBarOp::RulerData;
 Document*         TextInfoBarOp::pDoc             = NULL;
 CommonAttrSet 	  TextInfoBarOp::CommonAttrsToFindSet; 	// A set which will contain all attribute types
 														// that we need to find common attributes for
+// cached bitmap sizes
+UINT32 TextInfoBarOp::TabBitmapWidth;
+UINT32 TextInfoBarOp::TabBitmapHeight;
+UINT32 TextInfoBarOp::CurrentTabButtonWidth;
+UINT32 TextInfoBarOp::CurrentTabButtonHeight;
 
 FontDropDown	*TextInfoBarOp::NameDropDown = NULL;	// Font name drop-down list support for the font list and
 
@@ -394,8 +412,6 @@ TextInfoBarOp::TextInfoBarOp()
 
 ********************************************************************************************/
 
-
-
 BOOL TextInfoBarOp::Init()
 {
 	// Initialise the CommonAttrsToFindSet 
@@ -409,7 +425,51 @@ BOOL TextInfoBarOp::Init()
 	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtLineSpace));
 	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtBaseLine));
 	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtScript));
-	return ok; 
+	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtRuler));
+	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtLeftMargin));
+	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtRightMargin));
+	if (ok) ok = CommonAttrsToFindSet.AddTypeToSet(CC_RUNTIME_CLASS(AttrTxtFirstIndent));
+	if (ok) ok = TabStopDragOp::Init();
+
+	// find out about the sizes of the various tab ruler bitmaps (rather than hard-coding
+	// the sizes into the mouse click detection code in OnRulerClick())
+	// first, the size of the "current tab type" button - we ask for the left tab variant,
+	// but they should all be the same size
+	if (ok) ok = FindBitmapSize(_R(clefttab), &CurrentTabButtonWidth, &CurrentTabButtonHeight);
+	// find out about the size of tab stop blobs - we ask for the left tab variant, but they
+	// should all be the same size
+	if (ok) ok = FindBitmapSize(_R(lefttab), &TabBitmapWidth, &TabBitmapHeight);
+	return ok;
+}
+
+/********************************************************************************************
+
+>	static BOOL TextInfoBarOp::FindBitmapSize(ResourceID ID, UINT32* pWidth, UINT32* pHeight)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/07/06
+	Returns:	FALSE if failed
+	Purpose:	Find the width and height of a resource bitmap
+
+********************************************************************************************/
+
+BOOL TextInfoBarOp::FindBitmapSize(ResourceID ID, UINT32* pWidth, UINT32* pHeight)
+{
+	BOOL ok = FALSE;
+	OILBitmap* pOilBitmap = OILBitmap::Create();
+	if (pOilBitmap) ok = pOilBitmap->LoadBitmap(ID);
+	if (ok)
+	{
+		// create a kernel bitmap based on our OilBitmap
+		KernelBitmap KBitmap(pOilBitmap);
+		if (KBitmap.IsOK())
+		{
+			*pWidth = KBitmap.GetWidth();
+			*pHeight = KBitmap.GetHeight();
+			ok = TRUE;
+		}
+	}
+	return ok;
 }
 
 /********************************************************************************************
@@ -453,8 +513,57 @@ void TextInfoBarOp::OnFieldChange(FontAttribute ThisChange)
 	NodeAttribute * Attrib = NULL;
 	
 	switch (ThisChange)
-	{
-				
+	{				
+		case LeftMarginA:
+		{
+			if(RulerData.IsLeftMarginValid)
+			{
+				AttrTxtLeftMargin  * LeftMarginAttrib = new AttrTxtLeftMargin();
+				if (LeftMarginAttrib == NULL)
+				{
+					InformError();
+					return;
+				}
+				LeftMarginAttrib->Value.Value = RulerData.LeftMargin;
+				Attrib = LeftMarginAttrib;
+			}
+			break;
+		}
+		case RightMarginA:
+		{
+			if(RulerData.IsRightMarginValid)
+			{
+				AttrTxtRightMargin  * RightMarginAttrib = new AttrTxtRightMargin();
+				if (RightMarginAttrib == NULL)
+				{
+					InformError();
+					return;
+				}
+				RightMarginAttrib->Value.Value = RulerData.RightMargin;
+				Attrib = RightMarginAttrib;
+			}
+			break;
+		}
+		case FirstIndentA:
+		{
+			if(RulerData.IsFirstIndentValid)
+			{
+				AttrTxtFirstIndent  * FirstIndentAttrib = new AttrTxtFirstIndent();
+				if (FirstIndentAttrib == NULL)
+				{
+					InformError();
+					return;
+				}
+				FirstIndentAttrib->Value.Value = RulerData.FirstIndent;
+				Attrib = FirstIndentAttrib;
+			}
+			break;
+		}
+		case RulerA:
+		{
+			Attrib = RulerData.pNewRuler;
+			break;
+		}
 		case BaseLineShiftA:
 		{
 			if(InfoData.BaseLineShift != INVALID_ATTVAL)
@@ -732,6 +841,7 @@ void TextInfoBarOp::UpdateGadgets()
 	UpdateButtonStates();
 
 }
+
 /********************************************************************************************
 
 >void TextInfoBarOp::Update()
@@ -785,6 +895,8 @@ BOOL TextInfoBarOp::Update(BOOL DoUpdate)
 	// Find common attribute details for all attribute types we need to know about
 	if (!Selection->FindCommonAttributes(&CommonAttrsToFindSet))
 		return FALSE; 
+
+	UpdateRulerBar(Selection, DoUpdate);
 
 	SelRange::CommonAttribResult result;
 	NodeAttribute* pAttr;
@@ -2133,7 +2245,7 @@ void TextInfoBarOp::DoInputError(UINT32 GadgetID)
 
 /********************************************************************************************
 
->	MsgResult TextInfoBarOp::(Msg* Message) 
+>	MsgResult TextInfoBarOp::Message(Msg* Message) 
 
 	Author:		Mark_Goodall (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	3/10/94
@@ -2834,4 +2946,913 @@ BOOL TextInfoBarOp::UpdateFieldsAfterTyping()
 	}
 
 	return TRUE;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Ruler display and tab stop dragging
+
+/********************************************************************************************
+
+>void TextInfoBarOp::ForceRulerRedraw()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Purpose:	Force a ruler redraw
+				(called each time anything on the ruler has changed)
+
+********************************************************************************************/
+
+void TextInfoBarOp::ForceRulerRedraw()
+{
+	DocView* pDocView = DocView::GetSelected();
+	if (pDocView)
+	{
+		RulerPair* pRulerPair = pDocView->GetpRulerPair();
+		if (pRulerPair) pRulerPair->Update();
+	}
+}
+
+/********************************************************************************************
+
+>void TextInfoBarOp::ReleaseRuler()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Purpose:	Release the ruler if it has been claimed and update it
+				(called on tool deselection)						
+
+********************************************************************************************/
+
+void TextInfoBarOp::ReleaseRuler()
+{
+	if (RulerData.IsRulerOriginClaimed)
+	{
+		// release the ruler
+		RulerData.IsRulerOriginClaimed = FALSE;
+		// and force a redraw
+		ForceRulerRedraw();
+	}
+}
+
+/********************************************************************************************
+
+>	void TextInfoBarOp::TabStopDragStarting(TabStopDragType TheType)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/07/06
+	Purpose:	Called when a tab stop drag starts (allows TextInfoBarOp to hide the implicit
+				tab stops to avoid confusion. Otherwise, if the last tab stop was dragged,
+				implicit tab stops would appear after the previous tab stop.
+
+********************************************************************************************/
+
+void TextInfoBarOp::TabStopDragStarting(TabStopDragType TheType)
+{
+	if (TheType == DragTabStop || TheType == DragNew)
+	{
+		TRACEUSER("wuerthne", _T("tab stop drag starting"));
+		RulerData.TabStopDragRunning = TRUE;
+	}
+}
+
+/********************************************************************************************
+
+>	void TextInfoBarOp::TabStopDragFinished()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/07/06
+	Purpose:	Called when a tab stop drag finished, allowing TextInfoBarOp to display
+				implicit tab stops again.
+
+********************************************************************************************/
+
+void TextInfoBarOp::TabStopDragFinished()
+{
+	TRACEUSER("wuerthne", _T("tab stop drag finished"));
+	RulerData.TabStopDragRunning = FALSE;
+}
+
+/********************************************************************************************
+
+>void TextInfoBarOp::HighlightRulerSection(RulerBase* pRuler)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Purpose:	Show the position and width of the current text story on the ruler
+				(called from TextTool when the ruler background is redrawn)
+
+********************************************************************************************/
+
+void TextInfoBarOp::HighlightRulerSection(RulerBase* pRuler, UserRect& UpdateRect)
+{
+	if (!pRuler->IsHorizontal()) return;
+	TRACEUSER("wuerthne", _T("TextInfoBarOp::Highlight %d"), RulerData.CurrentRulerSectionWidth);
+
+	// we call RulerBase::HighlightSection, which expects coordinates in user space but
+	// knows about our tool origin
+	INT32 SectionEnd = RulerData.CurrentRulerSectionWidth;      // user coord of end of highlight section
+	if (SectionEnd == -1)
+	{
+		// infinite section
+		SectionEnd = UpdateRect.hi.x;
+	}
+	pRuler->HighlightSection(0, SectionEnd);
+}
+
+/********************************************************************************************
+
+>void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Purpose:	Show the margin and tab stop blobs on the ruler
+				(called from TextTool when the ruler foreground is redrawn)
+
+********************************************************************************************/
+
+void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
+{
+	if (!pRuler->IsHorizontal()) return;
+
+	if (RulerData.IsLeftMarginValid)
+		pRuler->DrawBitmap(RulerData.LeftMargin, _R(leftmar));
+	else
+		pRuler->DrawBitmap(0, _R(gleftmar));
+
+	if (RulerData.IsFirstIndentValid)
+		pRuler->DrawBitmap(RulerData.FirstIndent, _R(firstind));
+	else
+		pRuler->DrawBitmap(0, _R(gfirstind));
+
+	if (RulerData.CurrentRulerSectionWidth != -1)
+	{
+		// we only draw a right margin if we have a fixed formatting width
+		if (RulerData.IsRightMarginValid)
+			pRuler->DrawBitmap(RulerData.CurrentRulerSectionWidth - RulerData.RightMargin, _R(rightmar));
+		else
+			pRuler->DrawBitmap(RulerData.CurrentRulerSectionWidth, _R(grightmar));
+	}
+
+	if (RulerData.IsRulerValid)
+	{
+		MILLIPOINT LastPos = 0;
+		for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
+		{
+			ResourceID id;
+			switch((*it).GetType())
+			{
+				case LeftTab:
+					id = _R(lefttab);
+					break;
+				case RightTab:
+					id = _R(righttab);
+					break;
+				case CentreTab:
+					id = _R(centtab);
+					break;
+				case DecimalTab:
+					id = _R(dectab);
+					break;
+			}
+			pRuler->DrawBitmap((*it).GetPosition(), id);
+			LastPos = (*it).GetPosition();
+		}
+
+		if (!RulerData.TabStopDragRunning)
+		{
+			TRACEUSER("wuerthne", _T("redraw implicit tab stops"));
+			// draw greyed out left align tab stops at equidistant positions beyond the last defined
+			// tab stop, but only while we are not dragging
+			while(LastPos < UpdateRect.hi.x)
+			{
+				LastPos = LastPos + 36000 - (LastPos % 36000);
+				// if we have a fixed width text story, do not draw implicit tab stops outside the
+				// right hand margin (physical right margin less the logical margin, if present)
+				if (RulerData.CurrentRulerSectionWidth != -1
+					&& LastPos > RulerData.CurrentRulerSectionWidth
+					             - (RulerData.IsRightMarginValid ? RulerData.RightMargin : 0))
+					break;
+				pRuler->DrawBitmap(LastPos, _R(imptab));
+			}
+		}
+	}
+
+	// draw the current tab "button"
+	// we want this to appear to the left of the origin, but at a fixed distance
+	// no matter what the current zoom factor is, so we need to enquire about
+	// the scaled pixel size to find out how many MILLIPOINTS one screen pixel
+	// represents
+	DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
+	FIXED16 PixelSize = pDocView->GetScaledPixelWidth();
+	MILLIPOINT Pos = CurrentTabButtonPos*PixelSize.MakeLong();
+
+	ResourceID id;
+	switch(RulerData.CurrentTabType)
+	{
+		case LeftTab:
+			id = _R(clefttab);
+			break;
+		case RightTab:
+			id = _R(crighttab);
+			break;
+		case CentreTab:
+			id = _R(ccenttab);
+			break;
+		case DecimalTab:
+			id = _R(cdectab);
+			break;
+	}
+	pRuler->DrawBitmap(Pos, id);
+}
+
+/********************************************************************************************
+
+>   BOOL TextInfoBarOp::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+									 Spread* pSpread, RulerBase* pRuler)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:     nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
+				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+				Click		- Type of click enum
+				Mods		- Modifier flags struct
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Returns:    TRUE to claim the click
+	Purpose:	Called when the user has clicked on the ruler and we have claimed it
+
+********************************************************************************************/
+
+BOOL TextInfoBarOp::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+								 Spread* pSpread, RulerBase* pRuler)
+{
+	if (!pRuler->IsHorizontal()) return FALSE;
+	if (Click == CLICKTYPE_SINGLE)
+	{
+		// check whether the user has clicked on our homegrown "current tab" button
+		// this is displayed centered around the position CurrentTabButtonPos (in pixels)
+		DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
+		MILLIPOINT PixelSize = pDocView->GetScaledPixelWidth().MakeLong();
+		MILLIPOINT Distance1 = ((CurrentTabButtonPos - CurrentTabButtonWidth/2)*PixelSize);
+		MILLIPOINT Distance2 = ((CurrentTabButtonPos + CurrentTabButtonWidth/2)*PixelSize);
+		if (PointerPos.x >= Distance1 && PointerPos.x <= Distance2)
+		{
+			// a click on our "current tab" button
+			if (Mods.Adjust)
+			{
+				// adjust click, so cycle the other way round
+				switch(RulerData.CurrentTabType)
+				{
+					case LeftTab:
+						RulerData.CurrentTabType = DecimalTab;
+						break;
+					case RightTab:
+						RulerData.CurrentTabType = LeftTab;
+						break;
+					case CentreTab:
+						RulerData.CurrentTabType = RightTab;
+						break;
+					case DecimalTab:
+						RulerData.CurrentTabType = CentreTab;
+						break;
+				}
+			}
+			else
+			{
+				// standard click, so cycle the type
+				switch(RulerData.CurrentTabType)
+				{
+					case LeftTab:
+						RulerData.CurrentTabType = RightTab;
+						break;
+					case RightTab:
+						RulerData.CurrentTabType = CentreTab;
+						break;
+					case CentreTab:
+						RulerData.CurrentTabType = DecimalTab;
+						break;
+					case DecimalTab:
+						RulerData.CurrentTabType = LeftTab;
+						break;
+				}
+			}
+			Document::SetSelectedViewAndSpread(pDocView->GetDoc(), pDocView, pSpread);
+			DialogManager::DefaultKeyboardFocus();
+			ForceRulerRedraw();
+			return TRUE;
+		}
+
+		// not clicked on our button, so check whether the click was within the highlight section
+		BOOL InHighlightSection = PointerPos.x >= 0
+			&& (RulerData.CurrentRulerSectionWidth == -1
+				|| PointerPos.x < RulerData.CurrentRulerSectionWidth);
+
+		// we do allow dragging tab stops outside the highlight section but we do not allow creating
+		// new ones by clicking outside
+
+		// check whether we have got a tab at the click position - if they overlap, the tab stop
+		// to the right is on top, so the user expects that to be dragged; therefore, tab stops
+		// to the right have priority
+		Document::SetSelectedViewAndSpread(pDocView->GetDoc(), pDocView, pSpread);
+		
+		INT32 Index = 0;
+		INT32 MatchedIndex = -1;
+		for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
+		{
+			MILLIPOINT Pos = (*it).GetPosition();
+			if (PointerPos.x >= Pos - MILLIPOINT(TabBitmapWidth / 2 * PixelSize)
+				&& PointerPos.x <= Pos + MILLIPOINT(TabBitmapWidth / 2 * PixelSize))
+			{
+				TRACEUSER("wuerthne", _T("hit tab no %d"), Index);
+				MatchedIndex = Index;
+			}
+			Index++;
+		}
+		
+		TxtTabStop DraggedTabStop(LeftTab, 0);
+		if (MatchedIndex != -1)
+		{
+			// delete the tab stop from the shown ruler list
+			Index = MatchedIndex;
+			TxtTabStopIterator it = RulerData.pShownRuler->begin();
+			while(it != RulerData.pShownRuler->end() && Index--) ++it;
+			if (it != RulerData.pShownRuler->end())
+			{
+				DraggedTabStop = *it;
+				RulerData.pShownRuler->erase(it);
+			}
+			else
+			{
+				// cannot really happen, but exit gracefully - we still claim the click
+				return TRUE;
+			}
+		}
+		TabStopDragType DragType = (MatchedIndex == -1) ? DragNew : DragTabStop;
+		
+		if (DragType == DragNew && InHighlightSection || DragType != DragNew)
+		{
+			String_256 OpToken(OPTOKEN_TABSTOPDRAG);
+			TRACEUSER("wuerthne", _T("starting drag"));
+			TabStopDragOpParam* pParam = new TabStopDragOpParam(DragType, DraggedTabStop, PointerPos);
+			
+			if (pRuler->StartToolDrag(nFlags, PointerPos, &OpToken, pParam))
+			{
+				// the kernel has accepted the drag request
+				TextInfoBarOp::TabStopDragStarting(DragType);
+				// force a redraw to show the ruler without the tab stop being dragged (if any)
+				// and without implicit tab stops
+				TextInfoBarOp::ForceRulerRedraw();
+			}
+			else
+			{
+				// we cannot drag, but we need to reinstate the ruler bar (if we tried dragging
+				// and existing tab stop, we have removed it from pShownRuler)
+				TextInfoBarOp::Update(TRUE);
+			}
+			return TRUE;
+		}
+	}
+
+	// we have not claimed the click
+	return FALSE;
+}
+
+/********************************************************************************************
+
+>void TextInfoBarOp::DoAddTabStop(MILLIPOINT Position)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	10/07/06
+	Inputs:     Position - the position in text ruler space (millipoints)
+	Purpose:	Create a tab stop of the currently selected type at the given position
+				and apply the new text ruler
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoAddTabStop(MILLIPOINT Position)
+{
+	// we create a new ruler attribute
+	RulerData.pNewRuler = new AttrTxtRuler;
+	if (RulerData.pNewRuler == NULL) return;
+
+	// copy the ruler contents from the currently shown ruler
+	*RulerData.pNewRuler->Value.Value = *RulerData.pShownRuler;
+	RulerData.pNewRuler->Value.AddTabStop(RulerData.CurrentTabType, Position);
+	// OnFieldChange will use pNewRuler
+	OnFieldChange(RulerA);
+	// just to avoid confusion - OnFieldChange has taken control of the object, so
+	// let us forget about it
+	RulerData.pNewRuler = NULL;
+}
+
+/********************************************************************************************
+
+>void TextInfoBarOp::DoAddTabStop(MILLIPOINT Position)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	10/07/06
+	Inputs:     NewTabStop - the tab stop object to add to the ruler
+	Purpose:	Add a tab stop to the currently displayed ruler and apply it
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoAddTabStop(TxtTabStop NewTabStop)
+{
+	// we create a new ruler attribute
+	RulerData.pNewRuler = new AttrTxtRuler;
+	if (RulerData.pNewRuler == NULL) return;
+
+	// copy the ruler contents from the currently shown ruler
+	*RulerData.pNewRuler->Value.Value = *RulerData.pShownRuler;
+	RulerData.pNewRuler->Value.AddTabStop(NewTabStop);
+	// OnFieldChange will use pNewRuler
+	OnFieldChange(RulerA);
+	// just to avoid confusion - OnFieldChange has taken control of the object, so
+	// let us forget about it
+	RulerData.pNewRuler = NULL;
+}
+/********************************************************************************************
+
+>	void TextInfoBarOp::DoApplyShownRuler()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	10/07/06
+	Purpose:	Apply the currently shown ruler (used to remove a tab stop that has been
+				dragged off the ruler - the tab stop is removed from the shown ruler when
+				the drag starts, so to permanently delete it all we need to do is apply
+				the shown ruler)
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoApplyShownRuler()
+{
+	// we create a new ruler attribute
+	RulerData.pNewRuler = new AttrTxtRuler;
+	if (RulerData.pNewRuler == NULL) return;
+
+	// copy the ruler contents from the currently shown ruler
+	*RulerData.pNewRuler->Value.Value = *RulerData.pShownRuler;
+	// OnFieldChange will use pNewRuler
+	OnFieldChange(RulerA);
+	// just to avoid confusion - OnFieldChange has taken control of the object, so
+	// let us forget about it
+	RulerData.pNewRuler = NULL;
+}
+
+/********************************************************************************************
+
+>	INT32 TextInfoBarOp::GetLogicalStoryWidth(TextStory* pStory)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	10/07/06
+	Inputs:     pStory - a selected story
+	Returns:    its logical width in millipoints
+	Purpose:	Given a text story, find the width we want to display for it in the ruler bar
+
+********************************************************************************************/
+
+INT32 TextInfoBarOp::GetLogicalStoryWidth(TextStory* pStory)
+{
+	if (pStory->IsWordWrapping())
+	{
+		// either the width the user set or, if on a path, the length of the path
+		// minus the left and right indents (as set in TextStory::FormatAndChildren
+		// when formatting the story)
+		return pStory->GetStoryWidth();
+	}
+	else
+	{
+		// text at point - infinite width
+		return -1;
+	}
+}
+
+/********************************************************************************************
+
+>BOOL TextInfoBarOp::UpdateRulerBar()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	06/07/06
+	Inputs:     pSelection - the current selection range
+				DoUpdate - if TRUE, always update ruler display even if not changed
+	Returns:    FALSE if failed
+	Purpose:	Update the text ruler information shown in the ruler bar according to the
+				current selection 
+				called on selchange messages 
+				only update the ruler bar if something has changed
+
+********************************************************************************************/
+
+BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
+{
+	TRACEUSER("wuerthne", _T("UpdateRulerBar"));
+	BOOL changed = FALSE;
+
+	// first of all, check whether we want to change the ruler origin
+	BOOL ShouldWeClaimRuler = FALSE;
+	INT32 RulerOrigin, StoryWidth;
+	TextStory* pFocusStory = TextStory::GetFocusStory();
+	if (pFocusStory)
+	{
+		// there is a focus story, so the ruler should adapt to it
+		TRACEUSER("wuerthne", _T("Focus story present"));
+		ShouldWeClaimRuler = TRUE;
+		DocRect StoryBounds=pFocusStory->GetBoundingRect();
+		DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
+		UserCoord UserTopLeft = TopLeft.ToUser(pFocusStory->FindParentSpread());
+		RulerOrigin = UserTopLeft.x;
+		StoryWidth = GetLogicalStoryWidth(pFocusStory);
+	}
+	else
+	{
+		// no focus story, but maybe one or more selected text stories
+		Node* pNode = pSelection->FindFirst();
+		while (pNode != NULL)
+		{
+			if (IS_A(pNode, TextStory))
+			{
+				TextStory* pStory = (TextStory*)pNode;
+				DocRect StoryBounds=pStory->GetBoundingRect();
+				DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
+				UserCoord UserTopLeft = TopLeft.ToUser(pStory->FindParentSpread());
+				
+				if (!ShouldWeClaimRuler || UserTopLeft.x < RulerOrigin)
+				{
+					// first found object, or further to the left than previous ones, so use this position
+					RulerOrigin = UserTopLeft.x;
+					StoryWidth = GetLogicalStoryWidth(pStory);
+					ShouldWeClaimRuler = TRUE;
+				}
+			}
+			pNode = pSelection->FindNext(pNode);
+		}
+	}
+
+	if (ShouldWeClaimRuler)
+	{
+		TRACEUSER("wuerthne", _T("claim ruler"));
+		if (RulerData.IsRulerOriginClaimed)
+		{
+			// we have already claimed the ruler, is it for the same origin?
+			if (RulerData.CurrentRulerOrigin != RulerOrigin
+				|| RulerData.CurrentRulerSectionWidth != StoryWidth)
+			{
+				changed = TRUE;
+			}
+		}
+		else
+		{
+			changed = TRUE;
+		}
+		RulerData.IsRulerOriginClaimed = TRUE;
+		RulerData.CurrentRulerOrigin = RulerOrigin;		
+		RulerData.CurrentRulerSectionWidth = StoryWidth;
+	}
+	else
+	{
+		if (RulerData.IsRulerOriginClaimed)
+		{
+			// the ruler bar has been claimed, but we do not want to claim it any more
+			RulerData.IsRulerOriginClaimed = FALSE;
+			changed  = TRUE;            // force ruler bar update
+		}
+	}
+
+	if (RulerData.IsRulerOriginClaimed)
+	{
+		// we are claiming the ruler, so update the values
+		SelRange::CommonAttribResult result;
+		NodeAttribute* pAttr;
+
+		// left margin
+		CommonAttrsToFindSet.FindAttrDetails(CC_RUNTIME_CLASS(AttrTxtLeftMargin), 
+											 &pAttr,
+											 &result);
+		AttrTxtLeftMargin* pLeftMarginAttrib = (AttrTxtLeftMargin*)pAttr;
+		
+		if (result == SelRange::ATTR_MANY)
+		{
+			if (RulerData.IsLeftMarginValid) changed = TRUE;
+			RulerData.IsLeftMarginValid = FALSE;
+		}
+		else
+		{
+			if (RulerData.IsLeftMarginValid)
+			{
+				if (RulerData.LeftMargin != pLeftMarginAttrib->Value.Value) changed = TRUE;
+			}
+			else
+				changed = TRUE;
+			RulerData.IsLeftMarginValid = TRUE;
+			RulerData.LeftMargin = pLeftMarginAttrib->Value.Value;
+		}
+
+		// right margin
+		CommonAttrsToFindSet.FindAttrDetails(CC_RUNTIME_CLASS(AttrTxtRightMargin), 
+											 &pAttr,
+											 &result);
+		AttrTxtRightMargin* pRightMarginAttrib = (AttrTxtRightMargin*)pAttr;
+		
+		if (result == SelRange::ATTR_MANY)
+		{
+			if (RulerData.IsRightMarginValid) changed = TRUE;
+			RulerData.IsRightMarginValid = FALSE;
+		}
+		else
+		{
+			if (RulerData.IsRightMarginValid)
+			{
+				if (RulerData.RightMargin != pRightMarginAttrib->Value.Value) changed = TRUE;
+			}
+			else
+				changed = TRUE;
+			RulerData.IsRightMarginValid = TRUE;
+			RulerData.RightMargin = pRightMarginAttrib->Value.Value;
+		}
+
+		// first indent
+		CommonAttrsToFindSet.FindAttrDetails(CC_RUNTIME_CLASS(AttrTxtFirstIndent), 
+											 &pAttr,
+											 &result);
+		AttrTxtFirstIndent* pFirstIndentAttrib = (AttrTxtFirstIndent*)pAttr;
+		
+		if (result == SelRange::ATTR_MANY)
+		{
+			if (RulerData.IsFirstIndentValid) changed = TRUE;
+			RulerData.IsFirstIndentValid = FALSE;
+		}
+		else
+		{
+			if (RulerData.IsFirstIndentValid)
+			{
+				if (RulerData.FirstIndent != pFirstIndentAttrib->Value.Value) changed = TRUE;
+			}
+			else
+				changed = TRUE;
+			RulerData.IsFirstIndentValid = TRUE;
+			RulerData.FirstIndent = pFirstIndentAttrib->Value.Value;
+		}
+
+		// ruler
+		CommonAttrsToFindSet.FindAttrDetails(CC_RUNTIME_CLASS(AttrTxtRuler), 
+											 &pAttr,
+											 &result);
+		AttrTxtRuler* pRulerAttrib = (AttrTxtRuler*)pAttr;
+		
+		if (result == SelRange::ATTR_MANY)
+		{
+			if (RulerData.IsRulerValid) changed = TRUE;
+			RulerData.IsRulerValid = FALSE;
+		}
+		else
+		{
+			if (RulerData.IsRulerValid)
+			{
+				if (*RulerData.pShownRuler != *pRulerAttrib->Value.Value) changed = TRUE;
+			}
+			else
+				changed = TRUE;
+			RulerData.IsRulerValid = TRUE;
+			// use the copy constructor
+			*RulerData.pShownRuler = *pRulerAttrib->Value.Value;
+		}
+	}
+
+	// if anything has changed, force a ruler redraw
+	if (changed || DoUpdate) ForceRulerRedraw();
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	static BOOL TabStopDragOp::Init()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Returns:    FALSE if failed
+	Purpose:	Register the TabStopDragOp operation
+
+********************************************************************************************/
+
+BOOL TabStopDragOp::Init()
+{
+	return RegisterOpDescriptor(0, 
+								0,
+								CC_RUNTIME_CLASS(TabStopDragOp), 
+								OPTOKEN_TABSTOPDRAG,
+								TabStopDragOp::GetState,
+								0,  /* help ID */
+								0,	/* bubble ID */
+								0	/* bitmap ID */);
+}
+
+/********************************************************************************************
+
+>	static OpState TabStopDragOp::GetState(String_256* Description, OpDescriptor*)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Inputs:		Description = ptr to place description of why this op can't happen
+				pOpDesc     = ptr to the Op Desc associated with this op
+	Returns:	An OpState object
+	Purpose:    Func for determining the usability of this op
+
+********************************************************************************************/
+
+OpState TabStopDragOp::GetState(String_256* Description, OpDescriptor*)
+{
+	OpState State;
+	return State;
+}
+
+/********************************************************************************************
+
+>	void TabStopDragOp::DoWithParam(OpDescriptor *pOpDesc, OpParam* pParam)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Inputs:		pOpDesc = ptr to the Op Desc associated with this op
+				pParam = parameter block (dynamically created in TextInfoBarOp::OnRulerClick)
+	Purpose:    Main entry point of operation.
+
+********************************************************************************************/
+
+void TabStopDragOp::DoWithParam(OpDescriptor *pOpDesc, OpParam* pParam)
+{
+	m_pParam = (TabStopDragOpParam*)pParam;
+	DoDrag(Document::GetSelectedSpread());
+}
+
+/***********************************************************************************************
+
+>	void TabStopDragOp::DoDrag(Spread* pThisSpread)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Inputs:		pThisSpread 	  = ptr to spread drag started in (NULL means get selected spread)
+				PointerPos	 	  = coord of point clicked
+	Purpose:    Starts a drag for a new or existing tab stop
+		
+***********************************************************************************************/
+
+void TabStopDragOp::DoDrag(Spread* pThisSpread)
+{
+	TRACEUSER("wuerthne", _T("DoDrag"));
+	pSpread = pThisSpread;
+
+	if (pSpread == NULL)
+		pSpread = Document::GetSelectedSpread();
+
+	ERROR3IF(pSpread == NULL,"pSpread == NULL");
+	if (pSpread == NULL)
+	{
+		End();
+		return;
+	}
+
+	Ordinate = m_pParam->m_StartPos.x;
+	TRACEUSER("wuerthne", _T("starting drag at %d"), Ordinate);
+
+	if (m_pCursor == NULL)
+	{
+		m_pCursor = new Cursor(TOOLID_TEXT,_R(IDCSR_TEXT_TAB));
+		
+		if (m_pCursor != NULL)
+			CursorStackID = CursorStack::GPush(m_pCursor);
+	}
+
+	//##UpdateStatusLine();
+
+	// Tell the Dragging system to start a drag operation
+	// We would like to use DRAGTYPE_DEFERRED here, but unfortunately, that also scrolls
+	// vertically, which is very much in the way. So, until there is something like
+	// DRAGTYPE_DEFERRED_HORIZONTAL, disable auto-scrolling.
+	StartDrag(DRAGTYPE_NOSCROLL);
+}
+
+/***********************************************************************************************
+
+>	virtual void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, Spread*,
+											 BOOL Success, BOOL bSolidDrag)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Inputs:		PointerPos = coord of the pointer
+				ClickMods  = info on the click modifiers
+				pSpread    = ptr to spread (not used)
+				Success	   = TRUE if drag ended successfully, FALSE if drag terminated (by pressing Escape)
+	Purpose:    Responds to the drag of a tab stop ending
+		
+***********************************************************************************************/
+
+void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, Spread*, BOOL Success,
+								 BOOL bSolidDrag)
+{
+	TRACEUSER("wuerthne", _T("tab stop drag ended"));
+
+	TextInfoBarOp::TabStopDragFinished();
+	if (Success)
+	{
+		DocView::SnapCurrent(pSpread,&PointerPos);
+
+		UserCoord UserPos = PointerPos.ToUser(pSpread);
+		UserPos.x -= TextInfoBarOp::GetRulerOrigin();
+		Ordinate = UserPos.x;
+		TRACEUSER("wuerthne", _T("with success at %d"), Ordinate);
+
+		if (m_pParam->m_DragType == DragNew)
+		{
+			if (IsMouseOverRuler())
+			{
+				TextInfoBarOp::DoAddTabStop(Ordinate);
+			}
+			else
+			{
+				// do nothing (apart from redrawing the ruler bar, so the implicit
+				// tabs will be displayed again)
+				TextInfoBarOp::ForceRulerRedraw();
+			}
+		}
+		else if (m_pParam->m_DragType == DragTabStop)
+		{
+			if (IsMouseOverRuler())
+			{
+				TxtTabStop NewTabStop(m_pParam->m_DraggedTabStop);
+				NewTabStop.SetPosition(Ordinate);
+				TextInfoBarOp::DoAddTabStop(NewTabStop);
+			}
+			else
+			{
+				// delete the tab stop; we can do that by simply applying the shown
+				// ruler - we have removed the tab stop from the shown ruler when the
+				// drag started
+				TextInfoBarOp::DoApplyShownRuler();
+			}
+		}
+
+#if 0
+		if (pDraggedGuideline != NULL)
+		{
+			if (IsMouseOverRuler())
+			{
+				UndoIDS = _R(IDS_OPDELETEGUIDELINE);
+				Success = DoDeleteGuideline(pDraggedGuideline);
+			}
+			else
+				Success = DoTranslateGuideline(pDraggedGuideline,Ordinate);
+		}
+		else
+			Success = !IsMouseOverRuler() && DoNewGuideline(NULL,NEXT,Type,Ordinate);
+#endif
+	}
+
+	// End the Drag
+	EndDrag();
+
+	// Restore cursor
+	if (CursorStackID != TABSTOPDRAG_CURSORID_UNSET)
+	{
+		CursorStack::GPop(CursorStackID);
+		CursorStackID = TABSTOPDRAG_CURSORID_UNSET;
+	}
+
+	if (m_pCursor != NULL)
+	{
+		delete m_pCursor;
+		m_pCursor = NULL;
+	}
+	if (m_pParam != NULL)
+	{
+		delete m_pParam;
+		m_pParam = NULL;
+	}
+	
+	End();
+}
+
+/***********************************************************************************************
+
+>	BOOL TabStopDragOp::IsMouseOverRuler()
+
+	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	12/9/95
+	Returns:	TRUE if mouse is over a ruler, FALSE otherwise
+	Purpose:    Test to see where the mouse pointer is.
+				It will return TRUE if the mouse is over either ruler, or the origin gadget.
+	SeeAlso:	OpGuideline::IsMouseOverRuler() - copied from there
+		
+***********************************************************************************************/
+
+BOOL TabStopDragOp::IsMouseOverRuler()
+{
+	DocView* pDocView = DocView::GetSelected();
+	if (pDocView != NULL)
+	{
+		CCamView* pCCamView = pDocView->GetConnectionToOilView();
+		return (pCCamView->IsMouseOverRuler() != OVER_NO_RULERS);
+	}
+
+	return FALSE;
 }

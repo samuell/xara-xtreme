@@ -962,6 +962,60 @@ BOOL OpTextFormat::DoReturn(OpTextFormat::InsertStatus InsStatus)
 	return ok;
 }
 
+BOOL OpTextFormat::DoTab()
+{
+	UndoableOperation* pUndoOp = this;
+
+	// Get pointers to focus story, caret, caret line and caret line EOL
+	TextStory* pStory = TextStory::GetFocusStory();
+	ERROR2IF(pStory==NULL, FALSE, "OpTextFormat::DoTab() - No focus story");
+	CaretNode* pCaret = pStory->GetCaret();
+	ERROR2IF(pCaret==NULL, FALSE, "OpTextFormat::DoTab() - Focus story had no caret");
+	TextLine* pCaretLine = pCaret->FindParentLine();
+	ERROR2IF(pCaretLine==NULL,FALSE,"OpTextFormat::DoTab() - caret has no parent");
+
+	// start the text op (must be done before AllopOp() which may insert actions)
+	BOOL ok = DoStartTextOp(pStory);
+
+	// see if the op is allowed
+	ObjChangeParam ObjParam(OBJCHANGE_STARTING, ObjChangeFlags(), NULL, pUndoOp);
+	if (pCaret->AllowOp(&ObjParam)==FALSE)
+		return TRUE;
+
+	// delete any sub-selection if it exists, then get ptr to last VTN on caret line
+	if (ok) ok = DoDeleteSelection(pStory, TRUE);
+
+	// After deleting the selection, the caret line may have been deleted
+	// so we need to get it again in it's new location
+	pCaret = pStory->GetCaret();
+	ERROR2IF(pCaret==NULL, FALSE, "OpTextFormat::DoTab() - Focus story had no caret");
+	pCaretLine = pCaret->FindParentLine();
+	ERROR2IF(pCaretLine==NULL,FALSE,"OpTextFormat::DoTab() - caret has no parent");
+
+	VisibleTextNode* pLastCaretLineVTN = pCaretLine->FindLastVTN();
+	ERROR2IF(pLastCaretLineVTN==NULL,FALSE,"OpTextFormat::DoTab() - caret line has no VTN");
+
+	// insert a new Tab node before caret with caret's attributes
+	HorizontalTab* pTab = NULL;
+	if (ok) pTab = new HorizontalTab;
+	if (ok) ok = (pTab != NULL);
+	if (ok) ok = pTab->DoInsertNewNode(pUndoOp,pCaret,PREV);
+	if (ok) ok = pCaret->DoApplyAttrsTo(pUndoOp,pTab);
+
+	// update other textstories that are dependant on this one
+	//##SliceHelper::OnTextStoryChanged(pStory, this, &ObjParam, MasterText);
+
+	// Update all the changed nodes
+	ObjChangeParam ObjChange(OBJCHANGE_FINISHED,ObjChangeFlags(),NULL,pUndoOp);
+	if (ok) ok = UpdateChangedNodes(&ObjChange);
+
+	if (ok) pCaret->ScrollToShow();
+
+	if (!ok) FailAndExecute();
+	End();
+
+	return ok;
+}
 
 /********************************************************************************************
 >	void OpTextFormat::DoSwapCase()
@@ -1877,15 +1931,19 @@ PORTNOTE("other", "Removed live effects usage from text");
 		pObject = pStory->GetTextPath();
 		if (pObject != NULL)
 		{
-			// set story width to path length, this is the simplest way
+			// set story width to path length (minus physical indents), this is the simplest way
 			// BODGE WORDWRAP - does this need to account for x scaling due to matrix?
 			TextStoryInfo StoryInfo;
 			if (ok) ok = pStory->CreateUntransformedPath(&StoryInfo);
-			if (ok) delete StoryInfo.pPath;
-			if (ok) pStory->SetStoryWidth(StoryInfo.PathLength);
+			if (ok)
+			{
+				delete StoryInfo.pPath;
+				if (StoryInfo.WordWrapping)
+					pStory->SetStoryWidth(StoryInfo.PathLength - StoryInfo.LeftPathIndent - StoryInfo.RightPathIndent);
 
-			// Move path outside text object (but not outside any controllers that may be applied)
-			if (ok)	ok = DoMoveNode(pObject, pStory, NEXT);
+				// Move path outside text object (but not outside any controllers that may be applied)
+				ok = DoMoveNode(pObject, pStory, NEXT);
+			}
 
 			if (ok) pObject->SetSelected(FALSE);
 			if (ok) pStory->SetSelected(TRUE);

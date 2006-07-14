@@ -208,6 +208,14 @@ public:
 	void OnClick( DocCoord, ClickType, ClickModifiers, Spread* );
 	void OnMouseMove(DocCoord PointerPos,Spread* pSpread, ClickModifiers ClickMods);
 	void RenderToolBlobs(Spread *, DocRect*);
+
+	// new event handles for handling tab stops on the page ruler
+	void GetRulerOrigin(Spread*,UserCoord*);
+	void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
+	BOOL OnRulerClick( UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+					   Spread* pSpread, RulerBase* pRuler);
+
+
 	BOOL OnKeyPress(KeyPress* pKeyPress);
 	BOOL GetStatusLineText(String_256* ptext, Spread* pSpread, DocCoord DocPos, ClickModifiers ClickMods);
 	BOOL OnIdle();

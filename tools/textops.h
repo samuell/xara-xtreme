@@ -243,6 +243,7 @@ public:
 	void DoDeleteChar(OpTextFormat::DeleteType DelTyp);				 
 	void DoSwapCase();
 	BOOL DoReturn(OpTextFormat::InsertStatus InsStatus);
+	BOOL DoTab();
 
 	// One GetOpName fn for all flavours of this op
 	void GetOpName(String_256* OpName);

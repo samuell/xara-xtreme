@@ -102,20 +102,23 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontbase.h"
+#include "usercord.h"
 
 class TextTool;
 class FontDropDown;
 
 
 enum FontAttribute{JustifyA,BoldA,ItalicA,UnderLineA,AspectRatioA,FontSizeA,FontNameA,BaseLineShiftA,HorizontalKernA,
-						TrackingA,ScriptA,LineSpaceA,LineSpacePercentA,AutoKernText}; // AutoKernText is not an attribute
+				   TrackingA,ScriptA,LineSpaceA,LineSpacePercentA,
+				   LeftMarginA, RightMarginA, FirstIndentA, RulerA,
+				   AutoKernText}; // AutoKernText is not an attribute
 enum JustifyMode {JustifyLeft,JustifyRight,JustifyCentre,JustifyFull};
 enum ScriptModes {NormalScript,SuperScript,SubScript};
 		
 
 /********************************************************************************************
 
->	class InfoBarData :
+>	class TextInfoBarData :
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	22/5/94
@@ -148,6 +151,49 @@ public:
 	static UINT32		PointToLog(double Points){ return (UINT32) (Points*1000);}
  	static double		LogToPoint(UINT32 Log){ return (double)Log/1000;}
 	static BOOL			AutoKerning;
+};
+
+/********************************************************************************************
+
+>	class TextRulerBarData:
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Purpose:	Keep the current ruler bar display state
+
+********************************************************************************************/
+
+class TextRulerBarData : public CCObject
+{
+	CC_DECLARE_DYNCREATE(TextRulerBarData)
+
+public:
+	TextRulerBarData(): CurrentTabType(LeftTab), IsLeftMarginValid(FALSE), IsFirstIndentValid(FALSE),
+        IsRightMarginValid(FALSE), IsRulerValid(FALSE), IsRulerOriginClaimed(FALSE), pNewRuler(NULL),
+		TabStopDragRunning(FALSE)
+		{ pShownRuler = new TxtRuler; }
+	~TextRulerBarData() { if (pShownRuler) delete pShownRuler; }
+
+	TxtTabType CurrentTabType;          // currently chosen tab type (click creates tab of this kind)
+
+	BOOL IsLeftMarginValid:1;
+	BOOL IsFirstIndentValid:1;
+	BOOL IsRightMarginValid:1;
+	BOOL IsRulerValid:1;
+	BOOL IsRulerOriginClaimed:1;
+
+	MILLIPOINT LeftMargin;
+	MILLIPOINT FirstIndent;
+	MILLIPOINT RightMargin;
+	TxtRuler* pShownRuler;              // the currently shown ruler - this is a copy that is
+										// owned by this object!
+
+	AttrTxtRuler *pNewRuler;            // the new ruler attribute to be applied - this is just
+										// transient so need not be destroyed in the destructor
+
+	INT32 CurrentRulerOrigin;           // origin of our ruler section (in user space)
+	INT32 CurrentRulerSectionWidth;     // width of our ruler section (-1 for infinite)
+	BOOL TabStopDragRunning;
 };
 
 /********************************************************************************************
@@ -192,6 +238,18 @@ public:
 
 /********************************************************************************************
 
+>	enum TabStopDragType
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/07/06
+	Purpose:	Different types of drag operations on the ruler bar
+
+********************************************************************************************/
+
+enum TabStopDragType { DragNew, DragTabStop, DragLeftMargin, DragRightMargin, DragFirstIndent };
+
+/********************************************************************************************
+
 >	class TextInfoBarOp : public InformationBarOp
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
@@ -219,6 +277,8 @@ public:
 
 	void InitControls();
   	static BOOL Update(BOOL DoUpdate = FALSE);
+	static BOOL UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate = FALSE);
+
 	//static void GetTMetrics(TEXTMETRIC * Metrics, LOGFONT* pLogFont = NULL);
 	static void OnFieldChange(FontAttribute ThisChange);
 	static void AddFontToCombo(String_64 * FontName);
@@ -231,7 +291,6 @@ public:
 	static void DoLineSpacingBumps(UINT32 ButtonID);
 	
 	static void DoFontChange();
-
 
 	static BOOL SetCurrentPointSize(MILLIPOINT PointSize);
 	static BOOL SetCurrentAspectRatio(FIXED16 Ratio);
@@ -249,6 +308,21 @@ public:
 	static void SetCurrentJustify(UINT32 ButtonID);
 	static void SetCurrentScript(ScriptModes Script);
 	static void EnableGadgets(BOOL Enable);
+
+	static inline BOOL IsRulerOriginClaimed() { return RulerData.IsRulerOriginClaimed; }
+	static inline INT32 GetRulerOrigin() { return RulerData.CurrentRulerOrigin; }
+	static void ReleaseRuler();
+	static void HighlightRulerSection(RulerBase* pRuler, UserRect& UpdateRect);
+	static void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect);
+	static BOOL OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+							 Spread* pSpread, RulerBase* pRuler);
+
+	static void ForceRulerRedraw();
+	static void TabStopDragStarting(TabStopDragType);
+	static void TabStopDragFinished();
+	static void DoAddTabStop(MILLIPOINT Position);
+	static void DoAddTabStop(TxtTabStop NewTabStop);
+	static void DoApplyShownRuler();
 
 public:
 // the current infobar object - allow static member access
@@ -330,6 +404,9 @@ public:
 
 private:
 	static TextInfoBarData InfoData;
+	static TextRulerBarData RulerData;
+
+	static BOOL FindBitmapSize(ResourceID ID, UINT32* pWidth, UINT32* pHeight);
 
 	// static ENUMLOGFONT 	TempLogFont;
 	static void UpdateButtonStates();
@@ -339,6 +416,8 @@ private:
 	static void RedrawUnitGadgets();
 	static void SetLineSpaceGadget();
 	static void DoInputError(UINT32 GadgetID);
+
+	static INT32 GetLogicalStoryWidth(TextStory* pStory);
 
 	// static BOOL AddFontToCache(String_64 * FontName,WORD Handle);
 	// static INT32	AddTrueTypeFontsToList();
@@ -353,6 +432,11 @@ private:
 	// We only need to build this set once during the lifetime of the app.
 	static CommonAttrSet CommonAttrsToFindSet; 
 
+	// cached bitmap sizes
+	static UINT32 TabBitmapWidth;
+	static UINT32 TabBitmapHeight;
+	static UINT32 CurrentTabButtonWidth;
+	static UINT32 CurrentTabButtonHeight;
 };
 	
 
@@ -400,5 +484,63 @@ class TextInfoBarEnumFont : public OILEnumFonts
 
 };
 
+/********************************************************************************************
+
+>	class TabStopDragOpParam: public OpParam
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Purpose:	Parameters for TabStopDragOp operation class
+
+********************************************************************************************/
+
+class TabStopDragOpParam: public OpParam
+{
+public:
+	TabStopDragOpParam(TabStopDragType Type, TxtTabStop DraggedTabStop, UserCoord Pos):
+		m_DragType(Type), m_DraggedTabStop(DraggedTabStop), m_StartPos(Pos) {}
+	TabStopDragType m_DragType;
+	TxtTabStop      m_DraggedTabStop;   // only for Type == DragTabStop
+	UserCoord       m_StartPos;
+};
+
+#define OPTOKEN_TABSTOPDRAG _T("TabStopDrag")
+
+/********************************************************************************************
+
+>	class TabStopDragOp: public Operation
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Purpose:	Operation to handle tab stop dragging
+
+********************************************************************************************/
+
+class TabStopDragOp: public Operation
+{
+	CC_DECLARE_DYNCREATE(TabStopDragOp)
+public:
+	TabStopDragOp(): m_pCursor(NULL), m_pParam(NULL) {}
+	~TabStopDragOp() { if (m_pCursor) delete m_pCursor; if (m_pParam) delete m_pParam; }
+
+	static BOOL Init();
+	static OpState GetState(String_256* Description, OpDescriptor*);
+
+	// The main entry point
+	void DoWithParam(OpDescriptor *pOpDesc, OpParam* pParam);
+	virtual void DragFinished(	DocCoord PointerPos, 
+								ClickModifiers ClickMods, Spread*, 
+								BOOL Success, BOOL bSolidDrag);
+
+private:
+	void DoDrag(Spread* pThisSpread);
+	static BOOL IsMouseOverRuler();
+
+	Spread*    pSpread;
+	MILLIPOINT Ordinate;
+	INT32	   CursorStackID;
+	Cursor*	   m_pCursor;
+	TabStopDragOpParam* m_pParam;
+};
 
 #endif 		// INC_TEXTINFO
