@@ -204,6 +204,9 @@ public:
 
 	virtual BOOL DrawMajorGraticule(OilCoord GratOilPos, LPCTSTR str) {return FALSE;}
 	virtual BOOL DrawMinorGraticule(OilCoord GratOilPos, INT32 ExtraSize=0);
+	BOOL HighlightSection(OilCoord Lo, OilCoord Hi);
+	BOOL DrawBitmap(OilCoord Pos, ResourceID BitmapID);
+	BOOL StartToolDrag(UINT32 nFlags, OilCoord point, String_256* OpToken, OpParam* Param);
 
 	BOOL PaintMouseFollower(OilCoord OilPos, DocView* pDocView, MouseFollowerRenderType RenderType);
 	BOOL  DrawMouseFollower(OilCoord OilPos, DocView* pDocView, MouseFollowerRenderType RenderType, wxDC* pDC);

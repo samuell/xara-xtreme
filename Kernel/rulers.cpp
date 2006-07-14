@@ -179,15 +179,22 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	DocRect drect = pUpdateOilRect->ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
 	UserRect UpdateRect = drect.ToUser(pSpread);
 
-	// Give the current tool the chance to modify the UserCoord displayed by the ruler
-	Tool::GetCurrent()->GetRulerCoord(drect, &UpdateRect);
-
 	MILLIPOINT LoLimit = GetOrd(pRD->PasteBoardUserRect.lo);
 	MILLIPOINT HiLimit = GetOrd(pRD->PasteBoardUserRect.hi);
 	if (GetOrd(UpdateRect.lo)<LoLimit) UpdateRect.lo=MakeCoord(LoLimit);
 	if (GetOrd(UpdateRect.hi)>HiLimit) UpdateRect.hi=MakeCoord(HiLimit);
 	if (GetOrd(UpdateRect.hi)<GetOrd(UpdateRect.lo))
 		return TRUE;	// no region to redraw
+
+	// Give the current tool the chance to modify the UserCoord displayed by the ruler
+	UserCoord Offsets(0, 0);
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	UpdateRect.Translate(-Offsets.x, -Offsets.y);
+
+	// allow the current tool to render background blobs
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->RenderRulerBlobs(this, UpdateRect, TRUE);
 
 	// find the first and last major graticules to be rendered
 	double Start = GetOrd(UpdateRect.lo)/pRD->GratStepSize;
@@ -201,7 +208,7 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	while (Grat<=LastGrat)
 	{
 		// calc position of graticule and convert to OilCoords
-		MILLIPOINT GratPos=(MILLIPOINT)(Grat*pRD->GratUnitSize);
+		MILLIPOINT GratPos=(MILLIPOINT)(Grat*pRD->GratUnitSize + GetOrd(Offsets));
 		OilCoord GratOilPos=MakeCoord(GratPos).ToSpread(pSpread).ToOil(pSpread,pDocView);
 
 		// draw major graticule
@@ -230,6 +237,10 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 		Grat+=pRD->GratStep;
 	}
 
+	// allow the current tool to render foreground blobs
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->RenderRulerBlobs(this, UpdateRect, FALSE);
+
 	// draw the mouse follower on this ruler in it's last drawn position
 	DocCoord LastPos    = pRulerPair->GetMouseFollowerPosition();
 	BOOL     Visibility = pRulerPair->GetMouseFollowerVisibility();
@@ -244,6 +255,67 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	return TRUE;
 }
 
+/*****************************************************************************
+>	BOOL RulerBase::HighlightSection(MILLIPOINT ord_lo, MILLIPOINT ord_hi)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:		ord_lo, ord_hi - low and high coordinate on the ruler in tool user
+								 space (i.e., we know about the tool's own ruler origin)
+	Returns:	FALSE if fails
+	Purpose:	Highlight a rectangular section of the ruler
+
+*****************************************************************************/
+
+BOOL RulerBase::HighlightSection(MILLIPOINT ord_lo, MILLIPOINT ord_hi)
+{
+	DocView*         pDocView = pRulerPair->GetpDocView();
+	Spread*          pSpread  = pRulerPair->GetpSpread();
+
+	// if no spread visible in doc view, just exit
+	if (pSpread==NULL) return TRUE;
+
+	// take the current tool ruler origin into account
+	UserCoord Offsets(0, 0);
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	ord_lo += GetOrd(Offsets); ord_hi += GetOrd(Offsets);
+
+	OilCoord OilPosLo = MakeCoord(ord_lo).ToSpread(pSpread).ToOil(pSpread,pDocView);
+	OilCoord OilPosHi = MakeCoord(ord_hi).ToSpread(pSpread).ToOil(pSpread,pDocView);
+	return pOILRuler->HighlightSection(OilPosLo, OilPosHi);
+}
+
+/*****************************************************************************
+>	BOOL RulerBase::DrawBitmap(MILLIPOINT ord, ResourceID BitmapID)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:		ord - the position on the ruler in tool user space
+				(i.e., we know about the tool's own ruler origin)
+				BitmapID - the resource id of the bitmap
+	Returns:	FALSE if fails
+	Purpose:	Draw a bitmap at a specific position in the ruler
+
+*****************************************************************************/
+
+BOOL RulerBase::DrawBitmap(MILLIPOINT ord, ResourceID BitmapID)
+{
+	DocView*         pDocView = pRulerPair->GetpDocView();
+	Spread*          pSpread  = pRulerPair->GetpSpread();
+
+	// if no spread visible in doc view, just exit
+	if (pSpread==NULL) return TRUE;
+
+	// take the current tool ruler origin into account
+	UserCoord Offsets(0, 0);
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	ord += GetOrd(Offsets);
+
+	OilCoord OilPos = MakeCoord(ord).ToSpread(pSpread).ToOil(pSpread,pDocView);
+	return pOILRuler->DrawBitmap(OilPos, BitmapID);
+}
 
 /********************************************************************************************
 
@@ -265,7 +337,7 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 
 ********************************************************************************************/
 
-BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
+BOOL RulerBase::OnRulerClick(UINT32 nFlags, OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
 {
 	ERROR3IF(pRulerPair==NULL, "pRulerPair unexpectedly NULL");
 	ERROR3IF(pRulerPair->GetpSpread()==NULL, "pRulerPair->pSpread unexpectedly NULL");
@@ -295,16 +367,38 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 
 	// First of all convert the OilRect into device coords
 	DocCoord DocPos = PointerPos.ToDoc( pSpread, pRulerPair->GetpDocView() );
-	
+
 	// Convert the coord to spread coords
 	pSpread->DocCoordToSpreadCoord(&DocPos);
+	UserCoord UserPos = DocPos.ToUser(pSpread);
+
+	// take the current tool ruler origin into account
+	UserCoord Offsets(0, 0);
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	UserPos.translate(-Offsets.x, -Offsets.y);
 
 	if (Tool::GetCurrent())
-		return Tool::GetCurrent()->OnRulerClick(DocPos, Click, Mods, pSpread, this);
+		return Tool::GetCurrent()->OnRulerClick(nFlags, UserPos, Click, Mods, pSpread, this);
 
 	return FALSE;
 }
 
+BOOL RulerBase::StartToolDrag(UINT32 nFlags, UserCoord PointerPos, String_256* pOpToken, OpParam* pParam)
+{
+	// Find the spread in which the click happened
+	Spread *pSpread = pRulerPair->GetpSpread();
+	DocView *pDocView = pRulerPair->GetpDocView();
+
+	// take the current tool ruler origin into account
+	UserCoord Offsets(0, 0);
+	if (Tool::GetCurrent())
+		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	PointerPos.translate(Offsets.x, Offsets.y);
+
+	OilCoord OilPos = PointerPos.ToSpread(pSpread).ToOil(pSpread,pDocView);
+	return pOILRuler->StartToolDrag(nFlags, OilPos, pOpToken, pParam);
+}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -504,7 +598,9 @@ BOOL RulerPair::UpdateRedrawData()
 	UserRect PasteBoardUserRect = PasteSpreadRect.ToUser(pSpread);
 
 	// Give the current tool the chance to modify the UserCoord displayed by the ruler
-	Tool::GetCurrent()->GetRulerCoord(PasteSpreadRect, &PasteBoardUserRect);
+	UserCoord Offsets(0, 0);
+	Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
+	PasteBoardUserRect.Translate(-Offsets.x, -Offsets.y);
 
 	// hence the start and end values in terms of ruler units
 	double XStart = fabs(PasteBoardUserRect.lo.x/GratStepSize)*GratStep;

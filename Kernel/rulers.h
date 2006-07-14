@@ -134,10 +134,22 @@ public:
 
 	virtual MILLIPOINT    GetOrd(const UserCoord& coord) = 0;
 	virtual UserCoord  MakeCoord(const MILLIPOINT ord)   = 0;
+	virtual BOOL    IsHorizontal()                       = 0;
 
+	// Called by the OIL ruler when the ruler needs to be redrawn.
+	// We do all the platform independent computations and call the
+	// OIL ruler back to render specific things (e.g., graticules)
 	BOOL Redraw(OilRect* pOilRect);
 
-	virtual BOOL OnRulerClick(OilCoord, ClickType, ClickModifiers);
+	// For use by tools that wish to render extra things on the ruler
+	// (by responding to the RenderRulerBlobs method)
+	BOOL HighlightSection(MILLIPOINT ord_lo, MILLIPOINT ord_hi);
+	BOOL DrawBitmap(MILLIPOINT ord, ResourceID BitmapID);
+	// Allow tools to start a drag after receiving an OnRulerClick call.
+	// Drag events will be dispatched via OnRulerClick.
+	BOOL StartToolDrag(UINT32 nFlags, UserCoord, String_256* pOpToken, OpParam* pParam);
+
+	virtual BOOL OnRulerClick(UINT32 nFlags, OilCoord, ClickType, ClickModifiers);
 
 protected:
 	RulerPair* pRulerPair;
@@ -163,6 +175,7 @@ public:
 
 	virtual MILLIPOINT    GetOrd(const UserCoord& coord) { return coord.x; }
 	virtual UserCoord  MakeCoord(const MILLIPOINT ord)   { return UserCoord(ord,0); }
+	virtual BOOL    IsHorizontal() { return TRUE; }
 };
 
 
@@ -184,6 +197,7 @@ public:
 
 	virtual MILLIPOINT    GetOrd(const UserCoord& coord) { return coord.y; }
 	virtual UserCoord  MakeCoord(const MILLIPOINT ord)   { return UserCoord(0,ord); }
+	virtual BOOL    IsHorizontal() { return FALSE; }
 };
 
 

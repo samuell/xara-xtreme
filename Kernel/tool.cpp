@@ -116,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "blobs.h"
 #include "toolmsg.h"
+#include "usercord.h"
 
 #define SELECTED TRUE
 #define DESELECTED FALSE
@@ -1525,25 +1526,47 @@ void Tool_v1::SelectChange(BOOL /*IsSelected*/)
 
 /********************************************************************************************
 
->	virtual void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
+>	void Tool_v1::GetRulerOrigin(Spread* pSpread, UserCoord* pOffsets)
 
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/Jun/2006
-	Inputs:		dr - DocRect to be converted into tool-specific coordinate space
-	Outputs:	ur - UserRect containing optionally modified version of dr
+	Inputs:		pSpread - the spread for which the ruler is displayed
+	Outputs:	pOffsets - the desired origin shift in user space (is initialised to 0,0)
 	Purpose:	Gives the current tool the chance to change the coordinates
 				displayed on the ruler
 
 ********************************************************************************************/
 
-void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
+void Tool_v1::GetRulerOrigin(Spread* pSpread, UserCoord* pOffsets)
 {
 	// Override me if you want!
 	// Note that overriding this function implies that you will ensure the redraw of the rulers
 	// as you enter and leave your tool.
 }
 
+/********************************************************************************************
 
+>	void Tool_v1::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:		pRuler - the ruler that is currently being redrawn
+				UpdateRect - the rectangle to be updated in user coordinates (with the tool
+							 origin applied)
+				IsBackground - whether this is the call before drawing the main blobs
+							   or the call after rendering the main blobs
+	Purpose:	Gives the current tool the chance to render additional blobs on the ruler
+				Is called twice - once before the standard ruler graphics are rendered
+				(to allow additional background to be drawn) and once afterwards
+
+********************************************************************************************/
+
+void Tool_v1::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground)
+{
+	// Override me if you want!
+	// Note that overriding this function implies that you will ensure the redraw of the rulers
+	// as you enter and leave your tool.
+}
 
 
 /********************************************************************************************
@@ -1555,7 +1578,8 @@ void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
 									  )
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/Jun/2006
-	Inputs:		PointerPos	- SpreadCoord of click within spread
+	Inputs:		nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
+				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
 				Click		- Type of click enum
 				Mods		- Modifier flags struct
 				pSpread		- pointer to spread upon which click occurred
@@ -1568,7 +1592,8 @@ void Tool_v1::GetRulerCoord(const DocRect dr, UserRect* pur)
 
 ********************************************************************************************/
 
-BOOL Tool_v1::OnRulerClick( DocCoord PointerPos,
+BOOL Tool_v1::OnRulerClick( UINT32 nFlags,
+							UserCoord PointerPos,
 							ClickType Click,
 							ClickModifiers Mods,
 							Spread* pSpread,

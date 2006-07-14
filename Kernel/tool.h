@@ -360,10 +360,14 @@ public:
 	virtual void SelectChange(BOOL IsSelected);
 
 	// Allow the Current Tool to modify coordinates displayed on the Ruler
-	virtual void GetRulerCoord(const DocRect, UserRect*);
+	virtual void GetRulerOrigin(Spread* pSpread, UserCoord*);
+
+	// Allow the current tool to render additional blobs on the Ruler
+	virtual void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
 
 	// Allow the Current Tool to handle Ruler clicks
-	virtual BOOL OnRulerClick( DocCoord PointerPos,
+	virtual BOOL OnRulerClick( UINT32 nFlags,
+							   UserCoord PointerPos,
 							   ClickType Click,
 							   ClickModifiers Mods,
 							   Spread* pSpread,

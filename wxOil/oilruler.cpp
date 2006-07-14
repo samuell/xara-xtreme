@@ -341,6 +341,31 @@ BOOL OILRuler::StartDrag(UINT32 nFlags, wxPoint point)
 	return TRUE;
 }
 
+/********************************************************************************************
+>	BOOL OILRuler::StartToolDrag(UINT32 nFlags, wxPoint point, String_256* OpToken, void* Params)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	12/07/06
+	Input:      nFlags - the mouse event flags (as passed to OnRulerClick)
+				point - the pointer position (as passed to OnRulerClick)
+				OpToken - name of the operation to invoke
+				Params - an opaque pointer to the parameters for the operation
+	Returns:	FALSE if fails
+	Purpose:	StartDrag function for tool drags.
+********************************************************************************************/
+                    
+BOOL OILRuler::StartToolDrag(UINT32 nFlags, OilCoord point, String_256* pOpToken, OpParam* pParam)
+{ 
+	if (m_pOwnerView != NULL)
+	{
+		DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+		wxPoint ClientPoint = point.ToWin(pDocView);
+		m_pOwnerView->InvokeDragOp(pOpToken, pParam, nFlags, ClientPoint);
+		return TRUE;
+	}
+
+	return FALSE;
+}
 
 /*********************************************************************************************
 >	void OILRuler::ShowRuler(BOOL show)
@@ -976,7 +1001,7 @@ PORTNOTE("other","Removed reading of keyboard autorepeat rate")
 
 	// Convert the click position to OIL coordinates before passing to the kernel.
 	OilCoord ocoord = ClientToOil(pDocView, point);
-	return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
+	return pKernelRuler->OnRulerClick(nFlags, ocoord, t, m_LastClickMods);
 }
 
 
@@ -1046,7 +1071,7 @@ BOOL OILRuler::HandleRulerUpEvent(UINT32 Button, WinCoord point)
 			m_FirstClickButton = 0;
 
 			//Then pass the Up-Click message to CCamView::OnClick
-			return pKernelRuler->OnRulerClick(ocoord, CLICKTYPE_UP, m_LastClickMods);
+			return pKernelRuler->OnRulerClick(0, ocoord, CLICKTYPE_UP, m_LastClickMods);
 		}
 	}
 	else
@@ -1388,6 +1413,91 @@ BOOL OILRuler::DrawMouseFollower(OilCoord OilPos, DocView* pDocView,
 	return TRUE;
 }
 
+/********************************************************************************************
+>	BOOL OILRuler::HighlightSection(OilCoord Lo, OilCoord Hi)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:		Lo, Hi - determines the ruler section to be redrawn
+	Returns:    FALSE if fails
+	Purpose:	Highlight a rectangular section of the ruler
+
+********************************************************************************************/
+
+BOOL OILRuler::HighlightSection(OilCoord Lo, OilCoord Hi)
+{
+	ERROR2IF(pPaintDC==NULL,FALSE,"OILRuler::HighlightSection - pPaintDC==NULL");
+
+	// convert to ruler relative win coords
+	WinCoord RectLoWinPos = Lo.ToWin(pPaintDocView);
+	WinCoord RectHiWinPos = Hi.ToWin(pPaintDocView);
+
+	RectLoWinPos -= RulerToDocOffset;
+	RectHiWinPos -= RulerToDocOffset;
+
+	if (IsHorizontal())
+	{
+		RectLoWinPos.y = 0;
+		Hi.y = RenderWidth;
+	}
+	else
+	{
+		Lo.x = 0;
+		Hi.x = RenderWidth;
+	}
+
+	WinRect HighlightWinRect(RectLoWinPos.x, RectLoWinPos.y, RectHiWinPos.x, RectHiWinPos.y);
+
+	pPaintDC->SetBrush(wxBrush(wxColour(*wxWHITE)));
+	pPaintDC->SetPen(*wxTRANSPARENT_PEN);
+	pPaintDC->DrawRectangle(HighlightWinRect);
+	pPaintDC->SetPen(wxPen(*wxBLACK, 1, wxSOLID));		// Restore previous pen (as expected by further drawing)
+	return TRUE;
+}
+
+/********************************************************************************************
+>	BOOL OILRuler::DrawBitmap(OilCoord Pos, ResourceID BitmapID)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	07/07/06
+	Inputs:		Pos - the position on the ruler (only ordinate in ruler direction is significant)
+				BitmapID - the resource id of the bitmap
+	Returns:    FALSE if fails
+	Purpose:	Display a bitmap at a specific ruler position, centered around the requested
+				position in the ruler direction, aligned with the ruler edge in the other
+				direction
+	
+********************************************************************************************/
+
+BOOL OILRuler::DrawBitmap(OilCoord Pos, ResourceID BitmapID)
+{
+	ERROR2IF(pPaintDC==NULL,FALSE,"OILRuler::DrawBitmap() - pPaintDC==NULL");
+
+	wxBitmap* pBitmap = CamArtProvider::Get()->FindBitmap(BitmapID);
+	ERROR2IF(pBitmap==NULL,FALSE,"OILRuler::DrawBitmap - could not find bitmap");
+
+	INT32 BitmapWidth = pBitmap->GetWidth();
+	INT32 BitmapHeight = pBitmap->GetHeight();
+
+	// convert to ruler relative win coords
+	WinCoord WinPos = Pos.ToWin(pPaintDocView);
+	WinPos -= RulerToDocOffset;
+
+	if (IsHorizontal())
+	{
+		// centered around requested position, aligned with bottom of ruler
+		WinPos.x -= BitmapWidth / 2;
+		WinPos.y = RenderWidth - BitmapHeight;
+	}
+	else
+	{
+		// centered around requested position, aligned with right hand side of ruler
+		WinPos.x = RenderWidth - BitmapWidth;
+		WinPos.y -= BitmapHeight / 2;
+	}
+	pPaintDC->DrawBitmap(*pBitmap, WinPos.x, WinPos.y, true);
+	return TRUE;
+}
 
 /********************************************************************************************
 >	void OILRuler::SetCurrentStates()
