@@ -2519,6 +2519,10 @@ void TextStory::Transform(TransformBase& transform)
 			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtFontSize));
 			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtLineSpace));
 			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtBaseLine));
+			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtLeftMargin));
+			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtRightMargin));
+			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtFirstIndent));
+			if (ok) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtRuler));
 			if (ok && TransformAspect) ok=AffectedAttrs.AddToSet(CC_RUNTIME_CLASS(AttrTxtAspectRatio));
 
 			// We add all attributes, including the defaults to the TextStory
@@ -2675,7 +2679,6 @@ VisibleTextNode* TextStory::GetSelectionEnd(BOOL* pDirection)
 
 BOOL TextStory::FormatAndChildren(UndoableOperation* pUndoOp, BOOL UseNodeFlags, BOOL WordWrap)
 {
-       PORTNOTE("text","TextStory::FormatAndChildren - do nothing");
 #ifndef DISABLE_TEXT_RENDERING
 	// if whole story is affected, just flag all children as 'ModifiedByOp'
 	if (UseNodeFlags==FALSE)
@@ -2712,14 +2715,22 @@ BOOL TextStory::FormatAndChildren(UndoableOperation* pUndoOp, BOOL UseNodeFlags,
 	StoryInfo.pUndoOp  = pUndoOp;
 	StoryInfo.WordWrap = WordWrap;
 	if (GetTextPath()!=NULL)
+	{
 		if (CreateUntransformedPath(&StoryInfo)==FALSE)
 			return FALSE;
+	}
 
 	// determine the story's width, and if it is word wrapping or not
 	if (StoryInfo.pPath==NULL)
 		StoryInfo.StoryWidth = GetStoryWidth();		// 0 if text at point
 	else
+	{
 		StoryInfo.StoryWidth = StoryInfo.PathLength;
+		if (IsWordWrapping())
+			// we might just as well store the logical width in the story as well
+			// (for the benefit of displaying it on the ruler)
+			StoryWidth = StoryInfo.PathLength - StoryInfo.LeftPathIndent - StoryInfo.RightPathIndent;
+	}
 	StoryInfo.WordWrapping = IsWordWrapping();
 
 	// format each line in story
@@ -4165,11 +4176,10 @@ TextStory* TextStory::CreateFromChars(DocCoord Pos, char* pChars, WCHAR* pWChars
 					if (ok) pCaretNode->MoveNode(pTextLine,FIRSTCHILD);
 					break;
 				}
-				case '\t':	// insert a kern to mimic a tab
+				case '\t':  // insert a horizontal tab
 				{
-					DocCoord tabkern(4000,0); // Nothing like a hardcoded bodge
-					KernCode* pKernCode= new KernCode(pCaretNode, PREV, tabkern);
-					ok=(pKernCode!=NULL);
+					HorizontalTab* pTab = new HorizontalTab(pCaretNode, PREV);
+					ok = (pTab != NULL);
 					break;
 				}
 				default:

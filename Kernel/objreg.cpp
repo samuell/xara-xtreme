@@ -661,7 +661,12 @@ BOOL ObjectRegistry::Init()
 	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtFontSize); 
 	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtBaseLine);
 	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtScript); 
-	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtLineSpace); 
+	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtLineSpace);
+
+	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtLeftMargin);
+	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtRightMargin);
+	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtFirstIndent);
+	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrTxtRuler);
 
 	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrOverprintLine);
 	ADD_ATTRIB_CLASS(BaseTextClassDetails, AttrOverprintFill);
@@ -768,7 +773,12 @@ BOOL ObjectRegistry::Init()
 	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtFontSize); 
 	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtBaseLine);
 	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtScript); 
-	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtLineSpace); 
+	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtLineSpace);
+
+	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtLeftMargin);
+	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtRightMargin);
+	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtFirstIndent);
+	ADD_ATTRIB_CLASS(AllAttrDetails, AttrTxtRuler);
 
 	ADD_ATTRIB_CLASS(AllAttrDetails, AttrOverprintLine);
 	ADD_ATTRIB_CLASS(AllAttrDetails, AttrOverprintFill);

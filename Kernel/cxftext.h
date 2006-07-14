@@ -238,6 +238,26 @@ private:
 
 /********************************************************************************************
 
+>	class CXaraFileTxtTab
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	29/06/06
+	Base Class:	-
+	Purpose:	Exporting code for tab objects for the new file format
+
+********************************************************************************************/
+
+class CXaraFileTxtTab
+{
+public:
+	static BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter, HorizontalTab *pTab);
+	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, HorizontalTab *pTab);
+private:
+	static BOOL WriteTextTab(BaseCamelotFilter *pFilter, HorizontalTab* pTab);
+};
+
+/********************************************************************************************
+
 >	class CXaraFileTxtCaret
 
 	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
@@ -474,6 +494,86 @@ public:
 	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtBaseLine *pAttr);
 private:
 	static BOOL WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtBaseLine *pAttr);
+};
+
+/********************************************************************************************
+
+>	class CXaraFileTxtLeftMargin
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Base Class:	-
+	Purpose:	Export code for the new file format
+
+********************************************************************************************/
+
+class CXaraFileTxtLeftMargin
+{
+public:
+	static BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+private:
+	static BOOL WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+};
+
+/********************************************************************************************
+
+>	class CXaraFileTxtRightMargin
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Base Class:	-
+	Purpose:	Export code for the new file format
+
+********************************************************************************************/
+
+class CXaraFileTxtRightMargin
+{
+public:
+	static BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+private:
+	static BOOL WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+};
+
+/********************************************************************************************
+
+>	class CXaraFileTxtFirstIndent
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Base Class:	-
+	Purpose:	Export code for the new file format
+
+********************************************************************************************/
+
+class CXaraFileTxtFirstIndent
+{
+public:
+	static BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+private:
+	static BOOL WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+};
+
+/********************************************************************************************
+
+>	class CXaraFileTxtRuler
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Base Class:	-
+	Purpose:	Export code for the new file format
+
+********************************************************************************************/
+
+class CXaraFileTxtRuler
+{
+public:
+	static BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
+	static BOOL WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
+private:
+	static BOOL WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
 };
 
 /********************************************************************************************

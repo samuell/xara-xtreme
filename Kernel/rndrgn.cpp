@@ -1451,7 +1451,10 @@ void RenderRegion::SetTextAttributes(ChangeFillAttrType Type)
 			TextFlags.ValidScript		= FALSE; 
 			TextFlags.ValidBaseLine		= FALSE;
 			TextFlags.ValidLineSpace	= FALSE;
-
+			TextFlags.ValidLeftMargin   = FALSE;
+			TextFlags.ValidRightMargin  = FALSE;
+			TextFlags.ValidFirstIndent  = FALSE;
+			TextFlags.ValidRuler        = FALSE;
 			break;
 
 		case CHANGEATTR_FONT:
@@ -1492,6 +1495,18 @@ void RenderRegion::SetTextAttributes(ChangeFillAttrType Type)
 			break;
 		case CHANGEATTR_LINESPACE:
 			TextFlags.ValidLineSpace	= FALSE;
+			break;
+		case CHANGEATTR_LEFTMARGIN:
+			TextFlags.ValidLeftMargin   = FALSE;
+			break;
+		case CHANGEATTR_RIGHTMARGIN:
+			TextFlags.ValidRightMargin  = FALSE;
+			break;
+		case CHANGEATTR_FIRSTINDENT:
+			TextFlags.ValidFirstIndent  = FALSE;
+			break;
+		case CHANGEATTR_RULER:
+			TextFlags.ValidRuler        = FALSE;
 			break;
 
 		default:
@@ -4650,6 +4665,81 @@ void RenderRegion::RestoreTxtLineSpace(TxtLineSpaceAttribute *pAttr, BOOL Temp)
 	// Restore the Text LineSpace attribute
 	RestoreAttribute(ATTR_TXTLINESPACE, (AttributeValue*)pAttr, Temp);
 	SetTextAttributes(CHANGEATTR_LINESPACE);
+}
+
+/********************************************************************************************
+
+>	void RenderRegion::Set/RestoreTxtxxx(TxtXXXAttribute *pAttr, BOOL Temp)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Inputs:		See other Set/Restore routines above
+	Purpose:	See other Set/Restore routines above
+
+********************************************************************************************/
+
+void RenderRegion::SetTxtLeftMargin(TxtLeftMarginAttribute *pAttr, BOOL Temp)
+{
+	// Save the current attribute and set up the new one
+	if (SaveAttribute(ATTR_TXTLEFTMARGIN, (AttributeValue*)pAttr, Temp))
+	{
+		SetTextAttributes(CHANGEATTR_LEFTMARGIN);
+	}
+}
+
+void RenderRegion::RestoreTxtLeftMargin(TxtLeftMarginAttribute *pAttr, BOOL Temp)
+{
+	// Restore the attribute
+	RestoreAttribute(ATTR_TXTLEFTMARGIN, (AttributeValue*)pAttr, Temp);
+	SetTextAttributes(CHANGEATTR_LEFTMARGIN);
+}
+
+void RenderRegion::SetTxtRightMargin(TxtRightMarginAttribute *pAttr, BOOL Temp)
+{
+	// Save the current attribute and set up the new one
+	if (SaveAttribute(ATTR_TXTRIGHTMARGIN, (AttributeValue*)pAttr, Temp))
+	{
+		SetTextAttributes(CHANGEATTR_RIGHTMARGIN);
+	}
+}
+
+void RenderRegion::RestoreTxtRightMargin(TxtRightMarginAttribute *pAttr, BOOL Temp)
+{
+	// Restore the attribute
+	RestoreAttribute(ATTR_TXTRIGHTMARGIN, (AttributeValue*)pAttr, Temp);
+	SetTextAttributes(CHANGEATTR_RIGHTMARGIN);
+}
+
+void RenderRegion::SetTxtFirstIndent(TxtFirstIndentAttribute *pAttr, BOOL Temp)
+{
+	// Save the current attribute and set up the new one
+	if (SaveAttribute(ATTR_TXTFIRSTINDENT, (AttributeValue*)pAttr, Temp))
+	{
+		SetTextAttributes(CHANGEATTR_FIRSTINDENT);
+	}
+}
+
+void RenderRegion::RestoreTxtFirstIndent(TxtFirstIndentAttribute *pAttr, BOOL Temp)
+{
+	// Restore the attribute
+	RestoreAttribute(ATTR_TXTFIRSTINDENT, (AttributeValue*)pAttr, Temp);
+	SetTextAttributes(CHANGEATTR_FIRSTINDENT);
+}
+
+void RenderRegion::SetTxtRuler(TxtRulerAttribute *pAttr, BOOL Temp)
+{
+	// Save the current attribute and set up the new one
+	if (SaveAttribute(ATTR_TXTRULER, (AttributeValue*)pAttr, Temp))
+	{
+		SetTextAttributes(CHANGEATTR_RULER);
+	}
+}
+
+void RenderRegion::RestoreTxtRuler(TxtRulerAttribute *pAttr, BOOL Temp)
+{
+	// Restore the attribute
+	RestoreAttribute(ATTR_TXTRULER, (AttributeValue*)pAttr, Temp);
+	SetTextAttributes(CHANGEATTR_RULER);
 }
 
 /********************************************************************************************

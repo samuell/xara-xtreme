@@ -149,6 +149,9 @@ TextLineInfo::TextLineInfo()
 	justification   = JLEFT;
 	LeftMargin      = 0;
 	RightMargin     = 0;
+	ParaLeftMargin = 0;
+	ParaRightMargin = 0;
+	Ruler = NULL;
 	WordWrapping    = FALSE;
 	NumChars        = 0;
 	NumSpaces       = 0;
@@ -373,6 +376,9 @@ void TextLine::CopyNodeContents(TextLine* NodeCopy)
 	NodeCopy->mJustification  = mJustification;
 	NodeCopy->mLineSpacing    = mLineSpacing;
 	NodeCopy->mLineSpaceRatio = mLineSpaceRatio;
+	NodeCopy->mLeftMargin = mLeftMargin;
+	NodeCopy->mRightMargin = mRightMargin;
+	NodeCopy->mpRuler = mpRuler;
 
 	NodeCopy->mPosInStory  = mPosInStory;
 }
@@ -710,6 +716,22 @@ BOOL TextLine::ReCacheMetrics(FormatRegion* pFormatRegion)
 	SetJustification( pFormatRegion->GetJustification());
 	SetLineSpacing(   pFormatRegion->GetLineSpacing());
 	SetLineSpaceRatio(pFormatRegion->GetLineSpaceRatio());
+
+	// we need to find out whether this is the first line in the paragraph, so we know
+	// whether we need to use FirstLineIndent or LeftMargin
+	TextLine* pPrevLine = FindPrevLine();
+	if (pPrevLine==NULL || pPrevLine->FindEOLNode() != NULL)
+	{
+		// first line in paragraph
+		SetParaLeftMargin(pFormatRegion->GetFirstIndent());
+	}
+	else
+	{
+		// not first line, so use normal left margin
+		SetParaLeftMargin(pFormatRegion->GetLeftMargin());
+	}
+	SetParaRightMargin(pFormatRegion->GetRightMargin());
+	SetRuler(pFormatRegion->GetRuler());
 	return TRUE;
 }
 
@@ -731,17 +753,29 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 {
 	ERROR2IF(pStoryInfo==NULL,FALSE,"TextLine::Format() - pStoryInfo == NULL");
 
-	MILLIPOINT LeftMargin   = pStoryInfo->LeftPathIndent;	// 0 if not on path
-	MILLIPOINT RightMargin  = pStoryInfo->StoryWidth - pStoryInfo->RightPathIndent;
+	TRACEUSER("wuerthne", _T("TextLine::Format"));
+	MILLIPOINT PhysicalLeftMargin   = pStoryInfo->LeftPathIndent;	// 0 if not on path
+	MILLIPOINT PhysicalRightMargin  = pStoryInfo->StoryWidth - pStoryInfo->RightPathIndent;
 	BOOL       WordWrapping = pStoryInfo->WordWrapping;
+	MILLIPOINT RightMargin = PhysicalRightMargin - mRightMargin;
+	MILLIPOINT LeftMargin = PhysicalLeftMargin + mLeftMargin;
 
 	// if word wrapping, and not text at a point, and undoably 'do'ing op, word wrap the line
 	MILLIPOINT WrapWidth = 0;
 	if (WordWrapping)
 		WrapWidth = RightMargin - LeftMargin;	// will be 0 if text at a point
 	if (WrapWidth!=0 && pStoryInfo->WordWrap)
+	{
 		if (!this->Wrap(pStoryInfo->pUndoOp, WrapWidth))
 			return FALSE;
+	}
+	else if (WrapWidth != 0)
+	{
+		// when called during undo (i.e., WordWrap = FALSE) and the story is word wrapping,
+		// we do not want to wrap, but we still need to make sure that each tab gets its width
+		// set correctly, otherwise PositionCharsInLine will not do the right thing
+		FindBreakChar(WrapWidth, FALSE);
+	}
 
 	// if line affected in any way, reposition chars in line
 	if (NodeOrDescendantAffected())
@@ -750,8 +784,8 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 		if (ReCalcLineInfo(&LineInfo)==FALSE)
 			return FALSE;
 
-		LineInfo.LeftMargin    = LeftMargin;
-		LineInfo.RightMargin   = RightMargin;
+		LineInfo.LeftMargin    = PhysicalLeftMargin;
+		LineInfo.RightMargin   = PhysicalRightMargin;
 		LineInfo.WordWrapping  = WordWrapping;
 		if (PositionCharsInLine(&LineInfo)==FALSE)
 			return FALSE;
@@ -798,6 +832,8 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 
 BOOL TextLine::EnsureNextLineOfParagraphHasSameLineLevelAttrs(UndoableOperation* pUndoOp)
 {
+	TRACEUSER("wuerthne", _T("EnsureNextLineOfParagraphHasSameLineLevelAttrs"));
+
 	ERROR2IF(FindEOLNode()!=NULL,FALSE,"TextLine::EnsureNextOfParagraphLineHasSameLineLevelAttrs() - there is no next line in the paragraph!");
 	TextStory* pStory = this->FindParentStory();
 	ERROR2IF(pStory==NULL,FALSE,"TextLine::EnsureNextOfParagraphLineHasSameLineLevelAttrs() - line has no parent story!");
@@ -877,7 +913,9 @@ BOOL TextLine::EnsureNextLineOfParagraphHasSameLineLevelAttrs(UndoableOperation*
 					if (!pStory->DoLocaliseCommonAttributes(pUndoOp,FALSE,TRUE,&LLASet))
 						return FALSE;
 				StoryLocalised = TRUE;
+				TRACEUSER("wuerthne", _T("calling SimpleCopy for att %d %d"), IS_A(pThisLineLLA, AttrTxtLineSpace), IS_A(pThisLineLLA, AttrTxtRuler));
 				NodeAttribute* pNewLLA = (NodeAttribute*)pThisLineLLA->SimpleCopy();
+				TRACEUSER("wuerthne", _T("node copied %d %d"), IS_A(pNewLLA, AttrTxtLineSpace), IS_A(pNewLLA, AttrTxtRuler));
 				if (pNewLLA==NULL)
 					return FALSE;
 				pNewLLA->AttachNode(pNextLine,FIRSTCHILD,TRUE,FALSE); 
@@ -939,7 +977,11 @@ TextLine* TextLine::FindFirstLineOfParagraph()
 BOOL TextLine::IsAttrTypeLineLevel(CCRuntimeClass* pAttrType)
 {
 	return pAttrType==CC_RUNTIME_CLASS(AttrTxtJustification)
-		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtLineSpace);
+		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtLineSpace)
+		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtLeftMargin)
+		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtRightMargin)
+		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtFirstIndent)
+		|| pAttrType==CC_RUNTIME_CLASS(AttrTxtRuler);
 }
 
 
@@ -966,51 +1008,271 @@ BOOL TextLine::AddChildLineLevelAttrsToSet(AttrTypeSet* pAttrTypeSet)
 	return TRUE;
 }
 
+/********************************************************************************************
+>	BOOL FormatState::FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsLastTabSection)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>			
+	Created:	23/06/06
+	Inputs:		pLastFormattedNode - the most recently fitted node
+				IsLastTabSection - TRUE if this section has been terminated by EOL or a
+				line break (i.e., not by a Tab), which means we should add
+				ExtraSpaceOnChars/Space here)
+	Returns:	ptr to char to break at (or NULL if ERROR)
+	Purpose:	This routine is called when a tab or the end of the line is encountered,
+				so the text after the previous tab (or the start of the line) can be
+				finally formatted.
+				The Width/Advance of the Tab is always set and if SetCharPositions is TRUE,
+				then all the character positions are set.
+********************************************************************************************/
+
+BOOL FormatState::FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsLastTabSection)
+{
+	// first, set the Tab character's width - this is only necessary for non-Left tabs
+	// (for left tabs we have already set it when encountering the tab)
+	if (ActiveTabType != LeftTab)
+	{
+		// pLastTabVTN can only be undefined for ActiveTabType == LeftTab
+		((HorizontalTab*)pLastTabVTN)->SetCharWidth(RemainingSpace);
+		((HorizontalTab*)pLastTabVTN)->SetCharAdvance(RemainingSpace);
+	}
+	if (!SetCharPositions) return TRUE;
+
+	// full formatting desired
+	VisibleTextNode* pVTN = pLastTabVTN ? pLastTabVTN : pFirstVTN;
+	MILLIPOINT Pos = AnchorPos;
+	do
+	{
+		ERROR2IF(pVTN == NULL, FALSE, "FinishTabSection - unexpected end of line");
+		if (Pos + CharPosOffset != pVTN->GetPosInLine())
+		{
+			pVTN->SetPosInLine(Pos + CharPosOffset);
+			pVTN->FlagNodeAndDescendantsAffectedAndParentsHaveDescendantAffected();	
+		}
+		Pos += pVTN->GetCharAdvance();
+		
+		if (IsLastTabSection && IS_A(pVTN,TextChar))
+			Pos += ExtraOnChars;
+		if (IsLastTabSection && pVTN->IsASpace())
+			Pos += ExtraOnSpaces;
+		if (pVTN == pLastFormattedNode) break;
+		pVTN = pVTN->FindNextVTNInLine();
+	} while(1);
+	return TRUE;
+}
+
+/********************************************************************************************
+>	void FormatState::AdvanceBy(MILLIPOINT CharWidth)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>			
+	Created:	23/06/06
+	Inputs:		CharWidth - the amount to advance by
+	Purpose:	Account for a char with width CharWidth to be fitted into the current line.
+********************************************************************************************/
+
+void FormatState::AdvanceBy(MILLIPOINT CharWidth)
+{
+	// Note: This routine may only update Width and RemainingSpace, otherwise
+	// the backtracking in IsAvailable() does not work as expected.
+	if (ActiveTabType == CentreTab && RemainingSpace > 0)
+	{
+		MILLIPOINT SpaceToLeftUsed = 0;
+		// half the width is distributed into RemainingSpace, if it is big enough
+		if (RemainingSpace >= CharWidth / 2)
+		{
+			// half the width fully fits into RemainingSpace
+			SpaceToLeftUsed = CharWidth / 2;
+		}
+		else
+		{
+			// does not fit, so use up all of RemainingSpace
+			SpaceToLeftUsed = RemainingSpace;
+		}
+		// distribute some of the character to the left
+		RemainingSpace -= SpaceToLeftUsed;
+		// and the remainder to the right
+		Width += CharWidth - SpaceToLeftUsed;
+	}
+	else if ((ActiveTabType == RightTab || (ActiveTabType == DecimalTab && !DecimalPointFound))
+			 && RemainingSpace > 0)
+	{
+		if (RemainingSpace >= CharWidth) RemainingSpace -= CharWidth;
+		else
+		{
+			Width += CharWidth - RemainingSpace;
+			RemainingSpace = 0;
+		}
+	}
+	else
+	{
+		// last tab was left tab or decimal tab and we have already found the decimal point
+		Width += CharWidth;
+	}
+}
+
+/********************************************************************************************
+>	BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>			
+	Created:	23/06/06
+	Inputs:		CharWidth - the amount to advance by
+				IsATab - TRUE if the character to be fitted is a tab
+	Purpose:	Test whether a char with width CharWidth can be fitted into the current line.
+********************************************************************************************/
+
+BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab)
+{
+	// If the full CharWidth still fits, then we can return TRUE straight away
+	// without having to look at the active tab type
+	if (Width + CharWidth < FitWidth) return TRUE;
+	// If the above did not succeed there is no hope in the standard case (last
+	// tab was left tab or the beginning of the line) - the same is true for a
+	// tab character because it will start a new tab section, so none of its width
+	// can go to the left of the current formatting position
+	if (ActiveTabType == LeftTab || IsATab) return FALSE;
+
+	// For other tab types, things are a bit more complicated because half or
+	// all of the character can go to the left of the tab stop. Rather than
+	// duplicating all the AdvanceBy code, we simply advance and backtrack.
+	MILLIPOINT OldWidth = Width;
+	MILLIPOINT OldRemainingSpace = RemainingSpace;
+	AdvanceBy(CharWidth);
+	MILLIPOINT NewWidth = Width;
+	Width = OldWidth;
+	RemainingSpace = OldRemainingSpace;
+	return NewWidth < FitWidth;
+}
 
 /********************************************************************************************
 >	VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth)
 
-	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	15/7/96
-	Inputs:		FitWidth    - 
+	Author:		Martin Wuerthner <xara@mw-software.com>
+				(based on routine by Ed_Cornes <camelotdev@xara.com> created 15/7/96)
+	Created:	23/06/06
+	Inputs:		FitWidth - the overall width available
+				SetCharPositions - TRUE if character positions should be set
+				Indent = starting position of first character (logical, counts as far as tab
+						 stop positions are concerned)
+                CharPosOffset = positional offset to be added to each character, transparent
+						 as far as tab stop positions are concerned
+				ExtraOnChars, ExtraOnSpaces - see PositionCharsInLine
+				The last four are only used if SetCharPositions = TRUE
 	Returns:	ptr to char to break at (or NULL if ERROR)
-	Purpose:	Find words to fit given width, absorbing spaces
+	Purpose:	Find words to fit given width, absorbing spaces, optionally formats line
 ********************************************************************************************/
 
-VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth)
+VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositions,
+										 MILLIPOINT Indent, MILLIPOINT CharPosOffset,
+										 MILLIPOINT ExtraOnChars, MILLIPOINT ExtraOnSpaces)
 {
+	// This routine does not just find the break char (SetCharPositions = FALSE), it
+	// also formats lines by setting the character positions (SetCharPositions = TRUE).
+	// With the introduction of Tabs, formatting has become more complex, so it makes
+	// a lot of sense to have 
+	// depending on whether 
+	// Finding the break char is straightforward when no tabs are involved.
+	// You just add up the widths and remember the last space character and
+	// return that when the available width has been exceeded.
+	//
+	// With tabs, things become a bit more complex. Left tabs are easy: A left tab
+	// is treated like a character with the width of the remaining space up to the
+	// tab stop. When dealing with centre or right tabs we need to remember how much
+	// space we had left to the left of the tab stop. Half (for centre tabs) or all
+	// (for right tabs) of the width of all subsequent text goes to the left until
+	// that space is filled up, all remaining space goes to the right only.
+	// Decimal tabs behave like centre tabs except that distributing half the width
+	// to the left stops as soon as the decimal point has been seen.
+	//
+	// The formatting algorithm below divides the line into sections delimited by
+	// tabs or end of line. When a section is finished (i.e., when seeing a tab or
+	// end of line), then the complete section is formatted (using FinishTabSection()).
+
+	TRACEUSER("wuerthne", _T("FindBreakChar, SetCharPositions = %d"), SetCharPositions);
 	VisibleTextNode* pBreakChar = NULL;
 	BOOL             CharOnLine = FALSE;
-	MILLIPOINT       width      = 0;
 	VisibleTextNode* pPrevVTN   = NULL;
 	VisibleTextNode* pVTN       = this->FindFirstVTN();
+
+	// create a FormatState object that takes care of the formatting
+	FormatState State(FitWidth, SetCharPositions, pVTN, Indent, CharPosOffset, ExtraOnChars, ExtraOnSpaces);
+
 	while(pVTN!=NULL)
 	{
+		BOOL IsATab = IS_A(pVTN, HorizontalTab);
+		if (IsATab)
+		{
+			TxtTabType ThisTabType;
+			MILLIPOINT ThisTabPos;
+			MILLIPOINT TabWidth;
+
+			// finish the previous tab
+			State.FinishTabSection(pVTN, FALSE);
+
+			// find the next tab stop (always returns usable values - if there are no more
+			// tab stops on the ruler the routine assumes left tabs at equidistant positions)
+			TxtRulerAttribute::FindTabStopInRuler(mpRuler, State.Width, &ThisTabType, &ThisTabPos);
+			TabWidth = ThisTabPos - State.Width;
+			((HorizontalTab*)pVTN)->SetCharAdvance(TabWidth);
+			((HorizontalTab*)pVTN)->SetCharWidth(TabWidth);
+			State.AnchorPos = State.Width;
+			if (ThisTabType != LeftTab)
+			{
+				// Space between the tab character and the stop it aligns to
+				State.RemainingSpace = TabWidth;
+			}
+			if (ThisTabType == DecimalTab)
+				State.DecimalPointFound = FALSE;
+			State.pLastTabVTN = pVTN;
+			State.ActiveTabType = ThisTabType;
+			State.ActiveTabPos  = ThisTabPos;
+			// we allow line breaks at tabs
+			pBreakChar  = pPrevVTN;
+		}
 		if (!pVTN->IsACaret())
 		{
 			if (pVTN->IsAnEOLNode())
+			{
+				State.FinishTabSection(pVTN, TRUE);
 				return pVTN;
+			}
 			else if (pVTN->IsASpace())
 			{
-				width      += pVTN->GetCharAdvance();
+				State.AdvanceBy(pVTN->GetCharAdvance());
 				pBreakChar  = pVTN;
 			}
-			else if (!CharOnLine || width+pVTN->GetCharWidth()<FitWidth)
+			else if (!CharOnLine || State.IsAvailable(pVTN->GetCharWidth(), IsATab))
 			{
-				width += pVTN->GetCharAdvance();
+				if (IsATab) State.Width += pVTN->GetCharAdvance();
+				else State.AdvanceBy(pVTN->GetCharAdvance());
 				if (pVTN->IsAHyphen())
 					pBreakChar = pVTN;
+				if (State.ActiveTabType == DecimalTab && !State.DecimalPointFound && pVTN->IsADecimalPoint())
+					State.DecimalPointFound = TRUE;
 			}
 			else
 			{
+				// did not fit
 				if (pBreakChar==NULL)
 					pBreakChar = pPrevVTN;
+				if (pBreakChar) State.FinishTabSection(pBreakChar, TRUE);
 				return pBreakChar;
 			}
 			CharOnLine = TRUE;
 		}
 		pPrevVTN = pVTN;
-		pVTN = pVTN->FindNextVTNInStory();
+		if (SetCharPositions)
+		{
+			// formatting run - we stay within our line and finish when we run past the end
+			pVTN = pVTN->FindNextVTNInLine();
+			if (!pVTN)
+			{
+				State.FinishTabSection(pPrevVTN, TRUE);
+				return NULL;
+			}
+		}
+		else
+		{
+			pVTN = pVTN->FindNextVTNInStory();
+		}
 	}
 	ERROR2(FALSE,"FindBreakChar() - story has no final EOL!");
 }
@@ -1023,13 +1285,14 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth)
 	Created:	15/7/96
 	Inputs:		pUndoOp   - 
 				WrapWidth - width into which to format
+				LeftIndent - the left indent
 	Returns:	FALSE if fails
 	Purpose:	Word wrap the line
 ********************************************************************************************/
 
 BOOL TextLine::Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth)
 {
-	VisibleTextNode* pBreakChar = this->FindBreakChar(WrapWidth);
+	VisibleTextNode* pBreakChar = this->FindBreakChar(WrapWidth, FALSE);
 	if (pBreakChar==NULL)
 		return FALSE;
 
@@ -1079,6 +1342,7 @@ BOOL TextLine::ReCalcLineInfo(TextLineInfo* pLineInfo)
 {
 	ERROR2IF(pLineInfo==NULL,FALSE,"TextLine::ReCalcLineInfo() - pLineInfo==NULL");
 
+	TRACEUSER("wuerthne", _T("RecalcLineInfo"));
 	// reset info in node to be calculated
 	SetLineAscent(0);
 	SetLineDescent(0);
@@ -1113,6 +1377,13 @@ BOOL TextLine::ReCalcLineInfo(TextLineInfo* pLineInfo)
 			// update local info
 			if (IS_A(pATC,TextChar))
 				NumChars  += 1;
+			if (IS_A(pATC, HorizontalTab))
+			{
+				// only spaces/chars after the last tab can be stretched for full justification
+				TRACEUSER("wuerthne", _T("tab at %08x width=%d"), pATC, pATC->GetCharAdvance());
+				NumSpaces = 0;
+				NumChars = 0;
+			}
 			if (pATC->IsASpace())
 				NumSpaces += 1;
 			else if (!pATC->IsAnEOLNode())
@@ -1134,7 +1405,9 @@ BOOL TextLine::ReCalcLineInfo(TextLineInfo* pLineInfo)
 	pLineInfo->NumChars        = NumCharsToLastNonSpace;
 	pLineInfo->NumSpaces       = NumSpacesToLastNonSpace;
 	pLineInfo->justification   = GetJustification();
-
+	pLineInfo->ParaLeftMargin  = GetParaLeftMargin();
+	pLineInfo->ParaRightMargin = GetParaRightMargin();
+	pLineInfo->Ruler           = GetRuler();
 	return TRUE;
 }
 
@@ -1153,29 +1426,41 @@ BOOL TextLine::ReCalcLineInfo(TextLineInfo* pLineInfo)
 BOOL TextLine::PositionCharsInLine(TextLineInfo* pLineInfo)
 {
 	ERROR2IF(pLineInfo==NULL,FALSE,"TextLine::PositionCharsInLine() - pLineInfo==NULL");
-	MILLIPOINT LeftMargin      = pLineInfo->LeftMargin;
-	MILLIPOINT RightMargin     = pLineInfo->RightMargin;
+	// we have two different left/right margins: margin properties of the complete story
+	// (only for text on path) and margins applied as attributes to paragraphs
+	MILLIPOINT PhysicalLeftMargin = pLineInfo->LeftMargin;        // story property
+	MILLIPOINT ParagraphLeftMargin = pLineInfo->ParaLeftMargin;   // paragraph attribute
+	MILLIPOINT LeftMargin      = PhysicalLeftMargin + ParagraphLeftMargin;
+
+	MILLIPOINT PhysicalRightMargin = pLineInfo->RightMargin;
+	MILLIPOINT ParagraphRightMargin = pLineInfo->ParaRightMargin;
+	MILLIPOINT RightMargin = PhysicalRightMargin - ParagraphRightMargin;
+
 	MILLIPOINT SumCharAdvances = pLineInfo->SumCharAdvances;
 	BOOL       WordWrapping    = pLineInfo->WordWrapping;
 	MILLIPOINT JustifyWidth    = RightMargin - LeftMargin;
 
+	TRACEUSER("wuerthne", _T("PositionCharsInLine, Sum=%d, JWidth=%d"), SumCharAdvances, JustifyWidth);
+
 	// if word wrapping, fully justified, text does not fill line and end of paragraph
 	// left justified
 	Justification justification = pLineInfo->justification;
-	if (WordWrapping && justification==JFULL && SumCharAdvances<JustifyWidth && FindEOLNode()!=NULL)
+	if (WordWrapping && justification==JFULL && SumCharAdvances < JustifyWidth && FindEOLNode()!=NULL)
 		justification = JLEFT;
 
 	// calc amount by which chars need to be adjusted (default to left justify)
-	MILLIPOINT NextCharPos   = LeftMargin;
+	MILLIPOINT CharPosOffset = PhysicalLeftMargin;
 	MILLIPOINT ExtraOnSpaces = 0;
 	MILLIPOINT ExtraOnChars  = 0;
 	switch (justification)
 	{
+		// for both right and centre justification we subtract ParagraphLeftMargin because this
+		// will be added in again later
 		case JRIGHT:
-			NextCharPos = RightMargin - SumCharAdvances;
+			CharPosOffset = RightMargin - SumCharAdvances - ParagraphLeftMargin;
 			break;
 		case JCENTRE:
-			NextCharPos = (LeftMargin + RightMargin - SumCharAdvances)/2;
+			CharPosOffset = (LeftMargin + RightMargin - SumCharAdvances)/2 - ParagraphLeftMargin;
 			break;
 		case JFULL:
 			if (JustifyWidth!=0)
@@ -1204,30 +1489,9 @@ BOOL TextLine::PositionCharsInLine(TextLineInfo* pLineInfo)
 	}
 
 	// run through line setting all char's 'PosInLine' (flagging those which moved)
-	Node* pNode=FindFirstChild();
-	while (pNode!=NULL)
-	{
-		if (pNode->IsAVisibleTextNode())
-		{
-			VisibleTextNode* pVTN=(VisibleTextNode*)pNode;
-
-			// if the char has moved, set its new position and flag char 'affected'
-			if (NextCharPos!=pVTN->GetPosInLine())
-			{
-				pVTN->SetPosInLine(NextCharPos);
-				pVTN->FlagNodeAndDescendantsAffectedAndParentsHaveDescendantAffected();
-			}
-
-			// find position of next char
-			NextCharPos += pVTN->GetCharAdvance();
-			if (pVTN->IsASpace())
-				NextCharPos += ExtraOnSpaces;
-			if (IS_A(pVTN,TextChar))
-				NextCharPos += ExtraOnChars;
-		}
-		pNode=pNode->FindNext();
-	}
-
+	TRACEUSER("wuerthne", _T("calling FindBreakChar, Indent=%d, Offset=%d, ExtraC=%d, ExtraS=%d"),
+			  ParagraphLeftMargin, CharPosOffset, ExtraOnChars, ExtraOnSpaces);
+	FindBreakChar(INT32_MAX, TRUE, ParagraphLeftMargin, CharPosOffset, ExtraOnChars, ExtraOnSpaces);
 	return TRUE;
 }
 

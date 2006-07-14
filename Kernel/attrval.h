@@ -136,6 +136,7 @@ class AttributeValue : public CCObject
 	CC_DECLARE_DYNCREATE(AttributeValue)
 public:
 	AttributeValue() {};
+	virtual ~AttributeValue() {};
 
 	virtual void Render(RenderRegion *, BOOL Temp = FALSE) = 0;
 			// Called to "render" an attribute (makes it current for the first time)

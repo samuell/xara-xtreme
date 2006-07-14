@@ -176,6 +176,7 @@ public:
 	inline virtual BOOL IsASpace()        { return FALSE; }
 	inline virtual BOOL IsAVisibleSpace() { return FALSE; }
 	inline virtual BOOL IsAHyphen()       { return FALSE; }
+	inline virtual BOOL IsADecimalPoint() { return FALSE; }
 
 	virtual MILLIPOINT GetCharAdvance()					{ return 0; }
 	virtual MILLIPOINT GetCharWidth()					{ return 0; }
@@ -310,6 +311,7 @@ public:
 	virtual BOOL IsASpace()        { return Ch==' '; }
 	virtual BOOL IsAVisibleSpace() { return iswspace(Ch); }
 	virtual BOOL IsAHyphen()       { return Ch=='-'; }
+	virtual BOOL IsADecimalPoint() { return Ch=='.'; }     // needs to be internationalized
 
 	virtual WCHAR GetUnicodeValue() { return Ch; }
 	virtual void SetUnicodeValue(WCHAR Char) { Ch = Char; }
@@ -375,6 +377,31 @@ private:
 	DocCoord Value; // Defines Kern offset
 };
 
+/********************************************************************************************
+>	class HorizontalTab: public AbstractTextChar
+
+	Author:		Martin Wuerthner (xara@mw-software.com)
+	Created:	07/06/06
+	Purpose:	A horizontal tab character
+********************************************************************************************/
+
+class HorizontalTab: public AbstractTextChar
+{
+	CC_DECLARE_DYNAMIC(HorizontalTab)
+
+public:
+	HorizontalTab() {}
+	HorizontalTab(Node* ContextNode, AttachNodeDirection Direction);
+
+	virtual BOOL  ExportRender(RenderRegion* pRegion);
+	virtual UINT32 GetNodeSize() const;
+	void PolyCopyNodeContents(NodeRenderable* pNodeCopy);
+protected:
+	virtual Node* SimpleCopy();
+public:
+	virtual BOOL WritePreChildrenWeb(BaseCamelotFilter *pFilter);
+	virtual BOOL WritePreChildrenNative(BaseCamelotFilter *pFIlter);
+};
 
 /********************************************************************************************
 >	class CaretNode: public VisibleTextNode

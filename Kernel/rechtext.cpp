@@ -186,6 +186,7 @@ UINT32 *TextObjRecordHandler::GetTagList()
 								TAG_TEXT_KERN,
 								TAG_TEXT_CARET,
 								TAG_TEXT_LINE_INFO,
+								TAG_TEXT_TAB,
 								CXFRH_TAG_LIST_END};
 	return TagList;
 }
@@ -230,6 +231,7 @@ BOOL TextObjRecordHandler::HandleRecord(CXaraFileRecord *pCXaraFileRecord)
 		case TAG_TEXT_KERN						: ok = ReadTextKernCode(pCXaraFileRecord); break;
 		case TAG_TEXT_CARET						: ok = ReadTextCaret(pCXaraFileRecord); break;
 		case TAG_TEXT_LINE_INFO					: ok = ReadTextLineInfo(pCXaraFileRecord); break;
+		case TAG_TEXT_TAB						: ok = ReadTextTab(pCXaraFileRecord); break;
 		default									: ok = ReadTextInvalid(pCXaraFileRecord); break;
 	}
 
@@ -685,6 +687,18 @@ BOOL TextObjRecordHandler::ReadTextEOL(CXaraFileRecord *pCXaraFileRecord)
 	return ok;
 }
 
+BOOL TextObjRecordHandler::ReadTextTab(CXaraFileRecord *pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter CXaraFileRecord == NULL.");
+
+	BOOL ok = TRUE;
+	HorizontalTab *pTab = new HorizontalTab();
+
+	if (ok) ok = InsertNode(pTab);
+
+	return ok;
+}
+
 BOOL TextObjRecordHandler::ReadTextKernCode(CXaraFileRecord *pCXaraFileRecord)
 {
 	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter pCXaraFileRecord == NULL.");
@@ -1034,6 +1048,10 @@ UINT32 *TextAttrRecordHandler::GetTagList()
 								TAG_TEXT_TRACKING,
 								TAG_TEXT_ASPECT_RATIO,
 								TAG_TEXT_BASELINE,
+							    TAG_TEXT_LEFT_INDENT,
+							    TAG_TEXT_RIGHT_INDENT,
+							    TAG_TEXT_FIRST_INDENT,
+							    TAG_TEXT_RULER,
 								CXFRH_TAG_LIST_END};
 	return TagList;
 }
@@ -1079,6 +1097,10 @@ BOOL TextAttrRecordHandler::HandleRecord(CXaraFileRecord *pCXaraFileRecord)
 		case TAG_TEXT_TRACKING				: ok = ReadTextTracking(pCXaraFileRecord); break;
 		case TAG_TEXT_ASPECT_RATIO			: ok = ReadTextAspectRatio(pCXaraFileRecord); break;
 		case TAG_TEXT_BASELINE				: ok = ReadTextBaseline(pCXaraFileRecord); break;
+		case TAG_TEXT_LEFT_INDENT           : ok = ReadTextLeftIndent(pCXaraFileRecord); break;
+		case TAG_TEXT_RIGHT_INDENT          : ok = ReadTextRightIndent(pCXaraFileRecord); break;
+		case TAG_TEXT_FIRST_INDENT          : ok = ReadTextFirstIndent(pCXaraFileRecord); break;
+		case TAG_TEXT_RULER                 : ok = ReadTextRuler(pCXaraFileRecord); break;
 		default								: ok = ReadTextInvalid(pCXaraFileRecord); break;
 	}
 
@@ -1464,6 +1486,102 @@ BOOL TextAttrRecordHandler::ReadTextBaseline(CXaraFileRecord *pCXaraFileRecord)
 
 	return ok;
 }
+
+/********************************************************************************************
+
+>	BOOL TextAttrRecordHandler::ReadTextLeftIndent(CXaraFileRecord *pCXaraFileRecord)
+	BOOL TextAttrRecordHandler::ReadTextRightIndent(CXaraFileRecord *pCXaraFileRecord)
+	BOOL TextAttrRecordHandler::ReadTextFirstIndent(CXaraFileRecord *pCXaraFileRecord)
+	BOOL TextAttrRecordHandler::ReadTextRuler(CXaraFileRecord *pCXaraFileRecord)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		pCXaraFileRecord - pointer to a CXaraFileRecord to load
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Read text attributes for the new file format
+
+********************************************************************************************/
+
+BOOL TextAttrRecordHandler::ReadTextLeftIndent(CXaraFileRecord *pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter CXaraFileRecord == NULL.");
+
+	AttrTxtLeftMargin *pAttr = new AttrTxtLeftMargin();
+	MILLIPOINT Value;
+
+	BOOL ok = pCXaraFileRecord->ReadINT32(&Value);
+	pAttr->Value.Value = Value;
+	if (ok) ok = InsertNode(pAttr);
+	return ok;
+}
+
+BOOL TextAttrRecordHandler::ReadTextRightIndent(CXaraFileRecord *pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter CXaraFileRecord == NULL.");
+
+	AttrTxtRightMargin *pAttr = new AttrTxtRightMargin();
+	MILLIPOINT Value;
+
+	BOOL ok = pCXaraFileRecord->ReadINT32(&Value);
+	pAttr->Value.Value = Value;
+	if (ok) ok = InsertNode(pAttr);
+	return ok;
+}
+
+BOOL TextAttrRecordHandler::ReadTextFirstIndent(CXaraFileRecord *pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter CXaraFileRecord == NULL.");
+
+  	AttrTxtFirstIndent *pAttr = new AttrTxtFirstIndent();
+	MILLIPOINT Value;
+
+	BOOL ok = pCXaraFileRecord->ReadINT32(&Value);
+	pAttr->Value.Value = Value;
+	if (ok) ok = InsertNode(pAttr);
+	return ok;
+}
+
+BOOL TextAttrRecordHandler::ReadTextRuler(CXaraFileRecord *pCXaraFileRecord)
+{
+	ERROR2IF(pCXaraFileRecord==NULL, FALSE, "Parameter CXaraFileRecord == NULL.");
+
+	AttrTxtRuler *pAttr = new AttrTxtRuler();
+
+	UINT16 NumEntries;
+	BOOL ok = pCXaraFileRecord->ReadUINT16(&NumEntries);
+	TRACEUSER("wuerthne", _T("reading ruler attribute with %d entries"), NumEntries);
+	while(ok && NumEntries--)
+	{
+		BYTE TypeAndFlags;
+		MILLIPOINT Position;
+		WCHAR DecimalPointChar = WCHAR(0);
+		WCHAR TabFillerChar = WCHAR(0);
+		ok = pCXaraFileRecord->ReadBYTE(&TypeAndFlags);
+
+		BOOL HasTabFiller = TypeAndFlags & 4;
+		TxtTabType Type = TxtTabType(TypeAndFlags & 3);
+
+		if (ok) ok = pCXaraFileRecord->ReadINT32(&Position);
+		if (TxtTabType(Type) == DecimalTab && ok)
+			ok = pCXaraFileRecord->ReadWCHAR(&DecimalPointChar);
+		if (HasTabFiller && ok) ok = pCXaraFileRecord->ReadWCHAR(&TabFillerChar);
+		if (ok) pAttr->Value.AddTabStop(TxtTabType(Type), Position, DecimalPointChar, TabFillerChar);
+	}
+
+	if (ok) ok = InsertNode(pAttr);
+	return ok;
+}
+
+/********************************************************************************************
+
+>	BOOL TextAttrRecordHandler::ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord)
+
+	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	09/07/96
+	Inputs:		pCXaraFileRecord - pointer to a CXaraFileRecord to load
+	Returns:	FALSE
+
+********************************************************************************************/
 
 BOOL TextAttrRecordHandler::ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord)
 {

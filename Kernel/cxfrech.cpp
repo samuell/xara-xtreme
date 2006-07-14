@@ -567,6 +567,7 @@ void CXaraFileRecordHandler::GetTagText(UINT32 Tag,String_256& Str)
 		case TAG_TEXT_KERN						: Str="TAG_TEXT_KERN"; break;
 		case TAG_TEXT_CARET						: Str="TAG_TEXT_CARET"; break;
 		case TAG_TEXT_LINE_INFO					: Str="TAG_TEXT_LINE_INFO"; break;
+		case TAG_TEXT_TAB						: Str="TAG_TEXT_TAB"; break;
 
 		case TAG_TEXT_LINESPACE_RATIO			: Str="TAG_TEXT_LINESPACE_RATIO"; break;
 		case TAG_TEXT_LINESPACE_ABSOLUTE		: Str="TAG_TEXT_LINESPACE_ABSOLUTE"; break;
@@ -589,6 +590,10 @@ void CXaraFileRecordHandler::GetTagText(UINT32 Tag,String_256& Str)
 		case TAG_TEXT_TRACKING					: Str="TAG_TEXT_TRACKING"; break;
 		case TAG_TEXT_ASPECT_RATIO				: Str="TAG_TEXT_ASPECT_RATIO"; break;
 		case TAG_TEXT_BASELINE					: Str="TAG_TEXT_BASELINE"; break;
+		case TAG_TEXT_LEFT_INDENT				: Str="TAG_TEXT_LEFT_INDENT"; break;
+		case TAG_TEXT_FIRST_INDENT				: Str="TAG_TEXT_FIRST_INDENT"; break;
+		case TAG_TEXT_RIGHT_INDENT				: Str="TAG_TEXT_RIGHT_INDENT"; break;
+		case TAG_TEXT_RULER						: Str="TAG_TEXT_RULER"; break;
 
 		case TAG_OVERPRINTLINEON				: Str="TAG_OVERPRINTLINEON"; break;
 		case TAG_OVERPRINTLINEOFF				: Str="TAG_OVERPRINTLINEOFF"; break;

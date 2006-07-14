@@ -677,6 +677,21 @@ const UINT32 TAG_COMPOUNDRENDER			= 4128;
 const UINT32 TAG_OBJECTBOUNDS			= 4129;
 
 /////////////////////////////////////////////////////////////////////////////
+// XaraLX 0.6
+/////////////////////////////////////////////////////////////////////////////
+
+// New text tags for tabbing and paragraph-based indent support
+
+// Text objects
+const UINT32 TAG_TEXT_TAB				= 4200;
+
+// Text attributes
+const UINT32 TAG_TEXT_LEFT_INDENT		= 4201;
+const UINT32 TAG_TEXT_FIRST_INDENT		= 4202;
+const UINT32 TAG_TEXT_RIGHT_INDENT		= 4203;
+const UINT32 TAG_TEXT_RULER				= 4204;
+
+/////////////////////////////////////////////////////////////////////////////
 // TAG RANGES
 // Add new tags just before this comment
 // The current range for tags is 4000-4999. DO NOT define tags with values

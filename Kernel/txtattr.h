@@ -136,8 +136,11 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodeattr.h"
 #include "trans2d.h"
 #include "fixed16.h"
-enum Justification { JLEFT, JRIGHT, JCENTRE, JFULL }; 
 
+#include <list>
+
+enum Justification { JLEFT, JRIGHT, JCENTRE, JFULL }; 
+enum TxtTabType { LeftTab, RightTab, CentreTab, DecimalTab };
 	
 // Attribute Value classes
 
@@ -160,7 +163,7 @@ public:
 	TxtBaseClassAttribute() {};
 
 	virtual void Restore(RenderRegion *, BOOL) = 0;
-};	
+};
 
 /********************************************************************************************
 
@@ -577,8 +580,211 @@ public:
 	MILLIPOINT Value; // Absolute distance between lines
 	FIXED16 Ratio;
 	
-};	
+};
 
+/********************************************************************************************
+
+>	class TxtTabStop
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/6/06
+	Purpose:	This type represents a tab stop (part of a ruler attribute)
+
+********************************************************************************************/
+
+class TxtTabStop
+{
+public:
+	// standard constructor - fills in decimal point and tab chars automatically
+	TxtTabStop(TxtTabType TheType, MILLIPOINT ThePosition);
+	// full constructor
+	TxtTabStop(TxtTabType TheType, MILLIPOINT ThePosition, WCHAR DecimalPointChar, WCHAR TabFillerChar);
+
+	// accessor functions
+	inline TxtTabType GetType() const { return mType; }
+	void SetType(TxtTabType TheType);
+	inline MILLIPOINT GetPosition() const { return mPosition; }
+	inline void SetPosition(MILLIPOINT ThePosition) { mPosition = ThePosition; }
+	inline WCHAR GetDecimalPointChar() const { return mDecimalPointChar; }
+	inline void SetDecimalPointChar(WCHAR DecimalPointChar) { mDecimalPointChar = DecimalPointChar; }
+	inline WCHAR GetTabFillerChar() const { return mTabFillerChar; }
+	inline void SetTabFillerChar(WCHAR TheChar) { mTabFillerChar = TheChar; }
+
+ private:
+	TxtTabType mType;
+	MILLIPOINT mPosition;
+	WCHAR mDecimalPointChar;  // the character to align to (for decimal tabs only)
+	WCHAR mTabFillerChar;     // the tab filler character (0 for none)
+};
+
+// comparison operators
+BOOL operator==(const TxtTabStop& t1, const TxtTabStop& t2);
+BOOL operator!=(const TxtTabStop& t1, const TxtTabStop& t2);
+
+typedef list<TxtTabStop> TxtRuler;
+
+// iterators for the tab stop list used by TxtRulerAttribute
+typedef list<TxtTabStop>::iterator TxtTabStopIterator;
+typedef list<TxtTabStop>::const_iterator const_TxtTabStopIterator;
+
+/********************************************************************************************
+
+>	class TxtRulerAttribute: public TxtBaseClassAttribute
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/6/06
+	Purpose:	This text attribute specifies the ruler (i.e., tab stops)
+				Conceptually, a ruler is just a pointer to a sorted list of tab stops.				
+	SeeAlso:	-
+
+********************************************************************************************/
+
+class TxtRulerAttribute : public TxtBaseClassAttribute
+{
+	CC_DECLARE_DYNCREATE(TxtRulerAttribute)
+public:
+	// Constructor
+	TxtRulerAttribute();
+	~TxtRulerAttribute();
+
+	virtual void Restore (RenderRegion *, BOOL);
+	virtual void Render(RenderRegion *pRegion, BOOL Temp = FALSE);
+
+	virtual void SimpleCopy(AttributeValue *);
+	virtual NodeAttribute *MakeNode();
+
+	BOOL IsDifferent(AttributeValue *pAttr);
+
+	virtual TxtRulerAttribute& operator=(TxtRulerAttribute& Attrib);
+	INT32 operator==(const TxtRulerAttribute& Attrib);
+
+	// access functions for the tab stop list
+	void AddTabStop(TxtTabType Type, MILLIPOINT Position);
+	void AddTabStop(TxtTabType Type, MILLIPOINT Position, WCHAR DecimalPointChar, WCHAR TabFillerChar);
+	void AddTabStop(TxtTabStop TabStop);
+	void FindTabStop (MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos) const;
+	const_TxtTabStopIterator begin() const { return Value->begin(); }
+	const_TxtTabStopIterator end() const { return Value->end(); }
+	TxtTabStopIterator begin() { return Value->begin(); }
+	TxtTabStopIterator end() { return Value->end(); }
+	INT32 NumTabStops() const { return Value->size(); }
+
+	static BOOL Init();
+	static void FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT MinPos,
+								   TxtTabType* pType, MILLIPOINT* pPos);
+	// the actual value is a pointer to a list of tab stops
+	// this means that we will have to take care when destructing/copying
+	// objects of this class
+	TxtRuler* Value;
+private:
+	// prevent accidental copy construction
+	TxtRulerAttribute(const TxtRulerAttribute&);
+};
+
+/********************************************************************************************
+
+>	class TxtLeftMarginAttribute: public TxtBaseClassAttribute
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/6/06
+	Purpose:	This text attribute specifies the left margin
+	SeeAlso:	-
+
+********************************************************************************************/
+
+class TxtLeftMarginAttribute : public TxtBaseClassAttribute
+{
+	CC_DECLARE_DYNCREATE(TxtLeftMarginAttribute)
+public:
+	// Constructors
+	TxtLeftMarginAttribute();
+	TxtLeftMarginAttribute(MILLIPOINT value);
+
+	virtual void Restore (RenderRegion *, BOOL);
+	virtual void Render(RenderRegion *pRegion, BOOL Temp = FALSE);
+
+	virtual void SimpleCopy(AttributeValue *);
+	virtual NodeAttribute *MakeNode();
+
+	BOOL IsDifferent(AttributeValue *pAttr);
+
+	virtual TxtLeftMarginAttribute& operator=(TxtLeftMarginAttribute& Attrib);
+	INT32 operator==(const TxtLeftMarginAttribute& Attrib);
+
+	static BOOL Init();
+
+	MILLIPOINT Value;
+};
+
+/********************************************************************************************
+
+>	class TxtRightMarginAttribute: public TxtBaseClassAttribute
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/6/06
+	Purpose:	This text attribute specifies the right margin
+	SeeAlso:	-
+
+********************************************************************************************/
+
+class TxtRightMarginAttribute : public TxtBaseClassAttribute
+{
+	CC_DECLARE_DYNCREATE(TxtRightMarginAttribute)
+public:
+	// Constructors
+	TxtRightMarginAttribute();
+	TxtRightMarginAttribute(MILLIPOINT value);
+
+	virtual void Restore (RenderRegion *, BOOL);
+	virtual void Render(RenderRegion *pRegion, BOOL Temp = FALSE);
+
+	virtual void SimpleCopy(AttributeValue *);
+	virtual NodeAttribute *MakeNode();
+
+	BOOL IsDifferent(AttributeValue *pAttr);
+
+	virtual TxtRightMarginAttribute& operator=(TxtRightMarginAttribute& Attrib);
+	INT32 operator==(const TxtRightMarginAttribute& Attrib);
+
+	static BOOL Init();
+
+	MILLIPOINT Value;
+};
+
+/********************************************************************************************
+
+>	class TxtFirstIndentAttribute: public TxtBaseClassAttribute
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/6/06
+	Purpose:	This text attribute specifies the first line indent
+	SeeAlso:	-
+
+********************************************************************************************/
+
+class TxtFirstIndentAttribute : public TxtBaseClassAttribute
+{
+	CC_DECLARE_DYNCREATE(TxtFirstIndentAttribute)
+public:
+	// Constructors
+	TxtFirstIndentAttribute();
+	TxtFirstIndentAttribute(MILLIPOINT value);
+
+	virtual void Restore (RenderRegion *, BOOL);
+	virtual void Render(RenderRegion *pRegion, BOOL Temp = FALSE);
+
+	virtual void SimpleCopy(AttributeValue *);
+	virtual NodeAttribute *MakeNode();
+
+	BOOL IsDifferent(AttributeValue *pAttr);
+
+	virtual TxtFirstIndentAttribute& operator=(TxtFirstIndentAttribute& Attrib);
+	INT32 operator==(const TxtFirstIndentAttribute& Attrib);
+
+	static BOOL Init();
+
+	MILLIPOINT Value;
+};
 
 // ---------------------------------------------------------------------------------------------
 // Attribute Node classes
@@ -1198,6 +1404,231 @@ public:
 public:
 	TxtBaseLineAttribute Value;
 };
+
+/***********************************************************************************************
+
+>	class AttrTxtLeftMargin : public AttrTxtBase
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	AttrTxtLeftMargin: specifies the left margin
+
+***********************************************************************************************/
+
+class AttrTxtLeftMargin : public AttrTxtBase
+{
+	CC_DECLARE_DYNCREATE(AttrTxtLeftMargin)
+
+public:
+	// Constructors
+	AttrTxtLeftMargin() {}
+	AttrTxtLeftMargin(Node* ContextNode,  
+					  	AttachNodeDirection Direction,    
+				      	BOOL Locked=FALSE, 
+				      	BOOL Mangled=FALSE,  
+				      	BOOL Marked=FALSE, 
+					  	BOOL Selected=FALSE);
+
+	void Render( RenderRegion* pRender );
+
+	Node* SimpleCopy();							// Copies a node
+
+	virtual INT32 operator==(const NodeAttribute& NodeAttrib); 
+
+	virtual UINT32 GetAttrNameID(void); 
+	virtual AttrIndex GetAttributeIndex () { return ATTR_TXTLEFTMARGIN; }
+
+	void GetDebugDetails(StringBase* Str);
+
+    virtual UINT32 GetNodeSize() const; 			// Returns size of node in bytes
+
+	virtual AttributeValue* GetAttributeValue() { return &Value; }
+	virtual BOOL IsALineLevelAttrib() { return TRUE; }
+
+	virtual void BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect);
+
+	virtual void PolyCopyNodeContents(NodeRenderable* pNodeCopy);
+
+private:
+	void CopyNodeContents( AttrTxtLeftMargin* NodeCopy );
+
+// Version 2 file format functions
+public:
+	virtual BOOL WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	virtual BOOL WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+public:
+	TxtLeftMarginAttribute Value;
+};
+
+/***********************************************************************************************
+
+>	class AttrTxtRightMargin : public AttrTxtBase
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	AttrTxtRightMargin: specifies the right margin
+
+***********************************************************************************************/
+
+class AttrTxtRightMargin : public AttrTxtBase
+{
+	CC_DECLARE_DYNCREATE(AttrTxtRightMargin)
+
+public:
+	// Constructors
+	AttrTxtRightMargin() {}
+	AttrTxtRightMargin(Node* ContextNode,  
+					  	AttachNodeDirection Direction,    
+				      	BOOL Locked=FALSE, 
+				      	BOOL Mangled=FALSE,  
+				      	BOOL Marked=FALSE, 
+					  	BOOL Selected=FALSE);
+
+	void Render( RenderRegion* pRender );
+
+	Node* SimpleCopy();							// Copies a node
+
+	virtual INT32 operator==(const NodeAttribute& NodeAttrib); 
+
+	virtual UINT32 GetAttrNameID(void); 
+	virtual AttrIndex GetAttributeIndex () { return ATTR_TXTRIGHTMARGIN; }
+
+	void GetDebugDetails(StringBase* Str);
+
+    virtual UINT32 GetNodeSize() const; 			// Returns size of node in bytes
+
+	virtual AttributeValue* GetAttributeValue() { return &Value; }
+	virtual BOOL IsALineLevelAttrib() { return TRUE; }
+
+	virtual void BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect);
+
+	virtual void PolyCopyNodeContents(NodeRenderable* pNodeCopy);
+
+private:
+	void CopyNodeContents( AttrTxtRightMargin* NodeCopy );
+
+// Version 2 file format functions
+public:
+	virtual BOOL WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	virtual BOOL WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+public:
+	TxtRightMarginAttribute Value;
+};
+
+/***********************************************************************************************
+
+>	class AttrTxtFirstIndent : public AttrTxtBase
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	AttrTxtFirstIndent: specifies the first line indent
+
+***********************************************************************************************/
+
+class AttrTxtFirstIndent : public AttrTxtBase
+{
+	CC_DECLARE_DYNCREATE(AttrTxtFirstIndent)
+
+public:
+	// Constructors
+	AttrTxtFirstIndent() {}
+	AttrTxtFirstIndent(Node* ContextNode,  
+					  	AttachNodeDirection Direction,    
+				      	BOOL Locked=FALSE, 
+				      	BOOL Mangled=FALSE,  
+				      	BOOL Marked=FALSE, 
+					  	BOOL Selected=FALSE);
+
+	void Render( RenderRegion* pRender );
+
+	Node* SimpleCopy();							// Copies a node
+
+	virtual INT32 operator==(const NodeAttribute& NodeAttrib); 
+
+	virtual UINT32 GetAttrNameID(void); 
+	virtual AttrIndex GetAttributeIndex () { return ATTR_TXTFIRSTINDENT; }
+
+	void GetDebugDetails(StringBase* Str);
+
+    virtual UINT32 GetNodeSize() const; 			// Returns size of node in bytes
+
+	virtual AttributeValue* GetAttributeValue() { return &Value; }
+	virtual BOOL IsALineLevelAttrib() { return TRUE; }
+
+	virtual void BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect);
+
+	virtual void PolyCopyNodeContents(NodeRenderable* pNodeCopy);
+
+private:
+	void CopyNodeContents( AttrTxtFirstIndent* NodeCopy );
+
+// Version 2 file format functions
+public:
+	virtual BOOL WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	virtual BOOL WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+public:
+	TxtFirstIndentAttribute Value;
+};
+
+/***********************************************************************************************
+
+>	class AttrTxtRuler : public AttrTxtBase
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	AttrTxtRuler: specifies the ruler
+
+***********************************************************************************************/
+
+class AttrTxtRuler : public AttrTxtBase
+{
+	CC_DECLARE_DYNCREATE(AttrTxtRuler)
+
+public:
+	// Constructors
+	AttrTxtRuler() {}
+	AttrTxtRuler(Node* ContextNode,  
+					  	AttachNodeDirection Direction,    
+				      	BOOL Locked=FALSE, 
+				      	BOOL Mangled=FALSE,  
+				      	BOOL Marked=FALSE, 
+					  	BOOL Selected=FALSE);
+
+	void Render( RenderRegion* pRender );
+
+	Node* SimpleCopy();							// Copies a node
+
+	virtual INT32 operator==(const NodeAttribute& NodeAttrib); 
+
+	virtual UINT32 GetAttrNameID(void); 
+	virtual AttrIndex GetAttributeIndex () { return ATTR_TXTRULER; }
+
+	void GetDebugDetails(StringBase* Str);
+
+    virtual UINT32 GetNodeSize() const; 			// Returns size of node in bytes
+
+	virtual AttributeValue* GetAttributeValue() { return &Value; }
+	virtual BOOL IsALineLevelAttrib() { return TRUE; }
+
+	virtual void BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect);
+
+	virtual void PolyCopyNodeContents(NodeRenderable* pNodeCopy);
+
+private:
+	void CopyNodeContents( AttrTxtRuler* NodeCopy );
+
+// Version 2 file format functions
+public:
+	virtual BOOL WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	virtual BOOL WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+public:
+	TxtRulerAttribute Value;
+};
+
 
 /***********************************************************************************************
 

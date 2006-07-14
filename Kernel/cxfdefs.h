@@ -618,4 +618,20 @@ const UINT32 TAG_COMPOUNDRENDER_SIZE			= 4 + 16;	// Flags + 2 * Coord
 // ObjectBounds records size
 const UINT32 TAG_OBJECTBOUNDS_SIZE			= 16;		// 2 * Coord
 
+/////////////////////////////////////////////////////////////////////////////
+// XaraLX 0.6
+/////////////////////////////////////////////////////////////////////////////
+
+// ------------------------------------------------------------
+// New text tags for tabbing and paragraph-based indent support
+
+// Text objects
+const UINT32 TAG_TEXT_TAB_SIZE				= 0;
+
+// Text attributes
+const UINT32 TAG_TEXT_LEFT_INDENT_SIZE		= 4;
+const UINT32 TAG_TEXT_FIRST_INDENT_SIZE		= 4;
+const UINT32 TAG_TEXT_RIGHT_INDENT_SIZE		= 4;
+const UINT32 TAG_TEXT_RULER_SIZE			= UINT32(CXF_UNKNOWN_SIZE);
+
 #endif

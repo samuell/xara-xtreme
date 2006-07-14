@@ -178,11 +178,68 @@ public:
 	FIXED16       GetLineSpaceRatio(){ return ((TxtLineSpaceAttribute*)CurrentAttrs[ATTR_TXTLINESPACE].pAttr)->Ratio; }
 	MILLIPOINT    GetFontSize()      { return RR_TXTFONTSIZE(); }
 	MILLIPOINT    GetBaseLineShift() { return RR_TXTBASELINE(); }
-
+	MILLIPOINT    GetLeftMargin()    { return RR_TXTLEFTMARGIN(); }
+	MILLIPOINT    GetRightMargin()   { return RR_TXTRIGHTMARGIN(); }
+	MILLIPOINT    GetFirstIndent()   { return RR_TXTFIRSTINDENT(); }
+	TxtRuler*     GetRuler()         { return RR_TXTRULER(); }
 private:
 	std::auto_ptr<wxDC>	m_pFormatDC;
 };
 
+
+/********************************************************************************************
+>	class FormatState: public CC_CLASS_MEMDUMP
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	21/06/06
+	Purpose:	encapsulates state when wrapping/formatting a text line
+********************************************************************************************/
+
+class FormatState: public CC_CLASS_MEMDUMP
+{
+ public:
+	const BOOL       SetCharPositions;   // flag indicating whether formatting should set char positions
+	const MILLIPOINT FitWidth;           // overall width available
+	VisibleTextNode* const pFirstVTN;    // the first VTN in the line
+	const MILLIPOINT CharPosOffset;      // used for formatting only (i.e., if SetCharPositions = TRUE)
+	const MILLIPOINT ExtraOnChars;       // used for formatting only (i.e., if SetCharPositions = TRUE)
+	const MILLIPOINT ExtraOnSpaces;      // used for formatting only (i.e., if SetCharPositions = TRUE)
+	MILLIPOINT       Width;              // overall width used so far
+
+	// All formatted text is anchored to a tab stop. There is a notional left tab at position 0
+	// that anchors the start of the text. ActiveTabType/ActiveTabPos always contain information
+	// about the currently active tab stop.
+	TxtTabType       ActiveTabType;      // the type of the currently active tab stop
+	MILLIPOINT       ActiveTabPos;       // its position
+	VisibleTextNode* pLastTabVTN;        // the most recently fitted tab character object (maybe NULL)
+
+	// AnchorPos contains the width of the text formatted up to the most recently encountered tab
+	// character, in other words, the starting position of the field into which the section of text
+	// of text anchored to the currently active tab is to be formatted.
+	MILLIPOINT       AnchorPos;
+
+	// When a non-left tab is encountered, RemainingSpace is set to the remaining space between the
+	// tab character position (AnchorPos) and the position of the tab stop to which it advances
+	// (ActiveTabPos). It is updated as text is formatted to the left of the tab stop.
+	MILLIPOINT       RemainingSpace;
+	// if the most recently encountered tab was a Decimal tab, keep track of whether we have
+	// met the decimal point already
+	BOOL             DecimalPointFound;
+
+	// default constructor (no need to initialise RemainingSpace and DecimalPointFound)
+	FormatState(MILLIPOINT AvailableWidth, BOOL SetPositions, VisibleTextNode* pFirstNode,
+				MILLIPOINT Indent, MILLIPOINT _CharPosOffset,
+				MILLIPOINT _ExtraOnChars, MILLIPOINT _ExtraOnSpaces):
+		SetCharPositions(SetPositions),
+		FitWidth(AvailableWidth), pFirstVTN(pFirstNode),
+		CharPosOffset(_CharPosOffset),
+		ExtraOnChars(_ExtraOnChars), ExtraOnSpaces(_ExtraOnSpaces),
+		Width(Indent), ActiveTabType(LeftTab), ActiveTabPos(0), 
+		pLastTabVTN(NULL), AnchorPos(0) {};
+	void AdvanceBy(MILLIPOINT Advance);
+	BOOL FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsLastTabSection);
+	BOOL IsAvailable(MILLIPOINT CharWidth, BOOL IsATab);
+};
 
 /********************************************************************************************
 >	class TextLineInfo: public CC_CLASS_MEMDUMP
@@ -203,9 +260,14 @@ public:
 	Justification justification;
 	MILLIPOINT    LeftMargin;		// relative to start of line
 	MILLIPOINT    RightMargin;		// relative to start of line
+
+	MILLIPOINT    ParaLeftMargin;   // left margin from line level attribute (as opposed to object property for text on path)
+	MILLIPOINT    ParaRightMargin;  // (NB. - the ParaLeftMargin value comes from either the LeftMargin or the FirstLine attribute)
+	const TxtRuler* Ruler;
+
 	BOOL          WordWrapping;
-	INT32          NumChars;
-	INT32          NumSpaces;
+	INT32         NumChars;
+	INT32         NumSpaces;
 };
 
 
@@ -263,7 +325,9 @@ public:
 	BOOL SetCharMatrices(MILLIPOINT LinePos);
 	BOOL FitTextToPath(TextStoryInfo* pPathInfo, MILLIPOINT LinePos);
 	BOOL Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth);
-	VisibleTextNode* FindBreakChar(MILLIPOINT FitWidth);
+	VisibleTextNode* FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositions,
+								   MILLIPOINT Indent = 0, MILLIPOINT CharPosOffset = 0,
+								   MILLIPOINT ExtraOnChars = 0, MILLIPOINT ExtraOnSpaces = 0);
 
 	TextLine* FindFirstLineOfParagraph();
 	static BOOL IsAttrTypeLineLevel(CCRuntimeClass* pAttrType);
@@ -301,12 +365,18 @@ public:
 	void UpdateLineAscent( MILLIPOINT Ascent)  { if ( Ascent>mLineAscent ) mLineAscent  = Ascent; }
 	void UpdateLineSize(   MILLIPOINT Size)    { if (   Size>mLineSize   ) mLineSize    = Size; }
 
-	Justification GetJustification()  { return mJustification; }
-	MILLIPOINT    GetLineSpacing()    { return mLineSpacing; }
-	FIXED16       GetLineSpaceRatio() { return mLineSpaceRatio; }
-	void SetJustification( Justification justification) { mJustification  = justification; }
-	void SetLineSpacing(   MILLIPOINT    Spacing)       { mLineSpacing    = Spacing; }
-	void SetLineSpaceRatio(FIXED16       SpaceRatio)    { mLineSpaceRatio = SpaceRatio; }
+	Justification GetJustification()   { return mJustification; }
+	MILLIPOINT    GetLineSpacing()     { return mLineSpacing; }
+	FIXED16       GetLineSpaceRatio()  { return mLineSpaceRatio; }
+	MILLIPOINT    GetParaLeftMargin()  { return mLeftMargin; }
+	MILLIPOINT    GetParaRightMargin() { return mRightMargin; }
+	const TxtRuler* GetRuler()         { return mpRuler; }
+	void SetJustification(  Justification justification) { mJustification  = justification; }
+	void SetLineSpacing(    MILLIPOINT    Spacing)       { mLineSpacing    = Spacing; }
+	void SetLineSpaceRatio( FIXED16       SpaceRatio)    { mLineSpaceRatio = SpaceRatio; }
+	void SetParaLeftMargin( MILLIPOINT    Margin)        { mLeftMargin = Margin; }
+	void SetParaRightMargin(MILLIPOINT    Margin)        { mRightMargin = Margin; }
+	void SetRuler(          const TxtRuler* pRuler)      { mpRuler = pRuler; }
 
 	MILLIPOINT GetPosInStory() { return mPosInStory; }
 	void SetPosInStory(MILLIPOINT pos) { mPosInStory=pos; }
@@ -319,7 +389,12 @@ private:
 	Justification mJustification;	// cache for value read from attr stack
 	MILLIPOINT    mLineSpacing;		// cache for value read from attr stack
 	FIXED16       mLineSpaceRatio;	// cache for value read from attr stack
-
+	MILLIPOINT mLeftMargin;	        // cache for value read from attr stack
+	MILLIPOINT mRightMargin;        // cache for value read from attr stack
+	const TxtRuler* mpRuler;        // cache for value read from attr stack
+									// NB - this is a shared pointer to a list object owned by the attribute!
+									//      this only works because applying a different attribute will cause
+									//      our cached value to be updated
 	MILLIPOINT mPosInStory;		// y position of base of line relative to story
 };
 

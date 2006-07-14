@@ -150,6 +150,7 @@ CC_IMPLEMENT_DYNAMIC(AbstractTextChar, VisibleTextNode)
 CC_IMPLEMENT_DYNAMIC(EOLNode,  AbstractTextChar)
 CC_IMPLEMENT_DYNAMIC(TextChar, AbstractTextChar)
 CC_IMPLEMENT_DYNAMIC(KernCode, AbstractTextChar)
+CC_IMPLEMENT_DYNAMIC(HorizontalTab, AbstractTextChar)
 
 // Declare smart memory handling in Debug builds
 #define new CAM_DEBUG_NEW
@@ -1765,6 +1766,10 @@ BOOL AbstractTextChar::ReCacheMetrics(FormatRegion* pFormatRegion)
 		SetCharWidth(KernInMP);
 		SetCharAdvance(GetCharWidth());
 	}
+	else if (IS_A(this,HorizontalTab))
+	{
+		/* tab widths are not dependent on attributes, so do not do anything */
+	}
 	else if (this->IsAnEOLNode())
 	{
 		SetCharWidth(0);
@@ -1792,7 +1797,7 @@ BOOL AbstractTextChar::ReCacheMetrics(FormatRegion* pFormatRegion)
 
 	// set AttrdCharBounds (if zero size (or kern code), set to sensible size for hit test)
 	DocRect AttrdCharBounds(0,0,0,0);
-	if (!IS_A(this,KernCode))
+	if (!IS_A(this,KernCode) && !IS_A(this,HorizontalTab))
 		if (pFormatRegion->GetAttrdCharBounds(&AttrdCharBounds,GetUnicodeValue())==FALSE)
 			return FALSE;
 	if (AttrdCharBounds.IsEmpty())
@@ -3765,4 +3770,101 @@ BOOL KernCode::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 #else
 	return FALSE;
 #endif
+}
+
+/********************************************************************************************
+>   HorizontalTab::HorizontalTab(Node* ContextNode, AttachNodeDirection Direction)
+
+	Author:		Martin Wuerthner (xara@mw-software.com)
+	Created:	07/05/06
+	Inputs:		ContextNode: Pointer to a node which this node is to be attached to.     
+		
+				Direction: 
+			
+				Specifies the direction in which the node is to be attached to the 
+				ContextNode. The values this variable can take are as follows: 
+								  
+				PREV      : Attach node as a previous sibling of the context node
+				NEXT      : Attach node as a next sibling of the context node
+				FIRSTCHILD: Attach node as the first child of the context node
+				LASTCHILD : Attach node as a last child of the context node
+
+	Purpose:	The main HorizontalTab constructor
+********************************************************************************************/
+
+HorizontalTab::HorizontalTab(Node* ContextNode, AttachNodeDirection Direction)
+	:AbstractTextChar(ContextNode, Direction)
+{
+}
+
+/********************************************************************************************
+
+>	BOOL HorizontalTab::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+	BOOL HorizontalTab::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	29/06/06
+	Inputs:		pFilter - new file format filter to write record to
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Writes a tab record to the new file format filter
+
+********************************************************************************************/
+
+BOOL HorizontalTab::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	return CXaraFileTxtTab::WritePreChildrenWeb(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL HorizontalTab::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	return CXaraFileTxtTab::WritePreChildrenNative(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+>	UINT32 HorizontalTab::GetNodeSize() const 
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	29/06/06
+	Returns:	The size of the node in bytes
+	Purpose:	For finding the size of the node 
+********************************************************************************************/
+
+UINT32 HorizontalTab::GetNodeSize() const 
+{
+	return (sizeof(HorizontalTab)); 
+}
+
+void HorizontalTab::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+{
+	ENSURE(pNodeCopy, "Trying to copy a node's contents into a NULL node");
+	ENSURE(IS_A(pNodeCopy, HorizontalTab), "PolyCopyNodeContents given wrong dest node type");
+
+	if (IS_A(pNodeCopy, HorizontalTab))
+		CopyNodeContents((HorizontalTab*)pNodeCopy);
+}
+
+Node* HorizontalTab::SimpleCopy()
+{
+	// Make a new HorizontalTab and then copy things into it
+	HorizontalTab* NodeCopy = new HorizontalTab();
+
+    ERROR1IF(NodeCopy == NULL, NULL, _R(IDE_NOMORE_MEMORY)); 
+
+    if (NodeCopy) CopyNodeContents( NodeCopy );
+    
+	return NodeCopy;
+}
+
+BOOL HorizontalTab::ExportRender(RenderRegion* pRegion)
+{
+	/*##*/
+	return FALSE;
 }

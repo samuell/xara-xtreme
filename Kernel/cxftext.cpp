@@ -1416,6 +1416,63 @@ BOOL CXaraFileTxtKern::WriteTextKern(BaseCamelotFilter *pFilter, KernCode *pKern
 
 /********************************************************************************************
 
+>	BOOL CXaraFileTxtTab::WritePreChildrenWeb(BaseCamelotFilter *pFilter, HorizontalTab *pTab);
+	BOOL CXaraFileTxtTab::WritePreChildrenNative(BaseCamelotFilter *pFilter, HorizontalTab *pTab);
+	BOOL CXaraFileTxtTab::WriteTextTab(BaseCamelotFilter *pFilter, HorizontalTab *pTab);
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	29/06/06
+	Inputs:		pFilter	- New file format filter to write the record to
+				pTab	- tab character to export
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Writes a tab record to the filter
+
+********************************************************************************************/
+
+BOOL CXaraFileTxtTab::WritePreChildrenWeb(BaseCamelotFilter *pFilter, HorizontalTab *pTab)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter==NULL");
+	ERROR2IF(pTab==NULL, FALSE, "Parameter pTab==NULL");
+
+	return WriteTextTab(pFilter, pTab);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtTab::WritePreChildrenNative(BaseCamelotFilter *pFilter, HorizontalTab *pTab)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter==NULL");
+	ERROR2IF(pTab==NULL, FALSE, "Parameter pTab==NULL");
+
+	return WriteTextTab(pFilter, pTab);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtTab::WriteTextTab(BaseCamelotFilter *pFilter, HorizontalTab *pTab)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter==NULL");
+	ERROR2IF(pTab==NULL, FALSE, "Parameter pChar==NULL");
+
+	BOOL ok;
+
+	CamelotFileRecord Rec(pFilter, TAG_TEXT_TAB, TAG_TEXT_TAB_SIZE);
+	ok = Rec.Init();
+	if (ok) ok = pFilter->Write(&Rec);
+
+	return ok;
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+
 >	BOOL CXaraFileTxtCaret::WritePreChildrenWeb(BaseCamelotFilter *pFilter, CaretNode *pCaret);
 	BOOL CXaraFileTxtCaret::WritePreChildrenNative(BaseCamelotFilter *pFilter, CaretNode *pCaret);
 	BOOL CXaraFileTxtCaret::WriteTextCaret(BaseCamelotFilter *pFilter, CaretNode *pCaret);
@@ -2194,6 +2251,260 @@ BOOL CXaraFileTxtBaseLine::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrT
 	CamelotFileRecord Rec(pFilter, TAG_TEXT_BASELINE, TAG_TEXT_BASELINE_SIZE);
 	ok = Rec.Init();
 	if (ok) ok = Rec.WriteINT32(pAttr->Value.Value);
+	if (ok) ok = pFilter->Write(&Rec);
+
+	return ok;
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+
+>	BOOL CXaraFileTxtLeftMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+	BOOL CXaraFileTxtLeftMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+	BOOL CXaraFileTxtLeftMargin::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr);
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		pFilter	- camelot filter to use
+				pAttr	- attribute to save
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text left margin attribute to the filter
+
+********************************************************************************************/
+
+BOOL CXaraFileTxtLeftMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtLeftMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtLeftMargin::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtLeftMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	BOOL ok;
+
+	CamelotFileRecord Rec(pFilter, TAG_TEXT_LEFT_INDENT, TAG_TEXT_LEFT_INDENT_SIZE);
+	ok = Rec.Init();
+	if (ok) ok = Rec.WriteINT32(pAttr->Value.Value);
+	if (ok) ok = pFilter->Write(&Rec);
+
+	return ok;
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+
+>	BOOL CXaraFileTxtRightMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+	BOOL CXaraFileTxtRightMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+	BOOL CXaraFileTxtRightMargin::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr);
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		pFilter	- camelot filter to use
+				pAttr	- attribute to save
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text left margin attribute to the filter
+
+********************************************************************************************/
+
+BOOL CXaraFileTxtRightMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtRightMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtRightMargin::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRightMargin *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	BOOL ok;
+
+	CamelotFileRecord Rec(pFilter, TAG_TEXT_RIGHT_INDENT, TAG_TEXT_RIGHT_INDENT_SIZE);
+	ok = Rec.Init();
+	if (ok) ok = Rec.WriteINT32(pAttr->Value.Value);
+	if (ok) ok = pFilter->Write(&Rec);
+
+	return ok;
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+
+>	BOOL CXaraFileTxtFirstIndent::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+	BOOL CXaraFileTxtFirstIndent::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+	BOOL CXaraFileTxtFirstIndent::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr);
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		pFilter	- camelot filter to use
+				pAttr	- attribute to save
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text left margin attribute to the filter
+
+********************************************************************************************/
+
+BOOL CXaraFileTxtFirstIndent::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtFirstIndent::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtFirstIndent::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtFirstIndent *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	BOOL ok;
+
+	CamelotFileRecord Rec(pFilter, TAG_TEXT_FIRST_INDENT, TAG_TEXT_FIRST_INDENT_SIZE);
+	ok = Rec.Init();
+	if (ok) ok = Rec.WriteINT32(pAttr->Value.Value);
+	if (ok) ok = pFilter->Write(&Rec);
+
+	return ok;
+#else
+	return FALSE;
+#endif
+}
+
+/********************************************************************************************
+
+>	BOOL CXaraFileTxtRuler::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
+	BOOL CXaraFileTxtRuler::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
+	BOOL CXaraFileTxtRuler::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr);
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		pFilter	- camelot filter to use
+				pAttr	- attribute to save
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text left margin attribute to the filter
+
+********************************************************************************************/
+
+BOOL CXaraFileTxtRuler::WritePreChildrenWeb(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtRuler::WritePreChildrenNative(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	return WritePreChildrenAux(pFilter, pAttr);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL CXaraFileTxtRuler::WritePreChildrenAux(BaseCamelotFilter *pFilter, AttrTxtRuler *pAttr)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+	ERROR2IF(pAttr==NULL, FALSE, "Parameter pAttr == NULL.");
+
+	BOOL ok;
+
+	CamelotFileRecord Rec(pFilter, TAG_TEXT_RULER, TAG_TEXT_RULER_SIZE);
+	ok = Rec.Init();
+	if (ok)
+	{
+		TxtRuler* pRuler = pAttr->Value.Value;
+		UINT32 NumEntries = pRuler->size();
+		ERROR2IF(NumEntries > 65535, FALSE, "too many tab stops");
+		TRACEUSER("wuerthne", _T("saving ruler attribute with %d entries"), NumEntries);
+		ok = Rec.WriteUINT16(NumEntries);
+		for (TxtTabStopIterator it = pRuler->begin(); ok && it != pRuler->end(); ++it)
+		{
+			// we only write the tab filler when there is one, so if there is one,
+			// set a flag in the type field to indicate that the char has been saved
+			BOOL HasTabFiller = ((*it).GetTabFillerChar() != WCHAR(0));
+			BYTE TypeAndFlags = (*it).GetType() | (HasTabFiller ? 4 : 0);
+			ok = Rec.WriteBYTE(TypeAndFlags);
+			if (ok) ok = Rec.WriteINT32((*it).GetPosition());
+			// the decimal tab character is only defined for decimal tabs
+			if ((*it).GetType() == DecimalTab)
+				if (ok) ok = Rec.WriteWCHAR((*it).GetDecimalPointChar());
+			// the tab filler character is only written when there is one
+			if (HasTabFiller)
+				if (ok) ok = Rec.WriteWCHAR((*it).GetTabFillerChar());
+		}
+	}
 	if (ok) ok = pFilter->Write(&Rec);
 
 	return ok;

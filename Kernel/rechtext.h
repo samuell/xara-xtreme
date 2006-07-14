@@ -158,6 +158,7 @@ private:
 	BOOL ReadTextChar(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextEOL(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextKernCode(CXaraFileRecord *pCXaraFileRecord);
+	BOOL ReadTextTab(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextCaret(CXaraFileRecord *PCXaraFileRecord);
 	BOOL ReadTextLineInfo(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord);
@@ -246,6 +247,10 @@ private:
 	BOOL ReadTextTracking(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextAspectRatio(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextBaseline(CXaraFileRecord *pCXaraFileRecord);
+	BOOL ReadTextLeftIndent(CXaraFileRecord *pCXaraFileRecord);
+	BOOL ReadTextRightIndent(CXaraFileRecord *pCXaraFileRecord);
+	BOOL ReadTextFirstIndent(CXaraFileRecord *pCXaraFileRecord);
+	BOOL ReadTextRuler(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord);
 
 #if XAR_TREE_DIALOG

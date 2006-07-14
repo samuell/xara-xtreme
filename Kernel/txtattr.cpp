@@ -161,6 +161,10 @@ CC_IMPLEMENT_DYNCREATE(TxtFontSizeAttribute, 	  TxtBaseClassAttribute)
 CC_IMPLEMENT_DYNCREATE(TxtScriptAttribute, 		  TxtBaseClassAttribute)
 CC_IMPLEMENT_DYNCREATE(TxtBaseLineAttribute, 	  TxtBaseClassAttribute)
 CC_IMPLEMENT_DYNCREATE(TxtLineSpaceAttribute, 	  TxtBaseClassAttribute)
+CC_IMPLEMENT_DYNCREATE(TxtLeftMarginAttribute, 	  TxtBaseClassAttribute)
+CC_IMPLEMENT_DYNCREATE(TxtRightMarginAttribute,   TxtBaseClassAttribute)
+CC_IMPLEMENT_DYNCREATE(TxtFirstIndentAttribute,   TxtBaseClassAttribute)
+CC_IMPLEMENT_DYNCREATE(TxtRulerAttribute,         TxtBaseClassAttribute)
 
 
 CC_IMPLEMENT_DYNCREATE(AttrTxtBase,  	  		  NodeAttribute)
@@ -175,7 +179,10 @@ CC_IMPLEMENT_DYNCREATE(AttrTxtFontSize, 	  	  AttrTxtBase)
 CC_IMPLEMENT_DYNCREATE(AttrTxtScript,	 	  	  AttrTxtBase)
 CC_IMPLEMENT_DYNCREATE(AttrTxtBaseLine, 	  	  AttrTxtBase)
 CC_IMPLEMENT_DYNCREATE(AttrTxtLineSpace, 	  	  AttrTxtBase)
-
+CC_IMPLEMENT_DYNCREATE(AttrTxtLeftMargin, 	  	  AttrTxtBase)
+CC_IMPLEMENT_DYNCREATE(AttrTxtRightMargin, 	  	  AttrTxtBase)
+CC_IMPLEMENT_DYNCREATE(AttrTxtFirstIndent, 	  	  AttrTxtBase)
+CC_IMPLEMENT_DYNCREATE(AttrTxtRuler, 	 	  	  AttrTxtBase)
 
 CC_IMPLEMENT_DYNCREATE(CharDescription, 	  	  CCObject)
 
@@ -2383,10 +2390,1114 @@ NodeAttribute *TxtBaseLineAttribute::MakeNode()
 	return pAttr;
 }
 
+// Tabbing, ruler and margin/indent support
+//
+// The new LeftMargin, RightMargin, FirstIndent and Ruler attributes follow the
+// (rather dubious) pattern of all the other text attributes.
+//
+// Apart from substituting other class names in the dynamic type tests, the margin
+// and indent implementations are just code clones of the BaseLine attribute code.
+// 
+// MW 19-06-2006
+
+// -----------------------------------------------------------------------------------------
+// TxtLeftMarginAttribute methods
+ 
+/********************************************************************************************
+
+>	TxtLeftMarginAttribute::TxtLeftMarginAttribute()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Purpose:	Default Constuctor for TxtLeftMarginAttribute
+
+********************************************************************************************/
+
+TxtLeftMarginAttribute::TxtLeftMarginAttribute()
+{
+	Value = 0; 
+} 
 
 
+/********************************************************************************************
 
- // -----------------------------------------------------------------------------------------
+>	TxtLeftMarginAttribute::TxtLeftMarginAttribute(MILLIPOINT Value)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		Value: The left margin in millipoints
+	Purpose:	TxtLeftMarginAttribute constructor
+
+********************************************************************************************/
+
+TxtLeftMarginAttribute::TxtLeftMarginAttribute(MILLIPOINT value) 
+{ 
+	Value = value;
+}
+
+/********************************************************************************************
+
+>	void TxtLeftMarginAttribute::Render(RenderRegion *pRegion)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		pRegion - the render region to render this attribute into.
+	Purpose:	Sets the TxtLeftMarginAttribute attribute for the given render region.
+
+********************************************************************************************/
+
+void TxtLeftMarginAttribute::Render(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->SetTxtLeftMargin(this, Temp);
+}
+
+/********************************************************************************************
+
+>	void TxtLeftMarginAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to restore the attribute into.
+				Temp    - TRUE if this is a temporary attribute, FALSE if it is
+						  permanent (e.g. it's in a document tree).
+	Purpose:	Restores the TxtLeftMarginAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtLeftMarginAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->RestoreTxtLeftMargin(this, Temp);
+}
+
+/********************************************************************************************
+
+>	TxtLeftMarginAttribute& TxtLeftMarginAttribute::operator=(TxtLeftMarginAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Attrib - the attribute to copy
+
+	Returns:	Usual semantics for equality.
+	Purpose:	Make the Attribute the same as the other. 
+
+********************************************************************************************/
+
+TxtLeftMarginAttribute& TxtLeftMarginAttribute::operator=(TxtLeftMarginAttribute& Attrib)
+{	 
+	Value = Attrib.Value;
+	return *this;
+}
+
+/********************************************************************************************
+
+>	INT32 TxtLeftMarginAttribute::operator==(const TxtLeftMarginAttribute& Attrib)
+
+	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	23/8/94
+	Inputs:		Attrib - the attribute to compare this attribute with
+	Returns:	Usual semantics for equality.
+	Purpose:	Comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 TxtLeftMarginAttribute::operator==(const TxtLeftMarginAttribute& Attrib)
+{
+	return (Attrib.Value == Value); 
+}
+
+/********************************************************************************************
+
+>	void TxtLeftMarginAttribute ::SimpleCopy(AttributeValue *pValue)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pAttr - pointer to the AttributeValue to copy.
+	Purpose:	See AttributeValue::SimpleCopy
+
+********************************************************************************************/
+
+void TxtLeftMarginAttribute::SimpleCopy(AttributeValue *pValue)
+{
+	ERROR3IF(!IS_A(pValue, TxtLeftMarginAttribute), 
+		"Invalid Attribute value passed to TxtLeftMarginAttribute::SimpleCopy");
+	// We may as well just use our assignment operator.
+	*this = *((TxtLeftMarginAttribute*)pValue);
+}
+
+
+/********************************************************************************************
+
+>	BOOL TxtLeftMarginAttribute::IsDifferent(AttributeValue *pAttr)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Purpose:	See base class version.
+	Errors:		The two attributes are not of the same type.
+	SeeAlso:	AttributeValue::IsDifferent
+
+********************************************************************************************/
+
+BOOL TxtLeftMarginAttribute::IsDifferent(AttributeValue *pAttr)
+{
+	// This must be at least a FillGeometryAttribute...
+	ERROR3IF(!pAttr->IsKindOf(CC_RUNTIME_CLASS(TxtLeftMarginAttribute)), 
+		   		"Different attribute types in TxtLeftMarginAttribute::IsDifferent()");
+
+	// Check they are NOT the same.
+	return ( !(*((TxtLeftMarginAttribute *)pAttr) == *this) ); 
+}
+
+/********************************************************************************************
+
+>	BOOL TxtLeftMarginAttribute::Init()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	TRUE - initialised ok; FALSE if not.
+	Purpose:	Registers default attribute
+	Errors:		Out of memory.
+	SeeAlso:	AttributeManager
+
+********************************************************************************************/
+
+BOOL TxtLeftMarginAttribute::Init()
+{
+	TxtLeftMarginAttribute *pAttr = new TxtLeftMarginAttribute;
+	if (pAttr==NULL)
+		// error message has already been set by new
+		return FALSE;
+
+	UINT32 ID = AttributeManager::RegisterDefaultAttribute(CC_RUNTIME_CLASS(BaseTextClass), 
+														 pAttr);
+
+	ERROR2IF(ID == ATTR_BAD_ID, FALSE, "Bad ID when Initialising TxtLeftMarginAttribute");
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	NodeAttribute *TxtLeftMarginAttribute::MakeNode()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	Pointer to the new node, or NULL if out of memory.
+	Purpose:	Make a AttrTxtTracking node, see base class
+	Errors:		Out of memory
+	SeeAlso:	AttributeValue::MakeNode
+
+********************************************************************************************/
+
+NodeAttribute *TxtLeftMarginAttribute::MakeNode()
+{
+	// Create new attribute node
+	AttrTxtLeftMargin*  pAttr = new AttrTxtLeftMargin();
+	if (pAttr==NULL)	  
+		// error message has already been set by new
+		return NULL;
+
+	// Copy attribute value into the new node.
+	pAttr->Value.SimpleCopy(this);
+
+	// Return the new node
+	return pAttr;
+}
+
+// -----------------------------------------------------------------------------------------
+// TxtRightMarginAttribute methods
+ 
+/********************************************************************************************
+
+>	TxtRightMarginAttribute::TxtRightMarginAttribute()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Purpose:	Default Constuctor for TxtLeftMarginAttribute
+
+********************************************************************************************/
+
+TxtRightMarginAttribute::TxtRightMarginAttribute()
+{
+	Value = 0; 
+} 
+
+
+/********************************************************************************************
+
+>	TxtRightMarginAttribute::TxtRightMarginAttribute(MILLIPOINT Value)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		Value: The right margin in millipoints
+	Purpose:	TxtRightMarginAttribute constructor
+
+********************************************************************************************/
+
+TxtRightMarginAttribute::TxtRightMarginAttribute(MILLIPOINT value) 
+{ 
+	Value = value;
+}
+
+/********************************************************************************************
+
+>	void TxtRightMarginAttribute::Render(RenderRegion *pRegion)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to render this attribute into.
+	Purpose:	Sets the TxtRightMarginAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtRightMarginAttribute::Render(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->SetTxtRightMargin(this, Temp);
+}
+
+/********************************************************************************************
+
+>	void TxtRightMarginAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to restore the attribute into.
+				Temp    - TRUE if this is a temporary attribute, FALSE if it is
+						  permanent (e.g. it's in a document tree).
+	Purpose:	Restores the TxtRightMarginAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtRightMarginAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->RestoreTxtRightMargin(this, Temp);
+}
+
+/********************************************************************************************
+
+>	TxtRightMarginAttribute& TxtRightMarginAttribute::operator=(TxtRightMarginAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Attrib - the attribute to copy
+
+	Returns:	Usual semantics for equality.
+	Purpose:	Make the Attribute the same as the other. 
+
+********************************************************************************************/
+
+TxtRightMarginAttribute& TxtRightMarginAttribute::operator=(TxtRightMarginAttribute& Attrib)
+{	 
+	Value = Attrib.Value;
+	return *this;
+}
+
+/********************************************************************************************
+
+>	INT32 TxtRightMarginAttribute::operator==(const TxtRightMarginAttribute& Attrib)
+
+	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	23/8/94
+	Inputs:		Attrib - the attribute to compare this attribute with
+	Returns:	Usual semantics for equality.
+	Purpose:	Comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 TxtRightMarginAttribute::operator==(const TxtRightMarginAttribute& Attrib)
+{
+	return (Attrib.Value == Value); 
+}
+
+/********************************************************************************************
+
+>	void TxtRightMarginAttribute ::SimpleCopy(AttributeValue *pValue)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pAttr - pointer to the AttributeValue to copy.
+	Purpose:	See AttributeValue::SimpleCopy
+
+********************************************************************************************/
+
+void TxtRightMarginAttribute::SimpleCopy(AttributeValue *pValue)
+{
+	ERROR3IF(!IS_A(pValue, TxtRightMarginAttribute), 
+		"Invalid Attribute value passed to TxtRightMarginAttribute::SimpleCopy");
+	// We may as well just use our assignment operator.
+	*this = *((TxtRightMarginAttribute*)pValue);
+}
+
+
+/********************************************************************************************
+
+>	BOOL TxtRightMarginAttribute::IsDifferent(AttributeValue *pAttr)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Purpose:	See base class version.
+	Errors:		The two attributes are not of the same type.
+	SeeAlso:	AttributeValue::IsDifferent
+
+********************************************************************************************/
+
+BOOL TxtRightMarginAttribute::IsDifferent(AttributeValue *pAttr)
+{
+	// This must be at least a FillGeometryAttribute...
+	ERROR3IF(!pAttr->IsKindOf(CC_RUNTIME_CLASS(TxtRightMarginAttribute)), 
+		   		"Different attribute types in TxtRightMarginAttribute::IsDifferent()");
+
+	// Check they are NOT the same.
+	return ( !(*((TxtRightMarginAttribute *)pAttr) == *this) ); 
+}
+
+/********************************************************************************************
+
+>	BOOL TxtRightMarginAttribute::Init()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	TRUE - initialised ok; FALSE if not.
+	Purpose:	Registers default attribute
+	Errors:		Out of memory.
+	SeeAlso:	AttributeManager
+
+********************************************************************************************/
+
+BOOL TxtRightMarginAttribute::Init()
+{
+	TxtRightMarginAttribute *pAttr = new TxtRightMarginAttribute;
+	if (pAttr==NULL)
+		// error message has already been set by new
+		return FALSE;
+
+	UINT32 ID = AttributeManager::RegisterDefaultAttribute(CC_RUNTIME_CLASS(BaseTextClass), 
+														 pAttr);
+
+	ERROR2IF(ID == ATTR_BAD_ID, FALSE, "Bad ID when Initialising TxtRightMarginAttribute");
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	NodeAttribute *TxtRightMarginAttribute::MakeNode()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	Pointer to the new node, or NULL if out of memory.
+	Purpose:	Make a AttrTxtTracking node, see base class
+	Errors:		Out of memory
+	SeeAlso:	AttributeValue::MakeNode
+
+********************************************************************************************/
+
+NodeAttribute *TxtRightMarginAttribute::MakeNode()
+{
+	// Create new attribute node
+	AttrTxtRightMargin*  pAttr = new AttrTxtRightMargin();
+	if (pAttr==NULL)	  
+		// error message has already been set by new
+		return NULL;
+
+	// Copy attribute value into the new node.
+	pAttr->Value.SimpleCopy(this);
+
+	// Return the new node
+	return pAttr;
+}
+
+// -----------------------------------------------------------------------------------------
+// TxtFirstIndentAttribute methods
+ 
+/********************************************************************************************
+
+>	TxtFirstIndentAttribute::TxtFirstIndentAttribute()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Purpose:	Default Constuctor for TxtLeftMarginAttribute
+
+********************************************************************************************/
+
+TxtFirstIndentAttribute::TxtFirstIndentAttribute()
+{
+	Value = 0; 
+} 
+
+
+/********************************************************************************************
+
+>	TxtFirstIndentAttribute::TxtFirstIndentAttribute(MILLIPOINT Value)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		Value: The first line indent in millipoints
+	Purpose:	TxtFirstIndentAttribute constructor
+
+********************************************************************************************/
+
+TxtFirstIndentAttribute::TxtFirstIndentAttribute(MILLIPOINT value) 
+{ 
+	Value = value;
+}
+
+/********************************************************************************************
+
+>	void TxtFirstIndentAttribute::Render(RenderRegion *pRegion)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to render this attribute into.
+	Purpose:	Sets the TxtFirstIndentAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtFirstIndentAttribute::Render(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->SetTxtFirstIndent(this, Temp);
+}
+
+/********************************************************************************************
+
+>	void TxtFirstIndentAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to restore the attribute into.
+				Temp    - TRUE if this is a temporary attribute, FALSE if it is
+						  permanent (e.g. it's in a document tree).
+	Purpose:	Restores the TxtFirstIndentAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtFirstIndentAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->RestoreTxtFirstIndent(this, Temp);
+}
+
+/********************************************************************************************
+
+>	TxtFirstIndentAttribute& TxtFirstIndentAttribute::operator=(TxtFirstIndentAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Attrib - the attribute to copy
+
+	Returns:	Usual semantics for equality.
+	Purpose:	Make the Attribute the same as the other. 
+
+********************************************************************************************/
+
+TxtFirstIndentAttribute& TxtFirstIndentAttribute::operator=(TxtFirstIndentAttribute& Attrib)
+{	 
+	Value = Attrib.Value;
+	return *this;
+}
+
+/********************************************************************************************
+
+>	INT32 TxtFirstIndentAttribute::operator==(const TxtFirstIndentAttribute& Attrib)
+
+	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	23/8/94
+	Inputs:		Attrib - the attribute to compare this attribute with
+	Returns:	Usual semantics for equality.
+	Purpose:	Comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 TxtFirstIndentAttribute::operator==(const TxtFirstIndentAttribute& Attrib)
+{
+	return (Attrib.Value == Value); 
+}
+
+/********************************************************************************************
+
+>	void TxtFirstIndentAttribute ::SimpleCopy(AttributeValue *pValue)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pAttr - pointer to the AttributeValue to copy.
+	Purpose:	See AttributeValue::SimpleCopy
+
+********************************************************************************************/
+
+void TxtFirstIndentAttribute::SimpleCopy(AttributeValue *pValue)
+{
+	ERROR3IF(!IS_A(pValue, TxtFirstIndentAttribute), 
+		"Invalid Attribute value passed to TxtFirstIndentAttribute::SimpleCopy");
+	// We may as well just use our assignment operator.
+	*this = *((TxtFirstIndentAttribute*)pValue);
+}
+
+
+/********************************************************************************************
+
+>	BOOL TxtFirstIndentAttribute::IsDifferent(AttributeValue *pAttr)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Purpose:	See base class version.
+	Errors:		The two attributes are not of the same type.
+	SeeAlso:	AttributeValue::IsDifferent
+
+********************************************************************************************/
+
+BOOL TxtFirstIndentAttribute::IsDifferent(AttributeValue *pAttr)
+{
+	// This must be at least a FillGeometryAttribute...
+	ERROR3IF(!pAttr->IsKindOf(CC_RUNTIME_CLASS(TxtFirstIndentAttribute)), 
+		   		"Different attribute types in TxtFirstIndentAttribute::IsDifferent()");
+
+	// Check they are NOT the same.
+	return ( !(*((TxtFirstIndentAttribute *)pAttr) == *this) ); 
+}
+
+/********************************************************************************************
+
+>	BOOL TxtFirstIndentAttribute::Init()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	TRUE - initialised ok; FALSE if not.
+	Purpose:	Registers default attribute
+	Errors:		Out of memory.
+	SeeAlso:	AttributeManager
+
+********************************************************************************************/
+
+BOOL TxtFirstIndentAttribute::Init()
+{
+	TxtFirstIndentAttribute *pAttr = new TxtFirstIndentAttribute;
+	if (pAttr==NULL)
+		// error message has already been set by new
+		return FALSE;
+
+	UINT32 ID = AttributeManager::RegisterDefaultAttribute(CC_RUNTIME_CLASS(BaseTextClass), 
+														 pAttr);
+
+	ERROR2IF(ID == ATTR_BAD_ID, FALSE, "Bad ID when Initialising TxtFirstIndentAttribute");
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	NodeAttribute *TxtFirstIndentAttribute::MakeNode()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	Pointer to the new node, or NULL if out of memory.
+	Purpose:	Make a AttrTxtTracking node, see base class
+	Errors:		Out of memory
+	SeeAlso:	AttributeValue::MakeNode
+
+********************************************************************************************/
+
+NodeAttribute *TxtFirstIndentAttribute::MakeNode()
+{
+	// Create new attribute node
+	AttrTxtFirstIndent*  pAttr = new AttrTxtFirstIndent();
+	if (pAttr==NULL)	  
+		// error message has already been set by new
+		return NULL;
+
+	// Copy attribute value into the new node.
+	pAttr->Value.SimpleCopy(this);
+
+	// Return the new node
+	return pAttr;
+}
+
+// -----------------------------------------------------------------------------------------
+// TxtRulerAttribute methods
+ 
+/********************************************************************************************
+
+>	TxtRulerAttribute::TxtRulerAttribute()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	Default Constructor for TxtRulerAttribute
+				Creates an empty tab stops list.
+
+********************************************************************************************/
+
+TxtRulerAttribute::TxtRulerAttribute()
+{
+	Value = new TxtRuler;
+} 
+/********************************************************************************************
+
+>	TxtRulerAttribute::~TxtRulerAttribute()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/06/06
+	Purpose:	Destructor
+
+********************************************************************************************/
+
+TxtRulerAttribute::~TxtRulerAttribute()
+{
+	delete Value;
+} 
+
+/********************************************************************************************
+
+>	BOOL TxtRulerAttribute::AddTabStop(TxtTabStop TabStop)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		TabStop - a tab stop to be added
+	Purpose:	Adds a new tab stop at the given position to the sorted list,
+				removing any other tab stop already present at this position.
+
+********************************************************************************************/
+
+void TxtRulerAttribute::AddTabStop(TxtTabStop TabStop)
+{
+	MILLIPOINT Position = TabStop.GetPosition();
+	TxtTabStopIterator It = begin();
+	TxtTabStopIterator End = end();
+	while(It != End)
+	{
+		if ((*It).GetPosition() > Position) break;
+		else if ((*It).GetPosition() == Position)
+		{
+			// modify this tab directly
+			(*It) = TabStop;
+			return;
+		}
+		++It;
+	}
+	Value->insert(It, TabStop);
+}
+
+
+/********************************************************************************************
+
+>	BOOL TxtRulerAttribute::AddTabStop(TxtTabType Type, MILLIPOINT Position)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		Type, Position - the parameters for the tab stop
+	Purpose:	Adds a new tab stop at the given position to the sorted list,
+				removing any other tab stop already present at this position.
+
+********************************************************************************************/
+
+void TxtRulerAttribute::AddTabStop(TxtTabType Type, MILLIPOINT Position)
+{
+	TxtTabStopIterator It = begin();
+	TxtTabStopIterator End = end();
+	while(It != End)
+	{
+		if ((*It).GetPosition() > Position) break;
+		else if ((*It).GetPosition() == Position)
+		{
+			// modify this tab directly
+			(*It).SetType(Type);
+			return;
+		}
+		++It;
+	}
+	Value->insert(It, TxtTabStop(Type, Position));
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute::AddTabStop(TxtTabType Type, MILLIPOINT Position, WCHAR DecimalPointChar, WCHAR TabFillerChar)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		Type, Position, DecimalPointChar, TabFillerChar - the parameters for the tab stop
+	Purpose:	Adds a new tab stop at the given position to the sorted list,
+				removing any other tab stop already present at this position.
+
+********************************************************************************************/
+
+void TxtRulerAttribute::AddTabStop(TxtTabType Type, MILLIPOINT Position, WCHAR DecimalPointChar, WCHAR TabFillerChar)
+{
+	TxtTabStopIterator It = begin();
+	TxtTabStopIterator End = end();
+	while(It != End)
+	{
+		if ((*It).GetPosition() > Position) break;
+		else if ((*It).GetPosition() == Position)
+		{
+			// modify this tab directly
+			*It = TxtTabStop(Type, Position, DecimalPointChar, TabFillerChar);
+			return;
+		}
+		++It;
+	}
+	Value->insert(It, TxtTabStop(Type, Position, DecimalPointChar, TabFillerChar));
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute::FindTabStop(MILLIPOINT width, TxtTabType* pType, MILLIPOINT* pPos)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	21/6/06
+	Inputs:		MinPos - minimum position of the tab stop
+	Outputs:	stores type in pType and position in pPos
+	Purpose:	Finds a tab stop at the given position or higher
+
+********************************************************************************************/
+void TxtRulerAttribute::FindTabStop(MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos) const
+{
+	FindTabStopInRuler(Value, MinPos, pType, pPos);
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute::FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT width, TxtTabType* pType,
+										MILLIPOINT* pPos)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	21/6/06
+	Inputs:		pRuler - the ruler list or NULL
+				MinPos - minimum position of the tab stop
+	Outputs:	stores type in pType and position in pPos
+	Purpose:	Finds a tab stop at the given position or higher
+
+********************************************************************************************/
+void TxtRulerAttribute::FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT MinPos, TxtTabType* pType,
+										   MILLIPOINT* pPos)
+{
+	// we cope with pRuler being NULL, in which case we simply treat it as empty
+	if (pRuler)
+	{
+		for(const_TxtTabStopIterator It = pRuler->begin() ; It != pRuler->end(); ++It)
+		{
+			// NB - we must find a tab stop *beyond* our current position, we cannot
+			//      take the one exactly at our position - otherwise, having a tab
+			//      directly after a tab would not advance to the next tab stop
+			if ((*It).GetPosition() > MinPos) {
+				*pType = (*It).GetType();
+				*pPos  = (*It).GetPosition();
+				
+				return;
+			}
+		}
+	}
+	// we did not find any tab stop beyond our position, so assume equidistant left tabs
+	// at each multiple of 0.5in (this is what OpenOffice does)
+	*pType = LeftTab;
+	*pPos  = MinPos + 36000 - (MinPos % 36000);
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute::Render(RenderRegion *pRegion)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to render this attribute into.
+	Purpose:	Sets the TxtRulerAttribute attribute for the given render region. 
+
+********************************************************************************************/
+
+void TxtRulerAttribute::Render(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->SetTxtRuler(this, Temp);
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pRegion - the render region to restore the attribute into.
+				Temp    - TRUE if this is a temporary attribute, FALSE if it is
+						  permanent (e.g. it's in a document tree).
+	Purpose:	Restores the TxtRulerAttribute attribute for the given render region. 
+	SeeAlso:	-
+
+********************************************************************************************/
+
+void TxtRulerAttribute::Restore(RenderRegion *pRegion, BOOL Temp)
+{
+	pRegion->RestoreTxtRuler(this, Temp);
+}
+
+/********************************************************************************************
+
+>	TxtRulerAttribute& TxtRulerAttribute::operator=(TxtRulerAttribute& Attrib)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		Attrib - the attribute to copy
+	Purpose:	Assignment operator
+
+********************************************************************************************/
+
+TxtRulerAttribute& TxtRulerAttribute::operator=(TxtRulerAttribute& Attrib)
+{
+	*Value = *Attrib.Value;  // use TxtRuler's assignment operator (list template class)
+	return *this;
+}
+
+
+/********************************************************************************************
+
+>	TxtTabStop::TxtTabStop(TxtTabType TheType, MILLIPOINT ThePosition)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	27/06/06
+	Inputs:		TheType - the type of the tab stop (left, right, centre, decimal)
+				Position - its position		
+	Purpose:	Constructor
+
+********************************************************************************************/
+
+TxtTabStop::TxtTabStop(TxtTabType TheType, MILLIPOINT ThePosition):
+	mType(TheType), mPosition(ThePosition), mTabFillerChar((WCHAR)0)
+{
+	// The decimal point character is initialised by reading the character used in the conversion class
+	if (TheType == DecimalTab)
+		mDecimalPointChar = Convert::GetDecimalPointChar();
+	else
+		// not a decimal tab, so set to a well-defined value (to make equality comparisons easier)
+		mDecimalPointChar = (WCHAR)0;
+}
+
+/********************************************************************************************
+
+>	TxtTabStop::TxtTabStop(TxtTabType TheType, MILLIPOINT ThePosition)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	27/06/06
+	Inputs:		Type - the type of the tab stop
+				Position - its position		
+				DecimalPointChar - the character to align to (in case of a decimal tab)
+				TabFillerChar - the tab filler character (always 0 at the moment)
+	Purpose:	Alternative constructor (mainly for use by loader code)
+
+********************************************************************************************/
+
+TxtTabStop::TxtTabStop(TxtTabType Type, MILLIPOINT ThePosition, WCHAR DecimalPointChar, WCHAR TabFillerChar)
+	:mType(Type), mPosition(ThePosition), mDecimalPointChar(DecimalPointChar), mTabFillerChar(TabFillerChar)
+{
+}
+
+/********************************************************************************************
+
+>	void TxtTabStop::SetType(TxtTabType TheType)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	27/06/06
+	Inputs:		TheType - the type of the tab stop (left, right, centre, decimal)
+				Position - its position		
+	Purpose:	Constructor
+
+********************************************************************************************/
+
+void TxtTabStop::SetType(TxtTabType TheType)
+{
+	// in addition to setting the type we also update the decimal point char to the
+	// one valid in the current locale if the type is changed to decimal tab
+	 mType = TheType;
+	 if (TheType == DecimalTab)
+		mDecimalPointChar = Convert::GetDecimalPointChar();
+	 else
+		mDecimalPointChar = (WCHAR)0;
+}
+
+/********************************************************************************************
+
+>	BOOL operator==(const TxtTabStop& t1, const TxtTabStop& t2)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		t1, t2 - the two tab stops to be compared
+	Returns:	Usual semantics for equality.
+	Purpose:	Comparison operator
+
+********************************************************************************************/
+
+BOOL operator==(const TxtTabStop& t1, const TxtTabStop& t2)
+{
+	return t1.GetType() == t2.GetType() && t1.GetPosition() == t2.GetPosition()
+		&& t1.GetDecimalPointChar() == t2.GetDecimalPointChar()
+		&& t1.GetTabFillerChar() == t2.GetTabFillerChar();
+}
+
+/********************************************************************************************
+
+>	BOOL operator!=(const TxtTabStop& t1, const TxtTabStop& t2)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		t1, t2 - the two tab stops to be compared
+	Returns:	Usual semantics for inequality.
+	Purpose:	Comparison operator
+
+********************************************************************************************/
+
+BOOL operator!=(const TxtTabStop& t1, const TxtTabStop& t2)
+{
+	return !(t1 == t2);
+}
+
+/********************************************************************************************
+
+>	INT32 TxtRulerAttribute::operator==(const TxtRulerAttribute& Attrib)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	14/6/06
+	Inputs:		Attrib - the attribute to compare this attribute with
+	Returns:	Usual semantics for equality.
+	Purpose:	Comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 TxtRulerAttribute::operator==(const TxtRulerAttribute& Attrib)
+{
+	// we simply step through both rulers and return FALSE if we find any mismatches
+	const_TxtTabStopIterator ThisEnd = end();
+	const_TxtTabStopIterator ThatEnd = Attrib.end();
+	const_TxtTabStopIterator ThisIt = begin();
+	const_TxtTabStopIterator ThatIt = Attrib.begin();
+	for (; ThisIt != ThisEnd || ThatIt != ThatEnd; ++ThisIt, ++ThatIt)
+	{
+		// at least one of the iterators still points to a valid tab stop
+		// so, if either is past the end the rulers are different
+		if (ThisIt == ThisEnd || ThatIt == ThatEnd) return FALSE;
+		TxtTabStop ThisStop = *ThisIt;
+		TxtTabStop ThatStop = *ThatIt;
+		// both iterators valid, so compare the tab stops
+		if (ThisStop != ThatStop) return FALSE;
+	}
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	void TxtRulerAttribute ::SimpleCopy(AttributeValue *pValue)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		pAttr - pointer to the AttributeValue to copy.
+	Purpose:	See AttributeValue::SimpleCopy
+
+********************************************************************************************/
+
+void TxtRulerAttribute::SimpleCopy(AttributeValue *pValue)
+{
+	ERROR3IF(!IS_A(pValue, TxtRulerAttribute), 
+		"Invalid Attribute value passed to TxtRulerAttribute::SimpleCopy");
+	// We may as well just use our assignment operator.
+	*this = *((TxtRulerAttribute*)pValue);
+}
+
+
+/********************************************************************************************
+
+>	BOOL TxtRulerAttribute::IsDifferent(AttributeValue *pAttr)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Purpose:	See base class version.
+	Errors:		The two attributes are not of the same type.
+	SeeAlso:	AttributeValue::IsDifferent
+
+********************************************************************************************/
+
+BOOL TxtRulerAttribute::IsDifferent(AttributeValue *pAttr)
+{
+	// This must be at least a FillGeometryAttribute...
+	ERROR3IF(!pAttr->IsKindOf(CC_RUNTIME_CLASS(TxtRulerAttribute)), 
+		   		"Different attribute types in TxtRulerAttribute::IsDifferent()");
+
+	// Check they are NOT the same.
+	return ( !(*((TxtRulerAttribute *)pAttr) == *this) ); 
+}
+
+/********************************************************************************************
+
+>	BOOL TxtRulerAttribute::Init()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	TRUE - initialised ok; FALSE if not.
+	Purpose:	Registers default attribute
+	Errors:		Out of memory.
+	SeeAlso:	AttributeManager
+
+********************************************************************************************/
+
+BOOL TxtRulerAttribute::Init()
+{
+	TxtRulerAttribute *pAttr = new TxtRulerAttribute;
+	if (pAttr==NULL)
+		// error message has already been set by new
+		return FALSE;
+
+	// The default ruler attribute is an empty ruler, so we need not do anything
+	// here. There are implicit left align tab stops at multiples of 0.5in beyond
+	// the last user-defined tab stop, so tabs always have an effect.
+#if 0
+PORTNOTE("text","Just for testing, add a tab stop of each type")
+	// To test the various tab stop types without requiring a user interface for
+	// setting tab stops, simply enable this code section
+	pAttr->AddTabStop(LeftTab, 80000);
+	pAttr->AddTabStop(CentreTab, 160000);
+	pAttr->AddTabStop(RightTab, 280000);
+	pAttr->AddTabStop(DecimalTab, 300000);
+#endif
+	UINT32 ID = AttributeManager::RegisterDefaultAttribute(CC_RUNTIME_CLASS(BaseTextClass), 
+														 pAttr);
+
+	ERROR2IF(ID == ATTR_BAD_ID, FALSE, "Bad ID when Initialising TxtRulerAttribute");
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
+>	NodeAttribute *TxtRulerAttribute::MakeNode()
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Returns:	Pointer to the new node, or NULL if out of memory.
+	Purpose:	Make a AttrTxtTracking node, see base class
+	Errors:		Out of memory
+	SeeAlso:	AttributeValue::MakeNode
+
+********************************************************************************************/
+
+NodeAttribute *TxtRulerAttribute::MakeNode()
+{
+	// Create new attribute node
+	AttrTxtRuler*  pAttr = new AttrTxtRuler();
+	if (pAttr==NULL)	  
+		// error message has already been set by new
+		return NULL;
+
+	// Copy attribute value into the new node.
+	pAttr->Value.SimpleCopy(this);
+
+	// Return the new node
+	return pAttr;
+}
+
+// -----------------------------------------------------------------------------------------
 // TxtLineSpaceAttribute methods
  
 /********************************************************************************************
@@ -5582,6 +6693,1115 @@ BOOL AttrTxtBaseLine::WritePreChildrenNative(BaseCamelotFilter *pFilter)
 	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
 
 	return CXaraFileTxtBaseLine::WritePreChildrenNative(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+// AttrTxtLeftMargin methods
+// -----------------------------------------------------------------------------------------
+
+/********************************************************************************************
+
+>	AttrTxtLeftMargin::AttrTxtLeftMargin(Node* ContextNode,  
+											 AttachNodeDirection Direction,  
+											 BOOL Locked, 
+											 BOOL Mangled,  
+											 BOOL Marked, 
+											 BOOL Selected    
+										): AttrTxtBase(ContextNode, Direction, Locked, 
+														 Mangled, Marked, Selected, TRUE)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Purpose:	Creates a AttrTxtLeftMargin Attribute
+
+********************************************************************************************/
+
+AttrTxtLeftMargin::AttrTxtLeftMargin(Node* ContextNode,  
+					AttachNodeDirection Direction,  
+					BOOL Locked, 
+					BOOL Mangled,  
+  					BOOL Marked, 
+					BOOL Selected    
+			): AttrTxtBase(ContextNode, Direction, Locked, Mangled, Marked, Selected)  
+{                         
+} 
+
+/********************************************************************************************
+
+>	void AttrTxtLeftMargin::Render( RenderRegion* pRender)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		pRenderRegion = the render region to which the attribute should be rendered
+	Purpose:	'Renders' a left margin attribute
+
+********************************************************************************************/
+
+void AttrTxtLeftMargin::Render( RenderRegion* pRegion)
+{
+	pRegion->SetTxtLeftMargin(&Value, FALSE);
+}
+
+/***********************************************************************************************
+> Node* AttrTxtLeftMargin::SimpleCopy() 
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    13/03/95
+	
+    Returns:    A copy of the node, or NULL if memory runs out 
+		 
+    Purpose:    This method returns a shallow copy of the node with all Node pointers NULL. 
+				The function is virtual, and must be defined for all derived classes.  
+
+	Errors:     If memory runs out when trying to copy, then ERROR is called with an out of memory
+				error and the function returns NULL. 
+   	
+***********************************************************************************************/
+     
+Node* AttrTxtLeftMargin::SimpleCopy()
+{
+	AttrTxtLeftMargin* NodeCopy = new AttrTxtLeftMargin();
+	ERRORIF(NodeCopy == NULL, _R(IDE_NOMORE_MEMORY), NULL); 
+	CopyNodeContents(NodeCopy);
+	return NodeCopy;
+} 
+
+/********************************************************************************************
+
+>	INT32 AttrTxtLeftMargin::operator==(const NodeAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Atrib:	The attribute to compare, which must be an AttrTxtLeftMargin 
+	Outputs:	-
+	Returns:	-
+	Purpose:	A virtual comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+ 
+	Errors:		An ENSURE failure will occur if Attrib does not have a AttrTxtLeftMargin 
+				runtime class.
+				 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 AttrTxtLeftMargin::operator==(const NodeAttribute& Attrib)
+{
+	ENSURE(Attrib.IsKindOf(CC_RUNTIME_CLASS(AttrTxtLeftMargin)), 
+		"Trying to compare two objects with different types"); 
+	AttrTxtLeftMargin* Attr = (AttrTxtLeftMargin*) &Attrib;
+	return (Attr->Value.Value == Value.Value); 
+} 
+
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtLeftMargin::GetAttrNameID(void)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/2/94
+	Inputs:		-
+	Outputs:	-
+	Returns:	Attribute description ID
+	Purpose:	Returns back a string resource ID describing the attribute
+
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+UINT32 AttrTxtLeftMargin::GetAttrNameID(void)  
+{
+	return (_R(IDS_LEFTMARGIN)); 
+}  
+
+
+/***********************************************************************************************
+> ` void AttrTxtLeftMargin::CopyNodeContents( AttrTxtLeftMargin* NodeCopy)
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    28/4/93
+	
+	Inputs:           
+    Outputs:    A copy of this node
+    Returns:    -
+		 
+    Purpose:    This method copies the node's contents to the node pointed to by NodeCopy.
+		      
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+	
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtLeftMargin::CopyNodeContents( AttrTxtLeftMargin* NodeCopy)
+{
+	// Let the base class do its bit
+	NodeAttribute::CopyNodeContents( NodeCopy );
+	
+	//Copy contents specific to derived class here
+	NodeCopy->Value.Value = Value.Value;
+} 
+            
+                 
+/***********************************************************************************************
+>   void AttrTxtLeftMargin::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+
+    Author:     Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    18/12/2003
+    Outputs:    -
+    Purpose:    Polymorphically copies the contents of this node to another
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtLeftMargin::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+{
+	ENSURE(pNodeCopy, "Trying to copy a node's contents into a NULL node");
+	ENSURE(IS_A(pNodeCopy, AttrTxtLeftMargin), "PolyCopyNodeContents given wrong dest node type");
+
+	if (IS_A(pNodeCopy, AttrTxtLeftMargin))
+		CopyNodeContents((AttrTxtLeftMargin*)pNodeCopy);
+}
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtLeftMargin::GetNodeSize() const
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	6/10/93
+	Inputs:		-
+	Outputs:	-
+	Returns:	The size of the node in bytes
+	Purpose:	For finding the size of the node 
+				
+	SeeAlso:	Node::GetSubtreeSize
+
+********************************************************************************************/
+
+UINT32 AttrTxtLeftMargin::GetNodeSize() const 
+{     
+	return (sizeof(AttrTxtLeftMargin)); 
+}
+
+
+/********************************************************************************************
+
+>	virtual void AttrTxtLeftMargin::GetDebugDetails()
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	24/04/94
+	Inputs:		-
+	Purpose:	Used for debugging purposes during developement. Override in your own class
+				and output suitable debugging details.
+
+********************************************************************************************/
+
+void AttrTxtLeftMargin::GetDebugDetails(StringBase* Str)
+{
+	NodeAttribute::GetDebugDetails( Str );
+
+	String_256 TempStr;
+	TempStr._MakeMsg( TEXT("\r\nLeft margin=#1%ld\r\n"), Value.Value);
+	(*Str) += TempStr;
+}
+
+
+/********************************************************************************************
+>	void AttrTxtLeftMargin::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+
+	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	4/6/95
+	Inputs:		Scale  - 
+				Aspect -
+	Purpose:	Transform the attribute using the baseline relative scale and aspect
+********************************************************************************************/
+
+void AttrTxtLeftMargin::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+{
+	TxtLeftMarginAttribute* pLeftMarginAttrVal=(TxtLeftMarginAttribute*)GetAttributeValue();
+	pLeftMarginAttrVal->Value = XLONG(pLeftMarginAttrVal->Value) * Scale;
+}
+
+
+/********************************************************************************************
+
+>	BOOL AttrTxtLeftMargin::WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	BOOL AttrTxtLeftMargin::WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	09/07/96
+	Inputs:		pFilter - new camelot filter to save to
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text baseline attribute to the new file format filter
+
+********************************************************************************************/
+
+BOOL AttrTxtLeftMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtLeftMargin::WritePreChildrenWeb(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL AttrTxtLeftMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtLeftMargin::WritePreChildrenNative(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+// AttrTxtRightMargin methods
+// -----------------------------------------------------------------------------------------
+
+/********************************************************************************************
+
+>	AttrTxtRightMargin::AttrTxtRightMargin(Node* ContextNode,  
+											 AttachNodeDirection Direction,  
+											 BOOL Locked, 
+											 BOOL Mangled,  
+											 BOOL Marked, 
+											 BOOL Selected    
+										): AttrTxtBase(ContextNode, Direction, Locked, 
+														 Mangled, Marked, Selected, TRUE)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Creates a AttrTxtRightMargin Attribute
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+AttrTxtRightMargin::AttrTxtRightMargin(Node* ContextNode,  
+					AttachNodeDirection Direction,  
+					BOOL Locked, 
+					BOOL Mangled,  
+  					BOOL Marked, 
+					BOOL Selected    
+			): AttrTxtBase(ContextNode, Direction, Locked, Mangled, Marked, Selected)  
+{                         
+} 
+
+/********************************************************************************************
+
+>	void AttrTxtRightMargin::Render( RenderRegion* pRender)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		pRenderRegion = the render region to which the attribute should be rendered
+	Purpose:	'Renders' a right margin attribute
+
+********************************************************************************************/
+
+void AttrTxtRightMargin::Render( RenderRegion* pRegion)
+{
+	pRegion->SetTxtRightMargin(&Value, FALSE);
+}
+
+/***********************************************************************************************
+> Node* AttrTxtRightMargin::SimpleCopy() 
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    13/03/95
+	
+	Inputs:         - 
+    Outputs:     
+    Returns:    A copy of the node, or NULL if memory runs out 
+		 
+    Purpose:    This method returns a shallow copy of the node with all Node pointers NULL. 
+				The function is virtual, and must be defined for all derived classes.  
+
+	Errors:     If memory runs out when trying to copy, then ERROR is called with an out of memory
+				error and the function returns NULL. 
+   	
+	Scope:      protected       
+***********************************************************************************************/
+     
+Node* AttrTxtRightMargin::SimpleCopy()
+{
+	AttrTxtRightMargin* NodeCopy = new AttrTxtRightMargin();
+	ERRORIF(NodeCopy == NULL, _R(IDE_NOMORE_MEMORY), NULL); 
+	CopyNodeContents(NodeCopy);
+	return NodeCopy;
+} 
+
+/********************************************************************************************
+
+>	INT32 AttrTxtRightMargin::operator==(const NodeAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Atrib:	The attribute to compare, which must be an AttrTxtRightMargin 
+	Outputs:	-
+	Returns:	-
+	Purpose:	A virtual comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+ 
+	Errors:		An ENSURE failure will occur if Attrib does not have a AttrTxtRightMargin 
+				runtime class.
+				 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 AttrTxtRightMargin::operator==(const NodeAttribute& Attrib)
+{
+	ENSURE(Attrib.IsKindOf(CC_RUNTIME_CLASS(AttrTxtRightMargin)), 
+		"Trying to compare two objects with different types"); 
+	AttrTxtRightMargin* Attr = (AttrTxtRightMargin*) &Attrib;
+	return (Attr->Value.Value == Value.Value); 
+} 
+
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtRightMargin::GetAttrNameID(void)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/2/94
+	Inputs:		-
+	Outputs:	-
+	Returns:	Attribute description ID
+	Purpose:	Returns back a string resource ID describing the attribute
+
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+UINT32 AttrTxtRightMargin::GetAttrNameID(void)  
+{
+	return (_R(IDS_RIGHTMARGIN)); 
+}  
+
+
+/***********************************************************************************************
+> ` void AttrTxtRightMargin::CopyNodeContents( AttrTxtRightMargin* NodeCopy)
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    28/4/93
+	
+	Inputs:           
+    Outputs:    A copy of this node
+    Returns:    -
+		 
+    Purpose:    This method copies the node's contents to the node pointed to by NodeCopy.
+		      
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+	
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtRightMargin::CopyNodeContents( AttrTxtRightMargin* NodeCopy)
+{
+	// Let the base class do its bit
+	NodeAttribute::CopyNodeContents( NodeCopy );
+	
+	//Copy contents specific to derived class here
+	NodeCopy->Value.Value = Value.Value;
+} 
+            
+                 
+/***********************************************************************************************
+>   void AttrTxtRightMargin::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+
+    Author:     Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    18/12/2003
+    Outputs:    -
+    Purpose:    Polymorphically copies the contents of this node to another
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtRightMargin::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+{
+	ENSURE(pNodeCopy, "Trying to copy a node's contents into a NULL node");
+	ENSURE(IS_A(pNodeCopy, AttrTxtRightMargin), "PolyCopyNodeContents given wrong dest node type");
+
+	if (IS_A(pNodeCopy, AttrTxtRightMargin))
+		CopyNodeContents((AttrTxtRightMargin*)pNodeCopy);
+}
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtRightMargin::GetNodeSize() const
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	6/10/93
+	Inputs:		-
+	Outputs:	-
+	Returns:	The size of the node in bytes
+	Purpose:	For finding the size of the node 
+				
+	SeeAlso:	Node::GetSubtreeSize
+
+********************************************************************************************/
+
+UINT32 AttrTxtRightMargin::GetNodeSize() const 
+{     
+	return (sizeof(AttrTxtRightMargin)); 
+}
+
+
+/********************************************************************************************
+
+>	virtual void AttrTxtRightMargin::GetDebugDetails()
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	24/04/94
+	Inputs:		-
+	Purpose:	Used for debugging purposes during developement. Override in your own class
+				and output suitable debugging details.
+
+********************************************************************************************/
+
+void AttrTxtRightMargin::GetDebugDetails(StringBase* Str)
+{
+	NodeAttribute::GetDebugDetails( Str );
+
+	String_256 TempStr;
+	TempStr._MakeMsg( TEXT("\r\nRight margin=#1%ld\r\n"), Value.Value);
+	(*Str) += TempStr;
+}
+
+
+/********************************************************************************************
+>	void AttrTxtRightMargin::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+
+	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	4/6/95
+	Inputs:		Scale  - 
+				Aspect -
+	Purpose:	Transform the attribute using the baseline relative scale and aspect
+********************************************************************************************/
+
+void AttrTxtRightMargin::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+{
+	TxtRightMarginAttribute* pRightMarginAttrVal=(TxtRightMarginAttribute*)GetAttributeValue();
+	pRightMarginAttrVal->Value = XLONG(pRightMarginAttrVal->Value) * Scale;
+}
+
+
+/********************************************************************************************
+
+>	BOOL AttrTxtRightMargin::WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	BOOL AttrTxtRightMargin::WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	09/07/96
+	Inputs:		pFilter - new camelot filter to save to
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text baseline attribute to the new file format filter
+
+********************************************************************************************/
+
+BOOL AttrTxtRightMargin::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtRightMargin::WritePreChildrenWeb(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL AttrTxtRightMargin::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtRightMargin::WritePreChildrenNative(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+
+// AttrTxtFirstIndent methods
+// -----------------------------------------------------------------------------------------
+
+/********************************************************************************************
+
+>	AttrTxtFirstIndent::AttrTxtFirstIndent(Node* ContextNode,  
+											 AttachNodeDirection Direction,  
+											 BOOL Locked, 
+											 BOOL Mangled,  
+											 BOOL Marked, 
+											 BOOL Selected    
+										): AttrTxtBase(ContextNode, Direction, Locked, 
+														 Mangled, Marked, Selected, TRUE)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Creates a AttrTxtFirstIndent Attribute
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+AttrTxtFirstIndent::AttrTxtFirstIndent(Node* ContextNode,  
+					AttachNodeDirection Direction,  
+					BOOL Locked, 
+					BOOL Mangled,  
+  					BOOL Marked, 
+					BOOL Selected    
+			): AttrTxtBase(ContextNode, Direction, Locked, Mangled, Marked, Selected)  
+{                         
+} 
+
+/********************************************************************************************
+
+>	void AttrTxtFirstIndent::Render( RenderRegion* pRender)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		pRenderRegion = the render region to which the attribute should be rendered
+	Purpose:	'Renders' a left indent attribute
+
+********************************************************************************************/
+
+void AttrTxtFirstIndent::Render( RenderRegion* pRegion)
+{
+	pRegion->SetTxtFirstIndent(&Value, FALSE);
+}
+
+/***********************************************************************************************
+> Node* AttrTxtFirstIndent::SimpleCopy() 
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    13/03/95
+	
+	Inputs:         - 
+    Outputs:     
+    Returns:    A copy of the node, or NULL if memory runs out 
+		 
+    Purpose:    This method returns a shallow copy of the node with all Node pointers NULL. 
+				The function is virtual, and must be defined for all derived classes.  
+
+	Errors:     If memory runs out when trying to copy, then ERROR is called with an out of memory
+				error and the function returns NULL. 
+   	
+	Scope:      protected       
+***********************************************************************************************/
+     
+Node* AttrTxtFirstIndent::SimpleCopy()
+{
+	AttrTxtFirstIndent* NodeCopy = new AttrTxtFirstIndent();
+	ERRORIF(NodeCopy == NULL, _R(IDE_NOMORE_MEMORY), NULL); 
+	CopyNodeContents(NodeCopy);
+	return NodeCopy;
+} 
+
+/********************************************************************************************
+
+>	INT32 AttrTxtFirstIndent::operator==(const NodeAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Atrib:	The attribute to compare, which must be an AttrTxtFirstIndent 
+	Outputs:	-
+	Returns:	-
+	Purpose:	A virtual comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+ 
+	Errors:		An ENSURE failure will occur if Attrib does not have a AttrTxtFirstIndent 
+				runtime class.
+				 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 AttrTxtFirstIndent::operator==(const NodeAttribute& Attrib)
+{
+	ENSURE(Attrib.IsKindOf(CC_RUNTIME_CLASS(AttrTxtFirstIndent)), 
+		"Trying to compare two objects with different types"); 
+	AttrTxtFirstIndent* Attr = (AttrTxtFirstIndent*) &Attrib;
+	return (Attr->Value.Value == Value.Value); 
+} 
+
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtFirstIndent::GetAttrNameID(void)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/2/94
+	Inputs:		-
+	Outputs:	-
+	Returns:	Attribute description ID
+	Purpose:	Returns back a string resource ID describing the attribute
+
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+UINT32 AttrTxtFirstIndent::GetAttrNameID(void)  
+{
+	return (_R(IDS_FIRSTINDENT)); 
+}  
+
+
+/***********************************************************************************************
+> ` void AttrTxtFirstIndent::CopyNodeContents( AttrTxtFirstIndent* NodeCopy)
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    28/4/93
+	
+	Inputs:           
+    Outputs:    A copy of this node
+    Returns:    -
+		 
+    Purpose:    This method copies the node's contents to the node pointed to by NodeCopy.
+		      
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+	
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtFirstIndent::CopyNodeContents( AttrTxtFirstIndent* NodeCopy)
+{
+	// Let the base class do its bit
+	NodeAttribute::CopyNodeContents( NodeCopy );
+	
+	//Copy contents specific to derived class here
+	NodeCopy->Value.Value = Value.Value;
+} 
+            
+                 
+/***********************************************************************************************
+>   void AttrTxtFirstIndent::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+
+    Author:     Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    18/12/2003
+    Outputs:    -
+    Purpose:    Polymorphically copies the contents of this node to another
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtFirstIndent::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+{
+	ENSURE(pNodeCopy, "Trying to copy a node's contents into a NULL node");
+	ENSURE(IS_A(pNodeCopy, AttrTxtFirstIndent), "PolyCopyNodeContents given wrong dest node type");
+
+	if (IS_A(pNodeCopy, AttrTxtFirstIndent))
+		CopyNodeContents((AttrTxtFirstIndent*)pNodeCopy);
+}
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtFirstIndent::GetNodeSize() const
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	6/10/93
+	Inputs:		-
+	Outputs:	-
+	Returns:	The size of the node in bytes
+	Purpose:	For finding the size of the node 
+				
+	SeeAlso:	Node::GetSubtreeSize
+
+********************************************************************************************/
+
+UINT32 AttrTxtFirstIndent::GetNodeSize() const 
+{     
+	return (sizeof(AttrTxtFirstIndent)); 
+}
+
+
+/********************************************************************************************
+
+>	virtual void AttrTxtFirstIndent::GetDebugDetails()
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	24/04/94
+	Inputs:		-
+	Purpose:	Used for debugging purposes during developement. Override in your own class
+				and output suitable debugging details.
+
+********************************************************************************************/
+
+void AttrTxtFirstIndent::GetDebugDetails(StringBase* Str)
+{
+	NodeAttribute::GetDebugDetails( Str );
+
+	String_256 TempStr;
+	TempStr._MakeMsg( TEXT("\r\nLeft margin=#1%ld\r\n"), Value.Value);
+	(*Str) += TempStr;
+}
+
+
+/********************************************************************************************
+>	void AttrTxtFirstIndent::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+
+	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	4/6/95
+	Inputs:		Scale  - 
+				Aspect -
+	Purpose:	Transform the attribute using the baseline relative scale and aspect
+********************************************************************************************/
+
+void AttrTxtFirstIndent::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+{
+	TxtFirstIndentAttribute* pFirstIndentAttrVal=(TxtFirstIndentAttribute*)GetAttributeValue();
+	pFirstIndentAttrVal->Value = XLONG(pFirstIndentAttrVal->Value) * Scale;
+}
+
+
+/********************************************************************************************
+
+>	BOOL AttrTxtFirstIndent::WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	BOOL AttrTxtFirstIndent::WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	09/07/96
+	Inputs:		pFilter - new camelot filter to save to
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text baseline attribute to the new file format filter
+
+********************************************************************************************/
+
+BOOL AttrTxtFirstIndent::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtFirstIndent::WritePreChildrenWeb(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL AttrTxtFirstIndent::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtFirstIndent::WritePreChildrenNative(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+
+// AttrTxtRuler methods
+// -----------------------------------------------------------------------------------------
+
+/********************************************************************************************
+
+>	AttrTxtRuler::AttrTxtRuler(Node* ContextNode,  
+											 AttachNodeDirection Direction,  
+											 BOOL Locked, 
+											 BOOL Mangled,  
+											 BOOL Marked, 
+											 BOOL Selected    
+										): AttrTxtBase(ContextNode, Direction, Locked, 
+														 Mangled, Marked, Selected, TRUE)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Creates a AttrTxtRuler Attribute
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+AttrTxtRuler::AttrTxtRuler(Node* ContextNode,  
+					AttachNodeDirection Direction,  
+					BOOL Locked, 
+					BOOL Mangled,  
+  					BOOL Marked, 
+					BOOL Selected    
+			): AttrTxtBase(ContextNode, Direction, Locked, Mangled, Marked, Selected)  
+{                         
+} 
+
+/********************************************************************************************
+
+>	void AttrTxtRuler::Render( RenderRegion* pRender)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	19/06/06
+	Inputs:		pRenderRegion = the render region to which the attribute should be rendered
+	Purpose:	'Renders' a ruler attribute
+
+********************************************************************************************/
+
+void AttrTxtRuler::Render( RenderRegion* pRegion)
+{
+	pRegion->SetTxtRuler(&Value, FALSE);
+}
+
+/***********************************************************************************************
+> Node* AttrTxtRuler::SimpleCopy() 
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    13/03/95
+	
+	Inputs:         - 
+    Outputs:     
+    Returns:    A copy of the node, or NULL if memory runs out 
+		 
+    Purpose:    This method returns a shallow copy of the node with all Node pointers NULL. 
+				The function is virtual, and must be defined for all derived classes.  
+
+	Errors:     If memory runs out when trying to copy, then ERROR is called with an out of memory
+				error and the function returns NULL. 
+   	
+	Scope:      protected       
+***********************************************************************************************/
+     
+Node* AttrTxtRuler::SimpleCopy()
+{
+	AttrTxtRuler* NodeCopy = new AttrTxtRuler();
+	ERRORIF(NodeCopy == NULL, _R(IDE_NOMORE_MEMORY), NULL); 
+	CopyNodeContents(NodeCopy);
+	return NodeCopy;
+} 
+
+/********************************************************************************************
+
+>	INT32 AttrTxtRuler::operator==(const NodeAttribute& Attrib)
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	13/03/95
+	Inputs:		Atrib:	The attribute to compare, which must be an AttrTxtRuler 
+	Outputs:	-
+	Returns:	-
+	Purpose:	A virtual comparison operator. See NodeAttribute::operator== for 
+				a description of why it's required. 
+ 
+	Errors:		An ENSURE failure will occur if Attrib does not have a AttrTxtRuler 
+				runtime class.
+				 
+	SeeAlso:	NodeAttribute::operator==
+
+********************************************************************************************/
+
+INT32 AttrTxtRuler::operator==(const NodeAttribute& Attrib)
+{
+	ENSURE(Attrib.IsKindOf(CC_RUNTIME_CLASS(AttrTxtRuler)), 
+		"Trying to compare two objects with different types"); 
+	AttrTxtRuler* Attr = (AttrTxtRuler*) &Attrib;
+	
+	return (Attr->Value == Value); 
+} 
+
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtRuler::GetAttrNameID(void)  
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	22/2/94
+	Inputs:		-
+	Outputs:	-
+	Returns:	Attribute description ID
+	Purpose:	Returns back a string resource ID describing the attribute
+
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+UINT32 AttrTxtRuler::GetAttrNameID(void)  
+{
+	return (_R(IDS_RULER)); 
+}  
+
+
+/***********************************************************************************************
+> ` void AttrTxtRuler::CopyNodeContents( AttrTxtRuler* NodeCopy)
+
+    Author:     Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    28/4/93
+	
+	Inputs:           
+    Outputs:    A copy of this node
+    Returns:    -
+		 
+    Purpose:    This method copies the node's contents to the node pointed to by NodeCopy.
+		      
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+	
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtRuler::CopyNodeContents( AttrTxtRuler* NodeCopy)
+{
+	// Let the base class do its bit
+	NodeAttribute::CopyNodeContents( NodeCopy );
+	
+	//Copy contents specific to derived class here
+	NodeCopy->Value = Value;
+} 
+
+                 
+/***********************************************************************************************
+>   void AttrTxtRuler::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+
+    Author:     Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
+    Created:    18/12/2003
+    Outputs:    -
+    Purpose:    Polymorphically copies the contents of this node to another
+	Errors:     An assertion failure will occur if NodeCopy is NULL
+    Scope:      protected
+								     
+***********************************************************************************************/
+
+void AttrTxtRuler::PolyCopyNodeContents(NodeRenderable* pNodeCopy)
+{
+	ENSURE(pNodeCopy, "Trying to copy a node's contents into a NULL node");
+	ENSURE(IS_A(pNodeCopy, AttrTxtRuler), "PolyCopyNodeContents given wrong dest node type");
+
+	if (IS_A(pNodeCopy, AttrTxtRuler))
+		CopyNodeContents((AttrTxtRuler*)pNodeCopy);
+}
+
+/********************************************************************************************
+
+>	virtual UINT32 AttrTxtRuler::GetNodeSize() const
+
+	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	6/10/93
+	Inputs:		-
+	Outputs:	-
+	Returns:	The size of the node in bytes
+	Purpose:	For finding the size of the node 
+				
+	SeeAlso:	Node::GetSubtreeSize
+
+********************************************************************************************/
+
+UINT32 AttrTxtRuler::GetNodeSize() const 
+{     
+	return (sizeof(AttrTxtRuler)); 
+}
+
+
+/********************************************************************************************
+
+>	virtual void AttrTxtRuler::GetDebugDetails()
+
+	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	24/04/94
+	Inputs:		-
+	Purpose:	Used for debugging purposes during developement. Override in your own class
+				and output suitable debugging details.
+
+********************************************************************************************/
+
+void AttrTxtRuler::GetDebugDetails(StringBase* Str)
+{
+	NodeAttribute::GetDebugDetails( Str );
+
+	String_256 TempStr;
+	TempStr._MakeMsg( TEXT("\r\nRulers="));
+	(*Str) += TempStr;
+	for (TxtTabStopIterator It = Value.begin(); It != Value.end(); ++It)
+	{
+		switch((*It).GetType())
+		{
+			case LeftTab:
+				TempStr._MakeMsg( TEXT("L(#1%ld)"), (*It).GetPosition());
+				break;
+			case RightTab:
+				TempStr._MakeMsg( TEXT("R(#1%ld)"), (*It).GetPosition());
+				break;
+			case CentreTab:
+				TempStr._MakeMsg( TEXT("C(#1%ld)"), (*It).GetPosition());
+				break;
+			case DecimalTab:
+				TempStr._MakeMsg( TEXT("D(#1%ld)"), (*It).GetPosition());
+				break;
+		}
+		(*Str) += TempStr;
+	}
+	(*Str) += _T("\r\n");
+}
+
+
+/********************************************************************************************
+>	void AttrTxtRuler::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	04/07/06
+	Inputs:		Scale  - 
+				Aspect -
+	Purpose:	Transform the attribute using the baseline relative scale and aspect
+********************************************************************************************/
+
+void AttrTxtRuler::BaseLineRelativeTransform(FIXED16 Scale, FIXED16 Aspect)
+{
+	TxtRulerAttribute* pRulerAttrVal=(TxtRulerAttribute*)GetAttributeValue();
+	TxtRuler* pRuler = pRulerAttrVal->Value;
+	
+	for (TxtTabStopIterator it = pRuler->begin(); it != pRuler->end(); ++it)
+	{
+		MILLIPOINT pos = (*it).GetPosition();
+		(*it).SetPosition(XLONG(pos) * Scale);
+	}
+}
+
+
+/********************************************************************************************
+
+>	BOOL AttrTxtRuler::WritePreChildrenWeb(BaseCamelotFilter* pFilter);
+	BOOL AttrTxtRuler::WritePreChildrenNative(BaseCamelotFilter* pFilter);
+
+	Author:		Andy_Hayward (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	09/07/96
+	Inputs:		pFilter - new camelot filter to save to
+	Returns:	TRUE if successful, FALSE otherwise
+	Purpose:	Saves the text baseline attribute to the new file format filter
+
+********************************************************************************************/
+
+BOOL AttrTxtRuler::WritePreChildrenWeb(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtRuler::WritePreChildrenWeb(pFilter, this);
+#else
+	return FALSE;
+#endif
+}
+
+BOOL AttrTxtRuler::WritePreChildrenNative(BaseCamelotFilter *pFilter)
+{
+#ifdef DO_EXPORT
+	ERROR2IF(pFilter==NULL, FALSE, "Parameter pFilter == NULL.");
+
+	return CXaraFileTxtRuler::WritePreChildrenNative(pFilter, this);
 #else
 	return FALSE;
 #endif

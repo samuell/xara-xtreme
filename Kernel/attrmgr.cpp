@@ -807,6 +807,33 @@ BOOL AttributeManager::InitInstance()
 		
 	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), TxtLineSpaceAttr, FALSE, TRUE);  
 
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	AttrTxtLeftMargin* TxtLeftMarginAttr = new AttrTxtLeftMargin;
+	if (TxtLeftMarginAttr == NULL)
+		return FALSE;
+		
+	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), TxtLeftMarginAttr, FALSE, TRUE);
+
+	AttrTxtRightMargin* TxtRightMarginAttr = new AttrTxtRightMargin;
+	if (TxtRightMarginAttr == NULL)
+		return FALSE;
+		
+	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), TxtRightMarginAttr, FALSE, TRUE);
+
+	AttrTxtFirstIndent* TxtFirstIndentAttr = new AttrTxtFirstIndent;
+	if (TxtFirstIndentAttr == NULL)
+		return FALSE;
+		
+	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), TxtFirstIndentAttr, FALSE, TRUE);
+
+	AttrTxtRuler* TxtRulerAttr = new AttrTxtRuler;
+	if (TxtRulerAttr == NULL)
+		return FALSE;
+		
+	UpdateCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass), TxtRulerAttr, FALSE, TRUE);
+
+
 	// Attributes which are not unique to the BaseText group
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Attr1 = new AttrFlatColourFill; 
@@ -1197,6 +1224,11 @@ BOOL AttributeManager::RegisterBasicAttributes()
 		TxtBaseLineAttribute::Init() &&
 		TxtLineSpaceAttribute::Init() &&			// < -- And end here
 
+		TxtLeftMarginAttribute::Init() &&              // New text attributes
+		TxtRightMarginAttribute::Init() &&
+		TxtFirstIndentAttribute::Init() &&
+		TxtRulerAttribute::Init() &&                // end of new text attributes
+
 		OverprintLineAttrValue::Init() &&			// Imagesetting attributes
 		OverprintFillAttrValue::Init() &&
 		PrintOnAllPlatesAttrValue::Init()
@@ -1217,6 +1249,7 @@ BOOL AttributeManager::RegisterBasicAttributes()
 
 		FeatherAttrValue::Init() &&
 		ClipRegionAttribute::Init()
+
 		)
 	{
 		// Other attributes initialised ok - set drawing mode attribute directly.

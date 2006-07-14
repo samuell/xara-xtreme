@@ -194,6 +194,10 @@ class TxtFontSizeAttribute;
 class TxtScriptAttribute;
 class TxtBaseLineAttribute;
 class TxtLineSpaceAttribute;
+class TxtLeftMarginAttribute;
+class TxtRightMarginAttribute;
+class TxtFirstIndentAttribute;
+class TxtRulerAttribute;
 class OverprintLineAttrValue;
 class OverprintFillAttrValue;
 class PrintOnAllPlatesAttrValue;
@@ -279,7 +283,11 @@ typedef enum
 	CHANGEATTR_JUSTIFY, 
 	CHANGEATTR_SCRIPT,
 	CHANGEATTR_BASELINE,
-	CHANGEATTR_LINESPACE
+	CHANGEATTR_LINESPACE,
+	CHANGEATTR_LEFTMARGIN,
+    CHANGEATTR_RIGHTMARGIN,
+    CHANGEATTR_FIRSTINDENT,
+    CHANGEATTR_RULER
 } ChangeFillAttrType;
 
 
@@ -564,6 +572,10 @@ public:
 	virtual void SetTxtScript			(TxtScriptAttribute			*, BOOL Temp);
 	virtual void SetTxtBaseLine			(TxtBaseLineAttribute		*, BOOL Temp);
 	virtual void SetTxtLineSpace		(TxtLineSpaceAttribute		*, BOOL Temp);
+	virtual void SetTxtLeftMargin		(TxtLeftMarginAttribute		*, BOOL Temp);
+	virtual void SetTxtRightMargin		(TxtRightMarginAttribute	*, BOOL Temp);
+	virtual void SetTxtFirstIndent		(TxtFirstIndentAttribute	*, BOOL Temp);
+	virtual void SetTxtRuler			(TxtRulerAttribute			*, BOOL Temp);
 
 	virtual void SetSolidColours(BOOL SetSolid) {}
 
@@ -634,6 +646,10 @@ public:
 	void RestoreTxtScript			(TxtScriptAttribute			*, BOOL);
 	void RestoreTxtBaseLine			(TxtBaseLineAttribute		*, BOOL);
 	void RestoreTxtLineSpace		(TxtLineSpaceAttribute		*, BOOL);
+	void RestoreTxtLeftMargin		(TxtLeftMarginAttribute		*, BOOL);
+	void RestoreTxtRightMargin		(TxtRightMarginAttribute	*, BOOL);
+	void RestoreTxtFirstIndent		(TxtFirstIndentAttribute	*, BOOL);
+	void RestoreTxtRuler			(TxtRulerAttribute			*, BOOL);
 
 	virtual void RestoreOffscreen(OffscreenAttrValue*);
 	virtual void RestoreClipRegion	(ClipRegionAttribute	*, BOOL);
@@ -861,6 +877,10 @@ protected:
 		BOOL ValidScript		: 1;
 		BOOL ValidBaseLine		: 1;
 		BOOL ValidLineSpace		: 1;
+		BOOL ValidLeftMargin    : 1;
+		BOOL ValidRightMargin   : 1;
+		BOOL ValidFirstIndent   : 1;
+		BOOL ValidRuler         : 1;
 
 	} TextFlags;
 	
@@ -975,13 +995,17 @@ private:
 								||((TxtFontTypefaceAttribute *) CurrentAttrs[ATTR_TXTFONTTYPEFACE ].pAttr)->IsItalic)
 
 #define RR_TXTASPECTRATIO()  	(((TxtAspectRatioAttribute  	*) CurrentAttrs[ATTR_TXTASPECTRATIO ].pAttr)->AspectRatio)
-#define RR_TXTJUSTIFICATION()  	(((TxtJustificationAttribute *) CurrentAttrs[ATTR_TXTJUSTIFICATION ].pAttr)->justification)
+#define RR_TXTJUSTIFICATION()  	(((TxtJustificationAttribute 	*) CurrentAttrs[ATTR_TXTJUSTIFICATION ].pAttr)->justification)
 #define RR_TXTTRACKING()  		(((TxtTrackingAttribute  		*) CurrentAttrs[ATTR_TXTTRACKING ].pAttr)->Tracking)
 #define RR_TXTUNDERLINE()  		(((TxtUnderlineAttribute  		*) CurrentAttrs[ATTR_TXTUNDERLINE ].pAttr)->Underlined)
 #define RR_TXTFONTSIZE()  		(((TxtFontSizeAttribute 		*) CurrentAttrs[ATTR_TXTFONTSIZE ].pAttr)->FontSize)
-#define RR_TXTSCRIPT()  		((TxtScriptAttribute 		*) CurrentAttrs[ATTR_TXTSCRIPT ].pAttr)
+#define RR_TXTSCRIPT()  		((TxtScriptAttribute 			*) CurrentAttrs[ATTR_TXTSCRIPT ].pAttr)
 #define RR_TXTBASELINE()  		(((TxtBaseLineAttribute 		*) CurrentAttrs[ATTR_TXTBASELINE ].pAttr)->Value)
 #define RR_TXTLINESPACE()  		(((TxtLineSpaceAttribute 		*) CurrentAttrs[ATTR_TXTLINESPACE ].pAttr)->Value)
+#define RR_TXTLEFTMARGIN()  	(((TxtLeftMarginAttribute 		*) CurrentAttrs[ATTR_TXTLEFTMARGIN ].pAttr)->Value)
+#define RR_TXTRIGHTMARGIN()  	(((TxtRightMarginAttribute 		*) CurrentAttrs[ATTR_TXTRIGHTMARGIN ].pAttr)->Value)
+#define RR_TXTFIRSTINDENT()  	(((TxtFirstIndentAttribute 		*) CurrentAttrs[ATTR_TXTFIRSTINDENT ].pAttr)->Value)
+#define RR_TXTRULER()  		 	(((TxtRulerAttribute 			*) CurrentAttrs[ATTR_TXTRULER ].pAttr)->Value)
 
 #define RR_CLIPREGION()			((ClipRegionAttribute*)CurrentAttrs[ATTR_CLIPREGION].pAttr)
 
