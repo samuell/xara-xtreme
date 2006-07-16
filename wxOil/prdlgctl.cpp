@@ -220,6 +220,10 @@ BOOL 	CCPrintDialog::ReopenMainDlg		= FALSE;
 BOOL	CCPrintDialog::InformPrinterReset	= FALSE;
 BOOL	CCPrintDialog::IgnorePrntData		= FALSE;
 
+wxPrintDialogData CCPrintInfo::m_DefaultDialogData;
+BOOL CCPrintInfo::m_HaveSavedDefaultDialogData = FALSE;
+
+
 CCPrintInfo*   CCPrintInfo::pCurrent			= NULL;	// Ptr to the last constructed CCPrintInfo
 #endif //webster
 
@@ -392,20 +396,6 @@ CCPrintDialog::CCPrintDialog(CCPrintInfo * pDialogData, Document* pDoc,BOOL Prin
 
 CCPrintDialog::~CCPrintDialog()
 {
-PORTNOTE("printing", "removed m_pd.hDC reference")
-#ifndef EXCLUDE_FROM_XARALX
-	if (m_pd.hDC != NULL)
-	{
-		::DeleteDC(m_pd.hDC);
-		m_pd.hDC = NULL;		// NULL it in case base class destructors get ideas above their station
-	}
-
-	// NB: We cannot free m_pd.hDevNames & m_pd.hDevMode here because CCPrintDialogs are used
-	// with CWinApp functions (e.g. CWinApp::DoPrintDialog()), and these functions to copy the
-	// handles into CWinApp::m_hDevNames and CWinApp::m_hDevMode member vars.
-	// Freeing the handles here could make the app's handles invalid, hence making it impossible
-	// to print anything.
-#endif
 }
 
 /********************************************************************************************
@@ -438,184 +428,15 @@ PrintControl* CCPrintDialog::GetPrintControl()
 	return pPrCtrl;
 }
 
+// Here's how we might one-day run help
+
+// Yes, run the help system and don't process this message any more.  As we don't
+// have any C++ object associated with the Print Problems page we must use the
+// bodgey raw help function here.
+// _HelpUser(TEXT("PrintProblems"));
+// _HelpUser(TEXT("CCPrintSetupDialog"));
+
 #ifndef EXCLUDE_FROM_XARALX
-
-/********************************************************************************************
->	static UINT32 CALLBACK CCPrintDialog::PrintHookProc(HWND hwnd, UINT32 nMsg,
-													  WPARAM wParam, LPARAM lParam)
-	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/5/95
-	Inputs:		(the usual message proc parameters)
-	Returns:	FALSE if the common dialog code should process this message, TRUE if it
-				should ignore the message.
-	Purpose:	Checks messages destined for the print common dialog to see if they
-				mean the user is invoking help on Printing Problems
-	SeeAlso:	CCamApp::OnFilePrintSetup; _HelpUser
-********************************************************************************************/
-
-UINT32 CALLBACK CCPrintDialog::PrintHookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
-{
-	// Has the user clicked the 'Problems?' help button in the print dialog?
-	if (nMsg == WM_COMMAND && wParam == _R(IDC_PROBLEMS_HELP_BUTTON))
-	{
-		// Yes, run the help system and don't process this message any more.  As we don't
-		// have any C++ object associated with the Print Problems page we must use the
-		// bodgey raw help function here.
-		_HelpUser(TEXT("PrintProblems"));
-		return TRUE;
-	}
-
-	if (nMsg == WM_INITDIALOG && pCurrentCCPrintDialog != NULL)
-		return pCurrentCCPrintDialog->OnInitDialog();
-
-	// Do the default for everything else.
-	return FALSE;
-}
-
-
-
-/********************************************************************************************
->	static UINT32 CALLBACK CCPrintDialog::SetupHookProc(HWND hwnd, UINT32 nMsg,
-													  WPARAM wParam, LPARAM lParam)
-	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	23/5/95
-	Inputs:		(the usual message proc parameters)
-	Returns:	FALSE if the common dialog code should process this message, TRUE if it
-				should ignore the message.
-	Purpose:	Checks messages destined for the print-setup common dialog to see if they
-				mean the user is invoking help on the dialog.
-	SeeAlso:	CCamApp::OnFilePrintSetup; _HelpUser
-********************************************************************************************/
-
-UINT32 CALLBACK CCPrintDialog::SetupHookProc(HWND hwnd, UINT32 nMsg, WPARAM wParam, LPARAM lParam)
-{
-	// Has the user clicked the help button in the print-setup dialog?
-	if (nMsg == WM_COMMAND && wParam == pshHelp)
-	{
-		// Yes, run the help system and don't process this message any more.  As we don't
-		// have any C++ object associated with the print-setup dialog we must use the
-		// bodgey raw help function here.
-		_HelpUser(TEXT("CCPrintSetupDialog"));
-		return TRUE;
-	}
-
-	// Do the default for everything else.
-	return FALSE;
-}
-
-
-
-/********************************************************************************************
-
->	BOOL CCPrintDialog::InitCustomDlg()
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	30/3/95
-	Inputs:		-
-	Returns:	TRUE if it initialised OK, FALSE if not.
-	Purpose:	This initialises the underlying CPrintDialog to use our customised verison of the print
-				dialog.
-
-				It will error if it can't find our replacement dialog resource
-	SeeAlso:	CCPrintInfo
-
-********************************************************************************************/
-
-BOOL CCPrintDialog::InitCustomDlg()
-{
-	BOOL ok = FALSE;
-
-	HRSRC hrs = ::FindResource(AfxGetResourceHandle(),MAKEINTRESOURCE(_R(IDD_PRINTTPLATE)),RT_DIALOG);
-	if (hrs != NULL)
-	{
-		HGLOBAL hTemplate = ::LoadResource(AfxGetResourceHandle(),hrs);
-		if (hTemplate != NULL)
-		{
-			LPVOID p = ::LockResource(hTemplate);
-			if (p != NULL)
-			{
-				m_pd.hPrintTemplate = hTemplate;
-				m_pd.Flags |= PD_ENABLEPRINTTEMPLATEHANDLE;
-				m_pd.Flags |= PD_USEDEVMODECOPIES;
-				m_pd.Flags &= ~PD_DISABLEPRINTTOFILE;
-				m_pd.Flags &= ~PD_HIDEPRINTTOFILE;
-
-				// Make sure a help button is displayed etc.
-				m_pd.Flags |= PD_ENABLEPRINTHOOK | PD_ENABLESETUPHOOK;
-				m_pd.lpfnPrintHook = (LPPRINTHOOKPROC) PrintHookProc;
-				m_pd.lpfnSetupHook = (LPSETUPHOOKPROC) SetupHookProc;
-				m_pd.hwndOwner = GetMainFrame()->m_hWnd;
-
-				// If not running on Chicago then show a help button.
-				if (!IsWindows95())	//!IsWin32c())
-				{
-					m_pd.Flags |= PD_SHOWHELP;
-				}
-
-				BOOL MultiCopy = FALSE;
-				CanMultiCopy(&MultiCopy);
-
-				if (MultiCopy)
-					m_pd.Flags |= PD_USEDEVMODECOPIES;
-				else
-					m_pd.Flags &= ~PD_USEDEVMODECOPIES;
-
-				if (LocalPrintControl.IsCollated())
-					m_pd.Flags |= PD_COLLATE;
-
-				if (LocalPrintControl.GetPrintToFile())
-					m_pd.Flags |= PD_PRINTTOFILE;
-
-				ok = TRUE;
-			}
-		}
-	}
-
-	if (!ok)
-		DumpLastError("CCPrintDialog::InitCustomDlg()","it failed");
-
-	return (ok);
-}
-
-/********************************************************************************************
-
->	static void CCPrintDialog::DumpLastError(char* pStr1,char* pStr2)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	14/7/95
-	Inputs:		-
-	Returns:	-
-	Purpose:	Dumps the last error returned by GetLastError() using the FormatMessage() command
-	SeeAlso:	CPrintDialog::DoModal
-
-********************************************************************************************/
-
-void CCPrintDialog::DumpLastError(char* pStr1,char* pStr2)
-{
-	#ifdef _DEBUG
-
-	DWORD ResourceErr = GetLastError();
-	if (ResourceErr != NULL)
-	{
-		TRACE( _T("%s : %s\n"),pStr1,pStr2);
-		TRACE( _T("Resource err code = %ld (0x%lx)\n"),ResourceErr,ResourceErr);
-
-		char ErrMess[1000];
-
-		::FormatMessage(
-		  FORMAT_MESSAGE_FROM_SYSTEM,
-		  NULL,
-		  ResourceErr,
-		  MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
-		  ErrMess,
-		  999,
-		  NULL );
-
-		TRACE( _T("Error message : %s\n"),(LPTSTR)ErrMess);
-	}
-
-	#endif
-}
 
 /********************************************************************************************
 
@@ -700,6 +521,7 @@ INT32 CCPrintDialog::DoModal()
 
 	return ok;
 }
+#endif
 
 //-------------------
 
@@ -729,60 +551,25 @@ BOOL CCPrintDialog::GetPrinterSettings(BOOL RedrawPrintBorders)
 		Progress Hourglass(_R(IDS_UPDATE_PRINTER_SETTINGS),-1,FALSE);
 		Hourglass.Update();
 
-		CCPrintDialog PrintDlg(NULL);		// Use CCPrintDialog to get hold of printer's DEVMODE settings
-		PrintDlg.m_pd.Flags &= ~PD_RETURNDC;
-		if (PrintDlg.GetDefaults())
+		CCPrintInfo * pPrintInfo = CCPrintInfo::GetCurrent();
+		BOOL Local=FALSE;
+		if (!pPrintInfo)
 		{
-			FixFPControlRegister();
-			PrintDlg.UpdatePrinterSettings(RedrawPrintBorders);
+			pPrintInfo = new CCPrintInfo(Document::GetSelected(), NULL);
+			ERROR2IF(!pPrintInfo, FALSE, "Cannot get print info");
+			Local = TRUE;
 		}
+		
+		//CCPrintDialog PrintDlg(pPrintInfo);		// Use CCPrintDialog to get hold of printer's DEVMODE settings
 
-		// We are reponsible for freeing the hDevNames and hDevMode handles if ::PrintDlg() assigned them
-		// for us.
-		//
-		// NB: We cannot do this as a matter of course in the deconstructor because CCPrintDialogs are used
-		// with CWinApp functions (e.g. CWinApp::DoPrintDialog()), and these functions copy the
-		// handles into CWinApp::m_hDevNames and CWinApp::m_hDevMode member vars.
-		// Freeing the handles in the deconstructor could make the app's handles invalid, hence making it impossible
-		// to print anything.
+		pPrintInfo->UpdatePrinterSettings(RedrawPrintBorders);
 
-		FreeGlobalHandle(&PrintDlg.m_pd.hDevNames);
-		FreeGlobalHandle(&PrintDlg.m_pd.hDevMode);
+		if (Local)
+			delete pPrintInfo;
+
 	}
 
 	return (GotPrinterSettings);
-}
-
-/********************************************************************************************
-
->	static void CCPrintDialog::FreeGlobalHandle(HGLOBAL* pHandle)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	14/2/96
-	Inputs:		pHandle = ptr to the handle to free
-	Outputs:	Handle at *pHandle is freed (if there is one), and *pHandle is set to NULL
-	Returns:	-
-	Purpose:	Helper function to make the code easier to read
-
-				if *pHandle is NULL, nothing happens
-
-				Otherwise *pHandle is freed using ::GlobalFree(*pHandle), and *pHandle is set to NULL.
-
-	SeeAlso:	
-
-********************************************************************************************/
-
-void CCPrintDialog::FreeGlobalHandle(HGLOBAL* pHandle)
-{
-	ERROR3IF(pHandle == NULL,"pHandle is NULL");
-	if (pHandle == NULL)
-		return;
-
-	if (*pHandle != NULL)
-	{
-		::GlobalFree(*pHandle);
-		*pHandle = NULL;
-	}
 }
 
 /********************************************************************************************
@@ -843,6 +630,7 @@ void CCPrintDialog::ClosePrintDialogs()
 	// Close the print prefs tabbed dlg
 	PrintPrefsDlg::CloseCurrentDlg();
 
+#ifndef EXCLUDE_FROM_XARALX
 	// Close the print setup dlg that's opened from the main print dlg
 	if (pDlgSetup != NULL)
 	{
@@ -850,7 +638,8 @@ void CCPrintDialog::ClosePrintDialogs()
 		// Inform the user if we have switched to using the default printer on the system
 		// before closing dialog
 		InformResetToDefaultPrinter(TRUE);
-		pDlgSetup->PostMessage(WM_CLOSE);
+		delete pDlgSetup;
+		pDlgSetup = NULL;
 	}
 
 	// Close the main print dlg
@@ -860,20 +649,11 @@ void CCPrintDialog::ClosePrintDialogs()
 		// Inform the user if we have switched to using the default printer on the system
 		// before closing dialog
 		InformResetToDefaultPrinter(TRUE);
-		pCurrentCCPrintDialog->PostMessage(WM_CLOSE);
+		delete pCurrentCCPrintDialog;
+		pCurrentCCPrintDialog = NULL;
 	}
+#endif
 
-	CCamApp *pCamApp = (CCamApp *)AfxGetApp();
-
-	// Close the print setup dlg opened from the File menu
-	if (pCamApp != NULL && pCamApp->GetFilePrintSetupDlg() != NULL)
-	{
-		IgnorePrntData = TRUE;	// We are forcing the closure of the print dlgs
-		// Inform the user if we have switched to using the default printer on the system
-		// before closing dialog
-		InformResetToDefaultPrinter(TRUE);
-		pCamApp->GetFilePrintSetupDlg()->PostMessage(WM_CLOSE);
-	}
 }
 
 #endif
@@ -976,87 +756,11 @@ void CCPrintDialog::GetSelectedPrinterName(LPTSTR pName,INT32 BufferSize)
 	}
 }
 
-/********************************************************************************************
-
->	static CWnd* CCPrintDialog::GetPrintCWnd()
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	9/2/96
-	Inputs:		-
-	Returns:	Ptr CWnd of open print dlg, or NULL if non open
-	Purpose:	Returns the CWnd of the top-most print related dlg that's currently open.
-
-				If none are open, NULL is returned.
-
-				This allows other modal dialogs, such as the error box, open on top of the
-				print dialogs, and remain on top.
-
-	SeeAlso:	CInformErrorDialog::GetSafeParent()
-
-********************************************************************************************/
-
-CWnd* CCPrintDialog::GetPrintCWnd()
-{
-	// Close the print setup dlg that's opened from the main print dlg
-	if (pDlgSetup != NULL)
-		return pDlgSetup;
-
-	// Close the main print dlg
-	if (pCurrentCCPrintDialog != NULL)
-		return pCurrentCCPrintDialog;
-
-	// Close the print setup dlg opened from the File menu
-	CCamApp *pCamApp = (CCamApp *)AfxGetApp();
-	if (pCamApp != NULL && pCamApp->GetFilePrintSetupDlg() != NULL)
-		return pCamApp->GetFilePrintSetupDlg();
-
-	return NULL;
-}
+#endif
 
 /********************************************************************************************
 
->	BOOL CCPrintDialog::UpdateAppPrinterSettings(BOOL RedrawPrintBorders = TRUE)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	12/2/96
-	Inputs:		RedrawPrintBorders = TRUE if you want any visible print borders redrawing
-	Returns:	TRUE if ok, FALSE otherwise
-	Purpose:	This updates the printer settings using the currently selected printer.
-
-				The printer info it taken from the CCamApp.  If no printer has been selected yet,
-				the system defualt printer is used.
-
-	SeeAlso:	BOOL UpdatePrinterSettings(CPrintDialog*)
-
-********************************************************************************************/
-
-BOOL CCPrintDialog::UpdateAppPrinterSettings(BOOL RedrawPrintBorders)
-{
-	if (GotPrinterSettings)
-	{
-		BOOL ok = FALSE;
-
-		CCPrintDialog pd(NULL);
-
-		CCamApp *pCamApp = (CCamApp *)AfxGetApp();
-
-		if(pCamApp != NULL)
-		{
-			pd.m_pd.hDevNames = pCamApp->GetDevNames();
-			pd.m_pd.hDevMode  = pCamApp->GetDevMode();
-		}
-
-		ok = UpdatePrinterSettings(&pd);
-
-		return ok;
-	}
-
-	return TRUE;
-}
-
-/********************************************************************************************
-
->	BOOL CCPrintDialog::UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE)
+>	BOOL CCPrintInfo::UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/4/95
@@ -1073,60 +777,17 @@ BOOL CCPrintDialog::UpdateAppPrinterSettings(BOOL RedrawPrintBorders)
 
 ********************************************************************************************/
 
-BOOL CCPrintDialog::UpdatePrinterSettings(BOOL RedrawPrintBorders)
+BOOL CCPrintInfo::UpdatePrinterSettings(BOOL RedrawPrintBorders)
 {
-	return (CCPrintDialog::UpdatePrinterSettings(this,pDocument,RedrawPrintBorders));
+	wxDC * dc = MakeDCFromPrintData(&GetPrintData());
+	BOOL ret=CCPrintDialog::UpdatePrinterSettings(m_pNativePrintData,dc,pDocument,RedrawPrintBorders);
+	delete dc;
+	return ret;
 }
 
 /********************************************************************************************
 
->	static BOOL CCPrintDialog::UpdatePrinterSettings(CPrintDialog* pPrDlg,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	18/4/95
-	Inputs:		pPrDlg 	  = ptr to a CPrintDialog class
-				pDocument = ptr to associated doc (NULL means use current doc)
-				RedrawPrintBorders = TRUE if you want any visible print borders redrawing
-	Returns:	TRUE if ok, FALSE otherwise
-	Purpose:	Calls the (DEVMODE*,HDC,Document*) version of this func, extracting the params from the supplied 
-				CPrintDialog object
-
-				If a HDC is created in the supplied pPrDlg, it is deleted before the function returns.
-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-BOOL CCPrintDialog::UpdatePrinterSettings(CPrintDialog* pPrDlg,Document* pDocument,BOOL RedrawPrintBorders)
-{
-	ERROR2IF(pPrDlg == NULL,FALSE,"pPrDlg is NULL");
-
-	// If we have a DC, recreate it as it may no longer be valid.
-	if (pPrDlg->m_pd.hDC != NULL)
-	{
-		::DeleteDC(pPrDlg->m_pd.hDC);
-		pPrDlg->m_pd.hDC = NULL;
-	}
-
-	Progress Hourglass(_R(IDS_UPDATE_PRINTER_SETTINGS),-1,FALSE);
-	Hourglass.Update();
-
-	HDC hdc = pPrDlg->CreatePrinterDC();
-	DEVMODE* pDevMode = pPrDlg->GetDevMode();
-	BOOL ok = UpdatePrinterSettings(pDevMode,hdc,pDocument,RedrawPrintBorders);
-
-	if (pPrDlg->m_pd.hDC != NULL)
-	{
-		::DeleteDC(pPrDlg->m_pd.hDC);
-		pPrDlg->m_pd.hDC = NULL;
-	}
-
-	return ok;
-}
-
-/********************************************************************************************
-
->	static BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode, HDC hdc, Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE)
+>	static BOOL CCPrintDialog::UpdatePrinterSettings(wxPrintData * pPrintData, wxDC * pDC, Document* pDocument, BOOL RedrawPrintBorders)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	5/4/95
@@ -1146,62 +807,43 @@ BOOL CCPrintDialog::UpdatePrinterSettings(CPrintDialog* pPrDlg,Document* pDocume
 
 ********************************************************************************************/
 
-BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pDocument,BOOL RedrawPrintBorders)
+BOOL CCPrintDialog::UpdatePrinterSettings(wxPrintData * pPrintData, wxDC * pDC, Document* pDocument, BOOL RedrawPrintBorders)
 {
-	if (pDevMode == NULL)
+	if (pPrintData == NULL)
 	{
-		TRACE( _T("CCPrintDialog::UpdatePrinterSettings() - pDevMode is NULL"));
+		TRACE( _T("CCPrintDialog::UpdatePrinterSettings() - pPrintData is NULL"));
 		GotPrinterSettings = FALSE;
 		return FALSE;
 	}
-
-	INT32 Fields = pDevMode->dmFields;		// Find out which fields have been initialised
-
-	// ---------------------------------
-	// Extract the paper size
-	//
 
 	BOOL InitPaperSize = FALSE;
 
 	// First, look-up the paper size if we can, as this is more accurate than using the DC to get the
 	// physical width & height plus X & Y dpi
-	if (!InitPaperSize && (Fields & DM_PAPERSIZE))
+	if (!InitPaperSize)
 	{
 		// The dmPaperSize field has been initialised, so look up the paper dimensions
 		// if this value is not 0
 		// Note: I discovered a page in MSDN on 7/2/96 that states that a paper size value
 		// of wxPAPER_USER means "get size from dmPaperWidth & dmPaperLength"
-		if (pDevMode->dmPaperSize != 0 && pDevMode->dmPaperSize != wxPAPER_USER)
-			InitPaperSize = LookUpPaperSize(pDevMode->dmPaperSize,&PrPaperSize);
+		if (pPrintData->GetPaperId() != wxPAPER_NONE)
+			InitPaperSize = LookUpPaperSize(pPrintData->GetPaperId(),&PrPaperSize);
 	}
 
 	// Use the DC to find out the paper size
-	if (!InitPaperSize && hdc != NULL)
+	if (!InitPaperSize && pDC)
 	{
-		double xdpi = double(::GetDeviceCaps(hdc,LOGPIXELSX));		// Get X & Y dots (pixels) per inch
-		double ydpi = double(::GetDeviceCaps(hdc,LOGPIXELSY));
+		double xdpi = pDC->GetPPI().GetWidth();		// Get X & Y dots (pixels) per inch
+		double ydpi = pDC->GetPPI().GetHeight();
 
 		ERROR3IF(xdpi == 0,"(papersize) xdpi == 0");
 		ERROR3IF(ydpi == 0,"(papersize) ydpi == 0");
 
 		// Find the width and height in inches
-		double width  =double(::GetDeviceCaps(hdc,PHYSICALWIDTH))  / xdpi; // 2479.0 
-		double height =double(::GetDeviceCaps(hdc,PHYSICALHEIGHT)) / ydpi; // 3504.0 
+		double width  =double(pDC->GetSize().GetWidth())  / xdpi; // 2479.0 
+		double height =double(pDC->GetSize().GetHeight()) / ydpi; // 3504.0 
 
-		PrPaperSize.cx = IN_TO_MP(width);
-		PrPaperSize.cy = IN_TO_MP(height);
-		InitPaperSize = TRUE;
-	}
-
-	if (!InitPaperSize && (Fields & DM_PAPERWIDTH) && (Fields & DM_PAPERLENGTH))
-	{
-		// OK, we still haven't got the paper size yet AND the width and length fields have been
-		// initialised
-
-		// Paper size is defined in dmPaperWidth and dmPaperLength when dmPaperSize == 0 OR dmPaperSize == wxPAPER_USER
-		// Each dimension is defined in tenths of a millimeter
-		PrPaperSize.cx = MM_TO_MP(double(pDevMode->dmPaperWidth)/10);
-		PrPaperSize.cy = MM_TO_MP(double(pDevMode->dmPaperLength)/10);
+		PrPaperSize = wxSize(IN_TO_MP(width), IN_TO_MP(height));
 		InitPaperSize = TRUE;
 	}
 
@@ -1209,7 +851,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	{
 		// If we still haven't managed to get the paper size, then error in debug builds
 		// and set the paper size to a sensible default
-		ERROR3("Unable to extract paper size from given DEVMODE");
+		ERROR3("Unable to extract paper size");
 		LookUpPaperSize(wxPAPER_A4,&PrPaperSize);
 	}
 
@@ -1218,16 +860,8 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	//
 
 	// Has the orientation field been initialised?
-	if (Fields & DM_ORIENTATION)
-		PrPortrait = (pDevMode->dmOrientation == DMORIENT_PORTRAIT);
-	else
-	{
-		// We haven't managed to get the paper orientation, so error in debug builds
-		// and set the paper orientationto a sensible default
-		ERROR3("Unable to extract paper orientation from given DEVMODE");
-		PrPortrait = TRUE;
-	}
-
+	PrPortrait = (pPrintData->GetOrientation() == wxPORTRAIT);
+	
 	// ---------------------------------
 	// Extract print quality (i.e. resolution in dots per inch)
 	//
@@ -1239,36 +873,25 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 
 	// Use the DC to find the resolution, in preference to using the DEVMODE structure
 	// (Overall DPI is the smallest between the X and Y resolution of the device)
-	if (PrResolution <= 0 && hdc != NULL)
+	if (PrResolution <= 0 && pDC)
 	{
-		PrResolutionX = ::GetDeviceCaps(hdc,LOGPIXELSX);
-		PrResolutionY = ::GetDeviceCaps(hdc,LOGPIXELSY);
+		PrResolutionX = pDC->GetPPI().GetWidth();
+		PrResolutionY = pDC->GetPPI().GetHeight();
 
 		PrResolution = min(PrResolutionX,PrResolutionY);
 	}
 
 	// If we failed to get the printer resolution using the DC, try the DEVMODE structure
-	if (PrResolution <= 0 && (Fields & (DM_PRINTQUALITY | DM_YRESOLUTION)))
+	if (PrResolution <= 0)
 	{
-		PrResolution = pDevMode->dmPrintQuality;
+		PrResolution = pPrintData->GetQuality();
 		PrResolutionX = PrResolutionY = PrResolution;	// The X & Y res are the same
-
-		// Ensure that PrResolution is a value we understand
-		if ((PrResolution < 0) 				&& 
-			(PrResolution != DMRES_HIGH) 	&& 
-			(PrResolution != DMRES_MEDIUM) 	&& 
-			(PrResolution != DMRES_LOW) 	&& 
-			(PrResolution != DMRES_DRAFT))
-		{
-			ERROR3_PF(("Print res is -ve yet not a defined value (%d)",PrResolution));
-			PrResolution = DMRES_HIGH;		// Set it to the highest quality device-independent setting
-		}
 	}
 
 	// If all else fails, fall back on a default value
 	if (PrResolution <= 0)
 	{
-		ERROR3IF(hdc == NULL,"hdc is NULL. Try supplying one in order to get printer resolution.");
+		ERROR3IF(pDC == NULL,"hdc is NULL. Try supplying one in order to get printer resolution.");
 		ERROR3("Unable to find the printer resolution");
 		PrResolution = 300;
 		PrResolutionX = PrResolutionY = PrResolution;	// The X & Y res are the same
@@ -1278,6 +901,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	// Extract the margins of the printable area on the paper
 	// (we can only do this via the DC)
 
+#ifndef EXCLUDE_FROM_XARALX
 	if (hdc != NULL)
 	{
 		// Find out the various printer bits and bobs, all measured in pixels
@@ -1332,6 +956,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		PrBottomMargin 	= IN_TO_MP((height-yres-top) / ydpi);
 	}
 	else
+#endif
 	{
 		PrLeftMargin 	= 0;
 		PrTopMargin 	= 0;
@@ -1342,17 +967,9 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	// ---------------------------------
 	// Is printer a Postscript printer?
 	//
-	PrPostscript = FALSE;
-	if (hdc != NULL)
-	{
-		CDC cdc;
-		if (cdc.Attach(hdc))
-		{
-			PrPostscript = (CCDC::GetType(&cdc,TRUE) == RENDERTYPE_PRINTER_PS);
-			cdc.Detach();
-		}
-	}
+	PrPostscript = pDC->IsKindOf(CLASSINFO(wxPostScriptDC));
 
+#ifndef EXCLUDE_FROM_XARALX
 	// ---------------------------------
 	// Extract the scale factor
 	//
@@ -1368,6 +985,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		}
 	}
 	else
+#endif
 	{
 		// We haven't managed to get the print scale, so error in debug builds
 		// and set the scale to a sensible default
@@ -1378,7 +996,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	// ---------------------------------
 	// Extract the printer's ability to do multiple copies.
 	//
-	PrMultiCopies = ((Fields & DM_COPIES) != 0);
+	PrMultiCopies = 1; // ((Fields & DM_COPIES) != 0);
 
 	// ---------------------------------
 	// Final processing on extracted data 
@@ -1387,7 +1005,7 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 	if (!PrPortrait)
 	{
 		// If landscape printing, swap the width and height of the paper to which we will print to
-		Swap(PrPaperSize.cx,PrPaperSize.cy);
+		PrPaperSize=wxSize(PrPaperSize.GetHeight(),PrPaperSize.GetWidth());
 	}
 
 	if (PrScale != 100)
@@ -1395,12 +1013,11 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 		// If the printer driver is applying a scale factor, scale the real paper size to the apparent 
 		// size of the paper after scaling
 
-		double w = PrPaperSize.cx;			// w = width of paper
-		double h = PrPaperSize.cy;			// h = height of paper
+		double w = PrPaperSize.GetWidth();			// w = width of paper
+		double h = PrPaperSize.GetHeight();			// h = height of paper
 		double f = 100/double(PrScale);		// f = scale factor applied by printer driver
 
-		PrPaperSize.cx = MILLIPOINT((w*f)+0.5);
-		PrPaperSize.cy = MILLIPOINT((h*f)+0.5);
+		PrPaperSize = wxSize(MILLIPOINT((w*f)+0.5), MILLIPOINT((h*f)+0.5));
 	}
 
 	GotPrinterSettings = TRUE;	// Note that we have a set of valid printer settings now
@@ -1438,45 +1055,6 @@ BOOL CCPrintDialog::UpdatePrinterSettings(DEVMODE* pDevMode,HDC hdc,Document* pD
 }
 
 
-/********************************************************************************************
-
->	static HDC CCPrintDialog::CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	19/12/95
-	Inputs:		hDevNames = global memory handle containing a DEVNAMES structure
-				hFevMode  = global memory handle containing a DEVMODE  structure
-	Returns:	Print DC, or NULL if it fails
-	Purpose:	General printer DC generator.
-	SeeAlso:	-
-
-********************************************************************************************/
-
-HDC CCPrintDialog::CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode)
-{
-	if (hDevNames == NULL)
-		return NULL;
-
-	LPDEVNAMES lpDevNames = (LPDEVNAMES)::GlobalLock(hDevNames);
-	LPDEVMODE  lpDevMode = (hDevMode != NULL) ?
-						(LPDEVMODE)::GlobalLock(hDevMode) : NULL;
-
-	if (lpDevNames == NULL)
-		return NULL;
-
-	HDC hDC = ::CreateDC((LPCTSTR)lpDevNames + lpDevNames->wDriverOffset,
-					  (LPCTSTR)lpDevNames + lpDevNames->wDeviceOffset,
-					  (LPCTSTR)lpDevNames + lpDevNames->wOutputOffset,
-					  lpDevMode);
-
-	::GlobalUnlock(hDevNames);
-	if (hDevMode != NULL)
-		::GlobalUnlock(hDevMode);
-
-	return hDC;
-}
-
-#endif // EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -1502,8 +1080,6 @@ PORTNOTE("printing", "Make printer always appear to be postscript")
 #endif
 }
 
-PORTNOTE("printing", "disabled lots of printer dialog code")
-#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -1531,8 +1107,7 @@ BOOL CCPrintDialog::LookUpPaperSize(UINT32 PaperSizeID,wxSize* pPaperSize)
 	{
 		if (pPaperSizes[i].ID == PaperSizeID)
 		{
-			pPaperSize->cx = pPaperSizes[i].Width;
-			pPaperSize->cy = pPaperSizes[i].Height;
+			*pPaperSize = wxSize(pPaperSizes[i].Width, pPaperSizes[i].Height);
 			return TRUE;
 		}
 	}
@@ -1678,11 +1253,11 @@ BOOL CCPrintDialog::GetPrintableArea(DocRect* pPrintableArea)
 
 	if (GetPrinterSettings())
 	{
-		pPrintableArea->lox = PrLeftMargin;
-		pPrintableArea->hix = PrPaperSize.cx - PrRightMargin;
+		pPrintableArea->lo.x = PrLeftMargin;
+		pPrintableArea->hi.x = PrPaperSize.GetWidth() - PrRightMargin;
 
-		pPrintableArea->loy = PrBottomMargin;
-		pPrintableArea->hiy = PrPaperSize.cy - PrTopMargin;
+		pPrintableArea->lo.y = PrBottomMargin;
+		pPrintableArea->hi.y = PrPaperSize.GetHeight() - PrTopMargin;
 
 		return TRUE;
 	}
@@ -1752,35 +1327,7 @@ BOOL CCPrintDialog::CanMultiCopy(BOOL* pState)
 	return FALSE;
 }
 
-
-//---------------------------------------------------
-/*****************
-// Paper size retrieving code that won't run on Win32s (bugger eh?)
-
-		HANDLE PrHandle;
-
-		if (::OpenPrinter((char*)pDevMode->dmDeviceName,&PrHandle,NULL))
-		{
-			UINT32 size = sizeof(FORM_INFO_1) + 100;
-			BYTE* buffer = (BYTE*)CCMalloc(size);
-
-			if (buffer != NULL)
-			{
-				DWORD count;
-				if (::GetForm(PrHandle,(char*)pDevMode->dmFormName,1,buffer,size,&count))
-				{
-					FORM_INFO_1* pFormInfo1 = (FORM_INFO_1*)buffer;
-					*pPaperSize = pFormInfo1->Size;
-					ok = TRUE;
-				}
-				TRACEUSER( "Markn", _T("GetForm() count = %d\n"),count);
-				CCFree(buffer);
-			}
-		}
-
-		DWORD Err = GetLastError();
-*************************/
-//---------------------------------------------------
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -1932,23 +1479,6 @@ void CCPrintDialog::OnCancel()
 		return;
 	}
 
-/*
-	-- Jason here - I reckon if the user cancels, we shouldn't commit their
-	-- changes to the document...
-
-	// Get the dlg settings
-	GetDetails();
-
-	// Get ptr to document's print control
-	PrintControl* pPrCtrl = GetPrintControl();
-	ERROR3IF(pPrCtrl == NULL,"Unable to find the print control");
-
-	if (pPrCtrl != NULL)
-		// Copy the local print control to the doc's print control
-		*pPrCtrl = LocalPrintControl;
-*/
-
-	// Finally, call base class function
 	CPrintDialog::OnCancel();
 }	
 
@@ -2392,6 +1922,10 @@ CCPrintInfo::CCPrintInfo()
 	pDocument	= NULL;
 	pCCDC = NULL;
 	m_bContinuePrinting = TRUE;
+	m_pNativePrintData = NULL;
+
+	if (m_HaveSavedDefaultDialogData)
+		*((wxPrintDialogData *)this) = m_DefaultDialogData;
 }
 
 
@@ -2425,6 +1959,10 @@ CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 	pCCamView	= pCCamVw;
 	pCCDC 		= NULL;
 	m_bContinuePrinting = TRUE;
+	m_pNativePrintData = NULL;
+
+	if (m_HaveSavedDefaultDialogData)
+		*((wxPrintDialogData *)this) = m_DefaultDialogData;
 
 	EnableHelp(TRUE);
 	EnablePageNumbers(FALSE); // Make this TRUE to enable multiple pages
@@ -2501,6 +2039,9 @@ PORTNOTE("printing", "Disabled deletion of a print dialog inside printinfo struc
 		pCCDC=NULL;
 	}
 
+	if (m_pNativePrintData)
+		delete m_pNativePrintData;
+
 	CCPrintInfo::pCurrent = NULL;
 }
 
@@ -2549,6 +2090,9 @@ BOOL CCPrintInfo::OnPreparePrinting(BOOL bPrintSetupOnly /*=FALSE*/)
 		pOurPD = NULL;
 	}
 
+	EnablePrintToFile(true);
+	EnableSelection(true);
+	EnablePageNumbers(false);
 	pOurPD = new CCPrintDialog(this, pDocument);
 	if (!pOurPD)
 	{
@@ -2570,14 +2114,12 @@ BOOL CCPrintInfo::OnPreparePrinting(BOOL bPrintSetupOnly /*=FALSE*/)
 		// The print setup dialog should change the
 		// print data in-place if not cancelled.
 
-		wxDialog *dialog = factory->CreatePrintSetupDialog( NULL,
-															 &(pOurPD->GetPrintDialogData().GetPrintData()) );
+		wxDialog *dialog = factory->CreatePrintSetupDialog( NULL, &(pOurPD->GetPrintDialogData().GetPrintData()) );
 		if (dialog->ShowModal() == wxID_OK)
 		{
-PORTNOTE("printing", "don't do UpdatePrinterSettings")
-#ifndef EXCLUDE_FROM_XARALX
-			CCPrintDialog::UpdatePrinterSettings(pOurPD);
-#endif
+			*((wxPrintDialogData *)this)=pOurPD->GetPrintDialogData();
+			SavePrintDialogData();
+			UpdatePrinterSettings(TRUE);
 		}
 
 		// If we are to ignore the printer data (because the selected printer has been deleted, renamed, etc)
@@ -2610,18 +2152,22 @@ PORTNOTE("printing", "don't do FreeGlobalHandle")
 
 	// They pressed print
 	wxDC * dc = pOurPD->GetPrintDC(); // we now own the DC.
-	
+	if (dc) delete dc; // ignore your nasty dc, which may be a non-wxPostScript DC	
+
 	// Overwrite our own settings
 	*((wxPrintDialogData *)this)=pOurPD->GetPrintDialogData();
+	SavePrintDialogData();
+	UpdatePrinterSettings(TRUE);
+
 	pCCDC = NULL;
 
-	if ((!dc) || !(dc->IsKindOf(CLASSINFO(wxPostScriptDC))) )
+	dc = MakeDCFromPrintData(&(pOurPD->GetPrintDialogData().GetPrintData()));
+
+	if (!dc)
 	{
-		if (dc)
-			delete dc;
 		delete pOurPD;
 		pOurPD = NULL;
-		ERROR2(FALSE, "CCPrintInfo::OnPreparePrinting() got a non-Postscript DC back. Please recompile without --with-libgnomeprint for the time being");
+		ERROR2(FALSE, "CCPrintInfo::OnPreparePrinting() could not get a wxPostScriptDC");
 	}
 
 	pCCDC = new PSPrintDC(dc);
@@ -2636,6 +2182,78 @@ PORTNOTE("printing", "don't do FreeGlobalHandle")
 	pCCDC->SetDC(dc, TRUE); // now deleting the CCDC will delete the DC too
 
 	return TRUE;
+}
+
+/********************************************************************************************
+
+>	CCPrintInfo::MakeDCFromPrintData( wxPrintData * pPrintData )
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	22/6/2006
+	Inputs:		pPrintData - pointer to the dialog's print data
+	Returns:	A DC suitable for printing to
+	Purpose:	Generates a wxPostscriptDC even though the print dialog may not have
+				wanted to give us one. Also fills in m_pNativePrintData with the necessary
+				print data.
+
+	SeeAlso:	-
+
+********************************************************************************************/
+
+wxDC * CCPrintInfo::MakeDCFromPrintData( wxPrintData * pPrintData )
+{
+	// Make a new wxPostscriptDC based on the print data
+
+	if (m_pNativePrintData)
+	{
+		delete m_pNativePrintData;
+		m_pNativePrintData = NULL;
+	}
+
+	// We don't use the copy constructor to copy things over here because this copies
+	// wxPrintNativeData etc. which is print factory specific. We also have to switch
+	// print factories around so we get a new print factory with the correct private
+	// data in (what a bore).
+
+#if wxUSE_LIBGNOMEPRINT
+	wxPrintFactory::SetPrintFactory(new wxNativePrintFactory);
+#endif
+
+	wxPrintData * pNewData = new wxPrintData;
+	if (!pNewData)
+	{
+#if wxUSE_LIBGNOMEPRINT
+		// restore the print factory
+		wxPrintFactory::SetPrintFactory(new wxGnomePrintFactory);
+#endif
+		ERROR2(NULL, "CCPrintInfo::OnPreparePrinting() could not get new print data");
+	}
+
+	// Now copy through the bits we care about
+	pNewData->SetPrinterName(pPrintData->GetPrinterName());
+	pNewData->SetNoCopies(pPrintData->GetNoCopies());
+	pNewData->SetCollate(pPrintData->GetCollate());
+	pNewData->SetOrientation(pPrintData->GetOrientation());
+	pNewData->SetColour(pPrintData->GetColour());
+	pNewData->SetDuplex(pPrintData->GetDuplex());
+	pNewData->SetPaperId(pPrintData->GetPaperId());
+	pNewData->SetPaperSize(pPrintData->GetPaperSize());
+	pNewData->SetQuality(pPrintData->GetQuality());
+	pNewData->SetBin(pPrintData->GetBin());
+	pNewData->SetPrintMode(pPrintData->GetPrintMode());
+	pNewData->SetFilename(pPrintData->GetFilename());
+
+	wxDC * dc=new wxPostScriptDC(*pNewData);
+
+	// this has been copied, so it can safely be deleted
+	m_pNativePrintData =  pNewData;
+
+#if wxUSE_LIBGNOMEPRINT
+	// restore the print factory
+	wxPrintFactory::SetPrintFactory(new wxGnomePrintFactory);
+#endif
+	return dc;
+
 }
 
 /********************************************************************************************
@@ -3238,7 +2856,6 @@ PORTNOTE("printing", "Disabled print to file")
 
 //-----------------------------------------------------------------------------------------
 
-#endif //webster
 
 PORTNOTE("printing", "Disabled CCPrintToFileDialog")
 #ifndef EXCLUDE_FROM_XARALX

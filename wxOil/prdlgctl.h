@@ -168,6 +168,12 @@ public:
 
 	void LockProgressUpdate(BOOL Locked);
 
+	wxDC * MakeDCFromPrintData(wxPrintData * pPrintData);
+	wxPrintData	* m_pNativePrintData;
+	Document * GetDocument() {return pDocument;}
+
+	void SavePrintDialogData() {m_DefaultDialogData = *(wxPrintDialogData *)this; m_HaveSavedDefaultDialogData = TRUE;}
+
 private:
 	BOOL 			Initialised;	// TRUE if Init() has been successfully called
 	BOOL			Printing;		// TRUE after StartPrinting() called - FALSE after EndPrinting()
@@ -179,14 +185,17 @@ private:
 	PrintProgressDlg* pPrgDlg;		// Ptr to the print progress dlg, created by StartPrinting()
 	CCamView*		pCCamView;		// Ptr to the CCamView that is doing the print job
 
-	CCDC * 			pCCDC;			// Ptr to our CCDC
+	CCDC * 			pCCDC;			// Ptr to ourx CCDC
 
 	static CCPrintInfo*	pCurrent;	// Ptr to the last constructed CCPrintInfo
+	static wxPrintDialogData m_DefaultDialogData;
+	static BOOL m_HaveSavedDefaultDialogData;
 
 // New methods for XaraLX
 
 public:
 	BOOL OnPreparePrinting(BOOL bPrintSetupOnly = FALSE);
+	BOOL UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE);
 	static BOOL HasPrintSetup();
 
 	CCDC *	GetCCDC() const {return pCCDC;}
@@ -218,23 +227,6 @@ public:
 	CCPrintDialog(CCPrintInfo * pDialogData=NULL, Document* pDoc=NULL, BOOL PrintSetUpOnly = FALSE);
 	~CCPrintDialog();
 
-PORTNOTE("printing", "Disabled various CCPrintDialog overrides")
-#ifndef EXCLUDE_FROM_XARALX
-	// Called by MFC to initialise the dlg's controls
-	virtual BOOL OnInitDialog();
-
-	// Called by MFC to open the print dialog
-	virtual INT32 DoModal();
-
-	// Called by MFC when user clicks on OK
-	// Takes the values from the dlg, and commits them to the doc's print control
-	virtual void OnOK();
-
-	// Called by MFC when user clicks on Cancel
-	// Copies the original print control back into doc's print control
-	virtual void OnCancel();
-#endif
-
 	// Functions for retrieving info on the default printer
 	static BOOL GetPaperSize(wxSize* pPaperSize, BOOL RedrawPrintBorders = TRUE);
 	static BOOL GetPrintableArea(DocRect* pPrintableArea);
@@ -245,10 +237,7 @@ PORTNOTE("printing", "Disabled various CCPrintDialog overrides")
 	static BOOL IsPostscript();
 
 	// Funcs to call when the printer settings change
-	static BOOL UpdatePrinterSettings(DEVMODE* pDevMode,wxDC * hdc,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
-	static BOOL UpdatePrinterSettings(wxPrintDialog* pPrDlg,Document* pDocument = NULL,BOOL RedrawPrintBorders = TRUE);
-	BOOL UpdatePrinterSettings(BOOL RedrawPrintBorders = TRUE);
-	static BOOL UpdateAppPrinterSettings(BOOL RedrawPrintBorders = TRUE);
+	static BOOL UpdatePrinterSettings(wxPrintData * pPrintData, wxDC * pDC, Document* pDocument, BOOL RedrawPrintBorders);
 
 	// Creates a DC using given global memory handles for DEVNAMES and DEVMODE structures
 //	static HDC CreatePrinterDC(HGLOBAL hDevNames,HGLOBAL hDevMode);
@@ -263,7 +252,6 @@ PORTNOTE("printing", "Disabled various CCPrintDialog overrides")
 	static void		InformResetToDefaultPrinter(BOOL ClosingDlgs);
 	static BOOL		IgnorePrintData()		{ return IgnorePrntData; }
 	static void		ResetIgnorePrintData()	{ IgnorePrntData = FALSE; }
-	static void		FreeGlobalHandle(HGLOBAL* pHandle);
 	static void		GetSelectedPrinterName(LPTSTR pName,INT32 BufferSize);
 
 private:
