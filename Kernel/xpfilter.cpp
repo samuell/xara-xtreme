@@ -140,6 +140,7 @@ PluginNativeFilter::PluginNativeFilter()
 	m_pNewTree = NULL;
 	m_ProgressOffset = 0;
 	m_bSaveXPEBitmaps = TRUE;	// For now we will default this to saving out the bitmaps
+	m_bPreviewBitmap = FALSE;
 	m_BoundsLevel = BWL_NONE;
 	m_BitmapCompression = 200;      // Default to full PNG quality
 	m_BitmapCount = 0;
@@ -385,6 +386,9 @@ BOOL PluginNativeFilter::DoExport ( Operation* pOp, CCLexFile* pFile, PathName* 
 
 	// Update our bitmap compression setting
 	m_BitmapCompression = PlugCaps.GetBitmapCompression();
+
+	// Update the preview bitmap setting
+	m_bPreviewBitmap = PlugCaps.GetPreviewBitmap();
 
 	KernelBitmap::SetCreateTracker(&m_BitmapList);
 
@@ -790,9 +794,7 @@ INT32 PluginNativeFilter::GetBitmapCompression()
 BOOL PluginNativeFilter::GetPreviewBitmapExport()
 {
 	// Return TRUE if the plugin wants a preview bitmap and FALSE otherwise
-
-	// For now I'll just return FALSE
-	return FALSE;
+	return m_bPreviewBitmap;
 }
 
 /********************************************************************************************

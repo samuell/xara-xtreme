@@ -1029,6 +1029,7 @@ public:
 		// Set some sensible defaults (these will result in no conversions at all)
 		m_BoundsLevel = BWL_NONE;
 		m_bSelection = FALSE;
+		m_bPreviewBitmap = FALSE;
 		m_RasteriseDPI = 96.0;
 		m_bRasteriseAlpha = TRUE;
 		m_BitmapCompression = 200;
@@ -1077,6 +1078,7 @@ public:
 
 	void SetSelection(BOOL bSelection) { m_bSelection = bSelection; }
 	void SetBoundsLevel(BoundsWriteLevel Level) { m_BoundsLevel = Level; }
+	void SetPreviewBitmap(BOOL bPreviewBitmap) { m_bPreviewBitmap = bPreviewBitmap; }
 	
 	void SetSpreadType(XPFConvertType Type) { m_SpreadType = Type; }
 
@@ -1111,6 +1113,7 @@ public:
 
 	BOOL GetSelection() { return(m_bSelection); }
 	BoundsWriteLevel GetBoundsLevel() { return(m_BoundsLevel); }
+	BOOL GetPreviewBitmap() { return(m_bPreviewBitmap); }
 
 	double GetRasteriseDPI() { return(m_RasteriseDPI); }
 	BOOL GetRasteriseAlpha() { return(m_bRasteriseAlpha); }
@@ -1131,6 +1134,7 @@ public:
 protected:
 	BoundsWriteLevel m_BoundsLevel;
 	BOOL m_bSelection;
+	BOOL m_bPreviewBitmap;
 
 	double m_RasteriseDPI;
 	BOOL m_bRasteriseAlpha;

@@ -699,7 +699,7 @@ BOOL PluginOILFilter::BuildCapabilityTree(wxString strXmlFilename, CapabilityTre
 	xmlNodePtr pChild = node->children;
 	INT32 Phase =0;
 
-	// There are 5 phases to the parsing
+	// There are 7 phases to the parsing
 	// We will loop round until we run out of child elements
 	// After parsing a node the phase counter will be set to the phase just parsed
 	// If an element should have already been parsed (using the phase counter)
@@ -807,7 +807,7 @@ BOOL PluginOILFilter::ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	{
 		Level = BWL_ALL;
 	}
-	else
+	else if (strLevel != _T(""))
 	{
 		ERROR1(FALSE, _R(IDE_XPF_BADXML_OPTIONS_BOUNDSLEVEL));
 	}
@@ -819,6 +819,12 @@ BOOL PluginOILFilter::ReadOptions(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	bSelection = (strSelection == _T("true"));
 
 	pCapTree->SetSelection(bSelection);
+
+	BOOL bPreviewBitmap = FALSE;
+	wxString strPreviewBitmap = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"thumbnail"));
+	bPreviewBitmap = (strPreviewBitmap == _T("true"));
+
+	pCapTree->SetPreviewBitmap(bPreviewBitmap);
 
 	return TRUE;
 }

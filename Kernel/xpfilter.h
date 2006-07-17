@@ -220,6 +220,7 @@ protected:
 
 	UINT32 m_ProgressOffset;
 	BOOL m_bSaveXPEBitmaps;
+	BOOL m_bPreviewBitmap;
 
 	BoundsWriteLevel m_BoundsLevel;
 	INT32 m_BitmapCompression;
