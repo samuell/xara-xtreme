@@ -275,6 +275,7 @@ public:
 protected:
 
 	void HandleDragEvent(UINT32 Button, UINT32 nFlags, wxPoint point, ClickType t);
+	void HandleDragEvent(UINT32 Button, ClickModifiers clickmods, wxPoint point, ClickType t);
 	BOOL HandleMouseWheelEvent( wxMouseEvent &event );
 	void HandleDragScrolling(wxPoint point);
 	void CalcScrollDeltas(wxPoint point, WinRect wrSize, INT32* dx, INT32* dy);
@@ -296,6 +297,7 @@ public:
 	// Useful esp. for drag ops that are not connected to a particular tool and/or started
 	// from clicks outside the view, e.g. Creating guidelines by clicking on a ruler window
 	BOOL InvokeDragOp(String_256* pOpToken,OpParam* pParam,UINT32 Flags,wxPoint point);
+	BOOL InvokeDragOp(String_256* pOpToken,OpParam* pParam,ClickModifiers clickmods,wxPoint point);
 
 	// Function to test if there is another mouse move message in the queue
 	BOOL IsWaitingMouseMove();

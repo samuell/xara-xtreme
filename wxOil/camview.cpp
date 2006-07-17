@@ -4086,11 +4086,13 @@ void CCamView::Rect2wxRect(const Rect& krect, wxRect* prect)
 
 /********************************************************************************************
 >	void CCamView::HandleDragEvent(UINT32 Button, UINT32 nFlags, wxPoint point, ClickType t) const
+>	void CCamView::HandleDragEvent(UINT32 Button, ClickModifiers clickmods, wxPoint point, ClickType t)
 
 	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	ages ago
 	Inputs:		Button - the actual button being pressed for a click/double click event.
 				nFlags - The mouse button flags
+				clickmods - The kernel abstraction of the modifiers
 				point - the coordinate of the mouse cursor
 				t -  the kind of mouse event (button up/down, move, drag start/finish etc.)
 	Outputs:	-
@@ -4126,6 +4128,14 @@ is down.
 
 void CCamView::HandleDragEvent(UINT32 Button, UINT32 nFlags, wxPoint point, ClickType t)
 {
+	// Find out which buttons etc are down.
+	ClickModifiers clickmods = ClickModifiers::GetClickModifiers(nFlags);
+
+	HandleDragEvent(Button, clickmods, point, t);
+}
+
+void CCamView::HandleDragEvent(UINT32 Button, ClickModifiers clickmods, wxPoint point, ClickType t)
+{
 	if (DocView::GetSelected() != pDocView)
 	{
 //		TRACEUSER( "JustinF", _T("Ignored drag-event cos not in the selected view\n"));
@@ -4150,7 +4160,7 @@ void CCamView::HandleDragEvent(UINT32 Button, UINT32 nFlags, wxPoint point, Clic
 	SetCurrentStates();
 
 	// Find out which buttons etc are down.
-	LastClickMods = ClickModifiers::GetClickModifiers(nFlags);
+	LastClickMods = clickmods;
 
 	// If it's the first single click, then reset the drag delay timer, and ask for a 
 	// Windows timer.
@@ -4609,6 +4619,7 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 
 /*********************************************************************************************
 >	BOOL CCamView::InvokeDragOp(String_256 OpToken,UINT32 Flags,wxPoint point,OpParam* pParam)
+>	BOOL CCamView::InvokeDragOp(String_256 OpToken,ClickModifiers clickmods,wxPoint point,OpParam* pParam)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/9/95
@@ -4617,6 +4628,7 @@ void CCamView::HandleButtonUp(UINT32 Button, wxMouseEvent &event)
 						  NOTE! Object at *pParam must have a long life time.  I.e. do NOT
 						        call this func with ptr to a local OpParam var
 				Flags   = flags that specify which modifiers were down during the click
+				clickmods = Kernel abstraction of modifiers
 				point   = screen coord of the start of the drag
 	Outputs:	-
 	Returns:	Returns TRUE if successful.  Returns FALSE if not
@@ -4659,6 +4671,19 @@ BOOL CCamView::InvokeDragOp(String_256* pOpToken,OpParam* pParam,UINT32 Flags,wx
 	// NOTE: May need to post a pseudo mouse event here if some of the subtleties of click
 	// handling are required, but this works fine for simple drags
 	HandleDragEvent(MK_LBUTTON, Flags, point, CLICKTYPE_SINGLE);
+
+	return TRUE;
+}
+
+BOOL CCamView::InvokeDragOp(String_256* pOpToken, OpParam* pParam, ClickModifiers clickmods, wxPoint point)
+{
+	DragOpToken  = *pOpToken;
+	pDragOpParam = pParam;
+	DragOpInvoke = TRUE;
+
+	// NOTE: May need to post a pseudo mouse event here if some of the subtleties of click
+	// handling are required, but this works fine for simple drags
+	HandleDragEvent(MK_LBUTTON, clickmods, point, CLICKTYPE_SINGLE);
 
 	return TRUE;
 }
