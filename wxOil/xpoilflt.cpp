@@ -575,6 +575,27 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 		TRACEUSER("Gerry", _T("Command '%s' exited with code %d"), sCommand.c_str(), code);
 
 		// Get error message from saErrors
+
+		// Look for the first entry that starts "ERROR:" and set the remainder of 
+		// the line as the error message
+		wxString line;
+		size_t index = 0;
+		while (index < saErrors.GetCount())
+		{
+			wxString rest;
+			if (saErrors[index].StartsWith(_T("ERROR:"), &rest))
+			{
+				Error::SetError(0, rest.c_str(), 0);
+				break;
+			}
+			index++;
+		}
+
+		if (index == saErrors.GetCount())
+		{
+			ERROR1(FALSE, _R(IDS_XPF_NO_ERROR_SET));
+		}
+
 		return(FALSE);
 	}
 
