@@ -307,9 +307,7 @@ BOOL OILFilter::InitFilters(List& FilterList)
 
 	// Add the preview bitmap filters that we can use in the new native/web format
 	ADD_FILTER(PreviewFilterBMP)
-#if !defined(EXCLUDE_FROM_XARALX)
 	ADD_FILTER(PreviewFilterGIF)
-#endif
 	ADD_FILTER(PreviewFilterJPEG)
 	ADD_FILTER(PreviewFilterPNG)
 	ADD_FILTER(ThumbnailFilterPNG)
