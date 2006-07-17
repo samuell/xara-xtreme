@@ -128,6 +128,7 @@ class RulerBase : public CC_CLASS_MEMDUMP
 
 public:
 	RulerBase();
+	virtual ~RulerBase() {} // suppress warnings
 
 	RulerPair* GetpRulerPair() { return pRulerPair; }
 	OILRuler*  GetpOILRuler()  { return pOILRuler; }
