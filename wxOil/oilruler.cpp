@@ -168,6 +168,7 @@ BEGIN_EVENT_TABLE( OILRuler, wxWindow )
 	EVT_RIGHT_UP( 	 	OILRuler::OnRButtonUp)
 	EVT_MOTION(			OILRuler::OnMouseMove)
 	EVT_PAINT(			OILRuler::OnPaint)
+	EVT_SET_FOCUS(		OILRuler::OnFocus)
 END_EVENT_TABLE()
 
 
@@ -1500,7 +1501,7 @@ BOOL OILRuler::DrawBitmap(OilCoord Pos, ResourceID BitmapID)
 }
 
 /********************************************************************************************
->	void OILRuler::SetCurrentStates()
+>	void OILRuler::SetCurrentStates( wxFocusEvent& event )
 
 	Author:		Chris_Parks (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/6/96
@@ -1524,6 +1525,23 @@ void OILRuler::SetCurrentStates()
 	}
 }
 
+/********************************************************************************************
+>	void OILRuler::OnFocus()
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	17/07/06
+	Inputs:		-
+	Purpose:	The rulers shouldn't get focues (unless they ever decided to
+				handle arrow movement...)
+	SeeAlso:	
+********************************************************************************************/
+
+void OILRuler::OnFocus( wxFocusEvent& event )
+{
+	// Put the focus back into active view
+	TRACEUSER( "jlh92", _T("NO, that control is not allowed focus") );
+	AfxGetApp().GiveActiveCanvasFocus();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // 				OILHorizontalRuler

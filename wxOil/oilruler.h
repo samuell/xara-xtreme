@@ -252,6 +252,7 @@ protected:
 	void 	OnRButtonDblClk( wxMouseEvent &event );
 	void 	OnRButtonUp( wxMouseEvent &event );
 
+	void	OnFocus( wxFocusEvent& event );
 
 public:
 	static String_256*	FontName;		// read from .ini file
