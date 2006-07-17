@@ -190,7 +190,12 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	UserCoord Offsets(0, 0);
 	if (Tool::GetCurrent())
 		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
-	UpdateRect.Translate(-Offsets.x, -Offsets.y);
+	// We translate the rectangle by the tool-supplied offsets. We do not call UserRect::Translate
+	// since our rectangle is not necessarily valid due to MakeCoord used in the limit checks above
+	UpdateRect.lo.x -= Offsets.x;
+	UpdateRect.lo.y -= Offsets.y;
+	UpdateRect.hi.x -= Offsets.x;
+	UpdateRect.hi.y -= Offsets.y;
 
 	// allow the current tool to render background blobs
 	if (Tool::GetCurrent())
