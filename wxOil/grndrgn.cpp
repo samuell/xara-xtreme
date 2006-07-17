@@ -190,7 +190,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "clipattr.h"	// so we know what a ClipRegionAttribute is.
 
 #include "maskedrr.h"
-//GAT #include "prdlgctl.h"
+#include "prdlgctl.h"
 
 #include "camprofile.h"
 #include "fillattr2.h"
@@ -5830,12 +5830,7 @@ PORTNOTE("cms", "DisabledXaraCMS")
 						}
 #endif
 						// Now check what sort of printer we have to get the RenderRegion Caps correct
-PORTNOTE("printing", "Assume postscript")
-#ifndef EXCLUDE_FROM_XARALX
 						UINT32 PrintType = CCPrintDialog::IsPostscript() ? 2 : 1;
-#else
-						UINT32 PrintType = 2;
-#endif
 						pRegion->SetSimulatePrinting(PrintType);
 					}
 				}

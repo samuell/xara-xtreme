@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "justin2.h"
 //#include "markn.h"
 #include "osrndrgn.h"
-//#include "prdlgctl.h"
+#include "prdlgctl.h"
 #include "princomp.h"
 #include "printctl.h"
 #include "prntview.h"
@@ -439,8 +439,6 @@ String_256 PrintControl::BuildPaperSizeStr()
 		Str += TempStr;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
-PORTNOTE("printing", "Disabled Use of CCPrintDialog")
-#ifndef EXCLUDE_FROM_XARALX
 		INT32 PrScale;
 		if (CCPrintDialog::GetScale(&PrScale))
 		{
@@ -454,7 +452,6 @@ PORTNOTE("printing", "Disabled Use of CCPrintDialog")
 				Str += s;
 			}
 		}
-#endif
 #endif //webster
 		pDimScale->SetActiveState(ActiveState);
 	}
@@ -621,22 +618,20 @@ BOOL PrintControl::SetUp(Spread* pThisSpread, BOOL RedrawPrintBorders)
 
 BOOL PrintControl::CalcPrintAreaVars(BOOL RedrawPrintBorders)
 {
-PORTNOTE("printing", "Disabled Use of CCPrintDialog")
-#ifndef EXCLUDE_FROM_XARALX
 	// Calc the print area origin
 	Origin.x = TotalPrintArea.lo.x;
 	Origin.y = TotalPrintArea.hi.y;
 
 	//-------------------------
 	// Find out the dimensions of the printer's paper (in MILLIPOINTS)
-	SIZEL PaperSize;
+	wxSize PaperSize;
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 	if (!CCPrintDialog::GetPaperSize(&PaperSize, RedrawPrintBorders))
 		return FALSE;
 #endif //webster
-	PaperWidth  = PaperSize.cx;
-	PaperHeight = PaperSize.cy;
+	PaperWidth  = PaperSize.GetWidth();
+	PaperHeight = PaperSize.GetHeight();
 
 	// ------------------------
 	// Get the printable area on the paper (defined relative to a origin at the bottom left of paper)
@@ -665,7 +660,6 @@ PORTNOTE("printing", "Disabled Use of CCPrintDialog")
 	if (Orient == PRINTORIENTATION_SIDEWAYS)
 		Swap(PageWidth,PageHeight);
 
-#endif
 	return TRUE;
 }
 
@@ -1588,12 +1582,9 @@ INT32 PrintControl::GetDotsPerInch()
 		// Set up the local variable to the max auto dpi!
 		INT32 PrinterDPI = MAXAUTOBITMAPDPI;
 
-PORTNOTE("printing", "Disabled Use of CCPrintDialog")
-#ifndef EXCLUDE_FROM_XARALX
 		// Get the printer resolution (if this fails, choose the maximum setting)
 		if (!CCPrintDialog::GetResolution(&PrinterDPI))
 			PrinterDPI = MAXAUTOBITMAPDPI; // Failing could change the variable so reset it!
-#endif
 
 		// Make the DPI half the printer res
 		DotsPerInch = PrinterDPI >> 1;
@@ -1762,15 +1753,12 @@ PrintRangeObj PrintControl::GetObjPrintRange()
 BOOL PrintControl::CalcNumPaper()
 {
 	BOOL CanMultiCopy=TRUE;
-PORTNOTE("printing", "Disabled Use of CCPrintDialog")
-#ifndef EXCLUDE_FROM_XARALX
 //	WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER	
 	// Can the printer do multiple copies?
 	if (!CCPrintDialog::CanMultiCopy(&CanMultiCopy))
 		return FALSE;
 #endif //webster
-#endif
 	INT32 NumActualPiecesOfPaper = NumPrintablePages * NumCopies;	// Num pieces of paper that will come out of printer
 
 	// NumPaper will be the number of pieces of paper we will print to
