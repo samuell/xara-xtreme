@@ -845,7 +845,7 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
-#if defined(EMABLE_MOVIES)
+#if defined(ENABLE_MOVIES)
 
 #if wxUSE_MEDIACTRL
 enum
