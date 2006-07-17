@@ -1217,6 +1217,22 @@ public:
 
 /********************************************************************************************
 
+>	class ImageMagickOILFilter : public OILFilter
+
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	25/4/96
+	Purpose:	The PNG File format Oil Filter (Extension etc)
+
+********************************************************************************************/
+
+class ImageMagickOILFilter : public OILFilter
+{
+public:
+	ImageMagickOILFilter (Filter* pFilter);
+};
+
+/********************************************************************************************
+
 >	class ImagemapOILFilter : public OILFilter
 
 	Author:		Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>

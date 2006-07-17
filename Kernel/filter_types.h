@@ -192,6 +192,8 @@ typedef enum FILTERID
 	PNG_TRANSPARENT,
 	PNG_TRANSINTER,
 
+	IMAGEMAGICK,
+
 	// --- Insert new Filter Types just above here ---
 
 	MAXFILTERS

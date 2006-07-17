@@ -124,7 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "richard.h"		// for sprite ID's
 //#include "peter.h"
 //#include "sprfilt.h"		// for sprite filter class
-//#include "ppmfiltr.h"		// for PPM filter class
+#include "ppmfiltr.h"		// for PPM filter class
 #include "textfltr.h"
 #include "textfuns.h"
 #include "unicdman.h"
@@ -286,15 +286,17 @@ BOOL OILFilter::InitFilters(List& FilterList)
 
 #endif //WEBSTER
 
+#endif	// EXCLUDE_FROM_XARALX
+
 	ADD_FILTER(PPMFilter)
 	ADD_FILTER(PGMFilter)
 	ADD_FILTER(PBMFilter)
+#if !defined(EXCLUDE_FROM_XARALX)
 	ADD_FILTER(SpriteFilter)
+#endif
 
 //WEBSTER-Martin-19/12/96
 // possibly these next ones should now be in Filter::InitFilters as it's native code now
-
-#endif	// EXCLUDE_FROM_XARALX
 
 #if defined(EXCLUDE_FROM_XARALX)
 	ADD_FILTER(JPEGImportFilter)
@@ -1500,6 +1502,24 @@ PNGOILFilter::PNGOILFilter(Filter* pFilter) : OILFilter(pFilter)
 {
 	FilterName.Load(_R(IDS_FILTERNAME_PNG));
 	FilterExt.Load(_R(IDS_FILTEREXT_PNG));
+} 
+
+/********************************************************************************************
+
+>	ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter)
+
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	25/4/96
+	Inputs:		pFilter - The Filter
+	Purpose:	Constructs the oily parts of the PNG File Format Filter (ie the list of
+				File Extensions that this filter understands)
+
+********************************************************************************************/
+
+ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter) : OILFilter(pFilter)
+{
+	FilterName.Load(_R(IDS_FILTERNAME_IMAGEMAGICK));
+	FilterExt.Load(_R(IDS_FILTEREXT_IMAGEMAGICK));
 } 
 
 #if !defined(EXCLUDE_FROM_RALPH) 

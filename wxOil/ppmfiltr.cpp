@@ -108,7 +108,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodebmp.h"
 //#include "bmpfiltr.h"
 #include "progress.h"
-#include "wbitmap.h"	// Windows specific bitmap information	 
+#include "oilbitmap.h"	// Windows specific bitmap information	 
 //#include "docview.h"	// DocView - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "bitmap.h"		// kernel bitmap
 //#include "bmpres.h"		// general bitmap filter based resources
@@ -143,12 +143,12 @@ static struct
 	TCHAR*  Token;
 } TokenTable[] = 
 {
-	"P3",
-	"P6",
-	"P2",
-	"P5",
-	"P1",
-	"P4",
+	{_T("P3")},
+	{_T("P6")},
+	{_T("P2")},
+	{_T("P5")},
+	{_T("P1")},
+	{_T("P4")},
 };
 
 static PpmTokenIndex FindToken(const TCHAR* Token)
@@ -250,8 +250,8 @@ BOOL PPMFilter::Init()
 BOOL PPMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(camStrncmp(pHeader, "P3", 2) == 0) ||		// ASCII PPM
-		(camStrncmp(pHeader, "P6", 2) == 0) 		// BINARY PPM
+		(camStrncmp(pHeader, _T("P3"), 2) == 0) ||		// ASCII PPM
+		(camStrncmp(pHeader, _T("P6"), 2) == 0) 		// BINARY PPM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -356,8 +356,8 @@ BOOL PGMFilter::Init()
 BOOL PGMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(camStrncmp(pHeader, "P2", 2) == 0) ||		// ASCII PGM
-		(camStrncmp(pHeader, "P5", 2) == 0) 		// BINARY PGM
+		(camStrncmp(pHeader, _T("P2"), 2) == 0) ||		// ASCII PGM
+		(camStrncmp(pHeader, _T("P5"), 2) == 0) 		// BINARY PGM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -464,8 +464,8 @@ BOOL PBMFilter::Init()
 BOOL PBMFilter::CheckString(TCHAR * pHeader)
 {
 	if (
-		(camStrncmp(pHeader, "P1", 2) == 0) ||		// ASCII PBM
-		(camStrncmp(pHeader, "P4", 2) == 0)		// BINARY PBM
+		(camStrncmp(pHeader, _T("P1"), 2) == 0) ||		// ASCII PBM
+		(camStrncmp(pHeader, _T("P4"), 2) == 0)		// BINARY PBM
 	   )
 	{
 		// finding PBM should be good enough to determine that there is
@@ -555,7 +555,7 @@ BOOL BasePMFilter::Init()
 
 BOOL BasePMFilter::CheckString(TCHAR * pHeader)
 {
-	ERROR2(FALSE,"BasePMFilter::ReadDataIntoBitmap calling baseclass version!")	
+	ERROR2(FALSE,"BasePMFilter::ReadDataIntoBitmap calling baseclass version!");
 	return FALSE;
 }
 
@@ -593,8 +593,11 @@ TRACEUSER( "Neville", _T("BasePMFilter::HowCompatible"));
 		return 0;
 	}
 
-	// Check the header for the "PPM" signature.
-	TCHAR * pHeader = (TCHAR *) HeaderStart;
+	// copy four chars in to make TCHARs
+	TCHAR pHeader[4];
+	INT32 i;
+	for (i=0; i<4 ; i++)
+		pHeader[i]=(TCHAR)(((char *) HeaderStart)[i]);
 
 	if ( CheckString(pHeader) )
 	{
@@ -663,7 +666,7 @@ BOOL BasePMFilter::ReadFromFile(OILBitmap* pOilBitmap)
 	String_64 ProgressString(ImportMsgId);
 	ProgressString = GetImportProgressString(pImportFile, ImportMsgId);
 
-	WinBitmap* pWBitmap = (WinBitmap*)pOilBitmap;
+	CWxBitmap* pWBitmap = (CWxBitmap*)pOilBitmap;
 	
 	LPBITMAPINFO *pInfo = &(pWBitmap->BMInfo);
 	LPBYTE *pBytes = &(pWBitmap->BMBytes);
@@ -704,10 +707,6 @@ BOOL BasePMFilter::ReadFromFile(OILBitmap* pOilBitmap)
 BOOL BasePMFilter::ReadFromFile( CCLexFile* pLexFile, LPBITMAPINFO* Info, LPBYTE* Bits,
 								 String_64* ProgressString )
 {
-#ifndef WIN32
-	Error::SetError( _R(IDE_BADFORMAT) );
-	return FALSE;
-#else
 	ERROR2IF(pLexFile == NULL,FALSE,"BasePMFilter::ReadFromFile bad file pointer");
 	ERROR2IF(Info == NULL,FALSE,"BasePMFilter::ReadFromFile bad bitmap info pointer");
 	ERROR2IF(Bits == NULL,FALSE,"BasePMFilter::ReadFromFile bad bitmap data pointer");
@@ -716,8 +715,8 @@ BOOL BasePMFilter::ReadFromFile( CCLexFile* pLexFile, LPBITMAPINFO* Info, LPBYTE
 	*Bits = NULL;
 
 	// place to store the global palette, if present, for later use
-	LPRGBQUAD lpGlobalPalette 		= NULL;	// pointer to temporary palette store
-	INT32 GlobalPaletteSize 			= 0;	// size of the global palette found	 
+//	LPRGBQUAD lpGlobalPalette 		= NULL;	// pointer to temporary palette store
+//	INT32 GlobalPaletteSize 			= 0;	// size of the global palette found	 
 /*
 	// See if we are capable of parsing this, must be at least a LexFile.
 	// Check for DiskFile as derived off LexFile and required for binary reads
@@ -735,7 +734,7 @@ BOOL BasePMFilter::ReadFromFile( CCLexFile* pLexFile, LPBITMAPINFO* Info, LPBYTE
 	// Start it up.
 	if (ProgressString != NULL) BeginSlowJob(100, FALSE, ProgressString);
 
-	TRY
+	try
 	{
 		// A ppm file consists of:-
 		// - A "magic number" for identifying the file type. A ppm file's magic
@@ -898,7 +897,7 @@ BOOL BasePMFilter::ReadFromFile( CCLexFile* pLexFile, LPBITMAPINFO* Info, LPBYTE
 								{
 									// Must be one of the header numbers
 									INT32 Number; 
-									ok = (camSscanf(TokenBuf,"%d",&Number) == 1);
+									ok = (camSscanf(TokenBuf,_T("%d"),&Number) == 1);
 
 									// Now work out what to do with this
 									switch (Count)
@@ -1108,7 +1107,7 @@ TRACEUSER( "Neville", _T("BitsPerPixel = %d\n"), BitsPerPixel);
 		return TRUE;
 	}
 
-	CATCH( CFileException, e)
+	catch( CFileException )
 	{
 		// catch our form of a file exception
 		TRACEUSER( "Neville", _T("PPMFilter::ReadFromFile CC catch handler\n"));
@@ -1128,11 +1127,9 @@ TRACEUSER( "Neville", _T("BitsPerPixel = %d\n"), BitsPerPixel);
 		pLexFile->SetReportErrors( OldReportingState );
 		return FALSE;
 	}
-	END_CATCH
+	
 
 	ERROR2( FALSE, "Escaped exception clause somehow" );
-
-#endif
 }
 
 /********************************************************************************************
@@ -1323,7 +1320,7 @@ BOOL BasePMFilter::ReadASCIIFromFile( CCLexFile *pLexFile, LPBYTE pBits,
 	INT32 Number 	= 0; 
 
 	LPBYTE pData;
-	BYTE value 	= 0;
+//	BYTE value 	= 0;
 
 	BOOL NextPixel = TRUE;
 
@@ -1352,7 +1349,7 @@ BOOL BasePMFilter::ReadASCIIFromFile( CCLexFile *pLexFile, LPBYTE pBits,
 						case TOKEN_NONE:
 							{
 								// Must be one of the header numbers
-								ok = (camSscanf(TokenBuf,"%d",&Number) == 1);
+								ok = (camSscanf(TokenBuf,_T("%d"),&Number) == 1);
 
 								// Call the correct filters function to put the data into the bitmap itself
 								// in its own unique way, so long as we haven't failed already.
@@ -1581,7 +1578,7 @@ BOOL BasePMFilter::ReadBinaryFromFile( CCLexFile *pFile, LPBYTE pBits,
 
 BOOL BasePMFilter::ReadDataIntoBitmap(INT32 Number, INT32 * Count, LPBYTE * pData, BOOL * NextPixel)
 {
-	ERROR2(FALSE,"BasePMFilter::ReadDataIntoBitmap calling baseclass version!")	
+	ERROR2(FALSE,"BasePMFilter::ReadDataIntoBitmap calling baseclass version!");
 	return FALSE;	
 }
 

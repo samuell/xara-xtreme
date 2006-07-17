@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<resource>
+	<object class="wxDialog" name="STRINGTABLE_IMAGEMAGICK">
+		<title>String table from FILTRRESRC</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_FILTERNAME_IMAGEMAGICK">
+                                        <label>ImageMagick</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_FILTEREXT_IMAGEMAGICK">
+                                        <label>miff</label>
+                                </object>
+                        </object>
+			<object class="sizeritem">
+        		        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                        	<object class="wxStaticText" name="IDS_IMPORTMSG_IMAGEMAGICK">
+                			<label>Loading ImageMagick file...</label>
+	                        </object>
+		        </object>
+	        	<object class="sizeritem">
+	                        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+	                    	<object class="wxStaticText" name="IDS_EXPORTMSG_IMAGEMAGICK">
+	                     		<label>Exporting ImageMagick file...</label>
+		                </object>
+       	                </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_EXPORTINGMSG_IMAGEMAGICK">
+                                        <label>Exporting ImageMagick file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDN_MASKINGMSG_IMAGEMAGICK">
+                                        <label>Preparing mask for ImageMagick file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FILTERINFO">
+                                        <label>Load ImageMagick file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FILTERNAME">
+                                        <label>ImageMagick</label>
+                                </object>
+                        </object>
+		</object>
+        </object>
+</resource>
+
+

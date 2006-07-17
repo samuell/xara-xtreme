@@ -158,6 +158,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"		//For _R(IDS_CANCEL)
 #include "helpuser.h"		//For SetNextMsgHelpContext()
 //#include "resimmap.h"		//For _R(IDM_EXPORT_OVERWRITE)
+#include "imgmgkft.h"
 
 #include "webfiltr.h"		// The new web filter which is the minimilistic form of the new native filter
 #include "ftfilter.h"
@@ -787,7 +788,9 @@ PORTNOTETRACE("filter","Removed CamelotWebFilter usage");
 	ADD_FILTER(JPEGImportFilter)
 
 	ADD_FILTER(PNGFilter)
-
+#if _DEBUG
+	ADD_FILTER(ImageMagickFilter)
+#endif
 	ADD_FILTER(TI_GIFFilter)
 PORTNOTETRACE("filter","Removed TIFFFilter");
 #ifndef EXCLUDE_FROM_XARALX
