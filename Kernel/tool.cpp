@@ -1578,8 +1578,7 @@ void Tool_v1::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsB
 									  )
 	Author:		Phil_Martin (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	30/Jun/2006
-	Inputs:		nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
-				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+	Inputs:		PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
 				Click		- Type of click enum
 				Mods		- Modifier flags struct
 				pSpread		- pointer to spread upon which click occurred
@@ -1592,8 +1591,7 @@ void Tool_v1::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsB
 
 ********************************************************************************************/
 
-BOOL Tool_v1::OnRulerClick( UINT32 nFlags,
-							UserCoord PointerPos,
+BOOL Tool_v1::OnRulerClick( UserCoord PointerPos,
 							ClickType Click,
 							ClickModifiers Mods,
 							Spread* pSpread,

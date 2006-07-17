@@ -148,9 +148,9 @@ public:
 	BOOL DrawBitmap(MILLIPOINT ord, ResourceID BitmapID);
 	// Allow tools to start a drag after receiving an OnRulerClick call.
 	// Drag events will be dispatched via OnRulerClick.
-	BOOL StartToolDrag(UINT32 nFlags, UserCoord, String_256* pOpToken, OpParam* pParam);
+	BOOL StartToolDrag(ClickModifiers Mods, UserCoord, String_256* pOpToken, OpParam* pParam);
 
-	virtual BOOL OnRulerClick(UINT32 nFlags, OilCoord, ClickType, ClickModifiers);
+	virtual BOOL OnRulerClick(OilCoord, ClickType, ClickModifiers);
 
 protected:
 	RulerPair* pRulerPair;

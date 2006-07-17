@@ -972,10 +972,8 @@ void TextTool::OnMouseMove(DocCoord PointerPos, Spread* pSpread, ClickModifiers 
 
 void TextTool::GetRulerOrigin(Spread* pSpread, UserCoord *pOrigin)
 {
-	TRACEUSER("wuerthne", _T("GetRulerOrigin"));
 	if (TextInfoBarOp::IsRulerOriginClaimed())
 	{
-		TRACEUSER("wuerthne", _T("set origin"));
 		pOrigin->x = TextInfoBarOp::GetRulerOrigin();
 	}
 }
@@ -984,7 +982,7 @@ void TextTool::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL Is
 {
 	// we only draw onto the horizontal ruler and only if we have claimed it
 	if (!TextInfoBarOp::IsRulerOriginClaimed()) return;
-	TRACEUSER("wuerthne", _T("RenderRulerBlobs"));
+
 	// draw the highlighted background or the blobs
 	if (IsBackground)
 	{
@@ -998,13 +996,12 @@ void TextTool::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL Is
 
 /********************************************************************************************
 
->   BOOL TextTool::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+>   BOOL TextTool::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 								Spread* pSpread, RulerBase* pRuler)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	07/07/06
-	Inputs:     nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
-				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+	Inputs:     PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
 				Click		- Type of click enum
 				Mods		- Modifier flags struct
 				pSpread		- pointer to spread upon which click occurred
@@ -1014,13 +1011,11 @@ void TextTool::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL Is
 
 ********************************************************************************************/
 
-BOOL TextTool::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+BOOL TextTool::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 							Spread* pSpread, RulerBase* pRuler)
 {
 	if (!TextInfoBarOp::IsRulerOriginClaimed()) return FALSE;
-
-	TRACEUSER("wuerthne", _T("TextTool OnRulerClick %d at %d"), Click, PointerPos.x);
-	return TextInfoBarOp::OnRulerClick(nFlags, PointerPos, Click, Mods, pSpread, pRuler);
+	return TextInfoBarOp::OnRulerClick(PointerPos, Click, Mods, pSpread, pRuler);
 }
 
 
@@ -1272,6 +1267,7 @@ BOOL TextTool::HandleSpecialNonStoryKeys(KeyPress* pKeyPress)
 
 BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, CaretNode* pCaret)
 {
+	TRACEUSER("wuerthne", _T("HandleSpecialStoryKeys %d"), pKeyPress->GetVirtKey());
 	ERROR3IF(pKeyPress == NULL, "KeyPress pointer was NULL");
 	ERROR3IF(pStory == NULL, "Story pointer was NULL");
 	ERROR3IF(pCaret == NULL, "Caret pointer was NULL");

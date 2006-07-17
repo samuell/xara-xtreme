@@ -342,7 +342,7 @@ BOOL RulerBase::DrawBitmap(MILLIPOINT ord, ResourceID BitmapID)
 
 ********************************************************************************************/
 
-BOOL RulerBase::OnRulerClick(UINT32 nFlags, OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
+BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifiers Mods)
 {
 	ERROR3IF(pRulerPair==NULL, "pRulerPair unexpectedly NULL");
 	ERROR3IF(pRulerPair->GetpSpread()==NULL, "pRulerPair->pSpread unexpectedly NULL");
@@ -384,12 +384,28 @@ BOOL RulerBase::OnRulerClick(UINT32 nFlags, OilCoord PointerPos, ClickType Click
 	UserPos.translate(-Offsets.x, -Offsets.y);
 
 	if (Tool::GetCurrent())
-		return Tool::GetCurrent()->OnRulerClick(nFlags, UserPos, Click, Mods, pSpread, this);
+		return Tool::GetCurrent()->OnRulerClick(UserPos, Click, Mods, pSpread, this);
 
 	return FALSE;
 }
 
-BOOL RulerBase::StartToolDrag(UINT32 nFlags, UserCoord PointerPos, String_256* pOpToken, OpParam* pParam)
+/********************************************************************************************
+
+> 	BOOL RulerBase::StartToolDrag(ClickModifiers Mods, UserCoord PointerPos,
+								  String_256* pOpToken, OpParam* pParam)
+
+    Author: 	Martin Wuerthner <xara@mw-software.com>
+    Created:	12/07/06
+	Inputs:		Mods - click modifiers (as passed to OnRulerClick)
+				PointerPos - pointer position (as passed to OnRulerClick)
+				pOpToken - name of the operation to invoke for handling the drag
+				pParam - the parameters to pass to the operation
+    Purpose:    Allows tools to start a drag operation on the ruler
+                   			                                     
+********************************************************************************************/
+
+BOOL RulerBase::StartToolDrag(ClickModifiers Mods, UserCoord PointerPos,
+							  String_256* pOpToken, OpParam* pParam)
 {
 	// Find the spread in which the click happened
 	Spread *pSpread = pRulerPair->GetpSpread();
@@ -402,7 +418,7 @@ BOOL RulerBase::StartToolDrag(UINT32 nFlags, UserCoord PointerPos, String_256* p
 	PointerPos.translate(Offsets.x, Offsets.y);
 
 	OilCoord OilPos = PointerPos.ToSpread(pSpread).ToOil(pSpread,pDocView);
-	return pOILRuler->StartToolDrag(nFlags, OilPos, pOpToken, pParam);
+	return pOILRuler->StartToolDrag(Mods, OilPos, pOpToken, pParam);
 }
 
 

@@ -343,11 +343,11 @@ BOOL OILRuler::StartDrag(UINT32 nFlags, wxPoint point)
 }
 
 /********************************************************************************************
->	BOOL OILRuler::StartToolDrag(UINT32 nFlags, wxPoint point, String_256* OpToken, void* Params)
+>	BOOL OILRuler::StartToolDrag(ClickModifiers Mods, wxPoint point, String_256* OpToken, void* Params)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	12/07/06
-	Input:      nFlags - the mouse event flags (as passed to OnRulerClick)
+	Input:      Mods - the click modifiers (as passed to OnRulerClick)
 				point - the pointer position (as passed to OnRulerClick)
 				OpToken - name of the operation to invoke
 				Params - an opaque pointer to the parameters for the operation
@@ -355,13 +355,13 @@ BOOL OILRuler::StartDrag(UINT32 nFlags, wxPoint point)
 	Purpose:	StartDrag function for tool drags.
 ********************************************************************************************/
                     
-BOOL OILRuler::StartToolDrag(UINT32 nFlags, OilCoord point, String_256* pOpToken, OpParam* pParam)
-{ 
+BOOL OILRuler::StartToolDrag(ClickModifiers Mods, OilCoord point, String_256* pOpToken, OpParam* pParam)
+{
 	if (m_pOwnerView != NULL)
 	{
 		DocView* pDocView = m_pOwnerView->GetDocViewPtr();
 		wxPoint ClientPoint = point.ToWin(pDocView);
-		m_pOwnerView->InvokeDragOp(pOpToken, pParam, nFlags, ClientPoint);
+		m_pOwnerView->InvokeDragOp(pOpToken, pParam, Mods, ClientPoint);
 		return TRUE;
 	}
 
@@ -1002,7 +1002,7 @@ PORTNOTE("other","Removed reading of keyboard autorepeat rate")
 
 	// Convert the click position to OIL coordinates before passing to the kernel.
 	OilCoord ocoord = ClientToOil(pDocView, point);
-	return pKernelRuler->OnRulerClick(nFlags, ocoord, t, m_LastClickMods);
+	return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
 }
 
 
@@ -1072,7 +1072,7 @@ BOOL OILRuler::HandleRulerUpEvent(UINT32 Button, WinCoord point)
 			m_FirstClickButton = 0;
 
 			//Then pass the Up-Click message to CCamView::OnClick
-			return pKernelRuler->OnRulerClick(0, ocoord, CLICKTYPE_UP, m_LastClickMods);
+			return pKernelRuler->OnRulerClick(ocoord, CLICKTYPE_UP, m_LastClickMods);
 		}
 	}
 	else

@@ -366,8 +366,7 @@ public:
 	virtual void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
 
 	// Allow the Current Tool to handle Ruler clicks
-	virtual BOOL OnRulerClick( UINT32 nFlags,
-							   UserCoord PointerPos,
+	virtual BOOL OnRulerClick( UserCoord PointerPos,
 							   ClickType Click,
 							   ClickModifiers Mods,
 							   Spread* pSpread,

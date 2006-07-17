@@ -212,7 +212,7 @@ public:
 	// new event handles for handling tab stops on the page ruler
 	void GetRulerOrigin(Spread*,UserCoord*);
 	void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
-	BOOL OnRulerClick( UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+	BOOL OnRulerClick( UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 					   Spread* pSpread, RulerBase* pRuler);
 
 

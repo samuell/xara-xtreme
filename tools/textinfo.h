@@ -314,7 +314,7 @@ public:
 	static void ReleaseRuler();
 	static void HighlightRulerSection(RulerBase* pRuler, UserRect& UpdateRect);
 	static void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect);
-	static BOOL OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+	static BOOL OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 							 Spread* pSpread, RulerBase* pRuler);
 
 	static void ForceRulerRedraw();

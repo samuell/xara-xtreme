@@ -3168,13 +3168,12 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 
 /********************************************************************************************
 
->   BOOL TextInfoBarOp::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+>   BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 									 Spread* pSpread, RulerBase* pRuler)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	07/07/06
-	Inputs:     nFlags      - synthesized mouse event flags (to be passed through to StartToolDrag)
-				PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+	Inputs:     PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
 				Click		- Type of click enum
 				Mods		- Modifier flags struct
 				pSpread		- pointer to spread upon which click occurred
@@ -3184,7 +3183,7 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 
 ********************************************************************************************/
 
-BOOL TextInfoBarOp::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
+BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 								 Spread* pSpread, RulerBase* pRuler)
 {
 	if (!pRuler->IsHorizontal()) return FALSE;
@@ -3296,7 +3295,7 @@ BOOL TextInfoBarOp::OnRulerClick(UINT32 nFlags, UserCoord PointerPos, ClickType 
 			TRACEUSER("wuerthne", _T("starting drag"));
 			TabStopDragOpParam* pParam = new TabStopDragOpParam(DragType, DraggedTabStop, PointerPos);
 			
-			if (pRuler->StartToolDrag(nFlags, PointerPos, &OpToken, pParam))
+			if (pRuler->StartToolDrag(Mods, PointerPos, &OpToken, pParam))
 			{
 				// the kernel has accepted the drag request
 				TextInfoBarOp::TabStopDragStarting(DragType);
