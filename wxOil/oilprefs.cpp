@@ -328,11 +328,13 @@ void OILPreferences::Read(LPTCHAR Section, LPTCHAR PrefName,
 		{
 			// Just get the string - need to ask for the address of the String's
 			// text buffer so we can pass it to the SDK profile API.
-				wxString str;
-				wxConfig::Read(strKey, &str);
+			wxString str;
+			if (wxConfig::Read(strKey, &str))
+			{
 				str.Truncate(256);
 				*(pData.pString) = (LPCTSTR)str;
 //				*(pData.pString) = String_256(str);	// use this form when StringBase derived classes support direct conversion
+			}
 			break;
 		}
 
