@@ -1,11 +1,11 @@
 // $Id: pngfiltr.h 809 2006-04-13 11:28:42Z phil $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
- 
-               Xara LX, a vector drawing and manipulation program.
-                    Copyright (C) 1993-2006 Xara Group Ltd.
-       Copyright on certain contributions may be held in joint with their
-              respective authors. See AUTHORS file for details.
+
+			Xara LX, a vector drawing and manipulation program.
+					Copyright (C) 1993-2006 Xara Group Ltd.
+	Copyright on certain contributions may be held in joint with their
+			respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-  http://www.xaraxtreme.org/developers/
+http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-  http://www.xaraxtreme.org/developers/contribute/
+http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-                        http://www.xara.com/
+	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+						http://www.xara.com/
 
 =================================XARAHEADEREND============================
- */
+*/
 //
 
 #ifndef INC_IMGMGKFT_H
@@ -124,7 +124,7 @@ CC_DECLARE_DYNCREATE(ImageMagickExportOptions)
 public:
 	static BOOL Declare();
 
-    ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName);
+	ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 	ImageMagickExportOptions() {};
 
 	virtual BOOL	GetSupportsImageMap() { return TRUE; }
@@ -170,12 +170,12 @@ public:
 	// Import related functions
 	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);
 	// This is the function for native/web files to use
-    virtual BOOL ReadFromFile(OILBitmap* pOilBitmap, BaseCamelotFilter* pFilter,
-							  CCLexFile* pFile, BOOL IsCompressed);
+	virtual BOOL ReadFromFile(OILBitmap* pOilBitmap, BaseCamelotFilter* pFilter,
+							CCLexFile* pFile, BOOL IsCompressed);
 
 	// Function for web/native filters to use to write out the bitmap data to file
 	virtual BOOL WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFilter* pFilter,
-								   CCLexFile* pFile, INT32 Compression);
+								CCLexFile* pFile, INT32 Compression);
 
 	// Check if this Bitmap filter can cope with saving at this Bpp/Colour depth
 	virtual BOOL IsThisBppOk(UINT32 Bpp);
@@ -192,7 +192,7 @@ protected:
 
 	// Invert the alpha channel.
 	virtual void InvertAlpha ( LPBITMAPINFO	lpBitmapInfo,
-							   LPBYTE		lpBits );
+							LPBYTE		lpBits );
 
 	// Get the correct output DIB.
 	virtual OutputDIB* GetOutputDIB ( void );
@@ -216,17 +216,18 @@ protected:
 	// this is used for the actual writing of the file
 	BOOL WriteDataToFile( BOOL End, UINT32 Bpp, UINT32 Compression);
 	BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
-						 	  String_64* ProgressString = NULL);
+							String_64* ProgressString = NULL);
 
 	// This is the form used for direct saving bitmaps into the native/web file format
 	BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
-							  BOOL Interlace, INT32 TransparentColour,
-						 	  BaseCamelotFilter* pFilter = NULL);
+							BOOL Interlace, INT32 TransparentColour,
+							BaseCamelotFilter* pFilter = NULL);
 
 	void AlterPaletteContents( LPLOGPALETTE pPalette );//ap
 
 	virtual BOOL CreateTempFile();
-	virtual BOOL ProcessTempFile(CCLexFile * File);
+	virtual BOOL ConvertFromTempFile(CCLexFile * File);
+	virtual BOOL ConvertToTempFile(CCLexFile * File);
 	virtual BOOL TidyTempFile(BOOL Delete = TRUE);
 
 #ifdef DO_EXPORT

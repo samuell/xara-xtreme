@@ -1,11 +1,11 @@
 // $Id: pngfiltr.cpp 1282 2006-06-09 09:46:49Z alex $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
- 
-               Xara LX, a vector drawing and manipulation program.
-                    Copyright (C) 1993-2006 Xara Group Ltd.
-       Copyright on certain contributions may be held in joint with their
-              respective authors. See AUTHORS file for details.
+
+			Xara LX, a vector drawing and manipulation program.
+					Copyright (C) 1993-2006 Xara Group Ltd.
+	Copyright on certain contributions may be held in joint with their
+			respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-  http://www.xaraxtreme.org/developers/
+http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-  http://www.xaraxtreme.org/developers/contribute/
+http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-                        http://www.xara.com/
+	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+						http://www.xara.com/
 
 =================================XARAHEADEREND============================
- */
+*/
 
 // A ImageMagick import/export filter 
 
@@ -275,7 +275,7 @@ BOOL ImageMagickFilter::Init()
 /********************************************************************************************
 
 >	INT32 ImageMagickFilter::HowCompatible(PathName& Filename, ADDR HeaderStart, UINT32 HeaderSize, 
-								 UINT32 FileSize)
+								UINT32 FileSize)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/4/96
@@ -289,12 +289,12 @@ BOOL ImageMagickFilter::Init()
 
 ********************************************************************************************/
 INT32 ImageMagickFilter::HowCompatible(PathName& Filename, ADDR HeaderStart, UINT32 HeaderSize, 
-							 UINT32 FileSize)
+							UINT32 FileSize)
 {
 	// We need to remember what we thought of this file in our class variable.
 	// So, set it to a nice default value at the start.
 	ImageMagickHowCompatible = ((Filename.GetType() == _T("miff")) ||
-							    (Filename.GetType() == _T("miff")) ) ? 10:0;
+								(Filename.GetType() == _T("miff")) ) ? 10:0;
 
 	// Return the found value to the caller.
 	return ImageMagickHowCompatible;
@@ -320,7 +320,7 @@ BOOL ImageMagickFilter::IsThisBppOk(UINT32 Bpp)
 /********************************************************************************************
 
 >	BOOL ImageMagickFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* pFilter,
-								  CCLexFile* pFile, BOOL IsCompressed)
+								CCLexFile* pFile, BOOL IsCompressed)
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	20/7/96
@@ -342,7 +342,7 @@ BOOL ImageMagickFilter::IsThisBppOk(UINT32 Bpp)
 
 ********************************************************************************************/
 BOOL ImageMagickFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* pFilter,
-							  CCLexFile* pFile, BOOL IsCompressed)
+							CCLexFile* pFile, BOOL IsCompressed)
 {
 	ERROR2IF(pOilBitmap == NULL,FALSE,"BMPFilter::ReadFromFile null OilBitmap pointer");
 	ERROR2IF(pFilter == NULL,FALSE,"BMPFilter::ReadFromFile null pFilter pointer");
@@ -357,7 +357,11 @@ BOOL ImageMagickFilter::ReadFromFile( OILBitmap* pOilBitmap, BaseCamelotFilter* 
 	INT32 TransColour = -1;
 
 	// Read from file,using pFilter for progress bar updates
-	if (!PNGUtil::ReadFromFile(pFile, pInfo, pBytes, &TransColour, NULL, pFilter))
+	BOOL ok = ConvertToTempFile(pFile); 
+	if (ok)
+		ok = PNGUtil::ReadFromFile(TempFile, pInfo, pBytes, &TransColour, NULL, pFilter);
+	TidyTempFile();
+	if (!ok)
 		return FALSE;
 
 	if(pWBitmap->BMInfo->bmiHeader.biBitCount == 32)
@@ -416,7 +420,11 @@ BOOL ImageMagickFilter::ReadFromFile(OILBitmap* pOilBitmap)
 	INT32 TransColour = -1;
 
 	// The ImageMagick filter liked it very much and so use it, showing progress bar
-	if (!PNGUtil::ReadFromFile(pImportFile, pInfo, pBytes, &TransColour, &ProgressString))
+	BOOL ok = ConvertToTempFile(pImportFile); 
+	if (ok)
+		ok = PNGUtil::ReadFromFile(TempFile, pInfo, pBytes, &TransColour, &ProgressString);
+	TidyTempFile();
+	if (!ok)
 		return FALSE;
 
 	SetTransColour(TransColour);
@@ -686,7 +694,7 @@ BOOL ImageMagickFilter::EndWriteToFile()
 			ok = DestImageMagick.OutputPNGBits(TempFile, DestImageMagick.GetDestBitmapBits());
 			DestImageMagick.TidyUp();
 			if (ok)
-				ok=ProcessTempFile(OutputFile);
+				ok=ConvertFromTempFile(OutputFile);
 
 			EndSlowJob();
 		}
@@ -717,8 +725,8 @@ BOOL ImageMagickFilter::EndWriteToFile()
 	Inputs:		End - TRUE if this is the last block of the file.
 				Bpp - output depth in terms of bits per pixel
 				Compression - usually True if compression required, False otherwise
-							  In the ImageMagick case this is used to pass in the transparency and
-							  interlace state.
+							In the ImageMagick case this is used to pass in the transparency and
+							interlace state.
 	Returns:	TRUE if worked, FALSE if errored.
 	Purpose:	Physically put the bitmap into the disk.
 				NOTE - ONLY COPES WITH End=TRUE currently
@@ -796,8 +804,8 @@ BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double Dp
 /********************************************************************************************
 
 >	virtual BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap,
-											  BaseCamelotFilter*pFilter,
-											  CCLexFile* pFile, INT32 Compression);
+											BaseCamelotFilter*pFilter,
+											CCLexFile* pFile, INT32 Compression);
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/6/96
 	Inputs:		pKernelBitmap	- Pointer to the bitmap to be exported.
@@ -815,7 +823,7 @@ BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, double Dp
 
 ********************************************************************************************/
 BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamelotFilter* pFilter,
-										 CCLexFile* pFile, INT32 Compression)
+										CCLexFile* pFile, INT32 Compression)
 {
 	ERROR2IF(pKernelBitmap == NULL,FALSE, "ImageMagickFilter::WriteBitmapToFile null pKernelBitmap");
 	ERROR2IF(pFilter == NULL,FALSE, "ImageMagickFilter::WriteBitmapToFile null pFilter");
@@ -859,8 +867,8 @@ BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamel
 /********************************************************************************************
 
 >	static BOOL ImageMagickFilter::WriteToFile ( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
-										 BOOL Interlace, INT32 Transparent,
-										 BaseCamelotFilter* pFilter = NULL )
+										BOOL Interlace, INT32 Transparent,
+										BaseCamelotFilter* pFilter = NULL )
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	10/7/96
@@ -893,8 +901,8 @@ BOOL ImageMagickFilter::WriteBitmapToFile(KernelBitmap* pKernelBitmap, BaseCamel
 
 ********************************************************************************************/
 BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
-							 BOOL Interlace, INT32 TransparentColour,
-							 BaseCamelotFilter* pFilter )
+							BOOL Interlace, INT32 TransparentColour,
+							BaseCamelotFilter* pFilter )
 {
 #ifdef DO_EXPORT
 	ERROR2IF(File==NULL,FALSE,"ImageMagickFilter::WriteToFile File pointer is null");
@@ -932,7 +940,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 		// reset this as otherwise the next bitmap export may go wrong as it calls the tidy up
 		// and so will refer to the deleted CCFile. Oh Er!
 		DestImageMagick.TidyUp();
-		ProcessTempFile(File);
+		ConvertFromTempFile(File);
 	}
 	else
 	{
@@ -951,7 +959,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 /********************************************************************************************
 
 >	static BOOL ImageMagickFilter::WriteToFile ( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
-										 String_64* ProgressString = NULL )
+										String_64* ProgressString = NULL )
 
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	26/4/96
@@ -979,7 +987,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 
 ********************************************************************************************/
 BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE Bits,
-							 String_64* ProgressString )
+							String_64* ProgressString )
 {
 #ifdef DO_EXPORT
 
@@ -1044,7 +1052,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 		{
 			if (Info->bmiColors[i].rgbReserved == 0xFF)
 			{
-			 	Transparent = i;
+				Transparent = i;
 				TRACEUSER( "Neville", _T("ImageMagick output with transp index of %d\n"),Transparent);
 				break;
 			}		
@@ -1072,7 +1080,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 
 	// process it
 	if (ok)
-		ok = ProcessTempFile(File);
+		ok = ConvertFromTempFile(File);
 
 	// If started, then stop then progress bar
 	if (ProgressString != NULL)
@@ -1181,7 +1189,7 @@ BOOL ImageMagickFilter::WritePreSecondPass(void)
 /********************************************************************************************
 
 >	virtual void ImageMagickFilter::InvertAlpha ( LPBITMAPINFO	lpBitmapInfo,
-										  LPBYTE		lpBits )
+										LPBYTE		lpBits )
 
 	Author:		Graeme_Sutherland (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	27/6/00
@@ -1192,7 +1200,7 @@ BOOL ImageMagickFilter::WritePreSecondPass(void)
 
 ********************************************************************************************/
 void ImageMagickFilter::InvertAlpha ( LPBITMAPINFO	lpBitmapInfo,
-							  LPBYTE		lpBits )
+							LPBYTE		lpBits )
 {
 	DIBUtil::InvertAlpha(lpBitmapInfo, lpBits);
 }
@@ -1243,7 +1251,7 @@ void ImageMagickFilter::AlterPaletteContents( LPLOGPALETTE pPalette )
 
 	Author:		Alex Bligh <alex@alex.org.uk>
 	Created:	18/07/2006
-	Purpose:	Create a temporary file
+	Purpose:	Create an expty temporary file
 	Inputs:		None
 	Outputs:	None
 	Returns:	TRUE on success, FALSE on error
@@ -1273,10 +1281,9 @@ BOOL ImageMagickFilter::CreateTempFile()
 	return TRUE;
 }
 
-
 /********************************************************************************************
 
->	BOOL ImageMagickFilter::ProcessTempFile(CCLexFile * File)
+>	BOOL ImageMagickFilter::ConvertFromTempFile(CCLexFile * File)
 
 	Author:		Alex Bligh <alex@alex.org.uk>
 	Created:	18/07/2006
@@ -1288,12 +1295,12 @@ BOOL ImageMagickFilter::CreateTempFile()
 
 ********************************************************************************************/
 
-BOOL ImageMagickFilter::ProcessTempFile(CCLexFile * File)
+BOOL ImageMagickFilter::ConvertFromTempFile(CCLexFile * File)
 {
 	PathName OutputPath = File->GetPathName();
-	ERROR2IF(!OutputPath.IsValid(), FALSE, "ImageMagickFilter::WriteToFile can only be used on real files");
+	ERROR2IF(!OutputPath.IsValid(), FALSE, "ImageMagickFilter::ConvertFromTempFile can only be used on real files");
 
-	ERROR2IF(!TempFile || TempFileName.IsEmpty(), FALSE, "ImageMagickFilter::ProcessTempFile has no temporary file to process");
+	ERROR2IF(!TempFile || TempFileName.IsEmpty(), FALSE, "ImageMagickFilter::ConvertFromTempFile has no temporary file to process");
 	TempFile->close();
 
 	wxChar * cifn;
@@ -1323,6 +1330,61 @@ BOOL ImageMagickFilter::ProcessTempFile(CCLexFile * File)
 	}
 
 	TidyTempFile(); // ensures filename zapped so it isn't removed later
+
+	return TRUE;		
+}
+
+
+
+/********************************************************************************************
+
+>	BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	Process the passed file into the temp file by calling ImageMagick
+	Inputs:		file - the CCLexFile for the source file
+	Outputs:	None
+	Returns:	TRUE on success, FALSE on error
+	Notes:		-
+
+********************************************************************************************/
+
+BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
+{
+	if (!CreateTempFile())
+		return FALSE;
+
+	PathName InputPath = File->GetPathName();
+	ERROR2IF(!InputPath.IsValid(), FALSE, "ImageMagickFilter::ConvertToTempFile can only be used on real files");
+
+	ERROR2IF(!TempFile || TempFileName.IsEmpty(), FALSE, "ImageMagickFilter::ConvertToTempFile has no temporary file to process");
+	TempFile->close();
+
+	wxChar * cifn;
+	wxChar * cofn;
+	wxChar * pcommand=_T("/usr/bin/convert");
+	wxChar * IMargv[4];
+
+	// get filename in usable form
+	cifn = camStrdup(wxString(_T("miff:"))+(const TCHAR *)(InputPath.GetPath()));
+	cofn = camStrdup(wxString(_T("png:"))+TempFileName );
+
+	// Now convert the file
+	IMargv[0]=pcommand;
+	IMargv[1]=cifn;
+	IMargv[2]=cofn;
+	IMargv[3]=NULL;
+	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC);
+	
+	free(cifn);
+	free(cofn);
+
+	if (ret)
+	{
+		TidyTempFile();
+		ERROR1(FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+	}
 
 	return TRUE;		
 }
