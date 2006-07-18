@@ -232,7 +232,7 @@ BOOL CTemplateManager::Init()
 	{
 		ms_strDefaultDrawingTemplate=String_256(_R(IDS_DEFAULTDOCNAME));
 
-PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
+PORTNOTETRACE("other","CTemplateManager::Init - remove code to setup paths");
 #if !defined(EXCLUDE_FROM_XARALX)
 		//Then assume it's the exe path with \templates\drawing.xar on the end
 		TCHAR Pathname[MAX_PATH];
@@ -314,7 +314,7 @@ PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
 String_256& CTemplateManager::GetTemplatesPath()
 {
 	// Add a trailing slash if it hasn't got one
-	SGLibOil::AppendSlashIfNotPresent(&m_TemplatesPath);
+	SGLibOil::AppendSlashIfNotPresent(&m_LocalTemplatesPath);
 
 	return m_LocalTemplatesPath;
 }
@@ -337,12 +337,12 @@ void CTemplateManager::SetTemplatesPath(String_256& strToSet)
 	m_LocalTemplatesPath = strToSet;
 
 	// Add a trailing slash if it hasn't got one
-	SGLibOil::AppendSlashIfNotPresent(&m_TemplatesPath);
+	SGLibOil::AppendSlashIfNotPresent(&m_LocalTemplatesPath);
 }
 
 /********************************************************************************************
 
->   PathName DocOps::GetDefaultAnimationTemplate()
+>   PathName CTemplateManager::GetDefaultAnimationTemplate()
 
 	Author:         Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
 	Created:        23/10/97
@@ -364,7 +364,7 @@ PathName CTemplateManager::GetDefaultAnimationTemplate()
 
 /********************************************************************************************
 
->   PathName DocOps::GetDefaultDrawingTemplate()
+>   PathName CTemplateManager::GetDefaultDrawingTemplate()
 
 	Author:         Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
 	Created:        23/10/97
@@ -384,6 +384,24 @@ PathName CTemplateManager::GetDefaultDrawingTemplate()
 	return pathToReturn;
 }
 
+
+/********************************************************************************************
+
+>   PathName CTemplateManager::GetTemplateList( CTemplateList* pList, const String_256& strTemplatePath, bool fLocal )
+
+	Author:         Luke_Hart (Xara Group Ltd) <lukehart@xara.com>
+	Created:        18/07/2006
+	Inputs:         const String_256& strTemplatePath	Path to directory to scan
+					bool fLocal							Value local flag to stroe in list 
+	Outputs:        CTemplateList* pList				The returned list
+	Returns:        Nothing
+	Purpose:        INTERNAL - Fill the list of templates with all templates in specified directory,
+					marking each with specified user local flag
+	Errors:         -
+	SeeAlso:        -
+
+********************************************************************************************/
+
 void CTemplateManager::GetTemplateList( CTemplateList* pList, const String_256& strTemplatePath, bool fLocal )
 {
 	// Don't bother with any of this is directory is invalid
@@ -394,6 +412,7 @@ void CTemplateManager::GetTemplateList( CTemplateList* pList, const String_256& 
 	//Start by setting the leaf name to *.xar
 	String_256			strSearchFilename( _R(IDS_NEWTEMPLATES_DEFAULTTEMPLATEEXTENSION) );
 
+	// Get the default entry names
 	String_256			strPathOfDrawingTemplate   = CTemplateManager::GetDefaultDrawingTemplate().GetPath(FALSE);
 	strPathOfDrawingTemplate.SwapChar( _T('_'), _T(' ') );
 	String_256			strPathOfAnimationTemplate = CTemplateManager::GetDefaultAnimationTemplate().GetPath(FALSE);
@@ -433,15 +452,35 @@ void CTemplateManager::GetTemplateList( CTemplateList* pList, const String_256& 
 	Error::ClearError();
 }
 
+
+/********************************************************************************************
+
+>   PathName CTemplateManager::GetTemplateMenuName( UINT32 ordNumberOfTemplate, String_256* pStrNameOfFile )
+
+	Author:         Luke_Hart (Xara Group Ltd) <lukehart@xara.com>
+	Created:        18/07/2006
+	Inputs:         UINT32 ordNumberOfTemplate		Ordinal of template to query
+	Outputs:        String_256* pStrNameOfFile		Name that is returned
+	Returns:        True on success, else false if template with ordinal doesn't exist
+	Purpose:        Return the name to use in the New menu in pStrNameOfFile for the template
+					with ordinal ordNumberOfTemplate.
+	Errors:         -
+	SeeAlso:        -
+
+********************************************************************************************/
+
 bool CTemplateManager::GetTemplateMenuName( UINT32 ordNumberOfTemplate, String_256* pStrNameOfFile )
 {
+	// Fill the list with all templates (user local, begin second will over-write system ones)
 	CTemplateList		setSortFilename;
 	GetTemplateList( &setSortFilename, m_TemplatesPath, false );
 	GetTemplateList( &setSortFilename, m_LocalTemplatesPath, true );
 
+	// If the template with ordinal doesn't exist, fail
 	if( ordNumberOfTemplate > UINT32(setSortFilename.size()) )
 		return false;
 
+	// Get enbry for template
 	CTemplateList::iterator iter = setSortFilename.begin();
 	for( UINT32 i = 1; i < ordNumberOfTemplate; ++i, ++iter )
 	{ /*Do nothing!*/ }
@@ -452,19 +491,39 @@ bool CTemplateManager::GetTemplateMenuName( UINT32 ordNumberOfTemplate, String_2
 	return true;
 }
 
+
+/********************************************************************************************
+
+>   PathName CTemplateManager::GetTemplateFilename( UINT32 ordNumberOfTemplate, String_256* pStrNameOfFile )
+
+	Author:         Luke_Hart (Xara Group Ltd) <lukehart@xara.com>
+	Created:        18/07/2006
+	Inputs:         UINT32 ordNumberOfTemplate		Ordinal of template to query
+	Outputs:        String_256* pStrNameOfFile		Path that is returned
+	Returns:        True on success, else false if template with ordinal doesn't exist
+	Purpose:        Return the path to template with ordinal ordNumberOfTemplate in pStrNameOfFile.
+	Errors:         -
+	SeeAlso:        -
+
+********************************************************************************************/
+
 bool CTemplateManager::GetTemplateFilename( UINT32 ordNumberOfTemplate, String_256* pStrNameOfFile )
 {
+	// Fill the list with all templates (user local, begin second will over-write system ones)
 	CTemplateList		setSortFilename;
 	GetTemplateList( &setSortFilename, m_TemplatesPath, false );
 	GetTemplateList( &setSortFilename, m_LocalTemplatesPath, true );
 
+	// If the template with ordinal doesn't exist, fail
 	if( ordNumberOfTemplate > UINT32(setSortFilename.size()) )
 		return false;
 
+	// Get enbry for template
 	CTemplateList::iterator iter = setSortFilename.begin();
 	for( UINT32 i = 1; i < ordNumberOfTemplate; ++i, ++iter )
 	{ /*Do nothing!*/ }
 
+	// Pre-pend the path to the template
 	PathName			pathTemplates = iter->second ? m_LocalTemplatesPath : m_TemplatesPath;
 	pathTemplates.SetFileNameAndType( iter->first );
 
