@@ -165,7 +165,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "registry.h"
 //#include "register.h"
 //#include "liveeffectres.h"
-
+#include "tmplmngr.h"
 
 #if (_OLE_VER >= 0x200)
 	#include "srvritem.h"
@@ -264,31 +264,6 @@ BOOL ViewOps::DoFullScreen = FALSE;
 		ERRORIF(!Blobby, _R(IDE_NOMORE_MEMORY), FALSE);\
 	}
 
-/********************************************************************************************
-
-	Preference:		DefaultAnimationTemplate
-	Section:		Templates
-	Range:			String
-	Purpose:		The path to the default animation template. By default, this
-					is the EXE path with "\templates\animation.xar" added to the end
-	SeeAlso:		-
-
-********************************************************************************************/
-
-String_256 DocOps::ms_strDefaultAnimationTemplate = _T("");
-
-/********************************************************************************************
-
-	Preference:		DefaultDrawingTemplate
-	Section:		Templates
-	Range:			String
-	Purpose:		The path to the default drawing template. By default, this
-					is the EXE path with "\templates\drawing.xar" added to the end
-	SeeAlso:		-
-
-********************************************************************************************/
-
-String_256 DocOps::ms_strDefaultDrawingTemplate = _T("");
 
 
 
@@ -491,7 +466,7 @@ OpState DocOps::GetState(String_256* UIDescription, OpDescriptor* pOp)
 		//We need to change the name of the command to the name of the
 		//default template file, converted so the first character
 		//is upper case and the rest is lower
-		PathName pathDefaultDrawingTemplate=GetDefaultDrawingTemplate();
+		PathName pathDefaultDrawingTemplate = CTemplateManager::GetDefaultDrawingTemplate();
 
 		String_256 strToReturn=pathDefaultDrawingTemplate.GetFileName(FALSE);
 
@@ -545,91 +520,34 @@ PORTNOTE("other", "Remove template existance check - too annoying while it's not
 		pOp->Token == String(OPTOKEN_FILENEW_TEMPLATE9) ||
 		pOp->Token == String(OPTOKEN_FILENEW_TEMPLATE10))
 	{
-		//First find the default template path
-		Application* pApplication=GetApplication();
-
-		PathName pathTemplates=pApplication->GetTemplatesPath();
-
-		//Now search that path for templates
-		//Start by setting the leaf name to *.xar
-		String_256 strSearchFilename(_R(IDS_NEWTEMPLATES_DEFAULTTEMPLATEEXTENSION));
-
-		pathTemplates.SetFileNameAndType(strSearchFilename);
-
 		//Now find out which template in that path we want
 		//(This code isn't particularly pleasant)
-		String_256 strNumberOfTemplate;
-
-		INT32 iPositionOfFCharacter=pOp->Token.FindNextChar( 'F', 0 );
+		INT32			iPositionOfFCharacter = pOp->Token.FindNextChar( 'F', 0 );
 		TRACEUSER( "jlh92", _T("Token = %s(%d)\n"), PCTSTR(pOp->Token), iPositionOfFCharacter );
-		
-		pOp->Token.Left(&strNumberOfTemplate, iPositionOfFCharacter);
+		String_256		strNumberOfTemplate;
+		pOp->Token.Left( &strNumberOfTemplate, iPositionOfFCharacter );
 
-		TCHAR* pszTmp;
-		INT32 iNumberOfTemplate = camStrtol( (TCHAR *)strNumberOfTemplate, &pszTmp, 10 );
-
-		//And search the path for xar files that are
-		//NOT the default animation or drawing templates
-		String_256 strTemplates=pathTemplates.GetPath(FALSE);
-		if (FileUtil::StartFindingFiles(&strTemplates))
-		{
-			String_256 strNameOfFile;
-			PathName pathOfFile=pathTemplates;
-
-			TRACEUSER( "jlh92", _T("SFF = true\n") );
-
-			String_256 strPathOfDrawingTemplate=GetDefaultDrawingTemplate().GetPath(FALSE);
-			String_256 strPathOfAnimationTemplate=GetDefaultAnimationTemplate().GetPath(FALSE);
-			strPathOfDrawingTemplate.SwapChar( _T('_'), _T(' ') );
-			String_256 strPathOfFile;
-
-			TRACEUSER( "jlh92", _T("DefPath = %s, %s\n"), PCTSTR(strPathOfDrawingTemplate),
-				PCTSTR(strPathOfAnimationTemplate) );
-
-			std::set<String_256>	setSortFilename;
-
-			while( FileUtil::FindNextFile( &strNameOfFile ) )
-			{
-				pathOfFile.SetFileNameAndType(strNameOfFile);
-				strPathOfFile=pathOfFile.GetFileName(TRUE);
-
-				if( 0 != strPathOfFile.CompareTo( strPathOfDrawingTemplate, FALSE ) &&
-					0 != strPathOfFile.CompareTo( strPathOfAnimationTemplate, FALSE ) )
-				{
-					setSortFilename.insert( strPathOfFile );
-					TRACEUSER( "jlh92", _T("Curr = %s\n"), PCTSTR(strPathOfFile) );
-				}
-			}
-			FileUtil::StopFindingFiles();
-
-			if( iNumberOfTemplate > INT32(setSortFilename.size()) )
-			{
-				// Don't allow any errors set while searching to propagate outside this scope
-				Error::ClearError();
-				return OpState(FALSE, FALSE, TRUE);
-			}
-
-			std::set<String_256>::iterator iter = setSortFilename.begin();
-			for( INT32 i = 1; i < iNumberOfTemplate; ++i, ++iter )
-			{ /*Do nothing!*/ }
-
-			strNameOfFile = *iter;
-			TRACEUSER( "jlh92", _T("Final(%d) = %s\n"), iNumberOfTemplate, PCTSTR(strNameOfFile) );
-
-			//We've found a file. So strip the .xar from the name, as follows...
-			pathTemplates.SetFileNameAndType(strNameOfFile);
-			*UIDescription=pathTemplates.GetFileName(FALSE);
-
-			UIDescription->toTitle();
-
-			// Don't allow any errors set while searching to propagate outside this scope
-			Error::ClearError();
-
-			return OpState(FALSE, FALSE, FALSE);
-		}
+		// Convert the template ordinal into the template name
+		TCHAR*			pszTmp;
+		INT32			iNumberOfTemplate = camStrtol( (TCHAR *)strNumberOfTemplate, &pszTmp, 10 );
+		String_256		strNameOfFile;
+		CTemplateManager& TemplateManager( GetApplication()->GetTemplateManager() );
+		bool			fSuccess = TemplateManager.GetTemplateFilename( iNumberOfTemplate, &strNameOfFile );
 
 		// Don't allow any errors set while searching to propagate outside this scope
 		Error::ClearError();
+
+		// Tell the menu item to remove itsled if we don't have the template
+		if( !fSuccess )
+			return OpState(FALSE, FALSE, TRUE);
+
+		//We've found a file. So strip the .xar from the name and capitalize, as follows...
+		PathName		pathTemplates;
+		pathTemplates.SetFileNameAndType( strNameOfFile );
+		*UIDescription = pathTemplates.GetFileName(FALSE);
+		UIDescription->toTitle();
+
+		return OpState(FALSE, FALSE, FALSE);
 	}
 	
 	// File/SaveAll is only available if there is a document that is "dirty".
@@ -1295,103 +1213,9 @@ BOOL DocOps::Init()
 					TRUE                            // Recieve system messages
 					);
 	ERRORIF(!ok, _R(IDE_NOMORE_MEMORY), FALSE);
-
-	//Graham 20/10/97
-	if (Camelot.DeclareSection( _T("NewTemplates"), 10))
-	{
-		Camelot.DeclarePref( _T("NewTemplates"), _T("DefaultAnimationFile"), &ms_strDefaultAnimationTemplate);
-		Camelot.DeclarePref( _T("NewTemplates"), _T("DefaultDrawingFile"), &ms_strDefaultDrawingTemplate);
-	}
-
-	if (ms_strDefaultAnimationTemplate==String_256(_T("")))
-	{
-		String_256 strNameOfAnimationTemplate( _R(IDS_NEWTEMPLATES_DEFAULTANIMATIONFILE) );
-		String_256 strPathOfTemplate( GetApplication()->GetTemplatesPath() );
-		strPathOfTemplate += strNameOfAnimationTemplate;
-
-		ms_strDefaultAnimationTemplate=strPathOfTemplate;
-
-		TRACEUSER( "jlh92", _T("DefAnimTempl = %s\n"), PCTSTR(ms_strDefaultAnimationTemplate) );
-	}
-
-	if( ms_strDefaultDrawingTemplate == String_256( _T("") ) || 
-		0 == camStrcmp( ms_strDefaultDrawingTemplate, _T("default.xar") ) )
-	{
-		ms_strDefaultDrawingTemplate=String_256(_R(IDS_DEFAULTDOCNAME));
-
-PORTNOTETRACE("other","DocOps::Init - remove code to setup paths");
-#if !defined(EXCLUDE_FROM_XARALX)
-		//Then assume it's the exe path with \templates\drawing.xar on the end
-		TCHAR Pathname[MAX_PATH];
-
-		if(GetModuleFileName(NULL, Pathname, MAX_PATH) == 0) //Should be in the winoil really
-			return FALSE;
-
-		// Put the path name into a string
-		String_256 strPathOfExe(Pathname);
-		PathName pathPathOfExe(strPathOfExe);
-
-		strPathOfExe = pathPathOfExe.GetLocation(TRUE);
-
-		//And add "templates\" to the end
-		String_256 strTemplatesDirectory(_R(IDS_NEWTEMPLATES_RELATIVEPATH));
-		String_256 strNameOfDrawingTemplate(_R(IDS_DEFAULTDOCNAME));
-
-		String_256 strPathOfTemplate=strPathOfExe;
-		strPathOfTemplate+=strTemplatesDirectory;
-		strPathOfTemplate+=strNameOfDrawingTemplate;
-
-		ms_strDefaultDrawingTemplate=strPathOfTemplate;
-#endif
-	}
 	
 	return TRUE;
 }
-
-/********************************************************************************************
-
->   PathName DocOps::GetDefaultAnimationTemplate()
-
-	Author:         Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
-	Created:        23/10/97
-	Inputs:         -
-	Outputs:        -
-	Returns:        The path of the default animation template
-	Purpose:        As above
-	Errors:         -
-	SeeAlso:        -
-
-********************************************************************************************/
-
-PathName DocOps::GetDefaultAnimationTemplate()
-{
-	PathName pathToReturn=ms_strDefaultAnimationTemplate;
-
-	return pathToReturn;
-}
-
-/********************************************************************************************
-
->   PathName DocOps::GetDefaultDrawingTemplate()
-
-	Author:         Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
-	Created:        23/10/97
-	Inputs:         -
-	Outputs:        -
-	Returns:        The path of the default drawing template
-	Purpose:        As above
-	Errors:         -
-	SeeAlso:        -
-
-********************************************************************************************/
-
-PathName DocOps::GetDefaultDrawingTemplate()
-{
-	PathName pathToReturn=ms_strDefaultDrawingTemplate;
-
-	return pathToReturn;
-}
-
 
 
 

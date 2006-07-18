@@ -136,6 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rechblnd.h"		// so that can reset blend pointers
 //#include "urls.h"
 #include "filedlgs.h"
+#include "tmplmngr.h"
 
 DECLARE_SOURCE("$Revision$");  
 #define THIRTY_TWO 32
@@ -197,7 +198,7 @@ void FileNewAction()
 {               
 	//First tell the document system that the next template to use is the
 	//default animation template
-	CCamDoc::SetNextTemplateToUse(DocOps::GetDefaultDrawingTemplate());
+	CCamDoc::SetNextTemplateToUse( CTemplateManager::GetDefaultDrawingTemplate() );
 
 	// OnFileOpen needs an event, but doesn't use it
 	wxCommandEvent event;
@@ -226,7 +227,7 @@ void FileNewAnimationAction()
 {               
 	//First tell the document system that the next template to use is the
 	//default animation template
-	CCamDoc::SetNextTemplateToUse(DocOps::GetDefaultAnimationTemplate());
+	CCamDoc::SetNextTemplateToUse( CTemplateManager::GetDefaultAnimationTemplate() );
 
 PORTNOTETRACE("other", "FileNewAnimationAction does nothing");
 #if !defined(EXCLUDE_FROM_XARALX)
@@ -254,68 +255,15 @@ PORTNOTETRACE("other", "FileNewAnimationAction does nothing");
 
 void FileNewTemplateAction(INT32 iNumberOfTemplate) 
 {               
-	//First we must find the name of the template to use
-
-	//So search through the templates directory
-	String_256 strSearchFilename(_R(IDS_NEWTEMPLATES_DEFAULTTEMPLATEEXTENSION));
-
 	//First find the default template path
-	Application* pApplication=GetApplication();
-
-	PathName pathTemplates=pApplication->GetTemplatesPath();
-	
-	pathTemplates.SetFileNameAndType(strSearchFilename);
-
-	//And search the path for xar files that are
-	//NOT the default animation or drawing templates
-	String_256 strTemplates=pathTemplates.GetPath(FALSE);
-
-	String_256 strPathOfFile;
-
-
-	if (FileUtil::StartFindingFiles(&strTemplates))
-	{
-		String_256 strNameOfFile;
-		PathName pathOfFile=pathTemplates;
-
-		String_256 strPathOfDrawingTemplate=DocOps::GetDefaultDrawingTemplate().GetPath(FALSE);
-		String_256 strPathOfAnimationTemplate=DocOps::GetDefaultAnimationTemplate().GetPath(FALSE);
-		strPathOfDrawingTemplate.SwapChar( _T('_'), _T(' ') );
-		
-		std::set<String_256>	setSortFilename;
-
-		while( FileUtil::FindNextFile( &strNameOfFile ) )
-		{
-			pathOfFile.SetFileNameAndType(strNameOfFile);
-			strPathOfFile=pathOfFile.GetFileName(TRUE);
-
-			if( 0 != strPathOfFile.CompareTo( strPathOfDrawingTemplate, FALSE ) &&
-				0 != strPathOfFile.CompareTo( strPathOfAnimationTemplate, FALSE ) )
-			{
-				setSortFilename.insert( strPathOfFile );
-			}
-		}
-		FileUtil::StopFindingFiles();
-
-		if( iNumberOfTemplate > (INT32)setSortFilename.size() )
-		{
-			//We failed to find a template. So remove this
-			//item from the menu.
-			strNameOfFile="";
-		}
-
-		std::set<String_256>::iterator iter = setSortFilename.begin();
-		for( INT32 i = 1; i < iNumberOfTemplate; ++i, ++iter )
-		{ /*Do nothing!*/ }
-
-		strPathOfFile = *iter;
-	}
+	CTemplateManager&	TemplateManager = GetApplication()->GetTemplateManager();
+	String_256 			strPathOfFile;
+	if( !TemplateManager.GetTemplateFilename( iNumberOfTemplate, &strPathOfFile ) )
+		return;
 
 	TRACEUSER( "jlh92", _T("Opening %s\n"), PCTSTR(strPathOfFile) );
 
-	pathTemplates.SetFileNameAndType(strPathOfFile);
-
-	CCamDoc::SetNextTemplateToUse(pathTemplates);
+	CCamDoc::SetNextTemplateToUse( strPathOfFile );
 
 	// OnFileOpen needs an event, but doesn't use it
 	wxCommandEvent event;

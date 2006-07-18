@@ -405,12 +405,7 @@ public:
 
 	void			Do(OpDescriptor*);		// "Do" function
 
-public:
-	static String_256 ms_strDefaultAnimationTemplate;
-	static String_256 ms_strDefaultDrawingTemplate;
 
-	static PathName GetDefaultAnimationTemplate();
-	static PathName GetDefaultDrawingTemplate();
 	
 };
 

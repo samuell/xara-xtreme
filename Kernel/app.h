@@ -136,6 +136,7 @@ class SelRange;
 class ConcurrencyController;
 class WizOps;
 class CBitmapCache;
+class CTemplateManager;
 
 #define FONTMANAGER (GetApplication()->GetFontManager())
 #define NOISEMANAGER (GetApplication()->GetNoiseManager())
@@ -447,16 +448,14 @@ private:
 	// Temporary
 	StatusLine* m_pStatusLine;
 
-	// At some point this may well go to a template manager but for the present
-	// moment the most logical places is here as loading is in CCamDoc and saving
-	// is in OpMenuSave::Do.
-	static String_256 m_TemplatesPath;
+	std::auto_ptr<CTemplateManager>	m_pTemplateManager;
 
 public:
-	// Public access to the user's defined template path
-	String_256& GetTemplatesPath();
-	void SetTemplatesPath(String_256& strToSet);
-
+	// Public access to the template manager
+	CTemplateManager& GetTemplateManager()
+	{
+		return *m_pTemplateManager.get();
+	}
 
 	// return a pointer to the objectcache
 	ObjectCache* GetObjectCache();

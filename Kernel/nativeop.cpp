@@ -119,6 +119,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "filtrres.h"	// New native filter strings
 //#include "fixmem.h"		// CCFree - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bubbleid.h"
+#include "tmplmngr.h"
+#include "fileutil.h"
 
 #include "camdoc.h"		// for CCamDoc::GetTemplateFilename
 //#include "justin3.h"	// for _R(IDS_SAVE_AS_DEFAULT_EMBEDDED)
@@ -491,13 +493,16 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 	}
 
 	//And we'll need a pointer to the application
-	Application* pCamelot=GetApplication();
+	Application*		pCamelot = GetApplication();
+	CTemplateManager&	TemplateManager( pCamelot->GetTemplateManager() );
 
 	//And put the default templates path in the dialog
-	PathName pathToPutInDialog=pCamelot->GetTemplatesPath();
+	PathName			pathToPutInDialog = TemplateManager.GetTemplatesPath();
+
+	FileUtil::RecursiveCreateDirectory( pathToPutInDialog.GetPath() );
 	
 	//Now create the dialog
-	SaveTemplateDialog dialogToDisplay(pathToPutInDialog);
+	SaveTemplateDialog	dialogToDisplay(pathToPutInDialog);
 		
 	//And show it
 	if (dialogToDisplay.ShowModal() == wxID_OK)
@@ -532,18 +537,18 @@ void OpMenuSave::Do(OpDescriptor* pOpDesc)
 		{
 			if (pdocToSave->IsAnimated())
 			{
-				DocOps::ms_strDefaultAnimationTemplate=strPathToSaveTo;
+				CTemplateManager::SetDefaultAnimationTemplate( strPathToSaveTo );
 			}
 			else
 			{
-				DocOps::ms_strDefaultDrawingTemplate=strPathToSaveTo;
+				CTemplateManager::SetDefaultDrawingTemplate( strPathToSaveTo );
 			}
 		}
 
 		if (SaveTemplateDialog::m_fDefaultTemplatesFolder)
 		{
-			String_256 strDefaultPath=pathToSaveTo.GetLocation(TRUE);
-			pCamelot->SetTemplatesPath(strDefaultPath);
+			String_256	strDefaultPath = pathToSaveTo.GetLocation( TRUE );
+			CTemplateManager::SetTemplatesPath( strDefaultPath );
 		}
 	}
 

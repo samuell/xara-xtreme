@@ -1,4 +1,4 @@
-// $Id$
+// $Id: app.h 1361 2006-06-25 16:43:38Z alex $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
  
@@ -95,106 +95,52 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
  */
-// FileUtil - WinOil level file manipulation library
 
+#ifndef INC_TEMPLATE_MANAGER
+#define INC_TEMPLATE_MANAGER
 
-#ifndef INC_FILEUTIL
-#define INC_FILEUTIL
+/*********************************************************************************************
 
-class PathName;
+>	class CTemplateManager
 
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	17/07/2006
+	Base Class:	None
+	Purpose:	                
+	Errors:		None.
+				
+*********************************************************************************************/
 
-/****************************************************************************
-
->	class FileUtil
-
-	Author:		Mike_Kenny (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	24/07/96
-	Purpose:	This class contains a library of static functions for use
-				on Windows platforms. The functions perform general file
-				manipulation operations, rather than single file data IO.
-				If you want the size of a file, to locate a particular file
-				on disc etc, then here's where you'll find all those useful
-				routines to do it.
-	SeeAlso:
-
-****************************************************************************/
-
-class FileUtil
+class CCAPI CTemplateManager
 {
-public:		// Scanning for specific files
-	static BOOL FindResourceFile(TCHAR* SearchFile, TCHAR* FoundFile);
+public:       
+	CTemplateManager();
+	~CTemplateManager();
 
+	BOOL Init();
 
-public:		// Scanning through a set of particular files in a directory
-	static BOOL StartFindingFiles(String_256 *FileSpecifier);
-	static BOOL FindNextFile(String_256 *FoundFile);
-	static void StopFindingFiles(void);
+	// Public access to the user's defined template path
+	static String_256& GetTemplatesPath();
+	static void SetTemplatesPath(String_256& strToSet);
 
-public:		// Misc
-	static BOOL GetLongFileName(LPTSTR lpszPath, LPTSTR lpszOutput, size_t cchMaxOutLen);
-	static UINT32 GetTemporaryFileName(const TCHAR *PathName, const TCHAR *Prefix, UINT32 Unique, TCHAR *FileName);
-	static DWORD GetTemporaryPath(UINT32 BufferLength,	TCHAR *Buffer);
+	bool GetTemplateMenuName( UINT32 ordNumberOfTemplate, String_256* pStrPathOfFile );
+	bool GetTemplateFilename( UINT32 ordNumberOfTemplate, String_256* pStrPathOfFile );
 
-	static PathName GetTemporaryPathName();
-	static BOOL GetTemporaryPathName(const TCHAR *pExt, PathName *pTempPath);
-	static BOOL DeleteFile(PathName *FileToRemove);
+	static PathName GetDefaultAnimationTemplate();
+	static void SetDefaultAnimationTemplate( const String_256& strPath )	{ ms_strDefaultAnimationTemplate = strPath; }
+	static PathName GetDefaultDrawingTemplate();
+	static void SetDefaultDrawingTemplate( const String_256& strPath )		{ ms_strDefaultDrawingTemplate = strPath; }
 
-	static BOOL GetCurrentDirectory(String_256 * pCurrentPath);
-	static BOOL SetCurrentDirectory(const PathName& NewCurrentPath);
-	static BOOL SetCurrentDirectory(const String_256& NewCurrentPath);
+private:
+	static String_256	m_TemplatesPath;
+	static String_256	m_LocalTemplatesPath;
 
-	static BOOL RecursiveCreateDirectory( const String_256& strDirPath );
+	static String_256	ms_strDefaultAnimationTemplate;
+	static String_256	ms_strDefaultDrawingTemplate;
 
-	//A straightforward wrapper for the MFC function GetFileAttributes
-	static DWORD FindFileAttributes(LPCTSTR lpFileName)
-	{
-		TRACE( wxT("Warning - FileUtil::FindFileAttributes called\n") );
-#if defined(__WXMSW__)
-		return GetFileAttributes( lpFileName );
-#else
-		return 0;
-#endif
-		}
-
-private:	// Private data
-	static BOOL				SearchActive;
-	static bool				s_fStarted;
-	static String_256		SearchPath;
-	static wxDir			s_dirSearch;
-};
-
-/****************************************************************************
-
->	class FindFiles : public CC_CLASS_MEMDUMP
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	09/01/97
-	Purpose:	This class can be used for searching directories for files.
-				It is basically equivalent to the 
-	SeeAlso:
-
-****************************************************************************/
-
-class FindFiles : public CC_CLASS_MEMDUMP
-{
-	// Declare the class for memory tracking
-	CC_DECLARE_MEMDUMP(FindFiles);
-public:
-	FindFiles() {};
-
-public:		// Scanning through a set of particular files in a directory
-	BOOL StartFindingFiles(String_256 *FileSpecifier);
-	BOOL FindNextFile(String_256 *FoundFile, BOOL *IsDirectory);
-	BOOL StopFindingFiles();
-
-private:	// Private data
-	String_256		m_SearchPath;
-#if defined(__WXMSW__)
-	HANDLE			m_SearchHandle;
-	WIN32_FIND_DATA	m_SearchData;
-#endif
+	typedef std::map<String_256, bool> CTemplateList;
+	void GetTemplateList( CTemplateList* pList, const String_256& strTemplatePath, bool fLocal );
 };
 
 #endif
-
+													   

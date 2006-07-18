@@ -37,7 +37,7 @@ libwxOil_a_SOURCES = \
 	camprocess.cpp dropdown.cpp coldrop.cpp fontdrop.cpp bfxalu.cpp bfxpixop.cpp \
 	binreloc.c exceptio.cpp colpick.cpp dragpick.cpp sgldrag.cpp cctime.cpp \
 	lddirect.cpp prncamvw.cpp prdlgctl.cpp psdc.cpp grndprnt.cpp printprg.cpp \
-	oilruler.cpp bitmapdropdown.cpp helptabs.cpp imgmgkft.cpp ppmfiltr.cpp \
+	oilruler.cpp bitmapdropdown.cpp helptabs.cpp tmplmngr.cpp imgmgkft.cpp ppmfiltr.cpp \
 	resources.cpp
 
 # Keep resources.cpp on a separate line as it is odd

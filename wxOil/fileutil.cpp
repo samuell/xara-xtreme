@@ -582,6 +582,45 @@ BOOL FileUtil::DeleteFile(PathName *FileToRemove)
 	return !status;
 }
 
+
+/*******************************************************************************************
+
+>	static BOOL FileUtil::RecursiveCreateDirectory(const String_256& strDirPath)
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	18/07/2006
+	Inputs:		strDirPath - the path to verify and create
+	Returns:	TRUE if succesful, FALSE otherwise
+	Purpose:	Recursivly create directory path
+
+*******************************************************************************************/
+
+BOOL FileUtil::RecursiveCreateDirectory( const String_256& strDirPath )
+{
+	// Go down path making sure each directory exists (and creating if needed), we
+	// start from the second character becuase we don't want to deal with '/'
+	UINT32				ord = 1;
+	while( _T('\0') != strDirPath[ord] )
+	{
+		if( _T('/') == strDirPath[ord] )
+		{
+			String_256	strPath;
+			strDirPath.Left( &strPath, ord );
+			if( !wxDir::Exists( (PCTSTR)strPath ) )
+				wxMkdir( (PCTSTR)strPath ); 
+		}
+
+		++ord;
+	}
+
+	// Make sure the path as a whole exists
+	if( !wxDir::Exists( (PCTSTR)strDirPath ) )
+		wxMkdir( (PCTSTR)strDirPath );
+
+	return TRUE;
+}
+
+	
 PORTNOTE("other", "Removed lots of Windows'isms" )
 #if !defined(EXCLUDE_FROM_XARALX)
 

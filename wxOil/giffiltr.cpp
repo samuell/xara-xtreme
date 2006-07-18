@@ -139,6 +139,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "selall.h"		//  For OPTOKEN_EDITSELECTALL
 #include "bmpprefs.h"
 //#include "animparams.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "tmplmngr.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -2536,7 +2537,7 @@ UINT32 TI_GIFFilter::GetHintType(void)
 BOOL TI_GIFFilter::IsDefaultDocRequired(const TCHAR* pcszPathName)
 {
 	//Tell the system to use the default animation template
-	CCamDoc::SetNextTemplateToUse(DocOps::GetDefaultAnimationTemplate());
+	CCamDoc::SetNextTemplateToUse( CTemplateManager::GetDefaultAnimationTemplate() );
 
 	return TRUE;
 }

@@ -104,6 +104,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nativeop.h"
 #include "dbugtree.h"
 #include "brushmsg.h"
+#include "tmplmngr.h"
 
 #include "camdoc.h"
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -523,7 +524,7 @@ PathName CCamDoc::GetNextTemplateToUse()
 		}
 	}
 	
-	PathName pathToReturn(DocOps::GetDefaultDrawingTemplate());
+	PathName			pathToReturn( CTemplateManager::GetDefaultDrawingTemplate() );
 	return pathToReturn;
 
 }

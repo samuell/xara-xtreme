@@ -144,6 +144,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "plugmngr.h"	// Plug-in Manager
 #include "filtrmgr.h"	// Filter Manager
 #include "tmpltarg.h"	// WizOp(s)
+#include "tmplmngr.h"
 
 #include "noisebas.h"
 #ifdef AUTOMATION
@@ -164,19 +165,6 @@ CC_IMPLEMENT_MEMDUMP(Application, CCObject)
 
 Application Camelot;
 
-/********************************************************************************************
-
-	Preference:		Path
-	Section:		Templates
-	Range:			0 .. 256 characters
-	Purpose:		The path to load the templates from and save the templates to.
-					Defaults to blank which means alongside	the exe.
-	SeeAlso:		CCamDoc::LoadDefaultDocument; OpMenuSave::Do;
-
-********************************************************************************************/
-
-String_256 Application::m_TemplatesPath = TEXT("");
-
 /***********************************************************************************************
 
 > 	Application::Application()
@@ -194,7 +182,7 @@ String_256 Application::m_TemplatesPath = TEXT("");
                    			                                     
 ***********************************************************************************************/
 
-Application::Application()
+Application::Application() : m_pTemplateManager( new CTemplateManager )
 {
 // WEBSTER - markn 25/4/97
 // No pen stuff required in Webster
@@ -606,34 +594,8 @@ BOOL Application::LateInit()
 		return FALSE;
 #endif // PLUGINSUPPORT
 
-	// As the preference system is up, declare our preference to it
-	// This is the pathname that the templates should be loaded from and saved to
-	// If blank, the default, then it should use the exe path
-	GetApplication()->DeclareSection(TEXT("Templates"), 2);
-	GetApplication()->DeclarePref(TEXT("Templates"), TEXT("Path"), &m_TemplatesPath);
+	m_pTemplateManager->Init();
 
-	//Graham 21/10/97: If it is blank, then we should use the
-	//exe path with "\templates\" on the end
-	if( m_TemplatesPath.IsEmpty() || !SGLibOil::DirExists( m_TemplatesPath ) )
-	{
-		// Put the path name into a string
-		PathName ModulePath( CCamApp::GetResourceDirectory() );
-
-		m_TemplatesPath = ModulePath.GetLocation(TRUE);
-
-		//And add "templates\" to the end
-		String_256 strRelativePath(_R(IDS_NEWTEMPLATES_RELATIVEPATH));
-
-		m_TemplatesPath+=strRelativePath;
-
-#if defined(_DEBUG)
-		if( !SGLibOil::DirExists( m_TemplatesPath ) )
-			m_TemplatesPath = _T("/usr/share/xaralx/Templates/");
-#endif
-	}
-
-	TRACEUSER( "jlh92", _T("Using %s as template store\n"), PCTSTR(m_TemplatesPath) );
-	
 	// Everything went ok
 	return TRUE;
 }
@@ -1840,46 +1802,6 @@ ObjectCache* Application::GetObjectCache()
 	return m_pObjCache;
 }
 
-
-/***********************************************************************************************
-
->	String_256& Application::GetTemplatesPath()
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	03/03/97
-	Inputs:		-
-	Outputs:	-
-	Returns:	The specfied templates path in a string
-	Purpose:	To find out the user's preference for a path to the template file.
-	SeeAlso:	CCamDoc::LoadDefaultDocument; OpMenuSave::Do;
-
-***********************************************************************************************/
-
-String_256& Application::GetTemplatesPath()
-{
-	// Add a trailing slash if it hasn't got one
-	SGLibOil::AppendSlashIfNotPresent(&m_TemplatesPath);
-
-	return m_TemplatesPath;
-}
-
-/***********************************************************************************************
-
->	void Application::SetTemplatesPath(String_256& strToSet)
-
-	Author:		Graham_Walmsley (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	28/20/97
-	Inputs:		strToSet - the new value
-	Returns:	-
-	Purpose:	To set the default templates path
-	SeeAlso:	-
-
-***********************************************************************************************/
-
-void Application::SetTemplatesPath(String_256& strToSet)
-{
-	m_TemplatesPath=strToSet;
-}
 
 /********************************************************************************************
 
