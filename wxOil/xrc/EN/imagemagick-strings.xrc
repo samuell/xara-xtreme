@@ -60,17 +60,833 @@
                                 </object>
                         </object>
 
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_FILTERNAME">
+                                        <label>Microsoft Windows Bitmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_FILTERINFO">
+                                        <label>Load Microsoft Windows Bitmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_FILTEREXT">
+                                        <label>bmp</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_IMPORTMSG">
+                                        <label>Loading Microsoft Windows Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_PREPAREMSG">
+                                        <label>Preparing to export Microsoft Windows Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_EXPORTMSG">
+                                        <label>Exporting Microsoft Windows Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_BMP_MASKINGMSG">
+                                        <label>Preparing mask for Microsoft Windows Bitmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_FILTERNAME">
+                                        <label>Microsoft Cursor Icon</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_FILTERINFO">
+                                        <label>Load Microsoft Cursor Icon file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_FILTEREXT">
+                                        <label>cur</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_IMPORTMSG">
+                                        <label>Loading Microsoft Cursor Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_PREPAREMSG">
+                                        <label>Preparing to export Microsoft Cursor Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_EXPORTMSG">
+                                        <label>Exporting Microsoft Cursor Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUR_MASKINGMSG">
+                                        <label>Preparing mask for Microsoft Cursor Icon file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_FILTERNAME">
+                                        <label>DR Halo</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_FILTERINFO">
+                                        <label>Load DR Halo file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_FILTEREXT">
+                                        <label>cut</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_IMPORTMSG">
+                                        <label>Loading DR Halo file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_PREPAREMSG">
+                                        <label>Preparing to export DR Halo file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_EXPORTMSG">
+                                        <label>Exporting DR Halo file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_CUT_MASKINGMSG">
+                                        <label>Preparing mask for DR Halo file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_FILTERNAME">
+                                        <label>DICOM Image</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_FILTERINFO">
+                                        <label>Load DICOM Image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_FILTEREXT">
+                                        <label>dcm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_IMPORTMSG">
+                                        <label>Loading DICOM Image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_PREPAREMSG">
+                                        <label>Preparing to export DICOM Image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_EXPORTMSG">
+                                        <label>Exporting DICOM Image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCM_MASKINGMSG">
+                                        <label>Preparing mask for DICOM Image file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_FILTERNAME">
+                                        <label>ZSoft Paintbrush</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_FILTERINFO">
+                                        <label>Load ZSoft Paintbrush file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_FILTEREXT">
+                                        <label>dcx</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_IMPORTMSG">
+                                        <label>Loading ZSoft Paintbrush file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_PREPAREMSG">
+                                        <label>Preparing to export ZSoft Paintbrush file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_EXPORTMSG">
+                                        <label>Exporting ZSoft Paintbrush file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DCX_MASKINGMSG">
+                                        <label>Preparing mask for ZSoft Paintbrush file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_FILTERNAME">
+                                        <label>Microsoft Windows Device Independent Bitmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_FILTERINFO">
+                                        <label>Load Microsoft Windows Device Independent Bitmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_FILTEREXT">
+                                        <label>dib</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_IMPORTMSG">
+                                        <label>Loading Microsoft Windows Device Independent Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_PREPAREMSG">
+                                        <label>Preparing to export Microsoft Windows Device Independent Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_EXPORTMSG">
+                                        <label>Exporting Microsoft Windows Device Independent Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DIB_MASKINGMSG">
+                                        <label>Preparing mask for Microsoft Windows Device Independent Bitmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_FILTERNAME">
+                                        <label>Digital Negative</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_FILTERINFO">
+                                        <label>Load Digital Negative file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_FILTEREXT">
+                                        <label>dng</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_IMPORTMSG">
+                                        <label>Loading Digital Negative file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_PREPAREMSG">
+                                        <label>Preparing to export Digital Negative file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_EXPORTMSG">
+                                        <label>Exporting Digital Negative file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_DNG_MASKINGMSG">
+                                        <label>Preparing mask for Digital Negative file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_FILTERNAME">
+                                        <label>Encapsulated Portable Document Format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_FILTERINFO">
+                                        <label>Load Encapsulated Portable Document Format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_FILTEREXT">
+                                        <label>epdf</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_IMPORTMSG">
+                                        <label>Loading Encapsulated Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_PREPAREMSG">
+                                        <label>Preparing to export Encapsulated Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_EXPORTMSG">
+                                        <label>Exporting Encapsulated Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPDF_MASKINGMSG">
+                                        <label>Preparing mask for Encapsulated Portable Document Format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_FILTERNAME">
+                                        <label>Adobe Encapsulated PostScript Interchange format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_FILTERINFO">
+                                        <label>Load Adobe Encapsulated PostScript Interchange format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_FILTEREXT">
+                                        <label>epi</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_IMPORTMSG">
+                                        <label>Loading Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_PREPAREMSG">
+                                        <label>Preparing to export Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_EXPORTMSG">
+                                        <label>Exporting Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPI_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_FILTERNAME">
+                                        <label>Adobe Encapsulated PostScript</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_FILTERINFO">
+                                        <label>Load Adobe Encapsulated PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_FILTEREXT">
+                                        <label>eps</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_IMPORTMSG">
+                                        <label>Loading Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_PREPAREMSG">
+                                        <label>Preparing to export Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_EXPORTMSG">
+                                        <label>Exporting Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_FILTERNAME">
+                                        <label>Adobe Level II Encapsulated PostScript</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_FILTERINFO">
+                                        <label>Load Adobe Level II Encapsulated PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_FILTEREXT">
+                                        <label>eps2</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_IMPORTMSG">
+                                        <label>Loading Adobe Level II Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_PREPAREMSG">
+                                        <label>Preparing to export Adobe Level II Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_EXPORTMSG">
+                                        <label>Exporting Adobe Level II Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS2_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Level II Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_FILTERNAME">
+                                        <label>Adobe Level III Encapsulated PostScript</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_FILTERINFO">
+                                        <label>Load Adobe Level III Encapsulated PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_FILTEREXT">
+                                        <label>eps3</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_IMPORTMSG">
+                                        <label>Loading Adobe Level III Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_PREPAREMSG">
+                                        <label>Preparing to export Adobe Level III Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_EXPORTMSG">
+                                        <label>Exporting Adobe Level III Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPS3_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Level III Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_FILTERNAME">
+                                        <label>Adobe Encapsulated PostScript</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_FILTERINFO">
+                                        <label>Load Adobe Encapsulated PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_FILTEREXT">
+                                        <label>epsf</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_IMPORTMSG">
+                                        <label>Loading Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_PREPAREMSG">
+                                        <label>Preparing to export Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_EXPORTMSG">
+                                        <label>Exporting Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSF_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Encapsulated PostScript file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_FILTERNAME">
+                                        <label>Adobe Encapsulated PostScript Interchange format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_FILTERINFO">
+                                        <label>Load Adobe Encapsulated PostScript Interchange format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_FILTEREXT">
+                                        <label>epsi</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_IMPORTMSG">
+                                        <label>Loading Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_PREPAREMSG">
+                                        <label>Preparing to export Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_EXPORTMSG">
+                                        <label>Exporting Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPSI_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Encapsulated PostScript Interchange format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_FILTERNAME">
+                                        <label>Adobe Encapsulated PostScript Interchange format with TIFF preview</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_FILTERINFO">
+                                        <label>Load Adobe Encapsulated PostScript Interchange format with TIFF preview file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_FILTEREXT">
+                                        <label>ept</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_IMPORTMSG">
+                                        <label>Loading Adobe Encapsulated PostScript Interchange format with TIFF preview file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_PREPAREMSG">
+                                        <label>Preparing to export Adobe Encapsulated PostScript Interchange format with TIFF preview file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_EXPORTMSG">
+                                        <label>Exporting Adobe Encapsulated PostScript Interchange format with TIFF preview file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_EPT_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Encapsulated PostScript Interchange format with TIFF preview file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_FILTERNAME">
+                                        <label>Group 3 TIFF</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_FILTERINFO">
+                                        <label>Load Group 3 TIFF file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_FILTEREXT">
+                                        <label>fax</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_IMPORTMSG">
+                                        <label>Loading Group 3 TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_PREPAREMSG">
+                                        <label>Preparing to export Group 3 TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_EXPORTMSG">
+                                        <label>Exporting Group 3 TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FAX_MASKINGMSG">
+                                        <label>Preparing mask for Group 3 TIFF file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_FILTERNAME">
+                                        <label>Flexible Image Transport System</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_FILTERINFO">
+                                        <label>Load Flexible Image Transport System file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_FILTEREXT">
+                                        <label>fits</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_IMPORTMSG">
+                                        <label>Loading Flexible Image Transport System file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_PREPAREMSG">
+                                        <label>Preparing to export Flexible Image Transport System file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_EXPORTMSG">
+                                        <label>Exporting Flexible Image Transport System file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_FITS_MASKINGMSG">
+                                        <label>Preparing mask for Flexible Image Transport System file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_FILTERNAME">
+                                        <label>Microsoft Icon</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_FILTERINFO">
+                                        <label>Load Microsoft Icon file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_FILTEREXT">
+                                        <label>ico</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_IMPORTMSG">
+                                        <label>Loading Microsoft Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_PREPAREMSG">
+                                        <label>Preparing to export Microsoft Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_EXPORTMSG">
+                                        <label>Exporting Microsoft Icon file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_ICO_MASKINGMSG">
+                                        <label>Preparing mask for Microsoft Icon file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_FILTERNAME">
+                                        <label>Multiple-image Network Graphics</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_FILTERINFO">
+                                        <label>Load Multiple-image Network Graphics file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_FILTEREXT">
+                                        <label>jng</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_IMPORTMSG">
+                                        <label>Loading Multiple-image Network Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_PREPAREMSG">
+                                        <label>Preparing to export Multiple-image Network Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_EXPORTMSG">
+                                        <label>Exporting Multiple-image Network Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_JNG_MASKINGMSG">
+                                        <label>Preparing mask for Multiple-image Network Graphics file...</label>
+                                </object>
+                        </object>
 
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_FILTERNAME">
-                                        <label>ImageMagick MIFF</label>
+                                        <label>Magick image file format</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_FILTERINFO">
-                                        <label>Load MIFF file</label>
+                                        <label>Load Magick image file format file</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
@@ -79,42 +895,901 @@
                                         <label>miff</label>
                                 </object>
                         </object>
-			<object class="sizeritem">
-        		        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-                        	<object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_IMPORTMSG">
-                			<label>Loading MIFF file...</label>
-	                        </object>
-		        </object>
-	        	<object class="sizeritem">
-	                        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-	                    	<object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_PREPAREMSG">
-	                     		<label>Preparing to export MIFF file...</label>
-		                </object>
-       	                </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_IMPORTMSG">
+                                        <label>Loading Magick image file format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_PREPAREMSG">
+                                        <label>Preparing to export Magick image file format file...</label>
+                                </object>
+                        </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_EXPORTMSG">
-                                        <label>Exporting MIFF file...</label>
+                                        <label>Exporting Magick image file format file...</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_MIFF_MASKINGMSG">
-                                        <label>Preparing mask for MIFF file...</label>
+                                        <label>Preparing mask for Magick image file format file...</label>
                                 </object>
                         </object>
 
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_FILTERNAME">
+                                        <label>Magick Persistent Cache image file format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_FILTERINFO">
+                                        <label>Load Magick Persistent Cache image file format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_FILTEREXT">
+                                        <label>mpc</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_IMPORTMSG">
+                                        <label>Loading Magick Persistent Cache image file format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_PREPAREMSG">
+                                        <label>Preparing to export Magick Persistent Cache image file format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_EXPORTMSG">
+                                        <label>Exporting Magick Persistent Cache image file format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_MPC_MASKINGMSG">
+                                        <label>Preparing mask for Magick Persistent Cache image file format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_FILTERNAME">
+                                        <label>On-the-air Bitmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_FILTERINFO">
+                                        <label>Load On-the-air Bitmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_FILTEREXT">
+                                        <label>otb</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_IMPORTMSG">
+                                        <label>Loading On-the-air Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_PREPAREMSG">
+                                        <label>Preparing to export On-the-air Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_EXPORTMSG">
+                                        <label>Exporting On-the-air Bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_OTB_MASKINGMSG">
+                                        <label>Preparing mask for On-the-air Bitmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_FILTERNAME">
+                                        <label>Xv's Visual Schnauzer thumbnail format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_FILTERINFO">
+                                        <label>Load Xv's Visual Schnauzer thumbnail format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_FILTEREXT">
+                                        <label>p7</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_IMPORTMSG">
+                                        <label>Loading Xv's Visual Schnauzer thumbnail format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_PREPAREMSG">
+                                        <label>Preparing to export Xv's Visual Schnauzer thumbnail format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_EXPORTMSG">
+                                        <label>Exporting Xv's Visual Schnauzer thumbnail format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_P7_MASKINGMSG">
+                                        <label>Preparing mask for Xv's Visual Schnauzer thumbnail format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_FILTERNAME">
+                                        <label>Palm pixmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_FILTERINFO">
+                                        <label>Load Palm pixmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_FILTEREXT">
+                                        <label>palm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_IMPORTMSG">
+                                        <label>Loading Palm pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_PREPAREMSG">
+                                        <label>Preparing to export Palm pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_EXPORTMSG">
+                                        <label>Exporting Palm pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PALM_MASKINGMSG">
+                                        <label>Preparing mask for Palm pixmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_FILTERNAME">
+                                        <label>Common 2-dimensional bitmap format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_FILTERINFO">
+                                        <label>Load Common 2-dimensional bitmap format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_FILTEREXT">
+                                        <label>pam</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_IMPORTMSG">
+                                        <label>Loading Common 2-dimensional bitmap format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_PREPAREMSG">
+                                        <label>Preparing to export Common 2-dimensional bitmap format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_EXPORTMSG">
+                                        <label>Exporting Common 2-dimensional bitmap format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PAM_MASKINGMSG">
+                                        <label>Preparing mask for Common 2-dimensional bitmap format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_FILTERNAME">
+                                        <label>Portable bitmap format (black and white)</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_FILTERINFO">
+                                        <label>Load Portable bitmap format (black and white) file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_FILTEREXT">
+                                        <label>pbm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_IMPORTMSG">
+                                        <label>Loading Portable bitmap format (black and white) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_PREPAREMSG">
+                                        <label>Preparing to export Portable bitmap format (black and white) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_EXPORTMSG">
+                                        <label>Exporting Portable bitmap format (black and white) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PBM_MASKINGMSG">
+                                        <label>Preparing mask for Portable bitmap format (black and white) file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_FILTERNAME">
+                                        <label>Photo CD</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_FILTERINFO">
+                                        <label>Load Photo CD file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_FILTEREXT">
+                                        <label>pcd</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_IMPORTMSG">
+                                        <label>Loading Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_PREPAREMSG">
+                                        <label>Preparing to export Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_EXPORTMSG">
+                                        <label>Exporting Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCD_MASKINGMSG">
+                                        <label>Preparing mask for Photo CD file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_FILTERNAME">
+                                        <label>Photo CD</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_FILTERINFO">
+                                        <label>Load Photo CD file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_FILTEREXT">
+                                        <label>pcds</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_IMPORTMSG">
+                                        <label>Loading Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_PREPAREMSG">
+                                        <label>Preparing to export Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_EXPORTMSG">
+                                        <label>Exporting Photo CD file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCDS_MASKINGMSG">
+                                        <label>Preparing mask for Photo CD file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_FILTERNAME">
+                                        <label>HP Page Control Language</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_FILTERINFO">
+                                        <label>Load HP Page Control Language file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_FILTEREXT">
+                                        <label>pcl</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_IMPORTMSG">
+                                        <label>Loading HP Page Control Language file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_PREPAREMSG">
+                                        <label>Preparing to export HP Page Control Language file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_EXPORTMSG">
+                                        <label>Exporting HP Page Control Language file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCL_MASKINGMSG">
+                                        <label>Preparing mask for HP Page Control Language file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_FILTERNAME">
+                                        <label>ZSoft IBM PC Paintbrush file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_FILTERINFO">
+                                        <label>Load ZSoft IBM PC Paintbrush file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_FILTEREXT">
+                                        <label>pcx</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_IMPORTMSG">
+                                        <label>Loading ZSoft IBM PC Paintbrush file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_PREPAREMSG">
+                                        <label>Preparing to export ZSoft IBM PC Paintbrush file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_EXPORTMSG">
+                                        <label>Exporting ZSoft IBM PC Paintbrush file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PCX_MASKINGMSG">
+                                        <label>Preparing mask for ZSoft IBM PC Paintbrush file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_FILTERNAME">
+                                        <label>Palm Database ImageViewer Format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_FILTERINFO">
+                                        <label>Load Palm Database ImageViewer Format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_FILTEREXT">
+                                        <label>pdb</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_IMPORTMSG">
+                                        <label>Loading Palm Database ImageViewer Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_PREPAREMSG">
+                                        <label>Preparing to export Palm Database ImageViewer Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_EXPORTMSG">
+                                        <label>Exporting Palm Database ImageViewer Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDB_MASKINGMSG">
+                                        <label>Preparing mask for Palm Database ImageViewer Format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_FILTERNAME">
+                                        <label>Portable Document Format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_FILTERINFO">
+                                        <label>Load Portable Document Format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_FILTEREXT">
+                                        <label>pdf</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_IMPORTMSG">
+                                        <label>Loading Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_PREPAREMSG">
+                                        <label>Preparing to export Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_EXPORTMSG">
+                                        <label>Exporting Portable Document Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PDF_MASKINGMSG">
+                                        <label>Preparing mask for Portable Document Format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_FILTERNAME">
+                                        <label>Portable graymap format (gray scale)</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_FILTERINFO">
+                                        <label>Load Portable graymap format (gray scale) file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_FILTEREXT">
+                                        <label>pgm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_IMPORTMSG">
+                                        <label>Loading Portable graymap format (gray scale) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_PREPAREMSG">
+                                        <label>Preparing to export Portable graymap format (gray scale) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_EXPORTMSG">
+                                        <label>Exporting Portable graymap format (gray scale) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PGM_MASKINGMSG">
+                                        <label>Preparing mask for Portable graymap format (gray scale) file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_FILTERNAME">
+                                        <label>Apple Macintosh QuickDraw/PICT file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_FILTERINFO">
+                                        <label>Load Apple Macintosh QuickDraw/PICT file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_FILTEREXT">
+                                        <label>pict</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_IMPORTMSG">
+                                        <label>Loading Apple Macintosh QuickDraw/PICT file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_PREPAREMSG">
+                                        <label>Preparing to export Apple Macintosh QuickDraw/PICT file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_EXPORTMSG">
+                                        <label>Exporting Apple Macintosh QuickDraw/PICT file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PICT_MASKINGMSG">
+                                        <label>Preparing mask for Apple Macintosh QuickDraw/PICT file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_FILTERNAME">
+                                        <label>Alias/Wavefront RLE image format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_FILTERINFO">
+                                        <label>Load Alias/Wavefront RLE image format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_FILTEREXT">
+                                        <label>pix</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_IMPORTMSG">
+                                        <label>Loading Alias/Wavefront RLE image format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_PREPAREMSG">
+                                        <label>Preparing to export Alias/Wavefront RLE image format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_EXPORTMSG">
+                                        <label>Exporting Alias/Wavefront RLE image format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PIX_MASKINGMSG">
+                                        <label>Preparing mask for Alias/Wavefront RLE image format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_FILTERNAME">
+                                        <label>Portable anymap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_FILTERINFO">
+                                        <label>Load Portable anymap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_FILTEREXT">
+                                        <label>pnm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_IMPORTMSG">
+                                        <label>Loading Portable anymap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_PREPAREMSG">
+                                        <label>Preparing to export Portable anymap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_EXPORTMSG">
+                                        <label>Exporting Portable anymap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PNM_MASKINGMSG">
+                                        <label>Preparing mask for Portable anymap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_FILTERNAME">
+                                        <label>Portable pixmap format (color)</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_FILTERINFO">
+                                        <label>Load Portable pixmap format (color) file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_FILTEREXT">
+                                        <label>ppm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_IMPORTMSG">
+                                        <label>Loading Portable pixmap format (color) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_PREPAREMSG">
+                                        <label>Preparing to export Portable pixmap format (color) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_EXPORTMSG">
+                                        <label>Exporting Portable pixmap format (color) file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PPM_MASKINGMSG">
+                                        <label>Preparing mask for Portable pixmap format (color) file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_FILTERNAME">
+                                        <label>Adobe PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_FILTERINFO">
+                                        <label>Load Adobe PostScript file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_FILTEREXT">
+                                        <label>ps</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_IMPORTMSG">
+                                        <label>Loading Adobe PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_PREPAREMSG">
+                                        <label>Preparing to export Adobe PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_EXPORTMSG">
+                                        <label>Exporting Adobe PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS_MASKINGMSG">
+                                        <label>Preparing mask for Adobe PostScript file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_FILTERNAME">
+                                        <label>Adobe Level II PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_FILTERINFO">
+                                        <label>Load Adobe Level II PostScript file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_FILTEREXT">
+                                        <label>ps2</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_IMPORTMSG">
+                                        <label>Loading Adobe Level II PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_PREPAREMSG">
+                                        <label>Preparing to export Adobe Level II PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_EXPORTMSG">
+                                        <label>Exporting Adobe Level II PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS2_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Level II PostScript file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_FILTERNAME">
+                                        <label>Adobe Level III PostScript file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_FILTERINFO">
+                                        <label>Load Adobe Level III PostScript file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_FILTEREXT">
+                                        <label>ps3</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_IMPORTMSG">
+                                        <label>Loading Adobe Level III PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_PREPAREMSG">
+                                        <label>Preparing to export Adobe Level III PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_EXPORTMSG">
+                                        <label>Exporting Adobe Level III PostScript file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PS3_MASKINGMSG">
+                                        <label>Preparing mask for Adobe Level III PostScript file file...</label>
+                                </object>
+                        </object>
 
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_FILTERNAME">
-                                        <label>Photoshop PSD</label>
+                                        <label>Adobe Photoshop bitmap file</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_FILTERINFO">
-                                        <label>Load PSD file</label>
+                                        <label>Load Adobe Photoshop bitmap file file</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
@@ -123,32 +1798,891 @@
                                         <label>psd</label>
                                 </object>
                         </object>
-			<object class="sizeritem">
-        		        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-                        	<object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_IMPORTMSG">
-                			<label>Loading PSD file...</label>
-	                        </object>
-		        </object>
-	        	<object class="sizeritem">
-	                        <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
-	                    	<object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_PREPAREMSG">
-	                     		<label>Preparing to export PSD file...</label>
-		                </object>
-       	                </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_IMPORTMSG">
+                                        <label>Loading Adobe Photoshop bitmap file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_PREPAREMSG">
+                                        <label>Preparing to export Adobe Photoshop bitmap file file...</label>
+                                </object>
+                        </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_EXPORTMSG">
-                                        <label>Exporting PSD file...</label>
+                                        <label>Exporting Adobe Photoshop bitmap file file...</label>
                                 </object>
                         </object>
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_IMAGEMAGICK_PSD_MASKINGMSG">
-                                        <label>Preparing mask for PSD file...</label>
+                                        <label>Preparing mask for Adobe Photoshop bitmap file file...</label>
                                 </object>
                         </object>
 
-		</object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_FILTERNAME">
+                                        <label>Pyramid encoded TIFF</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_FILTERINFO">
+                                        <label>Load Pyramid encoded TIFF file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_FILTEREXT">
+                                        <label>ptif</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_IMPORTMSG">
+                                        <label>Loading Pyramid encoded TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_PREPAREMSG">
+                                        <label>Preparing to export Pyramid encoded TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_EXPORTMSG">
+                                        <label>Exporting Pyramid encoded TIFF file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PTIF_MASKINGMSG">
+                                        <label>Preparing mask for Pyramid encoded TIFF file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_FILTERNAME">
+                                        <label>Seattle File Works multi-image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_FILTERINFO">
+                                        <label>Load Seattle File Works multi-image file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_FILTEREXT">
+                                        <label>pwp</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_IMPORTMSG">
+                                        <label>Loading Seattle File Works multi-image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_PREPAREMSG">
+                                        <label>Preparing to export Seattle File Works multi-image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_EXPORTMSG">
+                                        <label>Exporting Seattle File Works multi-image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_PWP_MASKINGMSG">
+                                        <label>Preparing mask for Seattle File Works multi-image file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_FILTERNAME">
+                                        <label>Alias/Wavefront image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_FILTERINFO">
+                                        <label>Load Alias/Wavefront image file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_FILTEREXT">
+                                        <label>rla</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_IMPORTMSG">
+                                        <label>Loading Alias/Wavefront image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_PREPAREMSG">
+                                        <label>Preparing to export Alias/Wavefront image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_EXPORTMSG">
+                                        <label>Exporting Alias/Wavefront image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLA_MASKINGMSG">
+                                        <label>Preparing mask for Alias/Wavefront image file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_FILTERNAME">
+                                        <label>Utah Run length encoded image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_FILTERINFO">
+                                        <label>Load Utah Run length encoded image file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_FILTEREXT">
+                                        <label>rle</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_IMPORTMSG">
+                                        <label>Loading Utah Run length encoded image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_PREPAREMSG">
+                                        <label>Preparing to export Utah Run length encoded image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_EXPORTMSG">
+                                        <label>Exporting Utah Run length encoded image file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_RLE_MASKINGMSG">
+                                        <label>Preparing mask for Utah Run length encoded image file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_FILTERNAME">
+                                        <label>Scitex Continuous Tone Picture</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_FILTERINFO">
+                                        <label>Load Scitex Continuous Tone Picture file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_FILTEREXT">
+                                        <label>sct</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_IMPORTMSG">
+                                        <label>Loading Scitex Continuous Tone Picture file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_PREPAREMSG">
+                                        <label>Preparing to export Scitex Continuous Tone Picture file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_EXPORTMSG">
+                                        <label>Exporting Scitex Continuous Tone Picture file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SCT_MASKINGMSG">
+                                        <label>Preparing mask for Scitex Continuous Tone Picture file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_FILTERNAME">
+                                        <label>Seattle File Works image</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_FILTERINFO">
+                                        <label>Load Seattle File Works image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_FILTEREXT">
+                                        <label>sfw</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_IMPORTMSG">
+                                        <label>Loading Seattle File Works image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_PREPAREMSG">
+                                        <label>Preparing to export Seattle File Works image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_EXPORTMSG">
+                                        <label>Exporting Seattle File Works image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SFW_MASKINGMSG">
+                                        <label>Preparing mask for Seattle File Works image file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_FILTERNAME">
+                                        <label>SUN Rasterfile</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_FILTERINFO">
+                                        <label>Load SUN Rasterfile file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_FILTEREXT">
+                                        <label>sun</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_IMPORTMSG">
+                                        <label>Loading SUN Rasterfile file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_PREPAREMSG">
+                                        <label>Preparing to export SUN Rasterfile file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_EXPORTMSG">
+                                        <label>Exporting SUN Rasterfile file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SUN_MASKINGMSG">
+                                        <label>Preparing mask for SUN Rasterfile file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_FILTERNAME">
+                                        <label>Scalable Vector Graphics</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_FILTERINFO">
+                                        <label>Load Scalable Vector Graphics file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_FILTEREXT">
+                                        <label>svg</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_IMPORTMSG">
+                                        <label>Loading Scalable Vector Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_PREPAREMSG">
+                                        <label>Preparing to export Scalable Vector Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_EXPORTMSG">
+                                        <label>Exporting Scalable Vector Graphics file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_SVG_MASKINGMSG">
+                                        <label>Preparing mask for Scalable Vector Graphics file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_FILTERNAME">
+                                        <label>Truevision Targa image</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_FILTERINFO">
+                                        <label>Load Truevision Targa image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_FILTEREXT">
+                                        <label>tga</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_IMPORTMSG">
+                                        <label>Loading Truevision Targa image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_PREPAREMSG">
+                                        <label>Preparing to export Truevision Targa image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_EXPORTMSG">
+                                        <label>Exporting Truevision Targa image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TGA_MASKINGMSG">
+                                        <label>Preparing mask for Truevision Targa image file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_FILTERNAME">
+                                        <label>Tagged Image File Format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_FILTERINFO">
+                                        <label>Load Tagged Image File Format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_FILTEREXT">
+                                        <label>tiff</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_IMPORTMSG">
+                                        <label>Loading Tagged Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_PREPAREMSG">
+                                        <label>Preparing to export Tagged Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_EXPORTMSG">
+                                        <label>Exporting Tagged Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIFF_MASKINGMSG">
+                                        <label>Preparing mask for Tagged Image File Format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_FILTERNAME">
+                                        <label>PSX TIM file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_FILTERINFO">
+                                        <label>Load PSX TIM file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_FILTEREXT">
+                                        <label>tim</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_IMPORTMSG">
+                                        <label>Loading PSX TIM file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_PREPAREMSG">
+                                        <label>Preparing to export PSX TIM file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_EXPORTMSG">
+                                        <label>Exporting PSX TIM file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TIM_MASKINGMSG">
+                                        <label>Preparing mask for PSX TIM file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_FILTERNAME">
+                                        <label>TrueType font file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_FILTERINFO">
+                                        <label>Load TrueType font file file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_FILTEREXT">
+                                        <label>ttf</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_IMPORTMSG">
+                                        <label>Loading TrueType font file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_PREPAREMSG">
+                                        <label>Preparing to export TrueType font file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_EXPORTMSG">
+                                        <label>Exporting TrueType font file file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_TTF_MASKINGMSG">
+                                        <label>Preparing mask for TrueType font file file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_FILTERNAME">
+                                        <label>VICAR rasterfile format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_FILTERINFO">
+                                        <label>Load VICAR rasterfile format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_FILTEREXT">
+                                        <label>vicar</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_IMPORTMSG">
+                                        <label>Loading VICAR rasterfile format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_PREPAREMSG">
+                                        <label>Preparing to export VICAR rasterfile format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_EXPORTMSG">
+                                        <label>Exporting VICAR rasterfile format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VICAR_MASKINGMSG">
+                                        <label>Preparing mask for VICAR rasterfile format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_FILTERNAME">
+                                        <label>Khoros Visualization Image File Format</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_FILTERINFO">
+                                        <label>Load Khoros Visualization Image File Format file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_FILTEREXT">
+                                        <label>viff</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_IMPORTMSG">
+                                        <label>Loading Khoros Visualization Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_PREPAREMSG">
+                                        <label>Preparing to export Khoros Visualization Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_EXPORTMSG">
+                                        <label>Exporting Khoros Visualization Image File Format file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_VIFF_MASKINGMSG">
+                                        <label>Preparing mask for Khoros Visualization Image File Format file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_FILTERNAME">
+                                        <label>Wireless bitmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_FILTERINFO">
+                                        <label>Load Wireless bitmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_FILTEREXT">
+                                        <label>wbmp</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_IMPORTMSG">
+                                        <label>Loading Wireless bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_PREPAREMSG">
+                                        <label>Preparing to export Wireless bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_EXPORTMSG">
+                                        <label>Exporting Wireless bitmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WBMP_MASKINGMSG">
+                                        <label>Preparing mask for Wireless bitmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_FILTERNAME">
+                                        <label>Word Perfect Graphics File</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_FILTERINFO">
+                                        <label>Load Word Perfect Graphics File file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_FILTEREXT">
+                                        <label>wpg</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_IMPORTMSG">
+                                        <label>Loading Word Perfect Graphics File file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_PREPAREMSG">
+                                        <label>Preparing to export Word Perfect Graphics File file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_EXPORTMSG">
+                                        <label>Exporting Word Perfect Graphics File file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_WPG_MASKINGMSG">
+                                        <label>Preparing mask for Word Perfect Graphics File file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_FILTERNAME">
+                                        <label>X Windows system bitmap, black and white only</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_FILTERINFO">
+                                        <label>Load X Windows system bitmap, black and white only file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_FILTEREXT">
+                                        <label>xbm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_IMPORTMSG">
+                                        <label>Loading X Windows system bitmap, black and white only file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_PREPAREMSG">
+                                        <label>Preparing to export X Windows system bitmap, black and white only file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_EXPORTMSG">
+                                        <label>Exporting X Windows system bitmap, black and white only file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XBM_MASKINGMSG">
+                                        <label>Preparing mask for X Windows system bitmap, black and white only file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_FILTERNAME">
+                                        <label>GIMP image</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_FILTERINFO">
+                                        <label>Load GIMP image file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_FILTEREXT">
+                                        <label>xcf</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_IMPORTMSG">
+                                        <label>Loading GIMP image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_PREPAREMSG">
+                                        <label>Preparing to export GIMP image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_EXPORTMSG">
+                                        <label>Exporting GIMP image file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XCF_MASKINGMSG">
+                                        <label>Preparing mask for GIMP image file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_FILTERNAME">
+                                        <label>X Windows system pixmap</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_FILTERINFO">
+                                        <label>Load X Windows system pixmap file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_FILTEREXT">
+                                        <label>xpm</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_IMPORTMSG">
+                                        <label>Loading X Windows system pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_PREPAREMSG">
+                                        <label>Preparing to export X Windows system pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_EXPORTMSG">
+                                        <label>Exporting X Windows system pixmap file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XPM_MASKINGMSG">
+                                        <label>Preparing mask for X Windows system pixmap file...</label>
+                                </object>
+                        </object>
+
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_FILTERNAME">
+                                        <label>X Windows system window dump</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_FILTERINFO">
+                                        <label>Load X Windows system window dump file</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_FILTEREXT">
+                                        <label>xwd</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_IMPORTMSG">
+                                        <label>Loading X Windows system window dump file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_PREPAREMSG">
+                                        <label>Preparing to export X Windows system window dump file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_EXPORTMSG">
+                                        <label>Exporting X Windows system window dump file...</label>
+                                </object>
+                        </object>
+                        <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+                                <object class="wxStaticText" name="IDS_IMAGEMAGICK_XWD_MASKINGMSG">
+                                        <label>Preparing mask for X Windows system window dump file...</label>
+                                </object>
+                        </object>
+                </object>
         </object>
 </resource>
 
