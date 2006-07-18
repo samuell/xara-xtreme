@@ -132,7 +132,8 @@ CC_IMPLEMENT_DYNCREATE(ImageMagickExportOptions, MaskedFilterExportOptions)
 
 // Set the default path from a macro so it can be overridden at compile time
 #ifndef DEFAULT_IMAGEMAGICK_PATH
-	#define DEFAULT_IMAGEMAGICK_PATH "/usr/bin/convert"
+//	#define DEFAULT_IMAGEMAGICK_PATH "/usr/bin/convert"
+	#define DEFAULT_IMAGEMAGICK_PATH "convert"
 #endif
 
 #define DIP_QUOTE(x) _T(x) 
@@ -1501,6 +1502,7 @@ BOOL ImageMagickFilter::CheckPath()
 				if (version>=060000.0)
 				{
 					s_HaveImageMagick = TRUE;
+					s_DoWarning = TRUE; // warn them again if it ever goes away
 				}
 			}
 		}
