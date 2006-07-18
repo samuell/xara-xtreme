@@ -239,6 +239,7 @@ ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 	// Special Mask prepartion stage ID
 	Export2ndStageMsgID = _R(IDN_MASKINGMSG_IMAGEMAGICK);	// "Preparing mask for ImageMagick file..."
 	ExportRegion = NULL;
+	TempFile = NULL;
 }
 
 /********************************************************************************************
@@ -290,34 +291,11 @@ BOOL ImageMagickFilter::Init()
 INT32 ImageMagickFilter::HowCompatible(PathName& Filename, ADDR HeaderStart, UINT32 HeaderSize, 
 							 UINT32 FileSize)
 {
-PORTNOTE("byteorder", "TODO: Check byte ordering")
 	// We need to remember what we thought of this file in our class variable.
 	// So, set it to a nice default value at the start.
-	ImageMagickHowCompatible = 0;
+	ImageMagickHowCompatible = ((Filename.GetType() == _T("miff")) ||
+							    (Filename.GetType() == _T("miff")) ) ? 10:0;
 
-	// Check that we've got enough data to do our check
-	if (HeaderSize < 8)
-		return 0; // Not enough data - ignore this file.
-
-	// Check the header for the "ImageMagick" signature.
-	// The first eight bytes of a ImageMagick file always contain the following (decimal) values: 
-	// 137 80 78 71 13 10 26 10 
-	if (
-		(HeaderStart[0] == 137) && // 0x89
-		(HeaderStart[1] == 80) && //  0x50
-		(HeaderStart[2] == 78) && //  0x4E
-		(HeaderStart[3] == 71) && //  0x47
-		(HeaderStart[4] == 13) && // Carriage return
-		(HeaderStart[5] == 10) && // Line feed
-		(HeaderStart[6] == 26) && // end of file (0x1a)
-		(HeaderStart[7] == 10)    // Line feed
-	   )
-	{
-		// This should be a good enough check that this is a ImageMagick file
-		// Hence, we like this file
-		ImageMagickHowCompatible = 10;
-	}
-				
 	// Return the found value to the caller.
 	return ImageMagickHowCompatible;
 }
@@ -536,9 +514,9 @@ void ImageMagickFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 		switch (Silliness)
 		{
 		case 0:	s_FilterType = IMAGEMAGICK; break;
-		case 1:	s_FilterType = PNG_INTERLACED; break;
-		case 2:	s_FilterType = PNG_TRANSPARENT; break;
-		case 3:	s_FilterType = PNG_TRANSINTER; break;
+		case 1:	s_FilterType = IMAGEMAGICK_INTERLACED; break;
+		case 2:	s_FilterType = IMAGEMAGICK_TRANSPARENT; break;
+		case 3:	s_FilterType = IMAGEMAGICK_TRANSINTER; break;
 		}
 
 		if (pImageMagickOptions->WantTransparent() && pImageMagickOptions->GetSelectionType() == SELECTION)
@@ -670,7 +648,6 @@ BOOL ImageMagickFilter::EndWriteToFile()
 	// This involves doing a 1 bpp export of the same area and using this to work
 	// out which areas are transparent or not.
 	// Only do this if the user has requested transparency and we outputting at 8bpp
-	BOOL ok = TRUE;
 	BOOL SaveDataOut = TRUE;
 
 	if (BadExportRender)
@@ -682,13 +659,17 @@ BOOL ImageMagickFilter::EndWriteToFile()
 		pTempBitmapMask = NULL;
 	}
 
+	BOOL ok=FALSE;
+
 	// Save the data out if required. Only if we exported ok.
 	if (SaveDataOut && !BadExportRender)
 	{
+		ok = CreateTempFile();
+	
 		if (ok)
 		{
 			// Now that we know the transparent index we can output the ImageMagick header
-			ok = DestImageMagick.OutputPNGHeader(OutputFile, NULL, pImageMagickOptions->WantInterlaced(),
+			ok = DestImageMagick.OutputPNGHeader(TempFile, NULL, pImageMagickOptions->WantInterlaced(),
 										pImageMagickOptions->GetTransparencyIndex(),
 										pImageMagickOptions->GetDepth() <= 8 ? pImageMagickOptions->GetLogicalPalette() : NULL);
 		}
@@ -699,18 +680,32 @@ BOOL ImageMagickFilter::EndWriteToFile()
 		if (ok)
 		{
 			String_64 ProgressString(ExportingMsgID);
-			ProgressString = GetExportProgressString(OutputFile, ExportingMsgID);
+			ProgressString = GetExportProgressString(TempFile, ExportingMsgID);
 			BeginSlowJob(100, FALSE, &ProgressString);
 			
-			DestImageMagick.OutputPNGBits(OutputFile, DestImageMagick.GetDestBitmapBits());
-			
+			ok = DestImageMagick.OutputPNGBits(TempFile, DestImageMagick.GetDestBitmapBits());
+			DestImageMagick.TidyUp();
+			if (ok)
+				ok=ProcessTempFile(OutputFile);
+
 			EndSlowJob();
 		}
+		else
+		{
+			DestImageMagick.TidyUp();
+		}
+	}
+	else
+	{
+		DestImageMagick.TidyUp();
 	}
 
-	ASSERT(ok);
+
+	ERROR1IF(!ok, FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+
+	TidyTempFile();
 	
-	return DestImageMagick.TidyUp();
+	return TRUE;
 }
 
 /********************************************************************************************
@@ -926,16 +921,25 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 			Bits[i+3] = ~Bits[i+3];
 	}
 
-	// Output a ImageMagick header for this file, using the RGBQUAD palette rather than a LOGPALETTE
-	DestImageMagick.OutputPNGHeader(File, pInfoHeader, Interlace, TransparentColour, NULL, pPalette);
+	if (CreateTempFile())
+	{
+		// Output a ImageMagick header for this file, using the RGBQUAD palette rather than a LOGPALETTE
+		DestImageMagick.OutputPNGHeader(TempFile, pInfoHeader, Interlace, TransparentColour, NULL, pPalette);
+	
+		// Now write out the bitmap data itself.
+		DestImageMagick.OutputPNGBits(TempFile, Bits, TRUE, pFilter);
+		// The above has set the OutputFile member variable of DestImageMagick. We desperately need to
+		// reset this as otherwise the next bitmap export may go wrong as it calls the tidy up
+		// and so will refer to the deleted CCFile. Oh Er!
+		DestImageMagick.TidyUp();
+		ProcessTempFile(File);
+	}
+	else
+	{
+		DestImageMagick.TidyUp();
+	}
 
-	// Now write out the bitmap data itself.
-	DestImageMagick.OutputPNGBits(File, Bits, TRUE, pFilter);
-
-	// The above has set the OutputFile member variable of DestImageMagick. We desperately need to
-	// reset this as otherwise the next bitmap export may go wrong as it calls the tidy up
-	// and so will refer to the deleted CCFile. Oh Er!
-	DestImageMagick.TidyUp();
+	TidyTempFile();
 
 	// er, we seem to have finished OK so say so
 	return TRUE;
@@ -978,6 +982,7 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 							 String_64* ProgressString )
 {
 #ifdef DO_EXPORT
+
 	ERROR2IF(File==NULL,FALSE,"ImageMagickFilter::WriteToFile File pointer is null");
 	ERROR2IF(Info==NULL,FALSE,"ImageMagickFilter::WriteToFile BitmapInfo pointer is null");
 	ERROR2IF(Bits==NULL,FALSE,"ImageMagickFilter::WriteToFile Bits pointer is null");
@@ -1008,15 +1013,15 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 			Interlace 		= FALSE;
 			WantTransparent = FALSE;
 			break;
-		case PNG_INTERLACED:
+		case IMAGEMAGICK_INTERLACED:
 			Interlace 		= TRUE;
 			WantTransparent = FALSE;
 			break;
-		case PNG_TRANSPARENT:
+		case IMAGEMAGICK_TRANSPARENT:
 			Interlace 		= FALSE;
 			WantTransparent = TRUE;
 			break;
-		case PNG_TRANSINTER:
+		case IMAGEMAGICK_TRANSINTER:
 			Interlace 		= TRUE;
 			WantTransparent = TRUE;
 			break;
@@ -1046,26 +1051,39 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 		}	
 	}
 
-	// Output the ImageMagick data
-	BOOL ok = TRUE;
-	// Output a ImageMagick header for this file, using the RGBQUAD palette rather than a LOGPALETTE
-	if (Transparent == -1)
-		ok = DestImageMagick.OutputPNGHeader(File, pInfoHeader, Interlace, -1, NULL, pPalette);
-	else
-		ok = DestImageMagick.OutputPNGHeader(File, pInfoHeader, Interlace, Transparent, NULL, pPalette);
+	BOOL ok = CreateTempFile();
+
+	if (ok)
+	{
+		// Output the ImageMagick data
+		// Output a ImageMagick header for this file, using the RGBQUAD palette rather than a LOGPALETTE
+		if (Transparent == -1)
+			ok = DestImageMagick.OutputPNGHeader(TempFile, pInfoHeader, Interlace, -1, NULL, pPalette);
+		else
+			ok = DestImageMagick.OutputPNGHeader(TempFile, pInfoHeader, Interlace, Transparent, NULL, pPalette);
+	}
 
 	// Now write out the bitmap data itself.
 	if (ok)
-		ok = DestImageMagick.OutputPNGBits(File, Bits, TRUE);
-	
+		ok = DestImageMagick.OutputPNGBits(TempFile, Bits, TRUE);
+
+	// Tidy up here anyway
+	DestImageMagick.TidyUp();
+
+	// process it
+	if (ok)
+		ok = ProcessTempFile(File);
+
 	// If started, then stop then progress bar
 	if (ProgressString != NULL)
 		EndSlowJob();
 
+	TidyTempFile();
+
+	ERROR1IF(!ok, FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+
 	// er, we seem to have finished OK so say so
 	return TRUE;
-#else
-	return FALSE;
 #endif
 }
 
@@ -1139,7 +1157,7 @@ BOOL ImageMagickFilter::WritePostFrame(void)
 ********************************************************************************************/
 BOOL ImageMagickFilter::WriteFileEnd(void)
 {
-	return DestImageMagick.TidyUp();
+	return TRUE;
 }
 
 /********************************************************************************************
@@ -1216,4 +1234,126 @@ void ImageMagickFilter::AlterPaletteContents( LPLOGPALETTE pPalette )
 {
 	PORTNOTETRACE("filters","ImageMagickFilter::AlterPaletteContents - do nothing");
 //	DestImageMagick.AlterExportPalette( pPalette );
+}
+
+
+/********************************************************************************************
+
+>	BOOL ImageMagickFilter::CreateTempFile()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	Create a temporary file
+	Inputs:		None
+	Outputs:	None
+	Returns:	TRUE on success, FALSE on error
+	Notes:		-
+
+********************************************************************************************/
+
+BOOL ImageMagickFilter::CreateTempFile()
+{
+	if (TempFile)
+		delete TempFile;
+
+	TempFile = new CCDiskFile;
+	if (!TempFile)
+		return FALSE;
+
+	wxFile dummyFile; // to prevent deletion race condition
+	TempFileName = wxFileName::CreateTempFileName(wxEmptyString, &dummyFile);
+	PathName pthFileName=String_256(TempFileName);
+	
+	if (!(TempFile->open(pthFileName, ios::out | ios::trunc | ios::binary)))
+	{
+		::wxRemoveFile(TempFileName);
+		ERROR1(FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+	}
+
+	return TRUE;
+}
+
+
+/********************************************************************************************
+
+>	BOOL ImageMagickFilter::ProcessTempFile(CCLexFile * File)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	Process the temporary file by calling ImageMagick
+	Inputs:		file - the CCLexFile for the final file
+	Outputs:	None
+	Returns:	TRUE on success, FALSE on error
+	Notes:		-
+
+********************************************************************************************/
+
+BOOL ImageMagickFilter::ProcessTempFile(CCLexFile * File)
+{
+	PathName OutputPath = File->GetPathName();
+	ERROR2IF(!OutputPath.IsValid(), FALSE, "ImageMagickFilter::WriteToFile can only be used on real files");
+
+	ERROR2IF(!TempFile || TempFileName.IsEmpty(), FALSE, "ImageMagickFilter::ProcessTempFile has no temporary file to process");
+	TempFile->close();
+
+	wxChar * cifn;
+	wxChar * cofn;
+	wxChar * pcommand=_T("/usr/bin/convert");
+	wxChar * IMargv[4];
+
+	// get filename in usable form
+	cifn = camStrdup(wxString(_T("png:"))+TempFileName );
+	cofn = camStrdup((const TCHAR *)(OutputPath.GetPath()));
+
+	// Now convert the file
+	IMargv[0]=pcommand;
+	IMargv[1]=cifn;
+	IMargv[2]=cofn;
+	IMargv[3]=NULL;
+	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC);
+	
+	free(cifn);
+	free(cofn);
+
+	if (ret)
+	{
+		TidyTempFile();
+		::wxRemoveFile(wxString((const TCHAR *)(OutputPath.GetPath())));
+		ERROR1(FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+	}
+
+	TidyTempFile(); // ensures filename zapped so it isn't removed later
+
+	return TRUE;		
+}
+
+/********************************************************************************************
+
+>	BOOL ImageMagickFilter::TidyTempFile(BOOL Delete=TRUE)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	Closes any temporary file, and potentially removes it
+	Inputs:		None
+	Outputs:	None
+	Returns:	TRUE on success, FALSE on error
+	Notes:		-
+
+********************************************************************************************/
+
+BOOL ImageMagickFilter::TidyTempFile(BOOL Delete/*=TRUE*/)
+{
+	if (TempFile)
+	{
+		delete (TempFile);
+		TempFile = NULL;
+	}
+
+	if (!TempFileName.IsEmpty())
+	{
+		if (Delete)
+			::wxRemoveFile(TempFileName);
+		TempFileName = wxEmptyString;
+	}
+	return TRUE;
 }

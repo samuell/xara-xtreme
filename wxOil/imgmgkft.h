@@ -159,6 +159,7 @@ class ImageMagickFilter : public MaskedFilter
 public:
 
 	ImageMagickFilter();
+	virtual ~ImageMagickFilter() {if (TempFile) delete (TempFile);}
 	BOOL Init();
 
 	virtual INT32 HowCompatible( PathName& Filename, ADDR HeaderStart, UINT32 HeaderSize,
@@ -213,16 +214,20 @@ protected:
 	virtual BOOL WriteBitmapToFile(KernelBitmap* pKernelBitmap, double Dpi);
 
 	// this is used for the actual writing of the file
-	static BOOL WriteDataToFile( BOOL End, UINT32 Bpp, UINT32 Compression);
-	static BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
+	BOOL WriteDataToFile( BOOL End, UINT32 Bpp, UINT32 Compression);
+	BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
 						 	  String_64* ProgressString = NULL);
 
 	// This is the form used for direct saving bitmaps into the native/web file format
-	static BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
+	BOOL WriteToFile ( CCLexFile*, LPBITMAPINFO Info, LPBYTE Bits,
 							  BOOL Interlace, INT32 TransparentColour,
 						 	  BaseCamelotFilter* pFilter = NULL);
 
 	void AlterPaletteContents( LPLOGPALETTE pPalette );//ap
+
+	virtual BOOL CreateTempFile();
+	virtual BOOL ProcessTempFile(CCLexFile * File);
+	virtual BOOL TidyTempFile(BOOL Delete = TRUE);
 
 #ifdef DO_EXPORT
 	// The class we use for actually outputting the ImageMagick data and converting from 32 to n bpps
@@ -236,6 +241,9 @@ protected:
 
 	// The string to display when exporting the second stage.
 	UINT32 Export2ndStageMsgID;
+
+	CCDiskFile * TempFile;
+	wxString TempFileName;
 };
 
 #endif // INC_ImageMagickFILTR
