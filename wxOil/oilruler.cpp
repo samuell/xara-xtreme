@@ -156,6 +156,9 @@ OpGuidelineParam	OILRuler::NewGuidelineParam;
 
 IMPLEMENT_DYNAMIC_CLASS(OILRuler, wxWindow)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 BEGIN_EVENT_TABLE( OILRuler, wxWindow )
 	EVT_LEFT_DOWN( 		OILRuler::OnLButtonDown)
 	EVT_LEFT_DCLICK( 	OILRuler::OnLButtonDblClk)

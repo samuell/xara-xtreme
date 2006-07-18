@@ -272,7 +272,8 @@ IMPLEMENT_DYNAMIC_CLASS(CColourBar, wxWindow)
 CC_IMPLEMENT_DYNAMIC(EditButtonDragTarget, OilDragTarget)
 CC_IMPLEMENT_DYNAMIC(ColourLineDragTarget, OilDragTarget)
 
-
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 
 /********************************************************************************************

@@ -142,7 +142,9 @@ CC_IMPLEMENT_DYNAMIC( BitmapPtr, ListItem )
 CC_IMPLEMENT_DYNAMIC( KernelBmpListItem, ListItem )
 
 
-//#define	new	CAM_DEBUG_NEW
+// This will get Camelot to display the filename and linenumber of any memory allocations
+// that are not released at program exit
+#define new CAM_DEBUG_NEW
 
 
 // Static default bitmap pointer

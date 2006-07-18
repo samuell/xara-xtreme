@@ -132,6 +132,9 @@ CC_IMPLEMENT_DYNAMIC(TextObjRecordHandler, CamelotRecordHandler);
 CC_IMPLEMENT_DYNAMIC(TextAttrRecordHandler, CamelotRecordHandler);
 CC_IMPLEMENT_DYNAMIC(FontDefRecordHandler, CamelotRecordHandler);
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	BOOL TextObjRecordHandler::BeginImport()

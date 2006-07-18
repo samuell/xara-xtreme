@@ -135,7 +135,8 @@ static char Author[] 	= "The Nasty People";
 
 DECLARE_SOURCE("$Revision$");
 
-
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 // this macro makes it easier to move tools from the .exe to the .dll
 // in AFXDLL builds, the macro returns NULL, otherwise it does a 'new classtype'

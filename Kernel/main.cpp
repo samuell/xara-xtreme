@@ -118,7 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sginit.h"
 #include "sgliboil.h"
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "oilmenus.h"
+#include "oilmenus.h"
 #include "oilruler.h"
 #include "layer.h"
 //#include "atminst.h"
@@ -336,7 +336,8 @@ PORTNOTE("other","Removed ATMInstall usage")
 	ATMInstall::AliasList.DeInit();
 	DeinitButtonBar();
 #endif
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
+// && !defined(EXCLUDE_FROM_XARALX)
 	DeinitMenuSystem();
 #endif
 	DimScale::Deinit();
@@ -345,7 +346,8 @@ PORTNOTE("other","Removed ATMInstall usage")
 	GlobalBitmapList::DeInit();
 	GlobalFractalList::DeInit();
 	OILBitmap::Deinit();
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
+// && !defined(EXCLUDE_FROM_XARALX)
 	HotKey::Deinit(); 
 #endif
 #ifndef DISABLE_TEXT_RENDERING

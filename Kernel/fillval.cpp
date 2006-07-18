@@ -205,7 +205,7 @@ CC_IMPLEMENT_DYNCREATE(StrokeTranspAttribute,  	TranspFillAttribute)
 CC_IMPLEMENT_DYNCREATE(MouldAttribute,	AttributeValue)
 
 // Declare smart memory handling in Debug builds
-//#define	new	CAM_DEBUG_NEW
+#define	new	CAM_DEBUG_NEW
 
 // funky functions for use with our profile gadgets ....
 

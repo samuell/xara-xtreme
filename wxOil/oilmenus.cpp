@@ -693,17 +693,17 @@ void DeinitMenuSystem()
 		CamelotMDIMenu = NULL;
 	}
 
+PORTNOTE("other","Removed menu destruction - temporary!")
+#if 0
 	if (WinMDIMenu)
 	{
-PORTNOTE("other","Removed menu destruction - may not be needed, lifetime controlled by window!")
-#if 0
 		DestroyWinMenu(WinMDIMenu);			//Destroy The MDI Frame Menu
-#endif
+
 		WinMDIMenu->Detach();
 		delete WinMDIMenu;
 		WinMDIMenu = NULL;
 	}
-
+#endif
 	//----------------------------------------------------------
 	// If the context-sensitive menu is left around delete it...
 /*	if (CamelotContextMenu)

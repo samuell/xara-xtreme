@@ -119,6 +119,8 @@ static BYTE GlobalByte;
 
 CC_IMPLEMENT_DYNCREATE(OpException, Operation)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 /*******************************************************************
 

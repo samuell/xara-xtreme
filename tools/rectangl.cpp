@@ -124,6 +124,9 @@ TCHAR *		RectangleTool::Author = _T("Peter Arnold");
 
 CC_IMPLEMENT_MEMDUMP( RectangleTool, QuickShapeBase )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	RectangleTool::RectangleTool()

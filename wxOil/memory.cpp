@@ -124,7 +124,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 DECLARE_SOURCE("$Revision$");
 
-
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 
 /********************************************************************************************

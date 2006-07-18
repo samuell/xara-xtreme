@@ -133,6 +133,9 @@ IMPLEMENT_DYNAMIC_CLASS( CCamView, wxView )
 CC_IMPLEMENT_DYNAMIC( ViewDragTarget, OilDragTarget )
 CC_IMPLEMENT_DYNCREATE( PageDropInfo, CCObject )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 // This user preference controls how many pixels the mouse must move before a
 // drag is initiated.
 INT32 CCamView::DragLatency = 3;

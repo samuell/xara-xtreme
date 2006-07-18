@@ -1419,7 +1419,10 @@ BOOL Tool_v1::RegisterToolSwitch(KeyPress* pKeyPress,BOOL FromFile)
 		{
 			// if this tool switch has already been assigned for this tool, return TRUE
 			if (*pToolSwitch->pKeyPress == *pKeyPress)
+			{
+				delete pKeyPress;
 				return TRUE;
+			}
 		}
 		else
 		{

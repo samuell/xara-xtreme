@@ -121,6 +121,9 @@ const OpState MenuItem::DefaultMenuState( FALSE, TRUE );		// not ticked, but gre
 CC_IMPLEMENT_MEMDUMP(MenuItem, CmdControl)
 CC_IMPLEMENT_DYNAMIC(OpMenuParam, OpParam)
 
+// This will get Camelot to display the filename and linenumber of any memory allocations
+// that are not released at program exit
+#define new CAM_DEBUG_NEW
 
 /********************************************************************************************
 
@@ -204,7 +207,10 @@ MenuItem::MenuItem(const String_256& description, UINT32 parentMenuID, BOOL sepa
 MenuItem::~MenuItem()
 {
 	if (SubMenuItems != NULL)
+	{
+		SubMenuItems->DeleteAll();
 		delete SubMenuItems;
+	}
 
 	if (pMenuParam)
 	{

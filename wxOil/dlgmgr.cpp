@@ -151,6 +151,8 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_DYNAMIC(CGadgetImageList, CCObject);
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 // Place all statics here please, ordered by class
 // Statics

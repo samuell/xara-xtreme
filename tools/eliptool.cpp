@@ -123,6 +123,9 @@ TCHAR*		EllipseTool::Author = _T("Peter Arnold");
 
 CC_IMPLEMENT_MEMDUMP( EllipseTool, QuickShapeBase )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	EllipseTool::EllipseTool()

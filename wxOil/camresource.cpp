@@ -115,6 +115,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 CC_IMPLEMENT_DYNCREATE(CamResource, CCObject)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 ResIDToString * CamResource::pHash = NULL;
 ResIDToString * CamResource::pObjectNameHash = NULL;

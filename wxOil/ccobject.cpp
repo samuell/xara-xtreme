@@ -996,7 +996,7 @@ CCObject* CCRuntimeClass::CreateObject()
 	void* pObject = NULL;
 
 	// Allocate memory for the new object.
-	pObject = CCObject::operator new(m_nObjectSize);
+	pObject = CCObject::operator new(m_nObjectSize, THIS_FILE, __LINE__);
 
 	// Attempt to construct it using dynamic creation facilities
 	if ((pObject != NULL) && ConstructObject(pObject))

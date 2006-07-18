@@ -119,6 +119,9 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(HotKey,ListItem)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 static List HotKeyList;
 
 enum HK_TokenIndex
@@ -307,7 +310,12 @@ BOOL HotKey::AddHotKey(KeyPress* pKeyPress, TCHAR* pOpToken,String_32* pTextDesc
 			}
 		}
 		else
+		{
 			TRACE( _T("HotKey: Unable to find op desc \"%s\"\n"),pOpToken);
+			// These will only get deleted if we return false so delete them here
+			delete pKeyPress;
+			delete pTextDesc;
+		}
 	}
 
 	return ok;
@@ -685,10 +693,10 @@ BOOL HotKey::ReadHotKeysFromFile(CCLexFile& file)
 
 BOOL HotKey::ReadHotKey(CCLexFile& file)
 {
-	KeyPress* pKeyPress;
+	KeyPress* pKeyPress = NULL;
 	String_256 OpToken;
-	String_32* pTextDesc;
-	BOOL CheckUnicode;;
+	String_32* pTextDesc = NULL;
+	BOOL CheckUnicode;
 
 	BOOL ok = HotKey::ReadKeyDef(file,&pKeyPress,&OpToken,&pTextDesc,&CheckUnicode);
 
@@ -696,6 +704,11 @@ BOOL HotKey::ReadHotKey(CCLexFile& file)
 	{
 		ok = HotKey::AddHotKey(pKeyPress,OpToken,pTextDesc,CheckUnicode);
 		if (!ok) TRACE( _T("HotKey: Unable to add hot key to the system\n"));
+	}
+	else
+	{
+		delete pKeyPress;
+		delete pTextDesc;
 	}
 
 	return (ok);
@@ -717,10 +730,10 @@ BOOL HotKey::ReadHotKey(CCLexFile& file)
 
 BOOL HotKey::ReadToolSwitch(CCLexFile& file)
 {
-	KeyPress* pKeyPress;
+	KeyPress* pKeyPress = NULL;
 	String_256 OpToken;
-	String_32* pTextDesc;	// This is not used with tool switches
-	BOOL CheckUnicode;		// This is not used with tool switches
+	String_32* pTextDesc = NULL;	// This is not used with tool switches
+	BOOL CheckUnicode;				// This is not used with tool switches
 
 	BOOL ok = HotKey::ReadKeyDef(file,&pKeyPress,&OpToken,&pTextDesc,&CheckUnicode);
 
@@ -747,13 +760,21 @@ BOOL HotKey::ReadToolSwitch(CCLexFile& file)
 			if (ok)
 			{
 				ok = pToolListItem->m_pTool->RegisterToolSwitch(pKeyPress,TRUE);
-				if (!ok) TRACE( _T("HotKey: Unable to register the tool switch\n"));
+				if (!ok)
+				{
+					TRACE( _T("HotKey: Unable to register the tool switch\n"));
+					delete pKeyPress;
+				}
 			}
 			else
 				TRACE( _T("HotKey: Dodgy ToolListItem for the tool ID %ld\n"),ToolID);
 		}
 		else
 			TRACE( _T("HotKey: Unable to find op '%s'\n"),(TCHAR*)OpToken);
+	}
+	else
+	{
+		delete pKeyPress;
 	}
 
 	return (ok);
@@ -934,6 +955,11 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 		{
 			delete *ppKeyPress;
 			*ppKeyPress = NULL;
+		}
+		if (pTextDesc != NULL)
+		{
+			delete pTextDesc;
+			pTextDesc = NULL;
 		}
 	}
 

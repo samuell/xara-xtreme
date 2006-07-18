@@ -117,6 +117,9 @@ static BOOL PrefsInitedOk = FALSE;
 // Dynamic classing implementation
 CC_IMPLEMENT_MEMDUMP(Preferences,       List)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 #if !defined(EXCLUDE_FROM_RALPH)
 
 /********************************************************************************************

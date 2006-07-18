@@ -157,6 +157,9 @@ CC_IMPLEMENT_MEMDUMP(MetaFileFilter, Filter)
 //CC_IMPLEMENT_MEMDUMP(AldusFormatFilter, MetaFileFilter )
 #endif
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	OILFilter::OILFilter(Filter *pFilter)

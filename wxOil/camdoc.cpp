@@ -114,6 +114,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 IMPLEMENT_DYNAMIC_CLASS( CCamDoc, wxDocument )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 // Setting this to some document will force all CCamDoc's created by the
 // default constructor to attach to m_pForceDocument
 Document *CCamDoc::s_pForceDocument = NULL;

@@ -108,6 +108,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_MEMDUMP(ModuleListItem, ListItem)
 CC_IMPLEMENT_MEMDUMP(ModuleList, List)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	ModuleListItem(Module *pNewModule, OILModule *pNewOILModule)
@@ -155,10 +158,10 @@ ModuleListItem::~ModuleListItem()
 	
 	if( NULL != m_pOILModule )
 	{
-		PORTNOTETRACE("other","ModuleListItem::~ModuleListItem - m_pOILModule NOT deleted");
-#ifndef EXCLUDE_FROM_XARALX
+//		PORTNOTETRACE("other","ModuleListItem::~ModuleListItem - m_pOILModule NOT deleted");
+//#ifndef EXCLUDE_FROM_XARALX
 		delete m_pOILModule;
-#endif
+//#endif
 		m_pOILModule = NULL;
 	}
 }

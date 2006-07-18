@@ -145,6 +145,8 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(ZoomTool, Tool_v1)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 // *******************************************************
 // MIN and MAX Macros - These should not be here, I'm sure

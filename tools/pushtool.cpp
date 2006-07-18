@@ -140,7 +140,10 @@ DECLARE_SOURCE("$Revision$");
 
 
 CC_IMPLEMENT_MEMDUMP(PushTool, Tool_v1)
+CC_IMPLEMENT_DYNCREATE( OpPush, Operation )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
 
 /********************************************************************************************
 
@@ -559,7 +562,6 @@ void PushTool::OnMouseMove(DocCoord dcPoint, Spread* pSpread, ClickModifiers mod
 //  The Push Operation
 
 
-CC_IMPLEMENT_DYNCREATE( OpPush, Operation )
 
 /********************************************************************************************
 

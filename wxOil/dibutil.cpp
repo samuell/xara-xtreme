@@ -125,6 +125,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "hardwaremanager.h"
 using namespace oilHardwareManager;
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 // if this is non-zero, then extra scanlines get allocated to help find walking-past bitmap
 // type bugs
 #define	DIB_DEBUG	0

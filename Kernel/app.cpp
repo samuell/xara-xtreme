@@ -163,6 +163,9 @@ DECLARE_SOURCE("$Revision$");
 
 CC_IMPLEMENT_MEMDUMP(Application, CCObject)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 Application Camelot;
 
 /***********************************************************************************************
@@ -664,7 +667,8 @@ void Application::Deinit()
 		TheNoiseManager=NULL;
 	}
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
+#if !defined(EXCLUDE_FROM_XARALX)
 PORTNOTE("colourmanager","Removed XaraCMS usage")
 	if (CMSManager!=NULL)
 	{
@@ -684,13 +688,14 @@ PORTNOTE("colourmanager","Removed XaraCMS usage")
 	}
 #endif // VECTOR_STROKING
 
+#endif	// EXCLUDE_FROM_XARALX
 	// Get rid of the blob manager
 	if (BlobMgr!=NULL)
 	{
 		delete BlobMgr;
 		BlobMgr = NULL;
 	}
-#endif // EXCLUDE_FROM_RALPH, EXCLUDE_FROM_XARALX
+#endif // EXCLUDE_FROM_RALPH
 
 PORTNOTE("other","Removed un-=impl. stuff")
 #ifndef EXCLUDE_FROM_XARALX

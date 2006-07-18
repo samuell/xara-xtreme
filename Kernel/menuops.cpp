@@ -280,6 +280,10 @@ CC_IMPLEMENT_DYNCREATE  (DummyOp,               Operation)
 
 CC_IMPLEMENT_DYNCREATE  (OpToolSelect,  Operation)
 
+// This will get Camelot to display the filename and linenumber of any memory allocations
+// that are not released at program exit
+#define new CAM_DEBUG_NEW
+
 
 //********************************************************************************************
 //                                                                      TOOL SELECTION OPERATION

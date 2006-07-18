@@ -123,6 +123,9 @@ CC_IMPLEMENT_MEMDUMP(ModInfo, ModInfo_v1)
 CC_IMPLEMENT_MEMDUMP(Module_v1, CCObject)
 CC_IMPLEMENT_MEMDUMP(Module, Module_v1)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	void Module::InitModules()

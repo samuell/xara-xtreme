@@ -125,6 +125,9 @@ CC_IMPLEMENT_DYNCREATE(OpToggleDoubleBuffer, Operation)
 
 IMPLEMENT_DYNAMIC_CLASS( CRenderWnd, wxWindow )
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 BEGIN_EVENT_TABLE( CRenderWnd, wxWindow )
 	EVT_PAINT(				CRenderWnd::OnPaint )			
 	EVT_ERASE_BACKGROUND(	CRenderWnd::OnErase )

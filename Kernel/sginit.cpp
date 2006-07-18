@@ -113,7 +113,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ngdialog.h"	// For OpDisplayNameGallery & OpNGPropertyIndexDesc
 //#include "sgscan.h"		// For Library::InitLibPrefs() - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layerprp.h"	// For LayerPropertiesDlg::Init()
-//#include "aprps.h"
+#include "aprps.h"
 //#include "frameops.h"	// OpGrabFrame::Init()
 
 // Taken out by vector stroking code Neville 2/10/97
@@ -233,12 +233,10 @@ void SGInit::DeInit(void)
 PORTNOTE("galleries", "disabled various galleries deinit")
 #ifndef STANDALONE
 #ifndef WEBSTER
-#ifndef EXCLUDE_FROM_XARALX
 	LayerPropertyTabsDlg::Deinit();	
-#endif
 #endif	// WEBSTER	
-#ifndef EXCLUDE_FROM_XARALX
 	GIFAnimationPropertyTabsDlg::Deinit();
+#ifndef EXCLUDE_FROM_XARALX
 	OpGrabFrame::DeInit();
 #endif
 #endif

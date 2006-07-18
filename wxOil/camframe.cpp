@@ -123,6 +123,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "ccolbar.h"
 #include "dragmgr.h"
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 #if defined(USE_WXAUI)
 
 class CamFrameManager : public wxFrameManager

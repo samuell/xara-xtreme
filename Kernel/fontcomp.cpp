@@ -247,6 +247,9 @@ CC_IMPLEMENT_DYNAMIC(FontComponentListItem, ListItem)
 CC_IMPLEMENT_DYNAMIC(FontComponentList, List)
 CC_IMPLEMENT_DYNAMIC(FontComponent, DocComponent)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	BOOL FontComponentClass::Init()

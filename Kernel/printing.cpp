@@ -119,6 +119,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 CC_IMPLEMENT_DYNCREATE(OpPrint, Operation)
 
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 /********************************************************************************************
 
 >	OpPrint::OpPrint()

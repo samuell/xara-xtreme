@@ -141,7 +141,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_DYNAMIC( CWxBitmap, OILBitmap )
 
 // Declare smart memory handling in Debug builds
-//#define	new	CAM_DEBUG_NEW
+#define new CAM_DEBUG_NEW
 
 
 // firstly the bits of the OILBitmap class that get implemented in the OIL layer

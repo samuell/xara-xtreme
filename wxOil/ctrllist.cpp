@@ -106,6 +106,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "bars.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNCREATE(ControlList, CCObject)
+
+// Declare smart memory handling in Debug builds
+#define new CAM_DEBUG_NEW
+
 ControlList * ControlList::m_pControlList = NULL;
 
 /********************************************************************************************
