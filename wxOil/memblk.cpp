@@ -197,11 +197,12 @@ LPVOID MemoryBlock::Init( INT32 InitSize, BOOL bAutoZero, MemoryBlockType Type )
 	LPVOID				pNewPtr;
 	if( bAutoZero )
 	{
-		pNewPtr = calloc( m_RoundedSize, 1 );
+		pNewPtr = CCMalloc( m_RoundedSize );
+		memset(pNewPtr, 0, m_RoundedSize);
 	}
 	else
 	{
-		pNewPtr = malloc( m_RoundedSize );
+		pNewPtr = CCMalloc( m_RoundedSize );
 	}
 		
 	if( pNewPtr == NULL )
@@ -318,7 +319,7 @@ void MemoryBlock::DeInit()
 #if USE_STD_ALLOC
 	if( NULL != m_pMemBlk )
 	{
-		free(  m_pMemBlk );
+		CCFree(  m_pMemBlk );
 		m_pMemBlk = NULL;
 	}
 #elif USE_VM_BLOCKS
@@ -457,10 +458,10 @@ BOOL MemoryBlock::Grow( UINT32 OldSize, UINT32 NewSize, LPVOID *Pointer )
 	if( NewSize == m_RoundedSize )
 		return TRUE;									// if same physical size
 
-	LPVOID				NewPtr = realloc( *Pointer, NewSize );
+	LPVOID				NewPtr = CCRealloc( *Pointer, NewSize );
 	if (NewPtr==NULL)
 	{
-		TRACEUSER( "Andy", wxT("VirtualAlloc growing from %ld to %ld failed\n"), OldSize, NewSize);
+		TRACEUSER( "Andy", wxT("CCRealloc growing from %ld to %ld failed\n"), OldSize, NewSize);
 		return FALSE;
 	}
 	*Pointer = m_pMemBlk = NewPtr;
@@ -529,10 +530,10 @@ BOOL MemoryBlock::Shrink( UINT32 OldSize, UINT32 NewSize, LPVOID *Pointer )
 		return FALSE;
 	}									// if same physical size
 
-	LPVOID				NewPtr = realloc( *Pointer, NewSize );
+	LPVOID				NewPtr = CCRealloc( *Pointer, NewSize );
 	if (NewPtr==NULL)
 	{
-		TRACEUSER( "Andy", wxT("VirtualAlloc growing from %ld to %ld failed\n"), OldSize, NewSize);
+		TRACEUSER( "Andy", wxT("CCRealloc growing from %ld to %ld failed\n"), OldSize, NewSize);
 		return FALSE;
 	}
 	*Pointer = m_pMemBlk = NewPtr;

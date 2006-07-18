@@ -108,11 +108,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "memblk.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#if !defined(__WXMAC__)
-#include <malloc.h>
-#else
-#include <malloc/malloc.h>
-#endif
 
 #if defined(__WXGTK__)
 #include <stdio.h>
@@ -408,7 +403,7 @@ MHANDLE DynamicHeap::ClaimBlock(size_t Size)
 #endif
 
 	// Get the memory
-	ADDR pNewBlock = (ADDR) malloc(Size);
+	ADDR pNewBlock = (ADDR) CCMalloc(Size);
 
 	// Check for NULL
 	if (pNewBlock==NULL)
@@ -421,7 +416,7 @@ MHANDLE DynamicHeap::ClaimBlock(size_t Size)
 	if (NewHandle==BAD_MHANDLE)
 	{
 		TRACE( wxT("ClaimBlock - got the memory, but not a handle\n") );
-		free(pNewBlock);
+		CCFree(pNewBlock);
 		pNewBlock = NULL;
 	}
 
@@ -465,7 +460,11 @@ BOOL DynamicHeap::ReleaseBlock(MHANDLE Handle)
 	}
 
 	// It was OK, so free the memory
-	free(Address);
+	CCFree(Address);
+
+	// And release the handle or it never will be
+	ReleaseHandle(Handle);
+
 	return TRUE;
 }
 
@@ -506,15 +505,11 @@ BOOL DynamicHeap::IncreaseBlock(MHANDLE Handle, UINT32 NumBytes)
 	}
 
 	// Find out how big the old block was
-#if !defined(__WXMAC__)
-	size_t				Size = _msize(Address);
-#else
-	size_t				Size = malloc_size(Address);
-#endif
+	size_t				Size = CCGetBlockSize(Address);
 	Size += NumBytes;
 
 	// Reallocate the block to the new size
-	ADDR				pNewBlock = (ADDR)realloc(Address, Size);
+	ADDR				pNewBlock = (ADDR)CCRealloc(Address, Size);
 	if( pNewBlock==NULL )
 	{
 		TRACE( wxT("realloc failed in IncreaseBlock\n") );
@@ -561,15 +556,11 @@ BOOL DynamicHeap::DecreaseBlock(MHANDLE Handle, UINT32 NumBytes)
 	}
 
 	// Find out how big the old block was
-#if !defined(__WXMAC__)
-	size_t				Size = _msize(Address);
-#else
-	size_t				Size = malloc_size(Address);
-#endif
+	size_t				Size = CCGetBlockSize(Address);
 	Size -= NumBytes;
 
 	// Reallocate the block to the new size
-	ADDR pNewBlock = (ADDR) realloc(Address, Size);
+	ADDR pNewBlock = (ADDR) CCRealloc(Address, Size);
 	if (pNewBlock==NULL)
 	{
 		TRACE( wxT("realloc failed in IncreaseBlock\n") );
@@ -580,15 +571,6 @@ BOOL DynamicHeap::DecreaseBlock(MHANDLE Handle, UINT32 NumBytes)
 	AlterHandle(Handle, pNewBlock);
 	return TRUE;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -757,11 +739,7 @@ BOOL DescribeBlock(MHANDLE Handle, ADDR *Address, size_t *Size)
 	}
 
 	// Extract the size from the block
-#if !defined(__WXMAC__)
-	*Size = _msize(*Address);
-#else
-	*Size = malloc_size(*Address);
-#endif
+	*Size = CCGetBlockSize(*Address);
 
 	// Everything went ok
 	return TRUE;

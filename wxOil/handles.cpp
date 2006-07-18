@@ -203,25 +203,26 @@ BOOL InitHandles()
 
 void DeinitHandles()
 {   
-#ifdef _ 
+#ifdef _DEBUG
 	// Tell me how many handles were in use at its peak
-	TRACEUSER( "Rik", wxT("%ld Handles were used in total.\n"), ElementsInHandleTable );
+	TRACE( wxT("DeinitHandles: Max size of handle table = %ld"), ElementsInHandleTable );
 
 	// Tell everyone about any handles that were not released
 	UINT32 Waste = 0;
 	for (UINT32 n=1; n<ElementsInHandleTable; n++)
 	{	
 		if (HandlesTable[n].Address != BAD_MHANDLE )
+		{
+			TRACE( wxT("Handle %d not released (0x%08x)"), n, HandlesTable[n].Address);
 			Waste++;
+		}
 	}
-	TRACE( wxT("DeinitHandles - %ld Handles had not been released\n"), Waste );
+	TRACE( wxT("DeinitHandles: %ld handles not released"), Waste );
 #endif
 	
 	// dealloc the memory we now have from the OS
 	HandlesMemory.DeInit();
 }
-     
-     
 
 
 
@@ -288,6 +289,8 @@ ADDR DescribeHandle( MHANDLE Handle )
 #ifdef USE_UNIQUE_IDS
 BOOL ReleaseHandle( MHANDLE Handle )
 {
+//	TRACEUSER("Gerry", _T("ReleaseHandle - %d"), Handle);
+
 	// make sure its not garbage
 	ENSURE( (Handle & 0xFFFF) > BAD_MHANDLE, "ReleaseHandle: Handle was bad" );
 	ENSURE( (Handle & 0xFFFF) < ElementsInHandleTable, "ReleaseHandle: Handle was bad" );
@@ -319,6 +322,8 @@ BOOL ReleaseHandle( MHANDLE Handle )
 
 BOOL ReleaseHandle( MHANDLE Handle )
 {
+//	TRACEUSER("Gerry", _T("ReleaseHandle - %d"), Handle);
+
 	// make sure its not garbage
 	ENSURE( Handle > BAD_MHANDLE, "ReleaseHandle: Handle was BAD_MHANDLE" );
 	ENSURE( Handle < ElementsInHandleTable, "ReleaseHandle: Handle was too big" );
@@ -449,6 +454,8 @@ BOOL RelocateHandles( ADDR LowAddr, ADDR HighAddr, INT32 Shift )
 
 BOOL ReleaseRangeOfHandles( ADDR LowAddr, ADDR HighAddr )
 {
+//	TRACEUSER("Gerry", _T("ReleaseRange - 0x%08x to 0x%08x"), LowAddr, HighAddr);
+
 	// Make sure the params are not rubbish
 	ENSURE( HighAddr > LowAddr, "ReleaseRangeOfHandles: Low Addr is Higher the High Addr" );
 	
@@ -460,22 +467,23 @@ BOOL ReleaseRangeOfHandles( ADDR LowAddr, ADDR HighAddr )
     	Address = HandlesTable[ n ].Address;
 
 		// if it is ok
-    	if (Address != BAD_MHANDLE)
-    	{
-    		if( Address >= LowAddr &&
-    			Address < HighAddr )
-	    	{
-    			// If the address is in the range, release it
-    			HandlesTable[n].Address = PBYTE(BAD_MHANDLE);
+		if (Address != BAD_MHANDLE)
+		{
+			if( Address >= LowAddr &&
+				Address < HighAddr )
+			{
+				// If the address is in the range, release it
+//				TRACEUSER("Gerry", _T("ReleaseRange - releasing %d"), n);
+				HandlesTable[n].Address = PBYTE(BAD_MHANDLE);
 				HandlesInUse --;
 			}
 		}
 	}
-    		
+
     return TRUE;
 }
 
-                        
+
 /*********************************************************************************************
 
 >		MHANDLE ClaimHandle( ADDR Address )
@@ -537,6 +545,7 @@ MHANDLE ClaimHandle( ADDR Address )
 				HandlesTable[ Handle ].UniqueID = UniqueID;
 				return MAKEINT32( Handle, UniqueID );
 			#else
+//				TRACEUSER("Gerry", _T("ClaimHandle - %d"), Handle);
 				return Handle;
 			#endif
 		}

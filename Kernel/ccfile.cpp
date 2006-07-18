@@ -4852,6 +4852,7 @@ CCMemFile::CCMemFile(void *pFile, UINT32 size, FileAccess fProt,
   	     	return;
 		}		      
 		
+		MemHandle	= BAD_MHANDLE;
 		MemFile		= (BYTE*) pFile;			// Set Memory file pointer
 		CurrentPos  = 0;						// Set Current file position		
 		
@@ -4918,12 +4919,13 @@ CCMemFile::~CCMemFile()
 		// report error that file is not closed before destructor call
 		GotError(_R(IDE_MEM_CLOSE_ERROR));
 
-        // Release the memory occupied by the file (only if not reading)
-		if (FileProt != CCMemRead) 
+        // Release any memory block we might have
+		if (MemHandle != BAD_MHANDLE)
+		{
 			ReleaseBlock(MemHandle);
-
-       	return;
-	}		
+			MemHandle = BAD_MHANDLE;
+		}
+	}
 }
 
 /********************************************************************************************
@@ -5579,9 +5581,12 @@ void CCMemFile::close()
 {
 	IsOpen = FALSE;
 
-    // Release the memory occupied by the file
-	if (FileProt != CCMemRead) 
+    // Release any memory block we might have
+	if (MemHandle != BAD_MHANDLE)
+	{
 		ReleaseBlock(MemHandle);
+		MemHandle = BAD_MHANDLE;
+	}
 }
 
 

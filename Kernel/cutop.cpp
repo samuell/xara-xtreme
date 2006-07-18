@@ -535,7 +535,6 @@ OpCopy::OpCopy(): SelOperation()
 
 BOOL OpCopy::Init()
 {
-	TRACE( _T("Warning - OpCut::Init called\n") );
 	return (RegisterOpDescriptor(0,
  							_R(IDS_COPYOP),
 							CC_RUNTIME_CLASS(OpCopy),
