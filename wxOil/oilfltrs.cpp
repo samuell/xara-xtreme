@@ -1507,24 +1507,6 @@ PNGOILFilter::PNGOILFilter(Filter* pFilter) : OILFilter(pFilter)
 	FilterExt.Load(_R(IDS_FILTEREXT_PNG));
 } 
 
-/********************************************************************************************
-
->	ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter)
-
-	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	25/4/96
-	Inputs:		pFilter - The Filter
-	Purpose:	Constructs the oily parts of the PNG File Format Filter (ie the list of
-				File Extensions that this filter understands)
-
-********************************************************************************************/
-
-ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter) : OILFilter(pFilter)
-{
-	FilterName.Load(_R(IDS_FILTERNAME_IMAGEMAGICK));
-	FilterExt.Load(_R(IDS_FILTEREXT_IMAGEMAGICK));
-} 
-
 #if !defined(EXCLUDE_FROM_RALPH) 
 
 

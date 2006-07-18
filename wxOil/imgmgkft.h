@@ -117,13 +117,17 @@ class KernelBitmap;
 
 ********************************************************************************************/
 
+// Need a type for the hash data or we get duplicate const error
+typedef const TCHAR * IMFilterString;
+
+// Declare the hash map from IMFilterString to UINT32
+WX_DECLARE_HASH_MAP( IMFilterString, UINT32, wxStringHash, wxStringEqual, IMFilterStringToUINT32);
+
 class ImageMagickExportOptions : public MaskedFilterExportOptions
 {
 CC_DECLARE_DYNCREATE(ImageMagickExportOptions)
 
 public:
-	static BOOL Declare();
-
 	ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName);
 	ImageMagickExportOptions() {};
 
@@ -134,10 +138,31 @@ public:
 	
 	virtual UINT32 GetFilterNameStrID() { return _R(IDS_FILTERNAME_ImageMagick);}
 
+	virtual UINT32 * GetConfigPtr(const TCHAR * FilterName) const
+	{
+		if (!s_pHash)
+			return NULL;
+		IMFilterStringToUINT32::iterator i=s_pHash->find(FilterName);
+		return (UINT32 *)((i==s_pHash->end())?NULL:&(i->second));
+	}
 
+	virtual UINT32 GetConfig() const
+	{
+		UINT32 * pConfig = GetConfigPtr(FilterName);
+		return pConfig?(*pConfig):0;
+	}
+
+	virtual void SetConfig(UINT32 value) const
+	{
+		UINT32 * pConfig = GetConfigPtr(FilterName);
+		if (pConfig)
+			*pConfig = value;
+	}
 
 protected:
-	static	UINT32 g_CompactedFlagsForDefaults;
+	String_256 FilterName;
+
+	static	IMFilterStringToUINT32 * s_pHash;
 };
 
 /********************************************************************************************
@@ -183,6 +208,13 @@ public:
 	// Public way of finding out how compatable the ImageMagick filter thought the file was
 	// We might want to bring in the Accusoft filter to help out.
 	virtual INT32 GetImageMagickCompatibility() { return ImageMagickHowCompatible; }
+
+	// These get overridden in the derived classes
+	virtual BOOL CanDoTransparency() { return TRUE; }
+	virtual BOOL CanDoInterlace() { return FALSE; }
+	virtual wxString GetTag() { return _T("mmif"); }
+	virtual TCHAR * GetExtension() { return _T("mmif"); }
+	virtual INT32 GetCompatibility() { return 10; }
 
 	// Virtual overrides
 	virtual UINT32 GetExportMsgID();
@@ -236,6 +268,8 @@ protected:
 	// The class we use for actually outputting the ImageMagick data and converting from 32 to n bpps
 	static OutputPNG DestImageMagick;
 #endif
+
+	ResourceID FilterExtID;
 	
 	// This is so we can remember what we thought of the GIF file.
 	INT32 ImageMagickHowCompatible;
@@ -253,7 +287,74 @@ protected:
 	static BOOL s_HaveCheckedPath;
 	static BOOL s_DoWarning;
 	static BOOL s_Disable;
+
+	// These allow us to use a single filter type
+	static BOOL s_OutputTransparent;
+	static BOOL s_OutputInterlaced;
 };
+
+/********************************************************************************************
+
+>	class ImageMagickOILFilter : public OILFilter
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	The PNG File format Oil Filter (Extension etc)
+
+********************************************************************************************/
+
+class ImageMagickOILFilter : public OILFilter
+{
+public:
+	ImageMagickOILFilter (Filter* pFilter, ResourceID FilterNameID, ResourceID FilterExtID);
+};
+
+
+#define DECLARE_IMAGEMAGICK_FILTER(IMType, IMCanInport, IMCanExport, IMTransparency, IMInterlace, IMTag, IMExtension, IMCompatibility)	\
+class ImageMagickFilter ## IMType : public ImageMagickFilter					\
+{																				\
+public:																			\
+	ImageMagickFilter ## IMType()												\
+	{																			\
+		Flags.CanImport 	= IMCanInport;										\
+		Flags.CanExport 	= IMCanExport;										\
+		FilterID			= IMAGEMAGICK_ ## IMType ;							\
+		FilterNameID		= _R(IDS_IMAGEMAGICK_ ## IMType ## _FILTERNAME);	\
+		FilterInfoID		= _R(IDS_IMAGEMAGICK_ ## IMType ## _FILTERINFO);	\
+		FilterExtID			= _R(IDS_IMAGEMAGICK_ ## IMType ## _FILTEREXT);		\
+		ImportMsgID			= _R(IDS_IMAGEMAGICK_ ## IMType ## _IMPORTMSG);		\
+		ExportMsgID			= _R(IDS_IMAGEMAGICK_ ## IMType ## _PREPAREMSG);	\
+		ExportingMsgID		= _R(IDS_IMAGEMAGICK_ ## IMType ## _EXPORTMSG);		\
+		Export2ndStageMsgID = _R(IDS_IMAGEMAGICK_ ## IMType ## _MASKINGMSG);	\
+	}																			\
+																				\
+	virtual BOOL CanDoTransparency()	{ return IMTransparency; }				\
+	virtual BOOL CanDoInterlace() 		{ return IMInterlace; }					\
+	virtual wxString GetTag() 			{ return IMTag; }						\
+	virtual TCHAR * GetExtension() 		{ return IMExtension; }					\
+	virtual INT32 GetCompatibility() 	{ return IMCompatibility; }				\
+};
+
+// Instructions on adding a new ImageMagickFilter
+// ==============================================
+//
+// 1. Declare the filter below (let's say you give it the classname FOO)
+// 2. Add "IMAGEMAGIK_FOO" to the enum in filter_types.h
+// 3. Add "ADD_FILTER(ImageMagickFilterFOO)" to filters.cpp
+// 4. Add appropriate resources to wxOil/xrc/EN/imagemagick-strings.xrc
+//    These would be
+//		IDS_IMAGEMAGICK_FOO_FILTERNAME
+//		IDS_IMAGEMAGICK_FOO_FILTERINFO
+//		IDS_IMAGEMAGICK_FOO_FILTEREXT
+//		IDS_IMAGEMAGICK_FOO_IMPORTMSG
+//		IDS_IMAGEMAGICK_FOO_PREPAREMSG
+//		IDS_IMAGEMAGICK_FOO_EXPORTMSG
+//		IDS_IMAGEMAGICK_FOO_MASKINGMSG
+//
+
+//						  ClassName	Improt	Export	Transp	Int'lce	Tag			Extension	Compat
+DECLARE_IMAGEMAGICK_FILTER(MIFF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("miff"),	_T("miff"), 10)
+DECLARE_IMAGEMAGICK_FILTER(PSD,		TRUE,	TRUE,	TRUE,	FALSE,	_T("psd"),  _T("psd"),	10)
 
 #endif // INC_ImageMagickFILTR
 

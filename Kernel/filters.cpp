@@ -790,7 +790,8 @@ PORTNOTETRACE("filter","Removed CamelotWebFilter usage");
 #if _DEBUG
 	if (ImageMagickFilter::CheckPath())
 	{
-		ADD_FILTER(ImageMagickFilter)
+		ADD_FILTER(ImageMagickFilterMIFF)
+		ADD_FILTER(ImageMagickFilterPSD)
 	}
 #endif
 	ADD_FILTER(TI_GIFFilter)

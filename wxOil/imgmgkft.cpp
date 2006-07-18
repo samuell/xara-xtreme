@@ -147,31 +147,13 @@ BOOL		ImageMagickFilter::s_HaveCheckedPath = FALSE;
 BOOL		ImageMagickFilter::s_DoWarning = TRUE;
 BOOL		ImageMagickFilter::s_Disable = FALSE;
 
+BOOL 		ImageMagickFilter::s_OutputTransparent = FALSE;
+BOOL		ImageMagickFilter::s_OutputInterlaced = FALSE;
+
 #if 1
 
-UINT32 ImageMagickExportOptions::g_CompactedFlagsForDefaults = 0;
+IMFilterStringToUINT32 * ImageMagickExportOptions::s_pHash = NULL;
 
-
-
-/********************************************************************************************
-
->	static BOOL ImageMagickExportOptions::Declare()
-
-	Author:		Colin_Barfoot (Xara Group Ltd) <camelotdev@xara.com> (from Neville)
-	Created:	29/10/96
-	Returns:	TRUE if successfully declared preferences
-				FALSE otherwise
-	Purpose:	To declare preferences associated with these export options
-
-********************************************************************************************/
-BOOL ImageMagickExportOptions::Declare()
-{
-	BOOL ok = Camelot.DeclareSection(_T("Filters"), 10)
-			&& Camelot.DeclarePref( NULL, _T("ExportImageMagicktype"), &g_CompactedFlagsForDefaults, 0, 3 );
-
-	// All ok
-	return ok;
-}
 
 /********************************************************************************************
 
@@ -186,7 +168,36 @@ BOOL ImageMagickExportOptions::Declare()
 ImageMagickExportOptions::ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName) :
 						MaskedFilterExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName)
 {
-	// just us rats in here
+	FilterName = *pFilterName;
+
+	// if we don't already have the static hash, generate one
+	// We never delete this (harmless)
+	if (!s_pHash)
+	{
+		s_pHash = new IMFilterStringToUINT32;
+	}
+
+	if (!s_pHash) // Not much we can do
+		return;
+
+	// Declare the preference if it hasn't been seen already
+	if (!GetConfigPtr((const TCHAR *)(*pFilterName)))
+	{
+		// OK, it's not in the hash already, so we need to declare it
+		(*s_pHash)[camStrdup((const TCHAR *)*pFilterName)]=0;
+		UINT32 * pPref = GetConfigPtr((const TCHAR *)(*pFilterName));
+		ERROR3IF(!pPref, "Config did not stick");
+		if (pPref)
+		{	
+			if (Camelot.DeclareSection(_T("Filters"), 10))
+			{
+				String_256 PrefName = *pFilterName;
+				String_256 Prefix(_T("ExportImageMagickFlags"));
+				Prefix+=PrefName;
+				Camelot.DeclarePref( NULL, Prefix, pPref, 0, 3 );
+			}
+		}
+	}
 }
 
 /********************************************************************************************
@@ -204,7 +215,7 @@ BOOL ImageMagickExportOptions::RetrieveDefaults()
 	if (!MaskedFilterExportOptions::RetrieveDefaults())
 		return FALSE;
 
-	SetMakeInterlaced(g_CompactedFlagsForDefaults & 1);
+	SetMakeInterlaced(GetConfig() & 1);
 	return TRUE;
 }
 
@@ -223,8 +234,7 @@ BOOL ImageMagickExportOptions::SetAsDefaults() const
 	if (!MaskedFilterExportOptions::SetAsDefaults())
 		return FALSE;
 
-	g_CompactedFlagsForDefaults = WantTransparent() ? 2 : 0;
-	g_CompactedFlagsForDefaults |= WantInterlaced() ? 1 : 0;
+	SetConfig( ( WantTransparent() ? 2 : 0 ) | (WantInterlaced() ? 1 : 0) );
 
 	return TRUE;
 }
@@ -244,18 +254,20 @@ BOOL ImageMagickExportOptions::SetAsDefaults() const
 ********************************************************************************************/
 ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 {
-	ImportMsgID = _R(IDS_IMPORTMSG_IMAGEMAGICK);
-	Flags.CanImport = TRUE;
-	Flags.CanExport = TRUE;
-
-	FilterID = IMAGEMAGICK;
-	ExportMsgID = _R(IDS_EXPORTMSG_IMAGEMAGICK);			// "Preparing ImageMagick file..."
-	ExportingMsgID = _R(IDS_EXPORTINGMSG_IMAGEMAGICK);		// "Exporting ImageMagick file..."
-
-	// Special Mask prepartion stage ID
-	Export2ndStageMsgID = _R(IDN_MASKINGMSG_IMAGEMAGICK);	// "Preparing mask for ImageMagick file..."
 	ExportRegion = NULL;
 	TempFile = NULL;
+
+	// Things that the derive class constructor may stamp on
+	Flags.CanImport 	= TRUE;
+	Flags.CanExport 	= TRUE;
+	FilterID			= IMAGEMAGICK;
+	FilterNameID		= _R(IDS_IMAGEMAGICK_FILTERNAME);
+	FilterInfoID		= _R(IDS_IMAGEMAGICK_FILTERINFO);
+	FilterExtID			= _R(IDS_IMAGEMAGICK_FILTEREXT);
+	ImportMsgID			= _R(IDS_IMAGEMAGICK_IMPORTMSG);
+	ExportMsgID			= _R(IDS_IMAGEMAGICK_PREPAREMSG);			// "Preparing ImageMagick file..."
+	ExportingMsgID		= _R(IDS_IMAGEMAGICK_EXPORTMSG);		// "Exporting ImageMagick file..."
+	Export2ndStageMsgID = _R(IDS_IMAGEMAGICK_MASKINGMSG);	// "Preparing mask for ImageMagick file..."
 }
 
 /********************************************************************************************
@@ -272,17 +284,14 @@ ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 ********************************************************************************************/
 BOOL ImageMagickFilter::Init()
 {
-	if (!ImageMagickExportOptions::Declare())
-		return FALSE;
-
 	// Get the OILFilter object
-	pOILFilter = new ImageMagickOILFilter(this);
+	pOILFilter = new ImageMagickOILFilter(this, FilterNameID, FilterExtID);
 	if (pOILFilter==NULL)
 		return FALSE;
 
 	// Load the description strings
-	FilterName.Load(_R(IDS_IMAGEMAGICK_FILTERNAME));
-	FilterInfo.Load(_R(IDS_IMAGEMAGICK_FILTERINFO));
+	FilterName.Load(FilterNameID);
+	FilterInfo.Load(FilterInfoID);
 
 	// All ok
 	return TRUE;
@@ -309,8 +318,10 @@ INT32 ImageMagickFilter::HowCompatible(PathName& Filename, ADDR HeaderStart, UIN
 {
 	// We need to remember what we thought of this file in our class variable.
 	// So, set it to a nice default value at the start.
-	ImageMagickHowCompatible = ((Filename.GetType() == _T("miff")) ||
-								(Filename.GetType() == _T("miff")) ) ? 10:0;
+	String_256 fextension = Filename.GetType();
+	fextension.toLower();
+
+	ImageMagickHowCompatible = (fextension == (String_256)GetExtension()) ? GetCompatibility():0;
 
 	// Return the found value to the caller.
 	return ImageMagickHowCompatible;
@@ -527,21 +538,15 @@ void ImageMagickFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 
 	// do the specific to this class options
 	// Filter type can be changed by the export options dialog box from say 
-	// ImageMagick to ImageMagick_INTERLACED
+
+	s_OutputTransparent = pImageMagickOptions->WantTransparent();
+	s_OutputInterlaced = pImageMagickOptions->WantInterlaced();
 	UINT32 Silliness = pImageMagickOptions->WantTransparent() ? 2 : 0;
 	Silliness |= pImageMagickOptions->WantInterlaced() ? 1 : 0;
 	if (Silliness >= 0 && Silliness <= 4)
 	{
 		Compression = Silliness;
-		// Compression ranges from 0 .. 4 so map this onto our filter types
-//		s_FilterType = ImageMagick + Silliness;
-		switch (Silliness)
-		{
-		case 0:	s_FilterType = IMAGEMAGICK; break;
-		case 1:	s_FilterType = IMAGEMAGICK_INTERLACED; break;
-		case 2:	s_FilterType = IMAGEMAGICK_TRANSPARENT; break;
-		case 3:	s_FilterType = IMAGEMAGICK_TRANSINTER; break;
-		}
+		s_FilterType = IMAGEMAGICK;
 
 		if (pImageMagickOptions->WantTransparent() && pImageMagickOptions->GetSelectionType() == SELECTION)
 			DoingMask = TRUE;
@@ -1026,30 +1031,9 @@ BOOL ImageMagickFilter::WriteToFile( CCLexFile* File, LPBITMAPINFO Info, LPBYTE 
 	ERROR2IF(pPalette==NULL,FALSE,"ImageMagickFilter::WriteToFile palette pointer is null");
 
 	// Set up our format type flags.
-	BOOL Interlace = TRUE;	// Use interlace or not
 	INT32 Transparent = -1;	// colour or -1 = no transparency
-	BOOL WantTransparent = FALSE;
-
-	switch (s_FilterType)
-	{
-		default:
-		case IMAGEMAGICK:
-			Interlace 		= FALSE;
-			WantTransparent = FALSE;
-			break;
-		case IMAGEMAGICK_INTERLACED:
-			Interlace 		= TRUE;
-			WantTransparent = FALSE;
-			break;
-		case IMAGEMAGICK_TRANSPARENT:
-			Interlace 		= FALSE;
-			WantTransparent = TRUE;
-			break;
-		case IMAGEMAGICK_TRANSINTER:
-			Interlace 		= TRUE;
-			WantTransparent = TRUE;
-			break;
-	}
+	BOOL Interlace = s_OutputInterlaced;	// Use interlace or not
+	BOOL WantTransparent = s_OutputTransparent;
 
 	if (WantTransparent)
 	{
@@ -1326,7 +1310,7 @@ BOOL ImageMagickFilter::ConvertFromTempFile(CCLexFile * File)
 
 	// get filename in usable form
 	cifn = camStrdup(wxString(_T("png:"))+TempFileName );
-	cofn = camStrdup((const TCHAR *)(OutputPath.GetPath()));
+	cofn = camStrdup(GetTag()+_T(":")+(const TCHAR *)(OutputPath.GetPath()));
 
 	// Now convert the file
 	IMargv[0]=pcommand;
@@ -1383,7 +1367,7 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 	wxChar * IMargv[4];
 
 	// get filename in usable form
-	cifn = camStrdup(wxString(_T("miff:"))+(const TCHAR *)(InputPath.GetPath()));
+	cifn = camStrdup(GetTag()+_T(":")+(const TCHAR *)(InputPath.GetPath()));
 	cofn = camStrdup(wxString(_T("png:"))+TempFileName );
 
 	// Now convert the file
@@ -1516,4 +1500,22 @@ BOOL ImageMagickFilter::CheckPath()
 
 	return s_HaveImageMagick;		
 }
+
+/********************************************************************************************
+
+>	ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter)
+
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	18/07/2006
+	Inputs:		pFilter - The Filter
+	Purpose:	Constructs the oily parts of the PNG File Format Filter (ie the list of
+				File Extensions that this filter understands)
+
+********************************************************************************************/
+
+ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter, ResourceID FilterNameID, ResourceID FilterExtID) : OILFilter(pFilter)
+{
+	FilterName.Load(FilterNameID);
+	FilterExt.Load(FilterExtID);
+} 
 
