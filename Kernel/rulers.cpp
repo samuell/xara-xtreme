@@ -357,6 +357,7 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 	
 	// Find the spread in which the click happened
 	Spread *pSpread = pRulerPair->GetpSpread();
+	DocView* pDocView = pRulerPair->GetpDocView();
 
 	if (pSpread == NULL)
 	{
@@ -376,6 +377,14 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 	// Convert the coord to spread coords
 	pSpread->DocCoordToSpreadCoord(&DocPos);
 	UserCoord UserPos = DocPos.ToUser(pSpread);
+
+	// the insignificant position on the ruler (in the narrow dimension) should not be converted to
+	// document coordinates - the result makes no sense, but we scale from OIL pixels to User coords
+	MILLIPOINT PixelSize = pDocView->GetScaledPixelWidth().MakeLong();
+	if (IsHorizontal())
+		UserPos.y = MILLIPOINT(PointerPos.y * PixelSize);
+	else
+		UserPos.x = MILLIPOINT(PointerPos.x * PixelSize);
 
 	// take the current tool ruler origin into account
 	UserCoord Offsets(0, 0);

@@ -155,6 +155,18 @@ public:
 
 /********************************************************************************************
 
+>	enum TabStopDragType
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	13/07/06
+	Purpose:	Different types of drag operations on the ruler bar
+
+********************************************************************************************/
+
+enum TabStopDragType { DragNew, DragTabStop, DragLeftMargin, DragRightMargin, DragFirstIndent };
+
+/********************************************************************************************
+
 >	class TextRulerBarData:
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
@@ -194,6 +206,7 @@ public:
 	INT32 CurrentRulerOrigin;           // origin of our ruler section (in user space)
 	INT32 CurrentRulerSectionWidth;     // width of our ruler section (-1 for infinite)
 	BOOL TabStopDragRunning;
+	TabStopDragType CurrentDragType;
 };
 
 /********************************************************************************************
@@ -235,18 +248,6 @@ public:
 	ENUMLOGFONT ELogFont;
 };
 */
-
-/********************************************************************************************
-
->	enum TabStopDragType
-
-	Author:		Martin Wuerthner <xara@mw-software.com>
-	Created:	13/07/06
-	Purpose:	Different types of drag operations on the ruler bar
-
-********************************************************************************************/
-
-enum TabStopDragType { DragNew, DragTabStop, DragLeftMargin, DragRightMargin, DragFirstIndent };
 
 /********************************************************************************************
 
@@ -323,6 +324,10 @@ public:
 	static void DoAddTabStop(MILLIPOINT Position);
 	static void DoAddTabStop(TxtTabStop NewTabStop);
 	static void DoApplyShownRuler();
+	static void DoChangeLeftMargin(MILLIPOINT Ordinate);
+	static void DoChangeRightMargin(MILLIPOINT Ordinate);
+	static void DoChangeFirstIndent(MILLIPOINT Ordinate);
+
 
 public:
 // the current infobar object - allow static member access
@@ -433,10 +438,11 @@ private:
 	static CommonAttrSet CommonAttrsToFindSet; 
 
 	// cached bitmap sizes
-	static UINT32 TabBitmapWidth;
-	static UINT32 TabBitmapHeight;
 	static UINT32 CurrentTabButtonWidth;
-	static UINT32 CurrentTabButtonHeight;
+	static UINT32 TabBitmapWidth;
+	static UINT32 LeftMarginBitmapWidth;
+	static UINT32 LeftMarginBitmapHeight;
+	static UINT32 RightMarginBitmapWidth;
 };
 	
 

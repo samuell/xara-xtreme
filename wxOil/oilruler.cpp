@@ -1005,6 +1005,15 @@ PORTNOTE("other","Removed reading of keyboard autorepeat rate")
 
 	// Convert the click position to OIL coordinates before passing to the kernel.
 	OilCoord ocoord = ClientToOil(pDocView, point);
+	// Only the ordinate in the main ruler direction should be converted, the coordinate
+	// translation does not make any sense in the other direction. Instead, we keep the
+	// window-relative coordinate but we change it in such a way that the paper side of
+	// the ruler is coordinate 0 because the Kernel does not know the RenderWidth of the
+	// ruler and the paper side is the significant side where the blobs are drawn.
+	if (IsHorizontal())
+		ocoord.y = RenderWidth - point.y;
+	else
+		ocoord.x = RenderWidth - point.x;
 	return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
 }
 

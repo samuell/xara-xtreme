@@ -196,9 +196,10 @@ CommonAttrSet 	  TextInfoBarOp::CommonAttrsToFindSet; 	// A set which will conta
 														// that we need to find common attributes for
 // cached bitmap sizes
 UINT32 TextInfoBarOp::TabBitmapWidth;
-UINT32 TextInfoBarOp::TabBitmapHeight;
 UINT32 TextInfoBarOp::CurrentTabButtonWidth;
-UINT32 TextInfoBarOp::CurrentTabButtonHeight;
+UINT32 TextInfoBarOp::LeftMarginBitmapWidth;
+UINT32 TextInfoBarOp::LeftMarginBitmapHeight;
+UINT32 TextInfoBarOp::RightMarginBitmapWidth;
 
 FontDropDown	*TextInfoBarOp::NameDropDown = NULL;	// Font name drop-down list support for the font list and
 
@@ -435,10 +436,15 @@ BOOL TextInfoBarOp::Init()
 	// the sizes into the mouse click detection code in OnRulerClick())
 	// first, the size of the "current tab type" button - we ask for the left tab variant,
 	// but they should all be the same size
-	if (ok) ok = FindBitmapSize(_R(clefttab), &CurrentTabButtonWidth, &CurrentTabButtonHeight);
+	UINT32 Dummy;
+	if (ok) ok = FindBitmapSize(_R(clefttab), &CurrentTabButtonWidth, &Dummy);
 	// find out about the size of tab stop blobs - we ask for the left tab variant, but they
 	// should all be the same size
-	if (ok) ok = FindBitmapSize(_R(lefttab), &TabBitmapWidth, &TabBitmapHeight);
+	if (ok) ok = FindBitmapSize(_R(lefttab), &TabBitmapWidth, &Dummy);
+	// find out about the width and height of the first indent blob
+	if (ok) ok = FindBitmapSize(_R(leftmar), &LeftMarginBitmapWidth, &LeftMarginBitmapHeight);
+	// find out about the width of the left/right margin blobs
+	if (ok) ok = FindBitmapSize(_R(rightmar), &RightMarginBitmapWidth, &Dummy);	
 	return ok;
 }
 
@@ -3009,11 +3015,8 @@ void TextInfoBarOp::ReleaseRuler()
 
 void TextInfoBarOp::TabStopDragStarting(TabStopDragType TheType)
 {
-	if (TheType == DragTabStop || TheType == DragNew)
-	{
-		TRACEUSER("wuerthne", _T("tab stop drag starting"));
-		RulerData.TabStopDragRunning = TRUE;
-	}
+	RulerData.TabStopDragRunning = TRUE;
+	RulerData.CurrentDragType = TheType;
 }
 
 /********************************************************************************************
@@ -3075,17 +3078,26 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 {
 	if (!pRuler->IsHorizontal()) return;
 
-	if (RulerData.IsLeftMarginValid)
-		pRuler->DrawBitmap(RulerData.LeftMargin, _R(leftmar));
-	else
-		pRuler->DrawBitmap(0, _R(gleftmar));
+	if (!(RulerData.TabStopDragRunning && RulerData.CurrentDragType == DragLeftMargin))
+	{
+		// not currently dragging the left margin, so display it if it is the same across
+		// the selection, else show the greyed out margin icon at the origin
+		if (RulerData.IsLeftMarginValid)
+			pRuler->DrawBitmap(RulerData.LeftMargin, _R(leftmar));
+		else
+			pRuler->DrawBitmap(0, _R(gleftmar));
+	}
 
-	if (RulerData.IsFirstIndentValid)
-		pRuler->DrawBitmap(RulerData.FirstIndent, _R(firstind));
-	else
-		pRuler->DrawBitmap(0, _R(gfirstind));
+	if (!(RulerData.TabStopDragRunning && RulerData.CurrentDragType == DragFirstIndent))
+	{
+		if (RulerData.IsFirstIndentValid)
+			pRuler->DrawBitmap(RulerData.FirstIndent, _R(firstind));
+		else
+			pRuler->DrawBitmap(0, _R(gfirstind));
+	}
 
-	if (RulerData.CurrentRulerSectionWidth != -1)
+	if (RulerData.CurrentRulerSectionWidth != -1
+		&& !(RulerData.TabStopDragRunning && RulerData.CurrentDragType == DragRightMargin))
 	{
 		// we only draw a right margin if we have a fixed formatting width
 		if (RulerData.IsRightMarginValid)
@@ -3119,7 +3131,8 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 			LastPos = (*it).GetPosition();
 		}
 
-		if (!RulerData.TabStopDragRunning)
+		if (!(RulerData.TabStopDragRunning &&
+			  (RulerData.CurrentDragType == DragNew || RulerData.CurrentDragType == DragTabStop)))
 		{
 			TRACEUSER("wuerthne", _T("redraw implicit tab stops"));
 			// draw greyed out left align tab stops at equidistant positions beyond the last defined
@@ -3187,6 +3200,7 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 								 Spread* pSpread, RulerBase* pRuler)
 {
 	if (!pRuler->IsHorizontal()) return FALSE;
+	TRACEUSER("wuerthne", _T("ruler click (%d,%d)"), PointerPos.x, PointerPos.y);
 	if (Click == CLICKTYPE_SINGLE)
 	{
 		// check whether the user has clicked on our homegrown "current tab" button
@@ -3255,41 +3269,83 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 		// to the right have priority
 		Document::SetSelectedViewAndSpread(pDocView->GetDoc(), pDocView, pSpread);
 		
-		INT32 Index = 0;
 		INT32 MatchedIndex = -1;
-		for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
-		{
-			MILLIPOINT Pos = (*it).GetPosition();
-			if (PointerPos.x >= Pos - MILLIPOINT(TabBitmapWidth / 2 * PixelSize)
-				&& PointerPos.x <= Pos + MILLIPOINT(TabBitmapWidth / 2 * PixelSize))
-			{
-				TRACEUSER("wuerthne", _T("hit tab no %d"), Index);
-				MatchedIndex = Index;
-			}
-			Index++;
-		}
-		
 		TxtTabStop DraggedTabStop(LeftTab, 0);
-		if (MatchedIndex != -1)
+		if (RulerData.IsRulerValid)
 		{
-			// delete the tab stop from the shown ruler list
-			Index = MatchedIndex;
-			TxtTabStopIterator it = RulerData.pShownRuler->begin();
-			while(it != RulerData.pShownRuler->end() && Index--) ++it;
-			if (it != RulerData.pShownRuler->end())
+			INT32 Index = 0;
+			for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
 			{
-				DraggedTabStop = *it;
-				RulerData.pShownRuler->erase(it);
+				MILLIPOINT Pos = (*it).GetPosition();
+				if (PointerPos.x >= Pos - MILLIPOINT(TabBitmapWidth / 2 * PixelSize)
+					&& PointerPos.x <= Pos + MILLIPOINT(TabBitmapWidth / 2 * PixelSize))
+				{
+					TRACEUSER("wuerthne", _T("hit tab no %d"), Index);
+					MatchedIndex = Index;
+				}
+				Index++;
 			}
-			else
+			
+			if (MatchedIndex != -1)
 			{
-				// cannot really happen, but exit gracefully - we still claim the click
-				return TRUE;
+				// delete the tab stop from the shown ruler list
+				Index = MatchedIndex;
+				TxtTabStopIterator it = RulerData.pShownRuler->begin();
+				while(it != RulerData.pShownRuler->end() && Index--) ++it;
+				if (it != RulerData.pShownRuler->end())
+				{
+					DraggedTabStop = *it;
+					RulerData.pShownRuler->erase(it);
+				}
+				else
+				{
+					// cannot really happen, but exit gracefully - we still claim the click
+					return TRUE;
+				}
 			}
 		}
 		TabStopDragType DragType = (MatchedIndex == -1) ? DragNew : DragTabStop;
 		
-		if (DragType == DragNew && InHighlightSection || DragType != DragNew)
+		if (MatchedIndex == -1)
+		{
+			// no tab stop hit, but maybe the margin markers?
+			MILLIPOINT LeftMarginPos = RulerData.IsLeftMarginValid ? RulerData.LeftMargin : 0;
+			MILLIPOINT FirstIndentPos = RulerData.IsFirstIndentValid ? RulerData.FirstIndent : 0;
+			MILLIPOINT RightMarginPos = RulerData.CurrentRulerSectionWidth
+											- (RulerData.IsRightMarginValid ? RulerData.RightMargin : 0);
+
+			// We test for the left margin first because we check the vertical position to distinguish
+			// between left margin and first indent drags even when they are at the same position
+			if (PointerPos.x >= LeftMarginPos - MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
+				&& PointerPos.x <= LeftMarginPos + MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
+				&& PointerPos.y <= MILLIPOINT(LeftMarginBitmapHeight * PixelSize))
+			{
+				TRACEUSER("wuerthne", _T("drag left margin"));
+				DragType = DragLeftMargin;
+			}
+			else
+			{
+				// we do not check the vertical position for other margin drags - if there was a tab stop
+				// at the same position it got priority anyway
+				if (PointerPos.x >= FirstIndentPos - MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
+					&& PointerPos.x <= FirstIndentPos + MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize))
+				{
+					TRACEUSER("wuerthne", _T("drag left margin"));
+					DragType = DragFirstIndent;
+				}
+				else
+				{
+					if (PointerPos.x >= RightMarginPos - MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize)
+						&& PointerPos.x <= RightMarginPos + MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize))
+					{
+						TRACEUSER("wuerthne", _T("drag right margin"));
+						DragType = DragRightMargin;
+					}
+				}
+			}
+		}
+
+		if (InHighlightSection || DragType != DragNew)
 		{
 			String_256 OpToken(OPTOKEN_TABSTOPDRAG);
 			TRACEUSER("wuerthne", _T("starting drag"));
@@ -3371,6 +3427,7 @@ void TextInfoBarOp::DoAddTabStop(TxtTabStop NewTabStop)
 	// let us forget about it
 	RulerData.pNewRuler = NULL;
 }
+
 /********************************************************************************************
 
 >	void TextInfoBarOp::DoApplyShownRuler()
@@ -3397,6 +3454,71 @@ void TextInfoBarOp::DoApplyShownRuler()
 	// just to avoid confusion - OnFieldChange has taken control of the object, so
 	// let us forget about it
 	RulerData.pNewRuler = NULL;
+	// we just applied what we had in pShownRuler, so UpdateRuler() will think that
+	// nothing has changed - but we want the implicit tabs to reappear
+	ForceRulerRedraw();
+}
+
+/********************************************************************************************
+
+>	void TextInfoBarOp::DoChangeLeftMargin(MILLIPOINT Ordinate)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/07/06
+	Inputs:     Ordinate - the new position
+	Purpose:	Apply the changed left margin
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoChangeLeftMargin(MILLIPOINT Ordinate)
+{
+	RulerData.IsLeftMarginValid = TRUE;
+	RulerData.LeftMargin = Ordinate;
+	OnFieldChange(LeftMarginA);
+	ForceRulerRedraw();
+}
+
+/********************************************************************************************
+
+>	void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/07/06
+	Inputs:     Ordinate - the new position
+	Purpose:	Apply the changed first line indent
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
+{
+	RulerData.IsFirstIndentValid = TRUE;
+	RulerData.FirstIndent = Ordinate;
+	OnFieldChange(FirstIndentA);
+	ForceRulerRedraw();
+}
+
+/********************************************************************************************
+
+>	void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/07/06
+	Inputs:     Ordinate - the new position
+	Purpose:	Apply the changed right margin
+
+********************************************************************************************/
+
+void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate)
+{
+	// the right margin is actually an indent, i.e., an offset from the column width (otherwise
+	// we could not have a default attribute that makes sense and text objects with different
+	// widths would have to have different right margin attributes)
+	RulerData.IsRightMarginValid = TRUE;
+	// we allow the margin to become negative, i.e., to be located to the right of the
+	// column width
+	RulerData.RightMargin = RulerData.CurrentRulerSectionWidth - Ordinate;
+	OnFieldChange(RightMarginA);
+	ForceRulerRedraw();
 }
 
 /********************************************************************************************
@@ -3457,8 +3579,11 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 		// there is a focus story, so the ruler should adapt to it
 		TRACEUSER("wuerthne", _T("Focus story present"));
 		ShouldWeClaimRuler = TRUE;
-		DocRect StoryBounds=pFocusStory->GetBoundingRect();
-		DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
+		// DocRect StoryBounds=pFocusStory->GetBoundingRect();
+		// DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
+		const Matrix* pStoryMatrix = pFocusStory->GetpStoryMatrix();
+		DocCoord TopLeft(0,0);
+		pStoryMatrix->transform(&TopLeft);
 		UserCoord UserTopLeft = TopLeft.ToUser(pFocusStory->FindParentSpread());
 		RulerOrigin = UserTopLeft.x;
 		StoryWidth = GetLogicalStoryWidth(pFocusStory);
@@ -3472,8 +3597,10 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 			if (IS_A(pNode, TextStory))
 			{
 				TextStory* pStory = (TextStory*)pNode;
-				DocRect StoryBounds=pStory->GetBoundingRect();
-				DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
+
+				const Matrix* pStoryMatrix = pStory->GetpStoryMatrix();
+				DocCoord TopLeft(0,0);
+				pStoryMatrix->transform(&TopLeft);
 				UserCoord UserTopLeft = TopLeft.ToUser(pStory->FindParentSpread());
 				
 				if (!ShouldWeClaimRuler || UserTopLeft.x < RulerOrigin)
@@ -3760,51 +3887,46 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 		UserPos.x -= TextInfoBarOp::GetRulerOrigin();
 		Ordinate = UserPos.x;
 		TRACEUSER("wuerthne", _T("with success at %d"), Ordinate);
-
-		if (m_pParam->m_DragType == DragNew)
+		
+		switch(m_pParam->m_DragType)
 		{
-			if (IsMouseOverRuler())
-			{
-				TextInfoBarOp::DoAddTabStop(Ordinate);
-			}
-			else
-			{
-				// do nothing (apart from redrawing the ruler bar, so the implicit
-				// tabs will be displayed again)
-				TextInfoBarOp::ForceRulerRedraw();
-			}
+			case DragNew:
+				if (IsMouseOverRuler())
+				{
+					TextInfoBarOp::DoAddTabStop(Ordinate);
+				}
+				else
+				{
+					// do nothing (apart from redrawing the ruler bar, so the implicit
+					// tabs will be displayed again)
+					TextInfoBarOp::ForceRulerRedraw();
+				}
+				break;
+			case DragTabStop:
+				if (IsMouseOverRuler())
+				{
+					TxtTabStop NewTabStop(m_pParam->m_DraggedTabStop);
+					NewTabStop.SetPosition(Ordinate);
+					TextInfoBarOp::DoAddTabStop(NewTabStop);
+				}
+				else
+				{
+					// delete the tab stop; we can do that by simply applying the shown
+					// ruler - we have removed the tab stop from the shown ruler when the
+					// drag started
+					TextInfoBarOp::DoApplyShownRuler();
+				}
+				break;
+			case DragLeftMargin:
+				TextInfoBarOp::DoChangeLeftMargin(Ordinate);
+				break;
+			case DragFirstIndent:
+				TextInfoBarOp::DoChangeFirstIndent(Ordinate);
+				break;
+			case DragRightMargin:
+				TextInfoBarOp::DoChangeRightMargin(Ordinate);
+				break;
 		}
-		else if (m_pParam->m_DragType == DragTabStop)
-		{
-			if (IsMouseOverRuler())
-			{
-				TxtTabStop NewTabStop(m_pParam->m_DraggedTabStop);
-				NewTabStop.SetPosition(Ordinate);
-				TextInfoBarOp::DoAddTabStop(NewTabStop);
-			}
-			else
-			{
-				// delete the tab stop; we can do that by simply applying the shown
-				// ruler - we have removed the tab stop from the shown ruler when the
-				// drag started
-				TextInfoBarOp::DoApplyShownRuler();
-			}
-		}
-
-#if 0
-		if (pDraggedGuideline != NULL)
-		{
-			if (IsMouseOverRuler())
-			{
-				UndoIDS = _R(IDS_OPDELETEGUIDELINE);
-				Success = DoDeleteGuideline(pDraggedGuideline);
-			}
-			else
-				Success = DoTranslateGuideline(pDraggedGuideline,Ordinate);
-		}
-		else
-			Success = !IsMouseOverRuler() && DoNewGuideline(NULL,NEXT,Type,Ordinate);
-#endif
 	}
 
 	// End the Drag

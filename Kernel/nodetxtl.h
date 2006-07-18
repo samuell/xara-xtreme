@@ -235,7 +235,7 @@ class FormatState: public CC_CLASS_MEMDUMP
 		CharPosOffset(_CharPosOffset),
 		ExtraOnChars(_ExtraOnChars), ExtraOnSpaces(_ExtraOnSpaces),
 		Width(Indent), ActiveTabType(LeftTab), ActiveTabPos(0), 
-		pLastTabVTN(NULL), AnchorPos(0) {};
+		pLastTabVTN(NULL), AnchorPos(Indent) {};
 	void AdvanceBy(MILLIPOINT Advance);
 	BOOL FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsLastTabSection);
 	BOOL IsAvailable(MILLIPOINT CharWidth, BOOL IsATab);
@@ -369,18 +369,22 @@ public:
 	MILLIPOINT    GetLineSpacing()     { return mLineSpacing; }
 	FIXED16       GetLineSpaceRatio()  { return mLineSpaceRatio; }
 	MILLIPOINT    GetParaLeftMargin()  { return mLeftMargin; }
+	MILLIPOINT    GetParaFirstIndent() { return mFirstIndent; }
 	MILLIPOINT    GetParaRightMargin() { return mRightMargin; }
 	const TxtRuler* GetRuler()         { return mpRuler; }
 	void SetJustification(  Justification justification) { mJustification  = justification; }
 	void SetLineSpacing(    MILLIPOINT    Spacing)       { mLineSpacing    = Spacing; }
 	void SetLineSpaceRatio( FIXED16       SpaceRatio)    { mLineSpaceRatio = SpaceRatio; }
 	void SetParaLeftMargin( MILLIPOINT    Margin)        { mLeftMargin = Margin; }
+	void SetParaFirstIndent(MILLIPOINT    Indent)        { mFirstIndent = Indent; }
 	void SetParaRightMargin(MILLIPOINT    Margin)        { mRightMargin = Margin; }
 	void SetRuler(          const TxtRuler* pRuler)      { mpRuler = pRuler; }
 
 	MILLIPOINT GetPosInStory() { return mPosInStory; }
 	void SetPosInStory(MILLIPOINT pos) { mPosInStory=pos; }
 
+protected:
+    MILLIPOINT GetEffectiveLeftMargin();
 private:
 	MILLIPOINT mLineDescent;	// largest descent of any char in all fonts on the line
 	MILLIPOINT mLineAscent;		// largest  ascent of any char in all fonts on the line
@@ -390,6 +394,7 @@ private:
 	MILLIPOINT    mLineSpacing;		// cache for value read from attr stack
 	FIXED16       mLineSpaceRatio;	// cache for value read from attr stack
 	MILLIPOINT mLeftMargin;	        // cache for value read from attr stack
+	MILLIPOINT mFirstIndent;        // cache for value read from attr stack
 	MILLIPOINT mRightMargin;        // cache for value read from attr stack
 	const TxtRuler* mpRuler;        // cache for value read from attr stack
 									// NB - this is a shared pointer to a list object owned by the attribute!

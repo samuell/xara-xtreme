@@ -3863,8 +3863,37 @@ Node* HorizontalTab::SimpleCopy()
 	return NodeCopy;
 }
 
+/*******************************************************************************************
+>	BOOL HorizontalTab::ExportRender(RenderRegion* pRegion)
+
+ 	Author:		Martin Wuerthner <xara@mw-software.com>
+ 	Created:	18/07/06
+ 	Inputs:		pRegion - points to the export render region
+	Returns:	TRUE if rendered OK (FALSE=>use normal rendering)
+ 	Purpose:	This function is called when the render function passes through this node
+ 				It outputs the	Text Object start and end tokens
+ 	See also:   KernCode::ExportRender, on which this routine is based
+********************************************************************************************/
 BOOL HorizontalTab::ExportRender(RenderRegion* pRegion)
 {
-	/*##*/
+	// a tab is exported as a horizontal kern code
+#if EXPORT_TEXT
+ 	if (pRegion->IsKindOf(CC_RUNTIME_CLASS(EPSRenderRegion)))
+	{
+		// Output any valid text attributes necessary
+		((EPSRenderRegion*)pRegion)->GetValidPathAttributes();
+		((EPSRenderRegion*)pRegion)->GetValidTextAttributes();
+
+		EPSExportDC *pDC=(EPSExportDC*)pRegion->GetRenderDC();
+
+		// Use illustrator 3.0 compatible token.
+		INT32 autokern = 0;
+		pDC->OutputValue(autokern);
+		pDC->OutputValue(GetCharWidth());
+ 		pDC->OutputToken(_T("Tk"));
+		pDC->OutputNewLine();
+		return TRUE;
+	}
+#endif
 	return FALSE;
 }

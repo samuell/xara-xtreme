@@ -377,6 +377,7 @@ void TextLine::CopyNodeContents(TextLine* NodeCopy)
 	NodeCopy->mLineSpacing    = mLineSpacing;
 	NodeCopy->mLineSpaceRatio = mLineSpaceRatio;
 	NodeCopy->mLeftMargin = mLeftMargin;
+	NodeCopy->mFirstIndent = mFirstIndent;
 	NodeCopy->mRightMargin = mRightMargin;
 	NodeCopy->mpRuler = mpRuler;
 
@@ -717,24 +718,40 @@ BOOL TextLine::ReCacheMetrics(FormatRegion* pFormatRegion)
 	SetLineSpacing(   pFormatRegion->GetLineSpacing());
 	SetLineSpaceRatio(pFormatRegion->GetLineSpaceRatio());
 
-	// we need to find out whether this is the first line in the paragraph, so we know
-	// whether we need to use FirstLineIndent or LeftMargin
-	TextLine* pPrevLine = FindPrevLine();
-	if (pPrevLine==NULL || pPrevLine->FindEOLNode() != NULL)
-	{
-		// first line in paragraph
-		SetParaLeftMargin(pFormatRegion->GetFirstIndent());
-	}
-	else
-	{
-		// not first line, so use normal left margin
-		SetParaLeftMargin(pFormatRegion->GetLeftMargin());
-	}
+	SetParaLeftMargin(pFormatRegion->GetLeftMargin());
+	SetParaFirstIndent(pFormatRegion->GetFirstIndent());
 	SetParaRightMargin(pFormatRegion->GetRightMargin());
 	SetRuler(pFormatRegion->GetRuler());
 	return TRUE;
 }
 
+/********************************************************************************************
+>	MILLIPOINT TextLine::GetEffectiveLeftMargin()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	18/07/06
+	Inputs:		-
+	Returns:	the left margin value to use
+	Purpose:	Select the left margin or first indent value depending on whether this is
+				the first line in the paragraph
+********************************************************************************************/
+
+MILLIPOINT TextLine::GetEffectiveLeftMargin()
+{
+	// we need to find out whether this is the first line in the paragraph, so we know
+	// whether we need to use FirstLineIndent or LeftMargin
+
+	TextLine* pPrevLine = FindPrevLine();
+	if (pPrevLine==NULL || pPrevLine->FindEOLNode() != NULL)
+	{
+		// first line in paragraph
+		return mFirstIndent;
+	}
+	else
+	{
+		return mLeftMargin;
+	}
+}
 
 /********************************************************************************************
 >	BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
@@ -758,7 +775,7 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 	MILLIPOINT PhysicalRightMargin  = pStoryInfo->StoryWidth - pStoryInfo->RightPathIndent;
 	BOOL       WordWrapping = pStoryInfo->WordWrapping;
 	MILLIPOINT RightMargin = PhysicalRightMargin - mRightMargin;
-	MILLIPOINT LeftMargin = PhysicalLeftMargin + mLeftMargin;
+	MILLIPOINT LeftMargin = PhysicalLeftMargin + GetEffectiveLeftMargin();
 
 	// if word wrapping, and not text at a point, and undoably 'do'ing op, word wrap the line
 	MILLIPOINT WrapWidth = 0;
@@ -1405,7 +1422,7 @@ BOOL TextLine::ReCalcLineInfo(TextLineInfo* pLineInfo)
 	pLineInfo->NumChars        = NumCharsToLastNonSpace;
 	pLineInfo->NumSpaces       = NumSpacesToLastNonSpace;
 	pLineInfo->justification   = GetJustification();
-	pLineInfo->ParaLeftMargin  = GetParaLeftMargin();
+	pLineInfo->ParaLeftMargin  = GetEffectiveLeftMargin();
 	pLineInfo->ParaRightMargin = GetParaRightMargin();
 	pLineInfo->Ruler           = GetRuler();
 	return TRUE;
