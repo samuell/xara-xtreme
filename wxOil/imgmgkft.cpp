@@ -1367,7 +1367,7 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 	wxChar * IMargv[4];
 
 	// get filename in usable form
-	cifn = camStrdup(GetTag()+_T(":")+(const TCHAR *)(InputPath.GetPath()));
+	cifn = camStrdup(GetTag()+_T(":")+(const TCHAR *)(InputPath.GetPath())+_T("[0]"));
 	cofn = camStrdup(wxString(_T("png:"))+TempFileName );
 
 	// Now convert the file
