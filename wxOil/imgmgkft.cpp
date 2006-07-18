@@ -1,11 +1,11 @@
 // $Id: pngfiltr.cpp 1282 2006-06-09 09:46:49Z alex $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
-			Xara LX, a vector drawing and manipulation program.
-					Copyright (C) 1993-2006 Xara Group Ltd.
-	Copyright on certain contributions may be held in joint with their
-			respective authors. See AUTHORS file for details.
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-http://www.xaraxtreme.org/developers/
+  http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-http://www.xaraxtreme.org/developers/contribute/
+  http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-						http://www.xara.com/
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 
 // A ImageMagick import/export filter 
 
@@ -130,12 +130,27 @@ CC_IMPLEMENT_DYNCREATE(ImageMagickExportOptions, MaskedFilterExportOptions)
 
 #define	new	CAM_DEBUG_NEW
 
+// Set the default path from a macro so it can be overridden at compile time
+#ifndef DEFAULT_IMAGEMAGICK_PATH
+	#define DEFAULT_IMAGEMAGICK_PATH "/usr/bin/convert"
+#endif
+
+#define DIP_QUOTE(x) _T(x) 
+
 OutputPNG 	ImageMagickFilter::DestImageMagick;
 FilterType 	ImageMagickFilter::s_FilterType = IMAGEMAGICK;	// Type of filter in use (ImageMagick .. ImageMagick_TRANSINTER)
+
+String_256	ImageMagickFilter::s_ImageMagickPath = DIP_QUOTE(DEFAULT_IMAGEMAGICK_PATH);
+BOOL 		ImageMagickFilter::s_HaveImageMagick = FALSE;
+BOOL		ImageMagickFilter::s_HaveCheckedPath = FALSE;
+BOOL		ImageMagickFilter::s_DoWarning = TRUE;
+BOOL		ImageMagickFilter::s_Disable = FALSE;
 
 #if 1
 
 UINT32 ImageMagickExportOptions::g_CompactedFlagsForDefaults = 0;
+
+
 
 /********************************************************************************************
 
@@ -150,11 +165,11 @@ UINT32 ImageMagickExportOptions::g_CompactedFlagsForDefaults = 0;
 ********************************************************************************************/
 BOOL ImageMagickExportOptions::Declare()
 {
-	if (Camelot.DeclareSection(_T("Filters"), 10))
-		Camelot.DeclarePref( NULL, _T("ExportImageMagicktype"), &g_CompactedFlagsForDefaults, 0, 3 );
+	BOOL ok = Camelot.DeclareSection(_T("Filters"), 10)
+			&& Camelot.DeclarePref( NULL, _T("ExportImageMagicktype"), &g_CompactedFlagsForDefaults, 0, 3 );
 
 	// All ok
-	return TRUE;
+	return ok;
 }
 
 /********************************************************************************************
@@ -256,6 +271,9 @@ ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 ********************************************************************************************/
 BOOL ImageMagickFilter::Init()
 {
+	if (!ImageMagickExportOptions::Declare())
+		return FALSE;
+
 	// Get the OILFilter object
 	pOILFilter = new ImageMagickOILFilter(this);
 	if (pOILFilter==NULL)
@@ -264,9 +282,6 @@ BOOL ImageMagickFilter::Init()
 	// Load the description strings
 	FilterName.Load(_R(IDS_IMAGEMAGICK_FILTERNAME));
 	FilterInfo.Load(_R(IDS_IMAGEMAGICK_FILTERINFO));
-
-	if (!ImageMagickExportOptions::Declare())
-		return FALSE;
 
 	// All ok
 	return TRUE;
@@ -1375,12 +1390,26 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 	IMargv[1]=cifn;
 	IMargv[2]=cofn;
 	IMargv[3]=NULL;
+
+#ifdef AVOID_BROKEN_GDB
+	::wxCopyFile(wxString(_T("/tmp/test.png")), TempFileName);
+#else
 	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC);
+#endif
 	
 	free(cifn);
 	free(cofn);
 
 	if (ret)
+	{
+		TidyTempFile();
+		ERROR1(FALSE, _R(IDE_IMAGEMAGICK_ERROR));
+	}
+
+	PathName pthFileName=String_256(TempFileName);
+
+	// Reopen the file
+	if (!(TempFile->open(pthFileName, ios::in | ios::binary)))
 	{
 		TidyTempFile();
 		ERROR1(FALSE, _R(IDE_IMAGEMAGICK_ERROR));
@@ -1419,3 +1448,70 @@ BOOL ImageMagickFilter::TidyTempFile(BOOL Delete/*=TRUE*/)
 	}
 	return TRUE;
 }
+
+/********************************************************************************************
+
+>	static BOOL ImageMagickFilter::CheckPath()
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	18/07/2006
+	Purpose:	Determines whether or not ImageMagick is installed. Also registers filter prefs
+	Inputs:		None
+	Outputs:	None
+	Returns:	TRUE if ImageMagick is available, else fals
+	Notes:		-
+
+********************************************************************************************/
+
+BOOL ImageMagickFilter::CheckPath()
+{
+	if (s_HaveCheckedPath)
+		return s_HaveImageMagick;
+
+	s_HaveImageMagick = FALSE;
+	s_HaveCheckedPath = TRUE;
+
+	BOOL ok = Camelot.DeclareSection(_T("Filters"), 10)
+			&& Camelot.DeclarePref( NULL, _T("ImageMagickDisable"), &ImageMagickFilter::s_Disable, 0, 1 )
+			&& Camelot.DeclarePref( NULL, _T("ImageMagickWarning"), &ImageMagickFilter::s_DoWarning, 0, 1 )
+			&& Camelot.DeclarePref( NULL, _T("ImageMagickPath"), &ImageMagickFilter::s_ImageMagickPath );
+
+	if (!ok || s_Disable)
+		return s_HaveImageMagick;
+
+	if (s_ImageMagickPath == _T(""))
+		s_ImageMagickPath = DIP_QUOTE(DEFAULT_IMAGEMAGICK_PATH);
+
+	wxArrayString output;
+	long /*TYPENOTE: Correct*/ ret=::wxExecute(wxString((const TCHAR *)s_ImageMagickPath)/*+_T(" --version")*/, output);
+	if (!ret && output.GetCount()>0)
+	{
+		wxString check = output[0];
+		wxString version;
+		if (check.StartsWith(_T("Version: ImageMagick "),&version))
+		{
+			wxStringTokenizer tk(version, _T(".: "));
+			if (tk.CountTokens()>=3)
+			{
+				long /*TYPENOTE: Correct*/ v1,v2,v3=0;
+				tk.GetNextToken().ToLong(&v1);
+				tk.GetNextToken().ToLong(&v2);
+				tk.GetNextToken().ToLong(&v3);
+				double version = v1*10000.0+v2*100.0+v3;
+				if (version>=060000.0)
+				{
+					s_HaveImageMagick = TRUE;
+				}
+			}
+		}
+	}
+
+	if (!s_HaveImageMagick && s_DoWarning)
+	{
+		InformWarning(_R(IDS_WARN_NOIMAGEMAGICK), _R(IDS_OK));
+		s_DoWarning = FALSE; // disable the warning on subsequent runs
+	}
+
+	return s_HaveImageMagick;		
+}
+

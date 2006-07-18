@@ -722,7 +722,6 @@ void Filter::PopCurrentAttrsBasedOnSnapShot()
 	}																				\
 																					\
 	FilterList.AddTail(pFilter);
-	
 
 /********************************************************************************************
 
@@ -789,7 +788,10 @@ PORTNOTETRACE("filter","Removed CamelotWebFilter usage");
 
 	ADD_FILTER(PNGFilter)
 #if _DEBUG
-	ADD_FILTER(ImageMagickFilter)
+	if (ImageMagickFilter::CheckPath())
+	{
+		ADD_FILTER(ImageMagickFilter)
+	}
 #endif
 	ADD_FILTER(TI_GIFFilter)
 PORTNOTETRACE("filter","Removed TIFFFilter");

@@ -129,6 +129,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/splash.h>
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
+#include <wx/tokenzr.h>
 #include <wx/tooltip.h>
 #include <wx/treectrl.h>
 #include <wx/wxchar.h>
@@ -149,7 +150,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #if wxUSE_TOOLBOOK
 #include <wx/toolbook.h>
 #endif
-
+#if wxUSE_LIBGNOMEPRINT
+#include <wx/gtk/gnome/gprint.h>
+#endif
 
 // Now platform dependent stuff
 // FreeBSD does not provide backtrace()

@@ -1,11 +1,11 @@
 // $Id: pngfiltr.h 809 2006-04-13 11:28:42Z phil $
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
-			Xara LX, a vector drawing and manipulation program.
-					Copyright (C) 1993-2006 Xara Group Ltd.
-	Copyright on certain contributions may be held in joint with their
-			respective authors. See AUTHORS file for details.
+ 
+               Xara LX, a vector drawing and manipulation program.
+                    Copyright (C) 1993-2006 Xara Group Ltd.
+       Copyright on certain contributions may be held in joint with their
+              respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -71,11 +71,11 @@ Subject to the terms of the GNU Public License (see above), you are
 free to do whatever you like with your modifications. However, you may
 (at your option) wish contribute them to Xara's source tree. You can
 find details of how to do this at:
-http://www.xaraxtreme.org/developers/
+  http://www.xaraxtreme.org/developers/
 
 Prior to contributing your modifications, you will need to complete our
 contributor agreement. This can be found at:
-http://www.xaraxtreme.org/developers/contribute/
+  http://www.xaraxtreme.org/developers/contribute/
 
 Please note that Xara will not accept modifications which modify any of
 the text between the start and end of this header (marked
@@ -90,11 +90,11 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
-	Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-						http://www.xara.com/
+      Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 //
 
 #ifndef INC_IMGMGKFT_H
@@ -188,6 +188,8 @@ public:
 	virtual UINT32 GetExportMsgID();
 	virtual void PostGetExportOptions(BitmapExportOptions* pOptions);
 
+	static BOOL CheckPath();
+
 protected:
 
 	// Invert the alpha channel.
@@ -245,6 +247,12 @@ protected:
 
 	CCDiskFile * TempFile;
 	wxString TempFileName;
+
+	static String_256	s_ImageMagickPath;
+	static BOOL s_HaveImageMagick;
+	static BOOL s_HaveCheckedPath;
+	static BOOL s_DoWarning;
+	static BOOL s_Disable;
 };
 
 #endif // INC_ImageMagickFILTR

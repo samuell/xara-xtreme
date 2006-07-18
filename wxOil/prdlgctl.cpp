@@ -135,11 +135,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #define Swap(a,b)       { (a)^=(b), (b)^=(a), (a)^=(b); }
 
-// This should be in stdwx.h
-#if wxUSE_LIBGNOMEPRINT
-#include <wx/gtk/gnome/gprint.h>
-#endif
-
 PORTNOTE("printing", "Disabled message map stuff")
 #ifndef EXCLUDE_FROM_XARALX
 //---------------------------------
