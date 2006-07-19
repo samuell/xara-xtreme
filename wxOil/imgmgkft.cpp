@@ -260,7 +260,7 @@ ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 	// Things that the derive class constructor may stamp on
 	Flags.CanImport 	= TRUE;
 	Flags.CanExport 	= TRUE;
-	FilterID			= IMAGEMAGICK;
+	FilterID			= FILTERID_IMAGEMAGICK;
 	FilterNameID		= _R(IDS_IMAGEMAGICK_FILTERNAME);
 	FilterInfoID		= _R(IDS_IMAGEMAGICK_FILTERINFO);
 	FilterExtID			= _R(IDS_IMAGEMAGICK_FILTEREXT);

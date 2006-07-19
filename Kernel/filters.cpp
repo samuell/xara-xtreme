@@ -838,7 +838,7 @@ PORTNOTETRACE("filter","Removed CamelotWebFilter usage");
 		ADD_FILTER(ImageMagickFilterSCT)
 		ADD_FILTER(ImageMagickFilterSFW)
 		ADD_FILTER(ImageMagickFilterSUN)
-		ADD_FILTER(ImageMagickFilterSVG)
+		// ADD_FILTER(ImageMagickFilterSVG) - removed per NeilH 19/07/2006 so it doesn't clash with vector SVG import
 		ADD_FILTER(ImageMagickFilterTGA)
 		ADD_FILTER(ImageMagickFilterTIFF)
 		ADD_FILTER(ImageMagickFilterTIM)

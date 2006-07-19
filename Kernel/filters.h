@@ -234,6 +234,10 @@ class Pathname;
 #define	FILTERID_ALDUS_START		1000
 #define	FILTERID_ALDUS_END			1099
 
+// ImageMagick filters IDs 1100-1999 - 900 should be enough
+#define FILTERID_IMAGEMAGICK_START	1100
+#define FILTERID_IMAGEMAGICK_END	1999
+
 // !!!!!!!!!!!!!!!!! DON'T ADD ANY MORE TO THE ABOVE LIST !!!!!!!!!!!!!!!!
 
 enum SelectionType { SELECTION, DRAWING, SPREAD, ABITMAP, SOMEBITMAPS, PAGE };
