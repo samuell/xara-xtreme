@@ -2973,13 +2973,18 @@ BOOL CaretNode::HasMoved()
 	Returns:	TRUE
 	Purpose:	When attributes are applied to the caret, we cannot generate undo info
 				as children of the CaretNode are thrown away in a non-undoable way.
+
+	Notes:		Phil, 24/09/2005
+				The usage of this function has changed subtly today. It used to prevent
+				both attribute optimisation and undo recording on Caret nodes.
+				As of today it just prevents undo recording - attribute optimisation
+				goes ahead like normal on Caret nodes so that they behave more consistently.
+
 ********************************************************************************************/
 
 BOOL CaretNode::DiscardsAttributeChildren() const
 {
-// TEMP TEST! Allow caret to respond normally to attribute application! [Phil, 14/08/2005]
-return FALSE;
-//	return TRUE;
+	return TRUE;
 }
 
 
