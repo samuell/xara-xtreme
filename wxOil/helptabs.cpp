@@ -462,7 +462,7 @@ DialogHelpTuple atplDialogTopics[] =
 	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITSEQUENCE),			_R(IDS_HELPPATH_Dialog_Edit_Brush_Sequence)},
 	{_T("BrushEditDialog"),					_R(IDD_BRUSHEDITFILL),				_R(IDS_HELPPATH_Dialog_Edit_Brush_Properties)},
 	{_T("CInitBrushNameDlg"),				0,								_R(IDS_HELPPATH_How_Adding_Custom_Brush_Strokes)},
-	NULL, 0, 0
+	{NULL, 0, 0}
 };
 
 
@@ -712,7 +712,7 @@ OpHelpTuple atplOpTopics[] =
 	{OPTOKEN_FRAME_GRABFRAME,				_R(IDS_HELPPATH_Command_Preview_All_Frames)},
 #endif // WEBSTER
 	
-	NULL, 0
+	{NULL, 0}
 };
 
 
