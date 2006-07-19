@@ -195,13 +195,10 @@ CamelotNativeFilter::~CamelotNativeFilter()
 
 BOOL CamelotNativeFilter::Init()
 {
-PORTNOTE("filter","Removed NativeOILFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the OILFilter object
 	pOILFilter = new NativeOILFilter(this);
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(FilterNameID);
