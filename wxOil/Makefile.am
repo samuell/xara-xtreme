@@ -20,7 +20,7 @@ libwxOil_a_SOURCES = \
 	diagnost.cpp dibconv.cpp dibutil.cpp dlgmgr.cpp dlgview.cpp ensure.cpp \
 	errors.cpp filehndl.cpp filesize.cpp fixmem.cpp fixstr8.cpp fixstr16.cpp \
 	fixstr32.cpp fixstr64.cpp fixst128.cpp fixst256.cpp handles.cpp makemsg.cpp \
-	memblk.cpp memory.cpp monotime.cpp mtrand.cpp oilbitmap.cpp oilcoord.cpp \
+	memblk.cpp cammemory.cpp monotime.cpp mtrand.cpp oilbitmap.cpp oilcoord.cpp \
 	oildbug.cpp oilrect.cpp pathname.cpp pathnmex.cpp pen.cpp sgliboil.cpp \
 	tunemem.cpp unicdman.cpp vstate.cpp wincoord.cpp oilfiles.cpp oilmenus.cpp \
 	gifutil.cpp giffiltr.cpp winrect.cpp grndrgn.cpp osrndrgn.cpp grndbmp.cpp rendbits.cpp \

@@ -103,7 +103,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "camtypes.h"
 //#include "ccmaths.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "handles.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "csrstack.h"
 #include "bfxbase.h"
 #include "module.h"

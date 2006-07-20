@@ -107,7 +107,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepath.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include <math.h>
-//#include "memory.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "mike.h"
 //#include "undoop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]

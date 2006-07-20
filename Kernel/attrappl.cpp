@@ -1442,7 +1442,7 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 		INT32 stackpos = STACKPOS_TOP;
 		Range* pLevel = pStack->GetLevelRange(&stackpos, FALSE);			// Don't escape old controllers, apply attr to base nodes
 		Node* CurrentNode = pLevel->FindFirst();
-		Node* FirstNode = CurrentNode;
+//		Node* FirstNode = CurrentNode;
 
 		BOOL bCanDiscardUndo = TRUE;
 
@@ -2618,7 +2618,7 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 		
 		// While there are still nodes to apply the attribute to
 		Node* CurrentNode = pLevel->FindFirst();
-		Node* FirstNode = CurrentNode;
+//		Node* FirstNode = CurrentNode;
 		while (CurrentNode)   
 		{
 			NodeAttribute* AttrToApply = pAttr;

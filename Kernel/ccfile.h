@@ -103,7 +103,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "handles.h"
 #include "pathname.h"
-#include "memory.h"
+#include "cammemory.h"
 
 using namespace std;
 typedef INT32				filedesc;
