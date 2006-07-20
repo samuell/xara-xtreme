@@ -1444,17 +1444,14 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 		Node* CurrentNode = pLevel->FindFirst();
 		Node* FirstNode = CurrentNode;
 
+		BOOL bCanDiscardUndo = TRUE;
+
 		// While there are still nodes to apply the attribute to
 		while (CurrentNode != NULL)
 		{
 			// move to the next one but remember the current one
 			Node* OldNode = CurrentNode;
 			CurrentNode = pLevel->FindNext(CurrentNode);
-
-			// If this is the only node in the selection and it discards attribute undo
-			// Then we can abandon the entire Op once it's finished
-			if (OldNode->DiscardsAttributeChildren() && OldNode==FirstNode && CurrentNode==NULL)
-				pOp->SucceedAndDiscard();
 
 			if (OldNode->IsAnObject())
 			{
@@ -1472,8 +1469,12 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 						Node * pNextChildNode = pChildNode->FindNext();
 
 						if (pChildNode->IsAnObject() && ((NodeRenderableInk*)pChildNode)->RequiresAttrib(Attrib))
+						{
 							if (!DoApply(pOp, pChildNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))	// Will only apply Attrib if the node requires it.
 								return FALSE; 
+
+							bCanDiscardUndo = bCanDiscardUndo && pChildNode->DiscardsAttributeChildren();
+						}
 
 						pChildNode = pNextChildNode;
 					}
@@ -1485,6 +1486,7 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 					{
 						return FALSE; 
 					}
+					bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
 				}
 
 
@@ -1506,6 +1508,7 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 				{
 					return FALSE; 
 				}
+				bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
 			}
 
 			// a bodge to handle the case when a line width is applied to a transparent line.
@@ -1550,6 +1553,8 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 					if (!DoApply(pOp, OldNode, pAttr, bMutate, FALSE, FALSE, bOptimise, &bAttrWasRequired))
 						continue; 
 
+					bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
+
 					// remove the attribute
 					delete pAttr;
 					pAttr = NULL;
@@ -1575,6 +1580,8 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 				{
 					if (!DoApply(pOp, pNextATChar, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))
 						return FALSE; 
+
+					bCanDiscardUndo = bCanDiscardUndo && pNextATChar->DiscardsAttributeChildren();
 				}
 			}
 
@@ -1593,6 +1600,12 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 //				}
 //			}
 		}
+
+		// If all nodes report DiscardsAttributeChildren() = TRUE
+		// Then we can abandon the entire Op once it's finished
+		if (bCanDiscardUndo)
+			pOp->SucceedAndDiscard();
+
 	}
 	return TRUE;
 }
@@ -2589,6 +2602,8 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 	INT32 stackpos = STACKPOS_TOP;
 	Range* pLevel = pStack->GetLevelRange(&stackpos, FALSE);			// Don't escape old controllers, apply attr to base nodes
 
+	BOOL bCanDiscardUndo = TRUE;
+
 	NodeAttributePtrItem* pAttrItem = (NodeAttributePtrItem*)(Attribs->GetHead());
 	while (pAttrItem)
 	{
@@ -2621,11 +2636,6 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 				AttrToApply->TransformToNewBounds(NodeBounds);
 			}
 
-			// If this is the only node in the selection and it discards attribute undo
-			// Then we can abandon the entire Op once it's finished
-			if (CurrentNode->DiscardsAttributeChildren() && CurrentNode==FirstNode && pLevel->FindNext(CurrentNode)==NULL)
-				SucceedAndDiscard();
-
 			if (!DoApply(CurrentNode, 
 						 AttrToApply, 
 						 FALSE,  // Don't mutate
@@ -2635,6 +2645,8 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 			{
 				goto Failed;
 			}
+
+			bCanDiscardUndo = bCanDiscardUndo && CurrentNode->DiscardsAttributeChildren();
 
 			if (ThisAttrWasRequired)
 			{
@@ -2689,6 +2701,11 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 		ContinueSlowJob();
 		pAttrItem = (NodeAttributePtrItem*)(Attribs->GetNext(pAttrItem));
 	}
+
+	// If all nodes report DiscardsAttributeChildren() = TRUE
+	// Then we can abandon the entire Op once it's finished
+	if (bCanDiscardUndo)
+		SucceedAndDiscard();
 
 	return TRUE; 
 
