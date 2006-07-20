@@ -1754,42 +1754,6 @@ void BitmapExportPreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo, UINT32
 	// Go get a render region
 	DocRect VirtualSize(0, 0, pExtraInfo->dx, pExtraInfo->dy);
 
-	// test for zoom rectangle request
-	if ((m_ZoomRectRender) && (m_StartPos != m_CurrentPos)) 
-	{
-		// draw inverted rectangle only
-		
-		// create OSRenderRegion, because GRenderRegion doesn't handle EOR-ed draw
-		RenderRegion *pRender = CreateOSRenderRegion(&VirtualSize, pExtraInfo);
-
-		if (pRender == NULL)
-			return;
-
-		// Render the attributes and then a rectangle
-		pRender->SaveContext();
-
-		pRender->SetDrawingMode(DM_EORPEN);
-		
-		pRender->SetFillColour(COLOUR_TRANS);
-		pRender->SetLineColour(COLOUR_XORSELECT); 
-
-		// draw the rect
-		DocRect rc;
-		rc.lo.x = m_StartPos.x < m_CurrentPos.x ? m_StartPos.x : m_CurrentPos.x;
-		rc.lo.y = m_StartPos.y < m_CurrentPos.y ? m_StartPos.y : m_CurrentPos.y;
-		rc.hi.x = m_StartPos.x > m_CurrentPos.x ? m_StartPos.x : m_CurrentPos.x;
-		rc.hi.y = m_StartPos.y > m_CurrentPos.y ? m_StartPos.y : m_CurrentPos.y;
-
-		pRender->DrawRect(&rc);
-
-		pRender->RestoreContext();
-
-		// destroy the render region
-		DestroyOSRenderRegion(pRender);
-
-		return;
-	}
-
 	// normall redraw operation - draw our bitmap
 	
 	// If we haven't already created our render region then go and create it
@@ -1905,6 +1869,40 @@ void BitmapExportPreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo, UINT32
 		//  May have to redraw cursor.
 		m_bWantCursorRedrawn = TRUE;
 	}
+
+	// test for zoom rectangle request
+	if ((m_ZoomRectRender) && (m_StartPos != m_CurrentPos)) 
+	{
+		// draw inverted rectangle only
+		
+		// create OSRenderRegion, because GRenderRegion doesn't handle EOR-ed draw
+		RenderRegion *pRender = CreateOSRenderRegion(&VirtualSize, pExtraInfo);
+
+		if (pRender == NULL)
+			return;
+
+		// Render the attributes and then a rectangle
+		pRender->SaveContext();
+
+		pRender->SetDrawingMode(DM_EORPEN);
+		
+		pRender->SetFillColour(COLOUR_TRANS);
+		pRender->SetLineColour(COLOUR_XORSELECT); 
+
+		// draw the rect
+		DocRect rc;
+		rc.lo.x = m_StartPos.x < m_CurrentPos.x ? m_StartPos.x : m_CurrentPos.x;
+		rc.lo.y = m_StartPos.y < m_CurrentPos.y ? m_StartPos.y : m_CurrentPos.y;
+		rc.hi.x = m_StartPos.x > m_CurrentPos.x ? m_StartPos.x : m_CurrentPos.x;
+		rc.hi.y = m_StartPos.y > m_CurrentPos.y ? m_StartPos.y : m_CurrentPos.y;
+
+		pRender->DrawRect(&rc);
+
+		pRender->RestoreContext();
+
+		// destroy the render region
+		DestroyOSRenderRegion(pRender);
+	} 
 }
 
 
