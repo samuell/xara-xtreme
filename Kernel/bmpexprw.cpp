@@ -166,7 +166,7 @@ BitmapExportPreviewDialog * BitmapExportPreviewDialog::m_pBitmapExportPreviewDia
 BitmapExportPreviewDialog::BitmapExportPreviewDialog(CWindowID ParentWnd)  
 														: DialogOp(BitmapExportPreviewDialog::IDD, 
 																	BitmapExportPreviewDialog::Mode, 
-																	0,0,0,CC_RUNTIME_CLASS(DialogOp),-1,
+																	0, CC_RUNTIME_CLASS(DialogOp), -1,
 																	ParentWnd) 
 {
 	m_pBitmapExportPreviewDialog = this;
@@ -182,8 +182,8 @@ BitmapExportPreviewDialog::BitmapExportPreviewDialog(CWindowID ParentWnd)
 	m_CurID = -1;
 	m_ActiveBitmap = 0;
 
-	m_pBubbleWnd = NULL;
-	m_LastCursorOverControlID = 0;
+PORTNOTE("other","Removed BubbleHelp")
+//	m_LastCursorOverControlID = 0;
 	m_BubbleHelpPending = TRUE;
 	m_LastAdjustState = FALSE;
 	m_MouseOperationStarted = FALSE;
@@ -236,12 +236,15 @@ BitmapExportPreviewDialog::~BitmapExportPreviewDialog()
 	// delete the cursor if one is still left
 	DeleteCurrentCursor();
 	
+PORTNOTE("other","Removed BubbleHelp")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// if there is a bubble help window from a previous call, delete it
 	if (m_pBubbleWnd != NULL)
 	{
 		delete m_pBubbleWnd;
 		m_pBubbleWnd = NULL;
 	}
+#endif
 
 	// delete the background bitmap file, if one was created
 	if (BitmapPreviewData::pPagePath != NULL)
@@ -506,9 +509,12 @@ void BitmapExportPreviewDialog::ResetInfo(UINT32 id)
 		// remember the control the mouse is over
 		m_LastCursorOverControlID = id;
 
+PORTNOTE("other","Removed BubbleHelp")
+#if !defined(EXCLUDE_FROM_XARALX)
 		// delete the bubble help window
 		delete m_pBubbleWnd;
 		m_pBubbleWnd = NULL;
+#endif
 
 		m_BubbleHelpPending = TRUE;
 
@@ -516,64 +522,56 @@ void BitmapExportPreviewDialog::ResetInfo(UINT32 id)
 		
 		UINT32 StatusTextID = 0;		
 		// find the status text ID from the Gadget ID
-		switch (id)
+		if( id == _R(IDC_ZOOM_TOOL) )
+			StatusTextID = _R(IDS_ZOOM_TOOL_STATUS_TEXT);
+		else
+		if( id == _R(IDC_PUSH_TOOL) )
+			StatusTextID = _R(IDS_PUSH_TOOL_STATUS_TEXT);
+		else
+		if( id == _R(IDC_ZOOM_TO_FIT) )
+			StatusTextID = _R(IDS_ZOOMTOFIT_STATUS_TEXT);
+		else
+		if( id == _R(IDC_100PERCENT) )
+			StatusTextID = _R(IDS_ZOOMTO100_STATUS_TEXT);
+		else
+		if( id == _R(IDC_1TO1) )
+			StatusTextID = _R(IDS_1TO1_STATUS_TEXT);
+		else
+		if( id == _R(IDC_COLOUR_SELECTOR) )
+			StatusTextID = _R(IDS_COLOUR_SELECTOR_STATUS_TEXT);
+		else
+		if( id == _R(IDC_REDRAW1) ||
+			id == _R(IDC_REDRAW2) )
 		{
-			case _R(IDC_ZOOM_TOOL):
-					StatusTextID = _R(IDS_ZOOM_TOOL_STATUS_TEXT);
-					break;
-			
-			case _R(IDC_PUSH_TOOL):
-					StatusTextID = _R(IDS_PUSH_TOOL_STATUS_TEXT);
-					break;
-			
-			case _R(IDC_ZOOM_TO_FIT):
-					StatusTextID = _R(IDS_ZOOMTOFIT_STATUS_TEXT);
-					break;
+			// over one of the draw controls
 
-			case _R(IDC_100PERCENT):
-					StatusTextID = _R(IDS_ZOOMTO100_STATUS_TEXT);
-					break;
-
-			case _R(IDC_1TO1):
-					StatusTextID = _R(IDS_1TO1_STATUS_TEXT);
-					break;
-
-			case _R(IDC_COLOUR_SELECTOR):
-					StatusTextID = _R(IDS_COLOUR_SELECTOR_STATUS_TEXT);
-					break;
-
-			case _R(IDC_REDRAW1):
-			case _R(IDC_REDRAW2):
-				{
-					// over one of the draw controls
-
-					if (((id == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
-						((id == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
-					{
-						// over the unselected bitmap
-						StatusTextID = _R(IDS_UNSELECTED_STATUS_TEXT);
-					}
-					else
-					{
-						// over the selected bitmap - display the current tool options
-						if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
-							StatusTextID = _R(IDS_ZOOM_MODE_STATUS_TEXT);
-						else if (m_CurrentTool == PREVIEW_PUSH_TOOL)
-							StatusTextID = _R(IDS_PUSH_MODE_STATUS_TEXT);
-						else if( m_CurrentTool == PREVIEW_COLOUR_SELECTOR_TOOL )
-							StatusTextID = _R(IDS_COLOUR_SELECTOR_MODE_STATUS_TEXT);
-					}
-					break;
-				}
-		
-			default:
-				StatusTextID = _R(IDS_BITMAPPREVIEWDIALOG);
+			if (((id == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
+				((id == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
+			{
+				// over the unselected bitmap
+				StatusTextID = _R(IDS_UNSELECTED_STATUS_TEXT);
+			}
+			else
+			{
+				// over the selected bitmap - display the current tool options
+				if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
+					StatusTextID = _R(IDS_ZOOM_MODE_STATUS_TEXT);
+				else if (m_CurrentTool == PREVIEW_PUSH_TOOL)
+					StatusTextID = _R(IDS_PUSH_MODE_STATUS_TEXT);
+				else if( m_CurrentTool == PREVIEW_COLOUR_SELECTOR_TOOL )
+					StatusTextID = _R(IDS_COLOUR_SELECTOR_MODE_STATUS_TEXT);
+			}
 		}
+		else
+			StatusTextID = _R(IDS_BITMAPPREVIEWDIALOG);
 		
 		// put up some status line help
 		StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
 		if (pStatusLine != NULL)
-			pStatusLine->UpdateText(&String_256(StatusTextID),FALSE);
+		{
+			String_256	str( StatusTextID );
+			pStatusLine->UpdateText( &str, FALSE );
+		}
 	}
 }
 
@@ -595,12 +593,15 @@ void BitmapExportPreviewDialog::ResetInfo(UINT32 id)
 
 void BitmapExportPreviewDialog::DoBubbleHelp()
 {
+PORTNOTE("other","Removed BubbleHelp")
+#if !defined(EXCLUDE_FROM_XARALX)
 	// if there is a bubble help window from a previous call, delete it
 	if (m_pBubbleWnd != NULL)
 	{
 		delete m_pBubbleWnd;
 		m_pBubbleWnd = NULL;
 	}
+#endif
 	
 	// check if we are over a control
 	if (!m_LastCursorOverControlID)
@@ -609,55 +610,45 @@ void BitmapExportPreviewDialog::DoBubbleHelp()
 	UINT32 BubbleID = 0;
 
 	// find the bubble text ID from the Gadget ID
-	switch (m_LastCursorOverControlID)
-	{
-		case _R(IDC_ZOOM_TOOL):
-			BubbleID = _R(IDS_PREVIEW_ZOOM_TOOL);
-			break;
-
-		case _R(IDC_PUSH_TOOL):
-				BubbleID = _R(IDS_PREVIEW_PUSH_TOOL);
-				break;
-
-		case _R(IDC_ZOOM_TO_FIT):
-			BubbleID = _R(IDS_PREVIEW_ZOOM_TO_FIT);
-			break;
-
-		case _R(IDC_100PERCENT):
-			BubbleID = _R(IDS_PREVIEW_ZOOM_TO_100);
-			break;
-
-		case _R(IDC_1TO1):
-			BubbleID = _R(IDS_PREVIEW_1TO1);
-			break;
-
-		case _R(IDC_COLOUR_SELECTOR):
-			BubbleID = _R(IDS_PREVIEW_COLOUR_SELECTOR);
-			break;
-
-		default:
-			m_LastCursorOverControlID = 0;
-	}
+	if( m_LastCursorOverControlID == _R(IDC_ZOOM_TOOL) )
+		BubbleID = _R(IDS_PREVIEW_ZOOM_TOOL);
+	else
+	if( m_LastCursorOverControlID == _R(IDC_PUSH_TOOL) )
+		BubbleID = _R(IDS_PREVIEW_PUSH_TOOL);
+	else
+	if( m_LastCursorOverControlID == _R(IDC_ZOOM_TO_FIT) )
+		BubbleID = _R(IDS_PREVIEW_ZOOM_TO_FIT);
+	else
+	if( m_LastCursorOverControlID == _R(IDC_100PERCENT) )
+		BubbleID = _R(IDS_PREVIEW_ZOOM_TO_100);
+	else
+	if( m_LastCursorOverControlID == _R(IDC_1TO1) )
+		BubbleID = _R(IDS_PREVIEW_1TO1);
+	else
+	if( m_LastCursorOverControlID == _R(IDC_COLOUR_SELECTOR) )
+		BubbleID = _R(IDS_PREVIEW_COLOUR_SELECTOR);
+	else
+		m_LastCursorOverControlID = 0;
 
 	// no bubble found
 	if (BubbleID == 0)
 		return;
 	
-
+PORTNOTE("other","Removed BubbleHelp")
+#ifndef EXCLUDE_FROM_XARALX
 	////try to load the text
 	String_256 BubbleText(BubbleID);
 
 	// Make a new bubble help window
-	TRY
+	try
 	{
 		m_pBubbleWnd = new BubbleHelpWnd;
 	}
-	CATCH(CMemoryException, e)
+	catch( CMemoryException )
 	{
 		TRACEALL( _T("Unable to create bubble help window!\n"));
 		return;
 	}
-	END_CATCH
 
 	// Create the actual window
 	if (!m_pBubbleWnd->Create())
@@ -672,7 +663,7 @@ void BitmapExportPreviewDialog::DoBubbleHelp()
 
 	// display the window
 	m_pBubbleWnd->Show();
-
+#endif
 }
 
 
@@ -734,20 +725,27 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 					if (BitmapData[2-m_ActiveBitmap].m_bIsSameBitmap != TRUE) // not same bitmap
 					{
 						// delete the file
-						FileUtil::DeleteFile(&(BitmapData[2-m_ActiveBitmap].m_pOptions->GetPathName()));
+						PathName	path( BitmapData[2-m_ActiveBitmap].m_pOptions->GetPathName() );
+						FileUtil::DeleteFile( & path );
 					}
 
 					// delete the temp file for the active bitmap, but only if Cancel was chosen
 					if (Msg->DlgMsg == DIM_CANCEL)
-						FileUtil::DeleteFile(&(BitmapData[m_ActiveBitmap-1].m_pOptions->GetPathName()));
+					{
+						PathName	path( BitmapData[m_ActiveBitmap-1].m_pOptions->GetPathName() );
+						FileUtil::DeleteFile( &path );
+					}
 				}
 
+PORTNOTE("other","Removed BubbleHelp")
+#if !defined(EXCLUDE_FROM_XARALX)
 				// if there is a bubble help window from a previous call, delete it
 				if (m_pBubbleWnd != NULL)
 				{
 					delete m_pBubbleWnd;
 					m_pBubbleWnd = NULL;
 				}
+#endif
 
 				EndDialog = TRUE;
 				//Close();
@@ -769,49 +767,44 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 
 			case DIM_LFT_BN_DOWN :
 			{
-				switch (Msg->GadgetID)
+				if( Msg->GadgetID == _R(IDC_REDRAW1) ||
+					Msg->GadgetID == _R(IDC_REDRAW2) )
 				{
-					case _R(IDC_REDRAW1) :
-					case _R(IDC_REDRAW2) :
-					{
-						// get the extra info
-						ReDrawInfoType*param = (ReDrawInfoType*) Msg->DlgMsgParam;
+					// get the extra info
+					ReDrawInfoType*param = (ReDrawInfoType*) Msg->DlgMsgParam;
+					
+					// sanity check
+					ERROR3IF((param == NULL)  || (param->pMousePos == NULL), "Invalid mouse position passed");
 						
-						// sanity check
-						ERROR3IF((param == NULL)  || (param->pMousePos == NULL), "Invalid mouse position passed");
-						
-						// remember the current pos
-						m_CurrentPos = *(param->pMousePos);
+					// remember the current pos
+					m_CurrentPos = *(param->pMousePos);
 
-						// initialize for zoom to rect
-						m_StartPos = m_CurrentPos;
+					// initialize for zoom to rect
+					m_StartPos = m_CurrentPos;
 
-						// indicate start of mouse operation
-						m_MouseOperationStarted = TRUE;
+					// indicate start of mouse operation
+					m_MouseOperationStarted = TRUE;
 
-						//  If we are doing image slicing, then return now
-						if( BmapPrevDlg::m_bSlicingImage )
-							break;
-
-						// If the 'Colour Selector' is selected, the file format supports a palette
-						// and the message is for the active window more things have to be done.
-						if(	m_CurrentTool == PREVIEW_COLOUR_SELECTOR_TOOL &&
-							m_pParentDlg->m_pExportOptions->GetSupportsPalette() &&
-							(
-								((Msg->GadgetID==_R(IDC_REDRAW1)) && (m_ActiveBitmap==1)) ||
-								((Msg->GadgetID==_R(IDC_REDRAW2)) && (m_ActiveBitmap==2))
-							)
-						  )
-						{
-							//  The user has just clicked on a pixel in one of the preview images
-							//  Need to get the palette inidex of the colour that this pixel uses.
-							INT32 PaletteIndex = GetPaletteIndexOfColour( param, Msg->GadgetID );
-							//  If -1 was returned, then something went wrong, so just leave.
-							if( PaletteIndex == -1 )
-								break;
-							m_pParentDlg->SetPaletteSelection(PaletteIndex);
-						}
+					//  If we are doing image slicing, then return now
+					if( BmapPrevDlg::m_bSlicingImage )
 						break;
+
+					// If the 'Colour Selector' is selected, the file format supports a palette
+					// and the message is for the active window more things have to be done.
+					if(	m_CurrentTool == PREVIEW_COLOUR_SELECTOR_TOOL &&
+						m_pParentDlg->m_pExportOptions->GetSupportsPalette() &&
+						(
+							((Msg->GadgetID==_R(IDC_REDRAW1)) && (m_ActiveBitmap==1)) ||
+							((Msg->GadgetID==_R(IDC_REDRAW2)) && (m_ActiveBitmap==2))
+						) )
+					{
+						//  The user has just clicked on a pixel in one of the preview images
+						//  Need to get the palette inidex of the colour that this pixel uses.
+						INT32 PaletteIndex = GetPaletteIndexOfColour( param, Msg->GadgetID );
+						//  If -1 was returned, then something went wrong, so just leave.
+						if( PaletteIndex == -1 )
+							break;
+						m_pParentDlg->SetPaletteSelection(PaletteIndex);
 					}
 				}
 				break;
@@ -820,100 +813,92 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 
 			case DIM_LFT_BN_UP :
 			{
-				switch (Msg->GadgetID)
+				if( Msg->GadgetID == _R(IDC_REDRAW1) ||
+					Msg->GadgetID == _R(IDC_REDRAW2) )
 				{
-					case _R(IDC_REDRAW1) :
-					case _R(IDC_REDRAW2) :
-					{
-						// if the press of the button was outside the control, or ESC was pressed
-						if (!m_MouseOperationStarted)
-						{						
-							// delete the cursor so new one can be displayed
-							DeleteCurrentCursor();
-
-							break;
-						}
-						
-						// end of the mouseop
-						m_MouseOperationStarted = FALSE;
-
-						// change the active bitmap if necessary
-						if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
-							((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
-						{
-							// change the selected bitmap
-							ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
-						}
-						else
-						{
-							//perform zoom/pan
-
-							// get the extra info
-							ReDrawInfoType*param = (ReDrawInfoType*) Msg->DlgMsgParam;
-							
-							// sanity check
-							ERROR3IF((param == NULL)  || (param->pMousePos == NULL), 
-													"Invalid mouse position passed");
-							
-							// remember the current position
-							m_CurrentPos = *(param->pMousePos);
-
-							if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
-							{
-								if (!m_Dragging) // click-zoom
-									CalcViewRect(FindNearestZoom(!KeyPress::IsAdjustPressed()),
-											param->pMousePos);
-								else // zoom to rectangle
-									ZoomToRect();
-							}
-
-							m_Dragging = FALSE;
-						}
-	
+					// if the press of the button was outside the control, or ESC was pressed
+					if (!m_MouseOperationStarted)
+					{						
 						// delete the cursor so new one can be displayed
 						DeleteCurrentCursor();
 
 						break;
 					}
+						
+					// end of the mouseop
+					m_MouseOperationStarted = FALSE;
 
-					// Any other controls on the 1st image, swap to that image
-					case _R(IDC_ACTIVE1) :
-//					case _R(IDC_ACTIVEFRAME1) :
-					case _R(IDC_IMAGESIZE1) :
-					case _R(IDC_FILESIZE1) :
-					case _R(IDC_FILEDIFF1) :
-					case _R(IDC_FILE_TYPE_LIST):
+					// change the active bitmap if necessary
+					if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
+						((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
 					{
-						// change the active bitmap if necessary
-						if (m_ActiveBitmap != 1)
-						{
-							// change the selected bitmap
-							ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
-
-							//  Don't want to respond to any mouse messages until this piece has
-							//  been finished. 
-//							m_pParentDlg->SetDontWantMouseMessage( TRUE );
-//							BmapPrevDlg::m_bNeedPaletteUpdated = TRUE;
-						}
-						break;
+						// change the selected bitmap
+						ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
 					}
-
-					// Any other controls on the second image, swap to that image
-					case _R(IDC_ACTIVE2) :
-//					case _R(IDC_ACTIVEFRAME2) :
-					case _R(IDC_IMAGESIZE2) :
-					case _R(IDC_FILESIZE2) :
-					case _R(IDC_FILEDIFF2) :
-					case _R(IDC_FILE_TYPE_LIST2):
+					else
 					{
-						// change the active bitmap if necessary
-						if (m_ActiveBitmap != 2)
-						{
-							// change the selected bitmap
-							ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
+						//perform zoom/pan
 
+						// get the extra info
+						ReDrawInfoType*param = (ReDrawInfoType*) Msg->DlgMsgParam;
+							
+						// sanity check
+						ERROR3IF((param == NULL)  || (param->pMousePos == NULL), 
+												"Invalid mouse position passed");
+							
+						// remember the current position
+						m_CurrentPos = *(param->pMousePos);
+
+						if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
+						{
+							if (!m_Dragging) // click-zoom
+								CalcViewRect(FindNearestZoom(!KeyPress::IsAdjustPressed()),
+										param->pMousePos);
+							else // zoom to rectangle
+									ZoomToRect();
 						}
-						break;
+
+						m_Dragging = FALSE;
+					}
+	
+					// delete the cursor so new one can be displayed
+					DeleteCurrentCursor();
+
+				}
+				else
+				// Any other controls on the 1st image, swap to that image
+				if( Msg->GadgetID == _R(IDC_ACTIVE1) ||
+//					case _R(IDC_ACTIVEFRAME1) :
+					Msg->GadgetID == _R(IDC_IMAGESIZE1) ||
+					Msg->GadgetID == _R(IDC_FILESIZE1) ||
+					Msg->GadgetID == _R(IDC_FILEDIFF1) ||
+					Msg->GadgetID == _R(IDC_FILE_TYPE_LIST) )
+				{
+					// change the active bitmap if necessary
+					if (m_ActiveBitmap != 1)
+					{
+						// change the selected bitmap
+						ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
+						//  Don't want to respond to any mouse messages until this piece has
+						//  been finished. 
+//						m_pParentDlg->SetDontWantMouseMessage( TRUE );
+//						BmapPrevDlg::m_bNeedPaletteUpdated = TRUE;
+					}
+				}
+				else
+				// Any other controls on the second image, swap to that image
+				if( Msg->GadgetID == _R(IDC_ACTIVE2) ||
+//					case _R(IDC_ACTIVEFRAME2) :
+					Msg->GadgetID == _R(IDC_ACTIVE2) || Msg->GadgetID == _R(IDC_IMAGESIZE2) ||
+					Msg->GadgetID == _R(IDC_ACTIVE2) || Msg->GadgetID == _R(IDC_FILESIZE2) ||
+					Msg->GadgetID == _R(IDC_ACTIVE2) || Msg->GadgetID == _R(IDC_FILEDIFF2) ||
+					Msg->GadgetID == _R(IDC_ACTIVE2) || Msg->GadgetID == _R(IDC_FILE_TYPE_LIST2) )
+				{
+					// change the active bitmap if necessary
+					if (m_ActiveBitmap != 2)
+					{
+						// change the selected bitmap
+						ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
 					}
 				}
 				break;
@@ -928,7 +913,7 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 					DeleteCurrentCursor();					// pop the cursor from the stack
 					ReleaseMouse(Msg->GadgetID);			// release the mouse capture
 					if (m_PreviousWithFocus != NULL)		// restore the keyboard input focus to
-						::SetFocus(m_PreviousWithFocus);	// the last window with the focus
+						m_PreviousWithFocus->SetFocus();	// the last window with the focus
 					m_PreviousWithFocus = NULL; // reset it
 				}
 				else
@@ -957,7 +942,7 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 						
 						// restore the keyboard input focus to the last window with the focus
 						if (m_PreviousWithFocus != NULL)
-							::SetFocus(m_PreviousWithFocus);
+							m_PreviousWithFocus->SetFocus();
 						m_PreviousWithFocus = NULL; // reset it
 						
 						// pop the cursor from the stack
@@ -965,6 +950,8 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 					}
 					else
 					{
+PORTNOTE("other","Removed some oilieness for kernel")
+#ifndef EXCLUDE_FROM_XARALX
 						// get the hwnd of the control
 						CWindowID hChild = ::GetDlgItem(GetReadWriteWindowID(), Msg->GadgetID);
 						
@@ -980,6 +967,7 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 						
 						// the mouse is moved inside the control, so update the cursor
 						SetCurrentCursor(Msg->GadgetID);
+#endif
 						
 						//	If we are doing image slicing, then return now
 						if( BmapPrevDlg::m_bSlicingImage )
@@ -1010,32 +998,29 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 			{
 				ResetInfo(Msg->GadgetID);
 
-				switch (Msg->GadgetID)
+				if( Msg->GadgetID == _R(IDC_REDRAW1) ||
+					Msg->GadgetID == _R(IDC_REDRAW2) )
 				{
-					case _R(IDC_REDRAW1) :
-					case _R(IDC_REDRAW2):
+					// check whether the mouse button was first pressed inside our window
+					if (!m_MouseOperationStarted)
+						break;
+
+					// check for a drag in the unselected control
+					if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
+						((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
+						break;
+
+					if (KeyPress::IsEscapePressed())
 					{
-						// check whether the mouse button was first pressed inside our window
-						if (!m_MouseOperationStarted)
-							break;
-
-						// check for a drag in the unselected control
-						if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
-							((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
-							break;
-
-						if (KeyPress::IsEscapePressed())
-						{
-							// cancel the operation
-							m_MouseOperationStarted = FALSE;
-							
-							// if we are zooming to a rectangle, hide the rectangle
-							if (m_Dragging && (m_CurrentTool == PREVIEW_ZOOM_TOOL))
-								DrawZoomRect();
-
-							break;
-						}
-
+						// cancel the operation
+						m_MouseOperationStarted = FALSE;
+					
+						// if we are zooming to a rectangle, hide the rectangle
+						if (m_Dragging && (m_CurrentTool == PREVIEW_ZOOM_TOOL))
+							DrawZoomRect();
+					}
+					else
+					{
 						// get the extra info
 						ReDrawInfoType*param = (ReDrawInfoType*) Msg->DlgMsgParam;
 						
@@ -1056,7 +1041,10 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 
 							// display the text
 							if (StatusTextID != 0)
-								pStatusLine->UpdateText(&String_256(StatusTextID),FALSE);
+							{
+								String_256	str( StatusTextID );
+								pStatusLine->UpdateText( &str, FALSE );
+							}
 						}
 
 						// perform the drag operation
@@ -1064,7 +1052,6 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 							DoPush(param->pMousePos);
 						else if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
 							DoZoom(param->pMousePos);
-						break;
 					}
 				}
 				break;
@@ -1073,39 +1060,33 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 		case DIM_RGT_BN_UP :
 			{
 				// See which button was pressed
-				switch (Msg->GadgetID)
+				if( Msg->GadgetID == _R(IDC_REDRAW1) ||
+					Msg->GadgetID == _R(IDC_REDRAW2) )
 				{
-					case _R(IDC_REDRAW1) :
-					case _R(IDC_REDRAW2) :
+					// change the active bitmap if necessary
+					if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
+						((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
 					{
-						// change the active bitmap if necessary
-						if (((Msg->GadgetID == _R(IDC_REDRAW1)) && (m_ActiveBitmap != 1)) ||
-							((Msg->GadgetID == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
-						{
-							// change the selected bitmap
-							ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
-//							BmapPrevDlg::m_bNeedPaletteUpdated = TRUE;
-						}
-						else
-						{
-							// initialise the popup menu
-							OpPreviewPopupCommand::Init();
-
-							// create the right-click menu
-							PreviewContextMenu *menu = new PreviewContextMenu;
-
-							// display the menu
-							if (menu != NULL)
-								menu->Show();
-							else
-								ERROR3("Can't create PreviewContextMenu");
-						}
-
-						// delete the cursor, so new one can be set
-						DeleteCurrentCursor();
-
-						break;
+						// change the selected bitmap
+						ChangeActiveBitmap(1 + (m_ActiveBitmap == 1));
+//						BmapPrevDlg::m_bNeedPaletteUpdated = TRUE;
 					}
+					else
+					{
+						// initialise the popup menu
+						OpPreviewPopupCommand::Init();
+						// create the right-click menu
+						PreviewContextMenu *menu = new PreviewContextMenu;
+
+						// display the menu
+						if (menu != NULL)
+							menu->Show();
+						else
+							ERROR3("Can't create PreviewContextMenu");
+					}
+
+					// delete the cursor, so new one can be set
+					DeleteCurrentCursor();
 				}
 				break;
 			}
@@ -1114,46 +1095,28 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 		case DIM_LFT_BN_CLICKED :
 			{
 				// See which button was pressed
-				switch (Msg->GadgetID)
+				if( Msg->GadgetID == _R(IDC_ZOOM_TOOL) )
+					OnZoomTool();
+				else
+				if( Msg->GadgetID == _R(IDC_PUSH_TOOL) )
+					OnPushTool();
+				else
+				if( Msg->GadgetID == _R(IDC_ZOOM_TO_FIT)  )
 				{
-					case _R(IDC_ZOOM_TOOL) :
-					{
-						OnZoomTool();
-						break;
-					}
-
-					case _R(IDC_PUSH_TOOL) :
-					{
-						OnPushTool();
-						break;
-					}
-
-					case _R(IDC_ZOOM_TO_FIT) :
-					{
-						// first check if there is any bitmap
-						if (m_ActiveBitmap != 0)
-							CalcViewRect(-1, NULL);
-						break;
-					}
-
-					case _R(IDC_1TO1):
-					{
-						On1to1();
-						break;
-					}
-
-					case _R(IDC_100PERCENT):
-					{
-						On100Percent();
-						break;
-					}
-
-					case _R(IDC_COLOUR_SELECTOR):
-					{
-						OnColourSelectorTool();
-						break;
-					}
+					// first check if there is any bitmap
+					if (m_ActiveBitmap != 0)
+						CalcViewRect(-1, NULL);
 				}
+				else
+				if( Msg->GadgetID == _R(IDC_1TO1) )
+					On1to1();
+				else
+				if( Msg->GadgetID == _R(IDC_100PERCENT) )
+					On100Percent();
+				else
+				if( Msg->GadgetID == _R(IDC_COLOUR_SELECTOR) )
+					OnColourSelectorTool();
+				
 				break;
 			}
 
@@ -1162,23 +1125,19 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 				// This is where all the redrawing is done
 				// Which control in the window is sending the redraw message (if there are many
 				// grdraw controls you can tell which is which from the Gadget ID
-				switch (Msg->GadgetID)
-				{
-					// Draw the redraw_me control in here
-					case _R(IDC_REDRAW1) :
-					case _R(IDC_REDRAW2) :
-					{
-						RenderControl((ReDrawInfoType*) Msg->DlgMsgParam, Msg->GadgetID);
-						break;
-					}
 
+				// Draw the redraw_me control in here
+				if( Msg->GadgetID == _R(IDC_REDRAW1) ||
+					Msg->GadgetID == _R(IDC_REDRAW2) )
+				{
+					RenderControl((ReDrawInfoType*) Msg->DlgMsgParam, Msg->GadgetID);
+				}
+				else
+				{
 					// there are no other controls that should get a redraw message ever
-					default :
-					{
-						// give out an error in debug builds, ignore in retail builds
-						ERROR3("Got a redraw message for a control I don't know about");
-						break;
-					}
+				
+					// give out an error in debug builds, ignore in retail builds
+					ERROR3("Got a redraw message for a control I don't know about");
 				}
 
 				break;
@@ -1189,18 +1148,18 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 			{
 				//  Make sure that the message came from one of the file type drop-lists
 				//  before calling the handling function.
-				switch( Msg -> GadgetID )
-				{
-				case _R(IDC_FILE_TYPE_LIST):	
+				if( Msg->GadgetID == _R(IDC_FILE_TYPE_LIST) )	
 					HandleFileTypeListChange( 0 );
-					break;
-				case _R(IDC_FILE_TYPE_LIST2):
+				else
+				if( Msg->GadgetID == _R(IDC_FILE_TYPE_LIST2) )
 					HandleFileTypeListChange( 1 );
-					break;
-				}
+
 				break;
 			}
 
+			default:
+				// Do nothing, but quiten compiler
+				break;
 		}
 
 		// Allow the base class access to the message, it will do the
@@ -1211,8 +1170,9 @@ MsgResult BitmapExportPreviewDialog::Message(Msg* Message)
 		// End dialog here
 		if (EndDialog) 
 		{
-			Close();				// Hide the dialog box
-			End();					// Finish the operation
+			// DialogOp has already done this
+//			Close();				// Hide the dialog box
+//			End();					// Finish the operation
 
 			// Free up any unused bitmaps in the global list
 			// (just deleting the KernelBitmaps doesn't seem to do it)
@@ -1334,7 +1294,7 @@ INT32 BitmapExportPreviewDialog::GetPaletteIndexOfColour( ReDrawInfoType* param,
 
 	//  Get the palette from the BmapPrevDlg class.
 	//  Don't need to do this every time the mouse moves.
-	ExtendedPalette* pPal = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
+//	ExtendedPalette* pPal = BmapPrevDlg::m_pExportOptions->GetExtendedPalette();
 	INT32 PaletteIndex = pBit->ReturnPaletteIndexUsed( MouseX, MouseY );
 
 	return PaletteIndex;
@@ -1383,7 +1343,7 @@ BOOL BitmapExportPreviewDialog::DoBrowserPreview(BrowserPreviewOptions BrowserOp
 void BitmapExportPreviewDialog::OnZoomTool()
 {
 	BOOL Valid = FALSE;
-	BOOL State = GetLongGadgetValue(_R(IDC_ZOOM_TOOL), 0, 1, NULL, &Valid);
+	BOOL State = GetLongGadgetValue(_R(IDC_ZOOM_TOOL), 0, 1, 0, &Valid);
 	if (!State)
 	{
 		SetLongGadgetValue(_R(IDC_ZOOM_TOOL), TRUE);
@@ -1442,7 +1402,7 @@ void BitmapExportPreviewDialog::OnColourSelectorTool()
 void BitmapExportPreviewDialog::OnPushTool()
 {
 	BOOL Valid = FALSE;
-	BOOL State = GetLongGadgetValue(_R(IDC_PUSH_TOOL), 0, 1, NULL, &Valid);
+	BOOL State = GetLongGadgetValue(_R(IDC_PUSH_TOOL), 0, 1, 0, &Valid);
 	if (!State)
 	{
 		SetLongGadgetValue(_R(IDC_PUSH_TOOL), TRUE);
@@ -1488,24 +1448,22 @@ void BitmapExportPreviewDialog::On1to1()
 	m_BitmapView.lo.y = h/2 - Height / 2;
 	m_BitmapView.hi.y = h/2 + Height / 2;
 
-	INT32 PixelSize = 72000 / param.Dpi;
-
 	// make sure one of the corners is aligned at a pixel
 
 	// get the pixel size in millipoints
 	MILLIPOINT PixSize = 0;
 	DocUnitList* pDocUnitList =	DocUnitList::GetCurrentDocUnitList();
-	ERROR3IF(pDocUnitList == NULL, "BmpPrefsDlg::InitDialog() - no pDocUnitList!")
+	ERROR3IF(pDocUnitList == NULL, "BmpPrefsDlg::InitDialog() - no pDocUnitList!");
 	if (pDocUnitList != NULL)
 	{
 		Unit* pPixelUnit = pDocUnitList->FindUnit(PIXELS);
-		ERROR3IF(pPixelUnit == NULL, "BmpPrefsDlg::InitDialog() - no pixel units!")
+		ERROR3IF(pPixelUnit == NULL, "BmpPrefsDlg::InitDialog() - no pixel units!");
 		if (pPixelUnit != NULL)
 			PixSize = (MILLIPOINT) pPixelUnit->GetMillipoints();
 	}
 
 	// shift the rectangle, so that the lower left corner is aligned at a pixel boundary
-	if (PixSize != NULL)
+	if (PixSize != 0)
 	{
 		MILLIPOINT ShiftX = m_BitmapView.lo.x % PixSize;
 		MILLIPOINT ShiftY = m_BitmapView.lo.y % PixSize;
@@ -1554,12 +1512,12 @@ BOOL BitmapExportPreviewDialog::InitDialog()
 {
 	// Set up the bitmaps for the play controls
 	// Uses the title defined in the rc file so do not specify any bitmaps
-	SetGadgetBitmaps(_R(IDC_ZOOM_TOOL), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_PUSH_TOOL), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_ZOOM_TO_FIT), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_1TO1), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_100PERCENT), NULL, NULL);
-	SetGadgetBitmaps(_R(IDC_COLOUR_SELECTOR), NULL, NULL );
+	SetGadgetBitmaps(_R(IDC_ZOOM_TOOL), 0, 0);
+	SetGadgetBitmaps(_R(IDC_PUSH_TOOL), 0, 0);
+	SetGadgetBitmaps(_R(IDC_ZOOM_TO_FIT), 0, 0);
+	SetGadgetBitmaps(_R(IDC_1TO1), 0, 0);
+	SetGadgetBitmaps(_R(IDC_100PERCENT), 0, 0);
+	SetGadgetBitmaps(_R(IDC_COLOUR_SELECTOR), 0, 0 );
 
 	// default to push button
 	SetLongGadgetValue(_R(IDC_PUSH_TOOL), TRUE);
@@ -1610,25 +1568,29 @@ void BitmapExportPreviewDialog::InitFileTypeList()
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_BMP), FALSE, 2 );
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_JPG), FALSE, 3 );
 
-	switch(BmapPrevDlg::m_pExportOptions->GetFilterNameStrID())
+	UINT32				idString = BmapPrevDlg::m_pExportOptions->GetFilterNameStrID();
+	if( idString == _R(IDN_FILTERNAME_GIF) ) // its a windows bitmap bmp type
 	{
-	case _R(IDN_FILTERNAME_GIF): // its a windows bitmap bmp type
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 0 );
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 0 );
-		break;
-	default:
-	case _R(IDS_FILTERNAME_PNG): // its a png
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 1 );
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 1 );
-		break;
-	case _R(IDT_FILTERNAME_BMP): // its a windows bitmap bmp type
+	}
+	else
+	if( idString == _R(IDT_FILTERNAME_BMP) ) // its a windows bitmap bmp type
+	{
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 2 );
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 2 );
-		break;
-	case _R(IDS_JPG_EXP_FILTERNAME): // its a jpeg type
+	}
+	else
+	if( idString == _R(IDS_JPG_EXP_FILTERNAME) ) // its a jpeg type
+	{
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 3 );
 		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 3 );
-		break;
+	}
+	else
+	{
+//	case _R(IDS_FILTERNAME_PNG): // its a png
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 1 );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 1 );
 	}
 	
 	//  Set the lists to the correct length
@@ -1849,7 +1811,7 @@ void BitmapExportPreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo, UINT32
 		if (pDialogView)
 		{
 			// Try and create the bitmap etc
-			StartedOk = m_pRender->AttachDevice(pDialogView, pExtraInfo->pDC, NULL);
+			StartedOk = m_pRender->AttachDevice( pDialogView, pExtraInfo->pDC->GetDC(), NULL );
 
 			// Try and start the render region
 			StartedOk = StartedOk && m_pRender->StartRender();
@@ -1871,15 +1833,12 @@ void BitmapExportPreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo, UINT32
 		// Get the current bitmap for the passed control
 		KernelBitmap * pBitmapToUse;
 		//  The ( 1-based ) number of the bitmap currently being rendered.
-		UINT32 BitmapNumber = -1;
 		if (GadgetID == _R(IDC_REDRAW1))
 		{
-			BitmapNumber = 1;
 			pBitmapToUse = BitmapData[0].m_pBitmap;
 		}
 		else if (GadgetID == _R(IDC_REDRAW2))
 		{
-			BitmapNumber = 2;
 			pBitmapToUse = BitmapData[1].m_pBitmap;
 		}
 		else
@@ -2106,8 +2065,6 @@ void BitmapExportPreviewDialog::CalcViewRect(double NewZoomFactor, DocCoord *pos
 		m_BitmapView.hi.x = w/2 + Width / 2;
 		m_BitmapView.lo.y = h/2 - Height / 2;
 		m_BitmapView.hi.y = h/2 + Height / 2;
-
-		INT32 PixelSize = 72000 / param.Dpi;
 	}
 	else 
 	{
@@ -2156,8 +2113,6 @@ void BitmapExportPreviewDialog::CalcViewRect(double NewZoomFactor, DocCoord *pos
 		m_BitmapView.hi.y = Centre.y + Height/ 2;
 
 		
-		INT32 PixelSize = 72000 / param.Dpi;
-
 		DocCoord Pos;
 		// if no position passed assume click in the middle of the control
 		if (pos == NULL)
@@ -2187,17 +2142,17 @@ void BitmapExportPreviewDialog::CalcViewRect(double NewZoomFactor, DocCoord *pos
 	// get the pixel size in millipoints
 	MILLIPOINT PixSize = 0;
 	DocUnitList* pDocUnitList =	DocUnitList::GetCurrentDocUnitList();
-	ERROR3IF(pDocUnitList == NULL, "BmpPrefsDlg::InitDialog() - no pDocUnitList!")
+	ERROR3IF(pDocUnitList == NULL, "BmpPrefsDlg::InitDialog() - no pDocUnitList!");
 	if (pDocUnitList != NULL)
 	{
 		Unit* pPixelUnit = pDocUnitList->FindUnit(PIXELS);
-		ERROR3IF(pPixelUnit == NULL, "BmpPrefsDlg::InitDialog() - no pixel units!")
+		ERROR3IF(pPixelUnit == NULL, "BmpPrefsDlg::InitDialog() - no pixel units!");
 		if (pPixelUnit != NULL)
 			PixSize = (MILLIPOINT) pPixelUnit->GetMillipoints();
 	}
 
 	// shift the rectangle, so that the lower left corner is aligned at a pixel boundary
-	if (PixSize != NULL)
+	if (PixSize != 0)
 	{
 		MILLIPOINT ShiftX = m_BitmapView.lo.x % PixSize;
 		MILLIPOINT ShiftY = m_BitmapView.lo.y % PixSize;
@@ -2462,7 +2417,7 @@ void BitmapExportPreviewDialog::DisplayZoomFactor()
 	else
 		EnableGadget(_R(IDC_ACTIVE1), FALSE);
 
-	SetStringGadgetValue(_R(IDC_ACTIVE1),&Str1);
+	SetStringGadgetValue(_R(IDC_ACTIVE1),Str1);
 	InvalidateGadget(_R(IDC_FILE_TYPE_LIST)); // so the outline is not drawn over the top of the drop down
 
 	// for the second image
@@ -2475,7 +2430,7 @@ void BitmapExportPreviewDialog::DisplayZoomFactor()
 	else
 		EnableGadget(_R(IDC_ACTIVE2), FALSE);
 
-	SetStringGadgetValue(_R(IDC_ACTIVE2),&Str1);
+	SetStringGadgetValue(_R(IDC_ACTIVE2),Str1);
 	InvalidateGadget(_R(IDC_FILE_TYPE_LIST2)); // so the outline is not drawn over the top of the drop down
 
 	DisplayBitmapInfo();
@@ -2521,13 +2476,13 @@ void BitmapExportPreviewDialog::DisplayBitmapInfo()
 	
 	// for the first image
 	BitmapData[0].GenerateBitmapInfoStrings(ImageSize, FileSize, TRUE);
-	SetStringGadgetValue(_R(IDC_IMAGESIZE1), &ImageSize);
-	SetStringGadgetValue(_R(IDC_FILESIZE1), &FileSize);
+	SetStringGadgetValue(_R(IDC_IMAGESIZE1), ImageSize);
+	SetStringGadgetValue(_R(IDC_FILESIZE1), FileSize);
 
 	// for the second image
 	BitmapData[1].GenerateBitmapInfoStrings(ImageSize, FileSize, TRUE);
-	SetStringGadgetValue(_R(IDC_IMAGESIZE2), &ImageSize);
-	SetStringGadgetValue(_R(IDC_FILESIZE2), &FileSize);
+	SetStringGadgetValue(_R(IDC_IMAGESIZE2), ImageSize);
+	SetStringGadgetValue(_R(IDC_FILESIZE2), FileSize);
 
 	// now set the file difference
 
@@ -2556,7 +2511,7 @@ void BitmapExportPreviewDialog::DisplayBitmapInfo()
 		else
 			FileDiff += String_16(_R(IDS_SAMESIZE));
 
-		SetStringGadgetValue(_R(IDC_FILEDIFF1),&FileDiff);
+		SetStringGadgetValue(_R(IDC_FILEDIFF1),FileDiff);
 	}
 	else
 	{
@@ -2567,7 +2522,7 @@ void BitmapExportPreviewDialog::DisplayBitmapInfo()
 		else
 			FileDiff += String_16(_R(IDS_SAMESIZE));
 
-		SetStringGadgetValue(_R(IDC_FILEDIFF2),&FileDiff);
+		SetStringGadgetValue(_R(IDC_FILEDIFF2),FileDiff);
 	}
 }
 
@@ -2597,9 +2552,6 @@ BOOL BitmapExportPreviewDialog::OnExport(BitmapExportOptions * pExportOptions)
 	// check for bitmap filter
 //	if (m_pBmpFilter == NULL)
 //		return FALSE;
-
-	// get the current options
-	BitmapExportOptions *pCurrentOptions = BitmapData[Num-1].m_pOptions;
 
 	if (pExportOptions == NULL)
 		return FALSE;
@@ -2721,7 +2673,7 @@ pOptions->SetTempFileFlag(TRUE);
 
 	BOOL ok = TRUE;
 		
-	TRY  // to export the document to the temp file
+	try  // to export the document to the temp file
 	{
 		//no need for preview bitmap
 		m_pBmpFilter->IncludePreviewBmp(FALSE);
@@ -2784,7 +2736,7 @@ pOptions->SetTempFileFlag(TRUE);
 		}
 	}
 	// See if there was a file io error
-	CATCH(CFileException, e)
+	catch( CFileException )
 	{
 		UINT32 ErrNo = Error::GetErrorNumber();
 		// Report the error if no one else did
@@ -2799,7 +2751,7 @@ pOptions->SetTempFileFlag(TRUE);
 		EndSlowJob();
 
 		// Make sure that the file is closed and deleted
-		TRY
+		try
 		{
 			// First try and delete it (tries to close it first)
 			if (m_pBmpFilter)
@@ -2809,15 +2761,13 @@ pOptions->SetTempFileFlag(TRUE);
 			if (TempDiskFile.isOpen())
 				TempDiskFile.close();
 		}
-		CATCH(CFileException, e)
+		catch( CFileException )
 		{
 			// Failed to close the file - not much we can do about it really
 		}
-		END_CATCH
 
 		return FALSE;
 	}
-	END_CATCH
 
 	if (ok)
 	{
@@ -2894,7 +2844,8 @@ pOptions->SetTempFileFlag(TRUE);
 					if (pOptions->GetPathName().IsValid() && (oldTempPath != TempPath.GetPath()))
 					{
 						// Delete any old files that might be around
-						FileUtil::DeleteFile(&(pOptions->GetPathName()));
+						PathName		path( pOptions->GetPathName() );
+						FileUtil::DeleteFile( &path );
 					}
 
 					// set the new path name in the options object
@@ -2952,26 +2903,18 @@ pOptions->SetTempFileFlag(TRUE);
 						// try to make them both the same and borrow the bitmap from the first side
 						BitmapExportOptions * pNewOptions = NULL;
 
-						switch(pOptions->GetFilterNameStrID())
-						{
-						case _R(IDN_FILTERNAME_GIF):
+						UINT32 idString = pOptions->GetFilterNameStrID();
+						if( idString == _R(IDN_FILTERNAME_GIF) )
 							pNewOptions = new GIFExportOptions();
-							break;
-
-						case _R(IDT_FILTERNAME_BMP):
+						else
+						if( idString == _R(IDT_FILTERNAME_BMP) )
 							pNewOptions = new BMPExportOptions();
-							break;
-
-						default:
-						case _R(IDS_FILTERNAME_PNG):
-							pNewOptions = new PNGExportOptions();
-							break;
-
-						case _R(IDS_JPG_EXP_FILTERNAME):
+						else
+						if( idString == _R(IDS_JPG_EXP_FILTERNAME) )
 							pNewOptions = new JPEGExportOptions();
-							break;
-						}
-
+						else
+//						if( idString == _R(IDS_FILTERNAME_PNG):
+							pNewOptions = new PNGExportOptions();
 
 						KernelBitmap * pNewKBMP = new KernelBitmap(pKernelBitmap->ActualBitmap);
 
@@ -3085,19 +3028,19 @@ pOptions->SetTempFileFlag(TRUE);
 
 void BitmapExportPreviewDialog::DoCommand(StringBase *CommandID)
 {
-	if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_ZOOM_TOOL)
+	if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_ZOOM_TOOL)
 		OnZoomTool(); // "Zoom Tool"
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_PUSH_TOOL)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_PUSH_TOOL)
 		OnPushTool(); // "Push Tool"
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_COLOUR_SELECTOR_TOOL)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_COLOUR_SELECTOR_TOOL)
 		OnColourSelectorTool(); // 'Colour Selector'
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_ZOOM_TO_FIT)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_ZOOM_TO_FIT)
 		CalcViewRect(-1, NULL); //"Zoom to Fit"
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_ZOOM_TO_100)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_ZOOM_TO_100)
 		On100Percent(); // "Zoom to 100%"
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_1TO1)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_1TO1)
 		On1to1(); // "Zoom to 100%"
-	else if (*CommandID == (TCHAR *)OPTOKEN_PREVIEW_HELP)
+	else if (*CommandID == (PCTSTR)OPTOKEN_PREVIEW_HELP)
 	{
 		// call the parent dialog to do the help 
 		if (m_pParentDlg != NULL)

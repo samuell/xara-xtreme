@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_BITMAPPREVIEWDIALOG">
+	<object class="wxPanel" name="IDD_BITMAPPREVIEWDIALOG">
 			 <pos>0,0d</pos> <size>397,153d</size>
 		<object class="wxStaticBox" name="IDC_ACTIVE1">
 			 <pos>6,1d</pos> <size>167,150d</size>

@@ -396,6 +396,8 @@ BOOL FileUtil::GetLongFileName(LPTSTR lpszPath, LPTSTR lpszOutput, size_t cchMax
 	return FALSE;
 }
 
+#endif
+
 
 /********************************************************************************************
 >	static PathName FileUtil::GetTemporaryFile()
@@ -421,14 +423,15 @@ BOOL FileUtil::GetLongFileName(LPTSTR lpszPath, LPTSTR lpszOutput, size_t cchMax
 PathName FileUtil::GetTemporaryPathName()
 {
 	//First get the directory in which to put our temporary files
-	TCHAR pcPath[MAX_PATH];
+	TCHAR pcPath[MAX_PATH] = _T("");
 
-	FileUtil::GetTemporaryPath(MAX_PATH, pcPath);
+PORTNOTE("other", "This call is not needed, wxFileName::CreateTempFileName does the right thing" )
+//	FileUtil::GetTemporaryPath(MAX_PATH, pcPath);
 
 	//Now get a temporary file name
 	TCHAR pcFileName[MAX_PATH];
 
-	FileUtil::GetTemporaryFileName(pcPath, "xar", 0, pcFileName);
+	FileUtil::GetTemporaryFileName(pcPath, _T("xar"), 0, pcFileName);
 
 	//And convert the file name into a PathName
 	String_256 strFileName=pcFileName;
@@ -480,19 +483,14 @@ BOOL FileUtil::GetTemporaryPathName(const TCHAR *pExt, PathName *pTempPath)
 		BOOL ok = GetTemporaryPathName(pExt, pTempPath);
 
 		// remove our .tmp file
-		_tremove((TCHAR *)pInFile);
+		wxRemoveFile( (PCTSTR)pInFile );
 
 		return ok;
 	}
-	else
-	{
-		// try to rename the file
-		String_256 path = pTempPath->GetPath();
-		if (_trename(pInFile,path) != 0)
-			return FALSE;
-		else
-			return TRUE;
-	}
+
+	// try to rename the file
+	wxString			path = (PCTSTR)pTempPath->GetPath();
+	return wxRenameFile( (PCTSTR)pInFile, path );
 }
 
 
@@ -522,10 +520,17 @@ UINT32 FileUtil::GetTemporaryFileName(const TCHAR *PathName, const TCHAR *Prefix
 		return FALSE;
 	}
 
-	return ::GetTempFileName(PathName,Prefix,Unique,FileName);
+	wxString			str( PathName );
+//	str += Prefix;
+
+	str = wxFileName::CreateTempFileName( str );
+	camStrcpy( FileName, str.c_str() );
+	return Unique != 0 ? Unique : 0xD7334;	// Random non-zero value
 }
 
 
+PORTNOTE("other", "Removed lots of Windows'isms" )
+#if !defined(EXCLUDE_FROM_XARALX)
 
 /********************************************************************************************
 >	static INT32 FileUtil::GetTempPath(UINT32 BufferLength,	TCHAR *Buffer)
@@ -551,6 +556,7 @@ DWORD FileUtil::GetTemporaryPath(UINT32 BufferLength,	TCHAR *Buffer)
 }
 
 #endif
+
 
 /*******************************************************************************************
 

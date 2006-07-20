@@ -63,7 +63,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	zdeflate.cpp jpgdest.cpp webparam.cpp bmpalint.cpp zdftrees.cpp animparams.cpp \
 	sglayer.cpp layermgr.cpp layergal.cpp backgrnd.cpp viewmenu.cpp renddlg.cpp \
 	sgcolour.cpp sgbitmap.cpp bmpsdlg.cpp ngcore.cpp ngitem.cpp ngscan.cpp \
-	ngsentry.cpp ngsetop.cpp ngdialog.cpp property.cpp \
+	ngsentry.cpp ngsetop.cpp ngdialog.cpp property.cpp bmpexprw.cpp \
 	optsedit.cpp optsmisc.cpp optspntr.cpp optstune.cpp optsview.cpp optsgrid.cpp \
 	optspage.cpp optsundo.cpp optsscal.cpp optsunit.cpp pagesize.cpp radio.cpp \
 	xpfcaps.cpp xpfilter.cpp xpfrgn.cpp layerprp.cpp prpsgds.cpp prpslyrs.cpp \
@@ -77,7 +77,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	swfbuttn.cpp swffont.cpp swfplace.cpp swfrndr.cpp swfshape.cpp swfsprit.cpp \
 	swfexpdc.cpp swftext.cpp pmaskrgn.cpp printctl.cpp prnmkcom.cpp prnmks.cpp \
 	xsepsops.cpp xarprefs.cpp printing.cpp prntview.cpp psrndrgn.cpp opimgset.cpp \
-	optsprin.cpp prnprefs.cpp rulers.cpp biasgdgt.cpp biasdlg.cpp
+	optsprin.cpp prnprefs.cpp rulers.cpp biasgdgt.cpp biasdlg.cpp prvwmenu.cpp
 
 
 AM_CXXFLAGS = $(XARAFLAGS)

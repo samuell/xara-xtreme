@@ -344,25 +344,25 @@ BOOL BitmapPreviewData::ComposeHTMLColour(DocColour *pColour, String_32 &OutColo
 	pColour->GetRGBValue(&R, &G, &B);
 	
 	// convert this into a html colour string
-	OutColour = String_32("#");
+	OutColour = String_32( _T("#") );
 	String_32 c;
 	
 	// add the red component
 	if (R < 16) // is a leading 0 required
-		OutColour += "0";
-	c._MakeMsg("#1%X", R % 256);
+		OutColour += _T("0");
+	c._MakeMsg( _T("#1%X"), R % 256);
 	OutColour += c;
 	
 	// the green component
 	if (G < 16)
-		OutColour += "0";
-	c._MakeMsg("#1%X", G % 256);
+		OutColour += _T("0");
+	c._MakeMsg( _T("#1%X"), G % 256);
 	OutColour += c;
 	
 	// the blue component
 	if (B < 16)
-		OutColour += "0";
-	c._MakeMsg("#1%X", B % 256);
+		OutColour += _T("0");
+	c._MakeMsg( _T("#1%X"), B % 256);
 	OutColour += c;
 	
 	return TRUE;
@@ -482,7 +482,7 @@ BOOL BitmapPreviewData::SetBackgroundFromPage(CCDiskFile &DiskFile, Spread * pSp
 			if (pPagePath)
 			{
 				// create a new temporary file
-				Ok = FileUtil::GetTemporaryPathName("gif", pPagePath);
+				Ok = FileUtil::GetTemporaryPathName( _T("gif"), pPagePath);
 			}
 			else
 				Ok = FALSE;
@@ -604,6 +604,8 @@ BOOL BitmapPreviewData::ExportImagemap(CCDiskFile &DiskFile, PathName *pPath, Se
 *******************************************************************************************/
 BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 {
+PORTNOTE("other","Removed _R(IDD_TIMAPOPTIONS) - isn't wanted yet")
+#ifndef EXCLUDE_FROM_XARALX
 	// sanity checks
 	
 	// check for export options
@@ -632,7 +634,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 		return FALSE;
 	
 	// create a new temp file 
-	if (FileUtil::GetTemporaryPathName("htm",m_pTempHTMLPath) == FALSE)
+	if (FileUtil::GetTemporaryPathName( _T("htm"),m_pTempHTMLPath) == FALSE)
 	{
 		delete m_pTempHTMLPath;
 		m_pTempHTMLPath = NULL;
@@ -653,7 +655,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 	// create a path name object from the program name
 	PathName ProgramPath(strPathName);
 	
-	TRY
+	try
 	{
 		// open it for reading
 		if (!TempDiskFile.open(*m_pTempHTMLPath, ios::out))
@@ -736,17 +738,15 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 			}
 			else
 			{
-				switch (m_pOptions->GetFilterNameStrID())
+				if( m_pOptions->GetFilterNameStrID() == _R(IDN_FILTERNAME_GIF) ||
+					m_pOptions->GetFilterNameStrID() == _R(IDS_JPG_EXP_FILTERNAME) ||
+					m_pOptions->GetFilterNameStrID() == _R(IDT_FILTERNAME_BMP) )
 				{
-				case _R(IDN_FILTERNAME_GIF):
-				case _R(IDS_JPG_EXP_FILTERNAME): 
-				case _R(IDT_FILTERNAME_BMP):
 					s.MakeMsg(_R(IDS_DISPLAY_BMP), (const TCHAR *)TempPath.GetFileName());
-					break;
-				case _R(IDS_FILTERNAME_PNG):
-					s.MakeMsg(_R(IDS_DISPLAY_PNG), (const TCHAR *)TempPath.GetFileName());
-					break;
 				}
+				else
+				if( m_pOptions->GetFilterNameStrID() == _R(IDS_FILTERNAME_PNG) )
+					s.MakeMsg(_R(IDS_DISPLAY_PNG), (const TCHAR *)TempPath.GetFileName());
 			}	
 			
 			TempDiskFile.write(s);
@@ -1361,7 +1361,7 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 		
 	} // end of TRY block
 	
-	CATCH(CFileException, e)
+	catch( CFileException )
 	{
 		// any disk problems - come here
 		
@@ -1371,9 +1371,9 @@ BOOL BitmapPreviewData::GenerateHTMLStub(BrowserPreviewOptions BrowserOptions)
 		
 		return FALSE;
 	}
-	END_CATCH
+#endif
 		
-		return TRUE;
+	return TRUE;
 }
 
 

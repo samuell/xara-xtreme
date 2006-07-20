@@ -16,7 +16,7 @@ noinst_LIBRARIES	= libwxOil.a
 libwxOil_a_SOURCES = \
 	varstr.cpp \
 	basestr.cpp camdoc.cpp camelot.cpp camframe.cpp \
-	camview.cpp ccobject.cpp ccdc.cpp clikmods.cpp convert.cpp \
+	camview.cpp ccobject.cpp ccdc.cpp clikmods.cpp convert.cpp cbmpdata.cpp \
 	diagnost.cpp dibconv.cpp dibutil.cpp dlgmgr.cpp dlgview.cpp ensure.cpp \
 	errors.cpp filehndl.cpp filesize.cpp fixmem.cpp fixstr8.cpp fixstr16.cpp \
 	fixstr32.cpp fixstr64.cpp fixst128.cpp fixst256.cpp handles.cpp makemsg.cpp \

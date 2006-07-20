@@ -168,21 +168,21 @@ BOOL PreviewContextMenu :: Build()
 
 BOOL OpPreviewPopupCommand::InitPolymorphicCommand(TCHAR *OpToken, UINT32 MenuTextID)
 {
-	return(RegisterOpDescriptor(NULL,								// Tool ID 
+	return(RegisterOpDescriptor(0,									// Tool ID 
 								MenuTextID,		 					// String resource ID
 								CC_RUNTIME_CLASS(OpPreviewPopupCommand),// Runtime class
 								OpToken, 							// Token string
 								OpPreviewPopupCommand::GetCommandState,	// GetState function
-								NULL,								// help ID
-								NULL,								// bubble help
-								NULL,								// resource ID
-								NULL,								// control ID
+								0,									// help ID
+								0,									// bubble help
+								0,									// resource ID
+								0,									// control ID
 								SYSTEMBAR_ILLEGAL,					// Bar ID
 								FALSE,								// Receive system messages
 								FALSE,								// Smart duplicate operation
 								TRUE,								// Clean operation
 								NULL,								// No vertical counterpart
-								NULL,								// String for one copy only error
+								0,									// String for one copy only error
 								DONT_GREY_WHEN_SELECT_INSIDE		// Auto state flags
 								));
 }

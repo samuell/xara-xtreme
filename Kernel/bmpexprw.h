@@ -253,7 +253,7 @@ protected:
 	BOOL m_Dragging; // are we in drag mode?
 	BOOL m_ZoomRectRender; // whether we are to render the zoom rectangle in the redraw() function
 	INT32 m_CurID; // the id of the last set cursor
-	BubbleHelpWnd *m_pBubbleWnd; // the bubble help window
+//	BubbleHelpWnd *m_pBubbleWnd; // the bubble help window
 	UINT32 m_LastCursorOverControlID; //the id of the last control, the cursor was over
 	MonotonicTime BubbleTimer; // the timer for the bubble help
 	BOOL m_BubbleHelpPending; // is it waiting for the timer to signal displaying of bubble help

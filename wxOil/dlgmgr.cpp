@@ -374,7 +374,8 @@ BOOL DialogManager::Create(DialogOp* DlgOp,
 		pDialogName=CamResource::GetObjectNameFail(MainDlgID);
 		ERROR1IF(pDialogName == NULL, FALSE, _R(IDE_CANNOT_CREATE_DIALOG));
 
-		if (wxAUImanaged)
+PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel for non-toolbar type dialog")
+		if (wxAUImanaged || _R(IDD_BITMAPPREVIEWDIALOG) == MainDlgID )
 			pDialogWnd = wxXmlResource::Get()->LoadPanel((wxWindow *)ParentWnd, pDialogName);
 		else
 			pDialogWnd = wxXmlResource::Get()->LoadDialog((wxWindow *)ParentWnd, pDialogName);

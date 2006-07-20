@@ -270,7 +270,8 @@ PORTNOTE("other","Removed _R(IDD_TIMAPOPTIONS) & _R(IDD_TBROWSER) - isn't wanted
 	}
 
 PORTNOTE("other","Removed _R(IDD_TIMAPOPTIONS) - isn't wanted yet")
-#ifndef EXCLUDE_FROM_XARALX// design notes stuff on the image map page is needed in image slicing
+#ifndef EXCLUDE_FROM_XARALX
+	// design notes stuff on the image map page is needed in image slicing
 	if (ok && m_bSlicingImage)
 	{
 		ok = AddAPage(_R(IDD_TIMAPOPTIONS));
@@ -688,6 +689,7 @@ PORTNOTETRACE("other","Preview section NOT setup");
 		//First get the size of the current window
 		wxRect Rect;
 		GetWindowRect(WindowID, &Rect);
+#endif
 
 		//Now, the current window contains only the Tabs
 		//section of the dialog. We need to insert the Preview
@@ -722,7 +724,18 @@ PORTNOTETRACE("other","Preview section NOT setup");
 		// Get the window ID
 		m_DialogWnd = m_pPreviewDlg->WindowID;
 		ERROR2IF(m_DialogWnd == NULL, FALSE, "No preview dialog!");
+	
+PORTNOTE("other","Nasty pool of oil contaminating nive clean kernel");
+		// Fuse the whole lot into one dialog
+		wxSizer*		pMainSizer = WindowID->GetSizer();
+		wxSizer*		pVertSizer( new wxBoxSizer( wxVERTICAL ) );
+		pVertSizer->Add( m_pPreviewDlg->WindowID, wxALL );
+		pVertSizer->Add( pMainSizer );
 
+		WindowID->SetSizerAndFit( pVertSizer, false );
+
+PORTNOTE("other","Preview section NOT setup");
+#ifndef EXCLUDE_FROM_XARALX
 		//And get the Preview Dialog's rectangle
 		wxRect rectPreview;
 		GetWindowRect(m_DialogWnd, &rectPreview);
@@ -775,10 +788,10 @@ PORTNOTETRACE("other","Preview section NOT setup");
 		//produce the right effect, so let's not question
 		//why.
 		MoveWindow(m_DialogWnd, 0, 0, rectPreview.GetRight() - rectPreview.GetLeft(), rectPreview.GetBottom() - rectPreview.GetTop(), TRUE);
-		
-		// enable our window (which has been disabled when the preview window was created)
-		EnableWindow(WindowID, TRUE);
 #endif
+
+		// enable our window (which has been disabled when the preview window was created)
+		WindowID->Enable( TRUE );
 	}
 
 	// set the title bar
@@ -822,10 +835,7 @@ PORTNOTETRACE("other","Preview section NOT setup");
 
 	UpdateCurrentTab();
 
-PORTNOTE("other","Removed Windows style function EnumChildProc")
-#ifndef EXCLUDE_FROM_XARALX
 	m_PaletteControl.Init(GetReadWriteWindowID());
-#endif
 
 	return TRUE;
 }
@@ -1089,8 +1099,6 @@ void BmapPrevDlg::UpdateCurrentTab()
 ********************************************************************************************/
 BOOL BmapPrevDlg::DoPreview()
 {
-PORTNOTETRACE("other", "BmapPrevDlg::DoPreview - do nothing - returning true" );
-#if !defined(EXCLUDE_FROM_XARALX)
 	//	TRACEUSER( "Gerry", _T("DoPreview 0x%08x\n"), m_pExportOptions);
 
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
@@ -1130,8 +1138,6 @@ PORTNOTETRACE("other", "BmapPrevDlg::DoPreview - do nothing - returning true" );
 	TalkToPage(PageID);
 
 	return ok;
-#endif
-	return true;
 }
 
 
@@ -3042,8 +3048,7 @@ void BmapPrevDlg::RefreshBitmapSizeTab()
 
 	HandleBitmapSizeDPIChange();
 	
-PORTNOTE("other", "Remove preview usage" )
-//	if (m_pPreviewDlg )
+	if (m_pPreviewDlg )
 	{
 		m_LockSizeUpdates = TRUE;
 		WinRect wr = GetExportSize(m_pExportOptions->GetDPI());
