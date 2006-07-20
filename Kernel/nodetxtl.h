@@ -288,7 +288,8 @@ class TextLine:	public BaseTextClass
 	CC_DECLARE_DYNAMIC(TextLine)
 
 public:
-	TextLine(); 	
+	TextLine();
+	~TextLine();
 	TextLine(Node* ContextNode, AttachNodeDirection Direction);
 	void Init();
 	
@@ -378,7 +379,7 @@ public:
 	void SetParaLeftMargin( MILLIPOINT    Margin)        { mLeftMargin = Margin; }
 	void SetParaFirstIndent(MILLIPOINT    Indent)        { mFirstIndent = Indent; }
 	void SetParaRightMargin(MILLIPOINT    Margin)        { mRightMargin = Margin; }
-	void SetRuler(          const TxtRuler* pRuler)      { mpRuler = pRuler; }
+	void SetRuler(          const TxtRuler* pRuler)      { if (*mpRuler != *pRuler) *mpRuler = *pRuler; }
 
 	MILLIPOINT GetPosInStory() { return mPosInStory; }
 	void SetPosInStory(MILLIPOINT pos) { mPosInStory=pos; }
@@ -396,10 +397,8 @@ private:
 	MILLIPOINT mLeftMargin;	        // cache for value read from attr stack
 	MILLIPOINT mFirstIndent;        // cache for value read from attr stack
 	MILLIPOINT mRightMargin;        // cache for value read from attr stack
-	const TxtRuler* mpRuler;        // cache for value read from attr stack
-									// NB - this is a shared pointer to a list object owned by the attribute!
-									//      this only works because applying a different attribute will cause
-									//      our cached value to be updated
+	TxtRuler* mpRuler;              // cache for value read from attr stack
+									// NB - this is a list object owned by this object
 	MILLIPOINT mPosInStory;		// y position of base of line relative to story
 };
 

@@ -178,19 +178,19 @@ void TextLine::Init()
 	mJustification  = JLEFT;
 	mLineSpacing    = 0;
 	mLineSpaceRatio = 1;
+	mpRuler = new TxtRuler;
 
 	mPosInStory  = 0;
 }
 
- 
+
 /********************************************************************************************
 >	TextLine::TextLine()
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	21/12/94
 	Purpose:	Simple TextLine constructor, it is required so that SimpleCopy will work.
-				You should not normally call this constructor as it does not initialise
-				the object.
+
 ********************************************************************************************/
 
 TextLine::TextLine(): BaseTextClass()	// Call the base class
@@ -198,6 +198,19 @@ TextLine::TextLine(): BaseTextClass()	// Call the base class
 	Init();
 }
 
+/********************************************************************************************
+>	TextLine::~TextLine()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	20/07/06
+	Purpose:	Destructor
+
+********************************************************************************************/
+
+TextLine::~TextLine()
+{
+	delete mpRuler;
+}
  
 /********************************************************************************************
 >	TextLine::TextLine(Node* ContextNode, AttachNodeDirection Direction)
@@ -379,7 +392,7 @@ void TextLine::CopyNodeContents(TextLine* NodeCopy)
 	NodeCopy->mLeftMargin = mLeftMargin;
 	NodeCopy->mFirstIndent = mFirstIndent;
 	NodeCopy->mRightMargin = mRightMargin;
-	NodeCopy->mpRuler = mpRuler;
+	*NodeCopy->mpRuler = *mpRuler;
 
 	NodeCopy->mPosInStory  = mPosInStory;
 }
@@ -714,6 +727,7 @@ void TextLine::GetDebugDetails(StringBase* Str)
 
 BOOL TextLine::ReCacheMetrics(FormatRegion* pFormatRegion)
 {
+	TRACEUSER("wuerthne", _T("TextLine::ReCacheMetrics"));
 	SetJustification( pFormatRegion->GetJustification());
 	SetLineSpacing(   pFormatRegion->GetLineSpacing());
 	SetLineSpaceRatio(pFormatRegion->GetLineSpaceRatio());
@@ -722,6 +736,33 @@ BOOL TextLine::ReCacheMetrics(FormatRegion* pFormatRegion)
 	SetParaFirstIndent(pFormatRegion->GetFirstIndent());
 	SetParaRightMargin(pFormatRegion->GetRightMargin());
 	SetRuler(pFormatRegion->GetRuler());
+#if defined(_DEBUG) && 0
+	String_256 TempStr;
+	String Str(_T(" "));
+	for (TxtTabStopIterator It = mpRuler->begin(); It != mpRuler->end(); ++It)
+	{
+		switch((*It).GetType())
+		{
+			case LeftTab:
+				TempStr._MakeMsg( TEXT("L(#1%ld)"), (*It).GetPosition());
+				Str += TempStr;
+				break;
+			case RightTab:
+				TempStr._MakeMsg( TEXT("R(#1%ld)"), (*It).GetPosition());
+				Str += TempStr;
+				break;
+			case CentreTab:
+				TempStr._MakeMsg( TEXT("C(#1%ld)"), (*It).GetPosition());
+				Str += TempStr;
+				break;
+			case DecimalTab:
+				TempStr._MakeMsg( TEXT("D(#1%ld)"), (*It).GetPosition());
+				Str += TempStr;
+				break;
+		}
+	}
+	TRACEUSER("wuerthne", _T("ruler at %08x:%s"), mpRuler, (TCHAR*)Str);
+#endif
 	return TRUE;
 }
 
