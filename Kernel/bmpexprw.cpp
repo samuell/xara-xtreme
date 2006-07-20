@@ -1342,17 +1342,15 @@ BOOL BitmapExportPreviewDialog::DoBrowserPreview(BrowserPreviewOptions BrowserOp
 
 void BitmapExportPreviewDialog::OnZoomTool()
 {
-	BOOL Valid = FALSE;
-	BOOL State = GetLongGadgetValue(_R(IDC_ZOOM_TOOL), 0, 1, 0, &Valid);
-	if (!State)
-	{
-		SetLongGadgetValue(_R(IDC_ZOOM_TOOL), TRUE);
-		SetLongGadgetValue(_R(IDC_PUSH_TOOL), FALSE);
-		m_CurrentTool = PREVIEW_ZOOM_TOOL;
+	//  When the Zoom is clicked, make sure that the Color Selector and Push
+	//  tools are deselected.
+	SetLongGadgetValue( _R(IDC_COLOUR_SELECTOR), FALSE );
+	SetLongGadgetValue( _R(IDC_PUSH_TOOL), FALSE );
+	//  Select the Push tool
+	SetLongGadgetValue( _R(IDC_ZOOM_TOOL), TRUE );
 
-		//  Turn the colour selector tool off.
-		SetLongGadgetValue( _R(IDC_COLOUR_SELECTOR), FALSE );
-	}
+	//  Set this as the current tool
+	m_CurrentTool = PREVIEW_ZOOM_TOOL;
 }
 
 /******************************************************************************************
@@ -1401,17 +1399,15 @@ void BitmapExportPreviewDialog::OnColourSelectorTool()
 
 void BitmapExportPreviewDialog::OnPushTool()
 {
-	BOOL Valid = FALSE;
-	BOOL State = GetLongGadgetValue(_R(IDC_PUSH_TOOL), 0, 1, 0, &Valid);
-	if (!State)
-	{
-		SetLongGadgetValue(_R(IDC_PUSH_TOOL), TRUE);
-		SetLongGadgetValue(_R(IDC_ZOOM_TOOL), FALSE);
-		m_CurrentTool = PREVIEW_PUSH_TOOL;
+	//  When the Push is clicked, make sure that the Color Selector and Zoom 
+	//  tools are deselected.
+	SetLongGadgetValue( _R(IDC_COLOUR_SELECTOR), FALSE );
+	SetLongGadgetValue( _R(IDC_ZOOM_TOOL), FALSE );
+	//  Select the Push tool
+	SetLongGadgetValue( _R(IDC_PUSH_TOOL), TRUE );
 
-		//  Turn the Colour Selector off
-		SetLongGadgetValue( _R(IDC_COLOUR_SELECTOR), FALSE );
-	}
+	//  Set this as the current tool
+	m_CurrentTool = PREVIEW_PUSH_TOOL;
 }
 
 
