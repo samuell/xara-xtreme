@@ -128,8 +128,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "fontman.h"			// fonts
 //#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-#include "nodetxts.h"
-#include "nodetxtl.h"
 #include "nodetext.h"
 
 //#include "doccolor.h"			// colours - in camtypes.h [AUTOMATICALLY REMOVED]

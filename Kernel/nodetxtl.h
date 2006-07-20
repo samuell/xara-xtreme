@@ -324,9 +324,9 @@ public:
 								MILLIPOINT LastDescentLine, BOOL FirstLine);
 	BOOL SetCharMatrices(MILLIPOINT LinePos);
 	BOOL FitTextToPath(TextStoryInfo* pPathInfo, MILLIPOINT LinePos);
-	BOOL Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth);
+	BOOL Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth, MILLIPOINT Indent);
 	VisibleTextNode* FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositions,
-								   MILLIPOINT Indent = 0, MILLIPOINT CharPosOffset = 0,
+								   MILLIPOINT Indent, MILLIPOINT CharPosOffset = 0,
 								   MILLIPOINT ExtraOnChars = 0, MILLIPOINT ExtraOnSpaces = 0);
 
 	TextLine* FindFirstLineOfParagraph();

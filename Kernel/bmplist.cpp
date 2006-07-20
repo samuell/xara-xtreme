@@ -126,8 +126,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "will2.h"
 
-#include "nodetxtl.h"
-
 #include "bmpcomp.h"
 
 //#include "nodecach.h"		// for CacheCompound specific tests in cleaning up GlobalList

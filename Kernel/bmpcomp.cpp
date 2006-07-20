@@ -128,8 +128,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "sgliboil.h"
 //#include "will2.h"
 
-#include "nodetxtl.h"
-
 #include "expbmp.h"		// ExportedBitmaps handling class
 #include "impbmp.h"		// ImportedBitmaps handling class
 //#include "camfiltr.h"	// BaseCamelotFilter - version 2 native filter - in camtypes.h [AUTOMATICALLY REMOVED]

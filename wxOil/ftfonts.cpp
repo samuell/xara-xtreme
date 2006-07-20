@@ -466,6 +466,8 @@ bool ClosestFontEnumerator::OnFacename(const wxString& font)
 	// we need to pass a ENUMLOGFONT structure to the kernel
 	// we can pass pointers to transient structures - the kernel copies the data if it is the
 	// best match so far
+	// We can only handle names that have less than 64 characters - see MyFontEnumerator::OnFacename
+	if (font.length() > 63) return TRUE;
 	String_64 OurFontName = font;
 	ENUMLOGFONT OurEnumLogFont;
 	OurEnumLogFont.elfLogFont.FaceName = font;

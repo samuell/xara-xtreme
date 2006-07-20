@@ -775,15 +775,15 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 	MILLIPOINT PhysicalRightMargin  = pStoryInfo->StoryWidth - pStoryInfo->RightPathIndent;
 	BOOL       WordWrapping = pStoryInfo->WordWrapping;
 	MILLIPOINT RightMargin = PhysicalRightMargin - mRightMargin;
-	MILLIPOINT LeftMargin = PhysicalLeftMargin + GetEffectiveLeftMargin();
+	MILLIPOINT LeftIndent = GetEffectiveLeftMargin();
 
 	// if word wrapping, and not text at a point, and undoably 'do'ing op, word wrap the line
 	MILLIPOINT WrapWidth = 0;
 	if (WordWrapping)
-		WrapWidth = RightMargin - LeftMargin;	// will be 0 if text at a point
+		WrapWidth = RightMargin - PhysicalLeftMargin;	// will be 0 if text at a point
 	if (WrapWidth!=0 && pStoryInfo->WordWrap)
 	{
-		if (!this->Wrap(pStoryInfo->pUndoOp, WrapWidth))
+		if (!this->Wrap(pStoryInfo->pUndoOp, WrapWidth, LeftIndent))
 			return FALSE;
 	}
 	else if (WrapWidth != 0)
@@ -791,7 +791,7 @@ BOOL TextLine::Format(TextStoryInfo* pStoryInfo)
 		// when called during undo (i.e., WordWrap = FALSE) and the story is word wrapping,
 		// we do not want to wrap, but we still need to make sure that each tab gets its width
 		// set correctly, otherwise PositionCharsInLine will not do the right thing
-		FindBreakChar(WrapWidth, FALSE);
+		FindBreakChar(WrapWidth, FALSE, LeftIndent);
 	}
 
 	// if line affected in any way, reposition chars in line
@@ -1160,7 +1160,9 @@ BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab)
 }
 
 /********************************************************************************************
->	VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth)
+>	VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositions,
+										 MILLIPOINT Indent, MILLIPOINT CharPosOffset,
+										 MILLIPOINT ExtraOnChars, MILLIPOINT ExtraOnSpaces)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 				(based on routine by Ed_Cornes <camelotdev@xara.com> created 15/7/96)
@@ -1307,9 +1309,9 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositi
 	Purpose:	Word wrap the line
 ********************************************************************************************/
 
-BOOL TextLine::Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth)
+BOOL TextLine::Wrap(UndoableOperation* pUndoOp, MILLIPOINT WrapWidth, MILLIPOINT Indent)
 {
-	VisibleTextNode* pBreakChar = this->FindBreakChar(WrapWidth, FALSE);
+	VisibleTextNode* pBreakChar = this->FindBreakChar(WrapWidth, FALSE, Indent);
 	if (pBreakChar==NULL)
 		return FALSE;
 
