@@ -1855,6 +1855,14 @@ void BitmapExportPreviewDialog::RenderControl(ReDrawInfoType* pExtraInfo, UINT32
 								DocCoord(VirtualSize.lo.x + Width/2, VirtualSize.hi.y));
 			m_pRender->DrawLine(DocCoord(VirtualSize.lo.x, VirtualSize.lo.y + Height/2),
 								DocCoord(VirtualSize.hi.x, VirtualSize.lo.y + Height/2));
+
+			// Now display can't preview text
+			String_128		str( _T("Preview is not supported for this image format") );
+			DocRect			rect;
+			m_pRender->GetFixedSystemTextSize( &str, &rect );
+			rect.Translate( VirtualSize.lo.x + ( Width / 2 ) - ( rect.Width() / 2 ),
+						    VirtualSize.lo.y + ( Height / 2 ) - ( rect.Height() / 2 ) );
+			m_pRender->DrawFixedSystemText( &str, rect );
 		}
 
 		m_pRender->RestoreContext();
