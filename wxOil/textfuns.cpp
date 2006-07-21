@@ -639,54 +639,31 @@ BOOL TextManager::GetInfoFromLogFont(FontInfo* pFontInfo, LOGFONT* pLogFont, Fon
 
 CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 {
-#ifndef EXCLUDE_FROM_XARALX
 	ERROR2IF(pChar==NULL,Failed,"TextManager::ProcessCharCase() - pChar==NULL");
-	ERROR2IF(NewState==Failed || NewState==Unknown,Failed,"TextManager::ProcessCharCase() - invalid NewState");
+	ERROR2IF(NewState==Failed || NewState==UnknownType,Failed,"TextManager::ProcessCharCase() - invalid NewState");
+	ERROR2IF(sizeof(TCHAR) != sizeof(WCHAR), Failed,"TextManager::ProcessCharCase - Unicode only");
 
-	WCHAR OldCharW = *pChar;
-	CHAR OldCharA = UnicodeManager::UnicodeToMultiByte(OldCharW);
-	CharCase OldCase=Unknown;
+	CharCase OldCase=UnknownType;
 
 	// get a lower case version of the char (if it changes it must have been upper)
+	WCHAR OldCharW = *pChar;
 	WCHAR LowerCharW;
-	if (UnicodeManager::IsUnicodeCompleteOS())
+	if (camTolower(OldCharW) != OldCharW)
 	{
-		WCHAR pLowerChar[2]={OldCharW,0};
-		::CharLowerW(pLowerChar);								
-		if (*pLowerChar != OldCharW)
-			OldCase = Upper;
-		LowerCharW = *pLowerChar;
-	}
-	else
-	{
-		CHAR pLowerChar[2]={OldCharA,0};
-	  	::CharLowerA(pLowerChar);								
-		if (*pLowerChar != OldCharA)
-			OldCase = Upper;
-		LowerCharW = UnicodeManager::MultiByteToUnicode(*pLowerChar);
+		OldCase = Upper;
+		LowerCharW = camTolower(OldCharW);
 	}
 
 	// get an upper case version of the char (if it changes it must have been lower)
 	WCHAR UpperCharW;
-	if (UnicodeManager::IsUnicodeCompleteOS())
+	if (camToupper(OldCharW) != OldCharW)
 	{
-		WCHAR pUpperChar[2]={OldCharW,0};
-		::CharUpperW(pUpperChar);								
-		if (*pUpperChar != OldCharW)
-			OldCase = Lower;
-		UpperCharW = *pUpperChar;
-	}
-	else
-	{
-		CHAR pUpperChar[2]={OldCharA,0};
-	  	::CharUpperA(pUpperChar);								
-		if (*pUpperChar != OldCharA)
-			OldCase = Lower;
-		UpperCharW = UnicodeManager::MultiByteToUnicode(*pUpperChar);
+		OldCase = Lower;
+		UpperCharW = camToupper(OldCharW);
 	}
 
 	// if its case can be changed and we want to change it do it!
-	if (OldCase!=Unknown && NewState!=Read)
+	if (OldCase!=UnknownType && NewState!=Read)
 	{
 		if (NewState==Swap)
 			NewState = OldCase==Lower ? Upper : Lower;
@@ -695,9 +672,6 @@ CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 	}
 
 	return OldCase;
-#else
-	ERROR2(Failed, "ProcessCharCase NYI");
-#endif
 }
 
 

@@ -1035,7 +1035,23 @@ BOOL TextTool::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifier
 
 BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 {
-	TRACEUSER( "jlh92", _T("TextTool::OnKeyPress\n") );
+	TRACEUSER( "wuerthne", _T("TextTool::OnKeyPress, IsChar=%d IsRelease=%d VirtKey=%d\n"),
+			   pKeyPress->IsChar(), pKeyPress->IsRelease(), pKeyPress->GetVirtKey() );
+
+	// NB - each keypress casues three events:
+	//      (1) a key down event (IsChar() = FALSE, IsRelease() = FALSE) - which may not have the
+	//          correct Unicode char value because it has not been through the IM yet
+	//      (2) a char event (IsChar() = TRUE, IsRelease() = FALSE) - with the correct Unicode
+	//          char but with different values for GetVirtKey (e.g., Ctrl+char is reported as
+	//          a ctrl code)
+	//      (3) a release event (IsChar() = FALSE, IsRelease() = TRUE)
+
+	// Our strategy is to use the key down event for shortcuts, to use the char events for
+	// actual input and to ignore the release events. Care must be taken to swallow enough
+	// events, e.g., though cursor movement is handled using the key down event, the
+	// corresponding char event must be swallowed, too, otherwise the reported Unicode
+	// character ends up being inserted in the text object. Finally, all non-char events
+	// we do not swallow here will be processed by the hotkey system.
 
    	// Filter out all key release events 
    	if (pKeyPress->IsRelease())
@@ -1050,13 +1066,10 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 		return FALSE;
 	}
 
-	if( !pKeyPress->IsChar() )
-		return pKeyPress->GetUnicode() == _T(' ');
-
 	// Deal with keypresses that don't dosen't depend on a focus story
 	if (HandleSpecialStoryAndNonStoryKeys(pKeyPress))
 	{
-		TRACEUSER( "jlh92", _T("SpecialStoryAndNonStoryKeys\n") );
+		TRACEUSER( "wuerthne", _T("SpecialStoryAndNonStoryKeys\n") );
 
 		return TRUE;
 	}
@@ -1081,7 +1094,7 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 	// We need a focus story do handle a keypress
 	if (TextStory::GetFocusStory() == NULL) 
 	{
-		TRACEUSER( "jlh92", _T("GetFocusStory\n") );
+		TRACEUSER( "wuerthne", _T("GetFocusStory\n") );
 
 		return HandleSpecialNonStoryKeys(pKeyPress);
 	}
@@ -1120,53 +1133,58 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
    	// First see if this is a special meaning key
 	if (HandleSpecialStoryKeys(pKeyPress, TextStory::GetFocusStory(), TextStory::GetFocusStory()->GetCaret()))
 	{
-		TRACEUSER( "jlh92", _T("HandleSpecialStoryKeys\n") );
+		TRACEUSER( "wuerthne", _T("HandleSpecialStoryKeys\n") );
 
 		return TRUE;
 	}
-	else
+
+	// finally, only proper text input remaining, so we only want Char events
+	if( !pKeyPress->IsChar() )
 	{
-	 	if ( (!pKeyPress->IsAlternative()) ||				    // Alt not down
-				(pKeyPress->IsAlternative() && pKeyPress->IsExtended()) || // Right alt down
-				(pKeyPress->IsAlternative() && pKeyPress->IsConstrain()) ) // Ctrl & left alt down
-	 	{
-			WCHAR UnicodeValue = pKeyPress->GetUnicode();
-			TRACEUSER("jlh92", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
-			if (HandleDeadKeys(pKeyPress, &UnicodeValue))
-				return TRUE;
-			else
-			{
-		 		if ( (UnicodeValue>=32) && ((UnicodeValue < CAMELOT_UNICODE_BASE) || (UnicodeValue > CAMELOT_UNICODE_LAST)))
-		 		{
-#ifndef EXCLUDE_FROM_XARALX
-					if ((UnicodeValue < 256) /*&& !TextManager::IsUnicodeCompleteOS()*/)
-						UnicodeValue = UnicodeManager::MultiByteToUnicode(UnicodeValue);
-#endif
-
-					// Display a blank cursor (thus hiding the pointer)
-					if (!IsBlankCursorUp)
-					{
-						pcCurrentCursor = pcBlankCursor;
-						CursorStack::GSetTop(pcCurrentCursor, CurrentCursorID);
-						IsBlankCursorUp = TRUE;
-					}
-
-					// Create EditTextOp
-					OpTextFormat* pOp = new OpTextFormat();
-					if (pOp != NULL)
-					{
-						TRACEUSER("jlh92", _T("inserting Unicode char %04x"), UnicodeValue);
-						pOp->DoInsertChar(UnicodeValue, OpTextFormat::INSERT);
-						UpdateAfterTyping = TRUE;
-						return TRUE;
-					} 
-				}
-				else
-					TRACEUSER( "jlh92", _T("Rejected\n" ) );
-			}
-		}
+		TRACEUSER("wuerthne", _T("not char"));
+		return pKeyPress->GetUnicode() == _T(' ');          // always claim the Space key (tool switch)
 	}
 
+	if ( (!pKeyPress->IsAlternative()) ||				    // Alt not down
+		 (pKeyPress->IsAlternative() && pKeyPress->IsExtended()) || // Right alt down
+		 (pKeyPress->IsAlternative() && pKeyPress->IsConstrain()) ) // Ctrl & left alt down
+	{
+		WCHAR UnicodeValue = pKeyPress->GetUnicode();
+		TRACEUSER("wuerthne", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
+		if (HandleDeadKeys(pKeyPress, &UnicodeValue))
+			return TRUE;
+		else
+		{
+			if ( (UnicodeValue>=32) && ((UnicodeValue < CAMELOT_UNICODE_BASE) || (UnicodeValue > CAMELOT_UNICODE_LAST)))
+			{
+#ifndef EXCLUDE_FROM_XARALX
+				if ((UnicodeValue < 256) /*&& !TextManager::IsUnicodeCompleteOS()*/)
+					UnicodeValue = UnicodeManager::MultiByteToUnicode(UnicodeValue);
+#endif
+				
+				// Display a blank cursor (thus hiding the pointer)
+				if (!IsBlankCursorUp)
+				{
+					pcCurrentCursor = pcBlankCursor;
+					CursorStack::GSetTop(pcCurrentCursor, CurrentCursorID);
+					IsBlankCursorUp = TRUE;
+				}
+				
+				// Create EditTextOp
+				OpTextFormat* pOp = new OpTextFormat();
+				if (pOp != NULL)
+				{
+					TRACEUSER("jlh92", _T("inserting Unicode char %04x"), UnicodeValue);
+					pOp->DoInsertChar(UnicodeValue, OpTextFormat::INSERT);
+					UpdateAfterTyping = TRUE;
+					return TRUE;
+				} 
+			}
+			else
+				TRACEUSER( "jlh92", _T("Rejected\n" ) );
+		}
+	}
+	TRACEUSER("wuerthne", _T("TextTool::OnKeyPress returns FALSE"));
 	return FALSE;
 }
 
@@ -1187,6 +1205,8 @@ BOOL TextTool::HandleSpecialStoryAndNonStoryKeys(KeyPress* pKeyPress)
 	ERROR3IF(pKeyPress == NULL, "KeyPress pointer was NULL");
 	if (pKeyPress == NULL)
 		return FALSE;
+
+	if (pKeyPress->IsChar()) return FALSE;      // only use non-char events for hotkeys
 
 	BOOL UsedTheKeypress = FALSE;
 	BOOL Errored = FALSE;
@@ -1213,7 +1233,7 @@ BOOL TextTool::HandleSpecialStoryAndNonStoryKeys(KeyPress* pKeyPress)
 
 	if (Errored)
 		InformError();
-
+	TRACEUSER("wuerthne", _T("HandleSpecialStoryAndNonStoryKeys returns %d"), UsedTheKeypress);
 	return UsedTheKeypress;
 }
 
@@ -1246,7 +1266,7 @@ BOOL TextTool::HandleSpecialNonStoryKeys(KeyPress* pKeyPress)
 			UsedTheKeypress = TRUE;		// Just eat the keypress
 			break;
 	}
-
+	TRACEUSER("wuerthne", _T("HandleSpecialNonStoryKeys returns %d"), UsedTheKeypress);
 	return UsedTheKeypress;
 }
 
@@ -1274,6 +1294,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 	if ((pKeyPress == NULL) || (pStory == NULL) || (pCaret == NULL))
 		return FALSE;
 
+	BOOL IsNonCharEvent = !pKeyPress->IsChar(); // only use non-char events for hotkeys, but eat char events matching our hotkeys
 	BOOL UsedTheKeypress = FALSE;
 	BOOL Errored = FALSE;
 
@@ -1281,29 +1302,31 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 	{
 		case CAMKEY(HOME):
 	 		// Move caret to start of line
+			if (IsNonCharEvent)
 	 		{
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
 					pOp->DoMoveCaretHome(pKeyPress->IsAdjust(), pKeyPress->IsConstrain()); 
 				else
 					Errored = TRUE;
-				UsedTheKeypress = TRUE;
 			}
+			UsedTheKeypress = TRUE;
 			break;
 		case CAMKEY(END):
 	 		// Move caret to end of line
+			if (IsNonCharEvent)
 	 		{
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
 					pOp->DoMoveCaretEnd(pKeyPress->IsAdjust(), pKeyPress->IsConstrain()); 
 				else
 					Errored = TRUE;
-				UsedTheKeypress = TRUE;
 			}
+			UsedTheKeypress = TRUE;
 			break;
 		case CAMKEY(BACK):
 			// delete character before caret, or selected chars if either exists
-			if (pStory->GetSelectionEnd() || pCaret->FindPrevVTNInStory() != NULL)
+			if (IsNonCharEvent && (pStory->GetSelectionEnd() || pCaret->FindPrevVTNInStory() != NULL))
 	 		{
 				OpTextFormat* pOp = new OpTextFormat();
 				if (pOp != NULL)
@@ -1315,7 +1338,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(DELETE):
 			// delete character before caret, or selected chars if either exists
-			if (pStory->GetSelectionEnd() || pCaret->FindNextVTNInStory() != pStory->FindLastVTN())
+			if (IsNonCharEvent && (pStory->GetSelectionEnd() || pCaret->FindNextVTNInStory() != pStory->FindLastVTN()))
 	 		{
 				OpTextFormat* pOp = new OpTextFormat();
 				if (pOp != NULL)
@@ -1327,7 +1350,9 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(LEFT):
 			// Move/Select caret left one word/character
+			if (IsNonCharEvent)
 			{
+				TRACEUSER("wuerthne", _T("caret left"));
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
 					pOp->DoMoveCaretLeft(pKeyPress->IsAdjust(), pKeyPress->IsConstrain());
@@ -1338,6 +1363,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(RIGHT):
 			// Move/Select caret right one word/character
+			if (IsNonCharEvent)
 			{
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
@@ -1349,6 +1375,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(UP):
 			// Move/Select caret up a line
+			if (IsNonCharEvent)
 			{
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
@@ -1360,6 +1387,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(DOWN):
 			// Move/Select caret down a line
+			if (IsNonCharEvent)			
 			{
 				OpTextCaret* pOp = new OpTextCaret();
 				if (pOp != NULL)
@@ -1371,13 +1399,18 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(W):
 			// Swap case
+			TRACEUSER("wuerthne", _T("W pressed"));
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust() )
 			{
-				if (TextStory::GetFocusStory()->GetCaret()->FindNextTextCharInStory() != NULL)
+				TRACEUSER("wuerthne", _T("Ctrl-W pressed"));
+				if (IsNonCharEvent && TextStory::GetFocusStory()->GetCaret()->FindNextTextCharInStory() != NULL)
 				{
 					OpTextFormat* pOp = new OpTextFormat();
 					if (pOp != NULL)
+					{
+						TRACEUSER("wuerthne", _T("DoSwapCase"));
 						pOp->DoSwapCase();
+					}
 					else
 						Errored = TRUE;
 				}
@@ -1388,23 +1421,29 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			// Select all in the focus story, if there is one
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust())
 			{
-				OpTextSelection* pOp = new OpTextSelection();
-				if (pOp != NULL)
-					Errored = !pOp->DoSelectAllText(TextStory::GetFocusStory());
-				else
-					Errored = TRUE;
+				if (IsNonCharEvent)
+				{
+					OpTextSelection* pOp = new OpTextSelection();
+					if (pOp != NULL)
+						Errored = !pOp->DoSelectAllText(TextStory::GetFocusStory());
+					else
+						Errored = TRUE;
+				}
 				UsedTheKeypress = TRUE;
-			}			   	
+			}
 			break;
 
  		case CAMKEY(V):
 			// Paste text from the clipboard into a selected text story
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust())
 			{
-				// is there a focus story?
-				OpTextPaste* pOp = new OpTextPaste();
-				if (pOp != NULL)
-					pOp->Do(NULL);
+				if (IsNonCharEvent)
+				{
+					// is there a focus story?
+					OpTextPaste* pOp = new OpTextPaste();
+					if (pOp != NULL)
+						pOp->Do(NULL);
+				}
 				UsedTheKeypress = TRUE;
 			}
 			break;
@@ -1416,11 +1455,14 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 				TextLine* pLine = (TextLine*)TextStory::GetFocusStory()->GetCaret()->FindParent(CC_RUNTIME_CLASS(TextLine));
 				if (pLine != NULL)
 				{
-					OpTextSelection* pOp = new OpTextSelection();
-					if (pOp != NULL)
-						Errored = !pOp->DoSelectLineText();
-					else
-						Errored = TRUE;
+					if (IsNonCharEvent)
+					{
+						OpTextSelection* pOp = new OpTextSelection();
+						if (pOp != NULL)
+							Errored = !pOp->DoSelectLineText();
+						else
+							Errored = TRUE;
+					}
 					UsedTheKeypress = TRUE;
 				}
 			}
@@ -1430,7 +1472,7 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust() )
 			{
 				UsedTheKeypress = TRUE;
-				Errored = !IncreaseTrackKern();
+				Errored = IsNonCharEvent ? !IncreaseTrackKern() : FALSE;
 			}
 			break;
  		case CAMKEY(MINUS):
@@ -1438,29 +1480,36 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust() )
 			{
 				UsedTheKeypress = TRUE;
-				Errored = !DecreaseTrackKern();
+				Errored = IsNonCharEvent ? !DecreaseTrackKern() : FALSE;
 			}
 			break;
 		case CAMKEY(RETURN):
 			// Create a new TextLine and move the caret to it.
 			if (!pKeyPress->IsAlternative() && !pKeyPress->IsConstrain())
 			{
-				OpTextFormat* pOp = new OpTextFormat();
-				if (pOp != NULL)
-					Errored = !pOp->DoReturn(OpTextFormat::INSERT);
-				else
-					Errored = TRUE;
+				if (IsNonCharEvent)
+				{
+					OpTextFormat* pOp = new OpTextFormat();
+					if (pOp != NULL)
+						Errored = !pOp->DoReturn(OpTextFormat::INSERT);
+					else
+						Errored = TRUE;
+				}
 				UsedTheKeypress = TRUE;
 			}
 			break;
 		case CAMKEY(TAB):
 			if (!pKeyPress->IsAlternative() && !pKeyPress->IsConstrain())
 			{
-				/*##*/
-				OpTextFormat* pOp = new OpTextFormat();
-				if (pOp != NULL)
-					Errored = !pOp->DoTab();
-				else
+				if (IsNonCharEvent)
+				{
+					/* Create a tab node */
+					OpTextFormat* pOp = new OpTextFormat();
+					if (pOp != NULL)
+						Errored = !pOp->DoTab();
+					else
+						Errored = TRUE;
+				}
 				UsedTheKeypress = TRUE;
 			}
 			break;
@@ -1468,13 +1517,16 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			// Deselect the caret and select the text story
 			if (!pKeyPress->IsAlternative() && !pKeyPress->IsConstrain())
 			{
-				pCaret->DeSelect(TRUE);
-				pStory->Select(TRUE);
-				GetApplication()->FindSelection()->Update(TRUE);
+				if (IsNonCharEvent)
+				{
+					pCaret->DeSelect(TRUE);
+					pStory->Select(TRUE);
+					GetApplication()->FindSelection()->Update(TRUE);
+				}
 				UsedTheKeypress = TRUE;
 
 				// Remove the focus story if it was empty
-				Errored = !OpDeleteTextStory::RemoveEmptyFocusStory();
+				Errored = IsNonCharEvent ? !OpDeleteTextStory::RemoveEmptyFocusStory() : FALSE;
 			}
 			break;
 	}
