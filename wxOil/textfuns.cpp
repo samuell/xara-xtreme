@@ -647,16 +647,16 @@ CharCase TextManager::ProcessCharCase(WCHAR* pChar, CharCase NewState)
 
 	// get a lower case version of the char (if it changes it must have been upper)
 	WCHAR OldCharW = *pChar;
-	WCHAR LowerCharW;
-	if (camTolower(OldCharW) != OldCharW)
+	WCHAR LowerCharW = OldCharW;
+	if ((WCHAR)camTolower(OldCharW) != OldCharW)
 	{
 		OldCase = Upper;
 		LowerCharW = camTolower(OldCharW);
 	}
 
 	// get an upper case version of the char (if it changes it must have been lower)
-	WCHAR UpperCharW;
-	if (camToupper(OldCharW) != OldCharW)
+	WCHAR UpperCharW = OldCharW;
+	if ((WCHAR)camToupper(OldCharW) != OldCharW)
 	{
 		OldCase = Lower;
 		UpperCharW = camToupper(OldCharW);
