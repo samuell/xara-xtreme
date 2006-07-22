@@ -231,7 +231,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
     wxChar keychar=0;
     if ((keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
     {
-        keychar = keycode;
+        keychar = (wxChar)keycode;
     }
     else if (unicode>0)
     {
@@ -258,14 +258,16 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         value-=10;
         StopPartialCompletion();
     }
-    else if ( comboStyle && wxCB_READONLY )
+    else if ( comboStyle & wxCB_READONLY )
     {
         // Try partial completion
 
         // find the new partial completion string
+#if wxUSE_TIMER
         if (m_partialCompletionTimer.IsRunning())
             m_partialCompletionString+=wxString(keychar);
         else
+#endif // wxUSE_TIMER
             m_partialCompletionString=wxString(keychar);
 
         // now search through the values to see if this is found
@@ -291,7 +293,9 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         else
         {
             value=i;
+#if wxUSE_TIMER
             m_partialCompletionTimer.Start(wxODCB_PARTIAL_COMPLETION_TIME, true);
+#endif // wxUSE_TIMER
         }
     }
     else
@@ -331,7 +335,9 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
 void wxVListBoxComboPopup::StopPartialCompletion()
 {
     m_partialCompletionString = wxEmptyString;
+#if wxUSE_TIMER
     m_partialCompletionTimer.Stop();
+#endif // wxUSE_TIMER
 }
 
 void wxVListBoxComboPopup::OnComboDoubleClick()
@@ -413,7 +419,7 @@ void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
         int comboStyle = m_combo->GetWindowStyle();
         int keycode = event.GetKeyCode();
         // Process partial completion key codes here, but not the arrow keys as the base class will do that for us
-        if ((comboStyle && wxCB_READONLY) &&
+        if ((comboStyle & wxCB_READONLY) &&
             (keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
         {
             OnComboKeyEvent(event);
@@ -965,6 +971,7 @@ int wxOwnerDrawnComboBox::DoInsert(const wxString& item, wxIndex pos)
 #if 0
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 #endif
+
     GetVListBoxComboPopup()->Insert(item,pos);
 
     return pos;
@@ -1029,7 +1036,8 @@ wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
 void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const
 {
     // we need to render selected and current items differently
-    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) )
+    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
+         (flags & wxODCB_PAINTING_CONTROL) )
     {
         DrawFocusBackground(dc,
                             rect,

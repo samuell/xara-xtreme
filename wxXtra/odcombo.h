@@ -213,8 +213,10 @@ private:
     // Partial completion string
     wxString                m_partialCompletionString;
 
+#if wxUSE_TIMER
     // Partial completion timer
     wxTimer                 m_partialCompletionTimer;
+#endif // wxUSE_TIMER
 
     DECLARE_EVENT_TABLE()
 };
