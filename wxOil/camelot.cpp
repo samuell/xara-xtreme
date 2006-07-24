@@ -317,6 +317,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 
 			if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 				pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
+				pClassInfo->IsKindOf( CLASSINFO(wxSliderCombo) ) ||
 				pClassInfo->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
 				pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) )
 				)

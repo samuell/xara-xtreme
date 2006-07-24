@@ -12,9 +12,6 @@
 #include "slidercombo.h"
 
 #include <wx/slider.h>
-#ifdef __WXGTK20__
-#include <gtk/gtk.h>
-#endif
 
 class wxSliderComboPopup : public wxSlider, public wxComboPopup
 {
@@ -55,7 +52,7 @@ public:
     virtual wxString GetStringValue() const
     {
     // FIXME: Does this get called in wxGTK? On wxMSW this gets called on popup close
-        return wxT("asdf");
+        return wxString::Format(wxT("%d"), GetValue());
     }
 
 protected:
@@ -91,7 +88,6 @@ wxSliderCombo::wxSliderCombo(wxWindow *parent, wxWindowID id, int value,
                              const wxPoint& pos, const wxSize& size,
                              long style, const wxString& name)
 // FIXME: initial string and validator should maybe be in our ctor too?
-    : wxComboCtrl(parent, id, wxEmptyString, pos, size, style, wxDefaultValidator, name)
 {
     Init();
     Create(parent, id, value, pos, size, style, name);
@@ -102,11 +98,15 @@ bool wxSliderCombo::Create(wxWindow *parent, wxWindowID id,
                            const wxPoint& pos, const wxSize& size,
                            long style, const wxString& name)
 {
-    wxSliderComboPopup* sliderpopup = new wxSliderComboPopup();
-    m_slider = sliderpopup;
-    SetPopupControl(sliderpopup);
-    m_slider->SetValue(value);
-    return true;
+    if (wxComboCtrl::Create(parent, id, wxEmptyString, pos, size, style, wxDefaultValidator, name))
+    {
+        wxSliderComboPopup* sliderpopup = new wxSliderComboPopup();
+        m_slider = sliderpopup;
+        SetPopupControl(sliderpopup);
+        m_slider->SetValue(value);
+        return true;
+    }
+    return false;
 }
 
 wxSliderCombo::~wxSliderCombo()
