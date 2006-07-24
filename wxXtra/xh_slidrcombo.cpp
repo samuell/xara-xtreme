@@ -30,7 +30,6 @@ wxSliderComboXmlHandler::wxSliderComboXmlHandler()
                         :wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxCB_READONLY);
-    XRC_ADD_STYLE(wxCB_DROPDOWN);
     XRC_ADD_STYLE(wxTE_PROCESS_ENTER);
     XRC_ADD_STYLE(wxSL_HORIZONTAL);
     XRC_ADD_STYLE(wxSL_VERTICAL);
@@ -49,6 +48,11 @@ wxObject *wxSliderComboXmlHandler::DoCreateResource()
                     GetPosition(), GetSize(),
                     GetStyle(),
                     GetName());
+
+    wxSize ButtonSize=GetSize(wxT("buttonsize"));
+
+    if (ButtonSize != wxDefaultSize)
+    control->SetButtonPosition(ButtonSize.GetWidth(), ButtonSize.GetHeight());
 
     SetupWindow(control);
 

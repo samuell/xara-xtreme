@@ -2796,6 +2796,12 @@ BOOL DialogManager::SetStringGadgetValue(CWindowID WindowID,
 		return TRUE;
 	}
 
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		((wxSliderCombo *)pGadget)->SetValue(String);
+		return TRUE;
+	}
+
 	pGadget->SetLabel(String);
 
 	return TRUE;
@@ -4133,6 +4139,12 @@ String_256 DialogManager::GetStringGadgetValue(CWindowID WindowID,
 	if ( pGadget->IsKindOf(CLASSINFO(wxTextCtrl)) )
 	{
 		String = ((wxTextCtrl *)pGadget)->GetValue();
+		goto out;
+	}
+
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		String = ((wxSliderCombo *)pGadget)->GetValue();
 		goto out;
 	}
 

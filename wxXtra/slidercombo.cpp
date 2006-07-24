@@ -64,6 +64,8 @@ protected:
                           event.GetOrientation() );
         ev.SetEventObject( m_combo );
         m_combo->GetEventHandler()->ProcessEvent( ev );
+        if (event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE)
+            m_combo->HidePopup();
     }
 
 private:

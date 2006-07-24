@@ -570,6 +570,7 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 	// as more controls come online). If so just return allowing focus to stay
 	wxWindow*	pWnd = (wxWindow*)event.GetEventObject();
 	if( pWnd->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
+		pWnd->IsKindOf( CLASSINFO(wxSliderCombo) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxComboBox) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxComboCtrl) ) )
