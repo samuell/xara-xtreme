@@ -1101,7 +1101,12 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_SCROLL_LINEDOWN) ||
 		(EventType == wxEVT_SCROLL_PAGEUP) ||
 		(EventType == wxEVT_SCROLL_PAGEDOWN)
-		) && !(pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Don't handle slider scroll stuff here
+		) &&
+		!(
+		  (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider))) ||
+		  (pGadget && pGadget->IsKindOf(CLASSINFO(wxSliderCombo)))
+		)
+		) || // Don't handle slider scroll stuff here
 		(EventType == wxEVT_COMMAND_TREE_SEL_CHANGED) ||
 		FALSE)
 	{
@@ -1129,8 +1134,8 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 		(EventType == wxEVT_SCROLL_LINEDOWN) ||
 		(EventType == wxEVT_SCROLL_PAGEUP) ||
 		(EventType == wxEVT_SCROLL_PAGEDOWN)
-		) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider movements - note SCROLL_CHANGED always comes later
-		FALSE)
+		) && (pGadget && ( pGadget->IsKindOf(CLASSINFO(wxSlider)) || pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) ))) || 
+		FALSE) // Handle slider movements - note SCROLL_CHANGED always comes later
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_CHANGING;
 		HandleMessage = TRUE;
@@ -1138,7 +1143,9 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	else if(
 		// Do not handle THUMB_RELEASE because we get a SCROLL_CHANGED anyway, and having two means we generate two SETs which will generate 2 undo records
 		// on (for instance) transparency and Bevel tools
-		((/*EventType == wxEVT_SCROLL_THUMBRELEASE ||*/ EventType == wxEVT_SCROLL_CHANGED) && (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider)))) || // Handle slider changes
+		((/*EventType == wxEVT_SCROLL_THUMBRELEASE ||*/ EventType == wxEVT_SCROLL_CHANGED) &&
+		 ( (pGadget && pGadget->IsKindOf(CLASSINFO(wxSlider))) || (pGadget && pGadget->IsKindOf(CLASSINFO(wxSliderCombo))) )
+		) || // Handle slider changes
 		FALSE)
 	{
 		msg.DlgMsg = DIM_SLIDER_POS_SET;
@@ -2348,6 +2355,12 @@ BOOL DialogManager::SetLongGadgetValue(CWindowID WindowID,
 		return TRUE;
 	}
 
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		((wxSliderCombo *)(pGadget))->SetSliderValue(Value);
+		return TRUE;
+	}
+
 	if ( pGadget->IsKindOf(CLASSINFO(wxGauge)) )
 	{
 		((wxGauge *)(pGadget))->SetValue(Value);
@@ -2466,6 +2479,7 @@ BOOL DialogManager::SetDoubleGadgetValue(CWindowID WindowID,
 		( pGadget->IsKindOf(CLASSINFO(wxRadioButton))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxScrollBar))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxSlider))) ||
+		( pGadget->IsKindOf(CLASSINFO(wxSliderCombo))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxCamArtControl))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxGauge)))
 		)
@@ -3002,6 +3016,12 @@ BOOL DialogManager::SetGadgetRange(CWindowID WindowID,
 		return TRUE;
 	}
 
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		((wxSliderCombo *)(pGadget))->SetRange(Min, Max);
+		return TRUE;
+	}
+
 	if ( pGadget->IsKindOf(CLASSINFO(wxGauge)) )
 	{
 		ERROR3IF(Min !=0 , "Gauges with non-zero minimum need to be subclassed");
@@ -3202,6 +3222,7 @@ BOOL DialogManager::SetBoolGadgetSelected(CWindowID WindowID, CGadgetID Gadget,
 	// do this then break the control setting
 	if ( pGadget->IsKindOf(CLASSINFO(wxScrollBar))
 		|| pGadget->IsKindOf(CLASSINFO(wxSlider)) 
+		|| pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) 
 		|| pGadget->IsKindOf(CLASSINFO(wxGauge))  )
 		return TRUE;
 
@@ -3723,6 +3744,12 @@ INT32 DialogManager::GetLongGadgetValue(CWindowID WindowID,
 		return (INT32)(((wxSlider *)(pGadget))->GetValue());
 	}
 
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		if (Valid) *Valid=TRUE;
+		return (INT32)(((wxSliderCombo *)(pGadget))->GetSliderValue());
+	}
+
 	if ( pGadget->IsKindOf(CLASSINFO(wxGauge)) )
 	{
 		if (Valid) *Valid=TRUE;
@@ -3876,6 +3903,7 @@ double DialogManager::GetDoubleGadgetValue(CWindowID WindowID,
 		( pGadget->IsKindOf(CLASSINFO(wxRadioButton))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxScrollBar))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxSlider))) ||
+		( pGadget->IsKindOf(CLASSINFO(wxSliderCombo))) ||
 		( pGadget->IsKindOf(CLASSINFO(wxGauge)))
 		)
 		return (double)GetLongGadgetValue( WindowID, Gadget, (INT32)(floor(StartRange+0.5)), (INT32)(floor(EndRange+0.5)), IDSInvalidMsg, Valid);
@@ -4170,7 +4198,13 @@ BOOL DialogManager::GetGadgetRange(CWindowID WindowID,
 	if ( pGadget->IsKindOf(CLASSINFO(wxSlider)) )
 	{
 		min=((wxSlider *)(pGadget))->GetMin();
-		max=((wxSlider *)(pGadget))->GetMin();
+		max=((wxSlider *)(pGadget))->GetMax();
+	}
+
+	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
+	{
+		min=((wxSliderCombo *)(pGadget))->GetSliderMin();
+		max=((wxSliderCombo *)(pGadget))->GetSliderMax();
 	}
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxGauge)) )

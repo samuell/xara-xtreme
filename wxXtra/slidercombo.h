@@ -69,6 +69,9 @@ public:
     // Default without having called this is 0..100
     void SetRange(int minValue, int maxValue);
 
+	int GetSliderMin() const;
+	int GetSliderMax() const;
+
     // Do we need floating point support? In this case this could be used to
     // select it (and add some other floating point methods)
     /* void SetRange(double minValue, double maxValue); */

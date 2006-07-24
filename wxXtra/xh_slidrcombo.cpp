@@ -50,6 +50,8 @@ wxObject *wxSliderComboXmlHandler::DoCreateResource()
                     GetStyle(),
                     GetName());
 
+	control->SetPopupControl();
+
     SetupWindow(control);
 
     return control;

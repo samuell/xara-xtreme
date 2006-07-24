@@ -11,6 +11,8 @@
 #ifndef _WX_XH_SLIDERCOMBO_H_
 #define _WX_XH_SLIDERCOMBO_H_
 
+#define wxXTRA_XH_SLIDERCOMBO
+
 #include <wx/xrc/xmlres.h>
 
 //#if wxUSE_SLIDERCOMBO

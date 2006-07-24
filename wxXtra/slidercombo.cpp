@@ -158,3 +158,13 @@ void wxSliderCombo::SetRange(int minValue, int maxValue)
     m_slider->SetRange(minValue, maxValue);
     // FIXME: Perhaps need to sync with text control
 }
+
+int wxSliderCombo::GetSliderMin() const
+{
+    return m_slider->GetMin();
+}
+
+int wxSliderCombo::GetSliderMax() const
+{
+    return m_slider->GetMax();
+}

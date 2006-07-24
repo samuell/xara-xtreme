@@ -1455,7 +1455,9 @@ BOOL CamResource::Init()
 	wxXmlResource::Get()->AddHandler(new wxOwnerDrawnComboBoxXmlHandler);
 //	wxXmlResource::Get()->AddHandler(new wxComboControlXmlHandler);
 #endif
+#ifdef wxXTRA_XH_SLIDERCOMBO
 	wxXmlResource::Get()->AddHandler(new wxSliderComboXmlHandler);
+#endif
 #if WXXTRA_TREEBOOK
 	wxXmlResource::Get()->AddHandler(new wxTreebookXmlHandler);
 #endif
