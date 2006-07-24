@@ -2674,15 +2674,14 @@ BOOL BitmapExportPreviewDialog::DoWithExportOptions(BitmapExportOptions *pOption
 pOptions->SetTempFileFlag(TRUE);
 
 	BOOL ok = TRUE;
-		
+
+	Progress	SlowJob;
+
 	try  // to export the document to the temp file
 	{
 		//no need for preview bitmap
 		m_pBmpFilter->IncludePreviewBmp(FALSE);
 
-		// start the progress bar
-		BeginSlowJob();
-		
 		// try to export the document
 		BOOL ExportedOK = TRUE;
 
@@ -2732,8 +2731,6 @@ pOptions->SetTempFileFlag(TRUE);
 			 	Error::ClearError();
 			}
 
-			EndSlowJob();
-
 			return FALSE;
 		}
 	}
@@ -2749,8 +2746,6 @@ pOptions->SetTempFileFlag(TRUE);
 		}
 		else
 			Error::ClearError();	// otherwise remove the error so it won't get reported
-
-		EndSlowJob();
 
 		// Make sure that the file is closed and deleted
 		try
@@ -2802,7 +2797,7 @@ pOptions->SetTempFileFlag(TRUE);
 			}
 
 			// import the file
-			if (pImportFilter != NULL) 
+			if (pImportFilter != NULL)
 			{
 				// Set the preview bitmap flag to avoid adding the bitmap to the global bitmap list
 				((BaseBitmapFilter *)pImportFilter)->SetPreviewBitmap(TRUE);
@@ -2814,9 +2809,6 @@ pOptions->SetTempFileFlag(TRUE);
 
 				// close the file
 				TempDiskFile.close();
-
-				// close the progress bar indicator
-				EndSlowJob();
 
 				if (ok)
 				{
