@@ -3003,6 +3003,10 @@ pOptions->SetTempFileFlag(TRUE);
 		}
 	}
 
+	// We don't need to report this error since, it's reported indirectly in the 
+	// preview bitmap areas
+	Error::ClearError();
+
 	// the operation failed
 	return FALSE;
 }
