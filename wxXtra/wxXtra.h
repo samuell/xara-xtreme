@@ -19,3 +19,5 @@
 #include "advsplash.h"
 #include "treebook.h"
 #include "xh_treebk.h"
+#include "slidercombo.h"
+#include "xh_slidrcombo.h"
