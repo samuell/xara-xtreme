@@ -1013,9 +1013,6 @@ BOOL PathProcessorStroke::GetRequiredAttributes(CCAttrMap* pAttrMap,
 
 NodePath* PathProcessorStroke::GetSmoothProcessedPath(Path* pPath, Node* pParent)
 {
-	PORTNOTETRACE("other","PathProcessorStroke::GetSmoothProcessedPath - do nothing");
-	return NULL;
-#ifndef EXCLUDE_FROM_XARALX
 	// we need to fake a renderregion as our helper functions need one,
 	// luckily FormatRegion is on hand from the text stuff
 	FormatRegion FakeRender;
@@ -1073,7 +1070,6 @@ NodePath* PathProcessorStroke::GetSmoothProcessedPath(Path* pPath, Node* pParent
 	pOutput = NULL;
 
 	return pNewNode;
-#endif
 }
 
 
