@@ -1069,9 +1069,14 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxSlider" name="IDC_FEATHERSIZE_CUSTOMEDIT">
-                    <size>60,-1</size>
-                    <style>wxSL_HORIZONTAL|wxSL_AUTOTICKS</style>
+                <object class="wxSliderCombo" name="IDC_FEATHERSIZE_CUSTOMEDIT">
+                    <size>64,-1</size>
+                    <font>
+                        <size>8</size>
+                    </font>
+                    <style>wxTE_PROCESS_ENTER</style>
+                    <buttonsize>17,-1</buttonsize>
+                    <sliderstyle>wxSL_HORIZONTAL|wxSL_AUTOTICKS</sliderstyle>
                     <value>0</value>
                     <min>0</min>
                     <max>100</max>

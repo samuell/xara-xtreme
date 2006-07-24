@@ -261,7 +261,7 @@ MsgResult StandardBar::Message( Msg* Msg)
 	}
 	else
 	{
-		if( DIM_SELECTION_CHANGED == DMsg->DlgMsg )
+		if (( DIM_SELECTION_CHANGED == DMsg->DlgMsg ) || ( DIM_SLIDER_POS_SET == DMsg->DlgMsg ))
 		{
 			TRACEUSER( "luke", _T("Change focus") );
 			AfxGetApp().GiveActiveCanvasFocus();

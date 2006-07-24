@@ -569,12 +569,16 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 	// Check if focus is going to an always focus object (may need more tests
 	// as more controls come online). If so just return allowing focus to stay
 	wxWindow*	pWnd = (wxWindow*)event.GetEventObject();
+
+	TRACEUSER("amb", _T("DialogEventHandler::OnSetFocus %s"), pWnd->GetClassInfo()->GetClassName());
+
 	if( pWnd->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxSliderCombo) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxComboBox) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxOwnerDrawnComboBox) ) ||
 		pWnd->IsKindOf( CLASSINFO(wxComboCtrl) ) )
 	{
+		TRACEUSER("amb", _T("DialogEventHandler::OnSetFocus Focus undisturbed 1"));
 		return;
 	}
 
@@ -586,7 +590,10 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 		if( pWnd->IsKindOf( CLASSINFO(wxDialog) ) )
 		{
 			if( ((wxDialog*)pWnd)->IsModal() )
+			{
+				TRACEUSER("amb", _T("Focus undisturbed 2"));
 				return;
+			}
 
 			// Non-modal dialog so do focus handling
 			break;
@@ -595,6 +602,7 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 		pWnd = pWnd->GetParent();
 	}
 
+	TRACEUSER("amb", _T("DialogEventHandler::OnSetFocus Focus back to canvas"));
 	// Put the focus back into active view
 	TRACEUSER( "jlh92", _T("NO, that control is not allowed focus") );
 	AfxGetApp().GiveActiveCanvasFocus();

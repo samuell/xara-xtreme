@@ -254,9 +254,24 @@ CCamApp::CCamApp()
 	SeeAlso:	The focus handling document
 
 **********************************************************************************************/ 
+
 int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static /*TYPENOTE: Correct*/ long	lLastTimeStamp = 0;
+
+// useful code to see where focus events originate from. Set a breakpoint below and look
+// at the call stack
+#if 0 && defined(_DEBUG)
+	if ( event.GetEventType() == wxEVT_SET_FOCUS )
+	{
+		wxObject* pEventObject = event.GetEventObject();
+		TRACEUSER("amb", _T("CCamApp::FilterEvent focus to %s"), pEventObject->GetClassInfo()->GetClassName());
+		if (pEventObject->IsKindOf(CLASSINFO(CRenderWnd)))
+		{
+			int i=1;
+		}
+	}
+#endif
 
 	if (( event.GetEventType() == wxEVT_CREATE )
 		&& (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow)))
@@ -314,6 +329,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 				TRACEUSER( "jlh92", _T("----------------------\n") );
 			}
 #endif
+			TRACEUSER("amb", _T("CCamApp::FilterEvent key for %s"), pClassInfo->GetClassName());
 
 			if( pClassInfo->IsKindOf( CLASSINFO(wxTextCtrl) ) ||
 				pClassInfo->IsKindOf( CLASSINFO(wxComboBox) ) ||
@@ -322,6 +338,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 				pClassInfo->IsKindOf( CLASSINFO(wxComboCtrl) )
 				)
 			{
+				TRACEUSER("amb", _T("CCamApp::FilterEvent gets keys as special"));
 				TRACEUSER( "jlh92", _T("Control gets keys") );
 				// Yes, pass on as usual
 				return -1;
@@ -342,6 +359,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 				if( ((wxDialog*)pWnd)->IsModal() )
 				{
 					TRACEUSER( "jlh92", _T("Modal dialog\n") );
+					TRACEUSER("amb", _T("CCamApp::FilterEvent gets keys as modal"));
 					return -1;
 				}
 
@@ -352,6 +370,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 			pWnd = pWnd->GetParent();
 		}
 
+		TRACEUSER("amb", _T("CCamApp::FilterEvent handle"));
 		TRACEUSER( "jlh92", _T("Handled!\n") );
 
 		// Process keyboard messages (and mark event as handled)
