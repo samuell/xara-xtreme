@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1252"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwidgets.org/wxxrc">
     <object class="wxPanel" name="IDD_TBITMAPSIZE">
         <size>555,146</size>
@@ -22,6 +22,10 @@
                                 <object class="wxStaticBoxSizer" name="wxID_ANY">
                                     <orient>wxHORIZONTAL</orient>
                                     <label>Bitmap Size and Resolution</label>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                         <border>5</border>
@@ -35,6 +39,10 @@
                                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                                 <border>5</border>
                                                 <object class="wxStaticText" name="IDC_T1STATIC3">
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                     <label>Width</label>
                                                 </object>
                                             </object>
@@ -42,8 +50,12 @@
                                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
                                                 <object class="wxTextCtrl" name="IDC_T1EDIT1">
-                                                    <size>57,-1</size>
+                                                    <size>57,14</size>
                                                     <pos>45,30</pos>
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                 </object>
                                             </object>
                                             <object class="sizeritem">
@@ -51,6 +63,10 @@
                                                 <border>5</border>
                                                 <object class="wxStaticText" name="IDC_T1STATIC4">
                                                     <pos>117,34</pos>
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                     <label>Height</label>
                                                 </object>
                                             </object>
@@ -58,14 +74,22 @@
                                                 <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
                                                 <object class="wxTextCtrl" name="IDC_T1EDIT2">
-                                                    <size>57,-1</size>
+                                                    <size>57,14</size>
                                                     <pos>151,30</pos>
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                 </object>
                                             </object>
                                             <object class="sizeritem">
                                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                                 <border>5</border>
                                                 <object class="wxStaticText" name="IDC_T1STATIC6">
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                     <label>Scale</label>
                                                 </object>
                                             </object>
@@ -78,8 +102,12 @@
                                                         <flag>wxALIGN_CENTER_VERTICAL</flag>
                                                         <border>5</border>
                                                         <object class="wxTextCtrl" name="IDC_T1EDIT3">
-                                                            <size>57,-1</size>
+                                                            <size>57,14</size>
                                                             <pos>45,63</pos>
+                                                            <font>
+                                                                <size>8</size>
+                                                                <family>swiss</family>
+                                                            </font>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem">
@@ -87,6 +115,10 @@
                                                         <border>5</border>
                                                         <object class="wxStaticText" name="IDC_T1STATIC7">
                                                             <pos>102,65</pos>
+                                                            <font>
+                                                                <size>8</size>
+                                                                <family>swiss</family>
+                                                            </font>
                                                             <label>%</label>
                                                         </object>
                                                     </object>
@@ -97,6 +129,10 @@
                                                 <border>5</border>
                                                 <object class="wxStaticText" name="IDC_T1STATIC2">
                                                     <pos>117,65</pos>
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                     <label>DPI</label>
                                                 </object>
                                             </object>
@@ -106,6 +142,10 @@
                                                 <object class="wxOwnerDrawnComboBox" name="IDC_T1COMBO1">
                                                     <size>57,-1</size>
                                                     <pos>151,63</pos>
+                                                    <font>
+                                                        <size>8</size>
+                                                        <family>swiss</family>
+                                                    </font>
                                                 </object>
                                             </object>
                                         </object>
@@ -118,11 +158,19 @@
                                 <object class="wxStaticBoxSizer" name="wxID_ANY">
                                     <orient>wxVERTICAL</orient>
                                     <label>Area To Save</label>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALL</flag>
                                         <border>5</border>
                                         <object class="wxRadioButton" name="IDC_T1RADIO2">
                                             <pos>237,27</pos>
+                                            <font>
+                                                <size>8</size>
+                                                <family>swiss</family>
+                                            </font>
                                             <style>wxRB_GROUP</style>
                                             <label>Drawing</label>
                                             <value>0</value>
@@ -133,6 +181,10 @@
                                         <border>5</border>
                                         <object class="wxRadioButton" name="IDC_T1RADIO3">
                                             <pos>237,52</pos>
+                                            <font>
+                                                <size>8</size>
+                                                <family>swiss</family>
+                                            </font>
                                             <label>Selection</label>
                                             <value>0</value>
                                         </object>
@@ -142,6 +194,10 @@
                                         <border>5</border>
                                         <object class="wxRadioButton" name="IDC_T1RADIO1">
                                             <pos>237,76</pos>
+                                            <font>
+                                                <size>8</size>
+                                                <family>swiss</family>
+                                            </font>
                                             <label>Page</label>
                                             <value>0</value>
                                         </object>
@@ -177,11 +233,19 @@
                 <object class="wxStaticBoxSizer" name="wxID_ANY">
                     <orient>wxVERTICAL</orient>
                     <label>Anti-aliasing</label>
+                    <font>
+                        <size>8</size>
+                        <family>swiss</family>
+                    </font>
                     <object class="sizeritem">
                         <flag>wxALIGN_LEFT|wxALL</flag>
                         <border>5</border>
                         <object class="wxRadioButton" name="IDC_T1RADIO_MAINTAIN_AA">
                             <pos>342,37</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
                             <style>wxRB_GROUP</style>
                             <label>Maintain screen anti-aliasing</label>
                             <value>0</value>
@@ -192,6 +256,10 @@
                         <border>5</border>
                         <object class="wxRadioButton" name="IDC_T1RADIO_MINIMISE_AA">
                             <pos>342,63</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
                             <label>Minimise visible anti-aliasing</label>
                             <value>0</value>
                         </object>
@@ -504,6 +572,10 @@
                 <border>5</border>
                 <object class="wxCheckBox" name="IDC_OPTIONSTAB_CHECK1">
                     <pos>9,9</pos>
+                    <font>
+                        <size>8</size>
+                        <family>swiss</family>
+                    </font>
                     <label>&amp;Progressive</label>
                     <checked>0</checked>
                 </object>
@@ -514,11 +586,19 @@
                 <object class="wxStaticBoxSizer" name="IDC_OPTIONSTAB_JPEG_TEXT1">
                     <orient>wxVERTICAL</orient>
                     <label>JPEG Quality</label>
+                    <font>
+                        <size>8</size>
+                        <family>swiss</family>
+                    </font>
                     <object class="sizeritem">
                         <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="IDC_OPTIONSTAB_JPEG_TEXT2">
                             <pos>21,50</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
                             <label>0%</label>
                         </object>
                     </object>
@@ -543,8 +623,12 @@
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_OPTIONSTAB_JPEG_TEXT4">
-                                    <size>33,13</size>
+                                    <size>33,-1</size>
                                     <pos>150,71</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
                                     <label>100%</label>
                                 </object>
                             </object>
@@ -556,8 +640,12 @@
                 <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxCheckBox" name="IDC_OPTIONSTAB_CHECK2">
-				<size>256,-1</size>
-				<label>X</label>
+                    <size>256,-1</size>
+                    <font>
+                        <size>8</size>
+                        <family>swiss</family>
+                    </font>
+                    <label>X</label>
                     <checked>0</checked>
                 </object>
             </object>
@@ -565,113 +653,346 @@
                 <flag>wxALIGN_LEFT|wxALL</flag>
                 <border>5</border>
                 <object class="wxCheckBox" name="IDC_OPTIONSTAB_CHECK3">
-				<size>256,-1</size>
+                    <size>256,-1</size>
+                    <font>
+                        <size>8</size>
+                        <family>swiss</family>
+                    </font>
                     <label>Y</label>
                     <checked>0</checked>
                 </object>
             </object>
         </object>
     </object>
-	<object class="wxPanel" name="IDD_PALETTE_TAB">
-			 <pos>0,0d</pos> <size>370,90d</size>
-		<object class="wxStaticText" name="IDC_T2STATIC1">
-			 <pos>7,8d</pos> <size>30,9d</size>
-			<label>Dithering:</label>
-		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_DITHERING_COMBO">
-			 <pos>52,7d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC2">
-			 <pos>7,24d</pos> <size>29,9d</size>
-			<label>Palette:</label>
-		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_PALETTE_COMBO">
-			 <pos>52,23d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC3">
-			 <pos>7,40d</pos> <size>42,9d</size>
-			<label>Colour depth:</label>
-		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_COLOUR_DEPTH_COMBO">
-			 <pos>52,38d</pos> <size>83,-1d</size>
-			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC4">
-			 <pos>7,56d</pos> <size>43,9d</size>
-			<label>Max colours:</label>
-		</object>
-		<object class="wxTextCtrl" name="IDC_COLOURS_USED_EDIT">
-			 <pos>52,54d</pos> <size>23,12d</size>
-		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_COLOR_MODEL_LIST">
-			 <pos>80,54d</pos> <size>55,-1d</size>
-			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC6">
-			 <pos>7,72d</pos> <size>20,9d</size>
-			<label>Value:</label>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC7">
-			 <pos>34,73d</pos> <size>6,9d</size>
-			<label>R</label>
-		</object>
-		<object class="wxTextCtrl" name="IDC_RED_EDIT">
-			 <pos>42,71d</pos> <size>24,12d</size>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC8">
-			 <pos>69,73d</pos> <size>6,9d</size>
-			<label>G</label>
-		</object>
-		<object class="wxTextCtrl" name="IDC_GREEN_EDIT">
-			 <pos>77,71d</pos> <size>24,12d</size>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC9">
-			 <pos>104,73d</pos> <size>6,9d</size>
-			<label>B</label>
-		</object>
-		<object class="wxTextCtrl" name="IDC_BLUE_EDIT">
-			 <pos>111,71d</pos> <size>24,12d</size>
-		</object>
-		<object class="wxCamDrawControl" name="IDC_T2_PALETTE_CONTROL">
-			 <pos>142,7d</pos> <size>221,62d</size>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_LOCKED_COLOUR">
-			 <pos>142,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_WEB_SAFE_COLOUR">
-			 <pos>157,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_TRANSPARENT_BACKGROUND">
-			 <pos>172,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_TRANSPARENT_COLOUR">
-			 <pos>187,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_DELETE_COLOUR">
-			 <pos>208,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_RESTORE_COLOUR">
-			 <pos>223,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxCamArtControl" name="IDC_T2_SYSTEM_COLOURS">
-			 <pos>243,72d</pos> <size>15,15d</size>
-			<label>-</label>
-		</object>
-		<object class="wxStaticText" name="IDC_T2STATIC5">
-			 <pos>267,73d</pos> <size>25,9d</size>
-			<label>Sort By:</label>
-		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_T2_SORT_LIST">
-			 <pos>296,71d</pos> <size>68,-1d</size>
-			 <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+    <object class="wxPanel" name="IDD_PALETTE_TAB">
+        <size>647,191</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxGROW</flag>
+                        <border>5</border>
+                        <object class="wxFlexGridSizer">
+                            <cols>2</cols>
+                            <rows>2</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="IDC_T2STATIC1">
+                                    <size>52,19</size>
+                                    <pos>12,17</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <label>Dithering:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxOwnerDrawnComboBox" name="IDC_DITHERING_COMBO">
+                                    <size>145,-1</size>
+                                    <pos>91,14</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="IDC_T2STATIC2">
+                                    <size>50,19</size>
+                                    <pos>12,51</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <label>Palette:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxOwnerDrawnComboBox" name="IDC_PALETTE_COMBO">
+                                    <size>145,-1</size>
+                                    <pos>91,48</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="IDC_T2STATIC3">
+                                    <size>73,19</size>
+                                    <pos>12,85</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <label>Colour depth:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxOwnerDrawnComboBox" name="IDC_COLOUR_DEPTH_COMBO">
+                                    <size>145,-1</size>
+                                    <pos>91,80</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="IDC_T2STATIC4">
+                                    <size>75,19</size>
+                                    <pos>12,119</pos>
+                                    <font>
+                                        <size>8</size>
+                                        <family>swiss</family>
+                                    </font>
+                                    <label>Max colours:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxTextCtrl" name="IDC_COLOURS_USED_EDIT">
+                                            <size>40,14</size>
+                                            <pos>91,114</pos>
+                                            <font>
+                                                <size>8</size>
+                                                <family>swiss</family>
+                                            </font>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxOwnerDrawnComboBox" name="IDC_COLOR_MODEL_LIST">
+                                            <size>96,-1</size>
+                                            <pos>140,114</pos>
+                                            <font>
+                                                <size>8</size>
+                                                <family>swiss</family>
+                                            </font>
+                                            <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxCamDrawControl" name="IDC_T2_PALETTE_CONTROL">
+                            <size>386,131</size>
+                            <pos>248,14</pos>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_HORIZONTAL</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="IDC_T2STATIC6">
+                            <pos>12,153</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <label>Value:</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="IDC_T2STATIC7">
+                            <size>10,-1</size>
+                            <pos>59,155</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <label>R</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxTextCtrl" name="IDC_RED_EDIT">
+                            <size>42,13</size>
+                            <pos>73,150</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="IDC_T2STATIC8">
+                            <size>10,-1</size>
+                            <pos>120,155</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <label>G</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxTextCtrl" name="IDC_GREEN_EDIT">
+                            <size>42,13</size>
+                            <pos>134,150</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="IDC_T2STATIC9">
+                            <size>10,-1</size>
+                            <pos>182,155</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <label>B</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxTextCtrl" name="IDC_BLUE_EDIT">
+                            <size>42,13</size>
+                            <pos>194,150</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_LOCKED_COLOUR">
+                            <size>26,31</size>
+                            <pos>248,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_WEB_SAFE_COLOUR">
+                            <size>26,31</size>
+                            <pos>274,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_TRANSPARENT_BACKGROUND">
+                            <size>26,31</size>
+                            <pos>301,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_TRANSPARENT_COLOUR">
+                            <size>26,31</size>
+                            <pos>327,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_DELETE_COLOUR">
+                            <size>26,31</size>
+                            <pos>364,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_RESTORE_COLOUR">
+                            <size>26,31</size>
+                            <pos>390,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxCamArtControl" name="IDC_T2_SYSTEM_COLOURS">
+                            <size>26,31</size>
+                            <pos>425,153</pos>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="ID_STATICTEXT">
+                            <size>43,-1</size>
+                            <pos>467,155</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <label>Sort By:</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxOwnerDrawnComboBox" name="IDC_T2_SORT_LIST">
+                            <size>119,-1</size>
+                            <pos>518,150</pos>
+                            <font>
+                                <size>8</size>
+                                <family>swiss</family>
+                            </font>
+                            <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                        </object>
+                    </object>
+                </object>
+            </object>
 		</object>
 		<title>Palette Options</title>
 		<label>Palette Options</label>
