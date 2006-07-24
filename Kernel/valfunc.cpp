@@ -1711,8 +1711,10 @@ double ValueFunctionPropeller::GetValue(double Position)
 	if (Position < 0.15)
 	{
 		//Draw a curved beginning bit...
-		Position = 1.0 - (Position / 0.15);
-		Value = cos(asin(Position));
+		Position = 1.0 - Position/0.15;
+		if ( Position>1.0 )
+			Position = 1.0;
+		Value = sqrt(1-Position*Position);
 	}
 	else
 	{
@@ -1720,7 +1722,9 @@ double ValueFunctionPropeller::GetValue(double Position)
 		{
 			//Draw a curved end bit...
 			Position = (Position - 0.85) / 0.15;
-			Value = cos(asin(Position));
+			if ( Position>1.0 )
+				Position = 1.0;
+			Value = sqrt(1-Position*Position);
 		}
 		else
 		{
@@ -2539,8 +2543,10 @@ double ValueFunctionTeardrop::GetValue(double Position)
 	double Value;
 	if (Position < MaxPos)
 	{
-		Position = 1.0 - (Position / MaxPos);
-		Value = cos(asin(Position));
+		Position = 1.0 - Position/MaxPos;
+		if ( Position>1.0 )
+			Position = 1.0;
+		Value = sqrt(1-Position*Position);
 	}
 	else
 	{
@@ -2548,7 +2554,7 @@ double ValueFunctionTeardrop::GetValue(double Position)
 		Value = (cos( Position * Pi) + 1.0) / 2.0;
 	}
 
-	return(Value);
+	return Value;
 }
 
 
@@ -2598,8 +2604,10 @@ double ValueFunctionTeardropCurvedEnd::GetValue(double Position)
 	double Value;
 	if (Position < 0.2)
 	{
-		Position = 1.0 - (Position / 0.2);
-		Value = cos(asin(Position));
+		Position = 1.0 - Position/0.2;
+		if ( Position>1.0 )
+			Position = 1.0;
+		Value = sqrt(1-Position*Position);
 	}
 	else
 	{
@@ -2690,11 +2698,12 @@ ValueFunctionBlip *ValueFunctionTeardropCurvedEnd::CreateInstance(void)
 double ValueFunctionEllipse::GetValue(double Position)
 {
 	if (Position < MaxPos)
-		Position = 1.0 - (Position / MaxPos);
+		Position = 1.0 - Position/MaxPos;
 	else
 		Position = (Position - MaxPos) / (1.0 - MaxPos);
-
-	return(cos(asin(Position)));
+	if ( Position>1.0 )
+		Position = 1.0;
+	return sqrt(1-Position*Position);
 }
 
 
@@ -2749,11 +2758,13 @@ ValueFunctionBlip *ValueFunctionEllipse::CreateInstance(void)
 double ValueFunctionThumbtack::GetValue(double Position)
 {
 	if (Position < MaxPos)
-		Position = (Position / MaxPos);
+		Position = Position / MaxPos;
 	else
 		Position = 1.0 - ((Position - MaxPos) / (1.0 - MaxPos));
 
-	return(1.0 - cos(asin(Position)));
+	if ( Position>1.0 )
+		Position = 1.0;
+	return 1.0 - sqrt(1-Position*Position);
 }
 
 
