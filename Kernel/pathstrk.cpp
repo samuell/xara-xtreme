@@ -438,15 +438,17 @@ void PathStroker::RecursiveMapLineForwards(	TrapEdge *pEdge1, DocCoord &Point1, 
 	DocCoord ApproximateMidPoint(Point1.x/2 + Point2.x/2, Point1.y/2 + Point2.y/2);
 
 	// --- Calculate the error in the midpoint position
-	const INT32 dx = MidPoint.x - ApproximateMidPoint.x;
-	const INT32 dy = MidPoint.y - ApproximateMidPoint.y;
-	const double Dist = (double)((dx * dx) + (dy * dy));
+	const double dx = MidPoint.x - ApproximateMidPoint.x;
+	const double dy = MidPoint.y - ApproximateMidPoint.y;
+	const double Dist2 = dx * dx + dy * dy;
 
 	RecursionDepth++;
 
 	// --- If the straight-line approximation is not close enough to the curve, recurse,
 	// Don't bother to recurse for mitred or bevelled joins as they should be straight lines
-	if ((MidEdge.PrevTrapJoin != TrapJoin_MitredOrBevelled) && ((Dist > Flatness) || (RecursionDepth <= pWidthFunction->GetMinimumRecursionDepth())) && (RecursionDepth <= MaxRecursionDepth))
+	if ( MidEdge.PrevTrapJoin!=TrapJoin_MitredOrBevelled && 
+		 (Dist2>Flatness2 || RecursionDepth<=pWidthFunction->GetMinimumRecursionDepth()) &&
+		 RecursionDepth<=MaxRecursionDepth )
 	{
 		// Recurse on the left and right sides of the new midpoint
 		RecursiveMapLineForwards(pEdge1,   Point1,	 &MidEdge, MidPoint, pOutput);
@@ -593,15 +595,17 @@ void PathStroker::RecursiveMapLineBackwards(TrapEdge *pEdge1, DocCoord &Point1, 
 	DocCoord ApproximateMidPoint(Point1.x/2 + Point2.x/2, Point1.y/2 + Point2.y/2);
 
 	// --- Calculate the error in the midpoint position
-	const INT32 dx = MidPoint.x - ApproximateMidPoint.x;
-	const INT32 dy = MidPoint.y - ApproximateMidPoint.y;
-	const double Dist = (double)((dx * dx) + (dy * dy));
+	const double dx = MidPoint.x - ApproximateMidPoint.x;
+	const double dy = MidPoint.y - ApproximateMidPoint.y;
+	const double Dist2 = dx * dx + dy * dy;
 
 	RecursionDepth++;
 
 	// --- If the straight-line approximation is not close enough to the curve, recurse,
 	// Don't bother to recurse for mitred or bevelled joins as they should be straight lines
-	if ((MidEdge.PrevTrapJoin != TrapJoin_MitredOrBevelled) && ((Dist > Flatness) || (RecursionDepth <= pWidthFunction->GetMinimumRecursionDepth())) && (RecursionDepth <= MaxRecursionDepth))
+	if ( MidEdge.PrevTrapJoin!=TrapJoin_MitredOrBevelled &&
+		 (Dist2>Flatness2 || RecursionDepth<=pWidthFunction->GetMinimumRecursionDepth()) &&
+		 RecursionDepth<=MaxRecursionDepth )
 	{
 
 		// Recurse on the left and right sides of the new midpoint
@@ -1536,15 +1540,15 @@ void PathStrokerVector::RecursiveMapLine(TrapEdge *pEdge1, DocCoord &Point1, dou
 	DocCoord ApproximateMidPoint(Point1.x/2 + Point2.x/2, Point1.y/2 + Point2.y/2);
 
 	// --- Calculate the error in the midpoint position
-	const INT32 dx = MidPoint.x - ApproximateMidPoint.x;
-	const INT32 dy = MidPoint.y - ApproximateMidPoint.y;
-	const double Dist = (double)((dx * dx) + (dy * dy));
+	const double dx = MidPoint.x - ApproximateMidPoint.x;
+	const double dy = MidPoint.y - ApproximateMidPoint.y;
+	const double Dist2 = dx * dx + dy * dy;
 
 	// --- If the straight-line approximation is not close enough to the curve, recurse,
 	// else (recursion-tail) output the end-point that was passed in. We also recurse
 	// if the Position distance between the endpoints is large, as otherwise it can
 	// fail to flatten width functions properly.
-	if (Dist > Flatness2 || fabs(pEdge1->Position - pEdge2->Position) > 0.10)
+	if ( Dist2>Flatness2 || fabs(pEdge1->Position-pEdge2->Position)>0.10 )
 	{
 		// Recurse on the left and right sides of the new midpoint
 		RecursiveMapLine(pEdge1,   Point1,	 Width1,    &MidEdge, MidPoint, MidWidth,  Direction, pOutput);
@@ -1657,7 +1661,7 @@ void PathStrokerVector::RecursiveMapBezier(DocCoord *pCoords, DocCoord *p1, doub
 	// we will recursively flatten. However, we make sure that we divide the bezier into at
 	// least 2 sections, so if the difference in t parameters is too great, we set Dist
 	// large enough to cause a recursive flattening.
-	double Dist = Flatness2;
+	double Dist2 = Flatness2;
 
 	if (t2 - t1 < 0.45)
 	{
@@ -1671,11 +1675,11 @@ void PathStrokerVector::RecursiveMapBezier(DocCoord *pCoords, DocCoord *p1, doub
 		// And see how far the approximation is from the ideal position
 		const double dx = MappedMid.x - MappedApprox.x;
 		const double dy = MappedMid.y - MappedApprox.y;
-		Dist = dx*dx + dy*dy;
+		Dist2 = dx*dx + dy*dy;
 	}
 
 	// If we're too far away, then flatten further, else map the flattened line segment
-	if (Dist >= Flatness2)
+	if (Dist2 >= Flatness2)
 	{
 		RecursiveMapBezier(pCoords, p1, t1, &MidPoint, t);
 		RecursiveMapBezier(pCoords, &MidPoint, t, p2, t2);
