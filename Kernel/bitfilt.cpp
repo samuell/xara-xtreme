@@ -299,12 +299,7 @@ BaseBitmapFilter::~BaseBitmapFilter()
 ********************************************************************************************/
 BOOL BaseBitmapFilter::InitBaseClass()
 {
-PORTNOTE("filters","Removed BitmapExportOptions usage")
-#ifndef EXCLUDE_FROM_XARALX
 	return BitmapExportOptions::Declare();
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -1733,8 +1728,8 @@ BOOL BaseBitmapFilter::SetPixelHeight(const BMP_SIZE& Height)
 ********************************************************************************************/
 BOOL BaseBitmapFilter::GetExportOptions(BitmapExportOptions* pOptions)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
-	ERROR2IF(pOptions == NULL, FALSE, "NULL Args")
+#if !defined(EXCLUDE_FROM_RALPH)
+	ERROR2IF(pOptions == NULL, FALSE, "NULL Args");
 
 	WrittenHeader = FALSE;
 
@@ -1745,7 +1740,10 @@ BOOL BaseBitmapFilter::GetExportOptions(BitmapExportOptions* pOptions)
 	if (pOptions->GetSelectionType() != ABITMAP)
 	{
 		// This is ok as we are using a modal dialog box
-		 Ok = BmpPrefsDlg::InvokeDialog(pOptions);
+PORTNOTE("export", "Remove BmpPrefsDlg usage")
+#if !defined(EXCLUDE_FROM_XARALX)
+		Ok = BmpPrefsDlg::InvokeDialog(pOptions);
+#endif
 	}
 
 	if (Ok)
@@ -1773,10 +1771,7 @@ BOOL BaseBitmapFilter::GetExportOptions(BitmapExportOptions* pOptions)
 // call afterwards
 void BaseBitmapFilter::PostGetExportOptions(BitmapExportOptions* pOptions)
 {
-PORTNOTE("dialog","Removed NameGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 	pOptions->SetAsDefaults();
-#endif
 }
 
 
@@ -2502,11 +2497,8 @@ PORTNOTE("spread", "Multi-spread warning!")
 	else
 		ok = FALSE;
 
-PORTNOTE("ExportUI", "Removed use of export UI");
-#ifndef EXCLUDE_FROM_XARALX
 	//Graham W 3/7/97: Tell the preview dialog what the path to save out to is
 	BmapPrevDlg::m_pthExport=*pPath;
-#endif
 
 	if(ok)
 		ok = GetExportOptions(pExportOptions);
@@ -4797,14 +4789,11 @@ BOOL BaseBitmapFilter::SetExportOptions ( BitmapExportOptions*	pOptions )
 ********************************************************************************************/
 BitmapExportOptions* BaseBitmapFilter::CreateExportOptions() const
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::CreateExportOptions - do nothing");
-/*	TRACE( _T("BaseBitmapFilter::CreateExportOptions() called\n"));
+	TRACE( _T("BaseBitmapFilter::CreateExportOptions() called\n"));
 
-	BitmapExportOptions* pOptions = new BitmapExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, &FilterName);
+	BitmapExportOptions* pOptions = new BitmapExportOptions(_R(IDD_EXPORTBMPOPTS), FilterType(FilterID), &FilterName);
 
-	return pOptions; */
-
-	return NULL;
+	return pOptions;
 }
 
 
@@ -5022,8 +5011,7 @@ LPLOGPALETTE BaseBitmapFilter::Create8bppPalette()
 ********************************************************************************************/
 BOOL BaseBitmapFilter::ExportImagemap(Operation *pOp, PathName* pPath, Document* pDoc)
 {
-	PORTNOTETRACE("filters","BaseBitmapFilter::ExportImagemap - do nothing");
-/*	//Check our parameters
+	//Check our parameters
 	ERROR2IF(pOp == NULL, FALSE,"BaseBitmapFilter::ExportImagemap no export operation");
 	ERROR2IF(pPath == NULL, FALSE,"BaseBitmapFilter::ExportImagemap no export pathname");
 	ERROR2IF(pDoc == NULL, FALSE,"BaseBitmapFilter::DoExport no document to export");
@@ -5076,9 +5064,7 @@ BOOL BaseBitmapFilter::ExportImagemap(Operation *pOp, PathName* pPath, Document*
 		ImagemapFile.close();
 
 	//And return
-	return ok; */
-
-	return false;
+	return ok;
 }
 
 /********************************************************************************************

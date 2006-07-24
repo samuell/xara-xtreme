@@ -1274,9 +1274,12 @@ PORTNOTE("other", "Use SetUpExportOptions to get defaults only and not do dialog
 	if(pOptions)
 		pOptions->SetTempFileFlag(FALSE);
 
+PORTNOTE( "export", "Removed image map code" )
+#if !defined(EXCLUDE_FROM_XARALX)
 	// Now export the image map if required
 	if (pOptions && pOptions->GetSupportsImageMap() && pFilter->IS_KIND_OF(BaseBitmapFilter))
 		static_cast<BaseBitmapFilter *>(pFilter)->ExportImagemap(this, &Path, GetWorkingDoc());
+#endif
 
 	if (pOptions != NULL)
 	{
