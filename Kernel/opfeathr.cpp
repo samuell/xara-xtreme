@@ -450,10 +450,8 @@ BOOL ChangeFeatherSizeSliderOpDesc::UpdateAllFeatherControls(String_256* Str,
 			UINT32		GadgetID = GadgetItem->gidGadgetID;
 			DialogOp*	pDlg	 = GadgetItem->pDialogOp;
 
-			/* Remove until custom slider implemented
 			if (Str != NULL)
-				pDlg->SetStringGadgetValue(GadgetID, Str, FALSE, -1);
-			*/
+				pDlg->SetStringGadgetValue(GadgetID, *Str, FALSE, -1);
 
 			// set the position of a cc_Slider or the slider component of a cc_CustomEdit...
 TRACEUSER("amb", _T("UpdateAllFeatherContrls: Set slider to %d in [%d .. %d]"), InverseSliderVal, MinSlider, MaxSlider);
@@ -582,8 +580,6 @@ void ChangeFeatherSizeSliderOpDesc::ConvertSizeToUnits(String_256& StrSize, MILL
 
 void ChangeFeatherSizeSliderOpDesc::OnSelectionChange(OpDescControlMsg* SelChangedMsg, List* GadgetList)
 {
-PORTNOTE("feather", "Feather Slider OnSelectionChange disabled since it doesn't have an edit field at the moment and gets upset by wxEVT_SCROLL messages")
-#if !defined(EXCLUDE_FROM_XARALX)
     DialogOp* pDlg = SelChangedMsg->pDlgOp;
     CGadgetID SetGadgetID = SelChangedMsg->SetGadgetID;
 
@@ -610,7 +606,6 @@ PORTNOTE("feather", "Feather Slider OnSelectionChange disabled since it doesn't 
 
 	if (!bSuccess)
 		SetFeatherSizeForCurrentSel();
-#endif
 }
 
 /********************************************************************************************
