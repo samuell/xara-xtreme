@@ -466,15 +466,12 @@ BOOL PathProcessorStroke::DoBecomeA(BecomeA* pBecomeA, Path* pPath, Node* pParen
 
 NodePath* PathProcessorStroke::GetProcessedPath(Path* pPath, Node* pParent)
 {
-	PORTNOTETRACE("other","PathProcessorStroke::GetProcessedPath - do nothing");
-	return NULL;
-#ifndef EXCLUDE_FROM_XARALX
 	// we need to fake a renderregion as our helper functions need one,
 	// luckily FormatRegion is on hand from the text stuff
 	FormatRegion FakeRender;
 
 	if (!FakeRender.Init((NodeRenderableInk*)pParent)) // init renders all applied attributes into the region
-		return FALSE;
+		return NULL;
 
 	
 	// From here copied from ProcessPath:
@@ -527,7 +524,6 @@ NodePath* PathProcessorStroke::GetProcessedPath(Path* pPath, Node* pParent)
 	pOutput = NULL;
 
 	return pNewNode;
-#endif
 }
 
 

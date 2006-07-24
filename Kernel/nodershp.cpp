@@ -1425,6 +1425,8 @@ NodePath* NodeRegularShape::GetVariableWidthStrokePath()
 		Path* pShapePath = NULL;
 		if (BuildShapePath(&pShapePath))
 			pRetNode = pPPS->GetProcessedPath(pShapePath, this);
+
+		ERROR2IF(!pRetNode, NULL, "Failed to get a Processed Path");
 				
 		// now we have a choice, pass in the stroking flag to produce a path that works with bevels
 		Path CopyPath;
