@@ -845,6 +845,34 @@ PORTNOTE("dialog","Removed DialogBarOp usage")
 		CCamFrame::GetMainFrame()->UpdateFrameManager();
 }
 
+
+/********************************************************************************************
+
+>	static BOOL MergeDialogs( CWindowID Dialog, CWindowID Mergee, bool fAbove )
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	21/07/2006
+	Inputs:		-
+	Returns:	FALSE if the function failed.
+	Purpose:	This function places the contents of a dialog above or below the
+				contents of an existing dialog
+
+********************************************************************************************/
+BOOL DialogManager::MergeDialogs( CWindowID Dialog, CWindowID Mergee, bool fAbove )
+{
+	wxSizer*			pMainSizer = Dialog->GetSizer();
+	wxSizer*			pVertSizer( new wxBoxSizer( wxVERTICAL ) );
+	if( fAbove )
+		pVertSizer->Add( Mergee, wxALL );
+	pVertSizer->Add( pMainSizer );
+	if( !fAbove )
+		pVertSizer->Add( Mergee, wxALL );
+
+	Dialog->SetSizerAndFit( pVertSizer, false );
+	return TRUE;
+}
+
+
 /********************************************************************************************
 
 >	static BOOL DialogManager::BringToTop(CWindowID WindowID)

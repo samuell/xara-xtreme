@@ -725,70 +725,7 @@ PORTNOTETRACE("other","Preview section NOT setup");
 		m_DialogWnd = m_pPreviewDlg->WindowID;
 		ERROR2IF(m_DialogWnd == NULL, FALSE, "No preview dialog!");
 	
-PORTNOTE("other","Nasty pool of oil contaminating nive clean kernel");
-		// Fuse the whole lot into one dialog
-		wxSizer*		pMainSizer = WindowID->GetSizer();
-		wxSizer*		pVertSizer( new wxBoxSizer( wxVERTICAL ) );
-		pVertSizer->Add( m_pPreviewDlg->WindowID, wxALL );
-		pVertSizer->Add( pMainSizer );
-
-		WindowID->SetSizerAndFit( pVertSizer, false );
-
-PORTNOTE("other","Preview section NOT setup");
-#ifndef EXCLUDE_FROM_XARALX
-		//And get the Preview Dialog's rectangle
-		wxRect rectPreview;
-		GetWindowRect(m_DialogWnd, &rectPreview);
-
-		//First we must get the height of the Preview section
-		INT32 lPreviewHeight = rectPreview.GetBottom() - rectPreview.GetTop();
-		ERROR2IF(lPreviewHeight <= 0, FALSE, "Preview Dialog has no height");
-
-		if (!m_MovedWindow)
-		{ 
-			// Move the window to take account of it's incressed size (only need to do this
-			// the first time the dialog is run) and incress its size
-			::MoveWindow(
-				WindowID,									// The window
-				Rect.GetLeft(),									// Horiz position
-				Rect.GetTop() - lPreviewHeight / 2,				// Vertical position
-				Rect.GetRight() - Rect.GetLeft(),						// Width
-				Rect.GetBottom() - Rect.GetTop() + lPreviewHeight,	// Height
-				TRUE										// Repaint option
-			);
-			m_MovedWindow = true;
-		}
-		else
-		{
-			// Just incress the window's size
-			::MoveWindow(
-				WindowID,									// The window
-				Rect.GetLeft(),									// Horiz position
-				Rect.GetTop(),									// Vertical position
-				Rect.GetRight() - Rect.GetLeft(),						// Width
-				Rect.GetBottom() - Rect.GetTop() + lPreviewHeight,	// Height
-				TRUE										// Repaint option
-			);
-		}
-
-		// Now step 2. We need to move the tabbed section
-		// downwards by the height of the Preview dialog.
-		// Remember, take into account the height of the tabs which will be the top offset
-		ChildWindowParameters cwpToPass;
-		cwpToPass.FirstID	= WindowID;
-		cwpToPass.SecondID	= m_DialogWnd;
-		cwpToPass.Distance	= lPreviewHeight;
-		cwpToPass.TopOffset	= 28;
-
-		EnumChildWindows(WindowID, EnumChildProc, (LPARAM)&cwpToPass);
-
-		//Right and...er...move the Preview section again.
-		//I've no idea how the preview section got moved,
-		//but it does, and moving it again does actually
-		//produce the right effect, so let's not question
-		//why.
-		MoveWindow(m_DialogWnd, 0, 0, rectPreview.GetRight() - rectPreview.GetLeft(), rectPreview.GetBottom() - rectPreview.GetTop(), TRUE);
-#endif
+		DialogManager::MergeDialogs( WindowID, m_pPreviewDlg->WindowID, true );
 
 		// enable our window (which has been disabled when the preview window was created)
 		WindowID->Enable( TRUE );

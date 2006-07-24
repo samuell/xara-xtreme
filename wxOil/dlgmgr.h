@@ -363,6 +363,9 @@ public:
 	// resources associated with it. It hides the dialog.  
 	static void Close(CWindowID WindowID, DialogOp* DlgOp); 
 
+	// Place dialog above or below exist controls in dialog
+	static BOOL MergeDialogs( CWindowID Dialog, CWindowID Mergee, bool fAbove );
+
 	// Brings a dialog to the top-most z-order position
 	static BOOL BringToTop(CWindowID WindowID, DialogOp* pDlgOp);
 
