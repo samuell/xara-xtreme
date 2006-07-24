@@ -58,19 +58,44 @@ public:
     bool GetAutomaticUpdates() const;
     void SetAutomaticUpdates(bool);
 
+    // Duplicate the wxSlider API
+
     // From wxSlider whatever is necessary... Events are the most important here
     int GetSliderValue() const;
     void SetSliderValue(int value);
 
-    // How much do we increase/decrease with page up/down?
-    int GetPageSize() const;
-    void SetPageSize(int pageSize);
-
     // Default without having called this is 0..100
     void SetRange(int minValue, int maxValue);
 
-	int GetSliderMin() const;
-	int GetSliderMax() const;
+    int GetSliderMin() const;
+    int GetSliderMax() const;
+    void SetSliderMin( int minValue );
+    void SetSliderMax( int maxValue );
+
+    // the line/page size is the increment by which the slider moves when
+    // cursor arrow key/page up or down are pressed (clicking the mouse is like
+    // pressing PageUp/Down) and are by default set to 1 and 1/10 of the range
+    void SetLineSize(int lineSize);
+    void SetPageSize(int pageSize);
+    int GetLineSize() const;
+    int GetPageSize() const;
+
+    // these methods get/set the length of the slider pointer in pixels
+    void SetThumbLength(int lenPixels);
+    int GetThumbLength() const;
+
+    // warning: most of subsequent methods are currently only implemented in
+    //          wxMSW under Win95 and are silently ignored on other platforms
+
+    void SetTickFreq(int n, int pos);
+    int GetTickFreq() const;
+    void ClearTicks();
+    void SetTick(int tickPos);
+
+    void ClearSel();
+    int GetSelEnd() const;
+    int GetSelStart() const;
+    void SetSelection(int min, int max);
 
     // Do we need floating point support? In this case this could be used to
     // select it (and add some other floating point methods)

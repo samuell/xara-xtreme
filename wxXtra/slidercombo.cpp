@@ -145,16 +145,6 @@ void wxSliderCombo::SetSliderValue(int value)
     m_slider->SetValue(value);
 }
 
-int wxSliderCombo::GetPageSize() const
-{
-    return m_slider->GetPageSize();
-}
-
-void wxSliderCombo::SetPageSize(int pageSize)
-{
-    m_slider->SetPageSize(pageSize);
-}
-
 void wxSliderCombo::SetRange(int minValue, int maxValue)
 {
     m_slider->SetRange(minValue, maxValue);
@@ -169,4 +159,84 @@ int wxSliderCombo::GetSliderMin() const
 int wxSliderCombo::GetSliderMax() const
 {
     return m_slider->GetMax();
+}
+
+void wxSliderCombo::SetSliderMin( int minValue )
+{
+    m_slider->SetMin(minValue);
+}
+
+void wxSliderCombo::SetSliderMax( int maxValue )
+{
+    m_slider->SetMax(maxValue);
+}
+
+void wxSliderCombo::SetLineSize(int lineSize)
+{
+    m_slider->SetLineSize(lineSize);
+}
+
+void wxSliderCombo::SetPageSize(int pageSize)
+{
+    m_slider->SetPageSize(pageSize);
+}
+
+int wxSliderCombo::GetLineSize() const
+{
+    return m_slider->GetLineSize();
+}
+
+int wxSliderCombo::GetPageSize() const
+{
+    return m_slider->GetPageSize();
+}
+
+void wxSliderCombo::SetThumbLength(int lenPixels)
+{
+    m_slider->SetThumbLength(lenPixels);
+}
+
+int wxSliderCombo::GetThumbLength() const
+{
+    return m_slider->GetThumbLength();
+}
+
+void wxSliderCombo::SetTickFreq(int n, int pos)
+{
+    m_slider->SetTickFreq(n, pos);
+}
+
+int wxSliderCombo::GetTickFreq() const
+{
+    return m_slider->GetTickFreq();
+}
+
+void wxSliderCombo::ClearTicks()
+{
+    m_slider->ClearTicks();
+}
+
+void wxSliderCombo::SetTick(int tickPos)
+{
+    m_slider->SetTick(tickPos);
+}
+
+void wxSliderCombo::ClearSel()
+{
+    m_slider->ClearSel();
+}
+
+int wxSliderCombo::GetSelEnd() const
+{
+    return m_slider->GetSelEnd();
+}
+
+int wxSliderCombo::GetSelStart() const
+{
+    return m_slider->GetSelStart();
+}
+
+void wxSliderCombo::SetSelection(int min, int max)
+{
+    m_slider->SetSelection(min,max);
 }

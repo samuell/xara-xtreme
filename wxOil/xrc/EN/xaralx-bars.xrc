@@ -1079,7 +1079,8 @@
                     <sliderstyle>wxSL_HORIZONTAL|wxSL_AUTOTICKS</sliderstyle>
                     <value>0</value>
                     <min>0</min>
-                    <max>100</max>
+                    <max>37500</max>
+                    <linesize>375</linesize>
                     <optoken>FeatherSize</optoken>
                 </object>
             </object>

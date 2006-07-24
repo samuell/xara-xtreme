@@ -49,8 +49,34 @@ wxObject *wxSliderComboXmlHandler::DoCreateResource()
                     GetStyle(),
                     GetName());
 
-    wxSize ButtonSize=GetSize(wxT("buttonsize"));
+    // Slider like stuff
+    if( HasParam(wxT("tickfreq")))
+    {
+        control->SetTickFreq(GetLong(wxT("tickfreq")), 0);
+    }
+    if( HasParam(wxT("pagesize")))
+    {
+        control->SetPageSize(GetLong(wxT("pagesize")));
+    }
+    if( HasParam(wxT("linesize")))
+    {
+        control->SetLineSize(GetLong(wxT("linesize")));
+    }
+    if( HasParam(wxT("thumb")))
+    {
+        control->SetThumbLength(GetLong(wxT("thumb")));
+    }
+    if( HasParam(wxT("tick")))
+    {
+        control->SetTick(GetLong(wxT("tick")));
+    }
+    if( HasParam(wxT("selmin")) && HasParam(wxT("selmax")))
+    {
+        control->SetSelection(GetLong(wxT("selmin")), GetLong(wxT("selmax")));
+    }
 
+    // ComboCtrl like stuff
+    wxSize ButtonSize=GetSize(wxT("buttonsize"));
     if (ButtonSize != wxDefaultSize)
     control->SetButtonPosition(ButtonSize.GetWidth(), ButtonSize.GetHeight());
 
