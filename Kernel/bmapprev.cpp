@@ -3914,8 +3914,10 @@ void BmapPrevDlg::HandleBitmapOptionsTicks(UINT32 tick)
 	UINT32	idFilterName = m_pExportOptions->GetFilterNameStrID();
 
 	if( idFilterName == _R(IDS_JPG_EXP_FILTERNAME) )
+	{
 		if (tick == _R(IDC_OPTIONSTAB_CHECK1))
 			((JPEGExportOptions*) m_pExportOptions)->SetMakeProgressive(NewState);
+	}
 	else
 	if( idFilterName == _R(IDT_FILTERNAME_BMP) ) 
 	{
