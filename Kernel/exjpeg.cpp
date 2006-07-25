@@ -1345,6 +1345,8 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 		UINT32 ScanlinesRemaining = Height;
 		pBitmapLine += (ScanlinesRemaining - 1) * ScanlineSize;
 
+		RGBTRIPLE*	pTempLine = (RGBTRIPLE*)alloca( ExportlineSize );
+
 		// Do it one line at a time like it or not
 		while (ScanlinesRemaining > 0)
 		{
@@ -1364,7 +1366,7 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 			RGBTRIPLE* pExportRGB = (RGBTRIPLE*)pExportLine;
 			if( pExportLine == pBitmapLine )
 			{
-				pExportRGB = (RGBTRIPLE*)alloca( ExportlineSize );
+				pExportRGB = pTempLine;
 				memcpy( pExportRGB, pExportLine, ExportlineSize );
 				pExportLine = PBYTE(pExportRGB);
 			}
