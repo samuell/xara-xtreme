@@ -222,7 +222,20 @@ MenuItem *GetMenuPreferences(UINT32 ResourceID)
 				ERRORIF((!GetToken(&MenuScript, OpToken, TokenSize)), 
 						_R(IDE_SYNTAX_ERROR), 
 						NULL);
-                
+
+				TRACEUSER( "luke", _T("SUBMENU \"%s\" \"%s\"\n"), OpToken, OPTOKEN_DEBUG_MENU );
+
+#if !defined(ADD_DEBUG_MENU)
+				// Remove DEBUG menu
+				if( 0 == camStrcmp( OpToken, OPTOKEN_DEBUG_MENU ) )
+				{
+					TRACEUSER( "luke", _T(">-SUBMENU %s\n"), OPTOKEN_DEBUG_MENU );
+					MenuStack.AddHead(pCurMenu);	//Push Current Menu onto stack
+					pCurMenu = NULL;
+					continue;
+				}
+#endif
+
 				pSubMenu = CreateMenuItem(	OpToken, 
 											pCurMenu->GetMenuId(),
 											GetSeparator(	&MenuScript, 
@@ -251,7 +264,13 @@ MenuItem *GetMenuPreferences(UINT32 ResourceID)
 				ERRORIF((!GetToken(&MenuScript, OpToken, TokenSize)), 
 						_R(IDE_SYNTAX_ERROR), 
 						NULL);
-			
+
+#if !defined(ADD_DEBUG_MENU)
+				// Don't add menu itemns if parent not wanted
+				if( NULL == pCurMenu )
+					continue;
+#endif
+
 				pMenuItem = CreateMenuItem(	OpToken,
 											pCurMenu->GetMenuId(),
 											GetSeparator(	&MenuScript, 
