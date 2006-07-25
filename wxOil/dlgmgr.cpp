@@ -749,6 +749,77 @@ void DialogManager::InitPaneInfoHash()
 
 /********************************************************************************************
 
+>	void DialogManager::FreePaneInfoHash
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	25/07/06
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Free the pane info hash if it exists
+	Scope:		protected
+
+This function MUST be called ONLY after the preference system has been de-inited. This
+may be after dialogmanager deinit.
+
+********************************************************************************************/
+
+void DialogManager::FreePaneInfoHash()
+{
+	if (s_pPaneInfoHash)
+	{
+		delete s_pPaneInfoHash;
+		s_pPaneInfoHash = NULL;
+	}
+}
+
+/********************************************************************************************
+
+>	void DialogManager::EnsurePanePreferenceDeclared(key)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	25/07/06
+	Inputs:		key - the key the pane info will be stored under
+	Outputs:	None
+	Returns:	None
+	Purpose:	Ensures the relevant preference has been declared
+	Scope:		protected
+
+********************************************************************************************/
+
+void DialogManager::EnsurePanePreferenceDeclared(wxString key)
+{
+	if (!s_pPaneInfoHash)
+		InitPaneInfoHash();
+
+	if (!s_pPaneInfoHash)
+		return;
+
+	IdToSerializedPaneInfo::iterator i=s_pPaneInfoHash->find(key);
+	if (i==s_pPaneInfoHash->end())
+	{
+		// ok, it's not in the hash, so it can't have been declared as a preference
+		// yet. So we will declare it as a preference now
+		(*s_pPaneInfoHash)[key]=_T("");
+		i=s_pPaneInfoHash->find(key);
+		if (i==s_pPaneInfoHash->end())
+		{
+			ERROR3("This hash leaks like a seive");
+			return;
+		}
+		// --------------------------------------------------------------------------
+		// Detect first-time run and make Open File dialog default to Examples folder
+		if (Camelot.DeclareSection(_T("BarPositions"), 10))
+		{
+			Camelot.DeclarePref( NULL, (TCHAR *)(key.c_str()), &(i->second) );
+		}
+	}
+}
+
+
+
+/********************************************************************************************
+
 >	void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
 
 	Author:		Alex Bligh <alex@alex.org.uk>
@@ -769,14 +840,21 @@ void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
 	if (!s_pPaneInfoHash)
 		return;
 
+	EnsurePanePreferenceDeclared(key);
+
 	IdToSerializedPaneInfo::iterator i=s_pPaneInfoHash->find(key);
 	if (i==s_pPaneInfoHash->end())
+		return;
+
+	// do not bother trying to process empty strings
+	if (i->second.IsEmpty())
 		return;
 
 	TRACEUSER("amb", _T("key=%s"), (const TCHAR *)key);
 	TRACEUSER("amb", _T("val=%s"), (const TCHAR *)(i->second));
 
-	CCamFrame::GetFrameManager()->LoadPaneInfo(i->second, paneinfo);
+	wxString name = (wxString)((const TCHAR *)(i->second));
+	CCamFrame::GetFrameManager()->LoadPaneInfo(name, paneinfo);
 }
 
 /********************************************************************************************
@@ -800,6 +878,8 @@ void DialogManager::SavePaneInfo(wxString key, wxPaneInfo &paneinfo)
 
 	if (!s_pPaneInfoHash)
 		return;
+
+	EnsurePanePreferenceDeclared(key);
 
 	(*s_pPaneInfoHash)[key]=CCamFrame::GetFrameManager()->SavePaneInfo(paneinfo);
 }
@@ -6203,12 +6283,7 @@ PORTNOTE("dialog","Removed IsFullScreenMode usage")
 		delete DialogPositionList.RemoveItem(DlgPos);
 		DlgPos = NextPos;
 	}
-
-	if (s_pPaneInfoHash)
-	{
-		delete s_pPaneInfoHash;
-		s_pPaneInfoHash = NULL;
-	}
+	// We do not delete s_pPaneInfoHash here because the preferences have not been written out
 }
 
 /********************************************************************************************

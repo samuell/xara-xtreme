@@ -775,6 +775,10 @@ PORTNOTE("other","Removed un-=impl. stuff")
 	DestroyCCC();
 #endif
 
+	// DialogManager was deinitialized a while ago, but this bit needs to be done after
+	// the pref system has gone. It merely frees some memory
+	DialogManager::FreePaneInfoHash();
+
 	ObjectRegistry::Delete();
 }
 

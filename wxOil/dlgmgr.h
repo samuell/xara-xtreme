@@ -170,7 +170,7 @@ typedef struct
 
 #endif
 
-WX_DECLARE_STRING_HASH_MAP( wxString, IdToSerializedPaneInfo );
+WX_DECLARE_STRING_HASH_MAP( String_256, IdToSerializedPaneInfo );
 
 /********************************************************************************************
 
@@ -816,10 +816,14 @@ protected:
 	// Now our event handlers
 	static void Event (DialogEventHandler *pEvtHandler, wxEvent &event);
 
+	static void EnsurePanePreferenceDeclared(wxString key);
 	static void InitPaneInfoHash();
 	static void LoadPaneInfo(wxString key, wxPaneInfo &paneinfo);
 	static void SavePaneInfo(wxString key, wxPaneInfo &paneinfo);
 	static IdToSerializedPaneInfo * s_pPaneInfoHash;
+
+public:
+	static void FreePaneInfoHash();
 };         
 
 
