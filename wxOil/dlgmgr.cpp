@@ -462,6 +462,11 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 		// of stuff to be specified. Or try and retrieve it from the DialogBarOp or similar. Anyway, for now
 		// give it some default parameters
 		wxPaneInfo paneinfo;
+		if (!DlgOp->IsABar())
+		{
+			// default galleries to 300 deep. Specifying -1 as a width doesn't seem to work
+			paneinfo.FloatingSize(100,300);
+		}
 		LoadPaneInfo(wxString(CamResource::GetObjectName(pDialogWnd->GetId())), paneinfo);
 		paneinfo.DestroyOnClose(FALSE);
 		if (DlgOp->IsABar())
@@ -483,7 +488,8 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 		}
 		else
 		{
-			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float()    .Dockable(FALSE); // temporarilly stop galleries from docking
+			// Gallery
+			paneinfo.Layer(3).GripperTop().TopDockable(FALSE).BottomDockable(FALSE).Float().Dockable(FALSE); // temporarilly stop galleries from docking
 		}
 
 		if (DlgOp->IsKindOf(CC_RUNTIME_CLASS(InformationBarOp)))
@@ -874,7 +880,7 @@ void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
 void DialogManager::SavePaneInfo(wxString key, wxPaneInfo &paneinfo)
 {
 	// work around mysterious wxGTK sizing bug
-	if ((paneinfo.floating_size == wxDefaultSize) && (paneinfo.IsOk()) && (paneinfo.IsFloating()))
+	if ((paneinfo.IsOk()) && (paneinfo.IsFloating()))
 	{
 		paneinfo.FloatingSize(paneinfo.window->GetParent()->GetSize());
 	}
