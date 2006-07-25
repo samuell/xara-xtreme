@@ -171,18 +171,16 @@ INT32 CamProcess::Execute(const wxString& cmd)
 				size_t NumRead = 4096;
 				BYTE Buffer[4096];
 
-				while (NumRead > 0)
+				// Read a buffer full
+				GetInputStream()->Read(Buffer, 4096);
+
+				NumRead = GetInputStream()->LastRead();
+
+				// Write the buffer to the file
+				if (NumRead > 0)
 				{
-					// Read a buffer full
-					GetInputStream()->Read(Buffer, 4096);
-
-					NumRead = GetInputStream()->LastRead();
-
-					// Write the buffer to the file
-					if (NumRead > 0)
-					{
-						m_pOutFile->write(Buffer, NumRead);
-					}
+//					TRACEUSER("Gerry", _T("Writing %d bytes of stdout"), NumRead);
+					m_pOutFile->write(Buffer, NumRead);
 				}
 			}
 		}

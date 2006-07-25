@@ -1653,8 +1653,8 @@ void PluginFilterProcess::ProcessStdErr()
 				}
 				else
 				{
-//					TRACEUSER("Gerry", _T("XPFError:%s"), line.c_str());
-					m_Errors.Add(line);
+//					TRACEUSER("Gerry", _T("Skipping stderr:%s"), line.c_str());
+//					m_Errors.Add(line);
 				}
 			}
 		}
