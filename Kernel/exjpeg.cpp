@@ -1359,7 +1359,15 @@ BOOL JPEGExportFilter::WriteRawBitmap(	const ADDR& pBitmapData,
 			}
 
 #if !defined(__WXMSW__) && defined(BIG_ENDIAN)
+			// Component swapping must be done out-of-line, to stop original
+			// being blatted
 			RGBTRIPLE* pExportRGB = (RGBTRIPLE*)pExportLine;
+			if( pExportLine == pBitmapLine )
+			{
+				pExportRGB = (RGBTRIPLE*)alloca( ExportlineSize );
+				memcpy( pExportRGB, pExportLine, ExportlineSize );
+				pExportLine = PBYTE(pExportRGB);
+			}
 			for( unsigned ord = 0; ord < Width; ++ord, ++ pExportRGB )
 				std::swap( pExportRGB->rgbtBlue, pExportRGB->rgbtRed );
 #endif

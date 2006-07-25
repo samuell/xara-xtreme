@@ -925,7 +925,7 @@ void OpMenuExport::DoWithParam(OpDescriptor*, OpParam* pParam)
 		if (OriginalSourcePresent)
 		{
 			DefaultBitmapFilterID = FILTERID_EXPORT_JPEG;
-			SelectedBitmapFilter = 13; //FILTER_JPEG;
+			SelectedBitmapFilter = 0; //FILTER_JPEG;
 		}
 		else
 		{
