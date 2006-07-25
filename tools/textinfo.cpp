@@ -140,6 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "rulers.h"
 #include "usercord.h"
 #include "dlgmgr.h"
+#include "statline.h"
 
 // For tab stop dragging
 #include "csrstack.h"
@@ -3050,7 +3051,6 @@ void TextInfoBarOp::TabStopDragFinished()
 void TextInfoBarOp::HighlightRulerSection(RulerBase* pRuler, UserRect& UpdateRect)
 {
 	if (!pRuler->IsHorizontal()) return;
-	TRACEUSER("wuerthne", _T("TextInfoBarOp::Highlight %d"), RulerData.CurrentRulerSectionWidth);
 
 	// we call RulerBase::HighlightSection, which expects coordinates in user space but
 	// knows about our tool origin
@@ -3134,7 +3134,6 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 		if (!(RulerData.TabStopDragRunning &&
 			  (RulerData.CurrentDragType == DragNew || RulerData.CurrentDragType == DragTabStop)))
 		{
-			TRACEUSER("wuerthne", _T("redraw implicit tab stops"));
 			// draw greyed out left align tab stops at equidistant positions beyond the last defined
 			// tab stop, but only while we are not dragging
 			while(LastPos < UpdateRect.hi.x)
@@ -3181,6 +3180,46 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 
 /********************************************************************************************
 
+>   BOOL TextTool::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+										  Spread* pSpread, RulerBase* pRuler)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	25/07/06
+	Inputs:     PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Outputs:    Status line text written to pText (if returning TRUE)
+	Returns:    TRUE if the text has been set
+	Purpose:    Allows us to set the status line text for the ruler
+
+********************************************************************************************/
+
+BOOL TextInfoBarOp::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+										   Spread* pSpread, RulerBase* pRuler)
+{
+	if (!pRuler->IsHorizontal()) return FALSE;
+
+	// first of all, check whether we are over the current tab type button
+	DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
+	MILLIPOINT PixelSize = pDocView->GetScaledPixelWidth().MakeLong();
+	MILLIPOINT Distance1 = ((CurrentTabButtonPos - CurrentTabButtonWidth/2)*PixelSize);
+	MILLIPOINT Distance2 = ((CurrentTabButtonPos + CurrentTabButtonWidth/2)*PixelSize);
+	if (PointerPos.x >= Distance1 && PointerPos.x <= Distance2)
+	{
+		return pText->Load(_R(IDS_TEXTTOOL_CURRENTTABHELP));
+	}
+
+	// otherwise, check whether we are within the highlighted section
+	if (PointerPos.x >= 0 && (RulerData.CurrentRulerSectionWidth == -1
+							  || PointerPos.x < RulerData.CurrentRulerSectionWidth))
+	{
+		return pText->Load(_R(IDS_TEXTTOOL_RULERHELP));
+	}
+	return FALSE;
+}
+
+/********************************************************************************************
+
 >   BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 									 Spread* pSpread, RulerBase* pRuler)
 
@@ -3201,6 +3240,12 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 {
 	if (!pRuler->IsHorizontal()) return FALSE;
 	TRACEUSER("wuerthne", _T("ruler click (%d,%d)"), PointerPos.x, PointerPos.y);
+
+	// check whether the click was within the highlight section
+	BOOL InHighlightSection = PointerPos.x >= 0
+		&& (RulerData.CurrentRulerSectionWidth == -1
+			|| PointerPos.x < RulerData.CurrentRulerSectionWidth);
+
 	if (Click == CLICKTYPE_SINGLE)
 	{
 		// check whether the user has clicked on our homegrown "current tab" button
@@ -3256,11 +3301,6 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 			return TRUE;
 		}
 
-		// not clicked on our button, so check whether the click was within the highlight section
-		BOOL InHighlightSection = PointerPos.x >= 0
-			&& (RulerData.CurrentRulerSectionWidth == -1
-				|| PointerPos.x < RulerData.CurrentRulerSectionWidth);
-
 		// we do allow dragging tab stops outside the highlight section but we do not allow creating
 		// new ones by clicking outside
 
@@ -3270,7 +3310,7 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 		Document::SetSelectedViewAndSpread(pDocView->GetDoc(), pDocView, pSpread);
 		
 		INT32 MatchedIndex = -1;
-		TxtTabStop DraggedTabStop(LeftTab, 0);
+		TxtTabStop DraggedTabStop(RulerData.CurrentTabType, 0);
 		if (RulerData.IsRulerValid)
 		{
 			INT32 Index = 0;
@@ -3330,7 +3370,7 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 				if (PointerPos.x >= FirstIndentPos - MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
 					&& PointerPos.x <= FirstIndentPos + MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize))
 				{
-					TRACEUSER("wuerthne", _T("drag left margin"));
+					TRACEUSER("wuerthne", _T("drag first indent"));
 					DragType = DragFirstIndent;
 				}
 				else
@@ -3369,8 +3409,8 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 		}
 	}
 
-	// we have not claimed the click
-	return FALSE;
+	// we swallow all other clicks within the highlight section
+	return InHighlightSection;
 }
 
 /********************************************************************************************
@@ -3455,8 +3495,8 @@ void TextInfoBarOp::DoApplyShownRuler()
 	// let us forget about it
 	RulerData.pNewRuler = NULL;
 	// we just applied what we had in pShownRuler, so UpdateRuler() will think that
-	// nothing has changed - but we want the implicit tabs to reappear
-	ForceRulerRedraw();
+	// nothing has changed and not redraw the ruler - therefore, the caller will have
+	// to call ForceRulerRedraw(), which is done in TabStopDragOp::DragFinished() below
 }
 
 /********************************************************************************************
@@ -3472,6 +3512,10 @@ void TextInfoBarOp::DoApplyShownRuler()
 
 void TextInfoBarOp::DoChangeLeftMargin(MILLIPOINT Ordinate)
 {
+	// Technically, we could allow the left margin to become negative, i.e., to be located
+	// to the left of the start of the text object, but this might confuse users, so prevent
+	// it from happening.
+	if (Ordinate < 0) Ordinate = 0;
 	RulerData.IsLeftMarginValid = TRUE;
 	RulerData.LeftMargin = Ordinate;
 	OnFieldChange(LeftMarginA);
@@ -3491,6 +3535,10 @@ void TextInfoBarOp::DoChangeLeftMargin(MILLIPOINT Ordinate)
 
 void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
 {
+	// Technically, we could allow the firstindent to become negative, i.e., to be located
+	// to the left of the start of the text object, but this might confuse users, so prevent
+	// it from happening.
+	if (Ordinate < 0) Ordinate = 0;
 	RulerData.IsFirstIndentValid = TRUE;
 	RulerData.FirstIndent = Ordinate;
 	OnFieldChange(FirstIndentA);
@@ -3514,9 +3562,10 @@ void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate)
 	// we could not have a default attribute that makes sense and text objects with different
 	// widths would have to have different right margin attributes)
 	RulerData.IsRightMarginValid = TRUE;
-	// we allow the margin to become negative, i.e., to be located to the right of the
-	// column width
 	RulerData.RightMargin = RulerData.CurrentRulerSectionWidth - Ordinate;
+	// Technically, we could allow the margin to become negative, i.e., to be located to the
+	// right of the column width, but this might confuse users, so prevent it from happening
+	if (RulerData.RightMargin < 0) RulerData.RightMargin = 0;
 	OnFieldChange(RightMarginA);
 	ForceRulerRedraw();
 }
@@ -3567,7 +3616,6 @@ INT32 TextInfoBarOp::GetLogicalStoryWidth(TextStory* pStory)
 
 BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 {
-	TRACEUSER("wuerthne", _T("UpdateRulerBar"));
 	BOOL changed = FALSE;
 
 	// first of all, check whether we want to change the ruler origin
@@ -3577,7 +3625,6 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 	if (pFocusStory)
 	{
 		// there is a focus story, so the ruler should adapt to it
-		TRACEUSER("wuerthne", _T("Focus story present"));
 		ShouldWeClaimRuler = TRUE;
 		// DocRect StoryBounds=pFocusStory->GetBoundingRect();
 		// DocCoord TopLeft(StoryBounds.lo.x, StoryBounds.hi.y);
@@ -3594,6 +3641,11 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 		Node* pNode = pSelection->FindFirst();
 		while (pNode != NULL)
 		{
+			// we might have text nodes selected, so find their text story
+			while (IS_A(pNode, TextLine) || pNode->IsKindOf(CC_RUNTIME_CLASS(VisibleTextNode)))
+			{
+				pNode = pNode->FindParent();
+			}
 			if (IS_A(pNode, TextStory))
 			{
 				TextStory* pStory = (TextStory*)pNode;
@@ -3617,7 +3669,6 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 
 	if (ShouldWeClaimRuler)
 	{
-		TRACEUSER("wuerthne", _T("claim ruler"));
 		if (RulerData.IsRulerOriginClaimed)
 		{
 			// we have already claimed the ruler, is it for the same origin?
@@ -3776,6 +3827,38 @@ BOOL TabStopDragOp::Init()
 
 /********************************************************************************************
 
+>	TabStopDragOp::TabStopDragOp()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	23/07/06
+	Purpose:	Constructor
+
+********************************************************************************************/
+
+TabStopDragOp::TabStopDragOp(): CursorStackID(TABSTOPDRAG_CURSORID_UNSET),
+								m_pTabCursor(NULL), m_pDelCursor(NULL), m_pParam(NULL)
+{
+}
+
+/********************************************************************************************
+
+>	TabStopDragOp::~TabStopDragOp()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	23/07/06
+	Purpose:	Destructor
+
+********************************************************************************************/
+
+TabStopDragOp::~TabStopDragOp()
+{
+	if (m_pTabCursor) delete m_pTabCursor;
+	if (m_pDelCursor) delete m_pDelCursor;
+	if (m_pParam) delete m_pParam;
+}
+
+/********************************************************************************************
+
 >	static OpState TabStopDragOp::GetState(String_256* Description, OpDescriptor*)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
@@ -3838,24 +3921,204 @@ void TabStopDragOp::DoDrag(Spread* pThisSpread)
 		return;
 	}
 
-	Ordinate = m_pParam->m_StartPos.x;
+	Ordinate = m_pParam->StartPos.x;
 	TRACEUSER("wuerthne", _T("starting drag at %d"), Ordinate);
 
-	if (m_pCursor == NULL)
-	{
-		m_pCursor = new Cursor(TOOLID_TEXT,_R(IDCSR_TEXT_TAB));
-		
-		if (m_pCursor != NULL)
-			CursorStackID = CursorStack::GPush(m_pCursor);
-	}
+	if (m_pTabCursor != NULL) delete m_pTabCursor;
 
-	//##UpdateStatusLine();
+	ResourceID CursorID = _R(IDCSR_TEXT_LEFTTAB);
+	switch(m_pParam->DragType)
+	{
+		case DragTabStop: case DragNew:
+			switch(m_pParam->DraggedTabStop.GetType())
+			{
+				case RightTab:
+					CursorID = _R(IDCSR_TEXT_RIGHTTAB);
+					break;
+				case CentreTab:
+					CursorID = _R(IDCSR_TEXT_CENTTAB);
+					break;
+				case DecimalTab:
+					CursorID = _R(IDCSR_TEXT_DECTAB);
+					break;
+				default:
+					break;
+			}
+			break;
+		case DragLeftMargin:
+			CursorID = _R(IDCSR_TEXT_LEFTMAR);
+			break;
+		case DragRightMargin:
+			CursorID = _R(IDCSR_TEXT_RIGHTMAR);
+			break;
+		case DragFirstIndent:
+			CursorID = _R(IDCSR_TEXT_FIRSTIND);
+			break;
+		default:
+			break;
+	}
+	m_pTabCursor = new Cursor(TOOLID_TEXT, CursorID);
+	
+	if (m_pTabCursor != NULL)
+		CursorStackID = CursorStack::GPush(m_pTabCursor);
+	m_TabCursorShown = TRUE;
 
 	// Tell the Dragging system to start a drag operation
 	// We would like to use DRAGTYPE_DEFERRED here, but unfortunately, that also scrolls
 	// vertically, which is very much in the way. So, until there is something like
 	// DRAGTYPE_DEFERRED_HORIZONTAL, disable auto-scrolling.
 	StartDrag(DRAGTYPE_NOSCROLL);
+
+	// show the mouse follower at the (possibly snapped) starting position
+	// and update the status text
+	m_CurrentStatusTextID = 0;
+	UpdateStatusLineAndPos(&m_pParam->StartPos, pSpread);
+	// Temporary fix: The status bar does not want to show this message, so at least
+	// make sure that the text is updated after first mouse move
+	m_CurrentStatusTextID = 0;
+}
+
+/***********************************************************************************************
+
+>	void TabStopDragOp::UpdateStatusLineAndPos(UserCoord* DragPos, Spread* pSpread)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	25/07/06
+	Inputs:		DragPos - mouse position (in tool coords, i.e., user coords with the tool
+				origin applied)
+				pSpread - the current spread
+	Purpose:    Display appropriate status text and update displayed coordinates
+
+***********************************************************************************************/
+void TabStopDragOp::UpdateStatusLineAndPos(UserCoord* DragPos, Spread* pSpread)
+{
+	DocView *pDocView = DocView::GetCurrent();
+	// NB - to fool the snapping code we transform our user coords with origin applied
+	//      to spread coordinates and then let it snap, then we apply the tool origin
+	//      in the opposite direction, i.e., the origin shift is only applied for the
+	//      snapping operation and we end up with normal spread coordinates that can
+	//      be passed to the status line
+	DocCoord VirtualSpreadCoords = DragPos->ToSpread(pSpread);
+	if (pDocView->GetSnapToGridState())
+		pDocView->ForceSnapToGrid(pSpread, &VirtualSpreadCoords);
+	DocCoord PointerPos = VirtualSpreadCoords;
+	PointerPos.x += TextInfoBarOp::GetRulerOrigin();
+
+	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
+	if (pStatusLine)
+	{
+		// always pass Snap=FALSE otherwise the pointer changes to the "snapped" pointer
+		pStatusLine->UpdateMousePosAndSnap(&PointerPos, pSpread, pDocView, FALSE);
+		ResourceID ID = GetStatusLineID();
+		if (ID != m_CurrentStatusTextID)
+		{
+			// put up some status line help
+			TRACEUSER("wuerthne", _T("Resource ID is %d"), ID);
+			m_CurrentStatusTextID = ID;
+			String_256 Str;
+			if (Str.Load(ID))
+			{
+				TRACEUSER("wuerthne", _T("updating status line %s"), (TCHAR*)Str);
+				pStatusLine->UpdateText(&Str, TRUE);
+			}
+		}
+	}
+}
+
+/***********************************************************************************************
+
+>	ResourceID TabStopDragOp::GetStatusLineID()
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	25/07/06
+	Purpose:    Return resource ID appropriate for current drag (and mouse on/off ruler status)
+
+***********************************************************************************************/
+ResourceID TabStopDragOp::GetStatusLineID()
+{
+	UINT32 IDS = _R(IDS_TEXTTOOL_DRAGTABSTOP);
+	switch(m_pParam->DragType)
+	{
+		case DragLeftMargin:
+			IDS = _R(IDS_TEXTTOOL_DRAGLEFTMARGIN);
+			break;
+		case DragRightMargin:
+			IDS = _R(IDS_TEXTTOOL_DRAGRIGHTMARGIN);
+			break;
+		case DragFirstIndent:
+			IDS = _R(IDS_TEXTTOOL_DRAGFIRSTINDENT);
+			break;
+		case DragTabStop:
+			if (m_TabCursorShown)
+				IDS = _R(IDS_TEXTTOOL_DRAGTABSTOP);
+			else
+				IDS = _R(IDS_TEXTTOOL_DELTABSTOP);
+			break;
+		case DragNew:
+			if (m_TabCursorShown)
+				IDS = _R(IDS_TEXTTOOL_CREATETABSTOP);
+			else
+				IDS = _R(IDS_TEXTTOOL_CANCELTABSTOP);
+			break;
+	}
+	return IDS;
+}
+
+/***********************************************************************************************
+
+>	void TabStopDragOp::DragPointerMove(DocCoord PointerPos, ClickModifiers ClickMods, Spread*,
+										BOOL bSolidDrag)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	23/07/06
+	Inputs:		PointerPos        = current mouse coords
+				ClickMods         = modifiers
+				pSpread           = the spread
+				bSolidDrag        = whether the drag is solid
+	Purpose:    Called when the mouse moves during a drag
+
+***********************************************************************************************/
+
+void TabStopDragOp::DragPointerMove(DocCoord PointerPos, ClickModifiers ClickMods, Spread* pSpread,
+									BOOL bSolidDrag)
+{
+	// find out whether we need to change the mouse cursor
+	if (m_pParam->DragType == DragNew || m_pParam->DragType == DragTabStop)
+	{
+		if (IsMouseOverRuler())
+		{
+			// the mouse is over the ruler - are we showing the correct "drag tab" cursor?
+			if (!m_TabCursorShown && m_pTabCursor)
+			{
+				// no, so show it
+				CursorStack::GSetTop(m_pTabCursor, CursorStackID);
+				m_TabCursorShown = TRUE;
+			}
+		}
+		else
+		{
+			// the mouse is not over the ruler - are we showing the correct "delete tab" cursor?
+			if (m_TabCursorShown)
+			{
+				// no, so show it
+				if (!m_pDelCursor)
+				{
+					m_pDelCursor = new Cursor(TOOLID_TEXT, _R(IDCSR_TEXT_DELTAB));
+				}
+				if (m_pDelCursor)
+				{
+					CursorStack::GSetTop(m_pDelCursor, CursorStackID);
+					m_TabCursorShown = FALSE;
+				}
+			}
+		}
+	}
+	
+	// we update the mouse follower - we need to make sure that snapping is done in
+	// our tool space (i.e., in text ruler coordinates), not in document space
+	UserCoord UserPos = PointerPos.ToUser(pSpread);
+	UserPos.x -= TextInfoBarOp::GetRulerOrigin();
+	UpdateStatusLineAndPos(&UserPos, pSpread);
 }
 
 /***********************************************************************************************
@@ -3873,7 +4136,7 @@ void TabStopDragOp::DoDrag(Spread* pThisSpread)
 		
 ***********************************************************************************************/
 
-void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, Spread*, BOOL Success,
+void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, Spread* pSpread, BOOL Success,
 								 BOOL bSolidDrag)
 {
 	TRACEUSER("wuerthne", _T("tab stop drag ended"));
@@ -3881,37 +4144,38 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 	TextInfoBarOp::TabStopDragFinished();
 	if (Success)
 	{
-		DocView::SnapCurrent(pSpread,&PointerPos);
+		DocView *pDocView = DocView::GetCurrent();
 
+		// we need to snap in tool space, i.e., text ruler space
 		UserCoord UserPos = PointerPos.ToUser(pSpread);
 		UserPos.x -= TextInfoBarOp::GetRulerOrigin();
+		DocCoord VirtualSpreadCoords = UserPos.ToSpread(pSpread);
+		if (pDocView->GetSnapToGridState())
+			pDocView->ForceSnapToGrid(pSpread, &VirtualSpreadCoords);
+		UserPos = VirtualSpreadCoords.ToUser(pSpread);
 		Ordinate = UserPos.x;
 		TRACEUSER("wuerthne", _T("with success at %d"), Ordinate);
 		
-		switch(m_pParam->m_DragType)
+		switch(m_pParam->DragType)
 		{
 			case DragNew:
 				if (IsMouseOverRuler())
 				{
 					TextInfoBarOp::DoAddTabStop(Ordinate);
 				}
-				else
-				{
-					// do nothing (apart from redrawing the ruler bar, so the implicit
-					// tabs will be displayed again)
-					TextInfoBarOp::ForceRulerRedraw();
-				}
+				// if the mouse is not over the ruler, we simply refrain from adding a tab stop
+				// so there is nothing to do
 				break;
 			case DragTabStop:
 				if (IsMouseOverRuler())
 				{
-					TxtTabStop NewTabStop(m_pParam->m_DraggedTabStop);
+					TxtTabStop NewTabStop(m_pParam->DraggedTabStop);
 					NewTabStop.SetPosition(Ordinate);
 					TextInfoBarOp::DoAddTabStop(NewTabStop);
 				}
 				else
 				{
-					// delete the tab stop; we can do that by simply applying the shown
+					// delete the dragged tab stop; we can do that by simply applying the shown
 					// ruler - we have removed the tab stop from the shown ruler when the
 					// drag started
 					TextInfoBarOp::DoApplyShownRuler();
@@ -3928,7 +4192,10 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 				break;
 		}
 	}
-
+	// in any case, we redraw the ruler - this is necessary if the drag was aborted, too, because
+	// we want to restore the dragged tab stop or margin marker and we also want to restore the
+	// implicit tab stops
+	TextInfoBarOp::ForceRulerRedraw();
 	// End the Drag
 	EndDrag();
 
@@ -3939,10 +4206,15 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 		CursorStackID = TABSTOPDRAG_CURSORID_UNSET;
 	}
 
-	if (m_pCursor != NULL)
+	if (m_pTabCursor != NULL)
 	{
-		delete m_pCursor;
-		m_pCursor = NULL;
+		delete m_pTabCursor;
+		m_pTabCursor = NULL;
+	}
+	if (m_pDelCursor != NULL)
+	{
+		delete m_pDelCursor;
+		m_pDelCursor = NULL;
 	}
 	if (m_pParam != NULL)
 	{

@@ -365,6 +365,10 @@ public:
 	// Allow the current tool to render additional blobs on the Ruler
 	virtual void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
 
+	// Allow the current tool to change the ruler help text
+	virtual BOOL GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+										Spread* pSpread, RulerBase* pRuler);
+
 	// Allow the Current Tool to handle Ruler clicks
 	virtual BOOL OnRulerClick( UserCoord PointerPos,
 							   ClickType Click,

@@ -311,7 +311,6 @@ public:
 	virtual BOOL IsASpace()        { return Ch==' '; }
 	virtual BOOL IsAVisibleSpace() { return iswspace(Ch); }
 	virtual BOOL IsAHyphen()       { return Ch=='-'; }
-	virtual BOOL IsADecimalPoint() { return Ch=='.'; }     // needs to be internationalized
 
 	virtual WCHAR GetUnicodeValue() { return Ch; }
 	virtual void SetUnicodeValue(WCHAR Char) { Ch = Char; }

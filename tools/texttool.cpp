@@ -1018,7 +1018,28 @@ BOOL TextTool::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifier
 	return TextInfoBarOp::OnRulerClick(PointerPos, Click, Mods, pSpread, pRuler);
 }
 
+/********************************************************************************************
 
+>   BOOL TextTool::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+										  Spread* pSpread, RulerBase* pRuler)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	25/07/06
+	Inputs:     PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Outputs:    Status line text written to pText (if returning TRUE)
+	Returns:    TRUE if the text has been set
+	Purpose:    Allows the tool to set the status line text for the ruler
+
+********************************************************************************************/
+
+BOOL TextTool::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+									  Spread* pSpread, RulerBase* pRuler)
+{
+	if (!TextInfoBarOp::IsRulerOriginClaimed()) return FALSE;
+	return TextInfoBarOp::GetRulerStatusLineText(pText, PointerPos, pSpread, pRuler);
+}
 
 /********************************************************************************************
 
@@ -1144,6 +1165,11 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 		TRACEUSER("wuerthne", _T("not char"));
 		return pKeyPress->GetUnicode() == _T(' ');          // always claim the Space key (tool switch)
 	}
+
+	// temporary fix: do not allow function keys to insert funny Unicode characters
+	// (e.g., F8 to select text tool inserts an s circumflex character
+	if (pKeyPress->GetVirtKey() >= CAMKEY(F1) && pKeyPress->GetVirtKey() <= CAMKEY(F12))
+		return FALSE;
 
 	if ( (!pKeyPress->IsAlternative()) ||				    // Alt not down
 		 (pKeyPress->IsAlternative() && pKeyPress->IsExtended()) || // Right alt down
@@ -1399,16 +1425,13 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			break;
  		case CAMKEY(W):
 			// Swap case
-			TRACEUSER("wuerthne", _T("W pressed"));
 			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust() )
 			{
-				TRACEUSER("wuerthne", _T("Ctrl-W pressed"));
 				if (IsNonCharEvent && TextStory::GetFocusStory()->GetCaret()->FindNextTextCharInStory() != NULL)
 				{
 					OpTextFormat* pOp = new OpTextFormat();
 					if (pOp != NULL)
 					{
-						TRACEUSER("wuerthne", _T("DoSwapCase"));
 						pOp->DoSwapCase();
 					}
 					else

@@ -1124,10 +1124,13 @@ BOOL FormatState::FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsL
 	Author:		Martin Wuerthner <xara@mw-software.com>			
 	Created:	23/06/06
 	Inputs:		CharWidth - the amount to advance by
+				IsADecimalPoint - TRUE if the currently active tab is a decimal tab and the
+								  character to be formatted is its decimal point character
 	Purpose:	Account for a char with width CharWidth to be fitted into the current line.
+	See also:   TextLine::FindBreakChar for a description of the formatting algorithm used
 ********************************************************************************************/
 
-void FormatState::AdvanceBy(MILLIPOINT CharWidth)
+void FormatState::AdvanceBy(MILLIPOINT CharWidth, BOOL IsADecimalPoint)
 {
 	// Note: This routine may only update Width and RemainingSpace, otherwise
 	// the backtracking in IsAvailable() does not work as expected.
@@ -1150,7 +1153,8 @@ void FormatState::AdvanceBy(MILLIPOINT CharWidth)
 		// and the remainder to the right
 		Width += CharWidth - SpaceToLeftUsed;
 	}
-	else if ((ActiveTabType == RightTab || (ActiveTabType == DecimalTab && !DecimalPointFound))
+	else if ((ActiveTabType == RightTab || (ActiveTabType == DecimalTab && !DecimalPointFound
+											&& !IsADecimalPoint))
 			 && RemainingSpace > 0)
 	{
 		if (RemainingSpace >= CharWidth) RemainingSpace -= CharWidth;
@@ -1162,7 +1166,14 @@ void FormatState::AdvanceBy(MILLIPOINT CharWidth)
 	}
 	else
 	{
-		// last tab was left tab or decimal tab and we have already found the decimal point
+		// We end up here if:
+		// - the last tab was left tab, or
+		// - the last tab was a decimal tab and we have already found the decimal point, or
+		// - the last tab was a decimal tab and this is a decimal point character (NB. - the
+		//   decimal point is always formatted to the right of the tab position), or, finally,
+		// - this is any kind of tab and we have no more remaining space to the left of it
+		// In all these cases, we simply format the character to the right of the current position,
+		// which is the easiest thing to do anyway
 		Width += CharWidth;
 	}
 }
@@ -1174,10 +1185,12 @@ void FormatState::AdvanceBy(MILLIPOINT CharWidth)
 	Created:	23/06/06
 	Inputs:		CharWidth - the amount to advance by
 				IsATab - TRUE if the character to be fitted is a tab
+				IsADecimalPoint - TRUE if the currently active tab is a decimal tab and the
+								  character to be formatted is its decimal point character
 	Purpose:	Test whether a char with width CharWidth can be fitted into the current line.
 ********************************************************************************************/
 
-BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab)
+BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab, BOOL IsADecimalPoint)
 {
 	// If the full CharWidth still fits, then we can return TRUE straight away
 	// without having to look at the active tab type
@@ -1193,7 +1206,7 @@ BOOL FormatState::IsAvailable(MILLIPOINT CharWidth, BOOL IsATab)
 	// duplicating all the AdvanceBy code, we simply advance and backtrack.
 	MILLIPOINT OldWidth = Width;
 	MILLIPOINT OldRemainingSpace = RemainingSpace;
-	AdvanceBy(CharWidth);
+	AdvanceBy(CharWidth, IsADecimalPoint);
 	MILLIPOINT NewWidth = Width;
 	Width = OldWidth;
 	RemainingSpace = OldRemainingSpace;
@@ -1258,6 +1271,13 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositi
 	while(pVTN!=NULL)
 	{
 		BOOL IsATab = IS_A(pVTN, HorizontalTab);
+		BOOL IsADecimalPoint = FALSE;
+		if (State.ActiveTabType == DecimalTab && pVTN->IsATextChar())
+		{
+			// if the currently active tab is a decimal tab check whether we have hit a decimal point
+			// NB. - the decimal point character is stored in the tab stop
+			IsADecimalPoint = (((TextChar*)pVTN)->GetUnicodeValue() == State.DecimalPointChar);
+		}
 		if (IsATab)
 		{
 			TxtTabType ThisTabType;
@@ -1269,7 +1289,9 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositi
 
 			// find the next tab stop (always returns usable values - if there are no more
 			// tab stops on the ruler the routine assumes left tabs at equidistant positions)
-			TxtRulerAttribute::FindTabStopInRuler(mpRuler, State.Width, &ThisTabType, &ThisTabPos);
+			WCHAR DecimalPointChar;
+			TxtRulerAttribute::FindTabStopInRuler(mpRuler, State.Width, &ThisTabType, &ThisTabPos,
+												  &DecimalPointChar);
 			TabWidth = ThisTabPos - State.Width;
 			((HorizontalTab*)pVTN)->SetCharAdvance(TabWidth);
 			((HorizontalTab*)pVTN)->SetCharWidth(TabWidth);
@@ -1280,7 +1302,10 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositi
 				State.RemainingSpace = TabWidth;
 			}
 			if (ThisTabType == DecimalTab)
+			{
+				State.DecimalPointChar = DecimalPointChar;
 				State.DecimalPointFound = FALSE;
+			}
 			State.pLastTabVTN = pVTN;
 			State.ActiveTabType = ThisTabType;
 			State.ActiveTabPos  = ThisTabPos;
@@ -1296,16 +1321,16 @@ VisibleTextNode* TextLine::FindBreakChar(MILLIPOINT FitWidth, BOOL SetCharPositi
 			}
 			else if (pVTN->IsASpace())
 			{
-				State.AdvanceBy(pVTN->GetCharAdvance());
+				State.AdvanceBy(pVTN->GetCharAdvance(), IsADecimalPoint);
 				pBreakChar  = pVTN;
 			}
-			else if (!CharOnLine || State.IsAvailable(pVTN->GetCharWidth(), IsATab))
+			else if (!CharOnLine || State.IsAvailable(pVTN->GetCharWidth(), IsATab, IsADecimalPoint))
 			{
 				if (IsATab) State.Width += pVTN->GetCharAdvance();
-				else State.AdvanceBy(pVTN->GetCharAdvance());
+				else State.AdvanceBy(pVTN->GetCharAdvance(), IsADecimalPoint);
 				if (pVTN->IsAHyphen())
 					pBreakChar = pVTN;
-				if (State.ActiveTabType == DecimalTab && !State.DecimalPointFound && pVTN->IsADecimalPoint())
+				if (State.ActiveTabType == DecimalTab && !State.DecimalPointFound && IsADecimalPoint)
 					State.DecimalPointFound = TRUE;
 			}
 			else

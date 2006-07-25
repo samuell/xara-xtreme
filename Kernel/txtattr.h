@@ -662,7 +662,7 @@ public:
 	void AddTabStop(TxtTabType Type, MILLIPOINT Position);
 	void AddTabStop(TxtTabType Type, MILLIPOINT Position, WCHAR DecimalPointChar, WCHAR TabFillerChar);
 	void AddTabStop(TxtTabStop TabStop);
-	void FindTabStop (MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos) const;
+	void FindTabStop (MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos, WCHAR* pDecimalPointChar) const;
 	const_TxtTabStopIterator begin() const { return Value->begin(); }
 	const_TxtTabStopIterator end() const { return Value->end(); }
 	TxtTabStopIterator begin() { return Value->begin(); }
@@ -671,7 +671,7 @@ public:
 
 	static BOOL Init();
 	static void FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT MinPos,
-								   TxtTabType* pType, MILLIPOINT* pPos);
+								   TxtTabType* pType, MILLIPOINT* pPos, WCHAR* pDecimalPointChar);
 	// the actual value is a pointer to a list of tab stops
 	// this means that we will have to take care when destructing/copying
 	// objects of this class

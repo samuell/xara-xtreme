@@ -1386,6 +1386,60 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_RULERHELP">
+					<label>Click to create a tab stop, drag markers to move them</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_CURRENTTABHELP">
+					<label>Click to change the type given to newly created tab stops</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_DRAGLEFTMARGIN">
+					<label>Move the mouse left and right to move the left margin</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_DRAGRIGHTMARGIN">
+					<label>Move the mouse left and right to move the right margin</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_DRAGFIRSTINDENT">
+					<label>Move the mouse left and right to move the first line indent</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_DRAGTABSTOP">
+					<label>Move the mouse left and right to move the tab stop</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_CREATETABSTOP">
+					<label>Move the mouse left and right to position the new tab stop</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_DELTABSTOP">
+					<label>Release the mouse button here to delete the tab stop</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_TEXTTOOL_CANCELTABSTOP">
+					<label>Release the mouse button here to cancel the new tab stop</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_TEXTTOOL_OVERDOCUMENT">
 					<label>Click to create a simple text object; Drag to create a text column</label>
 				</object>

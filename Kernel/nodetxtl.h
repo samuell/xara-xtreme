@@ -222,8 +222,9 @@ class FormatState: public CC_CLASS_MEMDUMP
 	// tab character position (AnchorPos) and the position of the tab stop to which it advances
 	// (ActiveTabPos). It is updated as text is formatted to the left of the tab stop.
 	MILLIPOINT       RemainingSpace;
-	// if the most recently encountered tab was a Decimal tab, keep track of whether we have
-	// met the decimal point already
+	// if the most recently encountered tab was a Decimal tab, keep track of what its decimal point
+	// character is and whether we have met the decimal point already
+	WCHAR            DecimalPointChar;
 	BOOL             DecimalPointFound;
 
 	// default constructor (no need to initialise RemainingSpace and DecimalPointFound)
@@ -236,9 +237,9 @@ class FormatState: public CC_CLASS_MEMDUMP
 		ExtraOnChars(_ExtraOnChars), ExtraOnSpaces(_ExtraOnSpaces),
 		Width(Indent), ActiveTabType(LeftTab), ActiveTabPos(0), 
 		pLastTabVTN(NULL), AnchorPos(Indent) {};
-	void AdvanceBy(MILLIPOINT Advance);
+	void AdvanceBy(MILLIPOINT Advance, BOOL IsADecimalPoint);
 	BOOL FinishTabSection(VisibleTextNode* pLastFormattedNode, BOOL IsLastTabSection);
-	BOOL IsAvailable(MILLIPOINT CharWidth, BOOL IsATab);
+	BOOL IsAvailable(MILLIPOINT CharWidth, BOOL IsATab, BOOL IsADecimalPoint);
 };
 
 /********************************************************************************************

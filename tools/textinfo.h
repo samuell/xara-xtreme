@@ -317,6 +317,8 @@ public:
 	static void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect);
 	static BOOL OnRulerClick(UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 							 Spread* pSpread, RulerBase* pRuler);
+	static BOOL GetRulerStatusLineText(String_256* pText, UserCoord PointerPos,
+									   Spread* pSpread, RulerBase* pRuler);
 
 	static void ForceRulerRedraw();
 	static void TabStopDragStarting(TabStopDragType);
@@ -327,7 +329,6 @@ public:
 	static void DoChangeLeftMargin(MILLIPOINT Ordinate);
 	static void DoChangeRightMargin(MILLIPOINT Ordinate);
 	static void DoChangeFirstIndent(MILLIPOINT Ordinate);
-
 
 public:
 // the current infobar object - allow static member access
@@ -504,10 +505,10 @@ class TabStopDragOpParam: public OpParam
 {
 public:
 	TabStopDragOpParam(TabStopDragType Type, TxtTabStop DraggedTabStop, UserCoord Pos):
-		m_DragType(Type), m_DraggedTabStop(DraggedTabStop), m_StartPos(Pos) {}
-	TabStopDragType m_DragType;
-	TxtTabStop      m_DraggedTabStop;   // only for Type == DragTabStop
-	UserCoord       m_StartPos;
+		DragType(Type), DraggedTabStop(DraggedTabStop), StartPos(Pos) {}
+	TabStopDragType DragType;
+	TxtTabStop      DraggedTabStop;   // only for Type == DragNew or DragTabStop
+	UserCoord       StartPos;
 };
 
 #define OPTOKEN_TABSTOPDRAG _T("TabStopDrag")
@@ -526,14 +527,17 @@ class TabStopDragOp: public Operation
 {
 	CC_DECLARE_DYNCREATE(TabStopDragOp)
 public:
-	TabStopDragOp(): m_pCursor(NULL), m_pParam(NULL) {}
-	~TabStopDragOp() { if (m_pCursor) delete m_pCursor; if (m_pParam) delete m_pParam; }
+	TabStopDragOp();
+	~TabStopDragOp();
 
 	static BOOL Init();
 	static OpState GetState(String_256* Description, OpDescriptor*);
 
 	// The main entry point
 	void DoWithParam(OpDescriptor *pOpDesc, OpParam* pParam);
+    void DragPointerMove( DocCoord PointerPos, ClickModifiers ClickMods, Spread*, BOOL bSolidDrag);
+	ResourceID GetStatusLineID();
+	void UpdateStatusLineAndPos(UserCoord* ToolPos, Spread* pSpread);
 	virtual void DragFinished(	DocCoord PointerPos, 
 								ClickModifiers ClickMods, Spread*, 
 								BOOL Success, BOOL bSolidDrag);
@@ -545,7 +549,10 @@ private:
 	Spread*    pSpread;
 	MILLIPOINT Ordinate;
 	INT32	   CursorStackID;
-	Cursor*	   m_pCursor;
+	Cursor*	   m_pTabCursor;
+	Cursor*    m_pDelCursor;
+	BOOL       m_TabCursorShown;
+	ResourceID m_CurrentStatusTextID;
 	TabStopDragOpParam* m_pParam;
 };
 

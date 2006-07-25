@@ -214,6 +214,7 @@ public:
 	void RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsBackground);
 	BOOL OnRulerClick( UserCoord PointerPos, ClickType Click, ClickModifiers Mods,
 					   Spread* pSpread, RulerBase* pRuler);
+	BOOL GetRulerStatusLineText(String_256* pText, UserCoord PointerPos, Spread* pSpread, RulerBase* pRuler);
 
 
 	BOOL OnKeyPress(KeyPress* pKeyPress);

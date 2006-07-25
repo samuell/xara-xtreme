@@ -3147,35 +3147,39 @@ void TxtRulerAttribute::AddTabStop(TxtTabType Type, MILLIPOINT Position, WCHAR D
 
 /********************************************************************************************
 
->	void TxtRulerAttribute::FindTabStop(MILLIPOINT width, TxtTabType* pType, MILLIPOINT* pPos)
+>	void TxtRulerAttribute::FindTabStop(MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos,
+										WCHAR* pDecimalPointChar) const
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	21/6/06
 	Inputs:		MinPos - minimum position of the tab stop
-	Outputs:	stores type in pType and position in pPos
+	Outputs:	stores the tab stop's type in pType, its position in pPos and its decimal point
+				character in pDecimalPointChar (if applicable, else undefined)
 	Purpose:	Finds a tab stop at the given position or higher
 
 ********************************************************************************************/
-void TxtRulerAttribute::FindTabStop(MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos) const
+void TxtRulerAttribute::FindTabStop(MILLIPOINT MinPos, TxtTabType* pType, MILLIPOINT* pPos,
+									WCHAR* pDecimalPointChar) const
 {
-	FindTabStopInRuler(Value, MinPos, pType, pPos);
+	FindTabStopInRuler(Value, MinPos, pType, pPos, pDecimalPointChar);
 }
 
 /********************************************************************************************
 
 >	void TxtRulerAttribute::FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT width, TxtTabType* pType,
-										MILLIPOINT* pPos)
+										MILLIPOINT* pPos, WCHAR *pDecimalPointChar)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	21/6/06
 	Inputs:		pRuler - the ruler list or NULL
 				MinPos - minimum position of the tab stop
-	Outputs:	stores type in pType and position in pPos
+	Outputs:	stores the tab stop's type in pType, its position in pPos and its decimal point
+				character in pDecimalPointChar (if applicable, else undefined)
 	Purpose:	Finds a tab stop at the given position or higher
 
 ********************************************************************************************/
 void TxtRulerAttribute::FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT MinPos, TxtTabType* pType,
-										   MILLIPOINT* pPos)
+										   MILLIPOINT* pPos, WCHAR *pDecimalPointChar)
 {
 	// we cope with pRuler being NULL, in which case we simply treat it as empty
 	if (pRuler)
@@ -3188,7 +3192,8 @@ void TxtRulerAttribute::FindTabStopInRuler(const TxtRuler* pRuler, MILLIPOINT Mi
 			if ((*It).GetPosition() > MinPos) {
 				*pType = (*It).GetType();
 				*pPos  = (*It).GetPosition();
-				
+				if ((*It).GetType() == DecimalTab)
+					*pDecimalPointChar = (*It).GetDecimalPointChar();
 				return;
 			}
 		}
@@ -7724,7 +7729,7 @@ void AttrTxtRuler::GetDebugDetails(StringBase* Str)
 	NodeAttribute::GetDebugDetails( Str );
 
 	String_256 TempStr;
-	TempStr._MakeMsg( TEXT("\r\nRulers="));
+	TempStr._MakeMsg( TEXT("\r\nRuler(#1%08x)="), Value.Value);
 	(*Str) += TempStr;
 	for (TxtTabStopIterator It = Value.begin(); It != Value.end(); ++It)
 	{

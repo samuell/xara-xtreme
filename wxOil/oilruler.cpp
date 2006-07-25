@@ -1014,7 +1014,10 @@ PORTNOTE("other","Removed reading of keyboard autorepeat rate")
 		ocoord.y = RenderWidth - point.y;
 	else
 		ocoord.x = RenderWidth - point.x;
-	return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
+	// pass only left clicks to the ruler
+	if (Button == MK_LBUTTON)
+		return pKernelRuler->OnRulerClick(ocoord, t, m_LastClickMods);
+	return FALSE;
 }
 
 
@@ -1160,7 +1163,7 @@ void OILRuler::OnMouseMove(wxMouseEvent& event)
 
 	Author:		Ed_Cornes (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/10/95
-	Inputs:		MousePos - position in window (not used)
+	Inputs:		MousePos - position in window
 				hWnd     - handle of window
 	Outputs:	pText    -
 	Returns:	TRUE if ptext hold valid text, else FALSE if not over a pane
@@ -1173,6 +1176,12 @@ BOOL OILRuler::GetStatusLineText(String_256* pText, WinCoord MousePos, CWindowID
 
 	if (this!=hWnd)
 		return FALSE;
+
+	// allow the current tool to set the status line if it claims the ruler
+	DocView* pDocView = m_pOwnerView->GetDocViewPtr();
+	OilCoord ocoord = ClientToOil(pDocView, MousePos);
+	if (pKernelRuler->GetStatusLineText(pText, ocoord))
+		return TRUE;
 
 	UINT32 StatusHelpID = IsHorizontal() ? _R(IDS_HRULER_SH) : _R(IDS_VRULER_SH);
 	return (pText->Load(StatusHelpID)!=0);

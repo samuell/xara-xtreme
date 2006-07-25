@@ -179,13 +179,6 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	DocRect drect = pUpdateOilRect->ToDoc(pSpread,pDocView).ToSpread(pSpread,pDocView);
 	UserRect UpdateRect = drect.ToUser(pSpread);
 
-	MILLIPOINT LoLimit = GetOrd(pRD->PasteBoardUserRect.lo);
-	MILLIPOINT HiLimit = GetOrd(pRD->PasteBoardUserRect.hi);
-	if (GetOrd(UpdateRect.lo)<LoLimit) UpdateRect.lo=MakeCoord(LoLimit);
-	if (GetOrd(UpdateRect.hi)>HiLimit) UpdateRect.hi=MakeCoord(HiLimit);
-	if (GetOrd(UpdateRect.hi)<GetOrd(UpdateRect.lo))
-		return TRUE;	// no region to redraw
-
 	// Give the current tool the chance to modify the UserCoord displayed by the ruler
 	UserCoord Offsets(0, 0);
 	if (Tool::GetCurrent())
@@ -196,6 +189,13 @@ BOOL RulerBase::Redraw(OilRect* pUpdateOilRect)
 	UpdateRect.lo.y -= Offsets.y;
 	UpdateRect.hi.x -= Offsets.x;
 	UpdateRect.hi.y -= Offsets.y;
+
+	MILLIPOINT LoLimit = GetOrd(pRD->PasteBoardUserRect.lo);
+	MILLIPOINT HiLimit = GetOrd(pRD->PasteBoardUserRect.hi);
+	if (GetOrd(UpdateRect.lo)<LoLimit) UpdateRect.lo=MakeCoord(LoLimit);
+	if (GetOrd(UpdateRect.hi)>HiLimit) UpdateRect.hi=MakeCoord(HiLimit);
+	if (GetOrd(UpdateRect.hi)<GetOrd(UpdateRect.lo))
+		return TRUE;	// no region to redraw
 
 	// allow the current tool to render background blobs
 	if (Tool::GetCurrent())
@@ -357,7 +357,6 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 	
 	// Find the spread in which the click happened
 	Spread *pSpread = pRulerPair->GetpSpread();
-	DocView* pDocView = pRulerPair->GetpDocView();
 
 	if (pSpread == NULL)
 	{
@@ -371,8 +370,31 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 	// must make the choice about setting the selected spread IFF it handles the click
 //	Document::SetSelectedViewAndSpread(pDoc, this, pSpread);
 
+	UserCoord UserPos = OilToToolCoords(PointerPos, pSpread);
+	if (Tool::GetCurrent())
+		return Tool::GetCurrent()->OnRulerClick(UserPos, Click, Mods, pSpread, this);
+
+	return FALSE;
+}
+
+/********************************************************************************************
+
+> 	BOOL RulerBase::GetStatusLineText(String_256* pText, OilCoord PointerPos)
+
+    Author: 	Martin Wuerthner <xara@mw-software.com>
+    Created:	25/07/06
+	Inputs:		PointerPos - pointer position in Oil coords
+	Returns:    TRUE if text was set
+	Outputs:	Status text in pText (if return value is TRUE), else undefined
+    Purpose:    Allows tools to override the ruler help text
+                   			                                     
+********************************************************************************************/
+UserCoord RulerBase::OilToToolCoords(OilCoord PointerPos, Spread* pSpread)
+{
+	DocView* pDocView = pRulerPair->GetpDocView();
+
 	// First of all convert the OilRect into device coords
-	DocCoord DocPos = PointerPos.ToDoc( pSpread, pRulerPair->GetpDocView() );
+	DocCoord DocPos = PointerPos.ToDoc(pSpread, pDocView);
 
 	// Convert the coord to spread coords
 	pSpread->DocCoordToSpreadCoord(&DocPos);
@@ -390,12 +412,33 @@ BOOL RulerBase::OnRulerClick(OilCoord PointerPos, ClickType Click, ClickModifier
 	UserCoord Offsets(0, 0);
 	if (Tool::GetCurrent())
 		Tool::GetCurrent()->GetRulerOrigin(pSpread, &Offsets);
-	UserPos.translate(-Offsets.x, -Offsets.y);
 
-	if (Tool::GetCurrent())
-		return Tool::GetCurrent()->OnRulerClick(UserPos, Click, Mods, pSpread, this);
+	// Apply the tool origin, but only in the significant direction
+	if (IsHorizontal())
+		UserPos.x -= Offsets.x;
+	else
+		UserPos.y -= Offsets.y;
+	return UserPos;
+}
 
-	return FALSE;
+/********************************************************************************************
+
+> 	BOOL RulerBase::GetStatusLineText(String_256* pText, OilCoord PointerPos)
+
+    Author: 	Martin Wuerthner <xara@mw-software.com>
+    Created:	25/07/06
+	Inputs:		PointerPos - pointer position in Oil coords
+	Returns:    TRUE if text was set
+	Outputs:	Status text in pText (if return value is TRUE), else undefined
+    Purpose:    Allows tools to override the ruler help text
+                   			                                     
+********************************************************************************************/
+
+BOOL RulerBase::GetStatusLineText(String_256* pText, OilCoord PointerPos)
+{
+	Spread *pSpread = pRulerPair->GetpSpread();
+	UserCoord UserPos = OilToToolCoords(PointerPos, pSpread);
+	return (Tool::GetCurrent()) ? Tool::GetCurrent()->GetRulerStatusLineText(pText, UserPos, pSpread, this) : FALSE;
 }
 
 /********************************************************************************************

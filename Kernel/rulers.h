@@ -137,11 +137,19 @@ public:
 	virtual UserCoord  MakeCoord(const MILLIPOINT ord)   = 0;
 	virtual BOOL    IsHorizontal()                       = 0;
 
+	/////////////////////
+	// OilRuler interface
+
 	// Called by the OIL ruler when the ruler needs to be redrawn.
 	// We do all the platform independent computations and call the
 	// OIL ruler back to render specific things (e.g., graticules)
 	BOOL Redraw(OilRect* pOilRect);
+	virtual BOOL GetStatusLineText(String_256* pText, OilCoord PointerPos);
+	virtual BOOL OnRulerClick(OilCoord, ClickType, ClickModifiers);
 
+	/////////////////
+	// Tool interface
+	
 	// For use by tools that wish to render extra things on the ruler
 	// (by responding to the RenderRulerBlobs method)
 	BOOL HighlightSection(MILLIPOINT ord_lo, MILLIPOINT ord_hi);
@@ -150,9 +158,8 @@ public:
 	// Drag events will be dispatched via OnRulerClick.
 	BOOL StartToolDrag(ClickModifiers Mods, UserCoord, String_256* pOpToken, OpParam* pParam);
 
-	virtual BOOL OnRulerClick(OilCoord, ClickType, ClickModifiers);
-
 protected:
+	UserCoord OilToToolCoords(OilCoord PointerPos, Spread* pSpread);
 	RulerPair* pRulerPair;
 	OILRuler*  pOILRuler;
 };

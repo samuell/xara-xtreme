@@ -1571,6 +1571,27 @@ void Tool_v1::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect, BOOL IsB
 	// as you enter and leave your tool.
 }
 
+/********************************************************************************************
+
+>	virtual BOOL Tool_v1::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos, Spread* pSpread,
+												 RulerBase* pRuler)
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	25/07/2006
+	Inputs:		PointerPos	- user coordinates of click on ruler (relative to origin set by tool)
+				pSpread		- pointer to spread upon which click occurred
+				pRuler		- pointer to ruler which generated click
+	Outputs:	pText - status line text set (if return value is TRUE)
+	Returns:	TRUE if the text has been set
+	Purpose:	Gives the current tool the chance to change the status line text displayed for the ruler
+
+********************************************************************************************/
+
+BOOL Tool_v1::GetRulerStatusLineText(String_256* pText, UserCoord PointerPos, Spread* pSpread,
+									 RulerBase* pRuler)
+{
+	// Override me if you want!
+	return FALSE;
+}
 
 /********************************************************************************************
 

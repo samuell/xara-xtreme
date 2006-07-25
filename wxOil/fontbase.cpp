@@ -823,7 +823,7 @@ BOOL OILFontMan::GetCharPath(FontClass fclass,
 							 UINT32* pNumCoords,
 							 wxDC *pDC)
 {
-	TRACEUSER("wuerthne",_T("OILFontMan::GetCharPath"));
+	// TRACEUSER("wuerthne",_T("OILFontMan::GetCharPath"));
 	BOOL Success=FALSE;
 	switch (fclass)
 	{

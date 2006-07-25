@@ -732,7 +732,7 @@ static String_64* GetFacenameFromCharDesc(CharDescription &ChDesc)
 	ERROR2IF(pFontDataItem==NULL,FALSE,"FTFontMan::GetCharOutline could not find cached font");
   	ENUMLOGFONT*    pEnumLogFont  = pFontDataItem->GetEnumLogFont();
 	ERROR2IF(pEnumLogFont==NULL,FALSE,"FTFontMan::GetCharOutline could not find cached EnumLogFont");
-	DumpString64User("wuerthne", _T("GetFacenameFromCharDesc returning"), &pEnumLogFont->elfLogFont.FaceName);
+	// DumpString64User("wuerthne", _T("GetFacenameFromCharDesc returning"), &pEnumLogFont->elfLogFont.FaceName);
 	return &pEnumLogFont->elfLogFont.FaceName;
 }
 
@@ -1222,7 +1222,7 @@ BOOL FTFontMan::GetCharOutline(CharDescription& ChDesc,
 							   UINT32* pNumCoords,
 							   wxDC* pDC)
 {
-	TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline %04x"), ChDesc.GetCharCode());
+	// TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline %04x"), ChDesc.GetCharCode());
 	// Check some input parameters
 	ERROR2IF(ppCoords==NULL,FALSE,"FTFontMan::GetCharOutline ppCoords==NULL");
 	ERROR2IF(ppVerbs==NULL,FALSE,"FTFontMan::GetCharOutline ppVerbs==NULL");
@@ -1245,8 +1245,8 @@ BOOL FTFontMan::GetCharOutline(CharDescription& ChDesc,
 
 	FT_GlyphSlotRec *pGlyph = pFreeTypeFace->glyph;
 
-	TRACEUSER("wuerthne", _T("found outline, %d contours, %d points"),
-			  pGlyph->outline.n_contours, pGlyph->outline.n_points);
+	// TRACEUSER("wuerthne", _T("found outline, %d contours, %d points"),
+	//		  pGlyph->outline.n_contours, pGlyph->outline.n_points);
 	// finally, we have the glyph we want, so transfer it to the outlines cache
 	OILFontMan::InitialiseOutlineCache();
 
@@ -1272,7 +1272,7 @@ BOOL FTFontMan::GetCharOutline(CharDescription& ChDesc,
 	OILFontMan::FinaliseOutlineCache();
 	pango_fc_font_unlock_face(pPangoFcFont);
 	(*pNumCoords) = OILFontMan::GetOutlineCache(ppCoords,ppVerbs);
-	TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline Returning %d coords"), *pNumCoords);
+	// TRACEUSER("wuerthne", _T("FTFontMan::GetCharOutline Returning %d coords"), *pNumCoords);
 	return TRUE;
 }
 
@@ -1299,7 +1299,7 @@ OUTLINETEXTMETRIC* FTFontMan::GetOutlineTextMetric(LOGFONT *pLogFont)
 	String_64* pFaceName = &pLogFont->FaceName;
 	PangoFcFont* pPangoFcFont;
 	FT_Face pFreeTypeFace;
-	DumpString64User("wuerthne", _T("FTFontMan::GetOutlineTextMetric"), pFaceName);
+	// DumpString64User("wuerthne", _T("FTFontMan::GetOutlineTextMetric"), pFaceName);
 
 	// first of all, retrieve the underlying font information
 	if (!GetPangoFcFontAndFreeTypeFaceForFaceName(pFaceName, &pPangoFcFont, &pFreeTypeFace)) return NULL;
@@ -1325,7 +1325,7 @@ OUTLINETEXTMETRIC* FTFontMan::GetOutlineTextMetric(LOGFONT *pLogFont)
 	// will free the structure.
 	OUTLINETEXTMETRIC* pMetric = new OUTLINETEXTMETRIC;
 	pMetric->otmPanoseNumber = *((struct PANOSE*)&pOS2_Table->panose);
-	TRACEUSER("wuerthne", _T("returning valid OUTLINEFONTMETRIC structure"));
+	// TRACEUSER("wuerthne", _T("returning valid OUTLINEFONTMETRIC structure"));
 
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return pMetric;
@@ -1350,14 +1350,14 @@ BOOL FTFontMan::GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32*
 {
     PangoFcFont* pPangoFcFont;
 	FT_Face pFreeTypeFace;
-	TRACEUSER("wuerthne", _T("GetAscentDescent"));
+	// TRACEUSER("wuerthne", _T("GetAscentDescent"));
 	if (!GetPangoFcFontAndFreeTypeFaceForCharDesc(ChDesc, &pPangoFcFont, &pFreeTypeFace)) return FALSE;
 
 	// get the design size
 	INT32 DesignSize = pFreeTypeFace->units_per_EM;
 	*pAscent = ScaleToDefaultHeight(pFreeTypeFace->ascender, DesignSize);
 	*pDescent = ScaleToDefaultHeight(-pFreeTypeFace->descender, DesignSize);
-	TRACEUSER("wuerthne", _T("returning ascent = %d, descent = %d"), *pAscent, *pDescent);
+	// TRACEUSER("wuerthne", _T("returning ascent = %d, descent = %d"), *pAscent, *pDescent);
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return TRUE;
 }
@@ -1383,7 +1383,7 @@ BOOL FTFontMan::GetAscentDescent(CharDescription& ChDesc, INT32* pAscent, INT32*
 BOOL FTFontMan::GetCharWidth(CharDescription& ChDesc, TCHAR FirstChar, TCHAR LastChar,
 							 INT32* pCharWidthsBuf)
 {
-	TRACEUSER("wuerthne", _T("FTFontMan::GetCharWidth first=%04x last=%04x"), FirstChar, LastChar);
+	// TRACEUSER("wuerthne", _T("FTFontMan::GetCharWidth first=%04x last=%04x"), FirstChar, LastChar);
 	UINT32 NumChars = LastChar - FirstChar + 1;
     PangoFcFont* pPangoFcFont;
 	FT_Face pFreeTypeFace;
@@ -1426,7 +1426,7 @@ INT32 FTFontMan::GetCharsKerning(CharDescription& FontDesc, TCHAR LeftChar, TCHA
     PangoFcFont* pPangoFcFont;
 	FT_Face pFreeTypeFace;
 
-	TRACEUSER("wuerthne", _T("GetCharsKerning, %04x %04x"), LeftChar, RightChar);
+	// TRACEUSER("wuerthne", _T("GetCharsKerning, %04x %04x"), LeftChar, RightChar);
 	if (!GetPangoFcFontAndFreeTypeFaceForCharDesc(FontDesc, &pPangoFcFont, &pFreeTypeFace)) return 0;
 
 	// get the design size
@@ -1443,7 +1443,7 @@ INT32 FTFontMan::GetCharsKerning(CharDescription& FontDesc, TCHAR LeftChar, TCHA
 		return 0;
 	}
 
-	TRACEUSER("wuerthne", _T("Got kerning: %d"), kerning.x);
+	// TRACEUSER("wuerthne", _T("Got kerning: %d"), kerning.x);
 	pango_fc_font_unlock_face(pPangoFcFont);
 	return ScaleToDefaultHeight(kerning.x, DesignSize);
 }
