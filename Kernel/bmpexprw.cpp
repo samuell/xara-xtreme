@@ -1549,44 +1549,65 @@ void BitmapExportPreviewDialog::InitFileTypeList()
 	// Make sure the list is empty
 	DeleteAllValues( _R(IDC_FILE_TYPE_LIST) );
 
+PORTNOTE("export", "Removed GIF and BMP")
 	//  Add the necessary strings to the list. 
 	//  This is the complete collection of them.
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_GIF), FALSE, 0 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_PNG), FALSE, 1 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_BMP), FALSE, 2 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_JPG), FALSE, 3 );
+	
+	enum
+	{
+		idComboPng		= 0,
+		idComboJpg,
+		idComboGif,
+		idComboBmp
+	};
+
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_PNG), FALSE, idComboPng );
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_JPG), FALSE, idComboJpg );
+#if !defined(EXCLUDE_FROM_XARALX)
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_GIF), FALSE, idComboGif );
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_BMP), FALSE, idComboBmp );
+#endif
 
 	//  Repeat what is necessary for the second drop list.
 	DeleteAllValues( _R(IDC_FILE_TYPE_LIST2) );
 
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_GIF), FALSE, 0 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_PNG), FALSE, 1 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_BMP), FALSE, 2 );
-	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_JPG), FALSE, 3 );
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_PNG), FALSE, idComboPng );
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_JPG), FALSE, idComboJpg );
+#if !defined(EXCLUDE_FROM_XARALX)
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_GIF), FALSE, idComboGif );
+	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_BMP), FALSE, idComboBmp );
+#endif
 
 	UINT32				idString = BmapPrevDlg::m_pExportOptions->GetFilterNameStrID();
 	if( idString == _R(IDN_FILTERNAME_GIF) ) // its a windows bitmap bmp type
 	{
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 0 );
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 0 );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), idComboGif );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), idComboGif );
 	}
 	else
 	if( idString == _R(IDT_FILTERNAME_BMP) ) // its a windows bitmap bmp type
 	{
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 2 );
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 2 );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), idComboBmp );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), idComboBmp );
 	}
 	else
 	if( idString == _R(IDS_JPG_EXP_FILTERNAME) ) // its a jpeg type
 	{
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 3 );
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 3 );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), idComboJpg );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), idComboJpg );
 	}
 	else
 	{
 //	case _R(IDS_FILTERNAME_PNG): // its a png
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), 1 );
-		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), 1 );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST), idComboPng );
+		SetSelectedValueIndex( _R(IDC_FILE_TYPE_LIST2), idComboPng );
+
+		// Preview doesn't work for IM filters, so hide combos
+		if( idString != _R(IDS_FILTERNAME_PNG) )
+		{
+			HideGadget( _R(IDC_FILE_TYPE_LIST), TRUE );
+			HideGadget( _R(IDC_FILE_TYPE_LIST2), TRUE );
+		}
 	}
 	
 	//  Set the lists to the correct length
