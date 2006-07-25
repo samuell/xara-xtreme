@@ -5496,6 +5496,9 @@ DWORD BitmapExportOptions::GetSupportedColourDepths()
 		Supported = (COLOUR_2 | COLOUR_16 | COLOUR_256 | COLOUR_24BIT | COLOUR_32BIT);
 	else if (FilterStrID == _R(IDS_JPG_EXP_FILTERNAME))
 		Supported = COLOUR_24BIT;
+	else
+		// Anything else gets a choice of all types
+		Supported = (COLOUR_2 | COLOUR_16 | COLOUR_256 | COLOUR_24BIT | COLOUR_32BIT);
 
 	return Supported;
 }
