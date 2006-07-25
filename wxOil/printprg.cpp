@@ -482,7 +482,7 @@ BOOL PrintProgressDlg::AbortProc()
 		// Save current doc view etc. around yield as paint can destroy them.
 		View * pCurrentView = View::GetCurrent();
 		Document * pCurrentDocument = Document::GetCurrent();
-		::wxSafeYield(pPrintProgressDlg->WindowID, TRUE);
+//		::wxSafeYield(pPrintProgressDlg->WindowID, TRUE); - THIS YIELD CAUSES PROBLEMS (some bit of attribute stack is being corrupted) - AMB
 		pCurrentDocument->SetCurrent();
 		pCurrentView->SetCurrent();
 
