@@ -873,6 +873,12 @@ void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
 
 void DialogManager::SavePaneInfo(wxString key, wxPaneInfo &paneinfo)
 {
+	// work around mysterious wxGTK sizing bug
+	if ((paneinfo.floating_size == wxDefaultSize) && (paneinfo.IsOk()) && (paneinfo.IsFloating()))
+	{
+		paneinfo.FloatingSize(paneinfo.window->GetParent()->GetSize());
+	}
+
 	if (!s_pPaneInfoHash)
 		InitPaneInfoHash();
 
