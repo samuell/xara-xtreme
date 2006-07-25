@@ -117,6 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h"		// for Document - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "giffiltr.h"	// for TI_GIFFilter
 #include "exjpeg.h"		// for JPEGExportFilter
+#include "imgmgkft.h"	// for ImageMagickFilter
 #include "progress.h"
 #include "sgliboil.h"
 #include "backgrnd.h"
@@ -2689,6 +2690,9 @@ BOOL BitmapExportPreviewDialog::DoWithExportOptions(BitmapExportOptions *pOption
 	
 	// create a temp file 
 	PathName TempPath = FileUtil::GetTemporaryPathName();
+
+	if( m_pBmpFilter->IS_KIND_OF( ImageMagickFilter ) )
+		TempPath.SetType( ((ImageMagickFilter*)m_pBmpFilter)->GetExtension() );
 
 // Set flag telling exporter that we are NOT exporting a temporary file!
 pOptions->SetTempFileFlag(TRUE);
