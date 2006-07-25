@@ -454,7 +454,7 @@ void BitmapExportPreviewDialog::SetCurrentCursor(UINT32 id)
 		((id == _R(IDC_REDRAW2)) && (m_ActiveBitmap != 2)))
 	{
 		// over the unselected control
-		pCursor = new Cursor(_R(IDC_ARROW));
+		pCursor = new Cursor( wxCURSOR_ARROW );
 	}
 	else
 	{
@@ -462,21 +462,21 @@ void BitmapExportPreviewDialog::SetCurrentCursor(UINT32 id)
 		if (m_CurrentTool == PREVIEW_ZOOM_TOOL)
 		{
 			if (AdjustState)
-				pCursor = new Cursor(_R(IDC_ZOOMOUT));
+				pCursor = new Cursor( (Tool_v1*)NULL, _R(IDC_ZOOMOUT));
 			else
-				pCursor = new Cursor(_R(IDC_ZOOMIN));
+				pCursor = new Cursor( (Tool_v1*)NULL, _R(IDC_ZOOMIN));
 		}
 		else if (m_CurrentTool == PREVIEW_PUSH_TOOL)
 		{
-			pCursor = new Cursor(_R(IDC_PICKHAND));
+			pCursor = new Cursor( (Tool_v1*)NULL, _R(IDC_PICKHAND));
 		}									
 		else if( m_CurrentTool == PREVIEW_COLOUR_SELECTOR_TOOL )
 		{
 			//  Set the cursor for the colour selector. 
-			pCursor = new Cursor( _R(IDC_COLOURSELECTOR) );
+			pCursor = new Cursor( (Tool_v1*)NULL, _R(IDC_COLOURSELECTOR) );
 		}
 		else
-			pCursor = new Cursor( _R(IDC_COLOURSELECTOR) );
+			pCursor = new Cursor( (Tool_v1*)NULL, _R(IDC_COLOURSELECTOR) );
 	}
 	
 	// push (and display) the cursor
@@ -964,10 +964,9 @@ PORTNOTE("other","Removed some oilieness for kernel")
 						
 						//capture the mouse pointer
 						CaptureMouse(Msg->GadgetID);
-						
+#endif
 						// the mouse is moved inside the control, so update the cursor
 						SetCurrentCursor(Msg->GadgetID);
-#endif
 						
 						//	If we are doing image slicing, then return now
 						if( BmapPrevDlg::m_bSlicingImage )

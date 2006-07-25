@@ -87,28 +87,34 @@
             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
         </object>
         <object class="wxCamArtControl" name="IDC_ZOOM_TOOL">
-            <size>35,42</size>
+			<size>35,42</size>
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
             <pos>320,12</pos>
         </object>
         <object class="wxCamArtControl" name="IDC_PUSH_TOOL">
             <size>35,42</size>
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
             <pos>320,68</pos>
         </object>
         <object class="wxCamArtControl" name="IDC_ZOOM_TO_FIT">
             <size>35,42</size>
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
             <pos>320,119</pos>
         </object>
         <object class="wxCamArtControl" name="IDC_100PERCENT">
             <size>35,42</size>
+			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
             <pos>320,170</pos>
         </object>
         <object class="wxCamArtControl" name="IDC_1TO1">
             <size>35,42</size>
-            <pos>320,221</pos>
+ 			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+           <pos>320,221</pos>
         </object>
         <object class="wxCamArtControl" name="IDC_COLOUR_SELECTOR">
             <size>35,42</size>
-            <pos>320,272</pos>
+ 			<camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER|wxCACS_TOGGLEBUTTON</camartstyle>
+           <pos>320,272</pos>
         </object>
     </object>
 </resource>
