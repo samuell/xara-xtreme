@@ -685,7 +685,6 @@
                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_T2STATIC1">
-                                    <size>52,19</size>
                                     <pos>12,17</pos>
                                     <font>
                                         <size>8</size>
@@ -711,7 +710,6 @@
                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_T2STATIC2">
-                                    <size>50,19</size>
                                     <pos>12,51</pos>
                                     <font>
                                         <size>8</size>
@@ -737,7 +735,6 @@
                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_T2STATIC3">
-                                    <size>73,19</size>
                                     <pos>12,85</pos>
                                     <font>
                                         <size>8</size>
@@ -763,7 +760,6 @@
                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="IDC_T2STATIC4">
-                                    <size>75,19</size>
                                     <pos>12,119</pos>
                                     <font>
                                         <size>8</size>
