@@ -1680,7 +1680,7 @@ void Document::SetSelectedViewAndSpread(Document *TheDocument,
 											DocView *TheView,
 											Spread *TheSpread)
 {
-	TRACEUSER("Gerry", _T("Document::SetSelectedViewAndSpread(0x%08x, 0x%08x, 0x%08x)"), TheDocument, TheView, TheSpread);
+//	TRACEUSER("Gerry", _T("Document::SetSelectedViewAndSpread(0x%08x, 0x%08x, 0x%08x)"), TheDocument, TheView, TheSpread);
 #ifdef RALPH
 	// if we are being called from the load thread just ignore 
 	if(::GetCurrentThreadId() == RalphDocument::GetImportingThreadID())

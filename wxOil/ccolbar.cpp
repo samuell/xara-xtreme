@@ -4190,7 +4190,7 @@ void CColourBar::Show(BOOL ShowOrHide)
 
 void CColourBar::OnSize(wxSizeEvent &event)
 {
-	TRACEUSER("Gerry", _T("CColourBar::OnSize(%d, %d)\n"), event.m_size.x, event.m_size.y);
+//	TRACEUSER("Gerry", _T("CColourBar::OnSize(%d, %d)\n"), event.m_size.x, event.m_size.y);
 	if (m_pCurrentColourList == NULL)
 	{
 		Refresh();		// No colour list - just ensure we're redrawn OK, and exit
