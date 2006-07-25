@@ -13,6 +13,28 @@
 
 #include <wx/slider.h>
 
+#ifdef __WXGTK20__
+#include <gtk/gtk.h>
+
+extern "C" {
+static gboolean
+xara_slidercombo_expose_callback( GtkWidget *widget,
+                                  GdkEventExpose *gdk_event,
+                                  gboolean user_data )
+{
+    gtk_paint_box (widget->style,
+                   widget->window,
+                   GTK_STATE_NORMAL,
+                   GTK_SHADOW_OUT,
+                   NULL, widget, "menu",
+                   0, 0,
+                   widget->allocation.width, widget->allocation.height);
+
+    return FALSE;
+}
+}
+#endif
+
 class wxSliderComboPopup : public wxSlider, public wxComboPopup
 {
 public:
@@ -25,10 +47,24 @@ public:
     {
         long style = m_combo->GetWindowStyleFlag();
         style &= wxSL_HORIZONTAL | wxSL_VERTICAL | wxSL_LABELS | wxSL_INVERSE;
-        return wxSlider::Create(parent, wxID_ANY,
-                                50, 0, 100,
-                                wxDefaultPosition, wxDefaultSize,
-                                style | wxRAISED_BORDER);
+
+        // Add raised border for other ports (gtk2 draws its native one with the expose callback)
+#ifndef __WXGTK20__
+        style |= wxRAISED_BORDER;
+#endif
+
+        if (wxSlider::Create(parent, wxID_ANY,
+                             50, 0, 100,
+                             wxDefaultPosition, wxDefaultSize,
+                             style))
+        {
+#ifdef __WXGTK20__
+            g_signal_connect (m_widget, "expose_event",
+                              G_CALLBACK (xara_slidercombo_expose_callback), NULL);
+#endif
+            return true;
+        }
+        return false;
     }
 
     virtual void OnShow()
