@@ -228,6 +228,8 @@ public:
 	virtual void		DoSlide(INT32 SlideValue);
 	virtual void		SlideFinished(BOOL SuccessfulFinish = TRUE);
 
+	static BOOL IsUpdateDisabled() {return s_DisableUpdates;}
+
 private:
 #ifdef FEATHER_EFFECT
 	static NodeFeatherEffect* DoReplaceFeatherEffectNode(UndoableOperation* pOp,
@@ -239,8 +241,9 @@ private:
 private:
 	List				m_NewFeatherAttrs;
 
-	static INT32			s_iEditStackPos;
+	static INT32		s_iEditStackPos;
 	static ListRange*	s_pEditRange;
+	static BOOL 		s_DisableUpdates;
 };
 
 

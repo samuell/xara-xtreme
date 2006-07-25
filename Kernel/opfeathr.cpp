@@ -157,9 +157,9 @@ const MILLIPOINT	ChangeFeatherSizeSliderOpDesc::MinSlider = 0;
 const MILLIPOINT	ChangeFeatherSizeSliderOpDesc::MaxSlider = ((const MILLIPOINT) (MaxFeatherSize / 2 ));
 const double		ChangeFeatherSizeSliderOpDesc::SliderChangeRate = 1.5;
 
-INT32					OpChangeFeatherSize::s_iEditStackPos = STACKPOS_INVALID;
+INT32				OpChangeFeatherSize::s_iEditStackPos = STACKPOS_INVALID;
 ListRange*			OpChangeFeatherSize::s_pEditRange = NULL;
-
+BOOL				OpChangeFeatherSize::s_DisableUpdates = FALSE;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -431,6 +431,10 @@ BOOL ChangeFeatherSizeSliderOpDesc::SetFeatherSizeForCurrentSel()
 BOOL ChangeFeatherSizeSliderOpDesc::UpdateAllFeatherControls(String_256* Str,
 															MILLIPOINT InverseSliderVal)
 {
+    // Don't update controls if we have update disabled
+    if (OpChangeFeatherSize::IsUpdateDisabled())
+        return TRUE;
+
 	// Create a list for the dialogue manager to put gadget ID's on.
 	List* pGadgetList = new List;
 	if (pGadgetList == NULL)
@@ -817,7 +821,10 @@ void OpChangeFeatherSize::SetEditContext(INT32 iStackPos, ListRange* pEditRange)
 	else
 		s_pEditRange = NULL;
 
+    s_DisableUpdates = TRUE; // Disable updates to the slider triggered from this as we haven't set the new
+                             // feather attribute so we risk setting it back and causing jumpiness
 	BROADCAST_TO_ALL(SelChangingMsg(SelChangingMsg::EFFECTSTACKCHANGED));
+    s_DisableUpdates = FALSE;
 }
 
 

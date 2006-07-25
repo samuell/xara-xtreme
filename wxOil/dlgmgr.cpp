@@ -162,6 +162,8 @@ List DialogManager::DiscardStrList;
 List DialogManager::ScrollPageIncList;
 List DialogManager::DialogPositionList;
 
+IdToSerializedPaneInfo * DialogManager::s_pPaneInfoHash = NULL;
+
 wxWindow   *DialogManager::pDlgCurrent = NULL;   // Required for IsDialogMessage handling
 
 // The ActiveDialogStack is used to restore previously active dialogs after a Modal dialog
@@ -435,10 +437,32 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 #ifdef USE_WXAUI
 	if (wxAUImanaged)
 	{
+		wxString Title = wxEmptyString;
+		if (pDialogWnd->IsKindOf(CLASSINFO(wxDialog)))
+			Title=((wxDialog *)pDialogWnd)->GetTitle();
+		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
+		if (Title.IsEmpty())
+		{
+			const TCHAR * ResString=CamResource::GetTextFail(pDialogWnd->GetId());
+			if (ResString)
+				Title=wxString(ResString);
+		}
+		if (Title.IsEmpty())
+		{
+			// Finally, in desperation, we (mis-)use the tooltip string because now the wx folks have removed
+			// the label, even though it's needed for accessibility. Aarrghh
+			wxToolTip* pTip = pDialogWnd->GetToolTip();
+			if (pTip) Title=pTip->GetTip();
+		}
+		if (Title.IsEmpty())
+			Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
+
+
 		// We really should take a wxPaneInfo() as an additional parameter to this function to allow this sort
 		// of stuff to be specified. Or try and retrieve it from the DialogBarOp or similar. Anyway, for now
 		// give it some default parameters
 		wxPaneInfo paneinfo;
+		LoadPaneInfo(wxString(CamResource::GetObjectName(pDialogWnd->GetId())), paneinfo);
 		paneinfo.DestroyOnClose(FALSE);
 		if (DlgOp->IsABar())
 		{			
@@ -469,25 +493,7 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 										// tool switch that deletes them deleting the window.
 		}
 
-		wxString Title = wxEmptyString;
-		if (pDialogWnd->IsKindOf(CLASSINFO(wxDialog)))
-			Title=((wxDialog *)pDialogWnd)->GetTitle();
-		if (Title.IsEmpty()) Title = pDialogWnd->GetLabel(); // because wxPanel doesn't seem to support a title
-		if (Title.IsEmpty())
-		{
-			const TCHAR * ResString=CamResource::GetTextFail(pDialogWnd->GetId());
-			if (ResString)
-				Title=wxString(ResString);
-		}
-		if (Title.IsEmpty())
-		{
-			// Finally, in desperation, we (mis-)use the tooltip string because now the wx folks have removed
-			// the label, even though it's needed for accessibility. Aarrghh
-			wxToolTip* pTip = pDialogWnd->GetToolTip();
-			if (pTip) Title=pTip->GetTip();
-		}
-		if (Title.IsEmpty())
-			Title = wxString(CamResource::GetText(_R(IDS_ANONYMOUSBARTITLE)));
+		paneinfo.Name(pDialogName).Caption(Title).PinButton(TRUE);
 
 		wxSizer * pSizer = pDialogWnd->GetSizer();
 		if (pSizer)
@@ -496,9 +502,7 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 			pDialogWnd->SetSizerAndFit(pSizer);
 		}
 
-		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo.
-			Name(pDialogName).Caption(Title).
-			PinButton(TRUE));
+		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo);
 
 		CCamFrame::GetMainFrame()->UpdateFrameManager();
 	}
@@ -721,6 +725,84 @@ PORTNOTE("dialog","Removed FontFactory usage")
 	return TRUE; // Success
 }
 
+/********************************************************************************************
+
+>	void DialogManager::InitPaneInfoHash
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	25/07/06
+	Inputs:		-
+	Outputs:	-
+	Returns:	-
+	Purpose:	Initializes the pane info hash if it has not been previously initialized
+	Scope:		protected
+
+********************************************************************************************/
+
+void DialogManager::InitPaneInfoHash()
+{
+	if (s_pPaneInfoHash)
+		return;
+
+	s_pPaneInfoHash = new IdToSerializedPaneInfo;
+}
+
+/********************************************************************************************
+
+>	void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	25/07/06
+	Inputs:		key - the key the pane info will be stored under
+	Outputs:	paneinfo - the wxAUI pane info structure
+	Returns:	None
+	Purpose:	Loads the pane info structure from the hash
+	Scope:		protected
+
+********************************************************************************************/
+
+void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
+{
+	if (!s_pPaneInfoHash)
+		InitPaneInfoHash();
+
+	if (!s_pPaneInfoHash)
+		return;
+
+	IdToSerializedPaneInfo::iterator i=s_pPaneInfoHash->find(key);
+	if (i==s_pPaneInfoHash->end())
+		return;
+
+	TRACEUSER("amb", _T("key=%s"), (const TCHAR *)key);
+	TRACEUSER("amb", _T("val=%s"), (const TCHAR *)(i->second));
+
+	CCamFrame::GetFrameManager()->LoadPaneInfo(i->second, paneinfo);
+}
+
+/********************************************************************************************
+
+>	void DialogManager::SavePaneInfo(wxPaneInfo &paneinfo)
+
+	Author:		Alex Bligh <alex@alex.org.uk>
+	Created:	25/07/06
+	Inputs:		key - the key the pane info will be stored under
+				paneinfo - the wxAUI pane info structure
+	Returns:	None
+	Purpose:	Saves the pane info structure to the hash
+	Scope:		protected
+
+********************************************************************************************/
+
+void DialogManager::SavePaneInfo(wxString key, wxPaneInfo &paneinfo)
+{
+	if (!s_pPaneInfoHash)
+		InitPaneInfoHash();
+
+	if (!s_pPaneInfoHash)
+		return;
+
+	(*s_pPaneInfoHash)[key]=CCamFrame::GetFrameManager()->SavePaneInfo(paneinfo);
+}
 
 /********************************************************************************************
 
@@ -1691,6 +1773,9 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 
 	if (pDlgOp->pEvtHandler->wxAUImanaged)
 	{
+		wxPaneInfo paneinfo = CCamFrame::GetMainFrame()->GetFrameManager()->GetPane(pCWnd);
+		if (paneinfo.IsOk())
+			SavePaneInfo(wxString(CamResource::GetObjectName(pCWnd->GetId())), paneinfo);
 		// Remove the bar from wxAUI
 		CCamFrame::GetMainFrame()->GetFrameManager()->DetachPane(pCWnd);
 		CCamFrame::GetMainFrame()->UpdateFrameManager();
@@ -6117,6 +6202,12 @@ PORTNOTE("dialog","Removed IsFullScreenMode usage")
 		NextPos =  DialogPositionList.GetNext(DlgPos);
 		delete DialogPositionList.RemoveItem(DlgPos);
 		DlgPos = NextPos;
+	}
+
+	if (s_pPaneInfoHash)
+	{
+		delete s_pPaneInfoHash;
+		s_pPaneInfoHash = NULL;
 	}
 }
 
