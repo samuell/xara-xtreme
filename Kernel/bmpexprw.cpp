@@ -2691,7 +2691,8 @@ BOOL BitmapExportPreviewDialog::DoWithExportOptions(BitmapExportOptions *pOption
 	// create a temp file 
 	PathName TempPath = FileUtil::GetTemporaryPathName();
 
-	if( m_pBmpFilter->IS_KIND_OF( ImageMagickFilter ) )
+	// If we want any change of re-importing IM based filters, they need an extension
+	if( m_pBmpFilter->GetFilterType() == IMAGEMAGICK )
 		TempPath.SetType( ((ImageMagickFilter*)m_pBmpFilter)->GetExtension() );
 
 // Set flag telling exporter that we are NOT exporting a temporary file!

@@ -737,7 +737,10 @@ PORTNOTETRACE("other","Preview section NOT setup");
 		// Set up the title of the dialog box according to the passed in string which
 		// is the name of the filter plus export bitmap options.
 		String_256 Temp = ""; //*(m_pExportOptions->GetFilterName());
-		Temp.Load(m_pExportOptions->GetFilterNameStrID()); // which is safer than the ptr into whatever
+		if( m_pBmpFilter->GetFilterType() != IMAGEMAGICK )
+			Temp.Load(m_pExportOptions->GetFilterNameStrID()); // which is safer than the ptr into whatever
+		else
+			Temp.Load( _R(IDS_IMAGEMAGICK_FILTERNAME) ); 
 		Temp += String_256(_R(IDN_EXPORTBMPOPTS));
 
 		DialogManager::SetTitlebarName(WindowID, &Temp); // set the title bar for the window
