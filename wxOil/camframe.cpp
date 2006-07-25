@@ -359,7 +359,7 @@ bool CCamFrame::Create( wxWindow *pParent, wxWindowID id, const wxString &captio
 #if defined(USE_WXAUI)
 	m_pFrameManager = new CamFrameManager;
 	if (!m_pFrameManager) return FALSE;
-	m_pFrameManager->SetFrame(this);
+	m_pFrameManager->SetManagedWindow(this);
 	
 	m_pFrameManager->SetFlags(m_pFrameManager->GetFlags() |
 							wxAUI_MGR_ALLOW_FLOATING

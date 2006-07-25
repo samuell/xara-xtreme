@@ -32,7 +32,8 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
                 : wxFloatingPaneBaseClass(parent, id, wxEmptyString,
                         pane.floating_pos, pane.floating_size,
                         wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
-                        wxCLOSE_BOX | wxFRAME_NO_TASKBAR |
+                        (pane.HasCloseButton()?wxCLOSE_BOX:0) |
+                        wxFRAME_NO_TASKBAR |
                         wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
                         )
@@ -40,7 +41,7 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     m_owner_mgr = owner_mgr;
     m_moving = false;
     m_last_rect = wxRect();
-    m_mgr.SetFrame(this);
+    m_mgr.SetManagedWindow(this);
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
@@ -205,6 +206,5 @@ BEGIN_EVENT_TABLE(wxFloatingPane, wxFloatingPaneBaseClass)
     EVT_IDLE(wxFloatingPane::OnIdle)
     EVT_ACTIVATE(wxFloatingPane::OnActivate)
 END_EVENT_TABLE()
-
 
 #endif // wxUSE_AUI

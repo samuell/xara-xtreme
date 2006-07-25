@@ -50,10 +50,16 @@ enum wxFrameManagerOption
     wxAUI_MGR_TRANSPARENT_DRAG      = 1 << 2,
     wxAUI_MGR_TRANSPARENT_HINT      = 1 << 3,
     wxAUI_MGR_TRANSPARENT_HINT_FADE = 1 << 4,
+    // The venetian blind effect is ONLY used when the wxAUI_MGR_TRANSPARENT_HINT has been used, but
+    // at runtime we determine we cannot use transparency (because, for instance, the OS does not support it).
+    // setting this flag drops back in such circumstances (only) to the behaviour without wxAUI_MGR_TRANSPARENT_HINT
+    wxAUI_MGR_DISABLE_VENETIAN_BLINDS = 1 << 5,
+    wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE = 1 << 6,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
-                        wxAUI_MGR_TRANSPARENT_HINT_FADE
+                        wxAUI_MGR_TRANSPARENT_HINT_FADE |
+                        wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE
 };
 
 enum wxPaneDockArtSetting
@@ -108,16 +114,17 @@ class wxDockInfo;
 class wxDockArt;
 class wxFrameManagerEvent;
 
+#ifndef SWIG
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockInfo, wxDockInfoArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockUIPart, wxDockUIPartArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneButton, wxPaneButtonArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneInfo, wxPaneInfoArray, WXDLLIMPEXP_AUI);
 WX_DEFINE_ARRAY_PTR(wxPaneInfo*, wxPaneInfoPtrArray);
 WX_DEFINE_ARRAY_PTR(wxDockInfo*, wxDockInfoPtrArray);
+#endif // SWIG
 
-extern wxDockInfo wxNullDockInfo;
-extern wxPaneInfo wxNullPaneInfo;
-
+extern WXDLLIMPEXP_AUI wxDockInfo wxNullDockInfo;
+extern WXDLLIMPEXP_AUI wxPaneInfo wxNullPaneInfo;
 
 
 
@@ -144,6 +151,9 @@ public:
         DefaultPane();
     }
 
+    ~wxPaneInfo() {}
+    
+#ifndef SWIG
     wxPaneInfo(const wxPaneInfo& c)
     {
         name = c.name;
@@ -186,6 +196,20 @@ public:
         rect = c.rect;
         return *this;
     }
+#endif // SWIG
+
+    // Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
+    // used on loading perspectives etc.
+    void SafeSet(wxPaneInfo source)
+    {
+        // note source is not passed by reference so we can overwrite, to keep the
+        // unsafe bits of "dest"
+        source.window = window;
+        source.frame = frame;
+        source.buttons = buttons;
+        // now assign
+        *this = source;
+    }
 
     bool IsOk() const { return (window != NULL) ? true : false; }
     bool IsFixed() const { return !HasFlag(optionResizable); }
@@ -209,6 +233,9 @@ public:
     bool HasPinButton() const { return HasFlag(buttonPin); }
     bool HasGripperTop() const { return HasFlag(optionGripperTop); }
 
+#ifdef SWIG
+    %typemap(out) wxPaneInfo& { $result = $self; Py_INCREF($result); }
+#endif
     wxPaneInfo& Window(wxWindow* w) { window = w; return *this; }
     wxPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
@@ -298,6 +325,10 @@ public:
         return (state & flag) ? true:false;
     }
 
+#ifdef SWIG
+    %typemap(out) wxPaneInfo& ;
+#endif
+    
 public:
 
     enum wxPaneState
@@ -334,7 +365,7 @@ public:
     wxString caption;     // caption displayed on the window
 
     wxWindow* window;     // window that is in this pane
-    wxWindow* frame;      // floating frame window that holds the pane
+    wxFrame* frame;       // floating frame window that holds the pane
     unsigned int state;   // a combination of wxPaneState values
 
     int dock_direction;   // dock direction (top, bottom, left, right, center)
@@ -365,7 +396,7 @@ friend class wxFloatingPane;
 
 public:
 
-    wxFrameManager(wxFrame* frame = NULL,
+    wxFrameManager(wxWindow* managed_wnd = NULL,
                    unsigned int flags = wxAUI_MGR_DEFAULT);
     virtual ~wxFrameManager();
     void UnInit();
@@ -373,9 +404,12 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    void SetFrame(wxFrame* frame);
-    wxFrame* GetFrame() const;
+    void SetManagedWindow(wxWindow* managed_wnd);
+    wxWindow* GetManagedWindow() const;
 
+#ifdef SWIG
+    %disownarg( wxDockArt* art_provider );
+#endif
     void SetArtProvider(wxDockArt* art_provider);
     wxDockArt* GetArtProvider() const;
 
@@ -385,16 +419,23 @@ public:
 
     bool AddPane(wxWindow* window,
                  const wxPaneInfo& pane_info);
+                 
+    bool AddPane(wxWindow* window,
+                 const wxPaneInfo& pane_info,
+                 const wxPoint& drop_pos);
 
     bool AddPane(wxWindow* window,
                  int direction = wxLEFT,
                  const wxString& caption = wxEmptyString);
 
     bool InsertPane(wxWindow* window,
-                 const wxPaneInfo& pane_info,
+                 const wxPaneInfo& insert_location,
                  int insert_level = wxAUI_INSERT_PANE);
 
     bool DetachPane(wxWindow* window);
+
+    wxString SavePaneInfo(wxPaneInfo& pane);
+    wxString LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);
 
     wxString SavePerspective();
 
@@ -403,12 +444,27 @@ public:
 
     void Update();
 
-protected:
+
+public:
 
     void DrawHintRect(wxWindow* pane_window,
                        const wxPoint& pt,
                        const wxPoint& offset);
+    virtual void ShowHint(const wxRect& rect);
+    virtual void HideHint();
 
+public:
+
+    // deprecated -- please use SetManagedWindow() and
+    // and GetManagedWindow() instead
+    
+    wxDEPRECATED( void SetFrame(wxFrame* frame) );
+    wxDEPRECATED( wxFrame* GetFrame() const );
+    
+protected:
+
+
+    
     void DoFrameLayout();
 
     void LayoutAddPane(wxSizer* container,
@@ -426,6 +482,9 @@ protected:
                        wxDockInfoArray& docks,
                        wxDockUIPartArray& uiparts,
                        bool spacer_only = false);
+
+    virtual bool ProcessDockResult(wxPaneInfo& target,
+                                   const wxPaneInfo& new_pos);
 
     bool DoDrop(wxDockInfoArray& docks,
                 wxPaneInfoArray& panes,
@@ -452,23 +511,27 @@ protected:
     void GetPanePositionsAndSizes(wxDockInfo& dock,
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
-    virtual void ShowHint(const wxRect& rect);
-    virtual void HideHint();
+
+
+public:
+
+    // public events (which can be invoked externally)
+    void OnRender(wxFrameManagerEvent& evt);
+    void OnPaneButton(wxFrameManagerEvent& evt);
 
 protected:
 
-    // events
-    void OnPaint(wxPaintEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnSetCursor(wxSetCursorEvent& event);
-    void OnLeftDown(wxMouseEvent& event);
-    void OnLeftUp(wxMouseEvent& event);
-    void OnMotion(wxMouseEvent& event);
-    void OnLeaveWindow(wxMouseEvent& event);
-    void OnPaneButton(wxFrameManagerEvent& event);
-    void OnChildFocus(wxChildFocusEvent& event);
-    void OnHintFadeTimer(wxTimerEvent& event);
+    // protected events
+    void OnPaint(wxPaintEvent& evt);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnSize(wxSizeEvent& evt);
+    void OnSetCursor(wxSetCursorEvent& evt);
+    void OnLeftDown(wxMouseEvent& evt);
+    void OnLeftUp(wxMouseEvent& evt);
+    void OnMotion(wxMouseEvent& evt);
+    void OnLeaveWindow(wxMouseEvent& evt);
+    void OnChildFocus(wxChildFocusEvent& evt);
+    void OnHintFadeTimer(wxTimerEvent& evt);
 
 protected:
 
@@ -484,7 +547,7 @@ protected:
 
 protected:
 
-    wxFrame* m_frame;            // the frame being managed
+    wxWindow* m_frame;           // the window being managed
     wxDockArt* m_art;            // dock art object which does all drawing
     unsigned int m_flags;        // manager flags wxAUI_MGR_*
 
@@ -502,11 +565,14 @@ protected:
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
 
-    wxWindow* m_hint_wnd;        // transparent hint window (for now, only msw)
-    wxTimer m_hint_fadetimer;    // transparent fade timer (for now, only msw)
-    int m_hint_fadeamt;          // transparent fade amount (for now, only msw)
+    wxFrame* m_hint_wnd;         // transparent hint window, if supported by platform
+    wxTimer m_hint_fadetimer;    // transparent fade timer
+    wxByte m_hint_fadeamt;       // transparent fade amount
+    wxByte m_hint_fademax;       // maximum value of hint fade
 
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
+#endif // SWIG
 };
 
 
@@ -516,28 +582,33 @@ protected:
 class WXDLLIMPEXP_AUI wxFrameManagerEvent : public wxEvent
 {
 public:
-    wxFrameManagerEvent(wxEventType type) : wxEvent(0, type)
+    wxFrameManagerEvent(wxEventType type=wxEVT_NULL) : wxEvent(0, type)
     {
         pane = NULL;
         button = 0;
         veto_flag = false;
         canveto_flag = true;
+        dc = NULL;
     }
-
+#ifndef SWIG
     wxFrameManagerEvent(const wxFrameManagerEvent& c) : wxEvent(c)
     {
         pane = c.pane;
         button = c.button;
         veto_flag = c.veto_flag;
         canveto_flag = c.canveto_flag;
+        dc = c.dc;
     }
-
+#endif
     wxEvent *Clone() const { return new wxFrameManagerEvent(*this); }
 
     void SetPane(wxPaneInfo* p) { pane = p; }
     void SetButton(int b) { button = b; }
+    void SetDC(wxDC* pdc) { dc = pdc; }
+ 
     wxPaneInfo* GetPane() { return pane; }
     int GetButton() { return button; }
+    wxDC* GetDC() { return dc; }
     
     void Veto(bool veto = true) { veto_flag = veto; }
     bool GetVeto() const { return veto_flag; }
@@ -549,6 +620,12 @@ public:
     int button;
     bool veto_flag;
     bool canveto_flag;
+    wxDC* dc;
+
+#ifndef SWIG
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFrameManagerEvent)
+#endif
 };
 
 
@@ -567,6 +644,7 @@ public:
         toolbar = false;
     }
 
+#ifndef SWIG
     wxDockInfo(const wxDockInfo& c)
     {
         dock_direction = c.dock_direction;
@@ -595,6 +673,7 @@ public:
         rect = c.rect;
         return *this;
     }
+#endif // SWIG
 
     bool IsOk() const { return (dock_direction != 0) ? true : false; }
     bool IsHorizontal() const { return (dock_direction == wxAUI_DOCK_TOP ||
@@ -652,12 +731,13 @@ public:
 
 
 
-
+#ifndef SWIG
 // wx event machinery
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON, 0)
-    DECLARE_EVENT_TYPE(wxEVT_AUI_PANECLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEBUTTON, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANECLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
@@ -669,6 +749,21 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
    wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxFrameManagerEventHandler(func))
 #define EVT_AUI_PANECLOSE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
+#define EVT_AUI_RENDER(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_RENDER, wxFrameManagerEventHandler(func))
+
+#else
+
+%constant wxEventType wxEVT_AUI_PANEBUTTON;
+%constant wxEventType wxEVT_AUI_PANECLOSE;
+%constant wxEventType wxEVT_AUI_RENDER;
+
+%pythoncode {
+    EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
+    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
+    EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
+}
+#endif // SWIG
 
 
 #endif // wxUSE_AUI
