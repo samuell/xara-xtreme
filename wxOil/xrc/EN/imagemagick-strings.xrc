@@ -13,7 +13,7 @@
                         <object class="sizeritem">
                                 <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
                                 <object class="wxStaticText" name="IDS_WARN_NOIMAGEMAGICK">
-                                        <label>Xara LX cannot find ImageMagick version 6.0.0 or above. Various bitmap filters will be disabled. To install ImageMagick, either use the package manager supplied with your distribution, or visit http://www.imagemagick.org/</label>
+                                        <label>Xara Xtreme cannot find ImageMagick version 6.0.0 or above. Various bitmap filters will be disabled. To install ImageMagick, either use the package manager supplied with your distribution, or visit http://www.imagemagick.org/</label>
                                 </object>
                         </object>
 
