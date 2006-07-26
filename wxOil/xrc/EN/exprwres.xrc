@@ -36,8 +36,8 @@
             <label>File Difference:</label>
         </object>
         <object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST">
-            <size>84,-1</size>
-            <pos>211,0</pos>
+            <size>84,20</size>
+            <pos>211,2</pos>
             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
             <font>
                 <size>8</size>
@@ -78,8 +78,8 @@
             <label>File Difference:</label>
         </object>
         <object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST2">
-            <size>84,-1</size>
-            <pos>570,0</pos>
+            <size>84,20</size>
+            <pos>570,2</pos>
             <font>
                 <size>8</size>
             </font>
