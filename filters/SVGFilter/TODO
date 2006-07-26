@@ -1,0 +1,18 @@
+C++:
+* follow Xara C++ style conventions for indenting and commenting
+* add proper comments
+* add good error handling (exceptions?)
+
+SVG:
+* handle "id" and "xml:id" attributes
+* parse <defs> entity and handle #url() and xlinks in styles
+* transformations
+* non flat fills
+* correct handling of measures
+* parse <style type="text/css"> section
+* bitmaps
+* texts
+
+Xara:
+* maybe it's better to rename the binaries to "lxsvgfilter" and "lxsvgfilterui"
+  to keep namespace clean?

@@ -1,0 +1,24 @@
+XAR <---> SVG filter
+
+Currently supports:
+* Compression of SVG output (svg.gz format)
+* Decompression on-the-fly of SVG input (provided automatically by libxml2)
+
+*** How To build ***
+
+    ./configure		(*)
+    make
+    make install
+
+(*) If Xara LX is installed in /usr instead of /usr/local,
+
+    ./configure --prefix=/usr
+
+should be specified instead.
+
+*** Notes ***
+
+* svgexportdialog.cpp, svgexportdialog.h are partially generated with the
+  help of DialogBlocks, the project file is "svgfilterui.pjd".
+
+-- Written in 2006, Sandro Sigala

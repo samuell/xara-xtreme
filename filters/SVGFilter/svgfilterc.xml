@@ -1,0 +1,11 @@
+<FilterConfig>
+  <Filter name="SVGFiltercomp">
+    <DisplayName>SVG compressed</DisplayName>
+    <Extensions>svg.gz</Extensions>
+    <CanImport>svgfilter -z -c -f %IN%</CanImport>
+    <PrepareImport>svgfilterui -i -f %OUT% -x %XML%</PrepareImport>
+    <DoImport>svgfilter -z -i -g -f %IN%</DoImport>
+    <PrepareExport>svgfilterui -e -f %OUT% -x %XML%</PrepareExport>
+    <DoExport>svgfilter -z -e -g -f %OUT% -x %XML%</DoExport>
+  </Filter>
+</FilterConfig>

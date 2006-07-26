@@ -1,0 +1,171 @@
+AC_INIT(svgfilter.cpp)
+AM_INIT_AUTOMAKE(SVGFilter, 0.2)
+
+DEBUG_FLAGS=""
+OPT_FLAGS="-O3"
+DebugEnable="no"
+AC_ARG_ENABLE(debug,
+[[  --enable-debug          Add more debug information and checks to executable]],
+[
+	if test $enableval == "yes"; then
+		DEBUG_FLAGS="-ggdb -D_DEBUG"
+		OPT_FLAGS="-O0"
+		DebugEnable="yes"
+	fi
+])
+
+UnicodeEnable="yes"
+AC_ARG_ENABLE(ascii,
+[[  --enable-ascii          Build ascii version]],
+[
+	if test $enableval == "yes"; then
+		UnicodeEnable="no"
+	fi
+])
+
+StaticEnable="no"
+AC_ARG_ENABLE(static-exec,
+[[  --enable-static-exec    Build a statically linked version of the executable]],
+[
+	if test $enableval == "yes"; then
+	    StaticEnable="yes"
+	fi
+])
+
+WXCONFIG=wx-config
+AC_ARG_WITH(wx-config,
+[[  --with-wx-config=FILE   Use the given path to wx-config when determining
+                            wxWidgets configuration; defaults to "wx-config"]], [
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        WXCONFIG=$withval
+    fi
+])
+
+# -----------------------------------------------------------------------------
+# wxWidgets check
+
+wxversion=0
+
+AC_DEFUN([WXTEST],
+[
+    AC_REQUIRE([AC_PROG_AWK])
+    AC_MSG_CHECKING([wxWidgets version])
+    if wxversion=`$WXCONFIG --version`; then
+        AC_MSG_RESULT([$wxversion])
+    else
+        AC_MSG_RESULT([not found])
+        AC_MSG_ERROR([wxWidgets is required. Try --with-wx-config.])
+    fi
+])
+
+# Call WXTEST func
+WXTEST
+
+GTK_CFLAGS=""
+GTK_LIBS=""
+
+# Verify minimus requires
+vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
+if test -n "$vers" && test "$vers" -ge 2006002; then
+    WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=$UnicodeEnable --cppflags`"
+    WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=$UnicodeEnable --cxxflags | sed -e 's/-fno-exceptions//'`"
+    WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=$UnicodeEnable --libs`"
+    WXRC="`$WXCONFIG --utility=wxrc`"
+
+    # See if we are running on GTK
+    WX_GTK="no"
+    AC_MSG_CHECKING([wxWidgets GTK usage])
+    if echo $WX_CPPFLAGS | grep -q '__WXGTK__' ; then
+        WX_GTK="yes"
+        AC_MSG_RESULT([found])
+        PKG_CHECK_MODULES(GTK, [gtk+-2.0])
+    else
+        AC_MSG_RESULT([not found])
+    fi
+
+else
+    AC_MSG_ERROR([wxWidgets 2.6.2 or newer is required])
+fi
+
+# -----------------------------------------------------------------------------
+
+# Set up our XarLib build flags
+# Change this to be hopefully like wxWidgets above
+PKG_CHECK_MODULES(XARLIB, [Xar])
+
+# Setup our build flags (if not set by user)
+CPPFLAGS="-Wall -Wno-unknown-pragmas -g -fexceptions $DEBUG_FLAGS -DUSE_STD_ALLOC -DUSE_XARLIB"
+
+if test -z "$CXXFLAGS"; then
+	CXXFLAGS="$OPT_FLAGS"
+fi
+
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+LDFLAGS="$LDFLAGS $WX_LIBS"
+
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+
+AC_C_BIGENDIAN
+AC_CHECK_SIZEOF(void*)
+AC_CHECK_SIZEOF(long long)
+AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(char)
+AC_CHECK_SIZEOF(__int64)
+
+# -----------------------------------------------------------------------------
+# from Xara configure.in: test for libxml2
+
+XML2CONFIG=xml2-config
+AC_ARG_WITH(xml2-config,
+[[  --with-xml2-config=FILE Use the given path to xml2-config when determining
+                            libxml2 configuration; defaults to "xml2-config"]],
+[
+    if test "$withval" != "yes" -a "$withval" != ""; then
+        XML2CONFIG=$withval
+    fi
+])
+ 
+xml2version=0
+
+AC_DEFUN([XML2TEST],
+[
+	AC_REQUIRE([AC_PROG_AWK])
+	AC_MSG_CHECKING([libxml2 version])
+	if xml2version=`$XML2CONFIG --version`; then
+		AC_MSG_RESULT([$xml2version])
+	else
+		AC_MSG_RESULT([not found])
+		AC_MSG_ERROR([libxml2 is required. Try --with-xml2-config.])
+	fi
+])
+
+# Call XML2TEST func
+XML2TEST
+
+# check libxml2 version
+xml2version=`echo $xml2version | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
+if test -z "$xml2version" || test "$xml2version" -lt 2006000; then
+	AC_MSG_ERROR([libxml2 2.6 or newer is required])
+fi
+
+LIBXML2_CFLAGS="`$XML2CONFIG --cflags`"
+LIBXML2_LIBS="`$XML2CONFIG --libs`"
+
+# -----------------------------------------------------------------------------
+
+TOPDIR=$srcdir;
+if test `echo $srcdir | cut -c1` != "/"; then
+	TOPDIR="../$srcdir";
+fi
+AC_SUBST(TOPDIR)
+AC_SUBST(XARLIB_CFLAGS)
+AC_SUBST(XARLIB_LIBS)
+AC_SUBST(LIBXML2_CFLAGS)
+AC_SUBST(LIBXML2_LIBS)
+
+AC_OUTPUT(Makefile)
