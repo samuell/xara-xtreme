@@ -463,7 +463,7 @@ bool CCamApp::OnInit()
 		wxString			strMessage;
 
 #if defined(__WXMSW__)
-		strMessage = wxString::Format( wxT("Xara Xtreme (Linux edition)\nVersion: %s\nCDraw Version: %d.%03d\n"), 
+		strMessage = wxString::Format( wxT("Xara Xtreme\nVersion: %s\nCDraw Version: %d.%03d\n"), 
 			g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
 #if FALSE == wxUSE_UNICODE
@@ -472,7 +472,7 @@ bool CCamApp::OnInit()
 		TCHAR			pszCDrawVer[32];
 		camMbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-		strMessage = wxString::Format( wxT("Xara Xtreme (Linux edition)\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\n"), 
+		strMessage = wxString::Format( wxT("Xara Xtreme\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\n"), 
 			g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, CAMELOT_BUILD_DATE );
 #endif
 
@@ -1065,7 +1065,7 @@ void CCamApp::DoAboutBox()
 	wxString			strMessage;
 
 #if defined(__WXMSW__)
-	strMessage = wxString::Format( wxT("Xara Xtreme (Linux edition)\nVersion: %s\nCDraw Version: %d.%03d\nUsage: XaraLX.exe [xar-file...]"), 
+	strMessage = wxString::Format( wxT("Xara Xtreme\nVersion: %s\nCDraw Version: %d.%03d\nUsage: XaraLX.exe [xar-file...]"), 
 		g_pszAppVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()) );
 #else
 #if FALSE == wxUSE_UNICODE
@@ -1074,7 +1074,7 @@ void CCamApp::DoAboutBox()
 	TCHAR			pszCDrawVer[32];
 	camMbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
 #endif
-	strMessage = wxString::Format( wxT("Xara Xtreme (Linux edition)\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\nBuilt against: " wxVERSION_STRING "\n" /*"wxWidgets linked to %s\n" */ "Usage: XaraLX [xar-file...]"), 
+	strMessage = wxString::Format( wxT("Xara Xtreme\nVersion: %s (%s)\nCDraw Version: %d.%03d (%s)\nBuild date: %s\nBuilt against: " wxVERSION_STRING "\n" /*"wxWidgets linked to %s\n" */ "Usage: XaraLX [xar-file...]"), 
 		g_pszAppVersion, g_pszSvnVersion, HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion()), pszCDrawVer, CAMELOT_BUILD_DATE /*,_T("Unknown")*/ );
 #endif
 
