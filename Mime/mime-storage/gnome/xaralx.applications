@@ -1,0 +1,10 @@
+xaralx
+        command=xaralx # note tabs!
+        name=Xara Xtreme
+        can_open_multiple_files=false
+        expects_uris=false
+        requires_terminal=false
+        startup_notify=true
+        mime_types=image/xar
+
+

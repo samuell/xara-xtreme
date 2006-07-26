@@ -1,15 +1,15 @@
 # -*-shell-script-*-
 
 [Meta]
-RootName: @xaralx.org/xaralx:0.6
-DisplayName: Xara LX Vector Graphics Tool
-ShortName: xaralx
+RootName: @xaralx.org/xaralx:0.7
+DisplayName: Xara Xtreme Vector Graphics Tool
+ShortName: XaraXtreme
 Maintainer: Neil Howe <neil@xara.com>
 Packager: Anonymous <anonymous@nowhere.com>
-Summary: Xara LX is a vector graphics and photo tool
-URL: http://www.xaralx.org/
+Summary: Xara Xtreme is a vector graphics and photo tool
+URL: http://www.xaraxtreme.org/
 License: GNU General Public License, Version 2
-SoftwareVersion: 0.6
+SoftwareVersion: 0.7
 AutopackageTarget: 1.0
 
 # Only uncomment InterfaceVersion if your package exposes interfaces to other software,
@@ -19,11 +19,10 @@ AutopackageTarget: 1.0
 # InterfaceVersion: 0.0
 
 [Description]
-Xara LX is primarily a vector graphics (drawing and illustration) program but is
+Xara Xtreme is primarily a vector graphics (drawing and illustration) program but is
 one of the new generation of cross-over products that handles photos and
-drawings with equal ease. See xaralx.org for details. Xara LX is currently
-incomplete as it is an ongoing port to Linux of the finished product Xara Xtreme
-(see www.xara.com/xtreme).
+drawings with equal ease. See xaraxtreme.org for details. Xara Xtreme on Linux is a 
+port of the Windows version of Xara Xtreme (see www.xara.com/xtreme).
 
 [BuildPrepare]
 #prepareBuild
@@ -42,6 +41,8 @@ echo * | import
 [Install]
 # Put your installation script here
 installExe bin/xaralx
+installMime xaralx.xml
+installGnome2Mime mime-storage/gnome/*
 copyFiles Examples "$PREFIX/share/xaralx"
 copyFiles Templates "$PREFIX/share/xaralx"
 copyFiles doc "$PREFIX/share/xaralx"

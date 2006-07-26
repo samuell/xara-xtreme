@@ -1,0 +1,5 @@
+image/xar
+ext: xar
+        image/xar # note <tab>
+        ext: xar
+
