@@ -409,6 +409,9 @@
                         <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_MAPNAME">
                             <size>183,-1</size>
                             <pos>295,42</pos>
+                            <font>
+                                <size>8</size>
+                            </font>
                             <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                             <buttonsize>17,-1</buttonsize>
                         </object>
@@ -428,6 +431,9 @@
                         <object class="wxOwnerDrawnComboBox" name="IDC_IMAPTAB_APPROX">
                             <size>183,-1</size>
                             <pos>295,86</pos>
+                            <font>
+                                <size>8</size>
+                            </font>
                             <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
                             <buttonsize>17,-1</buttonsize>
                         </object>

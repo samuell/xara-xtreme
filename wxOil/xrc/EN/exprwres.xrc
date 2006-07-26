@@ -7,7 +7,6 @@
             <pos>10,2</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>Image A (0%) SELECTED</label>
         </object>
@@ -19,7 +18,6 @@
             <pos>22,265</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>Image Size:</label>
         </object>
@@ -27,7 +25,6 @@
             <pos>22,282</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>File Size:</label>
         </object>
@@ -35,7 +32,6 @@
             <pos>22,299</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>File Difference:</label>
         </object>
@@ -43,13 +39,16 @@
             <size>84,-1</size>
             <pos>211,0</pos>
             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+            <font>
+                <size>8</size>
+            </font>
+            <buttonsize>17,-1</buttonsize>
         </object>
         <object class="wxStaticBox" name="IDC_ACTIVE2">
             <size>288,320</size>
             <pos>372,0</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>Image B (0%)</label>
         </object>
@@ -61,7 +60,6 @@
             <pos>381,265</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>Image Size:</label>
         </object>
@@ -69,7 +67,6 @@
             <pos>381,282</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>File Size:</label>
         </object>
@@ -77,13 +74,16 @@
             <pos>381,299</pos>
             <font>
                 <size>8</size>
-                <family>swiss</family>
             </font>
             <label>File Difference:</label>
         </object>
         <object class="wxOwnerDrawnComboBox" name="IDC_FILE_TYPE_LIST2">
             <size>84,-1</size>
             <pos>570,0</pos>
+            <font>
+                <size>8</size>
+            </font>
+            <buttonsize>17,-1</buttonsize>
             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
         </object>
         <object class="wxCamArtControl" name="IDC_ZOOM_TOOL">
