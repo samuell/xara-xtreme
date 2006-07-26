@@ -24,7 +24,6 @@
                                     <label>Bitmap Size and Resolution</label>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -41,7 +40,6 @@
                                                 <object class="wxStaticText" name="IDC_T1STATIC3">
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                     <label>Width</label>
                                                 </object>
@@ -54,7 +52,6 @@
                                                     <pos>45,30</pos>
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                 </object>
                                             </object>
@@ -65,7 +62,6 @@
                                                     <pos>117,34</pos>
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                     <label>Height</label>
                                                 </object>
@@ -78,7 +74,6 @@
                                                     <pos>151,30</pos>
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                 </object>
                                             </object>
@@ -88,7 +83,6 @@
                                                 <object class="wxStaticText" name="IDC_T1STATIC6">
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                     <label>Scale</label>
                                                 </object>
@@ -106,7 +100,6 @@
                                                             <pos>45,63</pos>
                                                             <font>
                                                                 <size>8</size>
-                                                                <family>swiss</family>
                                                             </font>
                                                         </object>
                                                     </object>
@@ -117,7 +110,6 @@
                                                             <pos>102,65</pos>
                                                             <font>
                                                                 <size>8</size>
-                                                                <family>swiss</family>
                                                             </font>
                                                             <label>%</label>
                                                         </object>
@@ -131,7 +123,6 @@
                                                     <pos>117,65</pos>
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
                                                     <label>DPI</label>
                                                 </object>
@@ -144,8 +135,9 @@
                                                     <pos>151,63</pos>
                                                     <font>
                                                         <size>8</size>
-                                                        <family>swiss</family>
                                                     </font>
+                                                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                                    <buttonsize>17,-1</buttonsize>
                                                 </object>
                                             </object>
                                         </object>
@@ -160,7 +152,6 @@
                                     <label>Area To Save</label>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_LEFT|wxALL</flag>
@@ -169,7 +160,6 @@
                                             <pos>237,27</pos>
                                             <font>
                                                 <size>8</size>
-                                                <family>swiss</family>
                                             </font>
                                             <style>wxRB_GROUP</style>
                                             <label>Drawing</label>
@@ -183,7 +173,6 @@
                                             <pos>237,52</pos>
                                             <font>
                                                 <size>8</size>
-                                                <family>swiss</family>
                                             </font>
                                             <label>Selection</label>
                                             <value>0</value>
@@ -196,7 +185,6 @@
                                             <pos>237,76</pos>
                                             <font>
                                                 <size>8</size>
-                                                <family>swiss</family>
                                             </font>
                                             <label>Page</label>
                                             <value>0</value>
@@ -235,7 +223,6 @@
                     <label>Anti-aliasing</label>
                     <font>
                         <size>8</size>
-                        <family>swiss</family>
                     </font>
                     <object class="sizeritem">
                         <flag>wxALIGN_LEFT|wxALL</flag>
@@ -244,7 +231,6 @@
                             <pos>342,37</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <style>wxRB_GROUP</style>
                             <label>Maintain screen anti-aliasing</label>
@@ -258,7 +244,6 @@
                             <pos>342,63</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>Minimise visible anti-aliasing</label>
                             <value>0</value>
@@ -425,6 +410,7 @@
                             <size>183,-1</size>
                             <pos>295,42</pos>
                             <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                            <buttonsize>17,-1</buttonsize>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -443,6 +429,7 @@
                             <size>183,-1</size>
                             <pos>295,86</pos>
                             <style>wxCB_SORT|wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                            <buttonsize>17,-1</buttonsize>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -574,7 +561,6 @@
                     <pos>9,9</pos>
                     <font>
                         <size>8</size>
-                        <family>swiss</family>
                     </font>
                     <label>&amp;Progressive</label>
                     <checked>0</checked>
@@ -588,7 +574,6 @@
                     <label>JPEG Quality</label>
                     <font>
                         <size>8</size>
-                        <family>swiss</family>
                     </font>
                     <object class="sizeritem">
                         <flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
@@ -597,7 +582,6 @@
                             <pos>21,50</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>0%</label>
                         </object>
@@ -627,7 +611,6 @@
                                     <pos>150,71</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <label>100%</label>
                                 </object>
@@ -643,7 +626,6 @@
                     <size>256,-1</size>
                     <font>
                         <size>8</size>
-                        <family>swiss</family>
                     </font>
                     <label>X</label>
                     <checked>0</checked>
@@ -656,7 +638,6 @@
                     <size>256,-1</size>
                     <font>
                         <size>8</size>
-                        <family>swiss</family>
                     </font>
                     <label>Y</label>
                     <checked>0</checked>
@@ -688,7 +669,6 @@
                                     <pos>12,17</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <label>Dithering:</label>
                                 </object>
@@ -701,9 +681,9 @@
                                     <pos>91,14</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                    <buttonsize>17,-1</buttonsize>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -713,7 +693,6 @@
                                     <pos>12,51</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <label>Palette:</label>
                                 </object>
@@ -726,9 +705,9 @@
                                     <pos>91,48</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                    <buttonsize>17,-1</buttonsize>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -738,7 +717,6 @@
                                     <pos>12,85</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <label>Colour depth:</label>
                                 </object>
@@ -751,9 +729,9 @@
                                     <pos>91,80</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                    <buttonsize>17,-1</buttonsize>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -763,7 +741,6 @@
                                     <pos>12,119</pos>
                                     <font>
                                         <size>8</size>
-                                        <family>swiss</family>
                                     </font>
                                     <label>Max colours:</label>
                                 </object>
@@ -781,7 +758,6 @@
                                             <pos>91,114</pos>
                                             <font>
                                                 <size>8</size>
-                                                <family>swiss</family>
                                             </font>
                                         </object>
                                     </object>
@@ -793,9 +769,9 @@
                                             <pos>140,114</pos>
                                             <font>
                                                 <size>8</size>
-                                                <family>swiss</family>
                                             </font>
                                             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                                            <buttonsize>17,-1</buttonsize>
                                         </object>
                                     </object>
                                 </object>
@@ -825,7 +801,6 @@
                             <pos>12,153</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>Value:</label>
                         </object>
@@ -838,7 +813,6 @@
                             <pos>59,155</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>R</label>
                         </object>
@@ -851,7 +825,6 @@
                             <pos>73,150</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                         </object>
                     </object>
@@ -863,7 +836,6 @@
                             <pos>120,155</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>G</label>
                         </object>
@@ -876,7 +848,6 @@
                             <pos>134,150</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                         </object>
                     </object>
@@ -888,7 +859,6 @@
                             <pos>182,155</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>B</label>
                         </object>
@@ -901,7 +871,6 @@
                             <pos>194,150</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                         </object>
                     </object>
@@ -969,7 +938,6 @@
                             <pos>467,155</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <label>Sort By:</label>
                         </object>
@@ -982,9 +950,9 @@
                             <pos>518,150</pos>
                             <font>
                                 <size>8</size>
-                                <family>swiss</family>
                             </font>
                             <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                            <buttonsize>17,-1</buttonsize>
                         </object>
                     </object>
                 </object>
