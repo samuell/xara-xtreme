@@ -359,7 +359,7 @@ INT32 PluginOILFilter::HowCompatible(PathName& FileName)
 
 		wxArrayString saOutput;
 		wxArrayString saErrors;
-		INT32 code = wxExecute(sCommand, saOutput, saErrors);
+		INT32 code = wxExecute(sCommand, saOutput, saErrors, wxEXEC_NODISABLE);
 		TRACEUSER("Gerry", _T("wxExecute returned %d"), code);
 		if (code == 0)
 		{
@@ -552,7 +552,7 @@ BOOL PluginOILFilter::GetCapabilities(CCLexFile* pFile, PathName* pPath, Capabil
 
 	wxArrayString saOutput;
 	wxArrayString saErrors;
-	INT32 code = wxExecute(sCommand, saOutput, saErrors);
+	INT32 code = wxExecute(sCommand, saOutput, saErrors, wxEXEC_NODISABLE);
 
 #ifdef _DEBUG
 	for (UINT32 i = 0; i < saErrors.GetCount(); i++)
