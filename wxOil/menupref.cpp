@@ -225,7 +225,7 @@ MenuItem *GetMenuPreferences(UINT32 ResourceID)
 
 				TRACEUSER( "luke", _T("SUBMENU \"%s\" \"%s\"\n"), OpToken, OPTOKEN_DEBUG_MENU );
 
-#if !defined(ADD_DEBUG_MENU)
+#if !defined(_DEBUG)
 				// Remove DEBUG menu
 				if( 0 == camStrcmp( OpToken, OPTOKEN_DEBUG_MENU ) )
 				{
@@ -265,7 +265,7 @@ MenuItem *GetMenuPreferences(UINT32 ResourceID)
 						_R(IDE_SYNTAX_ERROR), 
 						NULL);
 
-#if !defined(ADD_DEBUG_MENU)
+#if !defined(_DEBUG)
 				// Don't add menu itemns if parent not wanted
 				if( NULL == pCurMenu )
 					continue;
