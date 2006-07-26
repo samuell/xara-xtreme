@@ -204,7 +204,8 @@ NodeRenderableInk * OpApplyAttrib::FindCompoundNodeWhichRequiresAttribute(
 								BOOL Mutate, 
 								BOOL InvalidateRegion = TRUE
 								BOOL KeepExistingCharacteristics  = TRUE,
-								BOOL* AttribWasRequired = NULL)
+								BOOL* AttribWasRequired = NULL,
+								BOOL* pbCanDiscardUndo = NULL)
 
 	Author:		Will_Cowling (Xara Group Ltd) <camelotdev@xara.com> 
 	Created:	5/4/95
@@ -230,10 +231,11 @@ BOOL SelOperation::DoApply(Node* CurrentNode,
 							BOOL Mutate, 
 							BOOL InvalidateRegion,
 							BOOL KeepExistingCols, /* = TRUE */
-							BOOL* pbAttribWasRequired    /* = NULL */
+							BOOL* pbAttribWasRequired,    /* = NULL */
+							BOOL* pbCanDiscardUndo /* = NULL */
 							)
 {
-	return SelOperation::DoApply(this, CurrentNode, Attrib, Mutate, InvalidateRegion, KeepExistingCols, TRUE, pbAttribWasRequired);
+	return SelOperation::DoApply(this, CurrentNode, Attrib, Mutate, InvalidateRegion, KeepExistingCols, TRUE, pbAttribWasRequired, pbCanDiscardUndo);
 }
 
 BOOL SelOperation::DoApply( SelOperation* pOp,
@@ -243,7 +245,8 @@ BOOL SelOperation::DoApply( SelOperation* pOp,
 							BOOL InvalidateRegion,
 							BOOL KeepExistingCols, /* = TRUE */
 							BOOL bOptimise,
-							BOOL* pbAttribWasRequired    /* = NULL */
+							BOOL* pbAttribWasRequired,    /* = NULL */
+							BOOL* pbCanDiscardUndo /* = NULL */
 							)
 {
 	BOOL AttributeExists = FALSE;  // Until we find that the attribute does exist
@@ -274,6 +277,10 @@ BOOL SelOperation::DoApply( SelOperation* pOp,
 
 	// NOTE! Better to get the value of this flag here, now that GetObjectToApplyTo has been called
 	BOOL bEffectRootOnly = (CurrentNode->IsAnObject() && ((NodeRenderableInk*)CurrentNode)->IsValidEffectAttr(Attrib));
+
+	// If we are applying attributes to the Caret only the caller should not retain an undo record
+	// for this operation...
+	*pbCanDiscardUndo = *pbCanDiscardUndo && CurrentNode->DiscardsAttributeChildren();
 
 	// BODGE! ------------------------------------------------------------
 	// Don't apply stroke transparency as an effect attribute - nothing
@@ -1470,10 +1477,8 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 
 						if (pChildNode->IsAnObject() && ((NodeRenderableInk*)pChildNode)->RequiresAttrib(Attrib))
 						{
-							if (!DoApply(pOp, pChildNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))	// Will only apply Attrib if the node requires it.
+							if (!DoApply(pOp, pChildNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired, &bCanDiscardUndo))	// Will only apply Attrib if the node requires it.
 								return FALSE; 
-
-							bCanDiscardUndo = bCanDiscardUndo && pChildNode->DiscardsAttributeChildren();
 						}
 
 						pChildNode = pNextChildNode;
@@ -1481,12 +1486,11 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 				}
 				else
 				{
-					if (!DoApply(pOp, OldNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))	 // Will not apply Attrib if the node does
+					if (!DoApply(pOp, OldNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired, &bCanDiscardUndo))	 // Will not apply Attrib if the node does
 					// not require it.
 					{
 						return FALSE; 
 					}
-					bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
 				}
 
 
@@ -1504,11 +1508,10 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 			}
 			else
 			{
-				if (!DoApply(pOp, OldNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))	 // Will not apply Attrib if the node does not require it.
+				if (!DoApply(pOp, OldNode, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired, &bCanDiscardUndo))	 // Will not apply Attrib if the node does not require it.
 				{
 					return FALSE; 
 				}
-				bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
 			}
 
 			// a bodge to handle the case when a line width is applied to a transparent line.
@@ -1550,10 +1553,8 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 					((AttrStrokeColour *)pAttr)->SetStartColour(&ColourToApply);
 
 					// apply the new line colour to the node
-					if (!DoApply(pOp, OldNode, pAttr, bMutate, FALSE, FALSE, bOptimise, &bAttrWasRequired))
+					if (!DoApply(pOp, OldNode, pAttr, bMutate, FALSE, FALSE, bOptimise, &bAttrWasRequired, &bCanDiscardUndo))
 						continue; 
-
-					bCanDiscardUndo = bCanDiscardUndo && OldNode->DiscardsAttributeChildren();
 
 					// remove the attribute
 					delete pAttr;
@@ -1578,10 +1579,8 @@ BOOL OpApplyAttrib::DoApplyToSelection(SelOperation* pOp, NodeAttribute* Attrib,
 				AbstractTextChar* pNextATChar = (AbstractTextChar*)pLastSelected->FindNext(CC_RUNTIME_CLASS(AbstractTextChar));
 				if (pNextATChar!=NULL && pNextATChar->IsAnEOLNode())
 				{
-					if (!DoApply(pOp, pNextATChar, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired))
+					if (!DoApply(pOp, pNextATChar, Attrib, bMutate, FALSE, TRUE, bOptimise, &bAttrWasRequired, &bCanDiscardUndo))
 						return FALSE; 
-
-					bCanDiscardUndo = bCanDiscardUndo && pNextATChar->DiscardsAttributeChildren();
 				}
 			}
 
@@ -2641,12 +2640,11 @@ BOOL SelOperation::DoApplyToSelection(List* Attribs, List* AttrGroupList, BOOL* 
 						 FALSE,  // Don't mutate
 						 FALSE,	 // Don't invalidate region
 						 FALSE,	 // Don't keep existing characteristics
-						 &ThisAttrWasRequired))
+						 &ThisAttrWasRequired,
+						 &bCanDiscardUndo))
 			{
 				goto Failed;
 			}
-
-			bCanDiscardUndo = bCanDiscardUndo && CurrentNode->DiscardsAttributeChildren();
 
 			if (ThisAttrWasRequired)
 			{

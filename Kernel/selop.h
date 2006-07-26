@@ -154,7 +154,8 @@ public:
 						 BOOL InvalidateRegion = TRUE, 
 						 BOOL KeepExistingCharacteristics = TRUE,
 						 BOOL bOptimise = TRUE,
-						 BOOL* AttribWasRequired = NULL
+						 BOOL* AttribWasRequired = NULL,
+						 BOOL* pbCanDiscardUndo = NULL
 						 );
 	static BOOL InvalidateNodeRegion(	SelOperation* pOp,
 										NodeRenderableBounded* CurrentNode, 
@@ -170,7 +171,8 @@ public:
 						 BOOL Mutate, 
 						 BOOL InvalidateRegion = TRUE, 
 						 BOOL KeepExistingCharacteristics = TRUE,
-						 BOOL* AttribWasRequired = NULL
+						 BOOL* AttribWasRequired = NULL,
+						 BOOL* pbCanDiscardUndo = NULL
 						 );
 
 protected:
