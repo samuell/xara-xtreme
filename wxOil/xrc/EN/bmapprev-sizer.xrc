@@ -847,7 +847,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxTextCtrl" name="IDC_RED_EDIT">
-                            <size>42,13</size>
+                            <size>42,14</size>
                             <pos>73,150</pos>
                             <font>
                                 <size>8</size>
@@ -872,7 +872,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxTextCtrl" name="IDC_GREEN_EDIT">
-                            <size>42,13</size>
+                            <size>42,14</size>
                             <pos>134,150</pos>
                             <font>
                                 <size>8</size>
