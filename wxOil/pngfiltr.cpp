@@ -1214,6 +1214,5 @@ BitmapExportOptions* PNGFilter::CreateExportOptions() const
 
 void PNGFilter::AlterPaletteContents( LPLOGPALETTE pPalette )
 {
-	PORTNOTETRACE("filters","PNGFilter::AlterPaletteContents - do nothing");
-//	DestPNG.AlterExportPalette( pPalette );
+	DestPNG.AlterExportPalette( pPalette );
 }
