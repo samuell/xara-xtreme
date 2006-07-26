@@ -278,9 +278,10 @@ BOOL SelOperation::DoApply( SelOperation* pOp,
 	// NOTE! Better to get the value of this flag here, now that GetObjectToApplyTo has been called
 	BOOL bEffectRootOnly = (CurrentNode->IsAnObject() && ((NodeRenderableInk*)CurrentNode)->IsValidEffectAttr(Attrib));
 
-	// If we are applying attributes to the Caret only the caller should not retain an undo record
+	// If we are applying attributes to the Caret alone then the caller should not retain an undo record
 	// for this operation...
-	*pbCanDiscardUndo = *pbCanDiscardUndo && CurrentNode->DiscardsAttributeChildren();
+	if (pbCanDiscardUndo)
+		*pbCanDiscardUndo = *pbCanDiscardUndo && CurrentNode->DiscardsAttributeChildren();
 
 	// BODGE! ------------------------------------------------------------
 	// Don't apply stroke transparency as an effect attribute - nothing
