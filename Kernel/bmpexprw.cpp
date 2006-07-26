@@ -1549,7 +1549,7 @@ void BitmapExportPreviewDialog::InitFileTypeList()
 	// Make sure the list is empty
 	DeleteAllValues( _R(IDC_FILE_TYPE_LIST) );
 
-PORTNOTE("export", "Removed GIF and BMP")
+PORTNOTE("export", "Removed BMP")
 	//  Add the necessary strings to the list. 
 	//  This is the complete collection of them.
 	
@@ -1563,8 +1563,8 @@ PORTNOTE("export", "Removed GIF and BMP")
 
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_PNG), FALSE, idComboPng );
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_JPG), FALSE, idComboJpg );
-#if !defined(EXCLUDE_FROM_XARALX)
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_GIF), FALSE, idComboGif );
+#if !defined(EXCLUDE_FROM_XARALX)
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST), _R(IDS_FILE_TYPE_BMP), FALSE, idComboBmp );
 #endif
 
@@ -1573,8 +1573,8 @@ PORTNOTE("export", "Removed GIF and BMP")
 
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_PNG), FALSE, idComboPng );
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_JPG), FALSE, idComboJpg );
-#if !defined(EXCLUDE_FROM_XARALX)
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_GIF), FALSE, idComboGif );
+#if !defined(EXCLUDE_FROM_XARALX)
 	SetStringGadgetValue( _R(IDC_FILE_TYPE_LIST2), _R(IDS_FILE_TYPE_BMP), FALSE, idComboBmp );
 #endif
 
