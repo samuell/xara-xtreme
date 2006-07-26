@@ -145,7 +145,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "filtimag.h"		// Imagemap filter
 #include "pngfiltr.h"		// for PNG filter class
 #include "imjpeg.h"			// for JPEGImportFilter
+PORTNOTE("filter","Removed Flash filter for 0.7")
+#if defined(_DEBUG)
 #include "swffiltr.h"		// For the SWF export filter.
+#endif
 //#include "extfilts.h"		// For the TIFF filter.
 #include "kerneldc.h"
 #include "xsepsops.h"
@@ -866,10 +869,12 @@ PORTNOTETRACE("filter","Removed TIFFFilter");
 	OILFilter::InitPluginFilters(FilterList);
 #endif
 
-#ifndef STANDALONE
-
+PORTNOTE("filter","Removed Flash filter for 0.7")
+#if defined(_DEBUG)
 	ADD_FILTER(FlashFilter)
+#endif
 
+#ifndef STANDALONE
 	// Other filters in alphabetical order.
 PORTNOTE("filter","Removed filters usage")
 #ifndef EXCLUDE_FROM_XARALX
