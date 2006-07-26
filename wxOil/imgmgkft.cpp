@@ -1317,7 +1317,7 @@ BOOL ImageMagickFilter::ConvertFromTempFile(CCLexFile * File)
 	IMargv[1]=cifn;
 	IMargv[2]=cofn;
 	IMargv[3]=NULL;
-	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC);
+	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC | wxEXEC_NODISABLE);
 	
 	free(cifn);
 	free(cofn);
@@ -1379,7 +1379,7 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 #ifdef AVOID_BROKEN_GDB
 	::wxCopyFile(wxString(_T("/tmp/test.png")), TempFileName);
 #else
-	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC);
+	long /*TYPENOTE: Correct*/ ret = ::wxExecute((wxChar **)IMargv, wxEXEC_SYNC | wxEXEC_NODISABLE);
 #endif
 	
 	free(cifn);
@@ -1468,7 +1468,7 @@ BOOL ImageMagickFilter::CheckPath()
 		s_ImageMagickPath = DIP_QUOTE(DEFAULT_IMAGEMAGICK_PATH);
 
 	wxArrayString output;
-	long /*TYPENOTE: Correct*/ ret=::wxExecute(wxString((const TCHAR *)s_ImageMagickPath)/*+_T(" --version")*/, output);
+	long /*TYPENOTE: Correct*/ ret=::wxExecute(wxString((const TCHAR *)s_ImageMagickPath)/*+_T(" --version")*/, output, wxEXEC_SYNC | wxEXEC_NODISABLE);
 	if (!ret && output.GetCount()>0)
 	{
 		wxString check = output[0];
