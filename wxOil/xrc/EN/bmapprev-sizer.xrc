@@ -50,7 +50,7 @@
                                                 <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
                                                 <object class="wxTextCtrl" name="IDC_T1EDIT1">
-                                                    <size>57,14</size>
+                                                    <size>57,20</size>
                                                     <pos>45,30</pos>
                                                     <font>
                                                         <size>8</size>
@@ -74,7 +74,7 @@
                                                 <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
                                                 <object class="wxTextCtrl" name="IDC_T1EDIT2">
-                                                    <size>57,14</size>
+                                                    <size>57,20</size>
                                                     <pos>151,30</pos>
                                                     <font>
                                                         <size>8</size>
@@ -102,7 +102,7 @@
                                                         <flag>wxALIGN_CENTER_VERTICAL</flag>
                                                         <border>5</border>
                                                         <object class="wxTextCtrl" name="IDC_T1EDIT3">
-                                                            <size>57,14</size>
+															<size>57,20</size>
                                                             <pos>45,63</pos>
                                                             <font>
                                                                 <size>8</size>
@@ -777,7 +777,7 @@
                                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                         <border>5</border>
                                         <object class="wxTextCtrl" name="IDC_COLOURS_USED_EDIT">
-                                            <size>40,14</size>
+                                            <size>40,20</size>
                                             <pos>91,114</pos>
                                             <font>
                                                 <size>8</size>
@@ -847,7 +847,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxTextCtrl" name="IDC_RED_EDIT">
-                            <size>42,14</size>
+                            <size>42,20</size>
                             <pos>73,150</pos>
                             <font>
                                 <size>8</size>
@@ -872,7 +872,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxTextCtrl" name="IDC_GREEN_EDIT">
-                            <size>42,14</size>
+                            <size>42,20</size>
                             <pos>134,150</pos>
                             <font>
                                 <size>8</size>
@@ -897,7 +897,7 @@
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxTextCtrl" name="IDC_BLUE_EDIT">
-                            <size>42,13</size>
+                            <size>42,20</size>
                             <pos>194,150</pos>
                             <font>
                                 <size>8</size>
