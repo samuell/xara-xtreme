@@ -100,9 +100,8 @@ protected:
                           event.GetOrientation() );
         ev.SetEventObject( m_combo );
         m_combo->GetEventHandler()->ProcessEvent( ev );
-// Commented out until Charles realizes his first idea was better - AMB
-//        if (event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE)
-//            m_combo->HidePopup();
+        if (event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE)
+            m_combo->HidePopup();
     }
 
 private:
