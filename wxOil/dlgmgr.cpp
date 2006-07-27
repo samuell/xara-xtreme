@@ -3185,6 +3185,13 @@ BOOL DialogManager::SetGadgetRange(CWindowID WindowID,
 	wxWindow * pGadget = GetGadget(WindowID, Gadget);
 	if (!pGadget) return FALSE;
 
+	INT32 LineIncr = (Max-Min+50)/100;
+//	Don't set PgIncr for now
+//	if (LineIncr>PgIncr/2)
+//		LineIncr = PgIncr/2;
+	if (LineIncr<1)
+		LineIncr=1;
+
 	if ( pGadget->IsKindOf(CLASSINFO(wxScrollBar)) )
 	{
 		wxScrollBar * pScroll = (wxScrollBar *)pGadget;
@@ -3196,12 +3203,14 @@ BOOL DialogManager::SetGadgetRange(CWindowID WindowID,
 	if ( pGadget->IsKindOf(CLASSINFO(wxSlider)) )
 	{
 		((wxSlider *)(pGadget))->SetRange(Min, Max);
+		((wxSlider *)(pGadget))->SetLineSize(LineIncr);
 		return TRUE;
 	}
 
 	if ( pGadget->IsKindOf(CLASSINFO(wxSliderCombo)) )
 	{
 		((wxSliderCombo *)(pGadget))->SetRange(Min, Max);
+		((wxSliderCombo *)(pGadget))->SetLineSize(LineIncr);
 		return TRUE;
 	}
 
