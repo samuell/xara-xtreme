@@ -107,6 +107,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 class KernelBitmap;
 
+enum ImageMagickFlags
+{
+	IM_IMPORT		= 1<<0,		// Can import
+	IM_EXPORT		= 1<<1,		// Can export
+	IM_EX_MASK		= 1<<2,		// Can use mask on export
+	IM_EX_INTERLACE = 1<<3,		// Can use interlace on export
+	IM_EX_ALPHA		= 1<<3,		// Can use alpha on import
+	IM_IM_DPI		= 1<<4, 	// Can use DPI on import (e.g. vector formats
+
+	IM_DEFAULT		= 0
+};
+
 /********************************************************************************************
 
 >	class ImageMagickExportOptions : public MaskedFilterExportOptions
@@ -209,12 +221,21 @@ public:
 	// We might want to bring in the Accusoft filter to help out.
 	virtual INT32 GetImageMagickCompatibility() { return ImageMagickHowCompatible; }
 
+	ImageMagickFlags GetCapabilities() {return m_Capabilities;}
+	BOOL HasFlag(ImageMagickFlags f) {return (GetCapabilities() & f)!=0;}
+
 	// These get overridden in the derived classes
-	virtual BOOL CanDoTransparency() { return TRUE; }
-	virtual BOOL CanDoInterlace() { return FALSE; }
+	virtual BOOL CanDoTransparency() { return HasFlag(IM_EX_MASK); }
+	virtual BOOL CanDoInterlace() { return HasFlag(IM_EX_INTERLACE); }
+	virtual BOOL CanDoAlpha() { return HasFlag(IM_EX_ALPHA); }
+	virtual BOOL CanDoImportDPI() { return HasFlag(IM_IM_DPI); }
+	virtual BOOL CanDoImport() { return HasFlag(IM_IMPORT); }
+	virtual BOOL CanDoExport() { return HasFlag(IM_EXPORT); }
 	virtual wxString GetTag() { return _T("mmif"); }
 	virtual TCHAR * GetExtension() { return _T("mmif"); }
 	virtual INT32 GetCompatibility() { return 10; }
+
+	virtual void SetImportDPI(INT32 ImportDPI) {m_ImportDPI = ImportDPI;}
 
 	// Virtual overrides
 	virtual UINT32 GetExportMsgID();
@@ -223,6 +244,7 @@ public:
 	static BOOL CheckPath();
 
 protected:
+	virtual void SetCapabilities(ImageMagickFlags f) {m_Capabilities = f;}
 
 	// Invert the alpha channel.
 	virtual void InvertAlpha ( LPBITMAPINFO	lpBitmapInfo,
@@ -279,6 +301,9 @@ protected:
 	// The string to display when exporting the second stage.
 	UINT32 Export2ndStageMsgID;
 
+	ImageMagickFlags m_Capabilities;
+	INT32 m_ImportDPI;
+
 	CCDiskFile * TempFile;
 	wxString TempFileName;
 
@@ -310,14 +335,15 @@ public:
 };
 
 
-#define DECLARE_IMAGEMAGICK_FILTER(IMType, IMCanInport, IMCanExport, IMTransparency, IMInterlace, IMTag, IMExtension, IMCompatibility)	\
+#define DECLARE_IMAGEMAGICK_FILTER(IMType, IMFlags, IMTag, IMExtension, IMCompatibility)	\
 class ImageMagickFilter ## IMType : public ImageMagickFilter					\
 {																				\
 public:																			\
 	ImageMagickFilter ## IMType()												\
 	{																			\
-		Flags.CanImport 	= IMCanInport;										\
-		Flags.CanExport 	= IMCanExport;										\
+		SetCapabilities((ImageMagickFlags)(IMFlags));							\
+		Flags.CanImport 	= HasFlag(IM_IMPORT);								\
+		Flags.CanExport 	= HasFlag(IM_EXPORT);								\
 		FilterID			= FILTERID_IMAGEMAGICK_ ## IMType ;					\
 		FilterNameID		= _R(IDS_IMAGEMAGICK_ ## IMType ## _FILTERNAME);	\
 		FilterInfoID		= _R(IDS_IMAGEMAGICK_ ## IMType ## _FILTERINFO);	\
@@ -328,8 +354,6 @@ public:																			\
 		Export2ndStageMsgID = _R(IDS_IMAGEMAGICK_ ## IMType ## _MASKINGMSG);	\
 	}																			\
 																				\
-	virtual BOOL CanDoTransparency()	{ return IMTransparency; }				\
-	virtual BOOL CanDoInterlace() 		{ return IMInterlace; }					\
 	virtual wxString GetTag() 			{ return IMTag; }						\
 	virtual TCHAR * GetExtension() 		{ return IMExtension; }					\
 	virtual INT32 GetCompatibility() 	{ return IMCompatibility; }				\
@@ -422,68 +446,67 @@ enum ImageMagickFilterID
 };
 
 //						  ClassName	Import	Export	Transp	Int'lce	Tag			Extension	Compat
-DECLARE_IMAGEMAGICK_FILTER(BMP,		TRUE,	TRUE,	TRUE,	FALSE,	_T("bmp"),	_T("bmp"),	10); // Microsoft Windows Bitmap
-DECLARE_IMAGEMAGICK_FILTER(CUR,		TRUE,	FALSE,	TRUE,	FALSE,	_T("cur"),	_T("cur"),	10); // Microsoft Cursor Icon
-DECLARE_IMAGEMAGICK_FILTER(CUT,		TRUE,	FALSE,	TRUE,	FALSE,	_T("cut"),	_T("cut"),	10); // DR Halo
-DECLARE_IMAGEMAGICK_FILTER(DCM,		TRUE,	FALSE,	TRUE,	FALSE,	_T("dcm"),	_T("dcm"),	10); // DICOM Image
-DECLARE_IMAGEMAGICK_FILTER(DCX,		TRUE,	TRUE,	TRUE,	FALSE,	_T("dcx"),	_T("dcx"),	10); // ZSoft Paintbrush
-DECLARE_IMAGEMAGICK_FILTER(DIB,		TRUE,	TRUE,	TRUE,	FALSE,	_T("dib"),	_T("dib"),	10); // Microsoft Windows Device Independent Bitmap
-DECLARE_IMAGEMAGICK_FILTER(DNG,		TRUE,	FALSE,	TRUE,	FALSE,	_T("dng"),	_T("dng"),	10); // Digital Negative
-DECLARE_IMAGEMAGICK_FILTER(EPDF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("epdf"),	_T("epdf"),	10); // Encapsulated Portable Document Format
-DECLARE_IMAGEMAGICK_FILTER(EPI,		TRUE,	TRUE,	TRUE,	FALSE,	_T("epi"),	_T("epi"),	10); // Adobe Encapsulated PostScript Interchange format
-DECLARE_IMAGEMAGICK_FILTER(EPS,		TRUE,	TRUE,	TRUE,	FALSE,	_T("eps"),	_T("eps"),	10); // Adobe Encapsulated PostScript
-DECLARE_IMAGEMAGICK_FILTER(EPS2,	FALSE,	TRUE,	TRUE,	FALSE,	_T("eps2"),	_T("eps2"),	10); // Adobe Level II Encapsulated PostScript
-DECLARE_IMAGEMAGICK_FILTER(EPS3,	FALSE,	TRUE,	TRUE,	FALSE,	_T("eps3"),	_T("eps3"),	10); // Adobe Level III Encapsulated PostScript
-DECLARE_IMAGEMAGICK_FILTER(EPSF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("epsf"),	_T("epsf"),	10); // Adobe Encapsulated PostScript
-DECLARE_IMAGEMAGICK_FILTER(EPSI,	TRUE,	TRUE,	TRUE,	FALSE,	_T("epsi"),	_T("epsi"),	10); // Adobe Encapsulated PostScript Interchange format
-DECLARE_IMAGEMAGICK_FILTER(EPT,		TRUE,	TRUE,	TRUE,	FALSE,	_T("ept"),	_T("ept"),	10); // Adobe Encapsulated PostScript Interchange format with TIFF preview
-DECLARE_IMAGEMAGICK_FILTER(FAX,		TRUE,	TRUE,	TRUE,	FALSE,	_T("fax"),	_T("fax"),	10); // Group 3 TIFF
-DECLARE_IMAGEMAGICK_FILTER(FITS,	TRUE,	TRUE,	TRUE,	FALSE,	_T("fits"),	_T("fits"),	10); // Flexible Image Transport System
-DECLARE_IMAGEMAGICK_FILTER(ICO,		TRUE,	FALSE,	TRUE,	FALSE,	_T("ico"),	_T("ico"),	10); // Microsoft Icon
-DECLARE_IMAGEMAGICK_FILTER(JNG,		TRUE,	TRUE,	TRUE,	FALSE,	_T("jng"),	_T("jng"),	10); // Multiple-image Network Graphics
-DECLARE_IMAGEMAGICK_FILTER(MIFF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("miff"),	_T("miff"),	10); // Magick image file format
-DECLARE_IMAGEMAGICK_FILTER(MPC,		TRUE,	TRUE,	TRUE,	FALSE,	_T("mpc"),	_T("mpc"),	10); // Magick Persistent Cache image file format
-DECLARE_IMAGEMAGICK_FILTER(OTB,		TRUE,	TRUE,	TRUE,	FALSE,	_T("otb"),	_T("otb"),	10); // On-the-air Bitmap
-DECLARE_IMAGEMAGICK_FILTER(P7,		TRUE,	TRUE,	TRUE,	FALSE,	_T("p7"),	_T("p7"),	10); // Xv's Visual Schnauzer thumbnail format
-DECLARE_IMAGEMAGICK_FILTER(PALM,	TRUE,	TRUE,	TRUE,	FALSE,	_T("palm"),	_T("palm"),	10); // Palm pixmap
-DECLARE_IMAGEMAGICK_FILTER(PAM,		FALSE,	TRUE,	TRUE,	FALSE,	_T("pam"),	_T("pam"),	10); // Common 2-dimensional bitmap format
-DECLARE_IMAGEMAGICK_FILTER(PBM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pbm"),	_T("pbm"),	10); // Portable bitmap format (black and white)
-DECLARE_IMAGEMAGICK_FILTER(PCD,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pcd"),	_T("pcd"),	10); // Photo CD
-DECLARE_IMAGEMAGICK_FILTER(PCDS,	TRUE,	TRUE,	TRUE,	FALSE,	_T("pcds"),	_T("pcds"),	10); // Photo CD
-DECLARE_IMAGEMAGICK_FILTER(PCL,		FALSE,	TRUE,	TRUE,	FALSE,	_T("pcl"),	_T("pcl"),	10); // HP Page Control Language
-DECLARE_IMAGEMAGICK_FILTER(PCX,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pcx"),	_T("pcx"),	10); // ZSoft IBM PC Paintbrush file
-DECLARE_IMAGEMAGICK_FILTER(PDB,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pdb"),	_T("pdb"),	10); // Palm Database ImageViewer Format
-DECLARE_IMAGEMAGICK_FILTER(PDF,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pdf"),	_T("pdf"),	10); // Portable Document Format
-DECLARE_IMAGEMAGICK_FILTER(PGM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pgm"),	_T("pgm"),	10); // Portable graymap format (gray scale)
-DECLARE_IMAGEMAGICK_FILTER(PICT,	TRUE,	TRUE,	TRUE,	FALSE,	_T("pict"),	_T("pict"),	10); // Apple Macintosh QuickDraw/PICT file
-DECLARE_IMAGEMAGICK_FILTER(PIX,		TRUE,	FALSE,	TRUE,	FALSE,	_T("pix"),	_T("pix"),	10); // Alias/Wavefront RLE image format
-DECLARE_IMAGEMAGICK_FILTER(PNM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("pnm"),	_T("pnm"),	10); // Portable anymap
-DECLARE_IMAGEMAGICK_FILTER(PPM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("ppm"),	_T("ppm"),	10); // Portable pixmap format (color)
-DECLARE_IMAGEMAGICK_FILTER(PS,		TRUE,	TRUE,	TRUE,	FALSE,	_T("ps"),	_T("ps"),	10); // Adobe PostScript file
-DECLARE_IMAGEMAGICK_FILTER(PS2,		TRUE,	TRUE,	TRUE,	FALSE,	_T("ps2"),	_T("ps2"),	10); // Adobe Level II PostScript file
-DECLARE_IMAGEMAGICK_FILTER(PS3,		TRUE,	TRUE,	TRUE,	FALSE,	_T("ps3"),	_T("ps3"),	10); // Adobe Level III PostScript file
-DECLARE_IMAGEMAGICK_FILTER(PSD,		TRUE,	TRUE,	TRUE,	FALSE,	_T("psd"),	_T("psd"),	10); // Adobe Photoshop bitmap file
-DECLARE_IMAGEMAGICK_FILTER(PTIF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("ptif"),	_T("ptif"),	10); // Pyramid encoded TIFF
-DECLARE_IMAGEMAGICK_FILTER(PWP,		TRUE,	FALSE,	TRUE,	FALSE,	_T("pwp"),	_T("pwp"),	10); // Seattle File Works multi-image file
-DECLARE_IMAGEMAGICK_FILTER(RLA,		TRUE,	FALSE,	TRUE,	FALSE,	_T("rla"),	_T("rla"),	10); // Alias/Wavefront image file
-DECLARE_IMAGEMAGICK_FILTER(RLE,		TRUE,	FALSE,	TRUE,	FALSE,	_T("rle"),	_T("rle"),	10); // Utah Run length encoded image file
-DECLARE_IMAGEMAGICK_FILTER(SCT,		TRUE,	FALSE,	TRUE,	FALSE,	_T("sct"),	_T("sct"),	10); // Scitex Continuous Tone Picture
-DECLARE_IMAGEMAGICK_FILTER(SFW,		TRUE,	FALSE,	TRUE,	FALSE,	_T("sfw"),	_T("sfw"),	10); // Seattle File Works image
-DECLARE_IMAGEMAGICK_FILTER(SUN,		TRUE,	TRUE,	TRUE,	FALSE,	_T("sun"),	_T("sun"),	10); // SUN Rasterfile
-DECLARE_IMAGEMAGICK_FILTER(SVG,		TRUE,	TRUE,	TRUE,	FALSE,	_T("svg"),	_T("svg"),	10); // Scalable Vector Graphics
-DECLARE_IMAGEMAGICK_FILTER(TGA,		TRUE,	TRUE,	TRUE,	FALSE,	_T("tga"),	_T("tga"),	10); // Truevision Targa image
-DECLARE_IMAGEMAGICK_FILTER(TIFF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("tiff"),	_T("tiff"),	10); // Tagged Image File Format
-DECLARE_IMAGEMAGICK_FILTER(TIM,		TRUE,	FALSE,	TRUE,	FALSE,	_T("tim"),	_T("tim"),	10); // PSX TIM file
-DECLARE_IMAGEMAGICK_FILTER(TTF,		TRUE,	FALSE,	TRUE,	FALSE,	_T("ttf"),	_T("ttf"),	10); // TrueType font file
-DECLARE_IMAGEMAGICK_FILTER(VICAR,	TRUE,	TRUE,	TRUE,	FALSE,	_T("vicar"),_T("vicar"),10); // VICAR rasterfile format
-DECLARE_IMAGEMAGICK_FILTER(VIFF,	TRUE,	TRUE,	TRUE,	FALSE,	_T("viff"),	_T("viff"),	10); // Khoros Visualization Image File Format
-DECLARE_IMAGEMAGICK_FILTER(WBMP,	TRUE,	TRUE,	TRUE,	FALSE,	_T("wbmp"),	_T("wbmp"),	10); // Wireless bitmap
-DECLARE_IMAGEMAGICK_FILTER(WPG,		TRUE,	FALSE,	TRUE,	FALSE,	_T("wpg"),	_T("wpg"),	10); // Word Perfect Graphics File
-DECLARE_IMAGEMAGICK_FILTER(XBM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("xbm"),	_T("xbm"),	10); // X Windows system bitmap, black and white only
-DECLARE_IMAGEMAGICK_FILTER(XCF,		TRUE,	FALSE,	TRUE,	FALSE,	_T("xcf"),	_T("xcf"),	10); // GIMP image
-DECLARE_IMAGEMAGICK_FILTER(XPM,		TRUE,	TRUE,	TRUE,	FALSE,	_T("xpm"),	_T("xpm"),	10); // X Windows system pixmap
-DECLARE_IMAGEMAGICK_FILTER(XWD,		TRUE,	TRUE,	TRUE,	FALSE,	_T("xwd"),	_T("xwd"),	10); // X Windows system window dump
-
+DECLARE_IMAGEMAGICK_FILTER(BMP,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("bmp"),	_T("bmp"),	10); // Microsoft Windows Bitmap
+DECLARE_IMAGEMAGICK_FILTER(CUR,		IM_IMPORT|IM_EX_MASK,						_T("cur"),	_T("cur"),	10); // Microsoft Cursor Icon
+DECLARE_IMAGEMAGICK_FILTER(CUT,		IM_IMPORT|IM_EX_MASK,						_T("cut"),	_T("cut"),	10); // DR Halo
+DECLARE_IMAGEMAGICK_FILTER(DCM,		IM_IMPORT|IM_EX_MASK,						_T("dcm"),	_T("dcm"),	10); // DICOM Image
+DECLARE_IMAGEMAGICK_FILTER(DCX,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("dcx"),	_T("dcx"),	10); // ZSoft Paintbrush
+DECLARE_IMAGEMAGICK_FILTER(DIB,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("dib"),	_T("dib"),	10); // Microsoft Windows Device Independent Bitmap
+DECLARE_IMAGEMAGICK_FILTER(DNG,		IM_IMPORT|IM_EX_MASK,						_T("dng"),	_T("dng"),	10); // Digital Negative
+DECLARE_IMAGEMAGICK_FILTER(EPDF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("epdf"),	_T("epdf"),	10); // Encapsulated Portable Document Format
+DECLARE_IMAGEMAGICK_FILTER(EPI,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("epi"),	_T("epi"),	10); // Adobe Encapsulated PostScript Interchange format
+DECLARE_IMAGEMAGICK_FILTER(EPS,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("eps"),	_T("eps"),	10); // Adobe Encapsulated PostScript
+DECLARE_IMAGEMAGICK_FILTER(EPS2,	IM_EXPORT|IM_EX_MASK|IM_IM_DPI,				_T("eps2"),	_T("eps2"),	10); // Adobe Level II Encapsulated PostScript
+DECLARE_IMAGEMAGICK_FILTER(EPS3,	IM_EXPORT|IM_EX_MASK|IM_IM_DPI,				_T("eps3"),	_T("eps3"),	10); // Adobe Level III Encapsulated PostScript
+DECLARE_IMAGEMAGICK_FILTER(EPSF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("epsf"),	_T("epsf"),	10); // Adobe Encapsulated PostScript
+DECLARE_IMAGEMAGICK_FILTER(EPSI,	IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("epsi"),	_T("epsi"),	10); // Adobe Encapsulated PostScript Interchange format
+DECLARE_IMAGEMAGICK_FILTER(EPT,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("ept"),	_T("ept"),	10); // Adobe Encapsulated PostScript Interchange format with TIFF preview
+DECLARE_IMAGEMAGICK_FILTER(FAX,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("fax"),	_T("fax"),	10); // Group 3 TIFF
+DECLARE_IMAGEMAGICK_FILTER(FITS,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("fits"),	_T("fits"),	10); // Flexible Image Transport System
+DECLARE_IMAGEMAGICK_FILTER(ICO,		IM_IMPORT|IM_EX_MASK,						_T("ico"),	_T("ico"),	10); // Microsoft Icon
+DECLARE_IMAGEMAGICK_FILTER(JNG,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("jng"),	_T("jng"),	10); // Multiple-image Network Graphics
+DECLARE_IMAGEMAGICK_FILTER(MIFF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("miff"),	_T("miff"),	10); // Magick image file format
+DECLARE_IMAGEMAGICK_FILTER(MPC,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("mpc"),	_T("mpc"),	10); // Magick Persistent Cache image file format
+DECLARE_IMAGEMAGICK_FILTER(OTB,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("otb"),	_T("otb"),	10); // On-the-air Bitmap
+DECLARE_IMAGEMAGICK_FILTER(P7,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("p7"),	_T("p7"),	10); // Xv's Visual Schnauzer thumbnail format
+DECLARE_IMAGEMAGICK_FILTER(PALM,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("palm"),	_T("palm"),	10); // Palm pixmap
+DECLARE_IMAGEMAGICK_FILTER(PAM,		IM_EXPORT|IM_EX_MASK,						_T("pam"),	_T("pam"),	10); // Common 2-dimensional bitmap format
+DECLARE_IMAGEMAGICK_FILTER(PBM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pbm"),	_T("pbm"),	10); // Portable bitmap format (black and white)
+DECLARE_IMAGEMAGICK_FILTER(PCD,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pcd"),	_T("pcd"),	10); // Photo CD
+DECLARE_IMAGEMAGICK_FILTER(PCDS,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pcds"),	_T("pcds"),	10); // Photo CD
+DECLARE_IMAGEMAGICK_FILTER(PCL,		IM_EXPORT|IM_EX_MASK|IM_IM_DPI,				_T("pcl"),	_T("pcl"),	10); // HP Page Control Language
+DECLARE_IMAGEMAGICK_FILTER(PCX,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pcx"),	_T("pcx"),	10); // ZSoft IBM PC Paintbrush file
+DECLARE_IMAGEMAGICK_FILTER(PDB,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pdb"),	_T("pdb"),	10); // Palm Database ImageViewer Format
+DECLARE_IMAGEMAGICK_FILTER(PDF,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("pdf"),	_T("pdf"),	10); // Portable Document Format
+DECLARE_IMAGEMAGICK_FILTER(PGM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pgm"),	_T("pgm"),	10); // Portable graymap format (gray scale)
+DECLARE_IMAGEMAGICK_FILTER(PICT,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pict"),	_T("pict"),	10); // Apple Macintosh QuickDraw/PICT file
+DECLARE_IMAGEMAGICK_FILTER(PIX,		IM_IMPORT|IM_EX_MASK,						_T("pix"),	_T("pix"),	10); // Alias/Wavefront RLE image format
+DECLARE_IMAGEMAGICK_FILTER(PNM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("pnm"),	_T("pnm"),	10); // Portable anymap
+DECLARE_IMAGEMAGICK_FILTER(PPM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("ppm"),	_T("ppm"),	10); // Portable pixmap format (color)
+DECLARE_IMAGEMAGICK_FILTER(PS,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("ps"),	_T("ps"),	10); // Adobe PostScript file
+DECLARE_IMAGEMAGICK_FILTER(PS2,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("ps2"),	_T("ps2"),	10); // Adobe Level II PostScript file
+DECLARE_IMAGEMAGICK_FILTER(PS3,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("ps3"),	_T("ps3"),	10); // Adobe Level III PostScript file
+DECLARE_IMAGEMAGICK_FILTER(PSD,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("psd"),	_T("psd"),	10); // Adobe Photoshop bitmap file
+DECLARE_IMAGEMAGICK_FILTER(PTIF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("ptif"),	_T("ptif"),	10); // Pyramid encoded TIFF
+DECLARE_IMAGEMAGICK_FILTER(PWP,		IM_IMPORT|IM_EX_MASK,						_T("pwp"),	_T("pwp"),	10); // Seattle File Works multi-image file
+DECLARE_IMAGEMAGICK_FILTER(RLA,		IM_IMPORT|IM_EX_MASK,						_T("rla"),	_T("rla"),	10); // Alias/Wavefront image file
+DECLARE_IMAGEMAGICK_FILTER(RLE,		IM_IMPORT|IM_EX_MASK,						_T("rle"),	_T("rle"),	10); // Utah Run length encoded image file
+DECLARE_IMAGEMAGICK_FILTER(SCT,		IM_IMPORT|IM_EX_MASK,						_T("sct"),	_T("sct"),	10); // Scitex Continuous Tone Picture
+DECLARE_IMAGEMAGICK_FILTER(SFW,		IM_IMPORT|IM_EX_MASK,						_T("sfw"),	_T("sfw"),	10); // Seattle File Works image
+DECLARE_IMAGEMAGICK_FILTER(SUN,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("sun"),	_T("sun"),	10); // SUN Rasterfile
+DECLARE_IMAGEMAGICK_FILTER(SVG,		IM_IMPORT|IM_EXPORT|IM_EX_MASK|IM_IM_DPI,	_T("svg"),	_T("svg"),	10); // Scalable Vector Graphics
+DECLARE_IMAGEMAGICK_FILTER(TGA,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("tga"),	_T("tga"),	10); // Truevision Targa image
+DECLARE_IMAGEMAGICK_FILTER(TIFF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("tiff"),	_T("tiff"),	10); // Tagged Image File Format
+DECLARE_IMAGEMAGICK_FILTER(TIM,		IM_IMPORT|IM_EX_MASK,						_T("tim"),	_T("tim"),	10); // PSX TIM file
+DECLARE_IMAGEMAGICK_FILTER(TTF,		IM_IMPORT|IM_EX_MASK,						_T("ttf"),	_T("ttf"),	10); // TrueType font file
+DECLARE_IMAGEMAGICK_FILTER(VICAR,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("vicar"),_T("vicar"),10); // VICAR rasterfile format
+DECLARE_IMAGEMAGICK_FILTER(VIFF,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("viff"),	_T("viff"),	10); // Khoros Visualization Image File Format
+DECLARE_IMAGEMAGICK_FILTER(WBMP,	IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("wbmp"),	_T("wbmp"),	10); // Wireless bitmap
+DECLARE_IMAGEMAGICK_FILTER(WPG,		IM_IMPORT|IM_EX_MASK,						_T("wpg"),	_T("wpg"),	10); // Word Perfect Graphics File
+DECLARE_IMAGEMAGICK_FILTER(XBM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("xbm"),	_T("xbm"),	10); // X Windows system bitmap, black and white only
+DECLARE_IMAGEMAGICK_FILTER(XCF,		IM_IMPORT|IM_EX_MASK,						_T("xcf"),	_T("xcf"),	10); // GIMP image
+DECLARE_IMAGEMAGICK_FILTER(XPM,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("xpm"),	_T("xpm"),	10); // X Windows system pixmap
+DECLARE_IMAGEMAGICK_FILTER(XWD,		IM_IMPORT|IM_EXPORT|IM_EX_MASK,				_T("xwd"),	_T("xwd"),	10); // X Windows system window dump
 
 #endif // INC_ImageMagickFILTR
 

@@ -124,6 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "mrhbits.h"	//  For CBMPBits::RenderSelectionToBMP
 #include "bitfilt.h"
 #include "selall.h"		//  For OPTOKEN_EDITSELECTALL
+#include "osrndrgn.h"
 
 CC_IMPLEMENT_DYNAMIC(ImageMagickFilter, MaskedFilter)
 CC_IMPLEMENT_DYNCREATE(ImageMagickExportOptions, MaskedFilterExportOptions)
@@ -256,6 +257,7 @@ ImageMagickFilter::ImageMagickFilter() : MaskedFilter()
 {
 	ExportRegion = NULL;
 	TempFile = NULL;
+	m_ImportDPI = 0;
 
 	// Things that the derive class constructor may stamp on
 	Flags.CanImport 	= TRUE;
@@ -1364,17 +1366,28 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 	wxChar * cifn;
 	wxChar * cofn;
 	wxChar * pcommand=_T("/usr/bin/convert");
-	wxChar * IMargv[4];
+	wxChar * IMargv[10];
+	wxChar * cdpi = NULL;
 
 	// get filename in usable form
 	cifn = camStrdup(GetTag()+_T(":")+(const TCHAR *)(InputPath.GetPath())+_T("[0]"));
 	cofn = camStrdup(wxString(_T("png:"))+TempFileName );
 
+	INT32 p = 0;
+
 	// Now convert the file
-	IMargv[0]=pcommand;
-	IMargv[1]=cifn;
-	IMargv[2]=cofn;
-	IMargv[3]=NULL;
+	IMargv[p++]=pcommand;
+	if (CanDoImportDPI())
+	{
+		// Always specify a DPI if the filter takes it, but use the screen default DPI if none specified
+		wxScreenDC dc;
+		wxSize DefaultDPI=OSRenderRegion::GetFixedDCPPI(dc);
+		IMargv[p++]=_T("-density");
+		cdpi = camStrdup(wxString::Format(_T("%dx%d"), m_ImportDPI?m_ImportDPI:DefaultDPI.GetWidth(),m_ImportDPI?m_ImportDPI:DefaultDPI.GetHeight()));
+	}
+	IMargv[p++]=cifn;
+	IMargv[p++]=cofn;
+	IMargv[p++]=NULL;
 
 #ifdef AVOID_BROKEN_GDB
 	::wxCopyFile(wxString(_T("/tmp/test.png")), TempFileName);
@@ -1384,6 +1397,11 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 	
 	free(cifn);
 	free(cofn);
+	if (cdpi)
+	{
+		free(cdpi);
+		cdpi = NULL;
+	}
 
 	if (ret)
 	{
@@ -1518,4 +1536,3 @@ ImageMagickOILFilter::ImageMagickOILFilter(Filter* pFilter, ResourceID FilterNam
 	FilterName.Load(FilterNameID);
 	FilterExt.Load(FilterExtID);
 } 
-
