@@ -10,6 +10,7 @@ xmlns:apkg="http://autopackage.org/xdgmime-extensions">
          </magic>
          <glob pattern="*.xar"/>
          <glob pattern="*.web"/>
+	 <alias type="application/x-extension-xar"/>
          <apkg:icon>xaralx.png</apkg:icon>
   </mime-type>
 </mime-info>
