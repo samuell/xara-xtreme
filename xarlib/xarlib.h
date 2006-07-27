@@ -28,6 +28,7 @@ a license to do so. Such a license will normally be granted free of charge.
 #ifndef INC_XARLIB
 #define	INC_XARLIB
 
+#include "camtypes.h"
 #include "cxftags.h"
 #include "cxfrec.h"
 
@@ -36,14 +37,14 @@ class CXaraFile;
 class CCDiskFile;
 class CCMemFile;
 
-typedef HRESULT (RecordHandler)(void*, CXaraFileRecord*);
+typedef BOOL (RecordHandler)(void*, CXaraFileRecord*);
 
 class CXarImport
 {
 public:
 	virtual ~CXarImport() {};
 	virtual BOOL PrepareImport() = 0;
-	virtual BOOL PrepareImport(char* pFileName) = 0;
+	virtual BOOL PrepareImport(TCHAR* pFileName) = 0;
 #if defined(USE_COM_STREAM)
 	virtual BOOL PrepareImport(IStream* pStream) = 0;
 #endif	// defined(USE_COM_STREAM)
@@ -57,7 +58,7 @@ class CXarExport
 public:
 	virtual ~CXarExport() {};
 	virtual BOOL StartExport() = 0;
-	virtual BOOL StartExport(char* pFileName) = 0;
+	virtual BOOL StartExport(TCHAR* pFileName) = 0;
 #if defined(USE_COM_STREAM)
 	virtual BOOL StartExport(IStream* pStream) = 0;
 #endif	// defined(USE_COM_STREAM)

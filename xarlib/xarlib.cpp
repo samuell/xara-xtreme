@@ -25,7 +25,7 @@ a license to do so. Such a license will normally be granted free of charge.
 
 ===========================XARAHEADEREND===================================*/
 
-#include "camtypes.h"
+//#include "camtypes.h"
 #include "xarlib.h"
 #include "cxfile.h"
 #include "ccfile.h"
@@ -37,7 +37,7 @@ public:
 	virtual ~CImporter();
 
 	virtual BOOL PrepareImport();
-	virtual BOOL PrepareImport(char* pFileName);
+	virtual BOOL PrepareImport(TCHAR* pFileName);
 #if defined(USE_COM_STREAM)
 	virtual BOOL PrepareImport(IStream* pStream);
 #endif	// defined(USE_COM_STREAM)
@@ -62,7 +62,7 @@ public:
 	virtual ~CExporter();
 
 	virtual BOOL StartExport();
-	virtual BOOL StartExport(char* pFileName);
+	virtual BOOL StartExport(TCHAR* pFileName);
 #if defined(USE_COM_STREAM)
 	virtual BOOL StartExport(IStream* pStream);
 #endif	// defined(USE_COM_STREAM)
@@ -156,9 +156,11 @@ BOOL CImporter::PrepareImport()
 		return(FALSE);
 	}
 
+	// TODOG: This needs fixing first!!!
+
 	// First off, we have to connect to stdin (cin is the iostream equivalent)
-	fstream* pStream = new fstream("test.xar", ios::in);
-//	((iostream*)pStream)->rdbuf(cin.rdbuf());
+	fstream* pStream = new fstream();
+	((iostream*)pStream)->rdbuf(cin.rdbuf());
 
 	m_pCCImpStreamFile = new CCStreamFile(pStream, 1024, FALSE, TRUE);
 	if (!m_pCCImpStreamFile)
@@ -180,7 +182,7 @@ BOOL CImporter::PrepareImport()
 
 
 
-BOOL CImporter::PrepareImport(char* pFileName)
+BOOL CImporter::PrepareImport(TCHAR* pFileName)
 {
 	if (m_pCXImpFile || m_pCCImpDiskFile || m_pCCImpStreamFile || m_pCCImpMemFile
 #if defined(USE_COM_STREAM)
@@ -201,7 +203,7 @@ BOOL CImporter::PrepareImport(char* pFileName)
 	if (!m_pCCImpDiskFile->open(FileName, ios::in | ios::binary))
 	{
 		// Failed to open the file...
-		TRACE("Failed to open file in PrepareImport\n");
+		TRACE(_T("Failed to open file in PrepareImport\n"));
 		return(FALSE);
 	}
 
@@ -267,6 +269,7 @@ BOOL CImporter::PrepareImport(BYTE* pBuffer, UINT32 Size)
 		return(FALSE);
 	}
 
+#if FALSE
 #if defined(_WIN32)
 	char PathBuf[MAX_PATH];
 	if (GetTempPath(MAX_PATH, PathBuf) == 0)
@@ -281,19 +284,22 @@ BOOL CImporter::PrepareImport(BYTE* pBuffer, UINT32 Size)
 	char Buffer[MAX_PATH];
 	tsprintf( Buffer, sizeof(Buffer), "%s/libXar-%d-%d-%ld", PathBuf, random(), getpid(), time(NULL) % 1000 );
 #endif
+#endif
+
+	wxString TempFileName = wxFileName::CreateTempFileName(_T("libXar"));
 	
 	CCDiskFile TempFile(1024,FALSE,TRUE);
-	PathName FileName(Buffer);
+	PathName FileName(TempFileName.c_str());
 	if (!TempFile.open(FileName, ios::out | ios::binary))
 	{
 		// Failed to open the file...
-		TRACE("Failed to open temp file in PrepareImport\n");
+		TRACE(_T("Failed to open temp file in PrepareImport\n"));
 		return(FALSE);
 	}
 	if (TempFile.write(pBuffer, Size).bad())
 	{
 		// Failed to write the file...
-		TRACE("Failed to write temp file in PrepareImport\n");
+		TRACE(_T("Failed to write temp file in PrepareImport\n"));
 		return(FALSE);
 	}
 
@@ -305,7 +311,7 @@ BOOL CImporter::PrepareImport(BYTE* pBuffer, UINT32 Size)
 	if (!m_pCCImpDiskFile->open(FileName, ios::in | ios::binary))
 	{
 		// Failed to open the file...
-		TRACE("Failed to open temp file in PrepareImport\n");
+		TRACE(_T("Failed to open temp file in PrepareImport\n"));
 		return(FALSE);
 	}
 
@@ -317,7 +323,7 @@ BOOL CImporter::PrepareImport(BYTE* pBuffer, UINT32 Size)
 //	if (!m_pCCImpMemFile->open(pBuffer, Size, CCMemRead))
 //	{
 //		// Failed to open the file...
-//		TRACE("Failed to open file in PrepareImport\n");
+//		TRACE(_T("Failed to open file in PrepareImport\n"));
 //		return(FALSE);
 //	}
 
@@ -456,7 +462,7 @@ BOOL CExporter::StartExport()
 
 
 
-BOOL CExporter::StartExport(char* pFileName)
+BOOL CExporter::StartExport(TCHAR* pFileName)
 {
 	if (m_pCXExpFile || m_pCCExpDiskFile || m_pCCExpStreamFile || m_pCCExpMemFile
 #if defined(USE_COM_STREAM)
@@ -477,7 +483,7 @@ BOOL CExporter::StartExport(char* pFileName)
 	if (!m_pCCExpDiskFile->open(FileName, ios::out | ios::binary))
 	{
 		// Failed to open the file...
-		TRACE("Failed to open file in PrepareExport\n");
+		TRACE(_T("Failed to open file in PrepareExport\n"));
 		return(FALSE);
 	}
 
@@ -541,7 +547,7 @@ BOOL CExporter::StartBufferedExport()
 	if (!m_pCCExpMemFile->open(NULL, 0, CCMemWrite))
 	{
 		// Failed to open the file...
-		TRACE("Failed to open file in PrepareExport\n");
+		TRACE(_T("Failed to open file in PrepareExport\n"));
 		return(FALSE);
 	}
 
@@ -596,4 +602,10 @@ BOOL CExporter::WriteZeroSizedRecord(UINT32 Tag, UINT32* pRecordNum)
 		*pRecordNum = RecordNum;
 
 	return(TRUE);
+}
+
+void CamResource::GetBinaryFileInfo(void **pPtr, UINT32 *pSize)
+{
+	*pPtr = NULL;
+	*pSize = 0;
 }

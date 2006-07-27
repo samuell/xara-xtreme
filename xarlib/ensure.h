@@ -50,14 +50,14 @@ a license to do so. Such a license will normally be granted free of charge.
 #ifndef INC_ENSURE
 #define INC_ENSURE
 
-	void CCAPI EnsureFailedLine(LPCSTR AssertDescription, LPCSTR lpszFileName, int nLine);    
+	void CCAPI EnsureFailedLine(LPCTSTR AssertDescription, LPCSTR lpszFileName, int nLine);    
 	
 // Set this #define to build ensures into retail builds too
 //#define _INCLUDE_ENSURES_IN_RETAIL
 
 	#ifdef _DEBUG
 		// Debug ensure
-		#define ENSURE(expr,description) ((expr) ? (void)0:  EnsureFailedLine(description,__FILE__,__LINE__))
+		#define ENSURE(expr,description) ((expr) ? (void)0:  EnsureFailedLine(_T(description),__FILE__,__LINE__))
 		#define _ENSURES
 	#else 
 		#ifdef _INCLUDE_ENSURES_IN_RETAIL

@@ -60,7 +60,15 @@ This function is an almost direct copy of the AfxAssertFailedLine function which
 called from the ASSERT macro.
 */ 
 
-void EnsureFailedLine(LPCSTR AssertDescription, LPCSTR lpszFileName, int nLine)
+void EnsureFailedLine(LPCTSTR AssertDescription, LPCSTR lpszFileName, int nLine)
 {
-	TRACE(_T("Ensure failed at %s (%d): %s\n"), lpszFileName, nLine, AssertDescription);
+#if 0 != wxUSE_UNICODE
+	// Need to convert the filename string to TCHAR
+	TCHAR tFile[512];
+	camMbstowcs(tFile, lpszFileName, 512);
+#else
+	TCHAR * tFile = lpszFileName;
+#endif
+
+	TRACE(_T("Ensure failed at %s (%d): %s\n"), tFile, nLine, AssertDescription);
 }
