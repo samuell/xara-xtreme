@@ -140,7 +140,7 @@ class ImageMagickExportOptions : public MaskedFilterExportOptions
 CC_DECLARE_DYNCREATE(ImageMagickExportOptions)
 
 public:
-	ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName);
+	ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName, ResourceID FilterTypeID);
 	ImageMagickExportOptions() {};
 
 	virtual BOOL	GetSupportsImageMap() { return TRUE; }
@@ -148,7 +148,7 @@ public:
 	virtual BOOL	RetrieveDefaults();
 	virtual BOOL	SetAsDefaults() const;
 	
-	virtual UINT32 GetFilterNameStrID() { return _R(IDS_FILTERNAME_ImageMagick);}
+	virtual UINT32 GetFilterNameStrID() { return m_FilterTypeID;}
 
 	virtual UINT32 * GetConfigPtr(const TCHAR * FilterName) const
 	{
@@ -173,6 +173,7 @@ public:
 
 protected:
 	String_256 FilterName;
+	ResourceID m_FilterTypeID;
 
 	static	IMFilterStringToUINT32 * s_pHash;
 };

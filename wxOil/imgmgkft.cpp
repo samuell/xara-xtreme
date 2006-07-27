@@ -166,10 +166,11 @@ IMFilterStringToUINT32 * ImageMagickExportOptions::s_pHash = NULL;
 				options
 
 ********************************************************************************************/
-ImageMagickExportOptions::ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName) :
+ImageMagickExportOptions::ImageMagickExportOptions(const FilterType FilterID, const StringBase* pFilterName, ResourceID FilterTypeID) :
 						MaskedFilterExportOptions(_R(IDD_EXPORTBMPOPTS), FilterID, pFilterName)
 {
 	FilterName = *pFilterName;
+	m_FilterTypeID = FilterTypeID;
 
 	// if we don't already have the static hash, generate one
 	// We never delete this (harmless)
@@ -1236,7 +1237,7 @@ OutputDIB* ImageMagickFilter::GetOutputDIB ( void )
 ********************************************************************************************/
 BitmapExportOptions* ImageMagickFilter::CreateExportOptions() const
 {
-	ImageMagickExportOptions* pImageMagickOptions = new ImageMagickExportOptions(IMAGEMAGICK, &FilterName);
+	ImageMagickExportOptions* pImageMagickOptions = new ImageMagickExportOptions(IMAGEMAGICK, &FilterName, FilterNameID);
 	return (BitmapExportOptions*)pImageMagickOptions;
 }
 
