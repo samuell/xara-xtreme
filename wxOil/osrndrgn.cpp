@@ -735,7 +735,8 @@ void OSRenderRegion::InitClipping()
 
 //	ENSURE(OSClipRect.top >= 0, "Blobby!");
 
-	ERROR3IF((OSClipRect.x < 0) || (OSClipRect.y < 0), "OSRenderRegion::InitClipping bad clip");
+//	This line commented out by Alex, to fix Bugzilla #991, per Neil, Gavin
+//	ERROR3IF((OSClipRect.x < 0) || (OSClipRect.y < 0), "OSRenderRegion::InitClipping bad clip");
 
 	// we can't clip within a metafile, but we can set the origin & extent based on it
 //	if (RFlags.Metafile)
