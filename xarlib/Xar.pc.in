@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libXar
+Description: Xara file loading \ saving library
+Version: @VERSION@
+Libs: -L${libdir} -lXar
+Cflags: -DEXCLUDE_FROM_XARLIB -DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS -DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS -DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT -I${includedir}/@PACKAGE@

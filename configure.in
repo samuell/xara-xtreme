@@ -2,6 +2,8 @@ AC_INIT(wxOil/camelot.cpp)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(XaraLX, 0.7)
 
+AC_PREFIX_PROGRAM( pkg-config )
+
 # BinReloc sets CFLAGS and CXXFLAGS, so we have to undo this
 inCFLAGS=$CFLAGS
 inCXXFLAGS=$CXXFLAGS
@@ -37,6 +39,13 @@ AC_ARG_ENABLE(xarlib,
               AS_HELP_STRING([--enable-xarlib],
                              [Enable build of the xarlib filter library]),
               XarLibEnable="$enableval", XarLibEnable="no")
+
+# Note that as each filter is a separate package, if you got your code from svn you will need to
+# do "autoreconf -f -i" in filters/SVGFilter (and all the others); the tarballs should be OK
+AC_ARG_ENABLE(filters,
+              AS_HELP_STRING([--enable-filters],
+                             [Enable build of the filters]),
+              FiltersEnable="$enableval", FiltersEnable="no")
 
 OPT_FLAGS34="-fno-strict-aliasing"
 WARN_FLAGS34="-Wstrict-aliasing=2"
@@ -355,12 +364,20 @@ if test "$SvnVersionEnable" = "yes" ; then
 	BUILDRESFLAGS="-s $BUILDRESFLAGS"
 fi
 
+# Force XarLibEnable on if we are to build the filters
+if test "$FiltersEnable" = "yes"; then
+	XarLibEnable="yes"
+	# Add each filter below here
+	AC_CONFIG_SUBDIRS([filters/SVGFilter])
+fi
+
 AM_CONDITIONAL(PRECOMPILE_ENABLE, [test "$PrecompileEnable" = "yes"])
 AM_CONDITIONAL(STATIC_ENABLE, [test "$StaticEnable" = "yes"])
 AM_CONDITIONAL(DARWIN_LINK, [test "$DarwinLink" = "yes"])
 AM_CONDITIONAL(INTERNATIONAL_ENABLE, [test "$InternationalEnable" = "yes"])
 AM_CONDITIONAL(SVNVERSION_ENABLE, [test "$SvnVersionEnable" = "yes"])
 AM_CONDITIONAL(XARLIB_ENABLE, [test "$XarLibEnable" = "yes"])
+AM_CONDITIONAL(FILTERS_ENABLE, [test "$FiltersEnable" = "yes"])
 
 AC_SUBST(TOPDIR)
 AC_SUBST(WX_LIBS)
@@ -375,4 +392,4 @@ AC_SUBST(LIBXML2_LIBS)
 AC_SUBST(PODIR)
 AC_SUBST(BUILDRESFLAGS)
 
-AC_OUTPUT(Makefile PreComp/Makefile Kernel/Makefile wxOil/Makefile tools/Makefile wxXtra/Makefile xarlib/Makefile po/Makefile.in)
+AC_OUTPUT(Makefile PreComp/Makefile Kernel/Makefile wxOil/Makefile tools/Makefile wxXtra/Makefile xarlib/Makefile xarlib/Xar.pc po/Makefile.in)

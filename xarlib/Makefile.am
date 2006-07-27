@@ -9,11 +9,12 @@ lib_LTLIBRARIES = libXar.la
 XARLIBFLAGS = \
 	-DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS \
 	-DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS \
-	-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT
+	-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT \
+	-I$(TOPDIR)/xarlib -I$(TOPDIR)/PreComp -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil -I$(TOPDIR)/GDraw 
 
 # make sure this does NOT have our include files in the path
 # xarlib needs to be first
-libXar_la_CXXFLAGS = -I$(TOPDIR)/xarlib -I$(TOPDIR)/PreComp -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil -I$(TOPDIR)/GDraw $(XARLIBFLAGS)
+libXar_la_CXXFLAGS = $(XARLIBFLAGS)
 
 #Extra libraries
 #libXar_la_LDFLAGS = @GTK_LIBS@
@@ -70,80 +71,81 @@ libXar_la_SOURCES = \
 	ensure.cpp \
 	xarlib.cpp
 
-if FALSE
-pkginclude_HEADERS = PreComp/camtypes.h \
-	wxOil/basestr.h \
-	wxOil/camresource.h \
-	wxOil/camstring.h \
-	wxOil/ccobject.h \
-	wxOil/compatdef.h \
-	wxOil/errors.h \
-	wxOil/exception.h \
-	wxOil/fixmem.h \
-	wxOil/fixst128.h \
-	wxOil/fixst256.h \
-	wxOil/fixstr16.h \
-	wxOil/fixstr32.h \
-	wxOil/fixstr64.h \
-	wxOil/fixstr8.h \
-	wxOil/handles.h \
-	wxOil/hardwaremanager.h \
-	wxOil/memblk.h \
-	wxOil/memdebug.h \
-	wxOil/memory.h \
-	wxOil/mfccontainer.h \
-	wxOil/pathname.h \
-	wxOil/stdwx.h \
-	wxOil/unicdman.h \
-	wxOil/varstr.h \
-	Kernel/attr.h \
-	Kernel/ccfile.h \
-	Kernel/ccmaths.h \
-	Kernel/ccpanose.h \
-	Kernel/coord.h \
-	Kernel/cxfarrow.h \
-	Kernel/cxfcols.h \
-	Kernel/cxfdash.h \
-	Kernel/cxfdefs.h \
-	Kernel/cxfile.h \
-	Kernel/cxfmap.h \
-	Kernel/cxfrec.h \
-	Kernel/cxfrech.h \
-	Kernel/cxftags.h \
-	Kernel/doccoord.h \
-	Kernel/docrect.h \
-	Kernel/f16spec.h \
-	Kernel/fixed16.h \
-	Kernel/fixed.h \
-	Kernel/fttyplis.h \
-	Kernel/list.h \
-	Kernel/listitem.h \
-	Kernel/macros.h \
-	Kernel/matrix.h \
-	Kernel/pathproc.h \
-	Kernel/paths.h \
-	Kernel/pathtype.h \
-	Kernel/pathutil.h \
-	Kernel/rechcomp.h \
-	Kernel/taglists.h \
-	Kernel/vector.h \
-	Kernel/xlong.h \
-	Kernel/zdeflate.h \
-	Kernel/zinflate.h \
-	Kernel/zlib.h \
-	Kernel/zstream.h \
-	Kernel/zutil.h \
-	xarlib/camelot.h \
-	xarlib/ensure.h \
-	xarlib/gconsts.h \
-	xarlib/xarlib.h
+pkginclude_HEADERS = \
+	../PreComp/camtypes.h \
+	../wxOil/basestr.h \
+	../wxOil/camresource.h \
+	../wxOil/camstring.h \
+	../wxOil/ccobject.h \
+	../wxOil/compatdef.h \
+	../wxOil/errors.h \
+	../wxOil/exception.h \
+	../wxOil/fixmem.h \
+	../wxOil/fixst128.h \
+	../wxOil/fixst256.h \
+	../wxOil/fixstr16.h \
+	../wxOil/fixstr32.h \
+	../wxOil/fixstr64.h \
+	../wxOil/fixstr8.h \
+	../wxOil/handles.h \
+	../wxOil/hardwaremanager.h \
+	../wxOil/memblk.h \
+	../wxOil/memdebug.h \
+	../wxOil/cammemory.h \
+	../wxOil/mfccontainer.h \
+	../wxOil/pathname.h \
+	../wxOil/stdwx.h \
+	../wxOil/unicdman.h \
+	../wxOil/varstr.h \
+	../GDraw/gconsts.h \
+	../Kernel/attr.h \
+	../Kernel/ccfile.h \
+	../Kernel/ccmaths.h \
+	../Kernel/ccpanose.h \
+	../Kernel/coord.h \
+	../Kernel/cxfarrow.h \
+	../Kernel/cxfcols.h \
+	../Kernel/cxfdash.h \
+	../Kernel/cxfdefs.h \
+	../Kernel/cxfile.h \
+	../Kernel/cxfmap.h \
+	../Kernel/cxfrec.h \
+	../Kernel/cxfrech.h \
+	../Kernel/cxftags.h \
+	../Kernel/doccoord.h \
+	../Kernel/docrect.h \
+	../Kernel/f16spec.h \
+	../Kernel/fixed16.h \
+	../Kernel/fixed.h \
+	../Kernel/fttyplis.h \
+	../Kernel/list.h \
+	../Kernel/listitem.h \
+	../Kernel/macros.h \
+	../Kernel/matrix.h \
+	../Kernel/pathproc.h \
+	../Kernel/paths.h \
+	../Kernel/pathtype.h \
+	../Kernel/pathutil.h \
+	../Kernel/rechcomp.h \
+	../Kernel/taglists.h \
+	../Kernel/vector.h \
+	../Kernel/xlong.h \
+	../Kernel/zdeflate.h \
+	../Kernel/zinflate.h \
+	../Kernel/zlib.h \
+	../Kernel/zstream.h \
+	../Kernel/zutil.h \
+	camelot.h \
+	ensure.h \
+	xarlib.h
 
 bin_PROGRAMS = expandxar
-
 expandxar_SOURCES = ExpandXar/expandxar.cpp
 expandxar_LDADD = libXar.la $(WX_LIBS)
+expandxar_CXXFLAGS = $(XARLIBFLAGS)
 
 pkgconfigdir = $(libdir)/pkgconfig
+#if FALSE
 pkgconfig_DATA = Xar.pc
+#endif
 
-endif

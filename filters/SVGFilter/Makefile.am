@@ -1,11 +1,22 @@
 bin_PROGRAMS = svgfilter svgfilterui
 
+# Note TOPDIR seems to have one too many ".."s in to work. So don't use it
+if LOCAL_XARLIB_ENABLE
+XARLIB_CFLAGS2 = -DEXCLUDE_FROM_XARLIB -DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS -DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS \
+				-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT \
+				-I$(top_srcdir)/../.. -I$(top_srcdir)/../../xarlib -I$(top_srcdir)/../../PreComp -I$(top_srcdir)/../../Kernel -I$(top_srcdir)/../../wxOil -I$(top_srcdir)/../../GDraw
+XARLIB_LIBS2 = -L../../xarlib/.libs -lXar
+else
+XARLIB_CFLAGS2 =
+XARLIB_LIBS2 =
+endif
+
 # the application source, library search path, and link libraries
 svgfilter_SOURCES = svgfilter.cpp svgfilter.h import.cpp svgimporter.cpp \
 		    svgimporter.h export.cpp utils.cpp utils.h styles.cpp \
 		    styles.h version.h
-svgfilter_CPPFLAGS = $(XARLIB_CFLAGS) $(LIBXML2_CFLAGS)
-svgfilter_LDADD = $(XARLIB_LIBS) $(LIBXML2_LIBS)
+svgfilter_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
+svgfilter_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
 
 svgfilterui_SOURCES = svgfilterui.cpp svgfilterui.h svgexportdialog.cpp \
 		      svgexportdialog.h version.h

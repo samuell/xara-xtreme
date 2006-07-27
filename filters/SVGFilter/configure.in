@@ -41,6 +41,8 @@ AC_ARG_WITH(wx-config,
     fi
 ])
 
+LocalXarLibEnable="no"
+
 # -----------------------------------------------------------------------------
 # wxWidgets check
 
@@ -91,7 +93,13 @@ fi
 
 # Set up our XarLib build flags
 # Change this to be hopefully like wxWidgets above
-PKG_CHECK_MODULES(XARLIB, [Xar])
+# Only do this if we are not inside a local build tree
+if test "$LocalXarLibEnable" != "yes"; then
+	PKG_CHECK_MODULES(XARLIB, [Xar])
+else
+	XARLIB_CFLAGS=""
+	XARLIB_LIBS=""
+fi
 
 # Setup our build flags (if not set by user)
 CPPFLAGS="-Wall -Wno-unknown-pragmas -g -fexceptions $DEBUG_FLAGS -DUSE_STD_ALLOC -DUSE_XARLIB"
@@ -162,6 +170,9 @@ TOPDIR=$srcdir;
 if test `echo $srcdir | cut -c1` != "/"; then
 	TOPDIR="../$srcdir";
 fi
+
+AM_CONDITIONAL(LOCAL_XARLIB_ENABLE, [test "$LocalXarLibEnable" = "yes"])
+
 AC_SUBST(TOPDIR)
 AC_SUBST(XARLIB_CFLAGS)
 AC_SUBST(XARLIB_LIBS)

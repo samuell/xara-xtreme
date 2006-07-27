@@ -2,4 +2,5 @@
 
 AUTORECONF=${AUTORECONF:-autoreconf}
 
-${AUTORECONF} -f -i -s
+${AUTORECONF} -f -i
+( cd filters/SVGFilter ; ${AUTORECONF} -f -i )
