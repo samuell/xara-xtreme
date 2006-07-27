@@ -304,6 +304,10 @@ public:
 	//This function does the export
 	BOOL ExportImagemap(Operation*, PathName*, Document*);
 
+	// Base do-nothing DPI functions
+	virtual BOOL CanDoImportDPI()				{ return FALSE; }
+	virtual void SetImportDPI(DPI ImportDPI)	{}
+
 protected:
 	// Something to mark if this is a meant as a Preview Bitmap or not
 	BOOL IsPreviewBitmap;

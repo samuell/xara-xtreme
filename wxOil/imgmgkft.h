@@ -229,14 +229,15 @@ public:
 	virtual BOOL CanDoTransparency() { return HasFlag(IM_EX_MASK); }
 	virtual BOOL CanDoInterlace() { return HasFlag(IM_EX_INTERLACE); }
 	virtual BOOL CanDoAlpha() { return HasFlag(IM_EX_ALPHA); }
-	virtual BOOL CanDoImportDPI() { return HasFlag(IM_IM_DPI); }
 	virtual BOOL CanDoImport() { return HasFlag(IM_IMPORT); }
 	virtual BOOL CanDoExport() { return HasFlag(IM_EXPORT); }
 	virtual wxString GetTag() { return _T("mmif"); }
 	virtual TCHAR * GetExtension() { return _T("mmif"); }
 	virtual INT32 GetCompatibility() { return 10; }
 
-	virtual void SetImportDPI(INT32 ImportDPI) {m_ImportDPI = ImportDPI;}
+	// Overide the DPI functions
+	virtual BOOL CanDoImportDPI() { return HasFlag(IM_IM_DPI); }
+	virtual void SetImportDPI(DPI ImportDPI) {m_ImportDPI = ImportDPI;}
 
 	// Virtual overrides
 	virtual UINT32 GetExportMsgID();
@@ -303,7 +304,7 @@ protected:
 	UINT32 Export2ndStageMsgID;
 
 	ImageMagickFlags m_Capabilities;
-	INT32 m_ImportDPI;
+	DPI m_ImportDPI;
 
 	CCDiskFile * TempFile;
 	wxString TempFileName;
