@@ -4055,11 +4055,11 @@ void AttrTxtFontTypeface::GetDebugDetails(StringBase* Str)
 		}
 		
 		(*Str) += buf;
-		camSnprintf( buf, 255, _T("Bold = %s\r\n"), Value.IsBold ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Bold = %s\r\n"), Value.IsBold ? _T("TRUE"):_T("FALSE"));
 		(*Str) += buf;
-		camSnprintf( buf, 255, _T("Italic = %s\r\n"), Value.IsItalic ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Italic = %s\r\n"), Value.IsItalic ? _T("TRUE"):_T("FALSE"));
 		(*Str) += buf;	
-		camSnprintf( buf, 255, _T("Replaced = %s\r\n"), FONTMANAGER->IsFontReplaced(&FontName, Class) ? "TRUE":"FALSE");
+		camSnprintf( buf, 255, _T("Replaced = %s\r\n"), FONTMANAGER->IsFontReplaced(&FontName, Class) ? _T("TRUE"):_T("FALSE"));
 		(*Str) += buf;	
 	}
 }
@@ -4342,9 +4342,9 @@ void AttrTxtBold::GetDebugDetails(StringBase* Str)
 	NodeAttribute::GetDebugDetails( Str );
 
 	String_256 TempStr;
-	char* p;
+	TCHAR* p;
 
-	(Value.BoldOn) ? (p = "TRUE") : (p = "FALSE");
+	(Value.BoldOn) ? (p = _T("TRUE")) : (p = _T("FALSE"));
 	TempStr._MakeMsg( TEXT("\r\nBold=#1%s\r\n"), p);
 	(*Str) += TempStr;
 }
@@ -4627,9 +4627,9 @@ void AttrTxtItalic::GetDebugDetails(StringBase* Str)
 	NodeAttribute::GetDebugDetails( Str );
 
 	String_256 TempStr;
-	char* p;
+	TCHAR* p;
 
-	(Value.ItalicOn) ? (p = "TRUE") : (p = "FALSE");
+	(Value.ItalicOn) ? (p = _T("TRUE")) : (p = _T("FALSE"));
 	TempStr._MakeMsg( TEXT("\r\nItalic=#1%s\r\n"), p);
 	(*Str) += TempStr;
 }
@@ -5211,8 +5211,8 @@ void AttrTxtUnderline::GetDebugDetails(StringBase* Str)
 	NodeAttribute::GetDebugDetails( Str );
 
 	String_256 TempStr;
-	char* p;
-	(Value.Underlined) ? (p="TRUE") : (p="FALSE");
+	TCHAR* p;
+	(Value.Underlined) ? (p=_T("TRUE")) : (p=_T("FALSE"));
 	TempStr._MakeMsg( TEXT("\r\nUnderline=#1%s\r\n"), p);
 	(*Str) += TempStr;
 }
