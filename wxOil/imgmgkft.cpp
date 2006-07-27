@@ -1384,6 +1384,7 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 		wxSize DefaultDPI=OSRenderRegion::GetFixedDCPPI(dc);
 		IMargv[p++]=_T("-density");
 		cdpi = camStrdup(wxString::Format(_T("%dx%d"), m_ImportDPI?m_ImportDPI:DefaultDPI.GetWidth(),m_ImportDPI?m_ImportDPI:DefaultDPI.GetHeight()));
+		IMargv[p++]=cdpi;	
 	}
 	IMargv[p++]=cifn;
 	IMargv[p++]=cofn;
