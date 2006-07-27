@@ -52,6 +52,7 @@ copyFiles Examples "$PREFIX/share/xaralx"
 copyFiles Templates "$PREFIX/share/xaralx"
 # copyFiles bin "$PREFIX/share/xaralx"
 # copyFiles video "$PREFIX/share/xaralx"
+update-desktop-database
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
