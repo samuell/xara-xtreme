@@ -170,7 +170,8 @@ public:
 	void CloseEvent(wxCloseEvent &event);
 	void MouseEvent(wxMouseEvent &event);
 	void WindowDestroyEvent(wxWindowDestroyEvent &event);
-	void OnSetFocus(wxChildFocusEvent &event);
+	void OnChildFocus(wxChildFocusEvent &event);
+	void OnSetFocus(wxFocusEvent &event);
 	void CamDialogEvent(wxCamDialogEvent &event);
 	void MoveEvent(wxMoveEvent &event);
 	void SizeEvent(wxSizeEvent &event);

@@ -157,7 +157,8 @@ BEGIN_EVENT_TABLE(DialogEventHandler, wxEvtHandler)
 	EVT_CLOSE	(DialogEventHandler::CloseEvent)
 	EVT_WINDOW_DESTROY	(DialogEventHandler::WindowDestroyEvent)
 	EVT_MOUSE_EVENTS (DialogEventHandler::MouseEvent)
-	EVT_CHILD_FOCUS( DialogEventHandler::OnSetFocus )
+	EVT_CHILD_FOCUS( DialogEventHandler::OnChildFocus )
+	EVT_SET_FOCUS( DialogEventHandler::OnSetFocus )
 	EVT_CAMDIALOG_DEFERREDMSG (wxID_ANY, DialogEventHandler::CamDialogEvent)
 	EVT_CAMDIALOG_GRIMREAPER (wxID_ANY, DialogEventHandler::GrimReaperEvent)
 	EVT_CAMDIALOG_REDRAW (wxID_ANY, DialogEventHandler::CamDialogEvent)
@@ -549,7 +550,7 @@ void DialogEventHandler::WindowDestroyEvent(wxWindowDestroyEvent& event)
 
 /********************************************************************************************
 
->	DialogEventHandler::OnSetFocus(wxCamDialogEvent& event)
+>	DialogEventHandler::OnChildFocus(wxChildFocusEvent& event)
 
 
 	Author:		Luke_Hart <alex@alex.org.uk>
@@ -557,14 +558,14 @@ void DialogEventHandler::WindowDestroyEvent(wxWindowDestroyEvent& event)
 	Inputs:		event - the wxEvent
 	Outputs:	-
 	Returns:	-
-	Purpose:	Passes an event to DialogManager::Event
+	Purpose:	Gives the event back to the page if need be
 	Errors:		-
 	SeeAlso:	-
 
 ********************************************************************************************/
 
 
-void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
+void DialogEventHandler::OnChildFocus(wxChildFocusEvent &event)
 {
 	// Check if focus is going to an always focus object (may need more tests
 	// as more controls come online). If so just return allowing focus to stay
@@ -608,6 +609,28 @@ void DialogEventHandler::OnSetFocus(wxChildFocusEvent &event)
 	AfxGetApp().GiveActiveCanvasFocus();
 }
 
+/********************************************************************************************
+
+>	DialogEventHandler::OnSetFocus(wxFocusEvent& event)
+
+
+	Author:		Luke_Hart <alex@alex.org.uk>
+	Created:	02/05/06
+	Inputs:		event - the wxEvent
+	Outputs:	-
+	Returns:	-
+	Purpose:	Passes an event to DialogManager::Event
+	Errors:		-
+	SeeAlso:	-
+
+********************************************************************************************/
+
+
+void DialogEventHandler::OnSetFocus(wxFocusEvent &event)
+{
+	// Do nothing for the time being
+	event.Skip();
+}
 
 
 /********************************************************************************************
