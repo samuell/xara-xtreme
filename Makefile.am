@@ -10,12 +10,17 @@ if PRECOMPILE_ENABLE
 	PRECOMPILE_DIR = PreComp
 endif
 
+XARLIB_DIR =
+if XARLIB_ENABLE
+	XARLIB_DIR = xarlib
+endif
+
 # Do not compile po directory if WXRC is broken (gentoo wxWidgets 2.6.3.2)
 # Leave the '#po' on the end to keep automake quiet
 if INTERNATIONAL_ENABLE
-SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools po
+SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools $(XARLIB_DIR) po
 else
-SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools
+SUBDIRS = $(PRECOMPILE_DIR) wxXtra wxOil Kernel tools $(XARLIB_DIR)
 endif
 
 # We clean these here not in the wxOil makefile to prevent a loop

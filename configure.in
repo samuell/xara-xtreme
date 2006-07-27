@@ -33,6 +33,11 @@ AC_ARG_ENABLE(svnversion,
                              [Disable svn versioning]),
               SvnVersionEnable="$enableval", SvnVersionEnable="yes")
 
+AC_ARG_ENABLE(xarlib,
+              AS_HELP_STRING([--enable-xarlib],
+                             [Enable build of the xarlib filter library]),
+              XarLibEnable="$enableval", XarLibEnable="no")
+
 OPT_FLAGS34="-fno-strict-aliasing"
 WARN_FLAGS34="-Wstrict-aliasing=2"
 
@@ -355,6 +360,7 @@ AM_CONDITIONAL(STATIC_ENABLE, [test "$StaticEnable" = "yes"])
 AM_CONDITIONAL(DARWIN_LINK, [test "$DarwinLink" = "yes"])
 AM_CONDITIONAL(INTERNATIONAL_ENABLE, [test "$InternationalEnable" = "yes"])
 AM_CONDITIONAL(SVNVERSION_ENABLE, [test "$SvnVersionEnable" = "yes"])
+AM_CONDITIONAL(XARLIB_ENABLE, [test "$XarLibEnable" = "yes"])
 
 AC_SUBST(TOPDIR)
 AC_SUBST(WX_LIBS)
@@ -369,4 +375,4 @@ AC_SUBST(LIBXML2_LIBS)
 AC_SUBST(PODIR)
 AC_SUBST(BUILDRESFLAGS)
 
-AC_OUTPUT(Makefile PreComp/Makefile Kernel/Makefile wxOil/Makefile tools/Makefile wxXtra/Makefile po/Makefile.in)
+AC_OUTPUT(Makefile PreComp/Makefile Kernel/Makefile wxOil/Makefile tools/Makefile wxXtra/Makefile xarlib/Makefile po/Makefile.in)
