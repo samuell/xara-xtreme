@@ -41,16 +41,19 @@ echo * | import
 [Install]
 # Put your installation script here
 installExe bin/xaralx
-installMime xaralx.xml
-installGnome2Mime mime-storage/gnome/*
-copyFiles Examples "$PREFIX/share/xaralx"
-copyFiles Templates "$PREFIX/share/xaralx"
-copyFiles doc "$PREFIX/share/xaralx"
-# copyFiles bin "$PREFIX/share/xaralx"
-# copyFiles video "$PREFIX/share/xaralx"
 installIcon xaralx.png
 installDesktop "Graphics/Vector Graphics" xaralx.desktop
+installMime xaralx.xml
+installGnome2Mime mime-storage/gnome/*
+copyFiles doc "$PREFIX/share/xaralx"
+mkdir -p "$PREFIX/share/xaralx/doc/en"
+unzip -qo xaralxHelp.zip -d "$PREFIX/share/xaralx/doc/en"
+copyFiles Examples "$PREFIX/share/xaralx"
+copyFiles Templates "$PREFIX/share/xaralx"
+# copyFiles bin "$PREFIX/share/xaralx"
+# copyFiles video "$PREFIX/share/xaralx"
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
 uninstallFromLog
+rm -rf "$PREFIX/share/xaralx/doc/en"
