@@ -140,6 +140,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "nodepostpro.h"
 #include "nodepath.h"
 #include "usercord.h"
+#include "camview.h"
 
 DECLARE_SOURCE( "$Revision$" );
 
@@ -1188,12 +1189,23 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 					UnicodeValue = UnicodeManager::MultiByteToUnicode(UnicodeValue);
 #endif
 				
-				// Display a blank cursor (thus hiding the pointer)
+				// Display a blank cursor (thus hiding the pointer), but only if the pointer
+				// is over the current document window
 				if (!IsBlankCursorUp)
-				{
-					pcCurrentCursor = pcBlankCursor;
-					CursorStack::GSetTop(pcCurrentCursor, CurrentCursorID);
-					IsBlankCursorUp = TRUE;
+				{	
+					DocView* pDocView = DocView::GetSelected();
+					if (pDocView != NULL)
+					{
+						OilCoord DummyPos;
+						CCamView* pCCamView = pDocView->GetConnectionToOilView();
+						if (pCCamView && pCCamView->GetCurrentMousePos(&DummyPos))
+						{
+							// mouse is over document window
+							pcCurrentCursor = pcBlankCursor;
+							CursorStack::GSetTop(pcCurrentCursor, CurrentCursorID);
+							IsBlankCursorUp = TRUE;
+						}		
+					}
 				}
 				
 				// Create EditTextOp
