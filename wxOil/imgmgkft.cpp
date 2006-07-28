@@ -1384,7 +1384,9 @@ BOOL ImageMagickFilter::ConvertToTempFile(CCLexFile * File)
 		wxScreenDC dc;
 		wxSize DefaultDPI=OSRenderRegion::GetFixedDCPPI(dc);
 		IMargv[p++]=_T("-density");
-		cdpi = camStrdup(wxString::Format(_T("%dx%d"), m_ImportDPI?m_ImportDPI:DefaultDPI.GetWidth(),m_ImportDPI?m_ImportDPI:DefaultDPI.GetHeight()));
+		UINT32	uHorzDpi = UINT32( m_ImportDPI ? m_ImportDPI : DefaultDPI.GetWidth() );
+		UINT32	uVertDpi = UINT32( m_ImportDPI ? m_ImportDPI : DefaultDPI.GetHeight() );
+		cdpi = camStrdup( wxString::Format( _T("%dx%d"), uHorzDpi, uVertDpi ) );
 		IMargv[p++]=cdpi;	
 	}
 	IMargv[p++]=cifn;

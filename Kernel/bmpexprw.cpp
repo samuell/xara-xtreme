@@ -2831,7 +2831,7 @@ pOptions->SetTempFileFlag(TRUE);
 			{
 				// Setup import DPI from export options (this means we get the same resolution bitmap from
 				// a PDF)
-				((ImageMagickFilter *)pImportFilter)->SetImportDPI( pOptions->GetDPI() );
+				((BaseBitmapFilter *)pImportFilter)->SetImportDPI( pOptions->GetDPI() );
 
 				// Set the preview bitmap flag to avoid adding the bitmap to the global bitmap list
 				((BaseBitmapFilter *)pImportFilter)->SetPreviewBitmap(TRUE);
