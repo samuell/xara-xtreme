@@ -284,6 +284,11 @@ MsgResult FreeHandInfoBarOp::Message(Msg* Message)
 
 		else if (Msg->DlgMsg == DIM_CREATE)
 		{
+// NB - not #ifndef
+#ifdef EXCLUDE_FROM_XARALX
+			EnableGadget(_R(IDC_CREATEBRUSH), FALSE);
+			EnableGadget(_R(IDC_EDITBRUSH), FALSE);
+#endif
 			HandleCreate();
 		}
 		else
@@ -3252,7 +3257,6 @@ PORTNOTE("other", "Disabled Brush editing")
 	else
 		EnableGadget(_R(IDC_EDITBRUSH), FALSE);
 //#endif
-#endif
 	SelRange* pSel = GetApplication()->FindSelection();
 	if (pSel != NULL)
 	{
@@ -3263,6 +3267,10 @@ PORTNOTE("other", "Disabled Brush editing")
 			EnableGadget(_R(IDC_CREATEBRUSH), TRUE);
 //#endif
 	}
+#else
+	EnableGadget(_R(IDC_CREATEBRUSH), FALSE);
+	EnableGadget(_R(IDC_EDITBRUSH), FALSE);
+#endif
 
 // WEBSTER - markn 25/4/97
 // No pen stuff required in Webster
