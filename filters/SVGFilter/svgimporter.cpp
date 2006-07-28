@@ -375,7 +375,7 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 				pathVector.Append(PathData(0x02, DocCoord(iX, m_docSize.y - iY))); // lineto
 			}
 		} else if (c == _T('C') || c == _T('c')) {
-			// Bézier cubic curveto
+			// Bï¿½ier cubic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
@@ -420,7 +420,7 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 				pathVector.Append(PathData(0x04, DocCoord(iX, m_docSize.y - iY))); // bezierto
 			}
 		} else if (c == _T('S') || c == _T('s')) {
-			// Bézier smooth cubic curveto
+			// Bï¿½ier smooth cubic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
@@ -438,7 +438,7 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 				// XXX ?
 			}
 		} else if (c == _T('Q') || c == _T('q')) {
-			// Bézier quadratic curveto
+			// Bï¿½ier quadratic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
@@ -457,8 +457,8 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 				fprintf(stderr, "bezier: %c %.2f %.2f %.2f %.2f\n", action, fX1, fY1, fX, fY);
 #endif
 
-				INT32 iX1 = (INT32)fX1;
-				INT32 iY1 = (INT32)fY1;
+//				INT32 iX1 = (INT32)fX1;
+//				INT32 iY1 = (INT32)fY1;
 				INT32 iX = (INT32)fX;
 				INT32 iY = (INT32)fY;
 				if (action == _T('c')) {
@@ -472,7 +472,7 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 				// XXX ?
 			}
 		} else if (c == _T('T') || c == _T('t')) {
-			// Bézier smooth quadratic curveto
+			// Bï¿½ier smooth quadratic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
