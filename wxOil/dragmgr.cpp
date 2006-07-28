@@ -1392,8 +1392,11 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
-						// a child-window of our window! 
-						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, WinoilMousePos);
+						// a child-window of our window! The subtlety here is that wxChildWindowFromPoint may have
+						// failed because another window is on top (in the way). So we also check the child window
+						// of the target window which is under the mousepointer is also the window which is
+						// under the mouse pointner
+						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, WinoilMousePos, false, -1);
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
 												ChildWindowUnderPoint == WindowUnderPoint);
 					}
@@ -1472,7 +1475,10 @@ BOOL DragManagerOp::ProcessEvent(DragEventType Event)
 					if (!AreOverTargetWnd)
 					{
 						// We're not immediately over the background of the window, but may be over
-						// a child-window of our window! 
+						// a child-window of our window! The subtlety here is that wxChildWindowFromPoint may have
+						// failed because another window is on top (in the way). So we also check the child window
+						// of the target window which is under the mousepointer is also the window which is
+						// under the mouse pointner
 						wxWindow* ChildWindowUnderPoint = ::wxChildWindowFromPoint(TargetWindow, WinoilMousePos, false, -1);
 //						TRACEUSER("Gerry", _T("ChildFromPoint = 0x%08x (%s)"), ChildWindowUnderPoint, ChildWindowUnderPoint ? ChildWindowUnderPoint->GetClassInfo()->GetClassName() : _T("null"));
 						AreOverTargetWnd = (ChildWindowUnderPoint != NULL &&
