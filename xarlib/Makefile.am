@@ -6,11 +6,13 @@
 #noinst_LIBRARIES	= libXar.a
 lib_LTLIBRARIES = libXar.la
 
+# have to use the -I flags to point at the three directories concerned as I
+# can't get this file to compile pretranslated source files.
 XARLIBFLAGS = \
 	-DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS \
 	-DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS \
 	-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT \
-	-I$(TOPDIR)/xarlib -I$(TOPDIR)/PreComp -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil -I$(TOPDIR)/GDraw 
+	-Iinclude -I$(TOPDIR)/PreComp -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil -I$(TOPDIR)/GDraw
 
 # make sure this does NOT have our include files in the path
 # xarlib needs to be first
@@ -19,7 +21,8 @@ libXar_la_CXXFLAGS = $(XARLIBFLAGS)
 #Extra libraries
 #libXar_la_LDFLAGS = @GTK_LIBS@
 
-libXar_la_SOURCES = \
+# Ensure these all begin with "../<directory>/" even if in the current directory
+XARLIBCPP = \
 	../Kernel/ccfile.cpp \
 	../Kernel/ccmaths.cpp \
 	../Kernel/ccpanose.cpp \
@@ -67,11 +70,12 @@ libXar_la_SOURCES = \
 	../wxOil/cammemory.cpp \
 	../wxOil/pathname.cpp \
 	../wxOil/unicdman.cpp \
-	camelot.cpp \
-	ensure.cpp \
-	xarlib.cpp
+	../xarlib/camelot.cpp \
+	../xarlib/ensure.cpp \
+	../xarlib/xarlib.cpp
 
-pkginclude_HEADERS = \
+# Ensure these all begin with "../<directory>/" even if in the current directory
+XARLIBHEADERS = \
 	../PreComp/camtypes.h \
 	../wxOil/basestr.h \
 	../wxOil/camresource.h \
@@ -135,17 +139,53 @@ pkginclude_HEADERS = \
 	../Kernel/zlib.h \
 	../Kernel/zstream.h \
 	../Kernel/zutil.h \
-	camelot.h \
-	ensure.h \
-	xarlib.h
+	../xarlib/camelot.h \
+	../xarlib/ensure.h \
+	../xarlib/xarlib.h
+
+INSTHEADERS = $(addprefix include/xarlib/, $(notdir $(XARLIBHEADERS)) )
+INSTCPP = $(notdir $(XARLIBCPP) )
+
+libXar_la_SOURCES = $(XARLIBCPP) $(INSTHEADERS)
+
+pkginclude_HEADERS = $(INSTHEADERS)
+
+BUILT_SOURCES = $(INSTHEADERS)
+#BUILT_SOURCES = $(INSTHEADERS) $(INSTCPP)
+
+MOSTLYCLEANFILES = $(INSTHEADERS)
+#MOSTLYCLEANFILES = $(INSTHEADERS) $(INSTCPP)
+
+# Insert an additional dependency to get the headers and cpp files built
+noinst_DATA = $(INSTHEADERS)
+#noinst_DATA = $(INSTHEADERS) $(INSTCPP)
+
+# Generate a directory of includes which has "xarlib/" in the include path
+$(INSTHEADERS) : $(XARLIBHEADERS)
+	@mkdir -p include/xarlib && \
+	echo $(libXar_la_SOURCES) > /tmp/bar && \
+	j=xarlib/$(filter %/$(notdir $@), $(XARLIBHEADERS) ) && \
+	echo "Building xarlib header $@ from $(TOPDIR)/$$j" && \
+	perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 
+
+# Generate a directory of includes which has "xarlib/" in the include path
+# We have to muck around with the prefixes here to avoid partial matches (coord.cpp matching doccoord.cpp etc.)
+$(INSTCPP) : $(XARLIBCPP)
+	@echo $(INSTCPP) > /tmp/foo && \
+	j=$(filter %/$(notdir $@), $(addprefix xarlib/, $(XARLIBCPP)) ) && \
+	echo "Building xarlib CPP file $@ from $(TOPDIR)/$$j" && \
+	ls -la $(TOPDIR)/$$j && \
+	#perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 
+
+# Only build the static library until we have an API/ABI nailed down
+libXar_la_LDFLAGS = -static
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = Xar.pc
 
 bin_PROGRAMS = expandxar
 expandxar_SOURCES = ExpandXar/expandxar.cpp
 expandxar_LDADD = libXar.la $(WX_LIBS)
+#expandxar_LDFLAGS = -all-static
+expandxar_LDFLAGS = -static
 expandxar_CXXFLAGS = $(XARLIBFLAGS)
-
-pkgconfigdir = $(libdir)/pkgconfig
-#if FALSE
-pkgconfig_DATA = Xar.pc
-#endif
-

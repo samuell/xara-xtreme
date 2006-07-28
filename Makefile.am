@@ -5,19 +5,22 @@ export XARAFLAGS = -I../PreComp -I../wxOil -I$(TOPDIR)/Kernel -I$(TOPDIR)/wxOil 
 	-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT
 export TOPDIR
 
-PRECOMPILE_DIR =
 if PRECOMPILE_ENABLE
-	PRECOMPILE_DIR = PreComp
+     PRECOMPILE_DIR = PreComp
+else
+     PRECOMPILE_DIR =
 endif
 
-XARLIB_DIR =
 if XARLIB_ENABLE
-	XARLIB_DIR = xarlib
+     XARLIB_DIR = xarlib
+else
+     XARLIB_DIR =
 endif
 
-FILTERS_DIRS =
 if FILTERS_ENABLE
-	FILTERS_DIRS = filters/SVGFilter
+     FILTERS_DIRS = filters/SVGFilter
+else
+     FILTERS_DIRS =
 endif
 
 # Do not compile po directory if WXRC is broken (gentoo wxWidgets 2.6.3.2)

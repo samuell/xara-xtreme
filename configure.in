@@ -120,6 +120,9 @@ fi
 # Stop automake directly including stuff
 XRCINCLUDE=include
 
+# Disable generation of shared libtool libraries - that's libXar. Note this has NOTHING to
+# do with static-exec (the executables)
+AC_DISABLE_SHARED
 # We don't need dlopen right now and it's not supported on Darwin
 # AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
