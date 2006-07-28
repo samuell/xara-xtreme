@@ -1,9 +1,17 @@
 #########################################################################
 # LIBRARY SECTION
 #########################################################################
-# this is librairy that is part of main executable.  it's name is used for all
+
+# this is the XarLib library.
+# it's name is used for all
 # of the other Makefile.am variables
 #noinst_LIBRARIES	= libXar.a
+
+# Manually set the package include dir, else we install libraries
+# in /usr/include/XaraLX which is not a good thing
+pkgincludedir=$(includedir)/xarlib
+
+# Main target
 lib_LTLIBRARIES = libXar.la
 
 # have to use the -I flags to point at the three directories concerned as I
@@ -17,9 +25,6 @@ XARLIBFLAGS = \
 # make sure this does NOT have our include files in the path
 # xarlib needs to be first
 libXar_la_CXXFLAGS = $(XARLIBFLAGS)
-
-#Extra libraries
-#libXar_la_LDFLAGS = @GTK_LIBS@
 
 # Ensure these all begin with "../<directory>/" even if in the current directory
 XARLIBCPP = \

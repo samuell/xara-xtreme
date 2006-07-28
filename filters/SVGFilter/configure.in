@@ -41,7 +41,15 @@ AC_ARG_WITH(wx-config,
     fi
 ])
 
-LocalXarLibEnable="no"
+if test "$LOCAL_XARLIB_OVERRIDE" == "yes" ; then
+	LocalXarLibEnable="yes"
+	AC_MSG_WARN("Using local (non-installed) XarLib despite any configuration to the contrary")
+else
+	AC_ARG_ENABLE(local-xarlib,
+				AS_HELP_STRING([--enable-local-xarlib],
+								[Use an uninstalled xarlib - INTERNAL USER ONLY]),
+				LocalXarLibEnable="$enableval", LocalXarLibEnable="no")
+fi
 
 # -----------------------------------------------------------------------------
 # wxWidgets check

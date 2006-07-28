@@ -370,6 +370,8 @@ fi
 # Force XarLibEnable on if we are to build the filters
 if test "$FiltersEnable" = "yes"; then
 	XarLibEnable="yes"
+	# ensure the filters have a local XarLib
+	export LOCAL_XARLIB_OVERRIDE=yes
 	# Add each filter below here
 	AC_CONFIG_SUBDIRS([filters/SVGFilter])
 fi

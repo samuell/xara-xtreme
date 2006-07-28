@@ -2,9 +2,10 @@ bin_PROGRAMS = svgfilter svgfilterui
 
 # Note TOPDIR seems to have one too many ".."s in to work. So don't use it
 if LOCAL_XARLIB_ENABLE
+# note includes are built, so no need to refer to topdir
 XARLIB_CFLAGS2 = -DEXCLUDE_FROM_XARLIB -DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS -DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS \
 				-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT \
-				-I$(top_srcdir)/../.. -I$(top_srcdir)/../../xarlib -I$(top_srcdir)/../../PreComp -I$(top_srcdir)/../../Kernel -I$(top_srcdir)/../../wxOil -I$(top_srcdir)/../../GDraw
+				-I../../xarlib/include
 XARLIB_LIBS2 = -L../../xarlib/.libs -lXar
 else
 XARLIB_CFLAGS2 =
