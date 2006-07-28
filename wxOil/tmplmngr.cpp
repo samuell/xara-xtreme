@@ -264,15 +264,13 @@ PORTNOTETRACE("other","CTemplateManager::Init - remove code to setup paths");
 	GetApplication()->DeclareSection(TEXT("Templates"), 2);
 	GetApplication()->DeclarePref(TEXT("Templates"), TEXT("Path"), &m_TemplatesPath);
 	GetApplication()->DeclarePref(TEXT("Templates"), TEXT("LocalPath"), &m_LocalTemplatesPath);
-
+	
 	//Graham 21/10/97: If it is blank, then we should use the
 	//exe path with "\templates\" on the end
 	if( m_TemplatesPath.IsEmpty() || !SGLibOil::DirExists( m_TemplatesPath ) )
 	{
 		// Put the path name into a string
-		PathName ModulePath( CCamApp::GetResourceDirectory() );
-
-		m_TemplatesPath = ModulePath.GetLocation(TRUE);
+		m_TemplatesPath = CCamApp::GetResourceDirectory();
 
 		//And add "templates\" to the end
 		String_256 strRelativePath(_R(IDS_NEWTEMPLATES_RELATIVEPATH));
