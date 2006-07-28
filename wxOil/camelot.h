@@ -169,6 +169,12 @@ protected:
 
 	wxTimer				m_Timer;
 
+	wxSingleInstanceChecker * m_pSingleInstanceChecker;
+	wxServerBase * m_pServer; // IPC server
+
+public:
+	BOOL OnSecondInstance(wxChar** argv, INT32 argc = 0);
+
 private:
 	static BOOL LaunchBrowserApp(const wxString& strAppName, wxString strCommand);
 

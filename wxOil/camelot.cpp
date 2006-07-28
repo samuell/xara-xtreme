@@ -381,11 +381,6 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 	return -1;
 }
 
-/***************************************************************************************************************************/
-//
-// Initialisation.
-//
-
 static bool GiveFocusToFocusableOffspring( wxWindow* pWnd )
 {
 	TRACEUSER( "jlh92", _T("GF2FO class %s\n"), pWnd->GetClassInfo()->GetClassName() );
@@ -413,30 +408,124 @@ static bool GiveFocusToFocusableOffspring( wxWindow* pWnd )
 	return false;
 }
 
+
+/***************************************************************************************************************************/
+//
+// Initialisation.
+//
+
+const wxString camIPC_START = _T("StartOther");
+
+class CamIPCConnection : public wxConnection
+{
+
+public:
+	CamIPCConnection() : wxConnection(m_pBuffer, WXSIZEOF(m_pBuffer)) {}
+
+	virtual bool OnExecute (const wxString& WXUNUSED(topic),
+							wxChar *data,
+							int /* TYPENOTE: Correct */ size,
+							wxIPCFormat WXUNUSED(format))
+	{
+		// argv buffer
+		INT32 argc = 0;
+
+		INT32 i;
+		for (i=0; i<size; i++)
+		{
+			// exit if this is a NULL, and the last character was a NULL
+			if (!data[i] && i && !data[i-1])
+				break;
+
+			if (!data[i])
+				argc++;
+		}
+
+		wxChar ** argv = new wxChar*[argc];
+
+		wxChar* p = data;
+		for (i=0; i<argc; i++)
+		{
+			argv[i] = camStrdup(p);
+			p+=wxStrlen(argv[i])+1; // move past null
+		}
+
+		BOOL result = wxGetApp().OnSecondInstance(argv, argc);
+
+		// free memory
+		for (i=0; i<argc; i++)
+		{
+			free(argv[i]);
+		}
+		delete [] argv;
+
+		// return
+		return result;
+	}
+
+private:
+	wxChar m_pBuffer[4096];
+
+};
+
+class CamIPCServer : public wxServer
+{
+public:
+	virtual wxConnectionBase *OnAcceptConnection (const wxString& topic)
+	{
+		if (topic != camIPC_START)
+			return NULL;
+		else
+			return new CamIPCConnection;
+	}
+};
+
+// Global so we can use it for parsing second instance
+static const wxCmdLineEntryDesc cmdLineDesc[] =
+{
+#if defined(_DEBUG)
+	{ wxCMD_LINE_OPTION, _T("u"), _T("user"), _T("set username for debug tracing") },
+	{ wxCMD_LINE_SWITCH, _T("m"), _T("memorycheck"), _T("check memory") },
+	{ wxCMD_LINE_SWITCH, _T("x"), _T("xrccheckgen"), _T("generate xrc.check file") },
+	{ wxCMD_LINE_OPTION, _T("l"), _T("listdebug"), _T("list debug level") , wxCMD_LINE_VAL_NUMBER },
+#endif
+	{ wxCMD_LINE_SWITCH, _T("h"), _T("help"),	_T("Display this help"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+	{ wxCMD_LINE_SWITCH, _T("v"), _T("version"),	_T("Display the version information") },
+	{ wxCMD_LINE_OPTION, _T("r"), _T("resource"),	_T("resource directory") },
+	{ wxCMD_LINE_PARAM, NULL, NULL, _T("input file"), wxCMD_LINE_VAL_STRING, 
+										wxCMD_LINE_PARAM_OPTIONAL|wxCMD_LINE_PARAM_MULTIPLE },
+	{ wxCMD_LINE_NONE }
+};
+
+BOOL CCamApp::OnSecondInstance(wxChar** argv, INT32 argc)
+{
+	// Parse command line. We do this early so we get flags which
+	// are useful for init, such as -u
+	//
+	wxCmdLineParser parser(argc,argv);
+	parser.SetDesc(cmdLineDesc);
+	if (parser.Parse()) // Handles help automatically
+	{
+		return FALSE;
+	}
+	if (parser.GetParamCount()>=1)
+	{
+		for ( UINT32 i=0 ; i<parser.GetParamCount() ; i++ )
+			m_docManager->CreateDocument(parser.GetParam(i),wxDOC_SILENT);
+		m_pMainFrame->Raise();
+	}
+	return TRUE;
+}
+
 bool CCamApp::OnInit()
 {
 	InInitOrDeInit = TRUE; // Don't allow the user to try carrying on working
 	::wxHandleFatalExceptions(TRUE);
+
 	//
 	// Parse command line. We do this early so we get flags which
 	// are useful for init, such as -u
 	//
-	static const wxCmdLineEntryDesc cmdLineDesc[] =
-	{
-
-#if defined(_DEBUG)
-		{ wxCMD_LINE_OPTION, _T("u"), _T("user"), _T("set username for debug tracing") },
-		{ wxCMD_LINE_SWITCH, _T("m"), _T("memorycheck"), _T("check memory") },
-		{ wxCMD_LINE_SWITCH, _T("x"), _T("xrccheckgen"), _T("generate xrc.check file") },
-		{ wxCMD_LINE_OPTION, _T("l"), _T("listdebug"), _T("list debug level") , wxCMD_LINE_VAL_NUMBER },
-#endif
-		{ wxCMD_LINE_SWITCH, _T("h"), _T("help"),	_T("Display this help"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-		{ wxCMD_LINE_SWITCH, _T("v"), _T("version"),	_T("Display the version information") },
-		{ wxCMD_LINE_OPTION, _T("r"), _T("resource"),	_T("resource directory") },
-		{ wxCMD_LINE_PARAM, NULL, NULL, _T("input file"), wxCMD_LINE_VAL_STRING, 
-											wxCMD_LINE_PARAM_OPTIONAL|wxCMD_LINE_PARAM_MULTIPLE },
-		{ wxCMD_LINE_NONE }
-	};
 	wxCmdLineParser parser(argc,argv);
 	parser.SetDesc(cmdLineDesc);
 	if (parser.Parse()) // Handles help automatically
@@ -515,6 +604,100 @@ bool CCamApp::OnInit()
 	TRACEUSER("ALL",_T("Memory debugging %d, List debugging %d\n"), SimpleCCObject::CheckMemoryFlag, List::ListDebugLevel);
 
 #endif
+
+	// OK, now we've handled the help case, and some VERY early init, we should see if another instance
+	// is running.
+
+	// Set and check for single instance running
+	wxString IPCname = wxString(_T("XARA-XTREME-WX-"))	+GetAppName()+wxString::Format(_T("%s.ipc"), wxGetUserId().c_str());
+
+	m_pSingleInstanceChecker = NULL;
+	m_pServer = NULL;
+
+#ifdef _DEBUG
+	BOOL SingleInstanceCheck = FALSE;
+#else
+	BOOL SingleInstanceCheck = TRUE;
+#endif
+
+	if (SingleInstanceCheck)
+	{
+		// Create a single instance checker at that location
+		m_pSingleInstanceChecker = new wxSingleInstanceChecker(IPCname);
+		if (!m_pSingleInstanceChecker)
+		{
+			ERROR2(FALSE, "Failed to create single instance checker");
+		}
+	
+		// Now see if another is running
+		if (m_pSingleInstanceChecker->IsAnotherRunning())
+		{
+			wxClient Client;
+			wxConnectionBase * Connection = Client.MakeConnection(wxEmptyString, IPCname, camIPC_START);
+	
+			// If there is no connection, perhaps the other end is dead. We will start up anyway.
+			if (Connection)
+			{
+				INT32 len=1; // terminating null
+				INT32 i;
+	
+				wxArrayString docs;
+				INT32 doccount = parser.GetParamCount()+1; // add one for the dummy
+	
+				// Add all docs with a dummy argv[0]
+				for ( i=0 ; i<doccount; i++ )
+				{
+					wxString docname;
+					if (i)
+					{
+						docname = parser.GetParam(i-1);
+						wxFileName fn(docname);
+						fn.Normalize(wxPATH_NORM_ALL);
+						docname=fn.GetFullPath();
+					}
+					else
+					{
+						docname=argv[0];
+					}
+					len+=docname.length()+1; // include the trailing zero
+					docs.Add(docname);
+				}
+	
+				wxChar * Data = new wxChar[len];
+				if (!Data)
+				{
+					ERROR2(FALSE, "Failed to create single instance checker data");
+				}
+	
+				// Copy the 
+				wxChar * p = Data;
+				for (i = 0; i < doccount; i++)
+				{
+					wxStrcpy(p, docs[i]);
+					p+=docs[i].length()+1; // move past string and terminating NULL
+				}
+				*p = _T('\0'); // add a final terminating NULL
+	
+				// Now send the data over the connection
+				if (Connection->Execute (Data, len*sizeof(wxChar)))
+				{
+					delete [] Data;
+					delete Connection;
+	
+					//.Free up the single instance checker
+					delete m_pSingleInstanceChecker;
+					m_pSingleInstanceChecker = NULL;
+	
+					// We're out of here...
+					return FALSE;
+				}
+	
+				// Hmmmm, it didn't want to execute it. perhaps the other process is stuck. We'll run anyway
+				delete [] Data;
+				delete Connection;
+			}
+		}
+	}
 
 	// Register the image handler which loads CURs (used for Cursors, obviously)
 	wxImage::AddHandler( new wxCURHandler );
@@ -808,6 +991,29 @@ bool CCamApp::OnInit()
 
 	CXMLUtils::Initialise();
 
+	if (SingleInstanceCheck)
+	{
+		// We are able to load documents, so now start our own IPC server
+		m_pServer = new CamIPCServer();
+		if (!m_pServer)
+		{
+			delete (m_pSingleInstanceChecker);
+			m_pSingleInstanceChecker = NULL;
+			ERROR2(FALSE, "Failed to create IPC server");
+		}
+	
+		// and initialize it
+		if (!(m_pServer->Create(IPCname)))
+		{
+			delete m_pServer;
+			m_pServer = NULL;
+	
+			delete (m_pSingleInstanceChecker);
+			m_pSingleInstanceChecker = NULL;
+			ERROR2(FALSE, "Failed to init IPC server");
+		}
+	}
+
 	// Give focus to any child that will take it, parent can't have it since
 	// it's a frame (see gtk_widget_grab_focus)
 	GiveFocusToFocusableOffspring( m_pMainFrame );
@@ -831,6 +1037,20 @@ INT32 CCamApp::OnExit( void )
 	InInitOrDeInit = TRUE; // Don't allow them to save their work on a SEGV
 	// We can no longer stop the closedown, so flag this fact
 	Camelot.ShuttingDown(TRUE);
+
+	// we can't load documents any more - delete IPC server
+	if (m_pServer)
+	{
+		delete m_pServer;
+		m_pServer = NULL;
+	}
+
+	// delete single instance checked
+	if (m_pSingleInstanceChecker)
+	{
+		delete m_pSingleInstanceChecker;
+		m_pSingleInstanceChecker = NULL;
+	}
 
 	// Rendering is back on idle events for now as it actually works
 //	m_Timer.Stop();
@@ -961,6 +1181,7 @@ PORTNOTE("other","Removed multi-instance flag stuff")
 
 	// Now close the main frame
 	m_pMainFrame->Close();
+
 }
 
 

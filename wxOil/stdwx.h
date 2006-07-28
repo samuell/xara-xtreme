@@ -124,8 +124,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <wx/hashmap.h>
 #include <wx/image.h>
 #include <wx/imagpng.h>
+#include <wx/ipc.h>
 #include <wx/log.h>
 #include <wx/rawbmp.h>
+#include <wx/snglinst.h>
 #include <wx/splash.h>
 #include <wx/stdpaths.h>
 #include <wx/sysopt.h>
