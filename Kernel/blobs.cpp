@@ -140,7 +140,7 @@ CC_IMPLEMENT_MEMDUMP(BlobManager, MessageHandler)
 BlobStyle::BlobStyle()
 {
 	// Set all the blobs to false
-	Object = Artistic = Fill = Tiny = Pen = ToolObject = FALSE;
+	Object = Artistic = Fill = Tiny = Pen = ToolObject = Effect = FALSE;
 }
 
 

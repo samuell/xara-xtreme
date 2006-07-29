@@ -248,6 +248,7 @@ Node::Node(Node* ContextNode,
 	Flags.Selected = Selected; 
 	Flags.SelectedChildren = FALSE;
 	Flags.Renderable = Renderable;
+	Flags.OpPermission1 = Flags.OpPermission2 = FALSE; // because SetOpPermission does a GetOpPermission
 	SetOpPermission(PERMISSION_UNDEFINED);	
 	Child=NULL;                         // New node has no children
 	AttachNode(ContextNode,Direction);  
