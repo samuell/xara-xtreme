@@ -28,10 +28,10 @@ EXTRA_DIST = svgfilterui.pjd svgfilter.xml svgfilterc.xml \
 	     images/*.png samples/*.xar tests/*.svg
 
 install-data-local:
-	mkdir -p $(prefix)/share/xaralx/filters/
-	$(INSTALL_DATA) $(srcdir)/svgfilter.xml $(prefix)/share/xaralx/filters
-	$(INSTALL_DATA) $(srcdir)/svgfilterc.xml $(prefix)/share/xaralx/filters
+	mkdir -p $(DESTDIR)$(prefix)/share/xaralx/filters/
+	$(INSTALL_DATA) $(srcdir)/svgfilter.xml $(DESTDIR)$(prefix)/share/xaralx/filters
+	$(INSTALL_DATA) $(srcdir)/svgfilterc.xml $(DESTDIR)$(prefix)/share/xaralx/filters
 
 uninstall-local:
-	rm -f $(prefix)/share/xaralx/filters/svgfilter.xml
-	rm -f $(prefix)/share/xaralx/filters/svgfilterc.xml
+	rm -f $(DESTDIR)$(prefix)/share/xaralx/filters/svgfilter.xml
+	rm -f $(DESTDIR)$(prefix)/share/xaralx/filters/svgfilterc.xml
