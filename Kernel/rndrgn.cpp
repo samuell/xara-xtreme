@@ -863,7 +863,6 @@ BOOL RenderRegion::AttachDevice(View* ViewToAttach, CCDC* DCToAttach,
 {
 	return AttachDevice(ViewToAttach, DCToAttach->GetDC(), SpreadToAttach, fOwned);
 }
-#include "prncamvw.h"
 
 BOOL RenderRegion::AttachDevice(View* ViewToAttach, wxDC* DCToAttach,
 								Spread* SpreadToAttach, bool fOwned /*= false*/)
