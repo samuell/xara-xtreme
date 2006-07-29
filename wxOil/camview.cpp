@@ -2736,7 +2736,7 @@ void CCamView::ShowRulers(BOOL Show)
 	Status->RulersVisible = Show;
 
 	// call OnSize directly to force new layout	
-	wxSize Size;
+	wxSize Size=wxDefaultSize;
 	m_pFrame->GetSize(&Size.x, &Size.y);
 	wxSizeEvent evSize(Size, 0);
 	OnSize(evSize);

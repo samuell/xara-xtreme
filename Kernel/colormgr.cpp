@@ -2870,7 +2870,7 @@ ActionHideColours::ActionHideColours()
 ActionHideColours::~ActionHideColours()
 {
 	if (ChangeColour != NULL)
-		delete ChangeColour;
+		delete [] ChangeColour;
 }
 
 
