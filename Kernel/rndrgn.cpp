@@ -1171,11 +1171,6 @@ void RenderRegion::DefaultRender(BOOL bForceImmediate /*= FALSE*/)
 
 BOOL RenderRegion::StartRender()
 {
-	if ((!RenderFlags.Printing) && (PrintMonitor::IsPrintingNow()))
-	{
-		::wxBell();
-	}
-
 	// If the device has not been Inited, then do it now
 	if (!RenderFlags.ValidDevice)
 	{
