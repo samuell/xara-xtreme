@@ -943,7 +943,7 @@ void CCLexFile::DeinitLexer()
 {
 	// Deallocate our buffers
 	if (LineBuf  != NULL) delete LineBuf;
-	if (TokenBuf != NULL) delete TokenBuf;
+	if (TokenBuf != NULL) delete [] TokenBuf;
 
 	LineBuf  = NULL;
 	TokenBuf = NULL;
