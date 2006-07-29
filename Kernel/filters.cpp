@@ -378,6 +378,8 @@ Filter::Filter ()
 	pOILFilter = NULL;
 	CurrentAttrs = NULL;
 	FillAttr.pAttr = NULL;
+	FillAttr.Temp = FALSE;
+	FillAttr.Ignore = FALSE;
 
 	// Set default of no export message
 	ExportMsgID = 0;
