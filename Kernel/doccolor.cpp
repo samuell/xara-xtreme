@@ -184,6 +184,7 @@ void DocColour::InitialiseInfoField(ColourModel ColModel)
 
 DocColour::DocColour()
 {
+	ZapSourceColour();
 	InitialiseInfoField(COLOURMODEL_RGBT);
 
 	SourceColour.RGBT.Red			= 0;	// Black & 100% Transparent
@@ -248,6 +249,7 @@ DocColour::~DocColour()
 
 DocColour::DocColour(StockColour Col)
 {
+	ZapSourceColour();
 	PColourValue Red = 0, Green = 0, Blue = 0, Transparent = 0;
 
 	InitialiseInfoField(COLOURMODEL_RGBT);
@@ -354,6 +356,7 @@ DocColour::DocColour(StockColour Col)
 
 DocColour::DocColour(ColourValue Red, ColourValue Green, ColourValue Blue)
 {
+	ZapSourceColour();
 	ColourRGBT temp;
 
 	InitialiseInfoField( COLOURMODEL_RGBT );
@@ -399,6 +402,7 @@ DocColour::DocColour(ColourValue Red, ColourValue Green, ColourValue Blue)
 
 DocColour::DocColour(ColourModel ColModel, ColourGeneric *Col)
 {
+	ZapSourceColour();
 	InitialiseInfoField(ColModel);
 	DEFAULTCONTEXT(ColModel)->PackColour(Col, &SourceColour);
 }
@@ -1607,6 +1611,7 @@ BOOL DocColour::operator!=(const DocColour Other) const
 
 DocColour::DocColour(INT32 Red, INT32 Green, INT32 Blue)
 {
+	ZapSourceColour();
 	InitialiseInfoField(COLOURMODEL_RGBT);
 
 	SourceColour.RGBT.Red	= (PColourValue) Red;

@@ -307,6 +307,11 @@ protected:
 
 protected:
 	void InitialiseInfoField(ColourModel ColModel);
+
+	// We need this because the ColourPacked entries are different sizes, and therefore incompletely
+	// initialized when set up with a colour model smaller than the default. This causes issues on
+	// retail builds because we later memcmp the entire structure to tell if colours are the same.
+	void ZapSourceColour() {memset(&SourceColour, 0, sizeof(SourceColour)); memset(&CachedColour, 0, sizeof(CachedColour)); }
 };
 
 
