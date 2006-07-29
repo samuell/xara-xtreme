@@ -41,6 +41,18 @@ AC_ARG_WITH(wx-config,
     fi
 ])
 
+# Where filters-enable is set, we should take it we have been configured as part
+# of the entire package
+AC_ARG_ENABLE(filters,
+              AS_HELP_STRING([--enable-filters],
+                             [Enable build of the filters]),
+              FiltersEnable="$enableval", FiltersEnable="no")
+
+# Force XarLibEnable on if we are to build the filters
+if test "$FiltersEnable" = "yes"; then
+	export LOCAL_XARLIB_OVERRIDE=yes
+fi
+
 if test "$LOCAL_XARLIB_OVERRIDE" == "yes" ; then
 	LocalXarLibEnable="yes"
 	AC_MSG_WARN("Using local (non-installed) XarLib despite any configuration to the contrary")
