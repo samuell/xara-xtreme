@@ -131,6 +131,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "filedlgs.h"
 #include "progress.h"
 #include "prdlgctl.h"
+#include "prncamvw.h"
 #include "gbrush.h"
 
 #include "camprocess.h"
@@ -258,6 +259,21 @@ CCamApp::CCamApp()
 int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static /*TYPENOTE: Correct*/ long	lLastTimeStamp = 0;
+
+	if (PrintMonitor::IsPrintingNow())
+	{
+		// Disable processing of paint messages for various controls which may use GDraw or GBrush to paint, as this
+		// appears to upset printing
+		if (event.IsKindOf(CLASSINFO(wxPaintEvent)))
+		{
+			wxObject* pEventObject = event.GetEventObject();
+			if (!pEventObject->IsKindOf(CLASSINFO(wxCamArtControl)))
+			{	
+				// TRACEUSER("amb", _T("CCamApp::FilterEvent caught paint for %s"), pEventObject->GetClassInfo()->GetClassName());
+				return false;
+			}
+		}
+	}
 
 // useful code to see where focus events originate from. Set a breakpoint below and look
 // at the call stack
@@ -1592,7 +1608,7 @@ void CCamApp::OnIdle( wxIdleEvent &event )
 {
 //	TRACEUSER("Gerry", _T("CCamApp::OnIdle\n"));
 
-	if ( IsDisabled() )
+	if ( IsDisabled() || PrintMonitor::IsPrintingNow() )
 	{
 //		TRACEUSER("Gerry", _T("Disabled - Is this a bad thing????????\n"));
 		event.Skip();
@@ -1619,13 +1635,17 @@ void CCamApp::OnIdle( wxIdleEvent &event )
 
 void CCamApp::OnTimer( wxTimerEvent& WXUNUSED(event) )
 {
+	if (!PrintMonitor::IsPrintingNow() )
+	{
+//		TRACEUSER("Gerry", _T("Disabled - Is this a bad thing????????\n"));
+		//
+		// This should also exit the while loop if there are messages in the
+		// message queue.
+		//
+		while ( Camelot.ServiceRendering() )
+			;
+	}
 PORTNOTE("other","CCamApp::OnTimer - needs completing")
-	//
-	// This should also exit the while loop if there are messages in the
-	// message queue.
-	//
-	while ( Camelot.ServiceRendering() )
-		;
 }
 
 /*******************************************************************************************/

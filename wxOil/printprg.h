@@ -125,7 +125,7 @@ class PrintProgressDlg : public DialogOp
 	CC_DECLARE_DYNCREATE( PrintProgressDlg )  
 public:
 	PrintProgressDlg();
-	virtual ~PrintProgressDlg() { pPrintProgressDlg = NULL; }
+	virtual ~PrintProgressDlg() { pPrintProgressDlg = NULL; if (pDisabler) { delete pDisabler; pDisabler=NULL;} }
 
 	MsgResult Message( Msg* Message );  
 	void Do(OpDescriptor*);		// "Do" function        
@@ -185,6 +185,8 @@ public:
 
 private:
 	static PrintProgressDlg* pPrintProgressDlg;		// Ptr to dlg used by AbortProc()
+
+	wxWindowDisabler * pDisabler;
 
 public:
 	static PrintProgressDlg * Get() {return pPrintProgressDlg;}

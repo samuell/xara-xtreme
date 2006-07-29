@@ -116,6 +116,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "fixst256.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
 //#include "justin2.h"
+#include "prncamvw.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -159,6 +160,7 @@ PrintProgressDlg::PrintProgressDlg(): DialogOp(PrintProgressDlg::IDD, PrintProgr
 	SliderSubRangeStep = 1;
 
 	pPrintProgressDlg = this;
+	pDisabler = NULL;
 
 	Printing = FALSE;
 	IgnoreUpdates = FALSE;
@@ -259,6 +261,11 @@ MsgResult PrintProgressDlg::Message( Msg* Message)
 			SetSliderPos(0);
 			IgnoreUpdates = FALSE;
 			UpdateTime.Sample();
+
+			if (pDisabler)
+				delete pDisabler;
+			pDisabler = new wxWindowDisabler(WindowID);
+			::wxYield(); // flush anything out the system
 		}
 		else if (Msg->DlgMsg == DIM_CANCEL)
 		{
@@ -477,12 +484,12 @@ BOOL PrintProgressDlg::AbortProc()
 	pPrintProgressDlg->PaintGadgetNow(0);
 
 	// Only sample if 750ms of printing has elapsed as the yield can take a while
-	if (pPrintProgressDlg->UpdateTime.Elapsed(750))
+	if (!PrintMonitor::IsYieldDisabled() && (pPrintProgressDlg->UpdateTime.Elapsed(750)))
 	{
 		// Save current doc view etc. around yield as paint can destroy them.
 		View * pCurrentView = View::GetCurrent();
 		Document * pCurrentDocument = Document::GetCurrent();
-//		::wxSafeYield(pPrintProgressDlg->WindowID, TRUE); - THIS YIELD CAUSES PROBLEMS (some bit of attribute stack is being corrupted) - AMB
+		AfxGetApp().Yield(TRUE);
 		pCurrentDocument->SetCurrent();
 		pCurrentView->SetCurrent();
 

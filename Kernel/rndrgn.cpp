@@ -863,6 +863,7 @@ BOOL RenderRegion::AttachDevice(View* ViewToAttach, CCDC* DCToAttach,
 {
 	return AttachDevice(ViewToAttach, DCToAttach->GetDC(), SpreadToAttach, fOwned);
 }
+#include "prncamvw.h"
 
 BOOL RenderRegion::AttachDevice(View* ViewToAttach, wxDC* DCToAttach,
 								Spread* SpreadToAttach, bool fOwned /*= false*/)
@@ -1170,6 +1171,11 @@ void RenderRegion::DefaultRender(BOOL bForceImmediate /*= FALSE*/)
 
 BOOL RenderRegion::StartRender()
 {
+	if ((!RenderFlags.Printing) && (PrintMonitor::IsPrintingNow()))
+	{
+		::wxBell();
+	}
+
 	// If the device has not been Inited, then do it now
 	if (!RenderFlags.ValidDevice)
 	{

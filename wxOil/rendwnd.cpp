@@ -266,6 +266,9 @@ work. Who knows why.
 
 void CRenderWnd::OnIdle(wxIdleEvent &event)
 {
+	if (PrintMonitor::IsPrintingNow())
+		return;
+
 	if ((m_DCUsers<=0) && m_pCCClientDC)
 	{
 		delete m_pCCClientDC;

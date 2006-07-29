@@ -127,6 +127,7 @@ public:
 	static BOOL IsPrintingActive();
 	static BOOL IsPrintingNow();
 	static void WantFullRedraw(BOOL);
+	static BOOL IsYieldDisabled() {return s_YieldDisabled;}
 
 	typedef enum
 	{
@@ -140,6 +141,7 @@ public:
 	static BOOL PrintWithDriverBands;
 	static MaskType PrintMaskType;
 	static BOOL FullRedrawNeeded;
+	static BOOL s_YieldDisabled;
 
 protected:
 	static CNativeDC * CurrentPrintJob;

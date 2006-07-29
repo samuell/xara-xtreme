@@ -265,6 +265,8 @@ BOOL PrintMonitor::InitPrefs()
 		   					   	  (INT32 *) &PrintMonitor::PrintMaskType, MASK_SIMPLE, MASK_OPTIMAL) &&
 		   	  Camelot.DeclarePref(TEXT("Printing"), TEXT("PrintWithDriverBands"),
 		   					   	  &PrintMonitor::PrintWithDriverBands, FALSE, TRUE);
+		   	  Camelot.DeclarePref(TEXT("Printing"), TEXT("DisableYield"),
+		   					   	  &PrintMonitor::s_YieldDisabled, FALSE, TRUE);
 	return ok;
 }
 
@@ -280,6 +282,7 @@ INT32 PrintMonitor::MySeriousErrorCount = 0;
 // Default to printing without mask, but with bands.
 BOOL PrintMonitor::PrintWithDriverBands = TRUE;
 BOOL PrintMonitor::PrintWithMask = TRUE;
+BOOL PrintMonitor::s_YieldDisabled = FALSE;
 PrintMonitor::MaskType PrintMonitor::PrintMaskType = MASK_OPTIMAL;
 
 
