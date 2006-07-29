@@ -5814,6 +5814,7 @@ CCFile& CCMemTextFile::read( StringBase *pBuf )
 	{
 		// store the char we read
 #if FALSE != wxUSE_UNICODE
+		Text[Off]=_T('?'); // in case it doesn't convert, we don't want unititalized memory
 		mbtowc( Text + Off, &Ch, 1 );
 		++Off;
 #else
