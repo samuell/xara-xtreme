@@ -257,10 +257,8 @@ MsgResult StandardBar::Message( Msg* Msg)
 			End();
 			return OK;
 		}
+
 		// Else fall through
-	}
-	else
-	{
 		if (( DIM_SELECTION_CHANGED == DMsg->DlgMsg ) || ( DIM_SLIDER_POS_SET == DMsg->DlgMsg ))
 		{
 			TRACEUSER( "luke", _T("Change focus") );
