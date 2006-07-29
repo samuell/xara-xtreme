@@ -3111,7 +3111,7 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 		MILLIPOINT LastPos = 0;
 		for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
 		{
-			ResourceID id;
+			ResourceID id=0;
 			switch((*it).GetType())
 			{
 				case LeftTab:
@@ -3159,12 +3159,9 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 	FIXED16 PixelSize = pDocView->GetScaledPixelWidth();
 	MILLIPOINT Pos = CurrentTabButtonPos*PixelSize.MakeLong();
 
-	ResourceID id;
+	ResourceID id=0;
 	switch(RulerData.CurrentTabType)
 	{
-		case LeftTab:
-			id = _R(clefttab);
-			break;
 		case RightTab:
 			id = _R(crighttab);
 			break;
@@ -3173,6 +3170,9 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 			break;
 		case DecimalTab:
 			id = _R(cdectab);
+			break;
+		case LeftTab:
+			id = _R(clefttab);
 			break;
 	}
 	pRuler->DrawBitmap(Pos, id);
@@ -3620,7 +3620,8 @@ BOOL TextInfoBarOp::UpdateRulerBar(SelRange* pSelection, BOOL DoUpdate)
 
 	// first of all, check whether we want to change the ruler origin
 	BOOL ShouldWeClaimRuler = FALSE;
-	INT32 RulerOrigin, StoryWidth;
+	INT32 RulerOrigin=0;
+	INT32 StoryWidth=0;
 	TextStory* pFocusStory = TextStory::GetFocusStory();
 	if (pFocusStory)
 	{
