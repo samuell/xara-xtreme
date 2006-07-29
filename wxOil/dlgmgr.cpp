@@ -1589,6 +1589,12 @@ void DialogManager::Event (DialogEventHandler *pEvtHandler, wxEvent &event)
 	// If we have a message to send, then send it (or defer it for later)
 	if (msg.DlgMsg != DIM_NONE)
 	{
+		// Restore focus after selection change etc. if the dialog Op is non-modal
+		if (!(pEvtHandler->pDialogOp->IsModal()) && (( DIM_SELECTION_CHANGED == msg.DlgMsg ) || ( DIM_SLIDER_POS_SET == msg.DlgMsg )))
+		{
+			TRACEUSER( "luke", _T("Change focus") );
+			AfxGetApp().GiveActiveCanvasFocus();
+		}
 
 		if (Defer)
 		{

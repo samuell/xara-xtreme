@@ -257,13 +257,6 @@ MsgResult StandardBar::Message( Msg* Msg)
 			End();
 			return OK;
 		}
-
-		// Else fall through
-		if (( DIM_SELECTION_CHANGED == DMsg->DlgMsg ) || ( DIM_SLIDER_POS_SET == DMsg->DlgMsg ))
-		{
-			TRACEUSER( "luke", _T("Change focus") );
-			AfxGetApp().GiveActiveCanvasFocus();
-		}
 	}
 	
 	return DialogOp::Message(Msg);
