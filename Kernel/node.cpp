@@ -161,7 +161,8 @@ CC_IMPLEMENT_DYNAMIC(Node, CCObject)
 Node::Node()
 {
 	Previous=Next=Child=Parent=NULL; 
-	Flags.Locked=Flags.Mangled=Flags.Marked=Flags.Selected=Flags.Renderable = FALSE;   
+	// Set OpPermission stuff here too as SetOpPermission does a GetOpPermission which otherwise reads an undefined value
+	Flags.Locked=Flags.Mangled=Flags.Marked=Flags.Selected=Flags.Renderable=Flags.OpPermission1=Flags.OpPermission2 = FALSE;   
 	Flags.SelectedChildren = FALSE;
 	SetOpPermission(PERMISSION_UNDEFINED);	
 	HiddenRefCnt = 0; 
