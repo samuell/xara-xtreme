@@ -284,7 +284,7 @@ BOOL FlashRenderRegion::ProcessPath ( Path *pPath )
 	StrokeColourAttribute	*pStrokeColour	= NULL;
 	TranspFillAttribute		*pTransp		= NULL;
 	DocColour				*pColour		= NULL;
-//	FlashExportDC			*FlashDC		= ( FlashExportDC * ) RenderDC;
+//	FlashExportDC			*FlashDC		= ( FlashExportDC * ) CCDC::ConvertFromNativeDC(RenderDC);
 
 	// Step 2:	If this is the first path to be processed, mpShape will be NULL. Therefore
 	//			create a new element. Otherwise add one to the end of the existing list.
@@ -968,7 +968,7 @@ BOOL FlashRenderRegion::ExportAll ( void )
 	BOOL invalidSizeFound = FALSE;
 
 	// Step 1:	Get a device context to the Flash file.
-	FlashExportDC *pFlashDC = ( FlashExportDC * ) RenderRegion::GetRenderDC();
+	FlashExportDC *pFlashDC = ( FlashExportDC * ) CCDC::ConvertFromNativeDC(RenderRegion::GetRenderDC());
 
 	TRACEUSER( "Graeme", _T("Entering ExportAll!\n") );
 	FlashBitmapRecord *pLastBitmap = NULL;
@@ -1681,7 +1681,7 @@ WORD FlashRenderRegion::GetBitmapID ( OILBitmap *pBitmap,
 {
 	BOOL				IsContone	= ( pStartColour != NULL && pEndColour != NULL );
 	WORD				BitmapID	= FlashPlaceObject::GetBitmapCount ();
-	FlashExportDC		*pFlashDC	= ( FlashExportDC * ) RenderDC;
+	FlashExportDC		*pFlashDC	= ( FlashExportDC * ) CCDC::ConvertFromNativeDC(RenderDC);
 	FlashBitmapRecord	*pRecord	= mpBitmap;
 
 	// If the bitmap has been contoned, but the underlying bitmap is a 32 bit image,
@@ -1888,7 +1888,7 @@ BOOL FlashRenderRegion::ProcessBitmapTransp ( TranspFillAttribute *pTransparency
 	WORD				BitmapID		= FlashPlaceObject::GetBitmapCount ();
 	OILBitmap			*pBitmap		= ( pBMFill->GetBitmap () )->GetActualBitmap ();
 	DocColour			*pStartColour	= pFill->GetStartColour ();
-	FlashExportDC		*pFlashDC		= ( FlashExportDC * ) RenderDC;
+	FlashExportDC		*pFlashDC		= ( FlashExportDC * ) CCDC::ConvertFromNativeDC(RenderDC);
 //	BOOL				IsContone		= TRUE;
 //	FlashBitmapRecord	*pRecord		= mpBitmap;
 

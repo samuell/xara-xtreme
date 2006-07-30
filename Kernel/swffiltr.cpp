@@ -437,7 +437,7 @@ BOOL FlashFilter::WriteNodes ( RenderRegion *pRegion,
 		// writing multiple instances to the file.
 
 		// Create a FlashRenderRegion and FlashExportDC pointers by casting the stock ones.
-		FlashExportDC		*pFDC	= ( FlashExportDC* ) pRegion->GetRenderDC ();
+		FlashExportDC		*pFDC	= ( FlashExportDC* ) CCDC::ConvertFromNativeDC(pRegion->GetRenderDC ());
 		FlashRenderRegion	*pFRR	= ( FlashRenderRegion* ) pRegion;
 
 		// Find the first node that we should export from this spread
