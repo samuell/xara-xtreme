@@ -1977,10 +1977,9 @@ void wxFrameManager::Update()
                 frame->SetPaneWindow(p);
                 p.frame = frame;
 
-                if (p.IsShown())
-                {
-                    frame->Show();
-                }
+                if (p.frame->IsShown() != p.IsShown())
+                    p.frame->Show(p.IsShown());
+
             }
              else
             {
@@ -1994,12 +1993,14 @@ void wxFrameManager::Update()
                     //p.frame->Move(p.floating_pos.x, p.floating_pos.y);
                 }
 
-                 p.frame->Show(p.IsShown());
+                if (p.frame->IsShown() != p.IsShown())
+                    p.frame->Show(p.IsShown());
             }
         }
          else
         {
-            p.window->Show(p.IsShown());
+            if (p.window->IsShown() != p.IsShown())
+                p.window->Show(p.IsShown());
         }
 
         // if "active panes" are no longer allowed, clear
