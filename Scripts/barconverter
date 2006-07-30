@@ -439,7 +439,7 @@ sub WriteSeparator
     print STDOUT $ddindent."            <object class=\"spacer\">\n";
     printf STDOUT $ddindent."                <flag>wxALIGN_CENTER_%s|wxALL</flag>\n", IsVertical()?"HORIZONTAL":"VERTICAL";;
     print STDOUT $ddindent."                <border>1</border>\n";
-    print STDOUT $ddindent."                <size>3,28</size>\n";
+    printf STDOUT $ddindent."                <size>%s</size>\n",IsVertical()?"28,3":"3,28";
     print STDOUT $ddindent."            </object>\n";
 }
 

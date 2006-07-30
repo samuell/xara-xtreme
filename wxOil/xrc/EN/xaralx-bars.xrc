@@ -1325,7 +1325,7 @@
             <object class="spacer">
                 <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
                 <border>1</border>
-                <size>3,28</size>
+                <size>28,3</size>
             </object>
         </object>
     </object>
