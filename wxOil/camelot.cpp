@@ -769,18 +769,23 @@ bool CCamApp::OnInit()
 	if( bFirstRun || m_strResourceDirPath == _T("") || !wxDir::Exists( (PCTSTR)m_strResourceDirPath ) )
 	{
 #if !defined(RESOURCE_DIR)
-		std::auto_ptr<char> pszDataPath( br_find_data_dir( "/usr/share" ) );
-		m_strResourceDirPath = ( pszDataPath.get() );
-		m_strResourceDirPath += _T("/xaralx");
-		TRACEUSER( "luke", _T("Using resource directory \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
-	#if defined(_DEBUG)
-		if( !wxDir::Exists( PCTSTR(m_strResourceDirPath) ) )
+		// we can't use auto pointers here because they free using delete but BR allocates using malloc (strdup actually)
+		char * pszDataPath = br_find_data_dir( "/usr/share" );
+		if (pszDataPath)
 		{
-			// We'll try default location under debug to make life easier
-			m_strResourceDirPath = _T("/usr/share/xaralx");
-			TRACEUSER( "luke", _T("Try = \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
+			m_strResourceDirPath = wxString( pszDataPath, wxConvFile );
+			free(pszDataPath);
+			m_strResourceDirPath += _T("/xaralx");
+			TRACEUSER( "luke", _T("Using resource directory \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
+#if defined(_DEBUG)
+			if( !wxDir::Exists( PCTSTR(m_strResourceDirPath) ) )
+			{
+				// We'll try default location under debug to make life easier
+				m_strResourceDirPath = _T("/usr/share/xaralx");
+				TRACEUSER( "luke", _T("Try = \"%s\"\n"), PCTSTR(m_strResourceDirPath) );
+			}
+#endif
 		}
-	#endif
 #else
 		// The "" is needed to stop the macro expanding to LRESOURCE_DIR
 		m_strResourceDirPath = _T(""RESOURCE_DIR);

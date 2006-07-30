@@ -249,6 +249,7 @@ CCamView::CCamView()
 	m_LastMouseUsedTimestamp=0;
 	m_CouldSkipNextMouse=FALSE;
 
+	OldOffset = WorkCoord(0, 0); // need to initialize it to something
 }
 
 /*********************************************************************************************

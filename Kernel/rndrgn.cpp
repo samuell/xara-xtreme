@@ -314,14 +314,15 @@ RenderRegion::RenderRegion()
 	// By default try to render everything
 	RenderComplexShapes = TRUE;
 
-	RenderFlags.Printing = FALSE;
 	TRACEUSER("Gavin",_T("RenderRegion::RenderRegion - RenderFlags.Rendering = FALSE;\n"));
+	RenderFlags.Printing = FALSE;
 	RenderFlags.Rendering = FALSE;
-	RenderFlags.bImmediateRender = FALSE;
+	RenderFlags.StackClaimed = FALSE;
 	RenderFlags.ValidDevice = FALSE;
+	RenderFlags.bImmediateRender = FALSE;
 	RenderFlags.VeryMono = FALSE;
-	RenderFlags.HitDetect = FALSE;
 	RenderFlags.SmoothedBitmaps = FALSE;
+	RenderFlags.HitDetect = FALSE;
 
 	// All fill attributes are invalid to start with.
 	FillFlags.ValidGeometry 		= FALSE;
@@ -435,14 +436,15 @@ RenderRegion::RenderRegion(DocRect ClipRect, Matrix ConvertMatrix, FIXED16 ViewS
 	RenderDC = NULL;
 	m_fOwned = FALSE;
 
-	RenderFlags.Printing = FALSE;
 	TRACEUSER("Gavin",_T("RenderRegion::RenderRegion - RenderFlags.Rendering = FALSE;\n"));
+	RenderFlags.Printing = FALSE;
 	RenderFlags.Rendering = FALSE;
-	RenderFlags.bImmediateRender = FALSE;
+	RenderFlags.StackClaimed = FALSE;
 	RenderFlags.ValidDevice = FALSE;
+	RenderFlags.bImmediateRender = FALSE;
 	RenderFlags.VeryMono = FALSE;
-	RenderFlags.HitDetect = FALSE;
 	RenderFlags.SmoothedBitmaps = FALSE;
+	RenderFlags.HitDetect = FALSE;
 
 	DrawingMode = DM_COPYPEN;
 
