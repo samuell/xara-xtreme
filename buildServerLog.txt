@@ -6,3 +6,4 @@ binary packages that have the same revision number.
 
 Date/Time	Change Description
 ---------	------------------
+30-Jul-06 	Changed build server to use ./autogen.sh instead of autoreconf -f -i -s
