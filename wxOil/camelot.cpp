@@ -502,12 +502,12 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
 #if defined(_DEBUG)
 	{ wxCMD_LINE_OPTION, _T("u"), _T("user"), _T("set username for debug tracing") },
 	{ wxCMD_LINE_SWITCH, _T("m"), _T("memorycheck"), _T("check memory") },
-	{ wxCMD_LINE_SWITCH, _T("x"), _T("xrccheckgen"), _T("generate xrc.check file") },
 	{ wxCMD_LINE_OPTION, _T("l"), _T("listdebug"), _T("list debug level") , wxCMD_LINE_VAL_NUMBER },
 #endif
 	{ wxCMD_LINE_SWITCH, _T("h"), _T("help"),	_T("Display this help"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
 	{ wxCMD_LINE_SWITCH, _T("v"), _T("version"),	_T("Display the version information") },
 	{ wxCMD_LINE_OPTION, _T("r"), _T("resource"),	_T("resource directory") },
+	{ wxCMD_LINE_SWITCH, _T("x"), _T("xrccheckgen"), _T("generate xrc.check file") },
 	{ wxCMD_LINE_PARAM, NULL, NULL, _T("input file"), wxCMD_LINE_VAL_STRING, 
 										wxCMD_LINE_PARAM_OPTIONAL|wxCMD_LINE_PARAM_MULTIPLE },
 	{ wxCMD_LINE_NONE }
