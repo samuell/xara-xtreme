@@ -249,23 +249,26 @@ Node::Node(Node* ContextNode,
 	Flags.SelectedChildren = FALSE;
 	Flags.Renderable = Renderable;
 	Flags.OpPermission1 = Flags.OpPermission2 = FALSE; // because SetOpPermission does a GetOpPermission
+
+	// Has no TAG because it is not in a document yet.
+	Tag = TAG_NOT_IN_DOC; 
+
 	SetOpPermission(PERMISSION_UNDEFINED);	
 	Child=NULL;                         // New node has no children
 	AttachNode(ContextNode,Direction);  
 			 
-	// Produce unique TAG for object 
-	//ENSURE(Document::GetCurrent() != NULL,"Unable to produce a unique TAG for the node" 
-	//	"\nbeing constructed because the current document is NULL"); 
-	
+	// Sanity check of unique TAG for object
 	BaseDocument* pDoc = ContextNode->FindOwnerDoc();
 	if (pDoc != NULL)
 	{
+		ERROR3IF(Tag==TAG_NOT_IN_DOC, "Tag should have a valid value");
 		// Get a tag for this node and update the count of nodes in the document.
-		Tag = pDoc->NewTag();
-		pDoc->IncNodeCount();
+		if (Tag==TAG_NOT_IN_DOC)
+			SetTags(pDoc);
 	}
 	else 
 	{
+		ERROR3IF(Tag!=TAG_NOT_IN_DOC, "Tag should be TAG_NOT_IN_DOC");
 		Tag = TAG_NOT_IN_DOC; // Has no TAG
 	}
 
