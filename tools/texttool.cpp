@@ -1165,8 +1165,8 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 	{
 		TRACEUSER("wuerthne", _T("not char"));
 
-		// We own all keys that don't have constrain or alt pressed
-		if( !pKeyPress->IsConstrain() && !pKeyPress->IsAlternative() )
+		// We own all keys that don't have constrain or alt pressed and aren't extended chars
+		if( !pKeyPress->IsConstrain() && !pKeyPress->IsAlternative() && !pKeyPress->IsExtended() )
 			return true;
 
 		return pKeyPress->GetUnicode() == _T(' ');          // always claim the Space key (tool switch)
@@ -1182,8 +1182,10 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 		 (pKeyPress->IsAlternative() && pKeyPress->IsConstrain()) ) // Ctrl & left alt down
 	{
 		WCHAR UnicodeValue = pKeyPress->GetUnicode();
-		TRACEUSER("wuerthne", _T("UnicodeValue from keypress event = %04x"), UnicodeValue);
-		if (HandleDeadKeys(pKeyPress, &UnicodeValue))
+		TRACEUSER("wuerthne", _T("UnicodeValue from keypress event = %04x %d"), UnicodeValue, pKeyPress->IsExtended() );
+
+		// Extanded keys shouldn't produce a character
+		if (HandleDeadKeys(pKeyPress, &UnicodeValue) || pKeyPress->IsExtended())
 			return TRUE;
 		else
 		{
