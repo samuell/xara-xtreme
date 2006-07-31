@@ -1078,7 +1078,7 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
    	// Filter out all key release events 
    	if (pKeyPress->IsRelease())
 	{
-		TRACEUSER( "jlh92", _T("Release\n") );
+		TRACEUSER( "wuerthne", _T("Release\n") );
 
 		if (GetApplication()->FindSelection()->IsSelRangeGagged())
 		{
@@ -1164,6 +1164,11 @@ BOOL TextTool::OnKeyPress(KeyPress* pKeyPress)
 	if( !pKeyPress->IsChar() )
 	{
 		TRACEUSER("wuerthne", _T("not char"));
+
+		// We own all keys that don't have constrain or alt pressed
+		if( !pKeyPress->IsConstrain() && !pKeyPress->IsAlternative() )
+			return true;
+
 		return pKeyPress->GetUnicode() == _T(' ');          // always claim the Space key (tool switch)
 	}
 
