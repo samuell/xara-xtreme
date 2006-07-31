@@ -125,6 +125,8 @@ BOOL HandleRecord(void* pMagic, CXaraFileRecord* pRecord)
 	INT32 ThisNum = pRecord->GetRecordNumber();
 	INT32 ThisTag = pRecord->GetTag();
 
+	TRACE(_T("HandleRecord %d - %d"), ThisNum, ThisTag);
+
 	// While this record isn't the one we should be writing
 	while (pData->NextRecord < ThisNum)
 	{
@@ -164,7 +166,7 @@ BOOL HandleRecord(void* pMagic, CXaraFileRecord* pRecord)
 		(pData->NextRecord)++;
 	}
 
-	return(S_OK);
+	return(TRUE);
 }
 
 

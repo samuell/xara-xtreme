@@ -1493,7 +1493,9 @@ BOOL CXaraFile::EndRecord()
 	{
 		WriteToRecord = FALSE;
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 		ERROR3IF(!pRecord->IsDataSectionFull(),"Data section of the record has not been filled");
+#endif
 
 		if (ok) ok = Write(pRecord->GetTag());
 		if (ok) ok = Write(pRecord->GetSize());
@@ -1629,7 +1631,9 @@ UINT32 CXaraFile::Write(CXaraFileRecord* pRecord)
 
 	BOOL ok = EndRecord();
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	ERROR3IF(!pRecord->IsDataSectionFull(),"Data section of the record has not been filled");
+#endif
 
 	if (ok) ok = Write(pRecord->GetTag());
 	if (ok) ok = Write(pRecord->GetSize());
