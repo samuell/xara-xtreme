@@ -1631,7 +1631,7 @@ BOOL CXaraFileRecord::ReadASCII( char *pStr, UINT32 MaxChars )
 
 BOOL CXaraFileRecord::ReadUTF16STR(StringVar* pvstr, UINT32 MaxChars)
 {
-#ifdef UNICODE
+#ifdef _UNICODE
 	BOOL ok = TRUE;
 	pvstr->Empty();
 	WCHAR c = 0;
