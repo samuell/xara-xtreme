@@ -5,6 +5,8 @@
 # of the other Makefile.am variables
 noinst_LIBRARIES	= libKernel.a
 
+libKernel_a_CXXFLAGS = $(XARALXCXXFLAGS) $(XARAFLAGS)
+
 # the application source, library search path, and link libraries
 libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attrbev.cpp \
 	attrmap.cpp attrmgr.cpp basedoc.cpp beveler.cpp bevtrap.cpp biasgain.cpp \

@@ -111,16 +111,6 @@ fi
 
 # -----------------------------------------------------------------------------
 
-# Set up our XarLib build flags
-# Change this to be hopefully like wxWidgets above
-# Only do this if we are not inside a local build tree
-if test "$LocalXarLibEnable" != "yes"; then
-	PKG_CHECK_MODULES(XARLIB, [Xar])
-else
-	XARLIB_CFLAGS=""
-	XARLIB_LIBS=""
-fi
-
 # Setup our build flags (if not set by user)
 CPPFLAGS="-Wall -Wno-unknown-pragmas -g -fexceptions $DEBUG_FLAGS -DUSE_STD_ALLOC -DUSE_XARLIB"
 
@@ -131,6 +121,21 @@ fi
 CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
 LDFLAGS="$LDFLAGS $WX_LIBS"
+
+# Set up our XarLib build flags
+# Change this to be hopefully like wxWidgets above
+# Only do this if we are not inside a local build tree
+if test "$LocalXarLibEnable" != "yes"; then
+	PKG_CHECK_MODULES(XARLIB, [Xar])
+else
+	# stops CPPFLAGS etc being set twice which upsets static link it seems, also drop 
+	XARLIB_CFLAGS="$CXXFLAGS"
+	XARLIB_LIBS="$WX_LIBS"
+	unset CPPFLAGS
+	unset CXXFLAGS
+	unset LDFLAGS
+fi
+
 
 AC_PROG_CXX
 AC_PROG_INSTALL

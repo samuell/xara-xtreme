@@ -122,10 +122,11 @@ XRCINCLUDE=include
 
 # Disable generation of shared libtool libraries - that's libXar. Note this has NOTHING to
 # do with static-exec (the executables)
-AC_DISABLE_SHARED
+#AC_DISABLE_SHARED
 # We don't need dlopen right now and it's not supported on Darwin
 # AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
+#AC_PROG_LIBTOOL
+AC_PROG_RANLIB
 
 AC_C_BIGENDIAN
 AC_CHECK_SIZEOF(void*)
@@ -194,6 +195,7 @@ if test -n "$vers" && test "$vers" -ge 2006003; then
 	WX_CPPFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cppflags`"
 	WX_CXXFLAGS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --cxxflags | sed -e 's/-fno-exceptions//'`"
 	WX_LIBS="`$WXCONFIG --static=$StaticEnable --debug=$DebugEnable --unicode=yes --libs std`"
+	WX_LIBS2="`echo $WX_LIBS | sed -e 's/-pthread//g'`"
 
 	# See if we are running on GTK
 	WX_GTK="no"
@@ -376,6 +378,13 @@ if test "$FiltersEnable" = "yes"; then
 	AC_CONFIG_SUBDIRS([filters/SVGFilter])
 fi
 
+# Do not pass CXXFLAGS, CFLAGS in. This sets up CXXLINK which breaks XARLIB compilation. Instead set
+XARALXCXXFLAGS="$CXXFLAGS"
+XARALXCPPFLAGS="$CPPFLAGS"
+CXXFLAGS=""
+CPPFLAGS=""
+
+
 AM_CONDITIONAL(PRECOMPILE_ENABLE, [test "$PrecompileEnable" = "yes"])
 AM_CONDITIONAL(STATIC_ENABLE, [test "$StaticEnable" = "yes"])
 AM_CONDITIONAL(DARWIN_LINK, [test "$DarwinLink" = "yes"])
@@ -384,8 +393,11 @@ AM_CONDITIONAL(SVNVERSION_ENABLE, [test "$SvnVersionEnable" = "yes"])
 AM_CONDITIONAL(XARLIB_ENABLE, [test "$XarLibEnable" = "yes"])
 AM_CONDITIONAL(FILTERS_ENABLE, [test "$FiltersEnable" = "yes"])
 
+AC_SUBST(XARALXCXXFLAGS)
+AC_SUBST(XARALXCPPFLAGS)
 AC_SUBST(TOPDIR)
 AC_SUBST(WX_LIBS)
+AC_SUBST(WX_LIBS2)
 AC_SUBST(XRCINCLUDE)
 AC_SUBST(XARALANGUAGE)
 AC_SUBST(WXRC)

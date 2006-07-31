@@ -5,8 +5,8 @@ if LOCAL_XARLIB_ENABLE
 # note includes are built, so no need to refer to topdir
 XARLIB_CFLAGS2 = -DEXCLUDE_FROM_XARLIB -DUSE_NATIVE_XLONG -DBUILDSHADOWS -DOLD_MATRIX_TRANSFORMATIONS -DVECTOR_STROKING -DEXCLUDE_FROM_XARLIB -DNEW_SHADOW_RENDER -DNO_XARACMS \
 				-DNEW_FEATURES -DSHOWPORTNOTE -DDO_EXPORT \
-				-I../../xarlib/include
-XARLIB_LIBS2 = -L../../xarlib/.libs -lXar
+				-I../../xarlib/include $(WX_CXXFLAGS)
+XARLIB_LIBS2 = -L../../xarlib -lXar
 else
 XARLIB_CFLAGS2 =
 XARLIB_LIBS2 =
@@ -16,13 +16,13 @@ endif
 svgfilter_SOURCES = svgfilter.cpp svgfilter.h import.cpp svgimporter.cpp \
 		    svgimporter.h export.cpp utils.cpp utils.h styles.cpp \
 		    styles.h version.h
-svgfilter_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
-svgfilter_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
+svgfilter_CPPFLAGS = $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS) $(XARLIB_CFLAGS)
+svgfilter_LDADD = $(XARLIB_LIBS2) $(LIBXML2_LIBS) $(XARLIB_LIBS)
 
 svgfilterui_SOURCES = svgfilterui.cpp svgfilterui.h svgexportdialog.cpp \
 		      svgexportdialog.h version.h
-svgfilterui_CPPFLAGS = $(LIBXML2_CFLAGS)
-svgfilterui_LDADD = $(LIBXML2_LIBS)
+svgfilterui_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
+svgfilterui_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
 
 EXTRA_DIST = svgfilterui.pjd svgfilter.xml svgfilterc.xml \
 	     images/*.png samples/*.xar tests/*.svg

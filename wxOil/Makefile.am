@@ -12,6 +12,8 @@ CLEANFILES		= svnversion.h
 MOSTLYCLEANFILES = $(TOPDIR)/wxOil/resources.h resources.h xrc/dialogs.xrc xrc/strings.xrc xrc/strings.lst xrc/xaralx.po xrc/resources.xrs xrc/xrc.check
 noinst_LIBRARIES	= libwxOil.a
 
+libwxOil_a_CXXFLAGS = $(XARALXCXXFLAGS) $(XARAFLAGS)
+
 # the application source, library search path, and link libraries
 libwxOil_a_SOURCES = \
 	varstr.cpp \

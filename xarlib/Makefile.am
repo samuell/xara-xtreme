@@ -12,7 +12,7 @@
 pkgincludedir=$(includedir)/xarlib
 
 # Main target
-lib_LTLIBRARIES = libXar.la
+lib_LIBRARIES = libXar.a
 
 # have to use the -I flags to point at the three directories concerned as I
 # can't get this file to compile pretranslated source files.
@@ -24,7 +24,7 @@ XARLIBFLAGS = \
 
 # make sure this does NOT have our include files in the path
 # xarlib needs to be first
-libXar_la_CXXFLAGS = $(XARLIBFLAGS)
+libXar_a_CXXFLAGS =  $(XARALXCXXFLAGS) $(XARLIBFLAGS)
 
 # Ensure these all begin with "../<directory>/" even if in the current directory
 XARLIBCPP = \
@@ -152,7 +152,9 @@ XARLIBHEADERS = \
 INSTHEADERS = $(addprefix include/xarlib/, $(notdir $(XARLIBHEADERS)) )
 INSTCPP = $(notdir $(XARLIBCPP) )
 
-libXar_la_SOURCES = $(XARLIBCPP) $(INSTHEADERS)
+libXar_a_SOURCES = $(XARLIBCPP) $(INSTHEADERS)
+# Only build the static library until we have an API/ABI nailed down
+#libXar_a_LIBADD = $(WX_LIBS2)
 
 pkginclude_HEADERS = $(INSTHEADERS)
 
@@ -169,7 +171,7 @@ noinst_DATA = $(INSTHEADERS)
 # Generate a directory of includes which has "xarlib/" in the include path
 $(INSTHEADERS) : $(XARLIBHEADERS)
 	@mkdir -p include/xarlib && \
-	echo $(libXar_la_SOURCES) > /tmp/bar && \
+	echo $(libXar_a_SOURCES) > /tmp/bar && \
 	j=xarlib/$(filter %/$(notdir $@), $(XARLIBHEADERS) ) && \
 	echo "Building xarlib header $@ from $(TOPDIR)/$$j" && \
 	perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 
@@ -183,15 +185,14 @@ $(INSTCPP) : $(XARLIBCPP)
 	ls -la $(TOPDIR)/$$j && \
 	#perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 
 
-# Only build the static library until we have an API/ABI nailed down
-libXar_la_LDFLAGS = -static
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = Xar.pc
 
+# Unser this as it upsets CXXLINK which causes linking to fail for no apparent reason
+AM_CXXFLAGS =
+
 bin_PROGRAMS = expandxar
 expandxar_SOURCES = ExpandXar/expandxar.cpp
-expandxar_LDADD = libXar.la $(WX_LIBS)
-#expandxar_LDFLAGS = -all-static
-expandxar_LDFLAGS = -static
-expandxar_CXXFLAGS = $(XARLIBFLAGS)
+expandxar_LDADD = libXar.a $(WX_LIBS)
+expandxar_CXXFLAGS = $(XARALXCXXFLAGS) $(XARLIBFLAGS)

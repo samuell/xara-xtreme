@@ -14,7 +14,7 @@ libwxXtra_a_SOURCES = \
 # make sure this does NOT have our include files in the path
 # Don't use GTK includes for now - you will need this with sub-2.6.3 but that's not supported
 # right now
-libwxXtra_a_CXXFLAGS = @GTK_CFLAGS@
+libwxXtra_a_CXXFLAGS = @GTK_CFLAGS@ $(XARALXCXXFLAGS)
 
 # Don't load the GTK libraries into wxXtra any more - you will need this with sub-2.6.3 but
 # that's not supported right now

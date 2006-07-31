@@ -5,6 +5,8 @@
 # of the other Makefile.am variables
 noinst_LIBRARIES	= libTools.a
 
+libTools_a_CXXFLAGS = $(XARALXCXXFLAGS) $(XARAFLAGS)
+
 # the application source, library search path, and link libraries
 libTools_a_SOURCES = opdrbrsh.cpp zoomtool.cpp zoomops.cpp blndtool.cpp opbevel.cpp \
 	dragtool.cpp viewmod.cpp selector.cpp selinfo.cpp tranlate.cpp oprotate.cpp \
