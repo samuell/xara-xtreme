@@ -47,12 +47,12 @@ installMime xaralx.xml
 installGnome2Mime mime-storage/gnome/*
 copyFiles doc "$PREFIX/share/xaralx"
 mkdir -p "$PREFIX/share/xaralx/doc/en"
-unzip -qo xaralxHelp.zip -d "$PREFIX/share/xaralx/doc/en"
+((tar xfz xaralxHelp.tar.gz -C "$PREFIX/share/xaralx/doc/en" 2>/dev/null) || /bin/true )
 copyFiles Examples "$PREFIX/share/xaralx"
 copyFiles Templates "$PREFIX/share/xaralx"
 # copyFiles bin "$PREFIX/share/xaralx"
 # copyFiles video "$PREFIX/share/xaralx"
-update-desktop-database
+((update-desktop-database 2>/dev/null) || /bin/true )
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
