@@ -961,12 +961,19 @@ BOOL CXaraFileRecord::WriteASCII(const TCHAR* pStr)
 	size_t len = camStrlen(pStr);
 	BOOL ok= TRUE;
 
-#ifdef UNICODE
+#ifdef _UNICODE
 	// Writing a Unicode string at pStr as an ASCII string
 	// Just write out the first byte of each unicode char.
 
-	for (INT32 i=0;ok && i<=len;i++)
-		ok = WriteBYTE(pStr[i*2]);
+	for (size_t i=0;ok && i<=len;i++)
+	{
+PORTNOTE( "record", "UNICODE characters that don't fit into 1 mb character need better handling" )
+		char	acTmp[MB_CUR_MAX];
+		if( 1 == wctomb( acTmp, pStr[i*2] ) )
+			ok = WriteBYTE( acTmp[0] );
+		else
+			ok = WriteBYTE( '.' );
+	}
 
 	LEAVEWRITEFUNCTION;
 	return ok;
@@ -1026,7 +1033,7 @@ BOOL CXaraFileRecord::WriteASCII(const TCHAR* pStr)
 
 BOOL CXaraFileRecord::WriteUTF16STR(const StringVar& pvstr)
 {
-#ifdef UNICODE
+#ifdef _UNICODE
 	BOOL ok = TRUE;
 	WCHAR c = 0;
 	INT32 i = 0;
