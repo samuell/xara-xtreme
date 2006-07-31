@@ -421,7 +421,9 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 			}
 		} else if (c == _T('S') || c == _T('s')) {
 			// B�ier smooth cubic curveto
+#if SVGDEBUG
 			wxChar action = c;
+#endif
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
 				double fX = TakeNumber(s);
