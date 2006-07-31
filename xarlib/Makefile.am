@@ -75,6 +75,7 @@ XARLIBCPP = \
 	../wxOil/cammemory.cpp \
 	../wxOil/pathname.cpp \
 	../wxOil/unicdman.cpp \
+	../wxOil/varstr.cpp \
 	../xarlib/camelot.cpp \
 	../xarlib/ensure.cpp \
 	../xarlib/xarlib.cpp

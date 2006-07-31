@@ -138,10 +138,12 @@ public:
 	StringVar& operator=(const TCHAR* s);
 	StringVar& operator=(const TCHAR ch);
 
+#if !defined(EXCLUDE_FROM_XARLIB)
 	// Special internationalisation stuff...
 	virtual void MakePercent(INT32 Value);
 	virtual void MakePercent(double Value);
 	virtual void MakePercent(TCHAR *Value);
+#endif
 
 private:
 	// Worker functions
