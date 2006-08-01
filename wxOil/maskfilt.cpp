@@ -811,7 +811,7 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 		{
 			// Get the current Byte of BMP Data at the current Position
 //			ByteData = _rotr(pBMPBits[PixelPos],8);
-			ByteData = pBMPBits[PixelPos]>>8 || pBMPBits[PixelPos]<<24;
+			ByteData = pBMPBits[PixelPos]>>8 | pBMPBits[PixelPos]<<24;
 
 			NumOfSubPixels = PixelsPerByte;
 
@@ -822,7 +822,7 @@ BOOL MaskedFilter::ApplyTransparentColoursToBitmap(BITMAPINFOHEADER* pInfoHeader
 			for(SubPixPos = 0; SubPixPos < PixelsPerByte; SubPixPos++)
 			{
 //				ByteData = _rotl(ByteData,Depth);
-				ByteData = ByteData<<8 || ByteData>>24;
+				ByteData = ByteData<<8 | ByteData>>24;
 				Padding = (SubPixPos >= NumOfSubPixels);
 
 				// First check to see if the alpha channel is fully transparent
