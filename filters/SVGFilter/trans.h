@@ -44,10 +44,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
 */
-// svgfilter.h: This defines the XAR <--> SVG command line interface
+// trans.h: This defines the class for handling transformations
 
-#ifndef SVGFILTER_H
-#define SVGFILTER_H
+#ifndef TRANS_H
+#define TRANS_H
 
 #include "wx/wxprec.h"
 
@@ -61,38 +61,72 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wx/wx.h"
 #endif
 
-// additional wxWidgets classes
-#include "wx/cmdline.h"
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
-#include "wx/zstream.h"
-#include "wx/datetime.h"
-#include "wx/tokenzr.h"
+#include "wx/list.h"
 
 // XAR handling library
 #include "xarlib/xarlib.h"
-#include "xarlib/docrect.h"
-#include "xarlib/paths.h"
 
-// libxml2 library
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xmlreader.h>
+// for PointD
+#include "utils.h"
 
-#ifndef LIBXML_READER_ENABLED
-#error xmlreader must be enabled in libxml2!
-#endif
+/***************************************************************************************************
 
-// forward declarations
-void ReportError(const wxChar* pStr);
+>	struct Transformation
 
-// import
-bool DoCanImportInternal(const wxString& sFileName);
-bool DoImportInternal(CXarExport* pExporter, const wxString& sFileName);
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	20 July 2006
+	Purpose:	Contains transformation matrix and applies SVG transformations to coordinates.
 
-// export
-bool DoPrepareExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(CXarImport* pImporter, const wxString& sFileName, const wxString& sXMLFileName, bool bCompress);
+***************************************************************************************************/
 
-#endif // !SVGFILTER_H
+struct Transformation {
+	Transformation() {
+		// default is an identity matrix
+		data[0] = 1.0; // x scale
+		data[1] = 0.0;
+		data[2] = 0.0;
+		data[3] = 0.0;
+		data[4] = 1.0; // y scale
+		data[5] = 0.0;
+	}
+	// copy constructor
+	Transformation(const Transformation& copy) {
+		*this = copy;
+	}
+
+	// copy operator
+	Transformation& operator =(const Transformation& copy) {
+		memcpy(data, copy.data, sizeof(double)*6);
+		size = copy.size;
+		return *this;
+	}
+
+	Transformation& operator *=(const Transformation& t);
+
+	// is the tranformation only composed by translation and scale?
+	bool IsSimpleTransformation() const {
+		// check items a12 & a21
+		return data[1] == 0.0 && data[3] == 0.0;
+	}
+
+	void ApplyToCoordinate(double x, double y, double* pRX, double* pRY) const;
+	void ApplyToMeasure(double x, double* pX) const;
+	
+	static Transformation CreateTranslate(double x, double y);
+	static Transformation CreateScale(double x, double y);
+	static Transformation CreateRotate(double a);
+	static Transformation CreateSkewX(double a);
+	static Transformation CreateSkewY(double a);
+	static Transformation CreateMatrix(double d[6]);
+
+	// 3x3 matrix simplified to 6 elements vector
+	// (line 3 of matrix is always [0 0 1])
+	double data[6];
+
+	// width and height of the parent object
+	PointD size;
+};
+
+WX_DECLARE_LIST(Transformation, TransformationList);
+
+#endif // !TRANS_H

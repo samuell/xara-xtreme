@@ -21,4 +21,29 @@ should be specified instead.
 * svgexportdialog.cpp, svgexportdialog.h are partially generated with the
   help of DialogBlocks, the project file is "svgfilterui.pjd".
 
--- Written in 2006, Sandro Sigala
+*** Command line usage ***
+
+How to convert SVG --> XAR:
+
+    svgfilter -i -f input.svg >output.xar
+
+*** Debugging ***
+
+To enable debug, add the "--enable-svgdebug" flag to "configure".
+
+A new "-T tracelevel" command line option will be enabled.
+The option accepts an integer that specifies the level of debug
+information to output to stderr.
+
+Any combination (bit mask) of the following values is accepted:
+
+    1	debug styles
+    2	debug transformations
+    4	debug transformations stack
+    8	debug paths
+   16	debug shapes
+   32   debug groups
+   64   debug gradients
+  255   enable all debug messages
+
+-- Written in 2006, Sandro Sigala <sandro@sigala.it>

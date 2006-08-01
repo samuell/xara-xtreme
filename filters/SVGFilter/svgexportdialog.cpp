@@ -257,7 +257,7 @@ bool SVGExportDialog::Create(wxWindow* parent, wxWindowID id, const wxString& ca
 }
 
 void SVGExportDialog::CreateControls()
-{    
+{
 ////@begin SVGExportDialog content construction
     SVGExportDialog* itemDialog1 = this;
 

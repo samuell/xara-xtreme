@@ -1,18 +1,45 @@
-C++:
+*** C++ ***
+
 * follow Xara C++ style conventions for indenting and commenting
 * add proper comments
-* add good error handling (exceptions?)
+* the error handling is non-existent (exceptions?)
+* generate XAR tags for objects/groups labels (id and xml:id properties)
+* review the tree of #include's and remove useless ones
 
-SVG:
-* handle "id" and "xml:id" attributes
-* parse <defs> entity and handle #url() and xlinks in styles
-* transformations
-* non flat fills
-* correct handling of measures
+*** SVG ***
+
+* fill-rule fill property
+* stroke-linecap, stroke-linejoin, stroke-miterlimit, stroke-dasharray, stroke-dashoffset
+* solidColor in <defs>
+* gradient radial fill
+* handle <defs> in the correct way: each one should have its own hashtable and
+  the filter should handle objects defined there and referenced later with <use />
 * parse <style type="text/css"> section
 * bitmaps
 * texts
 
-Xara:
-* maybe it's better to rename the binaries to "lxsvgfilter" and "lxsvgfilterui"
-  to keep namespace clean?
+*** Known Bugs ***
+
+1) tests/rects_trans.svg test fails:
+
+The entities
+
+  <rect x="30cm" y="2cm" width="600" height="300" transform="translate(50, 50) scale(.5, .5)"
+    style="fill:red; stroke:blue; stroke-width:3"/>
+  <rect x="15cm" y="2cm" width="1cm" height="3cm" transform="translate(-10, 20) scale(1.25, 1.5)"
+    style="fill:yellow; stroke:black; stroke-width:3"/>
+
+are not handled correctly.
+
+2) There are some bugs in transformations, "people_juliane_krug_04a.svg" from
+openclipart.org has objects moved in the wrong position.
+Also "tests/inkscape_tiger.svg" is positioned in wrong area.
+
+3) Some SVG files have geometry not correctly imported, some have improper width,
+height, viewBox properties that confuse the filter.
+
+Examples:
+    tests/inkscape2.svg
+
+4) Transparent objects (opacity < 1.0) do not look the same as in Inkscape or Firefox.
+TAG_FLATTRANSPARENTFILL with flag 0x01 is not enough.

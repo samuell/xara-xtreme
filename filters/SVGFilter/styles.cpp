@@ -227,7 +227,9 @@ wxColour Style::ParseColour(const wxString& sColour)
 	wxString s = sColour;
 	s = TrimWs(s);
 
-	if (s == _T("none"))
+	if (s.IsEmpty())
+		return wxColour(0,0,0);
+	else if (s == _T("none"))
 		return wxColour(); // return invalid colour (means no color)
 	else if (s.Left(1) == _T("#")) {
 		// hexadecimal colour definition

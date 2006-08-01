@@ -55,13 +55,15 @@ wxString TrimWs(const wxString& s)
 	return ret.Trim(true).Trim(false);
 }
 
-// take (and removes) the first number from the string and return it
+// take (and remove) the first number from the string and return it
+// XXX should be more clever parsing floating point numbers
+// (e.g. bogus 1.2e2.1e3 is currently accepted)
 double TakeNumber(wxString& data)
 {
 	wxString s;
 	data = TrimWs(data);
 	if (data.IsEmpty())
-		return 0.0f; // some error
+		return 0.0; // some error
 	if (IsNumberChar(data[0])) {
 		s += data[0];
 		data = data.Mid(1);
@@ -90,7 +92,7 @@ wxString GetStringProperty(xmlNodePtr cur, const char *name)
 // take the property named "name" and convert to double
 double GetDoubleProperty(xmlNodePtr cur, const char *name)
 {
-	double x = 0.0f;
+	double x = 0.0;
 	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
 	if (value != NULL) {
 		x = atof((const char *)value);
@@ -99,17 +101,40 @@ double GetDoubleProperty(xmlNodePtr cur, const char *name)
 	return x;
 }
 
-// is the measure without unit?
-bool IsUnitless(const wxString& measure)
+#if 0 // XXX unused
+// Is any of the (floating-point) properties zero?
+bool IsAnyPropertyZero(xmlNodePtr cur, size_t size, ...)
+{
+	va_list ap;
+	bool bResult = false;
+
+	va_start(ap, size);
+	for (unsigned int i = 0; i < size; ++i) {
+		const char *pName = va_arg(ap, const char *);
+		double fValue = GetDoubleProperty(cur, pName);
+		if (fValue == 0.0) {
+			bResult = true;
+			break;
+		}
+
+	}
+	va_end(ap);
+
+	return bResult;
+}
+#endif
+
+// is the measure relative?
+bool IsRelativeMeasure(const wxString& measure)
 {
 	wxString s = measure;
 	// remove whitespace and convert to lowercase
 	s = TrimWs(s).MakeLower();
-	return (s.IsNumber() || s.Right(2) == _T("px"));
+	return (s.IsNumber() || s.Right(2) == _T("px") || s.Right(1) == _T("%"));
 }
 
-// is the string a measure?
-bool IsMeasure(const wxString& measure)
+// is the string an absolute measure?
+bool IsAbsoluteMeasure(const wxString& measure)
 {
 	wxString s = measure;
 	// remove whitespace and convert to lowercase and take last 2 chars
@@ -118,7 +143,7 @@ bool IsMeasure(const wxString& measure)
 }
 
 // convert measure to millipoints
-double MeasureToMillipoints(const wxString& measure)
+double AbsoluteMeasureToMillipoints(const wxString& measure)
 {
 	wxString s = measure;
 	// remove whitespace and convert to lowercase
@@ -153,19 +178,15 @@ double MeasureToMillipoints(const wxString& measure)
 	return f;
 }
 
-double MeasureToUserUnits(const wxString& measure)
+#if SVGDEBUG
+extern long iDebugTraceLevel; // from svgfilter.cpp
+
+void svgtrace(int lvl, const char *fmt, ...)
 {
-	wxString s = measure;
-	// remove whitespace and convert to lowercase
-	s = TrimWs(s).MakeLower();
-
-	if (s.Right(2) == _T("px")) {
-		// strip units
-		s = s.RemoveLast(2).Trim();
-	}
-	double f;
-	s.ToDouble(&f);
-	f = PX2PT(f); // Convert to user units
-
-	return f;
+	va_list ap;
+	va_start(ap, fmt);
+	if (lvl & iDebugTraceLevel)
+		vfprintf(stderr, fmt, ap);
+	va_end(ap);
 }
+#endif

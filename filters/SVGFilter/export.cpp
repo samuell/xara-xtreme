@@ -148,7 +148,7 @@ bool DoExportInternal(CXarImport* pImporter, const wxString& sFileName, const wx
 {
 	if (!ParseXmlCapatibilityFile(sXMLFileName))
 		return false;
-	
+
 	// Open the output file for writing
 	wxFileOutputStream OutFile(sFileName);
 	if (!OutFile.Ok())

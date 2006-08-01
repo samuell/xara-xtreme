@@ -1,0 +1,24 @@
+Version 0.2
+
+* We are now able to open at least simple SVG files.
+
+Version 0.3
+
+* Most of the code have been rewritten or reviewed and the SVGImporter
+  has been cleaned up (all the XAR generation functions have been moved
+  to the new specialized XARGenerator class in xargenerator.cpp).
+* Implemented rounded rectangles.
+* Fully implemented paths (support for remaining 'S', 's', 'Q', 'q', 'T', 't'
+  SVG <path d="" /> parameters added).
+* Implemented transformations.
+* Added support for xml:id="" and id="" properties (still not enabled).
+* Rewritten <svg viewBox="" /> attribute parsing using transformations.
+* Rewritten support for measures ("cm", "pt", ecc.) using proper transformations.
+* Partially implemented parsing of <defs /> children to handle #url() and xlinks
+  in styles attributes.
+* Implemented partial support for linear fills.
+* Cleaned up debug messages.  Now a --svgdebug flag to "configure" is available
+  to enable debug code; the messages class is selected using the "-T tracelevel"
+  option to "svgfilter" (more information in README).
+* Fixed error messages to follow properly Xara's filter convention (e.g.
+  "ERROR: " and "WARNING: " prefixes).

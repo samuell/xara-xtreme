@@ -1,5 +1,5 @@
 AC_INIT(svgfilter.cpp)
-AM_INIT_AUTOMAKE(SVGFilter, 0.2)
+AM_INIT_AUTOMAKE(SVGFilter, 0.3)
 
 DEBUG_FLAGS=""
 OPT_FLAGS="-O3"
@@ -11,6 +11,14 @@ AC_ARG_ENABLE(debug,
 		DEBUG_FLAGS="-ggdb -D_DEBUG"
 		OPT_FLAGS="-O0"
 		DebugEnable="yes"
+	fi
+])
+
+AC_ARG_ENABLE(svgdebug,
+[[  --enable-svgdebug       Add debug code that prints information on stderr]],
+[
+	if test $enableval == "yes"; then
+		DEBUG_FLAGS="$DEBUG_FLAGS -DSVGDEBUG=1"
 	fi
 ])
 

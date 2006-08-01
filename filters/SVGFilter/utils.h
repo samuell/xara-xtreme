@@ -74,25 +74,38 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #endif
 
 #include <string.h>
-	 
+
 // Useful units conversion macros
-#define MM2PT(x) ((x)*2.834645669f)
-#define CM2PT(x) ((x)*28.34645669f)
-#define PC2PT(x) ((x)*12.0f)
-#define IN2PT(x) ((x)*72.0f)
-#define PX2PT(x) ((x)*1.0f)
-#define PT2MM(x) ((x)*0.3527777778f)
-#define PT2CM(x) ((x)*0.03527777778f)
-#define PT2PC(x) ((x)*0.08333333333f)
-#define PT2IN(x) ((x)*0.01388888889f)
-#define PT2PX(x) ((x)*1.0f)
+#define MM2PT(x) ((x)*2.834645669)
+#define CM2PT(x) ((x)*28.34645669)
+#define PC2PT(x) ((x)*12.0)
+#define IN2PT(x) ((x)*72.0)
+#define PX2PT(x) ((x)*1.0)
+#define PT2MM(x) ((x)*0.3527777778)
+#define PT2CM(x) ((x)*0.03527777778)
+#define PT2PC(x) ((x)*0.08333333333)
+#define PT2IN(x) ((x)*0.01388888889)
+#define PT2PX(x) ((x)*1.0)
 
 #ifndef M_SQRT2
-#define M_SQRT2	 1.414213562f
+#define M_SQRT2	 1.414213562
+#endif
+
+// debug ---------------------------------------------------------------------
+
+#if SVGDEBUG
+#define DBGTRACE_STYLES			0001
+#define DBGTRACE_TRANS			0002
+#define DBGTRACE_TRANS_STACK	0004
+#define DBGTRACE_PATHS			0010
+#define DBGTRACE_SHAPES			0020
+#define DBGTRACE_GROUPS			0040
+#define DBGTRACE_GRADIENTS		0100
+void svgtrace(int lvl, const char *fmt, ...);
 #endif
 
 // miscellaneous functions ---------------------------------------------------
-	 
+
 // trim whitespace from string
 wxString TrimWs(const wxString& s);
 
@@ -102,31 +115,106 @@ inline bool IsNumberChar(wxChar c)
 	return ((c >= wxT('0') && c <= wxT('9')) || c == _T('+') || c == _T('-') || c == _T('.'));
 }
 
-// check if character is one of [0-9] or "."
+// check if character is one of [0-9] or one of ".eE"
 inline bool IsNumberDigit(wxChar c)
 {
-	return ((c >= wxT('0') && c <= wxT('9')) || c == _T('.'));
+	return ((c >= wxT('0') && c <= wxT('9')) || c == _T('.') || c == _T('e') || c == _T('E'));
 }
 
 // take (and remove) the first number from the string and return it
 double TakeNumber(wxString& data);
+inline double TakeMilliNumber(wxString& data) { return TakeNumber(data)*1000.0; }
 
 // XML utilities -------------------------------------------------------------
 
 inline bool IsEntityName(xmlNodePtr cur, const char *name)
 {
-	return !xmlStrcmp(cur->name, (const xmlChar *)name);
+	return !xmlStrcasecmp(cur->name, (const xmlChar *)name);
+}
+
+inline bool IsPropertyDefined(xmlNodePtr cur, const char *name)
+{
+	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
+	return (value != NULL);
 }
 
 wxString GetStringProperty(xmlNodePtr cur, const char *name);
 double GetDoubleProperty(xmlNodePtr cur, const char *name);
+#if 0 // XXX unused
+bool IsAnyPropertyZero(xmlNodePtr cur, size_t size, ...);
+#endif
 
 // measure conversion utilities ----------------------------------------------
 
-bool IsUnitless(const wxString& measure);
-bool IsMeasure(const wxString& measure);
-double MeasureToMillipoints(const wxString& measure);
-double MeasureToUserUnits(const wxString& measure);
+bool IsRelativeMeasure(const wxString& measure);
+bool IsAbsoluteMeasure(const wxString& measure);
+double AbsoluteMeasureToMillipoints(const wxString& measure);
+
+// implements a point (double) -----------------------------------------------
+
+struct PointD {
+	PointD() : x(0.0f), y(0.0f) {}
+	PointD(double x1, double y1) : x(x1), y(y1) {}
+	PointD(const PointD& copy) { x = copy.x; y = copy.y; }
+
+	PointD& operator= (const PointD& copy) { x = copy.x; y = copy.y; return *this; }
+	bool operator== (const PointD& p) const { return (x==p.x && y==p.y); }
+
+	double x, y;
+};
+
+// implements a coordinate (double) ------------------------------------------
+
+struct CoordD {
+	CoordD() {}
+	CoordD(double x1, double y1, double x2, double y2) : a(x1, y1), b(x2, y2) {}
+	CoordD(const CoordD& copy) { a = copy.a; b = copy.b; }
+
+	CoordD& operator= (const CoordD& copy) { a = copy.a; b = copy.b; return *this; }
+	bool operator== (const CoordD& p) const { return (a==p.a && b==p.b); }
+
+	PointD a, b;
+};
+
+// implements a rectangle (double) -------------------------------------------
+
+/*
+ Geometry:
+
+ p11      p12
+ +--------+
+ |        |
+ |        |
+ +--------+
+ p21      p22
+
+
+ Some coordinates are duplicated (e.g.: pll.y==p12.y and p21.y==p22.y)
+ but thanks to this applying transformations is really simple.
+*/
+
+struct RectD {
+	RectD() {}
+	RectD(double x11, double y11, double x12, double y12,
+		  double x21, double y21, double x22, double y22)
+		: p11(x11, y11), p12(x12, y12), p21(x21, y21), p22(x22, y22) {}
+	RectD(const RectD& copy) { *this = copy; }
+
+	RectD& operator= (const RectD& copy) {
+		p11 = copy.p11; p12 = copy.p12; p21 = copy.p21; p22 = copy.p22;
+		return *this;
+	}
+	bool operator== (const RectD& r) const {
+		return (p11==r.p11 && p12==r.p12 && p21==r.p21 && p22==r.p22);
+	}
+
+	bool IsUpright() const {
+		// check only the first two coordinates
+		return (p11.x == p21.x && p11.y == p12.y);
+	}
+
+	PointD p11, p12, p21, p22;
+};
 
 // implements an extremely simple and fast vector ----------------------------
 
@@ -141,7 +229,7 @@ public:
 
 	size_t GetCount() const { return m_count; }
 	void Append(const T& value);
-	
+
 private:
 	T *m_data;
 	size_t m_size;		// current allocated space

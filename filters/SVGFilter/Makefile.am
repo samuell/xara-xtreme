@@ -15,7 +15,8 @@ endif
 # the application source, library search path, and link libraries
 svgfilter_SOURCES = svgfilter.cpp svgfilter.h import.cpp svgimporter.cpp \
 		    svgimporter.h export.cpp utils.cpp utils.h styles.cpp \
-		    styles.h version.h
+		    styles.h gradients.cpp gradients.h trans.cpp trans.h \
+		    xargenerator.cpp xargenerator.h version.h
 svgfilter_CPPFLAGS = $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS) $(XARLIB_CFLAGS)
 svgfilter_LDADD = $(XARLIB_LIBS2) $(LIBXML2_LIBS) $(XARLIB_LIBS)
 
@@ -25,7 +26,8 @@ svgfilterui_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
 svgfilterui_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
 
 EXTRA_DIST = svgfilterui.pjd svgfilter.xml svgfilterc.xml \
-	     images/*.png samples/*.xar tests/*.svg
+	     images/*.png samples/*.xar \
+	     tests/*.svg tests/*.el tests/*.sh
 
 install-data-local:
 	mkdir -p $(DESTDIR)$(prefix)/share/xaralx/filters/

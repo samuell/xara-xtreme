@@ -40,7 +40,7 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-			http://www.xara.com/
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
 */
@@ -61,12 +61,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wx/wx.h"
 #endif
 
-#include "wx/list.h"
-#include "wx/hashmap.h"
-
-// XAR handling library
-#include "xarlib/xarlib.h"
-
 // libxml2 library
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -80,27 +74,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // for Style, StyleList and ColourRefHashTable
 #include "styles.h"
+// for GradientStop, Gradient, pGradientHashTable
+#include "gradients.h"
+// for Transformation and TransformationList
+#include "trans.h"
+// for XARGenerator
+#include "xargenerator.h"
+	 
+/***************************************************************************************************
 
-// for SimpleVector
-#include "utils.h"
+>	class SVGImporter
 
-// used for storing paths data (coordinate and verb)
-struct PathData {
-	PathData() : m_verb(0x00), m_coord(DocCoord(0, 0)) {}
-	PathData(BYTE verb, const DocCoord& coord) : m_verb(verb), m_coord(coord) {}
-	BYTE m_verb;
-	DocCoord m_coord;
-};
-typedef SimpleVector<PathData> PathDataVector;
-typedef SimpleVector<DocCoord> DocCoordVector;
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	1 July 2006
+	Purpose:    Handles all the parsing of SVG documents and conversion to XAR documents.
 
-struct Transformation {
-	Transformation() { xf = yf = 1.0f; }
-	double parentWidth, parentHeight;
-	double width, height;
-	double xf, yf;
-};
-WX_DECLARE_LIST(Transformation, TransformationList);
+***************************************************************************************************/
 
 class SVGImporter {
 public:
@@ -111,48 +100,72 @@ public:
 	bool ParseAndOutput();
 
 private:
-	bool OutputXARHeader();
-	bool OutputXARFooter();
-	bool ParseDefinitionsTree();
+	// SVG/XML entities parsers ----------------------------------------------
+
 	bool ParseRootTree();
 
+	bool ParseLinearGradientEntity(xmlNodePtr cur);
+	bool ParseDefsEntity(xmlNodePtr cur);
+	bool ParsePathData(const Transformation& trans, const wxString& data, PathDataVector& pathVector);
 	bool ParsePathEntity(xmlNodePtr cur);
 	bool ParseRectEntity(xmlNodePtr cur);
-	bool ParseCircleEntity(xmlNodePtr cur);
-	bool ParseEllipseEntity(xmlNodePtr cur);
+	bool ParseEllipseEntity(xmlNodePtr cur, bool bIsCircle);
 	bool ParseLineEntity(xmlNodePtr cur);
+	bool ParsePolylineData(const Transformation& trans, const wxString& data, DocCoordVector& coordVector);
 	bool ParsePolylineEntity(xmlNodePtr cur);
 	bool ParsePolygonEntity(xmlNodePtr cur);
 	bool ParseGroupEntity(xmlNodePtr cur);
 	bool ParseEntitiesTree(xmlNodePtr cur);
 
-	void GetEntityGeometry(xmlNodePtr cur, size_t size, ...);
-
+	// transformations -------------------------------------------------------
+	
 	void PushTransformations();
 	void PopTransformations();
 	Transformation GetCurrentTransformation() const;
 	Transformation& GetCurrentTransformation();
+	Transformation ParseTransformations(xmlNodePtr cur) const;
+
+	double MeasureToMillipoints(const Transformation& trans, const wxString& sMeasure) const;
+	PointD GetTransformedCoordinate(const Transformation& trans,
+									const wxString& sX, const wxString& sY) const;
+	PointD GetTransformedCoordinate(xmlNodePtr cur, const Transformation& trans,
+									const char* pX, const char* pY) const;
+	RectD GetTransformedRectangle(const Transformation& trans,
+								  const wxString& sX, const wxString& sY,
+								  const wxString& sWidth, const wxString sHeight) const;
+	RectD GetTransformedRectangle(xmlNodePtr cur, const Transformation& trans,
+								  const char* pX, const char* pY,
+								  const char* pW, const char* pH) const;
+	RectD GetTransformedCircle(const Transformation& trans,
+							   const wxString& sX, const wxString& sY, const wxString& sR) const;
+	RectD GetTransformedCircle(xmlNodePtr cur, const Transformation& trans,
+							   const char* pX, const char* pY, const char* pR) const;
+	RectD GetTransformedEllipse(const Transformation& trans,
+								const wxString& sX, const wxString& sY,
+								const wxString& sRX, const wxString& sRY) const;
+	RectD GetTransformedEllipse(xmlNodePtr cur, const Transformation& trans,
+								const char* pX, const char* pY,
+								const char* pRX, const char* pRY) const;
+	double GetTransformedMeasure(const Transformation& trans, const wxString& sMeasure) const;
+	double GetTransformedMeasure(xmlNodePtr cur, const Transformation& trans, const char* pM) const;
+
+	// styles ----------------------------------------------------------------
 
 	void PushStyles();
 	void PopStyles();
 	Style GetCurrentStyle() const;
 	Style& GetCurrentStyle();
-	Style ParseStyle(xmlNodePtr cur, bool bIsObject) const;
-	bool OutputStyles(const Style& cssStyle, UINT32 witch);
+	Style ParseStyle(xmlNodePtr cur, const Transformation& trans, bool bIsObject) const;
+	void ImportStyleFromDefs(Style& style, const wxString& sXmlId) const;
 
-	INT32 DefineColour(const wxColour& col);
-	bool ParsePathData(const wxString& data, PathDataVector& pathVector);
-	bool ParsePolylineData(const wxString& data, DocCoordVector& coordVector);
-
-	CXarExport*			m_pExporter;
+	XARGenerator*		m_pGenerator;
 	wxString			m_sFileName;
 	xmlDocPtr			m_doc;
 	xmlNodePtr			m_root;
 	DocCoord			m_docSize;
-	DocRect				m_viewBox;
 	TransformationList	m_trans;
 	StyleList			m_styles;
-	ColourRefHashTable  m_colourRef;
+	pGradientHashTable	m_gradients;
 };
 
 #endif // !SVGIMPORTER_H

@@ -44,10 +44,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
 */
-// svgfilter.h: This defines the XAR <--> SVG command line interface
+// gradients.h: This defines the class for handling the gradients
 
-#ifndef SVGFILTER_H
-#define SVGFILTER_H
+#ifndef GRADIENTS_H
+#define GRADIENTS_H
 
 #include "wx/wxprec.h"
 
@@ -61,18 +61,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wx/wx.h"
 #endif
 
-// additional wxWidgets classes
-#include "wx/cmdline.h"
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
-#include "wx/zstream.h"
-#include "wx/datetime.h"
-#include "wx/tokenzr.h"
+#include "wx/hashmap.h"
 
 // XAR handling library
 #include "xarlib/xarlib.h"
-#include "xarlib/docrect.h"
-#include "xarlib/paths.h"
 
 // libxml2 library
 #include <libxml/parser.h>
@@ -83,16 +75,72 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #error xmlreader must be enabled in libxml2!
 #endif
 
-// forward declarations
-void ReportError(const wxChar* pStr);
+#include "styles.h"
 
-// import
-bool DoCanImportInternal(const wxString& sFileName);
-bool DoImportInternal(CXarExport* pExporter, const wxString& sFileName);
+/***************************************************************************************************
 
-// export
-bool DoPrepareExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(CXarImport* pImporter, const wxString& sFileName, const wxString& sXMLFileName, bool bCompress);
+>	struct GradientStop
 
-#endif // !SVGFILTER_H
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	25 July 2006
+	Purpose:	Contains SVG gradients stop parameters.
+
+***************************************************************************************************/
+
+struct GradientStop {
+	GradientStop() { offset = 0.0; stopColour = wxColour(0,0,0); }
+	GradientStop(const GradientStop& copy) { *this = copy; }
+
+	GradientStop& operator =(const GradientStop& copy) {
+		offset = copy.offset;
+		stopColour = copy.stopColour;
+		return *this;
+	}
+
+	double				offset;
+	wxColour			stopColour;
+};
+
+WX_DECLARE_LIST(GradientStop, GradientStopList);
+
+/***************************************************************************************************
+
+>	struct Gradient
+
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	25 July 2006
+	Purpose:	Contains SVG gradients parameters.
+
+***************************************************************************************************/
+
+struct Gradient {
+	enum Type { SolidColour, Linear, Radial };
+	enum Units { UserSpaceOnUse, ObjectBoundingBox };
+
+	Gradient() {
+		type = Linear;
+		units = ObjectBoundingBox;
+		x1 = y1 = x2 = y2 = 0.0;
+		stops.DeleteContents(true);
+	}
+	Gradient(const Gradient& copy) { *this = copy; }
+	~Gradient() {}
+
+	Gradient& operator =(const Gradient& copy);
+
+	Type				type;
+	wxString			xmlId;
+	Units				units;
+	// linear gradient parameters
+	double				x1, y1, x2, y2;
+	GradientStopList	stops;
+	// radial gradient parameters
+	double				cx, cy, r;
+	// solidColor paramenters
+	wxString			solidColour;
+	double				solidOpacity;
+};
+
+WX_DECLARE_STRING_HASH_MAP(Gradient*, pGradientHashTable);
+
+#endif // !GRADIENTS_H

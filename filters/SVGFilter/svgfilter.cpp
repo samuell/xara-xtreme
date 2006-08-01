@@ -51,6 +51,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 bool s_bDoProgress = false;
 bool s_bDoVerbose = false;
 bool s_bDoCompress = false;
+#if SVGDEBUG
+long iDebugTraceLevel = 0;
+#endif
 
 void ReportError(const wxChar* pStr)
 {
@@ -190,6 +193,15 @@ static bool DoImport(const wxCmdLineParser& parser)
 		return false;
 	}
 
+#if SVGDEBUG
+	wxString sDebugTraceLevel;
+	if (parser.Found(_T("T"), &sDebugTraceLevel))
+	{
+		sDebugTraceLevel.ToLong(&iDebugTraceLevel);
+		fprintf(stderr, "debug trace level %ld enabled\n", iDebugTraceLevel);
+	}
+#endif
+
 	// Ask the library to create a Xar Exporter object
 	CXarExport* pExporter = XarLibrary::CreateExporter();
 	bool bRetVal = true;
@@ -316,7 +328,7 @@ void ShowCmdLine(const wxCmdLineParser& parser)
 
 	Inputs:		argc		- number of parameters on command line
 				argv[]		- array of parameter strings
-	Returns:	
+	Returns:
 	Purpose:	The main entry point of the code.
 
 ****************************************************************************/
@@ -325,7 +337,7 @@ int main(int argc, char* argv[])
 {
 #if wxUSE_UNICODE
 	wxChar **wxArgv = new wxChar *[argc + 1];
-	
+
 	{
 		int n;
 
@@ -366,6 +378,9 @@ int main(int argc, char* argv[])
 		{ wxCMD_LINE_SWITCH, _T("z"), _T("compress"), _T("(de)compress (output) input file") },
 		{ wxCMD_LINE_OPTION, _T("f"), _T("file"),  _T("input/output file") },
 		{ wxCMD_LINE_OPTION, _T("x"), _T("xmlfile"),  _T("xml configuration file") },
+#if SVGDEBUG
+		{ wxCMD_LINE_OPTION, _T("T"), _T("tracelevel"),  _T("enable debug") },
+#endif
 		{ wxCMD_LINE_NONE }
 	};
 
@@ -402,7 +417,7 @@ int main(int argc, char* argv[])
 
 	wxUnusedVar(argc);
 	wxUnusedVar(argv);
-	
+
 	// May need to use exit(RetVal) here if the OS ignores the return value from main
 	return RetVal;
 }

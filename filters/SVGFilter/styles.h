@@ -1,10 +1,10 @@
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
 
-	       SVGFilter, XAR <--> SVG plugin filter for XaraLX
-		    Copyright (C) 2006 Xara Group Ltd.
+               SVGFilter, XAR <--> SVG plugin filter for XaraLX
+                    Copyright (C) 2006 Xara Group Ltd.
        Copyright on certain contributions may be held in joint with their
-	      respective authors. See AUTHORS file for details.
+              respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -40,7 +40,7 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-			http://www.xara.com/
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
 */
@@ -104,14 +104,42 @@ public:
 WX_DECLARE_HASH_MAP(wxColour, INT32, wxColourHash, wxColourEqual, ColourRefHashTable);
 
 // style flags (for IsXXXDefined())
-#define STYLE_FILL_COLOUR			0001
-#define STYLE_FILL_OPACITY			0002
-#define STYLE_FILL_RULE				0004
-#define STYLE_STROKE_COLOUR			0010
-#define STYLE_STROKE_WIDTH			0020
-#define STYLE_STROKE_LINECAP		0040
-#define STYLE_STROKE_LINEJOIN		0100
-#define STYLE_STROKE_OPACITY		0200
+#define STYLE_FILL_COLOUR			00000010
+#define STYLE_FILL_OPACITY			00000020
+#define STYLE_FILL_RULE				00000040
+#define STYLE_FILL_GRADIENT			00000100
+#define STYLE_FILL_ALL				(STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_FILL_RULE| \
+									 STYLE_FILL_GRADIENT)
+
+#define STYLE_STROKE_COLOUR			00001000
+#define STYLE_STROKE_WIDTH			00002000
+#define STYLE_STROKE_LINECAP		00004000
+#define STYLE_STROKE_LINEJOIN		00010000
+#define STYLE_STROKE_OPACITY		00020000
+#define STYLE_STROKE_ALL			(STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH|STYLE_STROKE_LINECAP| \
+									 STYLE_STROKE_LINEJOIN|STYLE_STROKE_OPACITY)
+
+#define STYLE_STOP_COLOUR		    00100000
+#define STYLE_STOP_OPACITY			00200000
+#define STYLE_STOP_ALL				(STYLE_STOP_COLOUR|STYLE_STOP_OPACITY)
+
+struct Gradient; // forward declaration
+
+/*
+ * NB: Inside the Style class is stored also XML id information (the tag of the object):
+ *     while it's not an object style in the strict sense, it's very useful to keep
+ *     this information in this class.
+ */
+
+/***************************************************************************************************
+
+>	class Style
+
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	10 July 2006
+	Purpose:	Contains SVG styles and parses CSS/SVG colours.
+
+***************************************************************************************************/
 
 class Style {
 public:
@@ -119,11 +147,14 @@ public:
 	Style() {
 		// default values
 		m_fillColour = wxColour(255,255,255);
-		m_fillOpacity = 1.0f;
+		m_fillOpacity = 1.0;
 		m_strokeColour = wxColour(0,0,0);
-		m_strokeOpacity = 1.0f;
+		m_strokeOpacity = 1.0;
 		m_strokeWidth = 1;
-		m_defined = 0;
+		m_stopColour = wxColour(0,0,0);
+		m_stopOpacity = 0.0;
+		m_fillGradient = NULL;
+		m_defined = 0; // no defined attibute
 	}
 	// copy constructor
 	Style(const Style& copy) {
@@ -132,13 +163,22 @@ public:
 
 	// copy operator
 	Style& operator =(const Style& copy) {
+		// NB: the xml id is not copied (does not inherit from parent)
 		m_fillColour = copy.m_fillColour;
 		m_fillOpacity = copy.m_fillOpacity;
 		m_strokeColour = copy.m_strokeColour;
 		m_strokeOpacity = copy.m_strokeOpacity;
 		m_strokeWidth = copy.m_strokeWidth;
+		m_stopColour = copy.m_stopColour;
+		m_stopOpacity = copy.m_stopOpacity;
+		m_fillGradient = copy.m_fillGradient;
 		m_defined = copy.m_defined;
 		return *this;
+	}
+
+	wxString GetXmlId() const { return m_xmlId; }
+	void SetXmlId(const wxString& id) {
+		m_xmlId = id;
 	}
 
 	bool IsFillColourDefined() const { return m_defined & STYLE_FILL_COLOUR; }
@@ -176,15 +216,40 @@ public:
 		m_strokeWidth = width;
 	}
 
+	bool IsStopColourDefined() const { return m_defined & STYLE_STOP_COLOUR; }
+	wxColour GetStopColour() const { return m_stopColour; }
+	void SetStopColour(const wxColour& col) {
+		m_defined |= STYLE_STOP_COLOUR;
+		m_stopColour = col;
+	}
+
+	bool IsStopOpacityDefined() const { return m_defined & STYLE_STOP_OPACITY; }
+	double GetStopOpacity() const { return m_stopOpacity; }
+	void SetStopOpacity(double value) {
+		m_defined |= STYLE_STOP_OPACITY;
+		m_stopOpacity = value;
+	}
+
+	bool IsFillGradientDefined() const { return m_defined & STYLE_FILL_GRADIENT; }
+	Gradient* GetFillGradient() const { return m_fillGradient; }
+	void SetFillGradient(Gradient* value) {
+		m_defined |= STYLE_FILL_GRADIENT;
+		m_fillGradient = value;
+	}
+
 	static void PrepareColourHashTable();
 	static wxColour ParseColour(const wxString& s);
 
 private:
+	wxString	m_xmlId;
 	wxColour	m_fillColour;
 	double		m_fillOpacity;
+	Gradient*	m_fillGradient;
 	wxColour	m_strokeColour;
 	double		m_strokeOpacity;
 	INT32		m_strokeWidth;
+	wxColour	m_stopColour;
+	double		m_stopOpacity;
 	UINT32		m_defined;
 };
 

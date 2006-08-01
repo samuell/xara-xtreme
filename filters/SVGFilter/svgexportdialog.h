@@ -79,12 +79,18 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define wxCLOSE_BOX 0x1000
 #endif
 
-/*!
- * SVGExportDialog class declaration
- */
+/***************************************************************************************************
+
+>	class SVGExportDialog
+
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	20 June 2006
+	Purpose:	Export (SVG --> XAR) dialogbox with the common user settings.
+
+***************************************************************************************************/
 
 class SVGExportDialog: public wxDialog
-{    
+{
     DECLARE_DYNAMIC_CLASS(SVGExportDialog)
     DECLARE_EVENT_TABLE()
 

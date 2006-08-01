@@ -1,14 +1,26 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="10cm" height="5cm" viewBox="0 0 500 500"
+<svg width="8cm" height="6cm" viewBox="0 0 800 600"
      xmlns="http://www.w3.org/2000/svg" version="1.1">
   <g>
-    <rect x="200" y="100" width="200" height="200"
+    <rect x="200" y="100" width="200" height="200" rx="30"
       style="fill:red; stroke:black; stroke-width:1"/>
     <rect x="275" y="175" width="50" height="50"
       style="fill:yellow; stroke:black; stroke-width:3"/>
   </g>
   <rect x="350" y="250" width="50" height="50"
         style="fill:yellow; stroke:black; stroke-width:3"/>
+
+  <!-- The same stuff but rotated -->
+  <g transform="translate(350, 100) rotate(30)">
+    <g>
+      <rect x="200" y="100" width="200" height="200" rx="30"
+	style="fill:red; stroke:black; stroke-width:1"/>
+      <rect x="275" y="175" width="50" height="50"
+	style="fill:yellow; stroke:black; stroke-width:3"/>
+    </g>
+    <rect x="350" y="250" width="50" height="50"
+      style="fill:yellow; stroke:black; stroke-width:3"/>
+  </g>
 </svg>

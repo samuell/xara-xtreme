@@ -44,10 +44,10 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
 */
-// svgfilter.h: This defines the XAR <--> SVG command line interface
+// svgimporter.h: This defines the XAR generator
 
-#ifndef SVGFILTER_H
-#define SVGFILTER_H
+#ifndef XARGENERATOR_H
+#define XARGENERATOR_H
 
 #include "wx/wxprec.h"
 
@@ -61,38 +61,68 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wx/wx.h"
 #endif
 
-// additional wxWidgets classes
-#include "wx/cmdline.h"
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
-#include "wx/zstream.h"
-#include "wx/datetime.h"
-#include "wx/tokenzr.h"
+#include "wx/hashmap.h"
 
 // XAR handling library
 #include "xarlib/xarlib.h"
-#include "xarlib/docrect.h"
-#include "xarlib/paths.h"
 
-// libxml2 library
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xmlreader.h>
+// for Style, StyleList and ColourRefHashTable
+#include "styles.h"
+// for GradientStop, Gradient, pGradientHashTable
+#include "gradients.h"
+// for SimpleVector
+#include "utils.h"
 
-#ifndef LIBXML_READER_ENABLED
-#error xmlreader must be enabled in libxml2!
-#endif
+// used for storing paths data (coordinate and verb)
+struct PathData {
+	PathData() : m_verb(0x00), m_coord(DocCoord(0, 0)) {}
+	PathData(BYTE verb, const DocCoord& coord) : m_verb(verb), m_coord(coord) {}
+	BYTE m_verb;
+	DocCoord m_coord;
+};
+typedef SimpleVector<PathData> PathDataVector;
+typedef SimpleVector<DocCoord> DocCoordVector;
 
-// forward declarations
-void ReportError(const wxChar* pStr);
+/***************************************************************************************************
 
-// import
-bool DoCanImportInternal(const wxString& sFileName);
-bool DoImportInternal(CXarExport* pExporter, const wxString& sFileName);
+>	class XARGenerator
 
-// export
-bool DoPrepareExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(CXarImport* pImporter, const wxString& sFileName, const wxString& sXMLFileName, bool bCompress);
+	Author:		Sandro Sigala <sandro@sigala.it>
+	Created:	28 July 2006
+	Purpose:    Produces XAR documents.
 
-#endif // !SVGFILTER_H
+***************************************************************************************************/
+
+class XARGenerator {
+public:
+	XARGenerator(CXarExport* pExporter) { m_pExporter = pExporter; }
+	~XARGenerator() {}
+
+	void SetDocumentSize(const DocCoord& size) { m_docSize = size; }
+
+	bool OutputHeader();
+	bool OutputFooter();
+	bool OutputPathEntity(const Style& style, PathDataVector& pathVector);
+	bool OutputRectEntity(const Style& style, const RectD& r, double fRoundAxis);
+	bool OutputEllipseEntity(const Style& style, const RectD& r);
+	bool OutputLineEntity(const Style& style, const PointD& p1, const PointD& p2);
+	bool OutputPolylineEntity(const Style& style, const DocCoordVector& coordVector);
+	bool OutputPolygonEntity(const Style& style, DocCoordVector& coordVector);
+	bool EnterGroup();
+	bool LeaveGroup();
+
+private:
+	bool OutputUprightRect(const RectD& r, double fRoundAxis, DocRect& boundings);
+	bool OutputComplexRect(const RectD& r, double fRoundAxis, DocRect& boundings);
+	bool OutputUprightEllipse(const RectD& r, DocRect& boundings);
+	bool OutputComplexEllipse(const RectD& r, DocRect& boundings);
+	bool OutputStyles(const Style& style, const DocRect& boundings, UINT32 witch);
+
+	INT32 DefineColour(const wxColour& col);
+
+	CXarExport*			m_pExporter;
+	DocCoord			m_docSize;
+	ColourRefHashTable  m_colourRef;
+};
+
+#endif // !XARGENERATOR_H

@@ -1,10 +1,10 @@
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
 
-	       SVGFilter, XAR <--> SVG plugin filter for XaraLX
-		    Copyright (C) 2006 Xara Group Ltd.
+               SVGFilter, XAR <--> SVG plugin filter for XaraLX
+                    Copyright (C) 2006 Xara Group Ltd.
        Copyright on certain contributions may be held in joint with their
-	      respective authors. See AUTHORS file for details.
+              respective authors. See AUTHORS file for details.
 
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
@@ -40,7 +40,7 @@ designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
-			http://www.xara.com/
+                        http://www.xara.com/
 
 =================================XARAHEADEREND============================
 */
@@ -51,30 +51,43 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "utils.h"
 #include "version.h"
 
-// define list of transformations
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(TransformationList);
+#if SVGDEBUG
+void DebugDumpTransformation(int lvl, const Transformation& trans);		// from trans.cpp
+#endif
+
+/*----------------------------------------------------------------------------
+ *
+ * Constructor/destructor
+ *
+ *----------------------------------------------------------------------------*/
 
 SVGImporter::SVGImporter(CXarExport* pExporter, const wxString& sFileName)
 {
-	m_pExporter = pExporter;
 	m_sFileName = sFileName;
 	m_doc = NULL;
 	m_root = NULL;
 
+	// Create XAR generator object
+	m_pGenerator = new XARGenerator(pExporter);
+
 	// Prepare hash table containing CSS colours ("red", "navy", etc.)
 	Style::PrepareColourHashTable();
 
+	// Append the root transformation: will contain the document geometry
 	Transformation *pTrans = new Transformation();
 	m_trans.Append(pTrans);
 
+	// Append the root style: will contain the default style
 	Style* pStyle = new Style();
 	m_styles.Append(pStyle);
 }
 
 SVGImporter::~SVGImporter()
 {
-	// dispose xml document
+	// Dispose XAR generator object
+	delete m_pGenerator;
+
+	// Dispose XML document
 	if (m_doc != NULL)
 		xmlFreeDoc(m_doc);
 
@@ -89,184 +102,108 @@ SVGImporter::~SVGImporter()
 	Style* pStyle = pSNode->GetData();
 	m_styles.DeleteNode(pSNode);
 	delete pStyle;
+
+	// flush gradients hashtable
+	typedef pGradientHashTable::iterator I;
+	for (I i = m_gradients.begin(); i != m_gradients.end(); ++i) {
+		Gradient* pGradient = i->second;
+		delete pGradient;
+    }
+	m_gradients.clear();
 }
 
 bool SVGImporter::Open()
 {
 	m_doc = xmlParseFile(m_sFileName.mb_str(wxConvUTF8));
 	if (m_doc == NULL) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "Failed to open input file.\n");
+		ReportError(_T("Failed to open input file"));
 		return false;
 	}
 
 	m_root = xmlDocGetRootElement(m_doc);
 	if (m_root == NULL) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "The document is empty\n");
+		ReportError(_T("The document is empty"));
 		xmlFreeDoc(m_doc);
 		m_doc = NULL;
 		return false;
 	}
 	if (!IsEntityName(m_root, "svg")) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "document root is not <svg>\n");
+		ReportError(_T("document root is not <svg>"));
 		xmlFreeDoc(m_doc);
 		m_doc = NULL;
 		return false;
 	}
 
-	// Parse width and height attributes
-	wxString sWidth = GetStringProperty(m_root, "width");
-	wxString sHeight = GetStringProperty(m_root, "height");
-	if (!sWidth.IsEmpty() && !sHeight.IsEmpty()) {
-		double fWidth = MeasureToMillipoints(sWidth);
-		double fHeight = MeasureToMillipoints(sHeight);
-		INT32 iWidth = (INT32)fWidth;
-		INT32 iHeight = (INT32)fHeight;
+	Transformation& trans = GetCurrentTransformation();
 
-		m_docSize = DocCoord(iWidth, iHeight);
+	// Parse width and height attributes
+
+	wxString sWidth  = GetStringProperty(m_root, "width");
+	wxString sHeight = GetStringProperty(m_root, "height");
+	double fDocWidth, fDocHeight;
+
+	if (!sWidth.IsEmpty() /*&& !sHeight.IsEmpty()*/) {
+		fDocWidth = AbsoluteMeasureToMillipoints(sWidth);
+		fDocHeight = AbsoluteMeasureToMillipoints(sHeight);
 	} else {
 		// no size or no valid size specified, let's suppose an A4 paper
-		INT32 iWidth = (INT32)(MM2PT(210.0f)*1000.0f);
-		INT32 iHeight = (INT32)(MM2PT(297.0f)*1000.0f);
-
-		m_docSize = DocCoord(iWidth, iHeight);
+		fDocWidth = MM2PT(210.0f)*1000.0f;
+		fDocHeight = MM2PT(297.0f)*1000.0f;
 	}
+
+	trans.size = PointD(fDocWidth, fDocHeight);
+	m_docSize = DocCoord((INT32)fDocWidth, (INT32)fDocHeight);
 
 	wxString sViewbox = GetStringProperty(m_root, "viewBox");
 	if (!sViewbox.IsEmpty() && TrimWs(sViewbox) != _T("none")) {
 		// parse the four space or comma separated values
-		wxString sVec[4];
-		wxStringTokenizer tkz(sViewbox, _T(" ,"));
-		for (int i = 0; i < 4 && tkz.HasMoreTokens(); ++i) {
-			wxString token = tkz.GetNextToken();
-			sVec[i] = token;
+
+		// replace commas with whitespace, if any
+		sViewbox.Replace(_T(","), _T(" "));
+
+		double fX      = TakeMilliNumber(sViewbox);
+		double fY      = TakeMilliNumber(sViewbox);
+		double fWidth  = TakeMilliNumber(sViewbox);
+		double fHeight = TakeMilliNumber(sViewbox);
+		double fScaleX = 1.0;
+		double fScaleY = 1.0;
+
+		if (fWidth != 0.0) {
+			fScaleX = fDocWidth / fWidth;
+		}
+		if (fHeight != 0.0) {
+			fScaleY = fDocHeight / fHeight;
 		}
 
-		double fX, fY, fWidth, fHeight;
-		sVec[0].ToDouble(&fX);
-		sVec[1].ToDouble(&fY);
-		sVec[2].ToDouble(&fWidth);
-		sVec[3].ToDouble(&fHeight);
-		INT32 iX = (INT32)fX;
-		INT32 iY = (INT32)fY;
-		INT32 iWidth = (INT32)fWidth;
-		INT32 iHeight = (INT32)fHeight;
+		// XXX other preserveAspectRatio flags?
+		wxString sPreserve = GetStringProperty(m_root, "preserveAspectRatio");
+		if (TrimWs(sPreserve) != _T("none"))
+			fScaleY = fScaleX;
 
-		m_viewBox = DocRect(DocCoord(iX, iY), iWidth, iHeight);
-	} else {
-		// no viewbox or no valid viewbox specified
-
-		double fWidth = GetDoubleProperty(m_root, "width");
-		double fHeight = GetDoubleProperty(m_root, "height");
-		if (fWidth > 0.0f && fHeight > 0.0f) {
-			// get viewbox geometry from document width and height
-			INT32 iWidth = (INT32)fWidth;
-			INT32 iHeight = (INT32)fHeight;
-
-			m_viewBox = DocRect(0, 0, iWidth, iHeight);
-		} else {
-			m_viewBox = DocRect(0, 0, m_docSize.x, m_docSize.y);
-		}
+		trans *= Transformation::CreateScale(fScaleX, fScaleY);
+		trans *= Transformation::CreateTranslate(-fX, -fY);
 	}
 
 #if SVGDEBUG
-	fprintf(stderr, "document width: %d, height: %d\n", m_docSize.x, m_docSize.y);
-	fprintf(stderr, "viewBox width: %d, height: %d\n", m_viewBox.Width(), m_viewBox.Height());
+	svgtrace(DBGTRACE_TRANS, "document width: %d, height: %d\n", m_docSize.x, m_docSize.y);
+	DebugDumpTransformation(DBGTRACE_TRANS, trans);
 #endif
 
 	return true;
 }
 
-bool SVGImporter::OutputXARHeader()
-{
-	bool ok = true;
+/*----------------------------------------------------------------------------
+ *
+ * XML/SVG parsing functions
+ *
+ *----------------------------------------------------------------------------*/
 
-	// Create a CXaraFileRecord object for the document header record
-	CXaraFileRecord Rec(TAG_FILEHEADER);
-	ok = Rec.Init();
-	if (ok) ok = Rec.WriteBuffer((BYTE*)"CXN", 3);
-	if (ok) ok = Rec.WriteUINT32(123);				// File size
-	if (ok) ok = Rec.WriteUINT32(0);				// Native/Web link ID
-	if (ok) ok = Rec.WriteUINT32(0);				// Precompression flags
-	if (ok) ok = Rec.WriteASCII(_T("SVGFilter"));	// Producer
-	if (ok) ok = Rec.WriteASCII(VERSION_TSTRING);	// Producer version
-	if (ok) ok = Rec.WriteASCII(_T(""));			// Producer build
-	if (ok) ok = m_pExporter->WriteRecord(&Rec);
-
-	// If any part of the header writing fails then return our own specific error
-	if (!ok)
-	{
-		// XXX Set an appropriate error here
-		return false;
-	}
-
-	// XXX From this point on the error handling becomes a bit thin
-
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_SPREAD);
-	if (m_docSize != DocCoord(0, 0)) {
-		ok = Rec.Reinit(TAG_SPREADINFORMATION, TAG_SPREADINFORMATION_SIZE);
-		ok = Rec.WriteUINT32(m_docSize.x); // width
-		ok = Rec.WriteUINT32(m_docSize.y); // height
-		ok = Rec.WriteUINT32(10000);	   // margin
-		ok = Rec.WriteUINT32(0);		   // bleed
-		ok = Rec.WriteBYTE(2);			   // flags (shadow: on)
-		ok = m_pExporter->WriteRecord(&Rec);
-	}
-
-	// Write a layer
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_LAYER);
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	ok = Rec.Reinit(TAG_LAYERDETAILS, -1);
-	ok = Rec.WriteBYTE(13);
-	ok = Rec.WriteUnicode(_T("Layer 1"));
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	return true;
-}
-
-bool SVGImporter::OutputXARFooter()
-{
-	bool ok = true;
-
-	// End of the layer
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
-
-	// Write the end of file record
-	CXaraFileRecord Rec(0);
-	ok = Rec.Reinit(TAG_ENDOFFILE, 0);
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_ENDOFFILE);
-
-	return true;
-}
-
-void SVGImporter::GetEntityGeometry(xmlNodePtr cur, size_t size, ...)
-{
-	va_list ap;
-	va_start(ap, size);
-	for (unsigned int i = 0; i < size; ++i) {
-		const char *pName = va_arg(ap, const char *);
-		double *pValue = va_arg(ap, double *);
-		wxString sValue = GetStringProperty(cur, pName);
-		double f;
-		if (IsMeasure(sValue)) {
-			f = MeasureToMillipoints(sValue);
-		} else {
-			f = MeasureToUserUnits(sValue);
-			if (m_viewBox.Width() != 0)
-				f = f*m_docSize.x/m_viewBox.Width();
-		}
-		*pValue = f;
-	}
-	va_end(ap);
-}
-
-bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector)
+bool SVGImporter::ParsePathData(const Transformation& trans, const wxString& data, PathDataVector& pathVector)
 {
 	wxString s = data;
-	DocCoord dcLast(0,0);
+	PointD pLast(0,0);
+	PointD pLastCtrl(0,0);
+	bool bHaveLastCtrl = false;
 
 	// replace commas with whitespace
 	s.Replace(_T(","), _T(" "));
@@ -278,235 +215,256 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
 
 #if SVGDEBUG
-				fprintf(stderr, "path: %c %.2f %.2f\n", action, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "path: %c %.2f %.2f\n", action, fX, fY);
 #endif
 
-				INT32 iX = (INT32)fX;
-				INT32 iY = (INT32)fY;
 				if (action == _T('m')) { // relative
-					iX += dcLast.x;
-					iY += dcLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
 				}
-				dcLast.x = iX;
-				dcLast.y = iY;
+				pLast.x = fX;
+				pLast.y = fY;
 
-				pathVector.Append(PathData(0x06, DocCoord(iX, m_docSize.y - iY))); // moveto
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x06, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // moveto
 			}
 		} else if (c == _T('L') || c == _T('l')) {
 			// lineto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
-
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
 #if SVGDEBUG
-				fprintf(stderr, "path: %c %.2f %.2f\n", action, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "path: %c %.2f %.2f\n", action, fX, fY);
 #endif
-
-				INT32 iX = (INT32)fX;
-				INT32 iY = (INT32)fY;
 				if (action == _T('l')) { // relative
-					iX += dcLast.x;
-					iY += dcLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
 				}
-				dcLast.x = iX;
-				dcLast.y = iY;
+				pLast.x = fX;
+				pLast.y = fY;
 
-				pathVector.Append(PathData(0x02, DocCoord(iX, m_docSize.y - iY))); // lineto
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x02, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // lineto
 			}
 		} else if (c == _T('H') || c == _T('h')) {
 			// horizontal lineto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX = TakeNumber(s);
-				fprintf(stderr, "%c coord: %.2f\n", action, fX);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-				}
-
+				double fX = TakeMilliNumber(s);
+				double fY = pLast.y;
 #if SVGDEBUG
-				fprintf(stderr, "path: %c %.2f\n", action, fX);
+				svgtrace(DBGTRACE_PATHS, "path: %c %.2f\n", action, fX);
 #endif
-
-				INT32 iX = (INT32)fX;
-				INT32 iY = dcLast.y;
 				if (action == _T('h')) {
-					iX += dcLast.x;
+					fX += pLast.x;
 				}
-				dcLast.x = iX;
+				pLast.x = fX;
 
-				pathVector.Append(PathData(0x02, DocCoord(iX, m_docSize.y - iY))); // lineto
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x02, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // lineto
 			}
 		} else if (c == _T('V') || c == _T('v')) {
 			// vertical lineto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
-
+				double fX = pLast.x;
+				double fY = TakeMilliNumber(s);
 #if SVGDEBUG
-				fprintf(stderr, "path: %c %.2f\n", action, fY);
+				svgtrace(DBGTRACE_PATHS, "path: %c %.2f\n", action, fY);
 #endif
-
-				INT32 iX = dcLast.x;
-				INT32 iY = (INT32)fY;
 				if (action == _T('v')) {
-					iY += dcLast.y;
+					fY += pLast.y;
 				}
-				dcLast.y = iY;
+				pLast.y = fY;
 
-				pathVector.Append(PathData(0x02, DocCoord(iX, m_docSize.y - iY))); // lineto
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x02, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // lineto
 			}
 		} else if (c == _T('C') || c == _T('c')) {
-			// B�ier cubic curveto
+			// Bezier cubic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX1 = TakeNumber(s);
-				double fY1 = TakeNumber(s);
-				double fX2 = TakeNumber(s);
-				double fY2 = TakeNumber(s);
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX1 = fX1/m_viewBox.Width()*m_docSize.x;
-					fY1 = fY1/m_viewBox.Width()*m_docSize.x;
-					fX2 = fX2/m_viewBox.Width()*m_docSize.x;
-					fY2 = fY2/m_viewBox.Width()*m_docSize.x;
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
-
+				double fX1 = TakeMilliNumber(s);
+				double fY1 = TakeMilliNumber(s);
+				double fX2 = TakeMilliNumber(s);
+				double fY2 = TakeMilliNumber(s);
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
 #if SVGDEBUG
-				fprintf(stderr, "bezier: %c %.2f %.2f %.2f %.2f %.2f %.2f\n", action, fX1, fY1, fX2, fY2, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "bezier: %c %.2f %.2f %.2f %.2f %.2f %.2f\n", action, fX1, fY1, fX2, fY2, fX, fY);
 #endif
-
-				INT32 iX1 = (INT32)fX1;
-				INT32 iY1 = (INT32)fY1;
-				INT32 iX2 = (INT32)fX2;
-				INT32 iY2 = (INT32)fY2;
-				INT32 iX = (INT32)fX;
-				INT32 iY = (INT32)fY;
 				if (action == _T('c')) {
-					iX1 += dcLast.x;
-					iY1 += dcLast.y;
-					iX2 += dcLast.x;
-					iY2 += dcLast.y;
-					iX += dcLast.x;
-					iY += dcLast.y;
+					fX1 += pLast.x;
+					fY1 += pLast.y;
+					fX2 += pLast.x;
+					fY2 += pLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
 				}
-				dcLast.x = iX;
-				dcLast.y = iY;
+				pLast.x = fX;
+				pLast.y = fY;
+				pLastCtrl.x = fX2;
+				pLastCtrl.y = fY2;
+				bHaveLastCtrl = true;
 
-				pathVector.Append(PathData(0x04, DocCoord(iX1, m_docSize.y - iY1))); // bezierto
-				pathVector.Append(PathData(0x04, DocCoord(iX2, m_docSize.y - iY2))); // bezierto
-				pathVector.Append(PathData(0x04, DocCoord(iX, m_docSize.y - iY))); // bezierto
+				trans.ApplyToCoordinate(fX1, fY1, &fX1, &fY1);
+				trans.ApplyToCoordinate(fX2, fY2, &fX2, &fY2);
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX1, m_docSize.y - (INT32)fY1))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX2, m_docSize.y - (INT32)fY2))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // bezierto
 			}
 		} else if (c == _T('S') || c == _T('s')) {
-			// B�ier smooth cubic curveto
-#if SVGDEBUG
+			// Bezier smooth cubic curveto
 			wxChar action = c;
-#endif
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
+				double fX1; // we will calculate later as reflection of previous
+				double fY1; // control point to the current point (fX, fY)
+				double fX2 = TakeMilliNumber(s);
+				double fY2 = TakeMilliNumber(s);
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
+
+				if (bHaveLastCtrl) {
+					// we have control point, i.e. there was a 'C', 'c', 'S' or 's'
+					// command previously.
+					fX1 = 2.0*pLast.x - pLastCtrl.x;
+					fY1 = 2.0*pLast.y - pLastCtrl.y;
+				} else {
+					fX1 = fX;
+					fY1 = fY;
 				}
-
 #if SVGDEBUG
-				fprintf(stderr, "bezier: %c %.2f %.2f\n", action, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "bezier: %c %.2f %.2f %.2f %.2f %.2f %.2f\n", action, fX1, fY1, fX2, fY2, fX, fY);
 #endif
+				if (action == _T('s')) {
+					fX2 += pLast.x;
+					fY2 += pLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
+				}
+				pLast.x = fX;
+				pLast.y = fY;
+				pLastCtrl.x = fX2;
+				pLastCtrl.y = fY2;
+				bHaveLastCtrl = true;
 
-				// XXX ?
+				trans.ApplyToCoordinate(fX1, fY1, &fX1, &fY1);
+				trans.ApplyToCoordinate(fX2, fY2, &fX2, &fY2);
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX1, m_docSize.y - (INT32)fY1))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX2, m_docSize.y - (INT32)fY2))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // bezierto
 			}
 		} else if (c == _T('Q') || c == _T('q')) {
-			// B�ier quadratic curveto
+			// Bezier quadratic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX1 = TakeNumber(s);
-				double fY1 = TakeNumber(s);
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX1 = fX/m_viewBox.Width()*m_docSize.x;
-					fY1 = fY/m_viewBox.Width()*m_docSize.x;
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
+				double fX1 = pLast.x;
+				double fY1 = pLast.y;
+				double fX2 = TakeMilliNumber(s);
+				double fY2 = TakeMilliNumber(s);
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
 
+				if (action == _T('q')) {
+					fX1 += pLast.x;
+					fY1 += pLast.y;
+					fX2 += pLast.x;
+					fY2 += pLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
+				}
 #if SVGDEBUG
-				fprintf(stderr, "bezier: %c %.2f %.2f %.2f %.2f\n", action, fX1, fY1, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "bezier: %c %.2f %.2f %.2f %.2f\n", action, fX2, fY2, fX, fY);
 #endif
+				pLast.x = fX;
+				pLast.y = fY;
+				pLastCtrl.x = fX2;
+				pLastCtrl.y = fY2;
+				bHaveLastCtrl = true;
 
-//				INT32 iX1 = (INT32)fX1;
-//				INT32 iY1 = (INT32)fY1;
-				INT32 iX = (INT32)fX;
-				INT32 iY = (INT32)fY;
-				if (action == _T('c')) {
-					dcLast.x += iX;
-					dcLast.y += iY;
-				} else if (action == _T('C')) {
-					dcLast.x = iX;
-					dcLast.y = iY;
-				}
+				// convert to cubic Bezier
+				double fXc1 = (fX1 + 2.0*fX2)/3.0;
+				double fYc1 = (fY1 + 2.0*fY2)/3.0;
+				double fXc2 = (2.0*fX2 + fX)/3.0;
+				double fYc2 = (2.0*fY2 + fY)/3.0;
 
-				// XXX ?
+				trans.ApplyToCoordinate(fXc1, fYc1, &fXc1, &fYc1);
+				trans.ApplyToCoordinate(fXc2, fYc2, &fXc2, &fYc2);
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fXc1, m_docSize.y - (INT32)fYc1))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fXc2, m_docSize.y - (INT32)fYc2))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // bezierto
 			}
 		} else if (c == _T('T') || c == _T('t')) {
-			// B�ier smooth quadratic curveto
+			// Bezier smooth quadratic curveto
 			wxChar action = c;
 			s = s.Mid(1);
 			while (IsNumberChar(TrimWs(s)[0])) {
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
+				double fX1 = pLast.x;
+				double fY1 = pLast.y;
+				double fX2; // we will calculate later as reflection of previous
+				double fY2; // control point to the current point (fX, fY)
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
 
+				if (bHaveLastCtrl) {
+					// we have control point, i.e. there was a 'Q', 'q', 'T' or 't'
+					// command previously.
+					fX2 = 2*fX1 - pLastCtrl.x;
+					fY2 = 2*fY1 - pLastCtrl.y;
+				} else {
+					fX2 = fX;
+					fY2 = fY;
+				}
 #if SVGDEBUG
-				fprintf(stderr, "bezier: %c %.2f %.2f\n", action, fX, fY);
+				svgtrace(DBGTRACE_PATHS, "bezier: %c %.2f %.2f\n", action, fX, fY);
 #endif
-
-				INT32 iX = (INT32)fX;
-				INT32 iY = (INT32)fY;
-				if (action == _T('c')) {
-					dcLast.x += iX;
-					dcLast.y += iY;
-				} else if (action == _T('C')) {
-					dcLast.x = iX;
-					dcLast.y = iY;
+				if (action == _T('t')) {
+					fX1 += pLast.x;
+					fY1 += pLast.y;
+					fX2 += pLast.x;
+					fY2 += pLast.y;
+					fX += pLast.x;
+					fY += pLast.y;
 				}
+				pLast.x = fX;
+				pLast.y = fY;
+				pLastCtrl.x = fX2;
+				pLastCtrl.y = fY2;
+				bHaveLastCtrl = true;
 
-				// XXX ?
+				// convert to cubic Bezier
+				double fXc1 = (fX1 + 2.0*fX2)/3.0;
+				double fYc1 = (fY1 + 2.0*fY2)/3.0;
+				double fXc2 = (2.0*fX2 + fX)/3.0;
+				double fYc2 = (2.0*fY2 + fY)/3.0;
+
+				trans.ApplyToCoordinate(fXc1, fYc1, &fXc1, &fYc1);
+				trans.ApplyToCoordinate(fXc2, fYc2, &fXc2, &fYc2);
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fXc1, m_docSize.y - (INT32)fYc1))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fXc2, m_docSize.y - (INT32)fYc2))); // bezierto
+				pathVector.Append(PathData(0x04, DocCoord((INT32)fX, m_docSize.y - (INT32)fY))); // bezierto
 			}
 		} else if (c == _T('Z') || c == _T('z')) {
 			// closepath
 			s = s.Mid(1);
 
 #if SVGDEBUG
-			fprintf(stderr, "closepath\n");
+			svgtrace(DBGTRACE_PATHS, "closepath\n");
 #endif
 
 			if (pathVector.GetCount() > 0) {
@@ -527,237 +485,108 @@ bool SVGImporter::ParsePathData(const wxString& data, PathDataVector& pathVector
 
 bool SVGImporter::ParsePathEntity(xmlNodePtr cur)
 {
-	double fX, fY, fWidth, fHeight;
+	PathDataVector pathVector;
 
-	GetEntityGeometry(cur, 4, "x", &fX, "y", &fY, "width", &fWidth, "height", &fHeight);
-
-	// adjust coordinates
-	fX += fWidth/2;
-	fY = m_docSize.y - fY - fHeight/2;
-
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fX, (INT32)fY);
-	DocCoord dcSize((INT32)fWidth, (INT32)fHeight);
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
 #if SVGDEBUG
-	fprintf(stderr, "path: %d %d %d %d\n", dcPos.x, dcPos.y, dcSize.x, dcSize.y);
+	svgtrace(DBGTRACE_SHAPES, "path\n");
 #endif
 
-	PathDataVector pathVector;
 	wxString sPathData = GetStringProperty(cur, "d");
-	ParsePathData(sPathData, pathVector);
-	if (pathVector.GetCount() < 2)
+	ParsePathData(trans, sPathData, pathVector);
+	if (pathVector.GetCount() < 2) { // bogus path
+		/*T*/ PopTransformations();
 		return false;
+	}
 
-	bool ok = true;
-	CXaraFileRecord Rec(0);
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputPathEntity(style, pathVector);
+	/*S*/ PopStyles();
 
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-
-	if (cssStyle.IsFillColourDefined()) {
-		if (cssStyle.IsStrokeColourDefined())
-			Rec.Reinit(TAG_PATH_FILLED_STROKED, TAG_PATH_SIZE);
-		else
-			Rec.Reinit(TAG_PATH_FILLED, TAG_PATH_SIZE);
-	} else // if (cssStyle.IsStrokeColourDefined())
-		Rec.Reinit(TAG_PATH_STROKED, TAG_PATH_SIZE);
-
-	Rec.WriteUINT32(pathVector.GetCount());
-	for (unsigned int i = 0; i < pathVector.GetCount(); ++i)
-		Rec.WriteBYTE(pathVector[i].m_verb);
-	for (unsigned int i = 0; i < pathVector.GetCount(); ++i)
-		Rec.WriteCoord(pathVector[i].m_coord);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
 bool SVGImporter::ParseRectEntity(xmlNodePtr cur)
 {
-	double fX, fY, fWidth, fHeight;
+	RectD r;
 
-	GetEntityGeometry(cur, 4, "x", &fX, "y", &fY, "width", &fWidth, "height", &fHeight);
-	if (fWidth == 0.0f || fHeight == 0.0f)
-		return false;
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
-	// adjust coordinates
-	fX += fWidth/2.0f;
-	fY = m_docSize.y - fY - fHeight/2.0f;
+	r = GetTransformedRectangle(cur, trans, "x", "y", "width", "height");
+	double fRoundAxis = GetTransformedMeasure(cur, trans, "rx");
+	if (fRoundAxis == 0.0)
+		fRoundAxis = GetTransformedMeasure(cur, trans, "ry");
+	// XXX ry is not supported, no way to specify in XAR
+	// the vertical axis of ellipse using only TAG_RECTANGLE_XXX_ROUNDED
+	// If rx != ry, should be simulated with a few shapes
 
-	// determine circumscribed ellipse axis
-	fWidth *= M_SQRT2;
-	fHeight *= M_SQRT2;
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputRectEntity(style, r, fRoundAxis);
+	/*S*/ PopStyles();
 
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fX, (INT32)fY);
-	DocCoord dcSize((INT32)fWidth, (INT32)fHeight);
-
-#if SVGDEBUG
-	fprintf(stderr, "rect: x=%d y=%d w=%d h=%d\n", dcPos.x, dcPos.y, dcSize.x, dcSize.y);
-#endif
-
-	bool ok = true;
-	CXaraFileRecord Rec(0);
-
-	Rec.Reinit(TAG_RECTANGLE_SIMPLE, TAG_RECTANGLE_SIMPLE_SIZE);
-	ok = Rec.WriteCoord(dcPos);
-	ok = Rec.WriteINT32(dcSize.x);
-	ok = Rec.WriteINT32(dcSize.y);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
-bool SVGImporter::ParseCircleEntity(xmlNodePtr cur)
+bool SVGImporter::ParseEllipseEntity(xmlNodePtr cur, bool bIsCircle)
 {
-	double fCX, fCY, fR;
+	RectD r;
 
-	GetEntityGeometry(cur, 3, "cx", &fCX, "cy", &fCY, "r", &fR);
-	if (fR == 0.0f)
-		return false;
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
-	// adjust coordinates
-	fCY = m_docSize.y - fCY;
-	fR *= 2.0f;
+	if (bIsCircle)
+		r = GetTransformedCircle(cur, trans, "cx", "cy", "r");
+	else
+		r = GetTransformedEllipse(cur, trans, "cx", "cy", "rx", "ry");
 
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fCX, (INT32)fCY);
-	INT32 iR = (INT32)fR;
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputEllipseEntity(style, r);
+	/*S*/ PopStyles();
 
-#if SVGDEBUG
-	fprintf(stderr, "circle: cx=%d cy=%d r=%d\n", dcPos.x, dcPos.y, iR);
-#endif
-
-	bool ok = true;
-	CXaraFileRecord Rec(0);
-
-	Rec.Reinit(TAG_ELLIPSE_SIMPLE, TAG_ELLIPSE_SIMPLE_SIZE);
-	ok = Rec.WriteCoord(dcPos);
-	ok = Rec.WriteINT32(iR);
-	ok = Rec.WriteINT32(iR);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
-
-
-	return true;
-}
-
-bool SVGImporter::ParseEllipseEntity(xmlNodePtr cur)
-{
-	double fCX, fCY, fRX, fRY;
-
-	GetEntityGeometry(cur, 4, "cx", &fCX, "cy", &fCY, "rx", &fRX, "ry", &fRY);
-	if (fRX == 0.0f || fRY == 0.0f)
-		return false;
-
-	// adjust coordinates
-	fCY = m_docSize.y - fCY;
-	fRX *= 2.0f;
-	fRY *= 2.0f;
-
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fCX, (INT32)fCY);
-	DocCoord dcSize((INT32)fRX, (INT32)fRY);
-
-#if SVGDEBUG
-	fprintf(stderr, "ellipse: cx=%d cy=%d rx=%d ry=%d\n", dcPos.x, dcPos.y, dcSize.x, dcSize.y);
-#endif
-
-	bool ok = true;
-	CXaraFileRecord Rec(0);
-
-	Rec.Reinit(TAG_ELLIPSE_SIMPLE, TAG_ELLIPSE_SIMPLE_SIZE);
-	ok = Rec.WriteCoord(dcPos);
-	ok = Rec.WriteINT32(dcSize.x);
-	ok = Rec.WriteINT32(dcSize.y);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
 bool SVGImporter::ParseLineEntity(xmlNodePtr cur)
 {
-	double fX1, fY1, fX2, fY2;
+	PointD p1, p2;
 
-	GetEntityGeometry(cur, 4, "x1", &fX1, "y1", &fY1, "x2", &fX2, "y2", &fY2);
-	if (fX1 == fX2 && fY1 == fY2)
-		return false;
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
-	// adjust coordinates
-	fY1 = m_docSize.y - fY1;
-	fY2 = m_docSize.y - fY2;
+	p1 = GetTransformedCoordinate(cur, trans, "x1", "y1");
+	p2 = GetTransformedCoordinate(cur, trans, "x2", "y2");
 
-	// truncate floating point values to INT32
-	DocCoord dcPos1((INT32)fX1, (INT32)fY1);
-	DocCoord dcPos2((INT32)fX2, (INT32)fY2);
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputLineEntity(style, p1, p2);
+	/*S*/ PopStyles();
 
-#if SVGDEBUG
-	fprintf(stderr, "line: x1=%d y1=%d x2=%d y2=%d\n", dcPos1.x, dcPos1.y, dcPos2.x, dcPos2.y);
-#endif
-
-	bool ok = true;
-	CXaraFileRecord Rec(0);
-
-	Rec.Reinit(TAG_PATH_STROKED, TAG_PATH_SIZE);
-	Rec.WriteUINT32(2);	 // two coordinates
-	Rec.WriteBYTE(0x06); // moveto
-	Rec.WriteBYTE(0x02); // lineno
-	Rec.WriteCoord(dcPos1);
-	Rec.WriteCoord(dcPos2);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
-bool SVGImporter::ParsePolylineData(const wxString& data, DocCoordVector& coordVector)
+bool SVGImporter::ParsePolylineData(const Transformation& trans, const wxString& data, DocCoordVector& coordVector)
 {
 	wxString s = data;
 
@@ -767,16 +596,13 @@ bool SVGImporter::ParsePolylineData(const wxString& data, DocCoordVector& coordV
 	while (!s.Trim(false).IsEmpty()) {
 		if (IsNumberChar(s[0])) {
 			while (IsNumberChar(s[0])) {
-				double fX = TakeNumber(s);
-				double fY = TakeNumber(s);
-				if (m_viewBox.Width() != 0) {
-					fX = fX/m_viewBox.Width()*m_docSize.x;
-					fY = fY/m_viewBox.Width()*m_docSize.x;
-				}
+				double fX = TakeMilliNumber(s);
+				double fY = TakeMilliNumber(s);
+				trans.ApplyToCoordinate(fX, fY, &fX, &fY);
 				fY = m_docSize.y - fY;
 
 #if SVGDEBUG
-				fprintf(stderr, "polyline point: %f %f\n", fX, fY);
+				svgtrace(DBGTRACE_PATHS, "polyline point: %f %f\n", fX, fY);
 #endif
 
 				INT32 iX = (INT32)fX;
@@ -796,159 +622,201 @@ bool SVGImporter::ParsePolylineData(const wxString& data, DocCoordVector& coordV
 
 bool SVGImporter::ParsePolylineEntity(xmlNodePtr cur)
 {
-	double fX, fY, fWidth, fHeight;
+	DocCoordVector coordVector;
 
-	GetEntityGeometry(cur, 4, "x", &fX, "y", &fY, "width", &fWidth, "height", &fHeight);
-
-	// adjust coordinates
-	fX += fWidth/2;
-	fY = m_docSize.y - fY - fHeight/2;
-
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fX, (INT32)fY);
-	DocCoord dcSize((INT32)fWidth, (INT32)fHeight);
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
 #if SVGDEBUG
-	fprintf(stderr, "polyline: %d %d %d %d\n", dcPos.x, dcPos.y, dcSize.x, dcSize.y);
+	svgtrace(DBGTRACE_SHAPES, "polyline\n");
 #endif
 
-	DocCoordVector coordVector;
 	wxString sPathData = GetStringProperty(cur, "points");
-	ParsePolylineData(sPathData, coordVector);
-	if (coordVector.GetCount() < 2)
+	ParsePolylineData(trans, sPathData, coordVector);
+	if (coordVector.GetCount() < 2) { // bogus polyline
+		/*T*/ PopTransformations();
 		return false;
+	}
 
-	bool ok = true;
-	CXaraFileRecord Rec(0);
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputPolylineEntity(style, coordVector);
+	/*S*/ PopStyles();
 
-	Rec.Reinit(TAG_PATH_STROKED, TAG_PATH_SIZE);
-	Rec.WriteUINT32(coordVector.GetCount());
-	Rec.WriteBYTE(0x06); // moveto
-	for (unsigned int i = 1; i < coordVector.GetCount(); ++i)
-		Rec.WriteBYTE(0x02); // lineto
-	for (unsigned int i = 0; i < coordVector.GetCount(); ++i)
-		Rec.WriteCoord(coordVector[i]);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
 bool SVGImporter::ParsePolygonEntity(xmlNodePtr cur)
 {
-	double fX, fY, fWidth, fHeight;
+	DocCoordVector coordVector;
 
-	GetEntityGeometry(cur, 4, "x", &fX, "y", &fY, "width", &fWidth, "height", &fHeight);
-
-	// adjust coordinates
-	fX += fWidth/2;
-	fY = m_docSize.y - fY - fHeight/2;
-
-	// truncate floating point values to INT32
-	DocCoord dcPos((INT32)fX, (INT32)fY);
-	DocCoord dcSize((INT32)fWidth, (INT32)fHeight);
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
 
 #if SVGDEBUG
-	fprintf(stderr, "polygon: %d %d %d %d\n", dcPos.x, dcPos.y, dcSize.x, dcSize.y);
+	svgtrace(DBGTRACE_SHAPES, "polygon\n");
 #endif
 
-	DocCoordVector coordVector;
 	wxString sPathData = GetStringProperty(cur, "points");
-	ParsePolylineData(sPathData, coordVector);
-	if (coordVector.GetCount() < 3)
+	ParsePolylineData(trans, sPathData, coordVector);
+	if (coordVector.GetCount() < 2) { // bogus polygon
+		/*T*/ PopTransformations();
 		return false;
+	}
 
-	bool ok = true;
-	CXaraFileRecord Rec(0);
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, true);
+	m_pGenerator->OutputPolygonEntity(style, coordVector);
+	/*S*/ PopStyles();
 
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, true);
-
-	if (cssStyle.IsFillColourDefined()) {
-		if (cssStyle.IsStrokeColourDefined())
-			Rec.Reinit(TAG_PATH_FILLED_STROKED, TAG_PATH_SIZE);
-		else
-			Rec.Reinit(TAG_PATH_FILLED, TAG_PATH_SIZE);
-	} else // if (cssStyle.IsStrokeColourDefined())
-		Rec.Reinit(TAG_PATH_STROKED, TAG_PATH_SIZE);
-	Rec.WriteUINT32(coordVector.GetCount());
-	Rec.WriteBYTE(0x06); // moveto
-	for (unsigned int i = 1; i < coordVector.GetCount() - 1; ++i)
-		Rec.WriteBYTE(0x02); // lineto
-	Rec.WriteBYTE(0x03); // lineto + closepath
-	for (unsigned int i = 0; i < coordVector.GetCount(); ++i)
-		Rec.WriteCoord(coordVector[i]);
-	ok = m_pExporter->WriteRecord(&Rec);
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
-
-	OutputStyles(cssStyle, STYLE_FILL_COLOUR|STYLE_FILL_OPACITY|STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH);
-	PopStyles();
-
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	/*T*/ PopTransformations();
 
 	return true;
 }
 
 bool SVGImporter::ParseGroupEntity(xmlNodePtr cur)
 {
-	xmlNodePtr child;
-
-	PushStyles();
-	Style& cssStyle = GetCurrentStyle(); // reference to the current style
-	cssStyle = ParseStyle(cur, false);
-
 	// Points to the first child
-	child = cur->xmlChildrenNode;
+	xmlNodePtr child = cur->xmlChildrenNode;
 
 #if SVGDEBUG
 	static int groupid = 0;
-	fprintf(stderr, "opengroup: %d\n", ++groupid);
+	svgtrace(DBGTRACE_GROUPS, "opengroup: %d\n", ++groupid);
 #endif
+
+	/*T*/ PushTransformations();
+	Transformation& trans = GetCurrentTransformation();
+	trans *= ParseTransformations(cur);
+
+	/*S*/ PushStyles();
+	Style& style = GetCurrentStyle(); // reference to the current style
+	style = ParseStyle(cur, trans, false);
 
 	bool ok = true;
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_GROUP);
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
+	ok = m_pGenerator->EnterGroup();
 	ok = ParseEntitiesTree(child);
-	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+	ok = m_pGenerator->LeaveGroup();
+	/*S*/ PopStyles();
+
+	/*T*/ PopTransformations();
 
 #if SVGDEBUG
-	fprintf(stderr, "closegroup: %d\n", groupid--);
+	svgtrace(DBGTRACE_GROUPS, "closegroup: %d\n", groupid--);
 #endif
-
-	PopStyles();
 
 	return ok;
 }
 
-bool SVGImporter::ParseDefinitionsTree()
+bool SVGImporter::ParseLinearGradientEntity(xmlNodePtr cur)
 {
-	// XXX parse the <defs> entity for colours, fills etc.
-	// and put into a hashtable for later lookup
+	wxString sXmlId = GetStringProperty(cur, "id");
+	if (sXmlId.IsEmpty())
+		sXmlId = GetStringProperty(cur, "xml:id");
+	sXmlId = TrimWs(sXmlId);
+	if (sXmlId.IsEmpty()) { // no id specified, useless gradient
+		/*T*/ PopTransformations();
+		return false;
+	}
+
+	double x1 = 0.0;
+	double y1 = 0.0;
+	double x2 = 1.0;
+	double y2 = 1.0;
+	if (IsPropertyDefined(cur, "x1")) {
+		x1 = GetDoubleProperty(cur, "x1");
+	}
+	if (IsPropertyDefined(cur, "y1")) {
+		y1 = GetDoubleProperty(cur, "y1");
+	}
+	if (IsPropertyDefined(cur, "x2")) {
+		x2 = GetDoubleProperty(cur, "x2");
+	}
+	if (IsPropertyDefined(cur, "y2")) {
+		y2 = GetDoubleProperty(cur, "y2");
+	}
+	
+	Gradient::Units units = Gradient::ObjectBoundingBox;
+	wxString sUnits = GetStringProperty(cur, "gradientUnits");
+	if (sUnits == _T("userSpaceOnUse")) {
+		units = Gradient::UserSpaceOnUse;
+	}
+
+#if SVGDEBUG
+	svgtrace(DBGTRACE_GRADIENTS, "gradient: '%s' %.2f %.2f %.2f %.2f\n",
+			 (const char *)sXmlId.mb_str(wxConvUTF8), x1, y1, x2, y2);
+#endif
+
+	Gradient* pGradient = new Gradient;
+	pGradient->type = Gradient::Linear;
+	pGradient->xmlId = sXmlId;
+	pGradient->units = units;
+	pGradient->x1 = x1;
+	pGradient->y1 = y1;
+	pGradient->x2 = x2;
+	pGradient->y2 = y2;
+
+	// Points to first <linearGradient /> child
+	cur = cur->xmlChildrenNode;
+
+	// scan all the elements
+	while (cur != NULL) {
+		if (IsEntityName(cur, "stop")) {
+			double offset = GetDoubleProperty(cur, "offset");
+			wxString sStopColour = GetStringProperty(cur, "stop-color");
+			wxColour stopColour = Style::ParseColour(sStopColour);
+			
+#if SVGDEBUG
+			svgtrace(DBGTRACE_GRADIENTS, "gradient stop: %.2f (%d,%d,%d)\n", offset, stopColour.Red(), stopColour.Green(), stopColour.Blue());
+#endif
+
+			GradientStop* pStop = new GradientStop();
+			pStop->offset = offset;
+			pStop->stopColour = stopColour;
+			pGradient->stops.Append(pStop);
+		}
+		cur = cur->next;
+	}
+
+	// add to hash table
+	m_gradients[sXmlId] = pGradient;
+
+	return true;
+}
+
+bool SVGImporter::ParseDefsEntity(xmlNodePtr cur)
+{
+	// Points to first <defs /> child
+	cur = cur->xmlChildrenNode;
+	
+	while (cur != NULL) {
+		if (IsEntityName(cur, "linearGradient")) {
+			ParseLinearGradientEntity(cur);
+		}
+		cur = cur->next;
+	}
+
 	return true;
 }
 
 bool SVGImporter::ParseEntitiesTree(xmlNodePtr cur)
 {
 	while (cur != NULL) {
-		if (IsEntityName(cur, "path")) {
+		if (IsEntityName(cur, "defs")) {
+			ParseDefsEntity(cur);
+		} else if (IsEntityName(cur, "path")) {
 			ParsePathEntity(cur);
 		} else if (IsEntityName(cur, "rect")) {
 			ParseRectEntity(cur);
 		} else if (IsEntityName(cur, "circle")) {
-			ParseCircleEntity(cur);
+			ParseEllipseEntity(cur, true);
 		} else if (IsEntityName(cur, "ellipse")) {
-			ParseEllipseEntity(cur);
+			ParseEllipseEntity(cur, false);
 		} else if (IsEntityName(cur, "line")) {
 			ParseLineEntity(cur);
 		} else if (IsEntityName(cur, "polyline")) {
@@ -968,7 +836,7 @@ bool SVGImporter::ParseRootTree()
 {
 	xmlNodePtr cur;
 
-	// Points to first <svg> child
+	// Points to first <svg /> child
 	cur = m_root->xmlChildrenNode;
 
 	return ParseEntitiesTree(cur);
@@ -976,22 +844,35 @@ bool SVGImporter::ParseRootTree()
 
 bool SVGImporter::ParseAndOutput()
 {
-	if (!ParseDefinitionsTree())
-		return false;
-	if (!OutputXARHeader())
+	m_pGenerator->SetDocumentSize(m_docSize);
+	if (!m_pGenerator->OutputHeader())
 		return false;
 	if (!ParseRootTree())
 		return false;
-	if (!OutputXARFooter())
+	if (!m_pGenerator->OutputFooter())
 		return false;
 	return true;
 }
+
+/*----------------------------------------------------------------------------
+ *
+ * Transformations handling functions
+ *
+ *----------------------------------------------------------------------------*/
+
+#if SVGDEBUG
+static int transLevel = 0;
+#endif
 
 void SVGImporter::PushTransformations()
 {
 	wxASSERT(m_trans.GetCount() > 0);
 	Transformation* pTrans = m_trans.GetLast()->GetData();
 	m_trans.Append(new Transformation(*pTrans));
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS_STACK, "pushing transformations (level %d)\n", ++transLevel);
+	DebugDumpTransformation(DBGTRACE_TRANS_STACK, *pTrans);
+#endif
 }
 
 void SVGImporter::PopTransformations()
@@ -1001,11 +882,18 @@ void SVGImporter::PopTransformations()
 	Transformation* pTrans = pNode->GetData();
 	m_trans.DeleteNode(pNode);
 	delete pTrans;
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS_STACK, "popping transformations (level %d)\n", transLevel--);
+	Transformation *pOldTrans = m_trans.GetLast()->GetData();
+	svgtrace(DBGTRACE_TRANS_STACK, "restoring: ");
+	DebugDumpTransformation(DBGTRACE_TRANS_STACK, *pOldTrans);
+#endif
 }
 
 Transformation SVGImporter::GetCurrentTransformation() const
 {
 	wxASSERT(m_trans.GetCount() > 0);
+	wxASSERT(m_trans.GetLast() != NULL);
 	Transformation* pTrans = m_trans.GetLast()->GetData();
 	return *pTrans;
 }
@@ -1013,9 +901,324 @@ Transformation SVGImporter::GetCurrentTransformation() const
 Transformation& SVGImporter::GetCurrentTransformation()
 {
 	wxASSERT(m_trans.GetCount() > 0);
+	wxASSERT(m_trans.GetLast() != NULL);
 	Transformation* pTrans = m_trans.GetLast()->GetData();
 	return *pTrans;
 }
+
+Transformation SVGImporter::ParseTransformations(xmlNodePtr cur) const
+{
+	wxString s = GetStringProperty(cur, "transform");
+	Transformation trans;
+
+	// replace commas with whitespace, if any
+	s.Replace(_T(","), _T(" "));
+
+	s = TrimWs(s);
+
+	while (s.Length() > 0) {
+		if (s.Left(10) == _T("translate(")) {
+			double fX;
+			double fY;
+
+			s = s.Mid(10); // skip "translate("
+
+			fX = TakeMilliNumber(s);
+			s = TrimWs(s);
+			if (s.Left(1) == _T(")")) {
+				fY = 0.0; // Y translation is implicit (equal to zero)
+			} else {
+				fY = TakeMilliNumber(s);
+			}
+			s = s.Mid(1); // skip ")"
+#if SVGDEBUG
+			svgtrace(DBGTRACE_TRANS, "creating translate matrix (%.4f, %.4f)\n", fX, fY);
+#endif
+			trans *= Transformation::CreateTranslate(fX, fY);
+		} else if (s.Left(6) == _T("scale(")) {
+			double fX;
+			double fY;
+
+			s = s.Mid(6); // skip "scale("
+
+			fX = TakeNumber(s);
+			s = TrimWs(s);
+			if (s.Left(1) == _T(")")) {
+				fY = fX; // Y scale is implicit (equal to X)
+			} else {
+				fY = TakeNumber(s);
+			}
+			s = s.Mid(1); // skip ")"
+#if SVGDEBUG
+			svgtrace(DBGTRACE_TRANS, "creating scale matrix (%.4f, %.4f)\n", fX, fY);
+#endif
+			trans *= Transformation::CreateScale(fX, fY);
+		} else if (s.Left(7) == _T("rotate(")) {
+			double fA;
+			double fX = 0.0;
+			double fY = 0.0;
+
+			s = s.Mid(7); // skip "rotate("
+
+			fA = TakeNumber(s)*M_PI/180.0;
+			s = TrimWs(s);
+			if (s.Left(1) != _T(")")) {
+				// also rotation center is specified
+				fX = TakeNumber(s);
+				fY = TakeNumber(s);
+			}
+			s = s.Mid(1); // skip ")"
+
+			if (fX != 0.0 || fY != 0.0) {
+#if SVGDEBUG
+				svgtrace(DBGTRACE_TRANS, "creating rotate/translate matrix %.4f (%.4f, %.4f)\n", fA, fX, fY);
+#endif
+				trans *= Transformation::CreateTranslate(fX, fY);
+				trans *= Transformation::CreateRotate(fA);
+				trans *= Transformation::CreateTranslate(-fX, -fY);
+			} else {
+#if SVGDEBUG
+				svgtrace(DBGTRACE_TRANS, "creating rotate matrix (%.4f)\n", fA);
+#endif
+				trans *= Transformation::CreateRotate(fA);
+			}
+		} else if (s.Left(6) == _T("skewX(")) {
+			double fA;
+
+			s = s.Mid(6); // skip "skewX("
+
+			fA = TakeNumber(s)*M_PI/180.0;
+			s = TrimWs(s);
+			s = s.Mid(1); // skip ")"
+#if SVGDEBUG
+			svgtrace(DBGTRACE_TRANS, "creating skewX matrix (%.4ff)\n", fA);
+#endif
+			trans *= Transformation::CreateSkewX(fA);
+		} else if (s.Left(6) == _T("skewY(")) {
+			double fA;
+
+			s = s.Mid(6); // skip "skewY("
+
+			fA = TakeNumber(s)*M_PI/180.0;
+			s = TrimWs(s);
+			s = s.Mid(1); // skip ")"
+#if SVGDEBUG
+			svgtrace(DBGTRACE_TRANS, "creating skewY matrix (%.4ff)\n", fA);
+#endif
+			trans *= Transformation::CreateSkewY(fA);
+		} else if (s.Left(7) == _T("matrix(")) {
+			double fX[6];
+
+			s = s.Mid(7); // skip "matrix("
+
+			for (int i = 0; i < 6; ++i)
+				fX[i] = TakeNumber(s);
+			s = TrimWs(s);
+			s = s.Mid(1); // skip ")"
+#if SVGDEBUG
+			svgtrace(DBGTRACE_TRANS, "creating user matrix [%.4f %.4f %.4f %.4f %.4f %.4f]\n",
+					 fX[0], fX[1], fX[2], fX[3], fX[4], fX[5]);
+#endif
+			trans *= Transformation::CreateMatrix(fX);
+		} else {
+			// skip unexpected character
+			s = s.Mid(1);
+		}
+	}
+
+	return trans;
+}
+
+double SVGImporter::MeasureToMillipoints(const Transformation& trans, const wxString& sMeasure) const
+{
+	wxString s;
+	double f;
+
+	s = TrimWs(sMeasure);
+
+	if (IsAbsoluteMeasure(s)) {
+		// absolute measure (mm, pt, etc.)
+		f = AbsoluteMeasureToMillipoints(s);
+	} else {
+		// relative measure
+		if (s.Right(1) == _T("%")) {
+			// relative measure to parent
+
+			// strip "%"
+			s = s.RemoveLast(1).Trim();
+
+			s.ToDouble(&f);
+			f *= trans.size.x * 0.01;
+		} else {
+			if (s.Right(2) == _T("px")) {
+				// strip units
+				s = s.RemoveLast(2).Trim();
+			}
+			s.ToDouble(&f);
+			f *= 1000.0;
+		}
+	}
+
+	return f;
+}
+
+PointD SVGImporter::GetTransformedCoordinate(const Transformation& trans, const wxString& sX, const wxString& sY) const
+{
+	double fX = MeasureToMillipoints(trans, sX);
+	double fY = MeasureToMillipoints(trans, sY);
+
+	PointD p;
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "using trans: ");
+	DebugDumpTransformation(DBGTRACE_TRANS, trans);
+#endif
+	trans.ApplyToCoordinate(fX, fY, &p.x, &p.y);
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "convert (%.2f,%.2f) --> (%.2f,%.2f)\n", fX, fY, p.x, p.y);
+#endif
+
+	return p;
+}
+
+inline RectD Transform(const Transformation& trans,
+					   double fX11, double fY11, double fX12, double fY12,
+					   double fX21, double fY21, double fX22, double fY22)
+{
+	RectD r;
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "using trans: ");
+	DebugDumpTransformation(DBGTRACE_TRANS, trans);
+#endif
+	trans.ApplyToCoordinate(fX11, fY11, &r.p11.x, &r.p11.y);
+	trans.ApplyToCoordinate(fX12, fY12, &r.p12.x, &r.p12.y);
+	trans.ApplyToCoordinate(fX21, fY21, &r.p21.x, &r.p21.y);
+	trans.ApplyToCoordinate(fX22, fY22, &r.p22.x, &r.p22.y);
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "convert (%.2f,%.2f) --> (%.2f,%.2f)\n", fX11, fY11, r.p11.x, r.p11.y);
+	svgtrace(DBGTRACE_TRANS, "convert (%.2f,%.2f) --> (%.2f,%.2f)\n", fX12, fY12, r.p12.x, r.p12.y);
+	svgtrace(DBGTRACE_TRANS, "convert (%.2f,%.2f) --> (%.2f,%.2f)\n", fX21, fY21, r.p21.x, r.p21.y);
+	svgtrace(DBGTRACE_TRANS, "convert (%.2f,%.2f) --> (%.2f,%.2f)\n", fX22, fY22, r.p22.x, r.p22.y);
+#endif
+	return r;
+}
+
+RectD SVGImporter::GetTransformedRectangle(const Transformation& trans, const wxString& sX, const wxString& sY,
+										   const wxString& sWidth, const wxString sHeight) const
+{
+	double fX11    = MeasureToMillipoints(trans, sX);
+	double fY11    = MeasureToMillipoints(trans, sY);
+	double fWidth  = MeasureToMillipoints(trans, sWidth);
+	double fHeight = MeasureToMillipoints(trans, sHeight);
+	double fX12    = fX11 + fWidth;
+	double fY12    = fY11;
+	double fX21    = fX11;
+	double fY21    = fY11 + fHeight;
+	double fX22    = fX11 + fWidth;
+	double fY22    = fY11 + fHeight;
+
+	return Transform(trans, fX11, fY11, fX12, fY12, fX21, fY21, fX22, fY22);
+}
+
+RectD SVGImporter::GetTransformedCircle(const Transformation& trans, const wxString& sX, const wxString& sY,
+										const wxString& sR) const
+{
+	double fR      = MeasureToMillipoints(trans, sR);
+	double fX11    = MeasureToMillipoints(trans, sX) - fR;
+	double fY11    = MeasureToMillipoints(trans, sY) - fR;
+	double fX12    = fX11 + fR*2.0;
+	double fY12    = fY11;
+	double fX21    = fX11;
+	double fY21    = fY11 + fR*2.0;
+	double fX22    = fX11 + fR*2.0;
+	double fY22    = fY11 + fR*2.0;
+
+	return Transform(trans, fX11, fY11, fX12, fY12, fX21, fY21, fX22, fY22);
+}
+
+RectD SVGImporter::GetTransformedEllipse(const Transformation& trans, const wxString& sX, const wxString& sY,
+										 const wxString& sRX, const wxString& sRY) const
+{
+	double fRX     = MeasureToMillipoints(trans, sRX);
+	double fRY     = MeasureToMillipoints(trans, sRY);
+	double fX11    = MeasureToMillipoints(trans, sX) - fRX;
+	double fY11    = MeasureToMillipoints(trans, sY) - fRY;
+	double fX12    = fX11 + fRX*2.0;
+	double fY12    = fY11;
+	double fX21    = fX11;
+	double fY21    = fY11 + fRY*2.0;
+	double fX22    = fX11 + fRX*2.0;
+	double fY22    = fY11 + fRY*2.0;
+
+	return Transform(trans, fX11, fY11, fX12, fY12, fX21, fY21, fX22, fY22);
+}
+
+double SVGImporter::GetTransformedMeasure(const Transformation& trans, const wxString& sMeasure) const
+{
+	double f = MeasureToMillipoints(trans, sMeasure);
+	double fR;
+
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "using trans: ");
+	DebugDumpTransformation(DBGTRACE_TRANS, trans);
+#endif
+	trans.ApplyToMeasure(f, &fR);
+#if SVGDEBUG
+	svgtrace(DBGTRACE_TRANS, "convert %.4f --> %.4f\n", f, fR);
+#endif
+
+	return fR;
+}
+
+PointD SVGImporter::GetTransformedCoordinate(xmlNodePtr cur, const Transformation& trans,
+											 const char* pX, const char* pY) const
+{
+	wxString sX = GetStringProperty(cur, pX);
+	wxString sY = GetStringProperty(cur, pY);
+	return GetTransformedCoordinate(trans, sX, sY);
+}
+
+RectD SVGImporter::GetTransformedRectangle(xmlNodePtr cur, const Transformation& trans,
+										   const char* pX, const char* pY,
+										   const char* pW, const char* pH) const
+{
+	wxString sX      = GetStringProperty(cur, pX);
+	wxString sY      = GetStringProperty(cur, pY);
+	wxString sWidth  = GetStringProperty(cur, pW);
+	wxString sHeight = GetStringProperty(cur, pH);
+	return GetTransformedRectangle(trans, sX, sY, sWidth, sHeight);
+}
+
+RectD SVGImporter::GetTransformedCircle(xmlNodePtr cur, const Transformation& trans,
+										const char* pX, const char* pY, const char* pR) const
+{
+	wxString sX      = GetStringProperty(cur, pX);
+	wxString sY      = GetStringProperty(cur, pY);
+	wxString sR      = GetStringProperty(cur, pR);
+	return GetTransformedCircle(trans, sX, sY, sR);
+}
+
+RectD SVGImporter::GetTransformedEllipse(xmlNodePtr cur, const Transformation& trans,
+										 const char* pX, const char* pY,
+										 const char* pRX, const char* pRY) const
+{
+	wxString sX      = GetStringProperty(cur, pX);
+	wxString sY      = GetStringProperty(cur, pY);
+	wxString sRX     = GetStringProperty(cur, pRX);
+	wxString sRY     = GetStringProperty(cur, pRY);
+	return GetTransformedEllipse(trans, sX, sY, sRX, sRY);
+}
+
+double SVGImporter::GetTransformedMeasure(xmlNodePtr cur, const Transformation& trans, const char* pM) const
+{
+	wxString s = GetStringProperty(cur, pM);
+	return GetTransformedMeasure(trans, s);
+}
+
+/*----------------------------------------------------------------------------
+ *
+ * Styles handling functions
+ *
+ *----------------------------------------------------------------------------*/
 
 void SVGImporter::PushStyles()
 {
@@ -1036,6 +1239,7 @@ void SVGImporter::PopStyles()
 Style SVGImporter::GetCurrentStyle() const
 {
 	wxASSERT(m_styles.GetCount() > 0);
+	wxASSERT(m_styles.GetLast() != NULL);
 	Style* pStyle = m_styles.GetLast()->GetData();
 	return *pStyle;
 }
@@ -1043,14 +1247,15 @@ Style SVGImporter::GetCurrentStyle() const
 Style& SVGImporter::GetCurrentStyle()
 {
 	wxASSERT(m_styles.GetCount() > 0);
+	wxASSERT(m_styles.GetLast() != NULL);
 	Style* pStyle = m_styles.GetLast()->GetData();
 	return *pStyle;
 }
 
-Style SVGImporter::ParseStyle(xmlNodePtr cur, bool bIsObject) const
+Style SVGImporter::ParseStyle(xmlNodePtr cur, const Transformation& trans, bool bIsObject) const
 {
 	wxString sStyle = GetStringProperty(cur, "style");
-	Style cssStyle = GetCurrentStyle();
+	Style style = GetCurrentStyle(); // import style defaults from parent
 
 	sStyle = TrimWs(sStyle);
 
@@ -1066,202 +1271,128 @@ Style SVGImporter::ParseStyle(xmlNodePtr cur, bool bIsObject) const
 		wxString sValue = TrimWs(sToken.After(_T(':')));
 
 		if (sIdent == _T("fill")) {
-			cssStyle.SetFillColour(Style::ParseColour(sValue));
+			if (sValue.Left(5) == _T("url(#")) {
+				// inherit values from <defs /> section
+				sValue = sValue.Mid(5);				  // skip "url(#"
+				sValue.Truncate(sValue.Length() - 1); // skip last ")"
+				ImportStyleFromDefs(style, sValue);
+			} else {
+				style.SetFillColour(Style::ParseColour(sValue));
+			}
 		} else if (sIdent == _T("fill-opacity")) {
 			double f;
 			sValue.ToDouble(&f);
-			cssStyle.SetFillOpacity(f);
+			style.SetFillOpacity(f);
 		} else if (sIdent == _T("stroke")) {
-			cssStyle.SetStrokeColour(Style::ParseColour(sValue));
+			style.SetStrokeColour(Style::ParseColour(sValue));
 		} else if (sIdent == _T("stroke-opacity")) {
 			double f;
 			sValue.ToDouble(&f);
-			cssStyle.SetStrokeOpacity(f);
+			style.SetStrokeOpacity(f);
 		} else if (sIdent == _T("stroke-width")) {
-			double fWidth;
-			sValue.ToDouble(&fWidth);
-			if (m_viewBox.Width() != 0)
-				fWidth = fWidth/m_viewBox.Width()*m_docSize.x;
-			cssStyle.SetStrokeWidth((INT32)fWidth);
+			double fWidth = GetTransformedMeasure(trans, sValue);
+			style.SetStrokeWidth((INT32)fWidth);
 		} else if (sIdent == _T("opacity")) {
 			double f;
 			sValue.ToDouble(&f);
-			cssStyle.SetFillOpacity(f);
-			cssStyle.SetStrokeOpacity(f);
+			style.SetFillOpacity(f);
+			style.SetStrokeOpacity(f);
+		} else if (sIdent == _T("stop-color")) {
+			style.SetStopColour(Style::ParseColour(sValue));
+		} else if (sIdent == _T("stop-opacity")) {
+			double f;
+			sValue.ToDouble(&f);
+			style.SetStopOpacity(f);
 		}
 	}
 
-	// parse the attributes alone (not in style)
+	// parse the attributes alone (not in style="" property)
 	wxString sValue;
-	sValue = GetStringProperty(cur, "fill");
-	if (!sValue.IsEmpty())
-		cssStyle.SetFillColour(Style::ParseColour(sValue));
+
+	// id="" and xml:id="" properties
+	sValue = GetStringProperty(cur, "id");
+	if (sValue.IsEmpty()) {
+		sValue = GetStringProperty(cur, "xml:id");
+	}
+	if (!sValue.IsEmpty()) {
+#if SVGDEBUG
+		svgtrace(DBGTRACE_STYLES, "got object id: %s\n", (const char *)sValue.mb_str(wxConvUTF8));
+#endif
+		style.SetXmlId(sValue);
+	}
+
+	sValue = GetStringProperty(cur, "xlink:href");
+	if (!sValue.IsEmpty()) {
+		// inherit values from <defs /> section
+		ImportStyleFromDefs(style, sValue);
+	}
+
+	sValue = TrimWs(GetStringProperty(cur, "fill"));
+	if (!sValue.IsEmpty()) {
+		if (sValue.Left(5) == _T("url(#")) {
+			// inherit values from <defs /> section
+			sValue = sValue.Mid(5);				  // skip "url(#"
+			sValue.Truncate(sValue.Length() - 1); // skip last ")"
+			ImportStyleFromDefs(style, sValue);
+		} else {
+			style.SetFillColour(Style::ParseColour(sValue));
+		}
+	}
 
 	sValue = GetStringProperty(cur, "fill-opacity");
 	if (!sValue.IsEmpty()) {
 		double f;
 		sValue.ToDouble(&f);
-		cssStyle.SetFillOpacity(f);
+		style.SetFillOpacity(f);
 	}
 
 	sValue = GetStringProperty(cur, "stroke");
 	if (!sValue.IsEmpty())
-		cssStyle.SetStrokeColour(Style::ParseColour(sValue));
+		style.SetStrokeColour(Style::ParseColour(sValue));
 
 	sValue = GetStringProperty(cur, "stroke-opacity");
 	if (!sValue.IsEmpty()) {
 		double f;
 		sValue.ToDouble(&f);
-		cssStyle.SetStrokeOpacity(f);
+		style.SetStrokeOpacity(f);
 	}
 
 	sValue = GetStringProperty(cur, "opacity");
 	if (!sValue.IsEmpty()) {
 		double f;
 		sValue.ToDouble(&f);
-		cssStyle.SetFillOpacity(f);
-		cssStyle.SetStrokeOpacity(f);
+		style.SetFillOpacity(f);
+		style.SetStrokeOpacity(f);
 	}
 
 	sValue = GetStringProperty(cur, "stroke-width");
 	if (!sValue.IsEmpty()) {
-		double fWidth;
-		sValue.ToDouble(&fWidth);
-		if (m_viewBox.Width() != 0)
-			fWidth = fWidth/m_viewBox.Width()*m_docSize.x;
-		cssStyle.SetStrokeWidth((INT32)fWidth);
+		double fWidth = GetTransformedMeasure(trans, sValue);
+		style.SetStrokeWidth((INT32)fWidth);
 	}
 
 	// for objects, the default stroke width is 1
-	if (bIsObject && !cssStyle.IsStrokeWidthDefined()) {
-		double fWidth = 1.0f;
-		if (m_viewBox.Width() != 0) {
-			fWidth = fWidth/m_viewBox.Width()*m_docSize.x;
-		}
-		INT32 iWidth = (INT32)fWidth;
-		cssStyle.SetStrokeWidth(iWidth);
+	if (bIsObject && !style.IsStrokeWidthDefined()) {
+		double fWidth = GetTransformedMeasure(trans, _T("1"));
+		style.SetStrokeWidth((INT32)fWidth);
 	}
 
-	return cssStyle;
+	return style;
 }
 
-bool SVGImporter::OutputStyles(const Style& cssStyle, UINT32 witch)
+void SVGImporter::ImportStyleFromDefs(Style& style, const wxString& sXmlId) const
 {
-	bool ok = true;
-	CXaraFileRecord Rec(0);
-
-	// XXX TODO to save XAR redundancy, we have to look
-	// if the styles are the same as the current ones
-
-	if (witch & STYLE_FILL_COLOUR) {
-		if (cssStyle.IsFillColourDefined()) {
-			wxColour col = cssStyle.GetFillColour();
-			if (col.Ok()) {
-				UINT32 iRecNo = DefineColour(col);
-
-				Rec.Reinit(TAG_FLATFILL, TAG_FLATFILL_SIZE);
-				ok = Rec.WriteReference(iRecNo);
-				ok = m_pExporter->WriteRecord(&Rec);
-
+	typedef pGradientHashTable::const_iterator I;
+	I i = m_gradients.find(sXmlId);
+	if (i != m_gradients.end()) {
+		Gradient* pGradient = i->second;
 #if SVGDEBUG
-				fprintf(stderr, "fill colour %d,%d,%d\n", col.Red(), col.Green(), col.Blue());
+		svgtrace(DBGTRACE_STYLES, "importing style '%s' from defs\n", (const char *)sXmlId.mb_str(wxConvUTF8));
 #endif
-			} else {
-				m_pExporter->WriteZeroSizedRecord(TAG_FLATFILL_NONE);
-#if SVGDEBUG
-				fprintf(stderr, "no fill colour\n");
-#endif
-			}
-		} else {
-			m_pExporter->WriteZeroSizedRecord(TAG_FLATFILL_NONE);
-#if SVGDEBUG
-			fprintf(stderr, "no fill colour\n");
-#endif
-		}
-	}
-
-	if (witch & STYLE_FILL_OPACITY && cssStyle.IsFillOpacityDefined()) {
-		if (cssStyle.GetFillOpacity() < 1.0f) {
-			BYTE bOpacity = (BYTE)((1.0f-cssStyle.GetFillOpacity())*255.0f);
-			Rec.Reinit(TAG_FLATTRANSPARENTFILL, TAG_FLATTRANSPARENTFILL_SIZE);
-			ok = Rec.WriteBYTE(bOpacity);
-			ok = Rec.WriteBYTE(0x02); // XXX stained glass, witch one is ok for SVG?
-			ok = m_pExporter->WriteRecord(&Rec);
-		}
-	}
-
-	if (witch & STYLE_STROKE_COLOUR) {
-		if (cssStyle.IsStrokeColourDefined()) {
-			wxColour col = cssStyle.GetStrokeColour();
-			if (col.Ok()) {
-				UINT32 iRecNo = DefineColour(col);
-
-				Rec.Reinit(TAG_LINECOLOUR, TAG_LINECOLOUR_SIZE);
-				ok = Rec.WriteReference(iRecNo);
-				ok = m_pExporter->WriteRecord(&Rec);
-
-#if SVGDEBUG
-				fprintf(stderr, "stroke colour %d,%d,%d\n", col.Red(), col.Green(), col.Blue());
-#endif
-			} else {
-				m_pExporter->WriteZeroSizedRecord(TAG_LINECOLOUR_NONE);
-#if SVGDEBUG
-				fprintf(stderr, "no stroke colour\n");
-#endif
-			}
-		} else {
-			m_pExporter->WriteZeroSizedRecord(TAG_LINECOLOUR_NONE);
-#if SVGDEBUG
-			fprintf(stderr, "no stroke colour\n");
-#endif
-		}
-	}
-
-	if (witch & STYLE_STROKE_WIDTH && cssStyle.IsStrokeWidthDefined()) {
-		UINT32 iStrokeWidth = cssStyle.GetStrokeWidth();
-		Rec.Reinit(TAG_LINEWIDTH, TAG_LINEWIDTH_SIZE);
-		ok = Rec.WriteINT32(iStrokeWidth);
-		ok = m_pExporter->WriteRecord(&Rec);
-	}
-
-	return ok;
-}
-
-INT32 SVGImporter::DefineColour(const wxColour& col)
-{
-	INT32 iRef;
-
-#if SVGDEBUG
-	fprintf(stderr, "looking up colour: #%.2x%.2x%.2x\n", col.Red(), col.Green(), col.Blue());
-#endif
-
-	if (m_colourRef.find(col) == m_colourRef.end()) {
-		// colour not yet defined, put a definition in XAR file
-		bool ok = true;
-		CXaraFileRecord Rec(0);
-
-		Rec.Reinit(TAG_DEFINERGBCOLOUR, TAG_DEFINERGBCOLOUR_SIZE);
-		ok = Rec.WriteBYTE(col.Red());
-		ok = Rec.WriteBYTE(col.Green());
-		ok = Rec.WriteBYTE(col.Blue());
-		UINT32 uiRef;
-		ok = m_pExporter->WriteRecord(&Rec, &uiRef);
-		iRef = uiRef;
-
-		// add to hash table
-		m_colourRef[col] = iRef;
-
-#if SVGDEBUG
-		fprintf(stderr, "definecolour: #%.2x%.2x%.2x (recid=%d)\n", col.Red(), col.Green(), col.Blue(), iRef);
-#endif
+		style.SetFillGradient(pGradient);
 	} else {
-		// already defined: take from the hash table
-		iRef = m_colourRef[col];
-
 #if SVGDEBUG
-		fprintf(stderr, "definecolour: recycle recid=%d\n", iRef);
+		svgtrace(DBGTRACE_STYLES, "tried to import non-existing style '%s' from defs\n", (const char *)sXmlId.mb_str(wxConvUTF8));
 #endif
 	}
-
-	return iRef;
 }

@@ -44,55 +44,39 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 =================================XARAHEADEREND============================
 */
-// svgfilter.h: This defines the XAR <--> SVG command line interface
+// gradients.cpp: This implements the class for handling the gradients
 
-#ifndef SVGFILTER_H
-#define SVGFILTER_H
+#include "gradients.h"
+#include "utils.h"
 
-#include "wx/wxprec.h"
+// define list of GradientStop elements
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(GradientStopList);
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+Gradient& Gradient::operator =(const Gradient& copy)
+{
+	type = copy.type;
+	xmlId = copy.xmlId;
+	units = copy.units;
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWidgets headers)
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
+	x1 = copy.x1;
+	y1 = copy.y1;
+	x2 = copy.x2;
+	y2 = copy.y2;
 
-// additional wxWidgets classes
-#include "wx/cmdline.h"
-#include "wx/wfstream.h"
-#include "wx/txtstrm.h"
-#include "wx/zstream.h"
-#include "wx/datetime.h"
-#include "wx/tokenzr.h"
+	// copy all the stops
+    for (GradientStopList::Node* node = copy.stops.GetFirst(); node != NULL; node = node->GetNext()) {
+        GradientStop* current = node->GetData();
+		GradientStop* copy = new GradientStop(*current);
+		stops.Append(copy);
+	}
 
-// XAR handling library
-#include "xarlib/xarlib.h"
-#include "xarlib/docrect.h"
-#include "xarlib/paths.h"
+	cx = copy.cx;
+	cy = copy.cy;
+	r = copy.r;
+	
+	solidColour = copy.solidColour;
+	solidOpacity = copy.solidOpacity;
 
-// libxml2 library
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xmlreader.h>
-
-#ifndef LIBXML_READER_ENABLED
-#error xmlreader must be enabled in libxml2!
-#endif
-
-// forward declarations
-void ReportError(const wxChar* pStr);
-
-// import
-bool DoCanImportInternal(const wxString& sFileName);
-bool DoImportInternal(CXarExport* pExporter, const wxString& sFileName);
-
-// export
-bool DoPrepareExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(const wxString& sFileName, const wxString& sXMLFileName);
-bool DoExportInternal(CXarImport* pImporter, const wxString& sFileName, const wxString& sXMLFileName, bool bCompress);
-
-#endif // !SVGFILTER_H
+	return *this;
+}

@@ -60,23 +60,20 @@ bool DoCanImportInternal(const wxString& sFileName)
 
 	doc = xmlParseFile(sFileName.mb_str(wxConvUTF8));
 	if (doc == NULL) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "Failed to open input file.\n");
+		ReportError(_T("Failed to open input file"));
 		IsCompatible = false;
 		goto finish;
 	}
 
 	cur = xmlDocGetRootElement(doc);
 	if (cur == NULL) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "The document is empty\n");
+		ReportError(_T("The document is empty"));
 		xmlFreeDoc(doc);
 		IsCompatible = false;
 		goto finish;
 	}
 	if (!IsEntityName(cur, "svg")) {
-		// XXX Set an appropriate error here
-		fprintf(stderr, "document root is not <svg>\n");
+		ReportError(_T("document root is not <svg>"));
 		xmlFreeDoc(doc);
 		IsCompatible = false;
 		goto finish;
