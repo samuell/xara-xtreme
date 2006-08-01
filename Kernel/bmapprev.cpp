@@ -3898,20 +3898,10 @@ void BmapPrevDlg::InitBitmapOptionsTab()
 		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), _R(IDS_OPTIONS_TAB_TRANSPARENT));
 		SetStringGadgetValue(_R(IDC_OPTIONSTAB_CHECK3), _R(IDS_OPTIONS_TAB_LAYERFILES));
 		HideGadget(_R(IDC_OPTIONSTAB_CHECK1), FALSE);
-PORTNOTE("other","Transparent background just break palettised exports")
-#if defined(ENABLE_TRANSPARENT)
 		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), FALSE);
-#else
-		HideGadget(_R(IDC_OPTIONSTAB_CHECK2), TRUE);
-#endif 
 		HideGadget(_R(IDC_OPTIONSTAB_CHECK3), FALSE);
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK1), ((MaskedFilterExportOptions*) m_pExportOptions)->WantInterlaced());
-#if defined(ENABLE_TRANSPARENT)
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), m_pExportOptions->IsBackgroundTransparent());
-#else
-		m_pExportOptions->SetBackgroundTransparency( FALSE );
-		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK2), FALSE);
-#endif
 		SetLongGadgetValue(_R(IDC_OPTIONSTAB_CHECK3), m_pExportOptions->GetSeparateLayerFiles());
 	}
 

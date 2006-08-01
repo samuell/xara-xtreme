@@ -1693,11 +1693,6 @@ void BitmapExportPreviewDialog::HandleFileTypeListChange( INT32 Index )
 	pNewOptions->RetrieveDefaults();
 	pNewOptions->CopyFrom(BitmapData[Index].m_pOptions);
 
-PORTNOTE("other","Transparent background just break palettised exports, stop the flag sneaking back in")
-#if !defined(ENABLE_TRANSPARENT)
-	pNewOptions->SetBackgroundTransparency( FALSE );
-#endif
-		
 	// Bodge fix so BMPs don't gain background transparency as they do not support it
 	if (FileTypeSelected.IsIdentical(String_16(_R(IDS_FILE_TYPE_BMP))))
 		pNewOptions->SetBackgroundTransparency(FALSE);
