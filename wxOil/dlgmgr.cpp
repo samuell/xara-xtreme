@@ -311,7 +311,7 @@ PORTNOTE("dialog", "This should probably be applied to all controls eventually")
 				break;
 		}
 
-		return pBook; // how did we get here?
+		return pBook;
 	}
 };
 
