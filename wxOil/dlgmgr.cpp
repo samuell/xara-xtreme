@@ -264,6 +264,7 @@ protected:
 	virtual wxBookCtrlBase* CreateBookCtrl()
 	{
 		INT32 style = wxCLIP_CHILDREN | wxBC_DEFAULT;
+		wxBookCtrlBase* pBook = NULL;
 
 		switch (m_TabType)
 		{
@@ -299,11 +300,18 @@ protected:
 #endif
 			case TABTYPE_TABS:
 			default:
-				return new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+				pBook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+					
+PORTNOTE("dialog", "This should probably be applied to all controls eventually")
+				// Fabricate a Xara standard font and associate it with notebook control
+				wxFont	fontDefault = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+				fontDefault.SetPointSize( 8 );
+				pBook->SetFont( fontDefault );
+				
 				break;
 		}
 
-		return NULL; // how did we get here?
+		return pBook; // how did we get here?
 	}
 };
 
