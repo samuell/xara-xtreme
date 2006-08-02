@@ -180,7 +180,7 @@ private:
 	Cursor* Pop(INT32 cursorID = 0);
 	Cursor* SetTop(Cursor* pCursor, INT32 cursorID = 0);
 
-	void SetActive() const;
+	void SetActive( bool fOnlyRendWnd = true ) const;
 	BOOL IsActive(const Cursor* pCursor) const;
 
 // IMPORTANT: DONT USE THIS VAR IN NEW CODE - IT IS DUE TO DIE SOON

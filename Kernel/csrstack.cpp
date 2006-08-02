@@ -357,7 +357,8 @@ Cursor* CursorStack::Pop(INT32 cursorID)
 
 				// Now the gap has been closed, let's decrement the nextfree counter
 				nNextFreeSlot--;
-				if (nNextFreeSlot > 0) SetActive();
+				if (nNextFreeSlot > 0)
+					SetActive();
 
 				// Finally, return the pointer to the cursor we've just removed from the stack
 				return pc;
@@ -463,7 +464,7 @@ Cursor* CursorStack::SetTop(Cursor* pCursor, INT32 cursorID)
 	SeeAlso:	Cursor::SetActive
 ********************************************************************************************/
 
-void CursorStack::SetActive() const
+void CursorStack::SetActive( bool fOnlyRendWnd /*= true*/ ) const
 {
 	if (nNextFreeSlot <= 0)
 	{
@@ -475,7 +476,7 @@ void CursorStack::SetActive() const
 	if (BusyCount > 0)
 		Cursor::Busy->SetActive();
 	else
-		pcStack[nNextFreeSlot - 1].pCursor->SetActive();
+		pcStack[nNextFreeSlot - 1].pCursor->SetActive( fOnlyRendWnd );
 }
 
 Cursor* CursorStack::GetActive()

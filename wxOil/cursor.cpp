@@ -571,7 +571,7 @@ BOOL Cursor::IsValid() const
 
 ********************************************************************************************/
 
-void Cursor::SetActive() const
+void Cursor::SetActive( bool fOnlyRendWnd /*= true*/ ) const
 {
 	// If we have captured the mouse then release it
 	wxWindow* pCaptureWnd = wxWindow::GetCapture();
@@ -579,11 +579,18 @@ void Cursor::SetActive() const
 		pCaptureWnd->ReleaseMouse();
 
 	// Set the global cursor (but only if we have a Render window to
-	// control its scope)
-	wxWindow* pRenderWnd = DocView::GetCurrentRenderWindow();
+	// control its scope). Also make sure we're in the Render window,
+	// this stops the cursor being hijacked when we pop.
+	wxWindow*	pRenderWnd = DocView::GetCurrentRenderWindow();
+	wxPoint		ptDontCare;
 	if( NULL != pRenderWnd )
-		wxSetCursor(hCursor);
-
+	{
+		if( !fOnlyRendWnd || wxFindWindowAtPointer( ptDontCare ) == pRenderWnd )
+			wxSetCursor(hCursor);
+		else
+			wxSetCursor( *wxSTANDARD_CURSOR );
+	}
+	
 	// If we have a RenderWindow and it doesn't have the capture then set its cursor
 	if( pRenderWnd != NULL && pCaptureWnd != pRenderWnd)
 		pRenderWnd->SetCursor(hCursor);

@@ -137,7 +137,7 @@ public:
 	virtual ~Cursor();								// destroy a cursor
 
 	BOOL IsValid() const;							// TRUE if cursor constructed OK
-	void SetActive() const;							// set the system's cursor to this
+	void SetActive( bool fOnlyRendWnd = false ) const; // set the system's cursor to this
 	wxCursor *Handle() {return &hCursor;}			// returns the (wxWindows) handle of the cursor
 
 //	static BOOL Show();								// show the cursor, if invisible
