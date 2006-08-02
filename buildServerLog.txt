@@ -9,3 +9,5 @@ Date/Time	Change Description
 30-Jul-06 	Changed build server to use ./autogen.sh instead of autoreconf -f -i -s
 01-Aug-06	Added configure flags --enable-xarlib --enable-filters
 		Updated build script to gather svg filter install files
+02-Aug-06 10:30 Re-applied patch to /usr/bin/makeinstaller to add -d switch to strip command.
+		Copy svg filter XML files correctly this time.
