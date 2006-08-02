@@ -223,6 +223,9 @@ class FontManager :	public CCObject
 		BOOL			IsFontReplaced(WORD Handle);
 		BOOL 			IsFontReplaced(String_64* pFontName, FontClass Class=FC_UNDEFINED);
 
+		BOOL            IsFontUsedInDoc(WORD Handle, Document* pDocument);
+		void            OnDocumentLoaded(Document* pDocument);
+
 		void			GetCompatibleFont(const String_64& EncodedName, String_64& CompatibleFont, INT32& Style);
 		void			EncodeFontName(String_64& FontName, String_64& Encoded, INT32 Styles);
 		void			EncodeAndMapFontName(String_64& FontName, String_64& Encoded, INT32 Styles);
@@ -286,6 +289,7 @@ public:
 		CachedFontItem* AddTempFont(String_64* pFontName, FontClass Class, WORD& hndle);
 		void			InvalidateCache();
 		void			ResetDefaultFont();
+		BOOL            IsFontUsedInSiblings(Node* pNode, WORD Handle, WORD CurrentHandle, UINT32 Level);
 
 	private:
 		WORD 			UniqueHandle;

@@ -3488,7 +3488,13 @@ BOOL BaseCamelotFilter::DoImport(SelOperation* pOp, CCLexFile* pFile, Document* 
 	// Flag this as a new format document
 	// But only flag it if we are opening the document rather than importing into an exisiting one
 	if (TheDocument && !TheDocument->IsImporting())
+	{
 		TheDocument->SetLoadedAsVersion1File(FALSE);
+
+		// allow the font manager to fix the current font
+		if (!TheDocument->IsAClipboard())
+			GetApplication()->GetFontManager()->OnDocumentLoaded(TheDocument);
+	}
 
 #if !defined(EXCLUDE_FROM_RALPH)
 	BOOL UpdateBars = TheDocument ? !TheDocument->IsAClipboard() : TRUE;

@@ -518,6 +518,24 @@ PORTNOTE("text","ATM deactivated")
 }
 
 /********************************************************************************************
+>	String_64* OILFontMan::GetNativeFontName(FontClass Class, LOGFONT *pLogFont)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	01/08/06
+	Inputs:     Class - the font class of the font (not used in wxOil but supplied in analogy
+						to GetOutlineTextMetrics)
+				pLogFont - a pointer to it's LOGFONT structure
+	Returns:    A pointer to the underlying native font name
+	Purpose:	Return the underlying native font name for a font
+
+********************************************************************************************/
+String_64* OILFontMan::GetNativeFontName(FontClass Class, LOGFONT *pLogFont)
+{
+	IGNOREPARAM(Class);
+	return &pLogFont->FaceName;
+}
+
+/********************************************************************************************
 >	OILFontMan::InvalidateCharMetrics()
 
 	Author:		Martin Wuerthner <xara@mw-software.com>

@@ -180,6 +180,7 @@ class OILFontMan : public CCObject
 		static void FindClosestFont();
 		static FontBase* CreateNewFont(FontClass Class, String_64* pFontName);
 		static OUTLINETEXTMETRIC *GetOutlineTextMetric(FontClass Class, LOGFONT *pLogFont);
+		static String_64* GetNativeFontName(FontClass Class, LOGFONT *pLogFont);
 		static void InvalidateCharMetrics();
 		static BOOL GetCharMetrics(wxDC* pDC, WCHAR ch, CharDescription& FontDesc, CharMetrics* pCharMetrics);
 		static MILLIPOINT GetCharsKerning(wxDC* pDC, WCHAR chLeft, WCHAR chRight,

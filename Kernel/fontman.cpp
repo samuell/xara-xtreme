@@ -102,6 +102,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 // #include "fontbase.h" - included in fontman.h
+#include "nodetxts.h"
+#include "nodetxtl.h"
+#include "nodetext.h"
 #include "fontman.h"
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "txtattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -333,7 +336,7 @@ BOOL CachedFontItem::IsFullyCached()
 {
 	PORTNOTE("text","CachedFontItem::IsFullyCached - do nothing");
 #ifndef DISABLE_TEXT_RENDERING
-	TRACEUSER("wuerthne", _T("CachedFontItem::IsFullyCached called") );
+	// TRACEUSER("wuerthne", _T("CachedFontItem::IsFullyCached called") );
 	ERROR2IF(pFontClass==NULL, FALSE, "A CachedFontItem structure exists without a FontClass!!!");
 	return (pEnumLogFont!=NULL);
 #else
@@ -592,7 +595,7 @@ CachedFontItem* FontManager::GetNextFont(CachedFontItem* pItem)
 
 CachedFontItem* FontManager::AddFont(String_64* Name, FontClass fclass, WORD& retHandle)
 {
-
+	TRACEUSER("wuerthne", _T("FontManager::AddFont %s"), (TCHAR*)*Name);
 	CachedFontItem* pItem = new	CachedFontItem;
 	if (pItem==NULL)
 		return NULL;
@@ -610,6 +613,7 @@ CachedFontItem* FontManager::AddFont(String_64* Name, FontClass fclass, WORD& re
 	TheFontList.AddTail(pItem);
 
 	retHandle = pItem->Handle;
+	TRACEUSER("wuerthne", _T("AddFont, returning %d"), retHandle);
 
 	return pItem;
 }
@@ -656,6 +660,10 @@ CachedFontItem* FontManager::FindFont(WORD Handle)
 				NULL if unable to find the font
 	Purpose:	Find the entry in the font managers font list which corresponds to this
 				fontname and font class
+	Note:       One might be tempted to include the default font item in the comparison
+				and return the default font handle when the default font name is passed,
+				but this does not happen and this is by design. See OnDocumentLoaded for
+				further information.
 
 ********************************************************************************************/
 
@@ -959,6 +967,136 @@ BOOL FontManager::IsFontDefault(WORD Handle)
 BOOL FontManager::IsFontDefault(CachedFontItem* pItem)
 {
 	return (pItem == (&DefaultFontItem));
+}
+
+/********************************************************************************************
+
+>	BOOL FontManager::IsFontUsedInSiblings(Node* pNode, WORD Handle, WORD CurrentHandle, UINT32 Level)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	01/08/06
+	Inputs:		pNode - the root node of the subtree to check
+				Handle - a font handle
+				CurrentHandle - the font handle applying to the current subtree
+				Level - level in the tree (level 0 is NodeDocument, level 1 are default attributes)
+	Returns:    Returns TRUE if a font attribute with the given handle applies to a text
+				object.
+	Purpose:	Find out whether a given font is used in a document.
+
+********************************************************************************************/
+
+BOOL FontManager::IsFontUsedInSiblings(Node* pNode, WORD Handle, WORD CurrentHandle, UINT32 Level)
+{
+	// perform a standard child-first recursion keeping track of the current font
+	while(pNode)
+	{
+		Node* pFirstChild = pNode->FindFirstChild();
+		if (pFirstChild && IsFontUsedInSiblings(pFirstChild, Handle, CurrentHandle, Level + 1)) return TRUE;
+		if (IS_A(pNode, AttrTxtFontTypeface))
+		{
+			AttrTxtFontTypeface* pAttr = (AttrTxtFontTypeface*)pNode;
+			CurrentHandle = pAttr->Value.HTypeface;
+			ENSURE(!(CurrentHandle == DEFAULTHANDLE && Level > 1), "FontManager::IsFontUsedInSiblings is based on the assumption that we do not have non-default attribute nodes referencing the default font");
+		}
+		if (CurrentHandle == Handle && (IS_A(pNode, TextStory) || IS_A(pNode, TextLine) || IS_A(pNode, TextChar)))
+			return TRUE;
+		pNode = pNode->FindNext();
+	}
+	return FALSE;
+}
+
+/********************************************************************************************
+
+>	BOOL FontManager::IsFontUsedInDoc(WORD Handle, Document* pDocument)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	01/08/06
+	Inputs:		Handle - a font handle
+				pDocument - pointer to a document
+	Returns:    When called with Handle == DEFAULTHANDLE it returns TRUE if the default
+				attribute applies to a text object. Otherwise, it returns TRUE if the supplied
+				font handle is used in the document
+	Purpose:	Find out whether a given font is used in a document.
+
+********************************************************************************************/
+
+BOOL FontManager::IsFontUsedInDoc(WORD Handle, Document* pDocument)
+{
+	Node* pNode = pDocument->GetFirstNode();
+	return IsFontUsedInSiblings(pNode, Handle, ILLEGALFHANDLE, 0);
+}
+
+/********************************************************************************************
+
+>	void FontManager::OnDocumentLoaded(Document* pDocument)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	01/08/06
+	Inputs:		pDocument - pointer to the newly created/loaded document
+	Purpose:	Called after a document has been loaded - allows us to fix the current and
+				default fonts if they are not installed. They are only changed if they are
+				not used in the document.
+
+				Fixing the current font is useful because it stops "Arial (missing)" from
+				being displayed after start-up if Arial is not installed. The same happens
+				when loading a document with the current font set to Arial (or any other
+				font that is not installed). We do not touch the current font if it is
+				actually used in the document because then, it is possible that it was set
+				deliberately (maybe even in a template).
+
+				One might consider a similar approach for the default font, but by definition,
+				the default font is always installed (though it may or may not be Times New
+				Roman), so there is no need to change anything. The default attributes are not
+				saved with the document, so, in contrast to the current font, there cannot be
+				any surprises with fonts that are not installed. The font name referenced by
+				the default font does not matter because the default font attribute is never
+				inherited by any text object in the document.
+
+				This is down to the behaviour of FindFont(String_64*,FontClass), which never
+				returns the default font handle, so any font attribute created by the text tool
+				based on a font name (which involves calling FindFont at some stage) is always
+				different from the default attribute (even if it happens to be the same font as
+				the default font) and hence this attribute is not optimised away. Therefore, each
+				and every text object has a non-default font attribute applied to it.
+
+********************************************************************************************/
+
+void FontManager::OnDocumentLoaded(Document* pDocument)
+{
+	// check if the current font is installed and change it in case it is not (only if the font is not used)
+	NodeAttribute* pAttr = pDocument->GetAttributeMgr().GetCurrentAttribute(CC_RUNTIME_CLASS(BaseTextClass),
+																			CC_RUNTIME_CLASS(AttrTxtFontTypeface));
+	if (pAttr)
+	{
+		AttrTxtFontTypeface* pTypeface = (AttrTxtFontTypeface*)pAttr;
+		WORD Handle = pTypeface->Value.HTypeface;
+		TRACEUSER("wuerthne", _T("found current font attribute, handle = %d"), Handle);
+		CachedFontItem *pItem = FindFont(Handle);
+		if (pItem)
+		{
+			String_64* SurfaceFontName = pItem->GetFontName();
+			TRACEUSER("wuerthne", _T("current font name is %s"), (TCHAR*)*SurfaceFontName);
+			ENUMLOGFONT *pEnumLogFont = pItem->GetEnumLogFont();
+			if (pEnumLogFont)
+			{
+				if (!IsFontInstalled(SurfaceFontName) && !IsFontUsedInDoc(Handle, pDocument))
+				{
+					// the current font is not installed and not used in the document,
+					// so find out what the replacement font is and use that instead
+					TRACEUSER("wuerthne", _T("font replaced and not used"));
+					String_64* NativeFontName = OILFontMan::GetNativeFontName(pItem->GetFontClass(),
+																			  &pEnumLogFont->elfLogFont);
+					WORD NewHandle = CacheNamedFont(NativeFontName, pItem->GetFontClass());
+					if (NewHandle != ILLEGALFHANDLE)
+					{
+						TRACEUSER("wuerthne", _T("change current font to handle %d"), NewHandle);
+						// modify the current attribute directly
+						pTypeface->Value.HTypeface = NewHandle;
+					}
+				}
+			}
+		}
+	}
 }
 
 /********************************************************************************************
@@ -1552,7 +1690,8 @@ WORD FontManager::CacheNamedFont(String_64* pFontName, FontClass Class)
 	// we've done a search for it and it does not exist so we'll use the default
 	WORD hndle=ILLEGALFHANDLE;
 	AddTempFont(pFontName, Class, hndle);
-		
+
+	TRACEUSER("wuerthne", _T("FontManager::CacheNamedFont = %d"), hndle);
 	return (hndle);
 }
 
