@@ -323,6 +323,7 @@ if test "$StaticEnable" = "yes"; then
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXext/-Wl,-Bstatic -lXext -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXinerama/-Wl,-Bstatic -lXinerama -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXxf86vm/-Wl,-Bstatic -lXxf86vm -Wl,-Bdynamic/g'`"	
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXrender/-Wl,-Bstatic -lXrender -Wl,-Bdynamic/g'`"	
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
