@@ -201,25 +201,24 @@ LIBXML2_LIBS="`$XML2CONFIG --libs`"
 # from Xara configure.in: setup static linking
 
 if test "$StaticEnable" = "yes"; then
-	#	if test PrecompileEnable == "yes"; then
-		CPPFLAGS+=" -ffunction-sections -fdata-sections"
-		CXXFLAGS+=" -ffunction-sections -fdata-sections"
-		WX_LIBS+=" --gc-sections"
+        CPPFLAGS="$CPPFLAGS -ffunction-sections -fdata-sections"
+        CXXFLAGS="$CXXFLAGS -ffunction-sections -fdata-sections"
+        XARLIB_LIBS="$XARLIB_LIBS --gc-sections"
 	
-	Force as much as possible to be statically linked
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXrandr/-Wl,-Bstatic -lXrandr -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXext/-Wl,-Bstatic -lXext -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXinerama/-Wl,-Bstatic -lXinerama -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXxf86vm/-Wl,-Bstatic -lXxf86vm -Wl,-Bdynamic/g'`"	
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXrender/-Wl,-Bstatic -lXrender -Wl,-Bdynamic/g'`"	
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ltiff/-Wl,-Bstatic -ltiff -Wl,-Bdynamic/g'`"
+	# Force as much as possible to be statically linked
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXrandr/-Wl,-Bstatic -lXrandr -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXext/-Wl,-Bstatic -lXext -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXinerama/-Wl,-Bstatic -lXinerama -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXxf86vm/-Wl,-Bstatic -lXxf86vm -Wl,-Bdynamic/g'`"	
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXrender/-Wl,-Bstatic -lXrender -Wl,-Bdynamic/g'`"	
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-ltiff/-Wl,-Bstatic -ltiff -Wl,-Bdynamic/g'`"
 	# These are handled by explicitly linking xml2 (see below)
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lxml2//g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lz//g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lm//g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lxml2//g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lz//g'`"
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lm//g'`"
 	# libxml2 linking needs fix-up too
 	LIBXML2_LIBS="`echo $LIBXML2_LIBS | sed -e 's/-lxml2/-Wl,-Bstatic -lxml2 -Wl,-Bdynamic/g'`"
 	LIBXML2_LIBS="`echo $LIBXML2_LIBS | sed -e 's/-lz/-Wl,-Bstatic -lz -Wl,-Bdynamic/g'`"
