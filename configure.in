@@ -319,12 +319,23 @@ if test "$StaticEnable" = "yes"; then
 	CXXFLAGS="$CXXFLAGS -static -static-libgcc"
 
 	# Force as much as possible to be statically linked
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"	
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXrandr/-Wl,-Bstatic -lXrandr -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXext/-Wl,-Bstatic -lXext -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXinerama/-Wl,-Bstatic -lXinerama -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXxf86vm/-Wl,-Bstatic -lXxf86vm -Wl,-Bdynamic/g'`"	
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ltiff/-Wl,-Bstatic -ltiff -Wl,-Bdynamic/g'`"
-	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lxml2/-Wl,-Bstatic -lxml2 -Wl,-Bdynamic/g'`"
+	# These are handled by explicitly linking xml2 (see below)
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lxml2//g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lz//g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lm//g'`"
 	WX_LIBS2="`echo $WX_LIBS | sed -e 's/-pthread//g'`"
+	# libxml2 linking needs fix-up too
+	LIBXML2_LIBS="`echo $LIBXML2_LIBS | sed -e 's/-lxml2/-Wl,-Bstatic -lxml2 -Wl,-Bdynamic/g'`"
+	LIBXML2_LIBS="`echo $LIBXML2_LIBS | sed -e 's/-lz/-Wl,-Bstatic -lz -Wl,-Bdynamic/g'`"
+	LIBXML2_LIBS="`echo $LIBXML2_LIBS | sed -e 's/-lm/-Wl,-Bstatic -lm -Wl,-Bdynamic/g'`"
 fi
 
 # pass the Pango, FreeType and GTK flags (required for wxGTK font rendering)
