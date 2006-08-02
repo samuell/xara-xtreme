@@ -223,4 +223,141 @@ inline BOOL IsWindows2000()
 
 #endif
 
+
+
+/*******************************************************************************************
+
+>	class wxWindowDeletionWatcher : public wxObject
+
+	Author:		Alex_Bligh <alex@alex.org.uk>
+	Created:	02/07/2006
+	Purpose:	A derived event to watch for the deletion of windows
+	Notes:		In the OIL
+	See Also:	
+
+********************************************************************************************/
+
+class wxWindowDeletionWatcher;
+WX_DECLARE_HASH_MAP( wxWindow *, wxWindowDeletionWatcher *, wxPointerHash, wxPointerEqual, WindowToWindowDeletionWatcher );
+
+class wxWindowDeletionWatcher : public wxObject
+{
+public:
+	wxWindowDeletionWatcher(wxWindow * pWatchedWindow = NULL) : m_HasBeenDeleted(FALSE), m_pWatchedWindow(pWatchedWindow), m_pNext(NULL), m_pPrev(NULL)
+	{
+		WindowToWindowDeletionWatcher::iterator i = GetHashEntry(m_pWatchedWindow);
+
+		// If there is no list, create a new hash entry, and we are done
+		if (i == s_UndeletedWindowHash->end() || !(i->second))
+		{
+			ERROR3IF(i != s_UndeletedWindowHash->end(), "wxWindowDeletionWatcher list non-empty but has NULL pointer");
+			(*s_UndeletedWindowHash)[m_pWatchedWindow]=this;
+		}
+		else
+		{
+			// we are going to stick it on the front of the list
+			m_pNext = i->second; // save the current list (may be NULL).
+			i->second = this; // stick us on the list
+
+			m_pPrev = NULL;
+			m_pNext->m_pPrev=this;
+		}
+		if (m_pWatchedWindow->IsBeingDeleted())
+			RegisterWindowDeletion(m_pWatchedWindow);
+	}
+
+	~wxWindowDeletionWatcher()
+	{
+		RemoveFromList();
+	}
+
+	void RemoveFromList()
+	{
+		if (m_HasBeenDeleted)
+		{
+			ERROR3IF(m_pNext || m_pPrev, "a deleted window appears to still be on the wxWindowDeletionWatcher list");
+			return; // it's not on a list anyway
+		}
+
+		BOOL Empty = TRUE;
+		if (m_pNext)
+		{
+			ERROR3IF(m_pNext->m_pPrev != this, "bad wxWindowDeletionWatcher next pointer");
+			m_pNext->m_pPrev = m_pPrev;
+			Empty = FALSE;
+		}
+		if (m_pPrev)
+		{
+			ERROR3IF(m_pPrev->m_pNext != this, "bad wxWindowDeletionWatcher prev pointer");
+			m_pPrev->m_pNext = m_pNext;
+			Empty = FALSE;
+		}
+		m_pPrev = m_pNext = NULL; // disconnect
+
+		if (Empty)
+		{
+			// Delete the hash table entry
+			WindowToWindowDeletionWatcher::iterator i = GetHashEntry(m_pWatchedWindow);
+			if (i->second != this)
+			{
+				ERROR3("wxWindowWatcher list appeared to be newly emptied but I wasn't the first item on it");
+			}
+			if (i != s_UndeletedWindowHash->end())
+				s_UndeletedWindowHash->erase(i);
+			else
+			{
+				ERROR3("Can't find wxWindowDeletionWatcher list");
+			}
+		}
+	}
+
+	BOOL HasBeenDeleted() const {return m_HasBeenDeleted;}
+
+	static void RegisterWindowDeletion(wxWindow * pWindow)
+	{
+		WindowToWindowDeletionWatcher::iterator i = GetHashEntry(pWindow);
+		if (i != s_UndeletedWindowHash->end())
+		{
+			// OK, there's an entry there
+			wxWindowDeletionWatcher * pWDW = i->second; // as "i" may become invalid
+			ERROR3IF(!pWDW, "Empty list in wxWindowDeletionWatcher::RegisterWindowDeletion");
+			while (pWDW)
+			{
+				ERROR3IF(pWDW->m_pWatchedWindow != pWindow, "Window on the wrong list in wxWindowDeletionWatcher::RegisterWindowDeletion");
+				wxWindowDeletionWatcher * next = pWDW->m_pNext; // as removing from the list erases the next pointer
+				pWDW->m_HasBeenDeleted = TRUE;
+				pWDW->RemoveFromList(); // note we don't delete the WDW object
+				pWDW = next;			
+			}
+		}
+	}
+
+	static void DeInit()
+	{
+		if (s_UndeletedWindowHash)
+		{
+			ERROR3IF(!s_UndeletedWindowHash->empty(), "wxWindowDeletionWatcher::DeInit() found hash of watched windows was non-empty; someone leaked a wxWindowDeletionWatcher");
+			s_UndeletedWindowHash->clear();
+			delete s_UndeletedWindowHash;
+			s_UndeletedWindowHash = NULL;
+		}
+	}
+
+private:
+	static WindowToWindowDeletionWatcher::iterator GetHashEntry(wxWindow * pWindow) {EnsureHash(); return s_UndeletedWindowHash->find(pWindow);}
+
+	static BOOL EnsureHash() {if (!s_UndeletedWindowHash) s_UndeletedWindowHash = new WindowToWindowDeletionWatcher; return s_UndeletedWindowHash!=NULL;}
+
+	BOOL m_HasBeenDeleted;
+	wxWindow * m_pWatchedWindow;
+
+	// whilst the windows remain undeleted, they sit on this list
+	wxWindowDeletionWatcher * m_pNext;
+	wxWindowDeletionWatcher * m_pPrev;
+
+	static WindowToWindowDeletionWatcher * s_UndeletedWindowHash;
+
+	DECLARE_DYNAMIC_CLASS(wxWindowDeletionWatcher);
+};
+
 #endif //_CAMELOT_H_

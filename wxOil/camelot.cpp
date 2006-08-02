@@ -153,6 +153,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#endif
 
 BOOL CCamApp::InInitOrDeInit = TRUE;
+IMPLEMENT_DYNAMIC_CLASS( wxWindowDeletionWatcher, wxObject);
+WindowToWindowDeletionWatcher * wxWindowDeletionWatcher::s_UndeletedWindowHash = NULL;
 
 /********************************************************************************************
 
@@ -260,13 +262,20 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 {
 	static /*TYPENOTE: Correct*/ long	lLastTimeStamp = 0;
 
+	wxObject* pEventObject = event.GetEventObject();
+
+	if (( event.GetEventType() == wxEVT_DESTROY ) && pEventObject->IsKindOf(CLASSINFO(wxWindow)))
+	{
+		// Register window destruction
+		wxWindowDeletionWatcher::RegisterWindowDeletion((wxWindow *)pEventObject);
+	}
+
 	if (PrintMonitor::IsPrintingNow())
 	{
 		// Disable processing of paint messages for various controls which may use GDraw or GBrush to paint, as this
 		// appears to upset printing
 		if (event.IsKindOf(CLASSINFO(wxPaintEvent)))
 		{
-			wxObject* pEventObject = event.GetEventObject();
 			if (!pEventObject->IsKindOf(CLASSINFO(wxCamArtControl)))
 			{	
 				// TRACEUSER("amb", _T("CCamApp::FilterEvent caught paint for %s"), pEventObject->GetClassInfo()->GetClassName());
@@ -280,7 +289,6 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 #if 0 && defined(_DEBUG)
 	if ( event.GetEventType() == wxEVT_SET_FOCUS )
 	{
-		wxObject* pEventObject = event.GetEventObject();
 		TRACEUSER("amb", _T("CCamApp::FilterEvent focus to %s"), pEventObject->GetClassInfo()->GetClassName());
 		if (pEventObject->IsKindOf(CLASSINFO(CRenderWnd)))
 		{
@@ -290,9 +298,10 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 #endif
 
 	if (( event.GetEventType() == wxEVT_CREATE )
-		&& (event.GetEventObject()->IsKindOf(CLASSINFO(wxTopLevelWindow)))
-		&& !(event.GetEventObject()->IsKindOf(CLASSINFO(wxAdvSplashScreen))) // Don't trigger this on the creation of the splash screen itself
-		&& !(event.GetEventObject()->IsKindOf(CLASSINFO(wxSplashScreen)))
+		&& pEventObject
+		&& (pEventObject->IsKindOf(CLASSINFO(wxTopLevelWindow)))
+		&& !(pEventObject->IsKindOf(CLASSINFO(wxAdvSplashScreen))) // Don't trigger this on the creation of the splash screen itself
+		&& !(pEventObject->IsKindOf(CLASSINFO(wxSplashScreen)))
 		)
 	{
 		// a top level window is about to be created. End the splash screen if it is up as it may obscure it
@@ -302,7 +311,6 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 #if defined(_DEBUG)
 	if( event.GetEventType() == wxEVT_CHAR )
 	{
-		wxObject* pEventObject = event.GetEventObject();
 		if (pEventObject)
 		{
 			TRACEUSER( "jlh92", _T("KeyEvent 4 %s CH\n"),
@@ -320,7 +328,6 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 			return -1;
 		lLastTimeStamp = event.GetTimestamp();
 
-		wxObject* pEventObject = event.GetEventObject();
 		TRACEUSER( "jlh92", _T("KeyEvent 4 %s %s\n"),
 			((wxWindow*)pEventObject)->GetClassInfo()->GetClassName(),
 			event.GetEventType() == wxEVT_KEY_DOWN ? _T("KD") : _T("KU") );
@@ -389,9 +396,29 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		TRACEUSER("amb", _T("CCamApp::FilterEvent handle"));
 		TRACEUSER( "jlh92", _T("Handled!\n") );
 
+		// Do our best to see if the object is deleted.
+		wxWindowDeletionWatcher * wd = NULL;
+		if (pEventObject->IsKindOf(CLASSINFO(wxWindow)))
+		{
+			wd = new wxWindowDeletionWatcher((wxWindow*)pEventObject);
+			if (!wd)
+				return -1;
+		}
+
 		// Process keyboard messages (and mark event as handled)
 		if( HandleKeyPress( (wxKeyEvent&)event ) )
-			return -1;
+		{
+			BOOL deleted = wd && wd->HasBeenDeleted();
+			if (wd)
+				delete wd;
+			if (deleted)
+				return 1; // event handled. Do NOT anything else here as the object may by now
+						// have been deleted (e.g. FileClose hotkey).
+			else
+				return -1;
+		}
+		if (wd)
+			delete wd;
 	}
 	
 	return -1;
@@ -1151,6 +1178,9 @@ PORTNOTE("other","Removed 3D, Extras and UserHelp support")
 	// Last of all, deinit the help system now that there's very little else to go wrong.
 	DeInitUserHelp();
 #endif
+
+	// zap this after we know all windows have gone
+	wxWindowDeletionWatcher::DeInit();
 
 	::wxHandleFatalExceptions(FALSE);
 	return wxApp::OnExit();
