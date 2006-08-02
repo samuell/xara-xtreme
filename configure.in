@@ -315,8 +315,9 @@ if test `echo $srcdir | cut -c1` != "/"; then
 fi
 
 if test "$StaticEnable" = "yes"; then
-	CPPFLAGS="$CPPFLAGS -static -static-libgcc"
-	CXXFLAGS="$CXXFLAGS -static -static-libgcc"
+	CPPFLAGS="$CPPFLAGS -static -static-libgcc -ffunction-sections -fdata-sections"
+	CXXFLAGS="$CXXFLAGS -static -static-libgcc -ffunction-sections -fdata-sections"
+	LDFLAGS="--gc-sections"
 
 	# Force as much as possible to be statically linked
 	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lXrandr/-Wl,-Bstatic -lXrandr -Wl,-Bdynamic/g'`"
