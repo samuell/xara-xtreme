@@ -1740,6 +1740,9 @@ BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
 	ok = LaunchBrowserApp(_T("desktop-launch"), strUrl);
 	if (ok) return ok;
 
+	ok = LaunchBrowserApp(_T("gnome-open"), strUrl);
+	if (ok) return ok;
+
 	ok = LaunchBrowserApp(_T("htmlview"), strUrl);
 	if (ok) return ok;
 
@@ -1752,7 +1755,7 @@ BOOL CCamApp::LaunchWebBrowser(const wxString& strUrl)
 	ok = LaunchBrowserApp(_T("konqueror"), strUrl);
 	if (ok) return ok;
 
-	ok = LaunchBrowserApp(_T("gnome-www-default-browser"), strUrl);
+	ok = LaunchBrowserApp(_T("gnome-www-browser"), strUrl);
 	if (ok) return ok;
 
 	ok = LaunchBrowserApp(_T("epiphany"), strUrl);
