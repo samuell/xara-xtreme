@@ -317,6 +317,14 @@ fi
 if test "$StaticEnable" = "yes"; then
 	CPPFLAGS="$CPPFLAGS -static -static-libgcc"
 	CXXFLAGS="$CXXFLAGS -static -static-libgcc"
+
+	# Force as much as possible to be statically linked
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"	
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-ltiff/-Wl,-Bstatic -ltiff -Wl,-Bdynamic/g'`"
+	WX_LIBS="`echo $WX_LIBS | sed -e 's/-lxml2/-Wl,-Bstatic -lxml2 -Wl,-Bdynamic/g'`"
+	WX_LIBS2="`echo $WX_LIBS | sed -e 's/-pthread//g'`"
 fi
 
 # pass the Pango, FreeType and GTK flags (required for wxGTK font rendering)
