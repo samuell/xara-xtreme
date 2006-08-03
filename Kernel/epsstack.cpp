@@ -145,7 +145,7 @@ void FIXEDPOINT::FromAscii(const TCHAR *Str)
 		camStrcpy(Tmp, Str);
 		Tmp[i] = 0;
 		Long = 0;
-		camScanf(Tmp, _T("%d"), &Long);
+		camSscanf(Tmp, _T("%d"), &Long);
 		Long *= 1000;
 
 		// Force fraction to be 3 digits at the most (as we only store with 3 digits accuracy)
@@ -153,7 +153,7 @@ void FIXEDPOINT::FromAscii(const TCHAR *Str)
 
 		// Convert fraction to integer
 		INT32 Frac = 0;
-		camScanf(&(Tmp[i+1]), _T("%d"), &Frac);
+		camSscanf(&(Tmp[i+1]), _T("%d"), &Frac);
 
 		// The fraction can be of the form .1, .10, or .100 - we must scale it correctly.
 		INT32 FracLen = camStrlen(Tmp + i + 1);
@@ -175,7 +175,7 @@ void FIXEDPOINT::FromAscii(const TCHAR *Str)
 	{
 		// No decimal point found - just scale the integer part.
 		Long = 0;
-		camScanf(Str, _T("%d"), &Long);
+		camSscanf(Str, _T("%d"), &Long);
 		Long *= 1000;
 	}
 }

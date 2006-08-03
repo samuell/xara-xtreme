@@ -1875,7 +1875,7 @@ void EPSFilter::DecodeToken()
 			// Floating point
 			Token = EPSC_Double;
 			TokenData.Double=0.0;
-			camSscanf(TokenBuf,_T("%f"),TokenData.Double);
+			camSscanf(TokenBuf,_T("%f"),&TokenData.Double);
 		}
 		else if (FoundDot)
 		{
@@ -1888,7 +1888,7 @@ void EPSFilter::DecodeToken()
 			// Integer
 			Token = EPSC_Integer;
 			TokenData.Long=0;
-			camSscanf(TokenBuf,_T("%d"),TokenData.Long);
+			camSscanf(TokenBuf,_T("%d"),&TokenData.Long);
 		}
 
 		return; // All done - found a number
@@ -4299,7 +4299,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
 	BBox.lo.x = 0;
-	camScanf(Num, _T("%d"), &BBox.lo.x);
+	camSscanf(Num, _T("%d"), &BBox.lo.x);
 	BBox.lo.x *= 1000;
 
 	Num=Next;
@@ -4311,7 +4311,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
 	BBox.lo.y = 0;
-	camScanf(Num, _T("%d"), &BBox.lo.y);
+	camSscanf(Num, _T("%d"), &BBox.lo.y);
 	BBox.lo.y *= 1000;
 
 	Num=Next;
@@ -4323,7 +4323,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
 	BBox.hi.x = 0;
-	camScanf(Num, _T("%d"), &BBox.hi.x);
+	camSscanf(Num, _T("%d"), &BBox.hi.x);
 	BBox.hi.x *= 1000;
 
 	Num=Next;
@@ -4335,7 +4335,7 @@ BOOL EPSFilter::ProcessBoundingBox()
 		// Error encountered in bounding box data - ignore it.
 		return TRUE;
 	BBox.hi.y = 0;
-	camScanf(Num, _T("%d"), &BBox.hi.y);
+	camSscanf(Num, _T("%d"), &BBox.hi.y);
 	BBox.hi.y *= 1000;
 
 	// Is this bounding box within the spread area?

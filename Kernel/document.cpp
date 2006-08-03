@@ -3175,7 +3175,7 @@ BOOL ReadNextNumber(INT32* Number, TCHAR* Comment, INT32* Offset)
 	{
 		// get the Number
 		*Number=0;
-		camScanf(&(Comment[i]),"%d",Number);
+		camSscanf(&(Comment[i]),_T("%d"),Number);
 
 		// Set the sign
 		if (IsNegative)
@@ -3223,7 +3223,7 @@ BOOL ReadNextNumber(UINT32* Number, TCHAR* Comment, INT32* Offset)
 	{
 		// get the Number
 		*Number=0;
-		camScanf(&(Comment[i]),"%ud",Number);
+		camSscanf(&(Comment[i]),_T("%ud"),Number);
 
 		// Skip to the next number
 		while (isdigit(Comment[i]))
@@ -3269,7 +3269,7 @@ BOOL ReadNextNumber(double* Number, TCHAR* Comment, INT32* Offset)
 	{
 		// get the Number
 		*Number=0.0;
-		camScanf(&(Comment[i]),"%f",Number);
+		camSscanf(&(Comment[i]),_T("%f"),Number);
 
 		// Skip to the next number
 		while (!camIsspace(Comment[i]))

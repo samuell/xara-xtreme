@@ -674,7 +674,7 @@ BOOL OpBackground::ApplyBitmap(KernelBitmap * pBitmapToApply, NodeRegularShape *
 	if (((AttrFillGeometry*)pBitmapFillAttr)->GetBitmap() != pBitmapToApply)
 	{
 		// It didn't use the bitmap we gave it, so we can delete it
-		delete pBitmapToApply;
+		// delete pBitmapToApply;
 	}
 
 	// And now insert it as a child of the regular shape

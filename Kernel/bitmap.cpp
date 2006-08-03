@@ -114,7 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "simon.h"
 //#include "resource.h"
 //#include "nativeps.h"	// The old style EPS native filter, used in v1.1
-//#include "clipint.h"
+#include "clipint.h"
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "grndrgn.h"
 //#include "devcolor.h"
@@ -2232,7 +2232,7 @@ PORTNOTE("other","Removed edit list")
 	m_pMasterBitmap = NULL;
 
 	m_bUsedByBrush = FALSE;
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	m_BitmapName.Load(_R(IDS_BITMAPNAME));
 #else
 	m_BitmapName = TEXT("Bitmap");
@@ -2453,10 +2453,7 @@ BOOL OILBitmap::BuildContonePalette(DocColour &StartCol, DocColour &EndCol,
 //			break;
 	}
 
-PORTNOTE("other","Removed GradTable32::BuildGraduatedPalette usage")
-#ifndef EXCLUDE_FROM_XARALX
 	GradTable32::BuildGraduatedPalette(StartCol, EndCol, ScopeView, Effect, NumCols, pPalette);
-#endif
 
 	BYTE* pGreyTable = GetGreyscaleTable();
 	if (pGreyTable)
@@ -3223,7 +3220,7 @@ void KernelBitmapRef::Attach(KernelBitmap* NewBitmap, Document* BitmapDoc)
 
 	ERROR3IF(IsHidden(), "Attaching a bitmap to a Hidden node, in KernelBitmapRef::Attach");
 
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	if (InternalClipboard::CopyInProgress())
 	{
 		// Bit of a bodge this !!
