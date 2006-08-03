@@ -59,6 +59,7 @@ installExe bin/svgfilterui
 copyFiles filters "$PREFIX/share/xaralx"
 
 ((update-desktop-database 2>/dev/null) || /bin/true )
+((kbuildsycoca 2>/dev/null) || /bin/true )
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
