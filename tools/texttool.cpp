@@ -1442,9 +1442,9 @@ BOOL TextTool::HandleSpecialStoryKeys(KeyPress* pKeyPress, TextStory* pStory, Ca
 			}
 			UsedTheKeypress = TRUE;
 			break;
- 		case CAMKEY(W):
-			// Swap case
-			if (pKeyPress->IsConstrain() && !pKeyPress->IsAdjust() )
+ 		case CAMKEY(C):
+			// Swap case (was Control-W, now Control-Shift-C)
+			if (pKeyPress->IsConstrain() && pKeyPress->IsAdjust() )
 			{
 				if (IsNonCharEvent && TextStory::GetFocusStory()->GetCaret()->FindNextTextCharInStory() != NULL)
 				{
