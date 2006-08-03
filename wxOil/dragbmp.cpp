@@ -848,6 +848,8 @@ PORTNOTE("other", "Assume 24bpp intermediate bitmap in DragBmp");
 			GRenderRegion::StaticPlotBitmap(&MemDC, DIBPal, TempInfo, TempBits, 0, 0, DestWidth, DestHeight, pPal, 0, 0);
 		}
 
+		GD->SetDefaultBitmapParameters(); // restore this, as else it upsets things
+
 		FreeDIB(TempInfo, TempBits);
 
 	}

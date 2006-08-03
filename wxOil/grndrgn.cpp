@@ -5041,6 +5041,7 @@ void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect
 	INT32 bw = BoundsRect.Width()/PixelWidth;
 	INT32 bh = BoundsRect.Height()/PixelWidth;
 
+#if 0
 	// Clip the windows rect so that is no bigger than the required rectangle
 	if (w < bw) 
 		bw = w;
@@ -5050,9 +5051,10 @@ void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect
 
 	if ((bh<=0) || (bw<=0))		// Still a valid rectangle?
 		return;
+#endif
 
 	// Create a memory DC
-	wxBitmap bitmap(bw, bh);
+	wxBitmap bitmap(w, h);
 	wxMemoryDC MemDC;
 	MemDC.SelectObject(bitmap);
 	MemDC.SetFont(FixedFont);
@@ -5082,12 +5084,13 @@ void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect
 		return;
 
 	// Calculate the orgin needed to centre the bitmap vertically
-	INT32 Height = bh * PixelWidth;
+	INT32 Height = h * PixelWidth;
 
 	DocCoord BottomLeft;
 	BottomLeft.x = BoundsRect.lo.x;
 	BottomLeft.y = (BoundsRect.lo.y + BoundsRect.Height()/2) - Height/2;
 
+	GetDrawContext()->SetDefaultBitmapParameters();
 	// Get gavin to plot the kernel bitmap
 	DrawBitmap(BottomLeft, pBitmap);
 
