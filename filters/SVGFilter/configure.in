@@ -211,6 +211,7 @@ if test "$StaticEnable" = "yes"; then
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXinerama/-Wl,-Bstatic -lXinerama -Wl,-Bdynamic/g'`"
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXxf86vm/-Wl,-Bstatic -lXxf86vm -Wl,-Bdynamic/g'`"	
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXrender/-Wl,-Bstatic -lXrender -Wl,-Bdynamic/g'`"	
+	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lXfixes/-Wl,-Bstatic -lXfixes -Wl,-Bdynamic/g'`"	
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lexpat/-Wl,-Bstatic -lexpat -Wl,-Bdynamic/g'`"
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-ljpeg/-Wl,-Bstatic -ljpeg -Wl,-Bdynamic/g'`"
 	XARLIB_LIBS="`echo $XARLIB_LIBS | sed -e 's/-lpng/-Wl,-Bstatic -lpng -Wl,-Bdynamic/g'`"
