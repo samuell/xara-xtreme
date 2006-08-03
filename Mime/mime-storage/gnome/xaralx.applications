@@ -5,6 +5,6 @@ xaralx
         expects_uris=false
         requires_terminal=false
         startup_notify=true
-        mime_types=image/xar
+        mime_types=application/vnd.xara
 
 

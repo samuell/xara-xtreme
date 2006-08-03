@@ -1,4 +1,4 @@
-image/xar # new MIME Type association
+application/vnd.xara # new MIME Type association
         description=Xara document
         category=Documents/Images
         icon_filename=xaralx

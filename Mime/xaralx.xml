@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"
 xmlns:apkg="http://autopackage.org/xdgmime-extensions">
-  <mime-type type="image/xar">
+  <mime-type type="application/vnd.xara">
          <comment xml:lang="en">Xara drawing</comment>
         
          ...
