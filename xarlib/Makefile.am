@@ -105,6 +105,7 @@ XARLIBHEADERS = \
 	../wxOil/mfccontainer.h \
 	../wxOil/pathname.h \
 	../wxOil/stdwx.h \
+	../wxOil/svnversion.h \
 	../wxOil/unicdman.h \
 	../wxOil/varstr.h \
 	../GDraw/gconsts.h \
@@ -149,6 +150,9 @@ XARLIBHEADERS = \
 	../xarlib/ensure.h \
 	../xarlib/xarlib.h
 
+# These ones not got from TOPDIR
+BUILTXARLIBHEADERS = ../wxOil/svnversion.h
+
 INSTHEADERS = $(addprefix include/xarlib/, $(notdir $(XARLIBHEADERS)) )
 INSTCPP = $(notdir $(XARLIBCPP) )
 
@@ -158,10 +162,11 @@ libXar_a_SOURCES = $(XARLIBCPP) $(INSTHEADERS)
 
 pkginclude_HEADERS = $(INSTHEADERS)
 
-BUILT_SOURCES = $(INSTHEADERS)
+BUILT_SOURCES = $(INSTHEADERS) svnversion.h
 #BUILT_SOURCES = $(INSTHEADERS) $(INSTCPP)
 
-MOSTLYCLEANFILES = $(INSTHEADERS)
+# Note this is OUR svnversion.h
+MOSTLYCLEANFILES = $(INSTHEADERS) svnversion.h
 #MOSTLYCLEANFILES = $(INSTHEADERS) $(INSTCPP)
 
 # Insert an additional dependency to get the headers and cpp files built
@@ -171,16 +176,19 @@ noinst_DATA = $(INSTHEADERS)
 # Generate a directory of includes which has "xarlib/" in the include path
 $(INSTHEADERS) : $(XARLIBHEADERS)
 	@mkdir -p include/xarlib && \
-	echo $(libXar_a_SOURCES) > /tmp/bar && \
 	j=xarlib/$(filter %/$(notdir $@), $(XARLIBHEADERS) ) && \
-	echo "Building xarlib header $@ from $(TOPDIR)/$$j" && \
-	perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 
+	s="$(if $(filter %/$(notdir $@),$(BUILTXARLIBHEADERS)),../$$j,$(TOPDIR)/$$j)" && \
+	echo "Building xarlib header $@ from $$s" && \
+	perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$$s >$@ 
+
+# We need svnversion.h in the output directory
+svnversion.h : $(INSTHEADERS)
+	@cp include/xarlib/svnversion.h svnversion.h
 
 # Generate a directory of includes which has "xarlib/" in the include path
 # We have to muck around with the prefixes here to avoid partial matches (coord.cpp matching doccoord.cpp etc.)
 $(INSTCPP) : $(XARLIBCPP)
-	@echo $(INSTCPP) > /tmp/foo && \
-	j=$(filter %/$(notdir $@), $(addprefix xarlib/, $(XARLIBCPP)) ) && \
+	@j=$(filter %/$(notdir $@), $(addprefix xarlib/, $(XARLIBCPP)) ) && \
 	echo "Building xarlib CPP file $@ from $(TOPDIR)/$$j" && \
 	ls -la $(TOPDIR)/$$j && \
 	#perl -pe 's,^[ \t]*#include[ \t]+\",#include \"xarlib/,' <$(TOPDIR)/$$j >$@ 

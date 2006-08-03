@@ -102,11 +102,12 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 */
 
 
-
 #include "camtypes.h"
 
 //#include "errors.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camelot.h"
+#include "gdraw.h"
+#include "cversion.h"
 //#include "ensure.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #if !defined(EXCLUDE_FROM_XARLIB)
 //#include "tool.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -340,6 +341,30 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 #else
 
+class wxCamDebugReport : public wxDebugReport
+{
+public:
+	virtual void DoAddCustomContext(wxXmlNode * nodeRoot)
+	{
+		wxString			strMessage;
+
+#if FALSE == wxUSE_UNICODE
+		TCHAR*			pszCDrawVer = GDraw_GetSvnVersion();
+#else
+		TCHAR			pszCDrawVer[32];
+		camMbstowcs( pszCDrawVer, GDraw_GetSvnVersion(), 31 );
+#endif
+		// Add the applications version information
+		wxXmlNode *nodeVersion = new wxXmlNode(wxXML_ELEMENT_NODE, _T("camelot"));
+		nodeVersion->AddProperty(_T("xtremeversion"), wxString(g_pszAppVersion));
+		nodeVersion->AddProperty(_T("xtremerevision"), wxString(g_pszSvnVersion));
+		nodeVersion->AddProperty(_T("xaradrawversion"), wxString::Format(_T("%d.03d"), HIWORD(GDraw_GetVersion()), LOWORD(GDraw_GetVersion())));
+		nodeVersion->AddProperty(_T("xaradrawrevision"), pszCDrawVer);
+		nodeVersion->AddProperty(_T("builddate"), CAMELOT_BUILD_DATE);
+		nodeRoot->AddChild(nodeVersion);
+	}
+};
+
 class CamErrorDialog : public wxDialog
 {
 public:
@@ -373,7 +398,7 @@ public:
 		else if (id == _R(IDS_ERRORBOX_DEBUGREPORT))
 		{
 #ifdef HAVE_DEBUGREPORT
-			wxDebugReport report;
+			wxCamDebugReport report;
 			wxDebugReportPreviewStd preview;
 		
 			report.AddAll();
