@@ -5037,22 +5037,6 @@ void GRenderRegion::DrawFixedSystemText(StringBase *TheText, DocRect &BoundsRect
 	if (PixelWidth == 0)
 		PixelWidth = 1;
 
-	// Now make a windows (pixels) rectangle from the Bounding DocRect (millipoints)
-	INT32 bw = BoundsRect.Width()/PixelWidth;
-	INT32 bh = BoundsRect.Height()/PixelWidth;
-
-#if 0
-	// Clip the windows rect so that is no bigger than the required rectangle
-	if (w < bw) 
-		bw = w;
-
-	if (h < bh)
-		bh = h;
-
-	if ((bh<=0) || (bw<=0))		// Still a valid rectangle?
-		return;
-#endif
-
 	// Create a memory DC
 	wxBitmap bitmap(w, h);
 	wxMemoryDC MemDC;
