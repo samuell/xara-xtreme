@@ -920,6 +920,8 @@ bool CCamApp::OnInit()
 	m_pMainFrame = new CCamFrame( m_docManager.get(), (wxFrame *)NULL, wxT("Xara Xtreme"), 
 		WndRect.GetPosition(), WndRect.GetSize(), wxDEFAULT_FRAME_STYLE);
 
+	m_pMainFrame->Show(FALSE); // Don't show it yet
+
 #if !defined(XARA_MENUGEN)
 	TRACET(_T("CCamApp::Making Menu structure"));
 	//
@@ -993,7 +995,11 @@ bool CCamApp::OnInit()
 		m_pMainFrame->Iconize();
 	}
 	SetTopWindow( m_pMainFrame );
+	::wxYield(); // allow resizing to take place
 	m_pMainFrame->Show( true );
+	::wxYield(); // allow resizing to take place
+	wxPlatformDependent::Get()->FixUpdate(m_pMainFrame); // Force the main frame to be redrawn properly
+	::wxYield(); // allow resizing to take place
 
 #ifndef EXCLUDE_FROM_XARALX
 	m_pMainFrame->CacheNormalPlaceMode();
