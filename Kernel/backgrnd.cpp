@@ -668,14 +668,6 @@ BOOL OpBackground::ApplyBitmap(KernelBitmap * pBitmapToApply, NodeRegularShape *
 
 	// Now attach the correct bitmap to the fill
 	((AttrFillGeometry*)pBitmapFillAttr)->AttachBitmap(pBitmapToApply);
-	// It would seem that this is necessary to stop kernel bitmap leaks
-	// It only seems to call the delete in the case where we drag a bitmap
-	// from say the bitmap gallery to the page
-	if (((AttrFillGeometry*)pBitmapFillAttr)->GetBitmap() != pBitmapToApply)
-	{
-		// It didn't use the bitmap we gave it, so we can delete it
-		// delete pBitmapToApply;
-	}
 
 	// And now insert it as a child of the regular shape
 	// Factoring should be ok as the Regular Shape is assumed to be the child of

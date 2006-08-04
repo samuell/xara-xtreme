@@ -308,9 +308,9 @@ GalleryBitmapDragInfo::GalleryBitmapDragInfo()
 
 GalleryBitmapDragInfo::GalleryBitmapDragInfo(SGDisplayKernelBitmap *pSourceItem,
 											SGMouseInfo *pMouseInfo, SGMiscInfo *pMiscInfo,
- 											BOOL IsAdjust)
-					: BitmapDragInformation(m_pDragBmp = new KernelBitmap(pSourceItem->GetDisplayedKernelBitmap()->ActualBitmap, TRUE), 
-											120,0,0,0, IsAdjust)
+											BOOL IsAdjust)
+					: BitmapDragInformation(pSourceItem->GetDisplayedKernelBitmap(),
+											120, 0, 0, 0, IsAdjust)
 {
 	SourceItem	= pSourceItem;	// Copy the source item pointer
 
@@ -331,8 +331,6 @@ GalleryBitmapDragInfo::GalleryBitmapDragInfo(SGDisplayKernelBitmap *pSourceItem,
 
 GalleryBitmapDragInfo::~GalleryBitmapDragInfo()
 {
-	if (m_pDragBmp)
-		delete m_pDragBmp;
 }
 
 
@@ -525,7 +523,6 @@ BOOL GalleryBitmapDragInfo::OnPageDrop(ViewDragTarget* pDragTarget)
 	// Find the bitmap to apply
 	KernelBitmap* BitmapToApply = TheBitmap;
 	TheBitmap = NULL;
-	m_pDragBmp = NULL;
 
 	if(BitmapToApply == NULL)
 		return FALSE;
@@ -538,13 +535,8 @@ BOOL GalleryBitmapDragInfo::OnPageDrop(ViewDragTarget* pDragTarget)
 		AttrBitmapColourFill* Attrib = new AttrBitmapColourFill;
 		if (Attrib == NULL)
 			return FALSE;
-						
+
 		Attrib->AttachBitmap(BitmapToApply);
-		if (Attrib->GetBitmap() != BitmapToApply)
-		{
-			// It didn't use the bitmap we gave it, so we can delete it
-			delete BitmapToApply;
-		}
 
 		AttributeManager::ApplyAttribToNode(pObjectHit, Attrib);
 	}

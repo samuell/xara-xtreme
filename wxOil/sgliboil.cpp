@@ -946,6 +946,13 @@ void OpBitmapImport::DoWithParam(OpDescriptor* pOp, OpParam* pBitmapImportParam)
 	// Should really check the return value of ApplyFill(...)
 	ApplyFill(pInfo, pBitmap);
 
+	// If we have created a bitmap and it hasn't been added to a list somewhere
+	if (pBitmap && pBitmap->GetParentBitmapList() == NULL)
+	{
+		// Delete it
+		delete pBitmap;
+	}
+
 	// grab the focus
 	GetMainFrame()->SetActiveWindow();
 

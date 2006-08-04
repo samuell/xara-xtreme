@@ -152,8 +152,6 @@ protected:
 	SGDisplayKernelBitmap*	SourceItem;
 	SGMouseInfo				MouseInfo;
 	SGMiscInfo				MiscInfo;
-
-	KernelBitmap*			m_pDragBmp;
 };
 
 /*********************************************************************************************

@@ -3431,9 +3431,9 @@ OpApplyAttribToNode::OpApplyAttribToNode(): OpApplyAttrib()
 	SeeAlso:	-
 
 ********************************************************************************************/
-		
+
 void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)		   
-{    
+{
 	ERROR3IF(pOpParam == NULL, "The OpApplyAttribToNode operation requires an attribute parameter"); 
 
 	// Obtain a pointer to the attribute which we will need to apply to all selected nodes 
@@ -3447,12 +3447,12 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 		UndoAttribStrID = NewAttr->GetAttrNameID();
 
 	ObjectSet LocalisedCompoundSet; // Every time we localise a compound's attributes we will add the
-						   			// compound to this set.
+									// compound to this set.
 
-   	AttrTypeSet AttrTypes;			// The attribute types to localise and factor out 
+	AttrTypeSet AttrTypes;			// The attribute types to localise and factor out 
 	
-	BOOL NotInterested; 
-	NodeAttribute* OtherAttrib = AttributeManager::GetOtherAttrToApply(NewAttr, &NotInterested);
+	BOOL OtherIsMutate;
+	NodeAttribute* OtherAttr = AttributeManager::GetOtherAttrToApply(NewAttr, &OtherIsMutate);
 
 	// Prepare an ObjChangeParam for use when asking the ink node if we can do this op to it.
 	ObjChangeFlags cFlags;
@@ -3466,16 +3466,15 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 	{
 		goto End;
 	}
-	
+
 	// Find out the types of attribute about to be applied, and add them to the AttrTypes set
 	ERROR3IF(NewAttr==NULL,"NewAttr == NULL");
 	AttrTypes.AddToSet((NewAttr->GetAttributeType()));
 
-	if (OtherAttrib != NULL)
+	if (OtherAttr != NULL)
 	{
-		AttrTypes.AddToSet((OtherAttrib->GetAttributeType())); 
+		AttrTypes.AddToSet((OtherAttr->GetAttributeType())); 
 	}
-	
 
 	// If we are applying an attribute to a VTN which is selected then apply the attribute
 	// to this node and all other selected nodes.
@@ -3483,7 +3482,7 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 	{
 		AbstractTextChar* Scan = (AbstractTextChar*)InkNode;
 		AbstractTextChar* Last;
-			
+
 		// Find the first selected AbstractTextChar
 		do
 		{
@@ -3498,7 +3497,7 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 			Last = Scan;
 			Scan = Scan->FindNextAbstractTextCharInStory();
 		} while ((Scan != NULL) && (Scan->IsSelected()));
-		   
+
 		Range SubSelRange(InkNode, Last, RangeControl(TRUE));
 
 		// Will the ink node (and all its parents) allow this op to happen?
@@ -3508,20 +3507,15 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 			goto End;	
 		}
 
-
 		// Invalidate the region before applying the attribute/s
-		BOOL IsMutate;
-		NodeAttribute* OtherAttr = AttributeManager::GetOtherAttrToApply(NewAttr, &IsMutate);
-
 		if (!DoInvalidateRegions(&SubSelRange, 
 								 NewAttr, 
 								 NewAttr->IsAFillAttr(),
 								 OtherAttr,
-								 IsMutate))  //Mutators have to include bounds
+								 OtherIsMutate))  //Mutators have to include bounds
 		{
 			goto End;
 		}
-
 
 		// Apply the attr to all selected AbstractTextChars
 		do
@@ -3541,12 +3535,10 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 								 NewAttr, 
 								 NewAttr->IsAFillAttr(),
 								 OtherAttr,
-								 IsMutate))  //Mutators have to include bounds
+								 OtherIsMutate))  //Mutators have to include bounds
 		{
 			goto End;		
 		}
-
-
 	}
 	else
 	{
@@ -3578,12 +3570,17 @@ void OpApplyAttribToNode::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 	{
 		FailAndExecute();
 	}
-	  
+
 	End:
 	// First tidy up
 	AttrTypes.DeleteAll();
 	LocalisedCompoundSet.DeleteAll();
-		
+
+	if (OtherAttr)
+	{
+		delete OtherAttr;
+	}
+
 	// then end
 	End(); // End of operation
 }
