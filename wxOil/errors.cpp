@@ -341,6 +341,7 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 
 #else
 
+#ifdef HAVE_DEBUGREPORT
 class wxCamDebugReport : public wxDebugReport
 {
 public:
@@ -364,6 +365,7 @@ public:
 		nodeRoot->AddChild(nodeVersion);
 	}
 };
+#endif
 
 class CamErrorDialog : public wxDialog
 {
