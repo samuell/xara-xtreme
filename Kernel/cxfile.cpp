@@ -889,12 +889,16 @@ BOOL CXaraFile::Read(UINT32* pUINT32)
 
 BOOL CXaraFile::Read(FLOAT* pf)
 {
-	return (Read((BYTE*)pf,sizeof(FLOAT)));
+	BOOL ok = (Read((BYTE*)pf,sizeof(FLOAT)));
+	*pf = LEtoNative(*pf);
+	return ok;
 }
 
 BOOL CXaraFile::Read(double* pd)
 {
-	return (Read((BYTE*)pd,sizeof(double)));
+	BOOL ok = (Read((BYTE*)pd,sizeof(double)));
+	*pd = LEtoNative(*pd);
+	return ok;
 }
 
 BOOL CXaraFile::ReadWCHAR(WCHAR *pw)

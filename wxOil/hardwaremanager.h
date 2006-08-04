@@ -158,6 +158,16 @@ namespace oilHardwareManager
 	static inline FIXED16 NativetoBE(FIXED16 n) {return n;}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 
+	static inline float BEtoNative(float n) {return n;}
+	static inline float LEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+	static inline float NativetoBE(float n) {return n;}
+	static inline float NativetoLE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+
+	static inline double BEtoNative(double n) {return n;}
+	static inline double LEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+	static inline double NativetoBE(double n) {return n;}
+	static inline double NativetoLE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+
 #else
 	// __LITTLE_ENDIAN__
 	// Little-Endian, signed
@@ -199,6 +209,16 @@ namespace oilHardwareManager
 	static inline FIXED16 LEtoNative(FIXED16 n) {return n;}
 	static inline FIXED16 NativetoBE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return n;}
+
+	static inline float BEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+	static inline float LEtoNative(float n) {return n;}
+	static inline float NativetoBE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+	static inline float NativetoLE(float n) {return n;}
+
+	static inline double BEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+	static inline double LEtoNative(double n) {return n;}
+	static inline double NativetoBE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+	static inline double NativetoLE(double n) {return n;}
 
 #endif
 

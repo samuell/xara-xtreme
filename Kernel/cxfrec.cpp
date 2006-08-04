@@ -1321,17 +1321,23 @@ BOOL CXaraFileRecord::ReadINT16(INT16* pn)
 
 BOOL CXaraFileRecord::ReadFLOAT(FLOAT* pf)
 {
-	return ReadBuffer((BYTE*)pf,sizeof(FLOAT));
+	BOOL ok = ReadBuffer((BYTE*)pf,sizeof(FLOAT));
+	*pf = LEtoNative(*pf);
+	return ok;
 }
 
 BOOL CXaraFileRecord::ReadDOUBLE(double* pd)
 {
-	return ReadBuffer((BYTE*)pd,sizeof(double));
+	BOOL ok = ReadBuffer((BYTE*)pd,sizeof(double));
+	*pd = LEtoNative(*pd);
+	return ok;
 }
 
 BOOL CXaraFileRecord::ReadDOUBLEnoError(double* pd)
 {
-	return ReadBuffernoError((BYTE*)pd,sizeof(double));
+	BOOL ok = ReadBuffernoError((BYTE*)pd,sizeof(double));
+	*pd = LEtoNative(*pd);
+	return ok;
 }
 
 BOOL CXaraFileRecord::ReadWCHAR(WCHAR *pw)
