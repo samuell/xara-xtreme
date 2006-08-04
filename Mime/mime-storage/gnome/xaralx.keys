@@ -1,7 +1,7 @@
 application/vnd.xara # new MIME Type association
         description=Xara document
         category=Documents/Images
-        icon_filename=xaralx
+        icon_filename=xaralx.png
         default_action_type=application
         short_list_application_ids_for_novice_user_level=xaralx
         short_list_application_ids_for_intermediate_user_level=xaralx
