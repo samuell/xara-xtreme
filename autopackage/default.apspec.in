@@ -54,8 +54,8 @@ copyFiles Templates "$PREFIX/share/xaralx"
 # copyFiles video "$PREFIX/share/xaralx"
 
 # SVG filter
-installExe bin/svgfilter
-installExe bin/svgfilterui
+installExe bin/xarasvgfilter
+installExe bin/xarasvgfilterui
 copyFiles filters "$PREFIX/share/xaralx"
 
 ((update-desktop-database 2>/dev/null) || /bin/true )
