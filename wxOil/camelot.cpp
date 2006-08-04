@@ -652,7 +652,9 @@ bool CCamApp::OnInit()
 	// is running.
 
 	// Set and check for single instance running
-	wxString IPCname = wxString(_T("XARA-XTREME-WX-"))	+GetAppName()+wxString::Format(_T("%s.ipc"), wxGetUserId().c_str());
+	wxString SIname = wxString(_T(".XARA-XTREME-WX-"))	+GetAppName()+wxString::Format(_T("-%s"), wxGetUserId().c_str());
+	wxFileName IPCfn(wxGetHomeDir(),SIname+_T(".ipc"));
+	wxString IPCname = IPCfn.GetFullPath();
 
 	m_pSingleInstanceChecker = NULL;
 	m_pServer = NULL;
@@ -666,7 +668,7 @@ bool CCamApp::OnInit()
 	if (SingleInstanceCheck)
 	{
 		// Create a single instance checker at that location
-		m_pSingleInstanceChecker = new wxSingleInstanceChecker(IPCname);
+		m_pSingleInstanceChecker = new wxSingleInstanceChecker(SIname);
 		if (!m_pSingleInstanceChecker)
 		{
 			ERROR2(FALSE, "Failed to create single instance checker");
@@ -741,6 +743,9 @@ bool CCamApp::OnInit()
 			}
 		}
 	}
+
+	// OK, we are the only instance running. Delete any stale socket (ours has not been created yet).
+	::wxRemoveFile(IPCname);
 
 	// Register the image handler which loads CURs (used for Cursors, obviously)
 	wxImage::AddHandler( new wxCURHandler );
