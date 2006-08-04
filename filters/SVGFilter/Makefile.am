@@ -1,4 +1,4 @@
-bin_PROGRAMS = svgfilter svgfilterui
+bin_PROGRAMS = xarasvgfilter xarasvgfilterui
 
 # Note TOPDIR seems to have one too many ".."s in to work. So don't use it
 if LOCAL_XARLIB_ENABLE
@@ -13,17 +13,17 @@ XARLIB_LIBS2 =
 endif
 
 # the application source, library search path, and link libraries
-svgfilter_SOURCES = svgfilter.cpp svgfilter.h import.cpp svgimporter.cpp \
+xarasvgfilter_SOURCES = svgfilter.cpp svgfilter.h import.cpp svgimporter.cpp \
 		    svgimporter.h export.cpp utils.cpp utils.h styles.cpp \
 		    styles.h gradients.cpp gradients.h trans.cpp trans.h \
 		    xargenerator.cpp xargenerator.h version.h
-svgfilter_CPPFLAGS = $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS) $(XARLIB_CFLAGS)
-svgfilter_LDADD = $(XARLIB_LIBS2) $(LIBXML2_LIBS) $(XARLIB_LIBS)
+xarasvgfilter_CPPFLAGS = $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS) $(XARLIB_CFLAGS)
+xarasvgfilter_LDADD = $(XARLIB_LIBS2) $(LIBXML2_LIBS) $(XARLIB_LIBS)
 
-svgfilterui_SOURCES = svgfilterui.cpp svgfilterui.h svgexportdialog.cpp \
+xarasvgfilterui_SOURCES = svgfilterui.cpp svgfilterui.h svgexportdialog.cpp \
 		      svgexportdialog.h version.h
-svgfilterui_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
-svgfilterui_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
+xarasvgfilterui_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
+xarasvgfilterui_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
 
 EXTRA_DIST = svgfilterui.pjd svgfilter.xml svgfilterc.xml \
 	     images/*.png samples/*.xar \
