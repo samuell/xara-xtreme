@@ -289,12 +289,19 @@ wxMenu* CreatePopup(MenuItem* pCamSubMenu)
 			wxMenu*	pNewMenu = CreatePopup( pSubMenu );
 			if (pNewMenu)
 			{
-				wxString sName((TCHAR *)pSubMenu->GetMenuText());
-				if (!pPopupMenu->Append( pSubMenu->GetMenuId(), sName, pNewMenu ))
+#if !defined(_DEBUG)
+				if( !fIsUnimpl )
 				{
-					TRACEUSER("luke", _T("Append failed\n"));
+#endif
+					wxString sName((TCHAR *)pSubMenu->GetMenuText());
+					if (!pPopupMenu->Append( pSubMenu->GetMenuId(), sName, pNewMenu ))
+					{
+						TRACEUSER("luke", _T("Append failed\n"));
+					}
 				}
+#if !defined(_DEBUG)
 			}
+#endif
 		}
 		else
 		{
