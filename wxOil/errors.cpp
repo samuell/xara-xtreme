@@ -968,7 +968,7 @@ void Error::SetError(UINT32 number, UINT32 module)
 	// minimum acceptable error string...
 	if (InSetError)
 	{
-		TRACE(FALSE,"SetError really has been called recursively (2)\n");
+		TRACE(_T("SetError really has been called recursively (2)\n"));
 		ErrorID = _R(IDE_EX_BADOP); // should have it's own, but...
 		ErrStatus = ERRORSTAT_TEXT;
 		ErrorHasBeenReported=FALSE;
