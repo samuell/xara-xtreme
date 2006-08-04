@@ -1330,7 +1330,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	{
 		TCHAR* pVersion = &(((TCHAR*)TokenBuf)[15]);
 		double Version=0.0;
-		camSscanf(pVersion, _T("%f"), &Version);
+		camSscanf(pVersion, _T("%lf"), &Version);
 		TRACEUSER( "Neville", _T("Native file version = %f\n"), Version);
 		FileVersionNumber = Version;
 		// Must stop later file versions loading back into this version.
@@ -1389,7 +1389,7 @@ BOOL CamelotNativeEPSFilter::ProcessFilterComment()
 	{
 		TCHAR* pVersion = &(((TCHAR*)TokenBuf)[19]);
 		double CompVersion=0.0;
-		camSscanf(pVersion, _T("%f"), &CompVersion);
+		camSscanf(pVersion, _T("%lf"), &CompVersion);
 		TRACEUSER( "Neville", _T("Compression version = %f\n"), CompVersion);
 		double StreamVersion = GZipFile::GetStreamVersionNo();
 		// If the version stored in the file is later than the one in the stream class

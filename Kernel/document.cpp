@@ -3269,7 +3269,7 @@ BOOL ReadNextNumber(double* Number, TCHAR* Comment, INT32* Offset)
 	{
 		// get the Number
 		*Number=0.0;
-		camSscanf(&(Comment[i]),_T("%f"),Number);
+		camSscanf(&(Comment[i]),_T("%lf"),Number);
 
 		// Skip to the next number
 		while (!camIsspace(Comment[i]))

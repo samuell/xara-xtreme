@@ -1952,8 +1952,8 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 
 		case MODEL_RGBPERCENT:
 		{
-			float t;
-			camSscanf(str, _T("%f"), &t);
+			double t;
+			camSscanf(str, _T("%lf"), &t);
 			double tt = t * (255.0 / 100.0); // convert from percent to 0-255
 			if (tt >= 0 && tt < 256)
 				*pColourWeAreChanging = UINT8(tt + 0.5); // adding 0.5 so number rounds to nearest INT32
@@ -1980,8 +1980,8 @@ void BmapPrevDlg::HandlePaletteColourEditChange(CGadgetID id)
 			}
 			else									// S & V components
 			{
-				float t;							// temp float variable (using float to keep sscanf happy)
-				camSscanf(str, _T("%f"), &t);				// read value as a float
+				double t;							// temp float variable (using float to keep sscanf happy)
+				camSscanf(str, _T("%lf"), &t);				// read value as a float
 				t *= (float)(255.0 / 100.0);		// convert from percent to 0-255
 				newValue = UINT8(t + 0.5);					// value to be set (check range before setting)
 			}

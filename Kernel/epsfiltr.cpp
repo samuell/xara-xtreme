@@ -1875,7 +1875,7 @@ void EPSFilter::DecodeToken()
 			// Floating point
 			Token = EPSC_Double;
 			TokenData.Double=0.0;
-			camSscanf(TokenBuf,_T("%f"),&TokenData.Double);
+			camSscanf(TokenBuf,_T("%lf"),&TokenData.Double);
 		}
 		else if (FoundDot)
 		{

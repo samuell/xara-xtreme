@@ -954,7 +954,7 @@ BOOL PageSizesList::ReadPageSizeDef(CCLexFile& file,
 										}
 										else
 										{
-											//ok = (camSscanf(TokenBuf,"%g",pHeight) == 1);
+											//ok = (camSscanf(TokenBuf,"%lg",pHeight) == 1);
 											*pHeight = Number;
 										}
 									}
