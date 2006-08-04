@@ -112,6 +112,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "oilcoord.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
 //#include "cursor.h" - in camtypes.h [AUTOMATICALLY REMOVED]
+#include "csrstack.h"
 #include "gbrush.h"
 #include "grndrgn.h"
 
@@ -192,6 +193,8 @@ CaptureHandler::~CaptureHandler()
 			{
 				TRACEUSER("Gerry", _T("Capture released"));
 			}
+
+			CursorStack::GSetActive();
 		}
 		else
 		{
