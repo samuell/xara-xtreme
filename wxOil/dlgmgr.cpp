@@ -519,6 +519,15 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo);
 
 		CCamFrame::GetMainFrame()->UpdateFrameManager();
+
+		// Make sure newly created floating panes are at the top in an attempt to fix
+		// Bugzilla bug 1393 (can't duplicate here...)
+		wxWindow * pTLW = pDialogWnd;
+		while (pTLW->GetParent())
+			pTLW=pTLW->GetParent();
+		if (pTLW->IsKindOf(CLASSINFO(wxFloatingPane)))
+			pTLW->Raise();
+
 	}
 #endif
 
