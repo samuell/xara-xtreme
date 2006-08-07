@@ -1,0 +1,47 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="20cm" height="10cm" viewBox="0 0 5000 2500"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+<defs>
+    <linearGradient id="grad1">
+      <stop offset="0.05" stop-color="yellow" />
+      <stop offset="0.95" stop-color="red" />
+    </linearGradient>
+    <linearGradient id="grad2">
+      <stop offset="0.00" stop-color="green" />
+      <stop offset="0.50" stop-color="yellow" />
+      <stop offset="1.00" stop-color="red" />
+    </linearGradient>
+</defs>
+  <rect x="200" y="0" width="600" height="100"
+        fill="url(#grad1)" stroke="black" stroke-width="3"/>
+  <rect x="200" y="200" width="600" height="100"
+        fill="url(#grad2)" stroke="black" stroke-width="3"/>
+  <g transform="translate(800, 0) rotate(30)">
+    <rect x="200" y="0" width="600" height="100"
+      fill="url(#grad1)" stroke="black" stroke-width="3"/>
+    <rect x="200" y="200" width="600" height="100"
+      fill="url(#grad2)" stroke="black" stroke-width="3"/>
+  </g>
+
+  <g transform="translate(700, 0) scale(5.0)">
+    <polygon fill="url(#grad2)" stroke="blue" stroke-width="3"
+      points="350,75 379,161 469,161 397,215
+      423,301 350,250 277,301 303,215
+      231,161 321,161" />
+  </g>
+
+  <g transform="translate(400, 300) scale(20.0)">
+    <path fill="url(#grad2)" style="stroke:red;stroke-width:1" x="50" y="50" width="100" height="100"
+      d="M 50 50 L 80 50 L 50 80 z" />
+  </g>
+
+  <g transform="translate(400, 800) rotate(30)">
+    <circle cx="0" cy="0" r="300" fill="url(#grad2)" style="stroke:black;stroke-width:1" />
+  </g>
+
+  <g transform="translate(400, 1800) rotate(30)">
+    <ellipse cx="0" cy="0" rx="300" ry="200" fill="url(#grad2)" style="stroke:black;stroke-width:1" />
+  </g>
+</svg>

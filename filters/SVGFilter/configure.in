@@ -1,5 +1,5 @@
 AC_INIT(svgfilter.cpp)
-AM_INIT_AUTOMAKE(SVGFilter, 0.3)
+AM_INIT_AUTOMAKE(SVGFilter, 0.4)
 
 DEBUG_FLAGS=""
 OPT_FLAGS="-O3"

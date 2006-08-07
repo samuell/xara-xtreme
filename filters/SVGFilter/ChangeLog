@@ -1,6 +1,7 @@
-Version 0.2
+Version 0.4 (WIP)
 
-* We are now able to open at least simple SVG files.
+* Implemented opacity in groups and shapes.
+* Added arcs support to paths.
 
 Version 0.3
 
@@ -22,3 +23,7 @@ Version 0.3
   option to "svgfilter" (more information in README).
 * Fixed error messages to follow properly Xara's filter convention (e.g.
   "ERROR: " and "WARNING: " prefixes).
+
+Version 0.2
+
+* We are now able to open at least simple SVG files.

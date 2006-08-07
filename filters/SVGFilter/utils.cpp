@@ -1,6 +1,7 @@
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
+ 
                SVGFilter, XAR <--> SVG plugin filter for XaraLX
                     Copyright (C) 2006 Xara Group Ltd.
        Copyright on certain contributions may be held in joint with their
@@ -9,28 +10,77 @@
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+This file is part of Xara LX.
 
-    * Redistributions of source code must retain the above copyright notice,
-      this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution.
-    * Neither the name of the Xara Group Ltd. nor the names of its contributors
-      may be used to endorse or promote products derived from this software
-      without specific prior written permission.
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
 
 MARKS
 -----
@@ -39,14 +89,16 @@ Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
 designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
+
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
                         http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 // utils.cpp: This implements various common utility functions
 
 #include "utils.h"
+#include "styles.h"
 
 // trim whitespace from string
 wxString TrimWs(const wxString& s)
@@ -77,10 +129,16 @@ double TakeNumber(wxString& data)
 	return f;
 }
 
-// take the property named "name"
-wxString GetStringProperty(xmlNodePtr cur, const char *name)
+void AddProperty(xmlNodePtr cur, const wxString& sName, const wxString& sValue)
 {
-	wxString s;
+	xmlSetProp(cur, (const xmlChar *)(const char *)sName.mb_str(wxConvUTF8),
+			   (const xmlChar *)(const char *)sValue.mb_str(wxConvUTF8));
+}
+
+// take the property named "name"
+wxString GetStringProperty(xmlNodePtr cur, const char *name, const wxString& def)
+{
+	wxString s = def;
 	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
 	if (value != NULL) {
 		s = wxString::FromAscii((const char *)value);
@@ -90,9 +148,9 @@ wxString GetStringProperty(xmlNodePtr cur, const char *name)
 }
 
 // take the property named "name" and convert to double
-double GetDoubleProperty(xmlNodePtr cur, const char *name)
+double GetDoubleProperty(xmlNodePtr cur, const char *name, double def)
 {
-	double x = 0.0;
+	double x = def;
 	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
 	if (value != NULL) {
 		x = atof((const char *)value);
@@ -101,28 +159,44 @@ double GetDoubleProperty(xmlNodePtr cur, const char *name)
 	return x;
 }
 
-#if 0 // XXX unused
-// Is any of the (floating-point) properties zero?
-bool IsAnyPropertyZero(xmlNodePtr cur, size_t size, ...)
+// take the property named "name" and convert to double and clamp to range [0,1]
+double GetClampedDoubleProperty(xmlNodePtr cur, const char *name, double def)
 {
-	va_list ap;
-	bool bResult = false;
+	double x = def;
+	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
+	if (value != NULL) {
+		wxString s = wxString::FromAscii((const char *)value);
+		xmlFree(value);
 
-	va_start(ap, size);
-	for (unsigned int i = 0; i < size; ++i) {
-		const char *pName = va_arg(ap, const char *);
-		double fValue = GetDoubleProperty(cur, pName);
-		if (fValue == 0.0) {
-			bResult = true;
-			break;
+		s = TrimWs(s);
+		if (s.Right(1) == _T("%")) {
+			// strip "%"
+			s = s.RemoveLast(1).Trim();
+			s.ToDouble(&x);
+			x *= 0.01;
+		} else {
+			s.ToDouble(&x);
 		}
-
+		if (x < 0.0)
+			x = 0.0;
+		else if (x > 1.0)
+			x = 1.0;
 	}
-	va_end(ap);
-
-	return bResult;
+	return x;
 }
-#endif
+
+// take the property named "name" and convert to a colour
+wxColour GetColourProperty(xmlNodePtr cur, const char *name, wxColour def)
+{
+	wxColour col = def;
+	xmlChar *value = xmlGetProp(cur, (const xmlChar *)name);
+	if (value != NULL) {
+		wxString s = wxString::FromAscii((const char *)value);
+		col = Style::ParseColour(s);
+		xmlFree(value);
+	}
+	return col;
+}
 
 // is the measure relative?
 bool IsRelativeMeasure(const wxString& measure)
@@ -130,7 +204,7 @@ bool IsRelativeMeasure(const wxString& measure)
 	wxString s = measure;
 	// remove whitespace and convert to lowercase
 	s = TrimWs(s).MakeLower();
-	return (s.IsNumber() || s.Right(2) == _T("px") || s.Right(1) == _T("%"));
+	return (s.IsNumber() || s.Right(1) == _T("%"));
 }
 
 // is the string an absolute measure?
@@ -139,7 +213,7 @@ bool IsAbsoluteMeasure(const wxString& measure)
 	wxString s = measure;
 	// remove whitespace and convert to lowercase and take last 2 chars
 	s = TrimWs(s).MakeLower().Right(2);
-	return (s == _T("cm") || s == _T("mm") || s == _T("in") || s == _T("pc"));
+	return (s == _T("cm") || s == _T("mm") || s == _T("in") || s == _T("pc") || s == _T("px"));
 }
 
 // convert measure to millipoints
@@ -153,26 +227,28 @@ double AbsoluteMeasureToMillipoints(const wxString& measure)
 	if (s.Right(2) == _T("cm")) {
 		s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f = CM2PT(f)*1000.0f; // Convert to millipoints
+		f = CM2PT(f)/0.8*1000.0; // Convert to millipoints
 	} else if (s.Right(2) == _T("mm")) {
 		s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f = MM2PT(f)*1000.0f; // Convert to millipoints
+		f = MM2PT(f)/0.8*1000.0; // Convert to millipoints
 	} else if (s.Right(2) == _T("in")) {
 		s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f = IN2PT(f)*1000.0f; // Convert to millipoints
+		f = IN2PT(f)/0.8*1000.0; // Convert to millipoints
 	} else if (s.Right(2) == _T("pc")) {
 		s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f = PC2PT(f)*1000.0f; // Convert to millipoints
+		f = PC2PT(f)/0.8*1000.0; // Convert to millipoints
 	} else if (s.Right(2) == _T("px")) {
 		s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f = PX2PT(f)*1000.0f; // Convert to millipoints
+		f = PX2PT(f)/0.8*1000.0; // Convert to millipoints
 	} else { // anything else
+		if (s.Right(2) == _T("pt"))
+			s = s.RemoveLast(2).Trim();
 		s.ToDouble(&f);
-		f *= 1000.0f;
+		f *= 1000.0;
 	}
 
 	return f;

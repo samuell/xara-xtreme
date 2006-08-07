@@ -26,8 +26,10 @@ xarasvgfilterui_CPPFLAGS = $(XARLIB_CFLAGS) $(XARLIB_CFLAGS2) $(LIBXML2_CFLAGS)
 xarasvgfilterui_LDADD = $(XARLIB_LIBS) $(XARLIB_LIBS2) $(LIBXML2_LIBS)
 
 EXTRA_DIST = svgfilterui.pjd svgfilter.xml svgfilterc.xml \
+	     batchconvert.sh \
 	     images/*.png samples/*.xar \
-	     tests/*.svg tests/*.el tests/*.sh
+	     tests/*.svg tests/*.dia tests/*.el tests/*.sh \
+	     openclipart/*.svg
 
 install-data-local:
 	mkdir -p $(DESTDIR)$(prefix)/share/xaralx/filters/

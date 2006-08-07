@@ -1,6 +1,7 @@
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
+ 
                SVGFilter, XAR <--> SVG plugin filter for XaraLX
                     Copyright (C) 2006 Xara Group Ltd.
        Copyright on certain contributions may be held in joint with their
@@ -9,28 +10,77 @@
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+This file is part of Xara LX.
 
-    * Redistributions of source code must retain the above copyright notice,
-      this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution.
-    * Neither the name of the Xara Group Ltd. nor the names of its contributors
-      may be used to endorse or promote products derived from this software
-      without specific prior written permission.
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
 
 MARKS
 -----
@@ -39,11 +89,12 @@ Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
 designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
+
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
                         http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 // utils.h: This defines various common utility functions
 
 #ifndef UTILS_H
@@ -76,20 +127,22 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include <string.h>
 
 // Useful units conversion macros
-#define MM2PT(x) ((x)*2.834645669)
-#define CM2PT(x) ((x)*28.34645669)
+#define MM2PT(x) ((x)/25.4*72.0)
+#define CM2PT(x) ((x)/2.54*72.0)
 #define PC2PT(x) ((x)*12.0)
 #define IN2PT(x) ((x)*72.0)
-#define PX2PT(x) ((x)*1.0)
-#define PT2MM(x) ((x)*0.3527777778)
-#define PT2CM(x) ((x)*0.03527777778)
-#define PT2PC(x) ((x)*0.08333333333)
-#define PT2IN(x) ((x)*0.01388888889)
-#define PT2PX(x) ((x)*1.0)
+#define PX2PT(x) ((x)*0.8)
 
 #ifndef M_SQRT2
-#define M_SQRT2	 1.414213562
+#define M_SQRT2	 1.41421356237309504880
 #endif
+
+#ifndef M_PI
+#define M_PI	 3.14159265358979323846
+#endif
+
+inline double deg2rad(double x) { return x*M_PI/180.0; }
+inline double rad2deg(double x) { return x*180.0/M_PI; }
 
 // debug ---------------------------------------------------------------------
 
@@ -125,6 +178,17 @@ inline bool IsNumberDigit(wxChar c)
 double TakeNumber(wxString& data);
 inline double TakeMilliNumber(wxString& data) { return TakeNumber(data)*1000.0; }
 
+template <class T>
+void mySwap(T& a, T& b)
+{
+	T c = a;
+	a = b;
+	b = c;
+}
+
+template <class T> T myMin(T a, T b) { return a < b ? a : b; }
+template <class T> T myMax(T a, T b) { return a > b ? a : b; }
+
 // XML utilities -------------------------------------------------------------
 
 inline bool IsEntityName(xmlNodePtr cur, const char *name)
@@ -138,11 +202,11 @@ inline bool IsPropertyDefined(xmlNodePtr cur, const char *name)
 	return (value != NULL);
 }
 
-wxString GetStringProperty(xmlNodePtr cur, const char *name);
-double GetDoubleProperty(xmlNodePtr cur, const char *name);
-#if 0 // XXX unused
-bool IsAnyPropertyZero(xmlNodePtr cur, size_t size, ...);
-#endif
+void AddProperty(xmlNodePtr cur, const wxString& sName, const wxString& sValue);
+wxString GetStringProperty(xmlNodePtr cur, const char *name, const wxString& def = _T(""));
+double GetDoubleProperty(xmlNodePtr cur, const char *name, double def = 0.0);
+double GetClampedDoubleProperty(xmlNodePtr cur, const char *name, double def = 0.0);
+wxColour GetColourProperty(xmlNodePtr cur, const char *name, wxColour def = wxColour());
 
 // measure conversion utilities ----------------------------------------------
 
@@ -158,6 +222,8 @@ struct PointD {
 	PointD(const PointD& copy) { x = copy.x; y = copy.y; }
 
 	PointD& operator= (const PointD& copy) { x = copy.x; y = copy.y; return *this; }
+	PointD operator+ (const PointD& p) const { return PointD(x+p.x, y+p.y); }
+	PointD operator* (double d) const { return PointD(x*d, y*d); }
 	bool operator== (const PointD& p) const { return (x==p.x && y==p.y); }
 
 	double x, y;
@@ -179,25 +245,33 @@ struct CoordD {
 // implements a rectangle (double) -------------------------------------------
 
 /*
- Geometry:
+  Geometry (non necessary up-right):
 
- p11      p12
- +--------+
- |        |
- |        |
- +--------+
- p21      p22
-
-
- Some coordinates are duplicated (e.g.: pll.y==p12.y and p21.y==p22.y)
- but thanks to this applying transformations is really simple.
-*/
-
+  p11      p12
+  +--------+
+  |        |
+  |        |
+  +--------+
+  p21      p22
+  
+ */
 struct RectD {
 	RectD() {}
 	RectD(double x11, double y11, double x12, double y12,
 		  double x21, double y21, double x22, double y22)
 		: p11(x11, y11), p12(x12, y12), p21(x21, y21), p22(x22, y22) {}
+	RectD(const PointD& p1, const PointD& p2) {
+		PointD pA = p1;
+		PointD pB = p2;
+// 		if (pA.x > pB.x)
+// 			mySwap(pA.x, pB.x);
+// 		if (pA.y > pB.y)
+// 			mySwap(pA.y, pB.y);
+		p11 = pA;
+		p12 = PointD(pB.x, pA.y);
+		p21 = PointD(pA.x, pB.y);
+		p22 = pB;
+	}
 	RectD(const RectD& copy) { *this = copy; }
 
 	RectD& operator= (const RectD& copy) {
@@ -209,10 +283,30 @@ struct RectD {
 	}
 
 	bool IsUpright() const {
-		// check only the first two coordinates
-		return (p11.x == p21.x && p11.y == p12.y);
+		return (p11.x == p21.x && p12.x == p22.x && p11.y == p12.y && p21.y == p22.y);
 	}
 
+	PointD LowerCoord() const {
+		PointD p = p11;
+		if (p12.x < p.x) p.x = p12.x;
+		if (p21.x < p.x) p.x = p21.x;
+		if (p22.x < p.x) p.x = p22.x;
+		if (p12.y < p.y) p.y = p12.y;
+		if (p21.y < p.y) p.y = p21.y;
+		if (p22.y < p.y) p.y = p22.y;
+		return p;
+	}
+	PointD HigherCoord() const {
+		PointD p = p11;
+		if (p12.x > p.x) p.x = p12.x;
+		if (p21.x > p.x) p.x = p21.x;
+		if (p22.x > p.x) p.x = p22.x;
+		if (p12.y > p.y) p.y = p12.y;
+		if (p21.y > p.y) p.y = p21.y;
+		if (p22.y > p.y) p.y = p22.y;
+		return p;
+	}
+	
 	PointD p11, p12, p21, p22;
 };
 

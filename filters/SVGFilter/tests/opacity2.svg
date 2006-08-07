@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+<svg width="300px" height="300px"
+ xmlns = 'http://www.w3.org/Graphics/SVG/svg-19990412.dtd'>
+ <g style="fill:#444">
+  <path d="M0,0v250h300v-250z"/>
+ </g>
+ <g style="stroke:#000; stroke-width:2; fill:#f00; fill-opacity:50%">
+  <circle cx="100" cy="100" r="80"/>
+ </g>
+ <g style="stroke:#000; stroke-width:2; fill:#00f; fill-opacity:50%">
+  <circle cx="200" cy="100" r="80"/>
+ </g>
+ <g style="stroke:#000; stroke-width:2; fill:#0f0; fill-opacity:50%">
+  <circle cx="150" cy="150" r="80"/>
+ </g>
+</svg>

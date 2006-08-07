@@ -1,6 +1,7 @@
+// $Id$
 /* @@tag:xara-cn@@ DO NOT MODIFY THIS LINE
 ================================XARAHEADERSTART===========================
-
+ 
                SVGFilter, XAR <--> SVG plugin filter for XaraLX
                     Copyright (C) 2006 Xara Group Ltd.
        Copyright on certain contributions may be held in joint with their
@@ -9,28 +10,77 @@
 LICENSE TO USE AND MODIFY SOFTWARE
 ----------------------------------
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+This file is part of Xara LX.
 
-    * Redistributions of source code must retain the above copyright notice,
-      this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution.
-    * Neither the name of the Xara Group Ltd. nor the names of its contributors
-      may be used to endorse or promote products derived from this software
-      without specific prior written permission.
+Xara LX is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 2 as published
+by the Free Software Foundation.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Xara LX and its component source files are distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Xara LX (see the file GPL in the root directory of the
+distribution); if not, write to the Free Software Foundation, Inc., 51
+Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+ADDITIONAL RIGHTS
+-----------------
+
+Conditional upon your continuing compliance with the GNU General Public
+License described above, Xara Group Ltd grants to you certain additional
+rights. 
+
+The additional rights are to use, modify, and distribute the software
+together with the wxWidgets library, the wxXtra library, and the "CDraw"
+library and any other such library that any version of Xara LX relased
+by Xara Group Ltd requires in order to compile and execute, including
+the static linking of that library to XaraLX. In the case of the
+"CDraw" library, you may satisfy obligation under the GNU General Public
+License to provide source code by providing a binary copy of the library
+concerned and a copy of the license accompanying it.
+
+Nothing in this section restricts any of the rights you have under
+the GNU General Public License.
+
+
+SCOPE OF LICENSE
+----------------
+
+This license applies to this program (XaraLX) and its constituent source
+files only, and does not necessarily apply to other Xara products which may
+in part share the same code base, and are subject to their own licensing
+terms.
+
+This license does not apply to files in the wxXtra directory, which
+are built into a separate library, and are subject to the wxWindows
+license contained within that directory in the file "WXXTRA-LICENSE".
+
+This license does not apply to the binary libraries (if any) within
+the "libs" directory, which are subject to a separate license contained
+within that directory in the file "LIBS-LICENSE".
+
+
+ARRANGEMENTS FOR CONTRIBUTION OF MODIFICATIONS
+----------------------------------------------
+
+Subject to the terms of the GNU Public License (see above), you are
+free to do whatever you like with your modifications. However, you may
+(at your option) wish contribute them to Xara's source tree. You can
+find details of how to do this at:
+  http://www.xaraxtreme.org/developers/
+
+Prior to contributing your modifications, you will need to complete our
+contributor agreement. This can be found at:
+  http://www.xaraxtreme.org/developers/contribute/
+
+Please note that Xara will not accept modifications which modify any of
+the text between the start and end of this header (marked
+XARAHEADERSTART and XARAHEADEREND).
+
 
 MARKS
 -----
@@ -39,11 +89,12 @@ Xara, Xara LX, Xara X, Xara X/Xtreme, Xara Xtreme, the Xtreme and Xara
 designs are registered or unregistered trademarks, design-marks, and/or
 service marks of Xara Group Ltd. All rights in these marks are reserved.
 
+
       Xara Group Ltd, Gaddesden Place, Hemel Hempstead, HP2 6EX, UK.
                         http://www.xara.com/
 
 =================================XARAHEADEREND============================
-*/
+ */
 // styles.h: This defines the class for handling the rendering styles
 
 #ifndef STYLES_H
@@ -112,16 +163,20 @@ WX_DECLARE_HASH_MAP(wxColour, INT32, wxColourHash, wxColourEqual, ColourRefHashT
 									 STYLE_FILL_GRADIENT)
 
 #define STYLE_STROKE_COLOUR			00001000
-#define STYLE_STROKE_WIDTH			00002000
-#define STYLE_STROKE_LINECAP		00004000
-#define STYLE_STROKE_LINEJOIN		00010000
-#define STYLE_STROKE_OPACITY		00020000
-#define STYLE_STROKE_ALL			(STYLE_STROKE_COLOUR|STYLE_STROKE_WIDTH|STYLE_STROKE_LINECAP| \
-									 STYLE_STROKE_LINEJOIN|STYLE_STROKE_OPACITY)
+#define STYLE_STROKE_OPACITY		00002000
+#define STYLE_STROKE_WIDTH			00004000
+#define STYLE_STROKE_LINECAP		00010000
+#define STYLE_STROKE_LINEJOIN		00020000
+#define STYLE_STROKE_GRADIENT		00040000
+#define STYLE_STROKE_ALL			(STYLE_STROKE_COLOUR|STYLE_STROKE_OPACITY|STYLE_STROKE_WIDTH| \
+									 STYLE_STROKE_LINECAP|STYLE_STROKE_LINEJOIN|STYLE_STROKE_GRADIENT)
 
-#define STYLE_STOP_COLOUR		    00100000
-#define STYLE_STOP_OPACITY			00200000
-#define STYLE_STOP_ALL				(STYLE_STOP_COLOUR|STYLE_STOP_OPACITY)
+#define STYLE_STOP_OFFSET			00100000
+#define STYLE_STOP_COLOUR		    00200000
+#define STYLE_STOP_OPACITY			00400000
+#define STYLE_STOP_ALL				(STYLE_STOP_OFFSET|STYLE_STOP_COLOUR|STYLE_STOP_OPACITY)
+
+#define STYLE_OPACITY				01000000
 
 struct Gradient; // forward declaration
 
@@ -148,12 +203,15 @@ public:
 		// default values
 		m_fillColour = wxColour(255,255,255);
 		m_fillOpacity = 1.0;
+		m_fillGradient = NULL;
 		m_strokeColour = wxColour(0,0,0);
 		m_strokeOpacity = 1.0;
 		m_strokeWidth = 1;
+		m_strokeGradient = NULL;
+		m_opacity = 1.0;
+		m_stopOffset = 0.0;
 		m_stopColour = wxColour(0,0,0);
 		m_stopOpacity = 0.0;
-		m_fillGradient = NULL;
 		m_defined = 0; // no defined attibute
 	}
 	// copy constructor
@@ -166,12 +224,15 @@ public:
 		// NB: the xml id is not copied (does not inherit from parent)
 		m_fillColour = copy.m_fillColour;
 		m_fillOpacity = copy.m_fillOpacity;
+		m_fillGradient = copy.m_fillGradient;
 		m_strokeColour = copy.m_strokeColour;
 		m_strokeOpacity = copy.m_strokeOpacity;
 		m_strokeWidth = copy.m_strokeWidth;
+		m_strokeGradient = copy.m_strokeGradient;
+		m_opacity = copy.m_opacity;
+		m_stopOffset = copy.m_stopOffset;
 		m_stopColour = copy.m_stopColour;
 		m_stopOpacity = copy.m_stopOpacity;
-		m_fillGradient = copy.m_fillGradient;
 		m_defined = copy.m_defined;
 		return *this;
 	}
@@ -195,6 +256,13 @@ public:
 		m_fillOpacity = value;
 	}
 
+	bool IsFillGradientDefined() const { return m_defined & STYLE_FILL_GRADIENT; }
+	Gradient* GetFillGradient() const { return m_fillGradient; }
+	void SetFillGradient(Gradient* value) {
+		m_defined |= STYLE_FILL_GRADIENT;
+		m_fillGradient = value;
+	}
+
 	bool IsStrokeColourDefined() const { return m_defined & STYLE_STROKE_COLOUR; }
 	wxColour GetStrokeColour() const { return m_strokeColour; }
 	void SetStrokeColour(const wxColour& col) {
@@ -216,6 +284,20 @@ public:
 		m_strokeWidth = width;
 	}
 
+	bool IsStrokeGradientDefined() const { return m_defined & STYLE_STROKE_GRADIENT; }
+	Gradient* GetStrokeGradient() const { return m_strokeGradient; }
+	void SetStrokeGradient(Gradient* value) {
+		m_defined |= STYLE_STROKE_GRADIENT;
+		m_strokeGradient = value;
+	}
+
+	bool IsOpacityDefined() const { return m_defined & STYLE_OPACITY; }
+	double GetOpacity() const { return m_opacity; }
+	void SetOpacity(double value) {
+		m_defined |= STYLE_OPACITY;
+		m_opacity = value;
+	}
+
 	bool IsStopColourDefined() const { return m_defined & STYLE_STOP_COLOUR; }
 	wxColour GetStopColour() const { return m_stopColour; }
 	void SetStopColour(const wxColour& col) {
@@ -223,18 +305,18 @@ public:
 		m_stopColour = col;
 	}
 
+	bool IsStopOffsetDefined() const { return m_defined & STYLE_STOP_OFFSET; }
+	double GetStopOffset() const { return m_stopOffset; }
+	void SetStopOffset(double value) {
+		m_defined |= STYLE_STOP_OFFSET;
+		m_stopOffset = value;
+	}
+
 	bool IsStopOpacityDefined() const { return m_defined & STYLE_STOP_OPACITY; }
 	double GetStopOpacity() const { return m_stopOpacity; }
 	void SetStopOpacity(double value) {
 		m_defined |= STYLE_STOP_OPACITY;
 		m_stopOpacity = value;
-	}
-
-	bool IsFillGradientDefined() const { return m_defined & STYLE_FILL_GRADIENT; }
-	Gradient* GetFillGradient() const { return m_fillGradient; }
-	void SetFillGradient(Gradient* value) {
-		m_defined |= STYLE_FILL_GRADIENT;
-		m_fillGradient = value;
 	}
 
 	static void PrepareColourHashTable();
@@ -248,6 +330,9 @@ private:
 	wxColour	m_strokeColour;
 	double		m_strokeOpacity;
 	INT32		m_strokeWidth;
+	Gradient*	m_strokeGradient;
+	double		m_opacity;
+	double		m_stopOffset;
 	wxColour	m_stopColour;
 	double		m_stopOpacity;
 	UINT32		m_defined;

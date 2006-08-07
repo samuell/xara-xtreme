@@ -4,6 +4,10 @@ Currently supports:
 * Compression of SVG output (svg.gz format)
 * Decompression on-the-fly of SVG input (provided automatically by libxml2)
 
+The "tests" directory contains a testsuite of the SVG functions.
+The "openclipart" directory contains a selection of "interesting"
+cliparts taken from the openclipart.org project.
+
 *** How To build ***
 
     ./configure		(*)
@@ -25,7 +29,7 @@ should be specified instead.
 
 How to convert SVG --> XAR:
 
-    svgfilter -i -f input.svg >output.xar
+    xarasvgfilter -i -f input.svg >output.xar
 
 *** Debugging ***
 

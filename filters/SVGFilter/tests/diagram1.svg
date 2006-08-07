@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created by diasvg.py -->
+<svg width="49.972cm" height="39.819cm" viewBox="5.300 -7.769 55.272 32.050"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="5.350" y="5.800" width="13.400" height="8.950" fill="#E6FFFE" stroke="none" stroke-width="0"/>
+<rect x="5.350" y="5.800" width="13.400" height="8.950" fill="none" stroke="#000000" stroke-width="0.100" stroke-dasharray="1.00,0.45,0.10,0.45"/>
+<ellipse cx="28.775" cy="25.300" rx="7.875" ry="6.700" fill="#FFFDDB" stroke="none"  /><ellipse cx="28.775" cy="25.300" rx="7.875" ry="6.700" fill="none" stroke="#000000"  stroke-width="0.100" /><path stroke="#000000" fill="none" stroke-width="0.100"  d ="M 12.448,15.667 A 24.630,24.630 0 0,0 20.441,24.997 "/>
+<ellipse cx="12.150" cy="14.979" rx="0.250" ry="0.250" fill="#000000" stroke="none"  /><polygon fill="#000000" stroke="none" stroke-width="0.100" points="12.678,15.568 12.249,15.209 12.219,15.767 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100"  d ="M 20.512,25.343 A 0.250,0.250 0 0,0 20.788,24.926 "/>
+<line x1="20.441" y1="24.997" x2="20.858" y2="25.272" stroke="#000000" stroke-width="0.100" />
+<polyline fill="none" stroke="#000000" stroke-width="0.100" stroke-dasharray="0.10,0.10" points="19.962,10.275 28.775,10.275 28.775,18.113 "/>
+<polygon fill="#FFFFFF" stroke="none" stroke-width="0.100" points="19.412,10.025 18.862,10.275 19.412,10.525 "/>
+<polygon fill="#FFFFFF" stroke="none" stroke-width="0.100" points="19.962,10.025 19.412,10.275 19.962,10.525 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="19.362,10.025 18.862,10.275 19.362,10.525 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="19.962,10.025 19.462,10.275 19.962,10.525 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="28.775,18.488 28.525,17.988 28.775,18.113 29.025,17.988 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="28.775,18.488 28.525,17.988 28.775,18.113 29.025,17.988 "/>
+<rect x="30.150" y="-4.219" width="17.550" height="9.750" fill="#EBEDFF" stroke="none" stroke-width="0"/>
+<rect x="30.150" y="-4.219" width="17.550" height="9.750" fill="none" stroke="#000000" stroke-width="0.100" stroke-dasharray="1.00,0.30,0.10,0.30,0.10,0.30"/>
+<polygon fill="#FFF1D9" stroke="none" stroke-width="0.100" points="9.050,-7.219 24.650,-6.219 13.750,2.431 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100" stroke-dasharray="1.00,1.00" points="9.050,-7.219 24.650,-6.219 13.750,2.431 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100"  d ="M 11.400,-2.394 A 9.016,9.016 0 0,0 11.793,5.387 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="11.991,5.705 11.515,5.413 11.793,5.387 11.939,5.148 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="11.991,5.705 11.515,5.413 11.793,5.387 11.939,5.148 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100"  d="M 19.200,-1.894 C 23.950,-1.819 27.500,7.081 29.964,1.106 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="30.107,0.760 30.148,1.317 29.964,1.106 29.686,1.127 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="30.107,0.760 30.148,1.317 29.964,1.106 29.686,1.127 "/>
+<path stroke="none" fill="#FFE3E3" stroke-width="0.100" d="M 47.150,12.081 C 55.650,8.131 55.800,24.231 54.800,24.231 C 53.800,24.231 38.650,16.031 47.150,12.081 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100" stroke-dasharray="0.10,0.10" d="M 47.150,12.081 C 55.650,8.131 55.800,24.231 54.800,24.231 C 53.800,24.231 38.650,16.031 47.150,12.081 "/>
+<polygon fill="#E4FFE2" stroke="none" stroke-width="0.100" points="7.300,26.575 10.713,25.531 11.850,22.400 12.988,25.531 16.400,26.575 12.988,27.619 11.850,30.750 10.713,27.619 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="7.300,26.575 10.713,25.531 11.850,22.400 12.988,25.531 16.400,26.575 12.988,27.619 11.850,30.750 10.713,27.619 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.010"  points="7.300,26.575 10.713,25.531 11.850,22.400 12.988,25.531 16.400,26.575 12.988,27.619 11.850,30.750 10.713,27.619 "/>
+<line x1="38.925" y1="5.531" x2="47.150" y2="12.081" stroke="#000000" stroke-width="0.100" />
+<line x1="46.759" y1="11.770" x2="46.994" y2="12.277" stroke="#000000" stroke-width="0.100" />
+<line x1="46.759" y1="11.770" x2="47.306" y2="11.886" stroke="#000000" stroke-width="0.100" />
+<path stroke="#000000" fill="none" stroke-width="0.100"  d="M 46.661,11.692 C 46.583,11.790 46.456,11.849 46.408,11.810 C 46.359,11.771 46.388,11.634 46.466,11.536 C 46.543,11.438 46.670,11.380 46.719,11.418 C 46.768,11.457 46.739,11.594 46.661,11.692 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100" stroke-dasharray="1.00,1.00" d ="M 37.103,25.478 A 8.063,8.063 0 0,0 47.412,19.638 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="36.754,25.341 37.311,25.290 37.103,25.478 37.128,25.756 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="36.754,25.341 37.311,25.290 37.103,25.478 37.128,25.756 "/>
+<path stroke="#000000" fill="none" stroke-width="0.100" stroke-dasharray="1.00,1.00" d="M 13.553,25.298 C 19.558,22.820 24.074,5.531 29.663,5.531 "/>
+<polygon fill="#FFFFFF" stroke="none" stroke-width="0.100" points="13.458,25.067 13.091,25.489 13.648,25.529 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="13.458,25.067 13.091,25.489 13.648,25.529 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="30.038,5.531 29.538,5.781 29.663,5.531 29.538,5.281 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="30.038,5.531 29.538,5.781 29.663,5.531 29.538,5.281 "/>
+<polyline fill="none" stroke="#000000" stroke-width="0.100"  points="16.850,-6.719 16.850,-7.719 38.925,-7.719 38.925,-4.706 "/>
+<polygon fill="#000000" stroke="none" stroke-width="0.100" points="38.925,-4.331 38.675,-4.831 38.925,-4.706 39.175,-4.831 "/>
+<polygon fill="none" stroke="#000000" stroke-width="0.100"  points="38.925,-4.331 38.675,-4.831 38.925,-4.706 39.175,-4.831 "/>
+</svg>
