@@ -7524,13 +7524,15 @@ PORTNOTE("cms", "Disabled XaraCMS")
 	}
 	else
 	{
+		const RGBQUAD TOnly = {0, 0, 0, 0xFF}; ; // 0xFF000000 on LittleEndian;
+		const DWORD DTOnly = *(DWORD *)(&TOnly);
 		// First we need to set all the pixels as transparent
 		DWORD* pPixel = (DWORD*)WinBM->BMBytes;
 		for (INT32 y = 0; y < Height; y++)
 		{
 			for (INT32 x = 0; x < Width; x++)
 			{
-				*(pPixel++) |= 0xFF000000;
+				*(pPixel++) |= DTOnly;
 			}
 		}
 
