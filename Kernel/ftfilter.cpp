@@ -157,7 +157,7 @@ FlareTemplateFilter::FlareTemplateFilter()
 
 	FilterID = FILTERID_FLARETEMPLATE;
 
-	Flags.CanImport = TRUE;
+	Flags.CanImport = FALSE;	// Import needs TemplMan COM object
 	Flags.CanExport = TRUE;
 
 	// Message to show when a problem file is encountered
