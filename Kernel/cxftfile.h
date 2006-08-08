@@ -177,10 +177,10 @@ protected:
 	BOOL WriteAsText(CXaraFileRecord* pRecord);
 	BOOL WriteBinHex(BYTE* pBuf, UINT32 BufSize);
 	BOOL WriteLabel(void);
-	BOOL IsSimpleUnicode(WCHAR* pStr);
-	BOOL WriteSimpleUnicode(WCHAR* pStr);
+	BOOL IsSimpleUnicode(UINT16* pStr);
+	BOOL WriteSimpleUnicode(UINT16* pStr);
 	BOOL WriteSimpleASCII(char* pStr);
-	UINT32 WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, WCHAR* pChars);
+	UINT32 WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, UINT16* pChars);
 	BOOL WriteSingleWCHAR(WCHAR ch);
 
 	inline BOOL IsPrint(WCHAR wc)

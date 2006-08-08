@@ -119,7 +119,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cxftfile.h"
 
 // An implement to match the Declare in the .h file.
-CC_IMPLEMENT_DYNAMIC(FlareTemplateFilter, CamelotWebFilter);
+// This used to be derived from CamelotWebFilter
+CC_IMPLEMENT_DYNAMIC(FlareTemplateFilter, CamelotNativeFilter);
 
 // This will get Camelot to display the filename and linenumber of any memory allocations
 // that are not released at program exit
@@ -206,7 +207,7 @@ BOOL FlareTemplateFilter::Init()
 
 	if (ok) ok = CreateRecordHandlers();
 
-	if (Camelot.DeclareSection("Filters", 10))
+	if (Camelot.DeclareSection(_T("Filters"), 10))
 	{
 		// Preferences for the Flare Template options dialog box
 
@@ -215,15 +216,15 @@ BOOL FlareTemplateFilter::Init()
 		// Preference for bitmap compression requested by the user
 		// 101 -201 means use PNG but remember old JPEG setting
 		// 0-100 use JPEG with this quality setting
-		Camelot.DeclarePref( NULL, "FTBitmapCompression", &FlareTemplateFilter::FTBitmapCompression, 0, 201 );
+		Camelot.DeclarePref( NULL, _T("FTBitmapCompression"), &FlareTemplateFilter::FTBitmapCompression, 0, 201 );
 		// Preference for whether we export a preview bitmap in web files
-		Camelot.DeclarePref( NULL, "FTExportPreviewBitmap", &FlareTemplateFilter::FTPreviewBitmapExport, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("FTExportPreviewBitmap"), &FlareTemplateFilter::FTPreviewBitmapExport, 0, 1 );
 		// Preference for whether we convert all text to outlines in web files (baring some assumed fonts)
-		Camelot.DeclarePref( NULL, "FTConvertTextToOutlines", &FlareTemplateFilter::FTConvertTextToOutlines, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("FTConvertTextToOutlines"), &FlareTemplateFilter::FTConvertTextToOutlines, 0, 1 );
 		// Preference for whether we export an HTML tag to the clipboard
-		Camelot.DeclarePref( NULL, "FTHTMLToClipboard", &FlareTemplateFilter::FTHTMLToClipboard, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("FTHTMLToClipboard"), &FlareTemplateFilter::FTHTMLToClipboard, 0, 1 );
 		// Preference for whether we convert all blends to outlines in web files
-		Camelot.DeclarePref( NULL, "FTConvertBlendsToOutlines", &FlareTemplateFilter::FTConvertBlendsToOutlines, 0, 1 );
+		Camelot.DeclarePref( NULL, _T("FTConvertBlendsToOutlines"), &FlareTemplateFilter::FTConvertBlendsToOutlines, 0, 1 );
 	}
 
 	// All ok?

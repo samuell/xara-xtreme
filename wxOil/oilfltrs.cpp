@@ -560,7 +560,7 @@ OILFilterFamily::OILFilterFamily(Filter *pFilter, UINT32 NameID) : OILFilter(pFi
 
 TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 {
-#if !defined(EXCLUDE_FROM_RALPH) && !defined(EXCLUDE_FROM_XARALX)
+#if !defined(EXCLUDE_FROM_RALPH)
 	// Load in the filter name and extensions...
 	static String_256 FilterStr;
 	String_256 Extensions;
@@ -572,7 +572,7 @@ TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 	if (IS_A(Parent, GenericFilter))
 	{
 		// It's the generic filter - just use "*.*" as the extension mask.
-		Extensions = "*.*";
+		Extensions = _T("*.*");
 	}
 	else
 	{
@@ -594,7 +594,8 @@ TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 				ExtStr = pFilter->pOILFilter->FilterExt;
 
 				// Extract each extension and see if we need to add it
-				char *pExt = _tcstok((TCHAR *) ExtStr, ",");
+				TCHAR* pTemp = NULL;
+				TCHAR* pExt = camStrtok((TCHAR *) ExtStr, _T(","), &pTemp);
 
 				while (pExt != NULL)
 				{
@@ -603,13 +604,13 @@ TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 						// Not already present - add the string.
 						if (!NoneFound)
 							// Don't add a semi-colon if this is the first one we find.
-							Extensions += ";";
-						Extensions += "*.";
+							Extensions += _T(";");
+						Extensions += _T("*.");
 						Extensions += pExt;
 						NoneFound = FALSE;
 					}
 
-					pExt = _tcstok(NULL, ",");
+					pExt = camStrtok(NULL, _T(","), &pTemp);
 				}
 			}
 
@@ -620,7 +621,7 @@ TCHAR *OILFilterFamily::ConstructFilterString(UINT32 NumberToExport)
 
 
 	// Construct the filter string from these two strings:
-	FilterStr += "|";
+	FilterStr += _T("|");
 	FilterStr += Extensions;
 
 	// Return a pointer to the string.
@@ -693,15 +694,15 @@ BOOL OILFilter::DoesExtensionOfPathNameMatch(PathName *Path)
 	pex = Ext;
 
 	INT32 l = 0;
-	while(pex[l] != '\0')
+	while(pex[l] != _T('\0'))
 	{
 		ex[l] = camTolower(pex[l]);
 		l++;
 	}
-	ex[l] = '\0';
+	ex[l] = _T('\0');
 
 TRACEUSER( "Ben", _T("Checking extension matches, of file = '%s', supported = '%s'\nLard\n"), (TCHAR *)ex, fe);
-	if(ex[0] == '\0')
+	if(ex[0] == _T('\0'))
 	{
 		// it's a blank extension. It can't match then, can it?
 TRACEUSER( "Ben", _T("File didn't have an extension\n"));
@@ -709,7 +710,7 @@ TRACEUSER( "Ben", _T("File didn't have an extension\n"));
 	}
 
 	// see if the extension is in the list of supported extensions in the filter
-	if(camStrstr(fe, (ex[0] == '.')?(ex + 1):ex) != NULL)
+	if(camStrstr(fe, (ex[0] == _T('.'))?(ex + 1):ex) != NULL)
 		return TRUE;
 
 	return FALSE;

@@ -893,8 +893,6 @@ BOOL CXaraFileRecord::WriteUnicode(const TCHAR* pStr)
 	}
 	while (c!=0);// Until end of string or no longer OK to write
 
-	return ok;									// If we terminated due to Read failure tell the caller
-
 #else
 	// pStr points to an ASCII or DBCS string, and we want it written as a Unicode string
 	// Write out each char separately, converting it to the correct Unicode value
@@ -969,7 +967,7 @@ BOOL CXaraFileRecord::WriteASCII(const TCHAR* pStr)
 	{
 PORTNOTE( "record", "UNICODE characters that don't fit into 1 mb character need better handling" )
 		char	acTmp[MB_CUR_MAX];
-		if( 1 == wctomb( acTmp, pStr[i*2] ) )
+		if( 1 == wctomb( acTmp, pStr[i] ) )
 			ok = WriteBYTE( acTmp[0] );
 		else
 			ok = WriteBYTE( '.' );
@@ -1034,6 +1032,8 @@ PORTNOTE( "record", "UNICODE characters that don't fit into 1 mb character need 
 BOOL CXaraFileRecord::WriteUTF16STR(const StringVar& pvstr)
 {
 #ifdef _UNICODE
+	ENTERWRITEFUNCTION(FTT_UNICODE);
+
 	BOOL ok = TRUE;
 	WCHAR c = 0;
 	INT32 i = 0;
@@ -1045,6 +1045,8 @@ BOOL CXaraFileRecord::WriteUTF16STR(const StringVar& pvstr)
 		if (!ok) c = 0;							// If the read failed then write a terminator
 	}
 	while (c!=0);// Until end of string or no longer OK to write
+
+	LEAVEWRITEFUNCTION;
 
 	return ok;									// If we terminated due to Read failure tell the caller
 #else

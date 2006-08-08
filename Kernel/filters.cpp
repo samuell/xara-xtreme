@@ -939,8 +939,7 @@ PORTNOTE("filter","Removed HTMLFilter usage")
 
 #endif
 
-PORTNOTE("filter","Removed FlareTemplateFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
+#ifdef _DEBUG
 	ADD_FILTER(FlareTemplateFilter)		// The text version
 #endif
 
@@ -5206,13 +5205,10 @@ GenericFilter::GenericFilter()
 
 BOOL GenericFilter::Init()
 {
-PORTNOTE("filter", "Removed OILFilter usage")
-#ifndef EXCLUDE_FROM_XARALX	
 	// Get the OILFilter object
 	pOILFilter = new OILFilterFamily(this, _R(IDT_FILTERNAME_GENERIC));
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(_R(IDT_GENERIC_FILTERNAME));
@@ -5256,13 +5252,10 @@ VectorFilterFamily::VectorFilterFamily()
 
 BOOL VectorFilterFamily::Init()
 {
-PORTNOTETRACE("filter","Removed OILFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the OILFilter object
 	pOILFilter = new OILFilterFamily(this, _R(IDT_FILTERNAME_VECTOR));
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(_R(IDT_VECTOR_FILTERNAME));
@@ -5306,13 +5299,10 @@ BitmapFilterFamily::BitmapFilterFamily()
 
 BOOL BitmapFilterFamily::Init()
 {
-PORTNOTETRACE("filter","Removed OILFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the OILFilter object
 	pOILFilter = new OILFilterFamily(this, _R(IDT_FILTERNAME_BITMAP));
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(_R(IDT_BITMAP_FILTERNAME));
@@ -5353,13 +5343,10 @@ TextFilterFamily::TextFilterFamily()
 ********************************************************************************************/
 BOOL TextFilterFamily::Init()
 {
-PORTNOTETRACE("filter","Removed OILFilter usage");
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the OILFilter object
 	pOILFilter = new OILFilterFamily(this, _R(IDT_FILTERNAME_TEXT));
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(_R(IDT_TEXT_FILTERNAME));
@@ -5405,13 +5392,10 @@ GenericEPSFilter::GenericEPSFilter()
 
 BOOL GenericEPSFilter::Init()
 {
-PORTNOTE("filter","Removed OILFilter usage")
-#ifndef EXCLUDE_FROM_XARALX
 	// Get the OILFilter object
 	pOILFilter = new OILFilterFamily(this, _R(IDT_FILTERNAME_EPS));
 	if (pOILFilter == NULL)
 		return FALSE;
-#endif
 
 	// Load the description strings
 	FilterName.Load(_R(IDT_EPS_FILTERNAME));

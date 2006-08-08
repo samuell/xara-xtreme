@@ -101,7 +101,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef INC_FTFILTER
 #define INC_FTFILTER
 
-#include "webfiltr.h"	// 	CamelotWebFilter
+#include "native.h"
+//#include "webfiltr.h"	// 	CamelotWebFilter
 
 /********************************************************************************************
 
@@ -116,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 ********************************************************************************************/
 
-class FlareTemplateFilter : public CamelotWebFilter
+class FlareTemplateFilter : public CamelotNativeFilter
 {
 	// Give my name in memory dumps
 	CC_DECLARE_DYNAMIC(FlareTemplateFilter);

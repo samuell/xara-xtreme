@@ -2010,6 +2010,8 @@ BOOL CXaraFile::ReadNextRecord()
 
 	if (ReadNextRecordHeader())
 	{
+		TRACEUSER("Gerry", _T("HandleRecord %d - %d [%d]"), RecordNumber, ReadTag, ReadSize);
+
 		CXaraFileRecordHandler* pCXaraFileRecordHandler = FindHandler(ReadTag);
 		if (pCXaraFileRecordHandler != NULL)
 		{

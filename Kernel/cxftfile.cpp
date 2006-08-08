@@ -836,7 +836,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_BYTE:
 					{
 						BYTE ByteVal = *pBinPtr;
-//						TRACEUSER( "Gerry", _T("Byte : \n"), ByteVal);
+						TRACEUSER( "Gerry", _T("Byte : %d\n"), ByteVal);
 						Num = sprintf(Buffer, ",B(%u)", ByteVal);
 						pBinPtr+=1;
 						break;
@@ -845,7 +845,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_UINT32:
 					{
 						UINT32 ULongVal = *((UINT32*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("ULong : %u\n"), ULongVal);
+						TRACEUSER( "Gerry", _T("ULong : %u\n"), ULongVal);
 						Num = sprintf(Buffer, ",U(%u)", ULongVal);
 						pBinPtr+=4;
 						break;
@@ -854,7 +854,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_INT32:
 					{
 						INT32 LongVal = *((INT32*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("Long : %d\n"), LongVal);
+						TRACEUSER( "Gerry", _T("Long : %d\n"), LongVal);
 						Num = sprintf(Buffer, ",L(%d)", LongVal);
 						pBinPtr+=4;
 						break;
@@ -863,7 +863,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_UINT16:
 					{
 						WORD WordVal = *((WORD*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("UINT16 : %hu\n"), WordVal);
+						TRACEUSER( "Gerry", _T("UINT16 : %hu\n"), WordVal);
 						Num = sprintf(Buffer, ",W(%hu)", WordVal);
 						pBinPtr+=2;
 						break;
@@ -872,7 +872,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_INT16:
 					{
 						INT16 ShortVal = *((INT16*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("INT16 : %hd\n"), ShortVal);
+						TRACEUSER( "Gerry", _T("INT16 : %hd\n"), ShortVal);
 						Num = sprintf(Buffer, ",I(%hd)", ShortVal);
 						pBinPtr+=2;
 						break;
@@ -881,7 +881,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_FLOAT:
 					{
 						double DoubleVal = *((FLOAT*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("Float : %g\n"), DoubleVal);
+						TRACEUSER( "Gerry", _T("Float : %g\n"), DoubleVal);
 						Num = sprintf(Buffer, ",F(%g)", DoubleVal);
 						pBinPtr+=4;
 						break;
@@ -890,7 +890,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_DOUBLE:
 					{
 						double DoubleVal = *((double*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("Double : %g\n"), DoubleVal);
+						TRACEUSER( "Gerry", _T("Double : %g\n"), DoubleVal);
 						Num = sprintf(Buffer, ",D(%g)", DoubleVal);
 						pBinPtr+=8;
 						break;
@@ -899,7 +899,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_REFERENCE:
 					{
 						INT32 LongVal = *((INT32*)pBinPtr);
-//						TRACEUSER( "Gerry", _T("Long : %d\n"), LongVal);
+						TRACEUSER( "Gerry", _T("Long : %d\n"), LongVal);
 						if (LongVal <= 0)
 						{
 							// then write it as an INT32
@@ -916,7 +916,8 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				
 				case FTT_WCHAR:
 					{
-						UINT32 NumChars = WriteMultipleWCHARs(&(pPtr[Index]), Count - Index, (WCHAR*)pBinPtr);
+						TRACEUSER( "Gerry", _T("WCHAR : %d items\n"), Count - Index);
+						UINT32 NumChars = WriteMultipleWCHARs(&(pPtr[Index]), Count - Index, (UINT16*)pBinPtr);
 						if (NumChars == 0)
 							ok = FALSE;
 						pBinPtr += (NumChars * sizeof(WCHAR));	// Skip the pointerand 
@@ -943,7 +944,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 						y += (pBinPtr[5] <<  8);
 						x += (pBinPtr[6] <<  0);
 						y += (pBinPtr[7] <<  0);
-//						TRACEUSER( "Gerry", _T("IntCoord : %d, %d\n"), x, y);
+						TRACEUSER( "Gerry", _T("IntCoord : %d, %d\n"), x, y);
 						Num = sprintf(Buffer, ",K(%d,%d)", x, y);
 						pBinPtr += 8;
 						break;
@@ -953,6 +954,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 					{
 						// Use ,ASC("String")
 						size_t len = strlen((char*)pBinPtr) + 1;
+						TRACEUSER("Gerry", _T("ASCII %d"), len);
 						ok = WriteSimpleASCII((char*)pBinPtr);
 						pBinPtr += len;
 						break;
@@ -960,10 +962,14 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 
 				case FTT_UNICODE:
 					{
-						UINT32 len = 2 * ( camStrlen( (PCTSTR)pBinPtr ) + 1 );
-						if (IsSimpleUnicode((WCHAR*) pBinPtr))
+						UINT32 len = 1;
+						UINT16* pCh = (UINT16*)pBinPtr;
+						while (*pCh++ != 0)
+							len++;
+						TRACEUSER("Gerry", _T("Unicode %d"), len);
+						if (IsSimpleUnicode((UINT16*)pBinPtr))
 						{
-							ok = WriteSimpleUnicode((WCHAR*)pBinPtr);
+							ok = WriteSimpleUnicode((UINT16*)pBinPtr);
 						}
 						else
 						{
@@ -976,6 +982,7 @@ BOOL CXaraTemplateFile::WriteAsText(CXaraFileRecord* pRecord)
 				case FTT_BINHEX:
 					{
 						UINT32 len = *((DWORD*)(pPtr+Index+1));	// Get the length (BYTE pointer arithmetic)
+						TRACEUSER("Gerry", _T("BinHex %d"), len);
 						Index += 4;
 						ok = WriteBinHex(pBinPtr, len);
 						pBinPtr += len;
@@ -1033,7 +1040,7 @@ BOOL CXaraTemplateFile::WriteBinHex(BYTE* pBuf, UINT32 BufSize)
 
 /********************************************************************************************
 
->	BOOL CXaraTemplateFile::IsSimpleUnicode(WCHAR* pStr)
+>	BOOL CXaraTemplateFile::IsSimpleUnicode(UINT16* pStr)
 
 	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/07/97
@@ -1042,7 +1049,7 @@ BOOL CXaraTemplateFile::WriteBinHex(BYTE* pBuf, UINT32 BufSize)
 
 ********************************************************************************************/
 
-BOOL CXaraTemplateFile::IsSimpleUnicode(WCHAR* pStr)
+BOOL CXaraTemplateFile::IsSimpleUnicode(UINT16* pStr)
 {
 	if (pStr == NULL)
 		return(FALSE);
@@ -1075,7 +1082,7 @@ BOOL CXaraTemplateFile::IsSimpleUnicode(WCHAR* pStr)
 
 ********************************************************************************************/
 
-BOOL CXaraTemplateFile::WriteSimpleUnicode(WCHAR* pStr)
+BOOL CXaraTemplateFile::WriteSimpleUnicode(UINT16* pStr)
 {
 	if (pStr == NULL)
 		return(FALSE);
@@ -1092,7 +1099,7 @@ BOOL CXaraTemplateFile::WriteSimpleUnicode(WCHAR* pStr)
 		if (ok && *pStr == '"')
 			ok = pCCFile->write(pStr).good();
 		
-		// Advance to next WCHAR
+		// Advance to next UINT16
 		pStr++;
 	}
 
@@ -1147,7 +1154,7 @@ BOOL CXaraTemplateFile::WriteSimpleASCII(char* pStr)
 
 /********************************************************************************************
 
->	UINT32 CXaraTemplateFile::WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, WCHAR* pChars)
+>	UINT32 CXaraTemplateFile::WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, UINT16* pChars)
 
 	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	12/07/97
@@ -1159,9 +1166,9 @@ BOOL CXaraTemplateFile::WriteSimpleASCII(char* pStr)
 
 ********************************************************************************************/
 
-UINT32 CXaraTemplateFile::WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, WCHAR* pChars)
+UINT32 CXaraTemplateFile::WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, UINT16* pChars)
 {
-	TRACEUSER( "Gerry", _T("WriteMultipleWCHARs\n"));
+	TRACEUSER( "Gerry", _T("WriteMultipleWCHARs %d\n"), Count);
 
 	ERROR3IF(pTypes == NULL, "NULL type array");
 	ERROR3IF(pChars == NULL, "NULL chars array");
@@ -1171,7 +1178,7 @@ UINT32 CXaraTemplateFile::WriteMultipleWCHARs(BYTE* pTypes, DWORD Count, WCHAR* 
 	if (Count == 0)
 		return(0);
 
-	WORD ch = pChars[0];
+	WCHAR ch = pChars[0];
 	if (Count == 1 || pTypes[1] != FTT_WCHAR)
 		return(WriteSingleWCHAR(ch) ? 1 : 0);
 
@@ -1281,15 +1288,11 @@ BOOL CXaraTemplateFile::WriteSingleWCHAR(WCHAR ch)
 	}
 	else if (IsPrint(ch))
 	{
-#ifdef __WXMSW__
-		Num = sprintf(Buffer, ",WC(\"%hc\")", ch);
-#else
-		Num = sprintf(Buffer, ",WC(\"%lc\")", ch);
-#endif
+		Num = sprintf(Buffer, ",WC(\"%c\")", (char)(ch & 0xFF));
 	}
 	else
 	{
-		Num = sprintf(Buffer, ",W(%hu)", ch);
+		Num = sprintf(Buffer, ",W(%hu)", (INT16)(ch & 0xFFFF));
 	}
 
 	ok = pCCFile->write(Buffer, Num).good();
