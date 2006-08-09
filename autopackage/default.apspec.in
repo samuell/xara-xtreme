@@ -42,6 +42,11 @@ echo * | import
 # Put your installation script here
 installExe bin/xaralx
 installIcon xaralx.png
+
+# Install the icon so that on GNOME XAR files will show the icon.
+((cp xaralx.png /usr/share/icons/hicolor/48x48/mimetypes/gnome-mime-application-vnd.xara.png) || /bin/true )
+((gtk-update-icon-cache -f "$PREFIX/share/icons/hicolor/") || /bin/true )
+
 installDesktop "Graphics/Vector Graphics" xaralx.desktop
 installMime xaralx.xml
 installGnome2Mime mime-storage/gnome/*
