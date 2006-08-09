@@ -44,24 +44,24 @@ installExe bin/xaralx
 installIcon xaralx.png
 
 # Install the icon so that on GNOME XAR files will show the icon.
-((cp xaralx.png /usr/share/icons/hicolor/48x48/mimetypes/gnome-mime-application-vnd.xara.png) || /bin/true )
-((gtk-update-icon-cache -f "$PREFIX/share/icons/hicolor/") || /bin/true )
+((cp xaralx.png /usr/share/icons/hicolor/48x48/mimetypes/gnome-mime-application-vnd.xara.png 2>/dev/null) || /bin/true )
+((gtk-update-icon-cache -f "$PREFIX/share/icons/hicolor/" 2>/dev/null) || /bin/true )
 
 installDesktop "Graphics/Vector Graphics" xaralx.desktop
 installMime xaralx.xml
 installGnome2Mime mime-storage/gnome/*
-copyFiles doc "$PREFIX/share/xaralx"
+copyFiles share/xaralx/doc "$PREFIX/share/xaralx"
 mkdir -p "$PREFIX/share/xaralx/doc/en"
 ((tar xfz xaralxHelp.tar.gz -C "$PREFIX/share/xaralx/doc/en" 2>/dev/null) || /bin/true )
-copyFiles Examples "$PREFIX/share/xaralx"
-copyFiles Templates "$PREFIX/share/xaralx"
+copyFiles share/xaralx/Examples "$PREFIX/share/xaralx"
+copyFiles share/xaralx/Templates "$PREFIX/share/xaralx"
 # copyFiles bin "$PREFIX/share/xaralx"
 # copyFiles video "$PREFIX/share/xaralx"
 
 # SVG filter
 installExe bin/xarasvgfilter
 installExe bin/xarasvgfilterui
-copyFiles filters "$PREFIX/share/xaralx"
+copyFiles share/xaralx/filters "$PREFIX/share/xaralx"
 
 ((update-desktop-database 2>/dev/null) || /bin/true )
 ((kbuildsycoca 2>/dev/null) || /bin/true )
