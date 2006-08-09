@@ -487,6 +487,24 @@ static GadgetHelpInfo GadgetHelp[] =
 };
 
 
+// Two utility functions to get slider sizing right
+
+INT32 GetSliderHeight(INT32 RectHeight, INT32 Num)
+{
+	INT32 AvailableHeight = (RectHeight / Num) - 4000; // subtract the minimum gap size
+	if (AvailableHeight<2000)
+		AvailableHeight = 2000;	// minimum height
+	return (AvailableHeight>18000)?18000:AvailableHeight;
+}
+
+INT32 GetSliderGap(INT32 RectHeight, INT32 Num)
+{
+	INT32 SliderGap = (RectHeight / Num) - GetSliderHeight(RectHeight, Num);
+	if (SliderGap < 4000)
+		SliderGap = 4000;
+	return SliderGap;
+}
+
 
 /********************************************************************************************
 
@@ -6307,10 +6325,8 @@ void ColourEditDlg::RenderPickerDefault(RenderRegion *pRender, DocRect *VirtualS
 	}
 
 	// Calculate slider sizes and spacing
-	const INT32 SliderHeight = 18000;
-	INT32 SliderGap = (SliderRect.Height() / NumComponents) - SliderHeight;
-	if (SliderGap < 4000)
-		SliderGap = 4000;
+	INT32 SliderHeight = GetSliderHeight(SliderRect.Height(), NumComponents);
+	INT32 SliderGap = GetSliderGap(SliderRect.Height(), NumComponents);
 
 	// And move the top down by half a SliderGap, so the sliders are centered vertically
 	SliderRect.hi.y -= SliderGap / 2;
@@ -8723,10 +8739,8 @@ void ColourEditDlg::SetNewValueDefault(ReDrawInfoType *Info, INT32 PixelSize, BO
 	}
 
 	// Calculate slider sizes and spacing
-	const INT32 SliderHeight = 18000;
-	INT32 SliderGap = (SliderRect.Height() / NumComponents) - SliderHeight;
-	if (SliderGap < 4000)
-		SliderGap = 4000;
+	INT32 SliderHeight = GetSliderHeight(SliderRect.Height(), NumComponents);
+	INT32 SliderGap = GetSliderGap(SliderRect.Height(), NumComponents);
 
 	// And move the top down by half a SliderGap, so the sliders are centered vertically
 	SliderRect.hi.y -= SliderGap / 2;
@@ -9735,10 +9749,8 @@ BOOL ColourEditDlg::HandleIdlePointerDefault(ReDrawInfoType *Info, String_128 *B
 	}
 
 	// Calculate slider sizes and spacing
-	const INT32 SliderHeight = 18000;
-	INT32 SliderGap = (SliderRect.Height() / NumComponents) - SliderHeight;
-	if (SliderGap < 4000)
-		SliderGap = 4000;
+	INT32 SliderHeight = GetSliderHeight(SliderRect.Height(), NumComponents);
+	INT32 SliderGap = GetSliderGap(SliderRect.Height(), NumComponents);
 
 	// And move the top down by half a SliderGap, so the sliders are centered vertically
 	SliderRect.hi.y -= SliderGap / 2;
