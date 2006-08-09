@@ -516,6 +516,11 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 			pDialogWnd->SetSizerAndFit(pSizer);
 		}
 
+		// Ensure the main frame is shown if the pane is floating, or it can get "behind"
+		// the main frame on wxGTK
+		if (paneinfo.IsFloating() && !CCamFrame::GetFrameManager()->GetManagedWindow()->IsShown())
+			CCamFrame::GetFrameManager()->GetManagedWindow()->Show();
+
 		CCamFrame::GetFrameManager()->AddPane(pDialogWnd, paneinfo);
 
 		CCamFrame::GetMainFrame()->UpdateFrameManager();
