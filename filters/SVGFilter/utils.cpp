@@ -121,7 +121,17 @@ double TakeNumber(wxString& data)
 		data = data.Mid(1);
 		while (data.Length() > 0 && IsNumberDigit(data[0])) {
 			s += data[0];
-			data = data.Mid(1);
+			if (data[0] == 'e' || data[0] == 'E') {
+				data = data.Mid(1);
+				if (data.Length() < 1)
+					break;
+				if (data[0] == '+' || data[0] == '-') {
+					s += data[0];
+					data = data.Mid(1);
+				}
+			} else {
+				data = data.Mid(1);
+			}
 		}
 	}
 	double f;
