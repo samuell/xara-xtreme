@@ -555,8 +555,8 @@ BOOL CCamApp::OnSecondInstance(wxChar** argv, INT32 argc)
 	{
 		for ( UINT32 i=0 ; i<parser.GetParamCount() ; i++ )
 			m_docManager->CreateDocument(parser.GetParam(i),wxDOC_SILENT);
-		m_pMainFrame->Raise();
 	}
+	m_pMainFrame->Raise();
 	return TRUE;
 }
 
