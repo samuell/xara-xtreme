@@ -128,22 +128,29 @@ bool XARGenerator::OutputHeader()
 	// XXX From this point on the error handling becomes a bit thin
 
 	ok = m_pExporter->WriteZeroSizedRecord(TAG_SPREAD);
+	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
+
 	if (m_docSize != DocCoord(0, 0)) {
 		ok = Rec.Reinit(TAG_SPREADINFORMATION, TAG_SPREADINFORMATION_SIZE);
-		ok = Rec.WriteUINT32(m_docSize.x); // width
-		ok = Rec.WriteUINT32(m_docSize.y); // height
-		ok = Rec.WriteUINT32(10000);	   // margin
-		ok = Rec.WriteUINT32(0);		   // bleed
-		ok = Rec.WriteBYTE(2);			   // flags (shadow: on)
+		ok = Rec.WriteUINT32(m_docSize.x);		// width
+		ok = Rec.WriteUINT32(m_docSize.y);		// height
+		ok = Rec.WriteUINT32(10000);			// margin
+		ok = Rec.WriteUINT32(0);				// bleed
+		ok = Rec.WriteBYTE(2);					// flags (1:shadow)
 		ok = m_pExporter->WriteRecord(&Rec);
 	}
 
+	ok = Rec.Reinit(TAG_VIEWPORT, TAG_VIEWPORT_SIZE);
+	ok = Rec.WriteCoord(DocCoord(0, 0));		// bottom-left
+	ok = Rec.WriteCoord(DocCoord(m_docSize.x, m_docSize.y));// top-right
+	ok = m_pExporter->WriteRecord(&Rec);
+
 	// Write a layer
 	ok = m_pExporter->WriteZeroSizedRecord(TAG_LAYER);
-	ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
+	/***/ ok = m_pExporter->WriteZeroSizedRecord(TAG_DOWN);
 
-	ok = Rec.Reinit(TAG_LAYERDETAILS, -1);
-	ok = Rec.WriteBYTE(13);
+	ok = Rec.Reinit(TAG_LAYERDETAILS, TAG_LAYERDETAILS_SIZE);
+	ok = Rec.WriteBYTE(1|4|8);					// flags (0:visible, 2:printable, 3:active)
 	ok = Rec.WriteUnicode(_T("Layer 1"));
 	ok = m_pExporter->WriteRecord(&Rec);
 
@@ -154,12 +161,13 @@ bool XARGenerator::OutputFooter()
 {
 	bool ok = true;
 
-	// End of the layer
+	// End of layer
 	ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
 
-	// Write the end of file record
-	CXaraFileRecord Rec(0);
-	ok = Rec.Reinit(TAG_ENDOFFILE, 0);
+	// End of spread
+	ok = m_pExporter->WriteZeroSizedRecord(TAG_UP);
+
+	// Write end of file record
 	ok = m_pExporter->WriteZeroSizedRecord(TAG_ENDOFFILE);
 
 	return ok;
