@@ -50,6 +50,7 @@ installIcon xaralx.png
 installDesktop "Graphics/Vector Graphics" xaralx.desktop
 installMime xaralx.xml
 installGnome2Mime mime-storage/gnome/*
+installMan 1 share/xaralx/doc/xaralx.1
 copyFiles share/xaralx/doc "$PREFIX/share/xaralx"
 mkdir -p "$PREFIX/share/xaralx/doc/en"
 ((tar xfz xaralxHelp.tar.gz -C "$PREFIX/share/xaralx/doc/en" 2>/dev/null) || /bin/true )
