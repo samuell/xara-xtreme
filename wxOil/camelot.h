@@ -166,6 +166,7 @@ protected:
 
 	static wxString		m_strResourcePath;		// The usually bound in resources
 	static String_256	m_strResourceDirPath;	// External resources (i.e. help files)
+	static String_256	m_strResourceDirPathOverride;	// Version in preference file
 
 	wxTimer				m_Timer;
 

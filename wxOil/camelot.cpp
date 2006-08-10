@@ -231,7 +231,7 @@ DialogManager			CCamApp::m_DlgMgr;
 bool					CCamApp::s_bIsDisabled = false; // Initially system is not disabled.
 wxString				CCamApp::m_strResourcePath;
 String_256				CCamApp::m_strResourceDirPath;
-
+String_256				CCamApp::m_strResourceDirPathOverride;
 
 /***************************************************************************************************************************/
 
@@ -797,8 +797,9 @@ bool CCamApp::OnInit()
 	}
 
 	// Check the resource dir exists
-	Camelot.DeclarePref( NULL, TEXT("ResourceDir"), &m_strResourceDirPath );
-	if( bFirstRun || m_strResourceDirPath == _T("") || !wxDir::Exists( (PCTSTR)m_strResourceDirPath ) )
+	Camelot.DeclarePref( NULL, TEXT("ResourceDir"), &m_strResourceDirPathOverride );
+	m_strResourceDirPath = m_strResourceDirPathOverride; // this way, the path we find never gets put within the preferences
+	if( /*bFirstRun ||*/ m_strResourceDirPath == _T("") || !wxDir::Exists( (PCTSTR)m_strResourceDirPath ) ) // AB: don't need to do this on first run especially
 	{
 #if !defined(RESOURCE_DIR)
 		// we can't use auto pointers here because they free using delete but BR allocates using malloc (strdup actually)
