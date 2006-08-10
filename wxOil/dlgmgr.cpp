@@ -7670,6 +7670,11 @@ BOOL DialogManager::CreateTabbedDialog(DialogTabOp* pTabDlgOp, CDlgMode Mode, IN
 	// Get the dialog sized to fit
 	RelayoutDialog(pTabDlgOp);
 
+	// Scroll to start and end after yeild
+	::wxYield();
+	pBook->SetSelection(pBook->GetPageCount()-1);
+	pBook->SetSelection(0);
+
 	// First check if the OpeningPage parameter is not equal to -1, in which case this
 	// specifies the active page to be opened.
 	// Has to be an index as otherwise we have not specified the pages yet and so cannot

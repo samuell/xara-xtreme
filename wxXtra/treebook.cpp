@@ -38,7 +38,7 @@ public:
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr) :
-				wxTreeCtrl(parent, id, pos, size, style, validator, name), m_fixedBestSize(160,80) {}
+				wxTreeCtrl(parent, id, pos, size, style, validator, name), m_fixedBestSize(160,380) {}
 
 	virtual wxSize DoGetBestSize() const
 	{
@@ -130,7 +130,7 @@ wxTreebook::Create(wxWindow *parent,
                     this,
                     wxID_TREEBOOKTREEVIEW,
                     wxDefaultPosition,
-                    wxDefaultSize,
+                    wxSize(160,380),
                     wxBORDER_SIMPLE |
                     wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
