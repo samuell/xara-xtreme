@@ -138,7 +138,7 @@ public:
 
 	virtual void IncProgressBarCount(UINT32 n) {};
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 #endif
 

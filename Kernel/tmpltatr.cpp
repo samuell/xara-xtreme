@@ -751,10 +751,10 @@ void TemplateAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecor
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord, pStr);
 
-	TCHAR OpName[64]	= {NULL};
-	TCHAR Question[256]	= {NULL};
-	TCHAR Param[256]	= {NULL};
-	TCHAR Patch[256]	= {NULL};
+	TCHAR OpName[64]	= {0};
+	TCHAR Question[256]	= {0};
+	TCHAR Param[256]	= {0};
+	TCHAR Patch[256]	= {0};
 
 	BOOL ok = pRecord->ReadUnicode(OpName, 64);
 
@@ -1468,7 +1468,7 @@ WizOpStyles& WizOpStyleRefRecordHandler::GetImportedStyles() const
 				pStr = ptr to string to update
 
 ********************************************************************************************/
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void WizOpStyleRefRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -1489,7 +1489,7 @@ void WizOpStyleRefRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pReco
 
 	BOOL Ok = pRecord->ReadINT32(&StyleRecordRef);
 
-	WizOpStyle* pStyle = NULL;
+//	WizOpStyle* pStyle = NULL;
 
 	if (Ok)
 	{

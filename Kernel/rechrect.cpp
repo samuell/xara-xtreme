@@ -858,7 +858,7 @@ BOOL RectangleRecordHandler::ReadRectangleComplexRoundedStellatedReformed(CXaraF
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void RectangleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase *pStr)
 {
 	if (pRecord != NULL && pStr != NULL)
@@ -877,7 +877,7 @@ void RectangleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, 
 			case TAG_RECTANGLE_SIMPLE_ROUNDED_REFORMED :
 			case TAG_RECTANGLE_SIMPLE_ROUNDED_STELLATED :
 			case TAG_RECTANGLE_SIMPLE_ROUNDED_STELLATED_REFORMED :
-				(*pStr) += "Rectangle simple\r\n\r\n";
+				(*pStr) += _T("Rectangle simple\r\n\r\n");
 				DescribeRectangleSimple(pRecord, pStr);
 				break;
 
@@ -885,7 +885,7 @@ void RectangleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, 
 			case TAG_RECTANGLE_COMPLEX_STELLATED :
 			case TAG_RECTANGLE_COMPLEX_ROUNDED :
 			case TAG_RECTANGLE_COMPLEX_ROUNDED_STELLATED :
-				(*pStr) += "Rectangle complex\r\n\r\n";
+				(*pStr) += _T("Rectangle complex\r\n\r\n");
 				DescribeRectangleComplex(pRecord, pStr);
 				break;
 
@@ -893,7 +893,7 @@ void RectangleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, 
 			case TAG_RECTANGLE_COMPLEX_STELLATED_REFORMED :
 			case TAG_RECTANGLE_COMPLEX_ROUNDED_REFORMED :
 			case TAG_RECTANGLE_COMPLEX_ROUNDED_STELLATED_REFORMED :
-				(*pStr) += "Rectangle complex reformed\r\n\r\n";
+				(*pStr) += _T("Rectangle complex reformed\r\n\r\n");
 				DescribeRectangleComplexReformed(pRecord, pStr);
 				break;
 

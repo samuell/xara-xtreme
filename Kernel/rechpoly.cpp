@@ -554,7 +554,7 @@ BOOL PolygonRecordHandler::ReadPolygonComplexRoundedStellatedReformed(CXaraFileR
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void PolygonRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase *pStr)
 {
 	if (pRecord != NULL && pStr != NULL)
@@ -569,7 +569,7 @@ void PolygonRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 			case TAG_POLYGON_COMPLEX_STELLATED :
 			case TAG_POLYGON_COMPLEX_ROUNDED :
 			case TAG_POLYGON_COMPLEX_ROUNDED_STELLATED :
-				(*pStr) += "Polygon complex\r\n\r\n";
+				(*pStr) += _T("Polygon complex\r\n\r\n");
 				DescribePolygonComplex(pRecord, pStr);
 				break;
 
@@ -577,7 +577,7 @@ void PolygonRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 			case TAG_POLYGON_COMPLEX_STELLATED_REFORMED :
 			case TAG_POLYGON_COMPLEX_ROUNDED_REFORMED :
 			case TAG_POLYGON_COMPLEX_ROUNDED_STELLATED_REFORMED :
-				(*pStr) += "Polygon complex reformed\r\n\r\n";
+				(*pStr) += _T("Polygon complex reformed\r\n\r\n");
 				DescribePolygonComplexReformed(pRecord, pStr);
 				break;
 
@@ -595,7 +595,7 @@ void PolygonRecordHandler::DescribePolygonComplex(CXaraFileRecord *pRecord, Stri
 	DocCoord MajorAxis;
 	DocCoord MinorAxis;
 	UINT16 NumberOfSides;
-	char s[256];
+	TCHAR s[256];
 
 	BOOL ok = TRUE;
 
@@ -604,13 +604,13 @@ void PolygonRecordHandler::DescribePolygonComplex(CXaraFileRecord *pRecord, Stri
 	if (ok) ok = pRecord->ReadCoordTrans(&MajorAxis,0,0);
 	if (ok) ok = pRecord->ReadCoordTrans(&MinorAxis,0,0);
 
-	_stprintf(s,"Number of sides\t= %d\r\n",NumberOfSides);
+	camSprintf(s,_T("Number of sides\t= %d\r\n"),NumberOfSides);
 	(*pStr) += s;
-	_stprintf(s,"Centre point\t= %d, %d\r\n",CentrePoint.x,CentrePoint.y);
+	camSprintf(s,_T("Centre point\t= %d, %d\r\n"),CentrePoint.x,CentrePoint.y);
 	(*pStr) += s;
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
 }
 
@@ -622,7 +622,7 @@ void PolygonRecordHandler::DescribePolygonComplexReformed(CXaraFileRecord *pReco
 	DocCoord MajorAxis;
 	DocCoord MinorAxis;
 	UINT16 NumberOfSides;
-	char s[256];
+	TCHAR s[256];
 
 	BOOL ok = TRUE;
 
@@ -630,11 +630,11 @@ void PolygonRecordHandler::DescribePolygonComplexReformed(CXaraFileRecord *pReco
 	if (ok) ok = pRecord->ReadCoordTrans(&MajorAxis,0,0);
 	if (ok) ok = pRecord->ReadCoordTrans(&MinorAxis,0,0);
 
-	_stprintf(s,"Number of sides\t= %d\r\n",NumberOfSides);
+	camSprintf(s,_T("Number of sides\t= %d\r\n"),NumberOfSides);
 	(*pStr) += s;
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
 }
 
@@ -643,6 +643,6 @@ void PolygonRecordHandler::DescribeInvalid(CXaraFileRecord *pRecord, StringBase 
 	if (pRecord == NULL || pStr == NULL)
 		return;
 
-	(*pStr) += "Invalid rectangle\r\n";
+	(*pStr) += _T("Invalid rectangle\r\n");
 }
 #endif

@@ -1541,32 +1541,16 @@ BOOL CXaraFileRecord::ReadUnicode(TCHAR* pStr,UINT32 MaxChars)
 BOOL CXaraFileRecord::ReadASCII(TCHAR* pStr,UINT32 MaxChars)
 {
 	BOOL ok = TRUE;
-	BYTE b=1;
-	BYTE* pBuf = (BYTE*)pStr;
-
-#ifdef _UNICODE	
-	BYTE* pBufEnd = pBuf+(MaxChars*2);
+	BYTE b = 1;
+	TCHAR* pBuf = pStr;
+	TCHAR* pBufEnd = pBuf + MaxChars;
 
 	while (ok && b != 0)
 	{
 		ok = ReadBYTE(&b);
-
-		if (ok) ok = (pBuf < pBufEnd);
-		if (ok) *pBuf++ = b;
-		if (ok) ok = (pBuf < pBufEnd);
-		if (ok) *pBuf++ = 0;
-	}
-#else
-	BYTE* pBufEnd = pBuf+MaxChars;
-
-	while (ok && b != 0)
-	{
-		ok = ReadBYTE(&b);
-
 		if (ok) ok = (pBuf < pBufEnd);
 		if (ok) *pBuf++ = b;
 	}
-#endif
 
 	return ok;
 }

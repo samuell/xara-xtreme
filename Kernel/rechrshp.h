@@ -169,7 +169,7 @@ protected:
 
 	BOOL SetFlags(NodeRegularShape *pShape, const BYTE &Value);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	virtual void GetRecordDescriptionText(CXaraFileRecord *pRecord, StringBase *pStr);
 	virtual void DescribeShapeGeneralPhase1(CXaraFileRecord *pRecord, StringBase *pStr);

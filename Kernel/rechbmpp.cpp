@@ -354,7 +354,7 @@ BOOL BitmapPropertiesRecordHandler::HandleStreamedRecord(CXaraFile * pCXFile, UI
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void BitmapPropertiesRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)

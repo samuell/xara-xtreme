@@ -103,7 +103,7 @@
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_CXFTREEDLG">
-					<label>v2 file format dump</label>
+					<label>Xar format dump</label>
 				</object>
 			</object>
 			<object class="sizeritem">

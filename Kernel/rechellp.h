@@ -138,7 +138,7 @@ private:
 	BOOL ReadEllipseSimple(CXaraFileRecord* pCXaraFileRecord);
 	BOOL ReadEllipseComplex(CXaraFileRecord* pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	virtual void GetRecordDescriptionText(CXaraFileRecord *pRecord, StringBase *pStr);
 	virtual void DescribeEllipseSimple(CXaraFileRecord *pRecord, StringBase *pStr);

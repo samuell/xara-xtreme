@@ -126,6 +126,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prnmks.h"
 #include "princomp.h"
 #include "oilruler.h"
+#include "strlist.h"
+#include "impexpop.h"
 
 /***************************************************************************************************************************/
 
@@ -348,6 +350,10 @@ PORTNOTE("other","ScreenCamView::OnCreate - Removed scroller corner usage")
 	}
 
 	CreateNewDocView();
+
+	CViewFileDropTarget* pTarget = new CViewFileDropTarget(this);
+	if (pTarget)
+		RenderWindow->SetDropTarget(pTarget);
 
 	// init the kernel rulers and establish pointer links to them
 	RulerPair* pRulers=pDocView->GetpRulerPair();
@@ -5161,6 +5167,33 @@ DocView *CCamView::GetDocViewFromWindowID( CWindowID WindowID )
 }	
 
 
+bool CCamView::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
+{
+	// Set the correct docivew (and hence document)
+	pDocView->SetCurrent();
+
+	// Create the drop info object
+	FileDropInfo DropInfo(WinCoord(x, y));
+	List* pList = DropInfo.GetFileList();
+
+	size_t Index;
+	for (Index = 0; Index < filenames.GetCount(); Index++)
+	{
+		String_256 Str(filenames[Index].c_str());
+		StringListItem* pItem = new StringListItem(Str);
+		if (pItem)
+			pList->AddTail(pItem);
+	}
+
+	// Invoke the dropped files operation
+	OpDescriptor *pOpDesc = OpDescriptor::FindOpDescriptor(OPTOKEN_DROPPEDFILE);
+	if (pOpDesc)
+		pOpDesc->Invoke((OpParam *) &DropInfo);
+
+	return(true);
+}
+
+
 /********************************************************************************************
 
 >	void ViewDragTarget::ViewDragTarget() 
@@ -5332,5 +5365,20 @@ BOOL ViewDragTarget::ProcessEvent(DragEventType Event,
 			break;
 	}
 	return FALSE;
+}
+
+
+CViewFileDropTarget::CViewFileDropTarget(CCamView* pView)
+{
+	m_pView = pView;
+}
+
+CViewFileDropTarget::~CViewFileDropTarget()
+{
+}
+
+bool CViewFileDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
+{
+	return(m_pView->OnDropFiles(x, y, filenames));
 }
 

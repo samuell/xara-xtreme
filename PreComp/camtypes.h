@@ -103,6 +103,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define EXCLUDE_FROM_XARALX
 #endif
 
+#define XAR_TREE_DIALOG 1
+
 //This removes the UNWIND_SEMATICS warnings during a build
 #pragma warning(disable:4530)
 

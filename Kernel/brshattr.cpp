@@ -5671,7 +5671,7 @@ BOOL BrushAttrRecordHandler::EndSubtree(UINT32 Tag)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 
 void BrushAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
@@ -5681,8 +5681,8 @@ void BrushAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, 
 	// Call base class first to output the tag and size
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord, pStr);
 
-	UINT32 Tag = pRecord->GetTag();
-	INT32 RecordNumber = pRecord->GetRecordNumber();
+//	UINT32 Tag = pRecord->GetTag();
+//	INT32 RecordNumber = pRecord->GetRecordNumber();
 
 
 }

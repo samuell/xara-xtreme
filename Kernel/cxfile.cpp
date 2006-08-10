@@ -2721,7 +2721,7 @@ BOOL GeneralRecordHandler::HandleTagNudgeSizeRecord(CXaraFileRecord* pCXaraFileR
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -2734,10 +2734,11 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 	{
 		case TAG_FILEHEADER :
 		{
+			BYTE TypeBytes[4];
 			TCHAR FileType[4];
 			FileType[3] = 0;
 
-			char s[256];
+			TCHAR s[256];
 			TCHAR Producer[100];
 			TCHAR ProducerVersion[100];
 			TCHAR ProducerBuild[100];
@@ -2745,7 +2746,7 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 			UINT32 PrecompressionFlags;
 			UINT32 FileSize;
 
-			pRecord->ReadBuffer((BYTE*)FileType,3);		// File type (ensuring only 3 chars are read)
+			pRecord->ReadBuffer(TypeBytes,3);		// File type (ensuring only 3 chars are read)
 			pRecord->ReadUINT32(&FileSize);				// File size
 			pRecord->ReadUINT32(&NativeWebLink);			// Native/Web link ID
 			pRecord->ReadUINT32(&PrecompressionFlags);	// Precompression flags
@@ -2753,36 +2754,39 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 			pRecord->ReadASCII(ProducerVersion,100);	// Producer version
 			pRecord->ReadASCII(ProducerBuild,100);		// Producer build
 
-			(*pStr) += "File Type\t\t\t: ";
+			FileType[0] = TypeBytes[0];
+			FileType[1] = TypeBytes[1];
+			FileType[2] = TypeBytes[2];
+			(*pStr) += _T("File Type\t\t\t: ");
 			(*pStr) += FileType;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Uncompressed File Size\t: ";
-			_stprintf(s,"%d",FileSize);
+			(*pStr) += _T("Uncompressed File Size\t: ");
+			camSprintf(s,_T("%d"),FileSize);
 			(*pStr) += s;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Native/Web Link ID\t: ";
-			_stprintf(s,"%d",NativeWebLink);
+			(*pStr) += _T("Native/Web Link ID\t: ");
+			camSprintf(s,_T("%d"),NativeWebLink);
 			(*pStr) += s;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Precompression Flags\t: ";
-			_stprintf(s,"0x%x",PrecompressionFlags);
+			(*pStr) += _T("Precompression Flags\t: ");
+			camSprintf(s,_T("0x%x"),PrecompressionFlags);
 			(*pStr) += s;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Producer\t\t\t: ";
+			(*pStr) += _T("Producer\t\t\t: ");
 			(*pStr) += Producer;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Producer Version\t\t: ";
+			(*pStr) += _T("Producer Version\t\t: ");
 			(*pStr) += ProducerVersion;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
-			(*pStr) += "Producer Build\t\t: ";
+			(*pStr) += _T("Producer Build\t\t: ");
 			(*pStr) += ProducerBuild;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 		}
 		break;
 
@@ -2792,14 +2796,14 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 			UINT32 Tag;
 			String_256 TagText;
 
-			(*pStr) += "Atomic tag list:\r\n";
+			(*pStr) += _T("Atomic tag list:\r\n");
 
 			for (UINT32 i = 0;i < Size; i+=sizeof(UINT32))
 			{
 				pRecord->ReadUINT32(&Tag);
 				GetTagText(Tag,TagText);
 				(*pStr) += TagText;
-				(*pStr) += "\r\n";
+				(*pStr) += _T("\r\n");
 			}
 		}
 		break;
@@ -2810,14 +2814,14 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 			UINT32 Tag;
 			String_256 TagText;
 
-			(*pStr) += "Essential tag list:\r\n";
+			(*pStr) += _T("Essential tag list:\r\n");
 
 			for (UINT32 i = 0;i < Size; i+=sizeof(UINT32))
 			{
 				pRecord->ReadUINT32(&Tag);
 				GetTagText(Tag,TagText);
 				(*pStr) += TagText;
-				(*pStr) += "\r\n";
+				(*pStr) += _T("\r\n");
 			}
 		}
 		break;
@@ -2828,7 +2832,7 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 			UINT32 Tag;
 			String_256 Desc,TagText;
 
-			(*pStr) += "Tag description list:\r\n";
+			(*pStr) += _T("Tag description list:\r\n");
 
 			pRecord->ReadUINT32(&NumTags);
 
@@ -2838,9 +2842,9 @@ void GeneralRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Str
 				pRecord->ReadUnicode(&Desc);//Desc,Desc.MaxLength());
 				GetTagText(Tag,TagText);
 				(*pStr) += TagText;
-				(*pStr) += " (";
+				(*pStr) += _T(" (");
 				(*pStr) += Desc;
-				(*pStr) += ")\r\n";
+				(*pStr) += _T(")\r\n");
 			}
 		}
 		break;

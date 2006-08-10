@@ -245,6 +245,31 @@ private:
 
 
 
+class FileDropInfo
+{
+public:
+	FileDropInfo() {}
+	FileDropInfo(WinCoord Point)
+	{
+		m_DropPoint = Point;
+	}
+
+	~FileDropInfo()
+	{
+		m_FileList.DeleteAll();
+	}
+
+	WinCoord GetDropPoint() { return(m_DropPoint); }
+	List* GetFileList() { return(&m_FileList); }
+
+protected:
+	List m_FileList;
+	WinCoord m_DropPoint;
+};
+
+
+
+
 /********************************************************************************************
 
 >	class OpDroppedFile : public Operation

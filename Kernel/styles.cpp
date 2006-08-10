@@ -1686,7 +1686,7 @@ WizOpStyle* WizOpStyleRecordHandler::FindStyleFromRecordReference(XFileRef Recor
 				pStr = ptr to string to update
 
 ********************************************************************************************/
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void WizOpStyleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -1703,10 +1703,10 @@ void WizOpStyleRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord, pStr);
 
-	TCHAR OpName[64]	= {NULL};
-	TCHAR Question[256]	= {NULL};
-	TCHAR Param[256]	= {NULL};
-	TCHAR StyleName[256]	= {NULL};
+	TCHAR OpName[64]	= {0};
+	TCHAR Question[256]	= {0};
+	TCHAR Param[256]	= {0};
+	TCHAR StyleName[256]	= {0};
 
 	BOOL ok = pRecord->ReadUnicode(OpName, 64);
 

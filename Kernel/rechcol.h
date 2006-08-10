@@ -137,7 +137,7 @@ public:
 	virtual UINT32*	GetTagList();
 	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 	void DecodeColour(ColourModel ColModel, UINT32 Comp1, UINT32 Comp2, UINT32 Comp3, UINT32 Comp4,
 					  BOOL Linked, StringBase* pStr);

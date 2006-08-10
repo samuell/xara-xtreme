@@ -145,7 +145,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "bmapprev.h"
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif
 
@@ -171,6 +171,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "filtimag.h"	// The imagemap filter class
 //#include "desnotes.h"	// Dream weaver integration
 //#include "sliceres.h"	// For _R(IDS_NOTES_WARNING)
+
+#include "strlist.h"
 
 CC_IMPLEMENT_DYNCREATE(OpMenuImport, SelOperation)
 CC_IMPLEMENT_DYNCREATE(OpMenuExport, SelOperation)
@@ -1781,27 +1783,24 @@ BOOL OpDroppedFile::Init()
 
 void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 {
-	// Get the handle for this dropfiles action...
-PORTNOTE("other", "Removed OpGenericDownload" )
-#if 0
-	HDROP hDrop = (HDROP) pOpParam;
+	// Get the file list
+	FileDropInfo* pFileInfo = (FileDropInfo*) pOpParam;
+	List* pFileList = pFileInfo->GetFileList();
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	CXFTreeDlg* pCXFTreeDlg = CXFTreeDlg::GetCurrentCXFTreeDlg();
 	if (pCXFTreeDlg != 0)
 	{
-		char PathBuf[PATH_BUF_SIZE];
-		PathBuf[0] = 0;
-
-		// Get the next filename
-		UINT32 cBytes = DragQueryFile(hDrop, 0, PathBuf, PATH_BUF_SIZE);
-
-		pCXFTreeDlg->ShowFile(PathBuf);
+		StringListItem* pItem = (StringListItem*)(pFileList->GetHead());
+		if (pItem)
+			pCXFTreeDlg->ShowFile((TCHAR*)(pItem->GetString()));
 
 		End();
 		return;
 	}
 #endif
+
+#if FALSE
 #if _DEBUG
 	CMXTreeDlg* pCMXTreeDlg = CMXTreeDlg::GetCurrentCMXTreeDlg();
 	if (pCMXTreeDlg != 0)
@@ -1818,7 +1817,7 @@ PORTNOTE("other", "Removed OpGenericDownload" )
 		return;
 	}
 #endif
-
+#endif
 	// Make sure we have a generic filter!
 	GenericFilter *pGenericFilter = Filter::GetGenericFilter();
 
@@ -1846,8 +1845,8 @@ PORTNOTE("other", "Removed OpGenericDownload" )
 	}
 
 	// Find out where the files were dropped...
-	WinCoord DropPoint;
-	DragQueryPoint(hDrop, &DropPoint);
+	WinCoord DropPoint = pFileInfo->GetDropPoint();
+//	DragQueryPoint(hDrop, &DropPoint);
 
 	// Turn this into Oil coordinates...
 	OilCoord OilPos = DropPoint.ToOil(pDocView);
@@ -1874,28 +1873,34 @@ PORTNOTE("other", "Removed OpGenericDownload" )
 	Pos.pSpread->DocCoordToSpreadCoord(&Pos.Position);
 
 	// Find out how many files were dropped
-	UINT32 cFiles = DragQueryFile(hDrop, (UINT32) -1, 0, 0);
+//	UINT32 cFiles = DragQueryFile(hDrop, (UINT32) -1, 0, 0);
+	UINT32 cFiles = pFileList->GetCount();
+
+	StringListItem* pItem = (StringListItem*)(pFileList->GetHead());
 
 	// Load each file in turn...
 	for (UINT32 iFile = 0; iFile < cFiles; iFile++)
 	{
-		char PathBuf[PATH_BUF_SIZE];
-		PathBuf[0] = 0;
+//		char PathBuf[PATH_BUF_SIZE];
+//		PathBuf[0] = 0;
 
 		// Get the next filename
-		UINT32 cBytes = DragQueryFile(hDrop, iFile, PathBuf, PATH_BUF_SIZE);
+//		UINT32 cBytes = DragQueryFile(hDrop, iFile, PathBuf, PATH_BUF_SIZE);
+
+		String_256 Str = pItem->GetString();
 
 		// Check it's not too long
-		if (cBytes > (PATH_BUF_SIZE - 5))
-		{
-			// Too long - inform user and try the next file.
-			Error::SetError(_R(IDT_FILENAME_TOO_LONG));
-			InformError();
-		}
-		else
+//		if (cBytes > (PATH_BUF_SIZE - 5))
+//		{
+//			// Too long - inform user and try the next file.
+//			Error::SetError(_R(IDT_FILENAME_TOO_LONG));
+//			InformError();
+//		}
+//		else
 		{
 			// Import this file...
-			PathName Path(PathBuf);
+//			PathName Path(PathBuf);
+			PathName Path(Str);
 			// Ensure that the path is valid
 			if ( !Path.IsValid() )
 			{
@@ -1975,7 +1980,6 @@ PORTNOTE("other", "Removed OpGenericDownload" )
 			}
 		}
 	}
-#endif
 	
 	// Finished the operation
 	End();

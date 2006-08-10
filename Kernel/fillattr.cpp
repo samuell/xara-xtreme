@@ -22739,7 +22739,7 @@ void AttrFillGeometry::SetTranspRamp(TransparencyRamp* New) { ATTRVALUE()->SetTr
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -22749,7 +22749,7 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 	// This outputs the tag and size
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
 
-	char s[256];
+	TCHAR s[256];
 
 	UINT32 Tag = pRecord->GetTag();
 	switch (Tag)
@@ -22758,8 +22758,8 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			// Read the colour reference number
 			INT32 ColourRef;
-			BOOL ok = pRecord->ReadINT32(&ColourRef);
-			_stprintf(s,"Colour reference = %d\r\n",ColourRef);	(*pStr) += s;
+			pRecord->ReadINT32(&ColourRef);
+			camSprintf(s,_T("Colour reference = %d\r\n"),ColourRef);	(*pStr) += s;
 		}
 		break;
 
@@ -22781,13 +22781,13 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			pRecord->ReadINT32(&StartColourRef);
 			pRecord->ReadINT32(&EndColourRef);
 
-			_stprintf(s,"Start Colour ref\t= %d\r\n",StartColourRef);				(*pStr) += s;
-			_stprintf(s,"End Colour ref\t= %d\r\n",EndColourRef);	   				(*pStr) += s;
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Start Colour ref\t= %d\r\n"),StartColourRef);				(*pStr) += s;
+			camSprintf(s,_T("End Colour ref\t= %d\r\n"),EndColourRef);	   				(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);		(*pStr) += s;
 			if (Tag == TAG_ELLIPTICALFILL || Tag == TAG_SQUAREFILL || Tag==TAG_LINEARFILL3POINT)
 			{
-				_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);	(*pStr) += s;
+				camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);	(*pStr) += s;
 			}
 		}
 		break;
@@ -22808,16 +22808,16 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			if (Tag == TAG_FOURCOLFILL)
 				pRecord->ReadINT32(&EndColourRef3);
 
-			_stprintf(s,"Start Colour ref\t= %d\r\n",StartColourRef);				(*pStr) += s;
-			_stprintf(s,"End Colour ref\t= %d\r\n",EndColourRef);	   				(*pStr) += s;
-			_stprintf(s,"End Colour2 ref\t= %d\r\n",EndColourRef2);	   				(*pStr) += s;
+			camSprintf(s,_T("Start Colour ref\t= %d\r\n"),StartColourRef);				(*pStr) += s;
+			camSprintf(s,_T("End Colour ref\t= %d\r\n"),EndColourRef);	   				(*pStr) += s;
+			camSprintf(s,_T("End Colour2 ref\t= %d\r\n"),EndColourRef2);	   				(*pStr) += s;
 			if (Tag == TAG_FOURCOLFILL)
 			{
-				_stprintf(s,"End Colour3 ref\t= %d\r\n",EndColourRef3);	   			(*pStr) += s;
+				camSprintf(s,_T("End Colour3 ref\t= %d\r\n"),EndColourRef3);	   			(*pStr) += s;
 			}
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);		(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);			(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);			(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
 		}
 		break;
 
@@ -22839,15 +22839,15 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			}
 			pRecord->ReadINT32(&BitmapRef);
 
-			_stprintf(s,"Bitmap reference\t= %d\r\n",BitmapRef);					(*pStr) += s;
+			camSprintf(s,_T("Bitmap reference\t= %d\r\n"),BitmapRef);					(*pStr) += s;
 			if (Tag == TAG_CONTONEBITMAPFILL)
 			{
-				_stprintf(s,"Start Colour ref\t= %d\r\n",StartColourRef);			(*pStr) += s;
-				_stprintf(s,"End Colour ref\t= %d\r\n",EndColourRef);	   			(*pStr) += s;
+				camSprintf(s,_T("Start Colour ref\t= %d\r\n"),StartColourRef);			(*pStr) += s;
+				camSprintf(s,_T("End Colour ref\t= %d\r\n"),EndColourRef);	   			(*pStr) += s;
 			}
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);		(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
 		}
 		break;
 
@@ -22873,21 +22873,21 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			pRecord->ReadINT32(&DPI);
 			pRecord->ReadBYTE(&Tileable);
 
-			_stprintf(s,"Start Colour ref\t= %d\r\n",StartColRef);				(*pStr) += s;
-			_stprintf(s,"End Colour ref\t= %d\r\n",EndColRef);					(*pStr) += s;
+			camSprintf(s,_T("Start Colour ref\t= %d\r\n"),StartColRef);				(*pStr) += s;
+			camSprintf(s,_T("End Colour ref\t= %d\r\n"),EndColRef);					(*pStr) += s;
 
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);  		(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);  		(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
 
-			_stprintf(s,"Seed\t\t= %d\r\n",Seed);									(*pStr) += s;
+			camSprintf(s,_T("Seed\t\t= %d\r\n"),Seed);									(*pStr) += s;
 
-			d = Graininess.MakeDouble();_stprintf(s,"Graininess\t= %g\r\n",d);	(*pStr) += s;
-			d = Gravity.MakeDouble();	_stprintf(s,"Gravity\t\t= %g\r\n",d);		(*pStr) += s;
-			d = Squash.MakeDouble();	_stprintf(s,"Squash\t\t= %g\r\n",d);		(*pStr) += s;
+			d = Graininess.MakeDouble();camSprintf(s,_T("Graininess\t= %g\r\n"),d);	(*pStr) += s;
+			d = Gravity.MakeDouble();	camSprintf(s,_T("Gravity\t\t= %g\r\n"),d);		(*pStr) += s;
+			d = Squash.MakeDouble();	camSprintf(s,_T("Squash\t\t= %g\r\n"),d);		(*pStr) += s;
 
-			_stprintf(s,"DPI\t\t= %d\r\n",DPI);									(*pStr) += s;
-			_stprintf(s,"Tileable\t\t= %d\r\n",INT32(Tileable));					(*pStr) += s;
+			camSprintf(s,_T("DPI\t\t= %d\r\n"),DPI);									(*pStr) += s;
+			camSprintf(s,_T("Tileable\t\t= %d\r\n"),INT32(Tileable));					(*pStr) += s;
 		}
 		break;
 
@@ -22897,8 +22897,8 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			pRecord->ReadBYTE(&Transp);
 			pRecord->ReadBYTE(&TranspType);
 
-			_stprintf(s,"Transparency\t\t= %d\r\n",INT32(Transp));				(*pStr) += s;
-			_stprintf(s,"Transparency Type\t\t= %d\r\n",INT32(TranspType));	(*pStr) += s;
+			camSprintf(s,_T("Transparency\t\t= %d\r\n"),INT32(Transp));				(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t\t= %d\r\n"),INT32(TranspType));	(*pStr) += s;
 		}
 		break;
 
@@ -22920,15 +22920,15 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			pRecord->ReadBYTE(&EndTransp);
 			pRecord->ReadBYTE(&TranspType);
 
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);		(*pStr) += s;
 			if (Tag == TAG_ELLIPTICALTRANSPARENTFILL || Tag == TAG_SQUARETRANSPARENTFILL || Tag==TAG_LINEARFILL3POINT)
 			{
-				_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);	(*pStr) += s;
+				camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);	(*pStr) += s;
 			}
-			_stprintf(s,"Start Transparency\t= %d\r\n",INT32(Transp));				(*pStr) += s;
-			_stprintf(s,"End Transparency\t= %d\r\n",INT32(EndTransp));			(*pStr) += s;
-			_stprintf(s,"Transparency Type\t= %d\r\n",INT32(TranspType));			(*pStr) += s;
+			camSprintf(s,_T("Start Transparency\t= %d\r\n"),INT32(Transp));				(*pStr) += s;
+			camSprintf(s,_T("End Transparency\t= %d\r\n"),INT32(EndTransp));			(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t= %d\r\n"),INT32(TranspType));			(*pStr) += s;
 		}
 		break;
 
@@ -22954,19 +22954,19 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 				pRecord->ReadBYTE(&EndTransp3);
 			pRecord->ReadBYTE(&TranspType);
 
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);		(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);			(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
-			_stprintf(s,"Start Transparency\t= %d\r\n",INT32(Transp));				(*pStr) += s;
-			_stprintf(s,"End Transparency\t= %d\r\n",INT32(EndTransp));				(*pStr) += s;
-			_stprintf(s,"End Transparency2\t= %d\r\n",INT32(EndTransp2));			(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);			(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Start Transparency\t= %d\r\n"),INT32(Transp));				(*pStr) += s;
+			camSprintf(s,_T("End Transparency\t= %d\r\n"),INT32(EndTransp));				(*pStr) += s;
+			camSprintf(s,_T("End Transparency2\t= %d\r\n"),INT32(EndTransp2));			(*pStr) += s;
 
 			if (Tag == TAG_FOURCOLTRANSPARENTFILL)
 			{
-				_stprintf(s,"End Transparency3\t= %d\r\n",INT32(EndTransp3));		(*pStr) += s;
+				camSprintf(s,_T("End Transparency3\t= %d\r\n"),INT32(EndTransp3));		(*pStr) += s;
 			}
 
-			_stprintf(s,"Transparency Type\t= %d\r\n",INT32(TranspType));			(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t= %d\r\n"),INT32(TranspType));			(*pStr) += s;
 		}
 		break;
 
@@ -22985,15 +22985,15 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			pRecord->ReadBYTE(&TranspType);
 			pRecord->ReadINT32(&BitmapRef);
 
-			_stprintf(s,"Bitmap reference\t= %d\r\n",BitmapRef);					(*pStr) += s;
+			camSprintf(s,_T("Bitmap reference\t= %d\r\n"),BitmapRef);					(*pStr) += s;
 
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);		(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
 
-			_stprintf(s,"Start Transparency\t= %d\r\n",INT32(Transp));				(*pStr) += s;
-			_stprintf(s,"End Transparency\t= %d\r\n",INT32(EndTransp));			(*pStr) += s;
-			_stprintf(s,"Transparency Type\t= %d\r\n",INT32(TranspType));			(*pStr) += s;
+			camSprintf(s,_T("Start Transparency\t= %d\r\n"),INT32(Transp));				(*pStr) += s;
+			camSprintf(s,_T("End Transparency\t= %d\r\n"),INT32(EndTransp));			(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t= %d\r\n"),INT32(TranspType));			(*pStr) += s;
 
 		}
 		break;
@@ -23017,27 +23017,27 @@ void FillAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 
 			pRecord->ReadINT32(&Seed);
 			pRecord->ReadFIXED16(&Graininess);
-			pRecord->ReadFIXED16(M&Gravity);
+			pRecord->ReadFIXED16(&Gravity);
 			pRecord->ReadFIXED16(&Squash);
 			pRecord->ReadINT32(&DPI);
 			pRecord->ReadBYTE(&Tileable);
 
-			_stprintf(s,"Coord 1\t\t= (%d,%d)\r\n",StartPoint.x,StartPoint.y);	(*pStr) += s;
-			_stprintf(s,"Coord 2\t\t= (%d,%d)\r\n",EndPoint.x,EndPoint.y);  		(*pStr) += s;
-			_stprintf(s,"Coord 3\t\t= (%d,%d)\r\n",EndPoint2.x,EndPoint2.y);		(*pStr) += s;
+			camSprintf(s,_T("Coord 1\t\t= (%d,%d)\r\n"),StartPoint.x,StartPoint.y);	(*pStr) += s;
+			camSprintf(s,_T("Coord 2\t\t= (%d,%d)\r\n"),EndPoint.x,EndPoint.y);  		(*pStr) += s;
+			camSprintf(s,_T("Coord 3\t\t= (%d,%d)\r\n"),EndPoint2.x,EndPoint2.y);		(*pStr) += s;
 
-			_stprintf(s,"Start Transparency\t= %d\r\n",INT32(Transp));				(*pStr) += s;
-			_stprintf(s,"End Transparency\t= %d\r\n",INT32(EndTransp));			(*pStr) += s;
-			_stprintf(s,"Transparency Type\t= %d\r\n",INT32(TranspType));			(*pStr) += s;
+			camSprintf(s,_T("Start Transparency\t= %d\r\n"),INT32(Transp));				(*pStr) += s;
+			camSprintf(s,_T("End Transparency\t= %d\r\n"),INT32(EndTransp));			(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t= %d\r\n"),INT32(TranspType));			(*pStr) += s;
 
-			_stprintf(s,"Seed\t\t= %d\r\n",Seed);									(*pStr) += s;
+			camSprintf(s,_T("Seed\t\t= %d\r\n"),Seed);									(*pStr) += s;
 
-			d = Graininess.MakeDouble();_stprintf(s,"Graininess\t= %g\r\n",d);	(*pStr) += s;
-			d = Gravity.MakeDouble();	_stprintf(s,"Gravity\t\t= %g\r\n",d);		(*pStr) += s;
-			d = Squash.MakeDouble();	_stprintf(s,"Squash\t\t= %g\r\n",d);		(*pStr) += s;
+			d = Graininess.MakeDouble();camSprintf(s,_T("Graininess\t= %g\r\n"),d);	(*pStr) += s;
+			d = Gravity.MakeDouble();	camSprintf(s,_T("Gravity\t\t= %g\r\n"),d);		(*pStr) += s;
+			d = Squash.MakeDouble();	camSprintf(s,_T("Squash\t\t= %g\r\n"),d);		(*pStr) += s;
 
-			_stprintf(s,"DPI\t\t= %d\r\n",DPI);									(*pStr) += s;
-			_stprintf(s,"Tileable\t\t= %d\r\n",INT32(Tileable));					(*pStr) += s;
+			camSprintf(s,_T("DPI\t\t= %d\r\n"),DPI);									(*pStr) += s;
+			camSprintf(s,_T("Tileable\t\t= %d\r\n"),INT32(Tileable));					(*pStr) += s;
 		}
 		break;
 	}

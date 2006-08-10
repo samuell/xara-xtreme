@@ -325,7 +325,7 @@ BOOL PrintingRecordHandler::EndSubtree(UINT32 Tag)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void PrintingRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -335,7 +335,7 @@ void PrintingRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord, pStr);
 
 	UINT32 Tag = pRecord->GetTag();
-	INT32 RecordNumber = pRecord->GetRecordNumber();
+//	INT32 RecordNumber = pRecord->GetRecordNumber();
 
 	switch (Tag)
 	{
@@ -353,13 +353,13 @@ void PrintingRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 				BYTE ID;
 				pRecord->ReadBYTE(&ID);
 				String_16 Temp;
-				Temp._MakeMsg("Printers mark, ID = #1%ld", (INT32)ID);
+				Temp._MakeMsg(_T("Printers mark, ID = #1%ld"), (INT32)ID);
 				*pStr += Temp;
 			}
 			break;
 
 		case TAG_PRINTMARKCUSTOM:
-			*pStr += "Custom printers mark subtree follows...";
+			*pStr += _T("Custom printers mark subtree follows...");
 			break;
 
 		default:

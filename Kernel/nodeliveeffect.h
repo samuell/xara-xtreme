@@ -141,14 +141,9 @@ public:
 	virtual BOOL	IsStreamed(UINT32 Tag);
 	virtual BOOL	HandleStreamedRecord(CXaraFile* pCXFile, UINT32 Tag, UINT32 Size, UINT32 RecordNumber);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void	GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr);
 #endif
-
-#if XAR_TREE_DIALOG
-	virtual void	GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr);
-#endif
-
 };
 
 

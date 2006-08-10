@@ -397,7 +397,7 @@ public:
 	virtual BOOL BeginSubtree(UINT32 Tag);
 	virtual BOOL EndSubtree(UINT32 Tag);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr);
 #endif
 };

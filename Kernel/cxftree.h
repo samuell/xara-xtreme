@@ -117,9 +117,9 @@ class DebugTreeInfo;
 class CXaraFileRecordHandler;
 class CXaraFile;
 
-class CXFNode : public CC_CLASS_MEMDUMP
+class CXFNode : public CCObject
 {
-	CC_DECLARE_MEMDUMP( CXFNode )
+	CC_DECLARE_DYNAMIC( CXFNode )
 public:
 
 	CXFNode() {}
@@ -180,28 +180,6 @@ public:
 private:
 	CXFTreeDlg* pCXFDlg;
 	CXaraFile* pCXFile;
-};
-    
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-
-/********************************************************************************************
-
->	class CXFNodeInfo : public CC_CLASS_MEMDUMP
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	10/6/96
-	Purpose:	Hold information on a node displayed in the tree dialog.
-	SeeAlso:	CXFTreeDlg
-
-********************************************************************************************/
-
-class CXFNodeInfo : public CC_CLASS_MEMDUMP
-{
-	CC_DECLARE_MEMDUMP( CXFNodeInfo  )
-public:
-	CXFNode* pNode;
 };
 
 
@@ -278,39 +256,37 @@ class CXFTreeDlg : public DialogOp
 	CC_DECLARE_DYNCREATE( CXFTreeDlg )
 public:
 
-	CXFTreeDlg();      
-	~CXFTreeDlg(); 
-	MsgResult Message( Msg* Message); 
-	void Do(OpDescriptor*);		// "Do" function        
-	static BOOL Init();                        
+	CXFTreeDlg();
+	~CXFTreeDlg();
+
+	MsgResult Message( Msg* Message);
+	void Do(OpDescriptor*);
 	BOOL Create();
+
+	static CDlgResID IDD() {return _R(IDD_NEWDEBUGTREE);}
+
+	static BOOL Init();
 	static OpState GetState(String_256*, OpDescriptor*);
+	static CXFTreeDlg* GetCurrentCXFTreeDlg() { return pCurrentCXFTreeDlg; }
 
 	void SetFileName(String_256& FileName);
 
 	void SetEndOfFile(BOOL b) { EndOfFile = b; }
 
-	enum { IDD = _R(IDD_NEWDEBUGTREE) };  
-
 	void AddNode(CXFNode *pNode);
 
-	static CXFTreeDlg* GetCurrentCXFTreeDlg() { return pCurrentCXFTreeDlg; }
-	void ShowFile(char* pFileName);
+	void ShowFile(TCHAR* pFileName);
 
 	void GetTagText(UINT32 Tag,String_256& Str);
 
 private:
 	void DeInit();
-	void Delete(CXFNode* pNode);
-
-	void DeleteTreeInfo();
 
 	void CreateTree();
-	void DisplayTree(BOOL ExpandAll);
+	void Delete(CXFNode* pNode);
+
 	INT32 AddDisplayNode(CXFNode* pNode,INT32 Index,INT32 Depth,BOOL ExpandAll);
-	void ShowNodeDebugInfo(INT32 ListIndex);
 	void ShowNodeDebugInfoForNode(CXFNode *pNode);
-	CXFNodeInfo* GetInfo(INT32 Index);
 	CXaraFileRecordHandler* CXFTreeDlg::FindHandler(UINT32 Tag);
 	void GetTagText(CXFNode* pNode,String_256& Str);
 
@@ -323,25 +299,22 @@ private:
 	String_256 FileName;
 	BOOL EndOfFile;
 
-	DebugTreeInfo* TreeInfo;
 	StringBase* EditStr;
 
 	CXFNodeTypeStatisticsList ListOfNodeTypeStats;
 
 	static CXFTreeDlg* pCurrentCXFTreeDlg;
-
+	static BOOL 	s_bExpandClicked;
 
 	// New TreeView stuff
-	HTREEITEM AddOneItem(HTREEITEM hParent, TCHAR *pText, HTREEITEM hInsAfter, INT32 iImage, CXFNode *pNode);
-	HTREEITEM AddItemsToNewTreeControl(HTREEITEM hParentItem, CXFNode *pNodeToAdd);
+	CTreeItemID AddOneItem(CTreeItemID hParent, const StringBase& str, CTreeItemID hInsAfter, INT32 iImage, CXFNode *pNode);
+	CTreeItemID AddItemToNewTreeControl(CTreeItemID hParentItem, CTreeItemID hInsAfterItem, CXFNode *pNode, BOOL bAddChildren);
 	BOOL InitialiseNewTreeControl(void);
-	INT32 AddBitmapResourceToImageList(HIMAGELIST hList, UINT32 ResID);
 	INT32 GetImageForNode(CXFNode *pNode);
-	BOOL GetInfoFromHTREEITEM(HTREEITEM hItem, CXFNode **pNode, INT32 *pChildren);
+	BOOL GetInfoFromTreeItem(CTreeItemID hItem, CXFNode **pNode, INT32 *pChildren);
 	void ExpandNewTree();
 
 	// Pictures for tree view
-	HIMAGELIST hNewTreeControlImageList;
 	INT32 m_idxGeneralTag;
 	INT32 m_idxDefineBitmap;
 	INT32 m_idxDefineColour;
@@ -354,7 +327,7 @@ private:
 	INT32 m_idxShape;
 	INT32 m_idxSentinelNode;
 	INT32 m_idxSetProperty;
-};    
+};
 
 #endif // INC_CXFTREE
 

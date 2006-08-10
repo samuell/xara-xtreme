@@ -539,7 +539,7 @@ BOOL RegularShapeRecordHandler::SetFlags(NodeRegularShape *pShape, const BYTE & 
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void RegularShapeRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase *pStr)
 {
 	if (pRecord != NULL && pStr != NULL)
@@ -562,7 +562,7 @@ void RegularShapeRecordHandler::DescribeShapeGeneralPhase1(CXaraFileRecord *pRec
 	if (pRecord == NULL || pStr == NULL)
 		return;
 
-	char s[512];
+	TCHAR s[512];
 
 	BOOL ok = TRUE;
 
@@ -590,22 +590,22 @@ void RegularShapeRecordHandler::DescribeShapeGeneralPhase1(CXaraFileRecord *pRec
 	//if (ok) ok = pRecord->ReadPath(&(pShape->EdgePath1));
 	//if (ok) ok = pRecord->ReadPath(&(pShape->EdgePath2));
 
-	(*pStr) += "General regular shape (Phase 1)\r\n\r\n";
-	_stprintf(s,"Flags\t\t= %x\r\n",Flags);
+	(*pStr) += _T("General regular shape (Phase 1)\r\n\r\n");
+	camSprintf(s,_T("Flags\t\t= %x\r\n"),Flags);
 	(*pStr) += s;
-	_stprintf(s,"Number of sides\t= %d\r\n",NumberOfSides);
+	camSprintf(s,_T("Number of sides\t= %d\r\n"),NumberOfSides);
 	(*pStr) += s;
-	_stprintf(s,"Centre point\t= %d, %d\r\n",UTCentrePoint.x,UTCentrePoint.y);
+	camSprintf(s,_T("Centre point\t= %d, %d\r\n"),UTCentrePoint.x,UTCentrePoint.y);
 	(*pStr) += s;
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Stellation radius\t= %f\r\n",StellationRadius);
+	camSprintf(s,_T("Stellation radius\t= %f\r\n"),StellationRadius);
 	(*pStr) += s;
-	_stprintf(s,"Primary curvature\t= %f\r\n",PrimaryCurvature);
+	camSprintf(s,_T("Primary curvature\t= %f\r\n"),PrimaryCurvature);
 	(*pStr) += s;
-	_stprintf(s,"Secondary curvature\t= %f\r\n",SecondaryCurvature);
+	camSprintf(s,_T("Secondary curvature\t= %f\r\n"),SecondaryCurvature);
 	(*pStr) += s;
 }
 
@@ -614,7 +614,7 @@ void RegularShapeRecordHandler::DescribeShapeGeneralPhase2(CXaraFileRecord *pRec
 	if (pRecord == NULL || pStr == NULL)
 		return;
 
-	char s[512];
+	TCHAR s[512];
 
 	BOOL ok = TRUE;
 
@@ -640,22 +640,22 @@ void RegularShapeRecordHandler::DescribeShapeGeneralPhase2(CXaraFileRecord *pRec
 	//if (ok) ok = pRecord->ReadPath(&(pShape->EdgePath1));
 	//if (ok) ok = pRecord->ReadPath(&(pShape->EdgePath2));
 	
-	(*pStr) += "General regular shape (Phase 2)\r\n\r\n";
-	_stprintf(s,"Flags\t\t= %x\r\n",Flags);
+	(*pStr) += _T("General regular shape (Phase 2)\r\n\r\n");
+	camSprintf(s,_T("Flags\t\t= %x\r\n"),Flags);
 	(*pStr) += s;
-	_stprintf(s,"Number of sides\t= %d\r\n",NumberOfSides);
+	camSprintf(s,_T("Number of sides\t= %d\r\n"),NumberOfSides);
 	(*pStr) += s;
-	_stprintf(s,"Major axis\t\t= %d, %d\r\n",MajorAxis.x,MajorAxis.y);
+	camSprintf(s,_T("Major axis\t\t= %d, %d\r\n"),MajorAxis.x,MajorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Minor axis\t\t= %d, %d\r\n",MinorAxis.x,MinorAxis.y);
+	camSprintf(s,_T("Minor axis\t\t= %d, %d\r\n"),MinorAxis.x,MinorAxis.y);
 	(*pStr) += s;
-	_stprintf(s,"Stellation radius\t= %f\r\n",StellationRadius);
+	camSprintf(s,_T("Stellation radius\t= %f\r\n"),StellationRadius);
 	(*pStr) += s;
-	_stprintf(s,"Stellation offset\t= %f\r\n",StellationOffset);
+	camSprintf(s,_T("Stellation offset\t= %f\r\n"),StellationOffset);
 	(*pStr) += s;
-	_stprintf(s,"Primary curvature\t= %f\r\n",PrimaryCurvature);
+	camSprintf(s,_T("Primary curvature\t= %f\r\n"),PrimaryCurvature);
 	(*pStr) += s;
-	_stprintf(s,"Secondary curvature\t= %f\r\n",SecondaryCurvature);
+	camSprintf(s,_T("Secondary curvature\t= %f\r\n"),SecondaryCurvature);
 	(*pStr) += s;
 }
 
@@ -664,7 +664,7 @@ void RegularShapeRecordHandler::DescribeInvalid(CXaraFileRecord *pRecord, String
 	if (pRecord == NULL || pStr == NULL)
 		return;
 
-	(*pStr) += "Invalid regular shape\r\n";
+	(*pStr) += _T("Invalid regular shape\r\n");
 }
 #endif
 

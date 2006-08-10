@@ -1144,13 +1144,13 @@ BOOL ViewRecordHandler::HandleDocumentViewRecord(CXaraFileRecord* pCXaraFileReco
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void ViewRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -1164,10 +1164,10 @@ void ViewRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,String
 			pRecord->ReadCoord(&lo);
 			pRecord->ReadCoord(&hi);
 
-			_stprintf(s,"lo.x = %d\r\n",lo.x);	(*pStr) += s;
-			_stprintf(s,"lo.y = %d\r\n",lo.y);	(*pStr) += s;
-			_stprintf(s,"hi.x = %d\r\n",hi.x);	(*pStr) += s;
-			_stprintf(s,"hi.y = %d\r\n",hi.y);	(*pStr) += s;
+			camSprintf(s,_T("lo.x = %d\r\n"),lo.x);	(*pStr) += s;
+			camSprintf(s,_T("lo.y = %d\r\n"),lo.y);	(*pStr) += s;
+			camSprintf(s,_T("hi.x = %d\r\n"),hi.x);	(*pStr) += s;
+			camSprintf(s,_T("hi.y = %d\r\n"),hi.y);	(*pStr) += s;
 		}
 		break;
 
@@ -1176,7 +1176,7 @@ void ViewRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,String
 			BYTE Quality = 0;
 			pRecord->ReadBYTE(&Quality);
 
-			_stprintf(s,"Quality = %d\r\n",Quality);
+			camSprintf(s,_T("Quality = %d\r\n"),Quality);
 			(*pStr) += s;
 		}
 		break;
@@ -1192,41 +1192,41 @@ void ViewRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,String
 			pRecord->ReadCoord(&TopRight);
 			pRecord->ReadUINT32(&ViewFlags);
 
-			(*pStr) += "Document view\r\n\r\n";
-			_stprintf(s,"Scale factor \t= %f\r\n",ScaleFactor.MakeDouble());
+			(*pStr) += _T("Document view\r\n\r\n");
+			camSprintf(s,_T("Scale factor \t= %f\r\n"),ScaleFactor.MakeDouble());
 			(*pStr) += s;
-			_stprintf(s,"Bottom left \t= %d,%d\r\n",BottomLeft.x,BottomLeft.y);
+			camSprintf(s,_T("Bottom left \t= %d,%d\r\n"),BottomLeft.x,BottomLeft.y);
 			(*pStr) += s;
-			_stprintf(s,"Top right \t\t= %d,%d\r\n",TopRight.x,TopRight.y);
+			camSprintf(s,_T("Top right \t\t= %d,%d\r\n"),TopRight.x,TopRight.y);
 			(*pStr) += s;
 			// Show all the State flags
 			if (ViewFlags & 8)
-				(*pStr) += "SnapToObjects";
+				(*pStr) += _T("SnapToObjects");
 			if (ViewFlags & 4)
-				(*pStr) += "SnapToGrid ";
+				(*pStr) += _T("SnapToGrid ");
 			if (ViewFlags & 2)
-				(*pStr) += "ShowGrid ";
+				(*pStr) += _T("ShowGrid ");
 			if (ViewFlags & 1)
-				(*pStr) += "ForeBackMode ";
-			(*pStr) += "\r\n";
+				(*pStr) += _T("ForeBackMode ");
+			(*pStr) += _T("\r\n");
 			
 			if (ViewFlags & (8 << 8)) 
-				(*pStr) += "ShowGuides ";
+				(*pStr) += _T("ShowGuides ");
 			if (ViewFlags & (4 << 8))
-				(*pStr) += "SnapToGuides ";
+				(*pStr) += _T("SnapToGuides ");
 			if (ViewFlags & (2 << 8))
-				(*pStr) += "ShowPrintBorders ";
+				(*pStr) += _T("ShowPrintBorders ");
 			if (ViewFlags & (1 << 8))
-				(*pStr) += "SnapToMagObjects ";
-			(*pStr) += "\r\n";
+				(*pStr) += _T("SnapToMagObjects ");
+			(*pStr) += _T("\r\n");
 
 			if (ViewFlags & (2 << 16))
-				(*pStr) += "ShowRulers ";
+				(*pStr) += _T("ShowRulers ");
 			if (ViewFlags & (1 << 16))
-				(*pStr) += "ShowScrollBars ";
-			(*pStr) += "\r\n";
+				(*pStr) += _T("ShowScrollBars ");
+			(*pStr) += _T("\r\n");
 
-			//_stprintf(s,"Flags \t= %d\r\n",ViewFlags);
+			//camSprintf(s,_T("Flags \t= %d\r\n"),ViewFlags);
 			//(*pStr) += s;
 		}
 		break;

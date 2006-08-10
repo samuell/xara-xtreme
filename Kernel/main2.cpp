@@ -184,7 +184,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "backgrnd.h"
 #include "blndtool.h"
 #include "helpuser.h"
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 #include "cxftree.h"
 #endif
 
@@ -363,11 +363,13 @@ PORTNOTE("other","Removed Lots of init functions")
 PORTNOTE("other","Removed CMXTreeDlg usage")
 //			CMXTreeDlg::Init() &&				// Temp ******
 #endif //DEBUG_TREE
+#endif //EXCLUDE_FROM_XARALX
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 			CXFTreeDlg::Init() &&				// The Xar format debug tree dialog
 #endif //XAR_TREE_DIALOG
 
+#ifndef EXCLUDE_FROM_XARALX
 			OpWhatsThis::Init() &&				// Register the "What's This?" help mode Operation
 			WindowOps::Init() &&				// Register Window Operations
 #endif //EXCLUDE_FROM_XARALX
@@ -391,8 +393,8 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 			HelpDownloadOp::Init() &&			// Register help and support download operations
 #ifndef STANDALONE
 #endif // STANDALONE
-			OpDroppedFile::Init() &&			// Register drag'n'drop import operations
 #endif //EXCLUDE_FROM_XARALX
+			OpDroppedFile::Init() &&			// Register drag'n'drop import operations
 			BaseFileDialog::Init() &&			// Declare the open and save default paths
 			DummyOp::Init() &&					// Register dummy ops for unimplemented menu items
 			OpMenuLoad::Init() &&				// Register Load operation

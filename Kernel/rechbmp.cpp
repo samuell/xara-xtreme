@@ -530,7 +530,7 @@ BOOL BitmapRecordHandler::HandleXPEBitmapPlaceHolder(CXaraFileRecord* pCXaraFile
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void BitmapRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -542,7 +542,7 @@ void BitmapRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 
 	UINT32 Tag = pRecord->GetTag();
 	BOOL ok = TRUE;
-	char s[340];
+	TCHAR s[340];
 	INT32 RecordNumber = pRecord->GetRecordNumber();
 
 	// If define bitmap records then read in the bitmap name
@@ -552,12 +552,12 @@ void BitmapRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 	{
 		if (ok) ok = pRecord->ReadUnicode(&BmpName);//BmpName, BmpName.MaxLength());
 		if (BmpName.Length() == 0)
-			BmpName = "Unnamed\r\n\r\n";
+			BmpName = _T("Unnamed\r\n\r\n");
 		else
 		{
-			BitmapDetails = "Bitmap name:- ";
+			BitmapDetails = _T("Bitmap name:- ");
 			BitmapDetails += BmpName;
-			BitmapDetails += "\r\n\r\n";
+			BitmapDetails += _T("\r\n\r\n");
 		}
 	}
 
@@ -576,15 +576,13 @@ void BitmapRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 			if (ok) ok = pRecord->ReadCoord(&Parallel[2]);
 			if (ok) ok = pRecord->ReadCoord(&Parallel[3]);
 			if (ok) ok = pRecord->ReadINT32(&BitmapRecordRef);
-			_stprintf(s,"Node bitmap\r\n\r\n");
+			(*pStr) += _T("Node bitmap\r\n\r\n");
+			camSprintf(s,_T("Bitmap reference : %d\r\n\r\n"),BitmapRecordRef);
 			(*pStr) += s;
-			_stprintf(s,"Bitmap reference : %d\r\n\r\n",BitmapRecordRef);
-			(*pStr) += s;
-			_stprintf(s,"\tNum\tX Coord\tY Coord\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("\tNum\tX Coord\tY Coord\r\n");
 			for (INT32 i = 0; i < 4; i++)
 			{
-				_stprintf(s,"\t%d\t%d\t%d\r\n",i,Parallel[i].x,Parallel[i].y);
+				camSprintf(s,_T("\t%d\t%d\t%d\r\n"),i,Parallel[i].x,Parallel[i].y);
 				(*pStr) += s;
 			}
 			break;
@@ -599,84 +597,79 @@ void BitmapRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 			if (ok) ok = pRecord->ReadINT32(&BitmapRecordRef);
 			if (ok) ok = pRecord->ReadINT32(&StartColourRecordRef);
 			if (ok) ok = pRecord->ReadINT32(&EndColourRecordRef);
-			_stprintf(s,"Node contoned bitmap\r\n\r\n");
+			camSprintf(s,_T("Node contoned bitmap\r\n\r\n"));
 			(*pStr) += s;
-			_stprintf(s,"Bitmap reference :\t %d\r\n\r\n",BitmapRecordRef);
+			camSprintf(s,_T("Bitmap reference :\t %d\r\n\r\n"),BitmapRecordRef);
 			(*pStr) += s;
-			_stprintf(s,"Start colour reference :\t %d\r\n\r\n",StartColourRecordRef);
+			camSprintf(s,_T("Start colour reference :\t %d\r\n\r\n"),StartColourRecordRef);
 			(*pStr) += s;
-			_stprintf(s,"End colour reference :\t %d\r\n\r\n",EndColourRecordRef);
+			camSprintf(s,_T("End colour reference :\t %d\r\n\r\n"),EndColourRecordRef);
 			(*pStr) += s;
-			_stprintf(s,"\tNum\tX Coord\tY Coord\r\n");
+			camSprintf(s,_T("\tNum\tX Coord\tY Coord\r\n"));
 			(*pStr) += s;
 			for (INT32 i = 0; i < 4; i++)
 			{
-				_stprintf(s,"\t%d\t%d\t%d\r\n",i,Parallel[i].x,Parallel[i].y);
+				camSprintf(s,_T("\t%d\t%d\t%d\r\n"),i,Parallel[i].x,Parallel[i].y);
 				(*pStr) += s;
 			}
 			break;
 		}
 	// Preview bitmap records
 		case TAG_PREVIEWBITMAP_BMP:
-			_stprintf(s,"Preview bitmap type BMP\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Preview bitmap type BMP\r\n\r\n");
 			break;
 		case TAG_PREVIEWBITMAP_GIF:
-			_stprintf(s,"Preview bitmap type GIF\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Preview bitmap type GIF\r\n\r\n");
 			break;
 		case TAG_PREVIEWBITMAP_JPEG:
-			_stprintf(s,"Preview bitmap type JPEG\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Preview bitmap type JPEG\r\n\r\n");
 			break;
 		case TAG_PREVIEWBITMAP_PNG:
-			_stprintf(s,"Preview bitmap type PNG\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Preview bitmap type PNG\r\n\r\n");
 			break;
 		case TAG_PREVIEWBITMAP_TIFFLZW:
-			_stprintf(s,"Preview bitmap type TIFF LZW\r\n\r\n");
-			(*pStr) += s;
+			(*pStr) += _T("Preview bitmap type TIFF LZW\r\n\r\n");
 			break;
 	
 	// Define bitmap records
 		case TAG_DEFINEBITMAP_BMP:
-			_stprintf(s,"Define BMP bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define BMP bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			break;
 		case TAG_DEFINEBITMAP_GIF:
-			_stprintf(s,"Define GIF bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define GIF bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			break;
 		case TAG_DEFINEBITMAP_JPEG:
-			_stprintf(s,"Define JPEG bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define JPEG bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			break;
 		case TAG_DEFINEBITMAP_PNG:
-			_stprintf(s,"Define PNG bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define PNG bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			break;
 		case TAG_DEFINEBITMAP_BMPZIP:
-			_stprintf(s,"Define zipped BMP bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define zipped BMP bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			break;
 		case TAG_DEFINEBITMAP_JPEG8BPP:
 		{
-			_stprintf(s,"Define 8bpp JPEG bitmap reference %d\r\n\r\n",RecordNumber);
+			camSprintf(s,_T("Define 8bpp JPEG bitmap reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			(*pStr) += BitmapDetails;
 			BYTE Entries = 0;
 			if (ok) ok = pRecord->ReadBYTE(&Entries);
-			_stprintf(s,"Palette entries %d\r\n\r\n",Entries + 1);
+			camSprintf(s,_T("Palette entries %d\r\n\r\n"),Entries + 1);
 			(*pStr) += s;
 			break;
 		}
 		default:
-			(*pStr) += "Unknown type of bitmap record\r\n";
+			(*pStr) += _T("Unknown type of bitmap record\r\n");
 			break;
 	}
 

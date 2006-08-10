@@ -425,7 +425,7 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -437,7 +437,7 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			INT32 Quality = 0;
 			pRecord->ReadINT32(&Quality);
 
-			_stprintf(s,"Quality = %d\r\n",Quality);
+			camSprintf(s,_T("Quality = %d\r\n"),Quality);
 			(*pStr) += s;
 		}
 		break;
@@ -450,9 +450,9 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			pRecord->ReadUnicode(Key, 256);
 			pRecord->ReadUnicode(Value, 256);
 
-			_stprintf(s,"Key   = %s\r\n",Key);
+			camSprintf(s,_T("Key   = %s\r\n"),Key);
 			(*pStr) += s;
-			_stprintf(s,"Value = %s\r\n",Value);
+			camSprintf(s,_T("Value = %s\r\n"),Value);
 			(*pStr) += s;
 		}
 		break;
@@ -465,9 +465,9 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			pRecord->ReadUnicode(URL, 256);
 			pRecord->ReadUnicode(Frame, 256);
 
-			_stprintf(s,"URL   = %s\r\n",URL);
+			camSprintf(s,_T("URL   = %s\r\n"),URL);
 			(*pStr) += s;
-			_stprintf(s,"Frame = %s\r\n",Frame);
+			camSprintf(s,_T("Frame = %s\r\n"),Frame);
 			(*pStr) += s;
 		}
 		break;
@@ -484,9 +484,9 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			pRecord->ReadUnicode(URL, 256);
 			pRecord->ReadUnicode(Frame, 256);
 
-			_stprintf(s,"URL   = %s\r\n",URL);
+			camSprintf(s,_T("URL   = %s\r\n"),URL);
 			(*pStr) += s;
-			_stprintf(s,"Frame = %s\r\n",Frame);
+			camSprintf(s,_T("Frame = %s\r\n"),Frame);
 			(*pStr) += s;
 		}
 		break;

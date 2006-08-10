@@ -2073,13 +2073,13 @@ BOOL GroupRecordHandler::HandleGroupRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void GroupRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	// Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -2102,7 +2102,7 @@ void GroupRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			DocRect rbounds;
 			pRecord->ReadCoord(&rbounds.lo);
 			pRecord->ReadCoord(&rbounds.hi);
-			camSprintf(s, _T("Bounds\t\t= %d, %d, %d, %d\r\n"), rbounds.lox, rbounds.loy, rbounds.hix, rbounds.hiy);
+			camSprintf(s, _T("Bounds\t\t= %d, %d, %d, %d\r\n"), rbounds.lo.x, rbounds.lo.y, rbounds.hi.x, rbounds.hi.y);
 			(*pStr) += s;
 			break;
 	}

@@ -143,7 +143,7 @@ public:
 	virtual BOOL EndSubtree(UINT32 Tag);
 
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord *pCXaraFileRecord, StringBase *Str);
 #endif
 

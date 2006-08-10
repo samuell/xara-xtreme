@@ -334,9 +334,7 @@ public:
 	virtual UINT32 GetProgressBarCount()	{ return ProgressBarCount; }
 	virtual BOOL SetTotalProgressBarCount(UINT32 n);
 
-#if XAR_TREE_DIALOG
 	static List* GetRecordHandlers() { return &RecordHandlerList; }
-#endif
 
 	virtual WebPrefsDlgParam* GetCachedExportOptions() { return pPrefs; }
 

@@ -3377,13 +3377,13 @@ BOOL PathRecordHandler::HandlePathRefRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void PathRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	// Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -3415,11 +3415,11 @@ void PathRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,String
 			{
 				pRecord->ReadBYTE(&Flags);
 
-				sprintf(s,"Flags\r\n"); (*pStr) += s;
-				sprintf(s,"Smooth:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_SMOOTH)   != 0); (*pStr) += s;
-				sprintf(s,"Rotate:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_ROTATE)    != 0); (*pStr) += s;
-				sprintf(s,"EndPoint:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_ENDPOINT) != 0); (*pStr) += s;
-				sprintf(s,"\r\n"); (*pStr) += s;
+				camSprintf(s,_T("Flags\r\n")); (*pStr) += s;
+				camSprintf(s,_T("Smooth:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_SMOOTH)   != 0); (*pStr) += s;
+				camSprintf(s,_T("Rotate:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_ROTATE)    != 0); (*pStr) += s;
+				camSprintf(s,_T("EndPoint:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_ENDPOINT) != 0); (*pStr) += s;
+				camSprintf(s,_T("\r\n")); (*pStr) += s;
 
 			}
 		}
@@ -3433,20 +3433,20 @@ void PathRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,String
 			pRecord->ReadUINT32(&SrcRecNum);
 			pRecord->ReadMatrix(&Transform);
 
-			sprintf(s,"Src path rec num:\t%d\r\n",SrcRecNum); (*pStr) += s;
+			camSprintf(s,_T("Src path rec num:\t%d\r\n"),SrcRecNum); (*pStr) += s;
 
 			FIXED16 abcd[4];
 			INT32    ef[2];
 			double  d;
 			Transform.GetComponents(abcd,ef);
 
-			d = abcd[0].MakeDouble(); sprintf(s,"a = %g\r\n",d); (*pStr) += s;
-			d = abcd[1].MakeDouble(); sprintf(s,"b = %g\r\n",d); (*pStr) += s;
-			d = abcd[2].MakeDouble(); sprintf(s,"c = %g\r\n",d); (*pStr) += s;
-			d = abcd[3].MakeDouble(); sprintf(s,"d = %g\r\n",d); (*pStr) += s;
+			d = abcd[0].MakeDouble(); camSprintf(s,_T("a = %g\r\n"),d); (*pStr) += s;
+			d = abcd[1].MakeDouble(); camSprintf(s,_T("b = %g\r\n"),d); (*pStr) += s;
+			d = abcd[2].MakeDouble(); camSprintf(s,_T("c = %g\r\n"),d); (*pStr) += s;
+			d = abcd[3].MakeDouble(); camSprintf(s,_T("d = %g\r\n"),d); (*pStr) += s;
 
-			sprintf(s,"e = %d\r\n",ef[0]); (*pStr) += s;
-			sprintf(s,"f = %d\r\n",ef[1]); (*pStr) += s;		
+			camSprintf(s,_T("e = %d\r\n"),ef[0]); (*pStr) += s;
+			camSprintf(s,_T("f = %d\r\n"),ef[1]); (*pStr) += s;		
 		}
 		break;
 	}
@@ -3553,13 +3553,13 @@ BOOL PathFlagsRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void PathFlagsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	// Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -3575,11 +3575,11 @@ void PathFlagsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,S
 			{
 				pRecord->ReadBYTE(&Flags);
 
-				sprintf(s,"Flags\r\n"); (*pStr) += s;
-				sprintf(s,"Smooth:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_SMOOTH)   != 0); (*pStr) += s;
-				sprintf(s,"Rotate:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_ROTATE)    != 0); (*pStr) += s;
-				sprintf(s,"EndPoint:\t%d\r\n",	(Flags & TAG_PATH_FLAGS_ENDPOINT) != 0); (*pStr) += s;
-				sprintf(s,"\r\n"); (*pStr) += s;
+				camSprintf(s,_T("Flags\r\n")); (*pStr) += s;
+				camSprintf(s,_T("Smooth:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_SMOOTH)   != 0); (*pStr) += s;
+				camSprintf(s,_T("Rotate:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_ROTATE)    != 0); (*pStr) += s;
+				camSprintf(s,_T("EndPoint:\t%d\r\n"),	(Flags & TAG_PATH_FLAGS_ENDPOINT) != 0); (*pStr) += s;
+				camSprintf(s,_T("\r\n")); (*pStr) += s;
 
 			}
 		}

@@ -271,7 +271,7 @@ BOOL CompressionRecordHandler::IsStreamed(UINT32 Tag)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void CompressionRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -282,7 +282,7 @@ void CompressionRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
 
 	UINT32 Tag = pRecord->GetTag();
-	char s[256];
+	TCHAR s[256];
 	switch (Tag)
 	{
 		case TAG_STARTCOMPRESSION:
@@ -295,9 +295,9 @@ void CompressionRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			UINT32 Type = 0L;
 			UINT32 MajorVersion = Version / 100;
 			UINT32 MinorVersion = Version - MajorVersion * 100;
-			_stprintf(s,"Compression type\t= %d\r\n",Type);
+			camSprintf(s,_T("Compression type\t= %d\r\n"),Type);
 			(*pStr) += s;
-			_stprintf(s,"Compression version\t= %d.%d\r\n",MajorVersion,MinorVersion);
+			camSprintf(s,_T("Compression version\t= %d.%d\r\n"),MajorVersion,MinorVersion);
 			(*pStr) += s;
 			break;
 		}
@@ -307,11 +307,11 @@ void CompressionRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 			// Read the number of bytes read 
 			UINT32 Checksum = 0L;
 			pRecord->ReadUINT32(&Checksum);
-			_stprintf(s,"Compression checksum\t= %d\r\n",Checksum);
+			camSprintf(s,_T("Compression checksum\t= %d\r\n"),Checksum);
 			(*pStr) += s;
 			UINT32 BytesRead = 0L;
 			pRecord->ReadUINT32(&BytesRead);
-			_stprintf(s,"Compression bytes read\t= %d\r\n",BytesRead);
+			camSprintf(s,_T("Compression bytes read\t= %d\r\n"),BytesRead);
 			(*pStr) += s;
 			break;
 		}

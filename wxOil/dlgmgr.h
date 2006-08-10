@@ -266,8 +266,9 @@ class CGadgetImageList : public CCObject
 
 public:
 	CGadgetImageList(UINT32 width=0, UINT32 height=0) {m_width = width; m_height = height;}
+	~CGadgetImageList();
 
-	UINT32 Add(CDlgResID resID) {m_BitmapIDList.AddTail(new ResIDListItem(resID)); return m_BitmapIDList.GetCount()-1;}		// Ahem!
+	UINT32 Add(CDlgResID resID);
 	ListItem* FindFirstBitmap(ResourceID* presID) const;
 	ListItem* FindNextBitmap(ListItem* pListItem, ResourceID* presID) const;
 	UINT32 GetWidth() const {return m_width;}

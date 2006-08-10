@@ -220,7 +220,7 @@ BOOL ColourRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -238,7 +238,7 @@ void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 	{
 		case TAG_DEFINERGBCOLOUR:
 		{
-			canSprintf(s,_T("Define simple colour reference %d\r\n\r\n"),RecordNumber);
+			camSprintf(s,_T("Define simple colour reference %d\r\n\r\n"),RecordNumber);
 			(*pStr) += s;
 			// Show what the simple RGB colour is
 			BYTE Red = 0;
@@ -278,12 +278,12 @@ void ColourRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Str
 			ColourModel ColModel = COLOURMODEL_RGBT;
 			BYTE temp;
 			if (ok) ok = pRecord->ReadBYTE(&temp);
-			ColModel = temp;
+			ColModel = (ColourModel)temp;
 
 			// read in the colour type
 			ExportColourType ColType = EXPORT_COLOURTYPE_NORMAL;
 			if (ok) ok = pRecord->ReadBYTE(&temp);
-			ColType = temp;
+			ColType = (ExportColourType)temp;
 
 			// read in the entry number that this colour should be in the list of colours
 			UINT32 EntryNumber = 0;

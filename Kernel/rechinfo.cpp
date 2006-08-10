@@ -242,7 +242,7 @@ BOOL DocInfoRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -254,8 +254,7 @@ void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 
 	UINT32 Tag = pRecord->GetTag();
 	BOOL ok = TRUE;
-	//char s[256];
-	INT32 RecordNumber = pRecord->GetRecordNumber();
+//	INT32 RecordNumber = pRecord->GetRecordNumber();
 	switch (Tag)
 	{
 		case TAG_DOCUMENTCOMMENT:
@@ -263,12 +262,12 @@ void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 			String_256 Comment;
 			if (ok) ok = pRecord->ReadUnicode(&Comment);//Comment, Comment.MaxLength());
 			if (Comment.Length() == 0)
-				(*pStr) += "None\r\n\r\n";
+				(*pStr) += _T("None\r\n\r\n");
 			else
 			{
-				(*pStr) += "Comment:- \r\n";
+				(*pStr) += _T("Comment:- \r\n");
 				(*pStr) += Comment;
-				(*pStr) += "\r\n\r\n";
+				(*pStr) += _T("\r\n\r\n");
 			}
 
 			break;
@@ -276,29 +275,31 @@ void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 
 		case TAG_DOCUMENTDATES:
 		{
+#if FALSE
 			// Read in the times/dates from the record
 			time_t Creation;
 			time_t LastSaved;
 
-			if (ok) ok = pRecord->ReadINT32(&Creation);
-			if (ok) ok = pRecord->ReadINT32(&LastSaved);
+			if (ok) ok = pRecord->ReadINT32((INT32*)&Creation);
+			if (ok) ok = pRecord->ReadINT32((INT32*)&LastSaved);
 			
 #if !defined(EXCLUDE_FROM_RALPH)
 			String_256 String;
-			(*pStr) += "Document created:- \t";
+			(*pStr) += _T("Document created:- \t");
 			LocalEnvironment::SystemTimeToString(&String, &Creation);
 			(*pStr) += String;
-			(*pStr) += "\t";
+			(*pStr) += _T("\t");
 			LocalEnvironment::SystemDateToString(&String, &Creation);
 			(*pStr) += String;
-			(*pStr) += "\r\n\r\n";
-			(*pStr) += "Document last saved:- \t";
+			(*pStr) += _T("\r\n\r\n");
+			(*pStr) += _T("Document last saved:- \t");
 			LocalEnvironment::SystemTimeToString(&String, &LastSaved);
 			(*pStr) += String;
-			(*pStr) += "\t";
+			(*pStr) += _T("\t");
 			LocalEnvironment::SystemDateToString(&String, &LastSaved);
 			(*pStr) += String;
-			(*pStr) += "\r\n\r\n";
+			(*pStr) += _T("\r\n\r\n");
+#endif
 #endif
 			break;
 		}
@@ -309,15 +310,15 @@ void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 			if (ok) ok = pRecord->ReadUINT32(&UndoBufSize);
 			if (UndoBufSize == UINT32_MAX)
 			{
-				(*pStr) += "Undo buffer size: \t= unlimited\r\n";
+				(*pStr) += _T("Undo buffer size: \t= unlimited\r\n");
 			}
 			else
 			{
-				(*pStr) += "Undo buffer size:- ";
+				(*pStr) += _T("Undo buffer size:- ");
 				String_256 Value;
 				Convert::BytesToString(&Value, UndoBufSize);
 				(*pStr) += Value;
-				(*pStr) += "\r\n\r\n";
+				(*pStr) += _T("\r\n\r\n");
 			}
 			break;
 		}
@@ -326,12 +327,12 @@ void DocInfoRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, St
 		{
 			UINT32 DocFlags = 0;
 			if (ok) ok = pRecord->ReadUINT32(&DocFlags);
-			(*pStr) += "Document flags which are currently set are:- \r\n";
+			(*pStr) += _T("Document flags which are currently set are:- \r\n");
 			if (DocFlags & 2)
-				(*pStr) += "Multilayer ";
+				(*pStr) += _T("Multilayer ");
 			if (DocFlags & 1)
-				(*pStr) += "AllLayersVisible ";
-			(*pStr) += "\r\n\r\n";
+				(*pStr) += _T("AllLayersVisible ");
+			(*pStr) += _T("\r\n\r\n");
 			break;
 		}
 	} 

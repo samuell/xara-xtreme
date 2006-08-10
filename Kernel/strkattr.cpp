@@ -2016,7 +2016,7 @@ BOOL StrokeAttrRecordHandler::EndSubtree(UINT32 Tag)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void StrokeAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -2026,16 +2026,16 @@ void StrokeAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord, pStr);
 
 	UINT32 Tag = pRecord->GetTag();
-	INT32 RecordNumber = pRecord->GetRecordNumber();
+//	INT32 RecordNumber = pRecord->GetRecordNumber();
 
 	switch (Tag)
 	{
 		case TAG_STROKETYPE:
-			*pStr += String_64("New-style stroke (basic type)");	// Only 1 stroke type so far!
+			*pStr += String_64(_T("New-style stroke (basic type)"));	// Only 1 stroke type so far!
 			break;
 
 		case TAG_STROKEDEFINITION:
-			*pStr += String_64("New-style stroke (Vector type)");
+			*pStr += String_64(_T("New-style stroke (Vector type)"));
 			break;
 
 		case TAG_STROKEAIRBRUSH:
@@ -2045,13 +2045,13 @@ void StrokeAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,
 				if (pValFunc != NULL)
 				{
 					String_256 Desc;
-					Desc._MakeMsg("Airbrush stroke of class #1%s", 
+					Desc._MakeMsg(_T("Airbrush stroke of class #1%s"), 
 									(TCHAR *)pValFunc->GetRuntimeClass()->m_lpszClassName);
 					*pStr += Desc;
 					delete pValFunc;
 				}
 				else
-					*pStr += String_64("Unknown Airbrush stroke type (failed to load)");
+					*pStr += String_64(_T("Unknown Airbrush stroke type (failed to load)"));
 			}
 			break;
 			break;
@@ -2063,19 +2063,19 @@ void StrokeAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,
 				switch(Function)
 				{
 					case VarWidth_Constant:
-						*pStr += String_64("Constant predefined stroke width");
+						*pStr += String_64(_T("Constant predefined stroke width"));
 						break;
 
 					case VarWidth_LinRamp:
-						*pStr += String_64("Linear-Ramp predefined stroke width");
+						*pStr += String_64(_T("Linear-Ramp predefined stroke width"));
 						break;
 
 					case VarWidth_SRamp:
-						*pStr += String_64("S-Ramp predefined stroke width");
+						*pStr += String_64(_T("S-Ramp predefined stroke width"));
 						break;
 
 					default:
-						*pStr += String_64("Unknown predefined stroke width type");
+						*pStr += String_64(_T("Unknown predefined stroke width type"));
 						break;
 				}
 			}
@@ -2088,18 +2088,18 @@ void StrokeAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,
 				if (pValFunc != NULL)
 				{
 					String_256 Desc;
-					Desc._MakeMsg("VariableWidth of class #1%s", 
+					Desc._MakeMsg(_T("VariableWidth of class #1%s"), 
 									(TCHAR *)pValFunc->GetRuntimeClass()->m_lpszClassName);
 					*pStr += Desc;
 					delete pValFunc;
 				}
 				else
-					*pStr += String_64("Unknown VariableWidth ValueFunction (failed to load)");
+					*pStr += String_64(_T("Unknown VariableWidth ValueFunction (failed to load)"));
 			}
 			break;
 
 		default:
-			ERROR3("Unknown tag passed to StrokeAttrRecordHandler");
+			ERROR3(_T("Unknown tag passed to StrokeAttrRecordHandler"));
 			break;
 	}
 }

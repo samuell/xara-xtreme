@@ -143,7 +143,7 @@ public:
 	virtual BOOL	HandleNodeBitmap(CXaraFileRecord* pCXaraFileRecord, INT32 Tag);
 	virtual BOOL	HandleXPEBitmapPlaceHolder(CXaraFileRecord* pCXaraFileRecord, INT32 Tag);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 #endif
 

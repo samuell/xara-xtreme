@@ -110,7 +110,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "app.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "ccobject.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "nodetext.h"
-#include <ios.h>
+//#include <ios.h>
 #include "bubbleid.h"
 
 //#include "filtrres.h"
@@ -132,8 +132,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 CC_IMPLEMENT_DYNCREATE(CXFTreeDlg, DialogOp)
 CC_IMPLEMENT_DYNAMIC(CXFTreeDlgRecordHandler,CXaraFileRecordHandler)
 
-CC_IMPLEMENT_MEMDUMP( CXFNodeInfo, CC_CLASS_MEMDUMP )
-CC_IMPLEMENT_MEMDUMP( CXFNode, CC_CLASS_MEMDUMP )
+CC_IMPLEMENT_DYNAMIC(CXFNode, CCObject)
 
 CC_IMPLEMENT_MEMDUMP(CXFNodeTypeStatistics,ListItem)
 CC_IMPLEMENT_MEMDUMP(CXFNodeTypeStatisticsList,List)
@@ -143,6 +142,7 @@ CC_IMPLEMENT_MEMDUMP(CXFNodeTypeStatisticsList,List)
 #define new CAM_DEBUG_NEW
 
 CXFTreeDlg* CXFTreeDlg::pCurrentCXFTreeDlg = NULL;
+BOOL CXFTreeDlg::s_bExpandClicked = FALSE;
 
 /********************************************************************************************
 
@@ -155,21 +155,20 @@ CXFTreeDlg* CXFTreeDlg::pCurrentCXFTreeDlg = NULL;
 
 ********************************************************************************************/
 
-CXFTreeDlg::CXFTreeDlg(): DialogOp(CXFTreeDlg::IDD, MODELESS) 
-{      
+CXFTreeDlg::CXFTreeDlg(): DialogOp(CXFTreeDlg::IDD(), MODELESS) 
+{
 	pRoot			= NULL;
 	pContextNode	= NULL;
 	EndOfFile		= FALSE;
 	AddNextAsChild	= FALSE;
 	Level			= 0;
-	TreeInfo		= NULL;
 	MaxIndex		= 0;
 
 	EditStr = new StringBase;
 	if (!EditStr || !EditStr->Alloc(0x100000)) return;
 
 	CXFTreeDlg::pCurrentCXFTreeDlg = this;
-}     
+}
 
 
 /********************************************************************************************
@@ -185,10 +184,10 @@ CXFTreeDlg::CXFTreeDlg(): DialogOp(CXFTreeDlg::IDD, MODELESS)
 CXFTreeDlg::~CXFTreeDlg()     
 {
 	Delete(pRoot);
-	DeleteTreeInfo();
+	pRoot = NULL;
 
 	// Deallocate the node details string.
-	delete EditStr;         
+	delete EditStr;
 
 	CXFTreeDlg::pCurrentCXFTreeDlg = NULL;
 }
@@ -207,8 +206,8 @@ CXFTreeDlg::~CXFTreeDlg()
 
 ********************************************************************************************/
 
-void CXFTreeDlg::Do(OpDescriptor*)		// "Do" function        
-{  
+void CXFTreeDlg::Do(OpDescriptor*)
+{
 	Create();
 	Open();
 }
@@ -227,18 +226,18 @@ void CXFTreeDlg::Do(OpDescriptor*)		// "Do" function
 
 ********************************************************************************************/
 
-BOOL CXFTreeDlg::Init()                     
+BOOL CXFTreeDlg::Init()
 {
 	// Register our OpDescriptor
 	return (RegisterOpDescriptor(
-	 							 0,
-	 							 _R(IDS_CXFTREEDLG), 
+								 0,
+								 _R(IDS_CXFTREEDLG), 
 								 CC_RUNTIME_CLASS(CXFTreeDlg),
-	 							 OPTOKEN_CXFTREEDLG,
-	 							 CXFTreeDlg::GetState,
-	 							 0,	/* help ID */
-	 							 _R(IDBBL_DEBUGTREEDLG),
-	 							 0	/* bitmap ID */));
+								 OPTOKEN_CXFTREEDLG,
+								 CXFTreeDlg::GetState,
+								 0,	/* help ID */
+								 _R(IDBBL_DEBUGTREEDLG),
+								 0	/* bitmap ID */));
 }
 
 /********************************************************************************************
@@ -254,7 +253,7 @@ BOOL CXFTreeDlg::Init()
 ********************************************************************************************/
 
 BOOL CXFTreeDlg::Create()
-{    
+{
 	if (DialogOp::Create())
 	{
 		EnableGadget(_R(IDC_DEBUGTREE_EXPAND),  TRUE);
@@ -264,7 +263,7 @@ BOOL CXFTreeDlg::Create()
 		EnableGadget(_R(IDC_DEBUGTREE_REFRESH), FALSE);
 
 		InitialiseNewTreeControl();
-	}     
+	}
 
 	return TRUE; 
 }
@@ -282,13 +281,13 @@ BOOL CXFTreeDlg::Create()
 ********************************************************************************************/
 
 OpState CXFTreeDlg::GetState(String_256*, OpDescriptor*)
-{  
+{
 	OpState OpSt;
 	return(OpSt);
-}	
+}
 /********************************************************************************************
 
->	void CXFTreeDlg::ShowFile(char* pFile)
+>	void CXFTreeDlg::ShowFile(TCHAR* pFile)
 
 	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	7/6/96
@@ -298,20 +297,18 @@ OpState CXFTreeDlg::GetState(String_256*, OpDescriptor*)
 
 ********************************************************************************************/
 
-void CXFTreeDlg::ShowFile(char* pFile)
+void CXFTreeDlg::ShowFile(TCHAR* pFile)
 {
 	String_256 s = pFile;
 	SetFileName(s);
 
 	CreateTree();
-	DisplayTree(FALSE);
 }  
 
 
 void CXFTreeDlg::DeInit()
 {
-	HWND hwndTree = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_TREE));
-	TreeView_DeleteAllItems(hwndTree);
+	DeleteAllValues(_R(IDC_DEBUGTREE_TREE));
 
 	Delete(pRoot);
 	pRoot = NULL;
@@ -323,10 +320,19 @@ void CXFTreeDlg::Delete(CXFNode* pNode)
 	if (pNode == NULL)
 		return;
 
-	Delete(pNode->GetChild());
-	Delete(pNode->GetNext());
+	while (pNode)
+	{
+		CXFNode* pNext = pNode->GetNext();
 
-	delete pNode;
+		CXFNode* pChild = pNode->GetChild();
+		if (pChild)
+		{
+			Delete(pChild);
+		}
+
+		delete pNode;
+		pNode = pNext;
+	}
 }
 
 void CXFTreeDlg::SetFileName(String_256& ThisFileName)
@@ -337,11 +343,14 @@ void CXFTreeDlg::SetFileName(String_256& ThisFileName)
 
 void CXFTreeDlg::CreateTree()
 {
+	// Delete the items from the tree control and also delete our tree
+	DeleteAllValues(_R(IDC_DEBUGTREE_TREE));
+	Delete(pRoot);
+	pRoot = NULL;
+
 	// Init vars before reading the file
 	AddNextAsChild = FALSE;
 	Level = 0;
-	Delete(pRoot);
-	pRoot = NULL;
 	pContextNode = NULL;
 
 	ListOfNodeTypeStats.DeleteAll();
@@ -356,6 +365,9 @@ void CXFTreeDlg::CreateTree()
 		{
 			EndOfFile = FALSE;
 			CXaraFile* pCXFile = NULL;
+
+PORTNOTE("other", "Removed wix reading - uses COM object")
+#if FALSE
 			char Buf[10];
 			pFile->read(Buf, 10);
 			// reset to the begining
@@ -367,6 +379,7 @@ void CXFTreeDlg::CreateTree()
 				pCXFile = new CXaraTemplateFile();		// template so use new class
 			}
 			else
+#endif
 			{
 				pCXFile = new CXaraFile();				// use original class
 			}
@@ -400,16 +413,17 @@ void CXFTreeDlg::CreateTree()
 	if (pPath != NULL)
 		delete pPath;
 
-	ListOfNodeTypeStats.Dump(this);
+//	ListOfNodeTypeStats.Dump(this);
 	ListOfNodeTypeStats.DeleteAll();
 
-	AddOneItem(NULL, (TCHAR *)FileName, TVI_LAST, m_idxPage, NULL);
+	CTreeItemID hThisItem = AddOneItem(CTreeItemID(), FileName, CTreeItemID(), m_idxPage, NULL);
 
 	// AddItemsToNewTreeControl doesn't add siblings now so we must loop
+	CTreeItemID hContext;
 	CXFNode* pNode = pRoot;
 	while (pNode)
 	{
-		AddItemsToNewTreeControl(NULL, pNode);
+		hContext = AddItemToNewTreeControl(hThisItem, hContext, pNode, TRUE);
 		pNode = pNode->GetNext();
 	}
 }
@@ -537,132 +551,6 @@ void CXFTreeDlg::GetTagText(UINT32 Tag,String_256& Str)
 		pHandler->GetTagText(Tag,Str);
 }
 
-INT32 CXFTreeDlg::AddDisplayNode(CXFNode* pNode,INT32 Index,INT32 Depth,BOOL ExpandAll)
-{
-	while (pNode != NULL)
-	{
-		if (ExpandAll)
-			pNode->SetShowChildren(TRUE);
-
-		// Set up the info record for this node.
-		CXFNodeInfo* pInfo = new CXFNodeInfo;
-		
-		if (pInfo != NULL)
-			pInfo->pNode = pNode;
-		else
-			return Index;
-
-		// Create the indentation string, based of the depth value
-		char indent[256];
-		indent[0] = 0;
-		for (INT32 i=0;i<Depth;i++)
-			camStrcat(indent,"       ");
-
-		if (pNode->HasChildren())
-		{
-			if (pNode->ShowChildren())
-				camStrcat(indent,"-");
-			else
-				camStrcat(indent,"+");
-		}
-
-		// Get the textual desc of the tag
-		String_256 TagText;
-		GetTagText(pNode,TagText);
-
-		// Construct the string for the node
-		String_256 ListBoxText = indent;
-		ListBoxText += TagText;
-
-		// Add the item to the list
-		SetStringGadgetValue(_R(IDC_DEBUGTREE_LIST), &ListBoxText, FALSE, Index); 
-
-		// Store the debug info for this item
-		if (TreeInfo != NULL)
-			TreeInfo->AddDebugInfo(Index, pInfo);
-
-		MaxIndex = Index;
-		Index++;
-
-		if (pNode->ShowChildren())
-			Index = AddDisplayNode(pNode->GetChild(),Index,Depth+1,ExpandAll);
-
-//		dont recurse the next value, stick it in a while loop you prat
-//		Index = AddDisplayNode(pNode->GetNext(),Index,Depth);
-
-		pNode = pNode->GetNext();
-
-	}
-
-	return Index;
-}
-
-void CXFTreeDlg::DeleteTreeInfo()
-{
-	if (TreeInfo != NULL)
-	{
-		for (INT32 i=0;i<=MaxIndex;i++)
-		{
-			CXFNodeInfo *pNodeInfo = GetInfo(i);
-
-			TreeInfo->AddDebugInfo(i, NULL);
-
-			if (pNodeInfo != NULL)
-				delete pNodeInfo;
-		}
-
-		delete TreeInfo;
-	}
-
-	TreeInfo = NULL;
-	MaxIndex = 0;
-}
-
-
-void CXFTreeDlg::DisplayTree(BOOL ExpandAll)
-{
-	// Get handle of list box
-	HWND hListBox = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_LIST));
-	ENSURE(hListBox != NULL, "Can't find list box in debug tree dialog!");
-
-	DeleteTreeInfo();
-
-	TreeInfo = new DebugTreeInfo(hListBox);
-
-	DeleteAllValues(_R(IDC_DEBUGTREE_LIST));
-	SetStringGadgetValue(_R(IDC_DEBUGTREE_LIST), &FileName, FALSE, 0); 
-	AddDisplayNode(pRoot,1,0,ExpandAll);
-}
-
-/********************************************************************************************
-
->	void CXFTreeDlg::ShowNodeDebugInfo(INT32 ListIndex)
-
-	Author:		Mark_Neves (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	11/6/96
-	Inputs:		ListIndex - the list item to display information on.
-	Purpose:	Display the debug information for the given node in the debug tree dialog's
-				scrolly window.
-
-********************************************************************************************/
-
-void CXFTreeDlg::ShowNodeDebugInfo(INT32 ListIndex)
-{  
-	if (ListIndex < 1)
-	{
-		String_256 Str = "";
-		SetStringGadgetValue(_R(IDC_DEBUGTREE_DETAILS), &Str); 
-		return;
-	}
-
-	// Get the Node
-	CXFNode *pNode = GetInfo(ListIndex)->pNode;
-
-	if (pNode != NULL)
-	{
-		ShowNodeDebugInfoForNode(pNode);
-	}
-}  
 
 void CXFTreeDlg::ShowNodeDebugInfoForNode(CXFNode *pNode)
 {  
@@ -683,15 +571,10 @@ void CXFTreeDlg::ShowNodeDebugInfoForNode(CXFNode *pNode)
 		}
 
 		// Copy this string into the edit control.
-		SetStringGadgetValue(_R(IDC_DEBUGTREE_DETAILS), EditStr); 
+		SetStringGadgetValue(_R(IDC_DEBUGTREE_DETAILS), *EditStr);
 	}
 }  
 
-CXFNodeInfo *CXFTreeDlg::GetInfo(INT32 Index)
-{
-	ERROR2IF(TreeInfo==NULL,NULL,"TreeInfo is NULL");
-	return (CXFNodeInfo *) TreeInfo->GetDebugInfo(Index);
-}
 
 /********************************************************************************************
 
@@ -707,95 +590,32 @@ CXFNodeInfo *CXFTreeDlg::GetInfo(INT32 Index)
 
 MsgResult CXFTreeDlg::Message( Msg* Message)
 {
-
 	if (IS_OUR_DIALOG_MSG(Message))
 	{
 		DialogMsg* Msg = (DialogMsg*) Message;
 		if ((Msg->DlgMsg == DIM_COMMIT || Msg->DlgMsg == DIM_CANCEL)) 
 		{
 			DeInit();
-			Close(); // Hide the dialog   
+			Close(); // Hide the dialog
 			End();
-		}          
+		}
 		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_EXPAND))
 			 && (Msg->DlgMsg == DIM_LFT_BN_CLICKED))
-		{   
+		{
 			// Expand the tree  
-			DisplayTree(TRUE); 
 			ExpandNewTree();
-		}    
-/*
-		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_DUMP))
-			 && (Msg->DlgMsg == DIM_LFT_BN_CLICKED))
-		{   
-			// Dump the tree
-			DumpTree();
-
-		}    
-		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_HIDDEN))
-			 && (Msg->DlgMsg == DIM_LFT_BN_CLICKED))
-		{   
-			// Update the 'show hidden nodes' flag
-			BOOL Valid;
-			INT32 Value = GetLongGadgetValue(_R(IDC_DEBUGTREE_HIDDEN), 0, 1, 0, &Valid);
-
-			if (Valid)
-				ShowHiddenNodes = (Value == 1);
-
-			// Update the tree display according to this value.
-			ShowHidden(ShowHiddenNodes);
-		}    
-		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_SELNONLY))
-			 && (Msg->DlgMsg == DIM_LFT_BN_CLICKED))
-		{   
-			// Update the 'show selection' flag
-			BOOL Valid;
-			INT32 Value = GetLongGadgetValue(_R(IDC_DEBUGTREE_SELNONLY), 0, 1, 0, &Valid);
-
-			if (Valid)
-				SelectionOnly = (Value == 1);
-
-			// Update the tree display according to this value.
-			ShowHidden(!SelectionOnly);
-		}    
-		*/
-		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_LIST)) && 
-				 (Msg->DlgMsg == DIM_SELECTION_CHANGED_COMMIT))
-		{
-			WORD Index; 
-			GetValueIndex(_R(IDC_DEBUGTREE_LIST), &Index);
-			if (Index > 0)
-			{
-				CXFNode *pNode = GetInfo(Index)->pNode;
-				if (pNode != NULL)
-				{
-					pNode->SetShowChildren(!pNode->ShowChildren());
-					DisplayTree(FALSE);
-					SetSelectedValueIndex(_R(IDC_DEBUGTREE_LIST), Index);
-				}
-			}
-		} 
-		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_LIST)) && (Msg->DlgMsg == DIM_SELECTION_CHANGED)) 
-		{
-			WORD Index; 
-			GetValueIndex(_R(IDC_DEBUGTREE_LIST), &Index);
-			ShowNodeDebugInfo(Index);
-		}  
+		}
 		else if ((Msg->GadgetID == _R(IDC_DEBUGTREE_TREE)) && (Msg->DlgMsg == DIM_SELECTION_CHANGED))
 		{
-			NM_TREEVIEW *pTV = (NM_TREEVIEW *)Msg->DlgMsgParam;
-			
-			if(pTV != NULL)
+			// Get the node out of the item
+			CTreeItemID hItem = GetTreeGadgetFirstSelectedItem(_R(IDC_DEBUGTREE_TREE));
+			if (hItem.IsOk())
 			{
-				// Get the newly selected TV_ITEM
-				TV_ITEM Item = pTV->itemNew;
-				{
-					// Get the node out of the item
-					CXFNode *pNode = (CXFNode *)Item.lParam;
-					ShowNodeDebugInfoForNode(pNode);
-				}
+				CCObject* pNode = GetTreeGadgetItemData(_R(IDC_DEBUGTREE_TREE), hItem);
+				if (pNode)
+					ShowNodeDebugInfoForNode((CXFNode*)pNode);
 			}
-   		} 
+		}
 
 		return (DLG_EAT_IF_HUNGRY(Msg)); 
 	}
@@ -1042,7 +862,7 @@ New TreeView Control stuff by Richard - 14/3/97
 
 /********************************************************************************************
 
->	HTREEITEM CXFTreeDlg::AddOneItem(HTREEITEM hParent, TCHAR *pText, HTREEITEM hInsAfter,
+>	CTreeItemID CXFTreeDlg::AddOneItem(CTreeItemID hParent, const StringBase& str, CTreeItemID hInsAfter,
 																	 INT32 iImage, CXFNode *pNode)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
@@ -1052,30 +872,9 @@ New TreeView Control stuff by Richard - 14/3/97
 
 ********************************************************************************************/
 
-HTREEITEM CXFTreeDlg::AddOneItem(HTREEITEM hParent, TCHAR *pText, HTREEITEM hInsAfter, INT32 iImage, CXFNode *pNode)
+CTreeItemID CXFTreeDlg::AddOneItem(CTreeItemID hParent, const StringBase& str, CTreeItemID hInsAfter, INT32 iImage, CXFNode *pNode)
 {
-	HWND hwndTree = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_TREE));
-
-	HTREEITEM hItem;
-	TV_ITEM tvI;
-	TV_INSERTSTRUCT tvIns;
-
-	// The pszText, iImage, and iSelectedImage members are filled out.
-	tvI.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
-	tvI.pszText = pText;
-	tvI.cchTextMax = camStrlen(pText);
-	tvI.iImage = iImage;
-	tvI.iSelectedImage = iImage;
-	tvI.lParam = (LPARAM)pNode;
-
-	tvIns.item = tvI;
-	tvIns.hInsertAfter = hInsAfter;
-	tvIns.hParent = hParent;
-
-	// Insert the item into the tree.
-	hItem = TreeView_InsertItem(hwndTree, &tvIns);
-
-	return (hItem);
+	return SetTreeGadgetItem(_R(IDC_DEBUGTREE_TREE), hParent, str, hInsAfter, iImage, pNode);
 }
 
 
@@ -1288,7 +1087,7 @@ INT32 CXFTreeDlg::GetImageForNode(CXFNode *pNode)
 
 /********************************************************************************************
 
->	HTREEITEM CXFTreeDlg::AddItemsToNewTreeControl(HTREEITEM hParentItem, CXFNode *pNode)
+>	CTreeItemID CXFTreeDlg::AddItemToNewTreeControl(CTreeItemID hParentItem, CTreeItemID hInsAfterItem, CXFNode *pNode, BOOL bAddChildren)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/02/97
@@ -1298,50 +1097,36 @@ INT32 CXFTreeDlg::GetImageForNode(CXFNode *pNode)
 
 ********************************************************************************************/
 
-HTREEITEM CXFTreeDlg::AddItemsToNewTreeControl(HTREEITEM hParentItem, CXFNode *pNode)
+CTreeItemID CXFTreeDlg::AddItemToNewTreeControl(CTreeItemID hParentItem, CTreeItemID hInsAfterItem, CXFNode *pNode, BOOL bAddChildren)
 {
 	if(pNode == NULL)
-		return 0;
+		return CTreeItemID();
 
 	String_256 NodeText; //(((TCHAR*)(pNode->GetRuntimeClass()->m_lpszClassName)));
 
 	GetTagText(pNode, NodeText);
 	INT32 iImage = GetImageForNode(pNode);
 
-	HTREEITEM hThisItem = AddOneItem(hParentItem, (TCHAR *)NodeText, hParentItem, iImage, pNode);
+	CTreeItemID hThisItem = AddOneItem(hParentItem, NodeText, hInsAfterItem, iImage, pNode);
 
 	// Check to see if this node has any children
 	CXFNode *pChild = pNode->GetChild();
-
-	while (pChild != NULL)
+	if (pChild && bAddChildren)
 	{
-		// Add to the tree control
-		AddItemsToNewTreeControl(hThisItem, pChild);
-		pChild = pChild->GetNext();
+		CTreeItemID hInsContext;
+
+		while (pChild != NULL)
+		{
+			// Add to the tree control
+			hInsContext = AddItemToNewTreeControl(hThisItem, hInsContext, pChild, bAddChildren);
+			pChild = pChild->GetNext();
+		}
 	}
 
 	return hThisItem;
 }
 
 
-/********************************************************************************************
-
->	INT32 CXFTreeDlg::AddBitmapResourceToImageList(HIMAGELIST hList, UINT32 ResID)
-
-	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
-	Created:	15/02/97
-	Purpose:	Obtain the bitmap from the resources and add it to the imagelist.
-				We use the old Magenta Mask trick for optimum viewtasticness...
-
-********************************************************************************************/
-
-INT32 CXFTreeDlg::AddBitmapResourceToImageList(HIMAGELIST hList, UINT32 ResID)
-{
-	HINSTANCE hMain = AfxGetResourceHandle();
-	HBITMAP hBmp = ::LoadBitmap(hMain, MAKEINTRESOURCE(ResID));
-	INT32 index = ImageList_AddMasked(hList, hBmp, RGB(255,0,255));
-	return index;
-}
 
 /********************************************************************************************
 
@@ -1355,41 +1140,29 @@ INT32 CXFTreeDlg::AddBitmapResourceToImageList(HIMAGELIST hList, UINT32 ResID)
 
 BOOL CXFTreeDlg::InitialiseNewTreeControl(void)
 {
-	HWND hwndTree = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_TREE));
+	CGadgetImageList NewImageList(16, 16);
+	m_idxGeneralTag		= NewImageList.Add(_R(IDB_CXFTREE_GENERALTAG));
+	m_idxDefineBitmap	= NewImageList.Add(_R(IDB_CXFTREE_DEFINEBITMAP));
+	m_idxDefineColour	= NewImageList.Add(_R(IDB_CXFTREE_DEFINECOLOUR));
+	m_idxCompression	= NewImageList.Add(_R(IDB_CXFTREE_COMPRESSION));
+	m_idxDown			= NewImageList.Add(_R(IDB_CXFTREE_DOWN));
+	m_idxUp				= NewImageList.Add(_R(IDB_CXFTREE_UP));
+	m_idxGroup			= NewImageList.Add(_R(IDB_CXFTREE_GROUP));
+	m_idxPage			= NewImageList.Add(_R(IDB_DEBUGTREE_RENDERABLEPAPER));
+	m_idxAttribute		= NewImageList.Add(_R(IDB_DEBUGTREE_ATTRIBUTE));
+	m_idxShape			= NewImageList.Add(_R(IDB_DEBUGTREE_RENDERABLEINK));
+	m_idxSentinelNode	= NewImageList.Add(_R(IDB_DEBUGTREE_SENTINELNODE));
+	m_idxSetProperty	= NewImageList.Add(_R(IDB_DEBUGTREE_SETPROPERTY));
 
-	INT32 BitmapWidth = 16;
-	INT32 BitmapHeight = 16;
+	SetGadgetBitmaps(_R(IDC_DEBUGTREE_TREE), NewImageList);
 
-	// Need to create an image list
-	hNewTreeControlImageList = ImageList_Create(BitmapWidth, BitmapHeight, ILC_MASK, 0, 0);
-
-	// Load the bitmaps and add them to the image list.
-	m_idxGeneralTag = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_GENERALTAG));
-	m_idxDefineBitmap = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_DEFINEBITMAP));
-	m_idxDefineColour = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_DEFINECOLOUR));
-	m_idxCompression = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_COMPRESSION));
-	m_idxDown = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_DOWN));
-	m_idxUp = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_UP));
-	m_idxGroup = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_CXFTREE_GROUP));
-	m_idxPage = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_DEBUGTREE_RENDERABLEPAPER));
-	m_idxAttribute = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_DEBUGTREE_ATTRIBUTE));
-	m_idxShape = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_DEBUGTREE_RENDERABLEINK));
-	m_idxSentinelNode = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_DEBUGTREE_SENTINELNODE));
-	m_idxSetProperty = AddBitmapResourceToImageList(hNewTreeControlImageList, _R(IDB_DEBUGTREE_SETPROPERTY));
-
-	// Associate the image list with the tree view control.
-	TreeView_SetImageList(hwndTree, hNewTreeControlImageList, m_idxGeneralTag);
-
-	// Check list actually contains bitmaps
-	INT32 Count = ImageList_GetImageCount(hNewTreeControlImageList);
-
-	return(Count > 0);
+	return(TRUE);
 }
 
 
 /********************************************************************************************
 
->	BOOL CXFTreeDlg::GetInfoFromHTREEITEM(HTREEITEM hItem, CXFNode **ppNode, INT32 *pChildren)
+>	BOOL CXFTreeDlg::GetInfoFromTreeItem(CTreeItemID hItem, CXFNode **ppNode, INT32 *pChildren)
 
 	Author:		Richard_Millican (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/02/97
@@ -1397,22 +1170,17 @@ BOOL CXFTreeDlg::InitialiseNewTreeControl(void)
 
 ********************************************************************************************/
 
-BOOL CXFTreeDlg::GetInfoFromHTREEITEM(HTREEITEM hItem, CXFNode **ppNode, INT32 *pChildren)
+BOOL CXFTreeDlg::GetInfoFromTreeItem(CTreeItemID hItem, CXFNode **ppNode, INT32 *pChildren)
 {
-	HWND hwndTree = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_TREE));
+	CCObject* pNode = GetTreeGadgetItemData(_R(IDC_DEBUGTREE_TREE), hItem);
+	ERROR3IF(!pNode->IsKindOf(CC_RUNTIME_CLASS(CXFNode)), "DebugTreeDlg found a non-CXFNode tree item");
+	if (!pNode->IsKindOf(CC_RUNTIME_CLASS(CXFNode)))
+		return FALSE;
 
-	TV_ITEM Item;
-	Item.hItem = hItem;
-	Item.mask = TVIF_PARAM | TVIF_CHILDREN | TVIF_STATE;
+	*ppNode		= (CXFNode*)pNode;
+	*pChildren	= GetTreeGadgetChildrenCount(_R(IDC_DEBUGTREE_TREE), hItem, FALSE);
 
-	if(TreeView_GetItem(hwndTree, &Item))
-	{
-		*ppNode = (CXFNode *)Item.lParam;
-		*pChildren = Item.cChildren;
-		return TRUE;
-	}
-
-	return FALSE;
+	return TRUE;
 }
 
 
@@ -1428,25 +1196,46 @@ BOOL CXFTreeDlg::GetInfoFromHTREEITEM(HTREEITEM hItem, CXFNode **ppNode, INT32 *
 
 void CXFTreeDlg::ExpandNewTree()
 {
-	HTREEITEM hItem = 0;
-	HWND hwndTree = ::GetDlgItem(WindowID, _R(IDC_DEBUGTREE_TREE));
-	hItem = TreeView_GetRoot(hwndTree);
+	CTreeItemID hItem = GetTreeGadgetRootItem(_R(IDC_DEBUGTREE_TREE));
+//	CTreeItemID hSelectedItem = GetTreeGadgetFirstSelectedItem(_R(IDC_DEBUGTREE_TREE));
 
-	HTREEITEM hSelectedItem = TreeView_GetSelection(hwndTree);
-
-	// Loop through the items in the tree control, dumping each one to the trace output
-	while(hItem != 0)
+	// Loop through the items in the tree control
+	while (hItem.IsOk())
 	{
-		TreeView_Expand(hwndTree, hItem, TVE_EXPAND);	
+		TreeGadgetExpandItem(_R(IDC_DEBUGTREE_TREE), hItem);
+//		CTreeItemID hChild = GetTreeGadgetFirstChildItem(_R(IDC_DEBUGTREE_TREE), hItem);
+//		if (hChild.IsOk())
+//			hItem = hChild;
 
 		// Get the next item
-		hItem = TreeView_GetNextItem(hwndTree, hItem, TVGN_NEXTVISIBLE);
+		hItem = GetTreeGadgetNextVisItem(_R(IDC_DEBUGTREE_TREE), hItem);
 	}
 
-	TreeView_SelectItem(hwndTree, hSelectedItem);
+//	if (hSelectedItem.IsOk())
+//		SelectTreeGadgetItem(_R(IDC_DEBUGTREE_TREE), hSelectedItem, TRUE );
 } 
 
+#if FALSE
+void CXFTreeDlg::ExpandTreeItem(CTreeItemID hItem, BOOL bChildren)
+{
+	if (hItem.IsOk())
+		TreeGadgetExpandItem(_R(IDC_DEBUGTREE_TREE), hItem);
+
+	if (bChildren)
+	{
+		CTreeItemID hChild = GetTreeGadgetFirstChildItem(_R(IDC_DEBUGTREE_TREE), hItem);
+
+		// Loop through the child items
+		while (hChild.IsOk())
+		{
+			ExpandTreeItem(hChild, bChildren);
+
+			// Get the next item
+			hItem = GetTreeGadgetNextItem(_R(IDC_DEBUGTREE_TREE), hChild);
+		}
+	}
+} 
+#endif
+
 #endif	// XAR_TREE_DIALOG
-
-
 

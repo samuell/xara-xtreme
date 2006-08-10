@@ -156,7 +156,7 @@ private:
 private:
 	static const INT32 NumberOfSides;
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	virtual void GetRecordDescriptionText(CXaraFileRecord *pRecord, StringBase *pStr);
 	virtual void DescribeRectangleSimple(CXaraFileRecord *pRecord, StringBase *pStr);

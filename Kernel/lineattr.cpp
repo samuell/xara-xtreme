@@ -4579,7 +4579,7 @@ BOOL LineAttrRecordHandler::HandleArrowTailRecord(CXaraFileRecord* pCXaraFileRec
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -4589,7 +4589,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 	// This outputs the tag and size
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
 
-	char s[256];
+	TCHAR s[256];
 
 	UINT32 Tag = pRecord->GetTag();
 	switch (Tag)
@@ -4599,7 +4599,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			// Read the colour reference number
 			INT32 ColourRef;
 			pRecord->ReadINT32(&ColourRef);
-			_stprintf(s,"Colour reference = %d\r\n",ColourRef);		(*pStr) += s;
+			camSprintf(s,_T("Colour reference = %d\r\n"),ColourRef);		(*pStr) += s;
 		}
 		break;
 
@@ -4607,7 +4607,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			INT32 Width;
 			pRecord->ReadINT32(&Width);
-			_stprintf(s,"Width = %d\r\n",Width);		(*pStr) += s;
+			camSprintf(s,_T("Width = %d\r\n"),Width);		(*pStr) += s;
 		}
 		break;
 
@@ -4616,8 +4616,8 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 			BYTE Transp, TranspType;
 			pRecord->ReadBYTE(&Transp);
 			pRecord->ReadBYTE(&TranspType);
-			_stprintf(s,"Transparency\t= %d\r\n",INT32(Transp));			(*pStr) += s;
-			_stprintf(s,"Transparency Type\t= %d\r\n",INT32(TranspType));	(*pStr) += s;
+			camSprintf(s,_T("Transparency\t= %d\r\n"),INT32(Transp));			(*pStr) += s;
+			camSprintf(s,_T("Transparency Type\t= %d\r\n"),INT32(TranspType));	(*pStr) += s;
 		}
 		break;
 
@@ -4626,7 +4626,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			BYTE Cap;
 			pRecord->ReadBYTE(&Cap);
-			_stprintf(s,"Cap style = %d\r\n",INT32(Cap));	(*pStr) += s;
+			camSprintf(s,_T("Cap style = %d\r\n"),INT32(Cap));	(*pStr) += s;
 		}
 		break;
 
@@ -4634,7 +4634,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			BYTE Join;
 			pRecord->ReadBYTE(&Join);
-			_stprintf(s,"Join style = %d\r\n",INT32(Join)); (*pStr) += s;
+			camSprintf(s,_T("Join style = %d\r\n"),INT32(Join)); (*pStr) += s;
 		}
 		break;
 
@@ -4642,7 +4642,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			INT32 MitreLimit;
 			pRecord->ReadINT32(&MitreLimit);
-			_stprintf(s,"Mitre Limit = %d\r\n",MitreLimit); (*pStr) += s;
+			camSprintf(s,_T("Mitre Limit = %d\r\n"),MitreLimit); (*pStr) += s;
 		}
 		break;
 
@@ -4650,7 +4650,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			BYTE WindingRule;
 			pRecord->ReadBYTE(&WindingRule);
-			_stprintf(s,"Winding Rule = %d\r\n",INT32(WindingRule)); (*pStr) += s;
+			camSprintf(s,_T("Winding Rule = %d\r\n"),INT32(WindingRule)); (*pStr) += s;
 		}
 		break;
 
@@ -4658,7 +4658,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			INT32 DashVal;
 			pRecord->ReadINT32(&DashVal);
-			_stprintf(s,"Dash Style = %d\r\n",DashVal); (*pStr) += s;
+			camSprintf(s,_T("Dash Style = %d\r\n"),DashVal); (*pStr) += s;
 		}
 		break;
 
@@ -4667,27 +4667,27 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			if (Tag == TAG_DEFINEDASH_SCALED)
 			{
-				_stprintf(s,"Define scaled dash pattern\r\n\r\n");
+				camSprintf(s,_T("Define scaled dash pattern\r\n\r\n"));
 				(*pStr) += s;
 			}
 			else
 			{				
-				_stprintf(s,"Define dash pattern\r\n\r\n");
+				camSprintf(s,_T("Define dash pattern\r\n\r\n"));
 				(*pStr) += s;
 			}
 
 			// Read the information from the record
 			INT32 DashStart	= 0;
 			pRecord->ReadINT32(&DashStart);
-			_stprintf(s,"Dash Start = %d\r\n",DashStart); (*pStr) += s;
+			camSprintf(s,_T("Dash Start = %d\r\n"),DashStart); (*pStr) += s;
 
 			INT32 LineWidth	= 0;
 			pRecord->ReadINT32(&LineWidth);
-			_stprintf(s,"Line width = %d\r\n",LineWidth); (*pStr) += s;
+			camSprintf(s,_T("Line width = %d\r\n"),LineWidth); (*pStr) += s;
 
 			INT32 Elements	= 0;
 			pRecord->ReadINT32(&Elements);
-			_stprintf(s,"Elements = %d\r\n",Elements); (*pStr) += s;
+			camSprintf(s,_T("Elements = %d\r\n"),Elements); (*pStr) += s;
 
 			// Don't bother with zero width lines
 			//if (LineWidth == 0)
@@ -4701,7 +4701,7 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 				{
 					if (!pRecord->ReadINT32(&Data))
 						break;
-					_stprintf(s,"\t%d\r\n",Data); (*pStr) += s;
+					camSprintf(s,_T("\t%d\r\n"),Data); (*pStr) += s;
 				}
 			}
 		}
@@ -4711,13 +4711,13 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			INT32 ArrowId;
 			pRecord->ReadINT32(&ArrowId);
-			_stprintf(s,"Arrow head Id = %d\r\n",ArrowId); (*pStr) += s;
+			camSprintf(s,_T("Arrow head Id = %d\r\n"),ArrowId); (*pStr) += s;
 			FIXED16 ScaleWidth;
 			pRecord->ReadFIXED16(&ScaleWidth);
-			_stprintf(s,"Scale width = %f\r\n",ScaleWidth.MakeDouble()); (*pStr) += s;
+			camSprintf(s,_T("Scale width = %f\r\n"),ScaleWidth.MakeDouble()); (*pStr) += s;
 			FIXED16 ScaleHeight;
 			pRecord->ReadFIXED16(&ScaleHeight);
-			_stprintf(s,"Scale height = %f\r\n",ScaleHeight.MakeDouble()); (*pStr) += s;
+			camSprintf(s,_T("Scale height = %f\r\n"),ScaleHeight.MakeDouble()); (*pStr) += s;
 		}
 		break;
 
@@ -4725,13 +4725,13 @@ void LineAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,St
 		{
 			INT32 ArrowId;
 			pRecord->ReadINT32(&ArrowId);
-			_stprintf(s,"Arrow tail Id = %d\r\n",ArrowId); (*pStr) += s;
+			camSprintf(s,_T("Arrow tail Id = %d\r\n"),ArrowId); (*pStr) += s;
 			FIXED16 ScaleWidth;
 			pRecord->ReadFIXED16(&ScaleWidth);
-			_stprintf(s,"Scale width = %f\r\n",ScaleWidth.MakeDouble()); (*pStr) += s;
+			camSprintf(s,_T("Scale width = %f\r\n"),ScaleWidth.MakeDouble()); (*pStr) += s;
 			FIXED16 ScaleHeight;
 			pRecord->ReadFIXED16(&ScaleHeight);
-			_stprintf(s,"Scale height = %f\r\n",ScaleHeight.MakeDouble()); (*pStr) += s;
+			camSprintf(s,_T("Scale height = %f\r\n"),ScaleHeight.MakeDouble()); (*pStr) += s;
 		}
 		break;
 	}

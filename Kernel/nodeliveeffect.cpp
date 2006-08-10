@@ -5044,13 +5044,13 @@ BOOL LiveEffectRecordHandler::HandleStreamedRecord(CXaraFile * pCXFile, UINT32 T
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void LiveEffectRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pCXaraFileRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 	BOOL ok = TRUE;
 
 	// Call base class first
@@ -5084,7 +5084,7 @@ void LiveEffectRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFi
 			if (ok) ok = pCXaraFileRecord->ReadUTF16STR(&strXML, pCXaraFileRecord->GetSize());
 
 			// --------------------------------------------------------------
-			_stprintf(s,"Flags\t\t= %d\r\n", (INT32)Flags);
+			camSprintf(s,_T("Flags\t\t= %d\r\n"), (INT32)Flags);
 			(*pStr) += s;
 		}
 		break;
@@ -5125,7 +5125,7 @@ void LiveEffectRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFi
 			if (ok) ok = pCXaraFileRecord->ReadUTF16STR(&strXML, pCXaraFileRecord->GetSize());
 
 			// --------------------------------------------------------------
-			_stprintf(s,"Flags\t\t= %d\r\n", (INT32)Flags);
+			camSprintf(s,_T("Flags\t\t= %d\r\n"), (INT32)Flags);
 			(*pStr) += s;
 		}
 		break;
@@ -5159,7 +5159,7 @@ void LiveEffectRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFi
 			if (ok) ok = pCXaraFileRecord->ReadDOUBLE(&dGain);
 
 			// --------------------------------------------------------------
-			_stprintf(s,"Flags\t\t= %d\r\n", (INT32)Flags);
+			camSprintf(s,_T("Flags\t\t= %d\r\n"), (INT32)Flags);
 			(*pStr) += s;
 		}
 		break;
@@ -5171,13 +5171,13 @@ void LiveEffectRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFi
 		case TAG_COMPOUNDRENDER:
 			INT32 reserved = 0;
 			pRecord->ReadINT32(&reserved);
-			_stprintf(s,"Reserved\t\t= %d\r\n", reserved);
+			camSprintf(s,_T("Reserved\t\t= %d\r\n"), reserved);
 			(*pStr) += s;
 
 			DocRect rbounds;
 			pRecord->ReadCoord(&rbounds.lo);
 			pRecord->ReadCoord(&rbounds.hi);
-			_stprintf(s,"Bounds\t\t= %d, %d, %d, %d\r\n", rbounds.lox, rbounds.loy, rbounds.hix, rbounds.hiy);
+			camSprintf(s,_T("Bounds\t\t= %d, %d, %d, %d\r\n"), rbounds.lox, rbounds.loy, rbounds.hix, rbounds.hiy);
 			(*pStr) += s;
 			break;
 */

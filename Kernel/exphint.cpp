@@ -301,7 +301,7 @@ BOOL ExportHintRecordHandler::HandleRecord(CXaraFileRecord* pRecord)
 }
 
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 /********************************************************************************************
 
 >	virtual void ExportHintRecordHandler::GetRecordDescriptionText(

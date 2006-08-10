@@ -806,7 +806,7 @@ BOOL TextObjRecordHandler::ReadAutoKern ( CXaraFileRecord	*pCXaraFileRecord,
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void TextObjRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase *pStr)
 {
 	if (pCXaraFileRecord!=NULL || pStr!=NULL)
@@ -1627,7 +1627,7 @@ BOOL TextAttrRecordHandler::ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void TextAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase* pStr)
 {
 	if (pCXaraFileRecord!=NULL || pStr!=NULL)
@@ -1669,9 +1669,9 @@ void TextAttrRecordHandler::DescribeLineSpaceRatio(CXaraFileRecord *pCXaraFileRe
 	FIXED16 Value;
 	pCXaraFileRecord->ReadFIXED16(&Value);
 
-	_stprintf(s, "Text Attribute - Line Spacing (Ratio)\r\n");
+	camSprintf(s, _T("Text Attribute - Line Spacing (Ratio)\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Line spacing = %f\r\n", Value.MakeDouble());
+	camSprintf(s, _T("Line spacing = %f\r\n"), Value.MakeDouble());
 	(*pStr) += s;
 }
 
@@ -1682,9 +1682,9 @@ void TextAttrRecordHandler::DescribeLineSpaceAbsolute(CXaraFileRecord *pCXaraFil
 	INT32 Value;
 	pCXaraFileRecord->ReadINT32(&Value);
 
-	_stprintf(s, "Text Attribute - Line Spacing (Absolute)\r\n");
+	camSprintf(s, _T("Text Attribute - Line Spacing (Absolute)\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Line spacing = %ld\r\n", Value);
+	camSprintf(s, _T("Line spacing = %ld\r\n"), Value);
 	(*pStr) += s;
 }
 
@@ -1692,7 +1692,7 @@ void TextAttrRecordHandler::DescribeJustificationLeft(CXaraFileRecord *pCXaraFil
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Justification (Left)\r\n");
+	camSprintf(s, _T("Text Attribute - Justification (Left)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1700,7 +1700,7 @@ void TextAttrRecordHandler::DescribeJustificationCentre(CXaraFileRecord *pCXaraF
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Justification (Centre)\r\n");
+	camSprintf(s, _T("Text Attribute - Justification (Centre)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1708,7 +1708,7 @@ void TextAttrRecordHandler::DescribeJustificationRight(CXaraFileRecord *pCXaraFi
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Justification (Right)\r\n");
+	camSprintf(s, _T("Text Attribute - Justification (Right)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1716,7 +1716,7 @@ void TextAttrRecordHandler::DescribeJustificationFull(CXaraFileRecord *pCXaraFil
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Justification (Full)\r\n");
+	camSprintf(s, _T("Text Attribute - Justification (Full)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1727,9 +1727,9 @@ void TextAttrRecordHandler::DescribeFontSize(CXaraFileRecord *pCXaraFileRecord, 
 	MILLIPOINT Value;
 	pCXaraFileRecord->ReadINT32(&Value);
 	
-	_stprintf(s, "Text Attribute - Font Size\r\n");
+	camSprintf(s, _T("Text Attribute - Font Size\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Font size = %ld\r\n", Value);
+	camSprintf(s, _T("Font size = %ld\r\n"), Value);
 	(*pStr) += s;
 }
 
@@ -1741,10 +1741,10 @@ void TextAttrRecordHandler::DescribeFontTypeface(CXaraFileRecord *pCXaraFileReco
 
 	pCXaraFileRecord->ReadINT32(&RecordNumber);
 
-	_stprintf(s, "Text Attribute - Typeface\r\n");
+	camSprintf(s, _T("Text Attribute - Typeface\r\n"));
 	(*pStr) += s;
 
-	_stprintf(s, "Record Number = %ld\r\n", RecordNumber);
+	camSprintf(s, _T("Record Number = %ld\r\n"), RecordNumber);
 	(*pStr) += s;
 }
 
@@ -1752,7 +1752,7 @@ void TextAttrRecordHandler::DescribeBoldOn(CXaraFileRecord *pCXaraFileRecord, St
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Bold (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Bold (On)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1760,7 +1760,7 @@ void TextAttrRecordHandler::DescribeBoldOff(CXaraFileRecord *pCXaraFileRecord, S
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Bold (Off)\r\n");
+	camSprintf(s, _T("Text Attribute - Bold (Off)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1768,7 +1768,7 @@ void TextAttrRecordHandler::DescribeItalicOn(CXaraFileRecord *pCXaraFileRecord, 
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Italic (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Italic (On)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1776,7 +1776,7 @@ void TextAttrRecordHandler::DescribeItalicOff(CXaraFileRecord *pCXaraFileRecord,
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Italic (Off)\r\n");
+	camSprintf(s, _T("Text Attribute - Italic (Off)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1784,7 +1784,7 @@ void TextAttrRecordHandler::DescribeUnderlineOn(CXaraFileRecord *pCXaraFileRecor
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Underline (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Underline (On)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1792,7 +1792,7 @@ void TextAttrRecordHandler::DescribeUnderlineOff(CXaraFileRecord *pCXaraFileReco
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Underline (Off)\r\n");
+	camSprintf(s, _T("Text Attribute - Underline (Off)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1805,11 +1805,11 @@ void TextAttrRecordHandler::DescribeScriptOn(CXaraFileRecord *pCXaraFileRecord, 
 	pCXaraFileRecord->ReadFIXED16(&Offset);
 	pCXaraFileRecord->ReadFIXED16(&Size);
 
-	_stprintf(s, "Text Attribute - Script (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Script (On)\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Offset = %f\r\n", Offset.MakeDouble());
+	camSprintf(s, _T("Offset = %f\r\n"), Offset.MakeDouble());
 	(*pStr) += s;
-	_stprintf(s, "Offset = %f\r\n", Size.MakeDouble());
+	camSprintf(s, _T("Offset = %f\r\n"), Size.MakeDouble());
 	(*pStr) += s;
 }
 
@@ -1817,7 +1817,7 @@ void TextAttrRecordHandler::DescribeScriptOff(CXaraFileRecord *pCXaraFileRecord,
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Script (Off)\r\n");
+	camSprintf(s, _T("Text Attribute - Script (Off)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1825,7 +1825,7 @@ void TextAttrRecordHandler::DescribeSuperscriptOn(CXaraFileRecord *pCXaraFileRec
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Superscript (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Superscript (On)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1833,7 +1833,7 @@ void TextAttrRecordHandler::DescribeSubscriptOn(CXaraFileRecord *pCXaraFileRecor
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Text Attribute - Subscript (On)\r\n");
+	camSprintf(s, _T("Text Attribute - Subscript (On)\r\n"));
 	(*pStr) += s;
 }
 
@@ -1844,9 +1844,9 @@ void TextAttrRecordHandler::DescribeTracking(CXaraFileRecord *pCXaraFileRecord, 
 	MILLIPOINT Value;
 	pCXaraFileRecord->ReadINT32(&Value);
 
-	_stprintf(s, "Text Attribute - Tracking\r\n");
+	camSprintf(s, _T("Text Attribute - Tracking\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Tracking = %ld\r\n", Value);
+	camSprintf(s, _T("Tracking = %ld\r\n"), Value);
 	(*pStr) += s;
 }
 	
@@ -1857,9 +1857,9 @@ void TextAttrRecordHandler::DescribeAspectRatio(CXaraFileRecord *pCXaraFileRecor
 	FIXED16 Value;
 	pCXaraFileRecord->ReadFIXED16(&Value);
 
-	_stprintf(s, "Text Attribute - Aspect Ratio\r\n");
+	camSprintf(s, _T("Text Attribute - Aspect Ratio\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Aspect Ratio = %f\r\n", Value.MakeDouble());
+	camSprintf(s, _T("Aspect Ratio = %f\r\n"), Value.MakeDouble());
 	(*pStr) += s;
 }
 
@@ -1870,9 +1870,9 @@ void TextAttrRecordHandler::DescribeBaseline(CXaraFileRecord *pCXaraFileRecord, 
 	MILLIPOINT Value;
 	pCXaraFileRecord->ReadINT32(&Value);
 
-	_stprintf(s, "Text Attribute - Baseline Shift\r\n");
+	camSprintf(s, _T("Text Attribute - Baseline Shift\r\n"));
 	(*pStr) += s;
-	_stprintf(s, "Baseline shift = %ld\r\n", Value);
+	camSprintf(s, _T("Baseline shift = %ld\r\n"), Value);
 	(*pStr) += s;
 }
 
@@ -1880,18 +1880,18 @@ void TextAttrRecordHandler::DescribeInvalid(CXaraFileRecord *pCXaraFileRecord, S
 {
 	TCHAR s[256];
 
-	_stprintf(s,"Record Number = %d\r\n", pCXaraFileRecord->GetRecordNumber());
+	camSprintf(s,_T("Record Number = %d\r\n"), pCXaraFileRecord->GetRecordNumber());
 	(*pStr) += s;
-	_stprintf(s, "Tag = %d\r\n", pCXaraFileRecord->GetTag());
+	camSprintf(s, _T("Tag = %d\r\n"), pCXaraFileRecord->GetTag());
 	(*pStr) += s;
-	_stprintf(s, "Size = %d\r\n\r\n", pCXaraFileRecord->GetSize());
+	camSprintf(s, _T("Size = %d\r\n\r\n"), pCXaraFileRecord->GetSize());
 	(*pStr) += s;
 
-	_stprintf(s, "Text Attribute - Invalid\r\n");
+	camSprintf(s, _T("Text Attribute - Invalid\r\n"));
 	(*pStr) += s;
 }
 
-#endif	// _DEBUG
+#endif	// XAR_TREE_DIALOG
 
 /********************************************************************************************
 
@@ -1954,7 +1954,7 @@ BOOL FontDefRecordHandler::HandleRecord(CXaraFileRecord *pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void FontDefRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase *pStr)
 {
 	if (pCXaraFileRecord!=NULL || pStr!=NULL)
@@ -1976,16 +1976,16 @@ void FontDefRecordHandler::DescribeFontDefTrueType(CXaraFileRecord *pCXaraFileRe
 	TCHAR FontName[64];
 	TCHAR FaceName[32];
 	CCPanose MyCCPanose;
-	
+
 	pCXaraFileRecord->ReadUnicode(FontName, 64);
 	pCXaraFileRecord->ReadUnicode(FaceName, 32);
 	pCXaraFileRecord->ReadCCPanose(&MyCCPanose);
 
-	_stprintf(buf, "Font Definition - Truetype\r\n");
+	camSprintf(buf, _T("Font Definition - Truetype\r\n"));
 	(*pStr) += buf;
-	_stprintf(buf, "Full font name - %s\r\n", FontName);
+	camSprintf(buf, _T("Full font name - %s\r\n"), FontName);
 	(*pStr) += buf;
-	_stprintf(buf, "TypeFace name - %s\r\n", FaceName);
+	camSprintf(buf, _T("TypeFace name - %s\r\n"), FaceName);
 	(*pStr) += buf;
 
 	MyCCPanose.GetDebugDetails(pStr);
@@ -2003,11 +2003,11 @@ void FontDefRecordHandler::DescribeFontDefATM(CXaraFileRecord *pCXaraFileRecord,
 	pCXaraFileRecord->ReadUnicode(FaceName, 32);
 	pCXaraFileRecord->ReadCCPanose(&MyCCPanose);
 
-	_stprintf(buf, "Font Definition - ATM\r\n");
+	camSprintf(buf, _T("Font Definition - ATM\r\n"));
 	(*pStr) += buf;
-	_stprintf(buf, "Full font name - %s\r\n", FontName);
+	camSprintf(buf, _T("Full font name - %s\r\n"), FontName);
 	(*pStr) += buf;
-	_stprintf(buf, "TypeFace name - %s\r\n", FaceName);
+	camSprintf(buf, _T("TypeFace name - %s\r\n"), FaceName);
 	(*pStr) += buf;
 
 	MyCCPanose.GetDebugDetails(pStr);
@@ -2018,7 +2018,7 @@ void FontDefRecordHandler::DescribeFontDefInvalid(CXaraFileRecord *pCXaraFileRec
 {
 	TCHAR s[256];
 
-	_stprintf(s, "Font Definition - Invalid\r\n");
+	camSprintf(s, _T("Font Definition - Invalid\r\n"));
 	(*pStr) += s;
 }
 

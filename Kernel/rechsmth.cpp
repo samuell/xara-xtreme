@@ -203,7 +203,7 @@ BOOL BitmapSmoothingRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecor
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void BitmapSmoothingRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)

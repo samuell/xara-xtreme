@@ -235,7 +235,7 @@ BOOL UnitsRecordHandler::HandleRecord(CXaraFileRecord* pCXaraFileRecord)
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void UnitsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -247,8 +247,8 @@ void UnitsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Stri
 
 	UINT32 Tag = pRecord->GetTag();
 	BOOL ok = TRUE;
-	char s[256];
-	INT32 RecordNumber = pRecord->GetRecordNumber();
+	TCHAR s[256];
+//	INT32 RecordNumber = pRecord->GetRecordNumber();
 	switch (Tag)
 	{
 		case TAG_DEFINE_DEFAULTUNITS:
@@ -257,27 +257,27 @@ void UnitsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Stri
 			INT32 ExportPageUnits = 0L;
 			INT32 ExportFontUnits = 0L;
 			if (ok) ok = pRecord->ReadINT32(&ExportPageUnits);
-			(*pStr) += "Page units: ";
+			(*pStr) += _T("Page units: ");
 			DescribeDefaultUnit(ExportPageUnits, pStr);
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 			if (ok) ok = pRecord->ReadINT32(&ExportFontUnits);
-			(*pStr) += "Font units: ";
+			(*pStr) += _T("Font units: ");
 			DescribeDefaultUnit(ExportFontUnits, pStr);
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 			break;
 		}
 
 		 case TAG_DEFINE_PREFIXUSERUNIT:
 		 case TAG_DEFINE_SUFFIXUSERUNIT:
 		{
-			BOOL Prefix = TRUE;
+//			BOOL Prefix = TRUE;
 			switch (Tag)
 			{
 				case TAG_DEFINE_PREFIXUSERUNIT:
-					(*pStr) += "Define prefix unit: \r\n\r\n";
+					(*pStr) += _T("Define prefix unit: \r\n\r\n");
 					break;
 				case TAG_DEFINE_SUFFIXUSERUNIT:
-					(*pStr) += "Define suffix unit: \r\n\r\n";
+					(*pStr) += _T("Define suffix unit: \r\n\r\n");
 					break;
 				default:
 					ERROR3("Bad tag in ImportUserUnitDefinition");
@@ -286,38 +286,38 @@ void UnitsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Stri
 			// Read in the main full name of the unit
 			String_32 Name;
 			pRecord->ReadUnicode(&Name);//Name, Name.MaxLength());
-			(*pStr) += "Name of unit: \t\t= ";
+			(*pStr) += _T("Name of unit: \t\t= ");
 			(*pStr) += Name;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
 			// And the abbreviation
 			String_32 Abbrev;
 			pRecord->ReadUnicode(&Abbrev);//Abbrev, Abbrev.MaxLength());
-			(*pStr) += "Abbreviation for unit: \t= ";
+			(*pStr) += _T("Abbreviation for unit: \t= ");
 			(*pStr) += Abbrev;
-			(*pStr) += "\r\n\r\n";
+			(*pStr) += _T("\r\n\r\n");
 			
 			// Read in the size of this unit, 0 means based on
 			double UnitSize = 0.0;
 			pRecord->ReadDOUBLE(&UnitSize);
-			_stprintf(s,"Size of unit: \t\t= %f\r\n",UnitSize);
+			camSprintf(s,_T("Size of unit: \t\t= %f\r\n"),UnitSize);
 			(*pStr) += s;
 
 			// Read in the exported base unit type
 			INT32 ExportBaseUnit = 0L;
 			pRecord->ReadINT32(&ExportBaseUnit);
-			(*pStr) += "Based on unit: \t\t= ";
+			(*pStr) += _T("Based on unit: \t\t= ");
 			DescribeDefaultUnit(ExportBaseUnit, pStr);
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
 			// Read in the multipliers for this unit
 			double BaseNumerator = 0.0;
 			double BaseDenominator = 0.0;
 			pRecord->ReadDOUBLE(&BaseNumerator);
 			pRecord->ReadDOUBLE(&BaseDenominator);
-			_stprintf(s,"Numerator: \t\t= %f\r\n",BaseNumerator);
+			camSprintf(s,_T("Numerator: \t\t= %f\r\n"),BaseNumerator);
 			(*pStr) += s;
-			_stprintf(s,"Denominator: \t\t= %f\r\n",BaseDenominator);
+			camSprintf(s,_T("Denominator: \t\t= %f\r\n"),BaseDenominator);
 			(*pStr) += s;
 
 			break;
@@ -344,34 +344,34 @@ void UnitsRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, Stri
 
 void UnitsRecordHandler::DescribeDefaultUnit(INT32 ExportUnitType, StringBase* pStr)
 {
-	char s[256];
+	TCHAR s[256];
 	if (ExportUnitType < 0)
 	{
 		switch (ExportUnitType)
 		{
-			case REF_DEFAULTUNIT_MILLIMETRES:	(*pStr) += "MILLIMETRES";	break;
-			case REF_DEFAULTUNIT_CENTIMETRES:	(*pStr) += "CENTIMETRES";	break;
-			case REF_DEFAULTUNIT_METRES:		(*pStr) += "METRES";		break;
-			case REF_DEFAULTUNIT_KILOMETRES:	(*pStr) += "KILOMETRES";	break;
-			case REF_DEFAULTUNIT_MILLIPOINTS:	(*pStr) += "MILLIPOINTS";	break;
-			case REF_DEFAULTUNIT_COMP_POINTS:	(*pStr) += "COMP_POINTS";	break;
-			case REF_DEFAULTUNIT_PICAS:			(*pStr) += "PICAS";			break;
-			case REF_DEFAULTUNIT_INCHES:		(*pStr) += "INCHES";		break;
-			case REF_DEFAULTUNIT_FEET:			(*pStr) += "FEET";			break;
-			case REF_DEFAULTUNIT_YARDS:			(*pStr) += "YARDS";			break;
-			case REF_DEFAULTUNIT_MILES:			(*pStr) += "MILES";			break;
-			case REF_DEFAULTUNIT_PIXELS:		(*pStr) += "PIXELS";		break;
+			case REF_DEFAULTUNIT_MILLIMETRES:	(*pStr) += _T("MILLIMETRES");	break;
+			case REF_DEFAULTUNIT_CENTIMETRES:	(*pStr) += _T("CENTIMETRES");	break;
+			case REF_DEFAULTUNIT_METRES:		(*pStr) += _T("METRES");		break;
+			case REF_DEFAULTUNIT_KILOMETRES:	(*pStr) += _T("KILOMETRES");	break;
+			case REF_DEFAULTUNIT_MILLIPOINTS:	(*pStr) += _T("MILLIPOINTS");	break;
+			case REF_DEFAULTUNIT_COMP_POINTS:	(*pStr) += _T("COMP_POINTS");	break;
+			case REF_DEFAULTUNIT_PICAS:			(*pStr) += _T("PICAS");			break;
+			case REF_DEFAULTUNIT_INCHES:		(*pStr) += _T("INCHES");		break;
+			case REF_DEFAULTUNIT_FEET:			(*pStr) += _T("FEET");			break;
+			case REF_DEFAULTUNIT_YARDS:			(*pStr) += _T("YARDS");			break;
+			case REF_DEFAULTUNIT_MILES:			(*pStr) += _T("MILES");			break;
+			case REF_DEFAULTUNIT_PIXELS:		(*pStr) += _T("PIXELS");		break;
 
-			case REF_DEFAULTUNIT_NOTYPE:		(*pStr) += "NOTYPE";		break;
+			case REF_DEFAULTUNIT_NOTYPE:		(*pStr) += _T("NOTYPE");		break;
 			default:
-				_stprintf(s,"%d",ExportUnitType);
+				camSprintf(s,_T("%d"),ExportUnitType);
 				(*pStr) += s;
 				break;
 		}
 	}
 	else
 	{
-		_stprintf(s,"%d",ExportUnitType);
+		camSprintf(s,_T("%d"),ExportUnitType);
 		(*pStr) += s;
 	}
 }

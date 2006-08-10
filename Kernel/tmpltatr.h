@@ -182,7 +182,7 @@ public:
 	virtual UINT32*	GetTagList();
 	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 	virtual void GetTagText(UINT32 Tag,String_256& Str);
 #endif
@@ -256,7 +256,7 @@ public:
 	virtual UINT32*	GetTagList();
 	virtual BOOL	HandleRecord(CXaraFileRecord* pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord,StringBase* Str);
 	virtual void GetTagText(UINT32 Tag,String_256& Str);
 #endif

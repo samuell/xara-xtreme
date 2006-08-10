@@ -170,7 +170,7 @@ private:
 	BOOL InsertTextStoryNode(TextStory* pTextStory);
 	TextStory* pLastInsertedTextStory;
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase *pStr);
 	void DescribeStorySimple(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr);
@@ -253,7 +253,7 @@ private:
 	BOOL ReadTextRuler(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadTextInvalid(CXaraFileRecord *pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase *pStr);
 	void DescribeLineSpaceRatio(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr);
@@ -307,7 +307,7 @@ public:
 	UINT32* GetTagList();
 	BOOL HandleRecord(CXaraFileRecord* pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	void GetRecordDescriptionText(CXaraFileRecord* pCXaraFileRecord, StringBase *pStr);
 	void DescribeFontDefTrueType(CXaraFileRecord *pCXaraFileRecord, StringBase *pStr);

@@ -152,7 +152,7 @@ private:
 	BOOL ReadPolygonComplexRoundedStellated(CXaraFileRecord *pCXaraFileRecord);
 	BOOL ReadPolygonComplexRoundedStellatedReformed(CXaraFileRecord *pCXaraFileRecord);
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 public:
 	virtual void GetRecordDescriptionText(CXaraFileRecord *pRecord, StringBase *pStr);
 	virtual void DescribePolygonComplex(CXaraFileRecord *pRecord, StringBase *pStr);

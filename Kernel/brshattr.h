@@ -490,7 +490,7 @@ protected: //helper functions
 	BOOL HandleAttrTranspInfo(CXaraFileRecord* pRecord);
 
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 	virtual void GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr);
 #endif
 

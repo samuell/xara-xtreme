@@ -105,6 +105,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "wrkrect.h"
 //#include "dragtrgt.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
+#include "wx/dnd.h"
+
 // Forward definitions
 class CRenderWnd;
 class CWinScroller;
@@ -241,6 +243,8 @@ public:
 	void	OnDragIdle( wxTimerEvent &event);		// OnTimer(DragIdleID)
 
 	void	OnSetCursor( wxSetCursorEvent& event );
+
+	bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
 
 protected:
 	LRESULT OnRenderView( WPARAM wp, LPARAM lp );
@@ -528,6 +532,20 @@ protected:
 
 	ObjectDragTarget 	OverTarget;
 	NodeRenderableInk* 	OverNode;
+};
+
+
+
+class CViewFileDropTarget : public wxFileDropTarget
+{
+public:
+	CViewFileDropTarget(CCamView* pView);
+	virtual ~CViewFileDropTarget();
+
+	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+
+protected:
+	CCamView* m_pView;
 };
 
 

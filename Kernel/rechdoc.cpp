@@ -1264,7 +1264,7 @@ return TRUE;
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -1366,42 +1366,42 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			}
 
 			(*pStr) += _T("Flags\r\n");
-			sprintf(s,"Visible:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_VISIBLE)	!= 0); (*pStr) += s;
-			sprintf(s,"Locked:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_LOCKED)		!= 0); (*pStr) += s;
-			sprintf(s,"Printable:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_PRINTABLE)	!= 0); (*pStr) += s;
-			sprintf(s,"Active:\t%d\r\n",	(Flags & TAG_LAYER_FLAG_ACTIVE)		!= 0); (*pStr) += s;
-			sprintf(s,"PageBackground:\t%d\r\n",(Flags & TAG_LAYER_FLAG_PAGEBACKGROUND)	!= 0); (*pStr) += s;
+			camSprintf(s,_T("Visible:\t%d\r\n"),	(Flags & TAG_LAYER_FLAG_VISIBLE)	!= 0); (*pStr) += s;
+			camSprintf(s,_T("Locked:\t%d\r\n"),	(Flags & TAG_LAYER_FLAG_LOCKED)		!= 0); (*pStr) += s;
+			camSprintf(s,_T("Printable:\t%d\r\n"),	(Flags & TAG_LAYER_FLAG_PRINTABLE)	!= 0); (*pStr) += s;
+			camSprintf(s,_T("Active:\t%d\r\n"),	(Flags & TAG_LAYER_FLAG_ACTIVE)		!= 0); (*pStr) += s;
+			camSprintf(s,_T("PageBackground:\t%d\r\n"),(Flags & TAG_LAYER_FLAG_PAGEBACKGROUND)	!= 0); (*pStr) += s;
 			(*pStr) += _T("\r\n");
 
-			sprintf(s,"Name: %s\r\n\r\n",(TCHAR*)Name); (*pStr) += s;
-			sprintf(s,"Colour reference : %d\r\n",ColRef); (*pStr) += s;
+			camSprintf(s,_T("Name: %s\r\n\r\n"),(TCHAR*)Name); (*pStr) += s;
+			camSprintf(s,_T("Colour reference : %d\r\n"),ColRef); (*pStr) += s;
 		}
 		break;
 
 		case TAG_GRIDRULERSETTINGS:
 		{
 			double   Divisions    = 0.0;
-			UnitType Unit         = NOTYPE;
+//			UnitType Unit         = NOTYPE;
 			UINT32    SubDivisions = 0;
 			GridType TypeOfGrid   = RECTANGULAR;
 			BYTE	 TypeOfGridB  = 0;
 			INT32	 UnitsRef	  = 0L;
 
 			if (ok) ok = pRecord->ReadINT32(&UnitsRef);
-			_stprintf(s,"Grid units : %d\r\n",UnitsRef);
+			camSprintf(s,_T("Grid units : %d\r\n"),UnitsRef);
 			(*pStr) += s;
 			if (ok) ok = pRecord->ReadDOUBLE(&Divisions);
-			_stprintf(s,"Grid divisions : %f\r\n",Divisions);
+			camSprintf(s,_T("Grid divisions : %f\r\n"),Divisions);
 			if (ok) ok = pRecord->ReadUINT32(&SubDivisions);
-			_stprintf(s,"Grid sub divisions : %d\r\n",SubDivisions);
+			camSprintf(s,_T("Grid sub divisions : %d\r\n"),SubDivisions);
 			if (ok) ok = pRecord->ReadBYTE(&TypeOfGridB);
 			TypeOfGrid = (GridType)TypeOfGridB;
 			if (TypeOfGrid == RECTANGULAR)
-				(*pStr) += "Rectangular";
+				(*pStr) += _T("Rectangular");
 			else if (TypeOfGrid == ISOMETRIC)
-				(*pStr) += "Isometric";
+				(*pStr) += _T("Isometric");
 			else
-				(*pStr) += "Unknown";
+				(*pStr) += _T("Unknown");
 			break;
 		}
 
@@ -1409,7 +1409,7 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 		{
 			DocCoord Origin(0,0);
 			if (ok) ok = pRecord->ReadCoord(&Origin);
-			_stprintf(s,"Grid and Ruler origin : %d, %d\r\n",Origin.x,Origin.y);
+			camSprintf(s,_T("Grid and Ruler origin : %d, %d\r\n"),Origin.x,Origin.y);
 			(*pStr) += s;
 			break;
 		}
@@ -1418,9 +1418,9 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 		case TAG_SPREADSCALING_INACTIVE:
 		{
 			if (Tag == TAG_SPREADSCALING_ACTIVE)
-				(*pStr) += "Spread scaling active \r\n\r\n";
+				(*pStr) += _T("Spread scaling active \r\n\r\n");
 			else
-				(*pStr) += "Spread scaling inactive \r\n\r\n";
+				(*pStr) += _T("Spread scaling inactive \r\n\r\n");
 			
 			double 	DrawingScaleValue	= 1.0;
 			INT32	DrawingUnits		= 0L;
@@ -1430,13 +1430,13 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			if (ok) ok = pRecord->ReadINT32(&DrawingUnits);
 			if (ok) ok = pRecord->ReadDOUBLE(&RealScaleValue);
 			if (ok) ok = pRecord->ReadINT32(&RealUnits);
-			_stprintf(s,"Drawing scale factor \t: %f\r\n",DrawingScaleValue);
+			camSprintf(s,_T("Drawing scale factor \t: %f\r\n"),DrawingScaleValue);
 			(*pStr) += s;
-			_stprintf(s,"Drawing units ref \t: %d\r\n",DrawingUnits);
+			camSprintf(s,_T("Drawing units ref \t: %d\r\n"),DrawingUnits);
 			(*pStr) += s;
-			_stprintf(s,"Real scale factor \t\t: %f\r\n",RealScaleValue);
+			camSprintf(s,_T("Real scale factor \t\t: %f\r\n"),RealScaleValue);
 			(*pStr) += s;
-			_stprintf(s,"Real units ref \t: %d\r\n",RealUnits);
+			camSprintf(s,_T("Real units ref \t: %d\r\n"),RealUnits);
 			(*pStr) += s;
 			break;
 		}
@@ -1449,8 +1449,8 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			pRecord->ReadBYTE(&Type);
 			pRecord->ReadINT32(&Ordinate);
 
-			_stprintf(s,"Type\t: %d\r\n",INT32(Type));	(*pStr) += s;
-			_stprintf(s,"Type\t: %d\r\n",Ordinate);		(*pStr) += s;
+			camSprintf(s,_T("Type\t: %d\r\n"),INT32(Type));	(*pStr) += s;
+			camSprintf(s,_T("Type\t: %d\r\n"),Ordinate);	(*pStr) += s;
 		}
 		break;
 
@@ -1488,19 +1488,19 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 	
 			// Display the info..
 
-			_stprintf(s,"Animation Loop \t: %d\r\n",Loop);
+			camSprintf(s,_T("Animation Loop \t: %d\r\n"),Loop);
 				(*pStr) += s;
-			_stprintf(s,"GlobalDelay \t: %d\r\n",GlobalDelay);
+			camSprintf(s,_T("GlobalDelay \t: %d\r\n"),GlobalDelay);
 				(*pStr) += s;
-			_stprintf(s,"Animation Dither \t: %d\r\n",Dither);
+			camSprintf(s,_T("Animation Dither \t: %d\r\n"),Dither);
 				(*pStr) += s;
-			_stprintf(s,"Palette	 \t: %d\r\n",WebPalette);
+			camSprintf(s,_T("Palette	 \t: %d\r\n"),WebPalette);
 				(*pStr) += s;
-			_stprintf(s,"Palette Colours \t: %d\r\n",ColoursPalette);
+			camSprintf(s,_T("Palette Colours \t: %d\r\n"),ColoursPalette);
 				(*pStr) += s;
-			_stprintf(s,"Number of Colours In Palette \t: %d\r\n",NumColsInPalette);
+			camSprintf(s,_T("Number of Colours In Palette \t: %d\r\n"),NumColsInPalette);
 				(*pStr) += s;
-			_stprintf(s,"Add System Colours \t: %d\r\n",UseSystemColours);
+			camSprintf(s,_T("Add System Colours \t: %d\r\n"),UseSystemColours);
 				(*pStr) += s;
 
 		};
@@ -1513,10 +1513,10 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			
 			if (ok) ok = pRecord->ReadUINT32(&Delay);
 			if (ok)	ok = pRecord->ReadBYTE(&Flags);
-			_stprintf(s,"Frame Layer Delay \t: %d\r\n",Delay);						(*pStr) += s;
-			sprintf(s,"Solid:\t%d\r\n",  (Flags & TAG_LAYER_FLAG_SOLID)		!= 0);	(*pStr) += s;
-			sprintf(s,"Overlay:\t%d\r\n",(Flags & TAG_LAYER_FLAG_OVERLAY)	!= 0);	(*pStr) += s;
-			sprintf(s,"Hidden:\t%d\r\n", (Flags & TAG_LAYER_FLAG_HIDDEN)	!= 0);	(*pStr) += s;
+			camSprintf(s,_T("Frame Layer Delay \t: %d\r\n"),Delay);						(*pStr) += s;
+			camSprintf(s,_T("Solid:\t%d\r\n"),  (Flags & TAG_LAYER_FLAG_SOLID)		!= 0);	(*pStr) += s;
+			camSprintf(s,_T("Overlay:\t%d\r\n"),(Flags & TAG_LAYER_FLAG_OVERLAY)	!= 0);	(*pStr) += s;
+			camSprintf(s,_T("Hidden:\t%d\r\n"), (Flags & TAG_LAYER_FLAG_HIDDEN)	!= 0);	(*pStr) += s;
 		}
 		break;
 
@@ -1527,13 +1527,13 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			switch(GroupID)
 			{
 			case ATTRIBUTEGROUP_INK:
-				_stprintf(s,"Attribute Group ID = INK\r\n"); (*pStr) += s;
+				(*pStr) += _T("Attribute Group ID = INK\r\n");
 				break;
 			case ATTRIBUTEGROUP_TEXT:
-				_stprintf(s,"Attribute Group ID = TEXT\r\n"); (*pStr) += s;
+				(*pStr) += _T("Attribute Group ID = TEXT\r\n");
 				break;
 			default:
-				_stprintf(s,"Attribute Group ID = UNKNOWN!\r\n"); (*pStr) += s;
+				(*pStr) += _T("Attribute Group ID = UNKNOWN!\r\n");
 				break;
 			}
 		}
@@ -1545,13 +1545,13 @@ void DocumentRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord, S
 			pRecord->ReadCoord(&attrBounds.lo);
 			pRecord->ReadCoord(&attrBounds.hi);
 
-			_stprintf(s,"lox \t: %d\r\n", attrBounds.lox);
+			camSprintf(s,_T("lo.x \t: %d\r\n"), attrBounds.lo.x);
 				(*pStr) += s;
-			_stprintf(s,"loy \t: %d\r\n", attrBounds.loy);
+			camSprintf(s,_T("lo.y \t: %d\r\n"), attrBounds.lo.y);
 				(*pStr) += s;
-			_stprintf(s,"hix \t: %d\r\n", attrBounds.hix);
+			camSprintf(s,_T("hi.x \t: %d\r\n"), attrBounds.hi.x);
 				(*pStr) += s;
-			_stprintf(s,"hiy \t: %d\r\n", attrBounds.hiy);
+			camSprintf(s,_T("hi.y \t: %d\r\n"), attrBounds.hi.y);
 				(*pStr) += s;
 
 		}

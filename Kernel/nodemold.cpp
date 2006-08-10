@@ -3036,7 +3036,7 @@ BOOL MouldRecordHandler::HandleMouldPathRecord(CXaraFileRecord* pCXaraFileRecord
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void MouldRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)

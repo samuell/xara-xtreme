@@ -4602,7 +4602,7 @@ BOOL BlendRecordHandler::HandleBlendProfileRecord(CXaraFileRecord* pCXaraFileRec
 
 ********************************************************************************************/
 
-#if XAR_TREE_DIALOG
+#ifdef XAR_TREE_DIALOG
 void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
 	if (pStr == NULL || pRecord == NULL)
@@ -4627,7 +4627,7 @@ void BlendRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Strin
 			(*pStr) += s;
 			camSprintf(s,_T("Flags\t\t= %d\r\n"),INT32(Flags));
 			(*pStr) += s;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
 			camSprintf(s,_T("One to One\t= %d\r\n"),Flags & TAG_BLEND_FLAG_ONETOONE);
 			(*pStr) += s;

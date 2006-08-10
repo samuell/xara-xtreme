@@ -978,19 +978,19 @@ void CMXTreeDlgRecordHandler::GetRecordDescriptionText(CMXFileRecord* pRecord,St
 	switch (ObjType)
 	{
 		case RIFFOBJECTTYPE_NONE:
-			ObjText = "None";
+			ObjText = _T("None");
 			break;
 		case RIFFOBJECTTYPE_CHUNK:
-			ObjText = "Chunk";
+			ObjText = _T("Chunk");
 			break;
 		case RIFFOBJECTTYPE_LISTSTART:
-			ObjText = "List start";
+			ObjText = _T("List start");
 			break;
 		case RIFFOBJECTTYPE_LISTEND:
-			ObjText = "List end";
+			ObjText = _T("List end");
 			break;
 		case RIFFOBJECTTYPE_FILEEND:
-			ObjText = "List end";
+			ObjText = _T("List end");
 			break;
 	}
 

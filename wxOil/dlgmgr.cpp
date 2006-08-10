@@ -9282,6 +9282,38 @@ UINT32 DialogManager::GetGadgetImageCount(CWindowID wnd, CGadgetID Gadget)
 }
 
 
+/********************************************************************************************
+
+>	CGadgetImageList::~CGadgetImageList()
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	08/Feb/2006
+	Purpose:	Destructor
+
+********************************************************************************************/
+
+CGadgetImageList::~CGadgetImageList()
+{
+	m_BitmapIDList.DeleteAll();
+}
+
+/********************************************************************************************
+
+>	UINT32 CGadgetImageList::Add(CDlgResID resID)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	08/Feb/2006
+	Inputs:		resID - resource ID of the image
+	Returns:	The index of the image
+	Purpose:	Adds an image to the list
+
+********************************************************************************************/
+
+UINT32 CGadgetImageList::Add(CDlgResID resID)
+{
+	m_BitmapIDList.AddTail(new ResIDListItem(resID));
+	return m_BitmapIDList.GetCount()-1;
+}
 
 
 /********************************************************************************************

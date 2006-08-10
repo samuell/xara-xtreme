@@ -2219,11 +2219,11 @@ BOOL ShadowRecordHandler::HandleShadowRecord(CXaraFileRecord* pCXaraFileRecord)
 #ifdef XAR_TREE_DIALOG
 void ShadowRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,StringBase* pStr)
 {
-	/*
+/*
 	if (pStr == NULL || pRecord == NULL)
 		return;
 
-	char s[256];
+	TCHAR s[256];
 
 	//	 Call base class first
 	CamelotRecordHandler::GetRecordDescriptionText(pRecord,pStr);
@@ -2253,11 +2253,11 @@ void ShadowRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord,Stri
 				case BITMAPFILTER:		(*pStr) += TEXT("Bitmap shadower"); break;
 				default:				(*pStr) += TEXT("Unknown"); break;
 			}
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 
 			camSprintf(s,_T("Width\t\t= %d\r\n"),Width);
 			(*pStr) += s;
-			(*pStr) += "\r\n";
+			(*pStr) += _T("\r\n");
 		}
 		break;
 	}
