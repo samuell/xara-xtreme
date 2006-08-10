@@ -1979,6 +1979,9 @@ void OpDroppedFile::DoWithParam(OpDescriptor*, OpParam* pOpParam)
 
 			}
 		}
+
+		// Get the next file name item
+		pItem = (StringListItem*)(pFileList->GetNext(pItem));
 	}
 	
 	// Finished the operation
