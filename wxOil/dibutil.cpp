@@ -4713,7 +4713,7 @@ LPLOGPALETTE DIBUtil::CopyBitmapPaletteIntoLogPalette(KernelBitmap * pBitmap)
 
 	LPRGBQUAD		pPal	= pBitmap->GetPaletteForBitmap();
 	UINT32			Bpp		= pBitmap->GetBPP();
-	UINT32			PaletteSize = UINT32( pow( 2.0, double(Bpp) ) );
+	UINT32			PaletteSize = 1U<<Bpp;
 	LPLOGPALETTE	pLogPal = NULL;
 
 	// Bitmaps with more than 256 colours in usually do not require a palette
