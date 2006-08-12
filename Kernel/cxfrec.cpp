@@ -624,7 +624,8 @@ BOOL CXaraFileRecord::WriteReference(INT32 n)
 BOOL CXaraFileRecord::WriteFLOAT(FLOAT f)
 {
 	ENTERWRITEFUNCTION(FTT_FLOAT);
-	BOOL ok = WriteBuffer((BYTE*)&f,sizeof(FLOAT));
+	FloatUnion u=NativetoLEU(f);
+	BOOL ok = WriteBuffer((BYTE*)&(u.u_INT32),sizeof(u.u_INT32));
 	LEAVEWRITEFUNCTION;
 	return (ok);
 }	
@@ -668,7 +669,8 @@ BOOL CXaraFileRecord::WriteANGLE(ANGLE a)
 BOOL CXaraFileRecord::WriteDOUBLE(double d)
 {
 	ENTERWRITEFUNCTION(FTT_DOUBLE);
-	BOOL ok = WriteBuffer((BYTE*)&d,sizeof(double));
+	DoubleUnion u=NativetoLEU(d);
+	BOOL ok = WriteBuffer((BYTE*)&(u.u_INT64),sizeof(u.u_INT64));
 	LEAVEWRITEFUNCTION;
 	return (ok);
 }	
@@ -1323,22 +1325,25 @@ BOOL CXaraFileRecord::ReadINT16(INT16* pn)
 
 BOOL CXaraFileRecord::ReadFLOAT(FLOAT* pf)
 {
-	BOOL ok = ReadBuffer((BYTE*)pf,sizeof(FLOAT));
-	*pf = LEtoNative(*pf);
+	FloatUnion f;
+	BOOL ok = ReadBuffer((BYTE*)&(f.u_INT32),sizeof(f.u_INT32));
+	*pf = LEtoNative(f);
 	return ok;
 }
 
 BOOL CXaraFileRecord::ReadDOUBLE(double* pd)
 {
-	BOOL ok = ReadBuffer((BYTE*)pd,sizeof(double));
-	*pd = LEtoNative(*pd);
+	DoubleUnion f;
+	BOOL ok = ReadBuffer((BYTE*)&(f.u_INT64),sizeof(f.u_INT64));
+	*pd = LEtoNative(f);
 	return ok;
 }
 
 BOOL CXaraFileRecord::ReadDOUBLEnoError(double* pd)
 {
-	BOOL ok = ReadBuffernoError((BYTE*)pd,sizeof(double));
-	*pd = LEtoNative(*pd);
+	DoubleUnion f;
+	BOOL ok = ReadBuffernoError((BYTE*)&(f.u_INT64),sizeof(f.u_INT64));
+	*pd = LEtoNative(f);
 	return ok;
 }
 

@@ -115,6 +115,19 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 namespace oilHardwareManager
 {
+	// Avoid aliasing problems
+	union DoubleUnion
+	{
+		double u_double;
+		INT64 u_INT64;
+	};
+
+	union FloatUnion
+	{
+		float u_float;
+		INT32 u_INT32;
+	};
+
 // Byte ordering functions
 #if defined(WORDS_BIGENDIAN)
 	// __BIG_ENDIAN__
@@ -158,15 +171,27 @@ namespace oilHardwareManager
 	static inline FIXED16 NativetoBE(FIXED16 n) {return n;}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 
-	static inline float BEtoNative(float n) {return n;}
-	static inline float LEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-	static inline float NativetoBE(float n) {return n;}
-	static inline float NativetoLE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
+//	static inline float BEtoNative(float n) {return n;}
+//	static inline float LEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+//	static inline float NativetoBE(float n) {return n;}
+//	static inline float NativetoLE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
 
-	static inline double BEtoNative(double n) {return n;}
-	static inline double LEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-	static inline double NativetoBE(double n) {return n;}
-	static inline double NativetoLE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
+//	static inline double BEtoNative(double n) {return n;}
+//	static inline double LEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+//	static inline double NativetoBE(double n) {return n;}
+//	static inline double NativetoLE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+
+	static inline float BEtoNative(FloatUnion n) {return n.u_float;}
+	static inline float LEtoNative(FloatUnion n) {n.u_INT32 = wxINT32_SWAP_ALWAYS(n.u_INT32); return n.u_float;}
+	static inline FloatUnion NativetoBEU(float n) {FloatUnion f; f.u_float=n; return f;}
+	static inline FloatUnion NativetoLEU(float n) {FloatUnion f; f.u_float=n; f.u_INT32 = wxINT32_SWAP_ALWAYS(f.u_INT32); return f;}
+
+	static inline double BEtoNative(DoubleUnion n) {return n.u_double;}
+	static inline double LEtoNative(DoubleUnion n) {n.u_INT64 = wxINT64_SWAP_ALWAYS(n.u_INT64); return n.u_double;}
+	static inline DoubleUnion NativetoBEU(double n) {DoubleUnion f; f.u_double=n; return f;}
+	static inline DoubleUnion NativetoLEU(double n) {DoubleUnion f; f.u_double=n; f.u_INT64 = wxINT64_SWAP_ALWAYS(f.u_INT64); return f;}
 
 #else
 	// __LITTLE_ENDIAN__
@@ -210,16 +235,27 @@ namespace oilHardwareManager
 	static inline FIXED16 NativetoBE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return n;}
 
-	static inline float BEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-	static inline float LEtoNative(float n) {return n;}
-	static inline float NativetoBE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-	static inline float NativetoLE(float n) {return n;}
+	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
+//	static inline float BEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+//	static inline float LEtoNative(float n) {return n;}
+//	static inline float NativetoBE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
+//	static inline float NativetoLE(float n) {return n;}
 
-	static inline double BEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-	static inline double LEtoNative(double n) {return n;}
-	static inline double NativetoBE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-	static inline double NativetoLE(double n) {return n;}
+	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
+//	static inline double BEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+//	static inline double LEtoNative(double n) {return n;}
+//	static inline double NativetoBE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
+//	static inline double NativetoLE(double n) {return n;}
 
+	static inline float BEtoNative(FloatUnion n) {n.u_INT32 = wxINT32_SWAP_ALWAYS(n.u_INT32); return n.u_float;}
+	static inline float LEtoNative(FloatUnion n) {return n.u_float;}
+	static inline FloatUnion NativetoBEU(float n) {FloatUnion f; f.u_float=n; f.u_INT32 = wxINT32_SWAP_ALWAYS(f.u_INT32); return f;}
+	static inline FloatUnion NativetoLEU(float n) {FloatUnion f; f.u_float=n; return f;}
+
+	static inline double BEtoNative(DoubleUnion n) {n.u_INT64 = wxINT64_SWAP_ALWAYS(n.u_INT64); return n.u_double;}
+	static inline double LEtoNative(DoubleUnion n) {return n.u_double;}
+	static inline DoubleUnion NativetoBEU(double n) {DoubleUnion f; f.u_double=n; f.u_INT64 = wxINT64_SWAP_ALWAYS(f.u_INT64); return f;}
+	static inline DoubleUnion NativetoLEU(double n) {DoubleUnion f; f.u_double=n; return f;}
 #endif
 
 // -------------------------------------------------------------------------------

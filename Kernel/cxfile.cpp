@@ -889,15 +889,17 @@ BOOL CXaraFile::Read(UINT32* pUINT32)
 
 BOOL CXaraFile::Read(FLOAT* pf)
 {
-	BOOL ok = (Read((BYTE*)pf,sizeof(FLOAT)));
-	*pf = LEtoNative(*pf);
+	FloatUnion f;
+	BOOL ok = (Read((BYTE*)&(f.u_INT32),sizeof(f.u_INT32)));
+	*pf = LEtoNative(f);
 	return ok;
 }
 
 BOOL CXaraFile::Read(double* pd)
 {
-	BOOL ok = (Read((BYTE*)pd,sizeof(double)));
-	*pd = LEtoNative(*pd);
+	DoubleUnion f;
+	BOOL ok = (Read((BYTE*)&(f.u_INT64),sizeof(f.u_INT64)));
+	*pd = LEtoNative(f);
 	return ok;
 }
 
@@ -1088,12 +1090,14 @@ BOOL CXaraFile::Write(INT32 n)
 
 BOOL CXaraFile::Write(FLOAT f)
 {
-	return (Write((BYTE*)&f,sizeof(FLOAT)));
+	FloatUnion u=NativetoLEU(f);
+	return (Write((BYTE*)&(u.u_INT32),sizeof(u.u_INT32)));
 }
 
 BOOL CXaraFile::Write(double d)
 {
-	return (Write((BYTE*)&d,sizeof(double)));
+	DoubleUnion u=NativetoLEU(d);
+	return (Write((BYTE*)&(u.u_INT64),sizeof(u.u_INT64)));
 }
 
 BOOL CXaraFile::WriteWCHAR(WCHAR w)
