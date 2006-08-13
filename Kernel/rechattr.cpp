@@ -446,7 +446,6 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 		{
 			TCHAR Key[256];
 			TCHAR Value[256];
-			BOOL ok = TRUE;
 			pRecord->ReadUnicode(Key, 256);
 			pRecord->ReadUnicode(Value, 256);
 
@@ -461,7 +460,6 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 		{
 			TCHAR URL[256];
 			TCHAR Frame[256];
-			BOOL ok = TRUE;
 			pRecord->ReadUnicode(URL, 256);
 			pRecord->ReadUnicode(Frame, 256);
 
@@ -476,7 +474,6 @@ void GeneralAttrRecordHandler::GetRecordDescriptionText(CXaraFileRecord* pRecord
 		{
 			TCHAR URL[256];
 			TCHAR Frame[256];
-			BOOL ok = TRUE;
 			DocCoord dcThrowAway;
 			pRecord->ReadCoordInterleaved(&dcThrowAway);
 			pRecord->ReadCoordInterleaved(&dcThrowAway);
