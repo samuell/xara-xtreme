@@ -171,18 +171,6 @@ namespace oilHardwareManager
 	static inline FIXED16 NativetoBE(FIXED16 n) {return n;}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 
-	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
-//	static inline float BEtoNative(float n) {return n;}
-//	static inline float LEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-//	static inline float NativetoBE(float n) {return n;}
-//	static inline float NativetoLE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-
-	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
-//	static inline double BEtoNative(double n) {return n;}
-//	static inline double LEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-//	static inline double NativetoBE(double n) {return n;}
-//	static inline double NativetoLE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-
 	static inline float BEtoNative(FloatUnion n) {return n.u_float;}
 	static inline float LEtoNative(FloatUnion n) {n.u_INT32 = wxINT32_SWAP_ALWAYS(n.u_INT32); return n.u_float;}
 	static inline FloatUnion NativetoBEU(float n) {FloatUnion f; f.u_float=n; return f;}
@@ -234,18 +222,6 @@ namespace oilHardwareManager
 	static inline FIXED16 LEtoNative(FIXED16 n) {return n;}
 	static inline FIXED16 NativetoBE(FIXED16 n) {return FIXED16::FromRawLong(wxINT32_SWAP_ALWAYS(n.GetRawLong()));}
 	static inline FIXED16 NativetoLE(FIXED16 n) {return n;}
-
-	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
-//	static inline float BEtoNative(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-//	static inline float LEtoNative(float n) {return n;}
-//	static inline float NativetoBE(float n) {return n;} //{return reinterpret_cast<float>(wxINT32_SWAP_ALWAYS(reinterpret_cast<INT32>(n)));}
-//	static inline float NativetoLE(float n) {return n;}
-
-	// AMB is not sure these are are a great idea as they rely on floats/doubles being set up with invalid data
-//	static inline double BEtoNative(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-//	static inline double LEtoNative(double n) {return n;}
-//	static inline double NativetoBE(double n) {return n;} //{return reinterpret_cast<double>(wxINT64_SWAP_ALWAYS(reinterpret_cast<INT64>(n)));}
-//	static inline double NativetoLE(double n) {return n;}
 
 	static inline float BEtoNative(FloatUnion n) {n.u_INT32 = wxINT32_SWAP_ALWAYS(n.u_INT32); return n.u_float;}
 	static inline float LEtoNative(FloatUnion n) {return n.u_float;}
