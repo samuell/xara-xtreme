@@ -7665,6 +7665,13 @@ BOOL GRenderRegion::GrabBitmap(DocRect* rectGrab, LPBITMAPINFO* plpBitmapInfo, L
 	*plpBitmapInfo = bmInfo;
 	*plpBits = bmBits;
 
+	// This code gets the pixelised version of the capture rect
+	// and returns it to the caller to ensure ULTIMATE accuracy when blitting the bitmap
+	// using RenderBits
+	DocRect rectPix = OSRenderRegion::WinRectToDoc(RenderMatrix, Rect, PixelsPerInch);
+	ENSURE(rectPix.IsValid(), "Pixelised rect is not valid in GrabBitmap");
+	*rectGrab = rectPix;
+
 	return TRUE;
 }
 
