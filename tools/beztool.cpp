@@ -1068,8 +1068,8 @@ void BezierTool::OnClick( DocCoord PointerPos, ClickType Click, ClickModifiers C
 
 BOOL BezierTool::OnKeyPress(KeyPress* pKeyPress)
 {
-	// We don't want to know about key release events
-	if (pKeyPress->IsRelease())
+	// We don't want to know about key release or character events
+	if (!pKeyPress->IsPress())
 		return FALSE;
 
 	// Comparing keypresses is exceeding greif!
