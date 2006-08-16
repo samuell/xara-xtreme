@@ -2788,8 +2788,9 @@ MsgResult GradInfoBarOp::Message(Msg* Message)
 					case DIM_SELECTION_CHANGED:
 					{
 						// Someone selected a new bitmap Fill Effect
-						INT32 Index;
-						GetValueIndex (_R(IDC_BITMAPEFFECT), &Index);
+						INT32 iIndex = m_oBitmapDropDown.GetSelected();
+						// GetValueIndex (_R(IDC_BITMAPEFFECT), &Index);
+
 
 						//if (CurrentEffectIndex != Index)
 						//{
@@ -2797,7 +2798,7 @@ MsgResult GradInfoBarOp::Message(Msg* Message)
 							// (we use CurrentEffectIndex because of the days when
 							// _R(IDC_EFFECT) handled this as well; thus we avoid having
 							// to change all of the code that relates to this
-							CurrentEffectIndex = Index;
+							CurrentEffectIndex = iIndex;
 							ChangeBitmapName ();
 						//}
 					}
@@ -3227,8 +3228,12 @@ void GradInfoBarOp::InitControls()
 
 	DeleteAllValues(_R(IDC_GEOMETRY));
 	DeleteAllValues(_R(IDC_EFFECT));
-	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+//	DeleteAllValues(_R(IDC_BITMAPEFFECT));
 	DeleteAllValues(_R(IDC_MAPPING));
+
+	m_oBitmapDropDown.Init(WindowID, _R(IDC_BITMAPEFFECT));
+	m_oBitmapDropDown.SetColumns(3);
+	m_oBitmapDropDown.SetItemSize(wxSize(50, 50));
 
 	String_64 Str;
 
@@ -3403,7 +3408,8 @@ void GradInfoBarOp::InitMapping()
 
 void GradInfoBarOp::InitBitmapName()
 {
-	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+//	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+	m_oBitmapDropDown.Clear();
 	EnableGadget (_R(IDC_BITMAPEFFECT), TRUE);
 	
 	EffectDisabled = FALSE;
@@ -3425,7 +3431,6 @@ void GradInfoBarOp::InitBitmapName()
 
 		ListItem* pBmp = Bitmaps->GetHead();
 
-		DeleteAllValues ( _R(IDC_BITMAPEFFECT) );
 
 		while (pBmp != NULL)
 		{
@@ -3433,37 +3438,16 @@ void GradInfoBarOp::InitBitmapName()
 			{
 				Str = ((KernelBitmap*)pBmp)->ActualBitmap->GetName();
 
-PORTNOTETRACE("other","GradInfoBarOp::InitBitmapName() - removed CustomComboBox handler");
-#ifndef EXCLUDE_FROM_XARALX
-				CustomComboBoxControlDataItem* theItem = new CustomComboBoxControlDataItem ();
-				theItem->itemName = Str;
-				theItem->itemID = Index;
-
 				KernelBitmap* bitmap = ((KernelBitmap*)pBmp);
-
-				// make the custom combobox know about our bitmap ....
-				theItem->oilItemBitmap = (KernelBitmap*) bitmap;
-
-				// and insert the data item into the cutsom combobox ....
-				SetCustomComboGadgetValue( _R(IDC_BITMAPEFFECT), theItem, TRUE, 0);
-#else
-				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), Str, TRUE, Index);
-#endif
+				m_oBitmapDropDown.AddItem(bitmap, Str);
+				
 				Index++;
 			}
 
 			pBmp = Bitmaps->GetNext(pBmp);
 		}
 
-		SetComboListLength(_R(IDC_BITMAPEFFECT));
 	}
-	//else
-	//{
-		// (not sure about this for a custom box)
-		
-		//Str.Load(_R(IDS_FILLTOOL_DEFAULTNAME));
-		//SetStringGadgetValue(_R(IDC_EFFECT),&Str,TRUE, 0);
-	//}
 }
 
 
@@ -4142,16 +4126,8 @@ INT32 GradInfoBarOp::FindCommonTesselate()
 
 void GradInfoBarOp::ShowCommonBitmapName()
 {
-	String_64 Str;
-
-	Str = FindCommonBitmapName();
-	// call custom controls interface ....
-PORTNOTETRACE("other","GradInfoBarOp::InitBitmapName() - removed CustomComboBox handler");
-#ifndef EXCLUDE_FROM_XARALX
-	SelectCustomComboGadgetValueOnString(_R(IDC_BITMAPEFFECT), &Str);
-#else
-	SetGadgetString(_R(IDC_BITMAPEFFECT), &Str);
-#endif
+	String_64 strName = FindCommonBitmapName();
+	m_oBitmapDropDown.SelectByLabel(strName);
 }
 
 /********************************************************************************************
@@ -6046,8 +6022,7 @@ MsgResult TranspInfoBarOp::Message(Msg* Message)
 					case DIM_SELECTION_CHANGED:
 					{
 						// Someone selected a new bitmap Fill Effect
-						INT32 Index;
-						GetValueIndex (_R(IDC_BITMAPEFFECT), &Index);
+						INT32 Index = m_oBitmapDropDown.GetSelected();
 
 						//if (CurrentBitmapIndex != Index)
 						//{
@@ -6631,7 +6606,11 @@ void TranspInfoBarOp::InitControls()
 	DeleteAllValues(_R(IDC_GEOMETRY));
 	DeleteAllValues(_R(IDC_TRANSPTYPE));
 	DeleteAllValues(_R(IDC_MAPPING));
-	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+//	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+	m_oBitmapDropDown.Init(WindowID, _R(IDC_BITMAPEFFECT));
+	m_oBitmapDropDown.SetColumns(3);
+	m_oBitmapDropDown.SetItemSize(wxSize(50, 50));
+
 
 	SetGadgetHelp(_R(IDC_GEOMETRY), 	_R(IDBBL_TRANSPTOOL_TRANSPSHAPE), 	_R(IDS_TRANSPTOOL_TRANSPSHAPE));
 	SetGadgetHelp(_R(IDC_TRANSPTYPE), 	_R(IDBBL_TRANSPTOOL_TRANSPTYPE), 	_R(IDS_TRANSPTOOL_TRANSPTYPE));
@@ -6820,7 +6799,8 @@ void TranspInfoBarOp::InitMapping()
 
 void TranspInfoBarOp::InitBitmapName()
 {
-	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+//	DeleteAllValues(_R(IDC_BITMAPEFFECT));
+	m_oBitmapDropDown.Clear();
 	EnableGadget (_R(IDC_BITMAPEFFECT), TRUE);
 
 	Document* pDoc = Document::GetSelected();
@@ -6840,7 +6820,7 @@ void TranspInfoBarOp::InitBitmapName()
 
 		ListItem* pBmp = Bitmaps->GetHead();
 
-		DeleteAllValues ( _R(IDC_BITMAPEFFECT) );
+//		DeleteAllValues ( _R(IDC_BITMAPEFFECT) );
 
 		while (pBmp != NULL)
 		{
@@ -6848,29 +6828,16 @@ void TranspInfoBarOp::InitBitmapName()
 			{
 				Str = ((KernelBitmap*)pBmp)->ActualBitmap->GetName();
 
-PORTNOTETRACE("other","SelectorTool::ResetDefaults - SelectorInfoBarOp usage");
-#ifndef EXCLUDE_FROM_XARALX
-				CustomComboBoxControlDataItem* theItem = new CustomComboBoxControlDataItem ();
-				theItem->itemName = Str;
-				theItem->itemID = Index;
-
 				KernelBitmap* bitmap = ((KernelBitmap*)pBmp);
-
-				// make the custom combobox know about our bitmap ....
-				theItem->oilItemBitmap = (KernelBitmap*) bitmap;
-
-				// and insert the data item into the cutsom combobox ....
-				SetCustomComboGadgetValue ( _R(IDC_BITMAPEFFECT), theItem, TRUE, 0);
-#else
-				SetStringGadgetValue(_R(IDC_BITMAPEFFECT), Str, TRUE, Index);
-#endif
+				m_oBitmapDropDown.AddItem(bitmap, Str);
+				
 				Index++;
 			}
 
 			pBmp = Bitmaps->GetNext(pBmp);
 		}
 
-		SetComboListLength(_R(IDC_BITMAPEFFECT));
+//		SetComboListLength(_R(IDC_BITMAPEFFECT));
 	}
 	//else
 	//{
@@ -7800,15 +7767,8 @@ Range* pLevel = pStack->GetLevelRange(&iStackPos, FALSE);		// Don't escape old c
 
 void TranspInfoBarOp::ShowCommonBitmapName()
 {
-	String_64 Str;
-
-	Str = FindCommonBitmapName();
-PORTNOTETRACE("other","TranspInfoBarOp::InitBitmapName() - removed CustomComboBox handler");
-#ifndef EXCLUDE_FROM_XARALX
-	SelectCustomComboGadgetValueOnString(_R(IDC_BITMAPEFFECT), &Str);
-#else
-	SetGadgetString(_R(IDC_BITMAPEFFECT), &Str);
-#endif
+	String_64 strName = FindCommonBitmapName();
+	m_oBitmapDropDown.SelectByLabel(strName);
 }
 
 /********************************************************************************************

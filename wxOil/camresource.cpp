@@ -96,7 +96,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-
 #include "camtypes.h"
 
 //#include "camconfig.h"
@@ -1461,6 +1460,7 @@ BOOL CamResource::Init()
 #if WXXTRA_TREEBOOK
 	wxXmlResource::Get()->AddHandler(new wxTreebookXmlHandler);
 #endif
+	wxXmlResource::Get()->AddHandler(new wxGridComboXmlHandler);
 #endif
 
 	if (!pwxFileSystem) pwxFileSystem = new wxFileSystem;

@@ -560,337 +560,6 @@ PORTNOTE("other", "Disabled Brush editing")
 	return (InformationBarOp::Message(Message)); 
 }    
 
-// NO LONGER USED!! Scheduled for demolition in five of your earth minutes, what do you mean 
-// you've never been to alpha centauri??
-void FreeHandInfoBarOp::InitBrushes ()
-{
-	// first get our brush list
-	if (InitBrushList() == FALSE)
-	{
-		ToolInformError(_R(IDS_OUT_OF_MEMORY), _R(IDS_OK));
-		return;
-	}
-	// if we have no document then don't bother
-	Document* pDoc  = Document::GetCurrent();
-	if (pDoc != NULL)
-	{
-//#ifdef BUILDNEWBRUSHES
-		DeleteAllValues(_R(IDC_BRUSHTYPE));
-		
-		// find out how many brushes there are
-		UINT32 NumBrushes = BrushComponent::GetNumberOfBrushes ();
-
-		for (UINT32 Index = 1; Index <= NumBrushes; Index++)
-		{
-			// ask the component to make a node for us
-			
-			AttrBrushType* pNewAttr = BrushComponent::CreateNode ((BrushHandle) Index-1);
-		
-			if (pNewAttr == NULL)
-			{
-				ToolInformError(_R(IDS_OUT_OF_MEMORY), _R(IDS_OK));
-				return;
-			}
-
-PORTNOTE("other", "Removed CustomComboBoxControlDataItem");
-#ifndef EXCLUDE_FROM_XARALX
-			CustomComboBoxControlDataItem * theItem = new CustomComboBoxControlDataItem ();
-			if (theItem == NULL)
-			{
-				ToolInformError(_R(IDS_OUT_OF_MEMORY), _R(IDS_OK));
-				return;
-			}
-		
-			theItem->itemID = Index;
-
-			// make the custom combobox know about our brush ....
-			theItem->itemBrush = (AttrBrushType*) pNewAttr;
-
-			// and insert the data item into the cutsom combobox ....
-			SetCustomComboGadgetValue ( _R(IDC_BRUSHTYPE), theItem, TRUE, 0);
-#endif
-			
-		}
-//#else
-/*	
-	UINT32 index = 1;
-	CustomComboBoxControlDataItem* theItem = NULL;
-		
-	// --- Simple constant-width line ------------------------------------------
-	VariableWidthAttrValue *pAttr;
-	pAttr = new VariableWidthAttrValue(NULL);
-	VarWidthItem* pItem = new VarWidthItem(pAttr, String_64(TEXT("Constant")));
-	//NodeAttributepItem->CreateNewAttribute ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Constant";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Blip ----------------------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionBlip);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Blip")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Blip";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Ellipse -------------------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionEllipse);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Ellipse")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Ellipse";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Simple linear ramp --------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionRampL);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave 3")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Concave 3";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Simple linear ramp with non-zero end width --------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionRampL2);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave 2")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Concave 2";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Simple S-shaped ramp ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionRampS);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex 3")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Convex 3";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Simple S-shaped ramp with non-zero end width ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionRampS2);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex 2")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Convex 2";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Teardrop ------------------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionTeardrop);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Raindrop")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Raindrop";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- TeardropCurvedEnd ------------------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionTeardropCurvedEnd);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Dab")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Dab";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Double S-shaped ramp ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionDoubleRampS);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Bow Tie")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Bow Tie";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Propeller ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionPropeller);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Propeller")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Propeller";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- BevelEnds ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionBevelEnds);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Bevel Ends")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Bevel Ends";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Intestine ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionIntestine);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Intestine")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Intestine";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- SawTooth ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSawTooth);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Saw Tooth")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Saw Tooth";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Decay ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionDecay);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Decay")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Decay";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Reed ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Reed);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Reed")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Reed";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Meteor ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Meteor);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Meteor")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Meteor";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Petal ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Petal);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Petal")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Petal";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Comet ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Comet);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Comet")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Comet";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Barb ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Barb);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Barb")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Barb";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Concave ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Concave);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Concave";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Convex ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Convex);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Convex";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Iron ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Iron);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Iron")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Iron";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Torpedo ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Torpedo);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Torpedo")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Torpedo";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Missile ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Missile);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Missile")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Missile";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Goldfish ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Goldfish);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Goldfish")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Goldfish";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_OceanLiner ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_OceanLiner);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("OceanLiner")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "OceanLiner";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Yacht ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Yacht);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Yacht")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Yacht";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Cigar ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Cigar);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Cigar")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Cigar";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-
-	// --- Smooth Stroke SS_Fallout ------------------------------------------------
-	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Fallout);
-	pItem = new VarWidthItem(pAttr, String_64(TEXT("Fallout")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Fallout";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
-*/
-//#endif
-	}
-}
 
 
 /********************************************************************************************
@@ -1006,7 +675,6 @@ void FreeHandInfoBarOp::RemoveBrush(BrushHandle Handle)
 	Purpose:	Called when a DIM_CREATE message is received
 
 ********************************************************************************************/
-
 void FreeHandInfoBarOp::HandleCreate()
 {
 	if (WindowID!=NULL)
@@ -1040,6 +708,16 @@ void FreeHandInfoBarOp::HandleCreate()
 		// only initialise the brush list once otherwise we upset the order
 		if (m_pBrushList == NULL || m_pBrushList->size() == 0)
 			InitBrushList();
+
+		// Create the brush type combobox.
+		m_bgddBrushType.Init(WindowID, _R(IDC_BRUSHTYPE));
+		m_bgddBrushType.SetColumns(3);
+		m_bgddBrushType.SetItemSize(wxSize(50, 50));
+
+		// Create the stroke type combobox.
+		m_bgddStrokes.Init(WindowID, _R(IDC_STROKETYPE));
+		m_bgddStrokes.SetColumns(3);
+		m_bgddStrokes.SetItemSize(wxSize(50, 50));
 
 		// create our brush list objects and put them in the control
 		SetBrushListToControl();
@@ -1085,18 +763,15 @@ void FreeHandInfoBarOp::HandleBrushSelectChange()
 		return;
 
 	// Someone selected a new brush
-	WORD Index;
-
-	// find out which index they selected
-	GetValueIndex (_R(IDC_BRUSHTYPE), &Index);
+	INT32 iIndex = m_bgddBrushType.GetSelected();
 
 	BrushHandle SelHandle;
 	
 	// the zeroth index is always reserved for the 'no-brush' 
-	if (Index == 0)
+	if (iIndex == 0)
 		SelHandle = BrushHandle_NoBrush;
 	else
-		SelHandle = GetBrushHandleFromControlIndex(Index-1);
+		SelHandle = GetBrushHandleFromControlIndex(iIndex-1);
 	//TRACEUSER( "Diccon", _T("Brush Combo: Handle = %d, Index = %d\n"), SelHandle, Index);	
 
 	// tell the tool our selection has changed
@@ -1145,10 +820,8 @@ void FreeHandInfoBarOp::HandleStrokeSelectChange()
 		return;
 
 	// Someone selected a new brush
-	WORD Index;
+	int Index = m_bgddStrokes.GetSelected();
 
-	// find out which index they selected
-	GetValueIndex (_R(IDC_STROKETYPE), &Index);	
 
 	// what we are going to do is apply a stroke attribute and a variable width attribute at the 
 	// same time via the attribute manager. This will require making a list
@@ -1177,7 +850,7 @@ void FreeHandInfoBarOp::HandleStrokeSelectChange()
 
 	// now make a pathprocessor and a stroke attribute, note that if we apply a CONSTANT stroke we don't need to
 	PathProcessorStroke* PPS = NULL;
-	if (Index-1 != CONSTANT)
+	if (Index != CONSTANT)
 	{
 		PPS = new PathProcessorStroke;
 		if (PPS == NULL)
@@ -1204,7 +877,7 @@ void FreeHandInfoBarOp::HandleStrokeSelectChange()
 	pStrokeItem->NodeAttribPtr = pStrokeType;
 	
 
-	switch (Index-1)
+	switch (Index)
 	{
 		case CONSTANT:
 		{
@@ -1861,7 +1534,7 @@ void FreeHandInfoBarOp::HandleStrokeSelectChange()
 	{
 		// recall that the indexes in the control are 1 greater than our enum constants
 		if (pSel->IsEmpty())
-			m_SelectedStroke = Index - 1;
+			m_SelectedStroke = Index;
 
 		// update the selection bounds
 		pSel->UpdateParentBoundsOfSelection();
@@ -2182,7 +1855,8 @@ BOOL FreeHandInfoBarOp::SetBrushListToControl()
 		return TRUE;
 
 	// wipe our existing control
-	DeleteAllValues(_R(IDC_BRUSHTYPE));
+//	DeleteAllValues(_R(IDC_BRUSHTYPE));
+	m_bgddBrushType.Clear();
 	
 	// need a pointer of type CustomComboBoxControlDataItem to insert items into
 	// a custom combobox ....
@@ -2204,35 +1878,13 @@ BOOL FreeHandInfoBarOp::SetBrushListToControl()
 			AttrBrushType* pNewAttr = BrushComponent::CreateNode (Handle);
 			
 			if (pNewAttr != NULL)
-			{
-PORTNOTE("other", "Removed CustomComboCoxControlDataItem");
-#ifndef EXCLUDE_FROM_XARALX
-				// make a new data item
-				theItem = new CustomComboBoxControlDataItem ();
-				if (theItem == NULL)
-				{
-					ToolInformError(_R(IDS_OUT_OF_MEMORY), _R(IDS_OK));
-					return FALSE;
-				}
-			
-				theItem->itemID = Counter++;
-
-				// make the custom combobox know about our brush ....
-				theItem->itemBrush = (AttrBrushType*) pNewAttr;
-
-				// and insert the data item into the cutsom combobox ....
-				SetCustomComboGadgetValue ( _R(IDC_BRUSHTYPE), theItem, TRUE, 0);
-
-				theItem = NULL;
-#endif
-			}
+				m_bgddBrushType.AddItem(pNewAttr);
 		}
 		else
 		{
 			ERROR3("Default brush handle found in list in FreeHandInfoBarOp::SetBrushListToControl");
 		}
 	}
-//#else
 
 	return SetStrokesToControl() ;
 }
@@ -2250,377 +1902,185 @@ PORTNOTE("other", "Removed CustomComboCoxControlDataItem");
 
 BOOL FreeHandInfoBarOp::SetStrokesToControl()
 {
-	DeleteAllValues(_R(IDC_STROKETYPE));
+//	DeleteAllValues(_R(IDC_STROKETYPE));
+	m_bgddStrokes.Clear();
 
-PORTNOTE("other", "Removed CustomComboBoxControlDataItem")
-#ifndef EXCLUDE_FROM_XARALX
 	
-	UINT32 index = 1;
-
-	CustomComboBoxControlDataItem* theItem = NULL;
+//	UINT32 index = 1;
+//	CustomComboBoxControlDataItem* theItem = NULL;
 		
 	// --- Simple constant-width line ------------------------------------------
 	VariableWidthAttrValue *pAttr;
 	pAttr = new VariableWidthAttrValue(NULL);
 	VarWidthItem* pItem = new VarWidthItem(pAttr, String_64(TEXT("Constant")));
-	//NodeAttribute* pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Constant"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Fallout ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Fallout);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Fallout")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Fallout";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Iron ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Iron);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Iron")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Iron";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Ellipse -------------------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionEllipse);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Ellipse")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Ellipse"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_SlimBlip ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_SlimBlip);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Slim Blip")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Slim Blip";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Blip ----------------------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionBlip);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Blip")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Blip"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Cigar ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Cigar);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Cigar")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Cigar";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Cigar2 ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Cigar2);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Cigar 2")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Cigar 2";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Cigar3 ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Cigar3);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Cigar 3")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Cigar 3";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Convex ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Convex);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Convex";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Simple S-shaped ramp with non-zero end width ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionRampS2);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex 2")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Convex 2"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Simple S-shaped ramp ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionRampS);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Convex 3")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Convex 3"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Concave ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Concave);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Concave";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Simple linear ramp with non-zero end width --------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionRampL2);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave 2")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Concave 2"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Simple linear ramp --------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionRampL);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Concave 3")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Concave 3"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Teardrop CurvedEnd------------------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionTeardropCurvedEnd);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Dab")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Dab"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Teardrop ------------------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionTeardrop);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Raindrop")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Raindrop"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Comet ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Comet);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Comet")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Comet";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Petal ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Petal);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Petal")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Petal";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Reed ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Reed);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Reed")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Reed";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Meteor ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Meteor);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Meteor")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Meteor";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Torpedo ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Torpedo);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Torpedo")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Torpedo";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Missile ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Missile);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Missile")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Missile";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Goldfish ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Goldfish);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Goldfish")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Goldfish";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Yacht ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Yacht);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Yacht")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Yacht";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_Barb ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_Barb);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Barb")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Barb";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Smooth Stroke SS_OceanLiner ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSS_OceanLiner);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Ocean Liner")));
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = "Ocean Liner";
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Propeller ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionPropeller);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Propeller")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Propeller"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Double S-shaped ramp ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionDoubleRampS);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Bow Tie")));
 	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Bow Tie"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- BevelEnds ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionBevelEnds);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Bevel Ends")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Bevel Ends"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- SawTooth ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionSawTooth);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Saw Tooth")));
 	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Saw Tooth"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Intestine ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionIntestine);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Intestine")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Intestine"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 	// --- Decay ------------------------------------------------
 	pAttr = new VariableWidthAttrValue(new ValueFunctionDecay);
 	pItem = new VarWidthItem(pAttr, String_64(TEXT("Decay")));
-	//pAttr2 = (NodeAttribute*) pItem->CreateNode ();
-	theItem = new CustomComboBoxControlDataItem ();
-	theItem->itemID = index++;
-	theItem->itemStroke = (VarWidthItem*) pItem;
-	theItem->itemName = String_64(TEXT("Decay"));
-	if (pAttr == NULL || pItem == NULL || theItem == NULL)
-		goto ExitFalse;
-	SetCustomComboGadgetValue ( _R(IDC_STROKETYPE), theItem, TRUE, 0);
+	m_bgddStrokes.AddItem(pItem);
 
 
 	SetStrokeComboFromSelection();
 	
 	return TRUE;
-
-ExitFalse: // clean up anything we managed to allocate
-	if (pAttr)
-		delete pAttr;
-	if (pItem)
-		delete pItem;
-	if (theItem)
-		delete theItem;
-
-	return FALSE;
-
-#else
-	return TRUE;
-#endif
-
 }
 
 
@@ -2655,6 +2115,7 @@ void FreeHandInfoBarOp::SetHeadOfListSelected()
 		BrushHandle Handle = m_pBrushList->front();
 	
 		SetCustomComboGadgetValue(_R(IDC_BRUSHTYPE), NULL, 0, 2 );
+		
 		m_DisplayBrush = Handle;
 		
 	}
@@ -2890,18 +2351,23 @@ void FreeHandInfoBarOp::SetStrokeComboFromSelection()
 		// if we have different strokes we need to say 'many', (what choo talkin' bout Willis!?)
 		if (bDifferent)
 		{
-			// the only way to do this seems to be by sending a string to the control
+/*			// the only way to do this seems to be by sending a string to the control
 			String_256 Many;
 			Many.Load(_R(IDS_FILLTOOL_MANY));
 			
 			// call custom controls interface ....
 			SelectCustomComboGadgetValueOnString (_R(IDC_STROKETYPE), &Many);
+*/
+			// Select none in the stroke dropdown since we don't support placing "many" word
+			// into the combobox.
+			m_bgddStrokes.SetSelected(-1);
 			return;
 		}
 
 	}
+	
 	// now set the index to the control
-	SetCustomComboGadgetValue(_R(IDC_STROKETYPE), NULL, TRUE, SelectedStroke + 1);
+	m_bgddStrokes.SetSelected(SelectedStroke);
 }
 
 

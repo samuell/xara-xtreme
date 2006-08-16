@@ -21,3 +21,5 @@
 #include "xh_treebk.h"
 #include "slidercombo.h"
 #include "xh_slidrcombo.h"
+#include "gridcombo.h"
+#include "xh_gridcombo.h"

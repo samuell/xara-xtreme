@@ -48,9 +48,9 @@
 			 <pos>5,129d</pos> <size>90,15d</size>
 			<style>wxSL_HORIZONTAL</style>
 		</object>
-		<object class="wxOwnerDrawnComboBox" name="IDC_BIASGAINCOMBO">
+		<object class="wxGridCombo" name="IDC_BIASGAINCOMBO">
 			 <pos>7,7d</pos> <size>24,-1d</size>
-		<style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+		<style>wxCB_READONLY</style>
 		</object>
 		<object class="wxTextCtrl" name="IDC_EDIT_BIAS">
 			 <pos>95,102d</pos> <size>22,12d</size>

@@ -106,6 +106,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "dialogop.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ctrllist.h"
 #include "dropdown.h"
+#include "griddropdown.h"
 
 const TCHAR * DialogEventHandler::DefaultString = _T("[Event Name Not Found]\0");
 EventNumberToName * DialogEventHandler::pHash = NULL;
@@ -530,6 +531,7 @@ void DialogEventHandler::WindowDestroyEvent(wxWindowDestroyEvent& event)
 	if (pwxWindow)
 	{
 		DropDown::KillDropDownsByWindow(pwxWindow);
+		CGridDropDown::KillDropDownsByWindow(pwxWindow);
 		ControlList::Get()->RemoveWindowAndChildren(pwxWindow);
 	}
 

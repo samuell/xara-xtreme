@@ -107,6 +107,7 @@ class FreeHandTool;
 #include "brshgdgt.h"
 #include "brshcomp.h"  // for brushhandle
 #include "valfunc.h"  // for valuefunctionID
+#include "bitmapgriddropdown.h"
 
 #include <list>
 
@@ -139,7 +140,6 @@ public:
 	void SetRetroState(BOOL CanRetroFit);
 	void SetRetroString();
 
-	void InitBrushes ();
 	void AddBrush();
 	void AddBrush(BrushHandle Handle);
 
@@ -204,6 +204,9 @@ protected:
 	BrushList*		m_pBrushList;
 
 	BrushHandle		m_DisplayBrush;   // the currently displayed brush in the combo
+
+	CBitmapGridDropDown m_bgddBrushType;
+	CBitmapGridDropDown m_bgddStrokes;
 
 PORTNOTE("other", "Disabled Brush editing")
 #ifndef EXCLUDE_FROM_XARALX

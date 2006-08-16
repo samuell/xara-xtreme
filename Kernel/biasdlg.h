@@ -107,7 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "transop.h"//"selop.h"
 #include "biasgain.h"
 #include "biasgdgt.h"
-#include "bitmapdropdown.h"
+#include "bitmapgriddropdown.h"
 
 
 
@@ -233,7 +233,7 @@ private: /////////////////////////////////////////////////////////////
 	// identifier for this particular instance
 	CGadgetID			Id_m;
 
-	CBitmapDropDown* m_pobddStandardProfile;
+	CBitmapGridDropDown* m_pobddStandardProfile;
 
 	// the curve representation
 	CProfileBiasGain	BiasGain_m;

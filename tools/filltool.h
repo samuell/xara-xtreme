@@ -107,6 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "fillattr.h"
 #include "lineattr.h"
 #include "biasgdgt.h"
+#include "bitmapgriddropdown.h"
 //#include "selop.h"
 #include "brshattr.h"
 #include "list.h"
@@ -538,7 +539,8 @@ private:
 	INT32 SliderMax;
 
 public:
-	CBiasGainGadget  m_BiasGainGadget;	// Gadget for invoking bias gain dialog
+	CBiasGainGadget		m_BiasGainGadget;	// Gadget for invoking bias gain dialog
+	CBitmapGridDropDown m_oBitmapDropDown;	// bitmap selector combobox.
 };
 	
 
@@ -689,7 +691,8 @@ private:
 	AttrValueChange* m_pDragTransp;
 
 public:
-	CBiasGainGadget  m_BiasGainGadget;	// Gadget for invoking the bias gain dialog.
+	CBiasGainGadget		m_BiasGainGadget;	// Gadget for invoking the bias gain dialog.
+	CBitmapGridDropDown m_oBitmapDropDown;	// bitmap selector combobox.
 };
 
 /********************************************************************************************

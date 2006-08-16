@@ -9,7 +9,8 @@ noinst_LIBRARIES	= libwxXtra.a
 libwxXtra_a_SOURCES = \
 	framemanager.cpp floatpane.cpp dockart.cpp \
 	doublebuffer.cpp cwfrompoint.cpp combo.cpp combog.cpp odcombo.cpp xh_odcombo.cpp\
-	platform.cpp advsplash.cpp treebook.cpp xh_treebk.cpp slidercombo.cpp xh_slidrcombo.cpp
+	platform.cpp advsplash.cpp treebook.cpp xh_treebk.cpp slidercombo.cpp xh_slidrcombo.cpp\
+	gridcombo.cpp xh_gridcombo.cpp
 
 # make sure this does NOT have our include files in the path
 # Don't use GTK includes for now - you will need this with sub-2.6.3 but that's not supported

@@ -320,7 +320,7 @@ void CBiasGainDlg::DoWithParam(OpDescriptor*, OpParam* OwningGadgetParams)
 	if (noProfile == TRUE)
 	{
 //		SetCustomComboGadgetValue ( _R(IDC_BIASGAINCOMBO), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
-		m_pobddStandardProfile->SetSelectedIndex(-1);
+		m_pobddStandardProfile->SetSelected(-1);
 
 		// and disable all other controls ....
 		DisableAllControls ();
@@ -465,10 +465,15 @@ MsgResult CBiasGainDlg::Message(Msg* Message)
 			{
 				if (Msg->GadgetID == _R(IDC_BIASGAINCOMBO))
 				{
-					WORD  DropdownListIndex;
-					GetValueIndex( _R(IDC_BIASGAINCOMBO), &DropdownListIndex );
+//					WORD  DropdownListIndex;
+//					GetValueIndex( _R(IDC_BIASGAINCOMBO), &DropdownListIndex );
+					int iSelected = m_pobddStandardProfile->GetSelected();
+					if (iSelected == -1)
+						break;
+						
+					DWORD dwSelected = (DWORD)iSelected;
 
-					switch( DropdownListIndex )
+					switch(dwSelected)
 					{
 						// get preset value to match the dropdown list index
 						//
@@ -485,7 +490,7 @@ MsgResult CBiasGainDlg::Message(Msg* Message)
 								EnableAllControls ();
 							}
 							
-							BiasGainGadget.GetPresetBiasGainValue( DropdownListIndex, BiasGain_m );
+							BiasGainGadget.GetPresetBiasGainValue(dwSelected, BiasGain_m );
 							InitSliders( BiasGain_m );
 							InitEditBoxes( BiasGain_m );
 							InvalidateGadget( _R(IDC_CURVE) );
@@ -1029,16 +1034,19 @@ void CBiasGainDlg::InitiProfileCombobox()
 		m_pobddStandardProfile = NULL;
 	}
 
-	m_pobddStandardProfile = new CBitmapDropDown;
+	m_pobddStandardProfile = new CBitmapGridDropDown;
 	m_pobddStandardProfile->Init(WindowID, _R(IDC_BIASGAINCOMBO));
 	
-	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE1), _T(""));
-	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE2), _T(""));
-	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE3), _T(""));
-	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE4), _T(""));
-	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE5), _T(""));
+	m_pobddStandardProfile->SetColumns(1);
+	m_pobddStandardProfile->SetItemSize(wxSize(21, 21));
 	
-	m_pobddStandardProfile->SetUnselectedIntem(_R(IDB_PROFILE6), _T(""));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE1));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE2));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE3));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE4));
+	m_pobddStandardProfile->AddItem(_R(IDB_PROFILE5));
+	
+	m_pobddStandardProfile->SetUnselectedItem(_R(IDB_PROFILE6));
 }
 
 
@@ -1055,7 +1063,7 @@ void CBiasGainDlg::InitBiasGainGadget(CProfileBiasGain const& BiasGain)
 {
 	INT32 iProfileIndex = BiasGainGadget.FindPresetBiasGain(BiasGain);
 	
-	m_pobddStandardProfile->SetSelectedIndex(iProfileIndex);
+	m_pobddStandardProfile->SetSelected(iProfileIndex);
 }
 
 
@@ -1152,7 +1160,7 @@ void CBiasGainDlg::ReInitialiseDialog(CProfileBiasGain* ReInitOn, BOOL bMany)
 	else if (bMany == TRUE)					// we need to display the many setting ....
 	{
 //		SetCustomComboGadgetValue ( _R(IDC_BIASGAINCOMBO), (CustomComboBoxControlDataItem*) NULL, TRUE, -1);
-		m_pobddStandardProfile->SetSelectedIndex(-1);
+		m_pobddStandardProfile->SetSelected(-1);
 		
 		// and disable all other controls ....
 		DisableAllControls ();
@@ -1398,7 +1406,7 @@ void  CBiasGainDlg::HandleSliderPosChanging(CDlgMessage const& Message, CProfile
 	// Make the profile control show a custom image (cause after all, now we have
 	// a custom bias/gain).
 	
-	m_pobddStandardProfile->SetSelectedIndex(-1);
+	m_pobddStandardProfile->SetSelected(-1);
 
 	// do general input handling
 	HandleInput( Message,  BiasGain );

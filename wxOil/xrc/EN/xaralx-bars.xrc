@@ -4267,12 +4267,12 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxOwnerDrawnComboBox" name="IDC_BITMAPEFFECT">
+                <object class="wxGridCombo" name="IDC_BITMAPEFFECT">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                    <style>wxCB_READONLY</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
@@ -4407,12 +4407,12 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxOwnerDrawnComboBox" name="IDC_BITMAPEFFECT">
+                <object class="wxGridCombo" name="IDC_BITMAPEFFECT">
                     <size>128,-1</size>
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                    <style>wxCB_READONLY</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Fill effect</tooltip>
                     <help>Choose how the fill fades from one colour to another</help>
@@ -5853,12 +5853,12 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxOwnerDrawnComboBox" name="IDC_BRUSHTYPE">
+                <object class="wxGridCombo" name="IDC_BRUSHTYPE">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                    <style>wxCB_READONLY</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing brush</tooltip>
                     <help>Select an existing brush</help>
@@ -5872,12 +5872,12 @@
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                 <border>0</border>
-                <object class="wxOwnerDrawnComboBox" name="IDC_STROKETYPE">
+                <object class="wxGridCombo" name="IDC_STROKETYPE">
                     <size>80,-1</size>
                     <font>
                         <size>8</size>
                     </font>
-                    <style>wxCB_READONLY|wxTE_PROCESS_ENTER</style>
+                    <style>wxCB_READONLY</style>
                     <buttonsize>17,-1</buttonsize>
                     <tooltip>Select an existing stroke shape / pressure profile</tooltip>
                     <help>Select an existing stroke shape / pressure profile</help>
