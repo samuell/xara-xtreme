@@ -3,10 +3,12 @@
 [Meta]
 RootName: @xaralx.org/xaralx:0.7
 DisplayName: Xara Xtreme Vector Graphics Tool
+DisplayName[de]: Xara Xtreme Vektorgraphikprogramm
 ShortName: xaralx
 Maintainer: Neil Howe <neil@xara.com>
 Packager: Anonymous <anonymous@nowhere.com>
 Summary: Xara Xtreme is a vector graphics and photo tool
+Summary[de]: Xara Xtreme ist ein Vektorgraphik- und Fotoprogramm
 URL: http://www.xaraxtreme.org/
 License: GNU General Public License, Version 2
 SoftwareVersion: 0.7
@@ -23,6 +25,12 @@ Xara Xtreme is primarily a vector graphics (drawing and illustration) program bu
 one of the new generation of cross-over products that handles photos and
 drawings with equal ease. See xaraxtreme.org for details. Xara Xtreme on Linux is a 
 port of the Windows version of Xara Xtreme (see www.xara.com/xtreme).
+
+[Description:de]
+Xara Xtreme ist hauptsächlich ein Vektorgraphikprogramm (Zeichungen und Illustrationen),
+aber eines der neuen Generation von Produkten, die Fotos und Zeichnungen gleichermaßen
+meistern. Siehe xaraxtreme.org für Details. Xara Xtreme auf Linux ist eine Portierung
+der Windowsversion von Xara Xtreme (siehe www.xara.com/xtreme).
 
 [BuildPrepare]
 #prepareBuild
