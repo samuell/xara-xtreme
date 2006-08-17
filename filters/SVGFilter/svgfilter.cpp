@@ -387,6 +387,9 @@ void ShowCmdLine(const wxCmdLineParser& parser)
 int main(int argc, char* argv[])
 {
 #if wxUSE_UNICODE
+	// Set to the user's default locale for these conversions
+	char* pOldLoc = setlocale(LC_CTYPE, "");
+
 	wxChar **wxArgv = new wxChar *[argc + 1];
 
 	{
@@ -400,6 +403,9 @@ int main(int argc, char* argv[])
 
 		wxArgv[n] = NULL;
 	}
+
+	// Set back to the old locale (should we be doing this?)
+	setlocale(LC_CTYPE, pOldLoc);
 #else // !wxUSE_UNICODE
 	#define wxArgv argv
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
