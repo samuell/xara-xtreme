@@ -2440,6 +2440,87 @@ KernelBitmap *NodeBitmap::EnumerateBitmaps(UINT32 Count)
 }
 
 
+/****************************************************************************
+
+>	double NodeBitmap::GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	07/08/2006
+
+	Inputs:		pBitmap		- pointer to a KernelBitmap
+	Returns:	
+	Purpose:	
+
+****************************************************************************/
+
+double NodeBitmap::GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap)
+{
+	if (GetBitmap() == pBitmap)
+	{
+		// Do we have a valid bitmap ?
+		OILBitmap *OilBM = pBitmap->ActualBitmap;
+		if (OilBM != NULL)
+		{
+			BitmapInfo Info;
+			OilBM->GetInfo(&Info);
+
+			// Get the Width of the Bitmap in Pixels
+			INT32 PixWidth  = Info.PixelWidth;
+			INT32 PixHeight = Info.PixelHeight;
+
+			// Get the Width of the Bitmap in Millipoints
+			INT32 Width  = INT32(Parallel[0].Distance(Parallel[1]));
+			INT32 Height = INT32(Parallel[1].Distance(Parallel[2]));
+
+			// Use doubles so that we can round up as well as down. This improves
+			// the dpi calculated.
+			double HDpi = 0;
+			double VDpi = 0;
+
+			if (Width > 0)
+				HDpi = ((double)PixWidth * 72000.0)/(double)Width;
+
+			if (Height > 0)
+				VDpi = ((double)PixHeight * 72000.0)/(double)Height;
+
+			// Use the smaller of the two dpi values
+			if (HDpi < VDpi)
+				return(HDpi);
+			else
+				return(VDpi);
+		}
+	}
+
+	return(1e9);
+}
+
+
+
+/****************************************************************************
+
+>	BOOL NodeBitmap::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap)
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	07/08/2006
+
+	Inputs:		pOrigBitmap	- pointer to a KernelBitmap
+				pNewBitmap	- pointer to a KernelBitmap
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL NodeBitmap::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap)
+{
+	if (GetBitmap() == pOrigBitmap)
+	{
+		BitmapRef.Attach(pNewBitmap);
+		return(TRUE);
+	}
+
+	return FALSE;
+}
+
 
 /********************************************************************************************
 >	BOOL NodeBitmap::IsABitmap() const

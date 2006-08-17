@@ -1474,6 +1474,7 @@ BOOL BitmapListComponent::LoadBitmapDefinition(CXaraFileRecordHandler *pXFileRec
 			if (pSource != NULL)
 			{
 				pBitmap->SetOriginalSource(pSource, pBitmapFilter);
+				pBitmap->SetAsLossy();
 			}
 		}
 		else
@@ -1757,48 +1758,51 @@ BOOL BitmapListComponent::WriteBitmapPropertiesRecord(KernelBitmap* pBitmap, Bas
 	// Find out whether we need to make an XPE record or not...
 PORTNOTE("other","KernelBitmap::GetXPEInfo removed")
 #ifndef EXCLUDE_FROM_XARALX
-	KernelBitmap* pMaster = NULL;
-	IXMLDOMDocumentPtr pEditList = NULL;
-	pBitmap->GetXPEInfo(pMaster, pEditList);
-	if (pMaster!=NULL && pEditList!=NULL)
+	if (pFilter->GetSaveXPEBitmaps() == FALSE)
 	{
-		// Get master bitmap reference number (writing out the bitmap if necessary)
-		INT32 MasterRecord = 0;
-		MasterRecord = GetWriteBitmapReference(pMaster, pFilter);
-
-		// Only write out new record style if we really have to...
-		// (Helps forward compatibility)
-		if (MasterRecord!=0)
+		KernelBitmap* pMaster = NULL;
+		IXMLDOMDocumentPtr pEditList = NULL;
+		pBitmap->GetXPEInfo(pMaster, pEditList);
+		if (pMaster!=NULL && pEditList!=NULL)
 		{
-			// Create a new style XPE bitmap properties record
-			CXaraFileRecord Rec(TAG_XPE_BITMAP_PROPERTIES);
-
-			BSTR bstrValue;
-			HRESULT hr;
-			hr = pEditList->get_xml(&bstrValue);
-			if (SUCCEEDED(hr))
+			// Get master bitmap reference number (writing out the bitmap if necessary)
+			INT32 MasterRecord = 0;
+			MasterRecord = GetWriteBitmapReference(pMaster, pFilter);
+	
+			// Only write out new record style if we really have to...
+			// (Helps forward compatibility)
+			if (MasterRecord!=0)
 			{
-				ok = Rec.Init();
-				if (ok) ok = Rec.WriteReference(BmpRef);		// bitmap reference
-				if (ok) ok = Rec.WriteBYTE(Flags);				// flags
-				
-				// TODO: write GIF animation properties here
-
-				// reserved bytes
-				for( INT32 i=0; i<7; i++ )
+				// Create a new style XPE bitmap properties record
+				CXaraFileRecord Rec(TAG_XPE_BITMAP_PROPERTIES);
+	
+				BSTR bstrValue;
+				HRESULT hr;
+				hr = pEditList->get_xml(&bstrValue);
+				if (SUCCEEDED(hr))
 				{
-					if (ok) ok = Rec.WriteBYTE(0);
+					ok = Rec.Init();
+					if (ok) ok = Rec.WriteReference(BmpRef);		// bitmap reference
+					if (ok) ok = Rec.WriteBYTE(Flags);				// flags
+					
+					// TODO: write GIF animation properties here
+	
+					// reserved bytes
+					for( INT32 i=0; i<7; i++ )
+					{
+						if (ok) ok = Rec.WriteBYTE(0);
+					}
+	
+					// Now write out XPE stuff
+					if (ok) ok = Rec.WriteReference(MasterRecord);		// Master bitmap record number
+					if (ok) ok = Rec.WriteUnicode(pBitmap->GetName());	// Oil Bitmap name
+					if (ok) ok = Rec.WriteBSTR(bstrValue);				// UNICODE xml string edits list
+	
+					// Write the record
+					if (ok) ok = pFilter->Write(&Rec);
+	
+					return ok;
 				}
-
-				// Now write out XPE stuff
-				if (ok) ok = Rec.WriteReference(MasterRecord);		// Master bitmap record number
-				if (ok) ok = Rec.WriteUnicode(pBitmap->GetName());	// Oil Bitmap name
-				if (ok) ok = Rec.WriteBSTR(bstrValue);				// UNICODE xml string edits list
-
-				// Write the record
-				if (ok) ok = pFilter->Write(&Rec);
-
-				return ok;
 			}
 		}
 	}
@@ -2008,6 +2012,22 @@ PORTNOTE("other", "Removed live effects stuff")
 					Tag = TAG_DEFINEBITMAP_JPEG;
 					SearchFilter = FILTERID_EXPORT_JPEG;
 				}
+				else if (Compression >= 201 && Compression <= 300)
+				{
+					// If compression is between 201 and 300 then use JPEG
+					// where the bitmap came from a lossy source
+					if (pBitmap->IsLossy())
+					{
+						Tag = TAG_DEFINEBITMAP_JPEG;
+						SearchFilter = FILTERID_EXPORT_JPEG;
+						Compression -= 200;		// Get quality in the correct range
+					}
+					else
+					{
+						Tag = TAG_DEFINEBITMAP_PNG;
+						SearchFilter = FILTERID_PNG;
+					}
+				}
 				else
 				{
 					Tag = TAG_DEFINEBITMAP_PNG;
@@ -2015,10 +2035,29 @@ PORTNOTE("other", "Removed live effects stuff")
 				}
 				break;
 			case 32:
-				// No choice but to use PNG or BMP in all cases as these are the only
-				// formats that support 32bpp.
-				Tag = TAG_DEFINEBITMAP_PNG;
-				SearchFilter = FILTERID_PNG;
+				if (Compression >= 0 && Compression <= 200)
+				{
+					// Definitely use PNG is this case
+					Tag = TAG_DEFINEBITMAP_PNG;
+					SearchFilter = FILTERID_PNG;
+				}
+				else
+				{
+					// If compression indicates JPEG where possible then use 
+					// JPEG where the bitmap came from a lossy source and has 
+					// no transparency in its alpha channel
+					if (pBitmap->IsLossy() && !pBitmap->IsTransparent())
+					{
+						Tag = TAG_DEFINEBITMAP_JPEG;
+						SearchFilter = FILTERID_EXPORT_JPEG;
+						Compression -= 200;		// Get quality in the correct range
+					}
+					else
+					{
+						Tag = TAG_DEFINEBITMAP_PNG;
+						SearchFilter = FILTERID_PNG;
+					}
+				}
 				break;
 			default:
 				ERROR2(0,"BitmapListComponent::SaveBitmapDefinition bad pixel depth");

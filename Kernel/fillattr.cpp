@@ -5607,6 +5607,98 @@ KernelBitmap *AttrBitmapFill::EnumerateBitmaps(UINT32 Count)
 	return NULL;
 }
 
+
+/****************************************************************************
+
+>	BOOL AttrBitmapFill::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap)
+
+	Author:		Gerry
+	Created:	07/08/2006
+
+	Inputs:		pOrigBitmap	- pointer to a KernelBitmap
+				pNewBitmap	- pointer to a KernelBitmap
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:	
+
+****************************************************************************/
+
+BOOL AttrBitmapFill::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap)
+{
+	if (!IsAFractalFill())
+	{
+		if (GetBitmap() == pOrigBitmap)
+		{
+			BitmapFillAttribute* pVal = (BitmapFillAttribute*)GetAttributeValue();
+			if (pVal)
+				pVal->GetBitmapRef()->Attach(pNewBitmap);
+
+			return(TRUE);
+		}
+	}
+
+	return FALSE;
+}
+
+
+/****************************************************************************
+
+>	double AttrBitmapFill::GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap)
+
+	Author:		Gerry
+	Created:	07/08/2006
+
+	Inputs:		pBitmap		- pointer to a KernelBitmap
+	Returns:	
+	Purpose:	Returns the minimum effective dpi this bitmap is used at
+
+****************************************************************************/
+
+double AttrBitmapFill::GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap)
+{
+	if (!IsAFractalFill() && GetBitmap() == pBitmap)
+	{
+		// Do we have a valid bitmap ?
+		OILBitmap *OilBM = pBitmap->ActualBitmap;
+		if (OilBM != NULL)
+		{
+			BitmapInfo Info;
+			OilBM->GetInfo(&Info);
+
+			// Get the Width of the Bitmap in Pixels
+			INT32 PixWidth  = Info.PixelWidth;
+			INT32 PixHeight = Info.PixelHeight;
+
+			DocCoord Start(*GetStartPoint());
+			DocCoord End(*GetEndPoint());
+			DocCoord End2(*GetEndPoint2());
+
+			// Get the Width of the Bitmap in Millipoints
+			INT32 Width  = INT32(Start.Distance(End));
+			INT32 Height = INT32(Start.Distance(End2));
+
+			// Use doubles so that we can round up as well as down. This improves
+			// the dpi calculated.
+			double HDpi = 0;
+			double VDpi = 0;
+
+			if (Width > 0)
+				HDpi = ((double)PixWidth * 72000.0)/(double)Width;
+
+			if (Height > 0)
+				VDpi = ((double)PixHeight * 72000.0)/(double)Height;
+
+			// Use the smaller of the two dpi values
+			if (HDpi < VDpi)
+				return(HDpi);
+			else
+				return(VDpi);
+		}
+	}
+
+	return(1e9);
+}
+
+
 /********************************************************************************************
 
 >	virtual NodeAttribute* AttrBitmapFill::GetOtherAttrToApply(BOOL* IsMutate)

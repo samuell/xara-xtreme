@@ -1845,6 +1845,8 @@ public:
 	virtual BOOL IsAGradFill() const { return TRUE; } 
 
 	virtual KernelBitmap *EnumerateBitmaps(UINT32 Count);
+	virtual double GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap);
+	virtual BOOL ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap);
 
 	virtual BOOL NeedsForceToSimpleMapping() { return(FALSE); }
 	

@@ -116,6 +116,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "progress.h"
 
 #include "camprocess.h"
+#include "bmpcomp.h"
+#include "grndbmp.h"
 
 // An implement to match the Declare in the .h file.
 CC_IMPLEMENT_DYNAMIC(PluginNativeFilter, CamelotNativeFilter);
@@ -492,7 +494,7 @@ BOOL PluginNativeFilter::GenerateExportData(CapabilityTree* pPlugCaps)
 
 	String_64 Str(_R(IDS_CONVERTING_DOCUMENT));
 	StartProgressBar(&Str);
-	SetTotalProgressBarCount(500);
+	SetTotalProgressBarCount(600);
 	m_ProgressOffset = 0;
 
 //	UINT32 ThisPassCount = 0;
@@ -628,6 +630,14 @@ BOOL PluginNativeFilter::GenerateExportData(CapabilityTree* pPlugCaps)
 		ok = DoConversionPassN(pPlugCaps, 5);
 	}
 
+	if (ok)
+	{
+		// Now handle the bitmap resampling pass
+		m_ProgressOffset = 500;
+		SetProgressBarCount(0);
+		ok = DoBitmapResamplePass(pPlugCaps);
+	}
+
 	SetProgressBarCount(100);
 
 	EndProgressBar();					// Kill progess bar
@@ -699,6 +709,211 @@ BOOL PluginNativeFilter::DoConversionPassN(CapabilityTree* pPlugCaps, INT32 Conv
 
 		// Get the next child node of the chapter
 		pChild = pChild->FindNext();
+	}
+
+	return(TRUE);
+}
+
+
+/****************************************************************************
+
+>	BOOL PluginNativeFilter::DoBitmapResamplePass(CapabilityTree* pPlugCaps)
+
+	Author:		Gerry
+	Created:	04/08/2006
+
+	Inputs:		pPlugCaps	- pointer to a CapabilityTree
+	Returns:	TRUE if ok, FALSE if bother
+	Purpose:
+
+****************************************************************************/
+
+BOOL PluginNativeFilter::DoBitmapResamplePass(CapabilityTree* pPlugCaps)
+{
+	if (!pPlugCaps->GetBitmapResample())
+		return(TRUE);
+
+	TRACE(_T("DoBitmapResamplePass"));
+
+	Document* pDoc = Document::GetCurrent();
+	ERROR2IF(pDoc == NULL, FALSE, "No current document in DoBitmapResamplePass");
+
+	BitmapList* pBmpList = pDoc->GetBitmapList();
+	ERROR2IF(pDoc == NULL, FALSE, "No bitmap list in DoBitmapResamplePass");
+
+	// For each bitmap in the document's bitmap list
+	KernelBitmap* pBitmap = (KernelBitmap*)(pBmpList->GetHead());
+
+	while (pBitmap)
+	{
+		double MinDPI = 1e9;
+
+		List NodeList;
+
+		// Scan through new document tree finding all uses of the bitmap
+		Node* pNode = m_pNewTree->FindFirstDepthFirst();
+		while (pNode)
+		{
+			UINT32 Count = 0;
+			BOOL bAdd = FALSE;
+			KernelBitmap* pTestBitmap = pNode->EnumerateBitmaps(Count);
+			while (pTestBitmap)
+			{
+				if (pTestBitmap == pBitmap)
+				{
+					bAdd = TRUE;		// Add this node to the list
+					double DPI = pNode->GetEffectiveBitmapMinDPI(pTestBitmap);
+					if (DPI < MinDPI)
+						MinDPI = DPI;
+				}
+
+				// Get the next bitmap from the node
+				Count++;
+				pTestBitmap = pNode->EnumerateBitmaps(Count);
+			}
+
+			if (bAdd)
+			{
+				NodeListItem* pItem = new NodeListItem(pNode);
+				if (pItem)
+					NodeList.AddTail(pItem);
+			}
+
+			// Get the next node
+			pNode = pNode->FindNextDepthFirst(m_pNewTree);
+		}
+
+		// If a minimum has been found for this bitmap
+		if (MinDPI < 1e9)
+		{
+			TRACE(_T("MinDPI = %f"), MinDPI);
+
+			double ratio = pPlugCaps->GetRasteriseDPI() / MinDPI;
+			// If the minimum dpi is above the resample dpi then
+			if (ratio < 0.9)
+			{
+				TRACE(_T("Resample bitmap"));
+				// Generate new bitmap with size so that minimum dpi is resample dpi
+
+				TRACE(_T("Actual size = (%d, %d)"), pBitmap->GetWidth(), pBitmap->GetHeight());
+
+				INT32 OutWidth = (INT32)(((double)pBitmap->GetWidth() * ratio) + 0.5);
+				INT32 OutHeight = (INT32)(((double)pBitmap->GetHeight() * ratio) + 0.5);
+				TRACE(_T("Needed size = (%d, %d)"), OutWidth, OutHeight);
+
+				KernelBitmap* pNewBitmap = NULL;
+				{
+					View* pView = View::GetCurrent();
+					Spread* pSpread = NULL;
+					BOOL bAlpha = pBitmap->IsTransparent();
+					Matrix ViewTrans;
+					FIXED16 TempScale(1.0);
+					double Dpi = 96.0;
+					DocRect BoundsRect(0, 0, OutWidth * 750, OutHeight * 750);
+
+					GRenderBitmap BitmapRR(BoundsRect, ViewTrans, TempScale, 32, Dpi);
+					if (bAlpha)
+						BitmapRR.m_DoCompression = TRUE;
+					BitmapRR.SetUsingSmoothedBitmaps(TRUE);		// Make sure we do high quality
+					BitmapRR.AttachDevice(pView, NULL, pSpread);
+
+					// Start rendering into the bitmap
+					if (!BitmapRR.StartRender())
+					{
+						ERROR2(FALSE, "StartRender failed in DoBitmapResamplePass");
+					}
+
+					BitmapRR.SaveContext();
+
+					// Best quality please
+					QualityAttribute *pQualAttr = new QualityAttribute();
+					pQualAttr->QualityValue.SetQuality(QUALITY_MAX);
+					BitmapRR.SetQuality(pQualAttr, TRUE);
+
+					// Simple bitmap fill which fills the whole shape
+					BitmapFillAttribute* pBitmapAttr = new BitmapFillAttribute;
+					pBitmapAttr->GetBitmapRef()->SetBitmap(pBitmap);
+					pBitmapAttr->StartPoint = BoundsRect.lo;
+					pBitmapAttr->EndPoint   = DocCoord(BoundsRect.hi.x, BoundsRect.lo.y);
+					pBitmapAttr->EndPoint2 	= DocCoord(BoundsRect.lo.x, BoundsRect.hi.y);
+
+					// Set bitmap attribute, and get the render region to throw it away when it's finished
+					// with (hence the TRUE parameter).
+					BitmapRR.SetFillGeometry(pBitmapAttr, TRUE);
+
+					BitmapRR.SetLineColour(COLOUR_NONE);
+
+					Path RectPath;
+					if (RectPath.Initialise())
+					{
+						// Start at bottom left corner
+						RectPath.InsertMoveTo(BoundsRect.lo);
+						RectPath.InsertLineTo(DocCoord(BoundsRect.hi.x, BoundsRect.lo.y));
+						RectPath.InsertLineTo(BoundsRect.hi);
+						RectPath.InsertLineTo(DocCoord(BoundsRect.lo.x, BoundsRect.hi.y));
+						RectPath.InsertLineTo(BoundsRect.lo);
+
+						// Close the path properly
+						RectPath.CloseSubPath();
+						RectPath.IsFilled = TRUE;
+						RectPath.IsStroked = FALSE;
+						BitmapRR.DrawPath(&RectPath);
+					}
+
+					BitmapRR.RestoreContext();
+
+					// Stop rendering
+					BitmapRR.StopRender();
+
+					OILBitmap* pFullBitmap = BitmapRR.ExtractBitmap();
+					String_256 sName = GetNewBitmapName();
+					pFullBitmap->SetName(sName);
+					pNewBitmap = KernelBitmap::MakeKernelBitmap(pFullBitmap);
+
+					// Attach the bitmap to this document or a copy will be created when
+					// it is used in the attribute
+					BitmapList* pBmpList = NULL;
+					Document* pCurDoc = Document::GetCurrent();
+					if (pCurDoc)
+						pBmpList = pCurDoc->GetBitmapList();
+
+					// and then attach the bitmap (doesn't matter if BmpList is NULL)
+					pNewBitmap->Attach(pBmpList);
+
+					// Make sure we preserve the lossy flag
+					pNewBitmap->SetAsLossy(pBitmap->IsLossy());
+				}
+
+				if (pNewBitmap)
+				{
+					TRACE(_T("New bitmap = (%d, %d)"), pNewBitmap->GetWidth(), pNewBitmap->GetHeight());
+
+					// Loop through NodeList asking each node to replace the
+					// specified bitmap with this new one
+
+					NodeListItem* pItem = (NodeListItem*)(NodeList.GetHead());
+					while (pItem)
+					{
+						if (pItem->pNode)
+						{
+							if (!pItem->pNode->ReplaceBitmap(pBitmap, pNewBitmap))
+							{
+								TRACE(_T("Failed to replace bitmap"));
+							}
+						}
+
+						pItem = (NodeListItem*)(NodeList.GetNext(pItem));
+					}
+				}
+				else
+				{
+					TRACE(_T("Failed to create new bitmap"));
+				}
+			}
+		}
+
+		NodeList.DeleteAll();
+		pBitmap = (KernelBitmap*)(pBmpList->GetNext(pBitmap));
 	}
 
 	return(TRUE);

@@ -142,6 +142,8 @@ public:
 	virtual String Describe(BOOL Plural, BOOL Verbose);
 
 	virtual KernelBitmap *EnumerateBitmaps(UINT32 Count);
+	virtual double GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap);
+	virtual BOOL ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap);
 
 	// Function for interrogation by clipboard to determine exportable data types
 	virtual BOOL SupportsClipboardFormat(InternalClipboardFormat *Format) const;

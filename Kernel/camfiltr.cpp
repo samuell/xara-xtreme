@@ -6994,53 +6994,30 @@ UINT32 BaseCamelotFilter::WriteXPEBitmapPlaceHolder(String_256& BitmapName)
 BOOL BaseCamelotFilter::WriteRemainingAtomicTagDefinitions ()
 {
 	BOOL ok = TRUE;
-	
+
 	CXaraFileRecord atomicRec(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
 	if (ok) ok = atomicRec.Init();
 	if (ok) ok = atomicRec.WriteUINT32(TAG_BEVEL);						// NodeBevelController
-	if (ok)	ok = Write(&atomicRec);										// And write out the record
+	if (ok) ok = atomicRec.WriteUINT32(TAG_BEVELINK);					// NodeBevel
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CONTOURCONTROLLER);			// NodeContourController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CONTOUR);					// NodeContour
+	if (ok) ok = atomicRec.WriteUINT32(TAG_SHADOWCONTROLLER);			// NodeShadowController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_SHADOW);						// NodeShadow
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CLIPVIEWCONTROLLER);			// NodeClipViewController
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CLIPVIEW);					// NodeClipView
+	if (ok) ok = atomicRec.WriteUINT32(TAG_CURRENTATTRIBUTES);			// Current Attributes container/component
+	// --------------------------------------------------------------
+	// Effect nodes marked as atomic in "Xara X2", 28/06/2005
+	if (ok) ok = atomicRec.WriteUINT32(TAG_LIVE_EFFECT);				// NodeLiveEffect
+	if (ok) ok = atomicRec.WriteUINT32(TAG_LOCKED_EFFECT);				// NodeLockedEffect
+	if (ok) ok = atomicRec.WriteUINT32(TAG_FEATHER_EFFECT);				// NodeFeatherEffect
+//	if (ok) ok = atomicRec.WriteUINT32(TAG_CURRENTATTRIBUTES_PHASE2);	// Current Attributes container/component
+//	if (ok) ok = atomicRec.WriteUINT32(TAG_SPREAD_PHASE2);				// NodeSpread (in multi-spread docs)
 
-	CXaraFileRecord atomicRec2(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec2.Init();
-	if (ok) ok = atomicRec2.WriteUINT32(TAG_BEVELINK);					// NodeBevel
-	if (ok)	ok = Write(&atomicRec2);
+	// Just keep writing more tags to the end of this one record
 
-	CXaraFileRecord atomicRec3(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec3.Init();
-	if (ok) ok = atomicRec3.WriteUINT32(TAG_CONTOURCONTROLLER);			// NodeContourController
-	if (ok)	ok = Write(&atomicRec3);
-
-	CXaraFileRecord atomicRec4(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec4.Init();
-	if (ok) ok = atomicRec4.WriteUINT32(TAG_CONTOUR);					// NodeContour
-	if (ok)	ok = Write(&atomicRec4);
-
-	CXaraFileRecord atomicRec5(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec5.Init();
-	if (ok) ok = atomicRec5.WriteUINT32(TAG_SHADOWCONTROLLER);			// NodeShadowController
-	if (ok)	ok = Write(&atomicRec5);
-
-	CXaraFileRecord atomicRec6(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec6.Init();
-	if (ok) ok = atomicRec6.WriteUINT32(TAG_SHADOW);						// NodeShadow
-	if (ok)	ok = Write(&atomicRec6);
-
-	CXaraFileRecord atomicRec7(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec7.Init();
-	if (ok) ok = atomicRec7.WriteUINT32(TAG_CLIPVIEWCONTROLLER);			// NodeClipViewController
-	if (ok)	ok = Write(&atomicRec7);
-
-	CXaraFileRecord atomicRec8(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec8.Init();
-	if (ok) ok = atomicRec8.WriteUINT32(TAG_CLIPVIEW);					// NodeClipView
-	if (ok)	ok = Write(&atomicRec8);
-
-	CXaraFileRecord atomicRec9(TAG_ATOMICTAGS, TAG_ATOMICTAGS_SIZE);
-	if (ok) ok = atomicRec9.Init();
-	if (ok) ok = atomicRec9.WriteUINT32(TAG_CURRENTATTRIBUTES);			// Current Attributes container/component
-	if (ok)	ok = Write(&atomicRec9);
-
-	
+	// Write the whole record out
+	if (ok)	ok = Write(&atomicRec);
 
 	return (ok);
 }

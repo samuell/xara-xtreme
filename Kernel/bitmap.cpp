@@ -594,6 +594,37 @@ BOOL KernelBitmap::SetAsGreyscale()
 
 /********************************************************************************************
 
+>	BOOL KernelBitmap::SetAsLossy(BOOL bLossy = TRUE)
+			
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	20/2/97
+
+	Returns:	FALSE if invalid pointer found
+
+	Purpose:	Set this bitmap' lossy flag
+
+********************************************************************************************/
+
+BOOL KernelBitmap::SetAsLossy(BOOL bLossy)
+{
+	if (ActualBitmap == NULL)
+		return FALSE;
+
+	ERROR3IF_OILBMP_PTR_INVALID(ActualBitmap,
+				"Bitmap Error.  Found a reference to a deleted bitmap.");
+
+	if (ActualBitmap)
+	{
+		ActualBitmap->SetAsLossy(bLossy);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/********************************************************************************************
+
 >	BOOL KernelBitmap::IsDefaultBitmap()
 					
 	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com>
@@ -1542,6 +1573,8 @@ void KernelBitmap::ReplaceOILBitmap(LPBYTE pBits, LPBITMAPINFO pInfo)
 	{
 		// We can't replace the default bitmap so make a new OilBitmap and attach that
 		CWxBitmap	   *pOilBitmap = new CWxBitmap(pInfo, pBits);
+		if (pOilBitmap && IsLossy())
+			pOilBitmap->SetAsLossy();
 		ActualBitmap = OILBitmap::Attach(pOilBitmap);
 	}
 	else
@@ -1745,6 +1778,31 @@ BOOL KernelBitmap::IsGreyscale()
 		return OILBitmap::Default->IsGreyscale();
 
 	return ActualBitmap->IsGreyscale();
+}
+
+
+/********************************************************************************************
+
+>	BOOL KernelBitmap::IsLossy()
+
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
+	Created:	15/8/96
+	Purpose:	Finds if this bitmap is lossy or not
+
+********************************************************************************************/
+
+BOOL KernelBitmap::IsLossy()
+{
+	if (ActualBitmap == NULL)
+		return FALSE;
+
+	ERROR3IF_OILBMP_PTR_INVALID(ActualBitmap,
+				"Bitmap Error.  Found a reference to a deleted bitmap.");
+
+	if (HasBeenDeleted())
+		return OILBitmap::Default->IsLossy();
+
+	return ActualBitmap->IsLossy();
 }
 
 
@@ -2217,6 +2275,7 @@ OILBitmap::OILBitmap()
 
 	m_bIsAFractal = FALSE;
 	m_bIsGreyscale = FALSE;
+	m_bIsLossy = FALSE;
 
 	SetBitmapAnimDelay(10);
 	SetAnimationRestoreType(GDM_LEAVE);

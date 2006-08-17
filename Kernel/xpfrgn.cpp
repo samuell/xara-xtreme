@@ -2262,6 +2262,7 @@ Node* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, 
 	BOOL bOldLayerVisibility = FALSE;
 	Layer* pSingleLayer = NULL;
 	Spread* pSingleSpread = NULL;
+	NodeBitmap* pSingleBitmap = NULL;
 	if (pFirstNode == pLastNode)
 	{
 		if (pFirstNode->IsLayer())
@@ -2270,9 +2271,13 @@ Node* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, 
 			bOldLayerVisibility = pSingleLayer->GetVisibleFlagState();
 			pSingleLayer->SetVisible(TRUE);
 		}
-		if (pFirstNode->IsSpread())
+		else if (pFirstNode->IsSpread())
 		{
 			pSingleSpread = (Spread*)pFirstNode;
+		}
+		else if (pFirstNode->IsABitmap())
+		{
+			pSingleBitmap = (NodeBitmap*)pFirstNode;
 		}
 	}
 	
@@ -2442,6 +2447,12 @@ Node* XPFRenderCallback::RenderNodesToBitmap(Node* pFirstNode, Node* pLastNode, 
 	}
 	
 	KernelBitmap* pRealBmp = KernelBitmap::MakeKernelBitmap(pFullBitmap);
+
+	// If we are converting a single NodeBitmap then maintain the lossy flag
+	if (pSingleBitmap && pSingleBitmap->GetBitmap())
+	{
+		pRealBmp->SetAsLossy(pSingleBitmap->GetBitmap()->IsLossy());
+	}
 
 	// Attach the bitmap to this document or a copy will be created when 
 	// it is used in the NodeBitmap

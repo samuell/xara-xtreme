@@ -526,6 +526,9 @@ BOOL JPEGImportFilter::ReadFromFile(OILBitmap* pOilBitmap, BaseCamelotFilter* pF
 		return FALSE;
 	}
 
+	// Make sure this bitmap is treated as lossy
+	pOilBitmap->SetAsLossy();
+
 	// Clear any eof signal as CCFile considers this an error
 	if (m_pFile->eof())
 	{

@@ -945,6 +945,7 @@ BOOL JPEGExportFilter::DoFilter(KernelBitmap* pKernelBitmap, CCLexFile *pFile)
 				break;
 
 			case 24:
+			case 32:
 				pOptions->SetColourModel(libJPEG::JCS_RGB);
 				break;
 	

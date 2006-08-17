@@ -857,6 +857,7 @@ BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
 	BOOL bAlpha = TRUE;
 	long Compression = 200;
 	String_256 CommonTrans;
+	BOOL bResample = FALSE;
 	wxString str;
 
 	str = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"dpi"));
@@ -883,7 +884,13 @@ BOOL PluginOILFilter::ReadRasterise(xmlNodePtr pNode, CapabilityTree* pCapTree)
 		CommonTrans = str;
 	}
 
-	pCapTree->SetRasterise(DPI, bAlpha, (INT32)Compression, CommonTrans);
+	str = CXMLUtils::ConvertToWXString(xmlGetProp(pNode, (xmlChar*)"resample"));
+	if (!str.IsEmpty())
+	{
+		bResample = (str == _T("true"));
+	}
+
+	pCapTree->SetRasterise(DPI, bAlpha, (INT32)Compression, CommonTrans, bResample);
 
 	return TRUE;
 }

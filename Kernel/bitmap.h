@@ -360,6 +360,7 @@ public:
 	BOOL IsDefaultBitmap() { return this == OILBitmap::Default || HasBeenDeleted(); }
 	BOOL IsTemp() { return m_bTemp; }		
 	BOOL IsInGlobalList() { return !m_bTemp; }
+	BOOL IsLossy() { return m_bIsLossy; }
 
 	void SetAsFractal() { m_bIsAFractal = TRUE;
 						  m_bIsGreyscale = TRUE; }
@@ -368,6 +369,7 @@ public:
 		// Informs this object that the bitmap it contains *is* a greyscale 8bpp bitmap, and that
 		// it therefore doesn't need to make a copy in GetGreyscaleVersion()
 
+	void SetAsLossy(BOOL bLossy = TRUE) { m_bIsLossy = bLossy; };
 	BOOL IsAFractal() { return m_bIsAFractal; }
 
 	virtual BOOL IsBrowserPalette() = 0;
@@ -431,6 +433,7 @@ PORTNOTE("other","Removed XML stuff")
 	BOOL m_bUsedByBrush : 1;
 	BOOL m_bNeedsXPERebuild : 1;	// Bitmap data has been removed from memory, can be rebuilt from m_pMasterBitmap and m_pEditList
 	BOOL m_bHidden : 1;				// Should not show up in bitmap gallery
+	BOOL m_bIsLossy : 1;
 
 #ifdef _DEBUG
 	// Debug flag, so we can detect multiple references to temp bitmaps
@@ -555,6 +558,7 @@ public:
 	BOOL IsDefaultBitmap();
 	BOOL HasBeenDeleted();
 	BOOL IsGreyscale();
+	BOOL IsLossy();
 
 	// Functions to access the orginal bitmap file
 	void SetOriginalSource(BitmapSource* pFileBuffer = NULL, BaseBitmapFilter* pImportFilter = NULL);
@@ -570,6 +574,7 @@ public:
 
 	BOOL SetAsFractal();
 	BOOL SetAsGreyscale();
+	BOOL SetAsLossy(BOOL bLossy = TRUE);
 
 	UINT32 GetDelay();
 	void SetDelay(UINT32 Delay);

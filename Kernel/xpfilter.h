@@ -202,6 +202,7 @@ protected:
 
 	BOOL GenerateExportData(CapabilityTree* pPlugCaps);
 	BOOL DoConversionPassN(CapabilityTree* pPlugCaps, INT32 ConvertPass);
+	BOOL DoBitmapResamplePass(CapabilityTree* pPlugCaps);
 	virtual Node* GetExportNode();
 	virtual BOOL BeginDocumentExport();
 	virtual BOOL EndDocumentExport();

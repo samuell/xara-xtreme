@@ -1033,6 +1033,7 @@ public:
 		m_RasteriseDPI = 96.0;
 		m_bRasteriseAlpha = TRUE;
 		m_BitmapCompression = 200;
+		m_bResample = FALSE;
 		m_SpreadType = XPFCONVTYPE_NATIVE;
 		m_pObjects = NULL;
 		m_ObjectsType = XPFCONVTYPE_NATIVE;
@@ -1082,12 +1083,13 @@ public:
 	
 	void SetSpreadType(XPFConvertType Type) { m_SpreadType = Type; }
 
-	void SetRasterise(double DPI, BOOL bAlpha, INT32 Compression, const String_256& CommonTrans)
+	void SetRasterise(double DPI, BOOL bAlpha, INT32 Compression, const String_256& CommonTrans, BOOL bResample)
 	{
 		m_RasteriseDPI = DPI;
 		m_bRasteriseAlpha = bAlpha;
 		m_BitmapCompression = Compression;
 		m_CommonTrans = CommonTrans;
+		m_bResample = bResample;
 	}
 
 	void SetObjectsTree(XPFCapability* pObjects, XPFConvertType ObjectsType)
@@ -1121,6 +1123,7 @@ public:
 	BOOL HasRasteriseCommonTrans() { return(!m_CommonTrans.IsEmpty()); }
 	// Move this into cpp file when implemented
 	BOOL IsRasteriseCommonTrans(UINT32 Type);
+	BOOL GetBitmapResample() { return(m_bResample); }
 
 	XPFCapability* GetObjects(void) const { return(m_pObjects); }
 	XPFCapability* GetAttributes(void) const { return(m_pAttributes); }
@@ -1140,6 +1143,7 @@ protected:
 	BOOL m_bRasteriseAlpha;
 	INT32 m_BitmapCompression;
 	String_256 m_CommonTrans;
+	BOOL m_bResample;
 
 	XPFConvertType m_SpreadType;
 	

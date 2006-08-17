@@ -533,7 +533,13 @@ public:
 
 	// This function returns NULL in the base class.
 	virtual KernelBitmap* EnumerateBitmaps(UINT32 Count);
-		
+
+	// This function returns the special value 1e9 to indicate no effective minimum
+	virtual double GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap) { return(1e9); }
+
+	// Replace a specific bitmap with another one
+	virtual BOOL ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap) { return(FALSE); }
+
 	// Find out the optoken of the default operation for this node. (See EditSelectionOp and Return hotkey.)
 	virtual TCHAR* GetDefaultOpToken() {return NULL;}
 		
