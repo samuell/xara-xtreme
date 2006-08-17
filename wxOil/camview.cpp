@@ -5179,7 +5179,41 @@ bool CCamView::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
 	size_t Index;
 	for (Index = 0; Index < filenames.GetCount(); Index++)
 	{
-		String_256 Str(filenames[Index].c_str());
+		wxString TempStr(filenames[Index]);
+
+		// A bit of a nasty hack here to work around a bug in wxWidgets
+		// Filenames with multibyte characters are not correctly decoded
+		// into the wxString so it still contains multi-byte sequences
+		// We will check if all the chars are single byte and if so,
+		// force it into a char buffer and convert using wxConvFileName
+		// This should mean that this code will not interfere if someone
+		// fixes wxWidgets
+		UINT32 i = 0;
+		while (TempStr[i] != 0 && (TempStr[i] & 0xFF) == TempStr[i])
+			i++;
+
+		if (TempStr[i] == 0)
+		{
+			// All the chars are bytes so try sticking them into a char array 
+			// and converting them with wxConvFileName
+			char* pBuf = (char*)CCMalloc(i);
+			if (pBuf)
+			{
+				i = 0;
+				while (TempStr[i] != 0)
+				{
+					pBuf[i] = (char)(TempStr[i] & 0xFF);
+					i++;
+				}
+				pBuf[i] = 0;
+
+				TempStr = wxConvFileName->cMB2WX(pBuf);
+				CCFree(pBuf);
+			}
+		}
+
+		String_256 Str(TempStr);
+
 		StringListItem* pItem = new StringListItem(Str);
 		if (pItem)
 			pList->AddTail(pItem);
