@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "cartprov.h"
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "camframe.h"
+#include "drawctl.h"
 
 //#include "hotlink.h"  //For the pointing hand cursor
 
@@ -583,9 +584,11 @@ void Cursor::SetActive( bool fOnlyRendWnd /*= true*/ ) const
 	// this stops the cursor being hijacked when we pop.
 	wxWindow*	pRenderWnd = DocView::GetCurrentRenderWindow();
 	wxPoint		ptDontCare;
+	wxWindow*	pWndAtPtr  = wxFindWindowAtPointer( ptDontCare );
 	if( NULL != pRenderWnd )
 	{
-		if( !fOnlyRendWnd || wxFindWindowAtPointer( ptDontCare ) == pRenderWnd )
+		bool	fDrawCtrl = NULL != pWndAtPtr ? pWndAtPtr->IsKindOf( CLASSINFO(wxCamDrawControl) ) : false;
+		if( !fOnlyRendWnd || fDrawCtrl || pWndAtPtr == pRenderWnd )
 			wxSetCursor(hCursor);
 		else
 			wxSetCursor( *wxSTANDARD_CURSOR );
