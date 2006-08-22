@@ -118,6 +118,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "cversion.h"
 #include "camelot.h"
+#include "camdoctp.h"
 
 #include "keypress.h"
 #include "ccdc.h"
@@ -133,6 +134,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prdlgctl.h"
 #include "prncamvw.h"
 #include "gbrush.h"
+#include "csrstack.h"
+#include "selmedia.h"
+#include "filedlgs.h"
 
 #include "camprocess.h"
 
@@ -852,12 +856,12 @@ bool CCamApp::OnInit()
 	m_docManager = std::auto_ptr<wxDocManager>( new wxDocManager() );
 
 	wxDocTemplate	   *pDocTemplate;
-	pDocTemplate = new wxDocTemplate(
+	pDocTemplate = new CCamDocTemplate(
 		m_docManager.get(), wxT("Xara"), wxT("*.xar;*.web"), wxT(""), wxT("xar"), wxT("Xara document"), 
 		wxT("Text View"),
 		CLASSINFO(CCamDoc),
 		CLASSINFO(CCamView) );
-//	pDocTemplate = new wxDocTemplate(
+//	pDocTemplate = new CCamDocTemplate(
 //		m_docManager.get(), wxT("Xara"), wxT("*.web"), wxT(""), wxT("web"), wxT("Xara document"), 
 //		wxT("Text View"),
 //		CLASSINFO(CCamDoc),
@@ -1275,6 +1279,380 @@ bool CCamApp::HandleKeyPress( wxKeyEvent& event )
 
 
 /********************************************************************************************
+
+>	void CCamApp::OnFileOpen()
+
+	Author:		Rik
+	Created:	14/2/95
+	Purpose:	Displays the File Open dialog and opens whichever file was selected.
+
+********************************************************************************************/
+
+void CCamApp::OnFileOpen()
+{
+#ifndef EXCLUDE_FROM_RALPH
+	// Build the list of filters
+	int NativeFilterPos = 0;
+	TCHAR* pFilters = OpenFileDialog::BuildFilterString(&NativeFilterPos);
+
+	TRACEUSER( "luke", _T("Filters = %s"), pFilters );
+
+	// Set up the dialog
+	OpenFileDialog OpenDialog(pFilters);
+	OpenDialog.NativeFilterPos = NativeFilterPos;
+	OpenDialog.PrepareDialog();		
+	
+	// Display the dialog and get the filename we require
+	BOOL Result = OpenDialog.OpenAndGetFileName();
+
+	// Free up the memory allocated by BuildFilterString
+	CCFree(pFilters);
+
+	// If they did not click on OK then stop right now
+	if (!Result)
+		return;
+
+	// Remember the filter for later in the opening sequence
+	OpenDialog.SelectedFilter = OpenDialog.GetSelectedFilterIndex();
+
+	// Get the filename, ensuring that the path is valid
+	PathName Path;
+	OpenDialog.GetChosenFileName(&Path);
+	String_256 Str = Path.GetPath();
+
+	// Extract directory name (minus terminating backslash) and remember for next time.
+	OpenDialog.SetDefaultPath(Path.GetLocation(FALSE));
+
+	// Andy Hills, 05-02-2001
+	// Fix for bug 6712:
+
+	// Delete the preview bitmap, if present.
+	// If we don't delete it here, when we call OpenDocumentFile (below)
+	// all global bitmaps are deleted (as part of the process of closing all
+	// existing documents), including the preview bitmap.
+	// Unfortunately, the OILBitmap is deleted without deleting the
+	// KernelBitmap which owns it; thus, at the end of this function, when the
+	// file dialogue is destructed, Camelot tries to destruct the preview
+	// bitmap even though its ActualBitmap has already been deleted, causing
+	// an access violation.
+	// It is safer to destroy both the kernel bitmap and (implicitly) its
+	// OILBitmap here.
+
+PORTNOTE( "other" ,"Removed open preview clean-up" )
+#ifndef EXCLUDE_FROM_XARALX
+	// There is a more general problem, in that when we close all documents
+	// we get rid of all global bitmaps. I don't believe it is safe to assume
+	// that all global bitmaps belong to the documents which are being closed.
+	// I.e. I think we should only delete bitmaps which we are sure belong to
+	// the documents.
+	if (OpenDialog.pBitmapToUse != NULL)
+	{
+		delete OpenDialog.pBitmapToUse;
+		OpenDialog.pBitmapToUse = NULL;
+	}
+#endif
+
+	// and open the file. if returns NULL, the user has already been alerted
+	wxDocument* pDoc = OpenDocumentFile( Str );
+	if (pDoc!=NULL)
+	{
+		// Make sure that the files name is sensible
+		MakeDocumentNative(pDoc, &Path);
+		
+		// add it to the recent file list
+		AddToRecentFileList( PCTSTR(Str) );
+
+		// ... and set the path as the "original" path to the doc.  This will be used to 
+		// "restore" the doc when we next run, if it was open when we shut down.
+		((CCamDoc*) pDoc)->SetOriginalPath(Str);
+	}
+#endif
+}
+
+
+/********************************************************************************************
+
+>	virtual void CCamApp::AddToRecentFileList(LPCTSTR pPathName)
+
+	Author:		Rik
+	Created:	8/5/95
+	Inputs:		pPathName - the full path name of the file to add to the list
+	Purpose:	Adds the file to the recent file list
+
+********************************************************************************************/
+
+void CCamApp::AddToRecentFileList(LPCTSTR pPathName)
+{
+PORTNOTE( "filelist" ,"I don't think this is needed since this all happen automatically" )
+#if !defined(EXCLUDE_FROM_XARALX) && !defined(EXCLUDE_FROM_RALPH)
+	// Make sure we have not been passed a load of junk
+	ERROR3IF(pPathName==NULL, "NULL path name in AddToRecentFilelist\n");
+
+	// Make sure that there is a recent file list, but bodge it so that OpenHiddenDocument
+	// does not add to the list!
+	if (pFileList!=NULL)
+	{
+		// Add the file to it
+		pFileList->Add(pPathName);
+	}
+#endif
+}
+
+
+/********************************************************************************************
+>	virtual CDocument* CCamApp::OpenDocumentFile(LPCTSTR lpcszFileName)
+
+	Author:		JustinF
+	Created:	4/7/95
+	Inputs:		lpcszFileName				path to the document file to load
+	Returns:	A pointer to the MFC CDocument object that manages the opened file, or
+				NULL if it can't be loaded for some reason.
+	Purpose:	We override this implementation function so that when the user tries to
+				load a document that is already loaded, we can display a dialog box with
+				various load options, instead of simply bringing the document's view
+				to the front.
+
+				This function is largely copied from the MFC equivalent in APPUI.CPP.
+	Errors:		-
+	SeeAlso:	-
+********************************************************************************************/
+
+wxDocument* CCamApp::OpenDocumentFile( PCTSTR lpcszFileName )
+{
+	// find the highest confidence
+
+	wxList&				listTemplates( GetDocumentManager()->GetTemplates() );
+	wxNode*				pNode = listTemplates.GetFirst();
+
+	CCamDocTemplate::Confidence bestMatch = CCamDocTemplate::noAttempt;
+	CCamDocTemplate*	pBestTemplate = NULL;
+	wxDocument*			pOpenDocument = NULL;
+	wxDocument*			pNewDoc		  = NULL;
+
+	TCHAR				szPath[_MAX_PATH + 1];
+	{
+		wxFileName		FileName( lpcszFileName );
+		camStrncpy( szPath, FileName.GetFullPath(), _MAX_PATH );
+	}
+
+	while (pNode != NULL)
+	{
+		CCamDocTemplate* pTemplate = (CCamDocTemplate*)pNode->GetData();
+		ASSERT( pTemplate->IsKindOf( CLASSINFO(CCamDocTemplate) ) );
+
+		CCamDocTemplate::Confidence match;
+		ASSERT(pOpenDocument == NULL);
+		match = pTemplate->MatchDocType(szPath, pOpenDocument);
+
+		if (match > bestMatch)
+		{
+			bestMatch = match;
+			pBestTemplate = pTemplate;
+		}
+
+		if (match == CCamDocTemplate::yesAlreadyOpen) break;
+
+		pNode= pNode->GetNext();
+	}
+
+	if (pOpenDocument != NULL)
+	{
+		// Make sure it really is one of ours.
+		ERROR3IF( !pOpenDocument->IsKindOf( CLASSINFO(CCamDoc) ),
+					_T("Not a CCamDoc in CCamApp::OpenDocumentFile") );
+
+		wxList&			lstViews( pOpenDocument->GetViews() );
+		wxNode*			pNode = lstViews.GetFirst();
+		if( NULL != pNode )
+		{
+			// Get the first view.
+			wxView*		pView = (wxView*)pNode->GetData();
+			wxMDIChildFrame* pFrame = (wxMDIChildFrame*)pView->GetFrame();
+			
+			// Now deal with the view window.
+			if (pFrame != NULL)
+			{
+				// Run a message box to find out what the user wants to do on trying
+				// to load a document that is already loaded.  To begin, if we can't
+				// find a document template just bring the view to the front.
+				if (pBestTemplate == NULL)
+				{
+					pFrame->Activate();
+				}
+				else
+				{
+					// If the document is modified then we may have to ask the user what they
+					// want to do, ie. revert to original, load copy, do nothing.
+					int nResult;
+					if (pOpenDocument->IsModified())
+					{
+						// OK, we have a modified document.  Run the message box to find out what
+						// the user wants to do.
+						nResult = InformWarning( _R(IDE_DOC_ALREADY_OPEN),
+												_R(IDS_REVERT_BTN), _R(IDS_DETACH_BTN), _R(IDS_CANCEL), 0,
+												2, 3);
+					}
+					else
+					{
+						// If the document isn't modified then force a "load copy".
+						// no if the document is already loaded just keep the view we have (sjk 3/2/00)
+						nResult = 3;
+					}
+
+					switch (nResult)
+					{
+					case 1:
+					{
+						// REVERT.  Reload the already-open doc, discarding unsaved changes.
+						((CCamDoc*) pOpenDocument)->SetModified(FALSE);
+						pOpenDocument->OnCloseDocument();
+						pNewDoc = pBestTemplate->CreateDocument( szPath );
+						goto PerformLoad;
+					}
+
+					case 2:
+					{
+						// DETACH.  Load the doc as an "untitled" one, making sure it won't
+						// save over the already-open doc.
+						wxDocument* pCopyDoc = pBestTemplate->CreateDocument( szPath );
+						if (pCopyDoc != NULL)
+						{
+							// We managed to load the doc to detach, so now we detach it.
+							// To do this we set its path to nothing, after saving the
+							// original path.
+							((CCamDoc*) pCopyDoc)->SetOriginalPath(szPath);
+							((CCamDoc*) pCopyDoc)->SetPathNameEmpty();
+							((CCamDoc*) pCopyDoc)->SetCopy(TRUE);
+
+							goto PerformLoad;
+						}
+					#ifdef _DEBUG
+						else
+						{
+							// Oh no, we failed to load the detached doc, so we have to
+							// fail this one.
+							TRACEUSER("JustinF", _T("Couldn't load doc to detach!\n") );
+							pFrame->Activate();
+						}
+					#endif						
+						return NULL;
+					}
+
+					case 3:
+						// CANCEL.  Don't load, just bring the already-open doc to the front.
+						pFrame->Activate();
+						break;
+
+					default:
+						ERROR3( _T("Bad return val from message box in CCamApp::OpenDocumentFile") );
+						break;
+					}
+				}
+			}
+			else
+				TRACE0( _T("Error: Can not find a frame for document to activate.\n") );
+		}
+		else
+		{
+			TRACE0( _T("Error: Can not find a view for document to activate.\n") );
+		}
+
+		return pOpenDocument;
+	}
+
+	if (pBestTemplate == NULL)
+	{
+		String_256		strReport( _R(AFX_IDP_FAILED_TO_OPEN_DOC) );
+		wxMessageBox( (PCTSTR)strReport );
+		return NULL;
+	}
+
+	pNewDoc =  pBestTemplate->CreateDocument( szPath );
+
+PerformLoad:
+	if( NULL == pNewDoc )
+		return NULL;
+
+	pNewDoc->SetDocumentName( pBestTemplate->GetDocumentName() );
+	pNewDoc->SetDocumentTemplate( pBestTemplate );
+	if( !pNewDoc->OnOpenDocument( szPath ) )
+	{
+		pNewDoc->DeleteAllViews();
+		pNewDoc = NULL;
+	}
+
+	return pNewDoc;
+}
+
+
+
+/********************************************************************************************
+
+>	BOOL CCamApp::MakeDocumentNative(CDocument* pDoc, PathName* Path)
+
+	Author:		Rik
+	Created:	14/2/95
+	Inputs:		pDoc - The document to test and change
+				Path - the path of the original document name
+	Outputs:	Path - This will have the extension modified if the function returned TRUE
+	Returns:	TRUE if it changed the document, FALSE if it did not
+	Purpose:	If you attemp to open a BMP or any other non native file, it will have a
+				bad document name (ending in .bmp or whatever, instead of .art). It also
+				causes problems when pressing save, as the original non native file can
+				be overwritten with a native file version. This makes sure that the user
+				will always be asked where they want to save it when it comes to saving
+				time by throwing away the know path info.
+	SeeAlso:	CCamApp::OnRecentFile; CCamApp::OnFileOpen
+
+********************************************************************************************/
+
+BOOL CCamApp::MakeDocumentNative( wxDocument* pDoc, PathName* Path )
+{
+	// Only bother if the was actually a document to process
+	if (pDoc==NULL)
+		return FALSE;
+
+	// Set the extension of the file to be .xar
+	String_256 Extension( _R(IDS_DEFAULT_EXTENSION) );
+	String_256 OldExtension = Path->GetType();
+	// make sure they are of the same case
+	Extension.toLower();
+	OldExtension.toLower();
+#if NEW_NATIVE_FILTER
+	String_256 NewExtension(IDS_DEFAULT_EXTENSION);
+	NewExtension.toLower();
+	// see if the extension is .xar or .cxn
+	if (Extension != OldExtension && OldExtension != NewExtension)
+#else
+	// see if the extension is .xar
+	if (Extension != OldExtension)
+#endif
+	{
+		Path->SetType(Extension);
+
+		// Find out some of the details about the filename
+		String_256 FileName = Path->GetFileName();
+
+		// Set the title of and path of the document
+		// we set the path to blank, so that we will always be prompted for a real filename
+		((CCamDoc*)pDoc)->SetTitle( FileName );
+		pDoc->SetFilename( FileName, true );
+		((CCamDoc*)pDoc)->SetPathNameEmpty();
+
+		TRACEUSER( "luke", _T("New name %s"), PCTSTR(FileName) );
+
+		// Tell 'em we changed things
+		return TRUE;
+	}
+
+	// Nothing changed
+	return FALSE;
+}
+
+
+
+/********************************************************************************************
+ *
 
 >	void CCamApp::OnRecentFile(INT32 RecentFileNumber)
 

@@ -2486,7 +2486,7 @@ TCHAR* OpenFileDialog::BuildFilterString(INT32* NativeFilterPos)
 	FilterSize += 2;
 
 	// Try to get this string
-	TCHAR*	FilterString = (TCHAR*)CCMalloc(FilterSize);
+	TCHAR*	FilterString = (TCHAR*)CCMalloc( FilterSize * sizeof(TCHAR) );
 	if (FilterString==NULL)
 		// Error state already set by CCMalloc
 		return NULL;

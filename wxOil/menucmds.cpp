@@ -302,8 +302,9 @@ void FileOpenAction()
 {
 	// OnFileOpen needs an event, but doesn't use it
 	wxCommandEvent		event;
-	AfxGetApp().GetDocumentManager()->SetLastDirectory(BaseFileDialog::DefaultOpenFilePath);
-	AfxGetApp().GetDocumentManager()->OnFileOpen( event );
+//	AfxGetApp().GetDocumentManager()->SetLastDirectory(BaseFileDialog::DefaultOpenFilePath);
+//	AfxGetApp().GetDocumentManager()->OnFileOpen( event );
+	AfxGetApp().OnFileOpen();
 	CCamDoc::EnableRemoveUntouchedDocs();		// Next idle event will try ro get rid of 
 												// the auto-created startup document
 }

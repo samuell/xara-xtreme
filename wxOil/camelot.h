@@ -148,6 +148,8 @@ public:
 
 	void OnFatalException();
 
+	void OnFileOpen();
+
 	void OnFilePrintSetup();
 
 	static BOOL LaunchWebBrowser(const wxString& strUrl);
@@ -157,6 +159,10 @@ public:
 
 private:
 	INT32 RunFalseMainLoop();
+
+	wxDocument* OpenDocumentFile( PCTSTR lpcszFileName );
+	void AddToRecentFileList( LPCTSTR pPathName );
+	BOOL MakeDocumentNative(wxDocument* pDoc, PathName* Path);
 
 protected:
 	std::auto_ptr<wxDocManager> m_docManager;
