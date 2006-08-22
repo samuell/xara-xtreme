@@ -2,9 +2,11 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"
 xmlns:apkg="http://autopackage.org/xdgmime-extensions">
   <mime-type type="application/vnd.xara">
-         <comment xml:lang="en">Xara drawing</comment>
+         <comment>Xara document</comment>
+         <comment xml:lang="de">Xara-Dokument</comment>
+         <comment xml:lang="fr">Illustration vectorielle Xara</comment>
+         <comment xml:lang="it">Documento Xara</comment>
         
-         ...
          <magic priority="80">
                 <match type="string" value="XARA" offset="0"/>
          </magic>

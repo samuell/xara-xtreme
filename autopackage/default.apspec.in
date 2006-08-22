@@ -3,12 +3,16 @@
 [Meta]
 RootName: @xaralx.org/xaralx:0.7
 DisplayName: Xara Xtreme Vector Graphics Tool
-DisplayName[de]: Xara Xtreme Vektorgraphikprogramm
+DisplayName[de]: Xara Xtreme Vektorgrafik-Programm
+DisplayName[fr]: Logiciel d'illustration vectorielle Xara Xtreme
+DisplayName[it]: Xara Xtreme Programma di Grafica Vettoriale
 ShortName: xaralx
 Maintainer: Neil Howe <neil@xara.com>
 Packager: Anonymous <anonymous@nowhere.com>
 Summary: Xara Xtreme is a vector graphics and photo tool
-Summary[de]: Xara Xtreme ist ein Vektorgraphik- und Fotoprogramm
+Summary[de]: Xara Xtreme ist ein Vektorgrafik- und Bildbearbeitungsprogramm
+Summary[fr]: Xara Xtreme est un logiciel d'illustration vectorielle polyvalent et rapide
+Summary[it]: Xara Xtreme è un programma di grafica vettoriale e fotoritocco
 URL: http://www.xaraxtreme.org/
 License: GNU General Public License, Version 2
 SoftwareVersion: 0.7
@@ -27,10 +31,26 @@ drawings with equal ease. See xaraxtreme.org for details. Xara Xtreme on Linux i
 port of the Windows version of Xara Xtreme (see www.xara.com/xtreme).
 
 [Description:de]
-Xara Xtreme ist hauptsächlich ein Vektorgraphikprogramm (Zeichungen und Illustrationen),
-aber eines der neuen Generation von Produkten, die Fotos und Zeichnungen gleichermaßen
-meistern. Siehe xaraxtreme.org für Details. Xara Xtreme auf Linux ist eine Portierung
-der Windowsversion von Xara Xtreme (siehe www.xara.com/xtreme).
+Xara Xtreme ist hauptsächlich ein Vektorgrafikprogramm zum Erstellen von
+Zeichnungen und Illustrationen. Als Vertreter einer neuen Generation von
+Grafikprogrammen bietet Xara Xtreme jedoch neben seinen Werkzeugen zum
+Erstellen von Vektorgrafiken auch leistungsfähige Funktionen zum Bearbeiten
+von Fotos an. Weitergehende Informationen finden Sie unter xaraxtreme.org.
+Bei Xara Xtreme for Linux handelt es sich um eine Portierung der Windows-
+Version von Xara Xtreme (siehe www.xara.com/xtreme).
+
+[Description:fr]
+Xara Xtreme est avant tout un logiciel de dessin et d'illustration vectoriel,
+mais il se veut aussi un outil transversal, capable de manipuler photos,
+textes et dessins avec souplesse. Visitez xaraxtreme.org pour plus
+d'information. Xara Xtreme pour Linux est le portage entièrement libre
+de la version Windows de Xara Xtreme (cf www.xara.com/xtreme).
+
+[Description:it]
+Xara Xtreme è principalmente un programma di grafica vettoriale (disegni ed illustrazioni),
+è un software della nuova generazione di prodotti cross-over che permette di gestire
+disegni e foto con la stessa facilità. Vedere xaraxtreme.org per dettagli. Xara Xtreme
+per Linux è un port della versione Windows di Xara Xtreme (vedere www.xara.com/xtreme).
 
 [BuildPrepare]
 #prepareBuild
