@@ -155,6 +155,7 @@ public:
 	static BOOL LaunchWebBrowser(const wxString& strUrl);
 
 	static bool LaunchMediaApp( const wxString& strUrl );
+	static bool SelectMediaApp();
 	
 	// Get the path to the root of the resource directory structure
 	static StringBase& GetResourceDirectory();

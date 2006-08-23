@@ -135,6 +135,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_HELPTOOLS		_T("HelpTools")
 #define OPTOKEN_HELPGALLERIES	_T("HelpGalleries")
 #define OPTOKEN_HELPDEMOS		_T("HelpDemos")
+#define OPTOKEN_HELPPLAYER		_T("HelpPlayer")
 #define OPTOKEN_HELPDEMOS_NATIVE _T("HelpDemosNative")
 #define OPTOKEN_HELPTECHSUPPORT	_T("HelpTechSupport")
 

@@ -48,6 +48,12 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_HELPPLAYEROP">
+					<label>Help on selecting movie replay app.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDBBL_HELPGALLERIESOP">
 					<label>Help on galleries</label>
 				</object>

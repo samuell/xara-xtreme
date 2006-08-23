@@ -157,6 +157,7 @@ void HelpUsingAction();
 void HelpToolsAction();
 void HelpGalleriesAction();
 void HelpDemosAction();
+void HelpPlayerAction();
 void HelpDemosNativeAction();
 void HelpTechSupportAction();
 void HelpXaraPurchasePage();

@@ -171,6 +171,7 @@ MENU "SHARED"
 		END
 		
 		MENUITEM "HelpDemos"
+		MENUITEM "HelpPlayer"
 		MENUITEM "HelpDemosNative"
 		MENUITEM "TipsDlg"			SEPARATOR
 		MENUITEM "Update"				SEPARATOR

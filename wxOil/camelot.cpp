@@ -2728,6 +2728,12 @@ INT32 CCamApp::RunFalseMainLoop()
 	wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
 
+
+/**
+ * CMediaReplayDetect - Class which checks to see if a command is available 
+ * on the path
+ **/
+
 class CMediaReplayDetect
 {
 private:
@@ -2772,51 +2778,93 @@ public:
 	}
 };
 
-bool CCamApp::LaunchMediaApp( const wxString& strUrl )
-{
-	CMediaReplayDetect	Detect;
-	static PCTSTR		apszApps[] = {  _T("mplayer"),
-									    _T("gmplayer"),
+/*********************************************************************************************
+>	static void FillMediaAppMap( SelMediaDlgParam::CMediaAppList* pMapMediaApp )
+
+	Author:		Luke_Hart <luke.hartΩxara.com>
+	Created:	23/08/06
+	Inputs:		pMapMediaApp - A map to contain all the media apps avaiable on system
+	Outputs:	-
+	Returns:	-
+	Purpose:	Retrieve a map of media replay applications
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	-
+
+ **********************************************************************************************/
+
+static PCTSTR			g_apszApps[] = {_T("mplayer"),
+										_T("gmplayer"),
 										PCTSTR(1),				// Everyting above this line supports mplayer control protocol
+										_T("gxine"),
 										_T("xine"),
 										_T("totem"),
 										_T("xfmedia"),
 										_T("codeine"),
 										NULL };
 
-	// Move array into a helpful structure
-	SelMediaDlgParam::CMediaAppList	mapMediaApp;
+static void FillMediaAppMap( SelMediaDlgParam::CMediaAppList* pMapMediaApp )
+{
+	// Add the basic list of applications
 	bool				fControlable = true;
 	UINT32				ord = 0;
-	while( NULL != apszApps[ord] )
+	while( NULL != g_apszApps[ord] )
 	{
 		// Skip controlable marker
-		if( PCTSTR(1) == apszApps[ord] )
+		if( PCTSTR(1) == g_apszApps[ord] )
 		{
 			++ord;
 			fControlable = false;
 			continue;
 		}
 
-		mapMediaApp.insert( std::make_pair( apszApps[ord], fControlable ) );
+		pMapMediaApp->insert( std::make_pair( g_apszApps[ord], fControlable ) );
 		++ord;
 	}
 
+	// Remove any non-present apps
+	CMediaReplayDetect	Detect;
+	SelMediaDlgParam::CMediaAppListIter	end( pMapMediaApp->end() );
+	SelMediaDlgParam::CMediaAppListIter	iter( pMapMediaApp->begin() );
+	for( ; iter != end; )
+	{
+		SelMediaDlgParam::CMediaAppListIter	iterCur( iter++ ); 
+		if( !Detect.IsAppPresent( iterCur->first ) )
+		{
+			TRACEUSER( "luke", _T("%s is not present"), iterCur->first );
+			 pMapMediaApp->erase( iterCur->first );
+		}
+	}
+}
+
+
+/*********************************************************************************************
+>	bool CCamApp::LaunchMediaApp( const wxString& strUrl )
+
+	Author:		Luke_Hart <luke.hartΩxara.com>
+	Created:	23/08/06
+	Inputs:		strUrl - The path to the file conbtaining the movie to play (could even be 
+							web address)
+	Outputs:	-
+	Returns:	true if player launched successfully
+	Purpose:	This function attempts to replay a movie using configured player (or ask user 
+				to specify one if not already setup)
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	-
+
+ **********************************************************************************************/
+
+bool CCamApp::LaunchMediaApp( const wxString& strUrl )
+{
+	// Move array into a helpful structure
+	SelMediaDlgParam::CMediaAppList	mapMediaApp;
+	FillMediaAppMap( &mapMediaApp );
+
 	// First we see if the replay app. is present
+	CMediaReplayDetect	Detect;
 	if( !Detect.IsAppPresent( m_strMediaApplication ) )
 	{
-		// Remove any non-present apps
-		SelMediaDlgParam::CMediaAppListIter	end( mapMediaApp.end() );
-		SelMediaDlgParam::CMediaAppListIter	iter( mapMediaApp.begin() );
-		for( ; iter != end; ++iter )
-		{
-			if( !Detect.IsAppPresent( iter->first ) )
-			{
-				mapMediaApp.erase( iter->first );
-				TRACEUSER( "jlh92", _T("%s is not present"), iter->first );
-			}
-		}
-
 		// Setup param and open replay app selection dialog
 		SelMediaDlgParam	Param;
 		Param.m_pAppList = &mapMediaApp;
@@ -2833,15 +2881,12 @@ bool CCamApp::LaunchMediaApp( const wxString& strUrl )
 		if( !Param.m_fValid )
 			return true;
 	}
-	else
-	{
-		// Pre-selected app, check to see if we can control it
-		SelMediaDlgParam::CMediaAppListIter iter = mapMediaApp.find( apszApps[ord] );
-		if( mapMediaApp.end() == iter )
-			fControlable = false;
-		else
-			fControlable = iter->second;
-	}
+
+	// Check to see if we can control the selected app. (maybe one day....)
+	SelMediaDlgParam::CMediaAppListIter iter = mapMediaApp.find( m_strMediaApplication );
+	bool				fControlable = false;
+	if( mapMediaApp.end() != iter )
+		fControlable = iter->second;
 
 	// Build the command line and execute it
 	wxString			strCommand;
@@ -2859,16 +2904,56 @@ bool CCamApp::LaunchMediaApp( const wxString& strUrl )
 	{
 		// Let this process run free!
 		plp->Disconnect();
-//		delete plp;								// This object will allegedly delete itself when the process dies
 	}
 	else
 	{
 		// Make sure we don't leave any zombie processes lying around
 		wxKillError e = plp->Terminate();		// This should result in a call to OnTerminate
 		TRACEUSER("Phil", _T("Terminating bad process returned %d\n"), e);
-//		delete plp;								// This object will allegedly delete itself when the process dies
 	}
 
 	return ok;
+}
+
+/*********************************************************************************************
+>	bool CCamApp::SelectMediaApp()
+
+	Author:		Luke_Hart <luke.hartΩxara.com>
+	Created:	23/08/06
+	Inputs:		-
+	Outputs:	-
+	Returns:	true if user accepts new choice
+	Purpose:	This function allows a user to select which media replay app. they'd like
+				to use to replay the help movies
+	Errors:		-
+	Scope:	    Public
+	SeeAlso:	-
+
+ **********************************************************************************************/ 
+
+bool CCamApp::SelectMediaApp()
+{
+	// Move array into a helpful structure
+	SelMediaDlgParam::CMediaAppList	mapMediaApp;
+	FillMediaAppMap( &mapMediaApp );
+
+	// First we see if the replay app. is present
+	CMediaReplayDetect	Detect;
+
+	// Setup param and open replay app selection dialog
+	SelMediaDlgParam	Param;
+	Param.m_pAppList = &mapMediaApp;
+	Param.m_strSel	 = m_strMediaApplication;
+	OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor( CC_RUNTIME_CLASS(SelMediaDlg) ); 
+	if( NULL != pOpDesc )
+	{
+		pOpDesc->Invoke( &Param );
+	
+		if( Param.m_fValid )
+			m_strMediaApplication = Param.m_strSel;
+	}
+
+	// User canceled, bomb out
+	return Param.m_fValid;
 }
 

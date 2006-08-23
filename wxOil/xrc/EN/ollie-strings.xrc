@@ -42,6 +42,12 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_HELP_PLAYER">
+					<label>Select movie app.;Show a list of applications to use for help movie replay</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_HELP_MOVIES_NATIVE">
 					<label>Movies test 2 (wxMediaCtrl);Show a list of movies you can watch</label>
 				</object>

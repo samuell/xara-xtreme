@@ -1282,6 +1282,10 @@ void HelpOps::Do(OpDescriptor* WhichOp)
 		WebsterDemos();
 	#endif //webster
 	}
+	else if (WhichOp->Token == String(OPTOKEN_HELPPLAYER))
+	{
+		HelpPlayerAction();
+	}
 	else if (WhichOp->Token == String(OPTOKEN_HELPTECHSUPPORT))
 		HelpTechSupportAction();
 //Webster_Ranbir_12\11\96
@@ -1376,6 +1380,7 @@ OpState HelpOps::GetState(String_256* UIDescription, OpDescriptor* OpDesc)
 #define HID_HELP_TOOLS                          (0)
 #define HID_HELP_GALLERIES                      (0)
 #define HID_HELP_DEMOS                          (0)
+#define HID_HELP_PLAYER                         (0)
 #define HID_HELP_TECHSUPPORT            (0)
 
 BOOL HelpOps::Init()
@@ -1418,6 +1423,19 @@ BOOL HelpOps::Init()
 												0 );
 
 	ERRORIF(!DemosOp, _R(IDE_NOMORE_MEMORY), FALSE);
+	
+	// REGOP(HELP, PLAYER, HelpPlayer);
+	OpDescriptor* PlayerOp = new OpDescriptor(
+												0, 
+												_R(IDS_HELP_PLAYER),
+												CC_RUNTIME_CLASS(HelpOps), 
+												OPTOKEN_HELPPLAYER,
+												HelpOps::GetState,
+												HID_HELP_PLAYER,
+												_R(IDBBL_HELPPLAYEROP),
+												0 );
+
+	ERRORIF(!PlayerOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
 	//Webster_Ranbir_12\11\96
 #ifdef INC_WEB_MENU_ITEMS

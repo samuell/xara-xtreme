@@ -834,6 +834,10 @@ void HelpDemosAction()
 //	HelpOnlineDemos();
 }
 
+void HelpPlayerAction()
+{
+	CCamApp::SelectMediaApp();
+}
 
 void HelpTechSupportAction()
 {
