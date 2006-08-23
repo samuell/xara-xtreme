@@ -794,126 +794,9 @@ void HelpGalleriesAction()
 	HelpUsingGalleries();
 }
 
-#if defined(ENABLE_MOVIES)
-
-#if wxUSE_MEDIACTRL
-enum
-{
-	wxID_MEDIACTRL			= wxID_HIGHEST + 1,
-	wxID_CLOSE_BUTTON
-};
-
-class CReplayWnd : public wxDialog
-{
-private:
-	wxMediaCtrl*	m_pMediaCtrl;
-	wxSizer*		m_pSizer;
-
-public:
-	CReplayWnd( wxWindow *pWnd );
-	virtual ~CReplayWnd()
-	{
-		TRACEUSER( "jlh92", _T("Destruct CRW\n") );
-	}
-
-	void Load( const wxString& str )
-	{
-		TRACEUSER( "jlh92", _T("Load Video\n") );
-		m_pMediaCtrl->Load( str );
-
-		m_pSizer->Fit( this );
-		m_pSizer->SetSizeHints( this );
-	}
-
-	void OnClose( wxCloseEvent& event );
-	void OnCreate( wxWindowCreateEvent& event );
-	void OnDestroy( wxWindowDestroyEvent& event );
-
-	void OnCloseButton( wxCommandEvent& event );
-
-	void OnLoaded( wxMediaEvent& event );
-
-	DECLARE_CLASS( CReplayWnd )
-	DECLARE_EVENT_TABLE();
-};
-
-IMPLEMENT_CLASS( CReplayWnd, wxDialog )
-BEGIN_EVENT_TABLE( CReplayWnd, wxDialog )
-//	EVT_CLOSE(			CReplayWnd::OnClose )
-//	EVT_WINDOW_DESTROY( CReplayWnd::OnDestroy )
-//	EVT_WINDOW_CREATE(	CReplayWnd::OnCreate )
-
-	EVT_BUTTON(			wxID_CLOSE_BUTTON,	CReplayWnd::OnCloseButton )
-
-	EVT_MEDIA_LOADED(	wxID_MEDIACTRL, CReplayWnd::OnLoaded )
-END_EVENT_TABLE()
-
-CReplayWnd::CReplayWnd( wxWindow *pWnd ) : wxDialog( pWnd, wxID_ANY, _T("Movie Replay"), wxDefaultPosition,
-												wxDefaultSize, wxSYSTEM_MENU | wxCAPTION )
-{
-	m_pSizer	= new wxBoxSizer( wxVERTICAL );
-	
-	m_pMediaCtrl = new wxMediaCtrl;
-	m_pMediaCtrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
-						wxDefaultPosition, wxDefaultSize, 0 );
-	m_pSizer->Add( m_pMediaCtrl, 0, wxALL, 0 );
-
-	{
-		wxSizer*	pHSizer = new wxBoxSizer( wxHORIZONTAL );
-		
-		wxButton*	pButton = new wxButton( this, wxID_CLOSE_BUTTON, _T("Close") );
-		pHSizer->Add( pButton, 0, wxLEFT | wxBOTTOM | wxTOP, 5  );
-
-		wxSlider*	pSlider = new wxSlider( this, wxID_ANY, 127, 0, 255 );
-		pHSizer->Add( pSlider, 1, wxEXPAND | wxALL, 5 );
-
-		m_pSizer->Add( pHSizer );
-	}
-
-	SetSizer( m_pSizer );
-}
-
-void CReplayWnd::OnCreate( wxWindowCreateEvent& )
-{
-	TRACEUSER( "jlh92", _T("Create video\n") );
-}
-
-void CReplayWnd::OnDestroy( wxWindowDestroyEvent& )
-{
-	TRACEUSER( "jlh92", _T("Destroy video\n") );
-	m_pMediaCtrl->Stop();
-}
-
-void CReplayWnd::OnClose( wxCloseEvent& )
-{
-	TRACEUSER( "jlh92", _T("Close video\n") );
-	m_pMediaCtrl->Stop();
-}
-
-void CReplayWnd::OnLoaded( wxMediaEvent& )
-{
-	TRACEUSER( "jlh92", _T("Play Video\n") );
-	m_pMediaCtrl->Play();
-}
-
-void CReplayWnd::OnCloseButton( wxCommandEvent& )
-{
-	TRACEUSER( "jlh92", _T("Close button\n") );
-	
-	if( NULL != m_pMediaCtrl )
-	{
-		m_pMediaCtrl->Stop();
-		delete m_pMediaCtrl;
-		m_pMediaCtrl = NULL;
-	}
-
-	Close();
-}
-#endif
-
 static void StartMovie( const wxString &strFile )
 {
-	wxString			strDataPath( CCamApp::GetResourceDirectory() );
+	wxString			strDataPath( (wxChar*)CCamApp::GetResourceDirectory() );
 	if( !wxDir::Exists( strDataPath ) )
 	{
 #if defined(_DEBUG)
@@ -924,9 +807,13 @@ static void StartMovie( const wxString &strFile )
 
 	wxString			strVideoPath( strDataPath );
 	strVideoPath += _("/video");
-	
-	wxString			strCommand( _T("mplayer -slave \"") );
+
+	wxString			strCommand; // ( _T("mplayer -slave \"") );
 	strCommand += strVideoPath + _T("/") + strFile + _T("\"");	
+
+#if true
+	CCamApp::LaunchMediaApp( strCommand );
+#else
 	long /*TYPENOTE: CORRECT*/ lResult = wxExecute( strCommand, wxEXEC_SYNC, NULL );
 	if( 255 == lResult )
 	{
@@ -937,32 +824,8 @@ static void StartMovie( const wxString &strFile )
 		if( 255 == lResult )
 			InformWarning( _R(IDS_MPLAYER_MISSING), _R(IDS_OK) );
 	}
-}
-
-static void StartMovieNative( const wxString &strFile )
-{
-#if wxUSE_MEDIACTRL
-	wxString			strDataPath( CCamApp::GetResourceDirectory() );
-	if( !wxDir::Exists( strDataPath ) )
-	{
-#if defined(_DEBUG)
-		// We'll try default location under debug to make life easier
-		strDataPath = _T("/usr/share");
 #endif
-	}
-
-	wxString			strVideoPath( strDataPath );
-	strVideoPath += _("/video");
-	
-	CReplayWnd*		pWnd	= new CReplayWnd( CCamFrame::GetMainFrame() );
-	pWnd->Load( strVideoPath + _T("/") + strFile );
-	
-	pWnd->Show( true );
-#else
-	InformWarning( _R(IDS_NO_MEDIACTRL), _R(IDS_OK) );
-#endif	
 }
-
 
 void HelpDemosAction()
 {
@@ -971,26 +834,6 @@ void HelpDemosAction()
 //	HelpOnlineDemos();
 }
 
-
-void HelpDemosNativeAction()
-{
-	StartMovieNative( _T("Part_1_master_inc_audio_smaller_q35_fr15_hi.ogm") );
-
-//	HelpOnlineDemos();
-}
-
-#else
-
-void HelpDemosAction()
-{
-}
-
-
-void HelpDemosNativeAction()
-{
-}
-
-#endif
 
 void HelpTechSupportAction()
 {

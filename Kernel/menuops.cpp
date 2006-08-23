@@ -1282,14 +1282,6 @@ void HelpOps::Do(OpDescriptor* WhichOp)
 		WebsterDemos();
 	#endif //webster
 	}
-	else if (WhichOp->Token == String(OPTOKEN_HELPDEMOS_NATIVE))
-	{
-	#ifndef WEBSTER
-		HelpDemosNativeAction();
-	#else	// webster
-		WebsterDemos();
-	#endif //webster
-	}
 	else if (WhichOp->Token == String(OPTOKEN_HELPTECHSUPPORT))
 		HelpTechSupportAction();
 //Webster_Ranbir_12\11\96
@@ -1414,7 +1406,6 @@ BOOL HelpOps::Init()
 
 	ERRORIF(!IndexOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
-#if defined(ENABLE_MOVIES)
 	// REGOP(HELP, DEMOS, HelpOps);
 	OpDescriptor* DemosOp = new OpDescriptor(
 												0, 
@@ -1427,21 +1418,6 @@ BOOL HelpOps::Init()
 												0 );
 
 	ERRORIF(!DemosOp, _R(IDE_NOMORE_MEMORY), FALSE);
-
-
-	// REGOP(HELP, DEMOS, HelpOps);
-	OpDescriptor* DemosNativeOp = new OpDescriptor(
-												0, 
-												_R(IDS_HELP_MOVIES_NATIVE),
-												CC_RUNTIME_CLASS(HelpOps), 
-												OPTOKEN_HELPDEMOS_NATIVE,
-												HelpOps::GetState,
-												HID_HELP_DEMOS,
-												_R(IDBBL_HELPDEMOSOP),
-												0 );
-
-	ERRORIF(!DemosNativeOp, _R(IDE_NOMORE_MEMORY), FALSE);
-#endif
 
 	//Webster_Ranbir_12\11\96
 #ifdef INC_WEB_MENU_ITEMS

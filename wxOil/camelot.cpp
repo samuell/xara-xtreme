@@ -236,6 +236,7 @@ bool					CCamApp::s_bIsDisabled = false; // Initially system is not disabled.
 wxString				CCamApp::m_strResourcePath;
 String_256				CCamApp::m_strResourceDirPath;
 String_256				CCamApp::m_strResourceDirPathOverride;
+String_256				CCamApp::m_strMediaApplication;
 
 /***************************************************************************************************************************/
 
@@ -300,6 +301,18 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		}
 	}
 #endif
+
+	if ( event.GetEventType() == wxEVT_KILL_FOCUS )
+	{
+		wxFocusEvent&	FocusEvent = (wxFocusEvent&)event;
+		TRACEUSER( "jlh92", _T("CCamApp::FilterEvent kill focus to %016x from 0x%016x"), FocusEvent.GetWindow(), 
+				FocusEvent.GetEventObject() );
+
+		// When we're given a null focus window it means the whole app
+		// is losing focus, so we need to result the cursor shape.
+		if( NULL == FocusEvent.GetWindow() )
+			CursorStack::GSetActive();
+	}
 
 	if (( event.GetEventType() == wxEVT_CREATE )
 		&& pEventObject
@@ -829,6 +842,9 @@ bool CCamApp::OnInit()
 #endif
 	}
 	TRACEUSER( "luke", _T("ResDir = %s\n"), PCTSTR(m_strResourceDirPath) );
+
+	// Get the media replay application setting
+	Camelot.DeclarePref( NULL, TEXT("MediaApplication"), &m_strMediaApplication );
 
 	TRACET(_T("CCamApp::Calling InitKernel"));
 	// then initialise the kernel (and almost everything else)	
@@ -2711,3 +2727,148 @@ INT32 CCamApp::RunFalseMainLoop()
 	}
 	wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
+
+class CMediaReplayDetect
+{
+private:
+	wxArrayString		m_astrPathElement;
+
+public:
+	CMediaReplayDetect()
+	{
+		wxString		strPath;
+		wxGetEnv( _T("PATH"), &strPath );
+
+		while( strPath != _T("") )
+		{
+			int			ordSep = strPath.Find( _T(':') );
+			if( -1 == ordSep )
+			{
+				if( strPath.Len() > 0 )
+					m_astrPathElement.Add( strPath );
+				break;
+			}
+
+			m_astrPathElement.Add( strPath.Mid( 0, ordSep ) );
+			TRACEUSER( "jlh92", _T("Add ele %s\n"), PCTSTR(strPath.Mid( 0, ordSep )) );
+			strPath = strPath.Mid( ordSep + 1 );
+		}
+	}
+
+	bool IsAppPresent( const wxString& strApp )
+	{
+		size_t			cElement = m_astrPathElement.GetCount();
+		for( size_t ord = 0; ord < cElement; ++ord )
+		{
+			wxString	strFullPath = m_astrPathElement.Item( ord );
+			strFullPath += _T("/");
+			strFullPath += strApp;
+
+			if( wxFile::Exists( strFullPath ) )
+				return true;
+		}
+
+		return false;
+	}
+};
+
+bool CCamApp::LaunchMediaApp( const wxString& strUrl )
+{
+	CMediaReplayDetect	Detect;
+	static PCTSTR		apszApps[] = {  _T("mplayer"),
+									    _T("gmplayer"),
+										PCTSTR(1),				// Everyting above this line supports mplayer control protocol
+										_T("xine"),
+										_T("totem"),
+										_T("xfmedia"),
+										_T("codeine"),
+										NULL };
+
+	// Move array into a helpful structure
+	SelMediaDlgParam::CMediaAppList	mapMediaApp;
+	bool				fControlable = true;
+	UINT32				ord = 0;
+	while( NULL != apszApps[ord] )
+	{
+		// Skip controlable marker
+		if( PCTSTR(1) == apszApps[ord] )
+		{
+			++ord;
+			fControlable = false;
+			continue;
+		}
+
+		mapMediaApp.insert( std::make_pair( apszApps[ord], fControlable ) );
+		++ord;
+	}
+
+	// First we see if the replay app. is present
+	if( !Detect.IsAppPresent( m_strMediaApplication ) )
+	{
+		// Remove any non-present apps
+		SelMediaDlgParam::CMediaAppListIter	end( mapMediaApp.end() );
+		SelMediaDlgParam::CMediaAppListIter	iter( mapMediaApp.begin() );
+		for( ; iter != end; ++iter )
+		{
+			if( !Detect.IsAppPresent( iter->first ) )
+			{
+				mapMediaApp.erase( iter->first );
+				TRACEUSER( "jlh92", _T("%s is not present"), iter->first );
+			}
+		}
+
+		// Setup param and open replay app selection dialog
+		SelMediaDlgParam	Param;
+		Param.m_pAppList = &mapMediaApp;
+		OpDescriptor* pOpDesc = OpDescriptor::FindOpDescriptor( CC_RUNTIME_CLASS(SelMediaDlg) ); 
+		if( NULL != pOpDesc )
+		{
+			pOpDesc->Invoke( &Param );
+		
+			if( Param.m_fValid )
+				m_strMediaApplication = Param.m_strSel;
+		}
+
+		// User canceled, bomb out
+		if( !Param.m_fValid )
+			return true;
+	}
+	else
+	{
+		// Pre-selected app, check to see if we can control it
+		SelMediaDlgParam::CMediaAppListIter iter = mapMediaApp.find( apszApps[ord] );
+		if( mapMediaApp.end() == iter )
+			fControlable = false;
+		else
+			fControlable = iter->second;
+	}
+
+	// Build the command line and execute it
+	wxString			strCommand;
+	strCommand = PCTSTR(m_strMediaApplication);
+	strCommand.Append( _T(" \"") );
+	strCommand.Append( strUrl );
+	strCommand.Append( _T("\"") );
+
+	CamLaunchProcess*	plp = new CamLaunchProcess();
+	if (plp==NULL)
+		return false;
+
+	bool				ok = FALSE != plp->Execute( strCommand );
+	if (ok)
+	{
+		// Let this process run free!
+		plp->Disconnect();
+//		delete plp;								// This object will allegedly delete itself when the process dies
+	}
+	else
+	{
+		// Make sure we don't leave any zombie processes lying around
+		wxKillError e = plp->Terminate();		// This should result in a call to OnTerminate
+		TRACEUSER("Phil", _T("Terminating bad process returned %d\n"), e);
+//		delete plp;								// This object will allegedly delete itself when the process dies
+	}
+
+	return ok;
+}
+

@@ -154,6 +154,8 @@ public:
 
 	static BOOL LaunchWebBrowser(const wxString& strUrl);
 
+	static bool LaunchMediaApp( const wxString& strUrl );
+	
 	// Get the path to the root of the resource directory structure
 	static StringBase& GetResourceDirectory();
 
@@ -173,6 +175,8 @@ protected:
 	static wxString		m_strResourcePath;		// The usually bound in resources
 	static String_256	m_strResourceDirPath;	// External resources (i.e. help files)
 	static String_256	m_strResourceDirPathOverride;	// Version in preference file
+
+	static String_256	m_strMediaApplication;	// The media replay application the user chose
 
 	wxTimer				m_Timer;
 

@@ -170,6 +170,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "xpehost.h"
 #include "editsel.h"
 #include "camview.h"
+#include "selmedia.h"
 
 // Normal exe's and standalones
 BOOL InitPostTools2()
@@ -302,6 +303,7 @@ PORTNOTE("other","Removed even more initialization")
 			InitRegistry() &&					// register us with the shell etc
 			InitAppState()	&&					// get workspace prefs
 #endif
+			SelMediaDlg::Init() &&
 			TRUE
 			);
 }
