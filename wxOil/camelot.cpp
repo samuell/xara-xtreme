@@ -883,9 +883,20 @@ bool CCamApp::OnInit()
 //		CLASSINFO(CCamDoc),
 //		CLASSINFO(ScreenCamView) );
 
-#if defined(FILELIST)
-	m_docManager->FileHistoryLoad(Preferences::GetOilPrefs());
-#endif
+	// Reload the file history (9 entries)
+	wxFileHistory*		pFileHist = m_docManager->GetFileHistory();
+	for( UINT32 ord = 0; ord < 9; ++ord )
+	{
+		// This is safe since we control all variables!
+		TCHAR			pszTag[8];
+		camSprintf( pszTag, _T("File%d"), ord );
+
+		String_256		strFileName;
+		Camelot.GetPrefDirect( _T("Recent File list"), pszTag, &strFileName );
+		
+		if( strFileName != _T("") )
+			pFileHist->AddFileToHistory( PCTSTR(strFileName) );
+	}
 
 	if (bFirstRun)
 	{
@@ -1118,6 +1129,24 @@ INT32 CCamApp::OnExit( void )
 	// We can no longer stop the closedown, so flag this fact
 	Camelot.ShuttingDown(TRUE);
 
+	// Dump the file history (9 entries as for Xtreme 4 Win)
+	wxFileHistory*		pFileHist = m_docManager->GetFileHistory();
+	UINT32				cRecent   = UINT32(pFileHist->GetCount());
+	for( UINT32 ord = 0; ord < 9; ++ord )
+	{
+		// This is safe since we control all variables!
+		TCHAR			pszTag[8];
+		camSprintf( pszTag, _T("File%d"), ord );
+
+		if( ord < cRecent )
+		{
+			wxString	strFileName( pFileHist->GetHistoryFile( ord ) );
+			Camelot.SetPrefDirect( _T("Recent File list"), pszTag, PCTSTR(strFileName), TRUE );
+		}
+		else
+			Camelot.SetPrefDirect( _T("Recent File list"), pszTag, _T(""), TRUE );
+	}
+
 	// we can't load documents any more - delete IPC server
 	if (m_pServer)
 	{
@@ -1159,16 +1188,6 @@ INT32 CCamApp::OnExit( void )
 PORTNOTE("other","Removed GDI+, filelist and profilename support")
 #ifndef EXCLUDE_FROM_XARALX
 	Gdiplus::GdiplusShutdown(gdiplusToken);
-
-	// Get rid of the recent file list
-	if (pFileList!=NULL)
-	{
-		// Write out the current file list to the ini file
-		pFileList->WriteList();
-
-		// then delete the list
-		delete pFileList;
-	}
 
 	// Finished with preferences/registry so remove the allocated ProfileName. Was not here before 18/2/97
 	if (m_pszProfileName != NULL)
@@ -1399,19 +1418,11 @@ PORTNOTE( "other" ,"Removed open preview clean-up" )
 
 void CCamApp::AddToRecentFileList(LPCTSTR pPathName)
 {
-PORTNOTE( "filelist" ,"I don't think this is needed since this all happen automatically" )
-#if !defined(EXCLUDE_FROM_XARALX) && !defined(EXCLUDE_FROM_RALPH)
 	// Make sure we have not been passed a load of junk
 	ERROR3IF(pPathName==NULL, "NULL path name in AddToRecentFilelist\n");
 
-	// Make sure that there is a recent file list, but bodge it so that OpenHiddenDocument
-	// does not add to the list!
-	if (pFileList!=NULL)
-	{
-		// Add the file to it
-		pFileList->Add(pPathName);
-	}
-#endif
+	wxFileHistory*		pFileHist = m_docManager->GetFileHistory();
+	pFileHist->AddFileToHistory( pPathName );
 }
 
 
