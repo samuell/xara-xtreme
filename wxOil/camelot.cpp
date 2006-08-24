@@ -304,14 +304,14 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 
 	if ( event.GetEventType() == wxEVT_KILL_FOCUS )
 	{
+#if defined(_DEBUG)
 		wxFocusEvent&	FocusEvent = (wxFocusEvent&)event;
-		TRACEUSER( "jlh92", _T("CCamApp::FilterEvent kill focus to %016x from 0x%016x"), FocusEvent.GetWindow(), 
+		TRACEUSER( "luke", _T("CCamApp::FilterEvent kill focus to %016x from 0x%016x"), FocusEvent.GetWindow(), 
 				FocusEvent.GetEventObject() );
+#endif
 
-		// When we're given a null focus window it means the whole app
-		// is losing focus, so we need to result the cursor shape.
-		if( NULL == FocusEvent.GetWindow() )
-			CursorStack::GSetActive();
+		// Any loss of focus could well a good time to kill cursor
+		wxSetCursor( *wxSTANDARD_CURSOR );
 	}
 
 	if (( event.GetEventType() == wxEVT_CREATE )
