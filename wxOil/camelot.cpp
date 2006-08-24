@@ -134,7 +134,6 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "prdlgctl.h"
 #include "prncamvw.h"
 #include "gbrush.h"
-#include "csrstack.h"
 #include "selmedia.h"
 #include "filedlgs.h"
 

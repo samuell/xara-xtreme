@@ -115,6 +115,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "docview.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "speedtst.h"
 #include "oilmenus.h"
+#include "csrstack.h"
 
 #include "blobby.h"
 #include "dbugtree.h"
@@ -858,6 +859,8 @@ void CCamFrame::OnInitMenuPopup( wxMenuEvent& event )
 	Document::GetSelected()->SetCurrent();
 	DocView::GetSelected()->SetCurrent();
 
+	wxSetCursor( *wxSTANDARD_CURSOR );
+
 PORTNOTE( "other", "Removed usage of bSysMent from OnInitMenuPopup" )
 #if !defined(EXCLUDE_FROM_XARALX)
 	if (bSysMenu)
@@ -876,6 +879,7 @@ PORTNOTE( "other", "Removed usage of bSysMent from OnInitMenuPopup" )
 	if( !UpdateMenu( event.GetMenu() ) )
 		event.Skip();
 }
+
 
 void CCamFrame::OnUpdateStandardBar( wxUpdateUIEvent& event)
 {
