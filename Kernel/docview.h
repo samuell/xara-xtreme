@@ -120,6 +120,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "docvmsg.h"
 #include "dragtrgt.h"
 #include "cursor.h"
+#include "snap.h"
 
 #define OPTOKEN_TOGGLESOLIDDRAG		TEXT("ToggleSolidDrag")
 
@@ -527,6 +528,7 @@ public:
 
 	static BOOL SnapToMagneticNode(Spread* pSpread, Node* pNode, DocCoord* pDocCoord);
 	static BOOL ForceSnapToGrid(Spread* pSpread, DocCoord* pDocCoord);
+	static BOOL ForceSnapToGuides(Spread* pSpread, DocCoord* pDocCoord, GuidelineType Type);
 
 	// Snap state functions.
 	BOOL GetSnapToGridState();

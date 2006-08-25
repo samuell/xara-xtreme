@@ -135,6 +135,7 @@ public:
 	BOOL TryToSnapToObject(Node* pNode, DocCoord* pDocCoord);
 
 	BOOL SnapToGrids(DocCoord* pDocCoord);
+	BOOL SnapToGuidelines(DocCoord* pDocCoord,GuidelineType Type = GUIDELINE_NOTYPE);
 
 	void SetSpread(Spread* pThisSpread) { pSpread = pThisSpread; }
 
@@ -155,7 +156,6 @@ private:
 	BOOL SnapToObjects(DocRect* pDocRect, const DocCoord& PrevCoord, const DocCoord& CurCoord, BOOL Magnetic,BOOL GuideLayersOnly);
 
 	// Internal snap-to-guidelines funcs
-	BOOL SnapToGuidelines(DocCoord* pDocCoord,GuidelineType Type = GUIDELINE_NOTYPE);
 	BOOL SnapToGuidelines(DocRect* pDocRect,const DocCoord& PrevCoord,const DocCoord& CurCoord);
 	BOOL SnapToGuidesInLayer(Layer* pLayer,DocCoord* pDocCoord,GuidelineType Type);
 

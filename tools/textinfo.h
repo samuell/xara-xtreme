@@ -327,7 +327,7 @@ public:
 	static void DoAddTabStop(TxtTabStop NewTabStop);
 	static void DoApplyShownRuler();
 	static void DoChangeLeftMargin(MILLIPOINT Ordinate);
-	static void DoChangeRightMargin(MILLIPOINT Ordinate);
+	static void DoChangeRightMargin(MILLIPOINT Ordinate, BOOL bReset);
 	static void DoChangeFirstIndent(MILLIPOINT Ordinate);
 
 public:
@@ -441,6 +441,7 @@ private:
 	// cached bitmap sizes
 	static UINT32 CurrentTabButtonWidth;
 	static UINT32 TabBitmapWidth;
+	static UINT32 TabBitmapHeight;
 	static UINT32 LeftMarginBitmapWidth;
 	static UINT32 LeftMarginBitmapHeight;
 	static UINT32 RightMarginBitmapWidth;
@@ -545,6 +546,7 @@ public:
 private:
 	void DoDrag(Spread* pThisSpread);
 	static BOOL IsMouseOverRuler();
+	static DocCoord SnapAndConvert(UserCoord* DragPos, Spread* pSpread, DocView* pDocView);
 
 	Spread*    pSpread;
 	MILLIPOINT Ordinate;

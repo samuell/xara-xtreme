@@ -4340,6 +4340,45 @@ BOOL DocView::Snap(Spread* pSpread,DocRect* pDocRect,const DocCoord& PrevCoord,c
 
 /********************************************************************************************
 
+>	static BOOL DocView::ForceSnapToGuides(Spread* pSpread, DocCoord* pDocCoord, GuidelineType Type)
+ 
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	24/08/06
+	Inputs:		pSpread		Pointer to spread on which node exists
+				pDocCoord 	A coordinate to test magnetically against the node
+	Returns:	TRUE	- The coord has been snapped to something
+				FALSE	- The coord is untouched by man and beast
+	Purpose:	Calls guideline snapper ignoring enabling flags.
+	Errors:		Will error in debug builds if there is no selected DocView
+	SeeAlso:	All Snap member functions of all classes derived from NodeRenderableBounded.
+
+********************************************************************************************/
+
+BOOL DocView::ForceSnapToGuides(Spread* pSpread, DocCoord* pDocCoord, GuidelineType Type)
+{
+	ERROR3IF(Selected == NULL,"DocView::ForceSnapToGuides called when no selected DocView");
+
+	if (Selected != NULL)
+	{
+		BOOL Snapped = FALSE;
+
+		if (Selected->pCSnap == NULL)
+			Selected->pCSnap = new CSnap(Selected,pSpread);
+
+		if (Selected->pCSnap != NULL)
+		{
+			Selected->pCSnap->SetSpread(pSpread);
+			Snapped = Selected->pCSnap->SnapToGuidelines(pDocCoord, Type);
+		}
+
+		return (Snapped);
+	}
+	else
+		return (FALSE);
+}
+
+/********************************************************************************************
+
 >	BOOL DocView::SnapSelected(Spread* pSpread,DocCoord* pDocCoord,
 								BOOL TryMagSnap = TRUE,
 								BOOL TryGridSnap = TRUE)

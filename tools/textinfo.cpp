@@ -197,6 +197,7 @@ CommonAttrSet 	  TextInfoBarOp::CommonAttrsToFindSet; 	// A set which will conta
 														// that we need to find common attributes for
 // cached bitmap sizes
 UINT32 TextInfoBarOp::TabBitmapWidth;
+UINT32 TextInfoBarOp::TabBitmapHeight;
 UINT32 TextInfoBarOp::CurrentTabButtonWidth;
 UINT32 TextInfoBarOp::LeftMarginBitmapWidth;
 UINT32 TextInfoBarOp::LeftMarginBitmapHeight;
@@ -441,7 +442,7 @@ BOOL TextInfoBarOp::Init()
 	if (ok) ok = FindBitmapSize(_R(clefttab), &CurrentTabButtonWidth, &Dummy);
 	// find out about the size of tab stop blobs - we ask for the left tab variant, but they
 	// should all be the same size
-	if (ok) ok = FindBitmapSize(_R(lefttab), &TabBitmapWidth, &Dummy);
+	if (ok) ok = FindBitmapSize(_R(lefttab), &TabBitmapWidth, &TabBitmapHeight);
 	// find out about the width and height of the first indent blob
 	if (ok) ok = FindBitmapSize(_R(leftmar), &LeftMarginBitmapWidth, &LeftMarginBitmapHeight);
 	// find out about the width of the left/right margin blobs
@@ -758,7 +759,11 @@ void TextInfoBarOp::OnFieldChange(FontAttribute ThisChange)
 	}
 	
 	if (Attrib)
-		AttributeManager::AttributeSelected(Attrib,NULL); 		 
+	{
+		TRACEUSER("wuerthne", _T("calling AttributeSelected"));
+		AttributeManager::AttributeSelected(Attrib,NULL);
+		TRACEUSER("wuerthne", _T("called AttributeSelected"));
+	}
 	// make sure the infobar reflects the current attributes
 	switch (ThisChange)
 	{
@@ -3078,6 +3083,33 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 {
 	if (!pRuler->IsHorizontal()) return;
 
+	// draw the current tab "button" - we draw this first so the first line indent, if that far left,
+	// is drawn on top of it
+	// we want the button to appear to the left of the origin, but at a fixed absolute distance
+	// no matter what the current zoom factor is, so we need to enquire about the scaled pixel size
+	// to find out how many MILLIPOINTS one screen pixel represents
+	DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
+	FIXED16 PixelSize = pDocView->GetScaledPixelWidth();
+	MILLIPOINT Pos = CurrentTabButtonPos*PixelSize.MakeLong();
+
+	ResourceID id=0;
+	switch(RulerData.CurrentTabType)
+	{
+		case RightTab:
+			id = _R(crighttab);
+			break;
+		case CentreTab:
+			id = _R(ccenttab);
+			break;
+		case DecimalTab:
+			id = _R(cdectab);
+			break;
+		case LeftTab:
+			id = _R(clefttab);
+			break;
+	}
+	pRuler->DrawBitmap(Pos, id);
+
 	if (!(RulerData.TabStopDragRunning && RulerData.CurrentDragType == DragLeftMargin))
 	{
 		// not currently dragging the left margin, so display it if it is the same across
@@ -3149,33 +3181,6 @@ void TextInfoBarOp::RenderRulerBlobs(RulerBase* pRuler, UserRect& UpdateRect)
 			}
 		}
 	}
-
-	// draw the current tab "button"
-	// we want this to appear to the left of the origin, but at a fixed distance
-	// no matter what the current zoom factor is, so we need to enquire about
-	// the scaled pixel size to find out how many MILLIPOINTS one screen pixel
-	// represents
-	DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
-	FIXED16 PixelSize = pDocView->GetScaledPixelWidth();
-	MILLIPOINT Pos = CurrentTabButtonPos*PixelSize.MakeLong();
-
-	ResourceID id=0;
-	switch(RulerData.CurrentTabType)
-	{
-		case RightTab:
-			id = _R(crighttab);
-			break;
-		case CentreTab:
-			id = _R(ccenttab);
-			break;
-		case DecimalTab:
-			id = _R(cdectab);
-			break;
-		case LeftTab:
-			id = _R(clefttab);
-			break;
-	}
-	pRuler->DrawBitmap(Pos, id);
 }
 
 /********************************************************************************************
@@ -3246,15 +3251,30 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 		&& (RulerData.CurrentRulerSectionWidth == -1
 			|| PointerPos.x < RulerData.CurrentRulerSectionWidth);
 
-	if (Click == CLICKTYPE_SINGLE)
+	DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
+	MILLIPOINT PixelSize = pDocView->GetScaledPixelWidth().MakeLong();
+
+	BOOL bIsOverTabButton = PointerPos.x >= MILLIPOINT((CurrentTabButtonPos - CurrentTabButtonWidth/2)*PixelSize)
+							&& PointerPos.x <= MILLIPOINT((CurrentTabButtonPos + CurrentTabButtonWidth/2)*PixelSize);
+	// treat a double click just as another single click
+	if (Click == CLICKTYPE_SINGLE || Click == CLICKTYPE_DOUBLE)
 	{
 		// check whether the user has clicked on our homegrown "current tab" button
 		// this is displayed centered around the position CurrentTabButtonPos (in pixels)
-		DocView* pDocView = pRuler->GetpRulerPair()->GetpDocView();
-		MILLIPOINT PixelSize = pDocView->GetScaledPixelWidth().MakeLong();
-		MILLIPOINT Distance1 = ((CurrentTabButtonPos - CurrentTabButtonWidth/2)*PixelSize);
-		MILLIPOINT Distance2 = ((CurrentTabButtonPos + CurrentTabButtonWidth/2)*PixelSize);
-		if (PointerPos.x >= Distance1 && PointerPos.x <= Distance2)
+		MILLIPOINT LeftMarginPos = RulerData.IsLeftMarginValid ? RulerData.LeftMargin : 0;
+		MILLIPOINT FirstIndentPos = RulerData.IsFirstIndentValid ? RulerData.FirstIndent : 0;
+		MILLIPOINT RightMarginPos = RulerData.CurrentRulerSectionWidth
+											- (RulerData.IsRightMarginValid ? RulerData.RightMargin : 0);
+		BOOL bIsOverFirstIndent = PointerPos.x >= FirstIndentPos - MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
+								  && PointerPos.x <= FirstIndentPos + MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize);
+		BOOL bIsOverRightMargin = PointerPos.x >= RightMarginPos - MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize)
+								  && PointerPos.x <= RightMarginPos + MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize);
+
+		// check whether the user has clicked on our homegrown "current tab" button
+		// this is displayed centered around the position CurrentTabButtonPos (in pixels)
+		// NB: we need to make sure that we can still drag the first line indent in case it overlaps, but even
+		//     in that case, we still treat clicks near the bottom of the ruler as "current tab" button clicks
+		if (bIsOverTabButton && (!bIsOverFirstIndent || PointerPos.y <= MILLIPOINT(TabBitmapHeight * PixelSize)))
 		{
 			// a click on our "current tab" button
 			if (Mods.Adjust)
@@ -3317,8 +3337,14 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 			for (TxtTabStopIterator it = RulerData.pShownRuler->begin(); it != RulerData.pShownRuler->end(); ++it)
 			{
 				MILLIPOINT Pos = (*it).GetPosition();
+				// we check for the first indent marker being at the same position as the tab - if it is, the
+				// vertical position is checked to distinguish between the two. We do not generally check the
+				// vertical position because that would mean that dragging slightly too high would create a
+				// new tab rather than moving the existing tab.
 				if (PointerPos.x >= Pos - MILLIPOINT(TabBitmapWidth / 2 * PixelSize)
-					&& PointerPos.x <= Pos + MILLIPOINT(TabBitmapWidth / 2 * PixelSize))
+					&& PointerPos.x <= Pos + MILLIPOINT(TabBitmapWidth / 2 * PixelSize)
+					&& ((!bIsOverFirstIndent && !bIsOverRightMargin)
+						|| PointerPos.y <= MILLIPOINT(TabBitmapHeight * PixelSize)))
 				{
 					TRACEUSER("wuerthne", _T("hit tab no %d"), Index);
 					MatchedIndex = Index;
@@ -3349,10 +3375,6 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 		if (MatchedIndex == -1)
 		{
 			// no tab stop hit, but maybe the margin markers?
-			MILLIPOINT LeftMarginPos = RulerData.IsLeftMarginValid ? RulerData.LeftMargin : 0;
-			MILLIPOINT FirstIndentPos = RulerData.IsFirstIndentValid ? RulerData.FirstIndent : 0;
-			MILLIPOINT RightMarginPos = RulerData.CurrentRulerSectionWidth
-											- (RulerData.IsRightMarginValid ? RulerData.RightMargin : 0);
 
 			// We test for the left margin first because we check the vertical position to distinguish
 			// between left margin and first indent drags even when they are at the same position
@@ -3367,16 +3389,14 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 			{
 				// we do not check the vertical position for other margin drags - if there was a tab stop
 				// at the same position it got priority anyway
-				if (PointerPos.x >= FirstIndentPos - MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize)
-					&& PointerPos.x <= FirstIndentPos + MILLIPOINT(LeftMarginBitmapWidth / 2 * PixelSize))
+				if (bIsOverFirstIndent)
 				{
 					TRACEUSER("wuerthne", _T("drag first indent"));
 					DragType = DragFirstIndent;
 				}
 				else
 				{
-					if (PointerPos.x >= RightMarginPos - MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize)
-						&& PointerPos.x <= RightMarginPos + MILLIPOINT(RightMarginBitmapWidth / 2 * PixelSize))
+					if (bIsOverRightMargin)
 					{
 						TRACEUSER("wuerthne", _T("drag right margin"));
 						DragType = DragRightMargin;
@@ -3408,9 +3428,9 @@ BOOL TextInfoBarOp::OnRulerClick(UserCoord PointerPos, ClickType Click, ClickMod
 			return TRUE;
 		}
 	}
-
-	// we swallow all other clicks within the highlight section
-	return InHighlightSection;
+	// we swallow all other clicks within the highlight section and over the tab button (most notably
+	// double clicks)
+	return InHighlightSection || bIsOverTabButton;
 }
 
 /********************************************************************************************
@@ -3535,10 +3555,8 @@ void TextInfoBarOp::DoChangeLeftMargin(MILLIPOINT Ordinate)
 
 void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
 {
-	// Technically, we could allow the firstindent to become negative, i.e., to be located
-	// to the left of the start of the text object, but this might confuse users, so prevent
-	// it from happening.
-	if (Ordinate < 0) Ordinate = 0;
+	// We allow the firstindent to become negative so hanging bullets are made easy (they would
+	// otherwise require both the left margin and the first indent to be dragged)
 	RulerData.IsFirstIndentValid = TRUE;
 	RulerData.FirstIndent = Ordinate;
 	OnFieldChange(FirstIndentA);
@@ -3547,7 +3565,7 @@ void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
 
 /********************************************************************************************
 
->	void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate)
+>	void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate, BOOL bReset)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
 	Created:	18/07/06
@@ -3556,13 +3574,13 @@ void TextInfoBarOp::DoChangeFirstIndent(MILLIPOINT Ordinate)
 
 ********************************************************************************************/
 
-void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate)
+void TextInfoBarOp::DoChangeRightMargin(MILLIPOINT Ordinate, BOOL bReset)
 {
 	// the right margin is actually an indent, i.e., an offset from the column width (otherwise
 	// we could not have a default attribute that makes sense and text objects with different
 	// widths would have to have different right margin attributes)
 	RulerData.IsRightMarginValid = TRUE;
-	RulerData.RightMargin = RulerData.CurrentRulerSectionWidth - Ordinate;
+	RulerData.RightMargin = bReset ? 0 : (RulerData.CurrentRulerSectionWidth - Ordinate);
 	// Technically, we could allow the margin to become negative, i.e., to be located to the
 	// right of the column width, but this might confuse users, so prevent it from happening
 	if (RulerData.RightMargin < 0) RulerData.RightMargin = 0;
@@ -3981,6 +3999,55 @@ void TabStopDragOp::DoDrag(Spread* pThisSpread)
 
 /***********************************************************************************************
 
+>	DocCoord TabStopDragOp::SnapAndConvert(UserCoord* DragPos, Spread* pSpread, DocView* pDocView)
+
+	Author:		Martin Wuerthner <xara@mw-software.com>
+	Created:	24/08/06
+	Inputs:		DragPos - mouse position (in tool coords, i.e., user coords with the tool
+				origin applied)
+				pSpread - the current spread
+				pDocView - the current doc view
+	Returns:	Snapped spread coordinates (ready for passing to the status line)
+	Purpose:    Snap the tool-specific coordinates and convert to doc coords
+
+***********************************************************************************************/
+
+DocCoord TabStopDragOp::SnapAndConvert(UserCoord* DragPos, Spread* pSpread, DocView* pDocView)
+{
+	// Snapping is tricky because when snapping to the grid we do not want to snap the
+	// absolute mouse position but instead our text ruler-specific coordinates, so that
+	// for instance, a 1mm grid allows us to place tab stops at exact multiples of 1mm,
+	// irrespective of where the text object happens to be located (it need not be at
+	// an exact multiple of 1mm). When snapping to a guideline, however, we need to snap
+	// the absolute position.
+
+	// So, first try guideline snapping
+	UserCoord AbsoluteDragPos = *DragPos;
+	AbsoluteDragPos.x += TextInfoBarOp::GetRulerOrigin();
+	DocCoord VirtualSpreadCoords = AbsoluteDragPos.ToSpread(pSpread);
+	BOOL Snapped = FALSE;
+	if (pDocView->GetSnapToGuidesState())
+		Snapped = pDocView->ForceSnapToGuides(pSpread, &VirtualSpreadCoords, GUIDELINE_VERT);
+	DocCoord PointerPos = VirtualSpreadCoords;
+	if (!Snapped)
+	{
+		// try grid snapping
+		// NB - to fool the snapping code we transform our user coords with origin applied
+		//      to spread coordinates and then let it snap, then we apply the tool origin
+		//      in the opposite direction, i.e., the origin shift is only applied for the
+		//      snapping operation and we end up with normal spread coordinates that can
+		//      be passed to the status line
+		DocCoord VirtualSpreadCoords = DragPos->ToSpread(pSpread);
+		if (pDocView->GetSnapToGridState())
+			pDocView->ForceSnapToGrid(pSpread, &VirtualSpreadCoords);
+		PointerPos = VirtualSpreadCoords;
+		PointerPos.x += TextInfoBarOp::GetRulerOrigin();
+	}
+	return PointerPos;
+}
+
+/***********************************************************************************************
+
 >	void TabStopDragOp::UpdateStatusLineAndPos(UserCoord* DragPos, Spread* pSpread)
 
 	Author:		Martin Wuerthner <xara@mw-software.com>
@@ -3994,17 +4061,7 @@ void TabStopDragOp::DoDrag(Spread* pThisSpread)
 void TabStopDragOp::UpdateStatusLineAndPos(UserCoord* DragPos, Spread* pSpread)
 {
 	DocView *pDocView = DocView::GetCurrent();
-	// NB - to fool the snapping code we transform our user coords with origin applied
-	//      to spread coordinates and then let it snap, then we apply the tool origin
-	//      in the opposite direction, i.e., the origin shift is only applied for the
-	//      snapping operation and we end up with normal spread coordinates that can
-	//      be passed to the status line
-	DocCoord VirtualSpreadCoords = DragPos->ToSpread(pSpread);
-	if (pDocView->GetSnapToGridState())
-		pDocView->ForceSnapToGrid(pSpread, &VirtualSpreadCoords);
-	DocCoord PointerPos = VirtualSpreadCoords;
-	PointerPos.x += TextInfoBarOp::GetRulerOrigin();
-
+	DocCoord PointerPos = SnapAndConvert(DragPos, pSpread, pDocView);
 	StatusLine* pStatusLine=GetApplication()->GetpStatusLine();
 	if (pStatusLine)
 	{
@@ -4150,11 +4207,10 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 		// we need to snap in tool space, i.e., text ruler space
 		UserCoord UserPos = PointerPos.ToUser(pSpread);
 		UserPos.x -= TextInfoBarOp::GetRulerOrigin();
-		DocCoord VirtualSpreadCoords = UserPos.ToSpread(pSpread);
-		if (pDocView->GetSnapToGridState())
-			pDocView->ForceSnapToGrid(pSpread, &VirtualSpreadCoords);
-		UserPos = VirtualSpreadCoords.ToUser(pSpread);
-		Ordinate = UserPos.x;
+		DocCoord SnappedPointerPos = SnapAndConvert(&UserPos, pSpread, pDocView);
+		// the returned coordinate is in spread coords
+		UserPos = SnappedPointerPos.ToUser(pSpread);
+		Ordinate = UserPos.x - TextInfoBarOp::GetRulerOrigin();
 		TRACEUSER("wuerthne", _T("with success at %d"), Ordinate);
 		
 		switch(m_pParam->DragType)
@@ -4183,13 +4239,18 @@ void TabStopDragOp::DragFinished(DocCoord PointerPos, ClickModifiers ClickMods, 
 				}
 				break;
 			case DragLeftMargin:
+				// dragged off the ruler means reset to 0
+				if (!IsMouseOverRuler()) Ordinate = 0;
 				TextInfoBarOp::DoChangeLeftMargin(Ordinate);
 				break;
 			case DragFirstIndent:
+				// dragged off the ruler means reset to 0
+				if (!IsMouseOverRuler()) Ordinate = 0;
 				TextInfoBarOp::DoChangeFirstIndent(Ordinate);
 				break;
 			case DragRightMargin:
-				TextInfoBarOp::DoChangeRightMargin(Ordinate);
+				// dragged off the ruler means reset the right margin to the physical width of the object
+				TextInfoBarOp::DoChangeRightMargin(Ordinate, !IsMouseOverRuler());
 				break;
 		}
 	}
