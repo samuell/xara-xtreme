@@ -5196,7 +5196,7 @@ bool CCamView::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames)
 		{
 			// All the chars are bytes so try sticking them into a char array 
 			// and converting them with wxConvFileName
-			char* pBuf = (char*)CCMalloc(i);
+			char* pBuf = (char*)CCMalloc(i + 1);
 			if (pBuf)
 			{
 				i = 0;
