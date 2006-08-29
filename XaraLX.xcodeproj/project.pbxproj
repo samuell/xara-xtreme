@@ -10736,7 +10736,7 @@
 				PRODUCT_NAME = wxXtra;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SYMROOT = builddebug;
-				ZERO_LINK = YES;
+				ZERO_LINK = NO;
 			};
 			name = Development;
 		};
@@ -10868,7 +10868,7 @@
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SYMROOT = builddebug;
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
+				ZERO_LINK = NO;
 			};
 			name = Development;
 		};
