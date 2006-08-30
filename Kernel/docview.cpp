@@ -5392,6 +5392,9 @@ PORTNOTE("spread", "Multi-spread warning!")
 	
 	dcToReturn.x = dcTopLeft.x - rectSpread.lo.x; 
 	dcToReturn.y = dcTopLeft.y - rectSpread.lo.y;
+
+	TRACEUSER( "luke", _T("rcToReturn (%x, %x), dcTopLeft (%x, %x), rectSpead (%x, %x)"),
+		dcToReturn.x, dcToReturn.y, dcTopLeft.x, dcTopLeft.y, rectSpread.lo.x, rectSpread.lo.y );
 																						
 	//And return that DocCoord
 	return dcToReturn;

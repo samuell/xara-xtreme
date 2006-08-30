@@ -257,10 +257,8 @@ static DWORD LookupDialogTopic(LPCTSTR lpcszLookupClass, UINT32 nPageResID)
 	SeeAlso:	HelpUser
 ********************************************************************************************/
 
-#if !defined(EXCLUDE_FROM_XARALX)
 static DWORD LookupOperationTopic(LPCTSTR lpcszOpName)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
 	// Check for junk.
 	ERROR3IF(lpcszOpName == NULL, "No valid OpToken in LookupOperationTopic");
 
@@ -279,7 +277,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	// No help topic, so sorry.
 	return 0;
 }
-#endif
 
 
 
@@ -296,10 +293,8 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	SeeAlso:	HelpUser
 ********************************************************************************************/
 
-#if !defined(EXCLUDE_FROM_XARALX)
 static DWORD LookupMessageTopic(UINT32 nMessageID)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
 #ifndef STANDALONE
 	// If we have no message ID then use the last one passed to MakeMsg.
 	if (nMessageID == 0) nMessageID = nNextMessageHelpContext;
@@ -325,7 +320,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	// No help topic for this message, so sorry.
 	return 0;
 }
-#endif
 
 
 /********************************************************************************************
@@ -659,25 +653,20 @@ BOOL HelpUser(const DialogOp& DlgOp)
 	SeeAlso:	RunOilHelp; LookupDialogTopic
 ********************************************************************************************/
 
-BOOL HelpUser(const CDialog& dlg)
+BOOL HelpUser(const wxDialog& dlg)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Look-up the class name/page ID in our list of help topics.  If we can't find it
 	// then we return a failure code.
-	DWORD dwHelpIndex = LookupDialogTopic(dlg.GetRuntimeClass()->m_lpszClassName, 0);
+	DWORD dwHelpIndex = LookupDialogTopic(dlg.GetClassInfo()->GetClassName(), 0);
 	if (dwHelpIndex == 0)
 	{
 		TRACEUSER( "Ollie", _T("Can't find help topic for the %s MFC dialog\n"),
-								(LPCTSTR) dlg.GetRuntimeClass()->m_lpszClassName);
+								(LPCTSTR) dlg.GetClassInfo()->GetClassName());
 		return FALSE;
 	}
 
 	// Show this topic in the help system and return a success code.
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -696,8 +685,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUser(const OpDescriptor& opdesc)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Check if a help topic is already recorded within the OpDescriptor.  If it isn't
 	// then we will have to look it up instead.
 /*
@@ -715,9 +702,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 	// Show the topic we have found.
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -737,8 +721,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUser(UINT32 nMessageID)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Look-up the message ID in our list of help topics.  If we can't find it
 	// then return a failure code.
 	DWORD dwHelpIndex = LookupMessageTopic(nMessageID);
@@ -751,9 +733,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 	// Show this topic in the help system and return a success code.
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -772,13 +751,8 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUserPropertyPage(UINT32 PageID)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	DWORD dwHelpIndex = LookupDialogTopic(NULL, PageID);
 	return (HelpUserTopic(dwHelpIndex));
-#else
-	return FALSE;
-#endif
 }
 
 /********************************************************************************************
@@ -797,16 +771,11 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUserTopic(DWORD dwHelpIndex)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	if (dwHelpIndex == 0)
 		return FALSE;
 	
 	// Show this topic in the help system and return a success code.
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -829,8 +798,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL _HelpUser(LPCTSTR lpcszClassName, UINT32 nSubTopic /* = 0 */)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	DWORD dwHelpIndex = LookupDialogTopic(lpcszClassName, nSubTopic);
 	if (dwHelpIndex == 0)
 	{
@@ -840,9 +807,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 	}
 
 	return ShowHelp(HELP_CONTEXT, dwHelpIndex);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -860,21 +824,14 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpContents()
 {
-
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 #ifndef STANDALONE
-
-#if (_MFC_VER <= 0x300)
-	#define HELP_FINDER		0xB
-#endif // MFC_VER
 
 	// If F1 was pressed, popup help in the context of the current tool. Use the tool's OpToken (of 
 	// the form "TOOL<ToolId>") to look-up its help page. Fixes #10489
 	if (KeyPress::IsKeyPressed(CAMKEY(F1)))
 	{
 		String OpToken;
-		wsprintf(OpToken, "TOOL%u", (Tool::GetCurrentID()));
+		OpToken._MakeMsg( _T("TOOL%u"), Tool::GetCurrentID() );
 		DWORD dwHelpIndex = LookupOperationTopic(OpToken);
 		return ShowHelp(HELP_CONTEXT, dwHelpIndex);
 	}
@@ -889,10 +846,6 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 		return ShowHelp(HELP_CONTEXT, _R(IDH_Misc_Contents));
 	#endif // WEBSTER
 #endif // STANDALONE
-#else
-	return TRUE;
-#endif // EXCLUDE_FROM_XARALX
-
 }
 
 
@@ -910,12 +863,7 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpUsingHelp()
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	return RunOilHelp(NULL, HELP_HELPONHELP, 0);
-#else
-	return FALSE;
-#endif
 }
 
 
@@ -988,15 +936,10 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL HelpTechnicalSupport()
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 #ifdef WEBSTER
 	return FALSE;
 #else
 	return ShowHelp(HELP_CONTEXT, _R(IDH_Misc_Tech_Support));
-#endif
-#else
-	return FALSE;
 #endif
 }
 
@@ -1018,13 +961,8 @@ PORTNOTETRACE("help", "Help function unimplemented!");
 
 BOOL CanHelpUser(UINT32 nMessageID)
 {
-PORTNOTETRACE("help", "Help function unimplemented!");
-#if !defined(EXCLUDE_FROM_XARALX)
 	// Just return TRUE if a help topic for the message exists.
 	return LookupMessageTopic(nMessageID) != 0;
-#else
-	return FALSE;
-#endif
 }
 
 

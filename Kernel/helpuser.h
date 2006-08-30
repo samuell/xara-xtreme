@@ -113,7 +113,7 @@ class OpDescriptor;
 // These overloaded functions are passed various Camelot objects to provide user help on.
 // Each version knows how to associate a help topic index with the given object.
 BOOL HelpUser(const DialogOp& dlgop);
-BOOL HelpUser(const CDialog& dlg);
+BOOL HelpUser(const wxDialog& dlg);
 BOOL HelpUser(const OpDescriptor& opdesc);
 BOOL HelpUser(UINT32 nMessageID);
 BOOL HelpUserPropertyPage(UINT32 PageID);

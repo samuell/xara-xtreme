@@ -290,16 +290,14 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 
 // useful code to see where focus events originate from. Set a breakpoint below and look
 // at the call stack
-#if 0 && defined(_DEBUG)
 	if ( event.GetEventType() == wxEVT_SET_FOCUS )
 	{
-		TRACEUSER("amb", _T("CCamApp::FilterEvent focus to %s"), pEventObject->GetClassInfo()->GetClassName());
-		if (pEventObject->IsKindOf(CLASSINFO(CRenderWnd)))
+		TRACEUSER("luke", _T("CCamApp::FilterEvent focus to %s"), pEventObject->GetClassInfo()->GetClassName());
+/*		if (pEventObject->IsKindOf(CLASSINFO(CRenderWnd)))
 		{
 			int i=1;
-		}
+		} */
 	}
-#endif
 
 	if ( event.GetEventType() == wxEVT_KILL_FOCUS )
 	{
