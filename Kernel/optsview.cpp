@@ -900,8 +900,8 @@ TRACEUSER( "Neville", _T("HandleViewMsg\n"));
 //					}
 //					break;
 //			}
-//			break;
-		case DIM_SELECTION_CHANGED_COMMIT:
+			break;
+		case DIM_SELECTION_CHANGED:
 		case DIM_TEXT_CHANGED:
 			OptionsTabs::SetApplyNowState(TRUE);
 			break;
