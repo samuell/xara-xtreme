@@ -12,3 +12,4 @@ Date/Time	Change Description
 02-Aug-06 10:30 Re-applied patch to /usr/bin/makeinstaller to add -d switch to strip command.
 		Copy svg filter XML files correctly this time.
 09-Aug-06 21:25 Changed structure of tar archive to match autopackage install.
+30-Aug-06	Updated to latest wxWidgets 2.6 branch
