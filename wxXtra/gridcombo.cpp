@@ -768,7 +768,7 @@ void wxGridCombo::AddItem(CGridComboUserData* pUserData)
 {
 	m_vecUserData.push_back(pUserData);
 	
-	wxGridComboPopup* pPopup = dynamic_cast<wxGridComboPopup*>(GetPopupControl());
+	wxGridComboPopup* pPopup = (wxGridComboPopup*)GetPopupControl();
 	if (pPopup)
 		pPopup->UpdateScrollers();
 }
@@ -786,7 +786,8 @@ void wxGridCombo::Clear()
 {
 	DeleteUserData();
 	
-	wxGridComboPopup* pPopup = dynamic_cast<wxGridComboPopup*>(GetPopupControl());
+	wxGridComboPopup* pPopup = (wxGridComboPopup*)GetPopupControl();
+
 	if (pPopup)
 		pPopup->UpdateScrollers();
 }
@@ -843,7 +844,8 @@ void wxGridCombo::SetItemSize(wxSize szItem)
 {
 	m_szItem = szItem;
 
-	wxGridComboPopup* pPopup = dynamic_cast<wxGridComboPopup*>(GetPopupControl());
+	wxGridComboPopup* pPopup = (wxGridComboPopup*)GetPopupControl();
+
 	if (!pPopup)
 		return;
 
@@ -864,7 +866,8 @@ void wxGridCombo::SetColumns(int iCols)
 {
 	m_iColumns = iCols;
 	
-	wxGridComboPopup* pPopup = dynamic_cast<wxGridComboPopup*>(GetPopupControl());
+	wxGridComboPopup* pPopup = (wxGridComboPopup*)GetPopupControl();
+
 	if (!pPopup)
 		return;
 
@@ -887,7 +890,8 @@ void wxGridCombo::SetSelected(int iItem)
 	if (GetSelected() == iItem)
 		return;
 
-	wxGridComboPopup* pPopup = dynamic_cast<wxGridComboPopup*>(GetPopupControl());
+	wxGridComboPopup* pPopup = (wxGridComboPopup*)GetPopupControl();
+
 	if (!pPopup)
 		return;
 

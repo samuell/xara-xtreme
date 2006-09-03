@@ -113,8 +113,8 @@ class LineAttrItem;
 Class         : CBGDDItemInfo
 Base Class    : public CGridComboUserData
 Author        : Mikhail Tatarnikov
-Description   : Item information for CBitmapGridDropDown.
-Pure Virtual  : None
+Description   : Items base class for for CBitmapGridDropDown control.
+Pure Virtual  : DrawItem - the derived classes has to implement their own drawing.
 Known Issues  : None
 Usage Notes   : None
 Override Notes: None
@@ -122,21 +122,130 @@ Override Notes: None
 class CBGDDItemInfo : public CGridComboUserData
 {
 public:
-	CBGDDItemInfo();
-	CBGDDItemInfo(UINT32 uiBitmapResID, String_256 strLabel = String_256());
-	CBGDDItemInfo(wxBitmap* pBitmap, BOOL bBitmapAutodelete = TRUE, String_256 strLabel = String_256());
-
+	CBGDDItemInfo(String_256 strLabel = String_256());
 	virtual ~CBGDDItemInfo();
 
-	// Accessors
-	wxBitmap*  GetBitmap();
 	String_256 GetLabel();
+
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const = 0;
 
 protected:
 	String_256 m_strLabel;
-	UINT32	   m_uiBitmapResID;
-	wxBitmap*  m_pBitmap;
-	BOOL	   m_bBitmapAutodelete;
+};
+
+
+
+/*************************************************************************
+Class         : CBGDDWxBitmapItem
+Base Class    : public CBGDDItemInfo
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a wxBitmap.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: None
+**************************************************************************/
+class CBGDDWxBitmapItem : public CBGDDItemInfo
+{
+public:
+	CBGDDWxBitmapItem(wxBitmap* pBitmap, BOOL bAutodelete = TRUE,
+					  String_256 strLabel = String_256(),
+					  BOOL		 bStretch = TRUE);
+	virtual ~CBGDDWxBitmapItem();
+
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
+
+protected:
+	wxBitmap* m_pBitmap;
+	BOOL	  m_bDelete;
+	BOOL	  m_bStretch;
+};
+
+
+
+/*************************************************************************
+Class         : CBGDDResourceItem
+Base Class    : public CBGDDWxBitmapItem
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a resource-stored bitmap.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: None
+**************************************************************************/
+class CBGDDResourceItem : public CBGDDWxBitmapItem
+{
+public:
+	CBGDDResourceItem(UINT32 uiBitmapResID,
+					  String_256 strLabel = String_256(),
+					  BOOL		 bStretch = TRUE);
+	virtual ~CBGDDResourceItem();
+};
+
+
+
+/*************************************************************************
+Class         : CBGDDKernelBitmapItem
+Base Class    : public CBGDDItemInfo
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a KernelBitmap.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: None
+**************************************************************************/
+class CBGDDKernelBitmapItem : public CBGDDItemInfo
+{
+public:
+	CBGDDKernelBitmapItem(KernelBitmap* pKernelBitmap, BOOL bAutodelete = TRUE,
+						  String_256 strLabel = String_256(),
+						  BOOL		 bStretch = TRUE);
+	virtual ~CBGDDKernelBitmapItem();
+
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
+
+protected:
+	// Get the representation of the item (of the Kernel Bitmap)
+	wxBitmap* GetWxBitmap(wxSize szBitmap) const;
+
+private:
+	static BOOL DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap);
+
+protected:
+	KernelBitmap* m_pKernelBitmap;
+	BOOL		  m_bDeleteKernelBitmap;
+	BOOL		  m_bStretch;
+
+	typedef	std::vector<pair<wxSize, wxBitmap*>*> TDCacheCollection;
+	mutable TDCacheCollection m_colCache;
+};
+
+
+
+
+
+
+/*************************************************************************
+Class         : CBGDDStrokeItem
+Base Class    : public CBGDDItemInfo
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a stroke.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: None
+**************************************************************************/
+class CBGDDStrokeItem : public CBGDDItemInfo
+{
+public:
+	CBGDDStrokeItem(LineAttrItem* plaiStroke, BOOL bAutodelete = TRUE, String_256 strLabel = String_256());
+	virtual ~CBGDDStrokeItem();
+
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
+
+protected:
+	LineAttrItem* m_plaiStroke;
+	BOOL		  m_bDelete;
 };
 
 
@@ -161,11 +270,11 @@ public:
 	CBitmapGridDropDown();
 	virtual ~CBitmapGridDropDown();
 
-	void AddItem(UINT32 uiBitmapResID, String_256 strLabel = String_256());
-	void AddItem(wxBitmap* pBitmap, String_256 strLabel = String_256());
-	void AddItem(KernelBitmap* pBitmap, String_256 strLabel = String_256());
-	void AddItem(LineAttrItem* plaiStroke, String_256 strLabel = String_256());
-	void AddItem(AttrBrushType* pabtBrush, String_256 strLabel = String_256());
+	void AddItem(UINT32 uiBitmapResID, String_256 strLabel = String_256(), BOOL bStretch = TRUE);
+	void AddItem(wxBitmap* pBitmap, BOOL bDelete = TRUE, String_256 strLabel = String_256(), BOOL bStretch = TRUE);
+	void AddItem(KernelBitmap* pBitmap, BOOL bDelete = TRUE, String_256 strLabel = String_256(), BOOL bStretch = TRUE);
+	void AddItem(LineAttrItem* plaiStroke, BOOL bDelete = TRUE, String_256 strLabel = String_256());
+	void AddItem(AttrBrushType* pabtBrush, BOOL bDelete = TRUE, String_256 strLabel = String_256());
 
 	void SetUnselectedItem(UINT32 uiBitmapResID, String_256 strLabel = String_256());
 	void SetUnselectedItem(wxBitmap* pBitmap, String_256 strLabel = String_256());

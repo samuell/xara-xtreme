@@ -131,76 +131,16 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define new CAM_DEBUG_NEW
 
 
-CBGDDItemInfo::CBGDDItemInfo()
+CBGDDItemInfo::CBGDDItemInfo(String_256 strLabel)
 {
-	m_uiBitmapResID		= (UINT32)-1;
-	m_pBitmap			= NULL;
-	m_bBitmapAutodelete = FALSE;
+	m_strLabel = strLabel;
 }
 
-
-/******************************************************************************
-Function  : CBGDDItemInfo::CBGDDItemInfo
-Author    : Mikhail Tatarnikov
-Purpose   : Construct an item with image stored in resources
-Returns   : void
-Exceptions: 
-Parameters: [in] UINT32		uiBitmapResID - resource id with the image;
-            [in] String_256 strLabel	  - label for the item.
-Notes     : 
-******************************************************************************/
-CBGDDItemInfo::CBGDDItemInfo(UINT32 uiBitmapResID, String_256 strLabel)
-{
-	m_uiBitmapResID		= uiBitmapResID;
-	m_pBitmap			= NULL;
-	m_bBitmapAutodelete = FALSE;
-	m_strLabel			= strLabel;
-}
-
-/******************************************************************************
-Function  : CBGDDItemInfo::CBGDDItemInfo
-Author    : Mikhail Tatarnikov
-Purpose   : Constructs an item with bitmap
-Returns   : void
-Exceptions: 
-Parameters: [in] wxBitmap*	pBitmap			  - bitmap to show for the image;
-            [in] BOOL		bBitmapAutodelete - whether we own the bitmap or not;
-            [in] String_256 strLabel		  - label for the item.
-Notes     : 
-******************************************************************************/
-CBGDDItemInfo::CBGDDItemInfo(wxBitmap* pBitmap, BOOL bBitmapAutodelete, String_256 strLabel)
-{
-	m_pBitmap			= pBitmap;
-	m_uiBitmapResID		= (UINT32)-1;
-	m_bBitmapAutodelete = bBitmapAutodelete;
-	m_strLabel			= strLabel;
-}
 
 CBGDDItemInfo::~CBGDDItemInfo()
 {
-	if (m_pBitmap && m_bBitmapAutodelete)
-		delete m_pBitmap;
 }
 
-
-/******************************************************************************
-Function  : CBGDDItemInfo::GetBitmap
-Author    : Mikhail Tatarnikov
-Purpose   : Gets the bitmap associated with the item
-Returns   : wxBitmap* - the item's bitmap.
-Exceptions: 
-Parameters: None
-Notes     : Loads bitmap from resources if necessary.
-******************************************************************************/
-wxBitmap* CBGDDItemInfo::GetBitmap()
-{
-	// If we are given a bitmap, just return it.
-	if (m_pBitmap)
-		return m_pBitmap;
-
-	//  Try to load the resource otherwise.
-	return CamArtProvider::Get()->FindBitmap(m_uiBitmapResID, CAF_DEFAULT);
-}
 
 
 /******************************************************************************
@@ -216,6 +156,254 @@ String_256 CBGDDItemInfo::GetLabel()
 {
 	return m_strLabel;
 }
+
+
+
+
+CBGDDWxBitmapItem::CBGDDWxBitmapItem(wxBitmap* pBitmap, BOOL bAutodelete,
+									 String_256 strLabel,
+									 BOOL bStretch)
+	: CBGDDItemInfo(strLabel)
+{
+	m_pBitmap  = pBitmap;
+	m_bDelete  = bAutodelete;
+	m_bStretch = bStretch;
+}
+
+CBGDDWxBitmapItem::~CBGDDWxBitmapItem()
+{
+	if (m_bDelete)
+		delete m_pBitmap;
+}
+
+
+void CBGDDWxBitmapItem::DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const
+{
+	// If the item isn't enabled just don't draw it
+	// TODO: grey out the current bitmap instead.
+	if (iFlags & wxGridComboPopup::keDisabled)
+		return;
+
+
+	// Draw to the memory bitmap first (so we can be sure the borders
+	// isn't eated by the scaling.
+	wxMemoryDC dcMem;
+	wxBitmap oMemBitmap(rect.width, rect.height);
+	dcMem.SelectObject(oMemBitmap);
+
+
+	static wxPen   penBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+	static wxBrush brBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+
+	// Erase with background (by default it's grey).
+	dcMem.SetPen(penBackground);
+	dcMem.SetBrush(brBackground);
+
+	dcMem.DrawRectangle(0, 0, rect.width, rect.height);
+
+	double dXScale = 1.0;
+	double dYScale = 1.0;
+
+	if (m_bStretch)
+	{
+		dXScale = (double)rect.width  / (double)m_pBitmap->GetWidth();
+		dYScale = (double)rect.height / (double)m_pBitmap->GetHeight();
+	}
+
+	dcMem.SetUserScale(dXScale, dYScale);
+
+	dcMem.DrawBitmap(*m_pBitmap, 0, 0, TRUE);
+
+
+	dcMem.SetBrush(wxNullBrush);
+	dcMem.SetPen(wxNullPen);
+	dcMem.SelectObject(wxNullBitmap);
+	
+	// Now we can draw bitmap without scaling - it has been scaled while
+	// drawing to the memory DC.
+	dc.SetUserScale(1.0, 1.0);
+	dc.DrawBitmap(oMemBitmap, rect.x, rect.y, false);
+}
+
+
+CBGDDResourceItem::CBGDDResourceItem(UINT32 uiBitmapResID, String_256 strLabel, BOOL bStretch)
+	: CBGDDWxBitmapItem(NULL, FALSE, strLabel, bStretch)
+{
+	m_pBitmap = CamArtProvider::Get()->FindBitmap(uiBitmapResID, CAF_DEFAULT);
+	m_bDelete = FALSE;
+}
+
+CBGDDResourceItem::~CBGDDResourceItem()
+{
+}
+
+
+
+
+
+
+
+
+
+CBGDDKernelBitmapItem::CBGDDKernelBitmapItem(KernelBitmap* pKernelBitmap, BOOL bAutodelete,
+											 String_256 strLabel, BOOL bStretch)
+	: CBGDDItemInfo(strLabel)
+{
+	m_pKernelBitmap		  = pKernelBitmap;
+	m_bDeleteKernelBitmap = bAutodelete;
+	m_bStretch			  = bStretch;
+}
+
+CBGDDKernelBitmapItem::~CBGDDKernelBitmapItem()
+{
+	if (m_bDeleteKernelBitmap)
+		delete m_pKernelBitmap;
+
+	TDCacheCollection::const_iterator citCur;
+	for (citCur = m_colCache.begin(); citCur != m_colCache.end(); ++citCur)
+	{
+		delete (*citCur)->second;
+		delete *citCur;
+	}
+	
+	m_colCache.clear();
+}
+
+
+BOOL CBGDDKernelBitmapItem::DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap)
+{
+	return poItem->first == szBitmap;
+}
+
+/******************************************************************************
+Function  : CBGDDKernelBitmapItem::GetWxBitmap
+Author    : Mikhail Tatarnikov
+Purpose   : Gets the wxBitmap representation of the currently stored KernelBitmap
+Returns   : wxBitmap* - the required version of the KernelBitmap.
+Exceptions: 
+Parameters: [in] wxSize szBitmap - the size of representation.
+Notes     : Since the KernelBitmap stored in the item can be of considerable size,
+			we have to speed up the drawing (and scaling). It's done by caching
+			the bitmap representations.
+******************************************************************************/
+wxBitmap* CBGDDKernelBitmapItem::GetWxBitmap(wxSize szBitmap) const
+{
+	// Try to locate the cache.
+	TDCacheCollection::const_iterator citFound = find_if(m_colCache.begin(), m_colCache.end(),
+		bind2nd(ptr_fun(DoesCacheItemSizeMatch), szBitmap));
+
+	if (citFound != m_colCache.end())
+		return (*citFound)->second;
+
+	// Here we have a cache miss. We need to rebuild the bitmap.
+	// NOTE: the maximum size of bitmap allowed by BitmapDragInformation is 180*??? pixels!!
+	wxMemoryDC dcMem;
+	wxBitmap* pBitmap = new wxBitmap(szBitmap.x, szBitmap.y);
+	dcMem.SelectObject(*pBitmap);
+	dcMem.SetUserScale(1.0, 1.0);
+
+	wxSize szDragBitmap = szBitmap;
+	if (!m_bStretch)
+		szDragBitmap = wxSize(m_pKernelBitmap->GetWidth(), m_pKernelBitmap->GetHeight());
+
+	BitmapDragInformation oDragBitmap(m_pKernelBitmap, szDragBitmap.x, szDragBitmap.y, 0, 0);
+	oDragBitmap.OnDrawSolidDrag(wxPoint(0, 0), &dcMem);
+
+	dcMem.SelectObject(wxNullBitmap);
+
+	// Now we have a resulting bitmap. We need to cache and return it.
+	m_colCache.push_back(new pair<wxSize, wxBitmap*>(szBitmap, pBitmap));
+
+	return pBitmap;
+}
+
+
+void CBGDDKernelBitmapItem::DrawItem(wxDC& dc, const wxRect& rcDraw, INT32 iFlags) const
+{
+	wxBitmap* pBitmap = GetWxBitmap(rcDraw.GetSize());
+
+	// We don't need to scale or do anything since we already have a bitmap of the right size.
+	dc.DrawBitmap(*pBitmap, rcDraw.x, rcDraw.y, FALSE);
+}
+
+
+
+
+
+
+
+CBGDDStrokeItem::CBGDDStrokeItem(LineAttrItem* plaiStroke, BOOL bAutodelete, String_256 strLabel)
+	: CBGDDItemInfo(strLabel)
+{
+	m_plaiStroke = plaiStroke;
+	m_bDelete	 = bAutodelete;
+}
+
+CBGDDStrokeItem::~CBGDDStrokeItem()
+{
+	if (m_bDelete)
+		delete m_plaiStroke;
+}
+
+void CBGDDStrokeItem::DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const
+{
+	INT32 iDPI = 96;
+
+	// Since we don't have a view, we need a fake one.
+	DialogView *pDialogView = new DialogView;
+	pDialogView->Init();
+	FIXED16 Scale(1);
+
+	Matrix oMatrix(1, 0, 0, 1, 0, 0);
+
+	wxSize szItem = rect.GetSize();
+
+	// Convert the item area to millipoints
+	DocRect rcDocClip;
+	rcDocClip.lo.x = 0;
+	rcDocClip.lo.y = 0;
+
+	rcDocClip.hi.x = (szItem.x * 1000);
+	rcDocClip.hi.y = (szItem.y * 1000);
+
+
+	// Create a bitmap render region.
+	GRenderBitmap* pRenderRegion = new GRenderBitmap(rcDocClip, oMatrix, Scale, 24, iDPI, FALSE, 0, NULL, TRUE);
+	pRenderRegion->AttachDevice(pDialogView, &dc, NULL, false);
+	
+	// Prepare for the rendering.
+	pRenderRegion->InitDevice();
+	pRenderRegion->SaveContext();
+	pRenderRegion->StartRender();
+
+	// Render the stroke.
+	m_plaiStroke->Render(pRenderRegion, rcDocClip, LineAttrItem::NO_LABEL);
+
+	pRenderRegion->StopRender();
+	pRenderRegion->RestoreContext();
+
+	KernelBitmap* pKernelBitmap = new KernelBitmap(pRenderRegion->ExtractBitmap(), FALSE);
+
+	BitmapDragInformation oDragBitmap(pKernelBitmap, szItem.x, szItem.y, 0, 0);
+	oDragBitmap.OnDrawSolidDrag(rect.GetTopLeft(), &dc);
+
+	delete pKernelBitmap;
+	delete pRenderRegion;
+	delete pDialogView;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -248,9 +436,9 @@ Parameters: [in] UINT32		uiBitmapResID - resource id with the image;
             [in] String_256 strLabel	  - label for the item.
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::AddItem(UINT32 uiBitmapResID, String_256 strLabel)
+void CBitmapGridDropDown::AddItem(UINT32 uiBitmapResID, String_256 strLabel, BOOL bStretch)
 {
-	CBGDDItemInfo* pData = new CBGDDItemInfo(uiBitmapResID, strLabel);
+	CBGDDItemInfo* pData = new CBGDDResourceItem(uiBitmapResID, strLabel, bStretch);
 	CGridDropDown::AddItem(pData);
 }
 
@@ -264,9 +452,9 @@ Parameters: [in] wxBitmap*	pBitmap	 - the bitmap to be shown for the item;
             [in] String_256 strLabel - the item label.
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::AddItem(wxBitmap* pBitmap, String_256 strLabel)
+void CBitmapGridDropDown::AddItem(wxBitmap* pBitmap, BOOL bDelete, String_256 strLabel, BOOL bStretch)
 {
-	CBGDDItemInfo* pData = new CBGDDItemInfo(pBitmap, TRUE, strLabel);
+	CBGDDItemInfo* pData = new CBGDDWxBitmapItem(pBitmap, bDelete, strLabel, bStretch);
 	CGridDropDown::AddItem(pData);
 }
 
@@ -280,21 +468,10 @@ Parameters: [in] KernelBitmap* pKernelBitmap - the bitmap to be shown for the it
             [in] String_256	   strLabel		 - the item label.
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::AddItem(KernelBitmap* pKernelBitmap, String_256 strLabel)
+void CBitmapGridDropDown::AddItem(KernelBitmap* pKernelBitmap, BOOL bDelete, String_256 strLabel, BOOL bStretch)
 {
-	wxSize szItem =  GetItemSize();
-	wxBitmap* pBitmap = new wxBitmap(szItem.x, szItem.y);
-	wxMemoryDC dcMem;
-
-	dcMem.SelectObject(*pBitmap);
-
-	BitmapDragInformation oDragBitmap(pKernelBitmap, szItem.x, szItem.y, 0, 0);
-	oDragBitmap.OnDrawSolidDrag(wxPoint(0, 0), &dcMem);
-
-
-	dcMem.SelectObject(wxNullBitmap);
-
-	AddItem(pBitmap, strLabel);
+	CBGDDItemInfo* pData = new CBGDDKernelBitmapItem(pKernelBitmap, bDelete, strLabel, bStretch);
+	CGridDropDown::AddItem(pData);
 }
 
 
@@ -308,13 +485,10 @@ Parameters: [in] LineAttrItem* plaiStroke - the stroke to display in the item;
             [in] String_256	   strLabel	  - the item label.
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::AddItem(LineAttrItem* plaiStroke, String_256 strLabel)
+void CBitmapGridDropDown::AddItem(LineAttrItem* plaiStroke, BOOL bDelete, String_256 strLabel)
 {
-	KernelBitmap* pBitmap = PreviewStroke(plaiStroke);
-	AddItem(pBitmap, strLabel);
-
-	delete pBitmap;
-	delete plaiStroke;
+	CBGDDStrokeItem* pStrokeItem = new CBGDDStrokeItem(plaiStroke, bDelete, strLabel);
+	CGridDropDown::AddItem(pStrokeItem);
 }
 
 
@@ -328,10 +502,10 @@ Parameters: [in] AttrBrushType* pabtBrush - the brush to be previewed in the ite
             [in] String_256		strLabel  - the item label.
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::AddItem(AttrBrushType* pabtBrush, String_256 strLabel)
+void CBitmapGridDropDown::AddItem(AttrBrushType* pabtBrush, BOOL bDelete, String_256 strLabel)
 {
 	wxBitmap* pBitmap = PreviewBrush(pabtBrush);
-	AddItem(pBitmap, strLabel);
+	AddItem(pBitmap, bDelete, strLabel);
 }
 
 
@@ -347,7 +521,7 @@ Notes     :
 ******************************************************************************/
 void CBitmapGridDropDown::SetUnselectedItem(UINT32 uiBitmapResID, String_256 strLabel)
 {
-	m_poUnselectedItem = new CBGDDItemInfo(uiBitmapResID, strLabel);
+	m_poUnselectedItem = new CBGDDResourceItem(uiBitmapResID, strLabel);
 }
 
 
@@ -363,7 +537,7 @@ Notes     :
 ******************************************************************************/
 void CBitmapGridDropDown::SetUnselectedItem(wxBitmap* pBitmap, String_256 strLabel)
 {
-	m_poUnselectedItem = new CBGDDItemInfo(pBitmap, TRUE, strLabel);
+	m_poUnselectedItem = new CBGDDWxBitmapItem(pBitmap, TRUE, strLabel);
 }
 
 
@@ -381,54 +555,9 @@ Notes     :
 ******************************************************************************/
 void CBitmapGridDropDown::DrawItemCore(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags)
 {
-	// If the item isn't enabled just don't draw it
-	// TODO: grey out the current bitmap instead.
-	if (iFlags & wxGridComboPopup::keDisabled)
-		return;
+	CBGDDItemInfo* pItemData = GetItemData(iItem);
 
-	CBGDDItemInfo* pData = (CBGDDItemInfo*)GetItemData(iItem);
-	if (!pData)
-		return;
-
-	// Obtain the bitmap to draw.
-	wxBitmap* pBitmap = pData->GetBitmap();
-	if (!pBitmap)
-		return;
-
-	// Draw to the memory bitmap first (so we can be sure the borders
-	// isn't eated by the scaling.
-	wxMemoryDC dcMem;
-//	wxSize szItem =  GetItemSize();
-	wxBitmap oMemBitmap(rect.width, rect.height);
-	dcMem.SelectObject(oMemBitmap);
-
-
-	static wxPen   penBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-	static wxBrush brBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-
-	// Erase with background (by default it's grey).
-	dcMem.SetPen(penBackground);
-	dcMem.SetBrush(brBackground);
-
-	dcMem.DrawRectangle(0, 0, rect.width, rect.height);
-
-
-	double dXScale = (double)rect.width  / pBitmap->GetWidth();
-	double dYScale = (double)rect.height / pBitmap->GetHeight();
-
-	dcMem.SetUserScale(dXScale, dYScale);
-
-	dcMem.DrawBitmap(*pBitmap, 0, 0, TRUE);
-	
-
-	dcMem.SetBrush(wxNullBrush);
-	dcMem.SetPen(wxNullPen);
-	dcMem.SelectObject(wxNullBitmap);
-	
-	// Now we can draw bitmap without scaling - it has been scaled while
-	// drawing to the memory DC.
-	dc.DrawBitmap(oMemBitmap, rect.x, rect.y, false);
-
+	pItemData->DrawItem(dc, rect, iFlags);
 }
 
 
@@ -446,7 +575,7 @@ CBGDDItemInfo* CBitmapGridDropDown::GetItemData(INT32 iItem)
 	if (iItem == -1)
 		return m_poUnselectedItem;
 
-	return dynamic_cast<CBGDDItemInfo*>(CGridDropDown::GetItemData(iItem));
+	return (CBGDDItemInfo*)CGridDropDown::GetItemData(iItem);
 }
 
 /******************************************************************************

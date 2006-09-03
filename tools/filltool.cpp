@@ -3439,7 +3439,7 @@ void GradInfoBarOp::InitBitmapName()
 				Str = ((KernelBitmap*)pBmp)->ActualBitmap->GetName();
 
 				KernelBitmap* bitmap = ((KernelBitmap*)pBmp);
-				m_oBitmapDropDown.AddItem(bitmap, Str);
+				m_oBitmapDropDown.AddItem(bitmap, FALSE, Str);
 				
 				Index++;
 			}
@@ -6829,7 +6829,7 @@ void TranspInfoBarOp::InitBitmapName()
 				Str = ((KernelBitmap*)pBmp)->ActualBitmap->GetName();
 
 				KernelBitmap* bitmap = ((KernelBitmap*)pBmp);
-				m_oBitmapDropDown.AddItem(bitmap, Str);
+				m_oBitmapDropDown.AddItem(bitmap, FALSE, Str);
 				
 				Index++;
 			}
