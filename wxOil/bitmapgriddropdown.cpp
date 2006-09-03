@@ -621,16 +621,26 @@ Notes     :
 ******************************************************************************/
 wxBitmap* CBitmapGridDropDown::PreviewBrush(AttrBrushType* pabtBrush)
 {
-	ERROR2IF(TRUE, FALSE, "CBitmapGridDropDown::PreviewBrush Not implemented yet");
-/*
+//	ERROR2IF(TRUE, FALSE, "CBitmapGridDropDown::PreviewBrush Not implemented yet");
+
 	wxMemoryDC dcMem;
 
 	// Setup a memory DC to draw into a bitmap.
 	wxSize szItem =  GetItemSize();
 	wxBitmap* pBitmap = new wxBitmap(szItem.x, szItem.y);
+
+
 	dcMem.SelectObject(*pBitmap);
 
+	// For now, clear the bitmap and return
+	dcMem.Clear();
+	return pBitmap;
 
+
+	// THIS CODE HAS A FUNDAMENTAL PROBLEM IN THAT IT TRIES TO USE THE COORDINATES IN 1:1 PIXELS
+	// THIS WON'T WORK IN THAT THEY ARE TOO LOW RESOLUTION - THEY NEED TO BE CONVERTED TO 96DPI
+	// COORDINATES (OR MORE ACCURATELY WHAT OSRenderRegion::GetFixedDCDPI RETURNS) - THAT IS
+	// WHAT IT USED TO DO WITH THE EXTAINFO STUFF - AMB
 
 //	ReDrawInfoType ExtraInfo;
 //	ExtraInfo.pMousePos = NULL;		// No mouse position info for redraw events
@@ -688,7 +698,7 @@ wxBitmap* CBitmapGridDropDown::PreviewBrush(AttrBrushType* pabtBrush)
 	Matrix oMatrix(0, 0);
 
 
-	GRenderRegion* pRenderRegion = new GRenderDIB(RenderRect, oMatrix, Scale, 32, 1.0);
+	GRenderRegion* pRenderRegion = new GRenderDIB(RenderRect, oMatrix, Scale, 32, 96.0);
 
 	static const StockColour  kBackgroundOutline  =  COLOUR_NONE;
 	static const StockColour  kBackground         =  COLOUR_WHITE;
@@ -697,11 +707,12 @@ wxBitmap* CBitmapGridDropDown::PreviewBrush(AttrBrushType* pabtBrush)
 	PathProcessorBrush* pPathProc = pabtBrush->GetPathProcessor();
 	BrushAttrValue* pVal = (BrushAttrValue*)pabtBrush->GetAttributeValue();
 
-	if( pRenderRegion != 0 )
+	if (pRenderRegion != 0 && pRenderRegion->AttachDevice(pDialogView, &dcMem, NULL) && pRenderRegion->StartRender())
 	{
+
 		pRenderRegion->SaveContext();
 
-		/// set drawing quality
+		// set drawing quality
 		Quality           QualityThing( Quality::QualityMax );
 		QualityAttribute  AntiAliasQualityAttr( QualityThing );
 		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
@@ -729,10 +740,8 @@ wxBitmap* CBitmapGridDropDown::PreviewBrush(AttrBrushType* pabtBrush)
 	MyDc.GetDC()->EndDrawing();		
 
 	dcMem.SelectObject(wxNullBitmap);
-	
+
 	return pBitmap;
-*/
-	return NULL;
 }
 
 
