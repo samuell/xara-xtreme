@@ -638,16 +638,17 @@ BOOL DialogManager::PostCreate(DialogOp * pDialogOp, INT32 OpeningPage)
 		{
 			ActivePage = DlgPos->ActivePage;
 			ActivePageIndex = DlgPos->ActivePageIndex;
-			if (pBook && ((ActivePageIndex<0) ||
-						  (ActivePageIndex >= pBook->GetPageCount()) ||
-						  ((UINT32)(pBook->GetPage(ActivePageIndex)->GetId()) != ActivePage)
-						))
-			{
-				ActivePageIndex=0;
-				ActivePage = pBook->GetPage(0)->GetId();
-			}
 		}
 		CreatedBefore = TRUE;
+	}
+
+	if (pBook && ((ActivePageIndex<0) ||
+					(ActivePageIndex >= pBook->GetPageCount()) ||
+					((UINT32)(pBook->GetPage(ActivePageIndex)->GetId()) != ActivePage)
+				))
+	{
+		ActivePageIndex=0;
+		ActivePage = pBook->GetPage(0)->GetId();
 	}
 
 	// Get the size of the dialog box (Required for the SetWindowPos function)

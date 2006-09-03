@@ -284,10 +284,12 @@ MsgResult FreeHandInfoBarOp::Message(Msg* Message)
 
 		else if (Msg->DlgMsg == DIM_CREATE)
 		{
+#if 0
 // NB - not #ifndef
 #ifdef EXCLUDE_FROM_XARALX
 			EnableGadget(_R(IDC_CREATEBRUSH), FALSE);
 			EnableGadget(_R(IDC_EDITBRUSH), FALSE);
+#endif
 #endif
 			HandleCreate();
 		}
@@ -331,8 +333,6 @@ MsgResult FreeHandInfoBarOp::Message(Msg* Message)
 						break;
 				}
 			}
-PORTNOTE("other", "Removed CreateBrush and EditBrush")
-#ifndef EXCLUDE_FROM_XARALX
 			else if (Msg->GadgetID == _R(IDC_CREATEBRUSH))
 			{
 				pTool->CreateBrush();
@@ -351,7 +351,6 @@ PORTNOTE("other", "Removed CreateBrush and EditBrush")
 						break;
 				}
 			}
-#endif
 			else if (Msg->GadgetID == _R(IDC_BRUSHTYPE))
 			{
 				switch (Msg->DlgMsg)
@@ -726,7 +725,7 @@ void FreeHandInfoBarOp::HandleCreate()
 		SetBrushComboFromSelection();
 //#ifdef BUILDNEWBRUSHES
 		// set up the brush gadget
-PORTNOTE("other", "Disabled Brush editing")
+PORTNOTE("other", "Disabled BrushGadget")
 #ifndef EXCLUDE_FROM_XARALX
 		BrushGadget.LinkControlButton (this, _R(IDC_EDITBRUSH), _R(IDBBL_BRUSHEDIT), _R(IDS_BRUSHEDITDLG));
 		BrushGadget.DisableTimeStamping ();
@@ -2713,8 +2712,6 @@ void FreeHandInfoBarOp::UpdateState()
 	if (!ControlsExist)
 		return;
 
-PORTNOTE("other", "Disabled Brush editing")
-#ifndef EXCLUDE_FROM_XARALX
 	// see if we're allowed to launch the brush dialog
 	OpState State = CBrushEditDlg::GetState(NULL, NULL);
 //#ifdef BUILDNEWBRUSHES
@@ -2733,10 +2730,6 @@ PORTNOTE("other", "Disabled Brush editing")
 			EnableGadget(_R(IDC_CREATEBRUSH), TRUE);
 //#endif
 	}
-#else
-	EnableGadget(_R(IDC_CREATEBRUSH), FALSE);
-	EnableGadget(_R(IDC_EDITBRUSH), FALSE);
-#endif
 
 // WEBSTER - markn 25/4/97
 // No pen stuff required in Webster

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <resource>
-	<object class="wxDialog" name="IDD_BRUSHEDITSPACING">
+	<object class="wxPanel" name="IDD_BRUSHEDITSPACING">
 			 <pos>0,0d</pos> <size>190,127d</size>
 		<object class="wxStaticText" name="IDC_STATICBRUSHSPACING">
 			 <pos>10,15d</pos> <size>27,8d</size>
@@ -51,7 +51,7 @@
 		<title>Spacing</title>
 		<label>Spacing</label>
 	</object>
-	<object class="wxDialog" name="IDD_BRUSHEDITOFFSET">
+	<object class="wxPanel" name="IDD_BRUSHEDITOFFSET">
 			 <pos>0,0d</pos> <size>190,119d</size>
 		<object class="wxStaticText" name="IDC_STATICPATHOFFSETVALUE">
 			 <pos>10,28d</pos> <size>29,8d</size>
@@ -102,7 +102,7 @@
 		<title>Offset</title>
 		<label>Offset</label>
 	</object>
-	<object class="wxDialog" name="IDD_BRUSHEDITSCALING">
+	<object class="wxPanel" name="IDD_BRUSHEDITSCALING">
 			 <pos>0,0d</pos> <size>190,92d</size>
 		<object class="wxStaticBox" name="IDC_STATICBRUSHSCALINGRAND">
 			 <pos>3,9d</pos> <size>180,55d</size>
@@ -151,7 +151,7 @@
 		<title>Scaling</title>
 		<label>Scaling</label>
 	</object>
-	<object class="wxDialog" name="IDD_BRUSHEDITEFFECTS">
+	<object class="wxPanel" name="IDD_BRUSHEDITEFFECTS">
 			 <pos>0,0d</pos> <size>204,119d</size>
 		<object class="wxCheckBox" name="IDC_CHECKROTATE">
 			 <pos>10,6d</pos> <size>73,10d</size>
@@ -214,7 +214,7 @@
 		<title>Rotation</title>
 		<label>Rotation</label>
 	</object>
-	<object class="wxDialog" name="IDD_BRUSHEDITSEQUENCE">
+	<object class="wxPanel" name="IDD_BRUSHEDITSEQUENCE">
 			 <pos>0,0d</pos> <size>190,70d</size>
 		<object class="wxStaticBox" name="IDC_STATIC">
 			 <pos>4,33d</pos> <size>200,40d</size>
@@ -254,7 +254,7 @@
 		<title>Transparency</title>
 		<label>Transparency</label>
 	</object>
-	<object class="wxDialog" name="IDD_BRUSHEDITFILL">
+	<object class="wxPanel" name="IDD_BRUSHEDITFILL">
 			 <pos>0,0d</pos> <size>197,117d</size>
 		<object class="wxCheckBox" name="IDC_CHECKTILEING">
 			 <pos>7,87d</pos> <size>39,10d</size>

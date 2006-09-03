@@ -1804,6 +1804,7 @@ void FreeHandTool::CreateBrush()
 		// iterate through again and assign the selection pointers to the new array
 		UINT32 Counter = 0;
 		pNode = pSel->FindFirst();
+
 		while (pNode != NULL && Counter < m_NumInkNodes)
 		{
 			if (pNode->IsAnObject())
@@ -1816,7 +1817,9 @@ void FreeHandTool::CreateBrush()
 					return;
 				}
 				if (BrushDefinition::ObjectCanCreateBrush((NodeRenderableInk*)pNode))
+				{
 					m_BrushInkNodeArray[Counter++] = (NodeRenderableInk*)pNode;
+				}
 			}
 			pNode = pSel->FindNext(pNode);
 		}
@@ -2047,14 +2050,14 @@ void FreeHandTool::InitialiseBrushInkNodeArray(UINT32 NumObjects)
 	// that are actually in the document.
 	m_BrushInkNodeArray.clear();
 
-//	m_BrushInkNodeArray.SetSize(NumObjects, -1);
+	m_BrushInkNodeArray.resize(NumObjects);
 
 	// fill the array with NULL objects so that we can check later
 	// to see if our allocations have worked
 	i = 0;
 	while (i < m_BrushInkNodeArray.size())
 	{
-		m_BrushInkNodeArray[i] = NULL;
+		m_BrushInkNodeArray[i++] = NULL;
 	}
 
 }
