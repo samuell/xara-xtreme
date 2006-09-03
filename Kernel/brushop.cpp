@@ -99,6 +99,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 // brush operation implementation
 
 #include "camtypes.h"
+#include "brshattr.h"
+#include "ppbrush.h"
 #include "brushop.h"
 //#include "rik.h"
 //#include "markn.h"
@@ -411,7 +413,7 @@ ActionCode ChangeBrushDefAction::Init(	Operation* 			pOp,
 	BrushComponent* pBrushComp = (BrushComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(BrushComponent));
 	ERROR2IF(pBrushComp == NULL, AC_FAIL, "No brush component");
 
-	BrushDefinition* pBrushDef = pBrushComp->FindDefinition(pChangeParam->m_Handle);
+	BrushDefinition* pBrushDef = pBrushComp->FindBrushDefinition(pChangeParam->m_Handle);
 	if (pBrushDef == NULL)
 		return AC_FAIL;
 
@@ -1831,9 +1833,14 @@ ActionCode DeactivateBrushDefAction::Init(Operation* pOp, ActionList* pActionLis
 
 
 {
-	BrushDefinition* pDef = BrushComponent::FindDefinition(Handle, TRUE);
+	// get the brush component from the document
+	Document* pDoc = Document::GetCurrent();
+	ERROR2IF(pDoc == NULL, AC_FAIL, "Wheres the document?");
+	BrushComponent* pBrushComp = (BrushComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(BrushComponent));
+	ERROR2IF(pBrushComp == NULL, AC_FAIL, "No brush component");
+
+	BrushDefinition* pDef = pBrushComp->FindBrushDefinition(Handle);
 	ERROR2IF(pDef == NULL, AC_FAIL, "Invalid handle passed to DeactivateBrushDefAction::Init");
-	
 	
 	// make the new action
 	UINT32 ActSize = sizeof(DeactivateBrushDefAction);
@@ -1851,7 +1858,7 @@ ActionCode DeactivateBrushDefAction::Init(Operation* pOp, ActionList* pActionLis
 	ToolListItem* pToolItem = Tool::Find(TOOLID_FREEHAND);
 	ERROR2IF(pToolItem == NULL, AC_FAIL, "Unable to get tool item in DeactivateBrushDefAction::Init");
 
-	FreeHandTool* pTool = (FreeHandTool*)pToolItem->pTool;
+	FreeHandTool* pTool = (FreeHandTool*)pToolItem->m_pTool;
 	ERROR2IF(pTool == NULL, AC_FAIL, "Unable to get tool in DeactivateBrushDefAction::Init");
 
 	if (pDef->IsActivated())
@@ -1904,7 +1911,6 @@ ActionCode DeactivateBrushDefAction::Init(Operation* pOp, ActionList* pActionLis
 	}
 	
 	// force a redraw of the document
-	Document* pDoc = Document::GetCurrent();
 	if (pDoc != NULL)
 	{
 		CBitmapCache* pBC = Camelot.GetBitmapCache();

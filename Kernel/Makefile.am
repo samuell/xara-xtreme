@@ -80,7 +80,8 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	swfexpdc.cpp swftext.cpp pmaskrgn.cpp printctl.cpp prnmkcom.cpp prnmks.cpp \
 	xsepsops.cpp xarprefs.cpp printing.cpp prntview.cpp psrndrgn.cpp opimgset.cpp \
 	optsprin.cpp prnprefs.cpp rulers.cpp biasgdgt.cpp biasdlg.cpp prvwmenu.cpp \
-	ftfilter.cpp cxftree.cpp strlist.cpp selmedia.cpp
+	ftfilter.cpp cxftree.cpp strlist.cpp selmedia.cpp brshname.cpp brushop.cpp \
+	brushdlg.cpp
 
 
 AM_CXXFLAGS = $(XARAFLAGS)

@@ -102,7 +102,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_BRUSHEDIT_DLG	_T("CBrushEditDlg")
 #define OPTOKEN_OPBRUSHEDIT		_T("OpBrushEdit")
 
-#include "brshgdgt.h"
+//#include "brshgdgt.h"
 #include "brshdata.h"
 #include "opdrbrsh.h"
 
@@ -114,9 +114,13 @@ class CBrushEditDlg : public DialogTabOp//DialogOp
 	CC_DECLARE_DYNCREATE( CBrushEditDlg )
 	
 	private:
+
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 	// ptr to the owning gadget
-		CBrushGadget*		pOwningGadget_m;
-		
+		CBrushGadget*		m_pOwningGadget;
+#endif		
+
 	// identifier for this particular instance
 		CGadgetID			Id_m;
 
@@ -132,8 +136,6 @@ class CBrushEditDlg : public DialogTabOp//DialogOp
 
 		ChangeBrushType     ChangeType_m;		// the change that we are going to commit
 		ChangeBrushOpParam  ChangeParam_m;
-
-		CWindowID			PreviewWindow;		// handle to our preview window
 
 		BOOL				FirstTime;			// is this the first time weve
 												// shown the dialog (with the
@@ -154,9 +156,6 @@ class CBrushEditDlg : public DialogTabOp//DialogOp
 		static BOOL			m_bIsOpen;          // as we only ever want one instance of this so keep track of when we open it
 
 		void HideShuffleIrrelevantButtons ();
-		void ResizeDialogAndCreateBrushPreview ();
-		void RenderBrushPreview (ReDrawInfoType* RedrawInfo);
-		void CycleToNextPreviewStyle ();
 		
 		void InitBrushSpacing (BOOL OnlyForUnitChange = FALSE);
 		void InitBrushOffset (BOOL OnlyForUnitChange = FALSE);
@@ -257,11 +256,14 @@ class CBrushEditDlg : public DialogTabOp//DialogOp
 		void HandleBrushEditSequenceMsg (DialogMsg* Msg);
 		void HandleBrushFillMsg (DialogMsg* Msg);
 
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 		void InvokeVia (CBrushGadget& pInvokeWith, BrushData* pInvokeOn, 
 						AttrBrushType* pBrush, BOOL& bMany);
 		void InvokeVia (CBrushGadget& pInvokeWith, BrushData* pInvokeOn, 
 						AttrBrushType* pBrush, AttrBrushType* pOrigBrush, BOOL& bMany);
 		void InvokeVia (CBrushGadget& pInvokeWith, BrushHandle Handle);
+#endif
 
 		virtual BOOL RegisterYourPagesInOrderPlease ();	// Add in tab pages
 		void ReInitialiseDialog (BrushData* pData);	

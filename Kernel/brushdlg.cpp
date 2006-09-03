@@ -96,21 +96,24 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 =================================XARAHEADEREND============================
  */
 
-DECLARE_SOURCE("$Revision$");
-
 #include "camtypes.h"		// the precompiled stuff
 
+DECLARE_SOURCE("$Revision$");
+
 #include "brushdlg.h"		// include our class header
+#include "dlgmgr.h"
 
 //#include "brdlgres.h"		// include our resources
 //#include "barsdlgs.h"
+#include "brshattr.h"
 #include "brshdata.h"		// for BrushData
+#include "ppbrush.h"
 //#include "rikdlg.h"			// _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER)
 //#include "rik.h"
 #include "optsmsgs.h"
-#include "redraw.h"			// for REDRAWCLASS custom control
-#include "qualattr.h"		// for REDRAWCLASS custom control
-#include "ccdc.h"			// for REDRAWCLASS custom control
+//#include "redraw.h"			// for REDRAWCLASS custom control
+#include "qualattr.h"
+#include "ccdc.h"
 
 #include "brushop.h"
 #include "brushmsg.h"
@@ -223,7 +226,6 @@ CBrushEditDlg::CBrushEditDlg ()
 	
 	m_Handle   = BrushHandle_NoBrush;
 
-	PreviewWindow = NULL;  // NOTE we never use the preview window anymore!
 	RenderType = RT_LINE;
 
 	pDocUnitList = NULL;
@@ -261,8 +263,6 @@ CBrushEditDlg::~CBrushEditDlg ()
 		delete (OriginalData);
 	if (EditData != NULL)
 		delete (EditData);
-	if (PreviewWindow != NULL)
-		DestroyWindow (PreviewWindow);
 }
 
 
@@ -383,12 +383,15 @@ void CBrushEditDlg::Do (OpDescriptor*)
 	ERROR3IF(pDocUnitList == NULL,"UnitPropertiesDlg::DoWithParam No doc unit list attached to this doc yet");
 
 	CurrentUserUnitType = pDocUnitList->GetPageUnits ();
-	
+
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 	// this fn. is called from the ViewContextMenu without any params so here we must initialise it ourselves
-	//pOwningGadget_m = FreeHandInfoBarOp::GetSpareGadget();
-	pOwningGadget_m = FreeHandInfoBarOp::GetBrushGadget();
-	if (pOwningGadget_m != NULL)
-		pOwningGadget_m->SetBrushDialog(this);
+	//m_pOwningGadget = FreeHandInfoBarOp::GetSpareGadget();
+	m_pOwningGadget = FreeHandInfoBarOp::GetBrushGadget();
+	if (m_pOwningGadget != NULL)
+		m_pOwningGadget->SetBrushDialog(this);
+#endif
 
 	EditData = new BrushData;
 	if (EditData == NULL)
@@ -418,7 +421,7 @@ void CBrushEditDlg::Do (OpDescriptor*)
 			BrushHandle Handle = pTool->GetBrushHandle();
 			if (Handle != BrushHandle_NoBrush)
 			{
-				BrushDefinition* pDef = BrushComponent::FindDefinition(Handle);
+				BrushDefinition* pDef = BrushComponent::FindBrushDefinition(Handle);
 				if (pDef != NULL)
 				{
 					// the definition allocates a new data object for us
@@ -464,19 +467,22 @@ void CBrushEditDlg::Do (OpDescriptor*)
 
 void CBrushEditDlg::DoWithParam (OpDescriptor*, OpParam* OwningGadgetParams)
 {
-	pOwningGadget_m  =  reinterpret_cast<CBrushGadget*> (OwningGadgetParams->Param1);
-	pOwningGadget_m->SetCBrushEditDlg (this);
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
+	m_pOwningGadget  =  reinterpret_cast<CBrushGadget*> (OwningGadgetParams->Param1);
+	m_pOwningGadget->SetCBrushEditDlg (this);
+#endif
 
 	// if theres already one open the don't
-	if (WindowID != NULL && ::IsWindowVisible(WindowID))
+	if (WindowID != NULL && IsOpen() && IsWindowVisible())
 		return;
 
-	EditData = new BrushData (*(reinterpret_cast<BrushData*> (OwningGadgetParams->Param2)));
+	EditData = new BrushData (*(reinterpret_cast<BrushData*> ((void*)(OwningGadgetParams->Param2))));
 	// if we're editing the definition then we had to create a brush data from scratch so delete 
 	// it here
 	if (EditingBrushDef)
 	{
-		BrushData* DeleteData = ((reinterpret_cast<BrushData*> (OwningGadgetParams->Param2)));
+		BrushData* DeleteData = ((reinterpret_cast<BrushData*> ((void *)(OwningGadgetParams->Param2))));
 		delete DeleteData;
 	}
 	//EditData = reinterpret_cast<BrushData*> (OwningGadgetParams->Param2);
@@ -487,17 +493,20 @@ void CBrushEditDlg::DoWithParam (OpDescriptor*, OpParam* OwningGadgetParams)
 
 	m_bDisableGadgets = FALSE;
 
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 	// get the ID
-	if (pOwningGadget_m != 0)
+	if (m_pOwningGadget != 0)
 	{
-		Id_m = pOwningGadget_m->GetGadgetID ();
+		Id_m = m_pOwningGadget->GetGadgetID ();
 	}
 
-	if (pOwningGadget_m->GetEditingBrushDefinition ())
+	if (m_pOwningGadget->GetEditingBrushDefinition ())
 	{
 		EditingBrushDef = TRUE;
 		GetAttributeNodeFromDefinition();
 	}
+#endif
 
 	Document * pDocument = Document::GetSelected();
 	ERROR3IF(pDocument == NULL,"UnitPropertiesDlg::DoWithParam No selected document");
@@ -514,11 +523,15 @@ void CBrushEditDlg::DoWithParam (OpDescriptor*, OpParam* OwningGadgetParams)
 	Create ();
 	Open ();
 
-	/// tell the owning gadget that this dialog has opened
-	if (pOwningGadget_m != 0)
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
+	// tell the owning gadget that this dialog has opened
+	if (m_pOwningGadget != 0)
 	{
-		pOwningGadget_m->DialogHasOpened ();
+		m_pOwningGadget->DialogHasOpened ();
 	}
+#endif
+
 	m_bIsOpen = TRUE;
 	m_bPreventUpdateSet = FALSE;
 	m_SliderStarted = FALSE;
@@ -696,7 +709,7 @@ MsgResult CBrushEditDlg::Message (Msg* Message)
 			{
 				TRACEUSER( "Diccon", _T("Closing dialog, EditingBD = %d\n"), EditingBrushDef);
 				
-				if (EditingBrushDef = TRUE)
+				if (EditingBrushDef)
 				{
 					
 					if (pAttrBrush_m != NULL)
@@ -780,49 +793,32 @@ MsgResult CBrushEditDlg::Message (Msg* Message)
 			}
 			break;
 
-
-
-			// handle the redraw of our brush preview
-			case DIM_REDRAW:
-				///RenderBrushPreview (reinterpret_cast<ReDrawInfoType*>( Msg->DlgMsgParam ));
-			break;
-
-			// handle right clicking on brush preview:  alters the current preview image type
-			case DIM_RGT_BN_DOWN:
-			{
-				CycleToNextPreviewStyle ();
-			}
+			default:
+				break;
 			
 		}
 
 		// dispatch message to relevant page handler ....
 		if ( ThePage && !MessageAlreadyHandled)
 		{
-			switch (ThePage)
+			if (FALSE) {}
+			else if (ThePage == _R(IDD_BRUSHEDITSPACING))
+				HandleBrushEditSpacingMsg (Msg);
+			else if (ThePage == _R(IDD_BRUSHEDITOFFSET))
+				HandleBrushEditOffsetMsg (Msg);
+			else if (ThePage == _R(IDD_BRUSHEDITSCALING))
+				HandleBrushEditScalingMsg (Msg);
+			else if (ThePage == _R(IDD_BRUSHEDITEFFECTS))
+				HandleBrushEditEffectMsg (Msg);
+			else if (ThePage == _R(IDD_BRUSHEDITSEQUENCE))
+				HandleBrushEditSequenceMsg (Msg);
+			else if (ThePage == _R(IDD_BRUSHEDITFILL))
+				HandleBrushFillMsg(Msg);
+			else
 			{
-				case _R(IDD_BRUSHEDITSPACING):
-					HandleBrushEditSpacingMsg (Msg);
-					break;
-				case _R(IDD_BRUSHEDITOFFSET):
-					HandleBrushEditOffsetMsg (Msg);
-					break;
-				case _R(IDD_BRUSHEDITSCALING):
-					HandleBrushEditScalingMsg (Msg);
-					break;
-				case _R(IDD_BRUSHEDITEFFECTS):
-					HandleBrushEditEffectMsg (Msg);
-					break;
-				case _R(IDD_BRUSHEDITSEQUENCE):
-					HandleBrushEditSequenceMsg (Msg);
-					break;
-				case _R(IDD_BRUSHEDITFILL):
-					HandleBrushFillMsg(Msg);
-					break;
-				default:
-					ERROR3("Message from unknown tab dialog page");
+				ERROR3("Message from unknown tab dialog page");
 			}
 		}
-
 
 	}
 	else  // deal with non-dialog messages here
@@ -838,14 +834,6 @@ MsgResult CBrushEditDlg::Message (Msg* Message)
 				// deelete our attribute node, and ask the definition for a new one
 				GetAttributeNodeFromDefinition();
 
-				// refresh our window
-				if (pOwningGadget_m->GetEditingBrushDefinition ())
-				{
-					if (PreviewWindow)
-					{
-						InvalidateRect (PreviewWindow, NULL, FALSE);
-					}
-				}
 			}
 		}
 		if (MESSAGE_IS_A(Message, SelChangingMsg))
@@ -859,12 +847,14 @@ MsgResult CBrushEditDlg::Message (Msg* Message)
 
 	if (bClose)
 	{	
-	//	DlgMgr->Delete (WindowID, this);
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 		// tell the owning gadget that this dialog has closed
-		if (pOwningGadget_m != 0)
+		if (m_pOwningGadget != 0)
 		{
-			pOwningGadget_m->DialogHasClosed();
+			m_pOwningGadget->DialogHasClosed();
 		}
+#endif
 	}
 
 	return Result;
@@ -907,6 +897,8 @@ void CBrushEditDlg::HandleBrushEditSpacingMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
@@ -944,6 +936,8 @@ void CBrushEditDlg::HandleBrushEditOffsetMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
@@ -981,6 +975,8 @@ void CBrushEditDlg::HandleBrushEditScalingMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
@@ -1019,6 +1015,8 @@ void CBrushEditDlg::HandleBrushEditEffectMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
@@ -1057,6 +1055,8 @@ void CBrushEditDlg::HandleBrushEditSequenceMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
@@ -1095,9 +1095,13 @@ void CBrushEditDlg::HandleBrushFillMsg (DialogMsg* Msg)
 			DialogManager::DefaultKeyboardFocus ();
 		}
 		break;
+		default:
+			break;
 	}
 }
 
+PORTNOTE("other", "Disabled CBrushGadget")
+#ifndef EXCLUDE_FROM_XARALX
 
 /********************************************************************************************
 
@@ -1149,7 +1153,7 @@ void CBrushEditDlg::InvokeVia (CBrushGadget& pInvokeWith, BrushHandle Handle)
 		ERROR3("No brush component in our document");
 		return;
 	}
-	BrushDefinition* pBrushDef = pBrushComp->FindDefinition(Handle);
+	BrushDefinition* pBrushDef = pBrushComp->FindBrushDefinition(Handle);
 	if (pBrushDef == NULL)
 		return;
 	
@@ -1191,6 +1195,7 @@ void CBrushEditDlg::InvokeVia (CBrushGadget& pInvokeWith, BrushData* pInvokeOn, 
 		DoWithParam( pOpDescriptor, &Param );
 	}
 }
+#endif
 
 BOOL CBrushEditDlg::RegisterYourPagesInOrderPlease ()
 {
@@ -1227,20 +1232,20 @@ BOOL CBrushEditDlg::RegisterYourPagesInOrderPlease ()
 
 void CBrushEditDlg::HideShuffleIrrelevantButtons ()
 {
-	TalkToPage (NULL);
+	TalkToPage (0);
 	
 	// say bye-bye to the ok button!
 	//HideGadget (IDOK, TRUE);
 
 	// now swap the position of the apply and cancel buttons ....
 
-	TalkToPage (NULL);
+	TalkToPage (0);
 	RECT rectApply;
 	GetGadgetPosition (_R(ID_APPLY_NOW), &rectApply);	// Preview
 	RECT rectCancel;
-	GetGadgetPosition (IDCANCEL, &rectCancel);			// Cancel
+	GetGadgetPosition (_R(IDCANCEL), &rectCancel);			// Cancel
 
-	SetGadgetPosition (IDCANCEL, rectApply);
+	SetGadgetPosition (_R(IDCANCEL), rectApply);
 	SetGadgetPosition (_R(ID_APPLY_NOW), rectCancel);
 	
 
@@ -1270,204 +1275,12 @@ void CBrushEditDlg::HideShuffleIrrelevantButtons ()
 
 void CBrushEditDlg::ChangeButtonText()
 {
-	// change the text in the cancel button to 'Close'
-	CWindowID OurID = GetReadWriteWindowID();
-
-	HWND hButton = GetDlgItem(OurID, IDCANCEL);
-
-	if (hButton != NULL)
-	{
-		String_32 CloseString;
-		CloseString.Load(_R(IDS_BRUSH_CLOSEDLG));
-		TCHAR* String = CloseString.operator TCHAR *();
-		if (String != NULL)
-			SetWindowText(hButton, String);
-	}
-	
-	// change the text in the apply button to "save"
-	HWND hApply = GetDlgItem(OurID, _R(ID_APPLY_NOW));
-
-	if (hApply != NULL)
-	{
-		String_32 SaveString;
-		SaveString.Load(_R(IDS_BRUSH_SAVE));
-		TCHAR* String = SaveString.operator TCHAR *();
-		if (String != NULL)
-			SetWindowText(hApply, String);
-	}
-	
-	// change text in the Ok button to "Save as"
-	HWND hOK = GetDlgItem(OurID, IDOK);
-
-	if (hOK != NULL)
-	{
-		String_32 SaveAsString;
-		SaveAsString.Load(_R(IDS_BRUSH_SAVE_AS));
-		TCHAR* String = SaveAsString.operator TCHAR *();
-		if (String != NULL)
-			SetWindowText(hOK, String);
-	}	
+	SetStringGadgetValue(_R(ID_CANCEL), _R(IDS_BRUSH_CLOSEDLG));
+	SetStringGadgetValue(_R(ID_APPLY_NOW), _R(IDS_BRUSH_SAVE));
+	SetStringGadgetValue(_R(IDOK), _R(IDS_BRUSH_SAVE_AS));
 }
 
 
-/********************************************************************************************
-
->	void CBrushEditDlg::ResizeDialogAndCreateBrushPreview ()
-
-
-	Author:		This comment by Diccon (function originally by ChrisS)
-	Created:	Comment added 15/12/2000
-	Inputs:		-
-	Outputs:	-
-	Returns:	-
-	Purpose:	Something to do with the brush preview window, which we no longer use.
-				
-	Errors:		-
-	SeeAlso:	-
-
-********************************************************************************************/
-
-
-void CBrushEditDlg::ResizeDialogAndCreateBrushPreview ()
-{
-	RECT WindowRect, ClientRect;
-	GetWindowRect (WindowID, &WindowRect);
-	GetClientRect (WindowID, &ClientRect);
-
-	INT32 NewPreviewSectionWidth = 100;
-
-	MoveWindow (WindowID, WindowRect.left - NewPreviewSectionWidth/2, WindowRect.top,
-				(WindowRect.right - WindowRect.left) + NewPreviewSectionWidth,
-				(WindowRect.bottom - WindowRect.top), TRUE);
-
-	// now lets create a render region for use as our preview brush area ....
-
-	INT32 Offset = 2;
-	RECT PreviewRect;
-
-	RECT NewClientRect;
-	GetClientRect (WindowID, &NewClientRect);
-
-	PreviewRect.left = ClientRect.right; //+ Offset;
-	PreviewRect.top = ClientRect.top + Offset;
-	PreviewRect.right = (NewClientRect.right - ClientRect.right) - Offset;
-	PreviewRect.bottom = ClientRect.bottom - 2*Offset;
-
-	PreviewWindow = CreateWindow (REDRAWCLASS, "", WS_VISIBLE | WS_CHILD /*| WS_BORDER*/,
-								  PreviewRect.left, PreviewRect.top, PreviewRect.right,
-								  PreviewRect.bottom, (HWND) WindowID, (HMENU) 1,
-								  (HINSTANCE) AfxGetInstanceHandle (), NULL);
-
-	ASSERT (PreviewWindow);
-}
-
-void CBrushEditDlg::RenderBrushPreview (ReDrawInfoType* RedrawInfo)
-{
-	HWND DestinationWnd = WindowFromDC (RedrawInfo->pDC->GetSafeHdc ());
-	INT32* RenderWindowID = (INT32*) GetProp (DestinationWnd, "WinID");
-
-	AttrBrushType* CurrentBrush = pAttrBrush_m;
-	
-	// paths should not be made static (for safety) ....
-
-	Path  CurvePath;
-
-	CurvePath.Initialise (8);
-	CurvePath.IsFilled  =  FALSE;
-	CurvePath.IsStroked = TRUE;
-	CurvePath.FindStartOfPath ();
-
-	// avoid overhead of allocation each time ....
-							
-	static INT32 kWidth;				kWidth				=	RedrawInfo->dx;
-	static INT32 kHalfWidth;			kHalfWidth			=	kWidth/2;
-	static INT32 kHeight;			kHeight				=	RedrawInfo->dy;
-	static INT32 kHalfHeight;		kHalfHeight			=	kHeight/2;
-
-	switch (RenderType)
-	{
-		case RT_LINE:
-		{
-			DocCoord P1 (kHalfWidth, 0);
-			DocCoord P2 (kHalfWidth, kHeight);
-
-			CurvePath.InsertMoveTo (P1);
-			CurvePath.InsertLineTo (P2);
-		}
-		break;
-		case RT_S:
-		{
-			DocCoord StartPoint2	(15000, 15000);
-			DocCoord MiddleCP1		(15000, kHalfHeight);
-			DocCoord MiddlePoint	(kHalfWidth, kHalfHeight);
-			DocCoord MiddleCP2		(kWidth-15000, kHalfHeight);
-			DocCoord EndPoint2		(kWidth-15000, kHeight-15000);
-
-			CurvePath.InsertMoveTo	(StartPoint2);
-			CurvePath.InsertCurveTo	(StartPoint2, MiddleCP1, MiddlePoint);
-			CurvePath.InsertCurveTo	(MiddlePoint, MiddleCP2, EndPoint2);
-			CurvePath.InsertLineTo	(EndPoint2);
-		}
-		break;
-	}
-
-	// render a curved line ....
-
-	DocRect  RenderRect( 0, 0,  kWidth, kHeight );
-
-	RenderRegion*  pRenderRegion  =  CreateGRenderRegion( &RenderRect, RedrawInfo );
-
-	static const StockColour  kBackgroundOutline  =  COLOUR_NONE;
-	static const StockColour  kBackground         =  COLOUR_WHITE;
-	
-	if (CurrentBrush == NULL)
-	{
-		ERROR3("Er, CurrentBrush is NULL in RenderBrushPreview");
-		return;
-	}
-
-	PathProcessorBrush* pPathProc = CurrentBrush->GetPathProcessor();
-	BrushAttrValue* pVal = (BrushAttrValue*)CurrentBrush->GetAttributeValue();
-
-	if( pRenderRegion != 0 )
-	{
-		pRenderRegion->SaveContext();
-
-		/// set drawing quality
-		Quality           QualityThing( Quality::QualityMax );
-		QualityAttribute  AntiAliasQualityAttr( QualityThing );
-		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-
-		pRenderRegion->SetFillColour( kBackground );
-		pRenderRegion->DrawRect( &RenderRect );
-
-		pRenderRegion->SetLineWidth (15000);
-		pPathProc->ScaleToValue (15000);
-		pRenderRegion->SetLineColour( kBackgroundOutline );
-
-		pVal->FlushCache  ();
-		CurrentBrush->Render (pRenderRegion);
-		pRenderRegion->DrawPath (&CurvePath);
-
-		pRenderRegion->RestoreContext();
-		DestroyGRenderRegion( pRenderRegion );
-	}
-}
-
-void CBrushEditDlg::CycleToNextPreviewStyle ()
-{
-	if (RenderType + 1 < RT_LAST)
-	{
-		//RenderType Adder = 1;
-		RenderType = (RenderPreviewType) (RenderType + 1);
-	}
-	else
-	{
-		RenderType = RT_LINE;
-	}
-
-	InvalidateRect (PreviewWindow, NULL, FALSE);
-}
 
 static CGadgetID BrushSpacingGadgetIDs [] =		{
 												//	_R(IDC_SPINBRUSHSPACING),            //0x5f84
@@ -1487,7 +1300,7 @@ static CGadgetID BrushSpacingGadgetIDs [] =		{
 													_R(IDC_COMBOSEQUENCETYPE),           //0x5f9c
 												};
 
-static NumberOfBrushSpacingGadgets = sizeof (BrushSpacingGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfBrushSpacingGadgets = sizeof (BrushSpacingGadgetIDs) / sizeof (CGadgetID);
 
 void CBrushEditDlg::InitBrushSpacing (BOOL OnlyForUnitChange /*= FALSE*/)
 {
@@ -1545,7 +1358,7 @@ static CGadgetID BrushOffsetGadgetIDs [] =	{
 												
 											};
 
-static NumberOfBrushOffsetGadgets = sizeof (BrushOffsetGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfBrushOffsetGadgets = sizeof (BrushOffsetGadgetIDs) / sizeof (CGadgetID);
 
 void CBrushEditDlg::InitBrushOffset (BOOL OnlyForUnitChange /*= FALSE*/)
 {
@@ -1620,7 +1433,7 @@ static CGadgetID BrushScalingGadgetIDs [] =	{
 												
 											};
 
-static NumberOfBrushScalingGadgets = sizeof (BrushScalingGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfBrushScalingGadgets = sizeof (BrushScalingGadgetIDs) / sizeof (CGadgetID);
 
 void CBrushEditDlg::InitBrushScaling (BOOL OnlyForUnitChange /*= FALSE*/)
 {
@@ -1683,7 +1496,7 @@ static CGadgetID BrushEffectsGadgetIDs [] = {
 												
 											};
 
-static NumberOfBrushEffectsGadgets = sizeof (BrushEffectsGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfBrushEffectsGadgets = sizeof (BrushEffectsGadgetIDs) / sizeof (CGadgetID);
 
 void CBrushEditDlg::InitBrushEffects (BOOL OnlyForUnitChange /*= FALSE*/)
 {
@@ -1729,7 +1542,7 @@ void CBrushEditDlg::InitBrushEffects (BOOL OnlyForUnitChange /*= FALSE*/)
 
 }
 
-/*!!!! SPECIAL NOTE the sequence combo has been moved to the spacing tab for various reasons.
+/* !!!! SPECIAL NOTE the sequence combo has been moved to the spacing tab for various reasons.
 the sequence tab now contains only transparency controls, obviously.
 */
 
@@ -1741,7 +1554,7 @@ static CGadgetID BrushSequenceGadgetIDs [] = {
 											};
 
 
-static NumberOfBrushSequenceGadgets = sizeof (BrushSequenceGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfBrushSequenceGadgets = sizeof (BrushSequenceGadgetIDs) / sizeof (CGadgetID);
 
 
 void CBrushEditDlg::InitBrushSequence (BOOL OnlyForUnitChange /*= FALSE*/)
@@ -1781,11 +1594,11 @@ static CGadgetID LocalFillRadioGadgets [] = {
 												_R(IDC_RADIOLOCALFILLALL),
 												_R(IDC_RADIOLOCALFILLNAMED), 
 												_R(IDC_RADIOLOCALFILLNONE),
-												NULL
+												0
 											};
 
-static NumberOfBrushFillGadgets = sizeof (BrushFillGadgetIDs) / sizeof (CGadgetID);
-static NumberOfLocalFillRadios = sizeof (LocalFillRadioGadgets) / sizeof (CGadgetID);
+static INT32 NumberOfBrushFillGadgets = sizeof (BrushFillGadgetIDs) / sizeof (CGadgetID);
+static INT32 NumberOfLocalFillRadios = sizeof (LocalFillRadioGadgets) / sizeof (CGadgetID);
 
 void CBrushEditDlg::InitBrushFill (BOOL OnlyForUnitChange /*= FALSE*/)
 {
@@ -1918,7 +1731,7 @@ void CBrushEditDlg::InitSequenceType ()
 		break;
 	}
 
-	BrushDefinition* pDef = BrushComponent::FindDefinition(EditData->m_BrushHandle);
+	BrushDefinition* pDef = BrushComponent::FindBrushDefinition(EditData->m_BrushHandle);
 	if (pDef)
 	{
 		UINT32 Num = pDef->GetNumBrushObjects();
@@ -1990,28 +1803,21 @@ void CBrushEditDlg::ReInitBrushSequence ()
 
 void CBrushEditDlg::ReInitUnitDependantFields (CDlgResID ThePage)
 {
-	switch (ThePage)
+	if (ThePage == _R(IDD_BRUSHEDITSPACING))
+		InitBrushSpacing (TRUE);
+	else if (ThePage == _R(IDD_BRUSHEDITOFFSET))
+		InitBrushOffset (TRUE);
+	else if (ThePage == _R(IDD_BRUSHEDITSCALING))
+		InitBrushScaling (TRUE);
+	else if (ThePage == _R(IDD_BRUSHEDITEFFECTS))
+		InitBrushEffects (TRUE);
+	else if (ThePage == _R(IDD_BRUSHEDITSEQUENCE))
+		InitBrushSequence (TRUE);
+	else if (ThePage == _R(IDD_BRUSHEDITFILL))
+		InitBrushFill (TRUE);
+	else
 	{
-		case _R(IDD_BRUSHEDITSPACING):
-			InitBrushSpacing (TRUE);
-		break;
-		case _R(IDD_BRUSHEDITOFFSET):
-			InitBrushOffset (TRUE);
-		break;
-		case _R(IDD_BRUSHEDITSCALING):
-			InitBrushScaling (TRUE);
-		break;
-		case _R(IDD_BRUSHEDITEFFECTS):
-			InitBrushEffects (TRUE);
-		break;
-		case _R(IDD_BRUSHEDITSEQUENCE):
-			InitBrushSequence (TRUE);
-		break;
-		case _R(IDD_BRUSHEDITFILL):
-			InitBrushFill (TRUE);
-		break;
-		default:
-			ERROR3("Unknown tab dialog page");
+		ERROR3("Unknown tab dialog page");
 	}
 }
 
@@ -2022,7 +1828,7 @@ void CBrushEditDlg::HandleCommit (DialogMsg* Msg)
 	
 	WriteSliders (Msg);
 
-	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, reinterpret_cast<INT32> (EditData)),  DialogBarOp);
+	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, (UINT_PTR) (EditData)),  DialogBarOp);
 	
 	LaunchOp();
 }
@@ -2036,7 +1842,7 @@ void CBrushEditDlg::HandleSelectionChange (DialogMsg* Msg)
 	if (ChangeType_m == CHANGEBRUSH_NONE)
 		ReadEditBox(Msg);
 
-	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, reinterpret_cast<INT32> (EditData)),  DialogBarOp);
+	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, (UINT_PTR) (EditData)),  DialogBarOp);
 	// launch the changebrush op
 	LaunchOp();
 }
@@ -2054,7 +1860,7 @@ void CBrushEditDlg::HandleButtonDown (DialogMsg* Msg)
 	if (ChangeType_m == CHANGEBRUSH_NONE)
 		ReadRadios(Msg);
 
-	BROADCAST_TO_CLASS (DialogMsg (0, DIM_COMMIT/*Msg->DlgMsg*/, Id_m, reinterpret_cast<INT32> (EditData)),  DialogBarOp);
+	BROADCAST_TO_CLASS (DialogMsg (0, DIM_COMMIT/*Msg->DlgMsg*/, Id_m, (UINT_PTR) (EditData)),  DialogBarOp);
 	LaunchOp();
 }
 
@@ -2062,7 +1868,7 @@ void CBrushEditDlg::HandleSliderPosChanging (DialogMsg* Msg)
 {
 	ReadSlider (Msg);
 
-	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, reinterpret_cast<INT32> (EditData)),  DialogBarOp);
+	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, (UINT_PTR) (EditData)),  DialogBarOp);
 	
 	// ok, so in order to avoid generating an undoable op for each slider movement we will only
 	// do so on the first movement, so that undo will take it back to its original position
@@ -2086,7 +1892,7 @@ void CBrushEditDlg::HandleSliderPosSet (DialogMsg* Msg)
 {
 	ReadSlider (Msg);
 
-	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, reinterpret_cast<INT32> (EditData)),  DialogBarOp);
+	BROADCAST_TO_CLASS (DialogMsg (0, Msg->DlgMsg, Id_m, (UINT_PTR) (EditData)),  DialogBarOp);
 	// don't launch an op, see above for comments
 	if (ChangeType_m != CHANGEBRUSH_NONE && EditingBrushDef == FALSE)
 	{
@@ -2203,206 +2009,192 @@ void CBrushEditDlg::ReadEditBox (DialogMsg* Msg)
 	INT32 LongNewVal;
 	BOOL Valid = FALSE;
 	ChangeType_m = CHANGEBRUSH_NONE;
-	switch (Msg->GadgetID)
-	{
 		// brush spacing stuff ....
 		
-		case _R(IDC_EDITBRUSHSPACING):
-		{
-			double MinSpacingSlider = 0;
-			double MaxSpacingSlider = 0;
-			GetSpacingRange(&MinSpacingSlider, &MaxSpacingSlider);
-			DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITBRUSHSPACING), MinSpacingSlider , MaxSpacingSlider);
-			MILLIPOINT NewVal  = GetPercentageAsDistance(DoubleNewVal, WIDTH);
-			DoubleNewVal = pow((double)NewVal, InvFactor);
-		
-			if (DoubleNewVal >= MinSpacingSlider && DoubleNewVal <= MaxSpacingSlider)
-			{	
-				if (EditData->m_BrushSpacing != NewVal)
-				{
-					
-					EditData->m_BrushSpacing = NewVal;
-					ChangeType_m = CHANGEBRUSH_SPACING;
-					ChangeParam_m.m_NewSpacing = NewVal;
-					ReInitBrushSpacing();
-				}
-			}
-			else
+	if (FALSE) {}
+	else if (Msg->GadgetID == _R(IDC_EDITBRUSHSPACING))
+	{
+		double MinSpacingSlider = 0;
+		double MaxSpacingSlider = 0;
+		GetSpacingRange(&MinSpacingSlider, &MaxSpacingSlider);
+		DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITBRUSHSPACING), MinSpacingSlider , MaxSpacingSlider);
+		MILLIPOINT NewVal  = GetPercentageAsDistance(DoubleNewVal, WIDTH);
+		DoubleNewVal = pow((double)NewVal, InvFactor);
+	
+		if (DoubleNewVal >= MinSpacingSlider && DoubleNewVal <= MaxSpacingSlider)
+		{	
+			if (EditData->m_BrushSpacing != NewVal)
 			{
-				//InformWarning(_R(IDS_BRUSHSPACING_INVALID));
-				UpdateEditBox(_R(IDC_EDITBRUSHSPACING));
-			}
-		}
-		break;
-		
-		case _R(IDC_EDITBRUSHSPACINGINCRCONST):
-		{
-			DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITBRUSHSPACINGINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, _R(IDS_BRUSHINCRINVALID), &Valid);
-			
-			if (DoubleNewVal > MIN_SPACING_INCR && DoubleNewVal < MAX_SPACING_INCR && Valid)
-			{
-				// we need to convert the % value we got from the slider into millipoints
-				MILLIPOINT Distance = GetPercentageAsDistance(DoubleNewVal, WIDTH);
-				if (abs(Distance - EditData->m_BrushSpacingIncrConst) > 5)
-				{
-					EditData->m_BrushSpacingIncrConst = Distance;
-					ChangeType_m = CHANGEBRUSH_SPACING_INCRCONST;
-					ChangeParam_m.m_NewSpacingIncrConst = Distance;
-					SetSpacingIncrSlider();
-				}
-			}
-			else
-			{
-				//InformWarning(_R(IDS_BRUSHINCRINVALID));
-				UpdateEditBox(_R(IDC_EDITBRUSHSPACINGINCRCONST));
-			}
-		}
-		break;
-
-		// brush offset stuff ....
-		
-		case _R(IDC_EDITPATHOFFSETVALUE):
-		{
-			DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETVALUE), MinOffset, MaxOffset,0, &Valid );
-
-			if (DoubleNewVal <= MaxOffset && DoubleNewVal >= MinOffset && Valid)
-			{
-				// convert the % val into millipoints
-				MILLIPOINT Offset = GetPercentageAsDistance(DoubleNewVal, HEIGHT);
-				if (abs(Offset - EditData->m_PathOffsetValue) > 5)
-				{
-					EditData->m_PathOffsetValue = Offset;
-					ChangeType_m = CHANGEBRUSH_OFFSET_VAL;
-					ChangeParam_m.m_NewPathOffsetVal = Offset;
-					ReInitBrushOffset();
-				}
-			}
-			else
-			{
-				UpdateEditBox(_R(IDC_EDITPATHOFFSETVALUE));
-			}
-		}
-		break;
-
-		case _R(IDC_EDITPATHOFFSETINCRCONST):
-		{
-			DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, _R(IDS_BRUSHINCRINVALID), &Valid);
-			if (Valid && DoubleNewVal <= MAX_SPACING_INCR && DoubleNewVal >= MIN_SPACING_INCR)
-			{
-				MilliPointNewVal = GetPercentageAsDistance(DoubleNewVal, HEIGHT);
-				if (EditData->m_PathOffsetIncrConst != MilliPointNewVal)
-				{	
-					EditData->m_PathOffsetIncrConst = MilliPointNewVal;
-					ChangeParam_m.m_NewOffsetIncrConst = MilliPointNewVal;
-					ChangeType_m = CHANGEBRUSH_OFFSET_INCRCONST;
-					ReInitBrushOffset();
-				}
-			}
-			else
-			{
-				//InformWarning(_R(IDS_BRUSHINCRINVALID));
-				UpdateEditBox(_R(IDC_EDITPATHOFFSETINCRCONST));
-			}
-		}
-		break;
-		
-		// brush scaling stuff ....
-
-		case _R(IDC_EDITSCALINGINCRCONST):
-		{
-			DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITSCALINGINCRCONST), MinScalingIncrSlider, MaxScalingIncrSlider, _R(IDS_BRUSHSCALINGINCRINVALID), &Valid);
-
-			if (DoubleNewVal <= MaxScalingIncrSlider && DoubleNewVal >= MinScalingIncrSlider && Valid)
-			{
-				// we need to convert the % value we got from the slider into millipoints
-				if (EditData->m_BrushScalingIncrConst  != DoubleNewVal)
-				{
-					EditData->m_BrushScalingIncrConst = DoubleNewVal;
-					ReInitBrushScaling();
-					ChangeType_m = CHANGEBRUSH_SCALING_INCRCONST;
-					ChangeParam_m.m_NewScalingIncrConst = EditData->m_BrushScalingIncrConst;
-				}
-			}
-			else
-			{
-				//InformWarning(_R(IDS_BRUSHSCALINGINCRINVALID));
-				UpdateEditBox(_R(IDC_EDITSCALINGINCRCONST));
-			}
-		}
-		break;
-
-		case _R(IDC_EDITBRUSHSCALINGINCR):
-			DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALINGINCR), MinMultiSlider, MaxMultiSlider, _R(IDS_INCRPROP_INVALID), &Valid);
-			if (! Valid || DoubleNewVal < MinMultiSlider || DoubleNewVal > MaxMultiSlider)
-			{
-				//InformWarning(_R(IDS_INCRPROP_INVALID));
-				UpdateEditBox(_R(IDC_EDITBRUSHSCALINGINCR));
-			}
-			else
-			{
-				if (EditData->m_BrushScalingIncr != DoubleNewVal / 100)
-				{
-					EditData->m_BrushScalingIncr = DoubleNewVal / 100;
-					ChangeType_m = CHANGEBRUSH_SCALING_INCR;
-					ChangeParam_m.m_NewScalingIncr = DoubleNewVal / 100;
-					ReInitBrushScaling();
-				}
-			}
-		break;
-
-		case _R(IDC_EDITROTATEANGLE):
-			DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITROTATEANGLE), 0, MAX_ANGLE_DEG, _R(IDS_BRUSHANGLE_INVALID), &Valid );
-			if (! Valid || DoubleNewVal < 0 || DoubleNewVal > MAX_ANGLE_DEG)
-			{
-				//InformWarning(_R(IDS_BRUSHANGLE_INVALID));
-				UpdateEditBox(_R(IDC_EDITROTATEANGLE));
-			}
-			else
-			{
-				if (EditData->m_RotateAngle != DoubleNewVal)
-				{
-					EditData->m_RotateAngle = DoubleNewVal;
-					ChangeType_m = CHANGEBRUSH_ROTATE_ANGLE;
-					ChangeParam_m.m_NewRotateAngle = DoubleNewVal;
-					ReInitBrushEffects();
-				}
-			}
-		break;
-		case _R(IDC_EDITROTATEANGLEINCR):
-			DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITROTATEANGLEINCR), MIN_ANGLE_DEG , MAX_ANGLE_DEG, _R(IDS_BRUSHANGLE_INVALID), &Valid);
-			if (!Valid || DoubleNewVal < MIN_ANGLE_DEG || DoubleNewVal > MAX_ANGLE_DEG)
-			{
-				//InformWarning(_R(IDS_BRUSHANGLE_INVALID));
-				UpdateEditBox(_R(IDC_EDITROTATEANGLEINCR));
-			}
-			else 
-			{
-				if (EditData->m_RotAngleIncrConst != DoubleNewVal)
-				{
-					EditData->m_RotAngleIncrConst = DoubleNewVal ;
-					ChangeType_m = CHANGEBRUSH_ROTATE_INCRCONST;
-					ChangeParam_m.m_NewRotationIncrConst = DoubleNewVal ;
-					ReInitBrushEffects();
-				}
-			}
-			break;
-		case _R(IDC_EDITBRUSHTRANSP):
-			LongNewVal = GetLongGadgetValue(_R(IDC_EDITBRUSHTRANSP), MIN_TRANSP_SLIDER-100 , MAX_TRANSP_SLIDER-100, _R(IDS_BRUSHTRANSP_INVALID), &Valid);
-			if (Valid)
-			{
-				if (EditData->m_BrushTransparency != LongNewVal + 100)
-				{
-					EditData->m_BrushTransparency = LongNewVal + 100;
-					ChangeType_m = CHANGEBRUSH_TRANSP;
-					ChangeParam_m.m_NewTransp = EditData->m_BrushTransparency;
-					ReInitBrushSequence();
-				}
 				
-					
+				EditData->m_BrushSpacing = NewVal;
+				ChangeType_m = CHANGEBRUSH_SPACING;
+				ChangeParam_m.m_NewSpacing = NewVal;
+				ReInitBrushSpacing();
 			}
-			UpdateEditBox(_R(IDC_EDITBRUSHTRANSP));
-			break;
+		}
+		else
+		{
+			//InformWarning(_R(IDS_BRUSHSPACING_INVALID));
+			UpdateEditBox(_R(IDC_EDITBRUSHSPACING));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITBRUSHSPACINGINCRCONST))
+	{
+		DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITBRUSHSPACINGINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, _R(IDS_BRUSHINCRINVALID), &Valid);
+		
+		if (DoubleNewVal > MIN_SPACING_INCR && DoubleNewVal < MAX_SPACING_INCR && Valid)
+		{
+			// we need to convert the % value we got from the slider into millipoints
+			MILLIPOINT Distance = GetPercentageAsDistance(DoubleNewVal, WIDTH);
+			if (abs(Distance - EditData->m_BrushSpacingIncrConst) > 5)
+			{
+				EditData->m_BrushSpacingIncrConst = Distance;
+				ChangeType_m = CHANGEBRUSH_SPACING_INCRCONST;
+				ChangeParam_m.m_NewSpacingIncrConst = Distance;
+				SetSpacingIncrSlider();
+			}
+		}
+		else
+		{
+			//InformWarning(_R(IDS_BRUSHINCRINVALID));
+			UpdateEditBox(_R(IDC_EDITBRUSHSPACINGINCRCONST));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITPATHOFFSETVALUE))
+	{
+		DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETVALUE), MinOffset, MaxOffset,0, &Valid );
 
+		if (DoubleNewVal <= MaxOffset && DoubleNewVal >= MinOffset && Valid)
+		{
+			// convert the % val into millipoints
+			MILLIPOINT Offset = GetPercentageAsDistance(DoubleNewVal, HEIGHT);
+			if (abs(Offset - EditData->m_PathOffsetValue) > 5)
+			{
+				EditData->m_PathOffsetValue = Offset;
+				ChangeType_m = CHANGEBRUSH_OFFSET_VAL;
+				ChangeParam_m.m_NewPathOffsetVal = Offset;
+				ReInitBrushOffset();
+			}
+		}
+		else
+		{
+			UpdateEditBox(_R(IDC_EDITPATHOFFSETVALUE));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITPATHOFFSETINCRCONST))
+	{
+		DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, _R(IDS_BRUSHINCRINVALID), &Valid);
+		if (Valid && DoubleNewVal <= MAX_SPACING_INCR && DoubleNewVal >= MIN_SPACING_INCR)
+		{
+			MilliPointNewVal = GetPercentageAsDistance(DoubleNewVal, HEIGHT);
+			if (EditData->m_PathOffsetIncrConst != MilliPointNewVal)
+			{	
+				EditData->m_PathOffsetIncrConst = MilliPointNewVal;
+				ChangeParam_m.m_NewOffsetIncrConst = MilliPointNewVal;
+				ChangeType_m = CHANGEBRUSH_OFFSET_INCRCONST;
+				ReInitBrushOffset();
+			}
+		}
+		else
+		{
+			//InformWarning(_R(IDS_BRUSHINCRINVALID));
+			UpdateEditBox(_R(IDC_EDITPATHOFFSETINCRCONST));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITSCALINGINCRCONST))
+	{
+		DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITSCALINGINCRCONST), MinScalingIncrSlider, MaxScalingIncrSlider, _R(IDS_BRUSHSCALINGINCRINVALID), &Valid);
+
+		if (DoubleNewVal <= MaxScalingIncrSlider && DoubleNewVal >= MinScalingIncrSlider && Valid)
+		{
+			// we need to convert the % value we got from the slider into millipoints
+			if (EditData->m_BrushScalingIncrConst  != DoubleNewVal)
+			{
+				EditData->m_BrushScalingIncrConst = DoubleNewVal;
+				ReInitBrushScaling();
+				ChangeType_m = CHANGEBRUSH_SCALING_INCRCONST;
+				ChangeParam_m.m_NewScalingIncrConst = EditData->m_BrushScalingIncrConst;
+			}
+		}
+		else
+		{
+			//InformWarning(_R(IDS_BRUSHSCALINGINCRINVALID));
+			UpdateEditBox(_R(IDC_EDITSCALINGINCRCONST));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITBRUSHSCALINGINCR))
+	{
+		DoubleNewVal = GetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALINGINCR), MinMultiSlider, MaxMultiSlider, _R(IDS_INCRPROP_INVALID), &Valid);
+		if (! Valid || DoubleNewVal < MinMultiSlider || DoubleNewVal > MaxMultiSlider)
+		{
+			//InformWarning(_R(IDS_INCRPROP_INVALID));
+			UpdateEditBox(_R(IDC_EDITBRUSHSCALINGINCR));
+		}
+		else
+		{
+			if (EditData->m_BrushScalingIncr != DoubleNewVal / 100)
+			{
+				EditData->m_BrushScalingIncr = DoubleNewVal / 100;
+				ChangeType_m = CHANGEBRUSH_SCALING_INCR;
+				ChangeParam_m.m_NewScalingIncr = DoubleNewVal / 100;
+				ReInitBrushScaling();
+			}
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITROTATEANGLE))
+	{
+		DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITROTATEANGLE), 0, MAX_ANGLE_DEG, _R(IDS_BRUSHANGLE_INVALID), &Valid );
+		if (! Valid || DoubleNewVal < 0 || DoubleNewVal > MAX_ANGLE_DEG)
+		{
+			//InformWarning(_R(IDS_BRUSHANGLE_INVALID));
+			UpdateEditBox(_R(IDC_EDITROTATEANGLE));
+		}
+		else
+		{
+			if (EditData->m_RotateAngle != DoubleNewVal)
+			{
+				EditData->m_RotateAngle = DoubleNewVal;
+				ChangeType_m = CHANGEBRUSH_ROTATE_ANGLE;
+				ChangeParam_m.m_NewRotateAngle = DoubleNewVal;
+				ReInitBrushEffects();
+			}
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITROTATEANGLEINCR))
+	{
+		DoubleNewVal = GetDoubleGadgetValue(_R(IDC_EDITROTATEANGLEINCR), MIN_ANGLE_DEG , MAX_ANGLE_DEG, _R(IDS_BRUSHANGLE_INVALID), &Valid);
+		if (!Valid || DoubleNewVal < MIN_ANGLE_DEG || DoubleNewVal > MAX_ANGLE_DEG)
+		{
+			//InformWarning(_R(IDS_BRUSHANGLE_INVALID));
+			UpdateEditBox(_R(IDC_EDITROTATEANGLEINCR));
+		}
+		else 
+		{
+			if (EditData->m_RotAngleIncrConst != DoubleNewVal)
+			{
+				EditData->m_RotAngleIncrConst = DoubleNewVal ;
+				ChangeType_m = CHANGEBRUSH_ROTATE_INCRCONST;
+				ChangeParam_m.m_NewRotationIncrConst = DoubleNewVal ;
+				ReInitBrushEffects();
+			}
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_EDITBRUSHTRANSP))
+	{
+		LongNewVal = GetLongGadgetValue(_R(IDC_EDITBRUSHTRANSP), MIN_TRANSP_SLIDER-100 , MAX_TRANSP_SLIDER-100, _R(IDS_BRUSHTRANSP_INVALID), &Valid);
+		if (Valid)
+		{
+			if (EditData->m_BrushTransparency != LongNewVal + 100)
+			{
+				EditData->m_BrushTransparency = LongNewVal + 100;
+				ChangeType_m = CHANGEBRUSH_TRANSP;
+				ChangeParam_m.m_NewTransp = EditData->m_BrushTransparency;
+				ReInitBrushSequence();
+			}
+			
+				
+		}
+		UpdateEditBox(_R(IDC_EDITBRUSHTRANSP));
 	}
 }
 
@@ -2410,159 +2202,151 @@ void CBrushEditDlg::ReadComboBox (DialogMsg* Msg)
 {
 //	SequenceType NewSeqType;
 //	PathOffset NewOffsetType;
-	WORD Index = -1;
-	switch (Msg->GadgetID)
+	WORD Index = (WORD)(-1);
+
+	if (Msg->GadgetID == _R(IDC_COMBOPATHOFFSETTYPE))
 	{
-		case _R(IDC_COMBOPATHOFFSETTYPE):
-			GetValueIndex(_R(IDC_COMBOPATHOFFSETTYPE), &Index);
-			UsingRandomOffset = FALSE;
-			
-			switch (Index)
-			{
-				case -1:
-					ERROR3("Invalid index");
-				break;
-
-				case OFFSET_NONE:
-					EditData->m_PathOffsetType = OFFSET_NONE;
-					if (EditData->m_OffsetValueMaxRand == 0)
-						ChangeParam_m.m_NewPathOffsetType = OFFSET_NONE;
-					else
-						ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
-			
-					ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
-					ReInitBrushOffset ();
-				break;
-
-				case OFFSET_ALTERNATE:
-					EditData->m_PathOffsetType = OFFSET_ALTERNATE;
-					ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
-					ChangeParam_m.m_NewPathOffsetType = OFFSET_ALTERNATE;
-					ReInitBrushOffset ();
-				break;
-
-				case OFFSET_LEFT:
-					EditData->m_PathOffsetType = OFFSET_LEFT;
-					ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
-					ChangeParam_m.m_NewPathOffsetType = OFFSET_LEFT;
-					ReInitBrushOffset ();
-				break;
-
-				case OFFSET_RIGHT:
-					EditData->m_PathOffsetType = OFFSET_RIGHT;
-					ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
-					ChangeParam_m.m_NewPathOffsetType = OFFSET_RIGHT;
-					ReInitBrushOffset ();
-				break;
-
-				case OFFSET_RANDOM:
-					UsingRandomOffset = TRUE;
-					EditData->m_PathOffsetType = OFFSET_RANDOM;
-					ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
-					ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
-					ReInitBrushOffset ();
-				break;
-
-				default:
-					ERROR3("Unrecognised offset type");
-					ChangeType_m = CHANGEBRUSH_NONE;
-				break;
-			}
-		break;
-
-		case _R(IDC_COMBOSEQUENCETYPE):
+		GetValueIndex(_R(IDC_COMBOPATHOFFSETTYPE), &Index);
+		UsingRandomOffset = FALSE;
+		
+		switch (Index)
 		{
-			GetValueIndex(_R(IDC_COMBOSEQUENCETYPE), &Index);
-			switch(Index)
-			{
-				case SEQ_FORWARD:
-					EditData->m_SequenceType = SEQ_FORWARD;
-					ChangeType_m = CHANGEBRUSH_SEQUENCE;
-					ChangeParam_m.m_NewSequenceType = SEQ_FORWARD;
-				break;
+			case -1:
+				ERROR3("Invalid index");
+			break;
 
-				case SEQ_BACKWARD:
-					EditData->m_SequenceType = SEQ_BACKWARD;
-					ChangeType_m = CHANGEBRUSH_SEQUENCE;
-					ChangeParam_m.m_NewSequenceType = SEQ_BACKWARD;
-				break;
+			case OFFSET_NONE:
+				EditData->m_PathOffsetType = OFFSET_NONE;
+				if (EditData->m_OffsetValueMaxRand == 0)
+					ChangeParam_m.m_NewPathOffsetType = OFFSET_NONE;
+				else
+					ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
+		
+				ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
+				ReInitBrushOffset ();
+			break;
 
-				case SEQ_MIRROR:
-					EditData->m_SequenceType = SEQ_MIRROR;
-					ChangeType_m = CHANGEBRUSH_SEQUENCE;
-					ChangeParam_m.m_NewSequenceType = SEQ_MIRROR;
-				break;
+			case OFFSET_ALTERNATE:
+				EditData->m_PathOffsetType = OFFSET_ALTERNATE;
+				ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
+				ChangeParam_m.m_NewPathOffsetType = OFFSET_ALTERNATE;
+				ReInitBrushOffset ();
+			break;
 
-				case SEQ_RANDOM:
-					EditData->m_SequenceType = SEQ_RANDOM;
-					ChangeType_m = CHANGEBRUSH_SEQUENCE;
-					ChangeParam_m.m_NewSequenceType = SEQ_RANDOM;
-				break;
+			case OFFSET_LEFT:
+				EditData->m_PathOffsetType = OFFSET_LEFT;
+				ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
+				ChangeParam_m.m_NewPathOffsetType = OFFSET_LEFT;
+				ReInitBrushOffset ();
+			break;
 
-				default:
-					ERROR3("Unrecognised sequence type");
-					ChangeType_m = CHANGEBRUSH_NONE;
-				break;
-			}
-		ReInitBrushSpacing();
+			case OFFSET_RIGHT:
+				EditData->m_PathOffsetType = OFFSET_RIGHT;
+				ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
+				ChangeParam_m.m_NewPathOffsetType = OFFSET_RIGHT;
+				ReInitBrushOffset ();
+			break;
+
+			case OFFSET_RANDOM:
+				UsingRandomOffset = TRUE;
+				EditData->m_PathOffsetType = OFFSET_RANDOM;
+				ChangeType_m = CHANGEBRUSH_OFFSET_TYPE;
+				ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
+				ReInitBrushOffset ();
+			break;
+
+			default:
+				ERROR3("Unrecognised offset type");
+				ChangeType_m = CHANGEBRUSH_NONE;
+			break;
 		}
-		break;
-
-	default:
-		ChangeType_m = CHANGEBRUSH_NONE;
-	break;
 	}
+	else if (Msg->GadgetID == _R(IDC_COMBOSEQUENCETYPE))
+	{
+		GetValueIndex(_R(IDC_COMBOSEQUENCETYPE), &Index);
+		switch(Index)
+		{
+			case SEQ_FORWARD:
+				EditData->m_SequenceType = SEQ_FORWARD;
+				ChangeType_m = CHANGEBRUSH_SEQUENCE;
+				ChangeParam_m.m_NewSequenceType = SEQ_FORWARD;
+			break;
+
+			case SEQ_BACKWARD:
+				EditData->m_SequenceType = SEQ_BACKWARD;
+				ChangeType_m = CHANGEBRUSH_SEQUENCE;
+				ChangeParam_m.m_NewSequenceType = SEQ_BACKWARD;
+			break;
+
+			case SEQ_MIRROR:
+				EditData->m_SequenceType = SEQ_MIRROR;
+				ChangeType_m = CHANGEBRUSH_SEQUENCE;
+				ChangeParam_m.m_NewSequenceType = SEQ_MIRROR;
+			break;
+
+			case SEQ_RANDOM:
+				EditData->m_SequenceType = SEQ_RANDOM;
+				ChangeType_m = CHANGEBRUSH_SEQUENCE;
+				ChangeParam_m.m_NewSequenceType = SEQ_RANDOM;
+			break;
+
+			default:
+				ERROR3("Unrecognised sequence type");
+				ChangeType_m = CHANGEBRUSH_NONE;
+			break;
+		}
+	ReInitBrushSpacing();
+	}
+	else
+		ChangeType_m = CHANGEBRUSH_NONE;
 }
 
 void CBrushEditDlg::ReadCheckBox (DialogMsg* Msg)
 {	
 //	BOOL Checked;
 
-	switch (Msg->GadgetID)
+	if (Msg->GadgetID == _R(IDC_CHECKTILEING))
 	{
-		case _R(IDC_CHECKTILEING):
-			EditData->m_bTile = !(EditData->m_bTile);
-			//GetBoolGadgetSelected (_R(IDC_CHECKTILEING),0, &Checked);
-			//EditData->m_bTile = Checked;
-			ChangeType_m = CHANGEBRUSH_TILED;
-			ChangeParam_m.m_bNewTiled = EditData->m_bTile;//Checked;
-			ReInitBrushFill();
-		break;
-
-		case _R(IDC_CHECKLOCALFILLCOLOUR):
-			//GetBoolGadgetSelected (_R(IDC_CHECKLOCALFILLCOLOUR),0, &Checked);
-			EditData->m_bUseLocalFillColour = !(EditData->m_bUseLocalFillColour);//Checked;
-			ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
-			ChangeParam_m.m_bNewUseLocalFillColour = EditData->m_bUseLocalFillColour;//Checked;
-			ReInitBrushFill();
-		break;
-
-		case _R(IDC_CHECKOVERRIDENAMED):
-			EditData->m_bUseNamedColour = !(EditData->m_bUseNamedColour);
-			ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
-			ChangeParam_m.m_bNewUseNamed = EditData->m_bUseNamedColour;
-			ReInitBrushFill();
-		break;
-
-		case _R(IDC_CHECKROTATE):
-			//GetBoolGadgetSelected (_R(IDC_CHECKROTATE),0, &Checked);
-			EditData->m_bRotate = !(EditData->m_bRotate);//Checked;
-			ChangeType_m = CHANGEBRUSH_TANGENTIAL;
-			ChangeParam_m.m_bNewRotated = EditData->m_bRotate;//Checked;
+		EditData->m_bTile = !(EditData->m_bTile);
+		//GetBoolGadgetSelected (_R(IDC_CHECKTILEING),0, &Checked);
+		//EditData->m_bTile = Checked;
+		ChangeType_m = CHANGEBRUSH_TILED;
+		ChangeParam_m.m_bNewTiled = EditData->m_bTile;//Checked;
+		ReInitBrushFill();
+	}
+	else if (Msg->GadgetID == _R(IDC_CHECKLOCALFILLCOLOUR))
+	{
+		//GetBoolGadgetSelected (_R(IDC_CHECKLOCALFILLCOLOUR),0, &Checked);
+		EditData->m_bUseLocalFillColour = !(EditData->m_bUseLocalFillColour);//Checked;
+		ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
+		ChangeParam_m.m_bNewUseLocalFillColour = EditData->m_bUseLocalFillColour;//Checked;
+		ReInitBrushFill();
+	}
+	else if (Msg->GadgetID == _R(IDC_CHECKOVERRIDENAMED))
+	{
+		EditData->m_bUseNamedColour = !(EditData->m_bUseNamedColour);
+		ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
+		ChangeParam_m.m_bNewUseNamed = EditData->m_bUseNamedColour;
+		ReInitBrushFill();
+	}
+	else if (Msg->GadgetID == _R(IDC_CHECKROTATE))
+	{
+		//GetBoolGadgetSelected (_R(IDC_CHECKROTATE),0, &Checked);
+		EditData->m_bRotate = !(EditData->m_bRotate);//Checked;
+		ChangeType_m = CHANGEBRUSH_TANGENTIAL;
+		ChangeParam_m.m_bNewRotated = EditData->m_bRotate;//Checked;
 		//	ReInitBrushEffects ();
 
-			/*if (!(EditData->m_bRotate))
-			{
-				EditData->m_RotateAngle = DefaultRotationAngle;
-			}*/
-		break;
-
-		default:
-			//ERROR3 ("Unrecognised gadget"); // not necessarily an error, as it may have been a button
-			ChangeType_m = CHANGEBRUSH_NONE;
-		break;
+		/*if (!(EditData->m_bRotate))
+		{
+			EditData->m_RotateAngle = DefaultRotationAngle;
+		}*/
 	}
-	
+	else
+	{
+		//ERROR3 ("Unrecognised gadget"); // not necessarily an error, as it may have been a button
+		ChangeType_m = CHANGEBRUSH_NONE;
+	}
 }
 
 void CBrushEditDlg::ReadRadios(DialogMsg* Msg)
@@ -2570,58 +2354,47 @@ void CBrushEditDlg::ReadRadios(DialogMsg* Msg)
 	if (Msg == NULL)
 		return;
 
-	switch (Msg->GadgetID)
+	if (Msg->GadgetID == _R(IDC_RADIOLOCALFILLALL))
 	{
-		case _R(IDC_RADIOLOCALFILLALL):
+		if (EditData->m_bUseLocalFillColour == FALSE)
 		{
-			if (EditData->m_bUseLocalFillColour == FALSE)
-			{
-				EditData->m_bUseLocalFillColour = TRUE;
-				// we need to set this to true to indicate that we are not overriding only named
-				// colours, the semantics are a little off i'm afraid
-				EditData->m_bUseNamedColour = TRUE;
-				ChangeParam_m.m_bNewUseLocalFillColour = TRUE;
-				ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
-			}
-
+			EditData->m_bUseLocalFillColour = TRUE;
+			// we need to set this to true to indicate that we are not overriding only named
+			// colours, the semantics are a little off i'm afraid
+			EditData->m_bUseNamedColour = TRUE;
+			ChangeParam_m.m_bNewUseLocalFillColour = TRUE;
+			ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
 		}
-		break;
-		case _R(IDC_RADIOLOCALFILLNAMED):
+	}
+	else if (Msg->GadgetID == _R(IDC_RADIOLOCALFILLNAMED))
+	{
+		// potentially a bit confusing this: if UseNamed == TRUE then we do not use
+		// any of the local colours, if UseNamed == FALSE then we do
+		if (EditData->m_bUseNamedColour == TRUE)
 		{
-			// potentially a bit confusing this: if UseNamed == TRUE then we do not use
-			// any of the local colours, if UseNamed == FALSE then we do
-			if (EditData->m_bUseNamedColour == TRUE)
-			{
-				EditData->m_bUseNamedColour = FALSE;
-				EditData->m_bUseLocalFillColour = FALSE;
-				ChangeParam_m.m_bNewUseNamed = FALSE;
-				ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
-			}
-
+			EditData->m_bUseNamedColour = FALSE;
+			EditData->m_bUseLocalFillColour = FALSE;
+			ChangeParam_m.m_bNewUseNamed = FALSE;
+			ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
 		}
-		break;
-		case _R(IDC_RADIOLOCALFILLNONE):
+	}
+	else if (Msg->GadgetID == _R(IDC_RADIOLOCALFILLNONE))
+	{
+		// find out which local option was selected and turn it off
+		if (EditData->m_bUseLocalFillColour)
 		{
-			// find out which local option was selected and turn it off
-			if (EditData->m_bUseLocalFillColour)
-			{
-				EditData->m_bUseLocalFillColour = FALSE;
-				ChangeParam_m.m_bNewUseLocalFillColour = FALSE;
-				ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
-			}
-	
-			if (EditData->m_bUseNamedColour == FALSE)
-			{
-				EditData->m_bUseNamedColour =	TRUE;
-				ChangeParam_m.m_bNewUseNamed = TRUE;
-				ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
-			}
-			
+			EditData->m_bUseLocalFillColour = FALSE;
+			ChangeParam_m.m_bNewUseLocalFillColour = FALSE;
+			ChangeType_m = CHANGEBRUSH_USELOCALFILLCOL;
 		}
-		break;
 
-		default:
-		break;
+		if (EditData->m_bUseNamedColour == FALSE)
+		{
+			EditData->m_bUseNamedColour =	TRUE;
+			ChangeParam_m.m_bNewUseNamed = TRUE;
+			ChangeType_m = CHANGEBRUSH_USENAMEDCOL;
+		}
+		
 	}
 }
 
@@ -2632,409 +2405,380 @@ void CBrushEditDlg::ReadSlider (DialogMsg* Msg)
 	
 	ChangeType_m = CHANGEBRUSH_NONE; // initialise our op type to none
 	
-	switch (Msg->GadgetID)
+	if (Msg->GadgetID == _R(IDC_SLIDERBRUSHSPACING1))
 	{
-		case _R(IDC_SLIDERBRUSHSPACING1):
-		{
-			double MinSpacingSlider = 0;
-			double MaxSpacingSlider = 0;
+		double MinSpacingSlider = 0;
+		double MaxSpacingSlider = 0;
 
-			GetSpacingRange(&MinSpacingSlider, &MaxSpacingSlider);
+		GetSpacingRange(&MinSpacingSlider, &MaxSpacingSlider);
 
-			INT32 IntMin = (INT32)(MinSpacingSlider);
-			INT32 IntMax = (INT32)(MaxSpacingSlider);
+		INT32 IntMin = (INT32)(MinSpacingSlider);
+		INT32 IntMax = (INT32)(MaxSpacingSlider);
 
-			Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACING1), IntMin, IntMax, 0, &Valid);
-			Result = (IntMax - Result) + IntMin;
-			
-			if (Valid)
-			{
-				double ExpVal = pow(Result, ExpFactor);
-				MILLIPOINT NewSpacing = (MILLIPOINT)ExpVal;
+		Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACING1), IntMin, IntMax, 0, &Valid);
+		Result = (IntMax - Result) + IntMin;
 		
-				EditData->m_BrushSpacing = NewSpacing;
-				ChangeParam_m.m_NewSpacing = NewSpacing;
-				ChangeType_m = CHANGEBRUSH_SPACING;
-				SetSpacingSlider();
-			
-			
-			}
+		if (Valid)
+		{
+			double ExpVal = pow(Result, ExpFactor);
+			MILLIPOINT NewSpacing = (MILLIPOINT)ExpVal;
+	
+			EditData->m_BrushSpacing = NewSpacing;
+			ChangeParam_m.m_NewSpacing = NewSpacing;
+			ChangeType_m = CHANGEBRUSH_SPACING;
+			SetSpacingSlider();
+		
+		
 		}
-		break;
-		case _R(IDC_SLIDERBRUSHSPACINGINCR):
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERBRUSHSPACINGINCR))
+	{
+		double dblResult = GetDoubleGadgetValue(_R(IDC_SLIDERBRUSHSPACINGINCR), MIN_SPACING_INCR, MAX_SPACING_INCR, 0, &Valid);
+		dblResult = (MAX_SPACING_INCR - dblResult) + MIN_SPACING_INCR;
+		if (Valid)
 		{
-			double dblResult = GetDoubleGadgetValue(_R(IDC_SLIDERBRUSHSPACINGINCR), MIN_SPACING_INCR, MAX_SPACING_INCR, 0, &Valid);
-			dblResult = (MAX_SPACING_INCR - dblResult) + MIN_SPACING_INCR;
-			if (Valid)
-			{
-				// we need to convert the % value we got from the slider into millipoints
-				MILLIPOINT Distance = GetPercentageAsDistance(dblResult, WIDTH);
+			// we need to convert the % value we got from the slider into millipoints
+			MILLIPOINT Distance = GetPercentageAsDistance(dblResult, WIDTH);
+	
+			EditData->m_BrushSpacingIncrConst = Distance;
+			ChangeParam_m.m_NewSpacingIncrConst = Distance;
+			ChangeType_m = CHANGEBRUSH_SPACING_INCRCONST;
+			UpdateEditBox(_R(IDC_EDITBRUSHSPACINGINCRCONST));
 		
-				EditData->m_BrushSpacingIncrConst = Distance;
-				ChangeParam_m.m_NewSpacingIncrConst = Distance;
-				ChangeType_m = CHANGEBRUSH_SPACING_INCRCONST;
-				UpdateEditBox(_R(IDC_EDITBRUSHSPACINGINCRCONST));
-			
-			}
-		}			
-		break;
-		case _R(IDC_SLIDERBRUSHSPACINGMAXRAND):
-		{
-			Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACINGMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
-			Result = MAX_RANDOM_SLIDER - Result;
+		}
+	}			
+	else if (Msg->GadgetID == _R(IDC_SLIDERBRUSHSPACINGMAXRAND))
+	{
+		Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACINGMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
+		Result = MAX_RANDOM_SLIDER - Result;
 
-			if (Valid)
+		if (Valid)
+		{
+			EditData->m_BrushSpacingMaxRand = Result;
+			
+			if (!UsingRandomSpacing)
 			{
-				EditData->m_BrushSpacingMaxRand = Result;
-				
-				if (!UsingRandomSpacing)
-				{
-					if (Result != MIN_RANDOM_SLIDER)
-					{
-						ReInitBrushSpacing ();
-					}
-				}
-				else if (Result == MIN_RANDOM_SLIDER)
+				if (Result != MIN_RANDOM_SLIDER)
 				{
 					ReInitBrushSpacing ();
 				}
-				ChangeType_m  = CHANGEBRUSH_SPACING_MAXRAND;
-				ChangeParam_m.m_NewSpacingMaxRand = Result;
-				SetRandomRangeText(_R(IDC_SLIDERBRUSHSPACINGMAXRAND));
 			}
-		}
-		break;
-		case _R(IDC_SLIDERPATHOFFSETVAL):
-		{
-			double MinOffset = 0;
-			double MaxOffset = 0;
-
-			GetOffsetRange(&MinOffset, &MaxOffset);
-
-			INT32 lMinOffset  = (INT32)MinOffset;
-			INT32 lMaxOffset  = (INT32)MaxOffset;
-
-			Result = GetLongGadgetValue(_R(IDC_SLIDERPATHOFFSETVAL), lMinOffset, lMaxOffset, 0, &Valid);
-			Result = (lMaxOffset - Result) + lMinOffset;
-
-			if (Valid)
+			else if (Result == MIN_RANDOM_SLIDER)
 			{
-				double ExpVal = pow(Result, ExpFactor);
-				MILLIPOINT NewOffset = (MILLIPOINT)ExpVal;
-			
-				EditData->m_PathOffsetValue = NewOffset;
-				ChangeParam_m.m_NewPathOffsetVal = NewOffset;
-				ChangeType_m = CHANGEBRUSH_OFFSET_VAL;
-				ReInitBrushOffset();
-				
+				ReInitBrushSpacing ();
 			}
-			
+			ChangeType_m  = CHANGEBRUSH_SPACING_MAXRAND;
+			ChangeParam_m.m_NewSpacingMaxRand = Result;
+			SetRandomRangeText(_R(IDC_SLIDERBRUSHSPACINGMAXRAND));
 		}
-		break;
-		case _R(IDC_SLIDEROFFSETINCRCONST):
-		{
-			double NewIncr = GetDoubleGadgetValue(_R(IDC_SLIDEROFFSETINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, 0, &Valid);
-			
-			if (Valid)
-			{
-				NewIncr = (MAX_SPACING_INCR - NewIncr) + MIN_SPACING_INCR;
-				MILLIPOINT Incr = GetPercentageAsDistance(NewIncr, HEIGHT);
-				if (abs(EditData->m_PathOffsetIncrConst - Incr) > 20)
-				{
-					EditData->m_PathOffsetIncrConst = Incr;
-					ChangeParam_m.m_NewOffsetIncrConst = Incr;
-					ChangeType_m = CHANGEBRUSH_OFFSET_INCRCONST;
-					UpdateEditBox(_R(IDC_EDITPATHOFFSETINCRCONST));
-				}
-			}
-		}
-		break;
-	
-		case _R(IDC_SLIDEROFFSETVALUEMAXRAND):
-		{
-			Result = GetLongGadgetValue (_R(IDC_SLIDEROFFSETVALUEMAXRAND), MinOffsetSlider, MaxOffsetSlider, 0, &Valid);
-			Result = MaxOffsetSlider - Result;
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERPATHOFFSETVAL))
+	{
+		double MinOffset = 0;
+		double MaxOffset = 0;
 
-			if (Valid)
-			{
-				EditData->m_OffsetValueMaxRand = Result;
-			
-				// if this is the first movement of the slider and our offset type is offset_none then
-				// surreptitiously change this to offset_random
-				if (EditData->m_PathOffsetType == OFFSET_NONE)
-				{
-					EditData->m_PathOffsetType = OFFSET_RANDOM;
-					ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
-					ChangeType_m = CHANGEBRUSH_ALL;
-				}
-				else
-					ChangeType_m = CHANGEBRUSH_OFFSET_MAXRAND;
-				
-				ChangeParam_m.m_NewOffsetValMaxRand = Result;
-			}
+		GetOffsetRange(&MinOffset, &MaxOffset);
+
+		INT32 lMinOffset  = (INT32)MinOffset;
+		INT32 lMaxOffset  = (INT32)MaxOffset;
+
+		Result = GetLongGadgetValue(_R(IDC_SLIDERPATHOFFSETVAL), lMinOffset, lMaxOffset, 0, &Valid);
+		Result = (lMaxOffset - Result) + lMinOffset;
+
+		if (Valid)
+		{
+			double ExpVal = pow(Result, ExpFactor);
+			MILLIPOINT NewOffset = (MILLIPOINT)ExpVal;
+		
+			EditData->m_PathOffsetValue = NewOffset;
+			ChangeParam_m.m_NewPathOffsetVal = NewOffset;
+			ChangeType_m = CHANGEBRUSH_OFFSET_VAL;
 			ReInitBrushOffset();
+			
 		}
-		break;
-		case _R(IDC_SLIDERBRUSHSCALINGMAXRAND):
+		
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDEROFFSETINCRCONST))
+	{
+		double NewIncr = GetDoubleGadgetValue(_R(IDC_SLIDEROFFSETINCRCONST), MIN_SPACING_INCR, MAX_SPACING_INCR, 0, &Valid);
+		
+		if (Valid)
 		{
-			Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSCALINGMAXRAND), MinScalingSlider, MaxScalingSlider, 0, &Valid);
-			Result = MaxScalingSlider - Result;
-
-			if (Valid)
+			NewIncr = (MAX_SPACING_INCR - NewIncr) + MIN_SPACING_INCR;
+			MILLIPOINT Incr = GetPercentageAsDistance(NewIncr, HEIGHT);
+			if (abs(EditData->m_PathOffsetIncrConst - Incr) > 20)
 			{
-				EditData->m_BrushScalingMaxRand = Result;
+				EditData->m_PathOffsetIncrConst = Incr;
+				ChangeParam_m.m_NewOffsetIncrConst = Incr;
+				ChangeType_m = CHANGEBRUSH_OFFSET_INCRCONST;
+				UpdateEditBox(_R(IDC_EDITPATHOFFSETINCRCONST));
+			}
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDEROFFSETVALUEMAXRAND))
+	{
+		Result = GetLongGadgetValue (_R(IDC_SLIDEROFFSETVALUEMAXRAND), MinOffsetSlider, MaxOffsetSlider, 0, &Valid);
+		Result = MaxOffsetSlider - Result;
 
-				if (!UsingRandomScaling)
-				{
-					if (Result != MinScalingSlider)
-					{
-						ReInitBrushScaling ();
-					}
-				}
-				else if (Result == MinScalingSlider)
+		if (Valid)
+		{
+			EditData->m_OffsetValueMaxRand = Result;
+		
+			// if this is the first movement of the slider and our offset type is offset_none then
+			// surreptitiously change this to offset_random
+			if (EditData->m_PathOffsetType == OFFSET_NONE)
+			{
+				EditData->m_PathOffsetType = OFFSET_RANDOM;
+				ChangeParam_m.m_NewPathOffsetType = OFFSET_RANDOM;
+				ChangeType_m = CHANGEBRUSH_ALL;
+			}
+			else
+				ChangeType_m = CHANGEBRUSH_OFFSET_MAXRAND;
+			
+			ChangeParam_m.m_NewOffsetValMaxRand = Result;
+		}
+		ReInitBrushOffset();
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERBRUSHSCALINGMAXRAND))
+	{
+		Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSCALINGMAXRAND), MinScalingSlider, MaxScalingSlider, 0, &Valid);
+		Result = MaxScalingSlider - Result;
+
+		if (Valid)
+		{
+			EditData->m_BrushScalingMaxRand = Result;
+
+			if (!UsingRandomScaling)
+			{
+				if (Result != MinScalingSlider)
 				{
 					ReInitBrushScaling ();
 				}
-				SetRandomRangeText(_R(IDC_SLIDERBRUSHSCALINGMAXRAND));
-				ChangeType_m = CHANGEBRUSH_SCALING_MAXRAND;
-				ChangeParam_m.m_NewScalingMaxRand = Result;
 			}
-		}
-		break;
-		case _R(IDC_SLIDERROTATEANGLE):
-		{
-			double NewAngle = GetDoubleGadgetValue(_R(IDC_SLIDERROTATEANGLE), MIN_ROTATION_SLIDER, MAX_ROTATION_SLIDER, 0, &Valid);
-			if (Valid)
+			else if (Result == MinScalingSlider)
 			{
-				NewAngle = (MAX_ROTATION_SLIDER - NewAngle) + MIN_ROTATION_SLIDER;
-			
-				// make it a whole number
-				INT32 AngleRounded = (INT32)NewAngle;
-				ChangeParam_m.m_NewRotateAngle = (double)AngleRounded;
-				ChangeType_m = CHANGEBRUSH_ROTATE_ANGLE;
-				EditData->m_RotateAngle = ChangeParam_m.m_NewRotateAngle;
-				ReInitBrushEffects();
-					
+				ReInitBrushScaling ();
+			}
+			SetRandomRangeText(_R(IDC_SLIDERBRUSHSCALINGMAXRAND));
+			ChangeType_m = CHANGEBRUSH_SCALING_MAXRAND;
+			ChangeParam_m.m_NewScalingMaxRand = Result;
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERROTATEANGLE))
+	{
+		double NewAngle = GetDoubleGadgetValue(_R(IDC_SLIDERROTATEANGLE), MIN_ROTATION_SLIDER, MAX_ROTATION_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			NewAngle = (MAX_ROTATION_SLIDER - NewAngle) + MIN_ROTATION_SLIDER;
+		
+			// make it a whole number
+			INT32 AngleRounded = (INT32)NewAngle;
+			ChangeParam_m.m_NewRotateAngle = (double)AngleRounded;
+			ChangeType_m = CHANGEBRUSH_ROTATE_ANGLE;
+			EditData->m_RotateAngle = ChangeParam_m.m_NewRotateAngle;
+			ReInitBrushEffects();
 				
-			}
-		}
-		break;
-		case _R(IDC_SLIDERROTATEANGLEINCR):
-		{
-			double NewIncr = GetDoubleGadgetValue(_R(IDC_SLIDERROTATEANGLEINCR), MIN_ROTATION_INCR_SLIDER, MAX_ROTATION_INCR_SLIDER,
-												  0, &Valid);
-			if (Valid)
-			{
-				NewIncr = (MAX_ROTATION_INCR_SLIDER - NewIncr) + MIN_ROTATION_INCR_SLIDER;
 			
-				INT32 IncrRounded = (INT32)NewIncr;
-				EditData->m_RotAngleIncrConst  =(double)IncrRounded;
-				ChangeParam_m.m_NewRotationIncrConst = EditData->m_RotAngleIncrConst;
-				ChangeType_m = CHANGEBRUSH_ROTATE_INCRCONST;
-				ReInitBrushEffects();
-				
-			}
 		}
-		break;
-		case _R(IDC_SLIDERROTATEANGLEMAXRAND):
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERROTATEANGLEINCR))
+	{
+		double NewIncr = GetDoubleGadgetValue(_R(IDC_SLIDERROTATEANGLEINCR), MIN_ROTATION_INCR_SLIDER, MAX_ROTATION_INCR_SLIDER,
+												0, &Valid);
+		if (Valid)
 		{
-			Result = GetLongGadgetValue (_R(IDC_SLIDERROTATEANGLEMAXRAND), MIN_RANDOM_SLIDER, MAX_ROTATION_RANDOM_SLIDER, 0, &Valid);
-			Result = (MAX_ROTATION_RANDOM_SLIDER - Result) + MIN_RANDOM_SLIDER;
-			//TRACEUSER( "Diccon", _T("Rotation max rand = %d\n"), Result);
-			if (Valid)
-			{
-				EditData->m_RotationMaxRand = Result;	
-				ReInitBrushEffects ();
+			NewIncr = (MAX_ROTATION_INCR_SLIDER - NewIncr) + MIN_ROTATION_INCR_SLIDER;
+		
+			INT32 IncrRounded = (INT32)NewIncr;
+			EditData->m_RotAngleIncrConst  =(double)IncrRounded;
+			ChangeParam_m.m_NewRotationIncrConst = EditData->m_RotAngleIncrConst;
+			ChangeType_m = CHANGEBRUSH_ROTATE_INCRCONST;
+			ReInitBrushEffects();
 			
-				ChangeType_m = CHANGEBRUSH_ROTATE_MAXRAND;
-				ChangeParam_m.m_NewRotateMaxRand = Result;
-				SetRandomRangeText(_R(IDC_SLIDERROTATEANGLEMAXRAND));
-			}
 		}
-		break;
-		case _R(IDC_SLIDERROTATEINCR):
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERROTATEANGLEMAXRAND))
+	{
+		Result = GetLongGadgetValue (_R(IDC_SLIDERROTATEANGLEMAXRAND), MIN_RANDOM_SLIDER, MAX_ROTATION_RANDOM_SLIDER, 0, &Valid);
+		Result = (MAX_ROTATION_RANDOM_SLIDER - Result) + MIN_RANDOM_SLIDER;
+		//TRACEUSER( "Diccon", _T("Rotation max rand = %d\n"), Result);
+		if (Valid)
 		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERROTATEINCR), MinMultiSlider, MaxMultiSlider, 0, &Valid);
-			Result = (MaxMultiSlider - Result) + MinMultiSlider;
-			if (Valid)
-			{
+			EditData->m_RotationMaxRand = Result;	
+			ReInitBrushEffects ();
+		
+			ChangeType_m = CHANGEBRUSH_ROTATE_MAXRAND;
+			ChangeParam_m.m_NewRotateMaxRand = Result;
+			SetRandomRangeText(_R(IDC_SLIDERROTATEANGLEMAXRAND));
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERROTATEINCR))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERROTATEINCR), MinMultiSlider, MaxMultiSlider, 0, &Valid);
+		Result = (MaxMultiSlider - Result) + MinMultiSlider;
+		if (Valid)
+		{
+		
+			EditData->m_RotAngleIncrProp = (double)((double)Result / 100);
+			ReInitBrushEffects();
+			ChangeType_m = CHANGEBRUSH_ROTATE_INCRPROP;
+			ChangeParam_m.m_NewRotationIncrProp = EditData->m_RotAngleIncrProp;
 			
-				EditData->m_RotAngleIncrProp = (double)((double)Result / 100);
-				ReInitBrushEffects();
-				ChangeType_m = CHANGEBRUSH_ROTATE_INCRPROP;
-				ChangeParam_m.m_NewRotationIncrProp = EditData->m_RotAngleIncrProp;
-				
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERBRUSHSCALINGINCR))
+	{
+		Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSCALINGINCR), MinMultiSlider, MaxMultiSlider, 0, &Valid);
+		Result = (MaxMultiSlider - Result) + MinMultiSlider;
+		if (Valid)
+		{
+		
+			EditData->m_BrushScalingIncr = (double)Result / 100;
+			ReInitBrushScaling();
+			ChangeType_m = CHANGEBRUSH_SCALING_INCR;
+			ChangeParam_m.m_NewScalingIncr = EditData->m_BrushScalingIncr;
+			
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERSCALINGINCRCONST))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERSCALINGINCRCONST), MinScalingIncrSlider, MaxScalingIncrSlider, 0, &Valid);
+		Result = (MaxScalingIncrSlider - Result) + MinScalingIncrSlider;
+		if (Valid)
+		{
+			if (EditData->m_BrushScalingIncrConst != Result)
+			{
+				EditData->m_BrushScalingIncrConst = (double)Result;
+				ReInitBrushScaling();
+				ChangeType_m = CHANGEBRUSH_SCALING_INCRCONST;
+				ChangeParam_m.m_NewScalingIncrConst = (double)Result;
 			}
 		}
-		break;
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERSCALINGPRESSURE))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERSCALINGPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			Result = (MAX_PRESSURE_SLIDER - Result) + MIN_PRESSURE_SLIDER;
 	
-		case _R(IDC_SLIDERBRUSHSCALINGINCR):
-		{
-			Result = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSCALINGINCR), MinMultiSlider, MaxMultiSlider, 0, &Valid);
-			Result = (MaxMultiSlider - Result) + MinMultiSlider;
-			if (Valid)
-			{
+			EditData->m_ScalingMaxPressure = Result;
+			ReInitBrushScaling();
+			ChangeType_m = CHANGEBRUSH_SCALING_PRESSURE;
+			ChangeParam_m.m_NewScalingMaxPressure = Result;
+			SetRandomRangeText(_R(IDC_SLIDERSCALINGPRESSURE));
 			
-				EditData->m_BrushScalingIncr = (double)Result / 100;
-				ReInitBrushScaling();
-				ChangeType_m = CHANGEBRUSH_SCALING_INCR;
-				ChangeParam_m.m_NewScalingIncr = EditData->m_BrushScalingIncr;
-				
-			}
 		}
-		break;
-		case _R(IDC_SLIDERSCALINGINCRCONST):
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERSATURATIONRANDOM))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERSATURATIONRANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_SAT_SLIDER, 0, &Valid);
+		if (Valid)
 		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERSCALINGINCRCONST), MinScalingIncrSlider, MaxScalingIncrSlider, 0, &Valid);
-			Result = (MaxScalingIncrSlider - Result) + MinScalingIncrSlider;
-			if (Valid)
-			{
-				if (EditData->m_BrushScalingIncrConst != Result)
-				{
-					EditData->m_BrushScalingIncrConst = (double)Result;
-					ReInitBrushScaling();
-					ChangeType_m = CHANGEBRUSH_SCALING_INCRCONST;
-					ChangeParam_m.m_NewScalingIncrConst = (double)Result;
-				}
-			}
-		}
-		break;
-
-		case _R(IDC_SLIDERSCALINGPRESSURE):
-		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERSCALINGPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				Result = (MAX_PRESSURE_SLIDER - Result) + MIN_PRESSURE_SLIDER;
-		
-				EditData->m_ScalingMaxPressure = Result;
-				ReInitBrushScaling();
-				ChangeType_m = CHANGEBRUSH_SCALING_PRESSURE;
-				ChangeParam_m.m_NewScalingMaxPressure = Result;
-				SetRandomRangeText(_R(IDC_SLIDERSCALINGPRESSURE));
-				
-			}
-		}
-		break;
-		
-		case _R(IDC_SLIDERSATURATIONRANDOM):
-		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERSATURATIONRANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_SAT_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				Result = (MAX_RANDOM_SAT_SLIDER - Result) + MIN_RANDOM_SLIDER;
-		
-				EditData->m_BrushSatMaxRand = Result;
-				ChangeType_m = CHANGEBRUSH_SAT_MAXRAND;
-				ChangeParam_m.m_NewSatMaxRand = Result;
-				SetRandomRangeText(_R(IDC_SLIDERSATURATIONRANDOM));
-				
-				ReInitBrushFill();
-			}
-		}
-		break;
-		case _R(IDC_SLIDERHUERANDOM):
-		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERHUERANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_HUE_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				Result = (MAX_RANDOM_HUE_SLIDER - Result) + MIN_RANDOM_SLIDER;
-		
-				EditData->m_BrushHueMaxRand = Result;
-				ChangeType_m = CHANGEBRUSH_HUE_MAXRAND;
-				ChangeParam_m.m_NewHueMaxRand = Result;
-				SetRandomRangeText(_R(IDC_SLIDERHUERANDOM));
-				
-				ReInitBrushFill();
-			}
-		}
-		break;
-		case _R(IDC_SLIDERTRANSP):
-		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERTRANSP), MIN_TRANSP_SLIDER, MAX_TRANSP_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				Result = (MAX_TRANSP_SLIDER - Result) + MIN_TRANSP_SLIDER;
-		
-				EditData->m_BrushTransparency = Result;
-				ChangeType_m = CHANGEBRUSH_TRANSP;
-				ChangeParam_m.m_NewTransp = Result;
-				UpdateEditBox(_R(IDC_EDITBRUSHTRANSP));
-				
-			}
-		}
-		break;
-		case _R(IDC_SLIDERTRANSPPRESSURE):
-		{
-			Result = GetLongGadgetValue(_R(IDC_SLIDERTRANSPPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				Result = (MAX_PRESSURE_SLIDER - Result) + MIN_PRESSURE_SLIDER;
+			Result = (MAX_RANDOM_SAT_SLIDER - Result) + MIN_RANDOM_SLIDER;
+	
+			EditData->m_BrushSatMaxRand = Result;
+			ChangeType_m = CHANGEBRUSH_SAT_MAXRAND;
+			ChangeParam_m.m_NewSatMaxRand = Result;
+			SetRandomRangeText(_R(IDC_SLIDERSATURATIONRANDOM));
 			
-				EditData->m_TranspMaxPressure = Result;
-				ChangeType_m = CHANGEBRUSH_TRANSP_PRESSURE;
-				ChangeParam_m.m_NewTranspPressure = Result;
-				ReInitBrushSequence();
-				
-			}
+			ReInitBrushFill();
 		}
-		break;
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERHUERANDOM))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERHUERANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_HUE_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			Result = (MAX_RANDOM_HUE_SLIDER - Result) + MIN_RANDOM_SLIDER;
+	
+			EditData->m_BrushHueMaxRand = Result;
+			ChangeType_m = CHANGEBRUSH_HUE_MAXRAND;
+			ChangeParam_m.m_NewHueMaxRand = Result;
+			SetRandomRangeText(_R(IDC_SLIDERHUERANDOM));
+			
+			ReInitBrushFill();
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERTRANSP))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERTRANSP), MIN_TRANSP_SLIDER, MAX_TRANSP_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			Result = (MAX_TRANSP_SLIDER - Result) + MIN_TRANSP_SLIDER;
+	
+			EditData->m_BrushTransparency = Result;
+			ChangeType_m = CHANGEBRUSH_TRANSP;
+			ChangeParam_m.m_NewTransp = Result;
+			UpdateEditBox(_R(IDC_EDITBRUSHTRANSP));
+			
+		}
+	}
+	else if (Msg->GadgetID == _R(IDC_SLIDERTRANSPPRESSURE))
+	{
+		Result = GetLongGadgetValue(_R(IDC_SLIDERTRANSPPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			Result = (MAX_PRESSURE_SLIDER - Result) + MIN_PRESSURE_SLIDER;
+		
+			EditData->m_TranspMaxPressure = Result;
+			ChangeType_m = CHANGEBRUSH_TRANSP_PRESSURE;
+			ChangeParam_m.m_NewTranspPressure = Result;
+			ReInitBrushSequence();
+			
+		}
 	}
 }
 
 
 void CBrushEditDlg::ReadButtons(DialogMsg* Msg)
 {
-
-	switch (Msg->GadgetID)
+	if (Msg->GadgetID == _R(IDC_BUTTONBRUSHSCALINGRANDSEED))
 	{
-		case _R(IDC_BUTTONBRUSHSCALINGRANDSEED):
-			ChangeType_m = CHANGEBRUSH_SCALING_RANDSEED;
-			ChangeParam_m.m_NewScalingRandSeed = GetNewRandomNumber(0);
-			EditData->m_BrushScalingRandSeed = ChangeParam_m.m_NewScalingRandSeed;
-		break;
+		ChangeType_m = CHANGEBRUSH_SCALING_RANDSEED;
+		ChangeParam_m.m_NewScalingRandSeed = GetNewRandomNumber(0);
+		EditData->m_BrushScalingRandSeed = ChangeParam_m.m_NewScalingRandSeed;
+	}
+	else if (Msg->GadgetID == _R(IDC_BUTTONBRUSHSPACINGRANDSEED))
+	{
+		ChangeType_m = CHANGEBRUSH_SPACING_RANDSEED;
+		ChangeParam_m.m_NewSpacingRandSeed = GetNewRandomNumber(0);
+		EditData->m_BrushSpacingRandSeed = ChangeParam_m.m_NewSpacingRandSeed;
+		
+		// We're changing sequence seed too
+		ChangeParam_m.m_NewSequenceRandSeed = EditData->m_BrushSpacingRandSeed;
+		EditData->m_SequenceRandSeed = ChangeParam_m.m_NewSequenceRandSeed;
+	}
+	else if (Msg->GadgetID == _R(IDC_BUTTONOFFSETVALUERANDSEED))
+	{
+		// bit of a change here, we only want to have one random button on the offset tab 
+		// so this button now changes seeds for both offset value and offset type
 
-		case _R(IDC_BUTTONBRUSHSPACINGRANDSEED):
-			ChangeType_m = CHANGEBRUSH_SPACING_RANDSEED;
-			ChangeParam_m.m_NewSpacingRandSeed = GetNewRandomNumber(0);
-			EditData->m_BrushSpacingRandSeed = ChangeParam_m.m_NewSpacingRandSeed;
-			
-			// We're changing sequence seed too
-			ChangeParam_m.m_NewSequenceRandSeed = EditData->m_BrushSpacingRandSeed;
-			EditData->m_SequenceRandSeed = ChangeParam_m.m_NewSequenceRandSeed;
-		break;
-
-		case _R(IDC_BUTTONOFFSETVALUERANDSEED):
-			// bit of a change here, we only want to have one random button on the offset tab 
-			// so this button now changes seeds for both offset value and offset type
-
-			ChangeType_m = CHANGEBRUSH_OFFSET_SEEDS;
-			ChangeParam_m.m_NewOffsetValRandSeed = GetNewRandomNumber(0);
-			ChangeParam_m.m_NewOffsetTypeRandSeed = GetNewRandomNumber(0);
-			EditData->m_OffsetValueRandSeed = ChangeParam_m.m_NewOffsetValRandSeed;
-			EditData->m_OffsetTypeRandSeed = ChangeParam_m.m_NewOffsetTypeRandSeed;
-		break;
-
-		case _R(IDC_BUTTONBRUSHSEQUENCERANDSEED):
-			ChangeType_m = CHANGEBRUSH_SEQUENCE_RANDSEED;
-			ChangeParam_m.m_NewSequenceRandSeed = GetNewRandomNumber(0);
-			EditData->m_SequenceRandSeed = ChangeParam_m.m_NewSequenceRandSeed;
-		break;
-		case _R(IDC_BUTTONROTATEANGLERANDSEED):
-			ChangeType_m = CHANGEBRUSH_ROTATE_RANDSEED;
-			ChangeParam_m.m_NewRotateRandSeed = GetNewRandomNumber(0);
-			EditData->m_RotationRandSeed = ChangeParam_m.m_NewRotateRandSeed;
-		break;
-		case _R(IDC_BUTTONBRUSHFILLRANDOM):
-			ChangeType_m = CHANGEBRUSH_FILL_SEEDS;
-			ChangeParam_m.m_NewHueRandSeed = GetNewRandomNumber(0);
-			ChangeParam_m.m_NewSatRandSeed = GetNewRandomNumber(0);
-			EditData->m_BrushHueRandSeed = ChangeParam_m.m_NewHueRandSeed;
-			EditData->m_BrushSatRandSeed = ChangeParam_m.m_NewSatRandSeed;
-		break;
-	
-		default: //not necessarily an error
-			break;
+		ChangeType_m = CHANGEBRUSH_OFFSET_SEEDS;
+		ChangeParam_m.m_NewOffsetValRandSeed = GetNewRandomNumber(0);
+		ChangeParam_m.m_NewOffsetTypeRandSeed = GetNewRandomNumber(0);
+		EditData->m_OffsetValueRandSeed = ChangeParam_m.m_NewOffsetValRandSeed;
+		EditData->m_OffsetTypeRandSeed = ChangeParam_m.m_NewOffsetTypeRandSeed;
+	}
+	else if (Msg->GadgetID == _R(IDC_BUTTONBRUSHSEQUENCERANDSEED))
+	{
+		ChangeType_m = CHANGEBRUSH_SEQUENCE_RANDSEED;
+		ChangeParam_m.m_NewSequenceRandSeed = GetNewRandomNumber(0);
+		EditData->m_SequenceRandSeed = ChangeParam_m.m_NewSequenceRandSeed;
+	}
+	else if (Msg->GadgetID == _R(IDC_BUTTONROTATEANGLERANDSEED))
+	{
+		ChangeType_m = CHANGEBRUSH_ROTATE_RANDSEED;
+		ChangeParam_m.m_NewRotateRandSeed = GetNewRandomNumber(0);
+		EditData->m_RotationRandSeed = ChangeParam_m.m_NewRotateRandSeed;
+	}
+	else if (Msg->GadgetID == _R(IDC_BUTTONBRUSHFILLRANDOM))
+	{
+		ChangeType_m = CHANGEBRUSH_FILL_SEEDS;
+		ChangeParam_m.m_NewHueRandSeed = GetNewRandomNumber(0);
+		ChangeParam_m.m_NewSatRandSeed = GetNewRandomNumber(0);
+		EditData->m_BrushHueRandSeed = ChangeParam_m.m_NewHueRandSeed;
+		EditData->m_BrushSatRandSeed = ChangeParam_m.m_NewSatRandSeed;
 	}
 }
 
@@ -3045,64 +2789,64 @@ void CBrushEditDlg::WriteSliders (DialogMsg* Msg)
 
 void CBrushEditDlg::UpdateEditBox (CGadgetID GadgetToUpdate)
 {	
-	switch (GadgetToUpdate)
+	if (GadgetToUpdate == _R(IDC_EDITBRUSHSPACING))
 	{
-		case _R(IDC_EDITBRUSHSPACING):
-		{
-			// work out the current actual spacing value
-			double dSpacingValue = (double)EditData->m_BrushSpacing; // * EditData->m_BrushScaling;
-			MILLIPOINT lSpacingValue = dSpacingValue;
-			dSpacingValue = pow(dSpacingValue, 1/ExpFactor);
-			INT32 iSpacingValue = (INT32)dSpacingValue;
-		
-			// get the spacing value as a % and set that in the edit field
-			double SpacingAsPercent = GetDistanceAsPercentageOfBBox(lSpacingValue, WIDTH);
-			SetDoubleGadgetValue (_R(IDC_EDITBRUSHSPACING), SpacingAsPercent);
-		
-		}
-		break;
-	/*	case _R(IDC_EDITBRUSHSPACINGINCRCONST):
-		{
-			// for the edit box we need to set it as a percentage
-			double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_BrushSpacingIncrConst);
-			SetDoubleGadgetValue(_R(IDC_EDITBRUSHSPACINGINCRCONST), PercentVal);
-		}
-		break;
+		// work out the current actual spacing value
+		double dSpacingValue = (double)EditData->m_BrushSpacing; // * EditData->m_BrushScaling;
+		MILLIPOINT lSpacingValue = (MILLIPOINT)dSpacingValue;
+		dSpacingValue = pow(dSpacingValue, 1/ExpFactor);
+//		INT32 iSpacingValue = (INT32)dSpacingValue;
+	
+		// get the spacing value as a % and set that in the edit field
+		double SpacingAsPercent = GetDistanceAsPercentageOfBBox(lSpacingValue, WIDTH);
+		SetDoubleGadgetValue (_R(IDC_EDITBRUSHSPACING), SpacingAsPercent);
+	
+	}
+	/*
+	else if (GadgetToUpdate == _R(IDC_EDITBRUSHSPACINGINCRCONST))
+	{
+		// for the edit box we need to set it as a percentage
+		double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_BrushSpacingIncrConst);
+		SetDoubleGadgetValue(_R(IDC_EDITBRUSHSPACINGINCRCONST), PercentVal);
+	}
 	*/
-		case _R(IDC_EDITPATHOFFSETVALUE):
-		{
-			double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_PathOffsetValue, HEIGHT);
-			SetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETVALUE), PercentVal);
-		}
-		break;
-
-	/*	case _R(IDC_EDITPATHOFFSETINCRCONST):
-		{
-			double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_PathOffsetIncrConst);
-			SetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETINCRCONST), PercentVal);
-		}		
-		break;*/
-		case _R(IDC_EDITBRUSHSCALING):
-			SetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALING), EditData->m_BrushScaling);
-		break;
-		case _R(IDC_EDITBRUSHSCALINGINCR):
-			SetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALINGINCR), EditData->m_BrushScalingIncr*100);	
-		break;
-	/*	case _R(IDC_EDITSCALINGINCRCONST):
-			SetDoubleGadgetValue (_R(IDC_EDITSCALINGINCRCONST), EditData->m_BrushScalingIncrConst);
-		break;
-		*/
-		case _R(IDC_EDITROTATEANGLEINCR):
-			SetDoubleGadgetValue (_R(IDC_EDITROTATEANGLEINCR), EditData->m_RotAngleIncrConst);
-		break;
-		case _R(IDC_EDITROTATEANGLE):
-			SetDoubleGadgetValue (_R(IDC_EDITROTATEANGLE), EditData->m_RotAngleIncrConst);
-		break;
-		case _R(IDC_EDITBRUSHTRANSP):
-			SetLongGadgetValue(_R(IDC_EDITBRUSHTRANSP), EditData->m_BrushTransparency - 100);
-		break;
-		default:
-		break;
+	else if (GadgetToUpdate == _R(IDC_EDITPATHOFFSETVALUE))
+	{
+		double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_PathOffsetValue, HEIGHT);
+		SetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETVALUE), PercentVal);
+	}
+	/*
+	else if (GadgetToUpdate == _R(IDC_EDITPATHOFFSETINCRCONST))
+	{
+		double PercentVal = GetDistanceAsPercentageOfBBox(EditData->m_PathOffsetIncrConst);
+		SetDoubleGadgetValue(_R(IDC_EDITPATHOFFSETINCRCONST), PercentVal);
+	}		
+	*/
+	else if (GadgetToUpdate == _R(IDC_EDITBRUSHSCALING))
+	{
+		SetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALING), EditData->m_BrushScaling);
+	}
+	else if (GadgetToUpdate == _R(IDC_EDITBRUSHSCALINGINCR))
+	{
+		SetDoubleGadgetValue (_R(IDC_EDITBRUSHSCALINGINCR), EditData->m_BrushScalingIncr*100);
+	}
+	/*
+	else if (GadgetToUpdate == _R(IDC_EDITSCALINGINCRCONST))
+	{
+		SetDoubleGadgetValue (_R(IDC_EDITSCALINGINCRCONST), EditData->m_BrushScalingIncrConst);
+	}
+	*/
+	else if (GadgetToUpdate == _R(IDC_EDITROTATEANGLEINCR))
+	{
+		SetDoubleGadgetValue (_R(IDC_EDITROTATEANGLEINCR), EditData->m_RotAngleIncrConst);
+	}
+	else if (GadgetToUpdate == _R(IDC_EDITROTATEANGLE))
+	{
+		SetDoubleGadgetValue (_R(IDC_EDITROTATEANGLE), EditData->m_RotAngleIncrConst);
+	}
+	else if (GadgetToUpdate == _R(IDC_EDITBRUSHTRANSP))
+	{
+		SetLongGadgetValue(_R(IDC_EDITBRUSHTRANSP), EditData->m_BrushTransparency - 100);
 	}
 }
 
@@ -3134,27 +2878,22 @@ void CBrushEditDlg::ReInitPage(CDlgResID PageID)
 	// tell the page we're talking to it
 	TalkToPage(PageID);
 	// reinit our active page
-	switch (PageID)
-	{	
-		case _R(IDD_BRUSHEDITSPACING):
-			ReInitBrushSpacing();
-			break;
-		case _R(IDD_BRUSHEDITOFFSET):
-			ReInitBrushOffset();
-			break;
-		case _R(IDD_BRUSHEDITSCALING):
-			ReInitBrushScaling();
-			break;
-		case _R(IDD_BRUSHEDITEFFECTS):
-			ReInitBrushEffects();
-			break;
-		case _R(IDD_BRUSHEDITSEQUENCE):
-			ReInitBrushSequence();
-			break;
-		case _R(IDD_BRUSHEDITFILL):
-			break;
-		default:
-			ERROR3("Message from unknown tab dialog page");
+	if (PageID == _R(IDD_BRUSHEDITSPACING))
+		ReInitBrushSpacing();
+	else if (PageID == _R(IDD_BRUSHEDITOFFSET))
+		ReInitBrushOffset();
+	else if (PageID == _R(IDD_BRUSHEDITSCALING))
+		ReInitBrushScaling();
+	else if (PageID == _R(IDD_BRUSHEDITEFFECTS))
+		ReInitBrushEffects();
+	else if (PageID == _R(IDD_BRUSHEDITSEQUENCE))
+		ReInitBrushSequence();
+	else if (PageID == _R(IDD_BRUSHEDITFILL))
+	{
+	}
+	else
+	{
+		ERROR3("Message from unknown tab dialog page");
 	}
 	
 }
@@ -3229,52 +2968,38 @@ void CBrushEditDlg::RefreshActivePage()
 {
 	CDlgResID ActivePageID = GetCurrentPageID();
 
-	switch (ActivePageID)
+	if (ActivePageID == _R(IDD_BRUSHEDITSPACING))
 	{
-		case _R(IDD_BRUSHEDITSPACING):
-			ReInitBrushSpacing();
-			break;
-		case _R(IDD_BRUSHEDITOFFSET):
-			ReInitBrushOffset();
-			break;
-		case _R(IDD_BRUSHEDITSCALING):
-			ReInitBrushScaling();
-			break;
-		case _R(IDD_BRUSHEDITEFFECTS):
-			ReInitBrushEffects();
-			break;
-		case _R(IDD_BRUSHEDITSEQUENCE):
-			ReInitBrushSequence();
-		break;
-		case _R(IDD_BRUSHEDITFILL):
-			ReInitBrushFill();
-		break;
-		default: // maybe not an error
-			break;
+		ReInitBrushSpacing();
 	}
-
+	else if (ActivePageID == _R(IDD_BRUSHEDITOFFSET))
+	{
+		ReInitBrushOffset();
+	}
+	else if (ActivePageID == _R(IDD_BRUSHEDITSCALING))
+	{
+		ReInitBrushScaling();
+	}
+	else if (ActivePageID == _R(IDD_BRUSHEDITEFFECTS))
+	{
+		ReInitBrushEffects();
+	}
+	else if (ActivePageID == _R(IDD_BRUSHEDITSEQUENCE))
+	{
+		ReInitBrushSequence();
+	}
+	else if (ActivePageID == _R(IDD_BRUSHEDITFILL))
+	{
+		ReInitBrushFill();
+	}
+	
 }
 
 // using settitlebarname has no effect as it gets the page window rather than 
 // the property sheet, so use this instead
 void CBrushEditDlg::SetDialogTitle(String_256 Title)
 {
-	// first get the window
-	CWnd* pCWnd = CWnd::FromHandlePermanent(WindowID);
-	
-	if (pCWnd == NULL)
-	{
-		ERROR3("This is not a property sheet, the PageID should be NULL"); 
-		return;
-	}
-	
-	// Ok so Win must be a property sheet, let's make sure
-	ERROR3IF(!(pCWnd->IsKindOf(RUNTIME_CLASS(OurPropSheet))), "Don't know what this window is");
-
-	TCHAR* pName = Title.operator TCHAR*(); // cast the string to something MFC likes
-
-	OurPropSheet* pPropertySheet = (OurPropSheet*)pCWnd;
-	pPropertySheet->SetTitle(pName); 
+	SetTitlebarName(&Title);
 }
 
 // sets up the brush spacing slider to have the correct values etc.
@@ -3407,7 +3132,7 @@ double CBrushEditDlg::GetDistanceAsPercentageOfBBox(MILLIPOINT Distance, RectSid
 
 MILLIPOINT CBrushEditDlg::GetSideOfBoundingBox(RectSideInfo RectSide)
 {
-	BrushDefinition* pBrushDef = BrushComponent::FindDefinition(EditData->m_BrushHandle);
+	BrushDefinition* pBrushDef = BrushComponent::FindBrushDefinition(EditData->m_BrushHandle);
 	if (pBrushDef == NULL)
 	{
 	//	ERROR3("No brush definition in CBrushEditDlg::GetLongestSideOfBoundingBox");
@@ -3446,7 +3171,7 @@ MILLIPOINT CBrushEditDlg::GetPercentageAsDistance(double Percent, RectSideInfo R
 {
 	MILLIPOINT Side = GetSideOfBoundingBox(RectSide);
 
-	MILLIPOINT ReturnVal = (double)Side * (Percent / 100);
+	MILLIPOINT ReturnVal = (MILLIPOINT)(((double)Side) * (Percent / 100));
 	return ReturnVal;
 }
 
@@ -3455,7 +3180,7 @@ MILLIPOINT CBrushEditDlg::GetPercentageAsDistance(double Percent, RectSideInfo R
 // Note that SliderVal should be the value adjusted for position, i.e. the value that 
 String_32 CBrushEditDlg::GetRandomRangeText(INT32 SliderVal)
 {
-	String_32 RangeText(" ");
+	String_32 RangeText(_T(" "));
 	if (SliderVal < MIN_RANDOM_SLIDER || SliderVal > MAX_RANDOM_SLIDER)
 	{
 		ERROR3("Slider value is out of range in CBrushEditDlg::GetRandomRangeText");
@@ -3471,7 +3196,7 @@ String_32 CBrushEditDlg::GetRandomRangeText(INT32 SliderVal)
 	// annoyingly we now need to recast our values as long
 	String_32 MinString;
 	String_32 MaxString;
-	String_32 MiddleString = " - ";
+	String_32 MiddleString = _T(" - ");
 	Convert::LongToString((INT32)MinVal, &MinString);
 	Convert::LongToString((INT32)MaxVal, &MaxString);
 
@@ -3487,7 +3212,7 @@ String_32 CBrushEditDlg::GetRandomRangeText(INT32 SliderVal)
 // essentially the same as above except that after we get the limits we convert them into degrees
 String_32 CBrushEditDlg::GetRotationRandomText(INT32 SliderVal)
 {
-	String_32 RangeText(" ");
+	String_32 RangeText(_T(" "));
 	if (SliderVal < MIN_RANDOM_SLIDER || SliderVal > MAX_RANDOM_SLIDER)
 	{
 		ERROR3("Slider value is out of range in CBrushEditDlg::GetRandomRangeText");
@@ -3504,7 +3229,7 @@ String_32 CBrushEditDlg::GetRotationRandomText(INT32 SliderVal)
 	// annoyingly we now need to recast our values as long
 	String_32 MinString;
 	String_32 MaxString;
-	String_32 MiddleString = " - ";
+	String_32 MiddleString = _T(" - ");
 	Convert::LongToString((INT32)MinVal, &MinString);
 	Convert::LongToString((INT32)MaxVal, &MaxString);
 
@@ -3522,151 +3247,135 @@ void CBrushEditDlg::SetRandomRangeText(CGadgetID SliderID)
 {
 	BOOL Valid = FALSE;
 	INT32 SliderVal = 0;
-	switch (SliderID)
+	if (SliderID == _R(IDC_SLIDERBRUSHSPACINGMAXRAND))
 	{
-		case _R(IDC_SLIDERBRUSHSPACINGMAXRAND):
+		SliderVal = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACINGMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
+		if (Valid)
 		{
-			SliderVal = GetLongGadgetValue (_R(IDC_SLIDERBRUSHSPACINGMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
+			SliderVal = (MAX_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
+			String_32 RangeText = GetRandomRangeText(SliderVal);
+			SetStringGadgetValue(_R(IDC_STATICBRUSHSPACINGRAND1), RangeText);
+		}
+	}
+	else if (SliderID == _R(IDC_SLIDEROFFSETVALUEMAXRAND))
+	{
+			SliderVal = GetLongGadgetValue(_R(IDC_SLIDEROFFSETVALUEMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
 			if (Valid)
 			{
-				SliderVal = (MAX_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
-				String_32 RangeText = GetRandomRangeText(SliderVal);
-				SetStringGadgetValue(_R(IDC_STATICBRUSHSPACINGRAND1), &RangeText);
-			}
-		}
-		break;
-		case _R(IDC_SLIDEROFFSETVALUEMAXRAND):
-		{
-			 SliderVal = GetLongGadgetValue(_R(IDC_SLIDEROFFSETVALUEMAXRAND), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
-			 if (Valid)
-			 {
-				SliderVal = (MAX_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
-				String_32 RangeText = TEXT(""); //GetRandomRangeText(SliderVal);
-				
-				String_32 MinString = TEXT("0 - ");
-				String_32 MaxString = TEXT("");;
-				Convert::LongToString((INT32)SliderVal, &MaxString);
-
-				RangeText += MinString;
-				RangeText += MaxString;
-				SetStringGadgetValue(_R(IDC_STATICOFFSETRAND), &RangeText);
-			 }
-		}
-		break;
-		case _R(IDC_SLIDERBRUSHSCALINGMAXRAND):
-		{
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERBRUSHSCALINGMAXRAND), MinScalingSlider, MaxScalingSlider, 0, &Valid);
-			if (Valid)
-			{
-				SliderVal = (MaxScalingSlider - SliderVal) + MinScalingSlider;
-				String_32 RangeText = GetRandomRangeText(SliderVal);
-				SetStringGadgetValue(_R(IDC_STATICSCALINGRAND), &RangeText);
-			}
-		}
-		break;
-		case _R(IDC_SLIDERROTATEANGLEMAXRAND):
-		{
-			// This is a little different as we go from 0 - Max degrees, where Max is determined by
-			// SliderVal * 360
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERROTATEANGLEMAXRAND), MIN_RANDOM_SLIDER, MAX_ROTATION_RANDOM_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				SliderVal = (MAX_ROTATION_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
-				//SliderVal = (SliderVal * 2) + 100; 
-				double MaxAngle = double(SliderVal); // * 360;
-				//MaxAngle = (MaxAngle * 0.01) - 360;
-
-				String_32 RangeText(""); 
-				String_32 MinString;
-				String_32 MaxString;
-				String_32 MiddleString = " - ";
-				Convert::LongToString(0, &MinString);
-				Convert::LongToString(INT32(MaxAngle), &MaxString);
-
-				RangeText = MinString;
-				RangeText += MiddleString;
-				RangeText += MaxString;
-		
-				SetStringGadgetValue(_R(IDC_STATICROTATIONRAND), &RangeText);
-			}
-		}
-		break;
-		case _R(IDC_SLIDERSCALINGPRESSURE):
-		{
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERSCALINGPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				INT32 lSlider = MAX_PRESSURE_SLIDER - (INT32)SliderVal;
-				
-				String_32 MinString = TEXT("");
-				Convert::LongToString((INT32)SliderVal, &MinString);
-				
-				// our maximum is always 100%
-				String_32 MaxString = TEXT(" - 100");
-
-				MinString += MaxString;
-				SetStringGadgetValue(_R(IDC_STATICSCALINGPRESS), &MinString);
-			}
-		}
-		break;
-		case _R(IDC_SLIDERSATURATIONRANDOM):
-		{
-			// this is a little different as it only goes from 0 - SliderVal;
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERSATURATIONRANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_SAT_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				SliderVal = MAX_RANDOM_SAT_SLIDER - SliderVal;
-				String_32 RangeText(""); 
-				String_32 MinString;
-				String_32 MaxString;
-				String_32 MiddleString = " - ";
-				Convert::LongToString(0, &MinString);
-				Convert::LongToString(SliderVal, &MaxString);
-
-				RangeText = MinString;
-				RangeText += MiddleString;
-				RangeText += MaxString;
+			SliderVal = (MAX_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
+			String_32 RangeText = TEXT(""); //GetRandomRangeText(SliderVal);
 			
-				SetStringGadgetValue(_R(IDC_STATICSATRAND), &RangeText);
+			String_32 MinString = TEXT("0 - ");
+			String_32 MaxString = TEXT("");;
+			Convert::LongToString((INT32)SliderVal, &MaxString);
+
+			RangeText += MinString;
+			RangeText += MaxString;
+			SetStringGadgetValue(_R(IDC_STATICOFFSETRAND), RangeText);
 			}
-		}
-		break;
-		case _R(IDC_SLIDERHUERANDOM):
+	}
+	else if (SliderID == _R(IDC_SLIDERBRUSHSCALINGMAXRAND))
+	{
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERBRUSHSCALINGMAXRAND), MinScalingSlider, MaxScalingSlider, 0, &Valid);
+		if (Valid)
 		{
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERHUERANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_HUE_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				SliderVal = MAX_RANDOM_HUE_SLIDER - SliderVal;
-			///	String_32 RangeText = GetRandomText(SliderVal, MAX_RANDOM_HUE_SLIDER);
+			SliderVal = (MaxScalingSlider - SliderVal) + MinScalingSlider;
+			String_32 RangeText = GetRandomRangeText(SliderVal);
+			SetStringGadgetValue(_R(IDC_STATICSCALINGRAND), RangeText);
+		}
+	}
+	else if (SliderID == _R(IDC_SLIDERROTATEANGLEMAXRAND))
+	{
+		// This is a little different as we go from 0 - Max degrees, where Max is determined by
+		// SliderVal * 360
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERROTATEANGLEMAXRAND), MIN_RANDOM_SLIDER, MAX_ROTATION_RANDOM_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			SliderVal = (MAX_ROTATION_RANDOM_SLIDER - SliderVal) + MIN_RANDOM_SLIDER;
+			//SliderVal = (SliderVal * 2) + 100; 
+			double MaxAngle = double(SliderVal); // * 360;
+			//MaxAngle = (MaxAngle * 0.01) - 360;
+
+			String_32 RangeText(_T("")); 
+			String_32 MinString;
+			String_32 MaxString;
+			String_32 MiddleString = _T(" - ");
+			Convert::LongToString(0, &MinString);
+			Convert::LongToString(INT32(MaxAngle), &MaxString);
+
+			RangeText = MinString;
+			RangeText += MiddleString;
+			RangeText += MaxString;
+	
+			SetStringGadgetValue(_R(IDC_STATICROTATIONRAND), RangeText);
+		}
+	}
+	else if (SliderID == _R(IDC_SLIDERSCALINGPRESSURE))
+	{
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERSCALINGPRESSURE), MIN_PRESSURE_SLIDER, MAX_PRESSURE_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+//			INT32 lSlider = MAX_PRESSURE_SLIDER - (INT32)SliderVal;
+			
+			String_32 MinString = TEXT("");
+			Convert::LongToString((INT32)SliderVal, &MinString);
+			
+			// our maximum is always 100%
+			String_32 MaxString = TEXT(" - 100");
+
+			MinString += MaxString;
+			SetStringGadgetValue(_R(IDC_STATICSCALINGPRESS), MinString);
+		}
+	}
+	else if (SliderID == _R(IDC_SLIDERSATURATIONRANDOM))
+	{
+		// this is a little different as it only goes from 0 - SliderVal;
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERSATURATIONRANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_SAT_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			SliderVal = MAX_RANDOM_SAT_SLIDER - SliderVal;
+			String_32 RangeText(_T("")); 
+			String_32 MinString;
+			String_32 MaxString;
+			String_32 MiddleString = _T(" - ");
+			Convert::LongToString(0, &MinString);
+			Convert::LongToString(SliderVal, &MaxString);
+
+			RangeText = MinString;
+			RangeText += MiddleString;
+			RangeText += MaxString;
+		
+			SetStringGadgetValue(_R(IDC_STATICSATRAND), RangeText);
+		}
+	}
+	else if (SliderID == _R(IDC_SLIDERHUERANDOM))
+	{
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERHUERANDOM), MIN_RANDOM_SLIDER, MAX_RANDOM_HUE_SLIDER, 0, &Valid);
+		if (Valid)
+		{
+			SliderVal = MAX_RANDOM_HUE_SLIDER - SliderVal;
+			//	String_32 RangeText = GetRandomText(SliderVal, MAX_RANDOM_HUE_SLIDER);
 			//	SetStringGadgetValue(_R(IDC_STATICHUERAND), &RangeText);
 
 
-				String_32 MinString = TEXT("0 - ");
-				String_32 MaxString = TEXT("");
-				Convert::LongToString((INT32)SliderVal, &MaxString);
+			String_32 MinString = TEXT("0 - ");
+			String_32 MaxString = TEXT("");
+			Convert::LongToString((INT32)SliderVal, &MaxString);
 
-				MinString += MaxString;
-				SetStringGadgetValue(_R(IDC_STATICSCALINGPRESS), &MinString);
-			
-			}
+			MinString += MaxString;
+			SetStringGadgetValue(_R(IDC_STATICSCALINGPRESS), MinString);
+		
 		}
-		break;
-		case _R(IDC_SLIDERTRANSPPRESSURE):
+	}
+	else if (SliderID == _R(IDC_SLIDERTRANSPPRESSURE))
+	{
+		SliderVal = GetLongGadgetValue(_R(IDC_SLIDERTRANSPPRESSURE), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
+		if (Valid)
 		{
-			SliderVal = GetLongGadgetValue(_R(IDC_SLIDERTRANSPPRESSURE), MIN_RANDOM_SLIDER, MAX_RANDOM_SLIDER, 0, &Valid);
-			if (Valid)
-			{
-				SliderVal = MAX_RANDOM_SLIDER - SliderVal;
-				String_32 RangeText = GetRandomText(SliderVal, MAX_RANDOM_SLIDER);
-				SetStringGadgetValue(_R(IDC_STATICTRANSPPRESSURE), &RangeText);
-			}
+			SliderVal = MAX_RANDOM_SLIDER - SliderVal;
+			String_32 RangeText = GetRandomText(SliderVal, MAX_RANDOM_SLIDER);
+			SetStringGadgetValue(_R(IDC_STATICTRANSPPRESSURE), RangeText);
 		}
-		break;
-		default:
-		{
-			// do nothing just yet
-		}
-		break;
 	}
 }
 
@@ -3686,12 +3395,12 @@ String_32 CBrushEditDlg::GetRandomText(INT32 Rand, INT32 MaxRand)
 	}
 
 
-	String_32 RangeText("");
+	String_32 RangeText(_T(""));
 
 	// annoyingly we now need to recast our values as long
 	String_32 MinString;
 	String_32 MaxString;
-	String_32 MiddleString = " - ";
+	String_32 MiddleString = _T(" - ");
 	Convert::LongToString(MinVal, &MinString);
 	Convert::LongToString(MaxVal, &MaxString);
 
@@ -3726,7 +3435,7 @@ void CBrushEditDlg::CreateNewBrush()
 		return;
 	}
 
-	BrushDefinition* pBrushDef = pBrushComp->FindDefinition(ThisHandle);
+	BrushDefinition* pBrushDef = pBrushComp->FindBrushDefinition(ThisHandle);
 
 	if (pBrushDef == NULL)
 	{

@@ -294,9 +294,8 @@ PORTNOTE("other","Removed Lots of init functions")
 			ExtendSetsDlg::Init() &&			// Register the Extend Sets Dialog
 #endif
 			OpMakeNodesShapes::Init() &&		// Register the OpMakeNodesShapes operation
-#ifndef EXCLUDE_FROM_XARALX
 			OpChangeBrush::Declare() &&         // Register the change brush operation
-#endif
+
 			OpApplyClipView::Init() &&			// Register the Apply ClipView operation
 			OpRemoveClipView::Init() &&			// Register the Remove ClipView operation
 // Neville 5/8/97 remove Stroking code
@@ -478,8 +477,8 @@ PORTNOTE("other","Removed various bevel usage")
 			GIFAnimationPropertyTabsDlg::Init() &&	// Register the GIF animation tabs dialog
 			AnimExOptns::Init() &&					// Register the Animation Export Options tabs dialog	
 			OpConvertPathToShapes::Declare() &&		// convert path to shapes operation
-#ifndef EXCLUDE_FROM_XARALX
 			OpChangeBrushDefinition::Declare() &&
+#ifndef EXCLUDE_FROM_XARALX
 // WEBSTER-ranbirr-13/11/96
 #ifndef WEBSTER
 			SepsDlg::Init() &&					// Init the separation properties dialog
@@ -500,13 +499,12 @@ PORTNOTE("other","Removed various bevel usage")
 			OpQuality::Init() &&  				// init the OpQuality operations
 #endif
 			CBiasGainDlg::Init() &&
-#ifndef EXCLUDE_FROM_XARALX
 			CBrushEditDlg::Init () &&
 			OpSelectBrush::Declare() &&
 			CNameBrushDlg::Init() &&
-			OpDeactivateBrush::Declare() &&
 			CInitBrushNameDlg::Init() &&
-#endif
+			OpDeactivateBrush::Declare() &&
+
 			OpZoomIn::Init() &&
 			OpZoomOut::Init() &&
 #ifndef EXCLUDE_FROM_XARALX

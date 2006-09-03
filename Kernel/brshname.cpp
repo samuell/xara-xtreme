@@ -105,7 +105,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "resource.h"
 #include "brshcomp.h"
 //#include "rik.h"   // for the strings
-#include "reshlpid.h"
+//#include "reshlpid.h"
 
 CC_IMPLEMENT_DYNAMIC(CBaseBrushNameDlg, DialogOp)
 CC_IMPLEMENT_DYNCREATE(CNameBrushDlg, CBaseBrushNameDlg)
@@ -123,7 +123,7 @@ BOOL CBaseBrushNameDlg::m_bModeless = FALSE;
 	Inputs:		idRes		---		resource ID of the dialog template to use
 				nMode		---		mode to run in, MODAL or MODELESS
 	Purpose:	Create a CBaseBrushNameDlg, an abstract base class for the Name name
-				and	Rename brush dialogs.
+				and	 dialogs.
 	SeeAlso:	CBrushNameDlg; CRenameBrushDlg
 ********************************************************************************************/
 
@@ -205,7 +205,7 @@ MsgResult CBaseBrushNameDlg::Message(Msg* pMessage)
 
 		case DIM_TEXT_CHANGED:
 			// Disable the OK/Apply button if there's no document or entered text.
-			EnableGadget(IDOK, !GetStringGadgetValue(_R(IDC_EDITBRUSHNAME), 0).IsEmpty()
+			EnableGadget(_R(IDOK), !GetStringGadgetValue(_R(IDC_EDITBRUSHNAME), 0).IsEmpty()
 							&& Document::GetSelected() != 0);
 			break;
 
@@ -223,7 +223,10 @@ MsgResult CBaseBrushNameDlg::Message(Msg* pMessage)
 					// Invalid, reinitialise.
 					InformError(nErrID);
 					if (nErrID == _R(IDS_BRUSHNAME_INVALID))
-						InitGadgetText(&(String_32(strEnter)), FALSE);
+					{
+						String_32 s(strEnter);
+						InitGadgetText(&s, FALSE);
+					}
 					else
 						InitGadgetText(NULL);
 					break;
@@ -236,21 +239,23 @@ MsgResult CBaseBrushNameDlg::Message(Msg* pMessage)
 					{
 						// Don't close, reinitialise (dialog is modeless).
 						InitGadgetText();
+						pMsg->DlgMsg = DIM_NONE; // stop base class closing it
 						break;
 					}
 					else
 					{
-						Close();
-						End();
+						// Close();
+						// End(); - base class will close
+						break;
 					}
 				}
 						
 			}
 			break;
 		case DIM_CANCEL:
-			HandleCancel();
-			Close();
-			End();
+			HandleCancel(); // base class will close
+			break;
+		default:
 			break;
 		}
 	}
@@ -261,7 +266,7 @@ MsgResult CBaseBrushNameDlg::Message(Msg* pMessage)
 	{
 		DocChangingMsg* pMsg = (DocChangingMsg*) pMessage;
 		if (pMsg->State == DocChangingMsg::SELCHANGED)
-			EnableGadget(IDOK, pMsg->pNewDoc != 0);
+			EnableGadget(_R(IDOK), pMsg->pNewDoc != 0);
 	}
 
 	// Pass everything on to the base class . . .
@@ -304,7 +309,6 @@ UINT32 CBaseBrushNameDlg::IsValid(const StringBase& strName)
 CNameBrushDlg::CNameBrushDlg()
   :	CBaseBrushNameDlg(_R(IDD_BRUSHNAMEDLG), m_bModeless ? MODELESS : MODAL)
 {
-	INT32 i = 1;
 	// Empty.
 }
 
@@ -344,7 +348,7 @@ void CNameBrushDlg::InitGadgetText(String_32* pString, BOOL resizeDialog /*= TRU
 {
 	if (pString != NULL)
 		m_strSuggest = *pString;
-	SetStringGadgetValue(_R(IDC_EDITBRUSHNAME), GetSuggestion(&m_strSuggest));
+	SetStringGadgetValue(_R(IDC_EDITBRUSHNAME), *GetSuggestion(&m_strSuggest));
 	HighlightText(_R(IDC_EDITBRUSHNAME));
 	SetKeyboardFocus(_R(IDC_EDITBRUSHNAME));
 
@@ -371,7 +375,7 @@ void CNameBrushDlg::InitGadgetText(String_32* pString, BOOL resizeDialog /*= TRU
 
 		// We want to move up the buttons
 		RECT OkRect;
-		if (GetGadgetPosition(IDOK, &OkRect))
+		if (GetGadgetPosition(_R(IDOK), &OkRect))
 		{
 			OkRect.top -= Subtract;
 			OkRect.bottom -= Subtract;
@@ -379,11 +383,11 @@ void CNameBrushDlg::InitGadgetText(String_32* pString, BOOL resizeDialog /*= TRU
 			Width = (Width * 2) / 3;
 			OkRect.left += Width ;
 			OkRect.right += Width;
-			SetGadgetPosition(IDOK, OkRect);
+			SetGadgetPosition(_R(IDOK), OkRect);
 		}
 
 		RECT CancelRect;
-		if (GetGadgetPosition(IDCANCEL, &CancelRect))
+		if (GetGadgetPosition(_R(IDCANCEL), &CancelRect))
 		{
 			CancelRect.top -= Subtract;
 			CancelRect.bottom -= Subtract;
@@ -391,7 +395,7 @@ void CNameBrushDlg::InitGadgetText(String_32* pString, BOOL resizeDialog /*= TRU
 			Width = (Width * 2) / 3;
 			CancelRect.left += Width;
 			CancelRect.right += Width;
-			SetGadgetPosition(IDCANCEL, CancelRect);
+			SetGadgetPosition(_R(IDCANCEL), CancelRect);
 		}
 
 		// Reset the window
@@ -533,7 +537,6 @@ BOOL CNameBrushDlg::Init()
 OpState	CNameBrushDlg::GetState(String_256*, OpDescriptor*)
 {    
 	OpState OpSt;
-	INT32 i = 1;
 	return OpSt;
 }
 
@@ -577,7 +580,6 @@ BOOL CInitBrushNameDlg::Init()
 OpState	CInitBrushNameDlg::GetState(String_256*, OpDescriptor*)
 {    
 	OpState OpSt;
-	INT32 i = 1;
 	return OpSt;
 }
 
@@ -598,7 +600,7 @@ void CInitBrushNameDlg::InitGadgetText(String_32* pString, BOOL resizeDialog /*=
 {
 	if (pString != NULL)
 		m_strSuggest = *pString;
-	SetStringGadgetValue(_R(IDC_EDITBRUSHNAME), GetSuggestion(&m_strSuggest));
+	SetStringGadgetValue(_R(IDC_EDITBRUSHNAME), *GetSuggestion(&m_strSuggest));
 
 	// change the dialog title to "Enter brush name:"
 	// Errr, NO!  This is very bad for translation!

@@ -1999,7 +1999,7 @@ PORTNOTE("other", "Removed m_pGRenderBrush support");
 	BrushComponent* pBrushComp = (BrushComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(BrushComponent));
 	if (!pBrushComp) return;
 
-	BrushDefinition* pBrushDef = pBrushComp->FindDefinition(Handle);
+	BrushDefinition* pBrushDef = pBrushComp->FindBrushDefinition(Handle);
 	if (!pBrushDef) return;
 
 	// now launch the edit dialog

@@ -111,14 +111,15 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layer.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "brushref.h"
-//#include "freehand.h"
+#include "freehand.h"
+#include "freeinfo.h"
 //#include "xlong.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "ppbrush.h"
 #include "brshattr.h"
-//#include "sgline.h"
+#include "sgline.h"
 //#include "loadbrsh.h"
 #include "fileutil.h"
-//#include "clipint.h"
+#include "clipint.h"
 #include "nodebldr.h"
 #include "bldbrdef.h"
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -137,6 +138,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "freeinfo.h"
 #include "brshbeca.h"
 //#include "brdlgres.h"
+#include "brushop.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -2829,8 +2831,6 @@ DocRect BrushDefinition::GetLargestPossibleRect(BOOL AdjustForLineWidth)
 	
 	double Scale = 1.0;
 
-PORTNOTE("other","Removed OpDrawBrush usage")
-#ifndef EXCLUDE_FROM_XARALX
 	MILLIPOINT LineWidth = GetDefaultLineWidth(TRUE);
 	
 	// if we are including the scale to linewidth then work that out here
@@ -2844,7 +2844,6 @@ PORTNOTE("other","Removed OpDrawBrush usage")
 			LineWidth = CurrentLineWidth;
 		}
 	}
-#endif
 	
 	// increase the size if we have randomness or pressure
 	UINT32 MaxRand = GetScalingMaxRand();
@@ -3245,8 +3244,6 @@ UINT32 BrushDefinition::GetNextRandomNumber()
 
 BOOL BrushDefinition::CopyInkTreeToClipboard()
 {
-	PORTNOTETRACE("clipboard","BrushDefinition::CopyInkTreeToClipboard - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	// first see if we can get the clipboard
 	InternalClipboard *Clipboard = InternalClipboard::Instance();
 	if (Clipboard == NULL || !Clipboard->PrepareForCopy())
@@ -3323,8 +3320,6 @@ BOOL BrushDefinition::CopyInkTreeToClipboard()
 	PostExportSubTree();
 
 	return (ok && StillOk);
-#endif
-	return false;
 }
 	
 /********************************************************************************************
@@ -4155,7 +4150,7 @@ BOOL BrushComponent::ExportLine(BaseCamelotFilter *pFilter, BrushHandle Handle)
 	ERROR3IF(pFilter == NULL, "Illegal NULL params");
 
 	// Find the stroke, and baulk if it's all gone wrong
-	BrushDefinition *pBrush = (BrushDefinition*)FindDefinition(Handle);
+	BrushDefinition *pBrush = FindBrushDefinition(Handle);
 	if (pBrush == NULL)
 	{
 		ERROR3("Attempt to save a deleted or non-existent stroke");
@@ -4206,7 +4201,7 @@ BrushHandle BrushComponent::FindImportedBrush(UINT32 ImportedHandle)
 
 /********************************************************************************************
 
->	static BrushDefinition *BrushComponent::FindDefinition(UINT32 Handle, BOOL IncludeDeactiveated);
+>	static BrushDefinition *BrushComponent::FindBrushDefinition(UINT32 Handle, BOOL IncludeDeactiveated);
 
 	Author:		Diccon_Yamanaka (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	13/12/99
@@ -4521,13 +4516,8 @@ LineHandle BrushComponent::AddNewItem(LineDefinition *pItem, BOOL AskName)
 		}
 	
 		// add it to the line gallery
-PORTNOTE("dialog","Removed LineGallery usage")
-#ifndef EXCLUDE_FROM_XARALX
 		LineGallery::AddNewBrushItem(pVal);	
-#endif
 
-PORTNOTE("other","BrushComponent::AddNewItem - Removed tool handling")
-#ifndef EXCLUDE_FROM_XARALX
 		// get the freehand tool
 		ToolListItem* pToolItem = Tool::Find(TOOLID_FREEHAND);
 		ERROR2IF(pToolItem == NULL, NewHandle, "Unable to get tool item in DeactivateBrushDefAction::Init");
@@ -4541,7 +4531,6 @@ PORTNOTE("other","BrushComponent::AddNewItem - Removed tool handling")
 
 		// add to the freehand infobar
 		pInfoBar->AddBrush(NewHandle);
-#endif
 	}
 	return NewHandle;
 }

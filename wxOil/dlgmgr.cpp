@@ -7095,7 +7095,14 @@ CWindowID DialogManager::GetPageWindow(CWindowID Win, CDlgResID PageID, INT32* P
 
 BOOL DialogManager::SetTitlebarName( CWindowID Win, String_256* Name )
 {
-	( (wxWindow *)Win )->SetLabel( (TCHAR *)(*Name) );
+	// iterate to find the TLW
+	wxWindow * pTLW = (wxWindow *)(Win);
+	while (pTLW && !pTLW->IsKindOf(CLASSINFO(wxTopLevelWindow)))
+		pTLW = pTLW->GetParent();
+
+	if (pTLW)
+		pTLW->SetTitle( (TCHAR *)(*Name) );
+
 	return true;
 }
 

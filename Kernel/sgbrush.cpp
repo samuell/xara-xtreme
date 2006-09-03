@@ -316,7 +316,7 @@ BrushDefinition *BrushAttrItem::GetBrushDefinition()
 		ERROR2IF(pDoc == NULL, NULL, "Wheres the document?");
 		BrushComponent* pBrushComp = (BrushComponent*)pDoc->GetDocComponent(CC_RUNTIME_CLASS(BrushComponent));
 		ERROR2IF(pBrushComp == NULL, NULL, "No brush component");
-		return (BrushDefinition *)(pBrushComp->FindDefinition(Handle));
+		return pBrushComp->FindBrushDefinition(Handle);
 	}
 
 	return NULL;
