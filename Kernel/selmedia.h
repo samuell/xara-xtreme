@@ -131,7 +131,7 @@ struct SelMediaDlgParam : public OpParam
 {
 CC_DECLARE_DYNAMIC(SelMediaDlgParam)
 
-	typedef std::map<PCTSTR, bool>	CMediaAppList;
+	typedef std::map<String_256, bool>	CMediaAppList;
 	typedef CMediaAppList::iterator CMediaAppListIter;
 	
 	CMediaAppList*	m_pAppList;

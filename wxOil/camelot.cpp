@@ -2839,7 +2839,7 @@ static void FillMediaAppMap( SelMediaDlgParam::CMediaAppList* pMapMediaApp )
 		SelMediaDlgParam::CMediaAppListIter	iterCur( iter++ ); 
 		if( !Detect.IsAppPresent( iterCur->first ) )
 		{
-			TRACEUSER( "luke", _T("%s is not present"), iterCur->first );
+			TRACEUSER( "luke", _T("%s is not present"), (PCTSTR)iterCur->first );
 			 pMapMediaApp->erase( iterCur->first );
 		}
 	}
@@ -2891,14 +2891,16 @@ bool CCamApp::LaunchMediaApp( const wxString& strUrl )
 	}
 
 	// Check to see if we can control the selected app. (maybe one day....)
-	SelMediaDlgParam::CMediaAppListIter iter = mapMediaApp.find( m_strMediaApplication );
-	bool				fControlable = false;
+	SelMediaDlgParam::CMediaAppListIter iter = mapMediaApp.find( (PCTSTR)m_strMediaApplication );
+	bool				fMPlayer = false;
 	if( mapMediaApp.end() != iter )
-		fControlable = iter->second;
+		fMPlayer = iter->second;
 
 	// Build the command line and execute it
 	wxString			strCommand;
 	strCommand = PCTSTR(m_strMediaApplication);
+	if( fMPlayer )
+		strCommand.append( _T(" -quiet ") );
 	strCommand.Append( _T(" \"") );
 	strCommand.Append( strUrl );
 	strCommand.Append( _T("\"") );
