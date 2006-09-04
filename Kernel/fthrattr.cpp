@@ -2313,8 +2313,6 @@ BOOL FeatherRecordHandler::HandleFeatherRecord(CXaraFileRecord* pCXaraFileRecord
 				
 				if (ok) ok = InsertNode(pAttr);
 
-				TRACEUSER( "luke", _T("HFR %x %d %d"), pAttr->FindParent(), pBaseCamelotFilter->GetInsertMode() == INSERTMODE_ATTACHTOTREE, ok );
-
 				// Set the m_Node pointer (TODO remove)
 				if (ok && pBaseCamelotFilter->GetInsertMode()==INSERTMODE_ATTACHTOTREE)
 					pValue->SetLinkedNode((NodeRenderableBounded*)pAttr->FindParent());
