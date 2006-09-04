@@ -101,7 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #include "camtypes.h"
 #include "linedef.h"
-//#include "colormgr.h"
+#include "colormgr.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 
 CC_IMPLEMENT_DYNAMIC(LineDefinition, CCObject)
@@ -249,8 +249,6 @@ BOOL LineDefinition::NeedsTransparency() const
 
 void LineDefinition::ConvertIndexedColours(Spread* pRoot)
 {
-	PORTNOTETRACE("other","LineDefinition::ConvertIndexedColours - do nothing");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pRoot == NULL)
 	{
 		ERROR3("Spread is NULL");
@@ -310,5 +308,4 @@ void LineDefinition::ConvertIndexedColours(Spread* pRoot)
 		
 		pNode = pNode->FindNext(CC_RUNTIME_CLASS(NodeRenderableInk));
 	}
-#endif
 }
