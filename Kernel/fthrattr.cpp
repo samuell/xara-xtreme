@@ -1555,8 +1555,7 @@ void AttrFeather::Render( RenderRegion* pRender )
 
 			else
 			{
-				if (!Error::IsUserName("Gavin"))
-					ERROR3("AttrFeather::Render; No linked node and parent is not an ink-node!");
+//				ERROR3("AttrFeather::Render; No linked node and parent is not an ink-node!");
 				return;
 			}
 		}
@@ -2313,6 +2312,9 @@ BOOL FeatherRecordHandler::HandleFeatherRecord(CXaraFileRecord* pCXaraFileRecord
 				pValue->SetFeatherProfile(Profile);
 				
 				if (ok) ok = InsertNode(pAttr);
+
+				TRACEUSER( "luke", _T("HFR %x %d %d"), pAttr->FindParent(), pBaseCamelotFilter->GetInsertMode() == INSERTMODE_ATTACHTOTREE, ok );
+
 				// Set the m_Node pointer (TODO remove)
 				if (ok && pBaseCamelotFilter->GetInsertMode()==INSERTMODE_ATTACHTOTREE)
 					pValue->SetLinkedNode((NodeRenderableBounded*)pAttr->FindParent());

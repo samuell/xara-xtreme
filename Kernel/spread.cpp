@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "layer.h"
 //#include "convert.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "sglayer.h"
+#include "sglayer.h"
 #include "usercord.h"
 //#include "tim.h"
 
@@ -1118,11 +1118,8 @@ Layer* Spread::FindActiveLayer(void)
 	// as long as there is at least one layer in this spread.
 	// The MultipleActiveLayers added by Neville 12/6/96 so that multiple active layers
 	// are fixed, if found.
-	PORTNOTETRACE("other","Spread::CopyNodeContents - not yet calling EnsureActiveLayerIntegrity");
-#ifndef EXCLUDE_FROM_XARALX
 	if (pActiveLayer == NULL || MultipleActiveLayers)
 		LayerSGallery::EnsureActiveLayerIntegrity(this,&pActiveLayer);
-#endif
 	// Fail if the spread has no active layer 
 	return (pActiveLayer);
 } 
