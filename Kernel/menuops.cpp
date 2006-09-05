@@ -1587,10 +1587,14 @@ Technical Notes:
 
 void WindowOps::Do(OpDescriptor* WhichOp)
 {
-
+	if( WhichOp->Token == String( OPTOKEN_NEXTDOCUMENT ) )
+		WindowNextDcocument( true );
+	else if( WhichOp->Token == String( OPTOKEN_LASTDOCUMENT ) )
+		WindowNextDcocument( false );
+	
 	PORTNOTETRACE("other","WindowOps::Do - do nothing");
 #ifndef EXCLUDE_FROM_XARALX
-	if ((WhichOp->Token) ==  String(OPTOKEN_WINDOWNEWVIEW))
+	else if ((WhichOp->Token) ==  String(OPTOKEN_WINDOWNEWVIEW))
 		WindowNewAction(); 
 	else if ((WhichOp->Token) == String(OPTOKEN_WINDOWARRANGE))
 		WindowArrangeAction(); 
@@ -1704,6 +1708,32 @@ PORTNOTETRACE("other","WindowOps::Do - do nothing");
 												0);
 	ERRORIF(!TileOp, _R(IDE_NOMORE_MEMORY), FALSE);*/
 #endif
+	
+	// REGOP(HELP, PLAYER, HelpPlayer);
+	OpDescriptor* NextDocumentOp = new OpDescriptor(
+												0, 
+												_R(IDS_NEXTDOCUMENT),
+												CC_RUNTIME_CLASS(WindowOps), 
+												OPTOKEN_NEXTDOCUMENT,
+												WindowOps::GetState,
+												0,
+												_R(IDBBL_NEXTDOCUMENT),
+												0 );
+
+	ERRORIF(!NextDocumentOp, _R(IDE_NOMORE_MEMORY), FALSE);
+
+	// REGOP(HELP, PLAYER, HelpPlayer);
+	OpDescriptor* LastDocumentOp = new OpDescriptor(
+												0, 
+												_R(IDS_LASTDOCUMENT),
+												CC_RUNTIME_CLASS(WindowOps), 
+												OPTOKEN_LASTDOCUMENT,
+												WindowOps::GetState,
+												0,
+												_R(IDBBL_LASTDOCUMENT),
+												0 );
+
+	ERRORIF(!LastDocumentOp, _R(IDE_NOMORE_MEMORY), FALSE);
 
 	return TRUE;
 }

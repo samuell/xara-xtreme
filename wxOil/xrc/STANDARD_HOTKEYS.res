@@ -1,3 +1,6 @@
+HotKey	0x09		Constrain				"Ctrl+Tab"		"NextDocument"
+HotKey	0x09		Adjust Constrain		"Ctrl+Shift+Tab" "LastDocument"
+
 HotKey	0x41		Constrain				"Ctrl+A"		"SelectAll"
 HotKey	0x41		Adjust Constrain		"Ctrl+Shift+A"	"PasteAttributes"
 HotKey	0x42		Constrain				"Ctrl+B"		"PutToBack"

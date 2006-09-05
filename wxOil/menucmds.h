@@ -180,7 +180,8 @@ void WindowNewAction();
 void WindowArrangeAction(); 
 void WindowCascadeAction(); 
 void WindowTileHorzAction(); 
-void WindowTileVertAction(); 
+void WindowTileVertAction();
+void WindowNextDcocument( bool fForward );
 OpState WindowCmdState(); 
 
 

@@ -685,6 +685,35 @@ PORTNOTETRACE("other", "WindowTileVertAction does nothing");
 #endif
 }
 
+
+/********************************************************************************************
+
+>	void WindowTileVertAction(); 	
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukehcamelotdev@xara.com>
+	Created:	01/08/06
+	Inputs:		None
+	Outputs:	None
+	Returns:	None
+	Purpose:	Performs Window menu function switch next\last document.
+	Errors:		None
+	SeeAlso:	MenuCmds
+
+********************************************************************************************/
+
+void WindowNextDcocument( bool fForward )
+{
+// This is only needed for Linux (and maybe Mac, we'll see)
+#if defined(__WXGTK__)
+	CCamFrame*			pFrame = (CCamFrame*)AfxGetApp().GetTopWindow();
+	if( fForward )
+		pFrame->ActivateNext();
+	else
+		pFrame->ActivatePrevious();
+#endif
+}
+
+
 /********************************************************************************************
 
 >	OpState WindowCmdState()

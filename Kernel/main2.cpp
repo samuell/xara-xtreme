@@ -370,9 +370,9 @@ PORTNOTE("other","Removed CMXTreeDlg usage")
 
 #ifndef EXCLUDE_FROM_XARALX
 			OpWhatsThis::Init() &&				// Register the "What's This?" help mode Operation
-			WindowOps::Init() &&				// Register Window Operations
 #endif //EXCLUDE_FROM_XARALX
 			ViewOps::Init() &&					// Register View Operations
+			WindowOps::Init() &&				// Register Window Operations
 //WEBSTER-ranbirr-12/11/96
 #ifndef WEBSTER
 #ifndef STANDALONE

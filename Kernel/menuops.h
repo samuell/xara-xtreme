@@ -138,6 +138,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define OPTOKEN_HELPPLAYER		_T("HelpPlayer")
 #define OPTOKEN_HELPDEMOS_NATIVE _T("HelpDemosNative")
 #define OPTOKEN_HELPTECHSUPPORT	_T("HelpTechSupport")
+#define OPTOKEN_NEXTDOCUMENT	_T("NextDocument")
+#define OPTOKEN_LASTDOCUMENT	_T("LastDocument")
 
 //Graham 20/10/97
 #define OPTOKEN_FILENEW_DRAWING		_T("FileNewDrawing")
