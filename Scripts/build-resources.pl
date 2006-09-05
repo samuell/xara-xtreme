@@ -248,7 +248,7 @@ if ($version ne "")
 	    system ("svn status -v $topdir > $outputdir/svnversion.cache");
 	    
 	    $svnv=`svnversion $topdir`;
-	    $bdate= `date +"%d-%b-%y %H:%M"`;
+	    $bdate= `LANG=C date +"%d-%b-%y %H:%M"`;
 	    chomp($bdate);
 	    chomp($svnv);
 	    print STDERR "svnversion gives $svnv\n";
