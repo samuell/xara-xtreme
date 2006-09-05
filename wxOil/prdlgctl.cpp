@@ -1949,6 +1949,8 @@ CCPrintInfo::CCPrintInfo()
 
 CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 {
+	CAM_USE(pCCamVw); // Unused parameter in wxOil - used in WinOil
+
 	pOurPD 		= NULL;
 	pOriginalPD = NULL;
 	Initialised = FALSE;
@@ -1956,7 +1958,6 @@ CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 	pDocument	= pDoc;
 	pPrCtrl		= NULL;
 	pPrgDlg		= NULL;
-	pCCamView	= pCCamVw;
 	pCCDC 		= NULL;
 	m_bContinuePrinting = TRUE;
 	m_pNativePrintData = NULL;
@@ -1971,7 +1972,7 @@ CCPrintInfo::CCPrintInfo(Document* pDoc,CCamView* pCCamVw)
 
 PORTNOTE("printing", "Disabled creation of a print dialog inside a CCPrintInfo structure")
 #ifndef EXCLUDE_FROM_XARALX
-	if (pDocument != NULL && pCCamView != NULL)
+	if (pDocument != NULL)
 	{
 		pOurPD = new CCPrintDialog(pDocument);
 
@@ -1989,8 +1990,7 @@ PORTNOTE("printing", "Disabled creation of a print dialog inside a CCPrintInfo s
 #endif
 
 	ERROR3IF(pDocument == NULL,"CCPrintInfo has NULL document ptr");
-	ERROR3IF(pCCamView == NULL,"CCPrintInfo has NULL CCamView ptr");
-
+	
 	ERROR3IF(CCPrintInfo::pCurrent != NULL,"Constructing a new CCPrintInfo before destructing the old one");
 	CCPrintInfo::pCurrent = this;
 }
@@ -2357,7 +2357,6 @@ BOOL CCPrintInfo::StartPrinting()
 	ERROR2IF(!Initialised,FALSE,"Not initialised");
 	ERROR2IF(pOurPD == NULL,FALSE,"NULL CCPrintDialog ptr");
 	ERROR2IF(pDocument == NULL,FALSE,"Document ptr is NULL");
-	ERROR2IF(pCCamView == NULL,FALSE,"CCamView ptr is NULL");
 
 	// Get ptr to the PrintControl object
 	pPrCtrl = pOurPD->GetPrintControl();

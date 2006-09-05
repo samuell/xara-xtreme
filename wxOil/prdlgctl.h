@@ -183,7 +183,6 @@ private:
 	String_256		DocTitle;		// The title of the assciated document
 	PrintControl*	pPrCtrl;		// Ptr to print control that will control print layout
 	PrintProgressDlg* pPrgDlg;		// Ptr to the print progress dlg, created by StartPrinting()
-	CCamView*		pCCamView;		// Ptr to the CCamView that is doing the print job
 
 	CCDC * 			pCCDC;			// Ptr to ourx CCDC
 
