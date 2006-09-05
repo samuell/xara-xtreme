@@ -900,6 +900,9 @@ BOOL SelectorTool::OnKeyPress(KeyPress* pKey)
 // >>>> End
 
 	case CAMKEY(TAB):								// moves selection to next rendered node
+		if( pKey->IsConstrain() )
+			return FALSE;			// We have other uses for Ctrl+Tab (switch document)
+
 		if (pKey->IsPress()) HandleTabKey(ClickMods.Adjust);
 		break;
 
