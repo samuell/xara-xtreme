@@ -5908,13 +5908,9 @@ void SelRange::AttrsHaveChanged()
 	DialogBarOp::SetSystemStateChanged(); 
 #endif
 
-PORTNOTE("other","SelRange::AttrsHaveChanged - EffectsStack usage removed")
 	if (m_pEffectsStack)
 	{
-		TRACE( _T("Warning - SelRange::AttrsHaveChanged - m_pEffectsStack->AttrsHaveChanged NOT called") );
-#ifndef EXCLUDE_FROM_XARALX
 		m_pEffectsStack->AttrsHaveChanged();
-#endif
 	}
 
 	if (m_pEffectClassRange)
