@@ -1351,9 +1351,6 @@ PORTNOTE("printing", "Disable banding call");
 
 
 ExitPrint:
-	// cleanup document printing process
-	PrintMonitor::EndPrintJob();
-
 	if (!bError)
 		pPrintInfo->GetDC()->EndDoc();
 	else
@@ -1366,6 +1363,9 @@ ExitPrint:
 		if (!pPrintInfo->Abort())
 			InformError();
 	}
+
+	// cleanup document printing process
+	PrintMonitor::EndPrintJob();
 
 //	AfxGetMainWnd()->EnableWindow();    // enable main window
 
