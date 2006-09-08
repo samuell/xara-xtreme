@@ -380,6 +380,7 @@ public:
 	INT32* GetSelectedItems(CGadgetID GadgetID);
 
 	BOOL EnableGadget(CGadgetID GadgetID, BOOL Enabled);
+	BOOL IsGadgetEnabled( CGadgetID Gadget );
 	BOOL HideGadget(CGadgetID GadgetID, BOOL Hide);
 	BOOL GadgetRedraw(CGadgetID GadgetID, BOOL Redraw);
 	void Layout(BOOL CanYield = FALSE);

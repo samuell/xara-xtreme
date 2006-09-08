@@ -1800,6 +1800,29 @@ BOOL DialogOp::EnableGadget(CGadgetID Gadget, BOOL Enabled)
 	return (DlgMgr->EnableGadget(GetReadWriteWindowID(), Gadget, Enabled)); 	
 } 
 
+
+/********************************************************************************************
+
+>	BOOL DialogOp::IsGadgetEnabled( CGadgetID Gadget );
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	07/09/06
+	Inputs:		WindowID: 		Dialog box window identifier
+				Gadget:			Gadget identifier
+	Outputs:
+	Returns:	TRUE if enabled, else FALSE
+	Purpose:	For checking if a gadget is enabled/disabled.
+
+	Errors:		-
+	SeeAlso:	DialogOp::IsGadgetEnabled
+
+********************************************************************************************/
+
+BOOL DialogOp::IsGadgetEnabled( CGadgetID Gadget )
+{
+	return DlgMgr->IsGadgetEnabled( GetReadWriteWindowID(), Gadget );
+}
+
 /********************************************************************************************
 
 >	BOOL DialogOp::HideGadget(CGadgetID GadgetID, BOOL Hide) 

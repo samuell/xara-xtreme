@@ -1036,12 +1036,18 @@ void BmapPrevDlg::UpdateCurrentTab()
 ********************************************************************************************/
 BOOL BmapPrevDlg::DoPreview()
 {
+
 	//	TRACEUSER( "Gerry", _T("DoPreview 0x%08x\n"), m_pExportOptions);
 
 	CDlgResID PageID = GetCurrentPageID();	// Get currently selected Tab id
 	if (m_pPreviewDlg == NULL)
 		return FALSE;
 
+	// Disable 'Export' button to stop nasty crashes
+	TalkToPage(0);
+	bool				fIsExportEnabled = IsGadgetEnabled( wxID_OK );
+	EnableGadget( wxID_OK, false );
+	
 	BOOL ok = (m_pExportOptions != NULL);
 
 	if (ok && !m_pExportOptions->DoesTempFileMatchExportOptions())
@@ -1072,6 +1078,10 @@ BOOL BmapPrevDlg::DoPreview()
 	// Update the palette as it may have been changed when the preview was generated
 	m_PaletteControl.RenderSoon();
 
+	// Re-enable 'Export' button
+	TalkToPage(0);
+	EnableGadget( wxID_OK, fIsExportEnabled );
+	
 	TalkToPage(PageID);
 
 	return ok;

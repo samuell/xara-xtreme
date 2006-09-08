@@ -5166,6 +5166,33 @@ BOOL DialogManager::EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enab
 
 /********************************************************************************************
 
+>	BOOL DialogManager::IsGadgetEnabled( CWindowID WindowID, CGadgetID Gadget );
+
+	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
+	Created:	07/09/06
+	Inputs:		WindowID: 		Dialog box window identifier
+				Gadget:			Gadget identifier
+	Outputs:
+	Returns:	TRUE if enabled, else FALSE
+	Purpose:	For checking if a gadget is enabled/disabled.
+
+	Errors:		-
+	SeeAlso:	DialogOp::IsGadgetEnabled
+
+********************************************************************************************/
+
+BOOL DialogManager::IsGadgetEnabled( CWindowID WindowID, CGadgetID Gadget )
+{
+	wxWindow*			pGadget = GetGadget(WindowID, Gadget);
+	if (!pGadget)
+		return FALSE;
+	
+	return pGadget->IsEnabled();
+}
+
+
+/********************************************************************************************
+
 >	BOOL DialogManager::HideGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Hide)
 
 	Author:		Simon_Maneggio (Xara Group Ltd) <camelotdev@xara.com>

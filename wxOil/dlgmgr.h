@@ -591,7 +591,8 @@ public:
     
     // ------------------------------------------------------------------------------------- 
     // Functions for changing a gadgets state 
-	static BOOL EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enabled); 
+	static BOOL EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enabled);
+	static BOOL IsGadgetEnabled( CWindowID WindowID, CGadgetID Gadget );
 	static BOOL HideGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Hide); 
 	static BOOL GadgetRedraw(CWindowID WindowID, CGadgetID Gadget, BOOL Redraw);
 	static void Layout(CWindowID WindowID, BOOL CanYield=FALSE);
