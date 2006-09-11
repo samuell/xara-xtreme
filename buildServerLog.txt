@@ -13,3 +13,4 @@ Date/Time	Change Description
 		Copy svg filter XML files correctly this time.
 09-Aug-06 21:25 Changed structure of tar archive to match autopackage install.
 30-Aug-06	Updated to latest wxWidgets 2.6 branch
+09-Sep-06	Untar the help file for plain tar-ball release
