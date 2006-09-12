@@ -177,6 +177,17 @@ CBGDDWxBitmapItem::~CBGDDWxBitmapItem()
 }
 
 
+/******************************************************************************
+Function  : CBGDDWxBitmapItem::DrawItem
+Author    : Mikhail Tatarnikov
+Purpose   : Draws this item into dc
+Returns   : void
+Exceptions: 
+Parameters: [in] wxDC&		   dc	  - device context to draw to;
+            [in] const wxRect& rect	  - area occupied by the item;
+            [in] INT32		   iFlags - drawing parameters.
+Notes     : 
+******************************************************************************/
 void CBGDDWxBitmapItem::DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const
 {
 	// If the item isn't enabled just don't draw it
@@ -239,26 +250,13 @@ CBGDDResourceItem::~CBGDDResourceItem()
 
 
 
-
-
-
-
-
-
-CBGDDKernelBitmapItem::CBGDDKernelBitmapItem(KernelBitmap* pKernelBitmap, BOOL bAutodelete,
-											 String_256 strLabel, BOOL bStretch)
+CBGDDCachedItem::CBGDDCachedItem(String_256 strLabel)
 	: CBGDDItemInfo(strLabel)
 {
-	m_pKernelBitmap		  = pKernelBitmap;
-	m_bDeleteKernelBitmap = bAutodelete;
-	m_bStretch			  = bStretch;
 }
 
-CBGDDKernelBitmapItem::~CBGDDKernelBitmapItem()
+CBGDDCachedItem::~CBGDDCachedItem()
 {
-	if (m_bDeleteKernelBitmap)
-		delete m_pKernelBitmap;
-
 	TDCacheCollection::const_iterator citCur;
 	for (citCur = m_colCache.begin(); citCur != m_colCache.end(); ++citCur)
 	{
@@ -269,11 +267,165 @@ CBGDDKernelBitmapItem::~CBGDDKernelBitmapItem()
 	m_colCache.clear();
 }
 
-
-BOOL CBGDDKernelBitmapItem::DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap)
+/******************************************************************************
+Function  : CBGDDCachedItem::DoesCacheItemSizeMatch
+Author    : Mikhail Tatarnikov
+Purpose   : Checks whether a cache item corresponds to the specific size
+Returns   : BOOL -
+Exceptions: 
+Parameters: [in] const pair<wxSize, xBitmap*>* poItem - 
+            [in] wxSize szBitmap - 
+Notes     : 
+******************************************************************************/
+BOOL CBGDDCachedItem::DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap)
 {
 	return poItem->first == szBitmap;
 }
+
+
+/******************************************************************************
+Function  : CBGDDCachedItem::GetWxBitmap
+Author    : Mikhail Tatarnikov
+Purpose   : Retrieves a representation from the cache
+Returns   : wxBitmap* - the representation with the required size.
+Exceptions: 
+Parameters: [in] wxSize szBitmap - cached image size to look for.
+Notes     : Creates a new representation if it doesn't exist.
+******************************************************************************/
+wxBitmap* CBGDDCachedItem::GetWxBitmap(wxSize szBitmap) const
+{
+	// Try to locate the cache.
+	TDCacheCollection::const_iterator citFound = find_if(m_colCache.begin(), m_colCache.end(),
+		bind2nd(ptr_fun(DoesCacheItemSizeMatch), szBitmap));
+
+	if (citFound != m_colCache.end())
+		return (*citFound)->second;
+
+	// No bitmap found in the cache. Ask the derivide class to render its content.
+	wxBitmap* pBitmap = RenderItemToBitmap(szBitmap);
+
+	// Now we have a resulting bitmap. We need to cache and return it.
+	m_colCache.push_back(new pair<wxSize, wxBitmap*>(szBitmap, pBitmap));
+
+	return pBitmap;
+}
+
+void CBGDDCachedItem::DrawItem(wxDC& dc, const wxRect& rcDraw, INT32 iFlags) const
+{
+	wxBitmap* pBitmap = GetWxBitmap(rcDraw.GetSize());
+
+	// We don't need to scale or do anything since we already have a bitmap of the right size.
+	dc.DrawBitmap(*pBitmap, rcDraw.x, rcDraw.y, FALSE);
+}
+
+
+/******************************************************************************
+Function  : CBGDDCachedItem::RenderItemToBitmap
+Author    : Mikhail Tatarnikov
+Purpose   : Renders an item to bitmap.
+Returns   : wxBitmap* - bitmap with the rendered item.
+Exceptions: 
+Parameters: [in] wxSize szBitmap - size of the required bitmap.
+Notes     : The function prepares a GRenderRegion and asks the derived class to
+			draw itself into it.
+******************************************************************************/
+wxBitmap* CBGDDCachedItem::RenderItemToBitmap(wxSize szBitmap) const
+{
+	wxMemoryDC dcMem;
+	wxBitmap* pBitmap = new wxBitmap(szBitmap.x, szBitmap.y);
+	dcMem.SelectObject(*pBitmap);
+
+
+	INT32 iDPI = 96;
+
+	// Since we don't have a view, we need a fake one.
+	DialogView *pDialogView = new DialogView;
+	pDialogView->Init();
+	FIXED16 Scale(1);
+
+	Matrix oMatrix(1, 0, 0, 1, 0, 0);
+
+	// Convert the item area to millipoints
+	DocRect drcDocClip;
+	drcDocClip.lo.x = 0;
+	drcDocClip.lo.y = 0;
+
+	drcDocClip.hi.x = (szBitmap.x * 1000);
+	drcDocClip.hi.y = (szBitmap.y * 1000);
+
+
+	// Create a bitmap render region.
+	GRenderBitmap* pRenderRegion = new GRenderBitmap(drcDocClip, oMatrix, Scale, 24, iDPI, FALSE, 0, NULL, TRUE);
+	pRenderRegion->AttachDevice(pDialogView, &dcMem, NULL, false);
+	
+	// Prepare for the rendering.
+	pRenderRegion->InitDevice();
+	pRenderRegion->SaveContext();
+	pRenderRegion->StartRender();
+
+
+	// Ask the derived class to render itself into GRenderRegion.
+	RenderItemToGRenderRegion(pRenderRegion, drcDocClip);
+
+	// Finalize the rendering.
+	pRenderRegion->StopRender();
+	pRenderRegion->RestoreContext();
+
+	// Extract bitmap from the render region. 
+	KernelBitmap* pKernelBitmap = new KernelBitmap(pRenderRegion->ExtractBitmap(), FALSE);
+
+	BitmapDragInformation oDragBitmap(pKernelBitmap, szBitmap.x, szBitmap.y, 0, 0);
+	oDragBitmap.OnDrawSolidDrag(wxPoint(0, 0), &dcMem);
+
+	// Free resourced and return the resulting bitmap.
+	delete pKernelBitmap;
+	delete pRenderRegion;
+	delete pDialogView;
+
+	dcMem.SelectObject(wxNullBitmap);
+
+	return pBitmap;
+}
+
+
+/******************************************************************************
+Function  : CBGDDCachedItem::RenderItemToGRenderRegion
+Author    : Mikhail Tatarnikov
+Purpose   : Renders the item into GRenderRegion.
+Returns   : void
+Exceptions: 
+Parameters: [in] GRenderRegion* pRenderRegion - Render region to draw to;
+            [in] DocRect		drcItem		  - item size.
+Notes     : The derived classes should override this function if they don't
+			override RenderItemToBitmap.
+******************************************************************************/
+void CBGDDCachedItem::RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const
+{
+	ASSERT(FALSE);	// The derived classes should override this method
+					// Or the parent RenderItemToBitmap method.
+}
+
+
+
+
+
+
+CBGDDKernelBitmapItem::CBGDDKernelBitmapItem(KernelBitmap* pKernelBitmap, BOOL bAutodelete,
+											 String_256 strLabel, BOOL bStretch)
+	: CBGDDCachedItem(strLabel)
+{
+	m_pKernelBitmap		  = pKernelBitmap;
+	m_bDeleteKernelBitmap = bAutodelete;
+	m_bStretch			  = bStretch;
+}
+
+CBGDDKernelBitmapItem::~CBGDDKernelBitmapItem()
+{
+	if (m_bDeleteKernelBitmap)
+		delete m_pKernelBitmap;
+}
+
+
 
 /******************************************************************************
 Function  : CBGDDKernelBitmapItem::GetWxBitmap
@@ -286,16 +438,8 @@ Notes     : Since the KernelBitmap stored in the item can be of considerable siz
 			we have to speed up the drawing (and scaling). It's done by caching
 			the bitmap representations.
 ******************************************************************************/
-wxBitmap* CBGDDKernelBitmapItem::GetWxBitmap(wxSize szBitmap) const
+wxBitmap* CBGDDKernelBitmapItem::RenderItemToBitmap(wxSize szBitmap) const
 {
-	// Try to locate the cache.
-	TDCacheCollection::const_iterator citFound = find_if(m_colCache.begin(), m_colCache.end(),
-		bind2nd(ptr_fun(DoesCacheItemSizeMatch), szBitmap));
-
-	if (citFound != m_colCache.end())
-		return (*citFound)->second;
-
-	// Here we have a cache miss. We need to rebuild the bitmap.
 	// NOTE: the maximum size of bitmap allowed by BitmapDragInformation is 180*??? pixels!!
 	wxMemoryDC dcMem;
 	wxBitmap* pBitmap = new wxBitmap(szBitmap.x, szBitmap.y);
@@ -311,20 +455,9 @@ wxBitmap* CBGDDKernelBitmapItem::GetWxBitmap(wxSize szBitmap) const
 
 	dcMem.SelectObject(wxNullBitmap);
 
-	// Now we have a resulting bitmap. We need to cache and return it.
-	m_colCache.push_back(new pair<wxSize, wxBitmap*>(szBitmap, pBitmap));
-
 	return pBitmap;
 }
 
-
-void CBGDDKernelBitmapItem::DrawItem(wxDC& dc, const wxRect& rcDraw, INT32 iFlags) const
-{
-	wxBitmap* pBitmap = GetWxBitmap(rcDraw.GetSize());
-
-	// We don't need to scale or do anything since we already have a bitmap of the right size.
-	dc.DrawBitmap(*pBitmap, rcDraw.x, rcDraw.y, FALSE);
-}
 
 
 
@@ -333,7 +466,7 @@ void CBGDDKernelBitmapItem::DrawItem(wxDC& dc, const wxRect& rcDraw, INT32 iFlag
 
 
 CBGDDStrokeItem::CBGDDStrokeItem(LineAttrItem* plaiStroke, BOOL bAutodelete, String_256 strLabel)
-	: CBGDDItemInfo(strLabel)
+	: CBGDDCachedItem(strLabel)
 {
 	m_plaiStroke = plaiStroke;
 	m_bDelete	 = bAutodelete;
@@ -345,52 +478,83 @@ CBGDDStrokeItem::~CBGDDStrokeItem()
 		delete m_plaiStroke;
 }
 
-void CBGDDStrokeItem::DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const
+
+/******************************************************************************
+Function  : CBGDDStrokeItem::RenderItemToGRenderRegion
+Author    : Mikhail Tatarnikov
+Purpose   : Renders the stroke into GRenderRegion.
+Returns   : void
+Exceptions: 
+Parameters: [in] GRenderRegion* pRenderRegion - Render region to draw to;
+            [in] DocRect		drcItem		  - item size.
+Notes     : 
+******************************************************************************/
+void CBGDDStrokeItem::RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const
 {
-	INT32 iDPI = 96;
-
-	// Since we don't have a view, we need a fake one.
-	DialogView *pDialogView = new DialogView;
-	pDialogView->Init();
-	FIXED16 Scale(1);
-
-	Matrix oMatrix(1, 0, 0, 1, 0, 0);
-
-	wxSize szItem = rect.GetSize();
-
-	// Convert the item area to millipoints
-	DocRect rcDocClip;
-	rcDocClip.lo.x = 0;
-	rcDocClip.lo.y = 0;
-
-	rcDocClip.hi.x = (szItem.x * 1000);
-	rcDocClip.hi.y = (szItem.y * 1000);
-
-
-	// Create a bitmap render region.
-	GRenderBitmap* pRenderRegion = new GRenderBitmap(rcDocClip, oMatrix, Scale, 24, iDPI, FALSE, 0, NULL, TRUE);
-	pRenderRegion->AttachDevice(pDialogView, &dc, NULL, false);
-	
-	// Prepare for the rendering.
-	pRenderRegion->InitDevice();
-	pRenderRegion->SaveContext();
-	pRenderRegion->StartRender();
-
 	// Render the stroke.
-	m_plaiStroke->Render(pRenderRegion, rcDocClip, LineAttrItem::NO_LABEL);
+	m_plaiStroke->Render(pRenderRegion, drcItem, LineAttrItem::NO_LABEL);
+}
 
-	pRenderRegion->StopRender();
-	pRenderRegion->RestoreContext();
 
-	KernelBitmap* pKernelBitmap = new KernelBitmap(pRenderRegion->ExtractBitmap(), FALSE);
 
-	BitmapDragInformation oDragBitmap(pKernelBitmap, szItem.x, szItem.y, 0, 0);
-	oDragBitmap.OnDrawSolidDrag(rect.GetTopLeft(), &dc);
 
-	delete pKernelBitmap;
-	delete pRenderRegion;
-	delete pDialogView;
 
+CBGDDBrushItem::CBGDDBrushItem(AttrBrushType* pabtBrush, BOOL bAutodelete, String_256 strLabel)
+	: CBGDDCachedItem(strLabel)
+{
+	m_pabtBrush  = pabtBrush;
+	m_bDelete	 = bAutodelete;
+}
+
+CBGDDBrushItem::~CBGDDBrushItem()
+{
+	if (m_bDelete)
+		delete m_pabtBrush;
+}
+
+
+/******************************************************************************
+Function  : CBGDDBrushItem::RenderItemToGRenderRegion
+Author    : Mikhail Tatarnikov
+Purpose   : Renders the brush into GRenderRegion.
+Returns   : void
+Exceptions: 
+Parameters: [in] GRenderRegion* pRenderRegion - Render region to draw to;
+            [in] DocRect		drcItem		  - item size.
+Notes     : 
+******************************************************************************/
+void CBGDDBrushItem::RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const
+{
+	Path  pthBrush;
+
+	pthBrush.Initialise(8);
+	pthBrush.IsFilled  =  FALSE;
+	pthBrush.IsStroked = TRUE;
+	pthBrush.FindStartOfPath();
+
+	// avoid overhead of allocation each time ....
+	INT32 iWidth	  = drcItem.Width();
+	INT32 iHeight	  = drcItem.Height();
+	INT32 iBorderX	  = (INT32)(0.025 * iWidth);
+//	INT32 iBorderY	  = (INT32)(0.025 * iHeight);
+//	INT32 iHalfWidth  = iWidth  / 2;
+	INT32 iHalfHeight = iHeight / 2;
+
+	DocCoord dcrdStartPoint(iBorderX, iHalfHeight);
+	DocCoord dcrdEndPoint(iWidth - iBorderX, iHalfHeight);
+
+	pthBrush.InsertMoveTo(dcrdStartPoint);
+	pthBrush.InsertLineTo(dcrdEndPoint);
+
+
+	pRenderRegion->SetLineWidth(iHeight / 3);
+
+	PathProcessorBrush* pPathProc = m_pabtBrush->GetPathProcessor();
+	pPathProc->ScaleToValue(1);
+	pRenderRegion->SetLineColour(COLOUR_BLACK);
+
+	m_pabtBrush->Render(pRenderRegion);
+	pRenderRegion->DrawPath (&pthBrush);
 }
 
 
@@ -504,8 +668,8 @@ Notes     :
 ******************************************************************************/
 void CBitmapGridDropDown::AddItem(AttrBrushType* pabtBrush, BOOL bDelete, String_256 strLabel)
 {
-	wxBitmap* pBitmap = PreviewBrush(pabtBrush);
-	AddItem(pBitmap, bDelete, strLabel);
+	CBGDDBrushItem* pBrushItem = new CBGDDBrushItem(pabtBrush, bDelete, strLabel);
+	CGridDropDown::AddItem(pBrushItem);
 }
 
 
@@ -557,7 +721,8 @@ void CBitmapGridDropDown::DrawItemCore(wxDC& dc, const wxRect& rect, int iItem, 
 {
 	CBGDDItemInfo* pItemData = GetItemData(iItem);
 
-	pItemData->DrawItem(dc, rect, iFlags);
+	if (pItemData)
+		pItemData->DrawItem(dc, rect, iFlags);
 }
 
 
@@ -609,140 +774,6 @@ void CBitmapGridDropDown::SelectByLabel(String_256 strLabel)
 }
 
 
-
-/******************************************************************************
-Function  : CBitmapGridDropDown::PreviewBrush
-Author    : Mikhail Tatarnikov
-Purpose   : Preview a brush into a bitmap
-Returns   : wxBitmap* - the brush preview
-Exceptions: 
-Parameters: [in] AttrBrushType* pabtBrush - brush to preview.
-Notes     : 
-******************************************************************************/
-wxBitmap* CBitmapGridDropDown::PreviewBrush(AttrBrushType* pabtBrush)
-{
-//	ERROR2IF(TRUE, FALSE, "CBitmapGridDropDown::PreviewBrush Not implemented yet");
-
-	wxMemoryDC dcMem;
-
-	// Setup a memory DC to draw into a bitmap.
-	wxSize szItem =  GetItemSize();
-	wxBitmap* pBitmap = new wxBitmap(szItem.x, szItem.y);
-
-
-	dcMem.SelectObject(*pBitmap);
-
-	// For now, clear the bitmap and return
-	dcMem.Clear();
-	return pBitmap;
-
-
-	// THIS CODE HAS A FUNDAMENTAL PROBLEM IN THAT IT TRIES TO USE THE COORDINATES IN 1:1 PIXELS
-	// THIS WON'T WORK IN THAT THEY ARE TOO LOW RESOLUTION - THEY NEED TO BE CONVERTED TO 96DPI
-	// COORDINATES (OR MORE ACCURATELY WHAT OSRenderRegion::GetFixedDCDPI RETURNS) - THAT IS
-	// WHAT IT USED TO DO WITH THE EXTAINFO STUFF - AMB
-
-//	ReDrawInfoType ExtraInfo;
-//	ExtraInfo.pMousePos = NULL;		// No mouse position info for redraw events
-
-	// Build a CC dc out of it for rendering to the screen
-	// Get a MFC CDC to put the DC in
-	CCDC MyDc(&dcMem);
-
-	// The devices DPI
-//	ExtraInfo.Dpi = OSRenderRegion::GetFixedDCPPI(MyDc).GetHeight();
-
-	// How big the window is
-//	ExtraInfo.dx = (((INT32)szItem.GetWidth())*72000) / ExtraInfo.Dpi;
-//	ExtraInfo.dy = (((INT32)szItem.GetHeight())*72000) / ExtraInfo.Dpi;
-
-	// Alternatively we can do this:
-	wxRect ClipRect(wxPoint(0, 0), szItem);
-
-
-
-	// paths should not be made static (for safety) ....
-	Path  CurvePath;
-
-	CurvePath.Initialise(8);
-	CurvePath.IsFilled  =  FALSE;
-	CurvePath.IsStroked = TRUE;
-	CurvePath.FindStartOfPath();
-
-	// avoid overhead of allocation each time ....
-	INT32 iWidth	  = szItem.x;
-	INT32 iHeight	  = szItem.y;
-	INT32 iBorderX	  = (INT32)(0.05 * iWidth);
-	INT32 iBorderY	  = (INT32)(0.05 * iHeight);
-	INT32 iHalfWidth  = szItem.x / 2;
-	INT32 iHalfHeight = szItem.y / 2;
-
-	DocCoord StartPoint2	(iBorderX, iBorderY);
-	DocCoord MiddleCP1		(iBorderX, iHalfHeight);
-	DocCoord MiddlePoint	(iHalfWidth, iHalfHeight);
-	DocCoord MiddleCP2		(iWidth-iBorderX, iHalfHeight);
-	DocCoord EndPoint2		(iWidth-iBorderX, iHeight-iBorderY);
-
-	CurvePath.InsertMoveTo	(StartPoint2);
-	CurvePath.InsertCurveTo	(StartPoint2, MiddleCP1, MiddlePoint);
-	CurvePath.InsertCurveTo	(MiddlePoint, MiddleCP2, EndPoint2);
-	CurvePath.InsertLineTo	(EndPoint2);
-
-	// render a curved line ....
-	DocRect RenderRect(0, 0, iWidth, iHeight);
-
-	DialogView *pDialogView = new DialogView;
-	pDialogView->Init();
-	FIXED16 Scale(1);
-
-	Matrix oMatrix(0, 0);
-
-
-	GRenderRegion* pRenderRegion = new GRenderDIB(RenderRect, oMatrix, Scale, 32, 96.0);
-
-	static const StockColour  kBackgroundOutline  =  COLOUR_NONE;
-	static const StockColour  kBackground         =  COLOUR_WHITE;
-	
-
-	PathProcessorBrush* pPathProc = pabtBrush->GetPathProcessor();
-	BrushAttrValue* pVal = (BrushAttrValue*)pabtBrush->GetAttributeValue();
-
-	if (pRenderRegion != 0 && pRenderRegion->AttachDevice(pDialogView, &dcMem, NULL) && pRenderRegion->StartRender())
-	{
-
-		pRenderRegion->SaveContext();
-
-		// set drawing quality
-		Quality           QualityThing( Quality::QualityMax );
-		QualityAttribute  AntiAliasQualityAttr( QualityThing );
-		pRenderRegion->SetQuality( &AntiAliasQualityAttr, FALSE );
-
-		pRenderRegion->SetFillColour( kBackground );
-		pRenderRegion->DrawRect( &RenderRect );
-
-		pRenderRegion->SetLineWidth (1);
-		pPathProc->ScaleToValue(1);
-		pRenderRegion->SetLineColour( kBackgroundOutline );
-
-		pVal->FlushCache  ();
-		pabtBrush->Render(pRenderRegion);
-		pRenderRegion->DrawPath (&CurvePath);
-
-		pRenderRegion->RestoreContext();
-//		DestroyGRenderRegion( pRenderRegion );
-		pRenderRegion->StopRender();
-		delete pRenderRegion;
-	}
-		
-	delete pDialogView;
-
-
-	MyDc.GetDC()->EndDrawing();		
-
-	dcMem.SelectObject(wxNullBitmap);
-
-	return pBitmap;
-}
 
 
 

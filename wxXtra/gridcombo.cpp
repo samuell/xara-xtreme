@@ -610,12 +610,12 @@ Notes     : Uses DrawItem pure virtual function.
 void wxGridComboPopup::PaintComboControl(wxDC& dc, const wxRect& rect)
 {
 	int iSelected = GetSelected();
-	if (iSelected == -1)
+/*	if (iSelected == -1)
 	{
 	    wxComboPopup::PaintComboControl(dc, rect);
 		return;
 	}
-
+*/
 	int iFlags = keComboControl;
 	if (!m_pCombo->IsEnabled())
 		iFlags |= keDisabled;

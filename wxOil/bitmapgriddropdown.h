@@ -107,6 +107,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 
 class LineAttrItem;
+class GRenderRegion;
 
 
 /*************************************************************************
@@ -183,10 +184,44 @@ public:
 };
 
 
+/*************************************************************************
+Class         : CBGDDCachedItem
+Base Class    : public CBGDDWxBitmapItem
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a resource-stored bitmap.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: The derived classes should override either RenderItemToBitmap or
+				or GetWxBitmap method - whatever fits best.
+**************************************************************************/
+class CBGDDCachedItem : public CBGDDItemInfo
+{
+public:
+	CBGDDCachedItem(String_256 strLabel = String_256());
+	virtual ~CBGDDCachedItem();
+
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
+
+protected:
+	// Get the representation of the item (of the Kernel Bitmap)
+	virtual wxBitmap* RenderItemToBitmap(wxSize szBitmap) const;
+	virtual void	  RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const;
+
+private:
+	wxBitmap*	GetWxBitmap(wxSize szBitmap) const;
+	static BOOL DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap);
+
+private:
+	typedef	std::vector<pair<wxSize, wxBitmap*>*> TDCacheCollection;
+	mutable TDCacheCollection m_colCache;
+};
+
+
 
 /*************************************************************************
 Class         : CBGDDKernelBitmapItem
-Base Class    : public CBGDDItemInfo
+Base Class    : public CBGDDCachedItem
 Author        : Mikhail Tatarnikov
 Description   : Item for displaying a KernelBitmap.
 Pure Virtual  : None
@@ -194,7 +229,7 @@ Known Issues  : None
 Usage Notes   : None
 Override Notes: None
 **************************************************************************/
-class CBGDDKernelBitmapItem : public CBGDDItemInfo
+class CBGDDKernelBitmapItem : public CBGDDCachedItem
 {
 public:
 	CBGDDKernelBitmapItem(KernelBitmap* pKernelBitmap, BOOL bAutodelete = TRUE,
@@ -202,22 +237,13 @@ public:
 						  BOOL		 bStretch = TRUE);
 	virtual ~CBGDDKernelBitmapItem();
 
-	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
-
 protected:
-	// Get the representation of the item (of the Kernel Bitmap)
-	wxBitmap* GetWxBitmap(wxSize szBitmap) const;
-
-private:
-	static BOOL DoesCacheItemSizeMatch(const pair<wxSize, wxBitmap*>* poItem, wxSize szBitmap);
+	virtual wxBitmap* RenderItemToBitmap(wxSize szBitmap) const;
 
 protected:
 	KernelBitmap* m_pKernelBitmap;
 	BOOL		  m_bDeleteKernelBitmap;
 	BOOL		  m_bStretch;
-
-	typedef	std::vector<pair<wxSize, wxBitmap*>*> TDCacheCollection;
-	mutable TDCacheCollection m_colCache;
 };
 
 
@@ -227,7 +253,7 @@ protected:
 
 /*************************************************************************
 Class         : CBGDDStrokeItem
-Base Class    : public CBGDDItemInfo
+Base Class    : public CBGDDCachedItem
 Author        : Mikhail Tatarnikov
 Description   : Item for displaying a stroke.
 Pure Virtual  : None
@@ -235,18 +261,56 @@ Known Issues  : None
 Usage Notes   : None
 Override Notes: None
 **************************************************************************/
-class CBGDDStrokeItem : public CBGDDItemInfo
+class CBGDDStrokeItem : public CBGDDCachedItem
 {
 public:
 	CBGDDStrokeItem(LineAttrItem* plaiStroke, BOOL bAutodelete = TRUE, String_256 strLabel = String_256());
 	virtual ~CBGDDStrokeItem();
 
-	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iFlags) const;
+protected:
+	virtual void RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const;
 
 protected:
 	LineAttrItem* m_plaiStroke;
 	BOOL		  m_bDelete;
 };
+
+
+
+
+
+/*************************************************************************
+Class         : CBGDDBrushItem
+Base Class    : public CBGDDCachedItem
+Author        : Mikhail Tatarnikov
+Description   : Item for displaying a brush.
+Pure Virtual  : None
+Known Issues  : None
+Usage Notes   : None
+Override Notes: None
+**************************************************************************/
+class CBGDDBrushItem : public CBGDDCachedItem
+{
+public:
+	CBGDDBrushItem(AttrBrushType* pabtBrush, BOOL bAutodelete = TRUE, String_256 strLabel = String_256());
+	virtual ~CBGDDBrushItem();
+
+protected:
+	virtual void RenderItemToGRenderRegion(GRenderRegion* pRenderRegion, DocRect drcItem) const;
+
+protected:
+	AttrBrushType* m_pabtBrush;
+	BOOL		   m_bDelete;
+};
+
+
+
+
+
+
+
+
+
 
 
 

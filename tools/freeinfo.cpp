@@ -711,7 +711,7 @@ void FreeHandInfoBarOp::HandleCreate()
 		// Create the brush type combobox.
 		m_bgddBrushType.Init(WindowID, _R(IDC_BRUSHTYPE));
 		m_bgddBrushType.SetColumns(3);
-		m_bgddBrushType.SetItemSize(wxSize(50, 50));
+		m_bgddBrushType.SetItemSize(wxSize(75, 40));
 
 		// Create the stroke type combobox.
 		m_bgddStrokes.Init(WindowID, _R(IDC_STROKETYPE));
@@ -767,10 +767,10 @@ void FreeHandInfoBarOp::HandleBrushSelectChange()
 	BrushHandle SelHandle;
 	
 	// the zeroth index is always reserved for the 'no-brush' 
-	if (iIndex == 0)
-		SelHandle = BrushHandle_NoBrush;
-	else
-		SelHandle = GetBrushHandleFromControlIndex(iIndex-1);
+//	if (iIndex == 0)
+//		SelHandle = BrushHandle_NoBrush;
+//	else
+		SelHandle = GetBrushHandleFromControlIndex(iIndex);
 	//TRACEUSER( "Diccon", _T("Brush Combo: Handle = %d, Index = %d\n"), SelHandle, Index);	
 
 	// tell the tool our selection has changed
@@ -1864,8 +1864,8 @@ BOOL FreeHandInfoBarOp::SetBrushListToControl()
 //	UINT32 Counter = 1; // the combo's indexes start at 1
 	
 	BrushHandle Handle = BrushHandle_NoBrush;
-	BrushList::const_iterator iter;
 
+	BrushList::const_iterator iter;
 	for (iter = m_pBrushList->begin(); iter !=m_pBrushList->end(); iter++)
 	{
 		// get the next handle
@@ -2113,7 +2113,8 @@ void FreeHandInfoBarOp::SetHeadOfListSelected()
 	{
 		BrushHandle Handle = m_pBrushList->front();
 	
-		SetCustomComboGadgetValue(_R(IDC_BRUSHTYPE), NULL, 0, 2 );
+//		SetCustomComboGadgetValue(_R(IDC_BRUSHTYPE), NULL, 0, 2 );
+		m_bgddBrushType.SetSelected(0);
 		
 		m_DisplayBrush = Handle;
 		
@@ -2137,12 +2138,14 @@ void FreeHandInfoBarOp::SetDisplayBrush()
 {
 //#ifdef BUILDNEWBRUSHES	
 	// we need to find the index for our brush
-	INT32 Index = GetControlIndexFromBrushHandle(m_DisplayBrush);
-	
+	INT32 iIndex = GetControlIndexFromBrushHandle(m_DisplayBrush);
+
+	m_bgddBrushType.SetSelected(iIndex);
+/*
 	switch (Index)
 	{
 		case -1:
-			SetCustomComboGadgetValue ( _R(IDC_BRUSHTYPE), NULL, TRUE, -2);
+//			SetCustomComboGadgetValue ( _R(IDC_BRUSHTYPE), NULL, TRUE, -2);
 		//	TRACEUSER( "Diccon", _T("Display default brush\n"));
 			break;
 		case 0: // the zeroth index is the same as the head of our selected brushes list
@@ -2154,6 +2157,7 @@ void FreeHandInfoBarOp::SetDisplayBrush()
 		//	TRACEUSER( "Diccon", _T("Displayed display brush\n"));
 			break;
 	}
+*/
 //#endif
 }
 
@@ -2211,7 +2215,8 @@ void FreeHandInfoBarOp::SetBrushComboFromSelection()
 			Many.Load(_R(IDS_FILLTOOL_MANY));
 			
 			// call custom controls interface ....
-			SelectCustomComboGadgetValueOnString (_R(IDC_BRUSHTYPE), &Many);
+//			SelectCustomComboGadgetValueOnString (_R(IDC_BRUSHTYPE), &Many);
+			m_bgddBrushType.SetSelected(-1);
 			
 		}
 		break;
@@ -2612,7 +2617,8 @@ void FreeHandInfoBarOp::SetHeadOfList(BrushHandle Handle)
 void FreeHandInfoBarOp::SetDefaultStrokeInCombo()
 {
 //#ifdef BUILDNEWBRUSHES
-	SetCustomComboGadgetValue(_R(IDC_BRUSHTYPE), NULL, 0, 1);
+//	SetCustomComboGadgetValue(_R(IDC_BRUSHTYPE), NULL, 0, 1);
+	m_bgddBrushType.SetSelected(0);
 //#endif
 }
 
