@@ -833,11 +833,14 @@ PORTNOTE("other", "Removed m_pGRenderBrush support");
 				Progress Hourglass(&ProgString, -1, FALSE);
 				m_pGRenderBrush = GetBigGRenderBrush(pSpread);
 				
+PORTNOTE("other", "Removed m_pGRenderBrush support");
+#ifndef EXCLUDE_FROM_XARALX
 				if (m_pGRenderBrush == NULL)
 				{
 					ToolInformError(_R(IDS_OUT_OF_MEMORY), _R(IDS_OK));
 					return;
 				}
+#endif
 				m_LastBrushDocument = CurrentDoc;
 				return;
 			
@@ -1993,8 +1996,6 @@ void FreeHandTool::CreateBrush()
 
 void FreeHandTool::LaunchBrushDefinitionDialog(BrushHandle Handle)
 {
-PORTNOTE("other", "Removed m_pGRenderBrush support");
-#ifndef EXCLUDE_FROM_XARALX
 	// first get the brush definition from the component
 	// get the brush component from the document
 	Document* pDoc = Document::GetCurrent();
@@ -2010,6 +2011,8 @@ PORTNOTE("other", "Removed m_pGRenderBrush support");
 	
 	if (pData != NULL)
 	{
+PORTNOTE("other", "Removed CBrushGadget support");
+#ifndef EXCLUDE_FROM_XARALX
 		// get the line gallery, as we want to edit the definition version
 		LineGallery* pLineGallery = LineGallery::GetInstance();
 		if (pLineGallery != NULL)
@@ -2027,8 +2030,8 @@ PORTNOTE("other", "Removed m_pGRenderBrush support");
 			// we need to delete the data
 			delete pData;
 		}
-	}
 #endif
+	}
 }
 
 /***********************************************************************************************
@@ -2394,8 +2397,6 @@ BOOL FreeHandTool::SetBrushUpdateState(UPDATE_STATE Update)
 
 BOOL FreeHandTool::BrushSelected(BrushHandle Handle, BOOL ApplyToSelection)
 {
-PORTNOTE("other", "Removed m_pGRenderBrush support");
-#ifndef EXCLUDE_FROM_XARALX
 	if (m_UpdateBrushState == UPDATE_NEVER)
 		return TRUE;
 
@@ -2427,14 +2428,19 @@ PORTNOTE("other", "Removed m_pGRenderBrush support");
 	// if its the 'null' brush then just kill the render region and leave
 	if (m_BrushHandle == BrushHandle_NoBrush)
 	{
+PORTNOTE("other", "Removed m_pGRenderBrush support");
+#ifndef EXCLUDE_FROM_XARALX
 		if (m_pGRenderBrush != NULL)
 		{
 			delete m_pGRenderBrush;
 			m_pGRenderBrush = NULL;
 		}
+#endif
 		return TRUE;
 	}
 
+PORTNOTE("other", "Removed m_pGRenderBrush support");
+#ifndef EXCLUDE_FROM_XARALX
 	// if we are <24BPP display then make the whole thing again from scratch
 	// as we will need different sized brush bitmaps and everything
 	if (m_pGRenderBrush != NULL && m_pGRenderBrush->GetScreenDepth() < 24)
