@@ -317,9 +317,6 @@ MsgResult BevelInfoBarOp::Message(Msg* Message)
 				UpdateControls();
 				UpdateJoinTypeControls();
 				
-				// set up all the combo's initial states
-				SetBoolGadgetSelected(_R(IDC_BEVEL_TYPE_COMBO), TRUE);
-				
 				SetGadgetBitmaps(_R(IDC_BEVELSLIDER), _R(IDB_SLIDERBASE), _R(IDB_SLIDERSLIDER));
 
 				m_bComboChanged = FALSE;
@@ -1469,38 +1466,6 @@ void BevelInfoBarOp::UpdateState()
 
 }
 
-/********************************************************************************************
-
->	void BevelInfoBarOp::SetGadgetWritable(INT32 id, BOOL enable)
-
-	Author:		DMC
-	Created:	15/11/94
-	Inputs:		id, the 'IDC_?' of the control.
-				enable, TRUE to allow the control to be typed into. FALSE to make it
-						read only.
-	Purpose:	Sets the state of the 'Read Only' flag of an edit field or combo box.
-
-********************************************************************************************/
-
-void BevelInfoBarOp::SetGadgetWritable(INT32 id, BOOL enable)
-{
-PORTNOTE("other", "Removed SetGadgetWritable")
-#ifndef EXCLUDE_FROM_XARALX
-	// Get the window handle of the gadget, from the gadget ID
-	HWND gadget = ::GetDlgItem(WindowID, id);
-
-	// See if it's got a child window (it may be a Combo Box)
-	HWND hEdit = ::ChildWindowFromPoint(gadget, CPoint(1,1));
-
-	if (hEdit)				// Was there a child window ?
-		gadget = hEdit;		// Yes, so send the message to it
-
- 	if (enable)
-		::SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
-	else
-		::SendMessage(gadget, EM_SETREADONLY, TRUE, 0);		// Set the Read Only Flag
-#endif
-}
 
 /********************************************************************************************
 

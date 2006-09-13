@@ -196,9 +196,6 @@ public:
 	BOOL m_BetweenViews;
 
 private:
-	// same as for filltool
-	void SetGadgetWritable(INT32 id, BOOL enable);
-
 	// conversion functions for the edit box
 	BOOL ConvertValueToString(String_256 &In, const INT32 value, UnitType type=NOTYPE);
 	BOOL ConvertStringToValue(CGadgetID ID,INT32 &value);

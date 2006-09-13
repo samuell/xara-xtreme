@@ -382,6 +382,7 @@ public:
 	BOOL EnableGadget(CGadgetID GadgetID, BOOL Enabled);
 	BOOL IsGadgetEnabled( CGadgetID Gadget );
 	BOOL HideGadget(CGadgetID GadgetID, BOOL Hide);
+	BOOL SetGadgetWritable(CGadgetID Gadget, BOOL enable);
 	BOOL GadgetRedraw(CGadgetID GadgetID, BOOL Redraw);
 	void Layout(BOOL CanYield = FALSE);
 

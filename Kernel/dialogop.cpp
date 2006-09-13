@@ -1845,6 +1845,24 @@ BOOL DialogOp::HideGadget(CGadgetID GadgetID, BOOL Hide)
 
 /********************************************************************************************
 
+>	void DialogManager::SetGadgetWritable(CWindowID id, BOOL enable)
+
+	Author:		DMC
+	Created:	15/11/94
+	Inputs:		id, the 'IDC_?' of the control.
+				enable, TRUE to allow the control to be typed into. FALSE to make it
+						read only.
+	Purpose:	Sets the state of the 'Read Only' flag of an edit field or combo box.
+
+********************************************************************************************/
+
+BOOL DialogOp::SetGadgetWritable(CGadgetID GadgetID, BOOL enable)
+{
+	return( DlgMgr->SetGadgetWritable( GetReadWriteWindowID(), GadgetID, enable ) );
+}
+
+/********************************************************************************************
+
 >	void DialogOp::Layout(BOOL CanYield = FALSE)
 
 	Author:		Alex Bligh <alex@alex.org.uk>

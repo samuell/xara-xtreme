@@ -5166,6 +5166,50 @@ BOOL DialogManager::EnableGadget(CWindowID WindowID, CGadgetID Gadget, BOOL Enab
 
 /********************************************************************************************
 
+>	void DialogManager::SetGadgetWritable(CWindowID id, BOOL enable)
+
+	Author:		DMC
+	Created:	15/11/94
+	Inputs:		id, the 'IDC_?' of the control.
+				enable, TRUE to allow the control to be typed into. FALSE to make it
+						read only.
+	Purpose:	Sets the state of the 'Read Only' flag of an edit field or combo box.
+
+********************************************************************************************/
+
+BOOL DialogManager::SetGadgetWritable(CWindowID WindowID, CGadgetID Gadget, BOOL enable)
+{
+	// Get the window handle of the gadget, from the gadget ID
+	wxWindow*			pGadget = GetGadget( WindowID, Gadget );
+	if( !pGadget )
+		return FALSE;
+
+	if( pGadget->IsKindOf( CLASSINFO(wxTextCtrl) ) )
+		( (wxTextCtrl*)pGadget )->SetEditable( FALSE != enable );
+	else
+	{
+PORTNOTETRACE("other", "Removed SetGadgetWritable handling of on TextCtrl");
+#ifndef EXCLUDE_FROM_XARALX
+		// See if it's got a child window (it may be a Combo Box)
+		HWND hEdit = ::ChildWindowFromPoint(gadget, CPoint(1,1));
+
+		if (hEdit)				// Was there a child window ?
+			gadget = hEdit;		// Yes, so send the message to it
+
+ 		if (enable)
+			::SendMessage(gadget, EM_SETREADONLY, FALSE, 0);	// Clear the Read Only Flag
+		else
+			::SendMessage(gadget, EM_SETREADONLY, TRUE, 0);		// Set the Read Only Flag
+#else
+		return FALSE;
+#endif
+	}
+
+	return TRUE;
+}
+
+/********************************************************************************************
+
 >	BOOL DialogManager::IsGadgetEnabled( CWindowID WindowID, CGadgetID Gadget );
 
 	Author:		Luke_Hart (Xara Group Ltd) <lukeh@xara.com>
