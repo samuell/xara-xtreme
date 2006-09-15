@@ -516,6 +516,12 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_CHANGEJOINTYPEOPNAME">
+					<label>Bevel join type change</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_CREATEBEVELOP">
 					<label>CreateBevel;Operation for creating bevels;Bevel creation</label>
 				</object>
