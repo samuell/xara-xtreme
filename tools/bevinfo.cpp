@@ -2156,17 +2156,40 @@ void BevelInfoBarOp::HandleJoinTypeBevelClicked()
 ********************************************************************************************/
 void BevelInfoBarOp::ChangeJoinType(JointType jt)
 {
-	// Create the appropriate join type attribute.
-	AttrJoinType* pJoinAttr = new AttrJoinType;
-	if (pJoinAttr == NULL)
+		// update my variables first
+	BevelInfo BI;
+	
+	SetUpBevelInfo(&BI);
+
+	BI.m_bJointTypeChanged = TRUE;
+	BI.m_JointType = jt;
+
+	// check for zero selection
+	Range				Sel(*(GetApplication()->FindSelection()));	
+	RangeControl		rg = Sel.GetRangeControlFlags();
+	rg.PromoteToParent = TRUE;
+	Sel.SetRangeControl(rg);
+
+	AttrJoinType*		pJoinType = NULL;
+	if (Sel.IsEmpty())
 	{
-		InformWarning(_R(IDS_UNDO_MEMORY_FAILURE), _R(IDS_OK));
+		// do the default attribute
+		pJoinType = new AttrJoinType;
+
+		if (!pJoinType)
+		{
+			ERROR3("Can't create bevel indent");
+			return;
+		}
+
+		pJoinType->Value.JoinType = BI.m_JointType;
+
+		AttributeManager::AttributeSelected( pJoinType );
 		return;
 	}
-	pJoinAttr->Value.JoinType = jt;
 
-	// Let the attribute manager apply it to the selection.
-	AttributeManager::AttributeSelected(pJoinAttr);
+	// get the operation descriptor for the bevel change
+	DoBevelAttrChange(&BI);
 }
 
 

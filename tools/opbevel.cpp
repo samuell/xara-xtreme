@@ -488,11 +488,12 @@ void OpCreateBevel::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 
 	NodeListItem *pNodeListItem = (NodeListItem *)BevelNodeList.GetHead();
 
-	AttrBevelIndent * pAttrIndent = NULL;
-	AttrBevelType   * pAttrType	  = NULL;
-	AttrBevelContrast * pAttrContrast = NULL;
-	AttrBevelLightAngle * pAttrLightAngle = NULL;
-	AttrBevelLightTilt * pAttrLightTilt = NULL;
+	AttrBevelIndent*	pAttrIndent = NULL;
+	AttrBevelType*		pAttrType	  = NULL;
+	AttrBevelContrast*	pAttrContrast = NULL;
+	AttrBevelLightAngle* pAttrLightAngle = NULL;
+	AttrBevelLightTilt* pAttrLightTilt = NULL;
+	AttrJoinType*		pAttrJointType = NULL;
 
 	HideNodeAction *pAction = NULL;
 
@@ -525,6 +526,7 @@ void OpCreateBevel::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 		}
 
 		// insert nodes if they are defaults exist !
+		// JointType is not handled here, since it has a very different meaning for non-bevels
 		if (pBevelInfo->m_bBevelIndentChanged || pBevelInfo->m_bBevelDirectionChanged)
 		{
 			if (pBevelControl->FindAppliedAttribute(CC_RUNTIME_CLASS(AttrBevelIndent), 
@@ -660,6 +662,7 @@ void OpCreateBevel::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 				}
 			}
 		}
+
 		
 		// localise out all the attributes
 		if (!DoLocaliseCommonAttributes(pBevelControl, TRUE, TRUE))
@@ -918,6 +921,39 @@ void OpCreateBevel::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 
 				m_NameID = _R(IDS_CHANGEBEVELLIGHTTILTOPNAME);
 			}
+			else
+			if (pCurrentNode->IS_KIND_OF(AttrJoinType) && pBevelInfo->m_bJointTypeChanged)
+			{
+				bGenerateNode = TRUE;
+				ALLOC_WITH_FAIL(pAttrJointType, (new AttrJoinType()), this);
+
+				pAttrJointType->Value.JoinType = pBevelInfo->m_JointType;
+
+				// hide the original node
+				if (!DoHideNode(pCurrentNode, TRUE, &pNodeHidden))
+				{
+					FailAndExecute();
+					End();
+					BevelNodeList.DeleteAll();
+					return;
+				}
+
+				// insert the new attribute node
+				pAttrJointType->AttachNode(pNodeHidden, NEXT);
+
+				// add an hide node action so that undo works ok
+				if (HideNodeAction::Init(this, GetUndoActionList(), (Node *)pAttrJointType,
+								FALSE, (Action **)&pAction, FALSE) != AC_OK)
+				{
+					FailAndExecute();
+					End();
+					BevelNodeList.DeleteAll();
+					return;
+				}
+
+				m_NameID = _R(IDS_CHANGEJOINTYPEOPNAME);
+			}
+
 
 //			else if (pCurrentNode->IS_KIND_OF(NodeBevel))
 //			{

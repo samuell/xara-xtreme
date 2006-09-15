@@ -253,6 +253,7 @@ public:
 		m_bBevelDirectionChanged	= FALSE;
 		m_bBevelLightTiltChanged    = FALSE;
 		m_bCreateNewBevels			= FALSE;
+		m_bJointTypeChanged			= FALSE;
 	}
 	
 	INT32			m_BevelType;				// the kind of bevel
@@ -267,6 +268,8 @@ public:
 	BOOL		m_bBevelContrastChanged;	// has the contrast changed ?
 	double		m_Tilt;
 	BOOL		m_bBevelLightTiltChanged;
+	JointType	m_JointType;
+	BOOL		m_bJointTypeChanged;
 
 	BOOL		m_bCreateNewBevels;			// whether to create new bevels or not
 };
