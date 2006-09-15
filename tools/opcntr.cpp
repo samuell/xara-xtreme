@@ -584,11 +584,6 @@ void OpCreateContour::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 			if(pChild)
 				((NodeRenderableInk *)pChild)->FindAppliedAttributes(&AttrMap);
 
-			// Create and initialize a new NodePath to hold the inset path!
-			NodePath* pNewPath;
-			ALLOC_WITH_FAIL(pNewPath, new NodePath, this);
-			pNewPath->InkPath.Initialise();
-
 			DoInvalidateNodeRegion(pContourNode,FALSE);
 
 			// Create the DoBecomeA Function and call it on the controller
@@ -603,19 +598,29 @@ void OpCreateContour::DoWithParam(OpDescriptor* pOp, OpParam* pParam)
 			else
 				pPathToCopy = (NodePath*)pContourNode->FindLastChild(CC_RUNTIME_CLASS(NodePath));
 
-			pNewPath->InkPath.CloneFrom(pPathToCopy->InkPath);
-
-			// now Initialize the flag array with the new Path and insert it after the group node!
-			pNewPath->InkPath.InitialiseFlags(0, pNewPath->InkPath.GetNumCoords());
-			DoInsertNewNode(pNewPath, pContourNode, NEXT, TRUE, FALSE, TRUE, TRUE);
-
-			pNewPath->InkPath.IsFilled = TRUE;
-
-			// Make sure we have the correct attributes applied to our new path and make it selected!
-			AttrMap.ApplyAttributesToNode(pNewPath);
-			pNewPath->NormaliseAttributes();
-			
-			pNewPath->SetSelected(TRUE);
+			// pPathToCopy may be NULL if the inset contour operation reduced the input paths
+			// to nothingness...
+			if (pPathToCopy)
+			{
+				// Create and initialize a new NodePath to hold the inset path!
+				NodePath* pNewPath;
+				ALLOC_WITH_FAIL(pNewPath, new NodePath, this);
+				pNewPath->InkPath.Initialise();
+	
+				pNewPath->InkPath.CloneFrom(pPathToCopy->InkPath);
+	
+				// now Initialize the flag array with the new Path and insert it after the group node!
+				pNewPath->InkPath.InitialiseFlags(0, pNewPath->InkPath.GetNumCoords());
+				DoInsertNewNode(pNewPath, pContourNode, NEXT, TRUE, FALSE, TRUE, TRUE);
+	
+				pNewPath->InkPath.IsFilled = TRUE;
+	
+				// Make sure we have the correct attributes applied to our new path and make it selected!
+				AttrMap.ApplyAttributesToNode(pNewPath);
+				pNewPath->NormaliseAttributes();
+				
+				pNewPath->SetSelected(TRUE);
+			}
 			
 			DoHideNode(pContourNode, TRUE, &pHidden, TRUE);
 //////////
