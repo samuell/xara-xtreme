@@ -183,9 +183,12 @@ protected: // helper functions
 
 	BOOL CaptureViewByRendering(); // renders the view into our bitmap
 
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	// test to split up the captureview fns for better profiling
 	BOOL Blit(HDC DestDC, HDC SourceDC, INT32 Height, INT32 Width, INT32 Left, INT32 Top);
 	BOOL GetBits(HDC hDC, HBITMAP hBitmap, INT32 Height, LPBYTE lpbits, LPBITMAPINFO lpInfo);
+#endif
 
 	virtual void FreeLPBits( LPBITMAPINFO, LPBYTE );
 
@@ -202,8 +205,11 @@ public:
 	// to expensively grab hold of the views DC within an interactive loop ....
 	void SetView (View*	v)			{ m_pView = v; }
 	void SetCamView (CCamView* v)	{ m_pCCamView = v; }
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	void SetCDC (CDC* cdc)			{ m_pDevContext = cdc; }
 	void SetHDC (HDC hdc)			{ m_DeviceHdc = hdc; }
+#endif
 //#endif
 
 protected:	// Data
@@ -226,8 +232,11 @@ protected:	// Data
 	// to expensively grab hold of the views DC within an interactive loop ....
 	View*	m_pView;
 	CCamView* m_pCCamView;
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	CDC* m_pDevContext;
 	HDC m_DeviceHdc;
+#endif
 //#endif
 };
 	

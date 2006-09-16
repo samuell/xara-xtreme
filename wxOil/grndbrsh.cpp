@@ -107,10 +107,8 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "grndrgn.h"
 //#include "rndrgn.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "osrndrgn.h"
-#include "gdrawasm.h"
+//#include "gdrawasm.h"
 #include "palman.h"
-#include "scrvw.h"
-#include "scrcamvw.h"
 //#include "view.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "fixmem.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -119,7 +117,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "freeinfo.h"
 //#include "freehres.h"
 #include  "offscrn.h"
-#include "wbitmap.h"
+//#include "wbitmap.h"
 #include "oilruler.h"
 
 static RealLogPalette StandardPalette = 
@@ -133,7 +131,7 @@ static BYTE NoTransTable[256];						// default translation table
 static BOOL ClippedPathIsValid;
 
 
-#include "defcons.tab"
+//#include "defcons.tab"
 
 // TODOG: Nasty local preference...
 static INT32 LargeGradTables = 0;
@@ -176,8 +174,11 @@ GRenderBrush::GRenderBrush(DocRect ClipRegion, Matrix ConvertMatrix, FIXED16 Vie
 //#ifdef NEWFASTBRUSHES
 	m_pView = NULL;
 	m_pCCamView = NULL;
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
 	m_pDevContext = NULL;
 	m_DeviceHdc = NULL;
+#endif
 //#endif
 }
 
@@ -210,9 +211,9 @@ GRenderBrush::~GRenderBrush()
 	if (lpBrushBitmapInfo != NULL && lpBrushBits != NULL)
 		FreeLPBits(lpBrushBitmapInfo, lpBrushBits);
 
-	if (lpBits != NULL && lpBitmapInfo != NULL)
+	if (pBits != NULL && pBitmapInfo != NULL)
 	{
-		FreeLPBits( lpBitmapInfo, lpBits );
+		FreeLPBits( pBitmapInfo, pBits );
 		SetBitmapPointers(NULL, NULL);
 	}
 	TRACEUSER( "Gavin", _T("GRenderBrush::~GRenderBrush - RenderFlags.Rendering = FALSE;\n"));
@@ -240,14 +241,14 @@ void GRenderBrush::DrawToScreenNow()
 	// this fn. basically blits to the screen, so we need to know, where on the source bitmap
 	// we take our data, where on the destination bitmap we put it, and what size chunk we move
 	
-	INT32 DestX = WRect.left;
-	INT32 DestY = WRect.top;
-	INT32 ViewWidth = WRect.right - WRect.left;
-	INT32 ViewHeight= WRect.bottom - WRect.top;
+	INT32 DestX = WRect.GetLeft();
+	INT32 DestY = WRect.GetTop();
+	INT32 ViewWidth = WRect.GetWidth();
+	INT32 ViewHeight= WRect.GetHeight();
 	INT32 Width = 0;
 	INT32 Height = 0;
-	INT32 SourceX = WRect.left;
-	INT32 SourceY = WRect.top;
+	INT32 SourceX = WRect.GetLeft();
+	INT32 SourceY = WRect.GetTop();
 	
 	// if ChangedBBox is set then we don't have to blit so much
 	RECT UsedRect;
@@ -264,18 +265,34 @@ void GRenderBrush::DrawToScreenNow()
 		{
 			View*	pView = NULL;
 			CCamView* pCCamView = NULL;
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
 			CDC* pDevContext = NULL;
 			HDC DeviceHdc = NULL;
-			
+#endif			
 			// find out about our device 
-			if (m_pView)		{ pView = m_pView; }
-			else				{ m_pView = View::GetCurrent(); }
-			if (m_pCCamView)	{ pCCamView = m_pCCamView; }
-			else				{ pCCamView = pView->GetConnectionToOilView(); }
-			if (m_pDevContext)	{ pDevContext = m_pDevContext; }
-			else				{ pDevContext = ((ScreenCamView*)pCCamView)->GetRenderDC(); }
-			if (m_DeviceHdc)	{ DeviceHdc = m_DeviceHdc; }
-			else				{ DeviceHdc = pDevContext->GetSafeHdc(); }
+			if (m_pView)
+				pView = m_pView;
+			else
+				m_pView = View::GetCurrent();
+
+			if (m_pCCamView)
+				pCCamView = m_pCCamView;
+			else
+				pCCamView = pView->GetConnectionToOilView();
+
+PORTNOTE("other", "Disable HDC stuff")
+#ifndef EXCLUDE_FROM_XARALX
+			if (m_pDevContext)
+				pDevContext = m_pDevContext;
+			else
+				pDevContext = ((ScreenCamView*)pCCamView)->GetRenderDC();
+
+			if (m_DeviceHdc)
+				DeviceHdc = m_DeviceHdc;
+			else
+				DeviceHdc = pDevContext->GetSafeHdc();
+#endif
 
 			if (ScreenDepth < 24)
 			{
@@ -297,7 +314,7 @@ void GRenderBrush::DrawToScreenNow()
 				if (Height > 0)
 				{
 					// copy from the big bitmap to the small brush bitmap
-					if (!DIBUtil::CopyBitmapSection(lpBitmapInfo, lpBits, 
+					if (!DIBUtil::CopyBitmapSection(pBitmapInfo, pBits, 
 								lpPreConvertBrushBitmapInfo, lpPreConvertBrushBits,
 								SourceY, SourceX))
 					{
