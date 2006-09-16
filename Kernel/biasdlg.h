@@ -217,6 +217,7 @@ private: /////////////////////////////////////////////////////////////
 	virtual	void		HandleSliderPosSet      ( CDlgMessage const&,  CProfileBiasGain& );
 	virtual	void		HandleCommit            ( CDlgMessage const&,  CProfileBiasGain& );
 	virtual	void		HandleInput             ( CDlgMessage const&,  CProfileBiasGain& );
+	virtual	void		HandleBiasEditChange    ( CDlgMessage const&,  CProfileBiasGain& );
 
 	// communicate bias gain values to outside
 	virtual void		BroadcastMessage ( CDlgMessage const&,  CProfileBiasGain const& )		const;

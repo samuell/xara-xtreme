@@ -436,6 +436,14 @@ MsgResult CBiasGainDlg::Message(Msg* Message)
 				break;
 			}
 
+			case DIM_TEXT_CHANGED:
+			{
+				HandleBiasEditChange(Msg->DlgMsg, BiasGain_m);
+				DialogManager::DefaultKeyboardFocus();
+				
+				break;
+			}
+			
 			case DIM_REDRAW :
 			{
 				if( Msg->GadgetID == _R(IDC_CURVE) )
@@ -1430,6 +1438,28 @@ void  CBiasGainDlg::HandleSliderPosSet(CDlgMessage const& Message, CProfileBiasG
 }
 
 
+
+void CBiasGainDlg::HandleBiasEditChange(CDlgMessage const& rDlgMessage,  CProfileBiasGain& rBiasGain)
+{
+	// read values from edit boxes (both (simplifies code)) into biasgain object
+//	ReadEditBoxes(BiasGain_m);
+	const AFp BiasMinus1ToPlus1 = AFp(GetDoubleGadgetValue(_R(IDC_EDIT_BIAS), double(-1.0), double(+1.0)));
+	const AFp GainMinus1ToPlus1 = AFp(GetDoubleGadgetValue(_R(IDC_EDIT_GAIN), double(-1.0), double(+1.0)));
+	
+	rBiasGain.SetBias(BiasMinus1ToPlus1);
+	rBiasGain.SetGain(GainMinus1ToPlus1);
+	
+	// make the sliders agree with the edit boxes
+	WriteSliders(rBiasGain);
+	
+	// Update the combobox as well.
+	m_pobddStandardProfile->SetSelected(-1);
+
+	// do general input handling
+	HandleInput(rDlgMessage,  rBiasGain);
+	
+}
+
 /****************************************************************************************
 Function  : CBiasGainDlg::HandleCommit
 Author    : Mikhail Tatarnikov
@@ -1473,7 +1503,7 @@ void CBiasGainDlg::HandleInput(CDlgMessage const& Message, CProfileBiasGain& Bia
 
 	// Broadcast a special profile change message, allowing all interested parties
 	// to handle it. Depending on the input type we send either interactive or final change.
-	if (Message == DIM_SLIDER_POS_CHANGING)
+	if (Message == DIM_SLIDER_POS_CHANGING || Message == DIM_TEXT_CHANGED)
 		BroadcastMessage(DIM_PROFILE_CHANGING,  BiasGain_m);
 	else if (Message == DIM_SLIDER_POS_IDLE)
 		BroadcastMessage(DIM_PROFILE_CHANGEIDLE,  BiasGain_m);
