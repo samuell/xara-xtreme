@@ -1004,6 +1004,14 @@
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>ZoomPrev</optoken>
                 </object>
+			</object>	
+			<object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDPB_ZOOM_100_BUTTON">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>Zoom100</optoken>
+                </object>
             </object>
             <object class="sizeritem">
                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
@@ -3488,6 +3496,19 @@
                 <object class="wxCamArtControl" name="IDPB_PREV_ZOOM_BUTTON">
                     <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
                     <optoken>ZoomPrev</optoken>
+                </object>
+            </object>
+            <object class="spacer">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <size>3,28</size>
+			</object>
+			<object class="sizeritem">
+                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                <border>1</border>
+                <object class="wxCamArtControl" name="IDPB_ZOOM_100_BUTTON">
+                    <camartstyle>wxCACS_PUSHBUTTON|wxCACS_ALLOWHOVER</camartstyle>
+                    <optoken>Zoom100</optoken>
                 </object>
             </object>
             <object class="spacer">

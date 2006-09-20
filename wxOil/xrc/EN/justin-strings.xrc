@@ -78,6 +78,30 @@
 			</object>
 			<object class="sizeritem">
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_ZOOMTO100">
+					<label>Zoom to 100%</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_ZOOMTO200">
+					<label>Zoom to 200%</label>
+			</object>
+			</object>
+				<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_ZOOMTO300">
+					<label>Zoom to 300%</label>
+			</object>
+			</object>
+				<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDBBL_ZOOM4O100">
+					<label>Zoom to 400%</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDBBL_PUSH_TOOLICON">
 					<label>Push Tool Shift+F8</label>
 				</object>
@@ -1166,6 +1190,12 @@
 				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
 				<object class="wxStaticText" name="IDS_ZOOMIN">
 					<label>Zoom Into &amp;page;Zooms into the current drawing;Zoom In to &amp;page</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ZOOMTO100">
+					<label>Zoom to &amp;100%;Zooms current drawing to 100%;Zoom to &amp;100%</label>
 				</object>
 			</object>
 			<object class="sizeritem">

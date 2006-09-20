@@ -149,6 +149,10 @@ DECLARE_SOURCE("$Revision$");
 CC_IMPLEMENT_DYNCREATE(OpZoom, OpCentredDragBox)
 CC_IMPLEMENT_DYNCREATE(OpZoomIn, OpZoom)
 CC_IMPLEMENT_DYNCREATE(OpZoomOut, OpZoom)
+CC_IMPLEMENT_DYNCREATE(OpZoomTo100, OpZoom)
+CC_IMPLEMENT_DYNCREATE(OpZoomTo200, OpZoom)
+CC_IMPLEMENT_DYNCREATE(OpZoomTo300, OpZoom)
+CC_IMPLEMENT_DYNCREATE(OpZoomTo400, OpZoom)
 
 #if !defined(EXCLUDE_FROM_RALPH)
 CC_IMPLEMENT_DYNCREATE(ZoomInfoBarOp, InformationBarOp)
@@ -641,6 +645,34 @@ void OpZoom::ZoomOut(Spread* pZoomSpread, const DocCoord& dcZoomPos, BOOL fEndOp
 }
 
 
+/********************************************************************************************
+>	void OpZoom::ZoomTo(const WorkCoord& wcZoom, int nPercent, BOOL fEndOp = TRUE)
+
+	Author:		JustinF
+	Created:	23/4/95
+	Inputs:		wcZoom			the point to zoom in at
+				fEndOp			whether to end this operation after this zoom
+	Purpose:	Zooms into the current DocView by one step.  By default this function
+				will call the End() function for this operation afterwards.
+********************************************************************************************/
+
+void OpZoom::ZoomTo(const WorkCoord& wcZoom, int nPercent, BOOL fEndOp)
+{
+	// Find out the current view.
+	DocView* pDocView = DocView::GetCurrent();
+	ERROR3IF(pDocView == 0, "No current DocView in OpZoom::ZoomIn");
+	
+	if (pDocView)
+	{
+		// Do the zoom.  We will (optionally) end the operation.
+		FIXED16		f16Scale = FIXED16(nPercent) / 100;
+		ZoomAtPoint(wcZoom, f16Scale, FALSE);
+	}
+
+	// End the operation if the caller wants us to.
+	if (fEndOp) End();
+}
+
 
 /********************************************************************************************
 >	void OpZoom::ZoomIn(const WorkCoord& wcZoom, BOOL fEndOp = TRUE)
@@ -1017,7 +1049,11 @@ BOOL OpZoom::Declare()
 			!new OpZoomFitSpreadDescriptor ||
 			!new OpZoomFitDrawingDescriptor ||
 			!new OpZoomFitSelectedDescriptor ||
-			!new OpZoomFitRectDescriptor,
+			!new OpZoomFitRectDescriptor ||
+			!OpZoomTo100::Init() ||
+			!OpZoomTo200::Init() ||
+			!OpZoomTo300::Init() ||
+			!OpZoomTo400::Init(),
 			_R(IDE_NOMORE_MEMORY),
 			FALSE);
 
@@ -1128,6 +1164,277 @@ void OpZoom::MouseWheelZoomAtPoint(const WorkCoord& wcZoom, FIXED16 fxNewScaleFa
 	// tell people things have changed on screen
 	TRACEUSER( "Diccon", _T("ZoomAtPoint\n"));
 	BROADCAST_TO_ALL(ScreenChangeMsg(TRUE));
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// class OpZoomTo100
+OpZoomTo100::OpZoomTo100()
+{
+}
+
+BOOL OpZoomTo100::Init()
+{
+	BOOL ok = RegisterOpDescriptor(
+									0, 
+									_R(IDS_ZOOMTO100),
+									CC_RUNTIME_CLASS(OpZoomTo100), 
+									OPTOKEN_ZOOMTO100,
+									OpZoomTo100::GetState,
+									0,					/* help ID */
+									_R(IDBBL_ZOOMTO100),/* bubble ID */
+									0					/* bitmap ID */
+									);
+	return ok;
+}
+
+/***********************************************************************************************
+
+>	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		Description = ptr to place description of why this op can't happen
+				pOpDesc     = ptr to the Op Desc associated with this op
+	Outputs:	-
+	Returns:	An OpState object
+	Purpose:    Func for determining the usability of this op
+	SeeAlso:	-
+		
+***********************************************************************************************/
+OpState OpZoomTo100::GetState(String_256* Description, OpDescriptor*)
+{
+	OpState State;
+	return State;
+}
+
+/********************************************************************************************
+
+>	virtual void OpZoomToo100::Do(OpDescriptor* pOpDesc)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		pointer to the OpZoomDescriptor being invoked
+	Purpose:	Calls the base class function to zoom to 100%!
+
+********************************************************************************************/
+void OpZoomTo100::Do(OpDescriptor *pOpDesc)
+{
+	// Ok! lets zoom in!
+	DocView* pDocView = DocView::GetCurrent();
+
+	if(pDocView)
+	{
+		const WorkRect ZoomRect = pDocView->GetViewRect();
+		ZoomTo( ZoomRect.Centre(), 100 );
+	}
+	else
+	{
+		ERROR3IF(pDocView == 0, "No current DocView found!");
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// class OpZoomTo200
+OpZoomTo200::OpZoomTo200()
+{
+}
+
+BOOL OpZoomTo200::Init()
+{
+	BOOL ok = RegisterOpDescriptor(
+									0, 
+									_R(IDS_ZOOMTO200),
+									CC_RUNTIME_CLASS(OpZoomTo200), 
+									OPTOKEN_ZOOMTO200,
+									OpZoomTo200::GetState,
+									0,					/* help ID */
+									_R(IDBBL_ZOOMTO200),/* bubble ID */
+									0					/* bitmap ID */
+									);
+	return ok;
+}
+
+/***********************************************************************************************
+
+>	static OpState OpZoomTo200::GetState(String_256* Description, OpDescriptor*)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		Description = ptr to place description of why this op can't happen
+				pOpDesc     = ptr to the Op Desc associated with this op
+	Outputs:	-
+	Returns:	An OpState object
+	Purpose:    Func for determining the usability of this op
+	SeeAlso:	-
+		
+***********************************************************************************************/
+OpState OpZoomTo200::GetState(String_256* Description, OpDescriptor*)
+{
+	OpState State;
+	return State;
+}
+
+/********************************************************************************************
+
+>	virtual void OpZoomTo200::Do(OpDescriptor* pOpDesc)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		pointer to the OpZoomDescriptor being invoked
+	Purpose:	Calls the base class function to zoom to 200%!
+
+********************************************************************************************/
+void OpZoomTo200::Do(OpDescriptor *pOpDesc)
+{
+	// Ok! lets zoom in!
+	DocView* pDocView = DocView::GetCurrent();
+
+	if(pDocView)
+	{
+		const WorkRect ZoomRect = pDocView->GetViewRect();
+		ZoomTo( ZoomRect.Centre(), 200 );
+	}
+	else
+	{
+		ERROR3IF(pDocView == 0, "No current DocView found!");
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// class OpZoomTo400
+OpZoomTo300::OpZoomTo300()
+{
+}
+
+BOOL OpZoomTo300::Init()
+{
+	BOOL ok = RegisterOpDescriptor(
+									0, 
+									_R(IDS_ZOOMTO300),
+									CC_RUNTIME_CLASS(OpZoomTo300), 
+									OPTOKEN_ZOOMTO300,
+									OpZoomTo300::GetState,
+									0,					/* help ID */
+									_R(IDBBL_ZOOMTO300),/* bubble ID */
+									0					/* bitmap ID */
+									);
+
+	return ok;
+}
+
+/***********************************************************************************************
+
+>	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		Description = ptr to place description of why this op can't happen
+				pOpDesc     = ptr to the Op Desc associated with this op
+	Outputs:	-
+	Returns:	An OpState object
+	Purpose:    Func for determining the usability of this op
+	SeeAlso:	-
+		
+***********************************************************************************************/
+OpState OpZoomTo300::GetState(String_256* Description, OpDescriptor*)
+{
+	OpState State;
+	return State;
+}
+
+/********************************************************************************************
+
+>	virtual void OpZoomTo300::Do(OpDescriptor* pOpDesc)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		pointer to the OpZoomDescriptor being invoked
+	Purpose:	Calls the base class function to zoom to 300%!
+
+********************************************************************************************/
+void OpZoomTo300::Do(OpDescriptor *pOpDesc)
+{
+	// Ok! lets zoom in!
+	DocView* pDocView = DocView::GetCurrent();
+
+	if(pDocView)
+	{
+		const WorkRect ZoomRect = pDocView->GetViewRect();
+		ZoomTo( ZoomRect.Centre(), 300 );
+	}
+	else
+	{
+		ERROR3IF(pDocView == 0, "No current DocView found!");
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// class OpZoomTo400
+OpZoomTo400::OpZoomTo400()
+{
+}
+
+BOOL OpZoomTo400::Init()
+{
+	BOOL ok = RegisterOpDescriptor(
+									0, 
+									_R(IDS_ZOOMTO400),
+									CC_RUNTIME_CLASS(OpZoomTo400), 
+									OPTOKEN_ZOOMTO400,
+									OpZoomTo400::GetState,
+									0,					/* help ID */
+									_R(IDBBL_ZOOMTO400),/* bubble ID */
+									0					/* bitmap ID */
+									);
+
+	return ok;
+}
+
+/***********************************************************************************************
+
+>	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		Description = ptr to place description of why this op can't happen
+				pOpDesc     = ptr to the Op Desc associated with this op
+	Outputs:	-
+	Returns:	An OpState object
+	Purpose:    Func for determining the usability of this op
+	SeeAlso:	-
+		
+***********************************************************************************************/
+OpState OpZoomTo400::GetState(String_256* Description, OpDescriptor*)
+{
+	OpState State;
+	return State;
+}
+
+/********************************************************************************************
+
+>	virtual void OpZoomToo100::Do(OpDescriptor* pOpDesc)
+
+	Author:		Luke Hart
+	Created:	18/09/06
+	Inputs:		pointer to the OpZoomDescriptor being invoked
+	Purpose:	Calls the base class function to zoom to 400%!
+
+********************************************************************************************/
+void OpZoomTo400::Do(OpDescriptor *pOpDesc)
+{
+	// Ok! lets zoom in!
+	DocView* pDocView = DocView::GetCurrent();
+
+	if(pDocView)
+	{
+		const WorkRect ZoomRect = pDocView->GetViewRect();
+		ZoomTo( ZoomRect.Centre(), 400 );
+	}
+	else
+	{
+		ERROR3IF(pDocView == 0, "No current DocView found!");
+	}
 }
 
 
