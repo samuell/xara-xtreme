@@ -119,6 +119,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "palman.h"
 #include "coldlog.h"
 #include "bmpcomp.h"	// for BitmapList
+#include "imjpeg.h"
 
 CC_IMPLEMENT_DYNAMIC(ViewTab, OptionsTabs)   
 			  
@@ -514,6 +515,9 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 		ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_TUNE));
 	}
 
+	BOOL fScaleJpg96dpi = FALSE; // Whether all JPEGs should be imported at 96DPI
+	fScaleJpg96dpi = pPrefsDlg->GetLongGadgetValue( _R(IDC_JPEG_96DPI_CHECK), 0, 1, 0, &Valid );
+	JPEGImportFilter::SetImportAt96dpi( fScaleJpg96dpi );
 
 	// Automatic colour line, gallery scroll to colour selected
 	State = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_AUTOSCROLL), 0, 1, 0, &Valid);
@@ -543,16 +547,6 @@ TRACEUSER( "Neville", _T("commit colour bar mode='%d' \n"),ColourBarMode);
 
 	// Proportional scrollbar state option (for main view) removed 10/10/05 by Marc.
 	// The current scrollbars are always proportional so it didn't make sense
-	
-	if (pView != NULL)
-	{
-		// Get the background redraw state and set new state accordingly
-		BackgroundRedraw	= pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_BACKREDRAW), 0, 1, 0, &Valid);
-		pView->SetForeBackMode(BackgroundRedraw);
-		// The preference value is set from the default document.
-		//SetOk = Camelot.SetPrefValue(TEXT("Rendering"), TEXT("BackgroundRendering"), &BackgroundRedraw);
-		//ERROR2IF(!SetOk,2,_R(IDE_OPTS_SETPREF_VIEW));
-	}
 
 	// Read the state of the interactive fill editing switch and set the new value in the preferences
 	BOOL InteractiveFill = pPrefsDlg->GetLongGadgetValue(_R(IDC_OPTS_INTERACTIVEFILL), 0, 1, 0, &Valid);
@@ -647,12 +641,6 @@ TRACEUSER( "Neville", _T("GreySection in ViewTab section\n"));
 	if (!ok)
 		return TRUE;	// Talk to page failed to return now
 
-	// Make sure the information field displaying the name of the current document
-	// is correct.
-	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
-	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
-
 	// Only update if we are not already grey 
 	if (GreyStatus == TRUE)
 		return TRUE;
@@ -688,12 +676,6 @@ TRACEUSER( "Neville", _T("UngreySection in ViewTab section\n"));
 	BOOL ok = pPrefsDlg->TalkToPage(_R(IDD_OPTSTAB_VIEW));	// The ViewTab identifier
 	if (!ok)
 		return TRUE;	// Talk to page failed to return now
-
-	// Make sure the information field displaying the name of the current document
-	// is correct.
-	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
-	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
 
 	BOOL bSmoothing = TRUE;
 	if (pDocument)
@@ -747,11 +729,9 @@ BOOL ViewTab::ChangeControlStatus(const BOOL Status)
 //	pPrefsDlg->EnableGadget(_OPTS_INTERACTIVEFILL, Status);
 //	pPrefsDlg->EnableGadget(_R(IDC_OPTS_AUTOTRANS), Status);
 
-	pPrefsDlg->EnableGadget(_R(IDC_OPTS_INFO), Status);
 //	removed transparency control 27/8/96 
 //	pPrefsDlg->EnableGadget(_R(IDC_OPTS_SHOWTRANS), Status);
 	pPrefsDlg->EnableGadget(_R(IDC_OPTS_SCROLLBARS), Status);
-	pPrefsDlg->EnableGadget(_R(IDC_OPTS_BACKREDRAW), Status);
 
 	pPrefsDlg->EnableGadget(_R(IDC_OPTS_SMOOTH_BITMAPS), Status);
 
@@ -789,11 +769,6 @@ TRACEUSER( "Neville", _T("ViewTab::UpdateSection\n"));
 
 	// Update any document/view specific bits
 	GetDisplayStyleForView();
-
-	// Set up the information field to reflect the current document name
-	String_256	DocName(_R(IDT_OPTS_VIEW_INFO)); 
-	DocName +=	*DocumentName;
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocName);
 
 	BOOL bSmoothing = TRUE;
 	if (pDocument)
@@ -946,20 +921,6 @@ BOOL ViewTab::GetDisplayStyleForView()
 		DocView *pView = DocView::GetSelected();
 		if (pView != NULL)
 		{
-		 	BOOL BackgroundRedraw; 
-			// Set up the background redraw switch
-			BackgroundRedraw = pView->GetForeBackMode();
-			//ReadOk = Camelot.GetPrefValue(TEXT("Rendering"), TEXT("BackgroundRendering"), &BackgroundRedraw);
-	TRACEUSER( "Neville", _T("get background redraw '%d'\n"),BackgroundRedraw);
-			// Seems to return -1 so cannot use value directly
-			if (BackgroundRedraw == FALSE)
-				pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_BACKREDRAW), FALSE);
-			else
-				pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_BACKREDRAW), TRUE);
-			//ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
-
-			// Remember these values for later use
-		 	OldBackgroundRedraw = BackgroundRedraw; 
 		}
 
 		// Remember this value for later use
@@ -1070,12 +1031,6 @@ TRACEUSER( "Neville", _T("ViewTab::InitSection\n"));
 
 	BOOL ReadOk = FALSE; 	// Flag to say whether the preference value was read ok 
 
-	// Make sure the information field displaying the name of the current document
-	// is correct.
-	String_256	DocumentName(_R(IDT_OPTS_VIEW_INFO)); 
-	DocumentName +=	*GetDocumentName();
-	pPrefsDlg->SetStringGadgetValue(_R(IDC_OPTS_INFO), DocumentName);
-
 	// Section = Display
 
 	// Now the colour bar mode combo box
@@ -1164,6 +1119,8 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 	pPrefsDlg->SetLongGadgetValue(_R(IDC_OPTS_COMPOUNDDPI), m_compoundConvertToEditableShapesDPI);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 
+	// Set the force JPEG DPI flag
+	pPrefsDlg->SetLongGadgetValue( _R(IDC_JPEG_96DPI_CHECK), LONG(JPEGImportFilter::GetImportAt96dpi()) );
 
 	// Section = Window
 

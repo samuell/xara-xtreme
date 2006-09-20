@@ -143,6 +143,9 @@ public:
 
     virtual BOOL ReadFromFile(OILBitmap* pOilBitmap);
 
+	static BOOL GetImportAt96dpi()						{ return m_fImportAt96dpi; }
+	static void SetImportAt96dpi( BOOL fImportAt96 )	{ m_fImportAt96dpi = fImportAt96; }
+
 protected:
 	BOOL DoFilter(CCFile* pInputFile, OILBitmap* pOilBitmap);
 
@@ -177,6 +180,7 @@ protected:
 	BOOL							m_bOldReportErrors;
 	BOOL							m_bOldThrowExceptions;
 	UINT32							m_uStartOffset;
+	static BOOL						m_fImportAt96dpi;
 
 	// the IJG control structure
 	struct libJPEG::jpeg_decompress_struct	m_cinfo;

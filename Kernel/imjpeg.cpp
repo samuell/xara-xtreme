@@ -152,7 +152,7 @@ public:
 CC_IMPLEMENT_MEMDUMP(JPEGImportFilter, BaseBitmapFilter)
 CC_IMPLEMENT_MEMDUMP(JPEGImportOptions,  BitmapImportOptions)
 
-
+BOOL					JPEGImportFilter::m_fImportAt96dpi = m_fImportAt96dpi;
 
 // We want better memory tracking
 #define new CAM_DEBUG_NEW
@@ -246,6 +246,12 @@ BOOL JPEGImportFilter::Init()
 	// Load the description strings
 	FilterName.Load(_R(IDS_JPG_IMP_FILTERNAME));
 	FilterInfo.Load(_R(IDS_JPG_IMP_FILTERINFO));
+
+	if( 9999 == m_fImportAt96dpi &&
+		Camelot.DeclareSection( _T("Filters"), 10 ) )
+	{
+		Camelot.DeclarePref( NULL, _T("ImportJPEGAt96dpi"), &m_fImportAt96dpi, FALSE, TRUE );
+	}
 
 	// All ok
 	return TRUE;
@@ -1025,8 +1031,12 @@ BOOL JPEGImportFilter::SetBitmapResolution()
 	// Set the horizontal & vertical pixel densities
 	LPBITMAPINFOHEADER pHeader = &(*m_ppInfo)->bmiHeader;
 
-	switch (m_cinfo.density_unit)
+	// Conviently the import code defaults to 96dpi, so
+	// we just leave it alone if we're importing at 96dpi
+	if( !m_fImportAt96dpi )
 	{
+		switch (m_cinfo.density_unit)
+		{
 		case 1:		// dots/inch
 			pHeader->biXPelsPerMeter = (INT32)(m_cinfo.X_density * (100 / 2.54));
 			pHeader->biYPelsPerMeter = (INT32)(m_cinfo.Y_density * (100 / 2.54));
@@ -1042,7 +1052,9 @@ BOOL JPEGImportFilter::SetBitmapResolution()
 			// even when density_unit=0.
 			// So leave it as is: 96dpi
 			break;
+		}
 	}
+
 	return TRUE;
 }
 

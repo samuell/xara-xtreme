@@ -99,48 +99,67 @@
                 <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                 <border>5</border>
                 <object class="wxStaticBoxSizer" name="IDC_OPTS_BITMAPS">
-                    <orient>wxHORIZONTAL</orient>
+                    <orient>wxVERTICAL</orient>
                     <label>Bitmaps</label>
                     <font>
                         <size>8</size>
-                    </font>
+					</font>
+					<object class="sizeritem">
+						<flag>wxALIGN_CENTER_VERTICAL|wxADJUST_MINSIZE</flag>
+          	            <border>5</border>
+              	        <option>1</option>
+						<object class="wxBoxSizer">
+							<orient>wxHORIZONTAL</orient>
+	    	                <object class="sizeritem">
+    	    	                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+        	    	            <border>5</border>
+            	    	        <object class="wxCheckBox" name="IDC_OPTS_SMOOTH_BITMAPS">
+                	    	        <pos>16,130</pos>
+                    	    	    <font>
+                        	    	    <size>8</size>
+		                            </font>
+    		                        <label>N&amp;ever smooth</label>
+        		                    <checked>0</checked>
+            		            </object>
+	            	        </object>
+    	            	    <object class="sizeritem">
+        	            	    <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+            	            	<border>5</border>
+   		             	        <option>1</option>
+	                    	    <object class="wxStaticText" name="IDC_OPTS_INFO2">
+        	                	    <pos>123,130</pos>
+            	                	<font>
+                	 	               <size>8</size>
+                    		        </font>
+                        		    <style>wxALIGN_RIGHT</style>
+	                        	    <label>DPI when auto generated</label>
+	    	                    </object>
+    	    	            </object>
+        	    	        <object class="sizeritem">
+            	    	        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                	    	    <border>5</border>
+                    	    	<object class="wxTextCtrl" name="IDC_OPTS_COMPOUNDDPI">
+    	                        	<size>34,20</size>
+		                            <pos>258,126</pos>
+    	    	                    <font>
+        		                        <size>8</size>
+            		                </font>
+                		        </object>
+							</object>
+						</object>
+					</object>
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
-                        <object class="wxCheckBox" name="IDC_OPTS_SMOOTH_BITMAPS">
-                            <pos>16,130</pos>
+                        <object class="wxCheckBox" name="IDC_JPEG_96DPI_CHECK">
                             <font>
                                 <size>8</size>
                             </font>
-                            <label>N&amp;ever smooth</label>
+                            <label>Import JPEGs at 96dpi (1:1)</label>
                             <checked>0</checked>
                         </object>
                     </object>
-                    <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
-                        <border>5</border>
-                        <option>1</option>
-                        <object class="wxStaticText" name="IDC_OPTS_INFO2">
-                            <pos>123,130</pos>
-                            <font>
-                                <size>8</size>
-                            </font>
-                            <style>wxALIGN_RIGHT</style>
-                            <label>DPI when auto generated</label>
-                        </object>
-                    </object>
-                    <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                        <border>5</border>
-                        <object class="wxTextCtrl" name="IDC_OPTS_COMPOUNDDPI">
-                            <size>34,20</size>
-                            <pos>258,126</pos>
-                            <font>
-                                <size>8</size>
-                            </font>
-                        </object>
-                    </object>
-                </object>
+               </object>
             </object>
             <object class="sizeritem">
                 <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
@@ -217,29 +236,6 @@
                                 <size>8</size>
                             </font>
                             <label>&amp;Automatic scroll to selected colour </label>
-                            <checked>0</checked>
-                        </object>
-                    </object>
-                </object>
-            </object>
-            <object class="sizeritem">
-                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
-                <border>5</border>
-                <object class="wxStaticBoxSizer" name="IDC_OPTS_INFO">
-                    <orient>wxHORIZONTAL</orient>
-                    <label>Windows options for</label>
-                    <font>
-                        <size>8</size>
-                    </font>
-                    <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                        <border>5</border>
-                        <object class="wxCheckBox" name="IDC_OPTS_BACKREDRAW">
-                            <pos>16,276</pos>
-                            <font>
-                                <size>8</size>
-                            </font>
-                            <label>Background &amp;redraw</label>
                             <checked>0</checked>
                         </object>
                     </object>
