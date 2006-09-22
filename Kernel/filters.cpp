@@ -4418,6 +4418,7 @@ BOOL Filter::GetDragAndDropTranslation(ImportPosition *pPos, DocRect BoundsRect,
 	DocRect SpreadRect = pPos->pSpread->GetPasteboardRect();
 	pPos->pSpread->DocCoordToSpreadCoord(&SpreadRect);
 
+#if defined( DODGY_BITMAP_POS_CODE )
 	// Now check that the bounding rectangle is small enough to fit on the spread...
 	if ((BoundsRect.Width() > SpreadRect.Width()) ||
 		(BoundsRect.Height() > SpreadRect.Height()))
@@ -4427,6 +4428,7 @@ BOOL Filter::GetDragAndDropTranslation(ImportPosition *pPos, DocRect BoundsRect,
 		Offset->y = 0;
 		return FALSE;
 	}
+#endif
 
 	// Bounding box should be centred on drop point
 	DocCoord Centre;
@@ -4447,11 +4449,11 @@ BOOL Filter::GetDragAndDropTranslation(ImportPosition *pPos, DocRect BoundsRect,
 	else if (BoundsRect.hi.x > SpreadRect.hi.x)
 		Offset->x -= (BoundsRect.hi.x - SpreadRect.hi.x);
 
-	// (b) Vertical adjustment
-	if (BoundsRect.lo.y < SpreadRect.lo.y)
-		Offset->y += (SpreadRect.lo.y - BoundsRect.lo.y);
-	else if (BoundsRect.hi.y > SpreadRect.hi.y)
+	// (b) Vertical adjustment (most useful to clip hi co-ords)
+	if (BoundsRect.hi.y > SpreadRect.hi.y)
 		Offset->y -= (BoundsRect.hi.y - SpreadRect.hi.y);
+	else if (BoundsRect.lo.y < SpreadRect.lo.y)
+		Offset->y += (SpreadRect.lo.y - BoundsRect.lo.y);
 
 	// Whatever happened, we can fit it on the spread.
 	return TRUE;

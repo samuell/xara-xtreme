@@ -316,6 +316,18 @@
 					<label> - mask</label>
 				</object>
 			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_ZOOM_ON_IMAGE_IMPORT">
+					<label>This picture is very large, so the zoom has been altered to show it all. Resize the image as required. You can click the previous Zoom Button (next to the zoom value on the top button bar) to restore your previous settings.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<flag>wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE</flag>
+				<object class="wxStaticText" name="IDS_DONT_SHOW_AGAIN">
+					<label>&amp;Don't show again</label>
+				</object>
+			</object>
 		</object>
 	</object>
 </resource>

@@ -308,6 +308,9 @@ public:
 	virtual BOOL CanDoImportDPI()				{ return FALSE; }
 	virtual void SetImportDPI(DPI ImportDPI)	{}
 
+	static BOOL GetZoomOnImport()				{ return s_fZoomOnImport; }
+	static void SetZoomOnImport( BOOL fFlag )	{ s_fZoomOnImport = fFlag; }
+
 protected:
 	// Something to mark if this is a meant as a Preview Bitmap or not
 	BOOL IsPreviewBitmap;
@@ -487,7 +490,12 @@ protected:
 	void		SetDepthToRender(const BMP_DEPTH& Depth)	{	m_RenderDepth = Depth;	}
 	BMP_DEPTH	GetRenderDepth() const						{	return m_RenderDepth;	}
 	BOOL		WarnIfIncompatible();
-	
+
+	// Flag to indicate whether an imported bitmap should be zoom'ed to fit, if
+	// it goes outside view.
+	static BOOL		s_fZoomOnImport;
+	static BOOL		s_fWarnedZoomOnImport;	
+
 private:
 	// Progress bar variables...should be in Filter class really
 	UINT32		m_ProgressBarCount;			// Current progress bar count

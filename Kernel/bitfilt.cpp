@@ -124,6 +124,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "fillattr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "bmpexdoc.h"
 #include "impexpop.h"
+#include "zoomops.h"
 //#include "will3.h"		// for _R(IDS_GENOPTPALMSGID)
 #include "nodetxtl.h"
 #include "qualattr.h"
@@ -189,6 +190,9 @@ KernelBitmap*	BaseBitmapFilter::pExportBitmap = NULL;			// Store for the bitmap 
 DPI				BaseBitmapFilter::m_DefaultExportDPI = 96.0;	// Used as the default DPI when exporting
 
 LPLOGPALETTE 	BaseBitmapFilter::m_pBrowserPalette 		= NULL;
+
+BOOL			BaseBitmapFilter::s_fZoomOnImport		= 9999;
+BOOL			BaseBitmapFilter::s_fWarnedZoomOnImport	= 9999;
 
 //  This constant gives you the ( square of the ) maximum distance that a colour has to be from a browser colour
 //  to be snapped to that colour.
@@ -299,6 +303,16 @@ BaseBitmapFilter::~BaseBitmapFilter()
 ********************************************************************************************/
 BOOL BaseBitmapFilter::InitBaseClass()
 {
+	if( 9999 == s_fZoomOnImport &&
+		Camelot.DeclareSection( _T("Filters"), 10 ) )
+	{
+		s_fZoomOnImport = TRUE;
+		s_fWarnedZoomOnImport = FALSE;
+
+		Camelot.DeclarePref( NULL, _T("ZoomToFitOnImport"), &s_fZoomOnImport, FALSE, TRUE );
+		Camelot.DeclarePref( NULL, _T("WarnedZoomToFitOnImport"), &s_fWarnedZoomOnImport, FALSE, TRUE );
+	}
+	
 	return BitmapExportOptions::Declare();
 }
 
@@ -749,15 +763,15 @@ BOOL BaseBitmapFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 	Spread *pSpread = NULL;
 	DocCoord Origin;
 
+	//So first find the current view
+	DocView* pDocView=DocView::GetCurrent();
+		
 	if (Pos == NULL)
 	{
 		// For now, position Draw objects on 1st page of spread 1
 
 		//Graham 30/6/97: We now position imported bitmaps in the top left of the view
 
-		//So first find the current view
-		DocView* pDocView=DocView::GetCurrent();
-		
 		ERROR2IF(pDocView==NULL, FALSE, "BaseBitmapFilter::DoImport - no current view");
 
 		//And get the centre coordinate
@@ -843,14 +857,8 @@ BOOL BaseBitmapFilter::DoImport(SelOperation *Op, CCLexFile* pFile,
 			BitmapInfo Info;
 			pNodeBitmap->GetBitmap()->ActualBitmap->GetInfo(&Info);
 
-			INT32 hdpi = pNodeBitmap->GetBitmap()->GetHorizontalDPI();
-			if (hdpi == 0)
-				hdpi = 96;
-			INT32 vdpi = pNodeBitmap->GetBitmap()->GetVerticalDPI();
-			if (vdpi == 0)
-				vdpi = 96;
-			const INT32 HPixelSize = (INT32) ((72000.0 / hdpi) + 0.5);	// Size of output pixel in millipoints
-			const INT32 VPixelSize = (INT32) ((72000.0 / vdpi) + 0.5);	// Size of output pixel in millipoints
+			const INT32 HPixelSize = ( pDocView->GetPixelWidth() + 0.5 ).MakeLong();	// Size of output pixel in millipoints
+			const INT32 VPixelSize = ( pDocView->GetPixelHeight() + 0.5 ).MakeLong();// Size of output pixel in millipoints
 
 			DocRect BoundsRect;
 			BoundsRect.lo = Origin;
@@ -1012,6 +1020,35 @@ PORTNOTE("filters","Removed HTMLFilter usage")
 					m_pImportOptions = NULL;
 				}
 				return FALSE;	// hmmm....
+			}
+	
+			DocRect		docrectBounds = pNodeBitmap->GetBoundingRect();
+			DocRect		docrectView = pDocView->GetDocViewRect( pSpread );
+            pSpread->DocCoordToSpreadCoord( &docrectView );
+			if( ( docrectBounds.lo.x < docrectView.lo.x ||
+				  docrectBounds.lo.y < docrectView.lo.y ||
+				  docrectBounds.hi.x > docrectView.hi.x ||
+				  docrectBounds.hi.y > docrectView.hi.y ) &&
+				s_fZoomOnImport )
+			{
+				OpZoomFitRectDescriptor* pOpDesc = (OpZoomFitRectDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_ZOOMRECT );
+				if( NULL != pOpDesc )
+				{
+					pOpDesc->SetZoomRect( docrectBounds );
+					pOpDesc->Invoke();
+				}
+
+				if( !s_fWarnedZoomOnImport )
+				{
+					ErrorInfo	Info;
+					memset( &Info, 0, sizeof(Info) );
+					Info.ErrorMsg	= _R(IDS_ZOOM_ON_IMAGE_IMPORT);
+					Info.Button[0]  = _R(IDS_OK);
+					Info.Button[1]  = _R(IDS_DONT_SHOW_AGAIN);
+					Info.OK			= 1;
+					if( _R(IDS_DONT_SHOW_AGAIN) == UINT32(InformMessage( &Info )) )
+						s_fWarnedZoomOnImport = TRUE;
+				}
 			}
 		}
 	}
