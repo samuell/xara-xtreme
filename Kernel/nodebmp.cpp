@@ -119,6 +119,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "scrcamvw.h"
 #include "cliptype.h"
 #include "attrmap.h"
+#include "spread.h"
+#include "zoomops.h"
+#include "bitfilt.h"
 
 #include "colormgr.h"
 //#include "attrmgr.h" - in camtypes.h [AUTOMATICALLY REMOVED]
@@ -2759,12 +2762,10 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 	KernelBitmap* KernelBmp = (KernelBitmap*)(void *)pOpParam->Param1;
 	PageDropInfo* pDropInfo = (PageDropInfo*)(void *)pOpParam->Param2;
 
-//	Document* pDoc 		= pDropInfo->pDoc;
+	DocView* pDocView	= DocView::GetCurrent();
 	Spread* pSpread		= pDropInfo->pSpread;
 	DocCoord DropPos 	= pDropInfo->DropPos;
 
-	DocRect BoundsRect;
-	BitmapInfo Info;
 
 	NodeBitmap* pNodeBitmap = new NodeBitmap();
 	if ((pNodeBitmap == NULL) || (!pNodeBitmap->SetUpPath(12,12)))
@@ -2778,29 +2779,109 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 		delete KernelBmp;
 	}
 
-	
-	pNodeBitmap->GetBitmap()->ActualBitmap->GetInfo(&Info);
-
-	BoundsRect.lo.x = DropPos.x - (Info.RecommendedWidth/2);
-	BoundsRect.lo.y = DropPos.y - (Info.RecommendedHeight/2);
-	BoundsRect.hi.x = DropPos.x + (Info.RecommendedWidth/2);
-	BoundsRect.hi.y = DropPos.y + (Info.RecommendedHeight/2);
-
-	// And set this in our bitmap node
-	pNodeBitmap->CreateShape(BoundsRect);
-
-	// Set the default attrs
-	// This Must be done before the NodeBitmap is inserted into the tree
-	if (!pNodeBitmap->ApplyDefaultBitmapAttrs(this))
-		goto EndOp;
-		
-	// Insert the node
-	if (!DoInsertNewNode(pNodeBitmap, pSpread, TRUE))
 	{
-		// It didn't work - delete the sub-tree we just created.
-		delete pNodeBitmap;
-		goto EndOp;
-	} 
+		DocRect BoundsRect;
+		BitmapInfo Info;
+
+		// Import worked - try to add the bitmap object into the tree.
+		// First, set the rectangle to the right size for the bitmap...
+		pNodeBitmap->GetBitmap()->ActualBitmap->GetInfo(&Info);
+
+		const INT32 HPixelSize = ( pDocView->GetPixelWidth() + 0.5 ).MakeLong();	// Size of output pixel in millipoints
+		const INT32 VPixelSize = ( pDocView->GetPixelHeight() + 0.5 ).MakeLong();// Size of output pixel in millipoints
+
+		// Make sure that this is snapped to a pixel grid
+		BoundsRect.lo.x = DropPos.x - ( Info.RecommendedWidth / 2 );
+		BoundsRect.lo.y = DropPos.y - ( Info.RecommendedHeight / 2 );
+		BoundsRect.lo.x = GridLock(BoundsRect.lo.x, HPixelSize);
+		BoundsRect.lo.y = GridLock(BoundsRect.lo.y, VPixelSize);
+		// And now add in the rest of the bounds
+		BoundsRect.hi.x = BoundsRect.lo.x + Info.RecommendedWidth;
+		BoundsRect.hi.y = BoundsRect.lo.y + Info.RecommendedHeight;
+		BoundsRect.hi.x = GridLock(BoundsRect.hi.x, HPixelSize);
+		BoundsRect.hi.y = GridLock(BoundsRect.hi.y, VPixelSize);
+
+		// And set this in our bitmap node
+		pNodeBitmap->CreateShape(BoundsRect);
+
+		// Set the default attrs
+		// This Must be done before the NodeBitmap is inserted into the tree
+		if (!pNodeBitmap->ApplyDefaultBitmapAttrs(this))
+			goto EndOp;
+			
+		// Insert the node
+		if (!DoInsertNewNode(pNodeBitmap, pSpread, TRUE))
+		{
+			// It didn't work - delete the sub-tree we just created.
+			delete pNodeBitmap;
+			goto EndOp;
+		}
+	
+		// Get the spread's bounding rectangle and convert it to spread coords.
+		DocRect SpreadRect = pSpread->GetPasteboardRect();
+		pSpread->DocCoordToSpreadCoord(&SpreadRect);
+
+		// If bounding box off the spread - limit it to the edge of the spread:
+
+		// (a) Horizontal adjustment
+		DocCoord Offset(0,0);
+		if (BoundsRect.lo.x < SpreadRect.lo.x)
+			Offset.x += (SpreadRect.lo.x - BoundsRect.lo.x);
+		else if (BoundsRect.hi.x > SpreadRect.hi.x)
+			Offset.x -= (BoundsRect.hi.x - SpreadRect.hi.x);
+
+		// (b) Vertical adjustment (most useful to clip hi co-ords)
+		if (BoundsRect.hi.y > SpreadRect.hi.y)
+			Offset.y -= (BoundsRect.hi.y - SpreadRect.hi.y);
+		else
+		if (BoundsRect.lo.y < SpreadRect.lo.y)
+			Offset.y += (SpreadRect.lo.y - BoundsRect.lo.y);
+
+		// Actually do the translation if needed
+		if( 0 != Offset.x ||
+			0 != Offset.y )
+		{
+			Offset.x = GridLock(Offset.x, HPixelSize);
+			Offset.y = GridLock(Offset.y, VPixelSize);
+
+			// Build the matrix and transform the bitmap to the correct place
+			Trans2DMatrix Xlate(Offset.x, Offset.y);
+			pNodeBitmap->Transform(Xlate);
+		}
+
+		// Does the bitmap fit with our current view?
+		DocRect		docrectBounds = pNodeBitmap->GetBoundingRect();
+		DocRect		docrectView = pDocView->GetDocViewRect( pSpread );
+		pSpread->DocCoordToSpreadCoord( &docrectView );
+		if( ( docrectBounds.lo.x < docrectView.lo.x ||
+			  docrectBounds.lo.y < docrectView.lo.y ||
+			  docrectBounds.hi.x > docrectView.hi.x ||
+			  docrectBounds.hi.y > docrectView.hi.y ) &&
+			  BaseBitmapFilter::GetZoomOnImport() )
+		{
+			// No, zoom out so the all the bitmap can be seen
+			OpZoomFitRectDescriptor* pOpDesc = (OpZoomFitRectDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_ZOOMRECT );
+			if( NULL != pOpDesc )
+			{
+				pOpDesc->SetZoomRect( docrectBounds );
+				pOpDesc->Invoke();
+			}
+
+			// Keep user informed about the zoom operation
+			if( !BaseBitmapFilter::GetWarnedZoomOnImport() )
+			{
+				ErrorInfo	Info;
+				memset( &Info, 0, sizeof(Info) );
+				Info.ErrorMsg	= _R(IDS_ZOOM_ON_IMAGE_IMPORT);
+				Info.Button[0]  = _R(IDS_OK);
+				Info.Button[1]  = _R(IDS_DONT_SHOW_AGAIN);
+				Info.OK			= 1;
+				if( _R(IDS_DONT_SHOW_AGAIN) == UINT32(InformMessage( &Info )) )
+					BaseBitmapFilter::SetWarnedZoomOnImport( TRUE );
+			}
+		}
+	}
+
 	ok = TRUE;
 
 EndOp:

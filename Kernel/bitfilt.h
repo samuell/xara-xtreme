@@ -311,6 +311,9 @@ public:
 	static BOOL GetZoomOnImport()				{ return s_fZoomOnImport; }
 	static void SetZoomOnImport( BOOL fFlag )	{ s_fZoomOnImport = fFlag; }
 
+	static BOOL GetWarnedZoomOnImport()			{ return s_fWarnedZoomOnImport; }
+	static void SetWarnedZoomOnImport( BOOL fFlag ) { s_fWarnedZoomOnImport = fFlag; }
+
 protected:
 	// Something to mark if this is a meant as a Preview Bitmap or not
 	BOOL IsPreviewBitmap;
@@ -515,5 +518,52 @@ private:
 	BMP_SIZE	m_PixelHeight;
 	BMP_DEPTH	m_RenderDepth;
 };
+
+
+/********************************************************************************************
+
+>	inline LONG GridLock(LONG Position, LONG GridSize)
+
+	Author:		Neville from Jason code in coldlog.cpp
+	Created:	22/9/97
+	Inputs:		Position - The X/Y position, in millipoints
+				GridSize - the size of the grid to lock to, in millipoints
+	Returns:	Position, locked (by rounding) to a grid of the given size, and offset by
+				half a grid.
+	Purpose:	Grid-locks a given plotting position to lie over a grid (usually the
+				output device-pixel grid). The result is shifted by half the grid size to
+				grid-lock to the _center_ of a pixel rather than the edges.
+	Note:		stolen from ColourEditDlg/PreviewDialog rendering routines
+				Hoisted into header file, since useful for anything that uses bitmaps
+
+********************************************************************************************/
+
+inline INT32 GridLock(INT32 Position, INT32 GridSize)
+{
+	// By truncating down to the nearest grid point, and adding half the grid value,
+	// we achieve rounding to the nearest offset-grid position.	
+
+	// NOTE:
+	// The original algorithm incorrectly rounded negative numbers towards
+	// zero. Negative numbers should be rounded towards negative infinity.
+	// The algorithm has been corrected by always rounding a positive number
+	// and restoring the original sign of the number after rounding.
+
+	BOOL bNegative = FALSE;				// Assume the number is positive
+
+	if (Position < 0)					// If the number if not positive
+	{									// note the fact and make positive
+		bNegative	= TRUE;
+		Position	= -Position;
+	}
+
+	Position += GridSize / 2;
+	Position -= Position % GridSize;
+
+	if (bNegative)						// If the number was negative
+		Position = -Position;			// restore the sign
+
+	return (Position);
+}
 
 #endif
