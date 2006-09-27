@@ -987,6 +987,20 @@ PORTNOTE("filters","Removed HTMLFilter usage")
 				  docrectBounds.hi.y > docrectView.hi.y ) &&
 				s_fZoomOnImport )
 			{
+				// Calculate bounding rect of view plus new photo and then make sure that edges in
+				// in both axes grow by same amount. We make use of the fact that zoom code only allows
+				// zooming in both axes by the same amount, so we don't need to make sure that growth in
+				// both axes is by the same percentage.
+				docrectBounds = docrectBounds.Union( docrectView );
+				if( docrectView.lo.x - docrectBounds.lo.x > docrectBounds.hi.x - docrectView.hi.x )
+					docrectBounds.hi.x = docrectView.hi.x + docrectView.lo.x - docrectBounds.lo.x;
+				else
+					docrectBounds.lo.x = docrectView.lo.x - docrectBounds.hi.x + docrectView.hi.x;
+				if( docrectView.lo.y - docrectBounds.lo.y > docrectBounds.hi.y - docrectView.hi.y )
+					docrectBounds.hi.y = docrectView.hi.y + docrectView.lo.y - docrectBounds.lo.y;
+				else
+					docrectBounds.lo.y = docrectView.lo.y - docrectBounds.hi.y + docrectView.hi.y;
+				
 				OpZoomFitRectDescriptor* pOpDesc = (OpZoomFitRectDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_ZOOMRECT );
 				if( NULL != pOpDesc )
 				{

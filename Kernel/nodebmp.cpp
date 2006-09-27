@@ -2787,8 +2787,12 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 		// First, set the rectangle to the right size for the bitmap...
 		pNodeBitmap->GetBitmap()->ActualBitmap->GetInfo(&Info);
 
-		const INT32 HPixelSize = ( pDocView->GetPixelWidth() + 0.5 ).MakeLong();	// Size of output pixel in millipoints
-		const INT32 VPixelSize = ( pDocView->GetPixelHeight() + 0.5 ).MakeLong();// Size of output pixel in millipoints
+		// When pasting from XPE we don't have a docview, so fabricate 96dpi measurement (NB this gives
+		// no remainder, just expressed as division to make derivation clear)
+		FIXED16		pixHorz = NULL != pDocView ? pDocView->GetPixelWidth()  : FIXED16( 72000 / 96 );
+		FIXED16		pixVert = NULL != pDocView ? pDocView->GetPixelHeight() : FIXED16( 72000 / 96 );
+		const LONG HPixelSize = ( pixHorz + 0.5 ).MakeLong();	// Size of output pixel in millipoints
+		const LONG VPixelSize = ( pixVert + 0.5 ).MakeLong();	// Size of output pixel in millipoints
 
 		// Make sure that this is snapped to a pixel grid
 		BoundsRect.lo.x = DropPos.x - ( Info.RecommendedWidth / 2 );
@@ -2849,35 +2853,53 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 			pNodeBitmap->Transform(Xlate);
 		}
 
-		// Does the bitmap fit with our current view?
-		DocRect		docrectBounds = pNodeBitmap->GetBoundingRect();
-		DocRect		docrectView = pDocView->GetDocViewRect( pSpread );
-		pSpread->DocCoordToSpreadCoord( &docrectView );
-		if( ( docrectBounds.lo.x < docrectView.lo.x ||
-			  docrectBounds.lo.y < docrectView.lo.y ||
-			  docrectBounds.hi.x > docrectView.hi.x ||
-			  docrectBounds.hi.y > docrectView.hi.y ) &&
-			  BaseBitmapFilter::GetZoomOnImport() )
+		// We can't do this without a docview
+		if( NULL != pDocView )
 		{
-			// No, zoom out so the all the bitmap can be seen
-			OpZoomFitRectDescriptor* pOpDesc = (OpZoomFitRectDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_ZOOMRECT );
-			if( NULL != pOpDesc )
+			// Does the bitmap fit with our current view?
+			DocRect		docrectBounds = pNodeBitmap->GetBoundingRect();
+			DocRect		docrectView = pDocView->GetDocViewRect( pSpread );
+			pSpread->DocCoordToSpreadCoord( &docrectView );
+			if( ( docrectBounds.lo.x < docrectView.lo.x ||
+				  docrectBounds.lo.y < docrectView.lo.y ||
+				  docrectBounds.hi.x > docrectView.hi.x ||
+				  docrectBounds.hi.y > docrectView.hi.y ) &&
+				  BaseBitmapFilter::GetZoomOnImport() )
 			{
-				pOpDesc->SetZoomRect( docrectBounds );
-				pOpDesc->Invoke();
-			}
+				// Calculate bounding rect of view plus new photo and then make sure that edges in
+				// in both axes grow by same amount. We make use of the fact that zoom code only allows
+				// zooming in both axes by the same amount, so we don't need to make sure that growth in
+				// both axes is by the same percentage.
+				docrectBounds = docrectBounds.Union( docrectView );
+				if( docrectView.lo.x - docrectBounds.lo.x > docrectBounds.hi.x - docrectView.hi.x )
+					docrectBounds.hi.x = docrectView.hi.x + docrectView.lo.x - docrectBounds.lo.x;
+				else
+					docrectBounds.lo.x = docrectView.lo.x - docrectBounds.hi.x + docrectView.hi.x;
+				if( docrectView.lo.y - docrectBounds.lo.y > docrectBounds.hi.y - docrectView.hi.y )
+					docrectBounds.hi.y = docrectView.hi.y + docrectView.lo.y - docrectBounds.lo.y;
+				else
+					docrectBounds.lo.y = docrectView.lo.y - docrectBounds.hi.y + docrectView.hi.y;
+				
+				// No, zoom out so the all the bitmap can be seen
+				OpZoomFitRectDescriptor* pOpDesc = (OpZoomFitRectDescriptor*)OpDescriptor::FindOpDescriptor( OPTOKEN_ZOOMRECT );
+				if( NULL != pOpDesc )
+				{
+					pOpDesc->SetZoomRect( docrectBounds );
+					pOpDesc->Invoke();
+				}
 
-			// Keep user informed about the zoom operation
-			if( !BaseBitmapFilter::GetWarnedZoomOnImport() )
-			{
-				ErrorInfo	Info;
-				memset( &Info, 0, sizeof(Info) );
-				Info.ErrorMsg	= _R(IDS_ZOOM_ON_IMAGE_IMPORT);
-				Info.Button[0]  = _R(IDS_OK);
-				Info.Button[1]  = _R(IDS_DONT_SHOW_AGAIN);
-				Info.OK			= 1;
-				if( _R(IDS_DONT_SHOW_AGAIN) == UINT32(InformMessage( &Info )) )
-					BaseBitmapFilter::SetWarnedZoomOnImport( TRUE );
+				// Keep user informed about the zoom operation
+				if( !BaseBitmapFilter::GetWarnedZoomOnImport() )
+				{
+					ErrorInfo	Info;
+					memset( &Info, 0, sizeof(Info) );
+					Info.ErrorMsg	= _R(IDS_ZOOM_ON_IMAGE_IMPORT);
+					Info.Button[0]  = _R(IDS_OK);
+					Info.Button[1]  = _R(IDS_DONT_SHOW_AGAIN);
+					Info.OK			= 1;
+					if( _R(IDS_DONT_SHOW_AGAIN) == UINT32(InformMessage( &Info )) )
+						BaseBitmapFilter::SetWarnedZoomOnImport( TRUE );
+				}
 			}
 		}
 	}

@@ -136,6 +136,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "gbrush.h"
 #include "selmedia.h"
 #include "filedlgs.h"
+#include "rendwnd.h"
 
 #include "camprocess.h"
 
@@ -286,6 +287,28 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 				return false;
 			}
 		}
+	}
+
+	if( event.GetEventType() == wxEVT_ACTIVATE )
+	{
+		TRACEUSER("luke", _T("CCamApp::FilterEvent activate to %s"), pEventObject->GetClassInfo()->GetClassName());
+
+		if( pEventObject->IsKindOf( CLASSINFO(wxFloatingPane) ) )
+		{
+			wxClassInfo* pClassInfo = pEventObject->GetClassInfo();
+			while( NULL != pClassInfo )
+			{
+				TRACEUSER( "luke", _T("Class = %s"), (PCTSTR)pClassInfo->GetClassName() );
+
+				const wxChar* pszBaseClass = pClassInfo->GetBaseClassName1();
+				pClassInfo = NULL == pszBaseClass ? NULL : wxClassInfo::FindClass( pszBaseClass );
+			}
+			TRACEUSER( "luke", _T("Parent = %x, %x"), ((wxWindow*)pEventObject)->GetParent(), m_pMainFrame );
+			TRACEUSER( "luke", _T("Active = %x"), ((wxTopLevelWindow*)pEventObject)->IsActive() );
+
+			GiveActiveCanvasFocus();
+			return 1;				// Don't let the recipent know it was activated
+		} 
 	}
 
 // useful code to see where focus events originate from. Set a breakpoint below and look
@@ -1776,7 +1799,10 @@ void CCamApp::GiveActiveCanvasFocus()
 {
 	CCamView* pView = dynamic_cast<CCamView*>( m_docManager->GetCurrentView() );
 	if( NULL != pView )
+	{
 		pView->Activate( true );
+		pView->GetRenderWindow()->SetFocus();
+	}
 }
 
 /***************************************************************************************************************************/
