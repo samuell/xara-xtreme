@@ -16,3 +16,4 @@ Date/Time	Change Description
 09-Sep-06	Untar the help file for plain tar-ball release
 	b)	Expect help file in right placea
 	c)	Change directory to the archive root before untar'ing helpfiles
+
