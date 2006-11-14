@@ -676,6 +676,18 @@ const UINT32 TAG_COMPOUNDRENDER			= 4128;
 
 const UINT32 TAG_OBJECTBOUNDS			= 4129;
 
+const ULONG TAG_DIMENSION					= 4130;
+
+const ULONG TAG_SPREAD_PHASE2				= 4131;
+const ULONG TAG_CURRENTATTRIBUTES_PHASE2	= 4132;
+const ULONG TAG_SPREAD_FLASHPROPS			= 4134;
+const ULONG TAG_PRINTERSETTINGS_PHASE2		= 4135;
+
+const ULONG TAG_DOCUMENTINFORMATION			= 4136;
+
+const ULONG TAG_CLIPVIEW_PATH				= 4137;
+const ULONG TAG_DEFINEBITMAP_PNG_REAL		= 4138;
+
 /////////////////////////////////////////////////////////////////////////////
 // XaraLX 0.6
 /////////////////////////////////////////////////////////////////////////////
@@ -690,6 +702,12 @@ const UINT32 TAG_TEXT_LEFT_INDENT		= 4201;
 const UINT32 TAG_TEXT_FIRST_INDENT		= 4202;
 const UINT32 TAG_TEXT_RIGHT_INDENT		= 4203;
 const UINT32 TAG_TEXT_RULER				= 4204;
+
+// New text tags for linked text areas and text flow
+
+const UINT32 TAG_TEXT_STORY_HEIGHT_INFO = 4205;
+const UINT32 TAG_TEXT_STORY_LINK_INFO   = 4206;
+const UINT32 TAG_TEXT_STORY_TRANSLATION_INFO = 4207;
 
 /////////////////////////////////////////////////////////////////////////////
 // TAG RANGES
