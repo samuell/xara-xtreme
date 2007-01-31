@@ -257,7 +257,7 @@ MsgResult FileInfo::Message(Msg* Message)
 		{
 			Close(); // Close and destroy the dialog 
 			End();
-//			return (DLG_EAT_IF_HUNGRY(Msg));  	 
+			return (DLG_EAT_IF_HUNGRY(Msg));  	 
 		}
 
 		if (Msg->DlgMsg == DIM_TIMER)
@@ -311,22 +311,31 @@ BOOL FileInfo::OnDimCreate()
 	this->SetTimer(42, DURATION_FASTJOB);				// Ten seconds between updates
 	timerSlowJob.Sample();
 
+	
+	// Setting up the external resources list control.
+	if (!m_lstctrlExternalResInfo.Init(WindowID, _R(IDC_FINFO_REFSLIST)))
+		return FALSE;
+		
+	m_lstctrlExternalResInfo.AddColumn(_T("Status"), 14);
+	m_lstctrlExternalResInfo.AddColumn(_T("Item"), 180);
+	m_lstctrlExternalResInfo.AddColumn(_T("Details"), 760);
+
 	// Setup list columns
 	// Why do we do this here when we have to use a custom AddItem function (AddRefsItem)
 	// to populate the list?
-	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
+/*	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
 	ERROR2IF(pListGadget==NULL, FALSE, "No refs list gadget");
 //	pListGadget->ShowColumnHeaders("", "Item", "Details");
 	pListGadget->SetColumnWidth(0, 14);		// Status indicators
 	pListGadget->SetColumnWidth(1, 80);		// Item name
 	pListGadget->SetColumnWidth(2, 760);	// Details
-
+*/
 	SetDocInfo(TRUE, TRUE);
 
 	return TRUE;
 }
 
-		 
+		 	
 
 /*******************************************************************************************
 
@@ -449,8 +458,8 @@ void FileInfo::Refresh()
 
 BOOL FileInfo::UpdateFontList(Document*	WorkDoc)
 {
-	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
-	ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
+//	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
+//	ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
 
 	List ItemList;
 
@@ -514,7 +523,12 @@ BOOL FileInfo::UpdateFontList(Document*	WorkDoc)
 	while (pRefItem)
 	{
 		// Add the font in the list to the list box
-		pListGadget->AddRefsItem(pRefItem->idBitmap, pRefItem->strItemName, pRefItem->strDetails);
+//		pListGadget->AddRefsItem(pRefItem->idBitmap, pRefItem->strItemName, pRefItem->strDetails);
+		CFileInfoList::CListRow oNewRow = m_lstctrlExternalResInfo.AddRow();
+		oNewRow.SetBitmap(pRefItem->idBitmap);
+		oNewRow.SetText(1, pRefItem->strItemName);
+		oNewRow.SetText(2, pRefItem->strDetails);
+		
 
 		pRefItem = (RefItem*)ItemList.GetNext(pRefItem);
 	}
@@ -546,8 +560,8 @@ BOOL FileInfo::UpdateEffectsList(Document* pWorkDoc)
 	// Add each list item to the listbox, marking it if the referred effect can not
 	// be found in the installed effect list
 
-	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
-	ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
+//	CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
+//	ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
 
 	if (pWorkDoc == NULL)	// Don't try to fill in anything when the window is shaded
 	{
@@ -630,7 +644,11 @@ PORTNOTE("other", "Disabled bitmap effects")
 	while (pRefItem)
 	{
 		// Add the font in the list to the list box
-		pListGadget->AddRefsItem(pRefItem->idBitmap, pRefItem->strItemName, pRefItem->strDetails);
+//		pListGadget->AddRefsItem(pRefItem->idBitmap, pRefItem->strItemName, pRefItem->strDetails);
+		CFileInfoList::CListRow oNewRow = m_lstctrlExternalResInfo.AddRow();
+		oNewRow.SetBitmap(pRefItem->idBitmap);
+		oNewRow.SetText(1, pRefItem->strItemName);
+		oNewRow.SetText(2, pRefItem->strDetails);
 
 		pRefItem = (RefItem*)ItemList.GetNext(pRefItem);
 	}
@@ -662,34 +680,40 @@ PORTNOTE("other", "Disabled bitmap effects")
 BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 {
 	Document*	WorkDoc = Document::GetSelected();
-	
+
 	if (UpdateFonts)
 	{
 		BeginSlowJob();
 		GadgetRedraw(_R(IDC_FINFO_REFSLIST), FALSE);	// Disable redraw while updating
-		CCustomList* pListGadget = CCustomList::GetGadget(GetReadWriteWindowID(), _R(IDC_FINFO_REFSLIST));
-		ERROR2IF(pListGadget == NULL, FALSE, "No list gadget?!");
 
-		INT32 iSelectedItem = pListGadget->GetSelectedItemIndex();
-		INT32 iScrollPos = pListGadget->GetScrollPos(SB_VERT);
-		pListGadget->DeleteAllItems();
+//		INT32 iSelectedItem = pListGadget->GetSelectedItemIndex();
+//		INT32 iScrollPos = pListGadget->GetScrollPos(SB_VERT);
+		
+		m_lstctrlExternalResInfo.Clear();
 
 		// Work out all the document based fonts again and recreate the drop down list
-		pListGadget->AddRefsItem(0, String(_R(IDS_FINFO_FONTREFS_NAMEHEADER)), String(_R(IDS_FINFO_FONTREFS_DETAILSHEADER)));
+		CFileInfoList::CListRow oNewRow = m_lstctrlExternalResInfo.AddRow();
+		oNewRow.SetText(1, String(_R(IDS_FINFO_FONTREFS_NAMEHEADER)));
+		oNewRow.SetText(2, String(_R(IDS_FINFO_FONTREFS_DETAILSHEADER)));
+		
 		UpdateFontList(WorkDoc);
 
 		// Show effects usage
-		pListGadget->AddRefsItem(0, String(_R(IDS_FINFO_EFFECTREFS_NAMEHEADER)), String(_R(IDS_FINFO_EFFECTREFS_DETAILSHEADER)));
+//		pListGadget->AddRefsItem(0, String(_R(IDS_FINFO_EFFECTREFS_NAMEHEADER)), String(_R(IDS_FINFO_EFFECTREFS_DETAILSHEADER)));
+		oNewRow = m_lstctrlExternalResInfo.AddRow();
+		oNewRow.SetText(1, String(_R(IDS_FINFO_EFFECTREFS_NAMEHEADER)));
+		oNewRow.SetText(2, String(_R(IDS_FINFO_EFFECTREFS_DETAILSHEADER)));
+		
 		UpdateEffectsList(WorkDoc);
 
-		pListGadget->SetSelectedItemIndex(iSelectedItem);
-		pListGadget->SetScrollPos(SB_VERT, iScrollPos, FALSE);
+//		pListGadget->SetSelectedItemIndex(iSelectedItem);
+//		pListGadget->SetScrollPos(SB_VERT, iScrollPos, FALSE);
 
 		GadgetRedraw(_R(IDC_FINFO_REFSLIST), TRUE);		// Enable redraw while updating
 		InvalidateGadget(_R(IDC_FINFO_REFSLIST));		// Force redraw now that we're done
 		EndSlowJob();
 	}
-	
+
 	// If there is no selected document then we want to set the fields to be blank 
 	if (WorkDoc == NULL)
 	{
@@ -994,19 +1018,24 @@ BOOL FileInfo::SetDocInfo(BOOL UpdateComment, BOOL UpdateFonts)
 	// Now do the creation and save times
 	time_t	TimeData;
 	TimeData = WorkDoc->GetCreationTime();
-	LocalEnvironment::SystemTimeToString(&String, &TimeData);
-	LocalEnvironment::SystemDateToString(&String2, &TimeData);
-	String += _T("  ");
-	String += String2;
+			
+	String = asctime(localtime(&TimeData));
+	
+//	LocalEnvironment::SystemTimeToString(&String, &TimeData);
+//	LocalEnvironment::SystemDateToString(&String2, &TimeData);
+//	String += _T("  ");
+//	String += String2;
 	UpdateStringGadgetValue(_R(IDC_FILEINFO_CREATIONDATE), &String);
 
 	TimeData = WorkDoc->GetLastSaveTime();
 	if (TimeData != 0)
 	{
-		LocalEnvironment::SystemTimeToString(&String, &TimeData);
-		LocalEnvironment::SystemDateToString(&String2, &TimeData);
-		String += _T("  ");
-		String += String2;
+//		LocalEnvironment::SystemTimeToString(&String, &TimeData);
+//		LocalEnvironment::SystemDateToString(&String2, &TimeData);
+//		String += _T("  ");
+//		String += String2;
+		String = asctime(localtime(&TimeData));
+		
 		UpdateStringGadgetValue(_R(IDC_FILEINFO_LASTSAVEDATE), &String);
 	}
 	else
@@ -1199,6 +1228,7 @@ BOOL FileInfo::AddToSortedList(List& ItemList, UINT32 idBitmap, String_64& strIt
 	ERROR3("Why are we here?");
 	return FALSE;
 }
+
 
 
 

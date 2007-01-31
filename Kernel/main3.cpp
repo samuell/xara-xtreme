@@ -183,8 +183,9 @@ PORTNOTE("other","Removed a large amount of initialization")
 			XPEEditOp::Init() &&				// Init the XPE Edit operation
 			EditSelectionOp::Init() &&			// Init the "Edit Selection" op
 			KeyPress::Init() &&					// Init the key press system
-			FileInfo::Init() &&					// Init the document info dialogue
 #endif
+			FileInfo::Init() &&					// Init the document info dialogue
+
 			ArrangeAlignment::Init() &&			// Init the arrange alignment dialogue
 			OpAlign::Init() &&					// Init the align op
 #ifndef EXCLUDE_FROM_XARALX
@@ -307,4 +308,5 @@ PORTNOTE("other","Removed even more initialization")
 			TRUE
 			);
 }
+
 

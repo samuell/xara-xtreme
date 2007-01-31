@@ -81,7 +81,7 @@ libKernel_a_SOURCES = app.cpp arrows.cpp attr.cpp attraggl.cpp attrappl.cpp attr
 	xsepsops.cpp xarprefs.cpp printing.cpp prntview.cpp psrndrgn.cpp opimgset.cpp \
 	optsprin.cpp prnprefs.cpp rulers.cpp biasgdgt.cpp biasdlg.cpp prvwmenu.cpp \
 	ftfilter.cpp cxftree.cpp strlist.cpp selmedia.cpp brshname.cpp brushop.cpp \
-	brushdlg.cpp
+	brushdlg.cpp finfodlg.cpp
 
 
 AM_CXXFLAGS = $(XARAFLAGS)

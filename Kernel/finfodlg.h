@@ -101,6 +101,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 //#include "dialogop.h"  - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "fontbase.h"		// font manager and associated items
+#include "fileinfolist.h"
 
 #define OPTOKEN_FINFODLG _T("FileInfo")    
 
@@ -144,6 +145,8 @@ private:
 	static DocumentFontDropDown	*NameDropDown;
 	List BitmapList;
 	MonotonicTime timerSlowJob;
+	
+	CFileInfoList m_lstctrlExternalResInfo;
 }; 
 
 Node* StartTreeScan(Document* pDoc);

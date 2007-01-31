@@ -41,7 +41,7 @@ libwxOil_a_SOURCES = \
 	lddirect.cpp prncamvw.cpp prdlgctl.cpp psdc.cpp grndprnt.cpp printprg.cpp \
 	oilruler.cpp bitmapdropdown.cpp helptabs.cpp tmplmngr.cpp imgmgkft.cpp ppmfiltr.cpp \
 	bitmapgriddropdown.cpp griddropdown.cpp camdoctp.cpp \
-	resources.cpp
+	resources.cpp fileinfolist.cpp
 
 # Keep resources.cpp on a separate line as it is odd
 
@@ -53,4 +53,5 @@ XARALANGUAGE = @XARALANGUAGE@
 WXRC := ${if @WXRC@,@WXRC@,echo}
 
 RESOURCEDUMMY := ${if ${strip ${shell $(TOPDIR)/Scripts/build-resources.pl @BUILDRESFLAGS@ -t $(TOPDIR) -o . --version $(VERSION) -x $(XARALANGUAGE) -u $(USER) --wxrc "$(WXRC)" } }, ,${error "Resource build failed"}}
+
 

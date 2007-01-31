@@ -39,7 +39,8 @@
 			<label>Comment:</label>
 		</object>
 		<object class="wxTextCtrl" name="IDC_FILEINFO_COMMENT">
-			 <pos>5,192d</pos> <size>185,34d</size>
+			<pos>5,192d</pos> <size>185,34d</size>
+			<style>wxTE_MULTILINE</style>
 		</object>
 		<object class="wxStaticText" name="IDC_STATIC">
 			 <pos>5,93d</pos> <size>63,8d</size>
@@ -129,8 +130,9 @@
 			 <pos>5,115d</pos> <size>185,8d</size>
 			<label>External resources used by this document:</label>
 		</object>
-		<object class="wxListBox" name="IDC_FINFO_REFSLIST">
-			 <pos>5,124d</pos> <size>185,55d</size>
+		<object class="wxListCtrl" name="IDC_FINFO_REFSLIST">
+			<pos>5,124d</pos> <size>185,55d</size>
+			<style>wxLC_REPORT  | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxSIMPLE_BORDER</style>
 		</object>
 		<title>Document information</title>
 		<label>Document information</label>
