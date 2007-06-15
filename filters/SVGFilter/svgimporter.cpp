@@ -1515,6 +1515,19 @@ Style SVGImporter::ParseStyle(xmlNodePtr cur, const Transformation& trans, bool 
 		style.SetStrokeWidth((INT32)fWidth);
 	}
 
+	sValue = GetStringProperty(cur, "stroke-linejoin");
+	if (!sValue.IsEmpty()) {
+		if(sValue.CmpNoCase(_T("miter"))==0) {
+			style.SetStrokeLineJoin(MitreJoin);
+		}
+		else if(sValue.CmpNoCase(_T("bevel"))==0) {
+			style.SetStrokeLineJoin(BevelledJoin);
+		}
+		else if(sValue.CmpNoCase(_T("round"))==0) {
+			style.SetStrokeLineJoin(RoundJoin);
+		}
+	}
+
 	if (IsPropertyDefined(cur, "opacity")) {
 		double fOpacity = GetClampedDoubleProperty(cur, "opacity");
 		style.SetOpacity(fOpacity);

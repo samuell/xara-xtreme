@@ -974,6 +974,29 @@ bool XARGenerator::OutputStyles(const Style& style, const Transformation& trans,
 		ok = m_pExporter->WriteRecord(&Rec);
 	}
 
+	if (witch & STYLE_STROKE_LINEJOIN && style.IsStrokeLineJoinDefined()) {
+		JointType jt=style.GetStrokeLineJoin();
+		Rec.Reinit(TAG_JOINSTYLE, TAG_JOINSTYLE_SIZE);
+		ok = Rec.WriteBYTE(jt);
+		ok = m_pExporter->WriteRecord(&Rec);
+
+#if SVGDEBUG
+		switch(jt)
+		{
+			case MitreJoin:
+				svgtrace(DBGTRACE_STYLES, "stroke join mitre\n");
+			break;
+			case BevelledJoin:
+				svgtrace(DBGTRACE_STYLES, "stroke join bevel\n");
+			break;
+			case RoundJoin:
+				svgtrace(DBGTRACE_STYLES, "stroke join round\n");
+			break;
+		}
+#endif
+
+	}
+
 	if (witch & STYLE_STROKE_OPACITY && style.IsStrokeOpacityDefined()) {
 		double opacity = style.GetStrokeOpacity();
 		if (opacity < 1.0) {

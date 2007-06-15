@@ -207,6 +207,7 @@ public:
 		m_strokeColour = wxColour(0,0,0);
 		m_strokeOpacity = 1.0;
 		m_strokeWidth = 1;
+		m_strokeLineJoin = MitreJoin;
 		m_strokeGradient = NULL;
 		m_opacity = 1.0;
 		m_stopOffset = 0.0;
@@ -228,6 +229,7 @@ public:
 		m_strokeColour = copy.m_strokeColour;
 		m_strokeOpacity = copy.m_strokeOpacity;
 		m_strokeWidth = copy.m_strokeWidth;
+		m_strokeLineJoin = copy.m_strokeLineJoin;
 		m_strokeGradient = copy.m_strokeGradient;
 		m_opacity = copy.m_opacity;
 		m_stopOffset = copy.m_stopOffset;
@@ -284,6 +286,13 @@ public:
 		m_strokeWidth = width;
 	}
 
+	bool IsStrokeLineJoinDefined() const { return m_defined & STYLE_STROKE_LINEJOIN; }
+	JointType GetStrokeLineJoin() const { return m_strokeLineJoin; }
+	void SetStrokeLineJoin(JointType jt ) {
+		m_defined |= STYLE_STROKE_LINEJOIN;
+		m_strokeLineJoin = jt;
+	}
+
 	bool IsStrokeGradientDefined() const { return m_defined & STYLE_STROKE_GRADIENT; }
 	Gradient* GetStrokeGradient() const { return m_strokeGradient; }
 	void SetStrokeGradient(Gradient* value) {
@@ -330,6 +339,7 @@ private:
 	wxColour	m_strokeColour;
 	double		m_strokeOpacity;
 	INT32		m_strokeWidth;
+	JointType	m_strokeLineJoin;
 	Gradient*	m_strokeGradient;
 	double		m_opacity;
 	double		m_stopOffset;
