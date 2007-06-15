@@ -474,7 +474,7 @@ MsgResult FreeHandInfoBarOp::Message(Msg* Message)
 		}
 
 		// if it is a stroke message then update our combo
-		if (Message->IsKindOf(CC_RUNTIME_CLASS(StrokeMsg)))
+		if (Message->IsKindOf(CC_RUNTIME_CLASS(StrokeMsg)) && ControlsExist && IsVisible())
 			SetStrokeComboFromSelection();
 
 		// likewise if it is a screen change message
@@ -2764,4 +2764,5 @@ void FreeHandInfoBarOp::UpdateState()
 
 
 }
+
 
