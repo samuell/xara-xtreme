@@ -127,7 +127,7 @@ public:
 	wxCamGridPopup(CGridDropDown* pDropDown, wxGridCombo* pCombo);
 	virtual ~wxCamGridPopup();
 
-	virtual void DrawItem(wxDC& dc, const wxRect& rect, int iItem, int iFlags);
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
 
 protected:
 	CGridDropDown* m_pDropDown;
@@ -188,11 +188,11 @@ protected:
 
 protected:		// Methods that must be overridden by derived classes
 
-	virtual void DrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags);
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
 
-	virtual wxRect PreDrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags);
-	virtual void   DrawItemCore(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags) = 0;
-	virtual void   PostDrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags);
+	virtual wxRect PreDrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
+	virtual void   DrawItemCore(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags) = 0;
+	virtual void   PostDrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
 
 	void SetListRedraw(BOOL Enable);	// Enables/disables redraw of the list (use while adding items)
 

@@ -2791,8 +2791,8 @@ void OpCreateNodeBitmap::DoWithParam(OpDescriptor* OpDesc, OpParam* pOpParam)
 		// no remainder, just expressed as division to make derivation clear)
 		FIXED16		pixHorz = NULL != pDocView ? pDocView->GetPixelWidth()  : FIXED16( 72000 / 96 );
 		FIXED16		pixVert = NULL != pDocView ? pDocView->GetPixelHeight() : FIXED16( 72000 / 96 );
-		const LONG HPixelSize = ( pixHorz + 0.5 ).MakeLong();	// Size of output pixel in millipoints
-		const LONG VPixelSize = ( pixVert + 0.5 ).MakeLong();	// Size of output pixel in millipoints
+		const INT32 HPixelSize = ( pixHorz + 0.5 ).MakeLong();	// Size of output pixel in millipoints
+		const INT32 VPixelSize = ( pixVert + 0.5 ).MakeLong();	// Size of output pixel in millipoints
 
 		// Make sure that this is snapped to a pixel grid
 		BoundsRect.lo.x = DropPos.x - ( Info.RecommendedWidth / 2 );

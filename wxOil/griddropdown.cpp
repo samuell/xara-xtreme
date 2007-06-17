@@ -147,11 +147,11 @@ Returns   : void
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] int	 iItem	- item index;
-            [in] int	 iFlags - additional flags (selected, highlighted, ...)
+            [in] INT32	 iItem	- item index;
+            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : Delegates the call to the control class.
 ******************************************************************************/
-void wxCamGridPopup::DrawItem(wxDC& dc, const wxRect& rect, int iItem, int iFlags)
+void wxCamGridPopup::DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
 {
 	if (m_pDropDown)
 		m_pDropDown->DrawItem(dc, rect, iItem, iFlags);
@@ -499,11 +499,11 @@ Returns   : void
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] int	 iItem	- item index;
-            [in] int	 iFlags - additional flags (selected, highlighted, ...)
+            [in] INT32	 iItem	- item index;
+            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : 
 ******************************************************************************/
-void CGridDropDown::DrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags)
+void CGridDropDown::DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
 {
 	// Erase the background first.
 	static wxPen   penBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -539,12 +539,12 @@ Returns   : wxRect - the area where the item should be drawn.
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] int	 iItem	- item index;
-            [in] int	 iFlags - additional flags (selected, highlighted, ...)
+            [in] INT32	 iItem	- item index;
+            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : The return rect specifies where the item should be drawn. It can be smaller
 			if we draw a frame and want the item itself to be drawn inside this frame.
 ******************************************************************************/
-wxRect CGridDropDown::PreDrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags)
+wxRect CGridDropDown::PreDrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
 {
 	// Shouldn't do anything if the combobox itself is drawn.
 	if (iFlags & wxGridComboPopup::keComboControl)
@@ -577,11 +577,11 @@ Returns   : void
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] int	 iItem	- item index;
-            [in] int	 iFlags - additional flags (selected, highlighted, ...)
+            [in] INT32	 iItem	- item index;
+            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : Here we highlight the selected item.
 ******************************************************************************/
-void   CGridDropDown::PostDrawItem(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags)
+void   CGridDropDown::PostDrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
 {
 	// Shouldn't do anything if the combobox itself is drawn - no reason
 	// to draw selection in the combobox itslef.

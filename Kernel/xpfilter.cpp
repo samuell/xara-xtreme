@@ -719,7 +719,7 @@ BOOL PluginNativeFilter::DoConversionPassN(CapabilityTree* pPlugCaps, INT32 Conv
 
 >	BOOL PluginNativeFilter::DoBitmapResamplePass(CapabilityTree* pPlugCaps)
 
-	Author:		Gerry
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	04/08/2006
 
 	Inputs:		pPlugCaps	- pointer to a CapabilityTree

@@ -475,7 +475,7 @@ MsgResult CBiasGainDlg::Message(Msg* Message)
 				{
 //					WORD  DropdownListIndex;
 //					GetValueIndex( _R(IDC_BIASGAINCOMBO), &DropdownListIndex );
-					int iSelected = m_pobddStandardProfile->GetSelected();
+					INT32 iSelected = m_pobddStandardProfile->GetSelected();
 					if (iSelected == -1)
 						break;
 						

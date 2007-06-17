@@ -318,7 +318,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 		TRACEUSER("luke", _T("CCamApp::FilterEvent focus to %s"), pEventObject->GetClassInfo()->GetClassName());
 /*		if (pEventObject->IsKindOf(CLASSINFO(CRenderWnd)))
 		{
-			int i=1;
+			INT32 i=1;
 		} */
 	}
 
@@ -1337,7 +1337,7 @@ bool CCamApp::HandleKeyPress( wxKeyEvent& event )
 
 >	void CCamApp::OnFileOpen()
 
-	Author:		Rik
+	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/2/95
 	Purpose:	Displays the File Open dialog and opens whichever file was selected.
 
@@ -1347,7 +1347,7 @@ void CCamApp::OnFileOpen()
 {
 #ifndef EXCLUDE_FROM_RALPH
 	// Build the list of filters
-	int NativeFilterPos = 0;
+	INT32 NativeFilterPos = 0;
 	TCHAR* pFilters = OpenFileDialog::BuildFilterString(&NativeFilterPos);
 
 	TRACEUSER( "luke", _T("Filters = %s"), pFilters );
@@ -1429,7 +1429,7 @@ PORTNOTE( "other" ,"Removed open preview clean-up" )
 
 >	virtual void CCamApp::AddToRecentFileList(LPCTSTR pPathName)
 
-	Author:		Rik
+	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	8/5/95
 	Inputs:		pPathName - the full path name of the file to add to the list
 	Purpose:	Adds the file to the recent file list
@@ -1449,7 +1449,7 @@ void CCamApp::AddToRecentFileList(LPCTSTR pPathName)
 /********************************************************************************************
 >	virtual CDocument* CCamApp::OpenDocumentFile(LPCTSTR lpcszFileName)
 
-	Author:		JustinF
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	4/7/95
 	Inputs:		lpcszFileName				path to the document file to load
 	Returns:	A pointer to the MFC CDocument object that manages the opened file, or
@@ -1530,7 +1530,7 @@ wxDocument* CCamApp::OpenDocumentFile( PCTSTR lpcszFileName )
 				{
 					// If the document is modified then we may have to ask the user what they
 					// want to do, ie. revert to original, load copy, do nothing.
-					int nResult;
+					INT32 nResult;
 					if (pOpenDocument->IsModified())
 					{
 						// OK, we have a modified document.  Run the message box to find out what
@@ -1637,7 +1637,7 @@ PerformLoad:
 
 >	BOOL CCamApp::MakeDocumentNative(CDocument* pDoc, PathName* Path)
 
-	Author:		Rik
+	Author:		Rik_Heywood (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	14/2/95
 	Inputs:		pDoc - The document to test and change
 				Path - the path of the original document name
@@ -1666,7 +1666,7 @@ BOOL CCamApp::MakeDocumentNative( wxDocument* pDoc, PathName* Path )
 	Extension.toLower();
 	OldExtension.toLower();
 #if NEW_NATIVE_FILTER
-	String_256 NewExtension(IDS_DEFAULT_EXTENSION);
+	String_256 NewExtension(_R(IDS_DEFAULT_EXTENSION));
 	NewExtension.toLower();
 	// see if the extension is .xar or .cxn
 	if (Extension != OldExtension && OldExtension != NewExtension)
@@ -2781,7 +2781,7 @@ public:
 
 		while( strPath != _T("") )
 		{
-			int			ordSep = strPath.Find( _T(':') );
+			INT32			ordSep = strPath.Find( _T(':') );
 			if( -1 == ordSep )
 			{
 				if( strPath.Len() > 0 )
@@ -2815,7 +2815,7 @@ public:
 /*********************************************************************************************
 >	static void FillMediaAppMap( SelMediaDlgParam::CMediaAppList* pMapMediaApp )
 
-	Author:		Luke_Hart <luke.hartΩxara.com>
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com> <luke.hartΩxara.com>
 	Created:	23/08/06
 	Inputs:		pMapMediaApp - A map to contain all the media apps avaiable on system
 	Outputs:	-
@@ -2875,7 +2875,7 @@ static void FillMediaAppMap( SelMediaDlgParam::CMediaAppList* pMapMediaApp )
 /*********************************************************************************************
 >	bool CCamApp::LaunchMediaApp( const wxString& strUrl )
 
-	Author:		Luke_Hart <luke.hartΩxara.com>
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com> <luke.hartΩxara.com>
 	Created:	23/08/06
 	Inputs:		strUrl - The path to the file conbtaining the movie to play (could even be 
 							web address)
@@ -2954,7 +2954,7 @@ bool CCamApp::LaunchMediaApp( const wxString& strUrl )
 /*********************************************************************************************
 >	bool CCamApp::SelectMediaApp()
 
-	Author:		Luke_Hart <luke.hartΩxara.com>
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com> <luke.hartΩxara.com>
 	Created:	23/08/06
 	Inputs:		-
 	Outputs:	-

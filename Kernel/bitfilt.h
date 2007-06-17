@@ -522,9 +522,9 @@ private:
 
 /********************************************************************************************
 
->	inline LONG GridLock(LONG Position, LONG GridSize)
+>	inline INT32 GridLock(INT32 Position, INT32 GridSize)
 
-	Author:		Neville from Jason code in coldlog.cpp
+	Author:		Neville_Humphrys (Xara Group Ltd) <camelotdev@xara.com> from Jason code in coldlog.cpp
 	Created:	22/9/97
 	Inputs:		Position - The X/Y position, in millipoints
 				GridSize - the size of the grid to lock to, in millipoints

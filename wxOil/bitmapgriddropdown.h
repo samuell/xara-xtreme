@@ -348,7 +348,7 @@ public:
 protected:
 	CBGDDItemInfo* GetItemData(INT32 iItem);
 
-	virtual void DrawItemCore(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags);
+	virtual void DrawItemCore(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
 
 	wxBitmap*	  PreviewBrush(AttrBrushType* pabtBrush);
 	KernelBitmap* PreviewStroke(LineAttrItem* plaiStroke);

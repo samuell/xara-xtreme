@@ -5612,7 +5612,7 @@ KernelBitmap *AttrBitmapFill::EnumerateBitmaps(UINT32 Count)
 
 >	BOOL AttrBitmapFill::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNewBitmap)
 
-	Author:		Gerry
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	07/08/2006
 
 	Inputs:		pOrigBitmap	- pointer to a KernelBitmap
@@ -5644,7 +5644,7 @@ BOOL AttrBitmapFill::ReplaceBitmap(KernelBitmap* pOrigBitmap, KernelBitmap* pNew
 
 >	double AttrBitmapFill::GetEffectiveBitmapMinDPI(KernelBitmap* pBitmap)
 
-	Author:		Gerry
+	Author:		Gerry_Iles (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	07/08/2006
 
 	Inputs:		pBitmap		- pointer to a KernelBitmap

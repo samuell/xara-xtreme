@@ -646,9 +646,9 @@ void OpZoom::ZoomOut(Spread* pZoomSpread, const DocCoord& dcZoomPos, BOOL fEndOp
 
 
 /********************************************************************************************
->	void OpZoom::ZoomTo(const WorkCoord& wcZoom, int nPercent, BOOL fEndOp = TRUE)
+>	void OpZoom::ZoomTo(const WorkCoord& wcZoom, INT32 nPercent, BOOL fEndOp = TRUE)
 
-	Author:		JustinF
+	Author:		Justin_Flude (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	23/4/95
 	Inputs:		wcZoom			the point to zoom in at
 				fEndOp			whether to end this operation after this zoom
@@ -656,7 +656,7 @@ void OpZoom::ZoomOut(Spread* pZoomSpread, const DocCoord& dcZoomPos, BOOL fEndOp
 				will call the End() function for this operation afterwards.
 ********************************************************************************************/
 
-void OpZoom::ZoomTo(const WorkCoord& wcZoom, int nPercent, BOOL fEndOp)
+void OpZoom::ZoomTo(const WorkCoord& wcZoom, INT32 nPercent, BOOL fEndOp)
 {
 	// Find out the current view.
 	DocView* pDocView = DocView::GetCurrent();
@@ -1192,7 +1192,7 @@ BOOL OpZoomTo100::Init()
 
 >	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		Description = ptr to place description of why this op can't happen
 				pOpDesc     = ptr to the Op Desc associated with this op
@@ -1212,7 +1212,7 @@ OpState OpZoomTo100::GetState(String_256* Description, OpDescriptor*)
 
 >	virtual void OpZoomToo100::Do(OpDescriptor* pOpDesc)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		pointer to the OpZoomDescriptor being invoked
 	Purpose:	Calls the base class function to zoom to 100%!
@@ -1259,7 +1259,7 @@ BOOL OpZoomTo200::Init()
 
 >	static OpState OpZoomTo200::GetState(String_256* Description, OpDescriptor*)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		Description = ptr to place description of why this op can't happen
 				pOpDesc     = ptr to the Op Desc associated with this op
@@ -1279,7 +1279,7 @@ OpState OpZoomTo200::GetState(String_256* Description, OpDescriptor*)
 
 >	virtual void OpZoomTo200::Do(OpDescriptor* pOpDesc)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		pointer to the OpZoomDescriptor being invoked
 	Purpose:	Calls the base class function to zoom to 200%!
@@ -1327,7 +1327,7 @@ BOOL OpZoomTo300::Init()
 
 >	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		Description = ptr to place description of why this op can't happen
 				pOpDesc     = ptr to the Op Desc associated with this op
@@ -1347,7 +1347,7 @@ OpState OpZoomTo300::GetState(String_256* Description, OpDescriptor*)
 
 >	virtual void OpZoomTo300::Do(OpDescriptor* pOpDesc)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		pointer to the OpZoomDescriptor being invoked
 	Purpose:	Calls the base class function to zoom to 300%!
@@ -1395,7 +1395,7 @@ BOOL OpZoomTo400::Init()
 
 >	static OpState OpZoomToo100::GetState(String_256* Description, OpDescriptor*)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		Description = ptr to place description of why this op can't happen
 				pOpDesc     = ptr to the Op Desc associated with this op
@@ -1415,7 +1415,7 @@ OpState OpZoomTo400::GetState(String_256* Description, OpDescriptor*)
 
 >	virtual void OpZoomToo100::Do(OpDescriptor* pOpDesc)
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	18/09/06
 	Inputs:		pointer to the OpZoomDescriptor being invoked
 	Purpose:	Calls the base class function to zoom to 400%!

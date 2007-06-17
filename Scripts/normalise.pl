@@ -458,7 +458,7 @@ sub process
 			my $token="INT32";
 			printf STDERR "$ilab:$inum token $bit, new='%s'\n",$new if ($verbose>3);
 			if ( ( $new =~ /\b(how|so|bytes of the|entries in the|deg\. in a|too|such a|byte|bytes|rather a|very|Created:|elements|great|it.s a|go the|see|1k|\.one long|in the|bits|short or|short, or|as|to get the|digits|\. Another|To cut a|up of a single|characters|one element|which is BufferSize|fairly|entries|rename the|a power of|REM 10|don.t know the|if file has a|4 or 5|Sorry about the|characters are considered illegal when converting|Two dummy|Find the first bit of the|attribute node. from a|accomodate a) $/i ) ||
-			     ( $bits[$bit+1] =~ /^.(story|winded|running|enough|grad table|, but|as possible|narrow boxes|while ago|it took me|life operation|ASCII string|before this|as that|last[,()]s+|time to|filename,\s+|\s+filename of|filename for|one. already exists|way away|names,s+|form, and|time to|filename version|ago|gone\. Returns|directory names|life time|time in the|way behind|pointer|time, there|mother of an extension|is . 32 bits on|and setting BIT_BUF_SIZE|\w+ = wx\w+)\b/i ) ||
+			     ( $bits[$bit+1] =~ /^.(last|story|winded|running|enough|grad table|, but|as possible|narrow boxes|while ago|it took me|life operation|ASCII string|before this|as that|last[,()]s+|time to|filename,\s+|\s+filename of|filename for|one. already exists|way away|names,s+|form, and|time to|filename version|ago|gone\. Returns|directory names|life time|time in the|way behind|pointer|time, there|mother of an extension|is . 32 bits on|and setting BIT_BUF_SIZE|\w+ = wx\w+)\b/i ) ||
 			     ($bits[$bit] =~ /^s+$/)
 			   )
 			{

@@ -713,11 +713,11 @@ Returns   : void
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] int	 iItem	- item index;
-            [in] int	 iFlags - additional flags (selected, highlighted, ...)
+            [in] INT32	 iItem	- item index;
+            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : 
 ******************************************************************************/
-void CBitmapGridDropDown::DrawItemCore(wxDC& dc, const wxRect& rect, int iItem, INT32 iFlags)
+void CBitmapGridDropDown::DrawItemCore(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
 {
 	CBGDDItemInfo* pItemData = GetItemData(iItem);
 

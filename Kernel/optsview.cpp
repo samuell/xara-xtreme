@@ -1120,7 +1120,7 @@ TRACEUSER( "Neville", _T("set colour editor list item '%d'\n"),SelectedIndex);
 	ERROR2IF(!ReadOk,FALSE,_R(IDE_OPTS_READPREF_VIEW));
 
 	// Set the force JPEG DPI flag
-	pPrefsDlg->SetLongGadgetValue( _R(IDC_JPEG_96DPI_CHECK), LONG(JPEGImportFilter::GetImportAt96dpi()) );
+	pPrefsDlg->SetLongGadgetValue( _R(IDC_JPEG_96DPI_CHECK), INT32(JPEGImportFilter::GetImportAt96dpi()) );
 
 	// Section = Window
 

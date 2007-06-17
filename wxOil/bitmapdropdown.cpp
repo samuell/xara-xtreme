@@ -212,19 +212,19 @@ Author    : Mikhail Tatarnikov
 Purpose   : Calculates the dropdown list size
 Returns   : wxSize - the popup list size.
 Exceptions: 
-Parameters: [in] int minWidth   - minimum width; in the current implemetation it's the 
+Parameters: [in] INT32 minWidth   - minimum width; in the current implemetation it's the 
 								  size of combobox control itself. In this function we
 								  ignore it;
-            [in] int prefHeight - the preffered height;
-            [in] int maxHeight  - maximum allowed height.
+            [in] INT32 prefHeight - the preffered height;
+            [in] INT32 maxHeight  - maximum allowed height.
 Notes     : 
 ******************************************************************************/
-wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, int maxHeight)
+wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(INT32 minWidth, INT32 prefHeight, INT32 maxHeight)
 {
 	// We should ignore the min width, since it's usually the size of the combobox
 	// (we can have a dropdown with width less than the control).
 	
-    int  height			= 250;
+    INT32  height			= 250;
     BOOL bNeedScrollbar = FALSE;
 
     if ( m_strings.GetCount() )
@@ -235,7 +235,7 @@ wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, i
         if ( height > maxHeight )
             height = maxHeight;
 
-        int totalHeight = GetTotalHeight(); // + 3;
+        INT32 totalHeight = GetTotalHeight(); // + 3;
         if ( height >= totalHeight )
         {
             height = totalHeight;
@@ -245,8 +245,8 @@ wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, i
             // Adjust height to a multiple of the height of the first item
             // NB: Calculations that take variable height into account
             //     are unnecessary.
-            int fih = GetLineHeight(0);
-            int shown = height/fih;
+            INT32 fih = GetLineHeight(0);
+            INT32 shown = height/fih;
             height = shown * fih;
             
             bNeedScrollbar = TRUE;
@@ -256,10 +256,10 @@ wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int minWidth, int prefHeight, i
         height = 50;
 
     // Take scrollbar into account in width calculations
-    int iWidth = GetWidestItemWidth();
+    INT32 iWidth = GetWidestItemWidth();
 	if (bNeedScrollbar)
     	iWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-//	int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+//	INT32 widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     
     return wxSize(iWidth, height+2);
 }

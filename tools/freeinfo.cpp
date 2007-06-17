@@ -819,7 +819,7 @@ void FreeHandInfoBarOp::HandleStrokeSelectChange()
 		return;
 
 	// Someone selected a new brush
-	int Index = m_bgddStrokes.GetSelected();
+	INT32 Index = m_bgddStrokes.GetSelected();
 
 
 	// what we are going to do is apply a stroke attribute and a variable width attribute at the 

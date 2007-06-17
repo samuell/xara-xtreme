@@ -133,7 +133,7 @@ public:
 
 	// Calculates the dropdown size. We need to override it to allow the dropdown list to have smaller
 	// width that the cobobox itself (in  case we have images only).
-    virtual wxSize GetAdjustedSize(int minWidth, int prefHeight, int maxHeight);
+    virtual wxSize GetAdjustedSize(INT32 minWidth, INT32 prefHeight, INT32 maxHeight);
 };
 
 

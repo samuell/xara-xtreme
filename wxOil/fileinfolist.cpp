@@ -271,7 +271,7 @@ Notes     :
 void CFileInfoList::AddColumn(String_64 strHeader, INT32 iWidth, INT32 iFormat)
 {
 	wxListCtrl* plstList = GetListCtrl();
-	int iColNum = plstList->GetColumnCount();
+	INT32 iColNum = plstList->GetColumnCount();
 	plstList->InsertColumn(iColNum, strHeader, iFormat, iWidth);
 }
 
@@ -345,7 +345,7 @@ void CFileInfoList::SetRowBitmap(INT32 iRow, UINT32 uiBitmapID)
 		plstList->AssignImageList(pilImageList, m_ciImageListType);
 	}
 	
-	int iBitmapIndex = pilImageList->Add(*pBitmap);
+	INT32 iBitmapIndex = pilImageList->Add(*pBitmap);
 	
 	// Finally set the item information.
 	plstList->SetItem(iRow, 0, _T(""), iBitmapIndex);

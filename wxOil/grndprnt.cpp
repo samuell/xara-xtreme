@@ -566,7 +566,7 @@ PORTNOTE("printing", "Attempt to use StaticPlotBitmap instead of StretchDIBits")
 #else
 	INT32 fwidth = clip.GetWidth();
 	INT32 fheight = clip.GetHeight();
-    wxBitmap bitmap( (int)fwidth, (int)fheight, 24 );
+    wxBitmap bitmap( (INT32)fwidth, (INT32)fheight, 24 );
     wxMemoryDC memDC;
     memDC.SelectObject(bitmap);
     memDC.Blit(0, 0, fwidth, fheight, &MemDC, 0, 0);

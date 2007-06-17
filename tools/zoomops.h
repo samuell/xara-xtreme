@@ -194,7 +194,7 @@ public:
 	void ZoomIn(const WorkCoord& wcZoom, BOOL fEndOp = TRUE);
 	void ZoomIn(Spread* pZoomSpread, const DocCoord& dcZoomPos, BOOL fEndOp = TRUE);
 
-	void ZoomTo( const WorkCoord& wcZoom, int Percent, BOOL fEndOp = TRUE);
+	void ZoomTo( const WorkCoord& wcZoom, INT32 Percent, BOOL fEndOp = TRUE);
 
 	// Zoom so that the given rectangle within the current view completely fills the
 	// current view's view-port.
@@ -301,7 +301,7 @@ private:
 /********************************************************************************************
 >	class OpZoomTo100 : public OpZoom
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/09/06
 	Purpose:	This op has been written so that we can use the NumPad Plus key to fire off
 				a zoom in operation. We can`t use the zoom op directly as the hotkey code
@@ -327,7 +327,7 @@ private:
 /********************************************************************************************
 >	class OpZoomTo200 : public OpZoom
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/09/06
 	Purpose:	This op has been written so that we can use the NumPad Plus key to fire off
 				a zoom in operation. We can`t use the zoom op directly as the hotkey code
@@ -353,7 +353,7 @@ private:
 /********************************************************************************************
 >	class OpZoomTo300 : public OpZoom
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/09/06
 	Purpose:	This op has been written so that we can use the NumPad Plus key to fire off
 				a zoom in operation. We can`t use the zoom op directly as the hotkey code
@@ -379,7 +379,7 @@ private:
 /********************************************************************************************
 >	class OpZoomTo400 : public OpZoom
 
-	Author:		Luke Hart
+	Author:		Luke_Hart (Xara Group Ltd) <camelotdev@xara.com>
 	Created:	15/09/06
 	Purpose:	This op has been written so that we can use the NumPad Plus key to fire off
 				a zoom in operation. We can`t use the zoom op directly as the hotkey code
