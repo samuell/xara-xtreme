@@ -129,14 +129,14 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 #if defined(USE_WXAUI)
 
-class CamFrameManager : public wxFrameManager
+class CamFrameManager : public wxAuiManager
 {
 private:
 	DECLARE_CLASS( CamFrameManager )
 
 public:
 	CamFrameManager(wxFrame* frame = NULL, unsigned int /*TYPENOTE: Correct*/ flags = wxAUI_MGR_DEFAULT)
-		   : wxFrameManager(frame, flags)
+		   : wxAuiManager(frame, flags)
 	{
 	}
 
@@ -154,7 +154,7 @@ public:
 		event.Skip();
 	}
 
-	void OnPaneClose(wxFrameManagerEvent& event)
+	void OnPaneClose(wxAuiManagerEvent& event)
 	{
 		// For now just pretend cancel was clicked. This is sufficient to fool
 		// dialogmanager into closing the window it would seem
@@ -174,11 +174,11 @@ public:
 	DECLARE_EVENT_TABLE()
 };
 
-IMPLEMENT_CLASS( CamFrameManager, wxFrameManager )
-BEGIN_EVENT_TABLE( CamFrameManager, wxFrameManager )
+IMPLEMENT_CLASS( CamFrameManager, wxAuiManager )
+BEGIN_EVENT_TABLE( CamFrameManager, wxAuiManager )
 	EVT_SIZE(CamFrameManager::OnSize)
 	EVT_MOVE(CamFrameManager::OnMove)
-	EVT_AUI_PANECLOSE(CamFrameManager::OnPaneClose)
+	EVT_AUI_PANE_CLOSE(CamFrameManager::OnPaneClose)
 END_EVENT_TABLE()
 
 #endif
@@ -386,7 +386,7 @@ BOOL CCamFrame::CreateToolbars()
 	{
 		pColourBar->Create(this, 12345);
 
-		wxPaneInfo paneinfo;
+		wxAuiPaneInfo paneinfo;
 		paneinfo.BottomDockable().Bottom();
 		paneinfo.CaptionVisible(false);
 		m_pFrameManager->AddPane(pColourBar, paneinfo);

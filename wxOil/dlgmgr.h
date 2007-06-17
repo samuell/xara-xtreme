@@ -821,8 +821,8 @@ protected:
 
 	static void EnsurePanePreferenceDeclared(wxString key);
 	static void InitPaneInfoHash();
-	static void LoadPaneInfo(wxString key, wxPaneInfo &paneinfo);
-	static void SavePaneInfo(wxString key, wxPaneInfo &paneinfo);
+	static void LoadPaneInfo(wxString key, wxAuiPaneInfo &paneinfo);
+	static void SavePaneInfo(wxString key, wxAuiPaneInfo &paneinfo);
 	static IdToSerializedPaneInfo * s_pPaneInfoHash;
 
 public:

@@ -15,6 +15,9 @@
 #include <wx/defs.h>
 //#include <wx/grid.h>
 #include <vector>
+#include <wx/scrolwin.h>
+#include <wx/timer.h>
+#include <wx/settings.h>
 
 #if wxUSE_COMBOCTRL
 #include <wx/combo.h>

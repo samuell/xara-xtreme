@@ -28,21 +28,21 @@
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__ )
 #include "wx/minifram.h"
-#define wxFloatingPaneBaseClass wxMiniFrame
+#define wxAuiFloatingFrameBaseClass wxMiniFrame
 #else
-#define wxFloatingPaneBaseClass wxFrame
+#define wxAuiFloatingFrameBaseClass wxFrame
 #endif
 
-class WXDLLIMPEXP_AUI wxFloatingPane : public wxFloatingPaneBaseClass
+class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {
 public:
-    wxFloatingPane(wxWindow* parent,
-                   wxFrameManager* owner_mgr,
-                   const wxPaneInfo& pane,
+    wxAuiFloatingFrame(wxWindow* parent,
+                   wxAuiManager* owner_mgr,
+                   const wxAuiPaneInfo& pane,
                    wxWindowID id = wxID_ANY
                    );
-    ~wxFloatingPane();
-    void SetPaneWindow(const wxPaneInfo& pane);
+    ~wxAuiFloatingFrame();
+    void SetPaneWindow(const wxAuiPaneInfo& pane);
 private:
     void OnSize(wxSizeEvent& event);
     void OnClose(wxCloseEvent& event);
@@ -59,12 +59,12 @@ private:
     wxRect m_last_rect;
     wxSize m_last_size;
 
-    wxFrameManager* m_owner_mgr;
-    wxFrameManager m_mgr;
+    wxAuiManager* m_owner_mgr;
+    wxAuiManager m_mgr;
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxFloatingPaneBaseClass)
+    DECLARE_CLASS(wxAuiFloatingFrameBaseClass)
 #endif // SWIG
 };
 

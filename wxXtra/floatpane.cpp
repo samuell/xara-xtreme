@@ -23,13 +23,13 @@
 
 #if wxXTRA_AUI
 
-IMPLEMENT_CLASS( wxFloatingPane, wxFloatingPaneBaseClass )
+IMPLEMENT_CLASS( wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass )
 
-wxFloatingPane::wxFloatingPane(wxWindow* parent,
-                wxFrameManager* owner_mgr,
-                const wxPaneInfo& pane,
+wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
+                wxAuiManager* owner_mgr,
+                const wxAuiPaneInfo& pane,
                 wxWindowID id /*= wxID_ANY*/)
-                : wxFloatingPaneBaseClass(parent, id, wxEmptyString,
+                : wxAuiFloatingFrameBaseClass(parent, id, wxEmptyString,
                         pane.floating_pos, pane.floating_size,
                         wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
                         (pane.HasCloseButton()?wxCLOSE_BOX:0) |
@@ -45,17 +45,17 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
-wxFloatingPane::~wxFloatingPane()
+wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
     m_mgr.UnInit();
 }
 
-void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
+void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 {
     m_pane_window = pane.window;
     m_pane_window->Reparent(this);
 
-    wxPaneInfo contained_pane = pane;
+    wxAuiPaneInfo contained_pane = pane;
     contained_pane.Dock().Center().Show().
                     CaptionVisible(false).
                     PaneBorder(false).
@@ -102,23 +102,23 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
     }
 }
 
-void wxFloatingPane::OnSize(wxSizeEvent& event)
+void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
 {
     m_owner_mgr->OnFloatingPaneResized(m_pane_window, event.GetSize());
 }
 
-void wxFloatingPane::OnClose(wxCloseEvent& evt)
+void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 {
     m_owner_mgr->OnFloatingPaneClosed(m_pane_window, evt);
     if (!evt.GetVeto())
         Destroy();
 }
 
-void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
+void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 {
 #ifdef __WXGTK__
     // On wxGTK 2.6 and 2.7 for some unknown reason, wxSizeEvents are not
-    // emitted for wxFloatingPanes when they are manually resized.
+    // emitted for wxAuiFloatingFrames when they are manually resized.
     // See Bug #1528554.
     // However, it does (fortunately) wrongly emit wxMoveEvent in this scenario.
     // So we having on that to update the floating pane size - let's hope noone
@@ -156,7 +156,7 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
     OnMoving(event.GetRect());
 }
 
-void wxFloatingPane::OnIdle(wxIdleEvent& event)
+void wxAuiFloatingFrame::OnIdle(wxIdleEvent& event)
 {
     if (m_moving)
     {
@@ -172,25 +172,25 @@ void wxFloatingPane::OnIdle(wxIdleEvent& event)
     }
 }
 
-void wxFloatingPane::OnMoveStart()
+void wxAuiFloatingFrame::OnMoveStart()
 {
     // notify the owner manager that the pane has started to move
     m_owner_mgr->OnFloatingPaneMoveStart(m_pane_window);
 }
 
-void wxFloatingPane::OnMoving(const wxRect& WXUNUSED(window_rect))
+void wxAuiFloatingFrame::OnMoving(const wxRect& WXUNUSED(window_rect))
 {
     // notify the owner manager that the pane is moving
     m_owner_mgr->OnFloatingPaneMoving(m_pane_window);
 }
 
-void wxFloatingPane::OnMoveFinished()
+void wxAuiFloatingFrame::OnMoveFinished()
 {
     // notify the owner manager that the pane has finished moving
     m_owner_mgr->OnFloatingPaneMoved(m_pane_window);
 }
 
-void wxFloatingPane::OnActivate(wxActivateEvent& event)
+void wxAuiFloatingFrame::OnActivate(wxActivateEvent& event)
 {
     if (event.GetActive())
     {
@@ -202,19 +202,19 @@ void wxFloatingPane::OnActivate(wxActivateEvent& event)
 // (independant of having a wxMouseEvent handy) - utimately a better
 // mechanism for this should be found (possibly by adding the
 // functionality to wxWidgets itself)
-bool wxFloatingPane::isMouseDown()
+bool wxAuiFloatingFrame::isMouseDown()
 {
     return wxGetMouseState().LeftDown();
 }
 
 
-BEGIN_EVENT_TABLE(wxFloatingPane, wxFloatingPaneBaseClass)
-    EVT_SIZE(wxFloatingPane::OnSize)
-    EVT_MOVE(wxFloatingPane::OnMoveEvent)
-    EVT_MOVING(wxFloatingPane::OnMoveEvent)
-    EVT_CLOSE(wxFloatingPane::OnClose)
-    EVT_IDLE(wxFloatingPane::OnIdle)
-    EVT_ACTIVATE(wxFloatingPane::OnActivate)
+BEGIN_EVENT_TABLE(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
+    EVT_SIZE(wxAuiFloatingFrame::OnSize)
+    EVT_MOVE(wxAuiFloatingFrame::OnMoveEvent)
+    EVT_MOVING(wxAuiFloatingFrame::OnMoveEvent)
+    EVT_CLOSE(wxAuiFloatingFrame::OnClose)
+    EVT_IDLE(wxAuiFloatingFrame::OnIdle)
+    EVT_ACTIVATE(wxAuiFloatingFrame::OnActivate)
 END_EVENT_TABLE()
 
 #endif // wxUSE_AUI

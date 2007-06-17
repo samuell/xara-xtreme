@@ -293,7 +293,7 @@ int /*TYPENOTE: Correct*/ CCamApp::FilterEvent( wxEvent& event )
 	{
 		TRACEUSER("luke", _T("CCamApp::FilterEvent activate to %s"), pEventObject->GetClassInfo()->GetClassName());
 
-		if( pEventObject->IsKindOf( CLASSINFO(wxFloatingPane) ) )
+		if( pEventObject->IsKindOf( CLASSINFO(wxAuiFloatingFrame) ) )
 		{
 			wxClassInfo* pClassInfo = pEventObject->GetClassInfo();
 			while( NULL != pClassInfo )

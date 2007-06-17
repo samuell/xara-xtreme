@@ -114,6 +114,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "toollist.h"
 #include "dragmgr.h"
 #include "basebar.h"
+#include "wxkeymap.h"
 
 DECLARE_SOURCE("$Revision$");
 
@@ -166,6 +167,9 @@ static HK_TokenIndex FindToken(const TCHAR* Token)
 
 // The size of the text description string object in a HotKey object
 #define TEXT_DESC_SIZE 32
+
+// The size of the enumeration string representation in a HotKey object
+#define ENUM_STR_DESC_SIZE 20
 
 /********************************************************************************************
 
@@ -842,6 +846,7 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 
 	// This is FALSE until we have read the text that describes the key combination
 	BOOL TextDescRead = FALSE;
+	BOOL EnumStringRead = FALSE;
 
 	// We haven't finsihed, but we're OK at the mo
 	BOOL finished = FALSE;
@@ -861,7 +866,26 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 			{
 				case TOKEN_STRING:
 
-					if (!TextDescRead)
+					if (!EnumStringRead)
+					{
+						// The first string encountered is the "WXK_" string representation of
+						// the enumeration.
+
+						// Make sure the enum string is not too long.
+						UINT32 TokenLen = camStrlen(TokenBuf);
+						if (TokenLen <= ENUM_STR_DESC_SIZE)
+						{
+							// Is the string not empty (i.e. "") ?
+							if (TokenLen > 0)
+							{
+								VirtKey=wxKeyMap::GetKeyVal(TokenBuf);
+							}
+						}
+						else
+							TRACE( _T("HotKey: Enum string ('%s') is too long - should be <= %d"),TokenBuf,ENUM_STR_DESC_SIZE);
+						EnumStringRead = TRUE;
+					}
+					else if (!TextDescRead)
 					{
 						// We haven't yet read the textual desc of the key definition, so assume
 						// that this is it
@@ -912,9 +936,10 @@ BOOL HotKey::ReadKeyDef(CCLexFile& file,
 							case HK_TOKEN_CHECKUNICODE	: *pCheckUnicode = TRUE; break;
 
 							case HK_TOKEN_NONE:
-								ok = (camSscanf(TokenBuf,_T("%li"),&VirtKey) == 1);
+								//Should no longer get this token.
+								/*ok = (camSscanf(TokenBuf,_T("%li"),&VirtKey) == 1);
 								if (!ok) TRACE( _T("HotKey: Expected a virtual key code but got : '%s'\n"),TokenBuf);
-								break;
+								break;*/
 
 							default:
 								ok = FALSE;

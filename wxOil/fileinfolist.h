@@ -98,7 +98,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #ifndef WXOIL_FILEINFOLIST_H
 #define WXOIL_FILEINFOLIST_H
 
-
+#include <wx/imaglist.h>
 
 class CFileInfoList
 {

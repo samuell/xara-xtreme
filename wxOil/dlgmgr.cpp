@@ -147,6 +147,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #include "osrndrgn.h"
 //#include "dlgtypes.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "statline.h"
+#include <wx/imaglist.h>
 
 DECLARE_SOURCE("$Revision$");
 
@@ -470,7 +471,7 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 		// We really should take a wxPaneInfo() as an additional parameter to this function to allow this sort
 		// of stuff to be specified. Or try and retrieve it from the DialogBarOp or similar. Anyway, for now
 		// give it some default parameters
-		wxPaneInfo paneinfo;
+		wxAuiPaneInfo paneinfo;
 		if (!DlgOp->IsABar())
 		{
 			// default galleries to 300 deep. Specifying -1 as a width doesn't seem to work
@@ -531,7 +532,7 @@ PORTNOTE("dialog","A more general scheme is needed to allow creation of a panel 
 		wxWindow * pTLW = pDialogWnd;
 		while (pTLW->GetParent())
 			pTLW=pTLW->GetParent();
-		if (pTLW->IsKindOf(CLASSINFO(wxFloatingPane)))
+		if (pTLW->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
 			pTLW->Raise();
 
 	}
@@ -862,7 +863,7 @@ void DialogManager::EnsurePanePreferenceDeclared(wxString key)
 
 ********************************************************************************************/
 
-void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
+void DialogManager::LoadPaneInfo(wxString key, wxAuiPaneInfo &paneinfo)
 {
 	if (!s_pPaneInfoHash)
 		InitPaneInfoHash();
@@ -901,7 +902,7 @@ void DialogManager::LoadPaneInfo(wxString key, wxPaneInfo &paneinfo)
 
 ********************************************************************************************/
 
-void DialogManager::SavePaneInfo(wxString key, wxPaneInfo &paneinfo)
+void DialogManager::SavePaneInfo(wxString key, wxAuiPaneInfo &paneinfo)
 {
 	// work around mysterious wxGTK sizing bug
 	if ((paneinfo.IsOk()) && (paneinfo.IsFloating()))
@@ -1895,7 +1896,7 @@ void DialogManager::Delete(CWindowID WindowID, DialogOp* pDlgOp)
 
 	if (pDlgOp->pEvtHandler->wxAUImanaged)
 	{
-		wxPaneInfo paneinfo = CCamFrame::GetMainFrame()->GetFrameManager()->GetPane(pCWnd);
+		wxAuiPaneInfo paneinfo = CCamFrame::GetMainFrame()->GetFrameManager()->GetPane(pCWnd);
 		if (paneinfo.IsOk())
 			SavePaneInfo(wxString(CamResource::GetObjectName(pCWnd->GetId())), paneinfo);
 		// Remove the bar from wxAUI
@@ -7173,7 +7174,7 @@ BOOL DialogManager::SetTitlebarName( CWindowID Win, String_256* Name )
 		pTLW = pTLW->GetParent();
 
 	if (pTLW)
-		pTLW->SetTitle( (TCHAR *)(*Name) );
+		pTLW->SetLabel( (TCHAR *)(*Name) );
 
 	return true;
 }

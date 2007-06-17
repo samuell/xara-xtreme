@@ -141,6 +141,9 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define WXK_Y 0x59
 #define WXK_Z 0x5A
 
+#define WXK_LESS 0xBC
+#define WXK_GREATER 0xBE
+
 #define WXK_ADD 0x6B
 #define WXK_EQUALS 0xBB
 #define WXK_COMMA 0xBC

@@ -100,7 +100,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 
 // Forward definitions
 class CCamCanvas;
-class wxFrameManager;
+class wxAuiManager;
 class CaptureWnd;
 
 class CCamFrame :
@@ -114,7 +114,7 @@ private:
 	
 	wxMenu			   *m_editMenu;
 #if defined(USE_WXAUI)
-	wxFrameManager *m_pFrameManager;
+	wxAuiManager *m_pFrameManager;
 #endif
 	wxStatusBar*		m_pStatusBar;
 
@@ -130,7 +130,7 @@ public:
 	~CCamFrame();
 
 	static CCamFrame * GetMainFrame() {return m_pMainFrame;}
-	static wxFrameManager * GetFrameManager() { return m_pMainFrame?m_pMainFrame->m_pFrameManager:NULL;}
+	static wxAuiManager * GetFrameManager() { return m_pMainFrame?m_pMainFrame->m_pFrameManager:NULL;}
 	
 	wxStatusBar* GetStatusBar() const 	{ return m_pStatusBar; }
 
