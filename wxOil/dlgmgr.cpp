@@ -7085,13 +7085,11 @@ BOOL DialogManager::AddAPage(DialogTabOp* pDialogTabOp, CDlgResID DialogResID, C
 
 	}
 
-	pNoteBook->AddPage( pNewPage, Title );
-	// add our image
 	if (pImageList)
-	{
 		pImageList->Add(b);
+	pNoteBook->AddPage( pNewPage, Title );
+	if (pImageList)
 		pNoteBook->SetPageImage(pNoteBook->GetPageCount()-1, pImageList->GetImageCount()-1);
-	}
 
 	return true;
 }
