@@ -127,7 +127,7 @@ public:
 	wxCamGridPopup(CGridDropDown* pDropDown, wxGridCombo* pCombo);
 	virtual ~wxCamGridPopup();
 
-	virtual void DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags);
+	virtual void DrawItem(wxDC& dc, const wxRect& rect, int /* TYPENOTE: Correct */ iItem, INT32 iFlags);
 
 protected:
 	CGridDropDown* m_pDropDown;

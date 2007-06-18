@@ -151,7 +151,7 @@ Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
 Notes     : Delegates the call to the control class.
 ******************************************************************************/
-void wxCamGridPopup::DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)
+void wxCamGridPopup::DrawItem(wxDC& dc, const wxRect& rect, int /* TYPENOTE: Correct */ iItem, INT32 iFlags)
 {
 	if (m_pDropDown)
 		m_pDropDown->DrawItem(dc, rect, iItem, iFlags);
@@ -499,8 +499,8 @@ Returns   : void
 Exceptions: 
 Parameters: [in] wxDC&	 dc		- the device context to draw to;
             [in] wxRect& rect	- the area of the item;
-            [in] INT32	 iItem	- item index;
-            [in] INT32	 iFlags - additional flags (selected, highlighted, ...)
+            [in] int	 iItem	- item index; TYPENOTE: Correct
+            [in] int	 iFlags - additional flags (selected, highlighted, ...) TYPENOTE: Correct
 Notes     : 
 ******************************************************************************/
 void CGridDropDown::DrawItem(wxDC& dc, const wxRect& rect, INT32 iItem, INT32 iFlags)

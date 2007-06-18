@@ -215,11 +215,11 @@ Exceptions:
 Parameters: [in] INT32 minWidth   - minimum width; in the current implemetation it's the 
 								  size of combobox control itself. In this function we
 								  ignore it;
-            [in] INT32 prefHeight - the preffered height;
-            [in] INT32 maxHeight  - maximum allowed height.
+            [in] int prefHeight - the preffered height; TYPENOTE: Correct
+            [in] int maxHeight  - maximum allowed height. TYPENOTE: Correct
 Notes     : 
 ******************************************************************************/
-wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(INT32 minWidth, INT32 prefHeight, INT32 maxHeight)
+wxSize wxCamBitmapDropdownPopup::GetAdjustedSize(int /* TYPENOTE: Correct */ minWidth, int /* TYPENOTE: Correct */ prefHeight, int /* TYPENOTE: Correct */ maxHeight)
 {
 	// We should ignore the min width, since it's usually the size of the combobox
 	// (we can have a dropdown with width less than the control).
