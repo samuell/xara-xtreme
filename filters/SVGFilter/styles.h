@@ -208,6 +208,7 @@ public:
 		m_strokeOpacity = 1.0;
 		m_strokeWidth = 1;
 		m_strokeLineJoin = MitreJoin;
+		m_strokeLineCap = LineCapButt;
 		m_strokeGradient = NULL;
 		m_opacity = 1.0;
 		m_stopOffset = 0.0;
@@ -230,6 +231,7 @@ public:
 		m_strokeOpacity = copy.m_strokeOpacity;
 		m_strokeWidth = copy.m_strokeWidth;
 		m_strokeLineJoin = copy.m_strokeLineJoin;
+		m_strokeLineCap = copy.m_strokeLineCap;
 		m_strokeGradient = copy.m_strokeGradient;
 		m_opacity = copy.m_opacity;
 		m_stopOffset = copy.m_stopOffset;
@@ -293,6 +295,13 @@ public:
 		m_strokeLineJoin = jt;
 	}
 
+	bool IsStrokeLineCapDefined() const { return m_defined & STYLE_STROKE_LINECAP; }
+	LineCapType GetStrokeLineCap() const { return m_strokeLineCap; }
+	void SetStrokeLineCap(LineCapType lct ) {
+		m_defined |= STYLE_STROKE_LINECAP;
+		m_strokeLineCap = lct;
+	}
+
 	bool IsStrokeGradientDefined() const { return m_defined & STYLE_STROKE_GRADIENT; }
 	Gradient* GetStrokeGradient() const { return m_strokeGradient; }
 	void SetStrokeGradient(Gradient* value) {
@@ -340,6 +349,7 @@ private:
 	double		m_strokeOpacity;
 	INT32		m_strokeWidth;
 	JointType	m_strokeLineJoin;
+	LineCapType	m_strokeLineCap;
 	Gradient*	m_strokeGradient;
 	double		m_opacity;
 	double		m_stopOffset;

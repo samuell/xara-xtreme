@@ -1528,6 +1528,19 @@ Style SVGImporter::ParseStyle(xmlNodePtr cur, const Transformation& trans, bool 
 		}
 	}
 
+	sValue = GetStringProperty(cur, "stroke-linecap");
+	if (!sValue.IsEmpty()) {
+		if(sValue.CmpNoCase(_T("butt"))==0) {
+			style.SetStrokeLineCap(LineCapButt);
+		}
+		else if(sValue.CmpNoCase(_T("round"))==0) {
+			style.SetStrokeLineCap(LineCapRound);
+		}
+		else if(sValue.CmpNoCase(_T("square"))==0) {
+			style.SetStrokeLineCap(LineCapSquare);
+		}
+	}
+
 	if (IsPropertyDefined(cur, "opacity")) {
 		double fOpacity = GetClampedDoubleProperty(cur, "opacity");
 		style.SetOpacity(fOpacity);

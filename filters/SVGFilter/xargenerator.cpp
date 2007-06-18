@@ -977,7 +977,7 @@ bool XARGenerator::OutputStyles(const Style& style, const Transformation& trans,
 	if (witch & STYLE_STROKE_LINEJOIN && style.IsStrokeLineJoinDefined()) {
 		JointType jt=style.GetStrokeLineJoin();
 		Rec.Reinit(TAG_JOINSTYLE, TAG_JOINSTYLE_SIZE);
-		ok = Rec.WriteBYTE(jt);
+		ok = Rec.WriteBYTE(BYTE(jt));
 		ok = m_pExporter->WriteRecord(&Rec);
 
 #if SVGDEBUG
@@ -991,6 +991,33 @@ bool XARGenerator::OutputStyles(const Style& style, const Transformation& trans,
 			break;
 			case RoundJoin:
 				svgtrace(DBGTRACE_STYLES, "stroke join round\n");
+			break;
+		}
+#endif
+
+	}
+
+	if (witch & STYLE_STROKE_LINECAP && style.IsStrokeLineCapDefined()) {
+		LineCapType lct=style.GetStrokeLineCap();
+		Rec.Reinit(TAG_STARTCAP, TAG_STARTCAP_SIZE);
+		ok = Rec.WriteBYTE(BYTE(lct));
+		ok = m_pExporter->WriteRecord(&Rec);
+
+		Rec.Reinit(TAG_ENDCAP, TAG_ENDCAP_SIZE);
+		ok = Rec.WriteBYTE(BYTE(lct));
+		ok = m_pExporter->WriteRecord(&Rec);
+
+#if SVGDEBUG
+		switch(lct)
+		{
+			case LineCapButt:
+				svgtrace(DBGTRACE_STYLES, "stroke cap butt\n");
+			break;
+			case LineCapRound:
+				svgtrace(DBGTRACE_STYLES, "stroke cap round\n");
+			break;
+			case LineCapSquare:
+				svgtrace(DBGTRACE_STYLES, "stroke cap square\n");
 			break;
 		}
 #endif
