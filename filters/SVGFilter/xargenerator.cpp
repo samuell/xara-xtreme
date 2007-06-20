@@ -974,26 +974,38 @@ bool XARGenerator::OutputStyles(const Style& style, const Transformation& trans,
 		ok = m_pExporter->WriteRecord(&Rec);
 	}
 
-	if (witch & STYLE_STROKE_LINEJOIN && style.IsStrokeLineJoinDefined()) {
-		JointType jt=style.GetStrokeLineJoin();
+	if (witch & STYLE_STROKE_LINEJOIN )
+	{
+		JointType jt;
+		if (style.IsStrokeLineJoinDefined()) {
+			jt=style.GetStrokeLineJoin();
+
+#if SVGDEBUG
+			switch(jt)
+			{
+				case MitreJoin:
+					svgtrace(DBGTRACE_STYLES, "stroke join mitre\n");
+				break;
+				case BevelledJoin:
+					svgtrace(DBGTRACE_STYLES, "stroke join bevel\n");
+				break;
+				case RoundJoin:
+					svgtrace(DBGTRACE_STYLES, "stroke join round\n");
+				break;
+			}
+#endif
+		} else {
+			jt=MitreJoin;
+
+#if SVGDEBUG
+			svgtrace(DBGTRACE_STYLES, "no stroke specified, using mitre\n");
+#endif
+
+		}
+
 		Rec.Reinit(TAG_JOINSTYLE, TAG_JOINSTYLE_SIZE);
 		ok = Rec.WriteBYTE(BYTE(jt));
 		ok = m_pExporter->WriteRecord(&Rec);
-
-#if SVGDEBUG
-		switch(jt)
-		{
-			case MitreJoin:
-				svgtrace(DBGTRACE_STYLES, "stroke join mitre\n");
-			break;
-			case BevelledJoin:
-				svgtrace(DBGTRACE_STYLES, "stroke join bevel\n");
-			break;
-			case RoundJoin:
-				svgtrace(DBGTRACE_STYLES, "stroke join round\n");
-			break;
-		}
-#endif
 
 	}
 
