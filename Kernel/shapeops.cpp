@@ -671,21 +671,18 @@ BOOL OpEditRegularShape::CarryOut(NodeRegularShape*	ShapeToEdit, EditRegularShap
 		}
 		else
 			ScaleFactor = 1.0;
-		
-		// Translate to origin, rotate so major axis flat, scale, then rotate and translate back
-		Matrix TransMat(-ShapeToEdit->GetCentrePoint().x, -ShapeToEdit->GetCentrePoint().y);
-		DocCoord Offset = ShapeToEdit->GetMajorAxes() - ShapeToEdit->GetCentrePoint();
-		double Angle = atan2((double)Offset.y, (double)Offset.x)*(180/PI);
-		TransMat*=Matrix(-ANGLE(Angle));
-		TransMat*=Matrix(ScaleFactor, 1.0);
-		TransMat*=Matrix(ANGLE(Angle));
-		TransMat*=Matrix(ShapeToEdit->GetCentrePoint().x, ShapeToEdit->GetCentrePoint().y);
 
-		Trans2DMatrix* Trans2DMat = new Trans2DMatrix(TransMat);
-		if (Trans2DMat == NULL)
+		if (ChangeShapePointAction::DoToggle(this, &UndoActions, ShapeToEdit, 
+						ChangeShapePointAction::CHANGE_MAJOR, ShapeToEdit->GetUTMajorAxes()) == AC_FAIL)
+		{
 			return FALSE;
-		if (!DoTransformNode(ShapeToEdit, Trans2DMat))
-			return FALSE;
+		}
+
+		// Scale the major axes relative to the centre point
+		Matrix ScaleMatrix(FIXED16(1.0), ScaleFactor);
+		DocCoord Offset = ShapeToEdit->GetUTMajorAxes() - ShapeToEdit->GetUTCentrePoint();
+		ScaleMatrix.transform(&Offset);
+		ShapeToEdit->SetMajorAxes(ShapeToEdit->GetUTCentrePoint() + Offset);
 	}
 
 	// See if we should change the MinorAxis of the shape to a new length
@@ -710,21 +707,18 @@ BOOL OpEditRegularShape::CarryOut(NodeRegularShape*	ShapeToEdit, EditRegularShap
 		}
 		else
 			ScaleFactor = 1.0;
-		
-		// Translate to origin, rotate so minor axis flat, scale, then rotate and translate back
-		Matrix TransMat(-ShapeToEdit->GetCentrePoint().x, -ShapeToEdit->GetCentrePoint().y);
-		DocCoord Offset = ShapeToEdit->GetMinorAxes() - ShapeToEdit->GetCentrePoint();
-		double Angle = atan2((double)Offset.y, (double)Offset.x)*(180/PI);
-		TransMat*=Matrix(-ANGLE(Angle));
-		TransMat*=Matrix(ScaleFactor, 1.0);
-		TransMat*=Matrix(ANGLE(Angle));
-		TransMat*=Matrix(ShapeToEdit->GetCentrePoint().x, ShapeToEdit->GetCentrePoint().y);
 
-		Trans2DMatrix* Trans2DMat = new Trans2DMatrix(TransMat);
-		if (Trans2DMat == NULL)
+		if (ChangeShapePointAction::DoToggle(this, &UndoActions, ShapeToEdit, 
+						ChangeShapePointAction::CHANGE_MINOR, ShapeToEdit->GetUTMinorAxes()) == AC_FAIL)
+		{
 			return FALSE;
-		if (!DoTransformNode(ShapeToEdit, Trans2DMat))
-			return FALSE;
+		}
+
+		// Scale the minor axes relative to the centre point
+		Matrix ScaleMatrix(ScaleFactor, FIXED16(1.0));
+		DocCoord Offset = ShapeToEdit->GetUTMinorAxes() - ShapeToEdit->GetUTCentrePoint();
+		ScaleMatrix.transform(&Offset);
+		ShapeToEdit->SetMinorAxes(ShapeToEdit->GetUTCentrePoint() + Offset);
 	}
 
 	// See if we should change the size of the stellation radius to a new length
@@ -1293,13 +1287,13 @@ ActionCode ChangeShapePointAction::Execute()
 	switch (ChangeItemID)
 	{
 		case CHANGE_MINOR:
-			ReData = pToggleShape->GetMinorAxes();
+			ReData = pToggleShape->GetUTMinorAxes();
 			break;
 		case CHANGE_MAJOR:
-			ReData = pToggleShape->GetMajorAxes();
+			ReData = pToggleShape->GetUTMajorAxes();
 			break;
 		case CHANGE_CENTRE:
-			ReData = pToggleShape->GetCentrePoint();
+			ReData = pToggleShape->GetUTCentrePoint();
 			break;
 		default:
 			ERROR2(Act, "What was that Change ID?!");
@@ -1871,6 +1865,18 @@ void OpDragRegularShape::DragFinished( DocCoord PointerPos, ClickModifiers Click
 				{	// Transform shape using the matrix
 					Trans2DMatrix* tm = new Trans2DMatrix(transMat);
 					Failed = ! DoTransformNode(OriginalShape, tm) ;
+					Failed |= !ChangeShapePointAction::DoToggle(this, &UndoActions, OriginalShape, 
+												ChangeShapePointAction::CHANGE_CENTRE, 
+															OriginalShape->GetUTCentrePoint());
+					OriginalShape->SetCentrePoint(EditShape->GetUTCentrePoint());
+					Failed |= !ChangeShapePointAction::DoToggle(this, &UndoActions, OriginalShape, 
+												ChangeShapePointAction::CHANGE_MINOR, 
+															OriginalShape->GetUTMinorAxes());
+					OriginalShape->SetMinorAxes(EditShape->GetUTMinorAxes());
+					Failed |= !ChangeShapePointAction::DoToggle(this, &UndoActions, OriginalShape, 
+												ChangeShapePointAction::CHANGE_MAJOR, 
+															OriginalShape->GetUTMajorAxes());
+					OriginalShape->SetMajorAxes(EditShape->GetUTMajorAxes());
 					break;
 				}
 				case DRAG_STELLATION:
@@ -2392,13 +2398,11 @@ BOOL OpDragRegularShape::ProcessRectangleDiagonal( DocCoord PointerPos, ClickMod
 
 	delete EditShape;
 	EditShape = new (NodeRegularShape);
-	if (EditShape != NULL)
-		OriginalShape->CopyNodeContents(EditShape);
-	else
+	if (NULL == EditShape)
 		return FALSE;
 
-	EditShape->Transform(Transform);
-	transMat = Transform.GetMatrix();
+ 	OriginalShape->CopyNodeContents(EditShape);
+ 	EditShape->TransformCentreAndAxes(Transform);
 
 	return TRUE;
 }
@@ -2459,18 +2463,14 @@ BOOL OpDragRegularShape::ProcessRectangleEdge( DocCoord PointerPos, DocCoord Oth
 	// Apply this to the edit shape
 	delete EditShape;
 	EditShape = new (NodeRegularShape);
-	if (EditShape != NULL)
-	{	
-		OriginalShape->CopyNodeContents(EditShape);
-
-		Trans2DMatrix	matrix( TransMat );
-		EditShape->Transform( matrix );
-		transMat = TransMat;
-
-		return TRUE;
-	}
-	else
-		return FALSE;
+ 	if (NULL == EditShape)
+ 		return FALSE;
+  
+ 	OriginalShape->CopyNodeContents(EditShape);
+	Trans2DMatrix	Trans2dMatrix(TransMat);
+ 	EditShape->TransformCentreAndAxes( Trans2dMatrix );
+  
+ 	return TRUE;
 }
 
 

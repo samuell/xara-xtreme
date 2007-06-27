@@ -189,6 +189,7 @@ public:
 
 	// Functions to transform the shape
 	virtual void Transform( TransformBase& );
+	virtual void TransformCentreAndAxes( TransformBase& );
 
 	// Information functions
 	virtual UINT32 GetNodeSize() const; 			// Returns size of node in bytes

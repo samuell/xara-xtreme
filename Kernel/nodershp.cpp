@@ -633,6 +633,41 @@ void NodeRegularShape::Transform( TransformBase& Trans )
 
 
 
+/********************************************************************************************
+
+>	virtual void NodeRegularShape::TransformCentreAndAxes( TransformBase& Trans )
+
+	Author:		Rory
+	Created:	21/05/07
+	Inputs:		Trans - The transform Object
+	Purpose:	Transforms the shape centre point and axes without modifying the matrix.
+	SeeAlso:	NodeRegularShape::Transform()
+
+********************************************************************************************/
+void NodeRegularShape::TransformCentreAndAxes( TransformBase& Trans )
+{
+	// Apply the transform to the transformed centre point and axes
+	TransformMatrix.transform(&UTCentrePoint);
+	Trans.Transform(&UTCentrePoint, 1);
+	TransformMatrix.Inverse().transform(&UTCentrePoint);
+
+	TransformMatrix.transform(&UTMajorAxes);
+	Trans.Transform(&UTMajorAxes, 1);
+	TransformMatrix.Inverse().transform(&UTMajorAxes);
+
+	TransformMatrix.transform(&UTMinorAxes);
+	Trans.Transform(&UTMinorAxes, 1);
+	TransformMatrix.Inverse().transform(&UTMinorAxes);
+
+	EmergencyFixShape();
+
+	// Mark the bounding rect as invalid							
+	InvalidateBoundingRect();
+	InvalidateCache();
+}
+
+
+
 /***********************************************************************************************
 
 >	BOOL NodeRegularShape::BuildShapePath(Path** RenderPath)
