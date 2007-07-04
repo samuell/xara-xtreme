@@ -1107,7 +1107,8 @@ void ColourManager::FindColourOfInterestToUser(IndexedColour **ResultCol, Colour
 	}
 
 	// Sanity check. Should never ever ever be the case, ever.
-	ERROR3IF(UsefulColour->IsDeleted(),
+	if (UsefulColour != NULL)
+		ERROR3IF(UsefulColour->IsDeleted(),
 				"ColourManager::FindColourOfInterestToUser - Colour found is DELETED!");
 
 	// Fill in the return results

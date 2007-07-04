@@ -508,7 +508,8 @@ BOOL ColourDropDown::FillInColourList(IndexedColour *Selected, INT32 SelectIndex
 	if (SelectIndex >= 0 && SelectIndex < (INT32)SpecialEntries.GetCount())
 		SelectedIndex = SelectIndex;
 
-	SetSelectedIndex(SelectedIndex);						// And set the appropriate selected item
+	if (Result)
+		SetSelectedIndex(SelectedIndex);						// And set the appropriate selected item
 
 	// Finally, enable the gadget, and trim its length down if necessary to fit the
 	// number of displayed items.

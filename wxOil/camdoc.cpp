@@ -1075,8 +1075,6 @@ bool CCamDoc::DefaultDocumentRequired( CCLexFile *pFile, UINT32 nPrefFilter )
 		return TRUE;
 	}
 
-#ifndef EXCLUDE_FROM_XARALX
-PORTNOTE("other", "Assuming we actually do need a default document rather than asking the filter system");
 	// Find out the position of the filter selected by the user in the open dialog
 	INT32 SelectedPos = BaseFileDialog::SelectedFilter;
 
@@ -1124,9 +1122,6 @@ PORTNOTE("other", "Assuming we actually do need a default document rather than a
 	// If it is a filter family then we will have to work out what filter is actually
 	// required and hence ask that filter the qeustion.
 	if (!pFilter->IsDefaultDocRequired(pth.GetPath())) return TRUE;
-#else
-	return TRUE;
-#endif
 
 	//Graham 22/10/97: First set the template that this document is based on
 	SetTemplate(GetNextTemplateToUse());
