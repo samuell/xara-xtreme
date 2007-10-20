@@ -2,7 +2,6 @@
 #ifndef WXOIL_WXKEYMAP
 #define WXOIL_WXKEYMAP
 
-#include "camtypes.h"
 #include <map>
 #include "fixstr32.h"
 

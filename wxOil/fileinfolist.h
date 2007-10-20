@@ -99,6 +99,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 #define WXOIL_FILEINFOLIST_H
 
 #include <wx/imaglist.h>
+#include <wx/listctrl.h>
 
 class CFileInfoList
 {
