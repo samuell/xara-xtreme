@@ -656,7 +656,9 @@ INT32 InformGeneral(UINT32 Error, UINT32 modID, UINT32 ErrorMsg,
 	// Set the default
 	if ( ((UINT32)OK <EB_MAXBUTS) && butres[OK] && pButt[OK])
 	{
-		pButt[OK]->SetDefault();
+//		The following should be unnecessary but harmless. It appears to cause a crash on
+//		newer GTK under wxWidgets 2.6.xx for an "ImageMagick not installed" error box
+//		pButt[OK]->SetDefault();
 		pBox->SetDefaultItem(pButt[OK]);
 	}
 
