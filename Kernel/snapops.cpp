@@ -111,7 +111,7 @@ service marks of Xara Group Ltd. All rights in these marks are reserved.
 //#include "document.h" - in camtypes.h [AUTOMATICALLY REMOVED]
 #include "layer.h"
 //#include "spread.h" - in camtypes.h [AUTOMATICALLY REMOVED]
-//#include "sglayer.h"
+#include "sglayer.h"
 #include "sprdmsg.h"
 #include "bubbleid.h"
 
@@ -696,12 +696,9 @@ void OpShowGuides::Do(OpDescriptor*)
 		Document* pDoc  = Document::GetSelected();
 		if (pSpread != NULL && pDoc != NULL)
 		{
-PORTNOTE("gallery", "Removed use of Gallery")
-#if !defined(EXCLUDE_FROM_XARALX)
 			Layer* pLayer = pSpread->FindFirstGuideLayer();
 			if (pLayer != NULL)
 				LayerSGallery::ForceRedrawLayer(pDoc,pLayer);
-#endif
 		}
 
 		BROADCAST_TO_ALL(SpreadMsg(pSpread,SpreadMsg::LAYERCHANGES));
